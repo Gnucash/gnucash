@@ -74,6 +74,9 @@ static gint last_width = 0;
 static gint last_height = 0;
 
 
+static void gnc_price_dialog_create (PricesDialog *pdb_dialog);
+
+
 static void
 gnc_prices_set_changed (PricesDialog *pdb_dialog, gboolean changed)
 {
@@ -374,6 +377,9 @@ price_window_delete_cb (GtkWidget *widget, GdkEvent *event, gpointer data)
     pdb_dialog->new = FALSE;
   }
 
+  pdb_dialog->price_dialog = NULL;
+  gnc_price_dialog_create (pdb_dialog);
+
   gnc_prices_load_prices (pdb_dialog);
 
   /* delete the window */
@@ -615,22 +621,18 @@ prices_set_min_widths (PricesDialog *pdb_dialog)
 }
 
 static void
-gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
+gnc_price_dialog_create (PricesDialog *pdb_dialog)
 {
-  GtkWidget *dialog;
+  GNCPrintAmountInfo print_info;
   GtkWidget *price_dialog;
-
-  dialog = create_Prices_Dialog ();
-  pdb_dialog->dialog = dialog;
+  GtkWidget *button;
+  GtkWidget *entry;
+  GtkWidget *menu;
+  GtkWidget *box;
+  GtkWidget *w;
 
   price_dialog = create_Price_Dialog ();
   pdb_dialog->price_dialog = price_dialog;
-
-  gnome_dialog_set_parent (GNOME_DIALOG (price_dialog), GTK_WINDOW (dialog));
-
-  gnome_dialog_button_connect (GNOME_DIALOG (dialog), 0,
-                               GTK_SIGNAL_FUNC (prices_close_clicked),
-                               pdb_dialog);
 
   gnome_dialog_button_connect (GNOME_DIALOG (price_dialog), 0,
                                GTK_SIGNAL_FUNC (price_ok_clicked),
@@ -640,12 +642,86 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
                                GTK_SIGNAL_FUNC (price_cancel_clicked),
                                pdb_dialog);
 
-  gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
-                      GTK_SIGNAL_FUNC (window_destroy_cb), pdb_dialog);
-
   gtk_signal_connect (GTK_OBJECT (price_dialog), "delete_event",
                       GTK_SIGNAL_FUNC (price_window_delete_cb),
                       pdb_dialog);
+
+  box = lookup_widget (price_dialog, "commodity_box");
+
+  w = gnc_commodity_edit_new ();
+  pdb_dialog->commodity_edit = w;
+  gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
+  gtk_widget_show (w);
+
+  gtk_signal_connect (GTK_OBJECT (w), "changed",
+                      GTK_SIGNAL_FUNC (commodity_changed_cb), pdb_dialog);
+
+  box = lookup_widget (price_dialog, "currency_box");
+
+  w = gnc_currency_edit_new ();
+  pdb_dialog->currency_edit = w;
+  gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
+  gtk_widget_show (w);
+
+  gtk_signal_connect (GTK_OBJECT (GTK_COMBO(w)->entry), "changed",
+                      GTK_SIGNAL_FUNC (currency_changed_cb), pdb_dialog);
+
+  box = lookup_widget (price_dialog, "date_box");
+
+  w = gnc_date_edit_new (time (NULL), FALSE, FALSE);
+  pdb_dialog->date_edit = w;
+  gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
+  gtk_widget_show (w);
+
+  gtk_signal_connect (GTK_OBJECT (w), "date_changed",
+                      GTK_SIGNAL_FUNC (date_changed_cb), pdb_dialog);
+
+  w = lookup_widget (price_dialog, "source_entry");
+  pdb_dialog->source_entry = w;
+
+  w = lookup_widget (price_dialog, "type_option");
+  pdb_dialog->type_option = w;
+
+  gnc_option_menu_init (w);
+  menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (w));
+  gtk_container_forall (GTK_CONTAINER (menu),
+                        connect_type_menu_item, pdb_dialog);
+
+  box = lookup_widget (price_dialog, "price_box");
+
+  w = gnc_amount_edit_new ();
+  pdb_dialog->price_edit = w;
+  gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
+  gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (w), TRUE);
+  print_info = gnc_default_price_print_info ();
+  gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (w), print_info);
+  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (w), 1000000);
+  gtk_widget_show (w);
+
+  entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (w));
+  gtk_signal_connect (GTK_OBJECT (entry), "changed",
+                      GTK_SIGNAL_FUNC (amount_changed_cb), pdb_dialog);
+}
+
+static void
+gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
+{
+  GtkWidget *dialog;
+
+  dialog = create_Prices_Dialog ();
+  pdb_dialog->dialog = dialog;
+
+  gnc_price_dialog_create (pdb_dialog);
+
+  gnome_dialog_set_parent (GNOME_DIALOG (pdb_dialog->price_dialog),
+                           GTK_WINDOW (dialog));
+
+  gnome_dialog_button_connect (GNOME_DIALOG (dialog), 0,
+                               GTK_SIGNAL_FUNC (prices_close_clicked),
+                               pdb_dialog);
+
+  gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+                      GTK_SIGNAL_FUNC (window_destroy_cb), pdb_dialog);
 
   /* parent */
   if (parent != NULL)
@@ -655,70 +731,7 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
   gnome_dialog_set_default (GNOME_DIALOG(dialog), 0);
 
   /* price information */
-  {
-    GNCPrintAmountInfo print_info;
-    GtkWidget *button;
-    GtkWidget *entry;
-    GtkWidget *menu;
-    GtkWidget *box;
-    GtkWidget *w;
-
-    box = lookup_widget (price_dialog, "commodity_box");
-
-    w = gnc_commodity_edit_new ();
-    pdb_dialog->commodity_edit = w;
-    gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
-    gtk_widget_show (w);
-
-    gtk_signal_connect (GTK_OBJECT (w), "changed",
-                        GTK_SIGNAL_FUNC (commodity_changed_cb), pdb_dialog);
-
-    box = lookup_widget (price_dialog, "currency_box");
-
-    w = gnc_currency_edit_new ();
-    pdb_dialog->currency_edit = w;
-    gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
-    gtk_widget_show (w);
-
-    gtk_signal_connect (GTK_OBJECT (GTK_COMBO(w)->entry), "changed",
-                        GTK_SIGNAL_FUNC (currency_changed_cb), pdb_dialog);
-
-    box = lookup_widget (price_dialog, "date_box");
-
-    w = gnc_date_edit_new (time (NULL), FALSE, FALSE);
-    pdb_dialog->date_edit = w;
-    gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
-    gtk_widget_show (w);
-
-    gtk_signal_connect (GTK_OBJECT (w), "date_changed",
-                        GTK_SIGNAL_FUNC (date_changed_cb), pdb_dialog);
-
-    w = lookup_widget (price_dialog, "source_entry");
-    pdb_dialog->source_entry = w;
-
-    w = lookup_widget (price_dialog, "type_option");
-    pdb_dialog->type_option = w;
-
-    gnc_option_menu_init (w);
-    menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (w));
-    gtk_container_forall (GTK_CONTAINER (menu),
-                          connect_type_menu_item, pdb_dialog);
-
-    box = lookup_widget (price_dialog, "price_box");
-
-    w = gnc_amount_edit_new ();
-    pdb_dialog->price_edit = w;
-    gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
-    gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (w), TRUE);
-    print_info = gnc_default_price_print_info ();
-    gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (w), print_info);
-    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (w), 1000000);
-    gtk_widget_show (w);
-
-    entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (w));
-    gtk_signal_connect (GTK_OBJECT (entry), "changed",
-                        GTK_SIGNAL_FUNC (amount_changed_cb), pdb_dialog);
-  }
+  
 
   /* price tree */
   {

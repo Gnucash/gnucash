@@ -66,7 +66,7 @@ struct _GNCAccountTree
   gint num_columns;
   gint balance_column;
   gint total_column;
-  gint column_fields[NUM_ACCOUNT_FIELDS];
+  AccountFieldCode column_fields[NUM_ACCOUNT_FIELDS];
 
   const gchar * column_headings[NUM_ACCOUNT_FIELDS + 1];
 
@@ -104,9 +104,6 @@ GtkWidget * gnc_account_tree_new (void);
 GtkWidget * gnc_account_tree_new_with_root (Account *account);
 
 void gnc_account_tree_refresh (GNCAccountTree *tree);
-
-void gnc_account_tree_set_view_info (GNCAccountTree *tree,
-                                     AccountViewInfo *info);
 
 gboolean gnc_account_tree_select_account (GNCAccountTree *tree,
 					  Account *account,

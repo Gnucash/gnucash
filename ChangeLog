@@ -1,5 +1,12 @@
 2001-04-08  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/dialog-price-editor.c: more work
+
+	* src/gnome/account-tree.c (gnc_account_tree_insert_row): speedup
+	refreshing
+
+	* src/gnome/account-tree.h: remove duplicate declaration
+
 	* src/scm/report/taxtxf.scm: don't use deprecated calls
 
 	* src/guile/gnc.gwp: wrap xaccAccountGetSplitList

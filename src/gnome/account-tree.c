@@ -1156,15 +1156,20 @@ gnc_account_tree_insert_row(GNCAccountTree *tree,
   if (acc == NULL)
     return NULL;
 
-  for (i = 0; i < tree->num_columns; i++) {
-    text[i] =
-      g_strdup(gnc_ui_get_account_field_value_string(acc,
-                                                     tree->column_fields[i]));
+  for (i = 0; i < tree->num_columns; i++)
+  {
+    AccountFieldCode field;
+
+    field = tree->column_fields[i];
+
+    if (tree->avi.show_field[field])
+      text[i] = g_strdup(gnc_ui_get_account_field_value_string(acc, field));
+    else
+      text[i] = NULL;
 
     /* Since string fields like notes can be NULL */
-    if(!text[i]) {
+    if (!text[i])
       text[i] = g_strdup("");
-    }
   }
 
   text[tree->num_columns] = NULL;
