@@ -34,6 +34,7 @@
 /** GLOBALS *********************************************************/
 #define CLOSED    1
 #define DESTROYED 2
+gint    done = CLOSED;
 
 /* This static indicates the debugging module that this .o belongs to.   */
 static short module = MOD_GUI;
@@ -63,8 +64,10 @@ fileBox(const char * title, const char * filter)
 {
   GtkWidget *fileBox;
   gchar     *fileName = NULL;
-  gint      done = 0;
- 
+
+  if ( !done )
+    return NULL;
+  
   if (title == NULL)
   {
     title = OPEN_STR;
@@ -74,15 +77,13 @@ fileBox(const char * title, const char * filter)
   {
     // SET FILTER TO "*.xac"
   }
+
+  done = 0;
                           
   ENTER("filebox");
 
   fileBox = gtk_file_selection_new (title);
   gtk_object_set_data(GTK_OBJECT(fileBox), "done", &done);
-
-  /* We should be able to set this dialog modal, but it doesn't work? */
-  /* gtk_window_set_modal(GTK_WINDOW(
-                          GTK_FILE_SELECTION(&(dialog)->window)), TRUE); */
 
   /* Connect the dialog to the destroy even */  
   gtk_signal_connect (GTK_OBJECT (fileBox), "destroy",
@@ -99,15 +100,10 @@ fileBox(const char * title, const char * filter)
 
   gtk_widget_show(GTK_WIDGET(fileBox));
 
-  /* Make the file dialog modal */
-  gtk_grab_add(GTK_WIDGET(fileBox));
-
   while ( !done )
   {
     gtk_main_iteration(); 
   }
-
-  gtk_grab_remove(GTK_WIDGET(fileBox));
 
   LEAVE("fileBox");
 

@@ -1,7 +1,7 @@
 #include <guile/gh.h>
 #include <gnome.h>
 
-#include "options-dialog.h"
+#include "dialog-options.h"
 
 /* Note that in general, passing SCM values to the GTK/GNOME callbacks
    as the "data" value requires you to make sure that that pointer is
@@ -350,7 +350,7 @@ gnc_show_options_dialog()  {
 
   if(!options_dialog) {
     gh_eval_str("(gnc:options-dialog-clear-cancel-actions)");
-    gh_eval_str("(gnc:options-dialog-clear-apply-actions)");
+    //gh_eval_str("(gnc:options-dialog-clear-apply-actions)");
 
     options_dialog = GNOME_PROPERTY_BOX(gnome_property_box_new());
     gnome_dialog_close_hides (GNOME_DIALOG(options_dialog), TRUE);

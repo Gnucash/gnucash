@@ -25,16 +25,18 @@
 \********************************************************************/
 
 #include <gnome.h>
-#include <nana.h>
 #include <stdio.h>
 
 #include "config.h"
 
 #include "AccWindow.h"
 #include "AccInfo.h"
+#include "Account.h"
 #include "top-level.h"
 #include "MainWindow.h"
 #include "messages.h"
+#include "util.h"
+#include "dialog-editnotes.h"
 
 /* Please look at ../motif/AccWindow.c for info on what should be
    going on in these functions */
@@ -287,7 +289,7 @@ gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
   entryDescription = gnc_ui_get_widget(GTK_WIDGET(dialog), "entryDescription");
   entryCurrency    = gnc_ui_get_widget(GTK_WIDGET(dialog), "entryCurrency"   );
   entrySecurity    = gnc_ui_get_widget(GTK_WIDGET(dialog), "entrySecurity"   );
-  
+
   /* Check to make sure something was entered */
   if( strcmp( gtk_entry_get_text(GTK_ENTRY(entryAccountName)), "" ) == 0 ) 
   {
@@ -336,7 +338,7 @@ gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
 
   refreshMainWindow();
 
-  gnome_dialog_close ( GNOME_DIALOG(accData->dialog) );
+  gnome_dialog_close(GNOME_DIALOG(gtk_widget_get_toplevel(dialog)));
 
 }
 
@@ -374,7 +376,8 @@ accWindow (AccountGroup *grp)
   GtkWidget *listOfTypes;
   GtkWidget *frameParentAccount;
   GtkWidget *frameParent;
-  GtkWidget *scrolledWindow;
+  GtkWidget *scrolledWindow1;
+  GtkWidget *scrolledWindow2;
   GtkWidget *tree1;
   gchar     *title      = SETUP_ACCT_STR;
 
@@ -520,7 +523,7 @@ accWindow (AccountGroup *grp)
   listOfTypes = gtk_list_new ();
   gtk_object_set_data (GTK_OBJECT (accData->dialog), "listOfTypes", listOfTypes);
   gtk_widget_show (listOfTypes);
-  gtk_container_add (GTK_CONTAINER (frameList), listOfTypes);
+//  gtk_container_add (GTK_CONTAINER (frameList), listOfTypes);
 
   frameParentAccount = gtk_frame_new ("Parent Account");
   gtk_object_set_data (GTK_OBJECT (accData->dialog), "frameParentAccount", frameParentAccount);
@@ -538,14 +541,22 @@ accWindow (AccountGroup *grp)
   gtk_object_set_data (GTK_OBJECT (accData->dialog), "tree1", tree1);
   gtk_widget_show (tree1);
 
-  scrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledWindow),
+  scrolledWindow1 = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledWindow1),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  gtk_widget_show (scrolledWindow);
+  gtk_widget_show (scrolledWindow1);
 
-  gtk_container_add( GTK_CONTAINER( frameParent ), scrolledWindow );
-  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolledWindow), 
+  scrolledWindow2 = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledWindow2),
+				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_widget_show (scrolledWindow2);
+
+  gtk_container_add( GTK_CONTAINER( frameList   ), scrolledWindow2);
+  gtk_container_add( GTK_CONTAINER( frameParent ), scrolledWindow1 );
+  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolledWindow1), 
                                         GTK_WIDGET(tree1));
+  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolledWindow2), 
+                                        GTK_WIDGET(listOfTypes));                                        
 
   gtk_widget_set_usize ( GTK_WIDGET(accData->dialog), 404, 376 );
 
@@ -586,6 +597,10 @@ accWindow (AccountGroup *grp)
   }
 
   /*** Callbacks ****************************************************/
+
+  gnome_dialog_button_connect (GNOME_DIALOG (accData->dialog), 0,
+                               GTK_SIGNAL_FUNC (gnc_ui_editnotes_callback), 
+                               accData->parentAccount);          
    
   gnome_dialog_button_connect (GNOME_DIALOG (accData->dialog), 1,
                                GTK_SIGNAL_FUNC (gnc_ui_accWindow_create_callback), 
@@ -594,64 +609,14 @@ accWindow (AccountGroup *grp)
   gnome_dialog_button_connect (GNOME_DIALOG (accData->dialog), 2,
                                GTK_SIGNAL_FUNC (gnc_ui_accWindow_cancelled_callback), 
                                accData);
+                               
+                     
 
   gtk_widget_show(GTK_WIDGET(accData->dialog));  
                        
   /*** End of Callbacks *********************************************/  
 
   return accData;
-}
-
-/********************************************************************\
- * editAccWindow                                                    *
- *   opens up a window to edit an account                           * 
- *                                                                  * 
- * Args:   parent   - the parent of the window to be created        * 
- *         account  - the account to edit                           * 
- * Return: none                                                     *
-\********************************************************************/
-EditAccWindow *
-editAccWindow( Account *acc ) {
-  EditAccWindow *editAccData = NULL;
-
-  L("STUB: editAccWindow needs to be written for GNOME.\n");
-
-  return editAccData;
-}
-
-/********************************************************************\
- * Don't delete any structures -- the close callback wil do this    *
-\********************************************************************/
-
-void
-xaccDestroyEditAccWindow (Account * acc) {
-
-  L("STUB: xaccDestroyEditAccWindow needs to be written for GNOME.\n");
-  
-}
-
-/********************************************************************\
- *                                                                  * 
-\********************************************************************/
-
-EditNotesWindow *
-editNotesWindow (Account *acc) {
-  EditNotesWindow *enw = NULL;
-
-  L("STUB: editNotesWindow needs to be written for GNOME.\n");
-
-  return enw;
-}
-
-/********************************************************************\
- * don't delete any structures; the close callack will do this       *
-\********************************************************************/
-
-void 
-xaccDestroyEditNotesWindow (Account *acc) {
-  
-  L("STUB: xaccDestroyEditNotesWindow needs to be written for GNOME.\n");
-
 }
 
 
