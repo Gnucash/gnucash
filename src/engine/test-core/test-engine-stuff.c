@@ -499,7 +499,7 @@ change_trans_helper (GNCSession *session, Transaction *trans, GList *accounts)
 
   make_random_changes_to_transaction (session, trans);
 
-  switch (get_random_int_in_range (0, 6))
+  switch (get_random_int_in_range (0, 3))
   {
     case 0: /* delete some splits, add some more */
       do
@@ -545,7 +545,10 @@ change_trans_helper (GNCSession *session, Transaction *trans, GList *accounts)
       make_random_changes_to_split (split);
   }
 
-  xaccTransCommitEdit (trans);
+  if (get_random_boolean ())
+    xaccTransCommitEdit (trans);
+  else
+    xaccTransRollbackEdit (trans);
 }
 
 static gboolean
@@ -588,6 +591,12 @@ make_random_changes_to_group (GNCSession *session, AccountGroup *group)
 
     xaccAccountInsertSubAccount (account, new_account);
   }
+
+  g_list_free (accounts);
+  accounts = xaccGroupGetSubAccounts (group);
+
+  /* Add some new transactions */
+  add_random_transactions_to_session (session, get_random_int_in_range (1, 6));
 
   /* Mess with the accounts */
   for (node = accounts; node; node = node->next)

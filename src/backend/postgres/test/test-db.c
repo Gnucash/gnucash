@@ -201,6 +201,94 @@ test_access (const char *db_name, const char *mode, gboolean multi_user)
   return TRUE;
 }
 
+static gpointer
+mark_account_commodities (Account *a, gpointer data)
+{
+  GHashTable *hash = data;
+
+  g_hash_table_insert (hash, xaccAccountGetCommodity (a), hash);
+
+  return NULL;
+}
+
+static int
+mark_transaction_commodities (Transaction *t, void *data)
+{
+  GHashTable *hash = data;
+
+  g_hash_table_insert (hash, xaccTransGetCurrency (t), hash);
+
+  return TRUE;
+}
+
+static gboolean
+mark_price_commodities (GNCPrice *p, gpointer data)
+{
+  GHashTable *hash = data;
+
+  g_hash_table_insert (hash, gnc_price_get_commodity (p), hash);
+  g_hash_table_insert (hash, gnc_price_get_currency (p), hash);
+
+  return TRUE;
+}
+
+typedef struct
+{
+  GHashTable *hash;
+  GList *to_delete;
+} CommodityDeleteInfo;
+
+static gboolean
+add_commodity_to_delete (gnc_commodity *com, gpointer data)
+{
+  CommodityDeleteInfo *cdi = data;
+
+  if (!g_hash_table_lookup (cdi->hash, com) &&
+      safe_strcmp (gnc_commodity_get_namespace (com),
+                   GNC_COMMODITY_NS_ISO) != 0)
+    cdi->to_delete = g_list_prepend (cdi->to_delete, com);
+
+  return TRUE;
+}
+
+static void
+remove_unneeded_commodities (GNCSession *session)
+{
+  CommodityDeleteInfo cdi;
+  GNCBook *book;
+  GList *node;
+
+  g_return_if_fail (session);
+
+  cdi.hash = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+  book = gnc_session_get_book (session);
+
+  xaccGroupForEachAccount (gnc_book_get_group (book),
+                           mark_account_commodities,
+                           cdi.hash, TRUE);
+
+  xaccGroupForEachTransaction (gnc_book_get_group (book),
+                               mark_transaction_commodities,
+                               cdi.hash);
+
+  gnc_pricedb_foreach_price (gnc_book_get_pricedb (book),
+                             mark_price_commodities,
+                             cdi.hash, FALSE);
+
+  cdi.to_delete = NULL;
+
+  gnc_commodity_table_foreach_commodity (gnc_book_get_commodity_table (book),
+                                         add_commodity_to_delete, &cdi);
+
+  for (node = cdi.to_delete; node; node = node->next)
+    gnc_commodity_table_remove (gnc_book_get_commodity_table (book),
+                                node->data);
+
+  g_list_free (cdi.to_delete);
+  g_hash_table_destroy (cdi.hash);
+}
+
 static gboolean
 test_updates (GNCSession *session, const char *db_name, const char *mode,
               gboolean multi_user)
@@ -223,22 +311,7 @@ test_updates (GNCSession *session, const char *db_name, const char *mode,
                      db_name, mode))
     return FALSE;
 
-  /* make_random_changes_to_session (session); */
-  {
-    Account *account;
-    Account *new_account;
-    AccountGroup *group;
-    GList *list;
-
-    group = gnc_book_get_group (gnc_session_get_book (session));
-    list = xaccGroupGetSubAccounts (group);
-
-    account = g_list_last (list)->data;
-
-    new_account = get_random_account (session);
-
-    xaccAccountInsertSubAccount (account, new_account);
-  }
+  make_random_changes_to_session (session);
 
   if (!multi_user)
   {
@@ -256,6 +329,9 @@ test_updates (GNCSession *session, const char *db_name, const char *mode,
 
   if (!load_db_file (session_2, db_name, mode))
     return FALSE;
+
+  remove_unneeded_commodities (session);
+  remove_unneeded_commodities (session_2);
 
   ok = gnc_book_equal (gnc_session_get_book (session),
                        gnc_session_get_book (session_2));
@@ -297,7 +373,7 @@ test_mode (const char *db_name, const char *mode,
   session = get_random_session ();
 
   add_random_transactions_to_session (session,
-                                      get_random_int_in_range (1, 20));
+                                      get_random_int_in_range (10, 20));
 
   if (!save_db_file (session, db_name, mode))
     return FALSE;
