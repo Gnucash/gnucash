@@ -20,12 +20,28 @@
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-8))
 (use-modules (gnucash gnc-module))
+(use-modules (ice-9 slib))
+(require 'printf)
 
 ;; A list of things to do when in batch mode after the initial
 ;; startup.  List items may be strings, in which case they're read and
 ;; evaluated or procedures, in which case they're just executed.
 ;; The items will be done in reverse order.
 (define gnc:*batch-mode-things-to-do* '())
+
+(define (gnc:print-unstable-message)
+  (newline)
+  (newline)
+  (display (_ "This is a development version. It may or may not work."))
+  (newline)
+  (display (_ "Report bugs and other problems to gnucash-devel@gnucash.org."))
+  (newline)
+  (display (sprintf #f (_ "The last stable version was %s.") "GnuCash 1.6.2"))
+  (newline)
+  (display (sprintf #f (_ "The next stable version will be %s.")
+                    "GnuCash 1.8.0"))
+  (newline)
+  (newline))
 
 (define (append-path pathname val)
   (let* ((current (getenv pathname))
@@ -249,8 +265,7 @@
   ;; Now the fun begins.
   (gnc:startup)
 
-  (if (not (= (gnc:lowlev-app-init) 0))
-      (gnc:shutdown 0))
+  (gnc:print-unstable-message)
 
   ;; add a hook to shut down the expression parser
   (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:exp-parser-shutdown)
