@@ -48,14 +48,22 @@ typedef struct {
 } GNCTreeModelAccountClass;
 
 /* function prototypes */
-GType                gnc_tree_model_account_get_type (void);
+GType                gnc_tree_model_account_get_type              (void);
 
-GNCTreeModelAccount *gnc_tree_model_account_new         (AccountGroup *group);
-void                 gnc_tree_model_account_set_root    (GNCTreeModelAccount *model,
-						         AccountGroup *group);
+GNCTreeModelAccount *gnc_tree_model_account_new                   (AccountGroup *group);
+void                 gnc_tree_model_account_set_root              (GNCTreeModelAccount *model,
+						                   AccountGroup *group);
 
-Account             *gnc_tree_model_account_get_account (GNCTreeModelAccount *model,
-                                                         GtkTreeIter *iter);
+Account             *gnc_tree_model_account_get_account           (GNCTreeModelAccount *model,
+                                                                   GtkTreeIter *iter);
+
+void                 gnc_tree_model_account_set_toplevel          (GNCTreeModelAccount *model,
+                                                                   Account *toplevel);
+Account             *gnc_tree_model_account_get_toplevel          (GNCTreeModelAccount *model);
+
+void                 gnc_tree_model_account_get_iter_from_account (GNCTreeModelAccount *model,
+                                                                   Account *account,
+                                                                   GtkTreeIter *iter);
 
 G_END_DECLS
 

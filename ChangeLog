@@ -1,3 +1,45 @@
+2003-05-20  Jan Arne Petersen  <jpetersen@uni-bonn.de>
+
+	* src/gnome-utils/Makefile.am:
+	Add src/file/backend to the INCLUDE dirs.
+
+	* src/gnome-utils/dialog-account.c:
+	Replace GncAccountTree by GtkTreeView and GNCTreeModelAccount.
+	Replace gtk_signal_connect by g_signal_connect.
+	Replace GncDateEdit by GnomeDateEdit (probably a temporary fix).
+	Replace GnomeDialog by GtkDialog
+
+	(gnc_ui_to_account),
+	(gnc_finish_ok), (extra_change_verify), (gnc_edit_account_ok),
+	(gnc_new_account_ok), (gnc_account_window_response_cb),
+	(gnc_account_type_list_create), (gnc_account_window_create),
+	(get_ui_fullname), (close_handler),
+	(gnc_ui_new_account_window_internal),
+	(gnc_ui_new_accounts_from_name_with_defaults),
+	(gnc_ui_edit_account_window), (gnc_ui_refresh_account_window):
+
+	Add support for a virtual toplevel account into the account
+	tree model.
+	* src/gnome-utils/gnc-tree-model-account.c: 
+	(gnc_tree_model_account_init), (gnc_tree_model_account_set_root),
+	(gnc_tree_model_account_set_toplevel),
+	(gnc_tree_model_account_get_toplevel),
+	(gnc_tree_model_account_get_iter_from_account),
+	(gnc_tree_model_account_get_iter),
+	(gnc_tree_model_account_get_path),
+	(gnc_tree_model_account_iter_next),
+	(gnc_tree_model_account_iter_children),
+	(gnc_tree_model_account_iter_has_child),
+	(gnc_tree_model_account_iter_n_children),
+	(gnc_tree_model_account_iter_nth_child),
+	(gnc_tree_model_account_iter_parent), (account_row_inserted):
+	* src/gnome-utils/gnc-tree-model-account.h:
+
+	Remove '#if 0' from druid-hierarchy.c and
+	update the account glade file (replace GtkCList/Tree by GtkTreeView)
+	* src/gnome/druid-hierarchy.c:
+	* src/gnome/glade/account.glade:
+
 
 2003-05-19 TomF changes for gnucash-gnome2-dev, 18th batch
 	* src/gnome/dialog-tax-info.c:
