@@ -34,7 +34,7 @@ CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH}
 ######################################################################
 # See Makefile.common for information about these variables.
 COMMON_SRCS   := MultiLedger.c SplitLedger.c 
-CLEAN_SUBDIRS := engine gnome motif register guile swig qt
+CLEAN_SUBDIRS := engine gnome motif register guile reports swig qt
 ######################################################################
 
 all: default

@@ -1,14 +1,11 @@
 #! /bin/sh
-# @configure_input@
 
 GNC_ARGS="${GNC_ARGS} --debug"
 GNC_ARGS="${GNC_ARGS} --startup-file ./share/scm/startup.scm"
 GNC_ARGS="${GNC_ARGS} --share-dir ./share"
 GNC_ARGS="${GNC_ARGS} --config-dir ./etc"
 GNC_ARGS="${GNC_ARGS} --load-path (\"(./share/scm)\")"
-
-XACC_HELP=${XACC_HELP}:./Docs:./Reports
-export XACC_HELP
+GNC_ARGS="${GNC_ARGS} --doc-path  (\"(./Docs)\"\"(./Reports)\")"
 
 # Run whichever one was built last.
 exec gnucash.bin ${GNC_ARGS} $@

@@ -40,11 +40,12 @@
   (gnc:debug "starting up.")
   #t)
 
-(define (gnc:shutdown value)
-  ;; FIXME: This should be synchronized with the C shutdown process...
-  (gnc:debug "shutting down.")
-  (exit 0))
+(define (gnc:shutdown exit-status)
+  (gnc:debug "Shutdown -- exit-status: " exit-status)
 
+  (gnc:hook-run-danglers gnc:*shutdown-hook*)
+  (_gnc_shutdown_ exit-status)
+  (exit exit-status))
 
 (define gnc:*user-config-loaded?* #f)
 
@@ -85,6 +86,7 @@
           #f))))
 
 (define gnc:_load-path-directories_ #f)
+(define gnc:_doc-path-directories_ #f)
 
 (define (directory? path)
   ;; This follows symlinks normally.
@@ -118,7 +120,7 @@
                                        (gnc:directory-subdirectories full-path)
                                        dirs))))))))))))
 
-(define (gnc:_load-path-expand_ items)
+(define (gnc:_path-expand_ items default-items)
   (if
    (null? items)
    '()  
@@ -127,9 +129,8 @@
      (cond
       ((eq? item 'default)
        (append 
-        (gnc:_load-path-expand_
-         (gnc:config-var-default-value-get gnc:*load-path*)))
-       (gnc:_load-path-expand_ other-items))
+        (gnc:_path-expand_ default-items))
+       (gnc:_path-expand_ other-items default-items))
       ((string? item)
        (if (and (char=? #\( (string-ref item 0))
                 (char=? #\) (string-ref item (- (string-length item) 1))))
@@ -139,29 +140,60 @@
              
              (if (directory? current-dir)
                  (let ((subdirs (gnc:directory-subdirectories current-dir))
-                       (rest (gnc:_load-path-expand_ other-items)))
+                       (rest (gnc:_path-expand_ other-items default-items)))
                    (cons current-dir (append subdirs rest)))
                  (begin
                    (gnc:warn "Non-directory " current-dir
-                             "in gnc:*load-path* value."
+                             "in gnc:_path-expand_ item."
                              "Ignoring.")
                    '())))
            (if (directory? item)
                (begin
-                 (gnc:warn "Non-directory " item "in gnc:*load-path* value."
+                 (gnc:warn "Non-directory " item "in gnc:_path-expand_ item."
                            "Ignoring.")
                  '())
-               (cons item (gnc:_load-path-expand_ other-items)))))
-      (else (gnc:warn "Invalid item " item " in gnc:*load-path*.  Ignoring")
-            (gnc:_load-path-expand_ other-items))))))
+               (cons item (gnc:_path-expand_ other-items default-items)))))
+      (else (gnc:warn "Invalid item " item " in gnc:_path-expand_.  Ignoring")
+            (gnc:_path-expand_ other-items default-items))))))
 
 (define (gnc:_load-path-update_ items)
-  (let ((result (gnc:_load-path-expand_ items)))
+  (let ((result (gnc:_path-expand_
+                 items
+                 (gnc:config-var-default-value-get gnc:*load-path*))))
     (if result
         (begin
           (set! gnc:_load-path-directories_ result)
           result)
         #f)))
+
+(define (gnc:_doc-path-update_ items)
+  (let ((result (gnc:_path-expand_
+                 items
+                 (gnc:config-var-default-value-get gnc:*doc-path*))))
+    (if result
+        (begin
+          (set! gnc:_doc-path-directories_ result)
+          result)
+        #f)))
+
+(define (gnc:find-in-directories file directories)
+  "Find file named 'file' anywhere in 'directories'.  'file' must be a
+string and 'directories' must be a list of strings."
+
+  (gnc:debug "gnc:find-in-directories looking for " file " in " directories)
+  
+  (do ((rest directories (cdr rest))
+       (finished? #f)
+       (result #f))
+      ((or (null? rest) finished?) result)
+    
+    (let ((file-name (string-append (car rest) "/" file)))
+      (gnc:debug "  checking for " file-name)
+      (if (access? file-name F_OK)
+          (begin
+            (gnc:debug "found file " file-name)
+            (set! finished? #t)
+            (set! result file-name))))))
 
 ;; It may make sense to dump this in favor of guile's load-path later,
 ;; but for now this works, and having gnc things separate may be less
@@ -171,28 +203,17 @@
   "Name must be a string.  The system attempts to locate the file of
 the given name and load it.  The system will attempt to locate the
 file in all of the directories specified by gnc:*load-path*."
-
-  (let ((directories gnc:_load-path-directories_))
-    (gnc:debug "gnc:load looking for " name " in " directories)
-
-    (do ((rest directories (cdr rest))
-         (finished? #f)
-         (result #f))
-        ((or (null? rest) finished?) result)
-
-      (let ((file-name (string-append (car rest) "/" name)))
-        (gnc:debug "  checking for " file-name)
-        (if (access? file-name F_OK)
-            (if (false-if-exception (primitive-load file-name))
-                (begin
-                  (gnc:debug "loaded file " file-name)
-                  (set! finished? #t)
-                  (set! result #t))
-                (begin
-                  (gnc:warn "failure loading " file-name)
-                  (set! finished? #t)
-                  (set! result #f))))))))
-
+  
+  (let ((file-name (gnc:find-in-directories name gnc:_load-path-directories_)))
+    (if (not file-name)
+        #f
+        (if (false-if-exception (primitive-load file-name))
+            (begin
+              (gnc:debug "loaded file " file-name)
+              #t)
+            (begin
+              (gnc:warn "failure loading " file-name)
+              #f)))))
 
 ;;; config-var: You can create them, set values, find out of the value
 ;;; is different from the default, and you can get a description.  You
@@ -314,6 +335,27 @@ variable is modified.  The symbol element default will expand to the default dir
     (string-append "(" (getenv "HOME") "/.gnucash/scm)")
     (string-append "(" gnc:_share-dir-default_ "/scm)"))))
 
+(define gnc:*doc-path*
+  (gnc:make-config-var
+   "A list of strings indicating where to look for documentation files
+Any path element enclosed in parentheses will automatically be
+expanded to that directory and all its subdirectories whenever this
+variable is modified.  The symbol element default will expand to the
+default directory.  i.e. (gnc:config-var-value-set! gnc:*doc-path*
+'(\"/my/dir/\" default))"
+   (lambda (var value)
+     (if (not (list? value))
+         #f
+         (let ((result (gnc:_doc-path-update_ value)))
+           (if (list? result)
+               (list result)
+               #f))))
+   equal?
+   (list 
+    (string-append "(" (getenv "HOME") "/.gnucash/doc)")
+    (string-append "(" gnc:_doc-dir-default_ ")"))))
+
+
 (define gnc:*prefs*
   (list
    
@@ -364,19 +406,23 @@ variable is modified.  The symbol element default will expand to the default dir
                     (gnc:error "non-list given for --load-path: " val)
                     (gnc:shutdown 1)))))))
    
+   (cons
+    "doc-path"
+    (cons 'string
+          (lambda (val)
+            (let ((path-list
+                   (call-with-input-string val (lambda (port) (read port)))))
+              (if (list? path-list)
+                  (gnc:config-var-value-set! gnc:*doc-path* #f path-list)
+                  (begin
+                    (gnc:error "non-list given for --doc-path: " val)
+                    (gnc:shutdown 1)))))))
+   
    (cons "load-user-config" (cons 'boolean gnc:load-user-config))
    (cons "load-system-config" (cons 'boolean gnc:load-system-config))))
 
-;;TODO
-
-;;help-path...
-
-;;  /* get environment var stuff... TODO let cmd-line opts override this stuff */
-;;  if( (helpPath = getenv(HELP_VAR)) == NULL )
-;;    helpPath = HELP_ROOT;
 
 ;; also "-c"
-
 
 
 (define (gnc:cmd-line-get-boolean-arg args)
@@ -410,29 +456,6 @@ variable is modified.  The symbol element default will expand to the default dir
 (define (gnc:prefs-show-usage)
   (display "usage: gnucash [ option ... ] [ datafile ]") (newline))
 
-;   (for-each
-;    (lambda (item)
-;      (display 
-;       (string-append
-;        "  --" (gnc:pref-name-get (cdr item)) " " 
-;               (gnc:pref-value-name-get (cdr item))))
-;      (newline)
-;      (display 
-;       (string-append
-;        "    description: " (gnc:pref-description-get (cdr item))))
-;      (newline)
-;      (display
-;       (string-append
-;        "    type: " (symbol->string (gnc:pref-type-get (cdr item)))))
-;      (newline)     
-;      (display
-;       "    default: ")
-;      (display (gnc:pref-default-get (cdr item)))
-;      (newline)     
-;      (newline)     
-;      )
-   
-;    gnc:*prefs*))
 
 (define (gnc:handle-command-line-args)
   (gnc:debug "handling command line arguments")
@@ -491,28 +514,29 @@ variable is modified.  The symbol element default will expand to the default dir
     
     result))
 
-
 ;;;; Now the fun begins.
 
 (gnc:startup)
 
 (if (not (gnc:handle-command-line-args))
-    (gnucash:shutdown 1))
+    (gnc:shutdown 1))
 
 ;;; Now we can load a bunch of files.
-;; (gnc:load 'hooks)
+
+(gnc:load "hooks.scm")
+(gnc:load "doc.scm")
 
 ;;; Load the system and user configs
 
 (if (not gnc:*user-config-loaded?*)
     (if (not (gnc:load-system-config))
-        (gnucash:shutdown 1)))
+        (gnc:shutdown 1)))
 
 (if (not gnc:*system-config-loaded?*)
     (if (not (gnc:load-user-config))
-        (gnucash:shutdown 1)))
+        (gnc:shutdown 1)))
 
-; (gnc:hook-run-danglers gnc:*startup-hooks*)
+(gnc:hook-run-danglers gnc:*startup-hook*)
 
 (if (or (gnc:config-var-value-get gnc:*arg-show-usage*)
          (gnc:config-var-value-get gnc:*arg-show-help*))

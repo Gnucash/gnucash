@@ -45,6 +45,10 @@ AC_ARG_WITH( motif-libraries,
        [  --with-motif-libraries=DIR   specify where to look for motif libs],
        X_LIBS="${X_LIBS} -L$with_motif_libraries" )
 
+AC_ARG_WITH( xmhtml-includes, 
+       [  --with-xmhtml-includes=DIR   specify where to look for xmhtml headers],
+       X_CFLAGS="${X_CFLAGS} -I$with_xmhtml_includes" )
+
 AC_ARG_WITH( xmhtml-libraries, 
        [  --with-xmhtml-libraries=DIR   specify where to look for xmhtml libs],
        X_LIBS="${X_LIBS} -L$with_xmhtml_libraries" )
@@ -104,7 +108,7 @@ AC_CHECK_LIB(XmHTML,  XmHTMLTextScrollToLine,
         XMHTML_TARGET=default 
         XMHTML_INC=/lib/XmHTML-1.1.0/src 
         LIBS="-L $srcdir/lib/XmHTML-1.1.0 $LIBS" , 
-        -lXm -L $x_libraries -lXext -lX11) 
+        -lXm -L $x_libraries $X_LIBS -lXext -lXt -lX11) 
 
 AC_SUBST(XMHTML_TARGET)
 AC_SUBST(XMHTML_INC)
@@ -126,6 +130,6 @@ AC_SUBST(GUILELIBS)
 # *******************************************
 AC_CONFIG_HEADER(config.h)
 
-AC_OUTPUT(gnucash Makefile src/Makefile src/engine/Makefile src/guile/Makefile src/gnome/Makefile src/motif/Makefile src/qt/Makefile src/register/Makefile src/reports/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile)
+AC_OUTPUT(Makefile src/Makefile src/engine/Makefile src/guile/Makefile src/gnome/Makefile src/motif/Makefile src/qt/Makefile src/register/Makefile src/reports/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile)
 
 chmod +x gnucash
