@@ -91,6 +91,7 @@ noinst_HEADERS = \
   sixtp-parsers.h \
   sixtp-writers.h \
   sixtp-stack.h \
+  sixtp-utils.h \
   sixtp-xml-write-utils.h \
   sixtp.h
 
