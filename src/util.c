@@ -39,7 +39,7 @@
 #include "util.h"
 
 /** GLOBALS *********************************************************/
-int loglevel = 3;
+int loglevel = 1;
 
 extern XtAppContext app;
 extern int realized;

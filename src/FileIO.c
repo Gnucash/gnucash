@@ -720,6 +720,43 @@ readDate( int fd, int token )
  ********************** SAVE DATA ***********************************
 \********************************************************************/
 
+static void
+xaccResetWriteFlags (AccountGroup *grp) 
+{
+   int i, numAcc;
+   if (!grp) return;
+
+  /* Zero out the write flag on all of the 
+   * transactions.  The write_flag is used to determine
+   * if a given transaction has already been written 
+   * out to the file.  This flag is necessary, since 
+   * double-entry transactions appear in two accounts,
+   * while they should be written only once to the file.
+   * The write_flag is used ONLY by the routines in this
+   * module.
+   */
+  numAcc = grp ->numAcc;
+  for( i=0; i<numAcc; i++ ) {
+    int n=0;
+    Account *acc;
+    Transaction * trans;
+    acc = getAccount (grp,i) ;
+
+    /* recursively do sub-accounts */
+    xaccResetWriteFlags (acc->children);
+    
+    /* zip over all accounts */
+    trans = getTransaction (acc, 0); 
+    n++;
+    while (trans) {
+      trans->write_flag = 0;
+      trans = getTransaction (acc, n); 
+      n++;
+    }
+  }
+
+}
+
 /********************************************************************\
  * writeData                                                        * 
  *   flattens the program data and saves it in a file               * 
@@ -730,7 +767,6 @@ readDate( int fd, int token )
 int 
 writeData( char *datafile, AccountGroup *grp )
   {
-  int i,numAcc;
   int err = 0;
   int token = VERSION;    /* The file format version */
   int fd;
@@ -746,20 +782,7 @@ writeData( char *datafile, AccountGroup *grp )
    * The write_flag is used ONLY by the routines in this
    * module.
    */
-  numAcc = grp ->numAcc;
-  for( i=0; i<numAcc; i++ ) {
-    int n=0;
-    Account *acc;
-    Transaction * trans;
-    acc = getAccount (grp,i) ;
-    trans = getTransaction (acc, n); 
-    n++;
-    while (trans) {
-      trans->write_flag = 0;
-      trans = getTransaction (acc, n); 
-      n++;
-    }
-  }
+  xaccResetWriteFlags (grp);
 
   /* now, open the file and start writing */
   fd = open( datafile, WFLAGS, PERMS );
@@ -798,6 +821,8 @@ writeGroup (int fd, AccountGroup *grp )
   {
   int i,numAcc;
   int err = 0;
+
+  ENTER ("writeGroup");
   
   if (NULL == grp) return 0;
 
@@ -830,12 +855,13 @@ writeAccount( int fd, Account *acc )
   {
   Transaction *trans;
   int err=0;
-  int i,numTrans, ntrans;
+  int i, numUnwrittenTrans, ntrans;
   int acc_id;
   int numChildren = 0;
   
+  INFO_2 ("writeAccount(): writing acct %s \n", acc->accountName);
+
   acc_id = acc->id;
-  DEBUGCMD (printf ("Info: writeAccount: writing acct id %d %x \n", acc_id, acc));
   XACC_FLIP_INT (acc_id);
   err = write( fd, &acc_id, sizeof(int) );
   if( err != sizeof(int) )
@@ -865,23 +891,24 @@ writeAccount( int fd, Account *acc )
    * number of transactions in this account, because some 
    * of the double entry transactions will already have been 
    * written. */
-  numTrans = 0;
-  i = 0;
-  trans = getTransaction (acc, i);
-  while (trans) {
-    i++;
-    if (0 == trans->write_flag) numTrans ++;
-    trans = getTransaction (acc, i);
+  numUnwrittenTrans = 0;
+  for( i=0; i<acc->numTrans; i++ ) {
+    trans = getTransaction(acc,i);
+    if (0 == trans->write_flag) numUnwrittenTrans ++;
   }
 
-  ntrans = numTrans;
+  ntrans = numUnwrittenTrans;
   XACC_FLIP_INT (ntrans);
   err = write( fd, &ntrans, sizeof(int) );
   if( err != sizeof(int) )
     return -1;
   
-  for( i=0; i<numTrans; i++ ) {
-    err = writeTransaction( fd, getTransaction(acc,i) );
+  INFO_2 ("writeAccount(): will write %d trans\n", numUnwrittenTrans);
+  for( i=0; i<acc->numTrans; i++ ) {
+    trans = getTransaction(acc,i);
+    if (0 == trans->write_flag) {
+       err = writeTransaction( fd, trans );
+    }
     if( err == -1 ) return err;
   }
 
