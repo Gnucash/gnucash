@@ -227,7 +227,7 @@ gnc_xfer_dialog_set_price_auto (XferDialog *xferData,
   if (gnc_numeric_zero_p (from_rate) || gnc_numeric_zero_p (to_rate))
     gnc_xfer_dialog_update_price (xferData);
 
-  price = gnc_numeric_div (from_rate, to_rate, GNC_DENOM_AUTO, 
+  price = gnc_numeric_div (to_rate, from_rate, GNC_DENOM_AUTO, 
                            GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND);
 
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(xferData->price_edit), price);
