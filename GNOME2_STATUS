@@ -1,0 +1,103 @@
+This is a ad-hoc list of list of what works and doesn't work in the g2
+port of gnucash.  The plan is to finish porting those parts of gnucash
+that have already been started (i.e. new windowing system, account
+tree, commodities tree, etc.), but not to port any additional features
+unless absolutely required.  The clist/ctree widgets *do* still exist
+in gtk2 and can be used, even though they've been marked as deprecated
+and will disappear in a future release.  Its important to get this
+release out the door and not stall it until all the deprecated
+functionality has been removed.
+
+Feel free to add to, delete from, or modify anything in this list.  If
+someone wants to turn this into a columnar table with a field for
+names of active developers, that'd be great.
+
+========================================
+             STATUS / TO DO
+========================================
+
+Main Window
+
+	- hbci functions missing from menus
+	- report functions missing from menus
+	
+Account Tree: - FUNCTIONAL
+
+	- can open/close multiple account tree windows
+	- can navigate account tree
+	- select an account and run a command
+	- Some menu/toolbar items functional
+
+	- Account tree doesn't open automatically
+	- importing qif produces errors
+
+
+Register Core - MINIMALLY FUNCTIONAL
+
+	- All widgets visible
+	- Popup widgets work
+
+	- Cannot enter data
+	- The first time it is used, the account popup immediately
+	  selects the first account. After that it functions normally.
+
+	"There's a nasty bug in the register code related to gnucash's
+	use of an off-screen gtkentry to do text manipulation.  g2
+	doesn't allow this, and I ran out of patience trying to fix
+	the problem and moved on to the account tree model/view.  At
+	some point, either I or someone else need sot go back and fix
+	this so the register isn't a read-only mechanism.  Hopefully
+	its a simple fix, and I didn't see it.  Other than this one
+	issue, the rest of the register works, as far as I can tell."
+
+Financial Calculator - WORKING
+
+Price Editor - MINIMALLY FUNCTIONAL
+
+	- Only loads one commodity
+	- Doesn't notice a new commodity, but adds another line from
+	  existing commodities.
+	- Remove/Edit doesn't work
+	- Get Quotes works.
+	- Close doesn't work.
+
+Commodity Editor - WORKING
+
+	- Enhance by converting to a tree so types can be
+	expanded/collapsed to find data easier
+
+Reconcile - APPEARS TO WORK
+
+Transfer - APPEARS TO WORK
+
+Stock Split Dialog - Mostly done
+	-Fix up accounts presented on "Cash In Lieu" page.  Always
+	shows top two levels.
+
+Find - MINIMALLY FUNCTIONAL
+	- Can generate a query in the dialog.
+	- Use of the "Date" selection sometimes crashes gnucash (not
+	  when you select it, but then you change from "Date" to
+	  something else.
+	- Clicking find or help crashes gnucash. (Not a problem with
+	  find. A problem with the code it calls.)
+
+
+View Toolbar/Summarybar/Statusbar - NEEDS WORK
+
+
+
+
+
+========================================
+              ENHANCEMENTS
+========================================
+
+1) New icons desired:
+
+	-) Add account
+	-) 
+
+2) Support multiple windows and moving plugin pages between windows.
+Support a preference on whether new plugin pages appear in the same or
+a new window.
