@@ -265,7 +265,7 @@ gnc_get_default_register_style()
   char *style_string;
 
   style_string = gnc_lookup_multichoice_option("Register", 
-                                               "Default Register Mode",
+                                               "Default Register Style",
                                                "ledger");
 
   if (safe_strcmp(style_string, "ledger") == 0)
