@@ -1,3 +1,14 @@
+2003-05-18  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/backend/file/gnc-schedxaction-xml-v2.c (tt_trn_handler): Fix
+	for existing/old data without posted dates.  If we encounter the
+	condition, fixup the transaction's Posted date to that of the
+	Entered date.
+
+	* src/engine/SchedXaction.c (xaccSchedXactionSetTemplateTrans):
+	Fix for creating new template transactions [from Scheduling
+	existing transactions], such that they have valid Posted dates.
+
 2003-05-19  Christian Stimming  <stimming@tuhh.de>
 
 	* po/de.po: Updated German translation.
