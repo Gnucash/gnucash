@@ -1,3 +1,9 @@
+2002-09-01  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/html-style-info.scm
+	(gnc:default-html-gnc-monetary-renderer): Add new workaround to
+	display the Euro symbol correctly in gtkhtml.
+
 2002-08-27  Christian Stimming  <stimming@tuhh.de>
 
 	* po/no.po, po/glossary/no.po: Updated Norwegian (bokmål)
