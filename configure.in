@@ -896,11 +896,19 @@ then
     AC_SUBST(GLADE_LIBS)
 
 
-    # check for gtkhtml 3.0 and 3.1
-    PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.1 ,,gtkhtml=0)
+    # check for gtkhtml 3.x
+    PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.6 ,,gtkhtml=0)
     if test $gtkhtml
-     then 
-        PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.0)
+      then
+         PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.2 ,,gtkhtml=0)
+         if test $gtkhtml
+           then 
+              PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.1 ,,gtkhtml=0)
+              if test $gtkhtml
+                then 
+                  PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.0)
+              fi
+        fi
     fi
     AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
     AC_SUBST(GTKHTML_CFLAGS)
