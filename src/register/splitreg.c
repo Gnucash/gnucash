@@ -237,7 +237,7 @@ configLayout (SplitRegister *reg)
 static void
 configTraverse (SplitRegister *reg)
 {
-   CellBlock *curs;
+   CellBlock *curs = NULL;
    int type = reg->type;
 
    switch (type) {
