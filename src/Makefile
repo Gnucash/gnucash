@@ -35,7 +35,7 @@ INCLPATH = -I.. \
 #           -I./../lib/libhtmlw 
 CFLAGS   = -O2
 LFLAGS   = -O2
-LIBS     = -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11 
+LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
 LIBPATH  = -L/usr/X11R6/lib
 TARGET   = ../xacc
 
