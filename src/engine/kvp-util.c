@@ -50,7 +50,7 @@ gnc_kvp_gemini (kvp_frame *kvp_root, const GUID *acct_guid,
    if (!kvp_root) return;
 
    /* cwd == 'current working directory' */
-   pwd = kvp_frame_get_frame (kvp_root, "gemini");
+   pwd = kvp_frame_get_frame (kvp_root, "gemini", NULL);
    if (!pwd) return;  /* error: can't ever happen */
 
    /* find, increment, store number of copies */
