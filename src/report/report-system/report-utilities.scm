@@ -492,7 +492,7 @@
   (let ((collector (gnc:account-get-comm-balance-at-date
                     account date include-children?)))
     (cadr (gnc:commodity-collector-assoc-pair 
-	   collector (gnc:account-get-commodity account)))))
+	   collector (gnc:account-get-commodity account) #f))))
 
 ;; This works similar as above but returns a commodity-collector, 
 ;; thus takes care of children accounts with different currencies.

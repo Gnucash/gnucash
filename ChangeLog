@@ -8,6 +8,9 @@
 	  to destroy ourselves and process the event later.  See #107953
 	  for more information.
 
+	* src/report/report-system/report-utilities.scm: had the wrong
+	  number of arguments in gnc:account-get-balance-at-date.
+
 2003-05-22  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-reports/owner-report.scm:  Better fix for 108731
