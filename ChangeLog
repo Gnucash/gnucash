@@ -1,5 +1,12 @@
 2003-03-15  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-date-edit.c: Fix the keypress handlers so
+	they work properly for both the text entry widget and the calendar
+	popup widget.
+
+	* src/gnome-utils/dialog-utils.c (gnc_handle_date_accelerator):
+	Eliminate a critical warning message. #106675
+
 	* src/register/ledger-core/split-register.c
 	(gnc_split_register_config): Force the cursor to the first line of
 	a transaction split before disabling "double line" mode in the
