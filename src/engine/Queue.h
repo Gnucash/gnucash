@@ -1,3 +1,14 @@
+/* XXXXXXXXXXXXXXXXXXXXXXXXXXX
+ Caution
+
+As of March 2003, this file is under construction, 
+it is in the process of being modernized 
+in order to allow the implementation of Lots to proceed forward.
+This is needed, in turn, to complete the implementation of books.
+
+this file does not currently compile
+*/
+
 /*
  * FILE:
  * Queue.h
@@ -61,8 +72,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __XACC_QUEUE_H__
-#define __XACC_QUEUE_H__
+#ifndef XACC_QUEUE_H
+#define XACC_QUEUE_H
 
 #include "Transaction.h"
 
@@ -106,4 +117,4 @@ double xaccQueuePopTailValue (Queue *, double);
 double xaccQueueGetValue (Queue *);
 double xaccQueueGetShares (Queue *);
 
-#endif /* __XACC_QUEUE_H__ */
+#endif /* XACC_QUEUE_H */

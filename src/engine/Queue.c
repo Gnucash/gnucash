@@ -1,3 +1,15 @@
+/* XXXXXXXXXXXXXXXXXXXXXXXXXXX
+ Caution
+
+As of March 2003, this file is under construction, 
+it is in the process of being modernized
+in order to allow the implementation of Lots to proceed forward.
+This is needed, in turn, to complete the implementation of books.
+
+this file does not currently compile
+*/
+
+
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -30,8 +42,8 @@
  * -- Does not allow pushhead after a pophead has occured.
  *
  * HISTORY:
- * created by Linas Vepstas January 1999
- * Copyright (c) 1999, 2000 Linas Vepstas
+ * Created by Linas Vepstas January 1999
+ * Copyright (c) 1999, 2000, 2003 Linas Vepstas <linas@linas.org>
  */
 
 #include <limits.h>
@@ -40,7 +52,9 @@
 
 #include "config.h"
 
-#include "Queue.h"
+#include "gnc-commodity.h"
+#include "gnc-engine.h"
+#include "GNCQueue.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "util.h"
@@ -50,31 +64,42 @@ static short module = MOD_ENGINE;
 
 /* ================================================== */
 
-struct _Queue {
+struct queue_s 
+{
+   GUID guid;  /* globally unique id */
+   GNCBook *book;
+
+   /* List of Lots ?? */
+
+   /* XXX commodity ??? */
    Split **split_list;
 
    int head_split;
    int tail_split;
    int list_len;
 
-   double head_amount;
-   double head_price;
+   gnc_numeric head_amount;
+   gnc_numeric head_value;
    Timespec head_date;
 
-   double tail_amount;
-   double tail_price;
+   gnc_numeric tail_amount;
+   gnc_numeric tail_value;
    Timespec tail_date;
 
+  /* kvp_data is a key-value pair database for storing simple
+   * "extra" information in splits, transactions, and accounts.
+   * it's NULL until accessed. */
+  kvp_frame * kvp_data;
 };
 
 /* ================================================== */
 
-Queue *
-xaccMallocQueue (void)
+GNCQueue *
+xaccMallocQueue (GNCBook *book)
 {
-   Queue * ret;
-   ret =  (Queue *) _malloc (sizeof (Queue));
-   xaccInitQueue (ret);
+   GNCQueue * ret;
+   ret =  (GNCQueue *) g_new (GNCQueue, 1);
+   xaccInitGNCQueue (ret, book);
    return ret;
 }
 
@@ -82,7 +107,7 @@ xaccMallocQueue (void)
 #define INITIAL_LENGTH 100
 
 void 
-xaccInitQueue (Queue *q)
+xaccInitQueue (GNCQueue *q, GNCBook *book)
 {
    if (!q) return;
 
@@ -90,86 +115,48 @@ xaccInitQueue (Queue *q)
    q->list_len = INITIAL_LENGTH;
    q->head_split = -1;
    q->tail_split = 0;
-   q->head_amount = 0.0;
-   q->tail_amount = 0.0;
-   q->head_price = 0.0;
-   q->tail_price = 0.0;
+   q->head_amount = gnc_numeric_zero();
+   q->tail_amount = gnc_numeric_zero();
+   q->head_price = gnc_numeric_zero();
+   q->tail_price = gnc_numeric_zero();
 
    q->head_date.tv_sec = 0;
    q->head_date.tv_nsec = 0;
    q->tail_date.tv_sec = 0;
    q->tail_date.tv_nsec = 0;
+
+   q->kvp_data =  kvp_frame_new();
+	q->book = book;
+   xaccGUIDNew (&q->guid, book);
+   xaccStoreEntity(book->entity_table, q, &q->guid, GNC_ID_QUEUE);
 }
 
 /* ================================================== */
 
 void 
-xaccFreeQueue (Queue *q)
+xaccFreeQueue (GNCQueue *q)
 {
    if (!q) return;
+
+   xaccRemoveEntity (q->book->entity_table, &q->guid);
 
    if (q->split_list) _free (q->split_list);
    q->split_list = 0x0;
    q->list_len = -1;
    q->head_split = -1;
    q->tail_split = 0;
-   q->head_amount = 0.0;
-   q->tail_amount = 0.0;
-   q->head_price = 0.0;
-   q->tail_price = 0.0;
+   q->head_amount = gnc_numeric_zero();
+   q->tail_amount = gnc_numeric_zero();
+   q->head_price = gnc_numeric_zero();
+   q->tail_price = gnc_numeric_zero();
 
-   _free (q);
-}
-
-/* ================================================== */
-/* get more memory, if needed */
-
-static void
-ExtendHead (Queue * q)
-{
-   Split **list, **newlist;
-   int i, len, tail;
-
-   /* if there's room to push one more item on the list, its a no-op */
-   if (1+(q->head_split) < q->list_len) return;
-
-   /* see if there's room at the bottom to slide the whole list down. */
-   /* as a rule of thumb, we'll shoot for a half-full queue */
-   if (2*(q->tail_split) > q->list_len) 
-   {
-      len = q->head_split - q->tail_split + 1;
-      list = q->split_list;
-      tail = q->tail_split;
-      for (i=0; i<len; i++) {
-         list[i] = list[i+tail]; 
-      }
-      q->tail_split = 0;
-      q->head_split = len-1;
-      return;
-   }
-
-   /* if we got to here, we need to malloc more memory. */
-   newlist = (Split **) malloc (2*(q->list_len)*sizeof (Split *));
-   q->list_len *= 2;
-
-   len = q->head_split - q->tail_split + 1;
-   list = q->split_list;
-   tail = q->tail_split;
-   for (i=0; i<len; i++) {
-      newlist[i] = list[i+tail]; 
-   }
-
-   q->tail_split = 0;
-   q->head_split = len-1;
-
-   q->split_list = newlist;
-   free(list);
+   g_free (q);
 }
 
 /* ================================================== */
 
 void 
-xaccQueuePushHead (Queue *q, Split *s)
+xaccQueuePushHead (GNCQueue *q, Split *s)
 {
   if (!q || !s) return;
 
@@ -184,9 +171,6 @@ xaccQueuePushHead (Queue *q, Split *s)
   /* don't queue a split that has no value */
   if (DEQ (s->damount, 0.0)) return;
 
-  /* make room, if need be */
-  ExtendHead (q);
-
   q->head_split ++;
   q->split_list [ q->head_split ] = s;
 }
@@ -194,7 +178,7 @@ xaccQueuePushHead (Queue *q, Split *s)
 /* ================================================== */
 
 double 
-xaccQueuePopTailShares (Queue *q, double shrs)
+xaccQueuePopTailShares (GNCQueue *q, double shrs)
 {
    int tp, hp;
    Split **list;
@@ -268,7 +252,7 @@ xaccQueuePopTailShares (Queue *q, double shrs)
 /* ================================================== */
 
 double 
-xaccQueuePopTailValue (Queue *q, double val)
+xaccQueuePopTailValue (GNCQueue *q, double val)
 {
    int tp, hp;
    Split **list;
@@ -343,14 +327,14 @@ xaccQueuePopTailValue (Queue *q, double val)
 /* these routines are same as above, but everything is reversed... */
 
 double 
-xaccQueuePopHeadValue (Queue *q, double val)
+xaccQueuePopHeadValue (GNCQueue *q, double val)
 {
    PERR("not implemented\n");
    return 0.0;
 }
 
 double 
-xaccQueuePopHeadShares (Queue *q, double val)
+xaccQueuePopHeadShares (GNCQueue *q, double val)
 {
    PERR("not implemented\n");
    return 0.0;
@@ -359,7 +343,7 @@ xaccQueuePopHeadShares (Queue *q, double val)
 /* ================================================== */
 
 double
-xaccQueueGetShares (Queue *q)
+xaccQueueGetShares (GNCQueue *q)
 {
    Split **list;
    double shrs = 0.0;
@@ -379,7 +363,7 @@ xaccQueueGetShares (Queue *q)
 }
 
 double 
-xaccQueueGetValue (Queue *q)
+xaccQueueGetValue (GNCQueue *q)
 {
    Split **list;
    double val = 0.0;
