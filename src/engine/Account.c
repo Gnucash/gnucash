@@ -1,7 +1,7 @@
 /********************************************************************\
  * Account.c -- the Account data structure                          *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998 Linas Vepstas                           *
+ * Copyright (C) 1997, 1998, 1999 Linas Vepstas                     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -38,7 +38,16 @@
 #include "TransactionP.h"
 #include "util.h"
 
+/* The unsafe_ops flag allows certain unsafe manipulations to be 
+ * performed on the data structures. Normally, this is disabled,
+ * as it can lead to scrambled data.
+ * hack alert -- this should be a configurable parameter.
+ */
+int unsafe_ops = 0;
+
 int next_free_unique_account_id = 0;
+
+static short module = MOD_ENGINE; 
 
 #ifndef FALSE
 #define FALSE 0
@@ -820,10 +829,10 @@ xaccAccountSetType (Account *acc, int tip)
 
    /* After an account type has been set, it cannot be changed */
    if (-1 < acc->type) {
-      printf ("Error: xaccAccountSetType(): "
-              "the type of the account cannot be changed "
-              "after its been set! \n"
-             );
+      PERR ("xaccAccountSetType(): "
+            "the type of the account cannot be changed "
+            "after its been set! \n"
+           );
       return;
    }
 
@@ -891,11 +900,17 @@ xaccAccountSetCurrency (Account *acc, char *str)
    CHECK (acc);
 
    if (acc->currency && (0x0 != acc->currency[0])) {
-      printf ("Error: xacAccountSetCurrency(): "
-              "the currency denomination of an account "
-              "cannot be changed!\n"
-             );
-      return;
+      if (unsafe_ops) {
+         PWARN ("xaccAccountSetCurrency(): "
+                "it is dangerous to change the currency denomination of an account! \n"
+                "\tAccount=%s old currency=%s new currency=%s \n",
+                acc->accountName, acc->currency, str);
+      } else {
+         PERR ("xaccAccountSetCurrency(): "
+               "the currency denomination of an account cannot be changed!\n"
+                "\tAccount=%s \n", acc->accountName);
+         return;
+      }
    }
    /* free the zero-length string */
    if (acc->currency) free (acc->currency);
@@ -909,11 +924,17 @@ xaccAccountSetSecurity (Account *acc, char *str)
    CHECK (acc);
 
    if (acc->security && (0x0 != acc->security[0])) {
-      printf ("Error: xacAccountSetCurrency(): "
-              "the security traded in an account "
-              "cannot be changed!\n"
-             );
-      return;
+      if (unsafe_ops) {
+         PWARN ("xaccAccountSetSecurity(): "
+                "it is dangerous to change the security denomination of an account! \n"
+                "\tAccount=%s old security=%s new security=%s \n",
+                acc->accountName, acc->security, str);
+      } else {
+         PERR ("xaccAccountSetSecurity(): "
+               "the security denomination of an account cannot be changed!\n"
+                "\tAccount=%s \n", acc->accountName);
+         return;
+      }
    }
    /* free the zero-length string */
    if (acc->security) free (acc->security);
