@@ -30,7 +30,7 @@
  *
  * HISTORY:
  * Created by Linas Vepstas May 2002
- * Copyright (c) 2002 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 2002.2003 Linas Vepstas <linas@linas.org>
  */
 
 #include "Account.h"
