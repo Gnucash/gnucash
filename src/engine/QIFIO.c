@@ -220,10 +220,12 @@ char * xaccReadQIFCategory (int fd, Account * acc)
          case 'R':
 	   break;
 
-	 /* B == ????  ... */
+         /* B == Budget Amount -- not (yet ?) used in GnuCash */
          case 'B':
-           PWARN ("Ignored: %s\n", qifline);
 	   break;
+
+         case '^':
+           break;    /* see below */
 
          default:
            PWARN ("Unknown transaction component %s\n", qifline);
@@ -380,7 +382,7 @@ char * xaccReadQIFAccList (int fd, AccountGroup *grp, int cat)
 
             /* trim off the parent account name ... */
             tok += sizeof(char);  /* get rid of the semi-colon */
-            xaccAccountSetName (acc, str);
+            xaccAccountSetName (acc, tok);
 
             xaccInsertSubAccount( parent, acc );
          } else {
