@@ -1,3 +1,20 @@
+2003-10-18  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/gnc-ui-util.h:
+	* src/gnome-utils/gnc-tree-model-account.[ch]:
+	* src/gnome-utils/gnc-tree-view-account.[ch]: Add support for the
+	"placeholder" column.
+
+	* src/gnome-utils/gnc-tree-model-example-account.c: Iters are
+	persistent. Mark them as such.
+
+	* src/gnome-utils/gnc-tree-model-selection.c: Bug fixes.
+
+	* src/gnome/druid-hierarchy.c: Overhaul.
+
+	* src/gnome/glade/account.glade: Minor tweaks for druid overhaul.
+
+	
 2003-10-17  David Hampton  <hampton@employees.org>
 
 	* src/register/register-gnome/gnucash-sheet.c: Can now enter text
