@@ -47,16 +47,18 @@
 const gchar *account_version_string = "2.0.0";
 
 /* ids */
-const char *gnc_account_string = "gnc:account";
-const char *act_name_string = "act:name";
-const char *act_id_string = "act:id";
-const char *act_type_string = "act:type";
-const char *act_currency_string = "act:currency";
-const char *act_code_string = "act:code";
-const char *act_description_string = "act:description";
-const char *act_security_string = "act:security";
-const char *act_slots_string = "act:slots";
-const char *act_parent_string = "act:parent";
+#define gnc_account_string "gnc:account"
+#define act_name_string "act:name"
+#define act_id_string "act:id"
+#define act_type_string "act:type"
+#define act_currency_string "act:currency"
+#define act_currency_scu_string "act:currency-scu"
+#define act_code_string "act:code"
+#define act_description_string "act:description"
+#define act_security_string "act:security"
+#define act_security_scu_string "act:security-scu"
+#define act_slots_string "act:slots"
+#define act_parent_string "act:parent"
 
 xmlNodePtr
 gnc_account_dom_tree_create(Account *act)
@@ -75,8 +77,11 @@ gnc_account_dom_tree_create(Account *act)
                     xaccAccountTypeEnumAsString(xaccAccountGetType(act))));
 
     xmlAddChild(ret, commodity_ref_to_dom_tree(act_currency_string,
-                                            xaccAccountGetCurrency(act)));
+                                               xaccAccountGetCurrency(act)));
 
+    xmlAddChild(ret, int_to_dom_tree(act_currency_scu_string,
+                                     xaccAccountGetCurrencySCU(act)));
+    
     if(xaccAccountGetCode(act) &&
         strlen(xaccAccountGetCode(act)) > 0)
     {
@@ -95,6 +100,8 @@ gnc_account_dom_tree_create(Account *act)
     {
         xmlAddChild(ret, commodity_ref_to_dom_tree(act_security_string,
                                                 xaccAccountGetSecurity(act)));
+        xmlAddChild(ret, int_to_dom_tree(act_security_scu_string,
+                                         xaccAccountGetSecuritySCU(act)));
     }
 
     if(xaccAccountGetSlots(act))
@@ -174,11 +181,31 @@ account_currency_handler (xmlNodePtr node, gpointer act)
 }
 
 static gboolean
+account_currency_scu_handler (xmlNodePtr node, gpointer act)
+{
+    gint64 val;
+    dom_tree_to_integer(node, &val);
+    xaccAccountSetCurrencySCU((Account*)act, val);
+
+    return TRUE;
+}
+
+static gboolean
 account_security_handler (xmlNodePtr node, gpointer act)
 {
     gnc_commodity *ref;
     ref = dom_tree_to_commodity_ref_no_engine(node);
     xaccAccountSetSecurity((Account*)act, ref);
+
+    return TRUE;
+}
+
+static gboolean
+account_security_scu_handler (xmlNodePtr node, gpointer act)
+{
+    gint64 val;
+    dom_tree_to_integer(node, &val);
+    xaccAccountSetSecuritySCU((Account*)act, val);
 
     return TRUE;
 }
@@ -225,15 +252,17 @@ account_description_handler(xmlNodePtr node, gpointer act)
 }
 
 static struct dom_tree_handler account_handlers_v2[] = {
-    { "act:name", account_name_handler, 1, 0 },
-    { "act:id", account_id_handler, 1, 0 },
-    { "act:type", account_type_handler, 1, 0 },
-    { "act:currency", account_currency_handler, 1, 0 },
-    { "act:code", account_code_handler, 0, 0 },
-    { "act:description", account_description_handler, 0, 0},
-    { "act:security", account_security_handler, 0, 0 },
-    { "act:slots", account_slots_handler, 0, 0 },
-    { "act:parent", account_parent_handler, 0, 0 },
+    { act_name_string, account_name_handler, 1, 0 },
+    { act_id_string, account_id_handler, 1, 0 },
+    { act_type_string, account_type_handler, 1, 0 },
+    { act_currency_string, account_currency_handler, 1, 0 },
+    { act_currency_scu_string, account_currency_scu_handler, 0, 0 },
+    { act_code_string, account_code_handler, 0, 0 },
+    { act_description_string, account_description_handler, 0, 0},
+    { act_security_string, account_security_handler, 0, 0 },
+    { act_security_scu_string, account_security_scu_handler, 0, 0 },
+    { act_slots_string, account_slots_handler, 0, 0 },
+    { act_parent_string, account_parent_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 
@@ -279,16 +308,16 @@ gnc_account_end_handler(gpointer data_for_children,
     else
     {
         gdata->cb(tag, gdata->data, acc);
+        /*
+         * Now return the account to the "edit" state.  At the end of reading
+         * all the transactions, we will Commit.  This replaces #splits
+         * rebalances with #accounts rebalances at the end.  A BIG win!
+         */
+        xaccAccountBeginEdit(acc);
     }
     
     xmlFreeNode(tree);
 
-    /* Now return the account to the "edit" state.  At the end of reading
-     * all the transactions, we will Commit.  This replaces #splits
-     *  rebalances with #accounts rebalances at the end.  A BIG win!
-     */
-    if (successful)
-      xaccAccountBeginEdit(acc);
 
     return successful;
 }
