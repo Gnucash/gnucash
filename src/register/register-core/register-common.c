@@ -31,7 +31,6 @@
 #include "pricecell.h"
 #include "recncell.h"
 #include "register-common.h"
-#include "textcell.h"
 #include "quickfillcell.h"
 
 
@@ -59,8 +58,6 @@ gnc_register_init (void)
   gnc_register_add_cell_type (PRICE_CELL_TYPE_NAME, xaccMallocPriceCell);
 
   gnc_register_add_cell_type (RECN_CELL_TYPE_NAME, xaccMallocRecnCell);
-
-  gnc_register_add_cell_type (TEXT_CELL_TYPE_NAME, xaccMallocTextCell);
 
   gnc_register_add_cell_type (QUICKFILL_CELL_TYPE_NAME,
                               xaccMallocQuickFillCell);

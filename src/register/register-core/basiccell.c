@@ -200,7 +200,7 @@ gnc_basic_cell_set_value (BasicCell *cell, const char *val)
     cell->set_value = cb;
   }
   else
-    xaccSetBasicCellValueInternal (cell, val);
+    gnc_basic_cell_set_value_internal (cell, val);
 }
 
 gboolean
@@ -249,8 +249,6 @@ xaccSetBasicCellBlankHelp (BasicCell *cell, const char *blank_help)
     cell->blank_help = g_strdup (blank_help);
 }
 
-/* ===================================================== */
-
 char *
 xaccBasicCellGetHelp (BasicCell *cell)
 {
@@ -263,10 +261,8 @@ xaccBasicCellGetHelp (BasicCell *cell)
   return cell->get_help_value(cell);
 }
 
-/* ===================================================== */
-
 void
-xaccSetBasicCellValueInternal (BasicCell *cell, const char *value)
+gnc_basic_cell_set_value_internal (BasicCell *cell, const char *value)
 {
   if (value == NULL)
     value = "";
@@ -283,7 +279,7 @@ xaccSetBasicCellWCValueInternal (BasicCell *cell, const GdkWChar *value)
 {
   if (!value)
   {
-    xaccSetBasicCellValueInternal (cell, "");
+    gnc_basic_cell_set_value_internal (cell, "");
     return;
   }
 

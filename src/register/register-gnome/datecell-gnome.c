@@ -219,7 +219,7 @@ xaccInitDateCell (DateCell *cell)
   box->date = *localtime (&secs);
   printDateCellDate (cell, buff);
 
-  xaccSetBasicCellValueInternal (&cell->cell, buff);
+  gnc_basic_cell_set_value_internal (&cell->cell, buff);
 }
 
 BasicCell *
@@ -233,8 +233,6 @@ xaccMallocDateCell (void)
 
    return &cell->cell;
 }
-
-/* =============================================== */
 
 static void
 date_picked_cb (GNCDatePicker *gdp, gpointer data)
@@ -353,8 +351,6 @@ unblock_picker_signals (DateCell *cell)
   gtk_signal_handler_unblock_by_data (GTK_OBJECT (box->date_picker), cell);
 }
 
-/* =============================================== */
-
 static void
 date_cell_gui_destroy (BasicCell *bcell)
 {
@@ -380,8 +376,6 @@ date_cell_gui_destroy (BasicCell *bcell)
 
   DEBUG ("date destroyed\n");
 }
-
-/* =============================================== */
 
 static void
 date_cell_destroy (BasicCell *bcell)
@@ -422,7 +416,7 @@ xaccSetDateCellValue (DateCell *cell, int day, int mon, int year)
 
   printDate (buff, dada.tm_mday, dada.tm_mon + 1, dada.tm_year + 1900);
 
-  xaccSetBasicCellValueInternal (&cell->cell, buff);
+  gnc_basic_cell_set_value_internal (&cell->cell, buff);
 
   if (!box->date_picker)
     return;
@@ -431,8 +425,6 @@ xaccSetDateCellValue (DateCell *cell, int day, int mon, int year)
   gnc_date_picker_set_date (box->date_picker, day, mon - 1, year);
   unblock_picker_signals (cell);
 }
-
-/* =============================================== */
 
 void 
 xaccSetDateCellValueSecs (DateCell *cell, time_t secs)
@@ -449,7 +441,7 @@ xaccSetDateCellValueSecs (DateCell *cell, time_t secs)
              box->date.tm_mon + 1, 
              box->date.tm_year + 1900);
 
-  xaccSetBasicCellValueInternal (&cell->cell, buff);
+  gnc_basic_cell_set_value_internal (&cell->cell, buff);
 
   if (!box->date_picker)
     return;
@@ -461,8 +453,6 @@ xaccSetDateCellValueSecs (DateCell *cell, time_t secs)
                             box->date.tm_year + 1900);
   unblock_picker_signals (cell);
 }
-
-/* ================================================ */
 
 #define THIRTY_TWO_YEARS 0x3c30fc00LL
 
@@ -513,7 +503,7 @@ xaccSetDateCellValueSecsL (DateCell *cell, long long secs)
              box->date.tm_mon + 1, 
              box->date.tm_year + 1900);
 
-  xaccSetBasicCellValueInternal (&cell->cell, buff);
+  gnc_basic_cell_set_value_internal (&cell->cell, buff);
 
   if (!box->date_picker)
     return;
@@ -525,8 +515,6 @@ xaccSetDateCellValueSecsL (DateCell *cell, long long secs)
                             box->date.tm_year + 1900);
   unblock_picker_signals (cell);
 }
-
-/* ================================================ */
 
 void
 xaccCommitDateCell (DateCell *cell)
@@ -544,7 +532,7 @@ xaccCommitDateCell (DateCell *cell)
              box->date.tm_mon + 1,
              box->date.tm_year + 1900);
 
-  xaccSetBasicCellValueInternal (&cell->cell, buff);
+  gnc_basic_cell_set_value_internal (&cell->cell, buff);
 
   if (!box->date_picker)
     return;
@@ -557,7 +545,6 @@ xaccCommitDateCell (DateCell *cell)
   unblock_picker_signals (cell);
 }
 
-/* =============================================== */
 static gboolean
 DateDirect (BasicCell *bcell,
             int *cursor_position,
@@ -688,7 +675,7 @@ DateDirect (BasicCell *bcell,
              box->date.tm_mon + 1,
              box->date.tm_year + 1900);
 
-  xaccSetBasicCellValueInternal (&cell->cell, buff);
+  gnc_basic_cell_set_value_internal (&cell->cell, buff);
 
   *start_selection = 0;
   *end_selection = -1;
@@ -783,8 +770,6 @@ DateMV (BasicCell *_cell,
   }
 }
 
-/* =============================================== */
-
 static void
 realizeDate (BasicCell *bcell, gpointer data)
 {
@@ -808,8 +793,6 @@ realizeDate (BasicCell *bcell, gpointer data)
   cell->cell.leave_cell = leaveDate;
 }
 
-/* =============================================== */
-
 static void
 moveDate (BasicCell *bcell)
 {
@@ -822,8 +805,6 @@ moveDate (BasicCell *bcell)
 
   box->calendar_popped = FALSE;
 }
-
-/* =============================================== */
 
 static int
 get_popup_height (GnomeCanvasItem *item,
@@ -877,8 +858,6 @@ enterDate (BasicCell *bcell,
   return TRUE;
 }
 
-/* =============================================== */
-
 static void
 leaveDate (BasicCell *bcell)
 {
@@ -891,8 +870,6 @@ leaveDate (BasicCell *bcell)
 
   box->calendar_popped = FALSE;
 }
-
-/* ================================================ */
 
 void
 xaccDateCellGetDate (DateCell *cell, Timespec *ts)
@@ -908,8 +885,6 @@ xaccDateCellGetDate (DateCell *cell, Timespec *ts)
   ts->tv_nsec = 0;
 }
 
-/* ================================================ */
-
 static void 
 setDateCellValue (BasicCell *_cell, const char *str)
 {
@@ -924,7 +899,7 @@ setDateCellValue (BasicCell *_cell, const char *str)
              box->date.tm_mon + 1, 
              box->date.tm_year + 1900);
 
-  xaccSetBasicCellValueInternal (_cell, buff);
+  gnc_basic_cell_set_value_internal (_cell, buff);
 
   if (!box->date_picker)
     return;
@@ -936,5 +911,3 @@ setDateCellValue (BasicCell *_cell, const char *str)
                             box->date.tm_year + 1900);
   unblock_picker_signals (cell);
 }
-
-/* =============== end of file =================== */

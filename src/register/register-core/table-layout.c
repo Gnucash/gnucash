@@ -346,13 +346,13 @@ restore_cell (BasicCell *bcell, CellBuffer *cb, CellBlock *cursor)
   for (r = 0; r < cursor->num_rows; r++)
     for (c = 0; c < cursor->num_cols; c++)
     {
-      CellBlockCell *cb_cell;
+      BasicCell *cell;
 
-      cb_cell = gnc_cellblock_get_cell (cursor, r, c);
-      if (cb_cell == NULL)
+      cell = gnc_cellblock_get_cell (cursor, r, c);
+      if (!cell)
         continue;
 
-      if (cb_cell->cell == bcell)
+      if (cell == bcell)
       {
         gnc_basic_cell_set_value (bcell, cb->value);
         bcell->changed = cb->changed;

@@ -231,7 +231,7 @@ quick_modify (BasicCell *_cell,
    *end_selection = -1;
    *cursor_position += change_len;
 
-   xaccSetBasicCellValueInternal (&cell->cell, match_str);
+   gnc_basic_cell_set_value_internal (&cell->cell, match_str);
 }
 
 /* ================================================ */
@@ -307,7 +307,7 @@ xaccSetQuickFillCellValue (QuickFillCell *cell, const char * value)
   if (cell == NULL)
     return;
 
-  xaccSetBasicCellValueInternal (&cell->cell, value);
+  gnc_basic_cell_set_value_internal (&cell->cell, value);
   gnc_quickfill_insert_wc (cell->qf, cell->cell.value_w, cell->sort);
 }
 

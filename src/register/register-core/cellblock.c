@@ -30,7 +30,7 @@
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
- * Copyright (c) 2000 Dave Peticolas
+ * Copyright (c) 2000-2001 Dave Peticolas <dave@krondo.com>
  */
 
 #include "config.h"
@@ -45,34 +45,17 @@ gnc_cellblock_new (int rows, int cols, const char *cursor_name)
 {
   CellBlock *cellblock;
 
+  g_return_val_if_fail (rows > 0, NULL);
+  g_return_val_if_fail (cols > 0, NULL);
   g_return_val_if_fail (cursor_name != NULL, NULL);
 
-  cellblock = g_new0(CellBlock, 1);
+  cellblock = g_new0 (CellBlock, 1);
 
   gnc_cellblock_init (cellblock, rows, cols);
 
   cellblock->cursor_name = g_strdup (cursor_name);
 
   return cellblock;
-}
-
-static void
-gnc_cellblock_cell_construct (gpointer _cb_cell, gpointer user_data)
-{
-  CellBlockCell *cb_cell = _cb_cell;
-
-  cb_cell->cell = NULL;
-}
-
-static void
-gnc_cellblock_cell_destroy (gpointer _cb_cell, gpointer user_data)
-{
-  CellBlockCell *cb_cell = _cb_cell;
-
-  if (cb_cell == NULL)
-    return;
-
-  cb_cell->cell = NULL;
 }
 
 static void
@@ -86,10 +69,9 @@ gnc_cellblock_init (CellBlock *cellblock, int rows, int cols)
   cellblock->stop_col  = -1;
 
   /* malloc new cell table */
-  cellblock->cb_cells = g_table_new (sizeof (CellBlockCell),
-                                     gnc_cellblock_cell_construct,
-                                     gnc_cellblock_cell_destroy, NULL);
-  g_table_resize (cellblock->cb_cells, rows, cols);
+  cellblock->cells = g_ptr_array_new ();
+
+  g_ptr_array_set_size (cellblock->cells, rows * cols);
 }
 
 void        
@@ -97,8 +79,8 @@ gnc_cellblock_destroy (CellBlock *cellblock)
 {
    if (!cellblock) return;
 
-   g_table_destroy (cellblock->cb_cells);
-   cellblock->cb_cells = NULL;
+   g_ptr_array_free (cellblock->cells, FALSE);
+   cellblock->cells = NULL;
 
    g_free (cellblock->cursor_name);
    cellblock->cursor_name = NULL;
@@ -106,13 +88,36 @@ gnc_cellblock_destroy (CellBlock *cellblock)
    g_free (cellblock);
 }
 
-CellBlockCell *
+void
+gnc_cellblock_set_cell (CellBlock *cellblock,
+                        int row, int col,
+                        BasicCell *cell)
+{
+  if (cellblock == NULL)
+    return;
+
+  if (row < 0 || row >= cellblock->num_rows)
+    return;
+
+  if (col < 0 || col >= cellblock->num_cols)
+    return;
+
+  cellblock->cells->pdata[(row * cellblock->num_cols) + col] = cell;
+}
+
+BasicCell *
 gnc_cellblock_get_cell (CellBlock *cellblock, int row, int col)
 {
   if (cellblock == NULL)
     return NULL;
 
-  return g_table_index (cellblock->cb_cells, row, col);
+  if (row < 0 || row >= cellblock->num_rows)
+    return NULL;
+
+  if (col < 0 || col >= cellblock->num_cols)
+    return NULL;
+
+  return cellblock->cells->pdata[(row * cellblock->num_cols) + col];
 }
 
 gboolean
@@ -126,17 +131,17 @@ gnc_cellblock_changed (CellBlock *cursor, gboolean include_conditional)
   for (r = 0; r < cursor->num_rows; r++)
     for (c = 0; c < cursor->num_cols; c++)
     {
-      CellBlockCell *cb_cell;
+      BasicCell *cell;
 
-      cb_cell = gnc_cellblock_get_cell (cursor, r, c);
-      if (cb_cell == NULL)
+      cell = gnc_cellblock_get_cell (cursor, r, c);
+      if (cell == NULL)
         continue;
 
-      if (gnc_basic_cell_get_changed (cb_cell->cell))
+      if (gnc_basic_cell_get_changed (cell))
         return TRUE;
 
       if (include_conditional &&
-          gnc_basic_cell_get_conditionally_changed (cb_cell->cell))
+          gnc_basic_cell_get_conditionally_changed (cell))
         return TRUE;
     }
 
@@ -154,15 +159,13 @@ gnc_cellblock_clear_changes (CellBlock *cursor)
   for (r = 0; r < cursor->num_rows; r++)
     for (c = 0; c < cursor->num_cols; c++)
     {
-      CellBlockCell *cb_cell;
+      BasicCell *cell;
 
-      cb_cell = gnc_cellblock_get_cell (cursor, r, c);
-      if (cb_cell == NULL)
+      cell = gnc_cellblock_get_cell (cursor, r, c);
+      if (cell == NULL)
         continue;
 
-      gnc_basic_cell_set_changed (cb_cell->cell, FALSE);
-      gnc_basic_cell_set_conditionally_changed (cb_cell->cell, FALSE);
+      gnc_basic_cell_set_changed (cell, FALSE);
+      gnc_basic_cell_set_conditionally_changed (cell, FALSE);
     }
 }
-
-/* --------------- end of file ----------------- */

@@ -92,8 +92,6 @@ static short module = MOD_GTK_REG;
 static gboolean auto_pop_combos = FALSE;
 
 
-/* =============================================== */
-
 BasicCell *
 xaccMallocComboCell (void)
 {
@@ -144,8 +142,6 @@ xaccInitComboCell (ComboCell *cell)
         box->ignore_strings = NULL;
         box->ignore_helps = NULL;
 }
-
-/* =============================================== */
 
 static void
 select_item_cb (GNCItemList *item_list, char *item_string, gpointer data)
@@ -266,8 +262,6 @@ unblock_list_signals (ComboCell *cell)
         gtk_signal_handler_unblock_by_data (GTK_OBJECT(box->item_list), cell);
 }
 
-/* =============================================== */
-
 static void
 combo_cell_gui_destroy (BasicCell *bcell)
 {
@@ -294,15 +288,11 @@ combo_cell_gui_destroy (BasicCell *bcell)
 	DEBUG("combo destroyed\n");
 }
 
-/* =============================================== */
-
 static void
 menustring_free (gpointer string, gpointer user_data)
 {
         g_free (string);
 }
-
-/* =============================================== */
 
 static void
 combo_cell_destroy (BasicCell *bcell)
@@ -349,8 +339,6 @@ combo_cell_destroy (BasicCell *bcell)
 	cell->cell.gui_realize = NULL;
 }
 
-/* =============================================== */
-
 void
 xaccClearComboCellMenu (ComboCell * cell)
 {
@@ -385,10 +373,8 @@ xaccClearComboCellMenu (ComboCell * cell)
         box->list_sorted = TRUE;
 }
 
-/* =============================================== */
-
 static void
-gnc_append_string_to_list(gpointer _string, gpointer _item_list)
+gnc_append_string_to_list (gpointer _string, gpointer _item_list)
 {
 	char *string = _string;
 	GNCItemList *item_list = GNC_ITEM_LIST (_item_list);
@@ -531,10 +517,8 @@ ComboMV (BasicCell *_cell,
 	gnc_item_list_select (box->item_list, match_str);
         unblock_list_signals (cell);
 
-        xaccSetBasicCellValueInternal (_cell, match_str);
+        gnc_basic_cell_set_value_internal (_cell, match_str);
 }
-
-/* =============================================== */
 
 static gboolean
 ComboDirect (BasicCell *bcell,
@@ -591,8 +575,8 @@ ComboDirect (BasicCell *bcell,
                                       strlen (bcell->value)) == 0) && 
                             (strcmp (match_str, bcell->value) != 0))
                         {
-                                xaccSetBasicCellValueInternal (bcell,
-                                                               match_str);
+                                gnc_basic_cell_set_value_internal (bcell,
+                                                                   match_str);
 
                                 block_list_signals (cell);
                                 gnc_item_list_select (box->item_list,
@@ -676,7 +660,7 @@ ComboDirect (BasicCell *bcell,
             (strncmp (match_str, bcell->value, strlen (bcell->value)) == 0) && 
             (strcmp (match_str, bcell->value) != 0))
         {
-                xaccSetBasicCellValueInternal (bcell, match_str);
+                gnc_basic_cell_set_value_internal (bcell, match_str);
 
                 block_list_signals (cell);
                 gnc_item_list_select (box->item_list, match_str);
@@ -689,8 +673,6 @@ ComboDirect (BasicCell *bcell,
 
         return TRUE;
 }
-
-/* =============================================== */
 
 static char *
 ComboHelpValue (BasicCell *bcell)
@@ -722,8 +704,6 @@ ComboHelpValue (BasicCell *bcell)
         return NULL;
 }
 
-/* =============================================== */
-
 static void
 combo_cell_gui_realize (BasicCell *bcell, gpointer data)
 {
@@ -750,8 +730,6 @@ combo_cell_gui_realize (BasicCell *bcell, gpointer data)
         cell->cell.direct_update = ComboDirect;
         cell->cell.get_help_value = ComboHelpValue;
 }
-
-/* =============================================== */
 
 static void
 combo_cell_gui_move (BasicCell *bcell)
@@ -857,8 +835,6 @@ combo_cell_enter (BasicCell *bcell,
 	return TRUE;
 }
 
-/* =============================================== */
-
 static void
 combo_cell_leave (BasicCell *bcell)
 {
@@ -887,11 +863,9 @@ combo_cell_leave (BasicCell *bcell)
                 if (find)
                         return;
 
-                xaccSetBasicCellValueInternal (bcell, "");
+                gnc_basic_cell_set_value_internal (bcell, "");
         }
 }
-
-/* =============================================== */
 
 void
 xaccComboCellSetStrict (ComboCell *cell, gboolean strict)
@@ -906,8 +880,6 @@ xaccComboCellSetStrict (ComboCell *cell, gboolean strict)
         box->strict = strict;
 }
 
-/* =============================================== */
-
 void
 xaccComboCellSetCompleteChar (ComboCell *cell, char complete_char)
 {
@@ -920,8 +892,6 @@ xaccComboCellSetCompleteChar (ComboCell *cell, char complete_char)
 
         box->complete_char = complete_char;
 }
-
-/* =============================================== */
 
 void
 xaccComboCellAddIgnoreString (ComboCell *cell,
@@ -941,8 +911,6 @@ xaccComboCellAddIgnoreString (ComboCell *cell,
                                             g_strdup (ignore_help));
 }
 
-/* =============================================== */
-
 void
 xaccComboCellSetAutoSize (ComboCell *cell, gboolean autosize)
 {
@@ -958,16 +926,11 @@ xaccComboCellSetAutoSize (ComboCell *cell, gboolean autosize)
         box->autosize = autosize;
 }
 
-/* =============================================== */
-
 void
 xaccComboCellSetAutoPop (gboolean auto_pop_combos_arg)
 {
         auto_pop_combos = auto_pop_combos_arg;
 }
-
-/* =============== end of file =================== */
-
 
 /*
   Local Variables:

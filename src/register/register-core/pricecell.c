@@ -158,7 +158,7 @@ PriceParse (PriceCell *cell, gboolean update_value)
     return;
 
   /* Otherwise, change it */
-  xaccSetBasicCellValueInternal (&cell->cell, newval);
+  gnc_basic_cell_set_value_internal (&cell->cell, newval);
 }
 
 /* ================================================ */
@@ -271,7 +271,7 @@ xaccSetPriceCellValue (PriceCell * cell, gnc_numeric amount)
   if (safe_strcmp (buff, cell->cell.value) == 0)
     return FALSE;
 
-  xaccSetBasicCellValueInternal (&cell->cell, buff);
+  gnc_basic_cell_set_value_internal (&cell->cell, buff);
 
   return TRUE;
 }
@@ -298,7 +298,7 @@ xaccSetPriceCellBlank (PriceCell *cell)
   cell->amount = gnc_numeric_zero ();
   cell->need_to_parse = FALSE;
 
-  xaccSetBasicCellValueInternal (&cell->cell, "");
+  gnc_basic_cell_set_value_internal (&cell->cell, "");
 }
 
 /* ================================================ */

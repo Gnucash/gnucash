@@ -133,7 +133,7 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                 {
                         gint x_offset, y_offset;
                         GdkRectangle rect;
-                        CellBlockCell *cb_cell;
+                        BasicCell *cell;
 
                         virt_loc.phys_col_offset = j;
 
@@ -144,9 +144,8 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                         else
                                 w = cd->pixel_width;
 
-                        cb_cell = gnc_cellblock_get_cell (cb, i, j);
-                        if (!cb_cell || !cb_cell->cell ||
-                            cb_cell->cell->cell_type < 0)
+                        cell = gnc_cellblock_get_cell (cb, i, j);
+                        if (!cell || cell->cell_type < 0)
                         {
                                 xpaint += w;
                                 continue;

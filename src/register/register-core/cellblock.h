@@ -65,13 +65,6 @@
 
 #include "gtable.h"
 
-
-typedef struct
-{
-  BasicCell *cell; /* cell handler */
-} CellBlockCell;
-
-
 typedef struct
 {
   short num_rows;
@@ -82,7 +75,7 @@ typedef struct
 
   char *cursor_name;
 
-  GTable *cb_cells; /* Holds the CellBlockCell table */
+  GPtrArray *cells; /* Holds the CellBlockCell table */
 } CellBlock;
 
 
@@ -90,13 +83,16 @@ CellBlock * gnc_cellblock_new (int rows, int cols, const char *cursor_name);
 
 void        gnc_cellblock_destroy (CellBlock *cellblock);
 
-CellBlockCell * gnc_cellblock_get_cell (CellBlock *cellblock,
-                                        int row, int col);
+void        gnc_cellblock_set_cell (CellBlock *cellblock,
+                                    int row, int col,
+                                    BasicCell *cell);
 
-gboolean gnc_cellblock_changed (CellBlock *cursor,
-                                gboolean include_conditional);
+BasicCell * gnc_cellblock_get_cell (CellBlock *cellblock,
+                                    int row, int col);
 
-void     gnc_cellblock_clear_changes (CellBlock *cursor);
+gboolean    gnc_cellblock_changed (CellBlock *cursor,
+                                   gboolean include_conditional);
+
+void        gnc_cellblock_clear_changes (CellBlock *cursor);
 
 #endif
-

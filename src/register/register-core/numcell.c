@@ -148,7 +148,7 @@ NumMV (BasicCell *_cell,
     if (safe_strcmp(buff, "") == 0)
       return;
 
-    xaccSetBasicCellValueInternal (&cell->cell, buff);
+    gnc_basic_cell_set_value_internal (&cell->cell, buff);
 
     *cursor_position = -1;
 
@@ -185,7 +185,7 @@ setNumCellValue (BasicCell *_cell, const char *str)
       cell->next_num = number + 1;
   }
 
-  xaccSetBasicCellValueInternal (_cell, str);
+  gnc_basic_cell_set_value_internal (_cell, str);
 }
 
 /* ================================================ */

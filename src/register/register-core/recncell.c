@@ -136,7 +136,7 @@ RecnSetValue (BasicCell *_cell, const char *value)
   if (!value || *value == '\0')
   {
     cell->reconciled_flag = NREC;
-    xaccSetBasicCellValueInternal (_cell, "");
+    gnc_basic_cell_set_value_internal (_cell, "");
     return;
   }
 
@@ -171,7 +171,7 @@ xaccRecnCellSetFlag (RecnCell *cell, char reconciled_flag)
 
   string = RecnCellGetString (reconciled_flag);
 
-  xaccSetBasicCellValueInternal (&cell->cell, string);
+  gnc_basic_cell_set_value_internal (&cell->cell, string);
 }
 
 /* ================================================ */

@@ -34,7 +34,6 @@
 #define NUM_CELL_TYPE_NAME       "num-cell"
 #define PRICE_CELL_TYPE_NAME     "price-cell"
 #define RECN_CELL_TYPE_NAME      "recn-cell"
-#define TEXT_CELL_TYPE_NAME      "text-cell"
 #define QUICKFILL_CELL_TYPE_NAME "quickfill-cell"
 
 void gnc_register_init (void);

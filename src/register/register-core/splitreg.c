@@ -206,7 +206,7 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
 {
   CellBlock *header;
   CellBlock *cursor_sl;
-  CellBlockCell *cb_cell;
+  BasicCell *cell;
 
   header = gnc_table_layout_get_cursor (reg->table->layout, CURSOR_HEADER);
 
@@ -216,17 +216,14 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
   header->start_col = MIN (header->start_col, col);
   header->stop_col  = MAX (header->stop_col,  col);
 
-  cb_cell = gnc_cellblock_get_cell (cursor, row, col);
-
-  cb_cell->cell = gnc_table_layout_get_cell (reg->table->layout, cell_type);
-
-  cb_cell = gnc_cellblock_get_cell (header, row, col);
+  cell = gnc_table_layout_get_cell (reg->table->layout, cell_type);
+  gnc_cellblock_set_cell (cursor, row, col, cell);
 
   cursor_sl = gnc_table_layout_get_cursor (reg->table->layout,
                                            CURSOR_SINGLE_LEDGER);
 
-  if (cb_cell && (cursor == cursor_sl))
-    cb_cell->cell = gnc_table_layout_get_cell (reg->table->layout, cell_type);
+  if (cursor == cursor_sl)
+    gnc_cellblock_set_cell (header, row, col, cell);
 }
 
 static void
@@ -236,13 +233,13 @@ copy_cursor_row (SplitRegister *reg, CellBlock *to, CellBlock *from, int row)
 
   for (col = 0; col < from->num_cols; col++)
   {
-    CellBlockCell *cb_cell;
+    BasicCell *cell;
 
-    cb_cell = gnc_cellblock_get_cell (from, row, col);
-    if (!cb_cell || !cb_cell->cell || cb_cell->cell->cell_type < 0)
+    cell = gnc_cellblock_get_cell (from, row, col);
+    if (!cell || cell->cell_type < 0)
       continue;
 
-    set_cell (reg, to, cb_cell->cell->cell_type, row, col);
+    set_cell (reg, to, cell->cell_type, row, col);
   }
 }
 

@@ -261,8 +261,8 @@ void         xaccSetBasicCellBlankHelp (BasicCell *bcell, const char *help);
 char *       xaccBasicCellGetHelp (BasicCell *bcell);
 
 /* for sub-class use only */
-void         xaccSetBasicCellValueInternal (BasicCell *bcell,
-                                            const char *value);
+void         gnc_basic_cell_set_value_internal (BasicCell *bcell,
+                                                const char *value);
 
 void         xaccSetBasicCellWCValueInternal (BasicCell *bcell,
                                               const GdkWChar *value);

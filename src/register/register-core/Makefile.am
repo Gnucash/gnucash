@@ -18,8 +18,7 @@ libgncmod_register_core_la_SOURCES = \
   table-allgui.c \
   table-control.c \
   table-layout.c \
-  table-model.c \
-  textcell.c
+  table-model.c
 
 noinst_HEADERS = \
   QuickFill.h \
@@ -38,8 +37,7 @@ noinst_HEADERS = \
   table-allgui.h \
   table-control.h \
   table-layout.h \
-  table-model.h \
-  textcell.h
+  table-model.h
 
 EXTRA_DIST = \
   .cvsignore 

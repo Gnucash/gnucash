@@ -168,7 +168,7 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                 {
                         int width;
                         char *text;
-                        CellBlockCell *cb_cell;
+                        BasicCell *cell;
 
                         cd = g_table_index (dimensions->cell_dimensions,
                                             row, col);
@@ -179,11 +179,11 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                         if (cd->pixel_width > 0)
                                 continue;
 
-                        cb_cell = gnc_cellblock_get_cell (cursor, row, col);
-                        if (!cb_cell || !cb_cell->cell)
+                        cell = gnc_cellblock_get_cell (cursor, row, col);
+                        if (!cell)
                                 continue;
 
-                        text = cb_cell->cell->sample_text;
+                        text = cell->sample_text;
                         if (text)
                                 cd->can_span_over = FALSE;
 
@@ -195,7 +195,7 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                         else
                                 width = 0;
 
-                        if (cb_cell->cell && cb_cell->cell->is_popup)
+                        if (cell && cell->is_popup)
                                 width += item_edit_get_toggle_offset
                                         (cd->pixel_height);
 
@@ -247,11 +247,11 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
         if (width < default_width)
                 for (col = 0; col < num_cols; col++)
                 {
-                        CellBlockCell *cb_cell;
+                        BasicCell *cell;
 
-                        cb_cell = gnc_cellblock_get_cell (cursor, 0, col);
+                        cell = gnc_cellblock_get_cell (cursor, 0, col);
 
-                        if (!cb_cell->cell->expandable)
+                        if (!cell || !cell->expandable)
                                 continue;
 
                         cd = g_table_index (cd_table, 0, col);
@@ -268,14 +268,14 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
 
                 for (col = 0; col < num_cols; col++)
                 {
-                        CellBlockCell *cb_cell;
+                        BasicCell *cell;
                         const char *text;
                         int sample_width;
                         int old_width;
 
-                        cb_cell = gnc_cellblock_get_cell (cursor, 0, col);
+                        cell = gnc_cellblock_get_cell (cursor, 0, col);
 
-                        if (!cb_cell->cell->expandable)
+                        if (!cell || !cell->expandable)
                                 continue;
 
                         cd = g_table_index (cd_table, 0, col);
@@ -284,7 +284,7 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
 
                         cd->pixel_width += (default_width - width);
 
-                        text = cb_cell->cell->sample_text;
+                        text = cell->sample_text;
                         if (text)
                         {
                                 sample_width = gdk_string_width (font, text);
@@ -339,16 +339,16 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
 
                         for (col = 0; col < num_cols; col++)
                         {
-                                CellBlockCell *cb_cell;
+                                BasicCell *cell;
 
-                                cb_cell = gnc_cellblock_get_cell (cursor,
+                                cell = gnc_cellblock_get_cell (cursor,
                                                                   row, col);
-                                if (!cb_cell || !cb_cell->cell)
+                                if (!cell)
                                         continue;
 
                                 cd = g_table_index (cd_table, row, col);
 
-                                if (cb_cell->cell->span)
+                                if (cell->span)
                                 {
                                         cd_span = cd;
                                         continue;
@@ -360,7 +360,7 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
                                 if (cd_span == NULL)
                                         continue;
 
-                                if (cb_cell->cell->sample_text != NULL)
+                                if (cell->sample_text != NULL)
                                 {
                                         cd_span = NULL;
                                         continue;
@@ -879,21 +879,21 @@ gnucash_sheet_get_header_widths (GnucashSheet *sheet, int *header_widths)
                 for (col = 0; col < style->ncols; col++)
                 {
                         CellDimensions *cd;
-                        CellBlockCell *cb_cell;
+                        BasicCell *cell;
 
                         cd = gnucash_style_get_cell_dimensions (style,
                                                                 row, col);
                         if (cd == NULL)
                                 continue;
 
-                        cb_cell = gnc_cellblock_get_cell (header, row, col);
-                        if (cb_cell == NULL || cb_cell->cell == NULL)
+                        cell = gnc_cellblock_get_cell (header, row, col);
+                        if (!cell)
                                 continue;
 
-                        if (cb_cell->cell->cell_type < 0)
+                        if (cell->cell_type < 0)
                                 continue;
 
-                        header_widths[cb_cell->cell->cell_type] = cd->pixel_width;
+                        header_widths[cell->cell_type] = cd->pixel_width;
                 }
 }
 
@@ -917,22 +917,22 @@ gnucash_sheet_set_header_widths (GnucashSheet *sheet, int *header_widths)
                 for (col = 0; col < style->ncols; col++)
                 {
                         CellDimensions *cd;
-                        CellBlockCell *cb_cell;
+                        BasicCell *cell;
 
                         cd = gnucash_style_get_cell_dimensions (style,
                                                                 row, col);
 
-                        cb_cell = gnc_cellblock_get_cell (header, row, col);
-                        if (!cb_cell || !cb_cell->cell)
+                        cell = gnc_cellblock_get_cell (header, row, col);
+                        if (!cell)
                                 continue;
 
-                        if (cb_cell->cell->cell_type < 0)
+                        if (cell->cell_type < 0)
                                 continue;
 
-                        if (header_widths[cb_cell->cell->cell_type] < 0)
+                        if (header_widths[cell->cell_type] < 0)
                                 continue;
 
-                        cd->pixel_width = header_widths[cb_cell->cell->cell_type];
+                        cd->pixel_width = header_widths[cell->cell_type];
                 }
 }
 
