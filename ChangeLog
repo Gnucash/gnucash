@@ -1,3 +1,10 @@
+2004-01-23  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/Makefile.am:
+	  Add new multifile provider descriptor
+	* src/app-utils/gnc-druid-provider-desc-multifile.[ch]:
+	  New multi-file provider descriptor
+
 2004-01-22  Derek Atkins  <derek@ihtfp.com>
 
 	* src/app-utils/Makefile.am:
