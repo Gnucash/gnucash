@@ -84,6 +84,7 @@ adjBWindow( Widget parent, Account *acc )
 			  XmNdialogStyle,    XmDIALOG_APPLICATION_MODAL,
 			  XmNtitle,          buf,
 			  XmNdeleteResponse, XmDESTROY,
+                          XmNtransient, FALSE,  /* allow window to be repositioned */
 			  NULL );
   
   /* ... and so memory gets freed: */

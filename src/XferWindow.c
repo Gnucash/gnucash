@@ -322,7 +322,7 @@ xferWindow( Widget parent )
                                     XmNleftAttachment,     XmATTACH_POSITION,
                                     XmNleftPosition,       position,
                                     XmNrightAttachment,    XmATTACH_POSITION,
-                                    XmNrightPosition,      ++position,
+                                    XmNrightPosition,      position+1,
                                     XmNshowAsDefault,      True,
                                     NULL );
   
@@ -330,6 +330,7 @@ xferWindow( Widget parent )
                  destroyShellCB, (XtPointer)dialog );  
   
   /* The "Transfer" button creates the transfer */
+  position ++;
   widget = XtVaCreateManagedWidget( "Transfer", 
                                     xmPushButtonWidgetClass, buttonform,
                                     XmNtopAttachment,      XmATTACH_FORM,
@@ -337,7 +338,7 @@ xferWindow( Widget parent )
                                     XmNleftAttachment,     XmATTACH_POSITION,
                                     XmNleftPosition,       position,
                                     XmNrightAttachment,    XmATTACH_POSITION,
-                                    XmNrightPosition,      ++position,
+                                    XmNrightPosition,      position+1,
                                     XmNshowAsDefault,      True,
                                     NULL );
   

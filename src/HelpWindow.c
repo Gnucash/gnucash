@@ -254,7 +254,7 @@ helpWindow( Widget parent, char *title, char *htmlfile )
 				   xmFormWidgetClass, pane,
 				   XmNfractionBase,   7,
 				   NULL );
-    position=0;
+    position=1;
     
     /* The "Back" button */
     widget = XtVaCreateManagedWidget( "Back",
@@ -262,37 +262,39 @@ helpWindow( Widget parent, char *title, char *htmlfile )
 				      XmNtopAttachment,      XmATTACH_FORM,
 				      XmNbottomAttachment,   XmATTACH_FORM,
 				      XmNleftAttachment,     XmATTACH_POSITION,
-				      XmNleftPosition,       ++position,
+				      XmNleftPosition,       position,
 				      XmNrightAttachment,    XmATTACH_POSITION,
-				      XmNrightPosition,      ++position,
+				      XmNrightPosition,      position+1,
 				      XmNshowAsDefault,      True,
 				      NULL );
     
     XtAddCallback( widget, XmNactivateCallback, helpBackCB, NULL );
     
     /* The "Forward" button */
+    position +=2;
     widget = XtVaCreateManagedWidget( "Forward",
 				      xmPushButtonWidgetClass, actionform,
 				      XmNtopAttachment,      XmATTACH_FORM,
 				      XmNbottomAttachment,   XmATTACH_FORM,
 				      XmNleftAttachment,     XmATTACH_POSITION,
-				      XmNleftPosition,       ++position,
+				      XmNleftPosition,       position,
 				      XmNrightAttachment,    XmATTACH_POSITION,
-				      XmNrightPosition,      ++position,
+				      XmNrightPosition,      position+1,
 				      XmNshowAsDefault,      True,
 				      NULL );
     
     XtAddCallback( widget, XmNactivateCallback, helpFwdCB, NULL );
     
     /* The "Close" button */
+    position +=2;
     widget = XtVaCreateManagedWidget( "Close",
 				      xmPushButtonWidgetClass, actionform,
 				      XmNtopAttachment,      XmATTACH_FORM,
 				      XmNbottomAttachment,   XmATTACH_FORM,
 				      XmNleftAttachment,     XmATTACH_POSITION,
-				      XmNleftPosition,       ++position,
+				      XmNleftPosition,       position,
 				      XmNrightAttachment,    XmATTACH_POSITION,
-				      XmNrightPosition,      ++position,
+				      XmNrightPosition,      position+1,
 				      XmNshowAsDefault,      True,
 				      NULL );
     

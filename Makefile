@@ -41,7 +41,8 @@ RANLIB = ranlib
 # USEDEBUG     - causes debugging info to be displayed
 CFLAGS = $(LFLAGS) -I../include -I../libhtmlw -I/usr/X11/include \
          -I/usr/local/include  -DMOTIF1_2 \
-	 -DUSEQUICKFILL # -DUSE_NO_COLOR -DDEBUGMEMORY -DUSEDEBUG
+	 -DDEBUGMEMORY -DUSEDEBUG
+	 # -DUSEQUICKFILL # -DUSE_NO_COLOR -DDEBUGMEMORY -DUSEDEBUG
 LFLAGS = -g -L/usr/local/lib -L/usr/X11/lib
 LIBS   = -lXm -lXmu -lXbae -lXt -lXext -lX11 -lSM -lICE -lXpm
 

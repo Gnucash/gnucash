@@ -82,6 +82,38 @@ int writeTransaction( int fd, Transaction *trans );
 int writeString( int fd, char *str );
 int writeDate( int fd, Date *date );
 
+/*******************************************************/
+/* some endian stuff */
+
+/* flip endianness of int, short, etc */
+int xaccFlipInt (int val) 
+  {
+  unsigned int flip;
+  flip = (val & 0xff000000) >> 24;
+  flip |= (val & 0xff0000) >> 8;
+  flip |= (val & 0xff00) << 8;
+  flip |= (val & 0xff) << 24;
+  return (int) flip;
+}
+
+short xaccFlipShort (short val) 
+  {
+  unsigned short flip;
+  flip = (val & 0xff00) >> 8;
+  flip |= (val & 0xff) << 8;
+  return (short) flip;
+}
+  
+#define XACC_FLIP_ENDIAN
+#ifdef XACC_FLIP_ENDIAN
+  #define XACC_FLIP_INT(x) { (x) = xaccFlipInt (x); }
+  #define XACC_FLIP_SHORT(x) { (x) = xaccFlipShort (x); }
+#else
+  #define XACC_FLIP_INT(x) 
+  #define XACC_FLIP_SHORT(x) 
+#endif /* XACC_FLIP_ENDIAN */
+
+  
 /********************************************************************\
  ********************** LOAD DATA ***********************************
 \********************************************************************/
@@ -120,6 +152,7 @@ readData( char *datafile )
     freeData(data);
     return NULL;
     }
+  XACC_FLIP_INT (token);
   
   /* If this is an old file, ask the user if the file
    * should be updated */
@@ -149,6 +182,7 @@ readData( char *datafile )
     freeData(data);
     return NULL;
     }
+  XACC_FLIP_INT (numAcc);
   
   /* read in the accounts */
   for( i=0; i<numAcc; i++ )
@@ -207,14 +241,14 @@ readAccount( int fd, int token )
     }
   
   acc->description = readString( fd, token );
-  if( acc->accountName == NULL )
+  if( acc->description == NULL )
     {
     freeAccount(acc);
     return NULL;
     }
   
   acc->notes = readString( fd, token );
-  if( acc->accountName == NULL )
+  if( acc->notes == NULL )
     {
     freeAccount(acc);
     return NULL;
@@ -226,6 +260,7 @@ readAccount( int fd, int token )
     freeAccount(acc);
     return NULL;
     }
+  XACC_FLIP_INT (numTrans);
   
   /* read the transactions */
   for( i=0; i<numTrans; i++ )
@@ -302,6 +337,7 @@ readTransaction( int fd, int token )
     _free(trans);
     return NULL;
     }
+  XACC_FLIP_INT (trans->catagory);
   
   err = read( fd, &(trans->reconciled), sizeof(char) );
   if( err != sizeof(char) )
@@ -336,6 +372,7 @@ readTransaction( int fd, int token )
     _free(trans);
     return NULL;
     }
+  XACC_FLIP_INT (trans->amount);
   
   return trans;
   }
@@ -358,6 +395,7 @@ readString( int fd, int token )
   err = read( fd, &size, sizeof(int) );
   if( err != sizeof(int) )
     return NULL;
+  XACC_FLIP_INT (size);
   
   str = (char *)XtMalloc(size);
   err = read( fd, str, size );
@@ -391,6 +429,7 @@ readDate( int fd, int token )
     _free(date);
     return NULL;
     }
+  XACC_FLIP_INT (date->year);
   
   err = read( fd, &(date->month), sizeof(int) );
   if( err != sizeof(int) )
@@ -398,6 +437,7 @@ readDate( int fd, int token )
     _free(date);
     return NULL;
     }
+  XACC_FLIP_INT (date->month);
   
   err = read( fd, &(date->day), sizeof(int) );
   if( err != sizeof(int) )
@@ -405,6 +445,7 @@ readDate( int fd, int token )
     _free(date);
     return NULL;
     }
+  XACC_FLIP_INT (date->day);
   
   return date;
   }
@@ -435,6 +476,7 @@ writeData( char *datafile, Data *data )
     return -1;
     }
   
+  XACC_FLIP_INT (token);
   err = write( fd, &token, sizeof(int) );
   if( err != sizeof(int) )
     {
@@ -444,6 +486,7 @@ writeData( char *datafile, Data *data )
     }
 
   numAcc = data->numAcc;
+  XACC_FLIP_INT (numAcc);
   err = write( fd, &numAcc, sizeof(int) );
   if( err != sizeof(int) )
     return -1;
@@ -472,7 +515,7 @@ writeAccount( int fd, Account *acc )
   {
   Transaction *trans;
   int err=0;
-  int i,numTrans;
+  int i,numTrans, ntrans;
   
   err = write( fd, &(acc->flags), sizeof(char) );
   if( err != sizeof(char) )
@@ -498,7 +541,9 @@ writeAccount( int fd, Account *acc )
   for( numTrans = 0; getTransaction(acc,numTrans) != NULL; numTrans++ )
     {}
   
-  err = write( fd, &numTrans, sizeof(int) );
+  ntrans = numTrans;
+  XACC_FLIP_INT (ntrans);
+  err = write( fd, &ntrans, sizeof(int) );
   if( err != sizeof(int) )
     return -1;
   
@@ -524,6 +569,7 @@ int
 writeTransaction( int fd, Transaction *trans )
   {
   int err=0;
+  int tmp;
   
   err = writeString( fd, trans->num );
   if( err == -1 )
@@ -541,7 +587,9 @@ writeTransaction( int fd, Transaction *trans )
   if( err == -1 )
     return err;
   
-  err = write( fd, &(trans->catagory), sizeof(int) );
+  tmp = trans->catagory;
+  XACC_FLIP_INT (tmp);
+  err = write( fd, &tmp, sizeof(int) );
   if( err != sizeof(int) )
     return -1;
   
@@ -549,7 +597,9 @@ writeTransaction( int fd, Transaction *trans )
   if( err != sizeof(char) )
     return -1;
   
-  err = write( fd, &(trans->amount), sizeof(int) );
+  tmp = trans->amount;
+  XACC_FLIP_INT (tmp);
+  err = write( fd, &tmp, sizeof(int) );
   if( err != sizeof(int) )
     return -1;
   
@@ -569,13 +619,16 @@ writeString( int fd, char *str )
   {
   int err=0;
   int size;
+  int tmp;
   
   for( size=0; str[size] != '\0'; size++ )
     {}
   size++;                /* we want to make sure we include the '\0'! 
 			  * Otherwise, bad things happen */
   
-  err = write( fd, &size, sizeof(int) );
+  tmp = size;
+  XACC_FLIP_INT (tmp);
+  err = write( fd, &tmp, sizeof(int) );
   if( err != sizeof(int) )
     return -1;
   
@@ -598,16 +651,23 @@ int
 writeDate( int fd, Date *date )
   {
   int err=0;
+  int tmp;
   
-  err = write( fd, &(date->year), sizeof(int) );
+  tmp = date->year;
+  XACC_FLIP_INT (tmp);
+  err = write( fd, &tmp, sizeof(int) );
   if( err != sizeof(int) )
     return -1;
   
-  err = write( fd, &(date->month), sizeof(int) );
+  tmp = date->month;
+  XACC_FLIP_INT (tmp);
+  err = write( fd, &tmp, sizeof(int) );
   if( err != sizeof(int) )
     return -1;
   
-  err = write( fd, &(date->day), sizeof(int) );
+  tmp = date->day;
+  XACC_FLIP_INT (tmp);
+  err = write( fd, &tmp, sizeof(int) );
   if( err != sizeof(int) )
     return -1;
   

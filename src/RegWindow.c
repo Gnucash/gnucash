@@ -592,9 +592,16 @@ regWindow( Widget parent, Account *acc )
                           xmDialogShellWidgetClass, parent,
                           XmNdeleteResponse,   XmDESTROY,
                           XmNtitle,            acc->accountName,
+                          XmNwidth,            495,
+                          XmNheight,           500,
+/*
                           XmNminWidth,         495,
                           XmNmaxWidth,         495,
                           XmNminHeight,        500,
+*/
+                          /* XmNresizable,        FALSE, */
+                          /* XmNallowShellResize, FALSE, */
+                          XmNtransient,        FALSE,  /* allow window to be repositioned */
                           NULL );
   
   XtAddCallback( regData->dialog, XmNdestroyCallback, 
@@ -776,7 +783,7 @@ regWindow( Widget parent, Account *acc )
 				    XmNleftAttachment,     XmATTACH_POSITION,
 				    XmNleftPosition,       position,
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      ++position,
+				    XmNrightPosition,      position+1,
 				    XmNshowAsDefault,      True,
 				    NULL );
   
@@ -784,6 +791,7 @@ regWindow( Widget parent, Account *acc )
 		 recordCB, (XtPointer)regData );
   
   /* The "Cancel" button */
+  position++;
   widget = XtVaCreateManagedWidget( "Cancel", 
 				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
@@ -791,7 +799,7 @@ regWindow( Widget parent, Account *acc )
 				    XmNleftAttachment,     XmATTACH_POSITION,
 				    XmNleftPosition,       position,
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      ++position,
+				    XmNrightPosition,      position+1,
 				    XmNshowAsDefault,      True,
 				    NULL );
   
@@ -1079,7 +1087,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       {	
       XbaeMatrixModifyVerifyCallbackStruct *mvcbs = 
          (XbaeMatrixModifyVerifyCallbackStruct *)cb;
-      char input = (mvcbs->verify->text->ptr)[0];
+      char input;
       
       /* If the user is about to change a reconciled transaction,
        * warn them... but only warn them the first time they change
@@ -1130,6 +1138,11 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
             regData->qf = getQuickFill( regData->qf, mvcbs->prev_text[i] );
           }
         
+        /* hack alert -- text pointer not valid if non-alpha key hit */
+        /* this will core dump, since ptr is NULL */
+        /* this is not fixed, since the fix is not obvious to me ... */
+        input = (mvcbs->verify->text->ptr)[0];
+
         /* go to qf's child node that corresponds to the
          * last character inputed by the user */
         regData->qf = getQuickFill( regData->qf, input );
@@ -1145,7 +1158,9 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           
           XbaeMatrixSetCell( mw, row, col, str );
           XbaeMatrixRefreshCell( mw, row, col );
+/*
           XbaeMatrixSetCursorPosition( mw, regData->insert+1 );
+*/
           }
         else
           {
@@ -1156,7 +1171,9 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           
           XbaeMatrixSetCell( mw, row, col, str );
           XbaeMatrixRefreshCell( mw, row, col );
+/*
           XbaeMatrixSetCursorPosition( mw, regData->insert );
+*/
           }
         }
 #endif	
@@ -1165,24 +1182,32 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
                                             * cell rules */
       if( IN_PAY_CELL(row,col) || IN_DEP_CELL(row,col) )
         {
-        /* Payment/Deposit format */
-        switch( input )
-          {
-          case '.':
-            /* Make sure that there is only one '.' */
+        /* text pointer is NULL if non-alpha key hit */
+        /* for example, the delete key */
+        if (mvcbs->verify->text->ptr) {
+          input = (mvcbs->verify->text->ptr)[0];
+          /* Payment/Deposit format */
+          switch( input )
             {
-            int i,count=0;
-            
-            for( i=0; (mvcbs->prev_text)[i] != '\0'; i++ )
-              if( (mvcbs->prev_text)[i] == '.' )
-                count++;
-            if( count >= 1 )
-              mvcbs->verify->doit = False;
+            case '.':
+              /* Make sure that there is only one '.' */
+              {
+              int i,count=0;
+              
+              for( i=0; (mvcbs->prev_text)[i] != '\0'; i++ )
+                if( (mvcbs->prev_text)[i] == '.' )
+                  count++;
+              if( count >= 1 )
+                mvcbs->verify->doit = False;
+              }
+              break;
+            default:
+              /* only accept the input if it is a number */
+              mvcbs->verify->doit = isNum(input);
             }
-            break;
-          default:
-            /* only accept the input if it is a number */
-            mvcbs->verify->doit = isNum(input);
+          } else {
+            /* we assume that any other changes are a valid edit */
+            mvcbs->verify->doit = True;
           }
         }
       }
@@ -1316,7 +1341,16 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs )
   Boolean changed=False;
   Date date;
   char buf[BUFSIZE];
-  char input = (mvcbs->verify->text->ptr)[0];
+  char input;
+
+  /* if user hit delete key, then ptr will be NULL */
+  /* lets just accept the edit. */
+  if (0x0 == (mvcbs->verify->text->ptr)) {
+    mvcbs->verify->doit = True;
+    return;
+  }
+
+  input = (mvcbs->verify->text->ptr)[0];
   
   row  = mvcbs->row;
   col  = mvcbs->column;

@@ -107,7 +107,7 @@ simpleReportWindow( Widget parent )
 				    XmNleftAttachment,     XmATTACH_POSITION,
 				    XmNleftPosition,       position,
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      ++position,
+				    XmNrightPosition,      position+1,
 				    XmNshowAsDefault,      True,
 				    NULL );
   

@@ -92,7 +92,6 @@ accWindow( Widget parent )
   Widget    dialog, form, frame, rc, widget, 
             label, buttonform;
   AccWindow *accData;
-  int       position;
   
   setBusyCursor( parent );
   
@@ -110,14 +109,20 @@ accWindow( Widget parent )
 				 XmNheight,    300,
 				 XmNminHeight, 300,
 				 XmNmaxHeight, 300,
+                                 XmNresizable, FALSE,
+                                 XmNallowShellResize, FALSE,
+                                 /* XmNtransient, FALSE,  /* allow window to be repositioned */
 				 NULL );
   
   XtAddCallback( dialog, XmNdestroyCallback, 
 		 closeAccWindow, (XtPointer)accData );
   
   /* The form to put everything in the dialog in */
-  form = XtVaCreateWidget( "form", xmFormWidgetClass, dialog, NULL );
+  form = XtVaCreateWidget( "form", xmFormWidgetClass, dialog, 
+                                 XmNrubberPositioning, TRUE,
+                                 NULL );
   
+
   /******************************************************************\
    * The account type area                                          *
   \******************************************************************/
@@ -211,7 +216,7 @@ accWindow( Widget parent )
 			     xmLabelGadgetClass, form,
 			     XmNtopAttachment,   XmATTACH_WIDGET,
 			     XmNtopWidget,       frame,
-			     XmNtopOffset,       10,
+			     XmNtopOffset,       10, 
 			     XmNrightAttachment, XmATTACH_POSITION,
 			     XmNrightPosition,   35,        /* 35% */
 			     NULL );
@@ -223,7 +228,7 @@ accWindow( Widget parent )
 			     XmNcolumns,         25,
 			     XmNtopAttachment,   XmATTACH_WIDGET,
 			     XmNtopWidget,       frame,
-			     XmNtopOffset,       10,
+			     XmNtopOffset,       10, 
 			     XmNleftAttachment,  XmATTACH_POSITION,
 			     XmNleftPosition,    35,        /* 35% */
 			     NULL );
@@ -232,7 +237,7 @@ accWindow( Widget parent )
     XtVaCreateManagedWidget( "Description:",
 			     xmLabelGadgetClass, form,
 			     XmNtopAttachment,   XmATTACH_WIDGET,
-			     XmNtopWidget,       accData->name,
+			     XmNtopWidget,       accData->name, 
 			     XmNtopOffset,       10,
 			     XmNrightAttachment, XmATTACH_POSITION,
 			     XmNrightPosition,   35,        /* 35% */
@@ -245,7 +250,7 @@ accWindow( Widget parent )
 			     XmNcolumns,         30,
 			     XmNtopAttachment,   XmATTACH_WIDGET,
 			     XmNtopWidget,       accData->name,
-			     XmNtopOffset,       10,
+			     XmNtopOffset,       10, 
 			     XmNleftAttachment,  XmATTACH_POSITION,
 			     XmNleftPosition,    35,        /* 35% */
 			     NULL );
@@ -258,15 +263,14 @@ accWindow( Widget parent )
 				 xmFormWidgetClass,   form,
 				 XmNfractionBase,     5,
 				 XmNtopAttachment,    XmATTACH_WIDGET,
-				 XmNtopWidget,        accData->desc,
-				 XmNtopOffset,        10,
+				 XmNtopWidget,        accData->desc, 
+				 XmNtopOffset,        10, 
 				 XmNbottomAttachment, XmATTACH_FORM,
 				 XmNbottomOffset,     10,
 				 XmNleftAttachment,   XmATTACH_FORM,
 				 XmNrightAttachment,  XmATTACH_FORM,
 				 NULL );
   
-  position = 1;                    /* puts the buttons in the right place */
   
   /* The "Notes" button opens a window to a few lines of notes about
    * the account */
@@ -274,12 +278,11 @@ accWindow( Widget parent )
 				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNleftAttachment,     XmATTACH_POSITION,
-				    XmNleftPosition,       position,
+				    XmNleftPosition,       1,
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      ++position,
+				    XmNrightPosition,      2,  
 				    XmNshowAsDefault,      True,
 				    NULL );
-  
   XtAddCallback( widget, XmNactivateCallback, 
 		 notesCB, (XtPointer)accData );  
   
@@ -288,9 +291,9 @@ accWindow( Widget parent )
 				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNleftAttachment,     XmATTACH_POSITION,
-				    XmNleftPosition,       position,
+				    XmNleftPosition,       2, 
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      ++position,
+				    XmNrightPosition,      3,  
 				    XmNshowAsDefault,      True,
 				    NULL );
   
@@ -304,9 +307,9 @@ accWindow( Widget parent )
 				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNleftAttachment,     XmATTACH_POSITION,
-				    XmNleftPosition,       position,
+				    XmNleftPosition,       3, 
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      ++position,
+				    XmNrightPosition,      4,  
 				    XmNshowAsDefault,      True,
 				    NULL );
   
@@ -359,7 +362,6 @@ editAccWindow( Widget parent, Account *account )
   {
   Widget dialog, form, widget, label, buttonform;
   EditAccWindow *editAccData;
-  int position;
   
   setBusyCursor( parent );
   
@@ -378,13 +380,18 @@ editAccWindow( Widget parent, Account *account )
 				 XmNheight,    150,
 				 XmNminHeight, 150,
 				 XmNmaxHeight, 150,
+                                 XmNresizable, FALSE,
+                                 XmNallowShellResize, FALSE,
+                                 XmNtransient, FALSE,  /* allow window to be repositioned */
 				 NULL );
   
   XtAddCallback( dialog, XmNdestroyCallback, 
 		 closeEditAccWindow, (XtPointer)editAccData );
   
   /* The form to put everything in the dialog in */
-  form = XtVaCreateWidget( "form", xmFormWidgetClass, dialog, NULL );
+  form = XtVaCreateWidget( "form", xmFormWidgetClass, dialog, 
+                                 XmNrubberPositioning, TRUE,
+                                 NULL );
   /******************************************************************\
    * Text fields....                                                *
   \******************************************************************/
@@ -452,8 +459,6 @@ editAccWindow( Widget parent, Account *account )
 		      XmNrightAttachment,  XmATTACH_FORM,
 		      NULL );
   
-  position = 1;                    /* puts the buttons in the right place */
-  
   /* The "Notes" button opens a window to a few lines of notes about
    * the account */
   widget = 
@@ -461,9 +466,9 @@ editAccWindow( Widget parent, Account *account )
 			     xmPushButtonWidgetClass, buttonform,
 			     XmNtopAttachment,      XmATTACH_FORM,
 			     XmNleftAttachment,     XmATTACH_POSITION,
-			     XmNleftPosition,       position,
+			     XmNleftPosition,       1,
 			     XmNrightAttachment,    XmATTACH_POSITION,
-			     XmNrightPosition,      ++position,
+			     XmNrightPosition,      2,
 			     XmNshowAsDefault,      True,
 			     NULL );
   
@@ -476,9 +481,9 @@ editAccWindow( Widget parent, Account *account )
 			     xmPushButtonWidgetClass, buttonform,
 			     XmNtopAttachment,      XmATTACH_FORM,
 			     XmNleftAttachment,     XmATTACH_POSITION,
-			     XmNleftPosition,       position,
+			     XmNleftPosition,       2,
 			     XmNrightAttachment,    XmATTACH_POSITION,
-			     XmNrightPosition,      ++position,
+			     XmNrightPosition,      3,
 			     XmNshowAsDefault,      True,
 			     NULL );
   
@@ -493,9 +498,9 @@ editAccWindow( Widget parent, Account *account )
 			     xmPushButtonWidgetClass, buttonform,
 			     XmNtopAttachment,      XmATTACH_FORM,
 			     XmNleftAttachment,     XmATTACH_POSITION,
-			     XmNleftPosition,       position,
+			     XmNleftPosition,       3,
 			     XmNrightAttachment,    XmATTACH_POSITION,
-			     XmNrightPosition,      ++position,
+			     XmNrightPosition,      4,
 			     XmNshowAsDefault,      True,
 			     NULL );
   

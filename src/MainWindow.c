@@ -194,6 +194,10 @@ mainWindow( Widget parent )
   mainwindow = XtVaCreateManagedWidget( "mainwindow", 
 					xmMainWindowWidgetClass, parent, 
 					XmNdeleteResponse,       XmDESTROY,
+/*linas hack */
+                                 XmNwidth,     650,
+                                 XmNheight,    300,
+
 					NULL );
   
   /* Umm... this doesn't seem to be getting called */
@@ -332,7 +336,7 @@ mainWindow( Widget parent )
 				    XmNleftAttachment,     XmATTACH_POSITION,
 				    XmNleftPosition,       position,
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      ++position,
+				    XmNrightPosition,      position+1,
 				    XmNshowAsDefault,      True,
 				    NULL );
 
@@ -340,6 +344,7 @@ mainWindow( Widget parent )
 		 accountMenubarCB, (XtPointer)AMB_OPEN );
 
   /* The "New" button, to create a new account */
+  position ++;
   widget = XtVaCreateManagedWidget( "New", 
 				    xmPushButtonWidgetClass, controlform,
 				    XmNtopAttachment,      XmATTACH_FORM,
@@ -347,7 +352,7 @@ mainWindow( Widget parent )
 				    XmNleftAttachment,     XmATTACH_POSITION,
 				    XmNleftPosition,       position,
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      ++position,
+				    XmNrightPosition,      position+1,
 				    XmNshowAsDefault,      True,
 				    NULL );
   
@@ -355,6 +360,7 @@ mainWindow( Widget parent )
 		 accountMenubarCB, (XtPointer)AMB_NEW );
   
   /* The "Edit" button */
+  position ++;
   widget = XtVaCreateManagedWidget( "Edit", 
 				    xmPushButtonWidgetClass, controlform,
 				    XmNtopAttachment,      XmATTACH_FORM,
@@ -362,7 +368,7 @@ mainWindow( Widget parent )
 				    XmNleftAttachment,     XmATTACH_POSITION,
 				    XmNleftPosition,       position,
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      ++position,
+				    XmNrightPosition,      position+1,
 				    XmNshowAsDefault,      True,
 				    NULL );
   
@@ -370,6 +376,7 @@ mainWindow( Widget parent )
 		 accountMenubarCB, (XtPointer)AMB_EDIT );
   
   /* The "Delete" button */
+  position ++;
   widget = XtVaCreateManagedWidget( "Delete", 
 				    xmPushButtonWidgetClass, controlform,
 				    XmNtopAttachment,      XmATTACH_FORM,
@@ -377,7 +384,7 @@ mainWindow( Widget parent )
 				    XmNleftAttachment,     XmATTACH_POSITION,
 				    XmNleftPosition,       position,
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      ++position,
+				    XmNrightPosition,      position+1,
 				    XmNshowAsDefault,      True,
 				    NULL );
   

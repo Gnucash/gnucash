@@ -253,6 +253,9 @@ startRecnWindow( Widget parent, Account *acc, int *diff )
                                  XmNdeleteResponse, XmDESTROY,
                                  XmNminWidth,       250,
                                  XmNminHeight,      150,
+                                 XmNresizable,        FALSE,
+                                 XmNallowShellResize, FALSE,
+                                 XmNtransient,        FALSE,  /* allow window to be repositioned */
                                  NULL );
   
   /* Create a PanedWindow Manager for the dialog box... the child 
@@ -630,9 +633,10 @@ recnWindow( Widget parent, Account *acc )
                                     XmNleftAttachment,  XmATTACH_POSITION,
                                     XmNleftPosition,    position,
                                     XmNrightAttachment, XmATTACH_POSITION,
-                                    XmNrightPosition,   ++position,
+                                    XmNrightPosition,   position+1,
                                     NULL );
 
+  position ++;
   recnData->difference = 
     XtVaCreateManagedWidget( "text",
                              xmTextWidgetClass,  form,
@@ -646,10 +650,10 @@ recnWindow( Widget parent, Account *acc )
                              XmNbottomAttachment,XmATTACH_FORM,
                              XmNbottomOffset,    6,
                              XmNleftAttachment,  XmATTACH_POSITION,
-                             XmNleftPosition,    position++,
+                             XmNleftPosition,    position,
                              NULL );
   
-  position++;
+  position +=2;
   
   /* The "Ok" button: */
   widget = XtVaCreateManagedWidget( "Ok", 
@@ -659,7 +663,7 @@ recnWindow( Widget parent, Account *acc )
                                     XmNleftAttachment,     XmATTACH_POSITION,
                                     XmNleftPosition,       position,
                                     XmNrightAttachment,    XmATTACH_POSITION,
-                                    XmNrightPosition,      ++position,
+                                    XmNrightPosition,      position+1,
                                     XmNshowAsDefault,      True,
                                     NULL );
 
@@ -668,6 +672,7 @@ recnWindow( Widget parent, Account *acc )
   XtAddCallback( widget, XmNactivateCallback, 
                  destroyShellCB, (XtPointer)(recnData->dialog) );  
   /* The "Cancel" button: */
+  position ++;
   widget = XtVaCreateManagedWidget( "Cancel", 
                                     xmPushButtonWidgetClass, form,
                                     XmNtopAttachment,      XmATTACH_FORM,
@@ -675,7 +680,7 @@ recnWindow( Widget parent, Account *acc )
                                     XmNleftAttachment,     XmATTACH_POSITION,
                                     XmNleftPosition,       position,
                                     XmNrightAttachment,    XmATTACH_POSITION,
-                                    XmNrightPosition,      ++position,
+                                    XmNrightPosition,      position+1,
                                     XmNshowAsDefault,      True,
                                     NULL );
 
@@ -683,6 +688,7 @@ recnWindow( Widget parent, Account *acc )
                  destroyShellCB, (XtPointer)(recnData->dialog) );  
   
   /* The "Help" button pops up the reconcile window help page: */
+  position ++;
   widget = XtVaCreateManagedWidget( "Help", 
                                     xmPushButtonWidgetClass, form,
                                     XmNtopAttachment,      XmATTACH_FORM,
@@ -690,7 +696,7 @@ recnWindow( Widget parent, Account *acc )
                                     XmNleftAttachment,     XmATTACH_POSITION,
                                     XmNleftPosition,       position,
                                     XmNrightAttachment,    XmATTACH_POSITION,
-                                    XmNrightPosition,      ++position,
+                                    XmNrightPosition,      position+1,
                                     XmNshowAsDefault,      True,
                                     NULL );
   
