@@ -1085,6 +1085,10 @@ item_edit_show_list (ItemEdit *item_edit)
 
         gtk_widget_grab_focus(GTK_WIDGET(item_edit->item_list->clist));
 
+        /* Make sure the list gets shown/sized correctly */
+        while (gtk_events_pending())
+                gtk_main_iteration();
+
         gnc_item_list_show_selected(item_edit->item_list);
 }
 
