@@ -33,6 +33,7 @@
                       style
                       col-styles
                       row-styles
+                      row-markup-table
                       col-headers-style
                       row-headers-style)))
 
@@ -52,6 +53,14 @@
 
 (define (gnc:make-html-table-cell/size rowspan colspan . objects)
   (gnc:make-html-table-cell-internal rowspan colspan "td"
+                                     objects (gnc:make-html-style-table)))
+
+(define (gnc:make-html-table-cell/markup markup . objects)
+  (gnc:make-html-table-cell-internal 1 1 markup objects 
+                                     (gnc:make-html-style-table)))
+
+(define (gnc:make-html-table-cell/size/markup rowspan colspan markup . objects)
+  (gnc:make-html-table-cell-internal rowspan colspan markup
                                      objects (gnc:make-html-style-table)))
 
 (define (gnc:make-html-table-header-cell . objects)
@@ -141,15 +150,12 @@
    #f                    ;; col-headers 
    #f                    ;; row-headers 
    #f                    ;; caption 
-   '()                   ;; data
-                         ;; NB: data is stored in reverse row order!!
-                         ;; ie (rowN rowN-1 . . . row0)
-                         ;; So html-append-row is constant time but
-                         ;; html-prepend-row is slow
+   '()                   ;; data (stored in reverse row-major order)
    0                     ;; num-rows
    (gnc:make-html-style-table) ;; style
-   (make-hash-table 21)  ;; col-styles 
-   (make-hash-table 21)  ;; row-styles 
+   (make-hash-table 21)  ;; hash of col number to col-style 
+   (make-hash-table 21)  ;; hash of row number to row-style
+   (make-hash-table 21)  ;; hash of row number to row markup
    (gnc:make-html-style-table) ;; col-headers-style
    (gnc:make-html-style-table) ;; row-headers-style
    ))
@@ -189,6 +195,18 @@
 
 (define gnc:html-table-set-row-styles!
   (record-modifier <html-table> 'row-styles))
+
+(define gnc:html-table-row-markup-table
+  (record-accessor <html-table> 'row-markup-table))
+
+(define (gnc:html-table-row-markup table row)
+  (hash-ref (gnc:html-table-row-markup-table table) row))
+
+(define gnc:html-table-set-row-markup-table!
+  (record-modifier <html-table> 'row-markup-table))
+
+(define (gnc:html-table-set-row-markup! table row markup)
+  (hash-set! (gnc:html-table-row-markup-table table) row markup))
 
 (define gnc:html-table-col-styles
   (record-accessor <html-table> 'col-styles))
@@ -298,6 +316,13 @@
      (gnc:html-table-data table))
     max))
 
+(define (gnc:html-table-append-row/markup! table markup newrow)
+  (let ((rownum (gnc:html-table-append-row! table newrow)))
+    (gnc:html-table-set-row-markup! table (- rownum 1) markup)))
+
+(define (gnc:html-table-prepend-row/markup! table markup newrow)
+  (gnc:html-table-set-row-markup! table 0 markup))
+
 (define (gnc:html-table-append-row! table newrow)
   (let* ((dd (gnc:html-table-data table))
 	 (current-num-rows (gnc:html-table-num-rows table))
@@ -318,6 +343,26 @@
      table
      new-num-rows)
     (gnc:html-table-set-data! table dd)
+    
+    ;; have to bump up the row index of the row styles and row markup
+    ;; table on a prepend.  just another reason you probably don't
+    ;; want to prepend.
+    (let ((new-rowstyles (make-hash-table 21)))
+      (hash-fold 
+       (lambda (row style prev)
+         (hash-set! new-rowstyles (+ 1 row) style)
+         #f)
+       #f (gnc:html-table-row-styles table))
+      (gnc:html-table-set-row-styles! table new-rowstyles))
+
+    (let ((new-rowmarkup (make-hash-table 21)))
+      (hash-fold 
+       (lambda (row markup prev)
+         (hash-set! new-rowmarkup (+ 1 row) markup)
+         #f)
+       #f (gnc:html-table-row-markup-table table))
+      (gnc:html-table-set-row-markup-table! table new-rowmarkup))
+    
     new-num-rows))
 
 (define (gnc:html-table-set-cell! table row col . objects)
@@ -349,159 +394,110 @@
      table
      (list-set-safe! (gnc:html-table-data table) row-loc rowdata))))
 
-;(define (gnc:html-table-append-column! table newcol)
-;  (let ((colnum 0)
-;        (rownum 0)
-;        (rows (gnc:html-table-data table))
-;        (this-row #f)
-;        (new-row #f))
-;    ;; find out how many cols are already there in the deepest row
-;    (for-each 
-;     (lambda (row)
-;       (let ((l (length row)))
-;         (if (> l colnum)
-;             (set! colnum l))))
-;     rows)
-
-;    ;; append the elements of 'newrow' to the rowumns 
-;    (for-each
-;     (lambda (newelt)
-;       ;; find the row, or append one 
-;       (if (not (null? rows))
-;           (begin
-;             (set! new-row #f)
-;             (set! this-row (car rows))
-;             (if (null? (cdr rows))
-;                 (set! rows #f)                
-;                 (set! rows (cdr rows))))
-;           (begin 
-;             (set! new-row #t)
-;             (set! this-row '())))
-
-;       ;; make sure the rowumn is long enough, then append the data 
-;       (let loop ((l (length this-row))
-;                  (r (reverse this-row)))
-;         (if (< l colnum)
-;             (loop (+ l 1) (cons #f r))
-;             (set! this-row 
-;                   (reverse (cons newelt r)))))
-;       (if new-row
-;           (gnc:html-table-append-row! table this-row)
-;           (list-set! (gnc:html-table-data table) rownum this-row))
-;       (set! rownum (+ 1 rownum)))
-;     (reverse newcol))))
-
 (define (gnc:html-table-append-column! table newcol)
-
   (define (maxwidth table-data)
     (if (null? table-data) 0
 	(max (length (car table-data)) (maxwidth (cdr table-data)))))
 	  
-  ;; widen an individual row to the required with and append element
+  ;; widen an individual row to the required width and append element
   (define (widen-and-append row element width)
     (let ((current-width (length row))
-  (new-suffix (list element)))
-     (do 
+          (new-suffix (list element)))
+      (do 
 	  ((i current-width (+ i 1)))
 	  ((< i width) #f)
 	(set! new-suffix (cons #f new-suffix)))
       (append row new-suffix)))
-; (define (widen-and-append row element width)
- ;   (list "a" "b" "c"))
-	
+
   ;; append the elements of newcol to each of the existing rows, widening
   ;; to width-to-make if necessary 
-  (define (append-to-element newcol existing-data length-to-append width-to-make)
+  (define (append-to-element newcol existing-data length-to-append 
+                             width-to-make)
     (if (= length-to-append 0) 
-	 (cons '() newcol)
-	 (let* 
-	     ((current-new (car newcol))
-	      (current-existing (car existing-data))
-	      (rest-new (cdr newcol))
-	      (rest-existing (cdr existing-data))
-	      (rest-result (append-to-element rest-new rest-existing 
-				       (- length-to-append 1))))
-	   (cons (cons (widen-and-append 
-			current-existing 
-			current-new 
-			width-to-make )
-		       (car rest-result))
-		 (cdr rest-result)))))
-
-;  (define (append-to-element newcol existing-data length-to-append width-to-make)
-;   (list (list "a" "b" "c") (list "d" "e" "f" "g")))
-
+        (cons '() newcol)
+        (let* 
+            ((current-new (car newcol))
+             (current-existing (car existing-data))
+             (rest-new (cdr newcol))
+             (rest-existing (cdr existing-data))
+             (rest-result (append-to-element rest-new rest-existing 
+                                             (- length-to-append 1))))
+          (cons (cons (widen-and-append 
+                       current-existing 
+                       current-new 
+                       width-to-make )
+                      (car rest-result))
+                (cdr rest-result)))))
+  
   (let* ((existing-data (reverse (gnc:html-table-data table)))
 	 (existing-length (length existing-data))
 	 (width-to-make (+ (maxwidth existing-data) 1))
 	 (newcol-length (length newcol)))
-	 (if (<= newcol-length existing-length)
-	     (gnc:html-table-set-data! table
-	      (reverse! (car (append-to-element 
-			      newcol
-			      existing-data
-			      newcol-length 
-			      width-to-make))))
-	     (let* ((temp-result (append-to-element
-				  newcol
-				  existing-data
-			  existing-length
-				  width-to-make))
-		    (joined-table-data (car temp-result))
-		    (remaining-elements (cdr temp-result)))
-	       ;; Invariant maintained - table data in reverse order
-	       (gnc:html-table-set-data! table (reverse! joined-table-data))
-       
-	       (for-each 
-		(lambda (element)
-		  (gnc:html-table-append-row! table 
-					      (widen-and-append 
-					       '() 
-					       element 
-					       width-to-make)))
-	remaining-elements)
-	       #f))))
+    (if (<= newcol-length existing-length)
+        (gnc:html-table-set-data! 
+         table
+         (reverse (car (append-to-element 
+                         newcol
+                         existing-data
+                         newcol-length 
+                         width-to-make))))
+        (let* ((temp-result (append-to-element
+                             newcol
+                             existing-data
+                             existing-length
+                             width-to-make))
+               (joined-table-data (car temp-result))
+               (remaining-elements (cdr temp-result)))
+          ;; Invariant maintained - table data in reverse order
+          (gnc:html-table-set-data! table (reverse joined-table-data))
+          
+          (for-each 
+           (lambda (element)
+             (gnc:html-table-append-row! table 
+                                         (widen-and-append 
+                                          '() 
+                                          element 
+                                          width-to-make)))
+           remaining-elements)
+          #f))))
 
 (define (gnc:html-table-prepend-column! table newcol)
   ;; returns a pair, the car of which is the prepending of newcol
   ;; and existing-data, and the cdr is the remaining elements of newcol
   (define (prepend-to-element newcol existing-data length-to-append)
     (if (= length-to-append 0) ('() . newcol)
-	 (let* 
-	     ((current-new (car newcol))
-	      (current-existing (car existing-data))
-	      (rest-new (cdr newcol))
-	      (rest-existing (cdr existing-data))
-	      (rest-result (prepend-to-element rest-new rest-existing 
-					       (- length-to-append 1))))
-	   (cons 
-	    (cons (cons current-new current-existing) (car rest-result))
-	    (cdr rest-result)))))
-  (let* (
-	 (existing-data (reverse! (gnc:html-table-data table)))
+        (let* 
+            ((current-new (car newcol))
+             (current-existing (car existing-data))
+             (rest-new (cdr newcol))
+             (rest-existing (cdr existing-data))
+             (rest-result (prepend-to-element rest-new rest-existing 
+                                              (- length-to-append 1))))
+          (cons 
+           (cons (cons current-new current-existing) (car rest-result))
+           (cdr rest-result)))))
+  (let* ((existing-data (reverse (gnc:html-table-data table)))
 	 (existing-length (length existing-data))
-	 (newcol-length (length newcol))
-	 )
-	 (if (<= newcol-length existing-length)
-	     (gnc:html-table-set-data! 
-	      (reverse! (car (prepend-to-element 
-			      newcol
-			      existing-data
-			      newcol-length))))
-     (let* ((temp-result (prepend-to-element
-				  newcol
-				  existing-data
-				  existing-length))
-		    (joined-table-data (car temp-result))
-		    (remaining-elements (cdr temp-result)))
-	       ;; Invariant maintained - table data in reverse order
-	       (gnc:html-table-set-data! table (reverse! joined-table-data))
-       
-	       (for-each 
-		(lambda (element)
-		  (gnc:html-table-append-row! table (list element)))
-		remaining-elements)
-       #f))))
+	 (newcol-length (length newcol)))
+    (if (<= newcol-length existing-length)
+        (gnc:html-table-set-data! 
+         (reverse (car (prepend-to-element 
+                        newcol
+                        existing-data
+                        newcol-length))))
+        (let* ((temp-result (prepend-to-element
+                             newcol
+                             existing-data
+                             existing-length))
+               (joined-table-data (car temp-result))
+               (remaining-elements (cdr temp-result)))
+          ;; Invariant maintained - table data in reverse order
+          (gnc:html-table-set-data! table (reverse joined-table-data))
+          (for-each 
+           (lambda (element)
+             (gnc:html-table-append-row! table (list element)))
+           remaining-elements)
+          #f))))
 
 (define (gnc:html-table-render table doc)
   (let* ((retval '())
@@ -579,12 +575,17 @@
       (for-each 
        (lambda (row) 
          (let ((rowstyle 
-                (gnc:html-table-row-style table rownum)))
+                (gnc:html-table-row-style table rownum))
+               (rowmarkup 
+                (gnc:html-table-row-markup table rownum)))
+           ;; set default row markup
+           (if (not rowmarkup)
+               (set! rowmarkup "tr"))
            
            ;; push the style for this row and write the start tag, then 
            ;; pop it again.
            (if rowstyle (gnc:html-document-push-style doc rowstyle))
-           (push (gnc:html-document-markup-start doc "tr"))
+           (push (gnc:html-document-markup-start doc rowmarkup))
            (if rowstyle (gnc:html-document-pop-style doc))
            
            ;; write the column data, pushing the right column style 
@@ -612,7 +613,7 @@
            
            ;; write the row end tag and pop the row style 
            (if rowstyle (gnc:html-document-push-style doc rowstyle))
-           (push (gnc:html-document-markup-end doc "tr"))
+           (push (gnc:html-document-markup-end doc rowmarkup))
            (if rowstyle (gnc:html-document-pop-style doc))
            
            (set! colnum 0)

@@ -27,10 +27,12 @@
 #include "config.h"
 
 void  gnc_gpg_init(void);
+char  * gnc_gpg_export(const gchar * keyname);
 char  * gnc_gpg_encrypt(const gchar * cleartext, int cleartext_size, 
-                        const gchar * recipient);
-char  * gnc_gpg_decrypt(const gchar * cleartext, int cleartext_size);
+                        const gchar * recipient, const gchar * passphrase);
+char  * gnc_gpg_decrypt(const gchar * cleartext, int cleartext_size,
+                        const gchar * passphrase);
 void  gnc_gpg_make_keypair(const gchar * name, const gchar * id,
-                           const gchar * email);
+                           const gchar * email, const gchar * passphrase);
 
 #endif

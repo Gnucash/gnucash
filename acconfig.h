@@ -68,8 +68,13 @@
 /* Use the new gtkhtml widget instead of the old xmhtml widget */
 #undef HAVE_LIBGTKHTML
 
+/* SSL support for ghttp is still not in the main tree, so test for it
+ * separately */
 #undef HAVE_LIBGHTTP
 #undef HAVE_OPENSSL
+
+/* GPG support.  This is an --enable option */
+#undef USE_GPG
 
 /* misc image and compression libs needed by html widget */
 #undef HAVE_ZLIB               

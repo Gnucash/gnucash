@@ -55,12 +55,14 @@ typedef int  (* GncHTMLObjectCB)(gnc_html * html, GtkHTMLEmbedded * eb,
                                  gpointer data); 
 typedef int  (* GncHTMLActionCB)(gnc_html * html, const char * method,
                                  const char * action, const char * act_args, 
-                                 const char * encoding);
+                                 GHashTable * form_data);
 gnc_html    * gnc_html_new(void);
 void          gnc_html_destroy(gnc_html * html);
 void          gnc_html_show_url(gnc_html * html, 
                                 URLType type, const char * location, 
                                 const char * label, int newwin_hint);
+void          gnc_html_show_data(gnc_html * html, 
+                                 const char * data, int datalen);
 void          gnc_html_reload(gnc_html * html);
 void          gnc_html_export(gnc_html * html);
 void          gnc_html_print(gnc_html * html);
@@ -83,15 +85,16 @@ void          gnc_html_unregister_action_handler(const char * action);
  * is the trivial application/x-www-form-urlencoded submit,
  * multipart-post is a multipart/form-data submit. */
 void          gnc_html_generic_get_submit(gnc_html * html, const char * act, 
-                                          const char * encoding);
+                                          GHashTable * form_data);
 void          gnc_html_generic_post_submit(gnc_html * html, const char * act, 
-                                           const char * encoding);
+                                           GHashTable * form_data);
 void          gnc_html_multipart_post_submit(gnc_html * html, const char * a, 
-                                             const char * encoding);
+                                             GHashTable * form_data);
 
 URLType       gnc_html_parse_url(gnc_html * html, const gchar * url, 
                                  char ** url_location, char ** url_label);
 char          * gnc_html_encode_string(const char * in);
+char          * gnc_html_decode_string(const char * in);
 
 gnc_html_history * gnc_html_get_history(gnc_html * html);
 GtkWidget   * gnc_html_get_widget(gnc_html * html);

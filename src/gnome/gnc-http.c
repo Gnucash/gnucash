@@ -165,9 +165,9 @@ ghttp_check_callback(gpointer data) {
 static int
 gnc_http_certificate_check_cb(ghttp_request * req, X509 * cert, 
                               void * user_data) {
-  PINFO("checking SSL certificate...");
+  printf("checking SSL certificate...");
   X509_print_fp(stdout, cert);
-  PINFO(" ... done\n");
+  printf(" ... done\n");
   return TRUE;
 }
 #endif
@@ -226,7 +226,7 @@ gnc_http_start_post(gnc_http * http, const char * uri,
                                      gnc_http_certificate_check_cb, 
                                      (void *)http);
 #endif
-  ghttp_set_uri(info->request, uri);
+  ghttp_set_uri(info->request, (char *)uri);
   ghttp_set_header(info->request, http_hdr_User_Agent, 
                    "gnucash/1.5 (Financial Browser for Linux; http://gnucash.org)");
   ghttp_set_header(info->request, http_hdr_Content_Type, content_type);

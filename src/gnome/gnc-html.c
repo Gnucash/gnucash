@@ -51,6 +51,7 @@
 #include "dialog-utils.h"
 #include "window-register.h"
 #include "print-session.h"
+#include "global-options.h"
 #include "gnc-engine-util.h"
 #include "gnc-gpg.h"
 #include "gnc-html.h"
@@ -319,6 +320,26 @@ rebuild_url(URLType type, const gchar * location, const gchar * label) {
   }
 }
 
+static gboolean
+http_allowed() {
+  return gnc_lookup_boolean_option("Network", "Allow http network access", 
+                                   TRUE);
+}
+
+static gboolean
+https_allowed() {
+  return gnc_lookup_boolean_option("Network", "Allow https network access", 
+                                   TRUE);
+}
+
+static gboolean
+gnc_network_allowed() {
+  return gnc_lookup_boolean_option("Network", "Enable GnuCash Network", 
+                                   TRUE);
+}
+
+
+
 /************************************************************
  * gnc_html_http_request_cb: fires when an HTTP request is completed.
  * this is when it's time to load the data into the GtkHTML widget. 
@@ -457,11 +478,22 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
     }
     break;
     
-  case URL_TYPE_HTTP:
-  case URL_TYPE_FTP:
   case URL_TYPE_SECURE:
+    if(!https_allowed()) {
+      gnc_error_dialog("Secure HTTP access is disabled.\n"
+                       "You can enable it in the Network section of\n"
+                       "the Preferences dialog.");
+      break;
+    }
+    
+  case URL_TYPE_HTTP:
+    if(!http_allowed()) {
+      gnc_error_dialog("Network HTTP access is disabled.\n"
+                       "You can enable it in the Network section of\n"
+                       "the Preferences dialog.");
+    }
     fullurl = rebuild_url(type, location, label);
-    gnc_html_start_request(html, fullurl, handle);    
+    gnc_html_start_request(html, fullurl, handle);
     break;
     
   case URL_TYPE_REPORT:
@@ -502,6 +534,7 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
     
   case URL_TYPE_REGISTER:
   case URL_TYPE_SCHEME:
+  case URL_TYPE_FTP:
   default:
     PWARN("load_to_stream for inappropriate type\n"
           "\turl = '%s#%s'\n", location, label);
@@ -723,6 +756,86 @@ gnc_html_button_press_cb(GtkWidget * widg, GdkEventButton * event,
   }
 }
 
+/********************************************************************
+ * gnc_html_pack/unpack_form_data
+ * convert an encoded arg string to/from a name-value hash table
+ ********************************************************************/
+
+static GHashTable *
+gnc_html_unpack_form_data(const char * encoding) {
+  GHashTable * rv = g_hash_table_new(g_str_hash, g_str_equal);
+
+  char * next_pair = g_strdup(encoding);
+  char * name  = NULL;
+  char * value = NULL;
+  char * extr_name  = NULL;
+  char * extr_value = NULL;
+
+  while(next_pair) {
+    name = next_pair;
+    if((value = strchr(name, '='))) {
+      extr_name = g_strndup(name, value-name);
+      next_pair = strchr(value, '&');
+      if(next_pair) {
+        extr_value = g_strndup(value+1, next_pair-value-1);
+        next_pair++;
+      }
+      else {
+        extr_value = g_strdup(value+1);
+      }
+      
+      g_hash_table_insert(rv, 
+                          gnc_html_decode_string(extr_name),
+                          gnc_html_decode_string(extr_value));
+      g_free(extr_name);
+      g_free(extr_value);
+    }
+    else {
+      next_pair = NULL;
+    }
+  }
+
+  return rv;
+}
+
+static gboolean
+free_form_data_helper(gpointer k, gpointer v, gpointer user) {
+  g_free(k);
+  g_free(v);
+  return TRUE;
+}
+
+static void 
+gnc_html_free_form_data(GHashTable * d) {
+  g_hash_table_foreach_remove(d, free_form_data_helper, NULL);
+  g_hash_table_destroy(d);
+}
+
+static void
+pack_form_data_helper(gpointer key, gpointer val, 
+                      gpointer user_data) {
+  char * old_str = *(char **)user_data;
+  char * enc_key = gnc_html_encode_string((char *)key);
+  char * enc_val = gnc_html_encode_string((char *)val);
+  char * new_str = NULL;
+
+  if(old_str) {
+    new_str = g_strconcat(old_str, "&", enc_key, "=", enc_val, NULL);
+  }
+  else {
+    new_str = g_strconcat(enc_key, "=", enc_val, NULL);
+  }
+  *(char **)user_data = new_str;
+  g_free(old_str);
+}
+
+static char *
+gnc_html_pack_form_data(GHashTable * form_data) {
+  char * encoded = NULL;
+  g_hash_table_foreach(form_data, pack_form_data_helper, &encoded);
+  return encoded;
+}
+
 
 /********************************************************************
  * gnc_html_button_submit_cb
@@ -731,7 +844,7 @@ gnc_html_button_press_cb(GtkWidget * widg, GdkEventButton * event,
 
 static int
 gnc_html_submit_cb(GtkHTML * html, const gchar * method, 
-                   const gchar * action, const gchar * encoding,
+                   const gchar * action, const gchar * encoded_form_data,
                    gpointer user_data) {
   gnc_html * gnchtml = user_data;
   char     * location = NULL;
@@ -739,35 +852,51 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
   char     * label = NULL;
   char     * submit_encoding = NULL;
   char     ** action_parts;
+  GHashTable * form_data = gnc_html_unpack_form_data(encoded_form_data);
   URLType  type;
   GncHTMLActionCB cb;
 
   type = gnc_html_parse_url(gnchtml, action, &location, &label);
   
   if(type == URL_TYPE_ACTION) {
-    if(gnc_html_action_handlers) {
-      action_parts = g_strsplit(location, "?", 2);
-      if(action_parts && action_parts[0]) {
-        cb = g_hash_table_lookup(gnc_html_action_handlers, action_parts[0]);
-        cb(gnchtml, method, action_parts[0], action_parts[1], encoding);
+    if(gnc_network_allowed()) {
+      if(gnc_html_action_handlers) {
+        action_parts = g_strsplit(location, "?", 2);
+        if(action_parts && action_parts[0]) {
+          cb = g_hash_table_lookup(gnc_html_action_handlers, action_parts[0]);
+          if(cb) {
+            cb(gnchtml, method, action_parts[0], action_parts[1], form_data);
+          }
+          else {
+            printf("no handler for gnc-network action '%s'\n",
+                   action);
+          }
+        }
+        else {
+          printf("tried to split on ? but failed...\n");
+        }
       }
-      else {
-        printf("tried to split on ? but failed...\n");
-      }
+    }
+    else {
+      gnc_error_dialog("GnuCash Network is disabled and this page "
+                       "requires it.\n"
+                       "You can enable it in the Network section\n"
+                       "of the Preferences dialog.");
     }
   }
   else {
     if(!strcasecmp(method, "get")) {
-      gnc_html_generic_get_submit(gnchtml, action, encoding);
+      gnc_html_generic_get_submit(gnchtml, action, form_data);
     }
     else if(!strcasecmp(method, "post")) {
-      gnc_html_generic_post_submit(gnchtml, action, encoding);
+      gnc_html_generic_post_submit(gnchtml, action, form_data);
     }
   }
   
   g_free(location);
   g_free(label);
   g_free(new_loc);
+  gnc_html_free_form_data(form_data);
   return TRUE;
 }
 
@@ -859,6 +988,21 @@ gnc_html_open_scm(gnc_html * html, const gchar * location,
 
 
 /********************************************************************
+ * gnc_html_show_data
+ * display some HTML that the creator of the gnc-html got from 
+ * somewhere. 
+ ********************************************************************/
+
+void
+gnc_html_show_data(gnc_html * html, const char * data, 
+                   int datalen) {
+  GtkHTMLStream * handle = gtk_html_begin(GTK_HTML(html->html));
+  gtk_html_write(GTK_HTML(html->html), handle, data, datalen);
+  gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_OK);  
+}
+
+
+/********************************************************************
  * gnc_html_show_url 
  * 
  * open a URL.  This is called when the user clicks a link or 
@@ -903,12 +1047,23 @@ gnc_html_show_url(gnc_html * html, URLType type,
     gtk_html_jump_to_anchor(GTK_HTML(html->html), label);
     break;
     
-  case URL_TYPE_HTTP:
-  case URL_TYPE_FTP:
   case URL_TYPE_SECURE:
+    if(!https_allowed()) {
+      gnc_error_dialog("Secure HTTP access is disabled.\n"
+                       "You can enable it in the Network section of\n"
+                       "the Preferences dialog.");
+      break;
+    }
+  case URL_TYPE_HTTP:
+    if(!http_allowed()) {
+      gnc_error_dialog("Network HTTP access is disabled.\n"
+                       "You can enable it in the Network section of\n"
+                       "the Preferences dialog.");
+      break;
+    }
   case URL_TYPE_FILE:
     html->base_type     = type;
-
+    
     if(html->base_location) g_free(html->base_location);
     html->base_location = extract_base_name(type, location);
     
@@ -1234,22 +1389,63 @@ gnc_html_encode_string(const char * str) {
 }
 
 
+char *
+gnc_html_decode_string(const char * str) {
+  static gchar * safe = "$-._!*(),"; /* RFC 1738 */
+  GString * decoded  = g_string_new ("");
+  gchar   * ptr;
+  guchar  c;
+  guint   hexval;
+  ptr = str;
+  while(*ptr) {
+    c = (unsigned char) *ptr;
+    if ((( c >= 'A') && ( c <= 'Z')) ||
+        (( c >= 'a') && ( c <= 'z')) ||
+        (( c >= '0') && ( c <= '9')) ||
+        (strchr(safe, c))) {
+      decoded = g_string_append_c (decoded, c);
+    }
+    else if ( c == '+' ) {
+      decoded = g_string_append_c (decoded, ' ');
+    }
+    else if (!strncmp(ptr, "%0D0A", 5)) {
+      decoded = g_string_append (decoded, "\n");
+      ptr += 4;
+    }
+    else if(c == '%') {
+      ptr++;
+      sscanf(ptr, "%02X", &hexval);
+      ptr++;
+      decoded = g_string_append_c(decoded, (char)hexval);
+    }
+    ptr++;
+  }
+  ptr = decoded->str;
+  g_string_free (decoded, FALSE);  
+
+  return (char *)ptr;  
+}
+
+
+
 /********************************************************************
  * gnc_html_generic_get_submit() : normal 'get' submit method. 
  ********************************************************************/
 
 void
 gnc_html_generic_get_submit(gnc_html * html, const char * action, 
-                            const char * encoding) {
+                            GHashTable * form_data) {
   URLType type;
   char    * location = NULL;
   char    * label = NULL;
   char    * fullurl = NULL;
-  
+  char    * encoded = gnc_html_pack_form_data(form_data);
+
   type    = gnc_html_parse_url(html, action, &location, &label);
-  fullurl = g_strconcat(location, "?", encoding, NULL);
+  fullurl = g_strconcat(location, "?", encoded, NULL);
   gnc_html_show_url(html, type, fullurl, label, 0);
 
+  g_free(encoded);
   g_free(location);
   g_free(label);
   g_free(fullurl);
@@ -1262,14 +1458,13 @@ gnc_html_generic_get_submit(gnc_html * html, const char * action,
 
 void
 gnc_html_generic_post_submit(gnc_html * html, const char * action, 
-                             const char * encoding) {
-  char * htmlstr = g_strconcat(encoding, 
-                               "&submit=submit",
-                               NULL);
+                             GHashTable * form_data) {
+  char * encoded = gnc_html_pack_form_data(form_data);
   gnc_http_start_post(html->http, action, 
                       "application/x-www-form-urlencoded",
-                      htmlstr, strlen(htmlstr), 
+                      encoded, strlen(encoded), 
                       gnc_html_http_request_cb, html);
+  g_free(encoded);
 }
 
 
@@ -1279,48 +1474,33 @@ gnc_html_generic_post_submit(gnc_html * html, const char * action,
  * don't properly decode the urlencoded values.
  ********************************************************************/
 
+static void
+multipart_post_helper(gpointer key, gpointer val, 
+                      gpointer user_data) {
+  char * old_str = *(char **)user_data;
+  char * new_str = 
+    g_strconcat(old_str,
+                "--XXXgncXXX\r\n",
+                "Content-Disposition: form-data; name=\"",
+                (char *)key, "\"\r\n\r\n",
+                (char *)val, "\r\n",
+                NULL);
+  *(char **)user_data = new_str;
+  g_free(old_str);
+}
+
+
 void
 gnc_html_multipart_post_submit(gnc_html * html, const char * action, 
-                               const char * encoding) {
+                               GHashTable * form_data) {
+
   char * htmlstr = g_strdup("");
   char * next_htmlstr;
-  char * next_pair = g_strconcat(encoding, "&submit=submit", NULL);
-  char * name  = NULL;
-  char * value = NULL;
-  char * extr_name  = NULL;
-  char * extr_value = NULL;
-  char * length_line = NULL;
+
+  /* encode the arguments from the hash table */
+  g_hash_table_foreach(form_data, multipart_post_helper, &htmlstr);
   
-  while(next_pair) {
-    name = next_pair;
-    if((value = strchr(name, '='))) {
-      extr_name = g_strndup(name, value-name);
-      next_pair = strchr(value, '&');
-      if(next_pair) {
-        extr_value = g_strndup(value+1, next_pair-value-1);
-        next_pair++;
-      }
-      else {
-        extr_value = g_strdup(value+1);
-      }
-      next_htmlstr = 
-        g_strconcat(htmlstr, 
-                    "--XXXgncXXX\r\n",
-                    "Content-Disposition: form-data; name=\"",
-                    extr_name, "\"\r\n",
-                    "Content-Type: application/x-www-form-urlencoded\r\n\r\n",
-                    extr_value, "\r\n",
-                    NULL);
-      
-      g_free(htmlstr);
-      htmlstr = next_htmlstr;
-      next_htmlstr = NULL;
-    }
-    else {
-      next_pair = NULL;
-    }
-  }
-  
+  /* add the closing boundary marker */
   next_htmlstr = g_strconcat(htmlstr, "--XXXgncXXX--\r\n", NULL);
   g_free(htmlstr);
   htmlstr = next_htmlstr;
@@ -1329,5 +1509,8 @@ gnc_html_multipart_post_submit(gnc_html * html, const char * action,
                       "multipart/form-data; boundary=XXXgncXXX",
                       htmlstr, strlen(htmlstr), 
                       gnc_html_http_request_cb, html);
+
+  printf("==== multipart submit ====\n");
+  printf("%s\n==== end ====\n", htmlstr);
   g_free(htmlstr);
 }

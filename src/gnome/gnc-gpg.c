@@ -29,21 +29,44 @@
 #include <sys/stat.h>
 #include <gnome.h>
 #include <unistd.h>
+#include <glib.h>
 
+#include <gtkhtml/gtkhtml.h>
+#include <gtkhtml/gtkhtml-embedded.h>
+
+#include "global-options.h"
+#include "gnc-ui.h"
 #include "gnc-html.h"
 #include "gnc-gpg.h"
 
-static int handle_gpg_html(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
+/* handlers for embedded <object> tags */ 
+static int gnc_crypted_html_handler(gnc_html * html, GtkHTMLEmbedded * eb, 
+                                    gpointer d);
+static int gnc_make_keypair_handler(gnc_html * html, GtkHTMLEmbedded * eb, 
+                                    gpointer d);
+
+/* handlers for gnc-action: <form> submit actions */ 
+static int gnc_submit_pubkey_handler(gnc_html * html, 
+                                     const char * method, const char * action,
+                                     const char * act_args, 
+                                     GHashTable * form_data);
 
 /********************************************************************
- * gnc_gpg_init : called at startup time.  adds a handler for crypted
- * HTML to gnc-html.
+ * gnc_gpg_init : called at startup time.  adds handlers for GPG
+ * related network transactions
  ********************************************************************/
 
 void
 gnc_gpg_init(void) {
-  gnc_html_register_object_handler("gnc-crypted-html", handle_gpg_html);
+  gnc_html_register_object_handler("gnc-crypted-html", 
+                                   gnc_crypted_html_handler);
+  gnc_html_register_object_handler("gnc-make-keypair",
+                                   gnc_make_keypair_handler);
+
+  gnc_html_register_action_handler("submit-pubkey",
+                                   gnc_submit_pubkey_handler); 
 }
+
 
 static char * 
 unescape_newlines(const gchar * in) {
@@ -66,34 +89,185 @@ unescape_newlines(const gchar * in) {
   return retval;
 }
 
-/* we just want to take the data and stuff it into the gnc-html
- * widget, blowing away the active streams.  crypted-html contains a
- * complete HTML page. */
-static int
-handle_gpg_html(gnc_html * html, GtkHTMLEmbedded * eb, gpointer data) {
-  int  retval;
-  char * cryptext  = unescape_newlines(eb->data);
-  char * cleartext = gnc_gpg_decrypt(cryptext, strlen(cryptext));
-  GtkHTMLStream * handle;
-  if(cleartext && cleartext[0]) {
-    handle = gtk_html_begin(html);
-    gtk_html_write(html, handle, cleartext, strlen(cleartext));
-    gtk_html_end(html, handle, GTK_HTML_STREAM_OK);
-    retval = TRUE;
+
+/********************************************************************
+ * gnc_get_passphrase : util to get a passphrase. 
+ ********************************************************************/
+
+static void 
+get_pp_string_cb(char * string, gpointer data) {
+  int l, i;
+
+  if(!data) return;
+  if(!string) {
+    *((char **)data) = NULL;
   }
   else {
-    retval = FALSE;
+    *((char **)data) = g_strdup(string);    
   }
-  g_free(cleartext);
-  g_free(cryptext);
+}
+
+static char * 
+gnc_get_passphrase(const char * prompt) {
+  char      * pp = NULL;
+  gint      retval;
+  GtkWidget * dlg = 
+    gnome_request_dialog(TRUE, prompt, "", 1024,
+                         get_pp_string_cb, (gpointer)&pp, NULL);
+  retval = gnome_dialog_run(GNOME_DIALOG(dlg));
+  if(retval == 0) {
+    return pp;
+  }
+  else {
+    printf("get_passphrase canceled.\n");
+    return NULL;
+  }
+}
+
+static void
+gnc_free_passphrase(char * pp) {
+  int l, i;
+  if(!pp) return;
+  l = strlen(pp);
+  for(i=0;i<l;i++) {
+    pp[i]=0;
+  }
+  g_free(pp);
+}
+
+
+/********************************************************************
+ * gnc_crypted_html_handler : receives ascii-armored GPG cryptext,
+ * decrypts it, and displays the result as HTML. 
+ ********************************************************************/
+
+static int
+gnc_crypted_html_handler(gnc_html * html, GtkHTMLEmbedded * eb, 
+                         gpointer data) {
+  int  retval = TRUE;
+  char * cryptext  = unescape_newlines(eb->data);
+  char * passphrase = gnc_get_passphrase("Enter passphrase:");
+  char * cleartext;
+
+  if(passphrase) {
+    cleartext  = gnc_gpg_decrypt(cryptext, strlen(cryptext), passphrase);
+    if(cleartext && cleartext[0]) {
+      gnc_html_show_data(html, cleartext, strlen(cleartext));
+    }
+    else {
+      retval = FALSE;
+    }
+    g_free(cleartext);
+    g_free(cryptext);
+    gnc_free_passphrase(passphrase);
+  }
+  return retval;
+}
+
+
+/********************************************************************
+ * gnc_make_keypair_handler : queries for a passphrase and
+ * generates a keypair in the local keyring
+ ********************************************************************/
+
+static int
+gnc_make_keypair_handler(gnc_html * html, GtkHTMLEmbedded * eb, 
+                         gpointer data) {
+  char * first_pp      = NULL;
+  char * verify_pp     = NULL;
+  char * username      = g_hash_table_lookup(eb->params, "username");
+  char * userid        = g_hash_table_lookup(eb->params, "userid");
+  char * email         = g_hash_table_lookup(eb->params, "email");
+  char * next_action   = g_hash_table_lookup(eb->params, "next-action");
+  char * cancel_action = g_hash_table_lookup(eb->params, "cancel-action");
+  int retval = TRUE;
+  URLType type;
+  char * location = NULL;
+  char * label = NULL;
+
+  first_pp = gnc_get_passphrase("Enter passphrase:");
+  if(first_pp) {
+    verify_pp = gnc_get_passphrase("Verify passphrase:");
+  }
+  else {
+    type = gnc_html_parse_url(html, cancel_action, &location, &label);
+    gnc_html_show_url(html, type, location, label, 0);
+    g_free(location);
+    g_free(label);
+  }
+
+  if(verify_pp) {
+    if(!strcmp(first_pp, verify_pp)) {
+      printf("Got passphrase '%s' (shhh! don't tell).  Generating keypair.\n",
+             first_pp);
+      gnc_gpg_make_keypair(username, userid, email, first_pp);
+      printf("...done\n");
+      gnc_free_passphrase(first_pp);
+      gnc_free_passphrase(verify_pp);
+      type = gnc_html_parse_url(html, next_action, &location, &label);
+      gnc_html_show_url(html, type, location, label, 0);
+      g_free(location);
+      g_free(label);
+    }
+    else {
+      gnc_free_passphrase(first_pp);
+      gnc_free_passphrase(verify_pp);
+      gnc_error_dialog(_("Passphrases did not match."));
+      gnc_make_keypair_handler(html, eb, data);
+    }
+  }
+  else {
+    gnc_free_passphrase(first_pp);
+    type = gnc_html_parse_url(html, cancel_action, &location, &label);
+    gnc_html_show_url(html, type, location, label, 0);
+    g_free(location);
+    g_free(label);
+  }
 
   return retval;
 }
 
 
+/********************************************************************
+ * gnc_submit_pubkey_handler : send the public key as a multipart
+ * POST submit
+ ********************************************************************/
+
+static int
+gnc_submit_pubkey_handler(gnc_html * html, const char * method,
+                          const char * action, const char * args, 
+                          GHashTable * form_data) {
+  char * keyid = g_hash_table_lookup(form_data, "gnc_keyid");
+  char * submit = g_hash_table_lookup(form_data, "submit");     
+  char * keytext = NULL;
+  char * gnc_net_server = 
+    gnc_lookup_string_option("Network", "GnuCash Network server", 
+                             "www.gnumatic.com");
+  char * new_action = g_strconcat("http://", gnc_net_server, "/", args, NULL);
+  
+  if(!strcmp(submit, "OK")) {
+    /* get the public key */
+    if(keyid) {
+      keytext = gnc_gpg_export(keyid);
+    }
+    
+    /* stick it in the form data */
+    g_hash_table_insert(form_data, g_strdup("gnc_user_pubkey"), keytext);
+    
+    /* submit as a multipart form */
+    gnc_html_multipart_post_submit(html, new_action, form_data);
+  }
+  else {
+    /* don't export the pubkey, just submit as is. */
+    printf("canceled\n");
+    gnc_html_generic_post_submit(html, new_action, form_data);
+  }
+  return TRUE;
+}
+
 static char *
 gnc_gpg_transform(const gchar * input, gint input_size, 
-                  char ** gpg_argv) {
+                  const char * passphrase, char ** gpg_argv) {
   int   pid;
   int   to_child[2];
   int   from_child[2];
@@ -105,7 +279,7 @@ gnc_gpg_transform(const gchar * input, gint input_size,
   char  * current_blk = NULL;
   char  * retval;
   char  * insert_pos;
-
+  
   /* create a pipe for talking to the child gpg process */
   if((pipe(to_child) != 0) || (pipe(from_child) != 0)) {
     return NULL;
@@ -115,10 +289,24 @@ gnc_gpg_transform(const gchar * input, gint input_size,
     close(to_child[0]);
     close(from_child[1]);
 
-    /* parent process. write cleartext to pipe. */
+    /* parent process. write passphrase to pipe first. */
+    if(passphrase) {
+      total_bytes = 0;    
+      while(total_bytes < strlen(passphrase)) {
+        bytes = write(to_child[1], 
+                      passphrase+total_bytes, 
+                      strlen(passphrase)-total_bytes); 
+        if(bytes < 0) break;
+        else {
+          total_bytes += bytes;
+        }
+      }
+    }
+
+    /* now write data */ 
     total_bytes = 0;
     while(total_bytes < input_size) {
-      bytes = write(to_child[1], input, input_size-total_bytes); 
+      bytes = write(to_child[1], input+total_bytes, input_size-total_bytes); 
       if(bytes < 0) break;
       else {
         total_bytes += bytes;
@@ -126,7 +314,7 @@ gnc_gpg_transform(const gchar * input, gint input_size,
     }
     close(to_child[1]);
 
-    /* read encrypted data back */ 
+    /* read transformed data back */ 
     current_blk = g_new0(char, 1024);
     block_bytes = 0;
     total_bytes = 0;
@@ -187,24 +375,28 @@ gnc_gpg_transform(const gchar * input, gint input_size,
 
 char * 
 gnc_gpg_encrypt(const gchar * cleartext, int cleartext_size, 
-                const gchar * recipient) {
-  char * argv[11];
+                const gchar * recipient, const gchar * passphrase) {
   char * retval = NULL;
+  char * argv[] = 
+  {
+    "gpg",
+    "-q",
+    "--batch",
+    "-sea",
+    "--keyring",
+    "~/.gnucash/gnucash.pub",
+    "--secret-keyring",
+    "~/.gnucash/gnucash.sec",
+    "-r",
+    NULL,
+    "--passphrase-fd",
+    "0",
+    NULL
+  };
+  
+  argv[7] = (char *)recipient;
 
-  argv[0] = "gpg";
-  argv[1] = "-q";
-  argv[2] = "--batch";
-  argv[3] = "-sea";
-  argv[4] = "--keyring";
-  argv[5] = "~/.gnucash/gnucash.pub";
-  argv[6] = "--secret-keyring";
-  argv[7] = "~/.gnucash/gnucash.sec";
-  argv[8] = "-r";
-  argv[9] = g_strdup(recipient);
-  argv[10] = NULL;
-
-  retval = gnc_gpg_transform(cleartext, cleartext_size, argv);
-  g_free(argv[7]);
+  retval = gnc_gpg_transform(cleartext, cleartext_size, passphrase, argv);
   return retval;
 }
 
@@ -215,35 +407,62 @@ gnc_gpg_encrypt(const gchar * cleartext, int cleartext_size,
  ********************************************************************/
 
 char * 
-gnc_gpg_decrypt(const gchar * cryptext, int cryptext_size) {
-  char * argv[9];
+gnc_gpg_decrypt(const gchar * cryptext, int cryptext_size,
+                const gchar * passphrase) {
   char * retval = NULL;
 
-  argv[0] = "gpg";
-  argv[1] = "-q";
-  argv[2] = "--batch";
-  argv[3] = "-da";
-  argv[4] = "--keyring";
-  argv[5] = "~/.gnucash/gnucash.pub";
-  argv[6] = "--secret-keyring";
-  argv[7] = "~/.gnucash/gnucash.sec";
-  argv[8] = NULL;
+  char * argv[] = 
+  { "gpg",
+    "-q",
+    "--batch",
+    "-da",
+    "--keyring",
+    "~/.gnucash/gnucash.pub",
+    "--secret-keyring",
+    "~/.gnucash/gnucash.sec",
+    "--passphrase-fd",
+    "0",
+    NULL
+  };
   
-  retval = gnc_gpg_transform(cryptext, cryptext_size, argv);
+  retval = gnc_gpg_transform(cryptext, cryptext_size, passphrase, argv);
   
   return retval;
 }
 
 
 /********************************************************************
+ *  gnc_gpg_export
+ *  get a public key (ASCII armored)
+ ********************************************************************/
+
+char * 
+gnc_gpg_export(const gchar * keyname) {
+  char * retval;
+  char * argv[] = 
+  { "gpg",
+    "-q",
+    "--export",
+    "-a",
+    NULL,
+    NULL
+  };
+  argv[4] = keyname;
+  retval = gnc_gpg_transform(NULL, 0, NULL, argv);
+  return retval;
+}
+
+
+/********************************************************************
  *  gnc_gpg_make_keypair
- *  make a passphraseless keypair for gnucash use 
+ *  make a keypair for gnucash use 
  ********************************************************************/
 
 void
 gnc_gpg_make_keypair(const gchar * username,
                      const gchar * idstring,
-                     const gchar * email) {
+                     const gchar * email,
+                     const gchar * passphrase) {
   char * stdin = 
     g_strdup_printf("Key-Type: DSA\n"
                     "Key-Length: 1024\n"
@@ -252,19 +471,22 @@ gnc_gpg_make_keypair(const gchar * username,
                     "Name-Real: %s\n"
                     "Name-Comment: %s\n"
                     "Name-Email: %s\n"
-                    "%%pubring: ~/.gnucash/gnucash.pub\n"
-                    "%%secring: ~/.gnucash/gnucash.sec\n"
+                    "Passphrase: %s\n"
                     "%%commit\n",
-                    username, idstring, email);
-  char * argv [4];
-  
-  argv[0] = "gpg";
-  argv[1] = "--batch";
-  argv[2] = "-q";
-  argv[3] = "--gen-key";
-  argv[4] = NULL;
+                    username, idstring, email, passphrase);
+  char * argv [] = 
+  { "gpg",
+    "--batch",
+    "-q",
+    "--gen-key",
+    "--keyring",
+    "~/.gnucash/gnucash.pub",
+    "--secret-keyring",
+    "~/.gnucash/gnucash.sec",
+    NULL
+  };
 
-  gnc_gpg_transform(stdin, strlen(stdin), argv);
+  char * retval = gnc_gpg_transform(stdin, strlen(stdin), NULL, argv);
   g_free(stdin);
 }
 

@@ -9,6 +9,7 @@ gncscm_DATA = \
   report-list.scm \
   stylesheet-plain.scm \
   stylesheet-fancy.scm \
+  table-test.scm \
   taxtxf.scm \
   txf-export.scm \
   txf-export-help.scm \

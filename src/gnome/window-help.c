@@ -223,11 +223,12 @@ gnc_help_window_reload_button_cb(GtkWidget * w, gpointer data) {
 
 static void
 goto_string_cb(char * string, gpointer data) {
-  if(string) {
-    strncpy(data, string, 250);
+  if(!data) return;
+  if(!string) {
+    *(char **)data = NULL;
   }
-  else if(data) {
-    *(char *)data = 0;
+  else {
+    *(char **)data = g_strdup(string);
   }
 }
 
@@ -235,14 +236,14 @@ static int
 gnc_help_window_goto_button_cb(GtkWidget * w, gpointer data) {
   gnc_help_window * help = data;
   int             retval = -1;
-  char            url[251] = "";
+  char            * url = NULL;
   URLType         type;
   char            * location = NULL;
   char            * label = NULL;
 
   GtkWidget * dlg = gnome_request_dialog(FALSE, 
                                          _("Enter URI:"), "", 250,
-                                         &goto_string_cb, &url[0],
+                                         &goto_string_cb, &url,
                                          NULL);
   retval = gnome_dialog_run_and_close(GNOME_DIALOG(dlg));
   
@@ -252,6 +253,11 @@ gnc_help_window_goto_button_cb(GtkWidget * w, gpointer data) {
     g_free(location);
     g_free(label);
   }
+
+  if(url) {
+    g_free(url);
+  }
+
   return TRUE;
 }
 

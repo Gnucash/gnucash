@@ -1,3 +1,36 @@
+2001-03-09  Bill Gribble  <grib@billgribble.com>
+
+	* add configure/acconfig option for GPG
+
+	* src/gnome/gng-gpg.c: add handlers for creation of keypair
+	(with passphrase) and for exporting public key block to GnuCash
+	Network server.  Fix bugs in old keypair creator.  Add passphrase
+	handling to data encrypt/decrypt.
+
+	* src/gnome/gnc-html-actions.c: rewrite privacy notice to use
+	GnuCash Network terminology.  The longer you guys wait to bitch
+	about the name the more stuck it is.  Rewrite gnc-info/form handler
+	to submit GnuCash version and feature information.
+
+	* src/gnome/gnc-html.c: respect global preferences for HTTP, SSL,
+	and GnuCash Network transactions.  Change submit handler calls to
+	unpack encoded form data into a hash table and possibly re-encode
+	and re-pack if necessary.  Fix bugs in submit handler lookups.
+	Add RFC-1738 decoder to go with the encoder. 
+
+	* src/gnome/window-help.c: fix bugs in Open dialog.
+
+	* src/scm/html-table.scm: Add new table-cell/markup and
+	append-row/markup functions to make it easier to set semantic data
+	styles in style sheets.  Remove dead code. 
+
+	* src/sc/prefs.scm: New preferences section, "Network", with
+	options to globally disable HTTP, SSL, and GnuCash Network, and to
+	assign the GnuCash Network server name.
+
+	* src/scm/report/table-test.scm: new test report to demonstrate 
+	row and cell semantic style
+	
 2001-03-09  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/engine/Account.c (xaccAccountInsertSplit): Remove unused

@@ -24,23 +24,23 @@
 /********************************************************************
  *  THIS IS PRIVACY-SENSITIVE CODE.  The actions handled here are run
  *  when gnucash needs to send HTML form information to a web server
- *  and can modify the information being sent or send additional
- *  information.
+ *  (the "GnuCash Network") and can modify the information being sent
+ *  or send additional information.
  * 
  *  Don't panic; all that means is that when an HTML form is loaded
  *  into the Gnucash HTML browser, after the user clicks the "submit"
  *  button, if the "action" in the form definition looks like
  *  "gnc-action:ACTION-NAME?ACTION-ARGS", the action-name is used to
  *  find a handler and the form is submitted by that handler.  The
- *  default action handlers allow Gnucash to send information about
- *  itself along with a form, to send the form data in a GPG-encrypted
- *  block, etc.  This is useful functionality, but there are real
- *  privacy concerns.
+ *  only web server that will have such forms will be the GnuCash
+ *  Network server.  Even if other hosts try to fool gnucash with
+ *  GnuCash Network submit actions, we will only ever submit to the
+ *  user's specified GnuCash Network server.
  * 
  *  Users: keep in mind that this is *not* a mechanism for executing
  *  arbitrary code in your gnucash; the only "actions" that can be
  *  taken must be compiled into the client, and you can disable them
- *  globally with a Preferences option.
+ *  globally with a Preferences option ("Enable GnuCash Network"). 
  * 
  *  Developers: Until we have a formally-codified privacy policy,
  *  please follow these guidelines:
@@ -48,27 +48,30 @@
  *  1. When actions send information that the user has not explicitly
  *  entered, there should *always* be a dialog or other notification,
  *  including the extra information to be sent, with an opportunity to
- *  bail out.
+ *  bail out.  A server-side confirmation is probably enough, but
+ *  client-side confirm is better.
  * 
- *  2. Do not use a accept a complete URI to submit to as an argument
- *  to actions.  This might allow a malicious server to ask the
- *  gnucash client for private information to be sent to itself, if
- *  the user happened to go to that site from within the gnucash HTML
- *  browser and click a form "SUBMIT" button.  Submit only to servers
- *  whose names the local user has specified as trusted servers for
- *  gnucash-related actions.
+ *  2. Do not accept a complete URI to submit to as an argument to
+ *  actions.  This might allow a malicious server to ask the gnucash
+ *  client for private information to be sent to itself, if the user
+ *  happened to go to that site from within the gnucash HTML browser
+ *  and click a form "SUBMIT" button.  Always use the "GnuCash Network 
+ *  server" from the global preferences option. 
  ********************************************************************/
 
 #include "config.h"
 #include <string.h>
 #include <glib.h>
+#include <guile/gh.h>
 
+#include "global-options.h"
 #include "gnc-html-actions.h"
 #include "gnc-html.h"
 
-static int handle_gnc_info_form_submit(gnc_html * html, const char * method, 
-                                       const char * action, const char * args, 
-                                       const char * encoding);
+static int 
+gnc_info_form_submit_handler(gnc_html * html, const char * method, 
+                             const char * action, const char * args, 
+                             GHashTable * form_data);
 
 /********************************************************************
  * gnc_html_actions_init() : register the basic set of gnc-action:
@@ -78,57 +81,63 @@ static int handle_gnc_info_form_submit(gnc_html * html, const char * method,
 void
 gnc_html_actions_init(void) {
   gnc_html_register_action_handler("gnc-info/form", 
-                                   handle_gnc_info_form_submit);
+                                   gnc_info_form_submit_handler);
 }
 
 
 /********************************************************************
- * handle_gnc_info_form_submit() : submit the form arguments from
+ * gnc_info_form_submit_handler() : submit the form arguments from
  * 'encoding', appending additional arguments describing the gnucash
- * client.  this is justa test and doesn't submit any real
- * information.
+ * client: gnucash version string and some features.
  ********************************************************************/
 
 static int
-handle_gnc_info_form_submit(gnc_html * html, const char * method, 
-                            const char * action, const char * args, 
-                            const char * encoding) {
-  char * extra_encoding = NULL;
-  char * new_encoding   = NULL;
+gnc_info_form_submit_handler(gnc_html * html, const char * method, 
+                             const char * action, const char * args, 
+                             GHashTable * form_data) {
+  char * version_string = NULL;
   char * new_action = NULL;
-  char * msg_1 = gnc_html_encode_string("gnucash version 1.5");
-  char * msg_2 = gnc_html_encode_string("Hello, world");
+  char * gnc_net_server = 
+    gnc_lookup_string_option("Network", "GnuCash Network server", 
+                             "www.gnumatic.com");
+  char * feature_string = NULL;
 
   if(!method || !action 
      || strcmp(action, "gnc-info/form")) {
     return FALSE;
   }
   
-  extra_encoding = g_strconcat("gnc_version=", msg_1, "&" 
-                               "gnc_message=", msg_2, NULL);
-  
-  if(encoding) {
-    new_encoding = g_strjoin("&", encoding, extra_encoding, NULL);
-  }
-  else {
-    new_encoding = extra_encoding;
-    extra_encoding = NULL;
-  }
+  version_string  = gh_scm2newstr(gh_eval_str("gnc:version"), NULL);  
 
-  new_action = g_strconcat("http://localhost/", args, NULL);
+  feature_string = 
+    g_strjoin(",",
+#if USE_GUPPI
+              "guppi",
+#endif
+#if USE_GPG 
+              "gpg",
+#endif
+#if HAVE_OPENSSL
+              "openssl",
+#endif
+              NULL);
+  g_hash_table_insert(form_data, g_strdup("gnc_browser"), g_strdup("1"));
+  g_hash_table_insert(form_data, g_strdup("gnc_version"), 
+                      g_strdup(version_string));
+  g_hash_table_insert(form_data, g_strdup("gnc_features"), 
+                      feature_string);
+  free(version_string);
+
+  new_action = g_strconcat("http://", gnc_net_server, "/", args, NULL);
   
   if(!strcasecmp(method, "get")) {
-    gnc_html_generic_get_submit(html, new_action, new_encoding);
+    gnc_html_generic_get_submit(html, new_action, form_data);
   }
   else {
-    gnc_html_generic_post_submit(html, new_action, new_encoding);
+    gnc_html_generic_post_submit(html, new_action, form_data);
   }    
   
-  g_free(extra_encoding);
-  g_free(new_encoding);
+  g_free(gnc_net_server);
   g_free(new_action);
-  g_free(msg_1);
-  g_free(msg_2);
-  
   return TRUE;
 }
