@@ -136,12 +136,33 @@ gnc_plugin_page_register_get_type (void)
 }
 
 GncPluginPage *
-gnc_plugin_page_register_new (GNCLedgerDisplay *ld)
+gnc_plugin_page_register_new (Account *account, gboolean subaccounts)
 {
 	GncPluginPageRegister *plugin_page;
+	GNCLedgerDisplay *ld;
 
 	plugin_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_REGISTER,
 			      NULL);
+
+	if (subaccounts)
+	  ld = gnc_ledger_display_subaccounts (account);
+	else
+	  ld = gnc_ledger_display_simple (account);
+	plugin_page->priv->ld = ld;
+	
+	return GNC_PLUGIN_PAGE (plugin_page);
+}
+
+GncPluginPage *
+gnc_plugin_page_register_new_gl (void)
+{
+	GncPluginPageRegister *plugin_page;
+	GNCLedgerDisplay *ld;
+
+	plugin_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_REGISTER,
+			      NULL);
+
+	ld = gnc_ledger_display_gl ();
 	plugin_page->priv->ld = ld;
 	
 	return GNC_PLUGIN_PAGE (plugin_page);

@@ -27,7 +27,6 @@
 #include <string.h>
 
 #include "gnc-plugin-register.h"
-
 #include "gnc-plugin-page-register.h"
 
 #include "messages.h"
@@ -194,14 +193,11 @@ gnc_plugin_register_create_page (GncPlugin *plugin,
 static void
 gnc_plugin_register_cmd_general_ledger (EggAction *action, GncMainWindowActionData *data)
 {
-	GNCLedgerDisplay *ld;
-
 	GncPluginPage *page;
 
 	g_return_if_fail (data != NULL);
 
-	ld = gnc_ledger_display_gl ();
-	page = gnc_plugin_page_register_new (ld);
+	page = gnc_plugin_page_register_new_gl ();
 	gnc_main_window_open_page (data->window, page);
 }
 

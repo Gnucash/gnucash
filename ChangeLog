@@ -1,3 +1,22 @@
+2003-09-13  David Hampton  <hampton@employees.org>
+
+	* src/gnome/gnc-main-window.c: Collapse common functions into one.
+
+	* src/gnome/gnc-main-window.c:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-plugin-page-register.[ch]:
+	* src/gnome/gnc-plugin-page.[ch]: Add new vector for getting the
+	window title.  The tab_name vector no loner returns a const
+	string.
+
+	* src/gnome/gnc-main-window.c: Always bring a new page to the top
+	of the stack.  Remove unused code.
+	
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-plugin-page-register.[ch]:
+	* src/gnome/gnc-plugin-register.c: Can now open arbitrary account
+	registers.
+
 2003-09-09  David Hampton  <hampton@employees.org>
 
 	* src/gnome-search/dialog-search.c:

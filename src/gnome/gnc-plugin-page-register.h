@@ -30,8 +30,6 @@
 #include "Account.h"
 #include "gnc-plugin-page.h"
 
-#include "gnc-ledger-display.h"
-
 G_BEGIN_DECLS
 
 /* type macros */
@@ -60,7 +58,8 @@ typedef struct {
 /* function prototypes */
 GType          gnc_plugin_page_register_get_type (void);
 
-GncPluginPage *gnc_plugin_page_register_new  (GNCLedgerDisplay *ld);
+GncPluginPage *gnc_plugin_page_register_new  (Account *account, gboolean subaccounts);
+GncPluginPage *gnc_plugin_page_register_new_gl  (void);
 
 G_END_DECLS
 

@@ -30,6 +30,7 @@
 #include "egg-action-group.h"
 
 #include "gnc-plugin-page-account-tree.h"
+#include "gnc-plugin-page-register.h"
 
 #include "AccWindow.h"
 #include "Scrub.h"
@@ -652,25 +653,45 @@ gnc_plugin_page_account_tree_cmd_new_account (EggAction *action, GncPluginPageAc
 static void
 gnc_plugin_page_account_tree_cmd_open_account (EggAction *action, GncPluginPageAccountTree *page)
 {
-	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
-	GNCSplitReg *gsr;
+	GncMainWindow *window;
+	GncPluginPage *new_page;
+	GtkWidget *widget;
+	Account *account;
 
-	g_return_if_fail (account != NULL);
+	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
+	account = gnc_plugin_page_account_tree_get_current_account (page);
+	if (account == NULL)
+	  return;
 
-	gsr = regWindowSimple (account);
-	gnc_split_reg_raise (gsr);
+	widget = page->priv->widget;
+	window = GNC_MAIN_WINDOW(g_object_get_data (G_OBJECT (widget), "window"));
+	if (window == NULL)
+	  return;
+
+	new_page = gnc_plugin_page_register_new (account, FALSE);
+	gnc_main_window_open_page (window, new_page);
 }
 
 static void
 gnc_plugin_page_account_tree_cmd_open_subaccounts (EggAction *action, GncPluginPageAccountTree *page)
 {
-	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
-	GNCSplitReg *gsr;
+	GncMainWindow *window;
+	GncPluginPage *new_page;
+	GtkWidget *widget;
+	Account *account;
 
-	g_return_if_fail (account != NULL);
+	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
+	account = gnc_plugin_page_account_tree_get_current_account (page);
+	if (account == NULL)
+	  return;
 
-	gsr = regWindowAccGroup (account);
-	gnc_split_reg_raise (gsr);
+	widget = page->priv->widget;
+	window = GNC_MAIN_WINDOW(g_object_get_data (G_OBJECT (widget), "window"));
+	if (window == NULL)
+	  return;
+
+	new_page = gnc_plugin_page_register_new (account, TRUE);
+	gnc_main_window_open_page (window, new_page);
 }
 
 static void
