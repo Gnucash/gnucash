@@ -4,8 +4,6 @@
 ;; This prints Tax related accounts and exports TXF files for import to
 ;; TaxCut, TurboTax, etc.
 ;;
-;; It also prints a Hierarchical Report for any account.
-;;
 ;; For this to work, the user has to segregate taxable and not taxable
 ;; income to different accounts, as well as deductible and non
 ;; deductible expenses.
@@ -25,7 +23,7 @@
 ;; Optionally prints brief or full account names
 ;;
 ;; NOTE: setting of specific dates is squirly! and seems to be
-;; current-date dependabnt!  Actually, time of day dependant!  Just
+;; current-date dependant!  Actually, time of day dependant!  Just
 ;; after midnight gives diffenent dates than just before!  Referencing
 ;; all times to noon seems to fix this.  Subtracting 1 year sometimes
 ;; subtracts 2!  see "(to-value"
@@ -48,7 +46,6 @@
 ;; Just a private scope.
 (let* ((MAX-LEVELS 16)			; Maximum Account Levels
        (levelx-collector (make-level-collector MAX-LEVELS))
-       (bg-color "#f6ffdb")
        (red   "#ff0000")
        (white "#ffffff")
        (blue  "#0000ff"))
@@ -158,15 +155,10 @@
 
   (define tax-tab-title (N_ "TAX Report Options"))
 
-  (define hierarchical-tab-title (N_ "Hierarchical Options"))
-
   (define (tax-options-generator)
-    (options-generator #f tax-tab-title))
+    (options-generator tax-tab-title))
 
-  (define (hierarchical-options-generator)
-    (options-generator #t hierarchical-tab-title))
-
-  (define (options-generator hierarchical? tab-title)
+  (define (options-generator tab-title)
     (define gnc:*tax-report-options* (gnc:new-options))
     (define (gnc:register-tax-option new-option)
       (gnc:register-option gnc:*tax-report-options* new-option))
@@ -238,72 +230,70 @@
       tab-title (N_ "Print Full account names")
       "g" (N_ "Print all Parent account names") #f))
 
-    (if (not hierarchical?)
-	(begin
-	  (gnc:register-tax-option
-	   (gnc:make-multichoice-option
-	    tab-title (N_ "Set/Reset Tax Status")
-	    "h" (N_ "Set/Reset Selected Account Tax Status") 'tax-no-change
-	    (list (list->vector
-                   (list 'tax-no-change (N_ "No Change") (N_ "No Change")))
-                  (list->vector
-                   (list 'tax-set (N_ "Set Tax Related")
-                         (N_ "Set Selected accounts as Tax Related")))
-                  (list->vector
-                   (list 'tax-reset (N_ "Reset Tax Related")
-                         (N_ "Reset Selected accounts as not Tax Related")))
-                  (list->vector
-                   (list 'tax-set-kids (N_ "Set Tax Related & sub-accounts") 
-                         (N_ "Set Selected & sub-accounts as Tax Related")))
-                  (list->vector
-                   (list 'tax-reset-kids
-                         (N_ "Reset Tax Related & sub-accounts")
-                         (N_ "Reset Selected & sub-accounts as not Tax Related")))
-		  )))
+    (gnc:register-tax-option
+     (gnc:make-multichoice-option
+      tab-title (N_ "Set/Reset Tax Status")
+      "h" (N_ "Set/Reset Selected Account Tax Status") 'tax-no-change
+      (list (list->vector
+             (list 'tax-no-change (N_ "No Change") (N_ "No Change")))
+            (list->vector
+             (list 'tax-set (N_ "Set Tax Related")
+                   (N_ "Set Selected accounts as Tax Related")))
+            (list->vector
+             (list 'tax-reset (N_ "Reset Tax Related")
+                   (N_ "Reset Selected accounts as not Tax Related")))
+            (list->vector
+             (list 'tax-set-kids (N_ "Set Tax Related & sub-accounts") 
+                   (N_ "Set Selected & sub-accounts as Tax Related")))
+            (list->vector
+             (list 'tax-reset-kids
+                   (N_ "Reset Tax Related & sub-accounts")
+                   (N_ "Reset Selected & sub-accounts as not Tax Related")))
+            )))
 
-	  (gnc:register-tax-option
-	   (gnc:make-account-list-option
-	    (N_ "TXF Export Init") (N_ "Select Account")
-	    "a" (N_ "Select Account")
-	    (lambda () (gnc:get-current-accounts))
-	    #f #t))
+    (gnc:register-tax-option
+     (gnc:make-account-list-option
+      (N_ "TXF Export Init") (N_ "Select Account")
+      "a" (N_ "Select Account")
+      (lambda () (gnc:get-current-accounts))
+      #f #t))
 
-	  (gnc:register-tax-option
-	   (gnc:make-simple-boolean-option
-	    (N_ "TXF Export Init") (N_ "Print extended TXF HELP messages")
-	    "b" (N_ "Print TXF HELP") #f))
+    (gnc:register-tax-option
+     (gnc:make-simple-boolean-option
+      (N_ "TXF Export Init") (N_ "Print extended TXF HELP messages")
+      "b" (N_ "Print TXF HELP") #f))
 
-	  (gnc:register-tax-option
-	   ;;(gnc:make-multichoice-option
-	   (gnc:make-list-option
-	    (N_ "TXF Export Init")
-            (N_ "For INCOME accounts, select here.   < ^ # see help")
-	    "c" (N_ "Select a TXF Income catagory")
-	    '()
-	    txf-income-catagories))
+    (gnc:register-tax-option
+     ;;(gnc:make-multichoice-option
+     (gnc:make-list-option
+      (N_ "TXF Export Init")
+      (N_ "For INCOME accounts, select here.   < ^ # see help")
+      "c" (N_ "Select a TXF Income catagory")
+      '()
+      txf-income-catagories))
 
-	  (gnc:register-tax-option
-	   ;;(gnc:make-multichoice-option
-	   (gnc:make-list-option
-	    (N_ "TXF Export Init")
-            (N_ "For EXPENSE accounts, select here.   < ^ # see help")
-	    "d" (N_ "Select a TXF Expense catagory")
-	    '()
-	    txf-expense-catagories))
+    (gnc:register-tax-option
+     ;;(gnc:make-multichoice-option
+     (gnc:make-list-option
+      (N_ "TXF Export Init")
+      (N_ "For EXPENSE accounts, select here.   < ^ # see help")
+      "d" (N_ "Select a TXF Expense catagory")
+      '()
+      txf-expense-catagories))
 
-	  (gnc:register-tax-option
-	   (gnc:make-multichoice-option
-	    (N_ "TXF Export Init") (N_ "< ^   Payer Name source")
-	    "e" (N_ "Select the source of the Payer Name") 'default
-	    (list (list->vector
-                   (list 'default (N_ "Default")
-                         (N_ "Use Indicated Default")))
-                  (list->vector
-                   (list 'current (N_ "< Current Account")
-                         (N_ "Use Current Account Name")))
-                  (list->vector
-                   (list 'parent (N_ "^ Parent Account")
-                         (N_ "Use Parent Account Name"))))))))
+    (gnc:register-tax-option
+     (gnc:make-multichoice-option
+      (N_ "TXF Export Init") (N_ "< ^   Payer Name source")
+      "e" (N_ "Select the source of the Payer Name") 'default
+      (list (list->vector
+             (list 'default (N_ "Default")
+                   (N_ "Use Indicated Default")))
+            (list->vector
+             (list 'current (N_ "< Current Account")
+                   (N_ "Use Current Account Name")))
+            (list->vector
+             (list 'parent (N_ "^ Parent Account")
+                   (N_ "Use Parent Account Name"))))))
 
     gnc:*tax-report-options*)
 
@@ -654,15 +644,15 @@
 
   ;; Render any level
   (define (render-level-x-account level max-level account lx-value
-				  suppress-0 full-names txf-date hierarchical?)
+				  suppress-0 full-names txf-date)
     (let* ((indent-1 "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
 	   (account-name (if txf-date	; special split
 			     (strftime "%Y-%b-%d" (localtime (car txf-date)))
 			     (if (or full-names (equal? level 1))
 				 (gnc:account-get-full-name account)
 				 (gnc:account-get-name account))))
-	   (blue? (and (not hierarchical?) (gnc:account-get-txf account)))
-	   (color (if (= level 1) white bg-color))
+	   (blue? (gnc:account-get-txf account))
+	   (color white)
 	   (print-info (gnc:account-value-print-info account #f))
 	   (value (gnc:amount->string lx-value print-info))
 	   (value-formatted (if blue?
@@ -704,20 +694,17 @@
   ;; Recursivly validate children if parent is not a tax account.
   ;; Don't check children if parent is valid.
   ;; Returns the Parent if a child or grandchild is valid.
-  (define (validate accounts hierarchical?)
-    (if hierarchical?
-	accounts
-	(apply append (map (lambda (a)
-			     (if (gnc:account-get-tax a)
-				 (list a)
-				 ;; check children
-				 (if (null? (validate
-					     (gnc:group-ptr->list
-					      (gnc:account-get-children a))
-					     #f))
-				     '()
-				     (list a))))
-			   accounts))))
+  (define (validate accounts)
+    (apply append (map (lambda (a)
+                         (if (gnc:account-get-tax a)
+                             (list a)
+                             ;; check children
+                             (if (null? (validate
+                                         (gnc:group-ptr->list
+                                          (gnc:account-get-children a))))
+                                 '()
+                                 (list a))))
+                       accounts)))
 
   ;; Set or Reset key in account notes
   (define (key-status accounts set key end-key kids)
@@ -749,7 +736,7 @@
   (define (generate-tax-or-txf report-name
 			       report-description
 			       report-obj
-			       tax-mode-in)    
+			       tax-mode-in)
 
     (define (get-option pagename optname)
       (gnc:option-value
@@ -768,9 +755,7 @@
 			(lambda (x) (num-generations x (+ 1 gen)))
 			children)))))
 
-    (let* ((hierarchical? (equal? (_ "Hierarchical Accounts Report")
-				  report-name))
-	   (tab-title (if hierarchical? hierarchical-tab-title tax-tab-title))
+    (let* ((tab-title tax-tab-title)
 	   (from-value (gnc:date-option-absolute-time 
 			(get-option tab-title "From")))
            (to-value (gnc:timepair-end-day-time
@@ -783,13 +768,12 @@
 	   (tax-mode tax-mode-in)	; these need to different later
 	   (user-sel-accnts (get-option tab-title
                                         "Select Accounts (none = all)"))
-	   (valid-user-sel-accnts (validate user-sel-accnts hierarchical?))
+	   (valid-user-sel-accnts (validate user-sel-accnts))
 	   ;; If no selected accounts, check all.
 	   (selected-accounts (if (not (null? user-sel-accnts))
 				  valid-user-sel-accnts
 				  (validate (gnc:group-ptr->list
-					     (gnc:get-current-group))
-					    hierarchical?)))
+					     (gnc:get-current-group)))))
 	   (generations (if (pair? selected-accounts)
 			    (apply max (map (lambda (x) (num-generations x 1))
 					    selected-accounts))
@@ -870,10 +854,8 @@
 			       (set! bdtm (gnc:timepair->date to-value)))))
 			(cons (car (mktime bdtm)) 0))))
 
-           (txf-help
-            (if hierarchical? #f
-                (get-option "TXF Export Init"
-                            "Print extended TXF HELP messages")))
+           (txf-help (get-option "TXF Export Init"
+                                 "Print extended TXF HELP messages"))
 	   (txf-feedback-str-lst '())
            (doc (gnc:make-html-document))
            (table (gnc:make-html-table)))
@@ -935,10 +917,9 @@
 	(let ((type (gw:enum-GNCAccountType-val->sym
                      (gnc:account-get-type account) #f))
 	      (name (gnc:account-get-name account)))
-	  (if (or hierarchical? (is-type-income-or-expense? type))
+	  (if (is-type-income-or-expense? type)
 	      (let* ((children (gnc:account-get-children account))
-		     (childrens-output (if (and (not children)
-						(not hierarchical?))
+		     (childrens-output (if (not children)
 					   (handle-txf-special-splits 
 					    level account from-value
 					    to-value)
@@ -950,8 +931,7 @@
 						  '()))
 					    children)))
 
-		     (account-balance (if (or hierarchical?
-					      (gnc:account-get-tax account))
+		     (account-balance (if (gnc:account-get-tax account)
 					  (d-gnc:account-get-balance-interval
 					   account from-value to-value #f)
 					  0))) ; don't add non tax related
@@ -969,8 +949,7 @@
 		       (if tax-mode
 			   (render-level-x-account level max-level account
 						   account-balance
-						   suppress-0 full-names #f
-						   hierarchical?)
+						   suppress-0 full-names #f)
 			   (render-txf-account account account-balance #f))))
 		  (if (equal? 1 level)
 		      (lx-collector 1 'reset #f))
@@ -990,45 +969,43 @@
 	      ;; Ignore
 	      '())))
 
-      (if (not hierarchical?)
-	  (let* ((tax-stat (get-option tab-title "Set/Reset Tax Status"))
-		 (txf-acc-lst (get-option "TXF Export Init" "Select Account"))
-		 (txf-account (if (null? txf-acc-lst)
-				  (begin (set! txf-acc-lst '(#f))
-					 #f)
-				  (car txf-acc-lst)))
-		 (txf-income (get-option "TXF Export Init"
-                                         "For INCOME accounts,\
+      (let* ((tax-stat (get-option tab-title "Set/Reset Tax Status"))
+             (txf-acc-lst (get-option "TXF Export Init" "Select Account"))
+             (txf-account (if (null? txf-acc-lst)
+                              (begin (set! txf-acc-lst '(#f))
+                                     #f)
+                              (car txf-acc-lst)))
+             (txf-income (get-option "TXF Export Init"
+                                     "For INCOME accounts,\
  select here.   < ^ # see help"))
-		 (txf-expense (get-option "TXF Export Init"
-                                          "For EXPENSE\
+             (txf-expense (get-option "TXF Export Init"
+                                      "For EXPENSE\
  accounts, select here.   < ^ # see help"))
-		 (txf-payer-source (get-option "TXF Export Init"
-                                               "< ^   Payer Name source"))
-		 (txf-full-name-lst (if txf-account
-					(map gnc:account-get-full-name
-					     txf-acc-lst)
-					'(#f)))
-		 (not-used 
-		  (case tax-stat
-		    ((tax-set)
-		     (key-status user-sel-accnts #t tax-key tax-end-key #f))
-		    ((tax-reset)
-		     (key-status user-sel-accnts #f tax-key tax-end-key #f))
-		    ((tax-set-kids)
-		     (key-status user-sel-accnts #t tax-key tax-end-key #t))
-		    ((tax-reset-kids)
-		     (key-status user-sel-accnts #f tax-key tax-end-key #t))))
+             (txf-payer-source (get-option "TXF Export Init"
+                                           "< ^   Payer Name source"))
+             (txf-full-name-lst (if txf-account
+                                    (map gnc:account-get-full-name
+                                         txf-acc-lst)
+                                    '(#f)))
+             (not-used 
+              (case tax-stat
+                ((tax-set)
+                 (key-status user-sel-accnts #t tax-key tax-end-key #f))
+                ((tax-reset)
+                 (key-status user-sel-accnts #f tax-key tax-end-key #f))
+                ((tax-set-kids)
+                 (key-status user-sel-accnts #t tax-key tax-end-key #t))
+                ((tax-reset-kids)
+                 (key-status user-sel-accnts #f tax-key tax-end-key #t))))
 
-		 (txf-fun-str-lst (map (lambda (a) (txf-function 
-						    a txf-income txf-expense
-						    txf-payer-source))
-				       txf-acc-lst)))
-	    (set! txf-feedback-str-lst (map txf-feedback-str txf-fun-str-lst
-					    txf-full-name-lst))))
+             (txf-fun-str-lst (map (lambda (a) (txf-function 
+                                                a txf-income txf-expense
+                                                txf-payer-source))
+                                   txf-acc-lst)))
+        (set! txf-feedback-str-lst (map txf-feedback-str txf-fun-str-lst
+                                        txf-full-name-lst)))
 
-      (let ((output '())
-	    (from-date (strftime "%Y-%b-%d" (localtime (car from-value))))
+      (let ((from-date (strftime "%Y-%b-%d" (localtime (car from-value))))
 	    (to-date (strftime "%Y-%b-%d" (localtime (car to-value))))
 	    (today-date (strftime "D%m/%d/%Y" 
 				  (localtime 
@@ -1040,6 +1017,14 @@
                               (_ "Detailed TXF Category Descriptions")
 			      report-name))
 	    (file-name #f))
+
+        (define (make-sub-headers max-level)
+          (if (eq? max-level 0)
+              '()
+              (cons (gnc:make-html-table-header-cell/markup
+                     "<number-header>"
+                     "(" (_ "Sub") " " (number->string max-level) ")")
+                    (make-sub-headers (- max-level 1)))))
 
 	;; Now, the main body
 	;; Reset all the balance collectors
@@ -1063,7 +1048,7 @@
 				 (if (gnc:verify-dialog
 				      (string-append 
 				       "File: \"" fname
-				       "\" exists, Over Write?")
+				       "\" exists, Overwrite?")
 				      #f)
 				     (begin (delete-file fname)
 					    #t)
@@ -1091,23 +1076,18 @@
 		    (close-output-port port)))))
 
 	(set! tax-mode #t)		; now do tax mode to display report
-	(set! output (list 
-		      (if txf-help
-			  (append (map (lambda (x) (txf-print-help x #t))
-				       txf-help-catagories)
-				  (map (lambda (x) (txf-print-help x #t))
-				       txf-income-catagories)
-				  (map (lambda (x) (txf-print-help x #f))
-				       txf-expense-catagories))
-			  (map (lambda (x) (handle-level-x-account 1 x))
-			       selected-accounts))))
+;	(set! output (list 
+;		      (if txf-help
+;			  (append (map (lambda (x) (txf-print-help x #t))
+;				       txf-help-catagories)
+;				  (map (lambda (x) (txf-print-help x #t))
+;				       txf-income-catagories)
+;				  (map (lambda (x) (txf-print-help x #f))
+;				       txf-expense-catagories))
+;			  (map (lambda (x) (handle-level-x-account 1 x))
+;			       selected-accounts))))
 
         (gnc:html-document-set-title! doc report-title)
-
-        (gnc:html-document-set-style!
-         doc "body" 
-         'attribute (list "bgcolor" bg-color)
-         'tag "center")
 
         (gnc:html-document-add-object! 
          doc
@@ -1117,27 +1097,26 @@
             (_ "Period from %s to %s") from-date to-date))))
 
         (let ((text (gnc:make-html-text)))
-          (gnc:html-text-set-style! text 'font-color "#0000ff")
+          (gnc:html-text-set-style! text "p" 'font-color blue)
           (gnc:html-document-add-object! doc text)
 
-          (if (not hierarchical?)
-              (if tax-mode-in
-                  (if (not txf-help)
-                      (gnc:html-text-append!
-                       text
-                       (gnc:html-markup-p
-                        (_ "Blue items are exportable to a TXF file."))))
+          (if tax-mode-in
+              (if (not txf-help)
                   (gnc:html-text-append!
                    text
                    (gnc:html-markup-p
-                    (if file-name
-                        (gnc:html-markup/format
-                         (_ "Blue items were exported to file %s.")
-                         (gnc:html-markup-tt file-name))
-                        (_ "Blue items were <em>not</em> exported to \
-txf file!"))))))
+                    (_ "Blue items are exportable to a TXF file."))))
+              (gnc:html-text-append!
+               text
+               (gnc:html-markup-p
+                (if file-name
+                    (gnc:html-markup/format
+                     (_ "Blue items were exported to file %s.")
+                     (gnc:html-markup-tt file-name))
+                    (_ "Blue items were <em>not</em> exported to \
+txf file!")))))
 
-          (if (not (or hierarchical? txf-help))
+          (if (not txf-help)
               (map (lambda (s)
                      (gnc:html-text-append! text (gnc:html-markup-p s)))
                    txf-feedback-str-lst)))
@@ -1164,53 +1143,32 @@ txf file!"))))))
                (html-red "Expense"))))
             (gnc:html-table-append-row!
              table
-             (list
-              (gnc:make-html-table-header-cell
-               (_ "Account Name")))))
+             (append
+              (list
+               (gnc:make-html-table-header-cell
+                (_ "Account Name")))
+              (make-sub-headers max-level)
+              (list
+               (gnc:make-html-table-header-cell/markup
+                "<number-header>" (_ "Total"))))))
+
+        (if (null? selected-accounts)
+            #f)
 
         (list
-         (if txf-help
-             ""
-             (do ((i (- max-level 1) (- i 1))
-                  (head "" (string-append 
-                            head "<th align=right>" (_ "(Sub ")
-                            (number->string i) ")</th>")))
-                 ((< i 1) head)))
-	 (if txf-help
-	     (list "<th>" (_ "Extended TXF Help messages")
-		   (html-blue " Income") (html-red " Expense"))
-	     (list "<th align=right>" (_ "Total")))
-	 output
-	 "</table>\n"
-	 (if (null? (car output))
+	 (if (null? selected-accounts)
 	     (string-append
               "<p><b>"
-              (if hierarchical?
-                  (_ "No accounts were found.")
-                  (_ "No Tax Related accounts were found. Click \
-\"Parameters\" to set some  with the \"Set/Reset Tax Status:\" parameter."))
+              (_ "No Tax Related accounts were found. Click \
+\"Parameters\" to set some  with the \"Set/Reset Tax Status:\" parameter.")
               "</b></p>\n")
-	     " ")
-	 "</body>"
-	 "</html>")
+	     " "))
         doc)))
 
   ;; copy help strings to category structures.
   (txf-help txf-income-catagories)
   (txf-help txf-expense-catagories)
   (txf-help txf-help-catagories)
-
-;  (gnc:define-report
-;   'version 1
-;   'name (N_ "Hierarchical")
-;   'options-generator hierarchical-options-generator
-;   'renderer (lambda (report-obj)
-;               (generate-tax-or-txf
-;                (_ "Hierarchical Accounts Report")
-;                (_ "This page shows your Taxable Income and \
-;Deductable Expenses.")
-;                report-obj
-;		#t)))
 
   (gnc:define-report
    'version 1
@@ -1222,16 +1180,16 @@ txf file!"))))))
                 (_ "This page shows your Taxable Income and \
 Deductable Expenses.")
                 report-obj
-		#t)))
+		#t))))
 
-  (gnc:define-report
-   'version 1
-   'name (N_ "Export .TXF")
-   'options-generator tax-options-generator
-   'renderer (lambda (report-obj)
-               (generate-tax-or-txf
-                (_ "Taxable Income / Deductible Expenses")
-                (_ "This page shows your Taxable Income and \
-Deductable Expenses.")
-                report-obj
-		#f))))
+;  (gnc:define-report
+;   'version 1
+;   'name (N_ "Export .TXF")
+;   'options-generator tax-options-generator
+;   'renderer (lambda (report-obj)
+;               (generate-tax-or-txf
+;                (_ "Taxable Income / Deductible Expenses")
+;                (_ "This page shows your Taxable Income and \
+;Deductable Expenses.")
+;                report-obj
+;		#f))))

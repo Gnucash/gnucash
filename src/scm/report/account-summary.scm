@@ -137,9 +137,9 @@
 			 #f date-tp 
 			 tree-depth show-subaccts? accounts 
 			 #t gnc:accounts-get-comm-total-assets 
-			 (_ "Net Assets") do-grouping? do-subtotals?
+			 (_ "Total") do-grouping? do-subtotals?
 			 show-fcur? report-currency exchange-fn)))
-	    
+
 	    ;; add the table 
 	    (gnc:html-document-add-object! doc table)
 

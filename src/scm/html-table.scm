@@ -67,6 +67,10 @@
   (gnc:make-html-table-cell-internal 1 1 "th" objects 
                                      (gnc:make-html-style-table)))
 
+(define (gnc:make-html-table-header-cell/markup markup . objects)
+  (gnc:make-html-table-cell-internal 1 1 markup objects 
+                                     (gnc:make-html-style-table)))
+
 (define (gnc:make-html-table-header-cell/size rowspan colspan . objects)
   (gnc:make-html-table-cell-internal rowspan colspan "th"
                                      objects (gnc:make-html-style-table)))

@@ -1,3 +1,17 @@
+2001-03-12  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/html-table.scm ((gnc:make-html-table-header-cell/markup
+	markup . objects)): new func
+
+	* src/scm/report/taxtxf.scm: more work on porting
+
+	* src/scm/html-style-sheet.scm: add "<number-cell>" and
+	"<number-header>" styles.
+
+	* src/scm/report/account-summary.scm: use "Total" not "Net
+	Assets". This is a general report, not just limited to asset
+	accounts.
+
 2001-03-10  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/Ledger-xml-parser-v1.c
