@@ -36,6 +36,8 @@
 #include "search-boolean.h"
 #include "search-account.h"
 
+static void grab_focus (GNCSearchCoreType *fe);
+static void editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog);
 static gboolean validate (GNCSearchCoreType *fe);
 
 static void gnc_search_core_type_class_init	(GNCSearchCoreTypeClass *class);
@@ -90,6 +92,8 @@ gnc_search_core_type_class_init (GNCSearchCoreTypeClass *class)
 
   /* override methods */
   class->validate = validate;
+  class->grab_focus = grab_focus;
+  class->editable_enters = editable_enters;
 
   /* signals */
 
@@ -122,6 +126,19 @@ gnc_search_core_type_new (void)
 {
   GNCSearchCoreType *o = (GNCSearchCoreType *)gtk_type_new(gnc_search_core_type_get_type ());
   return o;
+}
+
+void
+gnc_search_core_type_editable_enters (GNCSearchCoreType *fe,
+				      GnomeDialog *dialog)
+{
+  return ((GNCSearchCoreTypeClass *)((GtkObject *)fe)->klass)->editable_enters (fe, dialog);
+}
+
+void
+gnc_search_core_type_grab_focus (GNCSearchCoreType *fe)
+{
+  return ((GNCSearchCoreTypeClass *)((GtkObject *)fe)->klass)->grab_focus (fe);
 }
 
 gboolean
@@ -205,6 +222,18 @@ static gboolean
 validate (GNCSearchCoreType *fe)
 {
   return TRUE;
+}
+
+static void
+grab_focus (GNCSearchCoreType *fe)
+{
+  return;
+}
+
+static void
+editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog)
+{
+  return;
 }
 
 void

@@ -32,6 +32,7 @@
 
 #define d(x)
 
+static void grab_focus (GNCSearchCoreType *fe);
 static GNCSearchCoreType *clone(GNCSearchCoreType *fe);
 static gboolean validate (GNCSearchCoreType *fe);
 static GtkWidget *get_widget(GNCSearchCoreType *fe);
@@ -44,6 +45,7 @@ static void gnc_search_string_finalise	(GtkObject *obj);
 #define _PRIVATE(x) (((GNCSearchString *)(x))->priv)
 
 struct _GNCSearchStringPrivate {
+  GtkWidget *entry;
 };
 
 static GNCSearchCoreTypeClass *parent_class;
@@ -88,6 +90,7 @@ gnc_search_string_class_init (GNCSearchStringClass *class)
   object_class->finalize = gnc_search_string_finalise;
 
   /* override methods */
+  gnc_search_core_type->grab_focus = grab_focus;
   gnc_search_core_type->validate = validate;
   gnc_search_core_type->get_widget = get_widget;
   gnc_search_core_type->get_predicate = get_predicate;
@@ -284,6 +287,32 @@ make_menu (GNCSearchCoreType *fe)
   return opmenu;
 }
 
+static void
+grab_focus (GNCSearchCoreType *fe)
+{
+  GNCSearchString *fi = (GNCSearchString *)fe;
+
+  g_return_if_fail (fi);
+  g_return_if_fail (IS_GNCSEARCH_STRING (fi));
+
+  if (fi->priv->entry)
+    gtk_widget_grab_focus (fi->priv->entry);
+}
+
+static void
+editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog)
+{
+  GNCSearchString *fi = (GNCSearchString *)fe;
+
+  g_return_if_fail (fi);
+  g_return_if_fail (IS_GNCSEARCH_STRING (fi));
+  g_return_if_fail (dialog);
+  g_return_if_fail (IS_GNOME_DIALOG (dialog));
+
+  if (fi->priv->entry)
+    gnome_dialog_editable_enters (GTK_EDITABLE (fi->priv->entry), dialog);
+}
+
 static GtkWidget *
 get_widget (GNCSearchCoreType *fe)
 {
@@ -305,6 +334,7 @@ get_widget (GNCSearchCoreType *fe)
     gtk_entry_set_text (GTK_ENTRY (entry), fi->value);
   gtk_signal_connect (GTK_OBJECT (entry), "changed", entry_changed, fe);
   gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
+  fi->priv->entry = entry;
 
   /* Build and connect the toggle button */
   toggle = gtk_toggle_button_new_with_label (_("Case Insensitive?"));

@@ -43,6 +43,9 @@ struct _GNCSearchCoreTypeClass {
   GtkObjectClass parent_class;
 
   /* virtual methods */
+  void			(*grab_focus) (GNCSearchCoreType *fe);
+  void			(*editable_enters) (GNCSearchCoreType *fe,
+					    GnomeDialog *dialog);
   gboolean		(*validate) (GNCSearchCoreType *fe);
   GNCSearchCoreType *	(*clone) (GNCSearchCoreType *fe);
   GtkWidget *		(*get_widget) (GNCSearchCoreType *);
@@ -59,6 +62,9 @@ GNCSearchCoreType *	gnc_search_core_type_new (void);
 GNCSearchCoreType *	gnc_search_core_type_new_type_name (const char *type);
 
 /* methods */
+void			gnc_search_core_type_grab_focus (GNCSearchCoreType *fe);
+void			gnc_search_core_type_editable_enters (GNCSearchCoreType *fe,
+							      GnomeDialog *dialog);
 gboolean        	gnc_search_core_type_validate (GNCSearchCoreType *fe);
 GNCSearchCoreType *	gnc_search_core_type_clone (GNCSearchCoreType *fe);
 GtkWidget *		gnc_search_core_type_get_widget (GNCSearchCoreType *fe);

@@ -85,6 +85,7 @@ struct _crit_data {
   GtkWidget *		elemwidget;
   GtkWidget *		container;
   GtkWidget *		button;
+  GnomeDialog *		dialog;
 };
 
 static void search_clear_criteria (GNCSearchWindow *sw);
@@ -542,8 +543,6 @@ remove_element (GtkWidget *button, GNCSearchWindow *sw)
   /* and from the display */
   gtk_container_remove (GTK_CONTAINER (sw->criteria_table), element);
   gtk_container_remove (GTK_CONTAINER (sw->criteria_table), button);
-  gtk_object_destroy (GTK_OBJECT (element));
-  gtk_object_destroy (GTK_OBJECT (button));
 }
 
 static void
@@ -592,12 +591,17 @@ option_activate (GtkMenuItem *item, struct _crit_data *data)
     (gnc_search_param_get_param_type (param));
   data->element = newelem;
   data->elemwidget = gnc_search_core_type_get_widget (newelem);
-  if (data->elemwidget)
+  if (data->elemwidget) {
     gtk_box_pack_start (GTK_BOX (data->container), data->elemwidget,
 			FALSE, FALSE, 0);
+  }
 
   /* Make sure it's visible */
   gtk_widget_show_all (data->container);
+
+  /* And grab focus */
+  gnc_search_core_type_grab_focus (newelem);
+  gnc_search_core_type_editable_enters (newelem, data->dialog);
 }
 
 static void
@@ -624,6 +628,7 @@ get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
 
   data = g_new0 (struct _crit_data, 1);
   data->element = element;
+  data->dialog = GNOME_DIALOG (sw->dialog);
 
   hbox = gtk_hbox_new (FALSE, 0);
   /* only set to automaticaly clean up the memory */
@@ -691,6 +696,9 @@ gnc_search_dialog_add_criterion (GNCSearchWindow *sw)
     rows = GTK_TABLE (sw->criteria_table)->nrows;
     gtk_table_resize (GTK_TABLE (sw->criteria_table), rows+1, 2);
     attach_element (w, sw, rows);
+
+    gnc_search_core_type_grab_focus (new);
+    gnc_search_core_type_editable_enters (new, GNOME_DIALOG (sw->dialog));
   }
 }
 
@@ -795,9 +803,6 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
   box = glade_xml_get_widget (xml, "type_menu_box");
   gtk_box_pack_start (GTK_BOX (box), omenu, FALSE, FALSE, 3);
 
-  /* add the first criterion */
-  gnc_search_dialog_add_criterion (sw);
-
   /* if there's no original query, make the narrow, add, delete 
    * buttons inaccessible */
   sw->new_rb = glade_xml_get_widget (xml, "new_search_radiobutton");
@@ -819,6 +824,9 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
   /* Hide the 'new' button if there is no new_item_cb */
   if (!sw->new_item_cb)
     gtk_widget_hide_all (new_item_button);
+
+  /* add the first criterion */
+  gnc_search_dialog_add_criterion (sw);
 
   /* Connect XML signals */
 
