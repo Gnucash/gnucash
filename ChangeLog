@@ -1,5 +1,7 @@
 2001-07-05  Dave Peticolas  <dave@krondo.com>
 
+	* src/engine/Query.c (xaccQueryEqual): new func.
+
 	* doc/sgml/C/xacc-common-report-options.sgml: fix my fix
 
 	* doc/sgml/C/xacc-price-sources.sgml: fix warnings
