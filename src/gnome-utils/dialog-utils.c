@@ -585,6 +585,29 @@ gnc_window_adjust_for_screen(GtkWindow * window)
   gtk_widget_queue_resize(GTK_WIDGET(window));
 }
 
+/*
+ * This routine must be removed when GnuCash is ported to GTK 2.0.  It
+ * replicates the functionality (as much as possible) of that routine
+ * using functions available in GTK 1.4.
+ */
+void
+gtk_window_present (GtkWindow *window)
+{
+  GtkWidget *widget;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  widget = GTK_WIDGET (window);
+
+  if (GTK_WIDGET_VISIBLE (window)) {
+      g_assert (widget->window != NULL);
+      gdk_window_show(widget->window); 	/* De-iconify */
+      gdk_window_raise(widget->window);	/* Bring to front */
+  } else {
+      gtk_widget_show (widget);
+  }
+}
+
 gboolean
 gnc_handle_date_accelerator (GdkEventKey *event,
                              struct tm *tm,

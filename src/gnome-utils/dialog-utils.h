@@ -74,6 +74,7 @@ void gnc_option_menu_init (GtkWidget * option_menu);
 int  gnc_option_menu_get_active (GtkWidget * option_menu);
 
 void gnc_window_adjust_for_screen (GtkWindow * window);
+void gtk_window_present (GtkWindow * window); /* Remove me for GTK 2.0 */
 
 gboolean gnc_handle_date_accelerator (GdkEventKey *event,
                                       struct tm *tm,
