@@ -2,6 +2,7 @@
 
 	* NEWS: update for new release
 	* configure.in: update to new version 1.7.2
+	* rpm/gnucash.spec.in: now works building 1.7.x
 
 2002-10-28  Chris Lyttle  <chris@wilddev.net>
 

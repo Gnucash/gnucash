@@ -9,16 +9,17 @@
   %define _with_postgres 0
   %define sql_config --disable-sql
 %endif
+%define version @VERSION@
 
 Name:      	gnucash
 Summary:   	GnuCash is an application to keep track of your finances.
-Version:   	@-VERSION-@
+Version:   	%{version}
 Release:  	1
 Copyright: 	Free Software Foundation
 Group:     	Applications/Finance
 URL:            http://www.gnucash.org
-Source:    	http://www.gnucash.org/pub/gnucash/sources/stable/gnucash-%{PACKAGE_VERSION}.tar.gz
-BuildRoot: 	/var/tmp/gnucash-%version
+Source:    	http://www.gnucash.org/pub/gnucash/sources/stable/gnucash-%{version}.tar.gz
+BuildRoot: 	%{_tmppath}/%{name}-%{version}-root
 Requires:  	gnome-libs >= 1.2.0, gdk-pixbuf >= 0.2.5, gnome-print >= 0.21
 Requires:	guile >= 1.3.4, gtkhtml >= 0.8, Guppi >= 0.35.3
 Requires:	g-wrap >= 1.3.2, umb-scheme >= 3.2, gal >= 0.8
@@ -40,7 +41,7 @@ double-entry accounting principles to ensure balanced books.
 %package backend-postgres
 Summary: Backend for storing GnuCash data in a PostgreSQL database.
 Group: Applications/Finance
-Requires: gnucash = %{PACKAGE_VERSION}
+Requires: gnucash = %{version}
 Requires: postgres >= 7.1.3
 
 %description backend-postgres
@@ -55,7 +56,7 @@ want to keep your financial data in a database instead of a flat file
 %package devel
 Summary: Header files for GnuCash development.
 Group: Development/Libraries
-Requires: gnucash = %{PACKAGE_VERSION}
+Requires: gnucash = %{version}
 
 %description devel
 This package contains header files for GnuCash development.
@@ -66,12 +67,24 @@ in C programs.
 %setup -q
 
 %build
-%configure %{sql_config}
-make
+autoconf
+
+./configure --prefix=%{_prefix} --infodir=%{_infodir} \
+            --libdir=%{_libdir} --datadir=%{_datadir} \
+            --includedir=%{_includedir} %{sql_config}
+
+make RPM_OPT_FLAGS="$RPM_OPT_FLAGS"
+
 cp -p src/backend/postgres/README README.postgres
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+
+LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir} make prefix=$RPM_BUILD_ROOT%{_prefix} \
+    libdir=$RPM_BUILD_ROOT%{_libdir} \
+    datadir=$RPM_BUILD_ROOT%{_datadir} \
+    includedir=$RPM_BUILD_ROOT%{_includedir} install
+
 %{makeinstall}
 %find_lang %name
 
@@ -107,7 +120,6 @@ fi
 %{_datadir}/gnucash/doc
 %{_datadir}/gnucash/glade
 %{_datadir}/gnucash/guile-modules
-%{_datadir}/gnucash/html
 %{_datadir}/gnucash/scm
 %{_datadir}/gnome/help/gnucash
 %{_datadir}/gnome/apps/Applications/*
