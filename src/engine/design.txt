@@ -61,7 +61,7 @@ The security is used during split balancing to enable trading between
 accounts denominated in different currencies, or to, for example, move 
 stocks from one account to another.
 
-Accounts can be arranged in a heirarchical tree.  The nodes of the 
+Accounts can be arranged in a hierarchical tree.  The nodes of the 
 tree are called "Account Groups".  By accounting convention, the 
 value of an account is equal to the value of all of its splits plus
 the value of all of its sub-accounts.  Account Groups are implemented 
@@ -151,7 +151,7 @@ and the price goes inversely.
 
 Stock Options
 -------------
-Stock options are note currently supported.  To support them, the
+Stock options are not currently supported.  To support them, the
 following needs to be added:
 
 A stock option is an option to purchase stock at a specified price.

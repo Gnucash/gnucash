@@ -67,8 +67,8 @@ void       xaccSessionDestroy (Session *);
 /*
  * The xaccSessionBegin() method begins a new session.  It takes as an argument
  *    the sessionid.  The session id must be a string in the form of a URI/URL.
- *    In the current implementation, only one type of URI is supported, and that
- *    is the file URI: anything of the form 
+ *    In the current implementation, only one type of URI is supported, and
+ *    that is the file URI: anything of the form 
  *       "file:/home/somewhere/somedir/file.xac"
  *    The path part must be a valid path.  The file-part must be a valid
  *    xacc/gnucash-format file.  Paths may be relativ or absolute.  If the 
@@ -114,12 +114,13 @@ void       xaccSessionDestroy (Session *);
  * 
  * The xaccSessionSetGroup() method will set the topgroup to a new value.
  *
- * The xaccSessionSave() method will commit all changes that have been made to
- *    the top-level account group. In the current implementation, this is nothing
- *    more than a write to the file of the current AccountGroup of the session. 
- *    If the current AccountGroup is NULL, then the file will be deleted.
- *    This routine will never release the lock on the file under any
- *    circustances. 
+ * The xaccSessionSave() method will commit all changes that have been
+ *    made to the top-level account group. In the current
+ *    implementation, this is nothing more than a write to the file of
+ *    the current AccountGroup of the session.  If the current
+ *    AccountGroup is NULL, then the file will be deleted.  This
+ *    routine will never release the lock on the file under any
+ *    circustances.
  *
  * The xaccSessionEnd() method will release the session lock. It will *not*
  *    save the account group to a file.  Thus, this method acts as an "abort"
@@ -165,8 +166,7 @@ void       xaccSessionDestroy (Session *);
  *    }
  *    xaccSessionEnd (sess);
  *    xaccSessionDestroy (sess);
- *
- */
+ * */
 
 AccountGroup * xaccSessionBegin       (Session *, const char * sessionid);
 AccountGroup * xaccSessionBeginFile   (Session *, const char * filename);
