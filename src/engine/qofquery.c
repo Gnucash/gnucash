@@ -44,7 +44,7 @@
 
 static short module = MOD_QUERY;
 
-typedef struct _QofQueryTerm 
+struct _QofQueryTerm 
 {
   GSList *                param_list;
   QofQueryPredData        *pdata;
@@ -57,9 +57,9 @@ typedef struct _QofQueryTerm
    */
   GSList *                param_fcns;
   QofQueryPredicateFunc   pred_fcn;
-} QofQueryTerm;
+};
 
-typedef struct _QofSortFunc 
+struct _QofQuerySort 
 {
   GSList *            param_list;
   gint                options;
@@ -74,7 +74,7 @@ typedef struct _QofSortFunc
   GSList *            param_fcns;
   QofSortFunc         obj_cmp;        /* In case you are comparing objects */
   QofCompareFunc      comp_fcn;        /* When you are comparing core types */
-} QofQuerySort;
+};
 
 /* The QUERY structure */
 struct _QofQuery 
@@ -1205,21 +1205,21 @@ GList * qof_query_get_terms (QofQuery *q)
   return q->terms;
 }
 
-GSList * qof_query_term_get_param_path (QofQueryTerm_t qt)
+GSList * qof_query_term_get_param_path (QofQueryTerm *qt)
 {
   if (!qt)
     return NULL;
   return qt->param_list;
 }
 
-QofQueryPredData *qof_query_term_get_pred_data (QofQueryTerm_t qt)
+QofQueryPredData *qof_query_term_get_pred_data (QofQueryTerm *qt)
 {
   if (!qt)
     return NULL;
   return qt->pdata;
 }
 
-gboolean qof_query_term_is_inverted (QofQueryTerm_t qt)
+gboolean qof_query_term_is_inverted (QofQueryTerm *qt)
 {
   if (!qt)
     return FALSE;
@@ -1261,7 +1261,7 @@ gboolean qof_query_sort_get_increasing (QofQuerySort *qs)
 }
 
 static gboolean 
-qof_query_term_equal (QofQueryTerm_t qt1, QofQueryTerm_t qt2)
+qof_query_term_equal (QofQueryTerm *qt1, QofQueryTerm *qt2)
 {
   if (qt1 == qt2) return TRUE;
   if (!qt1 || !qt2) return FALSE;
@@ -1493,7 +1493,7 @@ static GList *
 qof_query_printAndTerms (GList * terms, GList * output)
 {
   const char *prefix = "  AND Terms:";
-  QofQueryTerm_t qt;
+  QofQueryTerm *qt;
   QofQueryPredData *pd;
   GSList *path;
   GList *lst;
@@ -1502,7 +1502,7 @@ qof_query_printAndTerms (GList * terms, GList * output)
   output = g_list_append (output, g_string_new (prefix));
   for (lst = terms; lst; lst = lst->next)
   {
-    qt = (QofQueryTerm_t) lst->data;
+    qt = (QofQueryTerm *) lst->data;
     pd = qof_query_term_get_pred_data (qt);
     path = qof_query_term_get_param_path (qt);
     invert = qof_query_term_is_inverted (qt);
