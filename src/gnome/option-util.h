@@ -38,9 +38,6 @@ struct _GNCOption
   /* Handle to the scheme-side option */
   SCM guile_option;
 
-  /* Identifier for unregistering */
-  SCM guile_option_id;
-
   /* Flag to indicate change by the UI */
   gboolean changed;
 

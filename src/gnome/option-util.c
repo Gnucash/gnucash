@@ -47,7 +47,6 @@ struct _GNCOptionSection
 struct _GNCOptionDB
 {
   SCM guile_options;
-  SCM guile_options_id;
 
   GSList *option_sections;
 
@@ -118,7 +117,7 @@ gnc_option_db_new(SCM guile_options)
   odb = g_new0(GNCOptionDB, 1);
 
   odb->guile_options = guile_options;
-  odb->guile_options_id = gnc_register_c_side_scheme_ptr(guile_options);
+  scm_protect_object(guile_options);
 
   odb->option_sections = NULL;
   odb->options_dirty = FALSE;
@@ -170,7 +169,7 @@ gnc_option_db_destroy(GNCOptionDB *odb)
     {
       option = option_node->data;
 
-      gnc_unregister_c_side_scheme_ptr_id(option->guile_option_id);
+      scm_unprotect_object(option->guile_option);
 
       option_node = option_node->next;
     }
@@ -195,9 +194,8 @@ gnc_option_db_destroy(GNCOptionDB *odb)
     option_dbs = NULL;
   }
 
-  gnc_unregister_c_side_scheme_ptr_id(odb->guile_options_id);
+  scm_unprotect_object(odb->guile_options);
   odb->guile_options = SCM_UNDEFINED;
-  odb->guile_options_id = SCM_UNDEFINED;
 
   g_free(odb);
 }
@@ -1118,13 +1116,7 @@ _gnc_option_db_register_option(GNCOptionDBHandle handle, SCM guile_option)
   option->widget = NULL;
 
   /* Prevent guile from garbage collecting the option */
-  option->guile_option_id = gnc_register_c_side_scheme_ptr(guile_option);
-  if (option->guile_option_id == SCM_UNDEFINED)
-  {
-    g_free(option);
-    PERR("_gnc_option_db_register_option: couldn't register\n");
-    return;
-  }
+  scm_protect_object(guile_option);
 
   /* Make the section structure */
   section = g_new0(GNCOptionSection, 1);

@@ -56,7 +56,6 @@ struct _ReportData
   GtkWidget *option_dialog;
 
   SCM rendering_thunk;
-  SCM rendering_thunk_id;
   SCM change_callback_id;
 };
 
@@ -69,7 +68,6 @@ report_data_new()
   report_data = g_new0(ReportData, 1);
 
   report_data->rendering_thunk = SCM_UNDEFINED;
-  report_data->rendering_thunk_id = SCM_UNDEFINED;
   report_data->change_callback_id = SCM_UNDEFINED;
 
   return report_data;
@@ -95,10 +93,9 @@ report_data_destroy(HTMLUserData user_data)
     gtk_widget_destroy(report_data->option_dialog);
   report_data->option_dialog = NULL;
 
-  if (report_data->rendering_thunk_id != SCM_UNDEFINED)
-    gnc_unregister_c_side_scheme_ptr_id(report_data->rendering_thunk_id);
+  if (report_data->rendering_thunk != SCM_UNDEFINED)
+    scm_unprotect_object(report_data->rendering_thunk);
   report_data->rendering_thunk = SCM_UNDEFINED;
-  report_data->rendering_thunk_id = SCM_UNDEFINED;
 
   g_free(report_data);
 }
@@ -114,11 +111,11 @@ static void
 report_data_set_rendering_thunk(ReportData *report_data,
                                 const SCM rendering_thunk)
 {
-  if (report_data->rendering_thunk_id != SCM_UNDEFINED)
-    gnc_unregister_c_side_scheme_ptr_id(report_data->rendering_thunk_id);
+  if (report_data->rendering_thunk != SCM_UNDEFINED)
+    scm_unprotect_object(report_data->rendering_thunk);
 
   report_data->rendering_thunk = rendering_thunk;
-  report_data->rendering_thunk_id = gnc_register_c_side_scheme_ptr(rendering_thunk);
+  scm_protect_object(rendering_thunk);
 }
 
 static void

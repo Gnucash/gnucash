@@ -34,7 +34,6 @@ typedef struct _ExtensionInfo ExtensionInfo;
 struct _ExtensionInfo
 {
   SCM extension;
-  SCM extension_id;
 
   GnomeUIInfo info[2];
 
@@ -269,7 +268,8 @@ gnc_create_extension_info(SCM extension)
   ext_info->info[0].pixmap_type = GNOME_APP_PIXMAP_NONE;
   ext_info->info[1].type = GNOME_APP_UI_ENDOFINFO;
 
-  ext_info->extension_id = gnc_register_c_side_scheme_ptr(extension);
+  scm_protect_object(extension);
+
   extension_list = g_slist_prepend(extension_list, ext_info);
 
   return ext_info;
@@ -281,7 +281,7 @@ cleanup_extension_info(gpointer extension_info, gpointer not_used)
 {
   ExtensionInfo *ext_info = extension_info;
 
-  gnc_unregister_c_side_scheme_ptr_id(ext_info->extension_id);
+  scm_unprotect_object(ext_info->extension);
 
   g_free(ext_info->info[0].label);
   g_free(ext_info->info[0].hint);

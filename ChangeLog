@@ -1,5 +1,8 @@
 2000-05-10  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* many: removed use of SCM registry in favor of scm_protect_object
+	and scm_unprotect_object.
+
 	* src/engine/GNCId.c (xaccRemoveEntity): don't allow the NULL id
 	to be removed.
 

@@ -62,7 +62,6 @@ struct _BudgetDialog
   GtkWidget *apply_button;
 
   SCM apply_func;
-  SCM apply_func_id;
 
   SCM current_entry;
   SCM current_subentry;
@@ -86,14 +85,12 @@ typedef struct _BudgetEntry
 {
   EntryType type;
   SCM entry;
-  SCM entry_id;
 } BudgetEntry;
 
 typedef struct _BudgetSubEntry
 {
   EntryType type;
   SCM subentry;
-  SCM subentry_id;
 } BudgetSubEntry;
 
 typedef union
@@ -218,7 +215,7 @@ destroy_subentry(gpointer data)
 
   if (bse == NULL) return;
 
-  gnc_unregister_c_side_scheme_ptr_id(bse->subentry_id);
+  scm_unprotect_object(bse->subentry);
 
   g_free(bse);
 }
@@ -230,7 +227,7 @@ destroy_entry(gpointer data)
 
   if (be == NULL) return;
 
-  gnc_unregister_c_side_scheme_ptr_id(be->entry_id);
+  scm_unprotect_object(be->entry);
 
   g_free(be);
 }
@@ -431,7 +428,7 @@ fill_subentries(GtkCTree *ctree, GtkCTreeNode *entry_node, SCM entry)
 
     bse->type = BUDGET_SUBENTRY;
     bse->subentry = subentry;
-    bse->subentry_id = gnc_register_c_side_scheme_ptr(subentry);
+    scm_protect_object(subentry);
 
     gtk_ctree_node_set_row_data_full(ctree, node, bse, destroy_subentry);
 
@@ -473,7 +470,7 @@ fill_entry_tree(GtkWidget *entry_tree, SCM budget)
 
     be->type = BUDGET_ENTRY;
     be->entry = entry;
-    be->entry_id = gnc_register_c_side_scheme_ptr(entry);
+    scm_protect_object(entry);
 
     gtk_ctree_node_set_row_data_full(ctree, node, be, destroy_entry);
 
@@ -1085,7 +1082,8 @@ budget_dialog_destroy(GtkObject       *object,
                       BudgetDialog    *bd)
 {
   bd->dialog = NULL;
-  gnc_unregister_c_side_scheme_ptr_id(bd->apply_func_id);
+
+  scm_unprotect_object(bd->apply_func);
 
   g_free(bd);
 }
@@ -1114,7 +1112,7 @@ gnc_ui_budget_dialog_create(SCM budget, SCM apply_func)
                      GTK_SIGNAL_FUNC(budget_dialog_destroy), bd);
 
   bd->apply_func = apply_func;
-  bd->apply_func_id = gnc_register_c_side_scheme_ptr(apply_func);
+  scm_protect_object(apply_func);
 
   bd->budget_name_entry = gtk_object_get_data(bdo, "budget_name_entry");
   gtk_signal_connect(GTK_OBJECT(bd->budget_name_entry), "changed",
