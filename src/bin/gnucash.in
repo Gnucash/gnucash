@@ -1,5 +1,5 @@
 #!/bin/sh
-exec gnucash-env guile -e main -s $0 "$@"
+exec @-GNUCASH_ENV-@ @-GUILE-@ -e main -s $0 "$@"
 !#
 
 (use-modules (gnucash bootstrap))

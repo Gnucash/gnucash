@@ -29,11 +29,12 @@ gnucash-run-script: gnucash-run-script.in
 	rm -f $@.tmp
 	sed < $@.in > $@.tmp \
 	    -e 's:@-GUILE-@:${GUILE}:' \
+	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:' \
 	    -e 's:@-GNC_GUILE_MODULE_DIR-@:${GNC_SHAREDIR}/guile-modules:' \
+	    -e 's:@-GNC_SCM_INSTALL_DIR-@:${GNC_SCM_INSTALL_DIR}:' \
             -e 's:@-GNC_LIB_INSTALLDIR-@:${libdir}:' \
             -e 's:@-GNC_PKGLIB_INSTALLDIR-@:${pkglibdir}:' \
-	    -e 's:@-GNC_SCM_INSTALL_DIR-@:${GNC_SCM_INSTALL_DIR}:' \
-	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:'
+	    -e 's:@-GNC_MODULE_DIR-@:${GNC_MODULE_DIR}:g'
 	mv $@.tmp $@
 BUILT_SOURCES = gnucash-run-script
 CLEANFILES = gnucash-run-script
@@ -54,9 +55,9 @@ gnucash-env: gnucash-env.in
 	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:g' \
 	    -e 's:@-GNC_GUILE_MODULE_DIR-@:${GNC_SHAREDIR}/guile-modules:g' \
 	    -e 's:@-GNC_SCM_INSTALL_DIR-@:${GNC_SCM_INSTALL_DIR}:g' \
-	    -e 's:@-GNC_LIBDIR-@:${GNC_LIBDIR}:g' \
-	    -e 's:@-GNC_MODULE_DIR-@:${GNC_MODULE_DIR}:g' \
+            -e 's:@-GNC_LIB_INSTALLDIR-@:${libdir}:' \
             -e 's:@-GNC_PKGLIB_INSTALLDIR-@:${pkglibdir}:g' \
+	    -e 's:@-GNC_MODULE_DIR-@:${GNC_MODULE_DIR}:g' \
             -e 's:@-GNC_SCRIPT_OVERRIDE_DIR-@:${gncoverridedir}:g'
 	mv $@.tmp $@
 	chmod u+x $@
@@ -66,6 +67,8 @@ CLEANFILES += gnucash-env
 gnucash: gnucash.in
 	rm -f $@.tmp
 	sed < $@.in > $@.tmp \
+	    -e 's:@-GUILE-@:${GUILE}:' \
+	    -e 's:@-GNUCASH_ENV-@:${bindir}/gnucash-env:g' \
 	    -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:g' \
 	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:g' \
 	    -e 's:@-GNC_LIBDIR-@:${GNC_LIBDIR}:g' \

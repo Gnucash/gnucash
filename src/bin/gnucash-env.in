@@ -14,7 +14,9 @@ exec @-GUILE-@ -s "$0" "$@"
         (apply string-append
                (or (getenv "LD_LIBRARY_PATH") "")
                (list ":"
-                     "@-GNC_LIBDIR-@"
+                     "@-GNC_LIB_INSTALLDIR-@"
+                     ":"
+                     "@-GNC_PKGLIB_INSTALLDIR-@"
                      ":"
                      "@-GNC_MODULE_DIR-@")))
 
