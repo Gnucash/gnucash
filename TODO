@@ -12,6 +12,8 @@ Hmm. verify that this is still broken!?!
 12) all messages should be moved out so that translation to foreign
     languages would be possible.
     -- long messages now in include/main.h, short words are not.
+    -- see alpah version 1.1, which has completed work on separating 
+       messages
 
 13) transfer window should allow share prices to be entered;
     but these should grey out when dealing with ordinary bank accounts.
@@ -50,6 +52,7 @@ Hmm. verify that this is still broken!?!
     This requires fixing install first.
 
 32) "make install" should work
+    Umm, I think it does now ??? check this to be sure ...
 
 33) automatic deposit-withdrawl on regular basis.
 
@@ -87,15 +90,16 @@ Hmm. verify that this is still broken!?!
     has sub-accounts.
 
 47) provide a simplified portfolio ledger window.
-
-48) allow tab traversal from memo field to commit button in the ledger
-    window.
+    Deffered, will be in version 1.1.x
 
 52) add sql interfaces. Use optimistic record modification policies,
     to avoid record locking. Something that is CVS, as opposed to 
     RCS, in style & philosophy.
 
-53) mnemonics don't work in the menus
+55) core dump when picking deleted account in the transfer
+    pull-down.
+
+56) mnemonics don't work in the menus
 
 
 Fixed bugs:
@@ -164,14 +168,24 @@ fixed. changed XmNnavigation
 fixed.
 
 
-
 46) fix traversal for ledger windows
 fixed.
+
+48) allow tab traversal from memo field to commit button in the ledger
+    window.
+Fixed in version 1.0.17
 
 49) fix recn window. Its completely broken right now.
 fixed, I think.
 
 50) provide a menu item to not show income/expense accounts.
     this makes it work more like quicken categories.  See also #26
-done.
+done. 
+
+53) core dump when reading MS-Money QIF files
+Fixed in 1.0.17
+
+54) core dump when deleting an account with open windows
+Hack-fixed in 1.0.17 by allowing a memory leak to occur.
+Non-memory-leak requires major redesign, and is in version 1.1
 

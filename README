@@ -136,23 +136,60 @@ sorry, no "make install" yet.
 
 Status:
 -------
-As of version 1.0b11:
+As of version 1.0.16:
 
 xacc is known to work in the following configs:
-Linux 2.0.x -- Intel  w/ RedHat Motif
-Linux 2.0.x -- Intel  w/ Lesstif v0.81
-SGI IRIX    -- 
+Linux 2.0.x           -- Intel  w/ RedHat Motif
+Linux 2.0.x           -- Intel  w/ Lesstif v0.81
+SGI IRIX              -- 
+IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
+Unixware 7            -- Intel
+SCO OpenServer 5.0.4  -- Intel
+
+See http://linas.org/linux/xacc for precompiled binaries for these platforms
 
 xacc seems to be having problems with:
 Solaris -- Sparc  -- won't compile due to va-args in XmHTML
 Linux 2.0.x -- Intel w/ Lesstif v0.82
 
+Download Sites:
+---------------
+All of the precompiled binaries & the latest source versions can be found
+at http://linas.org/linux/xacc  However, it is recommended that the master
+sites for each particular binary be used instead, for two reasons:
+1) bandwidth
+2) OS-specific info & support
+
+IBM AIX 4.1.5 
+      -- SMIT-installable images 
+      http://www.bull.de/pub/
+      see also http://www-frec.bull.com/
+
+SCO OpenServer 5.0.4 
+      http://www.sco.com/skunkware/osr5/x11/apps/xacc/VOLS.tar
+
+Unixware 7
+      -- use pkgadd to install
+      http://www.sco.com/skunkware/uw7/x11/apps/xacc/xacc.pkg.gz
+
+SGI Irix
+      -- in SGI install format
+      -- warning, this is a very down-level version
+      http://linas.org/linux/xacc/xacc-1.0b7-sgi-irix.inst.tar
+
+Linux Debian
+      -- use debian tools to install
+      http://linas.org/linux/xacc/xacc_1.0.15-1_i386.deb
 
 That's all folks!
-
 
 Credits:
 --------
 Robin Clark <rclark@hmc.edu> for original xacc
 Linas Vepstas <linas@lins.org> for extensive enhancements
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
+Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
+George Chen <georgec@sco.com> for MS-Money QIF's & fixes
+Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
+Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
+
