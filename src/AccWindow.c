@@ -2,6 +2,7 @@
  * AccWindow.c -- window for creating new accounts for xacc         *
  *                (X-Accountant)                                    *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1997 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,6 +24,8 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
+#include <string.h>
+
 #include <Xm/Xm.h>
 #include <Xm/DialogS.h>
 #include <Xm/Form.h>
@@ -32,7 +35,6 @@
 #include <Xm/ToggleB.h>
 #include <Xm/PushB.h>
 #include <Xm/Text.h>
-#include <string.h>
 
 #include "Account.h"
 #include "Data.h"
@@ -52,6 +54,8 @@ typedef struct _accwindow {
   Widget liability;
   Widget portfolio;
   Widget mutual;
+
+  Widget group_menu;     /* menu of groups, for sub-accounts        */
                          /* The text fields:                        */
   Widget name;           /* The account name text field             */
   Widget desc;           /* Account description text field          */
@@ -197,30 +201,44 @@ accWindow( Widget parent )
 			     xmToggleButtonWidgetClass, rc,
 			     XmNindicatorType,   XmONE_OF_MANY,
 			     NULL);
-  /* Portfolio account not supported yet, so grey it out: */
-/* hack alert 
-  XtSetSensitive( accData->portfolio, False );
-*/
   
   accData->mutual =
     XtVaCreateManagedWidget( "Mutual Fund",
 			     xmToggleButtonWidgetClass, rc,
 			     XmNindicatorType,   XmONE_OF_MANY,
 			     NULL);
-  /* Mutual Fund account not supported yet, so grey it out: */
-/* hack alert
-  XtSetSensitive( accData->mutual, False );
-*/
   
   /******************************************************************\
    * Text fields....                                                *
   \******************************************************************/
   
   label = 
-    XtVaCreateManagedWidget( "Account Name:",
+    XtVaCreateManagedWidget( "Sub:",
 			     xmLabelGadgetClass, form,
 			     XmNtopAttachment,   XmATTACH_WIDGET,
 			     XmNtopWidget,       frame,
+			     XmNtopOffset,       10, 
+			     XmNrightAttachment, XmATTACH_POSITION,
+			     XmNrightPosition,   35,        /* 35% */
+			     NULL );
+  
+  accData->group_menu = 
+    XtVaCreateManagedWidget( "text",
+			     xmTextWidgetClass,  form,
+			     XmNmaxLength,       40,
+			     XmNcolumns,         25,
+			     XmNtopAttachment,   XmATTACH_WIDGET,
+			     XmNtopWidget,       frame,
+			     XmNtopOffset,       10, 
+			     XmNleftAttachment,  XmATTACH_POSITION,
+			     XmNleftPosition,    35,        /* 35% */
+			     NULL );
+  
+  label = 
+    XtVaCreateManagedWidget( "Account Name:",
+			     xmLabelGadgetClass, form,
+			     XmNtopAttachment,   XmATTACH_WIDGET,
+			     XmNtopWidget,       accData->group_menu,
 			     XmNtopOffset,       10, 
 			     XmNrightAttachment, XmATTACH_POSITION,
 			     XmNrightPosition,   35,        /* 35% */
@@ -232,7 +250,7 @@ accWindow( Widget parent )
 			     XmNmaxLength,       40,
 			     XmNcolumns,         25,
 			     XmNtopAttachment,   XmATTACH_WIDGET,
-			     XmNtopWidget,       frame,
+			     XmNtopWidget,       accData->group_menu,
 			     XmNtopOffset,       10, 
 			     XmNleftAttachment,  XmATTACH_POSITION,
 			     XmNleftPosition,    35,        /* 35% */
@@ -321,10 +339,10 @@ accWindow( Widget parent )
   XtAddCallback( widget, XmNactivateCallback, 
 		 createCB, (XtPointer)accData );
   /* We need to do something to clean up memory too! */
-/* this is done at endo fo dialog.
-  XtAddCallback( widget, XmNactivateCallback, 
-		 destroyShellCB, (XtPointer)dialog );  
-*/
+  /* this is done at end of dialog.
+   * XtAddCallback( widget, XmNactivateCallback, 
+   * 		 destroyShellCB, (XtPointer)dialog );  
+   */
     
   XtManageChild(buttonform);
   
@@ -593,30 +611,6 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   String name = XmTextGetString(accData->name);
   String desc = XmTextGetString(accData->desc);
   
-#ifdef SHOULDNT_BE_BROKEN_ANYMORE
-  {
-    /* since portfolio & mutual not fully implemented, provide warning */
-    int warn = 0;
-    XtVaGetValues( accData->portfolio, XmNset, &set, NULL );
-    if(set) warn = 1;
-    
-    XtVaGetValues( accData->mutual, XmNset, &set, NULL );
-    if(set) warn = 1;
-
-    if (warn) {
-     int do_it_anyway;
-     do_it_anyway = verifyBox (toplevel, 
-"Warning: Portfolio and Mutual Fund \n\
-Account types are not fully implemented. \n\
-You can play with the interface here, \n\
-but doing so may damage your data. \n\
-You have been warned! \n\
-Do you want to continue anyway?\n");
-    if (!do_it_anyway) return;
-    }
-  }
-#endif /* SHOULDNT_BE_BROKEN_ANYMORE */
-
   /* The account has to have a name! */
   if( strcmp( name, "" ) == 0 ) {
     errorBox (toplevel, "The account must be given a name! \n");
@@ -711,3 +705,6 @@ editCB( Widget mw, XtPointer cd, XtPointer cb )
   
   refreshMainWindow();
   }
+
+/********************** END OF FILE *********************************\
+\********************************************************************/
