@@ -1,6 +1,6 @@
 2001-12-08  Christian Stimming  <stimming@tuhh.de>
 
-	* po/de.new.po: Updated German translation.
+	* po/de.po: Updated German translation.
 
 	* src/EuroUtils.c: Fixed rounding error.
 
