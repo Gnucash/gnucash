@@ -74,9 +74,9 @@ restart_loop:
    {
       Split * split = node->data;
 
-		/* If already in lot, then no-op */
-		if (split->lot) continue;
-		if (xaccSplitFIFOAssignToLot (split)) goto restart_loop;
+      /* If already in lot, then no-op */
+      if (split->lot) continue;
+      if (xaccSplitFIFOAssignToLot (split)) goto restart_loop;
    }
    xaccAccountCommitEdit (acc);
    LEAVE ("acc=%s", acc->accountName);
@@ -89,16 +89,12 @@ void
 xaccAccountScrubDoubleBalance (Account *acc)
 {
    LotList *node;
-
    if (!acc) return;
 
    ENTER ("acc=%s", acc->accountName);
    for (node = acc->lots; node; node=node->next)
    {
       GNCLot *lot = node->data;
-
-      /* We examine only closed lots */
-      if (FALSE == gnc_lot_is_closed (lot)) continue;
       xaccLotScrubDoubleBalance (lot);
    }
    LEAVE ("acc=%s", acc->accountName);
@@ -121,7 +117,7 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
    for (snode = lot->splits; snode; snode=snode->next)
    {
       Split *s = snode->data;
-		xaccSplitComputeCapGains (s, NULL);
+      xaccSplitComputeCapGains (s, NULL);
    }
 
    /* We double-check only closed lots */
@@ -139,27 +135,31 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
       }
       if (FALSE == gnc_commodity_equiv (currency, trans->common_currency))
       {
-			/* This lot has mixed currencies. Can't double-balance.
-			 * Silently punt */
+         /* This lot has mixed currencies. Can't double-balance.
+          * Silently punt */
          PWARN ("Lot with multiple currencies:\n"
                "\ttrans=%s curr=%s\n", xaccTransGetDescription(trans), 
                gnc_commodity_get_fullname(trans->common_currency)); 
-			break;
+         break;
       }
 
       /* Now, total up the values */
-      value = gnc_numeric_add (value, xaccSplitGetValue (s),
-                           GNC_DENOM_AUTO, GNC_DENOM_LCD);
+      value = gnc_numeric_add_fixed (value, xaccSplitGetValue (s));
       PINFO ("Split value=%s Accum Lot value=%s", 
           gnc_numeric_to_string (xaccSplitGetValue(s)),
           gnc_numeric_to_string (value));
           
-		if (FALSE == gnc_numeric_equal (value, zero))
-		{
-			/* Unhandled error condition. Not sure what to do here,
-			 * Since the ComputeCapGains should have gotten it right. */
-			PERR ("Closed lot fails to double-balance !!\n");
-		}
+   }
+
+   if (FALSE == gnc_numeric_equal (value, zero))
+   {
+      /* Unhandled error condition. Not sure what to do here,
+       * Since the ComputeCapGains should have gotten it right. 
+       * I suppose there might be small rounding errors, a penny or two,
+       * the ideal thing would to figure out why there's a roudning
+       * error, and fix that.
+       */
+      PERR ("Closed lot fails to double-balance !!\n");
    }
 
    LEAVE ("lot=%s", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));

@@ -38,11 +38,13 @@
  *  cap gains have. 
 
 ToDo List:
- o Need to have some sort of modified event handling watcher,
-   so that the peered gains split gets notified when the source
-   split gets modified, etc. etc.
-   Also, need to use xaccTransSetReadOnly on the gains split.
-   XXX one readonly usage is not i18n'ed !!
+ o Need to use a 'gains dirty' flag: A 'dirty' flag on the source 
+   split indicates that the gains transaction needs to be recomputed.
+   Another flag, the gains transaction flag, marks the split as
+   being a gains split, and that the source transaction should be 
+   checked for dirtiness before returning the date, the amount, the
+   value, etc.  Finally, these flags make amount and value read-only
+   for the gains splits. (the memo is user-modifieable).
 
  o If the amount in a split is changed, then the lot has to be recomputed.
    This has a potential trickle-through effect on all later lots. 
@@ -599,18 +601,6 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
        */
       lot_split = xaccSplitGetCapGainsSplit (split);
 
-      /* Make sure the existing gains trans has the correct currency,
-       * just in case someone screwed with it! If not, blow it up. */
-      if (lot_split &&
-          (FALSE == gnc_commodity_equiv (currency,
-                              xaccTransGetCurrency(lot_split->parent))))
-      {
-         trans = lot_split->parent;
-           xaccTransBeginEdit (trans);
-           xaccTransDestroy (trans);
-           xaccTransCommitEdit (trans);
-         lot_split = NULL;
-      }
       if (NULL == lot_split)
       {
          Account *lot_acc = lot->account;
@@ -661,6 +651,11 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
          trans = lot_split->parent;
          gain_split = xaccSplitGetOtherSplit (lot_split);
          xaccTransBeginEdit (trans);
+         xaccTransClearReadOnly (trans);
+
+         /* Make sure the existing gains trans has the correct currency,
+          * just in case someone screwed with it! */
+         xaccTransSetCurrency (trans, currency);
       }
 
       /* Common to both */
@@ -669,11 +664,15 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       xaccTransSetDateEnteredSecs (trans, time(0));
 
       xaccSplitSetAmount (lot_split, zero);
-      xaccSplitSetValue (lot_split, gnc_numeric_neg (value));
+      xaccSplitSetValue (lot_split, value);
       gnc_lot_add_split (lot, lot_split);
 
+      value = gnc_numeric_neg (value);
       xaccSplitSetAmount (gain_split, value);
       xaccSplitSetValue (gain_split, value);
+
+      /* XXX this is wrong; we want to make amount read-only only */
+      xaccTransSetReadOnly (trans, _("Capital Gains"));
       xaccTransCommitEdit (trans);
 
    }
@@ -686,11 +685,13 @@ gnc_numeric
 xaccSplitGetCapGains(Split * split)
 {
    if (!split) return gnc_numeric_zero();
-   split = xaccSplitGetCapGainsSplit (split);
-   if (!split) return gnc_numeric_zero();
 
    /* XXX Do *not! recomp gains every time; use a 'dirty' flag instead */
    xaccSplitComputeCapGains (split, NULL);
+
+   split = xaccSplitGetCapGainsSplit (split);
+   if (!split) return gnc_numeric_zero();
+
    return split->value;
 }
 
