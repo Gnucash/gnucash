@@ -1510,7 +1510,8 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
 
     if (num_decimal_places > info->max_decimal_places)
     {
-      PWARN ("max_decimal_places too small");
+      PWARN ("max_decimal_places too small; limit %d, value %s%s",
+	     info->max_decimal_places, buf, temp_buf);
     }
 
     if (num_decimal_places > 0)
