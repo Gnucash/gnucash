@@ -67,7 +67,7 @@ static void nextrun_destroy( GtkObject *o, gpointer ud );
 
 static void slr_create_transactions( SchedXaction *sx, GDate *gd );
 
-//int parse_vars_from_formula( const char *formula, GHashTable *varHash );
+/* int parse_vars_from_formula( const char *formula, GHashTable *varHash ); */
 
 void
 gnc_ui_nextrun_dialog_create(void)
@@ -185,8 +185,8 @@ nr_next_clicked( GtkButton *b, gpointer ud )
 
         DEBUG( "Okay... I should run with a date of: %s", ctime(&gdeDate) );
 
-        // destroy the previous transactions
-        // destroy all the toCreateTransactions
+        /* destroy the previous transactions
+           destroy all the toCreateTransactions */
         if ( sxsld->transList != NULL ) {
                 g_list_foreach( sxsld->transList, free_elts, NULL );
                 g_list_free( sxsld->transList );
@@ -214,9 +214,9 @@ nr_next_clicked( GtkButton *b, gpointer ud )
                 g_date_set_time( &gd, time(NULL) );
                 while ( g_date_compare( &gd, endDate ) <= 0 ) {
                         g_date_strftime( buf, 1023, "%c", &gd );
-                        // add to clist [ahem... register... ahem]
+                        /* add to clist [ahem... register... ahem] */
                         rowText[0] = xaccSchedXactionGetName( sx );
-                        rowText[1] = malloc( sizeof(char) * 256 ); // FIXME
+                        rowText[1] = malloc( sizeof(char) * 256 ); /* FIXME */
                         g_date_strftime( rowText[1], 255, "%c", &gd );
 
                         tct = g_new0( toCreateTransaction, 1 );
@@ -243,7 +243,7 @@ nr_next_clicked( GtkButton *b, gpointer ud )
                         xaccSchedXactionGetName( ((toCreateTransaction*)sxList->data)->sx ),
                         buf );
         } while ( (sxList = sxList->next) );
-#endif // 0
+#endif /* 0 */
 }
 
 static void
@@ -283,16 +283,16 @@ create_each_transaction( Transaction *t, void *d )
 
         newT = xaccMallocTransaction();
         xaccTransBeginEdit( newT );
-        // the action and description/memo are in the template
+        /* the action and description/memo are in the template */
         gnc_copy_trans_onto_trans( t, newT, FALSE, FALSE );
 
-        // the date is new [gd]
+        /* the date is new [gd] */
         xaccTransSetDate( newT,
                           g_date_day( gd ),
                           g_date_month( gd ),
                           g_date_year( gd ) );
 
-        // the accounts and amounts are in the kvp_frames of the splits.
+        /* the accounts and amounts are in the kvp_frames of the splits. */
         osList = xaccTransGetSplitList( t );
         sList = xaccTransGetSplitList( newT );
         if ( (osList == NULL) || (sList == NULL) ) {
@@ -301,10 +301,10 @@ create_each_transaction( Transaction *t, void *d )
         }
         do {
                 split = (Split*)sList->data;
-                // Ick.  This assumes that the split lists will be
-                // ordered identically. :( I think it's fair to say
-                // they will, but I'd rather not have to count on
-                // it. --jsled
+                /* Ick.  This assumes that the split lists will be
+                   ordered identically. :( I think it's fair to say
+                   they will, but I'd rather not have to count on
+                   it. --jsled */
                 split_kvpf = xaccSplitGetSlots( (Split*)osList->data );
 
                 DEBUG( "\tProcessing Split \"%s\"\n",
@@ -314,11 +314,11 @@ create_each_transaction( Transaction *t, void *d )
                         kvp_frame_to_string( split_kvpf ) );
 
 
-                // from-transaction of splits
+                /* from-transaction of splits */
                 {
                         GUID                *acct_guid;
                         Account                *acct;
-                        // contains the guid of the split's actual account.
+                        /* contains the guid of the split's actual account. */
                         kvp_val = kvp_frame_get_slot( split_kvpf, "sched-xaction/xfrm" );
                         if ( kvp_val == NULL ) {
                                 PERR( "Null kvp_val for xfrm\n" );
@@ -327,10 +327,10 @@ create_each_transaction( Transaction *t, void *d )
                         acct = xaccAccountLookup( acct_guid );
                         DEBUG( "Got account with name \"%s\"\n",
                                 xaccAccountGetName( acct ) );
-                        //xaccSplitSetAccount( split, acct );
+                        /* xaccSplitSetAccount( split, acct ); */
                         xaccAccountInsertSplit( acct, split );
                 }
-                // credit/debit formulas
+                /* credit/debit formulas */
                 {
                         char                *str;
                         gnc_numeric        credit_num;
@@ -345,11 +345,11 @@ create_each_transaction( Transaction *t, void *d )
                                 
                                 printf( "---------------\n" );
                                 printf( "Parsing formula:\n" );
-                                //parse_vars_from_formula( str, NULL );
+                                /* parse_vars_from_formula( str, NULL ); */
                                 printf( "---------------\n" );
 
                                 xaccParseAmount( str, TRUE, &credit_num, NULL );
-                                //string_to_gnc_numeric( str, &credit_num );
+                                /* string_to_gnc_numeric( str, &credit_num ); */
                                 printf( "gnc_numeric::credit: \"%s\" -> \"%s\"\n",
                                         str, gnc_numeric_to_string( credit_num ) );
                         }
@@ -362,11 +362,11 @@ create_each_transaction( Transaction *t, void *d )
 
                                 printf( "---------------\n" );
                                 printf( "Parsing formula:\n" );
-                                //parse_vars_from_formula( str, NULL );
+                                /* parse_vars_from_formula( str, NULL ); */
                                 printf( "---------------\n" );
 
                                 xaccParseAmount( str, TRUE, &debit_num, NULL );
-                                //string_to_gnc_numeric( str, &debit_num );
+                                /* string_to_gnc_numeric( str, &debit_num ); */
                                 printf( "gnc_numeric::debit: \"%s\" -> \"%s\"\n",
                                         str, gnc_numeric_to_string( debit_num ) );
                         }
@@ -387,7 +387,7 @@ create_each_transaction( Transaction *t, void *d )
 #if 0
                 kvp_val = kvp_frame_get_slot( split_kvpf, "sched-xaction/shares" );
                 kvp_val = kvp_frame_get_slot( split_kvpf, "sched-xaction/amnt" );
-#endif // 0
+#endif /* 0 */
         } while ( (sList = sList->next) && (osList = osList->next) );
 
         if ( errFlag ) {
@@ -408,7 +408,7 @@ slr_create_transactions( SchedXaction *sx, GDate *gd )
         Account                *acct;
         char                *id;
 
-        // get template account group
+        /* get template account group */
         ag = gnc_book_get_template_group( gncGetCurrentBook() );
         id = guid_to_string( xaccSchedXactionGetGUID(sx) );
         acct = xaccGetAccountFromName( ag, id );
@@ -460,7 +460,7 @@ parse_vars_from_formula( const char *formula, GHashTable *varHash )
         
         gnc_exp_parser_shutdown();
 }
-#endif // 0
+#endif /* 0 */
 
 #if 0
         GScanner        *varScanner;
@@ -557,4 +557,4 @@ tok: (
 tok: EOF
         */
           
-#endif // 0
+#endif /* 0 */

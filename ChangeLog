@@ -1,3 +1,9 @@
+2001-06-19  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-nextrun.h: add guards
+
+	* src/gnome/dialog-nextrun.c: use C comments.
+
 2001-06-19  Bill Gribble  <grib@billgribble.com>
 
 	* src/scm/qif-import/qif-objects.scm: initialize fields to ""

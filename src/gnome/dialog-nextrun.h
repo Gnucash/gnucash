@@ -20,4 +20,9 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+#ifndef DIALOG_NEXTRUN_H
+#define DIALOG_NEXTRUN_H
+
 void gnc_ui_nextrun_dialog_create( void );
+
+#endif
