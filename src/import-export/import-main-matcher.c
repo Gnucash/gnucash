@@ -251,18 +251,22 @@ run_account_picker_dialog (GNCGenTransaction *info,
 			   gint row, GNCImportTransInfo *trans_info)
 {
   Account *old_acc, *new_acc;
+  gboolean ok_pressed;
   g_assert (trans_info);
   old_acc = gnc_import_TransInfo_get_destacc (trans_info);
   new_acc = gnc_import_select_account(NULL,
 				      TRUE,
-				      _("A destination split for the transaction you selected."),
+				      _("Destination account for the auto-balance split."),
 				      xaccTransGetCurrency(gnc_import_TransInfo_get_trans(trans_info)),
 				      NO_TYPE,
-				      old_acc);
-  gnc_import_TransInfo_set_destacc (trans_info,
-				    new_acc,
-				    TRUE);
-  refresh_clist_row (info, row, trans_info);
+				      old_acc,
+				      &ok_pressed);
+  if(ok_pressed)
+    {
+      gnc_import_TransInfo_set_destacc (trans_info,
+					new_acc,
+					TRUE);
+    }
 }
 
 static void 
@@ -270,7 +274,6 @@ run_match_dialog (GNCGenTransaction *info,
 		  gint row, GNCImportTransInfo *trans_info)
 {
   gnc_import_match_picker_run_and_close (trans_info);
-  refresh_clist_row (info, row, trans_info);
 }
 
 static void
@@ -607,7 +610,7 @@ refresh_clist_row (GNCGenTransaction *gui,
     case GNCImport_ADD:
       if(gnc_import_TransInfo_is_balanced(info)==TRUE)
 	{
-	  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Add, transaction already balanced)"));
+	  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Add, transaction already balanced"));
 	  gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
 				    &(gui->color_back_green));
 	}
@@ -622,11 +625,11 @@ refresh_clist_row (GNCGenTransaction *gui,
 		 gnc_get_account_separator ());
 	      if(gnc_import_TransInfo_get_destacc_selected_manually(info)==TRUE)
 		{
-		  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Add, create balancing split in (user-selected) account \"%s\""),tmp);
+		  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Add, auto-balance into (user-selected) \"%s\""),tmp);
 		}
 	      else
 		{
-		  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Add, create balancing split in (auto-selected) account \"%s\""),tmp);
+		  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Add, auto-balance into (auto-selected) \"%s\""),tmp);
 		}
 	      free (tmp);
 	    }
@@ -634,7 +637,7 @@ refresh_clist_row (GNCGenTransaction *gui,
 	    {
 	      gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
 					&(gui->color_back_yellow));
-	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Add, UNBALANCED transaction!"));
+	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Add UNBALANCED (no auto-balance account)"));
 	    }
 	}
       break;
@@ -656,13 +659,13 @@ refresh_clist_row (GNCGenTransaction *gui,
 	{
 	  gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
 				    &(gui->color_back_red));
-	  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Please select transaction to reconcile (or another action)"));
+	  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Please select a match (or another action)"));
 	}
       break;
     case GNCImport_EDIT: text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup("NOT SUPPORTED YET!");
       break;
     case GNCImport_SKIP: 
-      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Skip the transaction, no action selected"));
+      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Skip this transaction (no action selected)"));
       gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
 				&(gui->color_back_red));
       break;

@@ -1,4 +1,18 @@
 2002-12-8  Benoit Grégoire  <bock@step.polymtl.ca>
+	* src/import-export/import-account-matcher.c,h: Add param to 
+	 gnc_import_select_account():
+	@param ok_pressed A pointer to gboolean.  If non-NULL, whether or
+    	not the picker dialog was closed by the user pressing ok will be
+    	stored in the parameter.  If no dialog was created by the  
+    	gnc_import_select_account() call, TRUE is always returned.
+	* src/import-export/ofx/gnc-ofx-import.c: Fix for above change.
+	* src/import-export/gnc-gen-transaction.c: Take advantage of
+	above change
+	* src/import-export/import-main-matcher.c: Take advantage of
+	above change.  Shorten the strings in the "Specific action to be
+	taken" column.
+
+2002-12-8  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/import-backend.c: Make the auto-balance 
 	split have the correct amount in all cases by using 
 	xaccTransGetImbalance() instead of the first split's value.

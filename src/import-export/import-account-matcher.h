@@ -74,6 +74,11 @@
     @param default_selection If not NULL, that account will be 
     pre-selected by default.
 
+    @param ok_pressed A pointer to gboolean.  If non-NULL, whether or
+    not the picker dialog was closed by the user pressing ok will be
+    stored in the parameter.  If no dialog was created by the  
+    gnc_import_select_account() call, TRUE is always returned.
+
   @return A pointer to the found or created Account, or NULL if no
   account was found or created.
 */
@@ -82,7 +87,9 @@ Account * gnc_import_select_account(char * account_online_id_value,
 				    char * account_human_description,
 				    gnc_commodity * new_account_default_commodity,
 				    GNCAccountType new_account_default_type,
-				    Account * default_selection);
+				    Account * default_selection,
+				    gboolean * ok_pressed
+				    );
 
 #endif
 /**@}*/

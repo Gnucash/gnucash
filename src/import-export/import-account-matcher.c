@@ -210,7 +210,8 @@ Account * gnc_import_select_account(char * account_online_id_value,
 				    char * account_human_description,
 				    gnc_commodity * new_account_default_commodity,
 				    GNCAccountType new_account_default_type,
-				    Account * default_selection)
+				    Account * default_selection,
+				    gboolean * ok_pressed)
 {
   #define ACCOUNT_DESCRIPTION_MAX_SIZE 255
   struct _accountpickerdialog * picker;
@@ -219,15 +220,14 @@ Account * gnc_import_select_account(char * account_online_id_value,
   GladeXML *xml;
   GtkWidget * online_id_label;
   gchar account_description_text[ACCOUNT_DESCRIPTION_MAX_SIZE] = "";
+  gboolean ok_pressed_retval;
 
   DEBUG("Default commodity received: %s",gnc_commodity_get_fullname( new_account_default_commodity));
   DEBUG("Default account type received: %s",xaccAccountGetTypeStr( new_account_default_type));
   picker = g_new0(struct _accountpickerdialog, 1);
   picker->acct_group = gnc_get_current_group();
-  if(picker->acct_group == NULL)
-    {
-      PWARN("The account group is NULL");
-    }
+  g_assert(picker->acct_group);
+
   picker->account_online_id_value = account_online_id_value;
   picker->account_human_description =  account_human_description;
   picker->new_account_default_commodity = new_account_default_commodity;
@@ -288,15 +288,25 @@ Account * gnc_import_select_account(char * account_online_id_value,
 	  {
 	    gnc_import_set_acc_online_id(picker->selected_acct, account_online_id_value);
 	  }
+	ok_pressed_retval=TRUE;
 	retval=picker->selected_acct;
       }
       else {
+	ok_pressed_retval=FALSE;
 	retval=NULL;
       }
-    }     
+    }
+  else
+    {
+      ok_pressed_retval=TRUE; /* There was no dialog involved, so the computer "pressed" ok */
+    }   
   printf("WRITEME: gnc_import_select_account() Here we should check if account type is compatible, currency matches, etc.\n"); 
   g_free(picker);
   DEBUG("Return value: %p%s%s%s",retval,", account name:",xaccAccountGetName(retval),"\n");
+  if(ok_pressed!=NULL)
+    {
+      *ok_pressed=ok_pressed_retval;
+    }
   return retval;
 }
 /**@}*/

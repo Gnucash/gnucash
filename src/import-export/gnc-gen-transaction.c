@@ -115,6 +115,7 @@ run_account_picker_dialog (GNCGenTransaction *info,
 			   gint row, GNCImportTransInfo *trans_info)
 {
   Account *old_acc, *new_acc;
+  gboolean ok_pressed;
   old_acc = gnc_import_TransInfo_get_destacc (trans_info);
   /*  new_acc = gnc_account_picker_dialog(old_acc);*/
   new_acc = gnc_import_select_account(NULL,
@@ -122,11 +123,15 @@ run_account_picker_dialog (GNCGenTransaction *info,
 				      _("A destination split for the transaction you selected."),
 				      xaccTransGetCurrency(gnc_import_TransInfo_get_trans(trans_info)),
 				      NO_TYPE,
-				      old_acc);
-    gnc_import_TransInfo_set_destacc (trans_info,
-				      new_acc,
-				      TRUE);
-    refresh_clist_row (info, row, trans_info);
+				      old_acc,
+				      &ok_pressed);
+  if(ok_pressed)
+    {
+      gnc_import_TransInfo_set_destacc (trans_info,
+					new_acc,
+					TRUE);
+      refresh_clist_row (info, row, trans_info);
+    }
 }
 
 static void 
