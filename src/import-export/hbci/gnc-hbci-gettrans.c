@@ -30,7 +30,9 @@
 #include "gnc-numeric.h"
 #include "date.h"
 #include "Transaction.h"
+#include "gnc-engine-util.h" 
 #include "gnc-generic-import.h"
+#include "gnc-gen-transaction.h"
 
 #include "hbci-interaction.h"
 #include "gnc-hbci-utils.h"
@@ -38,12 +40,14 @@
 #include "gnc-hbci-kvp.h"
 #include "dialog-daterange.h"
 
+static short module = MOD_IMPORT;
 
 static void *trans_list_cb (const HBCI_Transaction *trans, void *user_data);
 
 struct trans_list_data 
 {
   Account *gnc_acc;
+  GNCGenTransaction *importer;
 };
 
 
@@ -110,6 +114,7 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     HBCI_Date *from_date, *to_date;
     gboolean use_last_date = TRUE, 
       use_earliest_date = TRUE, use_until_now = TRUE;
+    GNCGenTransaction *importer_gui;
 
     /* Get time of last retrieval */
     last_timespec = gnc_hbci_get_account_trans_retrieval (gnc_acc);
@@ -170,12 +175,16 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     /* Store the date of this retrieval */
     gnc_hbci_set_account_trans_retrieval (gnc_acc, until_timespec);
 
+    importer_gui = gnc_gen_trans_new (NULL, NULL);
+    gnc_gen_trans_freeze (importer_gui);
+    
     {
       /* Now add the retrieved transactions to the gnucash account. */
       const list_HBCI_Transaction *trans_list;
       struct trans_list_data data;
       
       data.gnc_acc = gnc_acc;
+      data.importer = importer_gui;
       
       trans_list = HBCI_OutboxJobGetTransactions_transactions (trans_job);
       printf("gnc_hbci_gettrans: Got %d transactions.\n", 
@@ -183,9 +192,11 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
       list_HBCI_Transaction_foreach (trans_list, trans_list_cb, &data);
     }
 
+    gnc_gen_trans_thaw (importer_gui);
     GNCInteractor_hide (interactor);
     /* Clean up behind ourself. */
     HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);
+    gnc_gen_trans_run (importer_gui);
   }
 }
 
@@ -244,18 +255,21 @@ static void *trans_list_cb (const HBCI_Transaction *h_trans,
   {
     /* Description */
     char *h_descr = 
-      list_string_concat (HBCI_Transaction_description (h_trans));
+      list_string_concat_delim (HBCI_Transaction_description (h_trans), ";");
     char *othername = 
       list_string_concat_delim (HBCI_Transaction_otherName (h_trans), ", ");
     char *g_descr;
     
+    DEBUG("HBCI Description '%s'", h_descr);
     g_strstrip (h_descr);
     g_strstrip (othername);
     
     g_descr = 
-      g_strdup_printf ("%s %s", 
-		       othername, 
-		       h_descr);
+      (strlen (h_descr) > 0) ?
+      g_strdup_printf ("%s; %s", 
+		       h_descr,
+		       othername) :
+      g_strdup (othername);
     
     xaccTransSetDescription (gnc_trans, g_descr);
 
@@ -315,7 +329,8 @@ static void *trans_list_cb (const HBCI_Transaction *h_trans,
   }
   
   /* Instead of xaccTransCommitEdit(gnc_trans)  */
-  gnc_import_add_trans(gnc_trans);
+  /*gnc_import_add_trans(gnc_trans);*/
+  gnc_gen_trans_add_trans (data->importer, gnc_trans);
 
   return NULL;
 }

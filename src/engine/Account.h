@@ -346,11 +346,11 @@ void            xaccAccountSetPlaceholder (Account *account,
 GNCPlaceholderType xaccAccountGetDescendantPlaceholder (Account *account);
 
 /* The xaccAccountGetFullName routine returns the fully qualified name
- * of the account using the given separator char. The name must be freed
- * after use. The fully qualified name of an account is the concatenation
- * of the names of the account and all its ancestor accounts starting with
- * the topmost account and ending with the given account. Each name is
- * separated by the given character.
+ * of the account using the given separator char. The name must be
+ * g_free'd after use. The fully qualified name of an account is the
+ * concatenation of the names of the account and all its ancestor
+ * accounts starting with the topmost account and ending with the
+ * given account. Each name is separated by the given character.
  *
  * WAKE UP!
  * Unlike all other gets, the string returned by xaccAccountGetFullName() 

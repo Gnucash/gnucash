@@ -20,7 +20,8 @@ typedef struct _GncImportMatchMap GncImportMatchMap;
 GncImportMatchMap * gnc_imap_create_from_account (Account *acc);
 GncImportMatchMap * gnc_imap_create_from_book (GNCBook *book);
 
-/* Destroy an import map */
+/* Destroy an import map. But all stored entries will still continue
+ * to exist in the underlying kvp frame of the account or book. */
 void gnc_imap_destroy (GncImportMatchMap *imap);
 
 /* Clear an import map -- this removes ALL entries in the map */
@@ -30,7 +31,9 @@ void gnc_imap_clear (GncImportMatchMap *imap);
 Account * gnc_imap_find_account (GncImportMatchMap *imap, const char *category,
 				 const char *key);
 
-/* Store an Account in the map */
+/* Store an Account in the map. This mapping is immediatly stored in
+ * the underlying kvp frame, regardless of whether the MatchMap is
+ * destroyed later or not. */
 void gnc_imap_add_account (GncImportMatchMap *imap, const char *category,
 			   const char *key, Account *acc);
 

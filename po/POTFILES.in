@@ -274,11 +274,11 @@ src/import-export/hbci/dialog-hbcitrans.c
 src/import-export/hbci/dialog-pass.c
 src/import-export/hbci/hbci-progressmon.c
 src/import-export/hbci/gnc-hbci-actions.c
-src/import-export/hbci/hbci-account-picker.c
 src/import-export/hbci/gnc-hbci-transfer.c
 src/import-export/hbci/gncmod-hbci.c
 src/import-export/hbci/druid-hbci-utils.c
 src/import-export/test/test-link.c
+src/import-export/gnc-gen-transaction.c
 src/import-export/Transaction-matcher.c
 src/import-export/Account-matcher.c
 src/import-export/qif-io-core/gncmod-qifiocore.c
@@ -311,6 +311,7 @@ src/gnome-utils/gnc-currency-edit.c
 src/gnome-utils/gnc-date-edit.c
 src/gnome-utils/dialog-options.c
 src/gnome-utils/druid-utils.c
+src/gnome-utils/dialog-account-pick.c
 src/gnome-utils/dialog-commodity.c
 src/gnome-utils/gnc-date-delta.c
 src/gnome-utils/gnc-amount-edit.c

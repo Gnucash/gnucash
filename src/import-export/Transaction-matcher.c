@@ -172,7 +172,7 @@ gnc_import_TransInfo_set_selected_match (GNCImportTransInfo *info,
 }
 
 GNCImportAction
-gnc_import_TransInfo_get_action (GNCImportTransInfo *info)
+gnc_import_TransInfo_get_action (const GNCImportTransInfo *info)
 {
   g_assert (info);
   return info->action;
@@ -516,7 +516,7 @@ downloaded_transaction_select_cb (GtkCList *clist,
   GList * list_element;
   gint row_number;
   gboolean valid_action_found;
-  DEBUG("row: %d%s%d",row,", column: ",column);
+  /* DEBUG("row: %d%s%d",row,", column: ",column); */
   
   if(  matcher->selected_trans_info != gtk_clist_get_row_data(clist, row) 
        && matcher->selected_trans_info != NULL 
@@ -608,7 +608,7 @@ downloaded_transaction_unselect_cb(GtkCList *clist,
 				   GdkEventButton *event,
 				   gpointer user_data) {
   struct _transmatcherdialog * matcher = user_data;
-  DEBUG("row: %d%s%d",row,", column: ",column);
+  /* DEBUG("row: %d%s%d",row,", column: ",column); */
 
   if(  matcher->selected_trans_info == gtk_clist_get_row_data(clist, row) && column == DOWNLOADED_CLIST_ACTION)
     {
@@ -631,9 +631,9 @@ match_transaction_select_cb (GtkCList *clist,
 			     GdkEventButton *event,
 			     gpointer user_data) {
   struct _transmatcherdialog * matcher = user_data;
-  DEBUG("row: %d%s%d",row,", column: ",column);
-  matcher->selected_trans_info->selected_match_info=gtk_clist_get_row_data(clist,
-									   row);
+  /* DEBUG("row: %d%s%d",row,", column: ",column); */
+  matcher->selected_trans_info->selected_match_info =
+    gtk_clist_get_row_data(clist, row);
 }
 
 static void
@@ -643,7 +643,7 @@ match_transaction_unselect_cb(GtkCList *clist,
 			      GdkEventButton *event,
 			      gpointer user_data) {
   struct _transmatcherdialog * matcher = user_data;
-  DEBUG("row: %d%s%d",row,", column: ",column);
+  /* DEBUG("row: %d%s%d",row,", column: ",column); */
   matcher->selected_trans_info->selected_match_info=NULL;
 
   /*You can't replace or reconcile if no match is selected*/
@@ -660,87 +660,18 @@ on_matcher_apply_clicked (GtkButton *button,
 			  gpointer user_data)
 {
   struct _transmatcherdialog * matcher = user_data;
-  GNCImportTransInfo * transaction_info;
-  gint i;
-  gint row_number;
+  g_assert (matcher);
 
-  DEBUG("Begin");
-  transaction_info = (GNCImportTransInfo *) gtk_clist_get_row_data(matcher->downloaded_clist,
-									0);
-  for(i=1;transaction_info!=NULL;i++)
-    {
-      DEBUG("Iteration %d",i);
-      if(transaction_info->action!=GNCImport_SKIP)
-	{
-	  if(transaction_info->action==GNCImport_ADD)
-	    {
-	      xaccSplitSetReconcile(transaction_info->first_split,CREC);
-	      /*Set reconcile date to today*/
-	      xaccSplitSetDateReconciledSecs(transaction_info->first_split,time(NULL));
-	      xaccTransCommitEdit(transaction_info->trans);
-	    }
-	  else if(transaction_info->action==GNCImport_CLEAR)
-	    {
-	      if(transaction_info->selected_match_info->split==NULL)
-		{
-		  PERR("The split I am trying to reconcile is NULL, shouldn't happen!");
-		}
-	      else
-		{
-		  /* Reconcile the matching transaction */
-		  xaccTransBeginEdit(transaction_info->selected_match_info->trans);
-		  if (xaccSplitGetReconcile (transaction_info->selected_match_info->split) == NREC)
-		      xaccSplitSetReconcile(transaction_info->selected_match_info->split,CREC);
-		  /*Set reconcile date to today*/
-		  xaccSplitSetDateReconciledSecs(transaction_info->selected_match_info->split,time(NULL));
-		  /* Copy the online id to the reconciled transaction, so the match will be remembered */ 
-		  gnc_import_set_trans_online_id(transaction_info->selected_match_info->trans, gnc_import_get_trans_online_id(transaction_info->trans));
-
-		  xaccTransCommitEdit(transaction_info->selected_match_info->trans);
-		  
-		  /* Erase the downloaded transaction */
-		  xaccTransRollbackEdit(transaction_info->trans);
-		  xaccTransCommitEdit(transaction_info->trans);
-		}
-	    }
-	  else if(transaction_info->action==GNCImport_REPLACE)
-	    {
-	      if(transaction_info->selected_match_info->split==NULL)
-		{
-		  PERR("The split I am trying to replace is NULL, shouldn't happen!");
-		}
-	      else
-		{
-		  DEBUG("Deleting the previous transaction");
-		  /*Erase the matching transaction*/
-		  xaccTransBeginEdit(transaction_info->selected_match_info->trans);
-		  xaccTransDestroy(transaction_info->selected_match_info->trans);
-		  xaccTransCommitEdit(transaction_info->selected_match_info->trans);
-		  
-		  /*Replace it with the new one*/
-		  xaccSplitSetReconcile(transaction_info->first_split,CREC);
-		  /*Set reconcile date to today*/
-		  xaccSplitSetDateReconciledSecs(transaction_info->first_split,time(NULL));
-		  xaccTransCommitEdit(transaction_info->trans);
-		} 
-	    }
-	  row_number = gtk_clist_find_row_from_data(matcher->downloaded_clist,
-						    transaction_info);
-	  gtk_clist_remove(matcher->downloaded_clist,
-			   row_number);
-	  i--;
-	}
-      transaction_info = (GNCImportTransInfo *) gtk_clist_get_row_data(matcher->downloaded_clist,
-									    i);
-    }
+  gnc_import_process_trans_clist (matcher->downloaded_clist, NULL);
 }
+
 
 static void 
 on_matcher_cancel_clicked (GtkButton *button,
 			   gpointer user_data)
 {
   struct _transmatcherdialog * matcher = user_data;
-  DEBUG("Begin");
+  /* DEBUG("Begin"); */
   gtk_clist_clear(matcher->downloaded_clist);
   matcher->initialised=FALSE;
   gtk_widget_destroy(matcher->transaction_matcher);
@@ -754,7 +685,7 @@ static void
 on_matcher_ok_clicked (GtkButton *button,
 		       gpointer user_data)
 {
-  DEBUG("Begin");
+  /* DEBUG("Begin"); */
   on_matcher_apply_clicked (button,
 			    user_data);
   on_matcher_cancel_clicked (button,
@@ -762,25 +693,28 @@ on_matcher_ok_clicked (GtkButton *button,
 }
 
 /********************************************************************\
- * remove_downloaded_transaction() 
+ * downloaded_trans_row_destroy_cb()
 \********************************************************************/
 static void
 downloaded_trans_row_destroy_cb(gpointer data)
 {
   GNCImportTransInfo * transaction_info = data;
-  DEBUG("Begin");
+  /* DEBUG("Begin"); */
   gnc_import_TransInfo_delete (transaction_info);
 }
 
+
+
 /********************************************************************\
  * init_matcher_gui()
+ * -- GUI Initialization for the Transaction-Matcher
 \********************************************************************/
 static void
 init_matcher_gui(struct _transmatcherdialog * matcher)
 {
   GladeXML *xml;
   
-  DEBUG("Begin...");
+  /* DEBUG("Begin..."); */
   /* load the interface */
   xml = gnc_glade_xml_new ("generic-import.glade", "transaction_matcher");
   /* connect the signals in the interface */
@@ -852,6 +786,190 @@ init_matcher_gui(struct _transmatcherdialog * matcher)
     
 }/* end init_matcher_gui */
 
+
+
+
+
+
+/********************************************************************\
+ * init_match_picker_gui()
+ * -- GUI initialization for the Match_Picker Dialog
+\********************************************************************/
+static void
+init_match_picker_gui(struct _transmatcherdialog * matcher)
+{
+  GladeXML *xml;
+  
+  /* DEBUG("Begin..."); */
+  /* load the interface */
+  g_assert
+    (xml = gnc_glade_xml_new ("generic-import.glade", "match_picker"));
+  /* connect the signals in the interface */
+  glade_xml_signal_connect_data(xml,
+				"match_transaction_select_cb", 
+				GTK_SIGNAL_FUNC(match_transaction_select_cb),
+				matcher);
+  glade_xml_signal_connect_data(xml,
+				"match_transaction_unselect_cb", 
+				GTK_SIGNAL_FUNC(match_transaction_unselect_cb),
+				matcher);
+
+  matcher->transaction_matcher = glade_xml_get_widget (xml, "match_picker");
+  matcher->downloaded_clist = (GtkCList *)glade_xml_get_widget (xml, "downloaded_clist");
+  matcher->match_clist =  (GtkCList *)glade_xml_get_widget (xml, "matched_clist");
+
+  matcher->action_add_text = g_strdup(_("ADD"));
+  matcher->action_clear_text =  g_strdup(_("CLEAR"));       
+  matcher->action_replace_text =  g_strdup(_("REPLACE"));       
+  matcher->action_skip_text =  g_strdup(_("SKIP"));
+  matcher->action_skip_enabled = 
+    gnc_lookup_boolean_option("Transaction Matcher",
+			      "Enable SKIP transaction action",
+			      DEFAULT_ACTION_SKIP_ENABLED);
+  matcher->action_replace_enabled =
+    gnc_lookup_boolean_option("Transaction Matcher",
+			      "Enable REPLACE match action",
+			      DEFAULT_ACTION_REPLACE_ENABLED);
+  matcher->action_add_enabled=DEFAULT_ACTION_ADD_ENABLED;
+  matcher->action_clear_enabled=DEFAULT_ACTION_CLEAR_ENABLED;
+  matcher->clear_threshold=gnc_lookup_number_option("Transaction Matcher",
+						    "Auto-CLEAR threshold",
+						    DEFAULT_CLEAR_THRESHOLD);
+  matcher->add_threshold=gnc_lookup_number_option("Transaction Matcher",
+						  "Auto-ADD threshold",
+						  DEFAULT_ADD_THRESHOLD);
+  matcher->display_threshold =
+    gnc_lookup_number_option("Transaction Matcher","Match display threshold",
+			     DEFAULT_DISPLAY_THRESHOLD);
+  /* DEBUG("User prefs:%s%d%s%d%s%d%s%d%s%d",
+     " action_replace_enabled:",matcher->action_replace_enabled,
+     ", action_skip_enabled:",matcher->action_skip_enabled,
+     ", clear_threshold:",matcher->clear_threshold,
+     ", add_threshold:",matcher->add_threshold,
+     ", display_threshold:",matcher->display_threshold); */
+
+  gtk_widget_show(matcher->transaction_matcher);  
+  matcher->initialised=TRUE;  
+    
+}/* end init_match_picker_gui */
+
+/** 
+ * Run a match_picker dialog so that the selected-MatchInfo in the
+ * given trans_info is updated accordingly. This functions will only
+ * return after the user clicked Ok, Cancel, or Window-Close.
+ */
+void 
+gnc_import_match_picker_run_and_close (GNCImportTransInfo *transaction_info)
+{
+  struct _transmatcherdialog *matcher;
+  gint row_number, result;
+  GNCImportMatchInfo *old;
+  g_assert (transaction_info);
+
+  /* Create a new match_picker, even though it's stored in a
+     transmatcher struct :-) */
+  matcher = g_new0(struct _transmatcherdialog, 1);
+  /* DEBUG("Init match_picker"); */
+  init_match_picker_gui(matcher);
+
+  /* Append this single transaction to the downloaded_clist */
+  row_number = gtk_clist_append(matcher->downloaded_clist,
+				(char **)(transaction_info->clist_text));
+  gtk_clist_set_row_data(matcher->downloaded_clist,
+			 row_number,
+			 transaction_info);
+  downloaded_transaction_refresh_gui(matcher,
+				     transaction_info);
+
+  /* Now fake a selection of that transaction. */
+  downloaded_transaction_select_cb (matcher->downloaded_clist,
+				    row_number,
+				    2,
+				    NULL,
+				    matcher);
+  gtk_widget_set_sensitive (GTK_WIDGET (matcher->downloaded_clist), FALSE);
+  
+  old = transaction_info->selected_match_info;
+
+  /* Let this dialog run and close. */
+  result = 
+    gnome_dialog_run_and_close (GNOME_DIALOG (matcher->transaction_matcher));
+
+  /* DEBUG("Result was %d.", result); */
+  if (result != 0)
+    /* Cancel was pressed, or the window was closed. Revert change. */
+    transaction_info->selected_match_info = old;
+}
+
+
+
+/*************************************************************************
+ * MatchMap- related functions (storing and retrieving)
+ */
+static Account *
+matchmap_find_destination (GncImportMatchMap *matchmap, 
+				    GNCImportTransInfo *info)
+{
+  GncImportMatchMap *tmp_map;
+  Account *result;
+  g_assert (info);
+  
+  tmp_map = ((matchmap != NULL) ? matchmap : 
+	     gnc_imap_create_from_account 
+	     (xaccSplitGetAccount(info->first_split)));
+
+  result = gnc_imap_find_account (tmp_map, GNCIMPORT_DESC, 
+				  xaccTransGetDescription (info->trans));
+  if (result == NULL)
+    result = gnc_imap_find_account (tmp_map, GNCIMPORT_MEMO, 
+				    xaccSplitGetMemo (info->first_split));
+  
+  if (matchmap == NULL)
+    gnc_imap_destroy (tmp_map);
+
+  return result;
+}
+
+/* Store the destination account from trans_info in the matchmap. If
+   'use_match' is true, the destination account of the selected
+   matching/duplicate transaction is used; otherwise, the stored
+   destination_acc pointer is used. */
+static void 
+matchmap_store_destination (GncImportMatchMap *matchmap, 
+			    GNCImportTransInfo *trans_info,
+			    gboolean use_match)
+{
+  GncImportMatchMap *tmp_matchmap = NULL;
+  Account *dest;
+  g_assert (trans_info);
+
+  dest = ((use_match) ?
+	  xaccSplitGetAccount
+	  (xaccSplitGetOtherSplit (trans_info->selected_match_info->split)) :
+	  trans_info->dest_acc);
+  if (dest == NULL)
+    return;
+  
+  tmp_matchmap = ((matchmap != NULL) ? 
+		  matchmap : 
+		  gnc_imap_create_from_account 
+		  (xaccSplitGetAccount(trans_info->first_split)));
+
+  gnc_imap_add_account (tmp_matchmap, 
+			GNCIMPORT_DESC, 
+			xaccTransGetDescription (trans_info->trans), 
+			dest);
+  gnc_imap_add_account (tmp_matchmap, 
+			GNCIMPORT_MEMO, 
+			xaccSplitGetMemo (trans_info->first_split),
+			dest);
+
+  if (matchmap == NULL)
+    gnc_imap_destroy (tmp_matchmap);
+}
+
+
+
 /********************************************************************\
  * split_find_match() 
  * The main function for transaction matching.  The heuristics are
@@ -859,9 +977,10 @@ init_matcher_gui(struct _transmatcherdialog * matcher)
 \********************************************************************/
 static void split_find_match (GNCImportTransInfo * transaction_info,
 			      Split * split, 
-			      gint display_threshold)
+			      gint display_threshold,
+			      double fuzzy_amount_difference)
 {
-  DEBUG("Begin");
+  /* DEBUG("Begin"); */
   
   /*Ignore the split if the transaction is open for edit, meaning it
     was just downloaded.  Ignore the split if the transaction has an
@@ -893,8 +1012,8 @@ static void split_find_match (GNCImportTransInfo * transaction_info,
 	  prob = prob+3;
 	  DEBUG("heuristics:  probability + 3 (amount)");
 	}
-      else if (fabs (downloaded_split_amount-match_split_amount) <= 
-	       MATCH_ATM_FEE_THRESHOLD)
+      else if (fabs (downloaded_split_amount - match_split_amount) <= 
+	       fuzzy_amount_difference)
 	{
 	  /* ATM fees are sometimes added directly in the transaction.
 	     So you withdraw 100$ and get charged 101,25$ in the same
@@ -908,7 +1027,7 @@ static void split_find_match (GNCImportTransInfo * transaction_info,
 	     threshold, it's very unlikely to be the same transaction
 	     so we give it an extra -1 penality */
 	  prob = prob-1;
-	  DEBUG("heuristics:  probability - 1 (amount)");
+	  /* DEBUG("heuristics:  probability - 1 (amount)"); */
 	}
       
       /* Date heuristics */
@@ -936,7 +1055,7 @@ static void split_find_match (GNCImportTransInfo * transaction_info,
 	  /* Extra penalty if that split lies awfully far away
 	     from the given one. */
 	  prob = prob-1;
-	  DEBUG("heuristics:  probability - 1 (date)");
+	  /* DEBUG("heuristics:  probability - 1 (date)"); */
 	}
       
     
@@ -1045,7 +1164,8 @@ static void split_find_match (GNCImportTransInfo * transaction_info,
 /* Iterate through all splits of the originating account of the given
    transaction, and find all matching splits there. */
 void gnc_import_find_split_matches(GNCImportTransInfo *transaction_info,
-				   gint process_threshold)
+				   gint process_threshold, 
+				   double fuzzy_amount_difference)
 {
   GList * list_element;
   g_assert (transaction_info);
@@ -1062,18 +1182,166 @@ void gnc_import_find_split_matches(GNCImportTransInfo *transaction_info,
   while(list_element!=NULL)
     {
       split_find_match (transaction_info, list_element->data, 
-			process_threshold);
+			process_threshold, fuzzy_amount_difference);
       list_element = g_list_next (list_element);
     }
 }
 
+/***********************************************************************
+ */
+
+
+/* gnc_import_process_trans_clist -- Processes every selected match
+   according to its selected action. Then, each entry is removed from
+   the clist. */
+void
+gnc_import_process_trans_clist (GtkCList *clist, 
+				GncImportMatchMap *matchmap)
+{
+  GNCImportTransInfo * transaction_info;
+  gint row_number = 0, i = 0;
+  g_assert (clist);
+  
+  /* DEBUG("Begin"); */
+  gtk_clist_freeze (clist);
+  transaction_info = 
+    (GNCImportTransInfo *) gtk_clist_get_row_data(clist, 0);
+  
+  for(i = 1; transaction_info != NULL; i++)
+    {
+      g_assert (transaction_info);
+      /*DEBUG("Iteration %d, action %d, split %s", i, 
+	transaction_info->action,
+	xaccTransGetDescription (gnc_import_TransInfo_get_trans 
+	(transaction_info)))*/
+      switch (transaction_info->action) 
+	{
+	case GNCImport_SKIP:
+	  break;
+	case GNCImport_ADD:
+	  /* Transaction gets imported. */
+
+	  /* Is there a non-NULL destination account? */
+	  if (transaction_info->dest_acc != NULL) {
+	    /* Create the 'other' split. */
+	    Split *split = 
+	      xaccMallocSplit(xaccAccountGetBook(transaction_info->dest_acc));
+	    xaccTransAppendSplit(transaction_info->trans, split);
+	    xaccAccountInsertSplit(transaction_info->dest_acc, split);
+	    xaccSplitSetValue
+	      (split, gnc_numeric_neg(xaccSplitGetValue 
+				      (transaction_info->first_split)));
+	    xaccSplitSetMemo (split, _("Imported Transaction"));
+
+	    /* Store the mapping to the other account in the MatchMap. */
+	    matchmap_store_destination (matchmap, transaction_info, FALSE);
+	  }
+	  
+	  xaccSplitSetReconcile(transaction_info->first_split, CREC);
+	  /*Set reconcile date to today*/
+	  xaccSplitSetDateReconciledSecs(transaction_info->first_split,
+					 time(NULL));
+	  /* Done editing. */
+	  xaccTransCommitEdit(transaction_info->trans);
+	  break;
+	case GNCImport_CLEAR:
+	  /* Transaction gets not imported but the matching one gets 
+	     reconciled. */
+	  if(transaction_info->selected_match_info->split==NULL)
+	    {
+	      PERR("The split I am trying to reconcile is NULL, shouldn't happen!")
+	    }
+	  else
+	    {
+	      /* Reconcile the matching transaction */
+	      /*DEBUG("BeginEdit selected_match")*/
+	      xaccTransBeginEdit(transaction_info->selected_match_info->trans);
+
+	      if (xaccSplitGetReconcile 
+		  (transaction_info->selected_match_info->split) == NREC)
+		xaccSplitSetReconcile
+		  (transaction_info->selected_match_info->split, CREC);
+	      /* Set reconcile date to today */
+	      xaccSplitSetDateReconciledSecs
+		(transaction_info->selected_match_info->split,time(NULL));
+
+	      /* Copy the online id to the reconciled transaction, so
+		 the match will be remembered */ 
+	      if (gnc_import_get_trans_online_id(transaction_info->trans)
+		  != NULL)
+		gnc_import_set_trans_online_id
+		  (transaction_info->selected_match_info->trans, 
+		   gnc_import_get_trans_online_id(transaction_info->trans));
+	      
+	      /* Done editing. */
+	      /*DEBUG("CommitEdit selected_match")*/
+	      xaccTransCommitEdit
+		(transaction_info->selected_match_info->trans);
+	      
+	      /* Store the mapping to the other account in the MatchMap. */
+	      matchmap_store_destination (matchmap, transaction_info, TRUE);
+
+	      /* Erase the downloaded transaction */
+	      xaccTransDestroy(transaction_info->trans);
+	      /* FIXME: Why did we use xaccTransRollbackEdit instead
+		 of xaccTransDestroy here? It doesn't make sense since
+		 we want to *erase* it here. */
+	      DEBUG("CommitEdit trans")
+	      xaccTransCommitEdit(transaction_info->trans);
+	    }
+	  break;
+	case GNCImport_REPLACE:
+	  /* Imported transaction replaces the selected matching one. */
+	  if(transaction_info->selected_match_info->split==NULL)
+	    PERR("The split I am trying to replace is NULL, shouldn't happen!")
+	  else
+	    {
+	      /* Store the mapping to the other account in the MatchMap. */
+	      matchmap_store_destination (matchmap, transaction_info, TRUE);
+
+	      /* DEBUG("Deleting the previous transaction"); */
+	      /*Erase the matching transaction*/
+	      xaccTransBeginEdit(transaction_info->selected_match_info->trans);
+	      xaccTransDestroy(transaction_info->selected_match_info->trans);
+	      xaccTransCommitEdit(transaction_info->selected_match_info->trans);
+	      
+	      /*Replace it with the new one*/
+	      xaccSplitSetReconcile(transaction_info->first_split,CREC);
+	      /*Set reconcile date to today*/
+	      xaccSplitSetDateReconciledSecs(transaction_info->first_split,
+					     time(NULL));
+	      xaccTransCommitEdit(transaction_info->trans);
+	    } 
+	  break;
+	default:
+	  DEBUG("Invalid GNCImportAction for this imported transaction.");
+	}
+
+      /* For all actions except SKIP delete this transaction now. */
+      if(transaction_info->action != GNCImport_SKIP) {
+	row_number = gtk_clist_find_row_from_data(clist, transaction_info);
+	gtk_clist_remove (clist, row_number);
+	/* decrement the iteration counter since we've just removed
+	   one row. */
+	i--;
+      }
+
+      /* Get next transaction_info, NULL if finished */
+      transaction_info =
+	(GNCImportTransInfo *) gtk_clist_get_row_data(clist, i);
+    }
+  
+  /*DEBUG("End");*/
+  gtk_clist_thaw (clist);
+  /*DEBUG("Thawed.")*/
+}
 
 /********************************************************************\
- * check_trans_online_id() Callback function to be used by 
- * xaccAccountForEachTransaction.  Takes pointers to two transaction
- * and returns TRUE if their online_id kvp_frame do NOT match, or
- * if both pointers point to the same transaction.
-\********************************************************************/
+ * check_trans_online_id() Callback function to be used by
+ * gnc_import_exists_online_id.  Takes pointers to two transaction and
+ * returns TRUE if their online_id kvp_frame do NOT match, or if both
+ * pointers point to the same transaction.
+ * \********************************************************************/
 static gboolean check_trans_online_id(Transaction *trans1, void *user_data)
 {
   Transaction *trans2 = user_data;
@@ -1108,7 +1376,7 @@ gboolean gnc_import_exists_online_id (Transaction *trans)
 	 (online_id_exists == FALSE);
        i++)
     {
-      DEBUG("%s%d%s","Checking split ",i," for duplicates");
+      /* DEBUG("%s%d%s","Checking split ",i," for duplicates"); */
       dest_acct = xaccSplitGetAccount(source_split);
       online_id_exists = !xaccAccountForEachTransaction(dest_acct,
 							check_trans_online_id,
@@ -1127,6 +1395,27 @@ gboolean gnc_import_exists_online_id (Transaction *trans)
 }
 
 
+/* ******************************************************************
+ */
+
+/* Create a new object of GNCImportTransInfo here. */
+GNCImportTransInfo *
+gnc_import_TransInfo_new (Transaction *trans, GncImportMatchMap *matchmap)
+{
+  GNCImportTransInfo *transaction_info;
+  g_assert (trans);
+  
+  transaction_info = g_new0(GNCImportTransInfo,1);
+      
+  transaction_info->trans=trans;
+  /* Only use first split, the source split */
+  transaction_info->first_split=xaccTransGetSplit(trans,0);
+
+  transaction_info->dest_acc = 
+    matchmap_find_destination (matchmap, transaction_info);
+  
+  return transaction_info;
+}
 
 
 /* compare_probability() is used by g_list_sort to sort by probability */
@@ -1137,34 +1426,23 @@ static gint compare_probability (gconstpointer a,
 	 ((GNCImportMatchInfo *)a)->probability);
 }
 
-
-GNCImportTransInfo *
-gnc_import_TransInfo_new (Transaction *trans)
-{
-  GNCImportTransInfo * transaction_info;
-  g_assert (trans);
-  
-  transaction_info = g_new0(GNCImportTransInfo,1);
-      
-  transaction_info->trans=trans;
-  /* Only use first split, the source split */
-  transaction_info->first_split=xaccTransGetSplit(trans,0);
-
-  return transaction_info;
-}
-
-
+/** Iterates through all splits of the originating account of
+ * trans_info. Sorts the resulting list and sets the selected_match
+ * and action fields in the trans_info. 
+ */
 void 
 gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
 				   gint clear_threshold, 
 				   gint add_threshold,
-				   gint process_threshold)
+				   gint process_threshold, 
+				   double fuzzy_amount_difference)
 {
   GNCImportMatchInfo * best_match;
   g_assert (trans_info);
   
   /* Find all split matches in originating account. */
-  gnc_import_find_split_matches(trans_info, process_threshold);
+  gnc_import_find_split_matches(trans_info, process_threshold,
+				fuzzy_amount_difference);
 
   if (trans_info->match_list != NULL) 
     {
@@ -1226,12 +1504,13 @@ void gnc_import_add_trans(Transaction *trans)
 	  DEBUG("Matcher reinitialised");
 	}
       
-      transaction_info = gnc_import_TransInfo_new(trans);
+      transaction_info = gnc_import_TransInfo_new(trans, NULL);
       
       gnc_import_TransInfo_init_matches (transaction_info, 
 					 matcher->clear_threshold, 
 					 matcher->add_threshold,
-					 matcher->display_threshold);
+					 matcher->display_threshold,
+					 MATCH_ATM_FEE_THRESHOLD);
 
 
       row_number = gtk_clist_append(matcher->downloaded_clist,

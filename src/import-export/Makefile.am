@@ -8,6 +8,7 @@ libgncmod_generic_import_la_SOURCES = \
 	Transaction-matcher.c \
 	Utilities.c \
 	gnc-import-match-map.c \
+	gnc-gen-transaction.c \
 	gncmod-generic-import.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
@@ -15,6 +16,8 @@ gncinclude_HEADERS = \
   gnc-import-match-map.h
 
 noinst_HEADERS = \
+  gnc-gen-transaction.h \
+  Transaction-matcher.h \
   gnc-generic-import.h
 
 libgncmod_generic_import_la_LDFLAGS = -module
@@ -50,7 +53,8 @@ AM_CFLAGS = \
   ${GDK_PIXBUF_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
-  ${GLIB_CFLAGS} 
+  ${GLIB_CFLAGS} \
+  -Werror
 
 EXTRA_DIST = $(glade_DATA) \
   .cvsignore

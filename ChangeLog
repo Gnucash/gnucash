@@ -1,3 +1,25 @@
+2002-11-23  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-gettrans.c: Use the new generic
+	transaction importer.
+
+	* src/import-export/gnc-gen-transaction.[hc],
+	generic-importer.glade: Added a new generic transaction importer,
+	with GUI as proposed on gnucash-devel (one-page, one-listview).
+
+	* src/import-export/Transaction-matcher.[hc]: Refactor the code
+	even more and separate GUI-dependent from -independent tasks.
+	(gnc_import_match_picker_run_and_close): Add a new "Match-Picker
+	Dialog" for the non-usual case of where the user should pick
+	between different possible duplicate matches.
+	(matchmap_find_destination): Add automatic destination guessing
+	and learning, based on the GncImportMatchMap.
+	
+	* po/POTFILES.in, de.po: Updated translations.
+
+	* src/engine/Account.h, src/import-export/gnc-import-match-map.h:
+	Clarify some comments.
+
 2002-11-23  David Hampton  <hampton@employees.org>
 
 	* src/import-export/qif-import/qif-merge-groups.scm: Add a new
