@@ -36,47 +36,51 @@ libgncmod_engine_la_SOURCES = \
 
 # NetIO.c
 
-noinst_HEADERS = \
+gncincludedir = ${GNC_INCLUDE_DIR}
+gncinclude_HEADERS = \
   Account.h \
-  AccountP.h \
   Backend.h \
-  BackendP.h \
   DateUtils.h \
   FreqSpec.h \
-  FreqSpecP.h \
   GNCId.h \
-  GNCIdP.h \
   Group.h \
-  GroupP.h \
   SchedXaction.h \
   SX-ttinfo.h \
   Query.h \
   Scrub.h \
   TransLog.h \
   Transaction.h \
-  TransactionP.h \
   date.h \
   engine-helpers.h \
   glib-helpers.h \
   gnc-associate-account.h \
-  gnc-book-p.h \
   gnc-book.h \
   gnc-commodity.h \
   gnc-common.h \
   gnc-engine-util.h \
   gnc-engine.h \
-  gnc-event-p.h \
   gnc-event.h \
   gnc-numeric.h \
-  gnc-pricedb-p.h \
   gnc-pricedb.h \
   guid.h \
   kvp_frame.h \
-  kvp-scm.h \
-  md5.h \
   messages.h
 
 #  NetIO.h 
+
+noinst_HEADERS = \
+  AccountP.h \
+  BackendP.h \
+  FreqSpecP.h \
+  GNCIdP.h \
+  GroupP.h \
+  SX-ttinfo.h \
+  TransactionP.h \
+  gnc-book-p.h \
+  gnc-event-p.h \
+  gnc-pricedb-p.h \
+  kvp-scm.h \
+  md5.h
 
 libgncmod_engine_la_LDFLAGS = -module
 libgncmod_engine_la_LIBADD = ${GUILE_LIBS} ${GLIB_LIBS}

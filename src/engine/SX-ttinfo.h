@@ -37,9 +37,10 @@
 /* kvp_frame policy? */
 typedef struct 
 {
+  /* FIXME add notes field */
   char *description; /* owned by us */
   char *num;         /* owned  by us */
-  gnc_commodity *common_currency; /* not freed? */
+  gnc_commodity *common_currency; /* not freed */
   
   GList *splits; /* list of template splits, owned by us */
 } TTInfo;
@@ -87,12 +88,16 @@ const char * gnc_ttsplitinfo_get_action(TTSplitInfo *split_i);
 void gnc_ttsplitinfo_set_memo(TTSplitInfo *split_i, const char *memo);
 const char *gnc_ttsplitinfo_get_memo(TTSplitInfo *split_i);
 
-void gnc_ttsplitinfo_set_credit_formula(TTSplitInfo *split_i, const char *credit_formula);
-void gnc_ttsplitinfo_set_credit_formula_numeric(TTSplitInfo *split_i, gnc_numeric credit_formula);
+void gnc_ttsplitinfo_set_credit_formula(TTSplitInfo *split_i,
+                                        const char *credit_formula);
+void gnc_ttsplitinfo_set_credit_formula_numeric(TTSplitInfo *split_i,
+                                                gnc_numeric credit_formula);
 const char *gnc_ttsplitinfo_get_credit_formula(TTSplitInfo *split_i);
 
-void gnc_ttsplitinfo_set_debit_formula(TTSplitInfo *split_i, const char *debit_formula);
-void gnc_ttsplitinfo_set_debit_formula_numeric(TTSplitInfo *split_i, gnc_numeric debit_formula);
+void gnc_ttsplitinfo_set_debit_formula(TTSplitInfo *split_i,
+                                       const char *debit_formula);
+void gnc_ttsplitinfo_set_debit_formula_numeric(TTSplitInfo *split_i,
+                                               gnc_numeric debit_formula);
 const char *gnc_ttsplitinfo_get_debit_formula(TTSplitInfo *split_i);
 
 void gnc_ttsplitinfo_set_account(TTSplitInfo *split_i, Account *acc);

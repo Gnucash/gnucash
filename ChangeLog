@@ -1,3 +1,9 @@
+2001-09-06  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/Makefile.am: install public headers
+
+	* src/engine/SX-ttinfo.h: add fixme, reformat to 80 columns
+
 2001-09-05  Dave Peticolas  <dave@krondo.com>
 
 	* src/Makefile.am: identify new scripts as built sources
