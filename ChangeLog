@@ -1,3 +1,9 @@
+2002-10-22  Christian Stimming  <stimming@tuhh.de>
+
+	* po/glossary/gnc-glossary.txt, po/glossary/*: Update glossary
+	(added Scheduled Transactions). Merge glossaries from 1.6 branch
+	onto HEAD.
+
 2002-10-21  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_update_cal): Check
