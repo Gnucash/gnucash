@@ -29,7 +29,7 @@ require Exporter;
 use strict;
 use vars qw($VERSION @EXPORT @ISA $YAHOO_URL $FIDELITY_GANDI_URL
             $FIDELITY_GROWTH_URL $FIDELITY_CORPBOND_URL $FIDELITY_GLBND_URL
-            $FIDELITY_MM_URL);
+            $FIDELITY_MM_URL $FIDELITY_ASSET_URL);
 
 use LWP::UserAgent;
 use HTTP::Request::Common;
@@ -119,46 +119,47 @@ sub fidelity {
     for (@mm) { $amm{$_} ++; }
     for (@asset) { $aasset{$_} ++; }
    
-    # for Fidelity, we get them all. 
+    # the fidelity pages are comma-separated-values (csv's)
+    # there are two basic layouts, with, and without prices
     for (@symbols) {
        if ($agandi {$_} ) {
           if (0 == $dgandi ) {
-             %cc = &fidelity_gandi;
+             %cc = &fidelity_nav ($FIDELITY_GANDI_URL);
              $dgandi = 1;
              foreach $k (keys %cc) { $aa{$k} = $cc{$k}; }
           }
        }
        if ($agrowth {$_} ) {
           if (0 ==  $dgrowth ) {
-             %cc = &fidelity_growth;
+             %cc = &fidelity_nav ($FIDELITY_GROWTH_URL);
              $dgrowth = 1;
              foreach $k (keys %cc) { $aa{$k} = $cc{$k}; }
           }
        }
        if ($acorpbond {$_} ) {
           if (0 ==  $dcorpbond ) {
-             %cc = &fidelity_corpbond;
+             %cc = &fidelity_nav ($FIDELITY_CORPBOND_URL);
              $dcorpbond = 1;
              foreach $k (keys %cc) { $aa{$k} = $cc{$k}; }
           }
        }
        if ($aglbnd {$_} ) {
           if (0 ==  $dglbnd ) {
-             %cc = &fidelity_glbnd;
+             %cc = &fidelity_nav ($FIDELITY_GLBND_URL);
              $dglbnd = 1;
              foreach $k (keys %cc) { $aa{$k} = $cc{$k}; }
           }
        }
        if ($amm {$_} ) {
           if (0 ==  $dmm ) {
-             %cc = &fidelity_mm;
+             %cc = &fidelity_mm ($FIDELITY_MM_URL);
              $dmm = 1;
              foreach $k (keys %cc) { $aa{$k} = $cc{$k}; }
           }
        }
        if ($aasset {$_} ) {
           if (0 ==  $dasset ) {
-             %cc = &fidelity_asset;
+             %cc = &fidelity_nav ($FIDELITY_ASSET_URL);
              $dasset = 1;
              foreach $k (keys %cc) { $aa{$k} = $cc{$k}; }
           }
@@ -169,14 +170,13 @@ sub fidelity {
 
 # =======================================================================
 
-sub fidelity_gandi {
-    my @symbols = @_;
+sub fidelity_nav {
     my(@q,%aa,$ua,$url,$sym, $dayte);
     my %days = ('Monday','Mon','Tuesday','Tue','Wednesday','Wed',
                 'Thursday','Thu','Friday','Fri','Saturday','Sat','Sunday','Sun');
 
     # for Fidelity, we get them all. 
-    $url = $FIDELITY_GANDI_URL;
+    $url = $_[0];
     $ua = LWP::UserAgent->new;
     foreach (split('\n',$ua->request(GET $url)->content)) {
 	@q = grep { s/^"?(.*?)\s*"?\s*$/$1/; } split(',');
@@ -184,119 +184,17 @@ sub fidelity_gandi {
         # extract the date which is usually on the second line fo the file.
         if (! defined ($dayte)) {
            if ( $days {$q[0]} ) {          
-              $dayte = $q[1];
+              ($dayte = $q[1]) =~ s/^ +//;
            }
         }
-        $sym = $q[2];
+        ($sym = $q[2]) =~ s/^ +//;
         if ($sym) {
             $aa {$sym, "exchange"} = "Fidelity";  # Fidelity
-            $aa {$sym, "name"} = $q[0];
+            ($aa {$sym, "name"} = $q[0]) =~ s/^ +//;
             $aa {$sym, "number"} = $q[1];
             $aa {$sym, "nav"} = $q[3];
             $aa {$sym, "change"} = $q[4];
             $aa {$sym, "ask"} = $q[7];
-            $aa {$sym, "date"} = $dayte;
-        }
-    }
-    return %aa;
-}
-
-# =======================================================================
-
-sub fidelity_growth {
-    my @symbols = @_;
-    my(@q,%aa,$ua,$url,$sym, $dayte);
-    my %days = ('Monday','Mon','Tuesday','Tue','Wednesday','Wed',
-                'Thursday','Thu','Friday','Fri','Saturday','Sat','Sunday','Sun');
-
-    # for Fidelity, we get them all. 
-    $url = $FIDELITY_GROWTH_URL;
-    $ua = LWP::UserAgent->new;
-    foreach (split('\n',$ua->request(GET $url)->content)) {
-	@q = grep { s/^"?(.*?)\s*"?\s*$/$1/; } split(',');
-
-        # extract the date which is usually on the second line fo the file.
-        if (! defined ($dayte)) {
-           if ( $days {$q[0]} ) {          
-              $dayte = $q[1];
-           }
-        }
-        $sym = $q[2];
-        if ($sym) {
-            $aa {$sym, "exchange"} = "Fidelity";  # Fidelity
-            $aa {$sym, "name"} = $q[0];
-            $aa {$sym, "number"} = $q[1];
-            $aa {$sym, "nav"} = $q[3];
-            $aa {$sym, "change"} = $q[4];
-            $aa {$sym, "ask"} = $q[7];
-            $aa {$sym, "date"} = $dayte;
-        }
-    }
-    return %aa;
-}
-
-# =======================================================================
-
-sub fidelity_corpbond {
-    my @symbols = @_;
-    my(@q,%aa,$ua,$url,$sym, $dayte);
-    my %days = ('Monday','Mon','Tuesday','Tue','Wednesday','Wed',
-                'Thursday','Thu','Friday','Fri','Saturday','Sat','Sunday','Sun');
-
-    # for Fidelity, we get them all. 
-    $url = $FIDELITY_CORPBOND_URL;
-    $ua = LWP::UserAgent->new;
-    foreach (split('\n',$ua->request(GET $url)->content)) {
-	@q = grep { s/^"?(.*?)\s*"?\s*$/$1/; } split(',');
-
-        # extract the date which is usually on the second line fo the file.
-        if (! defined ($dayte)) {
-           if ( $days {$q[0]} ) {          
-              $dayte = $q[1];
-           }
-        }
-        $sym = $q[2];
-        if ($sym) {
-            $aa {$sym, "exchange"} = "Fidelity";  # Fidelity
-            $aa {$sym, "name"} = $q[0];
-            $aa {$sym, "number"} = $q[1];
-            $aa {$sym, "nav"} = $q[3];
-            $aa {$sym, "change"} = $q[4];
-            $aa {$sym, "yield"} = $q[7];
-            $aa {$sym, "date"} = $dayte;
-        }
-    }
-    return %aa;
-}
-
-# =======================================================================
-
-sub fidelity_glbnd {
-    my @symbols = @_;
-    my(@q,%aa,$ua,$url,$sym, $dayte);
-    my %days = ('Monday','Mon','Tuesday','Tue','Wednesday','Wed',
-                'Thursday','Thu','Friday','Fri','Saturday','Sat','Sunday','Sun');
-
-    # for Fidelity, we get them all. 
-    $url = $FIDELITY_GLBND_URL;
-    $ua = LWP::UserAgent->new;
-    foreach (split('\n',$ua->request(GET $url)->content)) {
-	@q = grep { s/^"?(.*?)\s*"?\s*$/$1/; } split(',');
-
-        # extract the date which is usually on the second line fo the file.
-        if (! defined ($dayte)) {
-           if ( $days {$q[0]} ) {          
-              $dayte = $q[1];
-           }
-        }
-        $sym = $q[2];
-        if ($sym) {
-            $aa {$sym, "exchange"} = "Fidelity";  # Fidelity
-            $aa {$sym, "name"} = $q[0];
-            $aa {$sym, "number"} = $q[1];
-            $aa {$sym, "nav"} = $q[3];
-            $aa {$sym, "change"} = $q[4];
-            $aa {$sym, "yield"} = $q[7];
             $aa {$sym, "date"} = $dayte;
         }
     }
@@ -306,13 +204,12 @@ sub fidelity_glbnd {
 # =======================================================================
 
 sub fidelity_mm {
-    my @symbols = @_;
     my(@q,%aa,$ua,$url,$sym, $dayte);
     my %days = ('Monday','Mon','Tuesday','Tue','Wednesday','Wed',
                 'Thursday','Thu','Friday','Fri','Saturday','Sat','Sunday','Sun');
 
     # for Fidelity, we get them all. 
-    $url = $FIDELITY_MM_URL;
+    $url = $_[0];
     $ua = LWP::UserAgent->new;
     foreach (split('\n',$ua->request(GET $url)->content)) {
 	@q = grep { s/^"?(.*?)\s*"?\s*$/$1/; } split(',');
@@ -320,49 +217,15 @@ sub fidelity_mm {
         # extract the date which is usually on the second line fo the file.
         if (! defined ($dayte)) {
            if ( $days {$q[0]} ) {          
-              $dayte = $q[1];
+              ($dayte = $q[1]) =~ s/^ +//;
            }
         }
-        $sym = $q[2];
+        ($sym = $q[2]) =~ s/^ +//;
         if ($sym) {
             $aa {$sym, "exchange"} = "Fidelity";  # Fidelity
-            $aa {$sym, "name"} = $q[0];
+            ($aa {$sym, "name"} = $q[0]) =~ s/^ +//;
             $aa {$sym, "number"} = $q[1];
             $aa {$sym, "yield"} = $q[3];
-            $aa {$sym, "date"} = $dayte;
-        }
-    }
-    return %aa;
-}
-
-# =======================================================================
-
-sub fidelity_asset {
-    my @symbols = @_;
-    my(@q,%aa,$ua,$url,$sym, $dayte);
-    my %days = ('Monday','Mon','Tuesday','Tue','Wednesday','Wed',
-                'Thursday','Thu','Friday','Fri','Saturday','Sat','Sunday','Sun');
-
-    # for Fidelity, we get them all. 
-    $url = $FIDELITY_ASSET_URL;
-    $ua = LWP::UserAgent->new;
-    foreach (split('\n',$ua->request(GET $url)->content)) {
-	@q = grep { s/^"?(.*?)\s*"?\s*$/$1/; } split(',');
-
-        # extract the date which is usually on the second line fo the file.
-        if (! defined ($dayte)) {
-           if ( $days {$q[0]} ) {          
-              $dayte = $q[1];
-           }
-        }
-        $sym = $q[2];
-        if ($sym) {
-            $aa {$sym, "exchange"} = "Fidelity";  # Fidelity
-            $aa {$sym, "name"} = $q[0];
-            $aa {$sym, "number"} = $q[1];
-            $aa {$sym, "nav"} = $q[3];
-            $aa {$sym, "change"} = $q[4];
-            $aa {$sym, "yield"} = $q[7];
             $aa {$sym, "date"} = $dayte;
         }
     }
