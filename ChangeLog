@@ -1,3 +1,10 @@
+2003-02-05  Derek Atkins  <derek@ihtfp.com>
+
+	Pull up from HEAD:
+	* src/engine/gnc-lot-p.h: some strange platforms assume "char" is
+	  0..255 instead of -128..127.  Force a "signed char" to make sure
+	  we get the latter interpretation.
+
 2003-02-04  Christian Stimming  <stimming@tuhh.de>
 
 	* po/it.po: Updated Italian translation by Lorenzo Cappelletti
