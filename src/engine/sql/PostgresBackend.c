@@ -16,9 +16,9 @@
 
 #include "BackendP.h"
 #include "Group.h"
-#include "Session.h"
+#include "gnc-book.h"
 #include "guid.h"
-#include "util.h"
+#include "gnc-engine-util.h"
 
 #include "PostgresBackend.h"
 
@@ -35,7 +35,7 @@ static short module = MOD_BACKEND;
    rc = PQsendQuery (be->connection, be->buff);			\
    if (!rc)							\
    {								\
-      /* hack alert -- we need knider, gentler error handling */\
+      /* hack alert -- we need kinder, gentler error handling */\
       PERR("send query failed:\n"				\
            "\t%s", PQerrorMessage(be->connection));		\
       PQfinish (be->connection);				\
@@ -70,7 +70,7 @@ static short module = MOD_BACKEND;
 }
 
 /* --------------------------------------------------------------- */
-/* The GET_RESULTS macro grabs the result of an sSQL query off the
+/* The GET_RESULTS macro grabs the result of an pgSQL query off the
  * wire, and makes sure that no errors occured. Results are left 
  * in the result buffer.
  */
@@ -147,9 +147,10 @@ pgendStoreOneGroupOnly (PGBackend *be, AccountGroup *grp, int update)
    const char *parent_guid, *grp_guid;
    int i, nacc;
 
-   ENTER ("be=%p, grp=%p\n", be, grp);
+   ENTER ("be=%p, grp=%p", be, grp);
    if (!be || !grp) return;
 
+#if 0
    grp_guid = guid_to_string(xaccGroupGetGUID (grp));
    parent = xaccGroupGetParentAccount(grp);
    parent_guid = guid_to_string(xaccAccountGetGUID (parent));
@@ -183,8 +184,9 @@ pgendStoreOneGroupOnly (PGBackend *be, AccountGroup *grp, int update)
    
    /* complete/commit the transaction, check the status */
    FINISH_QUERY(be->connection);
+#endif
 
-   LEAVE ("\n");
+   LEAVE (" ");
 }
 
 /* ============================================================= */
@@ -198,11 +200,12 @@ pgendCompareOneGroupOnly (PGBackend *be, AccountGroup *grp)
 {
    const char *grp_guid;
    PGresult *result;
-   int i=0, nrows=0, ndiffs=0;
+   int i=0, nrows=0, ndiffs=-1;
 
-   ENTER ("be=%p, grp=%p\n", be, grp);
-   if (!be || !grp) return;
+   ENTER ("be=%p, grp=%p", be, grp);
+   if (!be || !grp) return -1;
 
+#if 0
    grp_guid = guid_to_string(xaccGroupGetGUID (grp));
 
    /* try to find this group in the database */
@@ -233,8 +236,9 @@ pgendCompareOneGroupOnly (PGBackend *be, AccountGroup *grp)
    } while (result);
 
    if (0 == nrows) ndiffs = -1;
+#endif
 
-   LEAVE ("\n");
+   LEAVE (" ");
    return ndiffs;
 }
 
@@ -248,9 +252,10 @@ static void
 pgendStoreOneAccountOnly (PGBackend *be, Account *acct, int update)
 {
    const char *acct_guid, *parent_guid, *child_guid, *notes; 
-   ENTER ("be=%p, acct=%p\n", be, acct);
+   ENTER ("be=%p, acct=%p", be, acct);
    if (!be || !acct) return;
 
+#if 0
    acct_guid = guid_to_string(xaccAccountGetGUID (acct));
    parent_guid = guid_to_string(xaccGroupGetGUID (xaccAccountGetParent(acct)));
    child_guid = guid_to_string(xaccGroupGetGUID (xaccAccountGetChildren(acct)));
@@ -308,8 +313,9 @@ pgendStoreOneAccountOnly (PGBackend *be, Account *acct, int update)
    
    /* complete/commit the transaction, check the status */
    FINISH_QUERY(be->connection);
+#endif
 
-   LEAVE ("\n");
+   LEAVE (" ");
 }
 
 /* ============================================================= */
@@ -325,8 +331,8 @@ pgendCompareOneAccountOnly (PGBackend *be, Account *acct)
    PGresult *result;
    int i=0, nrows=0, ndiffs=0;
 
-   ENTER ("be=%p, acct=%p\n", be, acct);
-   if (!be || !acct) return;
+   ENTER ("be=%p, acct=%p", be, acct);
+   if (!be || !acct) return 0;
 
    acct_guid = guid_to_string(xaccAccountGetGUID (acct));
 
@@ -356,13 +362,13 @@ pgendCompareOneAccountOnly (PGBackend *be, Account *acct)
          COMP_STR ("accountName", xaccAccountGetName(acct), ndiffs);
          COMP_STR ("description", xaccAccountGetDescription(acct), ndiffs);
          COMP_STR ("notes", notes, ndiffs);
-         COMP_STR ("currency", xaccAccountGetCurrency(acct), ndiffs);
-         COMP_STR ("security", xaccAccountGetSecurity(acct), ndiffs);
+         // COMP_STR ("currency", xaccAccountGetCurrency(acct), ndiffs);
+         // COMP_STR ("security", xaccAccountGetSecurity(acct), ndiffs);
 
-         COMP_GUID ("parentGuid", 
-            xaccGroupGetGUID (xaccAccountGetParent(acct)), ndiffs);
-         COMP_GUID ("childrenGuid", 
-            xaccGroupGetGUID (xaccAccountGetChildren(acct)), ndiffs);
+         // COMP_GUID ("parentGuid", 
+         //   xaccGroupGetGUID (xaccAccountGetParent(acct)), ndiffs);
+         // COMP_GUID ("childrenGuid", 
+         //   xaccGroupGetGUID (xaccAccountGetChildren(acct)), ndiffs);
 
          /* hack alert -- need to also do the account type */
          /* hack alert -- need to also do additional acct info for
@@ -375,7 +381,7 @@ pgendCompareOneAccountOnly (PGBackend *be, Account *acct)
 
    if (0 == nrows) ndiffs = -1;
 
-   LEAVE ("\n");
+   LEAVE (" ");
    return ndiffs;
 }
 
@@ -390,7 +396,7 @@ pgendStoreOneTransactionOnly (PGBackend *be, Transaction *trans, int update)
 {
    const char * trans_guid;
 
-   ENTER ("be=%p, trans=%p\n", be, trans);
+   ENTER ("be=%p, trans=%p", be, trans);
    if (!be || !trans) return;
 
    trans_guid = guid_to_string(xaccTransGetGUID (trans));
@@ -425,7 +431,7 @@ pgendStoreOneTransactionOnly (PGBackend *be, Transaction *trans, int update)
    /* complete/commit the transaction, check the status */
    FINISH_QUERY(be->connection);
 
-   LEAVE ("\n");
+   LEAVE (" ");
 }
 
 /* ============================================================= */
@@ -441,8 +447,8 @@ pgendCompareOneTransactionOnly (PGBackend *be, Transaction *trans)
    PGresult *result;
    int i=0, nrows=0, ndiffs=0;
 
-   ENTER ("be=%p, trans=%p\n", be, trans);
-   if (!be || !trans) return;
+   ENTER ("be=%p, trans=%p", be, trans);
+   if (!be || !trans) return 0;
 
    trans_guid = guid_to_string(xaccTransGetGUID (trans));
 
@@ -477,7 +483,7 @@ pgendCompareOneTransactionOnly (PGBackend *be, Transaction *trans)
 
    if (0 == nrows) ndiffs = -1;
 
-   LEAVE ("\n");
+   LEAVE (" ");
    return ndiffs;
 }
 
@@ -491,7 +497,7 @@ pgendStoreOneSplitOnly (PGBackend *be, Split *split, int update)
    Timespec ts;
    const char *split_guid, *acct_guid, *trans_guid;
 
-   ENTER ("be=%p, split=%p\n", be, split);
+   ENTER ("be=%p, split=%p", be, split);
    if (!be || !split) return;
 
    split_guid = guid_to_string(xaccSplitGetGUID (split));
@@ -544,7 +550,7 @@ pgendStoreOneSplitOnly (PGBackend *be, Split *split, int update)
    /* complete/commit the transaction, check the status */
    FINISH_QUERY(be->connection);
 
-   LEAVE ("\n");
+   LEAVE (" ");
 }
 
 /* ============================================================= */
@@ -560,7 +566,7 @@ pgendCompareOneSplitOnly (PGBackend *be, Split *split)
    PGresult *result;
    int i=0, nrows=0, ndiffs=0;
 
-   ENTER ("be=%p, split=%p\n", be, split);
+   ENTER ("be=%p, split=%p", be, split);
    if (!be || !split) return;
 
    split_guid = guid_to_string(xaccSplitGetGUID (split));
@@ -610,7 +616,7 @@ GET_DB_VAL("share_price"));
 
    if (0 == nrows) ndiffs = -1;
 
-   LEAVE ("\n");
+   LEAVE (" ");
    return ndiffs;
 }
 
@@ -732,7 +738,7 @@ pgendStoreGroupMarkNoLock (PGBackend *be, AccountGroup *grp)
 static void
 pgendStoreGroup (PGBackend *be, AccountGroup *grp)
 {
-   ENTER ("be=%p, grp=%p\n", be, grp);
+   ENTER ("be=%p, grp=%p", be, grp);
    if (!be || !grp) return;
 
    /* lock it up so that we store atomically */
@@ -772,7 +778,7 @@ pgendGetOneSplitOnly (PGBackend *be, Split *split, GUID *guid)
 {
    int rc;
 
-   ENTER ("be=%p, split=%p\n", be, split);
+   ENTER ("be=%p, split=%p", be, split);
    if (!be || !split || !guid) return;
 
    rc = PQsendQuery (be->connection, "SELECT * FROM gncEntry;");
@@ -785,21 +791,21 @@ pgendGetOneSplitOnly (PGBackend *be, Split *split, GUID *guid)
    }
 
 
-   LEAVE ("\n");
+   LEAVE (" ");
 
 }
 
 /* ============================================================= */
 
 AccountGroup *
-pgend_session_begin (Session *sess, const char * sessionid)
+pgend_session_begin (GNCBook *sess, const char * sessionid)
 {
    PGBackend *be;
 
    if (!sess) return;
-   be = (PGBackend *) xaccSessionGetBackend (sess);
+   be = (PGBackend *) xaccGNCBookGetBackend (sess);
 
-   ENTER("sessionid=%s\n", sessionid);
+   ENTER("sessionid=%s", sessionid);
    /* connect to a bogus database ... */
    /* hack alert -- we should be parsing the sessionid for the
     * hostname, port number, db name, etc... clean this up ... 
@@ -823,10 +829,10 @@ pgend_session_begin (Session *sess, const char * sessionid)
 
 /* hack alert --- */
 /* just a quickie place to dump stuff */
-xaccGroupSetBackend (xaccSessionGetGroup(sess), &(be->be));
-pgendStoreGroup (be, xaccSessionGetGroup(sess));
+// xaccGroupSetBackend (xaccGNCBookGetGroup(sess), &(be->be));
+// pgendStoreGroup (be, xaccGNCBookGetGroup(sess));
 
-   LEAVE("\n");
+   LEAVE(" ");
    return NULL;
 }
 
@@ -840,7 +846,7 @@ pgend_trans_commit_edit (Backend * bend,
    int i, ndiffs, nsplits, rollback=0;
    PGBackend *be = (PGBackend *)bend;
 
-   ENTER ("be=%p, trans=%p\n", be, trans);
+   ENTER ("be=%p, trans=%p", be, trans);
    if (!be || !trans) return 1;  /* hack alert hardcode literal */
 
    /* lock it up so that we query and store atomically */
@@ -877,7 +883,7 @@ pgend_trans_commit_edit (Backend * bend,
       SEND_QUERY (be);
       FINISH_QUERY(be->connection);
 
-      LEAVE ("\n");
+      LEAVE (" ");
       return 666;   /* hack alert */
    } 
 
@@ -888,7 +894,7 @@ pgend_trans_commit_edit (Backend * bend,
    SEND_QUERY (be);
    FINISH_QUERY(be->connection);
 
-   LEAVE ("\n");
+   LEAVE (" ");
    return 0;
 }
 
