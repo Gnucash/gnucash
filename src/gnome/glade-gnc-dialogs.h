@@ -24,4 +24,3 @@ GtkWidget* create_HTML_Style_Sheet_Dialog (void);
 GtkWidget* create_Stock_Split_Druid (void);
 GtkWidget* create_Username_Password_Dialog (void);
 GtkWidget* create_Edit_Column_View_Page (void);
-GtkWidget* create_Edit_Report_Size (void);

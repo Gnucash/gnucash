@@ -437,20 +437,24 @@ gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data) {
 
 void
 gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data) {
-  gnc_column_view_edit * r = 
-    gtk_object_get_data(GTK_OBJECT(user_data), "view_edit_struct");
-  
-  GtkWidget * dlg = create_Edit_Report_Size();
+  gnc_column_view_edit * r;
+  GtkWidget * rowspin;
+  GtkWidget * colspin;
+  GtkWidget * dlg;
+  GladeXML *xml;
   SCM current;
   int length;
   int dlg_ret;
 
+  r = gtk_object_get_data(GTK_OBJECT(user_data), "view_edit_struct");
+
+  xml = gnc_glade_xml_new ("report.glade", "Edit Report Size");
+  dlg = glade_xml_get_widget (xml, "Edit Report Size");
+
   /* get the spinner widgets */ 
-  GtkWidget * rowspin = gtk_object_get_data(GTK_OBJECT(dlg),
-                                            "row_spin");
-  GtkWidget * colspin = gtk_object_get_data(GTK_OBJECT(dlg),
-                                            "col_spin");
-  
+  rowspin = glade_xml_get_widget (xml, "row_spin");
+  colspin = glade_xml_get_widget (xml, "col_spin");
+
   length = gh_length(r->contents_list);
   if(length > r->contents_selected) {
     current = gh_list_ref(r->contents_list, 

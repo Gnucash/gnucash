@@ -1,3 +1,9 @@
+2001-06-12  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/glade/report.glade: new file for old report dialogs
+
+	* src/gnome/dialog-column-view.c: use libglade
+
 2001-06-13  Bill Gribble  <grib@billgribble.com>
 
 	* src/sc/qif-import/qif-guess-map.scm: fix bug in 

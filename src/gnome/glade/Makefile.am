@@ -1,11 +1,13 @@
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
 	commodity.glade \
-	price.glade
+	price.glade \
+	report.glade
 
 STRING_FILES = \
 	commodity_strings.c \
-	price_strings.c
+	price_strings.c \
+	report_strings.c
 
 EXTRA_DIST = $(glade_DATA) $(STRING_FILES)
 
