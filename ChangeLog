@@ -1,5 +1,8 @@
 2003-01-27  Christian Stimming  <stimming@tuhh.de>
 
+	* po/nl.po: Updated Dutch translation by Hendrik-Jan Heins
+	<hjh@passys.nl>
+
 	* src/import-export/hbci/gnc-hbci-getbalance.c: Introduced yet
 	more user messages about what is supported by the bank.
 
