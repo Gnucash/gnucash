@@ -11,6 +11,7 @@ libgncregistergnome_a_SOURCES = \
   gnucash-header.c \
   gnucash-item-edit.c \
   gnucash-item-list.c \
+  gnucash-scrolled-window.c \
   gnucash-sheet.c \
   gnucash-style.c \
   quickfillcell-gnome.c \
@@ -24,6 +25,7 @@ noinst_HEADERS = \
   gnucash-header.h \
   gnucash-item-edit.h \
   gnucash-item-list.h \
+  gnucash-scrolled-window.h \
   gnucash-sheet.h \
   gnucash-style.h
 

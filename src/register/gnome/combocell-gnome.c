@@ -773,14 +773,15 @@ get_popup_height (GnomeCanvasItem *item,
                   int row_height,
                   gpointer user_data)
 {
-        return (space_available / row_height) * row_height;
+        return space_available;
 }
 
-static void
+static int
 popup_autosize (GnomeCanvasItem *item,
+                int max_width,
                 gpointer user_data)
 {
-        gnc_item_list_autosize (GNC_ITEM_LIST (item));
+        return max_width;
 }
 
 static void

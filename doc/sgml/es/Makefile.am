@@ -2,7 +2,9 @@ gnucash_helpdir = $(GNC_HELPDIR)/es
 
 GNUCASH_SGML_FILES = \
 	bofa-mym.sgml \
-        gnucash.sgml \
+	gnucash.sgml \
+	gpl-es.sgml \
+	traduccion.sgml \
 	xacc-about.sgml \
 	xacc-accountedit.sgml \
 	xacc-acctypes.sgml \
@@ -15,7 +17,7 @@ GNUCASH_SGML_FILES = \
 	xacc-currencyhandling.sgml \
 	xacc-dateinput.sgml \
 	xacc-depreciation.sgml \
-        xacc-dochack.sgml \
+	xacc-dochack.sgml \
 	xacc-doubleentry.sgml \
 	xacc-euro.sgml \
 	xacc-gpl.sgml \
@@ -38,10 +40,11 @@ GNUCASH_SGML_FILES = \
 	xacc-tax-report.sgml \
 	xacc-ticker.sgml \
 	xacc-trans-report.sgml \
-	xacc-txf-export-report.sgml \
 	xacc-txf-export-anomalies.sgml \
-	xacc-userdocs.sgml \
-	xacc-y2k.sgml
+	xacc-txf-export-report.sgml \
+        xacc-userdocs.sgml \
+        xacc-y2k.sgml
+
 
 gnucash_html_dir = $(top_srcdir)/doc/html/C
 

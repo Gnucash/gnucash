@@ -904,8 +904,8 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
              * account. */
             modity = gnc_string_to_commodity (DB_GET_VAL("currency",j));
 #if 0
-             xaccTransSetCurrency (trans, 
-                    gnc_string_to_commodity (DB_GET_VAL("currency",j)));
+            xaccTransSetCurrency
+              (trans, gnc_string_to_commodity (DB_GET_VAL("currency",j)));
 #endif
          }
       }
@@ -1136,6 +1136,8 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
        * pretty much shouldn't be allowed to exist in this
        * framework */
       pgendStoreTransaction (be, trans);
+
+      gnc_engine_resume_events();
       return;
    }
 

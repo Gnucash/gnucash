@@ -1,3 +1,20 @@
+2001-02-27  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/gnome/gnucash-scrolled-window.c: subclass of
+	gtk_scrolled_window for use in register.
+
+	* src/register/gnome/gnucash-item-list.c: use scrolled window
+	for really long account names.
+
+	* doc/sgml/es/Makefile.am (GNUCASH_SGML_FILES): fix list of sgml
+	files
+
+	* src/gnc-ui.h: use gncUIWidget not GtkWidget* in non-gnome
+	directories.
+
+	* src/engine/sql/PostgresBackend.c (pgendSyncTransaction): add
+	missing call to gnc_engine_resume_events ().
+
 2001-02-28  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/transaction-report.scm: Formatting cleanups.

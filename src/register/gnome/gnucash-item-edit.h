@@ -37,8 +37,9 @@ typedef int (*GetPopupHeight) (GnomeCanvasItem *item,
                                int row_height,
                                gpointer user_data);
 
-typedef void (*PopupAutosize) (GnomeCanvasItem *item,
-                               gpointer user_data);
+typedef int (*PopupAutosize) (GnomeCanvasItem *item,
+                              int max_width,
+                              gpointer user_data);
 
 typedef void (*PopupSetFocus) (GnomeCanvasItem *item,
                                gpointer user_data);

@@ -1291,6 +1291,7 @@ item_edit_show_popup (ItemEdit *item_edit)
         gint x, y, w, h;
         gint y_offset;
         gint popup_x, popup_y;
+        gint popup_width;
         gint popup_height;
         gint popup_max_width;
         gint view_height;
@@ -1338,15 +1339,28 @@ item_edit_show_popup (ItemEdit *item_edit)
                          item_edit->popup_user_data);
 
         if (item_edit->popup_autosize)
-                item_edit->popup_autosize (item_edit->popup_item,
-                                           item_edit->popup_user_data);
+                popup_width =
+                        item_edit->popup_autosize (item_edit->popup_item,
+                                                   popup_max_width,
+                                                   item_edit->popup_user_data);
+        else
+                popup_width = 0;
 
-        gnome_canvas_item_set (item_edit->popup_item,
-                               "x", (gdouble) popup_x,
-                               "y", (gdouble) popup_y,
-                               "height", (gdouble) popup_height,
-                               "anchor", popup_anchor,
-                               NULL);
+        if (popup_width > 0)
+                gnome_canvas_item_set (item_edit->popup_item,
+                                       "x", (gdouble) popup_x,
+                                       "y", (gdouble) popup_y,
+                                       "height", (gdouble) popup_height,
+                                       "width", (gdouble) popup_max_width,
+                                       "anchor", popup_anchor,
+                                       NULL);
+        else
+                gnome_canvas_item_set (item_edit->popup_item,
+                                       "x", (gdouble) popup_x,
+                                       "y", (gdouble) popup_y,
+                                       "height", (gdouble) popup_height,
+                                       "anchor", popup_anchor,
+                                       NULL);
 
         toggle = item_edit->popup_toggle.toggle_button;
 

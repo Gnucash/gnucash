@@ -26,8 +26,9 @@
 
 #include <gnome.h>
 
-#include "gnucash-item-list.h"
 #include "gnc-engine-util.h"
+#include "gnucash-item-list.h"
+#include "gnucash-scrolled-window.h"
 
 
 /* Item list signals */
@@ -355,34 +356,39 @@ clist_select_row_cb(GtkCList *clist, gint row, gint column,
 GnomeCanvasItem *
 gnc_item_list_new(GnomeCanvasGroup *parent)
 {
-	GtkWidget *clist, *hbox, *scrollbar;
+        GtkWidget *frame;
+	GtkWidget *clist;
+        GtkWidget *scrollwin;
         GnomeCanvasItem *item;
         GNCItemList *item_list;
 
-	hbox = gtk_hbox_new(FALSE, 0);
+        frame = gtk_frame_new (NULL);
 
-	clist = gtk_clist_new(1);
-	gtk_box_pack_start(GTK_BOX(hbox), clist, TRUE, TRUE, 0);
+        scrollwin = gnc_scrolled_window_new ();
+        gtk_container_add (GTK_CONTAINER (frame), scrollwin);
+
+        gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollwin),
+                                        GTK_POLICY_AUTOMATIC,
+                                        GTK_POLICY_AUTOMATIC);
+
+	clist = gtk_clist_new (1);
+        gtk_container_add (GTK_CONTAINER (scrollwin), clist);
         gtk_clist_set_selection_mode(GTK_CLIST(clist), GTK_SELECTION_BROWSE);
 
-	scrollbar = gtk_vscrollbar_new(NULL);
-	gtk_box_pack_start(GTK_BOX(hbox), scrollbar, FALSE, FALSE, 0);
-	gtk_clist_set_vadjustment(GTK_CLIST(clist),
-				  gtk_range_get_adjustment
-				  (GTK_RANGE(scrollbar)));
+        gtk_widget_show_all (frame);
 
-        item = gnome_canvas_item_new(parent, gnc_item_list_get_type(),
-				     "widget", hbox,
-				     "size_pixels", TRUE,
-				     "x", -10000.0,
-                                     "y", -10000.0,
-				     NULL);
+        item = gnome_canvas_item_new (parent, gnc_item_list_get_type(),
+                                      "widget", frame,
+                                      "size_pixels", TRUE,
+                                      "x", -10000.0,
+                                      "y", -10000.0,
+                                      NULL);
 
         item_list = GNC_ITEM_LIST (item);
 
 	item_list->clist = GTK_CLIST (clist);
 
-	gtk_signal_connect_after(GTK_OBJECT(hbox), "button_press_event",
+	gtk_signal_connect_after(GTK_OBJECT(frame), "button_press_event",
 				 GTK_SIGNAL_FUNC(gnc_item_list_button_event),
 				 (gpointer) item_list);
 

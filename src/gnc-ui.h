@@ -85,9 +85,9 @@ int      gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
                                                  int default_value,
                                                  char **radio_list);
 
-gboolean gnc_dup_trans_dialog (GtkWidget * parent, time_t *date_p,
+gboolean gnc_dup_trans_dialog (gncUIWidget parent, time_t *date_p,
                                const char *num, char **out_num);
-void     gnc_tax_info_dialog (GtkWidget * parent);
+void     gnc_tax_info_dialog (gncUIWidget parent);
 void     gnc_stock_split_dialog (Account * initial);
 
 /* Open a dialog asking for username and password. The heading and
@@ -96,7 +96,7 @@ void     gnc_stock_split_dialog (Account * initial);
  * output variables. They should be g_freed when no longer needed. If
  * the dialog returns FALSE, the user pressed CANCEL and NULL was
  * stored in username and password. */
-gboolean gnc_get_username_password (GtkWidget *parent,
+gboolean gnc_get_username_password (gncUIWidget parent,
                                     const char *heading,
                                     const char *initial_username,
                                     const char *initial_password,
