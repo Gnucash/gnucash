@@ -157,10 +157,17 @@
 	 (date (gnc:transaction-get-date-posted txn))
 	 (value (gnc:transaction-get-account-value txn acc))
 	 (split (gnc:transaction-get-split txn 0))
+	 (invoice (gnc:invoice-get-invoice-from-txn txn))
 	 (currency (gnc:transaction-get-currency txn))
 	 (type-str
 	  (cond
-	   ((equal? type gnc:transaction-type-invoice) (N_ "Invoice"))
+	   ((equal? type gnc:transaction-type-invoice)
+	    (if invoice
+		(gnc:make-html-text
+		 (gnc:html-markup-anchor
+		  (gnc:invoice-anchor-text invoice)
+		  (N_ "Invoice")))
+		(N_ "Invoice")))
 	   ((equal? type gnc:transaction-type-payment) (N_ "Payment, thank you"))
 	   (else (N_ "UNK"))))
 	 (row-contents '()))
@@ -239,7 +246,7 @@
 
     table))
 
-(define (options-generator)
+(define (options-generator acct-type-list)
 
   (define gnc:*report-options* (gnc:new-options))
 
@@ -251,11 +258,8 @@
 			    (lambda () #f) #f))
 
   (gnc:register-inv-option
-   (gnc:make-query-option "__reg" "query" #f))
-
-  (gnc:register-inv-option
-   (gnc:make-account-list-option "__reg" "account" "" ""
-			    (lambda () '()) #f #f))
+   (gnc:make-account-list-limited-option "Account" "Account" "" ""
+			    (lambda () '()) #f #f acct-type-list))
 
   (gnc:options-add-report-date!
    gnc:*report-options* gnc:pagename-general
@@ -296,6 +300,12 @@
 
   gnc:*report-options*)
 	     
+(define (customer-options-generator)
+  (options-generator '(receivable)))
+
+(define (vendor-options-generator)
+  (options-generator '(payable)))
+
 (define (string-expand string character replace-string)
   (define (car-line chars)
     (take-while (lambda (c) (not (eqv? c character))) chars))
@@ -313,6 +323,28 @@
                          (if (null? rest) "" replace-string)
                          (line-helper rest)))))
   (line-helper (string->list string)))
+
+(define (setup-query q owner account)
+  (let* ((guid (gnc:owner-get-guid (gnc:owner-get-end-owner owner))))
+
+    (gnc:query-add-guid-match
+     q 
+     (list gnc:split-trans gnc:invoice-from-txn gnc:invoice-owner
+	   gnc:owner-parentg)
+     guid 'query-or)
+    (gnc:query-add-guid-match
+     q
+     (list gnc:split-lot gnc:owner-from-lot gnc:owner-parentg)
+     guid 'query-or)
+    (gnc:query-add-guid-match
+     q
+     (list gnc:split-lot gnc:invoice-from-lot gnc:invoice-owner
+	   gnc:owner-parentg)
+     guid 'query-or)
+
+    (gnc:query-add-single-account-match q account 'query-and)
+    (gnc:query-set-book q (gnc:get-current-book))
+    q))
 
 (define (make-owner-table owner)
   (let ((table (gnc:make-html-table)))
@@ -391,59 +423,75 @@
   (let* ((document (gnc:make-html-document))
 	 (table '())
 	 (orders '())
-	 (query-scm (opt-val "__reg" "query"))
-	 (query (gnc:scm->query query-scm))
-	 (account (car (opt-val "__reg" "account")))
+	 (query (gnc:malloc-query))
+	 (account-list (opt-val "Account" "Account"))
+	 (account #f)
 	 (owner (opt-val "__reg" "owner"))
 	 (report-date (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
 	 (title #f))
 
-    (define (add-order o)
-      (if (and references? (not (member o orders)))
-	  (addto! orders o)))
-
-    (gnc:query-set-book query (gnc:get-current-book))
-
-    (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-		 (gnc:owner-get-type (gnc:owner-get-end-owner owner)) #f))
-	  (type-str ""))
-      (case type
-	((gnc-owner-customer)
-	 (set! type-str (N_ "Customer")))
-
-	((gnc-owner-vendor)
-	 (set! type-str (N_ "Vendor"))))
-
-      (set! title (string-append type-str " Report: "
-				 (gnc:owner-get-name owner))))
-
-    (set! table (make-txn-table (gnc:report-options report-obj) 
-				query account report-date))
-
-    (gnc:html-document-set-title! document title)
-
-    (gnc:html-table-set-style!
-     table "table"
-     'attribute (list "border" 1)
-     'attribute (list "cellspacing" 0)
-     'attribute (list "cellpadding" 4))
-
-    (gnc:html-document-add-object!
-     document
-     (make-myname-table (opt-val "Display" "Today Date Format")))
+    (if (not (null? account-list))
+	(set! account (car account-list)))
 
     (if owner
+	(begin
+	  (setup-query query owner account)
+
+	  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
+		       (gnc:owner-get-type (gnc:owner-get-end-owner owner))
+		       #f))
+		(type-str ""))
+	    (case type
+	      ((gnc-owner-customer)
+	       (set! type-str (N_ "Customer")))
+	      
+	      ((gnc-owner-vendor)
+	       (set! type-str (N_ "Vendor"))))
+
+	    (set! title (gnc:html-markup
+			 "!" 
+			 type-str
+			 (N_ " Report: ")
+			 (gnc:html-markup-anchor
+			  (gnc:owner-anchor-text owner)
+			  (gnc:owner-get-name owner)))))
+	  
+	  (if account
+	      (begin
+		(set! table (make-txn-table (gnc:report-options report-obj)
+					    query account report-date))
+		(gnc:html-table-set-style!
+		 table "table"
+		 'attribute (list "border" 1)
+		 'attribute (list "cellspacing" 0)
+		 'attribute (list "cellpadding" 4)))
+
+	      (set! table (gnc:make-html-text "No Valid Account Selected")))
+
+	  (gnc:html-document-set-title! document title)
+
+	  (gnc:html-document-add-object!
+	   document
+	   (make-myname-table (opt-val "Display" "Today Date Format")))
+
+	  (gnc:html-document-add-object!
+	   document
+	   (make-owner-table owner))
+
+	  (make-break! document)
+	  (make-break! document)
+
+	  (gnc:html-document-add-object! document table))
+
+	;; else....
 	(gnc:html-document-add-object!
 	 document
-	 (make-owner-table owner)))
+	 (gnc:make-html-text
+	  "No Valid Company Selected")))
 
-    (make-break! document)
-    (make-break! document)
-
-    (gnc:html-document-add-object! document table)
-
+    (gnc:free-query query)
     document))
 
 (define (find-first-account type)
@@ -483,101 +531,55 @@
 (gnc:define-report
  'version 1
  'name (N_ "Customer Report")
- 'options-generator options-generator
+ 'options-generator customer-options-generator
  'renderer reg-renderer
  'in-menu? #f)
 
 (gnc:define-report
  'version 1
  'name (N_ "Vendor Report")
- 'options-generator options-generator
+ 'options-generator vendor-options-generator
  'renderer reg-renderer
  'in-menu? #f)
 
-(define (owner-report-create-internal report-name owner query account)
+(define (owner-report-create-internal report-name owner account)
   (let* ((options (gnc:make-report-options report-name))
 	 (owner-op (gnc:lookup-option options "__reg" "owner"))
-	 (query-op (gnc:lookup-option options "__reg" "query"))
-	 (account-op (gnc:lookup-option options "__reg" "account")))
+	 (account-op (gnc:lookup-option options "Account" "Account")))
 
     (gnc:option-set-value owner-op owner)
-    (gnc:option-set-value query-op query)
     (gnc:option-set-value account-op (list account))
     (gnc:make-report report-name options)))
 
-(define (owner-report-create owner query account)
+(define (owner-report-create owner account)
   (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
 	       (gnc:owner-get-type (gnc:owner-get-end-owner owner)) #f)))
     (case type
       ((gnc-owner-customer)
-       (owner-report-create-internal "Customer Report" owner query account))
+       (owner-report-create-internal "Customer Report" owner account))
 
       ((gnc-owner-vendor)
-       (owner-report-create-internal "Vendor Report" owner query account)))
-  ))
+       (owner-report-create-internal "Vendor Report" owner account))
+
+      (else #f))))
 
 (define (gnc:owner-report-create owner account)
-  (let* ((q (gnc:malloc-query))
-	 (guid (gnc:owner-get-guid (gnc:owner-get-end-owner owner))))
+  ; Figure out an account to use if nothing exists here.
+  (if (not account)
+      (set! account (find-first-account-for-owner owner)))
 
-    ; Figure out an account to use if nothing exists here.
-    (if (not account)
-	(set! account (find-first-account-for-owner owner)))
-
-    (gnc:query-add-guid-match
-     q 
-     (list gnc:split-trans gnc:invoice-from-txn gnc:invoice-owner
-	   gnc:owner-parentg)
-     guid 'query-or)
-    (gnc:query-add-guid-match
-     q
-     (list gnc:split-lot gnc:owner-from-lot gnc:owner-parentg)
-     guid 'query-or)
-    (gnc:query-add-guid-match
-     q
-     (list gnc:split-lot gnc:invoice-from-lot gnc:invoice-owner
-	   gnc:owner-parentg)
-     guid 'query-or)
-
-    (gnc:query-add-single-account-match q account 'query-and)
-    (gnc:query-set-book q (gnc:get-current-book))
-
-    (let ((res (owner-report-create owner q account)))
-      (gnc:free-query q)
-      res)))
-
+  (owner-report-create owner account))
 
 (define (gnc:owner-report-create-internal
 	 account split query journal? double? title
 	 debit-string credit-string)
 
-  (let* ((trans (gnc:split-get-parent split))
-	 (invoice (gnc:invoice-get-invoice-from-txn trans))
-	 (temp-owner (gnc:owner-create))
-	 (owner #f))
+  (let* ((temp-owner (gnc:owner-create))
+	 (owner (gnc:owner-from-split split temp-owner))
+	 (res (gnc:owner-report-create owner account)))
 
-    (if invoice
-	(set! owner (gnc:invoice-get-owner invoice))
-	(let ((split-list (gnc:transaction-get-splits trans)))
-	  (define (check-splits splits)
-	    (let* ((split (car splits))
-		   (lot (gnc:split-get-lot split)))
-	      (if lot
-		  (let* ((invoice (gnc:invoice-get-invoice-from-lot lot))
-			 (owner? (gnc:owner-get-owner-from-lot
-				  lot temp-owner)))
-		    (if invoice
-			(set! owner (gnc:invoice-get-owner invoice))
-			(if owner?
-			    (set! owner temp-owner)
-			    (check-splits (cdr splits)))))
-		  (check-splits (cdr splits)))))
-	  (check-splits split-list)))
-
-    (let ((res (gnc:owner-report-create owner account)))
-      (gnc:owner-destroy temp-owner)
-      res)))
-
+    (gnc:owner-destroy temp-owner)
+    res))
 
 (gnc:register-report-hook 'receivable #t
 			  gnc:owner-report-create-internal)

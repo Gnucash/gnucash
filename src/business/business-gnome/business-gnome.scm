@@ -193,10 +193,16 @@
 		       (list top-level "")
 		       (lambda ()
 			 (gnc:tax-table-new (gnc:get-current-book)))))
-
   (add-vendor-items)
   (add-customer-items)
   )
+
+
+(define (business-report-function)
+  (gnc:add-extension
+   (gnc:make-menu gnc:menuname-business-reports
+		  (list gnc:menuname-reports gnc:menuname-income-expense))))
+
 
 
 (define (add-employee-extensions)
@@ -228,25 +234,6 @@
 
 (define (add-business-test)
 
-  (define test-report
-    (gnc:make-menu-item (N_ "Test Owner Report")
-			(N_ "Test Owner Report")
-			(list "Extensions" "")
-			(lambda ()
-			  (let* ((book (gnc:get-current-book))
-				 (group (gnc:book-get-group book))
-				 (sep (string-ref (gnc:account-separator-char)
-						  0))
-				 (acc (gnc:get-account-from-full-name
-				       group "A/R" sep))
-				 (query (gnc:malloc-query)))
-
-			    (gnc:query-add-single-account-match
-			     query acc 'query-and)
-			    (gnc:report-window
-			     (gnc:owner-report-create #f query acc))))))
-				 
-
   (define test-search
     (gnc:make-menu-item (N_ "Test Search Dialog")
 			(N_ "Test Search Dialog")
@@ -271,6 +258,17 @@
 			(lambda ()
 			  (let ((m (current-module)))
 			    (load-from-path "gnucash/report/owner-report.scm")
+			    (set-current-module m)))))
+
+  (define reload-receivable
+    (gnc:make-menu-item (N_ "Reload receivable report")
+			(N_ "Reload receivable report scheme file")
+			(list "Extensions" "")
+			(lambda ()
+			  (let ((m (current-module)))
+			    (load-from-path "gnucash/report/aging.scm")
+			    (set-current-module m)
+			    (load-from-path "gnucash/report/receivables.scm")
 			    (set-current-module m)))))
 
   (define init-data
@@ -307,7 +305,6 @@
 			    ;; Create the Invoice
 			    (gnc:invoice-set-id invoice "000012")
 			    (gnc:invoice-set-owner invoice owner)
-			    (gnc:invoice-set-terms invoice "Net-30")
 			    (gnc:invoice-set-date-opened
 			     invoice (cons (current-time) 0))
 			    (gnc:invoice-set-common-commodity
@@ -356,14 +353,15 @@
 
 
   (gnc:add-extension init-data)
+  (gnc:add-extension reload-receivable)
   (gnc:add-extension reload-invoice)
   (gnc:add-extension reload-owner)
   (gnc:add-extension test-search)
-  (gnc:add-extension test-report)
 
   (add-employee-extensions)
 )
 
+(gnc:hook-add-dangler gnc:*report-hook* business-report-function)
 (gnc:hook-add-dangler gnc:*ui-startup-hook* add-business-items)
 (gnc:hook-add-dangler gnc:*add-extension-hook* add-business-test)
 

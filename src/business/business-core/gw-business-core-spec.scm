@@ -925,6 +925,14 @@
    '((<gnc:GncOwner*> owner))
    "Return the GUID of this owner")
 
+  (gw:wrap-function
+   ws
+   'gnc:owner-copy-into-owner
+   '<gw:void>
+   "gncOwnerCopy"
+   '((<gnc:GncOwner*> src-owner) (<gnc:GncOwner*> dest-owner))
+   "Copy the src-owner to the dest-owner")
+
   ;;
   ;; gncVendor.h
   ;;

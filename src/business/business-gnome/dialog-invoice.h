@@ -30,4 +30,6 @@ GNCSearchWindow * gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBoo
 GNCSearchWindow * gnc_invoice_search_select (gpointer start, gpointer book);
 GNCSearchWindow * gnc_invoice_search_edit (gpointer start, gpointer book);
 
+void gnc_business_call_owner_report (GncOwner *owner, Account *acc);
+
 #endif /* GNC_DIALOG_INVOICE_H_ */

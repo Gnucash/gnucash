@@ -1,3 +1,23 @@
+2002-07-03  Derek Atkins  <derek@ihtfp.com>
+
+	* moved receivable and payable aging reports to business-reports;
+	added "links" to the company, invoices, and company-report.
+	Create a "Business Reports" menu item under "Reports" and put the
+	business reports there.  This required a new startup hook to allow
+	dynamic creation of the Report Menu.  Change the aging reports to
+	use Invoices and Lots instead of the transaction description to
+	differentiate actual companies.
+
+	* dialog-invoice: publish the function to open a company-report
+
+	* business-urls: hooks into gnc-html for business objects.
+	Initialize at module load-time.  wrap the business url types.
+
+	* business-core: create gnc:owner-from-split which is used by a
+	bunch of the business reports.  wrap gncOwnerCopy().
+
+	* fix the "Create Test Data" extension
+	
 2002-07-03  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/druid-hierarchy.c (gnc_get_ea_locale_dir): If current

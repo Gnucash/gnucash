@@ -1,5 +1,7 @@
 (define-module (gnucash business-core))
 (use-modules (g-wrapped gw-business-core))
+(use-modules (gnucash gnc-module))
+(gnc:module-load "gnucash/engine" 0)
 
 ; return a string which is basically:
 ;    name \n Attn: contact \n addr1 \n addr2 \n addr3 \n addr4
@@ -93,12 +95,42 @@
        (gnc:owner-get-id (gnc:job-get-owner (gnc:owner-get-job owner))))
       (else ""))))
 
-;; This MUST match the definitions in gncEntry.h or you'll be in trouble!
-(define (gnc:entry-type-percent-p type)
-  (or (= type 1) (= type 3)))
+(define (gnc:entry-type-percent-p type-val)
+  (let ((type (gw:enum-<gnc:GncAmountType>-val->sym type #f)))
+    (equal? type 'gnc-amount-type-percent)))
+
+(define (gnc:owner-from-split split result-owner)
+  (let* ((trans (gnc:split-get-parent split))
+	 (invoice (gnc:invoice-get-invoice-from-txn trans))
+	 (temp-owner (gnc:owner-create))
+	 (owner #f))
+
+    (if invoice
+	(set! owner (gnc:invoice-get-owner invoice))
+	(let ((split-list (gnc:transaction-get-splits trans)))
+	  (define (check-splits splits)
+	    (let* ((split (car splits))
+		   (lot (gnc:split-get-lot split)))
+	      (if lot
+		  (let* ((invoice (gnc:invoice-get-invoice-from-lot lot))
+			 (owner? (gnc:owner-get-owner-from-lot
+				  lot temp-owner)))
+		    (if invoice
+			(set! owner (gnc:invoice-get-owner invoice))
+			(if owner?
+			    (set! owner temp-owner)
+			    (check-splits (cdr splits)))))
+		  (check-splits (cdr splits)))))
+	  (check-splits split-list)))
+
+    (gnc:owner-copy-into-owner (gnc:owner-get-end-owner owner) result-owner)
+    (gnc:owner-destroy temp-owner)
+    result-owner))
+
 
 (export gnc:owner-get-name)
 (export gnc:owner-get-address)
 (export gnc:owner-get-address-dep)
 (export gnc:owner-get-owner-id)
 (export gnc:entry-type-percent-p)
+(export gnc:owner-from-split)

@@ -75,8 +75,6 @@
 (use-modules (gnucash report pnl))
 (use-modules (gnucash report portfolio))
 (use-modules (gnucash report price-scatter))
-(use-modules (gnucash report payables))
-(use-modules (gnucash report receivables))
 (use-modules (gnucash report register))
 (use-modules (gnucash report transaction))
 

@@ -9,6 +9,9 @@ noinst_DATA = .scm-links
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report
 gncscmmod_DATA = \
    business-reports.scm \
+   aging.scm \
+   payables.scm \
+   receivables.scm \
    invoice.scm \
    owner-report.scm
 

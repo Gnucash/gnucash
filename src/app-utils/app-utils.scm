@@ -233,6 +233,7 @@
 (export gnc:*book-opened-hook*)
 (export gnc:*new-book-hook*)
 (export gnc:*book-closed-hook*)
+(export gnc:*report-hook*)
 
 ;; simple-obj
 (export make-simple-class)

@@ -101,5 +101,8 @@
   (gnc:add-extension asset-liability-menu)
   (gnc:add-extension utility-menu)
 
+  ;; run report-hook danglers
+  (gnc:hook-run-danglers gnc:*report-hook*)
+
   ;; push reports (new items added on top of menu)
   (gnc:add-report-template-menu-items))

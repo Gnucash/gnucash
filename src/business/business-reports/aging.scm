@@ -33,10 +33,11 @@
 (require 'record)
 
 (gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/business-core" 0)
+(use-modules (gnucash report business-reports))
 
 (define sect-acc (N_ "Accounts"))
 (define optname-to-date (N_ "To"))
-(define optname-use-description (N_ "Use Description?"))
 (define optname-sort-by (N_ "Sort By"))
 (define optname-sort-order (N_ "Sort Order"))
 (define optname-report-currency (N_ "Report's currency"))
@@ -58,20 +59,24 @@
 (define company-info (make-record-type "ComanyInfo" 
 				       '(currency
 					 bucket-vector
-					 overpayment)))
+					 overpayment
+					 owner-obj)))
 
 (define num-buckets 4)
 (define (new-bucket-vector)
   (make-vector num-buckets (gnc:numeric-zero)))
 
 (define make-company-private
-  (record-constructor company-info '(currency bucket-vector overpayment)))
+  (record-constructor company-info '(currency bucket-vector overpayment owner-obj)))
 
-(define (make-company currency)
-  (make-company-private currency (new-bucket-vector) (gnc:numeric-zero)))
+(define (make-company currency owner-obj)
+  (make-company-private currency (new-bucket-vector) (gnc:numeric-zero) owner-obj))
 
 (define company-get-currency
   (record-accessor company-info 'currency))
+
+(define company-get-owner-obj
+  (record-accessor company-info 'owner-obj))
 
 (define company-get-buckets
   (record-accessor company-info 'bucket-vector))
@@ -159,33 +164,36 @@
 ;; a new company record in the hash
 
 (define (update-company-hash hash split bucket-intervals
-			     use-description? reverse?)
+			     reverse?)
   (let* ((transaction (gnc:split-get-parent split))
-	 (company-name (if use-description?
-			  (gnc:transaction-get-description transaction) 
-			  (gnc:split-get-memo split)))
+	 (temp-owner (gnc:owner-create))
+	 (owner (gnc:owner-from-split split temp-owner))
+	 (guid (gnc:owner-get-guid owner))
 	 (this-currency (gnc:transaction-get-currency transaction))
 	 (value (gnc:split-get-value split))
 	 (this-date (gnc:transaction-get-date-posted transaction))
-	 (company-info (hash-ref hash company-name)))
+	 (company-info (hash-ref hash guid)))
 
     (gnc:debug "update-company-hash called")
-    (gnc:debug "company-name" company-name)
+    (gnc:debug "guid" guid)
     (gnc:debug "split-value" value)
     (if reverse? (set! value (gnc:numeric-neg value)))
     (if company-info
-	;; if it's an existing company, first check currencies match
-	(if (not (gnc:commodity-equiv? this-currency
-				       (company-get-currency company-info)))
-	    (cons #f (sprintf (_ "Transactions relating to company  %d contain \
+	;; if it's an existing company, destroy the temp owner and
+	;; then make sure the currencies match
+	(begin
+	  (gnc:owner-destroy temp-owner)
+	  (if (not (gnc:commodity-equiv? this-currency
+					 (company-get-currency company-info)))
+	      (cons #f (sprintf (_ "Transactions relating to company  %d contain \
 more than one currency.  This report is not designed to cope with this possibility.")))
-	    (begin
-	      (gnc:debug "it's an old company")
-	      (if (gnc:numeric-negative-p value)
-		  (process-invoice company-info (gnc:numeric-neg value) bucket-intervals this-date)
-		  (process-payment company-info value))
-	      (hash-set! hash company-name company-info)
-	      (cons #t company-name)))
+	      (begin
+		(gnc:debug "it's an old company")
+		(if (gnc:numeric-negative-p value)
+		    (process-invoice company-info (gnc:numeric-neg value) bucket-intervals this-date)
+		    (process-payment company-info value))
+		(hash-set! hash guid company-info)
+		(cons #t guid))))
 	
 	;; if it's a new company
 	(begin
@@ -193,10 +201,11 @@ more than one currency.  This report is not designed to cope with this possibili
 	  (if (gnc:numeric-negative-p value) ;; if it's a new debt
 	      ;; if not ignore it
 	                                     ;;; XXX: is this right ?
-	      (let ((new-company (make-company this-currency)))
+	      (let ((new-company (make-company this-currency owner)))
 		(process-invoice new-company (gnc:numeric-neg value) bucket-intervals this-date)
-		(hash-set! hash company-name new-company)))
-	  (cons #t company-name)))))
+		(hash-set! hash guid new-company))
+	      (gnc:owner-destroy temp-owner))
+	  (cons #t guid)))))
 
 
 ;; get the total debt from the buckets
@@ -319,24 +328,15 @@ more than one currency.  This report is not designed to cope with this possibili
 	(vector 'increasing (N_ "Increasing") (N_ "0 -> $999,999.99, A->Z"))
 	(vector 'decreasing (N_ "Decreasing") (N_ "$999,999.99 -> $0, Z->A")))))
 
-       (add-option
+    (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-general
-      optname-use-description
-      "h"
-      (N_ "Use the description to identify individual companies.\
-  If false, use split memo")
-      #t))
-
-     
-       (add-option
-	(gnc:make-simple-boolean-option
-	 gnc:pagename-general
-	 optname-multicurrency-totals
-	 "i"
-	 (N_ "Show multi-currency totals.  If not selected, convert all\
+      optname-multicurrency-totals
+      "i"
+      (N_ "Show multi-currency totals.  If not selected, convert all\
 totals to report currency")
-	 #f))
+      #f))
+
     (gnc:options-set-default-section options "General")      
     options))
 
@@ -349,15 +349,19 @@ totals to report currency")
 
 (define (aging-renderer report-obj account reverse?)
 
+  (define (get-name a)
+    (let* ((owner (company-get-owner-obj (cdr a))))
+      (gnc:owner-get-name owner)))
+
   ;; Predicates for sorting the companys once the data has been collected
 
   ;; Format: (cons 'sort-key (cons 'increasing-pred 'decreasing-pred))
   (define sort-preds
     (list 
      (cons 'name (cons (lambda (a b)
-			 (string<? (car a) (car b)))
+			 (string<? (get-name a) (get-name b)))
 		       (lambda (a b)
-			 (string>? (car a) (car b)))))
+			 (string>? (get-name a) (get-name b)))))
      (cons 'total (cons (lambda (a b)
 			  (< (compare-total a b) 0))
 			(lambda (a b)
@@ -444,7 +448,6 @@ totals to report currency")
       (append (reverse monetised-buckets) 
 	      (list (gnc:make-gnc-monetary currency running-total)))))
 
-
   ;; convert the collectors to the right output format 
 
   (define (convert-collectors collector-list report-currency 
@@ -477,15 +480,11 @@ totals to report currency")
 
 
   (let* ((companys (make-hash-table 23))
-	 (report-title (string-append
-			(op-value gnc:pagename-general gnc:optname-reportname)
-			": "
-			(gnc:account-get-name account)))
+	 (report-title (op-value gnc:pagename-general gnc:optname-reportname))
         ;; document will be the HTML document that we return.
 	(report-date (gnc:timepair-end-day-time 
 		      (gnc:date-option-absolute-time
 		       (op-value gnc:pagename-general (N_ "To")))))
-	(use-description? (op-value gnc:pagename-general optname-use-description))
 	(interval-vec (list->vector (make-interval-list report-date)))
 	(sort-pred (get-sort-pred 
 		    (op-value gnc:pagename-general optname-sort-by)
@@ -501,6 +500,16 @@ totals to report currency")
 	(company-list '())
         (document (gnc:make-html-document)))
 ;    (gnc:debug "Account: " account)
+
+    (if account
+	(set! report-title (gnc:html-markup
+			    "!" 
+			    report-title
+			    ": "
+			    (gnc:html-markup-anchor
+			     (gnc:account-anchor-text account)
+			     (gnc:account-get-name account)))))
+
     (gnc:html-document-set-title! document report-title)
     (gnc:html-table-set-col-headers! table heading-list)
 				     
@@ -516,7 +525,6 @@ totals to report currency")
 			(update-company-hash companys 
 					      split 
 					      interval-vec 
-					      use-description?
 					      reverse?))
 			splits)
 ;	    (gnc:debug "companys" companys)
@@ -532,14 +540,39 @@ totals to report currency")
 
 	    ;; build the table
 	    (for-each (lambda (company-list-entry)
-			(let ((monetary-list (convert-to-monetary-list
-					      (company-get-buckets
-					       (cdr company-list-entry))
-					      (company-get-currency
-					       (cdr company-list-entry)))))
-			  (add-to-column-totals total-collector-list monetary-list)
+			(let* ((monetary-list (convert-to-monetary-list
+					       (company-get-buckets
+						(cdr company-list-entry))
+					       (company-get-currency
+						(cdr company-list-entry))))
+			       (owner (company-get-owner-obj
+				       (cdr company-list-entry)))
+			       (company-name (gnc:owner-get-name owner)))
+
+			  (add-to-column-totals total-collector-list
+						monetary-list)
+
+			  (let* ((ml (reverse monetary-list))
+				 (total (car ml))
+				 (rest (cdr ml)))
+
+			    (set! monetary-list
+				  (reverse
+				   (cons
+				    (gnc:make-html-text
+				     (gnc:html-markup-anchor
+				      (gnc:owner-report-text owner account)
+				      total))
+				    rest))))
+
 			  (gnc:html-table-append-row!
-			   table (cons (car company-list-entry) monetary-list))))
+			   table (cons
+				  (gnc:make-html-text
+				   (gnc:html-markup-anchor
+				    (gnc:owner-anchor-text owner)
+				    company-name))
+				  monetary-list))
+			  (gnc:owner-destroy owner)))			
 		      company-list)
 
 	    ;; add the totals

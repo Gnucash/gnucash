@@ -32,6 +32,7 @@
    ws
    (lambda (wrapset client-wrapset)
      (list
+      "#include <business-urls.h>\n"
       "#include <dialog-billterms.h>\n"
       "#include <dialog-customer.h>\n"
       "#include <dialog-employee.h>\n"
@@ -49,6 +50,19 @@
          '()
          (gw:inline-scheme '(use-modules (gnucash business-gnome))))))
   
+  ;;
+  ;; Business URL Types
+  ;;
+  (gw:wrap-value ws 'gnc:url-type-customer '<gnc:url-type> 
+		 "GNC_CUSTOMER_MODULE_NAME")
+  (gw:wrap-value ws 'gnc:url-type-vendor '<gnc:url-type> 
+		 "GNC_VENDOR_MODULE_NAME")
+  (gw:wrap-value ws 'gnc:url-type-invoice '<gnc:url-type> 
+		 "GNC_INVOICE_MODULE_NAME")
+  (gw:wrap-value ws 'gnc:url-type-ownerreport '<gnc:url-type>
+		 "URL_TYPE_OWNERREPORT")
+
+
   ;;
   ;; dialog-billterms.h
   ;;

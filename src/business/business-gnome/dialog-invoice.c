@@ -577,27 +577,37 @@ void gnc_invoice_window_new_invoice_cb (GtkWidget *widget, gpointer data)
   }
 }
 
-void gnc_invoice_window_report_owner_cb (GtkWidget *widget, gpointer data)
+void gnc_business_call_owner_report (GncOwner *owner, Account *acc)
 {
-  InvoiceWindow *iw = data;
   int id;
   SCM qtype;
   SCM args;
   SCM func;
   SCM arg;
 
+  g_return_if_fail (owner);
+
   args = SCM_EOL;
 
   func = gh_eval_str ("gnc:owner-report-create");
   g_return_if_fail (gh_procedure_p (func));
 
+  if (acc) {
+    qtype = gh_eval_str("<gnc:Account*>");
+    g_return_if_fail (qtype != SCM_UNDEFINED);
+
+    arg = gw_wcp_assimilate_ptr (acc, qtype);
+    g_return_if_fail (arg != SCM_UNDEFINED);
+    args = gh_cons (arg, args);
+  } else {
+    args = gh_cons (SCM_BOOL_F, args);
+  }
+
   qtype = gh_eval_str("<gnc:GncOwner*>");
   g_return_if_fail (qtype != SCM_UNDEFINED);
 
-  arg = gw_wcp_assimilate_ptr (&iw->owner, qtype);
+  arg = gw_wcp_assimilate_ptr (owner, qtype);
   g_return_if_fail (arg != SCM_UNDEFINED);
-
-  args = gh_cons (SCM_BOOL_F, args);
   args = gh_cons (arg, args);
 
   /* Apply the function to the args */
@@ -607,6 +617,12 @@ void gnc_invoice_window_report_owner_cb (GtkWidget *widget, gpointer data)
 
   if (id >= 0)
     reportWindow (id);
+}
+
+void gnc_invoice_window_report_owner_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  gnc_business_call_owner_report (&iw->owner, NULL);
 }
 
 void gnc_invoice_window_taxtable_cb (GtkWidget *widget, gpointer data)

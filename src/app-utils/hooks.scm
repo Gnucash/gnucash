@@ -108,6 +108,11 @@
    'book-closed-hook
    "Run before file close.  Hook args: book URL"))
 
+(define gnc:*report-hook*
+  (gnc:hook-define
+   'report-hook
+   "Run just before the reports are pushed into the menus.  Hook args: ()"))
+
 ;;(let ((hook (gnc:hook-lookup 'startup-hook)))
 ;;  (display (gnc:hook-name-get hook))
 ;;  (newline)

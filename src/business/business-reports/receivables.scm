@@ -29,6 +29,7 @@
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/business-gnome" 0)
 
 (use-modules (gnucash report aging))
 (use-modules (gnucash report standard-reports))
@@ -94,6 +95,7 @@
 (gnc:define-report
  'version 1
  'name (N_ "Receivable Aging")
+ 'menu-path (list gnc:menuname-business-reports)
  'options-generator options-generator
  'renderer receivables-renderer
  'in-menu? #t)
