@@ -1057,11 +1057,12 @@ gnc_sxed_save_sx( SchedXactionEditorDialog *sxed )
         {
                 FreqSpec *fs;
                 GDate gdate;
+		GString *str;
 
                 fs = xaccSchedXactionGetFreqSpec( sxed->sx );
                 gnc_frequency_save_state( sxed->gncfreq, fs, &gdate );
 
-                GString *str = g_string_new( "" );
+                str = g_string_new( "" );
                 xaccFreqSpecGetFreqStr( fs, str );
                 DEBUG( "fs: %s", str->str );
 
