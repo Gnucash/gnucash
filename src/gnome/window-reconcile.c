@@ -289,7 +289,7 @@ startRecnWindow(GtkWidget *parent, Account *acc, double *diff)
   int acc_type;
   char *title = NULL;
 
-  setBusyCursor(parent);
+  gnc_set_busy_cursor(parent);
   
   /* Get the previous ending balance.  Use the published
    * account interface for this, since the ending balance
@@ -361,7 +361,7 @@ startRecnWindow(GtkWidget *parent, Account *acc, double *diff)
     gtk_widget_show(end_value);
     gtk_widget_show(dialog);
     
-    unsetBusyCursor(parent);
+    gnc_unset_busy_cursor(parent);
     
     
     result = -1;
@@ -379,7 +379,7 @@ startRecnWindow(GtkWidget *parent, Account *acc, double *diff)
           if(sscanf(str, "%lf", &val ) == 1) {
             *diff = dendBalance - val;
           } else {
-            errorBox(N_("Ending balance must be a number."));
+            gnc_error_dialog(N_("Ending balance must be a number."));
             result = -1;
           }
         }
@@ -414,7 +414,7 @@ recnWindow(GtkWidget *parent, Account *acc)
 
   FETCH_FROM_LIST(RecnWindow, recnList, acc, acc, recnData);
   
-  setBusyCursor(parent);
+  gnc_set_busy_cursor(parent);
   
   recnData->ddiff = ddiff;
   
@@ -513,7 +513,7 @@ recnWindow(GtkWidget *parent, Account *acc)
   /* and then refresh the total/difference balance fields: */
   recnRecalculateBalance(recnData);
   
-  unsetBusyCursor(parent);
+  gnc_unset_busy_cursor(parent);
 
   return recnData;
 }

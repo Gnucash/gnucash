@@ -135,7 +135,7 @@ gnc_ui_EditAccWindow_finished_callback(GtkWidget *dialog, gpointer data)
       if (strcmp (oldval, n)) {
         char buff[1000];
         sprintf (buff, EDIT_CURRENCY_MSG, oldval, n);
-        if (verifyBox (buff)) {
+        if (gnc_verify_dialog (buff, GNC_T)) {
           xaccAccountSetCurrency (acc, n);
         }
       }
@@ -155,7 +155,7 @@ gnc_ui_EditAccWindow_finished_callback(GtkWidget *dialog, gpointer data)
         if (strcmp (oldval, n)) {
           char buff[1000];
           sprintf (buff, EDIT_SECURITY_MSG, oldval, n);
-          if (verifyBox (buff)) {
+          if (gnc_verify_dialog (buff, GNC_T)) {
             xaccAccountSetSecurity (acc, n);
           }
         }
@@ -170,7 +170,7 @@ gnc_ui_EditAccWindow_finished_callback(GtkWidget *dialog, gpointer data)
   
   xaccAccountCommitEdit (acc);
   
-  refreshMainWindow();
+  gnc_refresh_main_window();
 }
 
 

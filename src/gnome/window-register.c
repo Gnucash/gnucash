@@ -288,7 +288,7 @@ regWindowLedger(xaccLedgerDisplay *ledger) {
   }
   assert(windowname);
   
-  setBusyCursor(gnc_get_ui_data());
+  gnc_set_busy_cursor(gnc_get_ui_data());
   
   gtk_box_pack_start(GTK_BOX(register_vbox), table_frame, TRUE, TRUE, 0); 
   regData->dialog = table_frame;
@@ -459,7 +459,7 @@ regWindowLedger(xaccLedgerDisplay *ledger) {
 
   ledger->dirty = 1;
   xaccLedgerDisplayRefresh (ledger);
-  unsetBusyCursor(gnc_get_ui_data());
+  gnc_unset_busy_cursor(gnc_get_ui_data());
 
   return regData;
 }
@@ -635,8 +635,11 @@ deleteCB(GtkWidget *widget, gpointer data)
   /* ask for user confirmation before performing 
    * permanent damage */
   trans = xaccSplitGetParent (split);
-  sprintf (buf, TRANS_DEL_MSG, xaccSplitGetMemo (split), xaccTransGetDescription (trans));
-  if (!verifyBox(buf)) return;
+  sprintf (buf, TRANS_DEL_MSG, xaccSplitGetMemo (split),
+	   xaccTransGetDescription (trans));
+
+  if (!gnc_verify_dialog(buf, GNC_F))
+    return;
 
   /* make a copy of all of the accounts that will be  
    * affected by this deletion, so that we can update
@@ -660,7 +663,7 @@ deleteCB(GtkWidget *widget, gpointer data)
   xaccAccountCommitEdit (acc);
   xaccAccListDisplayRefresh (affected_accounts);
   free (affected_accounts);
-  refreshMainWindow ();
+  gnc_refresh_main_window ();
 }
 
 /********************************************************************\

@@ -1,5 +1,5 @@
 /*******************************************************************\
- * MainWindowP.h -- private GNOME main window functions             *
+ * window-main.h -- private GNOME main window functions             *
  * Copyright (C) 1997 Robin D. Clark                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -30,53 +30,25 @@
 #include "config.h"
 
 /** PROTOTYPES ******************************************************/
-void gnc_ui_refreshMainWindow( void );
-void gnc_ui_mainWindow(AccountGroup *);
-void gnc_ui_refresh_tree ( void );
-void gnc_ui_acct_tree_fill ( GtkTree *, AccountGroup *);
+static void gnc_ui_refresh_statusbar(void);
+static void gnc_ui_exit_cb(GtkWidget *widget, gpointer data);
+static void gnc_ui_about_cb(GtkWidget *widget, gpointer data);
+static void gnc_ui_help_cb(GtkWidget *widget, gpointer data);
+static void gnc_ui_reports_cb(GtkWidget *widget, gchar *report);
+static void gnc_ui_add_account(GtkWidget *widget, gpointer data);
+static void gnc_ui_delete_account_cb(GtkWidget *widget, gpointer data);
+static void gnc_ui_mainWindow_toolbar_open(GtkWidget *widget, gpointer data);
+static void gnc_ui_mainWindow_toolbar_edit(GtkWidget *widget, gpointer data);
+static void gnc_ui_options_cb(GtkWidget *widget, gpointer data);
+static void gnc_ui_view_cb(GtkWidget *widget, gint viewType);
+static void gnc_ui_filemenu_cb(GtkWidget *widget, gpointer menuItem);
 
-#if 0
+static gboolean gnc_ui_mainWindow_delete_cb(GtkWidget *widget,
+                                            GdkEvent *event,
+                                            gpointer user_data);
 
-/** GLOBALS *********************************************************/
-enum {
-  FMB_NEW,
-  FMB_OPEN,
-  FMB_IMPORT,
-  FMB_SAVE,
-  FMB_SAVEAS,
-  FMB_QUIT,
-};
-enum {
-  AMB_NEW,
-  AMB_OPEN,
-  AMB_LEDGER,
-  AMB_EDIT,
-  AMB_DEL,
-  AMB_TRNS,
-  AMB_RPRT,
-  AMB_SHOW,
-  AMB_CAT,
-};
-enum {
-  HMB_ABOUT,
-  HMB_ACC,
-  HMB_REGWIN,
-  HMB_RECNWIN,
-  HMB_ADJBWIN,
-  HMB_MAIN,
-  HMB_LIC,
-};
+static gboolean gnc_ui_mainWindow_destroy_cb(GtkWidget *widget,
+                                             GdkEvent *event,
+                                             gpointer user_data);
 
 #endif
-
-#endif
-
-/*
-  Local Variables:
-  tab-width: 2
-  indent-tabs-mode: nil
-  mode: c-mode
-  c-indentation-style: gnu
-  eval: (c-set-offset 'block-open '-)
-  End:
-*/

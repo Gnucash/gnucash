@@ -21,10 +21,12 @@
 
 #include <stdlib.h>
 #include <assert.h>
+#include <guile/gh.h>
 #include <gnome.h>
 
 #include "config.h"
 
+#include "window-main.h"
 #include "Account.h"
 #include "FileIO.h"
 #include "FileBox.h"
@@ -43,85 +45,136 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
-GtkWidget *app;
+static GtkWidget *app = NULL;
 
-gncUIWidget gnc_get_ui_data() {
+static int gnome_is_running = FALSE;
+static int gnome_is_initialized = FALSE;
+static int gnome_is_terminating = FALSE;
+
+/* ============================================================== */
+
+int 
+gnucash_ui_is_running() {
+  return gnome_is_running;
+}
+
+/* ============================================================== */
+
+int 
+gnucash_ui_is_terminating() {
+  return gnome_is_terminating;
+}
+
+/* ============================================================== */
+
+gncUIWidget
+gnc_get_ui_data() {
   return app;
 }
 
-/* These gnucash_lowlev and gnucash_ui functions are just hacks to get
+/* ============================================================== */
+
+/* These gnucash_ui_init and gnucash_ui functions are just hacks to get
    the guile stuff up and running.  Expect a more formal definition of
    what they should do soon, and expect that the open/select functions
    will be merged with the code in FMB_OPEN in MainWindow.c */
 
 int
-gnucash_lowlev_app_init()
+gnucash_ui_init()
 {
-#if DEBUG_MEMORY
-  char *blk;
-  DEBUG("Initializing memory");
-  blk = (char *)_malloc(8192);
-  _free(blk);
-  printf(" coresize = %d\n",_coresize());
-  DEBUG("Done initializing memory");
-#endif
-  ENTER ("gnucash_lowlev_app_init");
-  
-  printf ("\n\n"
-          "This is a development version.  It may or may not work. \n"
-          "Report bugs and other problems to http://www.gnucash.org/ \n"
-          "The last stable version was gnucash-1.2.0 \n"
-          "The next stable version will be gnucash-1.4.x \n"
-          "\n\n");
-  
-  {
-    int fake_argc = 1;
-    char *fake_argv[] = {"gnucash"};
-   
-    /* We're going to have to have other ways to handle X and GUI
-       specific args...
+  int fake_argc = 1;
+  char *fake_argv[] = {"gnucash"};
 
-       For now, use fake_argv and fake_argc...
-    */
-    gnome_init("GnuCash", NULL, fake_argc, fake_argv);  
-    app = gnome_app_new ( "gnucash", "GnuCash" );
-    
+  ENTER ("gnucash_ui_init");
+
+  /* We're going to have to have other ways to handle X and GUI
+     specific args...
+
+     For now, use fake_argv and fake_argc...
+  */
+  if (!gnome_is_initialized) {
+    gnome_init("GnuCash", NULL, fake_argc, fake_argv);
+    gnome_is_initialized = TRUE;
+
+    app = gnome_app_new ( "GnuCash", "GnuCash" );
+
     {
       /* Use a nicer font IMO, if available */
       char font[] = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*";
       GtkStyle *st = gtk_widget_get_default_style();
       GdkFont *f = gdk_font_load(font);
       if(st && f) {
-        st->font = f;
+	st->font = f;
       }
     }
-  } 
 
-  LEAVE ("gnucash_lowlev_app_init");
+    /* Make the main window. */
+    mainWindow();
+  }
+
+  LEAVE ("gnucash_ui_init");
+
   return 0;
 }
 
+/* ============================================================== */
+
+void
+gnc_ui_shutdown (void)
+{
+  if (gnome_is_running && !gnome_is_terminating) {
+    gnome_is_terminating = TRUE;
+    gtk_widget_hide(app);
+    gtk_main_quit();
+  }
+}
+
+/* ============================================================== */
+
+void
+gnc_ui_destroy (void)
+{
+  if (!gnome_is_initialized)
+    return;
+
+  if (app != NULL) {
+    gtk_widget_destroy(app);
+    app = NULL;
+  }
+}
+
+/* ============================================================== */
+
 int
-gnucash_lowlev_app_main()
-{  
-  /* Make main window */
-  mainWindow();
-  
-  gtk_widget_realize (app);
-  
+gnc_ui_main()
+{
+  /* Initialize gnome */
+  gnucash_ui_init();
+
+  gnc_refresh_main_window();
+  gtk_widget_show(app);
+
+  gnome_is_running = TRUE;
+
   /* Enter gnome event loop */
   gtk_main();
+
+  gnome_is_running = FALSE;
+  gnome_is_terminating = FALSE;
 
   return 0;
 }
 
 /* hack alert -- all we do below is rename some functions ... fix this someday */
+/* ============================================================== */
 
 int
 gnucash_ui_open_file(const char name[]) {
   gncFileOpenFile(name);
   return (1);
 }
+
+/* ============================================================== */
 
 int
 gnucash_ui_select_file() {

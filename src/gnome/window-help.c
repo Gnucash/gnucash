@@ -299,7 +299,7 @@ htmlWindow( GtkWidget *parent,
   HTMLWindow *hw = *hwinp;
   char * text=0x0;
   
- // setBusyCursor( parent );
+ // gnc_set_busy_cursor( parent );
   
   historyInsert (&(hw->history), htmlfile); 
   if (htmltext) text = strdup (htmltext);

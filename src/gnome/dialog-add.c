@@ -538,11 +538,7 @@ gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
       xaccAccountSetName(account, n);
     else
     {
-      GtkWidget *msgbox;
-      msgbox = gnome_message_box_new ( "You must enter a valid name for the account",
-                                       GNOME_MESSAGE_BOX_ERROR, "Ok", NULL );
-      gtk_window_set_modal(GTK_WINDOW(msgbox) ,TRUE );
-      gtk_widget_show ( msgbox );
+      gnc_error_dialog("You must enter a valid name for the account");
       return;
     }
   }
@@ -551,11 +547,7 @@ gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
     xaccAccountSetType (account, accData->type);
   else
   {
-    GtkWidget *msgbox;
-    msgbox = gnome_message_box_new ( "You must select a type for the account",
-                                     GNOME_MESSAGE_BOX_ERROR, "Ok", NULL );
-    gtk_window_set_modal(GTK_WINDOW(msgbox) ,TRUE );
-    gtk_widget_show ( msgbox );
+    gnc_error_dialog("You must select a type for the account");
     return;
   }
 
@@ -606,8 +598,6 @@ gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
   {
     GtkWidget *app = gnc_get_ui_data();
     GtkCTree *ctree = gtk_object_get_data(GTK_OBJECT(app), "ctree");
-    GtkCTreeNode *ctreeParent = gtk_object_get_data(GTK_OBJECT(app), 
-                                                    "ctree_parent");
     double dbalance = xaccAccountGetBalance(account);
     GtkCTreeNode *newRow = NULL;
     GtkCTreeNode *parentRow;
@@ -621,11 +611,12 @@ gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
     text[2] = buf;
     
     /* Find the parent account row & add our new account to it... */
-    parentRow = gtk_ctree_find_by_row_data(GTK_CTREE(ctree), ctreeParent, 
+    parentRow = gtk_ctree_find_by_row_data(GTK_CTREE(ctree), NULL,
                                            accData->parentAccount);
-    newRow    = gtk_ctree_insert_node (ctree, parentRow, newRow, text, 0,
-                                     NULL, NULL, NULL, NULL, /* PIXMAP INFO */
-                                       TRUE, TRUE);
+
+    newRow = gtk_ctree_insert_node (ctree, parentRow, newRow, text, 0,
+				    NULL, NULL, NULL, NULL, /* PIXMAP INFO */
+				    TRUE, TRUE);
     
     gtk_ctree_node_set_row_data(GTK_CTREE(ctree), newRow, account);
   }
