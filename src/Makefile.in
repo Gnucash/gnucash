@@ -53,7 +53,7 @@ gnome: ${GNOME_OBJS}
 	@cd engine;            $(MAKE) default
 	@cd register;          $(MAKE) gnome
 	@cd reports;           $(MAKE) default
-        @cd swig;  	       $(MAKE) default
+	@cd swig;  	       $(MAKE) default
 	@cd guile;             $(MAKE) default
 	@cd gnome;             $(MAKE) gnome
 
