@@ -96,3 +96,4 @@ To run gdb on the version in your build tree:
 Using Valgrind with gnucash
 -- run ./src/bin/overrides/gnucash-valgrind
 
+However, I did not find valgrind to be useful.  
