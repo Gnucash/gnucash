@@ -19,8 +19,6 @@
 ;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
-(gnc:support "xml-generator.scm")
-
 ;;;;;;;;;;;;;
 ;;;; by Christopher Browne
 ;;;; <cbbrowne@hex.net>, <cbbrowne@ntlug.org>
