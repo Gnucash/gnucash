@@ -176,7 +176,15 @@ gnc_numeric gnc_numeric_sub(gnc_numeric a, gnc_numeric b,
                             gint64 denom, gint how);
 gnc_numeric gnc_numeric_mul(gnc_numeric a, gnc_numeric b, 
                             gint64 denom, gint how);
-gnc_numeric gnc_numeric_div(gnc_numeric a, gnc_numeric b, 
+
+/** Division.  Note that division can overflow, in the following 
+ *  sense: if we write x=a/b and y=c/d  then x/y = (a*d)/(b*c)  
+ *  If, after eliminating all common factors between the numerator 
+ *  (a*d) and the denominator (b*c),  then if either the numerator 
+ *  and/or the denominator are *still* greater than 2^63, then 
+ *  the division has overflowed.
+ */
+gnc_numeric gnc_numeric_div(gnc_numeric x, gnc_numeric y, 
                             gint64 denom, gint how);
 /** Negate the argument  */
 gnc_numeric gnc_numeric_neg(gnc_numeric a);
