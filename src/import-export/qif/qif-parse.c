@@ -1,7 +1,7 @@
 /*
  * qif-parse.c -- parse QIF
  *
- * Written by:	Derek Atkins <derek@ihtfp.com>
+ * Written by:        Derek Atkins <derek@ihtfp.com>
  * Copyright (c) 2003 Derek Atkins <warlord@MIT.EDU>
  *
  * This program is free software; you can redistribute it and/or
@@ -80,14 +80,14 @@ compile_regex()
 {
   regcomp(&category_regex,
       "^ *(\\[)?([^]/\\|]*)(]?)(/([^\\|]*))?(\\|(\\[)?([^]/]*)(]?)(/(.*))?)? *$",
-	  REG_EXTENDED);
+          REG_EXTENDED);
 
   qifp_regex_compiled = TRUE;
 }
 
 #define QIF_ADD_TYPE(ts,t) \
-	g_hash_table_insert(qif_bangtype_map, ts, GINT_TO_POINTER(t)); \
-	g_hash_table_insert(qif_bangtype_map, _(ts), GINT_TO_POINTER(t));
+        g_hash_table_insert(qif_bangtype_map, ts, GINT_TO_POINTER(t)); \
+        g_hash_table_insert(qif_bangtype_map, _(ts), GINT_TO_POINTER(t));
 
 static void
 build_bangtype_map()
@@ -114,7 +114,7 @@ build_bangtype_map()
 #undef QIF_ADD_TYPE
 
 #define QIF_ADD_ACT(ts,t) \
-	g_hash_table_insert(qif_action_map, ts, GINT_TO_POINTER(t));
+        g_hash_table_insert(qif_action_map, ts, GINT_TO_POINTER(t));
 
 static void
 build_action_map()
@@ -222,9 +222,9 @@ build_atype_map()
 
   /* Internal types */
   QIF_ADD_ATYPE("__any_bank__", make_list(5, BANK, CREDIT, CASH, ASSET,
-					  LIABILITY));
+                                          LIABILITY));
   QIF_ADD_ATYPE("__all__", make_list(7, BANK, CREDIT, CASH, ASSET, LIABILITY,
-				      STOCK, MUTUAL));
+                                      STOCK, MUTUAL));
   QIF_ADD_ATYPE("__stock__", make_list(2, STOCK, MUTUAL));
   QIF_ADD_ATYPE("__income__", make_list(1, INCOME));
   QIF_ADD_ATYPE("__expense__", make_list(1, EXPENSE));
@@ -284,9 +284,9 @@ qif_parse_bangtype(QifContext ctx, const char *line)
 /* returns TRUE if successful, FALSE if there is a problem */
 gboolean
 qif_parse_split_category(const char* str,
-			 char** cat, gboolean *cat_is_acct, char** cat_class,
-			 char** miscx_cat, gboolean *miscx_cat_is_acct,
-			 char **miscx_class)
+                         char** cat, gboolean *cat_is_acct, char** cat_class,
+                         char** miscx_cat, gboolean *miscx_cat_is_acct,
+                         char **miscx_class)
 {
   /* This is a pretty f**ked up string.  Basically it looks like:
    *  ([)cat-or-acct(])(/(class))(|([)cat-of-acct(])(/ext))
@@ -308,7 +308,7 @@ qif_parse_split_category(const char* str,
   regmatch_t pmatch[12];
 
   g_return_val_if_fail(cat && cat_is_acct && cat_class &&
-		       miscx_cat && miscx_cat_is_acct && miscx_class, FALSE);
+                       miscx_cat && miscx_cat_is_acct && miscx_class, FALSE);
 
 
   if (!qifp_regex_compiled)
@@ -345,19 +345,19 @@ qif_parse_split_category(const char* str,
   *cat_is_acct = (pmatch[1].rm_so != -1 && pmatch[3].rm_so != -1);
   /* category class */
   *cat_class = (pmatch[4].rm_so != -1 ?
-		g_strndup(str+pmatch[5].rm_so, pmatch[5].rm_eo - pmatch[5].rm_so) :
-		NULL);
+                g_strndup(str+pmatch[5].rm_so, pmatch[5].rm_eo - pmatch[5].rm_so) :
+                NULL);
 
   /* miscx category name */
   *miscx_cat = (pmatch[6].rm_so != -1 ?
-		g_strndup(str+pmatch[8].rm_so, pmatch[8].rm_eo - pmatch[8].rm_so) :
-		NULL);
+                g_strndup(str+pmatch[8].rm_so, pmatch[8].rm_eo - pmatch[8].rm_so) :
+                NULL);
   /* miscx cat is acct */
   *miscx_cat_is_acct  = (pmatch[7].rm_so != -1 && pmatch[9].rm_so != -1);
   /* miscx class */
   *miscx_class = (pmatch[10].rm_so != -1 ?
-		  g_strndup(str+pmatch[11].rm_so,
-			    pmatch[11].rm_eo - pmatch[11].rm_so) : NULL);
+                  g_strndup(str+pmatch[11].rm_so,
+                            pmatch[11].rm_eo - pmatch[11].rm_so) : NULL);
 
   return TRUE;
 }
@@ -413,7 +413,7 @@ QifAction qif_parse_action(QifLine line)
   if (!result) {
     /* XXX: pop up a dialog? */
     PWARN("Unknown Action at line %d: %s.  Some transactions may be discarded",
-	  line->lineno, line->line);
+          line->lineno, line->line);
     return QIF_A_NONE;
   }
 
@@ -469,23 +469,23 @@ GList * qif_parse_acct_type_guess(QifType type)
  */
 
 typedef struct _parse_helper {
-  QifContext		ctx;
+  QifContext                ctx;
 
-  GncImportFormat	budget;
-  GncImportFormat	limit;
-  GncImportFormat	amount;
-  GncImportFormat	d_amount;
-  GncImportFormat	price;
-  GncImportFormat	shares;
-  GncImportFormat	commission;
-  GncImportFormat	date;
+  GncImportFormat        budget;
+  GncImportFormat        limit;
+  GncImportFormat        amount;
+  GncImportFormat        d_amount;
+  GncImportFormat        price;
+  GncImportFormat        shares;
+  GncImportFormat        commission;
+  GncImportFormat        date;
 } *parse_helper_t;
 
 #define QIF_PARSE_CHECK_NUMBER(str,help) { \
-	if (str) (help) = gnc_import_test_numeric((str), (help)); \
+        if (str) (help) = gnc_import_test_numeric((str), (help)); \
 }
 #define QIF_PARSE_PARSE_NUMBER(str,fmt,val) { \
-	if (str) gnc_import_parse_numeric((str), (fmt), (val)); \
+        if (str) gnc_import_parse_numeric((str), (fmt), (val)); \
 }
 
 static void
@@ -556,10 +556,10 @@ qif_parse_check_txn(gpointer val, gpointer data)
       QIF_PARSE_CHECK_NUMBER(split->amountstr, helper->amount);
 
       if (node) {
-	split = node->data;
-	node = node->next;
+        split = node->data;
+        node = node->next;
       } else
-	split = NULL;
+        split = NULL;
     } while (split);
   }
 }
@@ -586,7 +586,7 @@ qif_parse_parse_txn(gpointer val, gpointer data)
     QIF_PARSE_PARSE_NUMBER(itxn->pricestr, helper->price, &itxn->price);
     QIF_PARSE_PARSE_NUMBER(itxn->sharesstr, helper->shares, &itxn->shares);
     QIF_PARSE_PARSE_NUMBER(itxn->commissionstr, helper->commission,
-			   &itxn->commission);
+                           &itxn->commission);
 
     qif_invst_txn_setup_splits(helper->ctx, txn);
 
@@ -597,10 +597,10 @@ qif_parse_parse_txn(gpointer val, gpointer data)
       QIF_PARSE_PARSE_NUMBER(split->amountstr, helper->amount, &split->amount);
 
       if (node) {
-	split = node->data;
-	node = node->next;
+        split = node->data;
+        node = node->next;
       } else
-	split = NULL;
+        split = NULL;
     } while (split);
 
     qif_txn_setup_splits(txn);
@@ -659,8 +659,8 @@ qif_parse_all(QifContext ctx, gpointer arg)
 
   if (helper.date & (helper.date - 1)) {
     helper.date = gnc_import_choose_fmt(_("The Date format is ambiguous.  "
-					  "Please choose the correct format."),
-					helper.date, arg);
+                                          "Please choose the correct format."),
+                                        helper.date, arg);
   }
 
   /* now parse it.. */
@@ -668,9 +668,9 @@ qif_parse_all(QifContext ctx, gpointer arg)
 }
 
 typedef struct {
-  QifContext	ctx;
-  GList *	list;
-  const char*	type;
+  QifContext        ctx;
+  GList *        list;
+  const char*        type;
 } qif_merge_t;
 
 static void
@@ -744,7 +744,7 @@ qif_massage_split(QifSplit split, QifContext ctx)
 
   if (split->cat_class) {
     split->cat_class = (QifClass) qif_object_map_lookup(ctx, QIF_O_CLASS,
-							split->cat_class->name);
+                                                        split->cat_class->name);
   }
 }
 
@@ -775,7 +775,7 @@ qif_massage_txn(gpointer obj, gpointer data)
 
   if (txn->from_acct)
     txn->from_acct = (QifAccount) qif_object_map_lookup(ctx, QIF_O_ACCOUNT,
-							txn->from_acct->name);
+                                                        txn->from_acct->name);
 
   if (txn->invst_info)
     qif_massage_itxn(txn->invst_info, ctx);
