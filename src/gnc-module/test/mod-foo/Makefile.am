@@ -9,7 +9,7 @@ libfoo_la_LDFLAGS = -module
 libfoo_la_SOURCES = foo.c
 
 libgncmodfoo_la_SOURCES = foo-gwrap.c gnc-mod-foo.c
-libgncmodfoo_la_LDFLAGS = -module -L.libs
+libgncmodfoo_la_LDFLAGS = -module 
 libgncmodfoo_la_LIBADD = -lfoo
 
 foo-gwrap.c foo-gwrap.h: foo-gwrap.scm

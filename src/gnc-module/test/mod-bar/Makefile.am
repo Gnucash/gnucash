@@ -9,7 +9,7 @@ libbar_la_LDFLAGS = -module
 libbar_la_SOURCES = bar.c
 
 libgncmodbar_la_SOURCES=bar-gwrap.c gnc-mod-bar.c
-libgncmodbar_la_LDFLAGS=-module -L.libs
+libgncmodbar_la_LDFLAGS=-module
 libgncmodbar_la_LIBADD=-lbar
 
 bar-gwrap.c bar-gwrap.h: bar-gwrap.scm
