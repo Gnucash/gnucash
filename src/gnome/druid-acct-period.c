@@ -54,7 +54,7 @@ typedef struct
 
   time_t earliest;
   char * earliest_str;
-  GDate *start_date;
+  GDate *closing_date;
   FreqSpec *period;
 
 } AcctPeriodInfo;
@@ -70,7 +70,7 @@ ap_window_destroy_cb (GtkObject *object, gpointer data)
 
   // gnc_frequency_destory ??
   xaccFreqSpecFree (info->period);
-  g_date_free (info->start_date);
+  g_date_free (info->closing_date);
   g_free (info->earliest_str);
   g_free (info);
 }
@@ -80,9 +80,13 @@ ap_finish (GnomeDruidPage *druidpage,
                     gpointer arg1,
                     gpointer user_data)
 {
-  // AcctPeriodInfo *info = user_data;
+  AcctPeriodInfo *info = user_data;
 
+  gnc_suspend_gui_refresh ();
   printf ("finished with acct periods\n");
+
+  gnc_resume_gui_refresh ();
+  gnc_close_gui_component_by_data (DRUID_ACCT_PERIOD_CM_CLASS, info);
 }
 
 static void
@@ -209,20 +213,23 @@ ap_druid_create (AcctPeriodInfo *info)
 
   info->druid = glade_xml_get_widget (xml, "acct_period_druid");
 
-  /* Find the date of the earliest transaction in the book, and use
-   * that to set up the freq spec widget. */
+  /* Find the date of the earliest transaction in the book.
+   * Add a year minus a day as the first guess for book closing,
+   * and use that to set up the freq spec widget. */
   info->earliest = get_earliest_in_book (gnc_get_current_book());
   info->earliest_str = qof_print_date(info->earliest); 
 printf ("duude the earliest is %ld %s\n", info->earliest, ctime (&info->earliest));
-  info->start_date = g_date_new();
-  g_date_set_time (info->start_date, info->earliest);
+  info->closing_date = g_date_new();
+  g_date_set_time (info->closing_date, info->earliest);
+  g_date_add_years (info->closing_date, 1);
+  g_date_subtract_days (info->closing_date, 1);
 
   info->period = xaccFreqSpecMalloc( gnc_get_current_book() );
-  xaccFreqSpecSetMonthly (info->period, info->start_date, 12);
+  xaccFreqSpecSetMonthly (info->period, info->closing_date, 12);
   xaccFreqSpecSetUIType (info->period, UIFREQ_YEARLY);
 
   info->period_menu = GNC_FREQUENCY (
-          gnc_frequency_new (info->period, info->start_date));
+          gnc_frequency_new (info->period, info->closing_date));
 
   /* Change the text so that its more mainingful for this druid */
   gnc_frequency_set_frequency_label_text(info->period_menu, _("Period:"));
