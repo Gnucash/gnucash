@@ -54,7 +54,7 @@
                     '(version name options-generator
                               options-cleanup-cb options-changed-cb
                               renderer in-menu? menu-path menu-name
-                              menu-tip export-thunk)))
+                              menu-tip export-types export-thunk)))
 
 (define (gnc:define-report . args)
   ;; For now the version is ignored, but in the future it'll let us
@@ -76,6 +76,7 @@
      #f                         ;; menu-path
      #f                         ;; menu-name
      #f                         ;; menu-tip
+     #f                         ;; export-types
      #f                         ;; export-thunk
      ))
 
@@ -118,6 +119,8 @@
   (record-accessor <report-template> 'menu-name))
 (define gnc:report-template-menu-tip
   (record-accessor <report-template> 'menu-tip))
+(define gnc:report-template-export-types
+  (record-accessor <report-template> 'export-types))
 (define gnc:report-template-export-thunk
   (record-accessor <report-template> 'export-thunk))
 
@@ -264,17 +267,23 @@
         (gnc:report-template-new-options template)
         #f)))
 
+(define (gnc:report-export-types report)
+  (let ((template (hash-ref *gnc:_report-templates_* 
+                            (gnc:report-type report))))
+    (if template
+        (gnc:report-template-export-types template)
+        #f)))
+
 (define (gnc:report-export-thunk report)
-  (let ((template 
-         (hash-ref  *gnc:_report-templates_* 
-                    (gnc:report-type report))))
+  (let ((template (hash-ref *gnc:_report-templates_* 
+                            (gnc:report-type report))))
     (if template
         (gnc:report-template-export-thunk template)
         #f)))
 
 (define (gnc:report-menu-name report)
-  (let ((template (hash-ref  *gnc:_report-templates_* 
-			     (gnc:report-type report))))
+  (let ((template (hash-ref *gnc:_report-templates_* 
+                            (gnc:report-type report))))
     (if template
         (or (gnc:report-template-menu-name template)
 	    (gnc:report-name report))

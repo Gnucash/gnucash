@@ -6,7 +6,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash report report-system))
-(use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (ice-9 slib))
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-1))
@@ -116,6 +116,7 @@
 (export gnc:report-template-menu-path)
 (export gnc:report-template-menu-name)
 (export gnc:report-template-menu-tip)
+(export gnc:report-template-export-types)
 (export gnc:report-template-export-thunk)
 (export gnc:report-type)
 (export gnc:report-set-type!)
@@ -134,6 +135,7 @@
 (export gnc:make-report)
 (export gnc:restore-report)
 (export gnc:make-report-options)
+(export gnc:report-export-types)
 (export gnc:report-export-thunk)
 (export gnc:report-menu-name)
 (export gnc:report-name)
