@@ -125,7 +125,7 @@ gnomeappdir = ${datadir}/gnome/apps/Applications
 
 gnomeapp_DATA = gnucash.desktop
 
-noinst_HEADERS =    account-tree.h   account-treeP.h   cursors.h   dialog-account.h   dialog-account-picker.h   dialog-budget.h   dialog-fincalc.h   dialog-find-transactions.h   dialog-options.h   dialog-print-check.h   dialog-qif-import.h   dialog-totd.h   dialog-transfer.h   dialog-utils.h   extensions.h   glade-cb-gnc-dialogs.h   glade-gnc-dialogs.h   glade-support-gnc-dialogs.h   gnc-currency-edit.h   gnc-datedelta.h   gnc-dateedit.h   gnome-top-level.h   gtkselect.h   print-session.h   query-user.h   reconcile-list.h   reconcile-listP.h   window-help.h   window-html.h   window-main.h   window-mainP.h   window-reconcile.h   window-register.h   window-report.h
+noinst_HEADERS =    account-tree.h   cursors.h   dialog-account.h   dialog-account-picker.h   dialog-budget.h   dialog-fincalc.h   dialog-find-transactions.h   dialog-options.h   dialog-print-check.h   dialog-qif-import.h   dialog-totd.h   dialog-transfer.h   dialog-utils.h   extensions.h   glade-cb-gnc-dialogs.h   glade-gnc-dialogs.h   glade-support-gnc-dialogs.h   gnc-currency-edit.h   gnc-datedelta.h   gnc-dateedit.h   gnome-top-level.h   gtkselect.h   print-session.h   query-user.h   reconcile-list.h   window-help.h   window-html.h   window-main.h   window-reconcile.h   window-register.h   window-report.h
 
 
 EXTRA_DIST =    .cvsignore   gnc-dialogs.glade   gnucash.desktop

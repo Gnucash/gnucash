@@ -41,7 +41,6 @@ gnomeapp_DATA = gnucash.desktop
 
 noinst_HEADERS = \
   account-tree.h \
-  account-treeP.h \
   cursors.h \
   dialog-account.h \
   dialog-account-picker.h \
@@ -66,11 +65,9 @@ noinst_HEADERS = \
   print-session.h \
   query-user.h \
   reconcile-list.h \
-  reconcile-listP.h \
   window-help.h \
   window-html.h \
   window-main.h \
-  window-mainP.h \
   window-reconcile.h \
   window-register.h \
   window-report.h

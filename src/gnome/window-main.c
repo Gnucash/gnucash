@@ -43,7 +43,6 @@
 #include "RegWindow.h"
 #include "Refresh.h"
 #include "window-main.h"
-#include "window-mainP.h"
 #include "window-reconcile.h"
 #include "window-register.h"
 #include "window-help.h"
@@ -55,13 +54,27 @@
 #include "dialog-find-transactions.h"
 #include "dialog-totd.h"
 #include "file-history.h"
+#include "gtkselect.h"
 #include "EuroUtils.h"
 #include "Scrub.h"
 #include "util.h"
 #include "gnc.h"
 
-#include "gtkselect.h"
 
+/* Main Window information structure */
+typedef struct _GNCMainInfo GNCMainInfo;
+struct _GNCMainInfo
+{
+  GtkWidget *account_tree;
+  GtkWidget *totals_combo;
+  GList *totals_list;
+
+  SCM main_window_change_callback_id;
+  SCM euro_change_callback_id;
+  SCM toolbar_change_callback_id;
+
+  GSList *account_sensitives;
+};
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
@@ -76,14 +89,16 @@ enum {
   FMB_QUIT,
 };
 
-/*
- * An accumulator for a given currency.
+/** Static function declarations ***************************************/
+static GNCMainInfo * gnc_get_main_info();
+
+
+/* An accumulator for a given currency.
  *
  * This is used during the update to the status bar to contain the
  * accumulation for a single currency. These are placed in a GList and
  * kept around for the duration of the calculation. There may, in fact
- * be better ways to do this, but none occurred.
- */
+ * be better ways to do this, but none occurred. */
 struct _GNCCurrencyAcc {
   const char *currency;
   double assets;
@@ -91,13 +106,11 @@ struct _GNCCurrencyAcc {
 };
 typedef struct _GNCCurrencyAcc GNCCurrencyAcc;
 
-/*
- * An item to appear in the selector box in the status bar.
+/* An item to appear in the selector box in the status bar.
  *
- * This is maintained for the duration, where there is one per currency,
- * plus (eventually) one for the default currency accumulation (like the
- * EURO).
- */
+ * This is maintained for the duration, where there is one per
+ * currency, plus (eventually) one for the default currency
+ * accumulation (like the EURO). */
 struct _GNCCurrencyItem {
   const char *currency;
   GtkWidget *listitem;
@@ -107,13 +120,11 @@ struct _GNCCurrencyItem {
 };
 typedef struct _GNCCurrencyItem GNCCurrencyItem;
 
-/*
- * Build a single currency item.
+/* Build a single currency item.
  *
- * This function handles the building of a single currency item for the
- * selector. It looks like the old code in the update function, but now
- * only handles a single currency.
- */
+ * This function handles the building of a single currency item for
+ * the selector. It looks like the old code in the update function,
+ * but now only handles a single currency. */
 static GNCCurrencyItem *
 gnc_ui_build_currency_item(const char *currency)
 {
@@ -177,13 +188,10 @@ gnc_ui_build_currency_item(const char *currency)
 }
 
 
-/*
- * Get a currency accumulator.
+/* Get a currency accumulator.
  *
- * This will search the given list, and if no accumulator is found, wil
- * allocate a fresh one. This may cause problems with currencies that have
- * the same name... let the buyer beware.
- */
+ * This will search the given list, and if no accumulator is found,
+ * will allocate a fresh one. */
 static GNCCurrencyAcc *
 gnc_ui_get_currency_accumulator(GList **list, const char *currency)
 {
@@ -207,15 +215,13 @@ gnc_ui_get_currency_accumulator(GList **list, const char *currency)
   return found;
 }
 
-/*
- * Get a currency item.
+/* Get a currency item.
  *
  * This will search the given list, and if no accumulator is found, will
  * create a fresh one.
  *
- * It looks just like the function above, with some extra stuff to get the
- * item into the list.
- */
+ * It looks just like the function above, with some extra stuff to get
+ * the item into the list. */
 static GNCCurrencyItem *
 gnc_ui_get_currency_item(GList **list, const char *currency, GtkWidget *holder)
 {
