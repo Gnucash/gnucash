@@ -2,6 +2,8 @@
 
 	* src/engine/util.c (xaccSPrintAmount): add a space after the
 	currency code to make the currency symbol.
+	(gnc_lconv_set_char): check for the lconv default value using
+	CHAR_MAX, not 127.
 
 2000-05-02  Robert Graham Merkel  <rgmerk@mira.net>
 
