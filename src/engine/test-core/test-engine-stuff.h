@@ -53,6 +53,7 @@ const char *get_random_commodity_namespace(void);
 
 Query* get_random_query(void);
 Query * make_trans_query (Transaction *trans);
+void trans_query_include_price (gboolean include_amounts);
 
 GNCBook * get_random_book (GNCSession *session);
 GNCSession * get_random_session (void);

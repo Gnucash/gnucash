@@ -1517,6 +1517,14 @@ add_kvp_query (Query *q, kvp_frame *frame, kvp_match_where_t where)
   kvp_frame_for_each_slot (frame, add_kvp_value_query, &kqd);
 }
 
+static gboolean include_price = TRUE;
+
+void
+trans_query_include_price (gboolean include_price_in)
+{
+  include_price = include_price_in;
+}
+
 Query *
 make_trans_query (Transaction *trans)
 {
@@ -1543,11 +1551,14 @@ make_trans_query (Transaction *trans)
   DxaccQueryAddAmountMatch (q, d, AMT_SGN_MATCH_EITHER,
                             AMT_MATCH_EXACTLY, QUERY_AND);
 
-  d = gnc_numeric_to_double (xaccSplitGetSharePrice (s));
-  DxaccQueryAddSharePriceMatch (q, d, AMT_MATCH_EXACTLY, QUERY_AND);
-
   d = gnc_numeric_to_double (xaccSplitGetAmount (s));
   DxaccQueryAddSharesMatch (q, d, AMT_MATCH_EXACTLY, QUERY_AND);
+
+  if (include_price)
+  {
+    d = gnc_numeric_to_double (xaccSplitGetSharePrice (s));
+    DxaccQueryAddSharePriceMatch (q, d, AMT_MATCH_EXACTLY, QUERY_AND);
+  }
 
   {
     Timespec ts;
