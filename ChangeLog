@@ -1,3 +1,11 @@
+2002-09-07  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/gnc-generic-import.c, ...: Patch by Benoit
+	Gregoire <bock@step.polymtl.ca>: This is the new transaction
+	matcher GUI.  Basic functionnality is 100% implemented.
+	Transaction matching using unique-id was temporarily disabled to
+	ease testing of the heuristics.  Will be re-implemented very soon.
+
 2002-09-02  Derek Atkins  <derek@ihtfp.com>
 	* src/gnome/.cvsignore: ignore gnc-version.h
 	* src/report/report-system/html-style-info.scm: fix bug
