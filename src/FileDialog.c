@@ -299,8 +299,15 @@ gncFileQuerySave (void)
     const char *message = _("Changes have been made since the last "
                             "Save. Save the data to file?");
 
-    result = gnc_verify_cancel_dialog (message, GNC_VERIFY_YES);
-    
+    if (gnc_ui_can_cancel_save ())
+      result = gnc_verify_cancel_dialog (message, GNC_VERIFY_YES);
+    else
+    {
+      gboolean do_save = gnc_verify_dialog (message, TRUE);
+
+      result = do_save ? GNC_VERIFY_YES : GNC_VERIFY_NO;
+    }
+
     if (result == GNC_VERIFY_CANCEL)
       return FALSE;
 
@@ -544,6 +551,11 @@ gncFileSave (void)
   gncAddHistory (book);
 
   gnc_book_mark_saved(book);
+
+  /* save the main window state */
+  gh_call1(gh_eval_str("gnc:main-window-save-state"),
+           gh_str02scm(gnc_book_get_url(current_book))); 
+
   LEAVE (" ");
 }
 
