@@ -146,6 +146,46 @@ Some half-finished thoughts about the engine API:
    where "end-edit" is replaced by "commeit-edit" or "reject-edit".
 
 
+Reconciliation
+--------------
+> * From: "Christopher B. Browne" <cbbrowne@knuth.brownes.org>
+> >
+> > /* Values for the reconciled field in Transaction: */
+> > #define CREC 'c'              /* The transaction has been cleared
+> > */
+> > #define YREC 'y'              /* The transaction has been reconciled
+> > */
+> > #define FREC 'f'              /* frozen into accounting period
+> > */
+> > #define NREC 'n'              /* not reconciled or cleared
+> > */
+
+Note that FREC is not yet used/implemented ...
+
+>  I've reconciled the bank/credit card                                   
+> statement containing the transaction, and completed the
+> reconciliation.  One
+> could consider the transaction to now be "set in stone."  
+
+If a transaction has been marked "reconciled" in the gui, should
+the GUI then block any changes to the transaction?
+
+How about the following proposal:
+-- transactions marked 'y' (reconciled) in gui cannot be edited.
+-- gui will allow 'y' to be changed back to 'n' or 'c'
+   (thus allowing editing).
+-- engine will also enforce above restricitions
+-- transactions marked 'f' cannot be changed, period, either
+   in the gui or the engine.
+
+Let me know if this is a bad idea, otherwise I'll implement it.
+
+
+> (In a more traditional accounting system, this would be very much 
+> the case.  Once a period is "closed," you can't change the data 
+> anymore...)
+
+
 
 Remaining Work Items
 --------------------
