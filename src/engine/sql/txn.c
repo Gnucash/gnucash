@@ -390,6 +390,18 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
             i, nrows, ncols);
 
          j = 0;
+         if (0 == nrows) 
+         {
+            PQclear (result);
+            /* I beleive its a programming error to get this case.
+             * Print a warning for now... */
+            PERR ("no such transaction in the database. This is unexpected ...\n");
+            xaccBackendSetError (&be->be, ERR_SQL_MISSING_DATA);
+            pgendEnable(be);
+            gnc_engine_resume_events();
+            return 0;
+         }
+
          if (1 < nrows)
          {
              /* since the guid is primary key, this error is totally
@@ -457,17 +469,6 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
       PQclear (result);
       i++;
    } while (result);
-
-   if (0 == nrows) 
-   {
-      /* hack alert -- not sure how to handle this case; we'll just 
-       * punt for now ... */
-      PERR ("no such transaction in the database. This is unexpected ...\n");
-      xaccBackendSetError (&be->be, ERR_SQL_MISSING_DATA);
-      pgendEnable(be);
-      gnc_engine_resume_events();
-      return 0;
-   }
 
    /* if engine data was newer, we are done */
    if (0 <= engine_data_is_newer) 
