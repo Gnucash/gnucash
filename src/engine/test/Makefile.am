@@ -41,3 +41,8 @@ bin_PROGRAMS = \
   test-resolve-file-path \
   test-scm-query \
   test-split-vs-account
+
+EXTRA_DIST = \
+  test-create-account \
+  test-create-account.scm
+

@@ -14,7 +14,9 @@ libgncmodfoo_la_SOURCES = foo-gwrap.c gnc-mod-foo.c
 libgncmodfoo_la_LDFLAGS = -module 
 libgncmodfoo_la_LIBADD = -L. -L.libs -lfoo
 
-EXTRA_DIST = foo-gwrap.scm
+EXTRA_DIST = \
+  foo-gwrap.scm \
+  gnucash/foo.scm
 
 foo-gwrap.c foo-gwrap.h: foo-gwrap.scm
 	FLAVOR=gnome guile -c \

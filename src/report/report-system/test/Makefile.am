@@ -13,3 +13,5 @@ LDADD = \
   ../libgncmod-report-system.la 
 
 bin_PROGRAMS = test-link-module 
+
+EXTRA_DIST = test-load-module

@@ -24,6 +24,8 @@ bin_PROGRAMS = \
   test-link-module \
   test-exp-parser
 
+EXTRA_DIST = test-load-module
+
 INCLUDES = \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
