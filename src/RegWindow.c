@@ -23,7 +23,6 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifdef NOT_TODAY
 
 #include <Xm/Xm.h>
 #include <Xm/DialogS.h>
@@ -715,36 +714,22 @@ regRefresh( RegWindow *regData )
 
         case PORTFOLIO: {
            Account * acc;
-           int show_debit, show_credit;
+           int show_debit;
 
           /* show the price, only if the transaction records a 
            * share purchase/sale.  Otherwise, its a plain dollar
            * amount, and the price should not be shown. */
           show_debit = 0;
-          acc = (Account *) (trans->debit);
+          acc = (Account *) (split->acc);
           if (acc) {
              if ( (MUTUAL == acc->type) || (STOCK == acc->type) ) {
                show_debit = xaccIsAccountInList (acc, regData->blackacc);
              }
           }
 
-          show_credit = 0;
-          acc = (Account *) (trans->credit_split.acc);
-          if (acc) {
-             if ( (MUTUAL == acc->type) || (STOCK == acc->type) ) {
-               show_credit = xaccIsAccountInList (acc, regData->blackacc);
-             }
-          }
-
           /* row location of prices depends on whether this 
            * is a purchase or a sale */
-          sprintf( buf, "%.3f ", trans->share_price );
-
-          if (show_credit) { 
-            newData[row+PRCC_CELL_R][PRCC_CELL_C] = XtNewString(buf);
-          } else {
-            newData[row+PRCC_CELL_R][PRCC_CELL_C] = XtNewString("");
-          }
+          sprintf( buf, "%.3f ", split->share_price );
 
           if (show_debit) { 
             newData[row+PRCD_CELL_R][PRCD_CELL_C] = XtNewString(buf);
@@ -766,7 +751,7 @@ regRefresh( RegWindow *regData )
       /* there are some empty rows at the end, where the user
        * can create new transactions. Fill them in with emptiness
        */
-      row = NUM_ROWS_PER_TRANS*ntrans + NUM_HEADER_ROWS;
+      row = NUM_ROWS_PER_TRANS*nsplits + NUM_HEADER_ROWS;
       XbaeMatrixSetRowUserData  ( regData->reg, row, NULL);
 
       sprintf( buf, "%2d/%2d", date.month, date.day );
@@ -794,7 +779,7 @@ regRefresh( RegWindow *regData )
      * then the flat transaction array was alloc'ed and
      * must be freed. */
     if (1 != regData->numAcc) {
-      _free (tarray);
+      _free (sarray);
     }
    
     /* and free memory!!! */
@@ -825,7 +810,6 @@ double
 regRecalculateBalance( RegWindow *regData )
   {
   int is_debit, is_credit;
-  Account *credit_acc, *debit_acc;
   int num_rows;
   int  position   = NUM_HEADER_ROWS;
   double  dbalance    = 0.0;
@@ -834,7 +818,7 @@ regRecalculateBalance( RegWindow *regData )
   double prt_clearedBalance = 0.0;
   double tmp;
   char buf[BUFSIZE];
-  Transaction *trans;
+  Split *split;
   Widget reg;
   
   if( NULL == regData ) return 0.0;
@@ -858,65 +842,14 @@ regRecalculateBalance( RegWindow *regData )
   for (position = NUM_HEADER_ROWS; position < num_rows;
        position += NUM_ROWS_PER_TRANS) {
 
-    trans = (Transaction *) XbaeMatrixGetRowUserData (reg, position);
-    if (!trans) {
+    split = (Split *) XbaeMatrixGetRowUserData (reg, position);
+    if (!split) {
       PERR ("regRecalculateBalance(): missing transaction\n");
       continue;
     }
 
-    credit_acc = (Account *) (trans->credit_split.acc);
-    debit_acc = (Account *) (trans->debit);
-
-    /* figure out if this transaction shows up as a debit
-     * and/or a credit for this list of accounts.  Note
-     * that it may show up as both, and that's OK. */
-    is_credit = xaccIsAccountInList (credit_acc, regData -> blackacc );
-    is_debit  = xaccIsAccountInList (debit_acc,  regData -> blackacc );
-
-    /* Increment and/or decrement the running balance as appropriate.
-     * Naively, if there were no stock transactions (or at least,
-     * transactions that recorded only a price), we could simply get 
-     * the amount, and add that to the balance.  However, price 
-     * transactions, where only a price is specified, and the share
-     * amount is zero, makes this a tricky proposition.  A large
-     * number of price transactions interspersed with buy/sell makes
-     * this an even trickier calculation.  The easiest thing to do
-     * is to indirectly derive transaction values from the previously 
-     * computed balances.  Thus, the running balance.  
-     *
-     * Note, however, that this algorithm will provide confusing
-     * results unless all transactions are absolutely ordered.
-     * That is, date order is not enough, if several transactions
-     * occur on the same date:  the same transactions must occur
-     * *IN THE SAME ORDER* in the different accounts.
-     */
-    if (is_credit) {
-      tmp = xaccGetBalance (credit_acc, trans);
-      dbalance -= credit_acc -> running_balance;
-      dbalance += tmp;
-      credit_acc -> running_balance = tmp;
-
-      if( NREC != trans->credit_split.reconciled ) {
-        tmp = xaccGetClearedBalance (credit_acc, trans);
-        dclearedBalance -= credit_acc -> running_cleared_balance;
-        dclearedBalance += tmp;
-        credit_acc -> running_cleared_balance = tmp;
-      }
-    }
-
-    if (is_debit) {
-      tmp = xaccGetBalance (debit_acc, trans);
-      dbalance -= debit_acc -> running_balance;
-      dbalance += tmp;
-      debit_acc -> running_balance = tmp;
-
-      if( NREC != trans->credit_split.reconciled ) {
-        tmp = xaccGetClearedBalance (debit_acc, trans);
-        dclearedBalance -= debit_acc -> running_cleared_balance;
-        dclearedBalance += tmp;
-        debit_acc -> running_cleared_balance = tmp;
-      }
-    }
+    dbalance = split->balance;
+    dclearedBalance = split->cleared_balance;
 
     /* for income and expense acounts, we have to reverse
      * the meaning of balance, since, in a dual entry
@@ -958,15 +891,11 @@ regRecalculateBalance( RegWindow *regData )
         case STOCK: {
           double value = 0.0;
           double share_balance = 0.0;
-          Account *acc;
 
-          /* mutual and stock types have just one account */
-          acc = regData->blackacc[0];
           /* ------------------------------------ */
           /* do the value of the transaction */
-          value = xaccGetAmount (acc, trans);
-        
           /* if the value is zero, just leave the cell blank */
+          value = split->damount;
           if (DEQ (0.0, value)) {
             buf[0] = 0x0;
           } else {
@@ -993,7 +922,7 @@ regRecalculateBalance( RegWindow *regData )
 
           /* ------------------------------------ */
           /* now show the share balance */
-          share_balance = xaccGetShareBalance (acc, trans);
+          share_balance = split->share_balance;
 #if USE_NO_COLOR
           sprintf( buf, "%.3f ", share_balance );
 #else
@@ -1025,7 +954,7 @@ regRecalculateBalance( RegWindow *regData )
           /* ------------------------------------ */
           /* show the value of the transaction, but only if the
            * account belongs on this ledger */
-          value = trans->damount * trans->share_price;
+          value = split->damount * split->share_price;
 
 #if !USE_NO_COLOR
           /* Set the color of the text, depending on whether the
@@ -1043,34 +972,30 @@ regRecalculateBalance( RegWindow *regData )
                                          VCRD_CELL_C, posPixel );
           }
 #endif
-          value = trans->damount * trans->share_price;
+          value = split->damount * split->share_price;
 #if USE_NO_COLOR
           value = -value;  /* flip sign for debit accounts */
 #else 
           value = DABS(value);
 #endif
-          acc = (Account *) (trans->debit);
-          show = xaccIsAccountInList (acc, regData->blackacc);
           /* show only if value is non-zero (it may be zero if a price
            * is recorded) */
-          if (show && !(DEQ(0.0, value))) {
+          if (!(DEQ(0.0, value))) {
             sprintf( buf, "%.2f ", value );  
           } else {
             buf[0] = 0x0;
           }
           XbaeMatrixSetCell( reg, position+VDEB_CELL_R, VDEB_CELL_C, buf );
 
-          value = trans->damount * trans->share_price;
+          value = split->damount * split->share_price;
 #if USE_NO_COLOR
           value = +value;  /* DO NOT flip sign for credit accounts */
 #else 
           value = DABS(value);
 #endif
-          acc = (Account *) (trans->credit_split.acc);
-          show = xaccIsAccountInList (acc, regData->blackacc);
           /* show only if value is non-zero (it may be zero if a price
            * is recorded) */
-          if (show && !(DEQ(0.0, value))) {
+          if (!(DEQ(0.0, value))) {
             sprintf( buf, "%.2f ", value );
           } else {
             buf[0] = 0x0;
@@ -1082,24 +1007,7 @@ regRecalculateBalance( RegWindow *regData )
           /* show the share balance *only* either the debit or credit
            * account belongs in this ledger, *and* if the transaction
            * type is mutual or stock. */
-          show = 0;
-          share_balance = 0.0;
-
-          acc = (Account *) (trans->debit);
-          if (acc) {
-             if ((MUTUAL == acc->type) || (STOCK == acc->type)) {
-                show += xaccIsAccountInList (acc, regData->blackacc);
-                share_balance = xaccGetShareBalance (debit_acc, trans);
-             }
-          }
-
-          acc = (Account *) (trans->credit_split.acc);
-          if (acc) {
-             if ((MUTUAL == acc->type) || (STOCK == acc->type)) {
-                show += xaccIsAccountInList (acc, regData->blackacc);
-                share_balance = xaccGetShareBalance (credit_acc, trans);
-             }
-          }
+          share_balance = split->share_balance;
 
           if (show) {
 #if USE_NO_COLOR
@@ -1237,7 +1145,8 @@ regSaveTransaction( RegWindow *regData, int position )
    * that has changed */
   char buf[BUFSIZE];
   int  row = position * NUM_ROWS_PER_TRANS + NUM_HEADER_ROWS;
-  Transaction *trans;
+  Split *split;
+  Transaction *trans = NULL;
   Boolean dateOutOfOrder = False;
   Account *old_xfrm_acct = NULL;
   Account *old_xto_acct = NULL;
@@ -1245,9 +1154,9 @@ regSaveTransaction( RegWindow *regData, int position )
   /* If nothing has changed, we have nothing to do */
   if (MOD_NONE == regData->changed) return;
 
-  trans = (Transaction *) XbaeMatrixGetRowUserData (regData->reg, row);
+  split = (Split *) XbaeMatrixGetRowUserData (regData->reg, row);
   
-  if( trans == NULL )
+  if( split == NULL )
     {
     /* This must be a new transaction */
     DEBUG("New Transaction\n");
@@ -1267,8 +1176,6 @@ regSaveTransaction( RegWindow *regData, int position )
     /* Be sure to prompt the user to save to disk after changes are made! */
     Account *acc;
     acc = (Account *) trans->credit_split.acc;
-    if (acc) acc->parent->saved = False;
-    acc = (Account *) trans->debit;
     if (acc) acc->parent->saved = False;
   }
 
@@ -1318,7 +1225,7 @@ regSaveTransaction( RegWindow *regData, int position )
          (PORTFOLIO  == regData->type) ) {
 
       /* for a general ledger, the transfer-from account is obvious */
-      xfer_acct = (Account *) trans->debit;
+      /* xfer_acct = (Account *) trans->debit; */
     } else {
 
       /* if not a ledger, then there is only one account,
@@ -1327,7 +1234,7 @@ regSaveTransaction( RegWindow *regData, int position )
       if( regData->changed & MOD_NEW) {
          xfer_acct = NULL;
       } else {
-         xfer_acct = xaccGetOtherAccount (regData->blackacc[0], trans);
+         xfer_acct = (Account *) split->acc;
       }
     }
 
@@ -1352,7 +1259,7 @@ regSaveTransaction( RegWindow *regData, int position )
         /* for a new transaction, the default will be that the
          * transfer occurs from the debited account */
         if( regData->changed & MOD_NEW) {
-           trans->debit = (struct _account *)xfer_acct;
+           /* trans->debit = (struct _account *)xfer_acct; */
         }
   
         /* for a general ledger, the transfer *must* occur 
@@ -1360,7 +1267,7 @@ regSaveTransaction( RegWindow *regData, int position )
         if ( (GEN_LEDGER == regData->type) ||
              (INC_LEDGER == regData->type) ||
              (PORTFOLIO  == regData->type) ) {
-           trans->debit = (struct _account *)xfer_acct;
+           /* trans->debit = (struct _account *)xfer_acct; */
         }
   
         /* for non-new transactions, the transfer may be from the
@@ -3403,5 +3310,4 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_y
     }
   }
  
-#endif
 /************************** END OF FILE *************************/
