@@ -96,8 +96,8 @@ install: $(TARGET)
 	$(INSTALL) $(TARGET).gtk.bin $(PREFIX)/bin/$(TARGET).gtk.bin
 	$(INSTALL) $(TARGET).qt.bin $(PREFIX)/bin/$(TARGET).qt.bin
 	$(INSTALL) $(TARGET).static.bin $(PREFIX)/bin/$(TARGET).static.bin
-	@mkdir -p $(PREFIX)/toolbar
-	$(INSTALL_DATA) toolbar/*.xpm $(PREFIX)/toolbar
+# 	@mkdir -p $(PREFIX)/toolbar
+# 	$(INSTALL_DATA) toolbar/*.xpm $(PREFIX)/toolbar
 	@mkdir -p $(PREFIX)/$(DOCDIR)
 	$(INSTALL_DATA) Docs/*.html $(PREFIX)/$(DOCDIR)
 	$(INSTALL_DATA) Docs/*.gif $(PREFIX)/$(DOCDIR)
