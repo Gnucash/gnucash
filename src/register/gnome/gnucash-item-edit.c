@@ -450,8 +450,9 @@ item_edit_destroy (GtkObject *object)
 
 gboolean
 item_edit_set_cursor_pos (ItemEdit *item_edit,
-                          PhysicalLocation phys_loc, int x,
-                          gboolean changed_cells, gboolean extend_selection)
+                          VirtualLocation virt_loc, int x,
+                          gboolean changed_cells,
+                          gboolean extend_selection)
 {
         GtkEditable *editable;
         TextDrawInfo info;
@@ -459,34 +460,27 @@ item_edit_set_cursor_pos (ItemEdit *item_edit,
         gint pos;
         gint pos_x;
         gint o_x, o_y;
-        VirtualCellLocation vcell_loc;
         CellDimensions *cd;
         gint cell_row, cell_col;
         SheetBlockStyle *style;
-        PhysicalCell *pcell;
         char *text;
 
         g_return_val_if_fail (IS_ITEM_EDIT(item_edit), FALSE);
 
         table = item_edit->sheet->table;
 
-        pcell = gnc_table_get_physical_cell (table, phys_loc);
-        if (pcell == NULL)
-                return FALSE;
+	cell_row = virt_loc.phys_row_offset;
+	cell_col = virt_loc.phys_col_offset;
 
-	vcell_loc = pcell->virt_loc.vcell_loc;
-	cell_row = pcell->virt_loc.phys_row_offset;
-	cell_col = pcell->virt_loc.phys_col_offset;
-
-        style = gnucash_sheet_get_style (item_edit->sheet, vcell_loc);
+        style = gnucash_sheet_get_style (item_edit->sheet, virt_loc.vcell_loc);
 
         cd = gnucash_style_get_cell_dimensions (style, cell_row, cell_col);
 
         o_x = cd->origin_x;
         o_y = cd->origin_y;
 
-        if ( (vcell_loc.virt_row != item_edit->virt_row) ||
-             (vcell_loc.virt_col != item_edit->virt_col) ||
+        if ( (virt_loc.vcell_loc.virt_row != item_edit->virt_row) ||
+             (virt_loc.vcell_loc.virt_col != item_edit->virt_col) ||
              (cell_row != item_edit->cell_row) ||
              (cell_col != item_edit->cell_col) )
                 return FALSE;

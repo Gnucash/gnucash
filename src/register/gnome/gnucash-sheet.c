@@ -47,7 +47,7 @@ static guint gnucash_register_initial_rows = 15;
 static void gnucash_sheet_start_editing_at_cursor (GnucashSheet *sheet);
 
 static gboolean gnucash_sheet_cursor_move (GnucashSheet *sheet,
-                                           PhysicalLocation phys_loc);
+                                           VirtualLocation virt_loc);
 
 static void gnucash_sheet_deactivate_cursor_cell (GnucashSheet *sheet);
 static void gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
@@ -138,23 +138,18 @@ void
 gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet, gboolean do_scroll)
 {
         Table *table;
-        PhysicalLocation p_loc;
-        PhysicalCell *pcell;
+        VirtualLocation v_loc;
 
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET(sheet));
 
         table = sheet->table;
-        p_loc = table->current_cursor_phys_loc;
+        v_loc = table->current_cursor_loc;
 
-        pcell = gnc_table_get_physical_cell (table, p_loc);
-        if (pcell == NULL)
-                return;
-
-        gnucash_sheet_cursor_set(sheet, pcell->virt_loc);
+        gnucash_sheet_cursor_set(sheet, v_loc);
 
         if (do_scroll)
-                gnucash_sheet_make_cell_visible(sheet, pcell->virt_loc);
+                gnucash_sheet_make_cell_visible(sheet, v_loc);
 }
 
 
@@ -206,7 +201,6 @@ static void
 gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
                                     gboolean changed_cells)
 {
-        PhysicalLocation phys_loc;
         Table *table = sheet->table;
         VirtualLocation virt_loc;
         SheetBlockStyle *style;
@@ -218,18 +212,16 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
         if (sheet->editing)
                 gnucash_sheet_deactivate_cursor_cell (sheet);
 
-        gnucash_cursor_get_phys (GNUCASH_CURSOR(sheet->cursor), &phys_loc);
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
         /* This should be a no-op */
-        gnc_table_wrap_verify_cursor_position (table, phys_loc);
+        gnc_table_wrap_verify_cursor_position (table, virt_loc);
 
-        gnucash_cursor_get_phys (GNUCASH_CURSOR(sheet->cursor), &phys_loc);
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
         style = gnucash_sheet_get_style (sheet, virt_loc.vcell_loc);
         if (style->cursor_type == GNUCASH_CURSOR_HEADER ||
-            !gnc_table_virtual_cell_valid (table, virt_loc, TRUE))
+            !gnc_table_virtual_loc_valid (table, virt_loc, TRUE))
                 return;
 
         editable = GTK_EDITABLE(sheet->entry);
@@ -258,18 +250,15 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
 
 
 static gboolean
-gnucash_sheet_cursor_move (GnucashSheet *sheet, PhysicalLocation phys_loc)
+gnucash_sheet_cursor_move (GnucashSheet *sheet, VirtualLocation virt_loc)
 {
         VirtualLocation old_virt_loc;
-        VirtualLocation virt_loc;
-        PhysicalLocation old_phys_loc;
         gboolean changed_cells;
         Table *table;
 
         table = sheet->table;
 
         /* Get the old cursor position */
-        gnucash_cursor_get_phys (GNUCASH_CURSOR(sheet->cursor), &old_phys_loc);
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &old_virt_loc);
 
         /* Turn off the editing controls */
@@ -277,7 +266,7 @@ gnucash_sheet_cursor_move (GnucashSheet *sheet, PhysicalLocation phys_loc)
 
         /* Do the move. This may result in table restructuring due to
          * commits, auto modes, etc. */
-        gnc_table_wrap_verify_cursor_position (table, phys_loc);
+        gnc_table_wrap_verify_cursor_position (table, virt_loc);
 
         /* A complete reload can leave us with editing back on */
         if (sheet->editing)
@@ -286,7 +275,6 @@ gnucash_sheet_cursor_move (GnucashSheet *sheet, PhysicalLocation phys_loc)
         /* Find out where we really landed. We have to get the new
          * physical position as well, as the table may have been
          * restructured. */
-        gnucash_cursor_get_phys (GNUCASH_CURSOR(sheet->cursor), &phys_loc);
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
         gnucash_sheet_cursor_set (sheet, virt_loc);
@@ -295,9 +283,7 @@ gnucash_sheet_cursor_move (GnucashSheet *sheet, PhysicalLocation phys_loc)
          * configure the cursor. */
         gnucash_sheet_make_cell_visible (sheet, virt_loc);
 
-        changed_cells =
-                (phys_loc.phys_row != old_phys_loc.phys_row) ||
-                (phys_loc.phys_col != old_phys_loc.phys_col);
+        changed_cells = !virt_loc_equal (virt_loc, old_virt_loc);
 
         /* Now turn on the editing controls. */
         gnucash_sheet_activate_cursor_cell (sheet, changed_cells);
@@ -817,7 +803,7 @@ gnucash_sheet_modify_current_cell(GnucashSheet *sheet, const gchar *new_text)
 
         gnucash_cursor_get_virt(GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
-        if (!gnc_table_virtual_cell_valid (table, virt_loc, TRUE))
+        if (!gnc_table_virtual_loc_valid (table, virt_loc, TRUE))
                 return NULL;
 
         editable = GTK_EDITABLE(sheet->entry);
@@ -879,7 +865,7 @@ gnucash_sheet_insert_cb (GtkWidget *widget, const gchar *new_text,
 
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
-        if (!gnc_table_virtual_cell_valid (table, virt_loc, FALSE))
+        if (!gnc_table_virtual_loc_valid (table, virt_loc, FALSE))
                 return;
 
         old_text = gtk_entry_get_text (GTK_ENTRY(sheet->entry));
@@ -966,7 +952,7 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
 
         gnucash_cursor_get_virt (GNUCASH_CURSOR (sheet->cursor), &virt_loc);
 
-        if (!gnc_table_virtual_cell_valid (table, virt_loc, FALSE))
+        if (!gnc_table_virtual_loc_valid (table, virt_loc, FALSE))
                 return;
 
         old_text = gtk_entry_get_text (GTK_ENTRY(sheet->entry));
@@ -1088,7 +1074,7 @@ static gboolean
 gnucash_motion_event (GtkWidget *widget, GdkEventMotion *event)
 {
         GnucashSheet *sheet;
-        PhysicalLocation phys_loc;
+        VirtualLocation virt_loc;
         int xoffset, yoffset, x;
 
         g_return_val_if_fail(widget != NULL, TRUE);
@@ -1117,10 +1103,10 @@ gnucash_motion_event (GtkWidget *widget, GdkEventMotion *event)
 
         x = xoffset + event->x;
 
-        gnucash_cursor_get_phys (GNUCASH_CURSOR(sheet->cursor), &phys_loc);
+        gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
         item_edit_set_cursor_pos (ITEM_EDIT(sheet->item_editor),
-                                  phys_loc, x, FALSE, TRUE);
+                                  virt_loc, x, FALSE, TRUE);
 
         return TRUE;
 }
@@ -1211,11 +1197,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         gboolean changed_cells;
         int x, y;
 
-        /* physical coordinates */
-        PhysicalLocation cur_phys_loc;
-        PhysicalLocation new_phys_loc;
-
-        /* virtual coordinates */
+        VirtualLocation cur_virt_loc;
         VirtualLocation new_virt_loc;
 
         Table *table;
@@ -1259,7 +1241,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet),
 					 &xoffset, &yoffset);
 
-        gnucash_cursor_get_phys (GNUCASH_CURSOR(sheet->cursor), &cur_phys_loc);
+        gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &cur_virt_loc);
 
         x = xoffset + event->x;
         y = yoffset + event->y;
@@ -1272,16 +1254,11 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         if (vcell == NULL)
                 return TRUE;
 
-        new_phys_loc = vcell->phys_loc;
-        new_phys_loc.phys_row += new_virt_loc.phys_row_offset;
-        new_phys_loc.phys_col += new_virt_loc.phys_col_offset;
-
-        if ((new_phys_loc.phys_row == cur_phys_loc.phys_row) &&
-            (new_phys_loc.phys_col == cur_phys_loc.phys_col) &&
+        if (virt_loc_equal (new_virt_loc, cur_virt_loc) &&
             (event->type == GDK_2BUTTON_PRESS))
         {
                 item_edit_set_cursor_pos (ITEM_EDIT(sheet->item_editor),
-                                          cur_phys_loc, x, FALSE, FALSE);
+                                          cur_virt_loc, x, FALSE, FALSE);
 
                 gtk_editable_set_position(GTK_EDITABLE(sheet->entry), -1);
                 gtk_editable_select_region(GTK_EDITABLE(sheet->entry), 0, -1);
@@ -1300,14 +1277,12 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
         item_edit_set_has_selection(ITEM_EDIT(sheet->item_editor), TRUE);
 
-        if ((new_phys_loc.phys_row == cur_phys_loc.phys_row) &&
-            (new_phys_loc.phys_col == cur_phys_loc.phys_col) &&
-            sheet->editing)
+        if (virt_loc_equal (new_virt_loc, cur_virt_loc) && sheet->editing)
         {
                 gboolean extend_selection = event->state & GDK_SHIFT_MASK;
 
                 item_edit_set_cursor_pos (ITEM_EDIT(sheet->item_editor),
-                                          cur_phys_loc, x, FALSE,
+                                          cur_virt_loc, x, FALSE,
                                           extend_selection);
 
                 return TRUE;
@@ -1315,23 +1290,23 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
         /* and finally...process this as a POINTER_TRAVERSE */
         exit_register = gnc_table_traverse_update (table,
-                                                   cur_phys_loc,
+                                                   cur_virt_loc,
                                                    GNC_TABLE_TRAVERSE_POINTER,
-                                                   &new_phys_loc);
+                                                   &new_virt_loc);
 
         gnucash_sheet_check_grab(sheet);
 
         if (exit_register)
 		return TRUE;
 
-        changed_cells = gnucash_sheet_cursor_move(sheet, new_phys_loc);
+        changed_cells = gnucash_sheet_cursor_move(sheet, new_virt_loc);
 
         gnucash_sheet_check_grab(sheet);
 
-        gnucash_cursor_get_phys (GNUCASH_CURSOR(sheet->cursor), &new_phys_loc);
+        gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &new_virt_loc);
 
         item_edit_set_cursor_pos (ITEM_EDIT(sheet->item_editor),
-                                  new_phys_loc, x, changed_cells, FALSE);
+                                  new_virt_loc, x, changed_cells, FALSE);
 
         return TRUE;
 }
@@ -1449,7 +1424,7 @@ gnucash_sheet_direct_event(GnucashSheet *sheet, GdkEvent *event)
 
         gnucash_cursor_get_virt(GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
-        if (!gnc_table_virtual_cell_valid (table, virt_loc, TRUE))
+        if (!gnc_table_virtual_loc_valid (table, virt_loc, TRUE))
                 return FALSE;
 
         editable = GTK_EDITABLE(sheet->entry);
@@ -1516,12 +1491,13 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
         Table *table;
         GnucashSheet *sheet;
 	CellBlock *header;
-	int direction = 0;
 	gboolean pass_on = FALSE;
         gboolean exit_register;
         gboolean set_selection = TRUE;
-        PhysicalLocation cur_phys_loc;
-        PhysicalLocation new_phys_loc;
+        VirtualLocation cur_virt_loc;
+        VirtualLocation new_virt_loc;
+	gncTableTraversalDir direction = 0;
+        int distance;
 
         g_return_val_if_fail(widget != NULL, TRUE);
         g_return_val_if_fail(GNUCASH_IS_SHEET(widget), TRUE);
@@ -1534,7 +1510,8 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
         if (gnucash_sheet_direct_event(sheet, (GdkEvent *) event))
             return TRUE;
 
-        gnucash_cursor_get_phys (GNUCASH_CURSOR(sheet->cursor), &cur_phys_loc);
+        gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &cur_virt_loc);
+        new_virt_loc = cur_virt_loc;
 
 	/* Calculate tentative physical values */
         switch (event->keyval) {
@@ -1542,42 +1519,34 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
                 case GDK_ISO_Left_Tab:
                         if (event->state & GDK_SHIFT_MASK) {
                                 direction = GNC_TABLE_TRAVERSE_LEFT;
-                                new_phys_loc.phys_row = cur_phys_loc.phys_row;
-                                new_phys_loc.phys_col =
-                                        MAX(cur_phys_loc.phys_col - 1, 0);
+                                gnc_table_move_tab(table, &new_virt_loc, FALSE);
                         }
                         else {
                                 direction = GNC_TABLE_TRAVERSE_RIGHT;
-                                new_phys_loc.phys_row = cur_phys_loc.phys_row;
-                                new_phys_loc.phys_col =
-                                        MIN(cur_phys_loc.phys_col + 1,
-                                            table->num_phys_cols - 1);
+                                gnc_table_move_tab(table, &new_virt_loc, TRUE);
                         }
                         break;
                 case GDK_KP_Page_Up:
 		case GDK_Page_Up:
                         direction = GNC_TABLE_TRAVERSE_UP;
-                        new_phys_loc.phys_col = 0;
-                        new_phys_loc.phys_row =
-                                MAX(cur_phys_loc.phys_row -
-                                    (sheet->bottom_block - sheet->top_block),
-                                    header->num_rows);
+                        new_virt_loc.phys_col_offset = 0;
+                        distance = sheet->bottom_block - sheet->top_block;
+                        gnc_table_move_vertical_position (table, &new_virt_loc,
+                                                          -distance);
 			break;
                 case GDK_KP_Page_Down:
 		case GDK_Page_Down:
                         direction = GNC_TABLE_TRAVERSE_DOWN;
-                        new_phys_loc.phys_col = 0;
-                        new_phys_loc.phys_row =
-                                MIN(cur_phys_loc.phys_row +
-                                    sheet->bottom_block - sheet->top_block,
-                                    table->num_phys_rows - 1);
+                        new_virt_loc.phys_col_offset = 0;
+                        distance = sheet->bottom_block - sheet->top_block;
+                        gnc_table_move_vertical_position (table, &new_virt_loc,
+                                                          distance);
 			break;
                 case GDK_KP_Up:
 		case GDK_Up:
 			direction = GNC_TABLE_TRAVERSE_UP;
-			new_phys_loc.phys_col = cur_phys_loc.phys_col;
-			new_phys_loc.phys_row = MAX(cur_phys_loc.phys_row - 1,
-                                                    header->num_rows);
+                        gnc_table_move_vertical_position (table,
+                                                          &new_virt_loc, -1);
 			break;
                 case GDK_KP_Down:
 		case GDK_Down:
@@ -1593,9 +1562,8 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
                         }
 
 			direction = GNC_TABLE_TRAVERSE_DOWN;
-			new_phys_loc.phys_col = cur_phys_loc.phys_col;
-			new_phys_loc.phys_row = MIN(cur_phys_loc.phys_row + 1,
-                                                    table->num_phys_rows - 1);
+                        gnc_table_move_vertical_position (table,
+                                                          &new_virt_loc, 1);
 			break;
                 case GDK_Control_L:
                 case GDK_Control_R:
@@ -1684,14 +1652,14 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
                 return result;
         }
 
-	exit_register = gnc_table_traverse_update (table, cur_phys_loc,
-                                                   direction, &new_phys_loc);
+	exit_register = gnc_table_traverse_update (table, cur_virt_loc,
+                                                   direction, &new_virt_loc);
 
 	/* If that would leave the register, abort */
 	if (exit_register)
                 return TRUE;
 
-	gnucash_sheet_cursor_move (sheet, new_phys_loc);
+	gnucash_sheet_cursor_move (sheet, new_virt_loc);
 
         /* return true because we handled the key press */
         return TRUE;
@@ -1702,35 +1670,25 @@ static void
 gnucash_sheet_goto_virt_loc (GnucashSheet *sheet, VirtualLocation virt_loc)
 {
         Table *table;
-        VirtualCell *vcell;
         gboolean exit_register;
-        PhysicalLocation cur_phys_loc;
-        PhysicalLocation new_phys_loc;
+        VirtualLocation cur_virt_loc;
 
         g_return_if_fail(GNUCASH_IS_SHEET(sheet));
 
         table = sheet->table;
 
-        gnucash_cursor_get_phys (GNUCASH_CURSOR(sheet->cursor), &cur_phys_loc);
-
-        vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
-        if (vcell == NULL)
-                return;
-
-	new_phys_loc = vcell->phys_loc;
-        new_phys_loc.phys_row += virt_loc.phys_row_offset;
-        new_phys_loc.phys_col += virt_loc.phys_col_offset;
+        gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &cur_virt_loc);
 
         /* It's not really a pointer traverse, but it seems the most
          * appropriate here. */
- 	exit_register = gnc_table_traverse_update (table, cur_phys_loc,
+ 	exit_register = gnc_table_traverse_update (table, cur_virt_loc,
                                                    GNC_TABLE_TRAVERSE_POINTER,
-                                                   &new_phys_loc);
+                                                   &virt_loc);
 
 	if (exit_register)
 		return;
 
-	gnucash_sheet_cursor_move (sheet, new_phys_loc);
+	gnucash_sheet_cursor_move (sheet, virt_loc);
 }
 
 

@@ -65,6 +65,7 @@ static void gnc_table_init (Table * table);
 static void gnc_table_free_data (Table * table);
 static gpointer gnc_virtual_cell_new (gpointer user_data);
 static gpointer gnc_physical_cell_new (gpointer user_data);
+static void gnc_virtual_location_init (VirtualLocation *vloc);
 static void gnc_virtual_cell_free (gpointer tcell, gpointer user_data);
 static void gnc_physical_cell_free (gpointer tcell, gpointer user_data);
 static void gnc_table_resize (Table * table,
@@ -120,10 +121,7 @@ gnc_table_init (Table * table)
 
    table->current_cursor = NULL;
 
-   table->current_cursor_virt_loc.virt_row = -1;
-   table->current_cursor_virt_loc.virt_col = -1;
-   table->current_cursor_phys_loc.phys_row = -1;
-   table->current_cursor_phys_loc.phys_col = -1;
+   gnc_virtual_location_init (&table->current_cursor_loc);
 
    table->move_cursor = NULL;
    table->traverse = NULL;
@@ -255,8 +253,8 @@ gnc_table_get_entry_virtual (Table *table, VirtualLocation virt_loc)
   if (cb_cell->cell_type < 0)
     return "";
 
-  if (table->current_cursor_virt_loc.virt_row == virt_loc.vcell_loc.virt_row &&
-      table->current_cursor_virt_loc.virt_col == virt_loc.vcell_loc.virt_col)
+  if (virt_cell_loc_equal (table->current_cursor_loc.vcell_loc,
+                           virt_loc.vcell_loc))
   {
     if (cb_cell->cell == NULL)
       return "";
@@ -281,8 +279,8 @@ gnc_table_get_fg_color_virtual (Table *table, VirtualLocation virt_loc)
 
   fg_color = 0x000000; /* black */
 
-  if (table->current_cursor_virt_loc.virt_row == virt_loc.vcell_loc.virt_row &&
-      table->current_cursor_virt_loc.virt_col == virt_loc.vcell_loc.virt_col)
+  if (virt_cell_loc_equal (table->current_cursor_loc.vcell_loc,
+                           virt_loc.vcell_loc))
   {
     vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
     if (vcell == NULL)
@@ -321,8 +319,8 @@ gnc_table_get_bg_color_virtual (Table *table, VirtualLocation virt_loc)
   if (vcell == NULL)
     return bg_color;
 
-  if (table->current_cursor_virt_loc.virt_row == virt_loc.vcell_loc.virt_row &&
-      table->current_cursor_virt_loc.virt_col == virt_loc.vcell_loc.virt_col)
+  if (virt_cell_loc_equal (table->current_cursor_loc.vcell_loc,
+                           virt_loc.vcell_loc))
     bg_color = vcell->cellblock->active_bg_color;
   else
   {
@@ -364,25 +362,21 @@ gnc_table_set_size (Table * table,
                     int phys_rows, int phys_cols,
                     int virt_rows, int virt_cols)
 {
-   /* Invalidate the current cursor position, if the array is
-    * shrinking. This must be done since the table is probably
-    * shrinking because some rows were deleted, and there's a pretty
-    * good chance (100% with current design) that the cursor is
-    * located on the deleted rows. */
-   if ((virt_rows < table->num_virt_rows) ||
-       (virt_cols < table->num_virt_cols) ||
-       (phys_rows < table->num_phys_rows) ||
-       (phys_cols < table->num_phys_cols)) 
-   {
-      table->current_cursor_virt_loc.virt_row = -1;
-      table->current_cursor_virt_loc.virt_col = -1;
-      table->current_cursor_phys_loc.phys_row = -1;
-      table->current_cursor_phys_loc.phys_col = -1;
+  /* Invalidate the current cursor position, if the array is
+   * shrinking. This must be done since the table is probably
+   * shrinking because some rows were deleted, and there's a pretty
+   * good chance (100% with current design) that the cursor is
+   * located on the deleted rows. */
+  if ((virt_rows < table->num_virt_rows) ||
+      (virt_cols < table->num_virt_cols) ||
+      (phys_rows < table->num_phys_rows) ||
+      (phys_cols < table->num_phys_cols)) 
+  {
+    gnc_virtual_location_init (&table->current_cursor_loc);
+    table->current_cursor = NULL;
+  }
 
-      table->current_cursor = NULL;
-   }
-
-   gnc_table_resize (table, phys_rows, phys_cols, virt_rows, virt_cols);
+  gnc_table_resize (table, phys_rows, phys_cols, virt_rows, virt_cols);
 }
 
 /* ==================================================== */
@@ -597,26 +591,24 @@ gnc_table_set_virt_cell_data (Table *table,
 
 static void 
 gnc_table_move_cursor_internal (Table *table,
-                                PhysicalLocation new_phys_loc,
+                                VirtualLocation new_virt_loc,
                                 gboolean do_move_gui)
 {
   int cell_row, cell_col;
-  PhysicalLocation phys_origin;
-  VirtualCellLocation new_vcell_loc;
   VirtualLocation virt_loc;
-  PhysicalCell *pcell;
   VirtualCell *vcell;
   CellBlock *curs;
 
-  ENTER("new_phys=(%d %d) do_move_gui=%d\n", 
-        new_phys_loc.phys_row, new_phys_loc.phys_col, do_move_gui);
+  ENTER("new_virt=(%d %d) do_move_gui=%d\n", 
+        new_virt_loc.vcell_loc.virt_row,
+        new_virt_loc.vcell_loc.virt_col, do_move_gui);
 
   /* call the callback, allowing the app to commit any changes
    * associated with the current location of the cursor. Note that
    * this callback may recursively call this routine. */
   if (table->move_cursor)
   {
-    (table->move_cursor) (table, &new_phys_loc);
+    (table->move_cursor) (table, &new_virt_loc);
 
     /* The above callback can cause this routine to be called
      * recursively. As a result of this recursion, the cursor may
@@ -626,28 +618,15 @@ gnc_table_move_cursor_internal (Table *table,
       gnc_table_refresh_current_cursor_gui (table, FALSE);
   }
 
-  pcell = gnc_table_get_physical_cell (table, new_phys_loc);
-  if (pcell == NULL)
-  {
-    new_vcell_loc.virt_row = -1;
-    new_vcell_loc.virt_col = -1;
-  }
-  else
-  {
-    new_vcell_loc = pcell->virt_loc.vcell_loc;
-  }
-
   /* invalidate the cursor for now; we'll fix it back up below */
-  table->current_cursor_phys_loc.phys_row = -1;
-  table->current_cursor_phys_loc.phys_col = -1;
-  table->current_cursor_virt_loc.virt_row = -1;
-  table->current_cursor_virt_loc.virt_col = -1;
+  gnc_virtual_location_init (&table->current_cursor_loc);
 
   curs = table->current_cursor;
   table->current_cursor = NULL;
 
   /* check for out-of-bounds conditions (which may be deliberate) */
-  if ((0 > new_vcell_loc.virt_row) || (0 > new_vcell_loc.virt_col))
+  if ((new_virt_loc.vcell_loc.virt_row < 0) ||
+      (new_virt_loc.vcell_loc.virt_col < 0))
   {
     /* if the location is invalid, then we should take this 
      * as a command to unmap the cursor gui. */
@@ -678,32 +657,28 @@ gnc_table_move_cursor_internal (Table *table,
           }
         }
     }
+
     LEAVE("out of bounds\n");
+
     return;
   }
 
-  if (gnc_table_virtual_cell_out_of_bounds (table, new_vcell_loc))
+  if (!gnc_table_virtual_loc_valid (table, new_virt_loc, TRUE))
+  {
+    PWARN("bad table location");
     return;
-  if (gnc_table_physical_cell_out_of_bounds (table, new_phys_loc))
-    return;
+  }
 
-  /* ok, we now have a valid position.  Find the new cursor to use,
+  /* ok, we now have a valid position. Find the new cursor to use,
    * and initialize its cells */
-  vcell = gnc_table_get_virtual_cell (table, new_vcell_loc);
+  vcell = gnc_table_get_virtual_cell (table, new_virt_loc.vcell_loc);
   curs = vcell->cellblock;
   table->current_cursor = curs;
 
   /* record the new position */
-  table->current_cursor_virt_loc = new_vcell_loc;
-  table->current_cursor_phys_loc = new_phys_loc;
+  table->current_cursor_loc = new_virt_loc;
 
-  /* compute some useful offsets */
-  phys_origin = new_phys_loc;
-
-  phys_origin.phys_row -= pcell->virt_loc.phys_row_offset;
-  phys_origin.phys_col -= pcell->virt_loc.phys_col_offset;
-
-  virt_loc.vcell_loc = new_vcell_loc;
+  virt_loc.vcell_loc = new_virt_loc.vcell_loc;
 
   /* update the cell values to reflect the new position */
   for (cell_row = 0; cell_row < curs->num_rows; cell_row++)
@@ -747,33 +722,31 @@ gnc_table_move_cursor_internal (Table *table,
 /* ==================================================== */
 
 void
-gnc_table_move_cursor (Table *table, PhysicalLocation new_phys_loc)
+gnc_table_move_cursor (Table *table, VirtualLocation new_virt_loc)
 {
   if (!table) return;
 
-  gnc_table_move_cursor_internal (table, new_phys_loc, FALSE);
+  gnc_table_move_cursor_internal (table, new_virt_loc, FALSE);
 }
 
 /* same as above, but be sure to deal with GUI elements as well */
 void
-gnc_table_move_cursor_gui (Table *table, PhysicalLocation new_phys_loc)
+gnc_table_move_cursor_gui (Table *table, VirtualLocation new_virt_loc)
 {
   if (!table) return;
 
-  gnc_table_move_cursor_internal (table, new_phys_loc, TRUE);
+  gnc_table_move_cursor_internal (table, new_virt_loc, TRUE);
 }
 
 /* ==================================================== */
 
 /* gnc_table_verify_cursor_position checks the location of the cursor
- * with respect to a row/column position, and repositions the cursor
- * if necessary. This includes saving any uncommited data in the old
- * cursor, and then moving the cursor and its GUI. Returns true if the
- * cursor was repositioned. */
+ * with respect to a virtual location, and repositions the cursor
+ * if necessary. Returns true if the cell cursor was repositioned. */
 gboolean
-gnc_table_verify_cursor_position (Table *table, PhysicalLocation phys_loc)
+gnc_table_verify_cursor_position (Table *table, VirtualLocation virt_loc)
 {
-  gboolean do_commit = FALSE;
+  gboolean do_move = FALSE;
   gboolean moved_cursor = FALSE;
 
   if (!table) return FALSE;
@@ -783,48 +756,22 @@ gnc_table_verify_cursor_position (Table *table, PhysicalLocation phys_loc)
    * example, in order to unmap it in preparation for a reconfig.
    * So, if the specified location is out of bounds, then the cursor
    * MUST be moved. */
-  if (gnc_table_physical_cell_out_of_bounds (table, phys_loc))
-    do_commit = TRUE;
+  if (gnc_table_virtual_cell_out_of_bounds (table, virt_loc.vcell_loc))
+    do_move = TRUE;
 
-  /* Physical position is valid. Check the virtual position. */
-  if (!do_commit)
+  if (!virt_cell_loc_equal (virt_loc.vcell_loc,
+                            table->current_cursor_loc.vcell_loc))
+    do_move = TRUE;
+
+  if (do_move)
   {
-    PhysicalCell *pcell;
-    VirtualCellLocation vcell_loc;
-
-    pcell = gnc_table_get_physical_cell (table, phys_loc);
-
-    vcell_loc = pcell->virt_loc.vcell_loc;
-
-    if ((vcell_loc.virt_row != table->current_cursor_virt_loc.virt_row) ||
-        (vcell_loc.virt_col != table->current_cursor_virt_loc.virt_col))
-      do_commit = TRUE;
-  }
-
-  if (do_commit)
-  {
-    gnc_table_move_cursor_gui (table, phys_loc);
+    gnc_table_move_cursor_gui (table, virt_loc);
     moved_cursor = TRUE;
   }
-  else
+  else if (!virt_loc_equal (virt_loc, table->current_cursor_loc))
   {
-    /* The request might be to move to a cell that is one column over.
-     * If so, then do_commit will be zero, as there will have been no
-     * reason to actually move a cursor.  However, we want to keep
-     * positions accurate, so record the new location.  (The move may
-     * may also be one row up or down, which, for a two-row cursor,
-     * also might not require a cursor movement). */
-    if (table->current_cursor_phys_loc.phys_row != phys_loc.phys_row)
-    {
-      table->current_cursor_phys_loc.phys_row = phys_loc.phys_row;
-      moved_cursor = TRUE;
-    }
-
-    if (table->current_cursor_phys_loc.phys_col != phys_loc.phys_col)
-    {
-      table->current_cursor_phys_loc.phys_col = phys_loc.phys_col;
-      moved_cursor = TRUE;
-    }
+    table->current_cursor_loc = virt_loc;
+    moved_cursor = TRUE;
   }
 
   return moved_cursor;
@@ -896,26 +843,25 @@ gnc_table_create_cursor (Table * table, CellBlock *curs)
 /* ==================================================== */
 
 void
-gnc_table_wrap_verify_cursor_position (Table *table, PhysicalLocation phys_loc)
+gnc_table_wrap_verify_cursor_position (Table *table, VirtualLocation virt_loc)
 {
-   CellBlock *save_curs = table->current_cursor;
-   PhysicalLocation save_phys_loc;
+   VirtualLocation save_loc;
    gboolean moved_cursor;
 
    if (!table) return;
 
-   ENTER("(%d %d)", phys_loc.phys_row, phys_loc.phys_col);
+   ENTER("(%d %d)", virt_loc.vcell_loc.virt_row, virt_loc.vcell_loc.virt_col);
 
-   save_phys_loc = table->current_cursor_phys_loc;
+   save_loc = table->current_cursor_loc;
 
    /* VerifyCursor will do all sorts of gui-independent machinations */
-   moved_cursor = gnc_table_verify_cursor_position (table, phys_loc);
+   moved_cursor = gnc_table_verify_cursor_position (table, virt_loc);
 
    if (moved_cursor)
    {
       /* make sure *both* the old and the new cursor rows get redrawn */
       gnc_table_refresh_current_cursor_gui (table, TRUE);
-      gnc_table_refresh_cursor_gui (table, save_curs, save_phys_loc, FALSE);
+      gnc_table_refresh_cursor_gui (table, save_loc.vcell_loc, FALSE);
    }
 
    LEAVE ("\n");
@@ -928,8 +874,7 @@ gnc_table_refresh_current_cursor_gui (Table * table, gboolean do_scroll)
 {
   if (!table) return;
 
-  gnc_table_refresh_cursor_gui (table, table->current_cursor,
-                                table->current_cursor_phys_loc,
+  gnc_table_refresh_cursor_gui (table, table->current_cursor_loc.vcell_loc,
                                 do_scroll);
 }
 
@@ -1002,9 +947,9 @@ gnc_table_physical_cell_valid(Table *table,
 /* ==================================================== */
 
 gboolean
-gnc_table_virtual_cell_valid(Table *table,
-                             VirtualLocation virt_loc,
-                             gboolean exact_pointer)
+gnc_table_virtual_loc_valid(Table *table,
+                            VirtualLocation virt_loc,
+                            gboolean exact_pointer)
 {
   BasicCell *cell;
   VirtualCell *vcell;
@@ -1320,42 +1265,105 @@ gnc_table_direct_update(Table *table,
 /* ==================================================== */
 
 gboolean
+gnc_table_find_close_valid_cell (Table *table, VirtualLocation *virt_loc,
+                                 gboolean exact_pointer)
+{
+  if (!gnc_table_find_valid_cell_vert (table, virt_loc))
+    return FALSE;
+
+  return gnc_table_find_valid_cell_horiz (table, virt_loc, exact_pointer);
+}
+
+/* ==================================================== */
+
+gboolean
+gnc_table_find_valid_cell_vert (Table *table, VirtualLocation *virt_loc)
+{
+  VirtualLocation vloc;
+  VirtualCell *vcell;
+
+  if (table == NULL)
+    return FALSE;
+
+  if (virt_loc == NULL)
+    return FALSE;
+
+  vloc = *virt_loc;
+
+  if (vloc.vcell_loc.virt_row < 1)
+    vloc.vcell_loc.virt_row = 1;
+  if (vloc.vcell_loc.virt_row >= table->num_virt_rows)
+    vloc.vcell_loc.virt_row = table->num_virt_rows - 1;
+
+  vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
+  if (vcell == NULL)
+    return FALSE;
+  if (vcell->cellblock == NULL)
+    return FALSE;
+
+  if (vloc.phys_row_offset < 0)
+    vloc.phys_row_offset = 0;
+  if (vloc.phys_row_offset >= vcell->cellblock->num_rows)
+    vloc.phys_row_offset = vcell->cellblock->num_rows - 1;
+
+  *virt_loc = vloc;
+
+  return TRUE;
+}
+
+/* ==================================================== */
+
+gboolean
 gnc_table_find_valid_cell_horiz(Table *table,
-                                PhysicalLocation *phys_loc,
+                                VirtualLocation *virt_loc,
                                 gboolean exact_cell)
 {
+  VirtualLocation vloc;
+  VirtualCell *vcell;
   int left;
   int right;
 
-  if (phys_loc == NULL)
+  if (table == NULL)
     return FALSE;
 
-  if (gnc_table_physical_cell_out_of_bounds (table, *phys_loc))
+  if (virt_loc == NULL)
     return FALSE;
 
-  if (gnc_table_physical_cell_valid(table, *phys_loc, exact_cell))
+  if (gnc_table_virtual_cell_out_of_bounds (table, virt_loc->vcell_loc))
+    return FALSE;
+
+  if (gnc_table_virtual_loc_valid(table, *virt_loc, exact_cell))
     return TRUE;
 
-  left  = phys_loc->phys_col - 1;
-  right = phys_loc->phys_col + 1;
+  vloc = *virt_loc;
 
-  while (left >= 0 || right < table->num_phys_cols)
+  vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
+  if (vcell == NULL)
+    return FALSE;
+  if (vcell->cellblock == NULL)
+    return FALSE;
+
+  if (vloc.phys_col_offset < 0)
+    vloc.phys_col_offset = 0;
+  if (vloc.phys_col_offset >= vcell->cellblock->num_cols)
+    vloc.phys_col_offset = vcell->cellblock->num_cols - 1;
+
+  left  = vloc.phys_col_offset - 1;
+  right = vloc.phys_col_offset + 1;
+
+  while (left >= 0 || right < vcell->cellblock->num_cols)
   {
-    PhysicalLocation ploc;
-
-    ploc.phys_row = phys_loc->phys_row;
-
-    ploc.phys_col = right;
-    if (gnc_table_physical_cell_valid(table, ploc, FALSE))
+    vloc.phys_col_offset = right;
+    if (gnc_table_virtual_loc_valid(table, vloc, FALSE))
     {
-      phys_loc->phys_col = right;
+      *virt_loc = vloc;
       return TRUE;
     }
 
-    ploc.phys_col = left;
-    if (gnc_table_physical_cell_valid(table, ploc, FALSE))
+    vloc.phys_col_offset = left;
+    if (gnc_table_virtual_loc_valid(table, vloc, FALSE))
     {
-      phys_loc->phys_col = left;
+      *virt_loc = vloc;
       return TRUE;
     }
 
@@ -1369,10 +1377,162 @@ gnc_table_find_valid_cell_horiz(Table *table,
 /* ==================================================== */
 
 gboolean
+gnc_table_move_tab (Table *table,
+                    VirtualLocation *virt_loc,
+                    gboolean move_right)
+{
+  VirtualCell *vcell;
+  VirtualLocation vloc;
+
+  if ((table == NULL) || (virt_loc == NULL))
+    return FALSE;
+
+  vloc = *virt_loc;
+
+  vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
+  if ((vcell == NULL) || (vcell->cellblock == NULL))
+    return FALSE;
+
+  while (1)
+  {
+    CellBlockCell *cb_cell;
+
+    if (move_right)
+    {
+      vloc.phys_col_offset++;
+
+      if (vloc.phys_col_offset >= vcell->cellblock->num_cols)
+      {
+        if (!gnc_table_move_vertical_position (table, &vloc, 1))
+          return FALSE;
+
+        vloc.phys_col_offset = 0;
+      }
+    }
+    else
+    {
+      vloc.phys_col_offset--;
+
+      if (vloc.phys_col_offset < 0)
+      {
+        if (!gnc_table_move_vertical_position (table, &vloc, -1))
+          return FALSE;
+
+        vloc.phys_col_offset = vcell->cellblock->num_cols - 1;
+      }
+    }
+
+    vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
+    if ((vcell == NULL) || (vcell->cellblock == NULL))
+      return FALSE;
+
+    cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
+                                      vloc.phys_row_offset,
+                                      vloc.phys_col_offset);
+    if ((cb_cell == NULL) || (cb_cell->cell == NULL))
+      continue;
+
+    if (!(XACC_CELL_ALLOW_INPUT & cb_cell->cell->input_output))
+      continue;
+
+    if (XACC_CELL_ALLOW_EXACT_ONLY & cb_cell->cell->input_output)
+      continue;
+
+    break;
+  }
+
+  {
+    gboolean changed = !virt_loc_equal (vloc, *virt_loc);
+
+    *virt_loc = vloc;
+
+    return changed;
+  }
+}
+
+/* ==================================================== */
+
+gboolean
+gnc_table_move_vertical_position (Table *table,
+                                  VirtualLocation *virt_loc,
+                                  int phys_row_offset)
+{
+  VirtualLocation vloc;
+
+  if ((table == NULL) || (virt_loc == NULL))
+    return FALSE;
+
+  vloc = *virt_loc;
+
+  while (phys_row_offset != 0)
+  {
+    VirtualCell *vcell;
+
+    /* going down */
+    if (phys_row_offset < 0)
+    {
+      phys_row_offset++;
+
+      /* room left in the current cursor */
+      if (vloc.phys_row_offset > 0)
+      {
+        vloc.phys_row_offset--;
+        continue;
+      }
+
+      /* end of the line */
+      if (vloc.vcell_loc.virt_row == 1)
+        break;
+
+      vloc.vcell_loc.virt_row--;
+
+      vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
+      if ((vcell == NULL) || (vcell->cellblock == NULL))
+        return FALSE;
+
+      vloc.phys_row_offset = vcell->cellblock->num_rows - 1;
+    }
+    /* going up */
+    else
+    {
+      phys_row_offset--;
+
+      vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
+      if ((vcell == NULL) || (vcell->cellblock == NULL))
+        return FALSE;
+
+      /* room left in the current cursor */
+      if (vloc.phys_row_offset < (vcell->cellblock->num_rows - 1))
+      {
+        vloc.phys_row_offset++;
+        continue;
+      }
+
+      /* end of the line */
+      if (vloc.vcell_loc.virt_row == (table->num_virt_rows - 1))
+        break;
+
+      vloc.vcell_loc.virt_row++;
+      vloc.phys_row_offset = 0;
+    }
+  }
+
+  {
+    gboolean changed = !virt_loc_equal (vloc, *virt_loc);
+
+    *virt_loc = vloc;
+
+    return changed;
+  }
+}
+
+/* ==================================================== */
+
+gboolean
 gnc_table_traverse_update(Table *table,
-                          PhysicalLocation phys_loc,
+                          VirtualLocation virt_loc,
                           gncTableTraversalDir dir,
-                          PhysicalLocation *dest_loc)
+                          VirtualLocation *dest_loc)
 {
   CellBlock *cb;
 
@@ -1382,27 +1542,27 @@ gnc_table_traverse_update(Table *table,
   cb = table->current_cursor;
 
   ENTER("proposed (%d %d) -> (%d %d)\n",
-        phys_loc.phys_row, phys_loc.phys_col,
-        dest_loc->phys_row, dest_loc->phys_col);
+        virt_loc.vcell_loc.virt_row, virt_loc.vcell_loc.virt_row,
+        dest_loc->vcell_loc.virt_row, dest_loc->vcell_loc.virt_col);
 
   /* first, make sure our destination cell is valid. If it is out
    * of bounds report an error. I don't think this ever happens. */
-  if (gnc_table_physical_cell_out_of_bounds (table, *dest_loc))
+  if (gnc_table_virtual_cell_out_of_bounds (table, dest_loc->vcell_loc))
   {
     PERR("destination (%d, %d) out of bounds (%d, %d)\n",
-         dest_loc->phys_row, dest_loc->phys_col,
-         table->num_phys_rows, table->num_phys_cols);
+         dest_loc->vcell_loc.virt_row, dest_loc->vcell_loc.virt_col,
+         table->num_virt_rows, table->num_virt_cols);
     return TRUE;
   }
 
   /* next, check the current row and column.  If they are out of bounds
    * we can recover by treating the traversal as a mouse point. This can
    * occur whenever the register widget is resized smaller, maybe?. */
-  if (gnc_table_physical_cell_out_of_bounds (table, phys_loc))
+  if (!gnc_table_virtual_loc_valid (table, virt_loc, TRUE))
   {
     PINFO("source (%d, %d) out of bounds (%d, %d)\n",
-	  phys_loc.phys_row, phys_loc.phys_col,
-          table->num_phys_rows, table->num_phys_cols);
+	  virt_loc.vcell_loc.virt_row, virt_loc.vcell_loc.virt_col,
+          table->num_virt_rows, table->num_virt_cols);
 
     dir = GNC_TABLE_TRAVERSE_POINTER;
   }
@@ -1412,47 +1572,14 @@ gnc_table_traverse_update(Table *table,
   {
     case GNC_TABLE_TRAVERSE_RIGHT:
     case GNC_TABLE_TRAVERSE_LEFT:      
-      {
-        CellTraverseInfo *ct_info;
-        PhysicalCell *pcell;
-        int cell_row, cell_col;
-
-	/* cannot compute the cell location until we have checked that
-	 * row and column have valid values. compute the cell
-	 * location. */
-        pcell = gnc_table_get_physical_cell (table, phys_loc);
-        if (pcell == NULL)
-          return FALSE;
-
-        cell_row = pcell->virt_loc.phys_row_offset;
-        cell_col = pcell->virt_loc.phys_col_offset;
-
-        ct_info = gnc_cellblock_get_traverse (cb, cell_row, cell_col);
-
-        if (dir == GNC_TABLE_TRAVERSE_RIGHT)
-        {
-          dest_loc->phys_row = (phys_loc.phys_row - cell_row +
-                                ct_info->right_traverse_row);
-          dest_loc->phys_col = (phys_loc.phys_col - cell_col +
-                                ct_info->right_traverse_col);
-        }
-        else
-        {
-          dest_loc->phys_row = (phys_loc.phys_row - cell_row +
-                                ct_info->left_traverse_row);
-          dest_loc->phys_col = (phys_loc.phys_col - cell_col +
-                                ct_info->left_traverse_col);
-        }
-      }
+      gnc_table_find_valid_cell_horiz(table, dest_loc, FALSE);
 
       break;
 
     case GNC_TABLE_TRAVERSE_UP:
     case GNC_TABLE_TRAVERSE_DOWN:
       {
-        VirtualCell *vcell = gnc_table_get_header_cell (table);
-	CellBlock *header = vcell->cellblock;
-	PhysicalLocation new_loc = *dest_loc;
+	VirtualLocation new_loc = *dest_loc;
 	int increment;
 
 	/* Keep going in the specified direction until we find a valid
@@ -1462,29 +1589,26 @@ gnc_table_traverse_update(Table *table,
 	 * going left and right. */
 	increment = (dir == GNC_TABLE_TRAVERSE_DOWN) ? 1 : -1;
 
-	while (!gnc_table_physical_cell_valid(table, new_loc, FALSE))
+	while (!gnc_table_virtual_loc_valid(table, new_loc, FALSE))
 	{
-	  if (new_loc.phys_row == phys_loc.phys_row)
+	  if (virt_loc_equal (new_loc, virt_loc))
           {
-            new_loc.phys_row = dest_loc->phys_row;
+            new_loc = *dest_loc;
             gnc_table_find_valid_cell_horiz(table, &new_loc, FALSE);
             break;
           }
 
-	  if ((new_loc.phys_row < header->num_rows) ||
-              (new_loc.phys_row >= table->num_phys_rows))
-	  {
+          if (!gnc_table_move_vertical_position (table, &new_loc, increment))
+          {
 	    increment *= -1;
-	    new_loc.phys_row = dest_loc->phys_row;
+	    new_loc = *dest_loc;
 	  }
-
-	  new_loc.phys_row += increment;
 	}
 
 	*dest_loc = new_loc;
       }
 
-      if (!gnc_table_physical_cell_valid(table, *dest_loc, FALSE))
+      if (!gnc_table_virtual_loc_valid(table, *dest_loc, FALSE))
 	return TRUE;
 
       break;
@@ -1506,7 +1630,7 @@ gnc_table_traverse_update(Table *table,
     (table->traverse) (table, dest_loc, dir);
 
   LEAVE("dest_row = %d, dest_col = %d\n",
-        dest_loc->phys_row, dest_loc->phys_col);
+        dest_loc->vcell_loc.virt_row, dest_loc->vcell_loc.virt_col);
 
   return FALSE;
 }

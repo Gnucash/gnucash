@@ -197,7 +197,6 @@ struct _SplitRegister {
    int num_phys_rows;
    int num_virt_rows;
 
-   int cursor_phys_row;
    int cursor_virt_row;
 
    BasicCell *header_label_cells[NUM_CELLS];
@@ -273,21 +272,21 @@ CursorClass    xaccSplitRegisterGetCursorClass (SplitRegister *reg,
 /* Returns the type of the current cell */
 CellType        xaccSplitRegisterGetCurrentCellType (SplitRegister *reg);
 
-/* Returns the type of the cell at the given physical row and column. */
+/* Returns the type of the cell at the given virtual row and column. */
 CellType        xaccSplitRegisterGetCellType (SplitRegister *reg,
-                                              PhysicalLocation phys_loc);
+                                              VirtualLocation virt_loc);
 
-/* Returns the physical row and column in the current cursor of the
+/* Returns the virtual location in the current cursor of the
  * given cell using the pointer values. The function returns true if
  * the given cell type is in the current cursor, false otherwise. */
-gboolean        xaccSplitRegisterGetCellPhysLoc (SplitRegister *reg,
-                                                 CellType cell_type,
-                                                 VirtualCellLocation vcell_loc,
-                                                 PhysicalLocation *phys_loc);
+gboolean   xaccSplitRegisterGetCellLoc (SplitRegister *reg,
+                                        CellType cell_type,
+                                        VirtualCellLocation vcell_loc,
+                                        VirtualLocation *virt_loc);
 
-gboolean   xaccSplitRegisterGetCurrentCellPhysLoc (SplitRegister *reg,
-                                                   CellType cell_type,
-                                                   PhysicalLocation *phys_loc);
+gboolean   xaccSplitRegisterGetCurrentCellLoc (SplitRegister *reg,
+                                               CellType cell_type,
+                                               VirtualLocation *virt_loc);
 
 /* Functions for working with split register buffers */
 SplitRegisterBuffer * xaccMallocSplitRegisterBuffer (void);

@@ -335,7 +335,7 @@ draw_cell (GnucashGrid *grid, int block,
 
         gdk_gc_set_foreground (grid->gc, fg_color);
 
-        if (table->current_cursor_virt_loc.virt_row == block &&
+        if (table->current_cursor_loc.vcell_loc.virt_row == block &&
 	    (!text || strlen(text) == 0)) {
                 font = grid->italic_font;
                 gdk_gc_set_foreground (grid->gc, &gn_light_gray);

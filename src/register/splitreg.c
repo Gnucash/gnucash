@@ -1139,7 +1139,6 @@ xaccInitSplitRegister (SplitRegister *reg,
   /* -------------------------------- */
 
   phys_r = header->num_rows;
-  reg->cursor_phys_row = phys_r;  /* cursor on first line past header */
   reg->cursor_virt_row = 1;
 
   phys_r += reg->single_cursor->num_rows;
@@ -1166,16 +1165,21 @@ xaccInitSplitRegister (SplitRegister *reg,
    * creates a register but doesn't do anything with it. Don't
    * want to freak out any programmers. */
   {
-    PhysicalLocation ploc = { reg->cursor_phys_row, 0 };
+    PhysicalLocation ploc = { 1, 0 };
     VirtualCellLocation vcell_loc = { reg->cursor_virt_row, 0 };
 
     gnc_table_set_cursor (table, reg->single_cursor, ploc, vcell_loc);
   }
 
   {
-    PhysicalLocation ploc = { header->num_rows, 0 };
+    VirtualLocation vloc;
 
-    gnc_table_move_cursor (table, ploc);
+    vloc.vcell_loc.virt_row = 1;
+    vloc.vcell_loc.virt_col = 0;
+    vloc.phys_row_offset = 0;
+    vloc.phys_col_offset = 0;
+
+    gnc_table_move_cursor (table, vloc);
   }
 
   reg->table = table;
@@ -1444,20 +1448,18 @@ xaccSplitRegisterGetCurrentCellType (SplitRegister *reg)
     return NO_CELL;
 
   return
-    xaccSplitRegisterGetCellType(reg, table->current_cursor_phys_loc);
+    xaccSplitRegisterGetCellType(reg, table->current_cursor_loc);
 }
 
 /* ============================================== */
 
 static BasicCell *
-sr_get_cell (SplitRegister *reg, PhysicalLocation phys_loc)
+sr_get_cell (SplitRegister *reg, VirtualLocation virt_loc)
 {
   Table *table;
   VirtualCell *vcell;
-  PhysicalCell *pcell;
   CellBlock *cellblock;
   CellBlockCell *cb_cell;
-  VirtualLocation virt_loc;
 
   if (reg == NULL)
     return NULL;
@@ -1465,12 +1467,6 @@ sr_get_cell (SplitRegister *reg, PhysicalLocation phys_loc)
   table = reg->table;
   if (table == NULL)
     return NULL;
-
-  pcell = gnc_table_get_physical_cell (table, phys_loc);
-  if (pcell == NULL)
-    return NULL;
-
-  virt_loc = pcell->virt_loc;
 
   vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
   if (vcell == NULL)
@@ -1491,11 +1487,11 @@ sr_get_cell (SplitRegister *reg, PhysicalLocation phys_loc)
 /* ============================================== */
 
 CellType
-xaccSplitRegisterGetCellType (SplitRegister *reg, PhysicalLocation phys_loc)
+xaccSplitRegisterGetCellType (SplitRegister *reg, VirtualLocation virt_loc)
 {
   BasicCell *cell;
 
-  cell = sr_get_cell (reg, phys_loc);
+  cell = sr_get_cell (reg, virt_loc);
   if (cell == NULL)
     return NO_CELL;
 
@@ -1505,9 +1501,9 @@ xaccSplitRegisterGetCellType (SplitRegister *reg, PhysicalLocation phys_loc)
 /* ============================================== */
 
 gboolean
-xaccSplitRegisterGetCellPhysLoc (SplitRegister *reg, CellType cell_type,
-                                 VirtualCellLocation vcell_loc,
-                                 PhysicalLocation *phys_loc)
+xaccSplitRegisterGetCellLoc (SplitRegister *reg, CellType cell_type,
+                             VirtualCellLocation vcell_loc,
+                             VirtualLocation *virt_loc)
 {
   Table *table;
   VirtualCell *vcell;
@@ -1536,10 +1532,12 @@ xaccSplitRegisterGetCellPhysLoc (SplitRegister *reg, CellType cell_type,
 
       if (sr_cell_type (reg, cb_cell->cell) == cell_type)
       {
-        if (phys_loc != NULL)
+        if (virt_loc != NULL)
         {
-          phys_loc->phys_row = vcell->phys_loc.phys_row + cell_row;
-          phys_loc->phys_col = vcell->phys_loc.phys_col + cell_col;
+          virt_loc->vcell_loc = vcell_loc;
+
+          virt_loc->phys_row_offset = cell_row;
+          virt_loc->phys_col_offset = cell_col;
         }
 
         return TRUE;
@@ -1552,8 +1550,8 @@ xaccSplitRegisterGetCellPhysLoc (SplitRegister *reg, CellType cell_type,
 /* ============================================== */
 
 gboolean
-xaccSplitRegisterGetCurrentCellPhysLoc (SplitRegister *reg, CellType cell_type,
-                                        PhysicalLocation *phys_loc)
+xaccSplitRegisterGetCurrentCellLoc (SplitRegister *reg, CellType cell_type,
+                                    VirtualLocation *virt_loc)
 {
   Table *table;
 
@@ -1564,9 +1562,9 @@ xaccSplitRegisterGetCurrentCellPhysLoc (SplitRegister *reg, CellType cell_type,
   if (table == NULL)
     return FALSE;
 
-  return xaccSplitRegisterGetCellPhysLoc (reg, cell_type,
-                                          table->current_cursor_virt_loc,
-                                          phys_loc);
+  return xaccSplitRegisterGetCellLoc (reg, cell_type,
+                                      table->current_cursor_loc.vcell_loc,
+                                      virt_loc);
 }
 
 /* ============================================== */
