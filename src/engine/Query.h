@@ -58,11 +58,8 @@ typedef QofQuery Query;
  * The xaccQueryNumTerms() routine returns the total number of terms in the query.
  */
 
-// void xaccQueryPurgeTerms(Query * q, pd_type_t type);
-// gboolean      xaccQueryHasTermType(Query * q, pd_type_t type);
 #define xaccQueryHasTerms	qof_query_has_terms
 #define xaccQueryNumTerms	qof_query_num_terms
-// #define xaccQueryGetTerms	qof_query_get_terms
 
 
 #define xaccQuerySetSortIncreasing	qof_query_set_sort_increasing
@@ -78,6 +75,8 @@ typedef enum {
 } query_txn_match_t;
 
 /* After the query has been set up, call one of these to run the query. 
+ *    XXX The routines below should be replaced by a query
+ *    that explicitly asks for a list of the desied item.
  *
  * The xaccQueryGetSplits() routine returns all splits matching the 
  *    query.  Any given split will appear at most once in the result;
@@ -168,7 +167,7 @@ void xaccQueryAddNumericMatch (Query *q, gnc_numeric amount,
 				((bal) ? QOF_COMPARE_EQUAL : QOF_COMPARE_NEQ), (op), \
 				SPLIT_TRANS, TRANS_IMBALANCE, NULL)
 
-/* The DateMatch queries match transactions whose posted date
+/** The DateMatch queries match transactions whose posted date
  *    is in a date range.  If use_start is TRUE, then a matching
  *    posted date will be greater than the start date.   If 
  *    use_end is TRUE, then a match occurs for posted dates earlier 
@@ -205,7 +204,7 @@ void xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
 void xaccQueryAddGUIDMatchGL (QofQuery *q, GList *param_list,
 			      GUID guid, QofQueryOp op);
 
-/* given kvp value is on right side of comparison */
+/** given kvp value is on right side of comparison */
 void xaccQueryAddKVPMatch(Query *q, GSList *path, const KvpValue *value,
                           QofQueryCompare how, QofIdType id_type,
                           QofQueryOp op);

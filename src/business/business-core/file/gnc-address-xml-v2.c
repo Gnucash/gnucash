@@ -58,6 +58,7 @@ const gchar *address_version_string = "2.0.0";
 #define addr_phone_string	"addr:phone"
 #define addr_fax_string		"addr:fax"
 #define addr_email_string	"addr:email"
+#define addr_slots_string	"addr:slots"
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -173,6 +174,12 @@ address_email_handler (xmlNodePtr node, gpointer addr_pdata)
     return set_string(node, pdata->address, gncAddressSetEmail);
 }
 
+static gboolean
+address_slots_handler (xmlNodePtr node, gpointer addr_pdata)
+{
+  return TRUE;
+}
+
 static struct dom_tree_handler address_handlers_v2[] = {
     { addr_name_string, address_name_handler, 0, 0 },
     { addr_addr1_string, address_addr1_handler, 0, 0 },
@@ -182,6 +189,7 @@ static struct dom_tree_handler address_handlers_v2[] = {
     { addr_phone_string, address_phone_handler, 0, 0 },
     { addr_fax_string, address_fax_handler, 0, 0 },
     { addr_email_string, address_email_handler, 0, 0 },
+    { addr_slots_string, address_slots_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 

@@ -51,6 +51,7 @@ libgncgnome_la_SOURCES = \
   gnc-plugin-page-register.c \
   gnc-plugin-page.c \
   gnc-split-reg.c \
+  lot-viewer.c \
   mainwindow-account-tree.c \
   reconcile-list.c \
   tip-of-the-day.c \
@@ -97,6 +98,7 @@ noinst_HEADERS = \
   gnc-network.h \
   gnc-split-reg.h \
   gw-gnc.h \
+  lot-viewer.h \
   mainwindow-account-tree.h \
   reconcile-list.h \
   tip-of-the-day.h \

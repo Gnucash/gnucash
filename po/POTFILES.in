@@ -278,7 +278,6 @@ src/gnome/druid-hierarchy.c
 src/gnome/druid-loan.c
 src/gnome/druid-stock-split.c
 src/gnome/gnc-network.c
-src/gnome/gnc-splash.c
 src/gnome/gnc-split-reg.c
 src/gnome/gnucash.desktop.in
 src/gnome/gnucash.keys.in
@@ -339,6 +338,7 @@ src/gnome-utils/gnc-html.c
 src/gnome-utils/gnc-mdi-utils.c
 src/gnome-utils/gnc-menu-extensions.c
 src/gnome-utils/gnc-query-list.c
+src/gnome-utils/gnc-splash.c
 src/gnome-utils/gncmod-gnome-utils.c
 src/gnome-utils/gtkselect.c
 src/gnome-utils/print-session.c

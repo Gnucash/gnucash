@@ -1,9 +1,5 @@
 /********************************************************************\
- * io-gncbin.h -- read and write (old format) binary datafile       *
- *             (X-Accountant)                                       *
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998, 1999 Linas Vepstas                           *
- *                                                                  *
+ * io-gncbin.h -- read (old X-Accountant format) binary datafile    *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -31,11 +27,13 @@
 #define IO_GNCBIN_H
 
 #include "qofbackend.h"
-#include "qofsession.h"
+#include "qofbook.h"
 
-/** PROTOTYPES ******************************************************/
-
-/*
+/* @file io-gncbin.h
+ * @breif read (old X-Accountant format) binary datafile
+ * @author Copyright (C) 1997 Robin D. Clark
+ * @author Copyright (C) 1998, 1999 Linas Vepstas <linas@linas.org>
+ *
  * NOTE: These routines should not be used directly for file IO.  They
  *    are not inherently safe against file-locking errors.  For direct
  *    file IO, the gnc-book's higher level functions should be used.
@@ -49,7 +47,7 @@
  * thought of as a "stack of depth one", and this routine as a "pop".
  * Future implementations may have a deeper stack.
 */
-void            qof_session_load_from_binfile(QofSession *session);
+void            qof_session_load_from_binfile(QofBook *, const char * filepath);
 QofBackendError gnc_get_binfile_io_error(void);
 
 #endif /* IO_GNCBIN_H */

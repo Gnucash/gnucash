@@ -1,10 +1,10 @@
 
                            Lots
                            ====
-                  Implementation Proposal
+             Architecture & Implementation Overview
 
                Linas Vepstas <linas@linas.org>
-                  Last Revised January 2003
+                  Last Revised August 2003
 
 
 One often needs to know that the item 'bought' in one transaction
@@ -170,12 +170,11 @@ its own.
 
 Closing of Books
 ================
-A few words on lots and the closing of books.  Without implementing
-lots in the GnuCash engine, there is really no way of correctly 
-implementing book closing.  That is because some reports, such as
-the capital-gains report, need to know not only the account balance,
-but also the purchase dates.  Lots provide the natural mechanism for 
-storing this information.  
+A few words on lots and the closing of books.  Without lots, there 
+is really no way of correctly implementing book closing.  That is
+because some reports, such as the capital-gains report, need to know 
+not only the account balance, but also the purchase dates.  Lots 
+provide the natural mechanism for storing this information.  
 
 When a book is closed, any open lots must be moved into/kept with
 the open book.  Since the splits in a lot belong to transactions,
@@ -185,10 +184,15 @@ is considered closed when its balance is zero; when a book is closed,
 all of the lots that were closed stay with that book.  That is,
 closed lots are not propagated forward into the currently open book.
 
+Actually, its slightly more subtle than that. Not only must open
+lots stay with the open book, but so must all transactions that
+have splits that participate in teh open lot, and, by extension,
+all closed lots that participate in these 'open transations', 
+ad infinitum.
 
 
-The "Double Balance" Proposal
-=============================
+The "Double Balance" Requirment
+===============================
 The following is a proposal for how to handle both realized
 and unrealized gains/losses by means of "adjusting transactions."
 It works for simple cases, but has issues for more complex cases.
@@ -330,16 +334,62 @@ we want to show only one of these two splits.   Whichever method
 is chosen, the register has to filter out some of the splits 
 that it shows.
 
-The implementation that seems best is to represnet the sale
+The implementation that seems best is to represent the sale
 with two separate transactions: one for the sale itself, and a
 separate one for the gains.  This makes computing the balance 
-easier, although it makes  the logic for setting the date
+easier, although it makes the logic for setting the date
 more complex.  Ughh..
 
+Cap Gains Implementation Notes
+==============================
+Cap Gains will be handled by GnuCash as described above, using 
+two distinct transactions.  These transactions will be marked up
+using KVP, pointing to each other, so that the one can be found
+from the other.  Implementation in src/engine/cap-gains.c
+
+Quick API Overview:
+   xaccSplitGetCapGains(): Returns the capital gains associated with
+      a split.  Split must have been a sale/purchase in a previously 
+      opened lot.
+   xaccSplitAssignToLot(): If a split is not already in a lot,
+      then it places it into a lot, using a FIFO accounting policy.
+
+TODO:
+-- need to recompute lot membership when source split 'amount' changes.
+-- need to recompute gain value when source split value changes.
+-- need to copy void status when source split date changes.
+
+Cap Gains Actual Implementation
+===============================
+Cap Gains are noted by creating a separate transaction with two 
+splits in it.  One of the splits is as described above: zero
+amount, non-zero value.   There is a GUI requirement that when
+the looking at a gains transaction, certain things need to be
+kept in sync with the transaction that is the source of the gains.
+In order to accomplish this, the engine uses a set of 'dirty'
+flags, and a pair of pointers between the gains split and the
+source split, so that the one can be quickly found from the other.
+
+Things kept in sync:
+-- date posted
+-- value
+-- void status
+-- other things ?
+
+Things not kept in sync:
+-- kvp trees
+-- description, memo,  other things?
+
+The posted date is kept in sync using a lazy-evaluation scheme.
+If xaccTransactionSetDatePosted() is called, the date change is
+accepted, and the split is marked date-dirty.  If the posted date
+is queried for (using GetDatePosted()), then the transaction is
+evaluated. If its a gains-transaction, then it's date is copied 
+from the source transaction that created the gains. 
 
 Conversion
 ==========
-When Lots are finally put into production, old GnuCash datasets
+As Lots are put into production, old GnuCash datasets
 will need to be converted.   Conversion will be done by running 
 all splits in an account through an accounting FIFO.  The goal
 of the FIFO is to match up purchases and sales so that these can
@@ -361,6 +411,13 @@ for each account {
 
 See the file Scrub2.h for details.
 
+There is a bit of a problem with this conversion proceedure: If the
+user had prviously recorded cap gains using a 'handmade' version of
+lots, those cap gains will be ignored and will throw off balances.
+User will need to hand-edit to recover.
+
+-- TODO: Modify scrub routines to look for splits with zero amount,
+   try to assign these to lots as appropriate. ??
 
 GUI
 ===
@@ -415,18 +472,27 @@ Status
  o See src/engine/gnc-lot.h for the public API.
  o The XML backend support for lot is complete (April 2002,  ships in 
    version 1.8.x).
- o The Postgres backend does not yet support lots.
  o Scrub routines to automatically take old gnucash datasets and
    transition them to double-balanced lots have been implemented.
    These implement a FIFO accounting policy (April 2003)
+ o Closed/Open lots are handled correctly during book closing.
+   See src/engine/Period.c (August 2003)
 
-XXX need to add a lot id, have it auto-gened by the scrubber.
+ o The Postgres backend does not yet support lots.
+   XXX In particular, the programming API for Lots is currently
+   non-transactional. There's no dirty flag, and the backend is not 
+   signalled that the lots have changed.  This is the case both for
+   Scrub2.c and for src/gnome/lot-viewer.c (which changes KVP's).
 
- o No GUI yet.
+ o prototype lot-viewing GUI in src/gnome/lot-viewer.c
+   This GUI cannot 'edit' lots.
 
-XXX It is a good idea to generate a gain/loss split for ever sale, not
-just the lot closure.  Need to tweak the register to hide/show as appropriate.
-Need to add a tag to the gain split to indicate its's 'special' nature.
+ o Work has begun on the automatic computation & tracking of gain/loss
+   transactions.   See src/engine/cap-gains.h  Routines now exist to 
+   compute these.  Need to add infrastructure to auto-recompute as 
+   needed, make use of this in register gui's, etc.  A lot of work left.
+   In particular, what about the cap-gains report?
+
 
 
 -------------------------- end of file ------------------------------

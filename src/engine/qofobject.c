@@ -29,9 +29,12 @@
 #include <glib.h>
 
 #include "gnc-engine-util.h"
+#include "gnc-trace.h"
 #include "qofobject.h"
 #include "qofobject-p.h"
 #include "qofbook.h"
+
+static short module = MOD_QUERY;
 
 static gboolean object_is_initialized = FALSE;
 static GList *object_modules = NULL;
@@ -43,6 +46,7 @@ void qof_object_book_begin (QofBook *book)
   GList *l;
 
   if (!book) return;
+  ENTER (" ");
   for (l = object_modules; l; l = l->next) {
     QofObject *obj = l->data;
     if (obj->book_begin)
@@ -51,6 +55,7 @@ void qof_object_book_begin (QofBook *book)
 
   /* Remember this book for later */
   book_list = g_list_prepend (book_list, book);
+  LEAVE (" ");
 }
 
 void qof_object_book_end (QofBook *book)
@@ -58,6 +63,7 @@ void qof_object_book_end (QofBook *book)
   GList *l;
 
   if (!book) return;
+  ENTER (" ");
   for (l = object_modules; l; l = l->next) {
     QofObject *obj = l->data;
     if (obj->book_end)
@@ -66,6 +72,7 @@ void qof_object_book_end (QofBook *book)
 
   /* Remove it from the list */
   book_list = g_list_remove (book_list, book);
+  LEAVE (" ");
 }
 
 gboolean qof_object_is_dirty (QofBook *book)
@@ -112,12 +119,17 @@ void qof_object_foreach (QofIdTypeConst type_name, QofBook *book,
   const QofObject *obj;
 
   if (!book || !type_name) return;
+  ENTER ("type=%s", type_name);
 
   obj = qof_object_lookup (type_name);
+  PINFO ("lookup obj=%p for type=%s", obj, type_name);
   if (!obj) return;
 
-  if (obj->foreach)
-    return (obj->foreach (book, cb, user_data));
+  PINFO ("type=%s foreach=%p", type_name, obj->foreach);
+  if (obj->foreach) {
+    obj->foreach (book, cb, user_data);
+  }
+  LEAVE ("type=%s", type_name);
 
   return;
 }

@@ -673,12 +673,11 @@ static gboolean add_to_verslist (struct _listinfo *listinfo,
   return TRUE;
 }
 
-static gboolean add_txnvers_cb (Transaction *t, void *data)
+static gint add_txnvers_cb (Transaction *t, void *data)
 {
-  if (!t || !data)
-    return FALSE;
-
-  return add_to_verslist ((struct _listinfo *)data, &(t->guid), t->version);
+  if (!t || !data) return 1;
+  add_to_verslist ((struct _listinfo *)data, &(t->guid), t->version);
+  return 0;
 }
 
 gnc_vers_list * rpcend_build_gncverslist_txn (GList *txnlist,

@@ -134,13 +134,6 @@ add_account_local(GncExampleAccount *gea, Account *act)
     table = gnc_book_get_commodity_table (gea->book);
 
     clear_up_account_commodity(table, act,
-                                       DxaccAccountGetCurrency,
-                                       DxaccAccountSetCurrency);
-    clear_up_account_commodity(table, act,
-                                       DxaccAccountGetSecurity,
-                                       DxaccAccountSetSecurity);
-
-    clear_up_account_commodity(table, act,
                                xaccAccountGetCommodity,
                                xaccAccountSetCommodity);
 

@@ -72,6 +72,7 @@ const gchar *customer_version_string = "2.0.0";
 #define cust_currency_string "cust:currency"
 #define cust_taxtable_string "cust:taxtable"
 #define cust_taxtableoverride_string "cust:use-tt"
+#define cust_slots_string "cust:slots"
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -367,6 +368,12 @@ customer_taxtableoverride_handler (xmlNodePtr node, gpointer cust_pdata)
     return set_boolean (node, pdata->customer, gncCustomerSetTaxTableOverride);
 }
 
+static gboolean
+customer_slots_handler (xmlNodePtr node, gpointer cust_pdata)
+{
+  return TRUE;
+}
+
 static struct dom_tree_handler customer_handlers_v2[] = {
     { cust_name_string, customer_name_handler, 1, 0 },
     { cust_guid_string, customer_guid_handler, 1, 0 },
@@ -383,6 +390,7 @@ static struct dom_tree_handler customer_handlers_v2[] = {
     { "cust:commodity", customer_currency_handler, 0, 0 }, /* XXX */
     { cust_taxtable_string, customer_taxtable_handler, 0, 0 },
     { cust_taxtableoverride_string, customer_taxtableoverride_handler, 0, 0 },
+    { cust_slots_string, customer_slots_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 

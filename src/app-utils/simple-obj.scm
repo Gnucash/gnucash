@@ -3,7 +3,6 @@
 ;;;  rudimentary "class" system for straight Scheme 
 ;;;
 ;;;  Bill Gribble <grib@billgribble.com> 20 Feb 2000 
-;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;  this is an extremely rudimentary object system.  Each object is a

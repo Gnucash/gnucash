@@ -338,8 +338,9 @@ gnc_numeric_sub_fixed(gnc_numeric a, gnc_numeric b) {
 
 gnc_numeric
 gnc_numeric_mul(gnc_numeric a, gnc_numeric b, 
-                gint64 denom, gint how) {
-  gnc_numeric product;
+                gint64 denom, gint how) 
+{
+  gnc_numeric product, result;
   
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
     return gnc_numeric_error(GNC_ERROR_ARG);
@@ -380,12 +381,14 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
   }
   
   if((denom == GNC_DENOM_AUTO) &&
-     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_LCD)) {
+     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_LCD)) 
+  {
     denom = gnc_numeric_lcd(a, b);
     how   = how & GNC_NUMERIC_RND_MASK;
   }
 
-  return gnc_numeric_convert(product, denom, how);                             
+  result = gnc_numeric_convert(product, denom, how);                             
+  return result;
 }
 
 
@@ -485,7 +488,8 @@ gnc_numeric_abs(gnc_numeric a) {
  ********************************************************************/
 
 gnc_numeric
-gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how) {
+gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how) 
+{
   gnc_numeric out;
   gnc_numeric temp;
   gint64      temp_bc;
@@ -500,8 +504,12 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how) {
     return gnc_numeric_error(GNC_ERROR_ARG);
   }
   
-  if(denom == GNC_DENOM_AUTO) {
-    switch(how & GNC_NUMERIC_DENOM_MASK) {
+  if(denom == GNC_DENOM_AUTO) 
+  {
+    switch(how & GNC_NUMERIC_DENOM_MASK) 
+    {
+    default:
+    case GNC_DENOM_LCD:   /* LCD is meaningless with AUTO in here */
     case GNC_DENOM_EXACT:
       return in;
       break;
@@ -542,19 +550,15 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how) {
       how = how & ~GNC_DENOM_SIGFIG & ~GNC_NUMERIC_SIGFIGS_MASK;
       break;
 
-    case GNC_DENOM_LCD:
-      /* this is a no-op. */
-    default:
-      break;
     }
   }
   
-  /* make sure we need to do the work */
+  /* Make sure we need to do the work */
   if(in.denom == denom) {
     return in;
   }
   
-  /* if the denominator of the input value is negative, get rid of that. */
+  /* If the denominator of the input value is negative, get rid of that. */
   if(in.denom < 0) {
     in.num = in.num * (- in.denom);
     in.denom = 1;
@@ -562,9 +566,10 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how) {
   
   sign = (in.num < 0) ? -1 : 1;
 
-  /* if the denominator is less than zero, we are to interpret it as 
+  /* If the denominator is less than zero, we are to interpret it as 
    * the reciprocal of its magnitude. */
-  if(denom < 0) {
+  if(denom < 0) 
+  {
     denom     = - denom;
     denom_neg = 1;
     temp_a    = (in.num < 0) ? -in.num : in.num;
@@ -573,8 +578,9 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how) {
     out.num   = in.num / temp_bc;
     out.denom = - denom;    
   }
-  else {
-    /* do all the modulo and int division on positive values to make
+  else 
+  {
+    /* Do all the modulo and int division on positive values to make
      * things a little clearer. Reduce the fraction denom/in.denom to
      * help with range errors (FIXME : need bigger intermediate rep) */
     temp.num   = denom;
@@ -588,7 +594,8 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how) {
     out.denom = denom;
   }
 
-  if(remainder > 0) {
+  if(remainder > 0) 
+  {
     switch(how) {
     case GNC_RND_FLOOR:
       if(sign < 0) {

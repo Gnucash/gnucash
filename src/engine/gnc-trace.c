@@ -35,7 +35,7 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 /* static short module = MOD_ENGINE; */
 
-static gncLogLevel loglevel[MOD_LAST + 1] =
+gncLogLevel gnc_log_modules[MOD_LAST + 1] =
 {
   GNC_LOG_FATAL,        /* DUMMY */
   GNC_LOG_WARNING,      /* ENGINE */
@@ -61,9 +61,29 @@ static gncLogLevel loglevel[MOD_LAST + 1] =
   GNC_LOG_WARNING,      /* IMPORT */
   GNC_LOG_WARNING,      /* BUSINESS */
   GNC_LOG_TRACE,        /* DRUID */
+  GNC_LOG_WARNING,      /* COMMODITY */
 };
 
 static FILE *fout = NULL;
+
+static void
+fh_printer (const gchar   *log_domain,
+            GLogLevelFlags    log_level,
+            const gchar   *message,
+            gpointer    user_data)
+{
+  FILE *fh = user_data;
+  fprintf (fh, "%s\n", message);
+}
+
+void 
+gnc_log_init (void)
+{
+   fout = stderr;
+   fout = stdout;
+   fout = fopen ("/tmp/gnucash.trace", "w");
+   g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_MASK, fh_printer, fout);
+}
 
 /* Set the logging level of the given module. */
 void
@@ -72,7 +92,7 @@ gnc_set_log_level(gncModuleType module, gncLogLevel level)
   if ((module < 0) || (module > MOD_LAST))
     return;
 
-  loglevel[module] = level;
+  gnc_log_modules[module] = level;
 }
 
 /* Set the logging level for all modules. */
@@ -82,7 +102,7 @@ gnc_set_log_level_global(gncLogLevel level)
   gncModuleType module;
 
   for (module = 0; module <= MOD_LAST; module++)
-    loglevel[module] = level;
+    gnc_log_modules[module] = level;
 }
 
 void
@@ -91,13 +111,13 @@ gnc_set_logfile (FILE *outfile)
    fout = outfile;
 }
 
-/* prettify() cleans up subroutine names. AIX/xlC has the habit of
- * printing signatures not names; clean this up. On other operating
+/* gnc_log_prettify() cleans up subroutine names. AIX/xlC has the habit
+ * of printing signatures not names; clean this up. On other operating
  * systems, truncate name to 30 chars. Note this routine is not thread
  * safe. Note we wouldn't need this routine if AIX did something more
  * reasonable. Hope thread safety doesn't poke us in eye. */
-static const char *
-prettify (const char *name)
+const char *
+gnc_log_prettify (const char *name)
 {
   static char bf[128];
   char *p;
@@ -118,46 +138,6 @@ prettify (const char *name)
 
   return bf;
 }
-
-gboolean
-gnc_should_log (gncModuleType module, gncLogLevel log_level)
-{
-  if (module < 0 || module > MOD_LAST)
-  {
-    PERR ("Bad module: %d", module);
-    return FALSE;
-  }
-
-  if (log_level > loglevel[module])
-    return FALSE;
-
-  return TRUE;
-}
-
-void
-gnc_log (gncModuleType module, gncLogLevel log_level, const char *prefix,
-         const char *function_name, const char *format, ...)
-{
-  va_list ap;
-
-  if (!gnc_should_log (module, log_level))
-    return;
-
-  if (!fout) fout = stderr;
-
-  fprintf (fout, "%s: %s: ",
-           prefix ? prefix : "(null)",
-           prettify (function_name));
-
-  va_start (ap, format);
-
-  vfprintf (fout, format, ap);
-
-  va_end (ap);
-
-  fprintf (fout, "\n");
-}
-
 
 /********************************************************************\
 \********************************************************************/
@@ -186,10 +166,10 @@ gnc_start_clock (int clockno, gncModuleType module, gncLogLevel log_level,
   if ((0>clockno) || (NUM_CLOCKS <= clockno)) return;
   gettimeofday (&gnc_clock[clockno], &tz);
 
-  if (!fout) fout = stderr;
+  if (!fout) gnc_log_init();
 
   fprintf (fout, "Clock %d Start: %s: ",
-           clockno, prettify (function_name));
+           clockno, gnc_log_prettify (function_name));
 
   va_start (ap, format);
 
@@ -223,10 +203,10 @@ gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
   gnc_clock_total[clockno].tv_sec += now.tv_sec;
   gnc_clock_total[clockno].tv_usec += now.tv_usec;
 
-  if (!fout) fout = stderr;
+  if (!fout) gnc_log_init();
 
   fprintf (fout, "Clock %d Elapsed: %ld.%06lds %s: ",
-           clockno, now.tv_sec, now.tv_usec, prettify (function_name));
+           clockno, now.tv_sec, now.tv_usec, gnc_log_prettify (function_name));
 
   va_start (ap, format);
 
@@ -253,13 +233,13 @@ gnc_report_clock_total (int clockno,
     gnc_clock_total[clockno].tv_usec -= 1000000;
   }
 
-  if (!fout) fout = stderr;
+  if (!fout) gnc_log_init();
 
   fprintf (fout, "Clock %d Total Elapsed: %ld.%06lds  %s: ",
            clockno,
            gnc_clock_total[clockno].tv_sec,
            gnc_clock_total[clockno].tv_usec,
-           prettify (function_name));
+           gnc_log_prettify (function_name));
 
   va_start (ap, format);
 
@@ -277,12 +257,14 @@ gnc_report_clock_total (int clockno,
 static GNCGuiMessage gnc_gui_warning_func = NULL;
 static GNCGuiMessage gnc_gui_error_func = NULL;
 
-void gnc_set_warning_message (GNCGuiMessage func)
+void 
+gnc_set_warning_message (GNCGuiMessage func)
 {
   gnc_gui_warning_func = func;
 }
 
-void gnc_set_error_message (GNCGuiMessage func)
+void 
+gnc_set_error_message (GNCGuiMessage func)
 {
   gnc_gui_error_func = func;
 }
@@ -292,10 +274,17 @@ gnc_send_gui_warning(const gchar *format, ...)
 {
   va_list args;
 
+  va_start (args, format);
   if (!gnc_gui_warning_func)
-    return(FALSE);
+  {
+    if (!fout) gnc_log_init();
 
-  va_start(args, format);
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING, 
+      format, args);
+    va_end (args);
+    return(FALSE);
+  }
+
   gnc_gui_warning_func(format, args);
   va_end(args);
   return(TRUE);
@@ -306,10 +295,17 @@ gnc_send_gui_error(const gchar *format, ...)
 {
   va_list args;
 
+  va_start (args, format);
   if (!gnc_gui_error_func)
-    return(FALSE);
+  {
+    if (!fout) gnc_log_init();
 
-  va_start(args, format);
+    g_logv (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,
+      format, args);
+    va_end (args);
+    return(FALSE);
+  }
+
   gnc_gui_error_func(format, args);
   va_end(args);
   return(TRUE);

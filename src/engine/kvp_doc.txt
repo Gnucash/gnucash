@@ -1,11 +1,14 @@
 
-                    kvp_doc.txt
-                    -----------
+                    KVP Values used By GnuCash
+                    --------------------------
+                    Date Last Revised: August 2003
+
 
 This file documents the use of keys in the key-value pair system
-used by the Engine. Before assigning keys for use, please read
-the Key-Value Policy in the GnuCash Design Document located
-under src/doc/design.
+used by the GnuCash Application (both the engine, and non-engine, GUI
+pieces).  Before assigning keys for use, please read the Key-Value 
+Policy in the GnuCash Design Document located under src/doc/design.
+
 
 The format of the data below is:
 
@@ -27,7 +30,7 @@ Use: The use to which the key will be put. Include any requirements
 
 Example:
 
-Name: my-favorite-thing
+Name: /my-favorite-thing
 Type: string
 Entities: Account
 Use:  xaccGetMyFavoriteThing(), xaccSetMyFavoriteThing()
@@ -136,45 +139,50 @@ Use:  Holders for a bunch of counters for various types.  Used specifically
 
 -----------------------
 
-Name: from-sched-xaction
+Name: /from-sched-xaction
 Type: GUID
 Entities: Transaction
 Use: Identifies that the Transaction was created from a ScheduledTransaction,
      and stores the GUID of that SX.
 
+Name: /gains-source
+Type: guid
+Entities: Split
+Use:  GUID of the split that is at the source of the cap gains recorded
+      in this split.
+
+Name: /gains-split
+Type: guid
+Entities: Split
+Use:  GUID of the split that records the capital gains for this split.
+
 -----------------------
 
 Name: /gemini/
-Type: kvp_frame
+Type: kvp_glist
 Entities: Account, Book
-Use:  kvp subdirectory holding identification of accounts or books 
+Use:  kvp bag holding frames that identify accounts or books 
       that are copies of this account.
 
-Name: /gemini/ncopies
-Type: int64
-Entities: Account, Book
-Use:  number of subdirectories containing copy info.
-
-Name: /gemini/0/
+Name: /gemini/*
 Type: kvp_frame
 Entities: Account, Book
-Use:  subdirectory holding identification of the first copied account.
-      Other copies would appear in directories /gemini/1/, /gemini/2/,
-      etc.
+Use:  bag value holds a frame that identifies a single copied account.
+      Other copies would appear in other bag values.
 
-Name: /gemini/0/acct_guid
+Name: /gemini/*/acct_guid
 Type: guid
 Entities: Account
 Use:  guid of another account that is a copy of this one.
 
-Name: /gemini/0/book_guid
+Name: /gemini/*/book_guid
 Type: guid
 Entities: Account, Book
 Use:  When this appears in an account, then it contains the guid of 
       the book that the other account belongs to.  When this appears
       in a book, then this is the guid of the other book.
 
-Name: /gemini/0/date
+Name: /gemini/*/date
 Type: timespec
 Entities: Account, Book
 Use:  date that the copy was created.
@@ -246,16 +254,34 @@ Entities: Account
 Use: When a lot in this account is double-balanced, this key specifies
      the account to which realized gains are to be posted.
 
+Name: /lot-mgmt/next-id
+Type: int64
+Entities: Account
+Use: The next unused lot id number, used to autogenerate
+     a lot title.
+
+
+Name: /lot-split/
+Type: kvp_glist
+Entities: Split
+Use:  A bag of kvp frames holding identification of splits
+      that were split off of this split.  Same style as the 
+      /gemini/, look there for additional doco's.
+
+Name: /lot-split/*/peer_guid
+Type: GUID
+Entities: Split
+Use:  The GUID of the peer split which was split from this split.
 
 -----------------------
 
-Name: notes
+Name: /notes
 Type: string
 Entities: Account, Lot, Transaction
-Use: xaccAccountGetNotes(), xaccAccountSetNotes(),
-     xaccTransGetNotes(), xaccTransSetNotes(),
-     gnc_lot_get_notes(), gnc_lot_set_notes()
-     Store the 'Notes' string.
+Use: A user-suplied 'Notes' text field.  The user can set this to 
+     any value and change it at any time for any reason.
+     Accessors: xaccAccountGetNotes(), xaccAccountSetNotes(),
+     xaccTransGetNotes(), xaccTransSetNotes()
 
 Name: old-currency
 Type: string
@@ -299,7 +325,7 @@ Use: This holds the old security scu. This may be deleted at
 
 -----------------------
 
-Name: /reconcile-info
+Name: /reconcile-info/
 Type: frame
 Entities: Account
 Use: store reconcile information about accounts
@@ -355,13 +381,14 @@ Name: /sched-xaction/debit-formula
 Type: string
 Entities: Split associated with a SchedXaction
 Use: Formula for the debit.  Either the credit or the 
-debit formula must be empty.
+     debit formula must be empty.
+
+-----------------------
+
 Name: split-type
 Entities: Split
 Use: xaccSplitGetType, xaccSplitMakeStockSplit
      Store a string representing the type of split, if not normal.
-
------------------------
 
 Name: /tax-US/code
 Type: string
@@ -377,6 +404,12 @@ Name: tax-related
 Type: gint64
 Entities: Account
 Use: A boolean flag indicated whether the Account is tax-related.
+
+Name: /title
+Type: string
+Entities: Lot
+Use:  A user-suplied title for the lot.  The user can set this to 
+      any value and change it at any time for any reason.
 
 Name: trans-date-due
 Type: Timespec

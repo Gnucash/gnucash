@@ -300,10 +300,9 @@ gboolean xaccSplitTransactionTraverse(Split *split, int stage);
  *    a traversal is undefined, so don't do that.
  */
 
-typedef  int (*TransactionCallbackInt)(Transaction *t, void *data);
 int xaccGroupStagedTransactionTraversal(AccountGroup *grp,
                                     unsigned int stage,
-                                    TransactionCallbackInt,
+                                    TransactionCallback,
                                     void *data);
 
 /* xaccAccountStagedTransactionTraversal() calls thunk on each
@@ -320,11 +319,11 @@ int xaccGroupStagedTransactionTraversal(AccountGroup *grp,
 
 int xaccAccountStagedTransactionTraversal(Account *a,
                                           unsigned int stage,
-                                          TransactionCallbackInt,
+                                          TransactionCallback,
                                           void *data);
 
 /** Traverse all of the transactions in the given account group.
-   Continue processing IFF proc does not return FALSE. This function
+   Continue processing IFF proc returns 0. This function
    will descend recursively to traverse transactions in the
    children of the accounts in the group.
 
@@ -332,12 +331,9 @@ int xaccAccountStagedTransactionTraversal(Account *a,
    pointed to by at least one split in any account in the hierarchy
    topped by AccountGroup g.
 
-   Note too, that if you call this function on two separate account
-   groups and those accounts groups share transactions, proc will be
-   called once per account on the shared transactions.
-
-   The result of this function will not be FALSE IFF every relevant
-   transaction was traversed exactly once. 
+   The result of this function will be 0 IFF every relevant
+   transaction was traversed exactly once; otherwise, the return
+   value is the last non-zero value returned by the callback.
 
    Note that the traversal occurs only over the transactions that
    are locally cached in the local gnucash engine.  If the gnucash
@@ -346,26 +342,14 @@ int xaccAccountStagedTransactionTraversal(Account *a,
    This routine will not cause an SQL database query to be performed;
    it will not traverse transactions present only in the remote
    database.
+
+   Note that this routine is just a trivial wrapper for 
+   
+   xaccGroupBeginStagedTransactionTraversals(grp);
+   xaccGroupStagedTransactionTraversal(grp, 42, cb, data);
  */
 
-gboolean
-xaccGroupForEachTransaction(AccountGroup *g,
-                            TransactionCallback,
-                            void *data);
-
-/* Visit every transaction in the account that hasn't already been
-   visited exactly once.  visited_txns must be a hash table created
-   via guid_hash_table_new() and is the authority about which
-   transactions have already been visited.  Further, when this
-   procedure returns, visited_txns will have been modified to reflect
-   all the newly visited transactions.
-
-   The result of this function will not be FALSE IFF every relevant
-   transaction was traversed exactly once.  */
-gboolean
-xaccGroupVisitUnvisitedTransactions(AccountGroup *g,
-                                    TransactionCallback,
-                                    void *data,
-                                    GHashTable *visited_txns);
+int xaccGroupForEachTransaction(AccountGroup *g, 
+                                TransactionCallback, void *data);
 
 #endif /* XACC_ACCOUNT_GROUP_H */

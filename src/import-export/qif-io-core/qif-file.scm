@@ -3,7 +3,6 @@
 ;;;  read a QIF file into a <qif-file> object
 ;;;
 ;;;  Copyright (c) 2001 Linux Developers Group 
-;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (debug-enable 'debug)

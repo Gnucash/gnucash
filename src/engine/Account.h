@@ -260,53 +260,71 @@ void     xaccAccountSetAutoInterestXfer (Account *account, gboolean value);
 /** @} */
 
 /* @name Account Commodity setters/getters
+ *   Accounts are used to store an amount of 'something', that 'something'
+ *   is called the 'commodity'.  An account can only hold one kind of
+ *   commodity.  The following are used to get and set the commodity,
+ *   and also to set the SCU, the 'Smallest Commodity Unit'.
  *
- * New commodity access routines.
+ * Note that when we say that a 'split' holds an 'amount', that amount
+ *   is denominated in the account commodity.  Do not confuse 'amount'
+ *   and 'value'.  The 'value' of a split is the value of the amount
+ *   expressed in the currency fo the transaction.  Thus, for example,
+ *   the 'amount' may be 12 apples, where the account commodity is
+ *   'apples'.  The value of these 12 apples may be 12 dollars, where 
+ *   the transaction currency is 'dollars'.
  *
- * The account structure no longer stores two commodities ('currency'
- * and 'security'). Instead it stores only one commodity. This single
- * commodity is the one formerly known as 'security'.  Use
- * xaccAccountSetCommodity() and xaccAccountGetCommodity() to set and
- * fetch it. (This transition has been done between version 1.6.x and
- * 1.7.0.)
+ * The SCU is the 'Smallest Commodity Unit', signifying the smallest
+ *   non-zero amount that can be stored in the account.  It is 
+ *   represented as the integer denominator of a fraction.  Thus,
+ *   for example, a SCU of 12 means that 1/12 of something is the
+ *   smallest amount that can be stored in the account.  SCU's can
+ *   be any value; they do not need to be decimal.  This allows
+ *   the use of accounts with unusual, non-decimal commodities and
+ *   currencies.
  *
- * Basically, the engine eliminates the 'currency' field of the
- * Account structure. Instead, the common currency is stored with the
- * transaction.  The 'value' of a split is a translation of the
- * Split's 'amount' (which is the amount of the Account's commodity
- * involved) into the Transaction's balancing currency. */
+ *   Normally, the SCU is determined by the commodity of the account.
+ *   However, this default SCU can be over-ridden and set to an
+ *   account-specific value.  This is account-specific value is 
+ *   called the 'non-standard' value in the documentation below.
+ */
 /** @{ */
 
 /** Set the account's commodity */
 void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
-/** Get the account's commodity 
- *
- * This is from the new commodity access routines.
- *
- * The account structure no longer stores two commodities ('currency'
- * and 'security'). Instead it stores only one commodity. This single
- * commodity is the one formerly known as 'security'.  Use
- * xaccAccountSetCommodity() and xaccAccountGetCommodity() to set and
- * fetch it. (This transition has been done between version 1.6.x and
- * 1.7.0.)
- *
- * Basically, the engine eliminates the 'currency' field of the
- * Account structure. Instead, the common currency is stored with the
- * transaction.  The 'value' of a split is a translation of the
- * Split's 'amount' (which is the amount of the Account's commodity
- * involved) into the Transaction's balancing currency. */
+
+/* deprecated do not use */
+#define DxaccAccountSetSecurity xaccAccountSetCommodity
+
+/** Get the account's commodity  */
 gnc_commodity * xaccAccountGetCommodity (Account *account);
-/** DOCUMENT ME! */
+
+/* deprecated do not use */
+#define DxaccAccountGetSecurity xaccAccountGetCommodity
+
+/** Return the SCU for the account.  If a non-standard SCU has been
+ *   set for the account, that s returned; else the default SCU for 
+ *   the account commodity is returned.
+ */
 int  xaccAccountGetCommoditySCU (Account *account);
-/** DOCUMENT ME! */
+
+/** Return the 'internal' SCU setting.  This returns the over-ride
+ *   SCU for the account (which might not be set, and might be zero).  */
 int  xaccAccountGetCommoditySCUi (Account *account);
-/** DOCUMENT ME! */
+
+/** Set the SCU for the account. Normally, this routine is not
+ *   required, as the default SCU for an account is given by its
+ *   commodity.
+ */
 void xaccAccountSetCommoditySCU (Account *account, int frac);
-/** DOCUMENT ME! */
-void xaccAccountSetCommoditySCUandFlag (Account *account, int frac);
-/** DOCUMENT ME! */
+
+/* deprecated -- do not use for future development */
+#define xaccAccountSetCommoditySCUandFlag xaccAccountSetCommoditySCU 
+
+/** Set the flag indicating that this account uses a non-standard SCU. */
 void  xaccAccountSetNonStdSCU (Account *account, gboolean flag);
-/** DOCUMENT ME! */
+
+/** Return boolean, indicating whether this account uses a 
+ *   non-standard SCU. */ 
 gboolean  xaccAccountGetNonStdSCU (Account *account);
 /**@}*/
 
@@ -406,10 +424,6 @@ gboolean       xaccAccountHasAncestor (Account *account, Account *ancestor);
 /** @{ */
 KvpFrame * xaccAccountGetSlots (Account *account);
 void xaccAccountSetSlots_nc(Account *account, KvpFrame *frame);
-
-/** Delete any old data in the account's kvp data.
- * This includes the old currency and security fields. */
-void xaccAccountDeleteOldData (Account *account);
 /** @} */
 
 /* ------------------ */
@@ -453,14 +467,6 @@ gboolean xaccAccountTypesCompatible (GNCAccountType parent_type,
 
 /* ------------------ */
 
-/* Doxygen note: if these typedefs are inside the member group, the
- * member group will show up at the top of the documentation, which is
- * probably not wanted. */
-/** \warning Unimplemented, for xaccAccountForEachSplit() */
-typedef  gpointer (*SplitCallback)(Split *s, gpointer data);
-/** Callback prototype for xaccAccountForEachTransaction() */
-typedef  gboolean (*TransactionCallback)(Transaction *t, void *data);
-
 /** @name Account split/transaction list management */
 /*@{*/
 /** The xaccAccountInsertSplit() method will insert the indicated
@@ -486,7 +492,7 @@ gpointer xaccAccountForEachSplit(Account *account,
 /** The xaccAccountForEachTransaction() routine will traverse all of
    the transactions in the given 'account' and call the callback
    function 'proc' on each transaction.  Processing will continue
-   if-and-only-if 'proc' does not return FALSE. The user data pointer
+   if-and-only-if 'proc' returns 0. The user data pointer
    'data' will be passed on to the callback function 'proc'.
 
    This function does not descend recursively to traverse transactions
@@ -495,12 +501,9 @@ gpointer xaccAccountForEachSplit(Account *account,
    'proc' will be called exactly once for each transaction that is
    pointed to by at least one split in the given account.
 
-   Note too, that if you call this function on two separate accounts
-   and those accounts share transactions, proc will be called once per
-   account for the shared transactions.
-   
-   The result of this function will not be FALSE if-and-only-if
+   The result of this function will be 0 if-and-only-if
    every relevant transaction was traversed exactly once. 
+   Else the return value is the last non-zero value returned by proc.
 
    Note that the traversal occurs only over the transactions that 
    are locally cached in the local gnucash engine.  If the gnucash 
@@ -510,34 +513,16 @@ gpointer xaccAccountForEachSplit(Account *account,
    it will not traverse transactions present only in the remote
    database.
 */
-gboolean
-xaccAccountForEachTransaction(Account *account,
-                              TransactionCallback proc,
-                              void *data);
-
-/** The xaccAccountVisitUnvisitedTransactions() routine will
-   visit every transaction in the account that hasn't already been
-   visited exactly once.  visited_txns must be a hash table created
-   via guid_hash_table_new() and is the authority about which
-   transactions have already been visited.  Further, when this
-   procedure returns visited_txns will have been modified to reflect
-   all the newly visited transactions.
-
-   The result of this function will not be FALSE if-and-only-if 
-   every relevant transaction was traversed exactly once.  
-*/
-gboolean
-xaccAccountVisitUnvisitedTransactions(Account *account,
-                                      TransactionCallback,
-                                      void *data,
-                                      GHashTable *visited_txns);
+gint xaccAccountForEachTransaction(Account *account,
+                                   TransactionCallback proc,
+                                   void *data);
 
 /** Returns a pointer to the transaction, not a copy. */
-Transaction *
-xaccAccountFindTransByDesc(Account *account, const char *description);
+Transaction * xaccAccountFindTransByDesc(Account *account, 
+                                   const char *description);
+
 /** Returns a pointer to the split, not a copy. */
-Split *
-xaccAccountFindSplitByDesc(Account *account, const char *description);
+Split * xaccAccountFindSplitByDesc(Account *account, const char *description);
 
 /** The xaccAccountFixSplitDateOrder() subroutine checks to see if 
  *    a split is in proper sorted date order with respect 
@@ -563,7 +548,12 @@ void xaccAccountInsertLot (Account *, GNCLot *);
 void xaccAccountRemoveLot (Account *, GNCLot *);
 
  /** The xaccAccountGetLotList() routine returns a pointer to the GList of
- *    the lots in this account.  The same warnings as above apply. */
+ *    the lots in this account.  
+ * @note This GList is the account's internal 
+ *    data structure: do not delete it when done; treat it as a read-only
+ *    structure.  Note that some routines (such as xaccAccountRemoveLot())
+ *    modify this list directly, and could leave you with a corrupted 
+ *    pointer. */
 LotList*        xaccAccountGetLotList (Account *account);
 
 /** The xaccAccountForEachLot() method will apply the function 'proc'
@@ -705,29 +695,8 @@ void DxaccAccountSetCurrency (Account *account, gnc_commodity *currency);
 
 /** @deprecated The current API associates only one thing with an
  * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
- * it.
- *
- * These two funcs take control of their gnc_commodity args. Don't free */
-void DxaccAccountSetSecurity (Account *account, gnc_commodity *security);
-
-/** @deprecated The current API associates only one thing with an
- * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
  * it. */
 gnc_commodity * DxaccAccountGetCurrency (Account *account);
-
-/** @deprecated The current API associates only one thing with an
- * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
- * it. */
-gnc_commodity * DxaccAccountGetSecurity (Account *account);
-
-/** @deprecated The current API associates only one thing with an
- * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
- * it. */
-void DxaccAccountSetCurrencySCU (Account *account, int frac);
-/** @deprecated The current API associates only one thing with an
- * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
- * it. */
-int  DxaccAccountGetCurrencySCU (Account *account);
 
 /** Set the timezone to be used when interpreting the results from a
  *  given Finance::Quote backend.  Unfortunately, the upstream sources
@@ -735,6 +704,7 @@ int  DxaccAccountGetCurrencySCU (Account *account);
  *
  *  @deprecated Price quote information is now stored on the
  *  commodity, not the account. */
+
 void         dxaccAccountSetQuoteTZ (Account *account, const char *tz);
 /** Get the timezone to be used when interpreting the results from a
  *  given Finance::Quote backend.  Unfortunately, the upstream sources

@@ -259,6 +259,12 @@ gnc_commodity * gnc_commodity_new(const char * fullname,
  *  @param cm The commodity to destroy.
  */
 void  gnc_commodity_destroy(gnc_commodity * cm);
+
+/** Copy src into dest */
+void  gnc_commodity_copy(gnc_commodity * dest, gnc_commodity *src);
+
+/** allocate and copy */
+gnc_commodity * gnc_commodity_clone(gnc_commodity *src);
 /** @} */
 
 
@@ -469,16 +475,6 @@ void  gnc_commodity_set_exchange_code(gnc_commodity * cm,
  */
 void  gnc_commodity_set_fraction(gnc_commodity * cm, int smallest_fraction);
 
-/** Set the 'mark' field for the specified commodity.
- *
- *  @note This is a private field used by the Postgres back end.
- *
- *  @param cm A pointer to a commodity data structure.
- *
- *  @param mark The new value of the mark field.
- */
-void  gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark);
-
 /** Set the automatic price quote flag for the specified commodity.
  *  This flag indicates whether stock quotes should be retrieved for
  *  the specified stock.
@@ -559,49 +555,25 @@ gboolean gnc_commodity_is_iso(const gnc_commodity * cm);
 
 
 /* =============================================================== */
-/** @name Commodity Table Creation */
+/** @name Commodity Table */
 /** @{ */
-
-/* gnc_commodity_table functions : operate on a database of commodity
- * info */
-
-/** You proably shouldn't be using gnc_commodity_table_new() directly,
- * its for internal use only. You should probably be using
- * gnc_commodity_table_get_table()
- */
-gnc_commodity_table * gnc_commodity_table_new(void);
-void          gnc_commodity_table_destroy(gnc_commodity_table * table);
 
 /** Returns the commodity table assoicated with a book.
  */
 gnc_commodity_table * gnc_commodity_table_get_table(QofBook *book);
 
-/** You should probably not be using gnc_commodity_table_set_table()
- * directly.  Its for internal use only.
- */
-void gnc_commodity_table_set_table(QofBook *book, gnc_commodity_table *ct);
-
-/** You should probably not be using gnc_commodity_table_register()
- * It is an internal routine for registering the gncObject for the
- * commodity table.
- */
-gboolean gnc_commodity_table_register (void);
-		  
-/** @} */
-
-
 /* XXX backwards compat function; remove me someday */
 #define gnc_book_get_commodity_table gnc_commodity_table_get_table
 
-
-/** @name Commodity Table Comparison */
-/** @{ */
+/** compare two tables for equality */
 gboolean gnc_commodity_table_equal(gnc_commodity_table *t_1,
                                    gnc_commodity_table *t_2);
+
+/** copy all commodities from src table to dest table */
+void gnc_commodity_table_copy(gnc_commodity_table *dest,
+                              gnc_commodity_table *src);
 /** @} */
-
-
-
+/* ---------------------------------------------------------- */
 /** @name Commodity Table Lookup functions */
 /** @{ */
 gnc_commodity * gnc_commodity_table_lookup(const gnc_commodity_table * table, 
@@ -614,8 +586,7 @@ gnc_commodity * gnc_commodity_table_find_full(const gnc_commodity_table * t,
                                               const char * namespace,
                                               const char * fullname);
 /** @} */
-
-
+/* ---------------------------------------------------------- */
 
 /** @name Commodity Table Maintenance functions */
 /** @{ */
@@ -653,10 +624,9 @@ void gnc_commodity_table_remove(gnc_commodity_table * table,
  *
  *  @param table A pointer to the commodity table for the book. */
 gboolean gnc_commodity_table_add_default_data(gnc_commodity_table *table);
+
 /** @} */
-
-
-
+/* ---------------------------------------------------------- */
 /** @name Commodity Table Namespace functions */
 /** @{ */
 
@@ -711,8 +681,7 @@ void      gnc_commodity_table_add_namespace(gnc_commodity_table * table,
 void      gnc_commodity_table_delete_namespace(gnc_commodity_table * t,
                                                const char * namespace);
 /** @} */
-
-
+/* ---------------------------------------------------------- */
 /** @name Commodity Table Accessor functions */
 /** @{ */
 
@@ -776,6 +745,41 @@ gboolean gnc_commodity_table_foreach_commodity(const gnc_commodity_table * table
                                                      gpointer user_data),
                                        gpointer user_data);
 /** @} */
+
+/* ---------------------------------------------------------- */
+/** @name Commodity Table Private/Internal-Use Only Routines */
+/** @{ */
+
+/** Set the 'mark' field for the specified commodity.
+ *
+ *  @note This is a private field used by the Postgres back end.
+ *
+ *  @param cm A pointer to a commodity data structure.
+ *
+ *  @param mark The new value of the mark field.
+ */
+void  gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark);
+
+/** You proably shouldn't be using gnc_commodity_table_new() directly,
+ * its for internal use only. You should probably be using
+ * gnc_commodity_table_get_table()
+ */
+gnc_commodity_table * gnc_commodity_table_new(void);
+void          gnc_commodity_table_destroy(gnc_commodity_table * table);
+
+/** You should probably not be using gnc_commodity_table_set_table()
+ * directly.  Its for internal use only.
+ */
+void gnc_commodity_table_set_table(QofBook *book, gnc_commodity_table *ct);
+
+/** You should probably not be using gnc_commodity_table_register()
+ * It is an internal routine for registering the gncObject for the
+ * commodity table.
+ */
+gboolean gnc_commodity_table_register (void);
+		  
+/** @} */
+
 
 #endif /* GNC_COMMODITY_H */
 /** @} */

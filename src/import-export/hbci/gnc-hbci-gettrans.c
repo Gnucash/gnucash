@@ -241,19 +241,29 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
 static void *trans_list_cb (const HBCI_Transaction *h_trans, 
 			    void *user_data)
 {
-  time_t current_time, tt1, tt2; 
-  /*struct tm tm1, tm2;*/
   Account *gnc_acc;
-  GNCBook *book;
-  Transaction *gnc_trans;
-  Split *split;
   struct trans_list_data *data = user_data;
   g_assert(data);
   g_assert(h_trans);
 
   gnc_acc = data->gnc_acc;
   g_assert(gnc_acc);
-  
+
+  gnc_hbci_trans_import(h_trans,data->importer_generic,gnc_acc);
+
+  return NULL;
+}
+
+void gnc_hbci_trans_import(const HBCI_Transaction *h_trans,
+		GNCImportMainMatcher *importer_generic,
+		Account *gnc_acc)
+{
+  time_t current_time, tt1, tt2; 
+  /*struct tm tm1, tm2;*/
+  GNCBook *book;
+  Transaction *gnc_trans;
+  Split *split;
+
   book = xaccAccountGetBook(gnc_acc);
   gnc_trans = xaccMallocTransaction(book);
   xaccTransBeginEdit(gnc_trans);
@@ -321,8 +331,6 @@ static void *trans_list_cb (const HBCI_Transaction *h_trans,
   }
     
   /* Instead of xaccTransCommitEdit(gnc_trans)  */
-  g_assert (data->importer_generic);
-  gnc_gen_trans_list_add_trans (data->importer_generic, gnc_trans);
-
-  return NULL;
+  g_assert (importer_generic);
+  gnc_gen_trans_list_add_trans (importer_generic, gnc_trans);
 }

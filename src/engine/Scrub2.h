@@ -1,4 +1,6 @@
 /********************************************************************\
+ * Scrub2.h -- Convert Stock Accounts to use Lots                   *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -36,57 +38,42 @@
 
 #include "gnc-engine.h"
 
-/** The xaccAccountHasTrades() method checks to see if the 
- *    indicated account is used in the trading of commodities.
- *    A 'trading' account will contain transactions whose 
- *    transaction currency is not the same as the account
- *    commodity.  The existance of such transactions is
- *    the very definition of a 'trade'.   This routine returns
- *    TRUE if this is a trading account, else it returns
- *    FALSE.
+/** The xaccGroupScrubLotsBalance() routine walks the
+ *   account tree, and invokes xaccAccountScrubLots()
+ *   and xaccAccountScrubDoubleBalance() on all accounts 
+ *   that are trading accounts.  
+ * The xaccAccountTreeScrubLotsBalance() does the same.
+ * The xaccAccountScrubLotsBalance() will do the same, 
+ *   except that it won't descend down to the account 
+ *   children.
+ *
+ * Most GUI routines will want to use one of these 
+ * xacc[*]ScrubLotsBalance() routines, instead of the
+ * component ScrubLots() and ScrubDoubleBalance() routines,
+ * since it usually makes sense to call these together.
  */
-gboolean xaccAccountHasTrades (Account *);
+void xaccGroupScrubLotsBalance (AccountGroup *grp);
+void xaccAccountScrubLotsBalance (Account *acc);
+void xaccAccountTreeScrubLotsBalance (Account *acc);
 
-/** The xaccAccountFindEarliestOpenLot() method is a handy
- *   utility routine for finding the earliest open lot in
- *   an account whose lot balance is *opposite* to the 
- *   passed argument 'sign'.   By 'earliest lot', we mean
- *   the lot that has a split with the earliest 'date_posted'.
- *   The sign comparison helps identify a lot that can be 
- *   added to: usually, one wants to add splits to a lot so
- *   that the balance only decreases.
- */
-GNCLot * xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign);
-
-/** The xaccAccountGetDefaultGainAccount() routine will return
- *   the account to which realized gains/losses may be posted.  
- *   Because gains may be in different currencies, one must
- *   specify the currency type in which the gains will be posted.
- *   This routine does nothing more than return the value of
- *   the "/lot-mgmt/gains-act/XXX" key, where XXX is the unique
- *   currency name.  IOf there is no default account for this
- *   currency, NULL will be returned.
- */
-Account * xaccAccountGetDefaultGainAccount (Account *acc, gnc_commodity * currency);
-
-/** The xaccAccountSetDefaultGainAccount() routine can be used 
- *   to set the account to which realized gains/losses will be 
- *   posted by default. This routine does nothing more than set 
- *   value of the "/lot-mgmt/gains-act/XXX" key, where XXX is the 
- *   unique currency name of the currency of gains account.
- */
-void xaccAccountSetDefaultGainAccount (Account *acc, Account *gains_acct);
-
-/** The xaccAccountScrubLots() routine will walk over all of
+/** The xaccAccountAssignLots() routine will walk over all of
  *   the splits in an account, and make sure that each belongs
- *   to a lot.  Any splits that are not in a lot will be used
- *   to close the oldest open lot(s).  If there are no open 
- *   lots, a new lot will be started.  By trying to close the 
- *   oldest lots, this routine implements a FIFO acounting
- *   policy.
+ *   to a lot.  Currently, the default (and only implemented)
+ *   assignment policy is a FIFO policy: Any splits that are 
+ *   not in a lot will be used to close the oldest open lot(s).
+ *   If there are no open lots, a new lot will be started.  
+ *   By trying to close the oldest lots, this effectively
+ *   implements a FIFO acounting policy.  
  */
-void xaccAccountScrubLots (Account *acc);
+void xaccAccountAssignLots (Account *acc);
 
+/** The xaccLotFill() routine attempts to assign splits to the
+ *  indicated lot until the lot balance goes to zero, or until
+ *  there are no suitable (i.e. unassigned) splits left in the
+ *  account.  It uses the default accounting policy to choose
+ *  the splits to fill out the lot. 
+ */
+void xaccLotFill (GNCLot *lot);
 
 /** The xaccAccountScrubDoubleBalance() routine examines all
  *   of the closed lots in an account, and verifies that the
@@ -96,20 +83,27 @@ void xaccAccountScrubLots (Account *acc);
  *   found where the sum of the values is not zero, the lot
  *   is considered to have a 'realized gain or loss' that
  *   hadn't been correctly handled.  This routine then creates
- *   a balancing transaction to make not of the realized 
- *   gain/loss, adds it to the lot, and add it to a special
- *   orphaned gain/loss account.
+ *   a balancing transaction so as to record the realized 
+ *   gain/loss, adds it to the lot, and adds it to a gain/loss
+ *   account.  If there is no default gain/loss account, it 
+ *   creates one.
  */
 void xaccAccountScrubDoubleBalance (Account *acc);
 
-/** The xaccGroupScrubLotsBalance() routine walks the
- *   account tree, and invokes xaccAccountScrubLots()
- *   and xaccAccountScrubDoubleBalance() on all accounts 
- *   that are trading accounts.
+/** The xaccLotScrubDoubleBalance() routine examines the indicated
+ *   lot.  If it is open, it does nothing. If it is closed,
+ *   it then verifies that the lot is 'double balanced'.  
+ *   By 'double balance', we mean that both the sum of the 
+ *   split amounts is zero, and that the sum of the split 
+ *   values is zero.  If the lot is closed and the sum of the
+ *   values is not zero, the lot is considered to have a 
+ *   'realized gain or loss' that hadn't been correctly handled.  
+ *   This routine then creates a balancing transaction to so
+ *   as to record the realized gain/loss, adds it to the lot, 
+ *   and adds it to a gain/loss account.  If there is no default
+ *   gain/loss account, it creates one.
  */
-void xaccGroupScrubLotsBalance (AccountGroup *grp);
-void xaccAccountScrubLotsBalance (Account *acc);
-void xaccAccountTreeScrubLotsBalance (Account *acc);
+void xaccLotScrubDoubleBalance (GNCLot *lot);
 
 #endif /* XACC_SCRUB2_H */
 /** @} */

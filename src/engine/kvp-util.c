@@ -32,60 +32,138 @@
 #include "kvp-util-p.h"
 
 /* ================================================================ */
-/* mark the guid and date of the copy, using kvp.  The info will be
- * places in /gemini/ncopies, /gemini/<n>/acct_guid, /gemini/<n>/book_guid,
- * /gemini/<n>/date, where <n> = ncopies-1.
- */
-
-void 
-gnc_kvp_gemini (KvpFrame *kvp_root, const GUID *acct_guid, 
-        const GUID *book_guid, time_t secs)
+ 
+static KvpFrame *
+gnc_kvp_array_va (KvpFrame *kvp_root, const char * path, 
+                  time_t secs, const char * first_name, va_list ap)
 {
-   char buff[80];
-   KvpFrame *cwd, *pwd;
-   KvpValue *v_ncopies, *vvv;
-   gint64 ncopies = 0;
+   KvpFrame *cwd;
    Timespec ts;
+   const char *name;
 
-   if (!kvp_root) return;
-
-   /* cwd == 'current working directory' */
-   pwd = kvp_frame_get_frame (kvp_root, "gemini", NULL);
-   if (!pwd) return;  /* error: can't ever happen */
-
-   /* find, increment, store number of copies */
-   v_ncopies = kvp_frame_get_slot (pwd, "ncopies");
-   if (v_ncopies)
-   { 
-      ncopies = kvp_value_get_gint64 (v_ncopies);
-   }
-
-   ncopies ++;
-   v_ncopies = kvp_value_new_gint64 (ncopies);
-   kvp_frame_set_slot_nc (pwd, "ncopies", v_ncopies);
-
-   /* OK, now create subdirectory and put the actual data */
-   --ncopies;
-   sprintf (buff, GNC_SCANF_LLD, (long long int) ncopies);
+   if (!kvp_root) return NULL;  
+   if (!first_name) return NULL;
+   
+   /* Create subdirectory and put the actual data */
    cwd = kvp_frame_new();
-   kvp_frame_set_slot_nc(pwd, buff, kvp_value_new_frame_nc(cwd));
 
-   if (acct_guid)
-   {
-      vvv = kvp_value_new_guid (acct_guid);
-      kvp_frame_set_slot_nc (cwd, "acct_guid", vvv);
-   }
-
-   if (book_guid)
-   {
-      vvv = kvp_value_new_guid (book_guid);
-      kvp_frame_set_slot_nc (cwd, "book_guid", vvv);
-   }
-
+   /* Record the time */
    ts.tv_sec = secs;
    ts.tv_nsec = 0;
-   vvv = kvp_value_new_timespec (ts);
-   kvp_frame_set_slot_nc (cwd, "date", vvv);
+   kvp_frame_set_timespec (cwd, "date", ts);
+
+   /* Loop over the args */
+   name = first_name;
+   while (name)
+   {
+      const GUID *guid;
+      guid = va_arg (ap, const GUID *);
+
+      kvp_frame_set_guid (cwd, name, guid);
+
+      name = va_arg (ap, const char *);
+   }
+
+   /* Attach cwd into the array */
+   kvp_frame_add_frame_nc (kvp_root, path, cwd);
+   return cwd;
+}
+
+/* ================================================================ */
+
+KvpFrame *
+gnc_kvp_bag_add (KvpFrame *pwd, const char * path, 
+                 time_t secs, const char *first_name, ...)
+{
+   KvpFrame *cwd;
+   va_list ap;
+   va_start (ap, first_name);
+   cwd = gnc_kvp_array_va (pwd, path, secs, first_name, ap);
+   va_end (ap);
+   return cwd;
+}
+
+/* ================================================================ */
+ 
+void 
+gnc_kvp_gemini (KvpFrame *kvp_root, time_t secs, const char *first_name, ...)
+{
+   va_list ap;
+   va_start (ap, first_name);
+   gnc_kvp_array_va (kvp_root, "gemini", secs, first_name, ap);
+   va_end (ap);
+}
+
+/* ================================================================ */
+
+#define MATCH_GUID(elt) {                                       \
+  KvpFrame *fr = kvp_value_get_frame (elt);                     \
+  if (fr) {                                                     \
+     GUID *guid = kvp_frame_get_guid (fr, guid_name);           \
+     if (guid && guid_equal (desired_guid, guid)) return fr;    \
+  }                                                             \
+} 
+
+KvpFrame *
+gnc_kvp_bag_find_by_guid (KvpFrame *root, const char * path,
+                         const char *guid_name, GUID *desired_guid)
+{
+  KvpValue *arr;
+  KvpValueType valtype;
+  GList *node;
+
+  arr = kvp_frame_get_value (root, path);
+  valtype = kvp_value_get_type (arr);
+  if (KVP_TYPE_FRAME == valtype)
+  {
+    MATCH_GUID (arr);
+    return NULL;
+  }
+
+  /* Its gotta be a single isolated frame, or a list of them. */
+  if (KVP_TYPE_GLIST != valtype) return NULL;
+
+  for (node = kvp_value_get_glist(arr); node; node=node->next)
+  {
+    KvpValue *va = node->data;
+    MATCH_GUID (va);
+  }
+  return NULL;
+}
+
+/* ================================================================ */
+
+#define KILL_MATCH(elt)                                                 \
+  if (fr == kvp_value_get_frame (elt)) {                                \
+     KvpValue *old_val = kvp_frame_replace_value_nc (root, path, NULL); \
+     kvp_value_replace_frame_nc (old_val, NULL);                        \
+     kvp_value_delete (old_val);                                        \
+     return;                                                            \
+  }
+
+void
+gnc_kvp_bag_remove_frame (KvpFrame *root, const char *path, KvpFrame *fr)
+{
+  KvpValue *arr;
+  KvpValueType valtype;
+  GList *node;
+
+  arr = kvp_frame_get_value (root, path);
+  valtype = kvp_value_get_type (arr);
+  if (KVP_TYPE_FRAME == valtype)
+  {
+    KILL_MATCH (arr);
+    return;
+  }
+
+  /* Its gotta be a single isolated frame, or a list of them. */
+  if (KVP_TYPE_GLIST != valtype) return;
+
+  for (node = kvp_value_get_glist(arr); node; node=node->next)
+  {
+    KvpValue *va = node->data;
+    KILL_MATCH (va);
+  }
 }
 
 /* ================================================================ */

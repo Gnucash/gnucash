@@ -1,4 +1,5 @@
 SUBDIRS = . test-core test 
+PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgw-engine.la libgw-kvp.la libgncmod-engine.la 
 
@@ -19,8 +20,10 @@ libgncmod_engine_la_SOURCES = \
   SX-ttinfo.c \
   Scrub.c \
   Scrub2.c \
+  Scrub3.c \
   TransLog.c \
   Transaction.c \
+  cap-gains.c \
   gnc-associate-account.c \
   gnc-commodity.c \
   gnc-date.c \
@@ -38,6 +41,7 @@ libgncmod_engine_la_SOURCES = \
   kvp-util.c \
   md5.c \
   messages.c \
+  policy.c \
   qofbackend.c \
   qofbook.c \
   qofid.c \
@@ -65,8 +69,10 @@ gncinclude_HEADERS = \
   QueryCore.h \
   Scrub.h \
   Scrub2.h \
+  Scrub3.h \
   TransLog.h \
   Transaction.h \
+  cap-gains.h \
   engine-helpers.h \
   glib-helpers.h \
   gnc-associate-account.h \
@@ -88,6 +94,7 @@ gncinclude_HEADERS = \
   kvp-scm.h \
   kvp-util.h \
   messages.h \
+  policy.h \
   qof.h \
   qofbackend.h \
   qofbook.h \
@@ -116,6 +123,7 @@ noinst_HEADERS = \
   md5.h \
   gw-engine.h \
   gw-kvp.h \
+  policy-p.h \
   qofbackend-p.h \
   qofbook-p.h \
   qofid-p.h \
@@ -146,7 +154,6 @@ gncmod_DATA = engine.scm
 gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = \
   commodity-table.scm \
-  engine-init.scm \
   engine-interface.scm \
   engine-utilities.scm \
   gnc-numeric.scm

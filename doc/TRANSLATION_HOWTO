@@ -1,5 +1,5 @@
 HOWTO: Translating GnuCash
-Last update: 20030611
+Last update: 2003-07-04
 
 The concept of this document is to give you step-by-step instructions on 
 how to update (or create if non-existant) language translations for the 
@@ -20,7 +20,7 @@ Sections:
 8) Translating the .po file
 9) Testing and submitting your translations
 10) Problems
-11) How to translate the GnuCash manual
+11) How to translate the GnuCash guide and/or help files
 12) How to translate the files containing the new account hierarchies
 
 ==============================================================================
@@ -64,7 +64,7 @@ Checkout the current stable branch.
 cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout \
         -rgnucash-1-8-branch gnucash
 
-Checkout the documentation
+Checkout the documentation (optional, but recommended)
 cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout \
 	gnucash-docs
 
@@ -218,7 +218,7 @@ for it:
 
 cp gnucash.pot XXXX.po
 
-If your laguage file does exist, update it using the msgmerge program:
+If your language file does exist, update it using the msgmerge program:
 
 /usr/bin/msgmerge -o XXXX.po XXXX.po gnucash.pot
 
@@ -390,16 +390,26 @@ To follow gnucash as it access files,
 strace /opt/gnucash-1.8/bin/gnucash
 
 ==============================================================================
-11) How to translate the GnuCash manual
+11) How to translate the GnuCash guide and/or help files
 
 This section describes the actions needed to translate the manual.
 
-1) Create a new directory doc/sgml/<locale> (where <locale> is
-   something like es, en_GB, or pt_PT).
-2) Copy the files from doc/sgml/C into this directory.
-3) Recreate the image files in doc/sgml/C/gnucash so that they are
+First, you must *have* the gnucash-doc package installed:
+
+1) Checkout the documentation
+cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout \
+	gnucash-docs
+2) Create a new directory (if it doesn't already exist) in guide/<locale> 
+   where <locale> is something like es, en_GB, or pt_PT.
+3) Copy the files from guide/C into this directory.
+4) Recreate the image files in guide/C/figures so that they are
    appropriate to the locale.
-4) Edit all the sgml files and translate for the locale.
+5) Edit all the xml files and translate for the locale.
+6) Test that your xml file has no syntax errors
+   xmllint --valid --noout gnucash-guide.xml
+
+To translate the help files, repeat steps 2-5 but replace the "guide"
+directory with "help".
 
 ==============================================================================
 12) How to translate the files containing the new account hierarchies

@@ -30,6 +30,7 @@
 #include <string.h>
 
 #include "gnc-engine-util.h"
+#include "gnc-trace.h"
 
 #include "qofbackend-p.h"
 #include "qofbook.h"
@@ -284,7 +285,6 @@ static int cmp_func (QofQuerySort *sort, QofSortFunc default_sort,
   QofAccessFunc get_fcn = NULL;        /* to appease the compiler */
 
   g_return_val_if_fail (sort, 0);
-  g_return_val_if_fail (default_sort, 0);
 
   /* See if this is a default sort */
   if (sort->use_default) 
@@ -369,7 +369,9 @@ check_object (QofQuery *q, gpointer object)
   QofQueryTerm * qt;
   int       and_terms_ok=1;
   
-  ENTER (" object=%p terms=%p", object, q->terms);
+  ENTER (" object=%p terms=%p name=%s", 
+          object, q->terms, qof_object_printable (q->search_for, object));
+
   for(or_ptr = q->terms; or_ptr; or_ptr = or_ptr->next) 
   {
     and_terms_ok = 1;
@@ -761,9 +763,13 @@ GList * qof_query_run (QofQuery *q)
    * sortQuery is an unforgivable use of static global data...  
    * I just can't figure out how else to do this sanely.
    */
-  sortQuery = q;
-  matching_objects = g_list_sort(matching_objects, sort_func);
-  sortQuery = NULL;
+  if (q->primary_sort.comp_fcn || q->primary_sort.obj_cmp ||
+      (q->primary_sort.use_default && q->defaultSort))
+  {
+    sortQuery = q;
+    matching_objects = g_list_sort(matching_objects, sort_func);
+    sortQuery = NULL;
+  }
 
   /* Crop the list to limit the number of splits. */
   if((object_count > q->max_results) && (q->max_results > -1)) 
@@ -1658,6 +1664,34 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
                        gnc_numeric_to_string (pdata->amount));
     return;
   }
+  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_KVP))
+  {
+    GSList *node;
+    query_kvp_t pdata = (query_kvp_t) pd;
+    for (node = pdata->path; node; node = node->next)
+    {
+      g_string_sprintfa (gs, "\n      kvp path: %s", (gchar *) node->data);
+      return;
+    }
+  }
+  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_INT64))
+  {
+    query_int64_t pdata = (query_int64_t) pd;
+    g_string_sprintfa (gs, " int64: %lld", pdata->val);
+    return;
+  }
+  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_INT32))
+  {
+    query_int32_t pdata = (query_int32_t) pd;
+    g_string_sprintfa (gs, " int32: %d", pdata->val);
+    return;
+  }
+  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_DOUBLE))
+  {
+    query_double_t pdata = (query_double_t) pd;
+    g_string_sprintfa (gs, " double: %20.16g", pdata->val);
+    return;
+  }
   if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_DATE))
   {
     query_date_t pdata = (query_date_t) pd;
@@ -1674,15 +1708,11 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
     g_string_sprintfa (gs, " char list: %s", pdata->char_list);
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_KVP))
+  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_BOOLEAN))
   {
-    GSList *node;
-    query_kvp_t pdata = (query_kvp_t) pd;
-    for (node = pdata->path; node; node = node->next)
-    {
-      g_string_sprintfa (gs, "\n      kvp path: %s", (gchar *) node->data);
-      return;
-    }
+    query_boolean_t pdata = (query_boolean_t) pd;
+    g_string_sprintfa (gs, " boolean: %s", pdata->val?"TRUE":"FALSE");
+    return;
   }
   return;
 }                               /* qof_query_printValueForParam */

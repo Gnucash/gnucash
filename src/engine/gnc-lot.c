@@ -28,9 +28,14 @@
  * inventory lots, and stock market investment lots.  See the file
  * src/doc/lots.txt for implmentation overview.
  *
+ * XXX Lots are not currently treated in a correct transactional
+ * manner.  There's no dirty flag, and, at this time, the backend
+ * is not signalled about the fact that a lot has changed.  This
+ * is true both in the Scrub2.c and in src/gnome/lot-viewer.c
+ *
  * HISTORY:
  * Created by Linas Vepstas May 2002
- * Copyright (c) 2002.2003 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 2002,2003 Linas Vepstas <linas@linas.org>
  */
 
 #include "Account.h"
@@ -39,6 +44,7 @@
 #include "gnc-event-p.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
+#include "gnc-trace.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "qofqueryobject.h"
@@ -55,10 +61,11 @@ static void
 gnc_lot_init (GNCLot *lot, QofBook *book)
 {
    ENTER ("(lot=%p, book=%p)", lot, book);
-   lot->kvp_data = kvp_frame_new();;
+   lot->kvp_data = kvp_frame_new();
    lot->account = NULL;
    lot->splits = NULL;
    lot->is_closed = -1;
+   lot->marker = 0;
   
    lot->book = book;
    qof_entity_guid_new (book->entity_table, &lot->guid);
@@ -74,6 +81,7 @@ gnc_lot_new (QofBook *book)
 
    lot = g_new (GNCLot, 1);
    gnc_lot_init (lot, book);
+   gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_CREATE);
    return lot;
 }
 
@@ -188,7 +196,11 @@ gnc_lot_get_balance (GNCLot *lot)
    gnc_numeric baln = zero;
    if (!lot) return zero;
 
-   if (!lot->splits) return zero;
+   if (!lot->splits) 
+   {
+      lot->is_closed = FALSE;
+      return zero;
+   }
 
    /* Sum over splits; because they all belong to same account
     * they will have same denominator. 
@@ -236,6 +248,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
       return;
    }
 
+   if (lot == split->lot) return; /* handle not-uncommon no-op */
    if (split->lot)
    {
       gnc_lot_remove_split (split->lot, split);
@@ -246,6 +259,8 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
 
     /* for recomputation of is-closed */
    lot->is_closed = -1;
+
+   gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_MODIFY);
 }
 
 void
@@ -263,6 +278,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
       xaccAccountRemoveLot (lot->account, lot);
       lot->account = NULL;
    }
+   gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_MODIFY);
 }
 
 /* ============================================================== */

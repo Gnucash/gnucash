@@ -57,39 +57,6 @@
 #define TXN_TYPE_PAYMENT 'P'  /**< Transaction is a payment  */
 /**@}*/
 
-
-/** @name Configuration ForceDoubleEntry getters/setters
- */
-/**@{*/
-/**
- * The xaccConfigSetForceDoubleEntry() and xaccConfigGetForceDoubleEntry()
- *    set and get the "force_double_entry" flag.  This flag determines how
- *    the splits in a transaction will be balanced.
- *
- *    The following values have significance:
- *
- *    0 -- anything goes
- *
- *    1 -- The sum of all splits in a transaction will be
- *         forced to be zero, even if this requires the
- *         creation of additional splits.  Note that a split
- *         whose value is zero (e.g. a stock price) can exist
- *         by itself. Otherwise, all splits must come in at
- *         least pairs.
- *
- *    2 -- splits without parents will be forced into a
- *         lost & found account.  (Not implemented)
- */
-void   xaccConfigSetForceDoubleEntry (int force);
-/**
- * The xaccConfigSetForceDoubleEntry() and xaccConfigGetForceDoubleEntry()
- *    set and get the "force_double_entry" flag.  This flag determines how
- *    the splits in a transaction will be balanced.
- */
-int    xaccConfigGetForceDoubleEntry (void);
-/**@}*/
-
-
 /***************************************************************
  * Transaction
  */
@@ -362,18 +329,15 @@ int  xaccTransOrder     (const Transaction *ta, const Transaction *tb);
 void          xaccTransSetDate (Transaction *trans,
                                 int day, int mon, int year);
 
-/** The xaccTransSetDateSecs() method will modify the <i>posted</i>
+/** The xaccTransSetDatePostedSecs() method will modify the <i>posted</i>
     date of the transaction, specified by a time_t (see ctime(3)). The
     posted date is the date when this transaction was posted at the
     bank. */
-void          xaccTransSetDateSecs (Transaction *trans, time_t time);
-
-/**     xaccTransSetDatePostedSecs() is just an alias for
-	xaccTransSetDateSecs() -- both functions access the same date. */
+#define xaccTransSetDateSecs xaccTransSetDatePostedSecs
 void          xaccTransSetDatePostedSecs (Transaction *trans, time_t time);
 
 /**  The xaccTransSetDatePostedTS() method does the same thing as
-     xaccTransSetDate[Posted]Secs(), but takes a struct timespec64. */
+     xaccTransSetDatePostedSecs(), but takes a struct timespec64. */
 void          xaccTransSetDatePostedTS (Transaction *trans,
                                         const Timespec *ts);
 
@@ -541,9 +505,8 @@ Timespec      xaccSplitRetDateReconciledTS (const Split *split);
 */
 /*@{*/
 
-/** The xaccSplitSetAmount() (formerly xaccSplitSetShareAmount) method
- * sets the amount in the account's commodity that the split should
- * have.
+/** The xaccSplitSetAmount() method sets the amount in the account's 
+ * commodity that the split should have.
  *
  * The following four setter functions set the prices and amounts.
  * All of the routines always maintain balance: that is, invoking any
@@ -562,7 +525,10 @@ Timespec      xaccSplitRetDateReconciledTS (const Split *split);
  */
 void         xaccSplitSetAmount (Split *split, gnc_numeric amount);
 
-/** Returns the amount of the split in the account's commodity. */
+/** Returns the amount of the split in the account's commodity. 
+ *   Note that for cap-gains splits, this is slaved to the transaction
+ *   that is causing the gains to occur.
+ */
 gnc_numeric   xaccSplitGetAmount (const Split * split);
 
 /** The xaccSplitSetValue() method sets the value of this split in the
@@ -573,7 +539,10 @@ gnc_numeric   xaccSplitGetAmount (const Split * split);
  */
 void         xaccSplitSetValue (Split *split, gnc_numeric value);
 
-/** Returns the value of this split in the transaction's commodity. */
+/** Returns the value of this split in the transaction's commodity. 
+ *   Note that for cap-gains splits, this is slaved to the transaction
+ *   that is causing the gains to occur.
+*/
 gnc_numeric   xaccSplitGetValue (const Split * split);
 
 /** The xaccSplitSetSharePriceAndAmount() method will simultaneously
@@ -592,13 +561,17 @@ gnc_numeric   xaccSplitGetSharePrice (const Split * split);
 
 /** Depending on the base_currency, set either the value or the amount
  * of this split or both: If the base_currency is the transaction's
- * commodity, set the value.  If it's the account's commodity, set the
+ * commodity, set the value.  If it is the account's commodity, set the
  * amount. If both, set both. 
  *
- * @note This function is useful when filling in the value/amount for
- * a newly created transaction, since otherwise you have to manually
- * make sure that both Value and Amount are correctly set (and not
- * that value or amount remains zero).  */
+ * @note <b>WATCH OUT:</b> When using this function and the
+ * transaction's and account's commodities are different, the amount
+ * or the value will be left as zero. This might screw up the
+ * multi-currency handling code in the register. So please think twice
+ * whether you need this function -- using xaccSplitSetValue()
+ * together with xaccSplitSetAmount() is definitely the better and
+ * safer solution!
+ */
 void         xaccSplitSetBaseValue (Split *split, gnc_numeric value,
                                     const gnc_commodity * base_currency);
 
@@ -765,34 +738,7 @@ const char * xaccSplitGetCorrAccountCode(const Split *sa);
  * split. DEPRECATED - set the value and amount instead. */
 void         xaccSplitSetSharePrice (Split *split, gnc_numeric price);
 
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-void         DxaccSplitSetAmount (Split *s, double damt); 
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. 
- *
- * WARNING:  The xaccSplitSetValue and DxaccSplitSetValue do NOT have the same
- * behavior.  The later divides the value given by the current value and set's 
- * the result as the new split value.  Is that a but or just strange undocumented
- * feature?  Benoit Grégoire 2002-6-12 */
-void         DxaccSplitSetValue (Split *split, double value);
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-double        DxaccSplitGetValue (const Split * split);
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-void         DxaccSplitSetSharePriceAndAmount (Split *split, double price,
-                                               double amount);
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-void         DxaccSplitSetShareAmount (Split *split, double amount);
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-double        DxaccSplitGetShareAmount (const Split * split);
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-void         DxaccSplitSetSharePrice (Split *split, double price);
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-double        DxaccSplitGetSharePrice (const Split * split);
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-void         DxaccSplitSetBaseValue (Split *split, double value,
-                                     const gnc_commodity * base_currency);
 /*@}*/
-
-
 
 
 /********************************************************************\

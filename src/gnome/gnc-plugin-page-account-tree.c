@@ -49,6 +49,7 @@
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "lot-viewer.h"
 #include "option-util.h"
 #include "window-reconcile.h"
 #include "window-register.h"
@@ -95,6 +96,7 @@ static void gnc_plugin_page_account_tree_cmd_view_options (EggAction *action, Gn
 static void gnc_plugin_page_account_tree_cmd_reconcile (EggAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_transfer (EggAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_stock_split (EggAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_lots (EggAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub (EggAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub_sub (EggAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub_all (EggAction *action, GncPluginPageAccountTree *page);
@@ -139,6 +141,9 @@ static EggActionGroupEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "ActionsStockSplitAction", N_("Stock S_plit..."), NULL, NULL,
 	  N_("Record a stock split or a stock merger"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_stock_split), NULL },
+	{ "ActionsLotsAction", N_("_Lot Viewer..."), NULL, NULL,
+	  N_("Bring up the lot viewer/editor window"),
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_lots), NULL },
 	{ "ScrubMenuAction", N_("Check & Repair"), NULL, NULL, NULL, NULL, NULL },
 	{ "ScrubAction", N_("Check & Repair A_ccount"), NULL, NULL,
 	  N_("Check for and repair unbalanced transactions and orphan splits " "in this account"),
@@ -159,6 +164,7 @@ static const gchar *actions_requiring_account[] = {
 	"EditEditAccountAction",
 	"EditDeleteAccountAction",
 	"ActionsReconcileAction",
+	"ActionsLotsAction",
 	NULL
 };
 
@@ -945,6 +951,15 @@ gnc_plugin_page_account_tree_cmd_stock_split (EggAction *action, GncPluginPageAc
 	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
 
 	gnc_stock_split_dialog (NULL, account);
+}
+
+static void
+gnc_plugin_page_account_tree_cmd_lots (EggAction *action, GncPluginPageAccountTree *page)
+{
+	Account *account;
+
+	account = gnc_plugin_page_account_tree_get_current_account (page);
+	gnc_lot_viewer_dialog (account);
 }
 
 static void

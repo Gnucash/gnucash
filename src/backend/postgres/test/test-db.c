@@ -254,7 +254,7 @@ mark_transaction_commodities(Transaction * t, void *data)
 
     g_hash_table_insert(hash, xaccTransGetCurrency(t), hash);
 
-    return TRUE;
+    return 0;
 }
 
 static gboolean

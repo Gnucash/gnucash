@@ -25,6 +25,7 @@
 	<menuitem name="ActionsReconcile" action="ActionsReconcileAction"/>
 	<menuitem name="ActionsTransfer" action="ActionsTransferAction"/>
 	<menuitem name="ActionsStockSplit" action="ActionsStockSplitAction"/>
+	<menuitem name="ActionLots" action="ActionsLotsAction"/>
 	<separator name="ActionsSep2"/>
 	<menu name="ScrubMenu" action="ScrubMenuAction">
 	  <menuitem name="Scrub" action="ScrubAction"/>
@@ -43,6 +44,7 @@
     <menuitem name="AccountReconcile" action="ActionsReconcileAction"/>
     <menuitem name="AccountTransfer" action="ActionsTransferAction"/>
     <menuitem name="AccountStockSplit" action="ActionsStockSplitAction"/>
+    <menuitem name="AccountLots" action="ActionsLotsAction"/>
     <separator name="AccountSep2"/>
     <menuitem name="AccountNewAccount" action="FileNewAccountAction"/>
     <menuitem name="AccountDeleteAccount" action="EditDeleteAccountAction"/>

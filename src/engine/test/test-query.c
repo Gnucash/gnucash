@@ -11,7 +11,7 @@
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 
-static gboolean
+static int
 test_trans_query (Transaction *trans, gpointer data)
 {
   QofBook *book = data;
@@ -28,21 +28,21 @@ test_trans_query (Transaction *trans, gpointer data)
                   "number of matching transactions %d not 1",
                   g_list_length (list));
     g_list_free (list);
-    return FALSE;
+    return 13;
   }
 
   if (list->data != trans)
   {
     failure ("matching transaction is wrong");
     g_list_free (list);
-    return FALSE;
+    return 13;
   }
 
   success ("found right transaction");
   xaccFreeQuery (q);
   g_list_free (list);
 
-  return TRUE;
+  return 0;
 }
 
 static void

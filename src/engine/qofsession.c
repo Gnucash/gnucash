@@ -28,16 +28,16 @@
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * Copyright (c) 1998-2002 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 1998-2003 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2000 Dave Peticolas
  */
 
   /* TODO: XXX we should probably move this resolve function to the
-	* file backend.  I think the idea would be to open the backend
-	* and then ask it if it can contact it's storage media (disk,
-	* network, server, etc.) and abort if it can't.  Mal-formed
-	* file URL's would be handled the same way!
-	*/
+   * file backend.  I think the idea would be to open the backend
+   * and then ask it if it can contact it's storage media (disk,
+   * network, server, etc.) and abort if it can't.  Mal-formed
+   * file URL's would be handled the same way!
+   */
 
 #include "config.h"
 
@@ -69,7 +69,7 @@
 #endif /* GNUCASH */
 
 static QofSession * current_session = NULL;
-static short module = MOD_IO;
+static short module = MOD_BACKEND;
 
 /* ====================================================================== */
 /* error handling routines */
@@ -212,7 +212,7 @@ qof_session_get_book (QofSession *session)
 }
 
 void
-qof_session_set_book (QofSession *session, QofBook *addbook)
+qof_session_add_book (QofSession *session, QofBook *addbook)
 {
   GList *node;
   if (!session) return;
@@ -231,11 +231,13 @@ qof_session_set_book (QofSession *session, QofBook *addbook)
     /* hack alert -- someone should free all the books in the list,
      * but it should probably not be us ... since the books backends
      * should be shutdown first, etc */
+/* XXX this should probably be an error XXX */
     g_list_free (session->books);
     session->books = g_list_append (NULL, addbook);
   }
   else 
   {
+/* XXX Need to tell the backend to add a book as well */
     session->books = g_list_append (session->books, addbook);
   }
 
@@ -270,7 +272,7 @@ static void
 qof_session_int_backend_load_error(QofSession *session,
                                    char *message, char *dll_err)
 {
-    PWARN (message, dll_err ? dll_err : "");
+    PWARN ("%s %s", message, dll_err ? dll_err : "");
 
     g_free(session->fullpath);
     session->fullpath = NULL;
@@ -406,11 +408,11 @@ qof_session_begin (QofSession *session, const char * book_id,
   session->book_id = g_strdup (book_id);
 
   /* XXX we should probably move this resolve function to the
-	* file backend.  I think the idea would be to open the backend
-	* and then ask it if it can contact it's storage media (disk,
-	* network, server, etc.) and abort if it can't.  Mal-formed
-	* file URL's would be handled the same way!
-	*/
+   * file backend.  I think the idea would be to open the backend
+   * and then ask it if it can contact it's storage media (disk,
+   * network, server, etc.) and abort if it can't.  Mal-formed
+   * file URL's would be handled the same way!
+   */
   /* ResolveURL tries to find the file in the file system. */
   session->fullpath = xaccResolveURL(book_id);
   if (!session->fullpath)
@@ -452,7 +454,7 @@ qof_session_begin (QofSession *session, const char * book_id,
     qof_session_load_backend(session, "rpc");
   }
 
-  /* if there's a begin method, call that. */
+  /* If there's a begin method, call that. */
   if (session->backend && session->backend->session_begin)
   {
       int err;
@@ -495,7 +497,7 @@ qof_session_begin (QofSession *session, const char * book_id,
 
 void
 qof_session_load (QofSession *session,
-		  QofPercentageFunc percentage_func)
+                  QofPercentageFunc percentage_func)
 {
   QofBook *newbook;
   QofBookList *oldbooks, *node;
@@ -545,10 +547,6 @@ qof_session_load (QofSession *session,
           be->load (be, newbook);
           qof_session_push_error (session, qof_backend_get_error(be), NULL);
       }
-
-      /* we just got done loading, it can't possibly be dirty !! */
-      qof_book_mark_saved (newbook);
-
       xaccLogEnable();
   }
 
@@ -586,13 +584,16 @@ qof_session_load (QofSession *session,
 gboolean
 qof_session_save_may_clobber_data (QofSession *session)
 {
-  /* FIXME: Make sure this doesn't need more sophisticated semantics
-   * in the face of special file, devices, pipes, symlinks, etc. */
-
   struct stat statbuf;
 
   if (!session) return FALSE;
   if (!session->fullpath) return FALSE;
+
+  /* FIXME: This should really be sent to the backend.  The stat is
+   * correct only for the file backend */
+
+  /* FIXME: Make sure this doesn't need more sophisticated semantics
+   * in the face of special file, devices, pipes, symlinks, etc. */
   if (stat(session->fullpath, &statbuf) == 0) return TRUE;
 
   return FALSE;
@@ -608,10 +609,10 @@ save_error_handler(QofBackend *be, QofSession *session)
     {
         qof_session_push_error (session, err, NULL);
       
-        /* we close the backend here ... isn't this a bit harsh ??? 
-	 * Actually, yes, it is harsh, and causes bug #117657,
-	 * so let's NOT end the session just because it failed to save.
-	 */
+        /* We close the backend here ... isn't this a bit harsh ??? 
+         * Actually, yes, it is harsh, and causes bug #117657,
+         * so let's NOT end the session just because it failed to save.
+         */
 #if cause_crash_when_saves_fail
         if (be->session_end)
         {
@@ -625,7 +626,7 @@ save_error_handler(QofBackend *be, QofSession *session)
 
 void
 qof_session_save (QofSession *session,
-		  QofPercentageFunc percentage_func)
+                  QofPercentageFunc percentage_func)
 {
   GList *node;
   QofBackend *be;
@@ -641,7 +642,7 @@ qof_session_save (QofSession *session,
    * (i.e. we can communicate with it), then synchronize with 
    * the backend.  If we cannot contact the backend (e.g.
    * because we've gone offline, the network has crashed, etc.)
-   * then give the user the option to save to disk. 
+   * then give the user the option to save to the local disk. 
    *
    * hack alert -- FIXME -- XXX the code below no longer
    * does what the words above say.  This needs fixing.
@@ -662,28 +663,16 @@ qof_session_save (QofSession *session,
         (be->sync)(be, abook);
         if (save_error_handler(be, session)) return;
       }
-		
-	 	/* XXX The backend should really be calling this, not us. */
-		qof_book_mark_saved (abook);
     }
-
     
     /* If we got to here, then the backend saved everything 
      * just fine, and we are done. So return. */
+    qof_session_clear_error (session);
+    LEAVE("Success");
     return;
   } 
 
-  /* If the fullpath doesn't exist, either the user failed to initialize,
-   * or the lockfile was never obtained. Either way, we can't write. */
-  qof_session_clear_error (session);
-
-  if (!session->fullpath)
-  {
-    qof_session_push_error (session, ERR_BACKEND_MISC, NULL);
-    return;
-  }
-
-  LEAVE(" ");
+  LEAVE("error -- No backend!");
 }
 
 /* ====================================================================== */
@@ -691,8 +680,8 @@ qof_session_save (QofSession *session,
 
 gboolean
 qof_session_export (QofSession *tmp_session,
-		    QofSession *real_session,
-		    QofPercentageFunc percentage_func)
+                    QofSession *real_session,
+                    QofPercentageFunc percentage_func)
 {
   QofBook *book;
   QofBackend *be;

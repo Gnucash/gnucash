@@ -58,6 +58,7 @@
 #define GNC_ID_NULL           QOF_ID_NULL
 
 #define GNC_ID_ACCOUNT        "Account"
+#define GNC_ID_COMMODITY      "Commodity"
 #define GNC_ID_COMMODITY_TABLE "CommodityTable"
 #define GNC_ID_FREQSPEC       "FreqSpec"
 #define GNC_ID_GROUP          "AccountGroup"
@@ -70,12 +71,6 @@
 #define GNC_ID_SXTT           "SXTT"
 #define GNC_ID_TRANS          "Trans"
                                                                                 
-
-                                                                                
-
-
-
-
 /* TYPES **********************************************************/
 
 /** @brief Account in Gnucash. 
@@ -135,15 +130,27 @@ typedef struct gnc_commodity_s       gnc_commodity;
 /** @brief A gnc_commodity_table is a database of commodity info. */
 typedef struct gnc_commodity_table_s gnc_commodity_table;
 
-typedef struct gnc_quote_source_s    gnc_quote_source;
-
-/**
- * A GNCLot implements the fundamental conceptual idea behind
- * invoices, inventory lots, and stock market investment lots.  
+/** @breif Identifies that something sold at one time was bought at another.
+ *
+ * A GNCLot provides a way of tracking physical items as they are 
+ * bought and sold in different transactions.  By identifying 
+ * the individual, underlying physical objects, it provides the
+ * needed framework for implementing depreciation, capital gains,
+ * inventory control and invoices.
  *
  * See the file src/doc/lots.txt for implmentation overview.
  */
 typedef struct gnc_lot_struct        GNCLot;
+
+/** @breif Price of commodity on a given date.
+ *
+ * A GNCPrice encapsulates price information: the cost of a commodity
+ * expressed as a currency, on a given date.  It also holds info about 
+ * the provenance of the price: where it came from, its general validity.
+ */
+typedef struct gnc_price_s           GNCPrice;
+typedef struct gnc_quote_source_s    gnc_quote_source;
+
 
 /** GList of Account */
 typedef GList                  AccountList;
@@ -157,6 +164,10 @@ typedef GList                  TransList;
 typedef GList                  AccountGUIDList;
 /** GList of GUIDs of a GNCBook */
 typedef GList                  BookGUIDList;
+
+
+typedef  gint (*SplitCallback)(Split *s, gpointer data);
+typedef  gint (*TransactionCallback)(Transaction *t, void *data);
 
 /** Function type for init hooks in the engine.  */
 typedef void (* gnc_engine_init_hook_t)(int, char **);

@@ -191,7 +191,7 @@ struct account_pdata
   QofBook *book;
 };
 
-static gboolean
+static inline gboolean
 set_string(xmlNodePtr node, Account* act,
            void (*func)(Account *act, const gchar *txt))
 {
@@ -296,12 +296,6 @@ depricated_account_currency_handler (xmlNodePtr node, gpointer act_pdata)
 static gboolean
 depricated_account_currency_scu_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    struct account_pdata *pdata = act_pdata;
-    gint64 val;
-
-    dom_tree_to_integer(node, &val);
-    DxaccAccountSetCurrencySCU(pdata->account, val);
-
     return TRUE;
 }
 
@@ -312,7 +306,7 @@ depricated_account_security_handler (xmlNodePtr node, gpointer act_pdata)
     gnc_commodity *ref;
 
     ref = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
-    DxaccAccountSetSecurity(pdata->account, ref);
+    xaccAccountSetCommodity(pdata->account, ref);
 
     return TRUE;
 }

@@ -5,6 +5,7 @@ glade_DATA = \
 	commodities.glade \
 	fincalc.glade \
 	help.glade \
+	lots.glade \
 	newuser.glade \
 	price.glade \
 	print.glade \

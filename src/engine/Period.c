@@ -23,21 +23,24 @@
  * Period.c
  *
  * FUNCTION:
- * Implement accounting periods.
+ * Implement accounting periods, using design described in 
+ * src/doc/books.txt
  *
- * CAUTION: this is currently a semi-functional, untested implementation
- * of the design described in src/doc/book.txt
-
-Open questions: how do we deal with the backends ???
+ * CAUTION: poorly tested.
  *
  * HISTORY:
- * created by Linas Vepstas November 2001
- * Copyright (c) 2001, 2002 Linas Vepstas <linas@linas.org>
+ * Created by Linas Vepstas November 2001
+ * Copyright (c) 2001-2003 Linas Vepstas <linas@linas.org>
  */
 
 #include "AccountP.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
+#include "gnc-lot.h"
+#include "gnc-lot-p.h"
+#include "gnc-pricedb.h"
+#include "gnc-pricedb-p.h"
+#include "gnc-trace.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "kvp-util-p.h"
@@ -66,9 +69,10 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
 
    if (!trans || !book) return;
    
-   /* if this is the same book, its a no-op. */
+   /* If this is the same book, its a no-op. */
    if (trans->book == book) return;
 
+   ENTER ("trans=%p %s", trans, trans->description);
    newtrans = xaccDupeTransaction (trans);
    for (node = newtrans->splits; node; node = node->next)
    {
@@ -103,8 +107,6 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
       }
       else
       {
-        /* force to null, so remove doesn't occur */
-        s->acc = NULL;
         xaccAccountInsertSplit (twin, s);
         twin->balance_dirty = TRUE;
         twin->sort_dirty = TRUE;
@@ -113,10 +115,11 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
 
    xaccTransCommitEdit (newtrans);
    gnc_engine_generate_event (&newtrans->guid, GNC_ID_TRANS, GNC_EVENT_CREATE);
+   LEAVE ("trans=%p %s", trans, trans->description);
 }
 
 /* ================================================================ */
-/* Reparent transaction to new book.  This routine does this by simply
+/* Reparent transaction to new book.  This routine does this by 
  * moving GUID's to the new book's entity tables.
  */
 
@@ -137,6 +140,7 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
       gnc_book_insert_trans_clobber (book, trans);
       return;
    }
+   ENTER ("trans=%p %s", trans, trans->description);
 
    /* Fiddle the transaction into place in the new book */
    xaccTransBeginEdit (trans);
@@ -150,12 +154,15 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
       Account *twin;
       Split *s = node->data;
 
-      /* move the split into the new book ... */
-      qof_entity_remove (s->book->entity_table, &s->guid);
-      s->book = book;
-      qof_entity_store(book->entity_table, s, &s->guid, GNC_ID_SPLIT);
+      /* Move the splits over (only if they haven't already been moved). */
+      if (s->book != book)
+      {
+         qof_entity_remove (s->book->entity_table, &s->guid);
+         s->book = book;
+         qof_entity_store(book->entity_table, s, &s->guid, GNC_ID_SPLIT);
+      }
 
-      /* find the twin account, and re-parent to that. */
+      /* Find the twin account, and re-parent to that. */
       twin = xaccAccountLookupTwin (s->acc, book);
       if (!twin)
       {
@@ -163,43 +170,374 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
       }
       else
       {
-        /* force to null, so remove doesn't occur */
-        s->acc = NULL;
-        xaccAccountInsertSplit (twin, s);
-        twin->balance_dirty = TRUE;
-        twin->sort_dirty = TRUE;
+        /* Move the split too, if it hasn't been moved already */
+        if (s->acc != twin)
+        {
+           xaccAccountInsertSplit (twin, s);
+           twin->balance_dirty = TRUE;
+           twin->sort_dirty = TRUE;
+        }
       }
    }
 
    xaccTransCommitEdit (trans);
    gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_MODIFY);
+   LEAVE ("trans=%p %s", trans, trans->description);
+}
+
+/* ================================================================ */
+/* Reparent lot to new book.  This routine does this by 
+ * completely deleting and recreating the lot.
+ */
+
+void
+gnc_book_insert_lot_clobber (QofBook *book, GNCLot *lot)
+{
+   PERR ("Not Implemented");
+}
+
+/* ================================================================ */
+/* Reparent lot to new book.  This routine does this by 
+ * moving GUID's to the new book's entity tables.
+ */
+
+void
+gnc_book_insert_lot (QofBook *book, GNCLot *lot)
+{
+   SplitList *snode;
+   Account *twin;
+   if (!lot || !book) return;
+   
+   /* If this is the same book, its a no-op. */
+   if (lot->book == book) return;
+
+   if (book->backend != lot->book->backend)
+   {
+      gnc_book_insert_lot_clobber (book, lot);
+      return;
+   }
+   ENTER ("lot=%p", lot);
+   qof_entity_remove (lot->book->entity_table, &lot->guid);
+   lot->book = book;
+   qof_entity_store(book->entity_table, lot, &lot->guid, GNC_ID_LOT);
+
+   /* Move the splits over (only if they haven't already been moved). */
+   for (snode = lot->splits; snode; snode=snode->next)
+   {
+      Split *s = snode->data;
+      if (s->book != book)
+      {
+         qof_entity_remove (s->book->entity_table, &s->guid);
+         s->book = book;
+         qof_entity_store(book->entity_table, s, &s->guid, GNC_ID_SPLIT);
+      }
+   }
+
+   twin = xaccAccountLookupTwin (lot->account, book);
+   if (!twin)
+   {
+      PERR ("near-fatal: twin account not found");
+   }
+   else
+   {
+      xaccAccountInsertLot (twin, lot);
+   }
+   LEAVE ("lot=%p", lot);
+}
+
+/* ================================================================ */
+
+void
+gnc_book_insert_price (QofBook *book, GNCPrice *pr)
+{
+   if (!pr || !book) return;
+   
+   /* If this is the same book, its a no-op. */
+   if (pr->book == book) return;
+
+   /* If the old and new book don't share backends, then clobber-copy;
+    * i.e. destroy it in one backend, create it in another.  */
+   if (book->backend != pr->book->backend)
+   {
+      gnc_book_insert_price_clobber (book, pr);
+      return;
+   }
+   ENTER ("price=%p", pr);
+
+   /* Fiddle the price into place in the new book */
+   gnc_price_ref (pr);
+   gnc_price_begin_edit (pr);
+
+   qof_entity_remove (pr->book->entity_table, &pr->guid);
+   pr->book = book;
+   qof_entity_store(book->entity_table, pr, &pr->guid, GNC_ID_PRICE);
+
+   gnc_pricedb_remove_price (pr->db, pr);
+   gnc_pricedb_add_price (gnc_pricedb_get_db (book), pr);
+
+   gnc_price_commit_edit (pr);
+   gnc_price_unref (pr);
+
+   LEAVE ("price=%p", pr);
+}
+
+/* ================================================================ */
+
+void
+gnc_book_insert_price_clobber (QofBook *book, GNCPrice *pr)
+{
+	PERR ("Not Implemented");
+}
+
+/* ================================================================ */
+/* The following routines determine whether a given lot or 
+ * transaction is linked or related to another lot that is 'open'.
+ * These return true if so.
+ *
+ * An 'open transaction' is a transaction that has a split 
+ * that belongs to an 'open lot'.  An 'open lot' is one that
+ * is not closed, OR ONE THAT HAS a split in it that belongs to 
+ * an open transaction. 
+ *
+ * The need for this recursive definition is that some lots, 
+ * even though themselves closed, are participants in transactions
+ * that cannot be moved to a closed book, and thus, by association 
+ * can't be moved either.
+ *
+ * Lots contain pointers to splits, and transactions contain 
+ * pointers to splits.  Together, these form a graph, which may
+ * be cyclic.  We want to walk the entire graph, and determine
+ * whether there are any open lots in it.  The walk must be 
+ * recursive,  and because it might be cyclic, we use a marker
+ * to break the cycles.  
+ */
+
+static gboolean trans_has_open_lot_tree (Transaction *trans);
+static gboolean lot_has_open_trans_tree (GNCLot *lot);
+
+static gboolean
+trans_has_open_lot_tree (Transaction *trans)
+{
+   SplitList *split_list, *node;
+
+   if (1 == trans->marker) return FALSE;
+   if (2 == trans->marker) return TRUE;
+   trans->marker = 1;
+
+   split_list = xaccTransGetSplitList (trans);
+   for (node = split_list; node; node=node->next)
+   {
+      Split *s = node->data;
+      GNCLot *lot = s->lot;
+      if (NULL == lot) continue;
+      if ((FALSE == gnc_lot_is_closed(lot)) ||
+          (lot_has_open_trans_tree (lot)))
+      {
+         trans->marker = 2;
+         return TRUE;
+      }
+   }
+   return FALSE;
+}
+
+static gboolean 
+lot_has_open_trans_tree (GNCLot *lot)
+{
+   SplitList *split_list, *snode;
+
+   if (1 == lot->marker) return FALSE;
+   if (2 == lot->marker) return TRUE;
+   lot->marker = 1;
+
+   if (FALSE == gnc_lot_is_closed(lot))
+   {
+      lot->marker = 2;
+      return TRUE;
+   }
+
+   split_list = gnc_lot_get_split_list (lot);
+   for (snode = split_list; snode; snode=snode->next)
+   {
+      Split *s = snode->data;
+      Transaction *trans = s->parent;
+      if (trans_has_open_lot_tree (trans)) 
+      {
+         lot->marker = 2;
+         return TRUE;
+      }
+   }
+   return FALSE;
+}
+
+/* ================================================================ */
+/* The following routines remove 'open lots' and 'open transactions'
+ * from the lists passed in.
+ */
+
+static LotList *
+lot_list_preen_open_lots (LotList *lot_list)
+{
+   LotList *lnode;
+   ENTER (" ");
+   for (lnode=lot_list; lnode; )
+   {
+      GNCLot *lot = lnode->data;
+      LotList *lnext = lnode->next;
+
+      if (lot_has_open_trans_tree (lot))
+      {
+         lot_list = g_list_remove_link (lot_list, lnode);
+         /* XXX freeing this node somehow leads to glib g_list
+          * memory corruption which later takes down the system. 
+          * I don't see why.  */
+         /* g_list_free_1 (lnode); */
+      }
+      lnode = lnext;
+   }
+   LEAVE (" ");
+   return lot_list;
+}
+
+static TransList *
+trans_list_preen_open_lots (TransList *trans_list)
+{
+   TransList *tnode;
+
+   ENTER (" ");
+   for (tnode=trans_list; tnode; )
+   {
+      Transaction *trans = tnode->data;
+      TransList *tnext = tnode->next;
+
+      if (trans_has_open_lot_tree (trans))
+      {
+         trans_list = g_list_remove_link (trans_list, tnode);
+         /* XXX freeing this node somehow leads to glib g_list
+          * memory corruption which later takes down the system. 
+          * I don't see why.  */
+         /* g_list_free_1 (tnode); */
+      }
+      tnode = tnext;
+   }
+   LEAVE (" ");
+   return trans_list;
+}
+
+/* ================================================================ */
+/* clear the markers for the above routines */
+
+static void
+clear_markers (AccountGroup *grp)
+{
+   GList *node;
+
+   if (!grp) return;
+                                                                                
+   for (node = grp->accounts; node; node = node->next)
+   {
+      Account *account = node->data;
+      GList *lp;
+                                                                                
+      /* recursively do sub-accounts */
+      clear_markers (account->children);
+                                                                                
+      for (lp = account->splits; lp; lp = lp->next)
+      {
+        Split *s = lp->data;
+        Transaction *trans = s->parent;
+        GNCLot *lot = s->lot;
+        trans->marker = 0;
+        if (lot) lot->marker = 0;
+      }
+   }
+}
+
+/* ================================================================ */
+/* Return a unique list of lots that are involved with the listed
+ * transactions.
+ */
+
+static LotList *
+create_lot_list_from_trans_list (TransList *trans_list)
+{
+   LotList *lot_list = NULL;
+   TransList *tnode;
+
+   for (tnode=trans_list; tnode; tnode=tnode->next)
+   {
+      Transaction *trans = tnode->data;
+      SplitList *split_list = xaccTransGetSplitList (trans);
+      SplitList *snode;
+      for (snode = split_list; snode; snode=snode->next)
+      {
+         Split *s = snode->data;
+         GNCLot *lot = xaccSplitGetLot(s);
+         if (NULL == lot) continue;
+         if (g_list_find (lot_list, lot)) continue;
+         lot_list = g_list_prepend (lot_list, lot);
+      }
+   }
+   return lot_list;
 }
 
 /* ================================================================ */
 
 void 
-gnc_book_partition (QofBook *dest_book, QofBook *src_book, Query *query)
+gnc_book_partition_pricedb (QofBook *dest_book, QofBook *src_book, QofQuery *query)
 {
-   AccountGroup *src_grp, *dst_grp;
-   QofBackend *be;
-   time_t now;
-   GList *split_list, *snode;
+   GNCPriceDB *src_pdb, *dest_pdb;
+   GList *price_list, *pnode;
 
    if (!src_book || !dest_book || !query) return;
    ENTER (" src_book=%p dest_book=%p", src_book, dest_book);
 
-   be = src_book->backend;
-   if (be && be->begin)
+   src_pdb = gnc_pricedb_get_db (src_book);
+   dest_pdb = gnc_pricedb_get_db (dest_book);
+
+   gnc_pricedb_begin_edit (src_pdb);
+   gnc_pricedb_begin_edit (dest_pdb);
+
+   qof_query_set_book (query, src_book);
+   price_list = qof_query_run (query);
+
+printf ("duude XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX prices\n");
+   for (pnode = price_list; pnode; pnode=pnode->next)
    {
-      (*be->begin)(be, GNC_ID_PERIOD, dest_book);
+      GNCPrice *pr = pnode->data;
+      gnc_book_insert_price (dest_book, pr);
    }
-   
+
+   gnc_pricedb_commit_edit (dest_pdb);
+   gnc_pricedb_commit_edit (src_pdb);
+
+   LEAVE (" src_book=%p dest_book=%p", src_book, dest_book);
+}
+
+/* ================================================================ */
+
+void 
+gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
+{
+   gnc_commodity_table *src_tbl, *dst_tbl;
+   AccountGroup *src_grp, *dst_grp;
+   time_t now;
+   TransList *trans_list, *tnode;
+   LotList *lot_list, *lnode;
+
+   if (!src_book || !dest_book || !query) return;
+   ENTER (" src_book=%p dest_book=%p", src_book, dest_book);
+
    /* First, copy the book's KVP tree */
    /* hack alert -- FIXME -- this should really be a merge, not a
     * clobber copy, but I am too lazy to write a kvp merge routine,
     * and it is not needed for the current usage. */
    kvp_frame_delete (dest_book->kvp_data);
    dest_book->kvp_data = kvp_frame_copy (src_book->kvp_data);
+
+   /* Next, copy the commodity tables */
+   src_tbl = gnc_commodity_table_get_table (src_book);
+   dst_tbl = gnc_commodity_table_get_table (dest_book);
+   gnc_commodity_table_copy (dst_tbl, src_tbl);
 
    /* Next, copy all of the accounts */
    /* hack alert -- FIXME -- this should really be a merge, not a
@@ -216,34 +554,42 @@ gnc_book_partition (QofBook *dest_book, QofBook *src_book, Query *query)
    /* Next, run the query */
    xaccAccountGroupBeginEdit (dst_grp);
    xaccAccountGroupBeginEdit (src_grp);
-   xaccQuerySetBook (query, src_book);
-   split_list = xaccQueryGetSplitsUniqueTrans (query);
+   qof_query_set_book (query, src_book);
+   trans_list = qof_query_run (query);
 
-   /* And start moving transactions over */
-   for (snode = split_list; snode; snode=snode->next)
+   /* Preen: remove open lots/ open trnasactions */
+   clear_markers (src_grp);
+   trans_list = trans_list_preen_open_lots (trans_list);
+   lot_list = create_lot_list_from_trans_list (trans_list);
+   lot_list = lot_list_preen_open_lots (lot_list);
+
+   /* Move closed lots over to destination. Do this before moving 
+    * the txn's, so that the lots don't get trashed.  */
+   for (lnode = lot_list; lnode; lnode = lnode->next)
    {
-      Split *s = snode->data;
-      Transaction *trans = s->parent;
+      GNCLot *lot = lnode->data;
+      gnc_book_insert_lot (dest_book, lot);
+   }
 
+   /* Move the transactions over to the destination book. */
+   for (tnode = trans_list; tnode; tnode=tnode->next)
+   {
+      Transaction *trans = tnode->data;
       gnc_book_insert_trans (dest_book, trans);
    }
+
    xaccAccountGroupCommitEdit (src_grp);
    xaccAccountGroupCommitEdit (dst_grp);
 
-   /* make note of the sibling books */
+   /* Make note of the sibling books */
    now = time(0);
-   gnc_kvp_gemini (src_book->kvp_data, NULL, &dest_book->guid, now);
-   gnc_kvp_gemini (dest_book->kvp_data, NULL, &src_book->guid, now);
-
-   if (be && be->commit)
-   {
-      (*be->commit)(be, GNC_ID_PERIOD, dest_book);
-   }
+   gnc_kvp_gemini (src_book->kvp_data, now, "book_guid", &dest_book->guid, NULL);
+   gnc_kvp_gemini (dest_book->kvp_data, now, "book_guid", &src_book->guid, NULL);
    LEAVE (" ");
 }
 
 /* ================================================================ */
-/* find nearest equity account */
+/* Find nearest equity account */
 
 static Account *
 find_nearest_equity_acct (Account *acc)
@@ -252,7 +598,7 @@ find_nearest_equity_acct (Account *acc)
    AccountGroup *parent;
    Account *next_up, *candidate;
 
-   /* see if we can find an equity account that is peered to this account */
+   /* See if we can find an equity account that is peered to this account */
    parent = xaccAccountGetParent (acc);
    g_return_val_if_fail (parent, NULL);
 
@@ -292,7 +638,7 @@ find_nearest_equity_acct (Account *acc)
 }
 
 /* ================================================================ */
-/* traverse all accounts, get account balances */
+/* Traverse all accounts, get account balances */
 
 static void
 add_closing_balances (AccountGroup *closed_grp, 
@@ -307,48 +653,38 @@ add_closing_balances (AccountGroup *closed_grp,
    if (!closed_grp) return;
    ENTER (" enter=%s post=%s desc=%s", gnc_print_date(*date_entered),
        gnc_print_date (*post_date), desc);
+   xaccAccountBeginEdit (equity_account);
 
-   /* walk accounts in closed book */
+   /* Walk accounts in closed book */
    acc_list = xaccGroupGetAccountList (closed_grp);
    for (node=acc_list; node; node=node->next)
    {
       KvpFrame *cwd;
-      KvpValue *vvv;
       Account *twin;
       AccountGroup *childs;
       Account * candidate = (Account *) node->data;
       GNCAccountType tip = xaccAccountGetType (candidate);
 
-      /* find the peer account of this account in the open book  */
+      /* Find the peer account of this account in the open book  */
       twin = xaccAccountLookupTwin (candidate, open_book);
 
       /* -------------------------------- */
-      /* add KVP to open account, indicating the progenitor
+      /* Add KVP to open account, indicating the progenitor
        * of this account. */
       xaccAccountBeginEdit (twin);
       cwd = xaccAccountGetSlots (twin);
-      cwd = kvp_frame_get_frame_slash (cwd, "/book/");
-
-      vvv = kvp_value_new_guid (xaccAccountGetGUID (candidate));
-      kvp_frame_set_slot_nc (cwd, "prev-acct", vvv);
-      
-      vvv = kvp_value_new_guid (&closed_book->guid);
-      kvp_frame_set_slot_nc (cwd, "prev-book", vvv);
+      kvp_frame_set_guid (cwd, "/book/prev-acct", xaccAccountGetGUID (candidate));
+      kvp_frame_set_guid (cwd, "/book/prev-book", &closed_book->guid);
 
       xaccAccountSetSlots_nc (twin, twin->kvp_data);
       
       /* -------------------------------- */
-      /* add KVP to closed account, indicating where 
+      /* Add KVP to closed account, indicating where 
        * the next book is. */
       xaccAccountBeginEdit (candidate);
       cwd = xaccAccountGetSlots (candidate);
-      cwd = kvp_frame_get_frame_slash (cwd, "/book/");
-
-      vvv = kvp_value_new_guid (&open_book->guid);
-      kvp_frame_set_slot_nc (cwd, "next-book", vvv);
-      
-      vvv = kvp_value_new_guid (xaccAccountGetGUID (twin));
-      kvp_frame_set_slot_nc (cwd, "next-acct", vvv);
+      kvp_frame_set_guid (cwd, "/book/next-book", &open_book->guid);
+      kvp_frame_set_guid (cwd, "/book/next-acct", xaccAccountGetGUID (twin));
 
       xaccAccountSetSlots_nc (candidate, candidate->kvp_data);
 
@@ -357,72 +693,76 @@ add_closing_balances (AccountGroup *closed_grp,
        * and income or expense or equity account */
       if ((INCOME != tip) && (EXPENSE != tip) && (EQUITY != tip)) 
       {
-         Split *se, *st;
-         Transaction *trans;
-         Account *equity;
          gnc_numeric baln;
-
          baln = xaccAccountGetBalance (candidate);
 
-         /* find the equity account into which we'll poke the 
-          * balancing transaction */
-         if (NULL == equity_account)
+         /* Don't bother with creating the equity balance if its zero */
+         if (FALSE == gnc_numeric_zero_p(baln)) 
          {
-            equity = find_nearest_equity_acct (twin);
+            Split *se, *st;
+            Transaction *trans;
+            Account *equity;
+   
+            /* Find the equity account into which we'll poke the 
+             * balancing transaction */
+            if (NULL == equity_account)
+            {
+               equity = find_nearest_equity_acct (twin);
+               xaccAccountBeginEdit (equity);
+            }
+            else
+            {
+               equity = equity_account;
+            }
+   
+            /* -------------------------------- */
+            /* Create the balancing transaction */
+            trans = xaccMallocTransaction (open_book);
+            xaccTransBeginEdit (trans);
+   
+            xaccTransSetDatePostedTS (trans, post_date);
+            xaccTransSetDateEnteredTS (trans, date_entered);
+            xaccTransSetDescription (trans, desc);
+            xaccTransSetCurrency (trans, xaccAccountGetCommodity(equity));
+   
+            st = xaccMallocSplit(open_book);
+            xaccTransAppendSplit(trans, st);
+            xaccAccountInsertSplit (twin, st);
+            
+            se = xaccMallocSplit(open_book);
+            xaccTransAppendSplit(trans, se);
+            xaccAccountInsertSplit (equity, se);
+   
+            xaccSplitSetAmount (st, baln);
+            xaccSplitSetValue (st, baln);
+            xaccSplitSetAmount (se, gnc_numeric_neg(baln));
+            xaccSplitSetValue (se, gnc_numeric_neg(baln));
+   
+            /* Add KVP data showing where the balancing 
+             * transaction came from */
+            cwd = xaccTransGetSlots (trans);
+            kvp_frame_set_guid (cwd, "/book/closed-book", &closed_book->guid);
+            kvp_frame_set_guid (cwd, "/book/closed-acct", xaccAccountGetGUID(candidate));
+            
+            xaccTransCommitEdit (trans);
+   
+            if (NULL == equity_account)
+            {
+               xaccAccountCommitEdit (equity);
+            }
+            /* -------------------------------- */
+            /* Add KVP to closed account, indicating where the
+             * balance was carried forward to. */
+            cwd = xaccAccountGetSlots (candidate);
+            kvp_frame_set_guid (cwd, "/book/balancing-trans", xaccTransGetGUID(trans));
          }
-         else
-         {
-            equity = equity_account;
-         }
-
-         /* -------------------------------- */
-         /* create the balancing transaction */
-         trans = xaccMallocTransaction (open_book);
-         xaccTransBeginEdit (trans);
-         st = xaccMallocSplit(open_book);
-         xaccAccountInsertSplit (twin, st);
-         xaccTransAppendSplit(trans, st);
-         
-         se = xaccMallocSplit(open_book);
-         xaccAccountInsertSplit (equity, se);
-         xaccTransAppendSplit(trans, se);
-
-         xaccSplitSetValue (st, baln);
-         xaccSplitSetValue (se, gnc_numeric_neg(baln));
-
-         xaccTransSetDatePostedTS (trans, post_date);
-         xaccTransSetDateEnteredTS (trans, date_entered);
-         xaccTransSetDescription (trans, desc);
-         xaccTransSetCurrency (trans, xaccAccountGetCommodity(equity));
-
-         /* add KVP data showing where the balancing 
-          * transaction came from */
-         cwd = xaccTransGetSlots (trans);
-         cwd = kvp_frame_get_frame_slash (cwd, "/book/");
-
-         vvv = kvp_value_new_guid (&closed_book->guid);
-         kvp_frame_set_slot_nc (cwd, "closed-book", vvv);
-         
-         vvv = kvp_value_new_guid (xaccAccountGetGUID(candidate));
-         kvp_frame_set_slot_nc (cwd, "closed-acct", vvv);
-         
-         xaccTransCommitEdit (trans);
-
-         /* -------------------------------- */
-         /* add KVP to closed account, indicating where the
-          * balance was carried forward to. */
-         cwd = xaccAccountGetSlots (candidate);
-         cwd = kvp_frame_get_frame_slash (cwd, "/book/");
-
-         vvv = kvp_value_new_guid (xaccTransGetGUID(trans));
-         kvp_frame_set_slot_nc (cwd, "balancing-trans", vvv);
       }
 
-      /* we left an open dangling above ... */
+      /* We left an open dangling above ... */
       xaccAccountCommitEdit (candidate);
       xaccAccountCommitEdit (twin);
 
-      /* recurse down to the children */
+      /* Recurse down to the children */
       childs = xaccAccountGetChildren(candidate);
       if (childs) 
       {
@@ -433,61 +773,99 @@ add_closing_balances (AccountGroup *closed_grp,
                           post_date, date_entered, desc);
       }
    }
+   xaccAccountCommitEdit (equity_account);
    LEAVE (" ");
 }
 
 /* ================================================================ */
-/* split a book into two by date */
+
+static void 
+period_begin_edit (QofBook *src_book, QofBook *dest_book)
+{
+   QofBackend *be;
+   be = src_book->backend;
+   if (be && be->begin)
+   {
+      (*be->begin)(be, GNC_ID_PERIOD, dest_book);
+   }
+}
+   
+static void 
+period_commit_edit (QofBook *src_book, QofBook *dest_book)
+{
+   QofBackend *be;
+   be = src_book->backend;
+   if (be && be->commit)
+   {
+      (*be->commit)(be, GNC_ID_PERIOD, dest_book);
+   }
+}
+
+/* ================================================================ */
+/* Split a book into two by date */
 
 QofBook * 
 gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
                        Account *equity_account,
                        const char * memo)
 {
-   Query *query;
+   QofQuery *txn_query, *prc_query;
+   QofQueryPredData *pred_data;
+   GSList *param_list;
    QofBook *closing_book;
    KvpFrame *exist_cwd, *partn_cwd;
-   KvpValue *vvv;
    Timespec ts;
 
    if (!existing_book) return NULL;
    ENTER (" date=%s memo=%s", gnc_print_date(calve_date), memo);
 
-   /* Get all transactions that are *earlier* than the calve date,
-    * and put them in the new book.  */
-   query = xaccMallocQuery();
-   xaccQueryAddDateMatchTS (query, FALSE, calve_date, 
-                                   TRUE, calve_date,
-                                   QOF_QUERY_AND);
+   /* Setup closuing book */
    closing_book = qof_book_new();
    qof_book_set_backend (closing_book, existing_book->backend);
    closing_book->book_open = 'n';
-   gnc_book_partition (closing_book, existing_book, query);
 
-   xaccFreeQuery (query);
+   period_begin_edit (existing_book, closing_book);
+
+   /* Get all transactions that are *earlier* than the calve date,
+    * and put them in the new book.  */
+   txn_query = qof_query_create_for (GNC_ID_TRANS);
+   pred_data = qof_query_date_predicate (QOF_COMPARE_LTE,
+                                         QOF_DATE_MATCH_NORMAL,
+                                         calve_date);
+   param_list = qof_query_build_param_list (TRANS_DATE_POSTED, NULL);
+   qof_query_add_term (txn_query, param_list, pred_data, QOF_QUERY_FIRST_TERM);
+
+   gnc_book_partition_txn (closing_book, existing_book, txn_query);
+   qof_query_destroy (txn_query);
+
+   /* Move prices over too */
+   prc_query = qof_query_create_for (GNC_ID_PRICE);
+   pred_data = qof_query_date_predicate (QOF_COMPARE_LTE,
+                                         QOF_DATE_MATCH_NORMAL,
+                                         calve_date);
+   param_list = qof_query_build_param_list (PRICE_DATE, NULL);
+   qof_query_add_term (prc_query, param_list, pred_data, QOF_QUERY_FIRST_TERM);
+
+   gnc_book_partition_pricedb (closing_book, existing_book, prc_query);
+   qof_query_destroy (prc_query);
 
    /* Now add the various identifying kvp's */
    /* cwd == 'current working directory' */
-   exist_cwd = kvp_frame_get_frame_slash (existing_book->kvp_data, "/book/");
-   partn_cwd = kvp_frame_get_frame_slash (closing_book->kvp_data, "/book/");
+   exist_cwd = existing_book->kvp_data;
+   partn_cwd = closing_book->kvp_data;
    
    /* Mark the boundary date between the books */
-   vvv = kvp_value_new_timespec (calve_date);
-   kvp_frame_set_slot_nc (exist_cwd, "open-date", vvv);
-   kvp_frame_set_slot_nc (partn_cwd, "close-date", vvv);
+   kvp_frame_set_timespec (exist_cwd, "/book/open-date", calve_date);
+   kvp_frame_set_timespec (partn_cwd, "/book/close-date", calve_date);
 
    /* Mark partition as being closed */
    ts.tv_sec = time(0);
    ts.tv_nsec = 0;
-   vvv = kvp_value_new_timespec (ts);
-   kvp_frame_set_slot_nc (partn_cwd, "log-date", vvv);
+   kvp_frame_set_timespec (partn_cwd, "/book/log-date", ts);
 
    /* Set up pointers to each book from the other. */
-   vvv = kvp_value_new_guid (&existing_book->guid);
-   kvp_frame_set_slot_nc (partn_cwd, "next-book", vvv);
-
-   vvv = kvp_value_new_guid (&closing_book->guid);
-   kvp_frame_set_slot_nc (exist_cwd, "prev-book", vvv);
+   kvp_frame_set_guid (partn_cwd, "/book/next-book", &existing_book->guid);
+   kvp_frame_set_guid (exist_cwd, "/book/prev-book", &closing_book->guid);
 
    /* add in transactions to equity accounts that will
     * hold the colsing balances */
@@ -495,6 +873,9 @@ gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
                         existing_book, closing_book,
                         equity_account,
                         &calve_date, &ts, memo);
+
+   period_commit_edit (existing_book, closing_book);
+
    LEAVE (" ");
    return closing_book;
 }

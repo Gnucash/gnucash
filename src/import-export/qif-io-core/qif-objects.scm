@@ -3,7 +3,6 @@
 ;;;  record type definitions for QIF objects.  
 ;;;
 ;;;  Bill Gribble <grib@billgribble.com> 20 Feb 2000 
-;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; this should be a GOOPS class.  later, I guess. 

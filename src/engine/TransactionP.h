@@ -76,6 +76,17 @@
  * A "split" is more commonly refered to as a "entry" in a "transaction".
  */
 
+/* Flags for handling cap-gains status */
+#define GAINS_STATUS_UNKNOWN        0xff
+#define GAINS_STATUS_CLEAN           0x0
+#define GAINS_STATUS_GAINS           0x3
+#define GAINS_STATUS_DATE_DIRTY     0x10
+#define GAINS_STATUS_AMNT_DIRTY     0x20
+#define GAINS_STATUS_VALU_DIRTY     0x40
+#define GAINS_STATUS_LOT_DIRTY      0x80
+#define GAINS_STATUS_ADIRTY    (GAINS_STATUS_AMNT_DIRTY|GAINS_STATUS_LOT_DIRTY)
+#define GAINS_STATUS_VDIRTY    (GAINS_STATUS_VALU_DIRTY)
+#define GAINS_STATUS_A_VDIRTY  (GAINS_STATUS_AMNT_DIRTY|GAINS_STATUS_VALU_DIRTY|GAINS_STATUS_LOT_DIRTY)
 
 struct split_s
 {
@@ -108,10 +119,23 @@ struct split_s
    * it's NULL until accessed. */
   KvpFrame * kvp_data;
 
-  char    reconciled;        /* The reconciled field                      */
   Timespec date_reconciled;  /* date split was reconciled                 */
+  char    reconciled;        /* The reconciled field                      */
 
-  /* 'value' is the amount of the transaction balancing commodity
+  /* gains is a flag used to track the relationship between 
+   * capital-gains splits. Depending on its value, this flag indicates
+   * if this split is the source of gains, if this split is a record
+   * of the gains, and if values are 'dirty' and need to be recomputed.
+   */
+  unsigned char  gains;      
+
+  /* 'gains_split' is a convenience pointer used to track down the
+   * other end of a cap-gains transaction pair.  NULL if this split
+   * doesn't involve cap gains.
+   */
+  Split *gains_split;
+
+  /* 'value' is the quantity of the transaction balancing commodity
    * (i.e. currency) involved, 'amount' is the amount of the account's
    * commodity involved. */
   gnc_numeric  value;
@@ -226,7 +250,7 @@ void  xaccFreeSplit (Split *split);    /* frees memory */
  */
 Transaction * xaccDupeTransaction (Transaction *t);
 
-/* compute the value of a list of splits in the given currency,
+/* Compute the value of a list of splits in the given currency,
  * excluding the skip_me split. */
 gnc_numeric xaccSplitsComputeValue (GList *splits, Split * skip_me,
                                     const gnc_commodity * base_currency);
@@ -239,13 +263,6 @@ gnc_numeric xaccSplitsComputeValue (GList *splits, Split * skip_me,
 void xaccTransSetVersion (Transaction*, gint32);
 gint32 xaccTransGetVersion (const Transaction*);
 
-/* The xaccTransFindCommonCurrency () method returns a gnc_commodity
- *    indicating a currency denomination that all of the splits in this
- *    transaction have in common, using the old currency/security fields
- *    of the split accounts. */
-gnc_commodity * xaccTransFindOldCommonCurrency (Transaction *trans,
-                                                QofBook *book);
-
 /* Code to register Split and Transaction types with the engine */
 gboolean xaccSplitRegister (void);
 gboolean xaccTransRegister (void);
@@ -256,5 +273,23 @@ gboolean xaccTransRegister (void);
  *    transaction.
  */
 QofBackend * xaccTransactionGetBackend (Transaction *trans);
+
+/* The xaccSplitDetermineGainStatus() routine will analyze the 
+ *   the split, and try to set the internal status flags 
+ *   appropriately for the split.  These flags indicate if the split
+ *   represents cap gains, and if the gains value/amount needs to be 
+ *   recomputed.
+ */
+void xaccSplitDetermineGainStatus (Split *split);
+
+/* ---------------------------------------------------------------- */
+/* Depricated routines */
+void         DxaccSplitSetSharePriceAndAmount (Split *split, 
+                                               double price,
+                                               double amount);
+void         DxaccSplitSetShareAmount (Split *split, double amount);
+
+/*@}*/
+
 
 #endif /* XACC_TRANSACTION_P_H */

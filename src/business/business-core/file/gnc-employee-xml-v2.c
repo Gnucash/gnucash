@@ -67,6 +67,7 @@ const gchar *employee_version_string = "2.0.0";
 #define employee_rate_string "employee:rate"
 #define employee_currency_string "employee:currency"
 #define employee_ccard_string "employee:ccard"
+#define employee_slots_string "employee:slots"
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -285,6 +286,12 @@ employee_ccard_handler (xmlNodePtr node, gpointer employee_pdata)
     return TRUE;
 }
 
+static gboolean
+employee_slots_handler (xmlNodePtr node, gpointer employee_pdata)
+{
+  return TRUE;
+}
+
 static struct dom_tree_handler employee_handlers_v2[] = {
     { employee_username_string, employee_username_handler, 1, 0 },
     { employee_guid_string, employee_guid_handler, 1, 0 },
@@ -298,6 +305,7 @@ static struct dom_tree_handler employee_handlers_v2[] = {
     { employee_currency_string, employee_currency_handler, 0, 0 }, /* XXX */
     { "employee:commodity", employee_currency_handler, 0, 0 }, /* XXX */
     { employee_ccard_string, employee_ccard_handler, 0, 0 },
+    { employee_slots_string, employee_slots_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 

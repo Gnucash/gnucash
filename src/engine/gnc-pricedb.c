@@ -31,6 +31,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-pricedb-p.h"
+#include "gnc-trace.h"
 #include "guid.h"
 #include "kvp-util.h"
 #include "qofbackend-p.h"
@@ -38,6 +39,7 @@
 #include "qofbook-p.h"
 #include "qofid-p.h"
 #include "qofobject.h"
+#include "qofqueryobject.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_PRICE;
@@ -66,6 +68,8 @@ gnc_price_create (QofBook *book)
   p->version = 0;
   p->version_check = 0;
   p->value = gnc_numeric_zero();
+  p->type = NULL;
+  p->source = NULL;
 
   p->book = book;
   p->entity_table = qof_book_get_entity_table (book);
@@ -234,6 +238,88 @@ gnc_price_commit_edit (GNCPrice *p)
     p->not_saved = TRUE;
   }
   LEAVE ("pr=%p, not-saved=%d do-free=%d", p, p->not_saved, p->do_free);
+}
+
+/* ==================================================================== */
+
+void 
+gnc_pricedb_begin_edit (GNCPriceDB *pdb)
+{
+  QofBackend *be;
+
+  if (!pdb) return;
+  pdb->editlevel++;
+  if (1 < pdb->editlevel) return;
+  ENTER ("pdb=%p\n", pdb);
+
+  if (0 >= pdb->editlevel)
+  {
+    PERR ("unbalanced call - resetting (was %d)", pdb->editlevel);
+    pdb->editlevel = 1;
+  }
+
+  /* See if there's a backend.  If there is, invoke it. */
+  be = xaccPriceDBGetBackend (pdb);
+  if (be && be->begin) 
+  {
+    (be->begin) (be, GNC_ID_PRICEDB, pdb);
+  }
+
+  LEAVE ("pdb=%p\n", pdb);
+}
+
+void 
+gnc_pricedb_commit_edit (GNCPriceDB *pdb)
+{
+  QofBackend *be;
+  if (!pdb) return;
+
+  pdb->editlevel--;
+  if (0 < pdb->editlevel) return;
+
+  ENTER ("pdb=%p\n", pdb);
+  if (0 > pdb->editlevel)
+  {
+    PERR ("unbalanced call - resetting (was %d)", pdb->editlevel);
+    pdb->editlevel = 0;
+  }
+
+  /* See if there's a backend.  If there is, invoke it. */
+  /* We may not be able to find the backend, so make not of that .. */
+  be = xaccPriceDBGetBackend (pdb);
+  if (be && be->commit) 
+  {
+    QofBackendError errcode;
+
+    /* clear errors */
+    do {
+      errcode = qof_backend_get_error (be);
+    } while (ERR_BACKEND_NO_ERR != errcode);
+
+    /* if we haven't been able to call begin edit before, call it now */
+    if (TRUE == pdb->dirty) 
+    {
+      if (be->begin)
+      {
+        (be->begin) (be, GNC_ID_PRICEDB, pdb);
+      }
+    }
+
+    (be->commit) (be, GNC_ID_PRICEDB, pdb);
+    errcode = qof_backend_get_error (be);
+    if (ERR_BACKEND_NO_ERR != errcode) 
+    {
+      /* XXX hack alert FIXME implement price rollback */
+      PERR (" backend asked engine to rollback, but this isn't"
+            " handled yet. Return code=%d", errcode);
+
+      /* push error back onto the stack */
+      qof_backend_set_error (be, errcode);
+    }
+  }
+  pdb->dirty = FALSE;
+
+  LEAVE ("pdb=%p\n", pdb);
 }
 
 /* ==================================================================== */
@@ -638,6 +724,8 @@ gnc_pricedb_create(QofBook * book)
 
   result = g_new0(GNCPriceDB, 1);
   result->book = book;
+  result->editlevel = 0;
+  result->dirty = FALSE;
   result->commodity_hash = g_hash_table_new(commodity_hash, commodity_equal);
   g_return_val_if_fail (result->commodity_hash, NULL);
   return result;
@@ -1963,22 +2051,118 @@ pricedb_mark_clean(QofBook *book)
   gnc_pricedb_mark_clean(gnc_pricedb_get_db(book));
 }
 
+/* ==================================================================== */
+/* a non-boolean foreach. Ugh */
+
+typedef struct 
+{
+  void (*func)(GNCPrice *p, gpointer user_data);
+  gpointer user_data;
+} 
+VoidGNCPriceDBForeachData;
+
+static void
+void_pricedb_foreach_pricelist(gpointer key, gpointer val, gpointer user_data)
+{
+  GList *price_list = (GList *) val;
+  GList *node = price_list;
+  VoidGNCPriceDBForeachData *foreach_data = (VoidGNCPriceDBForeachData *) user_data;
+
+  while(node) 
+  {
+    GNCPrice *p = (GNCPrice *) node->data;
+    foreach_data->func(p, foreach_data->user_data);
+    node = node->next;
+  }
+}
+
+static void
+void_pricedb_foreach_currencies_hash(gpointer key, gpointer val, gpointer user_data)
+{
+  GHashTable *currencies_hash = (GHashTable *) val;
+  g_hash_table_foreach(currencies_hash, void_pricedb_foreach_pricelist, user_data);
+}
+
+static void
+void_unstable_price_traversal(GNCPriceDB *db,
+                       void (*f)(GNCPrice *p, gpointer user_data),
+                       gpointer user_data)
+{
+  VoidGNCPriceDBForeachData foreach_data;
+  
+  if(!db || !f) return;
+  foreach_data.func = f;
+  foreach_data.user_data = user_data;
+
+  g_hash_table_foreach(db->commodity_hash,
+                       void_pricedb_foreach_currencies_hash,
+                       &foreach_data);
+}
+
+static void 
+pricedb_foreach(QofBook *book, QofEntityForeachCB cb, gpointer data)
+{
+  GNCPriceDB *db = gnc_pricedb_get_db(book);
+  void_unstable_price_traversal(db, 
+                       (void (*)(GNCPrice *, gpointer)) cb,
+                       data);
+}
+
+/* ==================================================================== */
+static const char *
+pricedb_printable(gpointer obj)
+{
+  GNCPrice *pr = obj;
+  gnc_commodity *commodity;
+  gnc_commodity *currency;
+  static char buff[2048];  /* nasty static OK for printing */
+  char *val, *da;
+
+  if(!pr) return "";
+
+  val = gnc_numeric_to_string (pr->value);
+  da = qof_print_date (pr->tmspec.tv_sec);
+  
+  commodity = gnc_price_get_commodity(pr);
+  currency = gnc_price_get_currency(pr);
+
+  snprintf (buff, 2048, "%s %s / %s on %s", val,
+        gnc_commodity_get_unique_name(commodity),
+        gnc_commodity_get_unique_name(currency),
+        da);
+  g_free (val);
+  g_free (da);
+  return buff;
+}
+
 static QofObject pricedb_object_def = 
 {
   interface_version: QOF_OBJECT_VERSION,
-  name:              GNC_ID_PRICEDB,
-  type_label:        "PriceDB",
+  name:              GNC_ID_PRICE,
+  type_label:        "Price",
   book_begin:        pricedb_book_begin,
   book_end:          pricedb_book_end,
   is_dirty:          pricedb_is_dirty,
   mark_clean:        pricedb_mark_clean,
-  foreach:           NULL,
-  printable:         NULL,
+  foreach:           pricedb_foreach,
+  printable:         pricedb_printable,
 };
 
 gboolean 
 gnc_pricedb_register (void)
 {
+  static QofQueryObject params[] = {
+    { PRICE_COMMODITY, GNC_ID_COMMODITY, (QofAccessFunc)gnc_price_get_commodity },
+    { PRICE_CURRENCY, GNC_ID_COMMODITY, (QofAccessFunc)gnc_price_get_currency },
+    { PRICE_DATE, QOF_QUERYCORE_DATE, (QofAccessFunc)gnc_price_get_time },
+    { PRICE_SOURCE, QOF_QUERYCORE_STRING, (QofAccessFunc)gnc_price_get_source },
+    { PRICE_TYPE, QOF_QUERYCORE_STRING, (QofAccessFunc)gnc_price_get_type },
+    { PRICE_VALUE, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)gnc_price_get_value },
+    { NULL },
+  };
+
+  qof_query_object_register (GNC_ID_PRICE, NULL, params);
+
   return qof_object_register (&pricedb_object_def);
 }
 

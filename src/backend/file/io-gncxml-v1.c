@@ -359,23 +359,15 @@ gncxml_setup_for_read (GNCParseStatus *global_parse_status)
 /* ================================================================== */
 
 gboolean
-qof_session_load_from_xml_file(QofSession *session)
+qof_session_load_from_xml_file(QofBook *book, const char *filename)
 {
   gboolean parse_ok;
   gpointer parse_result = NULL;
   sixtp *top_level_pr;
   GNCParseStatus global_parse_status;
-  const gchar *filename;
-  QofBook *book;
 
-  g_return_val_if_fail(session, FALSE);
-
-  book = qof_session_get_book (session);
   global_parse_status.book = book;
-
   g_return_val_if_fail(book, FALSE);
-
-  filename = qof_session_get_file_path(session);
   g_return_val_if_fail(filename, FALSE);
 
   top_level_pr = gncxml_setup_for_read (&global_parse_status);
@@ -3593,10 +3585,9 @@ price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, QofBook *book)
     if(!c) return FALSE;
     gnc_price_set_currency(p, c);
   } else if(safe_strcmp("price:time", sub_node->name) == 0) {
-    Timespec *t = dom_tree_to_timespec(sub_node);
-    if(!t) return FALSE;
-    gnc_price_set_time(p, *t);
-    g_free(t);
+    Timespec t = dom_tree_to_timespec(sub_node);
+    if(!is_valid_timespec(t)) return FALSE;
+    gnc_price_set_time(p, t);
   } else if(safe_strcmp("price:source", sub_node->name) == 0) {
     char *text = dom_tree_to_text(sub_node);
     if(!text) return FALSE;

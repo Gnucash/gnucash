@@ -93,6 +93,7 @@ const gchar *entry_version_string = "2.0.0";
 #define entry_order_string "entry:order"
 #define entry_invoice_string "entry:invoice"
 #define entry_bill_string "entry:bill"
+#define entry_slots_string "entry:slots"
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -223,7 +224,7 @@ struct entry_pdata
   Account *acc;
 };
 
-static gboolean
+static inline gboolean
 set_string(xmlNodePtr node, GncEntry* entry,
            void (*func)(GncEntry *entry, const char *txt))
 {
@@ -235,19 +236,18 @@ set_string(xmlNodePtr node, GncEntry* entry,
   return TRUE;
 }
 
-static gboolean
+static inline gboolean
 set_timespec(xmlNodePtr node, GncEntry* entry,
            void (*func)(GncEntry *entry, Timespec ts))
 {
-  Timespec *ts = dom_tree_to_timespec (node);
-  g_return_val_if_fail(ts, FALSE);
+  Timespec ts = dom_tree_to_timespec (node);
+  g_return_val_if_fail(is_valid_timespec(ts), FALSE);
     
-  func(entry, *ts);
-  g_free(ts);
+  func(entry, ts);
   return TRUE;
 }
 
-static gboolean
+static inline gboolean
 set_numeric(xmlNodePtr node, GncEntry* entry,
            void (*func)(GncEntry *entry, gnc_numeric num))
 {
@@ -259,7 +259,7 @@ set_numeric(xmlNodePtr node, GncEntry* entry,
   return TRUE;
 }
 
-static gboolean
+static inline gboolean
 set_boolean(xmlNodePtr node, GncEntry* entry,
 	    void (*func)(GncEntry *entry, gboolean val))
 {
@@ -271,7 +271,7 @@ set_boolean(xmlNodePtr node, GncEntry* entry,
     return TRUE;
 }
 
-static gboolean
+static inline gboolean
 set_account(xmlNodePtr node, struct entry_pdata *pdata,
 	    void (*func)(GncEntry *entry, Account *acc))
 {
@@ -291,7 +291,7 @@ set_account(xmlNodePtr node, struct entry_pdata *pdata,
     return TRUE;
 }
 
-static gboolean
+static inline gboolean
 set_taxtable (xmlNodePtr node, struct entry_pdata *pdata,
 	      void (*func)(GncEntry *entry, GncTaxTable *taxtable))
 {
@@ -651,6 +651,12 @@ entry_price_handler (xmlNodePtr node, gpointer entry_pdata)
     return res;
 }
 
+static gboolean
+entry_slots_handler (xmlNodePtr node, gpointer entry_pdata)
+{
+  return TRUE;
+}
+
 static struct dom_tree_handler entry_handlers_v2[] = {
     { entry_guid_string, entry_guid_handler, 1, 0 },
     { entry_date_string, entry_date_handler, 1, 0 },
@@ -686,6 +692,7 @@ static struct dom_tree_handler entry_handlers_v2[] = {
     { entry_order_string, entry_order_handler, 0, 0 },
     { entry_invoice_string, entry_invoice_handler, 0, 0 },
     { entry_bill_string, entry_bill_handler, 0, 0 },
+    { entry_slots_string, entry_slots_handler, 0, 0 },
 
     /* Old XML support */
     { "entry:acct", entry_acct_handler, 0, 0 },

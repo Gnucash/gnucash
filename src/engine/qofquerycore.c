@@ -26,6 +26,7 @@
 #include <glib.h>
 
 #include "gnc-engine-util.h"
+#include "gnc-trace.h"
 #include "qofquery.h"
 #include "qofquerycore.h"
 #include "qofquerycore-p.h"

@@ -38,10 +38,11 @@
 #include "gnc-engine-util.h"
 #include "gnc-trace.h"
 #include "guid.h"
+#include "messages.h"
 #include "qofbook.h"
 #include "qofobject.h"
 
-static short module = MOD_ENGINE; 
+static short module = MOD_COMMODITY; 
 
 /* Parts per unit is nominal, i.e. number of 'partname' units in
  * a 'unitname' unit.  fraction is transactional, i.e. how many
@@ -64,12 +65,15 @@ struct gnc_commodity_s
   char    * quote_tz;
 };
 
-struct gnc_commodity_namespace_s {
+struct gnc_commodity_namespace_s 
+{
+  char    * namespace;
   GHashTable * table;
   GList      * list;
 };
 
-struct gnc_commodity_table_s {
+struct gnc_commodity_table_s 
+{
   GHashTable * table;
   GList      * list;
   gboolean     dirty;
@@ -77,7 +81,8 @@ struct gnc_commodity_table_s {
 
 typedef struct gnc_commodity_namespace_s gnc_commodity_namespace;
 
-struct gnc_new_iso_code {
+struct gnc_new_iso_code
+{
   const char *old_code;
   const char *new_code;
 } gnc_new_iso_codes[] = {
@@ -437,6 +442,12 @@ gnc_quote_source_set_fq_installed (GList *sources_list)
  * gnc_commodity_new
  ********************************************************************/
 
+#define CACHE_INSERT(dest,src)       \
+  if(src) { dest = g_cache_insert(str_cache, (gpointer)src); }
+
+#define CACHE_REMOVE(str)     \
+  if(str) { g_cache_remove(str_cache, str); str = NULL; }
+
 static void
 reset_printname(gnc_commodity *com)
 {
@@ -461,14 +472,18 @@ gnc_commodity_new(const char * fullname,
                   const char * exchange_code, 
                   int fraction)
 {
+  GCache *str_cache = gnc_engine_get_string_cache ();
   gnc_commodity * retval = g_new0(gnc_commodity, 1);
 
-  retval->fullname  = g_strdup(fullname);
-  retval->namespace = g_strdup(namespace);
-  retval->mnemonic  = g_strdup(mnemonic);
-  retval->exchange_code = g_strdup(exchange_code);
+  CACHE_INSERT (retval->fullname, fullname);
+  CACHE_INSERT (retval->namespace, namespace);
+  CACHE_INSERT (retval->mnemonic, mnemonic);
+  CACHE_INSERT (retval->exchange_code, exchange_code);
   retval->fraction = fraction;
   retval->mark = 0;
+  retval->quote_flag = 0;
+  retval->quote_source = NULL;
+  retval->quote_tz = NULL;
 
   reset_printname(retval);
   reset_unique_name(retval);
@@ -484,26 +499,18 @@ gnc_commodity_new(const char * fullname,
 void
 gnc_commodity_destroy(gnc_commodity * cm)
 {
+  GCache *str_cache = gnc_engine_get_string_cache ();
   if(!cm) return;
 
   /* Set at creation */
-  g_free(cm->fullname);
-  cm->fullname = NULL;
-
-  g_free(cm->namespace);
-  cm->namespace = NULL;
-
-  g_free(cm->exchange_code);
-  cm->exchange_code = NULL;
-
-  g_free(cm->mnemonic);
-  cm->mnemonic = NULL;
+  CACHE_REMOVE (cm->fullname);
+  CACHE_REMOVE (cm->namespace);
+  CACHE_REMOVE (cm->exchange_code);
+  CACHE_REMOVE (cm->mnemonic);
+  CACHE_REMOVE (cm->quote_tz);
 
   /* Set through accessor functions */
   cm->quote_source = NULL;
-
-  g_free(cm->quote_tz);
-  cm->quote_tz = NULL;
 
   /* Automatically generated */
   g_free(cm->printname);
@@ -517,6 +524,41 @@ gnc_commodity_destroy(gnc_commodity * cm)
   g_free(cm);
 }
 
+void
+gnc_commodity_copy(gnc_commodity * dest, gnc_commodity *src)
+{
+  gnc_commodity_set_fullname (dest, src->fullname);
+  gnc_commodity_set_namespace (dest, src->namespace);
+  gnc_commodity_set_fraction (dest, src->fraction);
+  gnc_commodity_set_exchange_code (dest, src->exchange_code);
+  gnc_commodity_set_quote_flag (dest, src->quote_flag);
+  gnc_commodity_set_quote_source (dest, gnc_commodity_get_quote_source (src));
+  gnc_commodity_set_quote_tz (dest, src->quote_tz);
+}
+
+gnc_commodity *
+gnc_commodity_clone(gnc_commodity *src)
+{
+  GCache *str_cache = gnc_engine_get_string_cache ();
+  gnc_commodity * dest = g_new0(gnc_commodity, 1);
+
+  CACHE_INSERT (dest->fullname, src->fullname);
+  CACHE_INSERT (dest->namespace, src->namespace);
+  CACHE_INSERT (dest->mnemonic, src->mnemonic);
+  CACHE_INSERT (dest->exchange_code, src->exchange_code);
+  CACHE_INSERT (dest->quote_tz, src->quote_tz);
+
+  dest->mark = 0;
+  dest->fraction = src->fraction;
+  dest->quote_flag = src->quote_flag;
+
+  gnc_commodity_set_quote_source (dest, gnc_commodity_get_quote_source (src));
+
+  reset_printname(dest);
+  reset_unique_name(dest);
+
+  return dest;
+}
 
 /********************************************************************
  * gnc_commodity_get_mnemonic
@@ -661,11 +703,12 @@ gnc_commodity_get_quote_tz(const gnc_commodity *cm)
 void
 gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic) 
 {
+  GCache *str_cache = gnc_engine_get_string_cache ();
   if(!cm) return;
   if(cm->mnemonic == mnemonic) return;
 
-  g_free(cm->mnemonic);
-  cm->mnemonic = g_strdup(mnemonic);
+  CACHE_REMOVE (cm->mnemonic);
+  CACHE_INSERT (cm->mnemonic, mnemonic);
 
   reset_printname(cm);
   reset_unique_name(cm);
@@ -678,11 +721,12 @@ gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic)
 void
 gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace) 
 {
+  GCache *str_cache = gnc_engine_get_string_cache ();
   if(!cm) return;
   if(cm->namespace == namespace) return;
 
-  g_free(cm->namespace);
-  cm->namespace = g_strdup(namespace);
+  CACHE_REMOVE (cm->namespace);
+  CACHE_INSERT (cm->namespace, namespace);
 
   reset_printname(cm);
   reset_unique_name(cm);
@@ -695,11 +739,12 @@ gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace)
 void
 gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname) 
 {
+  GCache *str_cache = gnc_engine_get_string_cache ();
   if(!cm) return;
   if(cm->fullname == fullname) return;
 
-  g_free(cm->fullname);
-  cm->fullname = g_strdup(fullname);
+  CACHE_REMOVE (cm->fullname);
+  CACHE_INSERT (cm->fullname, fullname);
 
   reset_printname(cm);
 }
@@ -712,11 +757,12 @@ void
 gnc_commodity_set_exchange_code(gnc_commodity * cm, 
                                 const char * exchange_code) 
 {
+  GCache *str_cache = gnc_engine_get_string_cache ();
   if(!cm) return;
   if(cm->exchange_code == exchange_code) return;
 
-  g_free(cm->exchange_code);
-  cm->exchange_code = g_strdup(exchange_code);
+  CACHE_REMOVE (cm->exchange_code);
+  CACHE_INSERT (cm->exchange_code, exchange_code);
 }
 
 /********************************************************************
@@ -776,17 +822,14 @@ gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src)
 void
 gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz) 
 {
+  GCache *str_cache = gnc_engine_get_string_cache ();
   ENTER ("(cm=%p, tz=%s)", cm, tz);
 
   if(!cm) return;
 
-  if (cm->quote_tz) {
-    g_free(cm->quote_tz);
-    cm->quote_tz = NULL;
-  }
+  CACHE_REMOVE (cm->quote_tz);
+  if (tz && *tz) CACHE_INSERT (cm->quote_tz, tz);
 
-  if (tz && *tz)
-    cm->quote_tz = g_strdup(tz);
   LEAVE(" ");
 }
 
@@ -1011,7 +1054,8 @@ gnc_commodity_table_lookup_unique(const gnc_commodity_table *table,
 gnc_commodity *
 gnc_commodity_table_find_full(const gnc_commodity_table * table, 
                               const char * namespace, 
-                              const char * fullname) {  
+                              const char * fullname) 
+{  
   gnc_commodity * retval=NULL;
   GList         * all;
   GList         * iterator;
@@ -1044,46 +1088,47 @@ gnc_commodity *
 gnc_commodity_table_insert(gnc_commodity_table * table, 
                            gnc_commodity * comm) 
 {
+  GCache *str_cache;
   gnc_commodity_namespace * nsp = NULL;
   gnc_commodity *c;
 
   if (!table) return NULL;
   if (!comm) return NULL;
 
+  ENTER ("(table=%p, comm=%p) %s %s", table, comm, comm->mnemonic, comm->fullname);
   c = gnc_commodity_table_lookup (table, comm->namespace, comm->mnemonic);
 
-  if (c) {
+  if (c) 
+  {
     if (c == comm)
+    {
       return c;
-
-    gnc_commodity_set_fullname (c, gnc_commodity_get_fullname (comm));
-    gnc_commodity_set_fraction (c, gnc_commodity_get_fraction (comm));
-    gnc_commodity_set_exchange_code (c,
-                                     gnc_commodity_get_exchange_code (comm));
-    gnc_commodity_set_quote_flag (c, gnc_commodity_get_quote_flag (comm));
-    gnc_commodity_set_quote_source (c, gnc_commodity_get_quote_source (comm));
-    gnc_commodity_set_quote_tz (c, gnc_commodity_get_quote_tz (comm));
+    }
+    gnc_commodity_copy (c, comm);
     gnc_commodity_destroy (comm);
-
     return c;
   }
 
   nsp = g_hash_table_lookup(table->table, (gpointer)(comm->namespace));
+  str_cache = gnc_engine_get_string_cache ();
   
-  if(!nsp) {
+  if(!nsp) 
+  {
     nsp = g_new0(gnc_commodity_namespace, 1);
     nsp->table = g_hash_table_new(g_str_hash, g_str_equal);
+    nsp->namespace = g_cache_insert(str_cache, comm->namespace);
     g_hash_table_insert(table->table, 
-                        g_strdup(comm->namespace), 
+                        nsp->namespace, 
                         (gpointer)nsp);
     table->list = g_list_append(table->list, nsp);
   }
 
-  nsp->list = g_list_append(nsp->list, comm);
+  PINFO ("insert %p %s into nsp=%p %s", comm->mnemonic, comm->mnemonic, nsp->table, nsp->namespace);
   g_hash_table_insert(nsp->table, 
-                      (gpointer)g_strdup(comm->mnemonic),
+                      (gpointer)g_cache_insert(str_cache, comm->mnemonic),
                       (gpointer)comm);
 
+  LEAVE ("(table=%p, comm=%p)", table, comm);
   return comm;
 }
 
@@ -1110,6 +1155,7 @@ gnc_commodity_table_remove(gnc_commodity_table * table,
 
   nsp->list = g_list_remove(nsp->list, comm);
   g_hash_table_remove (nsp->table, comm->mnemonic);
+  /* XXX minor mem leak, should remove the key as well */
 }
 
 /********************************************************************
@@ -1293,15 +1339,19 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
 {
   gnc_commodity_namespace * ns = NULL; 
   
-  if(table) { 
+  if(table) 
+  { 
     ns = g_hash_table_lookup(table->table, (gpointer)namespace);
   }
   
-  if(!ns) {
+  if(!ns) 
+  {
+    GCache *str_cache = gnc_engine_get_string_cache ();
     ns = g_new0(gnc_commodity_namespace, 1);
     ns->table = g_hash_table_new(g_str_hash, g_str_equal);
+    ns->namespace = g_cache_insert(str_cache, (gpointer)namespace);
     g_hash_table_insert(table->table,
-                        (gpointer) g_strdup(namespace), 
+                        (gpointer) ns->namespace, 
                         (gpointer) ns);
     table->list = g_list_append(table->list, ns);
   }
@@ -1316,9 +1366,10 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
 static int
 ns_helper(gpointer key, gpointer value, gpointer user_data) 
 {
+  GCache *str_cache = user_data;
   gnc_commodity * c = value;
   gnc_commodity_destroy(c);
-  g_free(key);
+  g_cache_remove (str_cache, key);  /* key is commodity mnemonic */
   return TRUE;
 }
 
@@ -1326,25 +1377,22 @@ void
 gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
                                      const char * namespace) 
 {
-  gpointer orig_key;
-  gnc_commodity_namespace * value;
+  gnc_commodity_namespace * ns;
+  if (!table) return;
 
-  if(table) { 
-    if(g_hash_table_lookup_extended(table->table,
-                                    (gpointer) namespace,
-                                    &orig_key,
-                                    (gpointer)&value)) {
-      g_hash_table_remove(table->table, namespace);
-      table->list = g_list_remove(table->list, value);
+  ns = g_hash_table_lookup(table->table, namespace);
+  if (ns)
+  {
+    GCache *str_cache = gnc_engine_get_string_cache ();
+    g_hash_table_remove(table->table, namespace);
+    table->list = g_list_remove(table->list, ns);
 
-      g_list_free(value->list);
-      value->list = NULL;
-      g_hash_table_foreach_remove(value->table, ns_helper, NULL);
-      g_hash_table_destroy(value->table);
-      g_free(value);
-
-      g_free(orig_key);
-    }
+    g_list_free(ns->list);
+    ns->list = NULL;
+    g_hash_table_foreach_remove(ns->table, ns_helper, str_cache);
+    g_hash_table_destroy(ns->table);
+    g_cache_remove (str_cache, ns->namespace);
+    g_free(ns);
   }
 }
 
@@ -1405,16 +1453,17 @@ gnc_commodity_table_foreach_commodity (const gnc_commodity_table * tbl,
 static int
 ct_helper(gpointer key, gpointer value, gpointer data) 
 {
+  GCache *str_cache = gnc_engine_get_string_cache ();
   gnc_commodity_namespace * ns = value;
 
   g_list_free(ns->list);
   ns->list = NULL;
 
-  g_hash_table_foreach_remove(ns->table, ns_helper, NULL);
+  g_hash_table_foreach_remove(ns->table, ns_helper, str_cache);
   g_hash_table_destroy(ns->table);
   ns->table = NULL;
+  g_cache_remove (str_cache, ns->namespace);
   g_free(ns);
-  g_free(key);
   return TRUE;
 }
 
@@ -1422,12 +1471,17 @@ void
 gnc_commodity_table_destroy(gnc_commodity_table * t) 
 {
   if (!t) return;
-
+  ENTER ("table=%p", t);
+  
   g_list_free(t->list);
-  g_hash_table_foreach_remove(t->table, ct_helper, t);
+  g_hash_table_foreach_remove(t->table, ct_helper, NULL);
   g_hash_table_destroy(t->table);
+  t->table = NULL;
   g_free(t);
+  LEAVE ("table=%p", t);
 }
+
+/* =========================================================== */
 
 static gboolean 
 table_equal_helper (gnc_commodity *cm_1, gpointer user_data)
@@ -1465,6 +1519,23 @@ gnc_commodity_table_equal(gnc_commodity_table *t_1,
   return gnc_commodity_table_foreach_commodity (t_2, table_equal_helper, t_1);
 }
 
+/* =========================================================== */
+
+static gboolean 
+table_copy_helper (gnc_commodity *src_cm, gpointer user_data)
+{
+  gnc_commodity_table *dest = user_data;
+  gnc_commodity_table_insert (dest, gnc_commodity_clone (src_cm));
+  return TRUE;
+}
+
+void
+gnc_commodity_table_copy(gnc_commodity_table *dest,
+                          gnc_commodity_table *src)
+{
+  gnc_commodity_table_foreach_commodity (src, table_copy_helper, dest);
+}
+
 /********************************************************************
  * gnc_commodity_table_add_default_data
  ********************************************************************/
@@ -1472,7 +1543,7 @@ gnc_commodity_table_equal(gnc_commodity_table *t_1,
 gboolean
 gnc_commodity_table_add_default_data(gnc_commodity_table *table)
 {
-
+  ENTER ("table=%p", table);
   #include "iso-4217-currencies.c"
 
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_AMEX);
@@ -1480,6 +1551,7 @@ gnc_commodity_table_add_default_data(gnc_commodity_table *table)
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_NASDAQ);
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_EUREX);
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_MUTUAL);
+  LEAVE ("table=%p", table);
   return TRUE;
 }
 
@@ -1491,6 +1563,7 @@ static void
 commodity_table_book_begin (QofBook *book)
 {
   gnc_commodity_table *ct;
+  ENTER ("book=%p", book);
   
   ct = gnc_commodity_table_new ();
   if(!gnc_commodity_table_add_default_data(ct))
@@ -1498,7 +1571,7 @@ commodity_table_book_begin (QofBook *book)
     PWARN("unable to initialize book's commodity_table");
   }
   gnc_commodity_table_set_table (book, ct);
-  
+  LEAVE ("book=%p", book);
 }
 
 static void 

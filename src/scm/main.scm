@@ -355,7 +355,7 @@ string and 'directories' must be a list of strings."
      (_ "This is a development version. It may or may not work.\n")
      (_ "Report bugs and other problems to gnucash-devel@gnucash.org.\n")
      (_ "You can also lookup and file bug reports at http://bugzilla.gnome.org\n")
-     (_ "The last stable version was ") "GnuCash 1.8.4" "\n"
+     (_ "The last stable version was ") "GnuCash 1.8.7" "\n"
      (_ "The next stable version will be ") "GnuCash 2.0"
      "\n\n"))))
 
@@ -428,6 +428,7 @@ string and 'directories' must be a list of strings."
     (load-module "gnucash/import-export/binary-import" 0 #f)
     (load-module "gnucash/import-export/qif-import" 0 #f)
     (load-module "gnucash/import-export/ofx" 0 #t)
+    (load-module "gnucash/import-export/mt940" 0 #t)
     (load-module "gnucash/import-export/log-replay" 0 #t)
     (load-module "gnucash/import-export/hbci" 0 #t)
     (load-module "gnucash/report/report-system" 0 #f)
