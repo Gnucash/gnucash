@@ -3242,6 +3242,12 @@ sr_split_auto_calc (SplitRegister *reg, Split *split)
       cell = gnc_register_get_cell (reg, SHRS_CELL);
       xaccSetPriceCellValue ((PriceCell *) cell, amount);
       gnc_basic_cell_set_changed (cell, TRUE);
+
+      if (amount_changed)
+      {
+        cell = gnc_register_get_cell (reg, PRIC_CELL);
+        gnc_basic_cell_set_changed (cell, FALSE);
+      }
     }
 
   if (recalc_price)
@@ -3293,6 +3299,14 @@ sr_split_auto_calc (SplitRegister *reg, Split *split)
 
     gnc_basic_cell_set_changed (debit_cell, TRUE);
     gnc_basic_cell_set_changed (credit_cell, TRUE);
+
+    if (shares_changed)
+    {
+      BasicCell *cell;
+
+      cell = gnc_register_get_cell (reg, PRIC_CELL);
+      gnc_basic_cell_set_changed (cell, FALSE);
+    }
   }
 }
 
@@ -3654,7 +3668,6 @@ xaccSRActuallySaveChangedCells (SplitRegister *reg,
     DEBUG ("SHRS");
 
     xaccSplitSetAmount (split, amount);
-    xaccSplitSetSharePrice (split, price);
   }
 
   if (gnc_register_get_cell_changed (reg, PRIC_CELL, TRUE))
@@ -3698,16 +3711,15 @@ xaccSRActuallySaveChangedCells (SplitRegister *reg,
 
     if (other_split)
     {
-      gnc_numeric amount = xaccSplitGetAmount (split);
-      gnc_numeric price = xaccSplitGetSharePrice (split);
+      gnc_numeric value = xaccSplitGetValue (split);
 
-      amount = gnc_numeric_neg (amount);
+      value = gnc_numeric_neg (value);
 
-      xaccSplitSetSharePriceAndAmount (other_split, price, amount);
+      xaccSplitSetValue (other_split, value);
+
       xaccSplitScrub (other_split);
     }
   }
-
 }
 
 static void
