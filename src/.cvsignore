@@ -5,10 +5,6 @@ Makefile.in
 *.patch
 *.log
 *.xac.*.xac
-gnucash
-gnucash.sh
-gnucash-run-script
-gnucash-make-guids
 .deps
 .libs
 gnc-dir.h
