@@ -30,6 +30,7 @@
 #include <aqbanking/account.h>
 #include <aqbanking/jobsingletransfer.h>
 #include <aqbanking/jobsingledebitnote.h>
+#include <iconv.h>
 
 #include "dialog-utils.h"
 #include "gnc-ui.h"
@@ -506,7 +507,6 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
   return result;
 }
 
-
 /** Create a new AB_TRANSACTION, fill the values from the entry
     fields into it and return it. The caller must
     AB_TRANSACTION_free() it when finished. */
@@ -515,6 +515,15 @@ hbci_trans_fill_values(const AB_ACCOUNT *h_acc, HBCITransDialog *td)
 {
   /* Fill in the user-entered values */
   AB_TRANSACTION *trans = AB_Transaction_new();
+  gchar *tmpchar;
+
+  /* FIXME: The internal source encoding is hard-coded so far. This
+     needs to be fixed for the gnome2 version; the source encoding is
+     then probably utf-8 as well. iconv is also used in
+     gnc_AB_BANKING_interactors() in hbci-interaction.c. */
+  iconv_t gnc_iconv_handler =
+    iconv_open(gnc_hbci_AQBANKING_encoding(), gnc_hbci_book_encoding());
+  g_assert(gnc_iconv_handler != (iconv_t)(-1));
 	
   /* OpenHBCI newer than 0.9.8: use account's bankCode values
    * instead of the bank's ones since this is what some banks
@@ -533,19 +542,32 @@ hbci_trans_fill_values(const AB_ACCOUNT *h_acc, HBCITransDialog *td)
   /* printf("Got otherAccountId %s.\n",
      AB_Transaction_otherAccountId (trans)); */
   AB_Transaction_SetRemoteCountry (trans, "DE");
-  AB_Transaction_AddRemoteName
-    (trans, gtk_entry_get_text (GTK_ENTRY (td->recp_name_entry)), FALSE);
+
+  /* Convert the result of GTK_ENTRY into UTF-8 */
+  tmpchar = gnc_call_iconv(gnc_iconv_handler, 
+			   gtk_entry_get_text (GTK_ENTRY (td->recp_name_entry)));
+  AB_Transaction_AddRemoteName (trans, tmpchar, FALSE);
+  g_free (tmpchar);
 	
   /* The last argument means: If TRUE, then the string will be only be
      appended if it doesn't exist yet. */
-  AB_Transaction_AddPurpose
-    (trans, gtk_entry_get_text (GTK_ENTRY (td->purpose_entry)), FALSE);
-  AB_Transaction_AddPurpose
-    (trans, gtk_entry_get_text (GTK_ENTRY (td->purpose_cont_entry)), FALSE);
-  AB_Transaction_AddPurpose
-    (trans, gtk_entry_get_text (GTK_ENTRY (td->purpose_cont2_entry)), FALSE);
-  AB_Transaction_AddPurpose
-    (trans, gtk_entry_get_text (GTK_ENTRY (td->purpose_cont3_entry)), FALSE);
+  /* Convert the result of GTK_ENTRY into UTF-8 */
+  tmpchar = gnc_call_iconv(gnc_iconv_handler, 
+			   gtk_entry_get_text (GTK_ENTRY (td->purpose_entry)));
+  AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
+  g_free (tmpchar);
+  tmpchar = gnc_call_iconv(gnc_iconv_handler, 
+			   gtk_entry_get_text (GTK_ENTRY (td->purpose_cont_entry)));
+  AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
+  g_free (tmpchar);
+  tmpchar = gnc_call_iconv(gnc_iconv_handler, 
+			   gtk_entry_get_text (GTK_ENTRY (td->purpose_cont2_entry)));
+  AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
+  g_free (tmpchar);
+  tmpchar = gnc_call_iconv(gnc_iconv_handler, 
+			   gtk_entry_get_text (GTK_ENTRY (td->purpose_cont3_entry)));
+  AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
+  g_free (tmpchar);
 	
   /* FIXME: Replace "EUR" by account-dependent string here. */
   AB_Transaction_SetValue 
@@ -564,6 +586,7 @@ hbci_trans_fill_values(const AB_ACCOUNT *h_acc, HBCITransDialog *td)
     AB_Transaction_SetTextKey (trans, 51);
   }
 
+  iconv_close(gnc_iconv_handler);
   return trans;
 }
 

@@ -1,10 +1,17 @@
+2005-03-20  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-utils.c: Retrieve the current
+	book's character encoding which so far is identical to the
+	locale's encoding by nl_langinfo().
+
+	* src/import-export/hbci/hbci-interaction.c: Fixed ignored 'abort'
+	button.
+
 2005-03-19  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-utils.c (gnc_hbci_descr_tognc):
 	Correctly convert imported transaction description from utf-8 to
-	iso-8859-15 which currently comes closest to gnucash's internal
-	encoding. This needs to be changed again for the gnome2 port, but
-	I'll think of that early enough.
+	the local encoding.
 
 2005-03-13  Christian Stimming  <stimming@tuhh.de>
 

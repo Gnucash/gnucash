@@ -25,6 +25,7 @@
 
 #include <glib.h>
 #include <gnome.h>
+#include <iconv.h>
 
 #include <aqbanking/banking.h>
 #include <aqbanking/transaction.h>
@@ -148,5 +149,17 @@ char *gnc_hbci_memo_tognc (const AB_TRANSACTION *h_trans);
 
 /** Return a newly allocated string. */
 char *gnc_AB_VALUE_toReadableString(const AB_VALUE *v);
+
+/** Returns a newly allocated gchar, converted according to the given
+   handler */
+gchar *gnc_call_iconv(iconv_t handler, const char* input);
+
+/** Returns the encoding of the current book in the format as required
+    by iconv_open(3). */
+const char *gnc_hbci_book_encoding(void);
+
+/** Returns the encoding that is required by AqBanking in the format
+    as required by iconv_open(3). */
+const char *gnc_hbci_AQBANKING_encoding(void);
 
 #endif
