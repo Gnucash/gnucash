@@ -55,7 +55,7 @@
 #include "gnc-menu-extensions.h"
 #include "gnc-ui.h"
 #include "gnucash.h"
-#include "io-utils.h"
+#include "io-gncxml-v2.h"
 #include "mainwindow-account-tree.h"
 #include "option-util.h"
 #include "top-level.h"
@@ -394,33 +394,11 @@ gnc_main_window_file_export_cb(GtkWidget * widget, gpointer data)
     return;
   }
 
-  ok = FALSE;
+  ok = gnc_book_write_accounts_to_xml_filehandle_v2 (gnc_get_current_book (),
+                                                     file);
 
-  do
-  {
-    rc = fputs ("<?xml version=\"1.0\"?>\n", file);
-    if (rc == EOF)
-      break;
-
-    rc = fputs ("<gnc-v2>\n", file);
-    if (rc == EOF)
-      break;
-
-    write_commodities (file, gnc_get_current_book ());
-    write_accounts (file, gnc_get_current_book ());
-
-    rc = fputs ("<\\gnc-v2>\n", file);
-    if (rc == EOF)
-      break;
-
-    write_emacs_trailer (file);
-
-    rc = fclose (file);
-    if (rc != 0)
-      break;
-
-    ok = TRUE;
-  } while (FALSE);
+  if (fclose (file) != 0)
+    ok = FALSE;
 
   if (!ok)
   {

@@ -763,13 +763,37 @@ write_schedXactions( FILE *out, GNCBook *book )
     } while ( (schedXactions = schedXactions->next) );
 }
 
+static void
+write_namespace_decl (FILE *out, const char *namespace)
+{
+  g_return_if_fail (namespace);
+  fprintf(out, " xmlns:%s=\"\"", namespace);
+}
+
+static void
+write_v2_header (FILE *out)
+{
+    fprintf(out, "<?xml version=\"1.0\"?>\n");
+    fprintf(out, "<" GNC_V2_STRING);
+    /*
+    write_namespace_decl (out, "cd");
+    write_namespace_decl (out, "gnc");
+    write_namespace_decl (out, "act");
+    write_namespace_decl (out, "cmdty");
+    write_namespace_decl (out, "trn");
+    write_namespace_decl (out, "ts");
+    write_namespace_decl (out, "split");
+    write_namespace_decl (out, "sx");
+    */
+    fprintf(out, ">\n");
+}
+
 gboolean
 gnc_book_write_to_xml_filehandle_v2(GNCBook *book, FILE *out)
 {
     if (!out) return FALSE;
 
-    fprintf(out, "<?xml version=\"1.0\"?>\n");
-    fprintf(out, "<" GNC_V2_STRING ">\n");
+    write_v2_header (out);
 
     write_counts(out,
                  "commodity",
@@ -797,6 +821,30 @@ gnc_book_write_to_xml_filehandle_v2(GNCBook *book, FILE *out)
 
     fprintf(out, "</" GNC_V2_STRING ">\n\n");
     
+    return TRUE;
+}
+
+gboolean
+gnc_book_write_accounts_to_xml_filehandle_v2(GNCBook *book, FILE *out)
+{
+    if (!out) return FALSE;
+
+    write_v2_header (out);
+
+    write_counts(out,
+                 "commodity",
+                 gnc_commodity_table_get_size(
+                     gnc_book_get_commodity_table(book)),
+                 "account",
+                 xaccGroupGetNumSubAccounts(gnc_book_get_group(book)),
+                 NULL);
+
+    write_commodities(out, book);
+
+    write_accounts(out, book);
+
+    fprintf(out, "</" GNC_V2_STRING ">\n\n");
+
     return TRUE;
 }
 

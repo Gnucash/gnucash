@@ -83,9 +83,13 @@ gboolean gnc_session_load_from_xml_file_v2(
     GNCSession *session,
     void (*countcallback)(const char *type, load_counter count));
 
-/* write all account info to a file */
+/* write all book info to a file */
 gboolean gnc_book_write_to_xml_filehandle_v2(GNCBook *book, FILE *fh);
 gboolean gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename);
+
+/* write just the commodities and accounts to a file */
+gboolean gnc_book_write_accounts_to_xml_filehandle_v2(GNCBook *book,
+                                                      FILE *out);
 
 /* The is_gncxml_file() routine checks to see if the first few 
  * chars of the file look like gnc-xml data.
