@@ -1,6 +1,7 @@
 /********************************************************************
  * kvp_frame.c -- a key-value frame system for gnucash.             *
  * Copyright (C) 2000 Bill Gribble                                  *
+ * Copyright (C) 2001 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -72,18 +73,22 @@ static short module = MOD_ENGINE;
  ********************************************************************/
 
 static guint 
-kvp_hash_func(gconstpointer v) {
+kvp_hash_func(gconstpointer v) 
+{
   return g_str_hash(v);
 }
 
 static gint
-kvp_comp_func(gconstpointer v, gconstpointer v2) {
+kvp_comp_func(gconstpointer v, gconstpointer v2) 
+{
   return g_str_equal(v, v2);
 }
 
 static gboolean
-init_frame_body_if_needed(kvp_frame *f) {
-  if(!f->hash) {
+init_frame_body_if_needed(kvp_frame *f) 
+{
+  if(!f->hash) 
+  {
     f->hash = g_hash_table_new(&kvp_hash_func, 
                                &kvp_comp_func);
   }
@@ -91,7 +96,8 @@ init_frame_body_if_needed(kvp_frame *f) {
 }
 
 kvp_frame * 
-kvp_frame_new(void) {
+kvp_frame_new(void) 
+{
   kvp_frame * retval = g_new0(kvp_frame, 1);
   /* save space until we have data */
   retval->hash = NULL;
@@ -99,17 +105,19 @@ kvp_frame_new(void) {
 }
 
 static void
-kvp_frame_delete_worker(gpointer key, gpointer value, gpointer user_data) {
+kvp_frame_delete_worker(gpointer key, gpointer value, gpointer user_data) 
+{
   g_cache_remove(gnc_engine_get_string_cache(), key);
   kvp_value_delete((kvp_value *)value);  
 }
 
 void
-kvp_frame_delete(kvp_frame * frame) {
-  if (!frame)
-    return;
+kvp_frame_delete(kvp_frame * frame) 
+{
+  if (!frame) return;
 
-  if(frame->hash) {
+  if(frame->hash) 
+  {
     /* free any allocated resource for frame or its children */
     g_hash_table_foreach(frame->hash, & kvp_frame_delete_worker, 
                          (gpointer)frame);
@@ -130,7 +138,8 @@ kvp_frame_is_empty(kvp_frame * frame)
 }
 
 static void
-kvp_frame_copy_worker(gpointer key, gpointer value, gpointer user_data) {
+kvp_frame_copy_worker(gpointer key, gpointer value, gpointer user_data) 
+{
   kvp_frame * dest = (kvp_frame *)user_data;
   g_hash_table_freeze(dest->hash);
   g_hash_table_insert(dest->hash,
@@ -140,13 +149,14 @@ kvp_frame_copy_worker(gpointer key, gpointer value, gpointer user_data) {
 }
 
 kvp_frame * 
-kvp_frame_copy(const kvp_frame * frame) {
+kvp_frame_copy(const kvp_frame * frame) 
+{
   kvp_frame * retval = kvp_frame_new();
 
-  if (!frame)
-    return retval;
+  if (!frame) return retval;
 
-  if(frame->hash) {
+  if(frame->hash) 
+  {
     if(!init_frame_body_if_needed(retval)) return(NULL);
     g_hash_table_foreach(frame->hash,
                          & kvp_frame_copy_worker, 
@@ -171,13 +181,15 @@ kvp_frame_set_slot_destructively(kvp_frame * frame, const char * slot,
 
   key_exists = g_hash_table_lookup_extended(frame->hash, slot,
                                             & orig_key, & orig_value);
-  if(key_exists) {
+  if(key_exists) 
+  {
     g_hash_table_remove(frame->hash, slot);
     g_cache_remove(gnc_engine_get_string_cache(), orig_key);
     kvp_value_delete(orig_value);
   }
 
-  if(new_value) {
+  if(new_value) 
+  {
     g_hash_table_insert(frame->hash,
                         g_cache_insert(gnc_engine_get_string_cache(),
                                        (gpointer) slot),
@@ -189,13 +201,11 @@ kvp_frame_set_slot_destructively(kvp_frame * frame, const char * slot,
 
 void
 kvp_frame_set_slot(kvp_frame * frame, const char * slot, 
-                   const kvp_value * value) {
-  /* FIXME: no way to indicate errors... */
-
+                   const kvp_value * value) 
+{
   kvp_value *new_value = NULL;
 
-  if (!frame)
-    return;
+  if (!frame) return;
 
   g_return_if_fail (slot && *slot != '\0');
 
@@ -205,11 +215,9 @@ kvp_frame_set_slot(kvp_frame * frame, const char * slot,
 
 void
 kvp_frame_set_slot_nc(kvp_frame * frame, const char * slot, 
-                      kvp_value * value) {
-  /* FIXME: no way to indicate errors... */
-
-  if (!frame)
-    return;
+                      kvp_value * value) 
+{
+  if (!frame) return;
 
   g_return_if_fail (slot && *slot != '\0');
 
@@ -217,9 +225,9 @@ kvp_frame_set_slot_nc(kvp_frame * frame, const char * slot,
 }
 
 kvp_value * 
-kvp_frame_get_slot(kvp_frame * frame, const char * slot) {
-  if (!frame)
-    return NULL;
+kvp_frame_get_slot(kvp_frame * frame, const char * slot) 
+{
+  if (!frame) return NULL;
   if(!frame->hash) return(NULL);
   return (kvp_value *)g_hash_table_lookup(frame->hash, slot);
 }
@@ -229,12 +237,12 @@ kvp_frame_get_slot(kvp_frame * frame, const char * slot) {
 void
 kvp_frame_set_slot_path (kvp_frame *frame,
                          const kvp_value *new_value,
-                         const char *first_key, ...) {
+                         const char *first_key, ...) 
+{
   va_list ap;
   const char *key;
 
-  if (!frame)
-    return;
+  if (!frame) return;
 
   g_return_if_fail (first_key && *first_key != '\0');
 
@@ -242,12 +250,14 @@ kvp_frame_set_slot_path (kvp_frame *frame,
 
   key = first_key;
 
-  while (TRUE) {
+  while (TRUE) 
+  {
     kvp_value *value;
     const char *next_key;
 
     next_key = va_arg (ap, const char *);
-    if (!next_key) {
+    if (!next_key) 
+    {
       kvp_frame_set_slot (frame, key, new_value);
       break;
     }
@@ -262,13 +272,11 @@ kvp_frame_set_slot_path (kvp_frame *frame,
       kvp_frame_set_slot_nc (frame, key, frame_value);
 
       value = kvp_frame_get_slot (frame, key);
-      if (!value)
-        break;
+      if (!value) break;
     }
 
     frame = kvp_value_get_frame (value);
-    if (!frame)
-      break;
+    if (!frame) break;
 
     key = next_key;
   }
@@ -279,11 +287,12 @@ kvp_frame_set_slot_path (kvp_frame *frame,
 void
 kvp_frame_set_slot_path_gslist (kvp_frame *frame,
                                 const kvp_value *new_value,
-                                GSList *key_path) {
-  if (!frame || !key_path)
-    return;
+                                GSList *key_path) 
+{
+  if (!frame || !key_path) return;
 
-  while (TRUE) {
+  while (TRUE) 
+  {
     const char *key = key_path->data;
     kvp_value *value;
 
@@ -293,13 +302,15 @@ kvp_frame_set_slot_path_gslist (kvp_frame *frame,
     g_return_if_fail (*key != '\0');
 
     key_path = key_path->next;
-    if (!key_path) {
+    if (!key_path) 
+    {
       kvp_frame_set_slot (frame, key, new_value);
       return;
     }
 
     value = kvp_frame_get_slot (frame, key);
-    if (!value) {
+    if (!value) 
+    {
       kvp_frame *new_frame = kvp_frame_new ();
       kvp_value *frame_value = kvp_value_new_frame (new_frame);
 
@@ -317,171 +328,133 @@ kvp_frame_set_slot_path_gslist (kvp_frame *frame,
 }
 
 /* ============================================================ */
+/* 
+ * NOTE: This patch undoes a previous (brain-damaged) patch.
+ *    Please don't un-un-do it.
+ *    The following three routines were re-written to remove a 
+ *    memory leak.  The second and third routines were also 
+ *    re-written to avoid an avalanche of mallocs needed to 
+ *    shoehorn them into  kvp_frame_get_frame_gslist() as an 
+ *    intermediate step.  The result is a simpler implementation,
+ *    bosted performance, less memory fragmentation, and the code
+ *    is easier to understand.
+ */
 
+/* get the named frame, or create it if it doesn't exist.
+ * gcc -O3 should inline it.  It performs no error checks,
+ * the caller is responsible of passing good keys and frames.
+ */
+static inline kvp_frame *
+get_or_make (kvp_frame *fr, const char * key)
+{
+    kvp_frame *next_frame;
+    kvp_value *value;
+
+    value = kvp_frame_get_slot (fr, key);
+    if (value) 
+    {
+      next_frame = kvp_value_get_frame (value);
+    }
+    else
+    {
+      next_frame = kvp_frame_new ();
+      kvp_frame_set_slot_nc (fr, key, 
+                   kvp_value_new_frame_nc (next_frame));
+    }
+    return next_frame;
+}
 
 kvp_frame *
 kvp_frame_get_frame_gslist (kvp_frame *frame, GSList *key_path) 
 {
-  if (!frame || !key_path)
-    return frame;
+  if (!frame) return frame;
 
-  while (TRUE) {
+  while (key_path) 
+  {
     const char *key = key_path->data;
-    kvp_value *value;
 
-    if (!key)
-      return frame;  /* an unusual but valid exit for this routine. */
+    if (!key) return frame;  /* an unusual but valid exit for this routine. */
 
-    /* get the named frame, or create it if it doesn't exist */
-    value = kvp_frame_get_slot (frame, key);
-    if (!value) {
-      kvp_frame *new_frame = kvp_frame_new ();
-      kvp_value *frame_value = kvp_value_new_frame (new_frame);
-
-      kvp_frame_set_slot_nc (frame, key, frame_value);
-
-      value = kvp_frame_get_slot (frame, key);
-      if (!value)
-        return frame; /* this should never happen */
-    }
-
-    frame = kvp_value_get_frame (value);
-    if (!frame)
-      return NULL;  /* this should never happen */
+    frame = get_or_make (frame, key);
+    if (!frame) return frame;  /* this should never happen */
 
     key_path = key_path->next;
-    if (!key_path) {
-      return frame;  /* this is the normal exit for this func */
-    }
   }
+  return frame;  /* this is the normal exit for this func */
 }
 
-static GSList*
-charstar_va_list_to_gslist(va_list lst)
-{
-    const char *val;
-    GSList *ret = NULL;
-
-    while(TRUE)
-    {
-        val = va_arg(lst, const char*);
-
-        if(!val)
-        {
-            break;
-        }
-
-        ret = g_slist_append(ret, (gpointer)val);
-    }
-
-    return ret;
-}
 
 kvp_frame *
-kvp_frame_get_frame (kvp_frame *frame,  ...) 
+kvp_frame_get_frame (kvp_frame *frame, const char *key,  ...) 
 {
   va_list ap;
-  GSList *lst;
-  kvp_frame *ret;
+  if (!frame || !key) return frame;
 
-  if (!frame)
-    return NULL;
+  va_start (ap, key);
 
-  va_start (ap, frame);
-
-  lst = charstar_va_list_to_gslist(ap);
-  
-  ret = kvp_frame_get_frame_gslist(frame, lst);
+  while (key) 
+  {
+    frame = get_or_make (frame, key);
+    if (!frame) break;     /* error, should never occur */
+    key = va_arg (ap, const char *);
+  }
 
   va_end (ap);
-
-  g_slist_free(lst);
-
-  return ret;
+  return frame;
 }
 
-static GSList*
-kvp_frame_parse_slash_path(const char *key_path)
+
+kvp_frame *
+kvp_frame_get_frame_slash (kvp_frame *frame, const char *key_path) 
 {
   char *root, *key, *next;
-  GSList *ret;
-
-  ret = NULL;
+  if (!frame || !key_path) return frame;
 
   root = g_strdup (key_path);
   key = root;
   key --;
 
-  while (key) {
+  while (key) 
+  {
     key ++;
     while ('/' == *key) { key++; }
-    if ('\0' == *key) break;    /* trailing slash */   
+    if (0x0 == *key) break;    /* trailing slash */
     next = strchr (key, '/');
-    if (next) *next = '\0';
+    if (next) *next = 0x0;
 
-    ret = g_slist_append(ret, g_strdup(key));
-
+    frame = get_or_make (frame, key);
+    if (!frame) break;  /* error - should never happen */
+    
     key = next;
   }
-
   g_free(root);
-  return ret;
-}
-
-static void
-kvp_frame_sp_free_string(gpointer data, gpointer ignored)
-{
-    g_free(data);
-}
-
-static void
-kvp_frame_delete_slash_path_gslist(GSList *lst)
-{
-    g_slist_foreach(lst, kvp_frame_sp_free_string, NULL);
-    g_slist_free(lst);
-}
-
-kvp_frame *
-kvp_frame_get_frame_slash (kvp_frame *frame, const char *key_path) 
-{
-  GSList *lst;
-  kvp_frame *ret;
-  
-  if (!frame || !key_path)
-    return frame;
-
-  lst = kvp_frame_parse_slash_path(key_path);
-  ret = kvp_frame_get_frame_gslist(frame, lst);
-  kvp_frame_delete_slash_path_gslist(lst);
-  
-  return ret;
+  return frame;
 }
 
 /* ============================================================ */
 
 kvp_value *
 kvp_frame_get_slot_path (kvp_frame *frame,
-                         const char *first_key, ...) {
+                         const char *first_key, ...) 
+{
   va_list ap;
   kvp_value *value;
   const char *key;
 
-  if (!frame || !first_key)
-    return NULL;
+  if (!frame || !first_key) return NULL;
 
   va_start (ap, first_key);
 
   key = first_key;
   value = NULL;
 
-  while (TRUE) {
+  while (TRUE) 
+  {
     value = kvp_frame_get_slot (frame, key);
-    if (!value)
-      break;
+    if (!value) break;
 
     key = va_arg (ap, const char *);
-    if (!key)
-      break;
+    if (!key) break;
 
     frame = kvp_value_get_frame (value);
     if (!frame)
@@ -498,28 +471,25 @@ kvp_frame_get_slot_path (kvp_frame *frame,
 
 kvp_value *
 kvp_frame_get_slot_path_gslist (kvp_frame *frame,
-                                GSList *key_path) {
-  if (!frame || !key_path)
-    return NULL;
+                                GSList *key_path) 
+{
+  if (!frame || !key_path) return NULL;
 
-  while (TRUE) {
+  while (TRUE) 
+  {
     const char *key = key_path->data;
     kvp_value *value;
 
-    if (!key)
-      return NULL;
+    if (!key) return NULL;
 
     value = kvp_frame_get_slot (frame, key);
-    if (!value)
-      return NULL;
+    if (!value) return NULL;
 
     key_path = key_path->next;
-    if (!key_path)
-      return value;
+    if (!key_path) return value;
 
     frame = kvp_value_get_frame (value);
-    if (!frame)
-      return NULL;
+    if (!frame) return NULL;
   }
 }
 
@@ -528,14 +498,17 @@ kvp_frame_get_slot_path_gslist (kvp_frame *frame,
  ********************************************************************/
 
 static void
-kvp_glist_delete_worker(gpointer datum, gpointer user_data) {
+kvp_glist_delete_worker(gpointer datum, gpointer user_data) 
+{
   kvp_value * val = (kvp_value *)datum;
   kvp_value_delete(val);
 }
 
 void
-kvp_glist_delete(GList * list) {
-  if(list) {
+kvp_glist_delete(GList * list) 
+{
+  if(list) 
+  {
     /* delete the data in the list */
     g_list_foreach(list, & kvp_glist_delete_worker, NULL);
     
@@ -545,7 +518,8 @@ kvp_glist_delete(GList * list) {
 }
 
 GList *
-kvp_glist_copy(const GList * list) {
+kvp_glist_copy(const GList * list) 
+{
   GList * retval = NULL;
   GList * lptr;
 
@@ -564,7 +538,8 @@ kvp_glist_copy(const GList * list) {
 }
 
 gint
-kvp_glist_compare(const GList * list1, const GList * list2) {
+kvp_glist_compare(const GList * list1, const GList * list2) 
+{
   const GList *lp1;
   const GList *lp2;
 
@@ -575,7 +550,8 @@ kvp_glist_compare(const GList * list1, const GList * list2) {
 
   lp1 = list1;
   lp2 = list2;
-  while(lp1 && lp2) {
+  while(lp1 && lp2) 
+  {
     kvp_value *v1 = (kvp_value *) lp1->data;
     kvp_value *v2 = (kvp_value *) lp2->data;
     gint vcmp = kvp_value_compare(v1, v2);
@@ -681,6 +657,14 @@ kvp_value_new_frame(const kvp_frame * value) {
   kvp_value * retval  = g_new0(kvp_value, 1);
   retval->type        = KVP_TYPE_FRAME;
   retval->value.frame = kvp_frame_copy(value);
+  return retval;  
+}
+
+kvp_value *
+kvp_value_new_frame_nc(kvp_frame * value) {
+  kvp_value * retval  = g_new0(kvp_value, 1);
+  retval->type        = KVP_TYPE_FRAME;
+  retval->value.frame = value;
   return retval;  
 }
 
@@ -1156,3 +1140,4 @@ kvp_frame_get_hash(const kvp_frame *frame)
     g_return_val_if_fail (frame != NULL, NULL);
     return frame->hash;
 }
+/* ========================== END OF FILE ======================= */

@@ -110,7 +110,7 @@ void          kvp_frame_set_slot_path_gslist (kvp_frame *frame,
  *
  * 
  */
-kvp_frame    * kvp_frame_get_frame (kvp_frame *frame, ...);
+kvp_frame    * kvp_frame_get_frame (kvp_frame *frame, const char *,...);
 
 kvp_frame    * kvp_frame_get_frame_gslist (kvp_frame *frame,
                                            GSList *key_path);
@@ -118,7 +118,7 @@ kvp_frame    * kvp_frame_get_frame_gslist (kvp_frame *frame,
 kvp_frame    * kvp_frame_get_frame_slash (kvp_frame *frame,
                                           const char *path);
 
-/* The following routines return the value att the end of the
+/* The following routines return the value at the end of the
  * path, or NULL if any portion of the path doesn't exist.
  */
 kvp_value   * kvp_frame_get_slot_path (kvp_frame *frame,
@@ -140,14 +140,21 @@ gint          kvp_value_compare(const kvp_value *va, const kvp_value *vb);
 /* list convenience funcs. */
 gint        kvp_glist_compare(const GList * list1, const GList * list2);
 
+/* kvp_glist_copy() performs a deep copy: same as mapping 
+ *     kvp_value_copy() over the elements and then copying the spine. 
+ */
 GList     * kvp_glist_copy(const GList * list);
-            /* deep copy: same as mapping kvp_value_copy over the
-               elements and then copying the spine. */
-void        kvp_glist_delete(GList * list);
-            /* deep delete: same as mapping kvp_value_delete over the
-               elements and then deleting the GList. */
 
-/* value constructors (copying for pointer args) */
+/* kvp_glist_delete() performs a deep delete: same as mapping 
+ *    kvp_value_delete() over the elements and then deleting the GList. 
+ */
+void        kvp_glist_delete(GList * list);
+
+/* The following routines are constructors for kvp_value.
+ *    Those with pointer arguments copy in the value.
+ *    The *_nc() versions do *not* copy in thier values, 
+ *    but use them directly.
+ */
 kvp_value   * kvp_value_new_gint64(gint64 value);
 kvp_value   * kvp_value_new_double(double value);
 kvp_value   * kvp_value_new_gnc_numeric(gnc_numeric value);
@@ -162,6 +169,7 @@ kvp_value   * kvp_value_new_frame(const kvp_frame * value);
    values *must* have been allocated via glib allocators! (gnew, etc.) */
 kvp_value   * kvp_value_new_binary_nc(void * data, guint64 datasize);
 kvp_value   * kvp_value_new_glist_nc(GList *lst);
+kvp_value   * kvp_value_new_frame_nc(kvp_frame * value);
 
 /* value accessors (NON-copying for frames/lists/guids/binary) */
 kvp_value_t kvp_value_get_type(const kvp_value * value);
