@@ -7,7 +7,7 @@
 
 (define-module (gnucash report utility-reports))
 
-(use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash report hello-world))
 (use-modules (gnucash report iframe-url))
 (use-modules (gnucash report view-column))
