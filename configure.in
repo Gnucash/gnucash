@@ -824,9 +824,9 @@ chmod u+x src/bin/overrides/gnucash-make-guids
 
 AUTOCONF_VERSION=`autoconf --version`
 autoconf_major_version=`echo ${AUTOCONF_VERSION} | \
-	sed 's/^.*Autoconf.* \([[0-9]]*\)\.\([[0-9]]*\).*$/\1/'`
+	sed 's/^.*Autoconf.* \([0-9]*\)\.\([0-9]*\).*$/\1/'`
 autoconf_minor_version=`echo ${AUTOCONF_VERSION} | \
-	sed 's/^.*Autoconf.* \([[0-9]]*\)\.\([[0-9]]*\).*$/\2/'`
+	sed 's/^.*Autoconf.* \([0-9]*\)\.\([0-9]*\).*$/\2/'`
 if test "$autoconf_major_version" -gt 2   -o \
     \( "$autoconf_major_version" -eq 2   -a \
       "$autoconf_minor_version" -gt 52 \)  ; then
