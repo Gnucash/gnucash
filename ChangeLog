@@ -1,3 +1,9 @@
+2002-07-01  Derek Atkins  <derek@ihtfp.com>
+	* Convert all (well, most all) HTML URL-generators to use
+	gnc_build_url() (or gnc:html-build-url in scheme) instead of
+	assuming the HTML prototype string.  Unfortunately the
+	help-window-index.scm cannot be fixed.
+
 2002-07-01  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome-utils/gnc-dense-cal.c (gnc_dense_cal_mark_remove):

@@ -26,30 +26,27 @@
       (cons #f (gnc:html-make-empty-cells (- n 1)))
       '()))
 
+(define (register-guid guid)
+  (gnc:html-build-url gnc:url-type-register (string-append "guid=" guid) #f))
+
 (define (gnc:account-anchor-text acct)
-  (string-append
-   "gnc-register:guid=" 
-   (gnc:account-get-guid acct)))
+  (register-guid (gnc:account-get-guid acct)))
 
 (define (gnc:split-anchor-text split)
-  (string-append
-   "gnc-register:guid=" 
-   (gnc:split-get-guid split)))
+  (register-guid (gnc:split-get-guid split)))
 
 (define (gnc:transaction-anchor-text trans)
-  (string-append
-   "gnc-register:guid=" 
-   (gnc:transaction-get-guid trans)))
+  (register-guid (gnc:transaction-get-guid trans)))
 
 (define (gnc:report-anchor-text report-id)
-  (string-append
-   "gnc-report:id="
-   (number->string report-id)))
+  (gnc:html-build-url gnc:url-type-report
+		      (string-append "id=" (number->string report-id))
+		      #f))
 
 (define (gnc:price-anchor-text price)
-  (string-append
-   "gnc-price:guid=" 
-   (gnc:price-get-guid price)))
+  (gnc:html-build-url gnc:url-type-price
+		      (string-append "guid=" (gnc:price-get-guid price))
+		      #f))
 
 ;; Make a new report and return the anchor to it. The new report of
 ;; type 'reportname' will have the option values copied from
@@ -722,7 +719,10 @@
 	 p 
 	 (gnc:html-markup-p
 	  (gnc:html-markup-anchor
-	   (sprintf #f "gnc-options:report-id=%a" report-id)
+	   (gnc:html-build-url gnc:url-type-options
+			       (string-append "report-id="
+					      (sprintf #f "%a" report-id))
+			       #f)
 	   (_ "Edit report options")))))
     p))
 
@@ -741,6 +741,9 @@
 	 p 
 	 (gnc:html-markup-p
 	  (gnc:html-markup-anchor
-	   (sprintf #f "gnc-options:report-id=%a" report-id)
+	   (gnc:html-build-url gnc:url-type-options
+			       (string-append "report-id"
+					      (sprintf #f "%a" report-id))
+			       #f)
 	   (_ "Edit report options")))))
     p))

@@ -228,7 +228,9 @@ gnc_report_window_create_child(const gchar * configstring) {
 
 void
 gnc_main_window_open_report(int report_id, gint toplevel) {
-  char * child_name = g_strdup_printf("gnc-report:id=%d", report_id);  
+  char * id_name = g_strdup_printf("id=%d", report_id);  
+  char * child_name = gnc_build_url (URL_TYPE_REPORT, id_name, NULL);
+  g_free (id_name);
   gnc_main_window_open_report_url(child_name, toplevel);
 }
 

@@ -34,6 +34,7 @@
 (require 'printf)
 
 (gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/gnome-utils" 0) ;for gnc:html-build-url
 
 (define (make-options)
   (let* ((options (gnc:new-options))
@@ -153,11 +154,19 @@
 	  report-table 
 	  (list (gnc:make-html-text 
 		 (gnc:html-markup-anchor
-		  (sprintf #f "gnc-options:report-id=%a" (car report-info))
+		  (gnc:html-build-url 
+		   gnc:url-type-options
+		   (string-append "report-id=" 
+				  (sprintf #f "%a" (car report-info)))
+		   #f)
 		  (_ "Edit Options"))
 		 "&nbsp;"
 		 (gnc:html-markup-anchor
-		  (sprintf #f "gnc-report:id=%a" (car report-info))
+		  (gnc:html-build-url
+		   gnc:url-type-report
+		   (string-append "id=" 
+				  (sprintf #f "%a" (car report-info)))
+		   #f)
 		  (_ "Single Report")))))
 
 	 ;; add the report-table to the toplevel-cell

@@ -21,6 +21,7 @@
 
 (gnc:module-load "gnucash/engine" 0)
 (gnc:module-load "gnucash/app-utils" 0)
+(gnc:module-load "gnucash/gnome-utils" 0) ; for the html routines
 
 ;; commodity-utilities.scm
 (export gnc:commodity-is-currency?)

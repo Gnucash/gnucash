@@ -226,6 +226,7 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data)
   GNCMDIChildInfo   * mc = g_new0(GNCMDIChildInfo, 1);
   GNCAcctTreeWin     * win = gnc_acct_tree_window_new(child->name);
   GtkWidget          * popup;
+  char		     * name_id;
   char               * name;
 
   mc->contents     = gnc_acct_tree_window_get_widget(win);
@@ -242,8 +243,10 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data)
   gtk_object_set_user_data(GTK_OBJECT(child), mc);
 
   /* set the child name that will get used to save app state */
-  name = g_strdup_printf("gnc-acct-tree:id=%d", win->options_id);
+  name_id = g_strdup_printf("id=%d", win->options_id);
+  name = gnc_build_url (URL_TYPE_ACCTTREE, name_id, NULL);
   gnome_mdi_child_set_name(mc->child, name);
+  g_free (name_id);
   g_free (name);
 
   gtk_signal_connect(GTK_OBJECT(child), "destroy", 

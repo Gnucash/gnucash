@@ -106,8 +106,9 @@ the account instead of opening a register.") #f))
    (gnc:generate-restore-forms optobj "options")
    (simple-format
     #f "  (hash-set! gnc:*acct-tree-options* ~A options)\n" id)
-   (simple-format
-    #f "  \"gnc-acct-tree:id=~S\")\n\n" id)))
+   "  \""
+   (gnc:html-build-url gnc:url-type-accttree (sprintf #f "%a" id) #f)
+   "\")\n\n"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

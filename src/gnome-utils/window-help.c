@@ -186,7 +186,7 @@ gnc_help_show_topic (gnc_help_window *help, const char * location)
     {
       char *help_loc;
 
-      help_loc = g_strconcat ("gnc-help:", location, NULL);
+      help_loc = gnc_build_url (URL_TYPE_HELP, location, NULL);
       if (safe_strcmp (help_loc, node_loc) != 0)
         node = NULL;
       g_free (help_loc);
@@ -200,7 +200,7 @@ gnc_help_show_topic (gnc_help_window *help, const char * location)
 
   if (!node)
   {
-    char *help_loc = g_strconcat ("gnc-help:", location, NULL);
+    char *help_loc = gnc_build_url (URL_TYPE_HELP, location, NULL);
     node = gtk_ctree_find_by_row_data_custom (ctree, NULL, help_loc,
                                               compare_locations);
     g_free (help_loc);
