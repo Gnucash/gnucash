@@ -10,6 +10,8 @@ developers who want to hack this code.
 
 4) run the script gnc-init.sh
    This script will automatically create the needed tables
+5) type 'make' to build the demo client
+6) type 'demo' to run the demo client
 
 
 
