@@ -34,7 +34,7 @@
 
 /** PROTOTYPES ******************************************************/
 void refreshMainWindow( void );
-void main_window_init( );
+void main_window_init(AccountGroup *);
 void xaccMainWindowAddAccount ( GtkWidget * );
 
 
@@ -78,3 +78,13 @@ enum {
 #define exit    4
 
 #endif
+
+/*
+  Local Variables:
+  tab-width: 2
+  indent-tabs-mode: nil
+  mode: c-mode
+  c-indentation-style: gnu
+  eval: (c-set-offset 'block-open '-)
+  End:
+*/

@@ -76,8 +76,7 @@ void file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
     topgroup->new = TRUE;
   } 
 
-  main_window_init ();
-  
+  main_window_init(topgroup);
 }
 
 void destroy (GtkWidget *widget, gpointer *data)
@@ -85,7 +84,7 @@ void destroy (GtkWidget *widget, gpointer *data)
   gtk_main_quit ();
 }
 
-void file_cmd_open ()
+void file_cmd_open (GtkWidget *widget, gpointer data)
 {
   g_print ( "Menu Command: file open\n" );
 }
@@ -107,6 +106,16 @@ main( int argc, char *argv[] )
 {   
   gtk_init (&argc, &argv);
  
+  {
+    /* Use a nicer font IMO, if available */
+    char font[] = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*";
+    GtkStyle *st = gtk_widget_get_default_style();
+    GdkFont *f = gdk_font_load(font);
+    if(st && f) {
+      st->font = f;
+    }
+  }
+
   filebox = gtk_file_selection_new ( "Open..." );
   
   /* read in the filename (should be the first arg after all
@@ -145,7 +154,7 @@ main( int argc, char *argv[] )
       }
     }
     /* Create main window */
-    main_window_init();
+    main_window_init(topgroup);
   }
   else
   {
@@ -156,27 +165,36 @@ main( int argc, char *argv[] )
   /* Check to see if this is a valid datafile */
   if ( datafile != NULL )
     topgroup = xaccReadAccountGroup (datafile);   
-
-
+  
+  
   /* Callbacks for File Box and Stuff */
-
+  
   gtk_signal_connect (GTK_OBJECT (filebox), "delete_event",
-                     (GtkSignalFunc) gtk_widget_destroy, 
-                     GTK_OBJECT(filebox));
- 
+                      (GtkSignalFunc) gtk_widget_destroy, 
+                      GTK_OBJECT(filebox));
+  
   /* Connect the ok_button to file_ok_sel function */
   gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (filebox)->ok_button),
-                     "clicked", (GtkSignalFunc) file_ok_sel, filebox );
-         
+                      "clicked", (GtkSignalFunc) file_ok_sel, filebox );
+  
   /* Connect the cancel_button to also kill the app */
   gtk_signal_connect_object ( GTK_OBJECT (GTK_FILE_SELECTION (filebox)->cancel_button),
- 			     "clicked", (GtkSignalFunc) gtk_exit, NULL );
- 		  
-
-
+                              "clicked", (GtkSignalFunc) gtk_exit, NULL );
+  
+  
+  
   /* Enter event loop */
   gtk_main();
 
   return 0;
 }
 
+/*
+  Local Variables:
+  tab-width: 2
+  indent-tabs-mode: nil
+  mode: c-mode
+  c-indentation-style: gnu
+  eval: (c-set-offset 'block-open '-)
+  End:
+*/

@@ -1,156 +1,151 @@
-// WaterMark/GnoMoney
-// mainMenu.c
-// from Gtk tutorial
+/* MenuBar.c -- GTK menu functions for xacc (X-Accountant) Copyright
+   (C) 1998 Jeremy Collins <linux@cyberramp.net>
+   (C) 1998 Rob Browning <rlb@cs.utexas.edu>
+                                                                   
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License as
+   published by the Free Software Foundation; either version 2 of the
+   License, or (at your option) any later version.
+                                                                   
+   This program is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+                                                                   
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+                                                                   
+   Author: Jeremy Collins
+   Internet: linux@cyberramp.net
+*/
 
 #include <gtk/gtk.h>
 #include <strings.h>
+#include "MenuBar.h"
 
-#include "main.h"
-
-static void menus_remove_accel(GtkWidget * widget, gchar * signal_name, gchar *
- path);
-static gint menus_install_accel(GtkWidget * widget, gchar * signal_name, gchar
-key, gchar modifiers, gchar * path);
-void menus_init(void);
-void menus_create(GtkMenuEntry * entries, int nmenu_entries);
-
-
-/* this is the GtkMenuEntry structure used to create new menus.  The
- * first member is the menu definition string.  The second, the
- * default accelerator key used to access this menu function with
- * the keyboard.  The third is the callback function to call when
- * this menu item is selected (by the accelerator key, or with the
- * mouse.) The last member is the data to pass to your callback function.
- */
-
-static GtkMenuEntry menu_items[] =
-{
-        {"<Main>/File/New", "<control>N", NULL, NULL},
-        {"<Main>/File/Open", "<control>O", file_cmd_open, NULL},
-        {"<Main>/File/Save", "<control>S", NULL, NULL},
-        {"<Main>/File/Save as", NULL, NULL, NULL},
-        {"<Main>/File/<separator>", NULL, NULL, NULL},
-        {"<Main>/File/Quit", "<control>Q", gtk_main_quit, "OK, I'll quit"},
-        {"<Main>/Account/General..", "<control>A", NULL, NULL},
-	{"<Main>/Help/About..", NULL, NULL, NULL}
-};
-
-/* calculate the number of menu_item's */
-static int nmenu_items = sizeof(menu_items) / sizeof(menu_items[0]);
-
-static int initialize = TRUE;
-static GtkMenuFactory *factory = NULL;
-static GtkMenuFactory *subfactory[1];
+#if 0
 static GHashTable *entry_ht = NULL;
 
-void get_main_menu(GtkWidget ** menubar, GtkAcceleratorTable ** table)
+static gint
+menus_install_accel(GtkWidget * widget, gchar * signal_name, gchar
+                    key, gchar modifiers, gchar * path)
 {
-    if (initialize)
-            menus_init();
-
-    if (menubar)
-            *menubar = subfactory[0]->widget;
-    if (table)
-            *table = subfactory[0]->table;
+  char accel[64];
+  char *t1, t2[2];
+  
+  accel[0] = '\0';
+  if (modifiers & GDK_CONTROL_MASK) strcat(accel, "<control>");
+  if (modifiers & GDK_SHIFT_MASK) strcat(accel, "<shift>");
+  if (modifiers & GDK_MOD1_MASK) strcat(accel, "<alt>");
+  
+  t2[0] = key;
+  t2[1] = '\0';
+  strcat(accel, t2);
+  
+  if (entry_ht) {
+    t1 = g_hash_table_lookup(entry_ht, path);
+    g_free(t1);
+  } else {
+    entry_ht = g_hash_table_new(g_str_hash, g_str_equal);
+  }
+  g_hash_table_insert(entry_ht, path, g_strdup(accel));
+  
+  return TRUE;
 }
 
-void menus_init(void)
+static void
+menus_remove_accel(GtkWidget * widget, gchar * signal_name, gchar *path)
 {
-    if (initialize) {
-        initialize = FALSE;
+  char *t;
+  
+  if (entry_ht) {
+   t = g_hash_table_lookup(entry_ht, path);
+    g_free(t);
+    
+    g_hash_table_insert(entry_ht, path, g_strdup(""));
+  }
+}
 
-        factory = gtk_menu_factory_new(GTK_MENU_FACTORY_MENU_BAR);
-        subfactory[0] = gtk_menu_factory_new(GTK_MENU_FACTORY_MENU_BAR);
+#endif
 
-        gtk_menu_factory_add_subfactory(factory, subfactory[0], "<Main>");
-        menus_create(menu_items, nmenu_items);
+MenuBarGroup *menuBarGroupCreate()
+{
+  GtkMenuFactory * f;
+  f = gtk_menu_factory_new(GTK_MENU_FACTORY_MENU_BAR);
+  return(f);
+}
+
+void
+menuBarGroupAddItems(MenuBarGroup *group,
+                     GtkMenuEntry items[], guint nitems)
+{
+#if 0
+  int i;
+  char *accelerator;
+
+  if (entry_ht) {
+    for (i = 0; i < nitems; i++) {
+      accelerator = g_hash_table_lookup(entry_ht, items[i].path);
+      if (accelerator) {
+        if (accelerator[0] == '\0')
+          items[i].accelerator = NULL;
+        else
+          items[i].accelerator = accelerator;
+      }
     }
+  }
+#endif
+
+  gtk_menu_factory_add_entries(group, items, nitems);
+    
+#if 0
+  for(i = 0; i < nitems; i++)
+  {
+    if (items[i].widget) {
+      gtk_signal_connect(GTK_OBJECT(items[i].widget), "install_accelerator",
+                         GTK_SIGNAL_FUNC(menus_install_accel),
+                         items[i].path);
+      gtk_signal_connect(GTK_OBJECT(items[i].widget), "remove_accelerator",
+                         GTK_SIGNAL_FUNC(menus_remove_accel),
+                         items[i].path);
+    }
+  }
+#endif
+
 }
 
-void menus_create(GtkMenuEntry * entries, int nmenu_entries)
+MenuBar *menuBarCreate(MenuBarGroup *group, const gchar menuBarName[])
 {
-    char *accelerator;
-    int i;
+  GtkMenuFactory *subfactory = gtk_menu_factory_new(GTK_MENU_FACTORY_MENU_BAR);
+  gtk_menu_factory_add_subfactory(group, subfactory, menuBarName);
 
-    if (initialize)
-            menus_init();
-
-    if (entry_ht)
-            for (i = 0; i < nmenu_entries; i++) {
-                accelerator = g_hash_table_lookup(entry_ht, entries[i].path);
-                if (accelerator) {
-                    if (accelerator[0] == '\0')
-                            entries[i].accelerator = NULL;
-                    else
-                            entries[i].accelerator = accelerator;
-                }
-            }
-    gtk_menu_factory_add_entries(factory, entries, nmenu_entries);
-
-    for (i = 0; i < nmenu_entries; i++)
-            if (entries[i].widget) {
-                gtk_signal_connect(GTK_OBJECT(entries[i].widget), "install_accelerator",
-                                   GTK_SIGNAL_FUNC(menus_install_accel),
-                                   entries[i].path);
-                gtk_signal_connect(GTK_OBJECT(entries[i].widget), "remove_accelerator",
-                                   GTK_SIGNAL_FUNC(menus_remove_accel),
-                                   entries[i].path);
-            }
+  return(subfactory);
 }
 
-static gint menus_install_accel(GtkWidget * widget, gchar * signal_name, gchar
-key, gchar modifiers, gchar * path)
+
+GtkWidget *menuBarGroupFindItem(MenuBarGroup *group, const gchar path[])
 {
-    char accel[64];
-    char *t1, t2[2];
+  GtkMenuPath *mp;
+  mp = gtk_menu_factory_find(group, path);
+  if(mp) {
+    return(mp->widget);
+  } else {
+    return NULL;
+  }
+}
 
-    accel[0] = '\0';
-    if (modifiers & GDK_CONTROL_MASK)
-            strcat(accel, "<control>");
-    if (modifiers & GDK_SHIFT_MASK)
-            strcat(accel, "<shift>");
-    if (modifiers & GDK_MOD1_MASK)
-            strcat(accel, "<alt>");
+GtkWidget    *menuBarGetWidget(MenuBar *mb)
+{
+  return mb->widget;
+}
 
-    t2[0] = key;
-    t2[1] = '\0';
-    strcat(accel, t2);
-
-/*    if (entry_ht) {
-        t1 = g_hash_table_lookup(entry_ht, path);
-        g_free(t1);
-    } else
-            entry_ht = g_hash_table_new(g_string_hash, g_string_equal);
+/*
+  Local Variables:
+  tab-width: 2
+  indent-tabs-mode: nil
+  mode: c-mode
+  c-indentation-style: gnu
+  eval: (c-set-offset 'block-open '-)
+  End:
 */
-    g_hash_table_insert(entry_ht, path, g_strdup(accel));
-
-    return TRUE;
-}
-
-static void menus_remove_accel(GtkWidget * widget, gchar * signal_name, gchar *
- path)
-{
-    char *t;
-
-    if (entry_ht) {
-        t = g_hash_table_lookup(entry_ht, path);
-        g_free(t);
-
-        g_hash_table_insert(entry_ht, path, g_strdup(""));
-    }
-}
-
-void menus_set_sensitive(char *path, int sensitive)
-{
-    GtkMenuPath *menu_path;
-
-    if (initialize)
-            menus_init();
-
-    menu_path = gtk_menu_factory_find(factory, path);
-    if (menu_path)
-            gtk_widget_set_sensitive(menu_path->widget, sensitive);
-    else
-            g_warning("Unable to set sensitivity for menu which doesn't exist:
-%s", path);
-}

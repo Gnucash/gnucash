@@ -24,6 +24,7 @@
 \********************************************************************/
 
 #include "MainWindow.h"
+#include "MenuBar.h"
 #include "messages.h"
 
 #include "main.h"
@@ -39,7 +40,32 @@ struct main_window {
 
 };
 
-void main_window_init()
+/* This should most likely be rewritting to use a Tree, not a Clist so
+   we can represent the heirarchical account structure */
+static void
+cram_accts_into_clist(GtkCList *list, AccountGroup *accts) {
+  int count = xaccGetNumAccounts(accts);
+  int i;
+  GtkWidget *item;
+  
+  for(i=0; i<count; i++) {
+    Account *acc = getAccount(accts, i);
+    
+    gchar *rowstrs[] = { acc->accountName,
+                         acc->description,
+                         acc->notes };
+    
+    gint new_row = gtk_clist_append(GTK_CLIST(list), rowstrs); 
+
+    /* Set the row to point to the actual account so we can reach it
+    trivially when the user selects the row.  (Should we use
+    gtk_*_data_full and have a destroy notify?) */
+    gtk_clist_set_row_data(GTK_CLIST(list), new_row, acc); 
+  }
+}
+
+void
+main_window_init(AccountGroup *accts)
 {
 
   GtkWidget *window;
@@ -56,8 +82,31 @@ void main_window_init()
   GtkWidget *clist;
   GtkWidget *list_item;
 
-    
   GtkAcceleratorTable *accel;
+
+  /* this is the GtkMenuEntry structure used to create new menus.  The
+     first member is the menu definition string.  The second, the default
+     accelerator key used to access this menu function with the keyboard.
+     The third is the callback function to call when this menu item is
+     selected (by the accelerator key, or with the mouse.) The last
+     member is the data to pass to your callback function.  */
+  
+  GtkMenuEntry menu_items[] =
+  {
+    {"<Main>/File/New", "<control>N", NULL, NULL},
+    {"<Main>/File/Open", "<control>O", file_cmd_open, NULL},
+    {"<Main>/File/Save", "<control>S", NULL, NULL},
+    {"<Main>/File/Save as", NULL, NULL, NULL},
+    {"<Main>/File/<separator>", NULL, NULL, NULL},
+    {"<Main>/File/Quit", "<control>Q", gtk_main_quit, "OK, I'll quit"},
+    {"<Main>/Options/General..", "<control>A", NULL, NULL},
+    {"<Main>/Help/About..", NULL, NULL, NULL}
+  };
+  
+  /* calculate the number of menu_item's */
+  int nmenu_items = sizeof(menu_items) / sizeof(menu_items[0]);
+
+  MenuBar *main_menu_bar;
 
   clist = gtk_clist_new_with_titles(3, clist_titles);    
 
@@ -65,14 +114,66 @@ void main_window_init()
   gtk_clist_set_column_width ( GTK_CLIST(clist), 1, 85 );
   gtk_clist_set_column_width ( GTK_CLIST(clist), 0, 85 );
 
+  cram_accts_into_clist(GTK_CLIST(clist), accts);
+
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title(GTK_WINDOW(window), "GnoMoney");
 
   main_vbox = gtk_vbox_new(FALSE, 1);
   gtk_container_border_width(GTK_CONTAINER(main_vbox), 1);
   gtk_container_add(GTK_CONTAINER(window), main_vbox);
+  
+  {
+    MenuBarGroup *mbg = menuBarGroupCreate();
+    main_menu_bar = menuBarCreate(mbg, "<Main>");
+    menuBarGroupAddItems(mbg, menu_items, nmenu_items);
+  }
 
-  get_main_menu(&menubar, &accel);
+  menubar = main_menu_bar->widget;
+  accel = main_menu_bar->table;
+
+#if 0
+
+  {
+    /* Here's how to use the new MenBar stuff to create multiple menu
+       bars */
+
+    GtkWidget *test_win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    GtkWidget *test_vbox = gtk_vbox_new(FALSE, 1);
+    MenuBarGroup *mbg = menuBarGroupCreate();
+    MenuBar *mb1;
+    MenuBar *mb2;
+    GtkMenuEntry items[] =
+    {
+      {"<Stumpy>/Eat/Grubs", "<control>N", NULL, NULL},
+      {"<Stumpy>/Eat/Gravel", "<control>O", NULL, NULL},
+      {"<Stumpy>/So/Scary", "<control>S", NULL, NULL},
+      {"<Stumpy2>/Eat-2/Grubs", "<control>N", NULL, NULL},
+      {"<Stumpy2>/Eat-2/Gravel", "<control>O", NULL, NULL},
+      {"<Stumpy2>/So-2/Scary/Err/Umm", "<control>S", NULL, NULL}
+    };
+    int nitems = sizeof(items) / sizeof(items[0]);
+    
+    mb1 = menuBarCreate(mbg, "<Stumpy>");
+    mb2 = menuBarCreate(mbg, "<Stumpy2>");
+    
+    menuBarGroupAddItems(mbg, items, nitems);
+
+    gtk_window_set_title(GTK_WINDOW(test_win), "Stumpy");
+    gtk_container_add(GTK_CONTAINER(test_win), test_vbox);
+    gtk_box_pack_start(GTK_BOX(test_vbox), menuBarGetWidget(mb1),
+                       FALSE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(test_vbox), menuBarGetWidget(mb2),
+                       FALSE, TRUE, 0);
+
+    gtk_widget_show(menuBarGetWidget(mb1));
+    gtk_widget_show(menuBarGetWidget(mb2));
+    gtk_widget_show(test_vbox);
+    gtk_widget_show(test_win);
+
+  }
+#endif
+
   gtk_window_add_accelerator_table(GTK_WINDOW(window), accel);
   gtk_box_pack_start(GTK_BOX(main_vbox), menubar, FALSE, TRUE, 0);     
   gtk_widget_show(menubar);
@@ -133,11 +234,18 @@ void main_window_init()
   /* Show everything now that it is created */
   gtk_widget_show(main_vbox);
   gtk_container_border_width (GTK_CONTAINER (window), 2);
-  gtk_widget_show(window);   
-
-     
-
+  gtk_widget_show(window);
 } 
 
 
 /********************* END OF FILE **********************************/
+
+/*
+  Local Variables:
+  tab-width: 2
+  indent-tabs-mode: nil
+  mode: c-mode
+  c-indentation-style: gnu
+  eval: (c-set-offset 'block-open '-)
+  End:
+*/

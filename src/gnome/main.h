@@ -51,9 +51,19 @@
 
 /** PROTOTYPES ******************************************************/
 void destroy (GtkWidget *widget, gpointer *data);
-void file_cmd_open (void);
+void file_cmd_open (GtkWidget *widget, gpointer data);
 
 /** GLOBALS *********************************************************/
 extern char  *helpPath;
 
 #endif
+
+/*
+  Local Variables:
+  tab-width: 2
+  indent-tabs-mode: nil
+  mode: c-mode
+  c-indentation-style: gnu
+  eval: (c-set-offset 'block-open '-)
+  End:
+*/
