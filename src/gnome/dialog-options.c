@@ -29,7 +29,7 @@
 #include "option-util.h"
 #include "guile-util.h"
 #include "query-user.h"
-#include "gnc-helpers.h"
+#include "engine-helpers.h"
 #include "account-tree.h"
 #include "gnc-dateedit.h"
 #include "gnc-commodity-edit.h"

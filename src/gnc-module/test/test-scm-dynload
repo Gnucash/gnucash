@@ -1,0 +1,4 @@
+#! /bin/sh
+echo "  test-scm-dynload: testing dynamic-link of libgncmodule from Scheme.";
+guile -c "(dynamic-link \"libgncmodule.la\")";
+

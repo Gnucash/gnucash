@@ -1,0 +1,78 @@
+NOTE: the RPC backend doesn't build at the moment. It's pretty close
+but needs a bit of sprucing up to make it work with the
+currency-in-transaction changes.
+
+Bill Gribble (2001-08-01)
+
+-----------------------------------------------------------------------
+
+
+This directory contains code for RPC support.  The RPC Backend is a
+part of the client and connects to an RPC Server sitting elsewhere.
+The RPC support in Gnucash is considered experimental, and you should
+use it only at your own risk.  In addition, the RPC Client and Server
+must match, meaning that they must be using the same version of the
+RPC protocol.  The client does attempt to check the version of the
+server and will complain if it does not match.
+
+Version 1, 2001-03-17
+
+GnuCash Build Instructions
+--------------------------
+Build the same as usual, but you must specify the flag '--enable-rpc'
+to the configure (or autogen.sh), and then run 'make' as usual.
+
+How to use GnuCash RPC 
+----------------------
+GnuCash RPC has two parts, an RPC Server and an RPC Client.  First,
+choose your server machine and run the GnuCash RPC Server:
+
+	gnucash --rpc-server
+
+Next, start the RPC Client on your workstation.  You activate the RPC
+Client by supplying a URL of the form rpc://hostname[:port]/<URL> to
+your client.  This will connect to the RPC Server on the specified
+host and open the Gnucash file <URL> on the server.  The <URL> must be
+a complete Gnucash URL.
+
+Example RPC URLs include:
+
+	rpc://localhost//path/to/gnucash-file.xac
+	rpc://serverhost:12345/file:/path/to/file.xac
+	rpc://host/postgres:/...
+
+Things to do:
+-------------
+
+ - Implement Security (encryption) on the RPC connection
+
+ - Better version checking in the RPC Protocol (allow client/server to
+   try to find a 'matching' protocol version?)  This might require
+   more integration of the version number into RpcUtils
+
+ - username/password or other authentication methods
+
+ - better server integration with e.g. postgres (allow RPC Server to
+   authenticate to postgres on behalf of client, instead of in-band
+   authentication in the postgres URL)
+
+ - better error messages
+
+ - Support for pricedb
+
+ - cope with new accounts/transactions in begin_edit()
+
+ - grab the book_error more often for the result/error returns in the server
+
+ - better handling when the server connection is lost
+	provide a way to reconnect?
+
+ - better way to kill the server (currently can only 'kill' it or ^C it)
+
+ - test whether rpcgen supports '-M'..  For now, supply the stubs as a
+   part of the release and let anyone who changes the .x files also
+   change the stubs and header.  Only the xdr routines are built on the
+   build host, because that doesn't depend on the -M flag at all.
+
+
+				Derek Atkins <warlord@MIT.EDU>

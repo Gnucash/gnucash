@@ -1,0 +1,58 @@
+(("../../../../doc/examples/quicktest.qif") 
+ #f (() 
+     ((#\D m-d-y) (#\I decimal) (#\Q decimal) (#\T decimal) 
+      (#\O decimal) (#\$ decimal))))
+
+(("../../../../doc/examples/Money95bank_fr.qif") 
+ #f (((#\D m-d-y) (#\T decimal) (#\S . "") (#\$ decimal)) ()))
+
+(("../../../../doc/examples/Money95invst_fr.qif") 
+ #f (((#\D m-d-y) (#\T decimal) (#\S . "") (#\$ decimal comma)) ()))
+
+(("../../../../doc/examples/Money95mfunds_fr.qif") 
+ #f (() 
+     ((#\D m-d-y) (#\I decimal) (#\Q decimal comma) (#\T decimal) 
+      (#\O decimal) (#\$ decimal))))
+
+(("../../../../doc/examples/Money95stocks_fr.qif") 
+ #f (() 
+     ((#\D m-d-y) (#\I decimal) (#\Q decimal) (#\T decimal) 
+      (#\O decimal) (#\$ decimal))))
+
+(("../../../../doc/examples/abc-all.qif") 
+ #f (((#\D m-d-y) (#\T decimal) (#\S . "") (#\$ decimal)) 
+     ()))
+
+(("../../../../doc/examples/abc.qif") 
+ #f (((#\D m-d-y) (#\T decimal) (#\S . "") (#\$ decimal comma)) 
+     ()))
+
+(("../../../../doc/examples/bogus.qif") 
+ #f (((#\D m-d-y) (#\T decimal) (#\S . "") (#\$ decimal comma)) 
+     ()))
+
+(("../../../../doc/examples/cbb-export.qif") 
+ #f (((#\D m-d-y) (#\T decimal) (#\S . "") (#\$ decimal)) 
+     ()))
+
+(("../../../../doc/examples/divx.qif") 
+ #f (((#\D m-d-y) (#\T decimal) (#\U decimal) (#\S . "") (#\$ decimal)) 
+     ((#\D m-d-y) (#\T decimal) (#\U decimal) (#\$ decimal))))
+
+(("../../../../doc/examples/every.qif") 
+ #f (() 
+     ((#\D m-d-y) (#\I decimal) (#\Q decimal) (#\T decimal) 
+      (#\O decimal) (#\$ decimal))))
+
+(("../../../../doc/examples/ms-money.qif") 
+ #f (((#\D m-d-y) (#\T decimal) (#\S . "") (#\$ decimal comma)) 
+     ()))
+
+(("../../../../doc/examples/swipe.qif") 
+ #f (() 
+     ((#\D m-d-y) (#\I decimal) (#\Q decimal) (#\T decimal) 
+      (#\$ decimal))))
+
+(("../../../../doc/examples/web.qif") 
+ #f (((#\D m-d-y) (#\T decimal) (#\S . "") (#\$ decimal comma)) 
+     ()))

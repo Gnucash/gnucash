@@ -1,0 +1,28 @@
+'Modules' in Gnucash are relatively self-contained segments of code that
+can be dynamically loaded at runtime.  Eventually we want the whole gnucash
+source tree to be a set of modules and the app itself to be a short Scheme
+program that loads them all. 
+
+We're not there yet :) 
+
+Here are the bits that have been converted to use the module system so
+far.
+
+gnc-module                  The module system (actually not a module itself)
+
+engine                      The engine module, without any backends
+
+backend/file                Binary and XML (v1 and v2) backends
+backend/postgres            Postgres backend
+backend/rpc                 RPC backend 
+
+register/ledger-core        The xacc SplitLedger and MultiLedger parts formerly
+                            in src/
+register/register-core      Toolkit independent register code, formerly in 
+                            src/register/
+register/register-gnome     Gnome-specific register code, formerly in 
+                            src/register/gnome
+
+import-export/qif-import    the old qif importer with Gnome druid 
+import-export/qif-io-core   new qif import/export module.  unfinished.
+

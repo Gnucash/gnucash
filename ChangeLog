@@ -1,3 +1,16 @@
+2001-08-06  Bill Gribble  <grib@billgribble.com>
+
+	* Added module/plugin system (src/gnc-module/*)
+
+	* reshuffled source code from src/engine, src/register, and some
+	from src/guile, src/scm, src/gnome (see src/README.modules).
+	engine, backends, register, qif importer are now "modules".
+
+	* unfinished new QIF import/export module (the old one's still
+	there and still works)
+
+	* really too many files touched to get into it.  
+	
 2001-08-06  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/table-html.[ch]: remove

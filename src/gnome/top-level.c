@@ -56,7 +56,7 @@
 #endif
 #include "gnc-gpg.h"
 #include "gnc-ui.h"
-#include "gnc.h"
+#include "gw-gnc.h"
 #include "gnucash-color.h"
 #include "gnucash-sheet.h"
 #include "gnucash-style.h"

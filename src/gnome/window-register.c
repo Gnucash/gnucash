@@ -832,15 +832,6 @@ gnc_register_create_tool_bar (RegWindow *regData)
   {
     {
       GNOME_APP_UI_ITEM,
-      N_("Close"),
-      N_("Close this register window"),
-      closeCB, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_CLOSE,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
       N_("Enter"),
       N_("Record the current transaction"),
       recordCB, NULL, NULL,
@@ -936,6 +927,15 @@ gnc_register_create_tool_bar (RegWindow *regData)
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_PRINT,
       0, 0, NULL
     },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Close"),
+      N_("Close this register window"),
+      closeCB, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_CLOSE,
+      0, 0, NULL
+    },
     GNOMEUIINFO_END
   };
 
@@ -946,7 +946,7 @@ gnc_register_create_tool_bar (RegWindow *regData)
 
   regData->toolbar = toolbar;
 
-  regData->split_button = toolbar_info[8].widget;
+  regData->split_button = toolbar_info[6].widget;
 
   return toolbar;
 }

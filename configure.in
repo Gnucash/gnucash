@@ -205,7 +205,7 @@ AC_ARG_ENABLE( sql,
           ],
           [
             AC_MSG_RESULT(yes)
-            SQL_DIR=sql
+            SQL_DIR=postgres
           ],
           [
             AC_MSG_ERROR([Cannot find PostgreSQL libraries; will not build sql backend]) 
@@ -624,8 +624,15 @@ AC_OUTPUT(
           src/doc/Makefile
           src/doc/design/Makefile
           src/engine/Makefile
-          src/engine/sql/Makefile
-	  src/engine/rpc/Makefile
+          src/engine/test/Makefile
+          src/backend/Makefile
+          src/backend/file/Makefile
+          src/backend/file/test/Makefile
+          src/backend/file/test/test-files/Makefile
+          src/backend/file/test/test-files/xml2/Makefile
+          src/backend/postgres/Makefile
+          src/backend/postgres/test/Makefile
+          src/backend/rpc/Makefile
           src/experimental/Makefile
           src/experimental/cbb/Makefile
           src/experimental/cbb/cbb-engine/Makefile
@@ -635,23 +642,32 @@ AC_OUTPUT(
           src/experimental/ofx/dtd/Makefile
           src/experimental/ofx/explore/Makefile
           src/experimental/ofx/parser/Makefile
+          src/gnc-module/Makefile
+          src/gnc-module/test/Makefile
+          src/gnc-module/test/mod-foo/Makefile
+          src/gnc-module/test/mod-bar/Makefile
+          src/gnc-module/test/mod-baz/Makefile
+          src/gnc-module/test/misc-mods/Makefile
           src/gnome/Makefile
           src/gnome/glade/Makefile
           src/guile/Makefile
+          src/import-export/Makefile
+          src/import-export/qif-import/Makefile
+          src/import-export/qif-io-core/Makefile
+          src/import-export/qif-io-core/test/Makefile
           src/optional/Makefile
           src/optional/swig/Makefile
           src/pixmaps/Makefile
           src/quotes/Makefile
           src/register/Makefile
-          src/register/gnome/Makefile
+          src/register/ledger-core/Makefile
+          src/register/register-core/Makefile
+          src/register/register-gnome/Makefile
           src/scm/Makefile
           src/scm/gnumeric/Makefile
           src/scm/printing/Makefile
-          src/scm/qif-import/Makefile
           src/scm/report/Makefile
           src/test/Makefile
-          src/test/test-files/Makefile
-          src/test/test-files/xml2/Makefile
 
           dnl # non-makefiles
           dnl # Please read doc/build-system before adding *anything* here

@@ -61,9 +61,6 @@
 #include "io-gncxml-v2.h"
 #include "gnc-book.h"
 
-/* FIXME get rid of these */
-#include "gnc.h"
-
 static short module = MOD_GUI;
 #define WINDOW_ACCT_TREE_CM_CLASS "window-acct-tree"
 

@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "gnc-module.h"
 #include "GNCIdP.h"
 
 static void
@@ -47,6 +48,9 @@ main (int argc, char **argv)
     if (num_to_make == 0)
       usage ();
   }
+
+  gnc_module_system_init();
+  gnc_module_load("gnucash/engine", 0);
 
   while (num_to_make-- > 0)
   {

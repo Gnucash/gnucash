@@ -19,21 +19,53 @@
 ;; and only have the use-modules statements in those files).
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-8))
+(use-modules (gnucash gnc-module))
 
 ;; A list of things to do when in batch mode after the initial
-;; startup.  List items may be strings, in wich case they're read and
+;; startup.  List items may be strings, in which case they're read and
 ;; evaluated or procedures, in which case they're just executed.
 ;; The items will be done in reverse order.
 (define gnc:*batch-mode-things-to-do* '())
 
 (define (gnc:startup)
   (gnc:debug "starting up.")
-  (if (not (gnc:handle-command-line-args))
-      (gnc:shutdown 1))
-
   (gnc:setup-debugging)
 
+  ;; initialize the gnucash module system 
+
+  ;; first make sure the search paths are reasonable. probably shouldn't
+  ;; need to do this. 
+  (let ((ev (getenv "LD_LIBRARY_PATH")))
+    (setenv "LD_LIBRARY_PATH"
+	    (if ev
+		(string-append ev ":" gnc:_lib-dir-default_)
+		gnc:_lib-dir-default_)))	  
+  (let ((ev (getenv "GNC_MODULE_PATH")))
+    (setenv "GNC_MODULE_PATH"
+	    (if ev
+		(string-append ev ":" gnc:_lib-dir-default_)
+		gnc:_lib-dir-default_)))
+
+  (simple-format #t "LD_LIBRARY_PATH=~S\n" (getenv "LD_LIBRARY_PATH"))
+  (gnc:module-system-init)
+  
+  ;; right now we have to statically load all these at startup time.
+  ;; Hopefully we can gradually make them autoloading.
+  (gnc:module-load "gnucash/engine" 0)
+  (gnc:module-load "gnucash/register/ledger-core" 0)
+  (gnc:module-load "gnucash/register/register-core" 0)
+  (gnc:module-load "gnucash/register/register-gnome" 0)
+  (gnc:module-load "gnucash/import-export/qif-import" 0)
+  
   ;; Now we can load a bunch of files.
+  (gnc:depend "config-var.scm")
+  (gnc:depend "utilities.scm")
+  (gnc:depend "path.scm")
+  (gnc:depend "c-interface.scm")
+  (gnc:depend "options.scm")
+  (gnc:depend "prefs.scm")
+  (gnc:depend "command-line.scm")
+  (gnc:depend "hooks.scm")
   (gnc:depend "doc.scm")
   (gnc:depend "extensions.scm")
   (gnc:depend "text-export.scm")
@@ -41,9 +73,12 @@
   (gnc:depend "main-window.scm")
   (gnc:depend "commodity-import.scm")
   (gnc:depend "report/report-list.scm")
-  (gnc:depend "qif-import/qif-import.scm")
   (gnc:depend "printing/print-check.scm")
   (gnc:depend "price-quotes.scm")
+  (gnc:depend "tip-of-the-day.scm")
+
+  (if (not (gnc:handle-command-line-args))
+      (gnc:shutdown 1))
 
   ;; Load the system configs
   (if (not (gnc:load-system-config-if-needed))

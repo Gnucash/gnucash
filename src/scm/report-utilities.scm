@@ -18,7 +18,6 @@
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
 (gnc:support "report-utilities.scm")
-(gnc:depend "engine-utilities.scm")
 
 (define (gnc:amount->string amount info)
   (d-gnc:amount->string-helper (exact->inexact amount) info))

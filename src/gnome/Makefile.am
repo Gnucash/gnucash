@@ -5,7 +5,6 @@ noinst_LIBRARIES = libgncgnome.a
 libgncgnome_a_SOURCES = \
   account-tree.c \
   cursors.c \
-  dialog-account-picker.c \
   dialog-account.c \
   dialog-column-view.c \
   dialog-commodities.c \
@@ -28,7 +27,6 @@ libgncgnome_a_SOURCES = \
   dialog-scheduledxaction.c \
   druid-commodity.c \
   druid-hierarchy.c \
-  druid-qif-import.c \
   druid-stock-split.c \
   druid-utils.c \
   extensions.c \
@@ -73,7 +71,6 @@ mime_DATA = gnucash.keys gnucash.mime
 
 noinst_HEADERS = \
   account-tree.h \
-  dialog-account-picker.h \
   dialog-account.h \
   dialog-column-view.h \
   dialog-commodity.h \
@@ -90,7 +87,6 @@ noinst_HEADERS = \
   dialog-scheduledxaction.h \
   druid-commodity.h \
   druid-hierarchy.h \
-  druid-qif-import.h \
   druid-utils.h \
   extensions.h \
   gnc-amount-edit.h \
@@ -142,10 +138,13 @@ INCLUDES = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/calculation \
   -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/g-wrap \
   -I${top_srcdir}/src/guile \
-  -I${top_srcdir}/src/register \
-  -I${top_srcdir}/src/register/gnome \
+  -I${top_srcdir}/src/register/ledger-core \
+  -I${top_srcdir}/src/register/register-core \
+  -I${top_srcdir}/src/register/register-gnome \
+  -I${top_srcdir}/src/import-export/qif-import \
   ${GNOME_INCLUDEDIR} \
   ${GUILE_INCS}
 

@@ -266,13 +266,17 @@ exit(0);
 __DATA__
 
 #*#
+*.P
 *.a
 *.bak
 *.bin
 *.diff
 *.diffs
 *.gmo
+*.la
+*.lai
 *.lo
+*.loT
 *.log
 *.mo
 *.moc

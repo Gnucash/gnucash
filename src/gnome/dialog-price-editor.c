@@ -39,6 +39,7 @@
 #include "gnc-pricedb.h"
 #include "gnc-ui.h"
 #include "guile-util.h"
+#include "engine-helpers.h"
 #include "messages.h"
 
 

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<foobar>
+  <blah anattr="my oh my">
+    <this>
+      is a silly idea
+    </this>
+    <there att1="try one" att2="try two">is nothing you can do</there>
+    <but>
+      I'll try to shoot</but>
+  </blah>
+  <you>
+    <in>the foot</in>
+  </you>
+</foobar>

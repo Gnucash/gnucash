@@ -9,7 +9,6 @@ glade_DATA = \
 	price.glade \
 	print.glade \
 	progress.glade \
-	qif.glade \
 	register.glade \
 	report.glade \
 	stocks.glade \
@@ -28,7 +27,6 @@ STRING_FILES = \
 	price_strings.c \
 	print_strings.c \
 	progress_strings.c \
-	qif_strings.c \
 	register_strings.c \
 	report_strings.c \
 	stocks_strings.c \

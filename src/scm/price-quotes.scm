@@ -23,12 +23,7 @@
 (use-modules (gnucash process))
 
 (gnc:support "price-quotes.scm")
-
-(gnc:depend "gnc-numeric.scm")
 (gnc:depend "utilities.scm")
-(gnc:depend "engine-utilities.scm")
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;

@@ -1,5 +1,5 @@
 
-SUBDIRS = gnumeric printing qif-import report
+SUBDIRS = gnumeric printing report
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
@@ -13,18 +13,13 @@ gnc_regular_scm_files = \
   c-interface.scm \
   command-line.scm \
   commodity-import.scm \
-  commodity-table.scm \
   commodity-utilities.scm \
   config-var.scm \
   date-utilities.scm \
   depend.scm \
   doc.scm \
-  engine-init.scm \
-  engine-interface.scm \
-  engine-utilities.scm \
   extensions.scm \
   graph.scm \
-  gnc-numeric.scm \
   help-topics-index.scm \
   hooks.scm \
   html-barchart.scm \
@@ -36,7 +31,6 @@ gnc_regular_scm_files = \
   html-text.scm \
   html-table.scm \
   html-utilities.scm \
-  iso-4217-currencies.scm \
   main.scm \
   main-window.scm \
   options.scm \
@@ -87,6 +81,7 @@ bootstrap.scm: bootstrap.scm.in Makefile
             -e 's:@-VERSION-@:${VERSION}:' \
             -e 's:@-GNC_CONFIGDIR-@:${GNC_CONFIGDIR}:' \
             -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:' \
+            -e 's:@-GNC_LIB_INSTALLDIR-@:${libdir}:' \
             -e 's:@-GNC_HELPDIR-@:${GNC_HELPDIR}:'
 	mv $@.tmp $@
 CLEANFILES += bootstrap.scm

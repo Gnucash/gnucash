@@ -1,0 +1,11 @@
+(("plain category") #f ("plain category" #f #f #f #f #f))
+(("[transfer]") #f ("transfer" #t #f #f #f #f))
+((bad-data) #t (qif-io:arg-type qif-io:parse-category string bad-data))
+(("category/class") #f ("category" #f "class" #f #f #f))
+(("[transfer]/class") #f ("transfer" #t "class" #f #f #f))
+(("[transfer]/class|[miscxfer]") #f ("transfer" #t "class" "miscxfer" #t #f))
+(("[transfer]/class|miscxfer") #f ("transfer" #t "class" "miscxfer" #f #f))
+(("[transfer]/class|[miscxfer]/class2") #f 
+  ("transfer" #t "class" "miscxfer" #t "class2"))
+(("class1/class2:ISDN|[Telecom]") #f ("class1" #f "class2:ISDN" "Telecom" #t #f))
+

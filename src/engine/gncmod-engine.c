@@ -1,0 +1,60 @@
+/*********************************************************************
+ * gnc-mod-engine.c
+ * module definition/initialization for the Engine module
+ * 
+ * Copyright (c) 2001 Linux Developers Group, Inc. 
+ *********************************************************************/
+
+#include <stdio.h>
+#include <guile/gh.h>
+#include <glib.h>
+#include "gnc-engine.h"
+
+#include "gw-engine.h"
+
+/* version of the gnc module system interface we require */
+int gnc_module_system_interface = 0;
+
+/* module versioning uses libtool semantics. */
+int gnc_module_current  = 0;
+int gnc_module_revision = 0;
+int gnc_module_age      = 0;
+
+char *
+gnc_module_path(void) 
+{
+  return g_strdup("gnucash/engine");
+}
+
+char * 
+gnc_module_description(void) 
+{
+  return g_strdup("The Gnucash accounting engine");
+}
+
+int
+gnc_module_init(int refcount) 
+{
+  if(refcount == 0) 
+  {
+    /* initialize the engine on the first load */
+    gnc_engine_init(0, NULL);
+  }
+  
+  gh_eval_str("(use-modules (gnucash engine))");
+  gh_eval_str("(use-modules (g-wrapped gw-engine))");
+
+  if(refcount == 0)
+  {
+    /* and set up the gnc-commodity stuff */
+    gh_eval_str("(gnc:load-iso-4217-currencies)");
+    gh_eval_str("(gnc:setup-default-namespaces)");
+  }
+  return TRUE;
+}
+
+int
+gnc_module_end(int refcount) {
+  return TRUE;
+}
+

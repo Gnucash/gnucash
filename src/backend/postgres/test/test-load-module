@@ -1,0 +1,18 @@
+#! /bin/sh
+exec guile -s "$0"
+!#
+
+(display "  testing postgres backend load ... ")
+(use-modules (gnucash gnc-module))
+(gnc:module-system-init)
+
+(if (gnc:module-load "gnucash/backend/postgres" 8)
+    (begin 
+      (display "ok\n")
+      (exit 0))
+    (begin 
+      (display "failed\n")
+      (exit -1)))
+
+	
+

@@ -1,59 +1,33 @@
-# Engine Makefile.am file.
+SUBDIRS = . test 
 
-# don't build sql or RPC subdirs by default, unless you want hurt
-SUBDIRS = ${SQL_DIR} ${RPC_DIR}
+lib_LTLIBRARIES = libgncengine.la libgncmod-engine.la
 
-# but put them in the dist
-DIST_SUBDIRS = sql rpc
-
-# Build a libtool library, libhello.la for installation in libdir.
-lib_LTLIBRARIES = libgncengine.la
-
-# Build hell from main.c and libhello.la
 libgncengine_la_SOURCES = \
   Account.c \
   Backend.c \
   DateUtils.c \
+  FreqSpec.c \
   GNCId.c \
   Group.c \
-  NetIO.c \
   Query.c \
+  SchedXaction.c \
   Scrub.c \
   TransLog.c \
   Transaction.c \
   date.c \
-  gnc-account-xml-v2.c \
   gnc-associate-account.c \
   gnc-book.c \
-  gnc-book-file.c \
-  gnc-commodity-xml-v2.c \
   gnc-commodity.c \
   gnc-engine-util.c \
   gnc-engine.c \
   gnc-event.c \
   gnc-numeric.c \
-  gnc-pricedb-xml-v1.c \
   gnc-pricedb.c \
-  gnc-transaction-xml-v2.c \
   guid.c \
-  io-example-account.c \
-  io-gncbin-r.c \
-  io-gncxml-gen.c \
-  io-gncxml-v1.c \
-  io-gncxml-v2.c \
-  io-utils.c \
   kvp_frame.c \
-  md5.c \
-  sixtp-dom-generators.c \
-  sixtp-dom-parsers.c \
-  sixtp-stack.c \
-  sixtp-to-dom-parser.c \
-  sixtp-utils.c \
-  sixtp.c \
-  FreqSpec.c \
-  SchedXaction.c \
-  gnc-freqspec-xml-v2.c \
-  gnc-schedxaction-xml-v2.c
+  md5.c 
+
+#  NetIO.c 
 
 libgncengine_la_LDFLAGS = -version-info 2:3:1
 
@@ -67,7 +41,6 @@ noinst_HEADERS = \
   GNCIdP.h \
   Group.h \
   GroupP.h \
-  NetIO.h \
   Query.h \
   Scrub.h \
   TransLog.h \
@@ -86,25 +59,13 @@ noinst_HEADERS = \
   gnc-numeric.h \
   gnc-pricedb-p.h \
   gnc-pricedb.h \
-  gnc-xml-helper.h \
-  gnc-xml.h \
   guid.h \
-  io-example-account.h \
-  io-gncbin.h \
-  io-gncxml-gen.h \
-  io-gncxml-v2.h \
-  io-gncxml.h \
-  io-utils.h \
   kvp_frame.h \
   md5.h \
-  sixtp-dom-generators.h \
-  sixtp-dom-parsers.h \
-  sixtp-parsers.h \
-  sixtp-stack.h \
-  sixtp-utils.h \
-  sixtp.h \
   FreqSpec.h \
   SchedXaction.h
+
+#  NetIO.h 
 
 EXTRA_DIST = \
   .cvsignore \
@@ -113,8 +74,56 @@ EXTRA_DIST = \
   extensions.txt \
   kvp_doc.txt
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GNOME_XML_CFLAGS} ${GHTTP_CFLAGS}
+libgncengine_la_CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GHTTP_CFLAGS}
+libgncengine_la_LIBADD = ${GLIB_LIBS}
 
-LDADD = ${GNOME_XML_LIB} ${GLIB_LIBS}
+CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}
 
-INCLUDES = -I..
+INCLUDES = -I${top_srcdir}/src/gnc-module ${GUILE_INCS} -I../
+
+libgncmod_engine_la_SOURCES=gncmod-engine.c
+libgncmod_engine_la_LDFLAGS=-module -L. -L.libs -L${top_srcdir}/src/gnc-module/.libs
+libgncmod_engine_la_LIBADD = \
+  -lgncengine \
+  -lgncmodule \
+  ${GUILE_LIBS}
+
+
+libgw_glib_la_SOURCES=gw-glib.c glib-helpers.c
+libgw_glib_la_LDFLAGS=-module
+
+libgw_engine_la_SOURCES=gw-engine.c engine-helpers.c
+libgw_engine_la_LDFLAGS=-module
+
+gncmoddir=${GNC_SHAREDIR}/guile-modules/gnucash
+gncmod_DATA=engine.scm 
+
+gncscmdir=${GNC_SHAREDIR}/scm
+gncscm_DATA=commodity-table.scm engine-init.scm engine-interface.scm \
+engine-utilities.scm gnc-numeric.scm iso-4217-currencies.scm
+
+gwmoddir=${GNC_SHAREDIR}/guile-modules/g-wrapped
+gwmod_LTLIBRARIES=libgw-glib.la libgw-engine.la 
+gwmod_DATA=gw-engine-spec.scm gw-glib-spec.scm
+
+.scm-links: 
+	rm -f gnucash g-wrapped
+	ln -sf . gnucash 
+	ln -sf . g-wrapped 
+	touch .scm-links
+
+gw-engine.c gw-engine.h: .scm-links gw-engine-spec.scm
+	FLAVOR=gnome guile -c \
+	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
+	 (set! %load-path (cons \"${PWD}\" %load-path)) \
+	 (primitive-load \"./gw-engine-spec.scm\") \
+	 (gw:generate-module \"gw-engine\")"
+
+gw-glib.c gw-glib.h: .scm-links gw-glib-spec.scm
+	FLAVOR=gnome guile -c \
+	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
+	 (primitive-load \"./gw-glib-spec.scm\") \
+	 (gw:generate-module \"gw-glib\")"
+
+BUILT_SOURCES += gw-engine.c gw-engine.h gw-glib.c gw-glib.h
+CLEANFILES += gw-engine.c gw-engine.h gw-engine.html gw-glib.c gw-glib.h gw-glib.html gnucash g-wrapped .scm-links

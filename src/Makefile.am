@@ -1,10 +1,13 @@
 
 SUBDIRS = \
   doc \
+  gnc-module \
   engine \
+  backend \
+  register \
+  import-export \
   calculation \
   experimental \
-  register \
   guile \
   gnome \
   scm \
@@ -23,13 +26,21 @@ bin_PROGRAMS = gnucash gnucash-make-guids
 # problem with the current version of gwrap, and will go away when
 # that's fixed.
 gnucash_LDADD = \
-  gnome/libgncgnome.a \
-  register/libgncregister.a \
-  register/gnome/libgncregistergnome.a \
+  -L${top_srcdir}/src/gnc-module/.libs \
+  -L${top_srcdir}/src/engine/.libs \
+  gnc-module/libgncmodule.la \
+  engine/libgncmod-engine.la \
+  engine/libgw-engine.la \
+  engine/libgw-glib.la \
+  backend/file/libgncmod-backend-file.la \
+  register/ledger-core/libgncmod-ledger-core.la \
+  register/register-core/libgncmod-register-core.la \
+  register/register-gnome/libgncmod-register-gnome.la \
+  import-export/qif-import/libgncmod-qif-import.la \
   guile/libgncguile.a \
   gnome/libgncgnome.a \
   calculation/libgnccalc.a \
-  engine/libgncengine.la \
+  guile/libgncguile.a \
   ${GNOMEUI_LIBS} \
   ${GNOME_LIBDIR} \
   ${GNOME_PRINT_LIBS} \
@@ -44,8 +55,6 @@ gnucash_LDADD = \
   ${EFENCE_LIBS}
 
 gnucash_SOURCES = \
-  MultiLedger.c \
-  SplitLedger.c \
   EuroUtils.c \
   FileDialog.c \
   gnc-component-manager.c \
@@ -54,7 +63,10 @@ gnucash_SOURCES = \
   gnc-ui-util.c
 
 gnucash_make_guids_LDADD = \
-  engine/libgncengine.la \
+  -L${top_srcdir}/src/gnc-module/.libs \
+  -L${top_srcdir}/src/engine/.libs \
+  gnc-module/libgncmodule.la \
+  engine/libgncmod-engine.la \
   ${DL_LIB} \
   ${GNOME_XML_LIB} \
   ${GLIB_LIBS} \
@@ -68,10 +80,7 @@ noinst_HEADERS = \
   EuroUtils.h \
   FileBox.h \
   FileDialog.h \
-  MultiLedger.h \
   RecnWindow.h \
-  RegWindow.h \
-  SplitLedger.h \
   file-history.h \
   gnc-component-manager.h \
   gnc-exp-parser.h \
@@ -89,4 +98,6 @@ INCLUDES = \
   -I./calculation \
   -I./engine \
   -I./guile \
-  -I./register
+  -I./register \
+  -I./gnc-module
+

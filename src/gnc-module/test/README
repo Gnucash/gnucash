@@ -1,0 +1,13 @@
+gnc-module tests:
+ test-gwrapped-c.c: load a gnc-module from Scheme and test gwrapped fns
+ test-load-c.c: load a gnc-module from C
+ test-load-deps.{c,scm}: load a module that depends on another module 
+ test-load-scm.scm: basic module load test from Scheme
+ test-scm-module.c: add a Scheme module load to the init fn and make sure 
+                    the symbols are visible 
+ test-scm-multi.{c,scm}: load multiple gnc-modules from Scheme 
+
+
+gnc-module support files:
+ mod-{foo,bar,baz}/: sample modules for testing 
+

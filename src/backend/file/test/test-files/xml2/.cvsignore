@@ -1,0 +1,6 @@
+*.LNK
+*.LCK
+*.xac
+*.log
+Makefile
+Makefile.in

@@ -1,0 +1,2 @@
+#!/bin/sh
+guile -l test-parser.scm -c "(exit (run-test))"

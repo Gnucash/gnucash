@@ -22,7 +22,6 @@
 (gnc:support "text-export.scm")
 
 (require 'pretty-print)
-(gnc:depend "engine-utilities.scm")
 
 ;; TODO
 ;;
