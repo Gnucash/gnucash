@@ -27,7 +27,6 @@ src/calculation/fin-main.c
 src/calculation/fin-interactive.c
 src/calculation/numeric_ops.c
 src/calculation/expression_parser.c
-src/gnome/gnc-account-sel.c
 src/gnome/dialog-fincalc.c
 src/gnome/glade/transfer.glade
 src/gnome/glade/tax.glade
@@ -321,6 +320,7 @@ src/gnome-utils/dialog-utils.c
 src/gnome-utils/gnc-html.c
 src/gnome-utils/commodity.glade
 src/gnome-utils/dialog-account.c
+src/gnome-utils/gnc-account-sel.c
 src/business/dialog-tax-table/gncmod-dialog-tax-table.c
 src/business/dialog-tax-table/dialog-tax-table.c
 src/business/dialog-tax-table/tax-tables.glade
