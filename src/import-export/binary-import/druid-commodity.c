@@ -128,7 +128,8 @@ window_delete_cb(GtkWidget *widget,
  ********************************************************************/
 
 CommodityDruid *
-gnc_ui_commodity_druid_create(const char * filename) {
+gnc_ui_commodity_druid_create(const char * filename) 
+{
 
   CommodityDruid * d = g_new0(CommodityDruid, 1);
   GtkObject      * dobj;
@@ -185,7 +186,7 @@ gnc_ui_commodity_druid_create(const char * filename) {
       found = gnc_commodity_new(gnc_commodity_get_mnemonic(lost),
                                 GNC_COMMODITY_NS_NASDAQ,
                                 gnc_commodity_get_mnemonic(lost),
-                                NULL, 100000);
+                                NULL, 100000, gnc_get_current_book());
     }
 
     g_hash_table_insert(d->new_map, (gpointer)gnc_commodity_get_mnemonic(lost),
@@ -231,8 +232,8 @@ gnc_ui_commodity_druid_create(const char * filename) {
 
 
 static CommodityDruidPage *
-make_commodity_druid_page(gnc_commodity * comm) {
-
+make_commodity_druid_page(gnc_commodity * comm) 
+{
   CommodityDruidPage * retval = g_new0(CommodityDruidPage, 1);
   GtkWidget * alignment;
   GtkWidget * top_vbox;
@@ -340,8 +341,8 @@ make_commodity_druid_page(gnc_commodity * comm) {
  ********************************************************************/
 
 void
-gnc_ui_commodity_druid_destroy(CommodityDruid * cd) {  
-
+gnc_ui_commodity_druid_destroy(CommodityDruid * cd) 
+{  
   GList * p;
   CommodityDruidPage * cdp;
 
@@ -375,7 +376,8 @@ gnc_ui_commodity_druid_destroy(CommodityDruid * cd) {
 
 static gboolean
 gnc_ui_commodity_druid_cancel_cb(GnomeDruidPage * page, gpointer druid,
-                                 gpointer user_data) {
+                                 gpointer user_data) 
+{
   CommodityDruid * cd = user_data;
 
   /* destroy the dialog */
@@ -391,7 +393,8 @@ gnc_ui_commodity_druid_cancel_cb(GnomeDruidPage * page, gpointer druid,
 
 static gboolean
 gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
-                                     gpointer user_data) {
+                                     gpointer user_data) 
+{
   CommodityDruid * cd = user_data;
   CommodityDruidPage * dpage = 
     (CommodityDruidPage *)gtk_object_get_data(GTK_OBJECT(page),
@@ -436,15 +439,17 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
 }
 
 static void 
-finish_helper(gpointer key, gpointer value, gpointer data) {
+finish_helper(gpointer key, gpointer value, gpointer data) 
+{
   CommodityDruid * cd = data;
   gnc_commodity  * comm = value; 
   gnc_commodity  * old_comm = g_hash_table_lookup(cd->old_map, key);
   GList          * accts;
   GList          * node;
-  GNCBook        * book = xaccGroupGetBook (gnc_get_current_group ());
+  GNCBook        * book = gnc_get_current_book ();
 
-  if(!book) {
+  if(!book) 
+  {
     PERR("finish_helper - no current book.");
     return;
   }
@@ -490,7 +495,8 @@ finish_helper(gpointer key, gpointer value, gpointer data) {
 
 static void
 gnc_ui_commodity_druid_finish_cb(GnomeDruidPage * page, gpointer druid,
-                                 gpointer user_data) {
+                                 gpointer user_data) 
+{
   CommodityDruid * cd = user_data;
 
   /* add the new commodities to the engine's namespace map and 
