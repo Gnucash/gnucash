@@ -173,18 +173,18 @@ foreach (@files)
 		s/query_new_term/_QofQueryTerm/g;
 		s/query_new_sort/_QofQuerySort/g;
 
-		s/query_object_def/_QofQueryObject/g;
-		s/QueryObjectDef/QofQueryObject/g;
+		s/query_object_def/_QofParam/g;
+		s/QueryObjectDef/QofParam/g;
 
 		s/QueryAccess/QofAccessFunc/g;
 
-		s/gncQueryObjectRegister/qof_query_object_register/g;
-		s/gncQueryObjectParameterType/qof_query_object_parameter_type/g;
-		s/gncQueryObjectGetParameterGetter/qof_query_object_get_parameter_getter/g;
-		s/gncQueryObjectGetParameter/qof_query_object_get_parameter/g;
-		s/gncQueryObjectInit/qof_query_object_init/g;
-		s/gncQueryObjectShutdown/qof_query_object_shutdown/g;
-		s/gncQueryObjectDefaultSort/qof_query_object_default_sort/g;
+		s/gncQueryObjectRegister/qof_class_register/g;
+		s/gncQueryObjectParameterType/qof_class_get_parameter_type/g;
+		s/gncQueryObjectGetParameterGetter/qof_class_get_parameter_getter/g;
+		s/gncQueryObjectGetParameter/qof_class_get_parameter/g;
+		s/gncQueryObjectInit/qof_class_init/g;
+		s/gncQueryObjectShutdown/qof_class_shutdown/g;
+		s/gncQueryObjectDefaultSort/qof_class_get_default_sort/g;
 
 		s/xaccGUIDNULL/guid_null/g;
 		s/xaccGUIDMalloc/guid_malloc/g;

@@ -7,10 +7,10 @@
 #include "gnc-engine-util.h"
 #include "messages.h"
 
+#include "qofclass-p.h"
 #include "qofquery.h"
 #include "qofquerycore.h"
 #include "qofquerycore-p.h"
-#include "qofqueryobject-p.h"
 
 #include "test-stuff.h"
 
@@ -29,41 +29,41 @@ static int test_core_param (gpointer a)
   return 0;
 }
 
-static void test_query_object (void)
+static void test_class (void)
 {
-  static QofQueryObject params[] = {
-    { TEST_PARAM, TEST_CORE, (QofAccessFunc)test_core_param },
+  static QofParam params[] = {
+    { TEST_PARAM, TEST_CORE, (QofAccessFunc)test_core_param, NULL },
     { NULL },
   };
 
-  fprintf (stderr, "\tTesting the QueryObject interface. \n"
+  fprintf (stderr, "\tTesting the qof_query_object interface. \n"
 	   "\tYou may see some \"** CRITICAL **\" messages, which you can safely ignore\n");
 
-  qof_query_object_register (TEST_MODULE_NAME, (QofSortFunc)test_sort, params);
+  qof_class_register (TEST_MODULE_NAME, (QofSortFunc)test_sort, params);
 
-  do_test (qof_query_object_get_parameter (TEST_MODULE_NAME, TEST_PARAM)
-	   == &params[0], "qof_query_object_get_parameter");
-  do_test (qof_query_object_get_parameter (NULL, NULL) == NULL,
-	   "gncQueryObjectGetParamter (NULL, NULL)");
-  do_test (qof_query_object_get_parameter (TEST_MODULE_NAME, NULL) == NULL,
-	   "gncQueryObjectGetParamter (TEST_MODULE_NAME, NULL)");
-  do_test (qof_query_object_get_parameter (TEST_MODULE_NAME, BAD_PARAM) == NULL,
-	   "gncQueryObjectGetParamter (TEST_MODULE_NAME, BAD_PARAM)");
-  do_test (qof_query_object_get_parameter (NULL, TEST_PARAM) == NULL,
-	   "gncQueryObjectGetParamter (NULL, TEST_PARAM)");
+  do_test (qof_class_get_parameter (TEST_MODULE_NAME, TEST_PARAM)
+	   == &params[0], "qof_class_get_parameter");
+  do_test (qof_class_get_parameter (NULL, NULL) == NULL,
+	   "qof_class_get_parameter (NULL, NULL)");
+  do_test (qof_class_get_parameter (TEST_MODULE_NAME, NULL) == NULL,
+	   "qof_class_get_parameter (TEST_MODULE_NAME, NULL)");
+  do_test (qof_class_get_parameter (TEST_MODULE_NAME, BAD_PARAM) == NULL,
+	   "qof_class_get_parameter (TEST_MODULE_NAME, BAD_PARAM)");
+  do_test (qof_class_get_parameter (NULL, TEST_PARAM) == NULL,
+	   "qof_class_get_parameter (NULL, TEST_PARAM)");
 
-  do_test (qof_query_object_get_parameter_getter (TEST_MODULE_NAME, TEST_PARAM)
+  do_test (qof_class_get_parameter_getter (TEST_MODULE_NAME, TEST_PARAM)
 	   == (QofAccessFunc)test_core_param,
-	   "qof_query_object_get_parameter_getter");
+	   "qof_class_get_parameter_getter");
 
-  do_test (safe_strcmp (qof_query_object_parameter_type (TEST_MODULE_NAME,
+  do_test (safe_strcmp (qof_class_get_parameter_type (TEST_MODULE_NAME,
 						     TEST_PARAM),
-			TEST_CORE) == 0, "qof_query_object_parameter_type");
+			TEST_CORE) == 0, "qof_class_get_parameter_type");
 
-  do_test (qof_query_object_default_sort (TEST_MODULE_NAME) == test_sort,
-	   "qof_query_object_default_sort");
-  do_test (qof_query_object_default_sort (NULL) == NULL,
-	   "qof_query_object_default_sort (NULL)");
+  do_test (qof_class_get_default_sort (TEST_MODULE_NAME) == test_sort,
+	   "qof_class_get_default_sort");
+  do_test (qof_class_get_default_sort (NULL) == NULL,
+	   "qof_class_get_default_sort (NULL)");
 }
 
 static void test_query_core (void)
@@ -80,7 +80,7 @@ main_helper (void *closure, int argc, char **argv)
 {
   gnc_module_load("gnucash/engine", 0);
   test_query_core();
-  test_query_object();
+  test_class();
   test_querynew();
   print_test_results();
   exit(get_rv());

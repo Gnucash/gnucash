@@ -41,11 +41,11 @@
 #include "kvp_frame.h"
 #include "qofbook.h"
 #include "qofid.h"
+#include "qofid-p.h"
 
 struct gnc_lot_struct
 {
-  /* Unique guid for this lot */
-  GUID guid;
+  QofEntity entity;     /* Unique guid for this lot */
 
   /* Book that this lot belongs to */
   QofBook *book;  
@@ -69,7 +69,7 @@ struct gnc_lot_struct
   unsigned char marker;
 };
 
-void gnc_lot_set_guid(GNCLot *lot, GUID guid);
+#define gnc_lot_set_guid(L,G)  qof_entity_set_guid(QOF_ENTITY(L),&(G))
 
 /* Register with the Query engine */
 void gnc_lot_register (void);

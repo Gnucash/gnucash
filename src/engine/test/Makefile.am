@@ -18,14 +18,18 @@ LDADD = \
   ${GLIB_LIBS} \
   -lltdl
 
+# these tests are ordered kind more or less in the order
+# that they should be executed, with more basic tests coming first.
+# 
 TESTS = \
   test-load-engine \
-  test-create-account \
-  test-commodities \
+  test-guid \
   test-date \
+  test-object \
+  test-commodities \
+  test-create-account \
   test-group-vs-book \
   test-lots \
-  test-object \
   test-period \
   test-querynew \
   test-query \
@@ -53,6 +57,7 @@ noinst_PROGRAMS = \
   test-commodities \
   test-date \
   test-freq-spec \
+  test-guid \
   test-group-vs-book \
   test-load-engine \
   test-lots \

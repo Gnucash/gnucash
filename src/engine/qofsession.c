@@ -478,8 +478,9 @@ qof_session_begin (QofSession *session, const char * book_id,
           LEAVE("backend error %d", err);
           return;
       }
-      if (msg != NULL) {
-          PWARN_GUI(msg);
+      if (msg != NULL) 
+      {
+          PWARN("%s", msg);
           g_free(msg);
       }
   }

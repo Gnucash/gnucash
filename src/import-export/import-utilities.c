@@ -32,13 +32,11 @@
 
 #include <stdlib.h>
 #include "import-utilities.h"
+#include "kvp_frame.h"
 #include "Account.h"
 #include "Transaction.h"
 
 #include "gnc-engine-util.h"
-
-
-static short module = MOD_IMPORT;
 
 /********************************************************************\
  * Setter and getter functions for the online_id kvp frame in
@@ -47,59 +45,32 @@ static short module = MOD_IMPORT;
 
 const gchar * gnc_import_get_acc_online_id(Account * account)
 {
-  gchar * string = NULL;
   kvp_frame * frame;
-  kvp_value * value;
   frame = xaccAccountGetSlots(account);
-  value = kvp_frame_get_slot(frame, "online_id");
-  string = kvp_value_get_string(value);  
-  return string;
+  return kvp_frame_get_string(frame, "online_id");
 }
 
 void gnc_import_set_acc_online_id(Account * account,
 				  const gchar * string_value)
 {
   kvp_frame * frame;
-  kvp_value * value;
   frame = xaccAccountGetSlots(account);
-  if(frame==NULL)
-    {
-      DEBUG("The kvp_frame was NULL, allocating new one\n");
-      frame = kvp_frame_new();
-    }
-  value = kvp_frame_get_slot(frame, "online_id");
-  value = kvp_value_new_string(string_value);
-  kvp_frame_set_slot(frame,"online_id",value);
-  xaccAccountSetSlots_nc(account,frame);
-  return;
+  kvp_frame_set_str(frame, "online_id", string_value);
 }
 
 const gchar * gnc_import_get_trans_online_id(Transaction * transaction)
 {
-  gchar * string = NULL;
   kvp_frame * frame;
-  kvp_value * value;
   frame = xaccTransGetSlots(transaction);
-  value = kvp_frame_get_slot(frame, "online_id");
-  string = kvp_value_get_string(value);  
-  return string;
+  return kvp_frame_get_string(frame, "online_id");
 }
 
 void gnc_import_set_trans_online_id(Transaction * transaction,
 				    const gchar * string_value)
 {
   kvp_frame * frame;
-  kvp_value * value;
   frame = xaccTransGetSlots(transaction);
-  if(frame==NULL)
-    {
-      DEBUG("The kvp_frame was NULL, allocating new one");
-      frame = kvp_frame_new();
-    }
-  value = kvp_value_new_string(string_value);
-  kvp_frame_set_slot(frame,"online_id",value);
-  xaccTransSetSlots_nc(transaction,frame);
-  return;
+  kvp_frame_set_str (frame, "online_id", string_value);
 }
 
 /* @} */

@@ -37,9 +37,9 @@
 
 #include "window-register.h"
 #include "Account.h"
-#include "AccWindow.h"
 #include "QueryNew.h"
 #include "SX-book.h"
+#include "dialog-account.h"
 #include "dialog-scheduledxaction.h"
 #include "dialog-sx-from-trans.h"
 #include "global-options.h"
@@ -47,6 +47,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine-util.h"
+#include "gnc-err-popup.h"
 #include "gnc-euro.h"
 #include "gnc-gui-query.h"
 #include "gnc-ledger-display.h"
@@ -1147,6 +1148,25 @@ gnc_split_reg_reverse_trans_cb (GtkWidget *w, gpointer data)
   GNCSplitReg *gsr = data;
   gsr_emit_simple_signal( gsr, "reverse_txn" );
 }
+
+
+static gboolean
+xaccTransWarnReadOnly (const Transaction *trans)
+{
+  const gchar *reason;
+
+  if (!trans) return FALSE;
+
+  reason = xaccTransGetReadOnly (trans);
+  if (reason) {
+    gnc_send_gui_error(_("Cannot modify or delete this transaction.\n"
+                       "This transaction is marked read-only because:\n\n'%s'"),
+                       reason);
+    return TRUE;
+  }
+  return FALSE;
+}
+
 
 void
 gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )

@@ -27,7 +27,7 @@
  * Provides a set of functions and utilities for checking and
  * repairing ('scrubbing clean') the usage of Lots and lot balances
  * in stock and commodity accounts.  Broken lots are repaired using
- * a first-in, first-out (FIFO) accounting schedule.
+ * the accounts specific accounting policy (probably FIFO).
  */
 
 #include "config.h"
@@ -98,9 +98,12 @@ xaccLotFill (GNCLot *lot)
 {
    gnc_numeric lot_baln;
    Account *acc;
+   Split *split;
+   GNCPolicy *pcy;
 
    if (!lot) return;
    acc = lot->account;
+   pcy = acc->policy;
 
    ENTER ("acc=%s", acc->accountName);
 
@@ -108,15 +111,17 @@ xaccLotFill (GNCLot *lot)
    lot_baln = gnc_lot_get_balance (lot);
    if (gnc_numeric_zero_p (lot_baln)) return;
 
+   split = pcy->PolicyGetSplit (pcy, lot);
+   if (!split) return;   /* Handle the common case */
+
    xaccAccountBeginEdit (acc);
 
    /* Loop until we've filled up the lot, (i.e. till the 
     * balance goes to zero) or there are no splits left.  */
    while (1)
    {
-      Split *split, *subsplit;
+      Split *subsplit;
 
-      split = FIFOPolicyGetSplit (lot, NULL);
       subsplit = xaccSplitAssignToLot (split, lot);
       if (subsplit == split)
       {
@@ -127,25 +132,11 @@ xaccLotFill (GNCLot *lot)
 
       lot_baln = gnc_lot_get_balance (lot);
       if (gnc_numeric_zero_p (lot_baln)) break;
+
+      split = pcy->PolicyGetSplit (pcy, lot);
+      if (!split) break;
    }
    xaccAccountCommitEdit (acc);
-   LEAVE ("acc=%s", acc->accountName);
-}
-
-/* ============================================================== */
-
-void
-xaccAccountScrubDoubleBalance (Account *acc)
-{
-   LotList *node;
-   if (!acc) return;
-
-   ENTER ("acc=%s", acc->accountName);
-   for (node = acc->lots; node; node=node->next)
-   {
-      GNCLot *lot = node->data;
-      xaccLotScrubDoubleBalance (lot);
-   }
    LEAVE ("acc=%s", acc->accountName);
 }
 
@@ -193,9 +184,10 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
       }
 
       /* Now, total up the values */
-      value = gnc_numeric_add_fixed (value, xaccSplitGetValue (s));
-      PINFO ("Split value=%s Accum Lot value=%s", 
-          gnc_numeric_to_string (xaccSplitGetValue(s)),
+      value = gnc_numeric_add (value, xaccSplitGetValue (s), 
+                  GNC_DENOM_AUTO, GNC_DENOM_EXACT);
+      PINFO ("Split=%p value=%s Accum Lot value=%s", s,
+          gnc_numeric_to_string (s->value),
           gnc_numeric_to_string (value));
           
    }
@@ -214,43 +206,242 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
    LEAVE ("lot=%s", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
 }
 
-/* ============================================================== */
+/* ================================================================= */
 
-static gpointer 
-lot_scrub_cb (Account *acc, gpointer data)
+static inline gboolean 
+is_subsplit (Split *split)
 {
-   if (FALSE == xaccAccountHasTrades (acc)) return NULL;
-   xaccAccountAssignLots (acc);
-   xaccAccountScrubDoubleBalance (acc);
-   return NULL;
+   KvpValue *kval;
+
+   /* generic stop-progress conditions */
+   if (!split) return FALSE;
+   g_return_val_if_fail (split->parent, FALSE);
+
+   /* If there are no sub-splits, then there's nothing to do. */
+   kval = kvp_frame_get_slot (split->kvp_data, "lot-split");
+   if (!kval) return FALSE;  
+
+   return TRUE;
 }
 
-void 
-xaccGroupScrubLotsBalance (AccountGroup *grp)
+/* ================================================================= */
+
+void
+xaccScrubSubSplitPrice (Split *split, int maxmult, int maxamtscu)
 {
-   if (!grp) return;
-   xaccGroupForEachAccount (grp, lot_scrub_cb, NULL, TRUE);
+   gnc_numeric src_amt, src_val;
+   SplitList *node;
+
+   if (FALSE == is_subsplit (split)) return;
+
+   ENTER (" ");
+   /* Get 'price' of the indicated split */
+   src_amt = xaccSplitGetAmount (split);
+   src_val = xaccSplitGetValue (split);
+
+   /* Loop over splits, adjust each so that it has the same
+    * ratio (i.e. price).  Change the value to get things 
+    * right; do not change the amount */
+   for (node=split->parent->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      Transaction *txn = s->parent;
+      gnc_numeric dst_amt, dst_val, target_val;
+      gnc_numeric delta;
+      int scu;
+
+      /* Skip the reference split */
+      if (s == split) continue;
+
+      scu = gnc_commodity_get_fraction (txn->common_currency);
+
+      dst_amt = xaccSplitGetAmount (s);
+      dst_val = xaccSplitGetValue (s);
+      target_val = gnc_numeric_mul (dst_amt, src_val,
+                        GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+      target_val = gnc_numeric_div (target_val, src_amt,
+                        scu, GNC_DENOM_EXACT);
+
+      /* If the required price changes are 'small', do nothing.
+       * That is a case that the user will have to deal with
+       * manually.  This routine is really intended only for
+       * a gross level of synchronization.
+       */
+      delta = gnc_numeric_sub_fixed (target_val, dst_val);
+      delta = gnc_numeric_abs (delta);
+      if (maxmult * delta.num  < delta.denom) continue;
+
+      /* If the amount is small, pass on that too */
+      if ((-maxamtscu < dst_amt.num) && (dst_amt.num < maxamtscu)) continue;
+
+      /* Make the actual adjustment */
+      xaccTransBeginEdit (txn);
+      xaccSplitSetValue (s, target_val);
+      xaccTransCommitEdit (txn);
+   }
+   LEAVE (" ");
 }
 
-void 
-xaccAccountScrubLotsBalance (Account *acc)
+/* ================================================================= */
+
+/* Remove the guid of b from a.  Note that a may not contain the guid 
+ * of b, (and v.v.) in which case, it will contain other guids which
+ * establish the links. So merge them back in. */
+
+static void
+remove_guids (Split *sa, Split *sb)
 {
-   if (!acc) return;
-   if (FALSE == xaccAccountHasTrades (acc)) return;
-   xaccAccountAssignLots (acc);
-   xaccAccountScrubDoubleBalance (acc);
+   KvpFrame *ksub;
+
+   /* Find and remove the matching guid's */
+   ksub = gnc_kvp_bag_find_by_guid (sa->kvp_data, "lot-split",
+                    "peer_guid", &sb->entity.guid);
+   if (ksub) 
+   {
+      gnc_kvp_bag_remove_frame (sa->kvp_data, "lot-split", ksub);
+      kvp_frame_delete (ksub);
+   }
+
+   /* Now do it in the other direction */
+   ksub = gnc_kvp_bag_find_by_guid (sb->kvp_data, "lot-split",
+                    "peer_guid", &sa->entity.guid);
+   if (ksub) 
+   {
+      gnc_kvp_bag_remove_frame (sb->kvp_data, "lot-split", ksub);
+      kvp_frame_delete (ksub);
+   }
+
+   /* Finally, merge b's lot-splits, if any, into a's */
+   /* This is an important step, if it got busted into many pieces. */
+   gnc_kvp_bag_merge (sa->kvp_data, "lot-split",
+                      sb->kvp_data, "lot-split");
 }
 
-void 
-xaccAccountTreeScrubLotsBalance (Account *acc)
-{
-   if (!acc) return;
+/* The merge_splits() routine causes the amount & value of sb 
+ * to be merged into sa; it then destroys sb.  It also performs
+ * some other misc cleanup */
 
-   xaccGroupScrubLotsBalance (acc->children);
-   
-   if (FALSE == xaccAccountHasTrades (acc)) return;
-   xaccAccountAssignLots (acc);
-   xaccAccountScrubDoubleBalance (acc);
+static void
+merge_splits (Split *sa, Split *sb)
+{
+   Account *act;
+   Transaction *txn;
+   gnc_numeric amt, val;
+
+   act = xaccSplitGetAccount (sb);
+   xaccAccountBeginEdit (act);
+
+   txn = sa->parent;
+   xaccTransBeginEdit (txn);
+
+   /* Remove the guid of sb from the 'gemini' of sa */
+   remove_guids (sa, sb);
+
+   /* Add amount of sb into sa, ditto for value. */
+   amt = xaccSplitGetAmount (sa);
+   amt = gnc_numeric_add_fixed (amt, xaccSplitGetAmount (sb));
+   xaccSplitSetAmount (sa, amt);
+
+   val = xaccSplitGetValue (sa);
+   val = gnc_numeric_add_fixed (val, xaccSplitGetValue (sb));
+   xaccSplitSetValue (sa, val);
+
+   /* Set reconcile to no; after this much violence, 
+    * no way its reconciled. */
+   xaccSplitSetReconcile (sa, NREC);
+
+   /* If sb has associated gains splits, trash them. */
+   if ((sb->gains_split) && 
+       (sb->gains_split->gains & GAINS_STATUS_GAINS))
+   {
+      Transaction *t = sb->gains_split->parent;
+      xaccTransBeginEdit (t);
+      xaccTransDestroy (t);
+      xaccTransCommitEdit (t);
+   }
+
+   /* Finally, delete sb */
+   xaccSplitDestroy(sb);
+
+   xaccTransCommitEdit (txn);
+   xaccAccountCommitEdit (act);
+}
+
+gboolean 
+xaccScrubMergeSubSplits (Split *split)
+{
+   gboolean rc = FALSE;
+   Transaction *txn;
+   SplitList *node;
+   GNCLot *lot;
+
+   if (FALSE == is_subsplit (split)) return FALSE;
+
+   txn = split->parent;
+   lot = xaccSplitGetLot (split);
+
+   ENTER (" ");
+restart:
+   for (node=txn->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      if (xaccSplitGetLot (s) != lot) continue;
+      if (s == split) continue;
+
+      /* OK, this split is in the same lot (and thus same account)
+       * as the indicated split.  It must be a subsplit (although
+       * we should double-check the kvp's to be sure).  Merge the
+       * two back together again. */
+      merge_splits (split, s);
+      rc = TRUE;
+      goto restart;
+   }
+   LEAVE (" splits merged=%d", rc);
+   return rc;
+}
+
+gboolean 
+xaccScrubMergeTransSubSplits (Transaction *txn)
+{
+   gboolean rc = FALSE;
+   SplitList *node;
+
+   if (!txn) return FALSE;
+
+   ENTER (" ");
+restart:
+   for (node=txn->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      if (!xaccScrubMergeSubSplits(s)) continue;
+
+      rc = TRUE;
+      goto restart;
+   }
+   LEAVE (" splits merged=%d", rc);
+   return rc;
+}
+
+gboolean 
+xaccScrubMergeLotSubSplits (GNCLot *lot)
+{
+   gboolean rc = FALSE;
+   SplitList *node;
+
+   if (!lot) return FALSE;
+
+   ENTER (" ");
+restart:
+   for (node=gnc_lot_get_split_list(lot); node; node=node->next)
+   {
+      Split *s = node->data;
+      if (!xaccScrubMergeSubSplits(s)) continue;
+
+      rc = TRUE;
+      goto restart;
+   }
+   LEAVE (" splits merged=%d", rc);
+   return rc;
 }
 
 /* =========================== END OF FILE ======================= */

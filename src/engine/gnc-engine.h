@@ -68,7 +68,8 @@
 #define GNC_ID_PRICEDB        "PriceDB"
 #define GNC_ID_SPLIT          "Split"
 #define GNC_ID_SCHEDXACTION   "SchedXaction"
-#define GNC_ID_SXTT           "SXTT"
+#define GNC_ID_SXTG           "SXTGroup"
+#define GNC_ID_SXTT           "SXTTrans"
 #define GNC_ID_TRANS          "Trans"
                                                                                 
 /* TYPES **********************************************************/

@@ -123,77 +123,60 @@ const char * gnc_log_prettify (const char *name);
  */
 
 #define FATAL(format, args...) {                     \
-  if (gnc_should_log (module, GNC_LOG_FATAL)) {      \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_ERROR,          \
-      "Fatal Error: %s: " format, FUNK, ## args);    \
-  }                                                  \
+      "Fatal Error: %s(): " format, FUNK, ## args);  \
 }
 
 #define PERR(format, args...) {                    \
   if (gnc_should_log (module, GNC_LOG_ERROR)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,     \
-      "Error: %s: " format, FUNK, ## args);        \
+      "Error: %s(): " format, FUNK, ## args);      \
   }                                                \
 }
 
 #define PWARN(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_WARNING)) {  \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,      \
-      "Warning: %s: " format, FUNK, ## args);      \
+      "Warning: %s(): " format, FUNK, ## args);    \
   }                                                \
-}
-
-#define PWARN_GUI(format, args...) {               \
-   gnc_send_gui_error(format, ## args);            \
 }
 
 #define PINFO(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_INFO)) {     \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_INFO,         \
-      "Info: %s: " format, FUNK, ## args);         \
+      "Info: %s(): " format, FUNK, ## args);       \
   }                                                \
 }
 
 #define DEBUG(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Debug: %s: " format, FUNK, ## args);        \
+      "Debug: %s(): " format, FUNK, ## args);      \
   }                                                \
 }
 
 #define ENTER(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Enter: %s: " format, FUNK, ## args);        \
+      "Enter: %s" format, FUNK, ## args);          \
   }                                                \
 }
 
 #define LEAVE(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Leave: %s: " format, FUNK, ## args);        \
+      "Leave: %s" format, FUNK, ## args);          \
   }                                                \
 }
 
 #define TRACE(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_TRACE)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Trace: %s: " format, FUNK, ## args);        \
+      "Trace: %s(): " format, FUNK, ## args);      \
   }                                                \
 }
 
 #define DEBUGCMD(x) { if (gnc_should_log (module, GNC_LOG_DEBUG)) { (x); }}
-
-/* -------------------------------------------------------- */
-/* Infrastructure to send messages go to GUI popups, not to stderr! 
- * Incompletely implemented, needs work.
- */
-typedef void (*GNCGuiMessage) (const char *format, va_list args);
-void gnc_set_warning_message (GNCGuiMessage func);
-void gnc_set_error_message (GNCGuiMessage func);
-
-gboolean gnc_send_gui_warning (const char *format, ...) G_GNUC_PRINTF(1,2);
-gboolean gnc_send_gui_error (const char *format, ...) G_GNUC_PRINTF(1,2);
 
 /* -------------------------------------------------------- */
 /* Infrastructure to make timing measurements for critical peices 

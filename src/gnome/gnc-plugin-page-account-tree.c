@@ -30,7 +30,6 @@
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-page-register.h"
 
-#include "AccWindow.h"
 #include "Scrub.h"
 #include "Transaction.h"
 #include "dialog-account.h"

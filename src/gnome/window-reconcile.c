@@ -37,8 +37,8 @@
 #include <libgnomeui/gnome-window-icon.h>
 #include <gconf/gconf-client.h>
 
-#include "AccWindow.h"
 #include "Scrub.h"
+#include "dialog-account.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "dialog-transfer.h"

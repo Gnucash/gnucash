@@ -75,29 +75,40 @@ void qof_object_book_end (QofBook *book)
   LEAVE (" ");
 }
 
-gboolean qof_object_is_dirty (QofBook *book)
+gboolean 
+qof_object_is_dirty (QofBook *book)
 {
   GList *l;
 
   if (!book) return FALSE;
-  for (l = object_modules; l; l = l->next) {
+  for (l = object_modules; l; l = l->next) 
+  {
     QofObject *obj = l->data;
     if (obj->is_dirty)
-      if (obj->is_dirty (book))
-	return TRUE;
+    {
+      QofCollection *col;
+      col = qof_book_get_collection (book, obj->e_type);
+      if (obj->is_dirty (col)) return TRUE;
+    }
   }
   return FALSE;
 }
 
-void qof_object_mark_clean (QofBook *book)
+void 
+qof_object_mark_clean (QofBook *book)
 {
   GList *l;
 
   if (!book) return;
-  for (l = object_modules; l; l = l->next) {
+  for (l = object_modules; l; l = l->next) 
+  {
     QofObject *obj = l->data;
     if (obj->mark_clean)
-      (obj->mark_clean) (book);
+    {
+      QofCollection *col;
+      col = qof_book_get_collection (book, obj->e_type);
+      (obj->mark_clean) (col);
+    }
   }
 }
 
@@ -113,21 +124,25 @@ void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data)
   }
 }
 
-void qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
-		       QofEntityForeachCB cb, gpointer user_data)
+void 
+qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
+                    QofEntityForeachCB cb, gpointer user_data)
 {
+  QofCollection *col;
   const QofObject *obj;
 
   if (!book || !type_name) return;
   ENTER ("type=%s", type_name);
 
   obj = qof_object_lookup (type_name);
+  col = qof_book_get_collection (book, obj->e_type);
   PINFO ("lookup obj=%p for type=%s", obj, type_name);
   if (!obj) return;
 
   PINFO ("type=%s foreach=%p", type_name, obj->foreach);
-  if (obj->foreach) {
-    obj->foreach (book, cb, user_data);
+  if (obj->foreach) 
+  {
+    obj->foreach (col, cb, user_data);
   }
   LEAVE ("type=%s", type_name);
 
@@ -147,7 +162,7 @@ qof_object_printable (QofIdTypeConst type_name, gpointer obj)
   if (b_obj->printable)
     return (b_obj->printable (obj));
 
-  return NULL;	    
+  return NULL;
 }
 
 const char * qof_object_get_type_label (QofIdTypeConst type_name)
@@ -230,15 +245,15 @@ const QofObject * qof_object_lookup (QofIdTypeConst name)
 
   for (iter = object_modules; iter; iter = iter->next) {
     obj = iter->data;
-    if (!safe_strcmp (obj->name, name))
+    if (!safe_strcmp (obj->e_type, name))
       return obj;
   }
   return NULL;
 }
 
 gboolean qof_object_register_backend (QofIdTypeConst type_name,
-				   const char *backend_name,
-				   gpointer be_data)
+                                   const char *backend_name,
+                                   gpointer be_data)
 {
   GHashTable *ht;
   g_return_val_if_fail (object_is_initialized, FALSE);
@@ -263,7 +278,7 @@ gboolean qof_object_register_backend (QofIdTypeConst type_name,
 }
 
 gpointer qof_object_lookup_backend (QofIdTypeConst type_name,
-				 const char *backend_name)
+                                 const char *backend_name)
 {
   GHashTable *ht;
 
@@ -279,8 +294,8 @@ gpointer qof_object_lookup_backend (QofIdTypeConst type_name,
 }
 
 struct foreach_data {
-  QofForeachBackendTypeCB	cb;
-  gpointer 		user_data;
+  QofForeachBackendTypeCB        cb;
+  gpointer                 user_data;
 };
 
 static void foreach_backend (gpointer key, gpointer be_item, gpointer arg)
@@ -295,8 +310,8 @@ static void foreach_backend (gpointer key, gpointer be_item, gpointer arg)
 }
 
 void qof_object_foreach_backend (const char *backend_name,
-			      QofForeachBackendTypeCB cb,
-			      gpointer user_data)
+                                 QofForeachBackendTypeCB cb,
+                                 gpointer user_data)
 {
   GHashTable *ht;
   struct foreach_data cb_data;

@@ -36,6 +36,7 @@
 #include "guid.h"
 #include "kvp_frame.h"
 #include "qofbook.h"
+#include "qofinstance.h"
 
 /** @name Split Reconciled field values
     If you change these
@@ -135,18 +136,18 @@ void          xaccTransCommitEdit (Transaction *trans);
 void          xaccTransRollbackEdit (Transaction *trans);
 
 /** The xaccTransIsOpen() method returns TRUE if the transaction
-    is open for editing. Otherwise, it returns false.  */
+    is open for editing. Otherwise, it returns false.  
+    XXX this routne should probably be deprecated.  its, umm,
+    hard to imagine legitamate uses (but it is used by
+    the import/export code for reasons I can't understand.)
+ */
 gboolean      xaccTransIsOpen (const Transaction *trans);
 
 /** The xaccTransLookup() subroutine will return the
     transaction associated with the given id, or NULL
     if there is no such transaction. */
 Transaction * xaccTransLookup (const GUID *guid, QofBook *book);
-/** The xaccTransLookup() subroutine will return the
-    transaction associated with the given id, or NULL
-    if there is no such transaction. */
-Transaction * xaccTransLookupDirect (GUID guid, QofBook *book);
-
+#define xaccTransLookupDirect(g,b) xaccTransLookup(&(g),b)
 
 /** \warning XXX FIXME 
  * gnc_book_count_transactions is a utility function, 
@@ -159,16 +160,6 @@ guint gnc_book_count_transactions(QofBook *book);
 
 /** @name Transaction general getters/setters */
 /**@{*/
-/** The xaccTransGetGUID() subroutine will return the
-    globally unique id associated with that transaction. */
-const GUID  * xaccTransGetGUID (const Transaction *trans);
-
-/** xaccTransReturnGUID() will returns a GUID struct 
-    associated with that transaction. */
-GUID          xaccTransReturnGUID (const Transaction *trans);
-
-/** Returns the book in which the transaction is stored */
-QofBook *     xaccTransGetBook (const Transaction *trans);
 
 /** Sorts the splits in a transaction, putting the debits first,
  *  followed by the credits.
@@ -178,17 +169,6 @@ void          xaccTransSortSplits (Transaction *trans);
 /** Print the transaction out to the console. Used for debugging.
  */
 void          xaccTransDump (Transaction *trans, const char *tag);
-
-/** Returns the transaction's KvpFrame slots.
- *
- Transaction slots are used to store arbitrary strings, numbers, and
- structures which aren't members of the transaction struct.  */
-KvpFrame *xaccTransGetSlots(const Transaction *trans);
-
-/** Set the KvpFrame slots of this transaction to the given frm by
- * directly using the frm pointer (i.e. non-copying). */
-void xaccTransSetSlots_nc(Transaction *t, KvpFrame *frm);
-
 
 /** Set the  Transaction Type
  *
@@ -249,8 +229,6 @@ void          xaccTransSetReadOnly (Transaction *trans, const char *reason);
 void	      xaccTransClearReadOnly (Transaction *trans);
 /** FIXME: document me */
 const char *  xaccTransGetReadOnly (const Transaction *trans);
-/** FIXME: document me */
-gboolean      xaccTransWarnReadOnly (const Transaction *trans);
 
 /** Returns the number of splits in this transaction. */
 int           xaccTransCountSplits (const Transaction *trans);
@@ -440,15 +418,6 @@ KvpFrame *xaccSplitGetSlots(const Split *split);
 /** Set the KvpFrame slots of this split to the given frm by directly
  * using the frm pointer (i.e. non-copying). */
 void xaccSplitSetSlots_nc(Split *s, KvpFrame *frm);
-
-
-/** The xaccSplitGetGUID() subroutine will return the
- *    globally unique id associated with that split. */
-const GUID * xaccSplitGetGUID (const Split *split);
-
-/** xaccSplitReturnGUID also returns the guid (globally unique id),
- * but in a GUID struct.*/
-GUID         xaccSplitReturnGUID (const Split *split);
 
 
 /** The memo is an arbitrary string associated with a split.  It is
@@ -645,9 +614,7 @@ gboolean xaccSplitEqual(const Split *sa, const Split *sb,
  *    split associated with the given id, or NULL
  *    if there is no such split. */
 Split      * xaccSplitLookup (const GUID *guid, QofBook *book);
-/** Returns the split associated with the given id, or NULL if there
- * is no such split. */
-Split      * xaccSplitLookupDirect (GUID guid, QofBook *book);
+#define      xaccSplitLookupDirect(g,b) xaccSplitLookup(&(g),b)
 
 
 /** 
@@ -889,6 +856,14 @@ Timespec xaccTransGetVoidTime(const Transaction *tr);
 /**@}*/
 
 #define RECONCILED_MATCH_TYPE	"reconciled-match"
+
+/** deprecated rouitines */
+#define xaccSplitGetGUID(X)      qof_entity_get_guid(QOF_ENTITY(X))
+#define xaccSplitReturnGUID(X) (*(qof_entity_get_guid(QOF_ENTITY(X))))
+#define xaccTransGetBook(X)      qof_instance_get_book (QOF_INSTANCE(X))
+#define xaccTransGetGUID(X)      qof_entity_get_guid(QOF_ENTITY(X))
+#define xaccTransReturnGUID(X) (*(qof_entity_get_guid(QOF_ENTITY(X))))
+#define xaccTransGetSlots(X)     qof_instance_get_slots (QOF_INSTANCE(X))
 
 #endif /* XACC_TRANSACTION_H */
 /** @} */

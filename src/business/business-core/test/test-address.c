@@ -1,3 +1,28 @@
+/*********************************************************************
+ * businessmod-core.c
+ * module definition/initialization for the core Business module
+ * 
+ * Copyright (c) 2001 Derek Atkins <warlord@MIT.EDU>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, contact:
+ *
+ * Free Software Foundation           Voice:  +1-617-542-5942
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ *
+ *********************************************************************/
+
 #include <glib.h>
 #include <libguile.h>
 
@@ -17,13 +42,18 @@ test_string_fcn (GncAddress *address, const char *message,
 static void
 test_address (void)
 {
+  QofEntity ent;
   GncAddress *address;
-  GNCBook *book = gnc_book_new ();
+  QofBook *book = qof_book_new ();
+
+  ent.e_type = "asdf";
+  ent.guid = *guid_null();
 
   /* Test creation/destruction */
   {
-    do_test (gncAddressCreate (NULL, NULL, NULL) == NULL, "address create NULL");
-    address = gncAddressCreate (book, NULL, "x");
+    do_test (gncAddressCreate (NULL,  NULL) == NULL, "address create NULL");
+
+    address = gncAddressCreate (book, &ent);
     do_test (address != NULL, "address create");
 
     gncAddressDestroy (address);
@@ -32,7 +62,7 @@ test_address (void)
 
   /* Test setting routines */
   {
-    address = gncAddressCreate (book, NULL, "x");
+    address = gncAddressCreate (book, &ent);
     test_string_fcn (address, "Name", gncAddressSetName, gncAddressGetName);
     test_string_fcn (address, "Addr1", gncAddressSetAddr1, gncAddressGetAddr1);
     test_string_fcn (address, "Addr2", gncAddressSetAddr2, gncAddressGetAddr2);

@@ -1,3 +1,28 @@
+/*********************************************************************
+ * test-business.c
+ * Test the business code.
+ * 
+ * Copyright (c) 2001 Derek Atkins <warlord@MIT.EDU>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, contact:
+ *
+ * Free Software Foundation           Voice:  +1-617-542-5942
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ *
+ *********************************************************************/
+
 #include <glib.h>
 #include <libguile.h>
 
@@ -13,10 +38,10 @@
 #define TEST_MODULE_DESC "Test Business"
 
 #if 0
-static GList * get_list (GNCBook *, gboolean show_all);
+static GList * get_list (QofBook *, gboolean show_all);
 static const char * printable (gpointer obj);
 static void test_printable (const char *name, gpointer obj);
-static void test_get_list (GNCBook *, const char *);
+static void test_get_list (QofBook *, const char *);
 
 static GncBusinessObject bus_obj = {
   GNC_BUSINESS_VERSION,
@@ -45,12 +70,12 @@ static void test_business (void)
 	     "test description return");
   }
 
-  test_get_list ((GNCBook*)1, TEST_MODULE_NAME);
+  test_get_list ((QofBook*)1, TEST_MODULE_NAME);
   test_printable (TEST_MODULE_NAME, (gpointer)1);
 }
 
 static GList *
-get_list (GNCBook *book, gboolean show_all)
+get_list (QofBook *book, gboolean show_all)
 {
   do_test (book != NULL, "get_list: NULL business");
   success ("called get_list callback");
@@ -66,7 +91,7 @@ printable (gpointer obj)
 }
 
 static void
-test_get_list (GNCBook *book, const char *name)
+test_get_list (QofBook *book, const char *name)
 {
   GList *res;
 

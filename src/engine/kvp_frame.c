@@ -72,7 +72,7 @@ struct _KvpValue
 };
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_ENGINE;
+static short module = MOD_KVP;
 
 /********************************************************************
  * KvpFrame functions
@@ -529,6 +529,7 @@ kvp_frame_add_value_nc(KvpFrame * frame, const char * path, KvpValue *value)
   frame = (KvpFrame *) get_trailer_or_null (frame, path, &key);
   oldvalue = kvp_frame_get_slot (frame, key);
 
+  ENTER ("old frame=%s", kvp_frame_to_string(frame));
   if (oldvalue)
   {
     /* If already a glist here, just append */
@@ -550,12 +551,14 @@ kvp_frame_add_value_nc(KvpFrame * frame, const char * path, KvpValue *value)
 
        kvp_frame_replace_slot_nc (frame, key, klist);
     }
+    LEAVE ("new frame=%s", kvp_frame_to_string(frame));
     return frame;
   }
 
   /* Hmm, if we are here, the path doesn't exist. We need to 
    * create the path, add the value to it. */
   frame = kvp_frame_set_value_nc (frame, path, value);
+  LEAVE ("new frame=%s", kvp_frame_to_string(frame));
   return frame;
 }
 
@@ -1408,11 +1411,24 @@ KvpFrame *
 kvp_value_replace_frame_nc(KvpValue *value, KvpFrame * newframe) 
 {
   KvpFrame *oldframe;
+  if (!value) return NULL;
   if (KVP_TYPE_FRAME != value->type) return NULL;
 
   oldframe = value->value.frame;
   value->value.frame = newframe;
   return oldframe;  
+}
+
+GList *
+kvp_value_replace_glist_nc(KvpValue * value, GList *newlist) 
+{
+  GList *oldlist;
+  if (!value) return NULL;
+  if (KVP_TYPE_GLIST != value->type) return NULL;
+
+  oldlist = value->value.list;
+  value->value.list = newlist;
+  return oldlist;
 }
 
 /* manipulators */

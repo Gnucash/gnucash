@@ -25,6 +25,7 @@
 #define GNC_EVENT_P_H
 
 #include "gnc-event.h"
+#include "qofid.h"
 
 /* gnc_engine_generate_event
  *   Invoke all registered event handlers using the given arguments.
@@ -40,11 +41,14 @@
  * event_type: the type of event -- this should be one of the
  *             single-bit GNCEngineEventType values, not a combination.
  */
-void gnc_engine_generate_event (const GUID *entity, QofIdType type,
+void gnc_engine_gen_event (QofEntity *entity, 
 				GNCEngineEventType event_type);
 
+/* XXX deprecated, but still usedion on postgres backend */
+void gnc_engine_generate_event (const GUID *, QofIdType, GNCEngineEventType);
+
 /* generates an event even when events are suspended! */
-void gnc_engine_force_event (const GUID *entity, QofIdType type,
+void gnc_engine_force_event (QofEntity *entity, 
 			     GNCEngineEventType event_type);
 
 #endif

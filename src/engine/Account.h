@@ -32,12 +32,17 @@
 #include "guid.h"
 #include "kvp_frame.h"
 #include "qofbook.h"
+#include "qofid.h"
+#include "qofinstance.h"
 
 
 typedef gnc_numeric (*xaccGetBalanceFn)( Account *account );
 typedef gnc_numeric (*xaccGetBalanceInCurrencyFn) (Account *account,
 						   gnc_commodity *report_commodity,
 						   gboolean include_children);
+
+#define GNC_IS_ACCOUNT(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_ACCOUNT))
+#define GNC_ACCOUNT(obj)     (QOF_CHECK_CAST((obj), GNC_ID_ACCOUNT, Account))
 
 /** The account types are used to determine how the transaction data
  * in the account is displayed.   These values can be safely changed
@@ -105,17 +110,24 @@ typedef enum
 /** Constructor */
 Account    * xaccMallocAccount (QofBook *book);
 
-/** The xaccCloneAccount() does the same as xaccCloneAccountSimple, except that it
- *    also uses the 'gemini' kvp value to mark the account from
- *    which it was copied. */
+/** The xaccCloneAccount() does the same as xaccCloneAccountSimple(), 
+ *    except that it also also places a pair of GUID-pointers
+ *    of each account to the other, in the other's kvp slot.
+ *    The guid pointers are stored under the under the kvp
+ *    path "gemini".  
+ */
 Account    * xaccCloneAccount (const Account *from, QofBook *book);
 
 /** The xaccCloneAccountSimple() routine makes a simple copy of the
  *  indicated account, placing it in the indicated book.  It copies
  *  the account type, name, description, and the kvp values;
- *  it does not copy splits/transactions.  Note also that it 
- *  does NOT use the 'gemini' kvp value to indicate where it 
- *  was copied from.*/
+ *  it does not copy splits/transactions.  The book should have 
+ *  a commodity table in it that has commodities with the same
+ *  unique name as the ones being copied in the account (the 
+ *  commodities in the clone will be those from the book).
+ *  Note that this routines does *NOT* use the 'gemini' kvp value 
+ *  to indicate where it was copied from.
+ */
 Account    * xaccCloneAccountSimple (const Account *from, QofBook *book);
 
 /** The xaccAccountBeginEdit() subroutine is the first phase of
@@ -151,36 +163,17 @@ int          xaccAccountOrder (Account **account_1, Account **account_2);
 /** @name Account lookup and GUID routines */
 /** @{ */
 
-/** The xaccAccountGetGUID() subroutine will return the
- *    globally unique id associated with that account. */
-const GUID * xaccAccountGetGUID (Account *account);
- /**  The xaccAccountReturnGUID() subroutine returns the 
-  *   same GUID as xaccAccountGetGUID, but as a struct. */
-GUID         xaccAccountReturnGUID (Account *account);
+/** deprecated */
+#define xaccAccountGetBook(X)     qof_instance_get_book(QOF_INSTANCE(X))
+#define xaccAccountGetGUID(X)     qof_entity_get_guid(QOF_ENTITY(X))
+#define xaccAccountReturnGUID(X) (*(qof_entity_get_guid(QOF_ENTITY(X))))
 
 /** The xaccAccountLookup() subroutine will return the
  *    account associated with the given id, or NULL
  *    if there is no such account. */
 Account    * xaccAccountLookup (const GUID *guid, QofBook *book);
+#define  xaccAccountLookupDirect(g,b) xaccAccountLookup(&(g),b)
 
-/**    xaccAccountLookupDirect performs the same function as
- * xaccAccountLookup but takes a GUID struct directly. */
-Account    * xaccAccountLookupDirect (GUID guid, QofBook *book);
-
-/** The xaccAccountLookupTwin() routine will find the "twin" of this
- *    account 'acc' in the given other 'book' (if the twin exists).
- *
- *    When accounts are copied or cloned, both of the pair are marked
- *    with the guid of thier copy, thus allowing the sibling-copy of
- *    an account to be found.  Since the sibling may end up in a
- *    different book, we need a way of finding it, given only that we
- *    know the book, and that we know its twin.  
- *
- *    That's what this routine does.  Given some book 'book', and an
- *    account 'acc', it will find the sibling account of 'acc' that is
- *    in 'book', and return it.  If not found, it returns NULL.  This
- *    routine uses the 'gemini' kvp values to do its work. */
-Account * xaccAccountLookupTwin (Account *acc,  QofBook *book);
 /** @} */
 
 /* ------------------ */
@@ -188,8 +181,6 @@ Account * xaccAccountLookupTwin (Account *acc,  QofBook *book);
 /** @name Account general setters/getters */
 /** @{ */
 
-/** @return The book where the account is stored */
-QofBook * xaccAccountGetBook (Account *account);
 
 /** Set the account's type */
 void xaccAccountSetType (Account *account, GNCAccountType);
@@ -416,15 +407,11 @@ gboolean        xaccAccountGetReconcileChildrenStatus(Account *account);
  *  Returns false if either one is NULL. 
  */
 gboolean       xaccAccountHasAncestor (Account *account, Account *ancestor);
+
+#define xaccAccountGetSlots(X) qof_instance_get_slots(QOF_INSTANCE(X))
+
 /** @} */
 
-/* ------------------ */
-
-/** @name Account KvpFrame getters/setters */
-/** @{ */
-KvpFrame * xaccAccountGetSlots (Account *account);
-void xaccAccountSetSlots_nc(Account *account, KvpFrame *frame);
-/** @} */
 
 /* ------------------ */
 
@@ -578,8 +565,6 @@ LotList * xaccAccountFindOpenLots (Account *acc,
 				   gpointer user_data, GCompareFunc sort_func);
 
 /*@}*/
-
-
 /* ------------------ */
 
 /** @name Account Reconciliation information getters/setters */

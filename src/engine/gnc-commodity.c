@@ -937,6 +937,27 @@ gnc_commodity_table_set_table(QofBook *book, gnc_commodity_table *ct)
   gnc_commodity_table_destroy (old_ct);
 }
 
+gnc_commodity *
+gnc_commodity_obtain_twin (gnc_commodity *from, QofBook *book)
+{
+  gnc_commodity *twin;
+  const char * ucom;
+  gnc_commodity_table * comtbl;
+
+  if (!from) return NULL;
+  comtbl = gnc_commodity_table_get_table (book);
+  if (!comtbl) return NULL;
+
+  ucom = gnc_commodity_get_unique_name (from);
+  twin = gnc_commodity_table_lookup_unique (comtbl, ucom);
+  if (!twin)
+  {
+    twin = gnc_commodity_clone (from);
+    twin = gnc_commodity_table_insert (comtbl, twin);
+  }
+  return twin;
+}
+
 /********************************************************************
  * gnc_commodity_get_size
  * get the size of the commodity table
@@ -1580,6 +1601,7 @@ commodity_table_book_end (QofBook *book)
   gnc_commodity_table_set_table (book, NULL);
 }
 
+#ifdef COMMODITY_CONVERTED_TO_QOF_COLLECTION
 static gboolean
 commodity_table_is_dirty (QofBook *book)
 {
@@ -1605,6 +1627,7 @@ commodity_table_mark_clean(QofBook *book)
     return;
   ct->dirty = FALSE;
 }
+#endif
 
 
 /* XXX Why is the commodity table never marked dirty/clean?
@@ -1614,12 +1637,14 @@ commodity_table_mark_clean(QofBook *book)
 static QofObject commodity_table_object_def = 
 {
   interface_version: QOF_OBJECT_VERSION,
-  name:              GNC_ID_COMMODITY_TABLE,
+  e_type:            GNC_ID_COMMODITY_TABLE,
   type_label:        "CommodityTable",
   book_begin:        commodity_table_book_begin,
   book_end:          commodity_table_book_end,
+#ifdef COMMODITY_CONVERTED_TO_QOF_COLLECTION
   is_dirty:          commodity_table_is_dirty,
   mark_clean:        commodity_table_mark_clean,
+#endif
   foreach:           NULL,
   printable:         NULL,
 };

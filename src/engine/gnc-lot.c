@@ -47,10 +47,11 @@
 #include "gnc-trace.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "qofqueryobject.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofclass.h"
 #include "qofid-p.h"
+#include "qofquery.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_LOT;
@@ -60,6 +61,7 @@ static short module = MOD_LOT;
 static void
 gnc_lot_init (GNCLot *lot, QofBook *book)
 {
+   QofCollection *col;
    ENTER ("(lot=%p, book=%p)", lot, book);
    lot->kvp_data = kvp_frame_new();
    lot->account = NULL;
@@ -68,8 +70,8 @@ gnc_lot_init (GNCLot *lot, QofBook *book)
    lot->marker = 0;
   
    lot->book = book;
-   qof_entity_guid_new (book->entity_table, &lot->guid);
-   qof_entity_store (book->entity_table, lot, &lot->guid, GNC_ID_LOT);
+   col = qof_book_get_collection (book, GNC_ID_LOT);
+   qof_entity_init (&lot->entity, GNC_ID_LOT, col);
    LEAVE ("(lot=%p, book=%p)", lot, book);
 }
 
@@ -81,7 +83,7 @@ gnc_lot_new (QofBook *book)
 
    lot = g_new (GNCLot, 1);
    gnc_lot_init (lot, book);
-   gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_CREATE);
+   gnc_engine_gen_event (&lot->entity, GNC_EVENT_CREATE);
    return lot;
 }
 
@@ -92,9 +94,9 @@ gnc_lot_destroy (GNCLot *lot)
    if (!lot) return;
    
    ENTER ("(lot=%p)", lot);
-   gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_DESTROY);
+   gnc_engine_gen_event (&lot->entity, GNC_EVENT_DESTROY);
 
-   qof_entity_remove (lot->book->entity_table, &lot->guid);
+   qof_entity_release (&lot->entity);
    
    for (node=lot->splits; node; node=node->next)
    {
@@ -114,31 +116,13 @@ gnc_lot_destroy (GNCLot *lot)
 
 /* ============================================================= */
 
-const GUID * 
-gnc_lot_get_guid (GNCLot *lot)
-{
-   if (!lot) return NULL;
-   return &lot->guid;
-}
-
-void
-gnc_lot_set_guid (GNCLot *lot, GUID uid)
-{
-   if (!lot) return;
-
-   if (guid_equal (&lot->guid, &uid)) return;
-
-   qof_entity_remove(lot->book->entity_table, &lot->guid);
-   lot->guid = uid;
-   qof_entity_store(lot->book->entity_table, lot, &lot->guid, GNC_ID_LOT);
-}
-
 GNCLot *
 gnc_lot_lookup (const GUID *guid, QofBook *book)
 {
+  QofCollection *col;
   if (!guid || !book) return NULL;
-  return qof_entity_lookup (qof_book_get_entity_table (book),
-                                          guid, GNC_ID_LOT);
+  col = qof_book_get_collection (book, GNC_ID_LOT);
+  return (GNCLot *) qof_collection_lookup_entity (col, guid);
 }
 
 QofBook *
@@ -147,7 +131,6 @@ gnc_lot_get_book (GNCLot *lot)
   if (!lot) return NULL;
   return lot->book;
 }
-
 
 /* ============================================================= */
 
@@ -186,6 +169,37 @@ gint gnc_lot_count_splits (GNCLot *lot)
    return g_list_length (lot->splits);
 }
 
+/* ============================================================== */
+/* Hmm, we should probably inline these. */
+
+const char * 
+gnc_lot_get_title (GNCLot *lot)
+{
+   if (!lot) return NULL;
+   return kvp_frame_get_string (lot->kvp_data, "/title");
+}
+
+const char * 
+gnc_lot_get_notes (GNCLot *lot)
+{
+   if (!lot) return NULL;
+   return kvp_frame_get_string (lot->kvp_data, "/notes");
+}
+
+void
+gnc_lot_set_title (GNCLot *lot, const char *str)
+{
+   if (!lot) return;
+   return kvp_frame_set_str (lot->kvp_data, "/title", str);
+}
+
+void
+gnc_lot_set_notes (GNCLot *lot, const char *str)
+{
+   if (!lot) return;
+   return kvp_frame_set_str (lot->kvp_data, "/notes", str);
+}
+
 /* ============================================================= */
 
 gnc_numeric
@@ -209,7 +223,7 @@ gnc_lot_get_balance (GNCLot *lot)
    {
       Split *s = node->data;
       gnc_numeric amt = xaccSplitGetAmount (s);
-      baln = gnc_numeric_add (baln, amt, GNC_DENOM_AUTO, GNC_DENOM_FIXED);
+      baln = gnc_numeric_add_fixed (baln, amt);
    }
 
    /* cache a zero balance as a closed lot */
@@ -260,7 +274,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
     /* for recomputation of is-closed */
    lot->is_closed = -1;
 
-   gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_MODIFY);
+   gnc_engine_gen_event (&lot->entity, GNC_EVENT_MODIFY);
 }
 
 void
@@ -278,7 +292,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
       xaccAccountRemoveLot (lot->account, lot);
       lot->account = NULL;
    }
-   gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_MODIFY);
+   gnc_engine_gen_event (&lot->entity, GNC_EVENT_MODIFY);
 }
 
 /* ============================================================== */
@@ -346,15 +360,15 @@ gnc_lot_get_latest_split (GNCLot *lot)
 
 void gnc_lot_register (void)
 {
-  static const QofQueryObject params[] = {
-    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gnc_lot_get_book },
-    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gnc_lot_get_guid },
-    { LOT_IS_CLOSED, QOF_QUERYCORE_BOOLEAN, (QofAccessFunc)gnc_lot_is_closed },
-    { LOT_BALANCE, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)gnc_lot_get_balance },
+  static const QofParam params[] = {
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gnc_lot_get_book, NULL },
+    { LOT_IS_CLOSED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gnc_lot_is_closed, NULL },
+    { LOT_BALANCE, QOF_TYPE_NUMERIC, (QofAccessFunc)gnc_lot_get_balance, NULL },
     { NULL },
   };
 
-  qof_query_object_register (GNC_ID_LOT, NULL, params);
+  qof_class_register (GNC_ID_LOT, NULL, params);
 }
 
 /* ========================== END OF FILE ========================= */

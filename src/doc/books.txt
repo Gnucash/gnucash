@@ -349,6 +349,12 @@ Open Issues/Questions that Need Discussion:
 *) How to handle business objects? e.g. vendors, customers should be
    copied into both old and new books.  But invoices should be in one 
    or the other.  Need to document which is which.
+   Copy:
+   customer -- ok, has guid, has for-each
+   employee
+
+   No-op:
+   address -- do nothing
 
 *) Discussion Q: What should the naming convention be for the different 
    books?  When the XML file backend is used, different books need to be 

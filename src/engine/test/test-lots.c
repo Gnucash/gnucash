@@ -10,7 +10,7 @@
 
 #include "Account.h"
 #include "Group.h"
-#include "Scrub2.h"
+#include "Scrub3.h"
 #include "gnc-engine-util.h"
 #include "gnc-module.h"
 #include "test-stuff.h"
@@ -26,27 +26,17 @@ run_test (void)
   QofBook *book;
   AccountGroup *grp;
 
-  if(!gnc_module_load("gnucash/engine", 0))
-  {
-    failure("couldn't load gnucash/engine");
-    exit(get_rv());
-  }
-
   /* --------------------------------------------------------- */
   /* In the first test, we will merely try to see if we can run
    * without crashing.  We don't check to see if data is good. */
   sess = get_random_session ();
   book = qof_session_get_book (sess);
-  if (!book)
-  {
-    failure("book not created");
-    exit(get_rv());
-  }
+  do_test ((NULL != book), "book not created");
 
   add_random_transactions_to_book (book, 720);
 
   grp = xaccGetAccountGroup (book);
-  xaccGroupScrubLotsBalance (grp);
+  xaccGroupScrubLots (grp);
 
   /* --------------------------------------------------------- */
   /* In the second test, we create an account with unrealized gains,
@@ -60,6 +50,9 @@ run_test (void)
 static void
 main_helper (void *closure, int argc, char **argv)
 {
+  g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
+  do_test((NULL!=gnc_module_load("gnucash/engine", 0)), "couldn't load engine");
+
   run_test ();
 
   print_test_results();

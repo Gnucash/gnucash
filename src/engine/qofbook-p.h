@@ -34,11 +34,11 @@
 #include "qofbackend.h"
 #include "qofbook.h"
 #include "qofid.h"
+#include "qofid-p.h"
 
 struct _QofBook
 {
-  /* Unique guid for this book. */
-  GUID guid;
+  QofEntity   entity;     /* Unique guid for this book. */
 
   /* The KvpFrame provides a place for top-level data associated 
    * with this book. */
@@ -48,7 +48,7 @@ struct _QofBook
    * belonging to this book, with their pointers to the respective
    * objects.  This allows a lookup of objects based on thier guid.
    */
-  QofEntityTable *entity_table;
+  GHashTable * hash_of_collections;
 
   /* In order to store arbitrary data, for extensibility, add a table
    * that will be used to hold arbitrary pointers.
@@ -87,7 +87,6 @@ struct _QofBook
  *    if the backends should even be doing this much, but for
  *    backwards compatibility, we leave these here.)
  */
-void qof_book_set_guid(QofBook *book, GUID guid);
 void qof_book_set_schedxactions( QofBook *book, GList *newList );
 
 void qof_book_set_backend (QofBook *book, QofBackend *be);
@@ -100,5 +99,9 @@ void qof_book_mark_saved(QofBook *book);
 
 /* Register books with the engine */
 gboolean qof_book_register (void);
+
+/* deprecated */
+#define qof_book_set_guid(book,guid)    \
+         qof_entity_set_guid(QOF_ENTITY(book), guid)
 
 #endif /* QOF_BOOK_P_H */

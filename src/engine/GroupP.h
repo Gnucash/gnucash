@@ -95,6 +95,7 @@ void     xaccFreeAccountGroup (AccountGroup *account_group);
 
 /* Set the top-level group in the book */
 void     xaccSetAccountGroup (QofBook *book, AccountGroup *grp);
+void     xaccCollSetAccountGroup (QofCollection *col, AccountGroup *grp);
 
 /*
  * The xaccGroupGetBackend() subroutine will find the

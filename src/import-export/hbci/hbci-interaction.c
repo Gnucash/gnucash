@@ -37,6 +37,7 @@
 #include "global-options.h"
 
 #include "dialog-pass.h"
+#include "gnc-hbci-utils.h"
 
 #include <openhbci.h>
 #ifndef OPENHBCI_VERSION_BUILD
@@ -148,15 +149,6 @@ void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent)
     }
 }
 
-/* Helper functions */
-static const char *bank_to_str (const HBCI_Bank *bank)
-{
-  g_assert (bank);
-  return ((strlen(HBCI_Bank_name (bank)) > 0) ?
-	  HBCI_Bank_name (bank) :
-	  HBCI_Bank_bankCode(bank));
-}
-
 /********************************************************
  * Now all the callback functions 
  */
@@ -202,7 +194,7 @@ static int msgInputPin(const HBCI_User *user,
 	else 
 	  /* xgettext:c-format */	    
 	  msgstr = g_strdup_printf ( _("Please enter and confirm a new PIN for \n"
-				       "user '%s' at unknown bank,\n"
+				       "user '%s',\n"
 				       "with at least %d characters."), 
 				     username, minsize);
       }
@@ -242,8 +234,8 @@ static int msgInputPin(const HBCI_User *user,
 	  }
 	}
 	else 
-	  msgstr = g_strdup ( _("Please enter PIN for \n"
-				"unknown user at unknown bank."));
+	  msgstr = g_strdup ( _("Please enter the PIN for \n"
+				"the newly created user."));
 	
 	retval = gnc_hbci_get_password (data->parent,
 					msgstr,
@@ -308,13 +300,19 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
       case MediumTypeFile:
 	if (b != NULL) 
 	  /* xgettext:c-format */	    
-	  msgstr = g_strdup_printf ( _("Please make sure the key file for \n"
-				       "user '%s' at bank '%s' can be accessed."), 
-				     username, bank_to_str (b));
+	  msgstr = g_strdup_printf 
+	    ( _("Please make sure the key file for user '%s' at bank '%s' can be \n"
+		"accessed. If the key file is on your harddisk, simply press 'Ok'. If \n"
+		"the key file is on a floppy disk or other removable media, please make \n"
+		"sure the floppy disk or medium is correctly mounted."), 
+	      username, bank_to_str (b));
 	else 
 	  /* xgettext:c-format */	    
-	  msgstr = g_strdup_printf ( _("Please make sure the key file for \n"
-				       "user '%s' at unknown bank can be accessed."), 
+	  msgstr = g_strdup_printf 
+	    ( _("Please make sure the key file for user '%s' can be \n"
+		"accessed. If the key file is on your harddisk, simply press 'Ok'. If \n"
+		"the key file is on a floppy disk or other removable media, please make \n"
+		"sure the floppy disk or medium is correctly mounted."), 
 				     username);
 	break;
       case MediumTypeCard:
@@ -327,7 +325,7 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
 	else 
 	  /* xgettext:c-format */	    
 	  msgstr = g_strdup_printf ( _("Please insert chip card for \n"
-				       "user '%s' at unknown bank."), 
+				       "user '%s'."), 
 				     username);
     }
   }
@@ -335,13 +333,17 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
     switch (mtype) 
       {
       case MediumTypeFile:
-	msgstr = g_strdup ( _("Please make sure the key file for \n"
-			      "unknown user at unknown bank can be accessed."));
+	msgstr = g_strdup 
+	  (_("Please make sure the key file for the newly created user can be \n"
+	     "accessed. If you want to create the key file on your harddisk, simply \n"
+	     "press 'Ok'. If you want to create the key on a floppy disk or other \n"
+	     "removable media, please make sure the floppy disk or medium is \n"
+	     "correctly mounted."));
 	break;
       case MediumTypeCard:
       default:
 	msgstr = g_strdup ( _("Please insert chip card for \n"
-			      "unknown user at unknown bank."));
+			      "the newly created user."));
       }
     
   retval = gnc_ok_cancel_dialog (data->parent, GTK_RESPONSE_OK, "%s", msgstr);
@@ -379,8 +381,8 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
 	else 
 	  /* xgettext:c-format */	    
 	  msgstr = g_strdup_printf ( _("The key file does not seem to be the correct \n"
-				       "file for user '%s' at unknown bank. Please make \n"
-				       "sure the correct key file can be accessed."), 
+				       "file for user '%s'. Please make sure the \n"
+				       "correct key file can be accessed."), 
 				     username);
 	break;
       case MediumTypeCard: 
@@ -393,7 +395,7 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
 	else 
 	  /* xgettext:c-format */	    
 	  msgstr = g_strdup_printf ( _("Please insert the correct chip card for \n"
-				       "user '%s' at unknown bank."), 
+				       "user '%s'."), 
 				     username);
       }
   }
@@ -402,13 +404,13 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
       {
       case MediumTypeFile: 
 	msgstr = g_strdup ( _("The key file does not seem to be the correct \n"
-			      "file for unknown user at unknown bank. Please make \n"
+			      "file for the newly created user. Please make \n"
 			      "sure the correct key file can be accessed."));
 	break;
       case MediumTypeCard: 
       default:
 	msgstr = g_strdup ( _("Please insert the correct chip card for \n"
-			      "unknown user at unknown bank."));
+			      "the newly created user."));
       }
   
   retval = gnc_ok_cancel_dialog (data->parent, GTK_RESPONSE_OK, "%s", msgstr);
@@ -498,14 +500,14 @@ msgStartInputPinViaKeypadCB(const HBCI_User *user, void *user_data)
     else {
       /* xgettext:c-format */	    
       msgstr = g_strdup_printf ( _("Please enter PIN for \n"
-				   "user '%s' at unknown bank\n"
+				   "user '%s'\n"
 				   "at the keypad of your chip card reader."),
 				 username);
     }
   }
   else 
     msgstr = g_strdup ( _("Please enter PIN for \n"
-			  "unknown user at unknown bank\n"
+			  "the newly created user \n"
 			  "at the keypad of your chip card reader."));
 
   /* Create new dialog */

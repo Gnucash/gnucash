@@ -7,6 +7,7 @@ test-load-engine
 test-commodities
 test-date
 test-freq-spec
+test-guid
 test-group-vs-book
 test-lots
 test-object

@@ -36,8 +36,8 @@
 #include <stdlib.h>
 #include "import-account-matcher.h"
 #include "import-utilities.h"
+#include "dialog-account.h"
 #include "dialog-utils.h"
-#include "AccWindow.h"
 
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"

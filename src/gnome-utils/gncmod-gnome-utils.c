@@ -18,6 +18,7 @@
 #include "dialog-options.h"
 #include "gnc-html.h"
 #include "gnc-engine-util.h"
+#include "gnc-err-popup.h"
 #include "gnc-gui-query.h"
 
 /* version of the gnc module system interface we require */

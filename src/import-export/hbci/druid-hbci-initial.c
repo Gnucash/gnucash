@@ -30,7 +30,7 @@
 #include "druid-hbci-initial.h"
 #include "druid-hbci-utils.h"
 #include "gnc-hbci-kvp.h"
-#include "dialog-account-pick.h"
+#include "import-account-matcher.h"
 #include "gnc-hbci-utils.h"
 
 #include "dialog-utils.h"
@@ -351,101 +351,29 @@ to_hexstring_hash (const char *str)
 
 
 
-static const HBCI_Bank *
-choose_one_bank (HBCIInitialInfo *info, int *list_size)
-{
-  const list_HBCI_Bank *banklist;
-  g_assert (info);
-  g_assert (list_size);
-
-  /* Get HBCI bank and account list */
-  banklist = HBCI_API_bankList (info->api);
-  /*printf("%d banks found.\n", list_HBCI_Bank_size (banklist));*/
-  *list_size = list_HBCI_Bank_size (banklist);
-  if (*list_size == 0) 
-    return NULL;
-  if (*list_size > 1) 
-    return NULL;
-
-  /* Get bank. */
-  {
-    const HBCI_Bank *bank;
-    list_HBCI_Bank_iter *iter;
-
-    iter = list_HBCI_Bank_begin (banklist);
-    bank = list_HBCI_Bank_iter_get (iter);
-    list_HBCI_Bank_iter_delete (iter);
-    return bank;
-  }
-}
 
 
 static const HBCI_Customer *
 choose_customer (HBCIInitialInfo *info)
 {
   const HBCI_Bank *bank;
-  int banklist_size = 0;
+  const HBCI_User *user;
   g_assert (info);
 
-  bank = choose_one_bank (info, &banklist_size);
+  /* Get HBCI bank from the banklist */
+  bank = choose_one_bank (info->window, HBCI_API_bankList (info->api) );
 
-  if (banklist_size == 0) 
+  if (bank == 0) 
     return NULL;
   
-  if (banklist_size > 1) {
-    printf("choose_customer: oops, more than one bank found. Not yet implemented.\n");
+  /* Get User from user list. */
+  user = choose_one_user (info->window, HBCI_Bank_users (bank) );
+
+  if (user == NULL)
     return NULL;
-  }
-  g_assert (bank);
-  
-  /* Get User list. */
-  {
-    const list_HBCI_User *userlist;
 
-    userlist = HBCI_Bank_users (bank);
-    
-    if (list_HBCI_User_size (userlist) == 0) {
-      printf("choose_customer: oops, no user found.\n");
-      return NULL;
-    }
-    if (list_HBCI_User_size (userlist) > 1) {
-      printf("choose_customer: oops, more than one user found; not yet implemented.\n");
-      return NULL;
-    }
-
-    /* Get User */
-    {
-      const HBCI_User *user;
-      list_HBCI_User_iter *iter;
-      const list_HBCI_Customer *custlist;
-      
-      iter = list_HBCI_User_begin (userlist);
-      user = list_HBCI_User_iter_get (iter);
-      list_HBCI_User_iter_delete (iter);
-      custlist = HBCI_User_customers (user);
-      
-      if (list_HBCI_Customer_size (custlist) == 0) {
-	printf ("choose_customer: oops, no customer found.\n");
-	return NULL;
-      }
-      if (list_HBCI_Customer_size (custlist) > 1) {
-	printf ("choose_customer: oops, more than one customer found; not yet implemented.\n");
-	return NULL;
-      }
-
-      /* Get customer */
-      {
-	const HBCI_Customer *cust;
-	list_HBCI_Customer_iter *iter;
-
-	iter = list_HBCI_Customer_begin (custlist);
-	cust = list_HBCI_Customer_iter_get (iter);
-	list_HBCI_Customer_iter_delete (iter);
-	
-	return cust;
-      }
-    }
-  }
+  /* Get customer from customer list. */
+  return choose_one_customer(info->window, HBCI_User_customers (user) );
 }
 
 /*********************************************************************
@@ -766,10 +694,10 @@ on_configfile_next (GnomeDruidPage *gnomedruidpage,
     }
 
     if (HBCI_API_totalUsers(api) == 0) {
-      int dummy;
       /* zero users? go to user-creation page*/
       info->state = INI_ADD_USER;
-      info->newbank = choose_one_bank (info, &dummy);
+      info->newbank = choose_one_bank (info->window, 
+				       HBCI_API_bankList (info->api) );
       gnome_druid_set_page (GNOME_DRUID (info->druid), 
 			    GNOME_DRUID_PAGE (info->userpage));
       return TRUE;
@@ -1198,7 +1126,8 @@ on_accountlist_select_row (GtkCList *clist, gint row,
   if (hbci_acc) {
     old_value = g_hash_table_lookup (info->gnc_hash, hbci_acc);
 
-    gnc_acc = gnc_account_picker_dialog(old_value);
+    gnc_acc = gnc_import_select_account(NULL, FALSE, NULL, NULL, NO_TYPE,
+					old_value, NULL);
 
     if (gnc_acc) {
       if (old_value) 
@@ -1512,9 +1441,9 @@ on_button_clicked (GtkButton *button,
     gnome_druid_set_page (GNOME_DRUID (info->druid), 
 			  GNOME_DRUID_PAGE (info->bankpage));
   } else if (strcmp (name, "adduser_button") == 0) {
-    int dummy;
     info->state = ADD_USER;
-    info->newbank = choose_one_bank (info, &dummy);
+    info->newbank = choose_one_bank (info->window, 
+				     HBCI_API_bankList (info->api) );
     gnome_druid_set_page (GNOME_DRUID (info->druid), 
 			  GNOME_DRUID_PAGE (info->userpage));
   } else if (strcmp (name, "hbciversion_button") == 0) {

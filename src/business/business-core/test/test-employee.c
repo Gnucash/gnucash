@@ -1,10 +1,36 @@
+/*********************************************************************
+ * test-employee.c
+ * Test the employee object.
+ * 
+ * Copyright (c) 2001 Derek Atkins <warlord@MIT.EDU>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, contact:
+ *
+ * Free Software Foundation           Voice:  +1-617-542-5942
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ *
+ *********************************************************************/
+
 #include <glib.h>
 #include <libguile.h>
 
 #include "guid.h"
 #include "gnc-module.h"
 #include "gnc-engine-util.h"
-#include "gncObject.h"
+#include "qofinstance.h"
+#include "qofobject.h"
 
 #include "gncEmployee.h"
 #include "gncEmployeeP.h"
@@ -13,41 +39,49 @@
 static int count = 0;
 
 static void
-test_string_fcn (GNCBook *book, const char *message,
+test_string_fcn (QofBook *book, const char *message,
 		 void (*set) (GncEmployee *, const char *str),
 		 const char * (*get)(GncEmployee *));
 
 static void
-test_numeric_fcn (GNCBook *book, const char *message,
+test_numeric_fcn (QofBook *book, const char *message,
 		  void (*set) (GncEmployee *, gnc_numeric),
 		  gnc_numeric (*get)(GncEmployee *));
 
 static void
-test_bool_fcn (GNCBook *book, const char *message,
+test_bool_fcn (QofBook *book, const char *message,
 		  void (*set) (GncEmployee *, gboolean),
 		  gboolean (*get) (GncEmployee *));
 
 #if 0
 static void
-test_gint_fcn (GNCBook *book, const char *message,
+test_gint_fcn (QofBook *book, const char *message,
 	       void (*set) (GncEmployee *, gint),
 	       gint (*get) (GncEmployee *));
 #endif
 
+extern QofBackend * libgncmod_backend_file_LTX_gnc_backend_new(void);
+
 static void
 test_employee (void)
 {
-  GNCBook *book;
+  QofBackend *fbe;
+  QofBook *book;
   GncEmployee *employee;
 
-  book = gnc_book_new ();
+  book = qof_book_new ();
+
+  /* The book *must* have a backend to pass the test of the 'dirty' flag */
+  /* See the README file for details */
+  fbe = libgncmod_backend_file_LTX_gnc_backend_new();
+  qof_book_set_backend (book, fbe);
 
   /* Test creation/destruction */
   {
     do_test (gncEmployeeCreate (NULL) == NULL, "employee create NULL");
     employee = gncEmployeeCreate (book);
     do_test (employee != NULL, "employee create");
-    do_test (gncEmployeeGetBook (employee) == book,
+    do_test (qof_instance_get_book(QOF_INSTANCE(employee)) == book,
 	     "getbook");
 
     gncEmployeeBeginEdit (employee);
@@ -74,7 +108,7 @@ test_employee (void)
     guid_new (&guid);
     employee = gncEmployeeCreate (book); count++;
     gncEmployeeSetGUID (employee, &guid);
-    do_test (guid_equal (&guid, gncEmployeeGetGUID (employee)), "guid compare");
+    do_test (guid_equal (&guid, qof_instance_get_guid(QOF_INSTANCE(employee))), "guid compare");
   }
 #if 0
   {
@@ -98,14 +132,14 @@ test_employee (void)
 
     addr = gncEmployeeGetAddr (employee);
     gncAddressSetName (addr, str);
-    res = gncObjectPrintable (GNC_EMPLOYEE_MODULE_NAME, employee);
+    res = qof_object_printable (GNC_ID_EMPLOYEE, employee);
     do_test (res != NULL, "Printable NULL?");
     do_test (safe_strcmp (str, res) == 0, "Printable equals");
   }    
 }
 
 static void
-test_string_fcn (GNCBook *book, const char *message,
+test_string_fcn (QofBook *book, const char *message,
 		 void (*set) (GncEmployee *, const char *str),
 		 const char * (*get)(GncEmployee *))
 {
@@ -124,7 +158,7 @@ test_string_fcn (GNCBook *book, const char *message,
 }
 
 static void
-test_numeric_fcn (GNCBook *book, const char *message,
+test_numeric_fcn (QofBook *book, const char *message,
 		  void (*set) (GncEmployee *, gnc_numeric),
 		  gnc_numeric (*get)(GncEmployee *))
 {
@@ -143,7 +177,7 @@ test_numeric_fcn (GNCBook *book, const char *message,
 }
 
 static void
-test_bool_fcn (GNCBook *book, const char *message,
+test_bool_fcn (QofBook *book, const char *message,
 	       void (*set) (GncEmployee *, gboolean),
 	       gboolean (*get) (GncEmployee *))
 {
@@ -165,7 +199,7 @@ test_bool_fcn (GNCBook *book, const char *message,
 
 #if 0
 static void
-test_gint_fcn (GNCBook *book, const char *message,
+test_gint_fcn (QofBook *book, const char *message,
 	       void (*set) (GncEmployee *, gint),
 	       gint (*get) (GncEmployee *))
 {

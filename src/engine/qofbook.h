@@ -43,12 +43,24 @@
  * manipulated by GnuCash.  This is the top-most structure
  * used for anchoring data.
  */
+
+/** Lookup an entity by guid, returning pointer to the entity */
+#define QOF_BOOK_LOOKUP_ENTITY(book,guid,e_type,c_type) ({  \
+  QofEntity *val = NULL;                                    \
+  if (guid && book) {                                       \
+    QofCollection *col;                                     \
+    col = qof_book_get_collection (book, e_type);           \
+    val = qof_collection_lookup_entity (col, guid);         \
+  }                                                         \
+  (c_type *) val;                                           \
+})
+
 typedef struct _QofBook       QofBook;
                                                                                 
 /** GList of QofBook */
 typedef GList                 QofBookList;
 
-/** Register the book boject with the QOF object system. */
+/** Register the book object with the QOF object system. */
 gboolean qof_book_register (void);
                                                                                 
 /** Allocate, initialise and return a new QofBook.  Books contain references
@@ -59,11 +71,12 @@ QofBook * qof_book_new (void);
     associated with it. */
 void      qof_book_destroy (QofBook *book);
 
-/** \return The Entity table for the book. */
-QofEntityTable      * qof_book_get_entity_table (QofBook *book);
+/** \return The table of entities of the given type. */
+QofCollection  * qof_book_get_collection (QofBook *, QofIdType);
 
-/** \return The GUID for the book. */
-const GUID          * qof_book_get_guid (QofBook *book);
+/** Invoke the indicated callback on each collection in the book. */
+typedef void (*QofCollectionForeachCB) (QofCollection *, gpointer user_data);
+void qof_book_foreach_collection (QofBook *, QofCollectionForeachCB, gpointer);
 
 /** \return The kvp data for the book */
 KvpFrame   * qof_book_get_slots (QofBook *book);
@@ -80,6 +93,7 @@ gpointer qof_book_get_data (QofBook *book, const char *key);
 
 /** DOCUMENT ME! */
 QofBackend *qof_book_get_backend (QofBook *book);
+
 void qof_book_set_backend (QofBook *book, QofBackend *);
 
 /** qof_book_not_saved() will return TRUE if any 
@@ -113,5 +127,8 @@ gint64 qof_book_get_counter (QofBook *book, const char *counter_name);
 
 /**@}*/
  
+/** deprecated */
+#define qof_book_get_guid(X) qof_entity_get_guid (QOF_ENTITY(X))
+
 #endif /* QOF_BOOK_H */
 /** @} */

@@ -1,5 +1,6 @@
 /********************************************************************\
  * qofobject.h -- the Core Object Registration/Lookup Interface     *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -30,6 +31,7 @@
 #define QOF_OBJECT_H_
 
 #include "qofbook.h"
+#include "qofid.h"
 
 /* Defines the version of the core object object registration
  * interface.  Only object modules compiled against this version
@@ -37,16 +39,22 @@
  */
 #define QOF_OBJECT_VERSION 1
 
+
 typedef struct _QofObject QofObject;
+typedef void (*QofForeachCB) (gpointer obj, gpointer user_data);
 typedef void (*QofForeachTypeCB) (QofObject *type, gpointer user_data);
 typedef void (*QofForeachBackendTypeCB) (QofIdTypeConst type,
                                       gpointer backend_data,
                                       gpointer user_data);
 
-/* This is the Object Object descriptor */
-struct _QofObject {
+/** This is the QofObject Class descriptor 
+ *
+ * XXX Hmm, should we add an object factory to this?
+ */
+struct _QofObject 
+{
   gint                interface_version; /* of this object interface */
-  QofIdType           name;              /* the Object's QOF_ID */
+  QofIdType           e_type;            /* the Object's QOF_ID */
   const char *        type_label;        /* "Printable" type-label string */
 
   /* book_begin is called from within the Book routines to create
@@ -58,17 +66,18 @@ struct _QofObject {
   void                (*book_end)(QofBook *);
 
   /* Determine if there are any dirty items in this book */
-  gboolean        (*is_dirty)(QofBook *);
+  gboolean            (*is_dirty)(QofCollection *);
 
   /* Mark this object's book clean (for after a load) */
-  void                (*mark_clean)(QofBook *);
+  void                (*mark_clean)(QofCollection *);
 
   /* foreach() is used to execute a callback over each object
    * stored in the particular book
    */
-  void                (*foreach)(QofBook *, QofEntityForeachCB, gpointer);
+  void                (*foreach)(QofCollection *, QofEntityForeachCB, gpointer);
 
   /* Given a particular object, return a printable string */
+  /* Argument should really be QofInstance not gpointer.. */
   const char *        (*printable)(gpointer obj);
 
 };
@@ -78,7 +87,6 @@ struct _QofObject {
 /** Initialize the object registration subsystem */
 void qof_object_initialize (void);
 void qof_object_shutdown (void);
-
 
 void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data);
 
