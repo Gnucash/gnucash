@@ -74,6 +74,7 @@ gw-report-gnome.scm gw-report-gnome.c gw-report-gnome.h: .scm-links gw-report-gn
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (set! %load-path (cons \"${PWD}\" %load-path)) \
 	  (set! %load-path (cons \"${top_srcdir}/src/engine\" %load-path)) \
+	  (set! %load-path (cons \"${top_srcdir}/src/app-utils\" %load-path)) \
 	  (set! %load-path (cons \"${top_srcdir}/src/gnome-utils\" %load-path)) \
 	  (primitive-load \"./gw-report-gnome-spec.scm\") \
 	  (gw:generate-module \"gw-report-gnome\")"
