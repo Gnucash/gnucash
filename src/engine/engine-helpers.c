@@ -1678,7 +1678,8 @@ gnc_gh_gint64_p(SCM num)
   static SCM maxval;
   static SCM minval;
 
-  if(!initialized) {
+  if (!initialized)
+  {
     /* to be super safe, we have to build these manually because
        though we know that we have gint64's here, we *don't* know how
        to portably specify a 64bit constant to the compiler (i.e. like
@@ -1698,7 +1699,9 @@ gnc_gh_gint64_p(SCM num)
     scm_protect_object(minval);
     initialized = 1;
   }
-  return ((scm_geq_p(num, minval) != SCM_BOOL_F) &&
+
+  return (gh_exact_p(num) &&
+          (scm_geq_p(num, minval) != SCM_BOOL_F) &&
           (scm_leq_p(num, maxval) != SCM_BOOL_F));
 }
 
