@@ -358,6 +358,8 @@ xaccAccountCommitEdit (Account *acc)
       /* XXX hack alert FIXME implement account rollback */
       PERR (" backend asked engine to rollback, but this isn't"
             " handled yet. Return code=%d", errcode);
+      /* push error back onto the stack */
+      xaccBackendSetError (be, errcode);
     }
   }
   acc->core_dirty = FALSE;
