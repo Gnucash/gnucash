@@ -87,9 +87,7 @@ xferWindow( Widget parent )
   AccountGroup *grp = topgroup;  /* hack alert -- should be pased as arg */
   
   if (1 >= (grp->numAcc)) {
-    errorBox (toplevel,
-"There must be at least two accounts\n\
-created before you can transfer funds.\n");
+    errorBox (toplevel, XFER_NSF_MSG);
     return;
   }
 
@@ -437,7 +435,7 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
 
   /* silently reject transfers into-out-of the same account */
   if (xferData->from == xferData->to) {
-    errorBox (toplevel, "The \"From\" and \"To\" accounts\n must be different!\n");
+    errorBox (toplevel, XFER_DIFF_MSG);
     return;
   }
 

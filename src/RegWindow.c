@@ -1391,7 +1391,7 @@ deleteCB( Widget mw, XtPointer cd, XtPointer cb )
   trans = getTransaction (acc, regData->lastTrans );
   if( NULL != trans)
     {
-    char *msg = "Are you sure you want\nto delete this transaction?";
+    char *msg = TRANS_DEL_MSG;
     
     if( verifyBox( toplevel, msg ) )
       {

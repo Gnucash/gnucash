@@ -234,9 +234,7 @@ readData( char *datafile )
    * error, try to continue anyway. */
   num_unclaimed = xaccGetNumAccounts (holder);
   if (num_unclaimed) {
-    char msg[BUFSIZE];
-    sprintf( (char *)&msg, FILE_BAD_READ );
-    if ( !verifyBox( toplevel, msg ) ) {
+    if ( !verifyBox( toplevel, FILE_BAD_READ_MSG ) ) {
        freeAccountGroup (holder);
        freeAccountGroup (grp);
        grp = NULL;
