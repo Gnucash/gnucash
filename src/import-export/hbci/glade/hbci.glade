@@ -1606,7 +1606,7 @@ Press 'Finish' now.</text>
 	  <can_focus>True</can_focus>
 	  <editable>True</editable>
 	  <text_visible>True</text_visible>
-	  <text_max_length>0</text_max_length>
+	  <text_max_length>12</text_max_length>
 	  <text></text>
 	  <child>
 	    <left_attach>0</left_attach>
@@ -1656,7 +1656,7 @@ Press 'Finish' now.</text>
 	  <can_focus>True</can_focus>
 	  <editable>True</editable>
 	  <text_visible>True</text_visible>
-	  <text_max_length>0</text_max_length>
+	  <text_max_length>8</text_max_length>
 	  <text></text>
 	  <child>
 	    <left_attach>2</left_attach>
@@ -1706,7 +1706,7 @@ Press 'Finish' now.</text>
 	  <can_focus>True</can_focus>
 	  <editable>True</editable>
 	  <text_visible>True</text_visible>
-	  <text_max_length>0</text_max_length>
+	  <text_max_length>27</text_max_length>
 	  <text></text>
 	  <child>
 	    <left_attach>0</left_attach>
@@ -1898,7 +1898,7 @@ Press 'Finish' now.</text>
 	  <can_focus>True</can_focus>
 	  <editable>True</editable>
 	  <text_visible>True</text_visible>
-	  <text_max_length>0</text_max_length>
+	  <text_max_length>27</text_max_length>
 	  <text></text>
 	  <child>
 	    <left_attach>0</left_attach>
@@ -1948,7 +1948,7 @@ Press 'Finish' now.</text>
 	  <can_focus>True</can_focus>
 	  <editable>True</editable>
 	  <text_visible>True</text_visible>
-	  <text_max_length>0</text_max_length>
+	  <text_max_length>27</text_max_length>
 	  <text></text>
 	  <child>
 	    <left_attach>0</left_attach>
