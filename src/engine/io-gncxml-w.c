@@ -1,6 +1,19 @@
 /*
  * io-gncxml-w.c -- write XML-format gnucash data file
  *
+ * FUNCTION:
+ * Contains routines to write out values for some basic field types
+ * Contains routines which specifically write out the account, txn,
+ * and split structures, for saving to file.
+ * Contains routines for writing out a query, for network transmission.
+ *
+ * TBD:
+ * Much of the contents of this file is 'mundane', and simply
+ * dumps C structure contents into xml.  This could probably be
+ * automated with a bit of meta-description of the C structs ...
+ * e.g. even some simple #define macros might help here ...
+ *
+ * HISTORY:
  * Initial code by Rob l. Browning 4Q 2000
  * Tuneups by James Lewis Moss Dec 2000
  * Generic I/O hack by Linas Vepstas January 2001
@@ -25,6 +38,7 @@
 #include "DateUtils.h"
 #include "Group.h"
 #include "messages.h"
+#include "Query.h"
 #include "Transaction.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
@@ -53,6 +67,8 @@ static const gchar *gncxml_emacs_trailer =
 "<!-- mode: xml        -->\n"
 "<!-- End:             -->\n";
 
+/* ============================================================== */
+
 static gboolean
 xml_add_str(xmlNodePtr p, const char *tag, const char *str,
             gboolean include_if_empty) {
@@ -69,6 +85,8 @@ xml_add_str(xmlNodePtr p, const char *tag, const char *str,
   return(TRUE);
 }
 
+/* ============================================================== */
+
 static gboolean
 xml_add_character(xmlNodePtr p, const char *tag, const char c) {
   char str[2];
@@ -76,6 +94,8 @@ xml_add_character(xmlNodePtr p, const char *tag, const char c) {
   str[1] = '\0';
   return(xml_add_str(p, tag, str, FALSE));
 }
+
+/* ============================================================== */
 
 static gboolean
 xml_add_gint64(xmlNodePtr p, const char *tag, const gint64 value) {
@@ -93,10 +113,27 @@ xml_add_gint64(xmlNodePtr p, const char *tag, const gint64 value) {
   return(TRUE);
 }
 
+/* ============================================================== */
 
-/*********/
-/* double
-   
+static gboolean
+xml_add_gint32(xmlNodePtr p, const char *tag, const gint32 value) {
+  xmlNodePtr val_xml;
+  char num_string[22];
+
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(tag, FALSE);
+
+  g_snprintf(num_string, sizeof (num_string), "%d", value);
+
+  val_xml = xmlNewTextChild(p, NULL, tag, num_string);
+  g_return_val_if_fail(val_xml, FALSE);
+
+  return(TRUE);
+}
+
+
+/* ============================================================== */
+/* 
    RLB writes:
    We have to use guile because AFAICT, libc, and C in general isn't
    smart enough to actually parse it's own output, especially not
@@ -107,7 +144,6 @@ xml_add_gint64(xmlNodePtr p, const char *tag, const gint64 value) {
    atof or strtod to accomplish this.
 
  */
-
 
 static gboolean
 xml_add_double(xmlNodePtr p, const char *tag, const double value) 
@@ -164,6 +200,8 @@ xml_add_double(xmlNodePtr p, const char *tag, const double value)
   return(TRUE);
 }
 
+/* ============================================================== */
+
 static gboolean
 xml_add_gnc_numeric(xmlNodePtr p, const char *tag, const gnc_numeric n) {
   char *numstr;
@@ -186,6 +224,7 @@ xml_add_gnc_numeric(xmlNodePtr p, const char *tag, const gnc_numeric n) {
   return(TRUE);
 }
 
+/* ============================================================== */
 
 static gboolean
 xml_add_guid(xmlNodePtr p, const char *tag, const GUID *guid) {
@@ -211,6 +250,8 @@ xml_add_guid(xmlNodePtr p, const char *tag, const GUID *guid) {
   }
   return(TRUE);
 }
+
+/* ============================================================== */
 
 static gboolean
 xml_add_editable_timespec(xmlNodePtr p,
@@ -258,6 +299,8 @@ xml_add_editable_timespec(xmlNodePtr p,
   return(TRUE);
 }
 
+/* ============================================================== */
+
 static gboolean
 xml_add_commodity_ref(xmlNodePtr p, const char *tag, const gnc_commodity *c) {
   xmlNodePtr c_xml = NULL;
@@ -285,6 +328,8 @@ xml_add_commodity_ref(xmlNodePtr p, const char *tag, const gnc_commodity *c) {
   if(!ok && c_xml) xmlFreeNode(c_xml);
   return(TRUE);
 }
+
+/* ============================================================== */
 
 static gboolean
 xml_add_commodity_restorer(xmlNodePtr p, gnc_commodity *c) {
@@ -327,6 +372,7 @@ xml_add_commodity_restorer(xmlNodePtr p, gnc_commodity *c) {
   return(TRUE);
 }
 
+/* ============================================================== */
 
 static gint
 compare_namespaces(gconstpointer a, gconstpointer b) {
@@ -392,6 +438,8 @@ xml_add_commodity_restorers(xmlNodePtr p) {
   return(TRUE);
 }
 
+/* ============================================================== */
+
 static gboolean
 xml_add_binary(xmlNodePtr p,
                const char *tag,
@@ -454,6 +502,8 @@ xml_add_binary(xmlNodePtr p,
   return(TRUE);
 }
 
+/* ============================================================== */
+
 static gboolean xml_add_kvp_value(xmlNodePtr p, kvp_value *val);
 
 static gboolean
@@ -476,6 +526,8 @@ xml_add_kvp_glist(xmlNodePtr p, const char *tag, GList *lst) {
   }
   return(TRUE);
 }
+
+/* ============================================================== */
 
 static gboolean
 xml_add_kvp_frame(xmlNodePtr p, const char *tag,
@@ -526,6 +578,8 @@ xml_add_kvp_value(xmlNodePtr p, kvp_value *val) {
   return(TRUE);
 }
 
+/* ============================================================== */
+
 static gboolean
 xml_add_kvp_slot(xmlNodePtr p, const char *key, kvp_value *val) {
   xmlNodePtr slot_xml;
@@ -544,6 +598,8 @@ xml_add_kvp_slot(xmlNodePtr p, const char *key, kvp_value *val) {
   return(xml_add_kvp_value(slot_xml, val));
 }
 
+/* ============================================================== */
+
 typedef struct {
   xmlNodePtr node;
   gint64 keycount;
@@ -557,6 +613,8 @@ xml_add_kvp_value_foreach_adapter(const char *key,
   xml_add_kvp_slot(info->node, key, value);
   info->keycount++;
 }
+
+/* ============================================================== */
 
 static gboolean
 xml_add_kvp_frame(xmlNodePtr p,
@@ -587,6 +645,8 @@ xml_add_kvp_frame(xmlNodePtr p,
   
   return(TRUE);
 }
+
+/* ============================================================== */
 
 static gboolean
 xml_add_transaction_split(xmlNodePtr p, Split* s) {
@@ -647,6 +707,7 @@ xml_add_transaction_split(xmlNodePtr p, Split* s) {
   return(TRUE);
 }
 
+/* ============================================================== */
 
 static gboolean
 xml_add_txn_restore(xmlNodePtr p, Transaction* t) {
@@ -701,6 +762,8 @@ xml_add_txn_restore(xmlNodePtr p, Transaction* t) {
   return(TRUE);
 }
 
+/* ============================================================== */
+
 static gboolean
 xml_add_txn_restore_adapter(Transaction *t, gpointer data) {
   xmlNodePtr xml_node = (xmlNodePtr) data;
@@ -713,6 +776,9 @@ xml_add_txn_and_split_restorers(xmlNodePtr p, AccountGroup *g) {
                                      xml_add_txn_restore_adapter,
                                      (gpointer) p));
 }
+
+/* ============================================================== */
+/* write out the xml for each of the fields in an account */
 
 static gboolean
 xml_add_account_restorer(xmlNodePtr p, Account* a) {
@@ -780,6 +846,9 @@ xml_add_account_restorer(xmlNodePtr p, Account* a) {
   return(TRUE);
 }
 
+/* ============================================================== */
+/* loop over all accounts in the group */
+
 static gboolean
 xml_add_account_restorers(xmlNodePtr p, AccountGroup *g) {
   GList *list;
@@ -796,6 +865,99 @@ xml_add_account_restorers(xmlNodePtr p, AccountGroup *g) {
   }
   return(TRUE);
 }
+
+/* ============================================================== */
+/* push query terms into xml */
+/* XXX hack alert not all predicates currently implemented */
+
+static gboolean
+xml_add_qterm_restorer(xmlNodePtr p, QueryTerm *qt) 
+{
+  int rc;
+
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(qt, FALSE);
+
+  switch (qt->data.type) {
+    case PD_DATE:
+       xml_add_gint32(p, "use-start", qt->data.date.use_start);
+       xml_add_gint32(p, "use-end", qt->data.date.use_end);
+       if (qt->data.date.use_start) {
+          xml_add_editable_timespec(p, "start-date", 
+                                   &qt->data.date.start, FALSE);
+       }
+       if (qt->data.date.use_end) {
+          xml_add_editable_timespec(p, "end-date", 
+                                   &qt->data.date.end, FALSE);
+       }
+       break;
+
+    case PD_AMOUNT:
+       PERR ("unimplemented");
+       break;
+
+    case PD_ACCOUNT: 
+       PERR ("unimplemented");
+       break;
+
+    case PD_STRING:
+       xml_add_gint32(p, "case-sens", qt->data.str.case_sens);
+       xml_add_gint32(p, "use-regexp", qt->data.str.use_regexp);
+       xml_add_str(p, "matchstring", qt->data.str.matchstring, TRUE);
+       break;
+
+    case PD_CLEARED:
+       PERR ("unimplemented");
+       break;
+
+    case PD_BALANCE:
+       PERR ("unimplemented");
+       break;
+
+    case PD_MISC:
+       PERR ("unimplemented");
+       break;
+
+
+    default:
+  }
+
+  rc = xml_add_gint32(p, "sense", qt->sense);
+  if (!rc) return(FALSE);
+
+  return(TRUE);
+}
+
+/* ============================================================== */
+/* loop over all terms in the query */
+
+static gboolean
+xml_add_query_restorers(xmlNodePtr p, Query *q) 
+{
+  xmlNodePtr qxml, restore_xml;
+  GList *list;
+  GList *node;
+  
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(q, FALSE);
+
+  list = xaccQueryGetTerms (q);
+
+  /* write the nested <query> <restore> */
+  qxml = xmlNewTextChild(p, NULL, "query", NULL);  
+  g_return_val_if_fail(qxml, FALSE);
+
+  restore_xml = xmlNewTextChild(qxml, NULL, "restore", NULL);  
+  g_return_val_if_fail(restore_xml, FALSE);
+
+  for (node = list; node; node = node->next) {
+    QueryTerm *qt = node->data;
+    xml_add_qterm_restorer(restore_xml, qt);
+  }
+  return(TRUE);
+}
+
+/* ============================================================== */
 
 static gboolean
 gncxml_append_emacs_trailer(const gchar *filename)
@@ -815,6 +977,42 @@ gncxml_append_emacs_trailer(const gchar *filename)
 }
     
 /* =============================================================== */
+/* create a new xml document and poke all the query terms into it. */
+
+static xmlDocPtr
+gncxml_new_query_doc (Query *q)
+{
+  xmlDocPtr doc;
+  xmlNodePtr query_terms;
+  xmlNodePtr tmpnode;
+  
+  doc = xmlNewDoc("1.0");
+  doc->xmlRootNode = xmlNewDocNode(doc, NULL, "gnc", NULL);
+   
+  tmpnode = xmlNewTextChild(doc->xmlRootNode, NULL, "version", "1");
+  if(!tmpnode) {
+    PERR ("can't create new text child");
+    xmlFreeDoc(doc);
+    return 0x0;
+  }
+
+  query_terms = xmlNewTextChild(doc->xmlRootNode, NULL, "query-terms", NULL);
+  if(!query_terms) {
+    PERR ("couldn't creat query terms");
+    xmlFreeDoc(doc);
+    return 0x0;
+  }
+
+  if(!xml_add_query_restorers(query_terms, q)) {
+    PERR ("couldn't write query terms");
+    xmlFreeDoc(doc);
+    return 0x0;
+  }
+
+  return doc;
+}
+
+/* =============================================================== */
 /* create a new xml document and poke all account & txn data into it. */
 
 static xmlDocPtr
@@ -829,13 +1027,14 @@ gncxml_newdoc (AccountGroup *group)
    
   tmpnode = xmlNewTextChild(doc->xmlRootNode, NULL, "version", "1");
   if(!tmpnode) {
+    PERR ("can't create new text child");
     xmlFreeDoc(doc);
     return 0x0;
   }
 
   ledger_data = xmlNewTextChild(doc->xmlRootNode, NULL, "ledger-data", NULL);
   if(!ledger_data) {
-    PERR ("couldn't get ledger data");
+    PERR ("couldn't create xml text child");
     xmlFreeDoc(doc);
     return 0x0;
   }
@@ -871,10 +1070,24 @@ gncxml_write_to_buf (AccountGroup *group, char **bufp, int *sz)
   doc = gncxml_newdoc (group);
   if (!doc) return;
 
-  xmlDocDumpMemory (doc, bufp, sz);
+  xmlDocDumpMemory (doc, (xmlChar **)bufp, sz);
 
-  PINFO ("wrote %d bytes");
+  PINFO ("wrote %d bytes", *sz);
+}
 
+/* =============================================================== */
+
+void
+gncxml_write_query_to_buf (Query *q, char **bufp, int *sz)
+{
+  xmlDocPtr doc;
+
+  doc = gncxml_new_query_doc (q);
+  if (!doc) return;
+
+  xmlDocDumpMemory (doc, (xmlChar **)bufp, sz);
+
+  PINFO ("wrote %d bytes", *sz);
 }
 
 /* =============================================================== */

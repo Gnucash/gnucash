@@ -196,6 +196,13 @@ xaccQueryHasTerms(Query * q) {
   return g_list_length(q->terms);    
 }
 
+GList *
+xaccQueryGetTerms (Query *q)
+{
+   if (!q) return 0x0;
+   return q->terms;
+}
+
 
 /********************************************************************
  * xaccQueryHasTermType
