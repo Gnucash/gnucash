@@ -14,47 +14,65 @@
 
     <p> The people behind <a href="http://gnucash.org">GnuCash</a> aim
     to create a world-class GPL'ed Open Source Personal Financial
-    Application for GNU/Linux and other Unix's. This page aims to
-    review some of the technical and development issues surrounding
-    this product, representing a sort of <b>FAQ</b> for developers and
-    contributors, to suggest directions when developers are trying to
-    determine how to implement new functionality.</p>
+    Application for GNU/Linux and other Unix's. This page reviews
+    some of the technical issues and development status surrounding
+    this project.  It is a kind of an <b>FAQ</b> for developers and
+    contributors, providing status, and suggesting directions and 
+    technologies for deploying new features.
 
-    <p>To get a better idea of what <a href="http://gnucash.org">
+    If you simply want to get a better idea of what 
+    <a href="http://gnucash.org">
     GnuCash</a> is and what it does, visit its <a href=
-    "http://gnucash.org">home page</a>.</p>
+    "http://gnucash.org">home page</a>.  The home page contains
+    screen shots, news items, and mailing list archives.
 
     <p>There are currently several different versions of
-    GnuCash.</p>
+    GnuCash.  We've adopted the kernel numbering scheme: 
+    even minor relase numbers (1.2.x, 1.4.x) are considered to mark
+    stable releases, while odd numbers (1.3.x) mark development 
+    releases.
 
     <ul>
-      <li>The current stable, production release is gnucash-1.2.x
-      and is based on the Open Group's Motif GUI library.<br>
-      <br>
-      </li>
+      <li>The current stable, production release is gnucash-1.2.5
+          and is based on the Open Group's Motif GUI library.
+          Note, however, that the Motif version is no longer being
+          maintained, and all development efforts have switched over 
+          to the Gnome/GTK version.
+          
+      <br><br>
+      <li>The 1.3.x releases focus on the 
+      the <a href="http://www.gnome.org">Gnome</a> /
+      <a href="http://www.gtk.org">GTK</a> version.
+      This version adds many new features that are absent in the Motif
+      version.  Development is progressing well, and the 1.3.x series
+      are as usable as the 1.2.5 version.
 
-      <li>However, development efforts have almost entirely
-      switched over to <a href="http://www.gnome.org"> Gnome</a>
-      and <a href="http://www.gtk.org"> GTK;</a> the Motif version
-      will likely fall by the wayside.</li>
-
+      <br><br>
       <li>Note that some more experimental versions, such as one
-      using the <a href="http://www.troll.no/products/qt.html"> Qt
-      library from Troll Tech</a> FOR the for the <a href= 
-      "http://www.kde.org/"> KDE desktop,</a> PalmComputing
+      using the <a href="http://www.troll.no/products/qt.html">Qt
+      library from Troll Tech</a> for the for the <a href= 
+      "http://www.kde.org/">KDE desktop</a>, for the Palm Computing
       platforms, as well as a Java-based version have been
-      discussed and/or started.<br>
-      <br>
+      discussed and/or started.  Source code for these, such as there
+      may be, is in the CVS tree.
+      
       </li>
     </ul>
 
     <p> The latest Gnome version, and latest versions in general,
-    are currently available only via CVS.</p>
+    are currently available only via CVS.  Occasionally, some of the
+    more stable CVS versions are given a version number, and packaged 
+    as a precompiled deb or rpm install package.  
 
-    <p> Precompiled versions <em> are</em> available, but usually
-    only for the stable releases. Don't use the unstable versions
-    unless you are ready for excitement and adventure, and are
-    prepared to cope with a need to keep extensive backups.</p>
+    Naive or begining users should probably stick to version 
+    gnucash-1.2.5: although this version is quite old and lacking in
+    many features, it is known to work.   More adventurous users can try 
+    one of the 1.3.x releases:  these days, they are pretty stable, and
+    work pretty well.  However, we cannot gaurentee that they are
+    flawless.  We've tried to make sure that no matter how broken
+    these get, they won't mangle your data, but we can't make promises.
+    <p>
+
 
     <p> This document is divided into several sections.</p>
 
@@ -87,10 +105,10 @@
         thought of as a manipulator of the data, a <b>
         Controller</b>. 
 
-        <p> Thus, the Motif or Gnome GUIs are merely two possible
+        Thus, the Motif or Gnome GUIs are merely two possible
         manipulators of the data; others, based on <i>e.g.</i>
-        Qt/KDE, emacs, Java applets or Java servlets ought to be
-        possible.</p>
+        web/cgi-bin, Qt/KDE, emacs, Java applets or Java servlets 
+        ought to be possible.
       </li>
 
       <li>The <b>View</b> of the data is a subset or slice of the
@@ -98,16 +116,17 @@
       transactions for the month of May, or only the account totals
       for certain accounts. The View is used in part to generate
       the reports and graphs, but it is also that which the
-      Controller interacts with.</li>
+      Controller interacts with. Views are generated by queries
+      to the data store.</li>
     </ul>
 
     <p> GnuCash also needs to deal with multiple distributed data
     sources: stock quotations from the net or transaction
     confirmations from online banks and brokerage houses, or from
     more mundane sources, such as file imports, or merger of data
-    from several users.</p>
+    from several users.
 
-    <p> Amongst these terms, the concept of a global Model-View is
+    Amongst these terms, the concept of a global Model-View is
     dated, and somewhat inappropriate. Rather, we need to be
     concerned about how data is represented in the local address
     space of the GUI, how the GUI manipulates it, how data is
@@ -133,16 +152,21 @@
     structures include:</p>
 
     <ul>
-      <li>Transactions</li>
+      <li><b>Transactions</b>, which consist of a set of journal entries
+          (JE's) whose values sum to zero.
 
-      <li>Transaction entries (splits)</li>
+      <li><b>Journal Entries<b> (internally refered to as 'splits')
+          which record prices and values.
 
-      <li>Accounts</li>
+      <li><b>Accounts</b> 
 
-      <li>Hierarchies of Accounts</li>
+      <li><b>Chart of Accounts</b>, which is a heirarchical tree of
+          accounts.
     </ul>
     The Engine has a very simple apply/commit model, and a simple
-    query mechanism for generating reports and views. 
+    query mechanism for generating reports and views.  The goal of the 
+    commit and query model is to aid/simplify the creation of & merger
+    with an SQL back-end.
 
     <p> The Engine currently handles only a small set of data
     sources:</p>
@@ -635,6 +659,9 @@
         <p> Stock portfolio tools should include a Cost Averaging
         report, Market Index report, Stock Option values,
         Estimation of capital gains tax liabilities.</p>
+        <ul>
+        <a href="http://www.gnome.org/guppi/">GUPPI</a>
+        </ul>
 
         <p> <b>Status:</b></p>
 
