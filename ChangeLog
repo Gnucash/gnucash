@@ -1,3 +1,8 @@
+2001-06-19  Bill Gribble  <grib@billgribble.com>
+
+	* src/scm/qif-import/qif-objects.scm: initialize fields to ""
+	rather than #f
+
 2001-06-19  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-scheduledxaction.c: use C comments. fix warning
