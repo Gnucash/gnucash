@@ -55,6 +55,14 @@ static const char * pgendSessionGetMode (PGBackend *be);
  */
 #define QBUFSIZE 16350
 
+
+/* hack alert -- calling PQFinish() is quite harsh, since all 
+ * subsequent sql queries will fail. On the other hand, killing
+ * anything that follows *is* a way of minimizing data corruption 
+ * due to subsequent mishaps ... so anyway, error handling in these 
+ * routines needs to be rethought. 
+ */
+
 /* ============================================================= */
 /* The SEND_QUERY macro sends the sql statement off to the server. 
  * It performs a minimal check to see that the send succeeded. 
@@ -122,7 +130,6 @@ static const char * pgendSessionGetMode (PGBackend *be);
       PERR("failed to get result to query:\n"			\
            "\t%s", PQerrorMessage((conn)));			\
       PQclear (result);						\
-      /* hack alert need gentler, kinder error recovery */	\
       PQfinish (conn);						\
       xaccBackendSetError (&be->be, ERR_SQL_GET_RESULT_FAILED);	\
       break;							\
@@ -337,6 +344,8 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
    const gnc_commodity *com;
 
    if (!be || !acct) return;
+   if (FALSE == acct->core_dirty) return;
+
    ENTER ("acct=%p, mark=%d", acct, do_mark);
 
    if (do_mark) 
@@ -1111,7 +1120,6 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
 
             xaccSplitSetReconcile (s, (DB_GET_VAL("reconciled", j))[0]);
 
-            xaccTransAppendSplit (trans, s);
 
             /* --------------------------------------------- */
             /* next, find the account that this split goes into */
@@ -1120,10 +1128,18 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
             acc = (Account *) xaccLookupEntity (&guid, GNC_ID_ACCOUNT);
             if (!acc)
             {
-               PERR ("account not found, don't know what to do ");
+               PERR ("account not found, will delete this split\n"
+                     "\t(split with  guid=%s\n" 
+                     "\twants an acct with guid=%s)\n", 
+                     DB_GET_VAL("entryGUID",j),
+                     DB_GET_VAL("accountGUID",j)
+                     );
+               xaccSplitDestroy (s);
             }
             else
             {
+               xaccTransAppendSplit (trans, s);
+
                if (acc != previous_acc)
                {
                   xaccAccountCommitEdit (previous_acc);
@@ -1131,12 +1147,11 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
                   previous_acc = acc;
                }
                xaccAccountInsertSplit(acc, s);
-            }
 
-            /* --------------------------------------------- */
-            /* finally tally them up; we use this below to clean 
-             * out deleted splits */
-            db_splits = g_list_prepend (db_splits, s);
+               /* finally tally them up; we use this below to 
+                * clean out deleted splits */
+               db_splits = g_list_prepend (db_splits, s);
+            }
          }
       }
       i++;
@@ -1660,28 +1675,42 @@ static int
 pgend_account_commit_edit (Backend * bend, 
                            Account * acct)
 {
-   char * bufp;
+   char *p;
    PGBackend *be = (PGBackend *)bend;
 
    ENTER ("be=%p, acct=%p", be, acct);
    if (!be || !acct) return 1;  /* hack alert hardcode literal */
+   if (FALSE == acct->core_dirty) return 0;
 
    /* lock it up so that we query and store atomically */
    /* its not at all clear to me that this isn't rife with deadlocks. */
-   bufp = "BEGIN; "
-          "LOCK TABLE gncAccount IN EXCLUSIVE MODE; "
-          "LOCK TABLE gncCommodity IN EXCLUSIVE MODE; ";
+   p = "BEGIN; "
+       "LOCK TABLE gncAccount IN EXCLUSIVE MODE; "
+       "LOCK TABLE gncCommodity IN EXCLUSIVE MODE; ";
 
-   SEND_QUERY (be,bufp, 555);
+   SEND_QUERY (be,p, 555);
    FINISH_QUERY(be->connection);
 
-   /* hack alert -- we aren't comparing old to new, 
-    * i.e. not comparing version numbers, to see if 
+   /* hack alert -- we should compare old to new, 
+    * i.e. compare version numbers, to see if 
     * we're clobbering someone elses changes.  */
-   pgendStoreAccountNoLock (be, acct, FALSE);
 
-   bufp = "COMMIT;";
-   SEND_QUERY (be,bufp,333);
+   if (acct->do_free)
+   {
+      p = be->buff; *p = 0;
+      p = stpcpy (p, "DELETE FROM gncAccount WHERE accountGuid='");
+      p = guid_to_string_buff (xaccAccountGetGUID(acct), p);
+      p = stpcpy (p, "';");
+      SEND_QUERY (be,be->buff, 444);
+      FINISH_QUERY(be->connection);
+   }
+   else
+   {
+      pgendStoreAccountNoLock (be, acct, FALSE);
+   }
+
+   p = "COMMIT;";
+   SEND_QUERY (be,p,333);
    FINISH_QUERY(be->connection);
 
    /* Mark this up so that we don't get that annoying gui dialog
@@ -2187,8 +2216,9 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.trans_rollback_edit = NULL;
             be->be.run_query = NULL;
             be->be.sync = pgendSyncSingleFile;
-            PWARN ("MODE_SINGLE_FILE is beta -- we've fixed all known \n"
-                   "bugs but that doesn't mean there aren't any!\n");
+            PWARN ("MODE_SINGLE_FILE is beta -- \n"
+                   "we've fixed all known bugs but that doesn't mean\n"
+                   "there aren't any!\n");
             break;
 
          case MODE_SINGLE_UPDATE:
@@ -2201,8 +2231,9 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.trans_rollback_edit = NULL;
             be->be.run_query = NULL;
             be->be.sync = pgendSync;
-            PWARN ("MODE_SINGLE_UPDATE is beta -- we've fixed all known \n"
-                   "bugs but that doesn't mean there aren't any!\n");
+            PWARN ("MODE_SINGLE_FILE is beta -- \n"
+                   "we've fixed all known bugs but that doesn't mean\n"
+                   "there aren't any!\n");
             break;
 
          case MODE_POLL:

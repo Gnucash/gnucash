@@ -24,9 +24,7 @@ To Be Done
 ----------
 Core bugs/features that still need work:
 
--- bug: Implement account and transaction deletion. Deleting an account or
-   transaction doesn't remove it from the database.
-   (done with split delete)
+-- missing function: handle kvp frames (this is important for accounts)
 
 -- bug: transaction memo in double line mode is lost.
 
@@ -34,19 +32,21 @@ Core bugs/features that still need work:
    the database already exists and has data in it ... 
 
 -- bug: group sync doesn't pull in newer data from the db ...
+   (related to the 'save as' above)
 
 -- allow user to enter URL in GUI dialog
 
 -- Implement GUI to ask user for username/password to log onto the
    server. 
 
--- handle kvp frames
 
 To Be Done, Part II
 -------------------
 This list only affects the multi-user and advanced/optional features.
 
 -- implement account commit edit (actually, the check&rollback part)
+   (need to check the account version number beofer the commit happens)
+
 -- fix excessive use of account commit by engine
 -- provide support for more query types in gncquery.c
 -- optimize for quantity of SQL traffic -- there's a lot of it,
@@ -88,7 +88,7 @@ This list only affects the multi-user and advanced/optional features.
 
 -- store account balances in database.  This will be tricky ...
    -- split query gets hard ... 
-   -- use aggregates ?? 
+   -- use postgres aggregates ?? 
 
 -- review multiuser operation for correctness 
 
