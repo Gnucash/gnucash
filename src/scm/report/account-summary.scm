@@ -168,7 +168,7 @@
 	    (gnc:html-document-add-object! 
 	     doc ;;(gnc:html-markup-p
 	     (gnc:html-make-exchangerates 
-	      report-currency exchange-alist accounts #f)));;)
+	      report-currency exchange-fn accounts)));;)
 	  
 	  ;; error condition: no accounts specified
           (let ((p (gnc:make-html-text)))

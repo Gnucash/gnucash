@@ -1,3 +1,18 @@
+2001-04-28  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/date-utilities.scm: Fixed a whole lot of bugs in the
+	relative-date functions (did *nobody* ever test those???). Added
+	relative dates end-cal-year, end-current-quarter, and
+	end-this-month. Added comments.
+
+	* src/scm/options-utilities.scm: Changed date-options to be combo
+	options of both relative and absolute dates.
+
+	* src/scm/report/portfolio.scm, taxtxf.scm: adapt to usual option
+	conventions.
+
+	* src/scm/report/account-summary.scm: Fix bug.
+
 2001-04-27  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/balance-sheet.scm: Added workaround for gtkhtml

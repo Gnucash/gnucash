@@ -374,6 +374,16 @@
     (set-tm:isdst now -1)
     (gnc:secs->timepair (car (mktime now)))))
 
+(define (gnc:get-end-cal-year)
+  (let ((now (localtime (current-time))))
+    (set-tm:sec now 59)
+    (set-tm:min now 59)
+    (set-tm:hour now 23)
+    (set-tm:mday now 31)
+    (set-tm:mon now 11)
+    (set-tm:isdst now -1)
+    (gnc:secs->timepair (car (mktime now)))))
+
 (define (gnc:get-start-prev-year)
   (let ((now (localtime (current-time))))
     (set-tm:sec now 0)
@@ -449,6 +459,7 @@
 	  (set-tm:hour now 23)
 	  (set-tm:mday now 30)
 	  (set-tm:mon now 5)
+	  (set-tm:year now (- (tm:year now) 1))
           (set-tm:isdst now -1)
 	  (cons (car (mktime now)) 0))
 	(begin
@@ -457,7 +468,6 @@
 	  (set-tm:hour now 23)
 	  (set-tm:mday now 30)
 	  (set-tm:mon now 5)
-	  (set-tm:year now (- (tm:year now) 1))
           (set-tm:isdst now -1)
 	  (cons (car (mktime now)) 0)))))
 
@@ -470,6 +480,16 @@
     (set-tm:isdst now -1)
     (cons (car (mktime now)) 0)))
 
+(define (gnc:get-end-this-month)
+  (let ((now (localtime (current-time))))
+    (set-tm:sec now 59)
+    (set-tm:min now 59) 
+    (set-tm:hour now 23)
+    (set-tm:mday now (gnc:days-in-month (+ (tm:mon now) 1) 
+					(+ (tm:year now) 1900)))
+    (set-tm:isdst now -1)
+    (cons (car (mktime now)) 0)))
+    
 (define (gnc:get-start-prev-month)
   (let ((now (localtime (current-time))))
     (set-tm:sec now 0)
@@ -489,12 +509,13 @@
     (set-tm:sec now 59)
     (set-tm:min now 59) 
     (set-tm:hour now 23)
-    (if (= (tm:month now 0))
+    (if (= (tm:mon now) 0)
 	(begin
-	  (set-tm:month now 11)
+	  (set-tm:mon now 11)
 	  (set-tm:year (- (tm:year now) 1)))
-	(set-tm:month now (- (tm:month now) 1)))
-    (set-tm:mday (gnc:days-in-month (+ (tm:month now) 1)) (+ (tm:year) 1900))
+	(set-tm:mon now (- (tm:mon now) 1)))
+    (set-tm:mday now (gnc:days-in-month (+ (tm:mon now) 1) 
+					(+ (tm:year now) 1900)))
     (set-tm:isdst now -1)
     (cons (car (mktime now)) 0)))
     
@@ -504,9 +525,21 @@
     (set-tm:min now 0)
     (set-tm:hour now 0)
     (set-tm:mday now 1)
-    (set-tm:month now (- (tm:month now) (mod (tm:month now) 3)))
+    (set-tm:mon now (- (tm:mon now) (modulo (tm:mon now) 3)))
     (set-tm:isdst now -1)
     (cons (car (mktime now)) 0)))
+
+(define (gnc:get-end-current-quarter)
+  (let ((now (localtime (current-time))))
+    (set-tm:sec now 59)
+    (set-tm:min now 59)
+    (set-tm:hour now 23)
+    (set-tm:mon now (+ (tm:mon now) 
+		       (- 2 (modulo (tm:mon now) 3))))
+    (set-tm:mday now (gnc:days-in-month (+ (tm:mon now) 1)
+                                        (+ (tm:year now) 1900)))
+    (set-tm:isdst now -1)
+    (gnc:secs->timepair (car (mktime now)))))
 
 (define (gnc:get-start-prev-quarter)
   (let ((now (localtime (current-time))))
@@ -514,28 +547,28 @@
     (set-tm:min now 0)
     (set-tm:hour now 0)
     (set-tm:mday now 1)
-    (set-tm:month now (- (tm:month now)  (mod (tm:month now) 3)))
-    (if (= (tm:month now) 0)
+    (set-tm:mon now (- (tm:mon now) (modulo (tm:mon now) 3)))
+    (if (= (tm:mon now) 0)
 	(begin
-	  (set-tm:month now 9)
+	  (set-tm:mon now 9)
 	  (set-tm:year now (- (tm:year now) 1)))
-	(set-tm:month now (- (tm-month now) 3)))
+	(set-tm:mon now (- (tm:mon now) 3)))
     (set-tm:isdst now -1)
-    (cons (car (mktime now) 0))))
+    (cons (car (mktime now)) 0)))
 
 (define (gnc:get-end-prev-quarter)
   (let ((now (localtime (current-time))))
     (set-tm:sec now 59)
     (set-tm:min now 59)
     (set-tm:hour now 23)
-    (if (< (tm:month now) 3)
+    (if (< (tm:mon now) 3)
 	(begin
-	  (set-tm:month now 11)
+	  (set-tm:mon now 11)
 	  (set-tm:year now (- (tm:year now) 1)))
-	(set-tm:month now (- (tm:month now) 
-			     (3 + (mod (tm:month now) 3)))))
-    (set-tm:mday now (gnc:days-in-month (+ (tm:month now) 1)
-                                        (+ (tm:year) 1900)))
+	(set-tm:mon now (- (tm:mon now) 
+			     (+ 1 (modulo (tm:mon now) 3)))))
+    (set-tm:mday now (gnc:days-in-month (+ (tm:mon now) 1)
+                                        (+ (tm:year now) 1900)))
     (set-tm:isdst now -1)
     (gnc:secs->timepair (car (mktime now)))))
 
@@ -544,12 +577,12 @@
 
 (define (gnc:get-one-month-ago)
   (let ((now (localtime (current-time))))
-    (if (= (tm:month now) 0)
+    (if (= (tm:mon now) 0)
 	(begin
-	  (set-tm:month now 11)
+	  (set-tm:mon now 11)
 	  (set-tm:year now (- (tm:year now) 1)))
-	(set-tm:month now (- (tm:month now) 1)))
-    (let ((month-length (gnc:days-in-month (+ (tm:month now) 1)
+	(set-tm:mon now (- (tm:mon now) 1)))
+    (let ((month-length (gnc:days-in-month (+ (tm:mon now) 1)
                                            (+ (tm:year now) 1900))))
       (if (> month-length (tm:mday now))
 	  (set-tm:mday now month-length))
@@ -558,12 +591,12 @@
 
 (define (gnc:get-three-months-ago)
   (let ((now (localtime (current-time))))
-    (if (< (tm:month now) 3)
+    (if (< (tm:mon now) 3)
 	(begin
-	  (set:tm-month now (+ (tm:month now) 12))
+	  (set:tm-month now (+ (tm:mon now) 12))
 	  (set:tm-year now  (- (tm:year now) 1))))
-    (set:tm-month now (- (tm:month now) 3))
-    (let ((month-days) (gnc:days-in-month (+ (tm:month now) 1)
+    (set:tm-month now (- (tm:mon now) 3))
+    (let ((month-days) (gnc:days-in-month (+ (tm:mon now) 1)
                                           (+ (tm:year now) 1900)))
       (if (> (month-days) (tm:mday now))
 	  (set-tm:mday now month-days))
@@ -572,12 +605,12 @@
 
 (define (gnc:get-six-months-ago)
   (let ((now (localtime (current-time))))
-    (if (< (tm:month now) 6)
+    (if (< (tm:mon now) 6)
 	(begin
-	  (set:tm-month now (+ (tm:month now) 12))
+	  (set:tm-month now (+ (tm:mon now) 12))
 	  (set:tm-year now  (- (tm:year now) 1))))
-    (set:tm-month now (- (tm:month now) 6))
-    (let ((month-days) (gnc:days-in-month (+ (tm:month now) 1)
+    (set:tm-month now (- (tm:mon now) 6))
+    (let ((month-days) (gnc:days-in-month (+ (tm:mon now) 1)
                                           (+ (tm:year now) 1900)))
       (if (> (month-days) (tm:mday now))
 	  (set-tm:mday now month-days))
@@ -587,12 +620,23 @@
 (define (gnc:get-one-year-ago)
   (let ((now (localtime (current-time))))
     (set:tm-year now (- (tm:year now) 1))
-    (let ((month-days) (gnc:days-in-month (+ (tm:month now) 1)
+    (let ((month-days) (gnc:days-in-month (+ (tm:mon now) 1)
                                           (+ (tm:year now) 1900)))
       (if (> (month-days) (tm:mday now))
 	  (set-tm:mday now month-days))
       (set-tm:isdst now -1)
       (gnc:secs->timepair (car (mktime now))))))
+
+;; There is no GNC:RELATIVE-DATES list like the one mentioned in
+;; gnucash-design.info, is there? Here are the currently defined
+;; items, loosely grouped.
+;;today
+;;start-cal-year end-cal-year start-prev-year end-prev-year
+;;start-this-month end-this-month start-prev-month end-prev-month
+;;start-current-quarter end-current-quarter start-prev-quarter
+;;end-prev-quarter
+;;one-month-ago three-months-ago six-months-ago one-year-ago
+;;start-cur-fin-year start-prev-fin-year end-prev-fin-year
 
 (define (gnc:reldate-initialize)
   (begin
@@ -602,97 +646,135 @@
     (gnc:reldate-string-db 
      'store 'start-cal-year-desc 
      (N_ "Start of the current calendar year"))
+
+    (gnc:reldate-string-db 
+     'store 'end-cal-year-string 
+     (N_ "Current Year End"))
+    (gnc:reldate-string-db 
+     'store 'end-cal-year-desc 
+     (N_ "End of the current calendar year"))
+
     (gnc:reldate-string-db 
      'store 'start-prev-year-string 
      (N_ "Previous Year Start"))
     (gnc:reldate-string-db 
      'store 'start-prev-year-desc 
      (N_ "Beginning of the previous calendar year"))
+
     (gnc:reldate-string-db 
      'store 'end-prev-year-string 
      (N_ "Previous Year End"))
     (gnc:reldate-string-db 
      'store 'end-prev-year-desc 
      (N_ "End of the Previous Year"))
+
     (gnc:reldate-string-db 
      'store 'start-cur-fin-year-string 
      (N_ "Current Financial Year Start"))
     (gnc:reldate-string-db 
      'store 'start-cur-fin-year-desc 
      (N_ "Start of the current financial year/accounting period"))
+
     (gnc:reldate-string-db 
      'store 'start-prev-fin-year-string 
      (N_ "Previous Financial Year Start"))
     (gnc:reldate-string-db 
      'store 'start-prev-fin-year-desc 
      (N_ "The start of the previous financial year/accounting period"))
+
     (gnc:reldate-string-db 
      'store 'end-prev-fin-year-string 
      (N_ "End Previous Financial Year"))
     (gnc:reldate-string-db 
      'store 'end-prev-fin-year-desc 
      (N_ "End of the previous Financial year/Accounting Period"))
+
     (gnc:reldate-string-db 
      'store 'start-this-month-string 
      (N_ "Start of this month"))
     (gnc:reldate-string-db 
      'store 'start-this-month-desc 
      (N_ "Start of the current month"))
+
+    (gnc:reldate-string-db 
+     'store 'end-this-month-string 
+     (N_ "End of this month"))
+    (gnc:reldate-string-db 
+     'store 'end-this-month-desc 
+     (N_ "End of the current month"))
+
     (gnc:reldate-string-db 
      'store 'start-prev-month-string 
      (N_ "Start of previous month"))
     (gnc:reldate-string-db 
      'store 'start-prev-month-desc
      (N_ "The beginning of the previous month"))
+
     (gnc:reldate-string-db 
      'store 'end-prev-month-string 
      (N_ "End of previous month"))
     (gnc:reldate-string-db 
      'store 'end-prev-month-desc
      (N_ "Last day of previous month"))
+
     (gnc:reldate-string-db 
      'store 'start-current-quarter-string 
      (N_ "Start of current quarter"))
     (gnc:reldate-string-db 
      'store 'start-current-quarter-desc
      (N_ "The start of the latest quarterly accounting period"))
+
+    (gnc:reldate-string-db 
+     'store 'end-current-quarter-string 
+     (N_ "End of current quarter"))
+    (gnc:reldate-string-db 
+     'store 'end-current-quarter-desc
+     (N_ "The end of the latest quarterly accounting period"))
+
     (gnc:reldate-string-db 
      'store 'start-prev-quarter-string 
      (N_ "Start of previous quarter"))
     (gnc:reldate-string-db 
      'store 'start-prev-quarter-desc
      (N_ "The start of the previous quarterly accounting period"))
+
     (gnc:reldate-string-db 
      'store 'end-prev-quarter-string 
      (N_ "End of previous quarter"))
     (gnc:reldate-string-db 
      'store 'end-prev-quarter-desc 
      (N_ "End of previous quarterly accounting period"))
+
     (gnc:reldate-string-db 
      'store 'today-string 
      (N_ "Today"))
     (gnc:reldate-string-db 
      'store 'today-desc (N_ "The current date"))
+
     (gnc:reldate-string-db 
      'store 'one-month-ago-string 
      (N_ "One Month Ago"))
     (gnc:reldate-string-db 
      'store 'one-month-ago-desc (N_ "One Month Ago"))
+
     (gnc:reldate-string-db 
      'store 'one-week-ago-string 
      (N_ "One Week Ago"))
     (gnc:reldate-string-db 
      'store 'one-week-ago-desc (N_ "One Week Ago"))
+
     (gnc:reldate-string-db 
      'store 'three-months-ago-string 
      (N_ "Three Months Ago"))
     (gnc:reldate-string-db 
      'store 'three-months-ago-desc (N_ "Three Months Ago"))
+
     (gnc:reldate-string-db 
      'store 'six-months-ago-string 
      (N_ "Six Months Ago"))
     (gnc:reldate-string-db 
      'store 'six-months-ago-desc (N_ "Six Months Ago"))
+
     (gnc:reldate-string-db 
      'store 'one-year-ago-string (N_ "One Year Ago"))
     (gnc:reldate-string-db 
@@ -704,6 +786,10 @@
 		   (gnc:reldate-string-db 'lookup 'start-cal-year-string)
 		   (gnc:reldate-string-db 'lookup 'start-cal-year-desc)
 		   gnc:get-start-cal-year)
+	   (vector 'end-cal-year 
+		   (gnc:reldate-string-db 'lookup 'end-cal-year-string)
+		   (gnc:reldate-string-db 'lookup 'end-cal-year-desc)
+		   gnc:get-end-cal-year)
 	   (vector 'start-prev-year
 		   (gnc:reldate-string-db 'lookup 'start-prev-year-string)
 		   (gnc:reldate-string-db 'lookup 'start-prev-year-desc)
@@ -728,6 +814,10 @@
 		   (gnc:reldate-string-db 'lookup 'start-this-month-string)
 		   (gnc:reldate-string-db 'lookup 'start-this-month-desc)
 		   gnc:get-start-this-month)
+	   (vector 'end-this-month
+		   (gnc:reldate-string-db 'lookup 'end-this-month-string)
+		   (gnc:reldate-string-db 'lookup 'end-this-month-desc)
+		   gnc:get-end-this-month)
 	   (vector 'start-prev-month
 		   (gnc:reldate-string-db 'lookup 'start-prev-month-string)
 		   (gnc:reldate-string-db 'lookup 'start-prev-month-desc)
@@ -740,6 +830,10 @@
 		   (gnc:reldate-string-db 'lookup 'start-current-quarter-string)
 		   (gnc:reldate-string-db 'lookup 'start-current-quarter-desc)
 		   gnc:get-start-current-quarter)
+	   (vector 'end-current-quarter
+		   (gnc:reldate-string-db 'lookup 'end-current-quarter-string)
+		   (gnc:reldate-string-db 'lookup 'end-current-quarter-desc)
+		   gnc:get-end-current-quarter)
 	   (vector 'start-prev-quarter
 		   (gnc:reldate-string-db 'lookup 'start-prev-quarter-string)
 		   (gnc:reldate-string-db 'lookup 'start-prev-quarter-desc)
@@ -749,8 +843,8 @@
 		   (gnc:reldate-string-db 'lookup 'end-prev-quarter-desc)
 		   gnc:get-end-prev-quarter)
 	   (vector 'today
-		   (gnc:reldate-string-db 'lookup 'end-prev-quarter-string)
-		   (gnc:reldate-string-db 'lookup 'end-prev-quarter-desc)
+		   (gnc:reldate-string-db 'lookup 'today-string)
+		   (gnc:reldate-string-db 'lookup 'today-desc)
 		   gnc:get-today)
 	   (vector 'one-month-ago
 		   (gnc:reldate-string-db 'lookup 'one-month-ago-string)

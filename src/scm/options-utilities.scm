@@ -36,12 +36,17 @@
     (gnc:make-date-option
      pagename optname 
      sort-tag (N_ "Select a date to report on")
-     (lambda ()
-       (cons 'absolute 
-	     (gnc:timepair-end-day-time     
-	      (gnc:secs->timepair 
-	       (car (mktime (localtime (current-time))))))))
-     #f 'absolute #f)))
+     (lambda () 
+;       (cons 'absolute 
+;	      (gnc:secs->timepair 
+;	       (car (mktime (localtime (current-time)))))))
+       (cons 'relative 'today))
+     #f 'both 
+     '(end-cal-year end-current-quarter end-this-month
+		    today end-prev-month end-prev-quarter
+		    end-prev-year ;;end-prev-fin-year
+		    ))))
+
 
 ;; This is a date-interval for a report.
 (define (gnc:options-add-date-interval!
@@ -52,22 +57,26 @@
     pagename name-from 
     (string-append sort-tag "a")
     (N_ "Start of reporting period")
-    (lambda ()
-      (cons 'absolute 
-            (gnc:get-start-cal-year)))
-    #f 'absolute #f))
+    (lambda () (cons 'relative 'start-cal-year))
+     #f 'both 
+     '(start-this-month start-prev-month start-current-quarter
+			start-prev-quarter start-cal-year 
+			;;start-cur-fin-year 
+			start-prev-year
+			;;start-prev-fin-year
+			)))
   (gnc:register-option 
    options  
    (gnc:make-date-option
     pagename name-to
     (string-append sort-tag "b")
     (N_ "End of reporting period")
-    (lambda ()
-      (cons 'absolute 
-            (gnc:timepair-end-day-time     
-             (gnc:secs->timepair 
-              (car (mktime (localtime (current-time))))))))
-    #f 'absolute #f)))
+    (lambda () (cons 'relative 'today))
+    #f 'both 
+    '(end-cal-year end-current-quarter end-this-month
+		   today end-prev-month end-prev-quarter end-prev-year
+		   ;;end-prev-fin-year
+		   ))))
 
 ;; A date interval multichoice option.
 (define (gnc:options-add-interval-choice! 
@@ -81,6 +90,7 @@
 	  (vector 'WeekDelta (N_ "Week") (N_ "Week"))
 	  (vector 'TwoWeekDelta (N_ "2Week") (N_ "Two Week"))
 	  (vector 'MonthDelta (N_ "Month") (N_ "Month"))
+	  ;; FIXME: how about quarters here?
 	  (vector 'YearDelta (N_ "Year") (N_ "Year"))
 	  ))))
 

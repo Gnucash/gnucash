@@ -80,41 +80,19 @@
   ;;   This is the year it is effective.  THIS IS A Y10K BUG!
   (define tax-qtr-real-qtr-year 10000)
 
-  (define tax-tab-title (N_ "TAX Report Options"))
-
   (define (tax-options-generator)
-    (options-generator tax-tab-title))
-
-  (define (options-generator tab-title)
-    (define gnc:*tax-report-options* (gnc:new-options))
+    (define options (gnc:new-options))
     (define (gnc:register-tax-option new-option)
-      (gnc:register-option gnc:*tax-report-options* new-option))
+      (gnc:register-option options new-option))
 
-    (gnc:register-tax-option
-     (gnc:make-date-option
-      tab-title (N_ "From")
-      "a" (N_ "Start of reporting period")
-      (lambda ()
-        (let ((bdtm (gnc:timepair->date (gnc:timepair-canonical-day-time
-					 (cons (current-time) 0)))))
-	  (set-tm:mday bdtm 1)          ; 01
-          (set-tm:mon bdtm 0)           ; Jan
-          (set-tm:isdst bdtm -1)
-	  (cons 'absolute (cons (car (mktime bdtm)) 0))))
-      #f 'absolute #f))
-
-    (gnc:register-tax-option
-     (gnc:make-date-option
-      tab-title (N_ "To")
-      "b" (N_ "End of reporting period")
-      (lambda ()
-        (cons 'absolute (gnc:timepair-canonical-day-time
-			 (cons (current-time) 0))))
-      #f 'absolute #f))
+    ;; date at which to report 
+    (gnc:options-add-date-interval!
+     options gnc:pagename-general 
+     (N_ "From") (N_ "To") "a")
 
     (gnc:register-tax-option
      (gnc:make-multichoice-option
-      tab-title (N_ "Alternate Period")
+      gnc:pagename-general (N_ "Alternate Period")
       "c" (N_ "Overide or modify From: & To:") 'from-to
       (list (list->vector
              (list 'from-to (N_ "Use From - To") (N_ "Use From - To period")))
@@ -143,22 +121,24 @@
 
     (gnc:register-tax-option
      (gnc:make-account-list-option
-      tab-title (N_ "Select Accounts (none = all)")
+      gnc:pagename-accounts (N_ "Select Accounts (none = all)")
       "d" (N_ "Select accounts")
       (lambda () '())
       #f #t))
 
     (gnc:register-tax-option
      (gnc:make-simple-boolean-option
-      tab-title (N_ "Suppress $0.00 values")
+      gnc:pagename-display (N_ "Suppress $0.00 values")
       "f" (N_ "$0.00 valued Accounts won't be printed.") #t))
 
     (gnc:register-tax-option
      (gnc:make-simple-boolean-option
-      tab-title (N_ "Print Full account names")
+      gnc:pagename-display (N_ "Print Full account names")
       "g" (N_ "Print all Parent account names") #f))
 
-    gnc:*tax-report-options*)
+    (gnc:options-set-default-section options gnc:pagename-general)
+
+    options)
 
   ;; Render txf information
   (define txf-last-payer #f)		; if same as current, inc txf-l-count
@@ -392,17 +372,17 @@
 			(lambda (x) (num-generations x (+ 1 gen)))
 			children)))))
 
-    (let* ((tab-title tax-tab-title)
-	   (from-value (gnc:date-option-absolute-time 
-			(get-option tab-title "From")))
+    (let* ((from-value (gnc:date-option-absolute-time 
+			(get-option gnc:pagename-general "From")))
            (to-value (gnc:timepair-end-day-time
 		      (gnc:date-option-absolute-time 		       
-		       (get-option tab-title "To"))))
-	   (alt-period (get-option tab-title "Alternate Period"))
-	   (suppress-0 (get-option tab-title "Suppress $0.00 values"))
-	   (full-names (get-option tab-title
+		       (get-option gnc:pagename-general "To"))))
+	   (alt-period (get-option gnc:pagename-general "Alternate Period"))
+	   (suppress-0 (get-option gnc:pagename-display 
+				   "Suppress $0.00 values"))
+	   (full-names (get-option gnc:pagename-display
                                    "Print Full account names"))
-	   (user-sel-accnts (get-option tab-title
+	   (user-sel-accnts (get-option gnc:pagename-accounts
                                         "Select Accounts (none = all)"))
            (valid-user-sel-accnts (validate user-sel-accnts))
            ;; If no selected accounts, check all.
