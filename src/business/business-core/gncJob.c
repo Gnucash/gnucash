@@ -214,13 +214,6 @@ void gncJobSetReference (GncJob *job, const char *desc)
   gncJobCommitEdit (job);
 }
 
-void gncJobSetGUID (GncJob *job, const GUID *guid)
-{
-  if (!job || !guid) return;
-
-  qof_entity_set_guid(&job->inst.entity, guid);
-}
-
 void gncJobSetOwner (GncJob *job, GncOwner *owner)
 {
   if (!job) return;

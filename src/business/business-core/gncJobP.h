@@ -33,7 +33,6 @@
 
 gboolean gncJobRegister (void);
 gint64 gncJobNextID (QofBook *book);
-void gncJobSetGUID (GncJob *job, const GUID *guid);
 
 /** The gncCloneTaxTable() routine makes a copy of the indicated
  *  tax table, placing it in the indicated book.  It copies
@@ -54,5 +53,6 @@ GncJob * gncCloneJob (GncJob *from, QofBook *book);
  */
 GncJob * gncJobObtainTwin (GncJob *from, QofBook *book);
 
+#define gncJobSetGUID(E,G) qof_entity_set_guid(QOF_ENTITY(E),(G))
 
 #endif /* GNC_JOBP_H_ */

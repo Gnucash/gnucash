@@ -387,18 +387,6 @@ CloneTaxEntry (GncTaxTableEntry*from, QofBook *book)
 /* =============================================================== */
 /* Set Functions */
 
-void gncTaxTableSetGUID (GncTaxTable *table, const GUID *guid)
-{
-  if (!table || !guid) return;
-  if (guid_equal (guid, &table->inst.entity. guid)) return;
-
-  gncTaxTableBeginEdit (table);
-  remObj (table);
-  qof_entity_set_guid(&table->inst.entity, guid);
-  addObj (table);
-  gncTaxTableCommitEdit (table);
-}
-
 void gncTaxTableSetName (GncTaxTable *table, const char *name)
 {
   if (!table || !name) return;
