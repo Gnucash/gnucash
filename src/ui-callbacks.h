@@ -28,12 +28,13 @@
 
 #include <gnc-common.h>
 
-void refreshMainWindow( void );
+void gnc_refresh_main_window( void );
 
-/* deprecated... replaced by queryBox in GNOME version */
-gncBoolean  verifyBox(const char *text);
-void        errorBox( const char *message );
-void        setBusyCursor( gncUIWidget w );
-void        unsetBusyCursor( gncUIWidget w );
+gncBoolean gnc_verify_dialog( const char *message,
+			      gncBoolean yes_is_default );
+void       gnc_error_dialog( const char *message );
+
+void gnc_set_busy_cursor( gncUIWidget w );
+void gnc_unset_busy_cursor( gncUIWidget w );
 
 #endif

@@ -51,27 +51,27 @@ static AccountGroup *topgroup = NULL;    /* the current top of the heriarchy */
         break;							\
      case ERR_FILEIO_FILE_NOT_FOUND:				\
         sprintf (buf, FILE_NOT_FOUND_MSG, newfile);		\
-        errorBox (buf);	                			\
+        gnc_error_dialog (buf);	                		\
         uh_oh = 1;						\
         break;							\
      case ERR_FILEIO_FILE_EMPTY:				\
         sprintf (buf, FILE_EMPTY_MSG, newfile);			\
-        errorBox (buf);         				\
+        gnc_error_dialog (buf);         			\
         uh_oh = 1;						\
         break;							\
      case ERR_FILEIO_FILE_TOO_NEW:				\
-        errorBox ( FILE_TOO_NEW_MSG);	        		\
+        gnc_error_dialog ( FILE_TOO_NEW_MSG);	        	\
         uh_oh = 1;						\
         break;							\
      case ERR_FILEIO_FILE_TOO_OLD:				\
-        if (!verifyBox( FILE_TOO_OLD_MSG )) {		        \
+        if (!gnc_verify_dialog( FILE_TOO_OLD_MSG, GNC_T )) {    \
            xaccFreeAccountGroup (newgrp);			\
            newgrp = NULL;					\
            uh_oh = 1;						\
         }							\
         break;							\
      case ERR_FILEIO_FILE_BAD_READ:				\
-        if (!verifyBox( FILE_BAD_READ_MSG )) {	\
+        if (!gnc_verify_dialog( FILE_BAD_READ_MSG, GNC_T )) {	\
            xaccFreeAccountGroup (newgrp);			\
            newgrp = NULL;					\
            uh_oh = 1;						\
@@ -89,14 +89,14 @@ static AccountGroup *topgroup = NULL;    /* the current top of the heriarchy */
     if (ETXTBSY == norr)					\
       {								\
         sprintf (buf, FMB_LOCKED_MSG, newfile);			\
-        errorBox (buf);				\
+        gnc_error_dialog (buf);				        \
         uh_oh = 1;						\
       }								\
     else 							\
     if (norr)							\
       {								\
         sprintf (buf, FMB_INVALID_MSG, newfile);		\
-        errorBox (buf);				\
+        gnc_error_dialog (buf);				        \
         uh_oh = 1;						\
       }								\
     }								\
@@ -160,7 +160,7 @@ gncFileQuerySave (void)
    */
   while ( xaccAccountGroupNotSaved (grp) ) 
     {
-    if( verifyBox( FMB_SAVE_MSG) ) 
+    if( gnc_verify_dialog( FMB_SAVE_MSG, GNC_T ) ) 
       {
       gncFileSave ();
       }
@@ -215,7 +215,7 @@ gncPostFileOpen (const char * filename)
   if (!newgrp && !io_error) 
     {
     sprintf (buf, FILE_NOT_FOUND_MSG, newfile);	
-    errorBox ( buf);
+    gnc_error_dialog ( buf);
     uh_oh = 1;
     }
  
@@ -458,7 +458,7 @@ gncFileSaveAs (void)
     tmpmsg = alloca (strlen (FMB_EEXIST_MSG) + strlen (newfile));
     sprintf (tmpmsg, FMB_EEXIST_MSG, newfile);
     /* if user says cancel, we should break out */
-    if (! verifyBox ( tmpmsg)) return;
+    if (! gnc_verify_dialog (tmpmsg, GNC_F)) return;
 
     /* Whoa-ok. Blow away the previous file. 
      * Do not disable logging ... we want to capture the 
@@ -523,7 +523,7 @@ gncGetCurrentGroup (void)
 /* ======================================================== */
 
 Session *
-main_window_get_session (void) 
+gncGetCurrentSession (void) 
 {
   return (current_session);
 }
