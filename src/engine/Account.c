@@ -2887,7 +2887,7 @@ gboolean xaccAccountRegister (void)
     { ACCOUNT_FUTURE_MINIMUM_, 	QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetProjectedMinimumBalance, NULL },
     { ACCOUNT_TAX_RELATED, 		QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccAccountGetTaxRelated, 		(QofSetterFunc) xaccAccountSetTaxRelated },
 	{ ACCOUNT_SCU, 				QOF_TYPE_INT32,   (QofAccessFunc)xaccAccountGetCommoditySCU, 	(QofSetterFunc)xaccAccountSetCommoditySCU },
-	{ ACCOUNT_NSCU, 			QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccAccountSetNonStdSCU, 		(QofSetterFunc)xaccAccountSetNonStdSCU },
+	{ ACCOUNT_NSCU, 			QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccAccountGetNonStdSCU, 		(QofSetterFunc)xaccAccountSetNonStdSCU },
 	{ ACCOUNT_PARENT,			GNC_ID_ACCOUNT,	  (QofAccessFunc)xaccAccountGetParentAccount,	(QofSetterFunc)qofAccountSetParent },
     { QOF_PARAM_BOOK, 			QOF_ID_BOOK, 	  (QofAccessFunc)qof_instance_get_book, 		NULL },
     { QOF_PARAM_GUID, 			QOF_TYPE_GUID,    (QofAccessFunc)qof_instance_get_guid, 		NULL },
