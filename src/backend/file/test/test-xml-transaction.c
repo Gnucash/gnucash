@@ -29,7 +29,6 @@
 #include "AccountP.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "GNCIdP.h"
 
 static GNCBook *book;
 
