@@ -373,7 +373,12 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
    {
       Transaction *trans = (Transaction *) node->data;
       GList *engine_splits, *snode;
+      gnc_commodity *currency = NULL;
+      currency = (gnc_commodity *) trans->common_currency;
+
       pgendCopySplitsToEngine (be, trans);
+      /* In branch gnucash-1.6, must set currency after splits were inserted ... */
+      xaccTransSetCurrency (trans, currency);
       xaccTransCommitEdit (trans);
    }
 
