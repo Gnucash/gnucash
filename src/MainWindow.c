@@ -116,8 +116,11 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
     cols[XACC_MAIN_ACC_NAME] = XtNewString(buf);
 
     /* fill in the balance column */
-    xaccRecomputeBalance (acc);  /* hack alert -- we don't need this */
     dbalance = acc->balance;
+    /* if the account has children, add in thier balance */
+    if (acc->children) {
+       dbalance += acc->children->balance;
+    }
     
     if( 0.0 > dbalance )
       sprintf( buf,"-$%.2f\0", DABS(dbalance) );
@@ -199,6 +202,7 @@ refreshMainWindow( void )
   XtVaGetValues( accountlist, XmNrows, &nrows, NULL );
   XbaeMatrixDeleteRows( accountlist, 0, nrows );
   
+  xaccRecomputeGroupBalance (grp);  
   xaccMainWindowAddAcct (accountlist, grp, 0);
 }
 

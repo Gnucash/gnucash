@@ -402,5 +402,28 @@ insertAccount( AccountGroup *grp, Account *acc )
   return i;
   }
 
+/********************************************************************\
+\********************************************************************/
+void
+xaccRecomputeGroupBalance (AccountGroup *grp)
+{
+   int i;
+   Account *acc;
+
+   grp->balance = 0.0;
+   for (i=0; i<grp->numAcc; i++) {
+      acc = grp->account[i];
+
+      /* first, get subtotals recursively */
+      if (acc->children) {
+         xaccRecomputeGroupBalance (acc->children);
+         grp->balance += acc->children->balance;
+      }
+
+      /* then add up accounts in this group */
+      xaccRecomputeBalance (acc);
+      grp->balance += acc->balance;
+   }
+}
 
 /****************** END OF FILE *************************************/
