@@ -798,6 +798,9 @@ xaccInitSplitRegister (SplitRegister *reg,
   /* by default, don't blank zeros on the price cells. */
   xaccSetPriceCellBlankZero(reg->priceCell, FALSE);
 
+  /* Use 5 decimal places for prices */
+  xaccSetPriceCellFraction (reg->priceCell, 100000);
+
   /* The reconcile cell should only be entered with the pointer, and
    * only then when the user clicks directly on the cell.  */
   reg->recnCell->cell.input_output |= XACC_CELL_ALLOW_EXACT_ONLY;

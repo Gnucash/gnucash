@@ -343,8 +343,7 @@ gnc_amount_edit_set_amount (GNCAmountEdit *gae, gnc_numeric amount)
   gae->amount = amount;
   gae->need_to_parse = FALSE;
 
-  amount_string = DxaccPrintAmount (gnc_numeric_to_double(amount),
-                                    gae->print_info);
+  amount_string = xaccPrintAmount (amount, gae->print_info);
 
   gtk_entry_set_text (GTK_ENTRY (gae->amount_entry), amount_string);
 }

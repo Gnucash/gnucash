@@ -132,7 +132,7 @@ gnc_locale_default_currency(void)
 
 /* Return the number of decimal places for this locale. */
 int 
-gnc_locale_decimal_places( void )
+gnc_locale_decimal_places (void)
 {
   static gboolean got_it = FALSE;
   static int places;
@@ -149,42 +149,6 @@ gnc_locale_decimal_places( void )
   got_it = TRUE;
 
   return places;
-}
-
-
-/* utility function to convert floating point value to a string */
-static int
-util_fptostr(char *buf, double val, int prec)
-{
-  int  i;
-  char formatString[10];
-  char prefix[]  = "%0.";
-  char postfix[] = "f";
-
-  /* This routine can only handle precision between 0 and 9, so
-   * clamp precision to that range */
-  if (prec > 9) prec = 9;
-  if (prec < 0) prec = 0;
-
-  /* Make sure that the output does not resemble "-0.00" by forcing
-   * val to 0.0 when we have a very small negative number */
-  if ((val <= 0.0) && (val > -pow(0.1, prec+1) * 5.0))
-    val = 0.0;
-
-  /* Create a format string to pass into sprintf.  By doing this,
-   * we can get sprintf to convert the number to a string, rather
-   * than maintaining conversion code ourselves.  */
-  i = 0;
-  strcpy(&formatString[i], prefix);
-  i += strlen(prefix);
-  formatString[i] = '0' + prec;  /* add prec to ASCII code for '0' */
-  i += 1;
-  strcpy(&formatString[i], postfix);
-  i += strlen(postfix);
-
-  sprintf(buf, formatString, val);
-
-  return strlen(buf);
 }
 
 
@@ -225,20 +189,24 @@ gnc_default_print_info (gboolean use_symbol)
 }
 
 static gboolean
-is_decimal_fraction (int fraction, guint8 *max_decimal_places)
+is_decimal_fraction (int fraction, guint8 *max_decimal_places_p)
 {
-  if (fraction % 10 != 0)
+  guint8 max_decimal_places = 0;
+
+  if (fraction <= 0)
     return FALSE;
 
-  if (max_decimal_places == NULL)
-    return TRUE;
-
-  *max_decimal_places = 0;
   while (fraction != 1)
   {
+    if (fraction % 10 != 0)
+      return FALSE;
+
     fraction = fraction / 10;
-    *max_decimal_places += 1;
+    max_decimal_places += 1;
   }
+
+  if (max_decimal_places_p)
+    *max_decimal_places_p = max_decimal_places;
 
   return TRUE;
 }
@@ -428,8 +396,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   }
 
   /* print the absolute value */
-  if (gnc_numeric_negative_p (val))
-    val = gnc_numeric_neg (val);
+  val = gnc_numeric_abs (val);
 
   /* calculate the integer part and the remainder */
   whole = gnc_numeric_create (val.num / val.denom, 1);
@@ -516,9 +483,9 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     {
       val = gnc_numeric_reduce (val);
 
-      printf (temp_buf, " + %lld / %lld",
-              (long long) val.num,
-              (long long) val.denom);
+      sprintf (temp_buf, " + %lld / %lld",
+               (long long) val.num,
+               (long long) val.denom);
 
       strcat (buf, temp_buf);
     }
@@ -575,7 +542,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
 }
 
 int
-DxaccSPrintAmount (char * bufp, double val, GNCPrintAmountInfo info)
+xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
 {
    struct lconv *lc;
 
@@ -589,12 +556,10 @@ DxaccSPrintAmount (char * bufp, double val, GNCPrintAmountInfo info)
 
    gboolean print_sign = TRUE;
 
-   if (!bufp) return 0;
+   if (!bufp)
+     return 0;
 
    lc = gnc_localeconv();
-
-   if (DEQ(val, 0.0))
-     val = 0.0;
 
    if (info.use_symbol)
    {
@@ -619,7 +584,7 @@ DxaccSPrintAmount (char * bufp, double val, GNCPrintAmountInfo info)
    }
    else
    {
-     if (val < 0.0)
+     if (gnc_numeric_negative_p (val))
      {
        cs_precedes  = lc->n_cs_precedes;
        sep_by_space = lc->n_sep_by_space;
@@ -631,7 +596,7 @@ DxaccSPrintAmount (char * bufp, double val, GNCPrintAmountInfo info)
      }
    }
 
-   if (val < 0.0)
+   if (gnc_numeric_negative_p (val))
    {
      sign = lc->negative_sign;
      sign_posn = lc->n_sign_posn;
@@ -642,7 +607,7 @@ DxaccSPrintAmount (char * bufp, double val, GNCPrintAmountInfo info)
      sign_posn = lc->p_sign_posn;
    }
 
-   if ((val == 0.0) || (sign == NULL) || (sign[0] == 0))
+   if (gnc_numeric_zero_p (val) || (sign == NULL) || (sign[0] == 0))
      print_sign = FALSE;
 
    /* See if we print sign now */
@@ -673,10 +638,7 @@ DxaccSPrintAmount (char * bufp, double val, GNCPrintAmountInfo info)
      bufp = gnc_stpcpy(bufp, "(");
 
    /* Now print the value */
-   {
-     gnc_numeric n = double_to_gnc_numeric (ABS (val), 10000, GNC_RND_ROUND);
-     bufp += PrintAmountInternal(bufp, n, &info);
-   }
+   bufp += PrintAmountInternal(bufp, val, &info);
 
    /* Now see if we print parentheses */
    if (print_sign && (sign_posn == 0))
@@ -710,32 +672,40 @@ DxaccSPrintAmount (char * bufp, double val, GNCPrintAmountInfo info)
 }
 
 const char *
-DxaccPrintAmount (double val, GNCPrintAmountInfo info)
+xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info)
 {
-   /* hack alert -- this is not thread safe ... */
-   static char buf[1024];
+  /* hack alert -- this is not thread safe ... */
+  static char buf[1024];
 
-   DxaccSPrintAmount (buf, val, info);
+  xaccSPrintAmount (buf, val, info);
 
-   /* its OK to return buf, since we declared it static */
-   return buf;
-}
-
-int
-xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
-{
-  return DxaccSPrintAmount (bufp, gnc_numeric_to_double (val), info);
+  /* its OK to return buf, since we declared it static */
+  return buf;
 }
 
 const char *
-xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info)
+DxaccPrintAmount (double dval, GNCPrintAmountInfo info)
 {
-  return DxaccPrintAmount (gnc_numeric_to_double (val), info);
+  gnc_numeric val;
+
+  val = double_to_gnc_numeric (ABS (dval), 10000, GNC_RND_ROUND);
+
+  return xaccPrintAmount (val, info);
+}
+
+int
+DxaccSPrintAmount (char * bufp, double dval, GNCPrintAmountInfo info)
+{
+  gnc_numeric val;
+
+  val = double_to_gnc_numeric (ABS (dval), 10000, GNC_RND_ROUND);
+
+  return xaccSPrintAmount (bufp, val, info);
 }
 
 
 /********************************************************************\
- * DxaccParseAmount                                                 *
+ * xaccParseAmount                                                  *
  *   parses amount strings using locale data                        *
  *                                                                  *
  * Args: in_str   -- pointer to string rep of num                   *

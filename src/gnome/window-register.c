@@ -1053,7 +1053,7 @@ print_check_cb(GtkWidget * widget, gpointer data)
 
   const char   * payee;
   const char   * memo;
-  double       amount;
+  gnc_numeric  amount;
   time_t       date;
 
   SCM print_check = gh_eval_str("gnc:print-check");
@@ -1062,13 +1062,14 @@ print_check_cb(GtkWidget * widget, gpointer data)
      gh_procedure_p(print_check))
   {
     payee  = xaccTransGetDescription(trans);
-    amount = DxaccSplitGetValue(split);
+    amount = xaccSplitGetValue(split);
+    amount = gnc_numeric_abs (amount);
     date   = xaccTransGetDate(trans);
     memo   = xaccSplitGetMemo(split);
 
     gh_apply(print_check,
              SCM_LIST4(gh_str02scm(payee),
-                       gh_double2scm(ABS(amount)),
+                       gh_double2scm(gnc_numeric_to_double (amount)),
                        gh_ulong2scm(date),
                        gh_str02scm(memo)));
   }

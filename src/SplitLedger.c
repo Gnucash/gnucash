@@ -652,6 +652,42 @@ gnc_split_get_quantity_denom (Split *split)
   return denom;
 }
 
+static void
+sr_set_cell_fractions (SplitRegister *reg, Split *split)
+{
+  SRInfo *info = xaccSRGetInfo(reg);
+  Account *account;
+
+  account = xaccSplitGetAccount (split);
+
+  if (account == NULL)
+    account = info->default_source_account;
+
+  if (account)
+  {
+    xaccSetPriceCellFraction (reg->sharesCell,
+                              xaccAccountGetSecuritySCU (account));
+    xaccSetPriceCellFraction (reg->debitCell,
+                              xaccAccountGetCurrencySCU (account));
+    xaccSetPriceCellFraction (reg->creditCell,
+                              xaccAccountGetCurrencySCU (account));
+
+    return;
+  }
+
+  {
+    const gnc_commodity *commodity;
+    int fraction;
+
+    xaccSetPriceCellFraction (reg->sharesCell, 10000);
+
+    commodity = gnc_locale_default_currency ();
+    fraction = gnc_commodity_get_fraction (commodity);
+
+    xaccSetPriceCellFraction (reg->debitCell, fraction);
+    xaccSetPriceCellFraction (reg->creditCell, fraction);
+  }
+}
 
 /* ======================================================== */
 /* This callback gets called when the user clicks on the gui
@@ -770,7 +806,10 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
   /* if the register was reloaded, then everything should be fine :)
    * otherwise, we may need to change some visibility settings. */
   if (saved)
+  {
+    sr_set_cell_fractions (reg, new_split);
     return;
+  }
 
   /* in the mult-line and dynamic modes, we need to hide the old
    * and show the new. */
@@ -794,6 +833,8 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
   info->cursor_hint_cursor_class = new_class;
 
   info->hint_set_by_traverse = FALSE;
+
+  sr_set_cell_fractions (reg, new_split);
 }
 
 /* This function determines if auto-completion is appropriate and,
