@@ -34,6 +34,7 @@
  * Copyright (c) 1999, 2000 Linas Vepstas
  */
 
+#include <glib.h>
 #include <limits.h>
 #include <stdlib.h>
 #include <strings.h>
@@ -73,7 +74,7 @@ Queue *
 xaccMallocQueue (void)
 {
    Queue * ret;
-   ret =  (Queue *) _malloc (sizeof (Queue));
+   ret = g_new(Queue, 1);
    xaccInitQueue (ret);
    return ret;
 }
@@ -86,7 +87,7 @@ xaccInitQueue (Queue *q)
 {
    if (!q) return;
 
-   q->split_list = (Split **) malloc (INITIAL_LENGTH * sizeof (Split *));
+   q->split_list = (Split **) g_malloc (INITIAL_LENGTH * sizeof (Split *));
    q->list_len = INITIAL_LENGTH;
    q->head_split = -1;
    q->tail_split = 0;
@@ -108,7 +109,7 @@ xaccFreeQueue (Queue *q)
 {
    if (!q) return;
 
-   if (q->split_list) _free (q->split_list);
+   if (q->split_list) g_free (q->split_list);
    q->split_list = 0x0;
    q->list_len = -1;
    q->head_split = -1;
@@ -118,7 +119,7 @@ xaccFreeQueue (Queue *q)
    q->head_price = 0.0;
    q->tail_price = 0.0;
 
-   _free (q);
+   g_free (q);
 }
 
 /* ================================================== */
@@ -149,7 +150,7 @@ ExtendHead (Queue * q)
    }
 
    /* if we got to here, we need to malloc more memory. */
-   newlist = (Split **) malloc (2*(q->list_len)*sizeof (Split *));
+   newlist = (Split **) g_malloc (2*(q->list_len)*sizeof (Split *));
    q->list_len *= 2;
 
    len = q->head_split - q->tail_split + 1;

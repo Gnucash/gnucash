@@ -223,12 +223,12 @@ recnRecalculateBalance(RecnWindow *recnData)
     (GNC_RECONCILE_LIST(recnData->credit));
 
   /* Update the total debit and credit fields */
-  amount = DxaccPrintAmount(DABS(debit), flags, 
-                           gnc_commodity_get_mnemonic(currency));
+  amount = DxaccPrintAmount(ABS(debit), flags, 
+                            gnc_commodity_get_mnemonic(currency));
   gtk_label_set_text(GTK_LABEL(recnData->total_debit), amount);
 
   amount = DxaccPrintAmount(credit, flags, 
-                           gnc_commodity_get_mnemonic(currency));
+                            gnc_commodity_get_mnemonic(currency));
 
   gtk_label_set_text(GTK_LABEL(recnData->total_credit), amount);
 
@@ -237,7 +237,7 @@ recnRecalculateBalance(RecnWindow *recnData)
   if (reverse_balance)
     reconciled = -reconciled;
   amount = DxaccPrintAmount(reconciled, flags, 
-                           gnc_commodity_get_mnemonic(currency));
+                            gnc_commodity_get_mnemonic(currency));
   gnc_set_label_color(recnData->reconciled, reconciled);
   gtk_label_set_text(GTK_LABEL(recnData->reconciled), amount);
   if (reverse_balance)
@@ -248,7 +248,7 @@ recnRecalculateBalance(RecnWindow *recnData)
   if (reverse_balance)
     diff = -diff;
   amount = DxaccPrintAmount(diff, flags,
-                           gnc_commodity_get_mnemonic(currency));
+                            gnc_commodity_get_mnemonic(currency));
   gnc_set_label_color(recnData->difference, diff);
   gtk_label_set_text(GTK_LABEL(recnData->difference), amount);
   if (reverse_balance)

@@ -107,27 +107,8 @@ void gnc_log (gncModuleType module, gncLogLevel log_level,
 #define ERROR()     fprintf(stderr,"%s: Line %d, error = %s\n", \
 			    __FILE__, __LINE__, strerror(errno));
 
-#if DEBUG_MEMORY
-void   *dmalloc( size_t size );
-void   dfree( void *ptr );
-size_t dcoresize(void);
-#  define _malloc(x)   dmalloc(x)
-#  define _free(x)     dfree(x)
-#  define _coresize()  dcoresize()
-#else
-#  define _malloc(x)    malloc(x)
-#  define _free(x)      free(x)
-#  define _coresize()   0
-#endif
 
 /** COOL MACROS *****************************************************/
-#ifndef ABS
-#define ABS(x)   ((x)>=0) ? (x) : (-1*(x))
-#endif
-#define DABS(x)  ((x)>=0.0) ? (x) : (-1.0*(x))
-#define DMAX(x,y) ((x)>(y)) ? (x) : (y)
-#define isNum(x) (((x)-0x30) < 0) ? 0 : (((x)-0x30) > 9) ? 0 : 1
-
 #define EPS  (1.0e-6)
 #define DEQEPS(x,y,eps) (((((x)+(eps))>(y)) ? 1 : 0) && ((((x)-(eps))<(y)) ? 1 : 0))
 #define DEQ(x,y) DEQEPS(x,y,EPS)

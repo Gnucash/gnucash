@@ -2903,7 +2903,7 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
         if ((amount > 0.0) && (cell_type == CRED_CELL))
           return "";
 
-        amount = DABS (amount);
+        amount = ABS (amount);
 
         return DxaccPrintAmount (amount, PRTSEP, NULL);
       }

@@ -163,51 +163,6 @@ gnc_set_auto_decimal_places( int places )
 /********************************************************************\
 \********************************************************************/
 
-/********************************************************************\
- * DEBUGGING MEMORY ALLOCATION STUFF                                * 
-\********************************************************************/
-#if DEBUG_MEMORY
-
-/* #if defined (__NetBSD__) || defined(__FreeBSD__) */
-
-#ifndef HAVE_MALLOC_USABLE_SIZE
-#define malloc_usable_size(ptr) 0
-#endif
-
-size_t core=0;
-
-void
-dfree( void *ptr )
-{
-  core -= malloc_usable_size(ptr);
-  free(ptr);
-}
-
-void*
-dmalloc( size_t size )
-{
-  int i;
-  char *ptr;
-  ptr = (char *)malloc(size);
-  for( i=0; i<size; i++ )
-    ptr[i] = '.';
-  
-  core +=  malloc_usable_size(ptr);
-  return (void *)ptr;
-}
-
-size_t
-dcoresize(void)
-{
-  return core;
-}
-#endif
-
-/********************************************************************\
-\********************************************************************/
-
-#define UPPER(c) (((c) >= 'a' && (c) <= 'z') ? (c) + 'A' - 'a' : (c))
-
 /* Search for str2 in first nchar chars of str1, ignore case.. 
  * Return pointer to first match, or null.
  */
@@ -215,18 +170,18 @@ dcoresize(void)
 char *
 strncasestr(const char *str1, const char *str2, size_t len) 
 {
-    while (*str1 && len--) 
-   {
-      if (UPPER(*str1) == UPPER(*str2)) 
+  while (*str1 && len--) 
+  {
+    if (toupper(*str1) == toupper(*str2)) 
+    {
+      if (strncasecmp(str1,str2,strlen(str2)) == 0) 
       {
-         if (strncasecmp(str1,str2,strlen(str2)) == 0) 
-         {
-            return (char *) str1;
-         }
+        return (char *) str1;
       }
-      str1++;
-   }
-   return NULL;
+    }
+    str1++;
+  }
+  return NULL;
 }
 
 /* Search for str2 in str1, ignore case. 
@@ -567,7 +522,7 @@ PrintAmt(char *buf, double val, int prec,
 
   /* print the absolute value */
   if (val < 0.0)
-    val = DABS(val);
+    val = ABS(val);
 
   /* print the value without separators */
   util_fptostr(temp_buf, val, prec);
@@ -788,7 +743,7 @@ DxaccSPrintAmountGeneral (char * bufp, double val,
      bufp = stpcpy(bufp, "(");
 
    /* Now print the value */
-   bufp += PrintAmt(bufp, DABS(val), precision, flags & PRTSEP,
+   bufp += PrintAmt(bufp, ABS(val), precision, flags & PRTSEP,
                     !(flags & PRTNMN), min_trailing_zeros);
 
    /* Now see if we print parentheses */

@@ -518,7 +518,7 @@ gnc_reconcile_list_reconciled_balance(GNCReconcileList *list)
       total += DxaccSplitGetValue(split);
   }
 
-  return DABS(total);
+  return ABS(total);
 }
 
 
@@ -677,8 +677,8 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     strings[0] = gnc_print_date(ts);
     strings[1] = xaccTransGetNum(trans);
     strings[2] = xaccTransGetDescription(trans);
-    strings[3] = DxaccPrintAmount(DABS(amount), flags, 
-                                 gnc_commodity_get_mnemonic(currency));
+    strings[3] = DxaccPrintAmount(ABS(amount), flags, 
+                                  gnc_commodity_get_mnemonic(currency));
 
     reconciled = g_hash_table_lookup(list->reconciled, split) != NULL;
     recn = reconciled ? YREC : recn;
