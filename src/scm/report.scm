@@ -100,20 +100,13 @@
   (define menu-namer (gnc:new-menu-namer))
 
   (define (add-report-menu-item name report)
-    (let* ((report-string "Report")
-           (title (string-append (gnc:_ report-string) ": " (gnc:_ name)))
+    (let* ((title (string-append (_ "Report") ": " (_ name)))
            (item #f))
-
-      (if (gnc:debugging?)
-          (let ((options (false-if-exception (gnc:report-new-options report))))
-            (if options
-                (gnc:options-register-translatable-strings options))
-            (gnc:register-translatable-strings report-string name)))
 
       (set! item
             (gnc:make-menu-item
              ((menu-namer 'add-name) name)
-             (string-append "Display the " name " report.")
+             (sprintf #f (_ "Display the %s report") name)
              (list "_Reports" "")
              (lambda ()
                (let ((rept
@@ -121,7 +114,7 @@
                  (gnc:report-window rept)))))
       (gnc:add-extension item)))  
   (gnc:add-extension menu)
-  
+
   (hash-for-each add-report-menu-item *gnc:_report-info_*))
 
 (define report-record-structure
@@ -246,4 +239,3 @@
     htext))
 
 (gnc:hook-add-dangler gnc:*main-window-opened-hook* gnc:report-menu-setup)
-

@@ -108,5 +108,5 @@
 
   (gnc:define-report
    'version 1
-   'name "Stock Portfolio"
+   'name (N_ "Stock Portfolio")
    'renderer folio-renderer))

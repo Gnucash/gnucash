@@ -432,6 +432,6 @@
 
   (gnc:define-report
    'version 1
-   'name "Account Balance Tracker"
+   'name (N_ "Account Balance Tracker")
    'options-generator runavg-options-generator
    'renderer average-balance-renderer))

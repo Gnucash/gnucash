@@ -1181,7 +1181,7 @@ txf file!")))))
   
   (gnc:define-report
    'version 1
-   'name "Hierarchical"
+   'name (N_ "Hierarchical")
    'options-generator hierarchical-options-generator
    'renderer (lambda (options)
                (generate-tax-or-txf
@@ -1193,7 +1193,7 @@ Deductable Expenses.")
   
   (gnc:define-report
    'version 1
-   'name "Tax"
+   'name (N_ "Tax")
    'options-generator tax-options-generator
    'renderer (lambda (options)
                (generate-tax-or-txf
@@ -1205,7 +1205,7 @@ Deductable Expenses.")
   
   (gnc:define-report
    'version 1
-   'name "Export .TXF"
+   'name (N_ "Export .TXF")
    'options-generator tax-options-generator
    'renderer (lambda (options)
                (generate-tax-or-txf

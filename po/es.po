@@ -5,2151 +5,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GNUCash 1.5\n"
-"POT-Creation-Date: 2000-12-21 00:27-0800\n"
+"POT-Creation-Date: 2000-12-21 03:54-0800\n"
 "PO-Revision-Date: 2000-08-28 22:00+0000\n"
 "Last-Translator: Juan Manuel García Molina <juanmagm@mail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-15\n"
 "Content-Transfer-Encoding: 8-bit\n"
-
-#: po/guile-strings.c:1
-msgid "String Option"
-msgstr "Opción de Cadena"
-
-#: po/guile-strings.c:2
-msgid "Second Option"
-msgstr "Segunda Opción"
-
-#: po/guile-strings.c:3
-msgid "Cost"
-msgstr "Coste"
-
-#: po/guile-strings.c:4 src/engine/Account.c:1504
-msgid "Mutual Fund"
-msgstr "Fondo Mutuo"
-
-#: po/guile-strings.c:5
-msgid "Status"
-msgstr "Estado"
-
-#: po/guile-strings.c:6 src/SplitLedger.c:3664
-#: src/gnome/glade-gnc-dialogs.c:1042 src/gnome/reconcile-list.c:134
-msgid "Date"
-msgstr "Fecha"
-
-#: po/guile-strings.c:7 src/gnc-ui-util.c:114
-msgid "Account Name"
-msgstr "Nombre de Cuenta"
-
-#: po/guile-strings.c:8 src/engine/Account.c:1508
-#: src/gnome/glade-gnc-dialogs.c:190 src/register/splitreg.c:223
-msgid "Equity"
-msgstr "Equidad"
-
-#: po/guile-strings.c:9
-#, fuzzy
-msgid "Last Year"
-msgstr "Año"
-
-#: po/guile-strings.c:10
-#, fuzzy
-msgid "'Enter' moves to blank transaction"
-msgstr "Introducir una descripción de la transacción"
-
-#: po/guile-strings.c:11
-msgid "Other Account"
-msgstr "Otra Cuenta"
-
-#: po/guile-strings.c:12
-msgid "Account Separator"
-msgstr "Separador de Cuenta"
-
-#: po/guile-strings.c:13
-msgid "Auto-Raise Lists"
-msgstr "Listas Auto-Crecientes"
-
-#: po/guile-strings.c:14 src/SplitLedger.c:3679 src/SplitLedger.c:3778
-#: src/gnc-ui-util.c:132 src/gnc-ui-util.c:135
-#: src/gnome/glade-gnc-dialogs.c:1615
-msgid "Balance"
-msgstr "Balance"
-
-#: po/guile-strings.c:15
-msgid "Secondary Sort Order"
-msgstr "Tipo de Orden Secundario"
-
-#: po/guile-strings.c:16
-msgid "Stock Portfolio Valuation"
-msgstr "Valoración de Cartera de Existencias"
-
-#: po/guile-strings.c:17
-msgid "Stock Portfolio"
-msgstr "Cartera de Existencias"
-
-#: po/guile-strings.c:18
-#, fuzzy
-msgid "Select Accounts (none = all)"
-msgstr "Seleccionar Cuenta"
-
-#: po/guile-strings.c:19
-msgid "The types of accounts for which balances are sign-reversed"
-msgstr "Los tipos de cuentas para los que los balances son de signo cambiado"
-
-#: po/guile-strings.c:20 src/register/splitreg.c:213
-msgid "Rebate"
-msgstr "Descuento"
-
-#: po/guile-strings.c:21
-msgid "The Good"
-msgstr "El Bueno"
-
-#: po/guile-strings.c:22 src/scm/report/guile-strings.c:8
-#, c-format
-msgid "The current time is %s."
-msgstr "El tiempo actual es %s."
-
-#: po/guile-strings.c:23
-#, fuzzy
-msgid "Alternate Period"
-msgstr "Periodo de Gracia:"
-
-#: po/guile-strings.c:24
-msgid "Headers"
-msgstr "Cabeceras"
-
-#: po/guile-strings.c:25
-msgid "One Month Ago"
-msgstr ""
-
-#: po/guile-strings.c:26 src/gnome/window-register.c:1138
-msgid "Double Line"
-msgstr "Línea Doble"
-
-#: po/guile-strings.c:27
-#, fuzzy
-msgid "Report's currency"
-msgstr "Moneda por Defecto"
-
-#: po/guile-strings.c:28
-msgid "End of the Previous Year"
-msgstr ""
-
-#: po/guile-strings.c:29
-msgid "Use a 24 hour (instead of a 12 hour) time format."
-msgstr "Utilizar un formato temporal de 24 oras (en lugar de uno de 12 horas)"
-
-#: po/guile-strings.c:30
-msgid "Income:Salary:Taxable"
-msgstr "Renta:Salario:Imponible"
-
-#: po/guile-strings.c:31
-msgid "Type of budget report"
-msgstr "Tipo de informe de presupuestos"
-
-#: po/guile-strings.c:32
-#, fuzzy
-msgid "Test progress dialog"
-msgstr "Probar el diálogo de presupuestos."
-
-#: po/guile-strings.c:33
-msgid "Balancing"
-msgstr "Hacer Balance"
-
-#: po/guile-strings.c:34
-msgid "Date (subtotal monthly)"
-msgstr "Fecha (subtotal mensual)"
-
-#: po/guile-strings.c:35
-#, fuzzy
-msgid "Split color"
-msgstr "Partida"
-
-#: po/guile-strings.c:36
-msgid "Time"
-msgstr "Tiempo"
-
-#: po/guile-strings.c:37
-msgid "Single Column Display"
-msgstr "Mostrar Sólo Una Columna"
-
-#: po/guile-strings.c:38
-msgid "Account (w/subtotal)"
-msgstr "Cuenta (c/subtotal)"
-
-#: po/guile-strings.c:39 src/SplitLedger.c:3688
-#: src/gnome/glade-gnc-dialogs.c:1318
-msgid "Memo"
-msgstr "Memo"
-
-#: po/guile-strings.c:40
-msgid "International"
-msgstr "Internacional"
-
-#: po/guile-strings.c:41
-#, fuzzy
-msgid "Relative Date Option"
-msgstr "Opción de Tiempo y Fecha"
-
-#: po/guile-strings.c:42
-msgid "This is a string option"
-msgstr "Esta es una opción de cadena"
-
-#: po/guile-strings.c:43
-msgid "The beginning of the previous month"
-msgstr ""
-
-#: po/guile-strings.c:44
-#, fuzzy
-msgid "Locale"
-msgstr "Cargar archivo"
-
-#: po/guile-strings.c:45
-msgid "Main Window"
-msgstr "Ventana Principal"
-
-#: po/guile-strings.c:46
-msgid "Set Selected & sub-accounts as Tax Related"
-msgstr ""
-
-#: po/guile-strings.c:47 src/SplitLedger.c:3712
-#: src/gnome/glade-gnc-dialogs.c:1207
-msgid "Debit"
-msgstr "Débito"
-
-#: po/guile-strings.c:48
-#, fuzzy
-msgid "This page shows your Taxable Income and Deductable Expenses."
-msgstr "Esta página muestra sus beneficios y pérdidas."
-
-#: po/guile-strings.c:49 src/scm/report/guile-strings.c:14
-#, c-format
-msgid "The date option is %s."
-msgstr "La opción de fecha es %s."
-
-#: po/guile-strings.c:50
-#, fuzzy
-msgid "Set Tax Related"
-msgstr "Colocar Rango de Fechas"
-
-#: po/guile-strings.c:51
-msgid "UK"
-msgstr "GB"
-
-#: po/guile-strings.c:52
-msgid "Sort by date"
-msgstr "Ordenar por fecha"
-
-#: po/guile-strings.c:53
-msgid "Start of previous month"
-msgstr ""
-
-#: po/guile-strings.c:54
-#, fuzzy
-msgid "Display the shares price?"
-msgstr "¿Mostrar las cabeceras?"
-
-#: po/guile-strings.c:55
-#, c-format
-msgid "Report for %s and all subaccounts."
-msgstr "Informe para %s y todas las subcuentas."
-
-#: po/guile-strings.c:56
-msgid "Account types to display"
-msgstr "Tipos de cuentas a mostrar"
-
-#: po/guile-strings.c:57
-msgid "Gain And Loss"
-msgstr "Ganancias y Pérdidas"
-
-#: po/guile-strings.c:58
-msgid "The start of the latest quarterly accounting period"
-msgstr ""
-
-#: po/guile-strings.c:59
-msgid "Double click expands parent accounts"
-msgstr "Doble click expande las cuentas padre"
-
-#: po/guile-strings.c:60
-msgid "The start of the previous financial year/accounting period"
-msgstr ""
-
-#: po/guile-strings.c:61
-msgid ""
-"If selected, move to the blank transaction after the user presses 'Enter'. "
-"Otherwise, move down one row."
-msgstr ""
-
-#: po/guile-strings.c:62
-msgid "Boolean Option"
-msgstr "Opción Booleana"
-
-#: po/guile-strings.c:63
-msgid "Income-Salary-Taxable"
-msgstr "Ingreso-Salario-Imponible"
-
-#: po/guile-strings.c:64
-msgid "End of previous month"
-msgstr ""
-
-#: po/guile-strings.c:65
-#, fuzzy
-msgid "Display the Tax report."
-msgstr "Mostrar el informe de Presupuestos."
-
-#: po/guile-strings.c:66
-msgid "Spend"
-msgstr "Gastar"
-
-#: po/guile-strings.c:67
-msgid "_Stock Portfolio"
-msgstr "Cartera de Existencias"
-
-#: po/guile-strings.c:68
-msgid "Testing"
-msgstr "Probando"
-
-#: po/guile-strings.c:69
-msgid "Other currencies' total"
-msgstr ""
-
-#: po/guile-strings.c:70
-msgid "US-style: mm/dd/yyyy"
-msgstr "Estilo EEUU: mm/dd/aaaa"
-
-#: po/guile-strings.c:71
-msgid "Only positive Entries"
-msgstr ""
-
-#: po/guile-strings.c:72
-#, fuzzy
-msgid "Period From: "
-msgstr "Periodo:"
-
-#: po/guile-strings.c:73
-msgid "You have not selected an account."
-msgstr "No ha seleccionado ninguna cuenta."
-
-#: po/guile-strings.c:74
-msgid "By default, show every transaction in an account."
-msgstr "Por defecto, mostar cada transacción en una cuenta."
-
-#: po/guile-strings.c:75 src/gnome/glade-gnc-dialogs.c:1260
-#: src/gnome/reconcile-list.c:137
-msgid "Amount"
-msgstr "Cantidad"
-
-#: po/guile-strings.c:76
-msgid "Multi Line"
-msgstr "Línea Múltiple"
-
-#: po/guile-strings.c:77
-msgid "No amount display"
-msgstr "No mostrar cantidad"
-
-#: po/guile-strings.c:78
-msgid "Withdrawal"
-msgstr "Retirar"
-
-#: po/guile-strings.c:79
-msgid "View"
-msgstr "Vista"
-
-#: po/guile-strings.c:80
-#, fuzzy
-msgid "Report on these account(s)"
-msgstr "Hacer informe de transacción sobre esas cuentas"
-
-#: po/guile-strings.c:81
-msgid "UK-style dd/mm/yyyy"
-msgstr "Estilo GB: dd/mm/aaaa"
-
-#: po/guile-strings.c:82
-msgid "Show all columns"
-msgstr "Mostrar todas las columnas"
-
-#: po/guile-strings.c:83
-msgid "Last Yr 3rd Est Tax Qtr"
-msgstr ""
-
-#: po/guile-strings.c:84 src/SplitLedger.c:3685 src/gnome/dialog-account.c:640
-#: src/gnome/glade-gnc-dialogs.c:960
-msgid "Account"
-msgstr "Cuenta"
-
-#: po/guile-strings.c:85 src/SplitLedger.c:3050 src/SplitLedger.c:3052
-msgid "Value"
-msgstr "Valor"
-
-#: po/guile-strings.c:86
-msgid "Sorting"
-msgstr "Ordenación"
-
-#: po/guile-strings.c:87
-msgid "Show icons only"
-msgstr "Mostrar sólo iconos"
-
-#: po/guile-strings.c:88
-msgid "Auto Single"
-msgstr "Auto Simple"
-
-#: po/guile-strings.c:89
-#, fuzzy
-msgid "Print all Parent account names"
-msgstr "Nombre de Cuenta GNUCash"
-
-#: po/guile-strings.c:90
-#, fuzzy
-msgid "Register hint font"
-msgstr "Rangos de fechas registrados"
-
-#: po/guile-strings.c:91
-msgid "Reset Selected accounts as not Tax Related"
-msgstr ""
-
-#: po/guile-strings.c:92
-msgid "Display the Hello, World report."
-msgstr "Mostrar el informe Hola, Mundo."
-
-#: po/guile-strings.c:93
-msgid "Gain"
-msgstr "Ganancias"
-
-#: po/guile-strings.c:94
-msgid "Last Yr 4th Est Tax Qtr"
-msgstr ""
-
-#: po/guile-strings.c:95
-msgid "Current Financial Year Start"
-msgstr ""
-
-#: po/guile-strings.c:96
-msgid "Reset Selected & sub-accounts as not Tax Related"
-msgstr ""
-
-#: po/guile-strings.c:97
-msgid "Hello Again"
-msgstr "Hola De Nuevo"
-
-#: po/guile-strings.c:98
-msgid "1st Est Tax Quarter"
-msgstr ""
-
-#: po/guile-strings.c:99
-#, fuzzy
-msgid "Previous Year Start"
-msgstr "Balance Anterior"
-
-#: po/guile-strings.c:100
-msgid "This page shows your profits and losses."
-msgstr "Esta página muestra sus beneficios y pérdidas."
-
-#: po/guile-strings.c:101
-msgid "Show Vertical Borders"
-msgstr "Mostrar Bordes Verticales"
-
-#: po/guile-strings.c:102 src/scm/report/guile-strings.c:16
-#, fuzzy, c-format
-msgid "The relative date option is %s."
-msgstr "La opción de fecha es %s."
-
-#: po/guile-strings.c:103
-msgid "This is a boolean option."
-msgstr "Esta es una opción booleana."
-
-#: po/guile-strings.c:104
-msgid ""
-"You should back up your files regularly.  Just copy\n"
-"the GnuCash .xac file to a floppy or other backup device.\n"
-msgstr ""
-
-#: po/guile-strings.c:107
-msgid "_Profit and Loss"
-msgstr "_Beneficios y Pérdidas"
-
-#: po/guile-strings.c:108
-msgid "Display 1 line"
-msgstr "Mostrar 1 línea"
-
-#: po/guile-strings.c:109
-#, fuzzy
-msgid "This is a combination date option"
-msgstr "Esta es una opción de fecha"
-
-#: po/guile-strings.c:110
-msgid "Background Color"
-msgstr "Color de Fondo"
-
-#: po/guile-strings.c:111 src/scm/report/guile-strings.c:19
-#, c-format
-msgid "The number option formatted as currency is %s."
-msgstr "La opción de número formateado como moneda es %s."
-
-#: po/guile-strings.c:112
-msgid "Income/Salary/Taxable"
-msgstr "Renta/Salario/Imponible"
-
-#. ============ END OF FILE =====================
-#: po/guile-strings.c:113 src/scm/report/guile-strings.c:1
-msgid "There are no selected accounts in the account list option."
-msgstr "No ha seleccionado cuentas en la opción de lista de cuentas."
-
-#: po/guile-strings.c:114
-#, fuzzy
-msgid "The background color for the current register row"
-msgstr "El color de fondo para la transacción activa en modo único"
-
-#: po/guile-strings.c:115
-msgid "Funds Out"
-msgstr "Fondos Extraídos"
-
-#: po/guile-strings.c:116
-msgid "This page shows your net worth."
-msgstr "Esta página muestra sus pérdidas netas."
-
-#: po/guile-strings.c:117
-msgid "_Budget"
-msgstr "_Presupuestos"
-
-#: po/guile-strings.c:118
-#, fuzzy
-msgid "Set/Reset Selected Account Tax Status"
-msgstr "Borrar cuenta seleccionada"
-
-#: po/guile-strings.c:119
-#, fuzzy
-msgid "Test the budget dialog"
-msgstr "Probar el diálogo de presupuestos."
-
-#: po/guile-strings.c:120
-msgid "Continental Europe: dd.mm.yyyy"
-msgstr "Continente Europeo: dd.mm.yyyy"
-
-#: po/guile-strings.c:121
-msgid "Confirm before changing reconciled"
-msgstr ""
-
-#: po/guile-strings.c:122
-msgid "The font used to show hints in the register"
-msgstr ""
-
-#: po/guile-strings.c:123
-msgid "Auto Decimal Places"
-msgstr ""
-
-#: po/guile-strings.c:124
-#, fuzzy
-msgid "Display the Account Summary report."
-msgstr "Mostrar informe de las Transacciones de Cuenta"
-
-#: po/guile-strings.c:125
-msgid "Single"
-msgstr "Único"
-
-#: po/guile-strings.c:126
-msgid ""
-"Warning!! This is a DEVELOPMENT version of GnuCash.\n"
-"It probably has lots of bugs and unstable features!\n"
-"If you are looking for a stable personal finance application,\n"
-"you should use the latest release of GnuCash 1.4.\n"
-msgstr ""
-
-#: po/guile-strings.c:131
-msgid "Show Horizontal Borders"
-msgstr "Mostrar Bordes Horizontales"
-
-#: po/guile-strings.c:132
-msgid "Sort by check/transaction number"
-msgstr "Ordenar por cheque/número de transacción"
-
-#: po/guile-strings.c:133
-#, fuzzy
-msgid "Start of current quarter"
-msgstr "Comienzo del periodo de informe"
-
-#: po/guile-strings.c:134
-msgid "Register Colors"
-msgstr "Colores de Registro"
-
-#: po/guile-strings.c:135 src/scm/report/guile-strings.c:9
-#, c-format
-msgid "The boolean option is %s."
-msgstr "La opción booleana es %s."
-
-#: po/guile-strings.c:136
-msgid "Display the memo?"
-msgstr "¿Mostrar el memo?"
-
-#: po/guile-strings.c:137
-msgid "(subaccounts)"
-msgstr "(subcuentas)"
-
-#: po/guile-strings.c:138
-#, fuzzy
-msgid "Header color"
-msgstr "Cabeceras"
-
-#: po/guile-strings.c:139
-#, fuzzy
-msgid "The default secondary background color for register rows"
-msgstr "El color del fondo por defecto para filas pares en modo simple"
-
-#: po/guile-strings.c:140
-msgid ""
-"Double clicking on an account with children expands the account instead of "
-"opening a register."
-msgstr ""
-"Doble click sobre una cuenta con hijos expande la cuenta en lugar de abrir "
-"un registro."
-
-#: po/guile-strings.c:141
-msgid "Loss"
-msgstr "Pérdidas"
-
-#: po/guile-strings.c:142
-msgid "Credit Accounts"
-msgstr "Cuentas de Crédito"
-
-#: po/guile-strings.c:143
-msgid "Sort by description"
-msgstr "Ordenar por descripción"
-
-#: po/guile-strings.c:144
-msgid "largest to smallest, latest to earliest"
-msgstr "mayor al menor, obsoleto a reciente"
-
-#: po/guile-strings.c:145
-#, fuzzy
-msgid "Acc_ount Balance Tracker"
-msgstr "Rastreador de Balance de Cuenta"
-
-#: po/guile-strings.c:146
-msgid "Use From - To"
-msgstr ""
-
-#: po/guile-strings.c:147
-msgid "Secondary Key"
-msgstr "Clave Secundaria"
-
-#: po/guile-strings.c:148
-msgid "Display the description?"
-msgstr "¿Mostrar la descripción?"
-
-#: po/guile-strings.c:149
-msgid ""
-"GnuCash does not use categories like Quicken does.\n"
-"Instead, you should use Income and Expense accounts.\n"
-msgstr ""
-
-#: po/guile-strings.c:152
-#, fuzzy
-msgid "(Sub "
-msgstr "Cancelar"
-
-#: po/guile-strings.c:153
-msgid "Save window sizes and positions."
-msgstr "Guardar tamaños y posiciones de ventanas."
-
-#: po/guile-strings.c:154 src/engine/Account.c:1498
-#: src/gnome/glade-gnc-dialogs.c:160
-msgid "Bank"
-msgstr "Banco"
-
-#: po/guile-strings.c:155
-msgid "Number Option"
-msgstr "Opciones de Números"
-
-#: po/guile-strings.c:156
-msgid "Set/Reset Tax Status"
-msgstr ""
-
-#: po/guile-strings.c:157
-#, c-format
-msgid "Report for %s."
-msgstr "Informe para %s."
-
-#: po/guile-strings.c:158
-msgid "Reverse Income and Expense Accounts"
-msgstr "Devoluciones y Cuentas de Gastos"
-
-#: po/guile-strings.c:159
-msgid "Europe"
-msgstr "Europa"
-
-#: po/guile-strings.c:160
-msgid "Split active color"
-msgstr ""
-
-#: po/guile-strings.c:161
-#, fuzzy
-msgid "Display the account type?"
-msgstr "¿Mostrar la cuenta?"
-
-#: po/guile-strings.c:162
-msgid "Opening Balance"
-msgstr "Balance de Apertura"
-
-#: po/guile-strings.c:163 src/register/splitreg.c:205
-#: src/register/splitreg.c:212
-msgid "Payment"
-msgstr "Pago"
-
-#: po/guile-strings.c:164
-msgid "Day"
-msgstr "Día"
-
-#: po/guile-strings.c:165
-msgid ""
-"This is for testing. Your reports probably shouldn't have an option like "
-"this."
-msgstr ""
-"Esto es para pruebas. Sus informes probablemente no deberían tener una "
-"opción como esta."
-
-#: po/guile-strings.c:166
-#, fuzzy
-msgid "Foreign Currency"
-msgstr "Moneda"
-
-#: po/guile-strings.c:167
-#, fuzzy
-msgid "Set Selected accounts as Tax Related"
-msgstr "Borrar cuenta seleccionada"
-
-#: po/guile-strings.c:168
-msgid "Display the headers?"
-msgstr "¿Mostrar las cabeceras?"
-
-#: po/guile-strings.c:169
-msgid "Do transaction report on these accounts"
-msgstr "Hacer informe de transacción sobre esas cuentas"
-
-#: po/guile-strings.c:170
-#, fuzzy
-msgid "Six Months Ago"
-msgstr "Meses"
-
-#: po/guile-strings.c:171
-msgid "Sort and subtotal by account transferred from/to's name"
-msgstr "Ordenar y subtotal de cuenta por nombre desde/hacia"
-
-#: po/guile-strings.c:172
-msgid "Double line mode with a multi-line cursor"
-msgstr "Modo de dobles líneas con un cursor multi-línea"
-
-#: po/guile-strings.c:173
-msgid "Single line mode with a multi-line cursor"
-msgstr "Modo de línea simple con un cursor multi-línea"
-
-#: po/guile-strings.c:174
-#, fuzzy
-msgid "Print Full account names"
-msgstr "Cuenta QIF"
-
-#: po/guile-strings.c:175 src/scm/report/guile-strings.c:4
-msgid "The items selected in the list option are:"
-msgstr "Los elementos seleccionados en las opciones de la lista son:"
-
-#: po/guile-strings.c:176
-msgid "Average"
-msgstr "Promedio"
-
-#: po/guile-strings.c:177
-msgid "From"
-msgstr "Desde"
-
-#: po/guile-strings.c:178
-msgid "Start of reporting period"
-msgstr "Comienzo del periodo de informe"
-
-#: po/guile-strings.c:179
-msgid "How many automatic decimal places will be filled in."
-msgstr ""
-
-#: po/guile-strings.c:180
-msgid "Sort by exact entry time"
-msgstr "Ordenar por tiempo de entrada exacto"
-
-#: po/guile-strings.c:181
-msgid "Use accounting labels"
-msgstr "Utilizar etiquetas contables"
-
-#: po/guile-strings.c:182
-msgid "Full"
-msgstr "Completo"
-
-#: po/guile-strings.c:183 src/SplitLedger.c:3045 src/SplitLedger.c:3047
-#: src/SplitLedger.c:3720 src/gnome/glade-gnc-dialogs.c:1462
-#: src/register/splitreg.c:230
-msgid "Price"
-msgstr "Precio"
-
-#: po/guile-strings.c:184
-#, fuzzy
-msgid "The font to use in the register"
-msgstr "Mover un paso hacia adelante en la historia"
-
-#: po/guile-strings.c:185
-#, fuzzy
-msgid "Display the account's foreign currency amount?"
-msgstr "Mostrar informe de las Transacciones de Cuenta"
-
-#: po/guile-strings.c:186
-msgid "The amount of time between data points"
-msgstr "La cantidad de tiempo entre puntos de datos"
-
-#: po/guile-strings.c:187
-msgid "Upper Limit"
-msgstr "Límite Superior"
-
-#: po/guile-strings.c:188
-#, fuzzy
-msgid "Account Summary"
-msgstr "Separador de Cuenta"
-
-#: po/guile-strings.c:189
-msgid "Previous Financial Year Start"
-msgstr ""
-
-#: po/guile-strings.c:190 src/engine/Account.c:1505 src/gnc-ui-util.c:126
-#: src/gnome/glade-gnc-dialogs.c:181
-msgid "Currency"
-msgstr "Moneda"
-
-#: po/guile-strings.c:191
-msgid "Week"
-msgstr "Semana"
-
-#: po/guile-strings.c:192
-msgid "Crash the report"
-msgstr "Estropear el informe"
-
-#: po/guile-strings.c:193
-msgid "Start of this month"
-msgstr ""
-
-#: po/guile-strings.c:194
-msgid "Beginning of the previous calendar year"
-msgstr ""
-
-#: po/guile-strings.c:195
-msgid "Taxable / Deductable"
-msgstr ""
-
-#: po/guile-strings.c:196 src/engine/Account.c:1499
-#: src/gnome/glade-gnc-dialogs.c:163
-msgid "Cash"
-msgstr "Caja"
-
-#: po/guile-strings.c:197
-msgid "Step Size"
-msgstr "Tamaño del Paso"
-
-#: po/guile-strings.c:198
-msgid "Hello, World!"
-msgstr "¡Hola, Mundo!"
-
-#: po/guile-strings.c:199
-msgid "ISO"
-msgstr "ISO"
-
-#: po/guile-strings.c:200
-msgid "Choose exchange rate for above currency"
-msgstr ""
-
-#: po/guile-strings.c:201
-msgid "A report useful for balancing the budget"
-msgstr "Un informe útil para balancear los presupuestos"
-
-#: po/guile-strings.c:202
-msgid "Display the amount?"
-msgstr "¿Mostrar la cantidad?"
-
-#: po/guile-strings.c:203
-msgid "Multi-Line"
-msgstr "Multi-Línea"
-
-#: po/guile-strings.c:204
-msgid "Two Column Display"
-msgstr "Mostrar Dos Columnas"
-
-#: po/guile-strings.c:205
-msgid "Date Format Display"
-msgstr "Mostrar Formato de Fecha"
-
-#: po/guile-strings.c:206
-msgid "Ending"
-msgstr "Cierre"
-
-#: po/guile-strings.c:207
-msgid "The start of the previous quarterly accounting period"
-msgstr ""
-
-#: po/guile-strings.c:208
-msgid "Reversed-balance account types"
-msgstr "Tipos de cuenta de balanceo inverso"
-
-#: po/guile-strings.c:209
-msgid "Show transactions on two lines with more information"
-msgstr "Mostrar las transacciones en dos líneas con más información"
-
-#: po/guile-strings.c:210
-msgid "Account fields to display"
-msgstr "Campos de cuenta a mostrar"
-
-#: po/guile-strings.c:211
-#, fuzzy, c-format
-msgid "Date: %s<br>Report for %s and all Sub-Accounts.<br>Accounts Total: %s"
-msgstr "Informe para %s y todas las subcuentas."
-
-#: po/guile-strings.c:212 src/register/splitreg.c:184
-#: src/register/splitreg.c:188 src/register/splitreg.c:198
-#: src/register/splitreg.c:202 src/register/splitreg.c:210
-#: src/register/splitreg.c:217 src/register/splitreg.c:222
-#: src/register/splitreg.c:229 src/register/splitreg.c:244
-msgid "Sell"
-msgstr "Vender"
-
-#: po/guile-strings.c:213
-msgid "Account Balance Tracker"
-msgstr "Rastreador de Balance de Cuenta"
-
-#: po/guile-strings.c:214
-msgid ""
-"If selected, use a dialog to confirm a change to a reconciled transaction."
-msgstr ""
-
-#: po/guile-strings.c:215
-msgid "Report Options"
-msgstr "Opciones de Informe"
-
-#: po/guile-strings.c:216
-msgid "Show transactions on single lines"
-msgstr "Mostrr transacciones en una sola línea"
-
-#: po/guile-strings.c:217 src/SplitLedger.c:3670 src/gnc-ui-util.c:120
-#: src/gnome/glade-gnc-dialogs.c:1100 src/gnome/reconcile-list.c:136
-msgid "Description"
-msgstr "Descripción"
-
-#: po/guile-strings.c:218
-msgid "Calculate balance sheet up to this date"
-msgstr "Calcular hoja de balance a esta fecha"
-
-#: po/guile-strings.c:219
-msgid "Transaction Report"
-msgstr "Informe de Transacción"
-
-#: po/guile-strings.c:220
-msgid "Sep 1 - Dec 31, Last year"
-msgstr ""
-
-#: po/guile-strings.c:221
-msgid "Jun 1 - Aug 31, Last year"
-msgstr ""
-
-#: po/guile-strings.c:222
-msgid "Apr 1 - May 31, Last year"
-msgstr ""
-
-#: po/guile-strings.c:223
-msgid "Jan 1 - Mar 31, Last year"
-msgstr ""
-
-#: po/guile-strings.c:224
-msgid "Gain/Loss"
-msgstr "Ganancias/Pérdidas"
-
-#: po/guile-strings.c:225
-msgid "Transfer from/to"
-msgstr "Transferir desde/hacia"
-
-#: po/guile-strings.c:226
-msgid "Text only"
-msgstr "Sólo texto"
-
-#: po/guile-strings.c:227
-#, fuzzy
-msgid "Start of previous quarter"
-msgstr "Comienzo del periodo de informe"
-
-#: po/guile-strings.c:228
-#, fuzzy
-msgid "Previous Year End"
-msgstr "Balance Anterior"
-
-#: po/guile-strings.c:229
-msgid "Depreciation"
-msgstr "Depreciación"
-
-#: po/guile-strings.c:230
-msgid "Toolbar Buttons"
-msgstr "Botones de la Barra de Herramientas"
-
-#: po/guile-strings.c:231
-msgid "Report Items from this date"
-msgstr "Elementos de Informe desde esta fecha"
-
-#: po/guile-strings.c:232
-msgid "Period"
-msgstr "Periodo"
-
-#: po/guile-strings.c:233
-msgid "Fourth Options"
-msgstr "Cuartas Opciones"
-
-#: po/guile-strings.c:234
-msgid "Sort by this criterion first"
-msgstr "Ordenar por este criterio primero"
-
-#: po/guile-strings.c:235
-msgid "Double"
-msgstr "Doble"
-
-#: po/guile-strings.c:236
-msgid "Ugly option"
-msgstr "Opción antiestética"
-
-#: po/guile-strings.c:237
-#, fuzzy
-msgid "End of previous quarter"
-msgstr "Fin del periodo del informe"
-
-#: po/guile-strings.c:238
-msgid "How are you doing on your budget?"
-msgstr "¿Qué está haciendo en su presupuesto?"
-
-#: po/guile-strings.c:239
-#, fuzzy
-msgid "Reset Tax Related & sub-accounts"
-msgstr "Borrar cuenta seleccionada"
-
-#: po/guile-strings.c:240
-#, fuzzy
-msgid "Combo Date Option"
-msgstr "Opción de Tiempo y Fecha"
-
-#: po/guile-strings.c:241
-msgid "Save Translatable Strings"
-msgstr "Guardar Cadenas Traducibles"
-
-#: po/guile-strings.c:242
-msgid "Start of the current month"
-msgstr ""
-
-#: po/guile-strings.c:243
-msgid "Save strings that need to be translated"
-msgstr "Guardar cadenas que se necistan traducir"
-
-#: po/guile-strings.c:244
-msgid "Automatic credit card payments"
-msgstr ""
-
-#: po/guile-strings.c:245
-msgid "Number of Rows"
-msgstr "Número de Columnas"
-
-#: po/guile-strings.c:246
-#, fuzzy
-msgid "A_ccount Summary"
-msgstr "Separador de Cuenta"
-
-#: po/guile-strings.c:247
-msgid "/ (Slash)"
-msgstr "/ (Barra oblícua)"
-
-#: po/guile-strings.c:248 src/engine/Account.c:1500
-#: src/gnome/glade-gnc-dialogs.c:166
-msgid "Asset"
-msgstr "Partida de Activo"
-
-#: po/guile-strings.c:249
-msgid "Reset Tax Related"
-msgstr ""
-
-#: po/guile-strings.c:250
-msgid "Use 24-hour time format"
-msgstr "Usar formato de tiempo de 24 horas"
-
-#: po/guile-strings.c:251 src/SplitLedger.c:3667
-#: src/gnome/reconcile-list.c:135
-msgid "Num"
-msgstr "Num"
-
-#: po/guile-strings.c:252
-msgid "Date Format"
-msgstr "Formato de Fecha"
-
-#: po/guile-strings.c:253
-msgid "A list option"
-msgstr "Una opción de lista"
-
-#: po/guile-strings.c:254
-msgid "ISO Standard: yyyy-mm-dd"
-msgstr "Estándar ISO: aaaa-mm-dd"
-
-#: po/guile-strings.c:255
-msgid "Default Currency"
-msgstr "Moneda por Defecto"
-
-#: po/guile-strings.c:256 src/gnome/window-register.c:776
-msgid "Today"
-msgstr "Hoy"
-
-#: po/guile-strings.c:257
-msgid "Primary active color"
-msgstr ""
-
-#: po/guile-strings.c:258
-msgid "Do transaction report on this account"
-msgstr "Hacer informe de transcción sobre esta cuenta"
-
-#: po/guile-strings.c:259
-msgid "Recent Price"
-msgstr "Precio Reciente"
-
-#: po/guile-strings.c:260
-msgid ""
-"Please choose appropriate dates - the \"To\" date should be *after* the "
-"\"From\" date."
-msgstr ""
-
-#: po/guile-strings.c:261 src/scm/report/guile-strings.c:12
-#, c-format
-msgid "The multi-choice option is %s."
-msgstr "La opción multiseleccionada es %s."
-
-#: po/guile-strings.c:262
-msgid "Double mode colors alternate with transactions"
-msgstr "Colores del modo doble alternados con transacciones"
-
-#: po/guile-strings.c:263
-msgid "General"
-msgstr "General"
-
-#: po/guile-strings.c:264 src/gnc-ui-util.c:129
-msgid "Security"
-msgstr "Seguridad"
-
-#: po/guile-strings.c:265
-msgid ""
-"Automatically insert a decimal point into values that are entered without "
-"one."
-msgstr ""
-
-#: po/guile-strings.c:266
-msgid "Single Line"
-msgstr "Línea Simple"
-
-#: po/guile-strings.c:267
-msgid "Receive"
-msgstr "Recibir"
-
-#: po/guile-strings.c:268
-msgid "Sub-Accounts"
-msgstr "Sub-Cuentas"
-
-#: po/guile-strings.c:269
-msgid "T_ax"
-msgstr ""
-
-#: po/guile-strings.c:270 src/scm/report/guile-strings.c:15
-#, c-format
-msgid "The date and time option is %s."
-msgstr "La opción de fecha y hora es %s."
-
-#: po/guile-strings.c:271 src/engine/Account.c:1502
-#: src/gnome/glade-gnc-dialogs.c:172
-msgid "Liability"
-msgstr "Responsabilidad"
-
-#: po/guile-strings.c:272
-msgid "End of reporting period"
-msgstr "Fin del periodo del informe"
-
-#: po/guile-strings.c:273
-msgid "Don't reverse any accounts"
-msgstr "No invertir ninguna cuenta"
-
-#: po/guile-strings.c:274
-msgid "Good option"
-msgstr "Opción buena"
-
-#: po/guile-strings.c:275
-msgid ""
-"The GnuCash online manual has lots of helpful information.\n"
-"You can access the manual under the Help menu.\n"
-msgstr ""
-
-#: po/guile-strings.c:278
-msgid "US"
-msgstr "EEUU"
-
-#: po/guile-strings.c:279
-msgid "_Transaction Report"
-msgstr "Informe de _Transacción"
-
-#: po/guile-strings.c:280
-msgid "One Week Ago"
-msgstr ""
-
-#. broken ! FIXME bg
-#: po/guile-strings.c:281 src/register/splitreg.c:167
-msgid "Deposit"
-msgstr "Depositar"
-
-#: po/guile-strings.c:282
-msgid "Ba_lance sheet"
-msgstr "Hoja de Ba_lance"
-
-#: po/guile-strings.c:283
-msgid "3rd Est Tax Quarter"
-msgstr ""
-
-#: po/guile-strings.c:284
-msgid "Help for first option"
-msgstr "Ayuda para la primera opción"
-
-#: po/guile-strings.c:285
-#, fuzzy
-msgid "  To: "
-msgstr "Hasta:"
-
-#: po/guile-strings.c:286
-msgid ""
-"In the reconcile window, you can press the spacebar\n"
-"to mark transactions as reconciled.\n"
-"You can also press Tab and Shift-Tab to move between\n"
-"deposits and withdrawals.\n"
-msgstr ""
-
-#: po/guile-strings.c:291 src/gnome/glade-gnc-dialogs.c:1158
-msgid "Number"
-msgstr "Número"
-
-#: po/guile-strings.c:292
-msgid "Show both icons and text"
-msgstr "Mostrar iconos y texto"
-
-#: po/guile-strings.c:293
-msgid ""
-"No Tax Related accounts were found. Click \"Parameters\" to set some  with "
-"the \"Set/Reset Tax Status:\" parameter."
-msgstr ""
-
-#: po/guile-strings.c:294
-msgid "Charge"
-msgstr "Cargo"
-
-#: po/guile-strings.c:295
-msgid "Transfer from/to (w/subtotal)"
-msgstr "Transferir desde/hacia (c/subtotal)"
-
-#: po/guile-strings.c:296 src/gnc-ui-util.c:138 src/gnc-ui-util.c:141
-msgid "Total"
-msgstr "Total"
-
-#: po/guile-strings.c:297
-msgid "Report"
-msgstr "Informe"
-
-#: po/guile-strings.c:298 src/SplitLedger.c:3781 src/gnc-ui-util.c:123
-#: src/gnome/glade-gnc-dialogs.c:3709
-msgid "Notes"
-msgstr "Notas"
-
-#: po/guile-strings.c:299 src/scm/report/guile-strings.c:18
-#, c-format
-msgid "The number option is %s."
-msgstr "La opción de número es %s."
-
-#: po/guile-strings.c:300 src/scm/report/guile-strings.c:13
-#, c-format
-msgid "The string option is %s."
-msgstr "La opción de cadena es %s."
-
-#: po/guile-strings.c:301
-msgid "Report style"
-msgstr "Estilo de informe"
-
-#: po/guile-strings.c:302
-msgid "_Reports"
-msgstr "_Informes"
-
-#: po/guile-strings.c:303 src/gnome/window-register.c:1661
-msgid "Register"
-msgstr "Registrar"
-
-#: po/guile-strings.c:304
-msgid "Year"
-msgstr "Año"
-
-#: po/guile-strings.c:305
-msgid "Automatic Decimal Point"
-msgstr ""
-
-#: po/guile-strings.c:306
-#, fuzzy
-msgid "Show the total amount of other currencies?"
-msgstr "Introduzca el valor total de las acciones"
-
-#: po/guile-strings.c:307
-msgid "Profit and Loss"
-msgstr "Beneficios y Pérdidas"
-
-#: po/guile-strings.c:308
-msgid "Month"
-msgstr "Mes"
-
-#: po/guile-strings.c:309
-msgid "Use From - To period"
-msgstr ""
-
-#: po/guile-strings.c:310
-msgid "Current Year Start"
-msgstr ""
-
-#: po/guile-strings.c:311
-msgid ". (Period)"
-msgstr ". (Periodo)"
-
-#: po/guile-strings.c:312
-msgid "Primary Sort Order"
-msgstr "Tipo de Ordenación Primaria"
-
-#: po/guile-strings.c:313
-msgid "Name"
-msgstr "Nombre"
-
-#: po/guile-strings.c:314
-msgid ""
-"When entering check numbers in the register, you can\n"
-"press '+' to enter the next number. You can use '+'\n"
-"and '-' to increment and decrement the number, respectively.\n"
-msgstr ""
-
-#: po/guile-strings.c:318
-msgid "Descending"
-msgstr "Descendente"
-
-#: po/guile-strings.c:319
-msgid "Display the date?"
-msgstr "¿Mostrar la fecha?"
-
-#: po/guile-strings.c:320
-msgid "This is a date option"
-msgstr "Esta es una opción de fecha"
-
-#: po/guile-strings.c:321
-msgid "Two Week"
-msgstr "Dos Semanas"
-
-#: po/guile-strings.c:322
-msgid "Last Yr 2nd Est Tax Qtr"
-msgstr ""
-
-#: po/guile-strings.c:323
-#, fuzzy
-msgid "The default background color for split rows in the register"
-msgstr "El color de fondo por defecto para filas impares en modo doble"
-
-#: po/guile-strings.c:324
-msgid "Save Window Geometry"
-msgstr "Guardar Geometría de Ventana"
-
-#: po/guile-strings.c:325
-msgid "Income\\Salary\\Taxable"
-msgstr "Renta\\Salario\\Imponible"
-
-#: po/guile-strings.c:326
-msgid "Code"
-msgstr "Código"
-
-#: po/guile-strings.c:327
-msgid ""
-"After reconciling a credit card statement, prompt the user to enter a credit "
-"card payment"
-msgstr ""
-
-#: po/guile-strings.c:328
-msgid "Balance sheet"
-msgstr "Hoja de balance"
-
-#: po/guile-strings.c:329
-msgid "Export data as text."
-msgstr "Exportar datos como texto."
-
-#: po/guile-strings.c:330
-msgid "Balance Sheet"
-msgstr "Hoja de Balance"
-
-#: po/guile-strings.c:331
-msgid "- (Dash)"
-msgstr "- (Raya)"
-
-#: po/guile-strings.c:332
-msgid "Funds In"
-msgstr "Fondos Ingresados"
-
-#: po/guile-strings.c:333
-#, fuzzy
-msgid "End of previous quarterly accounting period"
-msgstr "Fin del periodo del informe"
-
-#: po/guile-strings.c:334
-#, fuzzy
-msgid "Register font"
-msgstr "Registrar"
-
-#: po/guile-strings.c:335
-msgid "Order of primary sorting"
-msgstr "Tipo de ordenación de primaria"
-
-#: po/guile-strings.c:336
-#, fuzzy
-msgid "Default currency for new accounts"
-msgstr "Moneda Por Defecto Para Cuentas Nuevas"
-
-#: po/guile-strings.c:337
-msgid "Sort by this criterion second"
-msgstr "Ordenar por este criterio en segundo lugar"
-
-#: po/guile-strings.c:338
-#, fuzzy
-msgid "Tax"
-msgstr "Máx"
-
-#: po/guile-strings.c:339 src/scm/report/guile-strings.c:10
-msgid "true"
-msgstr "cierto"
-
-#: po/guile-strings.c:340
-msgid "Appreciation"
-msgstr "Apreciación"
-
-#: po/guile-strings.c:341
-#, fuzzy
-msgid ""
-"Alternate the primary and secondary colors with each transaction, not each "
-"row"
-msgstr "Alternar colores pares e impares en cada transacción, no en cada fila"
-
-#: po/guile-strings.c:342
-msgid "Do not sort"
-msgstr "No ordenar"
-
-#: po/guile-strings.c:343
-msgid "Display only positive Entries?"
-msgstr ""
-
-#: po/guile-strings.c:344
-#, c-format
-msgid "Date: %s<br>Report for %s.<br>Accounts Total: %s"
-msgstr ""
-
-#: po/guile-strings.c:345
-msgid "Period Ending"
-msgstr "Cierre de Periodo"
-
-#: po/guile-strings.c:346
-msgid "Income.Salary.Taxable"
-msgstr "Renta.Salario.Imponible"
-
-#: po/guile-strings.c:347
-msgid "Only use 'debit' and 'credit' instead of informal synonyms"
-msgstr "Usar sólo 'débito' y 'crédito' en lugar de sinónimos vulgares"
-
-#: po/guile-strings.c:348 src/engine/Account.c:1506
-#: src/gnome/glade-gnc-dialogs.c:184 src/register/splitreg.c:238
-msgid "Income"
-msgstr "Salario"
-
-#: po/guile-strings.c:349
-msgid "Include sub-accounts of all selected accounts"
-msgstr "Incluir las subcuentas de todas las cuentas seleccionadas"
-
-#: po/guile-strings.c:350
-msgid "Style"
-msgstr "Estilo"
-
-#: po/guile-strings.c:351
-msgid "The Ugly"
-msgstr "El Feo"
-
-#: po/guile-strings.c:352
-msgid "Max"
-msgstr "Máx"
-
-#: po/guile-strings.c:353
-#, fuzzy
-msgid "Include Sub-Accounts of each selected Account"
-msgstr "Incluir las subcuentas de todas las cuentas seleccionadas"
-
-#: po/guile-strings.c:354
-#, fuzzy
-msgid "No Change"
-msgstr "Cambiado"
-
-#: po/guile-strings.c:355
-msgid "Choose foreign currency to specify an exchange rate for"
-msgstr ""
-
-#: po/guile-strings.c:356
-#, fuzzy
-msgid "Budget (Testing, Unfinished)"
-msgstr "Diáologo de Presupuestos (Probando)"
-
-#: po/guile-strings.c:357
-msgid "By default, show horizontal borders on the cells."
-msgstr "Por defecto, mostrar bordes horizontales en las celdas."
-
-#: po/guile-strings.c:358
-msgid "Display the totals?"
-msgstr "¿Mostrar los totales?"
-
-#: po/guile-strings.c:359
-msgid ": (Colon)"
-msgstr ": (Dos puntos)"
-
-#: po/guile-strings.c:360
-msgid "By default, show vertical borders on the cells."
-msgstr "Por defecto, mostrar bordes verticales en las celdas."
-
-#: po/guile-strings.c:361 src/SplitLedger.c:3699
-#: src/gnome/glade-gnc-dialogs.c:169 src/gnome/glade-gnc-dialogs.c:1204
-#: src/register/splitreg.c:178 src/register/splitreg.c:194
-msgid "Credit"
-msgstr "Crédito"
-
-#: po/guile-strings.c:362
-#, fuzzy
-msgid "Tax Report Options"
-msgstr "Opciones de Informe"
-
-#: po/guile-strings.c:363
-msgid "Actual"
-msgstr "Actual"
-
-#: po/guile-strings.c:364
-msgid "Enable EURO support"
-msgstr "Permitir soporte de EURO"
-
-#: po/guile-strings.c:365
-msgid "Ascending"
-msgstr "Ascendente"
-
-#: po/guile-strings.c:366
-#, fuzzy
-msgid "Display the number of shares?"
-msgstr "Coincidir número de acciones"
-
-#: po/guile-strings.c:367
-msgid "The Bad"
-msgstr "El Malo"
-
-#: po/guile-strings.c:368
-msgid "Just a Date Option"
-msgstr "Sólo una Opción de Fecha"
-
-#: po/guile-strings.c:369
-msgid "Start of the current financial year/accounting period"
-msgstr ""
-
-#: po/guile-strings.c:370 src/scm/report/guile-strings.c:2
-msgid "The accounts selected in the account list option are:"
-msgstr "Las cuentas seleccionadas en la opción de lista de cuentas son:"
-
-#: po/guile-strings.c:371 src/gnome/window-reconcile.c:742
-msgid "Reconcile"
-msgstr "Cuadrar"
-
-#: po/guile-strings.c:372 src/scm/report/guile-strings.c:6
-#, c-format
-msgid ""
-"This is a sample GnuCash report. See the guile (scheme) source code in %s "
-"for details on writing your own reports, or extending existing reports."
-msgstr ""
-"Este es un ejemplo de informe de GnuCash. Vea el código fuente de guile "
-"(esquema) en %s para detalles sobre la escritura de sus propios informes, o "
-"extender los informes existentes."
-
-#: po/guile-strings.c:373
-msgid "Enables support for the European Union EURO currency"
-msgstr "Permitir soporte para la moneda de la Unión Europea EURO"
-
-#: po/guile-strings.c:374
-#, fuzzy
-msgid "The secondary background color for the current register row"
-msgstr "El color del fondo por defecto para filas pares en modo simple"
-
-#: po/guile-strings.c:375
-msgid "Display the Budget report."
-msgstr "Mostrar el informe de Presupuestos."
-
-#: po/guile-strings.c:376
-msgid "Display the account?"
-msgstr "¿Mostrar la cuenta?"
-
-#: po/guile-strings.c:377
-msgid "Display the cheque number?"
-msgstr "¿Mostrar el número de cheque?"
-
-#: po/guile-strings.c:378
-msgid "Display N lines"
-msgstr "Mostrar N líneas"
-
-#: po/guile-strings.c:379
-msgid "_Hello, World"
-msgstr "_Hola, Mundo"
-
-#: po/guile-strings.c:380
-msgid "First Option"
-msgstr "Primera Opción"
-
-#: po/guile-strings.c:381
-msgid "Display the Stock Portfolio report."
-msgstr "Mostrar informe de Cartera de Existencias."
-
-#: po/guile-strings.c:382
-msgid "All other currencies will get converted to this currency."
-msgstr ""
-
-#: po/guile-strings.c:383
-msgid ""
-"Show transactions on multiple lines with one line for each split in the "
-"transaction"
-msgstr ""
-"Mostrar transacciones sobre líneas múltiples con una línea para cada partida "
-"de la transacción"
-
-#: po/guile-strings.c:384
-#, fuzzy
-msgid "Currency 1"
-msgstr "Moneda"
-
-#: po/guile-strings.c:385
-#, fuzzy
-msgid "Currency 2"
-msgstr "Moneda"
-
-#: po/guile-strings.c:386
-#, fuzzy
-msgid "Currency 3"
-msgstr "Moneda"
-
-#: po/guile-strings.c:387
-#, fuzzy
-msgid "Currency 4"
-msgstr "Moneda"
-
-#: po/guile-strings.c:388
-#, fuzzy
-msgid "Currency 5"
-msgstr "Moneda"
-
-#: po/guile-strings.c:389
-msgid "Plot Type"
-msgstr "Tipo de Trazo"
-
-#: po/guile-strings.c:390 src/gnome/glade-gnc-dialogs.c:1873
-#: src/gnome/glade-gnc-dialogs.c:1881
-msgid "Budget"
-msgstr "Presupuestos"
-
-#: po/guile-strings.c:391
-msgid "Choose whether to display icons, text, or both for toolbar buttons"
-msgstr "Seleccionar entre mostrar iconos, texto o ambos en la barra de botones"
-
-#: po/guile-strings.c:392
-msgid "Sort by date & subtotal each year"
-msgstr "Ordenar por fecha y subtotal cada año"
-
-#: po/guile-strings.c:393
-msgid "4th Est Tax Quarter"
-msgstr ""
-
-#: po/guile-strings.c:394
-msgid "Show text only"
-msgstr "Mostrar sólo texto"
-
-#: po/guile-strings.c:395
-msgid "Icons and Text"
-msgstr "Iconos y Texto"
-
-#: po/guile-strings.c:396
-msgid "The type of graph to generate"
-msgstr "El tipo de gráfico a generar"
-
-#: po/guile-strings.c:397
-msgid "$0.00 valued Accounts won't be printed."
-msgstr ""
-
-#: po/guile-strings.c:398
-msgid "Automatically raise the list of accounts or actions during input."
-msgstr ""
-"Automáticamente alzar la lista de cuentas o acciones durante la entrada."
-
-#: po/guile-strings.c:399
-#, fuzzy
-msgid "Select accounts"
-msgstr "Seleccionar Cuenta"
-
-#: po/guile-strings.c:400
-msgid "Sort by account transferred from/to's name"
-msgstr "Ordenar por nombre de cuenta transferida desde/hacia"
-
-#: po/guile-strings.c:401
-msgid "Net Gain"
-msgstr "Ganancia Neta"
-
-#: po/guile-strings.c:402
-msgid "The fourth option rules!"
-msgstr "¡Predomina la cuarta opción!"
-
-#: po/guile-strings.c:403
-msgid "This is a date option with time"
-msgstr "Esta es una opción de fecha con hora"
-
-#: po/guile-strings.c:404
-msgid "End of the previous Financial year/Accounting Period"
-msgstr ""
-
-#: po/guile-strings.c:405
-msgid "The header background color"
-msgstr "El color de fondo de la cabecera"
-
-#: po/guile-strings.c:406
-#, fuzzy
-msgid "Display \"Tip of the Day\""
-msgstr "Consejos del Día"
-
-#: po/guile-strings.c:407
-msgid "Sort by memo"
-msgstr "Ordenar por memo"
-
-#: po/guile-strings.c:408
-msgid "Third Option"
-msgstr "Tercera Opción"
-
-#: po/guile-strings.c:409
-msgid "Choose the default mode for register windows"
-msgstr "Seleccionar el modo por defecto para registrar ventanas"
-
-#: po/guile-strings.c:410
-msgid "Default number of register rows to display."
-msgstr "Número de filas de registros a mostrar por defecto."
-
-#: po/guile-strings.c:411
-#, fuzzy
-msgid "The current date"
-msgstr "El tiempo actual es %s."
-
-#: po/guile-strings.c:412
-#, fuzzy
-msgid "Secondary color"
-msgstr "Clave Secundaria"
-
-#: po/guile-strings.c:413
-msgid "Report end date"
-msgstr "Fecha de fin del informe"
-
-#: po/guile-strings.c:414 src/gnome/glade-gnc-dialogs.c:939
-msgid "None"
-msgstr "Ninguno"
-
-#: po/guile-strings.c:415
-msgid "Export data as text (Danger: Unfinished)"
-msgstr "Exportar datos como texto (Peligroso: No terminado)"
-
-#: po/guile-strings.c:416 src/scm/report/guile-strings.c:17
-#, fuzzy, c-format
-msgid "The combination date option is %s."
-msgstr "La opción de fecha es %s."
-
-#: po/guile-strings.c:417
-msgid "Last Yr 1st Est Tax Qtr"
-msgstr ""
-
-#: po/guile-strings.c:418
-msgid "Primary Key"
-msgstr "Clave Primaria"
-
-#: po/guile-strings.c:419
-msgid "Ticker"
-msgstr "Reloj"
-
-#: po/guile-strings.c:420
-#, fuzzy
-msgid "Secondary active color"
-msgstr "Clave Secundaria"
-
-#: po/guile-strings.c:421
-msgid "Suppress $0.00 values"
-msgstr ""
-
-#: po/guile-strings.c:422
-msgid ""
-"Display the other account?  (if this is a split transaction, this parameter "
-"is guessed)."
-msgstr ""
-"¿Mostrar la otra cuenta? (si esta es una partida de transacción, este "
-"parámetro es invitado)."
-
-#: po/guile-strings.c:423
-msgid "Time and Date Option"
-msgstr "Opción de Tiempo y Fecha"
-
-#: po/guile-strings.c:424
-msgid "The character used to separate fully-qualified account names"
-msgstr ""
-"El carácter usado para separar nombres de cuentas totalmente cualificadas"
-
-#: po/guile-strings.c:425
-msgid "Report start date"
-msgstr "Fecha de comienzo del informe"
-
-#: po/guile-strings.c:426
-msgid "2nd Est Tax Quarter"
-msgstr ""
-
-#: po/guile-strings.c:427
-msgid "To"
-msgstr "Hacia"
-
-#: po/guile-strings.c:428
-msgid "smallest to largest, earliest to latest"
-msgstr "menor a mayor, reciente a obsoleto"
-
-#: po/guile-strings.c:429 src/gnc-ui-util.c:111
-msgid "Type"
-msgstr "Tipo"
-
-#: po/guile-strings.c:430
-msgid "Display the Transaction Report report."
-msgstr "Mostrar el informe Informe de Transacción."
-
-#: po/guile-strings.c:431
-msgid "\\ (Backslash)"
-msgstr "\\ (Barra inversa)"
-
-#: po/guile-strings.c:432
-msgid "Last day of previous month"
-msgstr ""
-
-#: po/guile-strings.c:433
-#, fuzzy
-msgid "End Previous Financial Year"
-msgstr "Balance Anterior"
-
-#: po/guile-strings.c:434
-msgid "Icons only"
-msgstr "Sólo iconos"
-
-#: po/guile-strings.c:435
-msgid "Help for third option"
-msgstr "Ayuda para la tercera opción"
-
-#: po/guile-strings.c:436
-msgid "Default system locale format"
-msgstr ""
-
-#: po/guile-strings.c:437
-msgid "Default Register Mode"
-msgstr "Modo de Registro por Defecto"
-
-#: po/guile-strings.c:438
-msgid "Auto Double"
-msgstr "Auto Doble"
-
-#: po/guile-strings.c:439
-msgid "Lower Limit"
-msgstr "Límite Inferior"
-
-#: po/guile-strings.c:440
-msgid "One Year Ago"
-msgstr ""
-
-#: po/guile-strings.c:441
-msgid ""
-"To transfer funds between accounts with different currencies,\n"
-"you need an intermediate currency trading account.\n"
-"Please see the GnuCash online manual for details\n"
-msgstr ""
-
-#: po/guile-strings.c:445
-msgid "Sort by amount"
-msgstr "Ordenar por cantidad"
-
-#: po/guile-strings.c:446
-msgid "This is an account list option"
-msgstr "Esta es una opción de lista de cuenta"
-
-#: po/guile-strings.c:447
-#, fuzzy
-msgid "This is a relative date option"
-msgstr "Esta es una opción de fecha"
-
-#: po/guile-strings.c:448
-msgid "Average Balance"
-msgstr "Balance Promedio"
-
-#: po/guile-strings.c:449
-msgid "Totals"
-msgstr "Totales"
-
-#: po/guile-strings.c:450
-msgid "Profit/Loss"
-msgstr "Beneficios/Pérdidas"
-
-#: po/guile-strings.c:451
-msgid "Start of the current calendar year"
-msgstr ""
-
-#: po/guile-strings.c:452 src/SplitLedger.c:3040 src/SplitLedger.c:3042
-#: src/SplitLedger.c:3726 src/gnome/glade-gnc-dialogs.c:1390
-msgid "Shares"
-msgstr "Acciones"
-
-#: po/guile-strings.c:453
-msgid "Show All Transactions"
-msgstr "Mostrar Todas las Transacciones"
-
-#: po/guile-strings.c:454
-msgid "Display the Profit and Loss report."
-msgstr "Mostrar el informe de Beneficios y Pérdidas."
-
-#: po/guile-strings.c:455
-msgid "Date (subtotal yearly)"
-msgstr "Fecha (subtotal anual)"
-
-#: po/guile-strings.c:456
-msgid "Display the Account Balance Tracker report."
-msgstr "Mostrar el informe de Rastreador de Balance de Cuenta."
-
-#: po/guile-strings.c:457
-msgid "2Week"
-msgstr "2Semanas"
-
-#: po/guile-strings.c:458
-msgid "Nothing"
-msgstr "Nada"
-
-#: po/guile-strings.c:459
-#, fuzzy
-msgid "The background color for the current split row in the register"
-msgstr "El color de fondo para la transacción activa en modo doble"
-
-#: po/guile-strings.c:460 src/scm/report/guile-strings.c:3
-msgid "You have selected no values in the list option."
-msgstr "No ha selecciondo valores en la opción de lista."
-
-#: po/guile-strings.c:461 src/scm/report/guile-strings.c:11
-msgid "false"
-msgstr "falso"
-
-#: po/guile-strings.c:462
-#, fuzzy
-msgid "The default background color for register rows"
-msgstr "El color del fondo por defecto para filas pares en modo simple"
-
-#: po/guile-strings.c:463
-msgid "Sep 1 - Dec 31"
-msgstr ""
-
-#: po/guile-strings.c:464
-msgid "Jun 1 - Aug 31"
-msgstr ""
-
-#: po/guile-strings.c:465
-msgid "Apr 1 - May 31"
-msgstr ""
-
-#: po/guile-strings.c:466
-msgid "Jan 1 - Mar 31"
-msgstr ""
-
-#: po/guile-strings.c:467 src/engine/Account.c:1507
-#: src/gnome/glade-gnc-dialogs.c:187
-msgid "Expense"
-msgstr "Haber"
-
-#: po/guile-strings.c:468
-msgid "An account list option"
-msgstr "Una opción de la lista de cuentas"
-
-#: po/guile-strings.c:469
-msgid "Multi Choice Option"
-msgstr "Opción de Selección Múltiple"
-
-#: po/guile-strings.c:470
-msgid "This is a color option"
-msgstr "Esta es una opción de color"
-
-#: po/guile-strings.c:471
-#, fuzzy
-msgid "Report up to and including this date"
-msgstr "Informar de elementos hasta esta fecha, inclusive"
-
-#: po/guile-strings.c:472
-#, fuzzy
-msgid "Currencies"
-msgstr "Moneda"
-
-#: po/guile-strings.c:473
-msgid "Make No Plot"
-msgstr "No Hacer Trazo"
-
-#: po/guile-strings.c:474
-msgid "Bad option"
-msgstr "Opcion incorrecta"
-
-#: po/guile-strings.c:475
-msgid "Display the Balance sheet report."
-msgstr "Mostrar el informe de la hoja de Balance"
-
-#: po/guile-strings.c:476
-msgid "Sort by date & subtotal each month"
-msgstr "Ordenar por fecha y subtotal cada mes"
-
-#: po/guile-strings.c:477
-msgid "Three Months Ago"
-msgstr ""
-
-#: po/guile-strings.c:478
-msgid "Net"
-msgstr "Neto"
-
-#: po/guile-strings.c:479 src/scm/report/guile-strings.c:20
-msgid "Have a nice day!"
-msgstr "¡Que tenga un buen día!"
-
-#: po/guile-strings.c:480
-#, fuzzy
-msgid "Primary color"
-msgstr "Clave Primaria"
-
-#: po/guile-strings.c:481
-msgid "This is a list option"
-msgstr "Esta es una opción de lista"
-
-#: po/guile-strings.c:482
-msgid "Exchange rate for Currency 1"
-msgstr ""
-
-#: po/guile-strings.c:483
-msgid "Exchange rate for Currency 2"
-msgstr ""
-
-#: po/guile-strings.c:484
-msgid "Exchange rate for Currency 3"
-msgstr ""
-
-#: po/guile-strings.c:485
-msgid "Exchange rate for Currency 4"
-msgstr ""
-
-#: po/guile-strings.c:486
-msgid "Exchange rate for Currency 5"
-msgstr ""
-
-#: po/guile-strings.c:487
-msgid "Min"
-msgstr "Mín"
-
-#: po/guile-strings.c:488
-msgid "Display hints for using GnuCash at startup"
-msgstr ""
-
-#: po/guile-strings.c:489
-msgid "Order of Secondary sorting"
-msgstr "Tipo de ordenación Secundaria"
-
-#: po/guile-strings.c:490
-msgid "Help for second option"
-msgstr "Ayuda para la segunda opción"
-
-#: po/guile-strings.c:491
-msgid "Overide or modify From: & To:"
-msgstr ""
-
-#: po/guile-strings.c:492
-#, fuzzy
-msgid "Set Tax Related & sub-accounts"
-msgstr "Borrar cuenta seleccionada"
-
-#: po/guile-strings.c:493
-msgid "Report items up to and including this date"
-msgstr "Informar de elementos hasta esta fecha, inclusive"
-
-#: po/guile-strings.c:494
-msgid "Display"
-msgstr "Mostrar"
-
-#: po/guile-strings.c:495 src/gnome/glade-gnc-dialogs.c:2263
-msgid "Nominal"
-msgstr "Nominal"
-
-#: po/guile-strings.c:496
-msgid "Beginning"
-msgstr "Apertura"
-
-#: po/guile-strings.c:497 src/scm/report/guile-strings.c:7
-#, c-format
-msgid ""
-"For help on writing reports, or to contribute your brand new, totally cool "
-"report, consult the mailing list %s. For details on subscribing to that "
-"list, see %s."
-msgstr ""
-"Para ayuda sobre la escritura de informes, o para contribuir con sus nuevos "
-"informes, totalmente fabulosos, consulte la lista de correo %s. Para "
-"detalles sobre cómo subscribirse, vea %s."
-
-#: po/guile-strings.c:498
-msgid "This is a multi choice option."
-msgstr "Esta es una opción de selección múltiple."
-
-#: po/guile-strings.c:499
-msgid "Income & Expense"
-msgstr "Ingresos y Gastos"
-
-#: po/guile-strings.c:500
-#, fuzzy
-msgid "Display negative amounts in red"
-msgstr "¿Mostrar la cantidad?"
-
-#: po/guile-strings.c:501 src/scm/report/guile-strings.c:5
-msgid "Hello, World"
-msgstr "Hola, Mundo"
-
-#: po/guile-strings.c:502 src/register/splitreg.c:183
-#: src/register/splitreg.c:187 src/register/splitreg.c:193
-#: src/register/splitreg.c:201 src/register/splitreg.c:209
-#: src/register/splitreg.c:216 src/register/splitreg.c:221
-#: src/register/splitreg.c:228 src/register/splitreg.c:243
-msgid "Buy"
-msgstr "Comprar"
-
-#: po/guile-strings.c:503
-msgid "Sort & subtotal by account"
-msgstr "Ordenar y subtotal por cuenta"
-
-#: po/guile-strings.c:504
-msgid "Reverse Credit Card, Liability, Equity, and Income Accounts"
-msgstr ""
-"Cuentas de Tarjeta de Crédito Inversa, Responsabilidad, Equidad e Ingresos"
-
-#: po/guile-strings.c:505 src/engine/Account.c:1503
-#: src/gnome/glade-gnc-dialogs.c:175
-msgid "Stock"
-msgstr "Existencias"
-
-#: po/guile-strings.c:506
-msgid "This is a number option."
-msgstr "Esta es una opción numérica"
-
-#: po/guile-strings.c:507
-msgid "Extensions"
-msgstr "Extensiones"
 
 #: src/FileDialog.c:50
 #, c-format
@@ -2327,9 +189,45 @@ msgstr ""
 "Los valores introducidos para esta transacción son inconsistentes.\n"
 "¿Qué valor le gustaría que fuera recalculado?\n"
 
+#: src/SplitLedger.c:3040 src/SplitLedger.c:3042 src/SplitLedger.c:3726
+#: src/gnome/glade-gnc-dialogs.c:1390 src/scm/report/guile-strings.c:115
+#: src/scm/report/guile-strings.c:203 src/scm/report/guile-strings.c:291
+msgid "Shares"
+msgstr "Acciones"
+
 #: src/SplitLedger.c:3040 src/SplitLedger.c:3045 src/SplitLedger.c:3050
 msgid "Changed"
 msgstr "Cambiado"
+
+#: src/SplitLedger.c:3045 src/SplitLedger.c:3047 src/SplitLedger.c:3720
+#: src/gnome/glade-gnc-dialogs.c:1462 src/register/splitreg.c:230
+#: src/scm/report/guile-strings.c:204 src/scm/report/guile-strings.c:294
+msgid "Price"
+msgstr "Precio"
+
+#: src/SplitLedger.c:3050 src/SplitLedger.c:3052
+#: src/scm/report/guile-strings.c:117
+msgid "Value"
+msgstr "Valor"
+
+#: src/SplitLedger.c:3664 src/gnome/glade-gnc-dialogs.c:1042
+#: src/gnome/reconcile-list.c:134 src/scm/report/guile-strings.c:197
+#: src/scm/report/guile-strings.c:230 src/scm/report/guile-strings.c:273
+msgid "Date"
+msgstr "Fecha"
+
+#: src/SplitLedger.c:3667 src/gnome/reconcile-list.c:135
+#: src/scm/report/guile-strings.c:198 src/scm/report/guile-strings.c:276
+msgid "Num"
+msgstr "Num"
+
+#: src/SplitLedger.c:3670 src/gnc-ui-util.c:120
+#: src/gnome/glade-gnc-dialogs.c:1100 src/gnome/reconcile-list.c:136
+#: src/scm/guile-strings.c:84 src/scm/report/guile-strings.c:199
+#: src/scm/report/guile-strings.c:244 src/scm/report/guile-strings.c:279
+#: src/scm/report/guile-strings.c:388
+msgid "Description"
+msgstr "Descripción"
 
 #. desc cell
 #: src/SplitLedger.c:3673 src/gnome/reconcile-list.c:138
@@ -2342,9 +240,43 @@ msgstr "Cuadrado:R"
 msgid "Share Balance"
 msgstr "Nuevo Balance"
 
+#: src/SplitLedger.c:3679 src/SplitLedger.c:3778 src/gnc-ui-util.c:132
+#: src/gnc-ui-util.c:135 src/gnome/glade-gnc-dialogs.c:1615
+#: src/scm/guile-strings.c:88 src/scm/report/guile-strings.c:11
+#: src/scm/report/guile-strings.c:88
+msgid "Balance"
+msgstr "Balance"
+
 #: src/SplitLedger.c:3682 src/gnome/glade-gnc-dialogs.c:1520
 msgid "Action"
 msgstr "Acción"
+
+#: src/SplitLedger.c:3685 src/gnome/dialog-account.c:640
+#: src/gnome/glade-gnc-dialogs.c:960 src/scm/report/guile-strings.c:5
+#: src/scm/report/guile-strings.c:23 src/scm/report/guile-strings.c:201
+#: src/scm/report/guile-strings.c:216 src/scm/report/guile-strings.c:285
+msgid "Account"
+msgstr "Cuenta"
+
+#: src/SplitLedger.c:3688 src/gnome/glade-gnc-dialogs.c:1318
+#: src/scm/report/guile-strings.c:200 src/scm/report/guile-strings.c:248
+#: src/scm/report/guile-strings.c:282
+msgid "Memo"
+msgstr "Memo"
+
+#: src/SplitLedger.c:3699 src/gnome/glade-gnc-dialogs.c:169
+#: src/gnome/glade-gnc-dialogs.c:1204 src/register/splitreg.c:178
+#: src/register/splitreg.c:194 src/scm/guile-strings.c:59
+#: src/scm/guile-strings.c:65 src/scm/guile-strings.c:73
+#: src/scm/report/guile-strings.c:207
+msgid "Credit"
+msgstr "Crédito"
+
+#: src/SplitLedger.c:3712 src/gnome/glade-gnc-dialogs.c:1207
+#: src/scm/guile-strings.c:47 src/scm/guile-strings.c:53
+#: src/scm/report/guile-strings.c:206
+msgid "Debit"
+msgstr "Débito"
 
 #. balance cell
 #: src/SplitLedger.c:3729 src/gnome/window-register.c:864
@@ -2372,6 +304,11 @@ msgstr "Débito"
 msgid "Tot Shares"
 msgstr "Acciones Totales"
 
+#: src/SplitLedger.c:3781 src/gnc-ui-util.c:123
+#: src/gnome/glade-gnc-dialogs.c:3709 src/scm/guile-strings.c:85
+msgid "Notes"
+msgstr "Notas"
+
 #: src/SplitLedger.c:4624
 #, fuzzy
 msgid ""
@@ -2381,9 +318,60 @@ msgstr ""
 "Ha hecho cambios a esta ventana de cuadre.\n"
 "¿Está seguro de que desea cancelar?"
 
+#: src/engine/Account.c:1498 src/gnome/glade-gnc-dialogs.c:160
+#: src/scm/guile-strings.c:71
+msgid "Bank"
+msgstr "Banco"
+
+#: src/engine/Account.c:1499 src/gnome/glade-gnc-dialogs.c:163
+#: src/scm/guile-strings.c:72
+msgid "Cash"
+msgstr "Caja"
+
+#: src/engine/Account.c:1500 src/gnome/glade-gnc-dialogs.c:166
+#: src/scm/guile-strings.c:74
+msgid "Asset"
+msgstr "Partida de Activo"
+
 #: src/engine/Account.c:1501
 msgid "Credit Card"
 msgstr "Tarjeta de Crédito"
+
+#: src/engine/Account.c:1502 src/gnome/glade-gnc-dialogs.c:172
+#: src/scm/guile-strings.c:75
+msgid "Liability"
+msgstr "Responsabilidad"
+
+#: src/engine/Account.c:1503 src/gnome/glade-gnc-dialogs.c:175
+#: src/scm/guile-strings.c:76
+msgid "Stock"
+msgstr "Existencias"
+
+#: src/engine/Account.c:1504 src/scm/guile-strings.c:77
+msgid "Mutual Fund"
+msgstr "Fondo Mutuo"
+
+#: src/engine/Account.c:1505 src/gnc-ui-util.c:126
+#: src/gnome/glade-gnc-dialogs.c:181 src/scm/guile-strings.c:78
+#: src/scm/guile-strings.c:86
+msgid "Currency"
+msgstr "Moneda"
+
+#: src/engine/Account.c:1506 src/gnome/glade-gnc-dialogs.c:184
+#: src/register/splitreg.c:238 src/scm/guile-strings.c:63
+#: src/scm/guile-strings.c:79
+msgid "Income"
+msgstr "Salario"
+
+#: src/engine/Account.c:1507 src/gnome/glade-gnc-dialogs.c:187
+#: src/scm/guile-strings.c:52 src/scm/guile-strings.c:80
+msgid "Expense"
+msgstr "Haber"
+
+#: src/engine/Account.c:1508 src/gnome/glade-gnc-dialogs.c:190
+#: src/register/splitreg.c:223 src/scm/guile-strings.c:81
+msgid "Equity"
+msgstr "Equidad"
 
 #. OK, we found an orphan.  Put it in an orphan account.
 #: src/engine/Scrub.c:102
@@ -2424,9 +412,28 @@ msgstr ""
 msgid "Out of memory"
 msgstr ""
 
+#: src/gnc-ui-util.c:111 src/scm/guile-strings.c:82
+#: src/scm/report/guile-strings.c:66 src/scm/report/guile-strings.c:86
+msgid "Type"
+msgstr "Tipo"
+
+#: src/gnc-ui-util.c:114 src/scm/report/guile-strings.c:10
+#: src/scm/report/guile-strings.c:85 src/scm/report/guile-strings.c:389
+msgid "Account Name"
+msgstr "Nombre de Cuenta"
+
 #: src/gnc-ui-util.c:117
 msgid "Account Code"
 msgstr "Código de Cuenta"
+
+#: src/gnc-ui-util.c:129 src/scm/guile-strings.c:87
+msgid "Security"
+msgstr "Seguridad"
+
+#: src/gnc-ui-util.c:138 src/gnc-ui-util.c:141 src/scm/guile-strings.c:89
+#: src/scm/report/guile-strings.c:208 src/scm/report/guile-strings.c:392
+msgid "Total"
+msgstr "Total"
 
 #: src/gnc-ui-util.c:271
 msgid "not cleared:n"
@@ -2788,7 +795,8 @@ msgstr ""
 msgid "Click \"Next\" to accept the information and move on."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:45
+#: src/gnome/glade-gnc-dialogs.c:45 src/scm/report/guile-strings.c:359
+#: src/scm/report/guile-strings.c:360
 msgid "Select Account"
 msgstr "Seleccionar Cuenta"
 
@@ -2963,6 +971,11 @@ msgstr "Todo"
 msgid "Any"
 msgstr "Cualquier"
 
+#: src/gnome/glade-gnc-dialogs.c:939 src/scm/guile-strings.c:204
+#: src/scm/report/guile-strings.c:250 src/scm/report/guile-strings.c:298
+msgid "None"
+msgstr "Ninguno"
+
 #: src/gnome/glade-gnc-dialogs.c:945
 msgid "selected accounts:"
 msgstr "cuentas seleccionadas:"
@@ -3010,6 +1023,10 @@ msgstr "Expresión regular"
 msgid "Find transactions whose Number matches:"
 msgstr "Buscar transacciones cuyo Número coincida con:"
 
+#: src/gnome/glade-gnc-dialogs.c:1158 src/scm/report/guile-strings.c:246
+msgid "Number"
+msgstr "Número"
+
 #: src/gnome/glade-gnc-dialogs.c:1165
 msgid "Match Amount"
 msgstr "Cantidad de Coincidencias"
@@ -3039,6 +1056,12 @@ msgstr "Como máximo "
 #: src/gnome/glade-gnc-dialogs.c:1440
 msgid "Exactly"
 msgstr "Exactamente"
+
+#: src/gnome/glade-gnc-dialogs.c:1260 src/gnome/reconcile-list.c:137
+#: src/scm/report/guile-strings.c:205 src/scm/report/guile-strings.c:242
+#: src/scm/report/guile-strings.c:296
+msgid "Amount"
+msgstr "Cantidad"
 
 #: src/gnome/glade-gnc-dialogs.c:1267
 msgid "Match Memo"
@@ -3163,6 +1186,10 @@ msgstr "Borrar resultados de la búsqueda actual"
 msgid "Find"
 msgstr "Buscar"
 
+#: src/gnome/glade-gnc-dialogs.c:1873 src/gnome/glade-gnc-dialogs.c:1881
+msgid "Budget"
+msgstr "Presupuestos"
+
 #: src/gnome/glade-gnc-dialogs.c:1905
 msgid "Name:"
 msgstr "Nombre:"
@@ -3248,6 +1275,10 @@ msgstr "Día de la Factura:"
 #: src/gnome/glade-gnc-dialogs.c:2212
 msgid "Grace Period:"
 msgstr "Periodo de Gracia:"
+
+#: src/gnome/glade-gnc-dialogs.c:2263
+msgid "Nominal"
+msgstr "Nominal"
 
 #: src/gnome/glade-gnc-dialogs.c:2266
 msgid "Bill"
@@ -3939,6 +1970,12 @@ msgstr "Ago"
 msgid "From Now"
 msgstr "Desde Ahora"
 
+#. Calendar label, only shown if the date editor has a time field
+#: src/gnome/gnc-dateedit.c:680
+#, fuzzy
+msgid "Calendar"
+msgstr "Limpiado"
+
 #: src/gnome/window-main.c:161
 #, fuzzy
 msgid "Net Assets:"
@@ -4217,6 +2254,10 @@ msgstr "Total"
 msgid "Are you sure you want to delete the current transaction?"
 msgstr "¿Está seguro de que quiere borrar la transacción actual?"
 
+#: src/gnome/window-reconcile.c:742 src/scm/guile-strings.c:172
+msgid "Reconcile"
+msgstr "Cuadrar"
+
 #: src/gnome/window-reconcile.c:930
 msgid "_Reconcile Information..."
 msgstr "Información del Cuadre..."
@@ -4388,6 +2429,10 @@ msgstr "Mostrar los Últimos"
 msgid "End date:"
 msgstr "Fecha límite"
 
+#: src/gnome/window-register.c:776 src/scm/guile-strings.c:25
+msgid "Today"
+msgstr "Hoy"
+
 #: src/gnome/window-register.c:782
 msgid "Set Date Range"
 msgstr "Colocar Rango de Fechas"
@@ -4467,7 +2512,7 @@ msgstr "Balance"
 msgid "Basic Ledger"
 msgstr "Libro Mayor General"
 
-#: src/gnome/window-register.c:1121
+#: src/gnome/window-register.c:1121 src/scm/guile-strings.c:113
 #, fuzzy
 msgid "Show transactions on one or two lines"
 msgstr "Mostrr transacciones en una sola línea"
@@ -4476,7 +2521,7 @@ msgstr "Mostrr transacciones en una sola línea"
 msgid "Auto-Split Ledger"
 msgstr ""
 
-#: src/gnome/window-register.c:1124
+#: src/gnome/window-register.c:1124 src/scm/guile-strings.c:115
 #, fuzzy
 msgid ""
 "Show transactions on one or two lines and expand the current transaction"
@@ -4487,12 +2532,16 @@ msgstr "Mostrar las transacciones en dos líneas con más información"
 msgid "Transaction Journal"
 msgstr "Informe de Transacción"
 
-#: src/gnome/window-register.c:1128
+#: src/gnome/window-register.c:1128 src/scm/guile-strings.c:117
 #, fuzzy
 msgid "Show expanded transactions with all splits"
 msgstr "Buscar transacciones con una búsqueda."
 
-#: src/gnome/window-register.c:1139
+#: src/gnome/window-register.c:1138
+msgid "Double Line"
+msgstr "Línea Doble"
+
+#: src/gnome/window-register.c:1139 src/scm/guile-strings.c:120
 msgid "Show two lines of information for each transaction"
 msgstr ""
 
@@ -4621,6 +2670,15 @@ msgstr "Cartera"
 #: src/gnome/window-register.c:1657
 msgid "Search Results"
 msgstr "Resultados de Búsqueda"
+
+#: src/gnome/window-register.c:1661 src/scm/guile-strings.c:109
+#: src/scm/guile-strings.c:118 src/scm/guile-strings.c:121
+#: src/scm/guile-strings.c:124 src/scm/guile-strings.c:127
+#: src/scm/guile-strings.c:130 src/scm/guile-strings.c:133
+#: src/scm/guile-strings.c:136 src/scm/guile-strings.c:139
+#: src/scm/guile-strings.c:142 src/scm/guile-strings.c:145
+msgid "Register"
+msgstr "Registrar"
 
 #: src/gnome/window-register.c:2326
 msgid ""
@@ -4784,6 +2842,11 @@ msgstr ""
 msgid "sample:Notes field sample text string"
 msgstr ""
 
+#. broken ! FIXME bg
+#: src/register/splitreg.c:167 src/scm/guile-strings.c:43
+msgid "Deposit"
+msgstr "Depositar"
+
 #: src/register/splitreg.c:168
 msgid "Withdraw"
 msgstr "Retirar"
@@ -4831,6 +2894,24 @@ msgstr "Alambre"
 msgid "Direct Debit"
 msgstr "Débito Directo"
 
+#: src/register/splitreg.c:183 src/register/splitreg.c:187
+#: src/register/splitreg.c:193 src/register/splitreg.c:201
+#: src/register/splitreg.c:209 src/register/splitreg.c:216
+#: src/register/splitreg.c:221 src/register/splitreg.c:228
+#: src/register/splitreg.c:243 src/scm/guile-strings.c:48
+#: src/scm/guile-strings.c:49 src/scm/guile-strings.c:50
+msgid "Buy"
+msgstr "Comprar"
+
+#: src/register/splitreg.c:184 src/register/splitreg.c:188
+#: src/register/splitreg.c:198 src/register/splitreg.c:202
+#: src/register/splitreg.c:210 src/register/splitreg.c:217
+#: src/register/splitreg.c:222 src/register/splitreg.c:229
+#: src/register/splitreg.c:244 src/scm/guile-strings.c:60
+#: src/scm/guile-strings.c:61 src/scm/guile-strings.c:62
+msgid "Sell"
+msgstr "Vender"
+
 #: src/register/splitreg.c:189 src/register/splitreg.c:195
 #: src/register/splitreg.c:231
 msgid "Fee"
@@ -4839,6 +2920,15 @@ msgstr "Cuota"
 #: src/register/splitreg.c:203
 msgid "Loan"
 msgstr "Préstamo"
+
+#: src/register/splitreg.c:205 src/register/splitreg.c:212
+#: src/scm/guile-strings.c:45
+msgid "Payment"
+msgstr "Pago"
+
+#: src/register/splitreg.c:213 src/scm/guile-strings.c:64
+msgid "Rebate"
+msgstr "Descuento"
 
 #: src/register/splitreg.c:232
 msgid "Div"
@@ -4906,6 +2996,2154 @@ msgstr "Introducir la cotización"
 msgid "Enter the number of shares bought or sold"
 msgstr "Introduzca el número de acciones vendidas"
 
+#. ============ END OF FILE =====================
+#: src/scm/guile-strings.c:1
+msgid "Current Year Start"
+msgstr ""
+
+#: src/scm/guile-strings.c:2
+msgid "Start of the current calendar year"
+msgstr ""
+
+#: src/scm/guile-strings.c:3
+#, fuzzy
+msgid "Previous Year Start"
+msgstr "Balance Anterior"
+
+#: src/scm/guile-strings.c:4
+msgid "Beginning of the previous calendar year"
+msgstr ""
+
+#: src/scm/guile-strings.c:5
+#, fuzzy
+msgid "Previous Year End"
+msgstr "Balance Anterior"
+
+#: src/scm/guile-strings.c:6
+msgid "End of the Previous Year"
+msgstr ""
+
+#: src/scm/guile-strings.c:7
+msgid "Current Financial Year Start"
+msgstr ""
+
+#: src/scm/guile-strings.c:8
+msgid "Start of the current financial year/accounting period"
+msgstr ""
+
+#: src/scm/guile-strings.c:9
+msgid "Previous Financial Year Start"
+msgstr ""
+
+#: src/scm/guile-strings.c:10
+msgid "The start of the previous financial year/accounting period"
+msgstr ""
+
+#: src/scm/guile-strings.c:11
+#, fuzzy
+msgid "End Previous Financial Year"
+msgstr "Balance Anterior"
+
+#: src/scm/guile-strings.c:12
+msgid "End of the previous Financial year/Accounting Period"
+msgstr ""
+
+#: src/scm/guile-strings.c:13
+msgid "Start of this month"
+msgstr ""
+
+#: src/scm/guile-strings.c:14
+msgid "Start of the current month"
+msgstr ""
+
+#: src/scm/guile-strings.c:15
+msgid "Start of previous month"
+msgstr ""
+
+#: src/scm/guile-strings.c:16
+msgid "The beginning of the previous month"
+msgstr ""
+
+#: src/scm/guile-strings.c:17
+msgid "End of previous month"
+msgstr ""
+
+#: src/scm/guile-strings.c:18
+msgid "Last day of previous month"
+msgstr ""
+
+#: src/scm/guile-strings.c:19
+#, fuzzy
+msgid "Start of current quarter"
+msgstr "Comienzo del periodo de informe"
+
+#: src/scm/guile-strings.c:20
+msgid "The start of the latest quarterly accounting period"
+msgstr ""
+
+#: src/scm/guile-strings.c:21
+#, fuzzy
+msgid "Start of previous quarter"
+msgstr "Comienzo del periodo de informe"
+
+#: src/scm/guile-strings.c:22
+msgid "The start of the previous quarterly accounting period"
+msgstr ""
+
+#: src/scm/guile-strings.c:23
+#, fuzzy
+msgid "End of previous quarter"
+msgstr "Fin del periodo del informe"
+
+#: src/scm/guile-strings.c:24
+#, fuzzy
+msgid "End of previous quarterly accounting period"
+msgstr "Fin del periodo del informe"
+
+#: src/scm/guile-strings.c:26
+#, fuzzy
+msgid "The current date"
+msgstr "El tiempo actual es %s."
+
+#: src/scm/guile-strings.c:27 src/scm/guile-strings.c:28
+msgid "One Month Ago"
+msgstr ""
+
+#: src/scm/guile-strings.c:29 src/scm/guile-strings.c:30
+msgid "One Week Ago"
+msgstr ""
+
+#: src/scm/guile-strings.c:31 src/scm/guile-strings.c:32
+msgid "Three Months Ago"
+msgstr ""
+
+#: src/scm/guile-strings.c:33 src/scm/guile-strings.c:34
+#, fuzzy
+msgid "Six Months Ago"
+msgstr "Meses"
+
+#: src/scm/guile-strings.c:35 src/scm/guile-strings.c:36
+msgid "One Year Ago"
+msgstr ""
+
+#: src/scm/guile-strings.c:37
+msgid "Export data as text (Danger: Unfinished)"
+msgstr "Exportar datos como texto (Peligroso: No terminado)"
+
+#: src/scm/guile-strings.c:38
+msgid "Export data as text."
+msgstr "Exportar datos como texto."
+
+#: src/scm/guile-strings.c:39 src/scm/guile-strings.c:40
+#, fuzzy
+msgid "Test progress dialog"
+msgstr "Probar el diálogo de presupuestos."
+
+#: src/scm/guile-strings.c:41
+msgid "GnuCash Configuration Options"
+msgstr ""
+
+#: src/scm/guile-strings.c:42
+msgid "Funds In"
+msgstr "Fondos Ingresados"
+
+#: src/scm/guile-strings.c:44
+msgid "Receive"
+msgstr "Recibir"
+
+#: src/scm/guile-strings.c:46
+msgid "Increase"
+msgstr "Incrementar"
+
+#: src/scm/guile-strings.c:51 src/scm/guile-strings.c:57
+msgid "Charge"
+msgstr "Cargo"
+
+#: src/scm/guile-strings.c:54
+msgid "Funds Out"
+msgstr "Fondos Extraídos"
+
+#: src/scm/guile-strings.c:55
+msgid "Withdrawal"
+msgstr "Retirar"
+
+#: src/scm/guile-strings.c:56
+msgid "Spend"
+msgstr "Gastar"
+
+#: src/scm/guile-strings.c:58
+msgid "Decrease"
+msgstr "Disminuir"
+
+#: src/scm/guile-strings.c:66 src/scm/guile-strings.c:69
+msgid "Main Window"
+msgstr "Ventana Principal"
+
+#: src/scm/guile-strings.c:67
+msgid "Double click expands parent accounts"
+msgstr "Doble click expande las cuentas padre"
+
+#: src/scm/guile-strings.c:68
+msgid ""
+"Double clicking on an account with children expands the account instead of "
+"opening a register."
+msgstr ""
+"Doble click sobre una cuenta con hijos expande la cuenta en lugar de abrir "
+"un registro."
+
+#: src/scm/guile-strings.c:70
+msgid "Account types to display"
+msgstr "Tipos de cuentas a mostrar"
+
+#: src/scm/guile-strings.c:83
+msgid "Code"
+msgstr "Código"
+
+#: src/scm/guile-strings.c:90
+msgid "US"
+msgstr "EEUU"
+
+#: src/scm/guile-strings.c:91
+msgid "US-style: mm/dd/yyyy"
+msgstr "Estilo EEUU: mm/dd/aaaa"
+
+#: src/scm/guile-strings.c:92
+msgid "UK"
+msgstr "GB"
+
+#: src/scm/guile-strings.c:93
+msgid "UK-style dd/mm/yyyy"
+msgstr "Estilo GB: dd/mm/aaaa"
+
+#: src/scm/guile-strings.c:94
+msgid "Europe"
+msgstr "Europa"
+
+#: src/scm/guile-strings.c:95
+msgid "Continental Europe: dd.mm.yyyy"
+msgstr "Continente Europeo: dd.mm.yyyy"
+
+#: src/scm/guile-strings.c:96
+msgid "ISO"
+msgstr "ISO"
+
+#: src/scm/guile-strings.c:97
+msgid "ISO Standard: yyyy-mm-dd"
+msgstr "Estándar ISO: aaaa-mm-dd"
+
+#: src/scm/guile-strings.c:98
+#, fuzzy
+msgid "Locale"
+msgstr "Cargar archivo"
+
+#: src/scm/guile-strings.c:99
+msgid "Default system locale format"
+msgstr ""
+
+#: src/scm/guile-strings.c:100 src/scm/guile-strings.c:103
+#: src/scm/guile-strings.c:106
+msgid "International"
+msgstr "Internacional"
+
+#: src/scm/guile-strings.c:101
+msgid "Default Currency"
+msgstr "Moneda por Defecto"
+
+#: src/scm/guile-strings.c:102
+#, fuzzy
+msgid "Default currency for new accounts"
+msgstr "Moneda Por Defecto Para Cuentas Nuevas"
+
+#: src/scm/guile-strings.c:104
+msgid "Use 24-hour time format"
+msgstr "Usar formato de tiempo de 24 horas"
+
+#: src/scm/guile-strings.c:105
+msgid "Use a 24 hour (instead of a 12 hour) time format."
+msgstr "Utilizar un formato temporal de 24 oras (en lugar de uno de 12 horas)"
+
+#: src/scm/guile-strings.c:107
+msgid "Enable EURO support"
+msgstr "Permitir soporte de EURO"
+
+#: src/scm/guile-strings.c:108
+msgid "Enables support for the European Union EURO currency"
+msgstr "Permitir soporte para la moneda de la Unión Europea EURO"
+
+#: src/scm/guile-strings.c:110
+#, fuzzy
+msgid "Default Register Style"
+msgstr "Modo de Registro por Defecto"
+
+#: src/scm/guile-strings.c:111
+#, fuzzy
+msgid "Default style for register windows"
+msgstr "Seleccionar el modo por defecto para registrar ventanas"
+
+#: src/scm/guile-strings.c:112
+#, fuzzy
+msgid "Ledger"
+msgstr "Libro Mayor General"
+
+#: src/scm/guile-strings.c:114
+#, fuzzy
+msgid "Auto Ledger"
+msgstr "Auto Simple"
+
+#: src/scm/guile-strings.c:116
+#, fuzzy
+msgid "Journal"
+msgstr "Normal"
+
+#: src/scm/guile-strings.c:119
+#, fuzzy
+msgid "Double Line Mode"
+msgstr "Línea Doble"
+
+#: src/scm/guile-strings.c:122
+msgid "Auto-Raise Lists"
+msgstr "Listas Auto-Crecientes"
+
+#: src/scm/guile-strings.c:123
+msgid "Automatically raise the list of accounts or actions during input."
+msgstr ""
+"Automáticamente alzar la lista de cuentas o acciones durante la entrada."
+
+#: src/scm/guile-strings.c:125
+msgid "Show All Transactions"
+msgstr "Mostrar Todas las Transacciones"
+
+#: src/scm/guile-strings.c:126
+msgid "By default, show every transaction in an account."
+msgstr "Por defecto, mostar cada transacción en una cuenta."
+
+#: src/scm/guile-strings.c:128
+msgid "Number of Rows"
+msgstr "Número de Columnas"
+
+#: src/scm/guile-strings.c:129
+msgid "Default number of register rows to display."
+msgstr "Número de filas de registros a mostrar por defecto."
+
+#: src/scm/guile-strings.c:131
+msgid "Show Vertical Borders"
+msgstr "Mostrar Bordes Verticales"
+
+#: src/scm/guile-strings.c:132
+msgid "By default, show vertical borders on the cells."
+msgstr "Por defecto, mostrar bordes verticales en las celdas."
+
+#: src/scm/guile-strings.c:134
+msgid "Show Horizontal Borders"
+msgstr "Mostrar Bordes Horizontales"
+
+#: src/scm/guile-strings.c:135
+msgid "By default, show horizontal borders on the cells."
+msgstr "Por defecto, mostrar bordes horizontales en las celdas."
+
+#: src/scm/guile-strings.c:137
+#, fuzzy
+msgid "'Enter' moves to blank transaction"
+msgstr "Introducir una descripción de la transacción"
+
+#: src/scm/guile-strings.c:138
+msgid ""
+"If selected, move to the blank transaction after the user presses 'Enter'. "
+"Otherwise, move down one row."
+msgstr ""
+
+#: src/scm/guile-strings.c:140
+msgid "Confirm before changing reconciled"
+msgstr ""
+
+#: src/scm/guile-strings.c:141
+msgid ""
+"If selected, use a dialog to confirm a change to a reconciled transaction."
+msgstr ""
+
+#: src/scm/guile-strings.c:143
+#, fuzzy
+msgid "Register font"
+msgstr "Registrar"
+
+#: src/scm/guile-strings.c:144
+#, fuzzy
+msgid "The font to use in the register"
+msgstr "Mover un paso hacia adelante en la historia"
+
+#: src/scm/guile-strings.c:146
+#, fuzzy
+msgid "Register hint font"
+msgstr "Rangos de fechas registrados"
+
+#: src/scm/guile-strings.c:147
+msgid "The font used to show hints in the register"
+msgstr ""
+
+#: src/scm/guile-strings.c:148 src/scm/guile-strings.c:151
+#: src/scm/guile-strings.c:154 src/scm/guile-strings.c:157
+#: src/scm/guile-strings.c:160 src/scm/guile-strings.c:163
+#: src/scm/guile-strings.c:166 src/scm/guile-strings.c:169
+msgid "Register Colors"
+msgstr "Colores de Registro"
+
+#: src/scm/guile-strings.c:149
+#, fuzzy
+msgid "Header color"
+msgstr "Cabeceras"
+
+#: src/scm/guile-strings.c:150
+msgid "The header background color"
+msgstr "El color de fondo de la cabecera"
+
+#: src/scm/guile-strings.c:152
+#, fuzzy
+msgid "Primary color"
+msgstr "Clave Primaria"
+
+#: src/scm/guile-strings.c:153
+#, fuzzy
+msgid "The default background color for register rows"
+msgstr "El color del fondo por defecto para filas pares en modo simple"
+
+#: src/scm/guile-strings.c:155
+#, fuzzy
+msgid "Secondary color"
+msgstr "Clave Secundaria"
+
+#: src/scm/guile-strings.c:156
+#, fuzzy
+msgid "The default secondary background color for register rows"
+msgstr "El color del fondo por defecto para filas pares en modo simple"
+
+#: src/scm/guile-strings.c:158
+msgid "Primary active color"
+msgstr ""
+
+#: src/scm/guile-strings.c:159
+#, fuzzy
+msgid "The background color for the current register row"
+msgstr "El color de fondo para la transacción activa en modo único"
+
+#: src/scm/guile-strings.c:161
+#, fuzzy
+msgid "Secondary active color"
+msgstr "Clave Secundaria"
+
+#: src/scm/guile-strings.c:162
+#, fuzzy
+msgid "The secondary background color for the current register row"
+msgstr "El color del fondo por defecto para filas pares en modo simple"
+
+#: src/scm/guile-strings.c:164
+#, fuzzy
+msgid "Split color"
+msgstr "Partida"
+
+#: src/scm/guile-strings.c:165
+#, fuzzy
+msgid "The default background color for split rows in the register"
+msgstr "El color de fondo por defecto para filas impares en modo doble"
+
+#: src/scm/guile-strings.c:167
+msgid "Split active color"
+msgstr ""
+
+#: src/scm/guile-strings.c:168
+#, fuzzy
+msgid "The background color for the current split row in the register"
+msgstr "El color de fondo para la transacción activa en modo doble"
+
+#: src/scm/guile-strings.c:170
+msgid "Double mode colors alternate with transactions"
+msgstr "Colores del modo doble alternados con transacciones"
+
+#: src/scm/guile-strings.c:171
+#, fuzzy
+msgid ""
+"Alternate the primary and secondary colors with each transaction, not each "
+"row"
+msgstr "Alternar colores pares e impares en cada transacción, no en cada fila"
+
+#: src/scm/guile-strings.c:173
+msgid "Automatic credit card payments"
+msgstr ""
+
+#: src/scm/guile-strings.c:174
+msgid ""
+"After reconciling a credit card statement, prompt the user to enter a credit "
+"card payment"
+msgstr ""
+
+#: src/scm/guile-strings.c:175 src/scm/guile-strings.c:184
+#: src/scm/guile-strings.c:197 src/scm/guile-strings.c:206
+#: src/scm/guile-strings.c:209 src/scm/guile-strings.c:212
+#: src/scm/guile-strings.c:215 src/scm/guile-strings.c:218
+msgid "General"
+msgstr "General"
+
+#: src/scm/guile-strings.c:176
+msgid "Save Window Geometry"
+msgstr "Guardar Geometría de Ventana"
+
+#: src/scm/guile-strings.c:177
+msgid "Save window sizes and positions."
+msgstr "Guardar tamaños y posiciones de ventanas."
+
+#: src/scm/guile-strings.c:178
+msgid "Icons and Text"
+msgstr "Iconos y Texto"
+
+#: src/scm/guile-strings.c:179
+msgid "Show both icons and text"
+msgstr "Mostrar iconos y texto"
+
+#: src/scm/guile-strings.c:180
+msgid "Icons only"
+msgstr "Sólo iconos"
+
+#: src/scm/guile-strings.c:181
+msgid "Show icons only"
+msgstr "Mostrar sólo iconos"
+
+#: src/scm/guile-strings.c:182
+msgid "Text only"
+msgstr "Sólo texto"
+
+#: src/scm/guile-strings.c:183
+msgid "Show text only"
+msgstr "Mostrar sólo texto"
+
+#: src/scm/guile-strings.c:185
+msgid "Account Separator"
+msgstr "Separador de Cuenta"
+
+#: src/scm/guile-strings.c:186
+msgid "The character used to separate fully-qualified account names"
+msgstr ""
+"El carácter usado para separar nombres de cuentas totalmente cualificadas"
+
+#: src/scm/guile-strings.c:187
+msgid ": (Colon)"
+msgstr ": (Dos puntos)"
+
+#: src/scm/guile-strings.c:188
+msgid "Income:Salary:Taxable"
+msgstr "Renta:Salario:Imponible"
+
+#: src/scm/guile-strings.c:189
+msgid "/ (Slash)"
+msgstr "/ (Barra oblícua)"
+
+#: src/scm/guile-strings.c:190
+msgid "Income/Salary/Taxable"
+msgstr "Renta/Salario/Imponible"
+
+#: src/scm/guile-strings.c:191
+msgid "\\ (Backslash)"
+msgstr "\\ (Barra inversa)"
+
+#: src/scm/guile-strings.c:192
+msgid "Income\\Salary\\Taxable"
+msgstr "Renta\\Salario\\Imponible"
+
+#: src/scm/guile-strings.c:193
+msgid "- (Dash)"
+msgstr "- (Raya)"
+
+#: src/scm/guile-strings.c:194
+msgid "Income-Salary-Taxable"
+msgstr "Ingreso-Salario-Imponible"
+
+#: src/scm/guile-strings.c:195
+msgid ". (Period)"
+msgstr ". (Periodo)"
+
+#: src/scm/guile-strings.c:196
+msgid "Income.Salary.Taxable"
+msgstr "Renta.Salario.Imponible"
+
+#: src/scm/guile-strings.c:198
+msgid "Reversed-balance account types"
+msgstr "Tipos de cuenta de balanceo inverso"
+
+#: src/scm/guile-strings.c:199
+msgid "The types of accounts for which balances are sign-reversed"
+msgstr "Los tipos de cuentas para los que los balances son de signo cambiado"
+
+#: src/scm/guile-strings.c:200
+msgid "Income & Expense"
+msgstr "Ingresos y Gastos"
+
+#: src/scm/guile-strings.c:201
+msgid "Reverse Income and Expense Accounts"
+msgstr "Devoluciones y Cuentas de Gastos"
+
+#: src/scm/guile-strings.c:202
+msgid "Credit Accounts"
+msgstr "Cuentas de Crédito"
+
+#: src/scm/guile-strings.c:203
+msgid "Reverse Credit Card, Liability, Equity, and Income Accounts"
+msgstr ""
+"Cuentas de Tarjeta de Crédito Inversa, Responsabilidad, Equidad e Ingresos"
+
+#: src/scm/guile-strings.c:205
+msgid "Don't reverse any accounts"
+msgstr "No invertir ninguna cuenta"
+
+#: src/scm/guile-strings.c:207
+msgid "Use accounting labels"
+msgstr "Utilizar etiquetas contables"
+
+#: src/scm/guile-strings.c:208
+msgid "Only use 'debit' and 'credit' instead of informal synonyms"
+msgstr "Usar sólo 'débito' y 'crédito' en lugar de sinónimos vulgares"
+
+#: src/scm/guile-strings.c:210
+#, fuzzy
+msgid "Display \"Tip of the Day\""
+msgstr "Consejos del Día"
+
+#: src/scm/guile-strings.c:211
+msgid "Display hints for using GnuCash at startup"
+msgstr ""
+
+#: src/scm/guile-strings.c:213 src/scm/guile-strings.c:214
+#, fuzzy
+msgid "Display negative amounts in red"
+msgstr "¿Mostrar la cantidad?"
+
+#: src/scm/guile-strings.c:216
+msgid "Automatic Decimal Point"
+msgstr ""
+
+#: src/scm/guile-strings.c:217
+msgid ""
+"Automatically insert a decimal point into values that are entered without "
+"one."
+msgstr ""
+
+#: src/scm/guile-strings.c:219
+msgid "Auto Decimal Places"
+msgstr ""
+
+#: src/scm/guile-strings.c:220
+msgid "How many automatic decimal places will be filled in."
+msgstr ""
+
+#: src/scm/guile-strings.c:221 src/scm/report/guile-strings.c:62
+#: src/scm/report/guile-strings.c:81
+msgid "Report"
+msgstr "Informe"
+
+#: src/scm/guile-strings.c:222
+#, fuzzy, c-format
+msgid "Display the %s report"
+msgstr "Mostrar el informe de Presupuestos."
+
+#: src/scm/guile-strings.c:223
+msgid ""
+"Warning!! This is a DEVELOPMENT version of GnuCash.\n"
+"It probably has lots of bugs and unstable features!\n"
+"If you are looking for a stable personal finance application,\n"
+"you should use the latest release of GnuCash 1.4."
+msgstr ""
+
+#: src/scm/guile-strings.c:227
+msgid ""
+"The GnuCash online manual has lots of helpful information.\n"
+"You can access the manual under the Help menu."
+msgstr ""
+
+#: src/scm/guile-strings.c:229
+msgid ""
+"You can easily import your existing financial data from Quicken,\n"
+"MS Money or other programs that export QIF (Quicken Interchange\n"
+"Format) files.  Click the Import button in the main window tool\n"
+"bar and follow the instructions provided."
+msgstr ""
+
+#: src/scm/guile-strings.c:233
+msgid ""
+"Create new accounts by clicking the New button in the main window\n"
+"tool bar.  This will bring up a dialog box where you can enter\n"
+"account details.  For more information on choosing an account type\n"
+"or setting up a chart of accounts, please see the GnuCash online\n"
+"manual."
+msgstr ""
+
+#: src/scm/guile-strings.c:238
+msgid ""
+"Click the right mouse button in the main window to bring up the\n"
+"account menu options. Within each register, clicking the right\n"
+"mouse button brings up the transaction menu options."
+msgstr ""
+
+#: src/scm/guile-strings.c:241
+msgid ""
+"As you enter amounts in the register, you can use the GnuCash\n"
+"calculator to add, subtract, multiply and divide .  Simply type\n"
+"the first value, then select '+', '-','*', or '/'.  Type the\n"
+"second value and press Enter to record the calculated amount."
+msgstr ""
+
+#: src/scm/guile-strings.c:245
+msgid ""
+"If you are familiar with other financial programs such as Quicken,\n"
+"note that GnuCash uses accounts instead of categories to track\n"
+"income and expenses.  For more information on income and expense\n"
+"accounts, please see the GnuCash online manual."
+msgstr ""
+
+#: src/scm/guile-strings.c:249
+msgid ""
+"Quick-fill makes it easy to enter common transactions.  When you\n"
+"type the first letter(s) of a common transaction description,\n"
+"GnuCash will automatically complete the remainder of the\n"
+"transaction as it was last entered."
+msgstr ""
+
+#: src/scm/guile-strings.c:253
+msgid ""
+"Type the first letter(s) of an existing account name in the\n"
+"Transfer register column, and GnuCash will complete the name from\n"
+"your list of accounts. For subaccounts, type the first letter(s)\n"
+"of the parent account, followed by ':' and the first letter(s) of\n"
+"the subaccount (e.g. A:C for Assets:Cash.)"
+msgstr ""
+
+#: src/scm/guile-strings.c:258
+msgid ""
+"To enter multiple-split transactions such as a paycheck with\n"
+"multiple deductions, click the Split button in the tool bar.\n"
+"Or choose either Auto-Split Ledger or Transaction Journal\n"
+"from the Register|Style menu option."
+msgstr ""
+
+#: src/scm/guile-strings.c:262
+msgid ""
+"Want to see all your subaccount transactions in one register?\n"
+"From the main menu, highlight the parent account and select\n"
+"Accounts|Open Subaccounts from the menu."
+msgstr ""
+
+#: src/scm/guile-strings.c:265
+msgid ""
+"In the reconcile window, you can press the spacebar\n"
+"to mark transactions as reconciled.\n"
+"You can also press Tab and Shift-Tab to move between\n"
+"deposits and withdrawals."
+msgstr ""
+
+#: src/scm/guile-strings.c:269
+msgid ""
+"When entering check numbers in the register, you can\n"
+"type '+' to enter the next number or '-' to enter the previous\n"
+"number. You can use '+' and '-' to increment and decrement\n"
+"dates as well."
+msgstr ""
+
+#: src/scm/guile-strings.c:273
+msgid ""
+"You should back up your files regularly.  Just copy\n"
+"the GnuCash .xac file to a floppy or other backup device."
+msgstr ""
+
+#: src/scm/guile-strings.c:275
+msgid ""
+"To transfer funds between accounts with different currencies,\n"
+"you may need an intermediate currency trading account.\n"
+"Please see the GnuCash online manual for details"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:1 src/scm/report/guile-strings.c:4
+#: src/scm/report/guile-strings.c:7 src/scm/report/guile-strings.c:16
+#: src/scm/report/guile-strings.c:19 src/scm/report/guile-strings.c:22
+#: src/scm/report/guile-strings.c:25 src/scm/report/guile-strings.c:28
+#: src/scm/report/guile-strings.c:31 src/scm/report/guile-strings.c:93
+#: src/scm/report/guile-strings.c:96 src/scm/report/guile-strings.c:99
+#: src/scm/report/guile-strings.c:209 src/scm/report/guile-strings.c:212
+#: src/scm/report/guile-strings.c:215 src/scm/report/guile-strings.c:218
+#: src/scm/report/guile-strings.c:225
+msgid "Report Options"
+msgstr "Opciones de Informe"
+
+#: src/scm/report/guile-strings.c:2 src/scm/report/guile-strings.c:20
+#: src/scm/report/guile-strings.c:63 src/scm/report/guile-strings.c:97
+#: src/scm/report/guile-strings.c:213 src/scm/report/guile-strings.c:316
+msgid "To"
+msgstr "Hacia"
+
+#: src/scm/report/guile-strings.c:3
+#, fuzzy
+msgid "Report up to and including this date"
+msgstr "Informar de elementos hasta esta fecha, inclusive"
+
+#: src/scm/report/guile-strings.c:6
+#, fuzzy
+msgid "Report on these account(s)"
+msgstr "Hacer informe de transacción sobre esas cuentas"
+
+#: src/scm/report/guile-strings.c:8 src/scm/report/guile-strings.c:29
+msgid "Sub-Accounts"
+msgstr "Sub-Cuentas"
+
+#: src/scm/report/guile-strings.c:9
+#, fuzzy
+msgid "Include Sub-Accounts of each selected Account"
+msgstr "Incluir las subcuentas de todas las cuentas seleccionadas"
+
+#: src/scm/report/guile-strings.c:12 src/scm/report/guile-strings.c:50
+msgid "You have not selected an account."
+msgstr "No ha seleccionado ninguna cuenta."
+
+#: src/scm/report/guile-strings.c:13
+#, fuzzy, c-format
+msgid "Date: %s<br>Report for %s and all Sub-Accounts.<br>Accounts Total: %s"
+msgstr "Informe para %s y todas las subcuentas."
+
+#: src/scm/report/guile-strings.c:14
+#, c-format
+msgid "Date: %s<br>Report for %s.<br>Accounts Total: %s"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:15
+#, fuzzy
+msgid "Account Summary"
+msgstr "Separador de Cuenta"
+
+#: src/scm/report/guile-strings.c:17 src/scm/report/guile-strings.c:82
+#: src/scm/report/guile-strings.c:94 src/scm/report/guile-strings.c:210
+#: src/scm/report/guile-strings.c:314
+msgid "From"
+msgstr "Desde"
+
+#: src/scm/report/guile-strings.c:18 src/scm/report/guile-strings.c:211
+msgid "Report Items from this date"
+msgstr "Elementos de Informe desde esta fecha"
+
+#: src/scm/report/guile-strings.c:21 src/scm/report/guile-strings.c:214
+msgid "Report items up to and including this date"
+msgstr "Informar de elementos hasta esta fecha, inclusive"
+
+#: src/scm/report/guile-strings.c:24
+msgid "Do transaction report on this account"
+msgstr "Hacer informe de transcción sobre esta cuenta"
+
+#: src/scm/report/guile-strings.c:26
+msgid "Step Size"
+msgstr "Tamaño del Paso"
+
+#: src/scm/report/guile-strings.c:27
+msgid "The amount of time between data points"
+msgstr "La cantidad de tiempo entre puntos de datos"
+
+#: src/scm/report/guile-strings.c:30
+msgid "Include sub-accounts of all selected accounts"
+msgstr "Incluir las subcuentas de todas las cuentas seleccionadas"
+
+#: src/scm/report/guile-strings.c:32
+msgid "Plot Type"
+msgstr "Tipo de Trazo"
+
+#: src/scm/report/guile-strings.c:33
+msgid "The type of graph to generate"
+msgstr "El tipo de gráfico a generar"
+
+#: src/scm/report/guile-strings.c:34
+msgid "Nothing"
+msgstr "Nada"
+
+#: src/scm/report/guile-strings.c:35
+msgid "Make No Plot"
+msgstr "No Hacer Trazo"
+
+#: src/scm/report/guile-strings.c:36 src/scm/report/guile-strings.c:44
+msgid "Average"
+msgstr "Promedio"
+
+#: src/scm/report/guile-strings.c:37
+msgid "Average Balance"
+msgstr "Balance Promedio"
+
+#: src/scm/report/guile-strings.c:38 src/scm/report/guile-strings.c:39
+#: src/scm/report/guile-strings.c:47
+msgid "Net Gain"
+msgstr "Ganancia Neta"
+
+#: src/scm/report/guile-strings.c:40
+msgid "Gain/Loss"
+msgstr "Ganancias/Pérdidas"
+
+#: src/scm/report/guile-strings.c:41
+msgid "Gain And Loss"
+msgstr "Ganancias y Pérdidas"
+
+#: src/scm/report/guile-strings.c:42
+msgid "Beginning"
+msgstr "Apertura"
+
+#: src/scm/report/guile-strings.c:43
+msgid "Ending"
+msgstr "Cierre"
+
+#: src/scm/report/guile-strings.c:45
+msgid "Max"
+msgstr "Máx"
+
+#: src/scm/report/guile-strings.c:46
+msgid "Min"
+msgstr "Mín"
+
+#: src/scm/report/guile-strings.c:48
+msgid "Gain"
+msgstr "Ganancias"
+
+#: src/scm/report/guile-strings.c:49
+msgid "Loss"
+msgstr "Pérdidas"
+
+#: src/scm/report/guile-strings.c:51
+msgid ""
+"Please choose appropriate dates - the \"To\" date should be *after* the "
+"\"From\" date."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:52
+msgid "Period Ending"
+msgstr "Cierre de Periodo"
+
+#: src/scm/report/guile-strings.c:53
+#, c-format
+msgid "Report for %s and all subaccounts."
+msgstr "Informe para %s y todas las subcuentas."
+
+#: src/scm/report/guile-strings.c:54
+#, c-format
+msgid "Report for %s."
+msgstr "Informe para %s."
+
+#: src/scm/report/guile-strings.c:55
+msgid "Account Balance Tracker"
+msgstr "Rastreador de Balance de Cuenta"
+
+#: src/scm/report/guile-strings.c:56
+#, fuzzy
+msgid "Currency 1"
+msgstr "Moneda"
+
+#: src/scm/report/guile-strings.c:57
+#, fuzzy
+msgid "Currency 2"
+msgstr "Moneda"
+
+#: src/scm/report/guile-strings.c:58
+#, fuzzy
+msgid "Currency 3"
+msgstr "Moneda"
+
+#: src/scm/report/guile-strings.c:59
+#, fuzzy
+msgid "Currency 4"
+msgstr "Moneda"
+
+#: src/scm/report/guile-strings.c:60
+#, fuzzy
+msgid "Currency 5"
+msgstr "Moneda"
+
+#: src/scm/report/guile-strings.c:61
+#, fuzzy
+msgid "Exchange rate for "
+msgstr "Fecha límite"
+
+#: src/scm/report/guile-strings.c:64
+msgid "Calculate balance sheet up to this date"
+msgstr "Calcular hoja de balance a esta fecha"
+
+#: src/scm/report/guile-strings.c:65 src/scm/report/guile-strings.c:68
+#: src/scm/report/guile-strings.c:272 src/scm/report/guile-strings.c:275
+#: src/scm/report/guile-strings.c:278 src/scm/report/guile-strings.c:281
+#: src/scm/report/guile-strings.c:284 src/scm/report/guile-strings.c:287
+#: src/scm/report/guile-strings.c:290 src/scm/report/guile-strings.c:293
+#: src/scm/report/guile-strings.c:295 src/scm/report/guile-strings.c:304
+#: src/scm/report/guile-strings.c:307
+msgid "Display"
+msgstr "Mostrar"
+
+#: src/scm/report/guile-strings.c:67
+#, fuzzy
+msgid "Display the account type?"
+msgstr "¿Mostrar la cuenta?"
+
+#: src/scm/report/guile-strings.c:69
+#, fuzzy
+msgid "Foreign Currency"
+msgstr "Moneda"
+
+#: src/scm/report/guile-strings.c:70
+#, fuzzy
+msgid "Display the account's foreign currency amount?"
+msgstr "Mostrar informe de las Transacciones de Cuenta"
+
+#: src/scm/report/guile-strings.c:71 src/scm/report/guile-strings.c:74
+#: src/scm/report/guile-strings.c:77 src/scm/report/guile-strings.c:79
+#, fuzzy
+msgid "Currencies"
+msgstr "Moneda"
+
+#: src/scm/report/guile-strings.c:72
+#, fuzzy
+msgid "Report's currency"
+msgstr "Moneda por Defecto"
+
+#: src/scm/report/guile-strings.c:73
+msgid "All other currencies will get converted to this currency."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:75
+msgid "Other currencies' total"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:76
+#, fuzzy
+msgid "Show the total amount of other currencies?"
+msgstr "Introduzca el valor total de las acciones"
+
+#: src/scm/report/guile-strings.c:78
+msgid "Choose foreign currency to specify an exchange rate for"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:80
+msgid "Choose exchange rate for above currency"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:83 src/scm/report/guile-strings.c:315
+msgid "Start of reporting period"
+msgstr "Comienzo del periodo de informe"
+
+#: src/scm/report/guile-strings.c:84 src/scm/report/guile-strings.c:120
+msgid "Net"
+msgstr "Neto"
+
+#: src/scm/report/guile-strings.c:87
+msgid "(subaccounts)"
+msgstr "(subcuentas)"
+
+#: src/scm/report/guile-strings.c:89
+msgid "Balance Sheet"
+msgstr "Hoja de Balance"
+
+#: src/scm/report/guile-strings.c:90
+msgid "This page shows your net worth."
+msgstr "Esta página muestra sus pérdidas netas."
+
+#: src/scm/report/guile-strings.c:91
+msgid "Profit and Loss"
+msgstr "Beneficios y Pérdidas"
+
+#: src/scm/report/guile-strings.c:92
+msgid "This page shows your profits and losses."
+msgstr "Esta página muestra sus beneficios y pérdidas."
+
+#: src/scm/report/guile-strings.c:95
+msgid "Report start date"
+msgstr "Fecha de comienzo del informe"
+
+#: src/scm/report/guile-strings.c:98
+msgid "Report end date"
+msgstr "Fecha de fin del informe"
+
+#: src/scm/report/guile-strings.c:100
+msgid "View"
+msgstr "Vista"
+
+#: src/scm/report/guile-strings.c:101
+msgid "Type of budget report"
+msgstr "Tipo de informe de presupuestos"
+
+#: src/scm/report/guile-strings.c:102
+msgid "Full"
+msgstr "Completo"
+
+#: src/scm/report/guile-strings.c:103
+msgid "Show all columns"
+msgstr "Mostrar todas las columnas"
+
+#: src/scm/report/guile-strings.c:104
+msgid "Balancing"
+msgstr "Hacer Balance"
+
+#: src/scm/report/guile-strings.c:105
+msgid "A report useful for balancing the budget"
+msgstr "Un informe útil para balancear los presupuestos"
+
+#: src/scm/report/guile-strings.c:106
+msgid "Status"
+msgstr "Estado"
+
+#: src/scm/report/guile-strings.c:107
+msgid "How are you doing on your budget?"
+msgstr "¿Qué está haciendo en su presupuesto?"
+
+#: src/scm/report/guile-strings.c:108
+#, fuzzy
+msgid "Budget (Testing, Unfinished)"
+msgstr "Diáologo de Presupuestos (Probando)"
+
+#: src/scm/report/guile-strings.c:109
+#, fuzzy
+msgid "Test the budget dialog"
+msgstr "Probar el diálogo de presupuestos."
+
+#: src/scm/report/guile-strings.c:110
+#, fuzzy
+msgid "Portfolio Options"
+msgstr "Opciones de Informe"
+
+#: src/scm/report/guile-strings.c:111
+#, fuzzy
+msgid "At"
+msgstr "Auto"
+
+#: src/scm/report/guile-strings.c:112
+#, fuzzy
+msgid "Calculate stock portfolio value at this date"
+msgstr "Calcular hoja de balance a esta fecha"
+
+#: src/scm/report/guile-strings.c:113
+msgid "Name"
+msgstr "Nombre"
+
+#: src/scm/report/guile-strings.c:114
+msgid "Ticker"
+msgstr "Reloj"
+
+#: src/scm/report/guile-strings.c:116
+msgid "Recent Price"
+msgstr "Precio Reciente"
+
+#: src/scm/report/guile-strings.c:118
+msgid "Cost"
+msgstr "Coste"
+
+#: src/scm/report/guile-strings.c:119
+msgid "Profit/Loss"
+msgstr "Beneficios/Pérdidas"
+
+#: src/scm/report/guile-strings.c:121 src/scm/report/guile-strings.c:122
+msgid "Stock Portfolio Valuation"
+msgstr "Valoración de Cartera de Existencias"
+
+#: src/scm/report/guile-strings.c:123
+msgid "Stock Portfolio"
+msgstr "Cartera de Existencias"
+
+#: src/scm/report/guile-strings.c:124 src/scm/report/guile-strings.c:127
+#: src/scm/report/guile-strings.c:138 src/scm/report/guile-strings.c:142
+#: src/scm/report/guile-strings.c:145 src/scm/report/guile-strings.c:148
+#: src/scm/report/guile-strings.c:151 src/scm/report/guile-strings.c:154
+#: src/scm/report/guile-strings.c:157
+msgid "Hello, World!"
+msgstr "¡Hola, Mundo!"
+
+#: src/scm/report/guile-strings.c:125
+msgid "Boolean Option"
+msgstr "Opción Booleana"
+
+#: src/scm/report/guile-strings.c:126
+msgid "This is a boolean option."
+msgstr "Esta es una opción booleana."
+
+#: src/scm/report/guile-strings.c:128
+msgid "Multi Choice Option"
+msgstr "Opción de Selección Múltiple"
+
+#: src/scm/report/guile-strings.c:129
+msgid "This is a multi choice option."
+msgstr "Esta es una opción de selección múltiple."
+
+#: src/scm/report/guile-strings.c:130
+msgid "First Option"
+msgstr "Primera Opción"
+
+#: src/scm/report/guile-strings.c:131
+msgid "Help for first option"
+msgstr "Ayuda para la primera opción"
+
+#: src/scm/report/guile-strings.c:132
+msgid "Second Option"
+msgstr "Segunda Opción"
+
+#: src/scm/report/guile-strings.c:133
+msgid "Help for second option"
+msgstr "Ayuda para la segunda opción"
+
+#: src/scm/report/guile-strings.c:134
+msgid "Third Option"
+msgstr "Tercera Opción"
+
+#: src/scm/report/guile-strings.c:135
+msgid "Help for third option"
+msgstr "Ayuda para la tercera opción"
+
+#: src/scm/report/guile-strings.c:136
+msgid "Fourth Options"
+msgstr "Cuartas Opciones"
+
+#: src/scm/report/guile-strings.c:137
+msgid "The fourth option rules!"
+msgstr "¡Predomina la cuarta opción!"
+
+#: src/scm/report/guile-strings.c:139
+msgid "String Option"
+msgstr "Opción de Cadena"
+
+#: src/scm/report/guile-strings.c:140
+msgid "This is a string option"
+msgstr "Esta es una opción de cadena"
+
+#: src/scm/report/guile-strings.c:141 src/scm/report/guile-strings.c:179
+#: src/scm/report/guile-strings.c:195
+msgid "Hello, World"
+msgstr "Hola, Mundo"
+
+#: src/scm/report/guile-strings.c:143
+msgid "Just a Date Option"
+msgstr "Sólo una Opción de Fecha"
+
+#: src/scm/report/guile-strings.c:144
+msgid "This is a date option"
+msgstr "Esta es una opción de fecha"
+
+#: src/scm/report/guile-strings.c:146
+msgid "Time and Date Option"
+msgstr "Opción de Tiempo y Fecha"
+
+#: src/scm/report/guile-strings.c:147
+msgid "This is a date option with time"
+msgstr "Esta es una opción de fecha con hora"
+
+#: src/scm/report/guile-strings.c:149
+#, fuzzy
+msgid "Combo Date Option"
+msgstr "Opción de Tiempo y Fecha"
+
+#: src/scm/report/guile-strings.c:150
+#, fuzzy
+msgid "This is a combination date option"
+msgstr "Esta es una opción de fecha"
+
+#: src/scm/report/guile-strings.c:152
+#, fuzzy
+msgid "Relative Date Option"
+msgstr "Opción de Tiempo y Fecha"
+
+#: src/scm/report/guile-strings.c:153
+#, fuzzy
+msgid "This is a relative date option"
+msgstr "Esta es una opción de fecha"
+
+#: src/scm/report/guile-strings.c:155
+msgid "Number Option"
+msgstr "Opciones de Números"
+
+#: src/scm/report/guile-strings.c:156
+msgid "This is a number option."
+msgstr "Esta es una opción numérica"
+
+#: src/scm/report/guile-strings.c:158
+msgid "Background Color"
+msgstr "Color de Fondo"
+
+#: src/scm/report/guile-strings.c:159
+msgid "This is a color option"
+msgstr "Esta es una opción de color"
+
+#: src/scm/report/guile-strings.c:160 src/scm/report/guile-strings.c:163
+msgid "Hello Again"
+msgstr "Hola De Nuevo"
+
+#: src/scm/report/guile-strings.c:161
+msgid "An account list option"
+msgstr "Una opción de la lista de cuentas"
+
+#: src/scm/report/guile-strings.c:162
+msgid "This is an account list option"
+msgstr "Esta es una opción de lista de cuenta"
+
+#: src/scm/report/guile-strings.c:164
+msgid "A list option"
+msgstr "Una opción de lista"
+
+#: src/scm/report/guile-strings.c:165
+msgid "This is a list option"
+msgstr "Esta es una opción de lista"
+
+#: src/scm/report/guile-strings.c:166
+msgid "The Good"
+msgstr "El Bueno"
+
+#: src/scm/report/guile-strings.c:167
+msgid "Good option"
+msgstr "Opción buena"
+
+#: src/scm/report/guile-strings.c:168
+msgid "The Bad"
+msgstr "El Malo"
+
+#: src/scm/report/guile-strings.c:169
+msgid "Bad option"
+msgstr "Opcion incorrecta"
+
+#: src/scm/report/guile-strings.c:170
+msgid "The Ugly"
+msgstr "El Feo"
+
+#: src/scm/report/guile-strings.c:171
+msgid "Ugly option"
+msgstr "Opción antiestética"
+
+#: src/scm/report/guile-strings.c:172
+msgid "Testing"
+msgstr "Probando"
+
+#: src/scm/report/guile-strings.c:173
+msgid "Crash the report"
+msgstr "Estropear el informe"
+
+#: src/scm/report/guile-strings.c:174
+msgid ""
+"This is for testing. Your reports probably shouldn't have an option like "
+"this."
+msgstr ""
+"Esto es para pruebas. Sus informes probablemente no deberían tener una "
+"opción como esta."
+
+#: src/scm/report/guile-strings.c:175
+msgid "There are no selected accounts in the account list option."
+msgstr "No ha seleccionado cuentas en la opción de lista de cuentas."
+
+#: src/scm/report/guile-strings.c:176
+msgid "The accounts selected in the account list option are:"
+msgstr "Las cuentas seleccionadas en la opción de lista de cuentas son:"
+
+#: src/scm/report/guile-strings.c:177
+msgid "You have selected no values in the list option."
+msgstr "No ha selecciondo valores en la opción de lista."
+
+#: src/scm/report/guile-strings.c:178
+msgid "The items selected in the list option are:"
+msgstr "Los elementos seleccionados en las opciones de la lista son:"
+
+#: src/scm/report/guile-strings.c:180
+#, c-format
+msgid ""
+"This is a sample GnuCash report. See the guile (scheme) source code in %s "
+"for details on writing your own reports, or extending existing reports."
+msgstr ""
+"Este es un ejemplo de informe de GnuCash. Vea el código fuente de guile "
+"(esquema) en %s para detalles sobre la escritura de sus propios informes, o "
+"extender los informes existentes."
+
+#: src/scm/report/guile-strings.c:181
+#, c-format
+msgid ""
+"For help on writing reports, or to contribute your brand new, totally cool "
+"report, consult the mailing list %s. For details on subscribing to that "
+"list, see %s."
+msgstr ""
+"Para ayuda sobre la escritura de informes, o para contribuir con sus nuevos "
+"informes, totalmente fabulosos, consulte la lista de correo %s. Para "
+"detalles sobre cómo subscribirse, vea %s."
+
+#: src/scm/report/guile-strings.c:182
+#, c-format
+msgid "The current time is %s."
+msgstr "El tiempo actual es %s."
+
+#: src/scm/report/guile-strings.c:183
+#, c-format
+msgid "The boolean option is %s."
+msgstr "La opción booleana es %s."
+
+#: src/scm/report/guile-strings.c:184
+msgid "true"
+msgstr "cierto"
+
+#: src/scm/report/guile-strings.c:185
+msgid "false"
+msgstr "falso"
+
+#: src/scm/report/guile-strings.c:186
+#, c-format
+msgid "The multi-choice option is %s."
+msgstr "La opción multiseleccionada es %s."
+
+#: src/scm/report/guile-strings.c:187
+#, c-format
+msgid "The string option is %s."
+msgstr "La opción de cadena es %s."
+
+#: src/scm/report/guile-strings.c:188
+#, c-format
+msgid "The date option is %s."
+msgstr "La opción de fecha es %s."
+
+#: src/scm/report/guile-strings.c:189
+#, c-format
+msgid "The date and time option is %s."
+msgstr "La opción de fecha y hora es %s."
+
+#: src/scm/report/guile-strings.c:190
+#, fuzzy, c-format
+msgid "The relative date option is %s."
+msgstr "La opción de fecha es %s."
+
+#: src/scm/report/guile-strings.c:191
+#, fuzzy, c-format
+msgid "The combination date option is %s."
+msgstr "La opción de fecha es %s."
+
+#: src/scm/report/guile-strings.c:192
+#, c-format
+msgid "The number option is %s."
+msgstr "La opción de número es %s."
+
+#: src/scm/report/guile-strings.c:193
+#, c-format
+msgid "The number option formatted as currency is %s."
+msgstr "La opción de número formateado como moneda es %s."
+
+#: src/scm/report/guile-strings.c:194
+msgid "Have a nice day!"
+msgstr "¡Que tenga un buen día!"
+
+#: src/scm/report/guile-strings.c:196
+msgid "Opening Balance"
+msgstr "Balance de Apertura"
+
+#: src/scm/report/guile-strings.c:202 src/scm/report/guile-strings.c:288
+msgid "Other Account"
+msgstr "Otra Cuenta"
+
+#: src/scm/report/guile-strings.c:217
+msgid "Do transaction report on these accounts"
+msgstr "Hacer informe de transacción sobre esas cuentas"
+
+#: src/scm/report/guile-strings.c:219
+msgid "Style"
+msgstr "Estilo"
+
+#: src/scm/report/guile-strings.c:220
+msgid "Report style"
+msgstr "Estilo de informe"
+
+#: src/scm/report/guile-strings.c:221
+msgid "Multi-Line"
+msgstr "Multi-Línea"
+
+#: src/scm/report/guile-strings.c:222
+msgid "Display N lines"
+msgstr "Mostrar N líneas"
+
+#: src/scm/report/guile-strings.c:223 src/scm/report/guile-strings.c:300
+msgid "Single"
+msgstr "Único"
+
+#: src/scm/report/guile-strings.c:224
+msgid "Display 1 line"
+msgstr "Mostrar 1 línea"
+
+#: src/scm/report/guile-strings.c:226
+msgid "Only positive Entries"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:227
+msgid "Display only positive Entries?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:228
+msgid "Account (w/subtotal)"
+msgstr "Cuenta (c/subtotal)"
+
+#: src/scm/report/guile-strings.c:229
+msgid "Sort & subtotal by account"
+msgstr "Ordenar y subtotal por cuenta"
+
+#: src/scm/report/guile-strings.c:231
+msgid "Sort by date"
+msgstr "Ordenar por fecha"
+
+#: src/scm/report/guile-strings.c:232
+msgid "Date (subtotal monthly)"
+msgstr "Fecha (subtotal mensual)"
+
+#: src/scm/report/guile-strings.c:233
+msgid "Sort by date & subtotal each month"
+msgstr "Ordenar por fecha y subtotal cada mes"
+
+#: src/scm/report/guile-strings.c:234
+msgid "Date (subtotal yearly)"
+msgstr "Fecha (subtotal anual)"
+
+#: src/scm/report/guile-strings.c:235
+msgid "Sort by date & subtotal each year"
+msgstr "Ordenar por fecha y subtotal cada año"
+
+#: src/scm/report/guile-strings.c:236
+msgid "Time"
+msgstr "Tiempo"
+
+#: src/scm/report/guile-strings.c:237
+msgid "Sort by exact entry time"
+msgstr "Ordenar por tiempo de entrada exacto"
+
+#: src/scm/report/guile-strings.c:238
+msgid "Transfer from/to"
+msgstr "Transferir desde/hacia"
+
+#: src/scm/report/guile-strings.c:239
+msgid "Sort by account transferred from/to's name"
+msgstr "Ordenar por nombre de cuenta transferida desde/hacia"
+
+#: src/scm/report/guile-strings.c:240
+msgid "Transfer from/to (w/subtotal)"
+msgstr "Transferir desde/hacia (c/subtotal)"
+
+#: src/scm/report/guile-strings.c:241
+msgid "Sort and subtotal by account transferred from/to's name"
+msgstr "Ordenar y subtotal de cuenta por nombre desde/hacia"
+
+#: src/scm/report/guile-strings.c:243
+msgid "Sort by amount"
+msgstr "Ordenar por cantidad"
+
+#: src/scm/report/guile-strings.c:245
+msgid "Sort by description"
+msgstr "Ordenar por descripción"
+
+#: src/scm/report/guile-strings.c:247
+msgid "Sort by check/transaction number"
+msgstr "Ordenar por cheque/número de transacción"
+
+#: src/scm/report/guile-strings.c:249
+msgid "Sort by memo"
+msgstr "Ordenar por memo"
+
+#: src/scm/report/guile-strings.c:251
+msgid "Do not sort"
+msgstr "No ordenar"
+
+#: src/scm/report/guile-strings.c:252 src/scm/report/guile-strings.c:255
+#: src/scm/report/guile-strings.c:262 src/scm/report/guile-strings.c:265
+msgid "Sorting"
+msgstr "Ordenación"
+
+#: src/scm/report/guile-strings.c:253
+msgid "Primary Key"
+msgstr "Clave Primaria"
+
+#: src/scm/report/guile-strings.c:254
+msgid "Sort by this criterion first"
+msgstr "Ordenar por este criterio primero"
+
+#: src/scm/report/guile-strings.c:256
+msgid "Primary Sort Order"
+msgstr "Tipo de Ordenación Primaria"
+
+#: src/scm/report/guile-strings.c:257
+msgid "Order of primary sorting"
+msgstr "Tipo de ordenación de primaria"
+
+#: src/scm/report/guile-strings.c:258 src/scm/report/guile-strings.c:268
+msgid "Ascending"
+msgstr "Ascendente"
+
+#: src/scm/report/guile-strings.c:259 src/scm/report/guile-strings.c:269
+msgid "smallest to largest, earliest to latest"
+msgstr "menor a mayor, reciente a obsoleto"
+
+#: src/scm/report/guile-strings.c:260 src/scm/report/guile-strings.c:270
+msgid "Descending"
+msgstr "Descendente"
+
+#: src/scm/report/guile-strings.c:261 src/scm/report/guile-strings.c:271
+msgid "largest to smallest, latest to earliest"
+msgstr "mayor al menor, obsoleto a reciente"
+
+#: src/scm/report/guile-strings.c:263
+msgid "Secondary Key"
+msgstr "Clave Secundaria"
+
+#: src/scm/report/guile-strings.c:264
+msgid "Sort by this criterion second"
+msgstr "Ordenar por este criterio en segundo lugar"
+
+#: src/scm/report/guile-strings.c:266
+msgid "Secondary Sort Order"
+msgstr "Tipo de Orden Secundario"
+
+#: src/scm/report/guile-strings.c:267
+msgid "Order of Secondary sorting"
+msgstr "Tipo de ordenación Secundaria"
+
+#: src/scm/report/guile-strings.c:274
+msgid "Display the date?"
+msgstr "¿Mostrar la fecha?"
+
+#: src/scm/report/guile-strings.c:277
+msgid "Display the cheque number?"
+msgstr "¿Mostrar el número de cheque?"
+
+#: src/scm/report/guile-strings.c:280
+msgid "Display the description?"
+msgstr "¿Mostrar la descripción?"
+
+#: src/scm/report/guile-strings.c:283
+msgid "Display the memo?"
+msgstr "¿Mostrar el memo?"
+
+#: src/scm/report/guile-strings.c:286
+msgid "Display the account?"
+msgstr "¿Mostrar la cuenta?"
+
+#: src/scm/report/guile-strings.c:289
+msgid ""
+"Display the other account?  (if this is a split transaction, this parameter "
+"is guessed)."
+msgstr ""
+"¿Mostrar la otra cuenta? (si esta es una partida de transacción, este "
+"parámetro es invitado)."
+
+#: src/scm/report/guile-strings.c:292
+#, fuzzy
+msgid "Display the number of shares?"
+msgstr "Coincidir número de acciones"
+
+#: src/scm/report/guile-strings.c:297
+msgid "Display the amount?"
+msgstr "¿Mostrar la cantidad?"
+
+#: src/scm/report/guile-strings.c:299
+msgid "No amount display"
+msgstr "No mostrar cantidad"
+
+#: src/scm/report/guile-strings.c:301
+msgid "Single Column Display"
+msgstr "Mostrar Sólo Una Columna"
+
+#: src/scm/report/guile-strings.c:302
+msgid "Double"
+msgstr "Doble"
+
+#: src/scm/report/guile-strings.c:303
+msgid "Two Column Display"
+msgstr "Mostrar Dos Columnas"
+
+#: src/scm/report/guile-strings.c:305
+msgid "Headers"
+msgstr "Cabeceras"
+
+#: src/scm/report/guile-strings.c:306
+msgid "Display the headers?"
+msgstr "¿Mostrar las cabeceras?"
+
+#: src/scm/report/guile-strings.c:308
+msgid "Totals"
+msgstr "Totales"
+
+#: src/scm/report/guile-strings.c:309
+msgid "Display the totals?"
+msgstr "¿Mostrar los totales?"
+
+#: src/scm/report/guile-strings.c:310 src/scm/report/guile-strings.c:311
+msgid "Transaction Report"
+msgstr "Informe de Transacción"
+
+#: src/scm/report/guile-strings.c:312
+#, fuzzy
+msgid "TAX Report Options"
+msgstr "Opciones de Informe"
+
+#: src/scm/report/guile-strings.c:313
+msgid "Hierarchical Options"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:317
+msgid "End of reporting period"
+msgstr "Fin del periodo del informe"
+
+#: src/scm/report/guile-strings.c:318
+#, fuzzy
+msgid "Alternate Period"
+msgstr "Periodo de Gracia:"
+
+#: src/scm/report/guile-strings.c:319
+msgid "Overide or modify From: & To:"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:320
+msgid "Use From - To"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:321
+msgid "Use From - To period"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:322
+msgid "1st Est Tax Quarter"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:323
+msgid "Jan 1 - Mar 31"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:324
+msgid "2nd Est Tax Quarter"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:325
+msgid "Apr 1 - May 31"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:326
+msgid "3rd Est Tax Quarter"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:327
+msgid "Jun 1 - Aug 31"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:328
+msgid "4th Est Tax Quarter"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:329
+msgid "Sep 1 - Dec 31"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:330 src/scm/report/guile-strings.c:331
+#, fuzzy
+msgid "Last Year"
+msgstr "Año"
+
+#: src/scm/report/guile-strings.c:332
+msgid "Last Yr 1st Est Tax Qtr"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:333
+msgid "Jan 1 - Mar 31, Last year"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:334
+msgid "Last Yr 2nd Est Tax Qtr"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:335
+msgid "Apr 1 - May 31, Last year"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:336
+msgid "Last Yr 3rd Est Tax Qtr"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:337
+msgid "Jun 1 - Aug 31, Last year"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:338
+msgid "Last Yr 4th Est Tax Qtr"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:339
+msgid "Sep 1 - Dec 31, Last year"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:340
+#, fuzzy
+msgid "Select Accounts (none = all)"
+msgstr "Seleccionar Cuenta"
+
+#: src/scm/report/guile-strings.c:341
+#, fuzzy
+msgid "Select accounts"
+msgstr "Seleccionar Cuenta"
+
+#: src/scm/report/guile-strings.c:342
+msgid "Suppress $0.00 values"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:343
+msgid "$0.00 valued Accounts won't be printed."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:344
+#, fuzzy
+msgid "Print Full account names"
+msgstr "Cuenta QIF"
+
+#: src/scm/report/guile-strings.c:345
+#, fuzzy
+msgid "Print all Parent account names"
+msgstr "Nombre de Cuenta GNUCash"
+
+#: src/scm/report/guile-strings.c:346
+msgid "Set/Reset Tax Status"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:347
+#, fuzzy
+msgid "Set/Reset Selected Account Tax Status"
+msgstr "Borrar cuenta seleccionada"
+
+#: src/scm/report/guile-strings.c:348 src/scm/report/guile-strings.c:349
+#, fuzzy
+msgid "No Change"
+msgstr "Cambiado"
+
+#: src/scm/report/guile-strings.c:350
+#, fuzzy
+msgid "Set Tax Related"
+msgstr "Colocar Rango de Fechas"
+
+#: src/scm/report/guile-strings.c:351
+#, fuzzy
+msgid "Set Selected accounts as Tax Related"
+msgstr "Borrar cuenta seleccionada"
+
+#: src/scm/report/guile-strings.c:352
+msgid "Reset Tax Related"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:353
+msgid "Reset Selected accounts as not Tax Related"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:354
+#, fuzzy
+msgid "Set Tax Related & sub-accounts"
+msgstr "Borrar cuenta seleccionada"
+
+#: src/scm/report/guile-strings.c:355
+msgid "Set Selected & sub-accounts as Tax Related"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:356
+#, fuzzy
+msgid "Reset Tax Related & sub-accounts"
+msgstr "Borrar cuenta seleccionada"
+
+#: src/scm/report/guile-strings.c:357
+msgid "Reset Selected & sub-accounts as not Tax Related"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:358 src/scm/report/guile-strings.c:361
+#: src/scm/report/guile-strings.c:364 src/scm/report/guile-strings.c:367
+#: src/scm/report/guile-strings.c:370
+msgid "TXF Export Init"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:362
+msgid "Print extended TXF HELP messages"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:363
+msgid "Print TXF HELP"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:365
+msgid "For INCOME accounts, select here.   < ^ # see help"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:366
+msgid "Select a TXF Income catagory"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:368
+msgid "For EXPENSE accounts, select here.   < ^ # see help"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:369
+msgid "Select a TXF Expense catagory"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:371
+msgid "< ^   Payer Name source"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:372
+msgid "Select the source of the Payer Name"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:373
+#, fuzzy
+msgid "Default"
+msgstr "Seleccionar por Defecto"
+
+#: src/scm/report/guile-strings.c:374
+#, fuzzy
+msgid "Use Indicated Default"
+msgstr "Seleccionar por Defecto"
+
+#: src/scm/report/guile-strings.c:375
+#, fuzzy
+msgid "< Current Account"
+msgstr "Cuenta Padre"
+
+#: src/scm/report/guile-strings.c:376
+#, fuzzy
+msgid "Use Current Account Name"
+msgstr "Cuenta Padre"
+
+#: src/scm/report/guile-strings.c:377
+#, fuzzy
+msgid "^ Parent Account"
+msgstr "Cuenta Padre"
+
+#: src/scm/report/guile-strings.c:378
+#, fuzzy
+msgid "Use Parent Account Name"
+msgstr "Cuenta Padre"
+
+#: src/scm/report/guile-strings.c:379
+msgid ""
+"ERROR: There are duplicate TXF codes assigned to some accounts.  Only TXF "
+"codes prefixed with \"&lt;\" or \"^\" may be repeated."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:380 src/scm/report/guile-strings.c:396
+msgid "Hierarchical Accounts Report"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:381
+msgid "Detailed TXF Category Descriptions"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:382
+#, fuzzy
+msgid "Period From:"
+msgstr "Periodo:"
+
+#: src/scm/report/guile-strings.c:383
+msgid "To:"
+msgstr "Hasta:"
+
+#: src/scm/report/guile-strings.c:384
+msgid "Blue items are exportable to a TXF file"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:385
+msgid "Blue items were exported to file: \""
+msgstr ""
+
+#: src/scm/report/guile-strings.c:386
+msgid "Blue items were <b>NOT</b> exported to txf file!"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:387
+msgid "Tax Form \\ TXF Code"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:390
+#, fuzzy
+msgid "(Sub "
+msgstr "Cancelar"
+
+#: src/scm/report/guile-strings.c:391
+msgid "Extended TXF Help messages"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:393
+msgid "No accounts were found."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:394
+msgid ""
+"No Tax Related accounts were found. Click \"Parameters\" to set some  with "
+"the \"Set/Reset Tax Status:\" parameter."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:395
+msgid "Hierarchical"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:397 src/scm/report/guile-strings.c:400
+#: src/scm/report/guile-strings.c:403
+#, fuzzy
+msgid "This page shows your Taxable Income and Deductable Expenses."
+msgstr "Esta página muestra sus beneficios y pérdidas."
+
+#: src/scm/report/guile-strings.c:398
+#, fuzzy
+msgid "Tax"
+msgstr "Máx"
+
+#: src/scm/report/guile-strings.c:399 src/scm/report/guile-strings.c:402
+#, fuzzy
+msgid "Taxable Income / Deductible Expenses"
+msgstr "Esta página muestra sus beneficios y pérdidas."
+
+#: src/scm/report/guile-strings.c:401
+#, fuzzy
+msgid "Export .TXF"
+msgstr "Exportar A"
+
+#, fuzzy
+#~ msgid "Display the shares price?"
+#~ msgstr "¿Mostrar las cabeceras?"
+
+#~ msgid "_Stock Portfolio"
+#~ msgstr "Cartera de Existencias"
+
+#~ msgid "Multi Line"
+#~ msgstr "Línea Múltiple"
+
+#~ msgid "Display the Hello, World report."
+#~ msgstr "Mostrar el informe Hola, Mundo."
+
+#~ msgid "_Profit and Loss"
+#~ msgstr "_Beneficios y Pérdidas"
+
+#~ msgid "_Budget"
+#~ msgstr "_Presupuestos"
+
+#, fuzzy
+#~ msgid "Display the Account Summary report."
+#~ msgstr "Mostrar informe de las Transacciones de Cuenta"
+
+#, fuzzy
+#~ msgid "Acc_ount Balance Tracker"
+#~ msgstr "Rastreador de Balance de Cuenta"
+
+#~ msgid "Day"
+#~ msgstr "Día"
+
+#~ msgid "Double line mode with a multi-line cursor"
+#~ msgstr "Modo de dobles líneas con un cursor multi-línea"
+
+#~ msgid "Single line mode with a multi-line cursor"
+#~ msgstr "Modo de línea simple con un cursor multi-línea"
+
+#~ msgid "Upper Limit"
+#~ msgstr "Límite Superior"
+
+#~ msgid "Week"
+#~ msgstr "Semana"
+
+#~ msgid "Date Format Display"
+#~ msgstr "Mostrar Formato de Fecha"
+
+#~ msgid "Show transactions on two lines with more information"
+#~ msgstr "Mostrar las transacciones en dos líneas con más información"
+
+#~ msgid "Account fields to display"
+#~ msgstr "Campos de cuenta a mostrar"
+
+#~ msgid "Show transactions on single lines"
+#~ msgstr "Mostrr transacciones en una sola línea"
+
+#~ msgid "Depreciation"
+#~ msgstr "Depreciación"
+
+#~ msgid "Toolbar Buttons"
+#~ msgstr "Botones de la Barra de Herramientas"
+
+#~ msgid "Period"
+#~ msgstr "Periodo"
+
+#~ msgid "Save Translatable Strings"
+#~ msgstr "Guardar Cadenas Traducibles"
+
+#~ msgid "Save strings that need to be translated"
+#~ msgstr "Guardar cadenas que se necistan traducir"
+
+#, fuzzy
+#~ msgid "A_ccount Summary"
+#~ msgstr "Separador de Cuenta"
+
+#~ msgid "Date Format"
+#~ msgstr "Formato de Fecha"
+
+#~ msgid "Single Line"
+#~ msgstr "Línea Simple"
+
+#~ msgid "_Transaction Report"
+#~ msgstr "Informe de _Transacción"
+
+#~ msgid "Ba_lance sheet"
+#~ msgstr "Hoja de Ba_lance"
+
+#, fuzzy
+#~ msgid "  To: "
+#~ msgstr "Hasta:"
+
+#~ msgid "_Reports"
+#~ msgstr "_Informes"
+
+#~ msgid "Year"
+#~ msgstr "Año"
+
+#~ msgid "Month"
+#~ msgstr "Mes"
+
+#~ msgid "Two Week"
+#~ msgstr "Dos Semanas"
+
+#~ msgid "Balance sheet"
+#~ msgstr "Hoja de balance"
+
+#~ msgid "Appreciation"
+#~ msgstr "Apreciación"
+
+#~ msgid "Actual"
+#~ msgstr "Actual"
+
+#~ msgid "Display the Budget report."
+#~ msgstr "Mostrar el informe de Presupuestos."
+
+#~ msgid "_Hello, World"
+#~ msgstr "_Hola, Mundo"
+
+#~ msgid "Display the Stock Portfolio report."
+#~ msgstr "Mostrar informe de Cartera de Existencias."
+
+#~ msgid ""
+#~ "Show transactions on multiple lines with one line for each split in the "
+#~ "transaction"
+#~ msgstr ""
+#~ "Mostrar transacciones sobre líneas múltiples con una línea para cada partida "
+#~ "de la transacción"
+
+#~ msgid "Choose whether to display icons, text, or both for toolbar buttons"
+#~ msgstr ""
+#~ "Seleccionar entre mostrar iconos, texto o ambos en la barra de botones"
+
+#~ msgid "Display the Transaction Report report."
+#~ msgstr "Mostrar el informe Informe de Transacción."
+
+#~ msgid "Auto Double"
+#~ msgstr "Auto Doble"
+
+#~ msgid "Lower Limit"
+#~ msgstr "Límite Inferior"
+
+#~ msgid "Display the Profit and Loss report."
+#~ msgstr "Mostrar el informe de Beneficios y Pérdidas."
+
+#~ msgid "Display the Account Balance Tracker report."
+#~ msgstr "Mostrar el informe de Rastreador de Balance de Cuenta."
+
+#~ msgid "2Week"
+#~ msgstr "2Semanas"
+
+#~ msgid "Display the Balance sheet report."
+#~ msgstr "Mostrar el informe de la hoja de Balance"
+
+#~ msgid "Extensions"
+#~ msgstr "Extensiones"
+
 #, fuzzy
 #~ msgid ""
 #~ "This is a sample GnuCash report.\n"
@@ -4944,9 +5182,6 @@ msgstr "Introduzca el número de acciones vendidas"
 #~ msgid "From:"
 #~ msgstr "Desde:"
 
-#~ msgid "To:"
-#~ msgstr "Hasta:"
-
 #~ msgid "Preview"
 #~ msgstr "Previsualización"
 
@@ -4964,9 +5199,6 @@ msgstr "Introduzca el número de acciones vendidas"
 
 #~ msgid "This report has no parameters."
 #~ msgstr "Este informe no tiene parámetros."
-
-#~ msgid "Export To"
-#~ msgstr "Exportar A"
 
 #~ msgid ""
 #~ "There was an error opening the file\n"
@@ -5317,17 +5549,11 @@ msgstr "Introduzca el número de acciones vendidas"
 #~ msgid "Create"
 #~ msgstr "Crear"
 
-#~ msgid "Decrease"
-#~ msgstr "Disminuir"
-
 #~ msgid "Deficit"
 #~ msgstr "Déficit"
 
 #~ msgid "File"
 #~ msgstr "Archivo"
-
-#~ msgid "Increase"
-#~ msgstr "Incrementar"
 
 #~ msgid "License"
 #~ msgstr "Licencia"
@@ -5386,9 +5612,6 @@ msgstr "Introduzca el número de acciones vendidas"
 
 #~ msgid "File Info"
 #~ msgstr "Información de Archivo"
-
-#~ msgid "Auto"
-#~ msgstr "Auto"
 
 #~ msgid "Files"
 #~ msgstr "Archivos"

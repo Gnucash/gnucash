@@ -131,7 +131,6 @@
 
 (define (make-report-spec . args)
   (let ((spec (apply report-spec-constructor args)))
-    (gnc:register-translatable-strings (report-spec-get-header spec))
     spec))
 
 (define report-spec-get-header

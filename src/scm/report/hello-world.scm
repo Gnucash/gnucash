@@ -369,9 +369,8 @@ For details on subscribing to that list, see %s.")
 
    ;; The name of this report. This will be used, among other things,
    ;; for making its menu item in the main menu. You need to use the
-   ;; untranslated value here! It will be registered and translated
-   ;; elsewhere.
-   'name "Hello, World"
+   ;; untranslated value here!
+   'name (N_ "Hello, World")
 
    ;; The options generator function defined above.
    'options-generator options-generator

@@ -30,8 +30,6 @@
          path
          ;; The script to call when the menu item is selected
          script)
-  (if (gnc:debugging?)
-      (gnc:register-translatable-strings name documentation-string))
   (vector type
           name
           documentation-string
@@ -63,14 +61,14 @@
   (define menu (gnc:make-menu "Extensions" (list "_Settings")))
 
   (define export-item
-    (gnc:make-menu-item "Export data as text (Danger: Unfinished)"
-                        "Export data as text."
+    (gnc:make-menu-item (N_ "Export data as text (Danger: Unfinished)")
+                        (N_ "Export data as text.")
                         (list "Extensions" "")
                         (lambda () (gnc:main-win-account-group-write win))))
 
   (define progress-item
-    (gnc:make-menu-item "Test progress dialog"
-                        "Test progress dialog"
+    (gnc:make-menu-item (N_ "Test progress dialog")
+                        (N_ "Test progress dialog")
                         (list "Extensions" "")
                         (lambda ()
                           (let ((dialog (gnc:progress-dialog-new
@@ -92,20 +90,9 @@
                             (gnc:progress-dialog-finish dialog)
                             (gnc:progress-dialog-destroy dialog)))))
 
-  (define strings-item
-    (gnc:make-menu-item
-     "Save Translatable Strings"
-     "Save strings that need to be translated"
-     (list "Extensions" "")
-     (lambda ()
-       (let ((file-name (gnc:file-selection-dialog
-                         "Select file to save strings in" ".txt" "")))
-         (if file-name (gnc:save-translatable-strings file-name))))))
-
   (gnc:add-extension menu)
   (gnc:add-extension export-item)
-  (gnc:add-extension progress-item)
-  (gnc:add-extension strings-item))
+  (gnc:add-extension progress-item))
 
 (if (gnc:debugging?)
     (gnc:hook-add-dangler gnc:*main-window-opened-hook*
@@ -119,7 +106,7 @@
   (define name-hash (make-hash-table 23))
 
   (define (add-name raw-name)
-    (let* ((name (gnc:_ raw-name))
+    (let* ((name (_ raw-name))
            (length (string-length name)))
 
       (define (try-at-k k)
@@ -138,9 +125,6 @@
                     (hash-set! name-hash raw-name new-name)
                     new-name)
                   (try-at-k (+ k 1))))))
-
-      (if (gnc:debugging?)
-          (gnc:register-translatable-strings raw-name))
 
       (try-at-k 0)))
 

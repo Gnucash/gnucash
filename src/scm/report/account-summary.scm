@@ -218,7 +218,7 @@
    ;; version
    'version 1
    ;; Name
-   'name "Account Summary"
+   'name (N_ "Account Summary")
    ;; Options
    'options-generator accsum-options-generator
    ;; renderer

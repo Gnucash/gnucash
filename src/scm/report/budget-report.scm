@@ -1297,8 +1297,8 @@
 (let ()
   (define budget-item
     (gnc:make-menu-item
-     "Budget (Testing, Unfinished)"
-     "Test the budget dialog"
+     (N_ "Budget (Testing, Unfinished)")
+     (N_ "Test the budget dialog")
      (list "_Tools" "")
      ;; FIXME: need update.
      (lambda ()

@@ -54,24 +54,14 @@
 
 (define gnc:*tip-list* '())
 
-(define (string-fold list-strings concatenator)
-  (if (null? list-strings)
-      ""
-     (string-append (car list-strings) concatenator
-                    (string-fold (cdr list-strings) concatenator))))
-
-
 (define (gnc:read-tips)
   (let ((in-port (open-input-file 
 		  (gnc:find-in-directories 
 		   (gnc:config-var-value-get gnc:*tip-file*)
 		   (gnc:config-var-value-get gnc:*load-path*)))))
 	(set! gnc:*tip-list* (read in-port))
-        (if (gnc:debugging?)
-            (for-each (lambda (list-strings)
-                        (gnc:register-translatable-strings
-                         (string-fold list-strings "\n")))
-                      gnc:*tip-list*))
+        (set! gnc:*tip-list*
+              (map (lambda (pair) (cadr pair)) gnc:*tip-list*))
 	(if (not (= (length gnc:*tip-list*)
                     (gnc:config-var-value-get gnc:*current-tip-number*)))
 	    (begin 
@@ -84,10 +74,8 @@
 	#f))
 
 (define (gnc:get-current-tip)
-  (gnc:_ (string-fold
-          (list-ref gnc:*tip-list*
-                    (gnc:config-var-value-get gnc:*current-tip-number*))
-          "\n")))
+  (_ (list-ref gnc:*tip-list*
+               (gnc:config-var-value-get gnc:*current-tip-number*))))
 
 (define (gnc:increment-tip-number)
   (let ((new-value (+ (gnc:config-var-value-get gnc:*current-tip-number*) 1)))

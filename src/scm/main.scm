@@ -34,7 +34,6 @@
   (gnc:load "srfi/srfi-1.r5rs.scm")
 
   ;; Now we can load a bunch of files.
-
   (gnc:depend "doc.scm")
   (gnc:depend "extensions.scm")
   (gnc:depend "text-export.scm")

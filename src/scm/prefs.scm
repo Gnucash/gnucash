@@ -78,7 +78,9 @@
                     (build-path (getenv "HOME") ".gnucash" "config.auto")
                     (string-append
                      "(gnc:config-file-format-version 1)\n\n"
-                     "; GnuCash Configuration Options\n")))
+                     ";"
+                     (_ "GnuCash Configuration Options")
+                     "\n")))
 
 (define (gnc:config-file-format-version version) #t)
 
@@ -86,85 +88,79 @@
 ;;;;;; Create default options and config vars
 
 (define gnc:*debit-strings*
-  (list '(NO_TYPE   . "Funds In")
-        '(BANK      . "Deposit")
-        '(CASH      . "Receive")
-        '(CREDIT    . "Payment")
-        '(ASSET     . "Increase")
-        '(LIABILITY . "Debit")
-        '(STOCK     . "Buy")
-        '(MUTUAL    . "Buy")
-        '(CURRENCY  . "Buy")
-        '(INCOME    . "Charge")
-        '(EXPENSE   . "Expense")
-        '(EQUITY    . "Debit")))
+  (list (cons 'NO_TYPE   (N_ "Funds In"))
+        (cons 'BANK      (N_ "Deposit"))
+        (cons 'CASH      (N_ "Receive"))
+        (cons 'CREDIT    (N_ "Payment"))
+        (cons 'ASSET     (N_ "Increase"))
+        (cons 'LIABILITY (N_ "Debit"))
+        (cons 'STOCK     (N_ "Buy"))
+        (cons 'MUTUAL    (N_ "Buy"))
+        (cons 'CURRENCY  (N_ "Buy"))
+        (cons 'INCOME    (N_ "Charge"))
+        (cons 'EXPENSE   (N_ "Expense"))
+        (cons 'EQUITY    (N_ "Debit"))))
 
 (define gnc:*credit-strings*
-  (list '(NO_TYPE   . "Funds Out")
-        '(BANK      . "Withdrawal")
-        '(CASH      . "Spend")
-        '(CREDIT    . "Charge")
-        '(ASSET     . "Decrease")
-        '(LIABILITY . "Credit")
-        '(STOCK     . "Sell")
-        '(MUTUAL    . "Sell")
-        '(CURRENCY  . "Sell")
-        '(INCOME    . "Income")
-        '(EXPENSE   . "Rebate")
-        '(EQUITY    . "Credit")))
-
-(if (gnc:debugging?)
-    (let ((thunk (lambda (pair)
-                   (gnc:register-translatable-strings (cdr pair)))))
-      (map thunk gnc:*debit-strings*)
-      (map thunk gnc:*credit-strings*)))
+  (list (cons 'NO_TYPE   (N_ "Funds Out"))
+        (cons 'BANK      (N_ "Withdrawal"))
+        (cons 'CASH      (N_ "Spend"))
+        (cons 'CREDIT    (N_ "Charge"))
+        (cons 'ASSET     (N_ "Decrease"))
+        (cons 'LIABILITY (N_ "Credit"))
+        (cons 'STOCK     (N_ "Sell"))
+        (cons 'MUTUAL    (N_ "Sell"))
+        (cons 'CURRENCY  (N_ "Sell"))
+        (cons 'INCOME    (N_ "Income"))
+        (cons 'EXPENSE   (N_ "Rebate"))
+        (cons 'EQUITY    (N_ "Credit"))))
 
 (define (gnc:get-debit-string type)
-  (gnc:_ (assoc-ref gnc:*debit-strings* type)))
+  (_ (assoc-ref gnc:*debit-strings* type)))
 
 (define (gnc:get-credit-string type)
-  (gnc:_ (assoc-ref gnc:*credit-strings* type)))
+  (_ (assoc-ref gnc:*credit-strings* type)))
 
 
 ;; Main Window options
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  "Main Window" "Double click expands parent accounts"
-  "a" "Double clicking on an account with children expands \
-the account instead of opening a register." #f))
+  (N_ "Main Window") (N_ "Double click expands parent accounts")
+  "a" (N_ "Double clicking on an account with children expands \
+the account instead of opening a register.") #f))
 
 (gnc:register-configuration-option
  (gnc:make-list-option
-  "Main Window" "Account types to display"
+  (N_ "Main Window") (N_ "Account types to display")
   "b" ""
   (list 'bank 'cash 'credit 'asset 'liability 'stock
         'mutual 'currency 'income 'expense 'equity)
-  (list #(bank "Bank" "")
-        #(cash "Cash" "")
-        #(credit "Credit" "")
-        #(asset "Asset" "")
-        #(liability "Liability" "")
-        #(stock "Stock" "")
-        #(mutual "Mutual Fund" "")
-        #(currency "Currency" "")
-        #(income "Income" "")
-        #(expense "Expense" "")
-        #(equity "Equity" ""))))
+  (list (list->vector (list 'bank      (N_ "Bank") ""))
+        (list->vector (list 'cash      (N_ "Cash") ""))
+        (list->vector (list 'credit    (N_ "Credit") ""))
+        (list->vector (list 'asset     (N_ "Asset") ""))
+        (list->vector (list 'liability (N_ "Liability") ""))
+        (list->vector (list 'stock     (N_ "Stock") ""))
+        (list->vector (list 'mutual    (N_ "Mutual Fund") ""))
+        (list->vector (list 'currency  (N_ "Currency") ""))
+        (list->vector (list 'income    (N_ "Income") ""))
+        (list->vector (list 'expense   (N_ "Expense") ""))
+        (list->vector (list 'equity    (N_ "Equity") "")))))
 
 (gnc:register-configuration-option
  (gnc:make-list-option
   "Main Window" "Account fields to display"
   "c" ""
   (list 'description 'total)
-  (list #(type "Type" "")
-        #(code "Code" "")
-        #(description "Description" "")
-        #(notes "Notes" "")
-        #(currency "Currency" "")
-        #(security "Security" "")
-        #(balance "Balance" "")
-        #(total "Total" ""))))
+  (list (list->vector (list 'type        (N_ "Type") ""))
+        (list->vector (list 'code        (N_ "Code") ""))
+        (list->vector (list 'description (N_ "Description") ""))
+        (list->vector (list 'notes       (N_ "Notes") ""))
+        (list->vector (list 'currency    (N_ "Currency") ""))
+        (list->vector (list 'security    (N_ "Security") ""))
+        (list->vector (list 'balance     (N_ "Balance") ""))
+        (list->vector (list 'total       (N_ "Total") "")))))
 
 
 ;; International options
@@ -173,27 +169,37 @@ the account instead of opening a register." #f))
  (gnc:make-multichoice-option
   "International" "Date Format"
   "a" "Date Format Display" 'us
-  (list #(us     "US"     "US-style: mm/dd/yyyy")
-        #(uk     "UK"     "UK-style dd/mm/yyyy")
-	#(ce     "Europe" "Continental Europe: dd.mm.yyyy")
-	#(iso    "ISO"    "ISO Standard: yyyy-mm-dd")
-	#(locale "Locale" "Default system locale format"))))
+  (list (list->vector (list 'us
+                            (N_ "US")
+                            (N_ "US-style: mm/dd/yyyy")))
+        (list->vector (list 'uk
+                            (N_ "UK")
+                            (N_ "UK-style dd/mm/yyyy")))
+        (list->vector (list 'ce
+                            (N_ "Europe")
+                            (N_ "Continental Europe: dd.mm.yyyy")))
+        (list->vector (list 'iso
+                            (N_ "ISO")
+                            (N_ "ISO Standard: yyyy-mm-dd")))
+        (list->vector (list 'locale
+                            (N_ "Locale")
+                            (N_ "Default system locale format"))))))
 
 (gnc:register-configuration-option
  (gnc:make-currency-option
-  "International" "Default Currency"
-  "b" "Default currency for new accounts"
+  (N_ "International") (N_ "Default Currency")
+  "b" (N_ "Default currency for new accounts")
   (gnc:locale-default-currency)))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  "International" "Use 24-hour time format"
-  "c" "Use a 24 hour (instead of a 12 hour) time format." #f))
+  (N_ "International") (N_ "Use 24-hour time format")
+  "c" (N_ "Use a 24 hour (instead of a 12 hour) time format.") #f))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  "International" "Enable EURO support"
-  "d" "Enables support for the European Union EURO currency" 
+  (N_ "International") (N_ "Enable EURO support")
+  "d" (N_ "Enables support for the European Union EURO currency") 
   (gnc:is-euro-currency
    (gnc:locale-default-currency))))
 
@@ -202,34 +208,42 @@ the account instead of opening a register." #f))
 
 (gnc:register-configuration-option
  (gnc:make-multichoice-option
-  "Register" "Default Register Style"
-  "a" "Default style for register windows"
+  (N_ "Register") (N_ "Default Register Style")
+  "a" (N_ "Default style for register windows")
   'ledger
-  (list #(ledger "Ledger" "Show transactions on one or two lines")
-        #(auto_ledger "Auto Ledger"
-                      "Show transactions on one or two lines and expand the current transaction")
-        #(journal "Journal"
-                  "Show expanded transactions with all splits"))))
+  (list (list->vector
+         (list 'ledger
+               (N_ "Ledger")
+               (N_ "Show transactions on one or two lines")))
+        (list->vector
+         (list 'auto_ledger
+               (N_ "Auto Ledger")
+               (N_ "Show transactions on one or two lines and expand the current transaction")))
+        (list->vector
+         (list 'journal
+               (N_ "Journal")
+               (N_ "Show expanded transactions with all splits"))))))
 
 (gnc:register-configuration-option     
  (gnc:make-simple-boolean-option
-  "Register" "Double Line Mode"
-  "aa" "Show two lines of information for each transaction" #f))
+  (N_ "Register") (N_ "Double Line Mode")
+  "aa" (N_ "Show two lines of information for each transaction") #f))
 
 (gnc:register-configuration-option     
  (gnc:make-simple-boolean-option
-  "Register" "Auto-Raise Lists"
-  "b" "Automatically raise the list of accounts or actions during input." #t))
+  (N_ "Register") (N_ "Auto-Raise Lists")
+  "b" (N_ "Automatically raise the list of accounts or actions during input.")
+  #t))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  "Register" "Show All Transactions"
-  "c" "By default, show every transaction in an account." #t))
+  (N_ "Register") (N_ "Show All Transactions")
+  "c" (N_ "By default, show every transaction in an account.") #t))
 
 (gnc:register-configuration-option
  (gnc:make-number-range-option
-  "Register" "Number of Rows"
-  "d" "Default number of register rows to display."
+  (N_ "Register") (N_ "Number of Rows")
+  "d" (N_ "Default number of register rows to display.")
    15.0 ;; default
     1.0 ;; lower bound
   200.0 ;; upper bound
@@ -239,35 +253,35 @@ the account instead of opening a register." #f))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  "Register" "Show Vertical Borders"
-  "e" "By default, show vertical borders on the cells." #t))
+  (N_ "Register") (N_ "Show Vertical Borders")
+  "e" (N_ "By default, show vertical borders on the cells.") #t))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  "Register" "Show Horizontal Borders"
-  "f" "By default, show horizontal borders on the cells." #t))
+  (N_ "Register") (N_ "Show Horizontal Borders")
+  "f" (N_ "By default, show horizontal borders on the cells.") #t))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  "Register" "'Enter' moves to blank transaction"
-  "g" "If selected, move to the blank transaction after the user presses \
-'Enter'. Otherwise, move down one row." #f))
+  (N_ "Register") (N_ "'Enter' moves to blank transaction")
+  "g" (N_ "If selected, move to the blank transaction after the user presses \
+'Enter'. Otherwise, move down one row.") #f))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  "Register" "Confirm before changing reconciled"
-  "h" "If selected, use a dialog to confirm a change to a reconciled \
-transaction." #t))
+  (N_ "Register") (N_ "Confirm before changing reconciled")
+  "h" (N_ "If selected, use a dialog to confirm a change to a reconciled \
+transaction.") #t))
 
 (gnc:register-configuration-option
  (gnc:make-font-option
-  "Register" "Register font"
-  "i" "The font to use in the register" (gnc:register-default-font)))
+  (N_ "Register") (N_ "Register font")
+  "i" (N_ "The font to use in the register") (gnc:register-default-font)))
 
 (gnc:register-configuration-option
  (gnc:make-font-option
-  "Register" "Register hint font"
-  "j" "The font used to show hints in the register"
+  (N_ "Register") (N_ "Register hint font")
+  "j" (N_ "The font used to show hints in the register")
   (gnc:register-default-hint-font)))
 
 
@@ -275,64 +289,64 @@ transaction." #t))
 
 (gnc:register-configuration-option
  (gnc:make-color-option
-  "Register Colors" "Header color"
-  "a" "The header background color"
+  (N_ "Register Colors") (N_ "Header color")
+  "a" (N_ "The header background color")
   (list #x96 #xb2 #x84 0)
   255
   #f))
 
 (gnc:register-configuration-option
  (gnc:make-color-option
-  "Register Colors" "Primary color"
-  "b" "The default background color for register rows"
+  (N_ "Register Colors") (N_ "Primary color")
+  "b" (N_ "The default background color for register rows")
   (list #xbf #xde #xba 0)
   255
   #f))
 
 (gnc:register-configuration-option
  (gnc:make-color-option
-  "Register Colors" "Secondary color"
-  "c" "The default secondary background color for register rows"
+  (N_ "Register Colors") (N_ "Secondary color")
+  "c" (N_ "The default secondary background color for register rows")
   (list #xf6 #xff #xdb 0)
   255
   #f))
 
 (gnc:register-configuration-option
  (gnc:make-color-option
-  "Register Colors" "Primary active color"
-  "d" "The background color for the current register row"
+  (N_ "Register Colors") (N_ "Primary active color")
+  "d" (N_ "The background color for the current register row")
   (list #xff #xf7 #xba 0)
   255
   #f))
 
 (gnc:register-configuration-option
  (gnc:make-color-option
-  "Register Colors" "Secondary active color"
-  "e" "The secondary background color for the current register row"
+  (N_ "Register Colors") (N_ "Secondary active color")
+  "e" (N_ "The secondary background color for the current register row")
   (list #xff #xf0 #x99 0)
   255
   #f))
 
 (gnc:register-configuration-option
  (gnc:make-color-option
-  "Register Colors" "Split color"
-  "f" "The default background color for split rows in the register"
+  (N_ "Register Colors") (N_ "Split color")
+  "f" (N_ "The default background color for split rows in the register")
   (list #xff #xfa #xd9 0)
   255
   #f))
 
 (gnc:register-configuration-option
  (gnc:make-color-option
-  "Register Colors" "Split active color"
-  "g" "The background color for the current split row in the register"
+  (N_ "Register Colors") (N_ "Split active color")
+  "g" (N_ "The background color for the current split row in the register")
   (list #xff #xf2 #xab 0)
   255
   #f))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  "Register Colors" "Double mode colors alternate with transactions"
-  "h" "Alternate the primary and secondary colors with each transaction, not each row"
+  (N_ "Register Colors") (N_ "Double mode colors alternate with transactions")
+  "h" (N_ "Alternate the primary and secondary colors with each transaction, not each row")
   #f))
 
 
@@ -340,8 +354,8 @@ transaction." #t))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  "Reconcile" "Automatic credit card payments"
-  "a" "After reconciling a credit card statement, prompt the user to enter a credit card payment"
+  (N_ "Reconcile") (N_ "Automatic credit card payments")
+  "a" (N_ "After reconciling a credit card statement, prompt the user to enter a credit card payment")
   #t))
 
 
@@ -349,60 +363,93 @@ transaction." #t))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  "General" "Save Window Geometry"
-  "a" "Save window sizes and positions." #t))
+  (N_ "General") (N_ "Save Window Geometry")
+  "a" (N_ "Save window sizes and positions.") #t))
 
 (gnc:register-configuration-option
  (gnc:make-multichoice-option
   "General" "Toolbar Buttons"
   "b" "Choose whether to display icons, text, or both for toolbar buttons"
   'icons_and_text
-  (list #(icons_and_text "Icons and Text" "Show both icons and text")
-        #(icons_only "Icons only" "Show icons only")
-        #(text_only "Text only" "Show text only"))))
+  (list (list->vector
+         (list 'icons_and_text
+               (N_ "Icons and Text")
+               (N_ "Show both icons and text")))
+        (list->vector
+         (list 'icons_only
+               (N_ "Icons only")
+               (N_ "Show icons only")))
+        (list->vector
+         (list 'text_only
+               (N_ "Text only")
+               (N_ "Show text only"))))))
 
 (gnc:register-configuration-option
  (gnc:make-multichoice-option
-  "General" "Account Separator"
-  "c" "The character used to separate fully-qualified account names"
+  (N_ "General") (N_ "Account Separator")
+  "c" (N_ "The character used to separate fully-qualified account names")
   'colon
-  (list #(colon ": (Colon)" "Income:Salary:Taxable")
-        #(slash "/ (Slash)" "Income/Salary/Taxable")
-        #(backslash "\\ (Backslash)" "Income\\Salary\\Taxable")
-        #(dash "- (Dash)" "Income-Salary-Taxable")
-        #(period ". (Period)" "Income.Salary.Taxable"))))
+  (list (list->vector
+         (list 'colon
+               (N_ ": (Colon)")
+               (N_ "Income:Salary:Taxable")))
+        (list->vector
+         (list 'slash
+               (N_ "/ (Slash)")
+               (N_ "Income/Salary/Taxable")))
+        (list->vector
+         (list 'backslash
+               (N_ "\\ (Backslash)")
+               (N_ "Income\\Salary\\Taxable")))
+        (list->vector
+         (list 'dash
+               (N_ "- (Dash)")
+               (N_ "Income-Salary-Taxable")))
+        (list->vector
+         (list 'period
+               (N_ ". (Period)")
+               (N_ "Income.Salary.Taxable"))))))
 
 (gnc:register-configuration-option
  (gnc:make-multichoice-option
-  "General" "Reversed-balance account types"
-  "d" "The types of accounts for which balances are sign-reversed"
+  (N_ "General") (N_ "Reversed-balance account types")
+  "d" (N_ "The types of accounts for which balances are sign-reversed")
  'credit
-  (list #(income-expense "Income & Expense" "Reverse Income and Expense Accounts")
-        #(credit "Credit Accounts" "Reverse Credit Card, Liability, Equity, and Income Accounts")
-        #(none "None" "Don't reverse any accounts"))))
+  (list (list->vector
+         (list 'income-expense
+               (N_ "Income & Expense")
+               (N_ "Reverse Income and Expense Accounts")))
+        (list->vector
+         (list 'credit
+               (N_ "Credit Accounts")
+               (N_ "Reverse Credit Card, Liability, Equity, and Income Accounts")))
+        (list->vector
+         (list 'none
+               (N_ "None")
+               (N_ "Don't reverse any accounts"))))))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  "General" "Use accounting labels"
-  "e" "Only use 'debit' and 'credit' instead of informal synonyms" #f))
+  (N_ "General") (N_ "Use accounting labels")
+  "e" (N_ "Only use 'debit' and 'credit' instead of informal synonyms") #f))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  "General" "Display \"Tip of the Day\""
-  "f" "Display hints for using GnuCash at startup" #t))
+  (N_ "General") (N_ "Display \"Tip of the Day\"")
+  "f" (N_ "Display hints for using GnuCash at startup") #t))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  "General" "Display negative amounts in red"
-  "g" "Display negative amounts in red" #t))
+  (N_ "General") (N_ "Display negative amounts in red")
+  "g" (N_ "Display negative amounts in red") #t))
 
 ; this option also changes the next option so that its
 ; selectability matches the state of this option.
 (gnc:register-configuration-option
  (gnc:make-complex-boolean-option
-  "General" "Automatic Decimal Point"
+  (N_ "General") (N_ "Automatic Decimal Point")
   "h" 
-  "Automatically insert a decimal point into values that are entered without one." 
+  (N_ "Automatically insert a decimal point into values that are entered without one.") 
   #f #f
   (lambda (x) (gnc:set-option-selectable-by-name "General"
                                                  "Auto Decimal Places"
@@ -410,10 +457,10 @@ transaction." #t))
 
 (gnc:register-configuration-option
  (gnc:make-number-range-option
-  "General" "Auto Decimal Places"
-  "i" "How many automatic decimal places will be filled in."
+  (N_ "General") (N_ "Auto Decimal Places")
+  "i" (N_ "How many automatic decimal places will be filled in.")
     ;; current range is 1-8 with default from the locale
-    ( gnc:locale-decimal-places )  ;; default
+    (gnc:locale-decimal-places) ;; default
     1.0 ;; lower bound
     8.0 ;; upper bound
     0.0 ;; number of decimals used for this range calculation
@@ -551,8 +598,3 @@ the current value of the path."
 (gnc:register-configuration-option
  (gnc:make-internal-option
   "__exp_parser" "defined_variables" '()))
-
-
-;; This needs to be after all the global options definitions
-(if (gnc:debugging?)
-    (gnc:options-register-translatable-strings gnc:*options-entries*))

@@ -47,9 +47,7 @@ EXTRA_DIST = \
   old/perl-reports/report-null.html \
   old/perl-reports/report-pnl.phtml \
   old/xacc-shell.c \
-  po/.cvsignore \
-  po/extract-macros.perl.in \
-  po/guile-strings.c
+  po/.cvsignore
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf

@@ -1,7 +1,6 @@
 # List of files which containing translatable strings.
 # Copyright (C) 1995, 1998 Free Software Foundation, Inc.
 
-po/guile-strings.c
 src/FileDialog.c
 src/SplitLedger.c
 src/engine/Account.c
