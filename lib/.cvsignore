@@ -2,3 +2,4 @@ Makefile
 tmp
 obj
 g-wrap-install
+g-wrap.configure
