@@ -1,3 +1,12 @@
+2004-03-31  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: move m4/Makefile to its own line
+	* macros/autogen.sh: add code to remove "intl/Makefile po/Makefile"
+	  from AC_OUTPUT in configure.in prior to calling gettextize
+	  to make sure that you can build from CVS with recent versions
+	  of gettextize.  Tested with both RH9 and RH7.3 to make sure
+	  it works with both old and new.  Fixes #120206.
+
 2004-03-30  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/report-system/report-system.scm:
