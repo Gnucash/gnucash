@@ -332,17 +332,11 @@ void        gnc_table_move_cursor_gui (Table *table, VirtualLocation virt_loc);
 gboolean    gnc_table_verify_cursor_position (Table *table,
                                               VirtualLocation virt_loc);
 
-/* The gnc_table_get_user_data_physical() method returns the user data
- *   associated with a cursor located at the given physical coords, or
- *   NULL if the coords are out of bounds. */
-gpointer    gnc_table_get_vcell_data_physical (Table *table,
-                                               PhysicalLocation phys_loc);
-
-/* The gnc_table_get_user_data_virtual() method returns the user data
+/* The gnc_table_get_vcell_data() method returns the virtual cell data
  *   associated with a cursor located at the given virtual coords, or
  *   NULL if the coords are out of bounds. */
-gpointer    gnc_table_get_vcell_data_virtual (Table *table,
-                                              VirtualCellLocation vcell_loc);
+gpointer    gnc_table_get_vcell_data (Table *table,
+                                      VirtualCellLocation vcell_loc);
 
 gboolean    gnc_table_find_close_valid_cell (Table *table,
                                              VirtualLocation *virt_loc,
@@ -375,46 +369,30 @@ void        gnc_table_refresh_gui (Table *table);
 
 /* ==================================================== */
 
-void       gnc_table_wrap_verify_cursor_position (Table *table,
-                                                  VirtualLocation virt_loc);
+void         gnc_table_wrap_verify_cursor_position (Table *table,
+                                                    VirtualLocation virt_loc);
 
-gboolean   gnc_table_physical_cell_valid(Table *table,
-                                         PhysicalLocation phys_loc,
+gboolean     gnc_table_virtual_loc_valid(Table *table,
+                                         VirtualLocation virt_loc,
                                          gboolean exact_pointer);
 
-gboolean   gnc_table_virtual_loc_valid(Table *table,
-                                       VirtualLocation virt_loc,
-                                       gboolean exact_pointer);
+void         gnc_table_refresh_cursor_gui (Table * table,
+                                           VirtualCellLocation vcell_loc,
+                                           gboolean do_scroll);
 
-void       gnc_table_refresh_cursor_gui (Table * table,
-                                         VirtualCellLocation vcell_loc,
-                                         gboolean do_scroll);
+gboolean     gnc_table_move_tab (Table *table,
+                                 VirtualLocation *virt_loc,
+                                 gboolean move_right);
 
-gboolean   gnc_table_move_tab (Table *table,
-                               VirtualLocation *virt_loc,
-                               gboolean move_right);
+gboolean     gnc_table_move_vertical_position (Table *table,
+                                               VirtualLocation *virt_loc,
+                                               int phys_row_offset);
 
-gboolean   gnc_table_move_vertical_position (Table *table,
-                                             VirtualLocation *virt_loc,
-                                             int phys_row_offset);
-
-
-/* gnc_table_enter_update() is a utility function used to determine
- *   how the gui will respond.  If it returns NULL, then the GUI will
- *   map an editing widget onto this cell, and allow user input. If it
- *   returns non-null, then the returned value will be used as the new
- *   cell value, and an editor for the cell will not be mapped (viz,
- *   the user will be prevented from updating the cell). The function
- *   is also passed pointers to the current cursor position, start
- *   selection position, and end selection position. If the function
- *   returns NULL, then it may change any of those values and the
- *   mapped editing widget will be modified accordingly.
- */
-gboolean gnc_table_enter_update(Table *table,
-                                VirtualLocation virt_loc,
-                                int *cursor_position,
-                                int *start_selection,
-                                int *end_selection);
+gboolean     gnc_table_enter_update(Table *table,
+                                    VirtualLocation virt_loc,
+                                    int *cursor_position,
+                                    int *start_selection,
+                                    int *end_selection);
 
 const char * gnc_table_leave_update(Table *table,
                                     VirtualLocation virt_loc);

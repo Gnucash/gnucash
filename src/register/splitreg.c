@@ -915,28 +915,17 @@ xaccInitSplitRegister (SplitRegister *reg,
     gnc_table_set_cursor (table, header, ploc, vcell_loc);
   }
 
-  /* The call below is for practical purposes useless. It installs
-   * a cursor (the single-line cursor, but it could have been any of
-   * them), and moves it to the first editable row. Whoop-de-doo,
-   * since this is promptly over-ridden when real data gets
-   * loaded. It's here as a fail-safe fallback, in case someone
-   * creates a register but doesn't do anything with it. Don't
-   * want to freak out any programmers. */
+  /* Set up default configuration. */
   {
     PhysicalLocation ploc = { 1, 0 };
-    VirtualCellLocation vcell_loc = { reg->cursor_virt_row, 0 };
-
-    gnc_table_set_cursor (table, reg->single_cursor, ploc, vcell_loc);
-  }
-
-  {
     VirtualLocation vloc;
 
-    vloc.vcell_loc.virt_row = 1;
+    vloc.vcell_loc.virt_row = reg->cursor_virt_row;
     vloc.vcell_loc.virt_col = 0;
     vloc.phys_row_offset = 0;
     vloc.phys_col_offset = 0;
 
+    gnc_table_set_cursor (table, reg->single_cursor, ploc, vloc.vcell_loc);
     gnc_table_move_cursor (table, vloc);
   }
 

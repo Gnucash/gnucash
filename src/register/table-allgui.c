@@ -780,28 +780,7 @@ gnc_table_verify_cursor_position (Table *table, VirtualLocation virt_loc)
 /* ==================================================== */
 
 void *
-gnc_table_get_vcell_data_physical (Table *table, PhysicalLocation phys_loc)
-{
-  PhysicalCell *pcell;
-  VirtualCell *vcell;
-
-  if (!table) return NULL;
-
-  pcell = gnc_table_get_physical_cell (table, phys_loc);
-  if (pcell == NULL)
-    return NULL;
-
-  vcell = gnc_table_get_virtual_cell (table, pcell->virt_loc.vcell_loc);
-  if (vcell == NULL)
-    return NULL;
-
-  return vcell->vcell_data;
-}
-
-/* ==================================================== */
-
-void *
-gnc_table_get_vcell_data_virtual (Table *table, VirtualCellLocation vcell_loc)
+gnc_table_get_vcell_data (Table *table, VirtualCellLocation vcell_loc)
 {
   VirtualCell *vcell;
 
@@ -876,72 +855,6 @@ gnc_table_refresh_current_cursor_gui (Table * table, gboolean do_scroll)
 
   gnc_table_refresh_cursor_gui (table, table->current_cursor_loc.vcell_loc,
                                 do_scroll);
-}
-
-/* ==================================================== */
-
-gboolean
-gnc_table_physical_cell_valid(Table *table,
-                              PhysicalLocation phys_loc,
-                              gboolean exact_cell)
-{
-  BasicCell *cell;
-  VirtualCell *vcell;
-  PhysicalCell *pcell;
-  CellBlockCell *cb_cell;
-  VirtualLocation virt_loc;
-
-  if (!table) return FALSE;
-
-  pcell = gnc_table_get_physical_cell(table, phys_loc);
-
-  /* can't edit outside of the physical space */
-  if (pcell == NULL)
-    return FALSE;
-
-  /* header rows cannot be modified */
-  vcell = gnc_table_get_header_cell (table);
-  if (vcell == NULL)
-    return FALSE;
-
-  if (phys_loc.phys_row < vcell->cellblock->num_rows)
-    return FALSE;
-
-  /* compute the cell location */
-  virt_loc = pcell->virt_loc;
-
-  vcell = gnc_table_get_virtual_cell(table, virt_loc.vcell_loc);
-  if (vcell == NULL)
-    return FALSE;
-
-  /* verify that offsets are valid. This may occur if the app that is
-   * using the table has a paritally initialized cursor. (probably due
-   * to a programming error, but maybe they meant to do this). */
-  if ((0 > virt_loc.phys_row_offset) || (0 > virt_loc.phys_col_offset))
-    return FALSE;
-
-  /* check for a cell handler, but only if cell address is valid */
-  if (vcell->cellblock == NULL) return FALSE;
-
-  cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
-                                    virt_loc.phys_row_offset,
-                                    virt_loc.phys_col_offset);
-  if (cb_cell == NULL)
-    return FALSE;
-
-  cell = cb_cell->cell;
-  if (cell == NULL)
-    return FALSE;
-
-  /* if cell is marked as output-only, you can't enter */
-  if (0 == (XACC_CELL_ALLOW_INPUT & cell->input_output)) return FALSE;
-
-  /* if cell is pointer only and this is not an exact pointer test,
-   * it cannot be entered. */
-  if (!exact_cell && ((XACC_CELL_ALLOW_EXACT_ONLY & cell->input_output) != 0))
-    return FALSE;
-
-  return TRUE;
 }
 
 /* ==================================================== */

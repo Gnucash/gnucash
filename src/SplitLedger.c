@@ -227,8 +227,7 @@ static gboolean xaccSRGetTransSplitVirtLoc (SplitRegister *reg,
                                             Transaction *trans,
                                             Split *trans_split, Split *split,
                                             VirtualCellLocation *vcell_loc);
-static Split * sr_get_split_virtual (SplitRegister *reg,
-                                     VirtualCellLocation vcell_loc);
+static Split * sr_get_split (SplitRegister *reg, VirtualCellLocation vcell_loc);
 
 
 /** implementations *******************************************************/
@@ -559,7 +558,7 @@ gnc_find_split_in_reg_by_memo(SplitRegister *reg, const char *memo,
       Transaction *trans;
       VirtualCellLocation vcell_loc = { virt_row, virt_col };
 
-      split = sr_get_split_virtual (reg, vcell_loc);
+      split = sr_get_split (reg, vcell_loc);
       trans = xaccSplitGetParent(split);
 
       if (trans == last_trans)
@@ -601,7 +600,7 @@ gnc_find_trans_in_reg_by_desc(SplitRegister *reg, const char *description)
       Transaction *trans;
       VirtualCellLocation vcell_loc = { virt_row, virt_col };
 
-      split = sr_get_split_virtual (reg, vcell_loc);
+      split = sr_get_split (reg, vcell_loc);
       trans = xaccSplitGetParent(split);
 
       if (trans == last_trans)
@@ -617,14 +616,14 @@ gnc_find_trans_in_reg_by_desc(SplitRegister *reg, const char *description)
 }
 
 static Split *
-sr_get_split_virtual (SplitRegister *reg, VirtualCellLocation vcell_loc)
+sr_get_split (SplitRegister *reg, VirtualCellLocation vcell_loc)
 {
   GUID *guid;
 
   if (reg == NULL)
     return NULL;
 
-  guid = gnc_table_get_vcell_data_virtual (reg->table, vcell_loc);
+  guid = gnc_table_get_vcell_data (reg->table, vcell_loc);
   if (guid == NULL)
     return NULL;
 
@@ -679,7 +678,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
     new_trans = xaccSRGetTrans(reg, new_virt_loc.vcell_loc);
 
     /* The split we are moving to */
-    new_split = sr_get_split_virtual(reg, new_virt_loc.vcell_loc);
+    new_split = sr_get_split(reg, new_virt_loc.vcell_loc);
 
     /* The split at the transaction line we are moving to */
     new_trans_split = xaccSRGetTransSplit(reg, new_virt_loc.vcell_loc);
@@ -747,7 +746,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
     new_trans_split = xaccSRGetTransSplit(reg, new_virt_loc.vcell_loc);
     info->cursor_hint_trans_split = new_trans_split;
 
-    new_split = sr_get_split_virtual (reg, new_virt_loc.vcell_loc);
+    new_split = sr_get_split (reg, new_virt_loc.vcell_loc);
     info->cursor_hint_split = new_split;
 
     info->cursor_hint_phys_col = new_virt_loc.phys_col_offset;
@@ -1095,7 +1094,7 @@ LedgerTraverse (Table *table,
         if ((result == GNC_VERIFY_YES) && xaccSRCheckReconciled (reg))
           break;
 
-        new_split = sr_get_split_virtual(reg, virt_loc.vcell_loc);
+        new_split = sr_get_split(reg, virt_loc.vcell_loc);
         trans_split = xaccSRGetTransSplit(reg, virt_loc.vcell_loc);
 
         xaccSRCancelCursorTransChanges(reg);
@@ -1186,7 +1185,7 @@ xaccSRGetTrans (SplitRegister *reg, VirtualCellLocation vcell_loc)
   if (reg == NULL)
     return NULL;
 
-  split = sr_get_split_virtual (reg, vcell_loc);
+  split = sr_get_split (reg, vcell_loc);
   if (split != NULL)
     return xaccSplitGetParent(split);
 
@@ -1199,7 +1198,7 @@ xaccSRGetTrans (SplitRegister *reg, VirtualCellLocation vcell_loc)
     return NULL;
   }
 
-  split = sr_get_split_virtual (reg, vcell_loc);
+  split = sr_get_split (reg, vcell_loc);
   if (split == NULL) {
     PERR ("no parent \n");
     return NULL;
@@ -1223,7 +1222,7 @@ xaccSRGetTransSplit (SplitRegister *reg, VirtualCellLocation vcell_loc)
     cursor_class = xaccSplitRegisterGetCursorClass (reg, vcell_loc);
 
     if (cursor_class == CURSOR_TRANS)
-      return sr_get_split_virtual (reg, vcell_loc);
+      return sr_get_split (reg, vcell_loc);
 
     vcell_loc.virt_row--;
 
@@ -1268,7 +1267,7 @@ xaccSRGetCurrentTransSplit (SplitRegister *reg)
     cursor_class = xaccSplitRegisterGetCursorClass (reg, vcell_loc);
 
     if (cursor_class == CURSOR_TRANS)
-      return sr_get_split_virtual (reg, vcell_loc);
+      return sr_get_split (reg, vcell_loc);
   }
 }
 
@@ -1297,7 +1296,7 @@ xaccSRGetCurrentTrans (SplitRegister *reg)
     return NULL;
   }
 
-  split = sr_get_split_virtual (reg, vcell_loc);
+  split = sr_get_split (reg, vcell_loc);
 
   return xaccSplitGetParent(split);
 }
@@ -1310,7 +1309,7 @@ xaccSRGetCurrentSplit (SplitRegister *reg)
   if (reg == NULL)
     return NULL;
 
-  return sr_get_split_virtual (reg, reg->table->current_cursor_loc.vcell_loc);
+  return sr_get_split (reg, reg->table->current_cursor_loc.vcell_loc);
 }
 
 /* ======================================================== */
@@ -1345,7 +1344,7 @@ xaccSRGetSplitVirtLoc (SplitRegister *reg, Split *split,
     {
       VirtualCellLocation vc_loc = { v_row, v_col };
 
-      s = sr_get_split_virtual (reg, vc_loc);
+      s = sr_get_split (reg, vc_loc);
 
       if ((s == split) && (vcell_loc != NULL))
       {
@@ -1422,7 +1421,7 @@ xaccSRGetTransSplitVirtLoc (SplitRegister *reg, Transaction *trans,
     {
       VirtualCellLocation vc_loc = { v_row, v_col };
 
-      s = sr_get_split_virtual (reg, vc_loc);
+      s = sr_get_split (reg, vc_loc);
       t = xaccSplitGetParent(s);
 
       cursor_class = xaccSplitRegisterGetCursorClass(reg, vc_loc);
