@@ -70,7 +70,7 @@
     gnc:*pnl-report-options*)
 
   (define (render-level-2-account level-2-account l2-value)
-    (let ((account-name (string-append "&nbsp;&nbsp;&nbsp;&nbsp"
+    (let ((account-name (string-append "&nbsp;&nbsp;&nbsp;&nbsp;"
                                        (gnc:account-get-full-name
                                         level-2-account)))
           (type-name (gnc:account-get-type-string
