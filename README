@@ -36,10 +36,12 @@ To install:
 
 sorry, no "make install" yet.
 
+Note version 0.9h may need help getting made I think I broke the makefile..
+
 
 Status:
 -------
-As of version 0.9g:
+As of version 0.9h:
 ---------------
 Bare-bones Mutual Fund and Stock Portfolio handling
 is implemented. 
@@ -84,6 +86,11 @@ from file.
 -------------
 The "reports" menu item is unimplemented and will result in a core dump.
 -------------
+
+Changes since 0.9g
+-----------------
+ o assorted minor bug fixes
+ o include ComboBox and modified Xbae in distribution
 
 That's all folks!
 

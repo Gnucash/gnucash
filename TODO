@@ -1,0 +1,43 @@
+
+> Xbae-4.6.2-linas/src/Matrix.h:
+>   - Uncomment lines 225 and 269  ( XmNtextField & XmCTextField
+>                                    definitions )
+
+Hmm ... can this be fixed with the xmkmf files?
+I am not the official xbae maintainer; and xbae is supposed
+to compile & work with a number of unix platforms.
+The redme should indicate how to reach the author;  since the
+maintainer seems busy at the moment, try sending them a unified diff.
+
+
+> xacc-0.9g/Makefile:
+>   - CC=cc
+>   - RANLIB=true
+
+> 2)  Typing a name of a .dat file which doesn't exist allows xacc to
+>     start, but on the console it prints "FileIO.c: Line 151, error =
+>     No such file or directory"
+>
+> 3)  Selecting "File", "New File" does nothing..
+>
+> 4)  Selecting "File", "Open File" and then clicking "Cancel" causes
+>     "Bad File" to be printed on the console, and the "Open File"
+>     dialog to be displayed again.  No way out of this loop except
+>     Ctrl-C.
+>
+> 5)  Tried to create a file with "touch new.dat"; when I tried to open
+>     this file xacc complained that it was both too old, and too new :)
+>     Oh well, didn't really expect this to work anyways..  But it would
+>     be nice if it had slightly better error checking.
+
+
+> 6)  The "About", "Help", and "License" windows start much too small.  I
+>     need to resize them to see any text.
+
+Yes, I know, haven't figured out why yet ...
+
+> 7)  "Help", "Help" shows three links to "Creating a new account".
+>     Only the first does anything at all, and it just goes to the
+>     "License" information.  Sometimes I need to resize this window
+>     before I can use the scrollbar.
+

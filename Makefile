@@ -26,7 +26,7 @@
 
 ######################################################################
 # CONFIGURABLE STUFF:                                                #
-CC = gcc
+CC = cc
 AR = ar r
 RANLIB = ranlib
 
@@ -39,14 +39,14 @@ RANLIB = ranlib
 # DEBUGMEMORY  - does some accounting whenever malloc/free
 #                is called.
 # USEDEBUG     - causes debugging info to be displayed
-CFLAGS = $(LFLAGS) -I../include -I../libhtmlw -I/usr/X11/include \
-         -I/usr/local/include  -DMOTIF1_2 \
+CFLAGS = $(LFLAGS) -I../include -I../libhtmlw -I../Xbae-4.6.2-linas \
+         -I ../ComboBox-1.33 -I/usr/local/include  -DMOTIF1_2 \
 
 
 	 # -DDEBUGMEMORY -DUSEDEBUG
 	 # -DUSEQUICKFILL # -DUSE_NO_COLOR -DDEBUGMEMORY -DUSEDEBUG
 LFLAGS = -g -L/usr/local/lib -L/usr/X11/lib
-LIBS   = -lXm -lXmu -lXbae -lXt -lXext -lX11 -lSM -lICE -lXpm
+LIBS   = -lXm -lXmu -lXt -lXpm -lXext -lSM -lICE -lX11 
 
 ######################################################################
 
@@ -58,6 +58,8 @@ OPTIONS = "CC = $(CC)"           "LFLAGS = $(LFLAGS)" \
           "RANLIB = $(RANLIB)"   "AR = $(AR)"
 
 default :
+	@cd ComboBox-1.33 ; $(MAKE) 
+	@cd Xbae-4.6.2-linas ; $(MAKE) 
 	@cd libhtmlw ; $(MAKE) $(OPTIONS)
 	@cd src ; $(MAKE) $(OPTIONS)
 
@@ -67,6 +69,8 @@ clean :
 	@cd help    ; rm -f *~
 	@cd libhtmlw ; $(MAKE) clean
 	@cd src ; $(MAKE) clean
+	@cd ComboBox-1.33 ; $(MAKE) clean
+	@cd Xbae-4.6.2-linas ; $(MAKE) clean
 
 really_clean : clean
 	@cd src ; $(MAKE) really_clean
