@@ -17,4 +17,5 @@ test-querynew
 test-resolve-file-path
 test-scm-query
 test-split-vs-account
+test-transaction-reversal
 test-transaction-voiding
