@@ -83,6 +83,14 @@
 (define opthelp-depth-limit
   (N_ "Maximum number of levels in the account tree displayed"))
 
+(define pagename-merchandising (N_ "Merchandising"))
+(define optname-gross-adjustment-accounts (N_ "Gross adjustment accounts"))
+(define opthelp-gross-adjustment-accounts
+  (N_ "Do not net, but show gross debit/credit adjustments to these accounts. Merchandising businesses will normally select their inventory accounts here."))
+(define optname-income-summary-accounts (N_ "Income summary accounts"))
+(define opthelp-income-summary-accounts
+  (N_ "Adjustments made to these accounts are gross adjusted (see above) in the Adjustments, Adjusted Trial Balance, and Income Statement columns. Mostly useful for merchandising businesses."))
+
 (define pagename-entries (N_ "Entries"))
 (define optname-adjusting-pattern (N_ "Adjusting Entries pattern"))
 (define opthelp-adjusting-pattern
@@ -182,7 +190,29 @@
     (gnc:options-add-account-levels!
      options gnc:pagename-accounts optname-depth-limit
      "b" opthelp-depth-limit 1)
-    
+
+    ;; options for merchandising business work sheets
+    (add-option
+     (gnc:make-account-list-option
+      pagename-merchandising optname-gross-adjustment-accounts
+      "c"
+      opthelp-gross-adjustment-accounts
+      (lambda ()
+	;; Here, it would be useful to have an inventory account type.
+	;; Lacking that, just select no accounts by default.
+	'()
+	)
+      #f #t))
+    (add-option
+     (gnc:make-account-list-option
+      pagename-merchandising optname-income-summary-accounts
+      "d"
+      opthelp-income-summary-accounts
+      (lambda ()
+	'()
+	)
+      #f #t))
+     
     ;; all about currencies
     (gnc:options-add-currency!
      options pagename-commodities
@@ -280,7 +310,11 @@
          (report-variant (get-option gnc:pagename-general
 				     optname-report-variant))
          (accounts (get-option gnc:pagename-accounts
-                               optname-accounts))	 
+                               optname-accounts))
+         (ga-accounts (get-option pagename-merchandising
+				  optname-gross-adjustment-accounts))
+         (is-accounts (get-option pagename-merchandising
+				  optname-income-summary-accounts))
 	 (depth-limit (get-option gnc:pagename-accounts 
 				  optname-depth-limit))
 	 (adjusting-str (get-option pagename-entries
@@ -307,7 +341,7 @@
 	 ;;			     optname-show-zb-accts))
 	 (show-zb-accts? #t) ;; see FIXME above
          (use-links? (get-option gnc:pagename-display
-				     optname-account-links))
+				 optname-account-links))
 	 (indent 0)
 	 
          ;; decompose the account list
@@ -326,6 +360,24 @@
 	 (all-accounts
 	  (append asset-accounts liability-accounts
 		  equity-accounts income-expense-accounts))
+	 
+	 ;; same for gross adjustment accounts...
+	 (split-up-ga-accounts (gnc:decompose-accountlist ga-accounts))
+	 (all-ga-accounts
+          (append (assoc-ref split-up-ga-accounts 'asset)
+                  (assoc-ref split-up-ga-accounts 'liability)
+                  (assoc-ref split-up-ga-accounts 'equity)
+                  (assoc-ref split-up-ga-accounts 'income)
+                  (assoc-ref split-up-ga-accounts 'expense)))
+	 (split-up-is-accounts (gnc:decompose-accountlist is-accounts))
+	 
+	 ;; same for income statement accounts...
+	 (all-is-accounts
+          (append (assoc-ref split-up-is-accounts 'asset)
+                  (assoc-ref split-up-is-accounts 'liability)
+                  (assoc-ref split-up-is-accounts 'equity)
+                  (assoc-ref split-up-is-accounts 'income)
+                  (assoc-ref split-up-is-accounts 'expense)))
 	 
 	 (doc (gnc:make-html-document))
          ;; exchange rates calculation parameters
@@ -393,6 +445,7 @@
 	  
 	  ;; Wrapper to call gnc:html-table-add-labeled-amount-line!
 	  ;; with the proper arguments.
+	  ;; (This is used to fill in the Trial Balance columns.)
 	  (define (add-line table label signed-balance)
 	    (let* ((entry (gnc:double-col
 			   'entry signed-balance
@@ -433,7 +486,9 @@
 	    (gnc:sum-collector-commodity
 	     amt report-commodity exchange-fn)
 	    )
-	  
+
+	  ;; Returns a gnc:html-table-cell containing the absolute value
+	  ;; of the given amount in the report commodity.
 	  (define (tot-abs-amt-cell amt)
 	    (let* ((neg-amt (gnc:make-commodity-collector))
 		   (rv (report-val amt))
@@ -582,7 +637,7 @@
 		  (if gnc:colspans-are-working-right
 		      (list (gnc:make-html-table-cell/size 1 account-cols #f))
 		      (gnc:html-make-empty-cells account-cols)
-		  )
+		      )
 		  parent-headings)
 		 )
 		(set! header-rows (+ header-rows 1))
@@ -623,6 +678,11 @@
 	  
 	  ;; now, for each account, calculate all the column values
 	  ;; and store them in the utility object...
+	  ;; 
+	  ;; this handles merchandising (inventory and income summary)
+	  ;; accounts specially. instead of storing a commodity collector,
+	  ;; it stores a two-element list of commodity collectors:
+	  ;;  (list debit-collector credit-collector)
 	  (let ((row 0)
 		(rows (gnc:html-acct-table-num-rows acct-table))
 		)
@@ -650,9 +710,35 @@
 				  )
 			    start-date-tp end-date-tp
 			    ))
+			  (is? (member acct all-is-accounts))
+			  (ga-or-is? (or (member acct all-ga-accounts) is?))
+			  (pos-adjusting
+			   (and ga-or-is?
+				adjusting
+				(gnc:account-get-pos-trans-total-interval
+				 group
+				 (list (list 'str adjusting-str)
+				       (list 'cased adjusting-cased)
+				       (list 'regexp adjusting-regexp)
+				       (list 'positive #t)
+				       )
+				 start-date-tp end-date-tp
+				 )
+				))
+			  (neg-adjusting
+			   (and pos-adjusting (gnc:make-commodity-collector)))
 			  (pre-closing-bal (gnc:make-commodity-collector))
 			  (pre-adjusting-bal (gnc:make-commodity-collector))
+			  (atb #f) ;; adjusted trial balance
 			  )
+		     
+		     ;; +P_ADJ + -N_ADJ = xADJ. xADJ - +P_ADJ = -N_ADJ.
+		     ;; That is, credit values are stored as such (negative).
+		     (if neg-adjusting
+			 (begin
+			   (neg-adjusting 'merge adjusting #f)
+			   (neg-adjusting 'minusmerge pos-adjusting #f)
+			   ))
 		     
 		     (pre-closing-bal 'merge curr-bal #f)
 		     ;; remove closing entries
@@ -663,16 +749,42 @@
 		     ;; we now have a pre-adjusting-bal,
 		     ;; pre-closing-bal, and curr-bal
 		     
+		     (set! atb
+			   ;; calculate the adjusted trial balance to use
+			   ;; this depends on whether or not we are netting
+			   ;; the atb value... so we check is?.
+			   (if is?
+			       (let* ((debit (gnc:make-commodity-collector))
+				      (credit (gnc:make-commodity-collector))
+				      )
+				 (debit 'merge pos-adjusting #f)
+				 (credit 'merge neg-adjusting #f)
+				 (if (gnc:double-col
+				      'credit-q pre-adjusting-bal
+				      report-commodity exchange-fn show-fcur?)
+				     (credit 'merge pre-adjusting-bal #f)
+				     (debit 'merge pre-adjusting-bal #f)
+				     )
+				 (list debit credit)
+				 )
+			       pre-closing-bal)
+			   )
+		     
 		     (gnc:html-acct-table-set-cell!
 		      acct-table row pa-col pre-adjusting-bal)
 		     (gnc:html-acct-table-set-cell!
-		      acct-table row adj-col adjusting)
+		      acct-table row adj-col
+		      (if ga-or-is?
+			  (list pos-adjusting neg-adjusting)
+			  adjusting)
+		      )
 		     (gnc:html-acct-table-set-cell!
-		      acct-table row atb-col pre-closing-bal)
+		      acct-table row atb-col atb)
 		     (gnc:html-acct-table-set-cell!
 		      acct-table row
-		      (if (gnc:account-is-inc-exp? acct) is-col bs-col)
-		      pre-closing-bal
+		      (if (or (gnc:account-is-inc-exp? acct) is?)
+			  is-col bs-col)
+		      atb
 		      )
 		     (gnc:html-acct-table-set-cell!
 		      acct-table row bal-col curr-bal)
@@ -683,6 +795,7 @@
 	    )
 	  
 	  ;; next, set up the account tree and pre-adjustment balances
+	  ;; (This fills in the Account Title and Trial Balance columns.)
 	  (let ((row 0)
 		(rows (gnc:html-acct-table-num-rows acct-table)))
 	    (while (< row rows)
@@ -695,7 +808,7 @@
 			    (get-val (list (list 'pre-adj pa-col)
 					   (list 'work-sheet pa-col)
 					   (list 'current bal-col)
-				      )
+					   )
 				     report-variant)
 			    ))
 			  (label (get-val env 'account-label))
@@ -757,7 +870,7 @@
 				(bs-credits 'minusmerge
 					    neg-unrealized-gain-collector #f))
 			   (and (atb-debits 'merge
-					     neg-unrealized-gain-collector #f)
+					    neg-unrealized-gain-collector #f)
 				(bs-debits 'merge
 					   neg-unrealized-gain-collector #f))
 			   )
@@ -787,34 +900,87 @@
 				       acct-table
 				       row
 				       colpair))
+				     (gross-bal? (list? bal))
 				     (entry (and bal
+						 (not gross-bal?)
 						 (gnc:double-col
 						  'entry bal
 						  report-commodity
 						  exchange-fn
 						  show-fcur?)))
 				     (credit? (and bal
-						   (gnc:double-col
-						    'credit-q bal
-						    report-commodity
-						    exchange-fn
-						    show-fcur?)))
+						   (or gross-bal?
+						       (gnc:double-col
+							'credit-q bal
+							report-commodity
+							exchange-fn
+							show-fcur?)
+						       )
+						   ))
+				     (non-credit? (and bal
+						       (or gross-bal?
+							   (not credit?))
+						       ))
+				     (debit (or
+					     (and gross-bal? (car bal))
+					     (and non-credit? bal)
+					     ))
+				     (credit (or
+					      (and gross-bal? (cadr bal))
+					      (and credit? bal)
+					      ))
+				     (debit-entry
+				      (and gross-bal?
+					   (gnc:double-col
+					    'entry debit
+					    report-commodity
+					    exchange-fn
+					    show-fcur?))
+				      )
+				     (credit-entry
+				      (and gross-bal?
+					   (gnc:double-col
+					    'entry credit
+					    report-commodity
+					    exchange-fn
+					    show-fcur?))
+				      )
 				     (col (+ account-cols
 					     (* 2 colpair)
-					     (if credit? 1 0))
+					     (if non-credit? 0 1))
 					  )
 				     )
 				(gnc:html-table-set-cell!
 				 build-table
 				 html-row
 				 col
-				 entry
+				 (or entry debit-entry)
 				 )
+				(if gross-bal?
+				    (gnc:html-table-set-cell!
+				     build-table
+				     html-row
+				     (+ col 1)
+				     credit-entry
+				     )
+				    )
 				;; update the corresponing running total
 				(and bal
-				     (if credit?
-					 (credit-coll 'minusmerge bal #f)
-					 (debit-coll 'merge bal #f)))
+				     (begin
+				       (if credit?
+					   (credit-coll 'minusmerge
+							(if gross-bal?
+							    credit bal)
+							#f)
+					   )
+				       (if non-credit?
+					   (debit-coll 'merge
+						       (if gross-bal?
+							   debit bal)
+						       #f)
+					   )
+				       )
+				     )
 				)
 			      )
 			    (list adj-col atb-col is-col bs-col)

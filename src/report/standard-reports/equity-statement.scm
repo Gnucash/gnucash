@@ -302,6 +302,7 @@
 	  (list (list 'str closing-str)
 		(list 'cased closing-cased)
 		(list 'regexp closing-regexp)
+		(list 'positive #f)
 		)
 	  )
 	 

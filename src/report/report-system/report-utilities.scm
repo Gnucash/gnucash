@@ -749,6 +749,7 @@
 	 (matchstr (get-val type 'str))
 	 (case-sens (if (get-val type 'cased) 1 0))
 	 (regexp (if (get-val type 'regexp) 1 0))
+	 (pos? (if (get-val type 'positive) #t #f))
          (total (gnc:make-commodity-collector))
          )
     (gnc:query-set-book str-query (gnc:get-current-book))
@@ -768,7 +769,13 @@
     (gnc:query-add-description-match
      str-query matchstr case-sens regexp 'query-and)
     (set! total-query
-	  (gnc:query-merge sign-query (gnc:query-invert str-query) 'query-and))
+	  ;; this is a tad inefficient, but its a simple way to accomplish
+	  ;; description match inversion...
+	  (if pos?
+	      (gnc:query-merge sign-query str-query 'query-and)
+	      (gnc:query-merge
+	       sign-query (gnc:query-invert str-query) 'query-and)
+	      ))
     
     (set! splits (gnc:query-get-splits total-query))
     (map (lambda (split)

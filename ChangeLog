@@ -1,3 +1,12 @@
+2004-08-12  David Montenegro  <sunrise2000@comcast.net>
+
+        * src/report/standard-reports/trial-balance.scm:
+	    src/report/standard-reports/equity-statement.scm:
+	    src/report/report-system/report-utilities.scm:
+	    Added to the work sheet special handling of
+	    inventory and income summary accounts for
+	    merchandising businesses.  Fixes #150008.
+
 2004-08-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/gnucash.desktop.in: make the desktop HIG compliant.
