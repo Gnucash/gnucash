@@ -1,3 +1,20 @@
+2003-06-23  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-account.c: Limit the commodity choices
+	based upon the current account type.
+
+	* src/gnome-utils/dialog-commodity.c: Add a new argument to the
+	dialog creation functions to specify what types of commodities
+	should be presented.  Also tweak the title of the dialog based
+	upon this argument.  Remove the "new" button when the dialog is
+	limited strictly to currencies.
+
+	* src/gnome-utils/gnc-commodity-edit.c:
+	* src/import-export/binary-import/druid-commodity.c: 
+	* src/import-export/import-commodity-matcher.c: 
+	* src/import-export/qif-import/druid-qif-import.c: Updated for new
+	commodity dialog argument.
+
 2003-06-22  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-commodity.[ch]: Clean up usage of the

@@ -29,6 +29,12 @@
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 
+typedef enum {
+  DIAG_COMM_CURRENCY,
+  DIAG_COMM_NON_CURRENCY,
+  DIAG_COMM_ALL,
+} dialog_commodity_mode;
+
 typedef struct select_commodity_window SelectCommodityWindow;
 typedef struct commodity_window CommodityWindow;
 
@@ -49,6 +55,7 @@ void gnc_ui_commodity_destroy(CommodityWindow * w);
 gnc_commodity * 
 gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel, 
 				   GtkWidget * parent,
+				   dialog_commodity_mode mode,
 				   char * user_message,
 				   char * exchange_code,
 				   char * fullname,
@@ -57,7 +64,8 @@ gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
 
 gnc_commodity * 
 gnc_ui_select_commodity_modal(gnc_commodity * orig_sel, 
-                              GtkWidget * parent);
+                              GtkWidget * parent,
+                              dialog_commodity_mode mode);
 
 
 gnc_commodity * 
@@ -79,8 +87,7 @@ gnc_ui_edit_commodity_modal(gnc_commodity *commodity,
 
 void gnc_ui_update_namespace_picker(GtkWidget * combobox,
 				    const char * sel,
-				    gboolean include_iso,
-				    gboolean include_all);
+				    dialog_commodity_mode mode);
 
 const char * gnc_ui_namespace_picker_ns (GtkWidget *combobox);
 
