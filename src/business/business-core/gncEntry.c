@@ -147,7 +147,7 @@ GncEntry *gncEntryCreate (GNCBook *book)
   entry->taxable = TRUE;
   entry->dirty = FALSE;
   entry->values_dirty = TRUE;
-  entry->billto.type = GNC_OWNER_NONE;
+  entry->billto.type = GNC_OWNER_CUSTOMER;
 
   xaccGUIDNew (&entry->guid, book);
   addObj (entry);

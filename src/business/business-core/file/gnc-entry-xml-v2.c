@@ -164,7 +164,7 @@ entry_dom_tree_create (GncEntry *entry)
       xmlAddChild(ret, int_to_dom_tree(entry_billable_string,
 				       gncEntryGetBillable (entry)));
       owner = gncEntryGetBillTo (entry);
-      if (owner && owner->type != GNC_OWNER_NONE)
+      if (owner && owner->owner.undefined != NULL)
 	xmlAddChild (ret, gnc_owner_to_dom_tree (entry_billto_string, owner));
     }
 

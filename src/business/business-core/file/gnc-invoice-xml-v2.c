@@ -148,7 +148,7 @@ invoice_dom_tree_create (GncInvoice *invoice)
 				 gncInvoiceGetCommonCommodity (invoice)));
 
     billto = gncInvoiceGetBillTo (invoice);
-    if (billto && billto->type != GNC_OWNER_NONE)
+    if (billto && billto->owner.undefined != NULL)
       xmlAddChild (ret, gnc_owner_to_dom_tree (invoice_billto_string, billto));
 
     return ret;

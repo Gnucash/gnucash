@@ -112,6 +112,13 @@ struct _invoice_window {
   GtkWidget *	billing_id_entry;
   GtkWidget *	terms_menu;
 
+  /* Project Widgets (used for Bills only) */
+  GtkWidget *	proj_frame;
+  GtkWidget *	proj_cust_box;
+  GtkWidget *	proj_cust_choice;
+  GtkWidget *	proj_job_box;
+  GtkWidget *	proj_job_choice;
+
   gint		width;
 
   GncBillTerm *	terms;
@@ -128,6 +135,8 @@ struct _invoice_window {
   GncOwner	owner;
   GncOwner	job;
 
+  GncOwner	proj_cust;
+  GncOwner	proj_job;
 };
 
 /* Forward definitions for CB functions */
@@ -164,7 +173,8 @@ void gnc_invoice_window_statusbar_cb (GtkWidget *widget, gpointer data);
 
 #define INV_WIDTH_PREFIX "invoice_reg"
 #define BILL_WIDTH_PREFIX "bill_reg"
-static int last_width = 0;
+static int inv_last_width = 0;
+static int bill_last_width = 0;
 
 static void gnc_invoice_update_window (InvoiceWindow *iw);
 static InvoiceWindow * gnc_ui_invoice_modify (GncInvoice *invoice);
@@ -214,6 +224,12 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
       gncInvoiceSetOwner (invoice, &(iw->job));
     else
       gncInvoiceSetOwner (invoice, &(iw->owner));
+
+    /* Only set the BillTo if we've actually got one */
+    if (gncOwnerGetJob (&iw->proj_job))
+      gncInvoiceSetBillTo (invoice, &iw->proj_job);
+    else
+      gncInvoiceSetBillTo (invoice, &iw->proj_cust);
   }
 
   gncInvoiceCommitEdit (invoice);
@@ -806,13 +822,29 @@ gnc_invoice_get_width_prefix (InvoiceWindow *iw)
   }
 }
 
+static int *
+gnc_invoice_get_width_integer (InvoiceWindow *iw)
+{
+  switch (gncOwnerGetType (&iw->owner)) {
+  case GNC_OWNER_CUSTOMER:
+    return &inv_last_width;
+  case GNC_OWNER_VENDOR:
+    return  &bill_last_width;
+  default:
+    g_warning ("invalid owner");
+    return &inv_last_width;
+  }
+}
+
 static void
 gnc_invoice_save_size (InvoiceWindow *iw)
 {
-  gdk_window_get_geometry (iw->dialog->window, NULL, NULL, &last_width,
-			   NULL, NULL);
+  int *last_width = gnc_invoice_get_width_integer (iw);
 
-  gnc_save_window_size (gnc_invoice_get_width_prefix (iw), last_width, 0);
+  gdk_window_get_geometry (iw->dialog->window, NULL, NULL,
+			   last_width, NULL, NULL);
+
+  gnc_save_window_size (gnc_invoice_get_width_prefix (iw), *last_width, 0);
 }
 
 static void
@@ -891,9 +923,8 @@ gnc_invoice_select_job_cb (gpointer jobp, gpointer user_data)
 static void
 gnc_invoice_update_job_choice (InvoiceWindow *iw)
 {
-  if (iw->job_choice) {
+  if (iw->job_choice)
     gtk_container_remove (GTK_CONTAINER (iw->job_box), iw->job_choice);
-  }
 
   /* If we don't have a real owner, then we obviously can't have a job */
   if (iw->owner.owner.undefined == NULL) {
@@ -905,28 +936,101 @@ gnc_invoice_update_job_choice (InvoiceWindow *iw)
     case EDIT_INVOICE:
       iw->job_choice =
 	gnc_owner_edit_create (NULL, iw->job_box, iw->book, &(iw->job));
+      break;
+    case NEW_INVOICE:
+    case MOD_INVOICE:
+      iw->job_choice =
+	gnc_general_search_new (GNC_JOB_MODULE_NAME, _("Select..."),
+				gnc_invoice_select_job_cb, iw);
+
+      gnc_general_search_set_selected (GNC_GENERAL_SEARCH (iw->job_choice),
+				       gncOwnerGetJob (&iw->job));
+      gnc_general_search_allow_clear (GNC_GENERAL_SEARCH (iw->job_choice),
+				      TRUE);
+      gtk_box_pack_start (GTK_BOX (iw->job_box), iw->job_choice,
+			  TRUE, TRUE, 0);
+      
+      gtk_signal_connect (GTK_OBJECT (iw->job_choice), "changed",
+			  GTK_SIGNAL_FUNC (gnc_invoice_job_changed_cb),
+			  iw);
+      break;
+    }
+  
+  if (iw->job_choice)
+    gtk_widget_show_all (iw->job_choice);
+}
+
+static GNCSearchWindow *
+gnc_invoice_select_proj_job_cb (gpointer jobp, gpointer user_data)
+{
+  GncJob *j = jobp;
+  InvoiceWindow *iw = user_data;
+  GncOwner owner, *ownerp;
+
+  if (!iw) return NULL;
+
+  if (j) {
+    ownerp = gncJobGetOwner (j);
+    gncOwnerCopy (ownerp, &owner);
+  } else
+    gncOwnerCopy (&(iw->proj_cust), &owner);
+
+  return gnc_job_search (j, &owner, iw->book);
+}
+
+static int
+gnc_invoice_proj_job_changed_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  
+  if (!iw)
+    return FALSE;
+
+  if (iw->dialog_type == VIEW_INVOICE)
+    return FALSE;
+
+  gnc_owner_get_owner (iw->proj_job_choice, &(iw->proj_job));
+  return FALSE;
+}
+
+static void
+gnc_invoice_update_proj_job (InvoiceWindow *iw)
+{
+  if (iw->proj_job_choice)
+    gtk_container_remove (GTK_CONTAINER (iw->proj_job_box),
+			  iw->proj_job_choice);
+
+  switch (iw->dialog_type) {
+  case VIEW_INVOICE:
+  case EDIT_INVOICE:
+      iw->proj_job_choice =
+	gnc_owner_edit_create (NULL, iw->proj_job_box, iw->book, &(iw->job));
     break;
   case NEW_INVOICE:
   case MOD_INVOICE:
-    iw->job_choice =
-      gnc_general_search_new (GNC_JOB_MODULE_NAME, _("Select..."),
-			      gnc_invoice_select_job_cb, iw);
+    if (iw->proj_cust.owner.undefined == NULL) {
+      iw->proj_job_choice = NULL;
+    } else {
+      iw->proj_job_choice =
+	gnc_general_search_new (GNC_JOB_MODULE_NAME, _("Select..."),
+				gnc_invoice_select_proj_job_cb, iw);
 
-    gnc_general_search_set_selected (GNC_GENERAL_SEARCH (iw->job_choice),
-				     gncOwnerGetJob (&iw->job));
-    gnc_general_search_allow_clear (GNC_GENERAL_SEARCH (iw->job_choice),
-				    TRUE);
-    gtk_box_pack_start (GTK_BOX (iw->job_box), iw->job_choice,
-			TRUE, TRUE, 0);
-
-    gtk_signal_connect (GTK_OBJECT (iw->job_choice), "changed",
-			GTK_SIGNAL_FUNC (gnc_invoice_job_changed_cb),
-			iw);
+      gnc_general_search_set_selected (GNC_GENERAL_SEARCH(iw->proj_job_choice),
+				       gncOwnerGetJob (&iw->proj_job));
+      gnc_general_search_allow_clear (GNC_GENERAL_SEARCH (iw->proj_job_choice),
+				      TRUE);
+      gtk_box_pack_start (GTK_BOX (iw->proj_job_box), iw->proj_job_choice,
+			  TRUE, TRUE, 0);
+      
+      gtk_signal_connect (GTK_OBJECT (iw->proj_job_choice), "changed",
+			  GTK_SIGNAL_FUNC (gnc_invoice_proj_job_changed_cb),
+			  iw);
+    }
     break;
   }
 
-  if (iw->job_choice)
-    gtk_widget_show_all (iw->job_choice);
+  if (iw->proj_job_choice)
+    gtk_widget_show_all (iw->proj_job_choice);
 }
 
 static int
@@ -975,6 +1079,35 @@ gnc_invoice_owner_changed_cb (GtkWidget *widget, gpointer data)
   gnc_ui_billterms_optionmenu (iw->terms_menu, iw->book, TRUE, &iw->terms);
 
   gnc_invoice_update_job_choice (iw);
+
+  return FALSE;
+}
+
+static int
+gnc_invoice_proj_cust_changed_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  GncOwner owner;
+  
+  if (!iw)
+    return FALSE;
+
+  if (iw->dialog_type == VIEW_INVOICE)
+    return FALSE;
+
+  gncOwnerCopy (&(iw->proj_cust), &owner);
+  gnc_owner_get_owner (iw->proj_cust_choice, &owner);
+
+  /* If this owner really changed, then reset ourselves */
+  if (!gncOwnerEqual (&owner, &(iw->proj_cust))) {
+    gncOwnerCopy (&owner, &(iw->proj_cust));
+    gncOwnerInitJob (&(iw->proj_job), NULL);
+  }
+
+  if (iw->dialog_type == EDIT_INVOICE)
+    return FALSE;
+
+  gnc_invoice_update_proj_job (iw);
 
   return FALSE;
 }
@@ -1061,6 +1194,11 @@ gnc_invoice_window_refresh_handler (GHashTable *changes, gpointer user_data)
   gncOwnerCopy (gncOwnerGetEndOwner (owner), &(iw->owner));
   gncOwnerInitJob (&(iw->job), gncOwnerGetJob (owner));
 
+  /* Copy the billto information into our window */
+  owner = gncInvoiceGetBillTo (invoice);
+  gncOwnerCopy (gncOwnerGetEndOwner (owner), &iw->proj_cust);
+  gncOwnerInitJob (&iw->proj_job, gncOwnerGetJob (owner));
+
   /* Ok, NOW let's refresh ourselves */
   gnc_invoice_update_window (iw);
 }
@@ -1107,9 +1245,12 @@ gnc_invoice_update_window (InvoiceWindow *iw)
 
   invoice = iw_get_invoice (iw);
 
-  if (iw->owner_choice) {
+  if (iw->owner_choice)
     gtk_container_remove (GTK_CONTAINER (iw->owner_box), iw->owner_choice);
-  }
+
+  if (iw->proj_cust_choice)
+    gtk_container_remove (GTK_CONTAINER (iw->proj_cust_box),
+			  iw->proj_cust_choice);
 
   switch (iw->dialog_type) {
   case VIEW_INVOICE:
@@ -1117,37 +1258,55 @@ gnc_invoice_update_window (InvoiceWindow *iw)
     iw->owner_choice =
       gnc_owner_edit_create (iw->owner_label, iw->owner_box, iw->book,
 			     &(iw->owner));
+    iw->proj_cust_choice =
+      gnc_owner_edit_create (NULL, iw->proj_cust_box, iw->book,
+			     &(iw->proj_cust));
     break;
   case NEW_INVOICE:
   case MOD_INVOICE:
     iw->owner_choice =
       gnc_owner_select_create (iw->owner_label, iw->owner_box, iw->book,
 			       &(iw->owner));
+    iw->proj_cust_choice =
+      gnc_owner_select_create (NULL, iw->proj_cust_box, iw->book,
+			       &(iw->proj_cust));
 
     gtk_signal_connect (GTK_OBJECT (iw->owner_choice), "changed",
 			GTK_SIGNAL_FUNC (gnc_invoice_owner_changed_cb),
+			iw);
+
+    gtk_signal_connect (GTK_OBJECT (iw->proj_cust_choice), "changed",
+			GTK_SIGNAL_FUNC (gnc_invoice_proj_cust_changed_cb),
 			iw);
 
     break;
   }
 
   gnc_invoice_update_job_choice (iw);
+  gnc_invoice_update_proj_job (iw);
 
+  {
+    int * last_width = gnc_invoice_get_width_integer (iw);
 
-  switch (iw->dialog_type) {
-  case VIEW_INVOICE:
-  case EDIT_INVOICE:
-    if (last_width == 0)
-      gnc_get_window_size (gnc_invoice_get_width_prefix (iw), &last_width,
-			   NULL);
+    switch (iw->dialog_type) {
+    case VIEW_INVOICE:
+    case EDIT_INVOICE:
+      if (*last_width == 0)
+	gnc_get_window_size (gnc_invoice_get_width_prefix (iw), last_width,
+			     NULL);
 
-    gtk_window_set_default_size (GTK_WINDOW (iw->dialog), last_width, 0);
-    break;
-  default:
-    break;
+      gtk_window_set_default_size (GTK_WINDOW (iw->dialog), *last_width, 0);
+      break;
+    default:
+      break;
+    }
   }
 
   gtk_widget_show_all (iw->dialog);
+
+  /* Hide the project frame for customer invoices */
+  if (iw->owner.type == GNC_OWNER_CUSTOMER)
+    gtk_widget_hide_all (iw->proj_frame);
 
   acct_entry = glade_xml_get_widget (iw->xml, "acct_entry");
 
@@ -1323,6 +1482,7 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   GncEntryLedger *entry_ledger = NULL;
   GncOwnerType owner_type;
   GncEntryLedgerType ledger_type;
+  GncOwner *billto;
 
   g_assert (type != NEW_INVOICE && type != MOD_INVOICE);
 
@@ -1357,6 +1517,10 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   gncOwnerInitJob (&(iw->job), gncOwnerGetJob (owner));
   owner_type = gncOwnerGetType (&iw->owner);
 
+  billto = gncInvoiceGetBillTo (invoice);
+  gncOwnerCopy (gncOwnerGetEndOwner (billto), &(iw->proj_cust));
+  gncOwnerInitJob (&iw->proj_job, gncOwnerGetJob (billto));
+
   /* Find the dialog */
   iw->xml = xml = gnc_glade_xml_new ("invoice.glade", "Invoice Entry Window");
   iw->dialog = glade_xml_get_widget (xml, "Invoice Entry Window");
@@ -1375,6 +1539,11 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   iw->owner_box = glade_xml_get_widget (xml, "owner_hbox");
   iw->owner_label = glade_xml_get_widget (xml, "owner_label");
   iw->job_box = glade_xml_get_widget (xml, "job_hbox");
+
+  /* grab the project widgets */
+  iw->proj_frame = glade_xml_get_widget (xml, "proj_frame");
+  iw->proj_cust_box = glade_xml_get_widget (xml, "proj_cust_hbox");
+  iw->proj_job_box = glade_xml_get_widget (xml, "proj_job_hbox");
 
   /* grab the toolbar widgets */
   iw->toolbar_dock = glade_xml_get_widget (xml, "toolbar_dock");
@@ -1521,6 +1690,7 @@ gnc_invoice_window_new_invoice (GNCBook *bookp, GncOwner *owner,
   GladeXML *xml;
   GnomeDialog *iwd;
   GtkWidget *hbox;
+  GncOwner *billto;
 
   if (invoice) {
     /*
@@ -1559,6 +1729,10 @@ gnc_invoice_window_new_invoice (GNCBook *bookp, GncOwner *owner,
   gncOwnerCopy (gncOwnerGetEndOwner(owner), &(iw->owner));
   gncOwnerInitJob (&(iw->job), gncOwnerGetJob (owner));
 
+  billto = gncInvoiceGetBillTo (invoice);
+  gncOwnerCopy (gncOwnerGetEndOwner (billto), &(iw->proj_cust));
+  gncOwnerInitJob (&iw->proj_job, gncOwnerGetJob (billto));
+
   /* Find the dialog */
   iw->xml = xml = gnc_glade_xml_new ("invoice.glade", "New Invoice Dialog");
   iw->dialog = glade_xml_get_widget (xml, "New Invoice Dialog");
@@ -1575,6 +1749,10 @@ gnc_invoice_window_new_invoice (GNCBook *bookp, GncOwner *owner,
   iw->owner_label = glade_xml_get_widget (xml, "owner_label");
   iw->job_box = glade_xml_get_widget (xml, "job_hbox");
 
+  /* grab the project widgets */
+  iw->proj_frame = glade_xml_get_widget (xml, "proj_frame");
+  iw->proj_cust_box = glade_xml_get_widget (xml, "proj_cust_hbox");
+  iw->proj_job_box = glade_xml_get_widget (xml, "proj_job_hbox");
 
   hbox = glade_xml_get_widget (xml, "date_opened_hbox");
   iw->opened_date = gnc_date_edit_new (time(NULL), FALSE, FALSE);

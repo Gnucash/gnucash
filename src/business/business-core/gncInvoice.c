@@ -98,7 +98,7 @@ GncInvoice *gncInvoiceCreate (GNCBook *book)
   invoice->notes = CACHE_INSERT ("");
   invoice->billing_id = CACHE_INSERT ("");
 
-  invoice->billto.type = GNC_OWNER_NONE;
+  invoice->billto.type = GNC_OWNER_CUSTOMER;
   invoice->active = TRUE;
 
   xaccGUIDNew (&invoice->guid, book);

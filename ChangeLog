@@ -37,6 +37,11 @@
 
 	* modify the Entry Ledger query to pull in Billable Entries from
 	  Posted Bills that belong to an Invoice's Owner.
+
+	* business-prefs: add the bill_reg_width preference to save the value
+	* implement "Default Project" in the Bill register to enter a
+	  default Bill-to customer/job.  It's only visible on Bills, not
+	  Invoices.
 	
 2002-07-09  Derek Atkins  <derek@ihftp.com>
 
