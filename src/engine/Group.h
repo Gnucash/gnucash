@@ -46,7 +46,7 @@ void          xaccAccountGroupDestroy (AccountGroup *grp);
 GNCBook * xaccGroupGetBook (AccountGroup *group);
 
 void          xaccAccountGroupBeginEdit (AccountGroup *grp);
-void 	      xaccAccountGroupCommitEdit (AccountGroup *grp);
+void          xaccAccountGroupCommitEdit (AccountGroup *grp);
 
 /*
  * The xaccGroupConcatGroup() subroutine will move (reparent) 
@@ -125,7 +125,7 @@ Account * xaccGroupGetAccount (AccountGroup *group, int index);
 /*
  * The xaccGroupGetSubAccounts() subroutine returns an list of the accounts,
  *    including subaccounts, in the account group. The returned list
- *    should be freed with g_list_free when no longer needed.
+ *    should be freed with g_list_free() when no longer needed.
  *
  * The xaccGroupGetAccountList() subroutines returns only the immediate
  *    children of the account group. The returned list should *not*
