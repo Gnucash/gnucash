@@ -92,6 +92,7 @@ xaccAccountGroupMarkSaved (AccountGroup *grp)
 {
    int i;
 
+   if (!grp) return;
    grp->saved = True;
 
    for (i=0; i<grp->numAcc; i++) {
