@@ -8,7 +8,17 @@
 (gnc:depend  "report-html.scm")
 (gnc:depend  "date-utilities.scm")
 
-(let ()
+(let ((pagename-general (N_ "General"))
+      (optname-from-date (N_ "From"))
+      (optname-to-date (N_ "To"))
+      (optname-accounts (N_ "Accounts"))
+      (optname-stepsize (N_ "Step Size"))
+      (optname-report-currency (N_ "Report's currency"))
+
+      (pagename-display (N_ "Display Format"))
+      (optname-plot-width (N_ "Plot Width"))
+      (optname-plot-height (N_ "Plot Height")))
+  
 
   (define (options-generator)    
     (let* ((options (gnc:new-options)) 
@@ -19,34 +29,13 @@
               (gnc:register-option options new-option))))
 
       (gnc:options-add-date-interval!
-       options "Report Options" 
-       (N_ "From") (N_ "To")
-       "d")
-
+       options pagename-general
+       optname-from-date optname-to-date "a")
+      
       (add-option
-       (gnc:make-account-list-option
-	(N_ "Report Options") (N_ "Accounts")
-	"b"
-	"Select accounts to calculate income on"
-	(lambda ()
-	  (filter
-	   gnc:account-is-inc-exp?
-	   (gnc:group-get-subaccounts (gnc:get-current-group))))
-	gnc:account-is-inc-exp?
-	#t))
-
-      (add-option
-       (gnc:make-currency-option
-	"Report Options"
-	"Report Currency"
-	"c"
-	"Select the display value for the currency"
-	(gnc:locale-default-currency)))
-
-     (add-option
        (gnc:make-multichoice-option
-        (N_ "Report Options") (N_ "Step Size")
-        "e" (N_ "The amount of time between data points") 'MonthDelta
+        pagename-general optname-stepsize
+        "b" (_ "The amount of time between data points") 'MonthDelta
         (list #(WeekDelta  "Week" "Week")
 	      #(TwoWeekDelta "Two Week" "Two Weeks")
 	      #(MonthDelta "Month" "Month")
@@ -54,19 +43,42 @@
               #(YearDelta "Year" "Year")
               )))      
 
-     (add-option
-       (gnc:make-number-range-option
-        (N_ "Display Format") (N_ "Plot Width")
-        "a" (N_ "Width of plot in pixels.") 400
-        100 1000 0 1))
-
+      (add-option
+       (gnc:make-account-list-option
+	pagename-general optname-accounts
+	"c"
+	(_ "Select accounts to calculate income on")
+	(lambda ()
+	  (filter
+	   gnc:account-is-inc-exp?
+	   (gnc:group-get-subaccounts (gnc:get-current-group))))
+	(lambda (accounts)
+	  (list #t
+		(filter gnc:account-is-inc-exp? accounts)))
+	#t))
+      
+      (add-option
+       (gnc:make-currency-option
+	pagename-general optname-report-currency
+	"d"
+	(_ "Select the display value for the currency")
+	(gnc:option-value
+	 (gnc:lookup-global-option "International"
+				   "Default Currency"))))
+      
       (add-option
        (gnc:make-number-range-option
-        (N_ "Display Format") (N_ "Plot Height")
-        "b" (N_ "Height of plot in pixels.") 400
+        pagename-display optname-plot-width 
+        "a" (_ "Width of plot in pixels.") 400
+        100 1000 0 1))
+      
+      (add-option
+       (gnc:make-number-range-option
+        pagename-display optname-plot-height
+        "b" (_ "Height of plot in pixels.") 400
         100 1000 0 1))
 
-      (gnc:options-set-default-section options "Report Options")
+      (gnc:options-set-default-section options pagename-general)
 
       options))
   
@@ -85,24 +97,26 @@
     (define (op-value section name)
       (gnc:option-value (get-op section name)))
     
-    (let* ((report-currency (op-value "Report Options" "Report Currency"))
-	   (height (op-value "Display Format" "Plot Height"))
-	   (width (op-value "Display Format" "Plot Width"))
-	   (accounts (op-value "Report Options" "Accounts"))
-	   (to-date-tp (gnc:timepair-end-day-time 
-			(vector-ref (op-value "Report Options"
-					      "To") 1)))
+    (let* ((to-date-tp (gnc:timepair-end-day-time 
+			(vector-ref (op-value pagename-general
+					      optname-to-date) 1)))
 	   (from-date-tp (gnc:timepair-start-day-time 
-			  (vector-ref (op-value "Report Options"
-						"From") 1)))
-	   (interval (op-value "Report Options" "Step Size"))
+			  (vector-ref (op-value pagename-general
+						optname-from-date) 1)))
+	   (interval (op-value pagename-general optname-stepsize))
+	   (accounts (op-value pagename-general optname-accounts))
+           (report-currency (op-value pagename-general optname-report-currency))
+
+	   (height (op-value pagename-display optname-plot-height))
+	   (width (op-value pagename-display optname-plot-width))
+
 	   (document (gnc:make-html-document))
 	   (chart (gnc:make-html-barchart))
 	   (exchange-alist (gnc:make-exchange-alist
 			    report-currency to-date-tp))
 	   (exchange-fn-internal (gnc:make-exchange-function exchange-alist))
-	   (exchange-fn (lambda (foriegn)
-                          (exchange-fn-internal foriegn report-currency)))
+	   (exchange-fn (lambda (foreign)
+                          (exchange-fn-internal foreign report-currency)))
 	   (dates-list (gnc:dateloop
                         (gnc:timepair-start-day-time from-date-tp) 
                         (gnc:timepair-end-day-time 
@@ -124,9 +138,12 @@
 	    (map profit-collector-fn dates-list))
 	   (double-list
 	    (map (lambda (commodity-collector)
-		   (- (gnc:numeric-to-double 
-                       (cadr (commodity-collector 'getpair
-                                                  report-currency #t)))))
+		   ;;(- 
+		   (gnc:numeric-to-double 
+		    (gnc:gnc-monetary-amount
+		     (gnc:sum-collector-commodity 
+		      commodity-collector report-currency 
+		      exchange-fn-internal))));;)
 		 profit-collector-list))
 	   (date-string-list
 	    (map (lambda (date-list-item)
@@ -134,7 +151,7 @@
 		    (car date-list-item)))
 		 dates-list)))
 
-      (gnc:html-barchart-set-title! chart (N_ "Income/Expense Chart"))
+      (gnc:html-barchart-set-title! chart (_ "Income/Expense Chart"))
       (gnc:html-barchart-set-subtitle!
        chart (sprintf #f
                       (_ "%s to %s")
