@@ -160,7 +160,7 @@ change_item_cb (GNCItemList *item_list, char *item_string, gpointer data)
 	PopBox *box = cell->cell.gui_private;
 
         box->in_list_select = TRUE;
-	gnucash_sheet_modify_current_cell(box->sheet, item_string);
+	gnucash_sheet_modify_current_cell (box->sheet, item_string);
         box->in_list_select = FALSE;
 }
 
@@ -180,14 +180,16 @@ key_press_item_cb (GNCItemList *item_list, GdkEventKey *event, gpointer data)
 	ComboCell *cell = data;
 	PopBox *box = cell->cell.gui_private;
 
-        switch(event->keyval) {
+        switch (event->keyval)
+        {
                 case GDK_Escape:
                         item_edit_hide_popup (box->item_edit);
                         box->list_popped = FALSE;
                         break;
+
                 default:
-                        gtk_widget_event(GTK_WIDGET(box->sheet),
-                                         (GdkEvent *) event);
+                        gtk_widget_event (GTK_WIDGET(box->sheet),
+                                          (GdkEvent *) event);
                         break;
         }
 }
@@ -200,7 +202,7 @@ combo_disconnect_signals (ComboCell *cell)
 	if (!box->signals_connected)
 		return;
 
-        if (GTK_OBJECT_DESTROYED(GTK_OBJECT(box->item_list)))
+        if (GTK_OBJECT_DESTROYED (GTK_OBJECT(box->item_list)))
                 return;
 
 	gtk_signal_disconnect_by_data (GTK_OBJECT(box->item_list), cell);
@@ -219,17 +221,17 @@ combo_connect_signals (ComboCell *cell)
         if (GTK_OBJECT_DESTROYED(GTK_OBJECT(box->item_list)))
                 return;
 
-        gtk_signal_connect(GTK_OBJECT(box->item_list), "select_item",
-                           GTK_SIGNAL_FUNC(select_item_cb), cell);
+        gtk_signal_connect (GTK_OBJECT(box->item_list), "select_item",
+                            GTK_SIGNAL_FUNC(select_item_cb), cell);
 
-        gtk_signal_connect(GTK_OBJECT(box->item_list), "change_item",
-                           GTK_SIGNAL_FUNC(change_item_cb), cell);
+        gtk_signal_connect (GTK_OBJECT(box->item_list), "change_item",
+                            GTK_SIGNAL_FUNC(change_item_cb), cell);
 
-        gtk_signal_connect(GTK_OBJECT(box->item_list), "activate_item",
-                           GTK_SIGNAL_FUNC(activate_item_cb), cell);
+        gtk_signal_connect (GTK_OBJECT(box->item_list), "activate_item",
+                            GTK_SIGNAL_FUNC(activate_item_cb), cell);
 
-        gtk_signal_connect(GTK_OBJECT(box->item_list), "key_press_event",
-                           GTK_SIGNAL_FUNC(key_press_item_cb), cell);
+        gtk_signal_connect (GTK_OBJECT(box->item_list), "key_press_event",
+                            GTK_SIGNAL_FUNC(key_press_item_cb), cell);
 
 	box->signals_connected = TRUE;
 }

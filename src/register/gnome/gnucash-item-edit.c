@@ -1357,10 +1357,6 @@ item_edit_show_popup (ItemEdit *item_edit)
                 item_edit->popup_set_focus (item_edit->popup_item,
                                             item_edit->popup_user_data);
 
-        /* Make sure the popup gets shown/sized correctly */
-        while (gtk_events_pending ())
-                gtk_main_iteration ();
-
         if (item_edit->popup_post_show)
                 item_edit->popup_post_show (item_edit->popup_item,
                                             item_edit->popup_user_data);

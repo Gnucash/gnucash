@@ -1556,11 +1556,13 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
                 case GDK_ISO_Left_Tab:
                         if (event->state & GDK_SHIFT_MASK) {
                                 direction = GNC_TABLE_TRAVERSE_LEFT;
-                                gnc_table_move_tab(table, &new_virt_loc, FALSE);
+                                gnc_table_move_tab (table, &new_virt_loc,
+                                                    FALSE);
                         }
                         else {
                                 direction = GNC_TABLE_TRAVERSE_RIGHT;
-                                gnc_table_move_tab(table, &new_virt_loc, TRUE);
+                                gnc_table_move_tab (table, &new_virt_loc,
+                                                    TRUE);
                         }
                         break;
                 case GDK_KP_Page_Up:
@@ -2143,9 +2145,9 @@ gnucash_sheet_init (GnucashSheet *sheet)
         sheet->width = 0;
         sheet->height = 0;
 
-        sheet->blocks = g_table_new(sizeof (SheetBlock),
-                                    gnucash_sheet_block_construct,
-                                    gnucash_sheet_block_destroy, NULL);
+        sheet->blocks = g_table_new (sizeof (SheetBlock),
+                                     gnucash_sheet_block_construct,
+                                     gnucash_sheet_block_destroy, NULL);
 }
 
 
