@@ -25,7 +25,7 @@
 #include <string.h>
 
 #include "gnc-engine-util.h"
-#include "gnc-pricedb.h"
+#include "gnc-pricedb-p.h"
 #include "io-gncxml-p.h"
 #include "sixtp.h"
 #include "sixtp-parsers.h"
@@ -105,6 +105,7 @@ ledger_data_after_child_handler(gpointer data_for_children,
       return FALSE;
     }
     status->pricedb = pdb;
+    gnc_pricedb_mark_clean(pdb);
     child_result->should_cleanup = FALSE;
   }
   return(TRUE);

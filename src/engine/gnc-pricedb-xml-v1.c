@@ -228,7 +228,7 @@ pricedb_after_child_handler(gpointer data_for_children,
                             GSList* sibling_data,
                             gpointer parent_data,
                             gpointer global_data,
-                           gpointer *result,
+                            gpointer *result,
                             const gchar *tag,
                             const gchar *child_tag,
                             sixtp_child_result *child_result)
