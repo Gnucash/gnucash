@@ -419,8 +419,7 @@
       </tr>
 
       <tr>
-        <td><a href="#alerts">Alerts, Recurring
-        Transactions</a></td>
+        <td><a href="#alerts">Alerts, Recurring Transactions</a></td>
 
         <td>Medium</td>
         <td>RLB</td>
@@ -431,6 +430,13 @@
 
         <td>Medium</td>
         <td>Dave</td>
+      </tr>
+
+      <tr>
+        <td><a href="#classes">Classes</a></td>
+
+        <td>Small</td>
+        <td>?</td>
       </tr>
 
       <tr>
@@ -1432,6 +1438,9 @@
         very very different GUI than what the budgeting system
         required for a small-business might look like.</p>
 
+        <p>Note that the utility of budgets is greatly enhanced by using
+        them with '<a href="#classes">classes</a>'. 
+
         <p><b>Status:</b></p>
 
         <ul>
@@ -1441,8 +1450,37 @@
 
           <li>Bryan Larsen has begun work .. it's scheme based ...
           Dave Peticolas has some GUI roughed out ...</li>
+
         </ul>
         <br>
+        <br>
+      </dd>
+
+      <dt><a name="classes"><b>Classes</b></a></dt>
+
+      <dd>
+        Ability to mark certain jopurnal entries as belonging to 
+        a 'class', so that expenses (or income) can be categorized
+        in more than one way.  For example, the expense of a trip
+        might include food, travel and lodging, and thus be spread over
+        three different expense accounts.  None-the-less, we want all
+        of these entries to be marked as being in the same class.
+        Note that classes can be particularly useful when used with
+        budgets.
+        This requires the following:
+        <ul>
+        <li>place in the engine where split can be marked
+            (grib is implementing in a slot, with use with qif import).
+        <li>gui where splits can be marked up as beloinging to a certain
+            class.
+        <li>Ability to report by class
+        <li>Ability to query by class.
+        </ul>
+
+        <br>
+        <br>
+      </dd>
+
       <dt><a name="testing"><b>Automated Test Suite</b></a></dt>
 
       <dd>
@@ -1451,8 +1489,7 @@
            <li>File IO consistency check. RLB.
            <li>Currency math correctness. Grib.
          </ul>
-      </dd>
-
+        <br>
         <br>
       </dd>
 
@@ -1473,7 +1510,7 @@
             Need a QIF Import wizard (there are several non-intuitive
             steps that need to be performed during import.  
             A dialogue wizard seems like the best idea to carry 
-            through this process.
+            through this process. (grib, in process for 1.5)
           </li>
           <li>
             Work needs to be done for recurring transactions, etc.
@@ -1516,13 +1553,11 @@
         </ul>
         <br>
         <br>
-         
 
         <p><b>Status:</b> not started</p>
       </dd>
 
-      <dt><a name="quote"><b>Stock Quotes, Price
-      Quotes</b></a></dt>
+      <dt><a name="quote"><b>Stock Quotes, Price Quotes</b></a></dt>
 
       <dd>
         Add ability to obtain stock, mutual fund, and currency trading
