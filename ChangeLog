@@ -1,4 +1,9 @@
-2004-18-21  Derek Atkins  <derek@ihtfp.com>
+2004-08-28  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Account.c: fix xaccAccountGetBalanceAsOfDate() to properly
+	  compute the balance at the end of the split list.  Fixes #150757.
+
+2004-08-21  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-reports/advanced-portfolio.scm:
 	  Add option to include zero-amount splits in computations.
