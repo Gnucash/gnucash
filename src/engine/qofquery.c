@@ -72,9 +72,9 @@ struct _QofQuerySort
    * convert types.
    */
   gboolean            use_default;
-  GSList *            param_fcns;     /* Chain of paramters to walk */
+  GSList *            param_fcns;
   QofSortFunc         obj_cmp;        /* In case you are comparing objects */
-  QofCompareFunc      comp_fcn;       /* When you are comparing core types */
+  QofCompareFunc      comp_fcn;        /* When you are comparing core types */
 };
 
 /* The QUERY structure */
@@ -280,9 +280,9 @@ static void free_members (QofQuery *q)
 static int cmp_func (QofQuerySort *sort, QofSortFunc default_sort,
                      gconstpointer a, gconstpointer b)
 {
-  QofParam *param = NULL;
   GSList *node;
   gpointer conva, convb;
+  QofAccessFunc get_fcn = NULL;        /* to appease the compiler */
 
   g_return_val_if_fail (sort, 0);
 
@@ -304,7 +304,7 @@ static int cmp_func (QofQuerySort *sort, QofSortFunc default_sort,
   convb = (gpointer)b;
   for (node = sort->param_fcns; node; node = node->next) 
   {
-    param = node->data;
+    get_fcn = node->data;
 
     /* The last term is really the "parameter getter",
      * unless we're comparing objects ;) */
@@ -312,14 +312,13 @@ static int cmp_func (QofQuerySort *sort, QofSortFunc default_sort,
       break;
 
     /* Do the converstions */
-    conva = (param->param_getfcn) (conva, param);
-    convb = (param->param_getfcn) (convb, param);
+    conva = get_fcn (conva);
+    convb = get_fcn (convb);
   }
-
   /* And now return the (appropriate) compare */
   if (sort->comp_fcn)
   {
-    int rc = sort->comp_fcn (conva, convb, sort->options, param);
+    int rc = sort->comp_fcn (conva, convb, sort->options, get_fcn);
     return rc;
   }
 
@@ -382,21 +381,21 @@ check_object (QofQuery *q, gpointer object)
       if (qt->param_fcns && qt->pred_fcn) 
       {
         GSList *node;
-        QofParam *param = NULL;
+        QofAccessFunc get_fcn;
         gpointer conv_obj = object;
 
         /* iterate through the conversions */
-        for (node = qt->param_fcns; node; node = node->next) 
-        {
-          param = node->data;
+        for (node = qt->param_fcns; node; node = node->next) {
+          get_fcn = node->data;
 
           /* The last term is the actual parameter getter */
-          if (!node->next) break;
+          if (!node->next)
+            break;
 
-          conv_obj = param->param_getfcn (conv_obj, param);
+          conv_obj = get_fcn (conv_obj);
         }
 
-        if (((qt->pred_fcn)(conv_obj, param, qt->pdata)) == qt->invert) 
+        if (((qt->pred_fcn)(conv_obj, get_fcn, qt->pdata)) == qt->invert) 
         {
           and_terms_ok = 0;
           break;
@@ -429,9 +428,8 @@ check_object (QofQuery *q, gpointer object)
  *
  * returns NULL if the first parameter is bad (and final is unchanged).
  */
-static GSList * 
-compile_params (GSList *param_list, QofIdType start_obj, 
-                QofParam const **final)
+static GSList * compile_params (GSList *param_list, QofIdType start_obj,
+                                QofParam const **final)
 {
   const QofParam *objDef = NULL;
   GSList *fcns = NULL;
@@ -449,8 +447,8 @@ compile_params (GSList *param_list, QofIdType start_obj,
     /* If it doesn't exist, then we've reached the end */
     if (!objDef) break;
 
-    /* Save off this parameter */
-    fcns = g_slist_prepend (fcns, (gpointer) objDef);
+    /* Save off this function */
+    fcns = g_slist_prepend (fcns, objDef->param_getfcn);
 
     /* Save this off, just in case */
     *final = objDef;

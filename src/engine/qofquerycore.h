@@ -146,6 +146,7 @@ void qof_query_core_predicate_free (QofQueryPredData *pdata);
 /** Return a printable string for a core data object.  Caller needs
  *  to g_free() the returned string.
  */
-char * qof_query_core_to_string (QofType, gpointer object, QofParam *getter);
+char * qof_query_core_to_string (char const *type, gpointer object,
+			     QofAccessFunc fcn);
 
 #endif /* QOF_QUERYCORE_H */

@@ -1,3 +1,13 @@
+2004-04-18  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Transaction.c: fix a comment to better explain why
+	  we have no-op functions for some parameters.
+	* src/engine/qof*:  Revert Linas' patch from last night which
+	  is broken is way too many ways to count.  First, the code didn't
+	  compile.  Second it was calling functions that took one argument
+	  with two due to broken casting.  Third, it had repurcusions in
+	  other sections of the code that Linas needs to take into account.
+
 2004-05-16  Derek Atkins  <derek@ihtfp.com>
 
 	* src/macros/autogen.sh: Add MORE warnings around gettext because
