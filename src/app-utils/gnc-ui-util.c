@@ -133,7 +133,7 @@ gnc_get_account_separator (void)
   char separator = ':';
   char *string;
 
-  string = gnc_lookup_multichoice_option("General",
+  string = gnc_lookup_multichoice_option("Accounts",
                                          "Account Separator",
                                          "colon");
 

@@ -336,7 +336,7 @@ gnc_gui_init (SCM command_line)
 
     account_separator_callback_id = 
       gnc_register_option_change_callback(gnc_configure_account_separator_cb,
-                                          NULL, "General",
+                                          NULL, "Accounts",
                                           "Account Separator");
 
     gnc_configure_register_colors();

@@ -3,6 +3,12 @@
 	* src/gnome-utils/dialog-transfer.c: the Euroland currency rates
 	  were inverted in the transfer dialog.
 
+	* src/app-utils/gnc-ui-util.c:
+	* src/gnome/top-level.c:
+	  the Account Separator option was moved to the Accounts page --
+	  reference is correctly.
+	Fixes #106673
+	
 2003-03-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/scm/main-window.scm:  turn off the report-total by default
