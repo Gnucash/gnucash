@@ -163,10 +163,17 @@
 	use of the GUPPI plotting tool.
       </para>
       <para>
-	We could talk about the graphs all day, but it's probably
-	more interesting to show you just how good they look:
-      </para>
-      <para><emphasis>PICTURES NEEDED!</emphasis></para>
+	We could talk about the graphs all day, but they're 
+	  much more interesting to look at than talk about - 
+	  for example:
+	  </para>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="image/asset-piechart.png">
+	    </imageobject>
+	  </mediaobject>
+	</screenshot>
     </sect2>
 
     <sect2>

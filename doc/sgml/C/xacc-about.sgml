@@ -29,8 +29,15 @@ offers, have a look at the <link linkend="xacc-features">Features
     do development work, you should be using either this version,
     or an older stable version. These versions are fairly stable,
     with all currently known bugs fixed.
- </para>
+    The present "experimental" stream is gnucash-1.7.x, which is
+    now almost at beta-test stage.  This is the version you are
+    using right now, obviously!   If you are using this version
+    with real data, PLEASE MAKE BACKUPS REGULARLY!
 
+    Once the 1.7.x series stabilizes, the next stable series
+    will be 1.8.x.
+
+ </para>
 <para>If you wish to "hack" on the experimental version, you should
     first start by reading through the <ulink url="http://linas.org/linux/xacc/projects.html">Project Goals</ulink>
     page in order to get some perspective on the overall design.
@@ -162,6 +169,15 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
    is a report-generating monster. He's been on of the largest
    contributors to the current report infrastructure, creating
    many of the important reports.
+   </para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>jsled@asynchronous.org</email>Joshua Sled</glossterm>
+<glossdef>
+<para>
+  works on scheduled transactions and budgeting.
    </para>
 </glossdef>
 </glossentry>
@@ -938,6 +954,14 @@ Nielsen</glossterm>
 <glossentry>
 <glossterm><email>stimming@tuhh.de</email> Christian
       Stimming</glossterm>
+<glossdef>
+<para>report patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>garrisonstuber@bellsouth.net</email> Michael
+      T. Garrison Stuber</glossterm>
 <glossdef>
 <para>report patch</para>
 </glossdef>
