@@ -1,25 +1,25 @@
 
 This directory contains code for SQL/Postgres support.  The
 SQL backend can be used in several modes. The single-user modes
-are more-or-less beta: they work, but haven't been well tested.
-The multi-user code is experimental: it still has a variety of
-problems.
+are beta: they work for me, but haven't had the benefit of lots 
+of testers whacking in it and bug-hunting.  The multi-user mode 
+is experimental: it still has a variety of deep problems.
 
 
 
 Postgres Install Instructions
 -----------------------------
-1) Install postgresql server, client and devel packages.
+1) Install PostgresSQL server, client and devel packages.
 2) if installed from redhat, then running /etc/rc.d/init.d/postgresql 
    will setup and initialize basic Postgres first-time setup & config.
 3) as root, 'su - postgres' then run 'createuser' to add your user id
-   (don't set a password on your postgres db name, yet, gnucash doesn't 
+   (don't set a password on your postgres db name, yet, GnuCash doesn't 
    have a GUI to ask for your password yet)
    If you've forgotten what users are on the system, you can check
    by starting the 'psql' command shell and typing the command.
    'SELECT * FROM pg_shadow;'
-   Note this wnly works for the posgres user, and other users that 
-   have creatuser permissions.
+   Note this only works for the postgres user, and other users that 
+   have createuser permissions.
 
 4) (optional) enable TCPIP connections to remote hosts. To do this:
    edit the file pg_hba.conf on the remote host to configure and allow 
@@ -71,7 +71,7 @@ using root privileges. After step 1 above, perform the following:
 GnuCash Build Instructions
 --------------------------
 Same as usual, but you must specify the flag '--enable-sql' in order
-to build in Postrges support.  
+to build in Postgres support.  
 i.e. 
 ./configure --enable-sql
 and then 'make'.
@@ -111,23 +111,28 @@ postgres://localhost/dbname?user=whomever&password=asdf
 Note that the username and password are the pg_shadow username and
 password, *NOT* your unix login name and password.
 
+(A GUI dialog to prompt for your password hasn't been implemented yet.)
 
 Access Modes
 ------------
-There are four different ways or 'modes' in which to access the database.
-These are 
+There are four different ways or 'modes' in which to access your 
+database.  These are 
+
 mode=single-file
 mode=single-update
 mode=multi-user-poll
 mode=multi-user
 
-The last mode is preferred, but not yet implemented.
-See the file 'design.txt' for an explanation.
-Enable these by specifying the URL
+The first two are single-user access modes; single-update is the 
+default mode (and the preferred single-user mode).
+
+The multi-user modes are partly implemented and quite broken at the
+moment.  See the file 'design.txt' for an in-depth explanation of
+these modes.
+
+You can specify a particular access mode by specifying the URL
 
 postgres://localhost/dbname?mode=whatever
-
-The current default is single-update, but will soon be multi-user-poll
 
 
 Other Options
@@ -141,7 +146,7 @@ To Be Done
 Core bugs/features that still need work:
 
 (none in this list are truly critical at this point, except possibly
-the username/password dialog, and its effect with regards to inital db
+the username/password dialog, and its effect with regards to initial db
 access).
 
 -- Wire in the GUI to ask user for username/password to log onto the
@@ -154,11 +159,11 @@ access).
 
 -- clear up end/destroy semantics.  After book_end is called,
    its not possible to start a new session, since there are
-   uninitialized pointers.  Unles to book is deleted immediately,
+   uninitialized pointers.  Unless to book is deleted immediately,
    everything is hosed.  This is a generic backend design problem,
-   not just an sql bckend problem, that needs fixing.
+   not just an sql backend problem, that needs fixing.
 
--- allow user to enter URL in GUI dialog.  User can currently type url
+-- allow user to enter URL in GUI dialog.  User can currently type URL
    into the file dialog window; it would be nice to have something 
    slightly nicer tan this.
 
@@ -205,7 +210,7 @@ multi-user mode is fundamentally broken unless they are fixed.
 -- checkpoint ending balance is showing up as starting balance
 
 -- if another user deletes a transaction, or an account, there is no way
-   for us to know.  Thus, any sort of sync will proabably (incorrectly)
+   for us to know.  Thus, any sort of sync will probably (incorrectly)
    add the deleted transaction back in.  Question: what is the best way
    of having the backend detect that another user has deleted a 
    transaction?
@@ -258,7 +263,7 @@ multi-user mode is fundamentally broken unless they are fixed.
    cached, rather than from the contents in the DB.  This is OK,
    as long as some other user hasn't modified the DB in the meanwhile.)
    This may not be a problem, as practically speaking, its highly
-   unlkikly that one user is modifying data while the other is undoing
+   unlikely that one user is modifying data while the other is undoing
    the same transaction.
 
 -- fix caching in the face of lost contact to the backend.  If the
