@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5\n"
-"POT-Creation-Date: 2001-06-09 16:49-0700\n"
-"PO-Revision-Date: 2001-06-08 18:18+02:00\n"
+"POT-Creation-Date: 2001-06-12 19:13+0200\n"
+"PO-Revision-Date: 2001-06-12 19:17+02:00\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -200,7 +200,7 @@ msgstr ""
 msgid "Open"
 msgstr "Öffnen"
 
-#: src/FileDialog.c:565 src/gnome/window-main.c:1084
+#: src/FileDialog.c:565 src/gnome/window-main.c:1090
 msgid "Save"
 msgstr "Speichern"
 
@@ -216,16 +216,6 @@ msgstr ""
 "    %s\n"
 " existiert bereits.\n"
 "Sind Sie sicher, daß sie überschrieben werden soll?"
-
-#: src/SplitLedger.c:125 src/engine/Transaction.c:2017
-#: src/engine/Transaction.c:2038 src/register/splitreg.c:739
-#: src/scm/report/guile-strings.c:344
-msgid "-- Split Transaction --"
-msgstr "-- Mehrteilige Buchung --"
-
-#: src/SplitLedger.c:126 src/register/splitreg.c:747
-msgid "-- Stock Split --"
-msgstr "-- Aktienteilung --"
 
 #: src/SplitLedger.c:822
 msgid "Rebalance Transaction"
@@ -509,13 +499,13 @@ msgstr "Währung"
 #: src/scm/guile-strings.c:230 src/scm/guile-strings.c:463
 #: src/scm/report/guile-strings.c:250
 msgid "Income"
-msgstr "Einnahme"
+msgstr "Erträge"
 
 #: src/engine/Account.c:1867 src/gnome/glade-gnc-dialogs.c:5985
 #: src/scm/guile-strings.c:152 src/scm/guile-strings.c:219
 #: src/scm/report/guile-strings.c:251
 msgid "Expense"
-msgstr "Ausgabe"
+msgstr "Aufwendungen"
 
 #: src/engine/Account.c:1868 src/gnc-ui-util.c:539 src/register/splitreg.c:222
 #: src/scm/guile-strings.c:153 src/scm/report/guile-strings.c:107
@@ -530,7 +520,12 @@ msgstr "Ausbuchungskonto"
 msgid "Imbalance"
 msgstr "Ausgleichskonto"
 
-#: src/engine/Transaction.c:2059 src/gnome/druid-stock-split.c:395
+#: src/engine/Transaction.c:2016 src/engine/Transaction.c:2037
+#: src/register/splitreg.c:739 src/scm/report/guile-strings.c:344
+msgid "-- Split Transaction --"
+msgstr "-- Mehrteiliger Vorgang --"
+
+#: src/engine/Transaction.c:2058 src/gnome/druid-stock-split.c:395
 #: src/gnome/window-register.c:869 src/register/splitreg.c:241
 msgid "Split"
 msgstr "Mehrteilig"
@@ -703,20 +698,20 @@ msgstr ""
 msgid "New top level account"
 msgstr "Neues Top-Level-Konto"
 
-#: src/gnome/dialog-account.c:1709
+#: src/gnome/dialog-account.c:1717
 msgid "<No name>"
 msgstr "<Kein Name>"
 
-#: src/gnome/dialog-account.c:1749
+#: src/gnome/dialog-account.c:1757
 msgid "Edit Account"
 msgstr "Konto bearbeiten"
 
-#: src/gnome/dialog-account.c:1752
+#: src/gnome/dialog-account.c:1760
 #, c-format
 msgid "(%d) New Accounts"
 msgstr "(%d) Neue Konten"
 
-#: src/gnome/dialog-account.c:1763 src/gnome/glade-gnc-dialogs.c:3446
+#: src/gnome/dialog-account.c:1771 src/gnome/glade-gnc-dialogs.c:3446
 msgid "New Account"
 msgstr "Neues Konto"
 
@@ -1709,7 +1704,7 @@ msgstr "Aktueller Wert"
 
 #: src/gnome/glade-gnc-dialogs.c:2501
 msgid "Periodic Payment"
-msgstr "periodische Zahlung"
+msgstr "Periodische Zahlung"
 
 #: src/gnome/glade-gnc-dialogs.c:2546
 msgid "Future Value"
@@ -1781,19 +1776,19 @@ msgstr "täglich (365)"
 
 #: src/gnome/glade-gnc-dialogs.c:2723
 msgid "End of Period Payments"
-msgstr "Ende der periodischen Zahlungen"
+msgstr "Zahlung am Ende der Periode"
 
 #: src/gnome/glade-gnc-dialogs.c:2732
 msgid "Beginning of Period Payments"
-msgstr "Anfang der periodischen Zahlungen"
+msgstr "Zahlung am Anfang der Periode"
 
 #: src/gnome/glade-gnc-dialogs.c:2747
 msgid "Discrete Compounding"
-msgstr "Schulden-Zins"
+msgstr "Periodenbezogene Verzinsung"
 
 #: src/gnome/glade-gnc-dialogs.c:2756
 msgid "Continuous Compounding"
-msgstr "Zinseszins"
+msgstr "Kontinuierliche Verzinsung"
 
 #: src/gnome/glade-gnc-dialogs.c:2771
 msgid "Payment Total:"
@@ -2204,12 +2199,12 @@ msgid ""
 "\n"
 "Note that GnuCash will be creating many accounts that did not exist on your\n"
 "other personal finance program, including a separate account for each stock\n"
-"you own, separate accounts for the brokerage commissions, special \"Equity"
-"\"\n"
+"you own, separate accounts for the brokerage commissions, special "
+"\"Equity\"\n"
 "accounts (subaccounts of Retained Earnings, by default) which are the "
 "source\n"
-"of your opening balances, etc. All of these accounts will appear on the "
-"next \n"
+"of your opening balances, etc. All of these accounts will appear on the next "
+"\n"
 "page so you can change them if you want to, but it is safe to leave them "
 "alone.\n"
 msgstr ""
@@ -2410,8 +2405,8 @@ msgid ""
 "On the next page, you will be asked to confirm that an existing transaction\n"
 "matches an imported transaction.  Imported transactions are shown on the\n"
 "left side of the page, and possible  matches for the selected left-hand\n"
-"transaction are shown  to the right.  There may be several old "
-"transactions \n"
+"transaction are shown  to the right.  There may be several old transactions "
+"\n"
 "that could match an imported transaction; you will be able to select the \n"
 "correct one by clicking in the \"Dup?\" column of the correct transaction.\n"
 "\n"
@@ -2725,7 +2720,7 @@ msgstr "Geldbetrag:"
 
 #: src/gnome/glade-gnc-dialogs.c:6822
 msgid "Income Account"
-msgstr "Einkommenskonto"
+msgstr "Ertragskonto"
 
 #: src/gnome/glade-gnc-dialogs.c:6838
 msgid "Asset Account"
@@ -3140,7 +3135,7 @@ msgstr ""
 msgid "Run dialog for new user again?"
 msgstr "Beim nächsten Start Assistenten wieder anzeigen?"
 
-#: src/gnome/new-user-interface.c:589 src/scm/report/guile-strings.c:719
+#: src/gnome/new-user-interface.c:589 src/scm/report/guile-strings.c:722
 msgid "Welcome to GnuCash 1.6!"
 msgstr "Willkommen zu GnuCash 1.6"
 
@@ -3325,7 +3320,7 @@ msgstr "Aus_buchen"
 #: src/gnome/window-acct-tree.c:890
 msgid "Setup tax information for all income and expense accounts"
 msgstr ""
-"Steuerrelevante Informationen für Einkommens- und Ausgabenskonten einrichten"
+"Steuerrelevante Informationen für Ertrags- und Aufwandskonten einrichten"
 
 #: src/gnome/window-acct-tree.c:901 src/gnome/window-reconcile.c:1227
 #: src/gnome/window-register.c:1581
@@ -3381,7 +3376,7 @@ msgstr "Drucken"
 msgid "Print Help window"
 msgstr "Hilfefenster ausdrucken"
 
-#: src/gnome/window-help.c:656 src/gnome/window-main.c:1094
+#: src/gnome/window-help.c:656 src/gnome/window-main.c:1100
 #: src/gnome/window-register.c:933 src/gnome/window-register.c:1374
 msgid "Close"
 msgstr "Schließen"
@@ -4382,6 +4377,10 @@ msgstr ""
 "Dieser Geschäftsvorgang ist eine Aktienteilung; klicken Sie 'Mehrteilig', um "
 "Einzelheiten sehen zu können"
 
+#: src/register/splitreg.c:747
+msgid "-- Stock Split --"
+msgstr "-- Aktienteilung --"
+
 # FIXME: DON'T use the noun 'description' here.
 #: src/register/splitreg.c:755
 msgid "Enter a description of the split"
@@ -4691,7 +4690,7 @@ msgstr "und Kategorien"
 
 #: src/scm/guile-strings.c:80
 msgid "Income/Expense"
-msgstr "Einnahmen/Ausgaben"
+msgstr "Erträge/Aufwendungen"
 
 #: src/scm/guile-strings.c:81
 msgid "New Setup"
@@ -4711,7 +4710,7 @@ msgstr "Buchungen"
 
 #: src/scm/guile-strings.c:86
 msgid "Registers"
-msgstr "Register"
+msgstr "Kassenberichte"
 
 #: src/scm/guile-strings.c:87
 msgid "Shortcuts"
@@ -4760,10 +4759,6 @@ msgstr "Verbindlichkeiten/Forderungen"
 #: src/scm/guile-strings.c:101
 msgid "Reports"
 msgstr "Berichte"
-
-#: src/scm/guile-strings.c:102
-msgid "Overview"
-msgstr "Übersicht"
 
 #: src/scm/guile-strings.c:102
 msgid "Overview"
@@ -5505,7 +5500,7 @@ msgstr ": (Doppelpunkt)"
 
 #: src/scm/guile-strings.c:354
 msgid "Income:Salary:Taxable"
-msgstr "Einnahmen:Einkommen:zu versteuern"
+msgstr "Erträge:Einkommen:zu versteuern"
 
 #: src/scm/guile-strings.c:355
 msgid "/ (Slash)"
@@ -5513,7 +5508,7 @@ msgstr "/ (Slash)"
 
 #: src/scm/guile-strings.c:356
 msgid "Income/Salary/Taxable"
-msgstr "Einkommen/Bezahlung/zu Versteuerndes"
+msgstr "Erträge/Bezahlung/zu Versteuerndes"
 
 #: src/scm/guile-strings.c:357
 msgid "\\ (Backslash)"
@@ -5521,7 +5516,7 @@ msgstr "\\ (Backslash)"
 
 #: src/scm/guile-strings.c:358
 msgid "Income\\Salary\\Taxable"
-msgstr "Einkommen/Bezahlung/zu versteuern"
+msgstr "Erträge/Bezahlung/zu versteuern"
 
 #: src/scm/guile-strings.c:359
 msgid "- (Dash)"
@@ -5537,7 +5532,7 @@ msgstr ". (Punkt)"
 
 #: src/scm/guile-strings.c:362
 msgid "Income.Salary.Taxable"
-msgstr "Einkommen.Bezahlung.zu versteuern"
+msgstr "Erträge.Bezahlung.zu versteuern"
 
 #: src/scm/guile-strings.c:364
 msgid "Reversed-balance account types"
@@ -5826,7 +5821,7 @@ msgstr "Geben Sie einen beschreibenden Namen für diesen Bericht an"
 #: src/scm/guile-strings.c:449 src/scm/guile-strings.c:453
 #: src/scm/guile-strings.c:454
 msgid "Stylesheet"
-msgstr "Stil"
+msgstr "Stilvorlage"
 
 #: src/scm/guile-strings.c:450
 msgid "Select a stylesheet for the report."
@@ -5834,7 +5829,7 @@ msgstr "Wählen Sie einen Stil für diesen Bericht."
 
 #: src/scm/guile-strings.c:452
 msgid " Stylesheet"
-msgstr " Stil"
+msgstr " Stilvorlage"
 
 #: src/scm/guile-strings.c:458 src/scm/report/guile-strings.c:11
 #: src/scm/report/guile-strings.c:103 src/scm/report/guile-strings.c:104
@@ -6168,7 +6163,7 @@ msgstr "QIF-Import: Namenskonflikt mit bestehendem Konto."
 
 #: src/scm/report/guile-strings.c:1
 msgid "Income Piechart"
-msgstr "Einkommen Tortendiagramm"
+msgstr "Erträge Tortendiagramm"
 
 #: src/scm/report/guile-strings.c:2
 msgid "Expense Piechart"
@@ -6184,7 +6179,7 @@ msgstr "Passiva Tortendiagramm"
 
 #: src/scm/report/guile-strings.c:5
 msgid "Shows a piechart with the Income per given time interval"
-msgstr "Tortendiagramm des Einkommens eines Zeitraums anzeigen"
+msgstr "Tortendiagramm der Erträge eines Zeitraums anzeigen"
 
 #: src/scm/report/guile-strings.c:6
 msgid "Shows a piechart with the Expenses per given time interval"
@@ -6200,7 +6195,7 @@ msgstr "Tortendiagramm der Passiva eines Zeitpunkts anzeigen"
 
 #: src/scm/report/guile-strings.c:9
 msgid "Income Accounts"
-msgstr "Einkommenskonten"
+msgstr "Ertragskonten"
 
 #: src/scm/report/guile-strings.c:10
 msgid "Expense Accounts"
@@ -6465,7 +6460,7 @@ msgstr "Passiva & Eigenkapital"
 
 #: src/scm/report/guile-strings.c:113
 msgid "Income Barchart"
-msgstr "Einkommen Balkendiagramm"
+msgstr "Erträge Balkendiagramm"
 
 #: src/scm/report/guile-strings.c:114
 msgid "Expense Barchart"
@@ -6481,7 +6476,7 @@ msgstr "Passiva Balkendiagramm"
 
 #: src/scm/report/guile-strings.c:117
 msgid "Shows a barchart with the Income per interval developing over time"
-msgstr "Balkendiagramm des Einkommens pro Zeit anzeigen"
+msgstr "Balkendiagramm der Erträge pro Zeit anzeigen"
 
 #: src/scm/report/guile-strings.c:118
 msgid "Shows a barchart with the Expenses per interval developing over time"
@@ -6497,7 +6492,7 @@ msgstr "Balkendiagramm der Passiva pro Zeit anzeigen"
 
 #: src/scm/report/guile-strings.c:121
 msgid "Income Over Time"
-msgstr "Einkommensentwicklung"
+msgstr "Ertragsentwicklung"
 
 #: src/scm/report/guile-strings.c:122
 msgid "Expense Over Time"
@@ -6884,7 +6879,7 @@ msgstr "Reinvermögen"
 
 #: src/scm/report/guile-strings.c:256
 msgid "Income Chart"
-msgstr "Einkommen Diagramm"
+msgstr "Erträge Diagramm"
 
 #: src/scm/report/guile-strings.c:257
 msgid "Asset Chart"
@@ -7792,14 +7787,22 @@ msgid "Number of columns before wrapping to a new row"
 msgstr "Anzahl Spalten, bevor eine neue Zeile begonnen wird"
 
 #: src/scm/report/guile-strings.c:718
+msgid "Edit Options"
+msgstr "Optionen"
+
+#: src/scm/report/guile-strings.c:719
+msgid "Single Report"
+msgstr "Einzelner Bericht"
+
+#: src/scm/report/guile-strings.c:720
 msgid "Multicolumn View"
 msgstr "Mehrspaltige Anzeige"
 
-#: src/scm/report/guile-strings.c:720
+#: src/scm/report/guile-strings.c:721 src/scm/report/guile-strings.c:724
+msgid "Welcome to GnuCash 1.6"
+msgstr "Willkommen zu GnuCash 1.6"
+
+#: src/scm/report/guile-strings.c:723
 msgid "GnuCash 1.6 has lots of nice features. Here are a few."
 msgstr ""
 "GnuCash 1.6 hat viele neue Funktionen. Hier werden einige Beispiele gegeben."
-
-#: src/scm/report/guile-strings.c:721
-msgid "Welcome to GnuCash 1.6"
-msgstr "Willkommen zu GnuCash 1.6"
