@@ -5549,12 +5549,13 @@ to abort the process. </text>
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
 	<name>druid-vbox8</name>
+	<border_width>25</border_width>
 	<homogeneous>False</homogeneous>
 	<spacing>0</spacing>
 	<child>
 	  <padding>0</padding>
 	  <expand>True</expand>
-	  <fill>False</fill>
+	  <fill>True</fill>
 	</child>
 
 	<widget>
@@ -5671,12 +5672,13 @@ worry if your data is in multiple files.
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
 	<name>druid-vbox22</name>
+	<border_width>25</border_width>
 	<homogeneous>False</homogeneous>
 	<spacing>0</spacing>
 	<child>
 	  <padding>0</padding>
 	  <expand>True</expand>
-	  <fill>False</fill>
+	  <fill>True</fill>
 	</child>
 
 	<widget>
@@ -5758,12 +5760,13 @@ US QIF files are likely to be &quot;m-d-y&quot; or month-year-day.
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
 	<name>druid-vbox9</name>
+	<border_width>25</border_width>
 	<homogeneous>False</homogeneous>
 	<spacing>0</spacing>
 	<child>
 	  <padding>0</padding>
 	  <expand>True</expand>
-	  <fill>False</fill>
+	  <fill>True</fill>
 	</child>
 
 	<widget>
@@ -5865,12 +5868,13 @@ in that program.
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
 	<name>druid-vbox1</name>
+	<border_width>25</border_width>
 	<homogeneous>False</homogeneous>
 	<spacing>4</spacing>
 	<child>
 	  <padding>0</padding>
 	  <expand>True</expand>
-	  <fill>False</fill>
+	  <fill>True</fill>
 	</child>
 
 	<widget>
@@ -5889,7 +5893,7 @@ in that program.
 	    <class>GtkScrolledWindow</class>
 	    <name>scrolledwindow10</name>
 	    <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
-	    <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	    <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
 	    <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
 	    <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
 
@@ -6022,6 +6026,7 @@ of the QIF import process. </label>
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
 	<name>druid-vbox13</name>
+	<border_width>25</border_width>
 	<homogeneous>False</homogeneous>
 	<spacing>0</spacing>
 	<child>
@@ -6092,6 +6097,7 @@ page so you can change them if you want to, but it is safe to leave them alone.
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
 	<name>druid-vbox3</name>
+	<border_width>25</border_width>
 	<homogeneous>False</homogeneous>
 	<spacing>0</spacing>
 	<child>
@@ -6104,7 +6110,7 @@ page so you can change them if you want to, but it is safe to leave them alone.
 	  <class>GtkScrolledWindow</class>
 	  <name>scrolledwindow11</name>
 	  <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
-	  <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	  <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
 	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
 	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
 	  <child>
@@ -6213,6 +6219,7 @@ page so you can change them if you want to, but it is safe to leave them alone.
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
 	<name>druid-vbox18</name>
+	<border_width>25</border_width>
 	<homogeneous>False</homogeneous>
 	<spacing>0</spacing>
 	<child>
@@ -6279,6 +6286,7 @@ within GnuCash.</label>
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
 	<name>druid-vbox4</name>
+	<border_width>25</border_width>
 	<homogeneous>False</homogeneous>
 	<spacing>0</spacing>
 	<child>
@@ -6290,8 +6298,8 @@ within GnuCash.</label>
 	<widget>
 	  <class>GtkScrolledWindow</class>
 	  <name>scrolledwindow12</name>
-	  <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
-	  <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	  <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
+	  <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
 	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
 	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
 	  <child>
@@ -6400,6 +6408,7 @@ within GnuCash.</label>
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
 	<name>druid-vbox39</name>
+	<border_width>25</border_width>
 	<homogeneous>False</homogeneous>
 	<spacing>0</spacing>
 	<child>
@@ -6465,6 +6474,7 @@ files. </label>
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
 	<name>druid-vbox40</name>
+	<border_width>25</border_width>
 	<homogeneous>False</homogeneous>
 	<spacing>0</spacing>
 	<child>
@@ -6494,8 +6504,8 @@ Give it a couple more days :)</label>
 	<widget>
 	  <class>GtkScrolledWindow</class>
 	  <name>scrolledwindow25</name>
-	  <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
-	  <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	  <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
+	  <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
 	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
 	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
 	  <child>
@@ -6587,12 +6597,13 @@ Give it a couple more days :)</label>
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
 	<name>druid-vbox16</name>
+	<border_width>25</border_width>
 	<homogeneous>False</homogeneous>
 	<spacing>0</spacing>
 	<child>
 	  <padding>0</padding>
 	  <expand>True</expand>
-	  <fill>False</fill>
+	  <fill>True</fill>
 	</child>
 
 	<widget>
@@ -6695,6 +6706,7 @@ mutual funds in the imported data.</label>
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
 	<name>druid-vbox17</name>
+	<border_width>25</border_width>
 	<homogeneous>False</homogeneous>
 	<spacing>0</spacing>
 	<child>
@@ -6759,6 +6771,7 @@ or listing for its type.
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
 	<name>druid-vbox34</name>
+	<border_width>5</border_width>
 	<homogeneous>False</homogeneous>
 	<spacing>0</spacing>
 	<child>
@@ -6825,6 +6838,7 @@ Click &quot;Next&quot; to find duplicate transactions. </label>
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
 	<name>druid-vbox35</name>
+	<border_width>5</border_width>
 	<homogeneous>False</homogeneous>
 	<spacing>0</spacing>
 	<child>
@@ -6837,7 +6851,7 @@ Click &quot;Next&quot; to find duplicate transactions. </label>
 	  <class>GtkHBox</class>
 	  <name>hbox94</name>
 	  <homogeneous>True</homogeneous>
-	  <spacing>0</spacing>
+	  <spacing>2</spacing>
 	  <child>
 	    <padding>0</padding>
 	    <expand>True</expand>

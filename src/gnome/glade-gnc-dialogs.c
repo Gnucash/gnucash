@@ -3943,6 +3943,7 @@ create_QIF_Import_Druid (void)
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druid_vbox8", druid_vbox8,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox8);
+  gtk_container_set_border_width (GTK_CONTAINER (druid_vbox8), 25);
 
   label822 = gtk_label_new (_("Please select a file to load. When you click \"Next\", the file will be loaded\nand analyzed. You may need to answer some questions about the account(s)\nin the file.\n\nYou will have the opportunity to load as many files as you wish, so don't \nworry if your data is in multiple files. \n"));
   gtk_widget_ref (label822);
@@ -3998,6 +3999,7 @@ create_QIF_Import_Druid (void)
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druid_vbox22", druid_vbox22,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox22);
+  gtk_container_set_border_width (GTK_CONTAINER (druid_vbox22), 25);
 
   label841 = gtk_label_new (_("The QIF file format does not specify which order the day, month, and \nyear components of a date are printed.  In most cases, it is possible \nto automatically determine which format is in use in a particular file.\nHowever, in the file you have just imported there exist more than one\npossible format that fits the data.  \n\nPlease select a date format for the file.  QIF files created by European\nsoftware are likely  to be in \"d-m-y\" or day-month-year format, where\nUS QIF files are likely to be \"m-d-y\" or month-year-day.    \n"));
   gtk_widget_ref (label841);
@@ -4038,6 +4040,7 @@ create_QIF_Import_Druid (void)
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druid_vbox9", druid_vbox9,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox9);
+  gtk_container_set_border_width (GTK_CONTAINER (druid_vbox9), 25);
 
   label823 = gtk_label_new (_("The QIF file that you just loaded appears to contain transactions for just \none account, but the file does not specify a name for that account.  \n\nPlease enter a name for the account. If the file was exported from another\naccounting program, you should use the same account name that was used \nin that program.\n"));
   gtk_widget_ref (label823);
@@ -4085,6 +4088,7 @@ create_QIF_Import_Druid (void)
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druid_vbox1", druid_vbox1,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox1);
+  gtk_container_set_border_width (GTK_CONTAINER (druid_vbox1), 25);
 
   frame33 = gtk_frame_new (_("QIF Files"));
   gtk_widget_ref (frame33);
@@ -4099,6 +4103,7 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (scrolledwindow10);
   gtk_container_add (GTK_CONTAINER (frame33), scrolledwindow10);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow10), GTK_POLICY_ALWAYS, GTK_POLICY_AUTOMATIC);
 
   selected_file_list = gtk_clist_new (1);
   gtk_widget_ref (selected_file_list);
@@ -4161,6 +4166,7 @@ create_QIF_Import_Druid (void)
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druid_vbox13", druid_vbox13,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox13);
+  gtk_container_set_border_width (GTK_CONTAINER (druid_vbox13), 25);
 
   label830 = gtk_label_new (_("On the next page, the accounts in your QIF files and any stocks or mutual funds\nyou own will be matched with Gnucash accounts. If a GnuCash account already\nexists with the same name, or a similar name and compatible type, that account\nwill be used as a match; otherwise, GnuCash will create a new account with the\nsame name and type as the QIF account. If you do not like the suggested\nGnucash account, click to change it.\n\nNote that Gnucash will be creating many accounts that did not exist on your\nother personal finance program, including a separate account for each stock\nyou own, separate accounts for the brokerage commissions, special \"Equity\"\naccounts (subaccounts of Retained Earnings, by default) which are the source\nof your opening balances, etc. All of these accounts will appear on the next \npage so you can change them if you want to, but it is safe to leave them alone.\n"));
   gtk_widget_ref (label830);
@@ -4186,6 +4192,7 @@ create_QIF_Import_Druid (void)
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druid_vbox3", druid_vbox3,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox3);
+  gtk_container_set_border_width (GTK_CONTAINER (druid_vbox3), 25);
 
   scrolledwindow11 = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_ref (scrolledwindow11);
@@ -4193,7 +4200,7 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (scrolledwindow11);
   gtk_box_pack_start (GTK_BOX (druid_vbox3), scrolledwindow11, TRUE, TRUE, 0);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow11), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow11), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
   account_page_list = gtk_clist_new (3);
   gtk_widget_ref (account_page_list);
@@ -4250,6 +4257,7 @@ create_QIF_Import_Druid (void)
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druid_vbox18", druid_vbox18,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox18);
+  gtk_container_set_border_width (GTK_CONTAINER (druid_vbox18), 25);
 
   label840 = gtk_label_new (_("Gnucash uses separate Income and Expense accounts rather than categories\nto classify your transactions. Each of the categories in your QIF file will be \nconverted to a Gnucash account. \n\nOn the next page, you will have an opportunity to look at the suggested matches\nbetween QIF categories and Gnucash accounts.  You may change matches \nthat you do not like by clicking on the line containing the category name.\n\nIf you change your mind later, you can reorganize the account structure safely\nwithin GnuCash."));
   gtk_widget_ref (label840);
@@ -4275,6 +4283,7 @@ create_QIF_Import_Druid (void)
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druid_vbox4", druid_vbox4,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox4);
+  gtk_container_set_border_width (GTK_CONTAINER (druid_vbox4), 25);
 
   scrolledwindow12 = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_ref (scrolledwindow12);
@@ -4282,7 +4291,7 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (scrolledwindow12);
   gtk_box_pack_start (GTK_BOX (druid_vbox4), scrolledwindow12, TRUE, TRUE, 0);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow12), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow12), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
   category_page_list = gtk_clist_new (3);
   gtk_widget_ref (category_page_list);
@@ -4339,6 +4348,7 @@ create_QIF_Import_Druid (void)
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druid_vbox39", druid_vbox39,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox39);
+  gtk_container_set_border_width (GTK_CONTAINER (druid_vbox39), 25);
 
   label847707 = gtk_label_new (_("QIF files dowloaded from banks and other financial institutions may not have\ninformation about Accounts and Categories which would allow them to be\ncorrectly assigned to Gnucash accounts.  \n\nIn the following page, you will see the text that appears in the Payee and \nMemo fields of transactions with no QIF Account or Category.   By default\nthese transactions are assigned to the 'Unspecified' account in Gnucash. \nIf you select a different account, it will be remembered for future QIF \nfiles. "));
   gtk_widget_ref (label847707);
@@ -4364,6 +4374,7 @@ create_QIF_Import_Druid (void)
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druid_vbox40", druid_vbox40,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox40);
+  gtk_container_set_border_width (GTK_CONTAINER (druid_vbox40), 25);
 
   label847713 = gtk_label_new (_("This doesn't actually affect the QIF import yet. \nGive it a couple more days :)"));
   gtk_widget_ref (label847713);
@@ -4378,7 +4389,7 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (scrolledwindow25);
   gtk_box_pack_start (GTK_BOX (druid_vbox40), scrolledwindow25, TRUE, TRUE, 0);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow25), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow25), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
   memo_page_list = gtk_clist_new (3);
   gtk_widget_ref (memo_page_list);
@@ -4428,6 +4439,7 @@ create_QIF_Import_Druid (void)
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druid_vbox16", druid_vbox16,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox16);
+  gtk_container_set_border_width (GTK_CONTAINER (druid_vbox16), 25);
 
   label831 = gtk_label_new (_("The QIF importer cannot currently handle multi-currency QIF files. All the \naccounts in the QIF file(s) you are importing must be denominated in the\nsame currency. This limitation should be removed soon.\n\nSelect the currency to use for transactions imported from your QIF files:\n"));
   gtk_widget_ref (label831);
@@ -4474,6 +4486,7 @@ create_QIF_Import_Druid (void)
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druid_vbox17", druid_vbox17,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox17);
+  gtk_container_set_border_width (GTK_CONTAINER (druid_vbox17), 25);
 
   label833 = gtk_label_new (_("In the next pages, you will be asked to provide information about stocks, \nmutual funds, and other tradable commodities that appear in the QIF file(s)\nyou are importing.  Gnucash requires more information about tradable \ncommodities than the QIF format can represent. \n\nEach stock, mutual fund, or other commodity must have a type, which is the \nexchange or listing that it is found on (NASDAQ, NYSE, US Mutual Funds, \netc), a full name, and an abbreviation.\n\nCheck to see if there is an existing Type that is appropriate; if not, you can\nenter a new Type name by hand in the box. Make sure that the abbreviation\nyou enter matches the ticker symbol used for the commodity on the exchange\nor listing for its type.  \n"));
   gtk_widget_ref (label833);
@@ -4499,6 +4512,7 @@ create_QIF_Import_Druid (void)
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druid_vbox34", druid_vbox34,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox34);
+  gtk_container_set_border_width (GTK_CONTAINER (druid_vbox34), 5);
 
   label847694 = gtk_label_new (_("If you are importing a QIF file downloaded from a bank or other financial\ninstitution, some of the information in the QIF file may duplicate information\nalready in your GnuCash accounts.  GnuCash will try to detect duplicates \nof existing transactions.  \n\nOn the next page, you will be asked to confirm that an existing transaction\nmatches an imported transaction.  Imported transactions are shown on the\nleft side of the page, and possible  matches for the selected left-hand\ntransaction are shown  to the right.  There may be several old transactions \nthat could match an imported transaction; you will be able to select the \ncorrect one by clicking in the \"Dup?\" column of the correct transaction.\n\nYou can control the rules used by GnuCash to find duplicate transcations \nin the \"QIF Import\" section of the GnuCash Preferences dialog.\n\nClick \"Next\" to find duplicate transactions. "));
   gtk_widget_ref (label847694);
@@ -4524,8 +4538,9 @@ create_QIF_Import_Druid (void)
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druid_vbox35", druid_vbox35,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox35);
+  gtk_container_set_border_width (GTK_CONTAINER (druid_vbox35), 5);
 
-  hbox94 = gtk_hbox_new (TRUE, 0);
+  hbox94 = gtk_hbox_new (TRUE, 2);
   gtk_widget_ref (hbox94);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "hbox94", hbox94,
                             (GtkDestroyNotify) gtk_widget_unref);

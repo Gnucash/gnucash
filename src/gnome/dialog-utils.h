@@ -67,11 +67,13 @@ int  gnc_option_menu_get_active (GtkWidget * option_menu);
 void gnc_window_adjust_for_screen (GtkWindow * window);
 
 
-/*** Using checks with clists ************************************/
-typedef void (*GNCUpdateCheck) (GtkCList *list, int row);
-
-void gnc_clist_add_check (GtkCList *list, GNCUpdateCheck update_cb,
-                          gpointer user_data);
+/* This function sets or clears a check mark in a GtkCList row.
+ * There are some restrictions on using this function. If you mix
+ * this function with gtk_clist_{insert, prepend, remove} before
+ * the clist is realized, then the checks may appear in the wrong
+ * place. Stick to gtk_clist_append, or use gnc_clist_set_check
+ * after you have built the list. This only applies to unrealized
+ * widgets. */
 void gnc_clist_set_check (GtkCList *list, int row, int col, gboolean checked);
 
 #endif

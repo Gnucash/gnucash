@@ -49,7 +49,7 @@ row_data_destroy_cb(gpointer data) {
 
 static void
 acct_tree_add_accts(SCM accts, GtkCTree * tree, GtkCTreeNode * parent,
-                    char * base_name) {
+                    char * base_name, int *row) {
   char         * acctinfo[2];
   char         * acctname;
   char         sep[2] = " ";
@@ -58,6 +58,7 @@ acct_tree_add_accts(SCM accts, GtkCTree * tree, GtkCTreeNode * parent,
   SCM          current;
   
   sep[0] = gnc_get_account_separator();
+  acctinfo[1] = "";
 
   while(!gh_null_p(accts)) {
     current = gh_car(accts);
@@ -69,13 +70,7 @@ acct_tree_add_accts(SCM accts, GtkCTree * tree, GtkCTreeNode * parent,
     }
 
     acctinfo[0] = gh_scm2newstr(gh_car(current), NULL);
-    if(gh_cadr(current) == SCM_BOOL_T) {
-      acctinfo[1] = "*";
-    }
-    else {
-      acctinfo[1] = " ";
-    }
-    
+
     if(!gh_null_p(gh_caddr(current))) {
       leafnode = FALSE;
     }
@@ -88,6 +83,9 @@ acct_tree_add_accts(SCM accts, GtkCTree * tree, GtkCTreeNode * parent,
                                  NULL, NULL, NULL, NULL,
                                  leafnode, TRUE);
 
+    gnc_clist_set_check (GTK_CLIST (tree), (*row)++, 1,
+                         gh_cadr (current) == SCM_BOOL_T);
+
     /* set some row data */ 
     if(base_name && (strlen(base_name) > 0)) {
       acctname =  g_strjoin(sep, base_name, acctinfo[0], NULL);
@@ -99,7 +97,7 @@ acct_tree_add_accts(SCM accts, GtkCTree * tree, GtkCTreeNode * parent,
                                      acctname,
                                      row_data_destroy_cb);
     if(!leafnode) {
-      acct_tree_add_accts(gh_caddr(current), tree, node, acctname);
+      acct_tree_add_accts(gh_caddr(current), tree, node, acctname, row);
     }
     
     accts = gh_cdr(accts);      
@@ -117,10 +115,16 @@ build_acct_tree(QIFAccountPickerDialog * picker, QIFImportWindow * import) {
   SCM  acct_tree = gh_call1(get_accts, 
                             gnc_ui_qif_import_druid_get_mappings(import));
   GtkCTreeNode * new_sel;
+  int row = 0;
 
   gtk_clist_clear(GTK_CLIST(picker->treeview));
-  acct_tree_add_accts(acct_tree, GTK_CTREE(picker->treeview), NULL, NULL);
-  
+
+  gtk_clist_set_column_justification (GTK_CLIST(picker->treeview),
+                                      1, GTK_JUSTIFY_CENTER);
+
+  acct_tree_add_accts(acct_tree, GTK_CTREE(picker->treeview),
+                      NULL, NULL, &row);
+
   if(picker->selected_name) {
     new_sel =
       gtk_ctree_find_by_row_data_custom(GTK_CTREE(picker->treeview),
@@ -132,6 +136,9 @@ build_acct_tree(QIFAccountPickerDialog * picker, QIFImportWindow * import) {
     gtk_ctree_node_moveto(GTK_CTREE(picker->treeview), new_sel, 0,
                           0.5, 0.0);
   }
+
+  gtk_clist_columns_autosize (GTK_CLIST (picker->treeview));
+  gtk_clist_column_titles_passive (GTK_CLIST (picker->treeview));
 }
 
 static void

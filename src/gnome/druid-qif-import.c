@@ -915,6 +915,7 @@ update_accounts_page(QIFImportWindow * wind) {
   SCM  accts_left;
   int  sel_row=0;
   char * row_text[3];
+  int  row;
 
   /* get the old selection row */
   sel_row = (GTK_CLIST(wind->acct_list))->focus_row;
@@ -929,6 +930,8 @@ update_accounts_page(QIFImportWindow * wind) {
   wind->acct_display_info = accts_left;  
   scm_protect_object(wind->acct_display_info);
   
+  gtk_clist_column_titles_passive (GTK_CLIST(wind->acct_list));
+
   /* clear the list */
   gtk_clist_clear(GTK_CLIST(wind->acct_list));
 
@@ -936,24 +939,22 @@ update_accounts_page(QIFImportWindow * wind) {
   gtk_clist_freeze(GTK_CLIST(wind->acct_list));
 
   gtk_clist_set_column_justification(GTK_CLIST(wind->acct_list),
-                                     0,
-                                     GTK_JUSTIFY_RIGHT);
-  gtk_clist_set_column_justification(GTK_CLIST(wind->acct_list),
-                                     1,
-                                     GTK_JUSTIFY_RIGHT);
+                                     2,
+                                     GTK_JUSTIFY_CENTER);
+
+  row_text[2] = "";
+
   while(!gh_null_p(accts_left)) {
     row_text[0] = gh_scm2newstr(gh_call1(get_qif_name, gh_car(accts_left)),
                                 NULL);
     row_text[1] = gh_scm2newstr(gh_call1(get_gnc_name, gh_car(accts_left)),
                                 NULL);
-    if(gh_call1(get_new, gh_car(accts_left)) == SCM_BOOL_T) {
-      row_text[2] = "Y";
-    }
-    else {
-      row_text[2] = "N";
-    }
     
-    gtk_clist_append(GTK_CLIST(wind->acct_list), row_text);
+    row = gtk_clist_append(GTK_CLIST(wind->acct_list), row_text);
+
+    gnc_clist_set_check (GTK_CLIST(wind->acct_list), row, 2,
+                         gh_call1(get_new, gh_car(accts_left)) == SCM_BOOL_T);
+
     accts_left = gh_cdr(accts_left);
 
     free(row_text[0]);
@@ -961,11 +962,10 @@ update_accounts_page(QIFImportWindow * wind) {
   }
 
   gtk_clist_thaw(GTK_CLIST(wind->acct_list));
-  
+
   /* move to the old selected row */
   (GTK_CLIST(wind->acct_list))->focus_row = sel_row;
   gtk_clist_moveto(GTK_CLIST(wind->acct_list), sel_row, 0, 0.0, 0.0);
-  
 }
 
 
@@ -985,6 +985,7 @@ update_categories_page(QIFImportWindow * wind) {
   SCM  cats_left;
   int  sel_row=0;
   char * row_text[3];
+  int  row;
 
   /* get the old selection row */
   sel_row = (GTK_CLIST(wind->cat_list))->focus_row;
@@ -999,6 +1000,8 @@ update_categories_page(QIFImportWindow * wind) {
   wind->cat_display_info = cats_left;  
   scm_protect_object(wind->cat_display_info);
   
+  gtk_clist_column_titles_passive (GTK_CLIST(wind->cat_list));
+
   /* clear the list */
   gtk_clist_clear(GTK_CLIST(wind->cat_list));
 
@@ -1006,24 +1009,22 @@ update_categories_page(QIFImportWindow * wind) {
   gtk_clist_freeze(GTK_CLIST(wind->cat_list));
 
   gtk_clist_set_column_justification(GTK_CLIST(wind->cat_list),
-                                     0,
-                                     GTK_JUSTIFY_RIGHT);
-  gtk_clist_set_column_justification(GTK_CLIST(wind->cat_list),
-                                     1,
-                                     GTK_JUSTIFY_RIGHT);
+                                     2,
+                                     GTK_JUSTIFY_CENTER);
+
+  row_text[2] = "";
+
   while(!gh_null_p(cats_left)) {
     row_text[0] = gh_scm2newstr(gh_call1(get_qif_name, gh_car(cats_left)),
                                 NULL);
     row_text[1] = gh_scm2newstr(gh_call1(get_gnc_name, gh_car(cats_left)),
                                 NULL);
-    if(gh_call1(get_new, gh_car(cats_left)) == SCM_BOOL_T) {
-      row_text[2] = "Y";
-    }
-    else {
-      row_text[2] = "N";
-    }
     
-    gtk_clist_append(GTK_CLIST(wind->cat_list), row_text);
+    row = gtk_clist_append(GTK_CLIST(wind->cat_list), row_text);
+
+    gnc_clist_set_check (GTK_CLIST(wind->cat_list), row, 2,
+                         gh_call1(get_new, gh_car(cats_left)) == SCM_BOOL_T);
+
     cats_left = gh_cdr(cats_left);
 
     free (row_text[0]);
@@ -1035,7 +1036,6 @@ update_categories_page(QIFImportWindow * wind) {
   /* move to the old selected row */
   (GTK_CLIST(wind->cat_list))->focus_row = sel_row;
   gtk_clist_moveto(GTK_CLIST(wind->cat_list), sel_row, 0, 0.0, 0.0);
-
 }
 
 
@@ -1055,6 +1055,7 @@ update_memo_page(QIFImportWindow * wind) {
   SCM  memos_left;
   int  sel_row=0;
   char * row_text[3];
+  int  row;
 
   /* get the old selection row */
   sel_row = (GTK_CLIST(wind->cat_list))->focus_row;
@@ -1069,6 +1070,8 @@ update_memo_page(QIFImportWindow * wind) {
   wind->memo_display_info = memos_left;  
   scm_protect_object(wind->memo_display_info);
   
+  gtk_clist_column_titles_passive (GTK_CLIST(wind->memo_list));
+
   /* clear the list */
   gtk_clist_clear(GTK_CLIST(wind->memo_list));
 
@@ -1076,24 +1079,22 @@ update_memo_page(QIFImportWindow * wind) {
   gtk_clist_freeze(GTK_CLIST(wind->memo_list));
 
   gtk_clist_set_column_justification(GTK_CLIST(wind->memo_list),
-                                     0,
-                                     GTK_JUSTIFY_RIGHT);
-  gtk_clist_set_column_justification(GTK_CLIST(wind->memo_list),
-                                     1,
-                                     GTK_JUSTIFY_RIGHT);
+                                     2,
+                                     GTK_JUSTIFY_CENTER);
+
+  row_text[2] = "";
+
   while(!gh_null_p(memos_left)) {
     row_text[0] = gh_scm2newstr(gh_call1(get_qif_name, gh_car(memos_left)),
                                 NULL);
     row_text[1] = gh_scm2newstr(gh_call1(get_gnc_name, gh_car(memos_left)),
                                 NULL);
-    if(gh_call1(get_new, gh_car(memos_left)) == SCM_BOOL_T) {
-      row_text[2] = "Y";
-    }
-    else {
-      row_text[2] = "N";
-    }
     
-    gtk_clist_append(GTK_CLIST(wind->memo_list), row_text);
+    row = gtk_clist_append(GTK_CLIST(wind->memo_list), row_text);
+
+    gnc_clist_set_check (GTK_CLIST(wind->memo_list), row, 2,
+                         gh_call1(get_new, gh_car(memos_left)) == SCM_BOOL_T);
+
     memos_left = gh_cdr(memos_left);
 
     free (row_text[0]);
@@ -1105,7 +1106,6 @@ update_memo_page(QIFImportWindow * wind) {
   /* move to the old selected row */
   (GTK_CLIST(wind->memo_list))->focus_row = sel_row;
   gtk_clist_moveto(GTK_CLIST(wind->memo_list), sel_row, 0, 0.0, 0.0);
-
 }
 
 

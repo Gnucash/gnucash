@@ -438,13 +438,30 @@ gnc_window_adjust_for_screen(GtkWindow * window)
 
 typedef struct
 {
+  int row;
+  int col;
+  gboolean checked;
+} GNCCListCheckNode;
+
+typedef struct
+{
   GdkPixmap *on_pixmap;
   GdkPixmap *off_pixmap;
   GdkBitmap *mask;
 
-  GNCUpdateCheck update_cb;
-  gpointer user_data;
+  GList *pending_checks;
 } GNCCListCheckInfo;
+
+static void
+free_check_list (GList *list)
+{
+  GList *node;
+
+  for (node = list; node; node = node->next)
+    g_free (node->data);
+
+  g_list_free (list);
+}
 
 static void
 check_realize (GtkWidget *widget, gpointer user_data)
@@ -456,8 +473,9 @@ check_realize (GtkWidget *widget, gpointer user_data)
   gint check_size;
   GdkColormap *cm;
   GtkStyle *style;
+  GList *list;
+  GList *node;
   GdkGC *gc;
-  gint i;
 
   if (check_info->mask)
     return;
@@ -519,8 +537,20 @@ check_realize (GtkWidget *widget, gpointer user_data)
 
   clist = GTK_CLIST (widget);
 
-  for (i = 0; i < clist->rows; i++)
-    check_info->update_cb (clist, i);
+  list = check_info->pending_checks;
+  check_info->pending_checks = NULL;
+
+  /* reverse so we apply in the order of the calls */
+  list = g_list_reverse (list);
+
+  for (node = list; node; node = node->next)
+  {
+    GNCCListCheckNode *cl_node = node->data;
+
+    gnc_clist_set_check (clist, cl_node->row, cl_node->col, cl_node->checked);
+  }
+
+  free_check_list (list);
 }
 
 static void
@@ -547,18 +577,17 @@ check_destroy (GtkWidget *widget, gpointer user_data)
 {
   GNCCListCheckInfo *check_info = user_data;
 
+  free_check_list (check_info->pending_checks);
+  check_info->pending_checks = NULL;
+
   g_free (check_info);
 }
 
-void
-gnc_clist_add_check (GtkCList *list, GNCUpdateCheck update_cb,
-                     gpointer user_data)
+static GNCCListCheckInfo *
+gnc_clist_add_check (GtkCList *list)
 {
   GNCCListCheckInfo *check_info;
   GtkObject *object;
-
-  g_return_if_fail (GTK_IS_CLIST (list));
-  g_return_if_fail (update_cb != NULL);
 
   object = GTK_OBJECT (list);
 
@@ -566,13 +595,10 @@ gnc_clist_add_check (GtkCList *list, GNCUpdateCheck update_cb,
   if (check_info)
   {
     PWARN ("clist already has check");
-    return;
+    return check_info;
   }
 
   check_info = g_new0 (GNCCListCheckInfo, 1);
-
-  check_info->update_cb = update_cb;
-  check_info->user_data = user_data;
 
   gtk_object_set_data (object, "gnc-check_info", check_info);
 
@@ -582,6 +608,8 @@ gnc_clist_add_check (GtkCList *list, GNCUpdateCheck update_cb,
                       GTK_SIGNAL_FUNC (check_unrealize), check_info);
   gtk_signal_connect (object, "destroy",
                       GTK_SIGNAL_FUNC (check_destroy), check_info);
+
+  return check_info;
 }
 
 
@@ -593,17 +621,30 @@ gnc_clist_set_check (GtkCList *list, int row, int col, gboolean checked)
 
   g_return_if_fail (GTK_IS_CLIST (list));
 
-  if (!GTK_WIDGET_REALIZED (GTK_WIDGET (list)))
-    return;
-
   check_info = gtk_object_get_data (GTK_OBJECT (list), "gnc-check_info");
   if (!check_info)
+    check_info = gnc_clist_add_check (list);
+
+  if (!GTK_WIDGET_REALIZED (GTK_WIDGET (list)))
   {
-    PWARN ("you need to call gnc_clist_add_check first");
+    GNCCListCheckNode *node;
+
+    node = g_new0 (GNCCListCheckNode, 1);
+
+    node->row = row;
+    node->col = col;
+    node->checked = checked;
+
+    check_info->pending_checks =
+      g_list_prepend (check_info->pending_checks, node);
+
     return;
   }
 
   pixmap = checked ? check_info->on_pixmap : check_info->off_pixmap;
 
-  gtk_clist_set_pixmap (list, row, 4, pixmap, check_info->mask);
+  if (checked)
+    gtk_clist_set_pixmap (list, row, col, pixmap, check_info->mask);
+  else
+    gtk_clist_set_text (list, row, col, "");
 }

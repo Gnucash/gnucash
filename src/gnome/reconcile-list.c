@@ -190,8 +190,6 @@ gnc_reconcile_list_init (GNCReconcileList *list)
       }
     }
   }
-
-  gnc_clist_add_check (clist, update_toggle, NULL);
 }
 
 
