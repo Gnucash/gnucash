@@ -56,5 +56,4 @@
  ((N_ "Report a bug") "http://www.linuxdevel.com/submit-bug.php" #f)
  ((N_ "URL Tests") ""
   (((N_ "gnucash.org") "http://www.gnucash.org" #f)
-   ((N_ "gnumatic.com") "http://www.gnumatic.com" #f)
    ((N_ "slashdot.org") "http://www.slashdot.org" #f))))

@@ -196,7 +196,7 @@ The Network tab contains options for network access, and it allows you to turn o
 
 * Enable GnuCash Network---This turns on the network services offered by GnuCash.
 
-* GnuCash Network server---The selected server is www.gnumatic.com.  This is where the GnuCash network resides.
+* GnuCash Network server---The selected server is www.gnucash.org.  This is where the GnuCash network resides.
 
 The QIF Import tab contains only one option, ?Verbose Documentation.?  The first time you use the importer (discussed later in this chapter), you may notice that the importer has detailed instructions on how to import a file.  Once you have become familiar with using the importer, you might want to turn off this option.  Turning off the option gives you less detail in the importer dialogs.
 

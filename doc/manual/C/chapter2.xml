@@ -442,7 +442,7 @@ Enable GnuCash Network---This turns on the network services offered by GnuCash.
     </listitem>
     <listitem>
      <para>
-GnuCash Network server---The selected server is www.gnumatic.com.  This is where the GnuCash network resides.
+GnuCash Network server---The selected server is www.gnucash.org.  This is where the GnuCash network resides.
     </para>
     </listitem>
    </itemizedlist>

@@ -549,7 +549,7 @@ without one.")
  (gnc:make-string-option
   (N_ "Network") (N_ "GnuCash Network server") 
   "d" (N_ "Host to connect to for user registration and support services")
-  "www.gnumatic.com"))
+  "www.gnucash.org"))
 
 
 ;; Scheduled|Recurring Transactions
