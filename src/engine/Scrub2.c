@@ -100,7 +100,6 @@ restart_loop:
 void
 xaccLotFill (GNCLot *lot)
 {
-   gnc_numeric lot_baln;
    Account *acc;
    Split *split;
    GNCPolicy *pcy;
@@ -109,11 +108,10 @@ xaccLotFill (GNCLot *lot)
    acc = lot->account;
    pcy = acc->policy;
 
-   ENTER ("acc=%s", acc->accountName);
+   ENTER ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), acc->accountName);
 
    /* If balance already zero, we have nothing to do. */
-   lot_baln = gnc_lot_get_balance (lot);
-   if (gnc_numeric_zero_p (lot_baln)) return;
+   if (gnc_lot_is_closed (lot)) return;
 
    split = pcy->PolicyGetSplit (pcy, lot);
    if (!split) return;   /* Handle the common case */
@@ -134,18 +132,21 @@ xaccLotFill (GNCLot *lot)
       if (subsplit == split)
       {
          PERR ("Accounting Policy gave us a split that "
-               "doesn't fit into this lot");
+               "doesn't fit into this lot\n"
+               "lot baln=%s, isclosed=%d, aplit amt=%s",
+               gnc_numeric_to_string (gnc_lot_get_balance(lot)),
+               gnc_lot_is_closed (lot),
+               gnc_numeric_to_string (split->amount));
          break;
       }
 
-      lot_baln = gnc_lot_get_balance (lot);
-      if (gnc_numeric_zero_p (lot_baln)) break;
+      if (gnc_lot_is_closed (lot)) break;
 
       split = pcy->PolicyGetSplit (pcy, lot);
       if (!split) break;
    }
    xaccAccountCommitEdit (acc);
-   LEAVE ("acc=%s", acc->accountName);
+   LEAVE ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), acc->accountName);
 }
 
 /* ============================================================== */

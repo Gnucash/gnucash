@@ -399,7 +399,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
       acc = split->acc;
       xaccAccountBeginEdit (acc);
       gnc_lot_add_split (lot, split);
-      PINFO ("simple added split to lot, new lot baln=%s (%s)", 
+      PINFO ("added split to empty lot, new lot baln=%s (%s)", 
            gnc_numeric_to_string (gnc_lot_get_balance(lot)),
            gnc_lot_get_title (lot));
       xaccAccountCommitEdit (acc);
@@ -407,15 +407,29 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
    }
 
    /* If the sign of the split is the same as the sign of the lot,
-    * we won't add it, because that would make the lot bigger, not
-    * smaller. Our only function here is to make lot balances smaller.
+    * add the split, but complain about it ... none of the currently
+    * implemented accounting policies should be giving us splits 
+    * that make lots larger.  One a lot is open, the FIFO/LIFO
+    * policies should be working only to make the lot smaller.
+    * We can remove teh warning emssage come the day we have 
+    * fancier policies.
     */
    baln_is_positive = gnc_numeric_positive_p (baln);
    amt_is_positive = gnc_numeric_positive_p (split->amount);
    if ((baln_is_positive && amt_is_positive) ||
        ((!baln_is_positive) && (!amt_is_positive)))
    {
-      return split;
+      PWARN ("accounting policy gave us split that enlarges the lot!\n"
+             "old lot baln=%s split amt=%s lot=%s",
+             gnc_numeric_to_string (gnc_lot_get_balance(lot)),
+             gnc_numeric_to_string (split->amount),
+             gnc_lot_get_title (lot));
+
+      acc = split->acc;
+      xaccAccountBeginEdit (acc);
+      gnc_lot_add_split (lot, split);
+      xaccAccountCommitEdit (acc);
+      return NULL;
    }
 
    /* If adding the split would make the lot balance change sign,
@@ -680,7 +694,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
          xaccTransCommitEdit (trans);
       }
 #endif
-      PINFO ("Lot opening split, returning.");
+      LEAVE ("Lot opening split, returning.");
       return;
    }
 
@@ -734,7 +748,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
        (split->gains_split) &&
        (FALSE == (split->gains_split->gains & GAINS_STATUS_A_VDIRTY))) 
    {
-      PINFO ("split not dirty, returning");
+      LEAVE ("split not dirty, returning");
       return;
    }
 
@@ -757,7 +771,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
        * I don't know how to compute cap gains for that.  This is not
        * an error. Just punt, silently. 
        */
-      PINFO ("Can't compute gains, mismatched commodities!");
+      LEAVE ("Can't compute gains, mismatched commodities!");
       return;
    }
 
@@ -769,9 +783,18 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    if (0 > gnc_numeric_compare (gnc_numeric_abs(opening_amount),
                                 gnc_numeric_abs(split->amount)))
    {
-      PERR ("Malformed Lot! (too thin!) opening amt=%s split amt=%s ",
+      GList *n;
+      for (n=lot->splits; n; n=n->next) 
+      {
+         Split *s = n->data;
+         PINFO ("split amt=%s", gnc_numeric_to_string(s->amount));
+      }
+      PERR ("Malformed Lot \"%s\"! (too thin!) " 
+            "opening amt=%s split amt=%s baln=%s",
+             gnc_lot_get_title (lot),
              gnc_numeric_to_string (opening_amount),
-             gnc_numeric_to_string (split->amount));
+             gnc_numeric_to_string (split->amount),
+             gnc_numeric_to_string (gnc_lot_get_balance(lot)));
       return;
    }
    if ( (gnc_numeric_negative_p(opening_amount) ||
@@ -779,9 +802,18 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
         (gnc_numeric_positive_p(opening_amount) ||
          gnc_numeric_negative_p(split->amount)))
    {
-      PERR ("Malformed Lot! (too fat!) opening amt=%s split amt=%s ",
+      GList *n;
+      for (n=lot->splits; n; n=n->next) 
+      {
+         Split *s = n->data;
+         PINFO ("split amt=%s", gnc_numeric_to_string(s->amount));
+      }
+      PERR ("Malformed Lot \"%s\"! (too fat!) "
+            "opening amt=%s split amt=%s baln=%s",
+             gnc_lot_get_title (lot),
              gnc_numeric_to_string (opening_amount),
-             gnc_numeric_to_string (split->amount));
+             gnc_numeric_to_string (split->amount),
+             gnc_numeric_to_string (gnc_lot_get_balance(lot)));
       return;
    }
 

@@ -152,7 +152,7 @@ rethin:
   }
   xaccAccountCommitEdit(acc);
 
-  LEAVE (" deleted=%d", splits_deleted);
+  LEAVE ("(lot=%s, deleted=%d)", gnc_lot_get_title(lot), splits_deleted);
   return splits_deleted;
 }
 
