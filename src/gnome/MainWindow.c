@@ -164,6 +164,7 @@ acct_tree_fill(GtkWidget *item, AccountGroup *accts, int subtree)
 }
 
 /* Standard Gnome About Dialog, need I say more? */
+/* hack alert -- should display about.html documentation page instead */
 static void
 about_cb (GtkWidget *widget, gpointer data)
 {
@@ -171,7 +172,7 @@ about_cb (GtkWidget *widget, gpointer data)
   gchar *authors[] = {
   /* Here should be your names */
           "Rob Clark",
-          "Linas Vepsta",
+          "Linas Vepstas",
           "Jeremy Collins",
           "Rob Browning",
           "For more see http://www.gnucash.org/developers.html",
@@ -191,8 +192,7 @@ about_cb (GtkWidget *widget, gpointer data)
 static void
 help_cb ( GtkWidget *widget, gpointer data )
 {
-  /* We need some config menus to setup were the docs are located */
-  /* for now I just set it to be $HOME/xacc-docs/                 */
+  /* hack alert --  We need some config menus to setup were the docs are located */
   
   gchar *docs_path = HELP_ROOT;
   

@@ -1,6 +1,7 @@
 /*-*-gnucash-c-*-****************************************************\
  * main.c -- main for xacc (X-Accountant)                           *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1998 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -16,10 +17,6 @@
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
 #include <config.h>
@@ -37,6 +34,7 @@
 #include "util.h"
 #include "MainWindow.h"
 #include "messages.h"
+#include "TransLog.h"
 
 /** PROTOTYPES ******************************************************/
 
@@ -51,6 +49,53 @@ GtkWidget   *import_filebox;
 char        *datafile = NULL;
 GtkWidget   *app;
 
+/* utility routine do deal with opening a new file.  cleans up the 
+ * mess left behind with the old one.
+ */
+static void 
+open_new_file (const char * newfile)
+{
+   int io_error;
+   AccountGroup *newgrp; 
+
+   if (!newfile) return;
+
+  /* disable logging while we move over to the new set of accounts to
+   * edit; the mass deletetion of accounts and transactions during
+   * switchover is not something we want to keep in a journal.  */
+  xaccLogDisable ();
+
+  newgrp = xaccReadAccountGroup (datafile);   
+ 
+  /* check for i/o error, put up appropriate error message */
+  io_error = xaccGetFileIOError();
+  SHOW_IO_ERR_MSG(io_error);
+ 
+  if (newgrp) {
+    if (datafile) free (datafile);
+    datafile = strdup (newfile);
+
+     xaccLogSetBase (newfile);
+     if (topgroup) {
+        xaccLogDisable ();
+        xaccFreeAccountGroup (topgroup);
+     }
+    topgroup = newgrp;
+  }
+
+   xaccAccountGroupMarkSaved (topgroup);
+   xaccLogEnable ();
+}
+
+/* serious hack alert -- the design here needs fixin, it completely fails to 
+ * warn user to save any uncommited work before blowing them out of the water.
+ * to fix this, should do something like
+ *     if( xaccAccountGroupNotSaved (topgrp) ) {
+ *       if( verifyBox(toplevel, FMB_SAVE_MSG) ) {
+ *         file_ok_sel( ...);
+ *         }
+ *       }
+ */
 
 void
 file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
@@ -66,18 +111,9 @@ file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
       gtk_signal_disconnect (GTK_OBJECT (filebox), filebox_quit);
       filebox_quit = 0;
     }
-
-  datafile = newfile;
-  topgroup = xaccReadAccountGroup (datafile);   
   gtk_widget_hide (filebox);
- 
-  if( NULL == topgroup )
-    {
-      /* Load the accounts data from datafile*/
-      topgroup = xaccMallocAccountGroup(); 
-    } 
-  
-  xaccAccountGroupMarkSaved (topgroup);
+
+  oepn_new_file (newfile);
   main_window_init (topgroup);
 }
 
@@ -98,6 +134,7 @@ import_ok_sel (GtkWidget *w, GtkFileSelection *fs)
     io_error = xaccGetQIFIOError();
     if (io_error)
       {
+        /* hack alert -- this should be a pop-up dialog, not a print statement */
 	printf ("I/O Error: %d", io_error);
 	return;
       }
@@ -174,49 +211,17 @@ void file_cmd_quit (GtkWidget *widget, gpointer data)
   gtk_main_quit();
 }
 
-#if 0
-static void
-foreach_split_in_group(AccountGroup *g, void (*f)(Split *)) {
-  const int num_accts = xaccGroupGetNumAccounts(g);
-  Account **acc_list = (Account **) _malloc((num_accts  + 1) *
-                                            sizeof(Account *));
-  Account *acct;
-  int i, pos;
-  Split **splits;
-  Split **split_cursor;
-    
-  for(i = 0, pos = 0; i < num_accts; i++) {
-    acct = xaccGetAccountFromID(g, i);
-    if(acct) {
-      acc_list[pos++] = acct;
-    }
-  }
-  acc_list[pos] = NULL;
-  
-  splits = accListGetSortedSplits(acc_list);
-  
-  split_cursor = splits;
-  while(*split_cursor) {
-    f(*split_cursor);
-    split_cursor++;
-  }
-  _free(splits);
-  _free(acc_list);
-}
-#endif
-
+/* hack alert -- what is the difference between this ui_open
+ * and the file_ok_sel() routine?  methinks the two should be merged,
+ */
 
 int
 gnucash_ui_open_file(const char name[]) {
 
   if( name == NULL ) return 0;
 
-  /* FIXME: this is a memory leak (very small). */
-  datafile = name;
+  open_new_file (name);
     
-  /* load the accounts data from datafile*/
-  topgroup = xaccReadAccountGroup (datafile); 
-
   if ( topgroup == NULL )
   {
     GtkWidget *dialog;
@@ -240,7 +245,6 @@ gnucash_ui_open_file(const char name[]) {
   }
   
   /* Create main window */
-  xaccAccountGroupMarkSaved(topgroup);
   main_window_init(topgroup);
 
   return 0;
