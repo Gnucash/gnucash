@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.4.X\n"
+"Project-Id-Version: gnucash 1.5.X\n"
 "POT-Creation-Date: 2000-06-27 21:56-0700\n"
-"PO-Revision-Date: 2000-07-01 22:00+0100\n"
+"PO-Revision-Date: 2000-07-27 01:30+0100\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -45,7 +45,7 @@ msgstr "Vous devez choisir un compte parent valide."
 #: messages-i18n.c:14
 #, fuzzy
 msgid "There is already an account with that name."
-msgstr "Il n'y a aucun comptes sur lesquels créer un rapport."
+msgstr "Il y a déjà un compte avec ce nom."
 
 # messages-i18n.c:14
 #: messages-i18n.c:15
@@ -412,6 +412,9 @@ msgid ""
 "You can re-enable tips from the General\n"
 "section of the Preferences menu"
 msgstr ""
+"Vous avez sésactivé \"L'astuce du jour\"\n"
+"Vous pouvez le réactiver les astuces à partir de la\n"
+"section Général du menu Préférences" 
 
 # messages-i18n.c:50
 #: messages-i18n.c:55
@@ -760,7 +763,7 @@ msgstr "Coller la transaction du presse papier"
 # messages-i18n.c:99
 #: messages-i18n.c:113
 msgid "Open the global preferences dialog"
-msgstr "Ouvrir la boîte des préférences globales."
+msgstr "Ouvrir la boîte de dialogue des préférences globales."
 
 # messages-i18n.c:100
 #: messages-i18n.c:114
@@ -886,7 +889,7 @@ msgstr "Garder l'ordre normal du compte"
 
 #: messages-i18n.c:138
 msgid "Tips of the Day"
-msgstr ""
+msgstr "Astuce du jour"
 
 # messages-i18n.c:121
 #: messages-i18n.c:139
@@ -1156,7 +1159,7 @@ msgstr "Style"
 
 #: messages-i18n.c:192
 msgid "_Tips Of The Day"
-msgstr ""
+msgstr "Astuce du jour"
 
 # messages-i18n.c:162
 #: messages-i18n.c:193
@@ -1206,7 +1209,7 @@ msgstr "Simple automatique"
 # messages-i18n.c:170
 #: messages-i18n.c:202
 msgid "Clear All"
-msgstr "Tout désélectionner"
+msgstr "Tout pointer"
 
 # messages-i18n.c:171
 #: messages-i18n.c:203
@@ -1240,9 +1243,8 @@ msgstr "Supprimer la transaction"
 
 # po/guile_strings.txt:219
 #: messages-i18n.c:209
-#, fuzzy
 msgid "Display this dialog next time"
-msgstr "Afficher la date?"
+msgstr "Afficher cette boite de dialogue la prochaine fois"
 
 # messages-i18n.c:177 po/guile_strings.txt:19
 #: messages-i18n.c:210 po/guile_strings.txt:22
@@ -1531,7 +1533,7 @@ msgstr "Etat de la date:"
 
 #: messages-i18n.c:272
 msgid "Tip of the Day:"
-msgstr ""
+msgstr "Astuce du jour:"
 
 # messages-i18n.c:229
 #: messages-i18n.c:273
@@ -1635,7 +1637,7 @@ msgstr "Actif(Avoirs)"
 # messages-i18n.c:246
 #: messages-i18n.c:292
 msgid "Assets"
-msgstr "Actif(Avoirs)"
+msgstr "Actifs(Avoirs)"
 
 # messages-i18n.c:247
 #: messages-i18n.c:293
@@ -2027,7 +2029,7 @@ msgstr "Portefeuille"
 # messages-i18n.c:314
 #: messages-i18n.c:367
 msgid "POS"
-msgstr "DAB"
+msgstr "PdV"
 
 # messages-i18n.c:315
 #: messages-i18n.c:368
@@ -2204,7 +2206,7 @@ msgstr "Transférer"
 
 #: messages-i18n.c:403
 msgid "Untitled"
-msgstr ""
+msgstr "Sans titre"
 
 # messages-i18n.c:348 po/guile_strings.txt:57
 #: messages-i18n.c:404 po/guile_strings.txt:66
@@ -2234,7 +2236,7 @@ msgstr "Se retirer"
 # messages-i18n.c:351
 #: messages-i18n.c:409 po/guile_strings.txt:60
 msgid "Withdrawal"
-msgstr "Retiré"
+msgstr "Retrait"
 
 # po/guile_strings.txt:182
 #: messages-i18n.c:410
@@ -2248,30 +2250,26 @@ msgstr "Oui"
 
 # messages-i18n.c:260
 #: messages-i18n.c:412
-#, fuzzy
 msgid "cleared:c"
-msgstr "Pointé"
+msgstr "pointé:p"
 
 #: messages-i18n.c:413
 msgid "frozen:f"
-msgstr ""
+msgstr "gelé:g"
 
 #: messages-i18n.c:414
-#, fuzzy
 msgid "not cleared:n"
-msgstr "Pas rapproché (n)"
+msgstr "pas pointé:n"
 
 # messages-i18n.c:322
 #: messages-i18n.c:415
-#, fuzzy
 msgid "Reconciled:R"
-msgstr "Rapprocher"
+msgstr "Rapproché:R"
 
 # messages-i18n.c:322
 #: messages-i18n.c:416
-#, fuzzy
 msgid "reconciled:y"
-msgstr "Rapprocher (y)"
+msgstr "rapproché:o"
 
 # po/guile_strings.txt:1
 #: po/guile_strings.txt:1
@@ -3709,7 +3707,7 @@ msgstr "C'est une option de couleur"
 # po/guile_strings.txt:279
 #: po/guile_strings.txt:331
 msgid "Make No Plot"
-msgstr "Ne fait pas de graphique"
+msgstr "Ne pas faire de graphique"
 
 # po/guile_strings.txt:280
 #: po/guile_strings.txt:332
@@ -4354,17 +4352,17 @@ msgstr "Trouver les transactions dont le status de rapprochement est:"
 
 #: src/gnome/glade-gnc-dialogs.c:2428
 msgid "Not cleared (n)"
-msgstr "Pas rapproché (n)"
+msgstr "Pas pointé (n)"
 
 # messages-i18n.c:260
 #: src/gnome/glade-gnc-dialogs.c:2435
 msgid "Cleared (c)"
-msgstr "Pointé (c)"
+msgstr "Pointé (p)"
 
 # messages-i18n.c:322
 #: src/gnome/glade-gnc-dialogs.c:2442
 msgid "Reconciled (y)"
-msgstr "Rapprocher (y)"
+msgstr "Rapprocher (o)"
 
 #: src/gnome/glade-gnc-dialogs.c:2470
 msgid "Type of search"
