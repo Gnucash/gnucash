@@ -120,6 +120,7 @@ char * ultostr (unsigned long val, int base);
 
 #define PRTSYM 0x1
 #define PRTSHR 0x2
+#define PRTSEP 0x4
 /*
  * The xaccPrintAmount() subroutine converts a double amount
  * to a printable string, depending on the argument shrs:
@@ -127,7 +128,9 @@ char * ultostr (unsigned long val, int base);
  * 1 -- print currency symbol & two decimal places
  * 2 -- print three decimal places
  * 3 -- prints three decimal places followed by string "shrs"
- * shrs must be bitwise-OR of PRTSYM & PRTSHR
+ * 4-7 as above, but comma separated
+ *
+ * shrs must be bitwise-OR of PRTSYM, PRTSHR and PRTSEP
  */
 char * xaccPrintAmount (double val, short shrs);
 

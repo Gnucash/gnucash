@@ -133,38 +133,87 @@ ultostr (unsigned long val, int base)
  * returned from the localconv() subroutine
 \********************************************************************/
 
-char * xaccPrintAmount (double val, short shrs) 
+/* THOU_SEP is a comma in U.S. but a period in some parts of Europe */
+/* CENT_SEP is a period in U.S. but a comma in some parts of Europe */
+#define THOU_SEP  ','
+#define CENT_SEP '.'
+
+static int
+PrtAmtComma (char * buf, double val, int prec)
+{
+   int i, ival, ncommas = 0;
+   double tmp, amt=0.0;
+   char *start = buf;
+
+   /* count number of commas */
+   tmp = val;
+   while (tmp > 1000.0) {
+      tmp *= 0.001;
+      ncommas ++;
+   }
+
+   /* print digits in groups of three, seperated by commas */
+   for (i=ncommas; i>=0; i--) {
+      int j;
+
+      amt *= 1000.0;
+      tmp = val;
+      for (j=i; j>0; j++) tmp *= 0.001;
+      tmp -= amt;
+      ival = tmp;  
+      if (i !=ncommas) {
+        buf += sprintf (buf, "%03d", ival);   
+      } else {
+        buf += sprintf (buf, "%d", ival);   
+      }
+      *buf = THOU_SEP; buf++;
+      amt += ival;
+   }
+
+   /* place decimal point */
+   buf --; *buf = CENT_SEP; buf++;
+
+   if (3 == prec) {
+      ival = 1000.0 * (val-amt);
+      buf += sprintf (buf, "%03d", ival); 
+   } else {
+      ival = 100.0 * (val-amt);
+      buf += sprintf (buf, "%02d", ival); 
+   }
+
+   return (buf-start);
+}
+
+char * 
+xaccPrintAmount (double val, short shrs) 
 {
    static char buf[BUFSIZE];
+   char *bufp = buf;
+
+   if (0.0 > val) {
+      buf[0] = '-';
+      bufp ++;
+      val = DABS(val);
+   }
 
    if (shrs & PRTSHR) {
-      if (shrs & PRTSYM) {
-         if (0.0 > val) {
-            sprintf( buf, "-%.3f shrs", DABS(val) );
-         } else {
-            sprintf( buf, " %.3f shrs", val );
-         }
+      if (shrs & PRTSEP) {
+         bufp += PrtAmtComma (bufp, val, 3);
       } else {
-         if (0.0 > val) {
-            sprintf( buf, "-%.3f", DABS(val) );
-         } else {
-            sprintf( buf, "%.3f", val );
-         }
+         bufp += sprintf( bufp, "%.3f", val );
+      }
+      if (shrs & PRTSYM) {
+         strcpy (bufp, " shrs");
       }
    } else {
 
       if (shrs & PRTSYM) {
-         if (0.0 > val) {
-            sprintf( buf, "-%s %.2f", CURRENCY_SYMBOL, DABS(val) );
-         } else {
-            sprintf( buf, "%s %.2f", CURRENCY_SYMBOL, val );
-         }
+         bufp += sprintf( buf, "%s ", CURRENCY_SYMBOL);
+      }
+      if (shrs & PRTSEP) {
+         PrtAmtComma (bufp, val, 2);
       } else {
-         if (0.0 > val) {
-            sprintf( buf, "-%.2f", DABS(val) );
-         } else {
-            sprintf( buf, "%.2f", val );
-         }
+         sprintf( bufp, "%.2f", val );
       }
    }
 
