@@ -8,9 +8,13 @@ checklib_LTLIBRARIES = libbar.la libgncmodbar.la
 libbar_la_LDFLAGS = -module
 libbar_la_SOURCES = bar.c
 
+noinst_HEADERS = bar.h
+
 libgncmodbar_la_SOURCES=bar-gwrap.c gnc-mod-bar.c
 libgncmodbar_la_LDFLAGS=-module
 libgncmodbar_la_LIBADD=-L. -L./.libs -lbar
+
+EXTRA_DIST = bar-gwrap.scm
 
 bar-gwrap.c bar-gwrap.h: bar-gwrap.scm
 	FLAVOR=gnome guile -c \

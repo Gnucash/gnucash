@@ -1,11 +1,23 @@
 
 pkglib_LTLIBRARIES=libgncmod-qif-import.la
 
-libgncmod_qif_import_la_SOURCES=gncmod-qif-import.c druid-qif-import.c dialog-account-picker.c 
-libgncmod_qif_import_la_LDFLAGS=-module \
-${GNOME_LIBS} ${GLADE_LIBS} ${GLIB_LIBS} ${GUILE_LIBS} 
+libgncmod_qif_import_la_SOURCES = \
+  dialog-account-picker.c \
+  druid-qif-import.c \
+  gncmod-qif-import.c
 
-gncscmmoddir=${GNC_SHAREDIR}/guile-modules/gnucash/import-export
+noinst_HEADERS = \
+  dialog-account-picker.h \
+  druid-qif-import.h
+
+libgncmod_qif_import_la_LDFLAGS = \
+  -module \
+  ${GNOME_LIBS} \
+  ${GLADE_LIBS} \
+  ${GLIB_LIBS} \
+  ${GUILE_LIBS} 
+
+gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/import-export
 gncscmmod_DATA = qif-import.scm 
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}/qif-import

@@ -24,6 +24,8 @@ libgncmod_app_utils_la_SOURCES = \
   option-util.c 
 
 noinst_HEADERS = \
+  gfec.h \
+  global-options.h \
   gnc-component-manager.h \
   gnc-euro.h \
   gnc-exp-parser.h \
@@ -31,7 +33,8 @@ noinst_HEADERS = \
   gnc-helpers.h \
   gnc-ui-common.h \
   gnc-ui-util.h \
-  guile-util.h
+  guile-util.h \
+  option-util.h
 
 libgncmod_app_utils_la_LDFLAGS = -module
 
@@ -55,6 +58,11 @@ gwmod_LTLIBRARIES=libgw-app-utils.la
 gwmod_DATA=gw-app-utils-spec.scm
 
 noinst_DATA=.scm-links
+
+EXTRA_DIST = \
+  ${gncmod_DATA} \
+  ${gncscm_DATA} \
+  ${gwmod_DATA}
 
 .scm-links: 
 	rm -f gnucash g-wrapped

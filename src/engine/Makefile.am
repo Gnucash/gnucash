@@ -40,16 +40,20 @@ noinst_HEADERS = \
   Backend.h \
   BackendP.h \
   DateUtils.h \
+  FreqSpec.h \
   GNCId.h \
   GNCIdP.h \
   Group.h \
   GroupP.h \
+  SchedXaction.h \
   Query.h \
   Scrub.h \
   TransLog.h \
   Transaction.h \
   TransactionP.h \
   date.h \
+  engine-helpers.h \
+  glib-helpers.h \
   gnc-associate-account.h \
   gnc-book-p.h \
   gnc-book.h \
@@ -66,9 +70,7 @@ noinst_HEADERS = \
   kvp_frame.h \
   kvp-scm.h \
   md5.h \
-  messages.h \
-  FreqSpec.h \
-  SchedXaction.h
+  messages.h
 
 #  NetIO.h 
 
@@ -100,7 +102,10 @@ EXTRA_DIST = \
   README.query-api \
   design.txt \
   extensions.txt \
-  kvp_doc.txt
+  kvp_doc.txt \
+  ${gncmod_DATA} \
+  ${gncscm_DATA} \
+  ${gwmod_DATA}
 
 .scm-links: 
 	rm -f gnucash g-wrapped

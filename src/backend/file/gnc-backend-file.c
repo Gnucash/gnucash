@@ -13,7 +13,6 @@
 #include "Backend.h"
 #include "BackendP.h"
 #include "Group.h"
-#include "NetIO.h"
 #include "Scrub.h"
 #include "TransLog.h"
 #include "gnc-engine-util.h"

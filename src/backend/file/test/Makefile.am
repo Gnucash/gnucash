@@ -1,3 +1,5 @@
+SUBDIRS = test-files
+
 TESTS = \
   test-date-converting \
   test-dom-converters1 \
@@ -34,6 +36,8 @@ noinst_PROGRAMS = \
   test-xml-commodity \
   test-xml-transaction \
   test-xml2-is-file
+
+noinst_HEADERS = test-file-stuff.h
 
 LDADD = -L${top_srcdir}/src/gnc-module -L${top_srcdir}/src/gnc-module/.libs \
         -L${top_srcdir}/src/engine -L${top_srcdir}/src/engine/.libs \
