@@ -1,3 +1,8 @@
+2003-01-12  Derek Atkins  <derek@ihtfp.com>
+
+	* src/doc/Makefile.am: add new documentation: generic-druid-framework.txt
+	* src/doc/generic-druid-framework.txt: new documentation
+
 2004-01-07  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/Transaction.h: fix the xaccTransOrder() documentation

@@ -28,6 +28,7 @@ EXTRA_DIST = \
   query-api.txt \
   guid.txt \
   qif.txt \
+  generic-druid-framework.txt \
   user-prefs-howto.txt
 
 
