@@ -11,6 +11,7 @@
                     ((default)
                      (list
                       (string-append (getenv "HOME") "/.gnucash/doc")    
+                      (string-append gnc:_share-dir-default_ "/Docs/En")
                       (string-append gnc:_share-dir-default_ "/Docs")
                       (string-append gnc:_share-dir-default_ "/Reports")))
                     ((current)
