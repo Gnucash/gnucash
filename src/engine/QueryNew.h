@@ -31,6 +31,8 @@ typedef enum {
 
 /* Basic API Functions */
 
+GSList * gncQueryBuildParamList (char const *param, ...);
+
 /* Create a new query.  A Query MUST be set with a 'search-for' type.
  * you can create and set this value in one step or two */
 QueryNew * gncQueryCreate (void);

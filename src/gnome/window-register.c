@@ -129,8 +129,6 @@ gnc_RegWindow_set_pcd (RegWindow *data, gpointer pcd)
 static int last_width = 0;
 static int last_stock_width = 0;
 
-static GSList *date_param = NULL;
-
 /** PROTOTYPES ******************************************************/
 
 static void gnc_register_help_changed_cb( GNCSplitReg *gsr, gpointer data );
@@ -336,6 +334,7 @@ gnc_register_set_date_range(RegWindow *regData)
 {
   RegDateWindow *regDateData;
   GtkToggleButton *toggle;
+  GSList *date_param;
   Query *query;
 
   if (!regData)
@@ -356,12 +355,9 @@ gnc_register_set_date_range(RegWindow *regData)
 
   toggle = GTK_TOGGLE_BUTTON(regDateData->show_earliest);
 
-  if (date_param == NULL) {
-    date_param = g_slist_prepend (NULL, TRANS_DATE_POSTED);
-    date_param = g_slist_prepend (date_param, SPLIT_TRANS);
-  }
-
+  date_param = gncQueryBuildParamList(TRANS_DATE_POSTED, SPLIT_TRANS, NULL);
   gncQueryPurgeTerms (query, date_param);
+  g_slist_free(date_param);
 
   if (!gtk_toggle_button_get_active(toggle))
   {
@@ -858,15 +854,12 @@ regWindowLedger( GNCLedgerDisplay *ledger )
                                         "Show All Transactions",
                                         TRUE );
 
-  /* Where does date_param come from? A file-static? Ick. -- jsled */
-  if (date_param == NULL) {
-    date_param = g_slist_prepend (NULL, TRANS_DATE_POSTED);
-    date_param = g_slist_prepend (date_param, SPLIT_TRANS);
-  }
-
   {
+    GSList *date_param = gncQueryBuildParamList(TRANS_DATE_POSTED,
+						SPLIT_TRANS, NULL);
     Query *q = gnc_ledger_display_get_query (regData->ledger);
     has_date = gncQueryHasTermType (q, date_param);
+    g_slist_free(date_param);
   }
 
   if (has_date)

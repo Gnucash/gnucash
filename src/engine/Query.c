@@ -57,22 +57,6 @@ build_param_list_internal (const char *first, va_list rest)
   return (g_slist_reverse (list));
 }
 
-static GSList *
-build_param_list (char const *param, ...)
-{
-  GSList *param_list;
-  va_list ap;
-
-  if (!param)
-    return NULL;
-
-  va_start (ap, param);
-  param_list = build_param_list_internal (param, ap);
-  va_end (ap);
-
-  return param_list;
-}
-
 /********************************************************************
  * xaccQueryGetSplitsUniqueTrans 
  * Get splits but no more than one from a given transaction.
@@ -283,11 +267,11 @@ xaccQueryAddAccountGUIDMatch(Query *q, AccountGUIDList *guid_list,
   switch (how) {
   case GUID_MATCH_ANY:
   case GUID_MATCH_NONE:
-    param_list = build_param_list (SPLIT_ACCOUNT, QUERY_PARAM_GUID, NULL);
+    param_list = gncQueryBuildParamList (SPLIT_ACCOUNT, QUERY_PARAM_GUID, NULL);
     break;
   case GUID_MATCH_ALL:
-    param_list = build_param_list (SPLIT_TRANS, TRANS_SPLITLIST,
-				   SPLIT_ACCOUNT_GUID, NULL);
+    param_list = gncQueryBuildParamList (SPLIT_TRANS, TRANS_SPLITLIST,
+					 SPLIT_ACCOUNT_GUID, NULL);
     break;
   default:
     PERR ("Invalid match type: %d", how);
@@ -393,7 +377,7 @@ xaccQueryAddDateMatchTS (Query * q,
       return;
     }
 
-    param_list = build_param_list (SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
+    param_list = gncQueryBuildParamList (SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
     gncQueryAddTerm (tmp_q, param_list, pred_data, QUERY_AND);
   }
 
@@ -404,7 +388,7 @@ xaccQueryAddDateMatchTS (Query * q,
       return;
     }
 
-    param_list = build_param_list (SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
+    param_list = gncQueryBuildParamList (SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
     gncQueryAddTerm (tmp_q, param_list, pred_data, QUERY_AND);
   }
 
@@ -486,7 +470,7 @@ xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QueryOp op)
   if (!pred_data)
     return;
 
-  param_list = build_param_list (SPLIT_RECONCILE, NULL);
+  param_list = gncQueryBuildParamList (SPLIT_RECONCILE, NULL);
 
   gncQueryAddTerm (q, param_list, pred_data, op);
 }
@@ -501,11 +485,11 @@ xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
     return;
 
   if (!safe_strcmp (id_type, GNC_ID_SPLIT)) 
-    param_list = build_param_list (QUERY_PARAM_GUID, NULL);
+    param_list = gncQueryBuildParamList (QUERY_PARAM_GUID, NULL);
   else if (!safe_strcmp (id_type, GNC_ID_TRANS))
-    param_list = build_param_list (SPLIT_TRANS, QUERY_PARAM_GUID, NULL);
+    param_list = gncQueryBuildParamList (SPLIT_TRANS, QUERY_PARAM_GUID, NULL);
   else if (!safe_strcmp (id_type, GNC_ID_ACCOUNT))
-    param_list = build_param_list (SPLIT_ACCOUNT, QUERY_PARAM_GUID, NULL);
+    param_list = gncQueryBuildParamList (SPLIT_ACCOUNT, QUERY_PARAM_GUID, NULL);
   else
     PERR ("Invalid match type: %s", id_type);
 
@@ -544,11 +528,11 @@ xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
     return;
 
   if (!safe_strcmp (id_type, GNC_ID_SPLIT)) 
-    param_list = build_param_list (SPLIT_KVP, NULL);
+    param_list = gncQueryBuildParamList (SPLIT_KVP, NULL);
   else if (!safe_strcmp (id_type, GNC_ID_TRANS))
-    param_list = build_param_list (SPLIT_TRANS, TRANS_KVP, NULL);
+    param_list = gncQueryBuildParamList (SPLIT_TRANS, TRANS_KVP, NULL);
   else if (!safe_strcmp (id_type, GNC_ID_ACCOUNT))
-    param_list = build_param_list (SPLIT_ACCOUNT, ACCOUNT_KVP, NULL);
+    param_list = gncQueryBuildParamList (SPLIT_ACCOUNT, ACCOUNT_KVP, NULL);
   else
     PERR ("Invalid match type: %s", id_type);
 

@@ -552,6 +552,26 @@ static void query_clear_compiles (QueryNew *q)
 /********************************************************************/
 /* PUBLISHED API FUNCTIONS */
 
+GSList *
+gncQueryBuildParamList (char const *param, ...)
+{
+  GSList *param_list = NULL;
+  char const *this_param;
+  va_list ap;
+
+  if (!param)
+    return NULL;
+
+  va_start (ap, param);
+
+  for (this_param = param; this_param; this_param = va_arg (ap, const char *))
+    param_list = g_slist_prepend (param_list, (gpointer)this_param);
+
+  va_end (ap);
+
+  return g_slist_reverse (param_list);
+}
+
 void gncQueryAddTerm (QueryNew *q, GSList *param_list,		      
 		      QueryPredData_t pred_data, QueryOp op)
 {
