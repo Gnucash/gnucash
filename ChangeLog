@@ -1,3 +1,13 @@
+2003-02-17  Derek Atkins  <derek@ihtfp.com>
+
+	Move some files around in preparation for re-factoring the
+	reconcile-list code (pull from HEAD):
+	* src/gnome-search/Makefile.am: removed search-param.[ch]
+	* src/gnome-search/search-param.[ch]: moved the search-param to gnome-utils
+	* src/gnome-utils/search-parah.[ch]: moved search-param from gnome-search
+	* src/gnome-utils/Makefile.am: added search-param.[ch]
+	* po/POTFILES.in: fix for the search-param.c move
+
 2003-02-16  Herbert Thoma  <herbie@hthoma.de>
 
 	Pull up from HEAD:
