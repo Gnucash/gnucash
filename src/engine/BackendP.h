@@ -26,7 +26,7 @@
 
 
 typedef enum {
-  ERR_BACKEND_NONE = 0,
+  ERR_BACKEND_NO_ERR = 0,
   ERR_BACKEND_MISC,
 
   /* fileio errors */
@@ -38,6 +38,7 @@ typedef enum {
   ERR_BFILEIO_ALLOC,
 
   /* network errors */
+  ERR_NETIO_NO_CONNECTION,
   ERR_NETIO_SHORT_READ,
   ERR_NETIO_WRONG_CONTENT_TYPE,
   ERR_NETIO_NOT_GNCXML
@@ -47,6 +48,22 @@ typedef enum {
 typedef struct _backend Backend;
 
 /*
+ * The book_begin() routine gives the backend a second initialization
+ *    opportunity.  It is suggested that the backend check that 
+ *    the URL is syntactically correct, and that it is actually
+ *    reachable.  This is probably(?) a good time to initialize
+ *    the actual network connection.
+ *
+ * The book_load() routine should return at least an account tree,
+ *    and all currencies.  It does not have to return any transactions
+ *    whatsoever, as these are obtained at a later stage when a user
+ *    opens a register, resulting in a query being sent to the backend.
+ *
+ *    (Its OK to send over transactinos at this point, but one should 
+ *    be careful of the network load; also, its possible that whatever 
+ *    is sent is not what the user wanted anyway, which is why its 
+ *    better to wait for the query).
+ *
  * The trans_commit_edit() routine takes two transaction arguments:
  *    the first is the proposed new transaction; the second is the
  *    'original' transaction. The second argument is here for 
@@ -74,6 +91,20 @@ typedef struct _backend Backend;
  *    cache of the split data.  This will allow the gnucash client to 
  *    continue functioning even when disconnected from the server:
  *    this is because it will have its local cache of data to work from.
+ *
+ * The sync() routine synchronizes the engine contents to the backend.
+ *    This is done by using version numbers (hack alert -- the engine
+ *    does not currently contain version numbers).
+ *    If the engine contents are newer than what's in the backend, the 
+ *    data is stored to the backend.  If the engine contents are older,
+ *    then the engine contents are updated.  
+ *
+ *    Note that this sync operation is only meant to apply to the 
+ *    current contents of the engine.  This routine is not intended
+ *    to be used to fetch account/transaction data from the backend.
+ *    (It might pull new splits from the backend, if this is what is
+ *    needed to update an existing transaction.  It might pull new 
+ *    currencies (??))
  *    
  * The last_err member indicates the last error that occured.
  *    It should probably be implemented as an array (actually,
@@ -82,8 +113,9 @@ typedef struct _backend Backend;
 
 struct _backend 
 {
-  AccountGroup * (*book_load) (GNCBook *, const char * book_id);
-  void (*book_end) (GNCBook *);
+  void (*book_begin) (GNCBook *, const char *book_id);
+  AccountGroup * (*book_load) (Backend *);
+  void (*book_end) (Backend *);
   int (*account_begin_edit) (Backend *, Account *, int defer);
   int (*account_commit_edit) (Backend *, Account *);
   int (*trans_begin_edit) (Backend *, Transaction *);
@@ -91,6 +123,7 @@ struct _backend
   int (*trans_rollback_edit) (Backend *, Transaction *);
 
   void (*run_query) (Backend *, Query *);
+  void (*sync) (Backend *, AccountGroup *);
 
   GNCBackendError last_err;
 };

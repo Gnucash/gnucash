@@ -67,8 +67,9 @@ void      gnc_book_destroy (GNCBook *book);
 
 /* The gnc_book_begin () method begins a new book. It takes as an argument
  *    the book id.  The book id must be a string in the form of a URI/URL.
- *    In the current implementation, only one type of URI is supported, and
- *    that is the file URI: anything of the form 
+ *    In the current implementation, only the file URI type is fully 
+ *    supported, (with others in various stages of prototyping).
+ *    A file URI is of the form 
  *       "file:/home/somewhere/somedir/file.xac"
  *    The path part must be a valid path.  The file-part must be a valid
  *    xacc/gnucash-format file. Paths may be relative or absolute. If the

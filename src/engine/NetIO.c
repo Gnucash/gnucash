@@ -25,9 +25,10 @@
  * Rudimentary implmentation right now; good enough for a demo, 
  * but that's all.
  *
- * HACK ALRT -- this should be moved into its own sbdirectory
+ * HACK ALERT -- this should be moved into its own subdirectory
  * Mostly so that the engine build doesn't require libghttp
- * as a dependency.  
+ * as a dependency.  In general, backends should be dynamically 
+ * loaded ...
  */
 
 
@@ -153,32 +154,45 @@ setup_request (XMLBackend *be)
 }
 
 /* ==================================================================== */
+/* Initialize the connection ... ?? */
+/* validate the URL for syntactic correctness ?? */
+/* maybe check to see if the server is reachable? */
+
+static void
+xmlbeBookBegin (GNCBook *book, const char *url) 
+{
+  XMLBackend *be;
+  if (!book) return;
+  ENTER ("url is %s", url);
+
+  be = (XMLBackend *) xaccGNCBookGetBackend (book); 
+
+  /* hack alert -- we store this first url as the url for inital
+   * contact  & * for sending queries to 
+   * this should be made customizable, I suppose ???? */
+  be->query_url = g_strdup (url);
+
+  LEAVE(" ");
+}
+
+/* ==================================================================== */
 /* Load a set of accounts and currencies from the indicated URL. */
 
 static AccountGroup *
-xmlbeBookLoad (GNCBook *book, const char *url) 
+xmlbeBookLoad (Backend *bend) 
 {
-  XMLBackend *be;
+  XMLBackend *be = (XMLBackend *) bend;
   AccountGroup *grp;
   ghttp_request *request;
   const char *bufp;
   int len;
 
-  if (!book) return NULL;
-
-  ENTER ("url is %s", url);
-
-  be = (XMLBackend *) xaccGNCBookGetBackend (book); 
-
-  /* hack alert -- we store this first url as some bogus url 
-   * for sending queries to 
-   * this should be made customizable, I suppose ???? */
-  be->query_url = g_strdup (url);
+  if (!be) return NULL;
 
   /* build up a request for the URL */
   setup_request (be);
   request = be->request;
-  ghttp_set_uri (request, (char *) url);
+  ghttp_set_uri (request, be->query_url);
   ghttp_set_type (request, ghttp_type_get);
   ghttp_prepare (request);
   ghttp_process (request);
@@ -188,7 +202,7 @@ xmlbeBookLoad (GNCBook *book, const char *url)
   if (0 >= len) return NULL;
 
   bufp = ghttp_get_body(request);
-  grp = gncxml_read_from_buf (bufp, len);
+  grp = gncxml_read_from_buf ((char *)bufp, len);
 
   LEAVE(" ");
   return grp;
@@ -267,6 +281,7 @@ xmlendNew (void)
   be = (XMLBackend *) malloc (sizeof (XMLBackend));
 
   /* generic backend handlers */
+  be->be.book_begin = NULL;
   be->be.book_load = xmlbeBookLoad;
   be->be.book_end = xmlbeBookEnd;
 
@@ -276,8 +291,9 @@ xmlendNew (void)
   be->be.trans_commit_edit = NULL;
   be->be.trans_rollback_edit = NULL;
   be->be.run_query = xmlbeRunQuery;
+  be->be.sync = NULL;
 
-  be->be.last_err = ERR_BACKEND_NONE;
+  be->be.last_err = ERR_BACKEND_NO_ERR;
 
   be->request = ghttp_request_new();
   be->auth_cookie = NULL;

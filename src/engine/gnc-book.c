@@ -324,47 +324,56 @@ gnc_book_begin (GNCBook *book, const char * book_id, gboolean ignore_lock)
 
   /* -------------------------------------------------- */
   if ((!strncmp(book_id, "http://", 7)) ||
-      (!strncmp(book_id, "https://", 8)))
+      (!strncmp(book_id, "https://", 8)) ||
+      (!strncmp(book_id, "postgres://", 11)))
   {
     /* Store the sessionid URL  */
     book->book_id = g_strdup (book_id);
 
-    /* create the backend */
-    book->backend = xmlendNew();
-
-    /* not sure what else should happen here ... should we check to see
-     * if the URL is reachable ?? Should we login the user ??
+    /* by definition, URL's are fully resolved */
+    /* hack alert -- the only reason we need to set 'fullpath' is 
+     * because the file save gui dialogues check for fully resolved
+     * paths 
      */
-    return TRUE;
-  }
+    book->fullpath = g_strdup (book_id);
 
-  /* -------------------------------------------------- */
-  if (!strncmp(book_id, "postgres://", 11))
-  {
-    /* Store the sessionid URL  */
-    /* we expect this to be in the format
-     * postgres://some.hostname.com/databasename.pql
-     * or maybe
-     * postgres://localhost/databasename.pql
-     * or one can specify the postgres socket port number explicitly:
-     * postgres://some.hostname.com:5432/databasename.pql
-     */
-    book->book_id = g_strdup (book_id);
-
+    /* load different backend based on URL.  We should probably
+     * dynamically load these based on some config file ... */
+    if ((!strncmp(book_id, "http://", 7)) ||
+        (!strncmp(book_id, "https://", 8)))
+    {
+      /* create the backend */
+      book->backend = xmlendNew();
+    } else 
+    if (!strncmp(book_id, "postgres://", 11))
+    {
 /* #define SQLHACK */
 #ifdef SQLHACK
-    {
       extern Backend * pgendNew (void);
       book->backend = pgendNew ();
+#else
+      g_free(book->fullpath);
+      book->fullpath = NULL;
+      book->errtype = ENOSYS;
+      return FALSE;
+#endif
+    }
+
+    /* if there's a begin method, call that. */
+    if (book->backend->book_begin)
+    {
+      (book->backend->book_begin)(book, book->book_id);
+      /* hack alert we should check for errors here ... */
+
+      /* not sure what else should happen here ... should we check to see
+       * if the URL is reachable ?? Should we login the user ??
+       */
+      
     }
     return TRUE;
-#else
-    book->errtype = ENOSYS;
-    return FALSE;
-#endif
   }
-  /* -------------------------------------------------- */
 
+  /* -------------------------------------------------- */
 
   /* otherwise, lets just assume its a file. */
   rc = gnc_book_begin_file (book, book_id, ignore_lock);
@@ -437,7 +446,7 @@ gnc_book_load (GNCBook *book)
      * The GUI will need to do a query for that.
      */
     if (be && be->book_load) {
-       book->topgroup = (be->book_load) (book, book->book_id);
+       book->topgroup = (be->book_load) (be);
     }
 
     xaccGroupSetBackend (book->topgroup, be);
@@ -480,7 +489,21 @@ gnc_book_save_may_clobber_data (GNCBook *book)
 void
 gnc_book_save (GNCBook *book)
 {
+  Backend *be;
   if (!book) return;
+
+  /* if there is a backend, and the backend is reachablele
+   * (i.e. we can communicate with it), then synchronize with 
+   * the backend.  If we cannot contact the backend (e.g.
+   * because we've gone offline, the network has crashed, etc.)
+   * then give the user the option to save to disk. 
+   */
+  be = book->backend;
+  if (be && be->sync && book->topgroup)
+  {
+     (be->sync)(be, book->topgroup);
+     if (ERR_BACKEND_NO_ERR == be->last_err) return;
+  } 
 
   /* if the fullpath doesn't exist, either the user failed to initialize,
    * or the lockfile was never obtained. Either way, we can't write. */
@@ -509,6 +532,12 @@ void
 gnc_book_end (GNCBook *book)
 {
   if (!book) return;
+
+  /* close down the backend first */
+  if (book->backend && book->backend->book_end)
+  {
+    (book->backend->book_end)(book->backend);
+  }
 
   book->errtype = 0;
   book->last_file_err = ERR_FILEIO_NONE;
@@ -541,6 +570,9 @@ gnc_book_destroy (GNCBook *book)
   if (!book) return;
 
   gnc_book_end (book);
+
+  /* destroy the backend */
+  if (book->backend) g_free(book->backend);
 
   xaccFreeAccountGroup (book->topgroup);
   book->topgroup = NULL;
