@@ -91,6 +91,29 @@ ledgerIsMember (xaccLedgerDisplay *ledger_display, Account * account)
   return g_list_find(ledger_display->displayed_accounts, account) != NULL;
 }
 
+static SplitRegisterStyle
+gnc_get_default_register_style ()
+{
+  SplitRegisterStyle new_style = REG_STYLE_LEDGER;
+  char *style_string;
+
+  style_string = gnc_lookup_multichoice_option("Register", 
+                                               "Default Register Style",
+                                               "ledger");
+
+  if (safe_strcmp(style_string, "ledger") == 0)
+    new_style = REG_STYLE_LEDGER;
+  else if (safe_strcmp(style_string, "auto_ledger") == 0)
+    new_style = REG_STYLE_AUTO_LEDGER;
+  else if (safe_strcmp(style_string, "journal") == 0)
+    new_style = REG_STYLE_JOURNAL;
+
+  if (style_string != NULL)
+    free(style_string);
+
+  return new_style;
+}
+
 /********************************************************************\
  * regWindowSimple                                                  *
  *   opens up a register window to display a single account         *
@@ -108,7 +131,8 @@ xaccLedgerDisplaySimple (Account *account)
   account_type = xaccAccountGetType (account);
 
   /* translate between different enumerants */
-  switch (account_type) {
+  switch (account_type)
+  {
     case BANK:
       reg_type = BANK_REGISTER;
       break;
@@ -145,7 +169,8 @@ xaccLedgerDisplaySimple (Account *account)
       return NULL;
   }
 
-  return xaccLedgerDisplayGeneral (account, NULL, reg_type, REG_STYLE_LEDGER);
+  return xaccLedgerDisplayGeneral (account, NULL, reg_type,
+                                   gnc_get_default_register_style ());
 }
 
 static GList *
@@ -239,7 +264,7 @@ xaccLedgerDisplayAccGroup (Account *account)
   }
 
   ledger_display = xaccLedgerDisplayGeneral (account, accounts, ledger_type,
-                                             REG_STYLE_LEDGER);
+                                             REG_STYLE_JOURNAL);
 
   g_list_free (accounts);
 
@@ -247,7 +272,7 @@ xaccLedgerDisplayAccGroup (Account *account)
 }
 
 static gncUIWidget
-xaccLedgerDisplayParent(void *user_data)
+xaccLedgerDisplayParent (void *user_data)
 {
   xaccLedgerDisplay *regData = user_data;
 
@@ -257,11 +282,11 @@ xaccLedgerDisplayParent(void *user_data)
   if (regData->get_parent == NULL)
     return NULL;
 
-  return (regData->get_parent)(regData);
+  return regData->get_parent (regData);
 }
 
 static void
-xaccLedgerDisplaySetHelp(void *user_data, const char *help_str)
+xaccLedgerDisplaySetHelp (void *user_data, const char *help_str)
 {
   xaccLedgerDisplay *regData = user_data;
 
@@ -271,7 +296,7 @@ xaccLedgerDisplaySetHelp(void *user_data, const char *help_str)
   if (regData->set_help == NULL)
     return;
 
-  (regData->set_help)(regData, help_str);
+  regData->set_help (regData, help_str);
 }
 
 static gpointer

@@ -134,7 +134,7 @@ static void dateCB(GtkWidget *w, gpointer data);
 static void new_trans_cb(GtkWidget *widget, gpointer data);
 static void jump_cb(GtkWidget *widget, gpointer data);
 static void print_check_cb(GtkWidget * widget, gpointer data);
-static void gnc_ui_find_transactions_cb ( GtkWidget *widget, gpointer data );
+static void gnc_ui_find_transactions_cb (GtkWidget *widget, gpointer data);
 
 static gboolean gnc_register_include_date(RegWindow *regData, time_t date);
 
@@ -258,30 +258,6 @@ gnc_register_jump_to_split_amount(RegWindow *regData, Split *split)
 }
 
 
-static SplitRegisterStyle
-gnc_get_default_register_style()
-{
-  SplitRegisterStyle new_style = REG_STYLE_LEDGER;
-  char *style_string;
-
-  style_string = gnc_lookup_multichoice_option("Register", 
-                                               "Default Register Style",
-                                               "ledger");
-
-  if (safe_strcmp(style_string, "ledger") == 0)
-    new_style = REG_STYLE_LEDGER;
-  else if (safe_strcmp(style_string, "auto_ledger") == 0)
-    new_style = REG_STYLE_AUTO_LEDGER;
-  else if (safe_strcmp(style_string, "journal") == 0)
-    new_style = REG_STYLE_JOURNAL;
-
-  if (style_string != NULL)
-    free(style_string);
-
-  return new_style;
-}
-
-
 static void
 gnc_register_change_style(RegWindow *regData, SplitRegisterStyle style)
 {
@@ -297,27 +273,36 @@ gnc_register_change_style(RegWindow *regData, SplitRegisterStyle style)
 }
 
 static void
-gnc_register_style_ledger_cb(GtkWidget *w, gpointer data)
+gnc_register_style_ledger_cb (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnc_register_change_style(regData, REG_STYLE_LEDGER);
+  if (!GTK_CHECK_MENU_ITEM (w)->active)
+    return;
+
+  gnc_register_change_style (regData, REG_STYLE_LEDGER);
 }
 
 static void
-gnc_register_style_auto_ledger_cb(GtkWidget *w, gpointer data)
+gnc_register_style_auto_ledger_cb (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnc_register_change_style(regData, REG_STYLE_AUTO_LEDGER);
+  if (!GTK_CHECK_MENU_ITEM (w)->active)
+    return;
+
+  gnc_register_change_style (regData, REG_STYLE_AUTO_LEDGER);
 }
 
 static void
-gnc_register_style_journal_cb(GtkWidget *w, gpointer data)
+gnc_register_style_journal_cb (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnc_register_change_style(regData, REG_STYLE_JOURNAL);
+  if (!GTK_CHECK_MENU_ITEM (w)->active)
+    return;
+
+  gnc_register_change_style (regData, REG_STYLE_JOURNAL);
 }
 
 static void
@@ -1387,7 +1372,7 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GtkWidget *widget;
     int index;
 
-    switch (gnc_get_default_register_style())
+    switch (regData->ledger->ledger->style)
     {
       default:
       case REG_STYLE_LEDGER:
@@ -1399,6 +1384,16 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
       case REG_STYLE_JOURNAL:
         index = 2;
         break;
+    }
+
+    /* registers with more than one account can only use journal mode */
+    if (regData->ledger->ledger->type >= NUM_SINGLE_REGISTER_TYPES)
+    {
+      widget = style_list[0].widget;
+      gtk_widget_set_sensitive (widget, FALSE);
+
+      widget = style_list[1].widget;
+      gtk_widget_set_sensitive (widget, FALSE);
     }
 
     widget = style_list[index].widget;
@@ -1745,8 +1740,7 @@ regWindowLedger(xaccLedgerDisplay *ledger)
 
     /* be sure to initialize the gui elements associated with the cursor */
     xaccConfigSplitRegister(ledger->ledger, ledger->type,
-                            gnc_get_default_register_style(),
-                            use_double_line);
+                            ledger->ledger->style, use_double_line);
   }
 
   /* Allow grow, allow shrink, auto-shrink */
@@ -1928,7 +1922,7 @@ regDestroy(xaccLedgerDisplay *ledger)
 static void
 regSetHelp(xaccLedgerDisplay *ledger, const char *help_str)
 {
-  RegWindow *regData = (RegWindow *) (ledger->gui_hook);
+  RegWindow *regData = ledger->gui_hook;
   const gchar *status;
 
   if (help_str != NULL)
@@ -2088,16 +2082,8 @@ static void
 xferCB(GtkWidget * w, gpointer data)
 {
   RegWindow *regData = data;
-  xaccLedgerDisplay *ledger = regData->ledger;
-  Account *account = ledger->leader;
 
-  if (account == NULL)
-    account = g_list_nth_data(ledger->displayed_accounts, 0);
-
-  if (account == NULL)
-    return;
-
-  gnc_xfer_dialog(regData->window, account);
+  gnc_xfer_dialog (regData->window, regData->ledger->leader);
 }
 
 

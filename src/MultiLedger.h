@@ -41,8 +41,9 @@
  * instance. */
 typedef struct _xaccLedgerDisplay xaccLedgerDisplay;
 
-struct _xaccLedgerDisplay {
-  Account *leader;               /* leading. "master" account               */
+struct _xaccLedgerDisplay
+{
+  Account *leader;               /* leading. "master" account, if any       */
   GList   *displayed_accounts;   /* The list of accounts shown here         */
   Query   *query;                /* query engine & filter for displaying    */
 
@@ -51,8 +52,10 @@ struct _xaccLedgerDisplay {
 
   /* GUI related stuff */
   gboolean dirty;                /* dirty flag, non zero if redraw needed   */
+
   SplitRegister *ledger;         /* main ledger window                      */
-  void *gui_hook;                /* GUI-specific state                      */
+  gpointer gui_hook;             /* GUI-specific state                      */
+
   void (*redraw) (xaccLedgerDisplay *); /* redraw callback                  */
   void (*destroy) (xaccLedgerDisplay *); /* destroy callback                */
   gncUIWidget (*get_parent) (xaccLedgerDisplay *); /* get parent widget     */

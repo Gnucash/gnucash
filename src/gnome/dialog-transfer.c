@@ -1077,7 +1077,7 @@ gnc_xfer_dialog(GtkWidget * parent, Account * initial)
   gnc_xfer_dialog_select_from_account(xferData, initial);
   gnc_xfer_dialog_select_to_account(xferData, initial);
 
-  if(initial == NULL)
+  if (initial == NULL)
     gnc_xfer_dialog_curr_acct_activate(xferData);
 
   gtk_widget_show_all(xferData->dialog);
