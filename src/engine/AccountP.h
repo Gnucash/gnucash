@@ -167,6 +167,11 @@ Account * xaccAccountLookupEntityTable (const GUID *guid,
  */
 void         xaccAccountRemoveSplit (Account *, Split *);
 
+/* xaccAccountSortSplits() will resort the account's splits
+ * if the sort is dirty. If 'force' is true, the account is
+ * sorted even if the editlevel is not zero. */
+void xaccAccountSortSplits (Account *acc, gboolean force);
+
 /* the following recompute the partial balances (stored with the
  * transaction) and the total balance, for this account */
 void         xaccAccountRecomputeBalance (Account *);

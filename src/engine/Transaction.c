@@ -1005,7 +1005,16 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
       {
         if (!xaccSplitEqual(sa->data, sb->data, check_guids, FALSE))
         {
-          PWARN ("splits differ");
+          char *str_a, *str_b;
+
+          str_a = guid_to_string (xaccSplitGetGUID (sa->data));
+          str_b = guid_to_string (xaccSplitGetGUID (sb->data));
+
+          PWARN ("splits %s and %s differ", str_a, str_b);
+
+          g_free (str_a);
+          g_free (str_b);
+
           return(FALSE);
         }
 
@@ -2558,10 +2567,20 @@ xaccSplitSetReconcile (Split *split, char recn)
      return;
    }
 
-   split->reconciled = recn;
+   if (split->reconciled != recn)
+   {
+     Account *account = xaccSplitGetAccount (split);
 
-   xaccAccountRecomputeBalance (xaccSplitGetAccount(split));
-   mark_split (split);
+     split->reconciled = recn;
+
+     if (account)
+     {
+       account->balance_dirty = TRUE;
+       xaccAccountRecomputeBalance (account);
+     }
+
+     mark_split (split);
+   }
 }
 
 void
@@ -2826,13 +2845,11 @@ xaccTransVoid(Transaction *transaction,
 			void_reason_str,
 			val);
 
-
   now.tv_sec = time(NULL);
   now.tv_nsec = 0;
 
   gnc_timespec_to_iso8601_buff(now, iso8601_str);
 
-  
   val = kvp_value_new_string (iso8601_str);
 
   kvp_frame_set_slot_nc(frame, 
@@ -2856,18 +2873,13 @@ xaccTransVoid(Transaction *transaction,
     amt = xaccSplitGetValue(split);
     val = kvp_value_new_gnc_numeric(amt);
     kvp_frame_set_slot_nc(frame, void_former_val_str, val);
-    
-    
+
     xaccSplitSetAmount(split, zero);
     xaccSplitSetValue(split, zero);
     xaccSplitSetReconcile(split, VREC);
-   
   }
 
   xaccTransCommitEdit(transaction);
-
-  
-  return;
 }
 
 gboolean 
@@ -2875,13 +2887,11 @@ xaccTransGetVoidStatus(Transaction *trans)
 {
   kvp_frame *frame;
 
-  
   g_return_val_if_fail(trans, FALSE);
 
   frame = xaccTransGetSlots(trans);
 
-  return (gboolean) kvp_frame_get_slot(frame, void_reason_str);
-
+  return (kvp_frame_get_slot(frame, void_reason_str) != NULL);
 }
 
 char *
@@ -2923,7 +2933,6 @@ xaccSplitVoidFormerAmount(Split *split)
   }
 
   return amt;
-  
 }
 
 gnc_numeric

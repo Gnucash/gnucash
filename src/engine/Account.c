@@ -604,15 +604,17 @@ split_sort_func(gconstpointer a, gconstpointer b) {
   return(xaccSplitDateOrder(sa, sb));
 }
 
-static void
-xaccAccountSortSplits (Account *acc) 
+void
+xaccAccountSortSplits (Account *acc, gboolean force)
 {
   if(!acc) return;
-
   if(!acc->sort_dirty) return;
-  if(acc->editlevel > 0) return;
+  if(!force && acc->editlevel > 0) return;
+
   acc->splits = g_list_sort(acc->splits, split_sort_func);
+
   acc->sort_dirty = FALSE;
+  acc->balance_dirty = TRUE;
 }
 
 static void
@@ -622,7 +624,7 @@ xaccAccountBringUpToDate(Account *acc)
 
   /* if a re-sort happens here, then everything will update, so the
      cost basis and balance calls are no-ops */
-  xaccAccountSortSplits(acc);
+  xaccAccountSortSplits(acc, FALSE);
   xaccAccountRecomputeBalance(acc);
 }
 
@@ -1597,28 +1599,19 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
   gboolean found = FALSE;
   gnc_numeric balance;
 
-  balance = xaccAccountGetBalance( acc );
+  if (!acc) return gnc_numeric_zero ();
 
-  xaccAccountSortSplits( acc );   /* just in case, normally a nop */
+  xaccAccountSortSplits (acc, TRUE); /* just in case, normally a noop */
+  xaccAccountRecomputeBalance (acc); /* just in case, normally a noop */
+
+  balance = xaccAccountGetBalance( acc );
 
   /* Since transaction post times are stored as a Timespec,
    * convert date into a Timespec as well rather than converting
    * each transaction's Timespec into a time_t.
    */
-
   ts.tv_sec = date;
   ts.tv_nsec = 0;
-
-  /* Do checks from xaccAccountRecomputeBalance.  balance_dirty isn't
-   * checked because it shouldn't be necessary.
-   */
-
-  if( NULL == acc ||
-      acc->editlevel > 0 ||
-      acc->do_free           )
-  {
-    return ( balance );
-  }
 
   lp = xaccAccountGetSplitList( acc );
   while( lp && !found )
