@@ -697,7 +697,9 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
   print_info = gnc_account_print_info( leader, TRUE );
   reverse = gnc_reverse_balance( leader );
 
-  if ( gsr->createFlags & CREATE_SUMMARYBAR ) {
+  /* Handle the summary bar */
+  if ( gsr->createFlags & CREATE_SUMMARYBAR ) 
+  {
     gsr_update_summary_label( gsr->balance_label,
                               xaccAccountGetPresentBalance,
                               leader, print_info, commodity, reverse, euro );
@@ -714,6 +716,7 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
                               xaccAccountGetProjectedMinimumBalance,
                               leader, print_info, commodity, reverse, euro );
 
+    /* Print the summary share amount */
     if (gsr->shares_label != NULL)
       {
         print_info = gnc_account_print_info( leader, TRUE );
@@ -728,54 +731,70 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
         gtk_label_set_text( GTK_LABEL(gsr->shares_label), string );
       }
 
+    /* Print the summary share value */
     if (gsr->value_label != NULL)
       {
         GNCPrice *price;
 
+        amount = xaccAccountGetBalance (leader);
+        if (reverse) amount = gnc_numeric_neg (amount);
+
         price = account_latest_price (leader);
         if (!price)
           {
-            price = account_latest_price_any_currency (leader);
-            if(!price)
+            /* If the balance is zero, then print zero. */
+            if (gnc_numeric_equal(amount, gnc_numeric_zero()))
               {
-                gnc_set_label_color (gsr->value_label, gnc_numeric_zero ());
-                gtk_label_set_text (GTK_LABEL (gsr->value_label),
-                                    _("<No information>"));
+                 gnc_commodity *currency = gnc_default_currency ();
+                 print_info = gnc_commodity_print_info (currency, TRUE);
+                 amount = gnc_numeric_zero ();
+
+                 xaccSPrintAmount (string, amount, print_info);
+
+                 gnc_set_label_color (gsr->value_label, amount);
+                 gtk_label_set_text (GTK_LABEL (gsr->value_label), string);
               }
             else
               {
-                gnc_commodity *currency = gnc_price_get_currency (price);
-                gnc_commodity *default_currency = gnc_default_currency ();
-                gnc_numeric currency_amount;
-                gnc_numeric default_currency_amount;
-
-                print_info = gnc_commodity_print_info (currency, TRUE);
-
-                amount = xaccAccountGetBalance (leader);
-                if (reverse)
-                  amount = gnc_numeric_neg (amount);
-
-                currency_amount =
-                  xaccAccountConvertBalanceToCurrency(leader, amount,
-                                                      commodity, currency);
-                xaccSPrintAmount (string, currency_amount, print_info);
-
-                default_currency_amount =
-                  xaccAccountConvertBalanceToCurrency(leader, amount,
-                                                      commodity,
-                                                      default_currency);
-                if(!gnc_numeric_zero_p(default_currency_amount))
+                /* else try to do a double-price-conversion :-( */
+                price = account_latest_price_any_currency (leader);
+                if(!price)
                   {
-                    strcat( string, " / " );
-                    print_info = gnc_commodity_print_info (default_currency, TRUE);
-                    xaccSPrintAmount( string + strlen( string ), default_currency_amount,
-                                      print_info);
+                     gnc_set_label_color (gsr->value_label, gnc_numeric_zero ());
+                     gtk_label_set_text (GTK_LABEL (gsr->value_label),
+                                           _("<No information>"));
                   }
-
-                gnc_set_label_color (gsr->value_label, amount);
-                gtk_label_set_text (GTK_LABEL (gsr->value_label), string);
-
-                gnc_price_unref (price);
+                else
+                  {
+                    gnc_commodity *currency = gnc_price_get_currency (price);
+                    gnc_commodity *default_currency = gnc_default_currency ();
+                    gnc_numeric currency_amount;
+                    gnc_numeric default_currency_amount;
+    
+                    print_info = gnc_commodity_print_info (currency, TRUE);
+    
+                    currency_amount =
+                      xaccAccountConvertBalanceToCurrency(leader, amount,
+                                                          commodity, currency);
+                    xaccSPrintAmount (string, currency_amount, print_info);
+    
+                    default_currency_amount =
+                      xaccAccountConvertBalanceToCurrency(leader, amount,
+                                                          commodity,
+                                                          default_currency);
+                    if(!gnc_numeric_zero_p(default_currency_amount))
+                      {
+                        strcat( string, " / " );
+                        print_info = gnc_commodity_print_info (default_currency, TRUE);
+                        xaccSPrintAmount( string + strlen( string ), default_currency_amount,
+                                          print_info);
+                      }
+    
+                    gnc_set_label_color (gsr->value_label, amount);
+                    gtk_label_set_text (GTK_LABEL (gsr->value_label), string);
+    
+                    gnc_price_unref (price);
+                  }
               }
           }
         else
@@ -783,10 +802,6 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
             gnc_commodity *currency = gnc_price_get_currency (price);
 
             print_info = gnc_commodity_print_info (currency, TRUE);
-
-            amount = xaccAccountGetBalance (leader);
-            if (reverse)
-              amount = gnc_numeric_neg (amount);
 
             amount = gnc_numeric_mul (amount, gnc_price_get_value (price),
                                       gnc_commodity_get_fraction (currency),
