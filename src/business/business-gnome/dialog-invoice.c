@@ -1296,21 +1296,28 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
 
 }
 
-gpointer gnc_invoice_edit_new_select (gpointer bookp, gpointer invoice,
-				       GtkWidget *toplevel)
+GNCSearchWindow *
+gnc_invoice_search_select (gpointer start, gpointer book)
 {
-  gnc_invoice_search (invoice, NULL, bookp);	/* XXX */
-  return invoice;
+  GncInvoice *i = start;
+  GncOwner owner, *ownerp;
+
+  if (!book) return NULL;
+
+  if (i) {
+    ownerp = gncInvoiceGetOwner (i);
+    gncOwnerCopy (ownerp, &owner);
+  } else
+    gncOwnerInitCustomer (&owner, NULL); /* XXX */
+
+  return gnc_invoice_search (start, NULL, book);
 }
 
-gpointer gnc_invoice_edit_new_edit (gpointer bookp, gpointer v,
-				     GtkWidget *toplevel)
+GNCSearchWindow *
+gnc_invoice_search_edit (gpointer start, gpointer book)
 {
-  GncInvoice *invoice = v;
+  if (start)
+    gnc_ui_invoice_edit (start);
 
-  g_return_val_if_fail (invoice != NULL, NULL);
-
-  /* XXX: figure out if this window exists and should be raised */
-  gnc_ui_invoice_edit (invoice);
-  return invoice;
+  return NULL;
 }

@@ -647,7 +647,7 @@ order_customer_cb (gpointer *cust_p, gpointer user_data)
     return;
 
   gncOwnerInitCustomer (&owner, cust);
-  gnc_order_find (NULL, &owner, sw->book);
+  gnc_order_search (NULL, &owner, sw->book);
   return;
 }
 

@@ -14,23 +14,20 @@ typedef struct _invoice_window InvoiceWindow;
 #include "gncOwner.h"
 #include "dialog-search.h"
 
-/* Create and edit an invoice window */
+/* Create and edit an invoice */
 InvoiceWindow * gnc_ui_invoice_edit (GncInvoice *invoice);
 InvoiceWindow * gnc_ui_invoice_new (GncOwner *owner, GNCBook *book);
 
 /* Search for invoices */
 GNCSearchWindow * gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book);
 
-/* Callbacks to select a invoice that match the necessary functions
- * for use with the gnc_general_select widget.
+/*
+ * These callbacks are for use with the gnc_general_search widget
  *
- * new_select provides a selection and the ability to create and edit
- *	invoices.
- * new_edit provides only the ability to edit the current selection
+ * select() provides a Select Dialog and returns it.
+ * edit() opens the existing invoice for editing and returns NULL.
  */
-gpointer        gnc_invoice_edit_new_select (gpointer book, gpointer c,
-					      GtkWidget *toplevel);
-gpointer	gnc_invoice_edit_new_edit (gpointer book, gpointer invoice,
-					    GtkWidget *toplevel);
+GNCSearchWindow * gnc_invoice_search_select (gpointer start, gpointer book);
+GNCSearchWindow * gnc_invoice_search_edit (gpointer start, gpointer book);
 
 #endif /* GNC_DIALOG_INVOICE_H_ */

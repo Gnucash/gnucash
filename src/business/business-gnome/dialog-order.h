@@ -12,28 +12,23 @@ typedef struct _order_window OrderWindow;
 
 #include "gncOrder.h"
 #include "gncOwner.h"
+#include "dialog-search.h"
 
-/* Create an order window */
-OrderWindow * gnc_ui_order_window_create (GncOrder *order);
+/* Create and edit an order */
+OrderWindow * gnc_ui_order_edit (GncOrder *order);
+OrderWindow * gnc_ui_order_new (GncOwner *owner, GNCBook *book);
 
-void gnc_order_find (GncOrder *start, GncOwner *owner, GNCBook *book);
+/* Search for orders */
+GNCSearchWindow * gnc_order_search (GncOrder *start, GncOwner *owner,
+				    GNCBook *book);
 
-/* Functions to create and edit orders */
-GncOrder * gnc_order_new (GtkWidget *parent, GncOwner *owner, GNCBook *book);
-
-GncOrder * gnc_order_choose (GtkWidget *parent, GncOrder *start,
-			     GncOwner *owner, GNCBook *book);
-
-/* Callbacks to select a order that match the necessary functions
- * for use with the gnc_general_select widget.
+/*
+ * These callbacks are for use with the gnc_general_search widget
  *
- * new_select provides a selection and the ability to create and edit
- *	orders.
- * new_edit provides only the ability to edit the current selection
+ * select() provides a Select Dialog and returns it.
+ * edit() opens the existing order for editing and returns NULL.
  */
-gpointer        gnc_order_edit_new_select (gpointer book, gpointer c,
-					      GtkWidget *toplevel);
-gpointer	gnc_order_edit_new_edit (gpointer book, gpointer order,
-					    GtkWidget *toplevel);
+GNCSearchWindow * gnc_order_search_select (gpointer start, gpointer book);
+GNCSearchWindow * gnc_order_search_edit (gpointer start, gpointer book);
 
 #endif /* GNC_DIALOG_ORDER_H_ */

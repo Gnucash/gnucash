@@ -508,7 +508,7 @@ order_vendor_cb (gpointer *vendor_p, gpointer user_data)
     return;
 
   gncOwnerInitVendor (&owner, vendor);
-  gnc_order_find (NULL, &owner, sw->book);
+  gnc_order_search (NULL, &owner, sw->book);
   return;
 }
 

@@ -1,3 +1,7 @@
+2002-0509   Derek Atkins   <derek@ihtfp.com>
+
+	Fixed dialog-order.  Should now complain less during compilation.
+
 2002-05-09  Derek Atkins   <derek@ihtfp.com>
 
 	Create a new general_search widget that hooks into the search

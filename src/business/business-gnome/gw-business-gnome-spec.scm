@@ -168,25 +168,25 @@
   (gw:wrap-function
    ws
    'gnc:order-new
-   '<gnc:GncOrder*>
-   "gnc_order_new"
-   '((<gnc:UIWidget> parent) (<gnc:GncOwner*> owner) (<gnc:Book*> book))
-   "Dialog: create a new GncOrder.  Parent may be NULL.")
+   '<gw:void>
+   "gnc_ui_order_new"
+   '((<gnc:GncOwner*> owner) (<gnc:Book*> book))
+   "Dialog: create a new GncOrder.")
 
   (gw:wrap-function
    ws
    'gnc:order-edit
    '<gw:void>
-   "gnc_ui_order_window_create"
+   "gnc_ui_order_edit"
    '((<gnc:GncOrder*> order))
    "Dialog: Edit a GncOrder.")
 
 
   (gw:wrap-function
    ws
-   'gnc:order-find
+   'gnc:order-search
    '<gw:void>
-   "gnc_order_find"
+   "gnc_order_search"
    '((<gnc:GncOrder*> start_selection) (<gnc:GncOwner*> order_owner)
      (<gnc:Book*> book) )
    "Dialog: Select a GncOrder.  Either start_selection or "
