@@ -46,7 +46,8 @@
 #include "gnc-owner-xml-v2.h"
 #include "gnc-engine-util.h"
 
-#include "gncObject.h"
+#include "qofobject.h"
+#include "xml-helpers.h"
 
 #define _GNC_MOD_NAME	GNC_JOB_MODULE_NAME
 
@@ -64,13 +65,6 @@ const gchar *job_version_string = "2.0.0";
 #define job_active_string "job:active"
 #define job_slots_string "job:slots"
 
-static void
-maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
-{
-  if (str && strlen(str) > 0)
-    xmlAddChild (ptr, text_to_dom_tree (tag, str));
-}
-
 static xmlNodePtr
 job_dom_tree_create (GncJob *job)
 {
@@ -80,7 +74,7 @@ job_dom_tree_create (GncJob *job)
     xmlSetProp(ret, "version", job_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(job_guid_string,
-				      gncJobGetGUID (job)));
+				      qof_instance_get_guid (QOF_INSTANCE (job))));
 
     xmlAddChild(ret, text_to_dom_tree(job_id_string,
                                       gncJobGetID (job)));
@@ -308,7 +302,7 @@ static int
 job_get_count (GNCBook *book)
 {
   int count = 0;
-  gncObjectForeach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
+  qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
   return count;
 }
 
@@ -331,7 +325,7 @@ xml_add_job (gpointer job_p, gpointer out_p)
 static void
 job_write (FILE *out, GNCBook *book)
 {
-  gncObjectForeach (_GNC_MOD_NAME, book, xml_add_job, (gpointer) out);
+  qof_object_foreach (_GNC_MOD_NAME, book, xml_add_job, (gpointer) out);
 }
 
 void
@@ -347,7 +341,7 @@ gnc_job_xml_initialize (void)
     NULL,			/* scrub */
   };
 
-  gncObjectRegisterBackend (_GNC_MOD_NAME,
+  qof_object_register_backend (_GNC_MOD_NAME,
 			    GNC_FILE_BACKEND,
 			    &be_data);
 }
