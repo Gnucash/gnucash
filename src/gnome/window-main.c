@@ -138,7 +138,11 @@ gnc_ui_build_currency_item(const gnc_commodity * currency)
   GtkWidget *topbox;
   GtkWidget *hbox;
   GtkWidget *listitem;
-  GNCCurrencyItem *item = g_new0(GNCCurrencyItem, 1);
+  GNCCurrencyItem *item;
+  const char *mnemonic;
+  char *label_str;
+
+  item = g_new0 (GNCCurrencyItem, 1);
 
   item->currency = currency;
 
@@ -149,23 +153,18 @@ gnc_ui_build_currency_item(const gnc_commodity * currency)
   gtk_widget_show(topbox);
   gtk_container_add(GTK_CONTAINER(listitem), topbox);
 
-  hbox = gtk_hbox_new(FALSE, 2);
-  gtk_widget_show(hbox);
-  gtk_box_pack_start(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
-
-  label = gtk_label_new(gnc_commodity_get_mnemonic(currency));
-  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-  gtk_widget_show(label);
-  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  mnemonic = gnc_commodity_get_mnemonic (currency);
 
   hbox = gtk_hbox_new(FALSE, 2);
   gtk_widget_show(hbox);
   gtk_box_pack_start(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
 
-  label = gtk_label_new(_("Net Assets:"));
+  label_str = g_strdup_printf ("%s (%s):", _("Net Assets"), mnemonic);
+  label = gtk_label_new(label_str);
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   gtk_widget_show(label);
   gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  g_free (label_str);
 
   label = gtk_label_new("");
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
@@ -177,10 +176,12 @@ gnc_ui_build_currency_item(const gnc_commodity * currency)
   gtk_widget_show(hbox);
   gtk_box_pack_start(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
 
-  label = gtk_label_new(_("Profits:"));
+  label_str = g_strdup_printf ("%s (%s):", _("Profits"), mnemonic);
+  label = gtk_label_new(label_str);
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   gtk_widget_show(label);
   gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  g_free (label_str);
 
   label = gtk_label_new("");
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
@@ -345,22 +346,21 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
   }
 }
 
-/* The gnc_ui_refresh_statusbar() subroutine redraws 
- *    the statusbar at the bottom of the main window. The statusbar
- *    includes two fields, titled 'profits' and 'assets'.  The total
- *    assets equal the sum of all of the non-equity, non-income
- *    accounts.  In theory, assets also equals the grand total
- *    value of the equity accounts, but that assumes that folks are
- *    using the equity account type correctly (which is not likely).
- *    Thus we show the sum of assets, rather than the sum of equities.
+/* The gnc_ui_refresh_statusbar() subroutine redraws the summary
+ *    information. The statusbar includes two fields, titled 'profits'
+ *    and 'assets'. The total assets equal the sum of all of the
+ *    non-equity, non-income accounts.  In theory, assets also equals
+ *    the grand total value of the equity accounts, but that assumes
+ *    that folks are using the equity account type correctly (which is
+ *    not likely). Thus we show the sum of assets, rather than the
+ *    sum of equities.
  *
  * The EURO gets special treatment. There can be one line with
  * EUR amounts and a EUR (total) line which summs up all EURO
  * member currencies.
  *
  * There should be a 'grand total', too, which sums up all accounts
- * converted to one common currency.
- */
+ * converted to one common currency.  */
 static void
 gnc_ui_refresh_statusbar (void)
 {
@@ -1363,6 +1363,37 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
   main_info->account_sensitives = list;
 }
 
+static GtkWidget *
+gnc_main_create_summary_bar (GnomeApp *app, GNCMainInfo *main_info)
+{
+  GtkWidget *summarybar;
+  GtkWidget *combo_box;
+  const gnc_commodity * default_currency;
+  GNCCurrencyItem *def_item;
+
+  summarybar = gtk_hbox_new (FALSE, 5);
+
+  gtk_container_set_border_width (GTK_CONTAINER (summarybar), 2);
+
+  default_currency =
+    gnc_lookup_currency_option ("International",
+                                "Default Currency",
+                                gnc_locale_default_currency ());
+
+  combo_box = gtk_select_new ();
+  main_info->totals_combo = combo_box;
+  main_info->totals_list = NULL;
+
+  def_item = gnc_ui_get_currency_item (&main_info->totals_list,
+                                       default_currency,
+                                       main_info->totals_combo);
+
+  gtk_select_select_child (GTK_SELECT(combo_box), def_item->listitem);
+  gtk_box_pack_end (GTK_BOX(summarybar), combo_box, FALSE, FALSE, 5);
+
+  return summarybar;
+}
+
 static GNCMainInfo *
 gnc_get_main_info (void)
 {
@@ -1440,6 +1471,7 @@ mainWindow (void)
 {
   GNCMainInfo *main_info;
   GtkWidget *app = gnc_get_ui_data();
+  GtkWidget *summarybar;
   GtkWidget *statusbar;
   int width = 0;
   int height = 0;
@@ -1469,6 +1501,19 @@ mainWindow (void)
                                         "International",
                                         "Enable EURO support");
 
+  summarybar = gnc_main_create_summary_bar (GNOME_APP(app), main_info);
+  if (summarybar)
+  {
+    GnomeDockItem *dock_item;
+    
+    gnome_app_add_docked (GNOME_APP(app), GTK_WIDGET(summarybar),
+                          "Summary Bar", GNOME_DOCK_ITEM_BEH_EXCLUSIVE,
+                          GNOME_DOCK_TOP, 2, 0, 0);
+ 
+    dock_item = gnome_app_get_dock_item_by_name (GNOME_APP(app),
+                                                 "Summary Bar");
+    gnome_dock_item_set_shadow_type (dock_item, GTK_SHADOW_OUT);
+  }
 
   /* create statusbar and add it to the application. */
   statusbar = gnome_appbar_new(FALSE, /* no progress bar, maybe later? */
@@ -1484,32 +1529,10 @@ mainWindow (void)
     gnc_register_option_change_callback(gnc_configure_toolbar, NULL,
                                         "General", "Toolbar Buttons");
 
-  /* create the label containing the account balances */
-  {
-    GtkWidget *combo_box;
-    const gnc_commodity * default_currency;
-    GNCCurrencyItem *def_item;
-    
-    default_currency =
-      gnc_lookup_currency_option("International",
-                                 "Default Currency",
-                                 gnc_locale_default_currency ());
-
-    combo_box = gtk_select_new();
-    main_info->totals_combo = combo_box;
-    main_info->totals_list = NULL;
-    def_item = gnc_ui_get_currency_item(&main_info->totals_list,
-					default_currency,
-				        main_info->totals_combo);
-    gtk_select_select_child(GTK_SELECT(combo_box), def_item->listitem);
-    gtk_box_pack_end(GTK_BOX(statusbar), combo_box, FALSE, FALSE, 5);
-  }
-
   /* create scrolled window */
 
   main_info->account_tree = gnc_mainwin_account_tree_new();
   gnome_app_set_contents(GNOME_APP(app), main_info->account_tree);
-
 
   gnc_main_create_menus(GNOME_APP(app), main_info->account_tree, main_info);
 
@@ -1537,8 +1560,9 @@ mainWindow (void)
                       main_info);
 
   /* Show everything now that it is created */
-  gtk_widget_show_all(statusbar);
-  gtk_widget_show(main_info->account_tree);
+  gtk_widget_show_all (summarybar);
+  gtk_widget_show_all (statusbar);
+  gtk_widget_show (main_info->account_tree);
 
   gnc_configure_account_tree (main_info);
 
