@@ -1,3 +1,17 @@
+2003-09-21  David Hampton  <hampton@employees.org>
+
+	* lib/egg/egg-menu-merge.c: Back port "smart separators" from the
+	gtk 2.4 code.
+
+	* src/gnome-utils/gnc-tree-model-account.[ch]: Check that a new
+	account belongs to the account tree being displayed by this
+	widget.  It may belong in the scheduled transaction account tree.
+
+	* src/gnome/gnc-main-window.c:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-plugin-page.[ch]: Add a new variable to the plugin
+	pages to hold a pointer to the enclosing window.
+	
 2003-09-20  David Hampton  <hampton@employees.org>
 
 	* src/gnome/dialog-scheduledxaction.c: Eliminate run time
