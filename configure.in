@@ -140,6 +140,7 @@ then
   GNC_LIBDIR='${libdir}'
   GNC_SCM_INSTALL_DIR='${datadir}/scm'
   GNC_SHAREDIR='${datadir}'
+  GNC_LIBEXECDIR='${libexecdir}'
 else
   GNC_CONFIGDIR='${sysconfdir}/gnucash'
   GNC_DOC_INSTALL_DIR='${pkgdatadir}/doc'
@@ -147,6 +148,7 @@ else
   GNC_LIBDIR='${pkglibdir}'
   GNC_SCM_INSTALL_DIR='${pkgdatadir}/scm'
   GNC_SHAREDIR='${pkgdatadir}'
+  GNC_LIBEXECDIR='${libexecdir}/gnucash'
 fi
 
 GNC_ACCOUNTS_DIR=${GNC_SHAREDIR}/accounts
@@ -166,6 +168,7 @@ AC_SUBST(GNC_MODULE_DIR)
 AC_SUBST(GNC_PIXMAP_DIR)
 AC_SUBST(GNC_SCM_INSTALL_DIR)
 AC_SUBST(GNC_SHAREDIR)
+AC_SUBST(GNC_LIBEXECDIR)
 
 # We should always see these errors...
 CFLAGS="${CFLAGS} -Wall"
@@ -766,6 +769,7 @@ AC_OUTPUT(
           src/backend/postgres/Makefile
           src/backend/postgres/test/Makefile
           src/backend/rpc/Makefile
+          src/bin/Makefile
           src/core-utils/Makefile
           src/calculation/Makefile 
           src/calculation/test/Makefile 
