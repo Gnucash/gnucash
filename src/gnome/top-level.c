@@ -200,7 +200,7 @@ gnucash_ui_init(void)
   GError *gerror;
 #endif
 
-  ENTER ("\n");
+  ENTER (" ");
 
   /* We're going to have to have other ways to handle X and GUI
      specific args... */
@@ -333,7 +333,7 @@ gnucash_ui_init(void)
     }    
   }
 
-  LEAVE ("\n");
+  LEAVE (" ");
 
   return 0;
 }
