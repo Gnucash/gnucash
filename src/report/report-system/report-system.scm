@@ -130,7 +130,6 @@
 (export gnc:report-remove-by-id)
 (export gnc:find-report)
 (export gnc:report-generate-restore-forms)
-(export gnc:backtrace-if-exception)
 (export gnc:report-render-html)
 (export gnc:report-run)
 
@@ -503,8 +502,6 @@
 (export gnc:account-get-type-string-plural)
 (export gnc:accounts-get-commodities)
 (export gnc:get-current-group-depth)
-(export gnc:account-separator-char)
-(export gnc:account-get-full-name)
 (export gnc:split-get-corr-account-full-name)
 (export gnc:account-get-immediate-subaccounts)
 (export gnc:account-get-all-subaccounts)
@@ -526,7 +523,6 @@
 (export gnc:account-get-balance-interval)
 (export gnc:account-get-comm-balance-interval)
 (export gnc:group-get-comm-balance-interval)
-(export gnc:transaction-get-splits)
 
 (load-from-path "commodity-utilities.scm")
 (load-from-path "html-barchart.scm")

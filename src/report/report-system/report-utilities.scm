@@ -154,22 +154,6 @@
   (accounts-get-children-depth 
    (gnc:group-get-account-list (gnc:get-current-group))))
 
-;; get a full account name
-(define (gnc:account-get-full-name account)
-  (let ((separator (gnc:account-separator-char)))
-    (if (not account)
-	""
-	(let ((parent-name
-	       (gnc:account-get-full-name 
-		(gnc:group-get-parent
-		 (gnc:account-get-parent account)))))
-	  (if (string=? parent-name "")
-	      (gnc:account-get-name account)
-	      (string-append
-	       parent-name
-	       separator
-	       (gnc:account-get-name account)))))))
-
 (define (gnc:split-get-corr-account-full-name split)
   (let ((separator (string-ref (gnc:account-separator-char) 0)))
     (gnc:split-get-corr-account-full-name-internal split separator)))
@@ -597,13 +581,3 @@
 		 (gnc:account-get-comm-balance-interval 
 		  account from to #t)) group))
     this-collector))
-
-;; FIXME redundant
-(define (gnc:transaction-get-splits transaction)
-  (let* ((num-splits (gnc:transaction-get-split-count transaction)))
-    (let loop ((index 0))
-      (if (= index num-splits)
-	  '()
-	  (cons
-	   (gnc:transaction-get-split transaction index)
-	   (loop (+ index 1)))))))

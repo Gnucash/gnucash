@@ -88,6 +88,20 @@ GList * gnc_scm_to_glist_account_ptr(SCM scm_list);
 int     gnc_glist_account_ptr_p(SCM scm_list);
 
 /* The GList is freed */
+SCM     gnc_glist_transaction_ptr_to_scm(GList *transaction_list);
+/* The GList is not freed */
+SCM     gnc_glist_transaction_ptr_to_scm_no_free (GList *transaction_list);
+GList * gnc_scm_to_glist_transaction_ptr(SCM scm_list);
+int     gnc_glist_transaction_ptr_p(SCM scm_list);
+
+/* The GList is freed */
+SCM     gnc_glist_split_ptr_to_scm(GList *split_list);
+/* The GList is not freed */
+SCM     gnc_glist_split_ptr_to_scm_no_free (GList *split_list);
+GList * gnc_scm_to_glist_split_ptr(SCM scm_list);
+int     gnc_glist_split_ptr_p(SCM scm_list);
+
+/* The GList is freed */
 SCM     gnc_glist_commodity_ptr_to_scm(GList * list);
 GList * gnc_scm_to_glist_commodity_ptr(SCM list);
 int     gnc_glist_commodity_ptr_p(SCM list);

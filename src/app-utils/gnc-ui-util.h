@@ -88,6 +88,8 @@ gboolean gnc_account_create_opening_balance (Account *account,
                                              gnc_numeric balance,
                                              time_t date);
 
+char * gnc_account_get_full_name (Account *account);
+
 
 /* Price source functions *******************************************/
 

@@ -155,6 +155,66 @@
                (old-func c-name)
                ";\n")))))
 
+  ;; list of split *
+  (let ((wt (gw:wrap-type mod '<gnc:list-of-split*-callee-owned>
+                          "GList *" "const GList *")))
+    (gw:type-set-scm-arg-type-test-ccodegen!
+     wt
+     (lambda (param)
+       (let ((old-func
+              (lambda (x)
+                (list "gnc_glist_split_ptr_p(" x ")"))))
+         (old-func (gw:param-get-scm-name param)))))
+    (gw:type-set-pre-call-arg-ccodegen!
+     wt
+     (lambda (param)
+       (let* ((scm-name (gw:param-get-scm-name param))
+              (c-name (gw:param-get-c-name param))
+              (old-func
+               (lambda (x)
+                 (list "gnc_scm_to_glist_split_ptr(" x ")"))))
+         (list c-name " = " (old-func scm-name) ";\n"))))
+
+    (gw:type-set-call-ccodegen! wt standard-c-call-gen)
+
+    (add-standard-result-handlers!
+     wt
+     (lambda (scm-name c-name)
+       (let ((old-func
+              (lambda (x)
+                (list "gnc_glist_split_ptr_to_scm_no_free(" x ")"))))
+         (list scm-name " = " (old-func c-name) ";\n")))))
+
+  ;; list of transaction *
+  (let ((wt (gw:wrap-type mod '<gnc:list-of-transaction*-callee-owned>
+                          "GList *" "const GList *")))
+    (gw:type-set-scm-arg-type-test-ccodegen!
+     wt
+     (lambda (param)
+       (let ((old-func
+              (lambda (x)
+                (list "gnc_glist_transaction_ptr_p(" x ")"))))
+         (old-func (gw:param-get-scm-name param)))))
+    (gw:type-set-pre-call-arg-ccodegen!
+     wt
+     (lambda (param)
+       (let* ((scm-name (gw:param-get-scm-name param))
+              (c-name (gw:param-get-c-name param))
+              (old-func
+               (lambda (x)
+                 (list "gnc_scm_to_glist_transaction_ptr(" x ")"))))
+         (list c-name " = " (old-func scm-name) ";\n"))))
+
+    (gw:type-set-call-ccodegen! wt standard-c-call-gen)
+
+    (add-standard-result-handlers!
+     wt
+     (lambda (scm-name c-name)
+       (let ((old-func
+              (lambda (x)
+                (list "gnc_glist_transaction_ptr_to_scm_no_free(" x ")"))))
+         (list scm-name " = " (old-func c-name) ";\n")))))
+
   ;; list of account * 
   (let ((wt (gw:wrap-type mod '<gnc:list-of-account*-caller-owned>
                           "GList *" "const GList *")))
@@ -634,6 +694,14 @@ values for i are zero to (number_of__splits-1).  An invalid value of i
 will cause NULL to be returned.  A convenient way of cycling through
 all splits is to start at zero, and kep incrementing until a null
 pointer is returned.")
+
+  (gw:wrap-function
+   mod
+   'gnc:transaction-get-splits
+   '<gnc:list-of-split*-callee-owned>
+   "xaccTransGetSplitList"
+   '((<gnc:Transaction*> t))
+   "Returns a list of the splits in t.")
 
   (gw:wrap-function
    mod

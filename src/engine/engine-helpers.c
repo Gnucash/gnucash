@@ -1297,6 +1297,7 @@ gnc_numeric_p(SCM arg)
     return TRUE;
   }
 }
+
 static SCM
 gnc_glist_account_ptr_to_scm_internal (GList *account_list, gboolean free_list)
 {
@@ -1367,6 +1368,98 @@ int
 gnc_glist_account_ptr_p(SCM list)
 {
   return gh_list_p(list);
+}
+
+static SCM
+gnc_glist_transaction_ptr_to_scm_internal (GList *trans_list,
+                                           gboolean free_list)
+{
+  static SCM trans_type = SCM_UNDEFINED;
+  SCM result;
+
+  if (trans_type == SCM_UNDEFINED)
+  {
+    trans_type = gh_eval_str("<gnc:Transaction*>");
+    /* don't really need this - types are bound globally anyway. */
+    if(trans_type != SCM_UNDEFINED) scm_protect_object(trans_type);
+  }
+
+  result = gnc_glist_to_scm_list(trans_list, trans_type);
+
+  if (free_list)
+    g_list_free (trans_list);
+
+  return result;
+}
+
+SCM
+gnc_glist_transaction_ptr_to_scm (GList *transaction_list)
+{
+  return gnc_glist_transaction_ptr_to_scm_internal (transaction_list, TRUE);
+}
+
+SCM
+gnc_glist_transaction_ptr_to_scm_no_free (GList *transaction_list)
+{
+  return gnc_glist_transaction_ptr_to_scm_internal (transaction_list, FALSE);
+}
+
+GList *
+gnc_scm_to_glist_transaction_ptr (SCM scm_list)
+{
+  return gnc_scm_list_to_glist (scm_list);
+}
+
+int
+gnc_glist_transaction_ptr_p (SCM list)
+{
+  return gh_list_p (list);
+}
+
+static SCM
+gnc_glist_split_ptr_to_scm_internal (GList *trans_list,
+                                     gboolean free_list)
+{
+  static SCM trans_type = SCM_UNDEFINED;
+  SCM result;
+
+  if (trans_type == SCM_UNDEFINED)
+  {
+    trans_type = gh_eval_str("<gnc:Split*>");
+    /* don't really need this - types are bound globally anyway. */
+    if(trans_type != SCM_UNDEFINED) scm_protect_object(trans_type);
+  }
+
+  result = gnc_glist_to_scm_list(trans_list, trans_type);
+
+  if (free_list)
+    g_list_free (trans_list);
+
+  return result;
+}
+
+SCM
+gnc_glist_split_ptr_to_scm (GList *split_list)
+{
+  return gnc_glist_split_ptr_to_scm_internal (split_list, TRUE);
+}
+
+SCM
+gnc_glist_split_ptr_to_scm_no_free (GList *split_list)
+{
+  return gnc_glist_split_ptr_to_scm_internal (split_list, FALSE);
+}
+
+GList *
+gnc_scm_to_glist_split_ptr (SCM scm_list)
+{
+  return gnc_scm_list_to_glist (scm_list);
+}
+
+int
+gnc_glist_split_ptr_p (SCM list)
+{
+  return gh_list_p (list);
 }
 
 /********************************************************************

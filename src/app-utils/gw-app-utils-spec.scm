@@ -205,6 +205,14 @@ determines formatting details.")
 
   (gw:wrap-function
    mod
+   'gnc:account-get-full-name
+   '(<gw:m-chars-caller-owned>)
+   "gnc_account_get_full_name"
+   '((<gnc:Account*> account))
+   "Return the fully-qualified name of the account.")
+
+  (gw:wrap-function
+   mod
    'gnc:default-print-info
    '<gnc:print-amount-info-scm>
    "gnc_default_print_info"

@@ -775,6 +775,14 @@ gnc_account_create_opening_balance (Account *account,
   return TRUE;
 }
 
+char *
+gnc_account_get_full_name (Account *account)
+{
+  if (!account) return NULL;
+
+  return xaccAccountGetFullName (account, gnc_get_account_separator ());
+}
+
 static void
 gnc_lconv_set (char **p_value, char *default_value)
 {
