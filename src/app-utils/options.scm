@@ -672,23 +672,20 @@
         item))
 
   (define (find-first-account)
-    (define (find-first group num-accounts index)
-      (if (>= index num-accounts)
+    (define (find-first account-list)
+      (if (null? account-list)
 	  #f
-	  (let* ((this-account (gnc:group-get-account group index))
+	  (let* ((this-account (car account-list))
 		 (account-type (gw:enum-<gnc:AccountType>-val->sym
 				(gnc:account-get-type this-account) #f)))
 	    (if (if (null? acct-type-list) #t (member account-type acct-type-list))
 		this-account
-		(find-first group num-accounts (+ index 1))))))
+		(find-first (cdr account-list))))))
 
     (let* ((current-group (gnc:get-current-group))
-	   (num-accounts (gnc:group-get-num-accounts
-			  current-group)))
-      (if (> num-accounts 0)
-	  (find-first current-group num-accounts 0)
-	  #f)))
-
+	   (account-list (gnc:group-get-subaccounts current-group)))
+      (find-first account-list)))
+	   
   (define (get-default)
     (if default-getter
 	(default-getter)
