@@ -1,6 +1,5 @@
 /********************************************************************
  * gnc-pricedb.h -- a simple price database for gnucash.            *
- * Copyright (C) 2001 Rob Browning, Linas Vepstas                   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -38,7 +37,8 @@
     @{ */
 /**********************************************************************/
 /** @file gnc-pricedb.h
-
+    @author Copyright (C) 2001 Rob Browning
+    @author Copyright (C) 2001,2003 Linas Vepstas <linas@linas.org>
     @brief a simple price database for gnucash
 
     The PriceDB is intended to be a database of price quotes, or more
@@ -202,9 +202,11 @@ gboolean        gnc_price_equal(GNCPrice *p1, GNCPrice *p2);
 /** gnc_price_list_insert - insert a price into the given list, calling
      gnc_price_ref on it during the process. */
 gboolean gnc_price_list_insert(GList **prices, GNCPrice *p);
+
 /** gnc_price_list_remove - remove the price, p, from the given list,
      calling gnc_price_unref on it during the process. */
 gboolean gnc_price_list_remove(GList **prices, GNCPrice *p);
+
 /** gnc_price_list_destroy - destroy the given price list, calling
      gnc_price_unref on all the prices included in the list. */
 void     gnc_price_list_destroy(GList *prices);
@@ -241,6 +243,10 @@ GNCPriceDB * gnc_pricedb_get_db(QofBook *book);
      the prices it contains.  This may not deallocate all of those
      prices.  Other code may still be holding references to them. */
 void gnc_pricedb_destroy(GNCPriceDB *db);
+
+/** Used for editing the pricedb en-mass */
+void gnc_pricedb_begin_edit (GNCPriceDB *);
+void gnc_pricedb_commit_edit (GNCPriceDB *);
 
 /** gnc_pricedb_add_price - add a price to the pricedb, you may drop
      your reference to the price (i.e. call unref) after this

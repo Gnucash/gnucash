@@ -240,6 +240,88 @@ gnc_price_commit_edit (GNCPrice *p)
 }
 
 /* ==================================================================== */
+
+void 
+gnc_pricedb_begin_edit (GNCPriceDB *pdb)
+{
+  QofBackend *be;
+
+  if (!pdb) return;
+  pdb->editlevel++;
+  if (1 < pdb->editlevel) return;
+  ENTER ("pdb=%p\n", pdb);
+
+  if (0 >= pdb->editlevel)
+  {
+    PERR ("unbalanced call - resetting (was %d)", pdb->editlevel);
+    pdb->editlevel = 1;
+  }
+
+  /* See if there's a backend.  If there is, invoke it. */
+  be = xaccPriceDBGetBackend (pdb);
+  if (be && be->begin) 
+  {
+    (be->begin) (be, GNC_ID_PRICEDB, pdb);
+  }
+
+  LEAVE ("pdb=%p\n", pdb);
+}
+
+void 
+gnc_pricedb_commit_edit (GNCPriceDB *pdb)
+{
+  QofBackend *be;
+  if (!pdb) return;
+
+  pdb->editlevel--;
+  if (0 < pdb->editlevel) return;
+
+  ENTER ("pdb=%p\n", pdb);
+  if (0 > pdb->editlevel)
+  {
+    PERR ("unbalanced call - resetting (was %d)", pdb->editlevel);
+    pdb->editlevel = 0;
+  }
+
+  /* See if there's a backend.  If there is, invoke it. */
+  /* We may not be able to find the backend, so make not of that .. */
+  be = xaccPriceDBGetBackend (pdb);
+  if (be && be->commit) 
+  {
+    QofBackendError errcode;
+
+    /* clear errors */
+    do {
+      errcode = qof_backend_get_error (be);
+    } while (ERR_BACKEND_NO_ERR != errcode);
+
+    /* if we haven't been able to call begin edit before, call it now */
+    if (TRUE == pdb->dirty) 
+    {
+      if (be->begin)
+      {
+        (be->begin) (be, GNC_ID_PRICEDB, pdb);
+      }
+    }
+
+    (be->commit) (be, GNC_ID_PRICEDB, pdb);
+    errcode = qof_backend_get_error (be);
+    if (ERR_BACKEND_NO_ERR != errcode) 
+    {
+      /* XXX hack alert FIXME implement price rollback */
+      PERR (" backend asked engine to rollback, but this isn't"
+            " handled yet. Return code=%d", errcode);
+
+      /* push error back onto the stack */
+      qof_backend_set_error (be, errcode);
+    }
+  }
+  pdb->dirty = FALSE;
+
+  LEAVE ("pdb=%p\n", pdb);
+}
+
+/* ==================================================================== */
 /* setters */
 
 void 
@@ -641,6 +723,8 @@ gnc_pricedb_create(QofBook * book)
 
   result = g_new0(GNCPriceDB, 1);
   result->book = book;
+  result->editlevel = 0;
+  result->dirty = FALSE;
   result->commodity_hash = g_hash_table_new(commodity_hash, commodity_equal);
   g_return_val_if_fail (result->commodity_hash, NULL);
   return result;
