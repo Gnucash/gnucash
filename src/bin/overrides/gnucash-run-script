@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if test $# -lt 1
+then
+  echo "Usage: $0 guile-script [arg ...]"
+  exit 1
+fi
+
+exec gnucash-env guile -s "$@"
