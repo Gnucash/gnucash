@@ -61,9 +61,21 @@ GNCLot * xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign);
 
 /** The xaccAccountScrubLots() routine will walk over all of
  *   the splits in an account, and make sure that each belongs
- *   to a lot, as appropriate
+ *   to a lot.  Any splits that are not in a lot will be used
+ *   to close the oldest open lot(s).  If there are no open 
+ *   lots, a new lot will be started.  By trying to close the 
+ *   oldest lots, this routine implements a FIFO acounting
+ *   policy.
  */
 void xaccAccountScrubLots (Account *acc);
+
+
+/** The xaccAccountScrubDoubleBalance() routine examines all
+ *   of the closed lots in an account, and verifies that the
+ *   lots are 'double balanced'
+ *
+ */
+void xaccAccountScrubDoubleBalance (Account *acc);
 
 #endif /* XACC_SCRUB2_H */
 /** @} */

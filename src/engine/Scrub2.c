@@ -22,7 +22,7 @@
  *  @author Created by Linas Vepstas March 2003
  *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
 
- * XXX under construction, just started, not done
+ * XXX under construction, not done
  *
  * Provides a set of functions and utilities for checking and
  * repairing ('scrubbing clean') stock and commodity accounts
@@ -35,7 +35,11 @@
 #include "TransactionP.h"
 #include "Scrub2.h"
 #include "gnc-engine.h"
+#include "gnc-engine-util.h"
 #include "gnc-lot.h"
+#include "gnc-lot-p.h"
+
+static short module = MOD_SCRUB;
 
 /* ============================================================== */
 
@@ -119,13 +123,18 @@ xaccAccountScrubLots (Account *acc)
 
    if (!acc) return;
 
+   xaccAccountBeginEdit (acc);
+
    /* Loop over all splits, and make sure that every split
     * belongs to some lot.  If a split does not belong to 
     * any lots, its is placed into the earliest possible
     * lot (thus enforcing FIFO accounting rules).
     */
+restart_loop:
    for (node=acc->splits; node; node=node->next)
    {
+      gboolean splits_added = FALSE;
+
       Split * split = node->data;
       GNCLot *lot = split->lot;
 
@@ -203,6 +212,8 @@ xaccAccountScrubLots (Account *acc)
               xaccTransAppendSplit (trans, new_split);
               xaccTransCommitEdit (trans);
               split = new_split;
+
+              splits_added = TRUE;
            }
            else
            {
@@ -218,7 +229,49 @@ xaccAccountScrubLots (Account *acc)
            split = NULL;
         }
       }
+
+      if (splits_added) goto restart_loop;
    }
+   xaccAccountCommitEdit (acc);
+}
+
+/* ============================================================== */
+
+void
+xaccAccountScrubDoubleBalance (Account *acc)
+{
+   LotList *node;
+
+   if (!acc) return;
+
+   for (node = acc->lots; node; node=node->next)
+	{
+      gnc_commodity *currency = NULL;
+      SplitList *snode;
+		GNCLot *lot = node->data;
+
+      /* We examine only closed lots */
+      if (FALSE == gnc_lot_is_closed (lot)) continue;
+
+      /* Check to make sure all splits in the lot have a common currency */
+      for (snode = lot->splits; snode; snode=snode->next)
+		{
+         Split *s = snode->data;
+         Transaction *trans = s->parent;
+			if (NULL == currency)
+			{
+				currency = trans->common_currency;
+			}
+			if (FALSE == gnc_commodity_equiv (currency, trans->common_currency))
+			{
+            /* Unhandled error condition.  We should do something 
+             * graceful here. Don't know what.  FIXME XXX */
+				PERR ("currencies in lot are not equivalent");
+			}
+		}
+
+      /* Now, total up the values */
+	}
 }
 
 /* =========================== END OF FILE ======================= */
