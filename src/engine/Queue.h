@@ -3,12 +3,40 @@
  * Queue.h
  *
  * DESCRIPTION:
- * Provide simple FIFO/LIFO cost-basis accounting support.
+ * Provides simple FIFO/LIFO cost-basis accounting support.
+ *
+ * The routines in this class implement a simple FIFO that
+ * holds a series of splits.  Splits can be pushed onto the head
+ * of the fifo.  The number of shares contained in the fifo is 
+ * then simply the sum of all of the shares in the splits.
+ * The "value" of the fifo is the cost-basis value of all of 
+ * the splits, i.e. the total of number of shares times prices.
+ *
+ * When shares are sold, they are dequed from the queue.  If the 
+ * oldest shares are sold first, they are dequed or "popped" from
+ * the tail, and the queue acts as a FIFO.  If the newest shares
+ * are sold first, then the queue acts as a LIFO, and shares are
+ * poped off the head.
+ *
+ * Either shares or a monetary value can be dequeued.  The amount
+ * dequeued does not have to exactly equal the amount/value of
+ * any given split; fractional amounts can be dequeued.  This queue
+ * automatically tracks fractional amounts on both the head (LIFO) 
+ * and tail (FIFO).  Indeed, there are *no* routines to explicitly
+ * dequeue a split; *only* amounts and values can be dequed. 
+ * Conversely, *only* splits can be pushed on, as this queue does 
+ * not provide any internal or hidden elements.
+ *
+ * In addition to the queue value, and the number of shares queued,
+ * the average age of the shares can also be computed, as well as
+ * other statistics involving a date and price.  The queue automatically
+ * tracks the posted date of fractional splits at the head and tail.
  *
  * RESTRICTIONS:
  * -- Does not support use with mixed currencies.
  * -- Does not check for or warn mixed currency use.
- * -- Does not allow pushhead after a pophead has occured.
+ * -- Does not allow push-head after a pop-head has occured.
+ * -- Push-tail not implemented
  *
  * HISTORY:
  * created by Linas Vepstas January 1999
