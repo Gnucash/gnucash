@@ -1643,20 +1643,21 @@ pgendDoSync (QofBackend *bend, QofBook *book)
 }
 
 static void
-pgend_do_begin (QofBackend *bend, QofIdTypeConst type, gpointer object)
+pgend_do_begin (QofBackend *bend, QofInstance *inst)
 {
   PGBackend *be = (PGBackend*)bend;
+  QofIdTypeConst type = inst->entity.e_type;
 
   ENTER ("be=%p, type=%s", bend, type);
-  if (!safe_strcmp (type, GNC_ID_PERIOD))
-    return pgend_book_transfer_begin (bend, object);
+  // if (!safe_strcmp (type, GNC_ID_PERIOD))
+  //   return pgend_book_transfer_begin (bend, object);
 
   switch (be->session_mode) {
       case MODE_EVENT:
       case MODE_POLL:
       case MODE_SINGLE_UPDATE:
           if (!safe_strcmp (type, GNC_ID_PRICE))
-              return pgend_price_begin_edit (bend, object);
+              return pgend_price_begin_edit (bend, (GNCPrice *) inst);
 
       case MODE_SINGLE_FILE:
       case MODE_NONE:
@@ -1668,13 +1669,14 @@ pgend_do_begin (QofBackend *bend, QofIdTypeConst type, gpointer object)
 }
 
 static void
-pgend_do_commit (QofBackend *bend, QofIdTypeConst type, gpointer object)
+pgend_do_commit (QofBackend *bend, QofInstance *inst)
 {
   PGBackend *be = (PGBackend*)bend;
+  QofIdTypeConst type = inst->entity.e_type;
 
   ENTER ("be=%p, type=%s", bend, type);
-  if (!safe_strcmp (type, GNC_ID_PERIOD))
-    return pgend_book_transfer_commit (bend, object);
+  // if (!safe_strcmp (type, GNC_ID_PERIOD))
+  //  return pgend_book_transfer_commit (bend, object);
 
   switch (be->session_mode) {
   case MODE_EVENT:
@@ -1682,15 +1684,15 @@ pgend_do_commit (QofBackend *bend, QofIdTypeConst type, gpointer object)
   case MODE_SINGLE_UPDATE:
 
     if (!safe_strcmp (type, GNC_ID_TRANS)) {
-      Transaction *txn = (Transaction*) object;
+      Transaction *txn = (Transaction*) inst;
       return pgend_trans_commit_edit (bend, txn, txn->orig);
     }
 
     if (!safe_strcmp (type, GNC_ID_PRICE))
-      return pgend_price_commit_edit (bend, object);
+      return pgend_price_commit_edit (bend, (GNCPrice *) inst);
 
     if (!safe_strcmp (type, GNC_ID_ACCOUNT))
-      return pgend_account_commit_edit (bend, object);
+      return pgend_account_commit_edit (bend, (Account *) inst);
 
   case MODE_SINGLE_FILE:
   case MODE_NONE:
@@ -1703,9 +1705,10 @@ pgend_do_commit (QofBackend *bend, QofIdTypeConst type, gpointer object)
 }
 
 static void
-pgend_do_rollback (QofBackend *bend, QofIdTypeConst type, gpointer object)
+pgend_do_rollback (QofBackend *bend, QofInstance *inst)
 {
   PGBackend *be = (PGBackend*)bend;
+  QofIdTypeConst type = inst->entity.e_type;
 
   ENTER ("be=%p, type=%s", bend, type);
   switch (be->session_mode) {
@@ -1713,7 +1716,7 @@ pgend_do_rollback (QofBackend *bend, QofIdTypeConst type, gpointer object)
   case MODE_POLL:
 
     if (!safe_strcmp (type, GNC_ID_TRANS))
-      return pgend_trans_rollback_edit (bend, object);
+      return pgend_trans_rollback_edit (bend, (Transaction *)inst);
 
   case MODE_SINGLE_UPDATE:
   case MODE_SINGLE_FILE:

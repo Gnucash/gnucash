@@ -314,7 +314,7 @@ sql_sort_need_entry(QofQuery * q)
 }
 
 /* =========================================================== */
-/* Macro for QOF_QUERYCORE_STRING query types
+/* Macro for QOF_TYPE_STRING query types
  * Note that postgres supports both case-sensitive and 
  * case-insensitve string searches, and it also supports 
  * regex!  yahooo! 
@@ -346,7 +346,7 @@ sql_sort_need_entry(QofQuery * q)
 }
 
 /* =========================================================== */
-/* Macro for QOF_QUERYCORE_NUMERIC type terms.  The logic used here in the
+/* Macro for QOF_TYPE_NUMERIC type terms.  The logic used here in the
  * SQL exactly matches that used in the qofquery.c code.  If
  * that code is incorrect or has changed, then the code below is 
  * broken as well. 
@@ -756,7 +756,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                 need_entry = TRUE;
                 need_trans_commodity = TRUE;
             } else if (!safe_strcmp(pd->type_name, QOF_TYPE_GUID)) {
-                if (!safe_strcmp(path->data, QOF_QUERY_PARAM_GUID))
+                if (!safe_strcmp(path->data, QOF_PARAM_GUID))
                     need_entry = TRUE;
                 else if (!safe_strcmp(path->data, SPLIT_ACCOUNT)) {
                     need_account = TRUE;
@@ -862,17 +862,17 @@ sqlQuery_build(sqlQuery * sq, Query * q)
 
                 PINFO("term is QOF_TYPE_GUID");
 
-                if (!safe_strcmp(path->data, QOF_QUERY_PARAM_GUID)) {
+                if (!safe_strcmp(path->data, QOF_PARAM_GUID)) {
                     field = "gncSplit.splitGuid";
                     g_assert(pdata->options != QOF_GUID_MATCH_ALL);
 
                 } else if (!safe_strcmp(path->data, SPLIT_TRANS) &&
-                           !safe_strcmp(path->next->data, QOF_QUERY_PARAM_GUID)) {
+                           !safe_strcmp(path->next->data, QOF_PARAM_GUID)) {
                     field = "gncSplit.transGUID";
                     g_assert(pdata->options != QOF_GUID_MATCH_ALL);
 
                 } else if (!safe_strcmp(path->data, SPLIT_ACCOUNT) &&
-                           !safe_strcmp(path->next->data, QOF_QUERY_PARAM_GUID)) {
+                           !safe_strcmp(path->next->data, QOF_PARAM_GUID)) {
                     field = "gncSplit.accountGUID";
                     g_assert(pdata->options != QOF_GUID_MATCH_ALL);
 
@@ -883,8 +883,8 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                     field = "gncSplit.accountGUID";
                     g_assert(pdata->options == QOF_GUID_MATCH_ALL);
 
-                } else if (!safe_strcmp(path->data, QOF_QUERY_PARAM_BOOK) &&
-                           !safe_strcmp(path->next->data, QOF_QUERY_PARAM_GUID)) {
+                } else if (!safe_strcmp(path->data, QOF_PARAM_BOOK) &&
+                           !safe_strcmp(path->next->data, QOF_PARAM_GUID)) {
                     /* XXX: Need to support the Book GUID? (gncAccount.bookGUID) */
                     field = "gncAccount.bookGUID";
                     g_assert(pdata->options != QOF_GUID_MATCH_ALL);

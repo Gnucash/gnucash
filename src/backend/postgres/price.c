@@ -462,7 +462,7 @@ pgendPriceFind (QofBackend *bend, gpointer olook)
 void
 pgend_price_begin_edit (QofBackend * bend, GNCPrice *pr)
 {
-   if (pr && pr->db && pr->db->dirty) 
+   if (pr && pr->db && pr->db->inst.dirty) 
    {
       PERR ("price db is unexpectedly dirty");
    }
@@ -527,7 +527,7 @@ pgend_price_commit_edit (QofBackend * bend, GNCPrice *pr)
    SEND_QUERY (be,bufp,);
    FINISH_QUERY(be->connection);
 
-   if (pr->db) pr->db->dirty = FALSE;
+   if (pr->db) pr->db->inst.dirty = FALSE;
 
    LEAVE ("commited");
    return;
