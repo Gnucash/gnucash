@@ -49,6 +49,7 @@
 
 
 /** Constants *******************************************************/
+#define DEBUG_GUID 0
 #define BLOCKSIZE 4096
 #define THRESHOLD (2 * BLOCKSIZE)
 
@@ -65,7 +66,7 @@ static short module = MOD_ENGINE;
 
 /* This code is based on code in md5.c in GNU textutils. */
 static size_t
-init_from_stream(FILE *stream, size_t max_size)
+init_from_stream(FILE *stream, size_t max_size, gboolean no_block)
 {
   char buffer[BLOCKSIZE + 72];
   size_t sum, block_size, total;
@@ -96,7 +97,7 @@ init_from_stream(FILE *stream, size_t max_size)
 
       sum += n;
     }
-    while (sum < block_size && n != 0);
+    while (!no_block && sum < block_size && n != 0);
 
     max_size -= sum;
 
@@ -125,17 +126,17 @@ init_from_stream(FILE *stream, size_t max_size)
 }
 
 static size_t
-init_from_file(const char *filename, size_t max_size)
+init_from_file(const char *filename, size_t max_size, gboolean no_block)
 {
   struct stat stats;
   size_t total = 0;
   FILE *fp;
 
-  if (stat(filename, &stats) == 0)
-  {
-    md5_process_bytes(&stats, sizeof(stats), &guid_context);
-    total += sizeof(stats);
-  }
+  if (stat(filename, &stats) != 0)
+    return 0;
+
+  md5_process_bytes(&stats, sizeof(stats), &guid_context);
+  total += sizeof(stats);
 
   if (max_size <= 0)
     return total;
@@ -144,7 +145,10 @@ init_from_file(const char *filename, size_t max_size)
   if (fp == NULL)
     return total;
 
-  total += init_from_stream(fp, max_size);
+  if (no_block)
+    setvbuf (fp, NULL, _IONBF, 0);
+
+  total += init_from_stream(fp, max_size, no_block);
 
   fclose(fp);
 
@@ -228,8 +232,8 @@ guid_init(void)
 
   /* entropy pool */
   {
-    init_from_file ("/dev/random", 256);
-    init_from_file ("/dev/urandom", 256);
+    bytes += init_from_file ("/dev/random", 256, TRUE);
+    bytes += init_from_file ("/dev/urandom", 256, FALSE);
   }
 
   /* files */
@@ -249,7 +253,7 @@ guid_init(void)
     int i;
 
     for (i = 0; files[i] != NULL; i++)
-      bytes += init_from_file(files[i], BLOCKSIZE);
+      bytes += init_from_file(files[i], BLOCKSIZE, FALSE);
   }
 
   /* directories */
@@ -338,10 +342,13 @@ guid_init(void)
   /* time in secs and clock ticks */
   bytes += init_from_time();
 
+#if DEBUG_GUID
+  g_warning ("guid_init got %u bytes.", bytes);
+#endif
+
   if (bytes < THRESHOLD)
-    fprintf(stderr,
-            "WARNING: guid_init only got %u bytes.\n"
-            "The identifiers might not be very random.\n", bytes);
+    g_warning("WARNING: guid_init only got %u bytes.\n"
+              "The identifiers might not be very random.\n", bytes);
 
   guid_initialized = TRUE;
 }
