@@ -335,6 +335,52 @@ xaccRemoveSplit (Split *split)
  * ugly too.
  *
 \********************************************************************/
+int
+xaccSplitOrder (Split **sa, Split **sb)
+{
+  int retval;
+  char *da, *db;
+
+  if ( (*sa) && !(*sb) ) return -1;
+  if ( !(*sa) && (*sb) ) return +1;
+  if ( !(*sa) && !(*sb) ) return 0;
+
+  retval = xaccTransOrder (sa->parent, sb->parent);
+  if (0 != retval) return retval;
+
+  /* otherwise, sort on memo strings */
+  da = (*sa)->memo;
+  db = (*sb)->memo;
+  if (da && db) {
+    retval = strcmp (da, db);
+    /* if strings differ, return */
+    if (retval) return retval;
+  } else 
+  if (!da && db) {
+    return -1;
+  } else 
+  if (da && !db) {
+    return +1;
+  }
+
+  /* otherwise, sort on action strings */
+  da = (*sa)->action;
+  db = (*sb)->action;
+  if (da && db) {
+    retval = strcmp (da, db);
+    /* if strings differ, return */
+    if (retval) return retval;
+  } else 
+  if (!da && db) {
+    return -1;
+  } else 
+  if (da && !db) {
+    return +1;
+  }
+
+  return 0;
+}
+
 
 int
 xaccTransOrder (Transaction **ta, Transaction **tb)
@@ -368,36 +414,6 @@ xaccTransOrder (Transaction **ta, Transaction **tb)
   /* otherwise, sort on transaction strings */
   da = (*ta)->description;
   db = (*tb)->description;
-  if (da && db) {
-    retval = strcmp (da, db);
-    /* if strings differ, return */
-    if (retval) return retval;
-  } else 
-  if (!da && db) {
-    return -1;
-  } else 
-  if (da && !db) {
-    return +1;
-  }
-
-  /* otherwise, sort on transaction strings */
-  da = (*ta)->credit_split.memo;
-  db = (*tb)->credit_split.memo;
-  if (da && db) {
-    retval = strcmp (da, db);
-    /* if strings differ, return */
-    if (retval) return retval;
-  } else 
-  if (!da && db) {
-    return -1;
-  } else 
-  if (da && !db) {
-    return +1;
-  }
-
-  /* otherwise, sort on transaction strings */
-  da = (*ta)->action;
-  db = (*tb)->action;
   if (da && db) {
     retval = strcmp (da, db);
     /* if strings differ, return */

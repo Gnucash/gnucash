@@ -63,12 +63,12 @@ Account ** accListCopy (Account **list)
 
 /* ------------------------------------------------------ */
 /* sort the transactions in date order */
-Transaction ** accListGetSortedTrans (Account **list)
+Split ** accListGetSortedSplits (Account **list)
 {
    Account *acc;
-   Transaction **tarray;
+   Split **sarray;
    int nacc = 0;
-   int ntrans = 0;
+   int nsplits = 0;
    int i, j;
 
    if (!list) return 0;
@@ -77,47 +77,47 @@ Transaction ** accListGetSortedTrans (Account **list)
    nacc = 0;
    acc = list[0];
    while (acc) {
-      ntrans += acc->numTrans;
+      nsplits += acc->numSplits;
       nacc++;
       acc = list[nacc];
    }
-   ntrans ++;
+   nsplits ++;
 
    /* malloc the array of transactions */
-   tarray = (Transaction **) _malloc (ntrans * sizeof (Transaction *));
+   sarray = (Split **) _malloc (nsplits * sizeof (Split *));
 
    /* put all of the transactions in the flat array */
    nacc = 0;
-   ntrans = 0;
+   nsplits = 0;
    acc = list[0];
    while (acc) {
-      for (i=0; i<acc->numTrans; i++) {
-         tarray[ntrans] = getTransaction (acc, i);
-         ntrans ++;
+      for (i=0; i<acc->numSplits; i++) {
+         sarray[nsplits] = acc->splits[i];
+         nsplits ++;
       }
       nacc++;
       acc = list[nacc];
    }
-   tarray [ntrans] = NULL;
+   sarray [nsplits] = NULL;
 
    /* search and destroy duplicates. */
    /* duplicates are possible due to double-entry */
    /* one transaction can appear at most twice in the list */
-   for (i=0; i<ntrans; i++) {
-      for (j=i+1; j<ntrans; j++) {
-         if (tarray[i] == tarray[j]) {
-            tarray[j] = tarray [ntrans-1];
-            tarray[ntrans-1] = NULL;
-            ntrans --;
+   for (i=0; i<nsplits; i++) {
+      for (j=i+1; j<nsplits; j++) {
+         if (sarray[i] == sarray[j]) {
+            sarray[j] = sarray [nsplits-1];
+            sarray[nsplits-1] = NULL;
+            nsplits --;
          }
       }
    }
 
    /* run the sort routine on the array */
-   qsort (tarray, ntrans, sizeof (Transaction *), 
-            (int(*)(const void*, const void *)) xaccTransOrder);
+   qsort (sarray, nsplits, sizeof (Split *), 
+            (int(*)(const void*, const void *)) xaccSplitOrder);
 
-   return tarray;
+   return sarray;
 }   
    
 /* ------------------------------------------------------ */
