@@ -1473,6 +1473,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   {
     guint8 num_decimal_places = 0;
     char *temp_ptr = temp_buf;
+    int min_dp, max_dp;
 
     *temp_ptr++ = info->monetary ?
       lc->mon_decimal_point[0] : lc->decimal_point[0];
@@ -1491,8 +1492,16 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
       val.num = val.num - (digit * val.denom);
     }
 
-    /* add in needed zeros */
-    while (num_decimal_places < info->min_decimal_places)
+    /* Force at least auto_decimal_places zeros */
+    if (auto_decimal_enabled) {
+      min_dp = MAX(auto_decimal_places, info->min_decimal_places);
+      max_dp = MAX(auto_decimal_places, info->max_decimal_places);
+    } else {
+      min_dp = info->min_decimal_places;
+      max_dp = info->max_decimal_places;
+    }
+
+    while (num_decimal_places < min_dp)
     {
       *temp_ptr++ = '0';
       num_decimal_places++;
@@ -1502,13 +1511,13 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     *temp_ptr-- = '\0';
 
     /* Here we strip off trailing decimal zeros per the argument. */
-    while (*temp_ptr == '0' && num_decimal_places > info->min_decimal_places)
+    while (*temp_ptr == '0' && num_decimal_places > min_dp)
     {
       *temp_ptr-- = '\0';
       num_decimal_places--;
     }
 
-    if (num_decimal_places > info->max_decimal_places)
+    if (num_decimal_places > max_dp)
     {
       PWARN ("max_decimal_places too small; limit %d, value %s%s",
 	     info->max_decimal_places, buf, temp_buf);
@@ -2119,7 +2128,7 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
     numer *= denom;
     numer += fraction;
   }
-  else if (auto_decimal_enabled && !got_decimal)
+  else if (monetary && auto_decimal_enabled && !got_decimal)
   {
     if ((auto_decimal_places > 0) && (auto_decimal_places < 9))
     {
