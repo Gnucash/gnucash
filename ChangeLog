@@ -1,5 +1,8 @@
 2003-05-30  Christian Stimming  <stimming@tuhh.de>
 
+	* po/de.po, po/glossary/de.po: Updated German translation. Changed
+	translation of "depot" to "Aktienkonto".
+
 	* po/cs.po: Updated complete (!) Czech translation by Miloslav
 	Trmac <mitr@volny.cz>.
 
