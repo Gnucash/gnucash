@@ -792,47 +792,88 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
       break;
       
     case GNC_HOW_RND_ROUND_HALF_DOWN:
-      if(denom_neg) {
-        if((2 * remainder) > in.denom*denom) {
+      if(denom_neg) 
+      {
+        if((2 * remainder) > in.denom*denom) 
+        {
           out.num = out.num + 1;
         }
       }
-      else if((2 * remainder) > temp.denom) {
+      else if((2 * remainder) > temp.denom) 
+      {
+        out.num = out.num + 1;
+      }
+      /* check that 2*remainder didn't over-flow */
+      else if (((2 * remainder) < remainder) && 
+               (remainder > (temp.denom / 2)))
+      {
         out.num = out.num + 1;
       }
       break;
       
     case GNC_HOW_RND_ROUND_HALF_UP:
-      if(denom_neg) {
-        if((2 * remainder) >= in.denom*denom) {
+      if(denom_neg) 
+      {
+        if((2 * remainder) >= in.denom*denom) 
+        {
           out.num = out.num + 1;
         }
       }
-      else if((2 * remainder ) >= temp.denom) {
+      else if((2 * remainder ) >= temp.denom) 
+      {
+        out.num = out.num + 1;
+      }
+      /* check that 2*remainder didn't over-flow */
+      else if (((2 * remainder) < remainder) && 
+               (remainder >= (temp.denom / 2)))
+      {
         out.num = out.num + 1;
       }
       break;
       
     case GNC_HOW_RND_ROUND:
-      if(denom_neg) {
-        if((2 * remainder) > in.denom*denom) {
+      if(denom_neg) 
+      {
+        if((2 * remainder) > in.denom*denom) 
+        {
           out.num = out.num + 1;
         }
-        else if((2 * remainder) == in.denom*denom) {
-          if(out.num % 2) {
+        else if((2 * remainder) == in.denom*denom) 
+        {
+          if(out.num % 2) 
+          {
             out.num = out.num + 1;
           }
         }        
       }
-      else {
-        if((2 * remainder ) > temp.denom) {
+      else 
+      {
+        if((2 * remainder ) > temp.denom) 
+        {
           out.num = out.num + 1;
         }
-        else if((2 * remainder) == temp.denom) {
-          if(out.num % 2) {
+        /* check that 2*remainder didn't over-flow */
+        else if (((2 * remainder) < remainder) && 
+                 (remainder > (temp.denom / 2)))
+        {
+          out.num = out.num + 1;
+        }
+        else if((2 * remainder) == temp.denom) 
+        {
+          if(out.num % 2) 
+          {
             out.num = out.num + 1;
           }
         }    
+        /* check that 2*remainder didn't over-flow */
+        else if (((2 * remainder) < remainder) && 
+                 (remainder ==  (temp.denom / 2)))
+        {
+          if(out.num % 2) 
+          {
+            out.num = out.num + 1;
+          }
+        }
       }    
       break;
       
