@@ -46,7 +46,7 @@
  *   Account     ::== accID flags type accountName description      * 
  *                    notes numTran (Transaction)^numTrans          * 
  *                    numGroups (Group)^numGroups                   *
- *   Transaction ::== num date description credit_split             *
+ *   Transaction ::== num date description source_split             *
  *                    numSplits (Split)^numSplits                   *
  *   Split       ::== memo action reconciled                        *
  *                     amount share_price account                   *
@@ -577,7 +577,7 @@ readTransaction( int fd, Account *acc, int token )
        * aren't reconciled until you get your bank statement, and
        * use the reconcile window to mark the transaction reconciled
        */
-      if( YREC == trans->credit_split.reconciled ) {
+      if( YREC == trans->source_split.reconciled ) {
         xaccTransSetReconcile (trans, CREC);
       }
     }
@@ -586,9 +586,9 @@ readTransaction( int fd, Account *acc, int token )
      * I have to do this mainly for if I change what NREC and
      * YREC are defined to be... this way it might loose all
      * the reconciled data, but at least the field is valid */
-    if( (YREC != trans->credit_split.reconciled) && 
-        (FREC != trans->credit_split.reconciled) &&
-        (CREC != trans->credit_split.reconciled) ) {
+    if( (YREC != trans->source_split.reconciled) && 
+        (FREC != trans->source_split.reconciled) &&
+        (CREC != trans->source_split.reconciled) ) {
       xaccTransSetReconcile (trans, NREC);
     }
     
@@ -607,7 +607,7 @@ readTransaction( int fd, Account *acc, int token )
         }
       XACC_FLIP_INT (amount);
       num_shares = 0.01 * ((double) amount); /* file stores pennies */
-      trans->credit_split.damount = num_shares;
+      trans->source_split.damount = num_shares;
     } else {
       double damount;
   
@@ -621,7 +621,7 @@ readTransaction( int fd, Account *acc, int token )
         }
       XACC_FLIP_DOUBLE (damount);
       num_shares  = damount;
-      trans->credit_split.damount = num_shares;
+      trans->source_split.damount = num_shares;
   
       /* ... next read the share price ... */
       err = read( fd, &damount, sizeof(double) );
@@ -633,7 +633,7 @@ readTransaction( int fd, Account *acc, int token )
         }
       XACC_FLIP_DOUBLE (damount);
       share_price = damount;
-      trans->credit_split.share_price = share_price;
+      trans->source_split.share_price = share_price;
     }  
   
     INFO_2 ("readTransaction(): num_shares %f \n", num_shares);
@@ -653,11 +653,11 @@ readTransaction( int fd, Account *acc, int token )
       XACC_FLIP_INT (acc_id);
       INFO_2 ("readTransaction(): credit %d\n", acc_id);
       peer_acc = locateAccount (acc_id);
-      trans -> credit_split.acc = (struct _account *) peer_acc;
+      trans -> source_split.acc = (struct _account *) peer_acc;
   
       /* insert the split part of the transaction into 
        * the credited account */
-      if (peer_acc) xaccInsertSplit( peer_acc, &(trans->credit_split) );
+      if (peer_acc) xaccInsertSplit( peer_acc, &(trans->source_split) );
   
       /* next read the debit account number */
       err = read( fd, &acc_id, sizeof(int) );
@@ -680,33 +680,33 @@ readTransaction( int fd, Account *acc, int token )
          /* duplicate many of the attributes in the credit split */
          split->damount = -num_shares;
          split->share_price = share_price;
-         split->reconciled = trans->credit_split.reconciled;
+         split->reconciled = trans->source_split.reconciled;
          free (split->memo);
-         split->memo = strdup (trans->credit_split.memo);
+         split->memo = strdup (trans->source_split.memo);
          free (split->action);
-         split->action = strdup (trans->credit_split.action);
+         split->action = strdup (trans->source_split.action);
       }
   
     } else {
 
       /* Version 1 files did not do double-entry */
-      xaccInsertSplit( acc, &(trans->credit_split) );
+      xaccInsertSplit( acc, &(trans->source_split) );
     }
   } else { /* else, read version-5 files */
      Split *split;
 
      /* first, read the credit split, and copy it in place */
      split = readSplit (fd, token);
-     xaccSplitSetMemo ( &(trans->credit_split), split->memo);
-     xaccSplitSetAction ( &(trans->credit_split), split->action);
-     xaccSplitSetReconcile ( &(trans->credit_split), split->reconciled);
-     trans->credit_split.damount = split->damount;
-     trans->credit_split.share_price = split->share_price;
-     trans->credit_split.acc = split->acc;
-     trans->credit_split.parent = trans;
+     xaccSplitSetMemo ( &(trans->source_split), split->memo);
+     xaccSplitSetAction ( &(trans->source_split), split->action);
+     xaccSplitSetReconcile ( &(trans->source_split), split->reconciled);
+     trans->source_split.damount = split->damount;
+     trans->source_split.share_price = split->share_price;
+     trans->source_split.acc = split->acc;
+     trans->source_split.parent = trans;
 
      /* then wire it into place */
-     xaccInsertSplit( ((Account *) (trans->credit_split.acc)), &(trans->credit_split) );
+     xaccInsertSplit( ((Account *) (trans->source_split.acc)), &(trans->source_split) );
      
      /* free the thing that  the read returned */
      split->acc = NULL;
@@ -1176,15 +1176,15 @@ writeTransaction( int fd, Transaction *trans )
   err = writeString( fd, trans->description );
   if( -1 == err ) return err;
   
-  err = writeSplit( fd, &(trans->credit_split) );
+  err = writeSplit( fd, &(trans->source_split) );
   if( -1 == err ) return err;
   
   /* count the number of splits */
   i = 0;
-  s = trans->debit_splits[i];
+  s = trans->dest_splits[i];
   while (s) {
     i++;
-    s = trans->debit_splits[i];
+    s = trans->dest_splits[i];
   }
   XACC_FLIP_INT (i);
   err = write( fd, &i, sizeof(int) );
@@ -1192,12 +1192,12 @@ writeTransaction( int fd, Transaction *trans )
   
   /* now write the splits */
   i = 0;
-  s = trans->debit_splits[i];
+  s = trans->dest_splits[i];
   while (s) {
     err = writeSplit (fd, s);
     if( -1 == err ) return err;
     i++;
-    s = trans->debit_splits[i];
+    s = trans->dest_splits[i];
   }
   
   return err;

@@ -10,17 +10,17 @@ The term "credited" here is arbitrary, as the value can be
 positive or negative.
 
 The notion of "double entry" is embodied in the "transaction" structure.
-The transaction consists of a date, a single "credit split" and zero
-or more "debit splits".  Again, the notion of "credit" and "debit"
-are arbitrary, as the value stored in the split can be positive or
-negative.
+The transaction consists of a date, a single "source split" and zero
+or more "destination splits".  Again, the notion of "source" and
+"destination" are arbitrary, as the value stored in the split can be 
+positive or negative.
 
-If a transaction has one or more "debit_splits", then the sum of 
-the debit-split values *must* equal the value of the credit-split.
+If a transaction has one or more "dest_splits", then the sum of 
+the destination-split values *must* equal the value of the source-split.
 This equality is what forces a double-entry accounting system to
 balance.
 
-A transaction may have zero "debit-splits".  If the transaction value
+A transaction may have zero "destination-splits".  If the transaction value
 is non-zero, then by definition, the system as a whole cannot balance.
 Many simple, home-oriented non-double-entry systems will allow
 non-balancing transactions, as these are simpler to comprehend for the 
@@ -40,5 +40,48 @@ tree are called "Account Groups".  By accounting convention, the
 value of an account is equal to the value of all of its splits plus
 the value of all of its sub-accounts.  Account Groups are implemented 
 as doubly-linked trees.
+
+
+Stocks, non-Currency-Denominated Assets
+---------------------------------------
+The engine includes support for non-currency-denominated assets, 
+such as stocks, bonds, mutual funds, inventory.  This is done with
+two values in the Split structure:
+
+double share_price;
+double damount;
+
+"damount" is the number of shares/items.  It is an "immutable" quantity,
+in that it cannot change except by transfer (sale/purchase).  It is the
+quantity that is used when computing balances.
+
+"share_price" is the price of the item in question.  The share-price is
+of course subject to fluctuation.
+
+The net-value of a split is the product of "damount" and "share_price".
+The currency balance of an account is the sum of all "damounts" times
+the latest, newest share-price.
+
+Currency accounts should use a share price of 1.0 for all splits.
+
+To maintain the double-entry consistency, one must have the following
+hold true:
+
+(source_split->damount) * (source_split->share_price) ==
+sum of all ((dest_split->damount) * (dest_split->share_price))
+
+Thus, for example, the purchase of shares can be represented as:
+
+source:
+debit ABC Bank for $1045  (1045 dollars * dollar "price" of 1.00)
+
+destination:
+credit PQR Stock for $1000 (100 shares at $10 per share)
+credit StockBroker category $45 in fees
+
+
+
+
+
 
 

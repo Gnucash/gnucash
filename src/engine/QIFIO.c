@@ -577,7 +577,7 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
 
 #define XACC_ACTION(q,x)				\
    if (!strncmp (&qifline[1], q, strlen(q))) {		\
-      trans->credit_split.action = strdup(x);	\
+      trans->source_split.action = strdup(x);	\
    } else
 
 
@@ -626,7 +626,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
      /* I == share price */
      if ('I' == qifline [0]) {   
-         trans -> credit_split.share_price = xaccParseUSAmount (&qifline[1]); 
+         trans -> source_split.share_price = xaccParseUSAmount (&qifline[1]); 
      } else 
 
      /* L == name of acount from which transfer occured */
@@ -637,7 +637,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
      /* M == memo field */
      if ('M' == qifline [0]) {  
-        XACC_PREP_STRING (trans->credit_split.memo);
+        XACC_PREP_STRING (trans->source_split.memo);
      } else 
 
      /* N == check numbers for Banks, but Action for portfolios */
@@ -670,7 +670,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      if ('O' == qifline [0]) {   
         double pute;
         adjust = xaccParseUSAmount (&qifline[1]);
-        pute = (trans->credit_split.damount) * (trans->credit_split.share_price);
+        pute = (trans->source_split.damount) * (trans->source_split.share_price);
         if (isneg) pute = -pute;
 
         printf ("QIF Warning: Adjustment of %.2f to amount %.2f not handled \n", adjust, pute);
@@ -683,8 +683,8 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
      /* Q == number of shares */
      if ('Q' == qifline [0]) {   
-         trans -> credit_split.damount = xaccParseUSAmount (&qifline[1]);  
-         if (isneg) trans -> credit_split.damount = - (trans->credit_split.damount);
+         trans -> source_split.damount = xaccParseUSAmount (&qifline[1]);  
+         if (isneg) trans -> source_split.damount = - (trans->source_split.damount);
          got_share_quantity = 1;
      } else 
 
@@ -709,8 +709,8 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      if ('T' == qifline [0]) {   
          /* ignore T for stock transactions, since T is a dollar amount */
          if (0 == got_share_quantity) {
-            trans -> credit_split.damount = xaccParseUSAmount (&qifline[1]);  
-            if (isneg) trans -> credit_split.damount = - (trans->credit_split.damount);
+            trans -> source_split.damount = xaccParseUSAmount (&qifline[1]);  
+            if (isneg) trans -> source_split.damount = - (trans->source_split.damount);
          }
      } else 
 
@@ -742,7 +742,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
            double parse, pute;
            int got, wanted;
            parse = xaccParseUSAmount (&qifline[1]);
-           pute = (trans->credit_split.damount) * (trans->credit_split.share_price);
+           pute = (trans->source_split.damount) * (trans->source_split.share_price);
            if (isneg) pute = -pute;
    
            wanted = (int) (100.0 * parse + 0.5);
@@ -778,8 +778,8 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
    XACC_PREP_NULL_STRING (trans->num);
    XACC_PREP_NULL_STRING (trans->description);
-   XACC_PREP_NULL_STRING (trans->credit_split.memo);
-   XACC_PREP_NULL_STRING (trans->credit_split.action);
+   XACC_PREP_NULL_STRING (trans->source_split.memo);
+   XACC_PREP_NULL_STRING (trans->source_split.action);
 
 
    /* fundamentally differnt handling for securities and non-securities */
@@ -809,7 +809,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
           * sub_acc; the security account is credited.
           * But, just in case its missing, avoid a core dump */
          if (sub_acc) {
-            trans->credit_split.acc = (struct _account *) sub_acc;
+            trans->source_split.acc = (struct _account *) sub_acc;
             xaccInsertSplit (sub_acc, split);
          }
       } else {
@@ -821,11 +821,11 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
           * account gets the dividend credit; otherwise, the 
           * main account gets it */
          if (xfer_acc) {
-            trans->credit_split.acc = (struct _account *) xfer_acc;
-            xaccInsertSplit (xfer_acc, &(trans->credit_split));
+            trans->source_split.acc = (struct _account *) xfer_acc;
+            xaccInsertSplit (xfer_acc, &(trans->source_split));
          } else {
-            trans->credit_split.acc = (struct _account *) acc;
-            xaccInsertSplit (acc, &(trans->credit_split));
+            trans->source_split.acc = (struct _account *) acc;
+            xaccInsertSplit (acc, &(trans->source_split));
          }
       }
 
@@ -842,8 +842,8 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
       }
 
       /* the transaction itself appears as a credit */
-      trans->credit_split.acc = (struct _account *) acc;
-      xaccInsertSplit (acc, &(trans->credit_split));
+      trans->source_split.acc = (struct _account *) acc;
+      xaccInsertSplit (acc, &(trans->source_split));
    }
 
    return qifline;

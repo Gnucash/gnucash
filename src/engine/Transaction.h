@@ -1,7 +1,7 @@
 /********************************************************************\
  * Transaction.h -- defines transaction for xacc (X-Accountant)     *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997 Linas Vepstas                                 *
+ * Copyright (C) 1997, 1998 Linas Vepstas                           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -75,8 +75,8 @@ typedef struct _transaction {
   Date    date;              /* transaction date                          */
   char  * description;        
 
-  Split   credit_split;      /* credited account                          */
-  Split   **debit_splits;    /* list of splits, null terminated           */
+  Split   source_split;      /* source (creidted) account                 */
+  Split   **dest_splits;     /* list of splits, null terminated           */
 
   char    write_flag;        /* used only during file IO                  */
 } Transaction;

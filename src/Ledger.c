@@ -47,14 +47,14 @@ GetOtherAccName (Split *split)
    Transaction *trans;
    trans = (Transaction *) (split->parent);
 
-   if (split != &(trans->credit_split)) {
-      acc = (Account *) trans->credit_split.acc;
+   if (split != &(trans->source_split)) {
+      acc = (Account *) trans->source_split.acc;
    } else {
-      if (trans->debit_splits) {
-         if (NULL != trans->debit_splits[0]) {
+      if (trans->dest_splits) {
+         if (NULL != trans->dest_splits[0]) {
             /* if only one split, then use that */
-            if (NULL == trans->debit_splits[1]) {
-               acc = (Account *) trans->debit_splits[0]->acc;
+            if (NULL == trans->dest_splits[1]) {
+               acc = (Account *) trans->dest_splits[0]->acc;
             } else {
                return SPLIT_STR;
             }
@@ -227,7 +227,7 @@ printf ("load reg of %d entries --------------------------- \n",i);
    todaysDate (&(trans->date));
    table->current_cursor_row = i;
    table->current_cursor_col = 0;
-   xaccLoadRegEntry (reg, &(trans->credit_split));
+   xaccLoadRegEntry (reg, &(trans->source_split));
    i++;
    
    /* restore the cursor to it original location */

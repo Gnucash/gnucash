@@ -1,7 +1,7 @@
 /********************************************************************\
  * Account.c -- the Account data structure                          *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997 Linas Vepstas                                 *
+ * Copyright (C) 1997, 1998 Linas Vepstas                           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -126,14 +126,14 @@ xaccFreeAccount( Account *acc )
     Transaction *trans =  (Transaction *) s->parent;
 
     j=0;
-    debit_s = trans->debit_splits[0];
+    debit_s = trans->dest_splits[0];
     while (debit_s) {
       if (debit_s->acc) { dont_free_transaction = 1; break; }
       j++;
-      debit_s = trans->debit_splits[j];
+      debit_s = trans->dest_splits[j];
     }
 
-    if ( (!dont_free_transaction) && (NULL == trans->credit_split.acc) ) {
+    if ( (!dont_free_transaction) && (NULL == trans->source_split.acc) ) {
       xaccFreeTransaction( trans );
     }
 
@@ -449,16 +449,16 @@ xaccCheckTransDateOrder (Transaction *trans )
 
   if (NULL == trans) return 0;
 
-  acc = (Account *) (trans->credit_split.acc);
-  outOfOrder += xaccCheckDateOrder (acc, &(trans->credit_split));
+  acc = (Account *) (trans->source_split.acc);
+  outOfOrder += xaccCheckDateOrder (acc, &(trans->source_split));
 
   i=0;
-  s = trans->debit_splits[0];
+  s = trans->dest_splits[0];
   while (s) {
     acc = (Account *) (s->acc);
     outOfOrder += xaccCheckDateOrder (acc, s);
     i++;
-    s = trans->debit_splits[i];
+    s = trans->dest_splits[i];
   }
 
   if (outOfOrder) return 1;
@@ -539,14 +539,14 @@ xaccMoveFarEnd (Split *split, Account *new_acc)
     * then move the far end of the split to the new location.
     */
    trans = (Transaction *) (split->parent);
-   if (split != &(trans->credit_split)) {
-      partner_split = &(trans->credit_split);
+   if (split != &(trans->source_split)) {
+      partner_split = &(trans->source_split);
    } else {
       /* perform that transfer *only* if there is one split */
-      if (trans->debit_splits) {
-         if (0x0 != trans->debit_splits[0]) {
-            if (0x0 == trans->debit_splits[1]) {
-               partner_split = trans->debit_splits[0];
+      if (trans->dest_splits) {
+         if (0x0 != trans->dest_splits[0]) {
+            if (0x0 == trans->dest_splits[1]) {
+               partner_split = trans->dest_splits[0];
             }
          }
       }
