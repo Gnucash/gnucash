@@ -552,7 +552,7 @@ string and 'directories' must be a list of strings."
 		(string-null? (cadr parts-in)))
 	   file)
 	  (else
-	   (gnc:strip-path (append (string-split (getenv "PWD") #\/) parts-in))))
+	   (gnc:strip-path (string-append (getenv "PWD") "/" file))))
   )
 )
 
