@@ -1,3 +1,9 @@
+2005-01-23  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncInvoice.c: Properly accumulate
+	  splits (bug #165053).  Also fixes a (related) memory leak
+	  (caused by the same lack-of-reference to accumulated splits).
+
 2005-01-16  Christian Stimming  <stimming@tuhh.de>
 
 	* src/app-utils/gnc-ui-util.c: Modify tax option code to load
