@@ -34,8 +34,6 @@
 #include <guile/gh.h>
 #include <glib.h>
 
-gnc_commodity_table * gnc_engine_commodity_table_new (void);
-
 Timespec gnc_transaction_get_date_posted(Transaction *t);
 Timespec gnc_transaction_get_date_entered(Transaction *t);
 
