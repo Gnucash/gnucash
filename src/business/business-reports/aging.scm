@@ -166,45 +166,51 @@
 			     reverse?)
   (let* ((transaction (gnc:split-get-parent split))
 	 (temp-owner (gnc:owner-create))
-	 (owner (gnc:owner-from-split split temp-owner))
-	 (guid (gnc:owner-get-guid owner))
-	 (this-currency (gnc:transaction-get-currency transaction))
-	 (value (gnc:split-get-value split))
-	 (this-date (gnc:transaction-get-date-posted transaction))
-	 (company-info (hash-ref hash guid)))
+	 (owner (gnc:owner-from-split split temp-owner)))
 
-    (gnc:debug "update-company-hash called")
-    (gnc:debug "guid" guid)
-    (gnc:debug "split-value" value)
-    (if reverse? (set! value (gnc:numeric-neg value)))
-    (if company-info
-	;; if it's an existing company, destroy the temp owner and
-	;; then make sure the currencies match
-	(begin
-	  (gnc:owner-destroy temp-owner)
-	  (if (not (gnc:commodity-equiv? this-currency
-					 (company-get-currency company-info)))
-	      (cons #f (sprintf (_ "Transactions relating to company  %d contain \
+    (if
+     owner
+     (let* ((guid (gnc:owner-get-guid owner))
+	    (this-currency (gnc:transaction-get-currency transaction))
+	    (value (gnc:split-get-value split))
+	    (this-date (gnc:transaction-get-date-posted transaction))
+	    (company-info (hash-ref hash guid)))
+
+       (gnc:debug "update-company-hash called")
+       (gnc:debug "guid" guid)
+       (gnc:debug "split-value" value)
+       (if reverse? (set! value (gnc:numeric-neg value)))
+       (if company-info
+	   ;; if it's an existing company, destroy the temp owner and
+	   ;; then make sure the currencies match
+	   (begin
+	     (gnc:owner-destroy temp-owner)
+	     (if (not (gnc:commodity-equiv? this-currency
+					    (company-get-currency company-info)))
+		 (cons #f (sprintf (_ "Transactions relating to company  %d contain \
 more than one currency.  This report is not designed to cope with this possibility.")))
-	      (begin
-		(gnc:debug "it's an old company")
-		(if (gnc:numeric-negative-p value)
-		    (process-invoice company-info (gnc:numeric-neg value) bucket-intervals this-date)
-		    (process-payment company-info value))
-		(hash-set! hash guid company-info)
-		(cons #t guid))))
-	
-	;; if it's a new company
-	(begin
-	  (gnc:debug "value" value)
-	  (if (gnc:numeric-negative-p value) ;; if it's a new debt
-	      ;; if not ignore it
+		 (begin
+		   (gnc:debug "it's an old company")
+		   (if (gnc:numeric-negative-p value)
+		       (process-invoice company-info (gnc:numeric-neg value) bucket-intervals this-date)
+		       (process-payment company-info value))
+		   (hash-set! hash guid company-info)
+		   (cons #t guid))))
+	   
+	   ;; if it's a new company
+	   (begin
+	     (gnc:debug "value" value)
+	     (if (gnc:numeric-negative-p value) ;; if it's a new debt
+		 ;; if not ignore it
 	                                     ;;; XXX: is this right ?
-	      (let ((new-company (make-company this-currency owner)))
-		(process-invoice new-company (gnc:numeric-neg value) bucket-intervals this-date)
-		(hash-set! hash guid new-company))
-	      (gnc:owner-destroy temp-owner))
-	  (cons #t guid)))))
+		 (let ((new-company (make-company this-currency owner)))
+		   (process-invoice new-company (gnc:numeric-neg value) bucket-intervals this-date)
+		   (hash-set! hash guid new-company))
+		 (gnc:owner-destroy temp-owner))
+	     (cons #t guid))))
+
+     ; else (no owner)
+     (gnc:owner-destroy temp-owner))))
 
 
 ;; get the total debt from the buckets

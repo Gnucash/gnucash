@@ -17,6 +17,14 @@
 	  Make sure that we're only saving the items that have been fully
 	  created (not half-created).  Fixes the cause of bug #102776.
 
+	* src/business/business-core/business-core.scm: return #f if
+	  we cannot obtain an owner from a split (in the case of a regularly-
+	  entered split)
+	* src/business/business-reports/aging.scm:
+	* src/business/business-reports/owner-report.scm:
+	  Cope with not being able to obtain an owner from a split.
+	  In particular, ignore it.  Fixes part of #97097.
+
 2003-01-06  Derek Atkins  <derek@ihtfp.com>
 
 	* macros/Makefile.am: include the rest of the macros in the dist.

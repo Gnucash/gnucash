@@ -619,7 +619,10 @@
 
   (let* ((temp-owner (gnc:owner-create))
 	 (owner (gnc:owner-from-split split temp-owner))
-	 (res (gnc:owner-report-create owner account)))
+	 (res #f))
+
+    (if owner
+	(set! res (gnc:owner-report-create owner account)))
 
     (gnc:owner-destroy temp-owner)
     res))

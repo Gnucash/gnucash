@@ -109,23 +109,29 @@
 	(set! owner (gnc:invoice-get-owner invoice))
 	(let ((split-list (gnc:transaction-get-splits trans)))
 	  (define (check-splits splits)
-	    (let* ((split (car splits))
-		   (lot (gnc:split-get-lot split)))
-	      (if lot
-		  (let* ((invoice (gnc:invoice-get-invoice-from-lot lot))
-			 (owner? (gnc:owner-get-owner-from-lot
-				  lot temp-owner)))
-		    (if invoice
-			(set! owner (gnc:invoice-get-owner invoice))
-			(if owner?
-			    (set! owner temp-owner)
-			    (check-splits (cdr splits)))))
-		  (check-splits (cdr splits)))))
+	    (if (and splits (not (null? splits)))
+		(let* ((split (car splits))
+		       (lot (gnc:split-get-lot split)))
+		  (if lot
+		      (let* ((invoice (gnc:invoice-get-invoice-from-lot lot))
+			     (owner? (gnc:owner-get-owner-from-lot
+				      lot temp-owner)))
+			(if invoice
+			    (set! owner (gnc:invoice-get-owner invoice))
+			    (if owner?
+				(set! owner temp-owner)
+				(check-splits (cdr splits)))))
+		      (check-splits (cdr splits))))))
 	  (check-splits split-list)))
 
-    (gnc:owner-copy-into-owner (gnc:owner-get-end-owner owner) result-owner)
-    (gnc:owner-destroy temp-owner)
-    result-owner))
+    (if owner
+	(begin
+	  (gnc:owner-copy-into-owner (gnc:owner-get-end-owner owner) result-owner)
+	  (gnc:owner-destroy temp-owner)
+	  result-owner)
+	(begin
+	  (gnc:owner-destroy temp-owner)
+	  #f))))
 
 
 (export gnc:owner-get-name)
