@@ -576,7 +576,7 @@ gboolean gncInvoiceIsDirty (GncInvoice *invoice)
 static void
 gncInvoiceDetachFromLot (GNCLot *lot)
 {
-  kvp_frame *kvp;
+  KvpFrame *kvp;
 
   if (!lot) return;
 
@@ -587,8 +587,8 @@ gncInvoiceDetachFromLot (GNCLot *lot)
 static void
 gncInvoiceAttachToLot (GncInvoice *invoice, GNCLot *lot)
 {
-  kvp_frame *kvp;
-  kvp_value *value;
+  KvpFrame *kvp;
+  KvpValue *value;
   
   if (!invoice || !lot)
     return;
@@ -604,8 +604,8 @@ gncInvoiceAttachToLot (GncInvoice *invoice, GNCLot *lot)
 
 GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot)
 {
-  kvp_frame *kvp;
-  kvp_value *value;
+  KvpFrame *kvp;
+  KvpValue *value;
   GUID *guid;
   QofBook *book;
 
@@ -625,8 +625,8 @@ GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot)
 static void
 gncInvoiceAttachToTxn (GncInvoice *invoice, Transaction *txn)
 {
-  kvp_frame *kvp;
-  kvp_value *value;
+  KvpFrame *kvp;
+  KvpValue *value;
   
   if (!invoice || !txn)
     return;
@@ -645,8 +645,8 @@ gncInvoiceAttachToTxn (GncInvoice *invoice, Transaction *txn)
 
 GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn)
 {
-  kvp_frame *kvp;
-  kvp_value *value;
+  KvpFrame *kvp;
+  KvpValue *value;
   GUID *guid;
   QofBook *book;
 
