@@ -157,13 +157,23 @@ xaccQueryPrint(Query * q)
         case PR_CLEARED:
           printf ("cleared\n");
           break;
-        case PR_DATE:
+        case PR_DATE: {
+          char buff[40];
           printf ("date sense=%d use_start=%d use_end=%d\n", 
                   qt->data.base.sense,
                   qt->data.date.use_start,
                   qt->data.date.use_end
                   );
+          if (qt->data.date.use_start) {
+             gnc_timespec_to_iso8601_buff (qt->data.date.start, buff);
+             printf ("\tstart date=%s\n", buff);
+          }
+          if (qt->data.date.use_end) {
+             gnc_timespec_to_iso8601_buff (qt->data.date.end, buff);
+             printf ("\tend date=%s\n", buff);
+          }
           break;
+        }
         case PR_DESC:
           printf ("desc\n");
           break;
