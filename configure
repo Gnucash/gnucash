@@ -2051,7 +2051,7 @@ fi
 
 # rude crude hack alert -- we should do something that actually attempts 
 # to guess at the usual perl locations, instead of this hard-coded nasty.
-PERLINCL="/usr/lib/perl5/i386-linux/5.00403/CORE"
+PERLINCL="-I/usr/lib/perl5/i386-linux/5.00404/CORE"
 # Check whether --with-perl-includes or --without-perl-includes was given.
 if test "${with_perl_includes+set}" = set; then
   withval="$with_perl_includes"
