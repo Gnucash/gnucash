@@ -60,6 +60,11 @@ enum
   NUM_ACCOUNT_TYPES = 14
 };
 
+/* hack alert -- we need a better way of dealing with
+ * account names!
+ */
+extern char *account_type_name [NUM_ACCOUNT_TYPES];
+
 struct _BankAcct 
 {
   char * bankid;       /* routing and transit number */
