@@ -27,8 +27,9 @@
  *                                                                  *
 \********************************************************************/
 
-/* hack alert -- splits & stocks probably not handled correctly
+/* hack alert -- stocks probably not handled correctly
  * this stuff still needs work 
+ * also, check out a stock split tooo
  */
 
 #include <fcntl.h>
@@ -38,12 +39,9 @@
 #include "config.h"
 
 #include "Account.h"
-#include "AccountP.h"
 #include "Group.h"
-#include "GroupP.h"
 #include "FileIO.h"
 #include "Transaction.h"
-#include "TransactionP.h"
 #include "util.h"
 
 #define PERMS   0666
@@ -454,7 +452,7 @@ GetSubQIFAccount (AccountGroup *rootgrp, char *qifline, int acc_type)
 {
    Account *xfer_acc;
    char * sub_ptr;
-   int i;
+   int i, nacc;
 
    /* search for colons in name -- this indicates a sub-account */
    sub_ptr = strchr (qifline, ':');
@@ -465,8 +463,9 @@ GetSubQIFAccount (AccountGroup *rootgrp, char *qifline, int acc_type)
    /* see if the account exists; but search only one level down,
     * not the full account tree */
    xfer_acc = NULL;
-   for (i=0; i<rootgrp->numAcc; i++) {
-      Account *acc = rootgrp->account[i];
+   nacc = xaccGroupGetNumAccounts (rootgrp);
+   for (i=0; i<nacc; i++) {
+      Account *acc = xaccGroupGetAccount (rootgrp, i);
       char * acc_name = xaccAccountGetName (acc);
       if (!strcmp(acc_name, qifline)) {
          xfer_acc = acc;
@@ -489,11 +488,11 @@ GetSubQIFAccount (AccountGroup *rootgrp, char *qifline, int acc_type)
    /* if this account name had sub-accounts, get those */
    if (sub_ptr) {
       sub_ptr ++;
-      rootgrp = xfer_acc->children;
+      rootgrp = xaccAccountGetChildren (xfer_acc);
       if (!rootgrp) {
-         rootgrp = xaccMallocAccountGroup();
-         xfer_acc->children = rootgrp;
-         rootgrp->parent = xfer_acc;
+         /* inserting a null child has effect of creating empty container */
+         xaccInsertSubAccount (xfer_acc, NULL);
+         rootgrp = xaccAccountGetChildren (xfer_acc);
       }
       xfer_acc = GetSubQIFAccount (rootgrp, sub_ptr, acc_type);
    }
@@ -627,7 +626,9 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
      /* D == date */
      if ('D' == qifline [0]) {  
-         xaccParseQIFDate (&(trans->date), &qifline[1]);
+         Date dayt;
+         xaccParseQIFDate (&dayt, &qifline[1]);
+         xaccTransSetDate (trans, dayt.day, dayt.month, dayt.year);
      } else 
 
      /* E == memo for split */
@@ -707,15 +708,17 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
          got_share_quantity = 1;
      } else 
 
-     /* S == split */
+     /* S == split, name of debited account */
      if ('S' == qifline [0]) {   
          split = xaccMallocSplit();
 
          xaccTransAppendSplit (trans, split);
-/* xxxxx */
-         split -> acc = xaccGetXferQIFAccount (acc, qifline);
-         /* hack alert -- we should insert this split into 
-          * the split account, and remove the L field */
+         xfer_acc = xaccGetXferQIFAccount (acc, qifline);
+         xaccAccountInsertSplit (xfer_acc, split);
+
+         /* set xfer account to NULL, so that we don't
+          * end up adding spurious splits */
+         xfer_acc = NULL;
      } else 
 
      /* T == total */
@@ -746,12 +749,13 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
         /* for splits, $ records the part of the total for each split */
         if (split) {
            double amt = xaccParseUSAmount (&qifline[1]);  
+           amt = -amt;
            xaccSplitSetValue (split, amt);
         } else {
            /* Currently, it appears that the $ amount is a redundant 
             * number that we can safely ignore.  To get fancy,
             * we use it to double-check the above work, since it 
-            * appears to always appear the last entry in the
+            * appears to always appear as the last entry in the
             * transaction.  Round things out to pennies, to 
             * handle round-off errors. 
             */
