@@ -1,5 +1,14 @@
 2000-04-08  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* src/scm/report/balance-and-pnl.scm: remove the report description.
+	It just looked wierd!
+
+	* src/scm/command-line.scm (gnc:prefs-show-version): use the
+	configured version instead of hard-coding it.
+
+	* src/scm/bootstrap.scm.in (gnc:version): configure this guile
+	variable with the gnucash version info.
+
 	* src/SplitLedger.c (xaccLoadXferCell): == not = Doh!!!
 
 2000-04-07  Dave Peticolas  <peticola@cs.ucdavis.edu>

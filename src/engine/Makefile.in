@@ -26,14 +26,14 @@ include @top_srcdir@/Makefile.init
 
 INCLPATH = -I@srcdir@/../../include -I@srcdir@/../..  -I@prefix@/include
 
-# we want to add the -fpic flag to generate relocatable position independent code
+# add the -fpic flag to generate relocatable position independent code
 # for the engine so that in can be used in a shared module (e.g. a perl module) 
 CFLAGS   = @CFLAGS@ ${INCLPATH} -fpic
 
 ######################################################################
 # See Makefile.common for information about these variables.
 INDEP_SRCS := AccInfo.c Account.c DateUtils.c FileIO.c Group.c \
-              LedgerUtils.c QIFIO.c Query.c Queue.c Scrub.c Session.c  \
+              LedgerUtils.c QIFIO.c Query.c Queue.c Scrub.c Session.c \
               Transaction.c TransLog.c date.c util.c
 ######################################################################
 

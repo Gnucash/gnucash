@@ -33,7 +33,7 @@
  * 2) Provides a search path for the file to be edited.  This should 
  *    simplify install & maintenance problems for naive users who
  *    may not have a good grasp on what a file ssytem is, or where
- *    they want to keep thier data files.
+ *    they want to keep their data files.
  *
  * The current implementations assumes the use of files and file
  * locks; however, the API was designed to be general enough to
@@ -122,8 +122,8 @@ void       xaccSessionDestroy (Session *);
  *    circustances. 
  *
  * The xaccSessionEnd() method will release the session lock. It will *not*
- *    save the account group to a file.  Thus, this method acts as an "abort" or
- *    "rollback" primitive.
+ *    save the account group to a file.  Thus, this method acts as an "abort"
+ *    or "rollback" primitive.
  *
  * The xaccResolveFilePath() routine is a utility that will accept a
  *    fragmentary filename as input, and resolve it into a fully-qualified path

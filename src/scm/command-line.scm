@@ -98,7 +98,10 @@
   (list (car args) (cdr args)))
 
 (define (gnc:prefs-show-version)
-  (display "GnuCash 1.3.4 development version") (newline))
+  (display "GnuCash ")
+  (display gnc:version)
+  (display " development version")
+  (newline))
 
 (define (gnc:prefs-show-usage)
   (display "usage: gnucash [ option ... ] [ datafile ]") (newline))

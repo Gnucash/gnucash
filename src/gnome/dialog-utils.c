@@ -15,7 +15,8 @@
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
  * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA        *
+ * 02111-1307, USA                                                  *
 \********************************************************************/
 
 #include "top-level.h"
@@ -203,6 +204,8 @@ gnc_get_source_name(gint source)
       return "Vanguard";
     case SOURCE_ASX :
       return "ASX";
+    case SOURCE_TIAA_CREF :
+      return "TIAA-CREF";
   }
 
   PWARN("Unknown source");
@@ -229,6 +232,8 @@ gnc_get_source_code_name(gint source)
       return "VANGUARD";
     case SOURCE_ASX :
       return "ASX";
+    case SOURCE_TIAA_CREF :
+      return "TIAACREF";
   }
 
   PWARN("Unknown source");

@@ -181,6 +181,11 @@ foreach $acct (@acctlist)
         %quotes = &Quote::asx ($security);
 	$price  = $quotes {$security, "last"};
       }
+      elsif ("TIAACREF" eq $quotesrc)
+      {
+        %quotes = &Quote::tiaacref ($security);
+        $price  = $quotes {$security, "nav"};
+      }
       else
       {
         print "unknown quote source: $quotesrc\n";

@@ -211,8 +211,6 @@
        "</head>"
 
        "<body bgcolor=#ccccff>"
-       report-description
-       "<p>"
 
        "<table cellpadding=1>"
        "<caption><b>" report-name "</b></caption>"

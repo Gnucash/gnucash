@@ -14,13 +14,12 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 #ifndef __XACC_ACCOUNT_H__
@@ -39,12 +38,12 @@ void         xaccFreeAccount( Account * );
 
 /* 
  * The xaccAccountBeginEdit() and xaccAccountCommitEdit() subroutines
- * provide a psuedo-two-phase-commit wrapper for account updates. 
+ * provide a pseudo-two-phase-commit wrapper for account updates. 
  * They are mildly useful for detecting attempted updates outside
- * of thier scope. However, they do not provide any true two-phase-anything
+ * of their scope. However, they do not provide any true two-phase-anything
  * in the current implementation.
  *
- * The defer flag, if sett, will defer all attempts at rebalancing 
+ * The defer flag, if set, will defer all attempts at rebalancing 
  * of accounts until the commit.
  */
 void         xaccAccountBeginEdit (Account *, int defer);
@@ -84,7 +83,7 @@ void         xaccZeroRunningBalances (Account **list);
  *    returns +1 if the first is "greater than" the second, and
  *    0 if they are equal.  To determine the sort order, first
  *    the account codes are compared, and if these are equal, then 
- *    account types, and, if these are queal, the account names.
+ *    account types, and, if these are equal, the account names.
  */
 int          xaccAccountOrder (Account**, Account **);
 
