@@ -170,7 +170,7 @@ sql_sort_get_type(char *p, GSList * path)
  * done by the Query C code. */
 
 static char *
-sql_sort_order(char *p, QofSortFunc sort)
+sql_sort_order(char *p, QofQuerySort *sort)
 {
     GSList *path;
     gboolean increasing;
@@ -216,12 +216,12 @@ sql_sort_order(char *p, QofSortFunc sort)
 /* distinct clauses */
 
 static char *
-sql_sort_distinct(char *p, QofQuerySort_t sort)
+sql_sort_distinct(char *p, QofQuerySort *sort)
 {
     GSList *path;
     ENTER(".");
 
-    path = gncQofSortFuncGetParamPath(sort);
+    path = qof_query_sort_get_param_path(sort);
 
     if (NULL != path) {
         p = stpcpy(p, ", ");
@@ -245,13 +245,13 @@ sql_sort_distinct(char *p, QofQuerySort_t sort)
 /* does sorting require a reference to this particular table? */
 
 static gboolean
-sql_sort_sort_need_account(QofQuerySort_t sort)
+sql_sort_sort_need_account(QofQuerySort *sort)
 {
     gboolean need_account = FALSE;
     GSList *path;
     ENTER(".");
 
-    path = gncQofSortFuncGetParamPath(sort);
+    path = qof_query_sort_get_param_path(sort);
 
     if (path)
         if (!safe_strcmp(path->data, SPLIT_ACCT_FULLNAME) ||
@@ -264,10 +264,10 @@ sql_sort_sort_need_account(QofQuerySort_t sort)
 }
 
 static gboolean
-sql_sort_need_account(Query * q)
+sql_sort_need_account(QofQuery * q)
 {
     gboolean need_account = FALSE;
-    QofQuerySort_t s1, s2, s3;
+    QofQuerySort *s1, *s2, *s3;
 
     qof_query_get_sorts(q, &s1, &s2, &s3);
 
@@ -281,13 +281,13 @@ sql_sort_need_account(Query * q)
 /* does sorting require a reference to this particular table? */
 
 static gboolean
-sql_sort_sort_need_entry(QofQuerySort_t sort)
+sql_sort_sort_need_entry(QofQuerySort *sort)
 {
     gboolean need_entry = FALSE;
     GSList *path;
     ENTER(".");
 
-    path = gncQofSortFuncGetParamPath(sort);
+    path = qof_query_sort_get_param_path(sort);
 
     if (path)
         if (!safe_strcmp(path->data, SPLIT_VALUE) ||
@@ -300,10 +300,10 @@ sql_sort_sort_need_entry(QofQuerySort_t sort)
 }
 
 static gboolean
-sql_sort_need_entry(Query * q)
+sql_sort_need_entry(QofQuery * q)
 {
     gboolean need_entry = FALSE;
-    QofQuerySort_t s1, s2, s3;
+    QofQuerySort *s1, *s2, *s3;
 
     qof_query_get_sorts(q, &s1, &s2, &s3);
 
@@ -347,7 +347,7 @@ sql_sort_need_entry(Query * q)
 
 /* =========================================================== */
 /* Macro for QOF_QUERYCORE_NUMERIC type terms.  The logic used here in the
- * SQL exactly matches that used in the Query.c code.  If
+ * SQL exactly matches that used in the qofquery.c code.  If
  * that code is incorrect or has changed, then the code below is 
  * broken as well. 
  */
@@ -711,9 +711,9 @@ sqlQuery_build(sqlQuery * sq, Query * q)
     GList *il, *jl, *qterms, *andterms;
     GList *tables = NULL;
     GSList *path;
-    QofQueryTerm_t qt;
-    QueryPredData_t pd;
-    QofQuerySort_t s1, s2, s3;
+    QofQueryTerm *qt;
+    QofQueryPredData *pd;
+    QofQuerySort *s1, *s2, *s3;
     int more_or = 0;
     int more_and = 0;
     int max_rows;
@@ -741,7 +741,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
         andterms = il->data;
 
         for (jl = andterms; jl; jl = jl->next) {
-            qt = (QofQueryTerm_t) jl->data;
+            qt = (QofQueryTerm *) jl->data;
             pd = qof_query_term_get_pred_data(qt);
             path = qof_query_term_get_param_path(qt);
 
@@ -761,7 +761,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                 else if (!safe_strcmp(path->data, SPLIT_ACCOUNT)) {
                     need_account = TRUE;
                 }
-            } else if (!safe_strcmp(pd->type_name, QUERYCORE_KVP)) {
+            } else if (!safe_strcmp(pd->type_name, QOF_QUERYCORE_KVP)) {
                 if (!safe_strcmp(path->data, SPLIT_KVP))
                     need_entry = TRUE;
                 else if (!safe_strcmp(path->data, SPLIT_ACCOUNT))
@@ -850,7 +850,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
             }
             more_and = 1;
 
-            qt = (QofQueryTerm_t) jl->data;
+            qt = (QofQueryTerm *) jl->data;
             pd = qof_query_term_get_pred_data(qt);
             path = qof_query_term_get_param_path(qt);
             invert = qof_query_term_is_inverted(qt);
@@ -1049,7 +1049,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                 if (invert)
                     sq->pq = stpcpy(sq->pq, ") ");
 
-            } else if (!safe_strcmp(pd->type_name, QUERYCORE_CHAR)) {
+            } else if (!safe_strcmp(pd->type_name, QOF_QUERYCORE_CHAR)) {
                 query_char_t pdata = (query_char_t) pd;
                 int got_one = 0;
 
@@ -1076,7 +1076,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                 } else
                     PINFO("Unknown CHAR type, %s", (char *)(path->data));
 
-            } else if (!safe_strcmp(pd->type_name, QUERYCORE_KVP)) {
+            } else if (!safe_strcmp(pd->type_name, QOF_QUERYCORE_KVP)) {
                 query_kvp_t pdata = (query_kvp_t) pd;
 
                 PINFO("term is a KVP");
@@ -1102,15 +1102,15 @@ sqlQuery_build(sqlQuery * sq, Query * q)
      * if the limit is set to a finite number of rows. 
      */
 
-    if (gncQofSortFuncGetParamPath(s1) != NULL) {
+    if (qof_query_sort_get_param_path(s1) != NULL) {
         sq->pq = stpcpy(sq->pq, "ORDER BY ");
         sq->pq = sql_sort_order(sq->pq, s1);
 
-        if (gncQofSortFuncGetParamPath(s2) != NULL) {
+        if (qof_query_sort_get_param_path(s2) != NULL) {
             sq->pq = stpcpy(sq->pq, ", ");
             sq->pq = sql_sort_order(sq->pq, s2);
 
-            if (gncQofSortFuncGetParamPath(s3) != NULL) {
+            if (qof_query_sort_get_param_path(s3) != NULL) {
                 sq->pq = stpcpy(sq->pq, ", ");
                 sq->pq = sql_sort_order(sq->pq, s3);
             }
