@@ -45,11 +45,11 @@ sixtp* gnc_book_slots_sixtp_parser_create(void);
 xmlNodePtr gnc_commodity_dom_tree_create(const gnc_commodity *com);
 sixtp* gnc_commodity_sixtp_parser_create(void);
 
-xmlNodePtr gnc_transaction_dom_tree_create(Transaction *txn);
-sixtp* gnc_transaction_sixtp_parser_create(void);
+xmlNodePtr gnc_freqSpec_dom_tree_create( FreqSpec *fs );
+sixtp* gnc_freqSpec_sixtp_parser_create(void);
 
-xmlNodePtr split_to_dom_tree(const gchar *tag, Split *spl);
-Split* dom_tree_to_split(xmlNodePtr node, GNCBook *book);
+xmlNodePtr gnc_lot_dom_tree_create(GNCLot *);
+sixtp* gnc_lot_sixtp_parser_create(void);
 
 xmlNodePtr gnc_pricedb_dom_tree_create(GNCPriceDB *db);
 sixtp* gnc_pricedb_sixtp_parser_create(void);
@@ -57,8 +57,11 @@ sixtp* gnc_pricedb_sixtp_parser_create(void);
 xmlNodePtr gnc_schedXaction_dom_tree_create( SchedXaction *sx );
 sixtp* gnc_schedXaction_sixtp_parser_create(void);
 
-xmlNodePtr gnc_freqSpec_dom_tree_create( FreqSpec *fs );
-sixtp* gnc_freqSpec_sixtp_parser_create(void);
+xmlNodePtr split_to_dom_tree(const gchar *tag, Split *spl);
+Split* dom_tree_to_split(xmlNodePtr node, GNCBook *book);
+
+xmlNodePtr gnc_transaction_dom_tree_create(Transaction *txn);
+sixtp* gnc_transaction_sixtp_parser_create(void);
 
 sixtp* gnc_template_transaction_sixtp_parser_create(void);
 

@@ -2,6 +2,7 @@
  * gnc-account-xml-v2.c -- account xml i/o implementation           *
  *                                                                  *
  * Copyright (C) 2001 James LewisMoss <dres@debian.org>             *
+ * Copyright (C) 2002 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -70,6 +71,8 @@ const gchar *account_version_string = "2.0.0";
 xmlNodePtr
 gnc_account_dom_tree_create(Account *act)
 {
+    const char *str;
+	 kvp_frame *kf;
     xmlNodePtr ret;
 
     ret = xmlNewNode(NULL, gnc_account_string);
@@ -90,24 +93,22 @@ gnc_account_dom_tree_create(Account *act)
     xmlAddChild(ret, int_to_dom_tree(act_commodity_scu_string,
                                      xaccAccountGetCommoditySCU(act)));
     
-    if(xaccAccountGetCode(act) &&
-        strlen(xaccAccountGetCode(act)) > 0)
+	 str = xaccAccountGetCode(act);
+    if (str && strlen(str) > 0)
     {
-        xmlAddChild(ret, text_to_dom_tree(act_code_string,
-                                          xaccAccountGetCode(act)));
+        xmlAddChild(ret, text_to_dom_tree(act_code_string, str));
     }
 
-    if(xaccAccountGetDescription(act) &&
-       strlen(xaccAccountGetDescription(act)) > 0)
+	 str = xaccAccountGetDescription(act);
+    if (str && strlen(str) > 0)
     {
-        xmlAddChild(ret, text_to_dom_tree(act_description_string,
-                                          xaccAccountGetDescription(act)));
+        xmlAddChild(ret, text_to_dom_tree(act_description_string, str));
     }
        
-    if(xaccAccountGetSlots(act))
+    kf = xaccAccountGetSlots(act);
+    if(kf)
     {
-        xmlNodePtr kvpnode = kvp_frame_to_dom_tree(act_slots_string,
-                                                   xaccAccountGetSlots(act));
+        xmlNodePtr kvpnode = kvp_frame_to_dom_tree(act_slots_string, kf);
         if(kvpnode)
         {
             xmlAddChild(ret, kvpnode);
