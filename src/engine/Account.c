@@ -1067,7 +1067,9 @@ xaccAccountInsertSplit (Account *acc, Split *split)
 
   /* Setting the amount casues a conversion to the new account's 
    * denominator AKA 'SCU Smallest Currency Unit'. */
-  xaccSplitSetAmount(split, old_amt);
+  /* xaccSplitSetAmount(split, old_amt); */
+  split->amount = gnc_numeric_convert (old_amt,
+                xaccAccountGetCommoditySCU(acc), GNC_RND_ROUND);
   xaccTransCommitEdit(trans);
   xaccAccountCommitEdit(acc);
   LEAVE ("(acc=%p, split=%p)", acc, split);
@@ -1169,17 +1171,23 @@ xaccAccountRecomputeBalance (Account * acc)
   cleared_balance    = acc->starting_cleared_balance;
   reconciled_balance = acc->starting_reconciled_balance;
 
-  for(lp = acc->splits; lp; lp = lp->next) {
+  PINFO ("acct=%s starting baln=%lld/%lld", acc->accountName, 
+         balance.num, balance.denom);
+  for(lp = acc->splits; lp; lp = lp->next) 
+  {
     Split *split = (Split *) lp->data;
     gnc_numeric amt = xaccSplitGetAmount (split);
 
     balance = gnc_numeric_add_fixed(balance, amt);
 
     if (NREC != split->reconciled)
+    {
       cleared_balance = gnc_numeric_add_fixed(cleared_balance, amt);
+    }
 
     if (YREC == split->reconciled ||
-        FREC == split->reconciled) {
+        FREC == split->reconciled) 
+    {
       reconciled_balance =
         gnc_numeric_add_fixed(reconciled_balance, amt);
     }
@@ -1879,6 +1887,9 @@ xaccAccountGetPresentBalance (Account *account)
 
 /********************************************************************\
 \********************************************************************/
+/* XXX TODO: These 'GetBal' routines should be moved to some
+ * utility area outside of the core account engine area. 
+ */
 
 /*
  * Convert a balance from one currency to another.
@@ -1916,12 +1927,12 @@ xaccAccountGetXxxBalanceInCurrency (Account *account,
 {
   gnc_numeric balance;
 
-  if (!account || !fn || !report_currency)
-    return gnc_numeric_zero ();
+  if (!account || !fn || !report_currency) return gnc_numeric_zero ();
   balance = fn(account);
-  return xaccAccountConvertBalanceToCurrency(account, balance,
+  balance = xaccAccountConvertBalanceToCurrency(account, balance,
 					     account->commodity,
 					     report_currency);
+  return balance;
 }
 
 /*
@@ -1993,9 +2004,12 @@ xaccAccountGetBalanceInCurrency (Account *account,
 				 gnc_commodity *report_commodity,
 				 gboolean include_children)
 {
-  return
-    xaccAccountGetXxxBalanceInCurrencyRecursive (account, xaccAccountGetBalance,
+  gnc_numeric rc;
+  rc = xaccAccountGetXxxBalanceInCurrencyRecursive (account, 
+                   xaccAccountGetBalance,
 						 report_commodity, include_children);
+  PINFO (" baln=%lld/%lld", rc.num, rc.denom);
+  return rc;
 }
 
 

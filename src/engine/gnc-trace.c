@@ -57,7 +57,7 @@ gncLogLevel gnc_log_modules[MOD_LAST + 1] =
   GNC_LOG_TRACE,      /* BOOK */
   GNC_LOG_TRACE,        /* TEST */
   GNC_LOG_TRACE,      /* LOT */
-  GNC_LOG_WARNING,      /* ACCOUNT */
+  GNC_LOG_TRACE,      /* ACCOUNT */
   GNC_LOG_WARNING,      /* IMPORT */
   GNC_LOG_WARNING,      /* BUSINESS */
   GNC_LOG_TRACE,        /* DRUID */
