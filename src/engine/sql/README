@@ -184,6 +184,8 @@ access).
    like usernames, etc. in the dialogs, and the backend doesn't 
    have the interfaces for passing this kind of info.
    (actually, the PERR/PINFO strings might do ??)
+   In some cases, we have PERR without setting a backend error...
+   grep for all PERR's that don't set backend error.
 
 -- fix the annoying postgres:,,localhost,asdf file syntax: needs
    mods to gnc-book to keep it happy about lock files & such.
@@ -221,8 +223,6 @@ multi-user mode is fundamentally broken unless they are fixed.
 
 -- checkpoint balance is broken for when register asks for only a small
    number of splits.
-
--- add support for price queries.
 
 -- if another user deletes a transaction, or an account, there is no way
    for us to know.  Thus, any sort of sync will probably (incorrectly)

@@ -177,7 +177,6 @@ pgendGetResults (PGBackend *be,
 {   
    PGresult *result;
    int i=0;
-
    be->nrows=0;
    do {
       GET_RESULTS (be->connection, result);
@@ -1471,6 +1470,7 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    GNCPriceDB *prdb = (GNCPriceDB *) data;
    GNCPrice *pr;
+   gint32 sql_vers, local_vers;
    Timespec ts;
    gint64 num, denom;
    gnc_numeric value;
@@ -1496,6 +1496,18 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
       gnc_price_begin_edit (pr);
       not_found = 0;
    }
+
+   /* compare versions. Hack alert -- Not sure how to handle failures */
+   sql_vers = atoi (DB_GET_VAL("version",j));
+   local_vers = gnc_price_get_version(pr);
+   if (sql_vers < local_vers) {
+      PERR ("local price version is higher than db !!! local=%d sql=%d",
+         local_vers, sql_vers);
+      gnc_price_commit_edit (pr);
+      gnc_price_unref (pr);
+      return prdb;
+   }
+   gnc_price_set_version (pr, sql_vers);
 
    modity = gnc_string_to_commodity (DB_GET_VAL("commodity",j));
    gnc_price_set_commodity (pr, modity);
@@ -1549,9 +1561,80 @@ pgendGetAllPrices (PGBackend *be, GNCPriceDB *prdb)
 /* ============================================================= */
 
 static void
-pgendPriceLookup (Backend *be, GNCPriceLookup *look)
+pgendPriceLookup (Backend *bend, GNCPriceLookup *look)
 {
-   PERR ("not implemented, type=%d", look->type);
+   PGBackend *be = (PGBackend *)bend;
+   char * p;
+
+   ENTER ("be=%p, lookup=%p", be, look);
+   if (!be || !look) return;
+
+   /* special case the two-way search in terms of more basic primitives */
+   if (LOOKUP_NEAREST_IN_TIME == look->type)
+   {
+      look->type = LOOKUP_LATEST_BEFORE;
+      pgendPriceLookup (bend, look);
+      look->type = LOOKUP_EARLIEST_AFTER;
+      pgendPriceLookup (bend, look);
+      return;
+   }
+
+   /* don't send events  to GUI, don't accept callbacks to backend */
+   gnc_engine_suspend_events();
+   pgendDisable(be);
+
+   /* set up the common part of the query */
+   p = be->buff; *p = 0;
+   p = stpcpy (p, "SELECT * FROM gncPrice"
+                  "  WHERE commodity='");
+   p = stpcpy (p, gnc_commodity_get_unique_name(look->commodity));
+   p = stpcpy (p, "'  AND currency='");
+   p = stpcpy (p, gnc_commodity_get_unique_name(look->currency));
+   p = stpcpy (p, "' ");
+
+   switch (look->type)
+   {
+      case LOOKUP_LATEST:
+         p = stpcpy (p, "ORDER BY time DESC LIMIT 1;");
+         break;
+      case LOOKUP_ALL:
+         /* Get all prices for this commodity and currency */
+         p = stpcpy (p, ";");
+         break;
+      case LOOKUP_AT_TIME:
+         p = stpcpy (p, "AND time='");
+         gnc_timespec_to_iso8601_buff (look->date, p);
+         p = stpcpy (p, "';");
+         break;
+      case LOOKUP_NEAREST_IN_TIME:
+         PERR ("this can't possibly happen but it did!!!");
+         p = stpcpy (p, ";");
+         break;
+      case LOOKUP_LATEST_BEFORE:
+         p = stpcpy (p, "AND time <= '");
+         gnc_timespec_to_iso8601_buff (look->date, p);
+         p = stpcpy (p, "' ORDER BY time DESC LIMIT 1;");
+         break;
+      case LOOKUP_EARLIEST_AFTER:
+         p = stpcpy (p, "AND time >= '");
+         gnc_timespec_to_iso8601_buff (look->date, p);
+         p = stpcpy (p, "' ORDER BY time ASC LIMIT 1;");
+         break;
+      default:
+         PERR ("unknown lookup type %d", look->type);
+         /* re-enable events */
+         pgendEnable(be);
+         gnc_engine_resume_events();
+         return;
+   }
+
+   SEND_QUERY (be, be->buff, );
+   pgendGetResults (be, get_price_cb, look->prdb);
+
+   /* re-enable events */
+   pgendEnable(be);
+   gnc_engine_resume_events();
+
 }
 
 /* ============================================================= */
@@ -2283,6 +2366,30 @@ pgend_book_load_poll (Backend *bend)
 }
 
 /* ============================================================= */
+/* The pgend_price_load_poll() routine creates the pricedb, but
+ * doesn't actually put any prices in it.  These are polled on 
+ * an as-needed basis.
+ */
+
+static GNCPriceDB *
+pgend_price_load_poll (Backend *bend)
+{
+   GNCPriceDB *prdb;
+   PGBackend *be = (PGBackend *)bend;
+   if (!be) return NULL;
+
+   /* don't send events  to GUI  */
+   gnc_engine_suspend_events();
+
+   prdb = gnc_pricedb_create();
+
+   /* re-enable events */
+   gnc_engine_resume_events();
+
+   return prdb;
+}
+
+/* ============================================================= */
 /* The pgend_book_load_single() routine loads the engine with
  *    data from the database.  Used only in single-user mode,
  *    it loads account *and* transaction data.  Single-user
@@ -2759,6 +2866,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
          case MODE_POLL:
             pgendEnable(be);
             be->be.book_load = pgend_book_load_poll;
+            be->be.price_load = pgend_price_load_poll;
             be->be.account_begin_edit = NULL;
             be->be.account_commit_edit = pgend_account_commit_edit;
             be->be.trans_begin_edit = NULL;
