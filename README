@@ -111,15 +111,14 @@ Development versions:
 http://www.gnucash.org/source_code.php3
 
 ####################
-Upgrading from 1.2.x
+Upgrading from 1.4.x
 --------------------
 
-There are many, many changes from the 1.2 series - have a look at the
-NEWS file if you want more details.  However, the most crucial ones
-for installation are that GnuCash now requires the Gnome libraries
-instead of Motif, and guile is required.  See the "dependancies"
-section of this file for more detail.  The file format hasn't changed
-(but make a backup of your data anyway . . . )
+There are many, many changes from the 1.4 series - have a look at the
+NEWS file if you want more details. In particular, GnuCash now
+requires the gtkhtml and guppi libraries. See the "dependancies"
+section of this file for more detail. The file format has changed
+from a binary format to XML. So backup your data!
 
 We hope you enjoy all the new features!
 
@@ -151,9 +150,11 @@ The following packages are required to be installed to run gnucash:
 
   gdk-pixbuf: any recent version should work.
 
-  gtkhtml: version 0.4 and later should work. You can obtain the latest
+  gtkhtml: version 0.8 and later should work. You can obtain the latest
     version of gtkhtml from Helix Code.  Note that this has changed since
     1.4, which used the older gtkxmhtml library.
+
+  guppi: version 0.35.1-1 should work
 
 To be able to use certain features of GnuCash, such as reports and
 network stock price downloads, you must have the following packages
@@ -175,14 +176,6 @@ In addition, some perl modules need to be installed:
            http://linas.org/linux/gnucash (last resort)
            or sources at
            http://www.cpan.org/CPAN.html
-
-If you wish to use the Balance Tracker report and get nifty charts,
-you will need to install:
-
-   gnuplot:  A plotting program.
-	     RPM's and debs available from the distributors
-	     You can get the source from:
-             http://www.gnuplot.vt.edu/ 
 
 
 #######
