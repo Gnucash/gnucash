@@ -130,6 +130,8 @@ xaccFreeAccount( Account *acc )
   }
 
   /* search for orphaned transactions, and delete them */
+  acc->open |= ACC_BEING_DESTROYED;
+  acc->open |= ACC_DEFER_REBALANCE;
   for (i=0; i<acc->numSplits; i++) {
     s = acc->splits[i];
     xaccSplitDestroy (s);
@@ -294,6 +296,9 @@ xaccAccountRemoveSplit ( Account *acc, Split *split )
 
   if (!acc) return;
   if (!split) return;
+
+  /* the being-destroyed flag prevents recursive scribbling upon oneself */
+  if (acc->open & ACC_BEING_DESTROYED) return;
   CHECK (acc);
 
   /* mark the account as having changed, and
