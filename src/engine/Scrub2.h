@@ -90,6 +90,8 @@ void xaccAccountScrubDoubleBalance (Account *acc);
  *   that are trading accounts.
  */
 void xaccGroupScrubLotsBalance (AccountGroup *grp);
+void xaccAccountScrubLotsBalance (Account *acc);
+void xaccAccountTreeScrubLotsBalance (Account *acc);
 
 #endif /* XACC_SCRUB2_H */
 /** @} */

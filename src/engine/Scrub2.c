@@ -366,7 +366,29 @@ lot_scrub_cb (Account *acc, gpointer data)
 void 
 xaccGroupScrubLotsBalance (AccountGroup *grp)
 {
+   if (!grp) return;
    xaccGroupForEachAccount (grp, lot_scrub_cb, NULL, TRUE);
+}
+
+void 
+xaccAccountScrubLotsBalance (Account *acc)
+{
+   if (!acc) return;
+   if (FALSE == xaccAccountHasTrades (acc)) return;
+   xaccAccountScrubLots (acc);
+   xaccAccountScrubDoubleBalance (acc);
+}
+
+void 
+xaccAccountTreeScrubLotsBalance (Account *acc)
+{
+   if (!acc) return;
+
+   xaccGroupScrubLotsBalance (acc->children);
+   
+   if (FALSE == xaccAccountHasTrades (acc)) return;
+   xaccAccountScrubLots (acc);
+   xaccAccountScrubDoubleBalance (acc);
 }
 
 /* =========================== END OF FILE ======================= */
