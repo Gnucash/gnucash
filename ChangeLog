@@ -1,5 +1,9 @@
 2001-06-15  Dave Peticolas  <dave@krondo.com>
 
+	* src/guile/gnc.gwp: remove budgeting api
+
+	* src/gnome/dialog-budget.[ch]: remove
+
 	* src/gnome/dialog-fincalc.c: use libglade
 
 	* src/gnome/dialog-commodity.c: use libglade

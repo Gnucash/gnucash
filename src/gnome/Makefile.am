@@ -7,7 +7,6 @@ libgncgnome_a_SOURCES = \
   cursors.c \
   dialog-account-picker.c \
   dialog-account.c \
-  dialog-budget.c \
   dialog-column-view.c \
   dialog-commodities.c \
   dialog-commodity.c \
@@ -75,7 +74,6 @@ noinst_HEADERS = \
   account-tree.h \
   dialog-account-picker.h \
   dialog-account.h \
-  dialog-budget.h \
   dialog-column-view.h \
   dialog-commodity.h \
   dialog-fincalc.h \

@@ -5,4 +5,3 @@
 GtkWidget* create_QIF_Import_Account_Picker (void);
 GtkWidget* create_Print_Check_Dialog (void);
 GtkWidget* create_Find_Transactions (void);
-GtkWidget* create_Budget_Dialog (void);
