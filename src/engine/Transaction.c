@@ -379,12 +379,15 @@ xaccSplitGetAccount(Split *s)
 const GUID *
 xaccSplitGetAccountGUID(Split *split)
 {
+    if (!split) return NULL;
     return (const GUID*) &split->acc_guid;
 }
     
 void
 xaccSplitSetAccount(Split *s, Account *act)
 {
+    if (!s) return;
+
     if(!act)
     {
         s->acc_guid = *xaccGUIDNULL();
@@ -401,6 +404,7 @@ xaccSplitSetAccount(Split *s, Account *act)
 void
 xaccSplitSetAccountGUID(Split *s, GUID id)
 {
+    if (!s) return;
     s->acc_guid = id;
     s->acc = NULL;
 }
@@ -482,7 +486,7 @@ mark_split_internal (Split *split, gboolean generate_events)
   Account *account = xaccSplitGetAccount(split);
   Transaction *trans;
 
-  if (account)
+  if (account && !account->do_free)
   {
     account->balance_dirty = TRUE;
     account->sort_dirty = TRUE;
@@ -790,6 +794,8 @@ xaccCloneTransaction (Transaction *t)
   trans->editlevel = 0;
   trans->do_free = FALSE;
   trans->orig = NULL;
+
+  trans->common_currency = t->common_currency;
 
   /* copy(!) the guid and entity table.  The cloned transaction is
    * *not* unique, is a sick twisted clone that holds 'undo'
@@ -1607,6 +1613,8 @@ xaccTransRollbackEdit (Transaction *trans)
    /* If the transaction had been deleted before the rollback,
     * the guid would have been unlisted. Restore that */
    xaccStoreEntity(trans->entity_table, trans, &trans->guid, GNC_ID_TRANS);
+
+   trans->common_currency = orig->common_currency;
 
    g_cache_remove (gnc_engine_get_string_cache(), trans->num);
    trans->num = orig->num;
