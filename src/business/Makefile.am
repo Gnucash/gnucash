@@ -1,4 +1,4 @@
 SUBDIRS = \
   business-core \
-  business-gnome \
-  business-ledger
+  business-ledger \
+  business-gnome
