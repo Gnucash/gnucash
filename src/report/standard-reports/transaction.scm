@@ -156,13 +156,13 @@
                                                (used-sort-account-full-name column-vector))))
                         table width subheading-style)))
 
-(define (render-month-subheading split table width subheading-style)
+(define (render-month-subheading split table width subheading-style column-vector)
   (let ((tm (gnc:timepair->date (gnc:transaction-get-date-posted
                                  (gnc:split-get-parent split)))))
     (add-subheading-row (strftime "%B %Y" tm)
                         table width subheading-style)))
 
-(define (render-year-subheading split table width subheading-style)
+(define (render-year-subheading split table width subheading-style column-vector)
   (add-subheading-row (strftime "%Y" (gnc:timepair->date
                                       (gnc:transaction-get-date-posted
                                        (gnc:split-get-parent split))))
@@ -203,7 +203,7 @@
                       total-collector subtotal-style))
 
 (define (render-corresponding-account-subtotal
-         table width split total-collector subtotal-style)
+         table width split total-collector subtotal-style column-vector)
     (add-subtotal-row table width
                       (total-string (account-namestring (gnc:split-get-account 
                                                           (gnc:split-get-other-split split))
@@ -213,7 +213,7 @@
                     total-collector subtotal-style))
 
 (define (render-month-subtotal
-         table width split total-collector subtotal-style)
+         table width split total-collector subtotal-style column-vector)
   (let ((tm (gnc:timepair->date (gnc:transaction-get-date-posted
                                  (gnc:split-get-parent split)))))
     (add-subtotal-row table width 
@@ -222,7 +222,7 @@
 
 
 (define (render-year-subtotal
-         table width split total-collector subtotal-style)
+         table width split total-collector subtotal-style column-vector)
   (let ((tm (gnc:timepair->date (gnc:transaction-get-date-posted
                                  (gnc:split-get-parent split)))))
     (add-subtotal-row table width 
@@ -934,7 +934,7 @@ Credit Card, and Income accounts")))))
                       (secondary-subtotal-renderer
                        table width current
                        secondary-subtotal-collector
-                       def:secondary-subtotal-style)
+                       def:secondary-subtotal-style used-columns)
                       (secondary-subtotal-collector 'reset #f #f)))
 
                 (primary-subtotal-renderer table width current
@@ -952,7 +952,7 @@ Credit Card, and Income accounts")))))
                           (secondary-subheading-renderer
                            next 
                            table 
-                           width def:secondary-subtotal-style)))))
+                           width def:secondary-subtotal-style used-columns)))))
 
               (if (and secondary-subtotal-pred
                        (or (not next)
@@ -962,12 +962,12 @@ Credit Card, and Income accounts")))))
                   (begin (secondary-subtotal-renderer
                           table width current
                           secondary-subtotal-collector
-                          def:secondary-subtotal-style)
+                          def:secondary-subtotal-style used-columns)
                          (secondary-subtotal-collector 'reset #f #f)
                          (if next
                              (secondary-subheading-renderer
                               next table width
-                              def:secondary-subtotal-style)))))
+                              def:secondary-subtotal-style used-columns)))))
 
           (do-rows-with-subtotals rest 
                                   table 
@@ -1003,7 +1003,7 @@ Credit Card, and Income accounts")))))
                (car splits) table width def:primary-subtotal-style used-columns))
           (if secondary-subheading-renderer
               (secondary-subheading-renderer
-               (car splits) table width def:secondary-subtotal-style))
+               (car splits) table width def:secondary-subtotal-style used-columns))
 
           (do-rows-with-subtotals splits table used-columns width
                                   multi-rows? #t 

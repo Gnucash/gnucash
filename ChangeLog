@@ -1,3 +1,8 @@
+2003-06-08  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/transaction.scm: make sure we have
+	  the right number of arguments for all renderers.  Fixes #114641.
+
 2003-06-08  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/*.c: Remove old unused code.
@@ -688,7 +693,7 @@
 	
 2003-04-04  Derek Atkins  <derek@ihtfp.com>
 
-	* src/report/standard-report/transactions.scm: symbols are not
+	* src/report/standard-report/transaction.scm: symbols are not
 	  strings in guile-1.6.  Fixes debian bug #186004.
 	* doc/gnucash.1.in: it's --add-price-quotes (not quote)
 	* src/app-utils/date-utilities.scm: fix "WeekDelta" and add
