@@ -18,7 +18,7 @@
 	for each of your bank accounts.
       <li> Each account keeps a running balance and
 	a reconciled balance, so you can keep track
-	of the checks that have clear your account.
+	of the checks that have cleared your account.
       <li> A simple interface.  If you can use the
 	register in the back of your checkbook,
 	you can use xacc.
@@ -28,17 +28,58 @@
 	and check off the transactions that appear
 	in the bank statement.  This makes it easy
 	to track down any discrepancies.
-      <li> QuickFill... if you begin typing a description
-	in the description fields, and it matches an
+      <li> QuickFill... if you begin typing 
+	in the description field, and the text matches a
 	previous transaction, hitting TAB will copy
-	the previous transaction.  Handy if you have
+	that previous transaction.  Handy if you have
 	similar transactions on a regular basis.
+      <li>Stock/Mutual Fund Portfolios.  Track stocks
+        individually (one per account) or in portfolio
+        of accounts (a group of accounts that can be 
+        displayed together).  
+    </ul>
+
+    <h2>Advanced Features</h2>
+    X-Accountant offers some features not usually found
+    in simpler accounting programs.
+    <ul>
+      <li>Sub-accounts: A master account can have a heirarchy
+        of detail accounts underneath it.  This allows similar
+        account types (e.g. Cash, Bank, Stock) to be grouped 
+        into one master account (e.g. Assets).
+      <li>Double Entry:  Every transaction can appear in two
+        accounts; one account is debited and the other is 
+        credited with exactly the same amount.  With 
+        double-entry, a transaction edited in one window 
+        will be automatically updated in all other windows 
+        showing that transaction, and in both of the 
+        accounts.
+      <li>Income/Expense account types.  When used properly 
+        with the double-entry feature, these can be used 
+        to create both Balance Sheet and Profits&Losses
+        reports.  For example, savings account interest,
+        stock dividends, or paychecks can be marked as 
+        both a deposit in a bank account, and as income in 
+        an Income account type, using the double-entry 
+        (transfer) feature.  Similarly, credit card charges
+        can be noted in the credit card account, as well 
+        as in a corresponding expense account.
+      <li>General Ledger: Multiple accounts can be displayed 
+        in one register window at the same time.  This can
+        ease the trouble of tracking down typing/entry errors.
+        It also provides a convenient way of viewing a
+        portfolio of many stocks, by showing all transactions
+        in that portfolio.
     </ul>
 
     <h2>Version</h2>
-    This version is xacc-0.9q <br>
-    $Id$
+    This version is xacc-0.9u 
+    <p>
+
+    This is a beta development version with known
+    minor user interface bugs and no known major bugs.
+    It has been tested only lightly but seems to work. 
+    It is not beleived to corrupt data.
      
-    
   </body>
 </html>
