@@ -630,55 +630,12 @@ xaccAccountOrder (Account **aa, Account **ab)
 void 
 xaccAccountAutoCode (Account *acc, int digits)
 {
-  Account *rent;
-  int maxcode = 0;
-  AccountGroup *top = acc->parent;
-  int i;
-
   if (!acc) return;
   if (acc->accountCode) return;   /* no-op if code already assinged */
   if (!(acc->parent)) return; 
 
-  /* count levels to top */
-  rent = acc->parent->parent;
-  while (rent) {
-    digits --;
-    assert (rent->parent);
-    rent = rent->parent->parent;
-  }
-
-  /* if (0>digits)  we could insert a decimal place, but I am too lazy
-   * to write this code.  It doesn't seem important at the moment ... */
-
-  /* find the largest used code */
-  rent = acc->parent->parent;
-  if (rent) {
-     if (rent->accountCode) {
-        maxcode = strtol (rent->accountCode, NULL, BASE);
-     }
-  }
-  for (i=0; i<top->numAcc; i++) {
-     Account *acnt = top->account[i];
-     if (acnt->accountCode) {
-        int code = strtol (acnt->accountCode, NULL, BASE);
-        if (code > maxcode) maxcode = code;
-     }
-  }
-
-  /* right-shift */
-  for (i=1; i<digits; i++) {
-     maxcode /= BASE;
-  }
-  maxcode ++;
-
-  /* left-shift */
-  for (i=1; i<digits; i++) {
-     maxcode *= BASE;
-  }
-
-  /* print */
-  acc->accountCode = ultostr ((unsigned long) maxcode, BASE);
-  top->saved = FALSE;
+  acc->accountCode = xaccGroupGetNextFreeCode (acc->parent, digits);
+  acc->parent->saved = FALSE;
 }
 
 /********************************************************************\

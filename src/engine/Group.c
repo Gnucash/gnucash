@@ -458,6 +458,63 @@ xaccRecomputeGroupBalance (AccountGroup *grp)
 
 /********************************************************************\
 \********************************************************************/
+/* account codes will be assigned base-36, with three digits */
+
+#define BASE 36
+
+char *
+xaccGroupGetNextFreeCode (AccountGroup *grp, int digits)
+{
+  Account *acc;
+  int i, maxcode = 0;
+  char * retval;
+
+  if (!grp) return NULL;
+
+  /* count levels to top */
+  acc = grp->parent;
+  while (acc) {
+    digits --;
+    assert (acc->parent);
+    acc = acc->parent->parent;
+  }
+
+  /* if (0>digits)  we could insert a decimal place, but I am too lazy
+   * to write this code.  It doesn't seem important at the moment ... */
+
+  /* find the largest used code */
+  acc = grp->parent;
+  if (acc) {
+     if (acc->accountCode) {
+        maxcode = strtol (acc->accountCode, NULL, BASE);
+     }
+  }
+  for (i=0; i<grp->numAcc; i++) {
+     Account *acnt = grp->account[i];
+     if (acnt->accountCode) {
+        int code = strtol (acnt->accountCode, NULL, BASE);
+        if (code > maxcode) maxcode = code;
+     }
+  }
+
+  /* right-shift */
+  for (i=1; i<digits; i++) {
+     maxcode /= BASE;
+  }
+  maxcode ++;
+
+  /* left-shift */
+  for (i=1; i<digits; i++) {
+     maxcode *= BASE;
+  }
+
+  /* print */
+  retval = ultostr ((unsigned long) maxcode, BASE);
+  return retval;
+}
+
+/********************************************************************\
+\********************************************************************/
 
 void
 xaccGroupDepthAutoCode (AccountGroup *grp)

@@ -147,6 +147,9 @@ Account * xaccGroupGetAccount (AccountGroup *, int);
 double    xaccGroupGetBalance (AccountGroup *);
 
 /*
+ * The xaccGroupNextFreeCode() method will try to guess a reasonable 
+ *    candidate for the next unused account code in this group.
+ *
  * The xaccGroupAutoCode() method will traverse the group, automatically
  *    inserting account codes into those accounts whose account codes 
  *    are blank.  It uses the algorithm used in xaccAccountAutoCode()
@@ -157,7 +160,8 @@ double    xaccGroupGetBalance (AccountGroup *);
  *    code.
  */
 
-void xaccGroupAutoCode (AccountGroup *grp, int num_digits);
-void xaccGroupDepthAutoCode (AccountGroup *grp);
+char * xaccGroupGetNextFreeCode (AccountGroup *grp, int num_digits);
+void   xaccGroupAutoCode (AccountGroup *grp, int num_digits);
+void   xaccGroupDepthAutoCode (AccountGroup *grp);
 
 #endif /* __XACC_ACCOUNT_GROUP_H__ */
