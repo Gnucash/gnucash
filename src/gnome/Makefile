@@ -48,13 +48,13 @@ INCLPATH = -I/usr/include \
 # where gtk's installed and is supposed to report the compiler 
 # options needed for the build.
 
-CFLAGS := $(shell gtk-config -cflags) -g -Wall
+CFLAGS := $(shell gtk-config --cflags) -g -Wall
 LFLAGS := -g -Wall
 
 # LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
 # LIBS     = -lgtk -lgdk -lglib -lXpm -lXext -lXmu -lXt -lXext  \
 #            -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
-LIBS     := $(shell gtk-config -libs) 
+LIBS     := $(shell gtk-config --libs) 
 LIBPATH  = -L/lib -L/usr/lib -L/usr/local/lib -L/usr/X11R6/lib/.
 TARGET   = ../../xacc.gtk.bin
 
