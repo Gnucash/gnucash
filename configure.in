@@ -118,9 +118,12 @@ AC_ARG_WITH( opt-style-install,
   OPT_STYLE_INSTALL=0)
 AC_SUBST(OPT_STYLE_INSTALL)
 
-# rude crude hack alert -- we should do something that actually attempts 
-# to guess at the usual perl locations, instead of this hard-coded nasty.
-PERLINCL="-I/usr/lib/perl5/i386-linux/5.00404/CORE"
+# This appears to be what Perl's ExtUtils::MakeMaker module does, so
+# I'm reasonably sure it's correct.
+# PERLINCL="-I/usr/lib/perl5/i386-linux/5.00404/CORE"
+# XXX - However, 'configure' should still find the proper version of Perl.
+#
+PERLINCL=-I`perl -MConfig -e 'print $Config{"archlibexp"},"/CORE"'`
 AC_ARG_WITH( perl-includes, 
        [  --with-perl-includes=DIR    specify where to look for perl CORE includes],
        PERLINCL="-I$with_perl_includes -I$with_perl_includes/CORE" )
@@ -143,7 +146,7 @@ AC_CHECK_LIB(png, png_read_image,
 
 AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage,
         AC_DEFINE(HAVE_XPM,1) X_LIBS="-lXpm $X_LIBS",
-        AC_DEFINE(HAVE_XPM,0), -L $x_libraries -lX11) 
+        AC_DEFINE(HAVE_XPM,0), -L$x_libraries -lX11) 
 
 # Don't build the xmhtml source if user already has it installed...
 # this is ugly, there must be a nicer way of setting this up ...
@@ -152,7 +155,7 @@ AC_CHECK_LIB(XmHTML,  XmHTMLTextScrollToLine,
         MOTIF_LIBS="-lXmHTML $MOTIF_LIBS"
         XMHTML_TARGET=default 
         XMHTML_INC=/lib/XmHTML-1.1.0/src 
-        LIBS="-L $srcdir/lib/XmHTML-1.1.0 $LIBS" , 
+        LIBS="-L$srcdir/lib/XmHTML-1.1.0 $LIBS" , 
         $X_PRE_LIBS $MOTIF_LIBS $X_EXTRA_LIBS $X_LIBS) 
 
 AC_SUBST(XMHTML_TARGET)

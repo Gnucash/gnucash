@@ -2,8 +2,6 @@
 
 @SET_MAKE@
 
-export SHELL=/bin/bash
-
 srcdir  = @srcdir@
 VPATH   = @srcdir@
 

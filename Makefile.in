@@ -83,7 +83,7 @@ DIST_TRASH += gnucash.motif gnucash.motif.static
 DIST_TRASH += gnucash.gnome gnucash.gnome.static gnucash.qt gnucash-shell
 DIST_TRASH += config.cache config.log config.status config.h
 
-tagsfiles := $(shell find -name "*.[ch]")
+tagsfiles := $(find -name "*.[ch]")
 
 TAGS: ${tagsfiles}
 	etags ${tagsfiles}    
