@@ -63,7 +63,4 @@ GncTaxTable * gncCloneTaxTable (GncTaxTable *from, QofBook *book);
  */
 GncTaxTable * gncTaxTableObtainTwin (GncTaxTable *from, QofBook *book);
                                                                                 
-                                                                                
-
-
 #endif /* GNC_TAXTABLEP_H_ */

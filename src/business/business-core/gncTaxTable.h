@@ -19,11 +19,12 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/*
- * Copyright (C) 2002 Derek Atkins
- * Author: Derek Atkins <warlord@MIT.EDU>
- */
+/** @addtogroup Business-Engine
+    @{ */
+/** @file gncTaxTable.h
+    @breif Tax Table programming interface
+    @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
+*/
 
 #ifndef GNC_TAXTABLE_H_
 #define GNC_TAXTABLE_H_
@@ -41,7 +42,7 @@ typedef struct _gncAccountValue GncAccountValue;
 
 #define GNC_TAXTABLE_MODULE_NAME "gncTaxTable"
 
-/*
+/**
  * How to interpret the amount.
  * You can interpret it as a VALUE or a PERCENT.
  */
@@ -50,7 +51,7 @@ typedef enum {
   GNC_AMT_TYPE_PERCENT
 } GncAmountType;
 
-/* How to interpret the TaxIncluded */
+/** How to interpret the TaxIncluded */
 typedef enum {
   GNC_TAXINCLUDED_YES = 1,
   GNC_TAXINCLUDED_NO,
@@ -63,13 +64,13 @@ gboolean gncAmountStringToType (const char *str, GncAmountType *type);
 const char * gncTaxIncludedTypeToString (GncTaxIncluded type);
 gboolean gncTaxIncludedStringToType (const char *str, GncTaxIncluded *type);
 
-/* Create/Destroy Functions */
+/** Create/Destroy Functions */
 GncTaxTable * gncTaxTableCreate (QofBook *book);
 void gncTaxTableDestroy (GncTaxTable *table);
 GncTaxTableEntry * gncTaxTableEntryCreate (void);
 void gncTaxTableEntryDestroy (GncTaxTableEntry *entry);
 
-/* Set Functions */
+/** Set Functions */
 void gncTaxTableSetName (GncTaxTable *table, const char *name);
 void gncTaxTableIncRef (GncTaxTable *table);
 void gncTaxTableDecRef (GncTaxTable *table);
@@ -85,7 +86,7 @@ void gncTaxTableChanged (GncTaxTable *table);
 void gncTaxTableBeginEdit (GncTaxTable *table);
 void gncTaxTableCommitEdit (GncTaxTable *table);
 
-/* Get Functions */
+/** Get Functions */
 GncTaxTable *gncTaxTableLookup (QofBook *book, const GUID *guid);
 GncTaxTable *gncTaxTableLookupByName (QofBook *book, const char *name);
 GList * gncTaxTableGetTables (QofBook *book);
@@ -115,19 +116,19 @@ struct _gncAccountValue {
   gnc_numeric	value;
 };
 
-/*
+/**
  * This will add value to the account-value for acc, creating a new
  * list object if necessary
  */
 GList *gncAccountValueAdd (GList *list, Account *acc, gnc_numeric value);
 
-/* Merge l2 into l1.  l2 is not touched. */
+/** Merge l2 into l1.  l2 is not touched. */
 GList *gncAccountValueAddList (GList *l1, GList *l2);
 
-/* return the total for this list */
+/** return the total for this list */
 gnc_numeric gncAccountValueTotal (GList *list);
 
-/* Destroy a list of accountvalues */
+/** Destroy a list of accountvalues */
 void gncAccountValueDestroy (GList *list);
 
 
@@ -135,3 +136,4 @@ void gncAccountValueDestroy (GList *list);
 #define gncTaxTableGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
 
 #endif /* GNC_TAXTABLE_H_ */
+/** @} */

@@ -78,8 +78,11 @@ struct _book_info
   GList *         tables;          /* visible tables */
 };
 
+static GncTaxTableEntry * CloneTaxEntry (GncTaxTableEntry*, QofBook *);
+
 static short        module = MOD_BUSINESS;
 
+/* =============================================================== */
 /* You must edit the functions in this block in tandem.  KEEP THEM IN
    SYNC! */
 
@@ -240,6 +243,7 @@ gncTaxTableCreate (QofBook *book)
 GncTaxTable * 
 gncCloneTaxTable (GncTaxTable *from, QofBook *book)
 {
+  GList *node;
   GncTaxTable *table;
   if (!book) return NULL;
 
@@ -251,11 +255,9 @@ gncCloneTaxTable (GncTaxTable *from, QofBook *book)
   table->modtime = from->modtime;
   table->invisible = from->invisible;
 
-  /* XXX not sure how to handle these, but the must be explicitly
-   * handled or ignored ... */
+  /* XXX not sure how to handle the refcount ... FIXME!! */
 #if LATER_FIXME
-  GList *         entries;
-  gint64          refcount;
+  table->refcount = ????
 #endif 
 
   /* XXX this treats parent-child as double-linked list, not sure
@@ -274,6 +276,15 @@ gncCloneTaxTable (GncTaxTable *from, QofBook *book)
   {
     table->parent = gncTaxTableObtainTwin (from->parent, book);
     table->parent->child = table;
+  }
+
+  /* Copy tax entries, preserving the order in the list */
+  table->entries = NULL;
+  for (node=g_list_last(from->entries); node; node=node->prev)
+  {
+    GncTaxTableEntry *ent = node->data;
+    ent = CloneTaxEntry (ent, book);
+    table->entries = g_list_prepend (table->entries, ent);
   }
 
   addObj (table);
@@ -340,6 +351,8 @@ gncTaxTableFree (GncTaxTable *table)
   g_free (table);
 }
 
+/* =============================================================== */
+
 GncTaxTableEntry * gncTaxTableEntryCreate (void)
 {
   GncTaxTableEntry *entry;
@@ -354,6 +367,24 @@ void gncTaxTableEntryDestroy (GncTaxTableEntry *entry)
   g_free (entry);
 }
 
+/** Makes a clone. The account is from the appriate book. 
+ *  Note that the table is left blank (for performance reasons
+ *  we set it above, when cloning the table).
+ */
+static GncTaxTableEntry * 
+CloneTaxEntry (GncTaxTableEntry*from, QofBook *book)
+{
+  QofInstance *acc;
+  GncTaxTableEntry *entry;
+  entry = g_new0 (GncTaxTableEntry, 1);
+
+  entry->type = from->type;
+  entry->amount = from->amount;
+
+  acc = qof_instance_lookup_twin (QOF_INSTANCE(from->account), book);
+  entry->account = (Account *) acc;
+  return entry;
+}
 
 /* =============================================================== */
 /* Set Functions */
