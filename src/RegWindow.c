@@ -1113,15 +1113,6 @@ regSaveTransaction( RegWindow *regData, int position )
     if (acc) acc->parent->saved = False;
   }
 
-  if( regData->changed & MOD_NUM )
-    {
-    DEBUG("MOD_NUM\n");	  
-    /* ...the transaction number (String)... */
-    XtFree( trans->num );
-    trans->num = XtNewString( 
-                 XbaeMatrixGetCell(regData->reg,row+NUM_CELL_R,NUM_CELL_C)); 
-    }
-  
   if( regData->changed & MOD_XFRM ) 
     {
     /* ... the transfer ... */
@@ -1232,6 +1223,15 @@ regSaveTransaction( RegWindow *regData, int position )
       /* insert the transaction into the transfer account */
       insertTransaction (xfer_acct, trans);
       }
+    }
+  
+  if( regData->changed & MOD_NUM )
+    {
+    DEBUG("MOD_NUM\n");	  
+    /* ...the transaction number (String)... */
+    XtFree( trans->num );
+    trans->num = XtNewString( 
+                 XbaeMatrixGetCell(regData->reg,row+NUM_CELL_R,NUM_CELL_C)); 
     }
   
   if( regData->changed & MOD_DESC )
@@ -1452,7 +1452,7 @@ regSaveTransaction( RegWindow *regData, int position )
         /* (strcmp("",trans->action) == 0)      && annoying! */
         /* (0 == trans->catagory)               && not implemented ! */
         /* (NULL == trans->credit)              && annoying! */
-        /* (NULL == trans->debit)               && annoying! */
+        (NULL == trans->debit)               &&  /* must check for this !*/
         (1.0 == trans->share_price)          &&
         (0.0 == trans->damount) ) {
       freeTransaction (trans);
@@ -1529,6 +1529,8 @@ regSaveTransaction( RegWindow *regData, int position )
   /* if this is a ledger window, then we have to update
    * it as well.  If this is not a ledger window, one of 
    * the above two lines will have handled it already */
+  /* minor hack alert -- this is probably not needed, as 
+   * above macros should handle it */
   if (1 < regData->numAcc) {
     regRefresh (regData);
   }
