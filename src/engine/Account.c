@@ -717,18 +717,16 @@ xaccConsolidateTransactions (Account * acc)
           * match, but so do all of thier partner-splits. )
           */
 
-#ifdef STILL_BROKEN
-/* hack alert -- still broken from splits */
-         /* Free the transaction, and shuffle down by one.
-          * Need to shuffle in order to preserve date ordering. */
-         xaccFreeTransaction (tb);
-         
-         for (k=j+1; k<acc->numTrans; k++) {
-            acc->transaction[k-1] = acc->transaction[k];
-         }
-         acc->transaction[acc->numTrans -1] = NULL;
-         acc->numTrans --;
-#endif
+          xaccTransBeginEdit (tb, 1);
+          xaccTransDestroy (tb);
+          xaccTransCommitEdit (tb);
+
+          /* It should be safe to just "break" here, as all splits
+           * wwith index i or less have been checked already and couldn't
+           * have been dupes.  So index i is still valid, although j is 
+           * not.  Note that numSplits changed ...
+           */
+          break;
       }
    }
 }
@@ -751,7 +749,8 @@ xaccAccountSetType (Account *acc, int tip)
       return;
    }
 
-   /* hack alert -- check to make sure type is valid ... */
+   /* refuse invalid account types */
+   if (NUM_ACCOUNT_TYPES <= tip) return;
    acc->type = tip;
 }
 
