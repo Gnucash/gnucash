@@ -95,6 +95,8 @@ xaccTransWriteLog (Transaction *trans)
    Split *split;
    int i = 0;
 
+   xaccOpenLog ();
+
    /* use tab-separated fields, to be /rdb compatible */
    fprintf (trans_log, "%s	%s\n", trans->num, trans->description);
 
