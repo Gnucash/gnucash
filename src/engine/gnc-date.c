@@ -43,7 +43,7 @@
 
 #include <glib.h>
 
-#include "date.h"
+#include "gnc-date.h"
 #include "gnc-engine-util.h"
 
 #ifndef HAVE_STRPTIME

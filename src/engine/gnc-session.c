@@ -46,13 +46,13 @@
 #include "BackendP.h"
 #include "TransLog.h"
 #include "gnc-engine-util.h"
-#include "date.h"
 #include "gnc-book-p.h"
+#include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "gnc-event.h"
 #include "gnc-module.h"
 #include "gnc-session-p.h"
-#include "gnc-event.h"
 
 static GNCSession * current_session = NULL;
 static short module = MOD_IO;

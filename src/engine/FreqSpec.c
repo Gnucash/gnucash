@@ -84,10 +84,10 @@
 #include <langinfo.h>
 #endif
 
-#include "date.h"
 #include "FreqSpecP.h"
 #include "GNCIdP.h"
 #include "gnc-book-p.h"
+#include "gnc-date.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "messages.h"

@@ -32,7 +32,7 @@
     "#include <gnc-engine-util.h>\n"
     "#include <gnc-event.h>\n"
     "#include <gnc-lot.h>\n"
-    "#include <date.h>\n"
+    "#include <gnc-date.h>\n"
     "#include <engine-helpers.h>\n"
     "#include <gnc-engine.h>\n"
     "#include <gnc-commodity.h>\n"

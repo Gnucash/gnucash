@@ -31,10 +31,10 @@
 
 #include "Account.h"
 #include "AccountP.h"
-#include "date.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
+#include "gnc-date.h"
 #include "gnc-engine-util.h"
 
 /* 
