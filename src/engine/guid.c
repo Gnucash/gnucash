@@ -27,6 +27,7 @@
 # include <config.h>
 #endif
 
+#include <sys/types.h>
 #include <ctype.h>
 #include <dirent.h>
 #include <glib.h>
@@ -35,7 +36,6 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/times.h>
-#include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
 

@@ -10,8 +10,9 @@
 #include <glib.h>
 #include <ltdl.h>
 #include <guile/gh.h>
-#include <dirent.h>
 #include <sys/types.h>
+#include <dirent.h>
+
 
 #include "core-utils.h"
 #include "gnc-module.h"
