@@ -58,8 +58,14 @@ typedef struct _builder sqlBuilder;
 sqlBuilder * sqlBuilder_new(void);
 void sqlBuilder_destroy (sqlBuilder *);
 
-/* Start building a new SQL query on table 'tablename' 
- * Previous query is erased.
+/* The sqlBuild_Table() routine starts building a new SQL query 
+ *    on table 'tablename'.  Any previously started query is erased.
+ *
+ *    When building 'select' type statments, crude table joins are 
+ *    supported: the 'tablename' can in fact be a comma-separated list 
+ *    of tables.  This field is copied directly as follows:
+ *    "SELECT ... FROM tablename WHERE ..." so anything valid in that
+ *    position is tolerated.
  */
 void sqlBuild_Table (sqlBuilder *b,
                      const char *tablename,
