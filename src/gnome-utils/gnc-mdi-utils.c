@@ -36,7 +36,6 @@
 #include "gnc-session.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
-#include "gnc-window.h"
 
 #define GNC_MDI_CM_CLASS "gnc-mdi"
 
@@ -47,6 +46,7 @@ static gboolean gnc_toolbar_visible = TRUE;
 static gboolean gnc_statusbar_visible = TRUE;
 static gboolean gnc_summarybar_visible = TRUE;
 
+static GNCMDIProgressHandler mdi_progress_func = NULL;
 
 /*
  * These strings must match the dispatch enum listed at the start of
@@ -116,7 +116,8 @@ gnc_mdi_set_summarybar_visibility (gboolean visible)
 void
 gnc_mdi_show_progress (const char *message, double percentage)
 {
-  gnc_window_show_progress( message, percentage );
+  if (mdi_progress_func)
+    mdi_progress_func( message, percentage );
 }
 
 typedef struct {
@@ -1310,4 +1311,10 @@ gnc_mdi_create_child_toolbar (GNCMDIInfo * mi, GNCMDIChildInfo * child)
 
   gnome_app_fill_toolbar (tb, tbinfo, NULL);
   LEAVE(" ");
+}
+
+void
+gnc_mdi_set_progress_handler (GNCMDIProgressHandler mdi_progress_func_in)
+{
+  mdi_progress_func = mdi_progress_func_in;
 }

@@ -1,3 +1,13 @@
+2004-06-13  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: add support for gtkhtml-3.1, remove src/experimental
+	* src/Makefile.am: remove experimental subtree
+	* src/app-file/gncmod-app-file.c: don't need gnc-mdi-utils.h
+	* src/gnome/gnc-window.c: register the gnc-mdi progress handler
+	* src/gnome-utils/gnc-mdi-utils.[ch]: add a progress handler
+	  that gets set by the gnc-window code (just like in gnc-file)
+	  to remove a circular dependency.
+
 2004-05-31  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/report/report-gnome/gnc-plugin-page-report.c

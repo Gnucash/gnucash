@@ -144,5 +144,7 @@ void gnc_mdi_show_toolbar (GNCMDIChildInfo *mc);
 void gnc_mdi_show_statusbar (GNCMDIChildInfo *mc);
 void gnc_mdi_show_summarybar (GNCMDIChildInfo *mc);
 
+typedef void (*GNCMDIProgressHandler) (const char *message, double percent);
+void gnc_mdi_set_progress_handler (GNCMDIProgressHandler mdi_progress_func);
 
 #endif

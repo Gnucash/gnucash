@@ -13,7 +13,6 @@
 #include "gnc-file-p.h"
 #include "gnc-file-history.h"
 #include "gnc-file-dialog.h"
-#include "gnc-mdi-utils.h"
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 
