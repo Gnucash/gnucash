@@ -377,6 +377,9 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
   gnc_set_string_option("__paths", "Import QIF", default_dir);
   g_free(default_dir);
   g_free(file_name);
+
+  /* Now raise the window to be sure it's visible */
+  gdk_window_raise(wind->window->window);
 }
 
 
