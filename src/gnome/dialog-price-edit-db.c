@@ -415,9 +415,9 @@ get_quotes_clicked (GtkWidget *widget, gpointer data)
 /**
  * gnc_prices_click_column_cb
  *
- * @par1: A pointer to the clist.
- * @par2: The column number clicked (0 based).
- * @par3: A pointer to the data structure describing this window.
+ * @clist: A pointer to the clist.
+ * @column: The column number clicked (0 based).
+ * @data: A pointer to the data structure describing this window.
  *
  * This function checks for a valid column number, and determines
  * whether or not to invert the current sort or select a new column

@@ -255,7 +255,7 @@ gnc_main_window_can_restore_cb (const char * filename)
 /**
  * gnc_main_window_tweak_menus
  *
- * @par1: A pointer to the GNC MDI child associated with the Main
+ * @mc: A pointer to the GNC MDI child associated with the Main
  * window.
  *
  * This routine tweaks the View window in the main window menubar so
@@ -285,8 +285,8 @@ gnc_main_window_tweak_menus(GNCMDIChildInfo * mc)
 /**
  * gnc_main_window_flip_toolbar_cb
  *
- * @par1: A pointer to the menu item selected. (ignored)
- * @par2: The user data for this menu item. (ignored)
+ * @widget: A pointer to the menu item selected. (ignored)
+ * @data: The user data for this menu item. (ignored)
  *
  * This routine flips the state of the toolbar, hiding it if currently
  * visible, and showing it if not.  This routine has to grovel through
@@ -321,8 +321,8 @@ gnc_main_window_flip_toolbar_cb(GtkWidget * widget, gpointer data)
 /**
  * gnc_main_window_flip_status_bar_cb
  *
- * @par1: A pointer to the menu item selected. (ignored)
- * @par2: The user data for this menu item. (ignored)
+ * @widget: A pointer to the menu item selected. (ignored)
+ * @data: The user data for this menu item. (ignored)
  *
  * This routine flips the state of the status bar, hiding it if
  * currently visible, and showing it if not.  This routine has to
@@ -363,8 +363,8 @@ gnc_main_window_flip_status_bar_cb(GtkWidget * widget, gpointer data)
 /**
  * gnc_main_window_flip_summary_bar_cb
  *
- * @par1: A pointer to the menu item selected. (ignored)
- * @par2: The user data for this menu item. (ignored)
+ * @widget: A pointer to the menu item selected. (ignored)
+ * @data: The user data for this menu item. (ignored)
  *
  * This routine flips the state of the summary bar, hiding it if
  * currently visible, and showing it if not.  This routine has to
@@ -596,8 +596,8 @@ gnc_main_window_file_shutdown_cb(GtkWidget * widget, gpointer data)
 /**
  * gnc_main_window_dispatch_cb
  *
- * @par1: A pointer to the menu item selected. (ignored)
- * @par2: The user data for this menu item. (ignored)
+ * @widget: A pointer to the menu item selected. (ignored)
+ * @data: The user data for this menu item. (ignored)
  *
  * The main menubar has several items that must react differently
  * depending upon what window is in front when they are selected.
@@ -632,8 +632,8 @@ gnc_main_window_dispatch_cb(GtkWidget * widget, gpointer data)
 /**
  * gnc_main_window_tax_info_cb
  *
- * @par1: A pointer to the menu item selected. (ignored)
- * @par2: The user data for this menu item. (ignored)
+ * @widget: A pointer to the menu item selected. (ignored)
+ * @unused: The user data for this menu item. (ignored)
  *
  * Bring up the window for editing tax data.
  */

@@ -1,3 +1,10 @@
+2002-06-24  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-mdi-utils.c: 
+	* src/gnome/dialog-price-edit-db.c: 
+	* src/gnome/window-acct-tree.c: 
+	* src/gnome/window-main.c: Fix parameter names in documentation.
+
 2002-06-23  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-sxsincelast.c: Lists of SX instances [the

@@ -79,10 +79,11 @@ static void gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc);
 /**
  * gnc_acct_tree_window_set_sensitives
  *
- * @par1: A pointer to the data structure holding all the data
+ * @win: A pointer to the data structure holding all the data
  * associated with the Account Tree window.
  *
- * @par2: TRUE to enable the list of widgets, FALSE to disable them.
+ * @sensitive: TRUE to enable the list of widgets, FALSE to disable
+ * them.
  *
  * Run the list of account sensitive widgets and enable/disable all
  * the items in the list.
@@ -99,10 +100,10 @@ gnc_acct_tree_window_set_sensitives(GNCAcctTreeWin * win,
 /**
  * gnc_acct_tree_window_add_sensitive
  *
- * @par1: A pointer to the data structure holding all the data
+ * @win: A pointer to the data structure holding all the data
  * associated with the Account Tree window.
  *
- * @par2: A pointer to a menu or toolbar item.
+ * @widget: A pointer to a menu or toolbar item.
  *
  * Add this widget to the list of items to be enabled/disabled when an
  * account is selected in this window.
@@ -118,12 +119,12 @@ gnc_acct_tree_window_add_sensitive(GNCAcctTreeWin * win, GtkWidget *widget)
 /**
  * gnc_acct_tree_window_find_popup_item
  *
- * @par1: A pointer to the data structure holding all the data
+ * @win: A pointer to the data structure holding all the data
  * associated with the Account Tree window.
  *
- * @par2: A pointer to the popup menu for this window.
+ * @popup: A pointer to the popup menu for this window.
  *
- * @par3: The name of the menu item to find.
+ * @name: The name of the menu item to find.
  *
  * This routine looks for a particular menu item in a popup menu.  If
  * found, it adds the menu to the list of items to be enabled/disabled
@@ -898,10 +899,10 @@ static GnomeUIInfo scrubmenu[] =
 /**
  * gnc_acct_tree_window_create_menu
  *
- * @par1: A pointer to the data structure holding all the data
+ * @main_info: A pointer to the data structure holding all the data
  * associated with the Account Tree window.
  *
- * @par2: A pointer to the GNC MDI child associated with the Account
+ * @child: A pointer to the GNC MDI child associated with the Account
  * Tree window.
  *
  * This routine creates the menu for the right-click popup menu in the
@@ -1208,7 +1209,7 @@ gnc_acct_tree_window_toolbar_options_cb(GtkWidget * widget, gpointer data) {
 /**
  * gnc_acct_tree_tweak_menu
  *
- * @par1: A pointer to the GNC MDI child associated with the Account
+ * @mc: A pointer to the GNC MDI child associated with the Account
  * Tree window.
  *
  * This routine is called when the account tree view is created and

@@ -99,8 +99,8 @@ gnc_mdi_set_toolbar_visibility (gboolean visible)
 /**
  * gnc_mdi_widget_show
  *
- * @par1: The widget to modify.
- * @par2: TRUE if the widget should be shown, FALSE if hidden.
+ * @data: The widget to modify.
+ * @user_data: TRUE if the widget should be shown, FALSE if hidden.
  *
  * This routine is merely a wrapper around gtk_widget_show/hide so
  * that those functions can be called on a list of widgets.
@@ -121,8 +121,8 @@ gnc_mdi_widget_show(gpointer data, gpointer user_data)
 /**
  * gnc_mdi_widget_sensitive
  *
- * @par1: The widget to modify.
- * @par2: The new sensitivity of the widget.
+ * @data: The widget to modify.
+ * @user_data: The new sensitivity of the widget.
  *
  * This routine is merely a wrapper around gtk_widget_set_sensitive
  * so that functions can be called on a list of widgets.
@@ -139,10 +139,10 @@ gnc_mdi_widget_sensitive(gpointer data, gpointer user_data)
 /**
  * gnc_mdi_update_widgets
  *
- * @par1: A pointer to the child data structure for the GNC child
+ * @mc: A pointer to the child data structure for the GNC child
  * being brought to the front (or sent to the back).
  *
- * @par2: TRUE if this child is being raised to the front of the
+ * @topmost: TRUE if this child is being raised to the front of the
  * notebook (or to be the topmost window.)
  *
  * This routine performs all the widget modifications needed to adjust
@@ -166,10 +166,10 @@ gnc_mdi_update_widgets(GNCMDIChildInfo *mc, gboolean topmost)
 /**
  * gnc_mdi_child_find_menu_item
  *
- * @par1: A pointer to the child data structure for the GNC child
+ * @mc: A pointer to the child data structure for the GNC child
  * currently visible.
  *
- * @par2: A string giving the menu path of the item wanted.  This
+ * @path: A string giving the menu path of the item wanted.  This
  * string MUST NOT be internationalized.
  *
  * This routine will search through the menubar looking for a specific
@@ -209,10 +209,10 @@ gnc_mdi_child_find_menu_item(GNCMDIChildInfo *mc, gchar *path)
 /**
  * gnc_mdi_child_find_toolbar_item
  *
- * @par1: A pointer to the child data structure for the GNC child
+ * @mc: A pointer to the child data structure for the GNC child
  * currently visible.
  *
- * @par2: A string giving the name the item wanted.  This name MUST
+ * @name: A string giving the name the item wanted.  This name MUST
  * NOT be internationalized.
  *
  * This routine will search through the toolbar looking for a specific
@@ -250,15 +250,15 @@ gnc_mdi_child_find_toolbar_item(GNCMDIChildInfo *mc, gchar *name)
 /**
  * gnc_mdi_child_auto_menu
  *
- * @par1: A pointer to the child data structure for the GNC child
+ * @mc: A pointer to the child data structure for the GNC child
  * whose menus should be set up for automatic adjustment.
  *
- * @par2: An enum describing what should be done with this item each
+ * @type: An enum describing what should be done with this item each
  * time this child is brought to the front.  Choices are: SHOW, HIDE,
  * ENABLE, and DISABLE.
  *
- * @par3: NULL terminated list of strings corresponding to the menu
- * items that should be added to the adjustment list.
+ * @first_path: NULL terminated list of strings corresponding to the
+ * menu items that should be added to the adjustment list.
  *
  * This routine searches through the application menu data structures
  * to find the specified menu item widgets, and then adds them to a
@@ -315,15 +315,15 @@ gnc_mdi_child_auto_menu(GNCMDIChildInfo *mc,
 /**
  * gnc_mdi_child_auto_toolbar
  *
- * @par1: A pointer to the child data structure for the GNC child
+ * @mc: A pointer to the child data structure for the GNC child
  * whose toolbar items should be set up for automatic adjustment.
  *
- * @par2: An enum describing what should be done with this item each
+ * @type: An enum describing what should be done with this item each
  * time this child is brought to the front.  Choices are: SHOW, HIDE,
  * ENABLE, and DISABLE.
  *
- * @par3: NULL terminated list of strings corresponding to the toolbar
- * items that should be added to the adjustment list.
+ * @first_path: NULL terminated list of strings corresponding to the
+ * toolbar items that should be added to the adjustment list.
  *
  * This routine searches through the application toolbar data structures
  * to find the specified toolbar item widgets, and then adds them to a
@@ -387,7 +387,7 @@ gnc_mdi_child_auto_toolbar(GNCMDIChildInfo *mc,
 /**
  * gnc_mdi_show_toolbar
  *
- * @par1: A pointer to the child data structure for the GNC child
+ * @mc: A pointer to the child data structure for the GNC child
  * whose toolbar items should be shown/hidden.
  *
  * This routine shows or hides the gnome dock item containing the
@@ -437,11 +437,11 @@ gnc_mdi_child_set_title (GNCMDIChildInfo *childwin)
 /**
  * gnc_mdi_app_destroyed_cb
  *
- * @par1: A pointer to the GnomeApp data structure being destroyed.
+ * @app: A pointer to the GnomeApp data structure being destroyed.
  *
- * @par2: A pointer to a GNCMDIInfo data structure associated with
- * this GnomeMDI data structure.  This value comes from the callback
- * registration.
+ * @user_data: A pointer to a GNCMDIInfo data structure associated
+ * with this GnomeMDI data structure.  This value comes from the
+ * callback registration.
  *
  * This function is called during destruction of the gnome app data
  * structure.  Its purpose is to save the toolbar settings and
@@ -502,9 +502,9 @@ gnc_mdi_app_created_cb (GnomeMDI * mdi, GnomeApp * app, gpointer data)
 /**
  * gnc_mdi_destroy_cb
  *
- * @par1: A pointer to the GnomeMDI data structure being destroyed.
+ * @w: A pointer to the GnomeMDI data structure being destroyed.
  *
- * @par2: A pointer to a GNCMDIInfo data structure associated with
+ * @data: A pointer to a GNCMDIInfo data structure associated with
  * this GnomeMDI data structure.  This value comes from the callback
  * registration.
  *
@@ -534,7 +534,7 @@ gnc_mdi_destroy_cb (GtkObject * w, gpointer data)
 /**
  * gnc_mdi_child_menu_tweaking
  *
- * @par1: A pointer to the child data structure for the GNC child view
+ * @mc: A pointer to the child data structure for the GNC child view
  * that has just been created.
  *
  * This routine adjust the main menubar to reflect which of the
@@ -563,14 +563,14 @@ gnc_mdi_child_menu_tweaking (GNCMDIChildInfo * mc)
 /**
  * gnc_mdi_child_menu_tweaking
  *
- * @par1: A pointer to the child data structure for the GNC child view
+ * @mc: A pointer to the child data structure for the GNC child view
  * that should be updated.
  *
- * @par2: The dispatch entry whose data should be set.
+ * @type: The dispatch entry whose data should be set.
  *
- * @par3: A view specific callback function.
+ * @cb: A view specific callback function.
  *
- * @par4: The data to pass to the view specific callback.
+ * @data: The data to pass to the view specific callback.
  *
  * This routine remembers the data for dispatching various top level
  * menu items to view specific functions.  These are items like the
@@ -967,7 +967,7 @@ gnc_app_set_title (GnomeApp *app)
 /**
  * gnc_mdi_destroy
  *
- * @par1: A pointer to a GNCMDIInfo data structure to destroy. 
+ * @gnc_mdi: A pointer to a GNCMDIInfo data structure to destroy. 
  *
  * This function is called during the destruction of the gnucash gui.
  * It is called from gnc_gui_destroy() in top-level.c
