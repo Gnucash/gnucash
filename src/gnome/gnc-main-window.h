@@ -79,7 +79,7 @@ void            gnc_main_window_merge_actions     (GncMainWindow *window,
 						   const gchar *group_name,
 						   EggActionEntry *entries,
 						   guint n_entries,
-						   const gchar *ui_file,
+						   const gchar *filename,
 						   gpointer user_data);
 void            gnc_main_window_unmerge_actions   (GncMainWindow *window,
 						   const gchar *group_name);

@@ -397,38 +397,44 @@ gnc_main_window_merge_actions (GncMainWindow *window,
 			       const gchar *group_name,
 			       EggActionEntry *actions,
 			       guint n_actions,
-			       const gchar *ui_file,
+			       const gchar *filename,
 			       gpointer user_data)
 {
 	GncMainWindowActionData *data;
 	MergedActionEntry *entry;
 	GError *error = NULL;
+	gchar *pathname;
 
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 	g_return_if_fail (group_name != NULL);
 	g_return_if_fail (actions != NULL);
 	g_return_if_fail (n_actions > 0);
-	g_return_if_fail (ui_file != NULL);
+	g_return_if_fail (filename != NULL);
 
 	data = g_new0 (GncMainWindowActionData, 1);
 	data->window = window;
 	data->data = user_data;
 
+	pathname = gnc_gnome_locate_ui_file (filename);
+	if (pathname == NULL)
+	  return;
+
 	entry = g_new0 (MergedActionEntry, 1);
 	entry->action_group = egg_action_group_new (group_name);
 	egg_action_group_add_actions (entry->action_group, actions, n_actions, data);
 	egg_menu_merge_insert_action_group (window->ui_merge, entry->action_group, 0);
-	entry->merge_id = egg_menu_merge_add_ui_from_file (window->ui_merge, ui_file, &error);
+	entry->merge_id = egg_menu_merge_add_ui_from_file (window->ui_merge, pathname, &error);
 	g_assert(entry->merge_id || error);
 	if (entry->merge_id) {
 	  egg_menu_merge_ensure_update (window->ui_merge);
 	  g_hash_table_insert (window->priv->merged_actions_table, g_strdup (group_name), entry);
 	} else {
 	  g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
-		     ui_file, error->message);
+		     filename, error->message);
 	  g_error_free(error);
 	  g_free(entry);
 	}
+	g_free(pathname);
 }
 
 void
@@ -546,6 +552,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	GncPluginManager *manager;
 	GList *plugins;
 	GError *error = NULL;
+	gchar *filename;
 
 	/* Create widgets and add them to the window */
 	main_vbox = gtk_vbox_new (FALSE, 0);
@@ -584,16 +591,21 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
 	g_signal_connect (G_OBJECT (window->ui_merge), "add_widget",
 			  G_CALLBACK (gnc_main_window_add_widget), window);
+	filename = gnc_gnome_locate_ui_file("gnc-main-window-ui.xml");
+
+	/* Can't do much without a ui. */
+	g_assert (filename);
+
 	merge_id = egg_menu_merge_add_ui_from_file (window->ui_merge,
-						    GNC_UI_DIR "/gnc-main-window-ui.xml",
-						    &error);
+						    filename, &error);
+	g_free(filename);
 	g_assert(merge_id || error);
 	if (merge_id) {
 	  gtk_window_add_accel_group (GTK_WINDOW (window), window->ui_merge->accel_group);
 	  egg_menu_merge_ensure_update (window->ui_merge);
 	} else {
 	  g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
-		     GNC_UI_DIR "/gnc-main-window-ui.xml", error->message);
+		     filename, error->message);
 	  g_error_free(error);
 	  g_assert(merge_id != 0);
 	}

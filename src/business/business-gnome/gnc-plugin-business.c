@@ -303,7 +303,7 @@ gnc_plugin_business_add_to_window (GncPlugin *plugin,
 
 	gnc_main_window_merge_actions (window, "gnc-plugin-business-actions",
 			               gnc_plugin_business_actions, gnc_plugin_business_n_actions,
-				       GNC_UI_DIR "/gnc-plugin-business-ui.xml", plugin);
+				       "gnc-plugin-business-ui.xml", plugin);
 }
 	
 static void

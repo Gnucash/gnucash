@@ -140,7 +140,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/register/register-gnome \
   -I${top_srcdir}/src/report/report-system \
   -I${top_srcdir}/src/report/report-gnome \
-  -DGNC_UI_DIR=\"$(GNC_UI_DIR)\"   \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GNOME_CFLAGS} \

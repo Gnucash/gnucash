@@ -33,6 +33,10 @@
 #ifndef GNC_GNOME_UTILS_H
 #define GNC_GNOME_UTILS_H
 
+/* These will go away when gtk2.4 becomes our base target. */
+#include "egg-action-group.h"
+#include "egg-menu-merge.h"
+
 #ifdef LIBGUILEH
 /** Initialize the Gnome libraries.
  *
@@ -58,6 +62,20 @@ SCM gnc_gnome_init (const char * arg0,
 void gnc_gnome_shutdown (void);
 
 
+/** Given a pixmap/pixbuf file name, find the file in the pixmap
+ *  directory associated with this application.  This routine will
+ *  display an error message if it can't find the file.
+ *
+ *  @param name The name of the file to be found.
+ *
+ *  @return the full path name of the file, or NULL of the file can't
+ *  be found.
+ *
+ *  @note It is the caller's responsibility to free the returned string.
+ */
+char *gnc_gnome_locate_pixmap (const char *name);
+
+
 /** Given a file name, find the file in the directories associated
  *  with this application.  This routine will display an error message
  *  if it can't find the file.
@@ -66,8 +84,10 @@ void gnc_gnome_shutdown (void);
  *
  *  @return the full path name of the file, or NULL of the file can't
  *  be found.
+ *
+ *  @note It is the caller's responsibility to free the returned string.
  */
-char *gnc_gnome_locate_file (const char *name);
+char *gnc_gnome_locate_ui_file (const char *name);
 
 
 /** Launch the default gnome help browser and open to a given link
@@ -107,6 +127,25 @@ GtkWidget * gnc_gnome_get_pixmap (const char *name);
  *  be found or loaded..
  */
 GdkPixbuf * gnc_gnome_get_gdkpixbuf (const char *name);
+
+/** Load a new set of actions into an existing UI.
+ *
+ *  @param ui_merge The existing set of merged actions. This is the ui
+ *  that a user sees.  The actions from the ui file will be added to
+ *  this ui.
+ *
+ *  @param action_group The local action group.  The actions from the
+ *  ui file will be added to this private action group.
+ *
+ *  @param filename The name of the ui file to load.  This file name
+ *  will be searched for in the ui directory.
+ *
+ *  @return The merge_id number for the newly merged UI.  If an error
+ *  occurred, the return value is 0.
+ */
+gint gnc_menu_merge_add_actions (EggMenuMerge *ui_merge,
+				 EggActionGroup *action_group,
+				 const gchar *filename);
 
 #endif
 /** @} */

@@ -43,6 +43,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
+#include "gnc-gnome-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-html.h"
 #include "gnc-menu-extensions.h"
@@ -1249,7 +1250,7 @@ gnc_acct_tree_window_new(const gchar * url)
 				acct_tree_popups_n_entries, treewin);
   egg_menu_merge_insert_action_group (merge, action_group, 0);
 
-  fname = g_strconcat (GNC_UI_DIR, "/", "acct-tree-ui.xml", NULL);
+  fname = gnc_gnome_locate_ui_file ("acct-tree-ui.xml");
   egg_menu_merge_add_ui_from_file (merge, fname, NULL);
   g_free (fname);
   /* gtk_window_add_accel_group (GTK_WINDOW (window), merge->accel_group); */

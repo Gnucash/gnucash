@@ -153,7 +153,7 @@ gnc_plugin_register_add_to_window (GncPlugin *plugin,
 
 	gnc_main_window_merge_actions (window, "gnc-plugin-register-default-actions",
 			               gnc_plugin_register_actions, gnc_plugin_register_n_actions,
-				       GNC_UI_DIR "/gnc-plugin-register-ui.xml", plugin);
+				       "gnc-plugin-register-ui.xml", plugin);
 }
 	
 static void

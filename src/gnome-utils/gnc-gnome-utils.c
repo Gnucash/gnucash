@@ -35,6 +35,7 @@
 #endif
 
 #include "argv-list-converters.h"
+#include "egg-action-group.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-html.h"
 #include "gnc-trace.h"
@@ -63,6 +64,46 @@ static const char *default_argv[] = {"", 0};
 static const struct poptOption nullPoptTable[] = {
   { NULL, 0, 0, NULL, 0 }
 };
+
+char *
+gnc_gnome_locate_pixmap (const char *name)
+{
+  char *fullname;
+
+  g_return_val_if_fail (name != NULL, NULL);
+
+  fullname = gnome_program_locate_file (gnucash_program,
+					GNOME_FILE_DOMAIN_APP_PIXMAP,
+					name, TRUE, NULL);
+  if (fullname == NULL) {
+    PERR ("Could not locate pixmap/pixbuf file %s", name);
+    return NULL;
+  }
+
+  return fullname;
+}
+
+char *
+gnc_gnome_locate_ui_file (const char *name)
+{
+  char *partial;
+  char *fullname;
+
+  g_return_val_if_fail (name != NULL, NULL);
+
+  partial = g_strdup_printf("ui/%s", name);
+  fullname = gnome_program_locate_file (gnucash_program,
+					GNOME_FILE_DOMAIN_APP_DATADIR,
+					partial, TRUE, NULL);
+  g_free(partial);
+
+  if (fullname == NULL) {
+    PERR ("Could not locate file %s", name);
+    return NULL;
+  }
+
+  return fullname;
+}
 
 SCM
 gnc_gnome_init (const char * arg0,
@@ -121,9 +162,7 @@ gnc_gnome_init (const char * arg0,
   gtk_widget_set_default_visual (gdk_rgb_get_visual ());
 
   /* use custom icon */
-  fullname = gnome_program_locate_file (gnucash_program,
-					GNOME_FILE_DOMAIN_APP_PIXMAP,
-					"gnucash-icon.png", TRUE, NULL);
+  fullname = gnc_gnome_locate_pixmap ("gnucash-icon.png");
   if (fullname) {
     gtk_window_set_default_icon_from_file (fullname, &error);
     g_free(fullname);
@@ -131,8 +170,6 @@ gnc_gnome_init (const char * arg0,
       PERR ("Could not set default icon: %s", error->message);
       g_error_free (error);
     }
-  } else {
-    PERR ("Could not locate pixmap file %s", "gnucash-icon.png");
   }
 
 #ifdef USE_GUPPI    
@@ -149,24 +186,6 @@ gnc_gnome_shutdown (void)
 #ifdef USE_GUPPI    
   gnc_html_guppi_shutdown();
 #endif
-}
-
-char *
-gnc_gnome_locate_file (const char *name)
-{
-  char *fullname;
-
-  g_return_val_if_fail (name != NULL, NULL);
-
-  fullname = gnome_program_locate_file (gnucash_program,
-					GNOME_FILE_DOMAIN_APP_PIXMAP,
-					name, TRUE, NULL);
-  if (fullname == NULL) {
-    PERR ("Could not locate file %s", name);
-    return NULL;
-  }
-
-  return fullname;
 }
 
 void
@@ -198,13 +217,9 @@ gnc_gnome_get_pixmap (const char *name)
 
   g_return_val_if_fail (name != NULL, NULL);
 
-  fullname = gnome_program_locate_file (gnucash_program,
-					GNOME_FILE_DOMAIN_APP_PIXMAP,
-					name, TRUE, NULL);
-  if (fullname == NULL) {
-    PERR ("Could not locate pixmap file %s", name);
+  fullname = gnc_gnome_locate_pixmap (name);
+  if (fullname == NULL)
     return NULL;
-  }
 
   DEBUG ("Loading pixmap file %s", fullname);
   pixmap = gnome_pixmap_new_from_file (fullname);
@@ -232,14 +247,9 @@ gnc_gnome_get_gdkpixbuf (const char *name)
 
   g_return_val_if_fail (name != NULL, NULL);
 
-  fullname = gnome_program_locate_file (gnucash_program,
-					GNOME_FILE_DOMAIN_APP_PIXMAP,
-					name, TRUE, NULL);
-
-  if (fullname == NULL) {
-    PERR ("Could not locate pixbuf file %s", name);
+  fullname = gnc_gnome_locate_pixmap (name);
+  if (fullname == NULL)
     return NULL;
-  }
 
   DEBUG ("Loading pixbuf file %s", fullname);
   pixbuf = gdk_pixbuf_new_from_file (fullname, &error);
@@ -254,3 +264,40 @@ gnc_gnome_get_gdkpixbuf (const char *name)
 }
 
 
+gint
+gnc_menu_merge_add_actions (EggMenuMerge *ui_merge,
+			    EggActionGroup *action_group,
+			    const gchar *filename)
+{
+	GError *error = NULL;
+	gchar *pathname;
+	gint merge_id;
+	
+	ENTER("ui_merge %p, action_group %p, filename %s",
+	      ui_merge, action_group, filename);
+	g_return_val_if_fail (ui_merge, 0);
+	g_return_val_if_fail (action_group, 0);
+	g_return_val_if_fail (filename, 0);
+
+	egg_menu_merge_insert_action_group (ui_merge, action_group, 0);
+
+	pathname = gnc_gnome_locate_ui_file (filename);
+	if (pathname == NULL)
+	  return 0;
+
+	merge_id = egg_menu_merge_add_ui_from_file (ui_merge, pathname, &error);
+	DEBUG("merge_id is %d", merge_id);
+
+	g_assert(merge_id || error);
+	if (merge_id) {
+	  egg_menu_merge_ensure_update (ui_merge);
+	} else {
+	  g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
+		     filename, error->message);
+	  g_error_free(error);
+	}
+
+	g_free(pathname);
+	LEAVE(" ");
+	return merge_id;
+}

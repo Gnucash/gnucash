@@ -27,7 +27,6 @@
 #include <string.h>
 
 #include "gnc-plugin-account-tree.h"
-
 #include "gnc-plugin-page-account-tree.h"
 
 #include "messages.h"
@@ -154,7 +153,7 @@ gnc_plugin_account_tree_add_to_window (GncPlugin *plugin,
 
 	gnc_main_window_merge_actions (window, "gnc-plugin-account-tree-default-actions",
 			               gnc_plugin_account_tree_actions, gnc_plugin_account_tree_n_actions,
-				       GNC_UI_DIR "/gnc-plugin-account-tree-ui.xml", plugin);
+				       "gnc-plugin-account-tree-ui.xml", plugin);
 }
 	
 static void

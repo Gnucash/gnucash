@@ -281,7 +281,7 @@ gnc_embedded_window_new (const gchar *action_group_name,
   priv = window->priv;
 
   /* Determine the full pathname of the ui file */
-  ui_fullname = g_strdup_printf("%s/%s", GNC_UI_DIR, ui_filename);
+  ui_fullname = gnc_gnome_locate_ui_file(ui_filename);
 
   /* Create menu and toolbar information */
   priv->action_group = egg_action_group_new (action_group_name);

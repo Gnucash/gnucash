@@ -21,8 +21,8 @@ gnc_add_stock_icon_pair (GtkIconFactory *factory,
 	char *fullname1, *fullname2;
 
 	/* Find the complete path names for these files */
-	fullname1 = gnc_gnome_locate_file (filename1);
-	fullname2 = gnc_gnome_locate_file (filename2);
+	fullname1 = gnc_gnome_locate_pixmap (filename1);
+	fullname2 = gnc_gnome_locate_pixmap (filename2);
 	g_assert (fullname1 && fullname2);
 
 	/* Load the pixbufs */

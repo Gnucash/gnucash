@@ -40,6 +40,7 @@
 #include "global-options.h"
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
+#include "gnc-gnome-utils.h"
 #include "gnc-icons.h"
 #include "gnc-split-reg.h"
 #include "lot-viewer.h"
@@ -475,7 +476,7 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 	gnc_plugin_page_register_init_short_names (action_group);
 	gnc_plugin_page_register_init_values (action_group);
 
-	priv->ui_description = g_strdup(GNC_UI_DIR "/gnc-plugin-page-register-ui.xml");
+	priv->ui_description = g_strdup("gnc-plugin-page-register-ui.xml");
 
 	priv->lines_opt_page = DEFAULT_LINES_OPTION_PAGE;
 	priv->lines_opt_name = DEFAULT_LINES_OPTION_NAME;
@@ -609,26 +610,17 @@ gnc_plugin_page_register_merge_actions (GncPluginPage *plugin_page,
 {
 	GncPluginPageRegister *register_page;
 	GncPluginPageRegisterPrivate *priv;
-	GError *error = NULL;
 	
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
 
 	register_page = GNC_PLUGIN_PAGE_REGISTER(plugin_page);
 	priv = register_page->priv;
-	egg_menu_merge_insert_action_group (ui_merge, priv->action_group, 0);
 
+	priv->ui_merge = ui_merge;
 	priv->merge_id =
-	  egg_menu_merge_add_ui_from_file (ui_merge, priv->ui_description, &error);
-
-	g_assert(priv->merge_id || error);
-	if (priv->merge_id) {
-	  egg_menu_merge_ensure_update (ui_merge);
-	  priv->ui_merge = ui_merge;
-	} else {
-	  g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
-		     priv->ui_description, error->message);
-	  g_error_free(error);
-	}
+	  gnc_menu_merge_add_actions (priv->ui_merge,
+				      priv->action_group,
+				      priv->ui_description);
 }
 	
 static void
@@ -1482,8 +1474,7 @@ gnc_plugin_page_register_set_ui_description (GncPluginPage *plugin_page,
 	priv = page->priv;
 
 	g_free(priv->ui_description);
-	priv->ui_description =
-	  g_strdup_printf("%s/%s", GNC_UI_DIR, ui_filename);
+	priv->ui_description = g_strdup(ui_filename);
 }
 
 GNCSplitReg *

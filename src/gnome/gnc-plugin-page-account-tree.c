@@ -41,6 +41,7 @@
 #include "global-options.h"
 #include "gnc-book.h"
 #include "gnc-component-manager.h"
+#include "gnc-gnome-utils.h"
 #include "gnc-html.h"
 #include "gnc-icons.h"
 #include "gnc-plugin-account-tree.h"
@@ -524,30 +525,21 @@ static void
 gnc_plugin_page_account_tree_merge_actions (GncPluginPage *plugin_page,
 					    EggMenuMerge *ui_merge)
 {
-	GncPluginPageAccountTree *plugin_page_account_tree = GNC_PLUGIN_PAGE_ACCOUNT_TREE(plugin_page);
-	GError *error = NULL;
+	GncPluginPageAccountTree *account_page;
+	GncPluginPageAccountTreePrivate *priv;
 	
 	ENTER("page %p, ui_merge %p", plugin_page, ui_merge);
-	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page_account_tree));
 
-	egg_menu_merge_insert_action_group (ui_merge, plugin_page_account_tree->priv->action_group, 0);
+	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page));
 
-	DEBUG("merge_id was %d", plugin_page_account_tree->priv->merge_id);
-	plugin_page_account_tree->priv->merge_id =
-	  egg_menu_merge_add_ui_from_file (ui_merge,
-					   GNC_UI_DIR "/gnc-plugin-page-account-tree-ui.xml",
-					   &error);
-	DEBUG("merge_id is %d", plugin_page_account_tree->priv->merge_id);
+	account_page = GNC_PLUGIN_PAGE_ACCOUNT_TREE(plugin_page);
+	priv = account_page->priv;
 
-	g_assert(plugin_page_account_tree->priv->merge_id || error);
-	if (plugin_page_account_tree->priv->merge_id) {
-	  egg_menu_merge_ensure_update (ui_merge);
-	  plugin_page_account_tree->priv->ui_merge = ui_merge;
-	} else {
-	  g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
-		     "gnc-plugin-page-account-tree-ui.xml", error->message);
-	  g_error_free(error);
-	}
+	priv->ui_merge = ui_merge;
+	priv->merge_id =
+	  gnc_menu_merge_add_actions (priv->ui_merge,
+				      priv->action_group,
+				      "gnc-plugin-page-account-tree-ui.xml");
 	LEAVE(" ");
 }
 	

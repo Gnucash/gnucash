@@ -109,7 +109,7 @@ gnc_plugin_qif_import_add_to_window (GncPlugin *plugin,
 
 	gnc_main_window_merge_actions (window, GNC_PLUGIN_QIF_IMPORT_DEFAULT_ACTIONS,
 				       gnc_plugin_qif_import_actions, gnc_plugin_qif_import_n_actions,
-				       GNC_UI_DIR "/gnc-plugin-qif-import-ui.xml", NULL);
+				       "gnc-plugin-qif-import-ui.xml", NULL);
 }
 	
 static void
