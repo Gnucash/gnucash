@@ -59,10 +59,10 @@ gnc_hbci_enter_daterange (GtkWidget *parent,
   GtkWidget *first_button;
   GtkWidget *now_button;
   
-  xml = gnc_glade_xml_new ("hbci.glade", "HBCI_daterange_dialog");
+  xml = gnc_glade_xml_new ("hbci.glade", "GWEN_TIMErange_dialog");
 
   g_assert
-    (dialog = glade_xml_get_widget (xml, "HBCI_daterange_dialog"));
+    (dialog = glade_xml_get_widget (xml, "GWEN_TIMErange_dialog"));
 
   if (parent)
     gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (parent));

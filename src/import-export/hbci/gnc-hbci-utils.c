@@ -25,8 +25,6 @@
 
 #include <gnome.h>
 #include <errno.h>
-#include <openhbci2.h>
-#include <openhbci2/error.h>
 #include <gwenhywfar/directory.h>
 
 #include "gnc-ui.h"
@@ -39,22 +37,21 @@
 
 /* static short module = MOD_IMPORT; */
 
-/* Globale variables for HBCI_API caching. */
-static HBCI_API *gnc_hbci_api = NULL;
+/* Globale variables for AB_BANKING caching. */
+static AB_BANKING *gnc_AB_BANKING = NULL;
 static char *gnc_hbci_configfile = NULL;
 static GNCInteractor *gnc_hbci_inter = NULL;
-static GList *gnc_hbci_accountlist = NULL;
+/* static GList *AB_ACCOUNTlist = NULL; */
 
 
 /* ------------------------------------------------------------ */
-HBCI_API *
-gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
-		  GtkWidget *parent, GNCInteractor **inter,
-		  GList **list_accounts)
+AB_BANKING *
+gnc_AB_BANKING_new (const char *filename, gboolean allowNewFile,
+		  GtkWidget *parent, GNCInteractor **inter)
 {
-  HBCI_API *api = NULL;
-  HBCI_Error *err = NULL;
-  char *errstring;
+  AB_BANKING *api = NULL;
+/*   int *err = NULL; */
+/*   char *errstring; */
   
   g_assert(inter);
   
@@ -77,60 +74,12 @@ gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
     }
   
 
-  api = HBCI_API_new (FALSE, TRUE);
+  api = AB_Banking_new ("gnucash", 0);
+  /* FIXME: The configfile is ignored here */
   
-  {
-    unsigned hbci_major, hbci_minor;
-    HBCI_Error *er;
-    er = HBCI_API_configHbciVersion(filename, &hbci_major, &hbci_minor);
-    if (er) {
-      HBCI_Error_delete(er);
-      /* do nothing else; new file */
-    }
-    else {
-      if ((hbci_major == 0) && (hbci_minor == 9)) {
-	gnc_warning_dialog
-	  (parent,
-	   _(
-"The file %s seems to be from a previous version of OpenHBCI.\n"
-"With the new version of OpenHBCI, you need to run the HBCI Setup \n"
-"Druid again and create a new configuration file before you can work \n"
-"with HBCI. You need to create \n"
-"your User and Customer in the HBCI Setup Druid, but you can \n"
-"directly re-use your existing keyfile or chip card."), filename);
-	HBCI_API_delete (api);
-	return NULL;
-      }
-    }
-  }
-  
-  
-  err = HBCI_API_loadEnvironment (api, filename);
-  if (!HBCI_Error_isOk (err) && !allowNewFile) {
-    errstring = HBCI_Error_errorString (err);
-    HBCI_Error_delete (err);
-    gnc_warning_dialog
-	(parent,
-	 /* Translators: Strings from this file are really only needed
-	  * inside Germany (HBCI is not supported anywhere else). You
-	  * may safely ignore strings from the import-export/hbci
-	  * subdirectory in other countries. */
-	 _("Error while loading OpenHBCI config file:\n  %s\n"), errstring);
-    free (errstring);
-    HBCI_API_delete (api);
-    return NULL;
-  }
-  HBCI_Error_delete (err);
+  *inter = gnc_AB_BANKING_interactors (api, parent);
 
-  *inter = gnc_hbci_api_interactors (api, parent);
-
-  gnc_hbci_accountlist =
-      gnc_HBCI_Account_glist_from_kvp_glist
-      (gnc_hbci_get_book_account_list(gnc_get_current_book ()),
-       api);
-  if (list_accounts)
-    *list_accounts = gnc_hbci_accountlist;
-
+#if 0
   {
     /* Well, currently gnucash doesn't offer a way to uniformly ask
        for the ~/.gnucash directory, so we have to generate that path
@@ -145,110 +94,95 @@ gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
     databuffer = g_strjoin("", homebuffer, "/.gnucash/hbci");
 
     /*fprintf(stderr, "Setting log dir to %s\n", databuffer);*/
-    HBCI_Hbci_setApplicationDataDir(HBCI_API_Hbci(api), databuffer);
+/*     HBCI_Hbci_setApplicationDataDir(AB_Banking_Hbci(api), databuffer); */
+    /* FIXME: do we need to set this here? */
 
     g_free(databuffer);
     g_free(homebuffer);
   }
+#endif
 
   return api;
 }
 
-HBCI_API * gnc_hbci_api_new_currentbook (GtkWidget *parent, 
-					 GNCInteractor **inter,
-					 GList **list_accounts)
+AB_BANKING * gnc_AB_BANKING_new_currentbook (GtkWidget *parent, 
+					 GNCInteractor **inter)
 {
-  if (gnc_hbci_api == NULL) {
+  if (gnc_AB_BANKING == NULL) {
     /* No API cached -- create new one. */
     gnc_hbci_configfile = 
       g_strdup (gnc_hbci_get_book_configfile (gnc_get_current_book ()));
-    gnc_hbci_api = gnc_hbci_api_new (gnc_hbci_configfile, 
-				     FALSE, parent, &gnc_hbci_inter, 
-				     list_accounts);
+    gnc_AB_BANKING = gnc_AB_BANKING_new (gnc_hbci_configfile, 
+					 FALSE, parent, &gnc_hbci_inter);
     if (inter)
       *inter = gnc_hbci_inter;
 
-    return gnc_hbci_api;
+    return gnc_AB_BANKING;
 
   } else if ((gnc_hbci_configfile != NULL) && 
 	     (strcmp(gnc_hbci_configfile, 
 		     gnc_hbci_get_book_configfile (gnc_get_current_book ()))
 	      != 0)) {
     /* Wrong API cached -- delete old and create new. */
-    gnc_hbci_api_delete (gnc_hbci_api);
+    gnc_AB_BANKING_delete (gnc_AB_BANKING);
     fprintf(stderr,
-	    "gnc_hbci_api_new_currentbook: Wrong HBCI_API cached; creating new one.\n");
-    return gnc_hbci_api_new_currentbook (parent, inter, list_accounts);
+	    "gnc_AB_BANKING_new_currentbook: Wrong AB_BANKING cached; creating new one.\n");
+    return gnc_AB_BANKING_new_currentbook (parent, inter);
   } else {
     /* Correct API cached. */
     if (inter) {
       *inter = gnc_hbci_inter;
       GNCInteractor_reparent (*inter, parent);
     }
-    if (list_accounts)
-      *list_accounts = gnc_hbci_accountlist;
     
-    return gnc_hbci_api;
+    return gnc_AB_BANKING;
   }
 }
 
-void gnc_hbci_api_delete (HBCI_API *api)
+void gnc_AB_BANKING_delete (AB_BANKING *api)
 {
-  if (api == gnc_hbci_api) {
-    gnc_hbci_api = NULL;
+  if (api == gnc_AB_BANKING) {
+    gnc_AB_BANKING = NULL;
     gnc_hbci_inter = NULL;
     g_free (gnc_hbci_configfile);
     gnc_hbci_configfile = NULL;
-    list_HBCI_Account_delete (gnc_hbci_accountlist);
-    gnc_hbci_accountlist = NULL;
   }
-  HBCI_API_delete (api);
+  if (api == 0)
+    api = gnc_AB_BANKING;
+  if (api) {
+    AB_Banking_Fini(api);
+    AB_Banking_free(api);
+  }
 }
 
 
-HBCI_Error * gnc_hbci_api_save (const HBCI_API *api)
+int gnc_AB_BANKING_save (const AB_BANKING *api) 
 {
-  const char *file = gnc_hbci_get_book_configfile (gnc_get_current_book ());
-  if ((file == NULL) || (strlen (file) == 0)) 
-    return HBCI_Error_new ("gnc_hbci_api_save", ERROR_LEVEL_NORMAL, 0, 
-			   ERROR_ADVISE_ABORT, 
-			   "No filename for config file in gnc_book.", "");
-  
-  return HBCI_API_saveEnvironment (api, file);
+  /* FIXME: do something to save the current state */
+  return 0;
 }
 
 
 
-const gnc_HBCI_Account *
-gnc_hbci_get_hbci_acc (const HBCI_API *api, Account *gnc_acc) 
-{
-  const char *bankcode = NULL, *accountid = NULL;
-  int countrycode = 0;
-  const HBCI_Bank *bank;
-  gnc_HBCI_Account *hbci_acc = NULL;
 
-  bankcode = gnc_hbci_get_account_bankcode (gnc_acc);
-  countrycode = gnc_hbci_get_account_countrycode (gnc_acc);
-  if (bankcode && (strlen(bankcode)>0) && (countrycode > 0)) {
+AB_ACCOUNT *
+gnc_hbci_get_hbci_acc (const AB_BANKING *api, Account *gnc_acc) 
+{
+  int account_uid = 0;
+  AB_ACCOUNT *hbci_acc = NULL;
+
+  account_uid = gnc_hbci_get_account_uid (gnc_acc);
+  if (account_uid > 0) {
     /*printf("gnc_hbci_get_hbci_acc: gnc_acc %s has blz %s and ccode %d\n",
       xaccAccountGetName (gnc_acc), bankcode, countrycode);*/
-    bank = HBCI_API_findBank (api, countrycode, bankcode);
-    if (bank) {
-      accountid = gnc_hbci_get_account_accountid (gnc_acc);
-      /*printf("gnc_hbci_get_hbci_acc: gnc_acc %s found blz %s and ccode %d and accountid %s, bank %p\n",
-	xaccAccountGetName (gnc_acc), bankcode, countrycode, accountid, bank);*/
-      if (accountid && (strlen(accountid)>0)) {
-	hbci_acc = list_HBCI_Account_find(gnc_hbci_accountlist, 
-					  bank, bankcode, accountid);
-	/*printf("gnc_hbci_get_hbci_acc: return HBCI_Account %p\n", hbci_acc);*/
-	return hbci_acc;
-      }
-    }
+    hbci_acc = AB_Banking_GetAccount(api, account_uid);
+    /*printf("gnc_hbci_get_hbci_acc: return HBCI_Account %p\n", hbci_acc);*/
+    return hbci_acc;
   }
   return NULL;
 }
 
-
+#if 0
 static void *
 print_list_int_cb (int value, void *user_data)
 {
@@ -281,52 +215,29 @@ get_resultcode_error (const list_int *list)
   cause = (int) list_int_foreach (list, &get_resultcode_error_cb, &tmp_result);
   return MAX(tmp_result, cause);
 }
-
+#endif
 int
-gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job, gboolean verbose)
+gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose)
 {
-  list_int *list;
-  const char *msg;
+/*   list_int *list; */
+/*   const char *msg; */
   int cause = 0;
   
   g_assert (job);
-/*   if (HBCI_OutboxJob_status (job) != HBCI_JOB_STATUS_DONE) */
+/*   if (AB_JOB_status (job) != HBCI_JOB_STATUS_DONE) */
 /*     return; */
-/*   if (HBCI_OutboxJob_result (job) != HBCI_JOB_RESULT_FAILED) */
+/*   if (AB_JOB_result (job) != HBCI_JOB_RESULT_FAILED) */
 /*     return; */
 
   if (verbose) {
-    printf("OutboxJob status: ");
-    switch(HBCI_OutboxJob_status (job)) {
-    case HBCI_JOB_STATUS_TODO:
-      printf("todo");
-      break;
-    case HBCI_JOB_STATUS_DONE:
-      printf("done");
-      break;
-    default:
-    case HBCI_JOB_STATUS_NONE:
-      printf("none");
-      break;
-    }
+    printf("OutboxJob status: %s", AB_Job_Status2Char(AB_Job_GetStatus(job)));
 
-    printf(", result: ");
-    switch(HBCI_OutboxJob_result (job)) {
-    case HBCI_JOB_RESULT_SUCCESS:
-      printf("success");
-      break;
-    case HBCI_JOB_RESULT_FAILED:
-      printf("failed");
-      break;
-    default:
-    case HBCI_JOB_STATUS_NONE:
-      printf("none");
-      break;
-    }
+    printf(", result: %s", AB_Job_GetResultText(job));
     printf("\n");
   }
-  
-  list = HBCI_OutboxJob_resultCodes (job);
+
+#if 0  
+  list = AB_JOB_resultCodes (job);
   if (list_int_size (list) > 0) {
 
     cause = get_resultcode_error (list);
@@ -358,84 +269,88 @@ gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job, gboolean verbose)
       printf("OutboxJob's resultCodes list has zero length.\n");
   }
   list_int_delete (list);
+#endif
 
   return cause;
 }
 
 
 gboolean
-gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
+gnc_hbci_Error_retry (GtkWidget *parent, int error, 
 		      GNCInteractor *inter)
 {
-  int code = HBCI_Error_code (error);
+  int code = error;
 
   switch (code) {
-  case HBCI_ERROR_CODE_PIN_WRONG:
+#if 0
+  case AB_ERROR_PIN_WRONG:
     GNCInteractor_erasePIN (inter);
     return gnc_verify_dialog (parent,
 				       TRUE,
 				       _("The PIN you entered was wrong.\n"
 					 "Do you want to try again?"));
-  case HBCI_ERROR_CODE_PIN_WRONG_0:
+  case AB_ERROR_PIN_WRONG_0:
     GNCInteractor_erasePIN (inter);
     return gnc_verify_dialog (parent,
 				       TRUE,
 				       _("The PIN you entered was wrong.\n"
 					 "ATTENTION: You have zero further wrong retries left!\n"
 					 "Do you want to try again?"));
-  case HBCI_ERROR_CODE_PIN_WRONG_1:
+  case AB_ERROR_PIN_WRONG_1:
     GNCInteractor_erasePIN (inter);
     return gnc_verify_dialog (parent,
 				       TRUE,
 				       _("The PIN you entered was wrong.\n"
 					 "You have one further wrong retry left.\n"
 					 "Do you want to try again?"));
-  case HBCI_ERROR_CODE_PIN_WRONG_2:
+  case AB_ERROR_PIN_WRONG_2:
     GNCInteractor_erasePIN (inter);
     return gnc_verify_dialog (parent,
 				       TRUE,
 				       _("The PIN you entered was wrong.\n"
 					 "You have two further wrong retries left.\n"
 					 "Do you want to try again?"));
-  case HBCI_ERROR_CODE_PIN_ABORTED:
-    /*     printf("gnc_hbci_error_feedback: PIN dialog was aborted.\n"); */
+  case AB_ERROR_PIN_ABORTED:
+    /*     printf("gnc_hbci_Error_feedback: PIN dialog was aborted.\n"); */
     return FALSE;
-  case HBCI_ERROR_CODE_PIN_TOO_SHORT:
+  case AB_ERROR_PIN_TOO_SHORT:
     GNCInteractor_erasePIN (inter);
     return gnc_verify_dialog (parent,
 				       TRUE,
 				       _("The PIN you entered was too short.\n"
 					 "Do you want to try again?"));
-  case HBCI_ERROR_CODE_CARD_DESTROYED:
+  case AB_ERROR_CARD_DESTROYED:
     GNCInteractor_hide (inter);
     gnc_error_dialog
       (parent,
        _("Unfortunately you entered a wrong PIN for too many times.\n"
 	 "Your chip card is therefore destroyed. Aborting."));
     return FALSE;
-  case HBCI_ERROR_CODE_FILE_NOT_FOUND:
-    /*     printf("gnc_hbci_error_feedback: File not found error.\n"); */
+  case AB_ERROR_FILE_NOT_FOUND:
+    /*     printf("gnc_hbci_Error_feedback: File not found error.\n"); */
     return FALSE;
-  case HBCI_ERROR_CODE_NO_CARD:
+  case AB_ERROR_NO_CARD:
     return gnc_verify_dialog (parent,
 				       TRUE,
 				       _("No chip card has been found in the chip card reader.\n"
 					 "Do you want to try again?"));
-  case HBCI_ERROR_CODE_JOB_NOT_SUPPORTED:
+  case AB_ERROR_JOB_NOT_SUPPORTED:
     GNCInteractor_hide (inter);
     gnc_error_dialog 
       (parent,
        _("Unfortunately this HBCI job is not supported \n"
 	 "by your bank or for your account. Aborting."));
     return FALSE;
-  case HBCI_ERROR_CODE_SOCKET_NO_CONNECT:
+#endif
+  case AB_ERROR_NETWORK:
     GNCInteractor_hide (inter);
     gnc_error_dialog 
       (parent,
        _("The server of your bank refused the HBCI connection.\n"
 	 "Please try again later. Aborting."));
     return FALSE;
-  case HBCI_ERROR_CODE_MEDIUM:
+#if 0
+  case AB_ERROR_MEDIUM:
     gnc_error_dialog 
       (parent,
        _("There was an error when loading the plugin for your security medium \n"
@@ -444,13 +359,14 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
 	 "to recompile and reinstall the plugin again. Aborting now."));
     GNCInteractor_hide (inter);
     return FALSE;
-  case HBCI_ERROR_CODE_BAD_MEDIUM:
+  case AB_ERROR_BAD_MEDIUM:
     gnc_error_dialog 
       (parent,
        _("Your security medium is not supported. No appropriate plugin \n"
 	 "has been found for that medium. Aborting."));
     GNCInteractor_hide (inter);
     return FALSE;
+#endif
       
   default:
     return FALSE;
@@ -458,6 +374,7 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
   
 }
 
+#if 0
 /* Prints all results that can be found in the outbox into the interactor */
 static void gnc_hbci_printresult(HBCI_Outbox *outbox, GNCInteractor *inter)
 {
@@ -507,14 +424,22 @@ static void gnc_hbci_printresult(HBCI_Outbox *outbox, GNCInteractor *inter)
 
   GWEN_DB_Group_free(rsp);
 }
+#endif
 
+static gboolean hbci_Error_isOk(int err) {
+  switch (err) {
+  case 0:
+    return TRUE;
+  default:
+    return FALSE;
+  };
+}
 
 gboolean
-gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
-		      HBCI_Outbox *queue,
-		      HBCI_OutboxJob *job, GNCInteractor *inter)
+gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
+			AB_JOB *job, GNCInteractor *inter)
 {
-  HBCI_Error *err;
+  int err;
   int resultcode;
 	  
   if (inter)
@@ -522,33 +447,31 @@ gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
 
   if (gnc_lookup_boolean_option("_+Advanced", 
 				"HBCI Verbose Debug Messages", FALSE)) {
-    GWEN_Logger_SetLevel(0, GWEN_LoggerLevelDebug);
-    HBCI_Hbci_setDebugLevel (4);
+/*     GWEN_Logger_SetLevel(0, GWEN_LoggerLevelDebug); */
+/*     HBCI_Hbci_setDebugLevel (4); */
   }
-  else
-    HBCI_Hbci_setDebugLevel (0);
+/*   else */
+/*     HBCI_Hbci_setDebugLevel (0); */
 
   do {
     if (inter)
       GNCInteractor_show_nodelete (inter);
-    err = HBCI_API_executeQueue (api, queue);
-    g_assert (err);
+    err = AB_Banking_ExecuteQueue (api);
 
     /* Print result codes to interactor */
-    gnc_hbci_printresult(queue, inter);
+/*     gnc_hbci_printresult(queue, inter); */
     
-  } while (gnc_hbci_error_retry (parent, err, inter));
+  } while (gnc_hbci_Error_retry (parent, err, inter));
   
   resultcode = gnc_hbci_debug_outboxjob (job, FALSE);
-  if (!HBCI_Error_isOk(err)) {
-    char *errstr = 
-      g_strdup_printf("gnc_hbci_api_execute: Error at executeQueue: %s",
-		      HBCI_Error_message (err));
-    printf("%s\n", errstr);
-    HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor 
-				      (HBCI_API_Hbci (api)), errstr);
-    g_free (errstr);
-    HBCI_Error_delete (err);
+  if (!hbci_Error_isOk(err)) {
+/*     char *errstr =  */
+/*       g_strdup_printf("gnc_AB_BANKING_execute: Error at executeQueue: %s", */
+/* 		      hbci_Error_message (err)); */
+/*     printf("%s\n", errstr); */
+/*     HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor  */
+/* 				      (AB_BANKING_Hbci (api)), errstr); */
+/*     g_free (errstr); */
     gnc_hbci_debug_outboxjob (job, TRUE);
     GNCInteractor_show_nodelete (inter);
     return FALSE;
@@ -556,13 +479,11 @@ gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
 
   GNCInteractor_set_cache_valid (inter, TRUE);
   if (resultcode <= 20) {
-    HBCI_Error_delete (err);
     return TRUE;
   }
   else {
-    printf("gnc_hbci_api_execute: Some message at executeQueue: %s",
-	   HBCI_Error_message (err));
-    HBCI_Error_delete (err);
+/*     printf("gnc_AB_BANKING_execute: Some message at executeQueue: %s", */
+/* 	   hbci_Error_message (err)); */
     GNCInteractor_show_nodelete (inter);
     return TRUE; /* <- This used to be a FALSE but this was probably
 		  * as wrong as it could get. @§%$! */
@@ -596,7 +517,7 @@ static void *gnc_list_string_cb (const char *string, void *user_data)
 }
 
 
-char *gnc_hbci_descr_tognc (const HBCI_Transaction *h_trans)
+char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
 {
   /* Description */
   char *h_descr = NULL;
@@ -607,12 +528,12 @@ char *gnc_hbci_descr_tognc (const HBCI_Transaction *h_trans)
      g_strstrip every single element of the string list, which is
      only done in our callback gnc_list_string_cb. The separator is
      also set there. */
-  list_string_foreach (HBCI_Transaction_description (h_trans), 
-		       &gnc_list_string_cb,
-		       &h_descr);
-  list_string_foreach (HBCI_Transaction_otherName (h_trans), 
-		       &gnc_list_string_cb,
-		       &othername);
+  GWEN_StringList_ForEach (AB_Transaction_GetPurpose (h_trans), 
+			   &gnc_list_string_cb,
+			   &h_descr);
+  GWEN_StringList_ForEach (AB_Transaction_GetRemoteName (h_trans), 
+			   &gnc_list_string_cb,
+			   &othername);
   /*DEBUG("HBCI Description '%s'", h_descr);*/
 
   if (othername && (strlen (othername) > 0))
@@ -633,16 +554,16 @@ char *gnc_hbci_descr_tognc (const HBCI_Transaction *h_trans)
   return g_descr;
 }
 
-char *gnc_hbci_memo_tognc (const HBCI_Transaction *h_trans)
+char *gnc_hbci_memo_tognc (const AB_TRANSACTION *h_trans)
 {
   /* Memo in the Split. HBCI's transactionText contains strings like
    * "STANDING ORDER", "UEBERWEISUNGSGUTSCHRIFT", etc.  */
   /*   char *h_transactionText =  */
-  /*     g_strdup (HBCI_Transaction_transactionText (h_trans)); */
+  /*     g_strdup (AB_TRANSACTION_transactionText (h_trans)); */
   char *h_otherAccountId =
-    g_strdup (HBCI_Transaction_otherAccountId (h_trans));
+    g_strdup (AB_Transaction_GetRemoteAccountNumber (h_trans));
   char *h_otherBankCode =
-    g_strdup (HBCI_Transaction_otherBankCode (h_trans));
+    g_strdup (AB_Transaction_GetRemoteBankCode (h_trans));
   char *g_memo;
 
   /*   g_strstrip (h_transactionText); */
@@ -662,10 +583,11 @@ char *gnc_hbci_memo_tognc (const HBCI_Transaction *h_trans)
 }
 
 
+#if 0
 /** Return the only customer that can act on the specified account, or
     NULL if none was found. */
 const HBCI_Customer *
-gnc_hbci_get_first_customer(const gnc_HBCI_Account *h_acc)
+gnc_hbci_get_first_customer(const AB_ACCOUNT *h_acc)
 {
   /* Get one customer. */
   const list_HBCI_User *userlist;
@@ -673,7 +595,7 @@ gnc_hbci_get_first_customer(const gnc_HBCI_Account *h_acc)
   const HBCI_User *user;
   g_assert(h_acc);
   
-  bank = gnc_HBCI_Account_bank (h_acc);
+  bank = AB_ACCOUNT_bank (h_acc);
   userlist = HBCI_Bank_users (bank);
   g_assert (userlist);
   user = choose_one_user(gnc_ui_get_toplevel (), userlist);
@@ -918,4 +840,12 @@ choose_one_user (gncUIWidget parent, const list_HBCI_User *userlist)
   
   g_assert_not_reached();
   return NULL;
+}
+#endif
+
+char *gnc_AB_VALUE_toReadableString(const AB_VALUE *v)
+{
+  char tmp[100];
+  sprintf(tmp, "%.2f %s", AB_Value_GetValue(v), AB_Value_GetCurrency(v));
+  return g_strdup(tmp);
 }

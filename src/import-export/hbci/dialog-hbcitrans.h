@@ -27,10 +27,9 @@
 
 #include <gnome.h>
 
-#include <openhbci2/api.h>
-#include <openhbci2/customer.h>
-#include <openhbci2/transaction.h>
-#include <openhbci2/outboxjob.h>
+#include <aqbanking/banking.h>
+#include <aqbanking/transaction.h>
+#include <aqbanking/job.h>
 
 #include "Account.h"
 #include "gnc-hbci-utils.h"
@@ -44,11 +43,11 @@ typedef enum GNC_HBCI_Transtype {
 } GNC_HBCI_Transtype;
 
 
-/*HBCI_Transaction *
+/*AB_TRANSACTION *
 gnc_hbci_trans (GtkWidget *parent,
-		HBCI_API *api,
+		AB_BANKING *api,
 		GNCInteractor *interactor,
-		const gnc_HBCI_Account *h_acc,
+		const AB_ACCOUNT *h_acc,
 		const HBCI_Customer *customer,
 		Account *gnc_acc,
 		GNC_HBCI_Transtype type,
@@ -58,8 +57,7 @@ gnc_hbci_trans (GtkWidget *parent,
  * specified by the arguments, and return a pointer to it. */
 HBCITransDialog *
 gnc_hbci_dialog_new (GtkWidget *parent,
-		     const gnc_HBCI_Account *h_acc,
-		     const HBCI_Customer *customer,
+		     const AB_ACCOUNT *h_acc,
 		     Account *gnc_acc,
 		     GNC_HBCI_Transtype trans_type,
 		     GList *templ);
@@ -72,8 +70,8 @@ GtkWidget *gnc_hbci_dialog_get_parent(const HBCITransDialog *td);
 GList *gnc_hbci_dialog_get_templ(const HBCITransDialog *td);
 /** Return the change status of the template list */
 gboolean gnc_hbci_dialog_get_templ_changed(const HBCITransDialog *td) ;
-/** Return the HBCI_Transaction. */
-const HBCI_Transaction *gnc_hbci_dialog_get_htrans(const HBCITransDialog *td);
+/** Return the AB_TRANSACTION. */
+const AB_TRANSACTION *gnc_hbci_dialog_get_htrans(const HBCITransDialog *td);
 /** Return the gnucash Transaction. */
 Transaction *gnc_hbci_dialog_get_gtrans(const HBCITransDialog *td);
 /** Hide the dialog */
@@ -84,12 +82,10 @@ void gnc_hbci_dialog_show(HBCITransDialog *td);
 
 
 int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td, 
-				 const gnc_HBCI_Account *h_acc);
-HBCI_OutboxJob *
-gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, HBCI_API *api,
-			      HBCI_Outbox *outbox,
-			      const HBCI_Customer *customer, 
-			      gnc_HBCI_Account *h_acc, 
+				 const AB_ACCOUNT *h_acc);
+AB_JOB *
+gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, AB_BANKING *api,
+			      AB_ACCOUNT *h_acc, 
 			      GNC_HBCI_Transtype trans_type);
 /** Callback function for gnc_xfer_dialog_set_txn_cb(). The user_data
  * has to be a pointer to a HBCITransDialog structure.  */
@@ -99,9 +95,8 @@ void gnc_hbci_dialog_xfer_cb(Transaction *trans, gpointer user_data);
  * the application should continue, and FALSE if the user wants to
  * enter this job again.  */
 gboolean 
-gnc_hbci_trans_dialog_execute(HBCITransDialog *td, HBCI_API *api, 
-			      HBCI_Outbox *outbox,
-			      HBCI_OutboxJob *job, GNCInteractor *interactor);
+gnc_hbci_trans_dialog_execute(HBCITransDialog *td, AB_BANKING *api, 
+			      AB_JOB *job, GNCInteractor *interactor);
 
 
 #endif

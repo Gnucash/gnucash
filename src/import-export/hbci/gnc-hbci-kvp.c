@@ -25,12 +25,14 @@
 
 #define HBCI_KEY "hbci"
 #define HBCI_ACCOUNT_ID "account-id"
+#define HBCI_ACCOUNT_UID "account-uid"
 #define HBCI_BANK_CODE "bank-code"
 #define HBCI_COUNTRY_CODE "country-code"
 #define HBCI_TRANS_RETRIEVAL "trans-retrieval"
 #define HBCI_ACCOUNTS "hbci-accounts"
 
 /* Account */
+#if 0
 char *gnc_hbci_get_account_accountid (Account *a)
 {
   kvp_frame *frame = gnc_hbci_get_account_kvp (a);
@@ -48,12 +50,6 @@ gint gnc_hbci_get_account_countrycode (Account *a)
   kvp_frame *frame = gnc_hbci_get_account_kvp (a);
   kvp_value *value = kvp_frame_get_slot (frame, HBCI_COUNTRY_CODE);
   return kvp_value_get_gint64 (value);
-}
-Timespec gnc_hbci_get_account_trans_retrieval (Account *a)
-{
-  kvp_frame *frame = gnc_hbci_get_account_kvp (a);
-  kvp_value *value = kvp_frame_get_slot (frame, HBCI_TRANS_RETRIEVAL);
-  return kvp_value_get_timespec (value);
 }
 void gnc_hbci_set_account_accountid (Account *a, const char *id)
 {
@@ -78,6 +74,27 @@ void gnc_hbci_set_account_countrycode (Account *a, gint code)
   xaccAccountBeginEdit (a);
   kvp_frame_set_slot_nc (frame, HBCI_COUNTRY_CODE, value);
   xaccAccountCommitEdit (a);
+}
+#endif
+gint gnc_hbci_get_account_uid (Account *a)
+{
+  kvp_frame *frame = gnc_hbci_get_account_kvp (a);
+  kvp_value *value = kvp_frame_get_slot (frame, HBCI_ACCOUNT_UID);
+  return kvp_value_get_gint64 (value);
+}
+void gnc_hbci_set_account_uid (Account *a, gint uid)
+{
+  kvp_frame *frame = gnc_hbci_get_account_kvp (a);
+  kvp_value *value = kvp_value_new_gint64 (uid);
+  xaccAccountBeginEdit (a);
+  kvp_frame_set_slot_nc (frame, HBCI_ACCOUNT_UID, value);
+  xaccAccountCommitEdit (a);
+}
+Timespec gnc_hbci_get_account_trans_retrieval (Account *a)
+{
+  kvp_frame *frame = gnc_hbci_get_account_kvp (a);
+  kvp_value *value = kvp_frame_get_slot (frame, HBCI_TRANS_RETRIEVAL);
+  return kvp_value_get_timespec (value);
 }
 void gnc_hbci_set_account_trans_retrieval (Account *a, Timespec time)
 {
@@ -121,6 +138,7 @@ void gnc_hbci_set_book_template_list (GNCBook *b, GList *template_list)
   qof_book_kvp_changed (b);
 }
 
+#if 0
 GList *gnc_hbci_get_book_account_list (GNCBook *b)
 {
   kvp_frame *frame = gnc_hbci_get_book_kvp (b);
@@ -134,6 +152,7 @@ void gnc_hbci_set_book_account_list (GNCBook *b, GList *account_list)
   kvp_frame_set_slot_nc (frame, HBCI_ACCOUNTS, value);
   qof_book_kvp_changed (b);
 }
+#endif
 
 
 /* lowlevel */

@@ -16,6 +16,7 @@
 
 #include "gnc-hbci-cb.h"
 #include "druid-hbci-initial.h"
+#include "gnc-hbci-utils.h"
 
 /* version of the gnc module system interface we require */
 int libgncmod_hbci_LTX_gnc_module_system_interface = 0;
@@ -78,6 +79,7 @@ libgncmod_hbci_LTX_gnc_module_init(int refcount)
 
 int
 libgncmod_hbci_LTX_gnc_module_end(int refcount) {
+  gnc_AB_BANKING_delete(0);
   return TRUE;
 }
 

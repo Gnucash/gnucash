@@ -24,7 +24,7 @@
 #define DRUID_HBCI_UTILS_H
 
 #include <gnome.h>
-#include <openhbci2/api.h>
+#include <aqbanking/banking.h>
 #include "hbci-interaction.h"
 #include "gnc-hbci-utils.h"
 
@@ -36,17 +36,17 @@ void accounts_save_kvp (GHashTable *hash);
 
 
 /** Update the account list in all the banks stored in this
- * HBCI_API. Straightforward, if we have only one bank and one user
+ * AB_BANKING. Straightforward, if we have only one bank and one user
  * with one customer. All other cases are not currently
  * implemented. */
-void update_accounts (GtkWidget *parent, HBCI_API *api, 
+void update_accounts (GtkWidget *parent, AB_BANKING *api, 
 		      GNCInteractor *inter);
 
 /** Builds a new hash table mapping all HBCI accounts to Gnucash
  * accounts, where the Gnucash accounts already have the reference
  * strings stored in their kvp's. */
 GHashTable *
-gnc_hbci_new_hash_from_kvp (HBCI_API *api);
+gnc_hbci_new_hash_from_kvp (AB_BANKING *api);
 
 gboolean 
 gnc_verify_exist_or_new_file (GtkWidget *parent, const char *filename);
@@ -54,13 +54,5 @@ gnc_verify_exist_or_new_file (GtkWidget *parent, const char *filename);
 gboolean
 gnc_test_dir_exist_error (GtkWindow *parent, const char *filename);
 
-GList *
-gnc_processOutboxResponse(HBCI_API *api, HBCI_Outbox *outbox, 
-			  GList *accountlist);
-
-/* Get keys from Job; store them in the customer's medium @§%&! */
-gboolean
-gnc_hbci_evaluate_GetKeys(HBCI_Outbox *outbox, HBCI_OutboxJob *job,
-			  HBCI_Customer *newcustomer);
 
 #endif

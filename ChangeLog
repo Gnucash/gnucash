@@ -1,3 +1,13 @@
+2004-09-04  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/*.h, *.c, macros/aqbanking.m4,
+	configure.in: Major change for HBCI. It is no longer based on the
+	openhbci2 library but instead on the aqbanking library
+	http://sf.net/projects/aqbanking which is Martin Preuss' successor
+	of openhbci2. This means that now aqbanking-0.9.2 is required
+	instead of any of the openhbci[2] package. Still needs more
+	testing, though.
+
 2004-08-28  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/Account.c: fix xaccAccountGetBalanceAsOfDate() to properly

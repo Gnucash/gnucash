@@ -30,27 +30,37 @@
 
 /* Account */
 
-/** Returns a non-copied pointer to the accountid string in the
+#if 0
+/** DEPRECATED. Returns a non-copied pointer to the accountid string in the
  * Account a. The char* is still owned by the kvp_frame, so don't free
  * it until you want to delete the whole kvp_frame. */
 char *gnc_hbci_get_account_accountid (Account *a);
-/** Set the accountid string in the Account a. A copy of the string
+/** DEPRECATED. Set the accountid string in the Account a. A copy of the string
  * will be stored. The Account will be marked as "dirty". */
 void gnc_hbci_set_account_accountid (Account *a, const char *id);
 
-/** Returns a non-copied pointer to the bankcode string in the
+/** DEPRECATED. Returns a non-copied pointer to the bankcode string in the
  * Account a. The char* is still owned by the kvp_frame, so don't free
  * it until you want to delete the whole kvp_frame. */
 char *gnc_hbci_get_account_bankcode (Account *a);
-/** Set the bankcode string in the Account a. A copy of the string
+/** DEPRECATED. Set the bankcode string in the Account a. A copy of the string
  * will be stored. The Account will be marked as "dirty". */
 void gnc_hbci_set_account_bankcode (Account *a, const char *code);
 
-/** Returns the countrycode integer value from the Account a.  */
+/** DEPRECATED. Returns the countrycode integer value from the Account a.  */
 gint gnc_hbci_get_account_countrycode (Account *a);
-/** Set the countrycode integer value in the Account a.  The Account
+/** DEPRECATED. Set the countrycode integer value in the Account a.  The Account
  * will be marked as "dirty". */
 void gnc_hbci_set_account_countrycode (Account *a, gint code);
+#endif
+
+/** Returns the unique id for the AB_BANKING account in the Account
+ * a. */
+gint gnc_hbci_get_account_uid (Account *a);
+/** Set the unique id for the AB_BANKING account in the Account a. The
+    Account will be marked as "dirty". */
+void gnc_hbci_set_account_uid (Account *a, gint uid);
+
 
 /** Returns the time of last online transaction retrieval */
 Timespec gnc_hbci_get_account_trans_retrieval (Account *a);
@@ -75,11 +85,13 @@ void gnc_hbci_set_book_configfile (GNCBook *b, const char *filename);
 GList *gnc_hbci_get_book_template_list (GNCBook *b);
 void gnc_hbci_set_book_template_list (GNCBook *b, GList *template_list);
 
+#if 0
 /** Returns a non-copied pointer to the GList of kvp_frames which
  * eventually are the available HBCI accounts, stored in the given
  * book. */
 GList *gnc_hbci_get_book_account_list (GNCBook *b);
 void gnc_hbci_set_book_account_list (GNCBook *b, GList *account_list);
+#endif
 
 /* lowlevel */
 

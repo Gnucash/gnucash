@@ -24,7 +24,7 @@
 #ifndef HBCI_INTERACTIONP_H
 #define HBCI_INTERACTIONP_H
 
-#include <openhbci2/interactor.h>
+#include <aqbanking/banking.h>
 #include <gnome.h>
 
 
@@ -45,6 +45,7 @@ struct _inter_data
   GtkWidget *job_entry;
   GtkWidget *action_entry;
   GtkWidget *action_progress;
+  double action_max;
 
   /* Log window */
   GtkWidget *log_text;
@@ -75,14 +76,20 @@ struct _inter_data
   gboolean cache_pin;
   /* The cached PIN and the HBCI_User it's cached for. */
   char *pw;
-  const HBCI_User *user;
+  char *cache_text;
   /* Whether this PIN is really valid or not. */
   gboolean cache_valid;
+
+  /* Dialogs */
+  int showbox_id;
+  GHashTable *showbox_hash; 
+  GtkWidget *showbox_last;
+
 };
 
 void delete_GNCInteractor (GNCInteractor *data);
 
-HBCI_Interactor *
-gnc_hbci_new_interactor(GNCInteractor *data);
+void
+gnc_hbci_add_callbacks(AB_BANKING *ba, GNCInteractor *data);
 
 #endif
