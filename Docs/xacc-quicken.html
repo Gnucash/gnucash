@@ -5,10 +5,10 @@
   </head>
   
   <body>
-  <h1>Quicken User's Guide</h1>
+  <h1>Quicken (TM) User's Guide</h1>
     Not all accounting systems use the same words for the same
     concepts.  Below follws some notes for
-    users accustomed to Quicken (TM) products.
+    users accustomed to Quicken products.
 
   <h2>Categories</h2>
     What Quicken calls "Categories" are really just 
@@ -16,6 +16,49 @@
     Thus, if you are used to specifying a category in Quicken, 
     just create an income/expense account of the same name in
     X-Acccountant, and use that as a category. 
+
+  <h2>Quicken QIF File Import</h2>
+    X-Accountant supports the import of Quicken Import Files
+    (QIF). (Note: Only Quicken Version 3.0 QIF has been tested).
+    Due to the curious nature of QIF, please read this section 
+    carefully, or you may be disappointed with the results.
+    <p>
+    To create a Quicken QIF file, start Quicken (yes, it works
+    Wine, and probably Wabi too), choose the menu "File"
+    and select the "Export..." menu entry.  Under Quicken 
+    Version 3.0, you can only export one account at a time, 
+    and thus, exporting will prove to be a tedious process.
+    When exporting, note that there are a series of check 
+    boxes marked "Transactions", "Accounts List", "Category
+    List", etc.  For best results, you will want to make
+    sure that these three are checked.  If you do *not*
+    check the "Accounts List" box, then the name of your
+    account will be lost.
+    <p>
+    To import a Quicken QIF file, choose the menu "File"
+    and select the entry "Import QIF".  The imported wile 
+    will be merged with whatever othe data you currently
+    have in X-Accountant.  This merge allows multiple
+    Quicken accounts to be imported and merged into 
+    one account group.  Note that during merge, a scan 
+    is made for duplicate transactions, and duplicates 
+    are removed.  A duplicate transaction is one 
+    where the date, description (payee), memo, quantity, share price,
+    and debited/credited accounts or catagories match exactly.
+    Thus, the merge should be safe unless you have multiple
+    transactions on the same date, to the same account,
+    for the same amount, with the same description and memo.
+    <p>
+    Note that when the "Accounts List" and "Category List"
+    is exported from Quicken, <b>all</b> accounts and 
+    categories will be exported, even if they are empty,
+    and contain no transactions.  When these are imported,
+    they will appear as accounts with a balance of zero.
+    If you do not need or use these accounts, delete them.
+    A future X-Accountant enhancement will allow you to
+    delete them en-masse, or to make them invisible without
+    deleting them.
+    
 
   </body>
 </html>
