@@ -420,7 +420,7 @@ test_mode (const char *db_name, const char *mode,
   add_random_transactions_to_session (session,
                                       get_random_int_in_range (10, 20));
 
-  if (!save_db_file (session, db_name, mode))
+  if (!save_db_file (session, db_name, "single-update"))
     return FALSE;
 
   session_db = gnc_session_new ();

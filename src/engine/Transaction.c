@@ -313,6 +313,54 @@ xaccSplitEqual(const Split *sa, const Split *sb,
     return FALSE;
   }
 
+  if (!gnc_numeric_equal (sa->balance, sb->balance))
+  {
+    char *str_a;
+    char *str_b;
+
+    str_a = gnc_numeric_to_string (sa->balance);
+    str_b = gnc_numeric_to_string (sb->balance);
+
+    PWARN ("balances differ: %s vs %s", str_a, str_b);
+
+    g_free (str_a);
+    g_free (str_b);
+
+    return FALSE;
+  }
+
+  if (!gnc_numeric_equal (sa->cleared_balance, sb->cleared_balance))
+  {
+    char *str_a;
+    char *str_b;
+
+    str_a = gnc_numeric_to_string (sa->cleared_balance);
+    str_b = gnc_numeric_to_string (sb->cleared_balance);
+
+    PWARN ("cleared balances differ: %s vs %s", str_a, str_b);
+
+    g_free (str_a);
+    g_free (str_b);
+
+    return FALSE;
+  }
+
+  if (!gnc_numeric_equal (sa->reconciled_balance, sb->reconciled_balance))
+  {
+    char *str_a;
+    char *str_b;
+
+    str_a = gnc_numeric_to_string (sa->reconciled_balance);
+    str_b = gnc_numeric_to_string (sb->reconciled_balance);
+
+    PWARN ("reconciled balances differ: %s vs %s", str_a, str_b);
+
+    g_free (str_a);
+    g_free (str_b);
+
+    return FALSE;
+  }
+
   if (!xaccTransEqual(sa->parent, sb->parent, check_guids, check_txn_splits))
   {
     PWARN ("transactions differ");

@@ -448,6 +448,104 @@ xaccAccountEqual(Account *aa, Account *ab, gboolean check_guids)
     return FALSE;
   }
 
+  if (!gnc_numeric_equal (aa->starting_balance, ab->starting_balance))
+  {
+    char *str_a;
+    char *str_b;
+
+    str_a = gnc_numeric_to_string (aa->starting_balance);
+    str_b = gnc_numeric_to_string (ab->starting_balance);
+
+    PWARN ("starting balances differ: %s vs %s", str_a, str_b);
+
+    g_free (str_a);
+    g_free (str_b);
+
+    return FALSE;
+  }
+
+  if (!gnc_numeric_equal (aa->starting_cleared_balance,
+                          ab->starting_cleared_balance))
+  {
+    char *str_a;
+    char *str_b;
+
+    str_a = gnc_numeric_to_string (aa->starting_cleared_balance);
+    str_b = gnc_numeric_to_string (ab->starting_cleared_balance);
+
+    PWARN ("starting cleared balances differ: %s vs %s", str_a, str_b);
+
+    g_free (str_a);
+    g_free (str_b);
+
+    return FALSE;
+  }
+
+  if (!gnc_numeric_equal (aa->starting_reconciled_balance,
+                          ab->starting_reconciled_balance))
+  {
+    char *str_a;
+    char *str_b;
+
+    str_a = gnc_numeric_to_string (aa->starting_reconciled_balance);
+    str_b = gnc_numeric_to_string (ab->starting_reconciled_balance);
+
+    PWARN ("starting reconciled balances differ: %s vs %s", str_a, str_b);
+
+    g_free (str_a);
+    g_free (str_b);
+
+    return FALSE;
+  }
+
+  if (!gnc_numeric_equal (aa->balance, ab->balance))
+  {
+    char *str_a;
+    char *str_b;
+
+    str_a = gnc_numeric_to_string (aa->balance);
+    str_b = gnc_numeric_to_string (ab->balance);
+
+    PWARN ("balances differ: %s vs %s", str_a, str_b);
+
+    g_free (str_a);
+    g_free (str_b);
+
+    return FALSE;
+  }
+
+  if (!gnc_numeric_equal (aa->cleared_balance, ab->cleared_balance))
+  {
+    char *str_a;
+    char *str_b;
+
+    str_a = gnc_numeric_to_string (aa->cleared_balance);
+    str_b = gnc_numeric_to_string (ab->cleared_balance);
+
+    PWARN ("cleared balances differ: %s vs %s", str_a, str_b);
+
+    g_free (str_a);
+    g_free (str_b);
+
+    return FALSE;
+  }
+
+  if (!gnc_numeric_equal (aa->reconciled_balance, ab->reconciled_balance))
+  {
+    char *str_a;
+    char *str_b;
+
+    str_a = gnc_numeric_to_string (aa->reconciled_balance);
+    str_b = gnc_numeric_to_string (ab->reconciled_balance);
+
+    PWARN ("reconciled balances differ: %s vs %s", str_a, str_b);
+
+    g_free (str_a);
+    g_free (str_b);
+
+    return FALSE;
+  }
+
   /* no parent; always compare downwards. */
 
   {
