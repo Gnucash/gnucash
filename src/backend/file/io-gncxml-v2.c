@@ -911,10 +911,14 @@ write_commodities(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 
     tbl = gnc_book_get_commodity_table(book);
 
-    namespaces = g_list_sort(gnc_commodity_table_get_namespaces(tbl),
-                             compare_namespaces);
+    namespaces = gnc_commodity_table_get_namespaces(tbl);
+    if(namespaces) 
+    {
+        namespaces = g_list_sort(namespaces, compare_namespaces);
+    }
 
-    for(lp = namespaces; lp; lp = lp->next) {
+    for(lp = namespaces; lp; lp = lp->next) 
+    {
         gchar *space;
 
         if(!lp->data) {
@@ -923,13 +927,15 @@ write_commodities(FILE *out, QofBook *book, sixtp_gdv2 *gd)
         }
 
         space = (gchar *) lp->data;
-        if(!gnc_commodity_namespace_is_iso(space)) {
+        if(!gnc_commodity_namespace_is_iso(space)) 
+        {
             GList *comms = gnc_commodity_table_get_commodities(tbl, space);
             GList *lp2;
 
             comms = g_list_sort(comms, compare_commodity_ids);
 
-            for(lp2 = comms; lp2; lp2 = lp2->next) {
+            for(lp2 = comms; lp2; lp2 = lp2->next) 
+            {
                 xmlNodePtr comnode = gnc_commodity_dom_tree_create(
                     (gnc_commodity *) lp2->data);
 
@@ -945,7 +951,7 @@ write_commodities(FILE *out, QofBook *book, sixtp_gdv2 *gd)
         }
     }
 
-    g_list_free (namespaces);
+    if (namespaces) g_list_free (namespaces);
 }
 
 static void
