@@ -118,9 +118,13 @@ Account    * xaccCloneAccount (const Account *from, QofBook *book,
 /** The xaccCloneAccountSimple() routine makes a simple copy of the
  *  indicated account, placing it in the indicated book.  It copies
  *  the account type, name, description, and the kvp values;
- *  it does not copy splits/transactions.  Note also that it 
- *  does NOT use the 'gemini' kvp value to indicate where it 
- *  was copied from.*/
+ *  it does not copy splits/transactions.  The book should have 
+ *  a commodity table in it that has commodities with the same
+ *  unique name as the ones being copied in the account (the 
+ *  commodities in the clone will be those from the book).
+ *  Note that this routines does *NOT* use the 'gemini' kvp value 
+ *  to indicate where it was copied from.
+ */
 Account    * xaccCloneAccountSimple (const Account *from, QofBook *book);
 
 /** The xaccAccountBeginEdit() subroutine is the first phase of

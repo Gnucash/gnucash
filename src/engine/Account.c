@@ -157,6 +157,8 @@ xaccMallocAccount (QofBook *book)
 Account *
 xaccCloneAccountSimple(const Account *from, QofBook *book)
 {
+    const char * ucom;
+    const gnc_commodity_table * comtbl;
     Account *ret;
 
     if (!from || !book) return NULL;
@@ -178,7 +180,12 @@ xaccCloneAccountSimple(const Account *from, QofBook *book)
 
     ret->kvp_data    = kvp_frame_copy(from->kvp_data);
 
-    ret->commodity    = from->commodity;
+    /* The new book should contain a commodity that matches
+     * the one in the old book. Find it, use it. */
+    ucom = gnc_commodity_get_unique_name (from->commodity);
+    comtbl = gnc_commodity_table_get_table (book);
+    ret->commodity    = gnc_commodity_table_lookup_unique (comtbl, ucom);
+
     ret->commodity_scu = from->commodity_scu;
     ret->non_standard_scu = from->non_standard_scu;
     ret->core_dirty   = TRUE;
@@ -212,7 +219,12 @@ xaccCloneAccount (const Account *from, QofBook *book,
 
     ret->kvp_data    = kvp_frame_copy(from->kvp_data);
 
-    ret->commodity    = from->commodity;
+    /* The new book should contain a commodity that matches
+     * the one in the old book. Find it, use it. */
+    ucom = gnc_commodity_get_unique_name (from->commodity);
+    comtbl = gnc_commodity_table_get_table (book);
+    ret->commodity    = gnc_commodity_table_lookup_unique (comtbl, ucom);
+
     ret->commodity_scu = from->commodity_scu;
     ret->non_standard_scu = from->non_standard_scu;
     ret->core_dirty   = TRUE;
