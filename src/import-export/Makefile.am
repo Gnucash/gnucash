@@ -40,11 +40,12 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
   ${G_WRAP_COMPILE_ARGS} \
-  ${GUILE_INCS} \
-  ${GLIB_CFLAGS} \
-  ${GLADE_CFLAGS} \
+  ${GNOME_INCLUDEDIR} \
+  ${GTKHTML_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
-  ${GTKHTML_CFLAGS}
+  ${GLADE_CFLAGS} \
+  ${GUILE_INCS} \
+  ${GLIB_CFLAGS} 
 
 EXTRA_DIST = $(glade_DATA) \
   .cvsignore
