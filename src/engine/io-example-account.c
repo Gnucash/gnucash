@@ -301,7 +301,6 @@ gnc_read_example_account(const gchar *filename)
     }
 
     xaccGroupMarkSaved(gea->group);
-    xaccGroupDepthAutoCode(gea->group);
     xaccAccountGroupCommitEdit(gea->group);
     
     return gea;

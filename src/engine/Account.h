@@ -177,16 +177,6 @@ void         xaccTransFixSplitDateOrder (Transaction *trans);
  */
 int          xaccAccountOrder (Account **account_1, Account **account_2);
 
-/* The xaccAccountAutoCode() method will assign an automatically
- *    generated account code to the account, if one does not already 
- *    exist.  Account codes will have the indicated number of digits
- *    in them.  The numbering scheme roughly follows generally
- *    accepted accounting practice, in that top-level accounts
- *    will be number 100, 200, etc., second level accounts 110, 120,
- *    .. 210, 220, ...etc. and third level accounts 111, 112, .. etc.
- */
-void         xaccAccountAutoCode (Account *account, int digits);
-
 void xaccAccountSetType (Account *account, int);
 void xaccAccountSetName (Account *account, const char *name);
 void xaccAccountSetCode (Account *account, const char *code);

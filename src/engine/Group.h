@@ -164,32 +164,6 @@ AccountGroup * xaccGetAccountRoot (Account *account);
  */
 Account * xaccGroupGetParentAccount (AccountGroup *group);
 
-/*
- * The xaccGroupGetNextFreeCode() method will try to guess a reasonable 
- *    candidate for the next unused account code in this group.
- *    The returned string is malloced, you must free the returned 
- *    pointer when done.
- *
- * The xaccAccountGetNextChildCode() method does same as above,
- *    except that it returns a value appropriate for a child account.
- *    The returned string is malloced, you must free the returned 
- *    pointer when done.
- *
- * The xaccGroupAutoCode() method will traverse the group, automatically
- *    inserting account codes into those accounts whose account codes 
- *    are blank.  It uses the algorithm used in xaccAccountAutoCode()
- *    to pick an account code.
- *
- * The xaccGroupDepthAutoCode() first measures the depth of the account
- *    tree, and uses that depth to pick the number of digits in the account
- *    code.
- */
-
-char * xaccGroupGetNextFreeCode (AccountGroup *grp, int num_digits);
-char * xaccAccountGetNextChildCode (Account *acc, int num_digits);
-void   xaccGroupAutoCode (AccountGroup *grp, int num_digits);
-void   xaccGroupDepthAutoCode (AccountGroup *grp);
-
 /* if the function returns null for a given item, it won't show up in
    the result list */
 GSList *xaccGroupMapAccounts(AccountGroup *grp,

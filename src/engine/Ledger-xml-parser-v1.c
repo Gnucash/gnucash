@@ -127,9 +127,6 @@ ledger_data_end_handler(gpointer data_for_children,
    */
   xaccGroupMarkSaved (ag);
 
-  /* auto-number the accounts, if they are not already numbered */
-  xaccGroupDepthAutoCode (ag);
-
   /* commit all groups, this completes the BeginEdit started when the
    * account_end_handler finished reading the account.
    */

@@ -453,9 +453,6 @@ gnc_book_load_from_xml_file_v2(
     /* also mark the pricedb as saved for the same reasons */
     gnc_pricedb_mark_clean (gnc_book_get_pricedb (book));
 
-    /* auto-number the accounts, if they are not already numbered */
-    xaccGroupDepthAutoCode (gnc_book_get_group(book));
-
     /* Fix account and transaction commodities */
     xaccGroupScrubCommodities (gnc_book_get_group(book));
 

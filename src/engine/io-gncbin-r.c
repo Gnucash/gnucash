@@ -465,9 +465,6 @@ gnc_load_financials_from_fd(GNCBook *book, int fd)
   holder = xaccMallocAccountGroup();
   grp = readGroup (fd, NULL, token);
 
-  /* auto-number the accounts, if they are not already numbered */
-  xaccGroupDepthAutoCode (grp);
-
   /* the number of unclaimed accounts should be zero if the 
    * read succeeded.  But just in case of a very unlikely 
    * error, try to continue anyway. */

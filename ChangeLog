@@ -1,5 +1,23 @@
 2001-07-11  Dave Peticolas  <dave@krondo.com>
 
+	* src/engine/io-gncxml-v2.c: same as below
+
+	* src/engine/io-gncbin-r.c: same as below
+
+	* src/engine/io-example-account.c: same as below
+
+	* src/engine/Ledger-xml-parser-v1.c: remove autocode
+
+	* src/engine/Group.[ch]: remove autocode api. This hasn't
+	really been used in a while, and account codes are generally
+	assigned based on account function, not just hierarchy position.
+
+	* src/engine/Account.[ch]: remove autocode api
+
+	* src/guile/gnc.gwp: remove auto code api
+
+	* src/scm/commodity-utilities.scm: fix function calls
+
 	* src/test/test-xml-transaction.c: CIT (currency-in-transaction)
 
 	* src/test/test-xml-account.c: CIT

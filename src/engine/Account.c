@@ -913,27 +913,6 @@ xaccAccountOrder (Account **aa, Account **ab) {
 
 /********************************************************************\
 \********************************************************************/
-/* account codes will be assigned base-36, with three digits */
-
-#define BASE 36
-
-void 
-xaccAccountAutoCode (Account *acc, int digits) {
-  if (!acc) return;
-  if (acc->accountCode) return;   /* no-op if code already assinged */
-  if (!(acc->parent)) return; 
-
-  xaccAccountBeginEdit(acc);
-  {
-    acc->accountCode = xaccGroupGetNextFreeCode (acc->parent, digits);
-    acc->parent->saved = FALSE;
-    acc->core_dirty = TRUE;
-  }
-  xaccAccountCommitEdit(acc);
-}
-
-/********************************************************************\
-\********************************************************************/
 
 void 
 xaccAccountSetType (Account *acc, int tip) {

@@ -59,7 +59,7 @@
 		  ;; which have two *different* commodities
 		  ;; involved.
 		  (lambda (s) (let ((trans-comm
-				     (gnc:transaction-get-commodity 
+				     (gnc:transaction-get-currency 
 				      (gnc:split-get-parent s)))
 				    (acc-comm
 				     (gnc:account-get-commodity 
@@ -127,7 +127,7 @@
 	(total-domestic (gnc:numeric-zero)))
     (map-in-order
      (lambda (a)
-       (let* ((transaction-comm (gnc:transaction-get-commodity 
+       (let* ((transaction-comm (gnc:transaction-get-currency 
 				 (gnc:split-get-parent a)))
 	      (account-comm (gnc:account-get-commodity 
 			     (gnc:split-get-account a)))
@@ -224,7 +224,7 @@
   ;; go through all splits; convert all splits into a price.
   (map-in-order
    (lambda (a)
-     (let* ((transaction-comm (gnc:transaction-get-commodity 
+     (let* ((transaction-comm (gnc:transaction-get-currency 
 			       (gnc:split-get-parent a)))
 	    (account-comm (gnc:account-get-commodity 
 			   (gnc:split-get-account a)))
@@ -491,7 +491,7 @@
 	;; and share-amounts
 	(for-each 
 	 (lambda (a)
-	   (let* ((transaction-comm (gnc:transaction-get-commodity 
+	   (let* ((transaction-comm (gnc:transaction-get-currency 
 				     (gnc:split-get-parent a)))
 		  (account-comm (gnc:account-get-commodity 
 				 (gnc:split-get-account a)))
