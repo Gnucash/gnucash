@@ -94,6 +94,7 @@ gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h: .scm-links gw-bus
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \
 	 (set! %load-path (cons \"../business-core\" %load-path)) \
 	 (set! %load-path (cons \"../../engine\" %load-path)) \
+	 (set! %load-path (cons \"../../app-utils\" %load-path)) \
 	 (set! %load-path (cons \"../../gnome-utils\" %load-path)) \
 	 (primitive-load \"./gw-business-gnome-spec.scm\") \
 	 (gw:generate-module \"gw-business-gnome\")"
