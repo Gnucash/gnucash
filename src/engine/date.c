@@ -28,6 +28,8 @@
 \********************************************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #include "config.h"
@@ -102,7 +104,8 @@ void printDate (char * buff, int day, int month, int year)
  *
  * Globals: global dateFormat value
  */
-int scanDate(const char *buff, int *day, int *month, int *year)
+void 
+scanDate(const char *buff, int *day, int *month, int *year)
 {
    char *dupe, *tmp, *first_field, *second_field, *third_field;
    int iday, imonth, iyear;
@@ -165,8 +168,6 @@ int scanDate(const char *buff, int *day, int *month, int *year)
    *year=iyear;
    *month=imonth;
    *day=iday;
-
-   return;
 }
 
 /**

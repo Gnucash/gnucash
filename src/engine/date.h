@@ -110,7 +110,7 @@ typedef enum
 
 /** PROTOTYPES ******************************************************/
 void printDate (char * buff, int day, int month, int year);
-int scanDate (const char *buff, int *day, int *monty, int *year);
+void scanDate (const char *buff, int *day, int *monty, int *year);
 char dateSeparator(void);
 
 void   adjustDay( Date *date, int adj );
