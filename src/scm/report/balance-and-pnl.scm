@@ -1,8 +1,5 @@
 ;; -*-scheme-*-
 
-(use-modules (ice-9 slib))
-(require 'stdio)
-
 (gnc:depend "text-export.scm")
 
 (let ()

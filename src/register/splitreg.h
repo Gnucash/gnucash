@@ -143,7 +143,7 @@ struct _SplitRegister {
    ComboCell     * xfrmCell;
    ComboCell     * mxfrmCell;
    ComboCell     * xtoCell;
-   BasicCell     * memoCell;
+   QuickFillCell * memoCell;
    PriceCell     * creditCell;
    PriceCell     * debitCell;
    PriceCell     * priceCell;
@@ -177,13 +177,40 @@ struct _SplitRegister {
    /* The destroy callback gives user's a chance 
     * to free up any associated user_hook data */
    void (* destroy) (SplitRegister *);
-
 };
+
+
+typedef struct _SplitRegisterColors SplitRegisterColors;
+
+struct _SplitRegisterColors
+{
+  uint32 single_cursor_active_bg_color;
+  uint32 single_cursor_passive_bg_color;
+  uint32 single_cursor_passive_bg_color2;
+
+  uint32 double_cursor_active_bg_color;
+  uint32 double_cursor_passive_bg_color;
+  uint32 double_cursor_passive_bg_color2;
+
+  gncBoolean double_alternate_virt;
+
+  uint32 trans_cursor_active_bg_color;
+  uint32 trans_cursor_passive_bg_color;
+
+  uint32 split_cursor_active_bg_color;
+  uint32 split_cursor_passive_bg_color;
+
+  uint32 header_bg_color;
+};
+
 
 SplitRegister * xaccMallocSplitRegister (int type);
 void            xaccInitSplitRegister (SplitRegister *, int type);
 void            xaccConfigSplitRegister (SplitRegister *, int type);
 void            xaccDestroySplitRegister (SplitRegister *);
+
+void            xaccSetSplitRegisterColors (SplitRegisterColors reg_colors);
+void            xaccSplitRegisterConfigColors (SplitRegister *reg);
 
 /* returns non-zero value if updates have been made to data */
 unsigned int    xaccSplitRegisterGetChangeFlag (SplitRegister *);

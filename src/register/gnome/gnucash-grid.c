@@ -254,11 +254,10 @@ draw_cell (GnucashGrid *grid, int block,
         sheet_block = gnucash_sheet_get_block (grid->sheet, block, 0);
 
         gdk_gc_set_foreground (grid->gc, sheet_block->bg_colors[i][j]);        
-
         gdk_draw_rectangle (drawable, grid->gc, TRUE, x, y, width, height);
 
         gdk_gc_set_foreground (grid->gc, &gn_black);
-        
+
         /* draw the border */
         gdk_draw_rectangle (drawable, grid->gc, FALSE, x, y, width, height);
 
@@ -268,10 +267,9 @@ draw_cell (GnucashGrid *grid, int block,
                 font = style->fonts[i][j];
         else
                 font = grid->normal_font;
-        
-        gdk_gc_set_foreground (grid->gc, &gn_black);
+
         gdk_gc_set_foreground (grid->gc, sheet_block->fg_colors[i][j]);
-        
+
         if (table->current_cursor_virt_row == block &&
 	    (!text || strlen(text) == 0)) {
                 font = grid->italic_font;

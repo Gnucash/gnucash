@@ -63,6 +63,7 @@ typedef struct
         guint signal;  /* the signal we connect */
         guint signal2; /* the other signal we connect */
 
+        gboolean has_selection;
 	gboolean is_combo;
 	gboolean show_list;
 
@@ -101,9 +102,28 @@ gboolean item_edit_set_cursor_pos (ItemEdit *item_edit,
                                    gboolean changed_cells,
                                    gboolean extend_selection);
 
-void item_edit_cut_clipboard (ItemEdit *item_edit);
-void item_edit_copy_clipboard (ItemEdit *item_edit);
-void item_edit_paste_clipboard (ItemEdit *item_edit);
+void item_edit_redraw (ItemEdit *item_edit);
+
+void item_edit_claim_selection (ItemEdit *item_edit, guint32 time);
+
+void item_edit_cut_clipboard (ItemEdit *item_edit, guint32 time);
+void item_edit_copy_clipboard (ItemEdit *item_edit, guint32 time);
+void item_edit_paste_clipboard (ItemEdit *item_edit, guint32 time);
+void item_edit_paste_primary (ItemEdit *item_edit, guint32 time);
+
+void item_edit_set_has_selection (ItemEdit *item_edit, gboolean has_selection);
+
+gboolean item_edit_selection_clear (ItemEdit          *item_edit,
+                                    GdkEventSelection *event);
+
+void item_edit_selection_get (ItemEdit         *item_edit,
+                              GtkSelectionData *selection_data,
+                              guint             info,
+                              guint             time);
+
+void item_edit_selection_received (ItemEdit          *item_edit,
+                                   GtkSelectionData  *selection_data,
+                                   guint              time);
 
 typedef struct {
         GnomeCanvasItemClass parent_class;

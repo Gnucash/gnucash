@@ -43,6 +43,20 @@ BasicCell * xaccMallocBasicCell (void)
 
 /* ===================================================== */
 
+static char *
+BasicCellHelpValue(BasicCell *cell)
+{
+  if ((cell->value != NULL) && (cell->value[0] != 0))
+    return strdup(cell->value);
+
+  if (cell->blank_help != NULL)
+    return strdup(cell->blank_help);
+
+  return NULL;
+}
+
+/* ===================================================== */
+
 void xaccInitBasicCell (BasicCell *cell)
 {
    cell->input_output = XACC_CELL_ALLOW_ALL;
@@ -50,15 +64,18 @@ void xaccInitBasicCell (BasicCell *cell)
    cell->fg_color = 0x0;       /* black */
    cell->use_bg_color = 0;     /* ignore the color */
    cell->use_fg_color = 0;     /* ignore the color */
-   cell->value = 0x0;
+   cell->value = NULL;
+   cell->blank_help = NULL;
    cell->changed = 0;
    cell->set_value = NULL;
    cell->enter_cell = NULL;
    cell->modify_verify = NULL;
+   cell->direct_update = NULL;
    cell->leave_cell = NULL;
    cell->realize = NULL;
    cell->move = NULL;
    cell->destroy = NULL;
+   cell->get_help_value = BasicCellHelpValue;
    cell->gui_private = NULL;
 }
 
@@ -74,6 +91,10 @@ void xaccDestroyBasicCell (BasicCell *cell)
    /* free up data strings */
    if (cell->value) {
       free (cell->value);
+   }
+
+   if (cell->blank_help) {
+     free (cell->blank_help);
    }
 
    /* help prevent access to freed memory */
@@ -104,6 +125,37 @@ void xaccSetBasicCellValue (BasicCell *cell, const char *val)
         cell->value = strdup("");
       }
    }
+}
+
+/* ===================================================== */
+
+void
+xaccSetBasicCellBlankHelp (BasicCell *cell, const char *blank_help)
+{
+  if (cell == NULL)
+    return;
+
+  if (cell->blank_help != NULL)
+    free(cell->blank_help);
+
+  if (blank_help == NULL)
+    cell->blank_help = NULL;
+  else
+    cell->blank_help = strdup(blank_help);
+}
+
+/* ===================================================== */
+
+char *
+xaccBasicCellGetHelp (BasicCell *cell)
+{
+  if (cell == NULL)
+    return NULL;
+
+  if (cell->get_help_value == NULL)
+    return NULL;
+
+  return cell->get_help_value(cell);
 }
 
 /* ================== end of file ====================== */

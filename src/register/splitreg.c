@@ -43,6 +43,27 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_REGISTER;
 
+static SplitRegisterColors reg_colors = {
+  0xffdddd, /* pale red, single cursor active */
+  0xccccff, /* pale blue, single cursor passive */
+  0xccccff, /* pale blue, single cursor passive 2 */
+
+  0xffdddd, /* pale red, double cursor active */
+  0xccccff, /* pale blue, double cursor passive */
+  0xffffff, /* white, double cursor passive 2 */
+
+  GNC_F,    /* double mode alternate by physical row */
+
+  0xffdddd, /* pale red, trans cursor active */
+  0xccccff, /* pale blue, trans cursor passive */
+
+  0xffffdd, /* pale yellow, split cursor active */
+  0xffffff, /* white, split cursor passive */
+
+  0xffffff  /* white, header color */
+};
+
+
 /* utility defines for cell configuration data */
 #define DATE_CELL      0
 #define NUM_CELL       1
@@ -89,9 +110,9 @@ static short module = MOD_REGISTER;
 #define DATE_CELL_ALIGN    ALIGN_RIGHT
 #define NUM_CELL_ALIGN     ALIGN_LEFT
 #define ACTN_CELL_ALIGN    ALIGN_LEFT
-#define XFRM_CELL_ALIGN    ALIGN_LEFT
-#define MXFRM_CELL_ALIGN   ALIGN_LEFT
-#define XTO_CELL_ALIGN     ALIGN_LEFT
+#define XFRM_CELL_ALIGN    ALIGN_RIGHT
+#define MXFRM_CELL_ALIGN   ALIGN_RIGHT
+#define XTO_CELL_ALIGN     ALIGN_RIGHT
 #define DESC_CELL_ALIGN    ALIGN_LEFT
 #define MEMO_CELL_ALIGN    ALIGN_LEFT
 #define RECN_CELL_ALIGN    ALIGN_CENTER
@@ -104,14 +125,7 @@ static short module = MOD_REGISTER;
 #define SHRS_CELL_ALIGN    ALIGN_RIGHT
 #define BALN_CELL_ALIGN    ALIGN_RIGHT
 
-/* Use 4 decimal places for everything that isn't a $ value
- * Perhaps this should be changed to store precision selection
- * in a config file. */
-#define SHRS_CELL_FORMAT   "%0.4f"
-#define DEBIT_CELL_FORMAT  "%0.4f"
-#define CREDIT_CELL_FORMAT "%0.4f"
-#define PRICE_CELL_FORMAT  "%0.4f"
-
+#define SHARES_PRECISION 4
 
 /* ============================================== */
 
@@ -357,27 +371,29 @@ configLayout (SplitRegister *reg)
          curs = reg->double_cursor;
          FANCY (DATE,   date,     0,  0);
          BASIC (NUM,    num,      1,  0);
-         FANCY (DESC,   desc,     3,  0);
+         FANCY (DESC,   desc,     2,  0);
+         FANCY (MXFRM,  mxfrm,    3,  0);
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
          FANCY (BALN,   balance,  7,  0);
   
          FANCY (ACTN,   action,   1,  1);
-         FANCY (MXFRM,  mxfrm,    2,  1);
-         BASIC (MEMO,   memo,     3,  1);
+         FANCY (MEMO,   memo,     2,  1);
 
          curs = reg->trans_cursor;
          FANCY (DATE,   date,     0,  0);
          BASIC (NUM,    num,      1,  0);
-         FANCY (DESC,   desc,     3,  0);
+         FANCY (DESC,   desc,     2,  0);
          BASIC (RECN,   recn,     4,  0);
+         FANCY (DEBT,   debit,    5,  0);
+         FANCY (CRED,   credit,   6,  0);
          FANCY (BALN,   balance,  7,  0);
      
          curs = reg->split_cursor;
          FANCY (ACTN,   action,   1,  0);
-         FANCY (XFRM,   xfrm,     2,  0);
-         BASIC (MEMO,   memo,     3,  0);
+         FANCY (MEMO,   memo,     2,  0);
+         FANCY (XFRM,   xfrm,     3,  0);
          FANCY (NDEBT,  ndebit,   5,  0);
          FANCY (NCRED,  ncredit,  6,  0);
 
@@ -385,8 +401,8 @@ configLayout (SplitRegister *reg)
          curs = reg->single_cursor;
          FANCY (DATE,   date,     0,  0);
          BASIC (NUM,    num,      1,  0);
-         FANCY (MXFRM,  mxfrm,    2,  0);
-         FANCY (DESC,   desc,     3,  0);
+         FANCY (DESC,   desc,     2,  0);
+         FANCY (MXFRM,  mxfrm,    3,  0);
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
@@ -404,7 +420,8 @@ configLayout (SplitRegister *reg)
          curs = reg->double_cursor;
          FANCY (DATE,   date,     0,  0);
          BASIC (NUM,    num,      1,  0);
-         FANCY (DESC,   desc,     3,  0);
+         FANCY (DESC,   desc,     2,  0);
+         FANCY (MXFRM,  mxfrm,    3,  0);
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
@@ -414,14 +431,13 @@ configLayout (SplitRegister *reg)
          FANCY (BALN,   balance,  10, 0);
 
          FANCY (ACTN,   action,   1,  1);
-         FANCY (MXFRM,  mxfrm,    2,  1);
-         BASIC (MEMO,   memo,     3,  1);
+         FANCY (MEMO,   memo,     2,  1);
 
          /* only the transaction cursor gets used */
          curs = reg->trans_cursor;
          FANCY (DATE,   date,     0,  0);
          BASIC (NUM,    num,      1,  0);
-         FANCY (DESC,   desc,     3,  0);
+         FANCY (DESC,   desc,     2,  0);
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
@@ -432,8 +448,8 @@ configLayout (SplitRegister *reg)
     
          curs = reg->split_cursor;
          FANCY (ACTN,   action,   1,  0);
-         FANCY (XFRM,   xfrm,     2,  0);
-         BASIC (MEMO,   memo,     3,  0);
+         FANCY (MEMO,   memo,     2,  0);
+         FANCY (XFRM,   xfrm,     3,  0);
          FANCY (NDEBT,  ndebit,   5,  0);
          FANCY (NCRED,  ncredit,  6,  0);
 
@@ -441,8 +457,8 @@ configLayout (SplitRegister *reg)
          curs = reg->single_cursor;
          FANCY (DATE,   date,     0,  0);
          BASIC (NUM,    num,      1,  0);
-         FANCY (MXFRM,  mxfrm,    2,  0);
-         FANCY (DESC,   desc,     3,  0);
+         FANCY (DESC,   desc,     2,  0);
+         FANCY (MXFRM,  mxfrm,    3,  0);
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
@@ -700,7 +716,8 @@ configTraverse (SplitRegister *reg)
 
 /* ============================================== */
 
-SplitRegister * xaccMallocSplitRegister (int type)
+SplitRegister *
+xaccMallocSplitRegister (int type)
 {
    SplitRegister * reg;
    reg = (SplitRegister *) malloc (sizeof (SplitRegister));
@@ -710,39 +727,83 @@ SplitRegister * xaccMallocSplitRegister (int type)
 
 /* ============================================== */
 
+void
+xaccSetSplitRegisterColors (SplitRegisterColors reg_colors_new)
+{
+  reg_colors = reg_colors_new;
+}
+
+/* ============================================== */
+
+static void
+configTable(SplitRegister *reg)
+{
+  int style = reg->type & REG_STYLE_MASK;
+
+  if ((reg == NULL) || (reg->table == NULL))
+    return;
+
+  switch (style) {
+    case REG_SINGLE_LINE:
+    case REG_SINGLE_DYNAMIC:
+      reg->table->alternate_bg_colors = GNC_T;
+      break;
+    case REG_DOUBLE_LINE:
+    case REG_DOUBLE_DYNAMIC:
+      reg->table->alternate_bg_colors = reg_colors.double_alternate_virt;
+      break;
+    default:
+      reg->table->alternate_bg_colors = GNC_F;
+      break;
+  }
+}
+
+/* ============================================== */
+
+void
+xaccSplitRegisterConfigColors (SplitRegister *reg)
+{
+   reg->single_cursor->active_bg_color =
+     reg_colors.single_cursor_active_bg_color;
+   reg->single_cursor->passive_bg_color =
+     reg_colors.single_cursor_passive_bg_color;
+   reg->single_cursor->passive_bg_color2 =
+     reg_colors.single_cursor_passive_bg_color2;
+
+   reg->double_cursor->active_bg_color =
+     reg_colors.double_cursor_active_bg_color;
+   reg->double_cursor->passive_bg_color =
+     reg_colors.double_cursor_passive_bg_color;
+   reg->double_cursor->passive_bg_color2 =
+     reg_colors.double_cursor_passive_bg_color2;
+
+   reg->trans_cursor->active_bg_color =
+     reg_colors.trans_cursor_active_bg_color;
+   reg->trans_cursor->passive_bg_color =
+     reg_colors.trans_cursor_passive_bg_color;
+   reg->trans_cursor->passive_bg_color2 =
+     reg_colors.trans_cursor_passive_bg_color;
+
+   reg->split_cursor->active_bg_color =
+     reg_colors.split_cursor_active_bg_color;
+   reg->split_cursor->passive_bg_color =
+     reg_colors.split_cursor_passive_bg_color;
+   reg->split_cursor->passive_bg_color2 =
+     reg_colors.split_cursor_passive_bg_color;
+
+   reg->header->active_bg_color = reg_colors.header_bg_color;
+   reg->header->passive_bg_color = reg_colors.header_bg_color;
+   reg->header->passive_bg_color2 = reg_colors.header_bg_color;
+
+   configTable(reg);
+}
+
+/* ============================================== */
+
 static void
 configCursors (SplitRegister *reg)
 {
-   /* --------------------------- */
-   /* set the color of the cells in the cursors */
-   /* hack alert -- the actual color should depend on the 
-    * type of register. */
-/* they used to be the following, once upon a time:
-  "*regbank.oddRowBackground:      #aaccff",
-  "*regcash.oddRowBackground:      #ccffcc",
-  "*regasset.oddRowBackground:     #aaffcc",
-  "*regcredit.oddRowBackground:    #ffffaa",
-  "*regliability.oddRowBackground: #ffcccc",
-  "*ledportfolio.oddRowBackground: #ccffff",
-  "*regmutual.oddRowBackground:    #ccffff",
-  "*regincome.oddRowBackground:    #aaccff",
-  "*regexpense.oddRowBackground:   #ffcccc",
-  "*regequity.oddRowBackground:    #ffffaa",
-  "*ledgportfolio.evenRowBackground:grey",
-  "*regmutual.evenRowBackground:   grey",
-*/
-   reg->single_cursor->active_bg_color = 0xffdddd; /* pale red */
-   reg->single_cursor->passive_bg_color = 0xccccff; /* pale blue */
-
-   reg->double_cursor->active_bg_color = 0xffdddd; /* pale red */
-   reg->double_cursor->passive_bg_color = 0xccccff; /* pale blue */
-
-   reg->trans_cursor->active_bg_color = 0xffdddd; /* pale red */
-   reg->trans_cursor->passive_bg_color = 0xccccff; /* pale blue */
-
-   reg->split_cursor->active_bg_color = 0xffffdd; /* pale yellow */
-   reg->split_cursor->passive_bg_color = 0xffffff; /* white */
-
+  xaccSplitRegisterConfigColors(reg);
 }
 
 /* ============================================== */
@@ -808,6 +869,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    CellBlock *header;
    int phys_r, phys_c;
 
+   reg->table = NULL;
    reg->user_data = NULL;
    reg->destroy = NULL;
    reg->type = type;
@@ -835,7 +897,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    HDR (VALU);
    HDR (SHRS);
    HDR (BALN);
-   
+
    HDR (NCRED);
    HDR (NDEBT);
 
@@ -854,7 +916,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    NEW (mxfrm,   Combo);
    NEW (xto,     Combo);
    NEW (action,  Combo);
-   NEW (memo,    Text);
+   NEW (memo,    QuickFill);
    NEW (credit,  Price);
    NEW (debit,   Price);
    NEW (price,   Price);
@@ -885,8 +947,23 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
     * cells handles this for us.
     */
 
-   reg -> nullCell -> input_output = XACC_CELL_ALLOW_NONE;
+   reg->nullCell->input_output = XACC_CELL_ALLOW_NONE;
    xaccSetBasicCellValue (reg->nullCell, "");
+
+   /* The num cell is the transaction number */
+   xaccSetBasicCellBlankHelp (reg->numCell, NUM_CELL_HELP);
+
+   /* the xfer cells */
+   xaccSetBasicCellBlankHelp (&reg->mxfrmCell->cell, XFER_CELL_HELP);
+   xaccSetBasicCellBlankHelp (&reg->xfrmCell->cell, XFER_CELL_HELP);
+   xaccComboCellSetIgnoreString (reg->mxfrmCell, SPLIT_STR);
+   xaccComboCellSetIgnoreHelp (reg->mxfrmCell, TOOLTIP_MULTI_SPLIT);
+
+   /* the memo cell */
+   xaccSetBasicCellBlankHelp (&reg->memoCell->cell, MEMO_CELL_HELP);
+
+   /* the desc cell */
+   xaccSetBasicCellBlankHelp (&reg->descCell->cell, DESC_CELL_HELP);
 
    /* balance cell does not accept input; its display only.  */
    /* however, we *do* want it to shadow the true cell contents when 
@@ -901,17 +978,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
     */
    reg->recnCell->input_output |= XACC_CELL_ALLOW_EXACT_ONLY;
 
-   /* the debit/credit/value cells show blank if value is 0.00 */
-   reg->debitCell->blank_zero = 1;
-   reg->creditCell->blank_zero = 1;
-   reg->valueCell->blank_zero = 1;
-   reg->ndebitCell->blank_zero = 1;
-   reg->ncreditCell->blank_zero = 1;
-
-   /* ok, now make sure the initail value of 0.0 is blanked.
-    * if this is not done, then various oddball situations 
-    * will show the non-blanked values. 
-    */
+   /* Initialize price cells */
    xaccSetPriceCellValue (reg->debitCell, 0.0);
    xaccSetPriceCellValue (reg->creditCell, 0.0);
    xaccSetPriceCellValue (reg->valueCell, 0.0);
@@ -920,27 +987,31 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
 
    /* The format for share-related info is a printf-style
     * format string for a double.  */
-   xaccSetPriceCellFormat (reg->shrsCell, SHRS_CELL_FORMAT);
-   xaccSetPriceCellMonetary (reg->shrsCell, GNC_F);
+   xaccSetPriceCellMinTrailZeros (reg->shrsCell, 0);
+   xaccSetPriceCellPrecision (reg->shrsCell, SHARES_PRECISION);
 
    /* The action cell should accept strings not in the list */
    xaccComboCellSetStrict (reg->actionCell, GNC_F);
+   xaccSetBasicCellBlankHelp (&reg->actionCell->cell, ACTION_CELL_HELP);
 
    /* number format for share quantities in stock ledgers */
    switch (type & REG_TYPE_MASK) {
       case STOCK_REGISTER:
       case PORTFOLIO:
       case CURRENCY_REGISTER:
-         xaccSetPriceCellFormat (reg->debitCell, DEBIT_CELL_FORMAT);
-         xaccSetPriceCellFormat (reg->creditCell, CREDIT_CELL_FORMAT);
-         xaccSetPriceCellFormat (reg->ndebitCell, DEBIT_CELL_FORMAT);
-         xaccSetPriceCellFormat (reg->ncreditCell, CREDIT_CELL_FORMAT);
-         xaccSetPriceCellFormat (reg->priceCell, DEBIT_CELL_FORMAT);
-         xaccSetPriceCellMonetary (reg->debitCell, GNC_F);
-         xaccSetPriceCellMonetary (reg->creditCell, GNC_F);
-         xaccSetPriceCellMonetary (reg->ndebitCell, GNC_F);
-         xaccSetPriceCellMonetary (reg->ncreditCell, GNC_F);
-         xaccSetPriceCellMonetary (reg->priceCell, GNC_F);
+         xaccSetPriceCellMinTrailZeros (reg->debitCell, 0);
+         xaccSetPriceCellMinTrailZeros (reg->creditCell, 0);
+         xaccSetPriceCellMinTrailZeros (reg->ndebitCell, 0);
+         xaccSetPriceCellMinTrailZeros (reg->ncreditCell, 0);
+
+         xaccSetPriceCellPrecision (reg->debitCell, SHARES_PRECISION);
+         xaccSetPriceCellPrecision (reg->creditCell, SHARES_PRECISION);
+         xaccSetPriceCellPrecision (reg->ndebitCell, SHARES_PRECISION);
+         xaccSetPriceCellPrecision (reg->ncreditCell, SHARES_PRECISION);
+         xaccSetPriceCellPrecision (reg->priceCell, SHARES_PRECISION);
+
+         xaccSetBasicCellBlankHelp (&reg->priceCell->cell, PRICE_CELL_HELP);
+         xaccSetBasicCellBlankHelp (&reg->valueCell->cell, VALUE_CELL_HELP);
          break;
       default:
          break;
@@ -958,6 +1029,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
 
    /* -------------------------------- */   
    phys_r = header->numRows;
+   reg->cursor_phys_col = 0;
    reg->cursor_phys_row = phys_r;  /* cursor on first line past header */
    reg->cursor_virt_row = 1;
 
@@ -986,6 +1058,8 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    xaccMoveCursor (table, header->numRows, 0);
 
    reg->table = table;
+
+   configTable(reg);
 }
 
 /* ============================================== */
@@ -997,12 +1071,14 @@ xaccConfigSplitRegister (SplitRegister *reg, int newtype)
 
    reg->type = newtype;
 
-   /* Make sure that any GU elemnts associated with this reconfig 
+   /* Make sure that any GUI elements associated with this reconfig 
     * are properly initialized.  */
    xaccCreateCursor (reg->table, reg->single_cursor);
    xaccCreateCursor (reg->table, reg->double_cursor);
    xaccCreateCursor (reg->table, reg->trans_cursor);
    xaccCreateCursor (reg->table, reg->split_cursor);
+
+   configTable(reg);
 }
 
 /* ============================================== */
@@ -1042,7 +1118,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
    xaccDestroyComboCell     (reg->xfrmCell);
    xaccDestroyComboCell     (reg->mxfrmCell);
    xaccDestroyComboCell     (reg->xtoCell);
-   xaccDestroyBasicCell     (reg->memoCell);
+   xaccDestroyQuickFillCell (reg->memoCell);
    xaccDestroyPriceCell     (reg->creditCell);
    xaccDestroyPriceCell     (reg->debitCell);
    xaccDestroyPriceCell     (reg->priceCell);
@@ -1093,7 +1169,7 @@ xaccSplitRegisterGetChangeFlag (SplitRegister *reg)
    changed |= MOD_XFRM  & reg->xfrmCell->cell.changed;
    changed |= MOD_MXFRM & reg->mxfrmCell->cell.changed;
    changed |= MOD_XTO   & reg->xtoCell->cell.changed; 
-   changed |= MOD_MEMO  & reg->memoCell->changed;
+   changed |= MOD_MEMO  & reg->memoCell->cell.changed;
    changed |= MOD_AMNT  & reg->creditCell->cell.changed;
    changed |= MOD_AMNT  & reg->debitCell->cell.changed;
    changed |= MOD_PRIC  & reg->priceCell->cell.changed;
@@ -1119,7 +1195,7 @@ xaccSplitRegisterClearChangeFlag (SplitRegister *reg)
    reg->xfrmCell->cell.changed = 0;
    reg->mxfrmCell->cell.changed = 0;
    reg->xtoCell->cell.changed = 0;
-   reg->memoCell->changed = 0;
+   reg->memoCell->cell.changed = 0;
    reg->creditCell->cell.changed = 0;
    reg->debitCell->cell.changed = 0;
    reg->priceCell->cell.changed = 0;

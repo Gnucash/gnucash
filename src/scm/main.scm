@@ -1,4 +1,3 @@
-
 (define (gnc:startup)
   (gnc:debug "starting up.")
   (if (not (gnc:handle-command-line-args))
@@ -14,10 +13,9 @@
   ;; Now we can load a bunch of files.
 
   (gnc:depend "doc.scm")
-  (gnc:depend "extensions.scm")      ; Should this be here or somewhere else?
+  (gnc:depend "extensions.scm")
   (gnc:depend "text-export.scm")
   (gnc:depend "importqif.scm")
-  (gnc:depend "test.scm")
   (gnc:depend "report.scm")
 
   ;; FIXME: These do not belong here, but for now, we're putting them
@@ -28,10 +26,18 @@
   ;;
   ;; Just load these since we might want to redefine them on the fly
   ;; and we're going to change this mechanism anyway...
-  (gnc:load "report/hello-world.scm")
-  (gnc:load "report/balance-and-pnl.scm")
-  (gnc:load "report/transaction-report.scm")
-  (gnc:load "report/average-balance.scm")
+  (let 
+      ((repdir 
+	(opendir (string-append gnc:_share-dir-default_ "/scm/report"))))
+    (while (let ((cf (readdir repdir)))
+	     (if (string? cf)
+		 (if (and 
+		      (not (directory? cf))
+		      (> (string-length cf) 4))
+		     (if (string=? (substring cf (- (string-length cf) 4) 
+					      (string-length cf)) ".scm")
+			 (gnc:load (string-append "report/" cf)))))
+             (string? cf)) ()))
 
   ;; Load the system configs
   (if (not (gnc:load-system-config-if-needed))
@@ -67,8 +73,8 @@
 	       (gnc:ui-shutdown))))
 
 	(else
-	 (gnc:hook-run-danglers gnc:*shutdown-hook*)
 	 (gnc:ui-destroy)
+	 (gnc:hook-run-danglers gnc:*shutdown-hook*)
 	 (exit exit-status))))
 
 (define (gnc:ui-finish)

@@ -32,6 +32,7 @@
 #include "SplitLedger.h"
 #include "Transaction.h"
 
+
 /* the MAX_QUERY_SPLITS define determines how many transactions should be shown
  * in the register.  Its set to a default of 30.  But this should be converted
  * into a user-configurable value.  So hack-alert on the configuration aspect.
@@ -72,6 +73,7 @@ struct _xaccLedgerDisplay {
   void (*redraw) (xaccLedgerDisplay *); /* redraw callback                  */
   void (*destroy) (xaccLedgerDisplay *); /* destroy callback                */
   gncUIWidget (*get_parent) (xaccLedgerDisplay *); /* get parent widget     */
+  void (*set_help) (xaccLedgerDisplay *, const char *); /* help string      */
 };
 
 

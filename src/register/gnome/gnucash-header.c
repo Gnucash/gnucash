@@ -60,27 +60,34 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 {
         GnucashHeader *header = GNUCASH_HEADER(item);
         SheetBlockStyle *style = header->style;
+        SheetBlockStyle *header_style;
         int i, j;
         int xpaint, ypaint;
         int w = 0, h = 0;
         gchar *text;
         GdkFont *font;
 
-        gdk_gc_set_foreground(header->gc, &gn_white);
+        header_style = header->sheet->cursor_style[GNUCASH_CURSOR_HEADER];
+
+        /* Assume all cells have the same color */
+        gdk_gc_set_foreground(header->gc,
+                              header_style->inactive_bg_color[0][0]);
         gdk_draw_rectangle(drawable, header->gc, TRUE, 0, 0, width, height);
 
         gdk_gc_set_line_attributes (header->gc, 1, GDK_LINE_SOLID, -1, -1);
         gdk_gc_set_foreground (header->gc, &gn_black);
-        gdk_draw_rectangle (drawable, header->gc, FALSE,
-                            -x, -y, style->dimensions->width-1, style->dimensions->height);
-        gdk_draw_line (drawable, header->gc,
-                       -x, style->dimensions->height-1, style->dimensions->width-1, style->dimensions->height-1);
+        gdk_draw_rectangle (drawable, header->gc, FALSE, -x, -y,
+                            style->dimensions->width,
+                            style->dimensions->height);
+        gdk_draw_line (drawable, header->gc, -x,
+                       style->dimensions->height - 1,
+                       style->dimensions->width - 1,
+                       style->dimensions->height - 1);
 
         gdk_gc_set_line_attributes (header->gc, 1, GDK_LINE_SOLID, -1, -1);
         gdk_gc_set_background (header->gc, &gn_white);
         gdk_gc_set_foreground (header->gc, &gn_black);
         font = style->header_font;
-
 
         ypaint = -y;
 
@@ -185,8 +192,13 @@ gnucash_header_unrealize (GnomeCanvasItem *item)
                 header->gc = NULL;
         }
 
-        gdk_cursor_destroy (header->resize_cursor);
-        gdk_cursor_destroy (header->normal_cursor);
+        if (header->resize_cursor != NULL)
+                gdk_cursor_destroy (header->resize_cursor);
+        header->resize_cursor = NULL;
+
+        if (header->normal_cursor != NULL)
+                gdk_cursor_destroy (header->normal_cursor);
+        header->normal_cursor = NULL;
 
         if (GNOME_CANVAS_ITEM_CLASS (gnucash_header_parent_class)->unrealize)
                 (*GNOME_CANVAS_ITEM_CLASS
@@ -200,15 +212,14 @@ gnucash_header_destroy (GtkObject *object)
         if (GTK_OBJECT_CLASS (gnucash_header_parent_class)->destroy)
                 (*GTK_OBJECT_CLASS
 		 (gnucash_header_parent_class)->destroy)(object);
-        
 }
 
 void
 gnucash_header_reconfigure (GnucashHeader *header)
 {
         GnomeCanvas *canvas = GNOME_CANVAS_ITEM(header)->canvas;
-        int w, h;
         double old_w, old_h;
+        int w, h;
 
         header->style = header->sheet->cursor_style[header->type];
 
@@ -245,23 +256,30 @@ gnucash_header_point (GnomeCanvasItem *item,
 }
 
 /*
- *  Returns -1 if pointer not on a resize line, else returns
- *  the index of the column to the left.
+ *  Returns FALSE if pointer not on a resize line, else returns
+ *  TRUE. Returns the index of the column to the left in the col
+ *  argument.
  */
-static int
-pointer_on_resize_line (GnucashHeader *header, int x, int y)
+static gboolean
+pointer_on_resize_line (GnucashHeader *header, int x, int y, int *col)
 {
         SheetBlockStyle *style = header->style;
+        gboolean on_the_line = FALSE;
+        int pixels = 0; /* = style->dimensions->pixel_widths[header->row][0];*/
         int j;
-        int pixels = style->dimensions->pixel_widths[header->row][0];
 
-        for (j = 1; j < style->ncols; j++) {
-                if (x >= pixels - 1 && x <= pixels+1)
-                        return j-1;
+        for (j = 0; j < style->ncols; j++) {
                 pixels += style->dimensions->pixel_widths[header->row][j];
+                if (x >= pixels - 1 && x <= pixels + 1)
+                        on_the_line = TRUE;
+                if (x <= pixels + 1)
+                        break;
         }
 
-        return -1;
+        if (col != NULL)
+                *col = j;
+
+        return on_the_line;
 }
 
 
@@ -275,7 +293,8 @@ find_resize_col (GnucashHeader *header, int col)
                 return -1;
 
         /* skip to the right over zero-width columns */
-        while (col+1 < style->ncols && style->dimensions->pixel_widths[0][col+1] == 0)
+        while (col+1 < style->ncols &&
+               style->dimensions->pixel_widths[0][col+1] == 0)
                 col++;
 
         /* now go back left till we have a resizable column */
@@ -286,11 +305,30 @@ find_resize_col (GnucashHeader *header, int col)
                         col--;
         }
 
-        /*  didn't find a resizable column to the right of col */
+        /* didn't find a resizable column to the right of col */
         return -1;
 }
 
+static void
+gnucash_header_auto_resize_column (GnucashHeader *header, gint col)
+{
+        GnucashSheet *sheet = header->sheet;
 
+        int width = gnucash_sheet_col_max_width (sheet, 0, col);
+
+        gnucash_sheet_style_set_col_width (sheet, header->style,
+                                           col, width, FALSE);
+
+        gnucash_sheet_style_set_dimensions (sheet, header->style);
+
+        gnucash_cursor_configure (GNUCASH_CURSOR(sheet->cursor));
+        item_edit_configure (ITEM_EDIT(sheet->item_editor));
+
+        gnucash_sheet_update_adjustments (sheet);
+
+        gnucash_header_request_redraw (header);
+        gnucash_sheet_redraw_all (sheet);
+}
 
 static gint
 gnucash_header_event (GnomeCanvasItem *item, GdkEvent *event)
@@ -300,7 +338,6 @@ gnucash_header_event (GnomeCanvasItem *item, GdkEvent *event)
         int x, y;
         int col;
         
-
         switch (event->type) {
         case GDK_MOTION_NOTIFY:
 
@@ -321,7 +358,7 @@ gnucash_header_event (GnomeCanvasItem *item, GdkEvent *event)
                         }
 
                         new_width = header->resize_col_width + change;
-                        
+
                         if (new_width >= 0) {
                                 header->resize_x = x;
                                 header->resize_col_width = new_width;
@@ -330,10 +367,9 @@ gnucash_header_event (GnomeCanvasItem *item, GdkEvent *event)
 
                         break;
                 }
-                
 
-                if ((col = pointer_on_resize_line(header, x, y)) > -1 &&
-                        gnucash_style_col_is_resizable (header->style, col) )
+                if (pointer_on_resize_line(header, x, y, &col) &&
+                    gnucash_style_col_is_resizable (header->style, col))
                         gdk_window_set_cursor (GTK_WIDGET(canvas)->window,
                                                header->resize_cursor);
                 else
@@ -344,13 +380,18 @@ gnucash_header_event (GnomeCanvasItem *item, GdkEvent *event)
         case GDK_BUTTON_PRESS: 
         {
                 int col;
-                
+
+                if (event->button.button != 1)
+                        break;
+
                 gnome_canvas_w2c (canvas, event->button.x, event->button.y,
                                   &x, &y);
 
-                col = pointer_on_resize_line (header, x, y);
-                col = find_resize_col (header, col);
-                
+                if (pointer_on_resize_line (header, x, y, &col))
+                        col = find_resize_col (header, col);
+                else
+                        col = -1;
+
                 if (col > -1) {
                         header->in_resize = TRUE;
                         header->resize_col = col;
@@ -363,7 +404,10 @@ gnucash_header_event (GnomeCanvasItem *item, GdkEvent *event)
         case GDK_BUTTON_RELEASE: 
         {
                 GnucashSheet *sheet = header->sheet;
-                
+
+                if (event->button.button != 1)
+                        break;
+
                 gnome_canvas_w2c (canvas, event->button.x, event->button.y,
                                   &x, &y);
 
@@ -371,31 +415,59 @@ gnucash_header_event (GnomeCanvasItem *item, GdkEvent *event)
                         if (header->needs_ungrab) {
                                 gnome_canvas_item_ungrab (item, event->button.time);
                                 header->needs_ungrab = FALSE;
+
+                                gnucash_sheet_style_set_col_width (sheet, header->style,
+                                                                   header->resize_col, header->resize_col_width, FALSE);
+                                gnucash_sheet_style_set_dimensions (sheet, header->style);
+
+                                gnucash_cursor_configure (GNUCASH_CURSOR(sheet->cursor));
+                                item_edit_configure (ITEM_EDIT(sheet->item_editor));
+
+                                gnucash_sheet_update_adjustments (sheet);
+
+                                gnucash_header_request_redraw (header);
+                                gnucash_sheet_redraw_all (sheet);
                         }
-                        
-                        gnucash_sheet_style_set_col_width (sheet, header->style,
-                                                            header->resize_col, header->resize_col_width, TRUE);
-                        gnucash_sheet_style_set_dimensions (sheet, header->style);
-                        
                         header->in_resize = FALSE;
                         header->resize_col = -1;
-                        
-                        gnucash_cursor_configure (GNUCASH_CURSOR(sheet->cursor));
-                        item_edit_configure (ITEM_EDIT(sheet->item_editor));
-                        
-                        gnucash_sheet_update_adjustments (sheet);
-
-                        gnucash_header_request_redraw (header);
-                        gnucash_sheet_redraw_all (sheet);
                 }
-                
+
                 break;
         }
-        
+
+        case GDK_2BUTTON_PRESS:
+        {
+                gboolean on_line;
+                int ptr_col;
+                int resize_col;
+
+                if (event->button.button != 1)
+                        break;
+
+                gnome_canvas_w2c (canvas, event->button.x, event->button.y,
+                                  &x, &y);
+
+                on_line = pointer_on_resize_line (header, x, y, &ptr_col);
+                resize_col = find_resize_col (header, ptr_col);
+
+                if ((resize_col > -1) &&
+                    (on_line || (resize_col == ptr_col))) {
+                        header->in_resize = FALSE;
+                        header->resize_col = -1;
+                        if (header->needs_ungrab) {
+                                gnome_canvas_item_ungrab (item, event->button.time);
+                                header->needs_ungrab = FALSE;
+                        }
+
+                        gnucash_header_auto_resize_column (header, resize_col);
+                }
+
+        }
+        break;
+
         default:
                 break;
         }
-        
 
         return TRUE;
 }
@@ -441,7 +513,7 @@ gnucash_header_init (GnucashHeader *header)
         header->in_resize = FALSE;
         header->resize_col = -1;
         header->resize_cursor = gdk_cursor_new (GDK_SB_H_DOUBLE_ARROW);
-        header->normal_cursor = gdk_cursor_new (GDK_X_CURSOR);
+        header->normal_cursor = NULL;
 }
 
 

@@ -75,6 +75,7 @@ xaccInitTable (Table * table)
 
    table->move_cursor = NULL;
    table->traverse = NULL;
+   table->set_help = NULL;
    table->client_data = NULL;
 
    table->entries = NULL;
@@ -84,6 +85,8 @@ xaccInitTable (Table * table)
    table->rev_locators = NULL;
    table->user_data = NULL;
    table->handlers = NULL;
+
+   table->alternate_bg_colors = GNC_F;
 
    /* invalidate the "previous" traversed cell */
    table->prev_phys_traverse_row = -1;
@@ -376,7 +379,7 @@ makePassive (Table *table)
    int phys_row = table->current_cursor_phys_row;
    int phys_col = table->current_cursor_phys_col;
    int r_origin, c_origin;
-
+   int virt_row;
 
    /* Change the cell background colors to their "passive" values.
     * This denotes that the cursor has left this location (which means more or
@@ -390,21 +393,27 @@ makePassive (Table *table)
    r_origin -= table->locators[phys_row][phys_col]->phys_row_offset;
    c_origin -= table->locators[phys_row][phys_col]->phys_col_offset;
 
+   virt_row = table->locators[phys_row][phys_col]->virt_row;
+
    curs = table->current_cursor;
 
    for (i=0; i<curs->numRows; i++) {
       for (j=0; j<curs->numCols; j++) {
          BasicCell *cell;
-      
-/* yooooo hack alert -- the color capabilities for the cursor should
- * be per-cell, not per cursor; so we do a quickie hack ughhh.
- * first line is whatever was speced, the second line is white.
- */
-if (0==i) {
-         table->bg_colors[i+r_origin][j+c_origin] = curs->passive_bg_color;
-} else {
-table->bg_colors[i+r_origin][j+c_origin] = 0xffffff;
-}
+         uint32 color;
+
+         if (table->alternate_bg_colors) {
+           if ((virt_row % 2) == 1)
+             color = curs->passive_bg_color;
+           else
+             color = curs->passive_bg_color2;
+         }
+         else if (0 == i)
+           color = curs->passive_bg_color;
+         else
+           color = curs->passive_bg_color2;
+
+         table->bg_colors[i+r_origin][j+c_origin] = color;
 
          cell = curs->cells[i][j];
          if (cell) {
@@ -935,12 +944,27 @@ gnc_table_enter_update(Table *table, int row, int col, int *cursor_position,
      * different, freeing the old one.  (Doing a strcmp would leak memory). 
      */
     if (retval && (val != retval)) {
+      if (safe_strcmp(retval, val) != 0)
+        (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
       if (table->entries[row][col]) free (table->entries[row][col]);
       table->entries[row][col] = retval;
-      (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
     } else {
        retval = NULL;
     }
+  }
+
+  if (table->set_help)
+  {
+    BasicCell *cell;
+    char *help_str;
+
+    cell = arr->cells[rel_row][rel_col];
+    help_str = xaccBasicCellGetHelp(cell);
+
+    table->set_help(table, help_str, table->client_data);
+
+    if (help_str != NULL)
+      free(help_str);
   }
 
   /* record this position as the cell that will be
@@ -1017,7 +1041,8 @@ gnc_table_leave_update(Table *table, int row, int col,
 /* ==================================================== */
 
 const char *
-gnc_table_modify_update(Table *table, int row, int col,
+gnc_table_modify_update(Table *table,
+                        int row, int col,
                         const char *oldval,
                         const char *change,
                         char *newval,
@@ -1037,7 +1062,9 @@ gnc_table_modify_update(Table *table, int row, int col,
   const char * (*mv) (BasicCell *,
                       const char *, const char *, const char *,
                       int *, int *, int *);
+
   const char *retval = NULL;
+
   ENTER ("gnc_table_modify_update()\n");
 
   /* OK, if there is a callback for this cell, call it */
@@ -1061,12 +1088,75 @@ gnc_table_modify_update(Table *table, int row, int col,
     retval = newval;
     (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
   }
+
+  if (table->set_help)
+  {
+    BasicCell *cell;
+    char *help_str;
+
+    cell = arr->cells[rel_row][rel_col];
+    help_str = xaccBasicCellGetHelp(cell);
+
+    table->set_help(table, help_str, table->client_data);
+
+    if (help_str != NULL)
+      free(help_str);
+  }
+
   LEAVE ("gnc_table_modify_update(): "
          "change %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
          row, col, rel_row, rel_col, 
          arr->cells[rel_row][rel_col], table->entries[row][col]);
   
   return(retval);
+}
+
+/* ==================================================== */
+
+gncBoolean
+gnc_table_direct_update(Table *table,
+                        int row, int col,
+                        const char *oldval,
+                        char **newval_ptr,
+                        int *cursor_position,
+                        int *start_selection,
+                        int *end_selection,
+                        void *gui_data)
+{
+  CellBlock *arr = table->current_cursor;
+
+  const int rel_row = table->locators[row][col]->phys_row_offset;
+  const int rel_col = table->locators[row][col]->phys_col_offset;
+
+  BasicCell *cell = arr->cells[rel_row][rel_col];
+
+  gncBoolean result;
+
+  if (cell->direct_update == NULL)
+    return GNC_F;
+
+  result = cell->direct_update(cell, oldval, newval_ptr, cursor_position,
+                               start_selection, end_selection, gui_data);
+
+  if ((*newval_ptr != oldval) && (*newval_ptr != NULL)) {
+    if (table->entries[row][col]) free (table->entries[row][col]);
+    table->entries[row][col] = *newval_ptr;
+    cell->changed = 0xffffffff;
+  }
+
+  if (table->set_help)
+  {
+    char *help_str;
+
+    help_str = xaccBasicCellGetHelp(cell);
+
+    table->set_help(table, help_str, table->client_data);
+
+    if (help_str != NULL)
+      free(help_str);
+  }
+
+  return result;
 }
 
 /* ==================================================== */

@@ -53,12 +53,17 @@
 #include "basiccell.h"
 #include "gnc-common.h"
 
-typedef struct _PriceCell {
+typedef struct _PriceCell
+{
    BasicCell cell;
-   double amount;       /* the amount associated with this cell */
-   short blank_zero;    /* controls printing of zero values */
-   char *prt_format;    /* controls display of value; printf format */
-   gncBoolean monetary; /* controls parsing of values */
+
+   double amount;          /* the amount associated with this cell */
+
+   int precision;          /* precision of printed values */
+   int min_trail_zeros;    /* minimum number of trailing zeros to print */
+
+   gncBoolean blank_zero;  /* controls printing of zero values */
+   gncBoolean monetary;    /* controls parsing of values */
 } PriceCell;
 
 /* installs a callback to handle price recording */
@@ -66,17 +71,22 @@ PriceCell *  xaccMallocPriceCell (void);
 void         xaccInitPriceCell (PriceCell *);
 void         xaccDestroyPriceCell (PriceCell *);
 
-/* updates amount, string format is three decimal places */
-void         xaccSetPriceCellValue (PriceCell *, double amount);
+/* return the value of a price cell */
+double       xaccGetPriceCellValue (PriceCell *cell);
 
-/* The xaccSetPriceCellFormat() method is used to control how
- *    the cell contents are displayed.   It accepts as an argument
- *    a printf-style format.  The format must control the display
- *    of a double-precision float.  See the printf() command for 
- *    allowed syntax.  The default format is "%m" for a monetary
- *    style format.
- */
-void         xaccSetPriceCellFormat (PriceCell *, char * fmt);
+/* updates amount, string format is three decimal places */
+void         xaccSetPriceCellValue (PriceCell *cell, double amount);
+
+/* sets the precision of the printed value. Defaults to 2 */
+void         xaccSetPriceCellPrecision (PriceCell *cell, int precision);
+
+/* Sets the mininum number of trailing decimal zeros that must
+ * be printed. Defaults to 2. */
+void         xaccSetPriceCellMinTrailZeros (PriceCell *cell, int);
+
+/* determines whether 0 values are left blank or printed.
+ * defaults to true. */
+void         xaccSetPriceCellBlankZero (PriceCell *cell, gncBoolean);
 
 /* The xaccSetPriceCellMonetary() sets a flag which determines
  *    how string amounts are parsed, either as monetary or
@@ -88,7 +98,7 @@ void         xaccSetPriceCellMonetary (PriceCell *, gncBoolean);
  * the credit cell if amount is positive, and makes the other cell
  * blank. */
 void         xaccSetDebCredCellValue (PriceCell *deb,
-                                      PriceCell *cred,  double amount);
+                                      PriceCell *cred, double amount);
 
 #endif /* __XACC_PRICE_CELL_C__ */
 

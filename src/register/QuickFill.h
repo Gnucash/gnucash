@@ -66,6 +66,8 @@ QuickFill *xaccMallocQuickFill( void );
 void       xaccFreeQuickFill( QuickFill *qf );
 QuickFill *xaccGetQuickFill( QuickFill *qf, char c );
 QuickFill *xaccGetQuickFillStr( QuickFill *qf, const char *str );
+QuickFill *xaccGetQuickFillStrLen( QuickFill *qf, const char *str, int len );
+QuickFill *xaccGetQuickFillUniqueLen( QuickFill *qf, int *len );
 void       xaccQFInsertText( QuickFill *qf, const char *text, QuickFillSort );
 
 /** GLOBALS *********************************************************/

@@ -61,6 +61,9 @@ void             xaccDestroyQuickFillCell (QuickFillCell *);
 void             xaccSetQuickFillCellValue (QuickFillCell *, const char *);
 void             xaccSetQuickFillSort (QuickFillCell *, QuickFillSort);
 
+/* GUI-dependent */
+void             xaccQuickFillGUIInit (QuickFillCell *);
+
 #endif /* __XACC_FILL_CELL_C__ */
 
 /* --------------- end of file ---------------------- */

@@ -28,7 +28,25 @@
 #include "util.h"
 
 
+/* The arguments we take */
+enum {
+        ARG_0,
+        ARG_SHEET,     /* The Sheet argument      */
+        ARG_GTK_ENTRY, /* The GtkEntry argument   */
+        ARG_IS_COMBO,  /* Should this be a combo? */
+};
+
+/* values for selection info */
+enum {
+        TARGET_STRING,
+        TARGET_TEXT,
+        TARGET_COMPOUND_TEXT
+};
+
 static GnomeCanvasItemClass *item_edit_parent_class;
+static GdkAtom clipboard_atom = GDK_NONE;
+static GdkAtom ctext_atom = GDK_NONE;
+
 
 typedef struct _TextDrawInfo TextDrawInfo;
 struct _TextDrawInfo
@@ -60,15 +78,6 @@ struct _TextDrawInfo
         int cursor_x;
         int cursor_y1;
         int cursor_y2;
-};
-
-
-/* The arguments we take */
-enum {
-        ARG_0,
-        ARG_SHEET,     /* The Sheet argument      */
-        ARG_GTK_ENTRY, /* The GtkEntry argument   */
-        ARG_IS_COMBO,  /* Should this be a combo? */
 };
 
 
@@ -364,6 +373,10 @@ item_edit_init (ItemEdit *item_edit)
 	item_edit->editor = NULL;
         item_edit->clipboard = NULL;
 
+        item_edit->has_selection = FALSE;
+        item_edit->is_combo = FALSE;
+        item_edit->show_list = FALSE;
+
 	item_edit->combo_toggle.combo_button = NULL;
 	item_edit->combo_toggle.combo_button_item = NULL;
         item_edit->combo_toggle.toggle_offset = 0;
@@ -393,6 +406,14 @@ queue_sync (ItemEdit *item_edit)
         gnome_canvas_request_redraw (canvas, x, y, x+w, y+h);
 }
 
+void
+item_edit_redraw (ItemEdit *item_edit)
+{
+        g_return_if_fail(item_edit != NULL);
+        g_return_if_fail(IS_ITEM_EDIT(item_edit));
+
+        queue_sync(item_edit);
+}
 
 static void
 entry_changed (GtkEntry *entry, void *data)
@@ -584,8 +605,42 @@ item_edit_configure (ItemEdit *item_edit)
 }
 
 
+void
+item_edit_claim_selection (ItemEdit *item_edit, guint32 time)
+{
+        GtkEditable *editable;
+        gint start_sel, end_sel;
+
+        g_return_if_fail(item_edit != NULL);
+        g_return_if_fail(IS_ITEM_EDIT(item_edit));
+
+        editable = GTK_EDITABLE (item_edit->editor);
+
+        start_sel = MIN(editable->selection_start_pos,
+                        editable->selection_end_pos);
+        end_sel = MAX(editable->selection_start_pos,
+                      editable->selection_end_pos);
+
+        if (start_sel != end_sel)
+        {
+                gtk_selection_owner_set (GTK_WIDGET(item_edit->sheet),
+                                         GDK_SELECTION_PRIMARY, time);
+                item_edit->has_selection = TRUE;
+        }
+        else
+        {
+                GdkWindow *owner;
+
+                owner = gdk_selection_owner_get (GDK_SELECTION_PRIMARY);
+                if (owner == GTK_WIDGET(item_edit->sheet)->window)
+                        gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY, time);
+                item_edit->has_selection = FALSE;
+        }
+}
+
+
 static void
-item_edit_cut_copy_clipboard (ItemEdit *item_edit, gboolean cut)
+item_edit_cut_copy_clipboard (ItemEdit *item_edit, guint32 time, gboolean cut)
 {
         GtkEditable *editable;
         gint start_sel, end_sel;
@@ -604,10 +659,14 @@ item_edit_cut_copy_clipboard (ItemEdit *item_edit, gboolean cut)
         if (start_sel == end_sel)
                 return;
 
-        if (item_edit->clipboard != NULL)
-                g_free(item_edit->clipboard);
+        g_free(item_edit->clipboard);
 
-        clip = gtk_editable_get_chars(editable, start_sel, end_sel);
+        if (gtk_selection_owner_set (GTK_WIDGET(item_edit->sheet),
+                                     clipboard_atom, time))
+                clip = gtk_editable_get_chars (editable, start_sel, end_sel);
+        else
+                clip = NULL;
+
         item_edit->clipboard = clip;
 
         if (!cut)
@@ -620,53 +679,44 @@ item_edit_cut_copy_clipboard (ItemEdit *item_edit, gboolean cut)
 
 
 void
-item_edit_cut_clipboard (ItemEdit *item_edit)
+item_edit_cut_clipboard (ItemEdit *item_edit, guint32 time)
 {
-        item_edit_cut_copy_clipboard(item_edit, TRUE);
+        item_edit_cut_copy_clipboard(item_edit, time, TRUE);
 }
 
 
 void
-item_edit_copy_clipboard (ItemEdit *item_edit)
+item_edit_copy_clipboard (ItemEdit *item_edit, guint32 time)
 {
-        item_edit_cut_copy_clipboard(item_edit, FALSE);
+        item_edit_cut_copy_clipboard(item_edit, time, FALSE);
 }
 
 
 void
-item_edit_paste_clipboard (ItemEdit *item_edit)
+item_edit_paste_clipboard (ItemEdit *item_edit, guint32 time)
 {
-        GtkEditable *editable;
-        gint start_sel, end_sel;
-        gint current_pos;
-        gchar *clip;
-
         g_return_if_fail(item_edit != NULL);
         g_return_if_fail(IS_ITEM_EDIT(item_edit));
 
-        if ((item_edit->clipboard == NULL) ||
-            (item_edit->clipboard[0] == 0))
-                return;
+        if (ctext_atom == GDK_NONE)
+                ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
 
-        editable = GTK_EDITABLE (item_edit->editor);
+        gtk_selection_convert(GTK_WIDGET(item_edit->sheet), 
+                              clipboard_atom, ctext_atom, time);
+}
 
-        current_pos = editable->current_pos;
-        start_sel = MIN(editable->selection_start_pos,
-                        editable->selection_end_pos);
-        end_sel = MAX(editable->selection_start_pos,
-                      editable->selection_end_pos);
 
-        if (start_sel != end_sel)
-        {
-                gtk_editable_delete_text(editable, start_sel, end_sel);
-                current_pos = start_sel;
-        }
+void
+item_edit_paste_primary (ItemEdit *item_edit, guint32 time)
+{
+        g_return_if_fail(item_edit != NULL);
+        g_return_if_fail(IS_ITEM_EDIT(item_edit));
 
-        clip = item_edit->clipboard;
-        gtk_editable_insert_text(editable, clip, strlen(clip), &current_pos);
+        if (ctext_atom == GDK_NONE)
+                ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
 
-        gtk_editable_select_region(editable, 0, 0);
-        gtk_editable_set_position(editable, current_pos);
+        gtk_selection_convert(GTK_WIDGET(item_edit->sheet), 
+                              GDK_SELECTION_PRIMARY, ctext_atom, time);
 }
 
 
@@ -871,6 +921,7 @@ item_edit_class_init (ItemEditClass *item_edit_class)
         item_class->realize     = item_edit_realize;
 }
 
+
 GtkType
 item_edit_get_type (void)
 {
@@ -921,6 +972,13 @@ create_combo_toggle(GnomeCanvasGroup *parent, ComboToggle *ct)
 GnomeCanvasItem *
 item_edit_new (GnomeCanvasGroup *parent, GnucashSheet *sheet, GtkWidget *entry)
 {
+        static const GtkTargetEntry targets[] = {
+                { "STRING", 0, TARGET_STRING },
+                { "TEXT",   0, TARGET_TEXT }, 
+                { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT }
+        };
+        static const gint n_targets = sizeof(targets) / sizeof(targets[0]);
+
         GnomeCanvasItem *item;
         ItemEdit *item_edit;
 
@@ -935,6 +993,17 @@ item_edit_new (GnomeCanvasGroup *parent, GnucashSheet *sheet, GtkWidget *entry)
 	item_edit->parent = parent;
 
 	create_combo_toggle(parent, &item_edit->combo_toggle);
+
+        if (clipboard_atom == GDK_NONE)
+          clipboard_atom = gdk_atom_intern ("CLIPBOARD", FALSE);
+
+        gtk_selection_add_targets (GTK_WIDGET(sheet),
+                                   GDK_SELECTION_PRIMARY,
+                                   targets, n_targets);
+
+        gtk_selection_add_targets (GTK_WIDGET(sheet),
+                                   clipboard_atom,
+                                   targets, n_targets);
 
         return item;
 }
@@ -1045,6 +1114,216 @@ item_edit_set_list (ItemEdit *item_edit, GNCItemList *item_list)
 	item_edit->item_list = item_list;
         item_edit_update (GNOME_CANVAS_ITEM(item_edit), NULL, NULL, 0);
 }
+
+
+void
+item_edit_set_has_selection (ItemEdit *item_edit, gboolean has_selection)
+{
+        g_return_if_fail(item_edit != NULL);
+        g_return_if_fail(IS_ITEM_EDIT(item_edit));
+
+        item_edit->has_selection = has_selection;
+}
+
+gboolean
+item_edit_selection_clear (ItemEdit          *item_edit,
+                           GdkEventSelection *event)
+{
+        g_return_val_if_fail(item_edit != NULL, FALSE);
+        g_return_val_if_fail(IS_ITEM_EDIT(item_edit), FALSE);
+        g_return_val_if_fail(event != NULL, FALSE);
+
+        /* Let the selection handling code know that the selection
+         * has been changed, since we've overriden the default handler */
+        if (!gtk_selection_clear(GTK_WIDGET(item_edit->sheet), event))
+                return FALSE;
+
+        if (event->selection == GDK_SELECTION_PRIMARY)
+        {
+                if (item_edit->has_selection)
+                {
+                        item_edit->has_selection = FALSE;
+                        /* TODO: redraw differently? */
+                }
+        }
+        else if (event->selection == clipboard_atom)
+        {
+                g_free(item_edit->clipboard);
+                item_edit->clipboard = NULL;
+        }
+
+        return TRUE;
+}
+
+
+void
+item_edit_selection_get (ItemEdit         *item_edit,
+                         GtkSelectionData *selection_data,
+                         guint             info,
+                         guint             time)
+{
+        GtkEditable *editable;
+
+        gint start_pos;
+        gint end_pos;
+
+        gchar *str;
+        gint length;
+
+        g_return_if_fail(item_edit != NULL);
+        g_return_if_fail(IS_ITEM_EDIT(item_edit));
+
+        editable = GTK_EDITABLE (item_edit->editor);
+
+        if (selection_data->selection == GDK_SELECTION_PRIMARY)
+        {
+                start_pos = MIN(editable->selection_start_pos,
+                                editable->selection_end_pos);
+                end_pos = MAX(editable->selection_start_pos,
+                              editable->selection_end_pos);
+
+                str = gtk_editable_get_chars(editable, start_pos, end_pos);
+        }
+        else /* CLIPBOARD */
+                str = item_edit->clipboard;
+
+        if (str == NULL)
+                return;
+
+        length = strlen(str);
+  
+        if (info == TARGET_STRING)
+        {
+                gtk_selection_data_set (selection_data,
+                                        GDK_SELECTION_TYPE_STRING,
+                                        8 * sizeof(gchar), (guchar *) str,
+                                        length);
+        }
+        else if ((info == TARGET_TEXT) || (info == TARGET_COMPOUND_TEXT))
+        {
+                guchar *text;
+                gchar c;
+                GdkAtom encoding;
+                gint format;
+                gint new_length;
+
+                c = str[length];
+                str[length] = '\0';
+
+                gdk_string_to_compound_text(str, &encoding, &format,
+                                            &text, &new_length);
+
+                gtk_selection_data_set(selection_data, encoding,
+                                       format, text, new_length);
+
+                gdk_free_compound_text(text);
+
+                str[length] = c;
+        }
+
+        if (str != item_edit->clipboard)
+                g_free(str);
+}
+
+
+void
+item_edit_selection_received (ItemEdit          *item_edit,
+                              GtkSelectionData  *selection_data,
+                              guint              time)
+{
+        GtkEditable *editable;
+        gboolean reselect;
+        gint old_pos;
+        gint tmp_pos;
+        enum {INVALID, STRING, CTEXT} type;
+
+        g_return_if_fail(item_edit != NULL);
+        g_return_if_fail(IS_ITEM_EDIT(item_edit));
+
+        editable = GTK_EDITABLE(item_edit->editor);
+
+        if (selection_data->type == GDK_TARGET_STRING)
+                type = STRING;
+        else if ((selection_data->type ==
+                  gdk_atom_intern("COMPOUND_TEXT", FALSE)) ||
+                 (selection_data->type == gdk_atom_intern("TEXT", FALSE)))
+                type = CTEXT;
+        else
+                type = INVALID;
+
+        if (type == INVALID || selection_data->length < 0)
+        {
+                /* avoid infinite loop */
+                if (selection_data->target != GDK_TARGET_STRING)
+                        gtk_selection_convert(GTK_WIDGET(item_edit->sheet),
+                                              selection_data->selection,
+                                              GDK_TARGET_STRING, time);
+                return;
+        }
+
+        reselect = FALSE;
+
+        if ((editable->selection_start_pos != editable->selection_end_pos) && 
+            (!item_edit->has_selection || 
+             (selection_data->selection == clipboard_atom)))
+        {
+                reselect = TRUE;
+
+                gtk_editable_delete_text(editable,
+                                         MIN(editable->selection_start_pos,
+                                             editable->selection_end_pos),
+                                         MAX(editable->selection_start_pos,
+                                             editable->selection_end_pos));
+        }
+
+        tmp_pos = old_pos = editable->current_pos;
+
+        switch (type)
+        {
+                case STRING:
+                        selection_data->data[selection_data->length] = 0;
+
+                        gtk_editable_insert_text
+                                (editable, (gchar *) selection_data->data,
+                                 strlen((gchar *)selection_data->data),
+                                 &tmp_pos);
+
+                        gtk_editable_set_position(editable, tmp_pos);
+                        break;
+                case CTEXT: {
+                        gchar **list;
+                        gint count;
+                        gint i;
+
+                        count = gdk_text_property_to_text_list
+                                (selection_data->type, selection_data->format, 
+                                 selection_data->data, selection_data->length,
+                                 &list);
+
+                        for (i = 0; i < count; i++) 
+                        {
+                                gtk_editable_insert_text(editable,
+                                                         list[i],
+                                                         strlen(list[i]),
+                                                         &tmp_pos);
+
+                                gtk_editable_set_position(editable, tmp_pos);
+                        }
+
+                        if (count > 0)
+                                gdk_free_text_list(list);
+                }
+                break;
+                case INVALID: /* quiet compiler */
+                        break;
+        }
+
+        if (!reselect)
+                return;
+
+        gtk_editable_select_region(editable, old_pos, editable->current_pos);
+}
+
 
 /*
   Local Variables:

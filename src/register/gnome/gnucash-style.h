@@ -34,6 +34,8 @@ void gnucash_sheet_style_set_col_width (GnucashSheet *sheet,
 
 gint gnucash_style_default_width(GnucashSheet *sheet, SheetBlockStyle *style);
 
+gint gnucash_style_row_width(SheetBlockStyle *style, int row);
+
 void gnucash_sheet_style_set_dimensions (GnucashSheet *sheet,
 					 SheetBlockStyle *style);
 
@@ -42,6 +44,11 @@ void gnucash_sheet_style_destroy (GnucashSheet *sheet, SheetBlockStyle *style);
 SheetBlockStyle * gnucash_sheet_style_compile (GnucashSheet *sheet,
 					       CellBlock *cellblock,
                                                gint cursor_type);
+
+void gnucash_sheet_style_recompile (SheetBlockStyle *style,
+                                    CellBlock *cellblock,
+                                    SplitRegister *sr,
+                                    gint cursor_type);
 
 SheetBlockStyle *gnucash_sheet_get_style (GnucashSheet *sheet, gint vrow,
 					  gint vcol);

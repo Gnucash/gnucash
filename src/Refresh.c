@@ -126,6 +126,9 @@ gnc_transaction_ui_refresh(Transaction *trans)
   Split *split;
   int i, num_splits;  
 
+  if (trans == NULL)
+    return;
+
   xaccTransDisplayRefresh(trans);
 
   num_splits = xaccTransCountSplits(trans);

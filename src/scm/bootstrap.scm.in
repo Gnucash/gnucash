@@ -7,6 +7,20 @@
 
 ;; (use-modules (gnc))
 
+(define (display-slib-error)
+        (display "Obtain slib at: http://swissnet.ai.mit.edu/~jaffer/SLIB.html\n")
+        (newline)
+        (display "If you have slib installed, you may need to create\n")
+        (display "a symbolic link named 'slib' from the guile directory\n")
+        (display "(usually /usr/share/guile) to the directory where slib\n")
+        (display "is installed.\n\n")
+        (display "You may also need to run the following command as root:")
+        (newline)
+        (newline)
+        (display "  guile -c \"(use-modules (ice-9 slib)) (require 'new-catalog)\"")
+        (newline)
+        (newline))
+
 ;; Test for slib.
 (let* ((try-slib (lambda () (use-modules (ice-9 slib))))
        (handler (lambda args #f))
@@ -14,27 +28,22 @@
   (if (not result)
       (begin
         (newline)
-        (display "It appears you do not have the 'slib' scheme\n")
-        (display "library installed. You need slib2c6 or later\n")
+        (display "It appears you do not have the 'slib' scheme ")
+        (display "library installed.\nYou need slib2c4 or later ")
         (display "to run GnuCash.\n")
         (newline)
-        (display "Obtain slib at: http://swissnet.ai.mit.edu/~jaffer/SLIB.html\n")
-        (newline)
+        (display-slib-error)
         (exit 1))))
+
+;; This variable determines whether slib-backup.scm gets loaded.
+(define gnc:*load-slib-backup* #f)
 
 ;; Test for slib >= 2c6.
 (let* ((try-slib (lambda () (require 'printf) (sprintf #f "test")))
        (handler (lambda args #f))
        (result (catch #t try-slib handler)))
   (if (not result)
-      (begin
-        (newline)
-        (display "It appears your 'slib' scheme library is out\n")
-        (display "of date. You need slib2c6 or later to run GnuCash.\n")
-        (newline)
-        (display "Obtain slib at: http://swissnet.ai.mit.edu/~jaffer/SLIB.html\n")
-        (newline)
-        (exit 1))))
+      (set! gnc:*load-slib-backup* #t)))
 
 
 (define (build-path firstelement . restofpath)

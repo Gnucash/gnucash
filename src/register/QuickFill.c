@@ -110,21 +110,70 @@ xaccGetQuickFill( QuickFill *qf, char c )
 /********************************************************************\
 \********************************************************************/
 QuickFill *
-xaccGetQuickFillStr( QuickFill *qf, const char *str )
+xaccGetQuickFillStrLen( QuickFill *qf, const char *str, int len )
 {
   if (str == NULL)
     return NULL;
 
-  while (*str != '\0')
+  while ((*str != '\0') && (len > 0))
   {
     if (qf == NULL)
       return NULL;
 
     qf = qf->qf[CHAR_TO_INDEX(*str)];
     str++;
+    len--;
   }
 
   return qf;
+}
+
+/********************************************************************\
+\********************************************************************/
+QuickFill *
+xaccGetQuickFillStr( QuickFill *qf, const char *str )
+{
+  if (str == NULL)
+    return NULL;
+
+  return xaccGetQuickFillStrLen(qf, str, strlen(str));
+}
+
+/********************************************************************\
+\********************************************************************/
+QuickFill *
+xaccGetQuickFillUniqueLen( QuickFill *qf, int * length )
+{
+  int last = 0;
+  int count;
+  int i;
+
+  *length = 0;
+
+  if (qf == NULL)
+    return NULL;
+
+  while (1)
+  {
+    count = 0;
+    for( i=0; i<QFNUM; i++ )
+    {
+      if (qf->qf[i] != NULL)
+      {
+        count++;
+        if (count > 1)
+          return qf;
+
+        last = i;
+      }
+    }
+
+    if (count == 0)
+      return qf;
+
+    qf = qf->qf[last];
+    (*length)++;
+  }
 }
 
 /********************************************************************\

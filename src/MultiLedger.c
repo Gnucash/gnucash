@@ -33,6 +33,7 @@
 #include "Transaction.h"
 #include "util.h"
 
+
 /** GLOBALS *********************************************************/
 /* These are globals because they describe the state of the entire session.
  * The is, there must be only one instance of these per GUI session.
@@ -209,7 +210,7 @@ xaccLedgerDisplaySimple (Account *acc)
 
 xaccLedgerDisplay *
 xaccLedgerDisplayAccGroup (Account *acc)
-  {
+{
   xaccLedgerDisplay *retval;
   Account **list;
   int ledger_type;
@@ -271,7 +272,7 @@ xaccLedgerDisplayAccGroup (Account *acc)
 
   if (list) _free (list);
   return retval;
-  }
+}
 
 static gncUIWidget
 xaccLedgerDisplayParent(void *user_data)
@@ -287,6 +288,20 @@ xaccLedgerDisplayParent(void *user_data)
   return (regData->get_parent)(regData);
 }
 
+static void
+xaccLedgerDisplaySetHelp(void *user_data, const char *help_str)
+{
+  xaccLedgerDisplay *regData = user_data;
+
+  if (regData == NULL)
+    return;
+
+  if (regData->set_help == NULL)
+    return;
+
+  (regData->set_help)(regData, help_str);
+}
+
 /********************************************************************\
  * xaccLedgerDisplayLedger                                          *
  *   opens up a ledger window for a list of accounts                *
@@ -300,8 +315,8 @@ xaccLedgerDisplayParent(void *user_data)
 
 xaccLedgerDisplay *
 xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
-  {
-  xaccLedgerDisplay   *regData = NULL;
+{
+  xaccLedgerDisplay *regData = NULL;
 
   /******************************************************************\
   \******************************************************************/
@@ -340,6 +355,7 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
   regData->redraw = NULL;
   regData->destroy = NULL;
   regData->get_parent = NULL;
+  regData->set_help = NULL;
   regData->gui_hook = NULL;
   regData->dirty = 0;
   regData->balance = 0.0;
@@ -373,7 +389,9 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
    * but will not do the gui init */
   regData->ledger = xaccMallocSplitRegister (ledger_type);
 
-  xaccSRSetData(regData->ledger, regData, xaccLedgerDisplayParent);
+  xaccSRSetData(regData->ledger, regData,
+                xaccLedgerDisplayParent,
+                xaccLedgerDisplaySetHelp);
 
   regData->dirty = 1;
   xaccLedgerDisplayRefresh (regData);

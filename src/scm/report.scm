@@ -1,4 +1,3 @@
-(use-modules (ice-9 slib))
 (require 'hash-table)
 
 (gnc:support "report.scm")
@@ -46,17 +45,25 @@
           (call-report rendering-thunk options)))))
 
 (define (gnc:report-menu-setup win)
-  ;; This should be on a reports menu later...
+
+  (define menu (gnc:make-menu "_Reports" (list "_Settings")))
+  (define menu-namer (gnc:new-menu-namer))
+
+  (gnc:add-extension menu)
+
   (hash-for-each
    (lambda (name report)
-     (gnc:extensions-menu-add-item
-      (string-append "Report: " name)
-      (string-append "Display the " name " report.")
-      (lambda ()
-        (let ((options (false-if-exception (gnc:report-new-options report))))
-          (gnc:report-window (string-append "Report: " name)
-                             (lambda () (gnc:run-report name options))
-                             options)))))
+     (define item
+       (gnc:make-menu-item
+        ((menu-namer 'add-name) name)
+        (string-append "Display the " name " report.")
+        (list "_Reports" "")
+        (lambda ()
+          (let ((options (false-if-exception (gnc:report-new-options report))))
+            (gnc:report-window (string-append "Report: " name)
+                               (lambda () (gnc:run-report name options))
+                               options)))))
+     (gnc:add-extension item))
    *gnc:_report-info_*))
 
 (define (gnc:define-report version name option-generator rendering-thunk)

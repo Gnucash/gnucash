@@ -3,8 +3,6 @@
 ;; Report on all transactions in an account
 ;; Robert Merkel (rgmerk@mira.net)
 
-(use-modules (ice-9 slib))
-(require 'printf)
 (require 'sort)
 
 ;hack alert - is this line necessary?
@@ -215,7 +213,7 @@
 
 (define (gnc:tr-report-get-first-acc-name split-scm)
   (let ((other-splits (gnc:tr-report-get-other-splits split-scm)))
-    (cond ((= (length other-splits) 0) "")
+    (cond ((= (length other-splits) 0) "-")
 	  (else  (caar other-splits)))))
 
 ;;; something like 

@@ -88,10 +88,14 @@ struct _CellBlock {
    * the currently active cursor).
    *
    * The passive_bg_color is the default color for the cell background
-   * (in argb format) when the cell block is not highlighted.
+   * (in argb format) of the first row when the cell block is not highlighted.
+   *
+   * The passive_bg_color2 is the default color for cell backgrounds
+   * in other rows of the cellblock when it is not highlighted.
    */
   uint32 active_bg_color;
   uint32 passive_bg_color;
+  uint32 passive_bg_color2;
 
   /* other attributes */
   short         *widths;        /* column widths */

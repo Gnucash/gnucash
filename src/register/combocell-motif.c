@@ -583,4 +583,25 @@ void xaccComboCellSetStrict (ComboCell *cell, gncBoolean strict)
 {
 }
 
+/* =============================================== */
+
+void
+xaccComboCellSetCompleteChar (ComboCell *cell, char complete_char)
+{
+}
+
+/* =============================================== */
+
+void
+xaccComboCellSetIgnoreString (ComboCell *cell, const char *ignore_string)
+{
+}
+
+/* =============================================== */
+
+void
+xaccComboCellSetIgnoreHelp (ComboCell *cell, const char *ignore_help)
+{
+}
+
 /* =============== end of file =================== */

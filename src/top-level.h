@@ -38,6 +38,8 @@
 #define HH_ADJBWIN   "xacc-adjbwin.html"
 #define HH_MAIN      "xacc-main.html"
 #define HH_GPL       "xacc-gpl.html"
+#define HH_GLOBPREFS "xacc-globalprefs.html"
+#define HH_ACCEDIT   "xacc-accountedit.html"
 
 /** STRUCTS *********************************************************/
 

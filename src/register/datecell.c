@@ -54,8 +54,8 @@ static short module = MOD_REGISTER;
 
 /* ================================================ */
 
-static
-void xaccParseDate (struct tm *parsed, const char * datestr)
+static void
+xaccParseDate (struct tm *parsed, const char * datestr)
 {
    int iday, imonth, iyear;
    if (!parsed) return;
@@ -123,6 +123,43 @@ xaccValidateDate (struct tm *date, int recur)
 
 /* ================================================ */
 
+static char *
+DateCellHelpValue(BasicCell *bcell)
+{
+  DateCell *cell = (DateCell *) bcell;
+
+  if ((bcell->value != NULL) && (bcell->value[0] != 0))
+  {
+    char string[1024];
+    struct tm time;
+
+    memset(&time, 0, sizeof(time));
+
+    if (bcell->value != NULL)
+      xaccParseDate (&time, bcell->value);
+    else
+    {
+      time.tm_mday = cell->date.tm_mday;
+      time.tm_mon  = cell->date.tm_mon;
+      time.tm_year = cell->date.tm_year;
+    }
+
+    xaccValidateDate(&time, GNC_F);
+    mktime(&time);
+
+    strftime(string, sizeof(string), "%A %d %B %Y", &time);
+
+    return strdup(string);
+  }
+
+  if (bcell->blank_help != NULL)
+    return strdup(bcell->blank_help);
+
+  return NULL;
+}
+
+/* ================================================ */
+
 static const char * 
 DateEnter (BasicCell *_cell, const char * curr,
            int *cursor_position,
@@ -150,32 +187,56 @@ DateMV (BasicCell *_cell,
         int *end_selection)
 {
    DateCell *cell = (DateCell *) _cell;
+   gncBoolean accept = GNC_F;
+   gncBoolean accel = GNC_F;
    struct tm *date;
    char buff[30];
    char *datestr;
-   int accel=0;
-   short accept=0;
 
    /* if user hit backspace, accept the change */
-   if (!change) accept=1;
-   else if (0x0 == change[0]) accept=1;
+   if (change == NULL) accept = GNC_T;
+   else if (0x0 == change[0]) accept = GNC_T;
+   else
+   {
+      int i, count = 0;
+      char separator = dateSeparator();
+      gncBoolean ok = GNC_T;
 
-   /* accept any numeric input */
-   else if (isdigit (change[0])) accept=1;
+      for (i=0; 0 != change[i]; i++)
+      {
+        /* accept only numbers or a date separator. Note that the
+         * separator of '-' (for DATE_FORMAT_ISO) takes precedence
+         * over the accelerator below! */
+        if (!isdigit(change[i]) && (separator != change[i]))
+          ok = GNC_F;
 
-   /* accept the separator character */
-   /* Note that the separator of '-' (for DATE_FORMAT_ISO) takes precedence
-      over the accelerator below! */
-   else if (dateSeparator() == change[0]) accept=1;
+        if (separator == change[i])
+          count++;
+      }
+
+      for (i=0; 0 != oldval[i]; i++)
+        if (separator == oldval[i])
+          count++;
+
+      if (2 < count)
+        ok = GNC_F;
+
+      if (ok)
+        accept = GNC_T;
+   }
 
    /* keep a copy of the new value */
    if (accept) {
       if (cell->cell.value) free (cell->cell.value);
       cell->cell.value = strdup (newval);
+      xaccParseDate (&(cell->date), newval);
       return newval;
    }
 
    /* otherwise, maybe its an accelerator key. */
+   if (strlen(change) != 1)
+     return NULL;
+
    date = &(cell->date);
 
    /* handle accelerator keys */
@@ -184,28 +245,28 @@ DateMV (BasicCell *_cell,
       case '=':
          /* increment day */
          date->tm_mday ++;
-         accel = 1;
+         accel = GNC_T;
          break;
 
       case '_':
       case '-':
          /* decrement day */
          date->tm_mday --;
-         accel = 1;
+         accel = GNC_T;
          break;
 
       case '}':
       case ']':
          /* increment month */
          date->tm_mon ++;
-         accel = 1;
+         accel = GNC_T;
          break;
 
       case '{':
       case '[':
          /* decrment month */
          date->tm_mon --;
-         accel = 1;
+         accel = GNC_T;
          break;
 
       case 'M':
@@ -261,7 +322,7 @@ DateMV (BasicCell *_cell,
    cell->cell.value = strdup (buff);
 
    datestr = strdup (buff);
-   
+
    return datestr;
 }
 
@@ -279,8 +340,8 @@ DateLeave (BasicCell *_cell, const char * curr)
    xaccParseDate (&(cell->date), curr);
 
    printDate (buff, cell->date.tm_mday, 
-                  cell->date.tm_mon+1, 
-                  cell->date.tm_year+1900);
+                    cell->date.tm_mon+1, 
+                    cell->date.tm_year+1900);
 
    if (cell->cell.value) free (cell->cell.value);
    cell->cell.value = strdup (buff);
@@ -346,6 +407,7 @@ xaccInitDateCell (DateCell *cell)
    cell->cell.modify_verify = DateMV;
    cell->cell.leave_cell = DateLeave;
    cell->cell.set_value = setDateCellValue;
+   cell->cell.get_help_value = DateCellHelpValue;
 }
 
 /* ================================================ */
@@ -456,8 +518,8 @@ setDateCellValue (BasicCell *_cell, const char *str)
    xaccParseDate (&(cell->date), str);
 
    printDate (buff, cell->date.tm_mday, 
-                  cell->date.tm_mon+1, 
-                  cell->date.tm_year+1900);
+              cell->date.tm_mon+1, 
+              cell->date.tm_year+1900);
 
    if (cell->cell.value) free (cell->cell.value);
    cell->cell.value = strdup (buff);

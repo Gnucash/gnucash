@@ -1,7 +1,6 @@
 ;;; $Id$
 ;;;;;;;;;;;  QIF Parsing  ;;;;;;;;;;;;;;
 
-(use-modules (ice-9 slib))
 (require 'hash-table)
 
 (define qif-txn-list '())

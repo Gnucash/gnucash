@@ -170,6 +170,9 @@ typedef struct {
 
         gint editing;
 
+        gint button; /* mouse button being held down */
+        gboolean grabbed; /* has the grab */
+
         guint insert_signal;
         guint delete_signal;
         guint changed_signal;
@@ -206,6 +209,8 @@ void gnucash_sheet_set_top_block (GnucashSheet *sheet, int new_top_block,
 
 SheetBlock *gnucash_sheet_get_block (GnucashSheet *sheet, gint vrow,
 				     gint vcol);
+gint
+gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col);
 
 gint gnucash_sheet_col_get_distance(GnucashSheet *sheet, int v_row, int col_a, int col_b);
 
@@ -252,6 +257,12 @@ void gnucash_register_goto_next_virt_row (GnucashRegister *reg);
 
 void gnucash_register_attach_popup(GnucashRegister *reg, GtkWidget *popup,
                                    gpointer data);
+
+void gnucash_register_set_initial_rows(guint num_rows);
+
+void gnucash_register_cut_clipboard (GnucashRegister *reg);
+void gnucash_register_copy_clipboard (GnucashRegister *reg);
+void gnucash_register_paste_clipboard (GnucashRegister *reg);
 
 
 typedef struct {

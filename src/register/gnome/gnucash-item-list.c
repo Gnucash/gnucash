@@ -28,6 +28,7 @@
 enum
 {
   SELECT_ITEM,
+  CHANGE_ITEM,
   KEY_PRESS_EVENT,
   LAST_SIGNAL
 };
@@ -145,18 +146,63 @@ gnc_item_list_button_event(GtkWidget *widget, GdkEventButton *event,
 
 
 static gboolean
+gnc_clist_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+        GtkAdjustment *vadj;
+        gfloat multiplier = 1.0;
+        gfloat v_value;
+
+        vadj = gtk_clist_get_vadjustment(GTK_CLIST(widget));
+        v_value = vadj->value;
+        if (event->state & GDK_SHIFT_MASK)
+                multiplier = 5.0;
+
+        switch (event->button)
+        {
+                case 4:
+                        v_value -= vadj->step_increment * multiplier;
+                        break;
+                case 5:
+                        v_value += vadj->step_increment * multiplier;
+                        break;
+                default:
+                        return FALSE;
+        }
+
+        v_value = CLAMP(v_value, vadj->lower, vadj->upper - vadj->page_size);
+
+        gtk_adjustment_set_value(vadj, v_value);
+
+	return FALSE;
+}
+
+
+static gboolean
 gnc_item_list_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	GNCItemList *item_list = GNC_ITEM_LIST(data);
+        GtkCList *clist;
+        gboolean got_text;
+        gchar *string;
+        gint row;
 
         switch (event->keyval) {
-                case GDK_space:
-                        if (event->state & GDK_CONTROL_MASK)
-                        {
-                                event->state &= ~GDK_CONTROL_MASK;
+                case GDK_Return:
+                        clist = item_list->clist;
+                        row = clist->focus_row;
+                        if (row < 0)
                                 return FALSE;
-                        }
-                        break;
+
+                        got_text = gtk_clist_get_text(clist, row, 0, &string);
+
+                        if (!got_text)
+                                return FALSE;
+
+                        gtk_signal_emit(GTK_OBJECT(item_list),
+                                        gnc_item_list_signals[SELECT_ITEM],
+                                        string);
+
+                        return TRUE;
 		case GDK_Page_Up:
 		case GDK_Page_Down:
 		case GDK_Up:
@@ -197,6 +243,16 @@ gnc_item_list_class_init(GNCItemListClass *item_list_class)
 			       GTK_TYPE_NONE, 1,
 			       GTK_TYPE_POINTER);
 
+	gnc_item_list_signals[CHANGE_ITEM] =
+		gtk_signal_new("change_item",
+			       GTK_RUN_LAST,
+			       object_class->type,
+			       GTK_SIGNAL_OFFSET(GNCItemListClass,
+						 change_item),
+			       gtk_marshal_NONE__POINTER,
+			       GTK_TYPE_NONE, 1,
+			       GTK_TYPE_POINTER);
+
 	gnc_item_list_signals[KEY_PRESS_EVENT] =
 		gtk_signal_new ("key_press_event",
 				GTK_RUN_LAST,
@@ -210,6 +266,10 @@ gnc_item_list_class_init(GNCItemListClass *item_list_class)
 	gtk_object_class_add_signals(object_class,
 				     gnc_item_list_signals,
 				     LAST_SIGNAL);
+
+        item_list_class->select_item = NULL;
+        item_list_class->change_item = NULL;
+        item_list_class->key_press_event = NULL;
 }
 
 
@@ -249,13 +309,17 @@ clist_select_row_cb(GtkCList *clist, gint row, gint column,
 	gboolean got_text;
 	char *string;
 
-	got_text = gtk_clist_get_text(clist, row, column, &string);
+	got_text = gtk_clist_get_text(clist, row, 0, &string);
 
 	if (!got_text)
 		return;
 
-	gtk_signal_emit(GTK_OBJECT(item_list),
-			gnc_item_list_signals[SELECT_ITEM], string);
+        if (column < 0)
+                gtk_signal_emit(GTK_OBJECT(item_list),
+                                gnc_item_list_signals[CHANGE_ITEM], string);
+        else
+                gtk_signal_emit(GTK_OBJECT(item_list),
+                                gnc_item_list_signals[SELECT_ITEM], string);
 }
 
 
@@ -271,6 +335,7 @@ gnc_item_list_new(GnomeCanvasGroup *parent)
 	clist = gtk_clist_new(1);
 	gtk_box_pack_start(GTK_BOX(hbox), clist, TRUE, TRUE, 0);
 	gtk_clist_set_column_auto_resize(GTK_CLIST(clist), 0, TRUE);
+        gtk_clist_set_selection_mode(GTK_CLIST(clist), GTK_SELECTION_BROWSE);
 
 	scrollbar = gtk_vscrollbar_new(NULL);
 	gtk_box_pack_start(GTK_BOX(hbox), scrollbar, FALSE, FALSE, 0);
@@ -290,7 +355,11 @@ gnc_item_list_new(GnomeCanvasGroup *parent)
 
 	gtk_signal_connect_after(GTK_OBJECT(hbox), "button_press_event",
 				 GTK_SIGNAL_FUNC(gnc_item_list_button_event),
-				 NULL);
+				 (gpointer) item_list);
+
+	gtk_signal_connect(GTK_OBJECT(clist), "button_press_event",
+                           GTK_SIGNAL_FUNC(gnc_clist_button_event),
+                           (gpointer) item_list);
 
 	gtk_signal_connect(GTK_OBJECT(clist), "key_press_event",
 			   GTK_SIGNAL_FUNC(gnc_item_list_key_event),

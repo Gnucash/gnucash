@@ -60,7 +60,7 @@ xaccCreateTable (GtkWidget *widget, void *data)
         GnucashSheet *sheet;
         GnucashRegister *greg;
         Table *table;
-        
+
         g_return_if_fail (widget != NULL);
         g_return_if_fail (GNUCASH_IS_REGISTER (widget));
         g_return_if_fail (data != NULL);
@@ -76,7 +76,7 @@ xaccCreateTable (GtkWidget *widget, void *data)
         gtk_widget_ref (table->table_widget);
 
         /* config the cell-block styles */
-        
+
         sheet->cursor_style[GNUCASH_CURSOR_HEADER] =
 		gnucash_sheet_style_compile (sheet,
 					     sr->header,
@@ -107,8 +107,6 @@ xaccCreateTable (GtkWidget *widget, void *data)
         gnucash_sheet_table_load (sheet);
         gnucash_sheet_cursor_set_from_table (sheet, TRUE);
         gnucash_sheet_redraw_all (sheet);
-        
-        return;
 }
 
 
@@ -116,6 +114,8 @@ void
 xaccRefreshTableGUI (Table * table)
 {
         GnucashSheet *sheet;
+        SheetBlockStyle *style;
+        SplitRegister *sr;
 
         if (!table)
                 return;
@@ -123,8 +123,29 @@ xaccRefreshTableGUI (Table * table)
                 return;
 
         g_return_if_fail (GNUCASH_IS_SHEET (table->table_widget));
-        
+
         sheet = GNUCASH_SHEET(table->table_widget);
+        sr = (SplitRegister *)sheet->split_register;
+
+        style = sheet->cursor_style[GNUCASH_CURSOR_HEADER];
+        gnucash_sheet_style_recompile (style, sr->header, sr,
+                                       GNUCASH_CURSOR_HEADER);
+
+        style = sheet->cursor_style[GNUCASH_CURSOR_SINGLE];
+        gnucash_sheet_style_recompile (style, sr->single_cursor,
+                                       sr, GNUCASH_CURSOR_SINGLE);
+
+        style = sheet->cursor_style[GNUCASH_CURSOR_DOUBLE];
+        gnucash_sheet_style_recompile (style, sr->double_cursor,
+                                       sr, GNUCASH_CURSOR_DOUBLE);
+
+        style = sheet->cursor_style[GNUCASH_CURSOR_TRANS];
+        gnucash_sheet_style_recompile (style, sr->trans_cursor,
+                                       sr, GNUCASH_CURSOR_TRANS);
+
+        style = sheet->cursor_style[GNUCASH_CURSOR_SPLIT];
+        gnucash_sheet_style_recompile (style, sr->split_cursor,
+                                       sr, GNUCASH_CURSOR_SPLIT);
 
         gnucash_sheet_table_load (sheet);
 

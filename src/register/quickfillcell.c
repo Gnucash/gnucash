@@ -257,6 +257,8 @@ xaccInitQuickFillCell (QuickFillCell *cell)
    cell->cell.modify_verify = quick_modify;
    cell->cell.leave_cell    = quick_leave;
    cell->cell.set_value     = quick_set;
+
+   xaccQuickFillGUIInit (cell);
 }
 
 /* ================================================ */

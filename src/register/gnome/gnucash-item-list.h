@@ -57,6 +57,9 @@ typedef struct
 	void (*select_item) (GNCItemList *item_list,
 			     char        *item_string);
 
+        void (*change_item) (GNCItemList *item_list,
+                             char        *item_string);
+
 	void (*key_press_event) (GNCItemList *item_list,
 				 GdkEventKey *event);
 

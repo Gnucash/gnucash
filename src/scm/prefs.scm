@@ -1,6 +1,5 @@
 ;;;; Preferences...
 
-(use-modules (ice-9 slib))
 (require 'sort)
 (require 'hash-table)
 
@@ -58,10 +57,17 @@
   (gnc:make-home-dir)
   (gnc:save-options gnc:*options-entries*
                     (symbol->string 'gnc:*options-entries*)
-                    (build-path (getenv "HOME") ".gnucash" "config.auto")))
+                    (build-path (getenv "HOME") ".gnucash" "config.auto")
+                    (string-append
+                     "(gnc:config-file-format-version 1)\n\n"
+                     "; GnuCash Configuration Options\n")))
+
+(define (gnc:config-file-format-version version) #t)
 
 
 ;;;;;; Create default options and config vars
+
+;; Account Types options
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
@@ -119,6 +125,8 @@
   "k" "Show equity accounts in the account tree." #t))
 
 
+;; Account Fields options
+
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
   "Account Fields" "Show account name"
@@ -159,6 +167,9 @@
   "Account Fields" "Show account balance"
   "h" "Show the account balance column in the account tree." #t))
 
+
+;; International options
+
 (gnc:register-configuration-option
  (gnc:make-multichoice-option
   "International" "Date Format"
@@ -166,8 +177,8 @@
   (list #(us "US" "US-style: mm/dd/yyyy")
         #(uk "UK" "UK-style dd/mm/yyyy")
 	#(ce "Europe" "Continental Europe: dd.mm.yyyy")
-	#(iso "ISO" "ISO Standard: yyyy-mm-dd")
-	#(locale "Locale" "Take from system locale"))))
+	#(iso "ISO" "ISO Standard: yyyy-mm-dd"))))
+;	#(locale "Locale" "Take from system locale"))))
 
 ;; hack alert - we should probably get the default new account currency
 ;; from the locale
@@ -181,6 +192,9 @@
  (gnc:make-simple-boolean-option
   "International" "Use 24-hour time format"
   "c" "Use a 24 hour (instead of a 12 hour) time format." #f))
+
+
+;; Register options
 
 (gnc:register-configuration-option
  (gnc:make-multichoice-option
@@ -201,13 +215,148 @@
   "b" "Automatically raise the list of accounts or actions during input." #t))
 
 (gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Register" "Show All Transactions"
+  "c" "By default, show every transaction in an account." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  "Register" "Number of Rows"
+  "d" "Default number of register rows to display."
+   15.0 ;; default
+    1.0 ;; lower bound
+  200.0 ;; upper bound
+    0.0 ;; number of decimals
+    1.0 ;; step size
+    ))
+
+
+;; Register Color options
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Header background"
+  "a" "The header background color"
+  (list #xff #xff #xff 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Single mode default even row background"
+  "b" "The default background color for even rows in single mode"
+  (list #xcc #xcc #xff 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Single mode default odd row background"
+  "bb" "The default background color for odd rows in single mode"
+  (list #xcc #xcc #xff 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Single mode active background"
+  "c" "The background color for the active transaction in single mode"
+  (list #xff #xdd #xdd 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Double mode default even row background"
+  "d" "The default background color for even rows in double mode"
+  (list #xcc #xcc #xff 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Double mode default odd row background"
+  "e" "The default background color for odd rows in double mode"
+  (list #xff #xff #xff 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Register Colors" "Double mode colors alternate with transactions"
+  "ee" "Alternate the even and odd colors with each transaction, not each row"
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Double mode active background"
+  "f" "The background color for the active transaction in double mode"
+  (list #xff #xdd #xdd 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Multi mode default transaction background"
+  "g" "The default background color for transactions in multi-line mode and the auto modes"
+  (list #xcc #xcc #xff 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Multi mode active transaction background"
+  "h" "The background color for an active transaction in multi-line mode and the auto modes"
+  (list #xff #xdd #xdd 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Multi mode default split background"
+  "i" "The default background color for splits in multi-line mode and the auto modes"
+  (list #xff #xff #xff 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Multi mode active split background"
+  "j" "The background color for an active split in multi-line mode and the auto modes"
+  (list #xff #xff #xdd 0)
+  255
+  #f))
+
+
+;; General Options
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "General" "Save Window Geometry"
+  "a" "Save window sizes and positions." #t))
+
+(gnc:register-configuration-option
  (gnc:make-multichoice-option
   "General" "Toolbar Buttons"
-  "a" "Choose whether to display icons, text, or both for toolbar buttons"
+  "b" "Choose whether to display icons, text, or both for toolbar buttons"
   'icons_and_text
   (list #(icons_and_text "Icons and Text" "Show both icons and text")
         #(icons_only "Icons only" "Show icons only")
         #(text_only "Text only" "Show text only"))))
+
+(gnc:register-configuration-option
+ (gnc:make-multichoice-option
+  "General" "Account Separator"
+  "c" "The character used to separate fully-qualified account names"
+  'colon
+  (list #(colon ": (Colon)" "Income:Salary:Taxable")
+        #(slash "/ (Slash)" "Income/Salary/Taxable")
+        #(backslash "\\ (Backslash)" "Income\\Salary\\Taxable")
+        #(dash "- (Dash)" "Income-Salary-Taxable")
+        #(period ". (Period)" "Income.Salary.Taxable"))))
+
+
+;; Configuation variables
 
 (define gnc:*arg-show-version*
   (gnc:make-config-var
@@ -286,3 +435,87 @@ the current value of the path."
            #f)))
    equal?
    '(default)))
+
+
+;; Internal options -- Section names that start with "__" are not
+;; displayed in option dialogs.
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  "__gui" "account_add_win_width" #f #f
+        0.0 ;; default
+        0.0 ;; lower bound
+    32000.0 ;; upper bound
+        0.0 ;; number of decimals
+        1.0 ;; step size
+        ))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  "__gui" "account_add_win_height" #f #f
+        0.0 ;; default
+        0.0 ;; lower bound
+    32000.0 ;; upper bound
+        0.0 ;; number of decimals
+        1.0 ;; step size
+        ))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  "__gui" "account_edit_win_width" #f #f
+        0.0 ;; default
+        0.0 ;; lower bound
+    32000.0 ;; upper bound
+        0.0 ;; number of decimals
+        1.0 ;; step size
+        ))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  "__gui" "account_edit_win_height" #f #f
+        0.0 ;; default
+        0.0 ;; lower bound
+    32000.0 ;; upper bound
+        0.0 ;; number of decimals
+        1.0 ;; step size
+        ))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  "__gui" "main_win_width" #f #f
+        0.0 ;; default
+        0.0 ;; lower bound
+    32000.0 ;; upper bound
+        0.0 ;; number of decimals
+        1.0 ;; step size
+        ))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  "__gui" "main_win_height" #f #f
+      400.0 ;; default
+        0.0 ;; lower bound
+    32000.0 ;; upper bound
+        0.0 ;; number of decimals
+        1.0 ;; step size
+        ))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  "__gui" "reg_win_width" #f #f
+        0.0 ;; default
+        0.0 ;; lower bound
+    32000.0 ;; upper bound
+        0.0 ;; number of decimals
+        1.0 ;; step size
+        ))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  "__gui" "reg_stock_win_width" #f #f
+        0.0 ;; default
+        0.0 ;; lower bound
+    32000.0 ;; upper bound
+        0.0 ;; number of decimals
+        1.0 ;; step size
+        ))

@@ -44,7 +44,7 @@
 
 typedef struct _ComboCell {
    BasicCell  cell;
-   char **    menuitems;    /* not used in the gnome version */
+   char **    menuitems;     /* not used in the gnome version */
 } ComboCell;
 
 ComboCell *  xaccMallocComboCell (void);
@@ -60,6 +60,21 @@ void         xaccAddComboCellMenuItem (ComboCell *, char * menustr);
  * the cell will accept strings not in the menu. Defaults
  * to strict, i.e., only menu items are accepted. */
 void         xaccComboCellSetStrict (ComboCell *, gncBoolean);
+
+/* Only functional in Gnome, right now. Sets a character used
+ * for special completion processing. */
+void         xaccComboCellSetCompleteChar (ComboCell *, char);
+
+/* Only functional in Gnome, right now. Sets a string which,
+ * if the cell has that value, will be returned on an enter,
+ * thus preventing the cell from being edited. This is used
+ * for transactions with multiple splits. */
+void         xaccComboCellSetIgnoreString (ComboCell *, const char *);
+
+/* Only functional in Gnome, right now. Sets a string which,
+ * if the cell has the ignore value, will be returned as the
+ * help string. */
+void         xaccComboCellSetIgnoreHelp (ComboCell *, const char *);
 
 #endif /* __XACC_COMBO_CELL_H__ */
 

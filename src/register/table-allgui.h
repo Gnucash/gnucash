@@ -154,6 +154,10 @@ struct _RevLocator {
 
 typedef struct _RevLocator RevLocator;
 
+typedef void (*TableSetHelpFunc) (Table *table,
+                                  const char *help_str,
+                                  void *client_data);
+
 
 /* The number of "physical" rows/cols is the number
  * of displayed one-line gui rows/cols in the table.
@@ -202,6 +206,8 @@ struct _Table {
                                 int *p_new_phys_col, 
                                 void *client_data);
 
+  TableSetHelpFunc set_help;
+
   void * client_data;
 
   /* string values for each cell, 
@@ -213,6 +219,12 @@ struct _Table {
    * of dimension num_phys_rows * num_phys_cols */
   uint32 **bg_colors;
   uint32 **fg_colors;
+
+  /* Determines whether the passive background
+   * colors alternate between odd and even virt
+   * rows, or between the first and non-first
+   * physical rows within cellblocks. */
+  gncBoolean alternate_bg_colors;
 
   /* handler locators for each cell, 
    * of dimension num_phys_rows * num_phys_cols */
@@ -363,17 +375,20 @@ xaccRefreshCursorGUI (Table * table, gncBoolean do_scroll);
  * However, don't just change it, because it will break functional code.
  */
 const char *
-gnc_table_enter_update(Table *table, int row, int col,
+gnc_table_enter_update(Table *table,
+                       int row, int col,
                        int *cursor_position,
                        int *start_selection,
                        int *end_selection);
 
 const char *
-gnc_table_leave_update(Table *table, int row, int col,
+gnc_table_leave_update(Table *table,
+                       int row, int col,
                        const char* old_text);
 
 const char *
-gnc_table_modify_update(Table *table, int row, int col,
+gnc_table_modify_update(Table *table,
+                        int row, int col,
                         const char *oldval,
                         const char *change,
                         char *newval,
@@ -382,7 +397,18 @@ gnc_table_modify_update(Table *table, int row, int col,
                         int *end_selection);
 
 gncBoolean
-gnc_table_traverse_update(Table *table, int row, int col,
+gnc_table_direct_update(Table *table,
+                        int row, int col,
+                        const char *oldval,
+                        char **newval_ptr,
+                        int *cursor_position,
+                        int *start_selection,
+                        int *end_selection,
+                        void *gui_data);
+
+gncBoolean
+gnc_table_traverse_update(Table *table,
+                          int row, int col,
                           gncTableTraversalDir dir,
                           int *dest_row,
                           int *dest_col);

@@ -1,4 +1,3 @@
-(use-modules (ice-9 slib))
 (require 'hash-table)
 
 (define gnc:register-c-side-scheme-ptr #f)
@@ -22,3 +21,23 @@
 
   (set! gnc:register-c-side-scheme-ptr register-c-side-scheme-ptr)
   (set! gnc:unregister-c-side-scheme-ptr-id unregister-c-side-scheme-ptr-id))
+
+
+(define (gnc:error->string tag args)
+  (define (write-error port)
+    (if (and (list? args) (not (null? args)))
+        (let ((func (car args)))
+          (if func
+              (begin
+                (display "Function: " port)
+                (display func port)
+                (display ", " port)
+                (display tag port)
+                (display "\n\n" port)))))
+    (false-if-exception
+     (apply display-error #f port args))
+    ;; Here we should write the stack trace.
+    )
+
+  (false-if-exception
+   (call-with-output-string write-error)))

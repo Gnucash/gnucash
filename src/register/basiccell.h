@@ -114,6 +114,14 @@
  *    It must return a string, or void if it rejects the change.
  *    The returned string will be used to update the cell value.
  *
+ * The direct_update() callback is called to pass raw gui data
+ *    to the cell. The exact format of the data is determined
+ *    by the gui. The callback should return TRUE if the event
+ *    was handled, i.e., there is no need to call the modify
+ *    update. If the value needs to be changed, the newval_ptr
+ *    should be set to a malloc'd new value. The other arguments
+ *    work as above.
+ *
  * Some memory management rules:
  * (1) the callback must not modify the values of old, change, new
  * (2) if the callback likes the new string, it may return the
@@ -177,6 +185,8 @@
 #ifndef __XACC_BASIC_CELL_H__
 #define __XACC_BASIC_CELL_H__
 
+#include "gnc-common.h"
+
 /* define a bitmask */
 #define XACC_CELL_ALLOW_NONE       0x0
 #define XACC_CELL_ALLOW_SHADOW     0x1
@@ -185,7 +195,6 @@
 #define XACC_CELL_ALLOW_EXACT_ONLY 0x4
 
 typedef struct _BasicCell BasicCell;
-typedef unsigned int uint32;
 
 struct _BasicCell {
 
@@ -200,6 +209,7 @@ struct _BasicCell {
 
   /* ==================================================== */
   char * value;          /* current value */
+  char *blank_help;      /* help when value is blank */
   unsigned int changed;  /* 2^32-1 if value modified */
 
   char   input_output;    /* zero if output-only */
@@ -221,6 +231,13 @@ struct _BasicCell {
                                  int *cursor_position,
                                  int *start_selection,
                                  int *end_selection);
+  gncBoolean   (*direct_update) (BasicCell *,
+                                 const char *oldval,
+                                 char **newval_ptr,
+                                 int *cursor_position,
+                                 int *start_selection,
+                                 int *end_selection,
+                                 void *gui_data);
   const char * (*leave_cell)    (BasicCell *,
                                  const char * current);
 
@@ -232,16 +249,20 @@ struct _BasicCell {
                             int phys_row, int phys_col);
   void         (* destroy) (BasicCell *);
 
+  char * (*get_help_value) (BasicCell *);
+
   /* general hook for gui-private data */
   void * gui_private;
 };
 
 
-BasicCell * xaccMallocBasicCell (void);
+BasicCell *  xaccMallocBasicCell (void);
 void         xaccInitBasicCell (BasicCell *);
 void         xaccDestroyBasicCell (BasicCell *);
 
 void         xaccSetBasicCellValue (BasicCell *, const char *);
+void         xaccSetBasicCellBlankHelp (BasicCell *, const char *);
+char *       xaccBasicCellGetHelp (BasicCell *);
 
 #endif /* __XACC_BASIC_CELL_H__ */
 /* ------------------ end of file ---------------------- */

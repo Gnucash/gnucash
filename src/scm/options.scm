@@ -69,12 +69,20 @@
   (let ((getter (gnc:option-getter option)))
     (getter)))
 
+(define (gnc:option-default-value option)
+  (let ((getter (gnc:option-default-getter option)))
+    (getter)))
+
 (define (gnc:restore-form-generator value->string)
   (lambda () (string-append
               "(lambda (option) "
               "(if option ((gnc:option-setter option) "
               (value->string)
               ")))")))
+
+(define (gnc:value->string value)
+  (call-with-output-string
+   (lambda (port) (write value port))))
 
 (define (gnc:make-string-option
 	 section
@@ -83,7 +91,7 @@
 	 documentation-string
 	 default-value)
   (let* ((value default-value)
-         (value->string (lambda () (string-append "\"" value "\""))))
+         (value->string (lambda () (gnc:value->string value))))
     (gnc:make-option
      section name sort-tag 'string documentation-string
      (lambda () value)
@@ -102,7 +110,7 @@
 	 documentation-string
 	 default-value)
   (let* ((value default-value)
-         (value->string (lambda () (if value "#t" "#f"))))
+         (value->string (lambda () (gnc:value->string value))))
     (gnc:make-option
      section name sort-tag 'boolean documentation-string
      (lambda () value)
@@ -129,10 +137,8 @@
     (and (pair? date) (exact? (car date)) (exact? (cdr date))))
 
   (let* ((value (default-getter))
-         (value->string
-          (lambda ()
-            (string-append "(" (number->string (car value))
-                           " . " (number->string (cdr value)) ")"))))
+         (value->string (lambda ()
+                          (string-append "'" (gnc:value->string value)))))
     (gnc:make-option
      section name sort-tag 'date documentation-string
      (lambda () value)
@@ -200,7 +206,7 @@
 
   (let* ((value default-value)
          (value->string (lambda ()
-                          (string-append "'" (symbol->string value)))))
+                          (string-append "'" (gnc:value->string value)))))
     (gnc:make-option
      section name sort-tag 'multichoice documentation-string
      (lambda () value)
@@ -215,6 +221,100 @@
            (list #t x)
            (list #f "multichoice-option: illegal choice")))
      ok-values)))
+
+;; number range options use the option-data as a list whose
+;; elements are: (lower-bound upper-bound num-decimals step-size)
+(define (gnc:make-number-range-option
+	 section
+	 name
+	 sort-tag
+	 documentation-string
+	 default-value
+         lower-bound
+         upper-bound
+         num-decimals
+         step-size)
+  (let* ((value default-value)
+         (value->string (lambda () (number->string value))))
+    (gnc:make-option
+     section name sort-tag 'number-range documentation-string
+     (lambda () value)
+     (lambda (x) (set! value x))
+     (lambda () default-value)
+     (gnc:restore-form-generator value->string)
+     (lambda (x)
+       (cond ((not (number? x)) (list #f "number-range-option: not a number"))
+             ((and (>= value lower-bound)
+                   (<= value upper-bound))
+              (list #t x))
+             (else (list #f "number-range-option: out of range"))))
+     (list lower-bound upper-bound num-decimals step-size))))
+
+;; Color options store rgba values in a list.
+;; The option-data is a list, whose first element
+;; is the range of possible rgba values and whose
+;; second element is a boolean indicating whether
+;; to use alpha transparency.
+(define (gnc:make-color-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-value
+         range
+         use-alpha)
+
+  (define (canonicalize values)
+    (map exact->inexact values))
+
+  (define (values-in-range values)
+    (if (null? values)
+        #t
+        (let ((value (car values)))
+          (and (number? value)
+               (>= value 0)
+               (<= value range)
+               (values-in-range (cdr values))))))
+
+  (define (validate-color color)
+    (cond ((not (list? color)) (list #f "color-option: not a list"))
+          ((not (= 4 (length color))) (list #f "color-option: wrong length"))
+          ((not (values-in-range color))
+           (list #f "color-option: bad color values"))
+          (else (list #t color))))
+
+  (let* ((value (canonicalize default-value))
+         (value->string (lambda ()
+                          (string-append "'" (gnc:value->string value)))))
+    (gnc:make-option
+     section name sort-tag 'color documentation-string
+     (lambda () value)
+     (lambda (x) (set! value (canonicalize x)))
+     (lambda () (canonicalize default-value))
+     (gnc:restore-form-generator value->string)
+     validate-color
+     (list range use-alpha))))
+
+(define (gnc:color->html color range)
+
+  (define (html-value value)
+    (inexact->exact
+     (min 255.0
+          (truncate (* (/ 255.0 range) value)))))
+
+  (let ((red (car color))
+        (green (cadr color))
+        (blue (caddr color)))
+    (string-append
+     "#"
+     (number->string (html-value red) 16)
+     (number->string (html-value green) 16)
+     (number->string (html-value blue) 16))))
+
+(define (gnc:color-option->html color-option)
+  (let ((color (gnc:option-value color-option))
+        (range (car (gnc:option-data color-option))))
+    (gnc:color->html color range)))
 
 
 ;; Create a new options database
@@ -279,7 +379,8 @@
        section-hash))
     (hash-for-each
      (lambda (section hash)
-       (section-thunk section hash)
+       (if section-thunk
+           (section-thunk section hash))
        (if option-thunk
            (section-for-each hash option-thunk)))
      option-hash))
@@ -302,16 +403,18 @@
           (string-append "\n; Section: " section "\n\n")
           port))
        (lambda (option)
-         (let* ((generator (gnc:option-generate-restore-form option))
-                (restore-code (false-if-exception (generator))))
-           (if restore-code
-               (display
-                (generate-option-restore-form option restore-code)
-                port))))))
+         (let ((value (gnc:option-value option))
+               (default-value (gnc:option-default-value option)))
+           (if
+            (not (equal? value default-value))
+            (let* ((generator (gnc:option-generate-restore-form option))
+                   (restore-code (false-if-exception (generator))))
+              (if restore-code
+                  (display
+                   (generate-option-restore-form option restore-code)
+                   port))))))))
 
-    (let ((header "; GnuCash Configuration Options\n\n")
-          (forms (call-with-output-string generate-forms)))
-      (string-append header forms)))
+    (call-with-output-string generate-forms))
 
   (define (register-callback section name callback)
     (let ((id last-callback-id)
@@ -344,16 +447,17 @@
     (clear-changes))
 
   (define (dispatch key)
-    (cond ((eq? key 'lookup) lookup-option)
-          ((eq? key 'register-option) register-option)
-          ((eq? key 'register-callback) register-callback)
-          ((eq? key 'unregister-callback-id) unregister-callback-id)
-          ((eq? key 'for-each) options-for-each)
-          ((eq? key 'for-each-general) options-for-each-general)
-          ((eq? key 'generate-restore-forms) generate-restore-forms)
-          ((eq? key 'clear-changes) clear-changes)
-          ((eq? key 'run-callbacks) run-callbacks)
-          (else (gnc:warn "options: bad key: " key "\n"))))
+    (case key
+      ((lookup) lookup-option)
+      ((register-option) register-option)
+      ((register-callback) register-callback)
+      ((unregister-callback-id) unregister-callback-id)
+      ((for-each) options-for-each)
+      ((for-each-general) options-for-each-general)
+      ((generate-restore-forms) generate-restore-forms)
+      ((clear-changes) clear-changes)
+      ((run-callbacks) run-callbacks)
+      (else (gnc:warn "options: bad key: " key "\n"))))
 
   dispatch)
 
@@ -394,9 +498,10 @@
      (gnc:option-db-register-option db_handle option))
    options))
 
-(define (gnc:save-options options options-string file)
+(define (gnc:save-options options options-string file header)
   (let ((code (gnc:generate-restore-forms options options-string))
         (port (open file (logior O_WRONLY O_CREAT O_TRUNC))))
     (if port (begin
+               (display header port)
                (display code port)
                (close port)))))
