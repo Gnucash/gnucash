@@ -223,23 +223,23 @@ typedef struct _SplitRegisterColors SplitRegisterColors;
 
 struct _SplitRegisterColors
 {
-  uint32 single_cursor_active_bg_color;
-  uint32 single_cursor_passive_bg_color;
-  uint32 single_cursor_passive_bg_color2;
+  guint32 single_cursor_active_bg_color;
+  guint32 single_cursor_passive_bg_color;
+  guint32 single_cursor_passive_bg_color2;
 
-  uint32 double_cursor_active_bg_color;
-  uint32 double_cursor_passive_bg_color;
-  uint32 double_cursor_passive_bg_color2;
+  guint32 double_cursor_active_bg_color;
+  guint32 double_cursor_passive_bg_color;
+  guint32 double_cursor_passive_bg_color2;
 
   gncBoolean double_alternate_virt;
 
-  uint32 trans_cursor_active_bg_color;
-  uint32 trans_cursor_passive_bg_color;
+  guint32 trans_cursor_active_bg_color;
+  guint32 trans_cursor_passive_bg_color;
 
-  uint32 split_cursor_active_bg_color;
-  uint32 split_cursor_passive_bg_color;
+  guint32 split_cursor_active_bg_color;
+  guint32 split_cursor_passive_bg_color;
 
-  uint32 header_bg_color;
+  guint32 header_bg_color;
 };
 
 typedef char* (*SRStringGetter) (SplitRegisterType);

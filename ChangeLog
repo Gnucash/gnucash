@@ -1,5 +1,10 @@
 2000-06-05  Dave Peticolas  <dave@krondo.com>
 
+	* src/<lots>: moved gui-dependent definitions from
+	src/engine/gnc-common.h to src/engine/gnc-ui-common.h.
+	Use guint32 instead of home-grown typedef. This touched
+	many files.
+
 	* src/guile/guile-util.c (gnc_get_debit_string): make sure to
 	return a malloc'd string.
 

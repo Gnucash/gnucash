@@ -189,7 +189,10 @@
 #ifndef __XACC_BASIC_CELL_H__
 #define __XACC_BASIC_CELL_H__
 
+#include <glib.h>
+
 #include "gnc-common.h"
+#include "gnc-ui-common.h"
 
 /* define a bitmask */
 #define XACC_CELL_ALLOW_NONE       0x0
@@ -204,8 +207,8 @@ struct _BasicCell {
 
   /* cell attributes */
   /* hack alert -- may want to redesign color to use named color strings. */
-  uint32 bg_color;        /* background color, ARGB format */
-  uint32 fg_color;        /* forground (text) color ARGB format */
+  guint32 bg_color;       /* background color, ARGB format */
+  guint32 fg_color;       /* forground (text) color ARGB format */
   short use_fg_color;     /* if 0, above is ignored */
   short use_bg_color;     /* if 0, above is ignored */
 

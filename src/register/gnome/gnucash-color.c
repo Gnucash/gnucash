@@ -47,7 +47,7 @@ static GHashTable *color_hash_table = NULL;
 static guint
 color_hash (gconstpointer v)
 {
-        const uint32 *c = (uint32 *) v;
+        const guint32 *c = (guint32 *) v;
 
         return *c;
 }
@@ -56,8 +56,8 @@ color_hash (gconstpointer v)
 static gint
 color_equal (gconstpointer v, gconstpointer w)
 {
-        const uint32 *c1 = (uint32 *) v;
-        const uint32 *c2 = (uint32 *) w;
+        const guint32 *c1 = (guint32 *) v;
+        const guint32 *c2 = (guint32 *) w;
 
         return (*c1 == *c2);
 }
@@ -108,17 +108,17 @@ gnucash_color_alloc_name (const char *name, GdkColor *c)
  *  the colors.  Caller must not touch the returned color.
  */
 GdkColor *
-gnucash_color_argb_to_gdk (uint32 argb)
+gnucash_color_argb_to_gdk (guint32 argb)
 {
         GdkColor *color;
-        const uint32 key = argb;
-        uint32 *newkey;
+        const guint32 key = argb;
+        guint32 *newkey;
 
         color = g_hash_table_lookup (color_hash_table, &key);
 
         if (!color) {
                 color = g_new0(GdkColor, 1);
-                newkey = g_new0(uint32, 1);
+                newkey = g_new0(guint32, 1);
 
                 *newkey = key;
                 

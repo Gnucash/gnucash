@@ -1,7 +1,7 @@
-/*******************************************************************\
+/********************************************************************\
  * gnc-common.h -- define platform independent items                *
  *                                                                  *
- * Copyright (C) 1999 Rob Browning                                  *
+ * Copyright (C) 1999, 2000 Rob Browning                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -14,8 +14,11 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
@@ -24,24 +27,8 @@
 
 #include "config.h"
 
-#if defined(GNOME)
-  #include <gtk/gtk.h>
-#elif defined(MOTIF)
-  #include <Xm/Xm.h>
-#endif
-
 typedef char gncBoolean;
 #define GNC_F 0
 #define GNC_T (! GNC_F)
-
-typedef unsigned int uint32;
-
-#if defined(GNOME)
-  typedef GtkWidget *gncUIWidget;
-#elif defined(MOTIF)
-  typedef Widget gncUIWidget;
-#elif defined(KDE)
-  typedef void *gncUIWidget;
-#endif
 
 #endif

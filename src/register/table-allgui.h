@@ -99,6 +99,8 @@
 #ifndef __XACC_TABLE_ALLGUI_H__
 #define __XACC_TABLE_ALLGUI_H__
 
+#include <glib.h>
+
 #ifdef MOTIF
 #include "table-motif.h"
 #endif 
@@ -222,8 +224,8 @@ struct _Table {
   /* background colors for each cell, format ARGB, 
    * and foreground (text) colors, format ARGB,
    * of dimension num_phys_rows * num_phys_cols */
-  uint32 **bg_colors;
-  uint32 **fg_colors;
+  guint32 **bg_colors;
+  guint32 **fg_colors;
 
   /* Determines whether the passive background
    * colors alternate between odd and even virt

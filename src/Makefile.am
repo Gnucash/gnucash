@@ -53,6 +53,7 @@ noinst_HEADERS = \
   RegWindow.h \
   SplitLedger.h \
   file-history.h \
+  gnc-ui-common.h \
   messages.h \
   messages_i18n.h \
   top-level.h \
@@ -61,7 +62,7 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   .cvsignore
 
-CFLAGS = @CFLAGS@ @GNOME_CFLAGS@
+CFLAGS = @CFLAGS@ @GLIB_CFLAGS@ @GNOME_CFLAGS@
 
 INCLUDES = \
   -I./engine \

@@ -1,4 +1,8 @@
 /********************************************************************\
+ * gnc-common.h -- define GUI independent items                     *
+ *                                                                  *
+ * Copyright (C) 1999, 2000 Rob Browning                            *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -18,20 +22,23 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef GNUCASH_COLOR_H
-#define GNUCASH_COLOR_H
+#ifndef __GNC_UI_COMMON_H__
+#define __GNC_UI_COMMON_H__
 
-#include <glib.h>
+#include "config.h"
 
-void     gnucash_color_init      (void);
+#if defined(GNOME)
+  #include <gtk/gtk.h>
+#elif defined(MOTIF)
+  #include <Xm/Xm.h>
+#endif
 
-/* Return the pixel value for the given red, green and blue */
-gulong   gnucash_color_alloc      (gushort red, gushort green, gushort blue);
-void     gnucash_color_alloc_name (const char *name, GdkColor *color);
-void     gnucash_color_alloc_gdk  (GdkColor *color);
-GdkColor *gnucash_color_argb_to_gdk (guint32 argb);
+#if defined(GNOME)
+  typedef GtkWidget *gncUIWidget;
+#elif defined(MOTIF)
+  typedef Widget gncUIWidget;
+#elif defined(KDE)
+  typedef void *gncUIWidget;
+#endif
 
-
-extern GdkColor gn_white, gn_light_gray, gn_dark_gray, gn_black, gn_red;
-
-#endif /* GNUCASH_COLOR_H */
+#endif

@@ -98,9 +98,9 @@ struct _CellBlock {
    * The passive_bg_color2 is the default color for cell backgrounds
    * in other rows of the cellblock when it is not highlighted.
    */
-  uint32 active_bg_color;
-  uint32 passive_bg_color;
-  uint32 passive_bg_color2;
+  guint32 active_bg_color;
+  guint32 passive_bg_color;
+  guint32 passive_bg_color2;
 
   /* other attributes */
   short         *widths;        /* column widths */

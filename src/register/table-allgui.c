@@ -281,8 +281,8 @@ xaccTableResize (Table * table,
                new_phys_rows,
                new_phys_cols,
                (table->bg_colors),
-               uint32,
-               ((uint32) 0xffffff),  /* white */
+               guint32,
+               ((guint32) 0xffffff), /* white */
                NOOP);                /* no-op */
 
    /* resize the foreground color array (black text) */
@@ -291,9 +291,9 @@ xaccTableResize (Table * table,
                new_phys_rows,
                new_phys_cols,
                (table->fg_colors),
-               uint32,
-               ((uint32) 0x0),      /* black */
-               NOOP);               /* no-op */
+               guint32,
+               ((guint32) 0x0),      /* black */
+               NOOP);                /* no-op */
 
 
    /* resize the user-data hooks */
@@ -403,7 +403,7 @@ makePassive (Table *table)
    for (i=0; i<curs->numRows; i++) {
       for (j=0; j<curs->numCols; j++) {
          BasicCell *cell;
-         uint32 color;
+         guint32 color;
 
          if (table->alternate_bg_colors) {
            if ((virt_row % 2) == 1)

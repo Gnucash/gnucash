@@ -133,13 +133,13 @@ LDADD =    gnome/libgncgnome.a   register/libgncregister.a   register/gnome/libg
 gnucash_SOURCES =    MultiLedger.c   SplitLedger.c   Destroy.c   EuroUtils.c   FileDialog.c   Refresh.c
 
 
-noinst_HEADERS =    AccWindow.h   AdjBWindow.h   Destroy.h   EuroUtils.h   FileBox.h   FileDialog.h   MainWindow.h   MultiLedger.h   RecnWindow.h   Refresh.h   RegWindow.h   SplitLedger.h   file-history.h   messages.h   messages_i18n.h   top-level.h   ui-callbacks.h
+noinst_HEADERS =    AccWindow.h   AdjBWindow.h   Destroy.h   EuroUtils.h   FileBox.h   FileDialog.h   MainWindow.h   MultiLedger.h   RecnWindow.h   Refresh.h   RegWindow.h   SplitLedger.h   file-history.h   gnc-ui-common.h   messages.h   messages_i18n.h   top-level.h   ui-callbacks.h
 
 
 EXTRA_DIST =    .cvsignore
 
 
-CFLAGS = @CFLAGS@ @GNOME_CFLAGS@
+CFLAGS = @CFLAGS@ @GLIB_CFLAGS@ @GNOME_CFLAGS@
 
 INCLUDES =    -I./engine   -I./guile   -I./register
 

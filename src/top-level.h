@@ -28,6 +28,8 @@
 #include "Group.h"
 #include "Session.h"
 #include "gnc-common.h"
+#include "gnc-ui-common.h"
+
 
 /** HELP STUFF: *****************************************************/
 #define HH_ABOUT             "xacc-about.html"
@@ -44,7 +46,6 @@
 #define HH_FIND_TRANSACTIONS "xacc-find-transactions.html"
 #define HH_PRINT             "xacc-print.html"
 
-/** STRUCTS *********************************************************/
 
 /** PROTOTYPES ******************************************************/
 
