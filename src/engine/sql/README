@@ -1,11 +1,11 @@
 
 This directory contains code for SQL/Postgres support.  The
-SQL backend can be used in several modes. The single-user modes
-are beta: they work for me, but haven't had the benefit of lots 
-of testers whacking in it and bug-hunting.  The multi-user mode 
-is nearing completion: it has a variety of problems, but may be 
-usable.
-
+SQL backend allows multiple users to view/edit the same data
+at the same time, as well as allowing a single user to 
+keep data in an SQL database.  This code is 'beta': it seems
+to work, but really has not been heavily tested by lots
+of users, and may still contain bugs.  See also the 
+'to be done' list at the bottom.
 
 
 Postgres Install Instructions
