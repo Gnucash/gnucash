@@ -56,7 +56,7 @@ WARN_LOGFILE           = doxygen.log
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = ../
+INPUT                  = @-top_srcdir-@/src
 FILE_PATTERNS          = 
 RECURSIVE              = YES
 EXCLUDE                = 
