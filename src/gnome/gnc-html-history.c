@@ -119,8 +119,7 @@ gnc_html_history_append(gnc_html_history * hist,
        !g_strcmp(hn->location, node->location) &&
        !g_strcmp(hn->label, node->label)) {      
       if(hist->destroy_cb) {
-        (hist->destroy_cb)((gnc_html_history_node *)n->data,
-                           hist->destroy_cb_data);
+        (hist->destroy_cb)(hn, hist->destroy_cb_data);
       }
       gnc_html_history_node_destroy(node);
       return;
