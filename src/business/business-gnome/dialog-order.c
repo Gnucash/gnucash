@@ -179,6 +179,7 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
   GtkWidget *vbox, *regWidget;
   GncEntryLedger *entry_ledger;
   GnomeDialog *owd;
+  GList *entries;
 
   ow = g_new0 (OrderWindow, 1);
 
@@ -196,6 +197,9 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
 
   /* Build the ledger */
   entry_ledger = gnc_entry_ledger_new (ow->book, GNCENTRY_LEDGER);
+  entries = gncOrderGetEntries (order);
+  /* Set watches on entries*/
+  gnc_entry_ledger_load (entry_ledger, entries);
 
   /* Watch the order of operations, here... */
   gnucash_register_set_initial_rows( 6 );
@@ -213,6 +217,13 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
 
   gtk_signal_connect (GTK_OBJECT (ow->dialog), "destroy",
 		      GTK_SIGNAL_FUNC(gnc_order_window_destroy_cb), ow);
+
+  gnome_dialog_button_connect (owd, 0,
+			       GTK_SIGNAL_FUNC(gnc_order_window_ok_cb), ow);
+  gnome_dialog_button_connect (owd, 1,
+			       GTK_SIGNAL_FUNC(gnc_order_window_cancel_cb), ow);
+  gnome_dialog_button_connect (owd, 2,
+			       GTK_SIGNAL_FUNC(gnc_order_window_help_cb), ow);
 
   /* Setup initial values */
   if (order != NULL) {

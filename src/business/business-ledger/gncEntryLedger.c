@@ -80,7 +80,10 @@ GncEntry * gnc_entry_ledger_get_current_entry (GncEntryLedger *ledger)
 }
 
 /* Copy GncEntry information from the list to the rows of the Ledger. */
-void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list);
+void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
+{
+  GncEntry *entry;
+}
 
 
 /* Create and return a new GncEntry Ledger */
@@ -107,8 +110,36 @@ GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type)
   /* config_cells? */
 
   /* set up header */
+  {
+    VirtualCellLocation vcell_loc = { 0, 0 };
+    CellBlock *header;
+
+    header = gnc_table_layout_get_cursor (ledger->table->layout, CURSOR_HEADER);
+
+    gnc_table_set_vcell (ledger->table, header, NULL, TRUE, TRUE, vcell_loc);
+  }
 
   /* set up first initial row */
+  {
+    VirtualLocation vloc;
+    CellBlock *cursor;
+
+    vloc.vcell_loc.virt_row = 1;
+    vloc.vcell_loc.virt_col = 0;
+    vloc.phys_row_offset = 0;
+    vloc.phys_col_offset = 0;
+
+    cursor = gnc_table_layout_get_cursor (ledger->table->layout, "cursor");
+
+    gnc_table_set_vcell (ledger->table, cursor, NULL, TRUE, TRUE, vloc.vcell_loc);
+
+    if (gnc_table_find_close_valid_cell (ledger->table, &vloc, FALSE))
+      gnc_table_move_cursor (ledger->table, vloc);
+      else
+    {
+      g_warning ("Can't find valid initial location");
+    }
+}
 
   return ledger;
 }
@@ -124,7 +155,7 @@ void gnc_entry_ledger_destroy (GncEntryLedger *ledger)
 
 Table * gnc_entry_ledger_get_table (GncEntryLedger *ledger)
 {
-  if (!ledger) return;
+  if (!ledger) return NULL;
   return ledger->table;
 }
 
