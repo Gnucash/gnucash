@@ -5,6 +5,8 @@
 
 	* kvp-scm: create gnc_kvp_frame_delete_at_path() and wrap it.
 	  This function will clear a sub-tree out of a kvp_frame.	  
+
+	* kvp-scm: implement KVP_TYPE_FRAME kvp-values
 	
 2002-07-05  Derek Atkins  <derek@ihtfp.com>
 

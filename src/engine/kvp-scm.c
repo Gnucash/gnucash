@@ -52,9 +52,13 @@ gnc_scm_to_kvp_value_ptr(SCM val)
         free(newstr);
         return ret;
     }
+    else if(gw_wcp_p(val) &&
+	    gw_wcp_is_of_type_p(gh_eval_str("<gnc:kvp-frame*>"), val))
+    {
+        return gw_wcp_get_ptr(val);
+    }
     /* FIXME: add binary handler here when it's figured out */
     /* FIXME: add list handler here */
-    /* FIXME: add frame handler here when it's figured out */
     return NULL;
 }
 
@@ -85,12 +89,19 @@ gnc_kvp_value_ptr_to_scm(kvp_value* val)
         return gnc_timespec2timepair(kvp_value_get_timespec(val));
 	break;
 
+    case KVP_TYPE_FRAME:
+    {
+        kvp_frame *frame = kvp_value_get_frame(val);
+	if (frame)
+	  return gw_wcp_assimilate_ptr (frame,
+					gh_eval_str("<gnc:kvp-frame*>"));
+    }
+        break;
+
     /* FIXME: handle types below */
     case KVP_TYPE_BINARY:
         break;
     case KVP_TYPE_GLIST:
-        break;
-    case KVP_TYPE_FRAME:
         break;
     }
     return SCM_BOOL_F;
