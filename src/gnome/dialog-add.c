@@ -3,6 +3,7 @@
  *                (X-Accountant)                                    *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997, 1998, 1999 Linas Vepstas                     *
+ * Copyright (C) 1999 Jeremy Collins                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -33,6 +34,7 @@
 #include "AccInfo.h"
 #include "Account.h"
 #include "top-level.h"
+#include "gnucash.h"
 #include "MainWindow.h"
 #include "messages.h"
 #include "util.h"
@@ -280,18 +282,29 @@ static void
 gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
 {
 
-  Transaction 		*trans;
-  Account      		*account;
-  AccWindow             *accData = data; 
-  GtkWidget             *entryAccountName;
-  GtkWidget             *entryDescription;
-  GtkWidget             *entryCurrency;
-  GtkWidget             *entrySecurity;
+  Transaction  *trans;
+  Account      *account;
+  AccWindow    *accData = data; 
+  GtkWidget    *entryAccountName;
+  GtkWidget    *entryDescription;
+  GtkWidget    *entryCurrency;
+  GtkWidget    *entrySecurity;
+  gchar        *text[3];
+  gchar        buf[BUFSIZE];
+  GtkCTreeNode *newRow = NULL;
+  GtkCTreeNode *parentRow;
+  GtkCTreeNode *ctreeParent;
+  GtkCTree     *ctree;
+  GtkWidget    *app;
   
   entryAccountName = gnc_ui_get_widget(GTK_WIDGET(dialog), "entryAccountName");
   entryDescription = gnc_ui_get_widget(GTK_WIDGET(dialog), "entryDescription");
   entryCurrency    = gnc_ui_get_widget(GTK_WIDGET(dialog), "entryCurrency"   );
   entrySecurity    = gnc_ui_get_widget(GTK_WIDGET(dialog), "entrySecurity"   );
+
+  app         = gnc_get_ui_data();
+  ctree       = gtk_object_get_data(GTK_OBJECT(app), "ctree");
+  ctreeParent = gtk_object_get_data(GTK_OBJECT(app), "ctree_parent");  
 
   /* Check to make sure something was entered */
   if( strcmp( gtk_entry_get_text(GTK_ENTRY(entryAccountName)), "" ) == 0 ) 
@@ -315,7 +328,6 @@ gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
   xaccAccountSetCurrency    (account, gtk_entry_get_text(GTK_ENTRY(entryCurrency)));
   xaccAccountSetSecurity    (account, gtk_entry_get_text(GTK_ENTRY(entrySecurity)));
 
-  /* Add an opening balance transaction (as the first transaction) */
   trans = xaccMallocTransaction();
  
   xaccTransBeginEdit(trans, 1);
@@ -323,17 +335,8 @@ gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
   xaccTransSetDescription (trans, OPEN_BALN_STR);
   xaccTransCommitEdit(trans);
             
-  /* add the new transaction to the account */
   xaccAccountInsertSplit (account, xaccTransGetSplit (trans, 0) );
   
-  /* once the account is set up, add it to account group 
-   * If the user indicated a parent acccount, make it a 
-   * sub account of that */
-       
-  /* The g_print statements should be removed after we are sure 
-   * everything is a ok with this callback 
-   */       
-       
   if ((Account *)accData->parentAccount) {
     xaccInsertSubAccount ((Account *)accData->parentAccount, account);
   } else {
@@ -341,7 +344,24 @@ gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
   }
   xaccAccountCommitEdit (account);
 
-  refreshMainWindow();
+  sprintf(buf, "%s%.2f", CURRENCY_SYMBOL, xaccAccountGetBalance(account));
+    
+  text[0] = xaccAccountGetName(account);
+  text[1] = xaccAccountGetDescription(account);
+  text[2] = buf;
+
+  /* Find the parent account row & add our new account to it... */
+  parentRow = gtk_ctree_find_by_row_data(GTK_CTREE(ctree), ctreeParent, (Account *)accData->parentAccount);
+  newRow    = gtk_ctree_insert_node (ctree, parentRow, newRow, text, 0,
+                                     NULL, NULL, NULL, NULL, /* PIXMAP INFO */
+			                         TRUE, TRUE);
+				           
+  gtk_ctree_node_set_row_data(GTK_CTREE(ctree), newRow, account);
+
+  /* FIXME: Maybe
+   *   Should we refresh the statusbar here?  I don't think it should be
+   *   needed because we are adding an account with a zero balance.
+   */
 
   gnome_dialog_close(GNOME_DIALOG(gtk_widget_get_toplevel(dialog)));
 

@@ -1,7 +1,7 @@
 /********************************************************************\
  * MainWindow.c -- the main window, and associated helper functions * 
  *                 and callback functions for xacc (X-Accountant)   *
- * Copyright (C) 1998,1999 Jeremy Collins	                    *
+ * Copyright (C) 1998,1999 Jeremy Collins	                        *
  * Copyright (C) 1998      Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,21 +20,23 @@
 \********************************************************************/
 
 #include <gnome.h>
+#include <guile/gh.h>
 
 #include "config.h"
 
 #include "gnucash.h"
-#include "dialog-options.h"
-#include "AccWindow.h"
-#include "MenuCommands.h"
-#include "messages.h"
-#include "RegWindow.h"
 #include "top-level.h"
+#include "messages.h"
 #include "version.h"
 #include "util.h"
-#include "AccWindow.h"
+
 #include "MainWindow.h"
-#include "MainWindowP.h"
+#include "RegWindow.h"
+#include "window-main-menu.h"
+#include "window-mainP.h"
+#include "window-help.h"
+#include "dialog-options.h"
+#include "AccWindow.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
@@ -49,8 +51,10 @@ static void gnc_ui_add_account( GtkWidget *, gpointer );
 static void gnc_ui_delete_account_cb( GtkWidget *, gpointer );
 static void gnc_ui_about_cb( GtkWidget *, gpointer );
 static void gnc_ui_help_cb( GtkWidget *, gpointer );
+static void gnc_ui_reports_cb( GtkWidget *, gchar * );
 static void gnc_ui_mainWindow_toolbar_open( GtkWidget *, gpointer );
 static void gnc_ui_mainWindow_toolbar_edit( GtkWidget *, gpointer );
+static void gnc_ui_refresh_statusbar();
 
 /** GLOBALS *********************************************************/
 char	    *HELP_ROOT = "";
@@ -84,6 +88,21 @@ static GnomeUIInfo filemenu[] = {
        GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_QUIT,
        0, 0, NULL},       
        GNOMEUIINFO_END             
+};
+
+static GnomeUIInfo reportsmenu[] = {
+	{GNOME_APP_UI_ITEM,
+	 N_("Balance"), N_("BalanceReport"),
+	 gnc_ui_reports_cb, "report-baln.phtml", NULL,
+	 GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PREF,
+	 0, 0, NULL},
+	{GNOME_APP_UI_ITEM,
+	 N_("Profit & Loss"), N_("ProfitLoss"),
+	 gnc_ui_reports_cb, "report-pnl.phtml", NULL,
+	 GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PREF,
+	 0, 0, NULL},
+	 
+	 GNOMEUIINFO_END
 };
 
 static GnomeUIInfo optionsmenu[] = {
@@ -137,6 +156,7 @@ static GnomeUIInfo helpmenu[] = {
 static GnomeUIInfo mainmenu[] = {
     GNOMEUIINFO_SUBTREE(N_("File"), filemenu),
     GNOMEUIINFO_SUBTREE(N_("Accounts"), accountsmenu),
+    GNOMEUIINFO_SUBTREE(N_("Reports"), reportsmenu),
     GNOMEUIINFO_SUBTREE(N_("Options"), optionsmenu),
     GNOMEUIINFO_SUBTREE(N_("Help"), helpmenu),
     GNOMEUIINFO_END
@@ -242,8 +262,8 @@ acct_ctree_unselect(GtkWidget *widget, GtkCTreeNode *row, gint column)
   return TRUE; 
 }
 
-void
-refreshMainWindow()
+static void
+gnc_ui_refresh_statusbar()
 {
   GtkWidget *statusbar;
   guint     context_id;
@@ -308,9 +328,15 @@ refreshMainWindow()
                                             "Statusbar");
   
   gtk_statusbar_push( GTK_STATUSBAR(statusbar), context_id, buf);
+  
+}
 
+/* Required for compatibility with Motif code... */
+void
+refreshMainWindow()
+{
+  gnc_ui_refresh_statusbar();
   gnc_ui_refresh_tree();
-
 }
 
 void
@@ -350,7 +376,7 @@ gnc_ui_acct_ctree_fill(GtkCTree *ctree, GtkCTreeNode *parent, AccountGroup *acct
     popup = gnome_popup_menu_new(accountsmenu);
     gnome_popup_menu_attach (GTK_WIDGET(popup), GTK_WIDGET(ctree), NULL);
 
-    gtk_ctree_toggle_expansion(GTK_CTREE(ctree), GTK_CTREE_NODE(sibling));
+//    gtk_ctree_toggle_expansion(GTK_CTREE(ctree), GTK_CTREE_NODE(sibling));
 
     /* Connect the signal to the tree_select_row event */
     gtk_signal_connect (GTK_OBJECT(ctree), 
@@ -402,50 +428,29 @@ gnc_ui_refresh_tree()
   
   parent = NULL;
   
+  gtk_clist_freeze(GTK_CLIST(ctree));
   gnc_ui_acct_ctree_fill(ctree, parent, accts);
+  gtk_clist_thaw(GTK_CLIST(ctree));
   gtk_clist_columns_autosize(GTK_CLIST(ctree));  
  
 }
 
-/* Standard Gnome About Dialog, need I say more? */
-/* hack alert -- should display about.html documentation page instead */
 static void
 gnc_ui_about_cb (GtkWidget *widget, gpointer data)
 {
-  GtkWidget *about;
-  const gchar *authors[] = {
-  /* Here should be your names */
-          "Rob Clark",
-          "Linas Vepstas",
-          "Jeremy Collins",
-          "Rob Browning",
-          "For more see http://www.gnucash.org/",
-          NULL
-          };
-
-  about = gnome_about_new ( "GnuCash", VERSION,
-                            "(C) 1998,1999 The GnuCash Project",
-                            authors,
-                            "GnuCash: The GNU way to manage your money!",
-                            NULL);
-  gtk_widget_show (about);
-
+  helpWindow( GTK_WIDGET(app), ABOUT_STR, HH_ABOUT ); 
 }                          
 
-/* Help system callback */
 static void
 gnc_ui_help_cb ( GtkWidget *widget, gpointer data )
 {
-  /* hack alert --  We need some config menus to setup were the docs are located */
-  
-  gchar *docs_path = HELP_ROOT;
-  
-  docs_path = gnome_util_prepend_user_home( docs_path );
+  helpWindow( GTK_WIDGET(app), HELP_STR, HH_MAIN );
+}
 
-  gnome_help_goto( NULL, docs_path );
-
-  g_free( docs_path );
-
+static void
+gnc_ui_reports_cb(GtkWidget *widget, gchar *report)
+{
+  reportWindow (widget, "duuuude", report);  
 }
 
 static void
@@ -474,14 +479,26 @@ gnc_ui_add_account ( GtkWidget *widget, gpointer data )
 static void
 gnc_ui_delete_account_finish_cb ( GtkWidget *widget, gpointer data )
 {
-  Account *account = data;
-  
-  /* Did I delete this correctly? */
+  GtkCTreeNode *deleteRow;
+  GtkCTreeNode *parentRow;
+  GtkCTree     *ctree;
+  Account      *account = data;
+
+  ctree      = gtk_object_get_data(GTK_OBJECT(app), "ctree");
+  parentRow  = gtk_object_get_data(GTK_OBJECT(app), "ctree_parent");
+
+  /* Step 1: Delete the actual account */  
   xaccRemoveAccount ( account );
   xaccFreeAccount ( account );
 
-  refreshMainWindow();  
+  /* Step 2: Find the GtkCTreeNode that matches this account */
+  deleteRow = gtk_ctree_find_by_row_data(GTK_CTREE(ctree), parentRow, account);
   
+  /* Step 3: Delete the GtkCTreeNode we just found */
+  gtk_ctree_remove_node(GTK_CTREE(ctree), deleteRow);
+  
+  /* Step 4: Refresh the toolbar */
+  gnc_ui_refresh_statusbar();
 }
 
 static void
@@ -584,25 +601,25 @@ mainWindow() {
   gnome_app_create_menus  (GNOME_APP(app), mainmenu);
 
   /* Cram accounts into the ctree widget & make sure the columns are sized correctly */
+  gtk_clist_freeze(GTK_CLIST(ctree));
   gnc_ui_acct_ctree_fill(GTK_CTREE(ctree), parent, accts);
+  gtk_clist_thaw(GTK_CLIST(ctree));
+
   gtk_clist_columns_autosize(GTK_CLIST(ctree));
-  gtk_clist_set_shadow_type (GTK_CLIST(ctree), GTK_SHADOW_NONE);
+  gtk_clist_set_shadow_type (GTK_CLIST(ctree), GTK_SHADOW_IN);
 
   /* Create main vbox */
   main_vbox = gtk_vbox_new( FALSE, 0 );
-  gtk_container_border_width( GTK_CONTAINER( main_vbox ), 0);
   gnome_app_set_contents ( GNOME_APP ( app ), main_vbox );
 
   /* create scrolled window */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
-				  GTK_POLICY_AUTOMATIC, 
-				  GTK_POLICY_AUTOMATIC);
+                                  GTK_POLICY_AUTOMATIC, 
+                                  GTK_POLICY_AUTOMATIC);
   gtk_widget_show (scrolled_win);
 
-  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_win), GTK_WIDGET(ctree));
-  gtk_container_border_width(GTK_CONTAINER(scrolled_win), 0);
-
+  gtk_container_add(GTK_CONTAINER(scrolled_win), GTK_WIDGET(ctree));
   gtk_box_pack_start(GTK_BOX(main_vbox), scrolled_win, TRUE, TRUE, 0);
 
   /* create statusbar and pack it into the main_vbox */
@@ -631,31 +648,6 @@ gnc_ui_shutdown (GtkWidget *widget, gpointer *data)
   gtk_main_quit ();
 }
     
-#if 0
-
-/* FIXME: This was the old shutdown code.  It probably needs to be
-   migrated to whatever function is being called by gncFileQuerySave() */
-
-  GtkWidget *msgbox;
-  msgbox = gnome_message_box_new ( FMB_SAVE_MSG,
-                                   GNOME_MESSAGE_BOX_ERROR, 
-                                   GNOME_STOCK_BUTTON_OK,
-                                   GNOME_STOCK_BUTTON_CANCEL, NULL );
-  gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 0,
-                               GTK_SIGNAL_FUNC (file_cmd_save), 
-                               NULL);
-  gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 0,
-                               GTK_SIGNAL_FUNC (file_cmd_quit), 
-                               NULL);                                 
-  gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 1,
-                               GTK_SIGNAL_FUNC (file_cmd_quit), 
-                               NULL);                                                    
-    gtk_widget_show ( msgbox );   
-
-#endif
-
-
-
 /********************* END OF FILE **********************************/
 
 /*

@@ -1,6 +1,6 @@
 /********************************************************************\
- * MenuCommands.h -- just what is says                              *
- * Copyright (C) 1998 Jeremy Collins                                *
+ * window-reconcile.h -- the reconcile window                       *
+ * Copyright (C) 1997 Robin D. Clark                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -16,37 +16,35 @@
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
  *                                                                  *
+ *   Author: Rob Clark                                              *
+ * Internet: rclark@cs.hmc.edu                                      *
+ *  Address: 609 8th Street                                         *
+ *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __MENUCOMMANDS_H__
-#define __MENUCOMMANDS_H__
+#ifndef __WINDOW_RECONCILE_H__
+#define __WINDOW_RECONCILE_H__
 
 #include <gtk/gtk.h>
 
 #include "config.h"
 
-/** STRUCTS *********************************************************/
-
-/** PROTOTYPES ******************************************************/
-void gnucash_shutdown (GtkWidget *widget, gpointer *data); 
-void file_cmd_open (GtkWidget *widget, gpointer data);
-void file_cmd_import (GtkWidget *widget, gpointer data);
-void file_cmd_quit (GtkWidget *widget, gpointer data);
-void file_cmd_save (GtkWidget *widget, gpointer data);
-/* void prepare_app ( void ); */
+#include "Account.h"
 
 /** GLOBALS *********************************************************/
-//extern char  *helpPath;
-extern GtkWidget   *app;
 
-#endif
+/** STRUCTS *********************************************************/
+typedef struct _RecnWindow RecnWindow;
+
+/** PROTOTYPES ******************************************************/
+void        recnRefresh(Account *account);
+RecnWindow *recnWindow(GtkWidget *parent, Account *account);
 
 /*
-  Local Variables:
-  tab-width: 2
-  indent-tabs-mode: nil
-  mode: c-mode
-  c-indentation-style: gnu
-  eval: (c-set-offset 'block-open '-)
-  End:
-*/ 
+ * The xaccDestroyRecnWindow() subroutine can be called from 
+ * anywhere to shut down the Register window.  Used primarily when
+ * destroying the underlying account.
+ */
+void       xaccDestroyRecnWindow(Account *);
+
+#endif

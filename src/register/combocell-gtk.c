@@ -168,7 +168,7 @@ xaccSetComboCellValue (ComboCell *cell, const char * str) {
     gtk_sheet_set_cell_text(box->sheet,
                             box->sheet->active_cell.row,
                             box->sheet->active_cell.col,
-                            str);
+                            (char *)str);
   }
 }
 
@@ -229,7 +229,7 @@ enterCombo (BasicCell *bcell, const char *value) {
     gtk_sheet_set_cell_text(box->sheet,
                             box->sheet->active_cell.row,
                             box->sheet->active_cell.col,
-                            value); 
+                            (char *)value); 
   }
   
   return NULL;

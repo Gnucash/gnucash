@@ -1,6 +1,6 @@
-/*******************************************************************\
- * MainWindowP.h -- private GNOME main window functions             *
- * Copyright (C) 1997 Robin D. Clark                                *
+/********************************************************************\
+ * window-main-menu.h -- just what is says                          *
+ * Copyright (C) 1998 Jeremy Collins                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -16,58 +16,28 @@
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __MAINWINDOWP_H__
-#define __MAINWINDOWP_H__
+#ifndef __WINDOW_MAIN_MENU_H__
+#define __WINDOW_MAIN_MENU_H__
 
 #include <gtk/gtk.h>
-#include "Group.h"
+
 #include "config.h"
 
-/** PROTOTYPES ******************************************************/
-void gnc_ui_refreshMainWindow( void );
-void gnc_ui_mainWindow(AccountGroup *);
-void gnc_ui_refresh_tree ( void );
-void gnc_ui_acct_tree_fill ( GtkTree *, AccountGroup *);
+/** STRUCTS *********************************************************/
 
-#if 0
+/** PROTOTYPES ******************************************************/
+void gnucash_shutdown (GtkWidget *widget, gpointer *data); 
+void file_cmd_open (GtkWidget *widget, gpointer data);
+void file_cmd_import (GtkWidget *widget, gpointer data);
+void file_cmd_quit (GtkWidget *widget, gpointer data);
+void file_cmd_save (GtkWidget *widget, gpointer data);
+/* void prepare_app ( void ); */
 
 /** GLOBALS *********************************************************/
-enum {
-  FMB_NEW,
-  FMB_OPEN,
-  FMB_IMPORT,
-  FMB_SAVE,
-  FMB_SAVEAS,
-  FMB_QUIT,
-};
-enum {
-  AMB_NEW,
-  AMB_OPEN,
-  AMB_LEDGER,
-  AMB_EDIT,
-  AMB_DEL,
-  AMB_TRNS,
-  AMB_RPRT,
-  AMB_SHOW,
-  AMB_CAT,
-};
-enum {
-  HMB_ABOUT,
-  HMB_ACC,
-  HMB_REGWIN,
-  HMB_RECNWIN,
-  HMB_ADJBWIN,
-  HMB_MAIN,
-  HMB_LIC,
-};
-
-#endif
+//extern char  *helpPath;
+extern GtkWidget   *app;
 
 #endif
 
@@ -75,8 +45,8 @@ enum {
   Local Variables:
   tab-width: 2
   indent-tabs-mode: nil
-  mode: c-mode
+  mode: c-modet
   c-indentation-style: gnu
   eval: (c-set-offset 'block-open '-)
   End:
-*/
+*/ 

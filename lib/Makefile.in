@@ -58,6 +58,7 @@ motif:
 
 gnome:
 	@cd ${GTKSHEET_DIR};  $(MAKE) default
+	@cd gtkfilesel2;      $(MAKE) default
 
 qt:
 

@@ -43,9 +43,11 @@
 #include "MultiLedger.h"
 #include "LedgerUtils.h"
 #include "MainWindow.h"
-#include "messages.h"
-#include "RecnWindow.h"
 #include "RegWindow.h"
+#include "window-reconcile.h"
+
+#include "messages.h"
+
 #include "table-html.h"
 #include "Transaction.h"
 #include "util.h"
@@ -366,7 +368,7 @@ regWindowLedger(xaccLedgerDisplay *ledger) {
          this hack.  It should be fixed later... */
       list_width += widths[i] * 5;
     }
-    gtk_widget_set_usize(regData->dialog, list_width + 80, 500);
+    gtk_widget_set_usize(regData->dialog, list_width + 219, 500);
   }
 
   /* Add controls at the bottom.  The controls are all in a handle
@@ -435,6 +437,7 @@ regWindowLedger(xaccLedgerDisplay *ledger) {
     gtk_widget_show(handle_box);
   }
 
+  gtk_container_add(GTK_CONTAINER(table_frame),     register_vbox);
   gtk_container_add(GTK_CONTAINER(register_window), register_vbox);
 
   gtk_widget_show(table_frame);  
@@ -474,7 +477,7 @@ static void regRefresh (xaccLedgerDisplay *ledger)
              balance_str
              );
     
-    gtk_frame_set_label(GTK_FRAME(regData->dialog), reglabel);
+    //gtk_frame_set_label(GTK_FRAME(regData->dialog), reglabel);
     free(balance_str);
     free(cleared_balance_str);
     free(reconciled_balance_str);
@@ -591,7 +594,7 @@ recordCB( GtkWidget *w, gpointer data)
 {
   RegWindow *regData = (RegWindow *) data;
   
-  xaccSRSaveRegEntry (regData->ledger->ledger);
+  xaccSRSaveRegEntry   (regData->ledger->ledger);
   xaccSRRedrawRegEntry (regData->ledger->ledger);
 }
 

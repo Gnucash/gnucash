@@ -388,7 +388,9 @@ AC_OUTPUT(Makefile
           lib/${GTKSHEET_DIR}/Makefile
           lib/Xbae-4.6.2-linas/Makefile
           lib/Xbae-4.6.2-linas/src/Makefile
-          lib/ComboBox-1.33/Makefile)
+          lib/ComboBox-1.33/Makefile
+          lib/gtkfilesel2/Makefile
+          lib/gtkfilesel2/config.h)
 
 chmod +x gnucash
 

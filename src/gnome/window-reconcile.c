@@ -32,11 +32,13 @@
 #include "date.h"
 #include "Group.h"
 #include "MultiLedger.h"
-#include "RegWindow.h"
+
 #include "MainWindow.h"
+#include "RegWindow.h"
+#include "window-reconcile.h"
 #include "messages.h"
 #include "util.h"
-#include "RecnWindow.h"
+
 
 /** STRUCTS *********************************************************/
 struct _RecnWindow

@@ -30,12 +30,12 @@
 
 #include "config.h"
 
+#include "top-level.h"
 #include "AccWindow.h"
 #include "dialog-editnotes.h"
+#include "MainWindow.h"
 #include "AccInfo.h"
 #include "Account.h"
-#include "top-level.h"
-#include "MainWindow.h"
 #include "messages.h"
 #include "util.h"
 

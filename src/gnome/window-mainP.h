@@ -1,5 +1,5 @@
-/********************************************************************\
- * RecnWindow.h -- the reconcile window                             *
+/*******************************************************************\
+ * MainWindowP.h -- private GNOME main window functions             *
  * Copyright (C) 1997 Robin D. Clark                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -22,29 +22,61 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __RECONCILE_H__
-#define __RECONCILE_H__
+#ifndef __WINDOW_MAINP_H__
+#define __WINDOW_MAINP_H__
 
 #include <gtk/gtk.h>
-
+#include "Group.h"
 #include "config.h"
 
-#include "Account.h"
+/** PROTOTYPES ******************************************************/
+void gnc_ui_refreshMainWindow( void );
+void gnc_ui_mainWindow(AccountGroup *);
+void gnc_ui_refresh_tree ( void );
+void gnc_ui_acct_tree_fill ( GtkTree *, AccountGroup *);
+
+#if 0
 
 /** GLOBALS *********************************************************/
-
-/** STRUCTS *********************************************************/
-typedef struct _RecnWindow RecnWindow;
-
-/** PROTOTYPES ******************************************************/
-void        recnRefresh(Account *account);
-RecnWindow *recnWindow(GtkWidget *parent, Account *account);
-
-/*
- * The xaccDestroyRecnWindow() subroutine can be called from 
- * anywhere to shut down the Register window.  Used primarily when
- * destroying the underlying account.
- */
-void       xaccDestroyRecnWindow(Account *);
+enum {
+  FMB_NEW,
+  FMB_OPEN,
+  FMB_IMPORT,
+  FMB_SAVE,
+  FMB_SAVEAS,
+  FMB_QUIT,
+};
+enum {
+  AMB_NEW,
+  AMB_OPEN,
+  AMB_LEDGER,
+  AMB_EDIT,
+  AMB_DEL,
+  AMB_TRNS,
+  AMB_RPRT,
+  AMB_SHOW,
+  AMB_CAT,
+};
+enum {
+  HMB_ABOUT,
+  HMB_ACC,
+  HMB_REGWIN,
+  HMB_RECNWIN,
+  HMB_ADJBWIN,
+  HMB_MAIN,
+  HMB_LIC,
+};
 
 #endif
+
+#endif
+
+/*
+  Local Variables:
+  tab-width: 2
+  indent-tabs-mode: nil
+  mode: c-mode
+  c-indentation-style: gnu
+  eval: (c-set-offset 'block-open '-)
+  End:
+*/
