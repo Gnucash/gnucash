@@ -1349,13 +1349,11 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
     }
   }
 
-  if (is_negative)
-    numer = -numer;
-
   if (result != NULL)
   {
-    result->num = numer;
-    result->denom = denom;
+    *result = gnc_numeric_create (numer, denom);
+    if (is_negative)
+      *result = gnc_numeric_neg (*result);
   }
 
   if (endstr != NULL)

@@ -138,7 +138,7 @@ PriceParse (PriceCell *cell)
 {
   const char *newval;
   char *oldval;
-  double amount;
+  gnc_numeric amount;
 
   if (!cell->need_to_parse)
     return;
@@ -148,7 +148,7 @@ PriceParse (PriceCell *cell)
     oldval = "";
 
   if (gnc_exp_parser_parse (cell->cell.value, &amount, NULL))
-    cell->amount = amount;
+    cell->amount = gnc_numeric_to_double (amount);
   else
     cell->amount = 0.0;
 
@@ -375,7 +375,7 @@ static void
 PriceSetValue (BasicCell *_cell, const char *str)
 {
   PriceCell *cell = (PriceCell *) _cell;
-  double amount;
+  gnc_numeric amount;
 
   if (str == NULL)
     str = "";
@@ -383,7 +383,7 @@ PriceSetValue (BasicCell *_cell, const char *str)
   if (*str == '\0')
     xaccSetPriceCellValue (cell, 0.0);
   else if (gnc_exp_parser_parse (str, &amount, NULL))
-    xaccSetPriceCellValue (cell, amount);
+    xaccSetPriceCellValue (cell, gnc_numeric_to_double (amount));
 }
 
 /* --------------- end of file ---------------------- */

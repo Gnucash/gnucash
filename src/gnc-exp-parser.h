@@ -24,6 +24,8 @@
 
 #include <glib.h>
 
+#include "gnc-numeric.h"
+
 
 /* Initialize the expression parser. If this function is not
  * called before one of the other parsing routines (other than
@@ -48,11 +50,11 @@ void gnc_exp_parser_remove_variable_names (GList * variable_names);
  * and value_p != NULL, return the value in *value_p, otherwise, *value_p
  * is unchanged. */
 gboolean gnc_exp_parser_get_value (const char * variable_name,
-                                   double *value_p);
+                                   gnc_numeric *value_p);
 
 /* Set the value of the variable to the given value. If the variable is
  * not already defined, it will be after the call. */
-void gnc_exp_parser_set_value (const char * variable_name, double value);
+void gnc_exp_parser_set_value (const char * variable_name, gnc_numeric value);
 
 /* Parse the given expression using the current variable definitions.
  * If the parse was successful, return TRUE and, if value_p is
@@ -61,7 +63,7 @@ void gnc_exp_parser_set_value (const char * variable_name, double value);
  * returned and error_loc_p is non-NULL, *error_loc_p is set to the
  * character in expression where parsing aborted. If TRUE is returned
  * and error_loc_p is non-NULL, *error_loc_p is set to NULL. */
-gboolean gnc_exp_parser_parse (const char * expression, double *value_p,
+gboolean gnc_exp_parser_parse (const char * expression, gnc_numeric *value_p,
                                char **error_loc_p);
 
 /* If the last parse returned FALSE, return an error string describing

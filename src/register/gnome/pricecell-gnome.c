@@ -66,13 +66,15 @@ PriceDirect (BasicCell *bcell,
         case GDK_KP_Enter:
             {
                 char *error_loc;
-                double amount;
+                gnc_numeric amount;
 
                 if (!cell->need_to_parse)
                     return FALSE;
 
-                if (gnc_exp_parser_parse(cell->cell.value, &amount, &error_loc))
-                    xaccSetPriceCellValue (cell, amount);
+                if (gnc_exp_parser_parse(cell->cell.value,
+                                         &amount, &error_loc))
+                    xaccSetPriceCellValue (cell,
+                                           gnc_numeric_to_double (amount));
                 else
                     *cursor_position = error_loc - cell->cell.value;
 

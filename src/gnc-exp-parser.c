@@ -35,7 +35,7 @@
 
 typedef struct ParserNum
 {
-  double value;
+  gnc_numeric value;
 } ParserNum;
 
 
@@ -65,21 +65,51 @@ gnc_exp_parser_init (void)
   while (gh_list_p(alist) && !gh_null_p(alist))
   {
     char *name;
-    double value;
     SCM assoc;
+    SCM val_scm;
+    gnc_numeric value;
+    gboolean good;
 
     assoc = gh_car (alist);
     alist = gh_cdr (alist);
 
-    name = gh_scm2newstr(gh_car (assoc), NULL);
+    if (!gh_pair_p (assoc))
+      continue;
+
+    name = gh_scm2newstr (gh_car (assoc), NULL);
     if (name == NULL)
       continue;
 
-    value = gh_scm2double(gh_cdr (assoc));
+    val_scm = gh_cdr (assoc);
+    good = TRUE;
 
-    gnc_exp_parser_set_value (name, value);
+    if (gh_number_p (val_scm))
+    {
+      double dvalue;
 
-    free(name);
+      dvalue = gh_scm2double (val_scm);
+      value = double_to_gnc_numeric (dvalue, 10000, GNC_RND_FLOOR);
+    }
+    else if (gh_string_p (val_scm))
+    {
+      char *s;
+      const char *err;
+
+      s = gh_scm2newstr (val_scm, NULL);
+
+      err = string_to_gnc_numeric (s, &value);
+      if (err == NULL)
+        good = FALSE;
+
+      free (s);
+    }
+    else
+      good = FALSE;
+
+    if (good)
+      gnc_exp_parser_set_value (name, gnc_numeric_reduce (value));
+
+    free (name);
   }
 }
 
@@ -98,9 +128,12 @@ binding_cons (gpointer key, gpointer value, gpointer data)
   char *name = key;
   ParserNum *pnum = value;
   SCM *alist_p = data;
+  char *num_str;
   SCM assoc;
 
-  assoc = gh_cons (gh_str02scm (name), gh_double2scm (pnum->value));
+  num_str = gnc_numeric_to_string (gnc_numeric_reduce (pnum->value));
+  assoc = gh_cons (gh_str02scm (name), gh_str02scm (num_str));
+  g_free (num_str);
 
   *alist_p = gh_cons (assoc, *alist_p);
 }
@@ -182,7 +215,7 @@ gnc_exp_parser_remove_variable_names (GList * variable_names)
 }
 
 gboolean
-gnc_exp_parser_get_value (const char * variable_name, double *value_p)
+gnc_exp_parser_get_value (const char * variable_name, gnc_numeric *value_p)
 {
   ParserNum *pnum;
 
@@ -203,7 +236,7 @@ gnc_exp_parser_get_value (const char * variable_name, double *value_p)
 }
 
 void
-gnc_exp_parser_set_value (const char * variable_name, double value)
+gnc_exp_parser_set_value (const char * variable_name, gnc_numeric value)
 {
   char *key;
   ParserNum *pnum;
@@ -293,12 +326,12 @@ trans_numeric(const char *digit_str,
               char      **rstr)
 {
   ParserNum *pnum;
-  double value;
+  gnc_numeric value;
 
   if (digit_str == NULL)
     return NULL;
 
-  if (!DxaccParseAmount (digit_str, TRUE, &value, rstr))
+  if (!xaccParseAmount (digit_str, TRUE, &value, rstr))
     return NULL;
 
   pnum = g_new0(ParserNum, 1);
@@ -324,16 +357,20 @@ numeric_ops(char op_sym,
   switch (op_sym)
   {
     case ADD_OP:
-      result->value = left->value + right->value;
+      result->value = gnc_numeric_add (left->value, right->value,
+                                       GNC_DENOM_AUTO, GNC_DENOM_EXACT);
       break;
     case SUB_OP:
-      result->value = left->value - right->value;
+      result->value = gnc_numeric_sub (left->value, right->value,
+                                       GNC_DENOM_AUTO, GNC_DENOM_EXACT);
       break;
     case DIV_OP:
-      result->value = left->value / right->value;
+      result->value = gnc_numeric_div (left->value, right->value,
+                                       GNC_DENOM_AUTO, GNC_DENOM_EXACT);
       break;
     case MUL_OP:
-      result->value = left->value * right->value;
+      result->value = gnc_numeric_mul (left->value, right->value,
+                                       GNC_DENOM_AUTO, GNC_DENOM_EXACT);
       break;
     case ASN_OP:
       result->value = right->value;
@@ -351,13 +388,13 @@ negate_numeric(void *value)
   if (value == NULL)
     return NULL;
 
-  result->value = -result->value;
+  result->value = gnc_numeric_neg (result->value);
 
   return result;
 }
 
 gboolean
-gnc_exp_parser_parse (const char * expression, double *value_p,
+gnc_exp_parser_parse (const char * expression, gnc_numeric *value_p,
                       char **error_loc_p)
 {
   parser_env_ptr pe;
@@ -390,7 +427,7 @@ gnc_exp_parser_parse (const char * expression, double *value_p,
   if (error_loc == NULL)
   {
     if ((value_p != NULL) && (pnum != NULL))
-      *value_p = pnum->value;
+      *value_p = gnc_numeric_reduce (pnum->value);
 
     if (error_loc_p != NULL)
       *error_loc_p = NULL;

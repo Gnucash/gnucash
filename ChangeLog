@@ -1,3 +1,11 @@
+2000-10-30  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnc-exp-parser.c: modify to use gnc_numerics instead of
+	doubles.
+
+	* src/engine/gnc-numeric.c: special case num == 0 to prevent
+	divide by zero exception.
+
 2000-10-27  Dave Peticolas  <dave@krondo.com>
 
 	* src/calculation/expression_parser.c: handle (num) as -num.

@@ -247,7 +247,8 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae)
 {
   const char *string;
   char *error_loc;
-  double amount;
+  gnc_numeric amount;
+  double damount;
   gboolean ok;
 
   g_return_val_if_fail(gae != NULL, FALSE);
@@ -264,10 +265,12 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae)
 
   if (ok)
   {
-    if (!DEQ(amount, gae->amount))
+    damount = gnc_numeric_to_double (amount);
+
+    if (!DEQ(damount, gae->amount))
       gtk_signal_emit (GTK_OBJECT (gae), amount_edit_signals [AMOUNT_CHANGED]);
 
-    gnc_amount_edit_set_amount (gae, amount);
+    gnc_amount_edit_set_amount (gae, damount);
 
     return TRUE;
   }

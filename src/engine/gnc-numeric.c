@@ -688,7 +688,7 @@ gnc_numeric_reduce(gnc_numeric in) {
   gint64   denom = in.denom;
   int      three_count = 0;
   gnc_numeric out;
-  
+
   /* the strategy is to eliminate common factors from 
    * 2 up to 'max', where max is the smaller of the smaller
    * part of the fraction and the sqrt of the larger part of 
@@ -700,7 +700,10 @@ gnc_numeric_reduce(gnc_numeric in) {
    * i.e. 9, 15, 21), thus the three_count stuff. */
 
   /* special case: one side divides evenly by the other */
-  if((num > denom) && (num % denom == 0)) {
+  if (num == 0) {
+    denom = 1;
+  }
+  else if((num > denom) && (num % denom == 0)) {
     num = num / denom;
     denom = 1;
   }
@@ -708,9 +711,9 @@ gnc_numeric_reduce(gnc_numeric in) {
     denom = denom / num;
     num = 1;
   }
-  
+
   max_square = (num > denom) ? denom : num;
-  
+
   /* normal case: test 2, then 3, 5, 7, 11, etc.
    * (skip multiples of 2 and 3) */
   while(current_divisor * current_divisor <= max_square) {
@@ -732,13 +735,13 @@ gnc_numeric_reduce(gnc_numeric in) {
         three_count++;
       }
     }
-    
+
     if((current_divisor > num) ||
        (current_divisor > denom)) {
       break;
     }
   }
-  
+
   /* all calculations are done on positive num, since it's not 
    * well defined what % does for negative values */
   out.num   = (in.num < 0) ? (- num) : num;
