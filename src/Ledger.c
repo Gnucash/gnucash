@@ -125,17 +125,20 @@ xaccSaveRegEntry (BasicRegister *reg)
    Account * acc;
    unsigned int changed;
 
+   /* use the changed flag to avoid heavy-weight updates
+    * of the split & transaction fields. This will help
+    * cut down on uneccessary register redraws.  */
+   changed = xaccGetChangeFlag (reg);
+   if (!changed) return;
+   
    /* get the handle to the current split and transaction */
    split = xaccGetCurrentSplit (reg);
    if (!split) return;
    trans = xaccSplitGetParent (split);
 
-   /* use the changed flag to avoid heavy-weight updates
-    * of the split & transaction fields. This will help
-    * cut down on uneccessary register redraws.  */
-   changed = xaccGetChangeFlag (reg);
-   
    /* copy the contents from the cursor to the split */
+
+   xaccTransBeginEdit (trans);
 
    if (MOD_DATE & changed) 
       xaccTransSetDate (trans, reg->dateCell->date.tm_mday,
@@ -155,17 +158,14 @@ xaccSaveRegEntry (BasicRegister *reg)
       double new_amount;
       new_amount = (reg->creditCell->amount) - (reg->debitCell->amount);
       xaccSplitSetValue (split, new_amount);
-      xaccSplitRebalance (split);
    }
 
    if (MOD_SHRS & changed) {
       xaccSplitSetShareAmount (split, reg->shrsCell->amount);
-      xaccSplitRebalance (split);
    }
 
    if (MOD_PRIC & changed) {
       xaccSplitSetSharePrice (split, reg->priceCell->amount);
-      xaccSplitRebalance (split);
    }
 
    if (MOD_MEMO & changed) 
@@ -181,23 +181,22 @@ xaccSaveRegEntry (BasicRegister *reg)
    if (MOD_XTO & changed) {
       /* hack alert -- implement this */
    }
+   xaccTransCommitEdit (trans);
 
 printf ("finished saving %s \n", xaccTransGetDescription(trans));
-   if (changed) {
 
-      /* if the modified split is the "blank split", 
-       * then it is now an official part of the account.
-       * Set user_hook to null, so that we can be sure of 
-       * getting a new split.
-       */
-      if (split == ((Split *) (reg->user_hook))) {
-         reg->user_hook = NULL;
-      }
-
-      /* refresh the register windows *only* if something changed */
-      acc = xaccSplitGetAccount (split);
-      accRefresh (acc);
+   /* if the modified split is the "blank split", 
+    * then it is now an official part of the account.
+    * Set user_hook to null, so that we can be sure of 
+    * getting a new split.
+    */
+   if (split == ((Split *) (reg->user_hook))) {
+      reg->user_hook = NULL;
    }
+
+   /* refresh the register windows *only* if something changed */
+   acc = xaccSplitGetAccount (split);
+   accRefresh (acc);
 }
 
 /* ======================================================== */
