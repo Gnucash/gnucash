@@ -447,8 +447,17 @@ gnc_ui_account_get_tax_info_string (Account *account)
   if (get_form == SCM_UNDEFINED)
   {
     GNCModule module;
+    /* load the tax info */
+    const char *thislocale = setlocale(LC_ALL, NULL);
+    /* This is a very simple hack that loads the (new, special) German
+       tax definition file in a German locale, or (default) loads the
+       previous US tax file. */
+    gboolean is_de_DE = (strncmp(thislocale, "de_DE", 5) == 0);
+    const char *tax_module = is_de_DE ? 
+      "gnucash/tax/de_DE" : 
+      "gnucash/tax/us";
 
-    module = gnc_module_load ("gnucash/tax/us", 0);
+    module = gnc_module_load ((char *)tax_module, 0);
 
     g_return_val_if_fail (module, NULL);
 

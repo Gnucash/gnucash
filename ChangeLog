@@ -1,3 +1,12 @@
+2005-01-16  Christian Stimming  <stimming@tuhh.de>
+
+	* src/app-utils/gnc-ui-util.c: Modify tax option code to load
+	tax-de_DE module in the appropriate locale.
+	
+	* src/report/locale-specific/us/gncmod-locale-reports-us.c,
+	de_DE.scm: Add scheme module for locale-report/us
+	resp. locale-report/de_DE again because it seems to be required.
+
 2005-01-15  Derek Atkins  <derek@ihtfp.com>
 
 	* Neil William's patch to remove static mergeData context.

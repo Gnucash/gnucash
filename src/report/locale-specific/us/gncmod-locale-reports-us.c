@@ -33,11 +33,11 @@ int libgncmod_locale_reports_us_LTX_gnc_module_end(int refcount);
 
 char *
 libgncmod_locale_reports_us_LTX_gnc_module_path(void) {
-  const char *thislocale = setlocale(LC_ALL, NULL);
+  /* const char *thislocale = setlocale(LC_ALL, NULL);
   if (strncmp(thislocale, "de_DE", 5) == 0)
     return g_strdup("gnucash/report/locale-specific/de_DE");
-  else
-    return g_strdup("gnucash/report/locale-specific/us");
+    else */
+  return g_strdup("gnucash/report/locale-specific/us");
 }
 
 char * 
@@ -59,6 +59,9 @@ libgncmod_locale_reports_us_LTX_gnc_module_init(int refcount) {
   const char *report_taxtxf = is_de_DE ? 
     "(use-modules (gnucash report taxtxf-de_DE))" :
     "(use-modules (gnucash report taxtxf))";
+  const char *report_locale = is_de_DE ?
+    "(use-modules (gnucash report locale-specific de_DE))" :
+    "(use-modules (gnucash report locale-specific us))";
 
   /* The gchar* cast is only because the function declaration expects
      a non-const string -- probably an api error. */
@@ -78,12 +81,11 @@ libgncmod_locale_reports_us_LTX_gnc_module_init(int refcount) {
     return FALSE;
   }
 
-  /* This is unused and therefore no longer installed and/or loaded */
-  /*
-  if(scm_c_eval_string("(use-modules (gnucash report locale-specific us))") 
+  /* Load the module scheme code */
+  if(gh_eval_str(report_locale) 
      == SCM_BOOL_F) {
     return FALSE;
-    }*/
+  }
 
   return TRUE;
 }

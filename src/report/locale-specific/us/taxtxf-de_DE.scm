@@ -51,7 +51,7 @@
 (require 'printf)
 
 (use-modules (gnucash gnc-module))
-(gnc:module-load "gnucash/tax/us" 0)
+(gnc:module-load "gnucash/tax/de_DE" 0)
 (gnc:module-load "gnucash/report/report-system" 0)
 
 
