@@ -329,7 +329,7 @@ xaccSRSetData(SplitRegister *reg, void *user_data,
               SRGetParentCallback get_parent,
               SRSetHelpCallback set_help)
 {
-  SRInfo *info = xaccSRGetInfo(reg);
+  SRInfo *info = xaccSRGetInfo (reg);
 
   g_return_if_fail (reg != NULL);
 
@@ -339,19 +339,19 @@ xaccSRSetData(SplitRegister *reg, void *user_data,
 }
 
 void
-xaccSRSetAccountSeparator(char separator)
+xaccSRSetAccountSeparator (char separator)
 {
   account_separator = separator;
 }
 
 void
-xaccSRSetReverseBalanceCallback(SRReverseBalanceCallback callback)
+xaccSRSetReverseBalanceCallback (SRReverseBalanceCallback callback)
 {
   reverse_balance = callback;
 }
 
 static int
-gnc_trans_split_index(Transaction *trans, Split *split)
+gnc_trans_split_index (Transaction *trans, Split *split)
 {
   GList *node;
   int i;
@@ -403,15 +403,14 @@ gnc_copy_trans_onto_trans(Transaction *from, Transaction *to,
 }
 
 static Split *
-gnc_find_split_in_trans_by_memo(Transaction *trans, const char *memo,
-                                Transaction *dest_trans, gboolean unit_price)
+gnc_find_split_in_trans_by_memo (Transaction *trans, const char *memo,
+                                 Transaction *dest_trans, gboolean unit_price)
 {
-  int num_splits = xaccTransCountSplits(trans);
-  int i;
+  GList *node;
 
-  for (i = num_splits - 1; i >= 0; i--)
+  for (node = xaccTransGetSplitList (trans); node; node = node->next)
   {
-    Split *split = xaccTransGetSplit(trans, i);
+    Split *split = node->data;
 
     if (unit_price)
     {
@@ -453,9 +452,9 @@ gnc_find_split_in_account_by_memo(Account *account, const char *memo,
 
   if (account == NULL) return NULL;
 
-  for(slp = g_list_last(xaccAccountGetSplitList(account));
-      slp;
-      slp = slp->prev)
+  for (slp = g_list_last (xaccAccountGetSplitList (account));
+       slp;
+       slp = slp->prev)
   {
     Split *split = slp->data;
     Transaction *trans = xaccSplitGetParent(split);
@@ -480,14 +479,14 @@ gnc_find_trans_in_account_by_desc(Account *account, const char *description)
 
   if (account == NULL) return NULL;
 
-  for(slp = g_list_last(xaccAccountGetSplitList(account));
-      slp;
-      slp = slp->prev)
+  for (slp = g_list_last (xaccAccountGetSplitList (account));
+       slp;
+       slp = slp->prev)
   {
     Split *split = slp->data;
     Transaction *trans = xaccSplitGetParent(split);
 
-    if (safe_strcmp(description, xaccTransGetDescription(trans)) == 0)
+    if (safe_strcmp (description, xaccTransGetDescription (trans)) == 0)
       return trans;
   }
 
@@ -495,8 +494,8 @@ gnc_find_trans_in_account_by_desc(Account *account, const char *description)
 }
 
 static Split *
-gnc_find_split_in_reg_by_memo(SplitRegister *reg, const char *memo,
-                              Transaction *dest_tran, gboolean unit_price)
+gnc_find_split_in_reg_by_memo (SplitRegister *reg, const char *memo,
+                               Transaction *dest_tran, gboolean unit_price)
 {
   int virt_row, virt_col;
   int num_rows, num_cols;
@@ -526,8 +525,8 @@ gnc_find_split_in_reg_by_memo(SplitRegister *reg, const char *memo,
       if (trans == last_trans)
         continue;
 
-      split = gnc_find_split_in_trans_by_memo(trans, memo, dest_tran,
-                                              unit_price);
+      split = gnc_find_split_in_trans_by_memo (trans, memo, dest_tran,
+                                               unit_price);
       if (split != NULL)
         return split;
 
@@ -538,7 +537,7 @@ gnc_find_split_in_reg_by_memo(SplitRegister *reg, const char *memo,
 }
 
 static Transaction *
-gnc_find_trans_in_reg_by_desc(SplitRegister *reg, const char *description)
+gnc_find_trans_in_reg_by_desc (SplitRegister *reg, const char *description)
 {
   int virt_row, virt_col;
   int num_rows, num_cols;
@@ -568,7 +567,7 @@ gnc_find_trans_in_reg_by_desc(SplitRegister *reg, const char *description)
       if (trans == last_trans)
         continue;
 
-      if (safe_strcmp(description, xaccTransGetDescription(trans)) == 0)
+      if (safe_strcmp (description, xaccTransGetDescription (trans)) == 0)
         return trans;
 
       last_trans = trans;

@@ -133,7 +133,7 @@ item_edit_get_pixel_coords (ItemEdit *item_edit,
 
 
 static void
-item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
+item_edit_draw_info (ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
 {
         SheetBlock *block;
         SheetBlockStyle *style;
@@ -275,10 +275,10 @@ item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                 return;
 
         /* Get the measurements for drawing */
-        item_edit_draw_info(item_edit, x, y, &info);
+        item_edit_draw_info (item_edit, x, y, &info);
 
         /* Draw the background */
-        gdk_gc_set_foreground(item_edit->gc, info.bg_color);
+        gdk_gc_set_foreground (item_edit->gc, info.bg_color);
         gdk_draw_rectangle (drawable, item_edit->gc, TRUE,
                             info.bg_rect.x, info.bg_rect.y,
                             info.bg_rect.width, info.bg_rect.height);
@@ -340,7 +340,28 @@ item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
         gdk_gc_set_clip_rectangle (item_edit->gc, NULL);
 
-        item_edit_free_draw_info_members(&info);
+        item_edit_free_draw_info_members (&info);
+
+#ifdef USE_XIM
+        if (gdk_im_ready() && item_edit->ic && 
+            (gdk_ic_get_style (item_edit->ic) & GDK_IM_PREEDIT_POSITION))
+	{
+                GnomeCanvasItem *item;
+                double winx, winy;
+
+                item = GNOME_CANVAS_ITEM (item_edit);
+
+                gnome_canvas_world_to_window (GNOME_CANVAS (item_edit->sheet),
+                                              item->x1, item->y2,
+                                              &winx, &winy);
+
+                item_edit->ic_attr->spot_location.x = winx;
+                item_edit->ic_attr->spot_location.y = winy;
+
+                gdk_ic_set_attr (item_edit->ic,
+                                 item_edit->ic_attr, GDK_IC_SPOT_LOCATION);
+	}
+#endif 
 }
 
 
@@ -357,6 +378,7 @@ item_edit_point (GnomeCanvasItem *item, double c_x, double c_y, int cx, int cy,
                 return 10000.0;
  
         *actual_item = item;
+
         return 0.0;
 }
 
@@ -464,16 +486,21 @@ item_edit_realize (GnomeCanvasItem *item)
 
                 attrmask |= GDK_IC_PREEDIT_FOREGROUND;
                 attrmask |= GDK_IC_PREEDIT_BACKGROUND;
-                attr->preedit_foreground = sheet_widget->style->fg[GTK_STATE_NORMAL];
-                attr->preedit_background = sheet_widget->style->base[GTK_STATE_NORMAL];
+
+                attr->preedit_foreground =
+                        sheet_widget->style->fg[GTK_STATE_NORMAL];
+                attr->preedit_background =
+                        sheet_widget->style->base[GTK_STATE_NORMAL];
 
                 switch (style & GDK_IM_PREEDIT_MASK)
                 {
                         case GDK_IM_PREEDIT_POSITION:
                                 if (sheet_widget->style &&
-                                    sheet_widget->style->font->type != GDK_FONT_FONTSET)
+                                    sheet_widget->style->font->type !=
+                                    GDK_FONT_FONTSET)
                                 {
-                                        g_warning ("over-the-spot style requires fontset");
+                                        g_warning ("over-the-spot style "
+                                                   "requires fontset");
                                         break;
                                 }
 
@@ -488,7 +515,8 @@ item_edit_realize (GnomeCanvasItem *item)
                                 attr->preedit_area.y = 0;
                                 attr->preedit_area.width = width;
                                 attr->preedit_area.height = height;
-                                attr->preedit_fontset = sheet_widget->style->font;
+                                attr->preedit_fontset =
+                                        sheet_widget->style->font;
 
                                 break;
                 }
@@ -539,6 +567,29 @@ item_edit_unrealize (GnomeCanvasItem *item)
 		 (item_edit_parent_class)->unrealize) (item);
 }
 
+void
+item_edit_focus_in (ItemEdit *item_edit)
+{
+        g_return_if_fail (item_edit != NULL);
+        g_return_if_fail (IS_ITEM_EDIT(item_edit));
+
+#ifdef USE_XIM
+        if (item_edit->ic)
+                gdk_im_begin (item_edit->ic,
+                              GTK_WIDGET (item_edit->sheet)->window);
+#endif
+}
+
+void
+item_edit_focus_out (ItemEdit *item_edit)
+{
+        g_return_if_fail (item_edit != NULL);
+        g_return_if_fail (IS_ITEM_EDIT(item_edit));
+
+#ifdef USE_XIM
+        gdk_im_end ();
+#endif
+}
 
 /*
  * Instance initialization
@@ -606,10 +657,10 @@ queue_sync (ItemEdit *item_edit)
 void
 item_edit_redraw (ItemEdit *item_edit)
 {
-        g_return_if_fail(item_edit != NULL);
-        g_return_if_fail(IS_ITEM_EDIT(item_edit));
+        g_return_if_fail (item_edit != NULL);
+        g_return_if_fail (IS_ITEM_EDIT(item_edit));
 
-        queue_sync(item_edit);
+        queue_sync (item_edit);
 }
 
 static void
@@ -805,6 +856,24 @@ item_edit_configure (ItemEdit *item_edit)
                                      NULL, NULL, NULL, NULL);
 
         item_edit_update (GNOME_CANVAS_ITEM(item_edit), NULL, NULL, 0);
+
+#ifdef USE_XIM
+        if (item_edit->ic &&
+            (gdk_ic_get_style (item_edit->ic) & GDK_IM_PREEDIT_POSITION))
+	{
+                GnomeCanvasItem *item;
+
+                item = GNOME_CANVAS_ITEM (item_edit);
+
+                item_edit->ic_attr->preedit_area.x = item->x1;
+                item_edit->ic_attr->preedit_area.y = item->y1;
+                item_edit->ic_attr->preedit_area.width = item->x2 - item->x1;
+                item_edit->ic_attr->preedit_area.height = item->y2 - item->y1;
+
+                gdk_ic_set_attr (item_edit->ic, item_edit->ic_attr,
+                                 GDK_IC_PREEDIT_AREA);
+	}
+#endif
 }
 
 
@@ -1100,9 +1169,9 @@ item_edit_class_init (ItemEditClass *item_edit_class)
         item_class->update      = item_edit_update;
         item_class->draw        = item_edit_draw;
         item_class->point       = item_edit_point;
-        item_class->event       = item_edit_event;
         item_class->realize     = item_edit_realize;
         item_class->unrealize   = item_edit_unrealize;
+        item_class->event       = item_edit_event;
 }
 
 

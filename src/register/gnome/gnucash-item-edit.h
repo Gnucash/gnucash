@@ -161,7 +161,12 @@ void item_edit_selection_received (ItemEdit          *item_edit,
                                    GtkSelectionData  *selection_data,
                                    guint              time);
 
-typedef struct {
+void item_edit_focus_in (ItemEdit *item_edit);
+void item_edit_focus_out (ItemEdit *item_edit);
+
+
+typedef struct
+{
         GnomeCanvasItemClass parent_class;
 } ItemEditClass;
 

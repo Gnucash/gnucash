@@ -1042,6 +1042,29 @@ gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
         gnucash_sheet_update_adjustments (sheet);
 }
 
+static gboolean
+gnucash_sheet_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
+{
+        GnucashSheet *sheet = GNUCASH_SHEET(widget);
+
+        if (GTK_WIDGET_CLASS(sheet_parent_class)->focus_in_event)
+                (*GTK_WIDGET_CLASS (sheet_parent_class)->focus_in_event)
+                        (widget, event);
+
+        item_edit_focus_in (ITEM_EDIT(sheet->item_editor));
+}
+
+static gboolean
+gnucash_sheet_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
+{
+        GnucashSheet *sheet = GNUCASH_SHEET(widget);
+
+        if (GTK_WIDGET_CLASS(sheet_parent_class)->focus_out_event)
+                (*GTK_WIDGET_CLASS (sheet_parent_class)->focus_out_event)
+                        (widget, event);
+
+        item_edit_focus_out (ITEM_EDIT(sheet->item_editor));
+}
 
 static void
 gnucash_sheet_start_editing_at_cursor (GnucashSheet *sheet)
@@ -2080,6 +2103,9 @@ gnucash_sheet_class_init (GnucashSheetClass *class)
 
         widget_class->size_request = gnucash_sheet_size_request;
         widget_class->size_allocate = gnucash_sheet_size_allocate;
+
+        widget_class->focus_in_event = gnucash_sheet_focus_in_event;
+        widget_class->focus_out_event = gnucash_sheet_focus_out_event;
 
         widget_class->key_press_event = gnucash_sheet_key_press_event;
         widget_class->button_press_event = gnucash_button_press_event;
