@@ -1,5 +1,6 @@
-<!ELEMENT gnc (gnc:defaults*, gnc:preferences*, gnc:prices*,
-               gnc:commodity*, gnc:account*, gnc:transaction*)>
+<!ELEMENT gnc-v2 (gnc:count-data*,
+                  gnc:defaults*, gnc:preferences*, gnc:commodity*,
+                  gnc:pricedb?, gnc:account*, gnc:transaction*)>
 
 <!ENTITY % defaults-v1 SYSTEM "defaults-v1.dtd">
 <!ENTITY % prefs-v1 SYSTEM "preferences-v1.dtd">
@@ -7,6 +8,10 @@
 <!ENTITY % commodity-v2 SYSTEM "commodity-v2.dtd">
 <!ENTITY % account-v2 SYSTEM "account-v2.dtd">
 <!ENTITY % transactions-v2 SYSTEM "transactions-v2.dtd">
+
+<!ELEMENT gnc:count-data (cd:type, cd:amount)>
+<!ELEMENT cd:type (#PCDATA)>
+<!ELEMENT cd:amount (#PCDATA)>
 
 %defaults-v1;
 

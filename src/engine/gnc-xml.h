@@ -10,7 +10,7 @@
 #include "gnc-commodity.h"
 
 #include "sixtp.h"
-
+#include "gnc-pricedb.h"
 
 xmlNodePtr gnc_account_dom_tree_create(Account *act);
 sixtp* gnc_account_sixtp_parser_create(void);
@@ -23,5 +23,9 @@ sixtp* gnc_transaction_sixtp_parser_create(void);
 
 xmlNodePtr split_to_dom_tree(const gchar *tag, Split *spl);
 Split* dom_tree_to_split(xmlNodePtr node);
+
+xmlNodePtr gnc_pricedb_dom_tree_create(GNCPriceDB *db);
+sixtp* gnc_pricedb_sixtp_parser_create(void);
+
 
 #endif /* __GNC_XML_H__ */

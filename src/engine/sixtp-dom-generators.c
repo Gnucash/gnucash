@@ -132,21 +132,15 @@ xmlNodePtr
 timespec_to_dom_tree(const char *tag, const Timespec *spec)
 {
     xmlNodePtr ret;
-    gchar *date_str;
-    gchar *ns_str;
+    gchar *date_str = NULL;
+    gchar *ns_str = NULL;
     
     g_return_val_if_fail(spec, NULL);
-    
 
     date_str = timespec_sec_to_string(spec);
-    ns_str = timespec_nsec_to_string(spec);
 
-    if((!date_str && !ns_str) || !date_str)
+    if(!date_str)
     {
-        if(ns_str)
-        {
-            g_free(ns_str);
-        }
         return NULL;
     }
     
@@ -154,13 +148,20 @@ timespec_to_dom_tree(const char *tag, const Timespec *spec)
     
     xmlNewTextChild(ret, NULL, "ts:date", date_str);
 
-    if(ns_str)
+    if(spec->tv_nsec > 0)
     {
-        xmlNewTextChild(ret, NULL, "ts:ns", ns_str);
+        ns_str = timespec_nsec_to_string(spec);
+        if(ns_str)
+        {
+            xmlNewTextChild(ret, NULL, "ts:ns", ns_str);
+        }
     }
 
     g_free(date_str);
-    g_free(ns_str);
+    if(ns_str)
+    {
+        g_free(ns_str);
+    }
     
     return ret;
 }
@@ -310,8 +311,23 @@ kvp_frame_to_dom_tree(const char *tag, const kvp_frame *frame)
 {
     xmlNodePtr ret;
 
-    ret = xmlNewNode(NULL, tag);
+    if(!frame)
+    {
+        return NULL;
+    }
 
+    if(!kvp_frame_get_hash(frame))
+    {
+        return NULL;
+    }
+
+    if(g_hash_table_size(kvp_frame_get_hash(frame)) == 0)
+    {
+        return NULL;
+    }
+    
+    ret = xmlNewNode(NULL, tag);
+    
     g_hash_table_foreach(kvp_frame_get_hash(frame), add_kvp_slot, ret);
     
     return ret;

@@ -15,6 +15,24 @@
 #include "Account.h"
 #include "Transaction.h"
 #include "gnc-commodity.h"
+#include "gnc-pricedb.h"
+
+struct _load_counter_struct
+{
+    int accounts_total;
+    int accounts_loaded;
+
+    int commodities_total;
+    int commodities_loaded;
+
+    int transactions_total;
+    int transactions_loaded;
+
+    int prices_total;
+    int prices_loaded;
+};
+
+typedef struct _load_counter_struct load_counter;
 
 struct sixtp_global_data_v2_struct
 {
@@ -23,6 +41,8 @@ struct sixtp_global_data_v2_struct
 
     int value;
     char *tag;
+
+    load_counter counter;
     
     gboolean (*addAccountFunc)(struct sixtp_global_data_v2_struct *data,
                                Account *act);
@@ -31,7 +51,7 @@ struct sixtp_global_data_v2_struct
     gboolean (*addTransactionFunc)(struct sixtp_global_data_v2_struct *data,
                                    Transaction *act);
     gboolean (*addPriceDBFunc)(struct sixtp_global_data_v2_struct *data,
-                               GNCPrice *prc);
+                               GNCPriceDB *prc);
 };
 
 typedef struct sixtp_global_data_v2_struct sixtp_gdv2;

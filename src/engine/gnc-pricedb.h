@@ -77,7 +77,9 @@ typedef struct _GNCPrice GNCPrice;
 
 /* allocation */
 GNCPrice *gnc_price_create(void);     /* create and initialize a price */
+#if 0
 GNCPrice *gnc_price_clone(GNCPrice* p);
+#endif
 void      gnc_price_ref(GNCPrice *p);
 void      gnc_price_unref(GNCPrice *p);
 

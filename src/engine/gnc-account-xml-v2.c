@@ -52,12 +52,14 @@ gnc_account_dom_tree_create(Account *act)
     xmlAddChild(ret, commodity_ref_to_dom_tree(act_currency_string,
                                             xaccAccountGetCurrency(act)));
 
-    if(xaccAccountGetCode(act))
+    if(xaccAccountGetCode(act) &&
+        strlen(xaccAccountGetCode(act)) > 0)
     {
         xmlNewChild(ret, NULL, act_code_string, xaccAccountGetCode(act));
     }
 
-    if(xaccAccountGetDescription(act))
+    if(xaccAccountGetDescription(act) &&
+       strlen(xaccAccountGetDescription(act)) > 0)
     {
         xmlNewChild(ret, NULL, act_description_string,
                     xaccAccountGetDescription(act));
@@ -71,8 +73,12 @@ gnc_account_dom_tree_create(Account *act)
 
     if(xaccAccountGetSlots(act))
     {
-        xmlAddChild(ret, kvp_frame_to_dom_tree(act_slots_string,
-                                            xaccAccountGetSlots(act)));
+        xmlNodePtr kvpnode = kvp_frame_to_dom_tree(act_slots_string,
+                                                   xaccAccountGetSlots(act));
+        if(kvpnode)
+        {
+            xmlAddChild(ret, kvpnode);
+        }
     }
 
     if(xaccAccountGetParentAccount(act))

@@ -86,6 +86,7 @@ gnc_price_unref(GNCPrice *p)
   }
 }
 
+#if 0
 GNCPrice *
 gnc_price_clone(GNCPrice* p)
 {
@@ -103,6 +104,7 @@ gnc_price_clone(GNCPrice* p)
   gnc_price_set_currency(new_p, gnc_price_get_currency(p));
   return(new_p);
 }
+#endif
 
 /* setters */
 void

@@ -295,6 +295,18 @@ gnc_commodity_table_new(void) {
   return retval;
 }
 
+/********************************************************************
+ * gnc_commodity_get_size
+ * get the size of the commodity table
+ ********************************************************************/
+
+guint
+gnc_commodity_table_get_size(gnc_commodity_table* tbl)
+{
+    g_return_val_if_fail(tbl, 0);
+    g_return_val_if_fail(tbl->table, 0);
+    return g_hash_table_size(tbl->table);
+}
 
 /********************************************************************
  * gnc_commodity_table_lookup

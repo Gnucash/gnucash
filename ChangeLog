@@ -1,3 +1,56 @@
+2001-03-12  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/gnome/window-main.c (gnc_ui_xml_v2_cb): new func.
+	(gnc_ui_account_heirarchy_cb): new empty func.
+	(gnc_main_create_menus): add devel menu.
+
+	* src/engine/io-gncxml-v2.h (struct _load_counter_struct): add
+	counters stuff.
+
+	* src/engine/io-gncxml-v2.c: mostly complete everything.  Writing
+	only partially tested.  Reading not tested at all.
+
+	* src/engine/gnc-xml.h: add pricedb declarations.
+
+	* src/engine/gnc-transaction-xml-v2.c (split_to_dom_tree): check
+	for NULL return from kvp_frame_to_dom_tree and don't add if we get
+	it.
+	(gnc_transaction_dom_tree_create): same.
+
+	* src/engine/gnc-commodity.c (gnc_commodity_table_get_size): add func.
+
+	* src/engine/gnc-account-xml-v2.c (gnc_account_dom_tree_create):
+	check for NULL return from kvp_frame_to_dom_tree and don't do
+	anything if we get it.
+
+	* src/gnome/gnc-http.c (gnc_http_start_post): cast data to char*
+	(it's const char*) (compile warning)
+
+	* src/gnome/gnc-html.c: put const on char *ptr (compile warning)
+
+	* src/doc/xml/io-gncxml-version2.dtd: reorder commodity and
+	prices.  Add count data defs.
+
+	* src/engine/sixtp-dom-generators.c (timespec_to_dom_tree): Only
+	write nanoseconds if > 0.
+	(kvp_frame_to_dom_tree): don't return an xmlNodePtr if the frame
+	is null or contains no data.
+
+	* src/engine/gnc-commodity-xml-v2.c
+	(gnc_commodity_dom_tree_create): check to see if xcode is > 0
+
+	* src/engine/gnc-account-xml-v2.c (gnc_account_dom_tree_create):
+	check for description and code strlen > 0
+
+	* src/engine/gnc-pricedb-xml-v1.c (pricedb_v2_end_handler): make
+	this func work in the v2 manner with a callback in the global
+	data.
+	(gnc_pricedb_sixtp_parser_create): change to work in the v2 manner
+	with an end handler that does the final link of the data into the
+	book. 
+	(pricedb_after_child_handler): add upping the counter for prices
+	loaded. 
+
 2001-03-12  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/io-gncxml-r.c (gnc_book_load_from_xml_file): use
@@ -57,6 +110,17 @@
 	row and cell semantic style
 	
 2001-03-09  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/doc/xml/prices-v1.dtd: Add rest of def.
+
+	* src/engine/gnc-pricedb-xml-v1.c (add_child_or_kill_parent):
+	remove unneeded check since NULL has already been checked.
+	(xml_add_gnc_pricedb): extract out pricedb xmlNodePtr creation to
+	func not requiring parent then add that to parent passed into this
+	func.
+	(gnc_pricedb_to_dom_tree): new func.
+	(gnc_pricedb_sixtp_parser_create): new func to call other so names
+	are standard in v2 parser setup.
 
 	* src/engine/Account.c (xaccAccountInsertSplit): Remove unused
 	var oldacc (assigned to once) and the block that went with it.

@@ -1393,7 +1393,7 @@ char *
 gnc_html_decode_string(const char * str) {
   static gchar * safe = "$-._!*(),"; /* RFC 1738 */
   GString * decoded  = g_string_new ("");
-  gchar   * ptr;
+  const gchar   * ptr;
   guchar  c;
   guint   hexval;
   ptr = str;

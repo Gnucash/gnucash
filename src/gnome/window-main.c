@@ -30,6 +30,7 @@
 
 #include "AccWindow.h"
 #include "EuroUtils.h"
+#include "FileBox.h"
 #include "FileDialog.h"
 #include "MainWindow.h"
 #include "RegWindow.h"
@@ -58,6 +59,9 @@
 #include "window-reconcile.h"
 #include "window-register.h"
 #include "window-report.h"
+
+#include "io-gncxml-v2.h"
+#include "gnc-book.h"
 
 /* FIXME get rid of these */
 #include "gnc.h"
@@ -769,6 +773,25 @@ gnc_ui_options_cb(GtkWidget *widget, gpointer data)
 }
 
 static void
+gnc_ui_xml_v2_cb(GtkWidget *widget, gpointer menuItem)
+{
+    const char *filename;
+    GNCBook *book;
+    
+    filename = fileBox(_("Save"), "*.gnc", gnc_history_get_last());
+    if (!filename) return;
+    
+    book = gncGetCurrentBook ();
+
+    gnc_book_write_to_xml_file_v2(book, filename);
+}
+
+static void
+gnc_ui_account_heirarchy_cb(GtkWidget *widget, gpointer menuItem)
+{
+}
+
+static void
 gnc_ui_filemenu_cb(GtkWidget *widget, gpointer menuItem)
 {
   switch (GPOINTER_TO_INT(menuItem))
@@ -1357,12 +1380,34 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     GNOMEUIINFO_END
   };
 
+  static GnomeUIInfo developer_menu[] =
+  {
+      {
+          GNOME_APP_UI_ITEM,
+          N_("_Write V2 XML File"),
+          N_("Write a version 2 XML file"),
+          gnc_ui_xml_v2_cb, NULL, NULL,
+          GNOME_APP_PIXMAP_NONE, NULL,
+          0, 0, NULL
+      },
+      {
+          GNOME_APP_UI_ITEM,
+          N_("Write _Account Heirarchy"),
+          N_("Write just the account heirarchy"),
+          gnc_ui_account_heirarchy_cb, NULL, NULL,
+          GNOME_APP_PIXMAP_NONE, NULL,
+          0, 0, NULL
+      },
+      GNOMEUIINFO_END
+  };
+  
   static GnomeUIInfo mainmenu[] =
   {
     GNOMEUIINFO_MENU_FILE_TREE(filemenu),
     GNOMEUIINFO_SUBTREE(N_("_Accounts"), accountsmenu),
     GNOMEUIINFO_SUBTREE(N_("_Tools"), toolsmenu),
     GNOMEUIINFO_MENU_SETTINGS_TREE(optionsmenu),
+    GNOMEUIINFO_SUBTREE(N_("_Devel Options"), developer_menu),
     GNOMEUIINFO_MENU_HELP_TREE(helpmenu),
     GNOMEUIINFO_END
   };

@@ -232,7 +232,7 @@ gnc_http_start_post(gnc_http * http, const char * uri,
   ghttp_set_header(info->request, http_hdr_Content_Type, content_type);
   ghttp_set_sync(info->request, ghttp_async);
   ghttp_set_type(info->request, ghttp_type_post);
-  ghttp_set_body(info->request, data, datalen);
+  ghttp_set_body(info->request, (char*)data, datalen);
 
   ghttp_prepare(info->request);
   ghttp_process(info->request);

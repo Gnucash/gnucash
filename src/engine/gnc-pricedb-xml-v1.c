@@ -34,6 +34,7 @@
 #include "sixtp-dom-generators.h"
 #include "sixtp-writers.h"
 #include "sixtp-xml-write-utils.h"
+#include "io-gncxml-v2.h"
 
 #include "gnc-pricedb.h"
 
@@ -246,6 +247,9 @@ pricedb_after_child_handler(gpointer data_for_children,
 
     g_return_val_if_fail(p, FALSE);
     gnc_pricedb_add_price(db, p);
+    /* can't do this because the v1 parser doesn't use this data
+       structure as global data */
+    /* ((sixtp_gdv2*)global_data)->counter.prices_loaded++; */
     return TRUE;
   } else {
     return FALSE;
@@ -261,6 +265,30 @@ pricedb_cleanup_result_handler(sixtp_child_result *result)
     if(db) gnc_pricedb_destroy(db);
     result->data = NULL;
   }
+}
+
+static gboolean
+pricedb_v2_end_handler(
+    gpointer data_for_children, GSList* data_from_children,
+    GSList* sibling_data, gpointer parent_data, gpointer global_data,
+    gpointer *result, const gchar *tag)
+{
+    GNCPriceDB *db = (GNCPriceDB*)result;
+    sixtp_gdv2* globaldata = (sixtp_gdv2*)global_data;
+
+    globaldata->addPriceDBFunc(globaldata, db);
+
+    return TRUE;
+}
+
+
+sixtp*
+gnc_pricedb_sixtp_parser_create(void)
+{
+    sixtp *ret;
+    ret = gnc_pricedb_parser_new();
+    sixtp_set_end(ret, pricedb_v2_end_handler);
+    return ret;
 }
 
 sixtp*
@@ -299,7 +327,6 @@ gnc_pricedb_parser_new(void)
 static gboolean
 add_child_or_kill_parent(xmlNodePtr parent, xmlNodePtr child)
 {
-  if(!parent) return FALSE;
   if(!child) {
     xmlFreeNode(parent);
     return FALSE;
@@ -373,6 +400,33 @@ xml_add_gnc_price_adapter(GNCPrice *p, gpointer data)
   }
 }
 
+xmlNodePtr
+gnc_pricedb_to_dom_tree(const char *tag, GNCPriceDB *db)
+{
+  xmlNodePtr db_xml = NULL;
+
+  if(!tag) return NULL;
+
+  db_xml= xmlNewNode(NULL, tag);
+  if(!db_xml) return NULL;
+
+  xmlSetProp(db_xml, "version", "1");
+
+  if(!gnc_pricedb_foreach_price(db, xml_add_gnc_price_adapter, db_xml, TRUE))
+  {
+    xmlFreeNode(db_xml);
+    return NULL;
+  }
+
+  return db_xml;
+}
+
+xmlNodePtr
+gnc_pricedb_dom_tree_create(GNCPriceDB *db)
+{
+    return gnc_pricedb_to_dom_tree("gnc:pricedb", db);
+}
+
 gboolean
 xml_add_gnc_pricedb(xmlNodePtr p, const char *tag, GNCPriceDB *db)
 {
@@ -381,16 +435,7 @@ xml_add_gnc_pricedb(xmlNodePtr p, const char *tag, GNCPriceDB *db)
   if(!p || !tag) return FALSE;
   if(!db) return TRUE;
 
-  db_xml= xmlNewTextChild(p, NULL, tag, NULL);
-  if(!db_xml) return FALSE;
-
-  xmlSetProp(db_xml, "version", "1");
-
-  if(!gnc_pricedb_foreach_price(db, xml_add_gnc_price_adapter, db_xml, TRUE))
-  {
-    xmlFreeNode(db_xml);
-    return FALSE;
-  }
+  xmlAddChild(p, gnc_pricedb_to_dom_tree(tag, db));
 
   return TRUE;
 }

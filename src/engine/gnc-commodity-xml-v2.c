@@ -40,7 +40,8 @@ gnc_commodity_dom_tree_create(const gnc_commodity *com)
         xmlNewChild(ret, NULL, "cmdty:name", gnc_commodity_get_fullname(com));
     }
 
-    if(gnc_commodity_get_exchange_code(com))
+    if(gnc_commodity_get_exchange_code(com) &&
+       strlen(gnc_commodity_get_exchange_code(com)) > 0)
     {
         xmlNewChild(ret, NULL, "cmdty:xcode",
                     gnc_commodity_get_exchange_code(com));

@@ -1,1 +1,21 @@
-<!ELEMENT gnc:price (#PCDATA)>
+<!ENTITY % types SYSTEM "types.dtd">
+%types;
+
+<!ELEMENT gnc:pricedb (price+)>
+<!ATTLIST gnc:pricedb version CDATA #REQUIRED>
+
+<!ELEMENT price (price:commodity, price:currency, price:time,
+                 price:source?, price:type?, price:value)>
+
+<!ELEMENT price:commodity %commodity-type;>
+
+<!ELEMENT price:currency %commodity-type;>
+
+<!ELEMENT price:time %date-type;>
+
+<!ELEMENT price:source (#PCDATA)>
+
+<!ELEMENT price:type (#PCDATA)>
+
+<!ELEMENT price:value (#PCDATA)>
+

@@ -80,6 +80,7 @@ gnc_commodity * gnc_commodity_table_insert(gnc_commodity_table * table,
 
 int       gnc_commodity_table_has_namespace(const gnc_commodity_table * t,
                                             const char * namespace);
+guint gnc_commodity_table_get_size(gnc_commodity_table* tbl);
 
 /* The next two functions return newly allocated lists which should
  * be freed with g_list_free. */

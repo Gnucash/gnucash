@@ -94,9 +94,15 @@ split_to_dom_tree(const gchar *tag, Split *spl)
     xmlAddChild(ret, guid_to_dom_tree(
                     "split:account",
                     xaccSplitGetAccountGUID(spl)));
-
-    xmlAddChild(ret, kvp_frame_to_dom_tree("split:slots",
-                                           xaccSplitGetSlots(spl)));
+    
+    {
+        xmlNodePtr kvpnode = kvp_frame_to_dom_tree("split:slots",
+                                                   xaccSplitGetSlots(spl));
+        if(kvpnode)
+        {
+            xmlAddChild(ret, kvpnode);
+        }
+    }
     
     return ret;
 }
@@ -143,9 +149,15 @@ gnc_transaction_dom_tree_create(Transaction *trn)
         xmlNewTextChild(ret, NULL, "trn:description",
                         xaccTransGetDescription(trn));
     }
-
-    xmlAddChild(ret, kvp_frame_to_dom_tree("trn:slots",
-                                           xaccTransGetSlots(trn)));
+    
+    {
+        xmlNodePtr kvpnode = kvp_frame_to_dom_tree("trn:slots",
+                                                   xaccTransGetSlots(trn));
+        if(kvpnode)
+        {
+            xmlAddChild(ret, kvpnode);
+        }
+    }
 
     add_trans_splits(ret, trn);
     
