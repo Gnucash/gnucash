@@ -442,6 +442,7 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   XferWindow  *xferData = (XferWindow *)cd;
   Transaction *trans;
+  Split *split;
   Account *acc;
   String  str;
   float   val=0.0;
@@ -456,7 +457,9 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   grp->saved = False;
   
   /* a double-entry transfer -- just one record, two accounts */
-  trans   = mallocTransaction();
+  trans = mallocTransaction();
+  split = xaccMallocSplit();
+  xaccTransAppendSplit (trans, split);
   
   /* Create the transaction */
   str = XmTextGetString(xferData->date);
@@ -465,20 +468,18 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
           &(trans->date.day), &(trans->date.year) );
   str = XmTextGetString(xferData->amount);
   sscanf( str, "%f", &val );  /* sscanf must take float not double arg */
-  trans->damount     = val;
-  trans->num         = XtNewString("");
-  
+  split->damount = -val;
+
   xaccTransSetMemo (trans, XmTextGetString(xferData->memo));
   xaccTransSetDescription (trans, XmTextGetString(xferData->desc));
   xaccTransSetReconcile (trans, NREC);
   
   /* make note of which accounts this was transfered from & to */
-  trans->debit       = (struct _account *) getAccount(grp,xferData->from);
+  split->acc              = (struct _account *) getAccount(grp,xferData->from);
   trans->credit_split.acc = (struct _account *) getAccount(grp,xferData->to);
 
   /* insert transaction into from acount */
-  acc = getAccount(grp,xferData->from);
-  insertTransaction( acc, trans );
+  xaccInsertSplit (((Account *) (split->acc)), split);
   
   /* Refresh the "from" account register window */
   regRefresh(acc->regData);
@@ -486,8 +487,7 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   recnRefresh(acc->recnData);
   
   /* insert transaction into to acount */
-  acc = getAccount(grp,xferData->to);
-  insertTransaction( acc, trans );
+  xaccInsertSplit (((Account *) (trans->credit_split.acc)), &(trans->credit_split));
 
   /* Refresh the "to" account register window */
   regRefresh(acc->regData);

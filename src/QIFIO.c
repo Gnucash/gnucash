@@ -696,7 +696,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
          split -> parent = trans;     /* parent transaction */
          split -> acc = (struct _account *) xaccGetXferQIFAccount (acc, qifline);
 
-         xaccAppendSplit (trans, split);
+         xaccTransAppendSplit (trans, split);
 
          /* hack alert -- we should insert this split into 
           * the split account, and remove the L field */
@@ -788,7 +788,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
       if (share_xfer) {
          if (!split) {
             split = xaccMallocSplit ();
-            xaccAppendSplit (trans, split);
+            xaccTransAppendSplit (trans, split);
          }
 
          /* Insert the transaction into the main brokerage 
@@ -832,7 +832,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
       if (xfer_acc) {
          if (!split) {
             split = xaccMallocSplit ();
-            xaccAppendSplit (trans, split);
+            xaccTransAppendSplit (trans, split);
          }
          split->acc = (struct _account *) xfer_acc;
          xaccInsertSplit (xfer_acc, split);

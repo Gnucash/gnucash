@@ -244,6 +244,35 @@ xaccInsertSplit ( Account *acc, Split *split )
 
 
 /********************************************************************\
+\********************************************************************/
+
+void
+xaccRemoveSplit ( Account *acc, Split *split )
+  {
+  int  i,j;
+
+  if (!acc) return;
+  if (!split) return;
+
+  /* mark the data file as needing to be saved: */
+  if( acc->parent != NULL ) acc->parent->saved = False;
+  
+  for( i=0,j=0; j<acc->numSplits; i++,j++ ) {
+    acc->splits[i] = acc->splits[j];
+    if (split == acc->splits[i]) i--;
+  }
+  
+  split->acc = NULL;
+
+  acc->numSplits --;
+
+  /* make sure the array is NULL terminated */
+  acc->splits[acc->numSplits] = NULL;
+
+}
+
+
+/********************************************************************\
  * xaccRecomputeBalance                                             *
  *   recomputes the partial balances and the current balance for    *
  *   this account.                                                  *
@@ -396,8 +425,8 @@ xaccCheckDateOrder (Account * acc, Split *split )
 
   /* take care of re-ordering, if necessary */
   if( outOfOrder ) {
-    removeTransaction( acc, position );
-    insertTransaction( acc, split );
+    xaccRemoveSplit( acc, split );
+    xaccInsertSplit( acc, split );
     return 1;
   }
   return 0;

@@ -672,7 +672,7 @@ readTransaction( int fd, Account *acc, int token )
       if (peer_acc) {
          Split *split;
          split = xaccMallocSplit ();
-         xaccAppendSplit (trans, split);
+         xaccTransAppendSplit (trans, split);
          split -> acc = (struct _account *) peer_acc;
          xaccInsertSplit (peer_acc, split);
          split->damount = -num_shares;
@@ -718,7 +718,7 @@ readTransaction( int fd, Account *acc, int token )
      for (i=0; i<numSplits; i++) {
         split = readSplit (fd, token);
         split->parent = trans;
-        xaccAppendSplit( trans, split);
+        xaccTransAppendSplit( trans, split);
         xaccInsertSplit( ((Account *) (split->acc)), split);
      }
   }

@@ -23,6 +23,8 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
+#ifdef NOT_TODAY
+
 #include <Xm/Xm.h>
 #include <Xm/DialogS.h>
 #include <Xm/Form.h>
@@ -368,7 +370,12 @@ xaccGetDisplayAmountStrings (RegWindow *regData,
         Account * acc;
         int show_debit, show_credit;
 
-        acc = (Account *) (trans->debit);
+        /* hack alert -- should examine all splits ... */
+        if (trans->debit_splits[0]) {
+          acc = (Account *) ((trans->debit_splits[0]) -> acc);
+        } else {
+          acc = NULL;
+        }
         show_debit = xaccIsAccountInList (acc, regData->blackacc);
 
         acc = (Account *) (trans->credit_split.acc);
@@ -419,7 +426,13 @@ xaccGetDisplayAmountStrings (RegWindow *regData,
          * the account type is stock or mutual, since other types
          * do not have shares. */
         show_debit = 0;
-        acc = (Account *) (trans->debit);
+
+        /* hack alert -- should examine all splits ... */
+        if (trans->debit_splits[0]) {
+          acc = (Account *) ((trans->debit_splits[0]) -> acc);
+        } else {
+          acc = NULL;
+        }
         if (acc) {
           if ((MUTUAL == acc->type) || (STOCK == acc->type) ) {
             show_debit = xaccIsAccountInList (acc, regData->blackacc);
@@ -494,10 +507,10 @@ regRefresh( RegWindow *regData )
   {
   if( regData != NULL )
     {
-    Transaction *trans;
-    Transaction **tarray;
+    Split *split;
+    Split **sarray;
     int    old_num_rows, new_num_rows, delta_rows;
-    int    i,j, ntrans, ncols;
+    int    i,j, nsplits, ncols;
     char   buf[BUFSIZE];
     String **data = NULL;
     String **newData;
@@ -513,17 +526,17 @@ regRefresh( RegWindow *regData )
 
     /* first, build a sorted array of transactions */
     if (1 == regData->numAcc) {
-       tarray = regData->blackacc[0]->transaction;
-       ntrans = regData->blackacc[0]->numTrans;
+       sarray = regData->blackacc[0]->splits;
+       nsplits = regData->blackacc[0]->numSplits;
 
     } else {
-       tarray = accListGetSortedTrans (regData->blackacc);
-       ntrans = xaccCountTransactions (tarray);
+       sarray = accListGetSortedSplits (regData->blackacc);
+       nsplits = xaccCountSplits (sarray);
     }
 
     /* Allocate one extra transaction row.  That extra row 
      * is used to allow the user to add new transactions */
-    new_num_rows = NUM_ROWS_PER_TRANS*(ntrans+1) + NUM_HEADER_ROWS;
+    new_num_rows = NUM_ROWS_PER_TRANS*(nsplits+1) + NUM_HEADER_ROWS;
 
     XtVaGetValues( regData->reg, XmNrows, &old_num_rows, NULL );
     XtVaGetValues( regData->reg, XmNcells, &data, NULL );
@@ -557,10 +570,12 @@ regRefresh( RegWindow *regData )
                         NULL, NULL, NULL, delta_rows );
     }
     
+#ifdef BROKEN_BECAUSE_OF_SPLITS
+/* hack alert -- discard or fix this ... */
     /* try to keep all amounts positive */
-    for (i=0; i<ntrans; i++) {
-      trans = tarray[i];
-      if (0.0 > trans->damount) {
+    for (i=0; i<nsplits; i++) {
+      split = sarray[i];
+      if (0.0 > split->damount) {
         struct _account *tmp;
         tmp = trans->credit_split.acc;
         trans->credit_split.acc = trans->debit;
@@ -568,15 +583,18 @@ regRefresh( RegWindow *regData )
         trans->damount = - (trans->damount);
       }
     }
+#endif
 
     /* and fill in the data for the matrix: */
-    for (i=0; i<ntrans; i++) {
+    for (i=0; i<nsplits; i++) {
+      Transaction *trans;
       int  row; 
 
-      trans = tarray[i];
+      split = sarray[i];
+      trans = split->parent;
       row = NUM_ROWS_PER_TRANS*i + NUM_HEADER_ROWS;
 
-      XbaeMatrixSetRowUserData  ( regData->reg, row, (XPointer) trans);   
+      XbaeMatrixSetRowUserData  ( regData->reg, row, (XPointer) split);   
 
       sprintf( buf, "%2d/%2d", trans->date.month, trans->date.day );
       newData[row+DATE_CELL_R][DATE_CELL_C]   = XtNewString(buf);
@@ -592,10 +610,16 @@ regRefresh( RegWindow *regData )
            (INC_LEDGER == regData->type) ||
            (PORTFOLIO  == regData->type) ) {
         Account *xfer_acc;
-        xfer_acc = (Account *) trans -> debit;
-        if (xfer_acc) {
-          sprintf( buf, "%s", xfer_acc->accountName );
-          newData[row+XFRM_CELL_R][XFRM_CELL_C] = XtNewString(buf);
+        Split *deb;
+
+        /* hack alert -- handle all splits ... */
+        deb = trans -> debit_splits[0];
+        if (deb) {
+          xfer_acc = (Account *) (deb->acc);
+          if (xfer_acc) {
+            sprintf( buf, "%s", xfer_acc->accountName );
+            newData[row+XFRM_CELL_R][XFRM_CELL_C] = XtNewString(buf);
+          }
         }
         xfer_acc = (Account *) trans -> credit_split.acc;
         if (xfer_acc) {
@@ -610,7 +634,9 @@ regRefresh( RegWindow *regData )
         Account *main_acc, *xfer_acc;
 
         main_acc = regData->blackacc[0];
-        xfer_acc = xaccGetOtherAccount (main_acc, trans);
+
+        /* hack alert -- should display all splits ... */
+        xfer_acc = (Account *) (split->parent->credit_split.acc);
         if (xfer_acc) {
           sprintf( buf, "%s", xfer_acc->accountName );
           newData[row+XFRM_CELL_R][XFRM_CELL_C] = XtNewString(buf);
@@ -619,13 +645,13 @@ regRefresh( RegWindow *regData )
 
       sprintf( buf, "%s", trans->description );
       newData[row+DESC_CELL_R][DESC_CELL_C]   = XtNewString(buf);
-      sprintf( buf, "%s", trans->credit_split.memo );
+      sprintf( buf, "%s", split->memo );
       newData[row+MEMO_CELL_R][MEMO_CELL_C] = XtNewString(buf);
       
-      sprintf( buf, "%c", trans->credit_split.reconciled );
+      sprintf( buf, "%c", split->reconciled );
       newData[row+RECN_CELL_R][RECN_CELL_C]   = XtNewString(buf);
 
-      sprintf( buf, "%s", trans->action );
+      sprintf( buf, "%s", split->action );
       newData[row+ACTN_CELL_R][ACTN_CELL_C]   = XtNewString(buf);
 
       /* ----------------------------------- */
@@ -653,11 +679,11 @@ regRefresh( RegWindow *regData )
 
         case INC_LEDGER: 
         case GEN_LEDGER: 
-          themount = trans->damount * trans->share_price;
+          themount = split->damount * split->share_price;
           break;
 
         case PORTFOLIO: 
-          themount = trans->damount;
+          themount = split->damount;
           break;
 
         default:
@@ -683,7 +709,7 @@ regRefresh( RegWindow *regData )
           break;
         case STOCK:
         case MUTUAL:
-          sprintf( buf, "%.2f ", trans->share_price );
+          sprintf( buf, "%.2f ", split->share_price );
           newData[row+PRCC_CELL_R][PRCC_CELL_C] = XtNewString(buf);
           break;
 
@@ -3377,4 +3403,5 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_y
     }
   }
  
+#endif
 /************************** END OF FILE *************************/

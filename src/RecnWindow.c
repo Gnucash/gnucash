@@ -92,7 +92,7 @@ recnRefresh( RecnWindow *recnData )
     {
     int   i,nrows;
     char  buf[BUFSIZE];
-    Transaction *trans;
+    Split *split;
     Account *acc = recnData->acc;
     
     /* NOTE: an improvement of the current design would be to use the
@@ -110,15 +110,17 @@ recnRefresh( RecnWindow *recnData )
     
     /* Add the non-reconciled transactions */
     i=0;
-    while( (trans=getTransaction(acc,i++)) != NULL )
+    split = acc->splits[i];
+    while( split)
       {
       String rows[5];
+      Transaction *trans = split->parent;
       
-      if( YREC != trans->credit_split.reconciled )
+      if( YREC != split->reconciled )
         {
         double themount;
 
-        sprintf( buf, "%c", trans->credit_split.reconciled );
+        sprintf( buf, "%c", split->reconciled );
         rows[0] = XtNewString(buf);
         rows[1] = trans->num;
         sprintf( buf, "%2d/%2d/%02d", 
@@ -131,9 +133,9 @@ recnRefresh( RecnWindow *recnData )
         /* for stock accounts, show share quantity, 
          * not currency amount */
         if ((STOCK == acc->type) || (MUTUAL == acc->type)) {
-           themount = xaccGetShareAmount (acc, trans);
+           themount = split->damount;
         } else {
-           themount = xaccGetAmount (acc, trans);
+           themount = split->damount * split->share_price;
         }
         sprintf( buf, "%.2f", DABS(themount) );
         rows[4] = XtNewString(buf);
@@ -142,13 +144,13 @@ recnRefresh( RecnWindow *recnData )
           {
           XtVaGetValues( recnData->debit, XmNrows, &nrows, NULL );
           XbaeMatrixAddRows( recnData->debit, nrows, rows, NULL, NULL, 1 );
-          XbaeMatrixSetRowUserData( recnData->debit, nrows, (XtPointer)trans );
+          XbaeMatrixSetRowUserData( recnData->debit, nrows, (XtPointer)split );
           }
         else
           {
           XtVaGetValues( recnData->credit, XmNrows, &nrows, NULL );
           XbaeMatrixAddRows( recnData->credit, nrows, rows, NULL, NULL, 1 );
-          XbaeMatrixSetRowUserData( recnData->credit,nrows, (XtPointer)trans );
+          XbaeMatrixSetRowUserData( recnData->credit,nrows, (XtPointer)split );
           }
         }
       }
@@ -168,7 +170,7 @@ recnRefresh( RecnWindow *recnData )
 void
 recnRecalculateBalance( RecnWindow *recnData )
   {
-  Transaction *trans;
+  Split * split;
   Account *acc = recnData ->acc;
   char *amt;
   int  i,nrows;
@@ -188,11 +190,11 @@ recnRecalculateBalance( RecnWindow *recnData )
     String recn = XbaeMatrixGetCell( recnData->debit, i, 0 );
     if( recn[0] == YREC )
       {
-      trans  = (Transaction *)XbaeMatrixGetRowUserData( recnData->debit, i );
+      split  = (Split *)XbaeMatrixGetRowUserData( recnData->debit, i );
       if (shrs) {
-        ddebit += xaccGetShareAmount (acc, trans); 
+        ddebit += split->damount;
       } else {
-        ddebit += xaccGetAmount (acc, trans); 
+        ddebit += split->damount * split->share_price;
       }
       }
     }
@@ -206,11 +208,11 @@ recnRecalculateBalance( RecnWindow *recnData )
     String recn = XbaeMatrixGetCell( recnData->credit, i, 0 );
     if( recn[0] == YREC )
       {
-      trans  = (Transaction *)XbaeMatrixGetRowUserData( recnData->credit, i );
+      split = (Split *)XbaeMatrixGetRowUserData( recnData->credit, i );
       if (shrs) {
-        dcredit += xaccGetShareAmount (acc, trans); 
+        dcredit += split->damount;
       } else {
-        dcredit += xaccGetAmount (acc, trans); 
+        dcredit += split->damount * split->share_price;
       }
       }
     }
@@ -799,7 +801,7 @@ void
 recnOkCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   int nrows,i;
-  Transaction *trans;
+  Split *split;
   RecnWindow  *recnData = (RecnWindow *)cd;
   AccountGroup *grp = topgroup;  /* hack alert -- should pass as arg .. */
   
@@ -810,8 +812,8 @@ recnOkCB( Widget mw, XtPointer cd, XtPointer cb )
     String recn = XbaeMatrixGetCell( recnData->debit, i, 0 );
     if( recn[0] == YREC )
       {
-      trans  = (Transaction *)XbaeMatrixGetRowUserData( recnData->debit, i );
-      xaccTransSetReconcile (trans, YREC);
+      split  = (Split *)XbaeMatrixGetRowUserData( recnData->debit, i );
+      split->reconciled = YREC;
       /* mark the datafile as needing to be saved: */
       grp->saved = False;
       }
@@ -824,8 +826,8 @@ recnOkCB( Widget mw, XtPointer cd, XtPointer cb )
     String recn = XbaeMatrixGetCell( recnData->credit, i, 0 );
     if( recn[0] == YREC )
       {
-      trans  = (Transaction *)XbaeMatrixGetRowUserData( recnData->credit, i );
-      xaccTransSetReconcile (trans, YREC);
+      split  = (Split *)XbaeMatrixGetRowUserData( recnData->credit, i );
+      split->reconciled = YREC;
       /* mark the datafile as needing to be saved: */
       grp->saved = False;
       }
@@ -867,10 +869,10 @@ recnCB( Widget mw, XtPointer cd, XtPointer cb )
 
     if( YREC == val[0] )
       {
-      Transaction *trans =
-        (Transaction *)XbaeMatrixGetRowUserData( mw, cbs->row );
+      Split *split =
+        (Split *)XbaeMatrixGetRowUserData( mw, cbs->row );
       
-      sprintf( buf, "%c", trans->credit_split.reconciled );
+      sprintf( buf, "%c", split->reconciled );
       XbaeMatrixSetCell( mw, cbs->row, cbs->column, buf );
       }
     else

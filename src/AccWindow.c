@@ -680,7 +680,7 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   xaccTransSetDescription (trans, OPEN_BALN_STR);
 
   /* add the new transaction to the account */
-  insertTransaction( acc, trans );
+  xaccInsertSplit (acc, &(trans->credit_split) );
   
   /* once the account is set up, add it to account group 
    * If the user indicated a parent acccount, make it a 

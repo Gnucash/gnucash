@@ -54,7 +54,6 @@ xaccInitSplit( Split * split )
   split->damount     = 0.0;
   split->share_price = 1.0;
 
-  split->write_flag  = 0;
   }
 
 /********************************************************************\
@@ -79,9 +78,10 @@ xaccFreeSplit( Split *split )
    * by any accounts. */
   if (split->acc) return;
 
-  xaccRemoveSplit (split);
+  xaccTransRemoveSplit (split->parent, split);
 
   XtFree(split->memo);
+  XtFree(split->action);
 
   /* just in case someone looks up freed memory ... */
   split->memo        = 0x0;
@@ -90,7 +90,6 @@ xaccFreeSplit( Split *split )
   split->share_price = 1.0;
   split->parent      = NULL;
 
-  split->write_flag  = 0;
   _free(split);
 }
 
@@ -171,7 +170,7 @@ initTransaction( Transaction * trans )
   trans->debit_splits[0] = NULL;
 
   xaccInitSplit ( &(trans->credit_split));
-  trans->credit_split->parent = trans;
+  trans->credit_split.parent = trans;
 
   trans->date.year   = 1900;        
   trans->date.month  = 1;        
@@ -194,17 +193,22 @@ mallocTransaction( void )
 void
 freeTransaction( Transaction *trans )
   {
+  int i;
+  Split *s;
+
   if (!trans) return;
 
   /* free a transaction only if it is not claimed
    * by any accounts. */
-  if (trans->debit) return;
   if (trans->credit_split.acc) return;
-/*
-hack alert -- don't do this until splits are fully
-implemented and tested.
-  if (NULL != trans->debit_splits[0]) return;
-*/
+
+  i = 0;
+  s = trans->debit_splits[i];
+  while (s) {
+    if (s->acc) return;
+    i++;
+    s = trans->debit_splits[i];
+  }
 
   _free (trans->debit_splits);
   XtFree(trans->num);
@@ -256,7 +260,7 @@ xaccTransRecomputeAmount (Transaction *trans)
 /********************************************************************\
 \********************************************************************/
 void
-xaccAppendSplit (Transaction *trans, Split *split) 
+xaccTransAppendSplit (Transaction *trans, Split *split) 
 {
    int i, num;
    Split **oldarray;
@@ -286,17 +290,14 @@ xaccAppendSplit (Transaction *trans, Split *split)
 \********************************************************************/
 
 void
-xaccRemoveSplit (Split *split) 
+xaccTransRemoveSplit (Transaction *trans, Split *split) 
 {
    int i=0, n=0;
    Split *s;
-   Transaction *trans;
 
    if (!split) return;
-   trans = (Transaction *) split->parent;
-   split->parent = NULL;
-
    if (!trans) return;
+   split->parent = NULL;
 
    s = trans->debit_splits[0];
    while (s) {
@@ -310,8 +311,6 @@ xaccRemoveSplit (Split *split)
 
    /* bring dollar amounts into synchrony */
    xaccTransRecomputeAmount (trans);
-
-   /* hack alert -- we should also remove it from the account */
 }
 
 /********************************************************************\
@@ -345,7 +344,8 @@ xaccSplitOrder (Split **sa, Split **sb)
   if ( !(*sa) && (*sb) ) return +1;
   if ( !(*sa) && !(*sb) ) return 0;
 
-  retval = xaccTransOrder (sa->parent, sb->parent);
+  retval = xaccTransOrder ( ((Transaction **) &((*sa)->parent)), 
+                            ((Transaction **) &((*sb)->parent)));
   if (0 != retval) return retval;
 
   /* otherwise, sort on memo strings */
