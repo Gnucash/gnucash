@@ -81,6 +81,13 @@ gnc_new_user_get_balance_editor(void)
   return gtk_object_get_data (GTK_OBJECT (newUserDialog), "balance_editor");
 }
 
+gboolean
+gnc_new_user_dialog_is_new_user(void)
+{
+    return (gboolean)gtk_object_get_data(GTK_OBJECT(newUserDialog),
+                                         "is_new_user_dialog");
+}
+
 struct add_group_data_struct
 {
     AccountGroup *to;
@@ -330,9 +337,15 @@ gnc_create_newUserDialog (void)
 }
 
 int
-gnc_ui_show_new_user_window(void)
+gnc_ui_show_new_user_window(gboolean new_user_dialog)
 {
-    return createit(gnc_create_newUserDialog, &newUserDialog);
+    int ret = createit(gnc_create_newUserDialog, &newUserDialog);
+    if(ret)
+    {
+        gtk_object_set_data(GTK_OBJECT(newUserDialog),
+                            "is_new_user_dialog", (gpointer)new_user_dialog);
+    }
+    return ret;
 }
 
 int
@@ -381,7 +394,7 @@ gnc_ui_show_new_user_choice_window(void)
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (new_accounts_button)))
   {
-    gnc_ui_show_new_user_window ();
+    gnc_ui_show_new_user_window (1);
     gtk_widget_destroy (dialog);
     return;
   }

@@ -29,8 +29,9 @@
 #include "gnc-commodity-edit.h"
 #include "Group.h"
 
-int gnc_ui_show_new_user_window(void);
+int gnc_ui_show_new_user_window(gboolean new_user_dialog);
 int gnc_ui_delete_new_user_window(void);
+gboolean gnc_new_user_dialog_is_new_user(void);
 
 void gnc_ui_show_new_user_choice_window(void);
 
