@@ -1,11 +1,21 @@
-/* Treat time_t as a floating point number at the guile level.  On
-   many of the common platforms it's just an integer, but there are
-   supposedly platforms (acording to the GNU libc info pages) where it
-   may be a real, and a real is always safe here. */
+/* 
+ * FILE:
+ * perl5_swig_annotations.i
+ *
+ * FUNCTION:
+ * clean up various aspects of the gnucash engine interface with 
+ * respect to the SWIG-generated perl bindings. This includes:
+ * -- handling time_t values as ints
+ * -- converting C ** arrays to perl arrays
+ *
+ * HISTORY:
+ * Created by Linas Vepstas January 1999
+ * Copyright (c) 1999 Linas Vepstas 
+ */
 
-/*
-typedef double time_t;
-*/
+#ifdef DOESNT_WORK_DONT_KNOW_WHY
+%apply int {time_t }
+#endif /* DOESNT_WORK_DONT_KNOW_WHY */
 
 /* Convert the return values from the function to perl values */
 /* specifically, create a new perl scalar and store the int value there */
@@ -18,7 +28,7 @@ typedef double time_t;
    *    sv_setiv ($target, (IV) $source);
    */
   argvi ++;
-  printf ("Info: converted return val of time_t secs to %d \n", (int) SvIV($target));
+  // printf ("Info: converted return time_t secs to %d \n", (int) SvIV($target));
 }
 
 %typemap(perl5, in) time_t *  {
@@ -29,13 +39,31 @@ typedef double time_t;
    */
   $target = alloca (sizeof (time_t));
   *($target) = (time_t) SvIV($source);
-  printf ("Info: time_t input arg is %ld \n", * ($target));
+  // printf ("Info: time_t input arg is %ld \n", * ($target));
 }
 
-/*
-%typemap(perl5,in) char * {
-             ... Turn a perl array into a char ** ...
-     }
-*/
+// Creates a new Perl array and places a Split ** into it
+%typemap(perl5,out) Split ** {
+    AV *myav;
+    SV **svs;
+    int i = 0,len = 0;
 
+    /* Figure out how many elements we have */
+    while ($source[len]) len++;
+    svs = (SV **) malloc(len*sizeof(SV *));
+    printf ("Info: measured Split array length of len=%d\n", len);
+
+    /* fill in array of scalar values */
+    for (i = 0; i < len ; i++) {
+        svs[i] = sv_newmortal();
+        sv_setref_pv (svs[i], "SplitPtr", $source[i]);
+    };
+
+    /* convert array of scalars into perl array */
+    myav =  av_make(len,svs);
+    free(svs);
+    $target = newRV((SV*)myav);
+    sv_2mortal($target);
+    argvi ++;
+}
 
