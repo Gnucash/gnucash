@@ -3,11 +3,9 @@
 <ARTHEADER>
 <TITLE>Locating transactions with the "Find Transactions" dialog</TITLE>
 </ARTHEADER>
-<SECT1>
-<TITLE> Locating transactions with the "Find Transactions" dialog</TITLE>
 <PARA>Bill Gribble &lt;grib@billgribble.com&gt;</PARA>
 <ANCHOR ID="FINDOVERVIEW">
-<SECT2>
+<sect1>
 <TITLE>Overview</TITLE>
 <PARA>    
     </PARA>
@@ -53,8 +51,8 @@ subset of your transactions that you want to see.</PARA>
 </LISTITEM>
 </ITEMIZEDLIST>      
     <ANCHOR ID="HOW-TO-FIND"></PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>How to use the Find Transactions dialog</TITLE>
 <PARA>    </PARA>
 <PARA>The Find Transactions dialog has two main parts.  
@@ -99,8 +97,8 @@ them by clicking the Find button in a search results window and
 selecting any "Type of Search" except "New search".
 
       <ANCHOR ID="SETUP"></PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>Setting up a search</TITLE>
 <PARA>    </PARA>
 <PARA>You can find transactions by any or all of the following 
@@ -150,7 +148,7 @@ the match value(s) and comparison method.
 criteria must be true for the transaction to be displayed.
 
     <ANCHOR ID="ACCOUNTSEARCH"></PARA>
-<SECT3>
+<sect2>
 <TITLE>Account searches</TITLE>
 <PARA>In the Account tab, select any accounts of interest and then
 choose whether transactions affecting Any, All, or None of these
@@ -171,8 +169,8 @@ entire checking account and your entire Visa account will be shown
 together in the Search Results window.
       
     </PARA>
-</SECT3>
-<SECT3 ID="DATE">
+</sect2>
+<sect2 ID="DATE">
 <TITLE>Date searches</TITLE>
 <PARA>In the Date tab, you can specify a date range for the
 transactions you wish to find.  The year, month, and day fields are in
@@ -188,8 +186,8 @@ put the date in the first date entry and put a date after your last
 transaction in the second entry.
 
       <ANCHOR ID="AMOUNT"></PARA>
-</SECT3>
-<SECT3>
+</sect2>
+<sect2>
 <TITLE>Amount searches</TITLE>
 <PARA>The searches in the Amount, Shares, and Price tabs allow you to
 search for particular quantities in various transaction fields.  You
@@ -202,8 +200,8 @@ amount in the entry box is always positive.
 interested in debits, credits, or both.
 
       <ANCHOR ID="STRING"></PARA>
-</SECT3>
-<SECT3>
+</sect2>
+<sect2>
 <TITLE>String searches</TITLE>
 <PARA>In the Description, Number, Memo, and Action tabs, you can
 specify a string which is matched against the respective fields of
@@ -225,9 +223,9 @@ sensitivity is still determined by the "Case sensitive" button.</PARA>
 </ITEMIZEDLIST>
       
     <ANCHOR ID="MODIFY"></PARA>
-</SECT3>
-</SECT2>
-<SECT2>
+</sect2>
+</sect1>
+<sect1>
 <TITLE>Modifying your search</TITLE>
 <PARA>    </PARA>
 <PARA>Clicking the "Find" button within a Search Results window allows
@@ -246,8 +244,7 @@ be shown in the existing Search Results window.
 </ITEMIZEDLIST>
       
   </PARA>
-</SECT2>
-</SECT1>
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->
