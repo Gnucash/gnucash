@@ -499,7 +499,7 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
  ********************************************************************/
 
 static int
-ns_helper(gpointer key, gpoin4er value, gpointer user_data) {
+ns_helper(gpointer key, gpointer value, gpointer user_data) {
   gnc_commodity * c = value;
   gnc_commodity_destroy(c);
   g_free(key);
