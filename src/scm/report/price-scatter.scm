@@ -78,7 +78,7 @@
 	'actual-transactions
 	(list (vector 'weighted-average 
 		      (N_ "Weighted Average")
-		      (N_ "The weighted average all currency transactions of the past"))
+		      (N_ "The weighted average of all currency transactions of the past"))
 	      (vector 'actual-transactions
 		      (N_ "Actual Transactions")
 		      (N_ "The instantaneous price of actual currency transactions in the past"))
