@@ -86,6 +86,13 @@ xferWindow( Widget parent )
   int        position,i;
   int        initial = 0;
   
+  if (1 >= (data->numAcc)) {
+    errorBox (toplevel,
+"There must be at least two accounts\n\
+created before you can transfer funds.\n");
+    return;
+  }
+
   setBusyCursor( parent );
   
   xferData = (XferWindow *)_malloc(sizeof(XferWindow));

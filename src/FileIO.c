@@ -114,11 +114,29 @@ short xaccFlipShort (short val)
   return (short) flip;
 }
   
+double xaccFlipDouble (double val) 
+  {
+  union {
+     unsigned int i[2];
+     double d;
+  } u;
+  unsigned int w0, w1;
+  u.d = val;
+  w0 = xaccFlipInt (u.i[0]);
+  w1 = xaccFlipInt (u.i[1]);
+
+  u.i[0] = w1;
+  u.i[1] = w0;
+  return u.d;
+}
+
 #define XACC_FLIP_ENDIAN
 #ifdef XACC_FLIP_ENDIAN
+  #define XACC_FLIP_DOUBLE(x) { (x) = xaccFlipDouble (x); }
   #define XACC_FLIP_INT(x) { (x) = xaccFlipInt (x); }
   #define XACC_FLIP_SHORT(x) { (x) = xaccFlipShort (x); }
 #else
+  #define XACC_FLIP_DOUBLE(x)
   #define XACC_FLIP_INT(x) 
   #define XACC_FLIP_SHORT(x) 
 #endif /* XACC_FLIP_ENDIAN */
@@ -440,6 +458,7 @@ readTransaction( int fd, Account *acc, int token )
       _free(trans);
       return NULL;
       }
+    XACC_FLIP_DOUBLE (damount);
     trans->damount = damount;
 
     /* ... next read the share price ... */
@@ -453,6 +472,7 @@ readTransaction( int fd, Account *acc, int token )
       _free(trans);
       return NULL;
       }
+    XACC_FLIP_DOUBLE (damount);
     trans->share_price = damount;
   }  
   DEBUGCMD(printf ("Info: readTransaction(): amount %f \n", trans->damount));
@@ -773,11 +793,13 @@ writeTransaction( int fd, Account * acc, Transaction *trans )
   
   damount = trans->damount;
   DEBUGCMD (printf ("Info: writeTransaction: amount=%f \n", damount));
+  XACC_FLIP_DOUBLE (damount);
   err = write( fd, &damount, sizeof(double) );
   if( err != sizeof(double) )
     return -1;
 
   damount = trans->share_price;  
+  XACC_FLIP_DOUBLE (damount);
   err = write( fd, &damount, sizeof(double) );
   if( err != sizeof(double) )
     return -1;

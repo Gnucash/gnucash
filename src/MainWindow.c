@@ -607,22 +607,49 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       DEBUG("AMB_OPEN");
         {
         Account *acc = getAccount(data,row);
-        if( NULL == acc->regData )   /* avoid having two registers updating one account */
-          acc->regData = regWindow( toplevel, acc );
+        if( NULL == acc ) {
+          int make_new = verifyBox (toplevel,
+"Do you want to create a new account?\n\
+If not, then please select an account\n\
+account to open in the main window.\n");
+          if (make_new) {
+            accWindow(toplevel);
+          }
+        } else {
+          if( NULL == acc->regData ) {  
+            /* avoid having two registers updating one account */
+            acc->regData = regWindow( toplevel, acc );
+          }
         }
+      }
       break;
     case AMB_EDIT:
       DEBUG("AMB_EDIT");
-      editAccWindow( toplevel, getAccount(data,row) );
+      {
+        Account *acc = getAccount(data,row);
+        if( NULL == acc ) {
+          errorBox (toplevel,
+"To edit an account, you must first \n\
+choose an account to delete.\n");
+        } else {
+          editAccWindow( toplevel, getAccount(data,row) );
+        }
+      }
       break;
     case AMB_DEL:
       DEBUG("AMB_DEL");
         {
-        char *msg = "Are you sure you want to delete this account?";
-        if( verifyBox(toplevel,msg) )
-          {
-          freeAccount( removeAccount(data,row) );
-          refreshMainWindow();
+        Account *acc = getAccount(data,row);
+        if( NULL == acc ) {
+          errorBox (toplevel,
+"To delete an account, you must first \n\
+choose an account to delete.\n");
+        } else {
+          char *msg = "Are you sure you want to delete this account?";
+          if( verifyBox(toplevel,msg) ) {
+            freeAccount( removeAccount(data,row) );
+            refreshMainWindow();
+            }
           }
         }
       break;

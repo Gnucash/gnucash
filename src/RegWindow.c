@@ -804,6 +804,7 @@ regWindow( Widget parent, Account *acc )
       NULL, (XtPointer)0,  (MenuItem *)NULL },
     NULL,
   };
+
   
   MenuItem activityMenu[] = {
     { "Transfer...",        &xmPushButtonWidgetClass, 'T', NULL, NULL, 
@@ -811,21 +812,22 @@ regWindow( Widget parent, Account *acc )
     { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL,
       NULL,         NULL,                    (MenuItem *)NULL },
     { "Reconcile...",       &xmPushButtonWidgetClass, 'C', NULL, NULL, 
-      startRecnCB, (XtPointer)regData, (MenuItem *)NULL },
+      startRecnCB, NULL, (MenuItem *)NULL },
     { "Adjust Balance...",  &xmPushButtonWidgetClass, 'A', NULL, NULL, 
-      startAdjBCB, (XtPointer)regData, (MenuItem *)NULL },
+      startAdjBCB, NULL, (MenuItem *)NULL },
     { "Report",             &xmPushButtonWidgetClass, 'D', NULL, NULL,
       NULL, (XtPointer)0,  (MenuItem *)&reportMenu },
     { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL,
       NULL,         NULL,                    (MenuItem *)NULL },
     { "Delete Transaction", &xmPushButtonWidgetClass, 'D', NULL, NULL,
-      deleteCB,     (XtPointer)regData,      (MenuItem *)NULL },
+      deleteCB,     NULL,      (MenuItem *)NULL },
     { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL,
       NULL,         NULL,                    (MenuItem *)NULL },
     { "Close Window", &xmPushButtonWidgetClass, 'Q', NULL, NULL,
-      destroyShellCB,(XtPointer)(regData->dialog),(MenuItem *)NULL },
+      destroyShellCB, NULL, (MenuItem *)NULL },
     NULL,
   };
+
   
   MenuItem helpMenu[] = {
     { "About...",           &xmPushButtonWidgetClass, 'A', NULL, NULL, 
@@ -839,6 +841,13 @@ regWindow( Widget parent, Account *acc )
     NULL,
   };
   
+  /* some compilers don't like dynamic data in initializers; 
+   * so rather than inlining these, we initialize here ... :-( */
+  activityMenu[2].callback_data=(XtPointer)regData;
+  activityMenu[3].callback_data=(XtPointer)regData;
+  activityMenu[6].callback_data=(XtPointer)regData;
+  activityMenu[8].callback_data=(XtPointer)(regData->dialog);
+
   menubar = XmCreateMenuBar( pane, "menubar", NULL, 0 );  
   
   BuildMenu( menubar, XmMENU_PULLDOWN, "Activities", 'A',
@@ -1467,7 +1476,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
         
         if( (regData->qf != NULL) && (regData->qf->trans != NULL) )
           {
-          //char *str = regData->qf->trans->description;
+          /* char *str = regData->qf->trans->description; */
           char str[BUFSIZE];
           strcpy( str, regData->qf->trans->description );
           DEBUG(str);

@@ -110,11 +110,12 @@ Widget BuildMenu( Widget parent, int menu_type, char *menu_title,
 	{
 	XtWarning("You can't have submenus from option menu items.");
 	continue;
-	} 
-      else
+	} else {
+printf ("creating submen label %s \n", items[i].label);
         widget = BuildMenu( menu, XmMENU_PULLDOWN, items[i].label, 
 			    items[i].mnemonic, tear_off, 0, 
 			    items[i].subitems);
+        }
       }
     else
       {

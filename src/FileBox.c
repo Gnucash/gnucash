@@ -66,7 +66,7 @@ fileBox( Widget parent, int type )
   
   ENTER("fileBox");
 
-//  setBusyCursor( parent );
+  /* setBusyCursor( parent ); */
   
   if( type == OPEN )
     {
@@ -105,7 +105,7 @@ fileBox( Widget parent, int type )
   
   XtManageChild( dialog );
 
-//  unsetBusyCursor( parent );
+  /* unsetBusyCursor( parent ); */
   /* while the user hasn't pushed "Ok", simulate XtMainLoop.*/
   while( !done || XtAppPending(app) )
     XtAppProcessEvent( app, XtIMAll );

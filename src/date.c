@@ -137,8 +137,6 @@ todaysDate( Date *date )
   date->month = theTime->tm_mon + 1;
   date->year  = theTime->tm_year + 1900;
   
-//  _free(theTime);
-  
   return date;
   }
 

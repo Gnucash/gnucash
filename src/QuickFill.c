@@ -42,7 +42,7 @@ void qfInsertTransactionRec( QuickFill *qf, Transaction *trans, int depth );
  * of the internals of QuickFill into one file.                     *
 \********************************************************************/
 
-inline int 
+int 
 CHAR_TO_INDEX( char c )
   {
   c = toupper(c)-0x40;

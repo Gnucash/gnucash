@@ -159,7 +159,7 @@ char * xaccReadQIFAccount (int fd, Account * acc)
         } else {
            DEBUG ("Unsupported account type\n");
            DEBUG (&qifline[1]);
-           acc -> type = 0x0;            // hack alert --
+           acc -> type = 0x0;            /* hack alert -- */
         }
      } else 
 
