@@ -59,13 +59,13 @@ ToggleRecn (BasicCell *_cell, const char *cur_val,
    BasicCell *cell = (BasicCell *) _cell;
    char buff[2];
 
-   /* throw up a popup if the user tries to undo a reconciled transcation
+   /* throw up a popup if the user tries to undo a reconciled transaction
       hack alert -- this sets a new precedent ... gnc_verify_dialog is 
-      defined in both the motif and the gtk subdirs; I don't think I like 
-      it that way.  Now it's in ui-callbacks.h which is UI independent, 
+      defined in both the motif and the gnome subdirs; I don't think I like 
+      it that way. Now it's in ui-callbacks.h which is UI independent, 
       but that's still perhaps not optimal...  */
 
-   if(cur_val[0] == YREC) {
+   if (cur_val[0] == YREC) {
      if(!gnc_verify_dialog(CHANGE_RECN_MSG, GNC_T)) {
        return strdup(cur_val);
      }
@@ -77,7 +77,7 @@ ToggleRecn (BasicCell *_cell, const char *cur_val,
      buff[0] = NREC;
    }
    buff[1] = 0x0;
-   
+
    xaccSetBasicCellValue (cell, buff);
    return strdup (buff);
 }

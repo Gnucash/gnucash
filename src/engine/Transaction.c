@@ -1997,15 +1997,10 @@ xaccSplitSetDocref (Split *split, const char *docs)
 void
 xaccSplitSetReconcile (Split *split, char recn)
 {
-   struct timeval tv;
-
    if (!split) return;
+
    split->reconciled = recn;
    MARK_SPLIT (split);
-
-   gettimeofday (&tv, NULL);
-   split->date_reconciled.tv_sec = tv.tv_sec;
-   split->date_reconciled.tv_nsec = 1000 * tv.tv_usec;
 
    xaccAccountRecomputeBalance (split->acc);
 }
@@ -2026,7 +2021,7 @@ xaccSplitSetDateReconciledTS (Split *split, Timespec *ts)
    if (!split) return;
    MARK_SPLIT (split);
 
-   split->date_reconciled =  *ts;
+   split->date_reconciled = *ts;
 }
 
 void

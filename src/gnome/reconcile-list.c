@@ -450,10 +450,11 @@ gnc_reconcile_list_reconciled_balance(GNCReconcileList *list)
  *   commit the reconcile information in the list                   *
  *                                                                  *
  * Args: list - list to commit                                      *
+ *       date - date to set as the reconcile date                   *
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_reconcile_list_commit(GNCReconcileList *list)
+gnc_reconcile_list_commit(GNCReconcileList *list, time_t date)
 {
   GtkCList *clist = GTK_CLIST(list);
   Split *split;
@@ -470,7 +471,10 @@ gnc_reconcile_list_commit(GNCReconcileList *list)
     split = gtk_clist_get_row_data(clist, i);
 
     if (g_hash_table_lookup(list->reconciled, split) != NULL)
+    {
       xaccSplitSetReconcile(split, YREC);
+      xaccSplitSetDateReconciledSecs(split, date);
+    }
   }
 }
 

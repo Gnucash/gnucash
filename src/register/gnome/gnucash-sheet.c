@@ -279,8 +279,11 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
                                            &cursor_pos, &start_sel, &end_sel);
 
 	if (new_text != NULL)
+        {
 		gnucash_sheet_cell_set_from_table (sheet, virt_row, virt_col,
 						   cell_row, cell_col);
+                gnucash_sheet_redraw_block (sheet, virt_row, virt_col);
+        }
 	else
         {
 		gnucash_sheet_start_editing_at_cursor (sheet);
@@ -712,7 +715,8 @@ gnucash_sheet_redraw_block (GnucashSheet *sheet, gint row, gint col)
                 y += canvas->layout.yoffset - canvas->zoom_yofs;
                 
                 h = style->dimensions->height;
-                w = MIN(style->dimensions->width, GTK_WIDGET(sheet)->allocation.width);
+                w = MIN(style->dimensions->width,
+                        GTK_WIDGET(sheet)->allocation.width);
 
                 gnome_canvas_request_redraw (canvas, x, y, x+w, y+h);
         }

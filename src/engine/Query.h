@@ -44,10 +44,12 @@ typedef enum {
   BY_STANDARD,
   BY_DATE,
   BY_DATE_ENTERED,
+  BY_DATE_RECONCILED,
   BY_NUM,
   BY_AMOUNT,
   BY_MEMO,
   BY_DESC,
+  BY_RECONCILE,
   BY_NONE
 } sort_type_t;  
 

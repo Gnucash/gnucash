@@ -1186,7 +1186,7 @@ xaccAccountGetParentAccount (Account * acc)
   return xaccGroupGetParentAccount(acc->parent);
 }
 
-int
+GNCAccountType
 xaccAccountGetType (Account *acc)
 {
    if (!acc) return NO_TYPE;

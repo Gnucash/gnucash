@@ -62,8 +62,8 @@
 /** DIALOG BOX MESSAGES: ********************************************/
 #define ABOUT_MSG         _("The GnuCash personal finance manager.\n"\
                             "The GNU way to manage your money!")
-#define ACC_ADJUST_MSG    _("To adjust an account's balance, you must first\n"\
-                            "choose an account to adjust.\n")
+#define ACC_ADJUST_MSG    _("To adjust an account's balance, you must "\
+                            "first\nchoose an account to adjust.\n")
 #define ACC_BAD_PARENT_MSG _("You must choose a valid parent account.")
 #define ACC_NEW_MSG       _("Do you want to create a new account?\n"\
                             "If not, then please select an account\n"\
@@ -82,8 +82,8 @@
                             "choose an account to reconcile.\n")
 #define AMOUNT_NUM_MSG    _("The amount must be a number.")
 #define BALANCE_NUM_MSG   _("The balance must be a number.")
-#define CHANGE_RECN_MSG   _("Do you really want to mark this transaction"\
-                            "not reconciled?\nDoing so might make future"\
+#define CHANGE_RECN_MSG   _("Do you really want to mark this transaction "\
+                            "not reconciled?\nDoing so might make future "\
                             "reconciliation difficult!")
 #define DEL_SPLITS_MSG    _("Delete all the splits")
 #define DEL_TRANS_MSG     _("Delete the whole transaction")
@@ -112,15 +112,15 @@
 #define FILE_ECLOSE_MSG   _("There was an error closing the file\n     %s.")
 #define FILE_NOT_FOUND_MSG _("The file \n    %s\n could not be found.")
 #define FILE_EMPTY_MSG    _("The file \n    %s\n is empty.")
-#define FMB_SAVE_MSG      _("Changes have been made since the last "\
+#define FMB_SAVE_MSG      _("Changes have been made since the last " \
                             "Save. Save the data to file?")
-#define FMB_EEXIST_MSG    _("The file \n    %s\n already exists.\n"\
+#define FMB_EEXIST_MSG    _("The file \n    %s\n already exists.\n" \
                             "Are you sure you want to overwrite it?")
-#define FMB_INVALID_MSG   _("The filepath \n    %s\n"\
+#define FMB_INVALID_MSG   _("The filepath \n    %s\n" \
                             "is not a valid location in the filesystem.")
-#define FMB_LOCKED_MSG    _("The file \n    %s\n"\
-                            "appears to be in use by another user.\n"\
-                            "If this is not right, remove the .LCK file "\
+#define FMB_LOCKED_MSG    _("The file \n    %s\n" \
+                            "appears to be in use by another user.\n" \
+                            "If this is not right, remove the .LCK file " \
                             "and try again.")
 #define GNOME_PRINT_MSG   _("You need to install the gnome-print library.")
 #define QIF_LOAD_FAILED_FORMAT_MSG _("QIF file load failed. %s")
@@ -130,12 +130,13 @@
 #define QUOTE_SRC_MSG     _("The source for price quotes")
 #define RECN_BALN_WARN    _("The account is not balanced.\n" \
                             "Are you sure you want to finish?")
-#define RECN_CANCEL_WARN  _("You have made changes to this reconcile window.\n"\
-                            "Are you sure you want to cancel?")
-#define RECN_TRANS_WARN   _("Warning! This is a reconciled transaction. "\
+#define RECN_CANCEL_WARN  _("You have made changes to this reconcile " \
+                            "window.\nAre you sure you want to cancel?")
+#define RECN_TRANS_WARN   _("Warning! This is a reconciled transaction. " \
                             "Do you want do continue?")
-#define REG_CURR_MSG      _("You cannot transfer funds from the %s account.\n"\
-                            "It does not have a matching currency.")
+#define REG_CURR_MSG      _("You cannot transfer funds from the %s " \
+                            "account.\nIt does not have a matching " \
+                            "currency.")
 #define REPORT_ERR_MSG    _("Error executing scheme report.")
 #define REPORT_NOPARM_MSG _("This report has no parameters.")
 #define SHOW_CAT_MSG      _("Show the income and expense accounts.")
@@ -161,14 +162,16 @@
                             "They do not have a common currency.")
 #define XFER_DIFF_MSG     _("The \"From\" and \"To\" accounts\n must be " \
                             "different!")
-#define XFER_SAME_MSG     _("You can't transfer from and to the same account!")
+#define XFER_SAME_MSG     _("You can't transfer from and to the same " \
+                            "account!")
 #define XFER_NO_ACC_MSG   _("You must specify an account to transfer from,\n"\
                             "or to, or both, for this transaction.\n" \
                             "Otherwise, it will not be recorded.")
 
 
 /* Tooltip phrases */
-#define TOOLTIP_ADJUST_N       N_("Adjust the balance of the selected account")
+#define TOOLTIP_ADJUST_N       N_("Adjust the balance of the selected " \
+                                  "account")
 #define TOOLTIP_ADJUST          _(TOOLTIP_ADJUST_N)
 #define TOOLTIP_ADJUST_AMOUNT   _("Enter the new balance")
 #define TOOLTIP_ADJUST_DATE     _("Enter the date you want the balance "\
@@ -259,6 +262,9 @@
 #define TOOLTIP_RECN_CANCEL     _(TOOLTIP_RECN_CANCEL_N)
 #define TOOLTIP_RECN_FINISH_N  N_("Finish the reconciliation of this account")
 #define TOOLTIP_RECN_FINISH     _(TOOLTIP_RECN_FINISH_N)
+#define TOOLTIP_RECN_INFO_N    N_("Change the reconcile information "\
+                                  "including statement date and ending "\
+                                  "balance.")
 #define TOOLTIP_RECN_REG_N     N_("Reconcile the main account for this "\
                                   "register")
 #define TOOLTIP_RECN_REG        _(TOOLTIP_RECN_REG_N)
@@ -275,8 +281,8 @@
 #define TOOLTIP_SCRUB_SUB_N    N_("Identify and fix problems in the account "\
                                   "and its subaccounts")
 #define TOOLTIP_SCRUB_SUB       _(TOOLTIP_SCRUB_SUB_N)
-#define TOOLTIP_SCRUB_REG_N    N_("Identify and fix problems in the accounts "\
-                                  "of this register")
+#define TOOLTIP_SCRUB_REG_N    N_("Identify and fix problems in the "\
+                                  "accounts of this register")
 #define TOOLTIP_SCRUB_REG       _(TOOLTIP_SCRUB_REG_N)
 #define TOOLTIP_SET_DEFAULT     _("Set the option to its default value")
 #define TOOLTIP_SHOW_ALL_N     N_("Show all of the transactions in the "\
@@ -296,9 +302,13 @@
 #define TOOLTIP_SORT_BY_MEMO    _(TOOLTIP_SORT_BY_MEMO_N)
 #define TOOLTIP_SORT_BY_NUM_N  N_("Sort by Num, then Date, then Amount")
 #define TOOLTIP_SORT_BY_NUM     _(TOOLTIP_SORT_BY_NUM_N)
+#define TOOLTIP_SORT_BY_STMT_N N_("Sort by the statement date "\
+                                  "(unreconciled items last")
+#define TOOLTIP_SORT_BY_STMT    _(TOOLTIP_SORT_BY_STMT_N)
 #define TOOLTIP_STANDARD_ORD_N N_("Keep normal account order")
 #define TOOLTIP_STANDARD_ORD    _(TOOLTIP_STANDARD_ORD_N)
-#define TOOLTIP_TRANSFER_N     N_("Transfer funds from one account to another")
+#define TOOLTIP_TRANSFER_N     N_("Transfer funds from one account to "\
+                                  "another")
 #define TOOLTIP_TRANSFER        _(TOOLTIP_TRANSFER_N)
 
 
@@ -368,6 +378,7 @@
 #define PREFERENCES_MENU_STR      _("_Preferences")
 #define PREFERENCES_MENU_E_STR_N N_("_Preferences...")
 #define PRINT_CHECK_MENU_E_STR_N N_("_Print Check... (unfinished!)")
+#define RECN_INFO_MENU_E_STR_N   N_("_Reconcile Information...")
 #define RECONCILE_MENU_E_STR_N   N_("_Reconcile...")
 #define RECONCILE_MENU_STR_N     N_("_Reconcile")
 #define RECONCILE_MENU_STR        _(RECONCILE_MENU_STR_N)
@@ -482,11 +493,14 @@
 #define SORT_BY_MEMO_STR    _(SORT_BY_MEMO_STR_N)
 #define SORT_BY_NUM_STR_N  N_("Sort by Num")
 #define SORT_BY_NUM_STR     _(SORT_BY_NUM_STR_N)
+#define SORT_BY_STMT_STR_N N_("Sort by statement date")
+#define SORT_BY_STMT_STR    _(SORT_BY_STMT_STR_N)
 #define SORT_ORDER_STR      _("Sort Order")
 #define START_DATE_STR      _("Start date")
 #define START_BALN_STR      _("Starting Balance")
 #define STANDARD_ORDER_STR_N N_("Standard order")
 #define STANDARD_ORDER_STR    _(STANDARD_ORDER_STR_N)
+#define STATEMENT_DATE_C_STR _("Statement Date:")
 #define TOP_ACCT_STR        _("Top level account")
 #define TOTAL_SHARES_STR    _("Total Shares")
 #define VERIFY_CHANGES_STR  _("Verify Changes")
@@ -595,7 +609,7 @@
 #define PARAMETERS_STR      _("Parameters")
 #define PAYMENT_STR         _("Payment")
 #define PORTFOLIO_STR       _("Portfolio")
-#define POS_STR             _("POS")    /* Point of Sale credit card machine */
+#define POS_STR             _("POS")   /* Point of Sale credit card machine */
 #define PREFERENCES_STR     _("Preferences")
 #define PRICE_STR           _("Price")
 #define PRINT_STR           _("Print")

@@ -149,7 +149,7 @@ void xaccAccountSetNotes (Account *, const char *);
 void xaccAccountSetCurrency (Account *, const char *);
 void xaccAccountSetSecurity (Account *, const char *);
 
-int            xaccAccountGetType (Account *);
+GNCAccountType xaccAccountGetType (Account *);
 char *         xaccAccountGetName (Account *);
 char *         xaccAccountGetFullName (Account *, const char separator);
 char *         xaccAccountGetCode (Account *);

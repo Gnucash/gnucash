@@ -337,6 +337,10 @@ gnc_register_sort(RegWindow *regData, int sort_code)
     case BY_DATE_ENTERED:
       xaccQuerySetSortOrder(query, BY_DATE_ENTERED, BY_STANDARD, BY_NONE);
       break;
+    case BY_DATE_RECONCILED:
+      xaccQuerySetSortOrder(query, BY_RECONCILE, BY_DATE_RECONCILED,
+                            BY_STANDARD);
+      break;
     case BY_NUM:
       xaccQuerySetSortOrder(query, BY_NUM, BY_DATE, BY_AMOUNT);
       break;
@@ -379,6 +383,14 @@ gnc_register_sort_date_entered_cb(GtkWidget *w, gpointer data)
   RegWindow *regData = data;
 
   gnc_register_sort(regData, BY_DATE_ENTERED);
+}
+
+static void
+gnc_register_sort_date_reconciled_cb(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
+
+  gnc_register_sort(regData, BY_DATE_RECONCILED);
 }
 
 static void
@@ -497,7 +509,7 @@ gnc_register_set_date_range(RegWindow *regData)
   toggle = GTK_TOGGLE_BUTTON(regDateData->show_earliest);
 
   xaccQueryPurgeTerms(regData->ledger->query, PD_DATE);
-    
+
   if (!gtk_toggle_button_get_active(toggle)) {
     time_t start;
     
@@ -1070,7 +1082,12 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
                                gnc_register_sort_date_cb, NULL, NULL),
     GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_ENTERED_STR_N,
                                TOOLTIP_SORT_BY_ENTERED_N,
-                               gnc_register_sort_date_entered_cb, NULL, NULL),
+                               gnc_register_sort_date_entered_cb,
+                               NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_STMT_STR_N,
+                               TOOLTIP_SORT_BY_STMT_N,
+                               gnc_register_sort_date_reconciled_cb,
+                               NULL, NULL),
     GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_NUM_STR_N, TOOLTIP_SORT_BY_NUM_N,
                                gnc_register_sort_num_cb, NULL, NULL),
     GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_AMNT_STR_N, TOOLTIP_SORT_BY_AMNT_N,

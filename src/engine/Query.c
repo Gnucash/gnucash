@@ -418,6 +418,26 @@ acct_query_matches(QueryTerm * qt, Account * acct) {
 
 static Query * split_sort_query = NULL;
 
+static int
+date_cmp_func(Timespec *t1, Timespec *t2) {
+  /* check seconds */
+  if (t1->tv_sec < t2->tv_sec) {
+    return -1;
+  }
+  else if (t1->tv_sec > t2->tv_sec) {
+    return +1;
+  }
+
+  /* else, seconds match. check nanoseconds */
+  if (t1->tv_nsec < t2->tv_nsec) {
+    return -1;
+  }
+  else if (t1->tv_nsec > t2->tv_nsec) {
+    return +1;
+  }
+
+  return 0;
+}
 
 static int
 split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) {
@@ -452,56 +472,25 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) {
     break;
 
   case BY_DATE:
-    /* if dates differ, return */ 
-    if ( (ta->date_posted.tv_sec) < 
-         (tb->date_posted.tv_sec)) { 
-      return -1; 
-    } 
-    else if ((ta->date_posted.tv_sec) > 
-             (tb->date_posted.tv_sec)) { 
-      return +1; 
-    } 
-    
-    /* else, seconds match. check nanoseconds */ 
-    if ( (ta->date_posted.tv_nsec) < 
-         (tb->date_posted.tv_nsec)) { 
-      return -1; 
-    } 
-    else if ( (ta->date_posted.tv_nsec) > 
-              (tb->date_posted.tv_nsec)) { 
-      return +1; 
-    }
-    return 0;
+    return date_cmp_func(&(ta->date_posted), &(tb->date_posted));
+
     break;
 
   case BY_DATE_ENTERED:
-    /* if dates differ, return */ 
-    if ( (ta->date_entered.tv_sec) < 
-         (tb->date_entered.tv_sec)) { 
-      return -1; 
-    } 
-    else if ((ta->date_entered.tv_sec) > 
-             (tb->date_entered.tv_sec)) { 
-      return +1; 
-    } 
+    return date_cmp_func(&(ta->date_entered), &(tb->date_entered));
 
-    /* else, seconds match. check nanoseconds */ 
-    if ( (ta->date_entered.tv_nsec) < 
-         (tb->date_entered.tv_nsec)) { 
-      return -1; 
-    } 
-    else if ( (ta->date_entered.tv_nsec) > 
-              (tb->date_entered.tv_nsec)) { 
-      return +1; 
-    }
-    return 0;
+    break;
+
+  case BY_DATE_RECONCILED:
+    return date_cmp_func(&(sa->date_reconciled), &(sb->date_reconciled));
+
     break;
 
   case BY_NUM:
     /* sort on transaction number */              
-    da = ta->num;                                 
-    db = tb->num;                                 
-    if (gnc_strisnum(da)) {                       
+    da = ta->num;
+    db = tb->num;
+    if (gnc_strisnum(da)) {
       if (!gnc_strisnum(db)) {                    
         return -1;                                
       }                                           
@@ -583,7 +572,30 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) {
       return 0;
     }
     break;
-    
+
+  case BY_RECONCILE:
+    /* Reconcile flags are sorted as: FREC = YREC < CREC = NREC */
+    switch (sa->reconciled) {
+      case YREC:
+      case FREC:
+        if (sb->reconciled == YREC)
+          return 0;
+        if (sb->reconciled == FREC)
+          return 0;
+        return -1;
+        break;
+
+      case CREC:
+      case NREC:
+        if (sb->reconciled == CREC)
+          return 0;
+        if (sb->reconciled == NREC)
+          return 0;
+        return 1;
+        break;
+    }
+    break;
+
   case BY_NONE:
     return 0;
     break;

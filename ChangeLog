@@ -1,3 +1,24 @@
+2000-05-18  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-reconcile.c: make the finish button sensitivity
+	depend on whether the reconciliation is balanced.
+
+	* src/register/gnome/gnucash-sheet.c
+	(gnucash_sheet_activate_cursor_cell): if the callback changes the
+	value, redraw.
+
+2000-05-17  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/engine/Query.c: allow sorting by reconciled date and
+	reconcile status.
+
+	* src/gnome/window-reconcile.c: add a 'statement date' to the
+	reconciliation date. This date is used to set all the reconcile
+	dates of the splits that get reconciled.
+
+	* src/engine/Transaction.c (xaccSplitSetReconcile): don't change
+	the reconcile date when the reconcile status is changed.
+
 2000-05-18  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/transaction-report-2.scm: Fixed *some* of the

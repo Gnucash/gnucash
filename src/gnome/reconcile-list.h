@@ -94,7 +94,7 @@ void gnc_reconcile_list_refresh (GNCReconcileList *list);
 
 double gnc_reconcile_list_reconciled_balance(GNCReconcileList *list);
 
-void gnc_reconcile_list_commit(GNCReconcileList *list);
+void gnc_reconcile_list_commit(GNCReconcileList *list, time_t date);
 
 void gnc_reconcile_list_unselect_all(GNCReconcileList *list);
 
