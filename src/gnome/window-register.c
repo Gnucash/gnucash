@@ -42,7 +42,6 @@
 #include "window-reconcile.h"
 #include "AccWindow.h"
 #include "window-help.h"
-#include "AdjBWindow.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "query-user.h"
@@ -126,7 +125,6 @@ static void startRecnCB(GtkWidget *w, gpointer data);
 static void xferCB(GtkWidget *w, gpointer data);
 static void editCB(GtkWidget *w, gpointer data);
 static void helpCB(GtkWidget *w, gpointer data);
-static void startAdjBCB(GtkWidget * w, gpointer data);
 static void newAccountCB(GtkWidget * w, gpointer data);
 static void deleteCB(GtkWidget *w, gpointer data);
 static void duplicateCB(GtkWidget *w, gpointer data);
@@ -1221,13 +1219,6 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
-    {
-      GNOME_APP_UI_ITEM,
-      ADJ_BALN_MENU_E_STR_N, TOOLTIP_ADJUST_REG_N,
-      startAdjBCB, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
@@ -2023,28 +2014,6 @@ pasteTransCB(GtkWidget *w, gpointer data)
   RegWindow *regData = data;
 
   xaccSRPasteCurrent(regData->ledger->ledger);
-}
-
-
-/********************************************************************\
- * startAdjBCB -- open up the adjust balance window... called       *
- *   from the menubar.                                              *
- *                                                                  *
- * Args:    w - the widget that called us                           *
- *       data - the data struct for this register                   *
- * Return: none                                                     *
-\********************************************************************/
-static void 
-startAdjBCB(GtkWidget * w, gpointer data)
-{
-  RegWindow *regData = (RegWindow *) data;
-  xaccLedgerDisplay *ledger = regData->ledger;
-  Account *account = ledger->leader;
-
-  if (account == NULL)
-    return;
-
-  adjBWindow(account);
 }
 
 

@@ -47,7 +47,6 @@ gnucash_SOURCES = \
 
 noinst_HEADERS = \
   AccWindow.h \
-  AdjBWindow.h \
   Destroy.h \
   EuroUtils.h \
   FileBox.h \

@@ -25,7 +25,6 @@
 #include "Refresh.h"
 #include "MultiLedger.h"
 #include "RecnWindow.h"
-#include "AdjBWindow.h"
 #include "AccWindow.h"
 
 #include "util.h"
@@ -59,7 +58,6 @@ gnc_account_ui_refresh(Account *account)
 
    xaccAccountDisplayRefresh(account);
    recnRefresh(account);
-   adjBRefresh(account);
    gnc_ui_refresh_edit_account_window(account);
 }
 

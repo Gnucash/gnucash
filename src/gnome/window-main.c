@@ -30,7 +30,6 @@
 
 #include "gnome-top-level.h"
 #include "AccWindow.h"
-#include "AdjBWindow.h"
 #include "global-options.h"
 #include "dialog-options.h"
 #include "FileDialog.h"
@@ -617,17 +616,6 @@ gnc_ui_mainWindow_transfer(GtkWidget *widget, gpointer data)
 }
 
 static void
-gnc_ui_mainWindow_adjust_balance(GtkWidget *widget, gpointer data)
-{
-  Account *account = gnc_get_current_account();
-
-  if (account != NULL)
-    adjBWindow(account);
-  else
-    gnc_error_dialog(ACC_ADJUST_MSG);
-}
-
-static void
 gnc_ui_mainWindow_scrub(GtkWidget *widget, gpointer data)
 {
   Account *account = gnc_get_current_account();
@@ -1156,13 +1144,6 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
       gnc_ui_mainWindow_transfer, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       't', GDK_CONTROL_MASK, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      ADJ_BALN_MENU_E_STR_N, TOOLTIP_ADJUST_N,
-      gnc_ui_mainWindow_adjust_balance, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      'b', GDK_CONTROL_MASK, NULL
     },
     GNOMEUIINFO_SEPARATOR,
     {

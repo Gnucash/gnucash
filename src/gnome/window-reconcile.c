@@ -51,7 +51,6 @@
 #include "enriched-messages.h"
 #include "guile-util.h"
 #include "AccWindow.h"
-#include "AdjBWindow.h"
 #include "Scrub.h"
 #include "util.h"
 #include "date.h"
@@ -778,18 +777,6 @@ gnc_recn_xfer_cb(GtkWidget * w, gpointer data)
   gnc_xfer_dialog(recnData->window, account);
 }
 
-static void 
-gnc_recn_adjust_cb(GtkWidget * w, gpointer data)
-{
-  RecnWindow *recnData = data;
-  Account *account = recnData->account;
-
-  if (account == NULL)
-    return;
-
-  adjBWindow(account);
-}
-
 static void
 gnc_recn_scrub_cb(GtkWidget *widget, gpointer data)
 {
@@ -1026,13 +1013,6 @@ gnc_recn_create_menu_bar(RecnWindow *recnData, GtkWidget *statusbar)
       GNOME_APP_UI_ITEM,
       TRANSFER_MENU_E_STR_N, TOOLTIP_TRANSFER_N,
       gnc_recn_xfer_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      ADJ_BALN_MENU_E_STR_N, TOOLTIP_ADJUST_N,
-      gnc_recn_adjust_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },

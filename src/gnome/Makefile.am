@@ -28,7 +28,6 @@ libgncgnome_a_SOURCES = \
   query-user.c \
   reconcile-list.c \
   top-level.c \
-  window-adjust.c \
   window-help.c \
   window-html.c \
   window-main.c \
