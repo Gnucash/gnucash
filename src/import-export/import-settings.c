@@ -84,6 +84,7 @@ struct _genimportsettings {
   /** The allowed amount range for fuzzy amount matching, 
       in the users default commodity.*/
   double fuzzy_amount;
+  gint match_date_hardlimit;
 };
 
 
@@ -122,7 +123,8 @@ gnc_import_Settings_new (void)
   settings->fuzzy_amount =
     gnc_lookup_number_option(MATCHER_PREF_PAGE,"Commercial ATM fees threshold",
 			     DEFAULT_ATM_FEE_THRESHOLD);
-  
+
+  settings->match_date_hardlimit = 42; /* 6 weeks */
   return settings;
 }
 
@@ -182,5 +184,16 @@ gint gnc_import_Settings_get_display_threshold (GNCImportSettings *settings)
   g_assert (settings);
   return settings->display_threshold;
 };
+
+void gnc_import_Settings_set_match_date_hardlimit (GNCImportSettings *s, gint m)
+{ 
+  g_assert(s);
+  s->match_date_hardlimit = m;
+}
+gint gnc_import_Settings_get_match_date_hardlimit (const GNCImportSettings *s)
+{
+  g_assert(s);
+  return s->match_date_hardlimit;
+}
 
 /**@}*/

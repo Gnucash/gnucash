@@ -36,8 +36,17 @@ typedef struct _genimportsettings GNCImportSettings;
 
 
 
-/** Allocates a new GNCImportSettings object, and initialize it with the
-    appropriate user prefs.
+/** Allocates a new GNCImportSettings object, and initialize it with
+ *    the appropriate user prefs.
+ *
+ * @param match_date_hardlimit The number of days that a matching
+ * split may differ from the given transaction before it is discarded
+ * immediately. In other words, any split that is more distant from
+ * the given transaction than this match_date_hardlimit days will be
+ * ignored altogether. For use cases without paper checks (e.g. HBCI),
+ * values like 14 (days) might be appropriate, whereas for use cases
+ * with paper checks (e.g. OFX, QIF), values like 42 (days) seem more
+ * appropriate. 
 */
 GNCImportSettings * 
 gnc_import_Settings_new (void);
@@ -83,6 +92,20 @@ gint gnc_import_Settings_get_add_threshold (GNCImportSettings *settings);
 /** Return the selected threshold.
 */
 gint gnc_import_Settings_get_display_threshold (GNCImportSettings *settings);
+
+/** @param match_date_hardlimit The number of days that a matching
+ * split may differ from the given transaction before it is discarded
+ * immediately. In other words, any split that is more distant from
+ * the given transaction than this match_date_hardlimit days will be
+ * ignored altogether. For use cases without paper checks (e.g. HBCI),
+ * values like 14 (days) might be appropriate, whereas for use cases
+ * with paper checks (e.g. OFX, QIF), values like 42 (days) seem more
+ * appropriate. 
+ */
+void gnc_import_Settings_set_match_date_hardlimit (GNCImportSettings *settings, gint match_date_hardlimit);
+/** Returns the hard-limiting number of days that a matching split may differ. */
+gint gnc_import_Settings_get_match_date_hardlimit (const GNCImportSettings *settings);
+
 /**@}*/
 /**@}*/
 

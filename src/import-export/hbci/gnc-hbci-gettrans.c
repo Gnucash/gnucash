@@ -206,7 +206,7 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
   if (trans_list && (AB_Transaction_List2_GetSize(trans_list) > 0)) {
     struct trans_list_data data;
     GNCImportMainMatcher *importer_generic_gui = 
-      gnc_gen_trans_list_new(NULL, NULL, TRUE);
+      gnc_gen_trans_list_new(NULL, NULL, TRUE, 14);
 
     data.importer_generic = importer_generic_gui;
     data.gnc_acc = gnc_acc;
