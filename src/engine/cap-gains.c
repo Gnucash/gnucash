@@ -367,6 +367,27 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
    /* If this split already belongs to a lot, we are done. */
    if (split->lot) return NULL;
 
+   /* Anomolous situation; except for voided transactions, 
+    * we don't expect to see splits with no amount .. 
+    * unless they're gains splits, and we shouldn't see those. 
+    */
+   if (gnc_numeric_zero_p (split->amount))
+   {
+     if (xaccTransGetVoidStatus(split->parent)) return NULL;
+
+     PWARN ("split with zero amount; value=%s gflag=%x gsplit=%p",
+            gnc_numeric_to_string (split->amount), 
+            split->gains,
+            split->gains_split);
+     if (split->gains_split)
+     {
+       PWARN ("gains amt=%s value=%s", 
+              gnc_numeric_to_string (split->gains_split->amount),
+              gnc_numeric_to_string (split->gains_split->value));
+     }
+     return NULL;
+   }
+
    /* If the lot is closed, we can't add anything to it */
    baln = gnc_lot_get_balance (lot);
    if (gnc_lot_is_closed (lot)) return split;
@@ -465,6 +486,11 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
               gnc_numeric_to_string(val_tot),
               gnc_numeric_to_string(amt_a),
               gnc_numeric_to_string(amt_tot));
+      }
+
+      if (gnc_numeric_zero_p(val_a) || gnc_numeric_zero_p(val_b))
+      {
+         PERR ("Failed to split into two!");
       }
 
       PINFO ("split value is = %s = %s + %s",
@@ -743,7 +769,9 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    if (0 > gnc_numeric_compare (gnc_numeric_abs(opening_amount),
                                 gnc_numeric_abs(split->amount)))
    {
-      PERR ("Malformed Lot! (too thin!)");
+      PERR ("Malformed Lot! (too thin!) opening amt=%s split amt=%s ",
+             gnc_numeric_to_string (opening_amount),
+             gnc_numeric_to_string (split->amount));
       return;
    }
    if ( (gnc_numeric_negative_p(opening_amount) ||
@@ -751,7 +779,9 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
         (gnc_numeric_positive_p(opening_amount) ||
          gnc_numeric_negative_p(split->amount)))
    {
-      PERR ("Malformed Lot! (too fat!)");
+      PERR ("Malformed Lot! (too fat!) opening amt=%s split amt=%s ",
+             gnc_numeric_to_string (opening_amount),
+             gnc_numeric_to_string (split->amount));
       return;
    }
 
