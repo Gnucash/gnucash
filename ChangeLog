@@ -5,6 +5,9 @@
 	  - Made Accounts h-scroll box policy automatic.
 	  - Reordered the containing table to two rows, one column
 
+	* configure.in:
+	  change the version number to 1.99 to make it different than HEAD.
+
 2004-12-04  Derek Atkins  <derek@ihtfp.com>
 
 	Fix some deprecated functions:

@@ -26,7 +26,7 @@ dnl Process this file with autoconf to produce a configure script.
 ### check for various programs, and stuff (do this first because later
 ### commands depend on them):
 
-AC_INIT(gnucash, 1.9.0, http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash)
+AC_INIT(gnucash, 1.99.0, http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
 AM_CONFIG_HEADER(config.h)
