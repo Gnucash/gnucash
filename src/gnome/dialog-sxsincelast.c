@@ -2583,12 +2583,8 @@ create_each_transaction_helper( Transaction *t, void *d )
                 /* set a kvp-frame element in the transaction indicating and
                  * pointing-to the SX this was created from. */
                 txn_frame = xaccTransGetSlots( newT );
-                if ( txn_frame == NULL ) {
-                        txn_frame = kvp_frame_new();
-                        xaccTransSetSlots_nc( newT, txn_frame );
-                }
-                kvp_val = kvp_value_new_guid( xaccSchedXactionGetGUID(tci->parentTCT->sx) );
-                kvp_frame_set_slot( txn_frame, "from-sched-xaction", kvp_val );
+                kvp_frame_set_guid ( txn_frame, "from-sched-xaction", 
+                              xaccSchedXactionGetGUID(tci->parentTCT->sx) );
         }
 
         if ( errFlag ) {
