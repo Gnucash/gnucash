@@ -352,13 +352,12 @@ SGI IRIX              -- MIPS
 IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
 Unixware 7            -- Intel
 SCO OpenServer 5.0.4  -- Intel
+Solaris               -- Sparc  
 
 See ftp://ftp.gnucash.org/pub/xacc (high-bandwdith)
 or  http://linas.org/linux/xacc (slowwww ) 
 for precompiled binaries for these platforms
 
-GnuCash seems to be having problems with:
-Solaris -- Sparc  -- won't compile due to va-args in XmHTML
 
 Additional Download Sites:
 --------------------------
