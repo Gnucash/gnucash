@@ -274,7 +274,7 @@
 
 ;; This one returns the ready-to-use function for calculation of the
 ;; exchange rates. The returned function takes a <gnc-monetary> and
-;; the domestic-commodity, exchanges the amount in the domestic
+;; the domestic-commodity, exchanges the amount into the domestic
 ;; currency and returns a <gnc-monetary>.
 (define (gnc:make-exchange-function exchange-alist)
   (let ((exchangelist exchange-alist))
@@ -291,6 +291,66 @@
                                   (gnc:commodity-get-fraction domestic)
 				  GNC-RND-ROUND))))
 	  #f))))
+
+;; Helper for gnc:exchange-by-pricedb-* below. 'price' gets tested for
+;; #f here, and gets unref'd here too. Returns a <gnc:monetary>.
+(define (gnc:exchange-by-price-helper
+	 foreign domestic price)
+  (if (gnc:gnc-monetary? foreign)
+      (gnc:make-gnc-monetary 
+       domestic
+       (if price
+	   (let ((result
+		  (gnc:numeric-mul (gnc:gnc-monetary-amount foreign) 
+				   (gnc:price-get-value price)
+				   (gnc:commodity-get-fraction domestic)
+				   GNC-RND-ROUND)))
+	     (gnc:price-unref price)
+	     result)
+	   (begin
+	     (warn "gnc:exchange-by-price-helper: No price found for "
+		   (gnc:commodity-value->string foreign) " into "
+		   (gnc:commodity-value->string 
+		    (list domestic (gnc:numeric-zero))))
+	     (gnc:numeric-zero))))
+      #f))
+
+;; This is another ready-to-use function for calculation of exchange
+;; rates. (Note that this is already the function itself. It doesn't
+;; return a function as opposed to make-exchange-function.) It takes
+;; the <gnc-monetary> 'foreign' amount and the <gnc:commodity*>
+;; 'domestic' commodity. It exchanges the amount into the domestic
+;; currency, using the latest price from the pricedb. The function
+;; returns a <gnc-monetary>.
+(define (gnc:exchange-by-pricedb-latest 
+	 foreign domestic)
+  (if (and (record? foreign) (gnc:gnc-monetary? foreign))
+      (gnc:exchange-by-price-helper
+       foreign domestic
+       (gnc:pricedb-lookup-latest 
+	(gnc:gnc-monetary-commodity foreign)
+	domestic))
+      #f))
+
+;; Yet another ready-to-use function for calculation of exchange
+;; rates. (Note that this is already the function itself. It doesn't
+;; return a function as opposed to make-exchange-function.) It takes
+;; the <gnc-monetary> 'foreign' amount, the <gnc:commodity*>
+;; 'domestic' commodity *and* a <gnc:time-pair> 'date'. It exchanges
+;; the amount into the domestic currency, using a price from the
+;; pricedb according to the given date. The function returns a
+;; <gnc-monetary>.
+(define (gnc:exchange-by-pricedb-nearest
+	 foreign domestic date)
+  (if (and (record? foreign) (gnc:gnc-monetary? foreign)
+	   date)
+      (gnc:exchange-by-price-helper
+       foreign domestic
+       (gnc:pricedb-lookup-nearest-in-time
+	(gnc:gnc-monetary-commodity foreign)
+	domestic date))
+      #f))
+
 
 ;; Adds all different commodities in the commodity-collector <foreign>
 ;; by using the exchange rates of <exchange-fn> to calculate the

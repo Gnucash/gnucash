@@ -1,3 +1,8 @@
+2001-04-26  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/commodity-utilities.scm
+	(gnc:exchange-by-pricedb-{latest,nearest}): new functions.
+
 2001-04-26  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/window-main.c: handle scm parsing errors
