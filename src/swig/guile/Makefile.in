@@ -21,6 +21,7 @@ include @top_srcdir@/Makefile.init
 
 INCLPATH = \
            -I. \
+           -I@top_srcdir@/ \
            -I@top_srcdir@/src \
            -I@top_srcdir@/src/swig\
            -I@top_srcdir@/src/engine \
@@ -28,7 +29,6 @@ INCLPATH = \
            -I@top_srcdir@/src/guile \
            -I@top_srcdir@/include \
            -I@top_srcdir@/lib/ComboBox-1.33 \
-           -I@top_srcdir@/@XMHTML_INC@ \
            -I@top_srcdir@/lib/Xbae-4.6.2-linas \
            -I$(prefix)/include
 
