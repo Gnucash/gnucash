@@ -5,8 +5,8 @@
 </ARTHEADER>
 
 
-
-
+    <sect1>
+      <title></title>
 <PARA>
 <TABLE>
 <TITLE>Detailed TXF Category Descriptions</TITLE>
@@ -1039,7 +1039,7 @@ The fair market value of donated property, such as used clothing or furniture.</
 </TGROUP>
 </TABLE>
 </PARA>
-
+</sect1>
 </ARTICLE>
  
 <!-- Local variables: -->
