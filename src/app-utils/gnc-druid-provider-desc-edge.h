@@ -41,9 +41,13 @@ struct _GNCDruidProviderDescEdgeClass
 
 GType	gnc_druid_provider_desc_edge_get_type(void);
 GNCDruidProviderDescEdge* gnc_druid_provider_desc_edge_new(void);
+GNCDruidProviderDescEdge*
+gnc_druid_provider_desc_edge_new_with_data(GNCDruidProviderDescEdgeWhich,
+					   const gchar* title,
+					   const gchar* text);
 
 void	gnc_druid_provider_desc_edge_set_text(GNCDruidProviderDescEdge*,
-					       const char* text);
+					       const gchar* text);
 void	gnc_druid_provider_desc_edge_set_which(GNCDruidProviderDescEdge*,
 					       GNCDruidProviderDescEdgeWhich);
 

@@ -11,6 +11,7 @@
 #include <glib-object.h>
 #include <libgnomeui/libgnomeui.h>
 #include "gnc-druid.h"
+#include "gnc-druid-gnome-ui.h"
 
 #define G_TYPE_GNC_DRUID_GNOME	(gnc_druid_gnome_get_type())
 #define GNC_DRUID_GNOME(obj)		G_TYPE_CHECK_INSTANCE_CAST((obj), G_TYPE_GNC_DRUID_GNOME, GNCDruidGnome)
@@ -21,8 +22,6 @@
 
 typedef struct _GNCDruidGnome GNCDruidGnome;
 typedef struct _GNCDruidGnomeClass GNCDruidGnomeClass;
-
-#define GNC_DRUID_GNOME_UI	"gnome"
 
 struct _GNCDruidGnome
 {

@@ -1,3 +1,19 @@
+2004-01-14  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/gnc-druid-provider-desc-edge.[ch]: add api to
+	  build the provider-desc in one function.
+	* src/app-utils/gnc-druid-provider.[ch]: remove get_pages API;
+	  the sub-class should just insert the list of pages and let
+	  us deal with it.  Also added a last_page() method.
+	* src/app-utils/gnc-druid.c: make sure to delete the providers
+	  when we shut down.
+	* src/gnome-utils/gnc-druid-gnome*.h: move the definition of the
+	  gnome UI to a header that actually get's installed as opposed to
+	  an internal header.
+	* src/gnome-utils/gnc-druid-provider-edge-gnome.[ch]: Implement
+	  a gnome-druid edge-page (first/last page in the druid).  Probably
+	  still need to hook into the next/prev buttons.
+
 2004-01-13  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: pull in gobject with glib

@@ -44,6 +44,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-date-format.c \
   gnc-dense-cal.c \
   gnc-druid-gnome.c \
+  gnc-druid-provider-edge-gnome.c \
   gnc-frequency.c \
   gnc-general-select.c \
   gnc-gconf-utils.c \
@@ -91,6 +92,7 @@ gncinclude_HEADERS = \
   gnc-date-edit.h \
   gnc-date-format.h \
   gnc-dense-cal.h \
+  gnc-druid-gnome-ui.h \
   gnc-frequency.h \
   gnc-general-select.h \
   gnc-gconf-utils.h \
@@ -122,6 +124,7 @@ noinst_HEADERS = \
   argv-list-converters.h \
   gnc-dir.h \
   gnc-druid-gnome.h \
+  gnc-druid-provider-edge-gnome.h \
   gnc-version.h \
   gw-gnome-utils.h \
   search-param.h

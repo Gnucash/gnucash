@@ -52,12 +52,15 @@ static void
 gnc_druid_finalize (GObject *obj)
 {
   GNCDruid *druid = (GNCDruid *)obj;
+  GList *node;
 
   /* Cancel the backend context */
   if (druid->cancel)
     (druid->cancel)(druid->be_ctx);
 
-  /* Destroy the provider list (the providers themselves are destroyed elsewhere) */
+  /* Destroy list of providers */
+  for (node = druid->providers; node; node = node->next)
+    g_object_unref(G_OBJECT(node->data));
   g_list_free(druid->providers);
 
   G_OBJECT_CLASS (parent_class)->finalize(obj);

@@ -68,6 +68,25 @@ gnc_druid_provider_desc_edge_new(void)
   return GNC_DRUID_PROVIDER_DESC_EDGE(g_object_new(G_TYPE_GNC_DRUID_PROVIDER_DESC_EDGE, NULL));
 }
 
+GNCDruidProviderDescEdge*
+gnc_druid_provider_desc_edge_new_with_data(GNCDruidProviderDescEdgeWhich which,
+					   const gchar* title,
+					   const gchar* text)
+{
+  GNCDruidProviderDescEdge* desc;
+
+  desc = gnc_druid_provider_desc_edge_new();
+  g_assert(desc);
+
+  gnc_druid_provider_desc_edge_set_which(desc, which);
+  if (text)
+    gnc_druid_provider_desc_edge_set_text(desc, text);
+  if (title)
+    gnc_druid_provider_desc_set_title(GNC_DRUID_PROVIDER_DESC(desc), title);
+
+  return desc;
+}
+
 void
 gnc_druid_provider_desc_edge_set_text(GNCDruidProviderDescEdge* desc,
 				      const gchar* text)
