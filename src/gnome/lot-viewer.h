@@ -28,7 +28,7 @@
 
 typedef struct _GNCLotViewer GNCLotViewer;
 
-
-GNCLotViewer * gnc_lot_viewer_dialog (GtkWidget *, Account *);
+/** Create and realize and show a lot-viewing dialog. */
+GNCLotViewer * gnc_lot_viewer_dialog (Account *);
 
 #endif /* LOT_VIEWER_H */

@@ -1384,8 +1384,7 @@ gnc_register_lots_cb (GtkWidget * w, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnc_lot_viewer_dialog (regData->window,
-                   gnc_ledger_display_leader (regData->ledger));
+  gnc_lot_viewer_dialog (gnc_ledger_display_leader (regData->ledger));
 }
 
 /********************************************************************\

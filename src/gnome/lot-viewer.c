@@ -28,7 +28,7 @@
  * title 'in-place' in the clist, but gnome-1.2 does not allow
  * entry widgets in clist cells.
  *
- * XXX need to save title, notes on window cliose
+ * XXX need to save title, notes on window close
  * XXX need to delete data structs on window close.
  */
 
@@ -66,6 +66,7 @@ struct _GNCLotViewer
    GtkText     * lot_notes;
    GtkWidget   * reg_area;
    GtkEntry    * title_entry;
+   GtkPaned    * lot_hpaned;
 
    Account     * account;
    GNCLot      * selected_lot;
@@ -215,6 +216,8 @@ printf ("duude got %d lots\n", nlots);
    {
       char obuff[MAX_DATE_LENGTH];
       char cbuff[MAX_DATE_LENGTH];
+      char baln_buff[200];
+      char gain_buff[200];
       GNCLot *lot = node->data;
       Split *esplit = gnc_lot_get_earliest_split (lot);
       Transaction *etrans = xaccSplitGetParent (esplit);
@@ -248,19 +251,19 @@ printf ("duude got %d lots\n", nlots);
       row_vals[TITLE_COL] = kvp_frame_get_string (kvp, "/title");
       
       /* Amount */
-      row_vals[BALN_COL] = (char *) xaccPrintAmount (amt_baln, 
+      xaccSPrintAmount (baln_buff, amt_baln, 
                  gnc_account_print_info (lv->account, TRUE));
+      row_vals[BALN_COL] = baln_buff;
 
       /* Capital Gains/Losses Appreciation/Depreciation */
-      row_vals[GAINS_COL] = (char *) xaccPrintAmount (gains_baln, 
+      xaccSPrintAmount (gain_buff, gains_baln, 
                  gnc_commodity_print_info (currency, TRUE));
-
+      row_vals[GAINS_COL] = gain_buff;
 
       /* Self-reference */
       row = gtk_clist_append (lv->lot_clist, row_vals);
       gtk_clist_set_row_data (lv->lot_clist, row, lot);
-printf ("duude amt = %lld/%lld\n", amt_baln.num, amt_baln.denom);
-printf ("duude amt %s row %d\n", row_vals[BALN_COL], row);
+printf ("duude amt %s baln %s row %d\n", row_vals[BALN_COL], row_vals[GAINS_COL], row);
 
    }
    gtk_clist_thaw (lv->lot_clist);
@@ -270,10 +273,12 @@ printf ("duude amt %s row %d\n", row_vals[BALN_COL], row);
 /* ======================================================================== */
 
 GNCLotViewer * 
-gnc_lot_viewer_dialog (GtkWidget *parent, Account *account)
+gnc_lot_viewer_dialog (Account *account)
 {
    GNCLotViewer *lv;
    GladeXML *xml;
+
+   if (!account) return NULL;
 
    lv = g_new0 (GNCLotViewer, 1);
 
@@ -283,7 +288,11 @@ gnc_lot_viewer_dialog (GtkWidget *parent, Account *account)
    lv->lot_clist = GTK_CLIST(glade_xml_get_widget (xml, "lot clist"));
    lv->lot_notes = GTK_TEXT(glade_xml_get_widget (xml, "lot notes text"));
    lv->title_entry = GTK_ENTRY (glade_xml_get_widget (xml, "lot title entry"));
+   lv->lot_hpaned = GTK_PANED (glade_xml_get_widget (xml, "lot hpaned"));
+   gtk_paned_set_position (lv->lot_hpaned, 100);   /* XXX hack to make visible */
+
    lv->reg_area = glade_xml_get_widget (xml, "lot reg area scrolledwindow");
+
    lv->account = account;
    lv->selected_lot = NULL;
    lv->selected_row = -1;

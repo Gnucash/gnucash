@@ -1,6 +1,6 @@
 /********************************************************************
  * window-acct-tree.c -- the main window account tree               * 
- * Copyright (C) 1998,1999 Jeremy Collins	                    *
+ * Copyright (C) 1998,1999 Jeremy Collins	                          *
  * Copyright (C) 1998,1999,2000 Linas Vepstas                       *
  * Copyright (C) 2001 Bill Gribble                                  *
  *                                                                  *
@@ -50,6 +50,7 @@
 #include "gnc-ui.h"
 #include "gtkselect.h"
 #include "io-gncxml-v2.h"
+#include "lot-viewer.h"
 #include "mainwindow-account-tree.h"
 #include "messages.h"
 #include "option-util.h"
@@ -620,6 +621,16 @@ gnc_acct_tree_window_menu_stock_split_cb (GtkWidget * widget,
 }
 
 static void
+gnc_acct_tree_window_menu_lots_view_cb (GtkWidget * widget, 
+					  GNCMDIInfo * info)
+{
+  Account *account;
+
+  account = gnc_acct_tree_find_account_from_gncmdi(info);
+  gnc_lot_viewer_dialog (account);
+}
+
+static void
 gnc_acct_tree_window_menu_add_account_cb (GtkWidget * widget, 
                                           GNCMDIInfo * info)
 {
@@ -1014,6 +1025,14 @@ gnc_acct_tree_window_create_menu(GNCAcctTreeWin * main_info,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("View _Lots..."),
+      N_("View and edit the lots in this account"),
+      gnc_acct_tree_window_menu_lots_view_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
@@ -1356,6 +1375,14 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
       N_("Stock S_plit..."),
       N_("Record a stock split or a stock merger"),
       gnc_acct_tree_window_menu_stock_split_cb, info, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("View _Lots..."),
+      N_("View and edit the lots in this account"),
+      gnc_acct_tree_window_menu_lots_view_cb, info, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
