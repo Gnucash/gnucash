@@ -3,8 +3,8 @@
                 --------------------------
                  Implementation Overview
 
-                Linas Vepstas December 2001
-                 Last Updated July 2003
+       Linas Vepstas <linas@linas.org> December 2001
+                 Last Updated August 2003
 
 
 A top, unimplemented request for GnuCash is the ability to 'close 
@@ -16,12 +16,24 @@ implementation design choices and the current design status.
 Definition
 ----------
 An accounting period or 'book' is a set of accounts and transactions
-that, once closed, must never be modified again.   Books are usually
+that, once closed, must never be modified again.   Books are typically
 closed once a quarter, or once a year.  Generating a report from a 
 closed book tells you how well you did for that year (or quarter).
 The provision against modifying a closed book helps ensure correctness,
 and discourages cheating.   Note that the closing balances of a closed
 book must be carried forward as the opening balance in the next book.
+(But only for asset, liability and equity accounts. Opening balances
+are zeroed for income and expense accounts.)
+
+Note that the correct handling of depreciation, capital gains and
+other similar accounting concepts requires 'Lots' to be correctly
+handled.  Lots are a way of identifying that an item bought in one
+transaction is the same as that sold in another transaction. 
+When a book is closed, the entire lot must be brought forward,
+and not just the account balance, because depreciation, captial
+gains, taxes, etc. depend on the dates of the originating
+transaction.  See 'lots.txt' for details.
+
 
 Requirements
 ------------
@@ -32,17 +44,13 @@ of multi-year data (i.e. create reports spanning multiple books).
 
 Status
 ------
-A fair amount of what is required to support books can be found in
-the file src/engine/gnc-book.c.  The actual implementation used is 
-"Plan A" from the list of choices below.  See also "Implementation
-Notes" at bottom for the current status.
-
-Note that the correct handling of depreciation, capital gains and
-other similar accounting concepts requires that 'lots' be supported
-by the engine, and in turn, handled correctly by the 'books' 
-infrastructure.  Currently, 'lots' are incompletely supported by 
-the engine, and this causes the book implementation to be broken in 
-a certain fundamental sense.  See 'lots.txt' for details.
+The top-level structure that holds references to all of the data in
+a book is implemented in src/engine/qofbook.c.  The routines to 
+split one book into two, automatically setting account balances, 
+etc. are implemented in src/engine/Period.c.  The actual 
+implementation used is "Plan A" from the list of choices 
+below.  The actual implementation is not yet complete, see 
+"Implementation Notes" at bottom for the current status.
 
 
 Possible Solutions
@@ -225,6 +233,17 @@ Pro's & Con's
 -------------
 I am not aware of any con's to plan A at this point.
 
+Handling of Lots
+----------------
+If a transaction has a split in an open lot, then that transaction is not
+moved to the closed book.  It needs to stay with the open book.
+
+If a lot is closed, and all of the other lots associated with all of
+the transactions in this lot are also closed, then the lot may be moved
+to the closed book (and all of the other associated lots must then 
+also be moved).
+
+The above is implemented but untested in Period.c ... 
 
 Implementation Notes:
 ---------------------
@@ -251,16 +270,12 @@ Plan A has been implemented in the engine.
    no support for spreading things out across multiple files (for
    faster load, by not loading old books).  
 
-The current implementation of books is broken because it does not
-yet make use of 'lots'.  The problem is that for stock accounts (and
-other non-currency accounts), it is not enough to supply merely the 
-opening balance.  In order to handle depreciation or cap gains properly, 
-the dates and quantities of a purchase need to be easily available.  
-See "lots.txt" for details.
-
 
 Open Issues / ToDo
 ------------------
+*) Handling of lots in book closing is implemented but is untested and 
+   may be broken.  Need to right test case.
+ 
 *) Naming convention for the different books?  When the XML file backend
    is used, different books need to be stored as different files (in order
    to avoid the performance penalty of a large file load).  
@@ -273,10 +288,6 @@ Open Issues / ToDo
 *) Handling of multi-book reports ???  Need to work out the recommended way
    of making this happen....
 
-*) Lots are now implemented in the engine, but not yet used in this code.
-   -- ok, we now leave open lots in the new book.
-   -- we still need to move closed lots to closed book.
-   
 *) Need to mark closed book as unalterable, and respect that markup.
 
 *) Need to trimming of price database 
