@@ -57,6 +57,8 @@ containing
 
 This information will be needed in the following. Press 'Next' now.
 
+NOTE: THIS IS ALL-EXPERIMENTAL. NO WARRANTIES FOR ANYTHING.
+
 Press 'Cancel' if you do not wish to setup any 
 HBCI connection now.</text>
       <title_color>255,255,255</title_color>
@@ -1325,6 +1327,8 @@ connection window.</label>
 server. Once you press 'Next', you public keys are sent to the 
 bank. Note that you cannot undo this action -- once you sent your
 keys to the bank server, you definitely need to use those keys.
+
+NOT YET IMPLEMENTED. Nothing will be sent to the bank for now.
 
 Press 'Next' now to send the keys to the bank. You can then see 
 the progress of the HBCI connection in the HBCI connection window.</label>

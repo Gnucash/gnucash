@@ -1179,7 +1179,7 @@ on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
       GNCInteractor_show (info->interactor);
   
     HBCI_Hbci_setDebugLevel(2);
-    err = HBCI_API_executeQueue (info->api, TRUE);
+    /*err = HBCI_API_executeQueue (info->api, TRUE);
     g_assert (err);
     if (!HBCI_Error_isOk(err)) {
       char *errstr = g_strdup_printf("on_iniletter_userinfo_next: Error at executeQueue: %s",
@@ -1193,7 +1193,11 @@ on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
       return FALSE;
     }
     HBCI_Error_delete (err);
-    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);
+    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);*/
+    gnc_warning_dialog_parented(gnc_ui_get_toplevel (), 
+				"Sorry, Sending Keys not yet implemented/disabled until it works correctly. 
+Nothing has been sent to the bank.");
+
   }
   else {
     printf("on_iniletter_userinfo_next: Oops, already got keys for another customer. Not yet implemented.\n");

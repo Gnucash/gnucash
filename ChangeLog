@@ -2,6 +2,13 @@
 	* Pull up change from 1.6 to make "make dist" work on swig subdir
 	without "swig" being installed.
 
+2002-08-25  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-cb.h, gnc-hbci-actions.h, *:
+	More HBCI work, including callbacks for account menu entries and
+	the respective HBCI actions. Still nothing to test for the general
+	public, though.
+
 2002-08-18  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome-utils/gnc-frequency.c: Added support for a "changed"
