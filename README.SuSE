@@ -1,0 +1,70 @@
+From sk@xgm.de  Thu Jan 14 12:39:26 1999
+Date: Thu, 14 Jan 1999 18:25:11 +0100
+From: Sven Kuenzler <sk@xgm.de>
+
+Installing GnuCash Motif on a SuSE Linux Distribution
+-----------------------------------------------------
+
+Installing GunCash on SuSE is a little tricky. There are a couple of
+necessary components missing. This README describes how I got I working.
+
+This does not mean that it's the only (or optimal) way of getting GnuCash
+ready. But there are several other options which are worse (and I happened
+to "test" some of them...) 
+
+To get GnuCash compiled you will need
+ 
+gnucash-1.1.25.tar.gz ("NOT REALLY??")
+eperl-2.2.14.tar.gz 
+Xbaelin-4.6.2.4.tar.gz
+guile-core-19980818.tar.gz
+XmHTML-1.1.5-1-rh51.i386.rpm
+
+The packages named above can be downloaded directly from GnuCash's ftp site
+at ftp.gnucash.org. The rpm files can be installed using SuSE's YaST, the 
+.tar.gz files can be unpacked with tar xfvz file.tar.gz. They can be 
+configured and installed as described in their READMEs, I did not experience
+any difficulties with them.
+
+a1  libz
+gra libgif
+gra libjpeg
+
+These are packages from the distribution from the a1 and gra series
+(This is true for SuSE 6.0, on older versions they may be located 
+elsewhere). YaST installs the linker related stuff in /usr/X11R6/lib.
+GnuCash won't find them there so you either edit GnuCash configure script
+(then you're on your own) or you symlink the files like this:
+
+ln -s /usr/X11R6/lib/libz.a /usr/lib
+                     libpng.a
+                     libjpg.a
+
+swig1.1p5.tar.gz		http://www.swig.org
+readline-2.1-5.i386.rpm	 http://rufus.w3.org/linux/RPM/redhat/5.0/i386/readline-2.1-5.i386.html
+nana-2.3.tar.gz http://www.cs.ntu.edu.au/homepages/pjm/nana-home/
+
+These files can be obtained from their different locations. They compile and
+install without any problems.
+
+Then there was LessTif ...
+To compile the Motif version of GnuCash, you will need LessTif, the freeware
+clone of this GUI library. It's not the problem LessTif on the net, it's 
+rather the question of finding an *appropriate* version.
+
+I had luck with the lesstif-0.86.0.tar.gz from 
+ftp.lesstif.org/pub/hungry/lesstif/srcdist/obsolete/ This one is stored 
+in a directory named "obsolete", but GnuCash or its components depend on 
+some calls which are kind of "gone" in later versions so you should 
+stick with this one. If you can get GnuCash running with any later LessTif
+version, report this, so this file can be updated. 
+
+The file lesstif-0.86.0.tar.gz contains the source of lesstif which requires
+several MBs of disk space to compile so don't forget "make clean" after 
+you installed it ;)
+
+That's it! "configure; make motif" and GnuCash should be ready.
+
+Have fun,
+
+	Sven Kuenzler <sk@xgm.de> 
