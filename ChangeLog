@@ -13,6 +13,9 @@
 	  compatible with QSF: using false instead of FALSE in string
 	  output and using the QSF_XSD_TIME for the datestrings.
 	
+	* src/engine/Account.c:
+	  - updated implementation of qofAccountSetParent().
+
 2005-01-29  Derek Atkins  <derek@ihtfp.com>
 
 	David Montenegro's patch for bugs #95551, #124367.

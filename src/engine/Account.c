@@ -1258,23 +1258,17 @@ xaccAccountSetDescription (Account *acc, const char *str)
 static void
 qofAccountSetParent (Account *acc, QofEntity *parent) 
 {
-	AccountGroup *ag;
-	if((!acc)||(!parent)) return;
-	if(acc->parent) return;
+	Account *parent_acc;
+	
+	if((!acc)||(!parent)) { return; }
+	parent_acc = (Account*)parent;
 	xaccAccountBeginEdit(acc);
-	g_message("qofAccountSetParent start");
-	ag = xaccAccountGetParent((Account*)parent);
-	acc->parent = ag;
-/* FIXME: acc->parent is type AccountGroup but AccountGroup is not a true QOF object 
-so can't set AccountGroup in the target book because the GUID of any new AccountGroups 
-is not found. Workaround uses Account as the reference type.
- */
-	if(!acc->parent) {
-		g_message("qofAccountSetParent failed.");
-	}
+	xaccAccountBeginEdit(parent_acc);
+	xaccAccountInsertSubAccount(parent_acc, acc);
+	mark_account (parent_acc);
 	mark_account (acc);
-	acc->inst.dirty = TRUE;
 	xaccAccountCommitEdit(acc);
+	xaccAccountCommitEdit(parent_acc);
 }
 
 void
