@@ -102,6 +102,8 @@
 #define PERMS   0666
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
 #define RFLAGS  O_RDONLY
+
+#undef VERSION
 #define VERSION 10
 
 
@@ -1512,10 +1514,8 @@ _write_transaction_wrapper_(Transaction *t, void *data)
 static int
 writeAccount( int fd, Account *acc )
   {
-  Transaction *trans = NULL;
-  Split *s = NULL;
   int err=0;
-  int i, numUnwrittenTrans, ntrans;
+  int numUnwrittenTrans, ntrans;
   int acc_id;
   int numChildren = 0;
   char * tmp;

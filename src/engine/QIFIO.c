@@ -497,7 +497,6 @@ static void TryToFixDate (struct tm *date)
   int first, second, third;
   int st_first, st_second, st_third;
   int mon, mday, year;
-  int results;
   int which[5] = {0,0,0,0,0};
   
   first = date->tm_mon;
@@ -564,6 +563,7 @@ static void TryToFixDate (struct tm *date)
 static int FavorDateType (int value) 
 {
   int favoring;
+
   favoring = 2;  /* Month */
   if (value > 30)
     favoring = 4;  /* Year */
@@ -572,6 +572,8 @@ static int FavorDateType (int value)
   if (value < 31)
     if (value > 11)
       favoring = 1;  /* Day of month */
+
+  return favoring;
 }
 
 /********************************************************************\

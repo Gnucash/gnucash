@@ -81,7 +81,7 @@ typedef enum
   DATE_FORMAT_US,       /* United states: mm/dd/yyyy */
   DATE_FORMAT_UK,       /* Britain: dd/mm/yyyy */
   DATE_FORMAT_CE,       /* Continental Europe: dd.mm.yyyy */
-  DATE_FORMAT_ISO,       /* ISO: yyyy-mm-dd */
+  DATE_FORMAT_ISO,      /* ISO: yyyy-mm-dd */
   DATE_FORMAT_LOCALE    /* Take from locale information */
 } DateFormat;
 
@@ -105,10 +105,5 @@ void   xaccTransSetDateStr (Transaction *trans, char *str);
 
 time_t xaccDMYToSec (int day, int month, int year);
 time_t xaccScanDateS (const char *buff);
-
-
-/** GLOBALS *********************************************************/
-
-extern DateFormat dateFormat;
 
 #endif /* __XACC_DATE_H__ */

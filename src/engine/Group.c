@@ -890,7 +890,6 @@ xaccGroupStagedTransactionTraversal(AccountGroup *grp,
   numAcc = grp->numAcc;
   for(i = 0; i < numAcc; i++) {
     int retval;
-    int n = 0;
     Account *acc;
     acc = xaccGroupGetAccount(grp, i);
     

@@ -22,6 +22,7 @@
 
 #include "AccInfo.h"
 #include "AccInfoP.h"
+#define DISABLE_GETTEXT_UNDERSCORE /* required to include messages.h */
 #include "messages.h"
 #include "util.h"
 
@@ -87,7 +88,7 @@ char * xaccAccountGetTypeStr (int type)
 {
    if (0 > type) return "";
    if (NUM_ACCOUNT_TYPES <= type) return "";
-   return (account_type_name [type]);
+   return gettext (account_type_name [type]);
 }
 
 /* =========================================================== */
