@@ -448,8 +448,14 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 				 xmFormWidgetClass, pane,
 				 XmNfractionBase,   6,
 				 XmNresizable,      False,
+                                 XmNtraversalOn,    True,
+                                 XmNnavigationType, XmSTICKY_TAB_GROUP,
 				 NULL );
-  
+
+  /* traverse to the buttons, when leaving the table */
+  xaccNextTabGroup (regData->ledger->table, buttonform);
+
+
   position = 0;                    /* puts the buttons in the right place */
   
   /* The "Record" button */
@@ -462,11 +468,14 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 				    XmNrightAttachment,    XmATTACH_POSITION,
 				    XmNrightPosition,      position+1,
 				    XmNshowAsDefault,      True,
+                                    XmNnavigationType,     XmTAB_GROUP,
 				    NULL );
   
   XtAddCallback( widget, XmNactivateCallback, 
 		 recordCB, (XtPointer)regData );
   regData->record = widget;
+
+
   
   /* The "Cancel" button */
   position++;
@@ -479,6 +488,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 				    XmNrightAttachment,    XmATTACH_POSITION,
 				    XmNrightPosition,      position+1,
 				    XmNshowAsDefault,      True,
+                                    XmNnavigationType,     XmTAB_GROUP,
 				    NULL );
   
   XtAddCallback( widget, XmNactivateCallback, 
@@ -495,7 +505,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 				    XmNrightAttachment,    XmATTACH_POSITION,
 				    XmNrightPosition,      position+1,
 				    XmNshowAsDefault,      True,
-                                    XmNnavigationType,     XmNONE,  /* stop tabbing ! */
+                                    XmNnavigationType,     XmTAB_GROUP,
 				    NULL );
   
   XtAddCallback( widget, XmNactivateCallback, 
