@@ -658,12 +658,19 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    xaccAddComboCellMenuItem ( reg->actionCell, WITHDRAW_STR);
 
    /* -------------------------------- */   
-   table = xaccMallocTable ();
    phys_r = header->numRows;
-   phys_r += reg->trans_cursor->numRows;
-   phys_r += reg->split_cursor->numRows;
+   reg->cursor_phys_row = phys_r;  /* cursor on first line past header */
+   reg->cursor_virt_row = 1;
+
+   phys_r += reg->single_cursor->numRows;
+   reg->num_phys_rows = phys_r;
+   reg->num_virt_rows = 2;  /* one header, one single_cursor */
+
    phys_c = header->numCols;
-   xaccSetTableSize (table, phys_r, phys_c, 3, 1);
+   reg->num_cols = phys_c;
+
+   table = xaccMallocTable ();
+   xaccSetTableSize (table, phys_r, phys_c, reg->num_virt_rows, 1);
    xaccSetCursor (table, header, 0, 0, 0, 0);
 
    /* the SetCursor call below is for most practical purposes useless.
@@ -674,7 +681,9 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
     * in case someone just creates a register but doesn't do anything 
     * with it.  Don't want to freak out any programmers.
     */
-   xaccSetCursor (table, reg->single_cursor, header->numRows, 0, 1, 0);
+   xaccSetCursor (table, reg->single_cursor, 
+                         reg->cursor_phys_row, 0, 
+                         reg->cursor_virt_row, 0);
    xaccMoveCursor (table, header->numRows, 0);
 
    reg->table = table;
