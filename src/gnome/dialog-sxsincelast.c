@@ -113,6 +113,7 @@
 #define CREATED_VBOX "created_vbox"
 #define WHAT_TO_DO_VBOX "what_to_do_vbox"
 #define WHAT_TO_DO_PROGRESS "creation_progress"
+#define SX_DISPOSITION_OPT "disposition_opt"
 
 #define TO_CREATE_LIST_WIDTH 2
 #define REMINDER_LIST_WIDTH  3
@@ -129,6 +130,13 @@
 #define GNC_D_WIDTH 25
 #define GNC_D_BUF_WIDTH 26
 
+#define IGNORE_TEXT         "Ignored"
+#define POSTPONE_TEXT       "Postponed"
+#define READY_TEXT          "Ready to create"
+#define NEEDS_BINDINGS_TEXT "Needs values for variables"
+
+#define OBSOLETE_TEXT  "Obsolete"
+
 static short module = MOD_SX;
 
 /**
@@ -138,6 +146,86 @@ static short module = MOD_SX;
 typedef enum {
         FORWARD, BACK
 } Direction;
+
+/**
+ * The states a to-be-created SX can be in...
+ *
+
+ * TO_CREATE   : The SX is ready to be created, depending on variable-binding
+ *               requirements.
+ * IGNORE      : Drop the SX on the floor forever.
+ * POSTPONE    : Bring this SX up in the future, but we're not going to
+ *               create it right now.
+ * [MAX_STATE] : The maximum real value.
+ * UNDEF       : Only used for prevState, to indicate that we haven't
+ *               processed this instance, yet.
+ **/
+typedef enum {
+        TO_CREATE,
+        IGNORE,
+        POSTPONE,
+        MAX_STATE,
+        UNDEF
+} ToCreateState;
+
+typedef struct toCreateTuple_ {
+        SchedXaction *sx;
+        GList /* <toCreateInstance*> */ *instanceList;
+} toCreateTuple;
+
+typedef struct toCreateInstance_ {
+        GDate *date;
+        GHashTable *varBindings;
+        void *sxStateData;
+        GtkCTreeNode *node;
+        toCreateTuple *parentTCT;
+        /* A list of the GUIDs of transactions generated from this TCI [if
+         * any]; this will always be a subset of the
+         * sxsld->createdTxnGUIDList. */
+        GList /* <GUID*> */ *createdTxnGUIDs;
+        gboolean dirty;
+        /** How this was, originally -- for revert processing. **/
+        ToCreateState origState;
+        /** How the user would currently like to process this instance
+         * [within the druid]. */
+        ToCreateState state;
+        /** How we've previously processed this instance [within the druid]. */
+        ToCreateState prevState;
+} toCreateInstance;
+
+/**
+ * A tuple of an SX and any upcoming reminders.
+ **/
+typedef struct reminderTuple_ {
+        SchedXaction *sx;
+        GList /* <reminderInstanceTuple*> */ *instanceList;
+} reminderTuple;
+
+/**
+ * An reminder instance of the containing SX.
+ **/
+typedef struct reminderInstanceTuple_ {
+        GDate	*endDate;
+        GDate	*occurDate;
+        void    *sxStateData;
+        gboolean isSelected;
+        reminderTuple *parentRT;
+        toCreateInstance *resultantTCI;
+} reminderInstanceTuple;
+
+typedef struct toDeleteTuple_ {
+        SchedXaction *sx;
+        GDate *endDate;
+        gboolean isSelected;
+} toDeleteTuple;
+
+typedef struct creation_helper_userdata_ {
+        /* the to-create tuple */
+        toCreateInstance *tci;
+        /* a [pointer to a] GList to append the GUIDs of newly-created
+         * Transactions to, or NULL */
+        GList **createdGUIDs;
+} createData;
 
 /**
  * The since-last-run dialog is a Gnome Druid which steps through the various
@@ -162,6 +250,9 @@ typedef struct _sxSinceLastData {
         GtkStatusbar *toCreateStatus;
         guint statusCtxId;
 
+        /* The currently-selected to-create instance. */
+        toCreateInstance *curSelTCI;
+
         /* Multi-stage processing-related stuff... */
         GList /* <toCreateTuple*> */ *autoCreateList;
         GList /* <toCreateTuple*> */ *toCreateList;
@@ -180,7 +271,6 @@ typedef struct _sxSinceLastData {
         gint remindSelCount;
 
         gboolean autoCreatedSomething;
-        gboolean createdSomething;
 
         GNCLedgerDisplay *ac_ledger;
         GNCRegWidget *ac_regWidget;
@@ -190,63 +280,11 @@ typedef struct _sxSinceLastData {
 
 } sxSinceLastData;
 
-typedef struct toCreateTuple_ {
-        SchedXaction *sx;
-        GList /* <toCreateInstance*> */ *instanceList;
-} toCreateTuple;
-
-typedef struct toCreateInstance_ {
-        GDate *date;
-        GHashTable *varBindings;
-        gint instanceNum;
-        GtkCTreeNode *node;
-        toCreateTuple *parentTCT;
-        /* A list of the GUIDs of transactions generated from this TCI [if
-         * any]; this will always be a subset of the
-         * sxsld->createdTxnGUIDList. */
-        GList /* <GUID*> */ *createdTxnGUIDs;
-        gboolean dirty;
-} toCreateInstance;
-
-/**
- * A tuple of an SX and any upcoming reminders.
- **/
-typedef struct reminderTuple_ {
-        SchedXaction *sx;
-        GList /* <reminderInstanceTuple*> */ *instanceList;
-} reminderTuple;
-
-/**
- * An reminder instance of the containing SX.
- **/
-typedef struct reminderInstanceTuple_ {
-        GDate	*endDate;
-        GDate	*occurDate;
-        gint     instanceNum;
-        gboolean isSelected;
-        reminderTuple *parentRT;
-        toCreateInstance *resultantTCI;
-} reminderInstanceTuple;
-
-typedef struct toDeleteTuple_ {
-        SchedXaction *sx;
-        GDate *endDate;
-        gboolean isSelected;
-} toDeleteTuple;
-
-typedef struct creation_helper_userdata_ {
-        /* the to-create tuple */
-        toCreateInstance *tci;
-        /* a [pointer to a] GList to append the GUIDs of newly-created
-         * Transactions to, or NULL */
-        GList **createdGUIDs;
-} createData;
-
 static void sxsincelast_init( sxSinceLastData *sxsld );
 static void create_autoCreate_ledger( sxSinceLastData *sxsld );
 static void create_created_ledger( sxSinceLastData *sxsld );
 static gncUIWidget sxsld_ledger_get_parent( GNCLedgerDisplay *ld );
-static void gnc_sxlsd_commit_ledgers( sxSinceLastData *sxsld );
+static void gnc_sxsld_commit_ledgers( sxSinceLastData *sxsld );
 
 static gboolean sxsincelast_populate( sxSinceLastData *sxsld );
 static void sxsincelast_druid_cancelled( GnomeDruid *druid, gpointer ud );
@@ -304,6 +342,10 @@ static void sxsld_remind_row_toggle( GtkCTree *ct, GList *node,
 static void sxsld_obsolete_row_toggle( GtkCList *cl, gint row, gint col,
                                        GdkEventButton *event, gpointer ud );
 
+static void sxsld_disposition_changed( GtkMenuShell *b, gpointer d );
+static void sxsld_set_sensitive_tci_controls( sxSinceLastData *sxsld,
+                                              gboolean sensitive );
+
 static void gnc_sxsld_revert_reminders( sxSinceLastData *sxsld,
                                         GList *toRevertList );
 static gboolean processed_valid_reminders_listP( sxSinceLastData *sxsld );
@@ -322,6 +364,13 @@ static void gnc_sxsld_free_sxState( gpointer key,
                                     gpointer value,
                                     gpointer userdata );
 static void gnc_sxsld_free_entry_numeric( GtkObject *o, gpointer ud );
+
+static void sxsld_process_to_create_instance( sxSinceLastData *sxsld,
+                                              toCreateInstance *tci );
+static void sxsld_revert_to_create_txns( sxSinceLastData *sxsld,
+                                         toCreateInstance *tci );
+static void sxsld_create_to_create_txns( sxSinceLastData *sxsld,
+                                         toCreateInstance *tci );
 
 /**
  * Used to wrap for the book-open hook, where the book filename is given.
@@ -566,7 +615,7 @@ static
 gboolean
 gnc_sxsld_created_appr( sxSinceLastData *sxsld )
 {
-        return sxsld->createdSomething;
+        return sxsld->createdTxnGUIDList != NULL;
 }
 
 static
@@ -910,6 +959,185 @@ to_create_prep( GnomeDruidPage *druid_page,
 }
 
 static
+void
+sxsld_revert_to_create_txns( sxSinceLastData *sxsld,
+                             toCreateInstance *tci )
+{
+        GList *l = NULL;
+        
+        gnc_suspend_gui_refresh();
+        for ( l = tci->createdTxnGUIDs;
+              l; l = l->next ) {
+                Transaction *t;
+                t = xaccTransLookup( (GUID*)l->data,
+                                     gnc_get_current_book() );
+                g_assert( t );
+                xaccTransBeginEdit( t );
+                xaccTransDestroy( t );
+                xaccTransCommitEdit( t );
+
+                /* Remove from master list, too. */
+                sxsld->createdTxnGUIDList =
+                        g_list_remove(
+                                sxsld->createdTxnGUIDList,
+                                l->data );
+        }
+        g_list_free( tci->createdTxnGUIDs );
+        tci->createdTxnGUIDs = NULL;
+}
+
+static
+void
+sxsld_create_to_create_txns( sxSinceLastData *sxsld,
+                             toCreateInstance *tci )
+{
+        GList *l = NULL;
+        GList *created = NULL;
+
+        /* Don't process instances we've already created transactions for
+         * [list_length > 0], which haven't otherwise changed [!dirty]. */
+        if ( g_list_length( tci->createdTxnGUIDs ) != 0 ) {
+                /* If we've created it and the variables
+                 * haven't changed, skip it. */
+                if ( ! tci->dirty ) {
+                        return;
+                }
+                /* Otherwise, destroy the transactions and
+                 * re-create them below. */
+
+                /* FIXME: this would be better if we could
+                 * re-used the existing txns we've already
+                 * gone through the pain of creating. */
+                sxsld_revert_to_create_txns( sxsld, tci );
+        }
+
+        create_transactions_on( tci->parentTCT->sx,
+                                tci->date,
+                                tci,
+                                &created );
+        tci->dirty = FALSE;
+
+        /* Add to the Query for that register. */
+        for ( l = created; l; l = l->next ) {
+                tci->createdTxnGUIDs =
+                        g_list_append( tci->createdTxnGUIDs,
+                                       (GUID*)l->data );
+        }
+        sxsld->createdTxnGUIDList =
+                g_list_concat( sxsld->createdTxnGUIDList, created );
+}
+
+/**
+ * Do the correct thing for the given toCreateInstance, taking into account
+ * what we've done to it before [tci->prevState].  That is: if we previously
+ * processed the instance as to-create/as-scheduled, and now we're postponing
+ * it, we should remove the previously-created transactions and now add the
+ * instance to the postponed list.  See the code for full details on the
+ * policy here.
+ **/
+static
+void
+sxsld_process_to_create_instance( sxSinceLastData *sxsld,
+                                  toCreateInstance *tci )
+{
+
+        /* Undo the previous work. */
+        switch ( tci->prevState ) {
+        case IGNORE:
+                switch ( tci->state ) {
+                case IGNORE:
+                        /* Keep ignoring. */
+                        break;
+                case POSTPONE:
+                        /* remove from postponed list. */
+                        gnc_sx_remove_defer_instance( tci->parentTCT->sx,
+                                                      tci->sxStateData );
+                        break;
+                case TO_CREATE:
+                        /* del prev txns. */
+                        sxsld_revert_to_create_txns( sxsld, tci );
+                        break;
+                default:
+                        g_assert( FALSE );
+                }
+                break;
+        case POSTPONE:
+                if ( tci->state != POSTPONE ) {
+                        /* remove from postponed list. */
+                        gnc_sx_remove_defer_instance( tci->parentTCT->sx,
+                                                      tci->sxStateData );
+                }
+                break;
+        case TO_CREATE:
+                if ( tci->state != TO_CREATE ) {
+                        /* del prev txns. */
+                        sxsld_revert_to_create_txns( sxsld, tci );
+                }
+                break;
+        case UNDEF:
+                /* Fine; do nothing. */
+                break;
+        default:
+                g_assert( FALSE );
+                break;
+        }
+
+        /* Now, process the currently-requested state. */
+        switch ( tci->state ) {
+        case IGNORE:
+                /* Fine ... just ignore it. */
+                break;
+        case POSTPONE:
+                if ( tci->prevState == POSTPONE ) {
+                        break;
+                }
+                /* add to the postponed list. */
+                gnc_sx_add_defer_instance( tci->parentTCT->sx, tci->sxStateData );
+                break;
+        case TO_CREATE:
+                /* Go ahead and create... */
+                sxsld_create_to_create_txns( sxsld, tci );
+                break;
+        default:
+                g_assert( FALSE );
+                break;
+        }
+
+        tci->prevState = tci->state;
+
+        /* Increment the SX state regardless of what happens above.  The last
+         * generated SX instance is the new final state of the SX in all
+         * cases [ignored, postponed or created]. */
+        {
+                gint tmp;
+                GDate *last_occur;
+                SchedXaction *sx;
+
+                sx = tci->parentTCT->sx;
+
+                /* Only set the last-occur-date, instance count and remaining
+                 * occurances if this instance is later than presently-last
+                 * definition in the SX; no matter what happens in the SX
+                 * dialog, the last instance processed sets the last-occur
+                 * date [and other params] to its instance date [and other
+                 * params]. */
+                last_occur = xaccSchedXactionGetLastOccurDate( sx );
+                /* If we don't have anything to do, then just return. */
+                if ( g_date_valid( last_occur )
+                     && g_date_compare( last_occur, tci->date ) > 0 ) {
+                        return;
+                }
+                xaccSchedXactionSetLastOccurDate( sx, tci->date );
+                tmp = gnc_sx_get_instance_count( sx, NULL );
+                gnc_sx_set_instance_count( sx, tmp+1 );
+                if ( xaccSchedXactionHasOccurDef( sx ) ) {
+                        tmp = xaccSchedXactionGetRemOccur(sx);
+                        xaccSchedXactionSetRemOccur( sx, tmp-1 );
+                }
+        }
+}
+
+static
 gboolean
 to_create_next( GnomeDruidPage *druid_page,
                 gpointer arg1, gpointer ud )
@@ -939,6 +1167,12 @@ to_create_next( GnomeDruidPage *druid_page,
                       tcInstList;
                       tcInstList = tcInstList->next ) {
                         tci = (toCreateInstance*)tcInstList->data;
+
+                        if ( tci->state == IGNORE
+                             || tci->state == POSTPONE ) {
+                                continue;
+                        }
+
                         allVarsBound = TRUE;
                         g_hash_table_foreach( tci->varBindings,
                                               andequal_numerics_set,
@@ -956,10 +1190,9 @@ to_create_next( GnomeDruidPage *druid_page,
         }
 
         /* At this point we can assume there are to-create transactions and
-         * all variables are bound. */
+         * either the instances are being postponed/ignored, or all variables
+         * are bound. */
 
-        /* FIXME: we should probably factor this out into a seperate
-         * routine. */
         tcList = sxsld->toCreateList;
         g_assert( tcList != NULL );
 
@@ -970,65 +1203,12 @@ to_create_next( GnomeDruidPage *druid_page,
                 for ( tcInstList = tct->instanceList;
                       tcInstList;
                       tcInstList = tcInstList->next ) {
-                        GList *l = NULL;
-                        GList *created = NULL;
 
                         tci = (toCreateInstance*)tcInstList->data;
-
-                        /* Skip over instances we've already created
-                         * transactions for. */
-
-                        if ( g_list_length( tci->createdTxnGUIDs ) != 0 ) {
-                                /* If we've created it and the variables
-                                 * haven't changed, skip it. */
-                                if ( ! tci->dirty ) {
-                                        continue;
-                                }
-                                /* Otherwise, destroy the transactions and
-                                 * re-create them below. */
-                                /* FIXME: this would be better if we could
-                                 * re-used the existing txns we've already
-                                 * gone through the pain of creating. */
-                                gnc_suspend_gui_refresh();
-                                for( l = tci->createdTxnGUIDs;
-                                     l; l = l->next ) {
-                                        Transaction *t;
-                                        t = xaccTransLookup( (GUID*)l->data,
-                                                             gnc_get_current_book() );
-                                        g_assert( t );
-                                        xaccTransBeginEdit( t );
-                                        xaccTransDestroy( t );
-                                        xaccTransCommitEdit( t );
-
-                                        sxsld->createdTxnGUIDList =
-                                                g_list_remove(
-                                                        sxsld->createdTxnGUIDList,
-                                                        l->data );
-                                }
-                                gnc_resume_gui_refresh();
-                                /* Remove from master list, too. */
-                                g_list_free( tci->createdTxnGUIDs );
-                                tci->createdTxnGUIDs = NULL;
-                        }
-
-                        create_transactions_on( tci->parentTCT->sx,
-                                                tci->date,
-                                                tci,
-                                                &created );
-                        tci->dirty = FALSE;
-                        /* Add to the Query for that register. */
-                        for ( l = created; l; l = l->next ) {
-                                tci->createdTxnGUIDs =
-                                        g_list_append( tci->createdTxnGUIDs,
-                                                       (GUID*)l->data );
-                        }
-                        sxsld->createdTxnGUIDList =
-                                g_list_concat( sxsld->createdTxnGUIDList, created );
+                        sxsld_process_to_create_instance( sxsld, tci );
                 }
         }
         gnc_resume_gui_refresh();
-
-        sxsld->createdSomething = TRUE;
 
         return FALSE;
 }
@@ -1045,7 +1225,7 @@ gnc_sxsld_finish( GnomeDruidPage *druid_page,
 
         gtk_widget_hide( sxsld->sincelast_window );
 
-        gnc_sxlsd_commit_ledgers( sxsld );
+        gnc_sxsld_commit_ledgers( sxsld );
 
         /* Deal with the selected obsolete list elts. */
         cl = GTK_CLIST( glade_xml_get_widget( sxsld->gxml,
@@ -1093,9 +1273,7 @@ restore_sx_temporal_state( gpointer key,
         sxsld = (sxSinceLastData*)user_data;
 
         sx = (SchedXaction*)key;
-        gnc_sx_revert_to_temporal_state_snapshot( sx, (void*)value );
-
-        gnc_sx_destroy_temporal_state_snapshot( (void*)value );
+        gnc_sx_revert_to_temporal_state( sx, (void*)value );
 }
 
 static gboolean 
@@ -1152,14 +1330,48 @@ cancel_check( GnomeDruidPage *druid_page,
                         t = NULL;
                 }
         }
+
+        /* Remove postponed SXes from their postponed lists, unless they were
+         * originally postponed. */
+        {
+                GList *tcList, *tciList;
+                toCreateTuple *tct;
+                toCreateInstance *tci;
+
+                for ( tcList = sxsld->toCreateList;
+                      tcList;
+                      tcList = tcList->next ) {
+                        tct = (toCreateTuple*)tcList->data;
+                        for ( tciList = tct->instanceList;
+                              tciList;
+                              tciList = tciList->next ) {
+                                tci = (toCreateInstance*)tciList->data;
+                                if ( tci->prevState == POSTPONE
+                                     && tci->origState != POSTPONE ) {
+                                        /* Any valid [non-null] 'prevState !=
+                                         * POSTPONE' sx temporal state
+                                         * pointers will be destroyed at the
+                                         * destruction of the dialog [the
+                                         * non-cancel case], so if we need to
+                                         * deal with those here, we should do
+                                         * so.
+                                         */
+                                        gnc_sx_remove_defer_instance( tct->sx, tci->sxStateData );
+                                        gnc_sx_destroy_temporal_state( tci->sxStateData );
+                                        tci->sxStateData = NULL;
+                                }
+                        }
+                }
+        }
+
         /* Restore the temporal state of all SXes. 
          * This is in sxInitStates [a bunch of opaque void *'s ... which
          * should be freed when we're done to prevent a memory leak.] */
         g_hash_table_foreach( sxsld->sxInitStates,
                               restore_sx_temporal_state,
                               (gpointer)sxsld );
-        g_hash_table_destroy( sxsld->sxInitStates );
-        sxsld->sxInitStates = NULL;
+        /* This will get destroyed when the dialog is, which will happen
+         * shortly after this return. */
 
         gnc_resume_gui_refresh();
         return FALSE;
@@ -1170,7 +1382,9 @@ static void
 sxsincelast_init( sxSinceLastData *sxsld )
 {
         GtkWidget *w;
+        GtkObject *o;
         GnomeDruidPage *nextPage;
+        int i;
         static widgetSignalHandlerTuple widgets[] = {
                 { SINCELAST_DRUID, "cancel",  sxsincelast_druid_cancelled },
 
@@ -1219,6 +1433,14 @@ sxsincelast_init( sxSinceLastData *sxsld )
                 { NULL, NULL, NULL, NULL, NULL, NULL }
         };
 
+        static const struct optionMenuTuple {
+                char *name;
+                void (*fn)();
+        } optionMenus[] = {
+                { SX_DISPOSITION_OPT, sxsld_disposition_changed },
+                { NULL, NULL }
+        };
+
 
         gnc_register_gui_component( DIALOG_SXSINCELAST_CM_CLASS,
                                     NULL,
@@ -1230,6 +1452,16 @@ sxsincelast_init( sxSinceLastData *sxsld )
 
 	dialog_widgets_attach_handlers(sxsld->gxml, widgets, sxsld);
         druid_pages_attach_handlers( sxsld->gxml, pages, sxsld );
+
+        /* gnc-init the option menu[s]. */
+        for ( i=0; optionMenus[i].name != NULL; i++ ) {
+                w = glade_xml_get_widget( sxsld->gxml, optionMenus[i].name );
+                gnc_option_menu_init( w );
+                o = GTK_OBJECT(gtk_option_menu_get_menu(GTK_OPTION_MENU(w)));
+                gtk_signal_connect( o, "selection-done",
+                                    GTK_SIGNAL_FUNC( optionMenus[i].fn ),
+                                    sxsld );
+        }
 
         /* set all to-create clist columns to auto-resize. */
         w = glade_xml_get_widget( sxsld->gxml, TO_CREATE_LIST );
@@ -1273,9 +1505,11 @@ sxsincelast_init( sxSinceLastData *sxsld )
         nextPage = gnc_sxsld_get_appropriate_page( sxsld,
                                                    GNOME_DRUID_PAGE(w),
                                                    FORWARD );
+
         /* If there's nowhere to go, then we shouldn't have been started at
          * all [ie., ..._populate should have returned FALSE]. */
         g_assert( nextPage );
+
         gnome_druid_set_page( sxsld->sincelast_druid, nextPage );
 }
 
@@ -1307,21 +1541,25 @@ generate_instances( SchedXaction *sx,
         g_assert( g_date_valid(reminderEnd) );
 
         /* Process valid next instances. */
-        seqStateData = xaccSchedXactionCreateSequenceState( sx );
-        gd = xaccSchedXactionGetNextInstance( sx, seqStateData );
+        seqStateData = gnc_sx_create_temporal_state( sx );
+        //gd = xaccSchedXactionGetNextInstance( sx, seqStateData );
+        gd = xaccSchedXactionGetInstanceAfter( sx, &gd, seqStateData );
         while ( g_date_valid(&gd)
                 && g_date_compare( &gd, end ) <= 0 ) {
 
                 tci = g_new0( toCreateInstance, 1 );
 
-                tci->dirty = FALSE;
-                tci->date  = g_date_new();
-                *tci->date = gd;
-                tci->instanceNum = gnc_sx_get_instance_count( sx, seqStateData );
+                tci->dirty     = FALSE;
+                tci->date      = g_date_new();
+                *tci->date     = gd;
+                tci->origState = UNDEF;
+                tci->state     = TO_CREATE;
+                tci->prevState = UNDEF;
+                tci->sxStateData =
+                        gnc_sx_clone_temporal_state( seqStateData );
+                *instanceList  = g_list_append( *instanceList, tci );
 
-                *instanceList = g_list_append( *instanceList, tci );
-
-                xaccSchedXactionIncrSequenceState( sx, seqStateData );
+                gnc_sx_incr_temporal_state( sx, seqStateData );
                 gd = xaccSchedXactionGetInstanceAfter( sx, &gd, seqStateData );
         }
 
@@ -1340,11 +1578,11 @@ generate_instances( SchedXaction *sx,
                         *rit->occurDate  = gd;
                         rit->isSelected  = FALSE;
                         rit->parentRT    = rt;
-                        rit->instanceNum = gnc_sx_get_instance_count( sx, seqStateData );
-
+                        rit->sxStateData =
+                                gnc_sx_clone_temporal_state( seqStateData );
                         rt->instanceList = g_list_append( rt->instanceList, rit );
 
-                        xaccSchedXactionIncrSequenceState( sx, seqStateData );
+                        gnc_sx_incr_temporal_state( sx, seqStateData );
                         gd = xaccSchedXactionGetInstanceAfter( sx, &gd, seqStateData );
                 }
                 if ( rt->instanceList != NULL ) {
@@ -1364,7 +1602,7 @@ generate_instances( SchedXaction *sx,
         } /* else { this else intentionally left blank: drop the SX on the
            * floor at this point. } */
 
-        xaccSchedXactionDestroySequenceState( seqStateData );
+        gnc_sx_destroy_temporal_state( seqStateData );
         seqStateData = NULL;
 }
 
@@ -1480,12 +1718,27 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
 
                         rowText[0] = g_new0( char, GNC_D_WIDTH );
                         g_date_strftime( rowText[0], GNC_D_WIDTH, GNC_D_FMT, tci->date );
-                        allVarsBound = TRUE;
-                        g_hash_table_foreach( tci->varBindings,
-                                              andequal_numerics_set,
-                                              &allVarsBound );
-                        rowText[1] = ( allVarsBound ? "y" : "n" );
 
+                        switch ( tci->state ) {
+                        case TO_CREATE:
+                                allVarsBound = TRUE;
+                                g_hash_table_foreach( tci->varBindings,
+                                                      andequal_numerics_set,
+                                                      &allVarsBound );
+                                rowText[1] = ( allVarsBound
+                                               ? _( READY_TEXT )
+                                               : _( NEEDS_BINDINGS_TEXT ) );
+                                break;
+                        case IGNORE:
+                                rowText[1] = _( IGNORE_TEXT );
+                                break;
+                        case POSTPONE:
+                                rowText[1] = _( POSTPONE_TEXT );
+                                break;
+                        default:
+                                g_assert( FALSE );
+                        }
+                                
                         tci->node = gtk_ctree_insert_node( ct, sxNode, NULL,
                                                            rowText,
                                                            0, NULL, NULL, NULL, NULL,
@@ -1608,7 +1861,7 @@ add_dead_list_to_gui(GList *removeList, sxSinceLastData *sxsld)
                  * obsolesence. */
                 /*g_date_strftime( rowtext[2], GNC_D_WIDTH, GNC_D_FMT, tdt->endDate ); */
 
-                strcpy( rowtext[2], "obsolete" );
+                strcpy( rowtext[2], _( OBSOLETE_TEXT ) );
 
                 gtk_clist_insert( cl, row, rowtext );
                 gtk_clist_set_row_data( cl, row, tdt );
@@ -1674,9 +1927,12 @@ processSelectedReminderList( GList *goodList, sxSinceLastData *sxsld )
                 tci->parentTCT   = tct;
                 tci->date        = g_date_new();
                 *tci->date       = *rit->occurDate;
+                tci->state       = TO_CREATE;
+                tci->prevState   = UNDEF;
+                tci->origState   = UNDEF;
                 tci->varBindings = NULL;
-                tci->instanceNum = rit->instanceNum;
                 tci->node        = NULL;
+                tci->sxStateData = rit->sxStateData;
                 
                 tct->instanceList =
                         g_list_append( tct->instanceList, tci );
@@ -1735,7 +1991,7 @@ sxsincelast_populate( sxSinceLastData *sxsld )
                               "the first time?" );
                         return FALSE;
                 }
-                sx_state = gnc_sx_create_temporal_state_snapshot( sx );
+                sx_state = gnc_sx_create_temporal_state( sx );
                 g_hash_table_insert( sxsld->sxInitStates,
                                      sx, sx_state );
 
@@ -1746,7 +2002,38 @@ sxsincelast_populate( sxSinceLastData *sxsld )
                 endPlusReminders = end;
                 daysInAdvance = xaccSchedXactionGetAdvanceReminder( sx );
                 g_date_add_days( &endPlusReminders, daysInAdvance );
-                
+
+                /* Handle postponed instances.
+                 *
+                 * Postponed instances, by definition, are always at the
+                 * front of the instance list.  As well, they're always valid
+                 * instances [not reminders]. */
+
+                /* FIXME: postponed instances _may_ create an obsolete
+                 * instance. */
+                {
+                        GList *postponed, *l;
+
+                        postponed = gnc_sx_get_defer_instances( sx );
+
+                        for ( l = postponed; l; l = l->next ) {
+                                tci = g_new0( toCreateInstance, 1 );
+                                tci->sxStateData = (void*)l->data;
+                                tci->date        = g_date_new();
+                                *tci->date       =
+                                        xaccSchedXactionGetNextInstance(
+                                                sx, tci->sxStateData );
+                                tci->dirty       = FALSE;
+                                tci->state       = POSTPONE;
+                                tci->prevState   = POSTPONE;
+                                tci->origState   = POSTPONE;
+
+                                instanceList = g_list_append( instanceList, tci );
+                                tci = NULL;
+                        }
+                        
+                }
+
                 generate_instances( sx, &end,
                                     &endPlusReminders,
                                     &instanceList,
@@ -1825,7 +2112,10 @@ sxsincelast_entry_changed( GtkEditable *e, gpointer ud )
         char msgBuf[MSG_BUF_LEN+1];
 
         sxsld = (sxSinceLastData*)ud;
+
         tci = (toCreateInstance*)gtk_object_get_data( GTK_OBJECT(e), "tci" );
+        g_assert( tci == sxsld->curSelTCI );
+
         varName = (gchar*)gtk_object_get_data( GTK_OBJECT(e), "varName" );
         num = (gnc_numeric*)gtk_object_get_data( GTK_OBJECT(e), "numeric" );
         entryText = gtk_editable_get_chars( e, 0, -1 );
@@ -1894,15 +2184,21 @@ sxsincelast_entry_changed( GtkEditable *e, gpointer ud )
                 tci->dirty = TRUE;
         }
 
+        
         {
                 GtkCTree *ct;
                 gboolean allVarsBound = TRUE;
 
                 /* If there are no un-bound variables, then set the 'ready-to-go'
                    flag to 'y'. */
-                g_hash_table_foreach( tci->varBindings, andequal_numerics_set, &allVarsBound );
+                g_hash_table_foreach( tci->varBindings,
+                                      andequal_numerics_set,
+                                      &allVarsBound );
                 ct = GTK_CTREE(glade_xml_get_widget( sxsld->gxml, TO_CREATE_LIST ));
-                gtk_ctree_node_set_text( ct, tci->node, 1, ( allVarsBound ? "y" : "n" ) );
+                gtk_ctree_node_set_text( ct, tci->node, 1,
+                                         ( allVarsBound
+                                           ? _( READY_TEXT )
+                                           : _( NEEDS_BINDINGS_TEXT ) ) );
         }
 }
 
@@ -2023,7 +2319,11 @@ create_each_transaction_helper( Transaction *t, void *d )
                                       gnc_sxsl_copy_ea_hash, actualVars );
         }
         varIValue = g_new0( gnc_numeric, 1 );
-        *varIValue = gnc_numeric_create( tci->instanceNum, 1 );
+        *varIValue =
+                gnc_numeric_create(
+                        gnc_sx_get_instance_count( tci->parentTCT->sx,
+                                                   tci->sxStateData ),
+                        1 );
         /* It's really important that we strdup "i" here, so we can
          * generically cleanup with a simple 'foreach' that blindly frees the
          * keys, below. */
@@ -2244,19 +2544,6 @@ create_transactions_on( SchedXaction *sx,
 	if (id) {
                 g_free( id );
 	}
-        
-        /* Increment the SX state */
-        {
-                gint tmp;
-
-                xaccSchedXactionSetLastOccurDate( sx, tci->date );
-                tmp = gnc_sx_get_instance_count( sx, NULL );
-                gnc_sx_set_instance_count( sx, tmp+1 );
-                if ( xaccSchedXactionHasOccurDef( sx ) ) {
-                        tmp = xaccSchedXactionGetRemOccur(sx);
-                        xaccSchedXactionSetRemOccur( sx, tmp-1 );
-                }
-        }
 }
 
 static void
@@ -2379,7 +2666,8 @@ tct_table_entry_key_handle( GtkWidget *widget, GdkEventKey *event, gpointer ud )
         return FALSE;
 }
 
-static void
+static
+void
 sxsincelast_tc_row_sel( GtkCTree *ct,
                         GList *nodelist,
                         gint column,
@@ -2399,7 +2687,7 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
         sxSinceLastData *sxsld;
 
         /* FIXME: this should more gracefully deal with multiple 'row-select'
-           signals from double/triple-clicks. */
+         * signals from double/triple-clicks. */
         sxsld = (sxSinceLastData*)user_data;
 
         tci = (toCreateInstance*)gtk_ctree_node_get_row_data( ct, node );
@@ -2407,6 +2695,24 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
                 PERR( "Given row-selection for row w/o "
                       "bound toCreateInstance." );
                 return;
+        }
+        sxsld->curSelTCI = tci;
+        sxsld_set_sensitive_tci_controls( sxsld, TRUE );
+        /* set real sensitivity based on the state of the TCI; when we change
+         * the option menu selection here, it won't fire the selection-done
+         * handler, so we have to force it. */
+
+        {
+                GtkOptionMenu *optMenu;
+
+                optMenu = GTK_OPTION_MENU(
+                        glade_xml_get_widget( sxsld->gxml,
+                                              SX_DISPOSITION_OPT ) );
+                gtk_option_menu_set_history( optMenu,
+                                             sxsld->curSelTCI->state );
+                sxsld_disposition_changed( GTK_MENU_SHELL(
+                                                   gtk_option_menu_get_menu( optMenu ) ),
+                                           sxsld );
         }
 
         /* Get the count of variables; potentially remove the system-defined
@@ -2537,6 +2843,10 @@ sxsincelast_tc_row_unsel( GtkCTree *ct,
 
         sxsld = (sxSinceLastData*)user_data;
         clean_variable_table( sxsld );
+
+        sxsld->curSelTCI = NULL;
+
+        sxsld_set_sensitive_tci_controls( sxsld, FALSE );
         /* we cleanup the gnc_numerics we allocated in the "destroy" signal
          * handler of the entry [where we attached them] */
 }
@@ -2832,6 +3142,78 @@ sxsld_obsolete_row_toggle( GtkCList *cl, gint row, gint col,
         tdt->isSelected = !tdt->isSelected;
 }
 
+static
+void
+sxsld_disposition_changed( GtkMenuShell *b, gpointer d )
+{
+        sxSinceLastData *sxsld = (sxSinceLastData*)d;
+        ToCreateState newState;
+        gboolean newSensitivity;
+        GtkCTree *ct;
+        char *newCtreeText;
+
+        newState =
+                gnc_option_menu_get_active( 
+                        glade_xml_get_widget( sxsld->gxml,
+                                              SX_DISPOSITION_OPT ));
+        /* Change the state of the TCI */
+        g_assert( sxsld->curSelTCI != NULL );
+        sxsld->curSelTCI->state = newState;
+
+        newSensitivity = TRUE;
+        newCtreeText = "FIXME";
+
+        switch ( newState ) {
+        case TO_CREATE:
+                newSensitivity = TRUE;
+                {
+                        gboolean allVarsBound = TRUE;
+                        /* If there are no un-bound variables, then set the 'ready-to-go'
+                           flag to 'y'. */
+                        g_hash_table_foreach( sxsld->curSelTCI->varBindings,
+                                              andequal_numerics_set,
+                                              &allVarsBound );
+                        newCtreeText = ( allVarsBound
+                                         ? _( READY_TEXT )
+                                         : _( NEEDS_BINDINGS_TEXT ) );
+                }
+                break;
+        case IGNORE:
+                newSensitivity = FALSE;
+                newCtreeText = _( IGNORE_TEXT );
+                break;
+        case POSTPONE:
+                newSensitivity = FALSE;
+                newCtreeText = _( POSTPONE_TEXT );
+                break;
+        default:
+                g_assert( FALSE );
+                break;
+        }
+
+        gtk_widget_set_sensitive( glade_xml_get_widget( sxsld->gxml,
+                                                        VARIABLE_TABLE ),
+                                  newSensitivity );
+        ct = GTK_CTREE(glade_xml_get_widget( sxsld->gxml, TO_CREATE_LIST ));
+        gtk_ctree_node_set_text( ct, sxsld->curSelTCI->node, 1, newCtreeText );
+}
+
+/**
+ * Makes both the variable table and disposition selection [in]sensitive, as
+ * specified.
+ **/
+static
+void
+sxsld_set_sensitive_tci_controls( sxSinceLastData *sxsld,
+                                  gboolean sensitive )
+{
+        GtkWidget *w;
+        w = glade_xml_get_widget( sxsld->gxml, SX_DISPOSITION_OPT );
+        gtk_widget_set_sensitive( w, sensitive );
+        w = glade_xml_get_widget( sxsld->gxml, VARIABLE_TABLE );
+        gtk_widget_set_sensitive( w, sensitive );
+}
+
 static void
 create_bad_reminders_msg( gpointer data, gpointer ud )
 {
@@ -3015,6 +3397,9 @@ clean_sincelast_data( sxSinceLastData *sxsld )
 {
         GList *l, *m;
 
+        /* FIXME: handle the cloned state data for all the instance
+         * structures. */
+
         /* Free the reminder list */
         for ( l = sxsld->reminderList; l; l = l->next ) {
                 reminderTuple *rt;
@@ -3032,7 +3417,6 @@ clean_sincelast_data( sxSinceLastData *sxsld )
                 g_free( rt );
         }
         g_list_free( sxsld->reminderList );
-
 
         /* Free the auto-create and to-create lists */
         gnc_sxsld_free_toCreateTuple_list( sxsld->autoCreateList );
@@ -3086,6 +3470,30 @@ gnc_sxsld_free_tci( toCreateInstance *tci )
                 tci->varBindings = NULL;
         }
 
+        /* Handling these original/previous/current-stated things is painful,
+         * but here's the rules...
+         *
+         * If we're not cancelling...
+         * . If ignored, then destroy.
+         * . If postponed, then don't.
+         * . If to-create, destroy.
+         *
+         * If we are cancelling....
+         * . If ignored, destroy.
+         * . If postponed, destroy.
+         * . If to-create, destroy.
+         *
+         * So, we don't destroy postponed by default, and let the
+         * cancel-specific case handle that destruction [thus the
+         * valid-pointer check].
+         */
+        if ( tci->prevState    != POSTPONE
+             && tci->origState != POSTPONE
+             && tci->sxStateData != NULL ) {
+                gnc_sx_destroy_temporal_state( tci->sxStateData );
+                tci->sxStateData = NULL;
+        }
+
         tci->parentTCT = NULL;
 
         if ( tci->createdTxnGUIDs ) {
@@ -3125,7 +3533,7 @@ gnc_sxsld_free_sxState( gpointer key,
                         gpointer value,
                         gpointer userdata )
 {
-        gnc_sx_destroy_temporal_state_snapshot( (void*)value );
+        gnc_sx_destroy_temporal_state( (void*)value );
 }
 
 static
@@ -3139,7 +3547,7 @@ gnc_sxsld_free_entry_numeric( GtkObject *o, gpointer ud )
 
 static
 void
-gnc_sxlsd_commit_ledgers( sxSinceLastData *sxsld )
+gnc_sxsld_commit_ledgers( sxSinceLastData *sxsld )
 {
         gnc_split_register_save(
                 gnc_ledger_display_get_split_register(sxsld->created_ledger),

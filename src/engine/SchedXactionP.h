@@ -77,10 +77,21 @@ struct gncp_SchedXaction
   GUID            guid;
   GNCEntityTable *entity_table;
   
+  /** The list of deferred SX instances.  This list is of temporalStateData
+   * instances.  */
+  GList /* <temporalStateData*> */ *deferredList;
+
   /* Changed since last save? */
   gboolean       dirty;
 
   kvp_frame        *kvp_data;
 };
+
+/** Just the variable temporal bits from the SX structure. */
+typedef struct _temporalStateData {
+  GDate last_date;
+  gint num_occur_rem;
+  gint num_inst;
+} temporalStateData;
 
 #endif

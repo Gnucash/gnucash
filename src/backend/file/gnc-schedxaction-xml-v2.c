@@ -70,6 +70,11 @@ static short module = MOD_SX;
  *   <sx:freq>
  *     <!-- freq spec tree -->
  *   </sx:freq>
+ *   <sx:deferredInstance>
+ *     <sx:last>2001-10-02</sx:last>
+ *     [...]
+ *   </sx:deferredInstance>
+ *   [...]
  * </gnc:schedxaction>
  * <gnc:schedxaction version="1.0.0">
  *   <sx:id type="guid">...</sx:id>
@@ -125,7 +130,7 @@ static short module = MOD_SX;
 #define SX_TEMPL_ACCT           "sx:templ-acct" 
 #define SX_FREQSPEC             "sx:freqspec"
 #define SX_SLOTS                "sx:slots"
-
+#define SX_DEFER_INSTANCE       "sx:deferredInstance"
 
 /*
  * FIXME: These should be defined in a header somewhere
@@ -183,12 +188,10 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
 
     if ( xaccSchedXactionHasOccurDef(sx) ) {
 
-        xmlAddChild(ret, int_to_dom_tree(
-                        SX_NUM_OCCUR,
-                        (gint32)xaccSchedXactionGetNumOccur(sx)));
-        xmlAddChild(ret, int_to_dom_tree(
-                        SX_REM_OCCUR,
-                        (gint32)xaccSchedXactionGetRemOccur(sx)));
+        xmlAddChild(ret, int_to_dom_tree( SX_NUM_OCCUR,
+                                          xaccSchedXactionGetNumOccur(sx)));
+        xmlAddChild(ret, int_to_dom_tree( SX_REM_OCCUR,
+                                          xaccSchedXactionGetRemOccur(sx)));
 
     } else if ( xaccSchedXactionHasEndDate(sx) ) {
             xmlAddChild( ret,
@@ -197,7 +200,6 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     }
 
     /* output template account GUID */
-
     xmlAddChild( ret, 
 		 guid_to_dom_tree(SX_TEMPL_ACCT,
 				  templ_acc_guid));
@@ -208,6 +210,26 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
                  gnc_freqSpec_dom_tree_create(
                          xaccSchedXactionGetFreqSpec(sx)) );
     xmlAddChild( ret, fsNode );
+
+    /* Output deferred-instance list. */
+    {
+            xmlNodePtr instNode;
+            temporalStateData *tsd;
+            GList *l;
+
+            for ( l = gnc_sx_get_defer_instances( sx ); l; l = l->next ) {
+                    tsd = (temporalStateData*)l->data;
+
+                    instNode = xmlNewNode( NULL, SX_DEFER_INSTANCE );
+                    xmlAddChild( instNode, gdate_to_dom_tree( SX_LAST,
+                                                              &tsd->last_date ) );
+                    xmlAddChild( instNode, int_to_dom_tree( SX_REM_OCCUR,
+                                                            tsd->num_occur_rem ) );
+                    xmlAddChild( instNode, int_to_dom_tree( SX_INSTANCE_COUNT,
+                                                            tsd->num_inst ) );
+                    xmlAddChild( ret, instNode );
+            }
+    }
     
     /* output kvp_frame */
     {
@@ -391,6 +413,85 @@ sx_freqspec_handler( xmlNodePtr node, gpointer sx_pdata )
 
 static
 gboolean
+sx_defer_last_handler( xmlNodePtr node, gpointer gpTSD )
+{
+        GDate *gd;
+        temporalStateData *tsd = (temporalStateData*)gpTSD;
+
+        g_return_val_if_fail( node, FALSE );
+        gd = dom_tree_to_gdate( node );
+        g_return_val_if_fail( gd, FALSE );
+        tsd->last_date = *gd;
+        g_date_free( gd );
+        return TRUE;
+}
+
+static
+gboolean
+sx_defer_rem_occur_handler( xmlNodePtr node, gpointer gpTSD )
+{
+        gint64 remOccur;
+        temporalStateData *tsd = (temporalStateData*)gpTSD;
+        g_return_val_if_fail( node, FALSE );
+
+        if ( ! dom_tree_to_integer( node, &remOccur ) ) {
+                return FALSE;
+        }
+        tsd->num_occur_rem = remOccur;
+        return TRUE;
+}
+
+static
+gboolean
+sx_defer_inst_count_handler( xmlNodePtr node, gpointer gpTSD )
+{
+        gint64 instCount;
+        temporalStateData *tsd = (temporalStateData*)gpTSD;
+        g_return_val_if_fail( node, FALSE );
+
+        if ( ! dom_tree_to_integer( node, &instCount ) ) {
+                return FALSE;
+        }
+        tsd->num_inst = instCount;
+        return TRUE;
+}
+
+struct dom_tree_handler sx_defer_dom_handlers[] = {
+       /* tag name, handler, opt, ? */
+        { SX_LAST,           sx_defer_last_handler,       1, 0 },
+        { SX_REM_OCCUR,      sx_defer_rem_occur_handler,  1, 0 },
+        { SX_INSTANCE_COUNT, sx_defer_inst_count_handler, 1, 0 },
+        { NULL, NULL, 0, 0 }
+};
+
+static
+gboolean
+sx_defer_inst_handler( xmlNodePtr node, gpointer sx_pdata )
+{
+        struct sx_pdata *pdata = sx_pdata;
+        SchedXaction *sx = pdata->sx;
+        temporalStateData *tsd;
+
+        g_return_val_if_fail( node, FALSE );
+
+        tsd = g_new0( temporalStateData, 1 );
+        g_assert( sx_defer_dom_handlers != NULL );
+        if ( !dom_tree_generic_parse( node,
+                                      sx_defer_dom_handlers,
+                                      tsd ) ) {
+                xmlElemDump(stdout, NULL, node);
+                g_free( tsd );
+                tsd = NULL;
+                return FALSE;
+        }
+
+        /* We assume they were serialized in sorted order, here. */
+        sx->deferredList = g_list_append( sx->deferredList, tsd );
+        return TRUE;
+}
+
+static
+gboolean
 sx_numOccur_handler( xmlNodePtr node, gpointer sx_pdata )
 {
     struct sx_pdata *pdata = sx_pdata;
@@ -469,7 +570,9 @@ struct dom_tree_handler sx_dom_handlers[] = {
     { SX_END,                 sx_end_handler,        0, 0 },
     { SX_TEMPL_ACCT,          sx_templ_acct_handler, 0, 0 },
     { SX_FREQSPEC,            sx_freqspec_handler,   1, 0 },
+    { SX_DEFER_INSTANCE,      sx_defer_inst_handler, 0, 0 },
     { SX_SLOTS,               sx_slots_handler,      0, 0 },
+    { NULL,                   NULL, 0, 0 }
 };
 
 static gboolean
@@ -508,6 +611,8 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
 
     sx_pdata.sx = sx;
     sx_pdata.book = gdata->bookdata;
+
+    g_assert( sx_dom_handlers != NULL );
 
     successful = dom_tree_generic_parse( tree, sx_dom_handlers, &sx_pdata );
 
@@ -634,8 +739,6 @@ tt_trn_handler( xmlNodePtr node, gpointer data )
 
         return TRUE;
 }
-
-
 
 struct dom_tree_handler tt_dom_handlers[] = {
         { GNC_ACCOUNT_TAG,     tt_act_handler, 0, 0 },

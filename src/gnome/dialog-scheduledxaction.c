@@ -1751,7 +1751,7 @@ generate_instances( SchedXaction *sx,
         void *seqStateData;
 
         /* Process valid next instances */
-        seqStateData = xaccSchedXactionCreateSequenceState( sx );
+        seqStateData = gnc_sx_create_temporal_state( sx );
         gd = xaccSchedXactionGetNextInstance( sx, seqStateData );
         while ( g_date_valid(&gd)
                 && g_date_compare( &gd, end ) <= 0 ) {
@@ -1760,10 +1760,10 @@ generate_instances( SchedXaction *sx,
                 *gdToReturn = gd;
                 *instanceList = g_list_append( *instanceList, gdToReturn );
 
-                xaccSchedXactionIncrSequenceState( sx, seqStateData );
+                gnc_sx_incr_temporal_state( sx, seqStateData );
                 gd = xaccSchedXactionGetInstanceAfter( sx, &gd, seqStateData );
         }
-        xaccSchedXactionDestroySequenceState( seqStateData );
+        gnc_sx_destroy_temporal_state( seqStateData );
         seqStateData = NULL;
 }
 

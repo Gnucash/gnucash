@@ -3949,7 +3949,7 @@ Select any which you would like to create now, and click
 		<class>GtkLabel</class>
 		<child_name>CTree:title</child_name>
 		<name>label847894</name>
-		<label>Ready?</label>
+		<label>State</label>
 		<justify>GTK_JUSTIFY_CENTER</justify>
 		<wrap>False</wrap>
 		<xalign>0.5</xalign>
@@ -3961,115 +3961,173 @@ Select any which you would like to create now, and click
 	  </widget>
 
 	  <widget>
-	    <class>GtkFrame</class>
-	    <name>frame81</name>
-	    <border_width>1</border_width>
-	    <label>Variables</label>
-	    <label_xalign>0.1</label_xalign>
-	    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	    <class>GtkVBox</class>
+	    <name>vbox176</name>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
 	    <child>
 	      <shrink>True</shrink>
 	      <resize>True</resize>
 	    </child>
 
 	    <widget>
-	      <class>GtkVBox</class>
-	      <name>vbox176</name>
+	      <class>GtkHBox</class>
+	      <name>hbox173</name>
 	      <homogeneous>False</homogeneous>
 	      <spacing>0</spacing>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
 
 	      <widget>
-		<class>GtkScrolledWindow</class>
-		<name>scrolledwindow17</name>
-		<hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
-		<vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
-		<hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-		<vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
-		<child>
-		  <padding>0</padding>
-		  <expand>True</expand>
-		  <fill>True</fill>
-		</child>
-
-		<widget>
-		  <class>GtkViewport</class>
-		  <name>viewport2</name>
-		  <border_width>2</border_width>
-		  <shadow_type>GTK_SHADOW_IN</shadow_type>
-
-		  <widget>
-		    <class>GtkTable</class>
-		    <name>variables_table</name>
-		    <rows>2</rows>
-		    <columns>2</columns>
-		    <homogeneous>False</homogeneous>
-		    <row_spacing>2</row_spacing>
-		    <column_spacing>2</column_spacing>
-
-		    <widget>
-		      <class>GtkLabel</class>
-		      <name>label847869</name>
-		      <label>Value</label>
-		      <justify>GTK_JUSTIFY_CENTER</justify>
-		      <wrap>False</wrap>
-		      <xalign>0.5</xalign>
-		      <yalign>0.5</yalign>
-		      <xpad>0</xpad>
-		      <ypad>0</ypad>
-		      <child>
-			<left_attach>1</left_attach>
-			<right_attach>2</right_attach>
-			<top_attach>0</top_attach>
-			<bottom_attach>1</bottom_attach>
-			<xpad>0</xpad>
-			<ypad>0</ypad>
-			<xexpand>True</xexpand>
-			<yexpand>False</yexpand>
-			<xshrink>False</xshrink>
-			<yshrink>False</yshrink>
-			<xfill>True</xfill>
-			<yfill>False</yfill>
-		      </child>
-		    </widget>
-
-		    <widget>
-		      <class>GtkLabel</class>
-		      <name>label847870</name>
-		      <label>Variable</label>
-		      <justify>GTK_JUSTIFY_CENTER</justify>
-		      <wrap>False</wrap>
-		      <xalign>0.5</xalign>
-		      <yalign>0.5</yalign>
-		      <xpad>0</xpad>
-		      <ypad>0</ypad>
-		      <child>
-			<left_attach>0</left_attach>
-			<right_attach>1</right_attach>
-			<top_attach>0</top_attach>
-			<bottom_attach>1</bottom_attach>
-			<xpad>0</xpad>
-			<ypad>0</ypad>
-			<xexpand>True</xexpand>
-			<yexpand>False</yexpand>
-			<xshrink>False</xshrink>
-			<yshrink>False</yshrink>
-			<xfill>True</xfill>
-			<yfill>False</yfill>
-		      </child>
-		    </widget>
-		  </widget>
-		</widget>
-	      </widget>
-
-	      <widget>
-		<class>GtkStatusbar</class>
-		<name>to_create_status</name>
-		<border_width>5</border_width>
+		<class>GtkLabel</class>
+		<name>label847965</name>
+		<label>Disposition?</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>3</xpad>
+		<ypad>0</ypad>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
 		  <fill>False</fill>
 		</child>
+	      </widget>
+
+	      <widget>
+		<class>GtkOptionMenu</class>
+		<name>disposition_opt</name>
+		<border_width>3</border_width>
+		<can_focus>True</can_focus>
+		<items>Create as scheduled
+Ignore
+Postpone
+</items>
+		<initial_choice>0</initial_choice>
+		<child>
+		  <padding>0</padding>
+		  <expand>True</expand>
+		  <fill>True</fill>
+		</child>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkFrame</class>
+	      <name>frame81</name>
+	      <border_width>3</border_width>
+	      <label>Variables</label>
+	      <label_xalign>0.1</label_xalign>
+	      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	      <child>
+		<padding>0</padding>
+		<expand>True</expand>
+		<fill>True</fill>
+	      </child>
+
+	      <widget>
+		<class>GtkVBox</class>
+		<name>vbox176</name>
+		<homogeneous>False</homogeneous>
+		<spacing>0</spacing>
+
+		<widget>
+		  <class>GtkScrolledWindow</class>
+		  <name>scrolledwindow17</name>
+		  <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
+		  <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
+		  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+		  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+		  <child>
+		    <padding>0</padding>
+		    <expand>True</expand>
+		    <fill>True</fill>
+		  </child>
+
+		  <widget>
+		    <class>GtkViewport</class>
+		    <name>viewport2</name>
+		    <border_width>2</border_width>
+		    <shadow_type>GTK_SHADOW_IN</shadow_type>
+
+		    <widget>
+		      <class>GtkTable</class>
+		      <name>variables_table</name>
+		      <rows>2</rows>
+		      <columns>2</columns>
+		      <homogeneous>False</homogeneous>
+		      <row_spacing>2</row_spacing>
+		      <column_spacing>2</column_spacing>
+
+		      <widget>
+			<class>GtkLabel</class>
+			<name>label847869</name>
+			<label>Value</label>
+			<justify>GTK_JUSTIFY_CENTER</justify>
+			<wrap>False</wrap>
+			<xalign>0.5</xalign>
+			<yalign>0.5</yalign>
+			<xpad>0</xpad>
+			<ypad>0</ypad>
+			<child>
+			  <left_attach>1</left_attach>
+			  <right_attach>2</right_attach>
+			  <top_attach>0</top_attach>
+			  <bottom_attach>1</bottom_attach>
+			  <xpad>0</xpad>
+			  <ypad>0</ypad>
+			  <xexpand>True</xexpand>
+			  <yexpand>False</yexpand>
+			  <xshrink>False</xshrink>
+			  <yshrink>False</yshrink>
+			  <xfill>True</xfill>
+			  <yfill>False</yfill>
+			</child>
+		      </widget>
+
+		      <widget>
+			<class>GtkLabel</class>
+			<name>label847870</name>
+			<label>Variable</label>
+			<justify>GTK_JUSTIFY_CENTER</justify>
+			<wrap>False</wrap>
+			<xalign>0.5</xalign>
+			<yalign>0.5</yalign>
+			<xpad>0</xpad>
+			<ypad>0</ypad>
+			<child>
+			  <left_attach>0</left_attach>
+			  <right_attach>1</right_attach>
+			  <top_attach>0</top_attach>
+			  <bottom_attach>1</bottom_attach>
+			  <xpad>0</xpad>
+			  <ypad>0</ypad>
+			  <xexpand>True</xexpand>
+			  <yexpand>False</yexpand>
+			  <xshrink>False</xshrink>
+			  <yshrink>False</yshrink>
+			  <xfill>True</xfill>
+			  <yfill>False</yfill>
+			</child>
+		      </widget>
+		    </widget>
+		  </widget>
+		</widget>
+
+		<widget>
+		  <class>GtkStatusbar</class>
+		  <name>to_create_status</name>
+		  <border_width>5</border_width>
+		  <child>
+		    <padding>0</padding>
+		    <expand>False</expand>
+		    <fill>False</fill>
+		  </child>
+		</widget>
 	      </widget>
 	    </widget>
 	  </widget>
@@ -5503,6 +5561,62 @@ Escrow
       <textbox_color>255,255,255</textbox_color>
       <text_color>0,0,0</text_color>
       <title_color>255,255,255</title_color>
+    </widget>
+  </widget>
+</widget>
+
+<widget>
+  <class>GtkMenu</class>
+  <name>Since Last Run popup</name>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>creation_state</name>
+    <label>Creation State</label>
+    <right_justify>False</right_justify>
+
+    <widget>
+      <class>GtkMenu</class>
+      <name>creation_state_menu</name>
+
+      <widget>
+	<class>GtkPixmapMenuItem</class>
+	<name>ignore</name>
+	<signal>
+	  <name>activate</name>
+	  <handler>on_ignore_activate</handler>
+	  <last_modification_time>Fri, 23 Aug 2002 22:16:45 GMT</last_modification_time>
+	</signal>
+	<label>Ignore</label>
+	<right_justify>False</right_justify>
+	<stock_icon>GNOME_STOCK_MENU_STOP</stock_icon>
+      </widget>
+
+      <widget>
+	<class>GtkPixmapMenuItem</class>
+	<name>postpone</name>
+	<signal>
+	  <name>activate</name>
+	  <handler>on_postpone_activate</handler>
+	  <last_modification_time>Fri, 23 Aug 2002 22:16:45 GMT</last_modification_time>
+	</signal>
+	<label>Postpone</label>
+	<right_justify>False</right_justify>
+	<stock_icon>GNOME_STOCK_MENU_TIMER_STOP</stock_icon>
+      </widget>
+
+      <widget>
+	<class>GtkPixmapMenuItem</class>
+	<name>create</name>
+	<signal>
+	  <name>activate</name>
+	  <handler>on_create_activate</handler>
+	  <last_modification_time>Fri, 23 Aug 2002 22:16:45 GMT</last_modification_time>
+	</signal>
+	<label>Create</label>
+	<right_justify>False</right_justify>
+	<stock_icon>GNOME_STOCK_MENU_TIMER</stock_icon>
+      </widget>
     </widget>
   </widget>
 </widget>

@@ -120,7 +120,9 @@ void xaccSchedXactionSetRemOccur( SchedXaction *sx, gint numRemain );
 
 /**
  * Set the instance count.  This is incremented by one for every created
- * instance of the SX.
+ * instance of the SX.  Returns the instance num of the SX unless stateData
+ * is non-null, in which case it returns the instance num from the state
+ * data.
  * @param stateData may be NULL.
  **/
 gint gnc_sx_get_instance_count( SchedXaction *sx, void *stateData );
@@ -197,9 +199,9 @@ void xaccSchedXactionSetGUID( SchedXaction *sx, GUID g );
  * 	THESE (3) FUNCTIONS ARE DEPRECATED.  See/Use the
  * 	'temporal_state_snapshot' functions below.
  **/
-void *xaccSchedXactionCreateSequenceState( SchedXaction *sx );
-void xaccSchedXactionIncrSequenceState( SchedXaction *sx, void *stateData );
-void xaccSchedXactionDestroySequenceState( void *stateData );
+//void *xaccSchedXactionCreateSequenceState( SchedXaction *sx );
+//void xaccSchedXactionIncrSequenceState( SchedXaction *sx, void *stateData );
+//void xaccSchedXactionDestroySequenceState( void *stateData );
 ///@}
 
 ///@{
@@ -216,15 +218,28 @@ void xaccSchedXactionDestroySequenceState( void *stateData );
  * perhaps can be seen as entailing the above interface.  In fact, the above
  * interface is deprecated in favor of this one.
  **/
-void *gnc_sx_create_temporal_state_snapshot( SchedXaction *sx );
-void gnc_sx_revert_to_temporal_state_snapshot( SchedXaction *sx, void *stateData );
-void gnc_sx_destroy_temporal_state_snapshot( void *stateData );
+void *gnc_sx_create_temporal_state( SchedXaction *sx );
+void gnc_sx_incr_temporal_state( SchedXaction *sx, void *stateData );
+void gnc_sx_revert_to_temporal_state( SchedXaction *sx,
+                                      void *stateData );
+void gnc_sx_destroy_temporal_state( void *stateData );
+/**
+ * Allocates and returns a copy of the given temporal state.  Destroy with
+ * gnc_sx_destroy_temporal_state(), as you'd expect.
+ **/
+void *gnc_sx_clone_temporal_state( void *stateData );
 ///@}
 
 /**
  * Returns the next occurance of a scheduled transaction.  If the
  * transaction hasn't occured, then it's based off the start date.
  * Otherwise, it's based off the last-occurance date.
+ *
+ * If state data is NULL, the current value of the SX is used for
+ * computation.  Otherwise, the values in the state data are used.  This
+ * allows the caller to correctly create a set of instances into the future
+ * for possible action without modifying the SX state until action is
+ * actually taken.
  **/
 GDate xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData );
 GDate xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
@@ -238,5 +253,24 @@ GDate xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
  */
 void xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
                                       GNCBook *book);
+
+/**
+ * Adds an instance to the deferred list of the SX.  Added instances are
+ * added in date-sorted order.
+ **/
+void gnc_sx_add_defer_instance( SchedXaction *sx, void *deferStateData );
+
+/**
+ * Removes an instance from the deferred list.  If the instance is no longer
+ * useful; gnc_sx_destroy_temporal_state() it.
+ **/
+void gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData );
+
+/**
+ * Returns the defer list from the SX; this is a date-sorted state-data
+ * instance list.  The list should not be modified by the caller; use the
+ * gnc_sx_{add,remove}_defer_instance() functions to modifiy the list.
+ **/
+GList *gnc_sx_get_defer_instances( SchedXaction *sx );
 
 #endif /* XACC_SCHEDXACTION_H */

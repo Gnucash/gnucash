@@ -1031,13 +1031,17 @@ static void
 write_template_transaction_data( FILE *out, GNCBook *book, sixtp_gdv2 *gd )
 {
     AccountGroup *ag;
+    struct file_backend be_data;
+
+    be_data.out = out;
+    be_data.gd = gd;
 
     ag = gnc_book_get_template_group(book);
     if ( xaccGroupGetNumSubAccounts(ag) > 0 )
     {
         fprintf( out, "<%s>\n", TEMPLATE_TRANSACTION_TAG );
         write_account_group( out, ag, gd );
-        xaccGroupForEachTransaction( ag, xml_add_trn_data, (gpointer)out );
+        xaccGroupForEachTransaction( ag, xml_add_trn_data, (gpointer)&be_data );
         fprintf( out, "</%s>\n", TEMPLATE_TRANSACTION_TAG );
     }
 }
