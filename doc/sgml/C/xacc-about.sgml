@@ -1054,6 +1054,48 @@ development project.
 <ENTRY>302 files
          (95.1)</ENTRY>
 </ROW>
+<ROW>
+<ENTRY>gnucash-1.4.6
+         Sept 2000</ENTRY>
+<ENTRY>43 files
+         (13.0+3.6)</ENTRY>
+<ENTRY>27 files
+         (5.9+2.0)</ENTRY>
+<ENTRY>24 files
+         (5.4+1.8)</ENTRY>
+<ENTRY>-</ENTRY>
+<ENTRY>82 files
+         (33.8+3.0)</ENTRY>
+<ENTRY>68 files
+         (4.0+0.7+15.5)</ENTRY>
+<ENTRY>36 files
+         (9.3)</ENTRY>
+<ENTRY>36 files
+         (4.8)</ENTRY>
+<ENTRY>316 files
+         (101.9)</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>gnucash-1.5.2
+         Sept 2000</ENTRY>
+<ENTRY>46 files
+         (14.9+3.7)</ENTRY>
+<ENTRY>29 files
+         (6.3+2.0)</ENTRY>
+<ENTRY>25 files
+         (5.7+1.8)</ENTRY>
+<ENTRY>-</ENTRY>
+<ENTRY>83 files
+         (35.8+2.9)</ENTRY>
+<ENTRY>73 files
+         (4.6+0.8+16.8)</ENTRY>
+<ENTRY>37 files
+         (10.7)</ENTRY>
+<ENTRY>37 files
+         (5.8)</ENTRY>
+<ENTRY>330 files
+         (111.8)</ENTRY>
+</ROW>
 </TBODY>
 </TGROUP>
 </TABLE>
@@ -1063,8 +1105,7 @@ development project.
     
      number of *c and *.h files
      (KLOCS in *.c + KLOCS in *.h)
-    (unless its the scheme directories, in which case its *scm
-    files, etc) 
+     (or KLOCS of *.txt or KLOCS of *.scm as appropriate)
 
  </PARA>
 <PARA>where KLOC == kilo-lines-of-code, as reported by
@@ -1099,12 +1140,14 @@ development project.
 </LISTITEM>
 <LISTITEM>
 <PARA>scheme -- scheme and guile code -- src/scm plus
-      src/guile
+      src/guile -- in parenthesis is (*.c + *.h + *.scm)
 
  </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>docs -- english-only html docs (user documentation)
+<PARA>docs -- english-only user documentation
+              (html or sgml)
+      
 
  </PARA>
 </LISTITEM>
