@@ -61,6 +61,7 @@ void gnc_lot_remove_split (GNCLot *, Split *);
  *    invalidate the returned pointer.
  */
 SplitList * gnc_lot_get_split_list (GNCLot *);
+gint gnc_lot_count_splits (GNCLot *);
 
 /* The gnc_lot_get_account() routine returns the account with which 
  *    this lot is associated. */

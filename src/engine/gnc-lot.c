@@ -169,6 +169,12 @@ gnc_lot_get_split_list (GNCLot *lot)
    return lot->splits;
 }
 
+gint gnc_lot_count_splits (GNCLot *lot)
+{
+   if (!lot) return 0;
+   return g_list_length (lot->splits);
+}
+
 /* ============================================================= */
 
 gnc_numeric
