@@ -140,6 +140,7 @@ Ben Kelly <ben.kelly@ieee.org> for Motif menu bug fix, core dump fixes
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
 Matt Kraai <kraai@alumni.carnegiemellon.edu> date accelerator bug fix
 Sven Kuenzler <sk@xgm.de> for SuSE README file
+Eneko Lacunza <enlar@enlar.net> Spanish Translation
 Bryan Larsen <blarsen@ada-works.com> guile budget report
 Chris J (Oakton) Leach <LeachCJ@az1.bp.com> autoconf patch
 Nicholas Lee <nj.lee@plumtree.co.nz> scheme bug fix
@@ -148,6 +149,7 @@ Georg Lehner <Jorge.Lehner@gmx.net> Nicaraguan Spanish translation
 Ted Lemon <mellon@andare.fugue.com> for NetBSD port
 Yannick Le Ny <y-le-ny@ifrance.com> French translations
 Frederic Lespez <frederic.lespez@wanadoo.fr> French account templates fixes.
+Chao-Hsiung Liao <pesder.liao@msa.hinet.net> Traditional Chinese translation
 Grant Likely <glikely@nortelnetworks.com> gnome and engine patches
 Volodymyr M. Lisivka <lvm@mystery.lviv.net> Ukrainian translation
 Duarte Loreto <happyguy_pt@hotmail.com> message and documentation Portuguese translations
@@ -202,6 +204,7 @@ Richard -Gilligan- Uschold <uschold@cs.ucf.edu> tax report & txf export
 Matthew Vanecek <mevanecek@yahoo.com> for pg_config configure.in patch
 Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices, qif import fixes
 Rob Walker <rob@valinux.com> guile and register patches
+Andy Wingo <wingo@pobox.com> income per day-of-week report
 David Woodhouse <dwmw2@infradead.org> messages  British translations
 Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU> QIF import fixes; MYM import
 Shimpei Yamashita <shimpei@gol.com> messages Japanese translation

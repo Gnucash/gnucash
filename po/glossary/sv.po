@@ -1,14 +1,14 @@
 # Swedish messages for gnucash-glossary.
-# Copyright (C) 2001, 2002 Free Software Foundation, Inc.
-# Christian Rose <menthos@menthos.com>, 2001, 2002.
+# Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
+# Christian Rose <menthos@menthos.com>, 2001, 2002, 2003.
 #
 # $Id$
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash-glossary\n"
-"POT-Creation-Date: 2002-08-03 14:43+0200\n"
-"PO-Revision-Date: 2002-08-03 14:45+0200\n"
+"Project-Id-Version: gnucash-glossary 1.7.4\n"
+"POT-Creation-Date: 2002-12-02 14:51MET\n"
+"PO-Revision-Date: 2003-03-07 22:30+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -192,9 +192,21 @@ msgstr "balansera, att"
 msgid "bank"
 msgstr "bank"
 
+#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received, whereas an 'invoice' is one that we sent out."
+msgid "bill"
+msgstr "räkning"
+
+#. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
+msgid "billing terms"
+msgstr "betalningsvillkor"
+
 #. "-"
 msgid "business (adjective)"
 msgstr "företags- (adjektiv)"
+
+#. "as Menu Item: Headline for features that are related to small business accounting"
+msgid "business (noun)"
+msgstr "företag (substantiv)"
 
 #. "Profits made from the sale of investments or property"
 msgid "capital gains"
@@ -296,9 +308,17 @@ msgstr "Beskrivning (kolumn i register)"
 msgid "double entry"
 msgstr "dubbel bokföring"
 
+#. "a person who works for somebody or a company in return for wages"
+msgid "employee"
+msgstr "anställd"
+
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
 msgstr "eget kapital"
+
+#. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
+msgid "escrow (account)"
+msgstr "överföring (konto)"
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
@@ -340,9 +360,13 @@ msgstr "import"
 msgid "interest"
 msgstr "ränta"
 
-#. "A list of goods sold or services provided together with the prices charged; a bill"
+#. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out, whereas a 'bill' is one that we received."
 msgid "invoice"
 msgstr "räkning"
+
+#. "In small business accounting: A piece of work or task undertaken on order at a stated rate?????"
+msgid "job"
+msgstr "jobb"
 
 #. "A book in which a bank, business firm, etc. records its financial accounts"
 msgid "ledger"
@@ -351,6 +375,11 @@ msgstr "liggare"
 #. "The heading for the right side of the balance sheet. See also: Equity."
 msgid "liabilities/equity"
 msgstr "skulder/eget kapital"
+
+# src/languages.h:184
+#. "A sum of money that is lent (by a bank)"
+msgid "loan"
+msgstr "lån"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -371,6 +400,10 @@ msgstr "MDI-läge"
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
 msgstr "Anteckning"
+
+#. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
+msgid "Mortgage"
+msgstr "Inteckning"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -411,6 +444,10 @@ msgstr "ingående saldo"
 #. "A menu choice in the graphical user interface that allows the user to specify how the application will act each time it is used. "
 msgid "options"
 msgstr "alternativ"
+
+#. "In small business accounting: unused term at the moment (maybe: a particular piece of work, maybe created through an order from a customer???)"
+msgid "order"
+msgstr "order"
 
 # src/languages.h:184
 #. "Name of an automatically created account that holds splits that have no account."
@@ -529,6 +566,11 @@ msgstr "Balanserade vinstmedel"
 msgid "save, to (to a file)"
 msgstr "spara, att (till en fil)"
 
+# src/prefs.c:239
+#. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
+msgid "Scheduled Transaction"
+msgstr "Schemalagd transaktion"
+
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
 msgstr "städa upp, att"
@@ -582,11 +624,11 @@ msgid "total"
 msgstr "totalsumma"
 
 # src/prefs.c:239
-#. "A piece of business done; the transfer of money from one account to one or more other accounts"
+#. "A piece of business done; the transfer of money from one account to one or more other accounts. (see also: Scheduled Transaction)"
 msgid "transaction"
 msgstr "transaktion"
 
-#. "-"
+#. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
 msgstr "transaktionstillstånd: godkänd"
 
@@ -597,6 +639,10 @@ msgstr "transaktionstillstånd: frusen"
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
 msgstr "transaktionstillstånd: avstämd"
+
+#. "A transaction that is void i.e. not valid (anymore)."
+msgid "transaction state: voided"
+msgstr "transaktionstillstånd: annulerad"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
@@ -625,6 +671,10 @@ msgstr "URL"
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
 msgid "value (in a split)"
 msgstr "värde (i en delning)"
+
+#. "In small business accounting: A person or company that sells items and is supplying goods"
+msgid "vendor"
+msgstr "leverantör"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"

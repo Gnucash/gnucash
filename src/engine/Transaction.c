@@ -2404,7 +2404,7 @@ xaccSplitGetCorrAccountCode(const Split *sa)
   else
   {
     other_split_acc = xaccSplitGetAccount(other_split);
-    return xaccAccountGetName(other_split_acc);
+    return xaccAccountGetCode(other_split_acc);
   }
 }
 
@@ -2492,7 +2492,7 @@ xaccTransSetDateInternal(Transaction *trans, int which, time_t secs,
     check_open(trans);
 
     PINFO ("addr=%p set %d date to %lu %li %s",
-           trans, which, secs, nsecs, ctime (&secs));
+	   trans, which, (long unsigned int)secs, nsecs, ctime (&secs));
     
     dadate = ((which == TDATE_POSTED)
               ? &trans->date_posted
@@ -2987,9 +2987,23 @@ xaccSplitGetValue (const Split * split)
 gnc_numeric
 xaccSplitGetSharePrice (const Split * split) 
 {
-  if(!split || gnc_numeric_zero_p(split->amount)) 
+  if(!split)
   {
     return gnc_numeric_create(1, 1);
+  }
+
+  /* if amount == 0 and value == 0, then return 1.
+   * if amount == 0 and value != 0 then return 0.
+   * otherwise return value/amount
+   */
+
+  if(gnc_numeric_zero_p(split->amount))
+  {
+    if(gnc_numeric_zero_p(split->value))
+    {
+      return gnc_numeric_create(1, 1);
+    }
+    return gnc_numeric_create(0, 1);
   }
   return gnc_numeric_div(split->value, 
                          split->amount,

@@ -1,7 +1,4 @@
 /********************************************************************\
- * druid-hbci-final.h -- hbci final creation functionality          *
- * Copyright (C) 2002 Christian Stimming                            *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -19,12 +16,19 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
+ /** @file
+     @brief .log replay module interface
+     *
+     gnc-log-replay.h
+     @author Copyright (c) 2003 Benoit Grégoire <bock@step.polymtl.ca>
+ */
+#ifndef OFX_IMPORT_H
+#define OFX_IMPORT_H
 
-#ifndef DRUID_HBCI_FINAL_H
-#define DRUID_HBCI_FINAL_H
-
-#include <guile/gh.h>
-
-/* Empty file at the moment. */
-
+/** The gnc_file_log_replay() routine will pop up a standard file
+ *     selection dialogue asking the user to pick a log file to replay. If one
+ *     is selected the the .log file is opened and read.  It's contents
+ *     are then silently merged in the current log file. */
+void              gnc_file_log_replay (void);
+SCM  scm_gnc_file_log_replay (void);
 #endif

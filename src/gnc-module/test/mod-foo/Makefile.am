@@ -4,6 +4,7 @@ AM_CFLAGS=\
   ${G_WRAP_COMPILE_ARGS} \
   ${GLIB_CFLAGS}
 
+PWD := $(shell pwd)
 checklibdir=${PWD}
 checklib_LTLIBRARIES=libfoo.la libgncmodfoo.la
 

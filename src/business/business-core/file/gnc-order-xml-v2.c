@@ -374,6 +374,7 @@ gnc_order_xml_initialize (void)
     NULL,			/* add_item */
     order_get_count,
     order_write,
+    NULL,			/* scrub */
   };
 
   gncObjectRegisterBackend (_GNC_MOD_NAME,

@@ -1,0 +1,837 @@
+;; -*-scheme-*-
+;; fancy-invoice.scm -- a Fancy Invoice Report, used to print a GncInvoice
+;;
+;; Created by:  Derek Atkins <warlord@MIT.EDU>
+;;
+;; Fancy Invoice customized from "invoice.scm"
+;; Customized by:  Oliver Jones <gnucash at oliverstech dot com>
+;;
+;; WARNING: customizations are hard-coded, some translations might be
+;; broken and it won't work for bills/expense vouchers
+;;
+;; Customizations are marked with "oli-custom".
+;;
+;; Hint: you may set your default options here until a way to save report
+;; options will be implemented.
+;;
+;; You will need to upgrade to gtkhtml-1.1 for the latest features or it won't look right.
+;; gtkhtml doesn't have support for table colgroup, tbody, thead and rules
+;; tags yet. When it will, the invoice will look even better.
+;;
+;; This is a quick and dirty hack. The proper way to do this (when I or someone
+;; else will have time) is to have the user supply an HTML template. The most common
+;; used templates will be distributed with gnucash.
+
+(define-module (gnucash report fancy-invoice))
+
+(use-modules (srfi srfi-1))
+(use-modules (ice-9 slib))
+(use-modules (gnucash gnc-module))
+
+(require 'hash-table)
+(require 'record)
+
+(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/business-utils" 0)
+
+(use-modules (gnucash report standard-reports))
+(use-modules (gnucash report business-reports))
+
+(define invoice-page gnc:pagename-general)
+(define invoice-name (N_ "Invoice Number"))
+
+(define-macro (addto! alist element)
+  `(set! ,alist (cons ,element ,alist)))
+
+(define (set-last-row-style! table tag . rest)
+  (let ((arg-list 
+         (cons table 
+               (cons (- (gnc:html-table-num-rows table) 1)
+                     (cons tag rest)))))
+    (apply gnc:html-table-set-row-style! arg-list)))
+
+(define (date-col columns-used)
+  (vector-ref columns-used 0))
+(define (description-col columns-used)
+  (vector-ref columns-used 1))
+(define (action-col columns-used)
+  (vector-ref columns-used 2))
+(define (quantity-col columns-used)
+  (vector-ref columns-used 3))
+(define (price-col columns-used)
+  (vector-ref columns-used 4))
+(define (discount-col columns-used)
+  (vector-ref columns-used 5))
+(define (tax-col columns-used)
+  (vector-ref columns-used 6))
+(define (taxvalue-col columns-used)
+  (vector-ref columns-used 7))
+(define (value-col columns-used)
+  (vector-ref columns-used 8))
+
+(define columns-used-size 9)
+
+(define (num-columns-required columns-used)  
+  (do ((i 0 (+ i 1)) 
+       (col-req 0 col-req)) 
+      ((>= i columns-used-size) col-req)
+    (if (vector-ref columns-used i)
+        (set! col-req (+ col-req 1)))))
+
+(define (build-column-used options)   
+  (define (opt-val section name)
+    (gnc:option-value 
+     (gnc:lookup-option options section name)))
+  (define (make-set-col col-vector)
+    (let ((col 0))
+      (lambda (used? index)
+        (if used?
+            (begin
+              (vector-set! col-vector index col)
+              (set! col (+ col 1)))
+            (vector-set! col-vector index #f)))))
+  
+  (let* ((col-vector (make-vector columns-used-size #f))
+         (set-col (make-set-col col-vector)))
+    (set-col (opt-val "Display Columns" "Date") 0)
+    (set-col (opt-val "Display Columns" "Description") 1)
+    (set-col (opt-val "Display Columns" "Action") 2)
+    (set-col (opt-val "Display Columns" "Quantity") 3)
+    (set-col (opt-val "Display Columns" "Price") 4)
+    (set-col (opt-val "Display Columns" "Discount") 5)
+    (set-col (opt-val "Display Columns" "Taxable") 6)
+    (set-col (opt-val "Display Columns" "Tax Amount") 7)
+    (set-col (opt-val "Display Columns" "Total") 8)
+    col-vector))
+
+(define (make-heading-list column-vector)
+
+  (let ((heading-list '()))
+    (if (date-col column-vector)
+        (addto! heading-list (_ "Date")))
+    (if (description-col column-vector)
+        (addto! heading-list (_ "Description")))
+    (if (action-col column-vector)
+	(addto! heading-list (_ "Charge Type")))
+    (if (quantity-col column-vector)
+	(addto! heading-list (_ "Quantity")))
+    (if (price-col column-vector)
+	(addto! heading-list (string-expand (_ "Unit Price") #\space "&nbsp;")))
+    (if (discount-col column-vector)
+	(addto! heading-list (_ "Discount")))
+    (if (tax-col column-vector)
+	(addto! heading-list (_ "Taxable")))
+    (if (taxvalue-col column-vector)
+	(addto! heading-list (_ "Tax Amount")))
+    (if (value-col column-vector)
+	(addto! heading-list (_ "Total")))
+    (reverse heading-list)))
+
+(define (make-account-hash) (make-hash-table 23))
+
+(define (update-account-hash hash values)
+  (for-each
+   (lambda (item)
+     (let* ((acct (car item))
+	    (val (cdr item))
+	    (ref (hash-ref hash acct)))
+
+       (hash-set! hash acct (if ref (gnc:numeric-add-fixed ref val) val))))
+   values))
+
+(define (monetary-or-percent numeric currency entry-type)
+  (if (gnc:entry-type-percent-p entry-type)
+      ;; oli-custom - make a string instead of a table
+      (string-append (gnc:default-html-gnc-numeric-renderer numeric #f) " " (_ "%"))
+      (gnc:make-gnc-monetary currency numeric)))
+
+(define (add-entry-row table currency entry column-vector row-style invoice?)
+  (let* ((row-contents '())
+	 (entry-value (gnc:make-gnc-monetary
+		       currency
+		       (gnc:entry-get-value entry invoice?)))
+	 (entry-tax-value (gnc:make-gnc-monetary
+			   currency
+			   (gnc:entry-get-tax-value entry invoice?))))
+
+    (if (date-col column-vector)
+        (addto! row-contents
+                (gnc:print-date (gnc:entry-get-date entry))))
+
+    (if (description-col column-vector)
+        (addto! row-contents
+		(gnc:entry-get-description entry)))
+
+    (if (action-col column-vector)
+        (addto! row-contents
+		(gnc:entry-get-action entry)))
+
+    (if (quantity-col column-vector)
+	(addto! row-contents
+		(gnc:make-html-table-cell/markup
+		 "number-cell"
+		 (gnc:entry-get-quantity entry))))
+
+    (if (price-col column-vector)
+	(addto! row-contents
+		(gnc:make-html-table-cell/markup
+		 "number-cell"
+		 (gnc:make-gnc-monetary
+		  currency (if invoice? (gnc:entry-get-inv-price entry)
+			       (gnc:entry-get-bill-price entry))))))
+
+    (if (discount-col column-vector)
+	(addto! row-contents
+		(if invoice?
+		    (gnc:make-html-table-cell/markup
+		     "number-cell"
+		     (monetary-or-percent (gnc:entry-get-inv-discount entry)
+					  currency
+					  (gnc:entry-get-inv-discount-type entry)))
+		    "")))
+
+    (if (tax-col column-vector)
+	(addto! row-contents
+		(if (if invoice?
+			(and (gnc:entry-get-inv-taxable entry)
+			     (gnc:entry-get-inv-tax-table entry))
+			(and (gnc:entry-get-bill-taxable entry)
+			     (gnc:entry-get-bill-tax-table entry)))
+		    (_ "T") "")))
+
+    (if (taxvalue-col column-vector)
+	(addto! row-contents
+		(gnc:make-html-table-cell/markup
+		 "number-cell"
+		 entry-tax-value)))
+
+    (if (value-col column-vector)
+	(addto! row-contents
+		(gnc:make-html-table-cell/markup
+		 "number-cell"
+		 entry-value)))
+
+    (gnc:html-table-append-row/markup! table row-style
+                                       (reverse row-contents))
+    
+    (cons entry-value entry-tax-value)))
+
+;; oli-custom - here you can set your default options
+
+(define (options-generator)
+
+  (define gnc:*report-options* (gnc:new-options))
+
+  (define (gnc:register-inv-option new-option)
+    (gnc:register-option gnc:*report-options* new-option))
+
+  (gnc:register-inv-option
+   (gnc:make-invoice-option invoice-page invoice-name "x" ""
+			    (lambda () #f) #f))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display Columns") (N_ "Date")
+    "b" (N_ "Display the date?") #f))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display Columns") (N_ "Description")
+    "d" (N_ "Display the description?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display Columns") (N_ "Action")
+    "g" (N_ "Display the action?") #f))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display Columns") (N_ "Quantity")
+    "ha" (N_ "Display the quantity of items?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display Columns") (N_ "Price")
+    "hb" "Display the price per item?" #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display Columns") (N_ "Discount")
+    "k" (N_ "Display the entry's discount") #f))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display Columns") (N_ "Taxable")
+    "l" (N_ "Display the entry's taxable status") #f))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display Columns") (N_ "Tax Amount")
+    "m" (N_ "Display each entry's total total tax") #f))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display Columns") (N_ "Total")
+    "n" (N_ "Display the entry's value") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "Individual Taxes")
+    "o" (N_ "Display all the individual taxes?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "Totals")
+    "p" (N_ "Display the totals?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "References")
+    "s" (N_ "Display the invoice references?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "Billing Terms")
+    "t" (N_ "Display the invoice billing terms?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "Billing ID")
+    "ta" (N_ "Display the billing id?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "Invoice Notes")
+    "tb" (N_ "Display the invoice notes?") #f))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "Payments")
+    "tc" (N_ "Display the payments applied to this invoice?") #f))
+
+  (gnc:register-inv-option
+   (gnc:make-text-option
+    (N_ "Display") (N_ "Extra Notes")
+     "u" (N_ "Extra notes to put on the invoice")
+     ;; oli-custom - Extra notes to add on each invoice, invoice-independent
+     ;; yes, I was too lazy to (get-company-name) ;)
+     "Make all cheques payable to: Company Name Inc.\nDirect all inquiries to: Mr. Accounting Contact"))
+
+  (gnc:register-inv-option
+   (gnc:make-string-option
+    (N_ "Display") (N_ "Today Date Format")
+    "v" (N_ "The format for the date->string conversion for today's date.")
+    "%B %e, %Y"))
+
+  (gnc:options-set-default-section gnc:*report-options* "General")
+
+  gnc:*report-options*)
+
+(define (make-entry-table invoice options add-order invoice?)
+  (define (opt-val section name)
+    (gnc:option-value 
+     (gnc:lookup-option options section name)))
+
+  (let ((show-payments (opt-val "Display" "Payments"))
+	(display-all-taxes (opt-val "Display" "Individual Taxes"))
+	(lot (gnc:invoice-get-posted-lot invoice))
+	(txn (gnc:invoice-get-posted-txn invoice))
+	(currency (gnc:invoice-get-currency invoice))
+	(entries-added 0))
+
+    (define (colspan monetary used-columns)
+      (cond
+       ((value-col used-columns) (value-col used-columns))
+       ((taxvalue-col used-columns) (taxvalue-col used-columns))
+       (else (price-col used-columns))))
+
+    (define (display-subtotal monetary used-columns)
+      (if (value-col used-columns)
+	  monetary
+	  (let ((amt (gnc:gnc-monetary-amount monetary)))
+	    (if amt
+		(if (gnc:numeric-negative-p amt)
+		    (gnc:monetary-neg monetary)
+		    monetary)
+		monetary))))
+
+    (define (add-subtotal-row table used-columns
+			      subtotal-collector subtotal-style subtotal-label)
+      (let ((currency-totals (subtotal-collector
+			      'format gnc:make-gnc-monetary #f)))
+
+	(for-each (lambda (currency)
+		    (gnc:html-table-append-row/markup! 
+		     table
+		     subtotal-style
+		     ;; oli-custom modified to colspan the subtotal labels instead of the data fields
+		     (append (cons (gnc:make-html-table-cell/size/markup
+				    0 (colspan currency used-columns)
+				    "total-label-cell" subtotal-label)
+				   '())
+			     (list (gnc:make-html-table-cell/markup
+				    ;; 1 (colspan currency used-columns)
+				    "total-number-cell"
+				    (display-subtotal currency used-columns))))))
+		  currency-totals)))
+
+    (define (add-payment-row table used-columns split total-collector)
+      (let* ((t (gnc:split-get-parent split))
+	     (currency (gnc:transaction-get-currency t))
+	     ;; XXX Need to know when to reverse the value
+	     (amt (gnc:make-gnc-monetary currency (gnc:split-get-value split)))
+	     (payment-style "grand-total")
+	     (row '()))
+	
+	(total-collector 'add 
+			 (gnc:gnc-monetary-commodity amt)
+			 (gnc:gnc-monetary-amount amt))
+
+	(if (date-col used-columns)
+	    (addto! row
+		    (gnc:print-date (gnc:transaction-get-date-posted t))))
+
+	(if (description-col used-columns)
+	    (addto! row (_ "Payment, thank you")))
+		    
+	(gnc:html-table-append-row/markup! 
+	 table
+	 payment-style
+	 (append (reverse row)
+		 (list (gnc:make-html-table-cell/size/markup
+			1 (colspan currency used-columns)
+			"total-number-cell"
+			(display-subtotal amt used-columns)))))))
+
+    (define (do-rows-with-subtotals entries
+				    table
+				    used-columns
+				    width
+				    odd-row?
+				    value-collector
+				    tax-collector
+				    total-collector
+				    acct-hash)
+      (if (null? entries)
+	  (begin
+	    ;; oli-custom - modified to have a minimum of entries per table, currently at 24
+	    ;; currently doesn't count payment rows and stuff
+	    (do ((entries-added entries-added (+ entries-added 1))
+		 (odd-row? odd-row? (not odd-row?)))
+		;; oli-custom - here you put the minimum number of rows minus one
+		((> entries-added 23))
+		(gnc:html-table-append-row/markup! table (if odd-row? "normal-row" "alternate-row") (string->list (make-string (num-columns-required used-columns) #\space)))
+		)
+	    (add-subtotal-row table used-columns value-collector
+			      "grand-total" (_ "Subtotal"))
+
+	    (if display-all-taxes
+		(hash-for-each
+		 (lambda (acct value)
+		   (let ((collector (gnc:make-commodity-collector))
+			 (commodity (gnc:account-get-commodity acct))
+			 (name (gnc:account-get-name acct)))
+		     (collector 'add commodity value)
+		     (add-subtotal-row table used-columns collector
+				       "grand-total" (string-expand name #\space "&nbsp;"))))
+		 acct-hash)
+
+		; nope, just show the total tax.
+		(add-subtotal-row table used-columns tax-collector
+				  "grand-total" (_ "Tax")))
+
+	    (if (and show-payments lot)
+		(let ((splits (sort-list!
+			       (gnc:lot-get-splits lot)
+			       (lambda (s1 s2)
+				 (let ((t1 (gnc:split-get-parent s1))
+				       (t2 (gnc:split-get-parent s2)))
+				   (< (gnc:transaction-order t1 t2) 0))))))
+		  (for-each
+		   (lambda (split)
+		     (if (not (equal? (gnc:split-get-parent split) txn))
+			 (add-payment-row table used-columns
+					  split total-collector)))
+		   splits)))
+
+	    (add-subtotal-row table used-columns total-collector
+			      "grand-total" (string-expand (_ "Amount Due") #\space "&nbsp;")))
+
+	  ;;
+	  ;; End of BEGIN -- now here's the code to handle all the entries!
+	  ;;
+	  (let* ((current (car entries))
+		 (current-row-style (if odd-row? "normal-row" "alternate-row"))
+		 (rest (cdr entries))
+		 (next (if (null? rest) #f
+			   (car rest)))
+		 (entry-values (add-entry-row table
+					      currency
+					      current
+					      used-columns
+					      current-row-style
+					      invoice?)))
+
+	    (if display-all-taxes
+		(let ((tax-list (gnc:entry-get-tax-values current invoice?)))
+		  (update-account-hash acct-hash tax-list))
+		(tax-collector 'add
+			       (gnc:gnc-monetary-commodity (cdr entry-values))
+			       (gnc:gnc-monetary-amount (cdr entry-values))))
+
+	    (value-collector 'add
+			     (gnc:gnc-monetary-commodity (car entry-values))
+			     (gnc:gnc-monetary-amount (car entry-values)))
+
+	    (total-collector 'add
+			     (gnc:gnc-monetary-commodity (car entry-values))
+			     (gnc:gnc-monetary-amount (car entry-values)))
+	    (total-collector 'add
+			     (gnc:gnc-monetary-commodity (cdr entry-values))
+			     (gnc:gnc-monetary-amount (cdr entry-values)))
+
+	    (let ((order (gnc:entry-get-order current)))
+	      (if order (add-order order)))
+
+	    (set! entries-added (+ entries-added 1))
+	    
+	    (do-rows-with-subtotals rest
+				    table
+				    used-columns
+				    width
+				    (not odd-row?)
+				    value-collector
+				    tax-collector
+				    total-collector
+				    acct-hash))))
+
+    (let* ((table (gnc:make-html-table))
+	   (used-columns (build-column-used options))
+	   (width (num-columns-required used-columns))
+	   (entries (gnc:invoice-get-entries invoice))
+	   (totals (gnc:make-commodity-collector)))
+
+      (gnc:html-table-set-col-headers!
+       table
+       (make-heading-list used-columns))
+
+      (do-rows-with-subtotals entries
+			      table
+			      used-columns
+			      width
+			      #t
+			      (gnc:make-commodity-collector)
+			      (gnc:make-commodity-collector)
+			      totals
+			      (make-account-hash))
+      table)))
+
+(define (string-expand string character replace-string)
+  (define (car-line chars)
+    (take-while (lambda (c) (not (eqv? c character))) chars))
+  (define (cdr-line chars)
+    (let ((rest (drop-while (lambda (c) (not (eqv? c character))) chars)))
+      (if (null? rest)
+          '()
+          (cdr rest))))
+  (define (line-helper chars)
+    (if (null? chars)
+        ""
+        (let ((first (car-line chars))
+              (rest (cdr-line chars)))
+          (string-append (list->string first)
+                         (if (null? rest) "" replace-string)
+                         (line-helper rest)))))
+  (line-helper (string->list string)))
+
+(define (make-client-table owner orders)
+;; oli-custom - FIXME: font for client company name should be at least size +1.
+  (let ((table (gnc:make-html-table)))
+    (gnc:html-table-set-style!
+     table "table"
+     'attribute (list "border" 0)
+     'attribute (list "cellspacing" 0)
+     'attribute (list "cellpadding" 0))
+    (gnc:html-table-append-row!
+     table
+     (list
+      (string-expand (gnc:owner-get-address-dep owner) #\newline "<br>")))
+    (gnc:html-table-append-row!
+     table
+     (list "<br>"))
+    (for-each
+     (lambda (order)
+       (let* ((reference (gnc:order-get-reference order)))
+	 (if (and reference (> (string-length reference) 0))
+	     (gnc:html-table-append-row!
+	      table
+	      (list
+	       (string-append (_ "REF") ":&nbsp;" reference))))))
+     orders)
+    (set-last-row-style!
+     table "td"
+     'attribute (list "valign" "top"))
+    table))
+
+(define (make-date-row! table label date)
+  (gnc:html-table-append-row!
+   table
+   (list
+    (string-append label ":&nbsp;")
+    ;; oli-custom - modified to display a custom format for the invoice date/due date fields
+    ;; I could have taken the format from the report options, but... ;)
+    (string-expand (strftime "%B %e, %Y" (localtime (car date))) #\space "&nbsp;")
+    ;;(string-expand (gnc:print-date date) #\space "&nbsp;")
+    )))
+
+(define (make-date-table)
+  (let ((table (gnc:make-html-table)))
+    (gnc:html-table-set-style!
+     table "table"
+     'attribute (list "border" 0)
+     'attribute (list "cellpadding" 0))
+    (set-last-row-style!
+     table "td"
+     'attribute (list "valign" "top"))
+    table))
+
+(define (make-myname-table book date-format)
+  (let* ((table (gnc:make-html-table))
+	 (slots (gnc:book-get-slots book))
+	 (name (gnc:kvp-frame-get-slot-path
+		slots (append gnc:*kvp-option-path*
+			      (list gnc:*business-label* gnc:*company-name*))))
+	 (addy (gnc:kvp-frame-get-slot-path
+		slots (append gnc:*kvp-option-path*
+			      (list gnc:*business-label* gnc:*company-addy*))))
+	 (invoice-cell (gnc:make-html-table-cell))
+	 (name-cell (gnc:make-html-table-cell))
+
+	)
+    ;; oli-custom - modified the name table to increase the font size of the company name
+    ;; and add an "INVOICE" title to the upper right, also, put some contact information in the middle
+    ;; FIXME: "INVOICE" should be translated and support bills/expense vouchers
+    (gnc:html-table-set-style!
+     table "table"
+     'attribute (list "border" 0)
+     'attribute (list "cellspacing" 0)
+     'attribute (list "cellpadding" 0)
+     'attribute (list "width" "100%"))
+    (gnc:html-table-cell-append-objects!
+	invoice-cell "INVOICE")
+    (gnc:html-table-cell-set-style!
+	invoice-cell "td"
+	'font-size "+2")
+    (gnc:html-table-cell-append-objects!
+	name-cell (if name name ""))
+    (gnc:html-table-cell-set-style!
+	name-cell "td"
+	'font-size "+2")
+    (gnc:html-table-append-row! table (list name-cell "" invoice-cell))
+    (gnc:html-table-set-col-style!
+	table 1 "td"
+	'attribute (list "align" "center")
+	'attribute (list "width" "33%"))
+    (gnc:html-table-set-col-style!
+	table 2 "td"
+	'attribute (list "align" "right")
+	'attribute (list "width" "33%"))
+    (gnc:html-table-append-row! table (list (string-expand
+					     (if addy addy "")
+					     #\newline "<br>") "Phone: (111) 222-3333<br>Web: http://companysite.com" ""))
+;; oli-custom - I didn't want today's date on the invoice. The invoice already has a date.
+;; Today's date can be in the email, fax or letter accompanying the invoice.
+;;    (gnc:html-table-append-row! table (list
+;;				       (strftime
+;;					date-format
+;;					(localtime (car (gnc:get-today))))))
+    table))
+
+(define (make-break! document)
+  (gnc:html-document-add-object!
+   document
+   (gnc:make-html-text
+    (gnc:html-markup-br))))
+
+(define (reg-renderer report-obj)
+  (define (opt-val section name)
+    (gnc:option-value
+     (gnc:lookup-option (gnc:report-options report-obj) section name)))
+
+  (let* ((document (gnc:make-html-document))
+	 (table '())
+	 (orders '())
+	 (invoice (opt-val invoice-page invoice-name))
+	 (owner #f)
+	 (references? (opt-val "Display" "References"))
+	 (title (_ "Invoice"))
+	 (invoice? #f))
+
+    (define (add-order o)
+      (if (and references? (not (member o orders)))
+	  (addto! orders o)))
+
+    (if invoice
+	(begin
+	  (set! owner (gnc:invoice-get-owner invoice))
+	  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
+		       (gnc:owner-get-type 
+			(gnc:owner-get-end-owner owner)) #f)))
+	    (case type
+	      ((gnc-owner-customer)
+	       (set! invoice? #t))
+	      ((gnc-owner-vendor)
+	       (set! title (_ "Bill")))
+	      ((gnc-owner-employee)
+	       (set! title (_ "Expense Voucher")))))
+	  (set! title (string-append title " #"
+				     (gnc:invoice-get-id invoice)))))
+    ;; oli-custom - title redundant, "Invoice" moved to myname-table, invoice number moved below
+    ;;(gnc:html-document-set-title! document title)
+
+    (if invoice
+	(let ((book (gnc:invoice-get-book invoice))
+	      (date-object #f)
+	      (helper-table (gnc:make-html-table)))
+	  (set! table (make-entry-table invoice
+					(gnc:report-options report-obj)
+					add-order invoice?))
+
+	  (gnc:html-table-set-style!
+	   table "table"
+	   'attribute (list "border" 1)
+	   'attribute (list "cellspacing" 0)
+	   'attribute (list "cellpadding" 4)
+	   ;; oli-custom - make table as wide as possible
+	   ;; works fine with simple style sheet templates, doesn't work quite right with fancy ones
+	   ;; probably supplying the style sheet with a wide image for the header (even if transparent/white) would fix it
+	   'attribute (list "width" "100%"))
+
+	  ;; oli-custom - make the description column big
+	  ;; 50% or 60%, depending on whether the first column is displayed or not
+	  ;; should actually be something more complicated, it's a really ugly hack right now :)
+	  (gnc:html-table-set-col-style!
+	   table (if (opt-val "Display Columns" "Date") 1 0) "td"
+	   'attribute (list "width" (if (opt-val "Display Columns" "Date") "50%" "60%")))
+
+	  (gnc:html-document-add-object! document (make-myname-table book (opt-val "Display" "Today Date Format")))
+
+	  (make-break! document)
+	  (make-break! document)
+	  (make-break! document)
+
+	  ;; oli-custom - client table and table with invoice number/date/due date both inserted into a table
+	  (gnc:html-table-set-style!
+	   helper-table "table"
+	   'attribute (list "border" 0)
+	   'attribute (list "cellspacing" 0)
+	   'attribute (list "cellpadding" 0)
+	   'attribute (list "width" "100%"))
+
+	  (set! date-object (let ((date-table #f)
+		(post-date (gnc:invoice-get-date-posted invoice))
+		(due-date (gnc:invoice-get-date-due invoice)))
+
+	    (if (not (equal? post-date (cons 0 0)))
+		(begin
+		  (set! date-table (make-date-table))
+		  ;; oli-custom - moved invoice number here
+		  (gnc:html-table-append-row! date-table (list "Invoice&nbsp;#&nbsp;" (gnc:invoice-get-id invoice)))
+		  (make-date-row! date-table (_ "Invoice&nbsp;Date") post-date)
+		  (make-date-row! date-table (_ "Due&nbsp;Date") due-date)
+		  date-table)
+		(gnc:make-html-text
+		  ;; oli-custom - FIXME: I have a feeling I broke a translation by not using string-expand for &nbsp;
+		  (string-append title (N_ "<br>Invoice&nbsp;in&nbsp;progress...."))))))
+	  
+	  (gnc:html-table-append-row!
+	  	helper-table
+		(list (make-client-table owner orders) date-object))
+	
+	  (gnc:html-table-set-col-style!
+	  	helper-table 0 "td"
+		'attribute (list "valign" "top"))
+		
+	  (gnc:html-table-set-col-style!
+	  	helper-table 1 "td"
+		'attribute (list "valign" "top")
+		'attribute (list "align" "right")
+		;; oli-custom - "squeeze" the date table, or else it's spaced out
+		'attribute (list "width" "1%"))
+
+	  (gnc:html-document-add-object!
+	   document
+	   helper-table)
+
+	  (make-break! document)
+
+	  (if (opt-val "Display" "Billing ID")
+	      (let ((billing-id (gnc:invoice-get-billing-id invoice)))
+		(if (and billing-id (> (string-length billing-id) 0))
+		    (begin
+		      (gnc:html-document-add-object!
+		       document
+		       (gnc:make-html-text
+			(string-append
+			 (_ "Reference") ":&nbsp;" 
+			 (string-expand billing-id #\newline "<br>"))))
+		      (make-break! document)))))
+
+	  (if (opt-val "Display" "Billing Terms")
+	      (let* ((term (gnc:invoice-get-terms invoice))
+		     (terms (gnc:bill-term-get-description term)))
+		(if (and terms (> (string-length terms) 0))
+		    (gnc:html-document-add-object!
+		     document
+		     (gnc:make-html-text
+		      (string-append
+		       (_ "Terms") ":&nbsp;" 
+		       (string-expand terms #\newline "<br>")))))))
+
+	  (make-break! document)
+
+	  (gnc:html-document-add-object! document table)
+
+	  (make-break! document)
+	  (make-break! document)
+
+	  (if (opt-val "Display" "Invoice Notes")
+	      (let ((notes (gnc:invoice-get-notes invoice)))
+		(gnc:html-document-add-object!
+		 document
+		 (gnc:make-html-text
+		  (string-expand notes #\newline "<br>")))))
+	  
+	  (make-break! document)
+
+	  (gnc:html-document-add-object!
+	   document
+	   (gnc:make-html-text
+	    (gnc:html-markup-br)
+	    (string-expand (opt-val "Display" "Extra Notes") #\newline "<br>")
+	    (gnc:html-markup-br))))
+
+	; else
+	(gnc:html-document-add-object!
+	 document
+	 (gnc:make-html-text
+	  (N_ "No Valid Invoice Selected"))))
+
+    document))
+
+(gnc:define-report
+ 'version 1
+ 'name (N_ "Fancy Invoice")
+ 'menu-path (list gnc:menuname-business-reports)
+ 'options-generator options-generator
+ 'renderer reg-renderer
+ 'in-menu? #t)
+
+(define (gnc:fancy-invoice-report-create-internal invoice)
+  (let* ((options (gnc:make-report-options (N_ "Fancy Invoice")))
+         (invoice-op (gnc:lookup-option options invoice-page invoice-name)))
+
+    (gnc:option-set-value invoice-op invoice)
+    (gnc:make-report (N_ "Fancy Invoice") options)))
+
+(export gnc:fancy-invoice-report-create-internal)

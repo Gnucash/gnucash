@@ -44,6 +44,9 @@
 
 #include "gnc-ui-util.h"
 
+#define IMPORT_PAGE	"Online Banking & Importing" /* from app-utils/prefs.scm */
+#define BAYES_OPTION	"Use Bayesian Matching?"
+
 /********************************************************************\
  *   Constants   *
 \********************************************************************/
@@ -64,6 +67,16 @@ static const int MATCH_DATE_NOT_THRESHOLD = 21;
 static const int SHOW_TRANSACTIONS_WITH_UNIQUE_ID = TRUE; /* DISABLE once account transfer bug is fixed! */
 
 /********************************************************************\
+ *   Forward declared prototypes                                    *
+\********************************************************************/
+
+static void
+matchmap_store_destination (GncImportMatchMap *matchmap, 
+			    GNCImportTransInfo *trans_info,
+			    gboolean use_match);
+
+
+/********************************************************************\
  *               Structures passed between the functions             *
 \********************************************************************/
 
@@ -79,6 +92,9 @@ struct _transactioninfo
 
   GNCImportAction action;
   GNCImportAction previous_action;
+
+  /* A list of tokenized strings to use for bayesian matching purposes */
+  GList * match_tokens;
 
   /* In case of a single destination account it is stored here. */
   Account *dest_acc;
@@ -186,6 +202,12 @@ void gnc_import_TransInfo_set_destacc (GNCImportTransInfo *info,
   g_assert (info);
   info->dest_acc = acc;
   info->dest_acc_selected_manually = selected_manually;
+
+  /* Store the mapping to the other account in the MatchMap. */
+  if(selected_manually)
+    {
+      matchmap_store_destination (NULL, info, FALSE);
+    }
 }
 
 gboolean
@@ -224,6 +246,15 @@ void gnc_import_TransInfo_delete (GNCImportTransInfo *info)
       {
 	xaccTransDestroy(info->trans);
 	xaccTransCommitEdit(info->trans);
+      }
+    if (info->match_tokens)
+      {
+	GList *node;
+
+	for (node = info->match_tokens; node; node = node->next)
+	  g_free (node->data);
+
+	g_list_free (info->match_tokens);
       }
     g_free(info);
   }
@@ -326,26 +357,135 @@ GdkPixmap* gen_probability_pixmap(gint score_original, GNCImportSettings *settin
 /*-************************************************************************
  * MatchMap- related functions (storing and retrieving)
  */
+
+/* Tokenize a string and append to an existing GList(or an empty GList)
+ * the tokens
+ */
+static GList*
+tokenize_string(GList* existing_tokens, const char *string)
+{
+  char **tokenized_strings; /* array of strings returned by g_strsplit() */
+  char **stringpos;
+
+  tokenized_strings = g_strsplit(string, " ", 0);
+  stringpos = tokenized_strings;
+
+  /* add each token to the token GList */
+  while(stringpos && *stringpos)
+  {
+    /* prepend the char* to the token GList */
+    existing_tokens = g_list_prepend(existing_tokens, g_strdup(*stringpos));
+
+    /* then move to the next string */
+    stringpos++;
+  }
+
+  /* free up the strings that g_strsplit() created */
+  g_strfreev(tokenized_strings);
+
+  return existing_tokens;
+}
+
+/* create and return a list of tokens for a given transaction info. */
+static GList*
+TransactionGetTokens(GNCImportTransInfo *info)
+{
+  Transaction* transaction;
+  GList* tokens;
+  const char* text;
+  time_t transtime;
+  struct tm *tm_struct;
+  char local_day_of_week[16];
+  Split* split;
+  int split_index;
+
+  g_return_val_if_fail (info, NULL);
+  if (info->match_tokens) return info->match_tokens;
+
+  transaction = gnc_import_TransInfo_get_trans(info);
+  g_assert(transaction);
+
+  tokens = 0; /* start off with an empty list */
+
+  /* make tokens from the transaction description */
+  text = xaccTransGetDescription(transaction);
+  tokens = tokenize_string(tokens, text);
+
+  /* the day of week the transaction occured is a good indicator of
+   * what account this transaction belongs in get the date and covert
+   * it to day of week as a token
+   */
+  transtime = xaccTransGetDate(transaction);
+  tm_struct = gmtime(&transtime);
+  if(!strftime(local_day_of_week, sizeof(local_day_of_week), "%A", tm_struct))
+    {
+      PERR("TransactionGetTokens: error, strftime failed\n");
+    }
+
+  /* we cannot add a locally allocated string to this array, dup it so
+   * it frees the same way the rest do
+   */
+  tokens = g_list_prepend(tokens, g_strdup(local_day_of_week));
+
+  /* make tokens from the memo of each split of this transaction */
+  split_index = 0;
+  while((split = xaccTransGetSplit(transaction, split_index)))
+  {
+       text = xaccSplitGetMemo(split);
+       tokens = tokenize_string(tokens, text);
+       split_index++; /* next split */
+  }
+
+  /* remember the list of tokens for later.. */
+  info->match_tokens = tokens;
+
+  /* return the pointer to the GList */
+  return tokens;
+}
+
+/* searches using the GNCImportTransInfo through all existing transactions
+ * if there is an exact match of the description and memo
+ */
 static Account *
-matchmap_find_destination (GncImportMatchMap *matchmap, 
-				    GNCImportTransInfo *info)
+matchmap_find_destination (GncImportMatchMap *matchmap, GNCImportTransInfo *info)
 {
   GncImportMatchMap *tmp_map;
   Account *result;
+  GList* tokens;
+  gboolean useBayes;
+
   g_assert (info);
-  
   tmp_map = ((matchmap != NULL) ? matchmap : 
 	     gnc_imap_create_from_account 
 	     (xaccSplitGetAccount
 	      (gnc_import_TransInfo_get_fsplit (info))));
 
-  result = gnc_imap_find_account 
-    (tmp_map, GNCIMPORT_DESC, 
-     xaccTransGetDescription (gnc_import_TransInfo_get_trans (info)));
-  if (result == NULL)
-    result = gnc_imap_find_account 
-      (tmp_map, GNCIMPORT_MEMO, 
-       xaccSplitGetMemo (gnc_import_TransInfo_get_fsplit (info)));
+  useBayes = gnc_lookup_boolean_option(IMPORT_PAGE, BAYES_OPTION, TRUE);
+  if(useBayes)
+    {
+      /* get the tokens for this transaction* */
+      tokens = TransactionGetTokens(info);
+
+      /* try to find the destination account for this transaction from its tokens */
+      result = gnc_imap_find_account_bayes(tmp_map, tokens);
+
+    } else {
+      /* old system of transaction to account matching */
+      result = gnc_imap_find_account 
+        (tmp_map, GNCIMPORT_DESC, 
+         xaccTransGetDescription (gnc_import_TransInfo_get_trans (info)));
+    }
+
+  /* Disable matching by memo, until bayesian filtering is implemented. 
+   * It's currently unlikely to help, and has adverse effects,
+   * causing false positives, since very often the type of the 
+   * transaction is stored there.
+     
+     if (result == NULL)
+     result = gnc_imap_find_account 
+     (tmp_map, GNCIMPORT_MEMO, 
+     xaccSplitGetMemo (gnc_import_TransInfo_get_fsplit (info)));
+  */
   
   if (matchmap == NULL)
     gnc_imap_destroy (tmp_map);
@@ -357,7 +497,7 @@ matchmap_find_destination (GncImportMatchMap *matchmap,
     'use_match' is true, the destination account of the selected
     matching/duplicate transaction is used; otherwise, the stored
     destination_acc pointer is used. */
-static void 
+static void
 matchmap_store_destination (GncImportMatchMap *matchmap, 
 			    GNCImportTransInfo *trans_info,
 			    gboolean use_match)
@@ -365,6 +505,9 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
   GncImportMatchMap *tmp_matchmap = NULL;
   Account *dest;
   const char *descr, *memo;
+  GList *tokens;
+  gboolean useBayes;
+
   g_assert (trans_info);
 
   /* This will store the destination account of the selected match if 
@@ -385,20 +528,33 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
 		  (xaccSplitGetAccount
 		   (gnc_import_TransInfo_get_fsplit (trans_info))));
 
-  descr = xaccTransGetDescription 
-      (gnc_import_TransInfo_get_trans (trans_info));
-  if (descr && (strlen (descr) > 0))
-      gnc_imap_add_account (tmp_matchmap, 
+  /* see what matching system we are currently using */
+  useBayes = gnc_lookup_boolean_option(IMPORT_PAGE, BAYES_OPTION, TRUE);
+  if(useBayes)
+    {
+      /* tokenize this transaction */
+      tokens = TransactionGetTokens(trans_info);
+
+      /* add the tokens to the imap with the given destination account */
+      gnc_imap_add_account_bayes(tmp_matchmap, tokens, dest);
+
+  } else {
+    /* old matching system */
+      descr = xaccTransGetDescription 
+          (gnc_import_TransInfo_get_trans (trans_info));
+      if (descr && (strlen (descr) > 0))
+          gnc_imap_add_account (tmp_matchmap, 
 			    GNCIMPORT_DESC, 
 			    descr,
 			    dest);
-  memo = xaccSplitGetMemo 
-      (gnc_import_TransInfo_get_fsplit (trans_info));
-  if (memo && (strlen (memo) > 0))
-      gnc_imap_add_account (tmp_matchmap, 
+      memo = xaccSplitGetMemo 
+          (gnc_import_TransInfo_get_fsplit (trans_info));
+      if (memo && (strlen (memo) > 0))
+          gnc_imap_add_account (tmp_matchmap, 
 			    GNCIMPORT_MEMO, 
 			    memo,
 			    dest);
+    } /* if(useBayes) */
 
   if (matchmap == NULL)
     gnc_imap_destroy (tmp_matchmap);
@@ -493,68 +649,90 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	  /*DEBUG("heuristics:  probability - 10 (date)"); */
 	}
       
-    
-      /* Memo heuristics */  
-      if((strcmp(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)),
-		 xaccSplitGetMemo(split))
-	  ==0))
-	{	
-	  /* An exact match of description gives a +2 */
-	  prob = prob+2;
-	  /* DEBUG("heuristics:  probability + 2 (memo)"); */
+      /* Check number heuristics */  
+      if(strlen(xaccTransGetNum(gnc_import_TransInfo_get_trans (trans_info)))!=0)
+	{     
+	  if((strcmp(xaccTransGetNum
+		     (gnc_import_TransInfo_get_trans (trans_info)),
+		     xaccTransGetNum(xaccSplitGetParent(split)))
+	      ==0))
+	    {	
+	      /*An exact match of the Check number gives a +5 */
+	      prob = prob+5;
+	      /*DEBUG("heuristics:  probability + 5 (Check number)");*/
+	    }
 	}
-      else if((strncmp(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)),
-		       xaccSplitGetMemo(split),
-		       strlen(xaccSplitGetMemo(split))/2)
-	       ==0))
+      
+      /* Memo heuristics */  
+      if(strlen(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)))!=0)
 	{
-	  /* Very primitive fuzzy match worth +1.  This matches the
-	     first 50% of the strings to skip annoying transaction
-	     number some banks seem to include in the memo but someone
-	     should write something more sophisticated */ 
-      	  prob = prob+1;
-	  /*DEBUG("heuristics:  probability + 1 (memo)");	*/
+	  if((strcmp(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)),
+		     xaccSplitGetMemo(split))
+	      ==0))
+	    {	
+	      /* An exact match of memo gives a +2 */
+	      prob = prob+2;
+	      /* DEBUG("heuristics:  probability + 2 (memo)"); */
+	    }
+	  else if((strncmp(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)),
+			   xaccSplitGetMemo(split),
+			   strlen(xaccSplitGetMemo(split))/2)
+		   ==0))
+	    {
+	      /* Very primitive fuzzy match worth +1.  This matches the
+		 first 50% of the strings to skip annoying transaction
+		 number some banks seem to include in the memo but someone
+		 should write something more sophisticated */ 
+	      prob = prob+1;
+	      /*DEBUG("heuristics:  probability + 1 (memo)");	*/
+	    }
 	}
 
       /* Description heuristics */  
-      if((strcmp(xaccTransGetDescription
-		 (gnc_import_TransInfo_get_trans (trans_info)),
-		 xaccTransGetDescription(xaccSplitGetParent(split)))
-	  ==0))
-	{	
-	  /*An exact match of Description gives a +2 */
-	  prob = prob+2;
-	  /*DEBUG("heuristics:  probability + 2 (description)");*/
-	}
-      else if((strncmp(xaccTransGetDescription
-		       (gnc_import_TransInfo_get_trans (trans_info)),
-		       xaccTransGetDescription(xaccSplitGetParent(split)),
-		       strlen(xaccTransGetDescription
-			      (gnc_import_TransInfo_get_trans (trans_info)))/2)
-	  ==0))
+      if(strlen(xaccTransGetDescription(gnc_import_TransInfo_get_trans (trans_info)))!=0)
 	{
-	  /* Very primitive fuzzy match worth +1.  This matches the
-	     first 50% of the strings to skip annoying transaction
-	     number some banks seem to include in the memo but someone
-	     should write something more sophisticated */ 
-      	  prob = prob+1;
-	  /*DEBUG("heuristics:  probability + 1 (description)");	*/
+	  if((strcmp(xaccTransGetDescription
+		     (gnc_import_TransInfo_get_trans (trans_info)),
+		     xaccTransGetDescription(xaccSplitGetParent(split)))
+	      ==0))
+	    {	
+	      /*An exact match of Description gives a +2 */
+	      prob = prob+2;
+	      /*DEBUG("heuristics:  probability + 2 (description)");*/
+	    }
+	  else if((strncmp(xaccTransGetDescription
+			   (gnc_import_TransInfo_get_trans (trans_info)),
+			   xaccTransGetDescription(xaccSplitGetParent(split)),
+			   strlen(xaccTransGetDescription
+				  (gnc_import_TransInfo_get_trans (trans_info)))/2)
+		   ==0))
+	    {
+	      /* Very primitive fuzzy match worth +1.  This matches the
+		 first 50% of the strings to skip annoying transaction
+		 number some banks seem to include in the memo but someone
+		 should write something more sophisticated */ 
+	      prob = prob+1;
+	      /*DEBUG("heuristics:  probability + 1 (description)");	*/
+	    }
 	}
 
+      /*Online id punishment*/
       if ((gnc_import_get_trans_online_id(xaccSplitGetParent(split))!=NULL) &&
 	  (strlen(gnc_import_get_trans_online_id(xaccSplitGetParent(split)))>0))
 	{
 	  /* If the pref is to show match even with online ID's,
-	     puninsh the transaction with online if */
-	  prob = prob-3;
+	     puninsh the transaction with online id */
+	  
+	  /* DISABLED, it's the wrong solution to the problem. benoitg, 24/2/2003 */
+	  /*prob = prob-3;*/
 	}
-
+      
       /* Is the probability high enough? Otherwise do nothing and return. */
       if(prob < display_threshold)
 	{
 	  return;
 	}
-
+      
       /* The probability is high enough, so allocate an object
 	 here. Allocating it only when it's actually being used is
 	 probably quite some performance gain. */
@@ -563,8 +741,8 @@ static void split_find_match (GNCImportTransInfo * trans_info,
       match_info->probability = prob;
       match_info->split = split;
       match_info->trans = xaccSplitGetParent(split);
-   
-
+      
+      
       /* Append that to the list. */
       trans_info->match_list = 
 	g_list_append(trans_info->match_list,
@@ -644,16 +822,23 @@ gnc_import_process_trans_clist (GtkCList *clist,
 	      (gnc_import_TransInfo_get_trans (trans_info), split);
 	    xaccAccountInsertSplit
 	      (gnc_import_TransInfo_get_destacc (trans_info), split);
-	    xaccSplitSetBaseValue
+	    /*xaccSplitSetBaseValue
 	      (split, 
 	       gnc_numeric_neg(xaccTransGetImbalance 
 			       (gnc_import_TransInfo_get_trans (trans_info))),
 	       xaccTransGetCurrency 
-	       (gnc_import_TransInfo_get_trans (trans_info)));
+	       (gnc_import_TransInfo_get_trans (trans_info)));*/
+	    /* This is a quick workaround for the bug described in
+	       http://gnucash.org/pipermail/gnucash-devel/2003-August/009982.html  */
+	    xaccSplitSetValue
+	      (split, 
+	       gnc_numeric_neg(xaccTransGetImbalance 
+			       (gnc_import_TransInfo_get_trans (trans_info))));
+	    xaccSplitSetAmount
+	      (split, 
+	       gnc_numeric_neg(xaccTransGetImbalance 
+			       (gnc_import_TransInfo_get_trans (trans_info))));
 	    xaccSplitSetMemo (split, _("Auto-Balance split"));
-
-	    /* Store the mapping to the other account in the MatchMap. */
-	    matchmap_store_destination (matchmap, trans_info, FALSE);
 	  }
 	  
 	  xaccSplitSetReconcile(gnc_import_TransInfo_get_fsplit (trans_info), CREC);
@@ -813,7 +998,6 @@ gnc_import_TransInfo_new (Transaction *trans, GncImportMatchMap *matchmap)
   
   /* Try to find a previously selected destination account 
      string match for the ADD action */
-  
   gnc_import_TransInfo_set_destacc (transaction_info, 
 				    matchmap_find_destination (matchmap, transaction_info),
 				    FALSE); 
@@ -875,5 +1059,40 @@ gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
   
   trans_info->previous_action=trans_info->action;
 }
+
+
+/* Try to automatch a transaction to a destination account if the */
+/* transaction hasn't already been manually assigned to another account */
+gboolean
+gnc_import_TransInfo_refresh_destacc (GNCImportTransInfo *transaction_info,
+				      GncImportMatchMap *matchmap)
+{
+  Account *orig_destacc;
+  Account *new_destacc = NULL;
+  g_assert(transaction_info);
+
+  orig_destacc = gnc_import_TransInfo_get_destacc(transaction_info);
+
+  /* if we haven't manually selected a destination account for this transaction */
+  if(gnc_import_TransInfo_get_destacc_selected_manually(transaction_info) == FALSE)
+  {
+    /* Try to find the destination account for this transaction based on prior ones */
+    new_destacc = matchmap_find_destination(matchmap, transaction_info);
+    gnc_import_TransInfo_set_destacc(transaction_info, new_destacc, FALSE);
+  } else
+  {
+    new_destacc = orig_destacc;
+  }
+
+  /* account has changed */
+  if(new_destacc != orig_destacc)
+  {
+    return TRUE;
+  } else /* account is the same */
+  {
+    return FALSE;
+  }
+}
+
 
 /** @} */

@@ -63,6 +63,16 @@ struct gnc_commodity_table_s {
 
 typedef struct gnc_commodity_namespace_s gnc_commodity_namespace;
 
+struct gnc_new_iso_code {
+  const char *old_code;
+  const char *new_code;
+} gnc_new_iso_codes[] = {
+  {"RUB", "RUR"}, // Russian Ruble
+  {"PLZ", "PLN"}, // Polish Zloty
+};
+#define GNC_NEW_ISO_CODES \
+        (sizeof(gnc_new_iso_codes) / sizeof(struct gnc_new_iso_code))
+  
 /********************************************************************
  * gnc_commodity_new
  ********************************************************************/
@@ -442,8 +452,10 @@ gnc_commodity_table_get_size(gnc_commodity_table* tbl)
 
 gnc_commodity *
 gnc_commodity_table_lookup(const gnc_commodity_table * table, 
-                           const char * namespace, const char * mnemonic) {
+                           const char * namespace, const char * mnemonic)
+{
   gnc_commodity_namespace * nsp = NULL;
+  unsigned int i;
 
   if (!table || !namespace || !mnemonic) return NULL;
 
@@ -451,11 +463,15 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
 
   if(nsp) {
     /*
-     * The symbol for Russing Roubles was changed. Need to support the
-     * old symbol to be backward compatible.
+     * Backward compatability support for currencies that have
+     * recently changed.
      */
-    if (strcmp(mnemonic, "RUB") == 0)
-      mnemonic = "RUR";
+    for (i = 0; i < GNC_NEW_ISO_CODES; i++) {
+      if (strcmp(mnemonic, gnc_new_iso_codes[i].old_code) == 0) {
+	mnemonic = gnc_new_iso_codes[i].new_code;
+	break;
+      }
+    }
     return g_hash_table_lookup(nsp->table, (gpointer)mnemonic);
   }
   else {

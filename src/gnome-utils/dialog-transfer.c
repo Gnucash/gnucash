@@ -46,7 +46,7 @@
 
 #define DIALOG_TRANSFER_CM_CLASS "dialog-transfer"
 
-#define PRECISION 100000
+#define PRECISION 1000000
 typedef enum
 {
   XFER_DIALOG_FROM,
@@ -112,9 +112,16 @@ struct _xferDialog
   gnc_numeric * exch_rate;
 
   /* a place to store the result quality (ok or cancel) because gnome_dialog_run
-   * doesn't seem to work right for this function
+   * doesn't seem to work right for this function.  <-- That's probably because
+   * the dialog is being closed and deleted out from under the gnome_dialog_run
+   * function.
    */
   gboolean *	result_p;
+
+  /* Callback funtion to notify of the newly created Transaction */
+  gnc_xfer_dialog_cb transaction_cb;
+  /* , and its user_data */
+  gpointer transaction_user_data;
 };
 
 struct _acct_list_item
@@ -131,6 +138,17 @@ static void gnc_xfer_dialog_update_conv_info(XferDialog *xferData);
 
 
 /** Implementations **********************************************/
+
+static gnc_numeric
+gnc_xfer_dialog_compute_price (XferDialog *xferData)
+{
+  gnc_numeric from_amt, to_amt;
+
+  from_amt = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
+  to_amt = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->to_amount_edit));
+
+  return(gnc_numeric_div(to_amt, from_amt, GNC_DENOM_AUTO, GNC_DENOM_REDUCE));
+}
 
 /* (maybe) update the price from the pricedb. */
 static void
@@ -227,8 +245,7 @@ gnc_xfer_dialog_set_price_auto (XferDialog *xferData,
   if (gnc_numeric_zero_p (from_rate) || gnc_numeric_zero_p (to_rate))
     gnc_xfer_dialog_update_price (xferData);
 
-  price = gnc_numeric_div (from_rate, to_rate, GNC_DENOM_AUTO, 
-                           GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND);
+  price = gnc_numeric_div (to_rate, from_rate, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
 
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(xferData->price_edit), price);
 
@@ -820,8 +837,10 @@ gnc_xfer_dialog_update_conv_info (XferDialog *xferData)
   from_mnemonic = gnc_commodity_get_mnemonic(xferData->from_commodity);
   to_mnemonic = gnc_commodity_get_mnemonic(xferData->to_commodity);
 
-  price = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
-  if (gnc_numeric_zero_p(price)) {
+  // price = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
+  price = gnc_xfer_dialog_compute_price(xferData);
+
+  if (gnc_numeric_check(price) || gnc_numeric_zero_p(price)) {
     string = g_strdup_printf("1 %s = x %s", from_mnemonic, to_mnemonic);
     gtk_label_set_text(GTK_LABEL(xferData->conv_forward), string);
     g_free(string);
@@ -934,7 +953,7 @@ gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
                              gpointer data)
 {
   XferDialog *xferData = data;
-  gnc_numeric amount, price, to_amount;
+  gnc_numeric price;
   Account *account;
 
   account = gnc_account_tree_get_current_account(xferData->to);
@@ -943,10 +962,8 @@ gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
 
   gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit));
 
-  amount = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
-  to_amount = gnc_amount_edit_get_amount
-    (GNC_AMOUNT_EDIT(xferData->to_amount_edit));
-  price = gnc_numeric_div (to_amount, amount, PRECISION, GNC_RND_ROUND);
+  price = gnc_xfer_dialog_compute_price(xferData);
+  price = gnc_numeric_convert (price, PRECISION, GNC_RND_ROUND);
   gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit), price);
   gnc_xfer_dialog_update_conv_info(xferData);
 
@@ -1341,6 +1358,16 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
       g_free(name);
       return;
     }
+
+    if (safe_strcmp (gnc_commodity_get_namespace (xferData->from_commodity),
+		     GNC_COMMODITY_NS_ISO))
+    {
+      const char *message = _("You can't transfer from a non-currency account.  "
+			      "Try reversing the \"from\" and \"to\" accounts "
+			      "and making the \"amount\" negative.");
+      gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
+      return;
+    }
   }
 
   if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit)))
@@ -1398,15 +1425,16 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
   if (xferData->exch_rate)
   {
-    /* If the to_amount is active, then call the callback, just in case the
-     * user hit "return" -- because the exit-focus signal handler was probably
-     * not executed.
-     */
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (xferData->amount_radio)))
-      gnc_xfer_to_amount_update_cb(xferData->to_amount_edit, NULL, xferData);
+    gnc_numeric price;
 
-    *(xferData->exch_rate) =
-      gnc_numeric_abs(gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit)));
+    /* If we've got the price-button set, then make sure we update the
+     * to-amount before we use it.
+     */
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(xferData->price_radio)))
+      gnc_xfer_update_to_amount(xferData);
+
+    price = gnc_xfer_dialog_compute_price(xferData);
+    *(xferData->exch_rate) = gnc_numeric_abs(price);
   }
   else
   {
@@ -1451,6 +1479,11 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     xaccTransCommitEdit(trans);
     xaccAccountCommitEdit(from_account);
     xaccAccountCommitEdit(to_account);
+
+    /* If there is a registered callback handler that should be
+       notified of the newly created Transaction, call it now. */
+    if (xferData->transaction_cb)
+      xferData->transaction_cb(trans, xferData->transaction_user_data);
   }
 
   /* try to save this to the pricedb */
@@ -1488,20 +1521,20 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 	gnc_numeric value;
 
 	/* compute the price -- maybe we need to swap? */
-	value = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
+	value = gnc_xfer_dialog_compute_price(xferData);
 	value = gnc_numeric_abs (value);
 
 	/* Try to be consistent about how quotes are installed. */
 	if (from == gnc_default_currency()) {
 	  tmp = from; from = to; to = tmp;
 	  value = gnc_numeric_div (gnc_numeric_create(1,1), value,
-				   PRECISION, GNC_RND_ROUND);
+				   GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
 	} else if ((to != gnc_default_currency()) &&
 		   (strcmp (gnc_commodity_get_mnemonic(from),
 			    gnc_commodity_get_mnemonic(to)) < 0)) {
 	  tmp = from; from = to; to = tmp;
 	  value = gnc_numeric_div (gnc_numeric_create(1,1), value,
-				   PRECISION, GNC_RND_ROUND);
+				   GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
 	}
 
 	price = gnc_price_create (xferData->book);
@@ -1545,6 +1578,10 @@ gnc_xfer_dialog_close_cb(GnomeDialog *dialog, gpointer data)
 {
   XferDialog * xferData = data;
   GtkWidget *entry;
+
+  /* Notify transaction callback to unregister here */
+  if (xferData->transaction_cb)
+    xferData->transaction_cb(NULL, xferData->transaction_user_data);
 
   entry = gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(xferData->amount_edit));
   gtk_signal_disconnect_by_data(GTK_OBJECT(entry), xferData);
@@ -1699,7 +1736,7 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 
     edit = gnc_amount_edit_new();
     gnc_amount_edit_set_print_info(GNC_AMOUNT_EDIT(edit),
-                                   gnc_default_price_print_info ());
+                                   gnc_default_print_info (FALSE));
     gnc_amount_edit_set_fraction(GNC_AMOUNT_EDIT(edit), PRECISION);
     hbox = glade_xml_get_widget (xml, "price_hbox");
     gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 0);
@@ -1771,6 +1808,7 @@ gnc_xfer_dialog (GtkWidget * parent, Account * initial)
   xferData->desc_start_selection = 0;
   xferData->desc_end_selection = 0;
   xferData->desc_didquickfill = FALSE;
+  xferData->transaction_cb = NULL;
 
   if (initial) {
     book = xaccAccountGetBook (initial);
@@ -1937,8 +1975,6 @@ gboolean gnc_xfer_dialog_run_until_done( XferDialog *xferData )
     {
       gnome_dialog_run( GNOME_DIALOG(xferData->dialog) );
 
-      if( result_ok == TRUE )
-      {
         /* See if the dialog is still there.  For various reasons, the
          * user could have hit OK but remained in the dialog.  We don't
          * want to return processing back to anyone else until we clear
@@ -1950,15 +1986,9 @@ gboolean gnc_xfer_dialog_run_until_done( XferDialog *xferData )
                                            find_xfer, xferData ) )
         {
           /* no more dialog, and OK was clicked, so assume it's all good */
-          return( TRUE );
+          return( result_ok );
         }
         /* else run the dialog again */
-  
-      }
-      else   /* result was Cancel */
-      {
-        return( FALSE );
-      }
     }
   }
     
@@ -1981,3 +2011,14 @@ gnc_xfer_dialog_quickfill_to_account(XferDialog *xferData,
   if( old != qf_to_account )
     gnc_xfer_dialog_reload_quickfill( xferData );
 }
+
+
+void gnc_xfer_dialog_set_txn_cb(XferDialog *xferData,
+				gnc_xfer_dialog_cb handler, 
+				gpointer user_data)
+{
+  g_assert(xferData);
+  xferData->transaction_cb = handler;
+  xferData->transaction_user_data = user_data;
+}
+

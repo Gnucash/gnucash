@@ -127,8 +127,8 @@ gnc_formula_cell_modify_verify( BasicCell *_cell,
   FormulaCell *cell = (FormulaCell *)_cell;
   struct lconv *lc = gnc_localeconv ();
   const char *toks = "+-*/=()_";
-  char decimal_point;
-  char thousands_sep;
+  unsigned char decimal_point;
+  unsigned char thousands_sep;
   int i;
 
   DEBUG( "%s, %d, %s, %d, %d, %d, %d",

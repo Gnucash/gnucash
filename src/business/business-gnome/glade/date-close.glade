@@ -195,7 +195,7 @@
   <position>GTK_WIN_POS_NONE</position>
   <modal>False</modal>
   <allow_shrink>False</allow_shrink>
-  <allow_grow>False</allow_grow>
+  <allow_grow>True</allow_grow>
   <auto_shrink>False</auto_shrink>
   <auto_close>False</auto_close>
   <hide_on_close>False</hide_on_close>
@@ -299,7 +299,7 @@
 	  <ypad>0</ypad>
 	  <child>
 	    <padding>0</padding>
-	    <expand>True</expand>
+	    <expand>False</expand>
 	    <fill>True</fill>
 	  </child>
 	</widget>
@@ -391,8 +391,8 @@
 	  <spacing>0</spacing>
 	  <child>
 	    <padding>3</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
+	    <expand>True</expand>
+	    <fill>True</fill>
 	  </child>
 
 	  <widget>
@@ -471,7 +471,7 @@
 	  <ypad>0</ypad>
 	  <child>
 	    <padding>0</padding>
-	    <expand>True</expand>
+	    <expand>False</expand>
 	    <fill>True</fill>
 	  </child>
 	</widget>
