@@ -53,9 +53,9 @@ guint      gnc_currency_edit_get_type       (void);
 GtkWidget *gnc_currency_edit_new            (void);
 
 void       gnc_currency_edit_set_currency   (GNCCurrencyEdit *gce,
-                                             const char *currency_code);
+                                             const gnc_commodity *currency);
 
-const char * gnc_currency_edit_get_currency (GNCCurrencyEdit *gce);
+const gnc_commodity * gnc_currency_edit_get_currency (GNCCurrencyEdit *gce);
 
 END_GNOME_DECLS
 

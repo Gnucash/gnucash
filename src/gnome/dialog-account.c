@@ -89,9 +89,6 @@ static gint last_height = 0;
 
 static int last_used_account_type = BANK;
 
-static gchar * default_currency = "USD";
-static gboolean default_currency_dynamically_allocated = FALSE;
-
 static GList *new_account_windows = NULL;
 static AccountWindow ** editAccountList = NULL;
 
@@ -1226,9 +1223,9 @@ gnc_ui_new_account_window (AccountGroup *this_is_not_used)
   gnc_account_window_create(aw);
   new_account_windows = g_list_prepend(new_account_windows, aw->dialog);
 
-  commodity = gnc_commodity_table_lookup(gnc_engine_commodities(),
-                                         GNC_COMMODITY_NS_ISO,
-                                         default_currency);
+  commodity = gnc_lookup_currency_option ("International",
+                                          "Default Currency",
+                                          gnc_locale_default_currency ());
 
   gnc_commodity_edit_set_commodity (GNC_COMMODITY_EDIT (aw->currency_edit),
                                     commodity);
@@ -1298,26 +1295,6 @@ gnc_ui_edit_account_window(Account *account)
   gnc_window_adjust_for_screen(GTK_WINDOW(aw->dialog));
 
   return aw;
-}
-
-
-/*********************************************************************\
- * gnc_ui_set_default_new_account_currency                           *
- *   Set the default currency for new accounts                       *
- *   intended to be called by option handling code                   *
- *                                                                   *
- * Args:    currency                                                 *
- * Globals: default_currency, default_currency_dynamically_allocated *
- * Return value: none                                                *
-\*********************************************************************/
-void 
-gnc_ui_set_default_new_account_currency(const char *currency)
-{
-  if (default_currency_dynamically_allocated)
-    g_free(default_currency);
-
-  default_currency = g_strdup(currency);
-  default_currency_dynamically_allocated = TRUE;
 }
 
 

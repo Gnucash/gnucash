@@ -7,7 +7,6 @@ gnc_autogen_scm_files = \
   bootstrap.scm
 
 gnc_regular_scm_files = \
-  bs-interp.scm \
   c-interface.scm \
   command-line.scm \
   config-var.scm \

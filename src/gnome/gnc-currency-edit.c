@@ -184,13 +184,14 @@ gnc_currency_edit_new (void)
  */
 void
 gnc_currency_edit_set_currency (GNCCurrencyEdit *gce,
-                                const char *currency_code)
+                                const gnc_commodity *currency)
 {
         g_return_if_fail(gce != NULL);
         g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
-        g_return_if_fail(currency_code != NULL);
+        g_return_if_fail(currency != NULL);
 
-        gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(gce)->entry), currency_code);
+        gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(gce)->entry),
+                           gnc_commodity_get_mnemonic (currency));
 }
 
 /**
@@ -199,13 +200,19 @@ gnc_currency_edit_set_currency (GNCCurrencyEdit *gce,
  *
  * Returns the selected currency.
  */
-const char *
+const gnc_commodity *
 gnc_currency_edit_get_currency (GNCCurrencyEdit *gce)
 {
+        const char *mnemonic;
+
         g_return_val_if_fail(gce != NULL, NULL);
         g_return_val_if_fail(GNC_IS_CURRENCY_EDIT(gce), NULL);
 
-        return gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(gce)->entry));
+        mnemonic = gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(gce)->entry));
+
+        return gnc_commodity_table_lookup (gnc_engine_commodities (),
+                                           GNC_COMMODITY_NS_ISO,
+                                           mnemonic);
 }
 
 /*

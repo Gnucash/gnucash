@@ -261,24 +261,20 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
   const gnc_commodity * account_currency;
   const gnc_commodity * default_currency;
   const gnc_commodity * euro_commodity;
-  const char * default_mnemonic;
   GNCCurrencyAcc *currency_accum;
   GNCCurrencyAcc *euro_accum = NULL;
   int i;
 
-  default_mnemonic = gnc_lookup_string_option("International",
-					      "Default Currency",
-					      "USD");
-  default_currency = gnc_commodity_table_lookup(gnc_engine_commodities(),
-                                                GNC_COMMODITY_NS_ISO,
-                                                default_mnemonic);
+  default_currency =
+    gnc_lookup_currency_option("International",
+                               "Default Currency",
+                               gnc_locale_default_currency ());
 
-  if (euro) {
-    euro_commodity = gnc_commodity_table_lookup(gnc_engine_commodities(),
-                                                GNC_COMMODITY_NS_ISO,
-                                                "EUR");    
+  if (euro)
+  {
+    euro_commodity = gnc_get_euro ();
     euro_accum = gnc_ui_get_currency_accumulator(currency_list,
-						 euro_commodity);
+                                                 euro_commodity);
   }
 
   num_accounts = xaccGroupGetNumAccounts(group);
@@ -352,7 +348,6 @@ gnc_ui_refresh_statusbar (void)
   AccountGroup *group;
   char asset_string[256];
   char profit_string[256];
-  const char * default_mnemonic;
   const gnc_commodity * default_currency;
   GNCCurrencyAcc *currency_accum;
   GNCCurrencyItem *currency_item;
@@ -360,16 +355,14 @@ gnc_ui_refresh_statusbar (void)
   GList *current;
   gboolean euro;
 
-  default_mnemonic = gnc_lookup_string_option("International",
-					      "Default Currency",
-					      "USD");
-  default_currency = gnc_commodity_table_lookup(gnc_engine_commodities(),
-                                                GNC_COMMODITY_NS_ISO,
-                                                default_mnemonic);
+  default_currency =
+    gnc_lookup_currency_option("International",
+                               "Default Currency",
+                               gnc_locale_default_currency ());
 
   euro = gnc_lookup_boolean_option("International",
-				   "Enable EURO support",
-				   FALSE);
+                                   "Enable EURO support",
+                                   FALSE);
 
   main_info = gnc_get_main_info();
   if (main_info == NULL)
@@ -1425,16 +1418,14 @@ mainWindow()
   /* create the label containing the account balances */
   {
     GtkWidget *combo_box;
-    const char *default_currency_mnemonic;
     const gnc_commodity * default_currency;
     GNCCurrencyItem *def_item;
     
-    default_currency_mnemonic = gnc_lookup_string_option("International",
-                                                         "Default Currency",
-                                                         "USD");
-    default_currency = gnc_commodity_table_lookup(gnc_engine_commodities(),
-                                                  GNC_COMMODITY_NS_ISO,
-                                                  default_currency_mnemonic);
+    default_currency =
+      gnc_lookup_currency_option("International",
+                                 "Default Currency",
+                                 gnc_locale_default_currency ());
+
     combo_box = gtk_select_new();
     main_info->totals_combo = combo_box;
     main_info->totals_list = NULL;

@@ -65,8 +65,6 @@
 /** PROTOTYPES ******************************************************/
 static void gnc_configure_date_format_cb(void *);
 static void gnc_configure_date_format(void);
-static void gnc_configure_newacc_currency_cb(void *);
-static void gnc_configure_newacc_currency(void);
 static void gnc_configure_account_separator_cb(void *);
 static void gnc_configure_account_separator(void);
 static void gnc_configure_register_colors_cb(void *);
@@ -100,7 +98,6 @@ static int gnome_is_initialized = FALSE;
 static int gnome_is_terminating = FALSE;
 
 static SCM date_callback_id = SCM_UNDEFINED;
-static SCM currency_callback_id = SCM_UNDEFINED;
 static SCM account_separator_callback_id = SCM_UNDEFINED;
 static SCM register_colors_callback_id = SCM_UNDEFINED;
 static SCM register_borders_callback_id = SCM_UNDEFINED;
@@ -169,12 +166,6 @@ gnucash_ui_init(void)
     date_callback_id =
       gnc_register_option_change_callback(gnc_configure_date_format_cb, NULL,
                                           "International", "Date Format");
-
-    gnc_configure_newacc_currency();
-    currency_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_newacc_currency_cb,
-                                          NULL, "International",
-                                          "Default Currency");
 
     gnc_configure_account_separator();
     account_separator_callback_id = 
@@ -284,7 +275,6 @@ gnc_ui_destroy (void)
     return;
 
   gnc_unregister_option_change_callback_id(date_callback_id);
-  gnc_unregister_option_change_callback_id(currency_callback_id);
   gnc_unregister_option_change_callback_id(account_separator_callback_id);
   gnc_unregister_option_change_callback_id(register_colors_callback_id);
   gnc_unregister_option_change_callback_id(register_borders_callback_id);
@@ -493,40 +483,6 @@ gnc_configure_date_format (void)
 
   if (format_code != NULL)
     free(format_code);
-}
-
-/* gnc_configure_date_format_cb
- *    Callback called when options change - sets default currency to
- *    the current value on the scheme side
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void 
-gnc_configure_newacc_currency_cb(void *data)
-{
-  gnc_configure_newacc_currency();
-}
-
-/* gnc_configure_newacc_currency
- *    sets the default currency for new accounts to the 
- *    current value on the scheme side
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_newacc_currency(void)
-{
-  char *newacc_def_currency = 
-    gnc_lookup_string_option("International",
-                             "Default Currency",
-                             "USD");
-
-  gnc_ui_set_default_new_account_currency (newacc_def_currency);
-
-  if (newacc_def_currency != NULL)
-    free(newacc_def_currency);
 }
 
 /* gnc_configure_account_separator_cb

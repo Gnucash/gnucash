@@ -223,17 +223,27 @@
 	 sort-tag
          documentation-string
  	 default-value)
-   (let* ((value default-value)
+
+  (define (currency->scm currency)
+    (if (string? currency)
+        currency
+        (gnc:commodity-get-mnemonic currency)))
+
+  (define (scm->currency currency)
+    (if (string? currency)
+        (gnc:commodity-table-lookup
+         (gnc:engine-commodities) GNC_COMMODITY_NS_ISO currency)
+        currency))
+
+   (let* ((value (currency->scm default-value))
           (value->string (lambda () (gnc:value->string value))))
      (gnc:make-option
       section name sort-tag 'currency documentation-string
-      (lambda () value)
-      (lambda (x) (set! value x))
-      (lambda () default-value)
+      (lambda ()  (scm->currency value))
+      (lambda (x) (set! value (currency->scm x)))
+      (lambda ()  (scm->currency default-value))
       (gnc:restore-form-generator value->string)
-      (lambda (x)
-        (cond ((string? x)(list #t x))
-              (else (list #f "currency-option: not a currency code"))))
+      (lambda (x) (list #t x))
       #f #f #f #f)))
 
 ;; commodity options use a specialized widget for entering commodities
