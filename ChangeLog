@@ -1,3 +1,27 @@
+2002-11-13  Benoit Grégoire  <bock@step.polymtl.ca>
+
+	* src/import-export/ofx/gnc-ofx-import.c: MAJOR improvement to 
+	investment support.  All transactions created from an investment
+	account are now already balanced.  Explicitely support Dividend 
+	Reinvestment transactions which will now directly create a 
+	income account -> stock account transaction, and Income 
+	transactions which will directly create a
+	income account -> cash account transaction.
+	Support memorising the income account association.  Several 
+	stock account can use the same income account if desired.
+	
+	* src/import-export/Transaction-matcher.c: Various bug fixes.
+
+	* src/import-export/Account-matcher.c and
+	src/import-export/gnc-generic-import.h: Support a new mode
+	of operation for the account matcher to allow selection of
+	an account without touching the online_id kvp frame. 
+	Currently used for income account selection or creation.
+
+	* src/import-export/generic-import.glade: Set default size 
+	to a more reasonable 800x600, since the Auto Shrink trick 
+	doesn't work for everyone.
+
 2002-11-12  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/gnc-import-match-map.[ch]

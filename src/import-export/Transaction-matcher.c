@@ -838,7 +838,7 @@ void gnc_import_add_trans(Transaction *trans)
   if(trans_not_found==FALSE)
     {
       DEBUG("%s","Transaction with same online ID exists, destroying current transaction");
-      xaccTransRollbackEdit(trans);
+      xaccTransDestroy(trans);
       xaccTransCommitEdit(trans);
     }
   else
@@ -869,10 +869,8 @@ void gnc_import_add_trans(Transaction *trans)
       transaction_info->match_list=g_list_sort(transaction_info->match_list,
 					       compare_probability);
       {
-	static const int TRANSACTION_RECONCILE_PROBABILITY_THRESHOLD = 6;
 	/*Transaction who's best match probability is below or equal to 
-	  this will be added as new by default */
-	static const int TRANSACTION_ADD_PROBABILITY_THRESHOLD = 2;
+	  this will be added as new by default TRANSACTION_ADD_PROBABILITY_THRESHOLD */
 	best_match=g_list_nth_data(transaction_info->match_list,0);
 	if(best_match != NULL && 
 	   best_match->probability >= TRANSACTION_RECONCILE_PROBABILITY_THRESHOLD)
@@ -890,7 +888,7 @@ void gnc_import_add_trans(Transaction *trans)
 	    transaction_info->action=IGNORE;
 	  }
       }
-      
+      transaction_info->previous_action=transaction_info->action;
       row_number = gtk_clist_append(matcher->downloaded_clist,
 				    (char **)(transaction_info->clist_text));
       gtk_clist_set_row_data_full(matcher->downloaded_clist,

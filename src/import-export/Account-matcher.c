@@ -215,10 +215,13 @@ Account * gnc_import_select_account(char * account_online_id_value,
   picker->new_account_default_type = new_account_default_type;
 
   DEBUG("Looking for account with online_id: %s", account_online_id_value);
-  retval = xaccGroupForEachAccount(picker->acct_group,
-				   test_acct_online_id_match,
-				   account_online_id_value,
-				   TRUE);
+  if(account_online_id_value!=NULL)
+    {
+      retval = xaccGroupForEachAccount(picker->acct_group,
+				       test_acct_online_id_match,
+				       account_online_id_value,
+				       TRUE);
+    }
   if(retval==NULL && auto_create != 0)
     {
       /* load the interface */
@@ -231,9 +234,7 @@ Account * gnc_import_select_account(char * account_online_id_value,
       
       glade_xml_signal_connect_data(xml, "gnc_ui_generic_account_picker_new_cb", GTK_SIGNAL_FUNC (gnc_ui_generic_account_picker_new_cb), picker);
       glade_xml_signal_connect_data(xml, "gnc_ui_generic_account_picker_select_cb", GTK_SIGNAL_FUNC(gnc_ui_generic_account_picker_select_cb), picker);
-      glade_xml_signal_connect_data(xml, "gnc_ui_generic_account_picker_unselect_cb", GTK_SIGNAL_FUNC(gnc_ui_generic_account_picker_unselect_cb), picker);
-/*      glade_xml_signal_connect_data(xml, "gnc_ui_generic_account_picker_map_cb", GTK_SIGNAL_FUNC(gnc_ui_generic_account_picker_map_cb), picker);*/
-      
+      glade_xml_signal_connect_data(xml, "gnc_ui_generic_account_picker_unselect_cb", GTK_SIGNAL_FUNC(gnc_ui_generic_account_picker_unselect_cb), picker);      
       picker->dialog     = glade_xml_get_widget (xml, "Generic Import Account Picker");
       picker->treeview   = glade_xml_get_widget (xml, "account_tree");
       online_id_label = glade_xml_get_widget (xml, "online_id_label");
@@ -245,17 +246,22 @@ Account * gnc_import_select_account(char * account_online_id_value,
 	  strncat(account_description_text, account_human_description, ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
 	  strncat(account_description_text, "\n", ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
 	}
-      strncat(account_description_text,_("(Full account ID: "), ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
-      strncat(account_description_text, account_online_id_value, ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
-      strncat(account_description_text, ")", ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
-
+      if(account_online_id_value!=NULL)
+	{
+	  strncat(account_description_text,_("(Full account ID: "), ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
+	  strncat(account_description_text, account_online_id_value, ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
+	  strncat(account_description_text, ")", ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
+	}
       gtk_label_set_text((GtkLabel*)online_id_label, account_description_text);
       build_acct_tree(picker);
-
+      
       ui_retval = gnome_dialog_run_and_close(GNOME_DIALOG(picker->dialog));  
 
       if(ui_retval == 0) {
-	gnc_import_set_acc_online_id(picker->selected_acct, account_online_id_value);
+	if( account_online_id_value != NULL)
+	  {
+	    gnc_import_set_acc_online_id(picker->selected_acct, account_online_id_value);
+	  }
 	retval=picker->selected_acct;
       }
       else {

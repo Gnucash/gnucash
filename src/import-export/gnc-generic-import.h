@@ -41,7 +41,16 @@
 
   Params:
 
-    account_online_id_value: The string containing your account_id
+    account_online_id_value: The string containing your unique account_id
+    coming from some string of your module.  This is the normal mode of
+    operation.
+
+    If account_online_id_value==NULL, you basically end up with an account
+    selector that allows you to select an account whose GUID will be 
+    remembered elsewhere.  You would fill account_human_description to tell
+    the user what he is looking for.  In this mode, the  online_id
+    kvp_frame of the found account will not be touched.  To use this mode,
+    auto_create must NOT be set to 0.  
 
     gchar * account_human_description: A human-readable description of
     the account.  Can be NULL. If it is not NULL, it will be shown before
