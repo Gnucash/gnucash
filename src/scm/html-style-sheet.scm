@@ -128,7 +128,7 @@
   (record-accessor <html-style-sheet> 'style))
 
 (define (gnc:save-style-sheet-options) 
-  (let ((port (open (build-path (getenv "HOME") ".gnucash" "config.auto")
+  (let ((port (open gnc:current-config-auto
                     (logior O_WRONLY O_CREAT O_APPEND))))
     (hash-fold
      (lambda (id ss-obj p)

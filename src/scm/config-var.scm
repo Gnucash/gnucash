@@ -31,7 +31,7 @@
 ;;; setting is considered transient.  Other settings (like from the UI
 ;;; preferences panel, or normal user code) should be considered
 ;;; permanent, and if they leave the variable value different from the
-;;; default, should be saved to ~/.gnucash/config.auto.
+;;; default, should be saved to the auto configuration file.
 
 (gnc:support "config-var.scm")
 

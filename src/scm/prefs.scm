@@ -82,7 +82,7 @@
   (gnc:save-style-sheet-options))
 
 (define (gnc:save-acct-tree-options)
-  (let ((port (open (build-path (getenv "HOME") ".gnucash" "config.auto")
+  (let ((port (open gnc:current-config-auto
                     (logior O_WRONLY O_CREAT O_APPEND)))
         (maxid 0))
     (hash-fold
@@ -104,7 +104,7 @@
   (gnc:make-home-dir)
   (gnc:save-options gnc:*options-entries*
                     (symbol->string 'gnc:*options-entries*)
-                    (build-path (getenv "HOME") ".gnucash" "config.auto")
+                    gnc:current-config-auto
                     (string-append
                      "(gnc:config-file-format-version 1)\n\n"
                      ";"

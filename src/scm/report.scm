@@ -112,7 +112,7 @@
   (hash-for-each add-report-menu-item *gnc:_report-templates_*))
 
 (define (gnc:save-report-options)
-  (let ((port (open (build-path (getenv "HOME") ".gnucash" "config.auto")
+  (let ((port (open gnc:current-config-auto
                     (logior O_WRONLY O_CREAT O_APPEND))))
     (hash-fold
      (lambda (id report-obj p)

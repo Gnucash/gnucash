@@ -47,10 +47,10 @@
                     ((current)
                      (gnc:config-var-value-get gnc:*doc-path*))
                     (else
-                     (gnc:warn "bad item " item " in doc-path.  Ignoring.")
+                     (gnc:warn "bad item " item " in doc-path. Ignoring.")
                      '())))
                  (else 
-                  (gnc:warn "bad item " item " in doc-path.  Ignoring.")
+                  (gnc:warn "bad item " item " in doc-path. Ignoring.")
                   '())))))
     (apply append (map path-interpret new-path))))
 
@@ -58,30 +58,31 @@
   (let ((home-dir (build-path (getenv "HOME") ".gnucash")))
     (if (access? home-dir X_OK) #t (mkdir home-dir #o700))))
 
+(define gnc:current-config-auto
+  (build-path (getenv "HOME") ".gnucash" "config-1.6.auto"))
+
 (define gnc:load-user-config-if-needed
   (let ((user-config-loaded? #f))
+
+    (define (try-load file-suffix)
+      (let ((file (build-path (getenv "HOME") ".gnucash" file-suffix)))
+        (if (access? file F_OK)
+            (if (false-if-exception (primitive-load file))
+                (begin
+                  (set! user-config-loaded? #t)
+                  #t)
+                (begin
+                  (gnc:warn "failure loading " user-file)
+                  #f))
+            #f)))
+
     (lambda ()
       (if (not user-config-loaded?)
           (begin
             (gnc:debug "loading user configuration")
-
-            (let ((user-file
-                   (build-path (getenv "HOME") ".gnucash" "config.user"))
-                  (auto-file
-                   (build-path (getenv "HOME") ".gnucash" "config.auto")))
-              
-              (if (access? user-file F_OK)
-                  (if (false-if-exception (primitive-load user-file))
-                      (set! user-config-loaded? #t)
-                      (begin
-                        (gnc:warn "failure loading " user-file)
-                        #f))
-                  (if (access? auto-file F_OK)
-                      (if (false-if-exception (primitive-load auto-file))
-                          (set! user-config-loaded? #t)
-                          (begin
-                            (gnc:warn "failure loading " auto-file)
-                            #f))))))))))
+            (or-map try-load
+                    '("config-1.6.user" "config.user"
+                      "config-1.6.auto" "config.auto")))))))
 
 ;; the system config should probably be loaded from some directory
 ;; that wouldn't be a site wide mounted directory, like /usr/share
