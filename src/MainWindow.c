@@ -78,9 +78,9 @@ short show_categories = 1;
 /* the english-language names here should match 
  * the enumerated types in Account.h */
 char *account_type_name[] = 
-       { "Bank","Cash","Asset","Credit Card",
-         "Liability","Stock","Mutual Fund",
-         "Income", "Expense", "Equity" };
+       { BANK_STR, CASH_STR, ASSET_STR, CREDIT_CARD_STR,
+         LIABILITY_STR, STOCK_STR, MUTUAL_FUND_STR,
+         INCOME_STR, EXPENSE_STR, EQUITY_STR };
 
 /* Pixel values are used to color the balance field text 
  * when computing the balance */
@@ -423,42 +423,42 @@ mainWindow( Widget parent )
    * Set up the menubar                                             *
   \******************************************************************/
   MenuItem fileMenu[] = {
-    { "New File...",   &xmPushButtonWidgetClass, 'N', NULL, NULL, True,
+    { NEW_FILE_E_STR,  &xmPushButtonWidgetClass, 'N', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_NEW,    (MenuItem *)NULL, 0 },
-    { "Open File...  ",&xmPushButtonWidgetClass, 'O', NULL, NULL, True,
+    { OPEN_FILE_E_STR, &xmPushButtonWidgetClass, 'O', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_OPEN,   (MenuItem *)NULL, 0 },
-    { "Import QIF...  ",&xmPushButtonWidgetClass, 'I', NULL, NULL, True,
+    { IMPORT_QIF_E_STR,&xmPushButtonWidgetClass, 'I', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_IMPORT, (MenuItem *)NULL, 0 },
-    { "",              &xmSeparatorWidgetClass,    0, NULL, NULL, True,
-      NULL,         NULL,                   (MenuItem *)NULL, 0 },
-    { "Save",          &xmPushButtonWidgetClass, 'S', NULL, NULL, True,
+    { "",              &xmSeparatorWidgetClass,   0,  NULL, NULL, True,
+      NULL,          NULL,                  (MenuItem *)NULL, 0 },
+    { SAVE_STR,        &xmPushButtonWidgetClass, 'S', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_SAVE,   (MenuItem *)NULL, 0 },
-    { "Save As...",    &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
+    { SAVE_AS_E_STR,   &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_SAVEAS, (MenuItem *)NULL, 0 },
-    { "",              &xmSeparatorWidgetClass,    0, NULL, NULL, True,
-      NULL,         NULL,                   (MenuItem *)NULL, 0 },
-    { "Quit",          &xmPushButtonWidgetClass, 'Q', NULL, NULL, True,
+    { "",              &xmSeparatorWidgetClass,   0,  NULL, NULL, True,
+      NULL,          NULL,                  (MenuItem *)NULL, 0 },
+    { QUIT_STR,        &xmPushButtonWidgetClass, 'Q', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_QUIT,   (MenuItem *)NULL, 0 },
-    { NULL,         NULL,                          0, NULL, NULL, False, 
+    { NULL,          NULL,                        0,  NULL, NULL, False, 
       NULL,          (XtPointer)0,          (MenuItem *)NULL, 0 },
   };
 
   MenuItem accountMenu[] = {
-    { "New Account...",     &xmPushButtonWidgetClass, 'N', NULL, NULL, True,
+    { NEW_ACC_E_STR,        &xmPushButtonWidgetClass, 'N', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_NEW,  (MenuItem *)NULL, 0 },
-    { "Open Account",       &xmPushButtonWidgetClass, 'O', NULL, NULL, True,
+    { OPEN_ACC_E_STR,       &xmPushButtonWidgetClass, 'O', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_OPEN, (MenuItem *)NULL, 0 },
-    { "Open Subaccounts",   &xmPushButtonWidgetClass, 'S', NULL, NULL, True,
+    { OPEN_SUB_STR,         &xmPushButtonWidgetClass, 'S', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_LEDGER, (MenuItem *)NULL, 0 },
-    { "Edit Account...",    &xmPushButtonWidgetClass, 'E', NULL, NULL, True,
+    { EDIT_ACCT_E_STR,      &xmPushButtonWidgetClass, 'E', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_EDIT, (MenuItem *)NULL, 0 },
-    { "Delete Account...",  &xmPushButtonWidgetClass, 'D', NULL, NULL, True,
+    { DEL_ACC_E_STR,        &xmPushButtonWidgetClass, 'D', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_DEL,  (MenuItem *)NULL, 0 },
     { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                    (MenuItem *)NULL, 0 },
-    { "Transfer",           &xmPushButtonWidgetClass, 'T', NULL, NULL, True,
+    { TRANSFER_STR,         &xmPushButtonWidgetClass, 'T', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_TRNS, (MenuItem *)NULL, 0 },
-    { "Report",             &xmPushButtonWidgetClass, 'R', NULL, NULL, False,
+    { REPORT_STR,           &xmPushButtonWidgetClass, 'R', NULL, NULL, False,
       accountMenubarCB, (XtPointer)AMB_RPRT, (MenuItem *)NULL, 0 },
     { "Hide Inc/Exp...",    &xmPushButtonWidgetClass, 'I', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_SHOW, (MenuItem *)NULL, 0 },
@@ -471,15 +471,15 @@ mainWindow( Widget parent )
   };
   
   MenuItem helpMenu[] = {
-    { "About...",           &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
+    { ABOUT_E_STR,          &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_ABOUT, (MenuItem *)NULL, 0 },
-    { "Help...",            &xmPushButtonWidgetClass, 'H', NULL, NULL, True,
+    { HELP_E_STR,           &xmPushButtonWidgetClass, 'H', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_MAIN,  (MenuItem *)NULL, 0 },
-    { "Accounts...",        &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
+    { ACCOUNTS_E_STR,       &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_ACC,   (MenuItem *)NULL, 0 },
     { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                  (MenuItem *)NULL, 0 },
-    { "License...",         &xmPushButtonWidgetClass, 'L', NULL, NULL, True,
+    { LICENSE_E_STR,        &xmPushButtonWidgetClass, 'L', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_LIC,   (MenuItem *)NULL, 0 },
     { NULL,         NULL,                          0, NULL, NULL, False, 
       NULL,              (XtPointer)0,     (MenuItem *)NULL, 0 },
@@ -502,9 +502,9 @@ mainWindow( Widget parent )
   
   menubar = XmCreateMenuBar( mainwindow, "menubar", NULL, 0 );  
   
-  BuildMenu( menubar, XmMENU_PULLDOWN, "File",   'F', False, 0, fileMenu );
-  BuildMenu( menubar, XmMENU_PULLDOWN, "Account",'A', False, 0, accountMenu );
-  BuildMenu( menubar, XmMENU_PULLDOWN, "Help",   'H', False, 0, helpMenu );
+  BuildMenu( menubar, XmMENU_PULLDOWN, FILE_STR,   'F', False, 0, fileMenu );
+  BuildMenu( menubar, XmMENU_PULLDOWN, ACCOUNT_STR,'A', False, 0, accountMenu );
+  BuildMenu( menubar, XmMENU_PULLDOWN, HELP_STR,   'H', False, 0, helpMenu );
 
   /* hack alert -- 8 is very sensitive to menu changes! */
   show_widget = accountMenu[8].widget;

@@ -258,23 +258,23 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   };
   
   MenuItem activityMenu[] = {
-    { "Transfer...",        &xmPushButtonWidgetClass, 'T', NULL, NULL, True,
+    { TRANSFER_E_STR,       &xmPushButtonWidgetClass, 'T', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_TRNS,   (MenuItem *)NULL, 0 },
     { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,              NULL,                 (MenuItem *)NULL, 0 },
-    { "Reconcile...",       &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
+    { RECONCILE_E_STR,      &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
       startRecnCB,       NULL,                 (MenuItem *)NULL, 0 },
-    { "Adjust Balance...",  &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
+    { ADJ_BALN_E_STR,       &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
       startAdjBCB,       NULL,                 (MenuItem *)NULL, 0 },
-    { "Report",             &xmPushButtonWidgetClass, 'R', NULL, NULL, False,
+    { REPORT_E_STR,         &xmPushButtonWidgetClass, 'R', NULL, NULL, False,
       NULL,              (XtPointer)0,         (MenuItem *)NULL, 0 },
     { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,              NULL,                 (MenuItem *)NULL, 0 },
-    { "Delete Transaction", &xmPushButtonWidgetClass, 'D', NULL, NULL, True,
+    { DEL_TRANS_STR,        &xmPushButtonWidgetClass, 'D', NULL, NULL, True,
       deleteCB,          NULL,                 (MenuItem *)NULL, 0 },
     { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,              NULL,                 (MenuItem *)NULL, 0 },
-    { "Close Window",       &xmPushButtonWidgetClass, 'Q', NULL, NULL, True,
+    { CLOSE_WIN_STR,        &xmPushButtonWidgetClass, 'Q', NULL, NULL, True,
       destroyShellCB,    NULL,                 (MenuItem *)NULL, 0 },
     { NULL,                 NULL,                      0,  NULL, NULL, False,
       NULL,              (XtPointer)0,         (MenuItem *)NULL, 0 },
@@ -282,13 +282,13 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 
   
   MenuItem helpMenu[] = {
-    { "About...",           &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
+    { ABOUT_E_STR,          &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_ABOUT, (MenuItem *)NULL, 0 },
-    { "Help...",            &xmPushButtonWidgetClass, 'H', NULL, NULL, True,
+    { HELP_E_STR,           &xmPushButtonWidgetClass, 'H', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_REGWIN,(MenuItem *)NULL, 0 },
     { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,          NULL,                 (MenuItem *)NULL, 0 },
-    { "License...",         &xmPushButtonWidgetClass, 'L', NULL, NULL, True,
+    { LICENSE_E_STR,        &xmPushButtonWidgetClass, 'L', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_LIC,   (MenuItem *)NULL, 0 },
     { NULL,                 NULL,                      0,  NULL, NULL, False,
       NULL,          (XtPointer)0,         (MenuItem *)NULL, 0 },
@@ -409,9 +409,9 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 
   menubar = XmCreateMenuBar( pane, "menubar", NULL, 0 );  
   
-  BuildMenu( menubar, XmMENU_PULLDOWN, "Activities", 'A',
+  BuildMenu( menubar, XmMENU_PULLDOWN, ACTIVITIES_STR, 'A',
              False, 0, activityMenu );
-  BuildMenu( menubar, XmMENU_PULLDOWN, "Help",       'H', 
+  BuildMenu( menubar, XmMENU_PULLDOWN, HELP_STR,       'H', 
              False, 0, helpMenu );
   
   XtManageChild( menubar );
