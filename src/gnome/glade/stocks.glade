@@ -39,9 +39,9 @@
 	<widget class="GnomeDruidPageStandard" id="account_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Stock Account</property>
-	  <property name="title_foreground">#1258082cd158</property>
-	  <property name="background">#b618082be9eb</property>
-	  <property name="logo_background">#1e10081d0001</property>
+	  <property name="title_foreground">#FFFFFFFFFFFF</property>
+	  <property name="background">#666666669999</property>
+	  <property name="logo_background">#666666669999</property>
 	  <signal name="next" handler="gnc_stock_split_druid_account_next" last_modification_time="Sat, 23 Aug 2003 22:43:13 GMT"/>
 
 	  <child internal-child="vbox">
@@ -163,9 +163,9 @@
 	<widget class="GnomeDruidPageStandard" id="details_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Stock Split Details</property>
-	  <property name="title_foreground">#c7f0082cd158</property>
-	  <property name="background">#d678082ce9eb</property>
-	  <property name="logo_background">#1e10081d0001</property>
+	  <property name="title_foreground">#FFFFFFFFFFFF</property>
+	  <property name="background">#666666669999</property>
+	  <property name="logo_background">#666666669999</property>
 	  <signal name="prepare" handler="gnc_stock_split_druid_details_prepare" last_modification_time="Sat, 23 Aug 2003 22:44:51 GMT"/>
 	  <signal name="next" handler="gnc_stock_split_druid_details_next" last_modification_time="Sat, 23 Aug 2003 22:45:27 GMT"/>
 
@@ -513,9 +513,9 @@ You may safely leave it blank.</property>
 	<widget class="GnomeDruidPageStandard" id="cash_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Cash In Lieu</property>
-	  <property name="title_foreground">#b030082ed158</property>
-	  <property name="background">#af98082ee9eb</property>
-	  <property name="logo_background">#1e10081d0001</property>
+	  <property name="title_foreground">#FFFFFFFFFFFF</property>
+	  <property name="background">#666666669999</property>
+	  <property name="logo_background">#666666669999</property>
 	  <signal name="prepare" handler="gnc_stock_split_druid_cash_prepare" last_modification_time="Sat, 23 Aug 2003 22:55:18 GMT"/>
 	  <signal name="next" handler="gnc_stock_split_druid_cash_next" last_modification_time="Sat, 23 Aug 2003 22:55:44 GMT"/>
 
