@@ -27,8 +27,6 @@
 #ifndef GNC_TRACE_H
 #define GNC_TRACE_H
 
-#include "config.h"
-
 #include <glib.h>
 #include <stdarg.h>
 #include <stdio.h>
