@@ -4,8 +4,8 @@ noinst_LIBRARIES = libgncgnome.a
 libgncgnome_a_SOURCES = \
   account-tree.c \
   cursors.c \
-  dialog-account.c \
   dialog-account-picker.c \
+  dialog-account.c \
   dialog-budget.c \
   dialog-commodity.c \
   dialog-dup-trans.c \
@@ -26,29 +26,29 @@ libgncgnome_a_SOURCES = \
   extensions.c \
   file-history.c \
   glade-gnc-dialogs.c \
+  glade-support.c \
   gnc-amount-edit.c \
   gnc-commodity-edit.c \
   gnc-currency-edit.c \
   gnc-datedelta.c \
   gnc-dateedit.c \
+  gnc-html-embedded.c \
+  gnc-html-history.c \
+  gnc-html.c \
   gtkselect.c \
   mainwindow-account-tree.c \
+  new-user-callbacks.c \
+  new-user-funs.c \
+  new-user-interface.c \
   print-session.c \
   query-user.c \
   reconcile-list.c \
   top-level.c \
+  window-help.c \
   window-main.c \
   window-reconcile.c \
   window-register.c \
-  gnc-html.c \
-  gnc-html-history.c \
-  gnc-html-embedded.c \
-  window-help.c \
-  window-report.c \
-  new-user-callbacks.c \
-  new-user-interface.c \
-  new-user-funs.c \
-  glade-support.c
+  window-report.c
 
 gnomeappdir = ${datadir}/gnome/apps/Applications
 
@@ -62,8 +62,8 @@ mime_DATA = gnucash.keys gnucash.mime
 noinst_HEADERS = \
   account-tree.h \
   cursors.h \
-  dialog-account.h \
   dialog-account-picker.h \
+  dialog-account.h \
   dialog-budget.h \
   dialog-commodity.h \
   dialog-fincalc.h \
@@ -80,27 +80,28 @@ noinst_HEADERS = \
   extensions.h \
   glade-cb-gnc-dialogs.h \
   glade-gnc-dialogs.h \
+  glade-support.h \
   gnc-amount-edit.h \
   gnc-commodity-edit.h \
   gnc-currency-edit.h \
   gnc-datedelta.h \
   gnc-dateedit.h \
+  gnc-html-embedded.h \
+  gnc-html-history.h \
+  gnc-html.h \
   gtkselect.h \
+  mainwindow-account-tree.h \
+  new-user-callbacks.h \
+  new-user-funs.h \
+  new-user-interface.h \
   print-session.h \
   query-user.h \
   reconcile-list.h \
+  window-help.h \
   window-main.h \
   window-reconcile.h \
   window-register.h \
-  gnc-html.h \
-  gnc-html-history.h \
-  gnc-html-embedded.h \
-  window-help.h \
-  window-report.h \
-  new-user-callbacks.h \
-  new-user-interface.h \
-  new-user-funs.h \
-  glade-support.h
+  window-report.h
 
 GLADE_FILES = \
   glade-gnc-dialogs.c \
