@@ -151,6 +151,7 @@ typedef struct sixtp_sax_data {
   GSList *stack;
   gpointer global_data;
   xmlParserCtxtPtr saxParserCtxt;
+  sixtp *bad_xml_parser;
 } sixtp_sax_data;
 
 

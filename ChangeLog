@@ -1,3 +1,44 @@
+2002-12-23  David Hampton  <hampton@employees.org>
+
+	* src/app-file/gnc-file.c: Add missing error message.
+
+	* src/backend/file/sixtp-dom-parsers.c:
+	* src/backend/file/sixtp-stack.c:
+	* src/backend/file/sixtp.c: Better handling of corrupt XML data
+	files.  Print better error messages for unknown tags, or
+	mismatched start/end tags.
+
+
+	* src/engine/engine-utilities.scm: Check for errors when trying to
+	open a new session file.
+
+	* src/engine/gw-engine-spec.scm: Added wrappers to access the
+	engine suspend/resume events functions.
+
+	* src/scm/command-line.scm: Suspend engine events when running
+	with the --add-price-quotes flag.
+
+	* src/scm/price-quotes.scm: Add some additional checking.
+
+	
+	* src/gnome-utils/dialog-transfer.c: Change logic to multiply by
+	the exchange rate instead of divide.  Look for both both forward
+	and reverse currency quotes in the pricedb. Attempt to install
+	currency quotes into the pricedb in a consistent manner.  Give the
+	user better feedback on exactly what the exchange rate
+	means. Obsolete the currency "swap" routine. #101450
+
+	* src/gnome-utils/transfer.glade: Give the user better feedback on
+	exactly what the exchange rate means.
+
+	* src/register/ledger-core/split-register-control.c: Remove
+	function call to obolete routine.
+	
+	* src/engine/gnc-pricedb.c:
+	* src/engine/gw-engine-spec.scm: Added a new function
+	(gnc_pricedb_lookup_day) to retrieve a price quote from a certain
+	day, not just an exact time.
+
 2002-12-22  Chris Lyttle  <chris@wilddev.net>
 
 	* rpm/gnucash.spec.in: require g-wrap 1.3.4

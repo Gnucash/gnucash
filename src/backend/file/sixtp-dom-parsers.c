@@ -819,7 +819,7 @@ dom_tree_generic_parse(xmlNodePtr node, struct dom_tree_handler *handlers,
         {
             PERR("gnc_xml_set_data failed");
             successful = FALSE;
-            break;
+            continue;
         }
     }
 

@@ -164,7 +164,7 @@ sixtp_context_run_end_handler(sixtp_parser_context* ctxt)
 {
     if(ctxt->top_frame->parser->end_handler)
     {
-        ctxt->data.parsing_ok =
+        ctxt->data.parsing_ok &=
         ctxt->top_frame->parser->end_handler(
             ctxt->top_frame->data_for_children,
             ctxt->top_frame->data_from_children,
