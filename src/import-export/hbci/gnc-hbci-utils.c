@@ -134,7 +134,7 @@ gnc_hbci_get_hbci_acc (const AB_BANKING *api, Account *gnc_acc)
 
     if (!hbci_acc && bankcode && (strlen(bankcode)>0) &&
 	accountid && (strlen(accountid) > 0)) {
-      printf("gnc_hbci_get_hbci_acc: No AB_ACCOUNT found for UID %d, trying bank code\n", account_uid);
+      /* printf("gnc_hbci_get_hbci_acc: No AB_ACCOUNT found for UID %d, trying bank code\n", account_uid); */
       hbci_acc = AB_Banking_GetAccountByCodeAndNumber(api, bankcode, accountid);
     }
     /*printf("gnc_hbci_get_hbci_acc: return HBCI_Account %p\n", hbci_acc);*/
@@ -237,6 +237,18 @@ gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose)
 #endif
 
   return cause;
+}
+
+void
+gnc_hbci_cleanup_job(AB_BANKING *api, AB_JOB *job)
+{
+  if (AB_Job_GetStatus(job) == AB_Job_StatusFinished) {
+    AB_Banking_DelFinishedJob(api, job);
+  } else if (AB_Job_GetStatus(job) == AB_Job_StatusPending) {
+    AB_Banking_DelPendingJob(api, job);
+  }
+  /* Martin assured me that there will be no job in the queue after
+     ExecuteQueue, so we don't need to remove it from the queue. */
 }
 
 

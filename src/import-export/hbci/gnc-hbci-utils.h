@@ -76,6 +76,11 @@ gnc_hbci_get_hbci_acc (const AB_BANKING *api, Account *gnc_acc);
 int
 gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose);
 
+/** Clean up the queue after executing, i.e. delete the job as good as
+    possible. */
+void
+gnc_hbci_cleanup_job(AB_BANKING *api, AB_JOB *job);
+
 /* Check int on whether some feedback should be given to the
  * user. Returns true if the HBCI action should be tried again; on the
  * other hand, returns false if the user can't do anything about this
