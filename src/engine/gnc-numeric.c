@@ -608,58 +608,52 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
     }
     qofint128 nume = mult128(a.num, b.denom);
     qofint128 deno = mult128(b.num, a.denom);
-    if ((0 == nume.isbig) && (0 == deno.isbig))
+
+    /* Try to avoid overflow by removing common factors */
+    if (nume.isbig && deno.isbig)
     {
-      quotient.num = sgn * nume.lo;
-      quotient.denom = deno.lo;
-    }
-    else if (0 == deno.isbig)
-    {
-      quotient = reduce128 (nume, deno.lo);
-      quotient.num *= sgn;
-    }
-    else
-    {
-      /* Try to avoid overflow by removing common factors */
       gnc_numeric ra = gnc_numeric_reduce (a);
       gnc_numeric rb = gnc_numeric_reduce (b);
 
       gint64 gcf_nume = gcf64(ra.num, rb.num);
       gint64 gcf_deno = gcf64(rb.denom, ra.denom);
-      qofint128 rnume = mult128(ra.num/gcf_nume, rb.denom/gcf_deno);
-      qofint128 rdeno = mult128(rb.num/gcf_nume, ra.denom/gcf_deno);
+      nume = mult128(ra.num/gcf_nume, rb.denom/gcf_deno);
+      deno = mult128(rb.num/gcf_nume, ra.denom/gcf_deno);
+    }
 
-      if ((0 == rnume.isbig) && (0 == rdeno.isbig))
+    if ((0 == nume.isbig) && (0 == deno.isbig))
+    {
+      quotient.num = sgn * nume.lo;
+      quotient.denom = deno.lo;
+      goto dive_done;
+    }
+    else if (0 == deno.isbig)
+    {
+      quotient = reduce128 (nume, deno.lo);
+      if (0 == gnc_numeric_check (quotient))
       {
-        quotient.num = sgn * rnume.lo;
-        quotient.denom = rdeno.lo;
-      }
-      else if (0 == rdeno.isbig)
-      {
-        quotient = reduce128 (rnume, rdeno.lo);
         quotient.num *= sgn;
+        goto dive_done;
       }
-      else
-      {
-        /* If rounding allowed, then shift until there's no 
-         * more overflow. The conversion at the end will fix 
-         * things up for the final value. */
-        if ((how & GNC_NUMERIC_RND_MASK) == GNC_HOW_RND_NEVER)
-        {
-          return gnc_numeric_error (GNC_ERROR_OVERFLOW);
-        }
-        while (rnume.isbig || rdeno.isbig)
-        {
-           rnume = shift128 (rnume);
-           rdeno = shift128 (rdeno);
-        }
-        quotient.num = sgn * rnume.lo;
-        quotient.denom = rdeno.lo;
-        if (0 == quotient.denom) 
-        {
-          return gnc_numeric_error (GNC_ERROR_OVERFLOW);
-        }
-      }
+    }
+
+    /* If rounding allowed, then shift until there's no 
+     * more overflow. The conversion at the end will fix 
+     * things up for the final value. */
+    if ((how & GNC_NUMERIC_RND_MASK) == GNC_HOW_RND_NEVER)
+    {
+      return gnc_numeric_error (GNC_ERROR_OVERFLOW);
+    }
+    while (nume.isbig || deno.isbig)
+    {
+       nume = shift128 (nume);
+       deno = shift128 (deno);
+    }
+    quotient.num = sgn * nume.lo;
+    quotient.denom = deno.lo;
+    if (0 == quotient.denom) 
+    {
+      return gnc_numeric_error (GNC_ERROR_OVERFLOW);
     }
   }
   
@@ -669,6 +663,7 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
     quotient.denom = -quotient.denom;
   }
   
+dive_done:
   if((denom == GNC_DENOM_AUTO) &&
      ((how & GNC_NUMERIC_DENOM_MASK) == GNC_HOW_DENOM_LCD)) 
   {
