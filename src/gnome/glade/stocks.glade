@@ -12,12 +12,14 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <signal name="destroy" handler="gnc_stock_split_druid_window_destroy_cb" last_modification_time="Sat, 23 Aug 2003 22:43:04 GMT"/>
 
   <child>
     <widget class="GnomeDruid" id="stock_split_druid">
       <property name="border_width">4</property>
       <property name="visible">True</property>
       <property name="show_help">False</property>
+      <signal name="cancel" handler="gnc_stock_split_druid_cancel_druid" last_modification_time="Sat, 23 Aug 2003 22:42:56 GMT"/>
 
       <child>
 	<widget class="GnomeDruidPageEdge" id="start_page">
@@ -37,9 +39,10 @@
 	<widget class="GnomeDruidPageStandard" id="account_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Stock Account</property>
-	  <property name="title_foreground">#df20083dceb8</property>
-	  <property name="background">#df180834e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#1258082cd158</property>
+	  <property name="background">#b618082be9eb</property>
+	  <property name="logo_background">#1e10081d0001</property>
+	  <signal name="next" handler="gnc_stock_split_druid_account_next" last_modification_time="Sat, 23 Aug 2003 22:43:13 GMT"/>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="vbox98">
@@ -79,21 +82,67 @@
 
 		  <child>
 		    <widget class="GtkScrolledWindow" id="scrolledwindow21">
-		      <property name="border_width">10</property>
 		      <property name="visible">True</property>
-		      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-		      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-		      <property name="shadow_type">GTK_SHADOW_IN</property>
+		      <property name="can_focus">True</property>
+		      <property name="hscrollbar_policy">GTK_POLICY_ALWAYS</property>
+		      <property name="vscrollbar_policy">GTK_POLICY_ALWAYS</property>
+		      <property name="shadow_type">GTK_SHADOW_NONE</property>
 		      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		      <child>
-			<widget class="GtkTreeView" id="account_clist">
+			<widget class="GtkCList" id="account_clist">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="headers_visible">True</property>
-			  <property name="rules_hint">False</property>
-			  <property name="reorderable">False</property>
-			  <property name="enable_search">True</property>
+			  <property name="n_columns">3</property>
+			  <property name="column_widths">80,80,80</property>
+			  <property name="selection_mode">GTK_SELECTION_SINGLE</property>
+			  <property name="show_titles">True</property>
+			  <property name="shadow_type">GTK_SHADOW_IN</property>
+
+			  <child>
+			    <widget class="GtkLabel" id="label847718">
+			      <property name="label" translatable="yes">Account</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_LEFT</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkLabel" id="label847719">
+			      <property name="label" translatable="yes">Symbol</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_LEFT</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkLabel" id="label847720">
+			      <property name="label" translatable="yes">Shares</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_RIGHT</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">1</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
 			</widget>
 		      </child>
 		    </widget>
@@ -114,9 +163,11 @@
 	<widget class="GnomeDruidPageStandard" id="details_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Stock Split Details</property>
-	  <property name="title_foreground">#51600840ceb8</property>
-	  <property name="background">#f0380835e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#c7f0082cd158</property>
+	  <property name="background">#d678082ce9eb</property>
+	  <property name="logo_background">#1e10081d0001</property>
+	  <signal name="prepare" handler="gnc_stock_split_druid_details_prepare" last_modification_time="Sat, 23 Aug 2003 22:44:51 GMT"/>
+	  <signal name="next" handler="gnc_stock_split_druid_details_next" last_modification_time="Sat, 23 Aug 2003 22:45:27 GMT"/>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox32">
@@ -462,9 +513,11 @@ You may safely leave it blank.</property>
 	<widget class="GnomeDruidPageStandard" id="cash_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Cash In Lieu</property>
-	  <property name="title_foreground">#4868083bceb8</property>
-	  <property name="background">#33e80832e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#b030082ed158</property>
+	  <property name="background">#af98082ee9eb</property>
+	  <property name="logo_background">#1e10081d0001</property>
+	  <signal name="prepare" handler="gnc_stock_split_druid_cash_prepare" last_modification_time="Sat, 23 Aug 2003 22:55:18 GMT"/>
+	  <signal name="next" handler="gnc_stock_split_druid_cash_next" last_modification_time="Sat, 23 Aug 2003 22:55:44 GMT"/>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox33">
@@ -752,6 +805,7 @@ quit without making any changes.</property>
 	  <property name="background_color">#666666669999</property>
 	  <property name="logo_background_color">#666666669999</property>
 	  <property name="textbox_color">#ffffffffffff</property>
+	  <signal name="finish" handler="gnc_stock_split_druid_finish" last_modification_time="Sat, 23 Aug 2003 22:56:22 GMT"/>
 	</widget>
       </child>
     </widget>

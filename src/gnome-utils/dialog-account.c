@@ -44,6 +44,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-session.h"
 #include "gnc-tree-model-account.h"
+#include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
@@ -105,7 +106,7 @@ struct _AccountWindow
 
 
 /** Static Globals *******************************************************/
-static short module = MOD_GUI;
+static short module = MOD_TEST;
 
 static gint last_width = 0;
 static gint last_height = 0;
@@ -175,6 +176,8 @@ gnc_account_to_ui(AccountWindow *aw)
   const char *string;
   gboolean tax_related, placeholder, nonstd_scu;
   gint index;
+  GtkTreePath *tree_path;
+  GncTreeModelAccount *tree_model;
 
   if (!account)
     return;
@@ -217,6 +220,14 @@ gnc_account_to_ui(AccountWindow *aw)
   placeholder = xaccAccountGetPlaceholder (account);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->placeholder_button),
                                 placeholder);
+
+  tree_model = GNC_TREE_MODEL_ACCOUNT (gtk_tree_view_get_model (aw->parent_tree));
+  gtk_tree_view_collapse_all (aw->parent_tree);
+  tree_path = gnc_tree_model_account_get_path_from_account (GNC_TREE_MODEL_ACCOUNT(tree_model), account);
+  if (tree_path) {
+    gtk_tree_view_expand_to_path (aw->parent_tree, tree_path);
+    gtk_tree_path_free(tree_path);
+  }
 }
 
 
@@ -396,10 +407,16 @@ gnc_ui_to_account(AccountWindow *aw)
   }
   else
   {
-    Account *transfer;
+    Account *transfer = NULL;
+    GtkTreeSelection *selection;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
 
-    transfer = gnc_account_tree_get_current_account
-      (GNC_ACCOUNT_TREE (aw->transfer_tree));
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (aw->transfer_tree));
+    if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
+	  transfer = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT (model),
+			  				   &iter);
+  }
     if (!transfer)
       return;
 
@@ -989,11 +1006,16 @@ gnc_new_account_ok (AccountWindow *aw)
 
     if (!use_equity)
     {
-      Account *transfer;
+      Account *transfer = NULL;
+      GtkTreeSelection *selection;
+      GtkTreeModel *model;
+      GtkTreeIter iter;
 
-      transfer = gnc_account_tree_get_current_account
-        (GNC_ACCOUNT_TREE (aw->transfer_tree));
-
+      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (aw->transfer_tree));
+      if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
+	transfer = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT (model),
+						       &iter);
+  }
       if (!transfer)
       {
         const char *message = _("You must select a transfer account or choose"
@@ -1335,6 +1357,7 @@ commodity_changed_cb (GNCGeneralSelect *gsl, gpointer data)
 {
   AccountWindow *aw = data;
   gnc_commodity *currency;
+  GtkTreeSelection *selection;
 
   currency = (gnc_commodity *) gnc_general_select_get_selected (gsl);
   if (!currency)
@@ -1345,17 +1368,40 @@ commodity_changed_cb (GNCGeneralSelect *gsl, gpointer data)
   gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (aw->opening_balance_edit),
                                   gnc_commodity_print_info (currency, FALSE));
 
-  gnc_account_tree_refresh (GNC_ACCOUNT_TREE (aw->transfer_tree));
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (aw->transfer_tree));
+  gtk_tree_selection_unselect_all (selection);
 }
 
 static gboolean
-account_commodity_filter (Account *account, gpointer user_data)
+account_commodity_filter (GtkTreeSelection *selection,
+			  GtkTreeModel *model,
+			  GtkTreePath *path,
+			  gboolean path_currently_selected,
+			  gpointer user_data)
 {
-  AccountWindow *aw = user_data;
   gnc_commodity *commodity;
+  AccountWindow *aw;
+  Account *account;
+  GtkTreeIter iter;
 
-  if (!account)
+  g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), FALSE);
+  g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), FALSE);
+  aw = user_data;
+
+  if (path_currently_selected) {
+    /* already selected, don't waste time. */
+    return TRUE;
+  }
+
+  if (!gtk_tree_model_get_iter (model, &iter, path)) {
+    /* Can't convert path to iter? Bad! */
     return FALSE;
+  }
+
+  account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT (model), &iter);
+  if (!account) {
+    return FALSE;
+  }
 
   commodity = (gnc_commodity *)
     gnc_general_select_get_selected (GNC_GENERAL_SELECT (aw->commodity_edit));
@@ -1389,10 +1435,11 @@ gnc_account_window_create(AccountWindow *aw)
   GObject *awo;
   GtkWidget *box;
   GladeXML  *xml;
-  AccountGroup *group;
-  GtkTreeModel *model;
-  GtkCellRenderer *renderer;
-  GtkTreeViewColumn *column;
+  //  AccountGroup *group;
+  //  GtkTreeModel *model;
+  //  GtkCellRenderer *renderer;
+  //  GtkTreeViewColumn *column;
+  GtkTreeSelection *selection;
 
   xml = gnc_glade_xml_new ("account.glade", "Account Dialog");
 
@@ -1441,22 +1488,11 @@ gnc_account_window_create(AccountWindow *aw)
   xaccAccountBeginEdit (aw->top_level_account);
   xaccAccountSetName(aw->top_level_account, _("New top level account"));
  
-  group = gnc_book_get_group (gnc_get_current_book ());
-
-  aw->parent_tree = GTK_TREE_VIEW (glade_xml_get_widget (xml, "parent_tree_view"));
-  model = gnc_tree_model_account_new (group);
-  gnc_tree_model_account_set_toplevel (GNC_TREE_MODEL_ACCOUNT (model), aw->top_level_account);
-  gtk_tree_view_set_model (aw->parent_tree, model);
-  g_object_unref (model);
-  
-  renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes ("",
-		  				     renderer,
-						     "text", GNC_TREE_MODEL_ACCOUNT_COL_NAME,
-						     NULL);
-  gtk_tree_view_append_column (aw->parent_tree, column);
-  gtk_tree_view_set_headers_visible (aw->parent_tree, FALSE);
-  gtk_tree_view_expand_all (aw->parent_tree);
+  //  group = gnc_book_get_group (gnc_get_current_book ());
+  aw->parent_tree = gnc_tree_view_account_new();
+  gtk_container_add(GTK_CONTAINER(box), GTK_WIDGET(aw->parent_tree));
+  gnc_tree_view_account_configure_columns (GNC_TREE_VIEW_ACCOUNT(aw->parent_tree), NULL);
+  gtk_widget_show(GTK_WIDGET(aw->parent_tree));
 
   aw->tax_related_button = glade_xml_get_widget (xml, "tax_related_button");
   aw->placeholder_button = glade_xml_get_widget (xml, "placeholder_button");
@@ -1484,12 +1520,9 @@ gnc_account_window_create(AccountWindow *aw)
 
   box = glade_xml_get_widget (xml, "transfer_account_scroll");
 
-  aw->transfer_tree = gnc_account_tree_new ();
-  gtk_clist_column_titles_hide (GTK_CLIST (aw->transfer_tree));
-  /* gnc_account_tree_hide_all_but_name(GNC_ACCOUNT_TREE(aw->parent_tree)); */
-
-  gnc_account_tree_set_selectable_filter (GNC_ACCOUNT_TREE (aw->transfer_tree),
-                                          account_commodity_filter, aw);
+  aw->transfer_tree = GTK_WIDGET(gnc_tree_view_account_new());
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(aw->transfer_tree));
+  gtk_tree_selection_set_select_function(selection, account_commodity_filter, aw, NULL);
 
   gtk_container_add(GTK_CONTAINER(box), GTK_WIDGET(aw->transfer_tree));
   gtk_widget_show (GTK_WIDGET(aw->transfer_tree));
@@ -1641,6 +1674,7 @@ gnc_ui_new_account_window_internal (Account *base_account,
   GncTreeModelAccount *model;
   GtkTreeSelection *selection;
   GtkTreeIter iter;
+  GtkTreePath *tree_path;
 
   aw = g_new0 (AccountWindow, 1);
 
@@ -1690,9 +1724,14 @@ gnc_ui_new_account_window_internal (Account *base_account,
 	  base_account = aw->top_level_account;
   }
 
-  gtk_tree_view_expand_all (GTK_TREE_VIEW (aw->parent_tree));
-  model = GNC_TREE_MODEL_ACCOUNT (gtk_tree_view_get_model (GTK_TREE_VIEW (aw->parent_tree)));
+  model = GNC_TREE_MODEL_ACCOUNT (gtk_tree_view_get_model (aw->parent_tree));
   gnc_tree_model_account_get_iter_from_account (model, base_account, &iter);
+  gtk_tree_view_collapse_all (aw->parent_tree);
+  tree_path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &iter);
+  if (tree_path) {
+    gtk_tree_view_expand_to_path (aw->parent_tree, tree_path);
+    gtk_tree_path_free(tree_path);
+  }
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (aw->parent_tree));
   gtk_tree_selection_select_iter (selection, &iter);
 
@@ -1937,7 +1976,6 @@ gnc_ui_edit_account_window(Account *account)
   if (parent == NULL)
     parent = aw->top_level_account;
 
-  gtk_tree_view_expand_all (aw->parent_tree);
   model = GNC_TREE_MODEL_ACCOUNT (gtk_tree_view_get_model (aw->parent_tree));
   gnc_tree_model_account_get_iter_from_account (model, parent, &iter);
   selection = gtk_tree_view_get_selection (aw->parent_tree);
