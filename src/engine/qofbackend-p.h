@@ -43,6 +43,7 @@
 
 #include "qofbackend.h"
 #include "qofbook.h"
+#include "qofinstance.h"
 #include "qofquery.h"
 #include "qofsession.h"
 
@@ -108,11 +109,11 @@
  *    to ERR_BACKEND_MOD_DESTROY from this routine, so that the 
  *    engine can properly clean up.
  *
- * The compile_query() method compiles a Gnucash query object into
+ * The compile_query() method compiles a QOF query object into
  *    a backend-specific data structure and returns the compiled
  *    query.  For an SQL backend, the contents of the query object
- *    need to be turned into a corresponding SQL query statement, and
- *    sent to the database for evaluation.
+ *    are typically turned into a corresponding SQL query statement, 
+ *    and sent to the database for evaluation.
  *
  * The free_query() method frees the data structure returned from 
  *    compile_query()
@@ -234,9 +235,9 @@ struct _QofBackend
 
   void (*load) (QofBackend *, QofBook *);
 
-  void (*begin) (QofBackend *, QofIdTypeConst, gpointer);
-  void (*commit) (QofBackend *, QofIdTypeConst, gpointer);
-  void (*rollback) (QofBackend *, QofIdTypeConst, gpointer);
+  void (*begin) (QofBackend *, QofInstance *);
+  void (*commit) (QofBackend *, QofInstance *);
+  void (*rollback) (QofBackend *, QofInstance *);
 
   gpointer (*compile_query) (QofBackend *, QofQuery *);
   void (*free_query) (QofBackend *, gpointer);

@@ -41,16 +41,13 @@
 #include "qofbook.h"
 #include "qofid.h"
 #include "qofid-p.h"
+#include "qofinstance-p.h"
 
 /** Book structure */
 struct _QofBook
 {
-  QofEntity   entity;     /**< Unique guid for this book. */
+  QofInstance   inst;     /**< Unique guid for this book. */
 
-  /** The KvpFrame provides a place for top-level data associated 
-   * with this book. */
-  KvpFrame *kvp_data;
-  
   /** The entity table associates the GUIDs of all the objects
    * belonging to this book, with their pointers to the respective
    * objects.  This allows a lookup of objects based on thier guid.
@@ -67,17 +64,14 @@ struct _QofBook
 
   /** state flag: 'y' means 'open for editing', 
    * 'n' means 'book is closed'  
+   * xxxxx shouldn't this be replaced by the instance editlevel ??? 
    */
   char book_open;
-
-  /** dirty/clean flag. If dirty, then this book has been modified,
-   * but has not yet been written out to storage (file/database) 
-   */
-  gboolean dirty;
 
   /** a flag denoting whether the book is closing down, used to
    * help the QOF objects shut down cleanly without maintaining
    * internal consistency.
+   * XXX shouldn't this be replaced by instance->do_free ??? 
    */
   gboolean shutting_down;
   

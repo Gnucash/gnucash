@@ -236,12 +236,15 @@ build_period_filepath (FileBackend *fbe, QofBook *book)
 }
 
 static void
-file_begin_edit (QofBackend *be, QofIdTypeConst typ, gpointer gp)
+file_begin_edit (QofBackend *be, QofInstance *inst)
 {
+    if (0) build_period_filepath(0, 0);
+#if BORKEN_FOR_NOW
     FileBackend *fbe = (FileBackend *) be;
     QofBook *book = gp;
     const char * filepath;
 
+    QofIdTypeConst typ = QOF_ENTITY(inst)->e_type;
     if (strcmp (GNC_ID_PERIOD, typ)) return;
     filepath = build_period_filepath(fbe, book);
     PINFO (" ====================== book=%p filepath=%s\n", book, filepath);
@@ -257,20 +260,24 @@ file_begin_edit (QofBackend *be, QofIdTypeConst typ, gpointer gp)
      * modify books that are closed (They should be treated as 
      * 'read-only').
      */
+#endif
 }
 
 static void
-file_rollback_edit (QofBackend *be, QofIdTypeConst typ, gpointer gp)
+file_rollback_edit (QofBackend *be, QofInstance *inst)
 {
+#if BORKEN_FOR_NOW
     QofBook *book = gp;
 
     if (strcmp (GNC_ID_PERIOD, typ)) return;
     PINFO ("book=%p", book);
+#endif
 }
 
 static void
-file_commit_edit (QofBackend *be, QofIdTypeConst typ, gpointer gp)
+file_commit_edit (QofBackend *be, QofInstance *inst)
 {
+#if BORKEN_FOR_NOW
     FileBackend *fbe = (FileBackend *) be;
     QofBook *book = gp;
     const char * filepath;
@@ -285,6 +292,7 @@ file_commit_edit (QofBackend *be, QofIdTypeConst typ, gpointer gp)
      * there'll be the same transactions in the closed book,
      * and also in the current book. */
     gnc_file_be_write_to_file (fbe, fbe->primary_book, fbe->fullpath, TRUE);
+#endif
 }
 
 /* ================================================================= */

@@ -30,6 +30,7 @@
 
 #include <glib.h>
 
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -49,7 +50,6 @@
 
 #include "gnc-event-p.h"
 #include "gnc-lot.h"
-#include "gnc-be-utils.h"
 
 #include "gncBusiness.h"
 #include "gncBillTermP.h"
@@ -1295,7 +1295,7 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice)
 
 void gncInvoiceBeginEdit (GncInvoice *invoice)
 {
-  GNC_BEGIN_EDIT (&invoice->inst);
+  QOF_BEGIN_EDIT (&invoice->inst);
 }
 
 static inline void gncInvoiceOnError (QofInstance *inst, QofBackendError errcode)
@@ -1313,8 +1313,8 @@ static inline void invoice_free (QofInstance *inst)
 
 void gncInvoiceCommitEdit (GncInvoice *invoice)
 {
-  GNC_COMMIT_EDIT_PART1 (&invoice->inst);
-  GNC_COMMIT_EDIT_PART2 (&invoice->inst, gncInvoiceOnError,
+  QOF_COMMIT_EDIT_PART1 (&invoice->inst);
+  QOF_COMMIT_EDIT_PART2 (&invoice->inst, gncInvoiceOnError,
 			 gncInvoiceOnDone, invoice_free);
 }
 

@@ -36,8 +36,8 @@
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
 #include "gnc-event-p.h"
-#include "gnc-be-utils.h"
 
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofinstance.h"
@@ -271,7 +271,7 @@ void gncJobSetActive (GncJob *job, gboolean active)
 
 void gncJobBeginEdit (GncJob *job)
 {
-  GNC_BEGIN_EDIT (&job->inst);
+  QOF_BEGIN_EDIT (&job->inst);
 }
 
 static void gncJobOnError (QofInstance *inst, QofBackendError errcode)
@@ -289,8 +289,8 @@ static inline void gncJobOnDone (QofInstance *qof) { }
 
 void gncJobCommitEdit (GncJob *job)
 {
-  GNC_COMMIT_EDIT_PART1 (&job->inst);
-  GNC_COMMIT_EDIT_PART2 (&job->inst, gncJobOnError,
+  QOF_COMMIT_EDIT_PART1 (&job->inst);
+  QOF_COMMIT_EDIT_PART2 (&job->inst, gncJobOnError,
                          gncJobOnDone, job_free);
 }
 

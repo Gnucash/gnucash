@@ -77,7 +77,6 @@ gncinclude_HEADERS = \
   engine-helpers.h \
   glib-helpers.h \
   gnc-associate-account.h \
-  gnc-be-utils.h \
   gnc-book.h \
   gnc-commodity.h \
   gnc-date.h \
@@ -98,6 +97,7 @@ gncinclude_HEADERS = \
   policy.h \
   qof.h \
   qofbackend.h \
+  qof-be-utils.h \
   qofbook.h \
   qofclass.h \
   qofid.h \

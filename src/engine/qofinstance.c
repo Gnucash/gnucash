@@ -165,11 +165,11 @@ qof_instance_gemini (QofInstance *to, QofInstance *from)
   /* Make a note of where the copy came from */
   gnc_kvp_bag_add (to->kvp_data, "gemini", now,
                                   "inst_guid", &from->entity.guid,
-                                  "book_guid", &from->book->entity.guid,
+                                  "book_guid", &from->book->inst.entity.guid,
                                   NULL);
   gnc_kvp_bag_add (from->kvp_data, "gemini", now,
                                   "inst_guid", &to->entity.guid,
-                                  "book_guid", &to->book->entity.guid,
+                                  "book_guid", &to->book->inst.entity.guid,
                                   NULL);
 
   to->dirty = TRUE;
@@ -187,7 +187,7 @@ qof_instance_lookup_twin (QofInstance *src, QofBook *target_book)
 	ENTER (" ");
 
 	fr = gnc_kvp_bag_find_by_guid (src->kvp_data, "gemini",
-	                             "book_guid", &target_book->entity.guid);
+	                             "book_guid", &target_book->inst.entity.guid);
 
 	twin_guid = kvp_frame_get_guid (fr, "inst_guid");
 

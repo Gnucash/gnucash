@@ -109,6 +109,7 @@ typedef enum {
 #define QOF_PARAM_GUID    "guid"
 
 /** "Known" Object Parameters -- some objects might support these */
+#define QOF_PARAM_KVP     "kvp" 
 #define QOF_PARAM_ACTIVE  "active" 
 
 /* --------------------------------------------------------- */

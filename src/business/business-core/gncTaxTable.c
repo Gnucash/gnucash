@@ -34,8 +34,8 @@
 #include "gnc-numeric.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
-#include "gnc-be-utils.h"
 
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -527,7 +527,7 @@ void gncTaxTableChanged (GncTaxTable *table)
 
 void gncTaxTableBeginEdit (GncTaxTable *table)
 {
-  GNC_BEGIN_EDIT (&table->inst);
+  QOF_BEGIN_EDIT (&table->inst);
 }
 
 static inline void gncTaxTableOnError (QofInstance *inst, QofBackendError errcode)
@@ -545,8 +545,8 @@ static inline void table_free (QofInstance *inst)
 
 void gncTaxTableCommitEdit (GncTaxTable *table)
 {
-  GNC_COMMIT_EDIT_PART1 (&table->inst);
-  GNC_COMMIT_EDIT_PART2 (&table->inst, gncTaxTableOnError,
+  QOF_COMMIT_EDIT_PART1 (&table->inst);
+  QOF_COMMIT_EDIT_PART2 (&table->inst, gncTaxTableOnError,
                          gncTaxTableOnDone, table_free);
 }
 

@@ -38,7 +38,6 @@
 #include "TransactionP.h"
 #include "TransLog.h"
 #include "cap-gains.h"
-#include "gnc-be-utils.h"
 #include "gnc-commodity.h"
 #include "gnc-date.h"
 #include "gnc-engine-util.h"
@@ -50,6 +49,7 @@
 #include "messages.h"
 
 #include "qofbackend-p.h"
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofclass.h"
@@ -1461,7 +1461,7 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
 void
 xaccTransBeginEdit (Transaction *trans)
 {
-   GNC_BEGIN_EDIT(&trans->inst)
+   QOF_BEGIN_EDIT(&trans->inst)
 
    if (qof_book_shutting_down(trans->inst.book))
      return;
@@ -1560,7 +1560,7 @@ void
 xaccTransCommitEdit (Transaction *trans)
 {
    QofBackend *be;
-   GNC_COMMIT_EDIT_PART1 (&trans->inst);
+   QOF_COMMIT_EDIT_PART1 (&trans->inst);
 
    /* We increment this for the duration of the call
     * so other functions don't result in a recursive
@@ -1600,7 +1600,7 @@ xaccTransCommitEdit (Transaction *trans)
    if (!trans->splits) trans->inst.do_free = TRUE;
 
    /* XXX the code below is almost identical to 
-    * GNC_COMMIT_EDIT_PART1 (&trans->inst);
+    * QOF_COMMIT_EDIT_PART1 (&trans->inst);
     * except for the rollback bits */
    /* See if there's a backend.  If there is, invoke it. */
    be = qof_book_get_backend (trans->inst.book);
@@ -1613,7 +1613,7 @@ xaccTransCommitEdit (Transaction *trans)
         errcode = qof_backend_get_error (be);
       } while (ERR_BACKEND_NO_ERR != errcode);
 
-      (be->commit) (be, GNC_ID_TRANS, trans);
+      (be->commit) (be, &(trans->inst));
 
       errcode = qof_backend_get_error (be);
       if (ERR_BACKEND_NO_ERR != errcode)
@@ -1682,7 +1682,7 @@ xaccTransRollbackEdit (Transaction *trans)
    int i;
    ENTER ("trans addr=%p\n", trans);
 
-   GNC_COMMIT_EDIT_PART1(&trans->inst);
+   QOF_COMMIT_EDIT_PART1(&trans->inst);
 
    /* We increment this for the duration of the call
     * so other functions don't result in a recursive
@@ -1852,7 +1852,7 @@ xaccTransRollbackEdit (Transaction *trans)
         errcode = qof_backend_get_error (be);
       } while (ERR_BACKEND_NO_ERR != errcode);
 
-      (be->rollback) (be, GNC_ID_TRANS, trans);
+      (be->rollback) (be, &(trans->inst));
 
       errcode = qof_backend_get_error (be);
       if (ERR_BACKEND_MOD_DESTROY == errcode)

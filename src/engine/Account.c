@@ -32,7 +32,6 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
-#include "gnc-be-utils.h"
 #include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
@@ -48,6 +47,7 @@
 
 #include "qofbackend.h"
 #include "qofbackend-p.h"
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofclass.h"
@@ -318,7 +318,7 @@ xaccFreeAccount (Account *acc)
 void 
 xaccAccountBeginEdit (Account *acc) 
 {
-  GNC_BEGIN_EDIT (&acc->inst);
+  QOF_BEGIN_EDIT (&acc->inst);
 }
 
 static inline void noop(QofInstance *inst) {}
@@ -338,7 +338,7 @@ static inline void acc_free (QofInstance *inst)
 void 
 xaccAccountCommitEdit (Account *acc) 
 {
-  GNC_COMMIT_EDIT_PART1 (&acc->inst);
+  QOF_COMMIT_EDIT_PART1 (&acc->inst);
 
   /* If marked for deletion, get rid of subaccounts first,
    * and then the splits ... */
@@ -385,7 +385,7 @@ xaccAccountCommitEdit (Account *acc)
     xaccGroupInsertAccount(acc->parent, acc); 
   }
 
-  GNC_COMMIT_EDIT_PART2 (&acc->inst, on_err, noop, acc_free);
+  QOF_COMMIT_EDIT_PART2 (&acc->inst, on_err, noop, acc_free);
 
   gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
 }

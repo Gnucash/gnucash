@@ -32,6 +32,7 @@
 #include <string.h>
 
 #include "guid.h"
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -46,7 +47,6 @@
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
-#include "gnc-be-utils.h"
 
 #include "gncAddressP.h"
 #include "gncBillTermP.h"
@@ -409,7 +409,7 @@ void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
 
 void gncVendorBeginEdit (GncVendor *vendor)
 {
-  GNC_BEGIN_EDIT (&vendor->inst);
+  QOF_BEGIN_EDIT (&vendor->inst);
 }
 
 static inline void gncVendorOnError (QofInstance *vendor, QofBackendError errcode)
@@ -431,8 +431,8 @@ static inline void vendor_free (QofInstance *inst)
 
 void gncVendorCommitEdit (GncVendor *vendor)
 {
-  GNC_COMMIT_EDIT_PART1 (&vendor->inst);
-  GNC_COMMIT_EDIT_PART2 (&vendor->inst, gncVendorOnError,
+  QOF_COMMIT_EDIT_PART1 (&vendor->inst);
+  QOF_COMMIT_EDIT_PART2 (&vendor->inst, gncVendorOnError,
                          gncVendorOnDone, vendor_free);
 }
 
