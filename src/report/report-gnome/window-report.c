@@ -648,7 +648,8 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
     win->cur_odb = NULL;
   }
   
-  scm_unprotect_object(win->cur_report);
+  if(win->cur_report != SCM_BOOL_F)
+    scm_unprotect_object(win->cur_report);
   win->cur_report = inst_report;
   scm_protect_object(win->cur_report);
 
