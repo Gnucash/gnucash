@@ -248,11 +248,13 @@ gboolean      xaccTransHasReconciledSplitsByAccount (const Transaction *trans,
 						     const Account *account);
 
 
-/** Returns the commodity of this transaction.
+/** Returns the valuation commodity of this transaction.
  *
- * Each transaction's 'currency' is by definition
- * the balancing common currency for the splits in that transaction.
- * @note What happens if the Currency isn't set? */
+ * Each transaction's valuation commodity, or 'currency' is, by definition,
+ * the common currency in which all splits in the transaction can be valued.
+ * The total value of the transaction must be zero when all splits 
+ * are valued in this currency.
+ * @note What happens if the Currency isn't set?  Ans: bad things.  */
 gnc_commodity * xaccTransGetCurrency (const Transaction *trans);
 
 /** Set the commodity of this transaction. */
