@@ -93,14 +93,6 @@
 
   (gw:wrap-function
    ws
-   'gnc:style-sheet-dialog-open
-   '<gw:void>
-   "gnc_style_sheet_dialog_open"
-   '()
-   "Show the style sheet editor window.")
-
-  (gw:wrap-function
-   ws
    'gnc:column-view-edit-options
    '<gnc:UIWidget>
    "gnc_column_view_edit_options"
