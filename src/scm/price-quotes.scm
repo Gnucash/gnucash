@@ -31,6 +31,8 @@
 ;;
 
 (use-modules (www main))
+(use-modules (srfi srfi-1))
+
 ;; (use-modules (srfi srfi-19)) when available (see below).
 
 (define (yahoo-get-historical-quotes symbol
@@ -376,20 +378,31 @@
        currency
        fq-method-sym
        mnemonic
-       (cons fq-method-sym (list commodity currency tz)))))
+       (list fq-method-sym commodity currency tz))))
 
-  (let ((cmd-list (delete #f (map account->fq-cmd account-list)))
-	(cmd-hash (make-hash-table 31)))
+  (let* ((big-list (delete #f (map account->fq-cmd account-list)))
+         (cmd-list #f)
+         (currency-cmd-list (call-with-values 
+                             (lambda () (partition!
+                                         (lambda (cmd)
+                                           (not (eq? (car cmd) 'currency)))
+                                         big-list))
+                             (lambda (a b) (set! cmd-list a) b)))
+         (cmd-hash (make-hash-table 31)))
 
     ;; Now collect symbols going to the same backend.
     (item-list->hash! cmd-list cmd-hash car cdr hashq-ref hashq-set! #t)
+
     ;; Now translate to just what finance-quote-helper expects.
-    (hash-fold
-     (lambda (key value prior-result)
-       (cons (cons (fq-method-sym->str key) value)
-	     prior-result))
-     '()
-     cmd-hash)))
+    (append
+     (hash-fold
+      (lambda (key value prior-result)
+        (cons (cons (fq-method-sym->str key) value)
+              prior-result))
+      '()
+      cmd-hash)
+     (map (lambda (cmd) (cons (fq-method-sym->str (car cmd)) (list (cdr cmd))))
+          currency-cmd-list))))
 
   (define (fq-call-data->fq-calls fq-call-data)
     ;; take an output element from accounts->fq-call-data and return a
