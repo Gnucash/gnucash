@@ -949,6 +949,8 @@ choose an account to delete.\n");
                    acc->accountName);
           if( verifyBox(toplevel,msg) ) {
             xaccRemoveAccount (selected_acc);
+            freeAccount (selected_acc);
+            selected_acc = NULL;
             refreshMainWindow();
             }
           }

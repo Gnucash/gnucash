@@ -330,6 +330,10 @@ xaccRemoveAccount (Account *acc)
    if (NULL == acc) return;
    grp = acc->parent;
 
+   /* this routine might be called on accounts which 
+    * are not yet parented. */
+   if (NULL == grp) return;
+
    oldAcc = grp->account;
 
    grp->saved = False;
@@ -337,7 +341,6 @@ xaccRemoveAccount (Account *acc)
    grp->numAcc--;
    grp->account = (Account **)_malloc((grp->numAcc)*sizeof(Account *));
     
-
    for( i=0,j=0; i<grp->numAcc; i++,j++ ) {
       if( acc != grp->account[i] ) {
          grp->account[i] = oldAcc[j];
@@ -347,10 +350,7 @@ xaccRemoveAccount (Account *acc)
    }
     
    _free(oldAcc);
-
-   freeAccount (acc);
 }
-
 
 /********************************************************************\
 \********************************************************************/

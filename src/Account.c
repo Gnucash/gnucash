@@ -81,39 +81,64 @@ mallocAccount( void )
 \********************************************************************/
 void
 freeAccount( Account *acc )
-  {
-  if( acc != NULL )
-    {
-    int i;
-    
-    /* recursively free children */
-    freeAccountGroup (acc->children);
+{
+  int i;
 
-    XtFree(acc->accountName);
-    XtFree(acc->description);
-    XtFree(acc->notes);
+  if (NULL == acc) return;
     
-    freeQuickFill(acc->qfRoot);
-    
-    for( i=0; i<acc->numTrans; i++ ) {
-      Transaction *trans = acc->transaction[i];
-      struct _account * _acc = (struct _account *) acc; 
+  /* recursively free children */
+  freeAccountGroup (acc->children);
 
-      /* free the transaction only if its not 
-       * a part of a double entry */
-      if (_acc == trans->credit) trans->credit = NULL;
-      if (_acc == trans->debit) trans->debit  = NULL;
-      if ( (NULL == trans->debit) && (NULL == trans->credit) ) {
-        freeTransaction( trans );
-      }
-    }
-    
-    /* free the array of pointers */
-    _free( acc->transaction );
-    
-    _free(acc);
+  XtFree(acc->accountName);
+  XtFree(acc->description);
+  XtFree(acc->notes);
+  
+  freeQuickFill(acc->qfRoot);
+  
+  for( i=0; i<acc->numTrans; i++ ) {
+    Transaction *trans = acc->transaction[i];
+    struct _account * _acc = (struct _account *) acc; 
+
+    /* free the transaction only if its not 
+     * a part of a double entry */
+    if (_acc == trans->credit) trans->credit = NULL;
+    if (_acc == trans->debit) trans->debit  = NULL;
+    if ( (NULL == trans->debit) && (NULL == trans->credit) ) {
+      freeTransaction( trans );
     }
   }
+  
+  /* free the array of pointers */
+  _free( acc->transaction );
+  
+  /* zero out values, just in case stray 
+   * pointers are pointing here. */
+
+  acc->parent   = NULL;
+  acc->children = NULL;
+
+  acc->balance  = 0.0;
+  acc->cleared_balance = 0.0;
+
+  acc->flags = 0;
+  acc->type  = -1;
+  
+  acc->accountName = NULL;
+  acc->description = NULL;
+  acc->notes       = NULL;
+  
+  acc->numTrans    = 0;
+  acc->transaction = NULL; 
+  
+  /* hack alert -- shouldn't we destroy this widget ??? */
+  acc->arrowb   = NULL;  
+  acc->expand   = 0;
+  acc->regData  = NULL;
+  acc->recnData = NULL;
+  acc->adjBData = NULL;
+
+  _free(acc);
+}
 
 /********************************************************************\
 \********************************************************************/
