@@ -303,12 +303,12 @@
         (if (symbol? type) (set! type (list type)))
         (if (and src
 		 (or (memq 'stock type)
-		     (memq 'mutual-func type)
+		     (memq 'mutual-fund type)
 		     (memq 'currency type)))
 	    a
 	    #f)))
     (filter quotable-account? (gnc:group-get-subaccounts group)))
-  
+
   (define (accounts->fq-call-data account-list)
     ;; Take a list of accounts that should be "quotable" -- i.e. they
     ;; have a price-source, and are of the right type, and return a
