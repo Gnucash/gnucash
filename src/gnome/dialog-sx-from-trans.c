@@ -167,6 +167,8 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
   GtkWidget *w;
 
   retval.type = BAD_END;
+  g_date_clear( &(retval.end_date), 1 );
+  retval.n_occurrences = 0;
 
   w = glade_xml_get_widget(sxfti->gxml, SXFTD_NEVER_END_BUTTON);
   if(gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w)))
