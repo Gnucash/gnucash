@@ -1,3 +1,9 @@
+2004-11-10  Christian Stimming  <stimming@tuhh.de>
+
+	* src/engine/gnc-commodity.c, src/engine/iso-4217-currencies.scm:
+	Change currency mnemonic for "New Israeli Shekel" from "ILS" to
+	"NIS". Fixes #152755.
+
 2004-11-01  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/dialog-find-transactions.c: Mark search criteria for
