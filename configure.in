@@ -286,6 +286,9 @@ AC_ARG_ENABLE(error-on-warning,
 # This has to come after AC_PROG_CC
 if test ${GCC}x = yesx
 then
+  CFLAGS="${CFLAGS} -Wunused"
+  CFLAGS="${CFLAGS} -Wmissing-prototypes"
+  CFLAGS="${CFLAGS} -Wmissing-declarations"
   CFLAGS="${CFLAGS} -Werror-implicit-function-declaration"
 fi
 
