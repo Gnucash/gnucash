@@ -12,7 +12,9 @@ price fields (price == 1.0 for plain old bank accts), and some misc disposition
 fields.
 
 The current implementation is file-format (not sql) based.   It defines a byte 
-stream, for saving to a file or transmitting via pipes/sockets.  The API also 
+stream, for saving to a file or transmitting via pipes/sockets ("persisitance"
+and "data migration" -- the byte stream allows the engine objects to be 
+moved/copied/dynamically recreated on any host. ).  The API also 
 provides simple concurrency controls, including a session object, and 
 primitives for begining/commiting/rejecting edits.  This should be enough to 
 allow SQL-based transactional back ends to be implemented.   The GUI uses
