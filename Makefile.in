@@ -168,13 +168,13 @@ install:
   # Try to do this in a platform independent way...
   # Directories
 	for dir in `find etc/ -type d`; do \
-    dest=`echo $$dir | cut -c 5-` \
+    dest=`echo $$dir | cut -c 5-` ; \
 		mkdir -p ${GNC_CONFIGDIR}/$$dest; \
   done
 
   # Files
 	for file in `find etc/ -type f`; do \
-    dest=`echo $$file | cut -c 5-` \
+    dest=`echo $$file | cut -c 5-` ; \
 		${INSTALL_DATA} $$file ${GNC_CONFIGDIR}/$$dest; \
   done
 
