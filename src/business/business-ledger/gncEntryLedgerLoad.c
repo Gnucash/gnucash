@@ -126,6 +126,11 @@ static void load_xfer_type_cells (GncEntryLedger *ledger)
   load_xfer_cell (cell, group);
 }
 
+void gnc_entry_ledger_load_xfer_cells (GncEntryLedger *ledger)
+{
+  load_xfer_type_cells (ledger);
+}
+
 /* XXX (FIXME): This should be in a config file! */
 /* Copy GncEntry information from the list to the rows of the Ledger. */
 void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
@@ -263,3 +268,4 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 
   /* Set the confirmation callbacks and load the combo cells */
 }
+

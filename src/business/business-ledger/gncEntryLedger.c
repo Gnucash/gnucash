@@ -213,6 +213,8 @@ GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type)
     }
   }
 
+  /* Initialize Display */
+  gnc_entry_ledger_display_init (ledger);
   return ledger;
 }
 
@@ -221,6 +223,7 @@ void gnc_entry_ledger_destroy (GncEntryLedger *ledger)
 {
   if (!ledger) return;
 
+  gnc_entry_ledger_display_fini (ledger);
   gnc_table_destroy (ledger->table);
   g_free (ledger);
 }
@@ -236,6 +239,7 @@ void gnc_entry_ledger_set_default_order (GncEntryLedger *ledger,
 {
   if (!ledger) return;
   ledger->order = order;
+  gnc_entry_ledger_display_refresh (ledger);
 }
 
 void gnc_entry_ledger_set_default_invoice (GncEntryLedger *ledger,
@@ -243,6 +247,7 @@ void gnc_entry_ledger_set_default_invoice (GncEntryLedger *ledger,
 {
   if (!ledger) return;
   ledger->invoice = invoice;
+  gnc_entry_ledger_display_refresh (ledger);
 }
 
 void gnc_entry_ledger_set_parent (GncEntryLedger *ledger, gncUIWidget parent)
@@ -270,13 +275,4 @@ gboolean gnc_entry_ledger_find_entry (GncEntryLedger *ledger, GncEntry *entry,
     }
   }
   return FALSE;
-}
-
-void gnc_entry_ledger_redraw (GncEntryLedger *ledger)
-{
-  /* XXX: FIXME -- Use a Query! */
-  if (ledger->order)
-    gnc_entry_ledger_load (ledger, gncOrderGetEntries (ledger->order));
-  if (ledger->invoice)
-    gnc_entry_ledger_load (ledger, gncInvoiceGetEntries (ledger->invoice));
 }

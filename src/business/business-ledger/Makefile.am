@@ -5,6 +5,7 @@ pkglib_LTLIBRARIES = libgnc-business-ledger.la
 libgnc_business_ledger_la_SOURCES = \
   gncEntryLedger.c \
   gncEntryLedgerControl.c \
+  gncEntryLedgerDisplay.c \
   gncEntryLedgerLayout.c \
   gncEntryLedgerLoad.c \
   gncEntryLedgerModel.c

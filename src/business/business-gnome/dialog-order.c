@@ -428,9 +428,13 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
     entry_ledger = gnc_entry_ledger_new (ow->book, GNCENTRY_ORDER_VIEWER);
     break;
   }
-  entries = gncOrderGetEntries (order);
+
+  /* Set the order for the entry_ledger */
+  gnc_entry_ledger_set_default_order (entry_ledger, order);
+
   /* Set watches on entries */
-  gnc_entry_ledger_load (entry_ledger, entries);
+  //  entries = gncOrderGetEntries (order);
+  //  gnc_entry_ledger_load (entry_ledger, entries);
 
   /* Watch the order of operations, here... */
   gnucash_register_set_initial_rows( 10 );
@@ -505,7 +509,6 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
   /* Set the Reference */
   gnc_order_owner_changed_cb (ow->owner_choice, ow);
 
-  /* We know that "order" (and "owner") exist now */
   {
     const char *string;
     Timespec ts, ts_zero = {0,0};
@@ -543,7 +546,6 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
 				       GNC_ID_NONE,
 				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
-  gnc_entry_ledger_set_default_order (entry_ledger, order);
   gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
   gtk_widget_show_all (ow->dialog);
   gnc_table_refresh_gui (gnc_entry_ledger_get_table (entry_ledger), TRUE);

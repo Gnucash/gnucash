@@ -320,7 +320,7 @@ gnc_invoice_window_refresh_handler (GHashTable *changes, gpointer user_data)
   const EventInfo *info;
   GncInvoice *invoice = iw_get_invoice (iw);
 
-  /* If there isn't a invoice behind us, close down */
+ /* If there isn't a invoice behind us, close down */
   if (!invoice) {
     gnc_close_gui_component (iw->component_id);
     return;
@@ -433,9 +433,13 @@ gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
     entry_ledger = gnc_entry_ledger_new (iw->book, GNCENTRY_INVOICE_VIEWER);
     break;
   }
-  entries = gncInvoiceGetEntries (invoice);
+
+  /* Set the entry_ledger's invoice */
+  gnc_entry_ledger_set_default_invoice (entry_ledger, invoice);
+
+  //entries = gncInvoiceGetEntries (invoice);
   /* Set watches on entries */
-  gnc_entry_ledger_load (entry_ledger, entries);
+  //gnc_entry_ledger_load (entry_ledger, entries);
 
   /* Watch the invoice of operations, here... */
   gnucash_register_set_initial_rows( 10 );
@@ -572,7 +576,6 @@ gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
 				       GNC_ID_NONE,
 				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
-  gnc_entry_ledger_set_default_invoice (entry_ledger, invoice);
   gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
   gtk_widget_show_all (iw->dialog);
   gnc_table_refresh_gui (gnc_entry_ledger_get_table (entry_ledger), TRUE);

@@ -47,7 +47,7 @@ static void gnc_entry_ledger_move_cursor (VirtualLocation *p_new_virt_loc,
     VirtualCellLocation vcell_loc;
 
     /* redraw */
-    gnc_entry_ledger_redraw (ledger);
+    gnc_entry_ledger_display_refresh (ledger);
 
     if (ledger->traverse_to_new)
       new_entry = gncEntryLookup (ledger->book, &ledger->blank_entry_guid);
@@ -199,13 +199,13 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
         break;
     }
 
-    //    info->full_refresh = FALSE;
+    ledger->full_refresh = FALSE;
 
     account = gnc_ui_new_accounts_from_name_window (name);
     if (!account)
       break;
 
-    // info->full_refresh = TRUE;
+    ledger->full_refresh = TRUE;
 
     name = xaccAccountGetFullName (account, gnc_get_account_separator ());
     gnc_combo_cell_set_value (cell, name);

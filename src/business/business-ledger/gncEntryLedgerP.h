@@ -17,6 +17,10 @@ struct GncEntryLedger_s {
   gboolean	blank_entry_edited;
   gboolean      traverse_to_new;
 
+  gboolean	loading;	/* To keep from recursing from events */
+  gboolean	full_refresh;	/* Is a full refresh ok? */
+  gint		component_id;	/* To register for events */
+
   Timespec	last_date_entered;
 
   gncUIWidget	parent;
@@ -44,6 +48,10 @@ const char * gnc_entry_ledger_type_string_getter (char flag);
 gboolean gnc_entry_ledger_find_entry (GncEntryLedger *ledger, GncEntry *entry,
 				      VirtualCellLocation *vcell_loc);
 
-void gnc_entry_ledger_redraw (GncEntryLedger *ledger);
+void gnc_entry_ledger_load_xfer_cells (GncEntryLedger *ledger);
+
+void gnc_entry_ledger_display_init (GncEntryLedger *ledger);
+void gnc_entry_ledger_display_fini (GncEntryLedger *ledger);
+
 
 #endif /* GNC_ENTRY_LEDGERP_H */
