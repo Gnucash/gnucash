@@ -173,14 +173,24 @@ AC_ARG_ENABLE( sql,
   [
     if test "x$enableval" != "xno" ; then
       AC_CHECK_HEADERS(pgsql/libpq-fe.h postgresql/libpq-fe.h)
-      if test "x$ac_cv_header_pgsql_libpq_fe_h$ac_cv_header_postgresql_libpq_fe_h" == xnono; then
-         AC_MSG_ERROR([Cannot find PosgreSQL headers; won't build sql backend]) 
+      if test "x$ac_cv_header_pgsql_libpq_fe_h$ac_cv_header_postgresql_libpq_fe_h" = xnono; then
+         AC_MSG_ERROR([Cannot find PostgreSQL headers; won't build sql backend]) 
       else 
+        master_dirs="/usr/include /usr/local/include"
         if test "x$ac_cv_header_pgsql_libpq_fe_h" != xno; then
-          CFLAGS="${CFLAGS} -I/usr/include/pgsql"
+          for dir in $master_dirs; do
+              if test -f "$dir/pgsql/libpq-fe.h"; then
+                  CFLAGS="${CFLAGS} -I$dir/pgsql"
+                  break
 	fi
-        if test "x$ac_cv_header_postgresql_libpq_fe_h" != xno; then
-          CFLAGS="${CFLAGS} -I/usr/include/postgresql"
+          done
+        elif test "x$ac_cv_header_postgresql_libpq_fe_h" != xno; then
+          for dir in $master_dirs; do
+              if test -f "$dir/postgresql/libpq-fe.h"; then
+                  CFLAGS="${CFLAGS} -I$dir/postgresql"
+                  break
+              fi
+          done
 	fi
         
         saved_LIBS="$LIBS"
@@ -198,7 +208,7 @@ AC_ARG_ENABLE( sql,
             SQL_DIR=sql
           ],
           [
-            AC_MSG_ERROR([Cannot find PosgreSQL libraries; will not build sql backend]) 
+            AC_MSG_ERROR([Cannot find PostgreSQL libraries; will not build sql backend]) 
           ]
         )
         LIBS="$saved_LIBS"

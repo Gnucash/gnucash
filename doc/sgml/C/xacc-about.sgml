@@ -1016,6 +1016,14 @@ Nielsen</glossterm>
 </glossentry>
 </glosslist>
 
+<glossentry>
+<glossterm><email>jazepeda@pacbell.net</email> Alex Zepeda</glossterm>
+<glossdef>
+<para>postgres configure patch</para>
+</glossdef>
+</glossentry>
+</glosslist>
+
 </para>
 </sect1>
 

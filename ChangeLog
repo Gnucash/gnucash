@@ -1,3 +1,11 @@
+2001-06-24  Dave Peticolas  <dave@krondo.com>
+
+	* AUTHORS: credits
+
+	* doc/sgml/C/xacc-about.sgml: credits
+
+	* configure.in: Alex Zepeda's postgres configure patch
+
 2001-06-23  Kevin Finn  <kevinfinn@mediaone.net>
 
 	* src/gnome/window-reconcile.c: fix for display of auto end value

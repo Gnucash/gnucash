@@ -179,5 +179,6 @@ Rob Walker <rob@valinux.com> guile and register patches
 David Woodhouse <dwmw2@infradead.org> messages  British translations
 Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU> QIF import fixes; MYM import
 Shimpei Yamashita <shimpei@gol.com> messages Japanese translation
+Alex Zepeda <jazepeda@pacbell.net> postgres configure patch
 
 ... and I am sure that I have missed many others ...
