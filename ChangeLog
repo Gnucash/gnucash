@@ -1,3 +1,12 @@
+2003-06-08  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/*.c: Remove old unused code.
+
+	* src/import-export/hbci/hbci-interaction.c: Add more user
+	feedback functions.
+
+	* src/import-export/hbci/gnc-hbci-utils.c: Improve error handling.
+
 2003-06-04  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/hbci-interaction.c: Adapted to latest

@@ -284,7 +284,6 @@ gnc_hbci_trans (GtkWidget *parent,
       /* Fill in the user-entered values */
       trans = HBCI_Transaction_new();
 	
-#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>8)
       /* OpenHBCI newer than 0.9.8: use account's bankCode values
        * instead of the bank's ones since this is what some banks
        * require. */
@@ -292,10 +291,6 @@ gnc_hbci_trans (GtkWidget *parent,
 					  HBCI_Account_countryCode (h_acc));
       HBCI_Transaction_setOurBankCode (trans, 
 				       HBCI_Account_instituteCode (h_acc));
-#else
-      HBCI_Transaction_setOurCountryCode (trans, HBCI_Bank_countryCode (bank));
-      HBCI_Transaction_setOurBankCode (trans, HBCI_Bank_bankCode (bank));
-#endif
       HBCI_Transaction_setOurAccountId (trans, HBCI_Account_accountId (h_acc));
       HBCI_Transaction_setOurSuffix (trans, HBCI_Account_accountSuffix (h_acc));
 	

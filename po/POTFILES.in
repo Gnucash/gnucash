@@ -344,7 +344,6 @@ src/import-export/gncmod-generic-import.c
 src/import-export/hbci/glade/hbci.glade
 src/import-export/hbci/glade/hbcipass.glade
 src/import-export/hbci/dialog-pass.c
-src/import-export/hbci/druid-hbci-final.c
 src/import-export/hbci/druid-hbci-initial.c
 src/import-export/hbci/druid-hbci-utils.c
 src/import-export/hbci/gnc-hbci-kvp.c

@@ -39,9 +39,6 @@
 #include "dialog-pass.h"
 
 #include <openhbci.h>
-#ifndef OPENHBCI_VERSION_BUILD
-#  define OPENHBCI_VERSION_BUILD 0
-#endif
 
 #define PREF_TAB_ONLINE_BANKING N_("Online Banking & Importing")
 
@@ -307,12 +304,7 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
     b = HBCI_User_bank (user);
     switch (mtype) 
       {
-#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
       case MediumTypeFile:
-#else /* openhbci > 0.9.9.5 */
-      case MediumRDHFile:
-      case MediumRDHFileOld:
-#endif /* openhbci > 0.9.9.5 */
 	if (b != NULL) 
 	  /* xgettext:c-format */	    
 	  msgstr = g_strdup_printf ( _("Please make sure the key file for \n"
@@ -324,12 +316,7 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
 				       "user '%s' at unknown bank can be accessed."), 
 				     username);
 	break;
-#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
       case MediumTypeCard:
-#else /* openhbci > 0.9.9.5 */
-      case MediumDDVCard:
-      case MediumRDHCard:
-#endif /* openhbci > 0.9.9.5 */
       default:
 	if (b != NULL) 
 	  /* xgettext:c-format */	    
@@ -346,21 +333,11 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
   else 
     switch (mtype) 
       {
-#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
       case MediumTypeFile:
-#else /* openhbci > 0.9.9.5 */
-      case MediumRDHFile:
-      case MediumRDHFileOld:
-#endif /* openhbci > 0.9.9.5 */
 	msgstr = g_strdup ( _("Please make sure the key file for \n"
 			      "unknown user at unknown bank can be accessed."));
 	break;
-#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
       case MediumTypeCard:
-#else /* openhbci > 0.9.9.5 */
-      case MediumDDVCard:
-      case MediumRDHCard:
-#endif /* openhbci > 0.9.9.5 */
       default:
 	msgstr = g_strdup ( _("Please insert chip card for \n"
 			      "unknown user at unknown bank."));
@@ -393,12 +370,7 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
     b = HBCI_User_bank (user);
     switch (mtype) 
       {
-#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
       case MediumTypeFile: 
-#else /* openhbci > 0.9.9.5 */
-      case MediumRDHFile:
-      case MediumRDHFileOld:
-#endif /* openhbci > 0.9.9.5 */
 	if (b != NULL) 
 	  /* xgettext:c-format */	    
 	  msgstr = g_strdup_printf ( _("The key file does not seem to be the correct \n"
@@ -412,12 +384,7 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
 				       "sure the correct key file can be accessed."), 
 				     username);
 	break;
-#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
       case MediumTypeCard: 
-#else /* openhbci > 0.9.9.5 */
-      case MediumDDVCard:
-      case MediumRDHCard:
-#endif /* openhbci > 0.9.9.5 */
       default:
 	if (b != NULL) 
 	  /* xgettext:c-format */	    
@@ -434,22 +401,12 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
   else 
     switch (mtype) 
       {
-#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
       case MediumTypeFile: 
-#else /* openhbci > 0.9.9.5 */
-      case MediumRDHFile:
-      case MediumRDHFileOld:
-#endif /* openhbci > 0.9.9.5 */
 	msgstr = g_strdup ( _("The key file does not seem to be the correct \n"
 			      "file for unknown user at unknown bank. Please make \n"
 			      "sure the correct key file can be accessed."));
 	break;
-#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
       case MediumTypeCard: 
-#else /* openhbci > 0.9.9.5 */
-      case MediumDDVCard:
-      case MediumRDHCard:
-#endif /* openhbci > 0.9.9.5 */
       default:
 	msgstr = g_strdup ( _("Please insert the correct chip card for \n"
 			      "unknown user at unknown bank."));
@@ -499,21 +456,89 @@ static void destr(void *user_data)
   }
 }
 
+static void 
+msgEndInputPinViaKeypadCB(const HBCI_User *user, void *user_data)
+{
+  GNCInteractor *data = user_data;
+  g_assert(data);
+  if (data->pin_keypad_dialog) {
+    gnome_dialog_close (GNOME_DIALOG (data->pin_keypad_dialog));
+    gtk_widget_destroy (data->pin_keypad_dialog);
+    data->pin_keypad_dialog = NULL;
+  }
+}
 
+static void 
+msgStartInputPinViaKeypadCB(const HBCI_User *user, void *user_data)
+{
+  const HBCI_Bank *bank;
+  char *msgstr;
+  GtkWidget *dialog;
+  GNCInteractor *data = user_data;
+  
+  g_assert(data);
+
+  /* Already an existing dialog? Shouldn't happen. Better delete
+     existing dialog first. */
+  if (data->pin_keypad_dialog != NULL)
+    msgEndInputPinViaKeypadCB(user, user_data);
+
+  /* Create message string */
+  if (user != NULL) {
+    const char *username = 
+      (HBCI_User_userName (user) ? HBCI_User_userName (user) :
+       (HBCI_User_userId (user) ? HBCI_User_userId (user) :
+	_("Unknown")));
+    bank = HBCI_User_bank (user);
+    if (bank != NULL) {
+      /* xgettext:c-format */	    
+      msgstr = g_strdup_printf (_("Please enter PIN for \n"
+				  "user '%s' at bank '%s'\n"
+				  "at the keypad of your chip card reader."),
+				username, 
+				bank_to_str (bank));
+    }
+    else {
+      /* xgettext:c-format */	    
+      msgstr = g_strdup_printf ( _("Please enter PIN for \n"
+				   "user '%s' at unknown bank\n"
+				   "at the keypad of your chip card reader."),
+				 username);
+    }
+  }
+  else 
+    msgstr = g_strdup ( _("Please enter PIN for \n"
+			  "unknown user at unknown bank\n"
+			  "at the keypad of your chip card reader."));
+
+  /* Create new dialog */
+  dialog = gnome_ok_dialog_parented (msgstr, GTK_WINDOW (data->parent));
+  gnome_dialog_close_hides (GNOME_DIALOG(dialog), TRUE);
+  gtk_widget_show_all (dialog);
+  data->pin_keypad_dialog = dialog;
+
+  g_free (msgstr);
+}
+
+
+
+/********************************************************
+ * Constructor 
+ */
 HBCI_Interactor *
 gnc_hbci_new_interactor(GNCInteractor *data)
 {
   HBCI_InteractorCB *inter;
 
   inter = HBCI_InteractorCB_new2(&destr,
-				&msgInputPin,
-				&msgInsertMediumOrAbort,
-				&msgInsertCorrectMediumOrAbort,
-				&msgStateResponse,
-				&keepAlive,
-				NULL,
-				NULL,
-				data);
+				 &msgInputPin,
+				 &msgInsertMediumOrAbort,
+				 &msgInsertCorrectMediumOrAbort,
+				 &msgStateResponse,
+				 &keepAlive,
+				 &msgStartInputPinViaKeypadCB,
+				 &msgEndInputPinViaKeypadCB,
+				 data);
 
   return HBCI_InteractorCB_Interactor(inter);
 }
