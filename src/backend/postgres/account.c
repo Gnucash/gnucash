@@ -272,22 +272,7 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    PINFO ("account GUID=%s", DB_GET_VAL("accountGUID",j));
 
-   if (NULL == book)
-   {
-      GList *node;
-      GUID book_guid;
-
-      FIND_BOOK (book);
-
-      book = NULL;
-      for (node=be->blist; node; node=node->next)
-      {
-         book = node->data;
-         if (guid_equal (&book->guid, &book_guid)) break;
-         book = NULL;
-      }
-      if (!book) return data;
-   }
+   FIND_BOOK (book);
 
    /* Next, lets see if we've already got this account */
    acct_guid = nullguid;  /* just in case the read fails ... */

@@ -358,7 +358,7 @@ gnc_commodity * gnc_string_to_commodity (const char *str, GNCBook *book);
          if (guid_equal (&book->guid, &book_guid)) break;	\
          book = NULL;						\
       }								\
-      if (!book) return NULL;					\
+      if (!book) return data;					\
    }								\
 }
 
