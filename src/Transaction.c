@@ -130,7 +130,6 @@ initTransaction( Transaction * trans )
   trans->description = XtNewString("");
   trans->memo        = XtNewString("");
   trans->action      = XtNewString("");
-  trans->catagory    = 0;
 
   trans->splits      = (Split **) _malloc (sizeof (Split *));
   trans->splits[0]   = NULL;
@@ -190,7 +189,6 @@ implemented and tested.
   trans->description = 0x0;
   trans->memo        = 0x0;
   trans->action      = 0x0;
-  trans->catagory    = 0;
   trans->reconciled  = NREC;
   trans->damount     = 0.0;
   trans->share_price = 1.0;

@@ -606,7 +606,6 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
    trans -> description = 0x0;  /* string */
    trans -> memo = 0x0;         /* string */
    trans -> action = 0x0;       /* string */
-   trans -> catagory = 0;       /* category is int */
    trans -> damount = 0.0;      /* amount is double */
    trans -> share_price= 1.0;   /* share_price is double */
    trans -> reconciled = NREC;  /* reconciled is byte */

@@ -470,7 +470,6 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   
   trans->memo        = XmTextGetString(xferData->memo);
   trans->description = XmTextGetString(xferData->desc);
-  trans->catagory    = 0;
   trans->reconciled  = NREC;
   
   /* make note of which accounts this was transfered from & to */

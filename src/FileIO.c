@@ -62,7 +62,7 @@
  *   description ::== String                                        * 
  *   memo        ::== String                                        * 
  *   action      ::== String                                        * 
- *   catagory    ::== int                                           * 
+ *   catagory    ::== int     (obsolete)                            * 
  *   reconciled  ::== char                                          * 
  *   amount      ::== double                                        * 
  *   share_price ::== double                                        * 
