@@ -32,7 +32,7 @@
 #include "Transaction.h"
 #include "gnc-engine-util.h" 
 
-#include "gnc-gen-transaction.h"
+/*#include "gnc-gen-transaction.h"*/
 #include "import-main-matcher.h"
 #include "global-options.h"
 
@@ -44,16 +44,16 @@
 
 /* static short module = MOD_IMPORT; */
 
-static const gboolean DEFAULT_USE_GENERIC_MATCHER = FALSE; 
+/*static const gboolean DEFAULT_USE_GENERIC_MATCHER = FALSE;  */
 
 static void *trans_list_cb (const HBCI_Transaction *trans, void *user_data);
 
 struct trans_list_data 
 {
   Account *gnc_acc;
-  GNCGenTransaction *importer;
+  /*GNCGenTransaction *importer;*/
   GNCImportMainMatcher *importer_generic;
-  gboolean use_generic_matcher;
+  /*gboolean use_generic_matcher;*/
 };
 
 
@@ -190,38 +190,38 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
 
       if (list_HBCI_Transaction_size(trans_list) > 0) {
 	struct trans_list_data data;
-	GNCGenTransaction *importer_gui = NULL;
+	/*GNCGenTransaction *importer_gui = NULL;*/
 	GNCImportMainMatcher *importer_generic_gui = NULL;
 
-	data.use_generic_matcher = 
-	    gnc_lookup_boolean_option("Online Banking & Importing",
-				      "HBCI Use generic import matcher",
-				      DEFAULT_USE_GENERIC_MATCHER);
-
-	if(data.use_generic_matcher == TRUE)
-	  {
-	    importer_generic_gui = gnc_gen_trans_list_new(NULL, NULL, TRUE);
-	    data.importer_generic = importer_generic_gui;
-	  }
-	else
-	  {
+	/*data.use_generic_matcher = 
+	  gnc_lookup_boolean_option("Online Banking & Importing",
+	  "HBCI Use generic import matcher",
+	  DEFAULT_USE_GENERIC_MATCHER);
+	  
+	  if(data.use_generic_matcher == TRUE)
+	  {*/
+	importer_generic_gui = gnc_gen_trans_list_new(NULL, NULL, TRUE);
+	data.importer_generic = importer_generic_gui;
+	/*  }
+	    else
+	    {
 	    importer_gui = gnc_gen_trans_new (NULL, NULL);
 	    gnc_gen_trans_freeze (importer_gui);
 	    gnc_gen_trans_set_fuzzy_amount (importer_gui, 0.0);
 	    data.importer = importer_gui;
-	  }
+	    }*/
 	data.gnc_acc = gnc_acc;
 	
 	list_HBCI_Transaction_foreach (trans_list, trans_list_cb, &data);
 
-	if(data.use_generic_matcher == FALSE)
-	  gnc_gen_trans_thaw (importer_gui);
+	/*if(data.use_generic_matcher == FALSE)
+	  gnc_gen_trans_thaw (importer_gui);*/
 
 	GNCInteractor_hide (interactor);
-	if(data.use_generic_matcher == TRUE)
-	  gnc_gen_trans_list_run (importer_generic_gui);
-	else
-	  gnc_gen_trans_run (importer_gui);
+	/*if(data.use_generic_matcher == TRUE)*/
+	gnc_gen_trans_list_run (importer_generic_gui);
+	/*else
+	  gnc_gen_trans_run (importer_gui);*/
 
       }
       else {
@@ -324,15 +324,15 @@ static void *trans_list_cb (const HBCI_Transaction *h_trans,
     
   /* Instead of xaccTransCommitEdit(gnc_trans)  */
   /*gnc_import_add_trans(gnc_trans);*/
-  if(data->use_generic_matcher == TRUE)
+  /*if(data->use_generic_matcher == TRUE)
+    {*/
+  g_assert (data->importer_generic);
+  gnc_gen_trans_list_add_trans (data->importer_generic, gnc_trans);
+  /*}
+    else
     {
-      g_assert (data->importer_generic);
-      gnc_gen_trans_list_add_trans (data->importer_generic, gnc_trans);
-    }
-  else
-    {
-      g_assert (data->importer);
-      gnc_gen_trans_add_trans (data->importer, gnc_trans);
-    }
+    g_assert (data->importer);
+    gnc_gen_trans_add_trans (data->importer, gnc_trans);
+    }*/
   return NULL;
 }

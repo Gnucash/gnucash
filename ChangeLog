@@ -1,3 +1,8 @@
+2002-12-14  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-gettrans.c: Switch to always
+	using the import-main-matcher.
+
 2002-12-13  Chris Lyttle  <chris@wilddev.net>
 
 	* rpm/gnucash.spec.in: fix for problem reports on gnucash-user
