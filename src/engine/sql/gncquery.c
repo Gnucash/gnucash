@@ -93,11 +93,11 @@ sql_sort_order (char *p, sort_type_t sort_type, gboolean increasing)
       case BY_STANDARD:
          if (TRUE == increasing)
          {
-            p = stpcpy (p, "gncTransaction.date_posted ASC, gncTransaction.num ASC, "
-                           "gncTransaction.date_entered ASC, gncTransaction.description");
-         } else {
             p = stpcpy (p, "gncTransaction.date_posted DESC, gncTransaction.num DESC, "
                            "gncTransaction.date_entered DESC, gncTransaction.description");
+         } else {
+            p = stpcpy (p, "gncTransaction.date_posted ASC, gncTransaction.num ASC, "
+                           "gncTransaction.date_entered ASC, gncTransaction.description");
          }
          break;
       case BY_DATE:
@@ -168,11 +168,11 @@ sql_sort_order (char *p, sort_type_t sort_type, gboolean increasing)
 
    if (TRUE == increasing)
    {
-      p = stpcpy (p, " ASC ");
+      p = stpcpy (p, " DESC ");
    }
    else 
    {
-      p = stpcpy (p, " DESC ");
+      p = stpcpy (p, " ASC ");
    }
 
    return p;
