@@ -1,7 +1,7 @@
 ;;;; $Id$
 ;;;; gnumeric-utilities.scm - Gnumeric spreadsheet generation functions
 
-(gnc:support "gnumeric-utilities.scm")
+(gnc:support "gnumeric/gnumeric-utilities.scm")
 (gnc:depend "xml-generator.scm")
 
 ;;;; Gnumeric spreadsheet consists of:
@@ -39,20 +39,27 @@
 ;;; to suggest a better function.
 ;;; The point of this is that Gnumeric uses this as the "native" data
 ;;; representation. 
-(define (ymd->number y m d)
-  (+
-   1 ;;; Start at 1
-   (* (- y 1900) 365)  ;;; 365 days per year
-   d                   ;;; Add the number of days
-   (vector-ref #(0 31 59 90 120 151 181 212 243 273 304 334) 
-	       (- m 1));;; Add in days associated with month
-   (truncate (/ (- y 1900) 4))  ;;; Add in leap days, valid 'til
-                                ;;; year 2100...
-   (if 
-    (and (= 0 (modulo y 4)) ;;; If a leap year,
-	 (> m 2))           ;;; and month is post-Feb
-    1                       ;;; add an extra day
-    0)))
+(gnc:depend "srfi/srfi-19.scm")
+
+(define (exceldate y m d)
+  (let 
+      ((epoch (encode-julian-day-number 31 12 1899)))
+    (- (encode-julian-day-number d m y) epoch)))
+
+;(define (ymd->number y m d)
+;  (+
+;   1 ;;; Start at 1
+;   (* (- y 1900) 365)  ;;; 365 days per year
+;   d                   ;;; Add the number of days
+;   (vector-ref #(0 31 59 90 120 151 181 212 243 273 304 334) 
+;	       (- m 1));;; Add in days associated with month
+;   (truncate (/ (- y 1900) 4))  ;;; Add in leap days, valid 'til
+;                                ;;; year 2100...
+;   (if 
+;    (and (= 0 (modulo y 4)) ;;; If a leap year,
+;	 (> m 2))           ;;; and month is post-Feb
+;    1                       ;;; add an extra day
+;    0)))
 
 ;;; gmr:Summary appears to be some metadata about who/what generated
 ;;; the document.
@@ -157,7 +164,7 @@
   (apply 
    (lambda (y m d descr amt)
      (list 
-      (gmr:cell 0 row (ymd->number y m d))
+      (gmr:cell 0 row (exceldate y m d))
       (gmr:cell 1 row descr)
       (gmr:cell 2 row amt)
       (gmr:cell 3 row (string-append "=D" (number->string row)

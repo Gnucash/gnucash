@@ -1,4 +1,3 @@
-
 ;;; I'm maintaining the license that Olin put on the SRFI-1 reference
 ;;; code.
 ;;;

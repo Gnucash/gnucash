@@ -6,6 +6,7 @@
 ;; Revised by Christopher Browne
 
 (gnc:support "dateutils.scm")
+(gnc:depend "srfi/srfi-19.scm")
 
 ;; get stuff from localtime date vector
 (define (gnc:date-get-year datevec)
@@ -203,4 +204,3 @@
 
 (define (gnc:timepair-later-or-eq-date t1 t2)
   (gnc:timepair-earlier-or-eq-date t2 t1))
-
