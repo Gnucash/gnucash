@@ -449,15 +449,22 @@ dom_tree_to_text(xmlNodePtr tree)
   gchar *temp;
 
   g_return_val_if_fail(tree, NULL);
+
   /* no nodes means it's an empty string text */
   if(!tree->xmlChildrenNode)
   {
+      PINFO ("No children");
       return g_strdup("");
   }
 
   temp = xmlNodeListGetString (NULL, tree->xmlChildrenNode, TRUE);
-  if (!temp) return NULL;
+  if (!temp) 
+  {
+    PINFO ("Null string");
+    return NULL;
+  }
 
+  PINFO ("node string is >>>%s<<<\n", temp);
   result = g_strdup (temp);
   xmlFree (temp);
   return result;
