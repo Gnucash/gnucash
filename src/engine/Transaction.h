@@ -94,6 +94,12 @@ void          xaccTransSetDescription (Transaction *, const char *);
 void          xaccTransSetMemo (Transaction *, const char *);
 void          xaccTransSetAction (Transaction *, const char *);
 
+/*
+ * The xaccTransAppendSplit() method will append the indicated 
+ *    split to the collection of splits in this transaction.
+ *    If the split is alredy a part of another transaction,
+ *    it will be removed from that transaction first.
+ */
 void          xaccTransAppendSplit (Transaction *, Split *);
 
 /* 
