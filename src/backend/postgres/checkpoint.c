@@ -54,6 +54,7 @@
 
 #include "builder.h"
 #include "checkpoint.h"
+#include "escape.h"
 
 #include "putil.h"
 
@@ -327,11 +328,14 @@ get_checkpoint_date_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 static void
 pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
 {
+   sqlEscape *escape;
    char guid_str[80], end_str[80];
    char * p;
 
    if (!be || !chk) return;
    ENTER("be=%p", be);
+
+   escape = sqlEscape_new ();
 
    guid_to_string_buff (chk->account_guid, guid_str);
    gnc_timespec_to_iso8601_buff (chk->date_end, end_str);
@@ -345,11 +349,14 @@ pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
                   "    WHERE accountGuid='");
    p = stpcpy (p, guid_str);
    p = stpcpy (p, "'   AND commodity='");
-   p = stpcpy (p, chk->commodity);
+   p = stpcpy (p, sqlEscapeString (escape, chk->commodity));
    p = stpcpy (p, "'   AND date_end <'");
    p = stpcpy (p, end_str);
    p = stpcpy (p, "';");
    SEND_QUERY (be,be->buff, );
+
+   sqlEscape_destroy (escape);
+   escape = NULL;
 
    pgendGetResults (be, get_checkpoint_cb, chk);
 
@@ -363,7 +370,7 @@ pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
    p = stpcpy (p, end_str);
    p = stpcpy (p, "'   ORDER BY date_start DESC LIMIT 1;");
    SEND_QUERY (be,be->buff, );
-   
+
    /* provide default value, in case there are no checkpoints */
    chk->date_start = gnc_iso8601_to_timespec_local (CK_EARLIEST_DATE);
    pgendGetResults (be, get_checkpoint_date_cb, chk);

@@ -39,6 +39,8 @@
 #include "guid.h"
 
 #include "PostgresBackend.h"
+#include "escape.h"
+#include "price.h"
 #include "putil.h"
 
 static short module = MOD_BACKEND; 
@@ -319,6 +321,9 @@ void
 pgendPriceLookup (Backend *bend, GNCPriceLookup *look)
 {
    PGBackend *be = (PGBackend *)bend;
+   const char * commodity_str;
+   const char * currency_str;
+   sqlEscape *escape;
    char * p;
 
    ENTER ("be=%p, lookup=%p", be, look);
@@ -334,6 +339,11 @@ pgendPriceLookup (Backend *bend, GNCPriceLookup *look)
       return;
    }
 
+   escape = sqlEscape_new ();
+
+   commodity_str = gnc_commodity_get_unique_name(look->commodity);
+   currency_str  = gnc_commodity_get_unique_name(look->currency);
+
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
@@ -342,10 +352,13 @@ pgendPriceLookup (Backend *bend, GNCPriceLookup *look)
    p = be->buff; *p = 0;
    p = stpcpy (p, "SELECT * FROM gncPrice"
                   "  WHERE commodity='");
-   p = stpcpy (p, gnc_commodity_get_unique_name(look->commodity));
+   p = stpcpy (p, sqlEscapeString (escape, commodity_str));
    p = stpcpy (p, "'  AND currency='");
-   p = stpcpy (p, gnc_commodity_get_unique_name(look->currency));
+   p = stpcpy (p, sqlEscapeString (escape, currency_str));
    p = stpcpy (p, "' ");
+
+   sqlEscape_destroy (escape);
+   escape = NULL;
 
    switch (look->type)
    {
@@ -393,7 +406,6 @@ pgendPriceLookup (Backend *bend, GNCPriceLookup *look)
    /* re-enable events */
    pgendEnable(be);
    gnc_engine_resume_events();
-
 }
 
 /* ============================================================= */
