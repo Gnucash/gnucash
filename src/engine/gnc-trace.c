@@ -25,20 +25,12 @@
 
 #include "config.h"
 
-/*
-#include <ctype.h>
-#include <errno.h>
 #include <glib.h>
-#include <limits.h>
-#include <math.h>
 #include <stdarg.h>
-#include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
 
-#include "gnc-engine-util.h"
-#include "gnc-engine.h"
-*/
+#include "gnc-trace.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 /* static short module = MOD_ENGINE; */
