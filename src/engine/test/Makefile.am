@@ -23,6 +23,7 @@ TESTS = \
   test-commodities \
   test-freq-spec \
   test-group-vs-book \
+  test-query \
   test-resolve-file-path \
   test-scm-query \
   test-split-vs-account  \
@@ -39,6 +40,7 @@ noinst_PROGRAMS = \
   test-freq-spec \
   test-group-vs-book \
   test-load-engine \
+  test-query \
   test-resolve-file-path \
   test-scm-query \
   test-split-vs-account \

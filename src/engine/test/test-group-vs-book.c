@@ -3,6 +3,7 @@
 #include <guile/gh.h>
 
 #include "GNCIdP.h"
+#include "TransLog.h"
 #include "gnc-book.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"
@@ -144,6 +145,8 @@ main_helper (int argc, char **argv)
   int i;
 
   gnc_module_load("gnucash/engine", 0);
+
+  xaccLogDisable ();
 
   for (i = 0; i < 10; i++)
     run_test ();

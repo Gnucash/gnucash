@@ -7,6 +7,7 @@
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "Query.h"
+#include "TransLog.h"
 
 
 static void
@@ -59,6 +60,9 @@ static void
 main_helper (int argc, char **argv)
 {
   gnc_module_load("gnucash/engine", 0);
+
+  xaccLogDisable ();
+
   run_tests ();
 
   print_test_results ();

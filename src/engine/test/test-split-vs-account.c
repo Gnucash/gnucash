@@ -5,6 +5,7 @@
 #include "GNCIdP.h"
 
 #include "Account.h"
+#include "TransLog.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"
 #include "gnc-session.h"
@@ -105,6 +106,8 @@ static void
 main_helper (int argc, char **argv)
 {
   gnc_module_load("gnucash/engine", 0);
+
+  xaccLogDisable ();
 
   run_test ();
 

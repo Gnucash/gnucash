@@ -86,6 +86,7 @@ static int  xaccClearedMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccDateMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccDescriptionMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccGUIDMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccKVPMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccMemoMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccNumberMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccSharePriceMatchPredicate(Split * s, PredicateData * pd);
@@ -150,18 +151,23 @@ xaccQueryPrint(Query * q)
           break;
         }
         case PR_ACTION:
-          printf ("action sense=%d case sensitive=%d\n", qt->data.str.sense, qt->data.str.case_sens);
+          printf ("action sense=%d case sensitive=%d\n", qt->data.str.sense,
+                  qt->data.str.case_sens);
           printf ("\tmatch string=%s \n", qt->data.str.matchstring);
           break;
         case PR_AMOUNT:
-          printf ("amount sense=%d how=%d\n", qt->data.amount.sense, qt->data.amount.how);
-          printf ("\tsign=%d amount=%f\n", qt->data.amount.amt_sgn, qt->data.amount.amount);
+          printf ("amount sense=%d how=%d\n", qt->data.amount.sense,
+                  qt->data.amount.how);
+          printf ("\tsign=%d amount=%f\n", qt->data.amount.amt_sgn,
+                  qt->data.amount.amount);
           break;
         case PR_BALANCE:
-          printf ("balance sense=%d how=%d\n", qt->data.balance.sense, qt->data.balance.how);
+          printf ("balance sense=%d how=%d\n", qt->data.balance.sense,
+                  qt->data.balance.how);
           break;
         case PR_CLEARED:
-          printf ("cleared sense=%d how=%d\n", qt->data.cleared.sense, qt->data.cleared.how);
+          printf ("cleared sense=%d how=%d\n", qt->data.cleared.sense,
+                  qt->data.cleared.how);
           break;
         case PR_DATE: {
           char buff[40];
@@ -181,7 +187,8 @@ xaccQueryPrint(Query * q)
           break;
         }
         case PR_DESC:
-          printf ("desc sense=%d case sensitive=%d\n", qt->data.str.sense, qt->data.str.case_sens);
+          printf ("desc sense=%d case sensitive=%d\n", qt->data.str.sense,
+                  qt->data.str.case_sens);
           printf ("\tmatch string=%s \n", qt->data.str.matchstring);
           break;
 
@@ -192,24 +199,48 @@ xaccQueryPrint(Query * q)
           printf ("\tguid %s\n", buff);
           break;
         }
+        case PR_KVP: {
+          GSList *node;
+          char *str;
+          printf ("kvp sense=%d how=%d where=%d\n", qt->data.kvp.sense,
+                  qt->data.kvp.how, qt->data.kvp.where);
+          printf ("path:");
+          for (node = qt->data.kvp.path; node; node = node->next)
+          {
+            printf (node->data);
+            if (node->next)
+              printf ("/");
+          }
+          printf ("\n");
+          str = kvp_value_to_string (qt->data.kvp.value);
+          printf ("value: %s\n", str);
+          g_free (str);
+          break;
+        }
         case PR_MEMO:
-          printf ("memo sense=%d case sensitive=%d\n", qt->data.str.sense, qt->data.str.case_sens);
+          printf ("memo sense=%d case sensitive=%d\n", qt->data.str.sense,
+                  qt->data.str.case_sens);
           printf ("\tmatch string=%s \n", qt->data.str.matchstring);
           break;
         case PR_MISC:
           printf ("misc\n");
           break;
         case PR_NUM:
-          printf ("num sense=%d case sensitive=%d\n", qt->data.str.sense, qt->data.str.case_sens);
+          printf ("num sense=%d case sensitive=%d\n", qt->data.str.sense,
+                  qt->data.str.case_sens);
           printf ("\tmatch string=%s \n", qt->data.str.matchstring);
           break;
         case PR_PRICE:
-          printf ("price sense=%d how=%d\n", qt->data.amount.sense, qt->data.amount.how);
-          printf ("\tsign=%d amount=%f\n", qt->data.amount.amt_sgn, qt->data.amount.amount);
+          printf ("price sense=%d how=%d\n", qt->data.amount.sense,
+                  qt->data.amount.how);
+          printf ("\tsign=%d amount=%f\n", qt->data.amount.amt_sgn,
+                  qt->data.amount.amount);
           break;
         case PR_SHRS:
-          printf ("shrs sense=%d how=%d\n", qt->data.amount.sense, qt->data.amount.how);
-          printf ("\tsign=%d amount=%f\n", qt->data.amount.amt_sgn, qt->data.amount.amount);
+          printf ("shrs sense=%d how=%d\n", qt->data.amount.sense,
+                  qt->data.amount.how);
+          printf ("\tsign=%d amount=%f\n", qt->data.amount.amt_sgn,
+                  qt->data.amount.amount);
           break;
 
         default:
@@ -376,6 +407,13 @@ free_query_term(QueryTerm *qt)
       qt->data.acct.account_guids = NULL;
       break;
 
+    case PD_KVP:
+      g_slist_free (qt->data.kvp.path);
+      qt->data.kvp.path = NULL;
+      kvp_value_delete (qt->data.kvp.value);
+      qt->data.kvp.value = NULL;
+      break;
+
     case PD_STRING:
       g_free(qt->data.str.matchstring);
       qt->data.str.matchstring = NULL;
@@ -415,6 +453,18 @@ copy_query_term(QueryTerm * qt) {
         node->data = new;
       }
       break;
+
+    case PD_KVP: {
+      GSList *node;
+
+      nqt->data.kvp.path = g_slist_copy (nqt->data.kvp.path);
+      nqt->data.kvp.value = kvp_value_copy (nqt->data.kvp.value);
+
+      for (node = nqt->data.kvp.path; node; node = node->next)
+        node->data = g_strdup (node->data);
+
+      break;
+    }
 
     case PD_STRING:
       nqt->data.str.matchstring = g_strdup(nqt->data.str.matchstring);
@@ -1377,6 +1427,25 @@ xaccQueryTermEqual (QueryTerm *qt1, QueryTerm *qt2)
         return FALSE;
       break;
 
+    case PD_KVP: {
+      GSList *n1, *n2;
+
+      n1 = qt1->data.kvp.path;
+      n2 = qt2->data.kvp.path;
+
+      for ( ; n1 && n2; n1 = n1->next, n2 = n2->next)
+        if (!safe_strcmp (n1->data, n2->data))
+          return FALSE;
+
+      if (n1 || n2)
+        return FALSE;
+
+      if (kvp_value_compare (qt1->data.kvp.value, qt2->data.kvp.value) != 0)
+        return FALSE;
+
+      break;
+    }
+
     case PD_MISC:
       if (qt1->data.misc.how != qt2->data.misc.how) return FALSE;
       if (qt1->data.misc.data != qt2->data.misc.data) return FALSE;
@@ -1462,6 +1531,9 @@ xaccQueryGetPredicate (pr_type_t term_type)
       break;
     case PR_GUID:
       p = & xaccGUIDMatchPredicate;
+      break;
+    case PR_KVP:
+      p = & xaccKVPMatchPredicate;
       break;
     case PR_MEMO:
       p = & xaccMemoMatchPredicate;
@@ -2160,6 +2232,46 @@ xaccQueryAddGUIDMatch(Query * q, const GUID *guid, QueryOp op)
   xaccFreeQuery(qr);
 }
 
+/********************************************************************
+ * xaccQueryAddKVPMatch
+ * Add a 'kvp' filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
+                     kvp_match_t how, kvp_match_where_t where, QueryOp op)
+{
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+  GSList    * node;
+
+  qt->p                   = &xaccKVPMatchPredicate;
+  qt->data.type           = PD_KVP;
+  qt->data.base.term_type = PR_KVP;
+  qt->data.base.sense     = 1;
+  qt->data.kvp.how        = how;
+  qt->data.kvp.where      = where;
+  qt->data.kvp.path       = g_slist_copy (path);
+  qt->data.kvp.value      = kvp_value_copy (value);
+
+  for (node = qt->data.kvp.path; node; node = node->next)
+    node->data = g_strdup (node->data);
+
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
 /*******************************************************************
  *  xaccQueryPurgeTerms
  *  delete any terms of a particular type
@@ -2353,7 +2465,6 @@ xaccDescriptionMatchPredicate(Split * s, PredicateData * pd) {
 static int
 xaccGUIDMatchPredicate(Split * s, PredicateData * pd)
 {
-  GUIDPredicateData *gpd;
   GUID *guid;
 
   g_return_val_if_fail (s, 0);
@@ -2380,6 +2491,85 @@ xaccGUIDMatchPredicate(Split * s, PredicateData * pd)
     case GNC_ID_SPLIT:
       return s == xaccSplitLookupEntityTable (guid, s->entity_table);
   }
+}
+
+/*******************************************************************
+ *  xaccKVPMatchPredicate
+ *******************************************************************/
+static int
+kvp_match_helper (GSList *path, kvp_value *value, kvp_match_t how,
+                  kvp_frame *frame)
+{
+  kvp_value *value_2;
+  int compare;
+
+  if (!path || !value || !frame || !how) return 0;
+
+  value_2 = kvp_frame_get_slot_path_gslist (frame, path);
+  if (!value_2)
+    return 0;
+
+  if (kvp_value_get_type (value) != kvp_value_get_type (value_2))
+    return 0;
+
+  compare = kvp_value_compare (value_2, value);
+
+  switch (how)
+  {
+    case KVP_MATCH_LT:
+      return (compare < 0);
+    case KVP_MATCH_LTE:
+      return (compare <= 0);
+    case KVP_MATCH_EQ:
+      return (compare == 0);
+    case KVP_MATCH_GTE:
+      return (compare >= 0);
+    case KVP_MATCH_GT:
+      return (compare > 0);
+    default:
+      PWARN ("bad match type: %d", how);
+      return FALSE;
+  }
+}
+
+static int
+xaccKVPMatchPredicate(Split * s, PredicateData * pd)
+{
+  KVPPredicateData *kpd;
+
+  g_return_val_if_fail (s, FALSE);
+  g_return_val_if_fail (pd, FALSE);
+  g_return_val_if_fail (pd->type == PD_KVP, FALSE);
+
+  kpd = &pd->kvp;
+
+  if (kpd->where && KVP_MATCH_SPLIT)
+  {
+    kvp_frame *frame = xaccSplitGetSlots (s);
+
+    if (kvp_match_helper (kpd->path, kpd->value, kpd->how, frame))
+      return TRUE;
+  }
+
+  if (kpd->where && KVP_MATCH_TRANS)
+  {
+    Transaction *trans = xaccSplitGetParent (s);
+    kvp_frame *frame = xaccTransGetSlots (trans);
+
+    if (kvp_match_helper (kpd->path, kpd->value, kpd->how, frame))
+      return TRUE;
+  }
+
+  if (kpd->where && KVP_MATCH_ACCOUNT)
+  {
+    Account *account = xaccSplitGetAccount (s);
+    kvp_frame *frame = xaccAccountGetSlots (account);
+
+    if (kvp_match_helper (kpd->path, kpd->value, kpd->how, frame))
+      return TRUE;
+  }
+
+  return 0;
 }
 
 /*******************************************************************
@@ -2467,15 +2657,12 @@ xaccSharePriceMatchPredicate(Split * s, PredicateData * pd) {
 
   g_return_val_if_fail(s && pd, FALSE);
   g_return_val_if_fail(pd->type == PD_AMOUNT, FALSE);
-  
+
   acct = xaccSplitGetAccount(s);
   type = xaccAccountGetType(acct);
 
-  if((type != STOCK) && (type != MUTUAL)) {
-    return 0;
-  }
   splitamt = DxaccSplitGetSharePrice(s);
-  
+
   return value_match_predicate(splitamt, pd);  
 }
 
@@ -2494,10 +2681,6 @@ xaccSharesMatchPredicate(Split * s, PredicateData * pd) {
   
   acct = xaccSplitGetAccount(s);
   type = xaccAccountGetType(acct);
-
-  if((type != STOCK) && (type != MUTUAL)) {
-    return 0;
-  }
 
   splitamt = DxaccSplitGetShareAmount(s);
   

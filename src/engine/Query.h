@@ -67,6 +67,7 @@ typedef enum {
   PD_CLEARED,
   PD_BALANCE,
   PD_GUID,
+  PD_KVP,
   PD_MISC
 } pd_type_t;
 
@@ -79,6 +80,7 @@ typedef enum {
   PR_DATE,
   PR_DESC,
   PR_GUID,
+  PR_KVP,
   PR_MEMO,
   PR_MISC,
   PR_NUM,
@@ -122,6 +124,20 @@ typedef enum {
   BALANCE_BALANCED   = 1 << 0,
   BALANCE_UNBALANCED = 1 << 1
 } balance_match_t;
+
+typedef enum {
+  KVP_MATCH_LT=1,
+  KVP_MATCH_LTE,
+  KVP_MATCH_EQ,
+  KVP_MATCH_GTE,
+  KVP_MATCH_GT
+} kvp_match_t;
+
+typedef enum {
+  KVP_MATCH_SPLIT   = 1 << 0,
+  KVP_MATCH_TRANS   = 1 << 1,
+  KVP_MATCH_ACCOUNT = 1 << 2
+} kvp_match_where_t;
 
 /* query_run_t describes whether to require all splits or 
  * any to match for a transaction to be returned by 
@@ -200,6 +216,16 @@ typedef struct {
 } GUIDPredicateData;
 
 typedef struct {
+  pd_type_t         type;
+  pr_type_t         term_type;
+  int               sense;
+  kvp_match_t       how;
+  kvp_match_where_t where;
+  GSList           *path;
+  kvp_value        *value;
+} KVPPredicateData;
+
+typedef struct {
   pd_type_t       type;
   pr_type_t       term_type;
   int             sense;
@@ -217,6 +243,7 @@ typedef union {
   ClearedPredicateData cleared;
   BalancePredicateData balance;
   GUIDPredicateData    guid;
+  KVPPredicateData     kvp;
   MiscPredicateData    misc;
 } PredicateData;
 
@@ -307,6 +334,10 @@ void xaccQueryAddMemoMatch(Query * q, const char * matchstring,
 void xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QueryOp op);
 void xaccQueryAddBalanceMatch(Query * q, balance_match_t how, QueryOp op);
 void xaccQueryAddGUIDMatch(Query * q, const GUID *guid, QueryOp op);
+/* given kvp value is on right side of comparison */
+void xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
+                          kvp_match_t how, kvp_match_where_t where,
+                          QueryOp op);
 void xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
                            QueryOp op);
 
