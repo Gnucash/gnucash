@@ -209,6 +209,10 @@ static void gnc_sxed_update_cal( SchedXactionEditorDialog *sxed );
 
 static void gnc_sxed_reg_check_close(SchedXactionEditorDialog *sxed);
 
+static gint sxed_close_event( GnomeDialog *dlg, gpointer ud );
+
+static gboolean sxed_confirmed_cancel( SchedXactionEditorDialog *sxed );
+
 static gboolean editor_component_sx_equality( gpointer find_data,
                                               gpointer user_data );
 
@@ -257,9 +261,13 @@ close_button_clicked( GtkButton *b, gpointer d )
         sxd_close_handler( d );
 }
 
+/**
+ * @return TRUE if the user does want to cancel, FALSE if not.  If TRUE is
+ * returned, the register's changes have been cancelled.
+ **/
 static
-void
-editor_cancel_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
+gboolean
+sxed_confirmed_cancel( SchedXactionEditorDialog *sxed )
 {
         SplitRegister *reg;
 
@@ -271,15 +279,25 @@ editor_cancel_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                            "sure you want to cancel?" );
                 if ( !gnc_verify_dialog_parented( GTK_WIDGET(sxed->dialog),
                                                   FALSE, sx_changed_msg ) ) {
-                        return;
+                        return FALSE;
                 }
         }
         /* cancel ledger changes */
         gnc_split_register_cancel_cursor_trans_changes( reg );
+        return TRUE;
+}
 
+static
+void
+editor_cancel_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
+{
+        
+        if ( !sxed_confirmed_cancel( sxed ) ) {
+                return;
+        }
         /* close */
-        gnc_close_gui_component_by_data (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
-                                         sxed);
+        gnc_close_gui_component_by_data( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
+                                         sxed );
 }
 
 static
@@ -516,13 +534,13 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
         gint ttVarCount;
         FreqSpec *fs;
 
-        /* FIXMEs...
-         * Do checks on validity and such, interrupting the user if
+        /* Do checks on validity and such, interrupting the user if
          * things aren't right.
          *
-         * . support formulas [?!]
-         * . balancing the SX if contain numeric-only formula data.
-         *   . agreement with create-automagically/notification controls
+         * Features...
+         * X support formulas [?!]
+         * X balancing the SX if contain numeric-only formula data.
+         *   X agreement with create-automagically/notification controls
          * X the 'will ever be valid' check should take num-occur vals into
          *   account.
          * X SX name is unique
@@ -1124,6 +1142,18 @@ schedXact_populate( SchedXactionDialog *sxd )
         }
 }
 
+static
+gint
+sxed_close_event( GnomeDialog *dlg, gpointer ud )
+{
+        SchedXactionEditorDialog *sxed = (SchedXactionEditorDialog*)ud;
+
+        if ( ! sxed_confirmed_cancel( sxed ) ) {
+                return TRUE;
+        }
+        return FALSE;
+}
+
 static gboolean
 sxed_delete_event( GtkWidget *widget, GdkEvent *evt, gpointer ud )
 {
@@ -1248,11 +1278,13 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                                                            close handler */
                                     sxed );
 
-        gtk_signal_connect(GTK_OBJECT(sxed->dialog), "delete-event",
-                           GTK_SIGNAL_FUNC(sxed_delete_event), sxed );
-        gtk_signal_connect(GTK_OBJECT(sxed->dialog), "destroy",
-                           GTK_SIGNAL_FUNC(scheduledxaction_editor_dialog_destroy),
-                           sxed);
+        gtk_signal_connect( GTK_OBJECT(sxed->dialog), "close",
+                            GTK_SIGNAL_FUNC(sxed_close_event), sxed );
+        gtk_signal_connect( GTK_OBJECT(sxed->dialog), "delete-event",
+                            GTK_SIGNAL_FUNC(sxed_delete_event), sxed );
+        gtk_signal_connect( GTK_OBJECT(sxed->dialog), "destroy",
+                            GTK_SIGNAL_FUNC(scheduledxaction_editor_dialog_destroy),
+                            sxed );
 
         for ( i=0; widgets[i].name != NULL; i++ ) {
                 button = glade_xml_get_widget( sxed->gxml, widgets[i].name );

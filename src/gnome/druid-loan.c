@@ -22,11 +22,13 @@
 \********************************************************************/
 
 #include "config.h"
+
 #include <string.h>
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glade/glade.h>
 #include <gnome.h>
+#include <math.h>
 
 #include "druid-loan.h"
 
@@ -44,6 +46,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "gnc-frequency.h"
+#include "gnc-engine-util.h"
 
 #define DIALOG_LOAN_DRUID_CM_CLASS "druid-loan-setup"
 
@@ -82,6 +85,8 @@
 #  define PAY_FREQ_CONTAINER "pay_freq_align"
 
 #define OPT_VBOX_SPACING 2
+
+static short module = MOD_SX;
 
 /**
  * TODO/fixme:
@@ -168,8 +173,8 @@ typedef struct LoanData_ {
         GDate *startDate;
         GDate *varStartDate;
         int numPer;
-        int numPerRemain;
         PeriodSize perSize;
+        int numMonRemain;
 
         char *repMemo;
         char *repAmount;
@@ -253,10 +258,8 @@ static void ld_close_handler( LoanDruidData *ldd );
 static void ld_destroy( GtkObject *o, gpointer ud );
 
 static void ld_cancel_check( GnomeDruid *gd, LoanDruidData *ldd );
-
 static void ld_prm_type_changed( GtkWidget *w, gint index, gpointer ud );
-
-static void gnc_loan_druid_length_changed( GtkEditable *e, gpointer ud );
+static void ld_calc_upd_rem_payments( GtkWidget *w, gpointer ud );
 
 static void ld_escrow_toggle( GtkToggleButton *tb, gpointer ud );
 static void ld_opt_toggled( GtkToggleButton *tb, gpointer ud );
@@ -301,6 +304,7 @@ gnc_ui_sx_loan_druid_create(void)
         /* non-gladeable widget setup */
         {
 
+                /* All of the GncAccountSel[ectors]... */
                 {
                         int i;
                         GtkAlignment *a;
@@ -354,11 +358,11 @@ gnc_ui_sx_loan_druid_create(void)
                 {
                         GtkAlignment *a;
                         GNCOptionInfo typeOptInfo[] = {
-                                { "Fixed", "A Fixed-Rate loan", ld_prm_type_changed, ldd },
-                                { "3/1",   "A 3/1 ARM",         ld_prm_type_changed, ldd },
-                                { "5/1",   "A 5/1 ARM",         ld_prm_type_changed, ldd },
-                                { "7/1",   "A 7/1 ARM",         ld_prm_type_changed, ldd },
-                                { "10/1",  "A 10/1 ARM",        ld_prm_type_changed, ldd },
+                                { _("Fixed"), _("A Fixed-Rate loan"), ld_prm_type_changed, ldd },
+                                { _("3/1"),   _("A 3/1 ARM"),         ld_prm_type_changed, ldd },
+                                { _("5/1"),   _("A 5/1 ARM"),         ld_prm_type_changed, ldd },
+                                { _("7/1"),   _("A 7/1 ARM"),         ld_prm_type_changed, ldd },
+                                { _("10/1"),  _("A 10/1 ARM"),        ld_prm_type_changed, ldd },
                         };
                         ldd->prmType =
                                 GTK_OPTION_MENU( gnc_build_option_menu( typeOptInfo, 5 ) );
@@ -386,7 +390,11 @@ gnc_ui_sx_loan_druid_create(void)
                                                                12, 12 ));
                         gtk_spin_button_set_adjustment( ldd->prmLengthSpin, a );
                         gtk_signal_connect( GTK_OBJECT(ldd->prmLengthSpin), "changed",
-                                            GTK_SIGNAL_FUNC(gnc_loan_druid_length_changed),
+                                            GTK_SIGNAL_FUNC( ld_calc_upd_rem_payments ),
+                                            ldd );
+                        gtk_signal_connect( GTK_OBJECT(ldd->prmStartDateGDE),
+                                            "date-changed",
+                                            GTK_SIGNAL_FUNC( ld_calc_upd_rem_payments ),
                                             ldd );
 
                         a = GTK_ADJUSTMENT(gtk_adjustment_new( 360, 1,
@@ -407,9 +415,8 @@ gnc_ui_sx_loan_druid_create(void)
                 gtk_container_add( GTK_CONTAINER(ldd->optEscrowHBox),
                                    GTK_WIDGET(ldd->optEscrowGAS) );
 
-                /* FIXME : too deep, factor out. */
                 {
-                        /* . Each RepayOpt gets an entry in the optContainer.
+                        /* . Each RepayOpt gets an "entry" in the optContainer.
                          * . Each "entry" is a 2-line vbox containing:
                          *   . The checkbox for the option itself
                          *   . an alignment-contained sub-checkbox for "through the
@@ -429,7 +436,7 @@ gnc_ui_sx_loan_druid_create(void)
                                 vb = GTK_VBOX(gtk_vbox_new( FALSE, OPT_VBOX_SPACING ));
 
                                 /* Add payment checkbox. */
-                                g_string_sprintf( str, "... pay \"%s\"?",
+                                g_string_sprintf( str, _("... pay \"%s\"?"),
                                                   rouid->optData->name );
                                 rouid->optCb =
                                         GTK_CHECK_BUTTON(
@@ -586,6 +593,7 @@ gnc_loan_druid_data_init( LoanDruidData *ldd )
         xaccFreqSpecSetMonthly( ldd->ld.repFreq, ldd->ld.startDate, 1 );
         xaccFreqSpecSetUIType( ldd->ld.repFreq, UIFREQ_MONTHLY );
 
+        ldd->ld.repMemo = g_strdup( _("Loan") );
         ldd->ld.repAmount = NULL;
         ldd->ld.repStartDate = g_date_new();
         ldd->ld.repayOptCount = optCount;
@@ -753,9 +761,9 @@ ld_escrow_toggle( GtkToggleButton *tb, gpointer ud )
                                                   rouid );
                 gtk_toggle_button_set_active(
                         GTK_TOGGLE_BUTTON(rouid->escrowCb),
-                        newState
-                        && gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(rouid->optCb) )
-                        && rouid->optData->throughEscrowP );
+                        ( newState
+                          && gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(rouid->optCb) )
+                          && rouid->optData->throughEscrowP ) );
                 gtk_widget_set_sensitive(
                         GTK_WIDGET(rouid->escrowCb),
                         newState
@@ -792,7 +800,10 @@ ld_opt_consistency( GtkToggleButton *tb, gpointer ud )
         escrowCb = GTK_TOGGLE_BUTTON(rouid->escrowCb);
         /* make sure the escrow option is only selected if we're active. */
         gtk_toggle_button_set_state( escrowCb,
-                                     rouid->optData->throughEscrowP
+                                     gtk_toggle_button_get_active(
+                                             GTK_TOGGLE_BUTTON(
+                                                     rouid->ldd->optEscrowCb) )
+                                     && rouid->optData->throughEscrowP
                                      && gtk_toggle_button_get_active(tb) );
         /* make sure the escrow option is only sensitive if we're active, and
          * the escrow account is enabled  */
@@ -823,8 +834,8 @@ ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         ldd->ld.primaryAcct = gnc_account_sel_get_account( ldd->prmAccountGAS );
         if ( ldd->ld.primaryAcct == NULL ) {
                 gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                          "Please select a valid "
-                                          "loan account." );
+                                          _("Please select a valid "
+                                            "loan account.") );
                 return TRUE;
         } 
         if ( ! ldd->ld.repPriAcct ) {
@@ -860,7 +871,7 @@ ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                          == MONTHS) ? MONTHS : YEARS;
                 ldd->ld.numPer =
                         gtk_spin_button_get_value_as_int( ldd->prmLengthSpin );
-                ldd->ld.numPerRemain =
+                ldd->ld.numMonRemain =
                         gtk_spin_button_get_value_as_int( ldd->prmRemainSpin );
         }
         return FALSE;
@@ -898,7 +909,7 @@ ld_info_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         {
                 gtk_spin_button_set_value( ldd->prmLengthSpin, ldd->ld.numPer );
                 gtk_option_menu_set_history( ldd->prmLengthType, ldd->ld.perSize );
-                gtk_spin_button_set_value( ldd->prmRemainSpin, ldd->ld.numPerRemain );
+                gtk_spin_button_set_value( ldd->prmRemainSpin, ldd->ld.numMonRemain );
         }
 }
 
@@ -911,8 +922,8 @@ ld_opts_save_state( LoanDruidData *ldd )
                         gnc_account_sel_get_account( ldd->optEscrowGAS );
                 if ( ldd->ld.escrowAcct == NULL ) {
                         gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                                  "Please select a valid "
-                                                  "Escrow Account" );
+                                                  _("Please select a valid "
+                                                    "Escrow Account.") );
                         return TRUE;
                 }
                 
@@ -977,24 +988,24 @@ ld_rep_save( LoanDruidData *ldd )
                 gnc_account_sel_get_account( ldd->repAssetsFromGAS );
         if ( ldd->ld.repFromAcct == NULL ) {
                 gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                          "Please select a valid "
-                                          "\"from\" account." );
+                                          _("Please select a valid "
+                                            "\"from\" account.") );
                 return TRUE;
         }
         ldd->ld.repPriAcct =
                 gnc_account_sel_get_account( ldd->repPrincToGAS );
         if ( ldd->ld.repPriAcct == NULL ) {
                 gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                          "Please select a valid "
-                                          "\"to\" account." );
+                                          _("Please select a valid "
+                                            "\"to\" account.") );
                 return TRUE;
         }
         ldd->ld.repIntAcct =
                 gnc_account_sel_get_account( ldd->repIntToGAS );
         if ( ldd->ld.repIntAcct == NULL ) {
                 gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                          "Please select a valid "
-                                          "\"interest\" account." );
+                                          _("Please select a valid "
+                                            "\"interest\" account.") );
                 return TRUE;
         }
         ldd->ld.remainderChoice =
@@ -1114,7 +1125,7 @@ ld_pay_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 
         rod = ldd->ld.repayOpts[ldd->currentIdx];
         str = g_string_sized_new( 32 );
-        g_string_sprintf( str, "Payment: \"%s\"", rod->name );
+        g_string_sprintf( str, _("Payment: \"%s\""), rod->name );
         gnome_druid_page_standard_set_title( GNOME_DRUID_PAGE_STANDARD(gdp),
                                              str->str );
         /* FIXME: copy in the relevant data from the currently-indexed
@@ -1179,15 +1190,15 @@ ld_pay_save_current( LoanDruidData *ldd )
         rod->from = gnc_account_sel_get_account( ldd->payAcctFromGAS );
         if ( rod->from == NULL ) {
                 gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                          "Please select a valid "
-                                          "\"from\" account." );
+                                          _("Please select a valid "
+                                            "\"from\" account.") );
                 return TRUE;
         }
         rod->to   = gnc_account_sel_get_account( ldd->payAcctToGAS );
         if ( rod->from == NULL ) {
                 gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                          "Please select a valid "
-                                          "\"to\" account." );
+                                          _("Please select a valid "
+                                            "\"to\" account.") );
                 return TRUE;
         }
         
@@ -1330,6 +1341,44 @@ ld_gnc_ttinfo_free( gpointer data, gpointer ud )
         gnc_ttinfo_free( (TTInfo*)data );
 }
 
+static
+int
+ld_calc_current_instance_num( int monthsPassed, FreqSpec *fs )
+{
+        float mult = 1.0;
+        UIFreqType uift;
+        uift = xaccFreqSpecGetUIType( fs );
+        switch ( uift ) {
+        case UIFREQ_WEEKLY:
+        {
+                int wMult, dow;
+                xaccFreqSpecGetWeekly( fs, &wMult, &dow );
+                mult = (4.0 / wMult);
+        }
+        break;
+        case UIFREQ_BI_WEEKLY:
+        case UIFREQ_SEMI_MONTHLY:
+                mult = 2.0;
+                break;
+        case UIFREQ_MONTHLY:
+        case UIFREQ_QUARTERLY:
+        case UIFREQ_TRI_ANUALLY:
+        case UIFREQ_SEMI_YEARLY:
+        case UIFREQ_YEARLY:
+        {
+                int mMult, dom, offset;
+                xaccFreqSpecGetMonthly( fs, &mMult, &dom, &offset );
+                mult = ( 1.0 / mMult );
+        }
+        break;
+        default:
+                PERR( "Wacky loan repayment frequency [%d]", uift );
+                break;
+        }
+
+        return floor( monthsPassed * mult );
+}
+
 /**
  * Actually does the work of creating the SXes from the LoanDruidData.
  **/
@@ -1347,11 +1396,24 @@ ld_create_sxes( LoanDruidData *ldd )
         gchar *tmpStr;
         GString *repAssetsDebitFormula, *tmpGS;
         GList *sxList;
+        GDate *loanEndDate;
+        int curInstNum;
+        int monPassed;
 
         /* Create a string for the Asset-account debit, which we will build
          * up in the processing of the LoanData and Options. */
         repAssetsDebitFormula = g_string_sized_new( 64 );
         repTTList = NULL;
+
+        loanEndDate = g_date_new();
+        g_date_set_time( loanEndDate, time(NULL) );
+        g_date_add_months( loanEndDate, ldd->ld.numMonRemain );
+
+        /* Figure out the correct current instance-count for the txns in the
+         * SX. */
+        monPassed =
+                (ldd->ld.numPer * ( ldd->ld.perSize == YEARS ? 12 : 1 ))
+                - ldd->ld.numMonRemain;
 
         /* first, start to deal with the repayment uber-SX */
         {
@@ -1365,7 +1427,7 @@ ld_create_sxes( LoanDruidData *ldd )
 
                 /* Principal credit */
                 ttsi = gnc_ttsplitinfo_malloc();
-                gnc_ttsplitinfo_set_memo( ttsi, "Repayment - Principal Portion" );
+                gnc_ttsplitinfo_set_memo( ttsi, _("Repayment - Principal Portion") );
                 tmpStr = xaccAccountGetFullName( ldd->ld.repPriAcct,
                                                  gnc_get_account_separator() );
                 g_free( tmpStr );
@@ -1381,7 +1443,7 @@ ld_create_sxes( LoanDruidData *ldd )
 
                 /* Interest credit */
                 ttsi = gnc_ttsplitinfo_malloc();
-                gnc_ttsplitinfo_set_memo( ttsi, "Repayment - Interest Portion" );
+                gnc_ttsplitinfo_set_memo( ttsi, _("Repayment - Interest Portion") );
                 tmpStr = xaccAccountGetFullName( ldd->ld.repIntAcct,
                                                  gnc_get_account_separator() );
                 g_free( tmpStr );
@@ -1396,7 +1458,7 @@ ld_create_sxes( LoanDruidData *ldd )
                 repSplits = g_list_append( repSplits, ttsi );
         }
 
-        /* Process the options. */
+        /* Take a side-trip to process the options. */
         for ( i=0; i<ldd->ld.repayOptCount; i++ ) {
                 Account *fromAcct;
                 GList *optSplits;
@@ -1475,8 +1537,11 @@ ld_create_sxes( LoanDruidData *ldd )
                         xaccSchedXactionSetFreqSpec( tmpSX, rod->fs );
                         xaccSchedXactionSetStartDate( tmpSX, rod->startDate );
                         xaccSchedXactionSetLastOccurDate( tmpSX, rod->startDate );
-                        xaccSchedXactionSetNumOccur( tmpSX, ldd->ld.numPer );
-                        xaccSchedXactionSetRemOccur( tmpSX, ldd->ld.numPerRemain );
+                        xaccSchedXactionSetEndDate( tmpSX, loanEndDate );
+                        curInstNum = ld_calc_current_instance_num( monPassed,
+                                                                   rod->fs );
+                        DEBUG( "%s instance num: %d", ldd->ld.repMemo, curInstNum );
+                        gnc_sx_set_instance_count( tmpSX, curInstNum );
                         xaccSchedXactionSetTemplateTrans( tmpSX, ttList,
                                                           gnc_get_current_book() );
 
@@ -1518,15 +1583,16 @@ ld_create_sxes( LoanDruidData *ldd )
         xaccSchedXactionSetStartDate( tmpSX, ldd->ld.repStartDate );
         xaccSchedXactionSetLastOccurDate( tmpSX, ldd->ld.repStartDate );
         xaccSchedXactionSetFreqSpec( tmpSX, ldd->ld.repFreq );
-        /* FIXME: we should compare these values with the user-specified
-         * repayment frequency. */
-        xaccSchedXactionSetNumOccur( tmpSX, ldd->ld.numPer );
-        xaccSchedXactionSetRemOccur( tmpSX, ldd->ld.numPerRemain );
+        xaccSchedXactionSetEndDate( tmpSX, loanEndDate );
+        /* we should fixup these values with the user-specified repayment
+         * frequency. */
+        curInstNum =
+                ld_calc_current_instance_num( monPassed,
+                                              ldd->ld.repFreq );
+        gnc_sx_set_instance_count( tmpSX, curInstNum );
+
         xaccSchedXactionSetTemplateTrans( tmpSX, repTTList,
                                           gnc_get_current_book() );
-
-        gnc_sx_set_instance_count( tmpSX,
-                                   ldd->ld.numPer - ldd->ld.numPerRemain + 1 );
 
         sxList = gnc_book_get_schedxactions( gnc_get_current_book() );
         sxList = g_list_append( sxList, tmpSX );
@@ -1535,7 +1601,9 @@ ld_create_sxes( LoanDruidData *ldd )
         g_list_foreach( repTTList, ld_gnc_ttinfo_free, NULL );
         g_list_free( repTTList );
         repTTList = NULL;
-        
+
+        g_date_free( loanEndDate );
+
         g_string_free( repAssetsDebitFormula, TRUE );
 
         ld_close_handler( ldd );
@@ -1543,21 +1611,23 @@ ld_create_sxes( LoanDruidData *ldd )
 
 static
 void
-gnc_loan_druid_length_changed( GtkEditable *e, gpointer ud )
+ld_calc_upd_rem_payments( GtkWidget *w, gpointer ud )
 {
-        LoanDruidData *ldd;
-        gchar *txt;
-        gint pos;
-
-        ldd = (LoanDruidData*)ud;
-        txt = gtk_editable_get_chars( e, 0, -1 );
-        if ( !txt )
-                return;
-
-        gtk_editable_select_region( GTK_EDITABLE(ldd->prmRemainSpin), 0, -1 );
-        gtk_editable_delete_selection( GTK_EDITABLE(ldd->prmRemainSpin) );
-        pos = 0;
-        gtk_editable_insert_text( GTK_EDITABLE(ldd->prmRemainSpin),
-                                  txt, strlen(txt), &pos );
-        g_free( txt );
+        LoanDruidData *ldd = (LoanDruidData*)ud;
+        GDate start, now;
+        int i, total, remain;
+        
+        g_date_clear( &start, 1 );
+        g_date_clear( &now, 1 );
+        g_date_set_time( &start, gnome_date_edit_get_date( ldd->prmStartDateGDE ) );
+        g_date_set_time( &now, time(NULL) );
+        for ( i=0; g_date_compare( &start, &now ) < 0; i++ ) {
+                g_date_add_months( &start, 1 );
+        }
+        total = gtk_spin_button_get_value_as_int( ldd->prmLengthSpin )
+                * ( gnc_option_menu_get_active(
+                            GTK_WIDGET(ldd->prmLengthType) )
+                    == 1 ? 12 : 1 );
+        remain = total - i;
+        gtk_spin_button_set_value( ldd->prmRemainSpin, remain );
 }

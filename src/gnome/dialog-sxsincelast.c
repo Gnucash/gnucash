@@ -2787,13 +2787,13 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
         toCreateInstance *tci;
         sxSinceLastData *sxsld;
 
-
         /* FIXME: this should more gracefully deal with multiple 'row-select'
          * signals from double/triple-clicks. */
         sxsld = (sxSinceLastData*)user_data;
 
         tci = (toCreateInstance*)gtk_ctree_node_get_row_data( ct, node );
-        g_assert( tci );
+        if ( !tci )
+                return;
 
         sxsld->curSelTCI = tci;
         sxsld_set_sensitive_tci_controls( sxsld, TRUE );

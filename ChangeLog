@@ -1,3 +1,27 @@
+2002-11-17  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/druid-loan.c (ld_calc_current_instance_num): Do some
+	work to figure out the correct current-instance-number for
+	non-monthly Loan-Repayment SXes.
+	(ld_create_sxes): Make the created SXes time out after the length
+	of the loan, rather than trying to get the number-of-periods
+	totally correct.  This obsoletes Bug#97808.
+
+	* src/gnome/dialog-sxsincelast.c (sxsincelast_tc_row_sel): Don't
+	assertion-failure if the user select a non-leaf row.
+
+	* src/gnome/dialog-scheduledxaction.c (sxed_confirmed_cancel):
+	Added; used by cancel button handler and [newly added] GnomeDialog
+	"close" handler; fixes Bug#84683.
+
+	* src/gnome/druid-loan.c: I18n of some strings previously
+	unaccounted for.
+	(ld_opt_consistency): Don't enable the "Through Escrow" checkbox
+	if there is no escrow account defined.
+	(ld_calc_upd_rem_payments): Added; calculate the number of
+	remaining payments based on the start date, loan length and
+	current date; fixes Bug#91815.
+
 2002-11-17  David Hampton  <hampton@employees.org>
 
 	* src/gnome/window-reconcile.c: Fix a couple of functions that

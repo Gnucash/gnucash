@@ -4585,33 +4585,6 @@ the created Scheduled Transactions directly.</text>
 	  </widget>
 
 	  <widget>
-	    <class>GtkFrame</class>
-	    <name>type_freq_frame</name>
-	    <border_width>3</border_width>
-	    <label>Interest Rate Change Frequency</label>
-	    <label_xalign>0.05</label_xalign>
-	    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
-	    <child>
-	      <left_attach>1</left_attach>
-	      <right_attach>4</right_attach>
-	      <top_attach>3</top_attach>
-	      <bottom_attach>4</bottom_attach>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	      <xexpand>True</xexpand>
-	      <yexpand>True</yexpand>
-	      <xshrink>True</xshrink>
-	      <yshrink>True</yshrink>
-	      <xfill>False</xfill>
-	      <yfill>False</yfill>
-	    </child>
-
-	    <widget>
-	      <class>Placeholder</class>
-	    </widget>
-	  </widget>
-
-	  <widget>
 	    <class>GtkHBox</class>
 	    <name>hbox167</name>
 	    <homogeneous>False</homogeneous>
@@ -4802,7 +4775,7 @@ years
 	  <widget>
 	    <class>GtkLabel</class>
 	    <name>label847901</name>
-	    <label>Periods Remaining:</label>
+	    <label>Months Remaining:</label>
 	    <justify>GTK_JUSTIFY_CENTER</justify>
 	    <wrap>False</wrap>
 	    <xalign>1</xalign>
@@ -4823,6 +4796,42 @@ years
 	      <xfill>True</xfill>
 	      <yfill>False</yfill>
 	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkAlignment</class>
+	    <name>alignment23</name>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xscale>0.5</xscale>
+	    <yscale>0.75</yscale>
+	    <child>
+	      <left_attach>1</left_attach>
+	      <right_attach>4</right_attach>
+	      <top_attach>3</top_attach>
+	      <bottom_attach>4</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>True</xexpand>
+	      <yexpand>True</yexpand>
+	      <xshrink>True</xshrink>
+	      <yshrink>True</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>True</yfill>
+	    </child>
+
+	    <widget>
+	      <class>GtkFrame</class>
+	      <name>type_freq_frame</name>
+	      <border_width>3</border_width>
+	      <label>Interest Rate Change Frequency</label>
+	      <label_xalign>0.05</label_xalign>
+	      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+
+	      <widget>
+		<class>Placeholder</class>
+	      </widget>
+	    </widget>
 	  </widget>
 	</widget>
       </widget>
@@ -5255,12 +5264,12 @@ Escrow
 	  </widget>
 
 	  <widget>
-	    <class>GtkFrame</class>
-	    <name>freq_frame</name>
-	    <border_width>3</border_width>
-	    <label>Repayment Frequency</label>
-	    <label_xalign>0.05</label_xalign>
-	    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	    <class>GtkAlignment</class>
+	    <name>alignment21</name>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xscale>0.5</xscale>
+	    <yscale>0.75</yscale>
 	    <child>
 	      <left_attach>0</left_attach>
 	      <right_attach>4</right_attach>
@@ -5268,16 +5277,25 @@ Escrow
 	      <bottom_attach>6</bottom_attach>
 	      <xpad>0</xpad>
 	      <ypad>0</ypad>
-	      <xexpand>True</xexpand>
+	      <xexpand>False</xexpand>
 	      <yexpand>True</yexpand>
 	      <xshrink>True</xshrink>
 	      <yshrink>True</yshrink>
-	      <xfill>False</xfill>
-	      <yfill>False</yfill>
+	      <xfill>True</xfill>
+	      <yfill>True</yfill>
 	    </child>
 
 	    <widget>
-	      <class>Placeholder</class>
+	      <class>GtkFrame</class>
+	      <name>freq_frame</name>
+	      <border_width>3</border_width>
+	      <label>Repayment Frequency</label>
+	      <label_xalign>0.05</label_xalign>
+	      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+
+	      <widget>
+		<class>Placeholder</class>
+	      </widget>
 	    </widget>
 	  </widget>
 	</widget>
@@ -5513,12 +5531,12 @@ Escrow
 	    </widget>
 
 	    <widget>
-	      <class>GtkFrame</class>
-	      <name>frame92</name>
-	      <border_width>5</border_width>
-	      <label>Payment Frequency</label>
-	      <label_xalign>0.05</label_xalign>
-	      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	      <class>GtkAlignment</class>
+	      <name>alignment22</name>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xscale>0.5</xscale>
+	      <yscale>0.75</yscale>
 	      <child>
 		<padding>0</padding>
 		<expand>False</expand>
@@ -5526,42 +5544,24 @@ Escrow
 	      </child>
 
 	      <widget>
-		<class>GtkVBox</class>
-		<name>vbox159</name>
-		<homogeneous>False</homogeneous>
-		<spacing>0</spacing>
-
-		<widget>
-		  <class>GtkRadioButton</class>
-		  <name>pay_txn_part_rb</name>
-		  <can_focus>True</can_focus>
-		  <label>Part of Payment Transaction</label>
-		  <active>False</active>
-		  <draw_indicator>True</draw_indicator>
-		  <group>rep_freq_opt</group>
-		  <child>
-		    <padding>0</padding>
-		    <expand>False</expand>
-		    <fill>False</fill>
-		  </child>
-		</widget>
+		<class>GtkFrame</class>
+		<name>frame92</name>
+		<border_width>5</border_width>
+		<label>Payment Frequency</label>
+		<label_xalign>0.05</label_xalign>
+		<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 
 		<widget>
 		  <class>GtkVBox</class>
-		  <name>vbox160</name>
+		  <name>vbox159</name>
 		  <homogeneous>False</homogeneous>
 		  <spacing>0</spacing>
-		  <child>
-		    <padding>0</padding>
-		    <expand>False</expand>
-		    <fill>False</fill>
-		  </child>
 
 		  <widget>
 		    <class>GtkRadioButton</class>
-		    <name>pay_uniq_freq_rb</name>
+		    <name>pay_txn_part_rb</name>
 		    <can_focus>True</can_focus>
-		    <label>Other</label>
+		    <label>Part of Payment Transaction</label>
 		    <active>False</active>
 		    <draw_indicator>True</draw_indicator>
 		    <group>rep_freq_opt</group>
@@ -5573,12 +5573,10 @@ Escrow
 		  </widget>
 
 		  <widget>
-		    <class>GtkAlignment</class>
-		    <name>pay_freq_align</name>
-		    <xalign>1</xalign>
-		    <yalign>0.5</yalign>
-		    <xscale>0.95</xscale>
-		    <yscale>1</yscale>
+		    <class>GtkVBox</class>
+		    <name>vbox160</name>
+		    <homogeneous>False</homogeneous>
+		    <spacing>0</spacing>
 		    <child>
 		      <padding>0</padding>
 		      <expand>False</expand>
@@ -5586,7 +5584,36 @@ Escrow
 		    </child>
 
 		    <widget>
-		      <class>Placeholder</class>
+		      <class>GtkRadioButton</class>
+		      <name>pay_uniq_freq_rb</name>
+		      <can_focus>True</can_focus>
+		      <label>Other</label>
+		      <active>False</active>
+		      <draw_indicator>True</draw_indicator>
+		      <group>rep_freq_opt</group>
+		      <child>
+			<padding>0</padding>
+			<expand>False</expand>
+			<fill>False</fill>
+		      </child>
+		    </widget>
+
+		    <widget>
+		      <class>GtkAlignment</class>
+		      <name>pay_freq_align</name>
+		      <xalign>1</xalign>
+		      <yalign>0.5</yalign>
+		      <xscale>0.95</xscale>
+		      <yscale>1</yscale>
+		      <child>
+			<padding>0</padding>
+			<expand>False</expand>
+			<fill>False</fill>
+		      </child>
+
+		      <widget>
+			<class>Placeholder</class>
+		      </widget>
 		    </widget>
 		  </widget>
 		</widget>
