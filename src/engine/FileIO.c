@@ -421,7 +421,7 @@ readGroup (int fd, Account *aparent, int token)
     {
     Account * acc = readAccount( fd, grp, token );
     if( NULL == acc ) {
-      PERR("Short group read: \n");
+      PERR("Short group read: \n"
            "\texpected %d, got %d accounts\n",numAcc,i);
       break;
       }
