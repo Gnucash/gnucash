@@ -246,6 +246,9 @@ void gnc_close_gui_component_by_data (const char *component_class,
  *
  * Returns: GList of user_data of found components, or NULL if none found
  *          The list should be freed with g_list_free().
+ *
+ * Notes on finding: components should not be registered or unregistered
+ *                   by the find callback.
  */
 GList * gnc_find_gui_components (const char *component_class,
                                  GNCComponentFindHandler find_handler,
@@ -258,6 +261,9 @@ GList * gnc_find_gui_components (const char *component_class,
  *                  all classes are iterated over
  * handler:         handler to invoke
  * iter_data:       data passed to handler
+ *
+ * Notes on forall: components may be unregistered by the handler,
+ *                  but no components should be registered.
  */
 void gnc_forall_gui_components (const char *component_class,
                                 GNCComponentHandler handler,

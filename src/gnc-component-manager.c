@@ -19,11 +19,15 @@
 
 #include "config.h"
 
+#include <stdio.h>
+
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 
 
 /** Declarations ****************************************************/
+
+#define CM_DEBUG 0
 
 typedef struct
 {
@@ -71,6 +75,26 @@ static void gnc_gui_refresh_internal (void);
 
 
 /** Implementations *************************************************/
+
+#if CM_DEBUG
+static void
+dump_components (void)
+{
+  GList *node;
+
+  fprintf (stderr, "Components:\n");
+
+  for (node = components; node; node = node->next)
+  {
+    ComponentInfo *ci = node->data;
+
+    fprintf (stderr, "  %s:\t%d\n",
+             ci->component_class, ci->component_id);
+  }
+
+  fprintf (stderr, "\n");
+}
+#endif
 
 static gboolean
 destroy_helper (gpointer key, gpointer value, gpointer user_data)
@@ -296,6 +320,12 @@ gnc_register_gui_component (const char *component_class,
   /* update id for next registration */
   next_component_id = component_id + 1;
 
+#if CM_DEBUG
+  fprintf (stderr, "Register component %d in class %s\n",
+           component_id, component_class);
+  dump_components ();
+#endif
+
   return component_id;
 }
 
@@ -370,6 +400,11 @@ gnc_unregister_gui_component (gint component_id)
     return;
   }
 
+#if CM_DEBUG
+  fprintf (stderr, "Unregister component %d in class %s\n",
+           ci->component_id, ci->component_class);
+#endif
+
   gnc_gui_component_clear_watches (component_id);
 
   components = g_list_remove (components, ci);
@@ -381,6 +416,10 @@ gnc_unregister_gui_component (gint component_id)
   ci->component_class = NULL;
 
   g_free (ci);
+
+#if CM_DEBUG
+  dump_components ();
+#endif
 }
 
 void
@@ -528,10 +567,7 @@ gnc_close_gui_component (gint component_id)
   }
 
   if (!ci->close_handler)
-  {
-    PERR ("no close handler");
     return;
-  }
 
   ci->close_handler (ci->user_data);
 }
@@ -586,15 +622,11 @@ gnc_find_gui_components (const char *component_class,
   return list;
 }
 
-void
-gnc_forall_gui_components (const char *component_class,
-                           GNCComponentHandler handler,
-                           gpointer iter_data)
+static GList *
+find_component_ids_by_class (const char *component_class)
 {
+  GList *list = NULL;
   GList *node;
-
-  if (!handler)
-    return;
 
   for (node = components; node; node = node->next)
   {
@@ -604,6 +636,35 @@ gnc_forall_gui_components (const char *component_class,
         safe_strcmp (component_class, ci->component_class) != 0)
       continue;
 
+    list = g_list_prepend (list, GINT_TO_POINTER (ci->component_id));
+  }
+
+  return list;
+}
+
+void
+gnc_forall_gui_components (const char *component_class,
+                           GNCComponentHandler handler,
+                           gpointer iter_data)
+{
+  GList *list;
+  GList *node;
+
+  if (!handler)
+    return;
+
+  /* so components can be destroyed during the forall */
+  list = find_component_ids_by_class (component_class);
+
+  for (node = list; node; node = node->next)
+  {
+    ComponentInfo *ci = find_component (GPOINTER_TO_INT (node->data));
+
+    if (!ci)
+      continue;
+
     handler (ci->component_class, ci->component_id, iter_data);
   }
+
+  g_list_free (list);
 }

@@ -26,23 +26,26 @@
 
 #include <gnome.h>
 
+#include "FileDialog.h"
+#include "MultiLedger.h"
+#include "Refresh.h"
+#include "account-tree.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
-#include "MultiLedger.h"
-#include "FileDialog.h"
-#include "Refresh.h"
-#include "window-reconcile.h"
-#include "query-user.h"
-#include "account-tree.h"
 #include "glade-gnc-dialogs.h"
-#include "gnc-amount-edit.h"
-#include "gnc-dateedit.h"
-#include "gnc-exp-parser.h"
-#include "messages.h"
-#include "gnc-ui.h"
 #include "global-options.h"
+#include "gnc-amount-edit.h"
+#include "gnc-component-manager.h"
+#include "gnc-dateedit.h"
 #include "gnc-engine-util.h"
+#include "gnc-exp-parser.h"
+#include "gnc-ui.h"
+#include "messages.h"
+#include "query-user.h"
+#include "window-reconcile.h"
 
+
+#define DIALOG_TRANSFER_CM_CLASS "dialog-transfer"
 
 typedef enum
 {
@@ -53,8 +56,6 @@ typedef enum
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
-
-static GList *xfer_dialogs = NULL;
 
 struct _xferDialog
 {
@@ -278,6 +279,7 @@ gnc_xfer_dialog_curr_acct_activate(XferDialog *xferData)
 		      (GNC_AMOUNT_EDIT(xferData->to_amount_edit)));
     gtk_entry_set_text(entry, "");
   }
+
   g_list_free(curr_accts_name_list);
 }
 
@@ -853,7 +855,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
   gnc_refresh_main_window();
 
-  gnome_dialog_close(GNOME_DIALOG(xferData->dialog));
+  gnc_close_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
 }
 
 
@@ -862,7 +864,7 @@ gnc_xfer_dialog_cancel_cb(GtkWidget * widget, gpointer data)
 {
   XferDialog *xferData = data; 
 
-  gnome_dialog_close(GNOME_DIALOG(xferData->dialog));
+  gnc_close_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
 }
 
 
@@ -889,7 +891,7 @@ gnc_xfer_dialog_close_cb(GnomeDialog *dialog, gpointer data)
     xferData->curr_accts_list = NULL;
   }
 
-  xfer_dialogs = g_list_remove(xfer_dialogs, dialog);
+  gnc_unregister_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
 
   g_free(xferData);
 
@@ -1050,6 +1052,13 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
   }
 }
 
+static void
+close_handler (gpointer user_data)
+{
+  XferDialog *xferData = user_data;
+
+  gnome_dialog_close (GNOME_DIALOG (xferData->dialog));
+}
 
 /********************************************************************\
  * gnc_xfer_dialog                                                  *
@@ -1060,17 +1069,18 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
  * Return: XferDialog structure                                     *
 \********************************************************************/
 XferDialog *
-gnc_xfer_dialog(GtkWidget * parent, Account * initial)
+gnc_xfer_dialog (GtkWidget * parent, Account * initial)
 {
   XferDialog *xferData;
   GNCAmountEdit *gae;
   GtkWidget *amount_entry;
 
-  xferData = g_new0(XferDialog, 1);
+  xferData = g_new0 (XferDialog, 1);
 
   gnc_xfer_dialog_create(parent, xferData);
 
-  xfer_dialogs = g_list_prepend(xfer_dialogs, xferData->dialog);
+  gnc_register_gui_component (DIALOG_TRANSFER_CM_CLASS,
+                              NULL, close_handler, xferData);
 
   gae = GNC_AMOUNT_EDIT(xferData->amount_edit);
   amount_entry = gnc_amount_edit_gtk_entry (gae);
@@ -1091,6 +1101,14 @@ gnc_xfer_dialog(GtkWidget * parent, Account * initial)
 }
 
 
+static void
+destroy_helper (const char *component_class,
+                gint component_id,
+                gpointer iter_data)
+{
+  gnc_close_gui_component (component_id);
+}
+
 /********************************************************************\
  * gnc_ui_destroy_xfer_windows                                      *
  *   destroy all open transfer dialogs                              *
@@ -1099,14 +1117,8 @@ gnc_xfer_dialog(GtkWidget * parent, Account * initial)
  * Return: none                                                     *
 \********************************************************************/
 void
-gnc_ui_destroy_xfer_windows(void)
+gnc_ui_destroy_xfer_windows (void)
 {
-  GnomeDialog *dialog;
-
-  while (xfer_dialogs != NULL)
-  {
-    dialog = GNOME_DIALOG(xfer_dialogs->data);
-
-    gnome_dialog_close(dialog);
-  }
+  gnc_forall_gui_components (DIALOG_TRANSFER_CM_CLASS,
+                             destroy_helper, NULL);
 }
