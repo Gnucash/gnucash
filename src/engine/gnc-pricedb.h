@@ -31,6 +31,7 @@
 #include "gnc-numeric.h"
 #include "guid.h"
 #include "qofbook.h"
+#include "qofinstance.h"
 
 
 /** @addtogroup Engine

@@ -56,6 +56,7 @@
 #include "qofbackend.h"
 #include "qofbook.h"
 #include "qofid.h"
+#include "qofid-p.h"
 #include "qofinstance.h"
 #include "qofinstance-p.h"
 
@@ -212,7 +213,7 @@ struct transaction_s
 /* Set the transaction's GUID. This should only be done when reading
  * a transaction from a datafile, or some other external source. Never
  * call this on an existing transaction! */
-#define xaccTransSetGUID(t,g) qof_instance_set_guid(QOF_INSTANCE(t),g)
+#define xaccTransSetGUID(t,g) qof_entity_set_guid(QOF_ENTITY(t),g)
 
 /* Set the split's GUID. This should only be done when reading
  * a split from a datafile, or some other external source. Never

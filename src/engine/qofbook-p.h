@@ -34,6 +34,7 @@
 #include "qofbackend.h"
 #include "qofbook.h"
 #include "qofid.h"
+#include "qofid-p.h"
 
 struct _QofBook
 {

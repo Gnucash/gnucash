@@ -26,6 +26,7 @@
 
 #include "SchedXaction.h"
 #include "qofid.h"
+#include "qofid-p.h"
 #include "qofinstance-p.h"
 
 /**
@@ -89,6 +90,6 @@ typedef struct _temporalStateData {
   gint num_inst;
 } temporalStateData;
 
-#define xaccSchedXactionSetGUID(X) qof_entity_set_guid(QOF_ENTITY(X))
+#define xaccSchedXactionSetGUID(X,G) qof_entity_set_guid(QOF_ENTITY(X),(G))
 
 #endif /* XACC_SCHEDXACTION_P_H */
