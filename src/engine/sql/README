@@ -1,54 +1,67 @@
 
-This directory contains experimental code for sql/postgres
-support.  The code 'functions' and does many things but is still
-missing an assortment of features, and may be buggy and crash a lot.
+This directory contains code for SQL/postgres support.  The
+SQL backend can be used in several modes. The single-user modes
+are more-or-less beta: they work, but haven't been well tested.
+The multi-user code is experimental: it still has a variety of
+problems.
+
 
 
 postgres install instructions
 -----------------------------
 1) Install postgresql server, client and devel packages.
 2) if installed from redhat, then running /etc/rc.d/init.d/postgresql 
-   will setup and initialize all first-time setup & config.
+   will setup and initialize basic postgres first-time setup & config.
 3) as root, su - postgres then run 'createuser' to add your user id
-
-Gnucash-specific install steps
-------------------------------
-A) install the m4 macro processor if you don't already have it.
-B) run the script gnc-init.sh
-   This script will automatically create the needed tables
+4) (don't set a password on your postgres db name, yet, gnucash doesn't 
+    have a GUI to ask for your password yet)
+5) as yourself (i.e. your unix login), run 'createdb gnucash'
+   
 
 
 
-To Bo Done
+To Be Done
 ----------
--- bug: transaction memo in double line mode is lost.
--- create database if it don't exist; provide user dialog for this.
+Core bugs/features that still need work:
 
--- allow user to enter url in gui dialog
--- handle kvp frames
--- implement account commit edit (actually, the check&rollback part)
--- fix excessive use of account commit by engine
--- provide support for more query types in gncquery.c
--- optimize for quantity of sql traffic -- there's a lot of it,
-   much of it proably un-needed.
-
--- Implement account and transaction deletion. Deleting an account or
+-- bug: Implement account and transaction deletion. Deleting an account or
    transaction doesn't remove it from the database.
    (done with split delete)
 
--- Implement logging history in the sql server.  i.e. save the old
+-- bug: transaction memo in double line mode is lost.
+
+-- bug/feature: the 'save as' semantics are ... unexpected, if 
+   the database already exists and has data in it ... 
+
+-- bug: group sync doesn't pull in newer data from the db ...
+
+-- allow user to enter URL in GUI dialog
+
+-- Implement GUI to ask user for username/password to log onto the
+   server. 
+
+-- handle kvp frames
+
+To Be Done, Part II
+-------------------
+This list only affects the multi-user and advanced/optional features.
+
+-- implement account commit edit (actually, the check&rollback part)
+-- fix excessive use of account commit by engine
+-- provide support for more query types in gncquery.c
+-- optimize for quantity of SQL traffic -- there's a lot of it,
+   much of it probably un-needed.
+
+-- Implement logging history in the SQL server.  i.e. save the old
    copies of stuff in log tables.  Make the username part of the 
    logging scheme.
 
--- Implement gui to ask user for username/password to log onto the
-   server. 
-
--- let all attached client receive update events via sql LISTEN/NOTIFY 
+-- let all attached client receive update events via SQL LISTEN/NOTIFY 
    events.
 
 -- Implement various advanced database features, such as checking the
    user's permission to view/edit account by account ... (hmmm this
-   done by the dbadmin... using sql commands... which means if user
+   done by the dbadmin... using SQL commands... which means if user
    tries to write to something they're not allowed to write to,
    then they should be bounced back.
 
@@ -56,32 +69,33 @@ To Bo Done
    should be like CVS: multiple nearly-simultaneous writers are allowed;
    however, only one wins, and others are kicked back.  The losers know
    themselves because they are trying to update info of the wrong
-   version. But right now, version is not done everyehwere, nor is it
-   done uniformely:
+   version. But right now, version is not done everywhere, nor is it
+   done uniformly:
    -- pgend_transaction_commit does it correctly.
    -- pgTransactionSync  does not, it clobbers.
    -- pgend_account_commit clobbers.
    -- pgendAccountGroupSync is unfinished.
    I'm not sure how critical this all is; with a small number of users
-   it shouldn'tbe a prblem.  With a huge number of users, each editing
+   it shouldn't be a problem.  With a huge number of users, each editing
    the same transaction (unlikely!?) then there is risk of clobbered
    data, but so what?
 
--- fix rollback bug in gui.  If backend tells engine to rollback,
-   (e.g. on a new transaction), the gui still shows traces, instead
+-- fix rollback bug in GUI.  If backend tells engine to rollback,
+   (e.g. on a new transaction), the GUI still shows traces, instead
    of kicking back.
-   This is a symptom of a lack of kick-back detection in gui.
+   This is a symptom of a lack of kick-back detection in GUI.
 -- finish implementing pgendAccountGroupSync
 
 -- store account balances in database.  This will be tricky ...
    -- split query gets hard ... 
+   -- use aggregates ?? 
 
 -- review multiuser operation for correctness 
 
 -- fix caching in the face of lost contact to the backend.  If the
    backend can't contact its server, then we should just save up caches,
    and then when contact with backend re-established, we should spit
-   them out.  But right now, this is brroken.  In particular, 
+   them out.  But right now, this is broken.  In particular, 
    the use of xaccGrouparkSaved screws up some status bits ...
 
 -- review & match up against docs at 

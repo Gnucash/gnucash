@@ -314,6 +314,14 @@ gnc_string_to_commodity (const char *str)
 
 #include "autogen.c"
 
+static const char *table_create_str = 
+#include "table-create.c"
+;
+
+static const char *table_drop_str = 
+#include "table-drop.c"
+;
+
 /* ============================================================= */
 /* This routine updates the account structure if needed, and/or
  * stores it the first time if it hasn't yet been stored.
@@ -1969,12 +1977,14 @@ pgend_book_load_single (Backend *bend)
 /* ============================================================= */
 
 static void
-pgend_session_begin (GNCBook *sess, const char * sessionid, int ignore_lock)
+pgend_session_begin (GNCBook *sess, const char * sessionid, 
+                    gboolean ignore_lock, gboolean create_new_db)
 {
+   int really_do_create = 0;
    int rc;
    PGBackend *be;
    char *url, *start, *end;
-   char * bufp;
+   char *bufp;
 
    if (!sess) return;
    be = (PGBackend *) xaccGNCBookGetBackend (sess);
@@ -1998,7 +2008,11 @@ pgend_session_begin (GNCBook *sess, const char * sessionid, int ignore_lock)
     * 
     */
 
-   if (strncmp (sessionid, "postgres://", 11)) return;
+   if (strncmp (sessionid, "postgres://", 11)) 
+   {
+      xaccBackendSetError (&be->be, ERR_SQL_BAD_LOCATION);
+      return;
+   }
    url = g_strdup(sessionid);
    start = url + 11;
    end = strchr (start, ':');
@@ -2021,7 +2035,12 @@ pgend_session_begin (GNCBook *sess, const char * sessionid, int ignore_lock)
      be->hostname = g_strdup (start);
    }
    start = end+1;
-   if (0x0 == *start) { g_free(url); return; }
+   if (0x0 == *start) 
+   { 
+      xaccBackendSetError (&be->be, ERR_SQL_BAD_LOCATION);
+      g_free(url); 
+      return; 
+   }
 
    /* chop of trailing url-encoded junk, if present */
    end = strchr (start, '?');
@@ -2053,8 +2072,88 @@ pgend_session_begin (GNCBook *sess, const char * sessionid, int ignore_lock)
            be->dbName, PQerrorMessage(be->connection));
       PQfinish (be->connection);
       be->connection = NULL;
-      xaccBackendSetError (&be->be, ERR_SQL_CANT_CONNECT);
-      return;
+
+      /* OK, this part is convoluted.
+       * I wish that postgres returned usable error codes. 
+       * Alas, it does not, so we guess the true error.
+       * If the host is 'localhost', and we couldn't connect,
+       * then we assume that its because the database doesn't
+       * exist (although this might also happen if the database
+       * existed, but the user supplied a bad username/password)
+       */
+      if (NULL == be->hostname)
+      {
+         if (create_new_db) {
+            really_do_create = TRUE;
+         } else {
+            xaccBackendSetError (&be->be, ERR_BACKEND_NO_SUCH_DB);
+            return;
+         }
+      }
+      else
+      {
+         xaccBackendSetError (&be->be, ERR_SQL_CANT_CONNECT);
+         return;
+      }
+   }
+
+   if (really_do_create)
+   {
+      char * p;
+      be->connection = PQsetdbLogin (be->hostname, 
+                                  be->portno,
+                                  NULL, /* trace/debug options */
+                                  NULL, /* file or tty for debug output */
+                                  "gnucash", 
+                                  NULL,  /* login */
+                                  NULL);  /* pwd */
+
+      /* check the connection status */
+      if (CONNECTION_BAD == PQstatus(be->connection))
+      {
+         PERR("Can't connect to database 'gnucash':\n"
+              "\t%s", 
+              PQerrorMessage(be->connection));
+         PQfinish (be->connection);
+         be->connection = NULL;
+         xaccBackendSetError (&be->be, ERR_SQL_CANT_CONNECT);
+         return;
+      }
+
+      /* create the database */
+      p = be->buff; *p =0;
+      p = stpcpy (p, "CREATE DATABASE ");
+      p = stpcpy (p, be->dbName);
+      p = stpcpy (p, ";");
+      SEND_QUERY (be,be->buff, );
+      FINISH_QUERY(be->connection);
+      PQfinish (be->connection);
+
+      /* now connect to the newly created database */
+      be->connection = PQsetdbLogin (be->hostname, 
+                                  be->portno,
+                                  NULL, /* trace/debug options */
+                                  NULL, /* file or tty for debug output */
+                                  be->dbName, 
+                                  NULL,  /* login */
+                                  NULL);  /* pwd */
+
+      /* check the connection status */
+      if (CONNECTION_BAD == PQstatus(be->connection))
+      {
+         PERR("Can't connect to the newly created database '%s':\n"
+              "\t%s", 
+              be->dbName,
+              PQerrorMessage(be->connection));
+         PQfinish (be->connection);
+         be->connection = NULL;
+         xaccBackendSetError (&be->be, ERR_SQL_CANT_CONNECT);
+         return;
+      }
+
+      /* finally, create all the tables and indexes */
+      SEND_QUERY (be,table_create_str, );
+      FINISH_QUERY(be->connection);
    }
 
    // DEBUGCMD (PQtrace(be->connection, stderr));
@@ -2088,7 +2187,8 @@ pgend_session_begin (GNCBook *sess, const char * sessionid, int ignore_lock)
             be->be.trans_rollback_edit = NULL;
             be->be.run_query = NULL;
             be->be.sync = pgendSyncSingleFile;
-            PWARN ("MODE_SINGLE_FILE is experimental");
+            PWARN ("MODE_SINGLE_FILE is beta -- we've fixed all known \n"
+                   "bugs but that doesn't mean there aren't any!\n");
             break;
 
          case MODE_SINGLE_UPDATE:
@@ -2101,7 +2201,8 @@ pgend_session_begin (GNCBook *sess, const char * sessionid, int ignore_lock)
             be->be.trans_rollback_edit = NULL;
             be->be.run_query = NULL;
             be->be.sync = pgendSync;
-            PWARN ("MODE_SINGLE_UPDATE is experimental");
+            PWARN ("MODE_SINGLE_UPDATE is beta -- we've fixed all known \n"
+                   "bugs but that doesn't mean there aren't any!\n");
             break;
 
          case MODE_POLL:
@@ -2114,7 +2215,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid, int ignore_lock)
             be->be.trans_rollback_edit = NULL;
             be->be.run_query = pgendRunQuery;
             be->be.sync = pgendSync;
-            PWARN ("MODE_EVENT is experimental");
+            PWARN ("MODE_POLL is experimental -- you will corrupt your data\n");
             break;
 
          case MODE_EVENT:
