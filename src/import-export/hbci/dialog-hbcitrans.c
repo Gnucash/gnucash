@@ -521,7 +521,7 @@ hbci_trans_fill_values(const AB_ACCOUNT *h_acc, HBCITransDialog *td)
   AB_Transaction_SetLocalBankCode (trans, 
 				   AB_Account_GetBankCode (h_acc));
   AB_Transaction_SetLocalAccountNumber (trans, AB_Account_GetAccountNumber (h_acc));
-  AB_Transaction_SetLocalCountryCode (trans, 280);
+  AB_Transaction_SetLocalCountry (trans, "DE");
 	
   AB_Transaction_SetRemoteBankCode
     (trans, gtk_entry_get_text (GTK_ENTRY (td->recp_bankcode_entry)));
@@ -531,7 +531,7 @@ hbci_trans_fill_values(const AB_ACCOUNT *h_acc, HBCITransDialog *td)
     (trans, gtk_entry_get_text (GTK_ENTRY (td->recp_account_entry)));
   /* printf("Got otherAccountId %s.\n",
      AB_Transaction_otherAccountId (trans)); */
-  AB_Transaction_SetRemoteCountryCode (trans, 280);
+  AB_Transaction_SetRemoteCountry (trans, "DE");
   AB_Transaction_AddRemoteName
     (trans, gtk_entry_get_text (GTK_ENTRY (td->recp_name_entry)), FALSE);
 	

@@ -242,19 +242,20 @@ static int gnc__extractText(const char *text, GWEN_BUFFER *tbuf) {
   return 0;
 }
 
-#if 0
 void gnc__utf8ToLatin1(const char *utf, int outputlength, char *latin1);
 
 void gnc__utf8ToLatin1(const char *utf, int outputlength, char *latin1)
 {
-  xmlCharEncodingHandlerPtr utf8ptr = 
-    xmlGetCharEncodingHandler(XML_CHAR_ENCODING_UTF8);
+/*   xmlCharEncodingHandlerPtr utf8ptr =  */
+/*     xmlGetCharEncodingHandler(XML_CHAR_ENCODING_UTF8); */
+/*   xmlCharEncodingInputFunc fromutf8 = utf8ptr->output; */
   xmlCharEncodingHandlerPtr latin1ptr = 
     xmlGetCharEncodingHandler(XML_CHAR_ENCODING_8859_1);
   xmlCharEncodingInputFunc intolatin1 = latin1ptr->input;
-  xmlCharEncodingInputFunc fromutf8 = utf8ptr->output;
+  /* int i; */
+
+  intolatin1(latin1, outputlength, (char*)utf, strlen(utf));
 }
-#endif
 
 /********************************************************
  * Now all the callback functions 
@@ -275,7 +276,7 @@ static int inputBoxCB(AB_BANKING *ab,
   int hideInput;
   GWEN_BUFFER *buffer1, *buffer2;
   int bufsize = 10+strlen(utf8text);
-  const char *latin1text;
+  char *latin1text;
   const char *latin1title;
 
   g_assert(ab);
@@ -292,7 +293,9 @@ static int inputBoxCB(AB_BANKING *ab,
   /*   AB_ImExporter_Utf8ToDta (title, bufsize, buffer1); */
   /*   AB_ImExporter_Utf8ToDta (text, bufsize, buffer2); */
   latin1title = GWEN_Buffer_GetStart (buffer1);
-  latin1text = GWEN_Buffer_GetStart (buffer2);
+
+  latin1text = g_strdup(GWEN_Buffer_GetStart (buffer2));
+/*   gnc__utf8ToLatin1(GWEN_Buffer_GetStart (buffer2), strlen(utf8text), latin1text); */
 
   newPin = (flags | AB_BANKING_INPUT_FLAGS_CONFIRM) == 0;
   /*   printf("inputBoxCB: Requesting newPind: %s\n", newPin ? "true" : "false"); */
@@ -353,6 +356,7 @@ static int inputBoxCB(AB_BANKING *ab,
       }
       else 
 	g_free (memset (passwd, 0, strlen (passwd)));
+      g_free(latin1text);
       GWEN_Buffer_free (buffer1);
       GWEN_Buffer_free (buffer2);
       return 0;
@@ -360,6 +364,7 @@ static int inputBoxCB(AB_BANKING *ab,
   }
   
   /* User wanted to abort. */
+  g_free(latin1text);
   GWEN_Buffer_free (buffer1);
   GWEN_Buffer_free (buffer2);
   return 1;
