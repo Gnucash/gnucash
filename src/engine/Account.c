@@ -715,54 +715,63 @@ xaccAccountSetNotes (Account *acc, char *str)
 AccountGroup *
 xaccAccountGetChildren (Account *acc)
 {
+   if (!acc) return NULL;
    return (acc->children);
 }
 
 AccountGroup *
 xaccAccountGetParent (Account *acc)
 {
+   if (!acc) return NULL;
    return (acc->parent);
 }
 
 int
 xaccAccountGetType (Account *acc)
 {
+   if (!acc) return 0;
    return (acc->type);
 }
 
 char *
 xaccAccountGetName (Account *acc)
 {
+   if (!acc) return NULL;
    return (acc->accountName);
 }
 
 char * 
 xaccAccountGetDescription (Account *acc)
 {
+   if (!acc) return NULL;
    return (acc->description);
 }
 
 char * 
 xaccAccountGetNotes (Account *acc)
 {
+   if (!acc) return NULL;
    return (acc->notes);
 }
 
 double
 xaccAccountGetBalance (Account *acc)
 {
+   if (!acc) return NULL;
    return (acc->balance);
 }
 
 double
 xaccAccountGetClearedBalance (Account *acc)
 {
+   if (!acc) return 0.0;
    return (acc->cleared_balance);
 }
 
 double
 xaccAccountGetReconciledBalance (Account *acc)
 {
+   if (!acc) return 0.0;
    return (acc->reconciled_balance);
 }
 
