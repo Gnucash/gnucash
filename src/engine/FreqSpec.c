@@ -199,7 +199,6 @@ xaccFreqSpecMalloc(GNCBook *book)
 
         fs = g_new0(FreqSpec, 1);
         xaccFreqSpecInit( fs, book );
-        /* FIXME:event */
         gnc_engine_generate_event( &fs->guid, GNC_EVENT_CREATE );
         return fs;
 }

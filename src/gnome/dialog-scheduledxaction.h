@@ -27,6 +27,9 @@
 #include <gnome.h>
 #include "SchedXaction.h"
 
+#define DIALOG_SCHEDXACTION_CM_CLASS "dialog-scheduledtransactions"
+#define DIALOG_SCHEDXACTION_EDITOR_CM_CLASS "dialog-scheduledtransaction-editor"
+
 struct _SchedXactionDialog;
 struct _SchedXactionEditorDialog;
 
@@ -35,13 +38,17 @@ typedef struct _SchedXactionEditorDialog SchedXactionEditorDialog;
 
 SchedXactionDialog * gnc_ui_scheduled_xaction_dialog_create(void);
 void gnc_ui_scheduled_xaction_dialog_destroy(SchedXactionDialog *sxd);
-void row_select_handler( GtkCList *clist, gint row, gint col, GdkEventButton *event, gpointer d );
+void row_select_handler( GtkCList *clist, gint row, gint col,
+                         GdkEventButton *event, gpointer d );
+
+void gnc_sxd_list_refresh( SchedXactionDialog *sxd );
 
 SchedXactionEditorDialog *
 gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
 					       SchedXaction *sx,
-                                               int newP );
-void gnc_ui_scheduled_xaction_editor_dialog_destroy(SchedXactionEditorDialog *sxd);
+                                               gboolean newSX );
+
+void gnc_ui_scheduled_xaction_editor_dialog_destroy( SchedXactionEditorDialog *sxd );
 
 #endif
 

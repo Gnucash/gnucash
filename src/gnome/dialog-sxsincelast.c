@@ -37,7 +37,6 @@
  *   . selected
  *     . <standard policy>
  *   . unselected
- *     . QUESTION: how do we detect unselected?
  *     . if auto-created   : delete
  *     . if to-create      : remove
  * . auto-create           : display
@@ -76,6 +75,7 @@
 #include "gnc-regwidget.h"
 
 #include "dialog-sxsincelast.h"
+#include "dialog-scheduledxaction.h"
 
 #ifdef HAVE_LANGINFO_D_FMT
 #include <langinfo.h>
@@ -242,6 +242,7 @@ static void sxsincelast_init( sxSinceLastData *sxsld );
 static void create_autoCreate_ledger( sxSinceLastData *sxsld );
 static void create_created_ledger( sxSinceLastData *sxsld );
 static gncUIWidget sxsld_ledger_get_parent( GNCLedgerDisplay *ld );
+static void gnc_sxlsd_commit_ledgers( sxSinceLastData *sxsld );
 
 static gboolean sxsincelast_populate( sxSinceLastData *sxsld );
 static void sxsincelast_druid_cancelled( GnomeDruid *druid, gpointer ud );
@@ -680,6 +681,34 @@ reminders_back( GnomeDruidPage *druid_page,
 }
 
 static
+gboolean
+created_back( GnomeDruidPage *druid_page,
+              gpointer arg1, gpointer ud )
+{
+        sxSinceLastData *sxsld;
+
+        sxsld = (sxSinceLastData*)ud;
+        gnc_split_register_save(
+                gnc_ledger_display_get_split_register(sxsld->created_ledger),
+                TRUE );
+        return gen_back( druid_page, arg1, ud );
+}
+
+static
+gboolean
+created_next( GnomeDruidPage *druid_page,
+              gpointer arg1, gpointer ud )
+{
+        sxSinceLastData *sxsld;
+
+        sxsld = (sxSinceLastData*)ud;
+        gnc_split_register_save(
+                gnc_ledger_display_get_split_register(sxsld->created_ledger),
+                TRUE );
+        return gen_next( druid_page, arg1, ud );
+}
+
+static
 void
 created_prep( GnomeDruidPage *druid_page,
                gpointer arg1, gpointer ud )
@@ -755,6 +784,34 @@ obsolete_prep( GnomeDruidPage *druid_page,
 
         /* This is always the last/finish page. */
         gnome_druid_set_show_finish( sxsld->sincelast_druid, TRUE );
+}
+
+static
+gboolean
+auto_create_back( GnomeDruidPage *druid_page,
+                  gpointer arg1, gpointer ud )
+{
+        sxSinceLastData *sxsld;
+
+        sxsld = (sxSinceLastData*)ud;
+        gnc_split_register_save(
+                gnc_ledger_display_get_split_register(sxsld->ac_ledger),
+                TRUE );
+        return gen_back( druid_page, arg1, ud );
+}
+
+static
+gboolean
+auto_create_next( GnomeDruidPage *druid_page,
+                  gpointer arg1, gpointer ud )
+{
+        sxSinceLastData *sxsld;
+
+        sxsld = (sxSinceLastData*)ud;
+        gnc_split_register_save(
+                gnc_ledger_display_get_split_register(sxsld->ac_ledger),
+                TRUE );
+        return gen_next( druid_page, arg1, ud );
 }
 
 static
@@ -984,11 +1041,14 @@ gnc_sxsld_finish( GnomeDruidPage *druid_page,
 
         gtk_widget_hide( sxsld->sincelast_window );
 
+        gnc_sxlsd_commit_ledgers( sxsld );
+
         /* Deal with the selected obsolete list elts. */
         cl = GTK_CLIST( glade_xml_get_widget( sxsld->gxml,
                                               SX_OBSOLETE_CLIST ) );
 
         if ( g_list_length( cl->selection ) > 0 ) {
+                SchedXactionDialog *sxd;
                 sxList = gnc_book_get_schedxactions( gnc_get_current_book() );
 
                 gnc_suspend_gui_refresh();
@@ -1006,6 +1066,13 @@ gnc_sxsld_finish( GnomeDruidPage *druid_page,
                 gnc_resume_gui_refresh();
 
                 gnc_book_set_schedxactions( gnc_get_current_book(), sxList );
+
+                sxd = (SchedXactionDialog*)
+                        gnc_find_first_gui_component(
+                                DIALOG_SCHEDXACTION_CM_CLASS, NULL, NULL );
+                if ( sxd ) {
+                        gnc_sxd_list_refresh( sxd );
+                }
         }
 
         sxsincelast_close_handler( sxsld );
@@ -1130,7 +1197,7 @@ sxsincelast_init( sxSinceLastData *sxsld )
                   gnc_sxsld_finish, cancel_check },
 
                 { AUTO_CREATE_NOTIFY_PG,
-                  auto_create_prep, gen_back, gen_next,
+                  auto_create_prep, auto_create_back, auto_create_next,
                   gnc_sxsld_finish, cancel_check },
 
                 { TO_CREATE_PG,
@@ -1138,7 +1205,7 @@ sxsincelast_init( sxSinceLastData *sxsld )
                   gnc_sxsld_finish, cancel_check },
 
                 { CREATED_PG,
-                  created_prep, gen_back, gen_next,
+                  created_prep, created_back, created_next,
                   gnc_sxsld_finish, cancel_check },
 
                 { OBSOLETE_PG,
@@ -2149,8 +2216,6 @@ create_transactions_on( SchedXaction *sx,
         AccountGroup *ag;
         Account *acct;
         char *id;
-        toCreateTuple *tct;
-        gboolean createdTCT;
 
         if ( tci ) {
                 g_assert( g_date_compare( gd, tci->date ) == 0 );
@@ -3063,4 +3128,16 @@ gnc_sxsld_free_entry_numeric( GtkObject *o, gpointer ud )
         gnc_numeric *num;
         num = (gnc_numeric*)gtk_object_get_data( o, "numeric" );
         g_free( num );
+}
+
+static
+void
+gnc_sxlsd_commit_ledgers( sxSinceLastData *sxsld )
+{
+        gnc_split_register_save(
+                gnc_ledger_display_get_split_register(sxsld->created_ledger),
+                TRUE );
+        gnc_split_register_save(
+                gnc_ledger_display_get_split_register(sxsld->ac_ledger),
+                TRUE );
 }

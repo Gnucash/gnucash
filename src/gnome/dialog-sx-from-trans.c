@@ -28,6 +28,7 @@
 
 #include "SX-ttinfo.h"
 #include "SchedXaction.h"
+#include "gnc-component-manager.h"
 #include "dialog-scheduledxaction.h"
 #include "dialog-sx-from-trans.h"
 #include "dialog-utils.h"
@@ -433,10 +434,17 @@ sxftd_ok_clicked(GtkWidget *w, gpointer user_data)
   }
   else
   {
+    SchedXactionDialog *sxd;
     book = gnc_get_current_book ();
     sx_list = gnc_book_get_schedxactions(book);
     sx_list = g_list_append(sx_list, sxfti->sx);
     gnc_book_set_schedxactions(book, sx_list);
+    sxd = (SchedXactionDialog*)
+            gnc_find_first_gui_component(
+                    DIALOG_SCHEDXACTION_CM_CLASS, NULL, NULL );
+    if ( sxd ) {
+            gnc_sxd_list_refresh( sxd );
+    }
   }
 
   sxftd_delete(sxfti, FALSE);
@@ -499,7 +507,8 @@ sxftd_advanced_clicked(GtkWidget *w, gpointer user_data)
 
   adv_dlg = gnc_ui_scheduled_xaction_dialog_create();
   adv_edit_dlg = gnc_ui_scheduled_xaction_editor_dialog_create(adv_dlg, 
-                                                               sxfti->sx, 1);
+                                                               sxfti->sx,
+                                                               TRUE /* newSX */);
   /* close ourself, since advanced editing entails us, and there are sync
    * issues otherwise. */
   sxftd_delete(sxfti, FALSE);

@@ -55,9 +55,6 @@
 
 static short module = MOD_SX;
 
-#define DIALOG_SCHEDXACTION_CM_CLASS "dialog-scheduledtransactions"
-#define DIALOG_SCHEDXACTION_EDITOR_CM_CLASS "dialog-scheduledtransaction-editor"
-
 #define SX_LIST_WIN_PREFIX "sx_list_win"
 #define SX_LIST_GLADE_NAME "Scheduled Transaction List"
 #define SX_LIST "sched_xact_list"
@@ -146,6 +143,8 @@ static void schedXact_editor_create_freq_sel( SchedXactionEditorDialog *sxed );
 static void schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed );
 static void schedXact_editor_populate( SchedXactionEditorDialog * );
 
+static void sxd_close_handler ( gpointer user_data );
+
 static void new_button_clicked( GtkButton *b, gpointer d );
 static void edit_button_clicked( GtkButton *b, gpointer d );
 static void delete_button_clicked( GtkButton *b, gpointer d );
@@ -182,6 +181,21 @@ sxd_close_handler ( gpointer user_data )
         SchedXactionDialog        *sxd = user_data;
         gnc_sxl_record_size( sxd );
         gnome_dialog_close( GNOME_DIALOG( sxd->dialog ) );
+}
+
+void
+gnc_sxd_list_refresh( SchedXactionDialog *sxd )
+{
+        GList *sxList;
+        GtkCList *cl;
+
+        /* Update the clist. */
+        cl = GTK_CLIST( glade_xml_get_widget( sxd->gxml, SX_LIST ) );
+        gtk_clist_freeze( cl );
+        gtk_clist_clear( cl );
+        sxList = gnc_book_get_schedxactions( gnc_get_current_book() );
+        g_list_foreach( sxList, putSchedXactionInDialog, sxd );
+        gtk_clist_thaw( cl );
 }
 
 static
@@ -919,17 +933,16 @@ gnc_ui_scheduled_xaction_dialog_create(void)
         GtkObject *sxdo;
         GtkWidget *button;
         GtkWidget *w;
-        GList *alreadyExisting = NULL;
+        SchedXactionDialog *alreadyExisting = NULL;
 
         alreadyExisting = 
-                gnc_find_gui_components( DIALOG_SCHEDXACTION_CM_CLASS,
-                                         NULL,
-                                         (gpointer)sxd );
+                (SchedXactionDialog*)
+                gnc_find_first_gui_component( DIALOG_SCHEDXACTION_CM_CLASS,
+                                              NULL,
+                                              (gpointer)sxd );
         if ( alreadyExisting != NULL ) {
-                sxd = (SchedXactionDialog*)alreadyExisting->data;
-                gtk_window_present( GTK_WINDOW(sxd->dialog) );
-                g_list_free( alreadyExisting );
-                return sxd;
+                gtk_window_present( GTK_WINDOW(alreadyExisting->dialog) );
+                return alreadyExisting;
         }
 
         sxd = g_new0( SchedXactionDialog, 1 );
@@ -975,7 +988,7 @@ gnc_ui_scheduled_xaction_dialog_create(void)
         }
 
         gnc_register_gui_component( DIALOG_SCHEDXACTION_CM_CLASS,
-                                    NULL, /* no refresh handler */
+                                    NULL, /* no refresh_handler */
                                     sxd_close_handler,
                                     sxd );
 
@@ -1046,14 +1059,11 @@ static
 void
 schedXact_populate( SchedXactionDialog *sxd )
 {
-        GNCBook *book;
         GList *sxList;
         GtkCList *sx_clist;
         int i;
 
-        book = gnc_get_current_book ();
-        sxList = gnc_book_get_schedxactions( book );
-
+        sxList = gnc_book_get_schedxactions( gnc_get_current_book() );
         g_list_foreach( sxList, putSchedXactionInDialog, sxd );
 
         sx_clist = GTK_CLIST( glade_xml_get_widget( sxd->gxml,
@@ -1116,7 +1126,7 @@ gnc_sxed_get_widgets( SchedXactionEditorDialog *sxed )
 SchedXactionEditorDialog *
 gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                                                SchedXaction *sx,
-                                               int newP )
+                                               gboolean newSX )
 {
         SchedXactionEditorDialog *sxed;
         GtkWidget *button;
@@ -1161,7 +1171,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
 
         sxed->sxd = sxd;
         sxed->sx = sx;
-        sxed->newsxP = newP;
+        sxed->newsxP = newSX;
 
         /* NOTE: this must occur before processing the widget list, above, so
          * the gpointers stored with the advance_ and remind_opts are
@@ -1485,7 +1495,8 @@ new_button_clicked( GtkButton *b, gpointer d )
         g_date_free( gd );
         
         sxd = (SchedXactionDialog*)d;
-        sxed = gnc_ui_scheduled_xaction_editor_dialog_create( sxd, tmpSX, 1 );
+        sxed = gnc_ui_scheduled_xaction_editor_dialog_create( sxd, tmpSX,
+                                                              TRUE /* newSX */ );
 }
 
 static
