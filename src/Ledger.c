@@ -264,7 +264,7 @@ printf ("load reg of %d entries --------------------------- \n",i);
       phys_row += i * (reg->cursor->numRows);
 
       /* i+1 because header is virt row zero */
-      xaccSetCursor (table, reg->cursor, phys_row, 0, i+1, 1);
+      xaccSetCursor (table, reg->cursor, phys_row, 0, i+1, 0);
       xaccMoveCursor (table, phys_row, 0);
       xaccLoadRegEntry (reg, split);
 
@@ -278,7 +278,7 @@ printf ("load reg of %d entries --------------------------- \n",i);
 
    phys_row = reg->header->numRows;
    phys_row += i * (reg->cursor->numRows);
-   xaccSetCursor (table, reg->cursor, phys_row, 0, i+1, 1);
+   xaccSetCursor (table, reg->cursor, phys_row, 0, i+1, 0);
    xaccMoveCursor (table, phys_row, 0);
 
    xaccLoadRegEntry (reg, &(trans->source_split));
