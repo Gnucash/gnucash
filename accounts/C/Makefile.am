@@ -36,4 +36,5 @@ account_DATA = \
   acctlist_spouseretire
 
 EXTRA_DIST = \
+  ${account_DATA} \
   .cvsignore
