@@ -13,3 +13,5 @@ config.h
 xacc
 *.xac.*.xac
 errs*
+gnucash.motif
+gnucash.gnome

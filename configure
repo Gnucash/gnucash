@@ -3184,9 +3184,7 @@ trap 'rm -fr `echo "Makefile
           lib/Makefile
           lib/Xbae-4.6.2-linas/Makefile
           lib/Xbae-4.6.2-linas/src/Makefile
-          lib/ComboBox-1.33/Makefile
-          lib/gtkfilesel2/Makefile
-          lib/gtkfilesel2/config.h config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
+          lib/ComboBox-1.33/Makefile config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
@@ -3308,9 +3306,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
           lib/Makefile
           lib/Xbae-4.6.2-linas/Makefile
           lib/Xbae-4.6.2-linas/src/Makefile
-          lib/ComboBox-1.33/Makefile
-          lib/gtkfilesel2/Makefile
-          lib/gtkfilesel2/config.h"}
+          lib/ComboBox-1.33/Makefile"}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then

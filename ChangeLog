@@ -1,3 +1,106 @@
+1999-11-21  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-register.c: (recordCB): when when record
+	a new or existing transaction, make sure it will be in the
+	date range we are viewing.
+
+	* src/register/table-allgui.c: (gnc_table_traverse_update): handle
+ 	pointer traversals a bit more intelligently.
+
+	* src/register/gnome/gnucash-item-edit.c: (item_edit_set_cursor_pos)
+	fix for when you enter a cell that's right-aligned.
+	
+1999-11-20  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/reconcile-list.[ch]: Use a hash table to remember
+	reconcile flags after a refresh. Also remember scroll position.
+	Change row styles so active row isn't highlited.
+
+	* src/register/gnome/gnucash-sheet.c:
+ 	(gnucash_button_press_event): For now, we need to enter the cell,
+ 	even if we're already there. The reconcile cell, for instance,
+ 	depends on this behavior. But, if we're entering the cell where we
+ 	already are, we remember the cursor position and try to go back to
+ 	it. Also, when we're entering a new cell it's drawn as if we're at
+ 	cursor position 0, so tell item_edit_set_cursor.
+
+	* src/register/gnome/gnucash-item-edit.c (item_edit_draw_info):
+ 	new function to calculate drawing parameters for the item
+ 	editor. This is used both in drawing and in calculating the place
+ 	to move the cursor to for mouse traversals.
+	(item_edit_draw): use item_edit_draw_info
+	(item_edit_set_cursor_pos): use item_edit_draw_info
+
+1999-11-19  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* gnucash-cursor.c (gnucash_item_cursor_draw): Use light gray for
+ 	the cell cursor; experimental to see if we like it.
+	(gnucash_item_cursor_draw): Draw the inside rectangle slightly
+ 	inside.
+	(gnucash_cursor_request_redraw): Tighten up the bounds now that we
+ 	don't have the outside rectangle.
+
+	* gnucash-sheet.c (gnucash_button_press_event): Only move the cursor
+	if the button press moves us to a new cell.  Set the editing cursor.
+
+	* gnucash-item-edit.c (item_edit_draw): Take justification into
+ 	account here.  Use CELL_HPADDING, CELL_VPADDING instead of magic
+ 	constants to set the clip rectangle and the offsets.
+	(item_edit_set_cursor_pos): New function.
+	(item_edit_update): Adjust the positioning of the list now that we
+ 	don't have the outer rectangle.
+
+1999-11-19  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/account-tree.c: remember expansion state and
+	scroll position after a refresh.
+
+	* src/gnome/query-user.[ch]: add parented versions of the
+	query dialogs.
+
+	* src/gnome/: modify dialogs to use parented dialogs
+
+1999-11-18  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/engine/util.c: (PrtAmtComma): fixed rounding error
+	when remainder is close to 1.
+
+1999-11-12  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/engine/util.c: (xaccSPrintAmount): print values
+	very close to 0 as 0 without negative sign.
+
+	* lib/README: updated to indicate obsolete packages.
+
+	* lib/Makefile.in: don't build g-wrap if g-wrap-install
+	directory exists
+
+	* src/guile-util.c: (gnc_register_c_side_scheme_ptr):
+	modified to return SCM handle, which is used with
+	(gnc_unregister_c_side_scheme_ptr) to unregister.
+
+	* src/gnome/option-util.c: added (gnc_options_init)
+	and (gnc_options_shutdown).
+
+	* src/gnome/top-level.c: call above functions at
+	appropriate times.
+
+	* src/gnome/account-tree.c: (gnc_account_tree_select_account):
+	scroll to make sure account is visible.
+
+1999-11-10  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/dialog-filebox.c: Use GtkFileSelection instead
+	of GtkFileSelection2.
+
+	* build: Changed configure.in/Makefile.in's to remove dependencies
+	on gtkfilel2.
+
+	* build: automatically rebuild gnc.[ch] when gnc.gwp changes *or*
+	if you switch from motif to gnome build or vice versa.
+
+	* src/gnome/window-main.: added Save As menu item.
+
 1999-11-07  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/Refresh.c: Added this code for refreshing account-related
