@@ -1,3 +1,19 @@
+2003-02-09  Derek Atkins  <derek@ihtfp.com>
+
+	* src/register/ledger-core/split-register-control.c
+	  If we're expanded, ignore TRANS cursor classes.  This prevents
+	  a bug where the exchange-rate dialog is realized when there really
+	  is nothing to do (because we're in an expanded transaction).
+  	* src/register/ledger-core/split-register-model.c
+	  Don't PERR() if we have no account -- this prevents annoying
+	  messages when handling multi-currency txns in the GL.  Note:
+	  all GL txns are displayed in the locale currency (if possible).	
+	* src/register/ledger-core/split-register.c
+	  AUTO_LEDGER and JOURNAL register types _ARE_ expanded -- return
+	  TRUE, not FALSE.
+	
+	Fixes 105319
+
 2003-02-07  Derek Atkins  <derek@ihtfp.com>
 
 	* src/scm/main.scm:
