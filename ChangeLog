@@ -1,3 +1,10 @@
+2003-01-12  David Hampton  <hampton@employees.org>
+
+	* src/register/register-gnome/gnucash-sheet.c
+	(gnucash_sheet_insert_cb): Return the number of characters
+	entered, not the length of the encoded multi-byte string. Possible
+	fix for 99419 and 102057.
+
 2003-01-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncBusGuile.[ch]: functions to interface

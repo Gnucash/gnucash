@@ -906,7 +906,7 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
         }
 
         if (*position < 0)
-                *position = strlen (retval);
+                *position = gnc_mbstowcs(NULL, retval);
 
         gtk_entry_select_region (GTK_ENTRY(sheet->entry), start_sel, end_sel);
 
