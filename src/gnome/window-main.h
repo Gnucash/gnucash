@@ -24,12 +24,8 @@
 #ifndef WINDOW_MAIN_H
 #define WINDOW_MAIN_H
 
-#include <glib.h>
-
 #include "gnc-mdi-utils.h"
 
-GNCMDIInfo    * gnc_main_window_new (void);
-gboolean        gnc_main_window_can_save (GNCMDIInfo * wind);
-gboolean        gnc_main_window_can_cancel_save (GNCMDIInfo *wind);
+GNCMDIInfo * gnc_main_window_new (void);
 
 #endif

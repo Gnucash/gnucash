@@ -192,22 +192,6 @@ gnc_main_window_create_child(const gchar * configstring) {
  * gnc_main_window_can_*()
  ********************************************************************/
 
-gboolean
-gnc_main_window_can_save (GNCMDIInfo * wind)
-{
-  if (!wind) return FALSE;
-
-  return gnc_mdi_has_apps ();
-}
-
-gboolean
-gnc_main_window_can_cancel_save (GNCMDIInfo *wind)
-{
-  if (!wind) return FALSE;
-
-  return gnc_mdi_has_apps ();
-}
-
 static gboolean
 gnc_main_window_can_restore_cb (const char * filename)
 {

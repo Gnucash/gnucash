@@ -130,13 +130,6 @@ gnucash_ui_is_terminating(void)
   return gnome_is_terminating;
 }
 
-static gboolean
-gnc_ui_can_cancel_save (void)
-{
-  return gnc_main_window_can_cancel_save (gnc_mdi_get_current ());
-}
-
-
 static const char* gnc_scheme_remaining_var = "gnc:*command-line-remaining*";
 
 static char**
@@ -543,7 +536,7 @@ gnucash_ui_init(void)
 
     gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
 
-    gnc_file_set_can_cancel_callback (gnc_ui_can_cancel_save);
+    gnc_file_set_can_cancel_callback (gnc_mdi_has_apps);
 
     gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
 

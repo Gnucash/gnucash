@@ -1,6 +1,6 @@
 SUBDIRS = . test
 
-pkglib_LTLIBRARIES = libgncmod-gnome-utils.la
+pkglib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
 
 CFLAGS = \
   @CFLAGS@ \
@@ -81,6 +81,12 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GUPPI_LIBS} \
   ${GLIB_LIBS}
 
+libgw_gnome_utils_la_SOURCES = gw-gnome-utils.c
+libgw_gnome_utils_la_LDFLAGS = -module
+
+gwmoddir = ${GNC_GWRAP_LIBDIR}
+gwmod_DATA = gw-gnome-utils.scm gw-gnome-utils-spec.scm
+
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
   commodity.glade
@@ -88,7 +94,8 @@ glade_DATA = \
 EXTRA_DIST = \
   .cvsignore \
   gnc-dir.h.in \
-  ${glade_DATA}
+  ${glade_DATA} \
+  ${gwmod_DATA}
 
 dialog-utils.c: gnc-dir.h
 
@@ -110,3 +117,21 @@ BUILT_SOURCES = gnc-dir.h
 # by all means, let us know...
 dist-hook:
 	rm ${distdir}/gnc-dir.h
+
+.scm-links: 
+	rm -f gnucash g-wrapped
+	ln -sf . gnucash 
+	ln -sf . g-wrapped 
+	touch .scm-links
+
+gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h: .scm-links gw-gnome-utils-spec.scm
+	FLAVOR=gnome guile -c \
+	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
+	  (set! %load-path (cons \"${PWD}\" %load-path)) \
+	  (set! %load-path (cons \"${top_srcdir}/src/engine\" %load-path)) \
+	  (primitive-load \"./gw-gnome-utils-spec.scm\") \
+	  (gw:generate-module \"gw-gnome-utils\")"
+
+BUILT_SOURCES = gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h
+CLEANFILES = gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h \
+             gw-gnome-utils.html gnucash g-wrapped .scm-links

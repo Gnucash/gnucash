@@ -32,6 +32,14 @@ gnc_module_description(void) {
   return g_strdup("Utilities for using Gnome/Gtk with GnuCash");
 }
 
+static void
+lmod(char * mn) 
+{
+  char * form = g_strdup_printf("(use-modules %s)\n", mn);
+  gh_eval_str(form);
+  g_free(form);
+}
+
 int
 gnc_module_init(int refcount) {
   /* load the engine (we depend on it) */
@@ -53,6 +61,9 @@ gnc_module_init(int refcount) {
   if(!gnc_module_load("gnucash/app-utils", 0)) {
     return FALSE;
   }
+
+  /* publish g-wrapped bindings */
+  lmod("(g-wrapped gw-gnome-utils)");
 
   return TRUE;
 }

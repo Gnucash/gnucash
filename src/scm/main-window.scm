@@ -128,8 +128,7 @@ the account instead of opening a register.") #f))
 
     (if (not save-file?) (gnc:warn (_ "Can't save window state")))
 
-    (if (and save-file? conf-file-name
-             (gnc:main-window-can-save? (gnc:mdi-get-current)))
+    (if (and save-file? conf-file-name (gnc:mdi-has-apps?))
         (let ((book-path (build-path (getenv "HOME") ".gnucash" "books" 
                                      conf-file-name)))
           (with-output-to-port (open-output-file book-path)
