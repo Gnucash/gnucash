@@ -3,7 +3,13 @@
 	* src/business/business-core/gncTaxTable.c: when asking for
 	  the child, return ourself if we're already a child instead
 	  of making a (useless) grandchild.
-	
+
+	* src/business/business-ledger/gncEntryLedger.c: fix a bug where
+	  if you unpost an invoice and don't bring the TaxTables up to
+	  date, the total value shown in the register is different
+	  dependending on whether the cursor is on the current line or
+	  not.
+
 2003-05-28  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-transfer.c, dialog-hbcitrans.c,

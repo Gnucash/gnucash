@@ -120,10 +120,22 @@ Account * gnc_entry_ledger_get_account (GncEntryLedger *ledger,
 GncTaxTable * gnc_entry_ledger_get_taxtable (GncEntryLedger *ledger,
 					     const char *cell_name)
 {
-  const char * name =
-    gnc_table_layout_get_cell_value (ledger->table->layout, cell_name);
+  GncEntry *entry;
+  const char * name;
 
-  return gncTaxTableLookupByName (ledger->book, name);
+  /* If the cursor has changed, then pull in the current table */
+  if (gnc_table_layout_get_cell_changed (ledger->table->layout,
+					 cell_name, TRUE)) {
+    name = gnc_table_layout_get_cell_value (ledger->table->layout, cell_name);
+    return gncTaxTableLookupByName (ledger->book, name);
+  }
+
+  /* If it has not changed, pull in the table from the entry */
+  entry = gnc_entry_ledger_get_current_entry (ledger);
+  if (ledger->is_invoice)
+    return gncEntryGetInvTaxTable (entry);
+  else
+    return gncEntryGetBillTaxTable (entry);
 }
 
 gboolean gnc_entry_ledger_get_checkmark (GncEntryLedger *ledger,
