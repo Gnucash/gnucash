@@ -1,5 +1,8 @@
 /*
  * io-gncxml-r.c -- read XML-format gnucash data file
+ *
+ * Initial code by Rob l. Browning 4Q 2000
+ * Tuneups by James Lewis Moss Dec 2000
  */
 
 #ifndef _GNU_SOURCE
@@ -36,15 +39,14 @@
 #include "AccountP.h"
 #include "TransactionP.h"
 
-/* Hack to get going... */
-#include "FileIOP.h"
-
 #ifdef USE_GUILE_FOR_DOUBLE_CONVERSION 
 #include <guile/gh.h>
 #endif /* USE_GUILE_FOR_DOUBLE_CONVERSION */
 
 
 /* TODO
+
+   bust this file up into several. Its *way* too big to deal with.
 
    create common funcs for repeated "types" of parsers.  i.e. a common
    func for handling guid, gnc_numeric, etc. parsers - just pass in
@@ -101,6 +103,8 @@
 
 
 */
+
+static short module = MOD_IO;
 
 typedef struct _sixtp_child_result sixtp_child_result;
 
@@ -331,7 +335,7 @@ sixtp_sax_start_handler(void *user_data,
                                                 (gpointer) &next_parser);
   
   if(!lookup_success) {
-    fprintf(stderr, "Tag <%s> not allowed in current context.\n", name);
+    PERR("Tag <%s> not allowed in current context.\n", name);
     pdata->parsing_ok = FALSE;
     return;
   }
@@ -474,7 +478,7 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name) {
      because this string is held by the parent parser's hash table. */
   end_tag = current_frame->tag;
 
-  /*fprintf(stderr, "Finished with end of <%s>\n", end_tag);*/
+  PINFO("Finished with end of <%s>\n", end_tag);
 
   /*sixtp_print_frame_stack(pdata->stack, stderr);*/
 
@@ -535,16 +539,15 @@ sixtp_destroy_child(gpointer key, gpointer value, gpointer user_data) {
   gpointer lookup_key;
   gpointer lookup_value;
 
-  /* fprintf(stderr, "Killing sixtp child under key <%s>\n", (char *) key); */
+  PINFO ("Killing sixtp child under key <%s>\n", (char *) key); 
   g_free(key);
 
   if(!corpses) {
-    fprintf(stderr, "BAD: no corpses in sixtp_destroy_child <%s>\n",
-            (char *) key);
+    PERR("BAD: no corpses in sixtp_destroy_child <%s>\n", (char *) key);
     return;
   }
   if(!child) {
-    fprintf(stderr, "BAD: no child in sixtp_destroy_child <%s>\n", (char *) key);
+    PERR("BAD: no child in sixtp_destroy_child <%s>\n", (char *) key);
     return;
   }
 
@@ -654,7 +657,7 @@ sixtp_handle_catastrophe(sixtp_sax_data *sax_data) {
   GSList *lp;
   GSList **stack = &(sax_data->stack);
 
-  fprintf(stderr, "sixtp: parse failed at \n");
+  PERR("parse failed at \n");
   sixtp_print_frame_stack(sax_data->stack, stderr);
 
   while(*stack) {
@@ -697,88 +700,141 @@ sixtp_handle_catastrophe(sixtp_sax_data *sax_data) {
 }
 
 
+/* ========================================================== */
 
 static gboolean
-sixtp_parse_file(sixtp *sixtp,
-                 const char *filename,
-                 gpointer data_for_top_level,
-                 gpointer global_data,
-                 gpointer *parse_result) {
-  xmlSAXHandler sax_handler;
-  sixtp_sax_data sax_data;
-  int sax_result;
-  sixtp_stack_frame *top_frame = NULL;
+sixtp_setup_parser (sixtp *sixtp,
+                    gpointer data_for_top_level,
+                    gpointer global_data,
+                    xmlSAXHandler *sax_handler,
+                    sixtp_sax_data *sax_data,
+                    sixtp_stack_frame *top_frame
+                    ) 
+{
+  memset(sax_handler, '\0', sizeof(xmlSAXHandler));
+  sax_handler->startElement = sixtp_sax_start_handler;
+  sax_handler->endElement = sixtp_sax_end_handler;
+  sax_handler->characters = sixtp_sax_characters_handler;
+  sax_handler->getEntity = sixtp_sax_get_entity_handler;
   
-  memset(&sax_handler, '\0', sizeof(sax_handler));
-  sax_handler.startElement = sixtp_sax_start_handler;
-  sax_handler.endElement = sixtp_sax_end_handler;
-  sax_handler.characters = sixtp_sax_characters_handler;
-  sax_handler.getEntity = sixtp_sax_get_entity_handler;
+  memset(sax_data, '\0', sizeof(sixtp_sax_data));
+  sax_data->parsing_ok = TRUE;
+  sax_data->stack = NULL;
+  sax_data->global_data = global_data;
   
-  memset(&sax_data, '\0', sizeof(sixtp_sax_data));
-  sax_data.parsing_ok = TRUE;
-  sax_data.stack = NULL;
-  sax_data.global_data = global_data;
-  
-  top_frame = g_new0(sixtp_stack_frame, 1);
   top_frame->parser = sixtp;
   top_frame->tag = NULL;
   top_frame->data_from_children = NULL;
   top_frame->data_for_children = NULL;
   top_frame->frame_data = NULL;
   
-  sax_data.stack = g_slist_prepend(sax_data.stack, (gpointer) top_frame);
+  sax_data->stack = g_slist_prepend(sax_data->stack, (gpointer) top_frame);
   
   if(sixtp->start_handler) {
-    sax_data.parsing_ok =
+    sax_data->parsing_ok =
       sixtp->start_handler(NULL,
                            data_for_top_level,
-                           sax_data.global_data,
+                           sax_data->global_data,
                            &top_frame->data_for_children,
                            &top_frame->frame_data,
                            NULL);
   }
   
-  if(!sax_data.parsing_ok)  {
-    sixtp_handle_catastrophe(&sax_data);
+  if(!sax_data->parsing_ok)  {
+    PERR ("parsing catastrophe");
+    sixtp_handle_catastrophe(sax_data);
     return(FALSE);
   }
+
+  return (TRUE);
+}
   
-  sax_result = xmlSAXUserParseFile(&sax_handler, &sax_data, filename);
+
+/* ========================================================== */
+
+static gboolean
+sixtp_teardown_parser(sixtp *sixtp,
+                     gpointer data_for_top_level,
+                     gpointer global_data,
+                     gpointer *parse_result, 
+                     sixtp_sax_data *sax_data)
+{
+  sixtp_stack_frame *top_frame = NULL;
   
-  if(!sax_data.parsing_ok) {
-    sixtp_handle_catastrophe(&sax_data);
+  if(!sax_data->parsing_ok) {
+    PERR ("couldn't parse, handle catastrophe");
+    sixtp_handle_catastrophe(sax_data);
     return(FALSE);
   }
   
   if(sixtp->end_handler) {
-    sax_data.parsing_ok =
+    sax_data->parsing_ok =
       sixtp->end_handler(top_frame->data_for_children,
                          top_frame->data_from_children,
                          NULL,
                          data_for_top_level,
-                         sax_data.global_data,
+                         sax_data->global_data,
                          &top_frame->frame_data,
                          NULL);
-  }
   
-  if(!sax_data.parsing_ok) {
-    sixtp_handle_catastrophe(&sax_data);
-    return(FALSE);
+    if(!sax_data->parsing_ok) {
+      PERR ("couldn't call end handler, cleanup catastrophe");
+      sixtp_handle_catastrophe(sax_data);
+      return(FALSE);
+    }
   }
-  
+
   /* put the result where the caller can see it */
   if(top_frame->frame_data) *parse_result = top_frame->frame_data;
   
   {
-    GSList *lp;
-    for(lp = sax_data.stack; lp; lp = lp->next)
+    GSList *lp = NULL;
+    for(lp = sax_data->stack; lp; lp = lp->next)
       sixtp_stack_frame_destroy((sixtp_stack_frame *) lp->data);
   }
-  g_slist_free(sax_data.stack);
+  g_slist_free(sax_data->stack);
   return(TRUE);
 }
 
+/* ========================================================== */
+
+static gboolean
+sixtp_parse_file(sixtp *sixtp,
+                 const char *filename,
+                 gpointer data_for_top_level,
+                 gpointer global_data,
+                 gpointer *parse_result) 
+{
+  xmlSAXHandler sax_handler;
+  sixtp_sax_data sax_data;
+  sixtp_stack_frame *top_frame = NULL;
+  int rc;
+  
+  /* hack alert -- XXX -- where is top_frame released?? */
+  /* looks like a mem leak to me ... */
+  top_frame = g_new0(sixtp_stack_frame, 1);
+  rc = sixtp_setup_parser (sixtp,
+                      data_for_top_level,
+                      global_data,
+                      &sax_handler,
+                      &sax_data,
+                      top_frame);
+ 
+  
+  if(!rc) return(FALSE);
+  
+  xmlSAXUserParseFile(&sax_handler, &sax_data, filename);
+  
+  rc = sixtp_teardown_parser(sixtp,
+                     data_for_top_level,
+                     global_data,
+                     parse_result, 
+                     &sax_data);
+
+  return rc;
+}
+
+/* ========================================================== */
 
 typedef enum {
   GNC_PARSE_ERR_NONE,
@@ -4515,11 +4571,12 @@ gnc_parser_new() {
   return(top_level);
 }
 
-/****************************************************************************/
+/* ================================================================== */
 
 gboolean
 gncxml_read(const gchar *filename,
-            AccountGroup **result_group) {
+            AccountGroup **result_group) 
+{
   /* fixme: this should be broken up into sub-functions later. */
 
   gboolean parse_ok;

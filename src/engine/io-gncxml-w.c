@@ -1,5 +1,11 @@
 /*
  * io-gncxml-w.c -- write XML-format gnucash data file
+ *
+ * Initial code by Rob l. Browning 4Q 2000
+ * Tuneups by James Lewis Moss Dec 2000
+ * Generic I/O hack by Linas Vepstas January 2001
+ *
+ * Copyright (c) 2000,2001 Gnumatic Incorporated
  */
 
 #define _GNU_SOURCE
@@ -29,14 +35,12 @@
 #include "AccountP.h" /* just for kvp_data */
 #include "TransactionP.h" /* just for kvp_data */
 
-/* Hack to get going... */
-#include "FileIOP.h"
-
 
 #ifdef USE_GUILE_FOR_DOUBLE_CONVERSION 
 #include <guile/gh.h>
 #endif /* USE_GUILE_FOR_DOUBLE_CONVERSION */
 
+static short module = MOD_IO;
 
 /* Pulled from the libxml-1.8.8 header */
 #ifndef xmlChildrenNode
@@ -393,7 +397,8 @@ xml_add_binary(xmlNodePtr p,
                const char *tag,
                const gchar *format,
                const void *data,
-               guint32 size) {
+               guint32 size) 
+{
 
   xmlNodePtr value_xml;
 
@@ -443,7 +448,7 @@ xml_add_binary(xmlNodePtr p,
     g_string_free(output, TRUE);
 
   } else {
-    fprintf(stderr, "xml_add_binary: unknown output format %s.\n", format);
+    PERR("unknown output format %s.\n", format);
     return(FALSE);
   }
   return(TRUE);
@@ -800,8 +805,7 @@ gncxml_append_emacs_trailer(const gchar *filename)
     toappend = fopen(filename, "a+");
     if(!toappend) 
     {
-        fprintf(stderr, "Unable to append emacs trailer: %s\n",
-                strerror(errno));
+        PERR("Unable to append emacs trailer: %s\n", strerror(errno));
         return 0;
     }
     
@@ -810,14 +814,15 @@ gncxml_append_emacs_trailer(const gchar *filename)
     return fclose(toappend);
 }
     
-gboolean
-gncxml_write(AccountGroup *group, const gchar *filename) {
-  /* fixme: this should be broken up into sub-functions later. */
+/* =============================================================== */
+/* create a new xml document and poke all account & txn data into it. */
 
+static xmlDocPtr
+gncxml_newdoc (AccountGroup *group)
+{
   xmlDocPtr doc;
   xmlNodePtr ledger_data;
   xmlNodePtr tmpnode;
-  int status;
   
   doc = xmlNewDoc("1.0");
   doc->xmlRootNode = xmlNewDocNode(doc, NULL, "gnc", NULL);
@@ -825,29 +830,66 @@ gncxml_write(AccountGroup *group, const gchar *filename) {
   tmpnode = xmlNewTextChild(doc->xmlRootNode, NULL, "version", "1");
   if(!tmpnode) {
     xmlFreeDoc(doc);
-    return FALSE;
+    return 0x0;
   }
 
   ledger_data = xmlNewTextChild(doc->xmlRootNode, NULL, "ledger-data", NULL);
   if(!ledger_data) {
+    PERR ("couldn't get ledger data");
     xmlFreeDoc(doc);
-    return FALSE;
+    return 0x0;
   }
 
   if(!xml_add_commodity_restorers(ledger_data)) {
+    PERR ("couldn't commodity restore");
     xmlFreeDoc(doc);
-    return FALSE;
+    return 0x0;
   }
 
   if(!xml_add_account_restorers(ledger_data, group)) {
+    PERR ("couldn't account restore");
     xmlFreeDoc(doc);
-    return FALSE;
+    return 0x0;
   }
 
   if(!xml_add_txn_and_split_restorers(ledger_data, group)) {
+    PERR ("couldn't txn restore");
     xmlFreeDoc(doc);
-    return FALSE;
+    return 0x0;
   }
+
+  return doc;
+}
+
+/* =============================================================== */
+
+void
+gncxml_write_to_buf (AccountGroup *group, char **bufp, int *sz)
+{
+  xmlDocPtr doc;
+
+  doc = gncxml_newdoc (group);
+  if (!doc) return;
+
+  xmlDocDumpMemory (doc, bufp, sz);
+
+  PINFO ("wrote %d bytes");
+
+}
+
+/* =============================================================== */
+/* write the account group to a filename */
+
+gboolean
+gncxml_write(AccountGroup *group, const gchar *filename) 
+{
+  xmlDocPtr doc;
+  int status;
+
+  if (!group || !filename) return FALSE;
+
+  doc = gncxml_newdoc (group);
+  if (!doc) return FALSE;
 
   xmlIndentTreeOutput = TRUE;
 
@@ -865,3 +907,5 @@ gncxml_write(AccountGroup *group, const gchar *filename) {
   */
   return(status != -1);
 }
+
+/* ========================= END OF FILE ============================ */
