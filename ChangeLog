@@ -1,3 +1,8 @@
+2000-04-15  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/gnucash-style.c (gnucash_style_layout_init):
+ 	added a missing 'break' statement.
+
 2000-04-14  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/engine/AccInfo.c: allow the price source to be set to NULL.

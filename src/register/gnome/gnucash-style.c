@@ -654,6 +654,7 @@ gnucash_style_layout_init (GnucashSheet *sheet, SheetBlockStyle *style)
                                         layout_init_stock_double(sheet, style);
                                         break;
                         }
+                        break;
                 case PORTFOLIO_LEDGER:
                         switch (style->cursor_type) {
                                 case GNUCASH_CURSOR_HEADER:
@@ -666,6 +667,7 @@ gnucash_style_layout_init (GnucashSheet *sheet, SheetBlockStyle *style)
                                         layout_init_stock_ledger_double(sheet, style);
                                         break;
                         }
+                        break;
                 default:
                         break;
         }
