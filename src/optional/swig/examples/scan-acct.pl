@@ -11,11 +11,20 @@ use gnucash;
 package gnucash;
 
 die "Usage: $0 <filename>" if $#ARGV < 0;
-print "its $ARGV[0]\n";
+print "Will load $ARGV[0]\n";
 
+gnucash::gnc_engine_init(0, $ARGV);
 $session = gnucash::gnc_book_new ();
-gnucash::gnc_book_begin ($session, $ARGV[0], 0, 0);
-gnucash::gnc_book_load ($session);
+
+$rc = gnucash::gnc_book_begin ($session, $ARGV[0], 0, 0);
+if ($rc != 1) 
+{
+   $err = gnucash::gnc_book_get_error ($session);
+   print "Could not find $ARGV[0], errrocode=$err\n";
+}
+
+$rc = gnucash::gnc_book_load ($session);
+die "Could not load $ARGV[0]\n" if $rc != 1;
 
 $grp = gnucash::gnc_book_get_group ($session);
 $numacc = gnucash::xaccGroupGetNumAccounts ($grp);
@@ -24,7 +33,8 @@ print "Loaded $numacc accounts\n\n";
 for ($i=0; $i<$numacc; $i++) {
    $acct = gnucash::xaccGroupGetAccount ($grp, $i);
    $acctname = gnucash::xaccAccountGetName ($acct);
-   $baln = gnucash::xaccAccountGetBalance ($acct);
+   $numeric_baln = gnucash::xaccAccountGetBalance ($acct);
+   $baln = gnucash::gnc_numeric_to_double ($numeric_baln);
    print "\tAccount: $acctname \tBalance: $baln\n";
 }
 

@@ -60,6 +60,19 @@
   // printf ("Info: gboolean input arg is %ld \n", * ($target));
 }
 
+/* cut and paste of above, do exactly the same thing for GNCBackendError */
+%typemap(perl5, out) GNCBackendError {
+
+  $target = newSViv ((IV) *($source));
+  /* 
+   * An alternate way of writing this code would have been ...
+   *    $target = sv_newmortal ();
+   *    sv_setiv ($target, (IV) $source);
+   */
+  argvi ++;
+  // printf ("Info: converted return GNCBackendError secs to %d \n", (int) SvIV($target));
+}
+
 /* --------------------------------------------------------- */
 
 #ifdef DOESNT_WORK_DONT_KNOW_WHY

@@ -40,7 +40,7 @@ INCLUDES = \
   -I${top_srcdir}/src/engine
 
 libgncswig_la_LIBADD = \
-  -lgncengine \
+  -lgncengine -lxml \
   @GLIB_LIBS@ 
 
 
@@ -53,7 +53,9 @@ SWIG_INPUT_HDRS := \
   ${top_srcdir}/src/engine/Scrub.h \
   ${top_srcdir}/src/engine/Transaction.h \
   ${top_srcdir}/src/engine/date.h \
-  ${top_srcdir}/src/engine/gnc-book.h
+  ${top_srcdir}/src/engine/gnc-book.h \
+  ${top_srcdir}/src/engine/gnc-engine.h \
+  ${top_srcdir}/src/engine/gnc-numeric.h
 
 ## This is kinda ugly, but swig insists that the .so file be named the
 ## same as the .pm file, and automake won't tolerate libraries that
