@@ -177,6 +177,7 @@ gnc_book_insert_trans (GNCBook *book, Transaction *trans)
 void 
 gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
 {
+   AccountGroup *src_grp, *dst_grp;
    Backend *be;
    time_t now;
    GList *split_list, *snode;
@@ -201,15 +202,17 @@ gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
    /* hack alert -- FIXME -- this should really be a merge, not a
     * clobber copy, but I am too lazy to write an account-group merge 
     * routine, and it is not needed for the current usage. */
-   xaccAccountGroupBeginEdit (dest_book->topgroup);
-   xaccAccountGroupBeginEdit (src_book->topgroup);
-   xaccGroupCopyGroup (dest_book->topgroup, src_book->topgroup);
-   xaccAccountGroupCommitEdit (src_book->topgroup);
-   xaccAccountGroupCommitEdit (dest_book->topgroup);
+   src_grp = gnc_book_get_group (src_book);
+   dst_grp = gnc_book_get_group (dest_book);
+   xaccAccountGroupBeginEdit (dst_grp);
+   xaccAccountGroupBeginEdit (src_grp);
+   xaccGroupCopyGroup (dst_grp, src_grp);
+   xaccAccountGroupCommitEdit (src_grp);
+   xaccAccountGroupCommitEdit (dst_grp);
 
    /* Next, run the query */
-   xaccAccountGroupBeginEdit (dest_book->topgroup);
-   xaccAccountGroupBeginEdit (src_book->topgroup);
+   xaccAccountGroupBeginEdit (dst_grp);
+   xaccAccountGroupBeginEdit (src_grp);
    xaccQuerySetBook (query, src_book);
    split_list = xaccQueryGetSplitsUniqueTrans (query);
 
@@ -221,8 +224,8 @@ gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
 
       gnc_book_insert_trans (dest_book, trans);
    }
-   xaccAccountGroupCommitEdit (src_book->topgroup);
-   xaccAccountGroupCommitEdit (dest_book->topgroup);
+   xaccAccountGroupCommitEdit (src_grp);
+   xaccAccountGroupCommitEdit (dst_grp);
 
    /* make note of the sibling books */
    now = time(0);
