@@ -18,6 +18,7 @@
 #include "GNCIdP.h"
 #include "QueryObject.h"
 #include "gnc-event-p.h"
+#include "gnc-lot.h"
 
 #include "gncBusiness.h"
 #include "gncEntry.h"
@@ -416,6 +417,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 				       const char * memo)
 {
   Transaction *txn;
+  GNCLot *lot;
   GList *iter;
   GList *splitinfo = NULL;
   gnc_numeric total;
@@ -430,6 +432,10 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
   reverse = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
 
+  /* Create a new lot for this invoice */
+  lot = gnc_lot_new (invoice->book);
+
+  /* Create a new transaction */
   txn = xaccMallocTransaction (invoice->book);
   xaccTransBeginEdit (txn);
 
@@ -512,8 +518,11 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   /* Now create the Posted split (which is negative -- it's a credit) */
   {
     Split *split = xaccMallocSplit (invoice->book);
-    /* Set action/memo */
 
+    /* add this split to the lot */
+    gnc_lot_add_split (lot, split);
+
+    /* Set action/memo */
     xaccSplitSetMemo (split, memo);
     xaccSplitSetAction (split, gncInvoiceGetType (invoice));
 			   
