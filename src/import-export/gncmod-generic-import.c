@@ -43,12 +43,6 @@ gnc_module_init(int refcount)
   {
     return FALSE;
   }
-    if(!gnc_module_load("gnucash/import-export", 0))
-  {
-    return FALSE;
-  }
-  gh_eval_str("(use-modules (gnucash import-export))");
-  printf("Generic import module loaded\n");
   return TRUE;
 }
 

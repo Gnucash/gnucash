@@ -33,6 +33,12 @@
    "Load and initialize a gnc-module")
 
   (gw:wrap-function
+   ws 'gnc:module-load-optional
+   '<gnc:module> "gnc_module_load_optional"
+   '(((<gw:mchars> caller-owned) module-name) (<gw:int> interface))
+   "Load and initialize a gnc-module if present")
+
+  (gw:wrap-function
    ws 'gnc:module-unload
    '<gw:bool> "gnc_module_unload"
    '((<gnc:module> module))

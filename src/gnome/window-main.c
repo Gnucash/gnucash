@@ -797,6 +797,19 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
     GNOMEUIINFO_END
   };
 
+  static GnomeUIInfo gnc_file_import_submenu_template[] =
+  {
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Import _QIF..."),
+      N_("Import a Quicken QIF file"),
+      gnc_main_window_file_import_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_CONVERT,
+      'i', GDK_CONTROL_MASK, NULL
+    },
+    GNOMEUIINFO_END
+  };
+
   static GnomeUIInfo gnc_file_export_submenu_template[] =
   {
     {
@@ -837,14 +850,8 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
     GNOMEUIINFO_MENU_SAVE_ITEM(gnc_main_window_file_save_cb, NULL),
     GNOMEUIINFO_MENU_SAVE_AS_ITEM(gnc_main_window_file_save_as_cb, NULL),
     GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Import QIF..."),
-      N_("Import a Quicken QIF file"),
-      gnc_main_window_file_import_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_CONVERT,
-      'i', GDK_CONTROL_MASK, NULL
-    },
+    GNOMEUIINFO_SUBTREE( N_("_Import"),
+                         gnc_file_import_submenu_template ),
     GNOMEUIINFO_SUBTREE( N_("_Export"),
                          gnc_file_export_submenu_template ),
     GNOMEUIINFO_SEPARATOR,

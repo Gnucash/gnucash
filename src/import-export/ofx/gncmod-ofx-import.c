@@ -46,8 +46,6 @@ gnc_module_init(int refcount)
   {
     return FALSE;
   }
-  gh_eval_str("(use-modules (gnucash import-export ofx))");
-  printf("OFX module loaded\n");
   return TRUE;
 }
 

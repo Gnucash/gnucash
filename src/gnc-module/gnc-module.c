@@ -415,8 +415,8 @@ gnc_module_check_loaded(const char * module_name, gint interface)
  * Ensure that the module named by "module_name" is loaded. 
  *************************************************************/
 
-GNCModule 
-gnc_module_load(char * module_name, gint interface) 
+static GNCModule 
+gnc_module_load_common(char * module_name, gint interface, gboolean optional)
 {
 
   GNCLoadedModule * info;
@@ -499,17 +499,30 @@ gnc_module_load(char * module_name, gint interface)
       }
       return info;
     }
-    else 
+    else if (!optional)
     {
       g_warning ("Failed to open module %s", module_name);
       if(modinfo) printf(": %s\n", lt_dlerror());
       else g_warning (": could not locate %s interface v.%d\n",
                       module_name, interface);
       return NULL;
-    }      
+    }
+    return NULL;
   }
 }
 
+
+GNCModule 
+gnc_module_load(char * module_name, gint interface) 
+{
+  return gnc_module_load_common(module_name, interface, FALSE);
+}
+
+GNCModule 
+gnc_module_load_optional(char * module_name, gint interface) 
+{
+  return gnc_module_load_common(module_name, interface, TRUE);
+}
 
 /*************************************************************
  * gnc_module_unload

@@ -224,13 +224,14 @@ int ofx_proc_transaction(struct OfxTransactionData data)
 	}
 	xaccTransSetNotes(transaction, notes);
 	g_free(notes);
-	
+	xaccTransSetCurrency(transaction,xaccAccountGetCommodity(account));
 	if(data.amount_valid==true){
 	  split=xaccMallocSplit(book);
 	  xaccTransAppendSplit(transaction,split);
 	  xaccAccountInsertSplit(account,split);
 	  gnc_amount = double_to_gnc_numeric(data.amount,xaccAccountGetCommoditySCU(account),GNC_RND_ROUND);
-	  xaccSplitSetValue(split, gnc_amount);
+	  xaccSplitSetBaseValue(split, gnc_amount,xaccAccountGetCommodity(account));
+
 	}
 	xaccTransCommitEdit(transaction);
 	//printf("Now calling gnc_import_add_trans()\n");

@@ -3,7 +3,8 @@ SUBDIRS = .  binary-import qif-import ${OFX_DIR} test
 pkglib_LTLIBRARIES=libgncmod-generic-import.la
 
 libgncmod_generic_import_la_SOURCES = \
-  gnc-generic-import.c
+  gnc-generic-import.c \
+  gncmod-generic-import.c
 
 noinst_HEADERS = \
   gnc-generic-import.h

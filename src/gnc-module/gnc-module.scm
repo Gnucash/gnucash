@@ -15,6 +15,7 @@
 ;; symbols from gw-gnc-module
 (export gnc:module-system-refresh)
 (export gnc:module-load)
+(export gnc:module-load-optional)
 (export gnc:module-unload)
 (export gnc:module-lookup)
 

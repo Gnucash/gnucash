@@ -1,3 +1,18 @@
+2002-06-22  David Hampton  <hampton@employees.org>
+
+	* src/gnc-module/gnc-module.{c,h,scm} :
+	* src/gnc-module/gw-gnc-module-spec.scm : Add support for loading
+	an optional module.  I.E. Don't complain if you can't find it.
+
+	* src/gnome/window-main.c : Add a File/Import submenu that will
+	contain entries for QIF, OFX, etc.
+
+	* src/import-export/Makefile.am :
+	* src/import-export/gncmod-generic-import.c :
+	* src/import-export/ofx/gnc-ofx-import.c :
+	* src/import-export/ofx/gncmod-ofx-import.c :
+	* src/scm/main.scm : OFX module loading tweaks.
+	
 2002-06-21  Derek Atkins   <derek@ihtfp.com>
 
 	* integrate the Billing Terms into the Core, GUI, and XML Backend
