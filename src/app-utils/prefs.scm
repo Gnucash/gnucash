@@ -747,3 +747,9 @@ without one.")
 (gnc:register-configuration-option
  (gnc:make-internal-option
   "__paths"  "Import OFX" #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "__gui" "search_for_active_only"
+  "" ""
+  #t))

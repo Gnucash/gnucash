@@ -28,6 +28,8 @@ typedef enum {
 /* "Known" Object Parameters -- all objects must support these */
 #define QUERY_PARAM_BOOK	"book"
 #define QUERY_PARAM_GUID	"guid"
+#define QUERY_PARAM_ACTIVE	"active" /* it's ok if an object does
+					  * not support this */
 
 /* Basic API Functions */
 

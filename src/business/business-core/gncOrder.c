@@ -443,6 +443,7 @@ gboolean gncOrderRegister (void)
     { ORDER_NOTES, QUERYCORE_STRING, (QueryAccess)gncOrderGetNotes },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncOrderGetBook },
     { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncOrderGetGUID },
+    { QUERY_PARAM_ACTIVE, QUERYCORE_BOOLEAN, (QueryAccess)gncOrderGetActive },
     { NULL },
   };
 

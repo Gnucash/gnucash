@@ -15,6 +15,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
+#include "global-options.h"
 #include "gncObject.h"
 #include "QueryNew.h"
 #include "QueryObject.h"
@@ -47,6 +48,8 @@ struct _GNCSearchWindow {
   GtkWidget *	narrow_rb;
   GtkWidget *	add_rb;
   GtkWidget *	del_rb;
+
+  GtkWidget *	active_only_check;
 
   /* The Select button */
   GtkWidget *	select_button;
@@ -388,29 +391,44 @@ search_type_cb (GtkToggleButton *button, GNCSearchWindow *sw)
 }
 
 static void
+search_active_only_cb (GtkToggleButton *button, GNCSearchWindow *sw)
+{
+  gnc_set_boolean_option("__gui", "search_for_active_only",
+			 gtk_toggle_button_get_active (button));
+}
+
+static void
 search_update_query (GNCSearchWindow *sw)
 {
+  static GSList *active_params = NULL;
   QueryNew *q, *q2, *new_q;
   GList *node;
   QueryOp op;
+  QueryPredData_t pdata;
 
   if (sw->grouping == GNC_SEARCH_MATCH_ANY)
     op = QUERY_OR;
   else
     op = QUERY_AND;
 
+  if (active_params == NULL)
+    active_params = g_slist_prepend (NULL, QUERY_PARAM_ACTIVE);
+
   /* Make sure we supply a book! */
   if (sw->start_q == NULL) {
     sw->start_q = gncQueryCreateFor (sw->search_for);
     gncQuerySetBook (sw->start_q, gnc_get_current_book ());
+  } else {
+    /* We've got a query -- purge it of any "active" parameters */
+    gncQueryPurgeTerms (sw->start_q, active_params);
   }
 
+  /* Now create a new query to work from */
   q = gncQueryCreateFor (sw->search_for);
 
   /* Walk the list of criteria */
   for (node = sw->crit_list; node; node = node->next) {
     struct _crit_data *data = node->data;
-    QueryPredData_t pdata;
 
     pdata = gnc_search_core_type_get_predicate (data->element);
     if (pdata)
@@ -446,6 +464,11 @@ search_update_query (GNCSearchWindow *sw)
     g_warning ("bad search type: %d", sw->search_type);
     new_q = q;
     break;
+  }
+
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (sw->active_only_check))) {
+    gncQueryAddBooleanMatch (new_q, active_params, TRUE, QUERY_AND);
+    active_params = NULL;
   }
 
   /* Destroy the old query */
@@ -848,6 +871,12 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
   sw->add_rb = glade_xml_get_widget (xml, "add_search_radiobutton");
   sw->del_rb = glade_xml_get_widget (xml, "delete_search_radiobutton");
 
+  sw->active_only_check = glade_xml_get_widget (xml, "active_only_check");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (sw->active_only_check),
+				gnc_lookup_boolean_option ("__gui",
+							   "search_for_active_only",
+							   TRUE));
+
   /* Deal with the cancel button */
   sw->cancel_button = glade_xml_get_widget (xml, "cancel_button");
   sw->close_button = glade_xml_get_widget (xml, "close_button");
@@ -877,6 +906,9 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
   glade_xml_signal_connect_data (xml, "gnc_ui_search_type_cb",
 				 GTK_SIGNAL_FUNC (search_type_cb), sw);
   
+  glade_xml_signal_connect_data (xml, "gnc_ui_search_active_cb",
+				 GTK_SIGNAL_FUNC (search_active_only_cb), sw);
+
   glade_xml_signal_connect_data (xml, "gnc_ui_search_new_cb",
 				 GTK_SIGNAL_FUNC (search_new_item_cb), sw);
   

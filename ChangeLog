@@ -1,3 +1,19 @@
+2003-01-14  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/QueryNew.h: add QUERY_PARAM_ACTIVE
+	* src/business/business-core/gncCustomer.c:
+	* src/business/business-core/gncEmployee.c:
+	* src/business/business-core/gncInvoice.c:
+	* src/business/business-core/gncJob.c:
+	* src/business/business-core/gncOrder.c:
+	* src/business/business-core/gncVendor.c:
+	  add the QUERY_PARAM_ACTIVE parameter support
+	* src/app-util/prefs.scm: add hidden preference to store
+	  the user's choice of searchin
+	* src/gnome-search/search.glade: add a checkbox to search-for-all
+	* src/gnome-search/dialog-search.c -- add preliminary support to
+	  limit searches to only "active" objects.  Fixes bug #103506
+
 2003-01-13  David Hampton  <hampton@employees.org>
 
 	* src/engine/engine-helpers.c: Make the gnc_scm_to_gint64()

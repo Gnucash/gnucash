@@ -727,6 +727,7 @@ gnc_numeric_lcd(gnc_numeric a, gnc_numeric b) {
  *  as the output denominator.
  ********************************************************************/
 
+#if 1
 gnc_numeric
 gnc_numeric_reduce(gnc_numeric in) {
   gint64   t;
@@ -753,7 +754,7 @@ gnc_numeric_reduce(gnc_numeric in) {
   return out;
 }
 
-#if 0
+#else
 gnc_numeric
 gnc_numeric_reduce(gnc_numeric in) {
 

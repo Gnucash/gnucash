@@ -387,6 +387,7 @@ gboolean gncJobRegister (void)
     { JOB_ACTIVE, QUERYCORE_BOOLEAN, (QueryAccess)gncJobGetActive },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncJobGetBook },
     { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncJobGetGUID },
+    { QUERY_PARAM_ACTIVE, QUERYCORE_BOOLEAN, (QueryAccess)gncJobGetActive },
     { NULL },
   };
 
