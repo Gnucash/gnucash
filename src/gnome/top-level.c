@@ -32,6 +32,8 @@
 #include <gconf/gconf.h>
 #endif
 
+#include <X11/Xlib.h>
+
 #include "AccWindow.h"
 #include "FileBox.h"
 #include "FileDialog.h"
@@ -435,6 +437,28 @@ gnc_ui_check_events (gpointer not_used)
   return TRUE;
 }
 
+static int
+gnc_x_error (Display	 *display,
+	     XErrorEvent *error)
+{
+  if (error->error_code)
+  {
+    char buf[64];
+
+    XGetErrorText (display, error->error_code, buf, 63);
+
+    g_warning ("X-ERROR **: %s\n  serial %ld error_code %d "
+               "request_code %d minor_code %d\n", 
+               buf, 
+               error->serial, 
+               error->error_code, 
+               error->request_code,
+               error->minor_code);
+  }
+
+  return 0;
+}
+
 int
 gnc_ui_start_event_loop (void)
 {
@@ -442,8 +466,10 @@ gnc_ui_start_event_loop (void)
 
   gnome_is_running = TRUE;
 
-  id = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE, 10000, /* 10 secs */
+  id = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE, 1, // 0000, /* 10 secs */
                            gnc_ui_check_events, NULL, NULL);
+
+  XSetErrorHandler (gnc_x_error);
 
   /* Enter gnome event loop */
   gtk_main ();

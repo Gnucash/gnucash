@@ -3971,6 +3971,9 @@ xaccSRGetDebitString (SplitRegister *reg)
   if (!reg)
     return NULL;
 
+  if (reg->debit_str)
+    return reg->debit_str;
+
   reg->debit_str = gnc_get_debit_string (sr_type_to_account_type (reg->type));
 
   if (reg->debit_str)
@@ -3984,6 +3987,9 @@ xaccSRGetDebitString (SplitRegister *reg)
 const char *
 xaccSRGetCreditString (SplitRegister *reg)
 {
+  if (!reg)
+    return NULL;
+
   if (reg->credit_str)
     return reg->credit_str;
 
