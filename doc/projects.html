@@ -42,7 +42,7 @@
     </p>
 
     <ul>
-      <li>The current stable, production release is gnucash-1.4.0 and
+      <li>The current stable, production release is gnucash-1.4.6 and
       is based on the <a href= "http://www.gnome.org">Gnome</a> / <a
       href= "http://www.gtk.org">GTK</a> libraries.
       </li>
@@ -52,10 +52,11 @@
       </li>
     </ul>
 
-    <p>The latest version is available only via CVS. Occasionally,
+    <p>The latest version is available only via CVS. 
+    Occasionally,
     some of the more stable CVS versions are given a version number,
     and packaged as a precompiled deb or RPM install package. Naive or
-    beginning users should probably stick to version gnucash-1.4.0.
+    beginning users should probably stick to version gnucash-1.4.6.
     More adventurous users can try one of the 1.5.x releases, However,
     keep in mind that they are in a state of constant change and will
     often be unstable.
@@ -212,6 +213,65 @@
     "http://www.perl.org">Perl</a> interfaces, thanks to a <a href=
     "http://starship.skyport.net/crew/beazley/swig.html">SWIG</a>
     wrapper.
+    </p>
+
+    <h2>A Web Browser for Financial Data</h2>
+
+    <p>More and more finacial data is moving onto the web.  
+    People shop on-line. They pay bills on-line.  There are
+    even some promising online micro-payment systems.  For GnuCash
+    to be relevent in this on-line world, it must be able to interact
+    with these systems.  There are several steps that can be taken
+    aloing this path.  First, it must be possible to simply and
+    transparently import financial data off the web.   Click on a QIF
+    file, mime-type "application/x-qif"? Gnucash sucks it in without 
+    burping.  But, in a more distant future, can GnuCash originate
+    transactions? It should be able to!  
+    </p>
+    <p>
+    GnuCash should become "The More Sophisticated Financial Web Browser".
+    Why? Because dyncamically-generated html and cgi-bins aren't
+    as pretty or easy to use (or as fast, responsive or sophisticated)
+    as what you can do with a custom client.  Sure Java plugins can
+    provide a fancier interface than html forms, but a java plugins 
+    that is sophisticated enough is also slow to download.  No two 
+    Java plugins are alike: every site has thier own: no standardization. 
+    Wouldn't you rather use one GUI that you already kn ow for all your 
+    on-line financial interactions?  Never mind that many people have
+    Java disabled in thier browser due to security concerns (oh, tell me
+    again, you do financial things, and you're NOT concerned about security?) 
+    Finally, no Java plugin provides you with monthly or quarterly
+    reports of your financial status. Maybe your credit card company 
+    does this over the web, but what if you have <b>two</b> credit cards?
+    </p>
+
+    <p>
+    GnuCash can provide a centralized, trusted store for financial 
+    data that no other application can provide.  There's the convenience 
+    factor:  if you have trading accounts at e*trade and charles schwab,
+    then GnuCash can be the central place where you can oversee 
+    <b>all</b> of your investments.  There's the trust factor:  
+    maybe you can trust your web bank. Maybe you can trust your web 
+    stock account.  But can you trust a single web entity with *all*
+    of your financial data?  Someone who won't treat you as 'just 
+    another consumer' and sell your 'consumer profile' to anyone who
+    cares to stalk (ahem, target) your financial activity (ahem,
+    purchasing) patterns?  Didn't think so.   Of course, you
+    *could* use some proprietary financial software.  Assuming, of course,
+    that you trust it not to have any built-in covert channels:
+    nothing that might send back the make and model of your CPU and 
+    the last ten transactions 'home to mommy' for 'diagnostic purposes'.
+    Because open source software, such as GnuCash, can be audited
+    it can be trusted in ways that no proprietary software can be.
+    In an increasingly net-connected world, the ability to build 
+    trust through audits will be increasingly important.
+
+    GnuCash should be able 
+    to act not only as a secure purse/wallet on the internet, but it
+    should infact be that trusted financial advisor that no other
+    technology is in a position to fill. 
+
+
     </p>
     <hr>
     <!--===================================================-->
