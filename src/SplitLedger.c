@@ -3911,16 +3911,37 @@ sr_type_to_account_type(SplitRegisterType sr_type)
   }
 }
 
-static char *
-sr_get_debit_string (SplitRegister *reg)
+const char *
+xaccSRGetDebitString (SplitRegister *reg)
 {
-  return gnc_get_debit_string (sr_type_to_account_type (reg->type));
+  if (!reg)
+    return NULL;
+
+  reg->debit_str = gnc_get_debit_string (sr_type_to_account_type (reg->type));
+
+  if (reg->debit_str)
+    return reg->debit_str;
+
+  reg->debit_str = g_strdup (_("Debit"));
+
+  return reg->debit_str;
 }
 
-static char *
-sr_get_credit_string (SplitRegister *reg)
+const char *
+xaccSRGetCreditString (SplitRegister *reg)
 {
-  return gnc_get_credit_string (sr_type_to_account_type (reg->type));
+  if (reg->credit_str)
+    return reg->credit_str;
+
+  reg->credit_str =
+    gnc_get_credit_string (sr_type_to_account_type (reg->type));
+
+  if (reg->credit_str)
+    return reg->credit_str;
+
+  reg->credit_str = g_strdup (_("Credit"));
+
+  return reg->credit_str;
 }
 
 const char *
@@ -3961,30 +3982,10 @@ xaccSRGetLabelHandler (VirtualLocation virt_loc, gpointer user_data)
       return _("Memo");
 
     case CRED_CELL:
-      if (reg->credit_str)
-        return reg->credit_str;
-
-      reg->credit_str = sr_get_credit_string (reg);
-
-      if (reg->credit_str)
-        return reg->credit_str;
-
-      reg->credit_str = g_strdup (_("Credit"));
-
-      return reg->credit_str;
+      return xaccSRGetCreditString (reg);
 
     case DEBT_CELL:
-      if (reg->debit_str)
-        return reg->debit_str;
-
-      reg->debit_str = sr_get_debit_string (reg);
-
-      if (reg->debit_str)
-        return reg->debit_str;
-
-      reg->debit_str = g_strdup (_("Debit"));
-
-      return reg->debit_str;
+      return xaccSRGetDebitString (reg);
 
     case PRIC_CELL:
       if (!use_security_cells (reg, virt_loc))
@@ -4006,12 +4007,9 @@ xaccSRGetLabelHandler (VirtualLocation virt_loc, gpointer user_data)
         return reg->tcredit_str;
 
       {
-        char *string = sr_get_credit_string (reg);
+        const char *string = xaccSRGetCreditString (reg);
         if (string)
-        {
           reg->tcredit_str = g_strdup_printf (_("Tot %s"), string);
-          g_free (string);
-        }
       }
 
       if (reg->tcredit_str)
@@ -4026,12 +4024,9 @@ xaccSRGetLabelHandler (VirtualLocation virt_loc, gpointer user_data)
         return reg->tdebit_str;
 
       {
-        char *string = sr_get_debit_string (reg);
+        const char *string = xaccSRGetDebitString (reg);
         if (string)
-        {
           reg->tdebit_str = g_strdup_printf (_("Tot %s"), string);
-          g_free (string);
-        }
       }
 
       if (reg->tdebit_str)

@@ -97,7 +97,8 @@
 			  (vector-ref (op-value pagename-general
 						optname-from-date) 1)))
 	   (accounts (op-value pagename-general optname-accounts))
-           (report-currency (op-value pagename-general optname-report-currency))
+           (report-currency (op-value pagename-general
+                                      optname-report-currency))
 
 	   (max-slices (op-value pagename-display optname-slices))
 	   (height (op-value pagename-display optname-plot-height))

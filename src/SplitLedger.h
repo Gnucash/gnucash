@@ -197,6 +197,10 @@ void     xaccSRExpandCurrentTrans (SplitRegister *reg, gboolean expand);
 /* Return TRUE if current trans is expanded and style is REG_STYLE_LEDGER. */
 gboolean xaccSRCurrentTransExpanded (SplitRegister *reg);
 
+/* Return the debit and credit strings used in the register. */
+const char * xaccSRGetDebitString (SplitRegister *reg);
+const char * xaccSRGetCreditString (SplitRegister *reg);
+
 /* Private functions, for MultiLedger.c only */
 gboolean xaccSRFullRefreshOK (SplitRegister *reg);
 void     xaccSRLoadXferCells (SplitRegister *reg, Account *base_account);

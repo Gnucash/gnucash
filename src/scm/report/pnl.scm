@@ -121,10 +121,10 @@
           (doc (gnc:make-html-document)))
       
       (gnc:html-document-set-title! 
-       doc (string-append (_ "Profit and Loss") " "
-			  (gnc:timepair-to-datestring from-date-tp)
-			  " " (_ "to") " "
-			  (gnc:timepair-to-datestring to-date-tp)))
+       doc (sprintf #f
+                    (_ "Profit and Loss - %s to %s")
+                    (gnc:timepair-to-datestring from-date-tp)
+                    (gnc:timepair-to-datestring to-date-tp)))
       (if (not (null? accounts))
 	  ;; if no max. tree depth is given we have to find the
 	  ;; maximum existing depth

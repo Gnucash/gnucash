@@ -34,8 +34,23 @@
 
 (define (gnc:account-anchor-text acct)
   (string-append
-   "gnc-register:account=" 
-   (gnc:account-get-full-name acct)))
+   "gnc-register:guid=" 
+   (gnc:account-get-guid acct)))
+
+(define (gnc:split-anchor-text split)
+  (string-append
+   "gnc-register:guid=" 
+   (gnc:split-get-guid split)))
+
+(define (gnc:transaction-anchor-text trans)
+  (string-append
+   "gnc-register:guid=" 
+   (gnc:transaction-get-guid trans)))
+
+(define (gnc:report-anchor-text report-id)
+  (string-append
+   "gnc-report:id="
+   (number->string report-id)))
 
 ;; returns the account name as html-text and anchor to the register.
 (define (gnc:html-account-anchor acct)
@@ -43,10 +58,15 @@
                        (gnc:account-anchor-text acct)
 		       (gnc:account-get-name acct))))
 
-(define (gnc:report-anchor-text report-id)
-  (string-append
-   "gnc-report:id="
-   (number->string report-id)))
+(define (gnc:html-split-anchor split text)
+  (gnc:make-html-text (gnc:html-markup-anchor
+                       (gnc:split-anchor-text split)
+                       text)))
+
+(define (gnc:html-transaction-anchor trans text)
+  (gnc:make-html-text (gnc:html-markup-anchor
+                       (gnc:transaction-anchor-text trans)
+                       text)))
 
 (define (gnc:assign-colors num-colors)
   (define base-colors '("red" "orange" "yellow" "green"

@@ -27,22 +27,20 @@
     (vector-ref columns-used 2))
   (define (used-account columns-used)
     (vector-ref columns-used 3))
-  (define (used-other-account columns-used)
-    (vector-ref columns-used 4))	
   (define (used-shares columns-used)
-    (vector-ref columns-used 5))	
+    (vector-ref columns-used 4))	
   (define (used-price columns-used)
-    (vector-ref columns-used 6))	
+    (vector-ref columns-used 5))	
   (define (used-amount-single columns-used)
-    (vector-ref columns-used 7))	
+    (vector-ref columns-used 6))	
   (define (used-amount-double-positive columns-used)
-    (vector-ref columns-used 8))	
+    (vector-ref columns-used 7))	
   (define (used-amount-double-negative columns-used)
-    (vector-ref columns-used 9))	
+    (vector-ref columns-used 8))	
   (define (used-running-balance columns-used)
-    (vector-ref columns-used 10))	
+    (vector-ref columns-used 9))	
 
-  (define columns-used-size 11)
+  (define columns-used-size 10)
 
   (define (num-columns-required columns-used)  
     (do ((i 0 (+ i 1)) 
@@ -54,11 +52,8 @@
     (define (opt-val section name)
       (gnc:option-value 
        (gnc:lookup-option options section name)))
-    (let ((column-list (make-vector 11 #f)))
 
-      (define (opt-val section name)
-        (gnc:option-value 
-         (gnc:lookup-option options section name)))
+    (let ((column-list (make-vector columns-used-size #f)))
       (if (opt-val (N_ "Display") (N_ "Date"))
           (vector-set! column-list 0 #t))
       (if (opt-val (N_ "Display") (N_ "Num"))
@@ -67,27 +62,23 @@
           (vector-set! column-list 2 #t))
       (if (opt-val (N_ "Display") (N_ "Account"))
           (vector-set! column-list 3 #t))
-      (if (opt-val (N_ "Display") (N_ "Other Account"))
-          (vector-set! column-list 4 #t))
       (if (opt-val (N_ "Display") (N_ "Shares"))
-          (vector-set! column-list 5 #t))
-
+          (vector-set! column-list 4 #t))
       (if (opt-val (N_ "Display") (N_ "Price"))
-          (vector-set! column-list 6 #t))
-
+          (vector-set! column-list 5 #t))
       (let ((amount-setting (opt-val (N_ "Display") (N_ "Amount"))))
         (if (eq? amount-setting 'single)
-            (vector-set! column-list 7 #t))
+            (vector-set! column-list 6 #t))
         (if (eq? amount-setting 'double)
             (begin 
-	      (vector-set! column-list 8 #t)
-	      (vector-set! column-list 9 #t))))
+	      (vector-set! column-list 7 #t)
+	      (vector-set! column-list 8 #t))))
       (if (opt-val (N_ "Display") (N_ "Running Balance"))
-          (vector-set! column-list 10 #t))
+          (vector-set! column-list 9 #t))
 
       column-list))
 
-  (define (make-heading-list column-vector)
+  (define (make-heading-list column-vector debit-string credit-string)
     (let ((heading-list '()))
       (gnc:debug "Column-vector" column-vector)
       (if (used-date column-vector)
@@ -98,24 +89,22 @@
 	  (addto! heading-list (N_ "Description")))
       (if (used-account column-vector)
 	  (addto! heading-list (N_ "Account")))
-      (if (used-other-account column-vector)
-	  (addto! heading-list (N_ "Transfer from/to")))
       (if (used-shares column-vector)
 	  (addto! heading-list (N_ "Shares")))
       (if (used-price column-vector)
 	  (addto! heading-list (N_ "Price")))
       (if (used-amount-single column-vector)
 	  (addto! heading-list (N_ "Amount")))
-      ;; FIXME: Proper labels: what?
       (if (used-amount-double-positive column-vector)
-	  (addto! heading-list (N_ "Debit")))
+	  (addto! heading-list debit-string))
       (if (used-amount-double-negative column-vector)
-	  (addto! heading-list (N_ "Credit")))
+	  (addto! heading-list credit-string))
       (if (used-running-balance column-vector)
 	  (addto! heading-list (N_ "Balance")))
       (reverse heading-list)))
 
-  (define (add-split-row table split column-vector row-style transaction-row?)
+  (define (add-split-row table split column-vector row-style
+                         transaction-info? split-info?)
     (let* ((row-contents '())
 	   (parent (gnc:split-get-parent split))
 	   (account (gnc:split-get-account split))
@@ -125,52 +114,74 @@
 
       (if (used-date column-vector)
 	  (addto! row-contents
-                  (if transaction-row?
+                  (if transaction-info?
                       (gnc:timepair-to-datestring 
                        (gnc:transaction-get-date-posted parent))
                       " ")))
       (if (used-num column-vector)
 	  (addto! row-contents
-                  (if transaction-row?
+                  (if transaction-info?
                       (gnc:transaction-get-num parent)
                       " ")))
       (if (used-description column-vector)
 	  (addto! row-contents
-                  (if transaction-row?
+                  (if transaction-info?
                       (gnc:transaction-get-description parent)
                       " ")))
       (if (used-account column-vector)
-	  (addto! row-contents (gnc:account-get-name account)))
-      (if (used-other-account column-vector)
-	  (addto! row-contents (gnc:split-get-corr-account-name split)))
+	  (addto! row-contents
+                  (if split-info?
+                      (gnc:account-get-name account)
+                      " ")))
       (if (used-shares column-vector)
-	  (addto! row-contents (gnc:split-get-share-amount split)))
+	  (addto! row-contents
+                  (if split-info?
+                      (gnc:split-get-share-amount split)
+                      " ")))
       (if (used-price column-vector)
-	  (addto! 
-	   row-contents 
-	   (gnc:make-gnc-monetary currency (gnc:split-get-share-price split))))
+	  (addto! row-contents 
+                  (if split-info?
+                      (gnc:make-gnc-monetary
+                       currency (gnc:split-get-share-price split))
+                      " ")))
       (if (used-amount-single column-vector)
 	  (addto! row-contents
-                  (gnc:make-html-table-header-cell/markup "number-cell"
-                                                          split-value)))
+                  (if split-info?
+                      (gnc:html-split-anchor
+                       split
+                       (gnc:make-html-table-header-cell/markup "number-cell"
+                                                               split-value))
+                      " ")))
       (if (used-amount-double-positive column-vector)
 	  (if (gnc:numeric-positive-p (gnc:gnc-monetary-amount split-value))
 	      (addto! row-contents
-                      (gnc:make-html-table-header-cell/markup "number-cell"
-                                                              split-value))
+                      (if split-info?
+                          (gnc:make-html-table-header-cell/markup
+                           "number-cell"
+                           (gnc:html-split-anchor split split-value))
+                          " "))
 	      (addto! row-contents " ")))
       (if (used-amount-double-negative column-vector)
 	  (if (gnc:numeric-negative-p (gnc:gnc-monetary-amount split-value))
 	      (addto! row-contents
-                      (gnc:make-html-table-header-cell/markup
-                       "number-cell" (gnc:monetary-neg split-value)))
+                      (if split-info?
+                          (gnc:make-html-table-header-cell/markup
+                           "number-cell"
+                           (gnc:html-split-anchor
+                            split (gnc:monetary-neg split-value)))
+                          " "))
 	      (addto! row-contents " ")))
       (if (used-running-balance column-vector)
 	  (addto! row-contents
-                  (gnc:make-html-table-header-cell/markup
-                   "number-cell"
-                   (gnc:make-gnc-monetary currency
-                                          (gnc:split-get-balance split)))))
+                  (if transaction-info?
+                      (gnc:make-html-table-header-cell/markup
+                       "number-cell"
+                       (gnc:html-split-anchor
+                        split
+                        (gnc:make-gnc-monetary currency
+                                               (gnc:split-get-balance split))))
+                      " ")))
+
       (gnc:html-table-append-row! table (reverse row-contents))
       (apply set-last-row-style! (cons table (cons "tr" row-style)))
       split-value))
@@ -191,6 +202,16 @@
      (gnc:make-internal-option "__reg" "query" #f))
     (gnc:register-reg-option
      (gnc:make-internal-option "__reg" "journal" #f))
+    (gnc:register-reg-option
+     (gnc:make-internal-option "__reg" "debit-string" (_ "Debit")))
+    (gnc:register-reg-option
+     (gnc:make-internal-option "__reg" "credit-string" (_ "Credit")))
+
+    (gnc:register-reg-option
+     (gnc:make-string-option
+      (N_ "Report Options") (N_ "Title")
+      "a" (N_ "The title of the report")
+      (N_ "Register Report")))
 
     (gnc:register-reg-option
      (gnc:make-simple-boolean-option
@@ -219,12 +240,6 @@
 
     (gnc:register-reg-option
      (gnc:make-simple-boolean-option
-      (N_ "Display") (N_ "Other Account")
-      "h" (N_ "Display the other account?
- (if this is a split transaction, this parameter is guessed).") #f))
-
-    (gnc:register-reg-option
-     (gnc:make-simple-boolean-option
       (N_ "Display") (N_ "Shares")
       "ha" (N_ "Display the number of shares?") #f))
 
@@ -242,11 +257,6 @@
        (vector 'none (N_ "None") (N_ "No amount display"))
        (vector 'single (N_ "Single") (N_ "Single Column Display"))
        (vector 'double (N_ "Double") (N_ "Two Column Display")))))
-
-    (gnc:register-reg-option
-     (gnc:make-simple-boolean-option
-      (N_ "Display") (N_ "Headers")
-      "j" (N_ "Display the headers?") #t))
 
     (gnc:register-reg-option
      (gnc:make-simple-boolean-option
@@ -284,8 +294,7 @@
       255
       #f))
 
-    (gnc:options-set-default-section gnc:*report-options*
-                                     "Report Options")
+    (gnc:options-set-default-section gnc:*report-options* "Report Options")
 
     gnc:*report-options*)
 
@@ -312,7 +321,10 @@
                                       (N_ "Split Even"))))
       (list 'attribute (list "bgcolor" (gnc:color-option->html bgcolor)))))
 
-  (define (make-split-table splits options)
+  (define (make-split-table splits options debit-string credit-string)
+    (define (opt-val section name)
+      (gnc:option-value (gnc:lookup-option options section name)))
+
     (define (add-subtotal-row table width subtotal-collector subtotal-style)
       (let ((currency-totals (subtotal-collector
                               'format gnc:make-gnc-monetary #f))
@@ -334,22 +346,17 @@
                            (cons table (cons "tr" subtotal-style))))
                   currency-totals)))
 
-    (define (reg-report-journal? options)
-      (gnc:option-value
-       (gnc:lookup-option options "__reg" "journal")))
+    (define (reg-report-journal?)
+      (opt-val "__reg" "journal"))
 
     (define (add-other-split-rows split table used-columns row-style)
       (define (other-rows-driver split parent table used-columns i)
 	(let ((current (gnc:transaction-get-split parent i)))
-	  (gnc:debug "i" i)
-	  (gnc:debug "current" current)
-	  (cond ((not current) #f)
-		((equal? current split)
-		 (other-rows-driver split parent table used-columns (+ i 1)))
-		(else (begin
-			(add-split-row table current used-columns row-style #f)
-			(other-rows-driver split parent table used-columns
-                                           (+ i 1)))))))
+          (if current
+              (begin
+                (add-split-row table current used-columns row-style #f #t)
+                (other-rows-driver split parent table
+                                   used-columns (+ i 1))))))
 
       (other-rows-driver split (gnc:split-get-parent split)
                          table used-columns 0))
@@ -374,12 +381,13 @@
 		 (rest (cdr splits))
 		 (next (if (null? rest) #f
 			   (car rest)))
-	         (split-value (add-split-row 
-                               table 
-                               current 
-                               used-columns 
-                               current-row-style
-                               #t)))
+	         (split-value (add-split-row table 
+                                             current 
+                                             used-columns 
+                                             current-row-style
+                                             #t
+                                             (not multi-rows?))))
+
 	    (if multi-rows?
                 (add-other-split-rows 
                  current table used-columns alternate-row-style))
@@ -402,7 +410,7 @@
     (let* ((table (gnc:make-html-table))
            (used-columns (build-column-used options))
            (width (num-columns-required used-columns))
-           (multi-rows? (reg-report-journal? options))
+           (multi-rows? (reg-report-journal?))
            (grand-total-style 
             (get-grand-total-style options))
            (odd-row-style 
@@ -412,7 +420,7 @@
 
       (gnc:html-table-set-col-headers!
        table
-       (make-heading-list used-columns))
+       (make-heading-list used-columns debit-string credit-string))
 
       (do-rows-with-subtotals splits
                               table
@@ -435,7 +443,10 @@
 	  (splits '())
           (table '())
 	  (query    (opt-val "__reg" "query"))
-          (journal? (opt-val "__reg" "journal")))
+          (journal? (opt-val "__reg" "journal"))
+          (debit-string (opt-val "__reg" "debit-string"))
+          (credit-string (opt-val "__reg" "credit-string"))
+          (title (opt-val "Report Options" "Title")))
 
       (gnc:query-set-group query (gnc:get-current-group))
 
@@ -445,9 +456,11 @@
                         (gnc:query-get-splits query))
                     <gnc:Split*>))
 
-      (set! table (make-split-table splits (gnc:report-options report-obj)))
+      (set! table (make-split-table splits
+                                    (gnc:report-options report-obj)
+                                    debit-string credit-string))
 
-      (gnc:html-document-set-title! document (_ "Register Report"))
+      (gnc:html-document-set-title! document title)
 ;      (gnc:html-document-add-object! 
 ;       document
 ;       (gnc:make-html-text
@@ -465,16 +478,25 @@
    'renderer reg-renderer
    'in-menu? #f))
 
-(define (gnc:apply-register-report func query journal?)
+(define (gnc:apply-register-report func query journal? title
+                                   debit-string credit-string)
   (let* ((options (gnc:make-report-options "Register"))
-         (qo (gnc:lookup-option options "__reg" "query"))
-         (jo (gnc:lookup-option options "__reg" "journal")))
-    (gnc:option-set-value qo query)
-    (gnc:option-set-value jo journal?)
+         (query-op (gnc:lookup-option options "__reg" "query"))
+         (journal-op (gnc:lookup-option options "__reg" "journal"))
+         (title-op (gnc:lookup-option options "Report Options" "Title"))
+         (debit-op (gnc:lookup-option options "__reg" "debit-string"))
+         (credit-op (gnc:lookup-option options "__reg" "credit-string")))
+
+    (gnc:option-set-value query-op query)
+    (gnc:option-set-value journal-op journal?)
+    (gnc:option-set-value title-op title)
+    (gnc:option-set-value debit-op debit-string)
+    (gnc:option-set-value credit-op credit-string)
+
     (func (gnc:make-report "Register" options))))
 
-(define (gnc:show-register-report query journal?)
-  (gnc:apply-register-report gnc:report-window query journal?))
+(define (gnc:show-register-report . rest)
+  (apply gnc:apply-register-report (cons gnc:report-window rest)))
 
-(define (gnc:print-register-report query journal?)
-  (gnc:apply-register-report gnc:print-report query journal?))
+(define (gnc:print-register-report . rest)
+  (apply gnc:apply-register-report (const gnc:print-report rest)))

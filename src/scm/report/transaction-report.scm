@@ -168,10 +168,6 @@
 	  (gnc:option-value 
 	   (gnc:lookup-option options section name)))
 	(let ((column-list (make-vector 11 #f)))
-	  
-	  (define (opt-val section name)
-	    (gnc:option-value 
-	     (gnc:lookup-option options section name)))
 	  (if (opt-val (N_ "Display") (N_ "Date"))
 	      (vector-set! column-list 0 #t))
 	  (if (opt-val (N_ "Display") (N_ "Num"))
@@ -500,11 +496,6 @@
       (vector 'single (N_ "Single") (N_ "Single Column Display"))
        (vector 'double (N_ "Double") (N_ "Two Column Display")))))
     
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
-      (N_ "Display") (N_ "Headers")
-      "j" (N_ "Display the headers?") #t))
-
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
       (N_ "Display") (N_ "Running Balance")

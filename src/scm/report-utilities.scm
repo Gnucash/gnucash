@@ -488,6 +488,26 @@
    (lambda(x) #t)))
 
 ;; Adds all accounts' balances, where the balances are determined with
+;; the get-balance-fn. Only the income accounts are regarded, and
+;; the result is sign reversed. Returns a commodity-collector.
+(define (gnc:accounts-get-comm-total-income accounts 
+					    get-balance-fn)
+  (gnc:accounts-get-balance-helper
+   (gnc:filter-accountlist-type '(income) accounts)
+   get-balance-fn
+   (lambda(x) #t)))
+
+;; Adds all accounts' balances, where the balances are determined with
+;; the get-balance-fn. Only the expense accounts are regarded, and
+;; the result is sign reversed. Returns a commodity-collector.
+(define (gnc:accounts-get-comm-total-expense accounts 
+                                             get-balance-fn)
+  (gnc:accounts-get-balance-helper
+   (gnc:filter-accountlist-type '(expense) accounts)
+   get-balance-fn
+   (lambda(x) #t)))
+
+;; Adds all accounts' balances, where the balances are determined with
 ;; the get-balance-fn. Intended for usage with a balance sheet, hence
 ;; a) the income/expense accounts are ignored, and b) no signs are
 ;; reversed at all. Returns a commodity-collector.

@@ -9,6 +9,7 @@
 (gnc:depend  "date-utilities.scm")
 
 (let ((pagename-general (N_ "General"))
+      (optname-show-net (N_ "Show Net Profit"))
       (optname-from-date (N_ "From"))
       (optname-to-date (N_ "To"))
       (optname-accounts (N_ "Accounts"))
@@ -18,7 +19,6 @@
       (pagename-display (N_ "Display Format"))
       (optname-plot-width (N_ "Plot Width"))
       (optname-plot-height (N_ "Plot Height")))
-  
 
   (define (options-generator)    
     (let* ((options (gnc:new-options)) 
@@ -28,10 +28,16 @@
             (lambda (new-option)
               (gnc:register-option options new-option))))
 
+      (add-option
+       (gnc:make-simple-boolean-option
+        pagename-general optname-show-net
+        "a" (N_ "Show a single bar with net profit instead of
+ side-by-side bars with income and expense") #f))
+
       (gnc:options-add-date-interval!
        options pagename-general
-       optname-from-date optname-to-date "a")
-      
+       optname-from-date optname-to-date "aa")
+
       (add-option
        (gnc:make-multichoice-option
         pagename-general optname-stepsize
@@ -56,7 +62,7 @@
 	  (list #t
 		(filter gnc:account-is-inc-exp? accounts)))
 	#t))
-      
+
       (add-option
        (gnc:make-currency-option
 	pagename-general optname-report-currency
@@ -96,8 +102,31 @@
     
     (define (op-value section name)
       (gnc:option-value (get-op section name)))
-    
-    (let* ((to-date-tp (gnc:timepair-end-day-time 
+
+    (define (collector-fn accounts income?)
+      (lambda (date-list-entry)
+        (let ((start-date (car date-list-entry))
+              (end-date (cadr date-list-entry)))
+          ((if income?
+               gnc:accounts-get-comm-total-income
+               gnc:accounts-get-comm-total-expense)
+           accounts 
+           (lambda (account)
+             (gnc:account-get-comm-balance-interval account
+                                                    start-date
+                                                    end-date
+                                                    #f))))))
+
+    (define (collector-to-double-fn report-currency exchange-fn)
+      (lambda (commodity-collector)
+        (gnc:numeric-to-double
+         (gnc:gnc-monetary-amount
+          (gnc:sum-collector-commodity commodity-collector
+                                       report-currency 
+                                       exchange-fn)))))
+
+    (let* ((show-net? (op-value pagename-general optname-show-net))
+           (to-date-tp (gnc:timepair-end-day-time 
 			(vector-ref (op-value pagename-general
 					      optname-to-date) 1)))
 	   (from-date-tp (gnc:timepair-start-day-time 
@@ -105,7 +134,8 @@
 						optname-from-date) 1)))
 	   (interval (op-value pagename-general optname-stepsize))
 	   (accounts (op-value pagename-general optname-accounts))
-           (report-currency (op-value pagename-general optname-report-currency))
+           (report-currency (op-value pagename-general
+                                      optname-report-currency))
 
 	   (height (op-value pagename-display optname-plot-height))
 	   (width (op-value pagename-display optname-plot-width))
@@ -122,29 +152,16 @@
                         (gnc:timepair-end-day-time 
                          (decdate to-date-tp DayDelta))
                         (eval interval)))
-	   (profit-collector-fn
-	    (lambda (date-list-entry)
-	      (let ((start-date (car date-list-entry))
-		    (end-date (cadr date-list-entry)))
-		(gnc:accounts-get-comm-total-profit
-                 accounts 
-                 (lambda (account)
-                   (gnc:account-get-comm-balance-interval
-                    account
-                    start-date
-                    end-date
-                    #f))))))
-	   (profit-collector-list
-	    (map profit-collector-fn dates-list))
-	   (double-list
-	    (map (lambda (commodity-collector)
-		   ;;(- 
-		   (gnc:numeric-to-double 
-		    (gnc:gnc-monetary-amount
-		     (gnc:sum-collector-commodity 
-		      commodity-collector report-currency 
-		      exchange-fn-internal))));;)
-		 profit-collector-list))
+           (income-collector-fn (collector-fn accounts #t))
+           (expense-collector-fn  (collector-fn accounts #f))
+	   (income-collector-list (map income-collector-fn dates-list))
+	   (expense-collector-list (map expense-collector-fn dates-list))
+	   (income-list
+            (map (collector-to-double-fn report-currency exchange-fn-internal)
+                 income-collector-list))
+           (expense-list
+            (map (collector-to-double-fn report-currency exchange-fn-internal)
+                 expense-collector-list))
 	   (date-string-list
 	    (map (lambda (date-list-item)
 		   (gnc:timepair-to-datestring
@@ -159,13 +176,25 @@
                       (gnc:timepair-to-datestring to-date-tp)))
       (gnc:html-barchart-set-width! chart width)
       (gnc:html-barchart-set-height! chart height)
-      (gnc:html-barchart-append-column! chart double-list)
       (gnc:html-barchart-set-row-labels! chart date-string-list)
-      (gnc:html-barchart-set-row-labels-rotated?! chart #t)
-      (gnc:html-barchart-set-col-labels! chart (list (_ "Net Profit")))
-      (gnc:html-barchart-set-col-colors! chart (list "red"))
       (gnc:html-barchart-set-y-axis-label!
        chart (gnc:commodity-get-mnemonic report-currency))
+      (gnc:html-barchart-set-row-labels-rotated?! chart #t)
+
+      (if show-net?
+          (begin
+            (gnc:html-barchart-append-column! chart
+                                              (map + income-list expense-list))
+            (gnc:html-barchart-set-col-labels! chart (list (_ "Net Profit")))
+            (gnc:html-barchart-set-col-colors! chart (list "red")))
+          (begin
+            (gnc:html-barchart-append-column! chart income-list)
+            (gnc:html-barchart-append-column! chart (map - expense-list))
+            (gnc:html-barchart-set-col-labels! chart
+                                               (list (_ "Income")
+                                                     (_ "Expense")))
+            (gnc:html-barchart-set-col-colors! chart (list "blue" "red"))))
+
       (gnc:html-document-add-object! document chart) 
 
 ;      (gnc:html-document-add-object! 

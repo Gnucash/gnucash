@@ -1795,18 +1795,18 @@ gnc_register_get_parent(xaccLedgerDisplay *ledger)
   return regData->window;
 }
 
-static void
-gnc_reg_set_window_name(RegWindow *regData)
+static char *
+gnc_reg_get_name (RegWindow *regData, gboolean for_window)
 {
-  SplitRegister *reg;
   Account *leader;
-  gchar *windowname;
+  SplitRegister *reg;
+  gboolean single_account;
   gchar *account_name;
   gchar *reg_name;
-  gboolean single_account;
+  gchar *name;
 
   if (regData == NULL)
-    return;
+    return NULL;
 
   reg = xaccLedgerDisplayGetSR (regData->ledger);
 
@@ -1814,19 +1814,31 @@ gnc_reg_set_window_name(RegWindow *regData)
   {
     case GENERAL_LEDGER:
     case INCOME_LEDGER:
-      reg_name = _("General Ledger");
+      if (for_window)
+        reg_name = _("General Ledger");
+      else
+        reg_name = _("General Ledger Report");
       single_account = FALSE;
       break;
     case PORTFOLIO_LEDGER:
-      reg_name = _("Portfolio");
+      if (for_window)
+        reg_name = _("Portfolio");
+      else
+        reg_name = _("Portfolio Report");
       single_account = FALSE;
       break;
     case SEARCH_LEDGER:
-      reg_name = _("Search Results");
+      if (for_window)
+        reg_name = _("Search Results");
+      else
+        reg_name = _("Search Results Report");
       single_account = FALSE;
       break;
     default:
-      reg_name = _("Register");
+      if (for_window)
+        reg_name = _("Register");
+      else
+        reg_name = _("Register Report");
       single_account = TRUE;
       break;
   }
@@ -1835,18 +1847,33 @@ gnc_reg_set_window_name(RegWindow *regData)
 
   if ((leader != NULL) && single_account)
   {
-    account_name = xaccAccountGetFullName(leader, gnc_get_account_separator());
+    account_name = xaccAccountGetFullName (leader,
+                                           gnc_get_account_separator ());
 
-    windowname = g_strconcat(account_name, " - ", reg_name, NULL);
+    name = g_strconcat (account_name, " - ", reg_name, NULL);
 
     g_free(account_name);
   }
   else
-    windowname = g_strdup(reg_name);
+    name = g_strdup (reg_name);
 
-  gtk_window_set_title(GTK_WINDOW(regData->window), windowname);
+  return name;
+}
 
-  g_free(windowname);
+static void
+gnc_reg_set_window_name (RegWindow *regData)
+{
+  SplitRegister *reg;
+  gchar *windowname;
+
+  if (regData == NULL)
+    return;
+
+  windowname = gnc_reg_get_name (regData, TRUE);
+
+  gtk_window_set_title (GTK_WINDOW(regData->window), windowname);
+
+  g_free (windowname);
 }
 
 static void
@@ -2980,26 +3007,46 @@ report_helper (RegWindow *regData, SCM func)
 {
   SplitRegister *reg = xaccLedgerDisplayGetSR (regData->ledger);
   Query *query;
-  SCM query_type;
-  SCM query_scm;
-  SCM journal_scm;
+  char *str;
+  SCM qtype;
+  SCM args;
+  SCM arg;
 
-  query_type = gh_eval_str("<gnc:Query*>");
-  g_return_if_fail (query_type != SCM_UNDEFINED);
+  g_return_if_fail (gh_procedure_p (func));
+
+  args = SCM_EOL;
+
+  arg = gh_str02scm (xaccSRGetCreditString (reg));
+  args = gh_cons (arg, args);
+
+  arg = gh_str02scm (xaccSRGetDebitString (reg));
+  args = gh_cons (arg, args);
+
+  str = gnc_reg_get_name (regData, FALSE);
+  arg = gh_str02scm (str);
+  args = gh_cons (arg, args);
+  g_free (str);
+
+  arg = gh_bool2scm (reg->style == REG_STYLE_JOURNAL);
+  args = gh_cons (arg, args);
+
+  qtype = gh_eval_str("<gnc:Query*>");
+  g_return_if_fail (qtype != SCM_UNDEFINED);
 
   query = xaccLedgerDisplayGetQuery (regData->ledger);
   g_return_if_fail (query != NULL);
 
   query = xaccQueryCopy (query);
 
-  query_scm = gw_wcp_assimilate_ptr (query, query_type);
-  g_return_if_fail (query_scm != SCM_UNDEFINED);
+  arg = gw_wcp_assimilate_ptr (query, qtype);
+  args = gh_cons (arg, args);
+  if (arg == SCM_UNDEFINED)
+  {
+    xaccFreeQuery (query);
+    return;
+  }
 
-  journal_scm = gh_bool2scm (reg->style == REG_STYLE_JOURNAL);
-
-  g_return_if_fail (gh_procedure_p (func));
-
-  gh_call2 (func, query_scm, journal_scm);
+  gh_apply (func, args);
 }
 
 /********************************************************************\

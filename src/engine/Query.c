@@ -1126,7 +1126,6 @@ xaccQueryGetSplitsUniqueTrans(Query *q)
     }
   }
 
-  g_list_free (splits);
   g_hash_table_destroy (trans_hash);
 
   return g_list_reverse (result);

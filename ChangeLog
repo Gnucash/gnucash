@@ -1,3 +1,26 @@
+2001-03-21  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/report-utilities.scm
+	(gnc:accounts-get-comm-total-income): new func
+	(gnc:accounts-get-comm-total-expense): new func
+
+	* src/scm/report/income-expense-graph.scm: allow user to display
+	both income & expense side-by-side
+
+	* src/scm/report/pnl.scm: use sprintf to make title
+
+	* src/guile/guile-util.c (gnc_get_debit_string): use g_strdup
+	(gnc_get_credit_string): use g_strdup
+
+	* src/gnome/gnc-html.c: add guid type to register anchor
+
+	* src/scm/report/register.scm: work on display
+
+	* src/engine/Query.c (xaccQueryGetSplitsUniqueTrans): fix bug
+
+	* src/gnome/window-register.c: add arguments to report window
+	for title & debit/credit strings
+
 2001-03-20  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/income-expense-graph.scm,

@@ -909,8 +909,11 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
 
 static void
 gnc_html_open_register(gnc_html * html, const gchar * location) {
-  Account   * acct;
-  RegWindow * reg;
+  RegWindow   * reg = NULL;
+  Split       * split = NULL;
+  Account     * acct;
+  Transaction * trans;
+  GList       * node;
 
   /* href="gnc-register:account=My Bank Account" */
   if(!strncmp("account=", location, 8)) {
@@ -919,6 +922,61 @@ gnc_html_open_register(gnc_html * html, const gchar * location) {
                                       gnc_get_account_separator());
     reg = regWindowSimple(acct);
     gnc_register_raise(reg);
+  }
+  /* href="gnc-register:guid=12345678901234567890123456789012" */
+  else if(!strncmp("guid=", location, 5)) {
+    GUID guid;
+
+    if (!string_to_guid(location + 5, &guid))
+    {
+      PWARN ("Bad guid: %s", location + 5);
+      return;
+    }
+
+    switch (xaccGUIDType (&guid))
+    {
+      case GNC_ID_NONE:
+      case GNC_ID_NULL:
+        PWARN ("No such entity: %s", location + 5);
+        return;
+
+      case GNC_ID_ACCOUNT:
+        acct = xaccAccountLookup (&guid);
+        reg = regWindowSimple(acct);
+        break;
+
+      case GNC_ID_TRANS:
+        trans = xaccTransLookup (&guid);
+        split = NULL;
+
+        for (node = xaccTransGetSplitList (trans); node; node = node->next)
+        {
+          split = node->data;
+          if (xaccSplitGetAccount (split))
+            break;
+        }
+
+        if (!split)
+          return;
+
+        reg = regWindowSimple (xaccSplitGetAccount (split));
+        break;
+
+      case GNC_ID_SPLIT:
+        split = xaccSplitLookup (&guid);
+        if (!split)
+          return;
+
+        reg = regWindowSimple (xaccSplitGetAccount (split));
+        break;
+
+      default:
+        return;
+    }
+
+    gnc_register_raise(reg);
+    if (split)
+      gnc_register_jump_to_split (reg, split);
   }
   else {
     gnc_warning_dialog(_("Badly formed gnc-register: URL."));
