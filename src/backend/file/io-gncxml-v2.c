@@ -1094,27 +1094,29 @@ gnc_book_write_to_xml_filehandle_v2(GNCBook *book, FILE *out)
 gboolean
 gnc_book_write_accounts_to_xml_filehandle_v2(Backend *be, GNCBook *book, FILE *out)
 {
+    gnc_commodity_table *table;
     AccountGroup *grp;
+    int ncom, nacc;
     sixtp_gdv2 *gd;
 
     if (!out) return FALSE;
 
 	 grp = gnc_book_get_group(book);
+    nacc = 1 + xaccGroupGetNumSubAccounts(grp);
+
+    table = gnc_book_get_commodity_table(book);
+    ncom = gnc_commodity_table_get_size(table);
+
     write_v2_header (out);
 
     write_counts(out,
-                 "commodity",
-                 gnc_commodity_table_get_size(
-                     gnc_book_get_commodity_table(book)),
-                 "account",
-                 1 + xaccGroupGetNumSubAccounts(grp),
+                 "commodity", ncom,
+                 "account", nacc,
                  NULL);
 
     gd = gnc_sixtp_gdv2_new(book, TRUE, file_rw_feedback, be->percentage);
-    gd->counter.commodities_total =
-      gnc_commodity_table_get_size(gnc_book_get_commodity_table(book));
-    gd->counter.accounts_total = 1 +
-      xaccGroupGetNumSubAccounts(grp);
+    gd->counter.commodities_total = ncom;
+    gd->counter.accounts_total = nacc;
 
     write_commodities(out, book, gd);
 
