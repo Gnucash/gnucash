@@ -12,10 +12,9 @@
 
     ;; we want to find all transactions with every split inside the
     ;; account group.
-    (gnc:query-add-account-match 
-     query 
-     (gnc:list->glist (gnc:group-get-subaccounts group))
-     'acct-match-any 'query-or)
+    (gnc:query-add-account-match query
+                                 (gnc:group-get-subaccounts group)
+                                 'acct-match-any 'query-or)
     (d-gnc:query-set-group query group)
     (set! xtns (gnc:query-get-transactions query 'query-match-all))
     
@@ -34,9 +33,7 @@
   ;; get all the transactions in the new group, then iterate over them
   ;; trying to find matches in the new group.  If there are matches, 
   ;; push the matches onto a list. 
-  (let* ((new-xtns 
-          (gnc:glist->list (gnc:group-get-transactions new-group) 
-                           <gnc:Transaction*>))
+  (let* ((new-xtns (gnc:group-get-transactions new-group))
          (separator (string-ref (gnc:account-separator-char) 0))
          (matches '()))    
     
@@ -101,10 +98,7 @@
          
          ;; now that we have built a query, get transactions in the old
          ;; account group that matches it.
-         (let ((old-xtns 
-                (gnc:glist->list (gnc:query-get-transactions 
-                                  query 'query-match-all)
-                                 <gnc:Transaction*>)))
+         (let ((old-xtns (gnc:query-get-transactions query 'query-match-all)))
            (set! old-xtns (map 
                            (lambda (elt)
                              (cons elt #f)) old-xtns))
