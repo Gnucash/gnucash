@@ -1,3 +1,9 @@
+2004-03-05  Tomas Cernaj  <tcernaj@gmx.de>
+
+	* src/register/register-gnome/gnucash-grid.c:
+	  Fix bug in the grid's update method: Called
+	  gnome_canvas_item_request_update() while updating.
+
 2004-03-04  Tomas Cernaj  <tcernaj@gmx.de>
 
 	* src/register/register-gnome/gnucash-cursor.c:
