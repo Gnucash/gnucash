@@ -25,11 +25,29 @@
 #include "account-quickfill.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
-#include "gnc-trace.h"
 #include "gnc-ui-util.h"
+#include "dialog-utils.h"
 
 /* This static indicates the debugging module that this .o belongs to. */
 static short module = MOD_REGISTER;
+
+
+QuickFill *
+gnc_quickfill_get_string_match_mb (QuickFill *qf, const char *str)
+{
+  GdkWChar *wc_text;
+
+  if (NULL == qf) return NULL;
+  if (NULL == str) return NULL;
+
+  /* The match routines all expect wide-chars. */
+  if (gnc_mbstowcs (&wc_text, str) < 0)
+  {
+    PERR ("bad text conversion");
+    return NULL;
+  }
+  return gnc_quickfill_get_string_len_match (qf, wc_text, gnc_wcslen (wc_text));
+}
 
 /* ===================================================================== */
 /* In order to speed up register starts for registers htat have a huge
@@ -43,14 +61,14 @@ static short module = MOD_REGISTER;
 
 typedef struct {
   QuickFill *qf;
-  QofBook *book;
+  GNCBook *book;
   gint  listener;
   AccountBoolCB dont_add_cb;
   gpointer dont_add_data;
 } QFB;
 
 static void 
-shared_quickfill_destroy (QofBook *book, gpointer key, gpointer user_data)
+shared_quickfill_destroy (GNCBook *book, gpointer user_data)
 {
   QFB *qfb = user_data;
   gnc_quickfill_destroy (qfb->qf);
@@ -62,8 +80,9 @@ shared_quickfill_destroy (QofBook *book, gpointer key, gpointer user_data)
  * update it whenever the user creates a new account.  So listen
  * for account modification events, and add new accounts.
  */
+
 static void
-listen_for_account_events (GUID *guid, QofIdType type, 
+listen_for_account_events (GUID *guid, 
                            GNCEngineEventType event_type, 
                            gpointer user_data)
 {
@@ -72,14 +91,14 @@ listen_for_account_events (GUID *guid, QofIdType type,
   QuickFill *match;
   char * name;
   const char *match_str;
-  QofCollection *col;
   Account *account;
+  GNCIdType type;
 
   if (! (event_type & GNC_EVENT_MODIFY)) return;
-  if (QSTRCMP (type, GNC_ID_ACCOUNT)) return;
+  type = xaccGUIDType (guid, qfb->book);
+  if (safe_strcmp (type, GNC_ID_ACCOUNT)) return;
 
-  col = qof_book_get_collection (qfb->book, GNC_ID_ACCOUNT);
-  account = GNC_ACCOUNT (qof_collection_lookup_entity (col, guid));
+  account = xaccAccountLookup (guid, qfb->book);
 
   /* Not every new account is eligable for the menu */
   if (qfb->dont_add_cb)
@@ -132,7 +151,8 @@ load_shared_qf_cb (Account *account, gpointer data)
  * Essentially same loop as in gnc_load_xfer_cell() above.
  */
 static QuickFill *
-build_shared_quickfill (QofBook *book, AccountGroup *group, const char * key,
+build_shared_quickfill (GNCBook *book, AccountGroup *group, 
+                        const char * key,
                         AccountBoolCB cb, gpointer data)
 {
   QFB *qfb;
@@ -149,21 +169,20 @@ build_shared_quickfill (QofBook *book, AccountGroup *group, const char * key,
   qfb->listener = 
      gnc_engine_register_event_handler (listen_for_account_events, qfb);
 
-  qof_book_set_data_fin (book, key, qfb, shared_quickfill_destroy);
+  gnc_book_set_shared_quickfill_hack (book, qfb, shared_quickfill_destroy);
 
   return qfb->qf;
 }
 
 QuickFill *
-gnc_get_shared_account_name_quickfill (AccountGroup *group, 
-                                       const char * key, 
+gnc_get_shared_account_name_quickfill (AccountGroup *group, const char * key,
                                        AccountBoolCB cb, gpointer cb_data)
 {
   QFB *qfb;
-  QofBook *book;
+  GNCBook *book;
 
   book = xaccGroupGetBook (group);
-  qfb = qof_book_get_data (book, key);
+  qfb = gnc_book_get_shared_quickfill_hack (book);
 
   if (qfb) return qfb->qf;
 
