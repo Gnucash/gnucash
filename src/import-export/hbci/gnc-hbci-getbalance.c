@@ -197,6 +197,7 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
   time_t booked_tt;
   gboolean dialogres;
   double booked_value, noted_value;
+  gnc_numeric value;
 
   response = AB_JobGetBalance_GetAccountStatus((AB_JOB*)job);
   if (!response) {
@@ -238,6 +239,9 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
     noted_val = NULL;
   }
 
+  value = double_to_gnc_numeric (booked_value,
+				 xaccAccountGetCommoditySCU(gnc_acc),
+				 GNC_RND_ROUND);
   if ((noted_value == 0.0) && (booked_value == 0.0))
     {
       gnome_ok_dialog_parented 
@@ -256,6 +260,8 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
     }
   else
     {
+      gnc_numeric reconc_balance = xaccAccountGetReconciledBalance (gnc_acc);
+
       char *booked_str = gnc_AB_VALUE_toReadableString (booked_val);
       char *message1 = g_strdup_printf
 	(
@@ -269,14 +275,24 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
 	 (_("For your information: This account also \n"
 	    "has a noted balance of %s\n"),
 	  noted_val));
-      const char *message3 = _("Reconcile account now?");
 
-      dialogres = gnc_verify_dialog
-	(parent, 
-	 TRUE,
-	 "%s%s\n%s",
-	 message1, message2, message3);
+      if (gnc_numeric_equal(value, reconc_balance)) {
+	const char *message3 = _("The booked balance is identical to the current \n"
+				 "reconciled balance of the account.");
+	char *msg = g_strdup_printf ("%s%s\n%s", message1, message2, message3);
+	gnome_ok_dialog_parented (msg, GTK_WINDOW (parent));
+	g_free (msg);
+	dialogres = FALSE;
 
+      } else {
+	const char *message3 = _("Reconcile account now?");
+
+	dialogres = gnc_verify_dialog
+	  (parent, 
+	   TRUE,
+	   "%s%s\n%s",
+	   message1, message2, message3);
+      }
       g_free (message1);
       g_free (message2);
       free (booked_str);
@@ -285,10 +301,6 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
       
   if (dialogres) 
     {
-      gnc_numeric value =
-	double_to_gnc_numeric (booked_value,
-			       xaccAccountGetCommoditySCU(gnc_acc),
-			       GNC_RND_ROUND);
       recnWindowWithBalance (parent, 
 			     gnc_acc, 
 			     value,
