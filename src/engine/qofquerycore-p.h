@@ -42,21 +42,21 @@ void qof_query_core_shutdown (void);
  * the Query internals), compare the object's parameter to the
  * predicate data
  */
-typedef int (*QueryPredicate) (gpointer object,
-			       QofQueryAccess get_fcn,
+typedef int (*QofQueryPredicateFunc) (gpointer object,
+			       QofAccessFunc get_fcn,
 			       QofQueryPredData *pdata);
 
 /* A callback for how to compare two (same-type) objects based on a
  * common get_fcn (parameter member), using the provided comparrison
  * options (which are the type-specific options).
  */
-typedef int (*QueryCompare) (gpointer a, gpointer b,
-                             gint compare_options,
-			     QofQueryAccess get_fcn);
+typedef int (*QofCompareFunc) (gpointer a, gpointer b,
+                              gint compare_options,
+                              QofAccessFunc get_fcn);
 
 /* Lookup functions */
-QueryPredicate qof_query_core_get_predicate (char const *type);
-QueryCompare qof_query_core_get_compare (char const *type);
+QofQueryPredicateFunc qof_query_core_get_predicate (char const *type);
+QofCompareFunc qof_query_core_get_compare (char const *type);
 
 /* Compare two predicates */
 gboolean qof_query_core_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2);

@@ -1,5 +1,5 @@
 /********************************************************************\
- * QueryObjectP.h -- Private API for registering queriable objects  *
+ * qofqueryobject-p.h -- Private API for registering queriable objects  *
  * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -21,14 +21,15 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef GNC_QUERYOBJECTP_H
-#define GNC_QUERYOBJECTP_H
+#ifndef QOF_QUERYOBJECTP_H
+#define QOF_QUERYOBJECTP_H
 
-#include "QueryObject.h"
+#include "GNCId.h"
+#include "qofqueryobject.h"
 
-void gncQueryObjectInit(void);
-void gncQueryObjectShutdown (void);
+void qof_query_object_init(void);
+void qof_query_object_shutdown (void);
 
-QuerySort gncQueryObjectDefaultSort (GNCIdTypeConst obj_name);
+QofSortFunc qof_query_object_default_sort (GNCIdTypeConst obj_name);
 
-#endif /* GNC_QUERYOBJECTP_H */
+#endif /* QOF_QUERYOBJECTP_H */

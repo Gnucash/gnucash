@@ -41,7 +41,7 @@
 #include "gnc-lot-p.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "QueryObject.h"
+#include "qofqueryobject.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 
@@ -329,15 +329,15 @@ gnc_lot_get_latest_split (GNCLot *lot)
 
 void gnc_lot_register (void)
 {
-  static const QueryObjectDef params[] = {
-    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofQueryAccess)gnc_lot_get_book },
-    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofQueryAccess)gnc_lot_get_guid },
-    { LOT_IS_CLOSED, QOF_QUERYCORE_BOOLEAN, (QofQueryAccess)gnc_lot_is_closed },
-    { LOT_BALANCE, QOF_QUERYCORE_NUMERIC, (QofQueryAccess)gnc_lot_get_balance },
+  static const QofQueryObject params[] = {
+    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gnc_lot_get_book },
+    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gnc_lot_get_guid },
+    { LOT_IS_CLOSED, QOF_QUERYCORE_BOOLEAN, (QofAccessFunc)gnc_lot_is_closed },
+    { LOT_BALANCE, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)gnc_lot_get_balance },
     { NULL },
   };
 
-  gncQueryObjectRegister (GNC_ID_LOT, NULL, params);
+  qof_query_object_register (GNC_ID_LOT, NULL, params);
 }
 
 /* ========================== END OF FILE ========================= */

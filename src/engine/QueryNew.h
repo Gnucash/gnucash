@@ -1,4 +1,3 @@
-
 #include "qofquery.h"
 
 
@@ -15,7 +14,7 @@
 		#define QueryNew QofQuery
 		#define QueryOp QofQueryOp
 		#define query_new_term _QofQueryTerm
-		#define query_new_sort _QofQuerySort
+		#define query_new_sort _QofSortFunc
 
 		#define gncQueryBuildParamList qof_query_build_param_list
 		#define gncQueryCreate qof_query_create

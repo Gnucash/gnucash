@@ -46,7 +46,7 @@
 		#define numeric_match_t QofNumericMatch
 		#define date_match_t QofDateMatch
 		#define string_match_t QofStringMatch
-		#define query_compare_t QofQueryCompare
+		#define query_compare_t QofCompareFunc
 
 		#define gncQueryCoreInit qof_query_core_init
 		#define gncQueryCoreShutdown qof_query_core_shutdown
@@ -64,5 +64,5 @@
 		#define QUERYCORE_INT64 QOF_QUERYCORE_INT64
 		#define QUERYCORE_DOUBLE QOF_QUERYCORE_DOUBLE
 
-		#define QueryAccess QofQueryAccess
+		#define QueryAccess QofAccessFunc
 		#define gncQueryCoreToString qof_query_core_to_string

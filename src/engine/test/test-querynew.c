@@ -6,10 +6,10 @@
 #include "gnc-engine-util.h"
 #include "messages.h"
 
-#include "QueryObjectP.h"
 #include "qofquery.h"
 #include "qofquerycore.h"
 #include "qofquerycore-p.h"
+#include "qofqueryobject-p.h"
 
 #include "test-stuff.h"
 
@@ -30,39 +30,39 @@ static int test_core_param (gpointer a)
 
 static void test_query_object (void)
 {
-  static QueryObjectDef params[] = {
-    { TEST_PARAM, TEST_CORE, (QofQueryAccess)test_core_param },
+  static QofQueryObject params[] = {
+    { TEST_PARAM, TEST_CORE, (QofAccessFunc)test_core_param },
     { NULL },
   };
 
   fprintf (stderr, "\tTesting the QueryObject interface. \n"
 	   "\tYou may see some \"** CRITICAL **\" messages, which you can safely ignore\n");
 
-  gncQueryObjectRegister (TEST_MODULE_NAME, (QuerySort)test_sort, params);
+  qof_query_object_register (TEST_MODULE_NAME, (QofSortFunc)test_sort, params);
 
-  do_test (gncQueryObjectGetParameter (TEST_MODULE_NAME, TEST_PARAM)
-	   == &params[0], "gncQueryObjectGetParameter");
-  do_test (gncQueryObjectGetParameter (NULL, NULL) == NULL,
+  do_test (qof_query_object_get_parameter (TEST_MODULE_NAME, TEST_PARAM)
+	   == &params[0], "qof_query_object_get_parameter");
+  do_test (qof_query_object_get_parameter (NULL, NULL) == NULL,
 	   "gncQueryObjectGetParamter (NULL, NULL)");
-  do_test (gncQueryObjectGetParameter (TEST_MODULE_NAME, NULL) == NULL,
+  do_test (qof_query_object_get_parameter (TEST_MODULE_NAME, NULL) == NULL,
 	   "gncQueryObjectGetParamter (TEST_MODULE_NAME, NULL)");
-  do_test (gncQueryObjectGetParameter (TEST_MODULE_NAME, BAD_PARAM) == NULL,
+  do_test (qof_query_object_get_parameter (TEST_MODULE_NAME, BAD_PARAM) == NULL,
 	   "gncQueryObjectGetParamter (TEST_MODULE_NAME, BAD_PARAM)");
-  do_test (gncQueryObjectGetParameter (NULL, TEST_PARAM) == NULL,
+  do_test (qof_query_object_get_parameter (NULL, TEST_PARAM) == NULL,
 	   "gncQueryObjectGetParamter (NULL, TEST_PARAM)");
 
-  do_test (gncQueryObjectGetParameterGetter (TEST_MODULE_NAME, TEST_PARAM)
-	   == (QofQueryAccess)test_core_param,
-	   "gncQueryObjectGetParameterGetter");
+  do_test (qof_query_object_get_parameter_getter (TEST_MODULE_NAME, TEST_PARAM)
+	   == (QofAccessFunc)test_core_param,
+	   "qof_query_object_get_parameter_getter");
 
-  do_test (safe_strcmp (gncQueryObjectParameterType (TEST_MODULE_NAME,
+  do_test (safe_strcmp (qof_query_object_parameter_type (TEST_MODULE_NAME,
 						     TEST_PARAM),
-			TEST_CORE) == 0, "gncQueryObjectParameterType");
+			TEST_CORE) == 0, "qof_query_object_parameter_type");
 
-  do_test (gncQueryObjectDefaultSort (TEST_MODULE_NAME) == test_sort,
-	   "gncQueryObjectDefaultSort");
-  do_test (gncQueryObjectDefaultSort (NULL) == NULL,
-	   "gncQueryObjectDefaultSort (NULL)");
+  do_test (qof_query_object_default_sort (TEST_MODULE_NAME) == test_sort,
+	   "qof_query_object_default_sort");
+  do_test (qof_query_object_default_sort (NULL) == NULL,
+	   "qof_query_object_default_sort (NULL)");
 }
 
 static void test_query_core (void)

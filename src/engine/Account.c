@@ -46,10 +46,10 @@
 #include "kvp-util-p.h"
 #include "messages.h"
 
-#include "QueryObject.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofobject.h"
+#include "qofqueryobject.h"
 
 static short module = MOD_ACCOUNT; 
 
@@ -3189,24 +3189,24 @@ static QofObject account_object_def = {
 
 gboolean xaccAccountRegister (void)
 {
-  static QueryObjectDef params[] = {
-    { ACCOUNT_KVP, QOF_QUERYCORE_KVP, (QofQueryAccess)xaccAccountGetSlots },
-    { ACCOUNT_NAME_, QOF_QUERYCORE_STRING, (QofQueryAccess)xaccAccountGetName },
-    { ACCOUNT_CODE_, QOF_QUERYCORE_STRING, (QofQueryAccess)xaccAccountGetCode },
-    { ACCOUNT_DESCRIPTION_, QOF_QUERYCORE_STRING, (QofQueryAccess)xaccAccountGetDescription },
-    { ACCOUNT_NOTES_, QOF_QUERYCORE_STRING, (QofQueryAccess)xaccAccountGetNotes },
-    { ACCOUNT_PRESENT_, QOF_QUERYCORE_NUMERIC, (QofQueryAccess)xaccAccountGetPresentBalance },
-    { ACCOUNT_BALANCE_, QOF_QUERYCORE_NUMERIC, (QofQueryAccess)xaccAccountGetBalance },
-    { ACCOUNT_CLEARED_, QOF_QUERYCORE_NUMERIC, (QofQueryAccess)xaccAccountGetClearedBalance },
-    { ACCOUNT_RECONCILED_, QOF_QUERYCORE_NUMERIC, (QofQueryAccess)xaccAccountGetReconciledBalance },
-    { ACCOUNT_FUTURE_MINIMUM_, QOF_QUERYCORE_NUMERIC, (QofQueryAccess)xaccAccountGetProjectedMinimumBalance },
-    { ACCOUNT_TAX_RELATED, QOF_QUERYCORE_BOOLEAN, (QofQueryAccess)xaccAccountGetTaxRelated },
-    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofQueryAccess)xaccAccountGetBook },
-    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofQueryAccess)xaccAccountGetGUID },
+  static QofQueryObject params[] = {
+    { ACCOUNT_KVP, QOF_QUERYCORE_KVP, (QofAccessFunc)xaccAccountGetSlots },
+    { ACCOUNT_NAME_, QOF_QUERYCORE_STRING, (QofAccessFunc)xaccAccountGetName },
+    { ACCOUNT_CODE_, QOF_QUERYCORE_STRING, (QofAccessFunc)xaccAccountGetCode },
+    { ACCOUNT_DESCRIPTION_, QOF_QUERYCORE_STRING, (QofAccessFunc)xaccAccountGetDescription },
+    { ACCOUNT_NOTES_, QOF_QUERYCORE_STRING, (QofAccessFunc)xaccAccountGetNotes },
+    { ACCOUNT_PRESENT_, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)xaccAccountGetPresentBalance },
+    { ACCOUNT_BALANCE_, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)xaccAccountGetBalance },
+    { ACCOUNT_CLEARED_, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)xaccAccountGetClearedBalance },
+    { ACCOUNT_RECONCILED_, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)xaccAccountGetReconciledBalance },
+    { ACCOUNT_FUTURE_MINIMUM_, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)xaccAccountGetProjectedMinimumBalance },
+    { ACCOUNT_TAX_RELATED, QOF_QUERYCORE_BOOLEAN, (QofAccessFunc)xaccAccountGetTaxRelated },
+    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)xaccAccountGetBook },
+    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)xaccAccountGetGUID },
     { NULL },
   };
 
-  gncQueryObjectRegister (GNC_ID_ACCOUNT, (QuerySort)xaccAccountOrder, params);
+  qof_query_object_register (GNC_ID_ACCOUNT, (QofSortFunc)xaccAccountOrder, params);
 
   return qof_object_register (&account_object_def);
 }

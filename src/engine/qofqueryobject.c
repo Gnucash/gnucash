@@ -26,7 +26,7 @@
 #include <glib.h>
 
 #include "gnc-engine-util.h"
-#include "QueryObjectP.h"
+#include "qofqueryobject-p.h"
 #include "qofquery.h"
 
 static short module = MOD_QUERY;
@@ -44,9 +44,9 @@ static gboolean clear_table (gpointer key, gpointer value, gpointer user_data)
 /********************************************************************/
 /* PUBLISHED API FUNCTIONS */
 
-void gncQueryObjectRegister (GNCIdTypeConst obj_name,
-			     QuerySort default_sort_function,
-			     const QueryObjectDef *params)
+void qof_query_object_register (GNCIdTypeConst obj_name,
+			     QofSortFunc default_sort_function,
+			     const QofQueryObject *params)
 {
   int i;
 
@@ -72,7 +72,7 @@ void gncQueryObjectRegister (GNCIdTypeConst obj_name,
   }
 }
 
-void gncQueryObjectInit(void)
+void qof_query_object_init(void)
 {
   if (initialized) return;
   initialized = TRUE;
@@ -81,7 +81,7 @@ void gncQueryObjectInit(void)
   sortTable = g_hash_table_new (g_str_hash, g_str_equal);
 }
 
-void gncQueryObjectShutdown (void)
+void qof_query_object_shutdown (void)
 {
   if (!initialized) return;
   initialized = FALSE;
@@ -92,7 +92,7 @@ void gncQueryObjectShutdown (void)
 }
 
 
-const QueryObjectDef * gncQueryObjectGetParameter (GNCIdTypeConst obj_name,
+const QofQueryObject * qof_query_object_get_parameter (GNCIdTypeConst obj_name,
 						   const char *parameter)
 {
   GHashTable *ht;
@@ -108,35 +108,36 @@ const QueryObjectDef * gncQueryObjectGetParameter (GNCIdTypeConst obj_name,
   return (g_hash_table_lookup (ht, parameter));
 }
 
-QofQueryAccess gncQueryObjectGetParameterGetter (GNCIdTypeConst obj_name,
+QofAccessFunc qof_query_object_get_parameter_getter (GNCIdTypeConst obj_name,
 					      const char *parameter)
 {
-  const QueryObjectDef *obj;
+  const QofQueryObject *obj;
 
   g_return_val_if_fail (obj_name, NULL);
   g_return_val_if_fail (parameter, NULL);
 
-  obj = gncQueryObjectGetParameter (obj_name, parameter);
+  obj = qof_query_object_get_parameter (obj_name, parameter);
   if (obj)
     return obj->param_getfcn;
 
   return NULL;
 }
 
-QofQueryCoreType gncQueryObjectParameterType (GNCIdTypeConst obj_name,
+QofQueryCoreType qof_query_object_parameter_type (GNCIdTypeConst obj_name,
 					   const char *param_name)
 {
-  const QueryObjectDef *obj;
+  const QofQueryObject *obj;
 
   if (!obj_name || !param_name) return NULL;
 
-  obj = gncQueryObjectGetParameter (obj_name, param_name);
+  obj = qof_query_object_get_parameter (obj_name, param_name);
   if (!obj) return NULL;
 
   return (obj->param_type);
 }
 
-QuerySort gncQueryObjectDefaultSort (GNCIdTypeConst obj_name)
+QofSortFunc 
+qof_query_object_default_sort (GNCIdTypeConst obj_name)
 {
   if (!obj_name) return NULL;
   return g_hash_table_lookup (sortTable, obj_name);

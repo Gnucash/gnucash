@@ -40,14 +40,14 @@ typedef const char * QofQueryCoreType;
 
 typedef struct _QofQueryPredData QofQueryPredData;
 
-/** The QofQueryAccess type defines an arbitrary function pointer
+/** The QofAccessFunc type defines an arbitrary function pointer
  *  for access functions.  This is needed because C doesn't have
  *  templates, so we just cast a lot.  Real functions must be of
  *  the form:
  *
  * <param_type> function (object_type *obj);
  */
-typedef gpointer (*QofQueryAccess)(gpointer);
+typedef gpointer (*QofAccessFunc)(gpointer);
 
 /** Standard Query comparitors, for how to compare objects in a predicate.
  *  Note that not all core types implement all comparitors
@@ -86,14 +86,15 @@ typedef enum {
 
 #define QOF_QUERYCORE_GUID		"guid"
 typedef enum {
-  /* These expect a single object and expect the QofQueryAccess returns GUID* */
+  /** These expect a single object and expect the 
+   * QofAccessFunc returns GUID* */
   QOF_GUID_MATCH_ANY = 1,
   QOF_GUID_MATCH_NONE,
   QOF_GUID_MATCH_NULL,
-  /* These expect a GList* of objects and calls the QofQueryAccess routine
+  /** These expect a GList* of objects and calls the QofAccessFunc routine
    * on each item in the list to obtain a GUID* for each object */
   QOF_GUID_MATCH_ALL,
-  /* These expect a single object and expect the QofQueryAccess function
+  /** These expect a single object and expect the QofAccessFunc function
    * to return a GList* of GUID* (the list is the property of the caller) */
   QOF_GUID_MATCH_LIST_ANY,
 } QofGuidMatch;
@@ -114,7 +115,7 @@ typedef enum {
 /** Head of Predicate Data structures.  All PData must start like this. */
 struct _QofQueryPredData {
   QofQueryCoreType      type_name;  /* QUERYCORE_* */
-  QofQueryCompare how;
+  QofQueryCompare       how;
 };
 
 
@@ -147,6 +148,6 @@ void qof_query_core_predicate_free (QofQueryPredData *pdata);
  *  to g_free() the returned string.
  */
 char * qof_query_core_to_string (char const *type, gpointer object,
-			     QofQueryAccess fcn);
+			     QofAccessFunc fcn);
 
 #endif /* QOF_QUERYCORE_H */

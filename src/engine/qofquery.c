@@ -32,7 +32,6 @@
 #include "gnc-engine-util.h"
 #include "BackendP.h"
 
-#include "QueryObjectP.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofobject.h"
@@ -40,10 +39,13 @@
 #include "qofquery-p.h"
 #include "qofquerycore.h"
 #include "qofquerycore-p.h"
+#include "qofqueryobject.h"
+#include "qofqueryobject-p.h"
 
 static short module = MOD_QUERY;
 
-typedef struct _QofQueryTerm {
+typedef struct _QofQueryTerm 
+{
   GSList *                param_list;
   QofQueryPredData        *pdata;
   gboolean                invert;
@@ -54,10 +56,11 @@ typedef struct _QofQueryTerm {
    * convert types.
    */
   GSList *                param_fcns;
-  QueryPredicate          pred_fcn;
+  QofQueryPredicateFunc   pred_fcn;
 } QofQueryTerm;
 
-typedef struct _QofQuerySort {
+typedef struct _QofSortFunc 
+{
   GSList *            param_list;
   gint                options;
   gboolean            increasing;
@@ -69,47 +72,49 @@ typedef struct _QofQuerySort {
    */
   gboolean            use_default;
   GSList *            param_fcns;
-  QuerySort           obj_cmp;        /* In case you are comparing objects */
-  QueryCompare        comp_fcn;        /* When you are comparing core types */
+  QofSortFunc         obj_cmp;        /* In case you are comparing objects */
+  QofCompareFunc      comp_fcn;        /* When you are comparing core types */
 } QofQuerySort;
 
 /* The QUERY structure */
-struct _QofQuery {
+struct _QofQuery 
+{
   /* The object type that we're searching for */
-  GNCIdType        search_for;
+  GNCIdType         search_for;
 
   /* terms is a list of the OR-terms in a sum-of-products 
    * logical expression. */
-  GList *        terms;  
+  GList *           terms;  
 
   /* sorting and chopping is independent of the search filter */
 
-  QofQuerySort        primary_sort;
-  QofQuerySort        secondary_sort;
-  QofQuerySort        tertiary_sort;
-  QuerySort        defaultSort;        /* <- Computed from search_for */
+  QofQuerySort      primary_sort;
+  QofQuerySort      secondary_sort;
+  QofQuerySort      tertiary_sort;
+  QofSortFunc       defaultSort;        /* <- Computed from search_for */
 
   /* The maximum number of results to return */
-  int                max_results;
+  int               max_results;
 
   /* list of books that will be participating in the query */
-  GList *        books;
+  GList *           books;
 
   /* a map of book to backend-compiled queries */
-  GHashTable*        be_compiled;
+  GHashTable*       be_compiled;
 
   /* cache the results so we don't have to run the whole search 
    * again until it's really necessary */
-  int                changed;
+  int               changed;
 
-  GList *        results;
+  GList *           results;
 };
 
-typedef struct query_cb {
+typedef struct _QofQueryCB 
+{
   QofQuery *        query;
-  GList *        list;
-  int                count;
-} query_cb_t;
+  GList *           list;
+  int               count;
+} QofQueryCB;
 
 /* initial_term will be owned by the new Query */
 static void query_init (QofQuery *q, QofQueryTerm *initial_term)
@@ -221,14 +226,14 @@ copy_or_terms(GList * or_terms)
   return g_list_reverse(or);
 }
 
-static void copy_sort (QofQuerySort_t dst, const QofQuerySort_t src)
+static void copy_sort (QofQuerySort *dst, const QofQuerySort *src)
 {
   memcpy (dst, src, sizeof (*dst));
   dst->param_list = g_slist_copy (src->param_list);
   dst->param_fcns = g_slist_copy (src->param_fcns);
 }
 
-static void free_sort (QofQuerySort_t s)
+static void free_sort (QofQuerySort *s)
 {
   g_slist_free (s->param_list);
   s->param_list = NULL;
@@ -271,12 +276,12 @@ static void free_members (QofQuery *q)
   q->results = NULL;
 }
 
-static int cmp_func (QofQuerySort_t sort, QuerySort default_sort,
+static int cmp_func (QofQuerySort *sort, QofSortFunc default_sort,
                      gconstpointer a, gconstpointer b)
 {
   GSList *node;
   gpointer conva, convb;
-  QofQueryAccess get_fcn = NULL;        /* to appease the compiler */
+  QofAccessFunc get_fcn = NULL;        /* to appease the compiler */
 
   g_return_val_if_fail (sort, 0);
   g_return_val_if_fail (default_sort, 0);
@@ -361,7 +366,7 @@ check_object (QofQuery *q, gpointer object)
       qt = (QofQueryTerm *)(and_ptr->data);
       if (qt->param_fcns && qt->pred_fcn) {
         GSList *node;
-        QofQueryAccess get_fcn;
+        QofAccessFunc get_fcn;
         gpointer conv_obj = object;
 
         /* iterate through the conversions */
@@ -398,9 +403,9 @@ check_object (QofQuery *q, gpointer object)
  * returns NULL if the first parameter is bad (and final is unchanged).
  */
 static GSList * compile_params (GSList *param_list, GNCIdType start_obj,
-                                QueryObjectDef const **final)
+                                QofQueryObject const **final)
 {
-  const QueryObjectDef *objDef = NULL;
+  const QofQueryObject *objDef = NULL;
   GSList *fcns = NULL;
 
   g_return_val_if_fail (param_list, NULL);
@@ -409,7 +414,7 @@ static GSList * compile_params (GSList *param_list, GNCIdType start_obj,
 
   for (; param_list; param_list = param_list->next) {
     GNCIdType param_name = param_list->data;
-    objDef = gncQueryObjectGetParameter (start_obj, param_name);
+    objDef = qof_query_object_get_parameter (start_obj, param_name);
 
     /* If it doesn't exist, then we've reached the end */
     if (!objDef)
@@ -428,9 +433,10 @@ static GSList * compile_params (GSList *param_list, GNCIdType start_obj,
   return (g_slist_reverse (fcns));
 }
 
-static void compile_sort (QofQuerySort_t sort, GNCIdType obj)
+static void 
+compile_sort (QofQuerySort *sort, GNCIdType obj)
 {
-  const QueryObjectDef *resObj = NULL;
+  const QofQueryObject *resObj = NULL;
 
   sort->use_default = FALSE;
 
@@ -454,7 +460,7 @@ static void compile_sort (QofQuerySort_t sort, GNCIdType obj)
 
     /* Hrm, perhaps this is an object compare, not a core compare? */
     if (sort->comp_fcn == NULL)
-      sort->obj_cmp = gncQueryObjectDefaultSort (resObj->param_type);
+      sort->obj_cmp = qof_query_object_default_sort (resObj->param_type);
 
   } else if (!safe_strcmp (sort->param_list->data, QUERY_DEFAULT_SORT))
     sort->use_default = TRUE;
@@ -470,7 +476,7 @@ static void compile_terms (QofQuery *q)
   for (or_ptr = q->terms; or_ptr; or_ptr = or_ptr->next) {
     for (and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next) {
       QofQueryTerm *qt = and_ptr->data;
-      const QueryObjectDef *resObj = NULL;
+      const QofQueryObject *resObj = NULL;
       
       g_slist_free (qt->param_fcns);
       qt->param_fcns = NULL;
@@ -495,7 +501,7 @@ static void compile_terms (QofQuery *q)
   compile_sort (&(q->secondary_sort), q->search_for);
   compile_sort (&(q->tertiary_sort), q->search_for);
 
-  q->defaultSort = gncQueryObjectDefaultSort (q->search_for);
+  q->defaultSort = qof_query_object_default_sort (q->search_for);
 
   /* Now compile the backend instances */
   for (node = q->books; node; node = node->next) {
@@ -512,7 +518,7 @@ static void compile_terms (QofQuery *q)
 
 static void check_item_cb (gpointer object, gpointer user_data)
 {
-  query_cb_t *ql = user_data;
+  QofQueryCB *ql = user_data;
 
   if (!object || !ql) return;
 
@@ -676,7 +682,7 @@ GList * qof_query_run (QofQuery *q)
 
   /* Now run the query over all the objects and save the results */
   {
-    query_cb_t qcb;
+    QofQueryCB qcb;
 
     memset (&qcb, 0, sizeof (qcb));
     qcb.query = q;
@@ -1172,12 +1178,12 @@ void qof_query_init (void)
 {
   PINFO("New Query Module Initialization");
   qof_query_core_init ();
-  gncQueryObjectInit ();
+  qof_query_object_init ();
 }
 
 void qof_query_shutdown (void)
 {
-  gncQueryObjectShutdown ();
+  qof_query_object_shutdown ();
   qof_query_core_shutdown ();
 }
 
@@ -1220,8 +1226,8 @@ gboolean qof_query_term_is_inverted (QofQueryTerm_t qt)
   return qt->invert;
 }
 
-void qof_query_get_sorts (QofQuery *q, QofQuerySort_t *primary,
-                       QofQuerySort_t *secondary, QofQuerySort_t *tertiary)
+void qof_query_get_sorts (QofQuery *q, QofQuerySort **primary,
+                       QofQuerySort **secondary, QofQuerySort **tertiary)
 {
   if (!q)
     return;
@@ -1233,21 +1239,21 @@ void qof_query_get_sorts (QofQuery *q, QofQuerySort_t *primary,
     *tertiary = &(q->tertiary_sort);
 }
 
-GSList * qof_query_sort_get_param_path (QofQuerySort_t qs)
+GSList * qof_query_sort_get_param_path (QofQuerySort *qs)
 {
   if (!qs)
     return NULL;
   return qs->param_list;
 }
 
-gint qof_query_sort_get_sort_options (QofQuerySort_t qs)
+gint qof_query_sort_get_sort_options (QofQuerySort *qs)
 {
   if (!qs)
     return 0;
   return qs->options;
 }
 
-gboolean qof_query_sort_get_increasing (QofQuerySort_t qs)
+gboolean qof_query_sort_get_increasing (QofQuerySort *qs)
 {
   if (!qs)
     return FALSE;
@@ -1264,7 +1270,7 @@ static gboolean gncQueryTermEqual (QofQueryTerm_t qt1, QofQueryTerm_t qt2)
   return qof_query_core_predicate_equal (qt1->pdata, qt2->pdata);
 }
 
-static gboolean gncQuerySortEqual (QofQuerySort_t qs1, QofQuerySort_t qs2)
+static gboolean gncQuerySortEqual (QofQuerySort* qs1, QofQuerySort* qs2)
 {
   if (qs1 == qs2) return TRUE;
   if (!qs1 || !qs2) return FALSE;
@@ -1322,7 +1328,7 @@ gboolean qof_query_equal (QofQuery *q1, QofQuery *q2)
 /* Static prototypes */
 static GList *qof_query_printSearchFor (QofQuery * query, GList * output);
 static GList *qof_query_printTerms (QofQuery * query, GList * output);
-static GList *qof_query_printSorts (QofQuerySort_t s[], const gint numSorts,
+static GList *qof_query_printSorts (QofQuerySort *s[], const gint numSorts,
                                   GList * output);
 static GList *qof_query_printAndTerms (GList * terms, GList * output);
 static gchar *qof_query_printStringForHow (QofQueryCompare how);
@@ -1345,7 +1351,7 @@ qof_query_print (QofQuery * query)
 {
   GList *output;
   GString *str;
-  QofQuerySort_t s[3];
+  QofQuerySort *s[3];
   gint maxResults = 0, numSorts = 3;
 
   ENTER (" ");
@@ -1447,7 +1453,7 @@ qof_query_printTerms (QofQuery * query, GList * output)
         not null.
 */
 static GList *
-qof_query_printSorts (QofQuerySort_t s[], const gint numSorts, GList * output)
+qof_query_printSorts (QofQuerySort *s[], const gint numSorts, GList * output)
 {
   GSList *gsl = NULL;
   gint curSort;
@@ -1546,7 +1552,7 @@ qof_query_printPredData (QofQueryPredData *pd)
 
 /*
         Get a string representation for the
-        QofQueryCompare enum type.
+        QofCompareFunc enum type.
 */
 static gchar *
 qof_query_printStringForHow (QofQueryCompare how)

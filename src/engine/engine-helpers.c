@@ -232,7 +232,7 @@ gnc_gw_enum_scm2val (const char *typestr, SCM enum_scm)
   return scm_num2int (scm, SCM_ARG1, __FUNCTION__);
 }
 
-/* QofQueryCompare */
+/* QofCompareFunc */
 
 static SCM
 gnc_query_compare2scm (QofQueryCompare how)
@@ -937,10 +937,10 @@ gnc_queryterm2scm (QofQueryTerm_t qt)
   return scm_reverse (qt_scm);
 }
 
-static Query *
+static QofQuery *
 gnc_scm2query_term_query_v2 (SCM qt_scm)
 {
-  Query *q = NULL;
+  QofQuery *q = NULL;
   QofQueryPredData *pd = NULL;
   SCM scm;
   char *type = NULL;
@@ -973,7 +973,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
       break;
     type = gh_symbol2newstr (scm, NULL);
 
-    /* QofQueryCompare */
+    /* QofCompareFunc */
     scm = SCM_CAR (qt_scm);
     qt_scm = SCM_CDR (qt_scm);
     if (SCM_NULLP (scm))
@@ -1164,14 +1164,14 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
   return q;
 }
 
-static Query *
+static QofQuery *
 gnc_scm2query_term_query_v1 (SCM query_term_scm)
 {
   gboolean ok = FALSE;
   char * pd_type = NULL;
   char * pr_type = NULL;
   gboolean sense = FALSE;
-  Query *q = NULL;
+  QofQuery *q = NULL;
   SCM scm;
 
   if (!SCM_LISTP (query_term_scm) ||
@@ -1626,7 +1626,7 @@ gnc_scm2query_or_terms (SCM or_terms, query_version_t vers)
 }
 
 static SCM
-gnc_query_sort2scm (QofQuerySort_t qs)
+gnc_query_sort2scm (QofSortFunc_t qs)
 {
   SCM sort_scm = SCM_EOL;
   GSList *path;
@@ -1703,7 +1703,7 @@ gnc_query2scm (Query *q)
 {
   SCM query_scm = SCM_EOL;
   SCM pair;
-  QofQuerySort_t s1, s2, s3;
+  QofSortFunc_t s1, s2, s3;
 
   if (!q) return SCM_BOOL_F;
 
