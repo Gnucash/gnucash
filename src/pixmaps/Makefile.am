@@ -1,4 +1,4 @@
-gncpixmapdir = ${GNC_SHAREDIR}
+gncpixmapdir = ${GNC_PIXMAP_DIR}
 
 gncpixmap_DATA = \
   gnucash_long.png

@@ -188,7 +188,7 @@ gnc_get_pixmap (const char *name)
 
   g_return_val_if_fail (name != NULL, NULL);
 
-  fullname = g_strconcat (GNC_SHAREDIR, "/", name, NULL);
+  fullname = g_strconcat (GNC_PIXMAP_DIR, "/", name, NULL);
   pixmap = gnome_pixmap_new_from_file (fullname);
   g_free (fullname);
 

@@ -23,6 +23,6 @@
 #ifndef __GNC_DIR_H__
 #define __GNC_DIR_H__
 
-#define GNC_SHAREDIR "@-GNC_SHAREDIR-@"
+#define GNC_PIXMAP_DIR "@-GNC_PIXMAP_DIR-@"
 
 #endif

@@ -1,5 +1,22 @@
 2001-03-04  Dave Peticolas  <dave@krondo.com>
 
+	* configure.in: define a new substitution GNC_PIXMAP_DIR for
+	a pixmap directory.
+
+	* src/pixmaps/Makefile.am (gncpixmapdir): install in configured
+	pixmap directory
+
+	* src/gnc-dir.h.in (GNC_PIXMAP_DIR): define pixmap directory
+
+	* src/Makefile.am (gnc-dir.h): configure pixmap directory
+	for gnc-dir.h.in
+
+	* src/gnome/dialog-utils.c (gnc_get_pixmap): use configured
+	pixmap directory
+
+	* src/engine/gnc-associate-account.c: fix some uses of glib
+	list routines (they always return the new head of the list).
+
 	* src/pixmaps: add gnucash_long.png graphic
 
 	* src/gnome/top-level.c (gnucash_ui_init): show splash screen
