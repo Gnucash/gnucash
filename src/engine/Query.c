@@ -1142,10 +1142,11 @@ xaccQueryGetSplitsUniqueTrans(Query *q)
   for (current = splits; current; current = current->next)
   {
     Split *split = current->data;
+    Transaction *trans = xaccSplitGetParent (split);
 
-    if (!g_hash_table_lookup (trans_hash, split))
+    if (!g_hash_table_lookup (trans_hash, trans))
     {
-      g_hash_table_insert (trans_hash, split, split);
+      g_hash_table_insert (trans_hash, trans, trans);
       result = g_list_prepend (result, split);
     }
   }

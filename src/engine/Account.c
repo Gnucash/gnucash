@@ -2115,11 +2115,9 @@ xaccAccountSetLastNum (Account *account, const char *num)
 \********************************************************************/
 
 void
-xaccAccountSetPriceSrc(Account *acc, const char *src) 
+xaccAccountSetPriceSrc(Account *acc, const char *src)
 {
-
   if(!acc) return;
-  if(!src) return;
 
   xaccAccountBeginEdit(acc);
   {
@@ -2127,8 +2125,8 @@ xaccAccountSetPriceSrc(Account *acc, const char *src)
 
     if((t == STOCK) || (t == MUTUAL)) {
       kvp_frame_set_slot_nc(acc->kvp_data,
-                           "old-price-source",
-                           kvp_value_new_string(src));
+                            "old-price-source",
+                            src ? kvp_value_new_string(src) : NULL);
       mark_account (acc);
     }
   }
