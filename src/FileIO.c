@@ -187,21 +187,24 @@ readData( char *datafile )
   int  token=0;
   int  num_unclaimed;
   AccountGroup *grp = 0x0;
+  char buf[BUFSIZE];
 
   maingrp = 0x0;
   
   fd = open( datafile, RFLAGS, 0 );
   if( fd == -1 )
     {
-    ERROR();
+    sprintf (buf, FILE_NOT_FOUND_MSG, datafile);
+    errorBox (toplevel, buf);
     return NULL;
     }
   
   /* Read in the file format token */
   err = read( fd, &token, sizeof(int) );
-  if( err == -1 )
+  if( sizeof(int) != err ) 
     {
-    ERROR();
+    sprintf (buf, FILE_EMPTY_MSG, datafile);
+    errorBox (toplevel, buf);
     close(fd);
     return NULL;
     }
@@ -278,7 +281,7 @@ readGroup (int fd, Account *aparent, int token)
 
   /* read numAccs */
   err = read( fd, &numAcc, sizeof(int) );
-  if( err == -1 )
+  if( sizeof(int) != err ) 
     {
     freeAccountGroup (grp);
     return NULL;
@@ -840,7 +843,7 @@ writeGroup (int fd, AccountGroup *grp )
   for( i=0; i<grp->numAcc; i++ )
     {
     err = writeAccount( fd, getAccount(grp,i) );
-    if( err == -1 )
+    if( -1 == err )
       return err;
     }
   
@@ -883,15 +886,15 @@ writeAccount( int fd, Account *acc )
     return -1;
   
   err = writeString( fd, acc->accountName );
-  if( err == -1 )
+  if( -1 == err )
     return err;
   
   err = writeString( fd, acc->description );
-  if( err == -1 )
+  if( -1 == err )
     return err;
   
   err = writeString( fd, acc->notes );
-  if( err == -1 )
+  if( -1 == err )
     return err;
   
   /* figure out numTrans -- it will be less than the total
@@ -916,7 +919,7 @@ writeAccount( int fd, Account *acc )
     if (0 == trans->write_flag) {
        err = writeTransaction( fd, trans );
     }
-    if( err == -1 ) return err;
+    if( -1 == err ) return err;
   }
 
   if (acc->children) {
@@ -963,23 +966,23 @@ writeTransaction( int fd, Transaction *trans )
   trans->write_flag = 1;
   
   err = writeString( fd, trans->num );
-  if( err == -1 )
+  if( -1 == err )
     return err;
   
   err = writeDate( fd, &(trans->date) );
-  if( err == -1 )
+  if( -1 == err )
     return err;
   
   err = writeString( fd, trans->description );
-  if( err == -1 )
+  if( -1 == err )
     return err;
   
   err = writeString( fd, trans->memo );
-  if( err == -1 )
+  if( -1 == err )
     return err;
   
   err = writeString( fd, trans->action );
-  if( err == -1 )
+  if( -1 == err )
     return err;
   
   tmp = trans->catagory;

@@ -49,6 +49,7 @@
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
 #define RFLAGS  O_RDONLY
 
+extern Widget toplevel;
 
 /********************************************************************\
  * xaccReadQIFLine                                                  * 
@@ -853,13 +854,14 @@ xaccReadQIFData( char *datafile )
   int  fd;
   int  skip = 0;
   char * qifline;
-  AccountGroup *grp = mallocAccountGroup();
+  AccountGroup *grp;
+  char buf[BUFSIZE];
   
   fd = open( datafile, RFLAGS, 0 );
   if( fd == -1 )
     {
-    ERROR();
-    freeAccountGroup(grp);
+    sprintf (buf, FILE_NOT_FOUND_MSG, datafile);
+    errorBox (toplevel, buf);
     return NULL;
     }
   
@@ -867,11 +869,13 @@ xaccReadQIFData( char *datafile )
   qifline = xaccReadQIFLine (fd); 
   if( NULL == qifline )
     {
-    ERROR();
+    sprintf (buf, FILE_EMPTY_MSG, datafile);
+    errorBox (toplevel, buf);
     close(fd);
-    freeAccountGroup(grp);
     return NULL;
     }
+
+  grp = mallocAccountGroup();
   
   while (qifline) {
      if (NSTRNCMP (qifline, "!Type:Bank")) {
