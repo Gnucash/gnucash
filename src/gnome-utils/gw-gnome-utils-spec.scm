@@ -462,7 +462,7 @@ be left empty")
 
   (gw:wrap-function
    ws
-   'gnc:mdi_show_progress
+   'gnc:mdi-show-progress
    '<gw:void>
    "gnc_mdi_show_progress"
    '(((<gw:mchars> caller-owned const) message)
@@ -471,7 +471,7 @@ be left empty")
 
   (gw:wrap-function
    ws
-   'gnc:set_busy_cursor
+   'gnc:set-busy-cursor
    '<gw:void>
    "gnc_set_busy_cursor"
    '((<gtk:Widget*> window)
@@ -480,7 +480,7 @@ be left empty")
 
   (gw:wrap-function
    ws
-   'gnc:unset_busy_cursor
+   'gnc:unset-busy-cursor
    '<gw:void>
    "gnc_unset_busy_cursor"
    '((<gtk:Widget*> window))

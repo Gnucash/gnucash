@@ -381,7 +381,7 @@
   (let ((report (gnc:find-report id))
 	(start-time (gettimeofday))
 	(html #f))
-    (gnc:set_busy_cursor #f #t)
+    (gnc:set-busy-cursor #f #t)
     (gnc:backtrace-if-exception 
      (lambda ()
        (if report
@@ -392,7 +392,7 @@
 ;;	     (newline)
 ;;	     (display html) (newline)
 	     ))))
-    (gnc:unset_busy_cursor #f)
+    (gnc:unset-busy-cursor #f)
     html))
 
 (define (gnc:report-templates-for-each thunk)
