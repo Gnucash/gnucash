@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5.0\n"
-"POT-Creation-Date: 2001-05-13 15:23-0700\n"
+"POT-Creation-Date: 2001-05-13 17:47-0700\n"
 "PO-Revision-Date: 2000-08-06 20:43+00:00\n"
 "Last-Translator: Valek Filippov <frob@df.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -332,7 +332,7 @@ msgstr "Кредит"
 #: src/gnome/glade-gnc-dialogs.c:960 src/gnome/glade-gnc-dialogs.c:4794
 #: src/gnome/glade-gnc-dialogs.c:4842 src/gnome/glade-gnc-dialogs.c:7399
 #: src/gnome/reconcile-list.c:147 src/scm/report/guile-strings.c:32
-#: src/scm/report/guile-strings.c:280 src/scm/report/guile-strings.c:327
+#: src/scm/report/guile-strings.c:281 src/scm/report/guile-strings.c:327
 #: src/scm/report/guile-strings.c:352 src/scm/report/guile-strings.c:384
 #: src/scm/report/guile-strings.c:566 src/scm/report/guile-strings.c:587
 #: src/scm/report/guile-strings.c:615 src/scm/report/guile-strings.c:651
@@ -2479,7 +2479,7 @@ msgstr "Информация о передаче"
 #: src/scm/guile-strings.c:430 src/scm/report/guile-strings.c:17
 #: src/scm/report/guile-strings.c:57 src/scm/report/guile-strings.c:81
 #: src/scm/report/guile-strings.c:129 src/scm/report/guile-strings.c:234
-#: src/scm/report/guile-strings.c:281 src/scm/report/guile-strings.c:607
+#: src/scm/report/guile-strings.c:283 src/scm/report/guile-strings.c:607
 msgid "Accounts"
 msgstr "Счета"
 
@@ -6029,7 +6029,8 @@ msgstr "Валюта по умолчанию"
 #: src/scm/report/guile-strings.c:16 src/scm/report/guile-strings.c:36
 #: src/scm/report/guile-strings.c:54 src/scm/report/guile-strings.c:95
 #: src/scm/report/guile-strings.c:128 src/scm/report/guile-strings.c:233
-#: src/scm/report/guile-strings.c:271 src/scm/report/guile-strings.c:299
+#: src/scm/report/guile-strings.c:271 src/scm/report/guile-strings.c:280
+#: src/scm/report/guile-strings.c:299
 msgid "Price Source"
 msgstr ""
 
@@ -6757,18 +6758,13 @@ msgstr "Пункты"
 
 #: src/scm/report/guile-strings.c:282
 #, fuzzy
-msgid "Stock Accounts to report on"
-msgstr "Выбрать счет"
-
-#: src/scm/report/guile-strings.c:283
-#, fuzzy
 msgid "Report Currency"
 msgstr "Валюта по умолчанию"
 
 #: src/scm/report/guile-strings.c:284
-#, c-format
-msgid "Investment Portfolio Report: %s"
-msgstr ""
+#, fuzzy
+msgid "Stock Accounts to report on"
+msgstr "Выбрать счет"
 
 #: src/scm/report/guile-strings.c:287
 #, fuzzy

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5.X\n"
-"POT-Creation-Date: 2001-05-13 15:23-0700\n"
+"POT-Creation-Date: 2001-05-13 17:47-0700\n"
 "PO-Revision-Date: 2001-01-22 00:25+0200\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: FRENCH  <FR@li.org>\n"
@@ -378,7 +378,7 @@ msgstr "Crédit"
 #: src/gnome/glade-gnc-dialogs.c:960 src/gnome/glade-gnc-dialogs.c:4794
 #: src/gnome/glade-gnc-dialogs.c:4842 src/gnome/glade-gnc-dialogs.c:7399
 #: src/gnome/reconcile-list.c:147 src/scm/report/guile-strings.c:32
-#: src/scm/report/guile-strings.c:280 src/scm/report/guile-strings.c:327
+#: src/scm/report/guile-strings.c:281 src/scm/report/guile-strings.c:327
 #: src/scm/report/guile-strings.c:352 src/scm/report/guile-strings.c:384
 #: src/scm/report/guile-strings.c:566 src/scm/report/guile-strings.c:587
 #: src/scm/report/guile-strings.c:615 src/scm/report/guile-strings.c:651
@@ -2900,7 +2900,7 @@ msgstr "Informations du transfert"
 #: src/scm/guile-strings.c:430 src/scm/report/guile-strings.c:17
 #: src/scm/report/guile-strings.c:57 src/scm/report/guile-strings.c:81
 #: src/scm/report/guile-strings.c:129 src/scm/report/guile-strings.c:234
-#: src/scm/report/guile-strings.c:281 src/scm/report/guile-strings.c:607
+#: src/scm/report/guile-strings.c:283 src/scm/report/guile-strings.c:607
 msgid "Accounts"
 msgstr "Comptes"
 
@@ -7046,7 +7046,8 @@ msgstr "Monnaie du rapport"
 #: src/scm/report/guile-strings.c:16 src/scm/report/guile-strings.c:36
 #: src/scm/report/guile-strings.c:54 src/scm/report/guile-strings.c:95
 #: src/scm/report/guile-strings.c:128 src/scm/report/guile-strings.c:233
-#: src/scm/report/guile-strings.c:271 src/scm/report/guile-strings.c:299
+#: src/scm/report/guile-strings.c:271 src/scm/report/guile-strings.c:280
+#: src/scm/report/guile-strings.c:299
 #, fuzzy
 msgid "Price Source"
 msgstr "Source des cours d'actions"
@@ -7925,23 +7926,17 @@ msgstr "Profits:"
 msgid "Profit And Loss"
 msgstr "Pertes et profits"
 
-# messages-i18n.c:206
-#: src/scm/report/guile-strings.c:282
-#, fuzzy
-msgid "Stock Accounts to report on"
-msgstr "Nettoyer le compte"
-
 # po/guile_strings.txt:152
-#: src/scm/report/guile-strings.c:283
+#: src/scm/report/guile-strings.c:282
 #, fuzzy
 msgid "Report Currency"
 msgstr "Monnaie du rapport"
 
-# po/guile_strings.txt:224
+# messages-i18n.c:206
 #: src/scm/report/guile-strings.c:284
-#, fuzzy, c-format
-msgid "Investment Portfolio Report: %s"
-msgstr "Affiche le rapport du Portefeuille d'actions"
+#, fuzzy
+msgid "Stock Accounts to report on"
+msgstr "Nettoyer le compte"
 
 # po/guile_strings.txt:122
 #: src/scm/report/guile-strings.c:287
@@ -8955,6 +8950,11 @@ msgstr ""
 #: src/scm/report/guile-strings.c:713
 msgid "Welcome to GnuCash 1.6"
 msgstr ""
+
+# po/guile_strings.txt:224
+#, fuzzy
+#~ msgid "Investment Portfolio Report: %s"
+#~ msgstr "Affiche le rapport du Portefeuille d'actions"
 
 # messages-i18n.c:236 po/guile_strings.txt:56
 #, fuzzy

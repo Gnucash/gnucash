@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.4.5\n"
-"POT-Creation-Date: 2001-05-13 15:23-0700\n"
+"POT-Creation-Date: 2001-05-13 17:47-0700\n"
 "PO-Revision-Date: 2000-09-17 09:18+02:00\n"
 "Last-Translator: Dennis Björklund <dennisb@cs.chalmers.se>\n"
 "Language-Team: Sv <sv@li.org>\n"
@@ -443,7 +443,7 @@ msgstr "Kredit"
 #: src/gnome/glade-gnc-dialogs.c:960 src/gnome/glade-gnc-dialogs.c:4794
 #: src/gnome/glade-gnc-dialogs.c:4842 src/gnome/glade-gnc-dialogs.c:7399
 #: src/gnome/reconcile-list.c:147 src/scm/report/guile-strings.c:32
-#: src/scm/report/guile-strings.c:280 src/scm/report/guile-strings.c:327
+#: src/scm/report/guile-strings.c:281 src/scm/report/guile-strings.c:327
 #: src/scm/report/guile-strings.c:352 src/scm/report/guile-strings.c:384
 #: src/scm/report/guile-strings.c:566 src/scm/report/guile-strings.c:587
 #: src/scm/report/guile-strings.c:615 src/scm/report/guile-strings.c:651
@@ -3553,7 +3553,7 @@ msgstr "Överför information"
 #: src/scm/guile-strings.c:430 src/scm/report/guile-strings.c:17
 #: src/scm/report/guile-strings.c:57 src/scm/report/guile-strings.c:81
 #: src/scm/report/guile-strings.c:129 src/scm/report/guile-strings.c:234
-#: src/scm/report/guile-strings.c:281 src/scm/report/guile-strings.c:607
+#: src/scm/report/guile-strings.c:283 src/scm/report/guile-strings.c:607
 msgid "Accounts"
 msgstr "Konton"
 
@@ -8734,7 +8734,8 @@ msgstr "Standardvaluta"
 #: src/scm/report/guile-strings.c:16 src/scm/report/guile-strings.c:36
 #: src/scm/report/guile-strings.c:54 src/scm/report/guile-strings.c:95
 #: src/scm/report/guile-strings.c:128 src/scm/report/guile-strings.c:233
-#: src/scm/report/guile-strings.c:271 src/scm/report/guile-strings.c:299
+#: src/scm/report/guile-strings.c:271 src/scm/report/guile-strings.c:280
+#: src/scm/report/guile-strings.c:299
 #, fuzzy
 msgid "Price Source"
 msgstr "Källa för Prisuppgift"
@@ -9893,29 +9894,21 @@ msgstr "Vinster"
 msgid "Profit And Loss"
 msgstr "Vinst och förlust"
 
-# src/gnome/glade-gnc-dialogs.c:506
-# src/gnome/glade-gnc-dialogs.c:514
-# src/gnome/glade-gnc-dialogs.c:447
-#: src/scm/report/guile-strings.c:282
-#, fuzzy
-msgid "Stock Accounts to report on"
-msgstr "Välj konto"
-
 # po/guile_strings.txt:155
 # po/guile_strings.txt:179
 # po/guile_strings.txt:180
-#: src/scm/report/guile-strings.c:283
+#: src/scm/report/guile-strings.c:282
 #, fuzzy
 msgid "Report Currency"
 msgstr "Standardvaluta"
 
-# po/guile_strings.txt:225
-# po/guile_strings.txt:272
-# po/guile_strings.txt:272
+# src/gnome/glade-gnc-dialogs.c:506
+# src/gnome/glade-gnc-dialogs.c:514
+# src/gnome/glade-gnc-dialogs.c:447
 #: src/scm/report/guile-strings.c:284
-#, fuzzy, c-format
-msgid "Investment Portfolio Report: %s"
-msgstr "Visa aktieportföljrapporten."
+#, fuzzy
+msgid "Stock Accounts to report on"
+msgstr "Välj konto"
 
 # po/guile_strings.txt:124
 # po/guile_strings.txt:145
@@ -11162,6 +11155,13 @@ msgstr ""
 #: src/scm/report/guile-strings.c:713
 msgid "Welcome to GnuCash 1.6"
 msgstr ""
+
+# po/guile_strings.txt:225
+# po/guile_strings.txt:272
+# po/guile_strings.txt:272
+#, fuzzy
+#~ msgid "Investment Portfolio Report: %s"
+#~ msgstr "Visa aktieportföljrapporten."
 
 # messages-i18n.c:245 po/guile_strings.txt:56
 # messages-i18n.c:274 po/guile_strings.txt:64
