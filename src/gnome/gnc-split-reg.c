@@ -948,10 +948,10 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
   char *buf = NULL;
   gint result;
   const char *two_choices[] = { N_(GTK_STOCK_CANCEL),
-				N_("Reinitialize"),
+				N_("Remove Transaction Splits"),
 				NULL };
-  const char *message = _("Are you sure you want to reinitialize this "
-			  "transaction?");
+  const char *message = _("Are you sure you want to remove the "
+			  "Splits of this transaction?");
 
   const char *recn_warn = _("You would be modifying a "
 			    "transaction with reconciled splits!\n"

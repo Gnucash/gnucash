@@ -1,3 +1,8 @@
+2002-11-05  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/gnc-split-reg.c, src/gnome/glade/register.glade:
+	Replace the term "reinitialize" by "Remove Transaction Splits".
+
 2002-11-04  David Hampton  <hampton@employees.org>
 
 	* src/engine/Transaction.c: New functions to get/set read-only

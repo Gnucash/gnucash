@@ -755,7 +755,7 @@
       <handler>gnc_register_reinitialize_trans_cb</handler>
       <last_modification_time>Wed, 16 Oct 2002 06:27:31 GMT</last_modification_time>
     </signal>
-    <label>ReInitialize Transaction</label>
+    <label>Remove Transaction Splits</label>
     <right_justify>False</right_justify>
   </widget>
 
@@ -1961,7 +1961,7 @@
 	    <handler>gnc_split_reg_reinitialize_trans_cb</handler>
 	    <last_modification_time>Wed, 16 Oct 2002 06:27:58 GMT</last_modification_time>
 	  </signal>
-	  <label>Re_initialize Transaction</label>
+	  <label>Remove Transaction Splits</label>
 	  <right_justify>False</right_justify>
 	</widget>
 
@@ -2191,7 +2191,7 @@
       <handler>gnc_split_reg_reinitialize_trans_cb</handler>
       <last_modification_time>Wed, 16 Oct 2002 06:27:31 GMT</last_modification_time>
     </signal>
-    <label>ReInitialize Transaction</label>
+    <label>Remove Transaction Splits</label>
     <right_justify>False</right_justify>
   </widget>
 
