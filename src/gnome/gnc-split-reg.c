@@ -375,7 +375,11 @@ gnc_split_reg_init( GNCSplitReg *gsr )
    * iterations of the Druid resizing without bound.  Contact
    * jsled@asynchronous.org for details. -- 2002.04.15
    */
-  gtk_container_set_resize_mode( GTK_CONTAINER(gsr), GTK_RESIZE_QUEUE );
+  /* This function call causes several problems in gnome2 port.  I do
+   * not see any problems with the code when it is removed.
+   * hampton@employees.org -- 2003-10-06
+   */
+  //gtk_container_set_resize_mode( GTK_CONTAINER(gsr), GTK_RESIZE_QUEUE );
 
   gtk_signal_connect( GTK_OBJECT(gsr), "destroy",
                       GTK_SIGNAL_FUNC (gnc_split_reg_destroy_cb), gsr );
@@ -536,7 +540,7 @@ gsr_create_table( GNCSplitReg *gsr )
   gsr->reg = GNUCASH_REGISTER( register_widget );
   gnc_table_init_gui( GTK_WIDGET(gsr->reg), sr );
 
-  gtk_container_add( GTK_CONTAINER(gsr), GTK_WIDGET(gsr->reg) );
+  gtk_box_pack_start (GTK_BOX (gsr), GTK_WIDGET(gsr->reg), TRUE, TRUE, 0);
   GNUCASH_SHEET(gsr->reg->sheet)->window = gsr->window;
   gtk_widget_show_all( GTK_WIDGET(gsr->reg) );
   gtk_signal_connect (GTK_OBJECT(gsr->reg), "activate_cursor",
