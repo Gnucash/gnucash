@@ -4,6 +4,10 @@ PWD := $(shell pwd)
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
 
 AM_CFLAGS = \
+  -DPREFIX=\"${prefix}\" \
+  -DSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
+  -DDATADIR=\"${GNC_SHAREDIR}\" \
+  -DLIBDIR=\"${GNC_LIBDIR}\" \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/backend/file \
@@ -64,8 +68,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gtkselect.c \
   misc-gnome-utils.c \
   print-session.c \
-  search-param.c \
-  window-help.c
+  search-param.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
@@ -108,8 +111,7 @@ gncinclude_HEADERS = \
   gnc-tree-view-account.h \
   gtkselect.h \
   misc-gnome-utils.h \
-  print-session.h \
-  window-help.h
+  print-session.h
 
 noinst_HEADERS = \
   argv-list-converters.h \
@@ -175,8 +177,7 @@ gnc-dir.h: gnc-dir.h.in ${top_builddir}/config.status
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's:@-GNC_ACCOUNTS_DIR-@:${GNC_ACCOUNTS_DIR}:g' \
-	    -e 's:@-GNC_GLADE_DIR-@:${GNC_GLADE_DIR}:g' \
-	    -e 's:@-GNC_PIXMAP_DIR-@:${GNC_PIXMAP_DIR}:g'
+	    -e 's:@-GNC_GLADE_DIR-@:${GNC_GLADE_DIR}:g'
 	mv $@.tmp $@
 
 gnc-version.h: _gnc-version.h
@@ -226,3 +227,14 @@ gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h: \
 BUILT_SOURCES += gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h
 DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
                  gw-gnome-utils.html
+
+#
+# I hate inconsistent standards. Autotools puts help files into
+# ${datadir}/gnome/help/${program} while the gnome2 libraries expect
+# them in ${pkgdatadir}/gnome/help/${program}.
+#
+install-data-hook:
+	ln -sf ../gnome ${pkgdatadir}
+
+uninstall-hook:
+	rm -f ${pkgdatadir}/gnome

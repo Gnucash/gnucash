@@ -51,15 +51,6 @@ GtkWidget * gnc_build_option_menu (GNCOptionInfo *option_info,
 				   gint num_options);
 
 
-/********************************************************************\
- * Returns a GnomePixmap widget given a pixmap filename             *
- *                                                                  *
- * Args: Filename of pixmap file                                    *
- * Returns: GnomePixmap widget or NULL if there was a problem       *
- \*******************************************************************/
-GtkWidget * gnc_get_pixmap (const char *name);
-
-
 GnomeMDIMode    gnc_get_mdi_mode(void);
 GtkToolbarStyle gnc_get_toolbar_style (void);
 void gnc_get_deficit_color (GdkColor *color);

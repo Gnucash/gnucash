@@ -24,7 +24,7 @@
 
 #include <gnome.h>
 
-#include "dialog-utils.h"
+#include "gnc-gnome-utils.h"
 #include "gnc-splash.h"
 #include "gnc-version.h"
 
@@ -61,7 +61,7 @@ gnc_show_splash_screen (void)
   gtk_window_set_title (GTK_WINDOW (splash), "GnuCash");
   gtk_window_set_position (GTK_WINDOW (splash), GTK_WIN_POS_CENTER);
 
-  pixmap = gnc_get_pixmap ("gnucash_splash.png");
+  pixmap = gnc_gnome_get_pixmap ("gnucash_splash.png");
 
   if (!pixmap)
   {

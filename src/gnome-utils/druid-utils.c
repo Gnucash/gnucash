@@ -26,37 +26,8 @@
 
 #include "dialog-utils.h"
 #include "druid-utils.h"
-#include "gnc-dir.h"
 #include "gnc-engine-util.h"
-
-/********************************************************************\
- * gnc_get_imlib_image                                              *
- *   returns a GdkImlibImage object given a pixmap filename         *
- *                                                                  *
- * Args: none                                                       *
- * Returns: GnomePixmap widget or NULL if there was a problem       *
- \*******************************************************************/
-static GdkPixbuf *
-gnc_druid_get_pixmap (const char *name)
-{
-  GdkPixbuf *pixbuf;
-  GError *error = NULL;
-  char *fullname;
-
-  g_return_val_if_fail (name != NULL, NULL);
-
-  fullname = g_strconcat (GNC_PIXMAP_DIR, "/", name, NULL);
-  pixbuf = gdk_pixbuf_new_from_file (fullname, &error);
-  if (error != NULL) {
-    g_assert (pixbuf == NULL);
-    fprintf (stderr, "Pixbuf is NULL: %s\n", error->message);
-    g_error_free (error);
-  }
-  g_free (fullname);
-
-  return pixbuf;
-}
-
+#include "gnc-gnome-utils.h"
 
 void
 gnc_druid_set_watermark_images (GnomeDruid *druid,
@@ -68,8 +39,8 @@ gnc_druid_set_watermark_images (GnomeDruid *druid,
   GtkWidget     *page;
 
   page_list = gtk_container_get_children(GTK_CONTAINER(druid));
-  top_pixbuf = gnc_druid_get_pixmap(top_path);
-  side_pixbuf = gnc_druid_get_pixmap(side_path);
+  top_pixbuf = gnc_gnome_get_gdkpixbuf(top_path);
+  side_pixbuf = gnc_gnome_get_gdkpixbuf(side_path);
 
   for (item = page_list; item; item = g_list_next(item)) {
     page = item->data;
@@ -100,7 +71,7 @@ gnc_druid_set_logo_image (GnomeDruid *druid, char *image_path)
   GtkWidget     *page;
 
   page_list = gtk_container_get_children(GTK_CONTAINER(druid));
-  logo_pixbuf = gnc_druid_get_pixmap(image_path); 
+  logo_pixbuf = gnc_gnome_get_gdkpixbuf(image_path); 
 
   for (item = page_list; item; item = g_list_next(item)) {
     page = item->data;

@@ -132,28 +132,6 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
 
 
 /********************************************************************\
- * gnc_get_pixmap                                                   *
- *   returns a GnomePixmap widget given a pixmap filename           *
- *                                                                  *
- * Args: none                                                       *
- * Returns: GnomePixmap widget or NULL if there was a problem       *
- \*******************************************************************/
-GtkWidget *
-gnc_get_pixmap (const char *name)
-{
-  GtkWidget *pixmap;
-  char *fullname;
-
-  g_return_val_if_fail (name != NULL, NULL);
-
-  fullname = g_strconcat (GNC_PIXMAP_DIR, "/", name, NULL);
-  pixmap = gnome_pixmap_new_from_file (fullname);
-  g_free (fullname);
-
-  return pixmap;
-}
-
-/********************************************************************\
  * gnc_get_toolbar_style                                            *
  *   returns the current toolbar style for gnucash toolbars         *
  *                                                                  *
