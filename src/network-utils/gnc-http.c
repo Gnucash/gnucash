@@ -30,6 +30,7 @@
 
 #include "config.h"
 
+#if 0
 #ifdef HAVE_OPENSSL
 #include <openssl/ssl.h>
 #include <openssl/err.h>
@@ -50,6 +51,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#endif
 
 #include "gnc-http.h"
 #include "gnc-engine-util.h"  /* To allow PERR messages             */ 
