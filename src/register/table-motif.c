@@ -286,6 +286,11 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
          if (retval != newval) {
             XbaeMatrixSetCell (mw, row, col, (char *) retval);
             XbaeMatrixRefreshCell (mw, row, col);
+            /* hack alert -- if the mv callback radically modifies
+             * the returned string, then endPos won't be such a great 
+             * place to put the cursor.  However, mv mostly just accepts
+             * or rejects edits, so as to not surprise the user too much. 
+             */
             XbaeMatrixSetCursorPosition (mw, (cbs->verify->endPos) +1);
 
             /* the default update has already been overridden,
