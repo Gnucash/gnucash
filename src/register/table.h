@@ -29,7 +29,8 @@ typedef struct _Table {
 
   /* protected data -- vital for the implementation, 
    * but not something we want to generally expose */
-  Widget reg;          /* the XbaeMatrix */
+  Widget table_widget;          /* the XbaeMatrix */
+  Widget next_tab_group;        /* where to traverse in the end */
 
   /* private data, caches, etc. */
   /* This is black-box stuff that no user of this class 
@@ -56,6 +57,7 @@ void        xaccInitTable (Table *, int tile_rows, int tile_cols);
 
 /* create the widget */
 Widget      xaccCreateTable (Table *, Widget parent, char * name);
+void        xaccNextTabGroup (Table *, Widget);
 
 void        xaccDestroyTable (Table *);
 

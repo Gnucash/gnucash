@@ -11,6 +11,15 @@ static void leaveCB (Widget mw, XtPointer cd, XtPointer cb);
 static void modifyCB (Widget mw, XtPointer cd, XtPointer cb);
 static void traverseCB (Widget mw, XtPointer cd, XtPointer cb);
 
+/* The XrmQuarks are used to figure out the direction of
+ * traversal from cell to cell */
+
+static XrmQuark QPointer, QLeft, QRight, QUp, QDown;
+static Boolean haveQuarks = False;
+
+
+/* ==================================================== */
+
 Table * 
 xaccMallocTable (int tile_rows, int tile_cols)
 {
@@ -32,7 +41,10 @@ xaccInitTable (Table * table, int tile_rows, int tile_cols)
    int num_phys_rows;
    int num_phys_cols;
    int i,j;
-   
+
+   table->table_widget = 0;
+   table->next_tab_group = 0;
+
    /* delete old entries */
    num_phys_rows = table->num_phys_rows;
    num_phys_cols = table->num_phys_cols;
@@ -167,6 +179,14 @@ xaccRefreshHeader (Table *table)
          }
       }
    }
+}
+
+/* ==================================================== */
+
+void
+xaccNextTabGroup (Table *table, Widget w)
+{
+   table->next_tab_group = w;
 }
 
 /* ==================================================== */
@@ -498,8 +518,28 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
    rel_row %= (arr->numRows);
    rel_col %= (arr->numCols);
 
-   printf ("traverse %d %d \n", row, col);
+   /* process right-moving traversals */
+   if (QRight == cbs->qparam) {
+      int next_row = arr->right_traverse_r[rel_row][rel_col];
+      int next_col = arr->right_traverse_c[rel_row][rel_col];
 
+      /* if we are at the end of the traversal chain,
+       * hop out of this tab group, and into the next.
+       */
+      if ((-1 == next_row) || (-1 == next_col)) {
+         cbs->next_row    = 0;
+         cbs->next_column = 0;
+         cbs->qparam      = NULLQUARK; 
+         if (table->next_tab_group) {
+            XmProcessTraversal (table->next_tab_group, 
+                                /* XmTRAVERSE_NEXT_TAB_GROUP); */
+                                XmTRAVERSE_CURRENT); 
+         }
+      } else {
+         cbs->next_row    = row - rel_row + next_row; 
+         cbs->next_column = col - rel_col + next_col;
+      }
+   }
 }
 
 
@@ -513,6 +553,17 @@ xaccCreateTable (Table *table, Widget parent, char * name)
    Widget reg;
 
    if (!table) return 0;
+
+   /* if quarks have not yet been initialized for this 
+    * application, initialize them now. */
+   if (!haveQuarks) {
+      QPointer = XrmPermStringToQuark ("Pointer");
+      QLeft    = XrmPermStringToQuark ("Left");
+      QRight   = XrmPermStringToQuark ("Right");
+      QUp      = XrmPermStringToQuark ("Up");
+      QDown    = XrmPermStringToQuark ("Down");
+      haveQuarks = True;
+   }
 
    /* make sure that the table is consistent */
 /* hack alert -- remove for now, since may be inited? 
@@ -550,7 +601,8 @@ xaccCreateTable (Table *table, Widget parent, char * name)
                   XmNshadowType,          XmSHADOW_ETCHED_IN,
                   XmNverticalScrollBarDisplayPolicy,XmDISPLAY_STATIC,
                   XmNselectScrollVisible, True,
-                  XmNnavigationType,      XmEXCLUSIVE_TAB_GROUP,  
+                  /* XmNnavigationType,      XmEXCLUSIVE_TAB_GROUP, */
+                  XmNnavigationType,      XmSTICKY_TAB_GROUP,  
                   NULL);
     
    XtManageChild (reg);
@@ -560,7 +612,7 @@ xaccCreateTable (Table *table, Widget parent, char * name)
    XtAddCallback (reg, XmNmodifyVerifyCallback, cellCB, (XtPointer)table);
    XtAddCallback (reg, XmNtraverseCellCallback, cellCB, (XtPointer)table);
 
-   table->reg = reg;
+   table->table_widget = reg;
    return (reg);
 }
 
@@ -569,7 +621,7 @@ xaccCreateTable (Table *table, Widget parent, char * name)
 void        
 xaccRefreshTable (Table * table)
 {
-  XtVaSetValues (table->reg, XmNcells, table->entries, NULL);
+  XtVaSetValues (table->table_widget, XmNcells, table->entries, NULL);
 }
 
 /* ================== end of file ======================= */

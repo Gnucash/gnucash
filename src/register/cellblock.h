@@ -4,7 +4,13 @@
 
 #include "basiccell.h"
 
-/* a cell array is a traversal group for one entry in the register */
+/* 
+ * The CellBlock is a rectangular grid of cells that define
+ * a traversal group for one entry in the register 
+ *
+ * The right_traverse array indicates which cell chould be
+ * traversed to when the tab key is pressed.
+ */
 
 typedef struct _CellBlock {
 
@@ -12,6 +18,9 @@ typedef struct _CellBlock {
   short numCols;
 
   BasicCell ***cells;  /* row-col array */
+
+  short     **right_traverse_r;
+  short     **right_traverse_c;
 
   /* private, utility cahced data */
   short         *widths;        /* column widths */
@@ -25,5 +34,9 @@ void        xaccInitCellBlock (CellBlock *, int numrows, int numcols);
 
 /* add a cell to the array */
 void        xaccAddCell (CellBlock *, BasicCell *, int row, int col);
+
+/* define next cell to traverse to */
+void        xaccNextRight (CellBlock *, int row,      int col, 
+                                        int next_row, int next_col);
 
 #endif __XACC_CELL_BLOCK_H__

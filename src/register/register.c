@@ -142,7 +142,19 @@ void xaccInitBasicRegister (BasicRegister *reg)
    reg->balanceCell->cell.width = 9;
    reg->balanceCell->cell.input_output = 0;
    xaccAddCell (curs, &(reg->balanceCell->cell), BALN_CELL_R, BALN_CELL_C);
-   
+
+   /* -------------------------------- */   
+   /* define the traversal order */
+   xaccNextRight (curs, DATE_CELL_R, DATE_CELL_C,  NUM_CELL_R,  NUM_CELL_C);
+   xaccNextRight (curs,  NUM_CELL_R,  NUM_CELL_C, XFRM_CELL_R, XFRM_CELL_C);
+   xaccNextRight (curs, XFRM_CELL_R, XFRM_CELL_C, DESC_CELL_R, DESC_CELL_C);
+   xaccNextRight (curs, DESC_CELL_R, DESC_CELL_C, CRED_CELL_R, CRED_CELL_C);
+   xaccNextRight (curs, CRED_CELL_R, CRED_CELL_C, DEBT_CELL_R, DEBT_CELL_C);
+   xaccNextRight (curs, DEBT_CELL_R, DEBT_CELL_C, MEMO_CELL_R, MEMO_CELL_C);
+   xaccNextRight (curs, MEMO_CELL_R, MEMO_CELL_C, -1, -1);
+
+
+   /* -------------------------------- */   
    table =  xaccMallocTable (0, 0);
    table -> header = header;
    xaccSetCursor (table, curs);
