@@ -54,12 +54,103 @@
 
 static short module = MOD_SX;
 
-/* XXX this whole file is crufty, it doesn't reallu se entities
+/* XXX this whole file is crufty, it doesn't really use entities
  * in the most efficient/best way */
 
 /* ====================================================================== */
 
-#define GNC_SCHEDXACTIONS "gnc_schedxactions"
+AccountGroup *
+gnc_collection_get_template_group( QofCollection *col )
+{
+  return qof_collection_get_data (col);
+}
+
+AccountGroup *
+gnc_book_get_template_group( QofBook *book )
+{
+  QofCollection *col;
+  if (!book) return NULL;
+  col = qof_book_get_collection (book, GNC_ID_SXTG);
+  return gnc_collection_get_template_group (col);
+}
+
+void
+gnc_collection_set_template_group (QofCollection *col, AccountGroup *templateGroup)
+{
+  AccountGroup *old_grp;
+  if (!col) return;
+
+  old_grp = gnc_collection_get_template_group (col);
+  if (old_grp == templateGroup) return;
+
+  qof_collection_set_data (col, templateGroup);
+
+  xaccAccountGroupBeginEdit (old_grp);
+  xaccAccountGroupDestroy (old_grp);
+}
+
+
+void
+gnc_book_set_template_group (QofBook *book, AccountGroup *templateGroup)
+{
+  QofCollection *col;
+  if (!book) return;
+
+  if (templateGroup && templateGroup->book != book)
+  {
+     PERR ("cannot mix and match books freely!");
+     return;
+  }
+
+  col = qof_book_get_collection (book, GNC_ID_SXTG);
+  gnc_collection_set_template_group (col, templateGroup);
+}
+
+
+/* ====================================================================== */
+/* gncObject function implementation and registration */
+
+static void 
+sxtg_book_begin (QofBook *book)
+{
+  gnc_book_set_template_group (book, xaccMallocAccountGroup(book));
+}
+
+static void 
+sxtg_book_end (QofBook *book)
+{
+  gnc_book_set_template_group (book, NULL);
+}
+
+
+static gboolean
+sxtg_is_dirty(QofCollection *col)
+{
+  return xaccGroupNotSaved(gnc_collection_get_template_group(col));
+}
+  
+static void
+sxtg_mark_clean(QofCollection *col)
+{
+  xaccGroupMarkSaved(gnc_collection_get_template_group(col));
+}
+
+
+static QofObject sxtg_object_def = 
+{
+  interface_version: QOF_OBJECT_VERSION,
+  e_type:            GNC_ID_SXTG,
+  type_label:        "Scheduled Transaction Templates",
+  book_begin:        sxtg_book_begin,
+  book_end:          sxtg_book_end,
+  is_dirty:          sxtg_is_dirty,
+  mark_clean:        sxtg_mark_clean,
+  foreach:           NULL,
+  printable:         NULL,
+};
+
+/* ====================================================================== */
+
 SchedXactions *
 gnc_collection_get_schedxaction_list( QofCollection *col)
 {
@@ -79,7 +170,7 @@ GList *
 gnc_book_get_schedxactions( QofBook *book )
 {
   QofCollection *col;
-  col = qof_book_get_collection (book, GNC_SCHEDXACTIONS);
+  col = qof_book_get_collection (book, GNC_ID_SXTT);
   return gnc_collection_get_schedxactions (col);
 }
 
@@ -114,86 +205,24 @@ gnc_book_set_schedxactions( QofBook *book, GList *newList )
   QofCollection *col;
   if ( book == NULL ) return;
 
-  col = qof_book_get_collection (book, GNC_SCHEDXACTIONS);
+  col = qof_book_get_collection (book, GNC_ID_SXTT);
   gnc_collection_set_schedxactions (col, newList);
 }
 
 /* ====================================================================== */
-
-#define GNC_TEMPLATE_GROUP "gnc_template_group"
-AccountGroup *
-gnc_collection_get_template_group( QofCollection *col )
-{
-  return qof_collection_get_data (col);
-}
-
-AccountGroup *
-gnc_book_get_template_group( QofBook *book )
-{
-  QofCollection *col;
-  if (!book) return NULL;
-  col = qof_book_get_collection (book, GNC_TEMPLATE_GROUP);
-  return gnc_collection_get_template_group (col);
-}
-
-void
-gnc_collection_set_template_group (QofCollection *col, AccountGroup *templateGroup)
-{
-  AccountGroup *old_grp;
-  if (!col) return;
-
-  old_grp = gnc_collection_get_template_group (col);
-  if (old_grp == templateGroup) return;
-
-  qof_collection_set_data (col, templateGroup);
-
-  xaccAccountGroupBeginEdit (old_grp);
-  xaccAccountGroupDestroy (old_grp);
-}
-
-
-void
-gnc_book_set_template_group (QofBook *book, AccountGroup *templateGroup)
-{
-  QofCollection *col;
-  if (!book) return;
-
-  if (templateGroup && templateGroup->book != book)
-  {
-     PERR ("cannot mix and match books freely!");
-     return;
-  }
-
-  col = qof_book_get_collection (book, GNC_TEMPLATE_GROUP);
-  gnc_collection_set_template_group (col, templateGroup);
-}
-
-
-/* ====================================================================== */
-/* gncObject function implementation and registration */
-/* XXX Its not clear to me if the template group and the sched xactions 
- * should be treated together or not.  I got lazy, and mashed them together.
- * For right now, this works. If you feel you need to slit this up into 
- * two separate gnc Objects, that's OK with me.
- */
+/* SX-trans stuff */
 
 static void 
 sxtt_book_begin (QofBook *book)
 {
   gnc_book_set_schedxactions (book, NULL);
-  gnc_book_set_template_group (book, xaccMallocAccountGroup(book));
 }
 
 static void 
 sxtt_book_end (QofBook *book)
 {
-  gnc_book_set_template_group (book, NULL);
   gnc_book_set_schedxactions (book, NULL);
 }
-
-/* ====================================================================== */
-/* dirty flag stuff */
-
 static void
 mark_sx_clean(gpointer data, gpointer user_data)
 {
@@ -217,18 +246,16 @@ static gboolean
 book_sxlist_notsaved(QofCollection *col)
 {
   GList *sxlist;
-  SchedXaction *sx;
   SchedXactions *sxl;
 
   sxl = gnc_collection_get_schedxaction_list (col);
-  if((sxl && sxl->sx_notsaved)
-     ||
-     xaccGroupNotSaved(gnc_collection_get_template_group(col))) return TRUE;
+  if((sxl && sxl->sx_notsaved)) return TRUE;
  
   for(sxlist = gnc_collection_get_schedxactions(col);
       sxlist != NULL;
       sxlist = g_list_next(sxlist))
   {
+    SchedXaction *sx;
     sx = (SchedXaction *) (sxlist->data);
     if (xaccSchedXactionIsDirty( sx ))
       return TRUE;
@@ -237,14 +264,6 @@ book_sxlist_notsaved(QofCollection *col)
   return FALSE;
 }
   
-static void
-sxtt_mark_clean(QofCollection *col)
-{
-  xaccGroupMarkSaved(gnc_collection_get_template_group(col));
-  book_sxns_mark_saved(col);
-}
-
-
 static QofObject sxtt_object_def = 
 {
   interface_version: QOF_OBJECT_VERSION,
@@ -253,7 +272,7 @@ static QofObject sxtt_object_def =
   book_begin:        sxtt_book_begin,
   book_end:          sxtt_book_end,
   is_dirty:          book_sxlist_notsaved,
-  mark_clean:        sxtt_mark_clean,
+  mark_clean:        book_sxns_mark_saved,
   foreach:           NULL,
   printable:         NULL,
 };
@@ -261,6 +280,7 @@ static QofObject sxtt_object_def =
 gboolean 
 gnc_sxtt_register (void)
 {
+  return qof_object_register (&sxtg_object_def);
   return qof_object_register (&sxtt_object_def);
 }
 
