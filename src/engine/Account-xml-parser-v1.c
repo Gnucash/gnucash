@@ -481,8 +481,8 @@ acc_restore_parent_end_handler(gpointer data_for_children,
   return(TRUE);
 }
 
-sixtp*
-parent_lookup_parser_new()
+static sixtp *
+parent_lookup_parser_new(void)
 {
     return sixtp_set_any(sixtp_new(), TRUE,
                          SIXTP_CHARACTERS_HANDLER_ID,
