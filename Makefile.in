@@ -161,21 +161,29 @@ install:
 	@mkdir -p ${GNC_SHAREDIR}/Reports/images
   # 	$(INSTALL_DATA) Reports/logos/*.* ${GNC_SHAREDIR}/Reports/images
 
-  # Config directory
-	@mkdir -p ${GNC_CONFIGDIR}
+  # ------------------------------------------------------------------
+  # hack alert -- the config dir stuff is messed up in configure.in as well 
+  # as in the scheme search paths.  For example, the configure script tries
+  # to put config files into /usr/etc/gnucash/config which is a butt-stupid 
+  # place for this stuff ...  For now, we will simply touch the one file that
+  # the scheme initialization is looking for, and punt on the rest ...
 
-  # Try to do this in a platform independent way...
-  # Directories
-	for dir in `find etc/ -type d`; do \
-    dest=`echo $$dir | cut -c 5-` ; \
-		mkdir -p ${GNC_CONFIGDIR}/$$dest; \
-  done
+	$(INSTALL_DATA) etc/conf* ${GNC_SHAREDIR}
 
-  # Files
-	for file in `find etc/ -type f`; do \
-    dest=`echo $$file | cut -c 5-` ; \
-		${INSTALL_DATA} $$file ${GNC_CONFIGDIR}/$$dest; \
-  done
+#  # Config directory
+#	@mkdir -p ${GNC_CONFIGDIR}
+#
+#  # Directories
+# 	for dir in `find etc/ -type d`; do \
+#    dest=`echo $$dir | cut -c 5-` ; \
+#		mkdir -p ${GNC_CONFIGDIR}/$$dest; \
+#  done
+#
+#  # Files
+#	for file in `find etc/ -type f`; do \
+#    dest=`echo $$file | cut -c 5-` ; \
+#		${INSTALL_DATA} $$file ${GNC_CONFIGDIR}/$$dest; \
+#  done
 
 .PHONY: default install-private install motif motif-static gnome gnome-static qt
 .PHONY: depend clean distclean
