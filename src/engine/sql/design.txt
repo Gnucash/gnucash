@@ -7,11 +7,10 @@ See table-create.sql for more info.
 
 Session Table, Session Modes
 ----------------------------
-There are four basic modes for accessing the database:
-"Single User File Mode",  "Single User Update Mode", "Polled Multi-User" 
-and "Event-Driven Multi-User"
-The session table in the database indicates which mode the database is
-functioning.
+There are four basic modes for accessing the database: "Single User
+File Mode", "Single User Update Mode", "Polled Multi-User" and
+"Event-Driven Multi-User".  The session table in the database
+indicates which mode the database is functioning.
 
 -- "Single User File Mode" -- 
    mode=single-file
@@ -35,7 +34,6 @@ functioning.
    This mode is mutually exclusive of any other access mode:
    a lockout mechanism prevents other users from accessing the 
    database while it is open in single-user mode.
-
 
 -- "Single User Update Mode" -- 
    mode=single-update
@@ -76,17 +74,25 @@ is because in this mode, the backend never finds out about deletions.
 If you want incremental deletion, then use the 'Single Update' mode.
 
 
+Connecting to Postgres
+---------
+The postgres API requires a database to connect to. The initial
+connect is made using the "template1" database.
+
+
 m4 macros
 ---------
 Some of the code is auto-gen'ed from m4 macros.  This mostly just
 simplifies some rather repetitive, cut-n-paste code that's identical
 from function to function.  If you can think of a better way ...
 
-string escapes
+
+String escapes
 --------------
 Any string is valid; the builder.c routine sqlBuilder_escape() converts
 single-quotes and backslashes to escaped quotes & backslashes to prevent
 sql corruption.
+
 
 KVP frames
 ----------
@@ -110,6 +116,7 @@ The actual values are stored in one of 6 different tables, depending on
 the type.  Note that the binary type and the glist type are not currently
 implemented.  The glist type could be implemented, as long as the glist
 only stored strings ... The binary type could be implemented with blobs.
+
 
 Version Numbers
 ---------------

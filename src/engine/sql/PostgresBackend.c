@@ -2058,13 +2058,13 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
    if (really_do_create)
    {
       char * p;
-      be->connection = PQsetdbLogin (be->hostname, 
-                                  be->portno,
-                                  pg_options, /* trace/debug options */
-                                  pg_tty, /* file or tty for debug output */
-                                  "gnucash", 
-                                  be->username,  /* login */
-                                  password);  /* pwd */
+      be->connection = PQsetdbLogin (be->hostname,
+                                     be->portno,
+                                     pg_options, /* trace/debug options */
+                                     pg_tty, /* file or tty for debug output */
+                                     "template1",
+                                     be->username,  /* login */
+                                     password);  /* pwd */
 
       /* check the connection status */
       if (CONNECTION_BAD == PQstatus(be->connection))
@@ -2240,7 +2240,6 @@ pgendEnable (PGBackend *be)
    be->be.trans_rollback_edit = be->snr.trans_rollback_edit;
    be->be.run_query           = be->snr.run_query;
    be->be.sync                = be->snr.sync;
-
 }
 
 /* ============================================================= */

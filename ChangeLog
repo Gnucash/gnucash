@@ -1,3 +1,10 @@
+2001-03-03  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/sql/design.txt: update design docs
+
+	* src/engine/sql/PostgresBackend.c (pgend_session_begin): connect
+	to template1 database instead of 'gnucash'
+
 2001-03-02  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/new-user.glade: tweak layout, strings
