@@ -1,5 +1,13 @@
 2001-07-03  Dave Peticolas  <dave@krondo.com>
 
+	* src/.cvsignore: adjust for new program
+
+	* rpm/gnucash.spec.in: adjust for new program
+
+	* src/Makefile.am: adjust for new program
+
+	* src/gnucash-make-guids.c: new program to aid in GUID creation
+
 	* src/engine/sql/putil.h: Alex Zepeda's patch converting atol->strtoll.
 
 	* src/scm/commodity-utilities.scm: fix bug -- use srfi-1 to
