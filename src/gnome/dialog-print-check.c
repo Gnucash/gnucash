@@ -30,6 +30,8 @@
 
 #include "date.h"
 #include "messages.h"
+#include "gnc-numeric.h"
+#include "window-register.h"
 #include "dialog-print-check.h"
 #include "dialog-utils.h"
 #include "window-help.h"
@@ -53,9 +55,6 @@ void gnc_ui_print_check_dialog_help_cb(GtkButton * button,
 void gnc_ui_print_check_format_changed_cb(GtkWidget *unused, 
 					  gpointer user_data);
 
-static gboolean saved_include_century = TRUE;
-static gboolean saved_month_name = FALSE;
-static gboolean saved_month_name_long = FALSE;
 
 static int gnc_ui_print_get_option_menu_item (GtkWidget *widget)
 {
@@ -102,6 +101,7 @@ gnc_ui_print_compute_new_format (PrintCheckDialog *pcd)
     pcd->format_string = NULL;
   }
 
+  /* Custom format */
   if (sel_option >= DATE_FORMAT_LOCALE) {
     format = g_strdup(gtk_entry_get_text(GTK_ENTRY(pcd->custom_format)));
     gtk_widget_set_sensitive(pcd->month_name_long, FALSE);
@@ -111,6 +111,7 @@ gnc_ui_print_compute_new_format (PrintCheckDialog *pcd)
     goto finish;
   }
 
+  /* One of the pre-specified formats */
   gnc_ui_print_enable_year(pcd, TRUE);
   gnc_ui_print_enable_format(pcd, FALSE);
   if (sel_option == DATE_FORMAT_ISO) {
@@ -124,6 +125,7 @@ gnc_ui_print_compute_new_format (PrintCheckDialog *pcd)
     gnc_ui_print_enable_month(pcd, TRUE);
   }
 
+  /* Update the format string based upon the user's preferences */
   if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pcd->month_name))) {
     format = g_strdup(getDateFormatString(sel_option));
     gtk_widget_set_sensitive(pcd->month_name_long, FALSE);
@@ -142,9 +144,20 @@ gnc_ui_print_compute_new_format (PrintCheckDialog *pcd)
     if (c)
       *c = 'Y';
   }
+
+  /*
+   * Give feedback on the format string so users can see how it works
+   * without having to read the strftime man page.
+   */
+  gtk_signal_handler_block_by_data(GTK_OBJECT(pcd->custom_format), pcd);
+  gtk_entry_set_text(GTK_ENTRY(pcd->custom_format), format);
+  gtk_signal_handler_unblock_by_data(GTK_OBJECT(pcd->custom_format), pcd);
   
 finish:
+  /* Save the format string for when OK is clicked */
   pcd->format_string = format;
+
+  /* Visual feedback on what the date will look like. */
   secs_now = time(NULL);
   localtime_r(&secs_now, &today);
   strftime(date_string, MAX_DATE_LEN, format, &today);
@@ -167,18 +180,39 @@ gnc_ui_print_check_format_changed_cb(GtkWidget *unused,
  * make a new print check dialog and wait for it.
 \********************************************************************/
 
-PrintCheckDialog * 
-gnc_ui_print_check_dialog_create(SCM callback)
+void
+gnc_ui_print_check_dialog_create(RegWindow     *reg_data,
+				 const char    *payee,
+				 gnc_numeric    amount,
+				 time_t         date,
+				 const char    *memo)
 {
-  PrintCheckDialog * pcd = g_new0(PrintCheckDialog, 1);
+  PrintCheckDialog * pcd;
   GladeXML *xml;
 
-  xml = gnc_glade_xml_new ("print.glade", "Print Check Dialog");
+  pcd = (PrintCheckDialog *)gnc_RegWindow_get_pcd(reg_data);
+  if (pcd) {
+    pcd->payee = payee;
+    pcd->amount = amount;
+    pcd->date = date;
+    pcd->memo = memo;
+    gnc_ui_print_compute_new_format(pcd);
+    gtk_window_present (GTK_WINDOW(pcd->dialog));
+    return;
+  }
 
+  pcd = g_new0(PrintCheckDialog, 1);
+  gnc_RegWindow_set_pcd(reg_data, pcd);
+  pcd->reg_data = reg_data;
+  pcd->payee = payee;
+  pcd->amount = amount;
+  pcd->date = date;
+  pcd->memo = memo;
+
+  xml = gnc_glade_xml_new ("print.glade", "Print Check Dialog");
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, pcd);
 
   pcd->dialog = glade_xml_get_widget (xml, "Print Check Dialog");
-  pcd->callback = callback;
 
   /* now pick out the relevant child widgets */
   pcd->format_picker = glade_xml_get_widget (xml, "check_format_picker");
@@ -208,12 +242,9 @@ gnc_ui_print_check_dialog_create(SCM callback)
   pcd->format_entry = glade_xml_get_widget (xml, "date_format_entry");
   pcd->units_picker = glade_xml_get_widget (xml, "units_picker");
 
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pcd->include_century),
-			       saved_include_century);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pcd->month_name),
-			       saved_month_name);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pcd->month_name_long),
-			       saved_month_name_long);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pcd->include_century), TRUE);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pcd->month_name), FALSE);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pcd->month_name_long), FALSE);
 
   /* fix the option menus so we can diagnose which option is 
      selected */
@@ -223,35 +254,43 @@ gnc_ui_print_check_dialog_create(SCM callback)
 				gnc_ui_print_check_format_changed_cb, pcd);
   gnc_option_menu_init(pcd->units_picker);
 
-  scm_protect_object(pcd->callback);
-
   /* Set initial format to gnucash default */
   gtk_option_menu_set_history(GTK_OPTION_MENU(pcd->dformat_picker),
 			      getDateFormat());
   gnc_ui_print_compute_new_format(pcd);
 
+  gnome_dialog_set_parent(GNOME_DIALOG(pcd->dialog),
+			  GTK_WINDOW(gnc_RegWindow_window(reg_data)));
   gtk_widget_show_all(pcd->dialog);
-
-  return pcd;
 }
 
 
 /********************************************************************\
  * gnc_ui_print_check_dialog_destroy
+ *
+ * Don't destroy the dialog until the program exits. This will
+ * maintain *all* user settings from invocation to invocation.
+ *
 \********************************************************************/
 
 void
 gnc_ui_print_check_dialog_destroy(PrintCheckDialog * pcd)
 {
-  gnome_dialog_close(GNOME_DIALOG(pcd->dialog));
-  
-  scm_unprotect_object(pcd->callback);
-
   if (pcd->format_string)
     g_free(pcd->format_string);
+
+  gnome_dialog_close(GNOME_DIALOG(pcd->dialog));
+  gtk_widget_destroy(pcd->dialog);
   pcd->dialog = NULL;
 
+  gnc_RegWindow_set_pcd(pcd->reg_data, NULL);
   g_free(pcd);
+}
+
+static void
+gnc_ui_print_check_dialog_hide(PrintCheckDialog * pcd)
+{
+  gtk_widget_hide(pcd->dialog);
 }
 
 static double 
@@ -276,20 +315,14 @@ gnc_ui_print_check_dialog_ok_cb(GtkButton * button,
   PrintCheckDialog * pcd = user_data;
 
   SCM        make_check_format = gh_eval_str("make-print-check-format");
-  SCM        callback;
+  SCM        print_check = gh_eval_str("gnc:print-check");
+  SCM        format_data;
   SCM        fmt, posn, cust_format, date_format;
   int        sel_option;
   double     multip = 72.0;
 
   char       * formats[]   = { "quicken", "custom" };
   char       * positions[] = { "top", "middle", "bottom", "custom" };
-
-  saved_include_century =
-    gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pcd->include_century));
-  saved_month_name =
-    gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pcd->month_name));
-  saved_month_name_long =
-    gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pcd->month_name_long));
 
   sel_option = gnc_ui_print_get_option_menu_item(pcd->format_picker);
   fmt        = gh_symbol2scm(formats[sel_option]);
@@ -329,16 +362,22 @@ gnc_ui_print_check_dialog_ok_cb(GtkButton * button,
      gh_cons(gh_symbol2scm("date-format"),
              gh_str02scm(gtk_entry_get_text(GTK_ENTRY(pcd->format_entry)))));
 
-  callback = pcd->callback;
-  
-  /* destroy the window */
-  gnc_ui_print_check_dialog_destroy(pcd);
+  /* hide the window */
+  gnc_ui_print_check_dialog_hide(pcd);
 
   /* now call the callback passed in from the scheme side with 
      the format as an arg */
-  gh_call1(callback,
-           gh_apply(make_check_format,
-                    SCM_LIST4(fmt, posn, date_format, cust_format)));
+  format_data = gh_apply(make_check_format,
+			 SCM_LIST4(fmt, posn, date_format, cust_format));
+
+  gh_apply(print_check,
+	   /* FIXME: when we drop support older guiles, drop the
+	      (char *) coercions below. */
+	   SCM_LIST5(format_data,
+		     gh_str02scm((char *) pcd->payee),
+		     gh_double2scm(gnc_numeric_to_double (pcd->amount)),
+		     gh_ulong2scm(pcd->date),
+		     gh_str02scm((char *) pcd->memo)));
   
 }
 
@@ -353,7 +392,7 @@ gnc_ui_print_check_dialog_cancel_cb(GtkButton * button,
 {
   PrintCheckDialog * pcd = user_data;
 
-  gnc_ui_print_check_dialog_destroy(pcd);
+  gnc_ui_print_check_dialog_hide(pcd);
 }
 
 /********************************************************************\

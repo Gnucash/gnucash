@@ -38,14 +38,12 @@
       "#include <window-main.h>\n"
       "#include <gnc-gui-query.h>\n"
       "#include <dialog-new-user.h>\n"
-      "#include <dialog-print-check.h>\n"
       "#include <dialog-progress.h>\n"
       "#include <dialog-totd.h>\n"
       "#include <dialog-commodity.h>\n"
       "#include <druid-hierarchy.h>\n"
       "#include <top-level.h>\n"
       "#include <window-help.h>\n"
-      "#include <window-main.h>\n"
       "#include <gnc-html.h>\n"
       "#include <dialog-find-transactions.h>\n"
       "#include <dialog-scheduledxaction.h>\n"
@@ -139,18 +137,6 @@
    '()
    "Destroy the UI.")
 
-  (gw:wrap-as-wct ws
-                  '<gnc:PrintCheckDialog*>
-                  "PrintCheckDialog*" "const PrintCheckDialog*")
-
-  (gw:wrap-function
-   ws
-   'gnc:print-check-dialog-create
-   '<gnc:PrintCheckDialog*>
-   "gnc_ui_print_check_dialog_create"
-   '((<gw:scm> callback))
-   "Pop up a dialog to set up printing a check.")
-  
   (gw:wrap-function
    ws
    'gnc:ui-totd-dialog-create-and-run

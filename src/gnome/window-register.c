@@ -60,6 +60,7 @@
 #include "window-register.h"
 #include "window-report.h"
 #include "top-level.h"
+#include "dialog-print-check.h"
 
 typedef enum {
   BY_STANDARD = 0,
@@ -123,6 +124,7 @@ struct _RegWindow
   sort_type_t sort_type;
 
   RegDateWindow *date_window;
+  gpointer pcd;
 };
 GtkWidget *gnc_RegWindow_window (RegWindow *data)
 {
@@ -135,6 +137,17 @@ GNCLedgerDisplay *gnc_RegWindow_ledger (RegWindow *data)
   return data->ledger;
 }
 
+gpointer
+gnc_RegWindow_get_pcd (RegWindow *data)
+{
+  return data->pcd;
+}
+
+void
+gnc_RegWindow_set_pcd (RegWindow *data, gpointer pcd)
+{
+  data->pcd = pcd;
+}
 
 
 /* This static indicates the debugging module that this .o belongs to.   */
@@ -1059,10 +1072,7 @@ gnc_register_print_check_cb(GtkWidget * widget, gpointer data)
   gnc_numeric   amount;
   time_t        date;
 
-  SCM print_check = gh_eval_str("gnc:print-check");
-
-  if(split && trans &&
-     gh_procedure_p(print_check))
+  if(split && trans)
   {
     payee  = xaccTransGetDescription(trans);
     memo   = xaccTransGetNotes(trans);
@@ -1072,13 +1082,7 @@ gnc_register_print_check_cb(GtkWidget * widget, gpointer data)
     amount = gnc_numeric_abs (amount);
     date   = xaccTransGetDate(trans);
 
-    gh_apply(print_check,
-             /* FIXME: when we drop support older guiles, drop the
-                (char *) coercions below. */
-             SCM_LIST4(gh_str02scm((char *) payee),
-                       gh_double2scm(gnc_numeric_to_double (amount)),
-                       gh_ulong2scm(date),
-                       gh_str02scm((char *) memo)));
+    gnc_ui_print_check_dialog_create(reg_data, payee, amount, date, memo);
   }
 }
 
@@ -1337,6 +1341,8 @@ gnc_register_destroy_cb(GtkWidget *widget, gpointer data)
     regData->date_window = NULL;
   }
 
+  if (regData->pcd)
+    gnc_ui_print_check_dialog_destroy(regData->pcd);
   g_free(regData);
 
   DEBUG ("destroyed RegWindow");
@@ -1605,7 +1611,7 @@ regWindowLedger (GNCLedgerDisplay *ledger)
   if (regData != NULL)
     return regData;
 
-  regData = g_new (RegWindow, 1);
+  regData = g_new0 (RegWindow, 1);
 
   gnc_ledger_display_set_user_data (ledger, regData);
 

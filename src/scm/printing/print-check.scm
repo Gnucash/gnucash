@@ -72,8 +72,7 @@
     (middle . 288.0)
     (bottom . 36.0)))
 
-(define (gnc:print-check payee amount date memo)
-  (define (print-check-callback format-info)
+(define (gnc:print-check format-info payee amount date memo)
     (let* ((int-part (inexact->exact (truncate amount)))
            (frac-part (inexact->exact 
                      (truncate 
@@ -139,6 +138,4 @@
 
       (gnc:print-session-done ps #t)
       (gnc:print-session-print ps)))
-
-  (gnc:print-check-dialog-create print-check-callback))
 

@@ -1,3 +1,25 @@
+2002-10-13  David Hampton  <hampton@employees.org>
+
+	* src/scm/printing/print-check.scm: The check printing setup
+	dialog is now called directly, instead of as a callback from the
+	check printing code.
+
+	* src/gnome/window-register.c (gnc_register_print_check_cb): Call
+	the check printing setup dialog directly.
+
+	* src/gnome/dialog-print-check.c
+	(gnc_ui_print_compute_new_format): Give feedback on the format
+	string being used. (gnc_ui_print_check_dialog_create): Rework for
+	being called directly from the register code.  Now hiding instead
+	of destroying the dialog, so remove hooks to remember state.  If
+	the current register already has a print dialog open, reuse
+	it. (gnc_ui_print_check_dialog_destroy): Hide the dialog instead
+	of destroying it. (gnc_ui_print_check_dialog_ok_cb): Call the
+	scheme printing code directly.
+
+	* src/gnome/gw-gnc-spec.scm: Remove unneeded references to check
+	printing.
+
 2002-10-13  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/register/ledger-core/gnc-regwidget.c

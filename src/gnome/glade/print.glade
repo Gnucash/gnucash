@@ -27,7 +27,7 @@
   <allow_grow>True</allow_grow>
   <auto_shrink>False</auto_shrink>
   <auto_close>False</auto_close>
-  <hide_on_close>False</hide_on_close>
+  <hide_on_close>True</hide_on_close>
 
   <widget>
     <class>GtkVBox</class>
@@ -206,6 +206,7 @@
 	<widget>
 	  <class>GtkCheckButton</class>
 	  <name>month_name_long</name>
+	  <tooltip>Use the month name instead of the month abbreviation. (E.g. January instead of Jan.)</tooltip>
 	  <can_focus>True</can_focus>
 	  <signal>
 	    <name>toggled</name>
@@ -234,6 +235,7 @@
 	<widget>
 	  <class>GtkCheckButton</class>
 	  <name>month_name</name>
+	  <tooltip>Use the month abbreviation instead of the month number. (E.g. Jan instead of '1'.)</tooltip>
 	  <can_focus>True</can_focus>
 	  <signal>
 	    <name>toggled</name>
@@ -262,6 +264,7 @@
 	<widget>
 	  <class>GtkCheckButton</class>
 	  <name>include_century</name>
+	  <tooltip>Include the century when printing the year. (E.g. 2001 instead of 01.)</tooltip>
 	  <can_focus>True</can_focus>
 	  <signal>
 	    <name>toggled</name>

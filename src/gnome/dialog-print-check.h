@@ -33,6 +33,12 @@
 typedef struct {
   GtkWidget * dialog;
 
+  RegWindow     *reg_data;
+  const char    *payee;
+  gnc_numeric    amount;
+  time_t         date;
+  const char    *memo;
+
   GtkWidget * format_picker;
   GtkWidget * position_picker;
   GtkWidget * dformat_picker;
@@ -52,12 +58,14 @@ typedef struct {
   GtkWidget * include_century, * sample_date;
   GtkWidget * custom_label, * custom_format;
   gchar *format_string;
-  
-  SCM callback;
 
 } PrintCheckDialog;
 
-PrintCheckDialog * gnc_ui_print_check_dialog_create(SCM callback);
+void gnc_ui_print_check_dialog_create(RegWindow     *reg_data,
+				      const char    *payee,
+				      gnc_numeric    amount,
+				      time_t         date,
+				      const char    *memo);
 void gnc_ui_print_check_dialog_destroy(PrintCheckDialog * pcd);
 
 #endif
