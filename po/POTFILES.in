@@ -56,6 +56,7 @@ src/gnome/reconcile-list.c
 src/gnome/druid-loan.c
 src/gnome/dialog-transfer.c
 src/gnome/dialog-sxsincelast.c
+src/gnome/gnc-split-reg.c
 src/gnome/window-register.c
 src/gnome/dialog-print-check.c
 src/gnome/dialog-scheduledxaction.c
@@ -401,7 +402,6 @@ src/register/ledger-core/split-register-util.c
 src/register/ledger-core/split-register-control.c
 src/register/ledger-core/gnc-ledger-display.c
 src/register/ledger-core/split-register-model.c
-src/register/ledger-core/gnc-regwidget.c
 src/register/ledger-core/dialog-dup-trans.c
 src/register/ledger-core/gncmod-ledger-core.c
 src/register/ledger-core/split-register-layout.c
