@@ -52,6 +52,7 @@ TRASH += g-wrap-install
 # this make dist is a quick hack to avoid build problems that
 # naive builders are suffering from.  Doing a 'make dist' makes
 # build problems go away.
+clean:	dist
 dist:
 	touch g-wrap/aclocal.m4  
 	touch g-wrap/configure.in 
