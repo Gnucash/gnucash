@@ -383,18 +383,18 @@ static QofObject gncJobDesc = {
 gboolean gncJobRegister (void)
 {
   static QofParam params[] = {
-    { JOB_ID, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetID },
-    { JOB_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetName },
-    { JOB_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetReference },
-    { JOB_OWNER, GNC_OWNER_MODULE_NAME, (QofAccessFunc)gncJobGetOwner },
-    { JOB_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gncJobGetBook },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncJobGetGUID },
-    { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive },
+    { JOB_ID, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetID, NULL },
+    { JOB_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetName, NULL },
+    { JOB_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetReference, NULL },
+    { JOB_OWNER, GNC_OWNER_MODULE_NAME, (QofAccessFunc)gncJobGetOwner, NULL },
+    { JOB_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, NULL },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gncJobGetBook, NULL },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncJobGetGUID, NULL },
+    { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, NULL },
     { NULL },
   };
 
-  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncJobCompare, params);
+  qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncJobCompare, params);
 
   return qof_object_register (&gncJobDesc);
 }

@@ -491,16 +491,16 @@ static QofObject gncVendorDesc = {
 gboolean gncVendorRegister (void)
 {
   static QofParam params[] = {
-    { VENDOR_ID, QOF_TYPE_STRING, (QofAccessFunc)gncVendorGetID },
-    { VENDOR_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncVendorGetName },
-    { VENDOR_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncVendorGetAddr },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gncVendorGetBook },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncVendorGetGUID },
-    { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncVendorGetActive },
+    { VENDOR_ID, QOF_TYPE_STRING, (QofAccessFunc)gncVendorGetID, NULL },
+    { VENDOR_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncVendorGetName, NULL },
+    { VENDOR_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncVendorGetAddr, NULL },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gncVendorGetBook, NULL },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncVendorGetGUID, NULL },
+    { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncVendorGetActive, NULL },
     { NULL },
   };
 
-  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncVendorCompare, params);
+  qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncVendorCompare, params);
 
   return qof_object_register (&gncVendorDesc);
 }

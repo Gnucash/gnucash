@@ -3008,23 +3008,23 @@ static QofObject account_object_def = {
 gboolean xaccAccountRegister (void)
 {
   static QofParam params[] = {
-    { ACCOUNT_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccAccountGetSlots },
-    { ACCOUNT_NAME_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetName },
-    { ACCOUNT_CODE_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetCode },
-    { ACCOUNT_DESCRIPTION_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetDescription },
-    { ACCOUNT_NOTES_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetNotes },
-    { ACCOUNT_PRESENT_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetPresentBalance },
-    { ACCOUNT_BALANCE_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetBalance },
-    { ACCOUNT_CLEARED_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetClearedBalance },
-    { ACCOUNT_RECONCILED_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetReconciledBalance },
-    { ACCOUNT_FUTURE_MINIMUM_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetProjectedMinimumBalance },
-    { ACCOUNT_TAX_RELATED, QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccAccountGetTaxRelated },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)xaccAccountGetBook },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)xaccAccountGetGUID },
+    { ACCOUNT_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccAccountGetSlots, NULL },
+    { ACCOUNT_NAME_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetName, NULL },
+    { ACCOUNT_CODE_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetCode, NULL },
+    { ACCOUNT_DESCRIPTION_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetDescription, NULL },
+    { ACCOUNT_NOTES_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetNotes, NULL },
+    { ACCOUNT_PRESENT_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetPresentBalance, NULL },
+    { ACCOUNT_BALANCE_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetBalance, NULL },
+    { ACCOUNT_CLEARED_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetClearedBalance, NULL },
+    { ACCOUNT_RECONCILED_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetReconciledBalance, NULL },
+    { ACCOUNT_FUTURE_MINIMUM_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetProjectedMinimumBalance, NULL },
+    { ACCOUNT_TAX_RELATED, QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccAccountGetTaxRelated, NULL },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)xaccAccountGetBook, NULL },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)xaccAccountGetGUID, NULL },
     { NULL },
   };
 
-  qof_query_object_register (GNC_ID_ACCOUNT, (QofSortFunc)xaccAccountOrder, params);
+  qof_class_register (GNC_ID_ACCOUNT, (QofSortFunc)xaccAccountOrder, params);
 
   return qof_object_register (&account_object_def);
 }

@@ -660,12 +660,12 @@ static QofObject gncBillTermDesc = {
 gboolean gncBillTermRegister (void)
 {
   static QofParam params[] = {
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gncBillTermGetBook },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncBillTermGetGUID },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gncBillTermGetBook, NULL },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncBillTermGetGUID, NULL },
     { NULL },
   };
 
-  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncBillTermCompare, params);
+  qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncBillTermCompare, params);
 
   return qof_object_register (&gncBillTermDesc);
 }

@@ -379,14 +379,14 @@ gnc_lot_get_latest_split (GNCLot *lot)
 void gnc_lot_register (void)
 {
   static const QofParam params[] = {
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gnc_lot_get_book },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gnc_lot_get_guid },
-    { LOT_IS_CLOSED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gnc_lot_is_closed },
-    { LOT_BALANCE, QOF_TYPE_NUMERIC, (QofAccessFunc)gnc_lot_get_balance },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gnc_lot_get_book, NULL },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gnc_lot_get_guid, NULL },
+    { LOT_IS_CLOSED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gnc_lot_is_closed, NULL },
+    { LOT_BALANCE, QOF_TYPE_NUMERIC, (QofAccessFunc)gnc_lot_get_balance, NULL },
     { NULL },
   };
 
-  qof_query_object_register (GNC_ID_LOT, NULL, params);
+  qof_class_register (GNC_ID_LOT, NULL, params);
 }
 
 /* ========================== END OF FILE ========================= */

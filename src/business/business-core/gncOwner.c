@@ -330,30 +330,30 @@ static void
 reg_lot (void)
 {
   static QofParam params[] = {
-    { OWNER_FROM_LOT, _GNC_MOD_NAME, (QofAccessFunc)owner_from_lot },
+    { OWNER_FROM_LOT, _GNC_MOD_NAME, (QofAccessFunc)owner_from_lot, NULL },
     { NULL },
   };
 
-  qof_query_object_register (GNC_ID_LOT, NULL, params);
+  qof_class_register (GNC_ID_LOT, NULL, params);
 }
 
 gboolean gncOwnerRegister (void)
 {
   static QofParam params[] = {
-    { OWNER_TYPE, QOF_TYPE_INT64, (QofAccessFunc)gncOwnerGetType },
+    { OWNER_TYPE, QOF_TYPE_INT64, (QofAccessFunc)gncOwnerGetType, NULL },
     { OWNER_CUSTOMER, GNC_CUSTOMER_MODULE_NAME,
-      (QofAccessFunc)gncOwnerGetCustomer },
-    { OWNER_JOB, GNC_JOB_MODULE_NAME, (QofAccessFunc)gncOwnerGetJob },
-    { OWNER_VENDOR, GNC_VENDOR_MODULE_NAME, (QofAccessFunc)gncOwnerGetVendor },
-    { OWNER_EMPLOYEE, GNC_EMPLOYEE_MODULE_NAME, (QofAccessFunc)gncOwnerGetEmployee },
-    { OWNER_PARENT, _GNC_MOD_NAME, (QofAccessFunc)gncOwnerGetEndOwner },
-    { OWNER_PARENTG, QOF_TYPE_GUID, (QofAccessFunc)gncOwnerGetEndGUID },
-    { OWNER_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncOwnerGetName },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncOwnerGetGUID },
+      (QofAccessFunc)gncOwnerGetCustomer, NULL },
+    { OWNER_JOB, GNC_JOB_MODULE_NAME, (QofAccessFunc)gncOwnerGetJob, NULL },
+    { OWNER_VENDOR, GNC_VENDOR_MODULE_NAME, (QofAccessFunc)gncOwnerGetVendor, NULL },
+    { OWNER_EMPLOYEE, GNC_EMPLOYEE_MODULE_NAME, (QofAccessFunc)gncOwnerGetEmployee, NULL },
+    { OWNER_PARENT, _GNC_MOD_NAME, (QofAccessFunc)gncOwnerGetEndOwner, NULL },
+    { OWNER_PARENTG, QOF_TYPE_GUID, (QofAccessFunc)gncOwnerGetEndGUID, NULL },
+    { OWNER_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncOwnerGetName, NULL },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncOwnerGetGUID, NULL },
     { NULL },
   };
 
-  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncOwnerCompare, params);
+  qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncOwnerCompare, params);
   reg_lot ();
 
   return TRUE;

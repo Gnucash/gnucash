@@ -3433,52 +3433,52 @@ static gpointer no_op (gpointer obj)
 gboolean xaccSplitRegister (void)
 {
   static const QofParam params[] = {
-    { SPLIT_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccSplitGetSlots },
+    { SPLIT_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccSplitGetSlots, NULL },
     { SPLIT_DATE_RECONCILED, QOF_TYPE_DATE,
-      (QofAccessFunc)xaccSplitRetDateReconciledTS },
+      (QofAccessFunc)xaccSplitRetDateReconciledTS, NULL },
 
     /* d-* are depricated query params, should not be used in new
      * queries, should be removed from old queries. */
     { "d-share-amount", QOF_TYPE_DOUBLE,
-      (QofAccessFunc)DxaccSplitGetShareAmount },
-    { "d-share-int64", QOF_TYPE_INT64, (QofAccessFunc)xaccSplitGetGUID },
-    { SPLIT_BALANCE, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccSplitGetBalance },
+      (QofAccessFunc)DxaccSplitGetShareAmount, NULL },
+    { "d-share-int64", QOF_TYPE_INT64, (QofAccessFunc)xaccSplitGetGUID, NULL },
+    { SPLIT_BALANCE, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccSplitGetBalance, NULL },
     { SPLIT_CLEARED_BALANCE, QOF_TYPE_NUMERIC,
-      (QofAccessFunc)xaccSplitGetClearedBalance },
+      (QofAccessFunc)xaccSplitGetClearedBalance, NULL },
     { SPLIT_RECONCILED_BALANCE, QOF_TYPE_NUMERIC,
-      (QofAccessFunc)xaccSplitGetReconciledBalance },
-    { SPLIT_MEMO, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetMemo },
-    { SPLIT_ACTION, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetAction },
-    { SPLIT_RECONCILE, QOF_TYPE_CHAR, (QofAccessFunc)xaccSplitGetReconcile },
-    { SPLIT_AMOUNT, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccSplitGetAmount },
+      (QofAccessFunc)xaccSplitGetReconciledBalance, NULL },
+    { SPLIT_MEMO, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetMemo, NULL },
+    { SPLIT_ACTION, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetAction, NULL },
+    { SPLIT_RECONCILE, QOF_TYPE_CHAR, (QofAccessFunc)xaccSplitGetReconcile, NULL },
+    { SPLIT_AMOUNT, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccSplitGetAmount, NULL },
     { SPLIT_SHARE_PRICE, QOF_TYPE_NUMERIC,
-      (QofAccessFunc)xaccSplitGetSharePrice },
-    { SPLIT_VALUE, QOF_TYPE_DEBCRED, (QofAccessFunc)xaccSplitGetValue },
-    { SPLIT_TYPE, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetType },
+      (QofAccessFunc)xaccSplitGetSharePrice, NULL },
+    { SPLIT_VALUE, QOF_TYPE_DEBCRED, (QofAccessFunc)xaccSplitGetValue, NULL },
+    { SPLIT_TYPE, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetType, NULL },
     { SPLIT_VOIDED_AMOUNT, QOF_TYPE_NUMERIC,
-      (QofAccessFunc)xaccSplitVoidFormerAmount },
+      (QofAccessFunc)xaccSplitVoidFormerAmount, NULL },
     { SPLIT_VOIDED_VALUE, QOF_TYPE_NUMERIC,
-      (QofAccessFunc)xaccSplitVoidFormerValue },
-    { SPLIT_LOT, GNC_ID_LOT, (QofAccessFunc)xaccSplitGetLot },
-    { SPLIT_TRANS, GNC_ID_TRANS, (QofAccessFunc)xaccSplitGetParent },
-    { SPLIT_ACCOUNT, GNC_ID_ACCOUNT, (QofAccessFunc)xaccSplitGetAccount },
-    { SPLIT_ACCOUNT_GUID, QOF_TYPE_GUID, split_account_guid_getter },
-    { SPLIT_ACCT_FULLNAME, SPLIT_ACCT_FULLNAME, no_op },
-    { SPLIT_CORR_ACCT_NAME, SPLIT_CORR_ACCT_NAME, no_op },
-    { SPLIT_CORR_ACCT_CODE, SPLIT_CORR_ACCT_CODE, no_op },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)xaccSplitGetBook },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc) xaccSplitGetGUID },
+      (QofAccessFunc)xaccSplitVoidFormerValue, NULL },
+    { SPLIT_LOT, GNC_ID_LOT, (QofAccessFunc)xaccSplitGetLot, NULL },
+    { SPLIT_TRANS, GNC_ID_TRANS, (QofAccessFunc)xaccSplitGetParent, NULL },
+    { SPLIT_ACCOUNT, GNC_ID_ACCOUNT, (QofAccessFunc)xaccSplitGetAccount, NULL },
+    { SPLIT_ACCOUNT_GUID, QOF_TYPE_GUID, split_account_guid_getter, NULL },
+    { SPLIT_ACCT_FULLNAME, SPLIT_ACCT_FULLNAME, no_op, NULL },
+    { SPLIT_CORR_ACCT_NAME, SPLIT_CORR_ACCT_NAME, no_op, NULL },
+    { SPLIT_CORR_ACCT_CODE, SPLIT_CORR_ACCT_CODE, no_op, NULL },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)xaccSplitGetBook, NULL },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc) xaccSplitGetGUID, NULL },
     { NULL },
   };
 
-  qof_query_object_register (GNC_ID_SPLIT, (QofSortFunc)xaccSplitDateOrder, params);
-  qof_query_object_register (SPLIT_ACCT_FULLNAME,
+  qof_class_register (GNC_ID_SPLIT, (QofSortFunc)xaccSplitDateOrder, params);
+  qof_class_register (SPLIT_ACCT_FULLNAME,
                           (QofSortFunc)xaccSplitCompareAccountFullNames,
                           NULL);
-  qof_query_object_register (SPLIT_CORR_ACCT_NAME,
+  qof_class_register (SPLIT_CORR_ACCT_NAME,
                           (QofSortFunc)xaccSplitCompareOtherAccountFullNames,
                           NULL);
-  qof_query_object_register (SPLIT_CORR_ACCT_CODE,
+  qof_class_register (SPLIT_CORR_ACCT_CODE,
                           (QofSortFunc)xaccSplitCompareOtherAccountCodes,
                           NULL);
 
@@ -3514,26 +3514,26 @@ trans_is_balanced_p (const Transaction *txn)
 gboolean xaccTransRegister (void)
 {
   static QofParam params[] = {
-    { TRANS_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccTransGetSlots },
-    { TRANS_NUM, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNum },
-    { TRANS_DESCRIPTION, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetDescription },
-    { TRANS_DATE_ENTERED, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDateEnteredTS },
-    { TRANS_DATE_POSTED, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDatePostedTS },
-    { TRANS_DATE_DUE, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDateDueTS },
-    { TRANS_IMBALANCE, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccTransGetImbalance },
-    { TRANS_NOTES, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNotes },
-    { TRANS_IS_BALANCED, QOF_TYPE_BOOLEAN, (QofAccessFunc)trans_is_balanced_p },
-    { TRANS_TYPE, QOF_TYPE_CHAR, (QofAccessFunc)xaccTransGetTxnType },
-    { TRANS_VOID_STATUS, QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccTransGetVoidStatus },
-    { TRANS_VOID_REASON, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetVoidReason },
-    { TRANS_VOID_TIME, QOF_TYPE_DATE, (QofAccessFunc)xaccTransGetVoidTime },
-    { TRANS_SPLITLIST, GNC_ID_SPLIT, (QofAccessFunc)xaccTransGetSplitList },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)xaccTransGetBook },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)xaccTransGetGUID },
+    { TRANS_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccTransGetSlots,NULL },
+    { TRANS_NUM, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNum,NULL },
+    { TRANS_DESCRIPTION, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetDescription,NULL },
+    { TRANS_DATE_ENTERED, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDateEnteredTS,NULL },
+    { TRANS_DATE_POSTED, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDatePostedTS,NULL },
+    { TRANS_DATE_DUE, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDateDueTS,NULL },
+    { TRANS_IMBALANCE, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccTransGetImbalance,NULL },
+    { TRANS_NOTES, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNotes,NULL },
+    { TRANS_IS_BALANCED, QOF_TYPE_BOOLEAN, (QofAccessFunc)trans_is_balanced_p,NULL },
+    { TRANS_TYPE, QOF_TYPE_CHAR, (QofAccessFunc)xaccTransGetTxnType,NULL },
+    { TRANS_VOID_STATUS, QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccTransGetVoidStatus,NULL },
+    { TRANS_VOID_REASON, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetVoidReason,NULL },
+    { TRANS_VOID_TIME, QOF_TYPE_DATE, (QofAccessFunc)xaccTransGetVoidTime,NULL },
+    { TRANS_SPLITLIST, GNC_ID_SPLIT, (QofAccessFunc)xaccTransGetSplitList,NULL },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)xaccTransGetBook,NULL },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)xaccTransGetGUID,NULL },
     { NULL },
   };
 
-  qof_query_object_register (GNC_ID_TRANS, (QofSortFunc)xaccTransOrder, params);
+  qof_class_register (GNC_ID_TRANS, (QofSortFunc)xaccTransOrder, params);
 
   return qof_object_register (&trans_object_def);
 }

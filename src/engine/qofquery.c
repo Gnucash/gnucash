@@ -442,7 +442,7 @@ static GSList * compile_params (GSList *param_list, QofIdType start_obj,
   for (; param_list; param_list = param_list->next) 
   {
     QofIdType param_name = param_list->data;
-    objDef = qof_query_object_get_parameter (start_obj, param_name);
+    objDef = qof_class_get_parameter (start_obj, param_name);
 
     /* If it doesn't exist, then we've reached the end */
     if (!objDef) break;
@@ -490,7 +490,7 @@ compile_sort (QofQuerySort *sort, QofIdType obj)
     /* Hrm, perhaps this is an object compare, not a core compare? */
     if (sort->comp_fcn == NULL)
     {
-      sort->obj_cmp = qof_query_object_default_sort (resObj->param_type);
+      sort->obj_cmp = qof_class_get_default_sort (resObj->param_type);
     }
   } 
   else if (!safe_strcmp (sort->param_list->data, QUERY_DEFAULT_SORT))
@@ -536,7 +536,7 @@ static void compile_terms (QofQuery *q)
   compile_sort (&(q->secondary_sort), q->search_for);
   compile_sort (&(q->tertiary_sort), q->search_for);
 
-  q->defaultSort = qof_query_object_default_sort (q->search_for);
+  q->defaultSort = qof_class_get_default_sort (q->search_for);
 
   /* Now compile the backend instances */
   for (node = q->books; node; node = node->next) {
@@ -1224,14 +1224,14 @@ void qof_query_add_boolean_match (QofQuery *q, GSList *param_list, gboolean valu
 
 void qof_query_init (void)
 {
-  PINFO("New Query Module Initialization");
+  ENTER (" ");
   qof_query_core_init ();
-  qof_query_object_init ();
+  qof_class_init ();
 }
 
 void qof_query_shutdown (void)
 {
-  qof_query_object_shutdown ();
+  qof_class_shutdown ();
   qof_query_core_shutdown ();
 }
 

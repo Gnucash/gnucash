@@ -238,14 +238,14 @@ gboolean gncAddressRegister (void)
 {
   static QofParam params[] = {
 
-    { ADDRESS_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetName },
-    { ADDRESS_PHONE, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetPhone },
-    { ADDRESS_FAX, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetFax },
-    { ADDRESS_EMAIL, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetEmail },
+    { ADDRESS_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetName, NULL },
+    { ADDRESS_PHONE, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetPhone, NULL },
+    { ADDRESS_FAX, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetFax, NULL },
+    { ADDRESS_EMAIL, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetEmail, NULL },
     { NULL },
   };
 
-  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncAddressCompare, params);
+  qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncAddressCompare, params);
 
   return TRUE;
 }

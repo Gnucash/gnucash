@@ -1,5 +1,5 @@
 /********************************************************************\
- * qofqueryobject.h -- API for registering queriable objects        *
+ * qofclass.h -- API for registering paramters on objects           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,13 +20,21 @@
  *                                                                  *
 \********************************************************************/
 
-/** @file qofqueryobject.h
-    @brief API for registering queriable objects 
+/** @file qofclass.h
+    @brief API for registering paramters on objects 
     @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
+    @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
+
+  This file defines a class messaging system reminiscent of
+  traditional OO-style setter and getter interfaces to object 
+  properties.  A C-language object can declare a collection
+  of setters and getters on itself that can then be used 
+  to perform run-time (as opposed to compile-time) bindings 
+  to the object.
 */
 
-#ifndef QOF_QUERYOBJECT_H
-#define QOF_QUERYOBJECT_H
+#ifndef QOF_CLASS_H
+#define QOF_CLASS_H
 
 #include "qofid.h"
 
@@ -48,39 +56,55 @@
 /** Type of Paramters (String, Date, Numeric, GUID, etc.) */
 typedef const char * QofType;
 
-/** The QofAccessFunc type defines an arbitrary function pointer
+/** The QofAccessFunc defines an arbitrary function pointer
  *  for access functions.  This is needed because C doesn't have
  *  templates, so we just cast a lot.  Real functions must be of
  *  the form:
  *
- * <param_type> function (object_type *obj);
+ * param_type getter_func (object_type *self);
  */
 typedef gpointer (*QofAccessFunc)(gpointer);
+
+/** The QofSetterFunc defines an function pointer for parameter
+ *  setters. Real functions must be of the form:
+ *
+ * void setter_func (object_type *self, param_type *param);
+ */
+typedef void (*QofSetterFunc) (gpointer, gpointer);
 
 /** This structure is for each queriable parameter in an object
  *
  * -- param_name is the name of the parameter.
  * -- param_type is the type of the parameter, which can be either another
  *    object (QofIdType) or it can be a core data type (QofType).
- * -- param_getgcn is the function to actually obtain the parameter
+ * -- param_getfcn is the function to actually obtain the parameter
+ * -- param_setfcn is the function to actually set the parameter
+ *
+ * Either the getter or the setter may be NULL.
  */
 typedef struct _QofParam 
 {
   const char       * param_name;
   QofType            param_type;
   QofAccessFunc      param_getfcn;
+  QofSetterFunc      param_setfcn;
 } QofParam;
 
 /** This function is the default sort function for a particular object type */
 typedef int (*QofSortFunc)(gpointer, gpointer);
 
-/** This function registers a new object class with the QofQuery
- * subsystem.  In particular it registers the set of parameters and
- * converters to query the type-specific data.  The "params" argument
- * must be a NULL-terminated array of QofParam. It may be NULL if
- * there are no paramters to be registered.
+/** This function registers a new object class with the Qof subsystem.
+ *  In particular, it registers the set of setters and getters for
+ *  controlling the object.   The getters are typically used by the
+ *  query subsystem to query type specific data.   Note that there
+ *  is no particular reqquirement for there to be a setter for every
+ *  getter or even v.v. nor is there any requeirement for these to 
+ *  map 'cleanly' or orthogonaly to the actual object design.
+ *
+ *  The "params" argument must be a NULL-terminated array of QofParam. 
+ *  It may be NULL if there are no parameters to be registered.
  */
-void qof_query_object_register (QofIdTypeConst obj_name,
+void qof_class_register (QofIdTypeConst obj_name,
 			     QofSortFunc default_sort_fcn,
 			     const QofParam *params);
 
@@ -93,28 +117,31 @@ void qof_query_object_register (QofIdTypeConst obj_name,
  * #define MY_OBJ_TRANS	"trans"
  *
  * static QofParam myParams[] = {
- * { MY_OBJ_MEMO, QOF_TYPE_STRING, myMemoGetter },
- * { MY_OBJ_VALUE, QOF_TYPE_NUMERIC, myValueGetter },
- * { MY_OBJ_DATE, QOF_TYPE_DATE, myDateGetter },
- * { MY_OBJ_ACCOUNT, GNC_ID_ACCOUNT, myAccountGetter },
- * { MY_OBJ_TRANS, GNC_ID_TRANS, myTransactionGetter },
+ * { MY_OBJ_MEMO, QOF_TYPE_STRING, myMemoGetter, NULL },
+ * { MY_OBJ_VALUE, QOF_TYPE_NUMERIC, myValueGetter, NULL },
+ * { MY_OBJ_DATE, QOF_TYPE_DATE, myDateGetter, NULL },
+ * { MY_OBJ_ACCOUNT, GNC_ID_ACCOUNT, myAccountGetter, NULL },
+ * { MY_OBJ_TRANS, GNC_ID_TRANS, myTransactionGetter, NULL },
  * NULL };
  *
- * qof_query_object_register ("myObjectName", myObjectCompare,
- *				    &myParams);
+ * qof_class_register ("myObjectName", myObjectCompare, &myParams);
  */
 
 /** Return the core datatype of the specified object's parameter */
-QofType qof_query_object_parameter_type (QofIdTypeConst obj_name,
+QofType qof_class_get_parameter_type (QofIdTypeConst obj_name,
 					   const char *param_name);
 
 /** Return the registered Parameter Definition for the requested parameter */
-const QofParam * qof_query_object_get_parameter (QofIdTypeConst obj_name,
+const QofParam * qof_class_get_parameter (QofIdTypeConst obj_name,
 						   const char *parameter);
 
 /** Return the object's parameter getter function */
-QofAccessFunc qof_query_object_get_parameter_getter (QofIdTypeConst obj_name,
+QofAccessFunc qof_class_get_parameter_getter (QofIdTypeConst obj_name,
+					      const char *parameter);
+
+/** Return the object's parameter setter function */
+QofSetterFunc qof_class_get_parameter_setter (QofIdTypeConst obj_name,
 					      const char *parameter);
 
 
-#endif /* QOF_QUERYOBJECT_H */
+#endif /* QOF_CLASS_H */

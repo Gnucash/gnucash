@@ -762,12 +762,12 @@ static QofObject gncTaxTableDesc = {
 gboolean gncTaxTableRegister (void)
 {
   static QofParam params[] = {
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gncTaxTableGetBook },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncTaxTableGetGUID },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gncTaxTableGetBook, NULL },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncTaxTableGetGUID, NULL },
     { NULL },
   };
 
-  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncTaxTableCompare, params);
+  qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncTaxTableCompare, params);
 
   return qof_object_register (&gncTaxTableDesc);
 }

@@ -45,9 +45,9 @@ static gboolean clear_table (gpointer key, gpointer value, gpointer user_data)
 /********************************************************************/
 /* PUBLISHED API FUNCTIONS */
 
-void qof_query_object_register (QofIdTypeConst obj_name,
-			     QofSortFunc default_sort_function,
-			     const QofParam *params)
+void qof_class_register (QofIdTypeConst obj_name,
+                 QofSortFunc default_sort_function,
+                 const QofParam *params)
 {
   int i;
 
@@ -68,12 +68,12 @@ void qof_query_object_register (QofIdTypeConst obj_name,
     /* Now insert all the parameters */
     for (i = 0; params[i].param_name; i++)
       g_hash_table_insert (ht,
-			   (char *)params[i].param_name,
-			   (gpointer)&(params[i]));
+               (char *)params[i].param_name,
+               (gpointer)&(params[i]));
   }
 }
 
-void qof_query_object_init(void)
+void qof_class_init(void)
 {
   if (initialized) return;
   initialized = TRUE;
@@ -82,7 +82,7 @@ void qof_query_object_init(void)
   sortTable = g_hash_table_new (g_str_hash, g_str_equal);
 }
 
-void qof_query_object_shutdown (void)
+void qof_class_shutdown (void)
 {
   if (!initialized) return;
   initialized = FALSE;
@@ -93,8 +93,9 @@ void qof_query_object_shutdown (void)
 }
 
 
-const QofParam * qof_query_object_get_parameter (QofIdTypeConst obj_name,
-						   const char *parameter)
+const QofParam * 
+qof_class_get_parameter (QofIdTypeConst obj_name,
+                          const char *parameter)
 {
   GHashTable *ht;
 
@@ -109,37 +110,57 @@ const QofParam * qof_query_object_get_parameter (QofIdTypeConst obj_name,
   return (g_hash_table_lookup (ht, parameter));
 }
 
-QofAccessFunc qof_query_object_get_parameter_getter (QofIdTypeConst obj_name,
-					      const char *parameter)
+QofAccessFunc 
+qof_class_get_parameter_getter (QofIdTypeConst obj_name,
+                                 const char *parameter)
 {
   const QofParam *prm;
 
   g_return_val_if_fail (obj_name, NULL);
   g_return_val_if_fail (parameter, NULL);
 
-  prm = qof_query_object_get_parameter (obj_name, parameter);
+  prm = qof_class_get_parameter (obj_name, parameter);
   if (prm)
     return prm->param_getfcn;
 
   return NULL;
 }
 
-QofType qof_query_object_parameter_type (QofIdTypeConst obj_name,
-					   const char *param_name)
+QofSetterFunc 
+qof_class_get_parameter_setter (QofIdTypeConst obj_name,
+                                 const char *parameter)
+{
+  const QofParam *prm;
+
+  g_return_val_if_fail (obj_name, NULL);
+  g_return_val_if_fail (parameter, NULL);
+
+  prm = qof_class_get_parameter (obj_name, parameter);
+  if (prm)
+    return prm->param_setfcn;
+
+  return NULL;
+}
+
+QofType 
+qof_class_get_parameter_type (QofIdTypeConst obj_name,
+                               const char *param_name)
 {
   const QofParam *prm;
 
   if (!obj_name || !param_name) return NULL;
 
-  prm = qof_query_object_get_parameter (obj_name, param_name);
+  prm = qof_class_get_parameter (obj_name, param_name);
   if (!prm) return NULL;
 
   return (prm->param_type);
 }
 
 QofSortFunc 
-qof_query_object_default_sort (QofIdTypeConst obj_name)
+qof_class_get_default_sort (QofIdTypeConst obj_name)
 {
   if (!obj_name) return NULL;
   return g_hash_table_lookup (sortTable, obj_name);
 }
+
+/* ============================= END OF FILE ======================== */

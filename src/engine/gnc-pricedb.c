@@ -2152,16 +2152,16 @@ gboolean
 gnc_pricedb_register (void)
 {
   static QofParam params[] = {
-    { PRICE_COMMODITY, GNC_ID_COMMODITY, (QofAccessFunc)gnc_price_get_commodity },
-    { PRICE_CURRENCY, GNC_ID_COMMODITY, (QofAccessFunc)gnc_price_get_currency },
-    { PRICE_DATE, QOF_TYPE_DATE, (QofAccessFunc)gnc_price_get_time },
-    { PRICE_SOURCE, QOF_TYPE_STRING, (QofAccessFunc)gnc_price_get_source },
-    { PRICE_TYPE, QOF_TYPE_STRING, (QofAccessFunc)gnc_price_get_type },
-    { PRICE_VALUE, QOF_TYPE_NUMERIC, (QofAccessFunc)gnc_price_get_value },
+    { PRICE_COMMODITY, GNC_ID_COMMODITY, (QofAccessFunc)gnc_price_get_commodity, NULL },
+    { PRICE_CURRENCY, GNC_ID_COMMODITY, (QofAccessFunc)gnc_price_get_currency, NULL },
+    { PRICE_DATE, QOF_TYPE_DATE, (QofAccessFunc)gnc_price_get_time, NULL },
+    { PRICE_SOURCE, QOF_TYPE_STRING, (QofAccessFunc)gnc_price_get_source, NULL },
+    { PRICE_TYPE, QOF_TYPE_STRING, (QofAccessFunc)gnc_price_get_type, NULL },
+    { PRICE_VALUE, QOF_TYPE_NUMERIC, (QofAccessFunc)gnc_price_get_value, NULL },
     { NULL },
   };
 
-  qof_query_object_register (GNC_ID_PRICE, NULL, params);
+  qof_class_register (GNC_ID_PRICE, NULL, params);
 
   return qof_object_register (&pricedb_object_def);
 }
