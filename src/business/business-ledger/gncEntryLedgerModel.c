@@ -34,9 +34,14 @@ static GncEntryLedgerColors reg_colors =
 
 /* GET_LABEL */
 
-static const char * get_acct_label (VirtualLocation virt_loc, gpointer data)
+static const char * get_iacct_label (VirtualLocation virt_loc, gpointer data)
 {
-  return _("Account");
+  return _("Income Account");
+}
+
+static const char * get_bacct_label (VirtualLocation virt_loc, gpointer data)
+{
+  return _("Expense Account");
 }
 
 static const char * get_actn_label (VirtualLocation virt_loc, gpointer data)
@@ -1044,8 +1049,8 @@ static void gnc_entry_ledger_model_new_handlers (TableModel *model,
     gpointer help_handler;
     gpointer io_flags_handler;
   } models[] = {
-    { ENTRY_IACCT_CELL, get_iacct_entry, get_acct_label, get_acct_help, get_standard_io_flags },
-    { ENTRY_BACCT_CELL, get_bacct_entry, get_acct_label, get_acct_help, get_standard_io_flags },
+    { ENTRY_IACCT_CELL, get_iacct_entry, get_iacct_label, get_acct_help, get_standard_io_flags },
+    { ENTRY_BACCT_CELL, get_bacct_entry, get_bacct_label, get_acct_help, get_standard_io_flags },
     { ENTRY_ACTN_CELL, get_actn_entry, get_actn_label, get_actn_help, get_standard_io_flags },
     { ENTRY_DATE_CELL, get_date_entry, get_date_label, get_date_help, get_standard_io_flags },
     { ENTRY_DESC_CELL, get_desc_entry, get_desc_label, get_desc_help, get_standard_io_flags },

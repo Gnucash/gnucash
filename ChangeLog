@@ -6,6 +6,10 @@
 	  elsewhere so that the reports themselves don't depend on
 	  gnome...  This fixes Wilddev's report problem.
 
+	* src/business/business-ledger/gncEntryLedgerModel.c -- relabel
+	  the "Account" column to "Income Account" or "Expense Account"
+	  to better encourage the user to "choose wisely".
+	
 2003-01-21  David Hampton  <hampton@employees.org>
 
 	* src/quotes/finance-quote-helper.in: Fix problem getting quotes
