@@ -2267,6 +2267,65 @@
 -=-=-=- cvs HEAD ChangeLog is below this line -=-=-=-
 
 
+2003-12-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/reconcile-list.c: make sure to verify that the items
+	  in the reconcile hash are still around after a refresh.  Fixes
+	  bug #129121.
+
+2003-12-08  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/gnc-numeric.c:  Rich Johnson's patch to convert
+	  atoll() -> strtoll()
+
+2003-12-08  Benoit Grégoire  <bock@step.polymtl.ca>
+	*src/import-export/log-replay/gnc-log-replay.c:  Increase read buffer size.
+	Hopefully fixes 127421, but this time someone please do test the fix...
+
+2003-12-01  Benoit Grégoire <bock@step.polymtl.ca>
+
+	* po/POTFILES.in: Remove reference to bin/strsub.c.
+
+2003-11-19  David Hampton  <hampton@employees.org>
+
+	* src/quotes/dump-finance-quote: Be more explicit when a lookup fails.
+
+2003-11-17  Chris Lyttle  <chris@wilddev.net>
+
+	* src/scm/main.scm: Update for 1.8.8 release
+
+2003-11-17  Derek Atkins  <derek@ihtfp.com>
+
+	* Makefile.am, Makefile.DEPS:
+	  remove Makefile.DEPS because we don't support automake-1.4 anymore
+	* src/bin/Makefile.am, strsub.c:
+	  remove strsub.c because we don't need it now that we've dropped 1.4
+	Fixes #120207
+
+2003-11-16  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/test-core/test-engine-stuff.c:  don't make a timespec
+	  with tv_sec == 0.  Fixes some tests on the alpha platform.
+
+2003-11-16  Linas Vepstas <linas@linas.org>
+
+	* src/doc/guid.txt: add document debating issues of guid usage in
+	  the closing of books.
+
+2003-11-14  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/advanced-portfolio.scm:
+	Applied Frank Pavageau's patch regarding capital gains to
+	handle split transactions.
+
+2003-10-26  David Hampton  <hampton@employees.org>
+
+	* src/engine/qofid.[ch]: Fix another crash caused by qof changes.
+
+2003-10-25  David Hampton  <hampton@employees.org>
+
+	* src/gnome/druid-stock-split.c: Fix crash caused by qof changes.
+
 2003-10-24  David Hampton  <hampton@employees.org>
 
 	* src/import-export/hbci/druid-hbci-initial.c: Use the generic

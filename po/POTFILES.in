@@ -92,7 +92,6 @@ src/backend/rpc/gncRpc_svc.c
 src/backend/rpc/gncmod-backend-rpc.c
 src/backend/rpc/svc_thrd.c
 src/backend/rpc/xprt_thrd.c
-src/bin/strsub.c
 src/business/business-core/businessmod-core.c
 src/business/business-core/gncAddress.c
 src/business/business-core/gncBillTerm.c

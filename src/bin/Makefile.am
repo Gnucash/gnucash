@@ -22,10 +22,6 @@ gnc_common_scripts = gnucash gnucash-env gnucash-run-script gnucash-make-guids
 
 bin_SCRIPTS = ${gnc_common_scripts}
 
-noinst_PROGRAMS = strsub
-strsub_SOURCES = strsub.c
-strsub_LDADD = ${GLIB_LIBS}
-
 # if you change gncoverridedir, make sure you change ./overrides/Makefile.am too.
 gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
 
