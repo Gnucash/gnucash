@@ -36,6 +36,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-currency-edit.c \
   gnc-date-delta.c \
   gnc-date-edit.c \
+  gnc-date-format.c \
   gnc-dense-cal.c \
   gnc-frequency.c \
   gnc-general-select.c \
@@ -71,6 +72,7 @@ gncinclude_HEADERS = \
   gnc-currency-edit.h \
   gnc-date-delta.h \
   gnc-date-edit.h \
+  gnc-date-format.h \
   gnc-dense-cal.h \
   gnc-frequency.h \
   gnc-general-select.h \
@@ -129,6 +131,7 @@ glade_DATA = \
   commodity.glade \
   dialog-query-list.glade \
   exchange-dialog.glade \
+  gnc-date-format.glade \
   transfer.glade
 
 EXTRA_DIST = \

@@ -38,136 +38,16 @@
 #include "window-help.h"
 #include "print-session.h"
 #include "gnc-ui.h"
+#include "gnc-date-format.h"
 
 #define CHECK_PRINT_NUM_FORMATS 3
 #define CHECK_PRINT_NUM_POSITIONS 4
-#define CHECK_PRINT_NUM_DATEFORMATS 9
 #define CHECK_PRINT_NUM_UNITS 4
 
-#define MAX_DATE_LEN 80
-
 /* Used by glade_xml_signal_autoconnect_full */
-void gnc_ui_print_check_dialog_ok_cb(GtkButton * button, 
-				     gpointer user_data);
-void gnc_ui_print_check_dialog_cancel_cb(GtkButton * button, 
-					 gpointer user_data);
-void gnc_ui_print_check_dialog_help_cb(GtkButton * button, 
-				       gpointer user_data);
-void gnc_ui_print_check_format_changed_cb(GtkWidget *unused, 
-					  gpointer user_data);
-
-
-static void
-gnc_ui_print_enable_month (PrintCheckDialog *pcd, gboolean sensitive)
-{
-  gtk_widget_set_sensitive(pcd->month_label, sensitive);
-  gtk_widget_set_sensitive(pcd->month_num, sensitive);
-  gtk_widget_set_sensitive(pcd->month_abbrev, sensitive);
-  gtk_widget_set_sensitive(pcd->month_name, sensitive);
-}
-
-static void
-gnc_ui_print_enable_year (PrintCheckDialog *pcd, gboolean sensitive)
-{
-  gtk_widget_set_sensitive(pcd->year_label, sensitive);
-  gtk_widget_set_sensitive(pcd->include_century, sensitive);
-}
-
-static void
-gnc_ui_print_enable_format (PrintCheckDialog *pcd, gboolean sensitive)
-{
-  gtk_widget_set_sensitive(pcd->custom_label, sensitive);
-  gtk_widget_set_sensitive(pcd->custom_format, sensitive);
-}
-
-static void
-gnc_ui_print_compute_new_format (PrintCheckDialog *pcd)
-{
-  int sel_option = gnc_option_menu_get_active(pcd->dformat_picker);
-  gboolean enable_year, enable_month, enable_custom, check_modifiers;
-  static gchar *format, *c;
-  gchar date_string[MAX_DATE_LEN];
-  time_t secs_now;
-  struct tm today;
-
-  switch (sel_option) {
-   case DATE_FORMAT_CUSTOM:
-    format = g_strdup(gtk_entry_get_text(GTK_ENTRY(pcd->custom_format)));
-    enable_year = enable_month = check_modifiers = FALSE;
-    enable_custom = TRUE;
-    break;
-
-   case DATE_FORMAT_LOCALE:
-    format = g_strdup(getDateFormatString(DATE_FORMAT_LOCALE));
-    enable_year = enable_month = check_modifiers = enable_custom = FALSE;
-    break;
-
-   case DATE_FORMAT_ISO:
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pcd->month_num), TRUE);
-    enable_year = check_modifiers = TRUE;
-    enable_month = enable_custom = FALSE;
-    break;
-
-   default:
-    enable_year = enable_month = check_modifiers = TRUE;
-    enable_custom = FALSE;
-    break;
-  }
-
-  /* Tweak widget sensitivities, as appropriate. */
-  gnc_ui_print_enable_year(pcd, enable_year);
-  gnc_ui_print_enable_month(pcd, enable_month);
-  gnc_ui_print_enable_format(pcd, enable_custom);
-
-  /* Update the format string based upon the user's preferences */
-  if (check_modifiers) {
-    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pcd->month_num))) {
-      format = g_strdup(getDateFormatString(sel_option));
-    } else {
-      format = g_strdup(getDateTextFormatString(sel_option));
-      if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pcd->month_name))) {
-	c = strchr(format, 'b');
-	if (c)
-	  *c = 'B';
-      }
-    }
-    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pcd->include_century))){
-      c = strchr(format, 'y');
-      if (c)
-	*c = 'Y';
-    }
-  }
-
-  /*
-   * Give feedback on the format string so users can see how it works
-   * without having to read the strftime man page. Prevent recursive
-   * signals.
-   */
-  gtk_signal_handler_block_by_data(GTK_OBJECT(pcd->custom_format), pcd);
-  gtk_entry_set_text(GTK_ENTRY(pcd->custom_format), format);
-  gtk_signal_handler_unblock_by_data(GTK_OBJECT(pcd->custom_format), pcd);
-  
-  /* Save the format string for when OK is clicked */
-  if (pcd->format_string)
-    g_free(pcd->format_string);
-  pcd->format_string = format;
-
-  /* Visual feedback on what the date will look like. */
-  secs_now = time(NULL);
-  localtime_r(&secs_now, &today);
-  strftime(date_string, MAX_DATE_LEN, format, &today);
-  gtk_label_set_text(GTK_LABEL(pcd->sample_date), date_string);
-}
-
-void
-gnc_ui_print_check_format_changed_cb(GtkWidget *unused, 
-				     gpointer user_data)
-{
-  PrintCheckDialog * pcd = user_data;
-
-  gnc_ui_print_compute_new_format(pcd);
-}
-
+void gnc_ui_print_check_dialog_ok_cb(GtkButton * button, gpointer user_data);
+void gnc_ui_print_check_dialog_cancel_cb(GtkButton * button, gpointer user_data);
+void gnc_ui_print_check_dialog_help_cb(GtkButton * button, gpointer user_data);
 
 
 /********************************************************************\
@@ -184,6 +64,7 @@ gnc_ui_print_check_dialog_create(RegWindow     *reg_data,
 {
   PrintCheckDialog * pcd;
   GladeXML *xml;
+  GtkWidget *table;
 
   pcd = (PrintCheckDialog *)gnc_RegWindow_get_pcd(reg_data);
   if (pcd) {
@@ -191,7 +72,7 @@ gnc_ui_print_check_dialog_create(RegWindow     *reg_data,
     pcd->amount = amount;
     pcd->date = date;
     pcd->memo = memo;
-    gnc_ui_print_compute_new_format(pcd);
+    gnc_date_format_refresh(GNC_DATE_FORMAT(pcd->date_format));
     gtk_window_present (GTK_WINDOW(pcd->dialog));
     return;
   }
@@ -212,17 +93,6 @@ gnc_ui_print_check_dialog_create(RegWindow     *reg_data,
   /* now pick out the relevant child widgets */
   pcd->format_picker = glade_xml_get_widget (xml, "check_format_picker");
   pcd->position_picker = glade_xml_get_widget (xml, "check_position_picker");
-  pcd->dformat_picker = glade_xml_get_widget (xml, "date_format_picker");
-
-  pcd->month_label = glade_xml_get_widget (xml, "month_label");
-  pcd->month_num = glade_xml_get_widget (xml, "month_num");
-  pcd->month_abbrev = glade_xml_get_widget (xml, "month_abbrev");
-  pcd->month_name = glade_xml_get_widget (xml, "month_name");
-  pcd->year_label = glade_xml_get_widget (xml, "year_label");
-  pcd->include_century = glade_xml_get_widget (xml, "include_century");
-  pcd->sample_date = glade_xml_get_widget (xml, "sample_date");
-  pcd->custom_label = glade_xml_get_widget (xml, "custom_label");
-  pcd->custom_format = glade_xml_get_widget (xml, "custom_format");
 
   pcd->payee_x = glade_xml_get_widget (xml, "payee_x_entry");
   pcd->payee_y = glade_xml_get_widget (xml, "payee_y_entry");
@@ -238,24 +108,20 @@ gnc_ui_print_check_dialog_create(RegWindow     *reg_data,
   pcd->format_entry = glade_xml_get_widget (xml, "date_format_entry");
   pcd->units_picker = glade_xml_get_widget (xml, "units_picker");
 
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pcd->include_century), TRUE);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pcd->month_num), TRUE);
-
   /* fix the option menus so we can diagnose which option is 
      selected */
   gnc_option_menu_init(pcd->format_picker);
   gnc_option_menu_init(pcd->position_picker);
-  gnc_option_menu_init_w_signal(pcd->dformat_picker,
-				gnc_ui_print_check_format_changed_cb, pcd);
   gnc_option_menu_init(pcd->units_picker);
-
-  /* Set initial format to gnucash default */
-  gtk_option_menu_set_history(GTK_OPTION_MENU(pcd->dformat_picker),
-			      getDateFormat());
-  gnc_ui_print_compute_new_format(pcd);
 
   gnome_dialog_set_parent(GNOME_DIALOG(pcd->dialog),
 			  GTK_WINDOW(gnc_RegWindow_window(reg_data)));
+
+  /* Create and attach the date-format chooser */
+  table = glade_xml_get_widget (xml, "options_table");
+  pcd->date_format = gnc_date_format_new_without_label();
+  gtk_table_attach_defaults(GTK_TABLE(table), pcd->date_format, 1, 4, 2, 7);
+
   gtk_widget_show_all(pcd->dialog);
 }
 
@@ -271,9 +137,6 @@ gnc_ui_print_check_dialog_create(RegWindow     *reg_data,
 void
 gnc_ui_print_check_dialog_destroy(PrintCheckDialog * pcd)
 {
-  if (pcd->format_string)
-    g_free(pcd->format_string);
-
   gnome_dialog_close(GNOME_DIALOG(pcd->dialog));
   gtk_widget_destroy(pcd->dialog);
   pcd->dialog = NULL;
@@ -333,7 +196,8 @@ gnc_ui_print_check_dialog_ok_cb(GtkButton * button,
   case 3:  multip = 1.0; break;    /* points */
   }
     
-  date_format = scm_makfrom0str(pcd->format_string);
+  date_format = scm_makfrom0str
+    (gnc_date_format_get_custom(GNC_DATE_FORMAT(pcd->date_format)));
   
   cust_format = 
     SCM_LIST7
