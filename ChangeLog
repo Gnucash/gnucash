@@ -1,5 +1,8 @@
 2003-07-01  David Hampton  <hampton@employees.org>
 
+	* src/backend/file/gnc-backend-file.c: New data file should have
+	same uid/gidas original file. #105662
+
 	* src/app-utils/gnc-ui-util.[ch]:
 	* src/app-utils/gw-app-utils-spec.scm:
 	* src/engine/gnc-commodity.[ch]:
