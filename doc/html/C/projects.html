@@ -402,7 +402,7 @@
         <td><a href="#glitz">Themes, Icons, Glitz</a></td>
 
         <td>Medium</td>
-        <td>?</td>
+        <td>RGM,Bill,Rob</td>
       </tr>
 
       <tr>
@@ -456,6 +456,13 @@
       </tr>
 
       <tr>
+        <td><a href="#wizards">Wizards</a></td>
+
+        <td>Small</td>
+        <td>Dave, Bill-qif</td>
+      </tr>
+
+      <tr>
         <td><a href="#book">Books, Accounting Periods</a></td>
 
         <td>Small</td>
@@ -474,6 +481,13 @@
 
         <td>Medium</td>
         <td>RLB</td>
+      </tr>
+
+      <tr>
+        <td><a href="#testing">Automated Test Suite</a></td>
+
+        <td>Medium</td>
+        <td>?</td>
       </tr>
 
       <tr>
@@ -505,7 +519,14 @@
       </tr>
 
       <tr>
-        <td><a href="#docs">Documentation</a></td>
+        <td><a href="#searchdocs">Searchable Documentation</a></td>
+
+        <td>Small</td>
+        <td>?</td>
+      </tr>
+
+      <tr>
+        <td><a href="#reconcile">Reconcile Auditing</a></td>
 
         <td>Small</td>
         <td>?</td>
@@ -839,46 +860,32 @@
 
         <p>Multi-Line splits look confusing when viewed from
            Income/Expense Accounts.
-        </p>
-        <p>Stock splits & reverse splits are not displayed correctly.
-        </p>
-        <p>Currency trading Ledger is confusing.
+           Stock splits & reverse splits are not displayed correctly.
+           Currency trading Ledger is confusing.
         </p>
         <p>
-        Stocks and Mutual funds are handled by placing them each in
-        their own account. Each account can be viewed individually.
-        If all of the stock accounts are children of a master
-        trading account, then the trading account can be viewed and
-        modified in a General Ledger window. The current stock
-        general ledger window is a bit obtuse, and difficult to
-        understand and use. A simplified but still powerful ledger
-        window is desperately needed. 
+           Stocks and Mutual funds are handled by placing them each in
+           their own account. Each account can be viewed individually.
+           If all of the stock accounts are children of a master
+           trading account, then the trading account can be viewed and
+           modified in a General Ledger window. The current stock
+           general ledger window is a bit obtuse, and difficult to
+           understand and use. A simplified but still powerful ledger
+           window is desperately needed. 
         </p>
 
         <p>How to most simply allow the user to
-        enter loads and fees?
-        Through multi-line transactions. Unfortunately, some users
-        may not properly understand multi-line transactions, 
-        at least not initially.
-        Thus, a little popup is needed to allow the user to type in
-        the sales load or fee and such, and then auto-create the
-        needed journal entries.</p>
+           enter loads and fees?
+           Through multi-line transactions. Unfortunately, some users
+           may not properly understand multi-line transactions, 
+           at least not initially.
+           Thus, a little popup is needed to allow the user to type in
+           the sales load or fee and such, and then auto-create the
+           needed journal entries.</p>
 
         <p>Note the current transfer window does <em>NOT</em> allow
-        a share price to be specified !! Needs fixing ...</p>
+           a share price to be specified !! Needs fixing ...</p>
       </dd>
-
-      <dt><a name="docs"><b>Documentation</b></a></dt>
-
-      <dd>Need to add a 'meta keyword' tag to the documetnatin
-      pages, this will help the search engine (<em>e.g.</em> <a
-      href="http://www.htdig.org/">htdig</a>) better categorize the
-      help. <a href="http://www.senga.org/mifluz/html/">Mifluz</a>
-      might be more embeddable ... I am told that htdig-API is in
-      good solid condition for this, but undocumented.
-      <p></p>
-      </dd>
-
 
       <dt><a name="glitz"><b>Themes, Icons, Glitz</b></a></dt>
 
@@ -917,24 +924,6 @@
             would be nice too. The button bar is the set of
             'buttons' (open, edit...) at the top of a register
             window and the main window.</p>
-          </li>
-
-          <li>
-            <p><b>Categories/Default Chart of Accounts</b> Provide
-            a default Chart of Accounts, which will mostly consist
-            of a default set of 'Categories' (Income/Expense
-            Accounts). These are categories such as "Automobile
-            Expense", "Bank Interest Income", and "Employment
-            Income". The user should be able to select a default
-            set of accounts, and have those created
-            automatically.  Most likely a wizard would pilot the user
-            through this.</p>
-
-            <p>To actually implement this, it might be best to
-            simply create a file with these in them, and load that
-            file. A mechanism should be provided to allow the user
-            to weed out undesired accounts whilst not preventing
-            them from using them at a later date, if desired.</p>
           </li>
 
           <li>
@@ -996,7 +985,7 @@
           </li>
 
           <li>
-            <p><b>Wizards/Context sensitive help</b>. When users
+            <p><b>Context sensitive help</b>. When users
             create new accounts, need to suggest stuff if the user
             typed something unexpected ... (<em>e.g.</em>
             non-alphanumeric input) ...</p>
@@ -1096,8 +1085,8 @@
       <dt><a name="misc"><b>Miscellaneous Small Projects</b></a></dt>
 
       <dd>
-        A variety of small projects (mostly in the one person-week
-        range): 
+        A variety of small internal projects (mostly in the one
+        person-week range): 
 
         <ul>
           <li>
@@ -1107,42 +1096,46 @@
             </p>
           </li>
           <li>
-            <p><b>Reconcile Window</b>. 
-               <b>Status:</b> Dave.
+            <p><b>Reconcile Window</b>.  
+               Auto-pay credit card when reconciling credit card 
+               accounts (Done, Dave).  
+               Auto-add bank fee when reconciling bank accounts.
+               (Not done, Dave).
             </p>
           </li>
           <li>
             <p><b>Print Register Window</b>. Output register window to
                printer.
-               <b>Status:</b> none
-            </p>
-          </li>
-          <li>
-            <p><b>gtkhtml</b>. Grib.
-            </p>
-          </li>
-          <li>
-            <p><b>print</b>. Grib.
-            </p>
-          </li>
-          <li>
-            <p><b>key-val pairs</b>. Grib.
-            </p>
-          </li>
-          <li>
-            <p><b>guid in fileio</b>. Dave.
-            </p>
-          </li>
-          <li>
-            <p><b>Engine validity test suite</b>. 
-            </p>
-          </li>
-          <li>
-            <p><b>Reconcile groups</b>. 
+               <b>Status:</b> defer indefinitely.
             </p>
           </li>
           <li>
             <p><b># of decimal places in prices (penny stock)</b>. 
+               Part of the big numeric overhaul.
+            </p>
+          </li>
+        </ul>
+        The following have been completed:
+        <ul>
+          <li>
+            <p><b>gtkhtml</b>. Move to gtkhtml from gtkxmhtml. 
+               Done in 1.5, Grib.
+            </p>
+          </li>
+          <li>
+            <p><b>print</b>. Print reports, etc. Done in 1.5, Grib.
+               This came 'for free' with gtkhtml.
+            </p>
+          </li>
+          <li>
+            <p><b>key-val pairs</b>. Add generic key-slot mechanism
+               into accounts, transactions, journal-entries. Done in
+               1.5.0, Grib.
+            </p>
+          </li>
+          <li>
+            <p><b>guid in fileio</b>. No longer relevent with new file
+               format. Dave.
             </p>
           </li>
         </ul>
@@ -1165,6 +1158,41 @@
           <li>Transfer the Income minus Expense for the book period
           to an equity account, so that each new period starts with
           zero income/expense balances.</li>
+
+      <dt><a name="wizards"><b>Wizards</b></a></dt>
+
+      <dd>
+        Create a set of wizards to walk through some of the more 
+        complex tasks, such as new user setup, account creation, 
+        QIF import, budget prep, obscure functional corners.
+        <ul>
+          <li>
+            <p><b>New User Setup</b> Provide
+            a default Chart of Accounts, which will mostly consist
+            of a default set of 'Categories' (Income/Expense
+            Accounts). These are categories such as "Automobile
+            Expense", "Bank Interest Income", and "Employment
+            Income". The user should be able to select a default
+            set of accounts, and have those created
+            automatically.</p>
+          </li>
+          <li><b>Account Creation</b>
+          </li>
+          <li><b>QIF Import</b>
+            QIF Import is just complicated enought that it needs 
+            a wizard walktrhough of the steps.
+          </li>
+          <li><b>Budget Setup</b>
+            Setting up a budget.
+          </li>
+          <li><b>Obscure Corners</b>
+            Various obscure corners of the application may be
+            non-intuitive, and need wizard help.  e.g. stock splits?
+            e.g. using foreign currency on a business trip?  
+          </li>
+        </ul>
+
+      </dd>
 
           <li>A mechanism to purge really old transactions from the
           database.</li>
@@ -1421,6 +1449,16 @@
           Dave Peticolas has some gui roughed out ...</li>
         </ul>
         <br>
+      <dt><a name="testing"><b>Automated Test Suite</b></a></dt>
+
+      <dd>
+         Build automated test suite, including:
+         <ul>
+           <li>File IO consistency check. RLB.
+           <li>Currency math correctness. Grib.
+         </ul>
+      </dd>
+
         <br>
       </dd>
 
@@ -1556,24 +1594,32 @@
       <dt><a name="currency"><b>Multiple Currencies</b></a></dt>
 
       <dd>
-        Need to support multiple currencies. 
-        Work is needed in the GUI. The engine currently supports
-        multiple currencies by treating them as securities, thus
-        allowing currency trading. The currency-trading register
-        needs a complete overhaul as it is obtuse and
-        unintuitive.</p>
+           Need to support multiple currencies. 
+           Work is needed in the GUI. The engine currently supports
+           multiple currencies by treating them as securities, thus
+           allowing currency trading. The currency-trading register
+           needs a complete overhaul as it is obtuse and
+           unintuitive. Weird stuff is in weird columns.
+        </p>
+        <p>
+           A simplfied way of dealing with one-shot currency
+           exchanges needs to be implemented, essentially just a
+           simple calculator popup.  This might be handy for the 
+           occasional business traveler or tourist with some minor 
+           currency trades.
+        </p>
+        <p>
+           Implement the 'correct' way of handling this when user
+           is working in multiple currencies on a regular basis.
+        </p>
 
-        <p>A simplfied way of dealing with one-shot currency
-        exchanges needs to be implemented, essentially just a
-        simple calculator popup.</p>
-
-      <p>
-      <b>Status:</b> Need to rethink wether the one-shot exchanges
-      should in fact be recorded full-fledged in the engine.
-      Also: EURO support is currently hacked in: the EURO is treated as
-      a 'special' currency. Virtually all the euro code can be fully
-      generalized (and should be).
-      </p>
+        <p>
+        <b>Status:</b> Need to rethink wether the one-shot exchanges
+           should in fact be recorded full-fledged in the engine.
+           Also: EURO support is currently hacked in: the EURO is treated as
+           a 'special' currency. Virtually all the euro code can be fully
+           generalized (and should be).
+        </p>
      
       </dd>
 
@@ -1646,6 +1692,26 @@
         possibly annotating individual transactions in the same
         way.
         <p></p>
+      </dd>
+
+      <dt><a name="searchdocs"><b>Searchable Documentation</b></a></dt>
+
+      <dd>Need to add a 'meta keyword' tag to the documentation
+        pages, this will help the search engine (<em>e.g.</em> 
+        <a href="http://www.htdig.org/">htdig</a>) better categorize the
+        help. <a href="http://www.senga.org/mifluz/html/">Mifluz</a>
+        might be more embeddable ... I am told that htdig-API is in
+        good solid condition for this, but undocumented.
+      </dd>
+
+      <dt><a name="reconcile"><b>Reconcile Auditing</b></a></dt>
+
+      <dd>When a collection of transactions get processed trhough the
+        reconcile dialogue, user needs to be able to add a note to this,
+        i.e. this set of je's will be treated as a group.  The note
+        (and date) can be later called up as a part of an audit
+        proceedure.  The act of reconciliation is treated as a
+        historical event that needs to be logged.
       </dd>
 
       <dt><a name="loan"><b>Loan and Mortgage Calculators</b></a></dt>
@@ -2180,10 +2246,19 @@ Password:
 
       <dt><a name="invoice"><b>Invoicing</b></a></dt>
 
-      <dd>Invoicing. To design an invoice, need to have a
-          mini-word-processor/simple drawing plug-in. Is
-          Abisource/Abiword a candidate? Probably needs bonobo...
-          <p></p>
+      <dd>Invoicing. Several compnenents:
+        <ul>
+        <li>Record an invoice. Assign it a serial number.  Be able
+            to reprint/report based on invoice serial number.
+        <li>Invoice associates customer name to set of transactions.
+            Need to deal with PIM issue.  I.e. need to integrate
+            with high-function PIM or CRM interface.
+        <li>Issuing an invoice should impact inventory, and 
+            an A/R account.
+        <li>To visually design an invoice, need to have a
+            mini-word-processor/simple drawing plug-in. Is
+            Abisource/Abiword a candidate? Probably needs bonobo...
+        </ul>
       </dd>
 
       <dt><a name="order"><b>Order Entry</b></a></dt>
