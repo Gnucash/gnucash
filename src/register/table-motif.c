@@ -517,11 +517,11 @@ assert (0);
    } 
 
    /* 
-*/
 xxxxxxxxxxx 
 hack alert -- this is still broke -- can't really do this until 
 after the leave, since all sorts of cell fix-ups occur
 on the leave ... 
+*/
 
    wrapVerifyCursorPosition (table, cbs->next_row, cbs->next_column);
    cbs->next_row = table->current_cursor_phys_row;
