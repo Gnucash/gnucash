@@ -1286,7 +1286,7 @@ xaccAccountSetTaxRelated (Account *account, gboolean tax_related)
 /********************************************************************\
 \********************************************************************/
 
-Account * 
+Account *
 IthAccount (Account **list, int i)
 {
    if (!list || 0 > i) return NULL;

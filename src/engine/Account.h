@@ -316,12 +316,9 @@ const char * xaccAccountGetPriceSrc (Account *acc);
 
 void xaccAccountSortSplits(Account *);
 
-#ifndef SWIG
-
 gpointer xaccAccountForEachSplit(Account *s,
                                  gpointer (*thunk)(Split *s, gpointer data),
                                  gpointer data);
-
 
 /* Traverse all of the transactions in the given account.  Continue
    processing IFF proc does not return FALSE. This function does not
@@ -356,7 +353,5 @@ xaccAccountVisitUnvisitedTransactions(Account *acc,
                                                        void *data),
                                       void *data,
                                       GHashTable *visited_txns);
-
-#endif /* SWIG */
 
 #endif /* __XACC_ACCOUNT_H__ */

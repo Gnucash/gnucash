@@ -64,13 +64,12 @@ typedef enum
  * even on the 32-bit Intel x86 and PowerPC architectures.  I'm
  * assuming that all the other modern compilers are clean on this
  * issue too. */
-#ifndef SWIG /* swig 1.1p5 can't hack the long long type */
+
 struct timespec64
 {
    long long int tv_sec;     
    long int tv_nsec;
 };
-#endif /* SWIG */
 
 typedef struct timespec64 Timespec;
 

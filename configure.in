@@ -208,19 +208,6 @@ fi
 AC_SUBST(PERLINCL)
 
 
-### -------------------------------------------------------------------
-
-# Check for 'swig'
-AC_PATH_PROG(SWIG,swig,no)	# Sets @SWIG@
-AC_ARG_WITH(swig,
-  [  --with-swig=FILE              which swig executable to use ],
-  SWIG="${with_swig}")
-
-if test x"$SWIG" = xno; then
-    AC_MSG_ERROR([Cannot find Swig. Try using the --with-swig flag.])
-fi
-
-
 ### --------------------------------------------------------------------------
 ### Libraries
 LIBS="$LIBS -lm"
@@ -324,7 +311,6 @@ AC_OUTPUT(
           src/gnome/Makefile
           src/guile/Makefile
           src/optional/Makefile
-          src/optional/swig/Makefile
           src/pixmaps/Makefile
           src/quotes/Makefile
           src/register/Makefile

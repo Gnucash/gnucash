@@ -215,9 +215,7 @@ const char *  xaccTransGetNum (Transaction *trans);
 const char *  xaccTransGetDescription (Transaction *trans);
 const char *  xaccTransGetNotes (Transaction *trans);
 time_t        xaccTransGetDate (Transaction *trans);
-#ifndef SWIG  /* swig chokes on long long */
 long long     xaccTransGetDateL (Transaction *trans);
-#endif
 
 void          xaccTransGetDateTS (Transaction *trans, Timespec *ts);
 #define xaccTransGetDatePostedTS xaccTransGetDateTS

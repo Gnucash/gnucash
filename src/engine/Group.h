@@ -197,8 +197,6 @@ char * xaccAccountGetNextChildCode (Account *acc, int num_digits);
 void   xaccGroupAutoCode (AccountGroup *grp, int num_digits);
 void   xaccGroupDepthAutoCode (AccountGroup *grp);
 
-#ifndef SWIG
-
 /* if the function returns null for a given item, it won't show up in
    the result list */
 GSList *xaccGroupMapAccounts(AccountGroup *grp,
@@ -353,7 +351,5 @@ xaccGroupVisitUnvisitedTransactions(AccountGroup *g,
                                     gboolean (*proc)(Transaction *t, void *data),
                                     void *data,
                                     GHashTable *visited_txns);
-
-#endif /* SWIG */
 
 #endif /* __XACC_ACCOUNT_GROUP_H__ */
