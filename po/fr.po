@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.3.X\n"
 "POT-Creation-Date: 2000-06-04 17:16-0700\n"
-"PO-Revision-Date: 2000-05-14 18:15+0100\n"
+"PO-Revision-Date: 2000-06-04 23:00+0100\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -576,9 +576,8 @@ msgstr "Fermer cette fenetre du registre"
 
 # messages-i18n.c:95
 #: messages-i18n.c:81
-#, fuzzy
 msgid "Copy the selected transaction"
-msgstr "Ouvrir le compte sélectionné."
+msgstr "Copier la transaction sélectionnée."
 
 #: messages-i18n.c:82
 msgid "Enter a 3-letter ISO currency code such as USD (US Dollars)"
@@ -586,9 +585,8 @@ msgstr ""
 
 # messages-i18n.c:80
 #: messages-i18n.c:83
-#, fuzzy
 msgid "Cut the selected transaction"
-msgstr "Afficher le compte sélectionné."
+msgstr "Couper la transaction sélectionnée."
 
 # messages-i18n.c:75
 #: messages-i18n.c:84
@@ -671,9 +669,8 @@ msgstr "Sauter à la transaction correspondante dans l'autre compte"
 
 # messages-i18n.c:85
 #: messages-i18n.c:100
-#, fuzzy
 msgid "Open the GnuCash Manual"
-msgstr "Ouvrir la fenêtre d'aide de Gnucash."
+msgstr "Ouvrir le manuel de Gnucash."
 
 # messages-i18n.c:90
 #: messages-i18n.c:101
@@ -728,9 +725,8 @@ msgstr "Ouvrir un fichier"
 
 # po/guile_strings.txt:185
 #: messages-i18n.c:110
-#, fuzzy
 msgid "Paste the transaction clipboard"
-msgstr "Arrière-plan de la transaction active en mode multi"
+msgstr "Coller la transaction du presse papier"
 
 # messages-i18n.c:99
 #: messages-i18n.c:111
@@ -761,6 +757,8 @@ msgstr "Finir le rapprochement de ce compte"
 msgid ""
 "Change the reconcile information including statement date and ending balance."
 msgstr ""
+"Changer l'information du rapprochement incluant l'état de la date et le "
+"solde final."
 
 # messages-i18n.c:104
 #: messages-i18n.c:117
@@ -849,7 +847,7 @@ msgstr "Trier par num"
 
 #: messages-i18n.c:134
 msgid "Sort by the statement date (unreconciled items last"
-msgstr ""
+msgstr "Trier par l'état de la date (éléments non rapprochés en dernier)"
 
 # messages-i18n.c:120
 #: messages-i18n.c:135
@@ -939,15 +937,13 @@ msgstr "Annuler"
 
 # messages-i18n.c:346
 #: messages-i18n.c:152
-#, fuzzy
 msgid "Copy Transaction"
-msgstr "Transaction"
+msgstr "Copier la transaction"
 
 # messages-i18n.c:346
 #: messages-i18n.c:153
-#, fuzzy
 msgid "Cut Transaction"
-msgstr "Transaction"
+msgstr "Couper la transaction"
 
 # messages-i18n.c:135
 #: messages-i18n.c:154
@@ -1006,9 +1002,8 @@ msgstr "Sauter"
 
 # src/gnome/glade-gnc-dialogs.c:638
 #: messages-i18n.c:165
-#, fuzzy
 msgid "_Manual"
-msgstr "Mutuel"
+msgstr "Manuel"
 
 # messages-i18n.c:145
 #: messages-i18n.c:166
@@ -1037,9 +1032,8 @@ msgstr "Ouvrir sous-comptes"
 
 # messages-i18n.c:176
 #: messages-i18n.c:171
-#, fuzzy
 msgid "Paste Transaction"
-msgstr "Supprimer la transaction"
+msgstr "Coller la transaction"
 
 # messages-i18n.c:149
 #: messages-i18n.c:172
@@ -1058,9 +1052,8 @@ msgstr "Imprimer chèques...(non terminé!)"
 
 # messages-i18n.c:238
 #: messages-i18n.c:175
-#, fuzzy
 msgid "_Reconcile Information..."
-msgstr "Information de rapprochement"
+msgstr "Information de rapprochement..."
 
 # messages-i18n.c:151
 #: messages-i18n.c:176
@@ -1469,9 +1462,8 @@ msgstr "Trier par date d'entrée"
 
 # po/guile_strings.txt:37
 #: messages-i18n.c:262
-#, fuzzy
 msgid "Sort by statement date"
-msgstr "Trier par date"
+msgstr "Trier par l'état de la date"
 
 # messages-i18n.c:226
 #: messages-i18n.c:263
@@ -1495,9 +1487,8 @@ msgstr "Ordre standard"
 
 # messages-i18n.c:210
 #: messages-i18n.c:267
-#, fuzzy
 msgid "Statement Date:"
-msgstr "Sélectionner date"
+msgstr "Etat de la date:"
 
 # messages-i18n.c:229
 #: messages-i18n.c:268
@@ -2555,7 +2546,7 @@ msgstr "Il n'y a aucun comptes selectionnés dans la liste d'options du compte."
 
 #: po/guile_strings.txt:84
 msgid "Funds Out"
-msgstr ""
+msgstr "Sortie de fonds"
 
 # po/guile_strings.txt:74
 #: po/guile_strings.txt:85
@@ -2754,7 +2745,7 @@ msgstr "Trier par heure exacte entrée"
 
 #: po/guile_strings.txt:129
 msgid "Use accounting labels"
-msgstr ""
+msgstr "Utiliser les étiquetttes de comptabilité"
 
 # po/guile_strings.txt:110
 #: po/guile_strings.txt:130
@@ -3194,9 +3185,8 @@ msgid "- (Dash)"
 msgstr "- (moins)"
 
 #: po/guile_strings.txt:234
-#, fuzzy
 msgid "Funds In"
-msgstr "Trouver"
+msgstr "Fonds dans"
 
 # po/guile_strings.txt:199
 #: po/guile_strings.txt:235
@@ -3236,8 +3226,7 @@ msgstr "Revenus.Salaire.Imposable"
 #, fuzzy
 msgid "Only use 'debit' and 'credit' instead of informal synonyms"
 msgstr ""
-"Utiliser seulement 'débit' et 'crédit' comme titres de la colonne du "
-"registre."
+"Utiliser seulement 'débit' et 'crédit' à la place de synonymes informels"
 
 # po/guile_strings.txt:100
 #: po/guile_strings.txt:245
@@ -4448,19 +4437,6 @@ msgstr ""
 msgid "You must select a printer first."
 msgstr "Vous devez dabord sélectionner une imprimante."
 
-# po/guile_strings.txt:78
-#~ msgid "Import QIF File - Scripted in Guile."
-#~ msgstr "Importer des fichiers QIF - écrit en Guile."
-
-# po/guile_strings.txt:91
-#~ msgid "largest to t, latest to earliest"
-#~ msgstr ""
-#~ "du plus grand vers le plus petit, du plus récent vers le plus ancien"
-
-# po/guile_strings.txt:278
-#~ msgid "QIF File Import (Danger: Unfinished)"
-#~ msgstr "Importation de fichier QIF (Danger: Non terminé)"
-
 # messages-i18n.c:45
 #~ msgid "QIF file load failed. Check settings and reload."
 #~ msgstr ""
@@ -4485,6 +4461,19 @@ msgstr "Vous devez dabord sélectionner une imprimante."
 # messages-i18n.c:119
 #~ msgid "Sort by Num, then Date, then Amount"
 #~ msgstr "Trier par Num, puis Date, puis Montant"
+
+# po/guile_strings.txt:78
+#~ msgid "Import QIF File - Scripted in Guile."
+#~ msgstr "Importer des fichiers QIF - écrit en Guile."
+
+# po/guile_strings.txt:91
+#~ msgid "largest to t, latest to earliest"
+#~ msgstr ""
+#~ "du plus grand vers le plus petit, du plus récent vers le plus ancien"
+
+# po/guile_strings.txt:278
+#~ msgid "QIF File Import (Danger: Unfinished)"
+#~ msgstr "Importation de fichier QIF (Danger: Non terminé)"
 
 # src/gnome/glade-gnc-dialogs.c:182
 #~ msgid "Radix format:"
