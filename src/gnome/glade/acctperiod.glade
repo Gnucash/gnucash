@@ -108,7 +108,7 @@ it is still under development.</text>
 
 	  <widget>
 	    <class>GtkOptionMenu</class>
-	    <name>freqeuncy option menu</name>
+	    <name>period menu</name>
 	    <can_focus>True</can_focus>
 	    <items>Weekly
 Monthly
@@ -161,8 +161,8 @@ Annual
 
 	  <widget>
 	    <class>GnomeDateEdit</class>
-	    <name>dateedit1</name>
-	    <show_time>True</show_time>
+	    <name>closing date edit</name>
+	    <show_time>False</show_time>
 	    <use_24_format>True</use_24_format>
 	    <week_start_monday>False</week_start_monday>
 	    <lower_hour>7</lower_hour>
@@ -227,7 +227,7 @@ Annual
 	  <widget>
 	    <class>GtkLabel</class>
 	    <name>earliest trans label</name>
-	    <label></label>
+	    <label>xxx</label>
 	    <justify>GTK_JUSTIFY_CENTER</justify>
 	    <wrap>False</wrap>
 	    <xalign>0</xalign>

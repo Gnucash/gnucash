@@ -1,7 +1,7 @@
 /********************************************************************
  * window-main.c -- open/close/configure GNOME MDI main window      *
- * Copyright (C) 1998,1999 Jeremy Collins	                    *
- * Copyright (C) 1998,1999,2000 Linas Vepstas                       *
+ * Copyright (C) 1998,1999 Jeremy Collins	                          *
+ * Copyright (C) 1998,1999,2000 Linas Vepstas <linas@linas.org>     *
  * Copyright (C) 2001 Bill Gribble                                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -42,6 +42,7 @@
 #include "dialog-totd.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
+#include "druid-acct-period.h"
 #include "druid-loan.h"
 #include "gfec.h"
 #include "global-options.h"
@@ -599,7 +600,7 @@ gnc_main_window_fincalc_cb(GtkWidget *widget, gpointer data)
 static void
 gnc_main_window_books_druid_cb(GtkWidget *widget, gpointer data)
 {
-	printf ("hello world\n");
+	gnc_acct_period_dialog();
 }
 
 void
