@@ -24,6 +24,13 @@
 (define owner-string (N_ "Company"))
 (define owner-page gnc:pagename-general)
 
+(define date-header (N_ "Date"))
+(define due-date-header (N_ "Due Date"))
+(define reference-header (N_ "Reference"))
+(define type-header (N_ "Type"))
+(define desc-header (N_ "Description"))
+(define amount-header (N_ "Amount"))
+
 (define-macro (addto! alist element)
   `(set! ,alist (cons ,element ,alist)))
 
@@ -64,28 +71,28 @@
   
   (let* ((col-vector (make-vector columns-used-size #f))
          (set-col (make-set-col col-vector)))
-    (set-col (opt-val "Display Columns" "Date") 0)
-    (set-col (opt-val "Display Columns" "Due Date") 1)
-    (set-col (opt-val "Display Columns" "Num") 2)
-    (set-col (opt-val "Display Columns" "Type") 3)
-    (set-col (opt-val "Display Columns" "Memo") 4)
-    (set-col (opt-val "Display Columns" "Value") 5)
+    (set-col (opt-val "Display Columns" date-header) 0)
+    (set-col (opt-val "Display Columns" due-date-header) 1)
+    (set-col (opt-val "Display Columns" reference-header) 2)
+    (set-col (opt-val "Display Columns" type-header) 3)
+    (set-col (opt-val "Display Columns" desc-header) 4)
+    (set-col (opt-val "Display Columns" amount-header) 5)
     col-vector))
 
 (define (make-heading-list column-vector)
   (let ((heading-list '()))
     (if (date-col column-vector)
-        (addto! heading-list (_ "Date")))
-    (if (date-col column-vector)
-        (addto! heading-list (_ "Due Date")))
+        (addto! heading-list (_ date-header)))
+    (if (date-due-col column-vector)
+        (addto! heading-list (_ due-date-header)))
     (if (num-col column-vector)
-        (addto! heading-list (_ "Reference")))
+        (addto! heading-list (_ reference-header)))
     (if (type-col column-vector)
-	(addto! heading-list (_ "Type")))
+	(addto! heading-list (_ type-header)))
     (if (memo-col column-vector)
-	(addto! heading-list (_ "Description")))
+	(addto! heading-list (_ desc-header)))
     (if (value-col column-vector)
-	(addto! heading-list (_ "Amount")))
+	(addto! heading-list (_ amount-header)))
     (reverse heading-list)))
 
 
@@ -147,10 +154,10 @@
 
     (gnc:html-table-set-col-headers!
      table
-     (list (N_ "0-30 days")
-	   (N_ "31-60 days")
-	   (N_ "61-90 days")
-	   (N_ "91+ days")))
+     (list (_ "0-30 days")
+	   (_ "31-60 days")
+	   (_ "61-90 days")
+	   (_ "91+ days")))
 
     (gnc:html-table-append-row!
      table
@@ -183,8 +190,8 @@
 		  (gnc:invoice-anchor-text invoice)
 		  inv-str))
 		inv-str))
-	   ((equal? type gnc:transaction-type-payment) (N_ "Payment, thank you"))
-	   (else (N_ "Unknown"))))
+	   ((equal? type gnc:transaction-type-payment) (_ "Payment, thank you"))
+	   (else (_ "Unknown"))))
 	 (row-contents '()))
 
     (if reverse?
@@ -259,8 +266,8 @@
      (append (cons (gnc:make-html-table-cell/markup
 		    "total-label-cell"
 		    (if (gnc:numeric-negative-p total)
-			(N_ "Total Credit")
-			(N_ "Total Due")))
+			(_ "Total Credit")
+			(_ "Total Due")))
 		   '())
 	     (list (gnc:make-html-table-cell/size/markup
 		    1 (value-col used-columns)
@@ -307,32 +314,32 @@
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display Columns") (N_ "Date")
+    (N_ "Display Columns") date-header
     "b" (N_ "Display the transaction date?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display Columns") (N_ "Due Date")
+    (N_ "Display Columns") due-date-header
     "c" (N_ "Display the transaction date?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display Columns") (N_ "Num")
+    (N_ "Display Columns") reference-header
     "d" (N_ "Display the transaction reference?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display Columns") (N_ "Type")
+    (N_ "Display Columns") type-header
     "g" (N_ "Display the transaction type?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display Columns") (N_ "Memo")
+    (N_ "Display Columns") desc-header
     "ha" (N_ "Display the transaction description?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display Columns") (N_ "Value")
+    (N_ "Display Columns") amount-header
     "hb" "Display the transaction amount?" #t))
 
   (gnc:register-inv-option
@@ -346,10 +353,10 @@
   gnc:*report-options*)
 	     
 (define (customer-options-generator)
-  (options-generator '(receivable) 'gnc-owner-customer (N_ "Invoice") #f))
+  (options-generator '(receivable) 'gnc-owner-customer (_ "Invoice") #f))
 
 (define (vendor-options-generator)
-  (options-generator '(payable) 'gnc-owner-vendor (N_ "Bill") #t))
+  (options-generator '(payable) 'gnc-owner-vendor (_ "Bill") #t))
 
 (define (string-expand string character replace-string)
   (define (car-line chars)
@@ -495,8 +502,8 @@
 
 	    (set! title (gnc:html-markup
 			 "!" 
-			 type-str
-			 (N_ " Report: ")
+			 (_ type-str )
+			 (_ " Report: ")
 			 (gnc:html-markup-anchor
 			  (gnc:owner-anchor-text owner)
 			  (gnc:owner-get-name owner)))))

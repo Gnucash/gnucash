@@ -1,3 +1,15 @@
+2003-02-02  Derek Atkins <derek@ihtfp.com>
+
+	* configure.in: re-enable -Werror, make sure it only is used with GCC,
+	  but also move it to the end of the script so it wont interfere with
+	  any other configuration test.
+
+	* src/business/business-report/owner-report.scm: fix the column
+	  headings and option names to match.  Fix the date-due column so
+	  the heading properly goes away.  Also fix some of the
+	  internationalization issues -- strings were translated but the
+	  translation was not being used.   Fixes # 105036
+
 2003-02-01  Benoit Grégoire  <bock@step.polymtl.ca>
 
 	* src/import-export/gnc-ofx-import.c: No longer assume that transaction with type OFX_OTHER are investement transactions.  Fixes bug reported by Rik harris.
