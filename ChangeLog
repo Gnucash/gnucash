@@ -1,3 +1,14 @@
+2001-07-01  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnc-ui-util.[ch]: implement towupper and iswlower
+	if they are missing
+
+	* src/register/quickfillcell.c: include gnc-ui-util.h
+
+	* src/register/QuickFill.c: include gnc-ui-util.h
+
+	* configure.in: check for towupper
+
 2001-06-29  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/gnc-frequency.c: Added functions for dealing with
