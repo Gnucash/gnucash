@@ -78,7 +78,7 @@ define(`price', `gncPrice, Price, GNCPrice,
        type,         , char *,   gnc_price_get_type(ptr),
        valueNum,     , int64,    gnc_numeric_num(gnc_price_get_value(ptr)),
        valueDenom,   , int64,    gnc_numeric_denom(gnc_price_get_value(ptr)),
-       version,      , int32,    0,
+       version,      , int32,    gnc_price_get_version(ptr),
        priceGUID, KEY, GUID *,   gnc_price_get_guid(ptr),
        ')
        
