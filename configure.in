@@ -549,6 +549,12 @@ then
     HBCI_LIBS="${OPENHBCI_LIBS}"
     HBCI_CFLAGS="${OPENHBCI_CFLAGS}"
 
+    # also check for ktoblzcheck
+    AC_CHECK_HEADERS(ktoblzcheck.h)
+    if test "x$ac_cv_header_ktoblzcheck_h" != xno; then
+	HBCI_LIBS="${HBCI_LIBS} -lktoblzcheck"  
+    fi
+
     AS_SCRUB_INCLUDE(HBCI_CFLAGS)
     AC_SUBST(HBCI_LIBS)
     AC_SUBST(HBCI_CFLAGS)
