@@ -1,3 +1,12 @@
+2001-06-25  Dave Peticolas  <dave@krondo.com>
+
+	* AUTHORS: credits
+
+	* doc/sgml/C/xacc-about.sgml: credits
+
+	* src/scm/report/balance-sheet.scm: Daniel Hagerty's patch
+	to add an unrealized gain/loss line to the balance sheet.
+
 2001-06-24  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/report/account-piecharts.scm: fix sign bug

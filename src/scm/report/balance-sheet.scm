@@ -229,6 +229,7 @@
                (retained-profit-balance (gnc:make-commodity-collector))
                (total-equity-balance (gnc:make-commodity-collector))
                (equity-plus-liability (gnc:make-commodity-collector))
+               (unrealized-gain-collector (gnc:make-commodity-collector))
 
                ;; Create the account tables here.
                (asset-table 
@@ -301,6 +302,31 @@
           (html-table-merge asset-table liability-table)
           (add-subtotal-line
            asset-table (_ "Liabilities") sign-reversed-liability-balance)
+
+          (let* ((weighted-fn
+                  (gnc:case-exchange-fn 'weighted-average
+                                        report-currency to-date-tp))
+
+                 (value
+                  (gnc:gnc-monetary-amount
+                   (gnc:sum-collector-commodity asset-balance
+                                                report-currency
+                                                exchange-fn)))
+
+                 (cost
+                  (gnc:gnc-monetary-amount
+                   (gnc:sum-collector-commodity asset-balance
+                                                report-currency
+                                                weighted-fn)))
+
+                 (unrealized-gain (gnc:numeric-sub-fixed value cost)))
+
+            (unrealized-gain-collector 'add report-currency unrealized-gain)
+            (equity-plus-liability 'add report-currency unrealized-gain)
+
+            (add-subtotal-line
+             asset-table (_ "Unrealized Gains(Losses)")
+             unrealized-gain-collector))
 
           (gnc:html-table-append-ruler! 
            asset-table (* (if show-fcur? 3 2) tree-depth))

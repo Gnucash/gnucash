@@ -473,6 +473,13 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>hag@linnaean.org</email> Daniel Hagerty</glossterm>
+<glossdef>
+<para>patch to balance sheet report</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>mhamada@redhat.com</email> Mitsuo
       Hamada</glossterm>
 <glossdef>

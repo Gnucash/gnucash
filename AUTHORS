@@ -109,6 +109,7 @@ Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 John Goerzen <jgoerzen@complete.org> file i/o fix for 64-bit architectures
 Hans de Graaff <hans@degraaff.org> XML patches
 Bill Gribble <grib@billgribble.com> qif importation code, and much much more
+Daniel Hagerty <hag@linnaean.org> patch to balance sheet report
 Mitsuo Hamada <mhamada@redhat.com> messages Japanese translations
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
 David Hampton <hampton@employees.org> qif import patch
