@@ -36,7 +36,7 @@ Description:    xacc is a program to keep track of your finances.  It
 Keywords:	X11 Accounting double entry
 Author:		rclark@cs.hmc.edu (Robin Clark)
 Maintained-by:	linas@linas.org (Linas Vepstas)
-Primary-site:	http://www3.hmc.edu/~rclark/xacc/
+Primary-site:	http://www.cs.hmc.edu/~rclark/xacc/
 Alternate-site:	http://linas.org/linux/xacc 
 		540KB  xacc-1.0b7-sgi-irix.inst.tar
 Alternate-site:	sunsite.unc.edu /pub/Linux/apps/financial/accounting/
