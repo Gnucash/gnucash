@@ -142,15 +142,15 @@ get_random_timespec(void)
   return ret;
 }
 
-#define RAND_IN_RANGE(X) ((X*((gint64) (rand()+1)))/RAND_MAX)
+#define RAND_IN_RANGE(X) (((X)*((gint64) (rand()+1)))/RAND_MAX)
 
 gnc_numeric
 get_random_gnc_numeric(void)
 {
-    gint64 numer = get_random_gint64()/10;
+    gint64 numer;
     gint64 deno;
 
-    if (RAND_MAX/2 < rand())
+    if (RAND_MAX/8 > rand())
     {
        /* Random number between 1 and 6000 */
        deno = RAND_IN_RANGE(6000ULL);
@@ -167,6 +167,11 @@ get_random_gnc_numeric(void)
           norm --;
        }
     }
+
+    /* Arbitrary random numbers can cause pointless overflow 
+     * during calculations.  Limit dynamic range in hopes 
+     * of avoiding overflow. */
+    numer = get_random_gint64()/100;
     return gnc_numeric_create(numer, deno);
 }
 
@@ -1156,7 +1161,10 @@ get_random_commodity (QofBook *book)
 
     name = get_random_string();
     xcode = get_random_string();
-    ran_int = get_random_int_in_range(1, 100000);
+
+    /* SCU == smallest currency unit -- the value of the denominator */
+#define MAX_SCU 106000
+    ran_int = get_random_int_in_range(1, MAX_SCU);
 
     ret = gnc_commodity_new (name, space, mn, xcode, ran_int);
 
