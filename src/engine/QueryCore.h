@@ -1,6 +1,7 @@
 
 #include "qofquerycore.h"
 
+		#define QueryPredData_t QofQueryPredData*
 
 		#define gncQueryStringPredicate qof_query_string_predicate
 		#define gncQueryDatePredicate qof_query_date_predicate
