@@ -210,7 +210,7 @@ static QofQueryPredData string_copy_predicate (QofQueryPredData pd)
 
   VERIFY_PDATA_R (query_string_type);
 
-  return gncQueryStringPredicate (pd->how, pdata->matchstring, pdata->options,
+  return qof_query_string_predicate (pd->how, pdata->matchstring, pdata->options,
 				  pdata->is_regex);
 }
 
@@ -224,7 +224,7 @@ static gboolean string_predicate_equal (QofQueryPredData p1, QofQueryPredData p2
   return (safe_strcmp (pd1->matchstring, pd2->matchstring) == 0);
 }
 
-QofQueryPredData gncQueryStringPredicate (QofQueryCompare how,
+QofQueryPredData qof_query_string_predicate (QofQueryCompare how,
 					 char *str, QofStringMatch options,
 					 gboolean is_regex)
 {
@@ -341,7 +341,7 @@ static QofQueryPredData date_copy_predicate (QofQueryPredData pd)
 
   VERIFY_PDATA_R (query_date_type);
 
-  return gncQueryDatePredicate (pd->how, pdata->options, pdata->date);
+  return qof_query_date_predicate (pd->how, pdata->options, pdata->date);
 }
 
 static gboolean date_predicate_equal (QofQueryPredData p1, QofQueryPredData p2)
@@ -353,7 +353,7 @@ static gboolean date_predicate_equal (QofQueryPredData p1, QofQueryPredData p2)
   return timespec_equal (&(pd1->date), &(pd2->date));
 }
 
-QofQueryPredData gncQueryDatePredicate (QofQueryCompare how,
+QofQueryPredData qof_query_date_predicate (QofQueryCompare how,
 				       QofDateMatch options, Timespec date)
 {
   query_date_t pdata;
@@ -454,7 +454,7 @@ static QofQueryPredData numeric_copy_predicate (QofQueryPredData pd)
 {
   query_numeric_t pdata = (query_numeric_t)pd;
   VERIFY_PDATA_R (query_numeric_type);
-  return gncQueryNumericPredicate (pd->how, pdata->options, pdata->amount);
+  return qof_query_numeric_predicate (pd->how, pdata->options, pdata->amount);
 }
 
 static gboolean numeric_predicate_equal (QofQueryPredData p1, QofQueryPredData p2)
@@ -466,7 +466,7 @@ static gboolean numeric_predicate_equal (QofQueryPredData p1, QofQueryPredData p
   return gnc_numeric_equal (pd1->amount, pd2->amount);
 }
 
-QofQueryPredData gncQueryNumericPredicate (QofQueryCompare how,
+QofQueryPredData qof_query_numeric_predicate (QofQueryCompare how,
 					  QofNumericMatch options,
 					  gnc_numeric value)
 {
@@ -614,7 +614,7 @@ static QofQueryPredData guid_copy_predicate (QofQueryPredData pd)
 {
   query_guid_t pdata = (query_guid_t)pd;
   VERIFY_PDATA_R (query_guid_type);
-  return gncQueryGUIDPredicate (pdata->options, pdata->guids);
+  return qof_query_guid_predicate (pdata->options, pdata->guids);
 }
 
 static gboolean guid_predicate_equal (QofQueryPredData p1, QofQueryPredData p2)
@@ -631,7 +631,7 @@ static gboolean guid_predicate_equal (QofQueryPredData p1, QofQueryPredData p2)
   return TRUE;
 }
 
-QofQueryPredData gncQueryGUIDPredicate (QofGuidMatch options, GList *guids)
+QofQueryPredData qof_query_guid_predicate (QofGuidMatch options, GList *guids)
 {
   query_guid_t pdata;
   GList *node;
@@ -706,7 +706,7 @@ static QofQueryPredData int32_copy_predicate (QofQueryPredData pd)
 {
   query_int32_t pdata = (query_int32_t)pd;
   VERIFY_PDATA_R (query_int32_type);
-  return gncQueryInt32Predicate (pd->how, pdata->val);
+  return qof_query_int32_predicate (pd->how, pdata->val);
 }
 
 static gboolean int32_predicate_equal (QofQueryPredData p1, QofQueryPredData p2)
@@ -717,7 +717,7 @@ static gboolean int32_predicate_equal (QofQueryPredData p1, QofQueryPredData p2)
   return (pd1->val == pd2->val);
 }
 
-QofQueryPredData gncQueryInt32Predicate (QofQueryCompare how, gint32 val)
+QofQueryPredData qof_query_int32_predicate (QofQueryCompare how, gint32 val)
 {
   query_int32_t pdata = g_new0 (query_int32_def, 1);
   pdata->pd.type_name = query_int32_type;
@@ -790,7 +790,7 @@ static QofQueryPredData int64_copy_predicate (QofQueryPredData pd)
 {
   query_int64_t pdata = (query_int64_t)pd;
   VERIFY_PDATA_R (query_int64_type);
-  return gncQueryInt64Predicate (pd->how, pdata->val);
+  return qof_query_int64_predicate (pd->how, pdata->val);
 }
 
 static gboolean int64_predicate_equal (QofQueryPredData p1, QofQueryPredData p2)
@@ -801,7 +801,7 @@ static gboolean int64_predicate_equal (QofQueryPredData p1, QofQueryPredData p2)
   return (pd1->val == pd2->val);
 }
 
-QofQueryPredData gncQueryInt64Predicate (QofQueryCompare how, gint64 val)
+QofQueryPredData qof_query_int64_predicate (QofQueryCompare how, gint64 val)
 {
   query_int64_t pdata = g_new0 (query_int64_def, 1);
   pdata->pd.type_name = query_int64_type;
@@ -874,7 +874,7 @@ static QofQueryPredData double_copy_predicate (QofQueryPredData pd)
 {
   query_double_t pdata = (query_double_t)pd;
   VERIFY_PDATA_R (query_double_type);
-  return gncQueryDoublePredicate (pd->how, pdata->val);
+  return qof_query_double_predicate (pd->how, pdata->val);
 }
 
 static gboolean double_predicate_equal (QofQueryPredData p1, QofQueryPredData p2)
@@ -885,7 +885,7 @@ static gboolean double_predicate_equal (QofQueryPredData p1, QofQueryPredData p2
   return (pd1->val == pd2->val);
 }
 
-QofQueryPredData gncQueryDoublePredicate (QofQueryCompare how, double val)
+QofQueryPredData qof_query_double_predicate (QofQueryCompare how, double val)
 {
   query_double_t pdata = g_new0 (query_double_def, 1);
   pdata->pd.type_name = query_double_type;
@@ -947,7 +947,7 @@ static QofQueryPredData boolean_copy_predicate (QofQueryPredData pd)
 {
   query_boolean_t pdata = (query_boolean_t)pd;
   VERIFY_PDATA_R (query_boolean_type);
-  return gncQueryBooleanPredicate (pd->how, pdata->val);
+  return qof_query_boolean_predicate (pd->how, pdata->val);
 }
 
 static gboolean boolean_predicate_equal (QofQueryPredData p1, QofQueryPredData p2)
@@ -958,7 +958,7 @@ static gboolean boolean_predicate_equal (QofQueryPredData p1, QofQueryPredData p
   return (pd1->val == pd2->val);
 }
 
-QofQueryPredData gncQueryBooleanPredicate (QofQueryCompare how, gboolean val)
+QofQueryPredData qof_query_boolean_predicate (QofQueryCompare how, gboolean val)
 {
   query_boolean_t pdata;
   g_return_val_if_fail (how == QOF_COMPARE_EQUAL || how == QOF_COMPARE_NEQ, NULL);
@@ -1024,7 +1024,7 @@ static QofQueryPredData char_copy_predicate (QofQueryPredData pd)
 {
   query_char_t pdata = (query_char_t)pd;
   VERIFY_PDATA_R (query_char_type);
-  return gncQueryCharPredicate (pdata->options, pdata->char_list);
+  return qof_query_char_predicate (pdata->options, pdata->char_list);
 }
 
 static gboolean char_predicate_equal (QofQueryPredData p1, QofQueryPredData p2)
@@ -1036,7 +1036,7 @@ static gboolean char_predicate_equal (QofQueryPredData p1, QofQueryPredData p2)
   return (safe_strcmp (pd1->char_list, pd2->char_list) == 0);
 }
 
-QofQueryPredData gncQueryCharPredicate (QofCharMatch options, const char *chars)
+QofQueryPredData qof_query_char_predicate (QofCharMatch options, const char *chars)
 {
   query_char_t pdata;
   g_return_val_if_fail (chars, NULL);
@@ -1119,7 +1119,7 @@ static QofQueryPredData kvp_copy_predicate (QofQueryPredData pd)
 {
   query_kvp_t pdata = (query_kvp_t)pd;
   VERIFY_PDATA_R (query_kvp_type);
-  return gncQueryKVPPredicate (pd->how, pdata->path, pdata->value);
+  return qof_query_kvp_predicate (pd->how, pdata->path, pdata->value);
 }
 
 static gboolean kvp_predicate_equal (QofQueryPredData p1, QofQueryPredData p2)
@@ -1141,7 +1141,7 @@ static gboolean kvp_predicate_equal (QofQueryPredData p1, QofQueryPredData p2)
   return (kvp_value_compare (pd1->value, pd2->value) == 0);
 }
 
-QofQueryPredData gncQueryKVPPredicate (QofQueryCompare how,
+QofQueryPredData qof_query_kvp_predicate (QofQueryCompare how,
 				      GSList *path, const kvp_value *value)
 {
   query_kvp_t pdata;
@@ -1309,7 +1309,7 @@ QueryCompare g;ncQueryCoreGetCompare (char const *type)
   return g_hash_table_lookup (cmpTable, type);
 }
 
-void gncQueryCorePredicateFree (QofQueryPredData pdata)
+void qof_query_core_predicate_free (QofQueryPredData pdata)
 {
   QueryPredDataFree free_fcn;
 

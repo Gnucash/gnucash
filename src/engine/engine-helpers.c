@@ -32,7 +32,6 @@
 #include "Backend.h"
 #include "Group.h"
 #include "QueryNewP.h"
-#include "QueryCoreP.h"
 #include "engine-helpers.h"
 #include "glib-helpers.h"
 #include "gnc-date.h"
@@ -41,6 +40,8 @@
 #include "gnc-numeric.h"
 #include "guile-mappings.h"
 #include "qofbook.h"
+#include "qofquerycore.h"
+#include "qofquerycore-p.h"
 
 static short module = MOD_ENGINE;
 
@@ -1003,7 +1004,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 	break;
       matchstring = gh_scm2newstr (scm, NULL);
 
-      pd = gncQueryStringPredicate (compare_how, matchstring,
+      pd = qof_query_string_predicate (compare_how, matchstring,
 				    options, is_regex);
       free (matchstring);
 
@@ -1023,7 +1024,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 	break;
       date = gnc_timepair2timespec (scm);
 
-      pd = gncQueryDatePredicate (compare_how, options, date);
+      pd = qof_query_date_predicate (compare_how, options, date);
 
     } else if (!safe_strcmp (type, QOF_QUERYCORE_NUMERIC)) {
       QofNumericMatch options;
@@ -1041,7 +1042,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 	break;
       val = gnc_query_scm2numeric (scm);
 
-      pd = gncQueryNumericPredicate (compare_how, options, val);
+      pd = qof_query_numeric_predicate (compare_how, options, val);
 
     } else if (!safe_strcmp (type, QOF_QUERYCORE_GUID)) {
       QofGuidMatch options;
@@ -1059,7 +1060,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 	break;
       guids = gnc_scm2guid_glist (scm);
 
-      pd = gncQueryGUIDPredicate (options, guids);
+      pd = qof_query_guid_predicate (options, guids);
 
       gnc_guid_glist_free (guids);
 
@@ -1072,7 +1073,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 	break;
       val = gnc_scm_to_gint64 (scm);
 
-      pd = gncQueryInt64Predicate (compare_how, val);
+      pd = qof_query_int64_predicate (compare_how, val);
 
     } else if (!safe_strcmp (type, QOF_QUERYCORE_DOUBLE)) {
       double val;
@@ -1083,7 +1084,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 	break;
       val = scm_num2dbl (scm, __FUNCTION__);
 
-      pd = gncQueryDoublePredicate (compare_how, val);
+      pd = qof_query_double_predicate (compare_how, val);
 
     } else if (!safe_strcmp (type, QOF_QUERYCORE_BOOLEAN)) {
       gboolean val;
@@ -1094,7 +1095,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 	break;
       val = SCM_NFALSEP (scm);
 
-      pd = gncQueryBooleanPredicate (compare_how, val);
+      pd = qof_query_boolean_predicate (compare_how, val);
 
     } else if (!safe_strcmp (type, QOF_QUERYCORE_CHAR)) {
       QofCharMatch options;
@@ -1112,7 +1113,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 	break;
       char_list = gh_scm2newstr (scm, NULL);
 
-      pd = gncQueryCharPredicate (options, char_list);
+      pd = qof_query_char_predicate (options, char_list);
       free (char_list);
 
     } else if (!safe_strcmp (type, QOF_QUERYCORE_KVP)) {
@@ -1133,7 +1134,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
       }
       value = gnc_scm2kvp_value (scm);
 
-      pd = gncQueryKVPPredicate (compare_how, kvp_path, value);
+      pd = qof_query_kvp_predicate (compare_how, kvp_path, value);
       gnc_query_path_free (kvp_path);
       kvp_value_delete (value);
       

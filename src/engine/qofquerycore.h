@@ -120,29 +120,29 @@ typedef struct query_pred_data {
 #endif
 
 /** Core Data Type Predicates */
-QofQueryPredData gncQueryStringPredicate (QofQueryCompare how, char *str,
+QofQueryPredData qof_query_string_predicate (QofQueryCompare how, char *str,
 					 QofStringMatch options,
 					 gboolean is_regex);
-QofQueryPredData gncQueryDatePredicate (QofQueryCompare how,
+QofQueryPredData qof_query_date_predicate (QofQueryCompare how,
 				       QofDateMatch options, Timespec date);
-QofQueryPredData gncQueryNumericPredicate (QofQueryCompare how,
+QofQueryPredData qof_query_numeric_predicate (QofQueryCompare how,
 					  QofNumericMatch options,
 					  gnc_numeric value);
-QofQueryPredData gncQueryGUIDPredicate (QofGuidMatch options, GList *guids);
-QofQueryPredData gncQueryInt32Predicate (QofQueryCompare how, gint32 val);
-QofQueryPredData gncQueryInt64Predicate (QofQueryCompare how, gint64 val);
-QofQueryPredData gncQueryDoublePredicate (QofQueryCompare how, double val);
-QofQueryPredData gncQueryBooleanPredicate (QofQueryCompare how, gboolean val);
-QofQueryPredData gncQueryCharPredicate (QofCharMatch options,
+QofQueryPredData qof_query_guid_predicate (QofGuidMatch options, GList *guids);
+QofQueryPredData qof_query_int32_predicate (QofQueryCompare how, gint32 val);
+QofQueryPredData qof_query_int64_predicate (QofQueryCompare how, gint64 val);
+QofQueryPredData qof_query_double_predicate (QofQueryCompare how, double val);
+QofQueryPredData qof_query_boolean_predicate (QofQueryCompare how, gboolean val);
+QofQueryPredData qof_query_char_predicate (QofCharMatch options,
 				       const char *chars);
-QofQueryPredData gncQueryKVPPredicate (QofQueryCompare how,
+QofQueryPredData qof_query_kvp_predicate (QofQueryCompare how,
 				      GSList *path, const kvp_value *value);
 
 /** Copy a predicate. */
 QofQueryPredData qof_query_core_predicate_copy (QofQueryPredData pdata);
 
 /** Destroy a predicate. */
-void gncQueryCorePredicateFree (QofQueryPredData pdata);
+void qof_query_core_predicate_free (QofQueryPredData pdata);
 
 /** Return a printable string for a core data object.  Caller needs
  *  to g_free() the returned string.

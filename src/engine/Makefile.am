@@ -148,10 +148,10 @@ gncscm_DATA = \
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = \
-  gw-engine.scm \
-  gw-kvp.scm \
   gw-engine-spec.scm \
-  gw-kvp-spec.scm
+  gw-engine.scm \
+  gw-kvp-spec.scm \
+  gw-kvp.scm
 
 EXTRA_DIST = \
   .cvsignore \

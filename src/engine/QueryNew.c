@@ -173,7 +173,7 @@ static void free_query_term (QueryNewTerm *qt)
 {
   if (!qt) return;
 
-  gncQueryCorePredicateFree (qt->pdata);
+  qof_query_core_predicate_free (qt->pdata);
   g_slist_free (qt->param_list);
   g_slist_free (qt->param_fcns);
   g_free (qt);
@@ -1119,7 +1119,7 @@ void gncQueryAddGUIDListMatch (QueryNew *q, GSList *param_list,
   if (!guid_list)
     g_return_if_fail (options == QOF_GUID_MATCH_NULL);
 
-  pdata = gncQueryGUIDPredicate (options, guid_list);
+  pdata = qof_query_guid_predicate (options, guid_list);
   gncQueryAddTerm (q, param_list, pdata, op);
 }
 
@@ -1159,7 +1159,7 @@ void gncQueryAddBooleanMatch (QueryNew *q, GSList *param_list, gboolean value,
   QofQueryPredData pdata;
   if (!q || !param_list) return;
 
-  pdata = gncQueryBooleanPredicate (QOF_COMPARE_EQUAL, value);
+  pdata = qof_query_boolean_predicate (QOF_COMPARE_EQUAL, value);
   gncQueryAddTerm (q, param_list, pdata, op);
 }
 

@@ -259,7 +259,7 @@ xaccQueryAddAccountGUIDMatch(Query *q, AccountGUIDList *guid_list,
 
   if (!q) return;
 
-  pred_data = gncQueryGUIDPredicate (how, guid_list);
+  pred_data = qof_query_guid_predicate (how, guid_list);
   if (!pred_data)
     return;
 
@@ -308,7 +308,7 @@ xaccQueryAddStringMatch (Query* q, const char *matchstring,
   if (!path || !q)
     return;
 
-  pred_data = gncQueryStringPredicate (QOF_COMPARE_EQUAL, (char *)matchstring,
+  pred_data = qof_query_string_predicate (QOF_COMPARE_EQUAL, (char *)matchstring,
 				       (case_sens ? QOF_STRING_MATCH_NORMAL :
 					QOF_STRING_MATCH_CASEINSENSITIVE),
 				       use_regexp);
@@ -334,7 +334,7 @@ xaccQueryAddNumericMatch (Query *q, gnc_numeric amount, QofNumericMatch sign,
   if (!q || !path)
     return;
 
-  pred_data = gncQueryNumericPredicate (how, sign, amount);
+  pred_data = qof_query_numeric_predicate (how, sign, amount);
   if (!pred_data)
     return;
 
@@ -370,7 +370,7 @@ xaccQueryAddDateMatchTS (Query * q,
   tmp_q = gncQueryCreate ();
 
   if (use_start) {
-    pred_data = gncQueryDatePredicate (QOF_QOF_COMPARE_GTE, QOF_DATE_MATCH_NORMAL, sts);
+    pred_data = qof_query_date_predicate (QOF_QOF_COMPARE_GTE, QOF_DATE_MATCH_NORMAL, sts);
     if (!pred_data) {
       gncQueryDestroy (tmp_q);
       return;
@@ -381,7 +381,7 @@ xaccQueryAddDateMatchTS (Query * q,
   }
 
   if (use_end) {
-    pred_data = gncQueryDatePredicate (QOF_QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, ets);
+    pred_data = qof_query_date_predicate (QOF_QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, ets);
     if (!pred_data) {
       gncQueryDestroy (tmp_q);
       return;
@@ -465,7 +465,7 @@ xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QueryOp op)
     chars[i++] = VREC;
   chars[i] = '\0';
 
-  pred_data = gncQueryCharPredicate (QOF_CHAR_MATCH_ANY, chars);
+  pred_data = qof_query_char_predicate (QOF_CHAR_MATCH_ANY, chars);
   if (!pred_data)
     return;
 
@@ -522,7 +522,7 @@ xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
   if (!q || !path || !value || !id_type)
     return;
 
-  pred_data = gncQueryKVPPredicate (how, path, value);
+  pred_data = qof_query_kvp_predicate (how, path, value);
   if (!pred_data)
     return;
 
