@@ -19,6 +19,8 @@ XbaeMatrix:
 
 libhtmlw:
   -- modified by deleting examples, other non-essential stuff.
+  -- will probably be eliminated; will use XmHTML instead, if  
+     things work out.
 
 ComboBox:
   -- assorted bug fixes
