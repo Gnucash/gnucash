@@ -24,6 +24,7 @@
 #include "business-utils.h"
 #include "dialog-job.h"
 #include "dialog-invoice.h"
+#include "dialog-payment.h"
 
 #define DIALOG_NEW_JOB_CM_CLASS "dialog-new-job"
 #define DIALOG_EDIT_JOB_CM_CLASS "dialog-edit-job"
@@ -462,6 +463,25 @@ invoice_job_cb (gpointer *job_p, gpointer user_data)
   gnc_invoice_search (NULL, &owner, sw->book);
 }
 
+static void
+payment_job_cb (gpointer *job_p, gpointer user_data)
+{
+  struct _job_select_window *sw = user_data;
+  GncOwner owner;
+  GncJob *job;
+
+  g_return_if_fail (job_p && user_data);
+
+  job = *job_p;
+
+  if (!job)
+    return;
+
+  gncOwnerInitJob (&owner, job);
+  gnc_ui_payment_new (&owner, sw->book);
+  return;
+}
+
 static gpointer
 new_job_cb (gpointer user_data)
 {
@@ -496,6 +516,7 @@ gnc_job_search (GncJob *start, GncOwner *owner, GNCBook *book)
   static GNCSearchCallbackButton buttons[] = { 
     { N_("View/Edit Job"), edit_job_cb},
     { N_("View Invoices"), invoice_job_cb},
+    { N_("Process Payment"), payment_job_cb},
     { NULL },
   };
 

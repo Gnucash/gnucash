@@ -29,6 +29,7 @@
 #include "dialog-job.h"
 #include "dialog-order.h"
 #include "dialog-invoice.h"
+#include "dialog-payment.h"
 
 #define DIALOG_NEW_CUSTOMER_CM_CLASS "dialog-new-customer"
 #define DIALOG_EDIT_CUSTOMER_CM_CLASS "dialog-edit-customer"
@@ -671,6 +672,25 @@ jobs_customer_cb (gpointer *cust_p, gpointer user_data)
 }
 
 static void
+payment_customer_cb (gpointer *cust_p, gpointer user_data)
+{
+  struct _customer_select_window *sw = user_data;
+  GncOwner owner;
+  GncCustomer *cust;
+
+  g_return_if_fail (cust_p && user_data);
+
+  cust = *cust_p;
+
+  if (!cust)
+    return;
+
+  gncOwnerInitCustomer (&owner, cust);
+  gnc_ui_payment_new (&owner, sw->book);
+  return;
+}
+
+static void
 edit_customer_cb (gpointer *cust_p, gpointer user_data)
 {
   GncCustomer *cust;
@@ -719,9 +739,10 @@ gnc_customer_search (GncCustomer *start, GNCBook *book)
   static GList *columns = NULL;
   static GNCSearchCallbackButton buttons[] = { 
     { N_("View/Edit Customer"), edit_customer_cb},
-    { N_("Customer Jobs"), jobs_customer_cb},
-    //    { N_("Customer Orders"), order_customer_cb},
-    { N_("Customer Invoices"), invoice_customer_cb},
+    { N_("Customer's Jobs"), jobs_customer_cb},
+    //    { N_("Customer's Orders"), order_customer_cb},
+    { N_("Customer's Invoices"), invoice_customer_cb},
+    { N_("Process Payment"), payment_customer_cb},
     { NULL },
   };
 

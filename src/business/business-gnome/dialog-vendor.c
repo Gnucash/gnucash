@@ -28,6 +28,7 @@
 #include "dialog-job.h"
 #include "dialog-order.h"
 #include "dialog-invoice.h"
+#include "dialog-payment.h"
 
 #define DIALOG_NEW_VENDOR_CM_CLASS "dialog-new-vendor"
 #define DIALOG_EDIT_VENDOR_CM_CLASS "dialog-edit-vendor"
@@ -532,6 +533,25 @@ jobs_vendor_cb (gpointer *vendor_p, gpointer user_data)
 }
 
 static void
+payment_vendor_cb (gpointer *vendor_p, gpointer user_data)
+{
+  struct _vendor_select_window *sw = user_data;
+  GncOwner owner;
+  GncVendor *vendor;
+
+  g_return_if_fail (vendor_p && user_data);
+
+  vendor = *vendor_p;
+
+  if (!vendor)
+    return;
+
+  gncOwnerInitVendor (&owner, vendor);
+  gnc_ui_payment_new (&owner, sw->book);
+  return;
+}
+
+static void
 edit_vendor_cb (gpointer *vendor_p, gpointer user_data)
 {
   GncVendor *vendor;
@@ -579,9 +599,10 @@ gnc_vendor_search (GncVendor *start, GNCBook *book)
   static GList *columns = NULL;
   static GNCSearchCallbackButton buttons[] = { 
     { N_("View/Edit Vendor"), edit_vendor_cb},
-    { N_("Vendor Jobs"), jobs_vendor_cb},
+    { N_("Vendor's Jobs"), jobs_vendor_cb},
     //    { N_("Vendor Orders"), order_vendor_cb},
-    { N_("Vendor Bills"), invoice_vendor_cb},
+    { N_("Vendor's Bills"), invoice_vendor_cb},
+    { N_("Pay Bill"), payment_vendor_cb},
     { NULL },
   };
 
