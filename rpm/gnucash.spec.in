@@ -130,5 +130,6 @@ fi
 %endif
 
 %files devel
+%defattr(444,root,root,755)
 %{_includedir}/gnucash
 %{_datadir}/aclocal/gnucash.m4
