@@ -69,6 +69,7 @@ test_file(const char *filename)
 
     for(i = 0; possible_envs[i] != NULL; i++)
     {
+        GNCBackendError err;
         GNCSession *session;
         char *cmd;
         char *new_file = gen_new_file_name(filename, possible_envs[i]);
@@ -76,17 +77,20 @@ test_file(const char *filename)
         
         session = gnc_session_new();
 
-        if(!gnc_session_begin(session, filename, TRUE, FALSE))
+        gnc_session_begin(session, filename, TRUE, FALSE);
+        err = gnc_session_pop_error (session);
+        if (err)
         {
             gnc_session_destroy(session);
-            return g_strdup("gnc_session_begin");
+            return g_strdup_printf("gnc_session_begin errorid %d", err);
         }
 
-        if(!gnc_session_load(session))
+        gnc_session_load(session);
+        err = gnc_session_pop_error (session);
+        if(err)
         {
-            int error = gnc_session_get_error(session);
             gnc_session_destroy(session);
-            return g_strdup_printf("gnc_session_load errorid %d", error);
+            return g_strdup_printf("gnc_session_load errorid %d", err);
         }
 
         if(gnc_setenv("LANG", possible_envs[i], 1) != 0)
@@ -94,7 +98,9 @@ test_file(const char *filename)
 
         new_session = gnc_session_new();
         
-        if(!gnc_session_begin(new_session, new_file, FALSE, FALSE))
+        gnc_session_begin(new_session, new_file, FALSE, FALSE);
+        err = gnc_session_pop_error (new_session);
+        if(err)
         {
             g_free(new_file);
             gnc_session_destroy(session);
