@@ -32,6 +32,7 @@
 
 #include "AccWindow.h"
 #include "EuroUtils.h"
+#include "FileDialog.h"
 #include "MainWindow.h"
 #include "MultiLedger.h"
 #include "RegWindow.h"
@@ -1135,18 +1136,53 @@ print_check_cb(GtkWidget * widget, gpointer data)
 
 
 static void
-gnc_register_scrub_cb(GtkWidget *widget, gpointer data)
+gnc_register_scrub_all_cb (GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
-  Account *account = xaccLedgerDisplayLeader (regData->ledger);
+  Query *query = xaccLedgerDisplayGetQuery (regData->ledger);
+  AccountGroup *root;
+  GList *node;
 
-  if (account == NULL)
+  if (query == NULL)
     return;
 
   gnc_suspend_gui_refresh ();
 
-  xaccAccountTreeScrubOrphans (account);
-  xaccAccountTreeScrubImbalance (account);
+  root = gncGetCurrentGroup ();
+
+  for (node = xaccQueryGetSplits (query); node; node = node->next)
+  {
+    Split *split = node->data;
+    Transaction *trans = xaccSplitGetParent (split);
+
+    xaccTransScrubOrphans (trans, root);
+    xaccTransScrubImbalance (trans, root);
+  }
+
+  gnc_refresh_main_window ();
+  gnc_resume_gui_refresh ();
+}
+
+static void
+gnc_register_scrub_current_cb (GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData = data;
+  SplitRegister *reg;
+  Transaction *trans;
+  AccountGroup *root;
+
+  reg = xaccLedgerDisplayGetSR (regData->ledger);
+  trans = xaccSRGetCurrentTrans (reg);
+
+  if (!trans)
+    return;
+
+  gnc_suspend_gui_refresh ();
+
+  root = gncGetCurrentGroup ();
+
+  xaccTransScrubOrphans (trans, root);
+  xaccTransScrubImbalance (trans, root);
 
   gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
@@ -1330,16 +1366,6 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Scrub"),
-      N_("Identify and fix problems in the "
-         "accounts of this register"),
-      gnc_register_scrub_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
     GNOMEUIINFO_END
   };
 
@@ -1402,6 +1428,25 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
       N_("Jump to the corresponding transaction in "
          "the other account"),
       jump_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_Scrub All"),
+      N_("Identify and fix problems in the "
+         "transactions displayed in this register"),
+      gnc_register_scrub_all_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_Scrub Current"),
+      N_("Identify and fix problems in the "
+         "current transaction"),
+      gnc_register_scrub_current_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },

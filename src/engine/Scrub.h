@@ -46,6 +46,9 @@
  *    go into and clean up.  Kind of like the unix "Lost+Found" directory
  *    for orphaned inodes.
  *
+ * The xaccTransScrubOrphans() method scrubs only the splits in the
+ *    given transaction. A root account group must be provided.
+ *
  * The xaccAccountScrubOrphans() method performs this scrub only for the 
  *    indicated account, and not for any of its children.
  *
@@ -55,6 +58,7 @@
  * The xaccGroupScrubOrphans() method performs this scrub for the 
  *    child accounts of this group.
  */
+void xaccTransScrubOrphans (Transaction *trans, AccountGroup *root);
 void xaccAccountScrubOrphans (Account *acc);
 void xaccAccountTreeScrubOrphans (Account *acc);
 void xaccGroupScrubOrphans (AccountGroup *grp);
@@ -73,7 +77,7 @@ void xaccGroupScrubSplits (AccountGroup *group);
  *    is created to offset this amount and is added to an "imbalance"
  *    account.
  */
-void xaccTransScrubImbalance (Transaction *trans);
+void xaccTransScrubImbalance (Transaction *trans, AccountGroup *root);
 void xaccAccountScrubImbalance (Account *acc);
 void xaccAccountTreeScrubImbalance (Account *acc);
 void xaccGroupScrubImbalance (AccountGroup *grp);

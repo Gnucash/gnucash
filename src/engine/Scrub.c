@@ -48,7 +48,8 @@
 #include "messages.h"
 
 static short module = MOD_SCRUB;
-static Account * GetOrMakeAccount (Account *, Transaction *, const char *);
+static Account * GetOrMakeAccount (AccountGroup *root, Transaction *trans,
+                                   const char *name_root);
 
 /* ================================================================ */
 
@@ -58,7 +59,8 @@ xaccGroupScrubOrphans (AccountGroup *grp)
   GList *list;
   GList *node;
 
-  if (!grp) return;
+  if (!grp)
+    return;
 
   list = xaccGroupGetAccountList (grp);
 
@@ -73,6 +75,9 @@ xaccGroupScrubOrphans (AccountGroup *grp)
 void
 xaccAccountTreeScrubOrphans (Account *acc)
 {
+  if (!acc)
+    return;
+
   xaccGroupScrubOrphans (xaccAccountGetChildren(acc));
   xaccAccountScrubOrphans (acc);
 }
@@ -80,33 +85,47 @@ xaccAccountTreeScrubOrphans (Account *acc)
 void
 xaccAccountScrubOrphans (Account *acc)
 {
-  GList *slp;
-  Transaction *trans;
-  Account * parent;
+  GList *node;
+
+  if (!acc)
+    return;
 
   PINFO ("Looking for orphans in account %s \n", xaccAccountGetName(acc));
 
-  for(slp = xaccAccountGetSplitList(acc); slp; slp = slp->next) {
-    Split *split = (Split *) slp->data;
-    Split * tsplit;
-    int j = 0;
+  for (node = xaccAccountGetSplitList(acc); node; node = node->next)
+  {
+    Split *split = node->data;
 
-    trans = xaccSplitGetParent (split);
-    tsplit = xaccTransGetSplit (trans, 0);
-    while (tsplit) {
-      parent = xaccSplitGetAccount (tsplit);
-      if (!parent) {
-        Account *orph;
-        DEBUG ("Found an orphan \n");
-        /* OK, we found an orphan.  Put it in an orphan account. */
-        orph = GetOrMakeAccount (acc, trans, _("Orphan"));
-        xaccAccountBeginEdit (orph);
-        xaccAccountInsertSplit (orph, tsplit);
-        xaccAccountCommitEdit (orph);
-      }
-      j++; 
-      tsplit = xaccTransGetSplit (trans, j);
-    }
+    xaccTransScrubOrphans (xaccSplitGetParent (split),
+                           xaccGetAccountRoot (acc));
+  }
+}
+
+void
+xaccTransScrubOrphans (Transaction *trans, AccountGroup *root)
+{
+  GList *node;
+
+  if (!trans)
+    return;
+
+  for (node = xaccTransGetSplitList (trans); node; node = node->next)
+  {
+    Split *split = node->data;
+    Account *account;
+    Account *orph;
+
+    account = xaccSplitGetAccount (split);
+    if (account)
+      continue;
+
+    DEBUG ("Found an orphan \n");
+
+    orph = GetOrMakeAccount (root, trans, _("Orphan"));
+
+    xaccAccountBeginEdit (orph);
+    xaccAccountInsertSplit (orph, split);
+    xaccAccountCommitEdit (orph);
   }
 }
 
@@ -233,21 +252,21 @@ xaccAccountTreeScrubImbalance (Account *acc)
 void
 xaccAccountScrubImbalance (Account *acc)
 {
-  GList *slp;
+  GList *node;
 
   PINFO ("Looking for imbalance in account %s \n", xaccAccountGetName(acc));
 
-  for(slp = xaccAccountGetSplitList(acc); slp; slp = slp->next)
+  for(node = xaccAccountGetSplitList(acc); node; node = node->next)
   {
-    Split *split = (Split *) slp->data;
+    Split *split = node->data;
     Transaction *trans = xaccSplitGetParent(split);
 
-    xaccTransScrubImbalance (trans);
+    xaccTransScrubImbalance (trans, xaccGetAccountRoot (acc));
   }
 }
 
 void
-xaccTransScrubImbalance (Transaction *trans)
+xaccTransScrubImbalance (Transaction *trans, AccountGroup *root)
 {
   Split *balance_split = NULL;
   gnc_numeric imbalance;
@@ -258,30 +277,13 @@ xaccTransScrubImbalance (Transaction *trans)
   xaccTransScrubSplits (trans);
 
   {
-    GList *node;
     Account *account;
-    Account *peer = NULL;
 
     imbalance = xaccTransGetImbalance (trans);
     if (gnc_numeric_zero_p (imbalance))
       return;
 
-    for (node = trans->splits; node; node = node->next)
-    {
-      Split *split = node->data;
-
-      peer = xaccSplitGetAccount (split);
-      if (peer)
-        break;
-    }
-
-    if (!peer)
-    {
-      PERR ("Transaction with no accounts");
-      return;
-    }
-
-    account = GetOrMakeAccount (peer, trans, _("Imbalance"));
+    account = GetOrMakeAccount (root, trans, _("Imbalance"));
 
     /* put split into account before setting split value */
     balance_split = xaccMallocSplit();
@@ -338,10 +340,10 @@ xaccTransScrubImbalance (Transaction *trans)
 /* ================================================================ */
 
 static Account *
-GetOrMakeAccount (Account *peer, Transaction *trans, const char *name_root)
+GetOrMakeAccount (AccountGroup *root, Transaction *trans,
+                  const char *name_root)
 {
   const gnc_commodity * currency;
-  AccountGroup *root;
   char * accname;
   Account * acc;
 
@@ -352,7 +354,7 @@ GetOrMakeAccount (Account *peer, Transaction *trans, const char *name_root)
                          gnc_commodity_get_mnemonic(currency), NULL);
 
   /* see if we've got one of these going already ... */
-  acc = xaccGetPeerAccountFromName (peer, accname);
+  acc = xaccGetAccountFromName (root, accname);
 
   if (acc == NULL)
   {
@@ -364,7 +366,6 @@ GetOrMakeAccount (Account *peer, Transaction *trans, const char *name_root)
     xaccAccountSetType (acc, BANK);
 
     /* hang the account off the root */
-    root = xaccGetAccountRoot (peer);
     xaccGroupInsertAccount (root, acc);
     xaccAccountCommitEdit (acc);
   }

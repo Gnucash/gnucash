@@ -858,7 +858,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
       (pending_trans == old_trans) &&
       (old_trans != new_trans))
   {
-    xaccTransScrubImbalance (old_trans);
+    xaccTransScrubImbalance (old_trans, gncGetCurrentGroup ());
     if (xaccTransIsOpen (old_trans))
       xaccTransCommitEdit (old_trans);
     info->pending_trans_guid = *xaccGUIDNULL();
@@ -892,7 +892,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
       }
       else
       {
-        xaccTransScrubImbalance (old_trans);
+        xaccTransScrubImbalance (old_trans, gncGetCurrentGroup ());
         saved = TRUE;
       }
     }
