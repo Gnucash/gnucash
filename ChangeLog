@@ -1,3 +1,7 @@
+2003-11-19  David Hampton  <hampton@employees.org>
+
+	* src/quotes/dump-finance-quote: Be more explicit when a lookup fails.
+
 2003-11-17  Derek Atkins  <derek@ihtfp.com>
 
 	* Makefile.DEPS: change timeout from 60 to 5 seconds.  Fixes #120207

@@ -46,22 +46,37 @@ sub check_modules {
 }
 
 sub report {
-  my($itemname, $qh) = @_;
+  my($itemname, $qh, $verbose) = @_;
   my ($symbol, $date, $currency, $last, $nav, $price, $timezone, $keyname);
+  my($success);
 
   # Parse the quote fields and put warnings where necessary.
-  $symbol = defined($$qh{$itemname, "symbol"})
-    ? $$qh{$itemname, "symbol"} : "$itemname (deduced)";
-  $date = defined($$qh{$itemname, "date"})
-    ? $$qh{$itemname, "date"} : "** missing **";
-  $currency = defined($$qh{$itemname, "currency"})
-    ? $$qh{$itemname, "currency"} :  "** missing **";
+  $success = 1;
+  if (defined($$qh{$itemname, "symbol"})) {
+    $symbol = $$qh{$itemname, "symbol"};
+  } else {
+    $symbol = "$itemname (deduced)";
+    $success = 0;
+  }
+  if (defined($$qh{$itemname, "date"})) {
+    $date = $$qh{$itemname, "date"};
+  } else {
+    $date = "** missing **";
+    $success = 0;
+  }
+  if (defined($$qh{$itemname, "currency"})) {
+    $currency = $$qh{$itemname, "currency"};
+  } else {
+    $currency = "** missing **";
+    $success = 0;
+  }
   if ((!defined($$qh{$itemname, "last"})) &&
       (!defined($$qh{$itemname, "nav" })) &&
       (!defined($$qh{$itemname, "price"}))) {
     $$qh{$itemname, "last"} = "**missing**";
     $$qh{$itemname, "nav"} = "**missing**";
     $$qh{$itemname, "price"} = "**missing**";
+    $success = 0;
   } else {
     $last = defined($$qh{$itemname, "last"})
       ? $$qh{$itemname, "last"} :  "";
@@ -73,7 +88,21 @@ sub report {
   $timezone = defined($$qh{$itemname, "timezone"})
     ? $$qh{$itemname, "timezone"} :  "";
 
-  # Dump gnucsah recognized fields
+  # Report failure
+  if ($success == 0) {
+    my ($stock, $key, %seen);
+    printf("\nThe query for $itemname failed!!");
+    foreach $keyname (sort keys %$qh) {
+      ($stock, $key) = split('\034', $keyname);
+      next if $stock eq $itemname;
+      next if $seen{$stock} == 1;
+      $seen{$stock} = 1;
+      printf "  Found data for stock(s) %s instead.\n", join(", ",  keys(%seen));
+    }
+    printf "\n";
+  }
+
+  # Dump gnucash recognized fields
   printf "Finance::Quote fields Gnucash uses:\n";
   printf "    symbol: %-20s <=== required\n",	  $symbol;
   printf "      date: %-20s <=== required\n",  	  $date;
@@ -83,13 +112,17 @@ sub report {
   printf "     price: %-20s <=/        \n", 	  $price;
   printf "  timezone: %-20s <=== optional\n", 	  $timezone;
 
-  # Dump all fields
-  printf "\nAll Finance::Quote Fields\n";
-  foreach $keyname (sort keys %$qh) {
-    my ($item, $key) = split('\034', $keyname);
-    printf "%10s: %s\n", $key, $$qh{$item, $key}, "\n";
+  # Dump all fields if requested
+  if ($verbose) {
+    printf "\nAll fields returned by Finance::Quote for stock $itemname\n\n";
+    printf "%-10s %10s  %s\n", "stock", "field", "value";
+    printf "%-10s %10s  %s\n", "-----", "-----", "-----";
+    foreach $keyname (sort keys %$qh) {
+      my ($stock, $key) = split('\034', $keyname);
+      printf "%-10s %10s: %s\n", $stock, $key, $$qh{$stock, $key};
+    }
+    print "\n";
   }
-  print "\n";
 }
 
 # Check for and load non-standard modules
@@ -100,9 +133,15 @@ $q->timeout(60);
 
 if ($#ARGV < 1) {
   my @sources = $q->sources();
-  printf "\nUsage: $0 <quote-source> <stock> [<stock> ...]\n\n";
+  printf "\nUsage: $0 <quote-source> [-v] <stock> [<stock> ...]\n\n";
   printf "Available sources are: \n     %s\n\n", join(' ', @sources);
   exit 0;
+}
+
+my $verbose = 0;
+if (@ARGV[0] eq "-v") {
+  $verbose = 1;
+  shift;
 }
 
 my $exchange = shift;
@@ -110,7 +149,7 @@ while ($#ARGV >= 0) {
   my $stock = shift;
   my %quotes = $q->fetch($exchange, $stock);
   $stock =~ tr/a-z/A-Z/;
-  report($stock, \%quotes);
+  report($stock, \%quotes, $verbose);
   if ($#ARGV >= 0) {
     printf "=====\n\n";
   }
