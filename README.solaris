@@ -1,8 +1,8 @@
 Solaris hints:
 ------------- 
-The Makefile won't work unless SHELL=/bin/bash for me (Solaris 2.5.1).
-That is:
-
-     make motif SHELL=/bin/bash
+If the Makefile won't work, try the following:
+   The Makefile won't work unless SHELL=/bin/bash for me (Solaris 2.5.1).
+   That is:
+        make motif SHELL=/bin/bash
 
 
