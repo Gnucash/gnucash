@@ -621,10 +621,6 @@ readTransaction( int fd, Account *acc, int token )
     split->share_price = damount;
   }  
 
-  /* temp hack till splits fully implemented */
-  trans->damount = split->damount;
-  trans->share_price = split->share_price;
-
   INFO_2 ("readTransaction(): amount %f \n", trans->damount);
 
   /* Read the account numbers for double-entry */
@@ -769,19 +765,19 @@ xaccResetWriteFlags (AccountGroup *grp)
   for( i=0; i<numAcc; i++ ) {
     int n=0;
     Account *acc;
-    Transaction * trans;
+    Split *s;
     acc = getAccount (grp,i) ;
 
     /* recursively do sub-accounts */
     xaccResetWriteFlags (acc->children);
     
     /* zip over all accounts */
-    trans = getTransaction (acc, 0); 
-    n++;
-    while (trans) {
-      trans->credit_split.write_flag = 0;
-      trans = getTransaction (acc, n); 
+    s = acc->splits[0];
+    n=0;
+    while (s) {
+      s -> write_flag = 0;
       n++;
+      s = acc->splits[n];
     }
   }
 

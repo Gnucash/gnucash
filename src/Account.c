@@ -404,7 +404,7 @@ xaccCheckDateOrder (Account * acc, Split *split )
 }
 
 /********************************************************************\
- * xaccCheckDateOrderDE                                             *
+ * xaccCheckTransDateOrder                                          *
  *   check this transaction to see if the date is in correct order  *
  *   If it is not, reorder the transactions ...                     *
  *   This routine perfroms the check for both of the double-entry   *
@@ -415,17 +415,26 @@ xaccCheckDateOrder (Account * acc, Split *split )
 \********************************************************************/
 
 int
-xaccCheckDateOrderDE (Transaction *trans )
+xaccCheckTransDateOrder (Transaction *trans )
 {
   Account * acc;
   int outOfOrder = 0;
+  Split *s;
+  int i = 0;
 
   if (NULL == trans) return 0;
 
   acc = (Account *) (trans->credit_split.acc);
-  outOfOrder += xaccCheckDateOrder (acc, trans);
-  acc = (Account *) (trans->debit);
-  outOfOrder += xaccCheckDateOrder (acc, trans);
+  outOfOrder += xaccCheckDateOrder (acc, &(trans->credit_split));
+
+  i=0;
+  s = trans->debit_splits[0];
+  while (s) {
+    acc = (Account *) (s->acc);
+    outOfOrder += xaccCheckDateOrder (acc, s);
+    i++;
+    s = trans->debit_splits[i];
+  }
 
   if (outOfOrder) return 1;
   return 0;
@@ -495,43 +504,26 @@ xaccZeroRunningBalances( Account **list )
 void
 xaccConsolidateTransactions (Account * acc)
 {
-   Transaction *ta, *tb;
+   Split *sa, *sb;
    int i,j,k;
 
    if (!acc) return;
 
-   for (i=0; i<acc->numTrans; i++) {
-      ta = acc->transaction[i];
-      for (j=i+1; j<acc->numTrans; j++) {
-         tb = acc->transaction[j];
+   for (i=0; i<acc->numSplits; i++) {
+      sa = acc->splits[i];
+      for (j=i+1; j<acc->numSplits; j++) {
+         sb = acc->splits[j];
 
          /* if no match, then continue on in the loop.
           * we really must match everything to get a duplicate */
-         if (ta->credit_split.acc != tb->credit_split.acc) continue;
-         if (ta->debit != tb->debit) continue;
-         if (ta->credit_split.reconciled != tb->credit_split.reconciled) continue;
-         if (ta->date.year != tb->date.year) continue;
-         if (ta->date.month != tb->date.month) continue;
-         if (ta->date.day != tb->date.day) continue;
-         if (strcmp (ta->num, tb->num)) continue;
-         if (strcmp (ta->description, tb->description)) continue;
-         if (strcmp (ta->credit_split.memo, tb->credit_split.memo)) continue;
-         if (strcmp (ta->action, tb->action)) continue;
-         if (0 == DEQ(ta->credit_split.damount, tb->credit_split.damount)) continue;
-         if (0 == DEQ(ta->credit_split.share_price, tb->credit_split.share_price)) continue;
+         if (sa->parent != sb->parent) continue;
+         if (sa->reconciled != sb->reconciled) continue;
+         if (0 == DEQ(sa->damount, sb->damount)) continue;
+         if (0 == DEQ(sa->share_price, sb->share_price)) continue;
+         if (strcmp (sa->memo, sb->memo)) continue;
 
-         /* if we got to here, then there must be a duplicate. */
-         /* before deleting it, remove it from the other 
-          * double-entry account */
-         if (acc == (Account *) tb->credit_split.acc) {
-            xaccRemoveTransaction ((Account *) tb->debit, tb);
-         }
-         if (acc == (Account *) tb->debit) {
-            xaccRemoveTransaction ((Account *) tb->credit_split.acc, tb);
-         }
-         tb->credit_split.acc = NULL;
-         tb->debit = NULL;
-
+#ifdef STIL_BROKEN
+/* hack alert -- still broken from splits */
          /* Free the transaction, and shuffle down by one.
           * Need to shuffle in order to preserve date ordering. */
          freeTransaction (tb);
@@ -541,6 +533,7 @@ xaccConsolidateTransactions (Account * acc)
          }
          acc->transaction[acc->numTrans -1] = NULL;
          acc->numTrans --;
+#endif
       }
    }
 }

@@ -315,7 +315,7 @@ adjBOkCB( Widget mw, XtPointer cd, XtPointer cb )
    * the desired balance.  */
   dcurrAmount = xaccGetBalance (&(trans->credit_split));
 
-  xaccSetAmount (split, dcurrAmount - themount);
+  xaccSetAmount (&(trans->credit_split), dcurrAmount - themount);
   
   /* Refresh the account register window */
   regRefresh(acc->regData);

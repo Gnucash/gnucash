@@ -557,19 +557,17 @@ xaccMergeAccounts (AccountGroup *grp)
             xaccMergeAccounts (ga);
 
             /* consolidate transactions */
-            for (k=0; k<acc_b->numTrans; k++) {
-               Transaction *trans;
-               trans = acc_b->transaction[k];
-               acc_b->transaction[k] = NULL;
-               if (acc_b == (Account *) trans->debit) 
-                   trans->debit = (struct _account *) acc_a;
-               if (acc_b == (Account *) trans->credit_split.acc) 
-                   trans->credit_split.acc = (struct _account *) acc_a;
-               insertTransaction (acc_a, trans);
+            for (k=0; k<acc_b->numSplits; k++) {
+               Split *split;
+               split = acc_b->splits[k];
+               acc_b->splits[k] = NULL;
+               if (acc_b == (Account *) split->acc) 
+                   split->acc = (struct _account *) acc_a;
+               xaccInsertSplit (acc_a, split);
             }
 
             /* free the account structure itself */
-            acc_b->numTrans = 0;
+            acc_b->numSplits = 0;
             freeAccount (acc_b);
             grp->account[j] = grp->account[grp->numAcc -1];
             grp->account[grp->numAcc -1] = NULL;
