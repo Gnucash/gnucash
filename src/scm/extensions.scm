@@ -16,4 +16,10 @@
                                  "Scheme test2 hint"
                                  gnc:extensions-menu-test-func))
 
+  (gnc:extensions-menu-add-item "QIF Import"
+                                "Import QIF hint"
+                                (lambda ()
+                                (gnc:extensions-qif-import win)))
+
+
 (gnc:hook-add-dangler gnc:*main-window-opened-hook* gnc:extensions-menu-setup)

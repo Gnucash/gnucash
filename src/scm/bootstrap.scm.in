@@ -87,8 +87,8 @@ file in all of the directories specified by gnc:*load-path*."
     (if (not file-name)
         #f
         (if 
-         ;;(false-if-exception (primitive-load file-name))
-         (primitive-load file-name)
+         (false-if-exception (primitive-load file-name))
+         ;(primitive-load file-name)
          (begin
            (gnc:debug "loaded file " file-name)
            #t)
