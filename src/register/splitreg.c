@@ -235,8 +235,6 @@ configLayout (SplitRegister *reg)
          if (show_samount) {
             SET (PRIC_CELL,  7,  0,  9,  PRICE_STR);
             SET (VALU_CELL,  8,  0, 10,  VALUE_STR);
-            SET (SHRS_CELL,  9,  0, 10,  TOT_SHRS_STR);
-            SET (BALN_CELL, 10,  0, 12,  BALN_STR);
          }
          if (show_tamount) {
             SET (TDEBT_CELL,  5,  0, 12,  DEBIT_STR);
@@ -244,6 +242,8 @@ configLayout (SplitRegister *reg)
             SET (TPRIC_CELL,  7,  0,  9,  PRICE_STR);
             SET (TVALU_CELL,  8,  0, 10,  VALUE_STR);
          }
+         SET (SHRS_CELL,  9,  0, 10,  TOT_SHRS_STR);
+         SET (BALN_CELL, 10,  0, 12,  BALN_STR);
          break;
 
       default:
