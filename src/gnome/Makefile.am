@@ -41,6 +41,7 @@ noinst_HEADERS = \
   account-treeP.h \
   cursors.h \
   dialog-account-picker.h \
+  dialog-add.h \
   dialog-budget.h \
   dialog-edit.h \
   dialog-find-transactions.h \

@@ -192,6 +192,35 @@ gnc_ui_refresh_statusbar (void)
   gnc_set_label_color(main_info->profits_label, profits);
 }
 
+static void
+gnc_refresh_main_window_title()
+{
+  GtkWidget *main_window;
+  Session *session;
+  gchar *filename;
+  gchar *title;
+
+  main_window = gnc_get_ui_data();
+  if (main_window == NULL)
+    return;
+
+  session = gncGetCurrentSession();
+
+  if (session == NULL)
+    filename = UNTITLED_STR;
+  else
+    filename = xaccSessionGetFilePath(session);
+
+  if ((filename == NULL) || (*filename == '\0'))
+    filename = UNTITLED_STR;
+
+  title = g_strconcat("GnuCash - ", filename, NULL);
+
+  gtk_window_set_title(GTK_WINDOW(main_window), title);
+
+  g_free(title);
+}
+
 void
 gnc_refresh_main_window()
 {
@@ -199,6 +228,7 @@ gnc_refresh_main_window()
   gnc_ui_refresh_statusbar();
   gnc_history_update_menu(GNOME_APP(gnc_get_ui_data()));
   gnc_account_tree_refresh_all();
+  gnc_refresh_main_window_title();
 }
 
 static void

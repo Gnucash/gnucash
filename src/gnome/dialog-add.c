@@ -40,28 +40,55 @@
 #include "util.h"
 
 
-/* This static indicates the debugging module that this .o belongs to.  */
+struct _accwindow
+{
+  GtkWidget *dialog;
+
+  GtkCList *type_list;
+
+  AccountEditInfo edit_info;
+
+  GNCAccountTree *tree;
+
+  Account *newAccount;
+
+  GNCAccountType type;
+};
+
+
+/* This static indicates the debugging module that this .o belongs to. */
 static short module = MOD_GUI;
+
+static gint last_width = 0;
+static gint last_height = 0;
 
 static int _accWindow_last_used_account_type = BANK;
 
 static gchar * default_currency = "USD";
 static gboolean default_currency_dynamically_allocated = FALSE;
 
+static GList *account_windows = NULL;
 
-struct _accwindow
+
+/********************************************************************\
+ * Function: gnc_ui_destroy_account_add_windows - destroy all open  *
+ *           account add windows.                                   *
+ *                                                                  *
+ * Args:   none                                                     *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gnc_ui_destroy_account_add_windows()
 {
-  GtkCList  *type_list;
+  GnomeDialog *dialog;
 
-  AccountEditInfo edit_info;
+  while (account_windows != NULL)
+  {
+    dialog = GNOME_DIALOG(account_windows->data);
 
-  GNCAccountTree *tree;
-
-  Account *parentAccount;
-  Account *newAccount;
-
-  gint	  type;
-};
+    gnome_dialog_close(dialog);
+  }
+}
 
 
 /********************************************************************\
@@ -79,10 +106,10 @@ static void
 gnc_ui_accWindow_list_select_cb(GtkCList * type_list, gint row, gint column,
 				GdkEventButton * event, gpointer data)
 {
+  AccWindow * accData = data;
   gboolean sensitive;
-  AccWindow * accData = (AccWindow *) data;
 
-  if(accData == NULL)
+  if (accData == NULL)
     return;
 
   if (!gtk_clist_get_selectable(type_list, row))
@@ -234,13 +261,13 @@ gnc_ui_accWindow_list_row_set_active(GtkCList *type_list, gint row,
  *         data - tells whether is a select or a deselect callack   * 
  * Return: none                                                     *
  * Notes: data == 0 unselect, data == 1 select                      *
- \********************************************************************/
+\********************************************************************/
 static void
 gnc_ui_accWindow_tree_select(GNCAccountTree *tree,
 			     Account * account, 
 			     gpointer data)
 {
-  AccWindow *accData = (AccWindow *) data;
+  AccWindow *accData = data;
   int       parentAccType;
   gboolean  compatible;
   gint      type;
@@ -250,9 +277,7 @@ gnc_ui_accWindow_tree_select(GNCAccountTree *tree,
   /* Deleselect any or select top account */
   if (account == NULL || account == accData->newAccount)
   {
-    accData->parentAccount = NULL;
-
-    /* sel all list widgets to be selectable */
+    /* set all list widgets to be selectable */
     for (type = 0; type < NUM_ACCOUNT_TYPES; type++)
       gtk_clist_set_selectable(accData->type_list, type, TRUE);
 
@@ -261,8 +286,6 @@ gnc_ui_accWindow_tree_select(GNCAccountTree *tree,
   }
   else /* Some other account was selected */
   {
-    accData->parentAccount = account;
-
     parentAccType = xaccAccountGetType(account);
 
     /* set the allowable account types for this parent */
@@ -296,9 +319,9 @@ static GtkWidget *
 gnc_ui_accWindow_account_tree_box_create(AccWindow * accData)
 {
   GtkWidget *frame, *scrollWin, *accountTree;
-    
+
   frame = gtk_frame_new(PARENT_ACC_STR);
-    
+
   accountTree = gnc_account_tree_new_with_root(accData->newAccount);
   gtk_clist_column_titles_hide(GTK_CLIST(accountTree));
   gnc_account_tree_hide_all_but_name(GNC_ACCOUNT_TREE(accountTree));
@@ -371,10 +394,122 @@ gnc_ui_accWindow_create_account(Account * account, Account * parent,
   xaccAccountCommitEdit (account);
   xaccAccountCommitEdit (parent);
 
-  gnc_account_tree_insert_account(gnc_get_current_account_tree(), account);
-
-  /* Refresh register so they have this account in their lists */
+  /* Refresh all registers so they have this account in their lists */
   gnc_group_ui_refresh(gncGetCurrentGroup());
+
+  /* Refresh the main window. This will also refresh all account lists. */
+  gnc_refresh_main_window();
+}
+
+static int
+gnc_ui_accWindow_close_cb(GnomeDialog *dialog, gpointer user_data)
+{
+  AccWindow * accData = user_data;
+
+  account_windows = g_list_remove(account_windows, dialog);
+
+  if (accData->newAccount != NULL)
+  {
+    xaccFreeAccount(accData->newAccount);
+    accData->newAccount = NULL;
+  }
+
+  g_free(accData);
+
+  gdk_window_get_geometry(GTK_WIDGET(dialog)->window, NULL, NULL,
+                          &last_width, &last_height, NULL);
+
+  gnc_save_window_size("account_add_win", last_width, last_height);
+
+  DEBUG("account add window destroyed\n");
+
+  return FALSE;
+}
+
+static void
+gnc_ui_accWindow_cancel_cb(GtkWidget * widget, gpointer data)
+{
+  AccWindow *accData = data; 
+
+  gnome_dialog_close(GNOME_DIALOG(accData->dialog));
+}
+
+static void
+gnc_ui_accWindow_ok_cb(GtkWidget * widget, gpointer data)
+{
+  AccWindow *accData = data; 
+  AccountFieldStrings strings;
+  Account *parent_account;
+
+  gnc_ui_extract_field_strings(&strings, &accData->edit_info);
+
+  /* check for valid name */
+  if (safe_strcmp(strings.name, "") == 0)
+  {
+    gnc_error_dialog_parented(GTK_WINDOW(accData->dialog), ACC_NO_NAME_MSG);
+    gnc_ui_free_field_strings(&strings);
+    return;
+  }
+
+  parent_account = gnc_account_tree_get_current_account(accData->tree);
+  if (parent_account == accData->newAccount)
+    parent_account = NULL;
+
+  /* check for a duplicate name */
+  {
+    Account *account;
+    AccountGroup *group;
+    char separator;
+
+    group = gncGetCurrentGroup();
+
+    separator = gnc_get_account_separator();
+
+    if (parent_account == NULL)
+      account = xaccGetAccountFromFullName(group, strings.name, separator);
+    else
+    {
+      char *fullname_parent;
+      char *fullname;
+      char sep_string[2];
+
+      sep_string[0] = separator;
+      sep_string[1] = '\0';
+
+      fullname_parent = xaccAccountGetFullName(parent_account, separator);
+      fullname = g_strconcat(fullname_parent, sep_string, strings.name, NULL);
+
+      account = xaccGetAccountFromFullName(group, fullname, separator);
+
+      free(fullname_parent);
+      g_free(fullname);
+    }
+
+    if (account != NULL)
+    {
+      gnc_error_dialog_parented(GTK_WINDOW(accData->dialog), ACC_DUP_NAME_MSG);
+      gnc_ui_free_field_strings(&strings);
+      return;
+    }
+  }
+
+  /* check for valid type */
+  if (accData->type == BAD_TYPE)
+  {
+    gnc_error_dialog_parented(GTK_WINDOW(accData->dialog), ACC_TYPE_MSG);
+    gnc_ui_free_field_strings(&strings);
+    return;
+  }
+
+  gnc_ui_accWindow_create_account(accData->newAccount, parent_account,
+                                  accData->type, &strings);
+
+  gnc_ui_free_field_strings(&strings);
+
+  /* so it doesn't get freed on close */
+  accData->newAccount = NULL;
+
+  gnome_dialog_close(GNOME_DIALOG(accData->dialog));
 }
 
 
@@ -398,18 +533,11 @@ gnc_accWindow_create(AccWindow *accData)
 
   vbox = GNOME_DIALOG(dialog)->vbox;
 
-  /* Make this dialog modal */
-  gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
-
-  /* parent */
-  gnome_dialog_set_parent(GNOME_DIALOG(dialog),
-			  GTK_WINDOW(gnc_get_ui_data()));
-
   /* default to ok */
   gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
 
-  /* don't close on buttons */
-  gnome_dialog_set_close(GNOME_DIALOG(dialog), FALSE);
+  /* destroy on close */
+  gnome_dialog_close_hides(GNOME_DIALOG(dialog), FALSE);
 
   /* allow grow and shrink, no auto-shrink */
   gtk_window_set_policy(GTK_WINDOW(dialog), TRUE, TRUE, FALSE);
@@ -455,6 +583,17 @@ gnc_accWindow_create(AccWindow *accData)
   widget = gnc_ui_notes_frame_create(&accData->edit_info.notes_entry);
   gtk_box_pack_start(GTK_BOX(vbox), widget, FALSE, FALSE, 0);
 
+  gnome_dialog_button_connect
+    (GNOME_DIALOG(dialog), 0,
+     GTK_SIGNAL_FUNC(gnc_ui_accWindow_ok_cb), accData);
+
+  gnome_dialog_button_connect
+    (GNOME_DIALOG(dialog), 1,
+     GTK_SIGNAL_FUNC(gnc_ui_accWindow_cancel_cb), accData);
+
+  gtk_signal_connect(GTK_OBJECT(dialog), "close",
+                     GTK_SIGNAL_FUNC(gnc_ui_accWindow_close_cb), accData);
+
   return dialog;
 }
 
@@ -469,84 +608,32 @@ gnc_accWindow_create(AccWindow *accData)
 AccWindow *
 accWindow (AccountGroup *this_is_not_used) 
 {
-  static gint last_width = 0;
-  static gint last_height = 0;
+  Account *current_account;
+  AccWindow *accData;
 
-  AccWindow *accData = g_new0(AccWindow, 1);
-  AccountFieldStrings strings;
-  GtkWidget *dialog;
-  gint result;
+  accData = g_new0(AccWindow, 1);
 
-  accData->parentAccount = gnc_get_current_account();
   accData->newAccount    = xaccMallocAccount();
   accData->type          = _accWindow_last_used_account_type;
 
   xaccAccountSetName(accData->newAccount, NEW_TOP_ACCT_STR);
 
-  dialog = gnc_accWindow_create(accData);
+  accData->dialog = gnc_accWindow_create(accData);
+  account_windows = g_list_prepend(account_windows, accData->dialog);
 
   if (last_width == 0)
     gnc_get_window_size("account_add_win", &last_width, &last_height);
 
-  gtk_window_set_default_size(GTK_WINDOW(dialog), last_width, last_height);
+  gtk_window_set_default_size(GTK_WINDOW(accData->dialog),
+                              last_width, last_height);
 
   gtk_widget_grab_focus(GTK_WIDGET(accData->edit_info.name_entry));
-  gtk_widget_show_all(dialog);
+  gtk_widget_show_all(accData->dialog);
 
-  gnc_account_tree_select_account(accData->tree, accData->parentAccount, TRUE);
+  current_account = gnc_get_current_account();
+  gnc_account_tree_select_account(accData->tree, current_account, TRUE);
 
-  while (1)
-  {
-    result = gnome_dialog_run(GNOME_DIALOG(dialog));
-
-    if (result != 0) /* cancel or delete */
-    {
-      xaccFreeAccount(accData->newAccount);
-      break;
-    }
-
-    gnc_ui_extract_field_strings(&strings, &accData->edit_info);
-
-    /* check for valid name */
-    if (safe_strcmp(strings.name, "") == 0)
-    {
-      gnc_error_dialog_parented(GTK_WINDOW(dialog), ACC_NO_NAME_MSG);
-      gnc_ui_free_field_strings(&strings);
-      continue;
-    }
-
-    /* check for valid type */
-    if (accData->type == BAD_TYPE)
-    {
-      gnc_error_dialog_parented(GTK_WINDOW(dialog), ACC_TYPE_MSG);
-      gnc_ui_free_field_strings(&strings);
-      continue;
-    }
-
-    gnc_ui_accWindow_create_account(accData->newAccount,
-				    accData->parentAccount,
-				    accData->type, &strings);
-
-    gnc_ui_free_field_strings(&strings);
-
-    break;
-  }
-
-  g_free(accData);
-
-  if (result < 0)
-    return NULL;
-
-  DEBUG("destroying account add window\n");
-
-  gdk_window_get_geometry(dialog->window, NULL, NULL,
-                          &last_width, &last_height, NULL);
-
-  gnc_save_window_size("account_add_win", last_width, last_height);
-
-  gtk_widget_destroy(dialog);
-
-  return NULL;
+  return accData;
 }
 
 
@@ -554,7 +641,6 @@ accWindow (AccountGroup *this_is_not_used)
 void
 xaccDestroyEditNotesWindow (Account *acc)
 {
-  return;
 }
 
 

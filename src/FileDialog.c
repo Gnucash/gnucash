@@ -300,7 +300,7 @@ gncFileOpen (void)
   if (!gncFileQuerySave ())
     return;
 
-  newfile = fileBox( OPEN_STR, "*.xac");
+  newfile = fileBox( OPEN_STR, "*.gnc");
   gncPostFileOpen (newfile);
 
   /* This dialogue can show up early in the startup process.
@@ -413,7 +413,7 @@ gncFileSaveAs (void)
   char buf[BUFSIZE];
   int io_error, uh_oh = 0;
 
-  filename = fileBox( SAVE_STR, "*.xac");
+  filename = fileBox(SAVE_STR, "*.gnc");
   if (!filename) return;
 
   /* check to see if the user did something silly, 
@@ -478,6 +478,9 @@ gncFileSaveAs (void)
       topgroup = xaccMallocAccountGroup();
     }
     free (newfile);
+
+    gnc_refresh_main_window();
+
     return;
   }
 
@@ -511,6 +514,8 @@ gncFileSaveAs (void)
   xaccSessionSetGroup (newsess, oldgrp);
   gncFileSave ();
   free (newfile);
+
+  gnc_refresh_main_window();
 }
 
 /* ======================================================== */

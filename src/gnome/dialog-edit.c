@@ -484,7 +484,7 @@ extra_change_verify(EditAccWindow *editAccData,
 static void
 gnc_ui_EditAccWindow_ok_cb(GtkWidget * widget, gpointer data)
 {
-  EditAccWindow *editAccData = (EditAccWindow *) data; 
+  EditAccWindow *editAccData = data; 
   AccountFieldStrings strings;
 
   GHashTable *change_currency;
@@ -858,7 +858,7 @@ editAccWindow(Account *account)
 
   editAccData->dialog  = dialog;
   editAccData->account = account;
-  
+
   if (last_width == 0)
     gnc_get_window_size("account_edit_win", &last_width, &last_height);
 

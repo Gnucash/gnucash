@@ -1,3 +1,19 @@
+2000-06-20  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-add.c: make this window modeless.
+	(gnc_ui_accWindow_ok_cb): don't let the user add an account with
+	the same fully-qualified name as another account.
+
+	* src/gnome/top-level.c (gnc_ui_destroy_all_subwindows): destroy
+	all the account add windows, too.
+
+	* src/gnome/window-main.c (gnc_refresh_main_window_title): new
+	function to put the current filename in the main window title.
+	(gnc_refresh_main_window): use the above when refreshing.
+
+	* src/FileDialog.c (gncFileSaveAs): refresh the main window after
+	'saving as' to update the filename in the main window.
+
 2000-06-19  Dave Peticolas  <dave@krondo.com>
 
 	* src/guile/gnc.gwp: take out GUIDs for Groups.

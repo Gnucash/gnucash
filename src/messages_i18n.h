@@ -65,6 +65,7 @@
 #define ACC_ADJUST_MSG    _("To adjust an account's balance, you must "\
                             "first\nchoose an account to adjust.\n")
 #define ACC_BAD_PARENT_MSG _("You must choose a valid parent account.")
+#define ACC_DUP_NAME_MSG  _("There is already an account with that name.")
 #define ACC_NEW_MSG       _("Do you want to create a new account?\n"\
                             "If not, then please select an account\n"\
                             "to open in the main window.\n")
@@ -655,6 +656,7 @@
 #define TRANSACTION_STR     _("Transaction")
 #define TRANSFER_STR_N     N_("Transfer")
 #define TRANSFER_STR        _(TRANSFER_STR_N)
+#define UNTITLED_STR        _("Untitled")
 #define VALUE_STR           _("Value")
 #define WARN_STR            _("WARNING")
 #define WEEKS_STR           _("Weeks")
