@@ -1,11 +1,12 @@
-INCLUDES = \
+
+CFLAGS = \
+  @CFLAGS@ \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/test-core \
   -I.. \
   -I../test-core \
-  ${GUILE_INCS}
-
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} 
+  ${GUILE_INCS} \
+  ${GLIB_CFLAGS} 
 
 LDADD = \
   ${top_srcdir}/src/gnc-module/libgncmodule.la \
@@ -30,9 +31,9 @@ TESTS = \
 
 TESTS_ENVIRONMENT = \
   GNC_MODULE_PATH="${top_srcdir}/src/engine" \
-  GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:..:../../gnc-module" \
+  GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:..:../../gnc-module:${top_srcdir}/src/scm:${top_srcdir}/src/guile" \
   LTDL_LIBRARY_PATH=../../gnc-module \
-  LD_LIBRARY_PATH=../../gnc-module:../../gnc-module/.libs
+  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:..:../.libs:${top_srcdir}/src/gnc-module:${top_srcdir}/src/gnc-module/.libs
 
 bin_PROGRAMS = \
   test-commodities \
@@ -47,4 +48,3 @@ bin_PROGRAMS = \
 EXTRA_DIST = \
   test-create-account \
   test-create-account.scm
-
