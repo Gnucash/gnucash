@@ -1,5 +1,9 @@
 2000-05-16  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* src/guile/guile-util.c: many bug fixes.
+
+	* src/scm/engine-interface.scm: fix list-ref arg order bug.
+
 	* src/SplitLedger.c (xaccSRCountRows): fix a bug when a two or
 	more splits from the same transaction are in the same account. Fix
 	other bugs including not accessing deleted splits/transactions.

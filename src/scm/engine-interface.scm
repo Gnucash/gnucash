@@ -191,7 +191,7 @@
     (cond ((< index 0) #f)
           ((not (pair? split-scms)) #f)
           ((>= index (length split-scms)) #f)
-          (else (list-ref index split-scms)))))
+          (else (list-ref split-scms index)))))
 
 (define (gnc:transaction-scm-get-other-split-scm trans-scm split-scm)
   (let ((split-scms (gnc:transaction-scm-get-split-scms trans-scm)))
