@@ -12,8 +12,7 @@ as Journal Entries in accounting practice), and Splits (known as Ledger
 Entries). These three entities are the central data structures of the
 GnuCash financial data model.
 
-The Engine code contains no GUI code whatsoever, and is essentially
-OS-neutral.
+The Engine code contains no GUI code whatsoever.
 
 @subsection Query
 

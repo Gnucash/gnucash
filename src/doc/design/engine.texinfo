@@ -1,2 +1,133 @@
 @node Engine, Register, Top Level, Top
 @chapter Engine
+
+The Enging provides an interface to a financial engine with three basic
+financial entities: Accounts, Transactions (known as Journal Entries in
+accounting practice), and Splits (known as Ledger Entries). These three
+entities are the central data structures of the GnuCash financial data
+model.
+
+In addition, the Engine provides the abstraction of Account Groups
+(collections of releated accounts) and Sessions. A Session abstracts
+a file-editing session allowing transparent support for locking and
+implementation with other backends such as SQL.
+
+The Engine code contains no GUI code whatsoever and is designed to
+be created as a shared library for use by other programs.
+
+@menu
+* Globally Unique Identifiers::  
+* Key-Value Pair Frames::       
+* Sessions::                    
+* Account Group::               
+* Account::                     
+* Transaction::                 
+* Split::                       
+@end menu
+
+
+@node Globally Unique Identifiers, Key-Value Pair Frames, Engine, Engine
+@section Globally Unique Identifiers
+@tindex GUID
+
+
+@node Key-Value Pair Frames, Sessions, Globally Unique Identifiers, Engine
+@section Key-Value Pair Frames
+@tindex kvp_frame
+@tindex kvp_value
+@tindex kvp_value_t
+@tindex kvp_list
+
+The number and types of data items which are associated with the
+financial abstractions (Accounts, Transactions, and Splits) can vary
+widely. For example, an Account which represents a user's checking
+account might need to store the bank name, a telephone number, and a
+username for online banking purposes. Another Account representing the
+user's ownership of a stock might need to store information about
+retrieving price quotes online such as the ticker symbol and the
+exchange.
+
+The GnuCash accounting entities use Key-Value Pair Frames (hereafter
+referred to as the datatype @code{kvp_frame}). A @code{kvp_frame} is
+a set of associations between character strings (keys) and
+@code{kvp_value} structures. A @code{kvp_value} is a union with
+possible types enumerated in the @code{kvp_value_t} enum which
+indicates the type of data stored in a @code{kvp_value} object.
+Possible @code{kvp_value_t} values and their meanings are:
+
+@table @code
+
+@item KVP_TYPE_NONE
+Indicates the abscence of a value in a kvp_frame.
+
+@item KVP_TYPE_INT64
+A @code{gint64} value.
+
+@item KVP_TYPE_FLOAT64
+A @code{double} value.
+
+@item KVP_TYPE_STRING
+A @code{char *} value of arbitrary length.
+
+@item KVP_TYPE_GUID
+A @code{GUID} value. @xref{Globally Unique Identifiers}.
+
+@item KVP_TYPE_BINARY
+Arbitrary binary data.
+
+@item KVP_TYPE_LIST
+A @code{kvp_list} item which contains a list of @code{kvp_value} items.
+
+@item KVP_TYPE_FRAME
+A @code{kvp_frame} object. Thus, frames may contain other frames in a
+recursive manner.
+
+@end table
+
+
+@node Sessions, Account Group, Key-Value Pair Frames, Engine
+@section Sessions
+@tindex Session
+
+The @dfn{Session} interface provides wrappers for initiating/concluding
+a file-editing session. This class provides several important services:
+
+@itemize
+
+@item
+Prevents multiple users from editing the same file at the same time,
+thus avoiding lost data due to race conditions. Thus an open session
+implies that the associated file is locked.
+
+@item
+Provides a search path for the file to be edited. This should simplify
+install & maintenance problems for naive users who may not have a good
+grasp on what a file ssytem is, or where they want to keep their data
+files.
+
+@end itemize
+
+The current implementation assumes the use of files and file locks;
+however, the API was designed to be general enough to allow the use
+of generic URL's, and/or implementation on top of SQL or other
+database/persistant object technology.
+
+
+@node Account Groups, Account, Sessions, Engine
+@section Account Groups
+@tindex AccountGroup
+
+
+@node Accounts, Transaction, Account Group, Engine
+@section Accounts
+@tindex Account
+
+
+@node Transactions, Split, Account, Engine
+@section Transactions
+@tindex Transaction
+
+
+@node Splits,  , Transaction, Engine
+@section Splits
+@tindex Split

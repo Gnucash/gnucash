@@ -93,6 +93,16 @@ of the @cite{GnuCash Design Document}, version @value{VERSION}.
 
 @detailmenu --- The Detailed Node Listing ---
 
+Engine
+
+* Globally Unique Identifiers::  
+* Key-Value Pair Frames::       
+* Sessions::                    
+* Account Group::               
+* Account::                     
+* Transaction::                 
+* Split::                       
+
 Register
 
 * Cells::                       
