@@ -47,7 +47,7 @@
 #include "gncObject.h"
 #include "QueryObject.h"
 
-static short module = MOD_ENGINE; 
+static short module = MOD_ACCOUNT; 
 
 
 /********************************************************************\
@@ -305,7 +305,8 @@ xaccFreeAccount (Account *acc)
     /* any split pointing at this account needs to be unmarked */
     for(lp = acc->splits; lp; lp = lp->next) 
     {
-      xaccSplitSetAccount((Split *) lp->data, NULL);
+      Split *s = lp->data;
+      s->acc = NULL;
     }
   
     acc->editlevel = 0;
@@ -947,6 +948,7 @@ xaccAccountInsertLot (Account *acc, GNCLot *lot)
    Account * old_acc = NULL;
 
    if (!acc || !lot) return;
+   ENTER ("(acc=%p, lot=%p)", acc, lot);
 
    /* pull it out of the old account */
    if (lot->account && lot->account != acc)
@@ -958,8 +960,13 @@ xaccAccountInsertLot (Account *acc, GNCLot *lot)
    }
    
    xaccAccountBeginEdit(acc);
-   lot->account = acc;
-   acc->lots = g_list_prepend (acc->lots, lot);
+
+   /* Avoid inserting into list more than once */
+   if (lot->account != acc)
+   {
+      acc->lots = g_list_prepend (acc->lots, lot);
+      lot->account = acc;
+   }
 
    /* Move all slots over to the new account.  At worst,
     * this is a no-op. */
@@ -976,6 +983,7 @@ xaccAccountInsertLot (Account *acc, GNCLot *lot)
    }
    xaccAccountCommitEdit(acc);
    xaccAccountCommitEdit(old_acc);
+   LEAVE ("(acc=%p, lot=%p)", acc, lot);
 }
 
 /********************************************************************\
@@ -988,6 +996,7 @@ xaccAccountInsertSplit (Account *acc, Split *split)
 
   if (!acc) return;
   if (!split) return;
+  ENTER ("(acc=%p, split=%p)", acc, split);
 
   /* check for book mix-up */
   g_return_if_fail (acc->book == split->book);
@@ -1015,7 +1024,11 @@ xaccAccountInsertSplit (Account *acc, Split *split)
       xaccSplitGetAccount(split) != acc)
     xaccAccountRemoveSplit (xaccSplitGetAccount(split), split);
 
-  xaccSplitSetAccount (split, acc);
+  split->acc = acc;
+  if (split->lot && (NULL == split->lot->account))
+  {
+		xaccAccountInsertLot (acc, split->lot);
+  }
 
   if (g_list_index(acc->splits, split) == -1)
   {
@@ -1035,6 +1048,7 @@ xaccAccountInsertSplit (Account *acc, Split *split)
 
   xaccTransCommitEdit(trans);
   xaccAccountCommitEdit(acc);
+  LEAVE ("(acc=%p, split=%p)", acc, split);
 }
 
 /********************************************************************\
@@ -1045,6 +1059,7 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
 {
   if (!acc) return;
   if (!split) return;
+  ENTER ("(acc=%p, split=%p)", acc, split);
 
   xaccAccountBeginEdit(acc);
   {
@@ -1065,7 +1080,7 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
       acc->balance_dirty = TRUE;
 
       xaccTransBeginEdit (trans);
-      xaccSplitSetAccount(split, NULL);
+      split->acc = NULL;
       if (split->lot)
       {
         gnc_lot_remove_split (split->lot, split);
@@ -1078,6 +1093,7 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
     }
   }
   xaccAccountCommitEdit(acc);
+  LEAVE ("(acc=%p, split=%p)", acc, split);
 }
 
 
@@ -1240,7 +1256,8 @@ static int revorder[NUM_ACCOUNT_TYPES] = {
 
 
 int
-xaccAccountOrder (Account **aa, Account **ab) {
+xaccAccountOrder (Account **aa, Account **ab) 
+{
   char *da, *db;
   char *endptr = NULL;
   int ta, tb;
@@ -1317,7 +1334,8 @@ xaccAccountSetType (Account *acc, GNCAccountType tip)
 }
 
 void 
-xaccAccountSetName (Account *acc, const char *str) {
+xaccAccountSetName (Account *acc, const char *str) 
+{
    char * tmp;
 
    if ((!acc) || (!str)) return;
@@ -1336,7 +1354,8 @@ xaccAccountSetName (Account *acc, const char *str) {
 }
 
 void 
-xaccAccountSetCode (Account *acc, const char *str) {
+xaccAccountSetCode (Account *acc, const char *str) 
+{
    char * tmp;
    if ((!acc) || (!str)) return;
 
@@ -1354,7 +1373,8 @@ xaccAccountSetCode (Account *acc, const char *str) {
 }
 
 void
-xaccAccountSetDescription (Account *acc, const char *str) {
+xaccAccountSetDescription (Account *acc, const char *str) 
+{
    char * tmp;
    if ((!acc) || (!str)) return;
 
@@ -1512,8 +1532,8 @@ DxaccAccountSetSecurity (Account *acc, gnc_commodity * security,
 }
 
 void 
-DxaccAccountSetCurrencySCU (Account * acc, int scu) {
-
+DxaccAccountSetCurrencySCU (Account * acc, int scu) 
+{
   if (!acc) return;
 
   xaccAccountBeginEdit(acc);
@@ -1525,7 +1545,8 @@ DxaccAccountSetCurrencySCU (Account * acc, int scu) {
 }
 
 int
-DxaccAccountGetCurrencySCU (Account * acc) {
+DxaccAccountGetCurrencySCU (Account * acc) 
+{
   kvp_value *v;
 
   if (!acc) return 0;
@@ -1720,7 +1741,8 @@ DxaccAccountGetSecurity (Account *acc, GNCBook *book)
 }
 
 gnc_numeric
-xaccAccountGetBalance (Account *acc) {
+xaccAccountGetBalance (Account *acc) 
+{
   if (!acc) return gnc_numeric_zero();
   return acc->balance;
 }
@@ -1989,8 +2011,10 @@ xaccAccountHasAncestor (Account *account, Account * ancestor)
 #define GNC_RETURN_ENUM_AS_STRING(x) case (x): return #x;
 
 char *
-xaccAccountTypeEnumAsString(GNCAccountType type) {
-  switch(type) {
+xaccAccountTypeEnumAsString(GNCAccountType type) 
+{
+  switch(type) 
+  {
     GNC_RETURN_ENUM_AS_STRING(NO_TYPE);
     GNC_RETURN_ENUM_AS_STRING(BANK);
     GNC_RETURN_ENUM_AS_STRING(CASH);
@@ -2022,7 +2046,8 @@ xaccAccountTypeEnumAsString(GNCAccountType type) {
   if(safe_strcmp(#x, (str)) == 0) { *type = x; return(TRUE); }
 
 gboolean
-xaccAccountStringToType(const char* str, GNCAccountType *type) {
+xaccAccountStringToType(const char* str, GNCAccountType *type)
+{
 
   GNC_RETURN_ON_MATCH(NO_TYPE);
   GNC_RETURN_ON_MATCH(BANK);
@@ -2163,6 +2188,7 @@ xaccAccountTypesCompatible (GNCAccountType parent_type,
 
 /********************************************************************\
 \********************************************************************/
+
 gboolean
 xaccAccountGetReconcileLastDate (Account *account, time_t *last_date)
 {
@@ -2209,6 +2235,7 @@ xaccAccountSetReconcileLastDate (Account *account, time_t last_date)
 
 /********************************************************************\
 \********************************************************************/
+
 gboolean
 xaccAccountGetReconcileLastInterval (Account *account, int *months, int *days)
 {
@@ -2554,6 +2581,7 @@ xaccAccountGetQuoteTZ(Account *acc)
 
 /********************************************************************\
 \********************************************************************/
+
 void
 xaccAccountSetReconcileChildrenStatus(Account *account, gboolean status)
 { 
@@ -2767,5 +2795,4 @@ gboolean xaccAccountRegister (void)
   return gncObjectRegister (&account_object_def);
 }
 
-/********************************************************************\
-\********************************************************************/
+/* ======================= END OF FILE =========================== */

@@ -81,7 +81,7 @@ gnc_book_insert_trans_clobber (GNCBook *book, Transaction *trans)
       else
       {
         /* force to null, so remove doesn't occur */
-        xaccSplitSetAccount (s, NULL);  
+        s->acc = NULL;
         xaccAccountInsertSplit (twin, s);
         twin->balance_dirty = TRUE;
         twin->sort_dirty = TRUE;
@@ -141,7 +141,7 @@ gnc_book_insert_trans (GNCBook *book, Transaction *trans)
       else
       {
         /* force to null, so remove doesn't occur */
-        xaccSplitSetAccount (s, NULL);  
+        s->acc = NULL;
         xaccAccountInsertSplit (twin, s);
         twin->balance_dirty = TRUE;
         twin->sort_dirty = TRUE;

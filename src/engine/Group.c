@@ -881,7 +881,7 @@ xaccGroupMergeAccounts (AccountGroup *grp)
 
           gnc_engine_generate_event (&xaccSplitGetAccount(split)->guid,
                                      GNC_EVENT_MODIFY);
-          xaccSplitSetAccount(split, NULL);
+          split->acc = NULL;
           xaccAccountInsertSplit (acc_a, split);
         }
 

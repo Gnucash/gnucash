@@ -44,13 +44,14 @@
 #include "TransactionP.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_ENGINE;
+static short module = MOD_LOT;
 
 /* ============================================================= */
 
 static void
 gnc_lot_init (GNCLot *lot, GNCBook *book)
 {
+   ENTER ("(lot=%p, book=%p)", lot, book);
    lot->kvp_data = NULL;
    lot->account = NULL;
    lot->splits = NULL;
@@ -59,6 +60,7 @@ gnc_lot_init (GNCLot *lot, GNCBook *book)
    lot->book = book;
    xaccGUIDNew (&lot->guid, book);
    xaccStoreEntity (book->entity_table, lot, &lot->guid, GNC_ID_LOT);
+   LEAVE ("(lot=%p, book=%p)", lot, book);
 }
 
 GNCLot *
@@ -78,6 +80,7 @@ gnc_lot_destroy (GNCLot *lot)
    GList *node;
    if (!lot) return;
    
+	ENTER ("(lot=%p)", lot);
    gnc_engine_generate_event (&lot->guid, GNC_EVENT_DESTROY);
 
    xaccRemoveEntity (lot->book->entity_table, &lot->guid);
@@ -203,6 +206,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
    Account * acc;
    if (!lot || !split) return;
 
+	ENTER ("(lot=%p, split=%p)", lot, split);
    acc = xaccSplitGetAccount (split);
    if (NULL == lot->account)
    {
@@ -231,6 +235,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
 {
    if (!lot || !split) return;
 
+	ENTER ("(lot=%p, split=%p)", lot, split);
    lot->splits = g_list_remove (lot->splits, split);
    split->lot = NULL;
 

@@ -104,7 +104,7 @@ static void
 xaccInitSplit(Split * split, GNCBook *book)
 {
   /* fill in some sane defaults */
-  xaccSplitSetAccount(split, NULL);
+  split->acc         = NULL;
   split->parent      = NULL;
   split->lot         = NULL;
 
@@ -210,7 +210,7 @@ xaccFreeSplit (Split *split)
   split->value       = gnc_numeric_zero();
   split->parent      = NULL;
   split->lot         = NULL;
-  xaccSplitSetAccount(split, NULL);
+  split->acc         = NULL;
   
   split->date_reconciled.tv_sec = 0;
   split->date_reconciled.tv_nsec = 0;
@@ -383,14 +383,6 @@ xaccSplitGetAccount (Split *s)
   if (!s) return NULL;
   return s->acc;
 }
-
-void
-xaccSplitSetAccount (Split *s, Account *act)
-{
-  if (!s) return;
-  s->acc = act;
-}
-
 
 /********************************************************************\
 \********************************************************************/
@@ -1869,7 +1861,7 @@ xaccTransRollbackEdit (Transaction *trans)
          Account *account = s->acc;
 
          s->parent = trans;
-         xaccSplitSetAccount(s, NULL);
+         s->acc = NULL;
          xaccStoreEntity(s->book->entity_table, s, &s->guid, GNC_ID_SPLIT);
          xaccAccountInsertSplit (account, s);
          mark_split (s);

@@ -1,7 +1,7 @@
 /********************************************************************\
  * gnc-engine-util.h -- GnuCash engine utility functions            *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998-2001 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 1998-2002 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -63,7 +63,9 @@ typedef enum
   MOD_SX      = 16,
   MOD_BOOK    = 17,
   MOD_TEST    = 18,
-  MOD_LAST    = 18
+  MOD_LOT     = 19,
+  MOD_ACCOUNT = 20,
+  MOD_LAST    = 20
 } gncModuleType;
 
 typedef enum

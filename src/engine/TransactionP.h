@@ -211,13 +211,6 @@ void xaccTransSetGUID (Transaction *trans, const GUID *guid);
  * call this on an existing split! */
 void xaccSplitSetGUID (Split *split, const GUID *guid);
 
-/* Set the value of the splits account pointer.  These are 'dangerous'
- * routines, because they fail to actually remove the split from
- * its old parent account, or insert it into its new parent account.
- * Using these incorrectly is guarenteed to scramble your data
- * or even lead to bizarre crashes and hangs!  Achtung! */
-void xaccSplitSetAccount(Split *s, Account *act);
-
 /* The xaccFreeSplit() method simply frees all memory associated
  * with the split.  It does not verify that the split isn't
  * referenced in some account.  If the split is referenced by an 
