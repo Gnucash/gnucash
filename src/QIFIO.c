@@ -21,12 +21,6 @@
  *   Author: Linas Vepstas                                          *
  * Internet: linas@linas.org                                        *
  *                                                                  *
- * NOTE: This software is *very alpha*, and is likely to core       *
- * dump on unexpected file formats, or otheriwse mangle and         *
- * loose data.  It sort-of works for the one QIF file its been      *
- * tested on ... The contents of this file are not well designed,   *
- * it is just a quick hack ...  a lot more qork is required.        *
- *                                                                  *
  * NOTE: the readxxxx/writexxxx functions changed the current       *
  *       position in the file, and so the order which these         *
  *       functions are called in important                          *
@@ -400,6 +394,190 @@ void xaccParseQIFDate (Date * dat, char * str)
 }
 
 /********************************************************************\
+ * xaccParseQIFAmount                                               * 
+ *   parses dollar ammount of the form DDD,DDD,DDD.CC               *
+ *                                                                  * 
+ * Args:   str -- pointer to string rep of sum                      * 
+ * Return: int -- in pennies                                        * 
+\********************************************************************/
+
+double xaccParseQIFAmount (char * str) 
+{
+   char * tok;
+   double dollars = 0.0;
+   int len;
+   int isneg = 0;
+
+   if (!str) return 0.0;
+
+   if ('-' == str[0]) {
+      isneg = 1;
+      str += sizeof(char);
+   }
+
+   tok = strchr (str, ',');
+   if (tok) {
+      *tok = 0x0;
+      dollars = ((double) (1000 * atoi (str)));
+      str = tok+sizeof(char);
+   }
+
+   tok = strchr (str, ',');
+   if (tok) {
+      *tok = 0x0;
+      dollars *= 1000.0;
+      dollars += ((double) (1000 * atoi (str)));
+      str = tok+sizeof(char);
+   }
+
+   tok = strchr (str, '.');
+   if (tok) {
+      *tok = 0x0;
+      dollars += ((double) (atoi (str)));
+      str = tok+sizeof(char);
+
+      tok = strchr (str, '\r');
+      if (!tok) {
+         tok = strchr (str, '\n');
+         if (!tok) return dollars;
+      }
+      *tok = 0x0;
+
+      /* strip off garbage at end of the line */
+      tok = strchr (str, '\n');
+      if (tok) *tok = 0x0;
+
+      tok = strchr (str, ' ');
+      if (tok) *tok = 0x0;
+
+      /* adjust for number of decimal places */
+      len = strlen(str);
+      if (6 == len) {
+         dollars += 0.000001 * ((double) atoi (str));
+      } else
+      if (5 == len) {
+         dollars += 0.00001 * ((double) atoi (str));
+      } else
+      if (4 == len) {
+         dollars += 0.0001 * ((double) atoi (str));
+      } else
+      if (3 == len) {
+         dollars += 0.001 * ((double) atoi (str));
+      } else
+      if (2 == len) {
+         dollars += 0.01 * ((double) atoi (str));
+      } else 
+      if (1 == len) {
+         dollars += 0.1 * ((double) atoi (str));
+      } 
+
+   } else {
+      tok = strchr (str, '\r');
+      if (tok) *tok = 0x0;
+      tok = strchr (str, '\n');
+      if (tok) *tok = 0x0;
+      tok = strchr (str, ' ');
+      if (tok) *tok = 0x0;
+
+      dollars += ((double) (atoi (str)));
+   }
+
+   if (isneg) dollars = -dollars;
+
+   return dollars;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+static int
+GuessAccountType (char * qifline)
+{
+   int acc_type = EXPENSE;
+
+   /* Guessing Bank is dangerous, since it could be "Bank Charges"
+    * if (strstr (qifline, "Bank")) {
+    *    acc_type = BANK;
+    * } else
+    */
+
+   if (strstr (qifline, "Bills")) {
+      acc_type = EXPENSE;
+   } else
+
+   if (strstr (qifline, "Cash")) {
+      acc_type = CASH;
+   } else
+
+   if (strstr (qifline, "Income")) {
+      acc_type = INCOME;
+   } else
+
+   if (strstr (qifline, "Card")) {
+      acc_type = CREDIT;
+   } else
+
+   {
+      acc_type = EXPENSE;
+   }
+
+   return acc_type;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+static Account *
+GetSubQIFAccount (AccountGroup *rootgrp, char *qifline, int acc_type)
+{
+   Account *xfer_acc;
+   char * sub_ptr;
+   int i;
+
+   /* search for colons in name -- this indicates a sub-account */
+   sub_ptr = strchr (qifline, ':');
+   if (sub_ptr) {
+      *sub_ptr = 0;
+   }
+
+   /* see if the account exists; but search only one level down,
+    * not the full account tree */
+   xfer_acc = NULL;
+   for (i=0; i<rootgrp->numAcc; i++) {
+      Account *acc = rootgrp->account[i];
+      if (!strcmp(acc->accountName, qifline)) {
+         xfer_acc = acc;
+         break;
+      }
+   }
+
+   /* if not, create it */
+   if (!xfer_acc) {
+      xfer_acc = mallocAccount ();
+      xfer_acc->accountName = XtNewString (qifline);
+      xfer_acc->description = XtNewString ("");
+      xfer_acc->notes = XtNewString ("");
+
+      if (0 > acc_type) acc_type = GuessAccountType (qifline);
+      xfer_acc->type = acc_type;
+      insertAccount (rootgrp, xfer_acc);
+   }
+
+   /* if this account name had sub-accounts, get those */
+   if (sub_ptr) {
+      sub_ptr ++;
+      rootgrp = xfer_acc->children;
+      if (!rootgrp) {
+         rootgrp = mallocAccountGroup();
+         xfer_acc->children = rootgrp;
+         rootgrp->parent = xfer_acc;
+      }
+      xfer_acc = GetSubQIFAccount (rootgrp, sub_ptr, acc_type);
+   }
+   return xfer_acc;
+}
+
+/********************************************************************\
 \********************************************************************/
 
 Account *
@@ -408,6 +586,7 @@ xaccGetXferQIFAccount (Account *acc, char *qifline)
    Account *xfer_acc;
    AccountGroup *rootgrp;
    char * tmp;
+   int acc_type = -1;
 
    /* remove square brackets from name, remove carriage return ... */
    qifline = &qifline[1];
@@ -415,27 +594,16 @@ xaccGetXferQIFAccount (Account *acc, char *qifline)
       qifline = &qifline[1];
       tmp = strchr (qifline, ']');
       if (tmp) *tmp = 0x0;
+      acc_type = BANK;
    }
    tmp = strchr (qifline, '\r');
    if(tmp) *tmp = 0x0;
    tmp = strchr (qifline, '\n');
    if(tmp) *tmp = 0x0;
 
-   /* see if the account exists */
-   rootgrp = xaccGetAccountRoot (acc);
-   xfer_acc = xaccGetAccountFromName (rootgrp, qifline);
-
-   /* if not, create it */
-   if (!xfer_acc) {
-      xfer_acc = xaccMallocAccount ();
-      xfer_acc->accountName = XtNewString (qifline);
-      xfer_acc->description = XtNewString ("");
-      xfer_acc->notes = XtNewString ("");
-
-      /* by default, assume its an expense-type category */
-      xfer_acc->type = EXPENSE;
-      insertAccount (rootgrp, xfer_acc);
-   }
+   /* see if the account exists, create it if not */
+   rootgrp = xaccGetRootGroupOfAcct (acc);
+   xfer_acc = GetSubQIFAccount (rootgrp, qifline, acc_type);
 
    return xfer_acc;
 }
@@ -462,6 +630,8 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
    tmp = strchr (qifline, '\n');
    if(tmp) *tmp = 0x0;
 
+   /* hack alert -- should search for colons in name, do an algorithm
+    * similar to Xfer routine above  */
    /* see if the account exists */
    rootgrp = xaccGetAccountRoot (acc);
    xfer_acc = xaccGetAccountFromName (rootgrp, qifline);
@@ -520,6 +690,14 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
    /* scan for transaction date, description, type */
    while (qifline) {
+     /* C == Cleared / Reconciled */
+     if ('C' == qifline [0]) {  
+         /* Quicken uses C* and Cx, while MS Money uses CX.
+          * I don't know what * and x are supposed to differentiate 
+          */
+        trans->reconciled = CREC;
+     } else 
+
      /* D == date */
      if ('D' == qifline [0]) {  
          xaccParseQIFDate (&(trans->date), &qifline[1]);
