@@ -1259,46 +1259,66 @@ gnc_split_register_get_tdebcred_entry (VirtualLocation virt_loc,
   return xaccPrintAmount (total, gnc_split_amount_print_info (split, FALSE));
 }
 
+/* Convert the amount/value of the Split for viewing in the account --
+ * in particular we want to convert the Split to be in to_commodity.
+ * Returns the amount.
+ */
 static gnc_numeric
 gnc_split_register_convert_amount (Split *split, Account * account,
 				   gnc_commodity * to_commodity)
 {
-  GNCPrice *price;
   GNCPriceDB *pricedb;
-  gnc_commodity *currency;
+  gnc_commodity *currency, *acc_com;
   Transaction *txn;
   Timespec date;
   gnc_numeric amount, convrate;
+  GList * price_list;
+  Account * split_acc;
   gboolean div = FALSE;
 
   amount = xaccSplitGetAmount (split);
 
-  /* If this split is attached to this account, then grab the amount
-   * because we know what it is
-   */
-  if (xaccSplitGetAccount (split) == account)
+  /* If this split is attached to this account, just return the amount */
+  split_acc = xaccSplitGetAccount (split);
+  if (split_acc == account)
     return amount;
 
-  /* otherwise, we need to compute the amount from the conversion
+  /* If split->account->commodity == to_commodity, return the amount */
+  acc_com = xaccAccountGetCommodity (split_acc);
+  if (acc_com && gnc_commodity_equal (acc_com, to_commodity))
+    return amount;
+
+  /* Ok, this split is not for the viewed account, and the commodity
+   * does not match.  So we need to do some conversion.
+   *
+   * First, we can cheat.  If this transaction is balanced and has
+   * exactly two splits, then we can implicitly determine the exchange
+   * rate and just return the 'other' split amount.
+   */
+  txn = xaccSplitGetParent (split);
+  if (txn && gnc_numeric_zero_p (xaccTransGetImbalance (txn))) {
+    Split *osplit = xaccSplitGetOtherSplit (split);
+
+    if (osplit)
+      return gnc_numeric_neg (xaccSplitGetAmount (osplit));
+  }
+
+  /* ... otherwise, we need to compute the amount from the conversion
    * rate from the pricedb
    */
   pricedb = gnc_book_get_pricedb (xaccSplitGetBook (split));
-  txn = xaccSplitGetParent (split);
   currency = xaccTransGetCurrency (txn);
   xaccTransGetDatePostedTS (txn, &date);
 
-  price = gnc_pricedb_lookup_nearest_in_time (pricedb, to_commodity,
-					      currency, date);
-  if (price)
+  price_list = gnc_pricedb_lookup_at_time (pricedb, to_commodity, currency, date);
+  if (price_list)
     div = TRUE;
   else
-    price = gnc_pricedb_lookup_nearest_in_time (pricedb, currency, to_commodity,
-						date);
-  if (!price)
+    price_list = gnc_pricedb_lookup_at_time (pricedb, currency, to_commodity, date);
+  if (!price_list)
     return amount;
 
-  convrate = gnc_price_get_value (price);
-  gnc_price_unref (price);
+  convrate = gnc_price_get_value (price_list->data);
 
   if (div)
     return gnc_numeric_div (amount, convrate,

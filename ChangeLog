@@ -1,3 +1,8 @@
+2002-11-30  Derek Atkins  <derek@ihtfp.com>
+	* src/register/ledger-core/split-register-model.c -- compute
+	  implicit exchange rates for balanced, two-split transactions.
+	  Fixes bug #99083 (for real)
+
 2002-11-30  Herbert Thoma  <herbie@hthoma.de>
 
 	* src/report/standard-reports/cash-flow.scm: Added new option
