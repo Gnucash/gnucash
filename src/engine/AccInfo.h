@@ -33,16 +33,12 @@
 
 #include "config.h"
 
-/* The account types. 
- * Note: the actual values of these are *very* important, 
- * as it is the values, not the enums, that are stored 
- * in the file format! 
- * hack alert  ... note that this is a bug that should be fixed ...
- */
-
 /*
  * The account types are used to determine how the transaction data
- * in the account is displayed.  
+ * in the account is displayed.   These values can be safely changed
+ * from one release to the next.  Note that if values are added,
+ * the file IO translation routines need to be updated. Note 
+ * also that GUI code depends on these numbers.
  */
 enum 
 {

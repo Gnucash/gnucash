@@ -131,6 +131,31 @@ static int writeString( int fd, char *str );
 static int writeDate( int fd, time_t secs );
 
 /*******************************************************/
+/* backwards compatibility definitions for numeric value 
+ * of account type.  These numbers are used (are to be
+ * used) no where else but here, precisely because they
+ * are non-portable.  The values of these defines MUST
+ * NOT BE CHANGED; andy changes WILL BREAK FILE COMPATIBILITY.
+ * YOu HAve BEen WARNed!!!!
+ */
+
+#define FF_BANK 	0
+#define FF_CASH 	1
+#define FF_ASSET	2
+#define FF_CREDIT 	3
+#define FF_LIABILITY 	4
+#define FF_STOCK	5
+#define FF_MUTUAL	6
+#define FF_INCOME	7
+#define FF_EXPENSE	8
+#define FF_EQUITY	9
+#define FF_CHECKING	10
+#define FF_SAVINGS	11
+#define FF_MONEYMRKT	12
+#define FF_CREDITLINE	13
+#define FF_CURRENCY	14
+
+/*******************************************************/
 
 int xaccGetFileIOError (void)
 {
@@ -343,7 +368,6 @@ readAccount( int fd, AccountGroup *grp, int token )
   int i;
   int numTrans, accID;
   Account *acc;
-  char acctype;
   char * tmp;
 
   ENTER ("readAccount");
@@ -364,9 +388,31 @@ readAccount( int fd, AccountGroup *grp, int token )
   err = read( fd, &(acc->flags), sizeof(char) );
   if( err != sizeof(char) ) { return NULL; }
   
-  err = read( fd, &(acctype), sizeof(char) );
-  if( err != sizeof(char) ) { return NULL; }
-  xaccAccountSetType (acc, acctype);
+  /* if (9999>= token) */ {
+    char ff_acctype;
+    int acctype;
+    err = read( fd, &(ff_acctype), sizeof(char) );
+    if( err != sizeof(char) ) { return NULL; }
+    switch (ff_acctype) {
+      case FF_BANK: 		{ acctype = BANK; 		break; }
+      case FF_CASH: 		{ acctype = CASH; 		break; }
+      case FF_ASSET: 		{ acctype = ASSET; 		break; }
+      case FF_CREDIT: 		{ acctype = CREDIT; 		break; }
+      case FF_LIABILITY:	{ acctype = LIABILITY; 		break; }
+      case FF_STOCK: 		{ acctype = STOCK; 		break; }
+      case FF_MUTUAL: 		{ acctype = MUTUAL; 		break; }
+      case FF_INCOME: 		{ acctype = INCOME; 		break; }
+      case FF_EXPENSE: 		{ acctype = EXPENSE; 		break; }
+      case FF_EQUITY: 		{ acctype = EQUITY; 		break; }
+      case FF_CHECKING: 	{ acctype = CHECKING; 		break; }
+      case FF_SAVINGS: 		{ acctype = SAVINGS; 		break; }
+      case FF_MONEYMRKT: 	{ acctype = MONEYMRKT;	 	break; }
+      case FF_CREDITLINE: 	{ acctype = CREDITLINE; 	break; }
+      case FF_CURRENCY: 	{ acctype = CURRENCY; 		break; }
+      default: return NULL;
+    }
+    xaccAccountSetType (acc, acctype);
+  }
   
   tmp = readString( fd, token );
   if( NULL == tmp)  { free (tmp);  return NULL; }
@@ -1144,7 +1190,6 @@ writeAccount( int fd, Account *acc )
   int i, numUnwrittenTrans, ntrans;
   int acc_id;
   int numChildren = 0;
-  char acctype;
   char * tmp;
   
   INFO_2 ("writeAccount(): writing acct %s \n", acc->accountName);
@@ -1159,10 +1204,32 @@ writeAccount( int fd, Account *acc )
   if( err != sizeof(char) )
     return -1;
   
-  acctype = (char) xaccAccountGetType (acc);
-  err = write( fd, &(acctype), sizeof(char) );
-  if( err != sizeof(char) )
-    return -1;
+  {
+    char ff_acctype;
+    int acctype;
+    acctype = xaccAccountGetType (acc);
+    switch (acctype) {
+      case BANK: 	{ ff_acctype = FF_BANK; 	break; }
+      case CASH: 	{ ff_acctype = FF_CASH; 	break; }
+      case ASSET: 	{ ff_acctype = FF_ASSET; 	break; }
+      case CREDIT: 	{ ff_acctype = FF_CREDIT; 	break; }
+      case LIABILITY:	{ ff_acctype = FF_LIABILITY; 	break; }
+      case STOCK: 	{ ff_acctype = FF_STOCK; 	break; }
+      case MUTUAL: 	{ ff_acctype = FF_MUTUAL; 	break; }
+      case INCOME: 	{ ff_acctype = FF_INCOME; 	break; }
+      case EXPENSE: 	{ ff_acctype = FF_EXPENSE; 	break; }
+      case EQUITY: 	{ ff_acctype = FF_EQUITY; 	break; }
+      case CHECKING: 	{ ff_acctype = FF_CHECKING; 	break; }
+      case SAVINGS: 	{ ff_acctype = FF_SAVINGS; 	break; }
+      case MONEYMRKT:	{ ff_acctype = FF_MONEYMRKT; 	break; }
+      case CREDITLINE: 	{ ff_acctype = FF_CREDITLINE; 	break; }
+      case CURRENCY: 	{ ff_acctype = FF_CURRENCY; 	break; }
+      default: return -1;
+    }
+    err = write( fd, &(ff_acctype), sizeof(char) );
+    if( err != sizeof(char) )
+      return -1;
+  }
   
   tmp = xaccAccountGetName (acc);
   err = writeString( fd, tmp );
