@@ -93,11 +93,27 @@ qof_instance_is_dirty (QofInstance *inst)
   return inst->dirty;
 }
 
+/* ========================================================== */
+/* setters */
+
 void
 qof_instance_mark_clean (QofInstance *inst)
 {
   if(!inst) return;
   inst->dirty = FALSE;
+}
+
+void 
+qof_instance_set_slots (QofInstance *inst, KvpFrame *frm)
+{
+  if (!inst) return;
+  if (inst->kvp_data && (inst->kvp_data != frm))
+  {
+    kvp_frame_delete(inst->kvp_data);
+  }
+                                                                                
+  inst->dirty = TRUE;
+  inst->kvp_data = frm;
 }
 
 /* ========================================================== */

@@ -212,12 +212,12 @@ struct transaction_s
 /* Set the transaction's GUID. This should only be done when reading
  * a transaction from a datafile, or some other external source. Never
  * call this on an existing transaction! */
-void xaccTransSetGUID (Transaction *trans, const GUID *guid);
+#define xaccTransSetGUID(t,g) qof_instance_set_guid(QOF_INSTANCE(t),g)
 
 /* Set the split's GUID. This should only be done when reading
  * a split from a datafile, or some other external source. Never
  * call this on an existing split! */
-void xaccSplitSetGUID (Split *split, const GUID *guid);
+#define xaccSplitSetGUID(s,g) qof_entity_set_guid(QOF_ENTITY(s),g)
 
 /* The xaccFreeSplit() method simply frees all memory associated
  * with the split.  It does not verify that the split isn't

@@ -436,7 +436,6 @@ xaccAccountDestroy (Account *acc)
   xaccAccountCommitEdit (acc);
 }
 
-
 void 
 xaccAccountSetVersion (Account *acc, gint32 vers)
 {
@@ -449,13 +448,6 @@ xaccAccountGetVersion (Account *acc)
 {
   if (!acc) return 0;
   return (acc->version);
-}
-
-QofBook *
-xaccAccountGetBook (Account *account)
-{
-  if (!account) return NULL;
-  return account->inst.book;
 }
 
 /********************************************************************\
@@ -706,56 +698,6 @@ xaccAccountBringUpToDate(Account *acc)
   xaccAccountRecomputeBalance(acc);
 }
 
-
-/********************************************************************
- * xaccAccountGetSlots
- ********************************************************************/
-
-KvpFrame * 
-xaccAccountGetSlots(Account * account) 
-{
-  if (!account) return NULL;
-  return(account->inst.kvp_data);
-}
-
-void
-xaccAccountSetSlots_nc(Account *account, KvpFrame *frame)
-{
-  if (!account) return;
-
-  xaccAccountBeginEdit (account);
-  if (account->inst.kvp_data && frame != account->inst.kvp_data)
-  {
-      kvp_frame_delete (account->inst.kvp_data);
-  }
-  account->inst.kvp_data = frame;
-  account->inst.dirty = TRUE;
-  mark_account (account);
-  xaccAccountCommitEdit (account);
-}
-
-
-/********************************************************************\
-\********************************************************************/
-
-const GUID *
-xaccAccountGetGUID (Account *account)
-{
-  if (!account)
-    return guid_null();
-
-  return &account->inst.entity.guid;
-}
-
-GUID
-xaccAccountReturnGUID (Account *account)
-{
-  if (!account)
-    return *guid_null();
-
-  return account->inst.entity.guid;
-}
-
 /********************************************************************\
 \********************************************************************/
 
@@ -782,12 +724,6 @@ xaccAccountLookup (const GUID *guid, QofBook *book)
   if (!guid || !book) return NULL;
   col = qof_book_get_collection (book, GNC_ID_ACCOUNT);
   return (Account *) qof_collection_lookup_entity (col, guid);
-}
-
-Account *
-xaccAccountLookupDirect (GUID guid, QofBook *book)
-{
-  return xaccAccountLookup (&guid, book);
 }
 
 /********************************************************************\
@@ -2929,7 +2865,6 @@ static QofObject account_object_def = {
 gboolean xaccAccountRegister (void)
 {
   static QofParam params[] = {
-    { ACCOUNT_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccAccountGetSlots, NULL },
     { ACCOUNT_NAME_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetName, NULL },
     { ACCOUNT_CODE_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetCode, NULL },
     { ACCOUNT_DESCRIPTION_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetDescription, NULL },
@@ -2942,6 +2877,7 @@ gboolean xaccAccountRegister (void)
     { ACCOUNT_TAX_RELATED, QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccAccountGetTaxRelated, NULL },
     { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_guid, NULL },
     { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { ACCOUNT_KVP, QOF_TYPE_KVP, (QofAccessFunc)qof_instance_get_slots, NULL },
     { NULL },
   };
 

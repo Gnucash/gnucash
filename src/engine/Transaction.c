@@ -92,7 +92,7 @@ G_INLINE_FUNC void check_open (Transaction *trans);
 G_INLINE_FUNC void
 check_open (Transaction *trans)
 {
-  if (trans && 0 >= trans->editlevel)
+  if (trans && 0 >= trans->inst.editlevel)
   {
     PERR ("transaction %p not open for editing", trans);
   }
@@ -106,6 +106,8 @@ check_open (Transaction *trans)
 static void
 xaccInitSplit(Split * split, QofBook *book)
 {
+  QofCollection *col;
+
   /* fill in some sane defaults */
   split->acc         = NULL;
   split->parent      = NULL;
@@ -132,8 +134,8 @@ xaccInitSplit(Split * split, QofBook *book)
   split->gains = GAINS_STATUS_UNKNOWN;
   split->gains_split = NULL;
 
-  qof_entity_guid_new (book->entity_table, &split->guid);
-  qof_entity_store(book->entity_table, split, &split->guid, GNC_ID_SPLIT);
+  col = qof_book_get_collection (book, GNC_ID_SPLIT);
+  qof_entity_init (&split->entity, GNC_ID_SPLIT, col);
 }
 
 /********************************************************************\
@@ -167,7 +169,7 @@ xaccDupeSplit (Split *s)
 
   /* copy(!) the guid and entity table. The cloned split is *not* unique,
    * is a sick twisted clone that holds 'undo' information. */
-  split->guid = s->guid;
+  split->entity.guid = s->entity.guid;
   split->book = s->book;
 
   split->parent = s->parent;
@@ -197,6 +199,7 @@ xaccDupeSplit (Split *s)
 static Split *
 xaccSplitClone (Split *s)
 {
+  QofCollection *col;
   Split *split = g_new0 (Split, 1);
 
   split->book                = s->book;
@@ -216,11 +219,12 @@ xaccSplitClone (Split *s)
   split->gains = GAINS_STATUS_UNKNOWN;
   split->gains_split = NULL;
 
-  qof_entity_guid_new(s->book->entity_table, &split->guid);
-  qof_entity_store(s->book->entity_table, split, &split->guid, GNC_ID_SPLIT);
+  col = qof_book_get_collection (s->book, GNC_ID_SPLIT);
+  qof_entity_init (&s->entity, GNC_ID_SPLIT, col);
 
   xaccAccountInsertSplit(s->acc, split);
-  if (s->lot) {
+  if (s->lot) 
+  {
     s->lot->splits = g_list_append (s->lot->splits, split);
     s->lot->is_closed = -1;
   }
@@ -331,7 +335,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
   if (sa == sb) return TRUE;
 
   if(check_guids) {
-    if(!guid_equal(&(sa->guid), &(sb->guid)))
+    if(!guid_equal(&(sa->entity.guid), &(sb->entity.guid)))
     {
       PWARN ("GUIDs differ");
       return FALSE;
@@ -446,51 +450,13 @@ xaccSplitGetAccount (const Split *s)
 /********************************************************************\
 \********************************************************************/
 
-const GUID *
-xaccSplitGetGUID (const Split *split)
-{
-  if (!split) return guid_null();
-  return &split->guid;
-}
-
-GUID
-xaccSplitReturnGUID (const Split *split)
-{
-  if (!split) return *guid_null();
-  return split->guid;
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void 
-xaccSplitSetGUID (Split *split, const GUID *guid)
-{
-  if (!split || !guid) return;
-  check_open (split->parent);
-  qof_entity_remove(split->book->entity_table, &split->guid);
-  split->guid = *guid;
-  qof_entity_store(split->book->entity_table, split,
-                  &split->guid, GNC_ID_SPLIT);
-}
-
-/********************************************************************\
-\********************************************************************/
-
 Split *
 xaccSplitLookup (const GUID *guid, QofBook *book)
 {
+  QofCollection *col;
   if (!guid || !book) return NULL;
-  return qof_entity_lookup(qof_book_get_entity_table (book),
-                          guid, GNC_ID_SPLIT);
-}
-
-Split *
-xaccSplitLookupDirect (GUID guid, QofBook *book)
-{
-  if (!book) return NULL;
-  return qof_entity_lookup(qof_book_get_entity_table (book),
-                          &guid, GNC_ID_SPLIT);
+  col = qof_book_get_collection (book, GNC_ID_SPLIT);
+  return (Split *) qof_collection_lookup_entity (col, guid);
 }
 
 /********************************************************************\
@@ -525,9 +491,11 @@ xaccSplitDetermineGainStatus (Split *split)
    }
    if (val)
    {
+      QofCollection *col;
+      col = qof_book_get_collection (split->book, GNC_ID_SPLIT);
       split->gains = GAINS_STATUS_GAINS;
-      other = qof_entity_lookup (qof_book_get_entity_table(split->book),
-                  kvp_value_get_guid (val), GNC_ID_SPLIT);
+      other = (Split *) qof_collection_lookup_entity (col, 
+                  kvp_value_get_guid (val));
       split->gains_split = other;
       return;
    }
@@ -591,13 +559,13 @@ G_INLINE_FUNC void gen_event (Split *split)
 
   if (trans)
   {
-    gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_MODIFY);
+    gnc_engine_gen_event (&trans->inst.entity, GNC_EVENT_MODIFY);
   }
 
   if (lot)
   {
     /* A change of value/amnt affects gains displat, etc. */
-    gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_MODIFY);
+    gnc_engine_gen_event (&lot->entity, GNC_EVENT_MODIFY);
   }
 }
 
@@ -619,11 +587,11 @@ G_INLINE_FUNC void gen_event_trans (Transaction *trans)
     if (lot)
     {
       /* A change of transaction date might affect opening date of lot */
-      gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_MODIFY);
+      gnc_engine_gen_event (&lot->entity, GNC_EVENT_MODIFY);
     }
   }
 
-  gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&trans->inst.entity, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\
@@ -687,8 +655,6 @@ xaccSplitSetSlots_nc(Split *s, KvpFrame *frm)
   }
 
   s->kvp_data = frm;
-
-  /* gen_event (s);  No! only in TransCommit() ! */
 }
 
 /********************************************************************\
@@ -857,17 +823,11 @@ xaccInitTransaction (Transaction * trans, QofBook *book)
   trans->version = 0;
   trans->version_check = 0;
   trans->marker = 0;
-  trans->editlevel = 0;
-  trans->do_free = FALSE;
   trans->orig = NULL;
 
-  trans->kvp_data = kvp_frame_new();
   trans->idata = 0;
 
-  trans->book = book;
-
-  qof_entity_guid_new (book->entity_table, &trans->guid);
-  qof_entity_store (book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
+  qof_instance_init (&trans->inst, GNC_ID_TRANS, book);
 }
 
 /********************************************************************\
@@ -882,7 +842,7 @@ xaccMallocTransaction (QofBook *book)
 
   trans = g_new(Transaction, 1);
   xaccInitTransaction (trans, book);
-  gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_CREATE);
+  gnc_engine_gen_event (&trans->inst.entity, GNC_EVENT_CREATE);
 
   return trans;
 }
@@ -894,18 +854,14 @@ xaccTransDump (Transaction *trans, const char *tag)
   GList *node;
 
   printf("%s Trans %p", tag, trans);
-  printf("    GUID:        %s\n", guid_to_string(&trans->guid));
-  printf("    Book:        %p\n", trans->book);
   printf("    Entered:     %s\n", gnc_print_date(trans->date_entered));
   printf("    Posted:      %s\n", gnc_print_date(trans->date_posted));
   printf("    Num:         %s\n", trans->num ? trans->num : "(null)");
   printf("    Description: %s\n", trans->description ? trans->description : "(null)");
-  printf("    KVP Data:    %p\n", trans->kvp_data);
   printf("    Currency:    %s\n", gnc_commodity_get_printname(trans->common_currency));
   printf("    version:     %x\n", trans->version);
   printf("    version_chk: %x\n", trans->version_check);
   printf("    editlevel:   %x\n", trans->editlevel);
-  printf("    do_free:     %x\n", trans->do_free);
   printf("    orig:        %p\n", trans->orig);
   printf("    idata:       %x\n", trans->idata);
   printf("    splits:      ");
@@ -921,13 +877,6 @@ xaccTransDump (Transaction *trans, const char *tag)
   printf("\n");
 }
 #endif
-
-QofBook *
-xaccTransGetBook (const Transaction *trans)
-{
-  if (!trans) return NULL;
-  return trans->book;
-}
 
 void
 xaccTransSortSplits (Transaction *trans)
@@ -976,8 +925,6 @@ xaccDupeTransaction (Transaction *t)
   trans->num         = g_cache_insert (gnc_engine_get_string_cache(), t->num);
   trans->description = g_cache_insert (gnc_engine_get_string_cache(), t->description);
 
-  trans->kvp_data = kvp_frame_copy (t->kvp_data);
-
   trans->splits = g_list_copy (t->splits);
   for (node = trans->splits; node; node = node->next)
   {
@@ -988,17 +935,17 @@ xaccDupeTransaction (Transaction *t)
   trans->date_posted = t->date_posted;
 
   trans->version = t->version;
-  trans->editlevel = 0;
-  trans->do_free = FALSE;
   trans->orig = NULL;
 
   trans->common_currency = t->common_currency;
 
-  /* copy(!) the guid and entity table.  The cloned transaction is
-   * *not* unique, it is a sick twisted clone that holds 'undo'
-   * information. */
-  trans->guid = t->guid;
-  trans->book = t->book;
+  /* copy(!) the guid.  The cloned transaction is **NOT** unique,
+   * it is a sick twisted clone that holds 'undo' information. */
+  trans->inst.entity = t->inst.entity;
+  trans->inst.book = t->inst.book;
+  trans->inst.editlevel = 0;
+  trans->inst.do_free = FALSE;
+  trans->inst.kvp_data = kvp_frame_copy (t->inst.kvp_data);
 
   return trans;
 }
@@ -1017,23 +964,20 @@ xaccTransClone (Transaction *t)
   gnc_engine_suspend_events();
   trans = g_new0 (Transaction, 1);
 
-  trans->book            = t->book;
   trans->date_entered    = t->date_entered;
   trans->date_posted     = t->date_posted;
   trans->num             = g_cache_insert (gnc_engine_get_string_cache(), t->num);
   trans->description     = g_cache_insert (gnc_engine_get_string_cache(), t->description);
-  trans->kvp_data        = kvp_frame_copy (t->kvp_data);
   trans->common_currency = t->common_currency;
   trans->version         = t->version;
   trans->version_check   = t->version_check;
 
-  trans->editlevel       = 0;
-  trans->do_free         = FALSE;
   trans->orig            = NULL;
   trans->idata           = 0;
 
-  qof_entity_guid_new (t->book->entity_table, &trans->guid);
-  qof_entity_store (t->book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
+  qof_instance_init (&trans->instance, GNC_ID_TRANS, t->inst.entity.collection);
+  kvp_frame_delete (trans->inst.kvp_data);
+  trans->inst.kvp_data    = kvp_frame_copy (t->inst.kvp_data);
 
   xaccTransBeginEdit(trans);
   for (node = t->splits; node; node = node->next)
@@ -1076,12 +1020,9 @@ xaccFreeTransaction (Transaction *trans)
   g_cache_remove(gnc_engine_get_string_cache(), trans->num);
   g_cache_remove(gnc_engine_get_string_cache(), trans->description);
 
-  kvp_frame_delete (trans->kvp_data);
-
   /* Just in case someone looks up freed memory ... */
   trans->num         = (char *) 1;
   trans->description = NULL;
-  trans->kvp_data    = NULL;
 
   trans->date_entered.tv_sec = 0;
   trans->date_entered.tv_nsec = 0;
@@ -1090,8 +1031,6 @@ xaccFreeTransaction (Transaction *trans)
   trans->date_posted.tv_nsec = 0;
 
   trans->version = 0;
-  trans->editlevel = 0;
-  trans->do_free = FALSE;
 
   if (trans->orig)
   {
@@ -1099,6 +1038,7 @@ xaccFreeTransaction (Transaction *trans)
     trans->orig = NULL;
   }
 
+  qof_instance_release (&trans->inst);
   g_free(trans);
 
   LEAVE ("addr=%p", trans);
@@ -1143,8 +1083,10 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
     return FALSE;
   }
 
+  if (ta == tb) return TRUE;
+
   if(check_guids) {
-    if(!guid_equal(&(ta->guid), &(tb->guid)))
+    if(!guid_equal(&(ta->inst.entity.guid), &(tb->inst.entity.guid)))
     {
       PWARN ("GUIDs differ");
       return FALSE;
@@ -1186,13 +1128,13 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
     return FALSE;
   }
 
-  if(kvp_frame_compare(ta->kvp_data, tb->kvp_data) != 0)
+  if(kvp_frame_compare(ta->inst.kvp_data, tb->inst.kvp_data) != 0)
   {
     char *frame_a;
     char *frame_b;
 
-    frame_a = kvp_frame_to_string (ta->kvp_data);
-    frame_b = kvp_frame_to_string (tb->kvp_data);
+    frame_a = kvp_frame_to_string (ta->inst.kvp_data);
+    frame_b = kvp_frame_to_string (tb->inst.kvp_data);
 
     PWARN ("kvp frames differ:\n%s\n\nvs\n\n%s", frame_a, frame_b);
 
@@ -1259,15 +1201,7 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
 }
 
 /********************************************************************
- * xaccTransGetSlots
  ********************************************************************/
-
-KvpFrame * 
-xaccTransGetSlots (const Transaction *t)
-{
-  if(!t) return NULL;
-  return(t->kvp_data);
-}
 
 void
 xaccTransSetSlots_nc (Transaction *t, KvpFrame *frm)
@@ -1282,25 +1216,6 @@ xaccTransSetSlots_nc (Transaction *t, KvpFrame *frm)
   }
 
   t->kvp_data = frm;
-
-  /* gen_event_trans (t);  No! only in TransCommit() ! */
-}
-
-/********************************************************************\
-\********************************************************************/
-
-const GUID *
-xaccTransGetGUID (const Transaction *trans)
-{
-  if (!trans) return guid_null();
-  return &trans->guid;
-}
-
-GUID
-xaccTransReturnGUID (const Transaction *trans)
-{
-  if (!trans) return *guid_null();
-  return trans->guid;
 }
 
 /********************************************************************\

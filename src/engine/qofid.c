@@ -97,7 +97,15 @@ qof_entity_set_guid (QofEntity *ent, const GUID *guid)
 GUID *
 qof_entity_get_guid (QofEntity *ent)
 {
+  if (!ent) return NULL;
   return &ent->guid;
+}
+
+GUID 
+qof_entity_return_guid (QofEntity *ent)
+{
+  if (!ent) return guid_null();
+  return ent->guid;
 }
 
 /* =============================================================== */

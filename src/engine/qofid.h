@@ -83,6 +83,7 @@ void qof_entity_init (QofEntity *, QofIdType, QofCollection *);
 void qof_entity_release (QofEntity *);
 
 GUID * qof_entity_get_guid (QofEntity *);
+GUID qof_entity_return_guid (QofEntity *);
 
 /** collections of entities */
 QofCollection * qof_collection_new (QofIdType type);

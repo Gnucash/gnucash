@@ -61,6 +61,9 @@ struct QofInstance_s
    gboolean  dirty;
 };
 
+/** reset the dirty flag */
 void qof_instance_mark_clean (QofInstance *);
+
+void qof_instance_set_slots (QofInstance *, KvpFrame *);
 
 #endif /* QOF_INSTANCE_P_H */
