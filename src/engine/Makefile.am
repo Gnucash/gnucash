@@ -120,6 +120,8 @@ EXTRA_DIST = \
 	ln -sf . g-wrapped 
 	touch .scm-links
 
+gncmod-engine.c: gw-engine.h
+
 gw-engine.scm gw-engine.c gw-engine.h: .scm-links gw-engine-spec.scm
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
