@@ -1,3 +1,8 @@
+2002-08-25  Chris Lyttle  <chris@wilddev.net>
+
+	* src/engine/sql/Makefile.am: remove RH libs fix
+	* src/engine/Makefile.am: add '.' to SUBDIRS (Derek Atkins)
+
 2002-08-25  Christian Stimming  <stimming@tuhh.de>
 
 	* po/glossary/pt.po: Updated Portuguese translation by Duarte
