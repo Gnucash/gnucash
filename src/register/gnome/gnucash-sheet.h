@@ -79,6 +79,9 @@ typedef struct
         SheetBlockStyle *style;
 
         GTable *block_cells;
+
+        gint origin_x; /* x origin of block */
+        gint origin_y; /* y origin of block */
 } SheetBlock;
 
 
@@ -191,6 +194,7 @@ const char * gnucash_sheet_modify_current_cell(GnucashSheet *sheet,
 
 void gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
                                          VirtualCellLocation vcell_loc);
+
 void gnucash_sheet_set_scroll_region (GnucashSheet *sheet);
 
 void gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet,

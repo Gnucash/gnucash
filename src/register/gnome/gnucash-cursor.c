@@ -195,7 +195,7 @@ gnucash_cursor_configure (GnucashCursor *cursor)
 
         item = cursor->cursor[GNUCASH_CURSOR_CELL];
         item_cursor = GNUCASH_ITEM_CURSOR(item);
-        
+
         gnucash_sheet_style_get_cell_pixel_rel_coords (cursor->style,
 						       item_cursor->row,
 						       item_cursor->col,
@@ -207,7 +207,7 @@ gnucash_cursor_configure (GnucashCursor *cursor)
         gnome_canvas_w2c (canvas, wx, wy, &item_cursor->x, &item_cursor->y);
         item_cursor->w = w;
         item_cursor->h = h;
-        
+
         item->x1 =  item_cursor->x;
         item->y1 =  item_cursor->y;
         item->x2 =  item_cursor->x+ w;

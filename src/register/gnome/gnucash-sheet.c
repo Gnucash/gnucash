@@ -366,11 +366,7 @@ gnucash_sheet_block_pixel_origin (GnucashSheet *sheet,
                                   VirtualCellLocation vcell_loc,
 				  gint *x, gint *y)
 {
-        VirtualCellLocation vc_loc;
-        SheetBlockStyle *style;
-        gint wx = 0;
-        gint wy = 0;
-        gint i;
+        SheetBlock *block;
 
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET(sheet));
@@ -378,28 +374,12 @@ gnucash_sheet_block_pixel_origin (GnucashSheet *sheet,
         if (gnucash_sheet_virt_cell_out_of_bounds (sheet, vcell_loc))
                 return;
 
-        vc_loc.virt_col = 0;
-        for (i = 1; i < vcell_loc.virt_row; i++) {
-                vc_loc.virt_row = i;
-                style = gnucash_sheet_get_style (sheet, vc_loc);
-                if (!style)
-                        return;
-                wy += style->dimensions->height;
-        }
-
-        vc_loc.virt_row = vcell_loc.virt_row;
-        for (i = 0; i < vcell_loc.virt_col; i++) {
-                vc_loc.virt_col = i;
-                style = gnucash_sheet_get_style (sheet, vc_loc);
-                if (!style)
-                        return;
-                wx += style->dimensions->width;
-        }
+        block = gnucash_sheet_get_block (sheet, vcell_loc);
 
         if (x)
-                *x = wx;
+                *x = block->origin_x;
         if (y)
-                *y = wy;
+                *y = block->origin_y;
 }
 
 
@@ -587,10 +567,11 @@ gnucash_sheet_vadjustment_value_changed (GtkAdjustment *adj,
 gint
 gnucash_sheet_row_get_distance (GnucashSheet *sheet, int v_row_a, int v_row_b)
 {
-        SheetBlockStyle *style;
-        int a, b;
-        int distance = 0;
+        SheetBlock *block;
+        VirtualCellLocation vcell_loc;
+        int distance;
         int sign = 1;
+        int a, b;
 
         g_return_val_if_fail (sheet != NULL, 0);
         g_return_val_if_fail (GNUCASH_IS_SHEET (sheet), 0);
@@ -608,11 +589,20 @@ gnucash_sheet_row_get_distance (GnucashSheet *sheet, int v_row_a, int v_row_b)
         a = MAX (a, 1);
         b = MIN (b, sheet->num_virt_rows);
 
-        for ( ; a < b; a++) {
-                VirtualCellLocation vcell_loc = { a, 0 };
-                style = gnucash_sheet_get_style(sheet, vcell_loc);
-                distance += style->dimensions->height;
-        }
+        if (a == b)
+                return 0;
+
+        vcell_loc.virt_row = MIN (b, sheet->num_virt_rows - 1);
+        vcell_loc.virt_col = 0;
+        block = gnucash_sheet_get_block (sheet, vcell_loc);
+        distance = block->origin_y;
+        if (b == sheet->num_virt_rows)
+                distance += block->style->dimensions->height;
+
+        vcell_loc.virt_row = a;
+        vcell_loc.virt_col = 0;
+        block = gnucash_sheet_get_block (sheet, vcell_loc);
+        distance -= block->origin_y;
 
         return sign * distance;
 }
@@ -621,10 +611,11 @@ gint
 gnucash_sheet_col_get_distance (GnucashSheet *sheet, int vrow,
                                 int v_col_a, int v_col_b)
 {
-        SheetBlockStyle *style;
-        int a, b;
-        int distance = 0;
+        SheetBlock *block;
+        VirtualCellLocation vcell_loc;
+        int distance;
         int sign = 1;
+        int a, b;
 
         g_return_val_if_fail (sheet != NULL, 0);
         g_return_val_if_fail (GNUCASH_IS_SHEET (sheet), 0);
@@ -643,16 +634,20 @@ gnucash_sheet_col_get_distance (GnucashSheet *sheet, int vrow,
         a = MAX (a, 0);
         b = MIN (b, sheet->num_virt_cols);
 
-        if (b <= a)
+        if (a == b)
                 return 0;
-        
-        for ( ; a < b; a++) {
-                VirtualCellLocation vcell_loc = { vrow, a };
-                style = gnucash_sheet_get_style(sheet, vcell_loc);
-                if (!style)
-                        return distance;
-                distance += style->dimensions->width;
-        }
+
+        vcell_loc.virt_row = vrow;
+        vcell_loc.virt_col = MIN (b, sheet->num_virt_cols - 1);
+        block = gnucash_sheet_get_block (sheet, vcell_loc);
+        distance = block->origin_x;
+        if (b == sheet->num_virt_cols)
+                distance += block->style->dimensions->width;
+
+        vcell_loc.virt_row = vrow;
+        vcell_loc.virt_col = a;
+        block = gnucash_sheet_get_block (sheet, vcell_loc);
+        distance -= block->origin_x;
 
         return sign * distance;
 }
@@ -692,10 +687,10 @@ gnucash_sheet_redraw_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc)
 						    vcell_loc.virt_row);
                 /* FIXME:  get_col_distance */
                 x = 0;
-                
+
                 x += canvas->layout.xoffset - canvas->zoom_xofs;
                 y += canvas->layout.yoffset - canvas->zoom_yofs;
-                
+
                 h = style->dimensions->height;
                 w = MIN(style->dimensions->width,
                         GTK_WIDGET(sheet)->allocation.width);
@@ -1972,34 +1967,35 @@ gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
         block = gnucash_sheet_get_block (sheet, vcell_loc);
         style = gnucash_sheet_get_style_from_table (sheet, vcell_loc);
 
-        if (block) {
-                table = sheet->table;
+        if (block == NULL)
+                return;
 
-                if (block->style  && block->style != style) {
+        table = sheet->table;
 
-                        /* the zero'th virtual row isn't drawn */
-                        if (vcell_loc.virt_row > 0)
-                                sheet->height -= block->style->dimensions->height;
-                        gnucash_style_unref (block->style);
-                        block->style = NULL;
-                }
+        if (block->style && (block->style != style)) {
 
-                if (block->style == NULL) {
-                        block->style = style;
-
-                        /* the zero'th virtual row isn't drawn */
-                        if (vcell_loc.virt_row > 0)
-                                sheet->height += block->style->dimensions->height;
-
-                        gnucash_style_ref(block->style);
-
-                        g_table_resize (block->block_cells,
-                                        block->style->nrows,
-                                        block->style->ncols);
-                }
-
-                gnucash_sheet_block_set_entries (sheet, vcell_loc);
+                /* the zero'th virtual row isn't drawn */
+                if (vcell_loc.virt_row > 0)
+                        sheet->height -= block->style->dimensions->height;
+                gnucash_style_unref (block->style);
+                block->style = NULL;
         }
+
+        if (block->style == NULL) {
+                block->style = style;
+
+                /* the zero'th virtual row isn't drawn */
+                if (vcell_loc.virt_row > 0)
+                        sheet->height += block->style->dimensions->height;
+
+                gnucash_style_ref(block->style);
+
+                g_table_resize (block->block_cells,
+                                block->style->nrows,
+                                block->style->ncols);
+        }
+
+        gnucash_sheet_block_set_entries (sheet, vcell_loc);
 }
 
 
@@ -2235,8 +2231,11 @@ void
 gnucash_sheet_table_load (GnucashSheet *sheet)
 {
         Table *table;
+        SheetBlock *block;
         gint num_virt_rows;
         gint i, j;
+        gint height;
+        gint width;
 
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET(sheet));
@@ -2253,11 +2252,27 @@ gnucash_sheet_table_load (GnucashSheet *sheet)
         gnucash_sheet_resize (sheet);
 
         /* fill it up */
-        for (i = 0; i < table->num_virt_rows; i++)
+        height = 0;
+        block = NULL;
+        for (i = 0; i < table->num_virt_rows; i++) {
+                width = 0;
+
                 for (j = 0; j < table->num_virt_cols; j++) {
                         VirtualCellLocation vcell_loc = { i, j };
+
                         gnucash_sheet_block_set_from_table (sheet, vcell_loc);
+
+                        block = gnucash_sheet_get_block (sheet, vcell_loc);
+
+                        block->origin_x = width;
+                        block->origin_y = height;
+
+                        width += block->style->dimensions->width;
                 }
+
+                if (i > 0)
+                        height += block->style->dimensions->height;
+        }
 
         gnucash_sheet_set_scroll_region (sheet);
 

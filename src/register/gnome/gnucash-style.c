@@ -714,7 +714,6 @@ gnucash_sheet_style_destroy (GnucashSheet *sheet, SheetBlockStyle *style)
 }
 
 
-/* FIXME:  maybe we can precompute these for each style */
 void
 gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
                                                gint cell_row, gint cell_col,
@@ -722,28 +721,16 @@ gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
                                                gint *w, gint *h)
 {
         CellDimensions *cd;
-        gint i;
 
         g_return_if_fail (style != NULL);
         g_return_if_fail (cell_row >= 0 && cell_row <= style->nrows);
         g_return_if_fail (cell_col >= 0 && cell_col <= style->ncols);
 
-        *y = 0;
-        for (i = 0; i < cell_row; i++) {
-                cd = gnucash_style_get_cell_dimensions (style, i, 0);
-                *y += cd->pixel_height;
-        }
-
-        cd = gnucash_style_get_cell_dimensions (style, cell_row, 0);
-        *h = cd->pixel_height;
-
-        *x = 0;
-        for (i = 0; i < cell_col; i++) {
-                cd = gnucash_style_get_cell_dimensions (style, cell_row, i);
-                *x += cd->pixel_width;
-        }
-
         cd = gnucash_style_get_cell_dimensions (style, cell_row, cell_col);
+
+        *x = cd->origin_x;
+        *y = cd->origin_y;
+        *h = cd->pixel_height;
         *w = cd->pixel_width;
 }
 
