@@ -22,7 +22,7 @@
 \********************************************************************/
 
 #include "config.h"
-
+#include <stdarg.h>
 #include <glib.h>
 
 #include "Account.h"
@@ -35,6 +35,7 @@
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
 #include "TransactionP.h"
+#include "messages.h"
 
 /* static short module = MOD_ENGINE; */
 
@@ -63,6 +64,45 @@ xaccBackendGetError (Backend *be)
    be->last_err = ERR_BACKEND_NO_ERR;
    return err;
 }
+
+void
+xaccBackendSetMessage (Backend *be, const char *format, ...) {
+   va_list args;
+   char * buffer;
+   
+   if (!be) return;
+  
+   va_start(args, format);
+   buffer = (char *)g_strdup_vprintf(format, args);
+   va_end(args);
+
+   /* If there's already something here, free it */
+   if (be->error_msg) g_free(be->error_msg);
+
+   be->error_msg = buffer;
+}
+
+/* This should always return a valid char * */
+char *
+xaccBackendGetMessage (Backend *be) {
+   char * msg;
+   
+   if (!be) return g_strdup(_("ERR_BACKEND_NO_BACKEND"));
+   if (!be->error_msg) return g_strdup(_("No error message"));
+
+   /* 
+    * Just return the contents of the error_msg and then set it to
+    * NULL.  This is necessary, because the Backends don't seem to
+    * have a destroy_backend function to take care if freeing stuff
+    * up.  The calling function should free the copy.
+    * Also, this is consistent with the xaccBackendGetError() popping.
+    */
+
+   msg = be->error_msg;
+   be->error_msg = NULL;
+   return msg;
+}
+
 
 /********************************************************************\
  * Fetch the backend                                                *
@@ -123,7 +163,8 @@ xaccInitBackend(Backend *be)
     be->process_events = NULL;
 
     be->last_err = ERR_BACKEND_NO_ERR;
-
+    if (be->error_msg) g_free (be->error_msg);
+    be->error_msg = NULL;
     be->percentage = NULL;
 
     be->export = NULL;

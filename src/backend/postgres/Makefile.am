@@ -22,7 +22,8 @@ libgncmod_backend_postgres_la_SOURCES = \
   price.c \
   txn.c \
   txnmass.c \
-  upgrade.c
+  upgrade.c \
+  putil.c
 
 noinst_HEADERS = \
   PostgresBackend.h \

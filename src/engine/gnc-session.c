@@ -320,6 +320,31 @@ gnc_session_load_backend(GNCSession * session, char * backend_name)
 
 /* ====================================================================== */
 
+static void
+gnc_session_destroy_backend (GNCSession *session)
+{
+  g_return_if_fail (session);
+
+  if (session->backend)
+  {
+    /* clear any error message */
+    char * msg = xaccBackendGetMessage (session->backend);
+    g_free (msg);
+
+    /* Then destroy the backend */
+    if (session->backend->destroy_backend)
+    {
+      session->backend->destroy_backend(session->backend);
+    }
+    else
+    {
+      g_free(session->backend);
+    }
+  }
+
+  session->backend = NULL;
+}
+
 void
 gnc_session_begin (GNCSession *session, const char * book_id, 
                    gboolean ignore_lock, gboolean create_if_nonexistent)
@@ -365,16 +390,7 @@ gnc_session_begin (GNCSession *session, const char * book_id,
   PINFO ("logpath=%s", session->logpath ? session->logpath : "(null)");
 
   /* destroy the old backend */
-  if (session->backend && session->backend->destroy_backend)
-  {
-      session->backend->destroy_backend(session->backend);
-  }
-  else
-  {
-      g_free(session->backend);
-  }
-
-  session->backend = NULL;
+  gnc_session_destroy_backend(session);
 
   /* check to see if this is a type we know how to handle */
   if (!g_strncasecmp(book_id, "file:", 5) ||
@@ -719,14 +735,7 @@ gnc_session_destroy (GNCSession *session)
   gnc_session_end (session);
 
   /* destroy the backend */
-  if (session->backend && session->backend->destroy_backend)
-  {
-      session->backend->destroy_backend(session->backend);
-  }
-  else
-  {
-      g_free(session->backend);
-  }
+  gnc_session_destroy_backend(session);
 
   for (node=session->books; node; node=node->next)
   {

@@ -1,3 +1,15 @@
+2002-11-16  Derek Atkins  <derek@ihtfp.com>
+
+	* Matthew Vanecek's patch:
+
+	The attached patch contains some immediate bug fixes for the SQL
+	back end, and it adds and error message string + accessor/mutator
+	to Backend.  Also, in xaccAccountCommitEdit(), added the use of
+	PWARN_GUI to display the error message.
+
+	The bug fixes in the SQL backend involved converting the *_QUERY
+	macros to functions.
+
 2002-11-15  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/window-register.c (gnc_register_delete_cb): Change the

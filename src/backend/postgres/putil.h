@@ -68,6 +68,9 @@ gpointer pgendGetResults (PGBackend *be,
  */
 gnc_commodity * gnc_string_to_commodity (const char *str, GNCBook *book);
 
+int sendQuery(PGBackend *be,char * buff);
+int finishQuery(PGBackend *be);
+
 /* hack alert -- calling PQfinish() on error is quite harsh, since 
  * all subsequent sql queries will fail. On the other hand, killing
  * anything that follows *is* a way of minimizing data corruption 
@@ -89,12 +92,11 @@ gnc_commodity * gnc_string_to_commodity (const char *str, GNCBook *book);
    rc = PQsendQuery (be->connection, buff);			\
    if (!rc)							\
    {								\
+      gchar * msg = (gchar *)PQerrorMessage(be->connection);    \
       /* hack alert -- we need kinder, gentler error handling */\
-      PERR("send query failed:\n"				\
-           "\t%s", PQerrorMessage(be->connection));		\
-      PQfinish (be->connection);				\
-      be->connection = NULL;					\
-      xaccBackendSetError (&be->be, ERR_BACKEND_CONN_LOST);	\
+      PERR("send query failed:\n\t%s", msg);			\
+      xaccBackendSetMessage (&be->be, msg);			\
+      xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);	\
       return retval;						\
    }								\
 }
@@ -112,6 +114,7 @@ gnc_commodity * gnc_string_to_commodity (const char *str, GNCBook *book);
    PGresult *result; 						\
    /* complete/commit the transaction, check the status */	\
    do {								\
+      gchar *msg = NULL;                                        \
       ExecStatusType status;					\
       result = PQgetResult((conn));				\
       if (!result) break;					\
@@ -121,9 +124,8 @@ gnc_commodity * gnc_string_to_commodity (const char *str, GNCBook *book);
          PERR("finish query failed:\n"				\
               "\t%s", PQerrorMessage((conn)));			\
          PQclear(result);					\
-         PQfinish ((conn));					\
-         be->connection = NULL;					\
-         xaccBackendSetError (&be->be, ERR_BACKEND_CONN_LOST);	\
+         xaccBackendSetMessage (&be->be, msg);			\
+         xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR); \
 	 break;							\
       }								\
       PQclear(result);						\

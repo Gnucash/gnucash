@@ -70,9 +70,9 @@
 #include "txnmass.h"
 #include "upgrade.h"
 
-#include "putil.h"
-
 static short module = MOD_BACKEND; 
+
+#include "putil.h"
 
 static void pgendInit (PGBackend *be);
 
@@ -1127,7 +1127,6 @@ pgendSessionGetMode (PGBackend *be)
          return "POLL";
       case MODE_EVENT:
          return "EVENT";
-      default:
    }
    return "ERROR";
 }

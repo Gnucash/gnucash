@@ -474,13 +474,20 @@ xaccAccountCommitEdit (Account *acc)
 
     if (ERR_BACKEND_NO_ERR != errcode)
     {
+      char * err;
       /* destroys must be rolled back as well ... ??? */
       acc->do_free = FALSE;
       /* XXX hack alert FIXME implement account rollback */
       PERR (" backend asked engine to rollback, but this isn't"
             " handled yet. Return code=%d", errcode);
+      err = xaccBackendGetMessage(be);
+      PWARN_GUI("Error occurred while saving Account:\n%d: %s",
+		      xaccBackendGetError(be), err);
+	    
       /* push error back onto the stack */
       xaccBackendSetError (be, errcode);
+      xaccBackendSetMessage (be, err);
+      g_free(err);
     }
   }
   acc->core_dirty = FALSE;

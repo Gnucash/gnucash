@@ -49,9 +49,9 @@
 #include "PostgresBackend.h"
 #include "price.h"
 
-#include "putil.h"
-
 static short module = MOD_BACKEND; 
+
+#include "putil.h"
 
 /* ============================================================= */
 /* ============================================================= */
@@ -577,6 +577,7 @@ pgend_account_commit_edit (Backend * bend,
 {
    AccountGroup *parent;
    char *p;
+   GNCBackendError err;
    PGBackend *be = (PGBackend *)bend;
 
    ENTER ("be=%p, acct=%p", be, acct);
@@ -624,15 +625,18 @@ pgend_account_commit_edit (Backend * bend,
    if (acct->do_free)
    {
       const GUID *guid = xaccAccountGetGUID(acct);
-      pgendStoreAuditAccount (be, acct, SQL_DELETE);
       pgendKVPDelete (be, acct->idata);
 
       p = be->buff; *p = 0;
       p = stpcpy (p, "DELETE FROM gncAccount WHERE accountGuid='");
       p = guid_to_string_buff (guid, p);
       p = stpcpy (p, "';");
-      SEND_QUERY (be,be->buff,);
-      FINISH_QUERY(be->connection);
+      err = sendQuery (be,be->buff);
+      if (err == ERR_BACKEND_NO_ERR) {
+          err = finishQuery(be);
+	  if (err > 0) /* if the number of rows deleted is 0 */
+              pgendStoreAuditAccount (be, acct, SQL_DELETE);
+      }
    }
    else
    {

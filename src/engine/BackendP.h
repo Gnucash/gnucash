@@ -257,6 +257,7 @@ struct backend_s
   GNCBePercentageFunc percentage;
 
   GNCBackendError last_err;
+  char * error_msg;
 
   /* Export should really _NOT_ be here, but is left here for now */
   void (*export) (Backend *, GNCBook *);
@@ -268,10 +269,18 @@ struct backend_s
  *
  * The xaccBackendGetError() routine pops an error code off the error
  *   stack.
+ *
+ * The xaccBackendSetMessage() assigns a string to the backend error
+ *   message.
+ *
+ * The xaccBackendGetMessage() pops the error message string from
+ *   the Backend.  This string should be freed with g_free().
  */
 
 void xaccBackendSetError (Backend *be, GNCBackendError err);
 GNCBackendError xaccBackendGetError (Backend *be);
+void xaccBackendSetMessage(Backend *be, const char *format, ...);
+char * xaccBackendGetMessage(Backend *be);
 
 /*
  * The xaccGetAccountBackend() subroutine will find the
