@@ -489,7 +489,7 @@ billterms_term_refresh (BillTermsWindow *btw)
 static void
 billterms_window_refresh (BillTermsWindow *btw)
 {
-  GList *list;
+  GList *list, *node;
   GtkAdjustment *vadjustment;
   GtkCList *clist;
   gfloat save_value = 0.0;
@@ -514,12 +514,14 @@ billterms_window_refresh (BillTermsWindow *btw)
   if (list == NULL) {
     btw->current_term = NULL;
     billterms_term_refresh (btw);
+  } else {
+    list = g_list_reverse (g_list_copy (list));
   }
 
-  for ( ; list; list = list->next) {
+  for ( node = list; node; node = node->next) {
     char *row_text[2];
     gint row;
-    GncBillTerm *term = list->data;
+    GncBillTerm *term = node->data;
 
     gnc_gui_component_watch_entity (btw->component_id,
 				    gncBillTermGetGUID (term),
@@ -532,6 +534,8 @@ billterms_window_refresh (BillTermsWindow *btw)
     gtk_clist_set_row_data (clist, row, term);
     gtk_clist_set_selectable (clist, row, TRUE);
   }
+
+  g_list_free (list);
 
   gnc_gui_component_watch_entity_type (btw->component_id,
 				       GNC_BILLTERM_MODULE_NAME,

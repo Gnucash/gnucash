@@ -293,7 +293,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
 static void
 tax_table_entries_refresh (TaxTableWindow *ttw, gboolean new_table)
 {
-  GList *list;
+  GList *list, *node;
   GtkAdjustment *vadjustment = NULL;
   GtkCList *clist;
   gfloat save_value = 0.0;
@@ -314,10 +314,13 @@ tax_table_entries_refresh (TaxTableWindow *ttw, gboolean new_table)
 
   /* Add the items to the list */
   list = gncTaxTableGetEntries (ttw->current_table);
-  for ( ; list; list = list->next) {
+  if (list)
+    list = g_list_reverse (g_list_copy (list));
+
+  for (node = list ; node; node = node->next) {
     char *row_text[3];
     gint row;
-    GncTaxTableEntry *entry = list->data;
+    GncTaxTableEntry *entry = node->data;
     Account *acc = gncTaxTableEntryGetAccount (entry);
     gnc_numeric amount = gncTaxTableEntryGetAmount (entry);
 
@@ -346,6 +349,8 @@ tax_table_entries_refresh (TaxTableWindow *ttw, gboolean new_table)
     g_free (row_text[1]);
   }
 
+  g_list_free (list);
+
   if (!new_table) {
     if (vadjustment) {
       save_value = CLAMP (save_value, vadjustment->lower,
@@ -373,7 +378,7 @@ tax_table_entries_refresh (TaxTableWindow *ttw, gboolean new_table)
 static void
 tax_table_window_refresh (TaxTableWindow *ttw)
 {
-  GList *list;
+  GList *list, *node;
   GtkAdjustment *vadjustment;
   GtkCList *clist;
   gfloat save_value = 0.0;
@@ -397,11 +402,13 @@ tax_table_window_refresh (TaxTableWindow *ttw)
   /* If there are no tables, clear the entries list */
   if (list == NULL)
     gtk_clist_clear (GTK_CLIST (ttw->entries_clist));
+  else
+    list = g_list_reverse (g_list_copy (list));
 
-  for ( ; list; list = list->next) {
+  for (node = list; node; node = node->next) {
     char *row_text[2];
     gint row;
-    GncTaxTable *table = list->data;
+    GncTaxTable *table = node->data;
 
     gnc_gui_component_watch_entity (ttw->component_id,
 				    gncTaxTableGetGUID (table),
@@ -414,6 +421,8 @@ tax_table_window_refresh (TaxTableWindow *ttw)
     gtk_clist_set_row_data (clist, row, table);
     gtk_clist_set_selectable (clist, row, TRUE);
   }
+
+  g_list_free (list);
 
   gnc_gui_component_watch_entity_type (ttw->component_id,
 				       GNC_TAXTABLE_MODULE_NAME,
