@@ -36,7 +36,8 @@
 #include <stdio.h>
 
 #include "gnc-currency-edit.h"
-#include "guile-util.h"
+#include "gnc-commodity.h"
+#include "gnc-engine.h"
 #include "messages.h"
 
 
@@ -86,47 +87,12 @@ gnc_currency_edit_class_init (GNCCurrencyEditClass *class)
 	object_class->destroy = gnc_currency_edit_destroy;
 }
 
-#if 0
-static void
-insert_text_cb(GtkEditable *editable, gchar *new_text, gint new_text_length,
-               gint *position, gpointer user_data)
-{
-        gint i;
-
-        for (i = 0; i < new_text_length; i++)
-        {
-                if (!isalpha(new_text[i]))
-                {
-                        gtk_signal_emit_stop_by_name(GTK_OBJECT(editable),
-                                                     "insert_text");
-                        return;
-                }
-
-                new_text[i] = toupper(new_text[i]);
-        }
-}
-#endif
-
 static void
 gnc_currency_edit_init (GNCCurrencyEdit *gce)
 {
-        GtkTooltips *tooltips;
-
         gtk_combo_set_use_arrows_always(GTK_COMBO(gce), TRUE);
         gtk_combo_set_value_in_list(GTK_COMBO(gce), FALSE, TRUE);
         gtk_combo_disable_activate(GTK_COMBO(gce));
-
-#if 0
-        gtk_entry_set_max_length(GTK_ENTRY(GTK_COMBO(gce)->entry), 3);
-
-        gtk_signal_connect(GTK_OBJECT(GTK_COMBO(gce)->entry),
-                           "insert_text", insert_text_cb, NULL);
-#endif
-
-        tooltips = gtk_tooltips_new();
-        gtk_tooltips_set_tip(GTK_TOOLTIPS(tooltips), GTK_COMBO(gce)->entry,
-                             _("Enter a 3-letter ISO currency code such "
-                               "as USD (US Dollars)"), NULL);
 }
 
 static void
@@ -140,25 +106,25 @@ gnc_currency_edit_destroy (GtkObject *object)
 }
 
 static void
-add_item(GNCCurrencyEdit *gce, const char *code, const char *desc)
+add_item(GNCCurrencyEdit *gce, gnc_commodity *commodity)
 {
         GtkWidget *item;
         GtkWidget *label;
-        char *string;
+        const char *string;
 
         item = gtk_list_item_new();
 
-        string = g_strconcat(desc, " (", code, ")", NULL);
+        string = gnc_commodity_get_printname (commodity);
 
         label = gtk_label_new(string);
         gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-        g_free(string);
 
         gtk_container_add(GTK_CONTAINER(item), label);
 
         gtk_widget_show_all(item);
 
-        gtk_combo_set_item_string(GTK_COMBO(gce), GTK_ITEM (item), code);
+        gtk_combo_set_item_string(GTK_COMBO(gce), GTK_ITEM (item),
+                                  gnc_commodity_get_mnemonic (commodity));
 
         gtk_container_add(GTK_CONTAINER(GTK_COMBO(gce)->list), item);
 }
@@ -166,80 +132,25 @@ add_item(GNCCurrencyEdit *gce, const char *code, const char *desc)
 static int
 currency_compare(gconstpointer a, gconstpointer b)
 {
-        return strcoll(a, b);
-}
-
-static void
-destroy_hash_node(gpointer key, gpointer value, gpointer data)
-{
-        free(key);
-        free(value);
+        return strcmp (gnc_commodity_get_fullname (a),
+                       gnc_commodity_get_fullname (b));
 }
 
 static void
 fill_currencies(GNCCurrencyEdit *gce)
 {
-        GHashTable *table;
-        GList *list = NULL;
+        GList *currencies;
         GList *node;
-        SCM currencies;
-        SCM item;
 
-        table = g_hash_table_new(g_str_hash, g_str_equal);
+        currencies = gnc_commodity_table_get_commodities
+                (gnc_engine_commodities (), GNC_COMMODITY_NS_ISO);
 
-        gnc_depend("currencies.scm");
+        currencies = g_list_sort(currencies, currency_compare);
 
-        currencies = gh_eval_str("gnc:*currencies*");
+        for (node = currencies; node != NULL; node = node->next)
+                add_item(gce, node->data);
 
-        while (gh_list_p(currencies) && !gh_null_p(currencies))
-        {
-                char *code;
-                char *desc;
-                SCM value;
-
-                item = gh_car(currencies);
-                currencies = gh_cdr(currencies);
-
-                if (!gh_pair_p(item))
-                        continue;
-
-                value = gh_car(item);
-                if (!gh_string_p(value))
-                        continue;
-
-                code = gh_scm2newstr(value, NULL);
-                if (code == NULL)
-                        continue;
-
-                value = gh_cdr(item);
-                if (!gh_string_p(value))
-                {
-                        free(code);
-                        continue;
-                }
-
-                desc = gh_scm2newstr(value, NULL);
-                if (desc == NULL)
-                {
-                        free(code);
-                        continue;
-                }
-
-                g_hash_table_insert(table, desc, code);
-                list = g_list_prepend(list, desc);
-        }
-
-        list = g_list_reverse(list);
-        list = g_list_sort(list, currency_compare);
-
-        for (node = list; node != NULL; node = node->next)
-                add_item(gce, g_hash_table_lookup(table, node->data),
-                         node->data);
-
-        g_hash_table_foreach(table, destroy_hash_node, NULL);
-        g_hash_table_destroy(table);
-
-        g_list_free(list);
+        g_list_free(currencies);
 }
 
 /**
@@ -251,7 +162,7 @@ fill_currencies(GNCCurrencyEdit *gce)
  * Returns a GNCCurrencyEdit widget.
  */
 GtkWidget *
-gnc_currency_edit_new ()
+gnc_currency_edit_new (void)
 {
 	GNCCurrencyEdit *gce;
 
@@ -263,21 +174,38 @@ gnc_currency_edit_new ()
 }
 
 /**
- * gnc_currency_edit_new:
+ * gnc_currency_edit_set_curreny:
  * @gce: the currency editor widget
- * @currency: the currency code to select
+ * @currency: the currency to select
  *
  * Sets the currency value of the widget to a particular currency.
- * 
+ *
  * Returns nothing.
  */
 void
-gnc_currency_edit_set_currency (GNCCurrencyEdit *gce, const gchar *currency)
+gnc_currency_edit_set_currency (GNCCurrencyEdit *gce,
+                                const char *currency_code)
 {
         g_return_if_fail(gce != NULL);
         g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
+        g_return_if_fail(currency_code != NULL);
 
-        gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(gce)->entry), currency);
+        gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(gce)->entry), currency_code);
+}
+
+/**
+ * gnc_currency_edit_get_curreny:
+ * @gce: the currency editor widget
+ *
+ * Returns the selected currency.
+ */
+const char *
+gnc_currency_edit_get_currency (GNCCurrencyEdit *gce)
+{
+        g_return_val_if_fail(gce != NULL, NULL);
+        g_return_val_if_fail(GNC_IS_CURRENCY_EDIT(gce), NULL);
+
+        return gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(gce)->entry));
 }
 
 /*

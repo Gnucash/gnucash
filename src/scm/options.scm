@@ -255,14 +255,15 @@
      (gnc:engine-commodities) (cadr scm) (caddr scm)))
 
    (let* ((value (commodity->scm default-value))
-          (value->string (lambda () (gnc:value->string value))))
+          (value->string (lambda ()
+                           (string-append "'" (gnc:value->string value)))))
      (gnc:make-option
       section name sort-tag 'commodity documentation-string
       (lambda () (scm->commodity value))
       (lambda (x) (if (and (pair? x) (eqv? (car x) 'commodity-scm))
                       (set! value x)
                       (set! value (commodity->scm x))))
-      (lambda () (commodity->scm default-value))
+      (lambda () default-value)
       (gnc:restore-form-generator value->string)
       (lambda (x) (list #t x))
       #f #f #f #f)))
@@ -766,6 +767,10 @@
        (lambda (option)
          (let ((value (gnc:option-value option))
                (default-value (gnc:option-default-value option)))
+;           (if (and (pair? default-value)); (eqv? 'commodity-scm (car value)))
+;               (begin
+;                 (write value) (newline)
+;                 (write default-value) (newline)))
            (if
             (not (equal? value default-value))
             (let* ((generator (gnc:option-generate-restore-form option))

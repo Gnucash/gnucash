@@ -81,9 +81,13 @@ void          gnc_commodity_table_remove(gnc_commodity_table * table,
 
 int       gnc_commodity_table_has_namespace(const gnc_commodity_table * t,
                                             const char * namespace);
+
+/* The next two functions return newly allocated lists which should
+ * be freed with g_list_free. */
 GList     * gnc_commodity_table_get_namespaces(const gnc_commodity_table * t);
 GList     * gnc_commodity_table_get_commodities(const gnc_commodity_table * t,
                                                 const char * namespace);
+
 void      gnc_commodity_table_add_namespace(gnc_commodity_table * table,
                                             const char * namespace);
 void      gnc_commodity_table_delete_namespace(gnc_commodity_table * t,

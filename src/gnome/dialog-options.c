@@ -31,7 +31,9 @@
 #include "gnc-helpers.h"
 #include "account-tree.h"
 #include "gnc-dateedit.h"
+#include "gnc-commodity-edit.h"
 #include "gnc-currency-edit.h"
+#include "gnc-engine.h"
 #include "global-options.h"
 #include "query-user.h"
 #include "window-help.h"
@@ -183,6 +185,17 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
                                      string);
       free(string);
     }
+    else
+      bad_value = TRUE;
+  }
+  else if (safe_strcmp(type, "commodity") == 0)
+  {
+    const gnc_commodity *commodity;
+
+    commodity = gnc_scm_to_commodity (value);
+    if (commodity)
+      gnc_commodity_edit_set_commodity(GNC_COMMODITY_EDIT (option->widget),
+                                       commodity);
     else
       bad_value = TRUE;
   }
@@ -432,13 +445,19 @@ gnc_option_get_ui_value(GNCOption *option)
   }
   else if (safe_strcmp(type, "currency") == 0)
   {
-    GtkEditable *editable;
-    char * string;
+    const char * string;
 
-    editable = GTK_EDITABLE(GTK_COMBO(option->widget)->entry);
-    string = gtk_editable_get_chars(editable, 0, -1);
+    string = gnc_currency_edit_get_currency(GNC_CURRENCY_EDIT(option->widget));
     result = gh_str02scm(string);
-    g_free(string);
+  }
+  else if (safe_strcmp(type, "commodity") == 0)
+  {
+    const gnc_commodity *commodity;
+
+    commodity =
+      gnc_commodity_edit_get_commodity(GNC_COMMODITY_EDIT(option->widget));
+
+    result = gnc_commodity_to_scm(commodity);
   }
   else if (safe_strcmp(type, "multichoice") == 0)
   {
@@ -1272,6 +1291,35 @@ gnc_option_set_ui_widget(GNCOption *option,
                            documentation, NULL);
 
     gtk_signal_connect(GTK_OBJECT(GTK_COMBO(value)->entry), "changed",
+		       GTK_SIGNAL_FUNC(gnc_option_changed_cb), option);
+
+    gtk_box_pack_start(GTK_BOX(enclosing), label, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(enclosing), value, FALSE, FALSE, 0);
+    gtk_box_pack_end(GTK_BOX(enclosing),
+		     gnc_option_create_default_button(option, tooltips),
+		     FALSE, FALSE, 0);
+  }
+  else if (safe_strcmp(type, "commodity") == 0)
+  {
+    GtkWidget *label;
+    gchar *colon_name;
+
+    colon_name = g_strconcat(name, ":", NULL);
+    label = gtk_label_new(colon_name);
+    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+    g_free(colon_name);
+
+    enclosing = gtk_hbox_new(FALSE, 5);
+    value = gnc_commodity_edit_new();
+
+    option->widget = value;
+    gnc_option_set_ui_value(option, FALSE);
+
+    if (documentation != NULL)
+      gtk_tooltips_set_tip(tooltips, GNC_COMMODITY_EDIT(value)->entry,
+                           documentation, NULL);
+
+    gtk_signal_connect(GTK_OBJECT(GNC_COMMODITY_EDIT(value)->entry), "changed",
 		       GTK_SIGNAL_FUNC(gnc_option_changed_cb), option);
 
     gtk_box_pack_start(GTK_BOX(enclosing), label, FALSE, FALSE, 0);

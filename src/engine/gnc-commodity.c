@@ -374,7 +374,7 @@ gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
 static void 
 hash_keys_helper(gpointer key, gpointer value, gpointer data) {
   GList ** l = data;
-  *l = g_list_append(*l, key);
+  *l = g_list_prepend(*l, key);
 }
 
 static GList *
@@ -387,7 +387,7 @@ g_hash_table_keys(GHashTable * table) {
 static void 
 hash_values_helper(gpointer key, gpointer value, gpointer data) {
   GList ** l = data;
-  *l = g_list_append(*l, value);
+  *l = g_list_prepend(*l, value);
 }
 
 static GList *
@@ -404,9 +404,12 @@ g_hash_table_values(GHashTable * table) {
 
 GList * 
 gnc_commodity_table_get_namespaces(const gnc_commodity_table * table) {
+  if (!table)
+    return NULL;
+
   return g_hash_table_keys(table->table);
 }
-    
+
 
 /********************************************************************
  * gnc_commodity_table_get_commodities
@@ -417,11 +420,11 @@ GList *
 gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
                                     const char * namespace) {
   gnc_commodity_namespace * ns = NULL; 
-  
+
   if(table) { 
     ns = g_hash_table_lookup(table->table, (gpointer)namespace);
   }
-  
+
   if(ns) {
     return g_hash_table_values(ns->table);
   }

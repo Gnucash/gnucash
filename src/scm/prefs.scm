@@ -180,10 +180,10 @@ the account instead of opening a register." #f))
 	#(locale "Locale" "Default system locale format"))))
 
 (gnc:register-configuration-option
- (gnc:make-commodity-option
+ (gnc:make-currency-option
   "International" "Default Currency"
   "b" "Default currency for new accounts"
-  (gnc:locale-default-currency)))
+  (gnc:commodity-get-mnemonic (gnc:locale-default-currency))))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option

@@ -31,6 +31,8 @@
 
 #include <gnome.h>
 
+#include "gnc-commodity.h"
+
 BEGIN_GNOME_DECLS
 
 
@@ -51,8 +53,9 @@ guint      gnc_currency_edit_get_type       (void);
 GtkWidget *gnc_currency_edit_new            (void);
 
 void       gnc_currency_edit_set_currency   (GNCCurrencyEdit *gce,
-                                             const gchar *currency);
+                                             const char *currency_code);
 
+const char * gnc_currency_edit_get_currency (GNCCurrencyEdit *gce);
 
 END_GNOME_DECLS
 
