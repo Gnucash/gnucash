@@ -55,6 +55,7 @@ libgncengine_la_LDFLAGS = -version-info 2:3:1
 noinst_HEADERS = \
   Account.h \
   AccountP.h \
+  Backend.h \
   BackendP.h \
   DateUtils.h \
   GNCId.h \
