@@ -1,3 +1,8 @@
+2003-08-15  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-backend.c: Workaround for
+	multi-currency importing bug as discussed on gnucash-devel.
+
 2003-08-13  Matt Vanecek   <mevanecek@yahoo.com>
 
     * src/backend/postgres/PostgresBackend.c pgend_session_begin():

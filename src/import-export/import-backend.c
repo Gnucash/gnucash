@@ -822,12 +822,22 @@ gnc_import_process_trans_clist (GtkCList *clist,
 	      (gnc_import_TransInfo_get_trans (trans_info), split);
 	    xaccAccountInsertSplit
 	      (gnc_import_TransInfo_get_destacc (trans_info), split);
-	    xaccSplitSetBaseValue
+	    /*xaccSplitSetBaseValue
 	      (split, 
 	       gnc_numeric_neg(xaccTransGetImbalance 
 			       (gnc_import_TransInfo_get_trans (trans_info))),
 	       xaccTransGetCurrency 
-	       (gnc_import_TransInfo_get_trans (trans_info)));
+	       (gnc_import_TransInfo_get_trans (trans_info)));*/
+	    /* This is a quick workaround for the bug described in
+	       http://gnucash.org/pipermail/gnucash-devel/2003-August/009982.html  */
+	    xaccSplitSetValue
+	      (split, 
+	       gnc_numeric_neg(xaccTransGetImbalance 
+			       (gnc_import_TransInfo_get_trans (trans_info))));
+	    xaccSplitSetAmount
+	      (split, 
+	       gnc_numeric_neg(xaccTransGetImbalance 
+			       (gnc_import_TransInfo_get_trans (trans_info))));
 	    xaccSplitSetMemo (split, _("Auto-Balance split"));
 	  }
 	  
