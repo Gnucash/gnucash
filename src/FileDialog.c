@@ -182,7 +182,7 @@ show_book_error (GNCBackendError io_error, const char *newfile)
       break;
 
     case ERR_SQL_DB_BUSY:
-      fmt = _("The SQL database is in use by other users,"
+      fmt = _("The SQL database is in use by other users, "
               "and the upgrade cannot be performed until they logoff.\n"
               "If there are currently no other users, consult the \n"
               "documentation to learn how to clear out dangling login\n"
