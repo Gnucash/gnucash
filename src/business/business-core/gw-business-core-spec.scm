@@ -91,6 +91,17 @@
     #t)
 
   ;;
+  ;; Define business Query parameters
+  ;;
+
+  (gw:wrap-value ws 'gnc:invoice-from-lot '<gnc:id-type> "INVOICE_FROM_LOT")
+  (gw:wrap-value ws 'gnc:invoice-from-txn '<gnc:id-type> "INVOICE_FROM_TXN")
+  (gw:wrap-value ws 'gnc:invoice-owner '<gnc:id-type> "INVOICE_OWNER")
+
+  (gw:wrap-value ws 'gnc:owner-from-lot '<gnc:id-type> "OWNER_FROM_LOT")
+  (gw:wrap-value ws 'gnc:owner-parentg '<gnc:id-type> "OWNER_PARENTG")
+
+  ;;
   ;; gncAddress.h
   ;;
 

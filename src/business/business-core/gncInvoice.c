@@ -848,6 +848,30 @@ static GncObject_t gncInvoiceDesc = {
   _gncInvoicePrintable,
 };
 
+static void
+reg_lot (void)
+{
+  static QueryObjectDef params[] = {
+    { INVOICE_FROM_LOT, _GNC_MOD_NAME,
+      (QueryAccess)gncInvoiceGetInvoiceFromLot },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (GNC_ID_LOT, NULL, params);
+}
+
+static void
+reg_txn (void)
+{
+  static QueryObjectDef params[] = {
+    { INVOICE_FROM_TXN, _GNC_MOD_NAME,
+      (QueryAccess)gncInvoiceGetInvoiceFromTxn },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (GNC_ID_TRANS, NULL, params);
+}
+
 gboolean gncInvoiceRegister (void)
 {
   static QueryObjectDef params[] = {
@@ -869,6 +893,8 @@ gboolean gncInvoiceRegister (void)
   };
 
   gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncInvoiceCompare, params);
+  reg_lot ();
+  reg_txn ();
 
   return gncObjectRegister (&gncInvoiceDesc);
 }

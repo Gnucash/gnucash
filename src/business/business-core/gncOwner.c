@@ -277,6 +277,32 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner)
   return (owner->owner.undefined != NULL);
 }
 
+/* XXX: Yea, this is broken, but it should work fine for Queries.
+ * We're single-threaded, right?
+ */
+static GncOwner *
+owner_from_lot (GNCLot *lot)
+{
+  static GncOwner owner;
+
+  if (!lot) return NULL;
+  if (gncOwnerGetOwnerFromLot (lot, &owner))
+    return &owner;
+
+  return NULL;
+}
+
+static void
+reg_lot (void)
+{
+  static QueryObjectDef params[] = {
+    { OWNER_FROM_LOT, _GNC_MOD_NAME, (QueryAccess)owner_from_lot },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (GNC_ID_LOT, NULL, params);
+}
+
 gboolean gncOwnerRegister (void)
 {
   static QueryObjectDef params[] = {
@@ -293,6 +319,7 @@ gboolean gncOwnerRegister (void)
   };
 
   gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncOwnerCompare, params);
+  reg_lot ();
 
   return TRUE;
 }

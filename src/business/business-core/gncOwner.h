@@ -79,6 +79,8 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner);
 #define OWNER_PARENTG	"parent-guid"
 #define OWNER_NAME	"name"
 
+#define OWNER_FROM_LOT	"owner-from-lot"
+
 /*
  * These two functions are mainly for the convenience of scheme code.
  * Normal C code has no need to ever use these two functions, and rather
