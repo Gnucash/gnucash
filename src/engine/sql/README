@@ -219,14 +219,12 @@ This list only affects the multi-user and advanced/optional features.
 Most of the items on this list are 'critical' in the sense that
 multi-user mode is fundamentally broken unless they are fixed. 
 
--- checkpoint balance is broken for the type of queries used in
-   reports. 
-
 -- checkpoint balance is broken for when register asks for only a small
    number of splits.
 
--- provide support for more query types in gncquery.c
-   (reports are currently broken as a result).
+-- add support for price queries.
+
+-- provide support for remainder of query types in gncquery.c
 
 -- if another user deletes a transaction, or an account, there is no way
    for us to know.  Thus, any sort of sync will probably (incorrectly)
@@ -243,28 +241,8 @@ multi-user mode is fundamentally broken unless they are fixed.
    as to what this is about.  For the first pass, this is not a 
    serious issue; its a 'nice to have' thing.
 
--- add support for price queries.
-
 -- add versioning support for price db.  We should add version numbers 
    to the prices, and check version numbers when updating prices.
-
--- multi-user 'save-as' is incorrect:
-   As it currently works, save-as (sync) is a mass-copy of all data 
-   out of the engine into the named storage location.  If the indicated 
-   storage location doesn't exist, its created, and all of the engine 
-   data is copied into it.  If the storage location (i.e. database) 
-   does exist, and contains data, then the engine contents are merged 
-   into it.
-
-   From the engine point of view, the above is the easiest thing to do.
-   However, in the multi-user mode, it may not be what the user is 
-   expecting.  In the multi-user mode, the engine would not contain 
-   a full copy of the database data; instead, it contains only a subset. 
-   A 'save as', if implemented as above, would save only that subset, 
-   instead of all of the data.   If the user thought 'save as'
-   means the same thing as 'copy', they would be sorely disappointed. 
-   I don't currently have an opinion on the 'best' way of dealing with 
-   this situation.
 
 -- implement account rollback (i.e. if other user has modified the
    account, we need to do something to merge their work into ours...)
@@ -327,5 +305,24 @@ multi-user mode is fundamentally broken unless they are fixed.
 -- use version numbers for commodities.  Right now, multi-user
    updates of commodities are not detected (this seem OK for
    now, since this is a rare occurrence, right ???)
+
+-- multi-user 'save-as' has unexpected results:
+   As it currently works, save-as (sync) is a mass-copy of all data 
+   out of the engine into the named storage location.  If the indicated 
+   storage location doesn't exist, its created, and all of the engine 
+   data is copied into it.  If the storage location (i.e. database) 
+   does exist, and contains data, then the engine contents are merged 
+   into it.
+
+   From the engine point of view, the above is the easiest thing to do.
+   However, in the multi-user mode, it may not be what the user is 
+   expecting.  In the multi-user mode, the engine would not contain 
+   a full copy of the database data; instead, it contains only a subset. 
+   A 'save as', if implemented as above, would save only that subset, 
+   instead of all of the data.   If the user thought 'save as'
+   means the same thing as 'copy', and hoped to copy all of the sql 
+   data to a file, they would be sorely disappointed.  I don't 
+   currently have an opinion on the 'best' way of dealing with this 
+   situation.  A reasonable solution may well be 'don't do that'.
 
 
