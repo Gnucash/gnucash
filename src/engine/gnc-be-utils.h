@@ -47,24 +47,24 @@
  * The caller should use this macro first and then perform any other operations.
  */
 
-#define GNC_BEGIN_EDIT(obj,type) { \
-  QofBackend * be; \
-  if (!(obj)) return; \
-  \
-  (obj)->editlevel++; \
-  if (1 < (obj)->editlevel) return; \
-  \
-  if (0 >= (obj)->editlevel) \
-  { \
+#define GNC_BEGIN_EDIT(obj,type) {                         \
+  QofBackend * be;                                         \
+  if (!(obj)) return;                                      \
+                                                           \
+  (obj)->editlevel++;                                      \
+  if (1 < (obj)->editlevel) return;                        \
+                                                           \
+  if (0 >= (obj)->editlevel)                               \
+  {                                                        \
     PERR ("unbalanced call - resetting (was %d)", (obj)->editlevel); \
-    (obj)->editlevel = 1; \
-  } \
-  \
+    (obj)->editlevel = 1;                                  \
+  }                                                        \
+                                                           \
   /* See if there's a backend.  If there is, invoke it. */ \
-  be = gnc_book_get_backend ((obj)->book); \
-  if (be && be->begin) { \
-     (be->begin) (be, (type), (obj)); \
-  } \
+  be = qof_book_get_backend ((obj)->book);                 \
+  if (be && be->begin) {                                   \
+     (be->begin) (be, (type), (obj));                      \
+  }                                                        \
 }
 
 
@@ -92,17 +92,17 @@
  *        obj: the object being committed
  */
 
-#define GNC_COMMIT_EDIT_PART1(obj) { \
-  if (!(obj)) return; \
-  \
-  (obj)->editlevel--; \
-  if (0 < (obj)->editlevel) return; \
-  \
-  if (0 > (obj)->editlevel) \
-  { \
+#define GNC_COMMIT_EDIT_PART1(obj) {             \
+  if (!(obj)) return;                            \
+                                                 \
+  (obj)->editlevel--;                            \
+  if (0 < (obj)->editlevel) return;              \
+                                                 \
+  if (0 > (obj)->editlevel)                      \
+  {                                              \
     PERR ("unbalanced call - resetting (was %d)", (obj)->editlevel); \
-    (obj)->editlevel = 0; \
-  } \
+    (obj)->editlevel = 0;                        \
+  }                                              \
 }
 
 /*
@@ -128,7 +128,7 @@
   QofBackend * be; \
   \
   /* See if there's a backend.  If there is, invoke it. */ \
-  be = gnc_book_get_backend ((obj)->book); \
+  be = qof_book_get_backend ((obj)->book); \
   if (be && be->commit) \
   { \
     QofBackendError errcode; \

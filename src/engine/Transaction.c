@@ -554,7 +554,7 @@ G_INLINE_FUNC void mark_split (Split *s)
 {
   Account *account = s->acc;
 
-  if (account && !account->do_free)
+  if (account && !account->inst.do_free)
   {
     account->balance_dirty = TRUE;
     account->sort_dirty = TRUE;
@@ -586,7 +586,7 @@ G_INLINE_FUNC void gen_event (Split *split)
   if (account)
   {
     xaccGroupMarkNotSaved (account->parent);
-    gnc_engine_generate_event (&account->guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
+    gnc_engine_generate_event (&account->inst.guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
   }
 
   if (trans)
@@ -614,7 +614,7 @@ G_INLINE_FUNC void gen_event_trans (Transaction *trans)
     if (account)
     {
       xaccGroupMarkNotSaved (account->parent);
-      gnc_engine_generate_event (&account->guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
+      gnc_engine_generate_event (&account->inst.guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
     }
     if (lot)
     {
@@ -2089,7 +2089,7 @@ xaccSplitDestroy (Split *split)
 
    acc = split->acc;
    trans = split->parent;
-   if (acc && !acc->do_free && xaccTransGetReadOnly (trans))
+   if (acc && !acc->inst.do_free && xaccTransGetReadOnly (trans))
        return FALSE;
 
    check_open (trans);

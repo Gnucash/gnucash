@@ -93,7 +93,20 @@ KvpFrame* qof_instance_get_slots (QofInstance *);
  */
 void qof_instance_gemini (QofInstance *to, QofInstance *from);
 
-/** Look up the gemini'ed twin to 'src' in the book 'book'. */
+/** The qof_instance_lookup_twin() routine will find the "twin" of this
+ *    instance 'src' in the given other 'book' (if the twin exists).
+ *
+ *    When instances are gemini'ed or cloned, both of the pair are marked
+ *    with the guid of thier copy, thus allowing the sibling-copy of
+ *    an instance to be found.  Since the sibling may end up in a
+ *    different book, we need a way of finding it, given only that we
+ *    know the book, and that we know its twin.
+ *
+ *    That's what this routine does.  Given some book 'book', and an
+ *    instance 'src', it will find the sibling instance of 'src' that is
+ *    in 'book', and return it.  If not found, it returns NULL.  This
+ *    routine uses the 'gemini' kvp values to do its work. 
+ */
 QofInstance * qof_instance_lookup_twin (QofInstance *src, QofBook *book);
 
 #endif /* QOF_INSTANCE_H */

@@ -265,7 +265,7 @@ xaccAccountSetDefaultGainAccount (Account *acc, Account *gain_acct)
   xaccAccountBeginEdit (acc);
   vvv = kvp_value_new_guid (xaccAccountGetGUID (gain_acct));
   kvp_frame_set_slot_nc (cwd, cur_name, vvv);
-  xaccAccountSetSlots_nc (acc, acc->kvp_data);
+  xaccAccountSetSlots_nc (acc, acc->inst.kvp_data);
   xaccAccountCommitEdit (acc);
 }
 
@@ -290,7 +290,7 @@ xaccAccountGetDefaultGainAccount (Account *acc, gnc_commodity * currency)
   vvv = kvp_frame_get_slot (cwd, cur_name);
   gain_acct_guid = kvp_value_get_guid (vvv);
 
-  gain_acct = xaccAccountLookup (gain_acct_guid, acc->book);
+  gain_acct = xaccAccountLookup (gain_acct_guid, acc->inst.book);
   return gain_acct;
 }
 
@@ -318,7 +318,7 @@ GetOrMakeGainAcct (Account *acc, gnc_commodity * currency)
   vvv = kvp_frame_get_slot (cwd, cur_name);
   gain_acct_guid = kvp_value_get_guid (vvv);
 
-  gain_acct = xaccAccountLookup (gain_acct_guid, acc->book);
+  gain_acct = xaccAccountLookup (gain_acct_guid, acc->inst.book);
 
   /* If there is no default place to put gains/losses 
    * for this account, then create such a place */
@@ -332,7 +332,7 @@ GetOrMakeGainAcct (Account *acc, gnc_commodity * currency)
 
       vvv = kvp_value_new_guid (xaccAccountGetGUID (gain_acct));
       kvp_frame_set_slot_nc (cwd, cur_name, vvv);
-      xaccAccountSetSlots_nc (acc, acc->kvp_data);
+      xaccAccountSetSlots_nc (acc, acc->inst.kvp_data);
       xaccAccountCommitEdit (acc);
 
   }
@@ -454,7 +454,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
 
       /* Put the remainder of the balance into a new split, 
        * which is in other respects just a clone of this one. */
-      new_split = xaccMallocSplit (acc->book);
+      new_split = xaccMallocSplit (acc->inst.book);
 
       /* Copy most of the split attributes */
       xaccSplitSetMemo (new_split, xaccSplitGetMemo (split));
@@ -500,7 +500,7 @@ MakeDefaultLot (Account *acc)
    gint64 id;
    char buff[200];
 
-   lot = gnc_lot_new (acc->book);
+   lot = gnc_lot_new (acc->inst.book);
 
    /* Provide a reasonable title for the new lot */
    id = kvp_frame_get_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id");
@@ -763,7 +763,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       if (NULL == lot_split)
       {
          Account *lot_acc = lot->account;
-         QofBook *book = lot_acc->book;
+         QofBook *book = lot_acc->inst.book;
 
          lot_split = xaccMallocSplit (book);
          gain_split = xaccMallocSplit (book);

@@ -109,11 +109,9 @@ Account    * xaccMallocAccount (QofBook *book);
  *    except that it also also places a pair of GUID-pointers
  *    of each account to the other, in the other's kvp slot.
  *    The guid pointers are stored under the under the kvp
- *    path "gemini_path".  If gemini_path is NULL, then this 
- *    routine is identical to xaccCloneAccountSimple().
+ *    path "gemini".  
  */
-Account    * xaccCloneAccount (const Account *from, QofBook *book,
-               const char * gemini_path);
+Account    * xaccCloneAccount (const Account *from, QofBook *book);
 
 /** The xaccCloneAccountSimple() routine makes a simple copy of the
  *  indicated account, placing it in the indicated book.  It copies
@@ -176,20 +174,6 @@ Account    * xaccAccountLookup (const GUID *guid, QofBook *book);
  * xaccAccountLookup but takes a GUID struct directly. */
 Account    * xaccAccountLookupDirect (GUID guid, QofBook *book);
 
-/** The xaccAccountLookupTwin() routine will find the "twin" of this
- *    account 'acc' in the given other 'book' (if the twin exists).
- *
- *    When accounts are copied or cloned, both of the pair are marked
- *    with the guid of thier copy, thus allowing the sibling-copy of
- *    an account to be found.  Since the sibling may end up in a
- *    different book, we need a way of finding it, given only that we
- *    know the book, and that we know its twin.  
- *
- *    That's what this routine does.  Given some book 'book', and an
- *    account 'acc', it will find the sibling account of 'acc' that is
- *    in 'book', and return it.  If not found, it returns NULL.  This
- *    routine uses the 'gemini' kvp values to do its work. */
-Account * xaccAccountLookupTwin (Account *acc,  QofBook *book);
 /** @} */
 
 /* ------------------ */

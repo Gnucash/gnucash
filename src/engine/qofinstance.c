@@ -56,6 +56,10 @@ void
 qof_instance_release (QofInstance *inst)
 {
    kvp_frame_delete (inst->kvp_data);
+   qof_entity_remove (inst->book->entity_table, &inst->guid);
+	inst->editlevel = 0;
+	inst->do_free = FALSE;
+   inst->dirty = FALSE;
 }
 
 const GUID *
@@ -86,7 +90,7 @@ qof_instance_gemini (QofInstance *to, QofInstance *from)
 {
   time_t now;
   now = time(0);
-                                                                                
+
   /* Make a note of where the copy came from */
   gnc_kvp_bag_add (to->kvp_data, "gemini", now,
                                   "inst_guid", &from->guid,
@@ -103,7 +107,6 @@ qof_instance_gemini (QofInstance *to, QofInstance *from)
 QofInstance *
 qof_instance_lookup_twin (QofInstance *src, QofBook *target_book)
 {
-   QofEntityTable *src_etable, *target_etable;
    QofIdType etype;
    KvpFrame *fr;
    GUID * twin_guid;
@@ -117,11 +120,9 @@ qof_instance_lookup_twin (QofInstance *src, QofBook *target_book)
                                                                                 
    twin_guid = kvp_frame_get_guid (fr, "inst_guid");
 
-   src_etable = qof_book_get_entity_table (src->book);
-   etype = qof_entity_type (src_etable, &src->guid);
+   etype = qof_entity_type (src->book->entity_table, &src->guid);
 
-   target_etable = qof_book_get_entity_table (target_book);
-   twin = qof_entity_lookup (target_etable, twin_guid, etype);
+   twin = qof_entity_lookup (target_book->entity_table, twin_guid, etype);
 
    LEAVE (" found twin=%p", twin);
    return twin;

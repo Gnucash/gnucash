@@ -55,6 +55,14 @@
 static short module = MOD_BOOK;
 
 /* ================================================================ */
+
+static inline Account *
+xaccAccountLookupTwin (Account *acc,  QofBook *book)
+{
+   return (Account *) qof_instance_lookup_twin (QOF_INSTANCE(acc), book);
+}
+
+/* ================================================================ */
 /* Reparent transaction to new book.  This routine does this by 
  * deleting the transaction in the old book, and creating a copy
  * in the new book.  While technically correct, this is maybe too 
@@ -680,7 +688,7 @@ add_closing_balances (AccountGroup *closed_grp,
       kvp_frame_set_guid (cwd, "/book/prev-acct", xaccAccountGetGUID (candidate));
       kvp_frame_set_guid (cwd, "/book/prev-book", &closed_book->guid);
 
-      xaccAccountSetSlots_nc (twin, twin->kvp_data);
+      xaccAccountSetSlots_nc (twin, twin->inst.kvp_data);
       
       /* -------------------------------- */
       /* Add KVP to closed account, indicating where 
@@ -690,7 +698,7 @@ add_closing_balances (AccountGroup *closed_grp,
       kvp_frame_set_guid (cwd, "/book/next-book", &open_book->guid);
       kvp_frame_set_guid (cwd, "/book/next-acct", xaccAccountGetGUID (twin));
 
-      xaccAccountSetSlots_nc (candidate, candidate->kvp_data);
+      xaccAccountSetSlots_nc (candidate, candidate->inst.kvp_data);
 
       /* -------------------------------- */
       /* We need to carry a balance on any account that is not

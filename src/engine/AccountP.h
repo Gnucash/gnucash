@@ -47,9 +47,11 @@
 #include "gnc-numeric.h"
 #include "kvp_frame.h"
 #include "policy.h"
+
 #include "qofbackend.h"
 #include "qofbook.h"
 #include "qofid.h"
+#include "qofinstance.h"
 
 
 /** STRUCTS *********************************************************/
@@ -61,10 +63,7 @@
 */
 struct account_s
 {
-  /* public data, describes account */
-  GUID      guid;          /* globally unique account id */
-
-  QofBook *book;   /* the entity_table in which this account is stored */
+  QofInstance inst;
 
   /* The accountName is an arbitrary string assigned by the user. 
    * It is intended to a short, 5 to 30 character long string that
@@ -86,12 +85,6 @@ struct account_s
    * this account is all about.
    */
   char     *description;
-
-  /* kvp_data is a key-value pair database for storing simple "extra"
-   * information in splits, transactions, and accounts.  it's NULL
-   * until accessed.  See src/engine/kvp_doc.txt for a list and 
-   * description of the important keys. */
-  KvpFrame * kvp_data;
 
   /* The type field is the account type, picked from the enumerated 
    * list that includes BANK, STOCK, CREDIT, INCOME, etc.  Its
@@ -134,13 +127,8 @@ struct account_s
   /* Cached pointer to policy method */
   GNCPolicy *policy;
 
-  /* keep track of nesting level of begin/end edit calls */
-  gint32 editlevel;
-
   gboolean balance_dirty;  /* balances in splits incorrect */
   gboolean sort_dirty;     /* sort order of splits is bad */
-  gboolean core_dirty;     /* fields in this struct have changed */
-  gboolean do_free;        /* in process of being destroyed */
 
   /* The "mark" flag can be used by the user to mark this account
    * in any way desired.  Handy for specialty traversals of the 
@@ -209,13 +197,6 @@ void xaccFreeAccount (Account *account);
  */
 void xaccAccountSetVersion (Account*, gint32);
 gint32 xaccAccountGetVersion (Account*);
-
-/*
- * The xaccGetAccountBackend() subroutine will find the
- *    persistent-data storage backend associated with this account.
- */
-
-QofBackend * xaccAccountGetBackend (Account *account);
 
 /* Register Accounts with the engine */
 gboolean xaccAccountRegister (void);
