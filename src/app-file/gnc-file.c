@@ -37,6 +37,7 @@
 #include "gnc-file-history.h"
 #include "gnc-file-p.h"
 #include "gnc-gui-query.h"
+#include "gnc-splash.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "qofbackend.h"
@@ -88,6 +89,7 @@ show_session_error (QofBackendError io_error, const char *newfile)
   gboolean uh_oh = TRUE;
   const char *fmt;
 
+  gnc_destroy_splash_screen(); /* Just in case */
   if (NULL == newfile) { newfile = _("(null)"); }
 
   switch (io_error)
@@ -387,8 +389,8 @@ gnc_post_file_open (const char * filename)
   /* if file appears to be locked, ask the user ... */
   if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
   {
-    const char *buttons[] = { N_("Quit"), N_("Open Anyway"),
-                              N_("Create New File"), NULL };
+    const char *buttons[] = { GTK_STOCK_QUIT, GTK_STOCK_OPEN,
+			      GTK_STOCK_NEW, NULL };
     char *fmt = ((ERR_BACKEND_LOCKED == io_err) ?
                  _("GnuCash could not obtain the lock for\n"
                    "   %s.\n"
@@ -404,6 +406,7 @@ gnc_post_file_open (const char * filename)
                  );
     int rc;
 
+    gnc_destroy_splash_screen(); /* Just in case */
     if (shutdown_cb) {
       rc = gnc_generic_question_dialog (NULL, buttons, fmt, newfile);
     } else {
