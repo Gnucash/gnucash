@@ -1,3 +1,21 @@
+2001-01-03  Rob Browning  <rlb@cs.utexas.edu>
+
+	* src/engine/Transaction.h :start documenting reserved split slots.
+	add prototypes for new functions below.
+
+	* src/engine/Transaction.c
+	(xaccSplitGetType): new function.
+	(xaccSplitMakeStockSplit): new function.
+
+	* src/doc/design/engine.texinfo
+	(Engine Introduction): add docs for split types, including the new
+	stock-split split.
+	(General Split API): remove Slot Get/Set function docs.
+	(General Split API): add xaccSplitMakeStockSplit docs.
+	(Split Getters): add xaccSplitGetType docs.
+
+	* .cvsignore: add TAGS.
+
 2000-12-20  Bill Gribble  <grib@billgribble.com>
 
 	* src/scm/report.scm: minor changes to allow report URLs

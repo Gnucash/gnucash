@@ -1,4 +1,4 @@
-@node Engine, Register, Top Level, Top
+@node Engine
 @chapter Engine
 @cindex The Engine
 
@@ -49,13 +49,13 @@ accounting. A Transaction consists of a date, a description, a number, a
 list of one or more Splits, and a key-value frame. When double-entry
 rules are enforced, the total value of the splits is zero.  Note that if
 there is just one split, its value must be zero for double-entry
-accounting; this is useful because a zero-valued split can store a price
-(useful for e.g. tracking stocks). If there are two splits, then the
-value of one must be positive, the other negative: this denotes that one
-account is credited, and another is debited by an equal amount. Positive
-Split values are 'debits' and negative Split values are 'credits'.
-Ensuring the Splits to 'add up' to zero causes a double-entry accounting
-system to always balance.
+accounting; this used to be used for storing prices, but with the advent
+of the pricedb, zero-valued splits are probably best avoided. If there
+are two splits, then the value of one must be positive, the other
+negative: this denotes that one account is credited, and another is
+debited by an equal amount. Positive Split values are 'debits' and
+negative Split values are 'credits'.  Ensuring the Splits to 'add up' to
+zero causes a double-entry accounting system to always balance.
 
 The engine does not enforce double-entry accounting, but provides an API
 to enable user-code to find unbalanced transactions and 'repair' them so
@@ -1070,6 +1070,17 @@ reconciliation states for a Split are:
 
   @end table
 
+@item A set of slots
+This is a kvp_frame specific to a given split.  Reserved key names
+include:
+
+  @table @code
+  @item "gnc:stock-split"
+  This slot stores a string indicating the type of the split if the
+  split is not a ``normal'' split.  See @code{xaccSplitGetType}
+  for more details.
+  @end table
+
 @end table
 
 In addition to the above, Splits contain a Memo field, an Action field,
@@ -1111,13 +1122,9 @@ Return the split associated with @var{GUID}, or @code{NULL} if there is
 no such split.
 @end deftypefun
 
-@deftypefun {kvp_value *} xaccSplitGetSlot(Split * @var{split}, const char * @var{key})
-Return the @code{kvp_value} associated with @var{key} in @var{split}.
-If there is none, @code{NULL} is returned.
-@end deftypefun
-
-@deftypefun void xaccSplitSetSlot(Split * @var{split}, const char * @var{key}, const kvp_value * @var{value})
-Associate a copy of @var{value} with @var{key} in @var{split}.
+@deftypefun void xaccSplitMakeStockSplit (Split * @var{split})
+Modify @var{split} to be an ``official'' stock-split split.  Among other
+things, this involves clearing the value of the split to 0.
 @end deftypefun
 
 
@@ -1214,6 +1221,21 @@ and including @var{split}. See @ref{Accounts} for details.
 @deftypefun gnc_numeric xaccSplitGetShareReconciledBalance (Split * @code{split})
 Return the share reconciled balance of @var{split}'s parent Account up
 to and including @var{split}. See @ref{Accounts} for details.
+@end deftypefun
+
+@deftypefun {const char*} xaccSplitGetType (Split * @var{split})
+Return @var{split}'s type as a string.  Currently, the possibilities are 
+
+  @table @code
+  @item normal
+  a normal split -- the default.
+
+  @item stock-split
+  a split representing a stock split.  The value should be 0 and the
+  share amount should represent the number of shares added/subtracted from
+  the account as a result of the forward/reverse stock split.
+  @end table
+
 @end deftypefun
 
 

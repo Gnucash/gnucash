@@ -467,7 +467,7 @@ void
 xaccSplitSetValue (Split *s, gnc_numeric amt) {
   if(!s) return;
 
-  s->value = gnc_numeric_convert(amt, get_currency_denom(s), GNC_RND_ROUND);;
+  s->value = gnc_numeric_convert(amt, get_currency_denom(s), GNC_RND_ROUND);
 
   mark_split (s);
 }
@@ -2054,6 +2054,39 @@ xaccSplitGetSharePrice (Split * split) {
                          split->damount,
                          PRICE_DENOM, GNC_RND_ROUND);
 }
+
+/********************************************************************\
+\********************************************************************/
+
+const char *
+xaccSplitGetType(const Split *s)
+{
+  kvp_frame *frame;
+  kvp_value *split_type;
+
+  if(!s) return NULL;
+  frame = xaccSplitGetSlots((Split *) s);
+  if(!frame) return NULL;
+  split_type = kvp_frame_get_slot(frame, "gnc:split-type");
+  if(!split_type) return "normal";
+  if(kvp_value_get_type(split_type) != KVP_TYPE_STRING) return NULL;
+  return(kvp_value_get_string(split_type));
+}
+
+/* reconfgure a split to be a stock split - after this, you shouldn't
+   mess with the value, just the damount. */
+void
+xaccSplitMakeStockSplit(Split *s)
+{
+  kvp_frame *frame = xaccSplitGetSlots(s);
+
+  xaccSplitSetValue(s, gnc_numeric_zero());
+  kvp_frame_set_slot(frame,
+                     "gnc:split-type",
+                     kvp_value_new_string("stock-split"));
+  mark_split(s);
+}
+
 
 /********************************************************************\
 \********************************************************************/

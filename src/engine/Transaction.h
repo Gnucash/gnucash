@@ -299,8 +299,13 @@ gboolean xaccSplitEqual(const Split *sa, const Split *sb,
                         gboolean check_txn_splits);
 
 /* Split slots are used to store arbitrary strings, numbers, and
- * structures which aren't members of the transaction struct.  */
-
+ * structures which aren't members of the transaction struct.
+ *
+ * Reserved slot names:
+ *
+ * gnc:split-type -- a string representing the type of split, if not normal.
+ *
+ */
 kvp_frame *xaccSplitGetSlots(Split *trans);
 
 /* The xaccSplitGetGUID() subroutine will return the
@@ -425,6 +430,13 @@ gnc_numeric   xaccSplitGetSharePrice (Split * split);
 gnc_numeric   xaccSplitGetValue (Split * split);
 
 Account *     xaccSplitGetAccount (Split *split);
+
+/* split types: normal stock-split */
+const char *xaccSplitGetType(const Split *s);
+
+/* reconfgure a split to be a stock split - after this, you shouldn't
+   mess with the value, just the damount. */
+void xaccSplitMakeStockSplit(Split *s);
 
 /********************************************************************\
  * sorting comparison function
