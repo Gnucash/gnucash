@@ -116,6 +116,10 @@ char * xaccPrintAmount (double val, short shrs)
  *                                                                  * 
  * Args:   str -- pointer to string rep of sum                      * 
  * Return: double -- the parsed amount                              * 
+ *
+ * Note: be careful changing this algorithm.  The Quicken-file-format
+ * parser depends a lot on the ability of this routine to do what it's
+ * doing.  Don't break it!
 \********************************************************************/
 
 double xaccParseUSAmount (char * str) 
