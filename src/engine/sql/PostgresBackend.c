@@ -1071,7 +1071,9 @@ pgendSessionEnd (PGBackend *be)
 
    if (!be->sessionGuid) return;
 
+   /* vacuuming w/ analyze can improve performance 20% */
    p = be->buff; *p=0;
+   p = stpcpy (p, "VACUUM ANALYZE;\n");
    p = stpcpy (p, "UPDATE gncSession SET time_off='NOW' "
                   "WHERE sessionGuid='");
    p = stpcpy (p, be->session_guid_str);
