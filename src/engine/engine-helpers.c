@@ -2166,8 +2166,12 @@ gint64
 gnc_scm_to_gint64(SCM num)
 {
 #if GUILE_LONG_LONG_OK 
-  // This interface changes in guile 1.6. The second arg becomes an int.
+#ifdef SCM_MINOR_VERSION
+  /* Guile 1.6 and later have the SCM_XXX_VERSION macro */
+  return scm_num2long_long(num, SCM_ARG1, "gnc_scm_to_gint64");
+#else
   return scm_num2long_long(num, (char *) SCM_ARG1, "gnc_scm_to_gint64");
+#endif
 #else
   static SCM bits00to15_mask = SCM_BOOL_F;
   SCM magnitude  = scm_abs(num);
@@ -2380,4 +2384,3 @@ gnc_session_to_scm (GNCSession *session)
 
   return gw_wcp_assimilate_ptr ((void *) session, session_type);
 }
-
