@@ -75,7 +75,7 @@ extern int loglevel[MODULE_MAX];
 /* utility macros  */
 #define FATAL(x...)    LG(1, "Fatal Error: ");   LG(1,       ##x);
 #define PERR(x...)     LG(LERR,    "Error: ");   LG(LERR,    ##x);
-#define PWARN(x...)    LG(LWARN,   "Waring: ");  LG(LWARN,   ##x);
+#define PWARN(x...)    LG(LWARN,   "Warning: "); LG(LWARN,   ##x);
 #define PINFO(x...)    LG(LINFO,   "Info: ");    LG(LINFO,   ##x);
 #define DEBUG(x...)    LG(LDEBUG,  "Debug: ");   LG(LDEBUG,  ##x);
 #define ENTER(x...)    LG(LDEBUG,  "Enter: ");   LG(LDEBUG,  ##x);
