@@ -50,7 +50,7 @@ AC_DEFINE_UNQUOTED(GNUCASH_MINOR_VERSION, $GNUCASH_MINOR_VERSION)
 AC_DEFINE_UNQUOTED(GNUCASH_MICRO_VERSION, $GNUCASH_MICRO_VERSION)
 
 dnl Set of available languages.
-ALL_LINGUAS="da de en_GB es fr it ja no pt ru sv"
+ALL_LINGUAS="da de en_GB es es_NI fr it ja no pt ru sv"
 AM_GNU_GETTEXT
 
 

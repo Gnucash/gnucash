@@ -639,6 +639,13 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>Jorge.Lehner@gmx.net</email> Georg Lehner</glossterm>
+<glossdef>
+<para>Nicaraguan Spanish translation</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>mellon@andare.fugue.com</email> Ted
       Lemon</glossterm>
 <glossdef>
@@ -1033,6 +1040,13 @@ Nielsen</glossterm>
       -Gilligan- Uschold</glossterm>
 <glossdef>
 <para>tax report and txf export</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>mevanecek@yahoo.com</email> Matthew Vanecek</glossterm>
+<glossdef>
+<para>for pg_config configure.in patch</para>
 </glossdef>
 </glossentry>
 

@@ -45,6 +45,7 @@ EXTRA_DIST = \
   po/glossary/da.po \
   po/glossary/de.po \
   po/glossary/es.po \
+  po/glossary/es_NI-policy.txt \
   po/glossary/gnc-glossary.txt \
   po/glossary/txt-to-pot.sh \
   intltool-extract.in \
