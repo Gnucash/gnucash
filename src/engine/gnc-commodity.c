@@ -42,7 +42,7 @@
 #include "qofbook.h"
 #include "qofobject.h"
 
-static short module = MOD_ENGINE; 
+static short module = MOD_COMMODITY; 
 
 /* Parts per unit is nominal, i.e. number of 'partname' units in
  * a 'unitname' unit.  fraction is transactional, i.e. how many
