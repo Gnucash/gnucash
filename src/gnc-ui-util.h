@@ -85,7 +85,8 @@ typedef enum
   NUM_EQUITY_TYPES
 } GNCEquityType;
 
-Account * gnc_find_or_create_equity_account (GNCEquityType equity_type,
+Account * gnc_find_or_create_equity_account (AccountGroup *group,
+                                             GNCEquityType equity_type,
                                              gnc_commodity *currency);
 gboolean gnc_account_create_opening_balance (Account *account,
                                              gnc_numeric balance,

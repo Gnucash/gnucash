@@ -470,12 +470,12 @@ equity_base_name (GNCEquityType equity_type)
 }
 
 Account *
-gnc_find_or_create_equity_account (GNCEquityType equity_type,
+gnc_find_or_create_equity_account (AccountGroup *group,
+                                   GNCEquityType equity_type,
                                    gnc_commodity *currency)
 {
   Account *parent;
   Account *account;
-  AccountGroup *group;
   gboolean name_exists;
   gboolean base_name_exists;
   const char *base_name;
@@ -485,7 +485,8 @@ gnc_find_or_create_equity_account (GNCEquityType equity_type,
   g_return_val_if_fail (equity_type < NUM_EQUITY_TYPES, NULL);
   g_return_val_if_fail (currency != NULL, NULL);
 
-  group = gncGetCurrentGroup ();
+  if (!group)
+    group = gncGetCurrentGroup ();
 
   base_name = equity_base_name (equity_type);
 
@@ -578,7 +579,8 @@ gnc_account_create_opening_balance (Account *account,
   g_return_val_if_fail (account != NULL, FALSE);
 
   equity_account =
-    gnc_find_or_create_equity_account (EQUITY_OPENING_BALANCE,
+    gnc_find_or_create_equity_account (xaccGetAccountRoot (account),
+                                       EQUITY_OPENING_BALANCE,
                                        xaccAccountGetCurrency (account));
   if (!equity_account)
     return FALSE;
