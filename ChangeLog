@@ -1,3 +1,11 @@
+2002-11-17  David Hampton  <hampton@employees.org>
+
+	* macros/as-scrub-include.m4: New macro.
+
+	* configure.in: Use the new AS_SCRUB_INCLUDE macro to remove
+	system directories from the compile search path. Prevents GCC 3.x
+	from complaining.
+
 2002-11-17  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-utils.c: Fix caching of HBCI_API

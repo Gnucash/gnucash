@@ -140,6 +140,7 @@ esac
 ### the Gnome check?)
 
 GNOME_CHECK_GUILE
+AS_SCRUB_INCLUDE(GUILE_INCS)
 
 ### --------------------------------------------------------------------------
 ### G-wrap (libraries and executable)
@@ -184,6 +185,8 @@ AC_SUBST(G_WRAP_COMPILE_ARGS)
 AC_SUBST(G_WRAP_LINK_ARGS)
 AC_SUBST(G_WRAP_MODULE_DIR)
 AC_SUBST(G_WRAP_LIB_DIR)
+
+AS_SCRUB_INCLUDE(CFLAGS)
 
 ### Check size of long_long - some guile's are broken.
 AC_MSG_CHECKING(if guile long_long is at least as big as gint64)
@@ -710,6 +713,8 @@ then
     	     AC_MSG_WARN([****** ghttp does not have SSL support.]),
     	     $GHTTP_LIBS)
     
+    AS_SCRUB_INCLUDE(GHTTP_CFLAGS)
+    AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
     AC_SUBST(GTKHTML_LIBS)
     AC_SUBST(GTKHTML_CFLAGS)
     AC_SUBST(GHTTP_LIBS)
@@ -767,6 +772,7 @@ then
     GUPPI_LIBS=`$GNOME_CONFIG --libs libguppi`
     GUPPI_CFLAGS=`$GNOME_CONFIG --cflags libguppi`
     LIBGUPPI_CHECK
+    AS_SCRUB_INCLUDE(GUPPI_CFLAGS)
     AC_SUBST(GUPPI_LIBS)
     AC_SUBST(GUPPI_CFLAGS)
     

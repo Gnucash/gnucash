@@ -184,6 +184,7 @@ Alessandro Seveso <aleseveso@tiscalinet.it> messages Italian translations
 Mike Simons <msimons@fsimons01.erols.com> misc configure.in patches
 Keld Simonsen <keld@dkuug.dk> messages Danish translation
 Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
+Thomas Vander Stichele <thomas@urgent.rug.ac.be> Macro for filtering system directories
 Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
 Ben Stanley <bds02@uow.edu.au> test infrastructure
 Robby Stephenson <robby.stephenson@usa.net> register & file history patches
