@@ -19,7 +19,31 @@
 #
 
 use strict;
-use Finance::Quote;
+
+sub check_modules {
+  my @modules = qw(Date::Manip Finance::Quote LWP);
+  my @missing;
+
+  foreach my $mod (@modules) {
+    if (eval "require $mod") {
+      $mod->import();
+    }
+    else {
+      push (@missing, $mod);
+    }
+  }
+
+  return unless @missing;
+
+  print STDERR "$0 cannot find all the Perl modules needed to run.\n";
+  print STDERR "You need to install the following Perl modules:\n";
+  foreach my $mod (@missing) {
+    print STDERR "  ".$mod."\n";
+  }
+  print STDERR "Run 'update-finance-quote' as root to install them.\n";
+
+  exit 1;
+}
 
 sub report {
   my($itemname, $qh) = @_;
@@ -67,6 +91,9 @@ sub report {
   }
   print "\n";
 }
+
+# Check for and load non-standard modules
+check_modules ();
 
 my $q = Finance::Quote->new;
 $q->timeout(60);

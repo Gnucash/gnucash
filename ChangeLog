@@ -1,3 +1,9 @@
+2003-02-14  David Hampton  <hampton@employees.org>
+
+	* src/quotes/dump-finance-quote: Do a runtime check for
+	Finance::Quote instead of including the perl 'use' declaration.
+	The latter causes RPM to add a dependancy on F::Q.
+
 2003-02-13  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/dialog-options.c:  guile-1.6 doesn't like
