@@ -1,5 +1,13 @@
 Version history:
 ------- -------
+ 1.1.15 - 9 Aug 1998
+         o Everybody's doin it: make xacc into a web server.
+         
+ 1.1.14 - 8 Aug 1998
+         o First drop of Qt code
+         o A split register that finally more or less works
+         o guile configuration code from Rob Browning
+
  1.1.6 - 8 March 98
          o First drop of GTK code from Jeremy Collins
          o First stab at GTK plotting from Rob Browning
