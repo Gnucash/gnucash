@@ -29,6 +29,7 @@
 
 #include "Backend.h"
 #include "global-options.h"
+#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
@@ -42,9 +43,6 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
-
-/* FIXME: this is wrong.  This file should not need this include. */
-#include "gnc-book-p.h"
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -688,8 +686,6 @@ gnc_file_save (void)
   }
 
   gnc_add_history (session);
-
-  gnc_book_mark_saved (gnc_session_get_book (session));
 
   /* save the main window state */
   scm_call_1 (scm_c_eval_string("gnc:main-window-save-state"),
