@@ -1775,8 +1775,7 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 
 
 static void
-gnucash_sheet_goto_virt_cell_loc (GnucashSheet *sheet,
-                                  VirtualCellLocation vcell_loc)
+gnucash_sheet_goto_virt_loc (GnucashSheet *sheet, VirtualLocation virt_loc)
 {
         Table *table;
         VirtualCell *vcell;
@@ -1790,11 +1789,13 @@ gnucash_sheet_goto_virt_cell_loc (GnucashSheet *sheet,
 
         gnucash_cursor_get_phys (GNUCASH_CURSOR(sheet->cursor), &cur_phys_loc);
 
-        vcell = gnc_table_get_virtual_cell (table, vcell_loc);
+        vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
         if (vcell == NULL)
                 return;
 
 	new_phys_loc = vcell->phys_loc;
+        new_phys_loc.phys_row += virt_loc.phys_row_offset;
+        new_phys_loc.phys_col += virt_loc.phys_col_offset;
 
         /* It's not really a pointer traverse, but it seems the most
          * appropriate here. */
@@ -1814,14 +1815,32 @@ gnucash_register_goto_virt_cell (GnucashRegister *reg,
                                  VirtualCellLocation vcell_loc)
 {
         GnucashSheet *sheet;
+        VirtualLocation virt_loc;
 
+        g_return_if_fail(reg != NULL);
         g_return_if_fail(GNUCASH_IS_REGISTER(reg));
 
         sheet = GNUCASH_SHEET(reg->sheet);
 
-        gnucash_sheet_goto_virt_cell_loc(sheet, vcell_loc);
+        virt_loc.vcell_loc = vcell_loc;
+        virt_loc.phys_row_offset = 0;
+        virt_loc.phys_col_offset = 0;
+
+        gnucash_sheet_goto_virt_loc(sheet, virt_loc);
 }
 
+void gnucash_register_goto_virt_loc (GnucashRegister *reg,
+                                     VirtualLocation virt_loc)
+{
+        GnucashSheet *sheet;
+
+        g_return_if_fail(reg != NULL);
+        g_return_if_fail(GNUCASH_IS_REGISTER(reg));
+
+        sheet = GNUCASH_SHEET(reg->sheet);
+
+        gnucash_sheet_goto_virt_loc(sheet, virt_loc);
+}
 
 void
 gnucash_register_goto_next_virt_row (GnucashRegister *reg)
@@ -1839,7 +1858,10 @@ gnucash_register_goto_next_virt_row (GnucashRegister *reg)
         if (virt_loc.vcell_loc.virt_row >= sheet->num_virt_rows)
                 return;
 
-        gnucash_sheet_goto_virt_cell_loc(sheet, virt_loc.vcell_loc);
+        virt_loc.phys_row_offset = 0;
+        virt_loc.phys_col_offset = 0;
+
+        gnucash_sheet_goto_virt_loc(sheet, virt_loc);
 }
 
 
@@ -2248,7 +2270,7 @@ gnucash_sheet_table_load (GnucashSheet *sheet)
                 }
 
         gnucash_sheet_set_scroll_region (sheet);
-        
+
         gnucash_sheet_set_top_row (sheet, sheet->top_block,
                                    GNUCASH_ALIGN_BOTTOM);
 

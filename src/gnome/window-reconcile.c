@@ -724,7 +724,7 @@ gnc_ui_reconcile_window_edit_cb(GtkButton *button, gpointer data)
     return;
 
   gnc_register_raise(regData);
-  gnc_register_jump_to_split(regData, split);
+  gnc_register_jump_to_split_amount(regData, split);
 }
 
 

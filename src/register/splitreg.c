@@ -1514,13 +1514,12 @@ xaccSplitRegisterGetCellType (SplitRegister *reg, PhysicalLocation phys_loc)
 
 gboolean
 xaccSplitRegisterGetCellPhysLoc (SplitRegister *reg, CellType cell_type,
+                                 VirtualCellLocation vcell_loc,
                                  PhysicalLocation *phys_loc)
 {
   Table *table;
   VirtualCell *vcell;
-  PhysicalCell *pcell;
   CellBlock *cellblock;
-  VirtualCellLocation vcell_loc;
   int cell_row, cell_col;
 
   if (reg == NULL)
@@ -1529,12 +1528,6 @@ xaccSplitRegisterGetCellPhysLoc (SplitRegister *reg, CellType cell_type,
   table = reg->table;
   if (table == NULL)
     return FALSE;
-
-  pcell = gnc_table_get_physical_cell (table, table->current_cursor_phys_loc);
-  if (pcell == NULL)
-    return FALSE;
-
-  vcell_loc = pcell->virt_loc.vcell_loc;
 
   vcell = gnc_table_get_virtual_cell (table, vcell_loc);
   if (vcell == NULL)
@@ -1560,6 +1553,26 @@ xaccSplitRegisterGetCellPhysLoc (SplitRegister *reg, CellType cell_type,
     }
 
   return FALSE;
+}
+
+/* ============================================== */
+
+gboolean
+xaccSplitRegisterGetCurrentCellPhysLoc (SplitRegister *reg, CellType cell_type,
+                                        PhysicalLocation *phys_loc)
+{
+  Table *table;
+
+  if (reg == NULL)
+    return FALSE;
+
+  table = reg->table;
+  if (table == NULL)
+    return FALSE;
+
+  return xaccSplitRegisterGetCellPhysLoc (reg, cell_type,
+                                          table->current_cursor_virt_loc,
+                                          phys_loc);
 }
 
 /* ============================================== */

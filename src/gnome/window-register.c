@@ -233,6 +233,33 @@ gnc_register_jump_to_split(RegWindow *regData, Split *split)
 }
 
 
+/********************************************************************\
+ * gnc_register_jump_to_split_amount                                *
+ *   move the cursor to the split in the non-blank amount column    *
+ *                                                                  *
+ * Args:   regData - the register data structure                    *
+ *         split   - the split to jump to                           *
+ * Return: nothing                                                  *
+\********************************************************************/
+void
+gnc_register_jump_to_split_amount(RegWindow *regData, Split *split)
+{
+  Transaction *trans;
+  VirtualLocation virt_loc;
+
+  trans = xaccSplitGetParent(split);
+  if (trans != NULL)
+    if (gnc_register_include_date(regData, xaccTransGetDate(trans)))
+    {
+      regData->ledger->dirty = 1;
+      xaccLedgerDisplayRefresh(regData->ledger);
+    }
+
+  if (xaccSRGetSplitAmountVirtLoc(regData->ledger->ledger, split, &virt_loc))
+    gnucash_register_goto_virt_loc(regData->reg, virt_loc);
+}
+
+
 static SplitRegisterStyle
 gnc_get_default_register_style()
 {

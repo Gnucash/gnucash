@@ -71,6 +71,14 @@ Split * xaccSRGetBlankSplit (SplitRegister *reg);
 gboolean xaccSRGetSplitVirtLoc (SplitRegister *reg, Split *split,
                                 VirtualCellLocation *vcell_loc);
 
+/* The xaccSRGetSplitAmountVirtLoc() method searches the split
+ *    register for the given split. If found, it returns TRUE and
+ *    virt_loc is set to the location of either the debit or credit
+ *    column in the split, whichever one is non-blank. Otherwise,
+ *    the method returns FALSE. */
+gboolean xaccSRGetSplitAmountVirtLoc (SplitRegister *reg, Split *split,
+                                      VirtualLocation *virt_loc);
+
 /* The xaccSRDuplicateCurrent() method duplicates either the current
  *    transaction or the current split depending on the register mode
  *    and cursor position. Returns the split just created, or the
@@ -78,8 +86,17 @@ gboolean xaccSRGetSplitVirtLoc (SplitRegister *reg, Split *split,
  *    nothing happened. */
 Split * xaccSRDuplicateCurrent (SplitRegister *reg);
 
+/* The xaccSRCopyCurrent() method makes a copy of the current entity,
+ *    either a split or a transaction, so that it can be pasted later. */
 void    xaccSRCopyCurrent  (SplitRegister *reg);
+
+/* The xaccSRCutCurrent() method is equivalent to copying the current
+ *    entity and the deleting it with the approriate delete method. */
 void    xaccSRCutCurrent   (SplitRegister *reg);
+
+/* The xaccSRPasteCurrent() method pastes a previous copied entity
+ *    onto the current entity, but only if the copied entity and the
+ *    current entity are of the same type. */
 void    xaccSRPasteCurrent (SplitRegister *reg);
 
 /* The xaccSRDeleteCurrentSplit() method deletes the split associated

@@ -257,6 +257,9 @@ void gnucash_sheet_update_adjustments (GnucashSheet *sheet);
 void gnucash_register_goto_virt_cell (GnucashRegister *reg,
                                       VirtualCellLocation vcell_loc);
 
+void gnucash_register_goto_virt_loc (GnucashRegister *reg,
+                                     VirtualLocation virt_loc);
+
 void gnucash_register_goto_next_virt_row (GnucashRegister *reg);
 
 void gnucash_register_attach_popup(GnucashRegister *reg, GtkWidget *popup,

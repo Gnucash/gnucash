@@ -288,7 +288,12 @@ CellType        xaccSplitRegisterGetCellType (SplitRegister *reg,
  * the given cell type is in the current cursor, false otherwise. */
 gboolean        xaccSplitRegisterGetCellPhysLoc (SplitRegister *reg,
                                                  CellType cell_type,
+                                                 VirtualCellLocation vcell_loc,
                                                  PhysicalLocation *phys_loc);
+
+gboolean   xaccSplitRegisterGetCurrentCellPhysLoc (SplitRegister *reg,
+                                                   CellType cell_type,
+                                                   PhysicalLocation *phys_loc);
 
 /* Functions for working with split register buffers */
 SplitRegisterBuffer * xaccMallocSplitRegisterBuffer ();

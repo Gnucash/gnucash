@@ -934,7 +934,8 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       amount = xaccSplitGetShareAmount (blank_split);
       cell_type = (amount >= 0) ? DEBT_CELL : CRED_CELL;
 
-      if (xaccSplitRegisterGetCellPhysLoc (reg, cell_type, &new_phys_loc))
+      if (xaccSplitRegisterGetCurrentCellPhysLoc (reg, cell_type,
+                                                  &new_phys_loc))
         *p_new_phys_loc = new_phys_loc;
     }
 
@@ -968,7 +969,8 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
 
       /* if there is no price field, only auto-complete from splits with
        * a unit share price. */
-      unit_price = !xaccSplitRegisterGetCellPhysLoc(reg, PRIC_CELL, NULL);
+      unit_price = !xaccSplitRegisterGetCurrentCellPhysLoc(reg, PRIC_CELL,
+                                                           NULL);
 
       /* find a split to auto-complete on */
       if (info->default_source_account != NULL)
@@ -1014,7 +1016,8 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       amount = xaccSplitGetShareAmount (auto_split);
       cell_type = (amount < 0) ? NDEBT_CELL : NCRED_CELL;
 
-      if (xaccSplitRegisterGetCellPhysLoc (reg, cell_type, &new_phys_loc))
+      if (xaccSplitRegisterGetCurrentCellPhysLoc (reg, cell_type,
+                                                  &new_phys_loc))
         *p_new_phys_loc = new_phys_loc;
     }
 
@@ -1421,9 +1424,15 @@ gboolean
 xaccSRGetSplitVirtLoc (SplitRegister *reg, Split *split,
                        VirtualCellLocation *vcell_loc)
 {
-  Table *table = reg->table;
-  int v_row, v_col;
+  Table *table;
+  int v_row;
+  int v_col;
   Split *s;
+
+  if ((reg == NULL) || (split == NULL))
+    return FALSE;
+
+  table = reg->table;
 
   for (v_row = 1; v_row < table->num_virt_rows; v_row++)
     for (v_col = 0; v_col < table->num_virt_cols; v_col++)
@@ -1441,6 +1450,56 @@ xaccSRGetSplitVirtLoc (SplitRegister *reg, Split *split,
     }
 
   return FALSE;
+}
+
+/* ======================================================== */
+
+gboolean
+xaccSRGetSplitAmountVirtLoc (SplitRegister *reg, Split *split,
+                             VirtualLocation *virt_loc)
+{
+  VirtualLocation v_loc;
+  CursorType cursor_type;
+  PhysicalLocation p_loc;
+  PhysicalCell *pcell;
+  CellType cell_type;
+  double value;
+
+  if (!xaccSRGetSplitVirtLoc (reg, split, &v_loc.vcell_loc))
+    return FALSE;
+
+  cursor_type = xaccSplitRegisterGetCursorType (reg, v_loc.vcell_loc);
+
+  value = xaccSplitGetValue (split);
+  if (DEQ (value, 0.0))
+    value = 0.0;
+
+  switch (cursor_type)
+  {
+    case CURSOR_TRANS:
+      cell_type = (value >= 0.0) ? DEBT_CELL : CRED_CELL;
+      break;
+    case CURSOR_SPLIT:
+      cell_type = (value >= 0.0) ? CRED_CELL : DEBT_CELL;
+      break;
+    default:
+      return FALSE;
+  }
+
+  if (!xaccSplitRegisterGetCellPhysLoc (reg, cell_type,
+                                        v_loc.vcell_loc, &p_loc))
+    return FALSE;
+
+  if (virt_loc == NULL)
+    return TRUE;
+
+  pcell = gnc_table_get_physical_cell (reg->table, p_loc);
+  if (pcell == NULL)
+    return FALSE;
+
+  *virt_loc = pcell->virt_loc;
+
+  return TRUE;
 }
 
 /* ======================================================== */
