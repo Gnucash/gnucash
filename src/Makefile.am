@@ -77,7 +77,7 @@ EXTRA_DIST = \
 AM_CFLAGS = \
   -I./app-utils \
   -I./engine \
-  -I./guile \
+  -I./gnome \
   -I./register \
   -I./gnc-module \
   ${GNOME_INCLUDEDIR} \

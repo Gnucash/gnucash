@@ -48,7 +48,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/app-file \
-  -I${top_srcdir}/src/guile \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
   ${G_WRAP_COMPILE_ARGS} \

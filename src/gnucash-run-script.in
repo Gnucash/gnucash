@@ -25,7 +25,7 @@ exec ${GUILE} -s "$0" "$@"
 
 (define guile (getenv "GUILE"))
 
-(apply execlp guile guile "--debug" "-s" (cdr (program-arguments)))
+(apply execlp guile guile "-s" (cdr (program-arguments)))
 
 ;; Local Variables:
 ;; mode: scheme

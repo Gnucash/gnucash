@@ -30,7 +30,6 @@ libgncmod_ledger_core_la_LIBADD = \
 AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
-  -I${top_srcdir}/src/guile \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/register/register-core \
