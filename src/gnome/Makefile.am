@@ -9,19 +9,24 @@ libgncguile_la_SOURCES = gnucash.c
 libgncguile_la_LIBADD = ${GLIB_LIBS}
 libgncguile_la_LDFLAGS = -module 
 
+libgncgnome_la_LDFLAGS = -module
+libgncgnome_la_LIBADD = ./libgncguile.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/app-file/libgncmod-app-file.la \
+  ${top_builddir}/src/backend/file/libgncmod-backend-file.la \
+  ${top_builddir}/src/import-export/qif-import/libgncmod-qif-import.la \
+  ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
+  ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
+  ${GNOME_LIBDIR} ${GNOMEUI_LIBS} ${GLIB_LIBS} ${GUILE_LIBS}
+
 libgw_gnc_la_SOURCES = gw-gnc.c
 libgw_gnc_la_LIBADD = ${G_WRAP_LINK_ARGS} ${GLIB_LIBS}
-libgw_gnc_la_LDFLAGS = -module
-
-libgncgnome_la_LDFLAGS = -module
-libgncgnome_la_LIBADD = ./libgncguile.la ${GNOME_LIBDIR} ${GNOMEUI_LIBS} ${GLIB_LIBS} ${GUILE_LIBS}
+libgw_gnc_la_LDFLAGS = -module -L. -L.libs -lgncgnome -lgncguile
 
 libgncgnome_la_SOURCES = \
   argv-list-converters.c \
-  dialog-account.c \
   dialog-column-view.c \
   dialog-commodities.c \
-  dialog-dup-trans.c \
   dialog-fincalc.c \
   dialog-find-transactions.c \
   dialog-new-user.c \
@@ -38,7 +43,6 @@ libgncgnome_la_SOURCES = \
   dialog-scheduledxaction.c \
   druid-hierarchy.c \
   druid-stock-split.c \
-  file-utils.c \
   gnc-network.c \
   gnc-splash.c \
   mainwindow-account-tree.c \
@@ -46,7 +50,6 @@ libgncgnome_la_SOURCES = \
   tip-of-the-day.c \
   top-level.c \
   window-acct-tree.c \
-  window-help.c \
   window-main.c \
   window-main-summarybar.c \
   window-reconcile.c \
@@ -66,7 +69,6 @@ mime_DATA = gnucash.keys gnucash.mime
 
 noinst_HEADERS = \
   argv-list-converters.h \
-  dialog-account.h \
   dialog-column-view.h \
   dialog-fincalc.h \
   dialog-find-transactions.h \
@@ -80,7 +82,6 @@ noinst_HEADERS = \
   dialog-transfer.h \
   dialog-scheduledxaction.h \
   druid-hierarchy.h \
-  file-utils.h \
   gnc-network.h \
   gnc-splash.h \
   gnucash.h \
@@ -91,7 +92,6 @@ noinst_HEADERS = \
   tip-of-the-day.h \
   top-level.h \
   window-acct-tree.h \
-  window-help.h \
   window-main.h \
   window-main-summarybar.h \
   window-reconcile.h \
@@ -110,6 +110,7 @@ EXTRA_DIST = \
 AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/calculation \
+  -I${top_srcdir}/src/dialog-account \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/network-utils \
   -I${top_srcdir}/src/app-utils \
