@@ -396,13 +396,32 @@ gnc_acct_tree_window_toolbar_add_account_cb (GtkWidget *widget, gpointer data)
  * and return the same value to stop walking the account tree if
  * appropriate.
  ********************************************************************/
+typedef struct _delete_helper {
+  gboolean	has_splits;
+  gboolean	has_ro_splits;
+} delete_helper_t;
+
 static gpointer
 delete_account_helper (Account *account, gpointer data)
 {
-  gboolean *has_splits = data;
+  delete_helper_t *helper_res = data;
+  GList *splits;
 
-  *has_splits = (xaccAccountGetSplitList(account) != NULL);
-  return (gpointer)*has_splits;
+  splits = xaccAccountGetSplitList(account);
+  if (splits) {
+    helper_res->has_splits = TRUE;
+    while (splits) {
+      Split *s = splits->data;
+      Transaction *txn = xaccSplitGetParent (s);
+      if (xaccTransGetReadOnly (txn)) {
+	helper_res->has_ro_splits = TRUE;
+	break;
+      }
+      splits = splits->next;
+    }
+  }
+
+  return (gpointer)(helper_res->has_splits || helper_res->has_ro_splits);
 }
 
 static void
@@ -421,22 +440,44 @@ gnc_acct_tree_window_delete_common (Account *account)
 			 _("One (or more) children of this account contain\n"
 			   "transactions.  Are you sure you want to delete the\n"
 			   "%s account and all its children?");
+    const char *acct_has_ro_splits =
+      			_("This account contains read-only transactions.  You "
+			  "may not delete %s.");
+    const char *child_has_ro_splits =
+      			_("One (or more) children of this account contains "
+			  "read-only transactions.  You may not delete %s.");
     const char *format;
     char *name;
+    GList *splits;
 
     name = xaccAccountGetFullName(account, gnc_get_account_separator ());
     if (!name)
       name = g_strdup ("");
 
-    if (xaccAccountGetSplitList(account) != NULL) {
+    if ((splits = xaccAccountGetSplitList(account)) != NULL) {
+      /* Check for RO txns -- if there are any, disallow deletion */
+      for ( ; splits ; splits = splits->next) {
+	Split *s = splits->data;
+	Transaction *txn = xaccSplitGetParent (s);
+	if (xaccTransGetReadOnly (txn)) {
+	  gnc_error_dialog (acct_has_ro_splits, name);
+	  return;
+	}
+      }
       format = acct_has_splits;
     } else {
       AccountGroup *children;
-      gboolean has_splits = FALSE;
+      delete_helper_t delete_res = { FALSE, FALSE };
 
       children = xaccAccountGetChildren(account);
-      xaccGroupForEachAccount(children, delete_account_helper, &has_splits, TRUE);
-      if (has_splits) 
+      xaccGroupForEachAccount(children, delete_account_helper, &delete_res, TRUE);
+
+      /* Check for RO txns in the children -- disallow deletion if there are any */
+      if (delete_res.has_ro_splits) {
+	gnc_error_dialog (child_has_ro_splits, name);
+	return;
+
+      } else if (delete_res.has_splits) 
 	format= child_has_splits;
       else
 	format = children ? no_splits : no_splits_no_children;

@@ -1,3 +1,10 @@
+2002-12-09  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/window-acct-tree.c: Disallow the deletion of accounts
+	  with ReadOnly Transacation in them.  You must first "delete" the
+	  RO Txns before you delete the account.  Fix for bug# 100727 (although
+	  it requires invoice unposting to work).	 
+
 2002-12-9  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/import-main-matcher.c:
 	* src/import-export/generic-import.glade: Change colors, remove 
