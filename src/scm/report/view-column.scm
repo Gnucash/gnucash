@@ -191,7 +191,6 @@
            (reports
             (gnc:option-value
              (gnc:lookup-option options "__general" "report-list"))))
-      (simple-format #t "view options changed cb\n")
       (for-each 
        (lambda (child)
          (gnc:report-set-dirty?! (gnc:find-report (car child)) #t))

@@ -1919,7 +1919,6 @@ gnc_options_dialog_close_stub_cb(GtkWidget * w, gpointer data) {
     gtk_widget_hide(container);
 
   /* at this point, window may point to freed data */
-
   if (!GTK_OBJECT_DESTROYED (container))
     gtk_signal_handler_unblock_by_func(GTK_OBJECT(container),
                                        GTK_SIGNAL_FUNC
@@ -2048,14 +2047,21 @@ gnc_options_dialog_destroy(GNCOptionWin * win) {
 
   if (!win) return;
 
-  gtk_widget_destroy(win->container);
-
+  gtk_signal_disconnect_by_func(GTK_OBJECT(win->container), 
+                                GTK_SIGNAL_FUNC
+                                (gnc_options_dialog_destroy_stub_cb),
+                                win);
   if(!win->toplevel) {
     gtk_widget_unref(win->container);
   }
+  else {
+    gtk_widget_destroy(win->container);
+  }
 
-  gtk_object_unref (GTK_OBJECT(win->tips));
-
+  if(win->tips) {
+    gtk_object_unref (GTK_OBJECT(win->tips));
+  }
+  
   win->container = NULL;
   win->notebook = NULL;
   win->apply_cb = NULL;

@@ -1,3 +1,13 @@
+2001-05-12  Bill Gribble  <grib@billgribble.com>
+
+	* src/gnome/dialog-options.c: fix destructor bug 
+
+	* src/gnome/window-report.c: add options dialog to edited list
+	even if opened by a URL click. 
+	
+	* src/gnome/window-main.c: handle close of last window safely.
+	Still don't save MDI info correctly with WM close, though.
+
 2001-05-12  Dave Peticolas  <dave@krondo.com>
 
 	* src/FileDialog.c (gncFileSaveAs): don't use a default filename

@@ -353,6 +353,9 @@ gnc_report_window_params_cb(GtkWidget * w, gpointer data) {
     if(gh_call1(start_editor, report->cur_report) == SCM_BOOL_F) {
       gnc_warning_dialog("There are no options for this report.");
     }
+    else {
+      gnc_report_window_add_edited_report(report, report->cur_report);
+    }
   }
   return TRUE;
 }
@@ -433,9 +436,21 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
   SCM  inst_options;
   SCM  inst_options_ed;
   
+  /* we get this callback if a new report is requested to be loaded OR
+   * if any URL is clicked.  If an options URL is clicked, we want to
+   * know about it */
   if((type == URL_TYPE_REPORT) && location && (strlen(location) > 3) && 
      !strncmp("id=", location, 3)) {
     sscanf(location+3, "%d", &report_id);
+  }
+  else if((type == URL_TYPE_OPTIONS) && location && (strlen(location) > 10) &&
+          !strncmp("report-id=", location, 10)) {
+    sscanf(location+10, "%d", &report_id);
+    inst_report = gh_call1(find_report, gh_int2scm(report_id));
+    if(inst_report != SCM_BOOL_F) {
+      gnc_report_window_add_edited_report(win, inst_report);      
+    }
+    return;
   }
   else {
     return;
@@ -768,8 +783,7 @@ reportWindow(int report_id) {
 }
 
 void
-gnc_print_report (int report_id)
-{
+gnc_print_report (int report_id) {
   gnc_html *html;
   char * location;
 
@@ -833,7 +847,6 @@ gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
 GtkWidget * 
 gnc_report_window_default_params_editor(SCM options, SCM report) {
   SCM get_editor = gh_eval_str("gnc:report-editor-widget");
-  SCM set_editor = gh_eval_str("gnc:report-set-editor-widget!");
   SCM ptr;
   SCM new_edited;
   
@@ -867,7 +880,6 @@ gnc_report_window_default_params_editor(SCM options, SCM report) {
     gnc_options_dialog_set_close_cb(prm->win, 
                                     gnc_options_dialog_close_cb,
                                     (gpointer)prm);
-
     return gnc_options_dialog_widget(prm->win);
   }
 }

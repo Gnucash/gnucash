@@ -70,9 +70,10 @@ static void gnc_main_window_create_menus(GNCMainInfo * maininfo);
  * Shut down the Gnucash ui windows 
  ********************************************************************/
 
-static void
+static int
 gnc_main_window_destroy_cb(GtkObject * w) {
   gnc_shutdown (0);
+  return TRUE;
 }
 
 
@@ -89,21 +90,27 @@ gnc_main_window_app_destroyed_cb(GnomeApp * app, gpointer user_data) {
   GtkWidget *toolbar;
   GList * child; 
 
-  toolbar = gtk_object_get_user_data (GTK_OBJECT (app));
-  if (toolbar)
-    gtk_widget_unref (toolbar);
-  gtk_object_set_user_data (GTK_OBJECT (app), NULL);
-
-  for(child = mainwin->children; child; child = child->next) {
-    mc = child->data;
-    if(mc && mc->toolbar && mc->app && (mc->app == app)) {
-      /* we need to pull the toolbar out to prevent its being
-       * destroyed */
-      gtk_widget_ref(mc->toolbar);
-      gtk_container_remove(GTK_CONTAINER(mc->toolbar->parent), mc->toolbar);
+  if(g_list_length(mdi->windows) == 0) {
+    gnc_shutdown(0);
+  }
+  else {
+    toolbar = gtk_object_get_user_data (GTK_OBJECT (app));
+    if (toolbar)
+      gtk_widget_unref (toolbar);
+    gtk_object_set_user_data (GTK_OBJECT (app), NULL);
+    
+    for(child = mainwin->children; child; child = child->next) {
+      mc = child->data;
+      if(mc && mc->toolbar && mc->app && (mc->app == app)) {
+        /* we need to pull the toolbar out to prevent its being
+         * destroyed */
+        gtk_widget_ref(mc->toolbar);
+        gtk_container_remove(GTK_CONTAINER(mc->toolbar->parent), mc->toolbar);
+      }
     }
   }
 }
+
 
 /********************************************************************
  * gnc_main_window_app_created_cb()
@@ -141,15 +148,13 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
     item = gnome_dock_item_new("Summary Bar", behavior);
     gtk_container_add( GTK_CONTAINER (item), summarybar );
 
-    if (app->layout)
-    {
+    if (app->layout) {
       gnome_dock_layout_add_item( app->layout,
                                   GNOME_DOCK_ITEM(item),
                                   GNOME_DOCK_TOP,
                                   2, 0, 0 );
     }
-    else
-    {
+    else {
       gnome_dock_add_item( GNOME_DOCK(app->dock),
                            GNOME_DOCK_ITEM(item),
                            GNOME_DOCK_TOP,
