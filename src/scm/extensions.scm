@@ -99,16 +99,13 @@
      (list "Extensions" "")
      (lambda ()
        (let ((file-name (gnc:file-selection-dialog
-                         "Select file to save strings in" ".txt")))
+                         "Select file to save strings in" ".txt" "")))
          (if file-name (gnc:save-translatable-strings file-name))))))
 
   (gnc:add-extension menu)
   (gnc:add-extension export-item)
   (gnc:add-extension progress-item)
-
-  (if (gnc:debugging?)
-      (gnc:add-extension strings-item)))
-
+  (gnc:add-extension strings-item))
 
 (if (gnc:debugging?)
     (gnc:hook-add-dangler gnc:*main-window-opened-hook*

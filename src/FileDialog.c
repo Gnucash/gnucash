@@ -361,7 +361,7 @@ gncFileOpen (void)
   if (!gncFileQuerySave ())
     return;
 
-  newfile = fileBox(_("Open"), NULL);
+  newfile = fileBox(_("Open"), NULL, NULL);
   gncPostFileOpen (newfile);
 
   /* This dialogue can show up early in the startup process. If the
@@ -464,7 +464,7 @@ gncFileSaveAs (void)
   const char *oldfile;
   gboolean uh_oh = FALSE;
 
-  filename = fileBox(_("Save"), "*.gnc");
+  filename = fileBox(_("Save"), "*.gnc", NULL);
   if (!filename) return;
 
   /* Check to see if the user specified the same file as the current

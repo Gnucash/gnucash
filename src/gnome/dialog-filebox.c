@@ -61,12 +61,13 @@ static gboolean gnc_file_box_delete_cb(GtkWidget *widget, GdkEvent *event,
  *   (This function does not return until the user selects a file   * 
  *   or presses "Cancel" or the window manager destroy button)      * 
  *                                                                  * 
- * Args:   title - the title of the window                          *
- *         filter - the file filter to use                          * 
+ * Args:   title        - the title of the window                   *
+ *         filter       - the file filter to use                    * 
+ *         default_name - the default name to use                   *
  * Return: containing the name of the file the user selected        *
 \********************************************************************/
 const char *
-fileBox(const char * title, const char * filter) 
+fileBox (const char * title, const char * filter, const char *default_name)
 {
   const char *last_file;
 
@@ -83,7 +84,10 @@ fileBox(const char * title, const char * filter)
   fb_info.file_name = NULL;
 
   last_file = gnc_history_get_last();
-  if (last_file && !filter)
+
+  if (default_name)
+    gtk_file_selection_set_filename(fb_info.file_box, default_name);
+  else if (last_file)
     gtk_file_selection_set_filename(fb_info.file_box, last_file);
 
   /* hack alert - this was filtering directory names as well as file 

@@ -28,6 +28,8 @@
 #include "config.h"
 
 /** PROTOTYPES ******************************************************/
-const char *fileBox( const char * title, const char * filter );
+const char *fileBox (const char * title,
+                     const char * filter,
+                     const char * default_name);
 
 #endif

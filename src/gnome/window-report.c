@@ -201,16 +201,15 @@ gnc_report_error_dialog(const char *message)
   parent = GTK_WINDOW(gnc_html_window_get_window(reportwindow));
 
   if (message == NULL)
-    text = err_msg;
+    text = g_strdup (err_msg);
   else
-    text = g_strconcat(err_msg, "\n\n", message, NULL);
+    text = g_strconcat (err_msg, "\n\n", message, NULL);
 
   PERR("gnc_report_error_dialog: error running report.\n%s\n", message);
 
   gnc_error_dialog_parented(parent, text);
 
-  if (message != NULL)
-    g_free(text);
+  g_free(text);
 }
 
 static char *
@@ -316,7 +315,7 @@ gnc_report_export(ReportData *report_data)
     text = report_data->text;
 
   /* Get the filename */
-  export_filename = fileBox(_("Export To"), NULL);
+  export_filename = fileBox(_("Export To"), NULL, "");
   if (export_filename == NULL)
     return;
 

@@ -226,8 +226,8 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
   
   const char * new_file_name;
 
-  new_file_name = fileBox(_("Select QIF File"), "*.qif");
-  
+  new_file_name = fileBox(_("Select QIF File"), "*.qif", "");
+
   /* set the filename entry for what was selected */
   if(wind->filename_entry) {
     if(new_file_name) {
@@ -239,9 +239,6 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
                          "");
     }      
   }
-  
-  /* free new_file_name -- g_free or free? */
-  /* FIXME */
 }
 
 
