@@ -13,7 +13,7 @@ typedef struct _gncAccountValue GncAccountValue;
 
 #include "gnc-numeric.h"
 #include "gnc-book.h"
-#include "date.h"
+#include "gnc-date.h"
 #include "Account.h"
 
 #define GNC_TAXTABLE_MODULE_NAME "gncTaxTable"

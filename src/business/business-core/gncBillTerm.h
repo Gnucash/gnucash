@@ -11,7 +11,7 @@ typedef struct _gncBillTerm GncBillTerm;
 
 #include "gnc-numeric.h"
 #include "gnc-book.h"
-#include "date.h"
+#include "gnc-date.h"
 
 #define GNC_BILLTERM_MODULE_NAME "gncBillTerm"
 

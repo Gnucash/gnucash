@@ -20,8 +20,8 @@ typedef enum {
   GNC_DISC_POSTTAX
 } GncDiscountHow;
 
-#include "date.h"
 #include "gnc-book.h"
+#include "gnc-date.h"
 #include "gncTaxTable.h"
 #include "gncOrder.h"
 #include "gncInvoice.h"
