@@ -184,12 +184,6 @@ void         xaccAccountRemoveSplit (Account *, Split *);
 void         xaccAccountRecomputeBalance (Account *);
 void         xaccAccountRecomputeBalances (Account **);
 
-/*
- * recomputes the cost basis 
- */
-void         xaccAccountRecomputeCostBasis (Account *);
-
-
 /* Set the account's GUID. This should only be done when reading
  * an account from a datafile, or some other external source. Never
  * call this on an existing account! */

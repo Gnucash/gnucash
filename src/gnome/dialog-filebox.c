@@ -27,6 +27,7 @@
 #include <gnome.h>
 
 #include "FileBox.h"
+#include "file-history.h"
 #include "messages.h"
 #include "util.h"
 
@@ -61,11 +62,13 @@ static gboolean gnc_file_box_delete_cb(GtkWidget *widget, GdkEvent *event,
  *                                                                  * 
  * Args:   title - the title of the window                          *
  *         filter - the file filter to use                          * 
- * Return: char * containing the name of the file the user selected *
+ * Return: containing the name of the file the user selected        *
 \********************************************************************/
-char *
+const char *
 fileBox(const char * title, const char * filter) 
 {
+  const char *last_file;
+
   ENTER("\n");
 
   /* Set a default title if nothing was passed in */  
@@ -77,6 +80,10 @@ fileBox(const char * title, const char * filter)
 
   fb_info.file_box = GTK_FILE_SELECTION(gtk_file_selection_new(title));
   fb_info.file_name = NULL;
+
+  last_file = gnc_history_get_last();
+  if (last_file != NULL)
+    gtk_file_selection_set_filename(fb_info.file_box, last_file);
 
   /* hack alert - this was filtering directory names as well as file 
    * names, so I think we should not do this by default (rgmerk) */

@@ -14,4 +14,5 @@ gncscm_DATA = \
 
 EXTRA_DIST = \
   .cvsignore \
-  ${gncscm_DATA}
+  ${gncscm_DATA} \
+  file-format.txt

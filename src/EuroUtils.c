@@ -24,6 +24,8 @@
 #include <string.h>
 #include "gnc-commodity.h"
 
+#include "EuroUtils.h"
+
 /* local structs */
 typedef struct _gnc_euro_rate_struct {
   const char *currency;

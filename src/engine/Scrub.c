@@ -47,13 +47,6 @@
 static short module = MOD_SCRUB;
 static Account * GetOrMakeAccount (Account *, Transaction *, const char *);
 
-void 
-Scrub (Account *acc)
-{
-   xaccAccountTreeScrubOrphans (acc);
-   xaccAccountScrubImbalance (acc);
-}
-
 /* ================================================================ */
 
 void

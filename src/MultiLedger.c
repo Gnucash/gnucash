@@ -26,7 +26,6 @@
 #include "Account.h"
 #include "AccountP.h"
 #include "Group.h"
-#include "LedgerUtils.h"
 #include "MultiLedger.h"
 #include "Query.h"
 #include "SplitLedger.h"
@@ -37,15 +36,16 @@
 
 
 /** GLOBALS *********************************************************/
-/* These are globals because they describe the state of the entire session.
- * The is, there must be only one instance of these per GUI session.
- */
+/* These are globals because they describe the state of the entire
+ * session. The is, there must be only one instance of these per GUI
+ * session. */
 
-static xaccLedgerDisplay **regList = NULL;     /* single-account registers */
-static xaccLedgerDisplay **ledgerList = NULL;  /* multiple-account registers */
-static xaccLedgerDisplay **fullList = NULL;    /* all registers */
+static xaccLedgerDisplay **registerList = NULL; /* single-account registers */
+static xaccLedgerDisplay **ledgerList = NULL;   /* multi-account registers */
+static GList *fullList = NULL;    /* all registers */
 
 static short module = MOD_LEDGER;
+
 
 /********************************************************************\
  * Ledger utilities                                                 *
@@ -57,89 +57,39 @@ static short module = MOD_LEDGER;
  * present a rather natural place for the locks to be placed.       *
 \********************************************************************/
 
-static int 
-ledgerListCount (xaccLedgerDisplay **list)
+/* ------------------------------------------------------ */
+
+static GList *
+ledgerListAdd (GList *list, xaccLedgerDisplay *ledger_display)
 {
-   int n = 0;
-   if (!list) return 0;
-   while (list[n]) n++;
-   return n;
+  if (ledger_display == NULL)
+    return list;
+
+  return g_list_prepend(list, ledger_display);
 }
 
 /* ------------------------------------------------------ */
 
-static xaccLedgerDisplay ** 
-ledgerListAdd (xaccLedgerDisplay **oldlist, xaccLedgerDisplay *addreg)
+static GList *
+ledgerListRemove (GList *list, xaccLedgerDisplay *ledger_display)
 {
-   xaccLedgerDisplay **newlist;
-   xaccLedgerDisplay *reg;
-   int n;
-
-   if (!addreg) return oldlist;
-
-   n = ledgerListCount (oldlist);
-   newlist = (xaccLedgerDisplay **) _malloc ((n+2) * sizeof (xaccLedgerDisplay *));
-
-   n = 0;
-   if (oldlist) {
-      reg = oldlist[0];
-      while (reg) {
-         newlist[n] = reg;
-         n++;
-         reg = oldlist[n];
-      }
-      _free (oldlist);
-   }
-   newlist[n] = addreg;
-   newlist[n+1] = NULL;
-
-   return newlist;
+  return g_list_remove(list, ledger_display);
 }
 
 /* ------------------------------------------------------ */
 
-static void
-ledgerListRemove (xaccLedgerDisplay **list, xaccLedgerDisplay *delreg)
+static gboolean
+ledgerIsMember (xaccLedgerDisplay *ledger_display, Account * account)
 {
-   int n, i;
+  if (!account) return FALSE;
+  if (!ledger_display) return FALSE;
 
-   if (!list) return;
-   if (!delreg) return;
+  if (account == ledger_display->leader) return TRUE;
 
-   n = 0;
-   i = 0; 
-   while (list[n]) {
-      list[i] = list[n];
-      if (delreg == list[n]) i--;
-      i++;
-      n++;
-   }
-   list[i] = NULL;
-}
+  /* Simple hack. Always return true for search registers. */
+  if (ledger_display->type == SEARCH_LEDGER) return TRUE;
 
-/* ------------------------------------------------------ */
-
-int
-ledgerIsMember (xaccLedgerDisplay *reg, Account * acc)
-{
-   int n; 
-
-   if (!acc) return 0;
-   if (!reg) return 0;
-
-   if (acc == reg->leader) return 1;
-
-   /* Simple hack. Always return true for search registers. */
-   if (reg->type == SEARCH_LEDGER) return 1;
-
-   if (! (reg->displayed_accounts)) return 0; 
-
-   n = 0;
-   while (reg->displayed_accounts[n]) {
-      if (acc == reg->displayed_accounts[n]) return 1;
-      n++;
-   }
-   return 0;
+  return g_list_find(ledger_display->displayed_accounts, account) != NULL;
 }
 
 /********************************************************************\
@@ -151,15 +101,15 @@ ledgerIsMember (xaccLedgerDisplay *reg, Account * acc)
 \********************************************************************/
 
 xaccLedgerDisplay *
-xaccLedgerDisplaySimple (Account *acc)
+xaccLedgerDisplaySimple (Account *account)
 {
   SplitRegisterType reg_type;
-  GNCAccountType acc_type;
+  GNCAccountType account_type;
 
-  acc_type = xaccAccountGetType (acc);
+  account_type = xaccAccountGetType (account);
 
   /* translate between different enumerants */
-  switch (acc_type) {
+  switch (account_type) {
     case BANK:
       reg_type = BANK_REGISTER;
       break;
@@ -192,11 +142,36 @@ xaccLedgerDisplaySimple (Account *acc)
       reg_type = CURRENCY_REGISTER;
       break;
     default:
-      PERR ("unknown account type %d\n", acc_type);
+      PERR ("unknown account type %d\n", account_type);
       return NULL;
   }
 
-  return xaccLedgerDisplayGeneral (acc, NULL, reg_type, REG_SINGLE_LINE);
+  return xaccLedgerDisplayGeneral (account, NULL, reg_type, REG_SINGLE_LINE);
+}
+
+static GList *
+xaccAccountPrependChildren (Account *account, GList *list)
+{
+  AccountGroup *group;
+  int num_accounts;
+  int i;
+
+  if (!account) return NULL;
+
+  list = g_list_prepend(list, account);
+
+  group = xaccAccountGetChildren (account);
+  if (group == NULL)
+    return list;
+
+  num_accounts = xaccGroupGetNumAccounts (group);
+  for (i = 0; i < num_accounts; i++)
+  {
+    account = xaccGroupGetAccount (group, i);
+    list = xaccAccountPrependChildren (account, list);
+  }
+
+  return list;
 }
 
 /********************************************************************\
@@ -204,73 +179,69 @@ xaccLedgerDisplaySimple (Account *acc)
  *   opens up a register window to display an account, and all      *
  *   of its children, in the same window                            *
  *                                                                  *
- * Args:   acc     - the account associated with this register      *
- * Return: regData - the register window instance                   *
+ * Args:   account - the account associated with this register      *
+ * Return: the register window instance                             *
 \********************************************************************/
 
 xaccLedgerDisplay *
-xaccLedgerDisplayAccGroup (Account *acc)
+xaccLedgerDisplayAccGroup (Account *account)
 {
+  xaccLedgerDisplay *ledger_display;
   SplitRegisterType ledger_type;
-  xaccLedgerDisplay *retval;
-  GNCAccountType acc_type;
   GNCAccountType le_type;
-  Account **list;
-  Account *le;
-  int n;
+  GList *accounts;
+  GList *node;
 
   /* build a flat list from the tree */
-  list = xaccGroupToList (acc);
+  accounts = xaccAccountPrependChildren (account, NULL);
+  accounts = g_list_reverse (accounts);
 
-  acc_type = xaccAccountGetType (acc);
-  switch (acc_type) {
+  switch (xaccAccountGetType (account))
+  {
     case BANK:
     case CASH:
     case ASSET:
     case CREDIT:
     case LIABILITY:
-       /* if any of the sub-accounts have STOCK or MUTUAL types,
-        * then we must use the PORTFOLIO_LEDGER ledger. Otherwise,
-        * a plain old GENERAL_LEDGER will do. */
-       ledger_type = GENERAL_LEDGER;
+      /* if any of the sub-accounts have STOCK or MUTUAL types,
+       * then we must use the PORTFOLIO_LEDGER ledger. Otherwise,
+       * a plain old GENERAL_LEDGER will do. */
+      ledger_type = GENERAL_LEDGER;
 
-       le = list[0];
-       n = 0;
-       while (le) {
-          le_type = xaccAccountGetType (le);
-          if ((STOCK == le_type) || (MUTUAL == le_type)) {
-             ledger_type = PORTFOLIO_LEDGER;
-          }
-          n++;
-          le = list[n];
-       }
-       break;
+      for (node = accounts; node; node = node->next)
+      {
+        le_type = xaccAccountGetType (node->data);
+        if ((STOCK == le_type) || (MUTUAL == le_type))
+          ledger_type = PORTFOLIO_LEDGER;
+      }
+      break;
 
     case STOCK:
     case MUTUAL:
-       ledger_type = PORTFOLIO_LEDGER;
-       break;
+      ledger_type = PORTFOLIO_LEDGER;
+      break;
 
     case INCOME:
     case EXPENSE:
-       ledger_type = INCOME_LEDGER;
-       break;
+      ledger_type = INCOME_LEDGER;
+      break;
 
     case EQUITY:
-       ledger_type = GENERAL_LEDGER;
-       break;
+      ledger_type = GENERAL_LEDGER;
+      break;
 
     default:
       PERR ("unknown account type \n");
-      _free (list);
+      g_list_free (accounts);
       return NULL;
   }
 
-  retval = xaccLedgerDisplayGeneral (acc, list, ledger_type, REG_SINGLE_LINE);
+  ledger_display = xaccLedgerDisplayGeneral (account, accounts, ledger_type,
+                                             REG_SINGLE_LINE);
 
-  if (list) _free (list);
+  g_list_free (accounts);
 
-  return retval;
+  return ledger_display;
 }
 
 static gncUIWidget
@@ -305,15 +276,15 @@ xaccLedgerDisplaySetHelp(void *user_data, const char *help_str)
  * xaccLedgerDisplayGeneral                                         *
  *   opens up a ledger window for a list of accounts                *
  *                                                                  *
- * Args:   lead_acc - the account associated with this register     *
- *                     (may be null)                                *
- *         acc_list - the list of accounts to display in register   *
- *                     (may be null)                                *
- * Return: regData  - the register window instance                  *
+ * Args:   lead_account - the account associated with this register *
+ *                        (may be NULL)                             *
+ *         accounts     - the list of accounts to display           *
+ *                        (may be NULL)                             *
+ * Return: the register window instance                             *
 \********************************************************************/
 
 xaccLedgerDisplay *
-xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist,
+xaccLedgerDisplayGeneral (Account *lead_account, GList *accounts,
                           SplitRegisterType type, SplitRegisterStyle style)
 {
   xaccLedgerDisplay *regData = NULL;
@@ -339,34 +310,32 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist,
    * registers.
    */
   regData = NULL;
-  if (lead_acc) {
-     if (!acclist) {
-       FETCH_FROM_LIST (xaccLedgerDisplay, regList, lead_acc, leader, regData);
+  if (lead_account) {
+     if (!accounts) {
+       FETCH_FROM_LIST (xaccLedgerDisplay, registerList, lead_account, leader, regData);
      } else {
-       FETCH_FROM_LIST (xaccLedgerDisplay, ledgerList, lead_acc, leader, regData);
+       FETCH_FROM_LIST (xaccLedgerDisplay, ledgerList, lead_account, leader, regData);
      }
   }
 
   /* if regData is null, then no leader account was specified */
-  if (!regData) {
+  if (!regData)
     regData = (xaccLedgerDisplay *) malloc (sizeof (xaccLedgerDisplay));
-  }
 
-  regData->leader = lead_acc;
+  regData->leader = lead_account;
   regData->redraw = NULL;
   regData->destroy = NULL;
   regData->get_parent = NULL;
   regData->set_help = NULL;
   regData->gui_hook = NULL;
-  regData->dirty = 0;
+  regData->dirty = FALSE;
   regData->balance = 0.0;
   regData->clearedBalance = 0.0;
   regData->reconciledBalance = 0.0;
 
-  /* count the number of accounts we are supposed to display,
-   * and then, store them. */
-  regData->numAcc = accListCount (acclist);
-  regData->displayed_accounts = accListCopy (acclist);
+  /* store the displayed accounts */
+  regData->displayed_accounts = g_list_copy(accounts);
+
   regData->type = type;
 
   show_all = gnc_lookup_boolean_option("Register",
@@ -384,17 +353,15 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist,
     xaccQuerySetMaxSplits(regData->query, 30);
 
   xaccQuerySetGroup(regData->query, gncGetCurrentGroup());
-  if(regData->displayed_accounts) {
-    xaccQueryAddAccountMatch(regData->query, 
-                             regData->displayed_accounts,
+
+  if (regData->displayed_accounts)
+    xaccQueryAddAccountMatch(regData->query, regData->displayed_accounts,
                              ACCT_MATCH_ANY, QUERY_OR);
-  }
+
   if ((regData->leader != NULL) &&
-      !accListHasAccount(regData->displayed_accounts, regData->leader)) {
-    xaccQueryAddSingleAccountMatch(regData->query, regData->leader,
-                                   QUERY_OR);
-  }
-  
+      (g_list_find(regData->displayed_accounts, regData->leader) == NULL))
+    xaccQueryAddSingleAccountMatch(regData->query, regData->leader, QUERY_OR);
+
   /* add this register to the list of registers */
   fullList = ledgerListAdd (fullList, regData);
 
@@ -410,7 +377,7 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist,
                 xaccLedgerDisplayParent,
                 xaccLedgerDisplaySetHelp);
 
-  regData->dirty = 1;
+  regData->dirty = TRUE;
   xaccLedgerDisplayRefresh (regData);
 
   return regData;
@@ -423,18 +390,18 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist,
 void 
 xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
 {
-   /* If we don't really need the redraw, don't do it. */
-   if (!(regData->dirty)) return;
-   regData->dirty = 0;  /* mark clean */
+  /* If we don't really need the redraw, don't do it. */
+  if (!(regData->dirty)) return;
+  regData->dirty = FALSE;  /* mark clean */
 
-   /* The leader account is used by the register gui to
-    * assign a default source account for a "blank split"
-    * that is attached to the bottom of the register.
-    * The "blank split" is what the user edits to create 
-    * new splits and get them into the system. */
-   xaccSRLoadRegister (regData->ledger, 
-                       xaccQueryGetSplits (regData->query),
-                       regData->leader);
+  /* The leader account is used by the register gui to
+   * assign a default source account for a "blank split"
+   * that is attached to the bottom of the register.
+   * The "blank split" is what the user edits to create 
+   * new splits and get them into the system. */
+  xaccSRLoadRegister (regData->ledger, 
+                      xaccQueryGetSplits (regData->query),
+                      regData->leader);
 
   /* hack alert -- this computation of totals is incorrect 
    * for multi-account ledgers */
@@ -458,17 +425,15 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
 void 
 xaccRegisterRefreshAllGUI (void)
 {
-   xaccLedgerDisplay *regData;
-   int n;
+  xaccLedgerDisplay *ledger_display;
+  GList *node;
 
-   if (!fullList) return;
-
-   n = 0; regData = fullList[n];
-   while (regData) {
-     if (regData->redraw)
-       (regData->redraw) (regData);
-      n++; regData = fullList[n];
-   }
+  for (node = fullList; node; node = g_list_next(node))
+  {
+    ledger_display = node->data;
+    if (ledger_display->redraw)
+      (ledger_display->redraw) (ledger_display);
+  }
 }
 
 /********************************************************************\
@@ -478,21 +443,19 @@ xaccRegisterRefreshAllGUI (void)
 void 
 xaccRegisterRefresh (SplitRegister *splitreg)
 {
-   xaccLedgerDisplay *regData;
-   int n;
+  xaccLedgerDisplay *ledger_display;
+  GList *node;
 
-   if (!fullList) return;
-
-   /* find the ledger which contains this register */
-   n = 0; regData = fullList[n];
-   while (regData) {
-      if (splitreg == regData->ledger) {
-        regData->dirty = 1;
-        xaccLedgerDisplayRefresh (regData);
-        return;
-      }
-      n++; regData = fullList[n];
-   }
+  for (node = fullList; node; node = g_list_next(node))
+  {
+    ledger_display = node->data;
+    if (splitreg == ledger_display->ledger)
+    {
+      ledger_display->dirty = TRUE;
+      xaccLedgerDisplayRefresh (ledger_display);
+      return;
+    }
+  }
 }
 
 /********************************************************************\
@@ -500,21 +463,17 @@ xaccRegisterRefresh (SplitRegister *splitreg)
 \********************************************************************/
 
 static void 
-MarkDirtyAllRegs (Account *acc)
+MarkDirtyAllRegs (Account *account)
 {
-   xaccLedgerDisplay *regData;
-   int n;
+  xaccLedgerDisplay *ledger_display;
+  GList *node;
 
-   if (!acc || !fullList) return;   
-
-   /* find all registers which contain this account */
-   n = 0; regData = fullList[n];
-   while (regData) {
-      if (ledgerIsMember (regData, acc)) {
-        regData->dirty = 1;
-      }
-      n++; regData = fullList[n];
-   }
+  for (node = fullList; node; node = g_list_next(node))
+  {
+    ledger_display = node->data;
+    if (ledgerIsMember (ledger_display, account))
+      ledger_display->dirty = TRUE;
+  }
 }
 
 /********************************************************************\
@@ -522,54 +481,28 @@ MarkDirtyAllRegs (Account *acc)
 \********************************************************************/
 
 static void 
-RefreshAllRegs (Account *acc)
+RefreshAllRegs (Account *account)
 {
-   xaccLedgerDisplay *regData;
-   int n;
+  xaccLedgerDisplay *ledger_display;
+  GList *node;
 
-   if (!acc || !fullList) return;   
-
-   /* find all registers which contain this account */
-   n = 0; regData = fullList[n];
-   while (regData) {
-      if (ledgerIsMember (regData, acc)) {
-        xaccLedgerDisplayRefresh (regData);
-      }
-      n++; regData = fullList[n];
-   }
+  for (node = fullList; node; node = g_list_next(node))
+  {
+    ledger_display = node->data;
+    if (ledgerIsMember (ledger_display, account))
+      xaccLedgerDisplayRefresh (ledger_display);
+  }
 }
 
 /********************************************************************\
 \********************************************************************/
 
 void 
-xaccAccountDisplayRefresh (Account *acc)
+xaccAccountDisplayRefresh (Account *account)
 {
-   /* avoid excess screen flicker with a two-phase refresh */
-   MarkDirtyAllRegs (acc);
-   RefreshAllRegs (acc);
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void 
-xaccAccListDisplayRefresh (Account **acc_list)
-{
-   Account *acc;
-   int i;
-
-   /* avoid excess screen flicker with a two-phase refresh */
-   i = 0; acc = acc_list[0];
-   while (acc) {
-      MarkDirtyAllRegs (acc);
-      i++; acc = acc_list[i];
-   }
-   i = 0; acc = acc_list[0];
-   while (acc) {
-      RefreshAllRegs (acc);
-      i++; acc = acc_list[i];
-   }
+  /* avoid excess screen flicker with a two-phase refresh */
+  MarkDirtyAllRegs (account);
+  RefreshAllRegs (account);
 }
 
 /********************************************************************\
@@ -585,6 +518,7 @@ xaccAccGListDisplayRefresh (GList *accounts)
     MarkDirtyAllRegs (node->data);
     node = node->next;
   }
+
   node = accounts;
   while (node) {
     RefreshAllRegs (node->data);
@@ -598,20 +532,20 @@ xaccAccGListDisplayRefresh (GList *accounts)
 void 
 xaccTransDisplayRefresh (Transaction *trans)
 {
-   int i, num_splits;  
+  int i, num_splits;
 
-   /* avoid excess screen flicker with a two-phase refresh */
-   num_splits = xaccTransCountSplits (trans);
-   for (i=0; i<num_splits; i++) {
-      Split *split = xaccTransGetSplit (trans, i);
-      Account *acc = xaccSplitGetAccount (split);
-      MarkDirtyAllRegs (acc);
-   }
-   for (i=0; i<num_splits; i++) {
-      Split *split = xaccTransGetSplit (trans, i);
-      Account *acc = xaccSplitGetAccount (split);
-      RefreshAllRegs (acc);
-   }
+  /* avoid excess screen flicker with a two-phase refresh */
+  num_splits = xaccTransCountSplits (trans);
+  for (i=0; i<num_splits; i++) {
+    Split *split = xaccTransGetSplit (trans, i);
+    Account *account = xaccSplitGetAccount (split);
+    MarkDirtyAllRegs (account);
+  }
+  for (i=0; i<num_splits; i++) {
+    Split *split = xaccTransGetSplit (trans, i);
+    Account *account = xaccSplitGetAccount (split);
+    RefreshAllRegs (account);
+  }
 }
 
 /********************************************************************\
@@ -619,43 +553,50 @@ xaccTransDisplayRefresh (Transaction *trans)
 \********************************************************************/
 
 void
-xaccDestroyLedgerDisplay (Account *acc)
+xaccDestroyLedgerDisplay (Account *account)
 {
-   xaccLedgerDisplay *regData;
-   int n;
+  xaccLedgerDisplay *ledger_display;
+  GList *close_list = NULL;
+  GList *node;
 
-   if (!acc) return;
+  if (!account) return;
 
-   /* find the single-account window for this account, if any */
-   FIND_IN_LIST (xaccLedgerDisplay, regList, acc, leader, regData);
-   if (regData) {
-      if (regData->destroy) { (regData->destroy) (regData); }
-      xaccLedgerDisplayClose (regData);
-   } 
+  /* find the single-account window for this account, if any */
+  FIND_IN_LIST (xaccLedgerDisplay, registerList, account, leader,
+                ledger_display);
+  if (ledger_display)
+  {
+    if (ledger_display->destroy)
+      (ledger_display->destroy) (ledger_display);
+    xaccLedgerDisplayClose (ledger_display);
+  }
 
-   /* find the multiple-account window for this account, if any */
-   FIND_IN_LIST (xaccLedgerDisplay, ledgerList, acc, leader, regData);
-   if (regData) {
-      if (regData->destroy) { (regData->destroy) (regData); }
-      xaccLedgerDisplayClose (regData);
-   } 
+  /* find the multiple-account window for this account, if any */
+  FIND_IN_LIST (xaccLedgerDisplay, ledgerList, account, leader,
+                ledger_display);
+  if (ledger_display)
+  {
+    if (ledger_display->destroy)
+      (ledger_display->destroy) (ledger_display);
+    xaccLedgerDisplayClose (ledger_display);
+  } 
 
-   /* cruise throught the miscellaneous account windows */
-   if (!fullList) return;
-   n = 0;
-   regData = fullList[n];
-   while (regData) {
-      int got_one;
+  for (node = fullList; node; node = g_list_next(node))
+  {
+    ledger_display = node->data;
+    if (ledgerIsMember (ledger_display, account))
+      close_list = g_list_prepend (close_list, ledger_display);
+  }
 
-      got_one = ledgerIsMember (regData, acc);
-      if (got_one) {
-         if (regData->destroy) { (regData->destroy) (regData); }
-         xaccLedgerDisplayClose (regData);
-         n = -1;  /* since the above alters this list */
-      }
-      n++;
-      regData = fullList[n];
-   }
+  for (node = close_list; node; node = g_list_next(node))
+  {
+    ledger_display = node->data;
+    if (ledger_display->destroy)
+      (ledger_display->destroy) (ledger_display);
+    xaccLedgerDisplayClose (ledger_display);
+  }
+
+  g_list_free(close_list);
 }
 
 /********************************************************************\
@@ -667,24 +608,28 @@ xaccDestroyLedgerDisplay (Account *acc)
  * Return: none                                                     *
 \********************************************************************/
 void 
-xaccLedgerDisplayClose (xaccLedgerDisplay *regData)
+xaccLedgerDisplayClose (xaccLedgerDisplay *ledger_display)
 {
-  Account *acc;
-  
-  if (!regData) return;
-  acc = regData->leader;
+  Account *account;
 
-  xaccDestroySplitRegister (regData->ledger);
+  if (!ledger_display) return;
+
+  account = ledger_display->leader;
+
+  xaccDestroySplitRegister (ledger_display->ledger);
 
   /* whether this is a single or multi-account window, remove it */
-  REMOVE_FROM_LIST (xaccLedgerDisplay, regList, acc, leader);
-  REMOVE_FROM_LIST (xaccLedgerDisplay, ledgerList, acc, leader);
+  REMOVE_FROM_LIST (xaccLedgerDisplay, registerList, account, leader);
+  REMOVE_FROM_LIST (xaccLedgerDisplay, ledgerList, account, leader);
 
-  ledgerListRemove (fullList, regData);
+  fullList = ledgerListRemove (fullList, ledger_display);
 
-  xaccFreeQuery (regData->query);
+  xaccFreeQuery (ledger_display->query);
 
-  free(regData);
+  g_list_free(ledger_display->displayed_accounts);
+  ledger_display->displayed_accounts = NULL;
+
+  free(ledger_display);
 }
 
 /************************** END OF FILE *************************/

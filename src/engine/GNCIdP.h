@@ -29,10 +29,10 @@
 /* This file defines an engine-only API for using gnucash entity
  * identifiers. */
 
-/* Generate a new id. This function is guaranteed to return an
- * id that is unique within the scope of a particular gnucash
- * session. GnuCash routines should always use this function
- * and not guid_new!! */
+/* Generate a new id. This function is guaranteed to return an id that
+ * is unique within the scope of all GnuCash entities being managed by
+ * the current invocation of GnuCash. GnuCash routines should always
+ * use this function and not guid_new! */
 void xaccGUIDNew(GUID *guid);
 
 /* Lookup an entity given an id and a type. If there is no entity

@@ -241,3 +241,18 @@ void
 gnc_ui_qif_import_finish_cb            (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data);
+
+void
+gnc_ui_find_transactions_dialog_early_date_toggle_cb
+                                        (GtkToggleButton *togglebutton,
+                                        gpointer         user_data);
+
+void
+gnc_ui_find_transactions_dialog_late_date_toggle_cb
+                                        (GtkToggleButton *togglebutton,
+                                        gpointer         user_data);
+
+gboolean
+gnc_ui_qif_import_date_format_next_cb  (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);

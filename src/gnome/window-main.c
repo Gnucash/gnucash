@@ -30,11 +30,9 @@
 
 #include "gnome-top-level.h"
 #include "AccWindow.h"
-#include "AdjBWindow.h"
 #include "global-options.h"
 #include "dialog-options.h"
 #include "FileDialog.h"
-#include "g-wrap.h"
 #include "gnucash.h"
 #include "MainWindow.h"
 #include "Destroy.h"
@@ -43,7 +41,6 @@
 #include "RegWindow.h"
 #include "Refresh.h"
 #include "window-main.h"
-#include "window-mainP.h"
 #include "window-reconcile.h"
 #include "window-register.h"
 #include "window-help.h"
@@ -54,14 +51,32 @@
 #include "dialog-find-transactions.h"
 #include "dialog-totd.h"
 #include "file-history.h"
+#include "gtkselect.h"
 #include "EuroUtils.h"
 #include "Scrub.h"
 #include "util.h"
-#include "gnc.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gtkselect.h"
 
+/* FIXME get rid of these */
+#include <g-wrap.h>
+#include "gnc.h"
+
+/* Main Window information structure */
+typedef struct _GNCMainInfo GNCMainInfo;
+struct _GNCMainInfo
+{
+  GtkWidget *account_tree;
+  GtkWidget *totals_combo;
+  GList *totals_list;
+
+  SCM main_window_change_callback_id;
+  SCM euro_change_callback_id;
+  SCM toolbar_change_callback_id;
+
+  GSList *account_sensitives;
+};
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
@@ -76,14 +91,16 @@ enum {
   FMB_QUIT,
 };
 
-/*
- * An accumulator for a given currency.
+/** Static function declarations ***************************************/
+static GNCMainInfo * gnc_get_main_info(void);
+
+
+/* An accumulator for a given currency.
  *
  * This is used during the update to the status bar to contain the
  * accumulation for a single currency. These are placed in a GList and
- * kept around for the duration of the calcualtion. There may, in fact
- * be better ways to do this, but none occurred...
- */
+ * kept around for the duration of the calculation. There may, in fact
+ * be better ways to do this, but none occurred. */
 struct _GNCCurrencyAcc {
   const gnc_commodity * currency;
   double assets;
@@ -91,13 +108,11 @@ struct _GNCCurrencyAcc {
 };
 typedef struct _GNCCurrencyAcc GNCCurrencyAcc;
 
-/*
- * An item to appear in the selector box in the status bar.
+/* An item to appear in the selector box in the status bar.
  *
- * This is maintained for the duration, where there is one per currency,
- * plus (eventually) one for the default currency accumulation (like the
- * EURO
- */
+ * This is maintained for the duration, where there is one per
+ * currency, plus (eventually) one for the default currency
+ * accumulation (like the EURO). */
 struct _GNCCurrencyItem {
   const gnc_commodity * currency;
   GtkWidget *listitem;
@@ -107,14 +122,13 @@ struct _GNCCurrencyItem {
 };
 typedef struct _GNCCurrencyItem GNCCurrencyItem;
 
-/*
- * Build a single currency item.
+/* Build a single currency item.
  *
  * This function handles the building of a single currency item for the
  * selector. It looks like the old code in the update function, but now
  * only handles a single currency.
  */
-GNCCurrencyItem *
+static GNCCurrencyItem *
 gnc_ui_build_currency_item(const gnc_commodity * currency)
 {
   GtkWidget *label;
@@ -177,61 +191,141 @@ gnc_ui_build_currency_item(const gnc_commodity * currency)
 }
 
 
-/*
- * Get a currency accumulator.
+/* Get a currency accumulator.
  *
- * This will search the given list, and if no accumulator is found, wil
- * allocate a fresh one. This may cause problems with currencies that have
- * the same name... let the buyer beware.
- */
+ * This will search the given list, and if no accumulator is found,
+ * will allocate a fresh one. */
 static GNCCurrencyAcc *
 gnc_ui_get_currency_accumulator(GList **list, const gnc_commodity * currency)
 {
   GList *current;
   GNCCurrencyAcc *found;
-
-  for (current = g_list_first(*list); current; current = g_list_next(current)) {
+    
+  for (current = g_list_first(*list); current;
+       current = g_list_next(current)) {
     found = current->data;
     if (gnc_commodity_equiv(currency, found->currency)) {
       return found;
     }
-  }
+  } 
   found = g_new0(GNCCurrencyAcc, 1);
   found->currency = currency;
   found->assets = 0.0;
   found->profits = 0.0;
   *list = g_list_append(*list, found);
+  
   return found;
 }
 
-/*
- * Get a currency item.
+/* Get a currency item.
  *
- * This will search the given list, and if no accumulator is found, wil
- * create a fresh one. This may cause problems with currencies that have
- * the same name... let the buyer beware.
+ * This will search the given list, and if no accumulator is found, will
+ * create a fresh one.
  *
- * It looks just like the function above, with some extra stuff to get the
- * item into the list.
- */
+ * It looks just like the function above, with some extra stuff to get
+ * the item into the list. */
+
 static GNCCurrencyItem *
 gnc_ui_get_currency_item(GList **list, const gnc_commodity * currency, GtkWidget *holder)
 {
   GList *current;
   GNCCurrencyItem *found;
 
-  for (current = g_list_first(*list); current; current = g_list_next(current)) {
+  for (current = g_list_first(*list); current;
+       current = g_list_next(current)) {
     found = current->data;
     if (gnc_commodity_equiv(found->currency, currency)) {
       return found;
     }
   }
+  
   found = gnc_ui_build_currency_item(currency);
   *list = g_list_append(*list, found);
-
+  
   current = g_list_append(NULL, found->listitem);
   gtk_select_append_items(GTK_SELECT(holder), current);
+
   return found;
+}
+
+static void
+gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
+                         gboolean euro)
+{
+  double amount;
+  AccountGroup *children;
+  Account *account;
+  int num_accounts;
+  int account_type;  
+  const gnc_commodity * account_currency;
+  const gnc_commodity * default_currency;
+  const gnc_commodity * euro_commodity;
+  const char * default_mnemonic;
+  GNCCurrencyAcc *currency_accum;
+  GNCCurrencyAcc *euro_accum = NULL;
+  int i;
+
+  default_mnemonic = gnc_lookup_string_option("International",
+					      "Default Currency",
+					      "USD");
+  default_currency = gnc_commodity_table_lookup(gnc_engine_commodities(),
+                                                GNC_COMMODITY_NS_ISO,
+                                                default_mnemonic);
+
+  if (euro) {
+    euro_commodity = gnc_commodity_table_lookup(gnc_engine_commodities(),
+                                                GNC_COMMODITY_NS_ISO,
+                                                "EUR");    
+    euro_accum = gnc_ui_get_currency_accumulator(currency_list,
+						 euro_commodity);
+  }
+  
+  num_accounts = xaccGroupGetNumAccounts(group);
+  for (i = 0; i < num_accounts; i++)
+  {
+    account = xaccGroupGetAccount(group, i);
+
+    account_type = xaccAccountGetType(account);
+    account_currency = xaccAccountGetCurrency(account);
+    children = xaccAccountGetChildren(account);
+    currency_accum = gnc_ui_get_currency_accumulator(currency_list,
+						     account_currency);
+
+    switch (account_type)
+    {
+      case BANK:
+      case CASH:
+      case ASSET:
+      case STOCK:
+      case MUTUAL:
+      case CREDIT:
+      case LIABILITY:
+	amount = xaccAccountGetBalance(account);
+        currency_accum->assets += amount;
+	if(euro)
+	  euro_accum->assets += gnc_convert_to_euro(account_currency, amount);
+
+	if (children != NULL)
+	  gnc_ui_accounts_recurse(children, currency_list, euro);
+	break;
+      case INCOME:
+      case EXPENSE:
+	amount = xaccAccountGetBalance(account);
+        currency_accum->profits -= amount;
+	if(euro)
+	  euro_accum->profits -= gnc_convert_to_euro(account_currency, amount);
+
+	if (children != NULL)
+	  gnc_ui_accounts_recurse(children, currency_list, euro);
+	break;
+      case EQUITY:
+        /* no-op, see comments at top about summing assets */
+	break;
+      case CURRENCY:
+      default:
+	break;
+    }
+  }
 }
 
 /* The gnc_ui_refresh_statusbar() subroutine redraws 
@@ -247,41 +341,30 @@ gnc_ui_get_currency_item(GList **list, const gnc_commodity * currency, GtkWidget
  * EUR amounts and a EUR (total) line which summs up all EURO
  * member currencies.
  *
- * There should be a 'grand total', too, which summs up all accounts
+ * There should be a 'grand total', too, which sums up all accounts
  * converted to one common currency.
  */
-
 static void
 gnc_ui_refresh_statusbar (void)
 {
   GNCMainInfo *main_info;
-  double amount;
   AccountGroup *group;
-  AccountGroup *children;
-  Account *account;
   char asset_string[256];
   char profit_string[256];
-  int num_accounts;
-  int account_type;  
-  const gnc_commodity * account_currency;
-  const gnc_commodity * default_currency;
-  const gnc_commodity * euro_commodity;
   const char * default_mnemonic;
+  const gnc_commodity * default_currency;
   GNCCurrencyAcc *currency_accum;
-  GNCCurrencyAcc *euro_accum = NULL;
   GNCCurrencyItem *currency_item;
   GList *currency_list;
   GList *current;
   gboolean euro;
-  int i;
 
   default_mnemonic = gnc_lookup_string_option("International",
 					      "Default Currency",
 					      "USD");
   default_currency = gnc_commodity_table_lookup(gnc_engine_commodities(),
-                                                GNC_COMMODITY_NS_ISO,
-                                                default_mnemonic);
-
+                                                default_mnemonic,
+                                                GNC_COMMODITY_NS_ISO);
   euro = gnc_lookup_boolean_option("International",
 				   "Enable EURO support",
 				   FALSE);
@@ -291,67 +374,12 @@ gnc_ui_refresh_statusbar (void)
     return;
 
   currency_list = NULL;
-  if (euro)
-  {
-    euro_commodity = gnc_commodity_table_lookup(gnc_engine_commodities(),
-                                                GNC_COMMODITY_NS_ISO,
-                                                "EUR");    
-    euro_accum = gnc_ui_get_currency_accumulator(&currency_list,
-						 euro_commodity);
-  }
-  
+
+  /* Make sure there's at least one accumulator in the list. */
+  gnc_ui_get_currency_accumulator (&currency_list, default_currency);
+
   group = gncGetCurrentGroup ();
-  num_accounts = xaccGroupGetNumAccounts(group);
-  for (i = 0; i < num_accounts; i++)
-  {
-    account = xaccGroupGetAccount(group, i);
-
-    account_type = xaccAccountGetType(account);
-    account_currency = xaccAccountGetCurrency(account);
-    children = xaccAccountGetChildren(account);
-    currency_accum = gnc_ui_get_currency_accumulator(&currency_list,
-						     account_currency);
-
-    switch (account_type)
-    {
-      case BANK:
-      case CASH:
-      case ASSET:
-      case STOCK:
-      case MUTUAL:
-      case CREDIT:
-      case LIABILITY:
-	amount = xaccAccountGetBalance(account);
-	if (children != NULL)
-	  amount += xaccGroupGetBalance(children);
-
-        currency_accum->assets += amount;
-	if(euro)
-	{
-	  euro_accum->assets += gnc_convert_to_euro(account_currency, amount);
-	}
-	break;
-      case INCOME:
-      case EXPENSE:
-	amount = xaccAccountGetBalance(account);
-	if (children != NULL)
-	  amount += xaccGroupGetBalance(children);
-
-        currency_accum->profits -= amount;
-	if(euro)
-	{
-	  euro_accum->profits -= gnc_convert_to_euro(account_currency, amount);
-	}
-	break;
-      case EQUITY:
-        /* no-op, see comments at top about summing assets */
-	break;
-      case CURRENCY:
-      default:
-	break;
-    }
-  }
-
+  gnc_ui_accounts_recurse(group, &currency_list, euro);
 
   for (current = g_list_first(main_info->totals_list); current;
        current = g_list_next(current))
@@ -359,6 +387,7 @@ gnc_ui_refresh_statusbar (void)
     currency_item = current->data;
     currency_item->touched = 0;
   }
+
   for (current = g_list_first(currency_list); current;
        current = g_list_next(current))
   {
@@ -379,11 +408,14 @@ gnc_ui_refresh_statusbar (void)
                      gnc_commodity_get_mnemonic(currency_accum->currency));
     gtk_label_set_text(GTK_LABEL(currency_item->profits_label), profit_string);
     gnc_set_label_color(currency_item->profits_label, currency_accum->profits);
+
     g_free(currency_accum);
+    current->data = NULL;
   }
-  if (currency_list)
-    g_list_free(currency_list);
+
+  g_list_free(currency_list);
   currency_list = NULL;
+
   current = g_list_first(main_info->totals_list);
   while (current)
   {
@@ -396,14 +428,18 @@ gnc_ui_refresh_statusbar (void)
       currency_list = g_list_append(currency_list, currency_item->listitem);
       main_info->totals_list = g_list_remove_link(main_info->totals_list,
 						  current);
-      g_list_free_1(current);
       g_free(currency_item);
+      current->data = NULL;
+      g_list_free_1(current);
     }
+    
     current = next;
   }
+
   if (currency_list)
   {
-    gtk_select_remove_items(GTK_SELECT(main_info->totals_combo), currency_list);
+    gtk_select_remove_items(GTK_SELECT(main_info->totals_combo),
+                            currency_list);
     g_list_free(currency_list);
   }
 }
@@ -442,7 +478,7 @@ gnc_refresh_main_window()
 {
   xaccRecomputeGroupBalance(gncGetCurrentGroup());
   gnc_ui_refresh_statusbar();
-  gnc_history_update_menu(GNOME_APP(gnc_get_ui_data()));
+  gnc_history_update_menu();
   gnc_account_tree_refresh_all();
   gnc_refresh_main_window_title();
 }
@@ -608,17 +644,6 @@ gnc_ui_mainWindow_transfer(GtkWidget *widget, gpointer data)
 }
 
 static void
-gnc_ui_mainWindow_adjust_balance(GtkWidget *widget, gpointer data)
-{
-  Account *account = gnc_get_current_account();
-
-  if (account != NULL)
-    adjBWindow(account);
-  else
-    gnc_error_dialog(ACC_ADJUST_MSG);
-}
-
-static void
 gnc_ui_mainWindow_scrub(GtkWidget *widget, gpointer data)
 {
   Account *account = gnc_get_current_account();
@@ -732,7 +757,7 @@ gnc_ui_mainWindow_destroy_event_cb(GtkWidget *widget,
 }
 
 void
-gnc_ui_mainWindow_save_size()
+gnc_ui_mainWindow_save_size(void)
 {
   GtkWidget *app;
   int width = 0;
@@ -767,7 +792,7 @@ gnc_ui_mainWindow_destroy_cb(GtkObject *object, gpointer user_data)
 }
 
 GNCAccountTree *
-gnc_get_current_account_tree()
+gnc_get_current_account_tree(void)
 {
   GNCMainInfo *main_info;
 
@@ -779,14 +804,14 @@ gnc_get_current_account_tree()
 }
 
 Account *
-gnc_get_current_account()
+gnc_get_current_account(void)
 {
   GNCAccountTree * tree = gnc_get_current_account_tree();
   return gnc_account_tree_get_current_account(tree);
 }
 
 GList *
-gnc_get_current_accounts()
+gnc_get_current_accounts(void)
 {
   GNCAccountTree * tree = gnc_get_current_account_tree();
   return gnc_account_tree_get_current_accounts(tree);
@@ -1148,13 +1173,6 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
       GNOME_APP_PIXMAP_NONE, NULL,
       't', GDK_CONTROL_MASK, NULL
     },
-    {
-      GNOME_APP_UI_ITEM,
-      ADJ_BALN_MENU_E_STR_N, TOOLTIP_ADJUST_N,
-      gnc_ui_mainWindow_adjust_balance, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      'b', GDK_CONTROL_MASK, NULL
-    },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
@@ -1248,7 +1266,7 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
 }
 
 static GNCMainInfo *
-gnc_get_main_info()
+gnc_get_main_info(void)
 {
   GtkObject *app = GTK_OBJECT(gnc_get_ui_data());
 
@@ -1392,6 +1410,7 @@ mainWindow()
                     GTK_WIDGET(main_info->account_tree));
   
   {
+    /* I HATE THIS but it needs to be here FIXME bg */
     SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
     SCM hook = gh_eval_str("gnc:*main-window-opened-hook*");
     SCM window = POINTER_TOKEN_to_SCM(make_POINTER_TOKEN("gncUIWidget", app));

@@ -421,12 +421,13 @@
      (lambda (bin)
        (for-each 
         (lambda (elt)
-          (if (qif-map-entry:new-acct? (cdr elt))
+          (if (and (qif-map-entry:new-acct? (cdr elt))
+                   (qif-map-entry:display? (cdr elt)))
               (set! retval #t)))
         bin))
      (vector->list hash-table))
     retval))
-  
+
 (define (qif-import:any-new-stock-accts? hash-table) 
   (let ((retval #f))
     (for-each 
@@ -435,6 +436,7 @@
         (lambda (elt)
           (if (and 
                (qif-map-entry:new-acct? (cdr elt))
+               (qif-map-entry:display? (cdr elt))
                (or 
                 (memv GNC-STOCK-TYPE 
                       (qif-map-entry:allowed-types (cdr elt)))

@@ -24,6 +24,8 @@
 #ifndef __GNC_NUMERIC_H__
 #define __GNC_NUMERIC_H__
 
+#include <glib.h>
+
 struct _gnc_numeric {
   gint64  num;
   gint64  denom;
@@ -40,10 +42,11 @@ enum {
   GNC_RND_FLOOR            = 0x01, 
   GNC_RND_CEIL             = 0x02,  
   GNC_RND_TRUNC            = 0x03,
-  GNC_RND_ROUND_HALF_DOWN  = 0x04, 
-  GNC_RND_ROUND_HALF_UP    = 0x05, 
-  GNC_RND_ROUND            = 0x06, 
-  GNC_RND_NEVER            = 0x07
+  GNC_RND_PROMOTE          = 0x04,
+  GNC_RND_ROUND_HALF_DOWN  = 0x05, 
+  GNC_RND_ROUND_HALF_UP    = 0x06, 
+  GNC_RND_ROUND            = 0x07, 
+  GNC_RND_NEVER            = 0x08
 };
 
 /* auto-denominator types */
@@ -111,6 +114,10 @@ gnc_numeric gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
 gnc_numeric gnc_numeric_div(gnc_numeric a, gnc_numeric b, 
                             gint64 denom, gint how);
 gnc_numeric gnc_numeric_neg(gnc_numeric a);
+
+/* some shortcuts for common operations */
+gnc_numeric gnc_numeric_add_fixed(gnc_numeric a, gnc_numeric b);
+gnc_numeric gnc_numeric_sub_fixed(gnc_numeric a, gnc_numeric b);
 
 /* arithmetic functions with exact error returns */
 gnc_numeric gnc_numeric_add_with_error(gnc_numeric a, gnc_numeric b,

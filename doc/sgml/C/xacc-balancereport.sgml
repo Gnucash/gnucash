@@ -1,18 +1,16 @@
-
 <ARTICLE ID="XACC-BALANCEREPORT">
+
 <ARTHEADER>
 <TITLE>Balance Tracking Report</TITLE>
 </ARTHEADER>
-<SECT1>
-<TITLE> Balance Tracking Report</TITLE>
+
 <PARA>    <INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
-<IMAGEDATA FILEREF="report-av-baln.gif&gt; &lt;p&gt;This report allows you to track the balance of an account over time. If you have gnuplot installed, it can even produce graphical output:&lt;/p&gt; &lt;img src=">
+<IMAGEDATA FILEREF="image/report-av-baln.png">
 </IMAGEOBJECT>
 </INLINEMEDIAOBJECT>
-     
-
     </PARA>
+
 <PARA>Parameters for this report include:
 
     <ITEMIZEDLIST>
@@ -62,5 +60,4 @@
 
 
 </PARA>
-</SECT1>
 </ARTICLE>

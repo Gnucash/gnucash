@@ -32,9 +32,9 @@
 #include <math.h>
 
 #include "gnome-top-level.h"
+#include "window-register.h"
 #include "ui-callbacks.h"
 #include "MultiLedger.h"
-#include "LedgerUtils.h"
 #include "MainWindow.h"
 #include "Refresh.h"
 #include "RegWindow.h"
@@ -42,7 +42,6 @@
 #include "window-reconcile.h"
 #include "AccWindow.h"
 #include "window-help.h"
-#include "AdjBWindow.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "query-user.h"
@@ -126,7 +125,6 @@ static void startRecnCB(GtkWidget *w, gpointer data);
 static void xferCB(GtkWidget *w, gpointer data);
 static void editCB(GtkWidget *w, gpointer data);
 static void helpCB(GtkWidget *w, gpointer data);
-static void startAdjBCB(GtkWidget * w, gpointer data);
 static void newAccountCB(GtkWidget * w, gpointer data);
 static void deleteCB(GtkWidget *w, gpointer data);
 static void duplicateCB(GtkWidget *w, gpointer data);
@@ -219,7 +217,7 @@ void
 gnc_register_jump_to_split(RegWindow *regData, Split *split)
 {
   Transaction *trans;
-  int vrow, vcol;
+  VirtualCellLocation vcell_loc;
 
   trans = xaccSplitGetParent(split);
   if (trans != NULL)
@@ -229,8 +227,35 @@ gnc_register_jump_to_split(RegWindow *regData, Split *split)
       xaccLedgerDisplayRefresh(regData->ledger);
     }
 
-  if (xaccSRGetSplitRowCol(regData->ledger->ledger, split, &vrow, &vcol))
-    gnucash_register_goto_virt_row_col(regData->reg, vrow, vcol);
+  if (xaccSRGetSplitVirtLoc(regData->ledger->ledger, split, &vcell_loc))
+    gnucash_register_goto_virt_cell(regData->reg, vcell_loc);
+}
+
+
+/********************************************************************\
+ * gnc_register_jump_to_split_amount                                *
+ *   move the cursor to the split in the non-blank amount column    *
+ *                                                                  *
+ * Args:   regData - the register data structure                    *
+ *         split   - the split to jump to                           *
+ * Return: nothing                                                  *
+\********************************************************************/
+void
+gnc_register_jump_to_split_amount(RegWindow *regData, Split *split)
+{
+  Transaction *trans;
+  VirtualLocation virt_loc;
+
+  trans = xaccSplitGetParent(split);
+  if (trans != NULL)
+    if (gnc_register_include_date(regData, xaccTransGetDate(trans)))
+    {
+      regData->ledger->dirty = 1;
+      xaccLedgerDisplayRefresh(regData->ledger);
+    }
+
+  if (xaccSRGetSplitAmountVirtLoc(regData->ledger->ledger, split, &virt_loc))
+    gnucash_register_goto_virt_loc(regData->reg, virt_loc);
 }
 
 
@@ -518,7 +543,8 @@ gnc_register_set_date_range(RegWindow *regData)
     start = gnc_register_min_day_time(start);
 
     xaccQueryAddDateMatchTT(regData->ledger->query, 
-                            start, LONG_MAX,
+                            TRUE, start, 
+                            FALSE, 0, 
                             QUERY_AND);
   }
 
@@ -530,8 +556,8 @@ gnc_register_set_date_range(RegWindow *regData)
     end = gnc_register_max_day_time(end);
 
     xaccQueryAddDateMatchTT(regData->ledger->query, 
-                            LONG_MIN,
-                            end,                            
+                            FALSE, 0,
+                            TRUE, end,                            
                             QUERY_AND);
   }
 
@@ -940,14 +966,14 @@ gnc_register_jump_to_blank(RegWindow *regData)
 {
   SplitRegister *sr = regData->ledger->ledger;
   Split *blank;
-  int vrow, vcol;
+  VirtualCellLocation vcell_loc;
 
   blank = xaccSRGetBlankSplit(sr);
   if (blank == NULL)
     return;
 
-  if (xaccSRGetSplitRowCol(sr, blank, &vrow, &vcol))
-    gnucash_register_goto_virt_row_col(regData->reg, vrow, vcol);
+  if (xaccSRGetSplitVirtLoc(sr, blank, &vcell_loc))
+    gnucash_register_goto_virt_cell(regData->reg, vcell_loc);
 }
 
 
@@ -1001,8 +1027,7 @@ jump_cb(GtkWidget *widget, gpointer data)
 static void
 print_check_cb(GtkWidget * widget, gpointer data)
 {
-  RegWindow    * reg_data = (RegWindow *)data;
-#ifdef HAVE_LIBGNOMEPRINT
+  RegWindow    * reg_data = data;
   Split        * split    = xaccSRGetCurrentSplit(reg_data->ledger->ledger);
   Transaction  * trans    = xaccSplitGetParent(split);
 
@@ -1027,9 +1052,6 @@ print_check_cb(GtkWidget * widget, gpointer data)
                        gh_ulong2scm(date),
                        gh_str02scm(memo)));
   }
-#else
-  gnc_info_dialog_parented(GTK_WINDOW(reg_data->window), GNOME_PRINT_MSG);
-#endif
 }
 
 
@@ -1195,13 +1217,6 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
       GNOME_APP_UI_ITEM,
       TRANSFER_MENU_E_STR_N, TOOLTIP_TRANSFER_N,
       xferCB, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      ADJ_BALN_MENU_E_STR_N, TOOLTIP_ADJUST_REG_N,
-      startAdjBCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
@@ -2005,28 +2020,6 @@ pasteTransCB(GtkWidget *w, gpointer data)
 
 
 /********************************************************************\
- * startAdjBCB -- open up the adjust balance window... called       *
- *   from the menubar.                                              *
- *                                                                  *
- * Args:    w - the widget that called us                           *
- *       data - the data struct for this register                   *
- * Return: none                                                     *
-\********************************************************************/
-static void 
-startAdjBCB(GtkWidget * w, gpointer data)
-{
-  RegWindow *regData = (RegWindow *) data;
-  xaccLedgerDisplay *ledger = regData->ledger;
-  Account *account = ledger->leader;
-
-  if (account == NULL)
-    return;
-
-  adjBWindow(account);
-}
-
-
-/********************************************************************\
  * xferCB -- open up the transfer window                            *
  *                                                                  *
  * Args:   w    - the widget that called us                         *
@@ -2036,12 +2029,12 @@ startAdjBCB(GtkWidget * w, gpointer data)
 static void 
 xferCB(GtkWidget * w, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
+  RegWindow *regData = data;
   xaccLedgerDisplay *ledger = regData->ledger;
   Account *account = ledger->leader;
 
   if (account == NULL)
-    account = ledger->displayed_accounts[0];
+    account = g_list_nth_data(ledger->displayed_accounts, 0);
 
   if (account == NULL)
     return;
@@ -2180,7 +2173,7 @@ gnc_transaction_delete_toggle_cb(GtkToggleButton *button, gpointer data)
  * Args: parent - the parent window the dialog should use           *
  * Returns: DeleteType choice indicator                             *
  \*******************************************************************/
-DeleteType
+static DeleteType
 gnc_transaction_delete_query(GtkWindow *parent)
 {
   GtkWidget *dialog;
@@ -2273,7 +2266,7 @@ deleteCB(GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
   SplitRegisterStyle style;
-  CursorType cursor_type;
+  CursorClass cursor_class;
   Transaction *trans;
   char *buf = NULL;
   Split *split;
@@ -2289,7 +2282,8 @@ deleteCB(GtkWidget *widget, gpointer data)
 
   trans = xaccSplitGetParent(split);
   style = regData->ledger->ledger->style;
-  cursor_type = xaccSplitRegisterGetCursorType(regData->ledger->ledger);
+  cursor_class =
+    xaccSplitRegisterGetCurrentCursorClass(regData->ledger->ledger);
 
   /* Deleting the blank split just cancels */
   {
@@ -2302,18 +2296,17 @@ deleteCB(GtkWidget *widget, gpointer data)
     }
   }
 
-  if (cursor_type == CURSOR_NONE)
+  if (cursor_class == CURSOR_NONE)
     return;
 
   /* On a split cursor, just delete the one split. */
-  if (cursor_type == CURSOR_SPLIT)
+  if (cursor_class == CURSOR_SPLIT)
   {
     /* ask for user confirmation before performing permanent damage */
     buf = g_strdup_printf(TRANS_DEL_MSG, xaccSplitGetMemo(split),
                           xaccTransGetDescription(trans));
 
-    result = gnc_verify_dialog_parented(GTK_WINDOW(regData->window),
-                                        buf, FALSE);
+    result = gnc_verify_dialog_parented(regData->window, buf, FALSE);
 
     g_free(buf);
 
@@ -2324,14 +2317,14 @@ deleteCB(GtkWidget *widget, gpointer data)
     return;
   }
 
-  assert(cursor_type == CURSOR_TRANS);
+  assert(cursor_class == CURSOR_TRANS);
 
   /* On a transaction cursor with 2 or fewer splits in single or double
    * mode, we just delete the whole transaction, kerblooie */
   if ((xaccTransCountSplits(trans) <= 2) &&
       ((style == REG_SINGLE_LINE) || (style == REG_DOUBLE_LINE)))
   {
-    result = gnc_verify_dialog_parented(GTK_WINDOW(regData->window),
+    result = gnc_verify_dialog_parented(regData->window,
                                         TRANS_DEL2_MSG, FALSE);
 
     if (!result)
@@ -2413,8 +2406,7 @@ gnc_register_check_close(RegWindow *regData)
   pending_changes = xaccSRHasPendingChanges(regData->ledger->ledger);
   if (pending_changes)
   {
-    if (gnc_verify_dialog_parented
-        (GTK_WINDOW(regData->window), TRANS_CHANGED_MSG, TRUE))
+    if (gnc_verify_dialog_parented(regData->window, TRANS_CHANGED_MSG, TRUE))
       recordCB(regData->window, regData);
     else
       xaccSRCancelCursorTransChanges(regData->ledger->ledger);

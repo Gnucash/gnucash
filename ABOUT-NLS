@@ -100,7 +100,7 @@ good one ourself.
 LL gives an ISO 639 two-letter code identifying the language.  Unless
 translations have been forbidden at `configure' time by using the
 `--disable-nls' switch, all available translations are installed
-together with the package.  However, the environment variable `LINGUAS'
+together with the package.  However, the environment variable `LINGUAs'
 may be set, prior to configuration, to limit the installed set.
 `LINGUAS' should then contain a space separated list of two-letter
 codes, stating which languages are allowed.

@@ -201,8 +201,9 @@ xaccGetFileIOError (void)
 /* some endian stuff */
 
 /* flip endianness of int, short, etc */
-int xaccFlipInt (int val) 
-  {
+static int
+xaccFlipInt (int val) 
+{
   guint32 flip;
   flip = (val & 0xff000000) >> 24;
   flip |= (val & 0xff0000) >> 8;
@@ -211,16 +212,20 @@ int xaccFlipInt (int val)
   return (int) flip;
 }
 
-short xaccFlipShort (short val) 
-  {
+#if 0
+static short
+xaccFlipShort (short val) 
+{
   unsigned short flip;
   flip = (val & 0xff00) >> 8;
   flip |= (val & 0xff) << 8;
   return (short) flip;
 }
+#endif
 
-double xaccFlipDouble (double val) 
-  {
+static double
+xaccFlipDouble (double val) 
+{
   union {
      guint32 i[2];
      double d;
@@ -235,8 +240,9 @@ double xaccFlipDouble (double val)
   return u.d;
 }
 
-gint64 xaccFlipLongLong (gint64 val) 
-  {
+static gint64
+xaccFlipLongLong (gint64 val) 
+{
   union {
      guint32 i[2];
      gint64 d;
@@ -286,7 +292,7 @@ gnc_commodity_import_legacy(const char * currency_name) {
     if(!old) {
       old = gnc_commodity_new(currency_name, currency_name, NULL, 
                               GNC_COMMODITY_NS_LEGACY, currency_name,
-                              0, 0, 0);
+                              0, 10000, 10000);
       gnc_commodity_table_insert(gnc_engine_commodities(), 
                                  old);
     }

@@ -1192,28 +1192,15 @@ create_Find_Transactions (void)
   GtkWidget *account_match_scroller;
   GtkWidget *label716;
   GtkWidget *frame11;
-  GtkWidget *vbox39;
-  GtkWidget *label754;
-  GtkWidget *hbox29;
-  GtkObject *date_start_entry_1_adj;
-  GtkWidget *date_start_entry_1;
-  GtkWidget *label755;
-  GtkObject *date_start_entry_2_adj;
-  GtkWidget *date_start_entry_2;
-  GtkWidget *label756;
-  GtkObject *date_start_entry_3_adj;
-  GtkWidget *date_start_entry_3;
-  GtkWidget *button33;
-  GtkWidget *hbox30;
-  GtkObject *date_end_entry_1_adj;
-  GtkWidget *date_end_entry_1;
-  GtkWidget *label757;
-  GtkObject *date_end_entry_2_adj;
-  GtkWidget *date_end_entry_2;
-  GtkWidget *label758;
-  GtkObject *date_end_entry_3_adj;
-  GtkWidget *date_end_entry_3;
-  GtkWidget *button32;
+  GtkWidget *vbox79;
+  GtkWidget *label842;
+  GtkWidget *hbox71;
+  GtkWidget *vbox80;
+  GtkWidget *date_start_toggle;
+  GtkWidget *date_end_toggle;
+  GtkWidget *vbox81;
+  GtkWidget *date_start_frame;
+  GtkWidget *date_end_frame;
   GtkWidget *label768;
   GtkWidget *frame8;
   GtkWidget *vbox16;
@@ -1393,127 +1380,73 @@ create_Find_Transactions (void)
   gtk_widget_show (frame11);
   gtk_container_add (GTK_CONTAINER (notebook2), frame11);
 
-  vbox39 = gtk_vbox_new (FALSE, 5);
-  gtk_widget_ref (vbox39);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox39", vbox39,
+  vbox79 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox79);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox79", vbox79,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (vbox39);
-  gtk_container_add (GTK_CONTAINER (frame11), vbox39);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox39), 5);
+  gtk_widget_show (vbox79);
+  gtk_container_add (GTK_CONTAINER (frame11), vbox79);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox79), 5);
 
-  label754 = gtk_label_new (_("Find transactions occurring between the dates:"));
-  gtk_widget_ref (label754);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label754", label754,
+  label842 = gtk_label_new (_("Find transactions occurring in the date range:"));
+  gtk_widget_ref (label842);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label842", label842,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label754);
-  gtk_box_pack_start (GTK_BOX (vbox39), label754, FALSE, FALSE, 0);
-  gtk_misc_set_alignment (GTK_MISC (label754), 7.45058e-09, 0.5);
+  gtk_widget_show (label842);
+  gtk_box_pack_start (GTK_BOX (vbox79), label842, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label842), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC (label842), 7.45058e-09, 0.5);
 
-  hbox29 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (hbox29);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "hbox29", hbox29,
+  hbox71 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox71);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "hbox71", hbox71,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox29);
-  gtk_box_pack_start (GTK_BOX (vbox39), hbox29, FALSE, FALSE, 0);
+  gtk_widget_show (hbox71);
+  gtk_box_pack_start (GTK_BOX (vbox79), hbox71, FALSE, FALSE, 0);
 
-  date_start_entry_1_adj = gtk_adjustment_new (1, 1, 10000, 1, 10, 10);
-  date_start_entry_1 = gtk_spin_button_new (GTK_ADJUSTMENT (date_start_entry_1_adj), 1, 0);
-  gtk_widget_ref (date_start_entry_1);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "date_start_entry_1", date_start_entry_1,
+  vbox80 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox80);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox80", vbox80,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (date_start_entry_1);
-  gtk_box_pack_start (GTK_BOX (hbox29), date_start_entry_1, FALSE, FALSE, 0);
-  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (date_start_entry_1), TRUE);
+  gtk_widget_show (vbox80);
+  gtk_box_pack_start (GTK_BOX (hbox71), vbox80, FALSE, FALSE, 0);
 
-  label755 = gtk_label_new (_("/"));
-  gtk_widget_ref (label755);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label755", label755,
+  date_start_toggle = gtk_check_button_new_with_label (_("Starting "));
+  gtk_widget_ref (date_start_toggle);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "date_start_toggle", date_start_toggle,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label755);
-  gtk_box_pack_start (GTK_BOX (hbox29), label755, FALSE, FALSE, 5);
+  gtk_widget_show (date_start_toggle);
+  gtk_box_pack_start (GTK_BOX (vbox80), date_start_toggle, FALSE, FALSE, 0);
 
-  date_start_entry_2_adj = gtk_adjustment_new (1, 1, 10000, 1, 10, 10);
-  date_start_entry_2 = gtk_spin_button_new (GTK_ADJUSTMENT (date_start_entry_2_adj), 1, 0);
-  gtk_widget_ref (date_start_entry_2);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "date_start_entry_2", date_start_entry_2,
+  date_end_toggle = gtk_check_button_new_with_label (_("Ending "));
+  gtk_widget_ref (date_end_toggle);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "date_end_toggle", date_end_toggle,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (date_start_entry_2);
-  gtk_box_pack_start (GTK_BOX (hbox29), date_start_entry_2, FALSE, FALSE, 0);
-  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (date_start_entry_2), TRUE);
+  gtk_widget_show (date_end_toggle);
+  gtk_box_pack_start (GTK_BOX (vbox80), date_end_toggle, FALSE, FALSE, 0);
 
-  label756 = gtk_label_new (_("/"));
-  gtk_widget_ref (label756);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label756", label756,
+  vbox81 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox81);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox81", vbox81,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label756);
-  gtk_box_pack_start (GTK_BOX (hbox29), label756, FALSE, FALSE, 5);
+  gtk_widget_show (vbox81);
+  gtk_box_pack_start (GTK_BOX (hbox71), vbox81, FALSE, FALSE, 0);
 
-  date_start_entry_3_adj = gtk_adjustment_new (1900, 0, 10000, 1, 10, 10);
-  date_start_entry_3 = gtk_spin_button_new (GTK_ADJUSTMENT (date_start_entry_3_adj), 1, 0);
-  gtk_widget_ref (date_start_entry_3);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "date_start_entry_3", date_start_entry_3,
+  date_start_frame = gtk_frame_new (NULL);
+  gtk_widget_ref (date_start_frame);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "date_start_frame", date_start_frame,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (date_start_entry_3);
-  gtk_box_pack_start (GTK_BOX (hbox29), date_start_entry_3, FALSE, FALSE, 0);
+  gtk_widget_show (date_start_frame);
+  gtk_box_pack_start (GTK_BOX (vbox81), date_start_frame, TRUE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (date_start_frame), GTK_SHADOW_NONE);
 
-  button33 = gtk_button_new_with_label (_("Select ..."));
-  gtk_widget_ref (button33);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "button33", button33,
+  date_end_frame = gtk_frame_new (NULL);
+  gtk_widget_ref (date_end_frame);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "date_end_frame", date_end_frame,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button33);
-  gtk_box_pack_start (GTK_BOX (hbox29), button33, FALSE, FALSE, 0);
-
-  hbox30 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (hbox30);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "hbox30", hbox30,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox30);
-  gtk_box_pack_start (GTK_BOX (vbox39), hbox30, FALSE, FALSE, 0);
-
-  date_end_entry_1_adj = gtk_adjustment_new (1, 0, 10000, 1, 10, 10);
-  date_end_entry_1 = gtk_spin_button_new (GTK_ADJUSTMENT (date_end_entry_1_adj), 1, 0);
-  gtk_widget_ref (date_end_entry_1);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "date_end_entry_1", date_end_entry_1,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (date_end_entry_1);
-  gtk_box_pack_start (GTK_BOX (hbox30), date_end_entry_1, FALSE, FALSE, 0);
-
-  label757 = gtk_label_new (_("/"));
-  gtk_widget_ref (label757);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label757", label757,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label757);
-  gtk_box_pack_start (GTK_BOX (hbox30), label757, FALSE, FALSE, 5);
-
-  date_end_entry_2_adj = gtk_adjustment_new (1, 0, 10000, 1, 10, 10);
-  date_end_entry_2 = gtk_spin_button_new (GTK_ADJUSTMENT (date_end_entry_2_adj), 1, 0);
-  gtk_widget_ref (date_end_entry_2);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "date_end_entry_2", date_end_entry_2,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (date_end_entry_2);
-  gtk_box_pack_start (GTK_BOX (hbox30), date_end_entry_2, FALSE, FALSE, 0);
-
-  label758 = gtk_label_new (_("/"));
-  gtk_widget_ref (label758);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label758", label758,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label758);
-  gtk_box_pack_start (GTK_BOX (hbox30), label758, FALSE, FALSE, 5);
-
-  date_end_entry_3_adj = gtk_adjustment_new (2100, 0, 10000, 1, 10, 10);
-  date_end_entry_3 = gtk_spin_button_new (GTK_ADJUSTMENT (date_end_entry_3_adj), 1, 0);
-  gtk_widget_ref (date_end_entry_3);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "date_end_entry_3", date_end_entry_3,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (date_end_entry_3);
-  gtk_box_pack_start (GTK_BOX (hbox30), date_end_entry_3, FALSE, FALSE, 0);
-
-  button32 = gtk_button_new_with_label (_("Select ..."));
-  gtk_widget_ref (button32);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "button32", button32,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button32);
-  gtk_box_pack_start (GTK_BOX (hbox30), button32, FALSE, FALSE, 0);
+  gtk_widget_show (date_end_frame);
+  gtk_box_pack_start (GTK_BOX (vbox81), date_end_frame, TRUE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (date_end_frame), GTK_SHADOW_NONE);
 
   label768 = gtk_label_new (_("Date"));
   gtk_widget_ref (label768);
@@ -2142,11 +2075,11 @@ create_Find_Transactions (void)
   gtk_widget_show (button28);
   GTK_WIDGET_SET_FLAGS (button28, GTK_CAN_DEFAULT);
 
-  gtk_signal_connect (GTK_OBJECT (button33), "clicked",
-                      GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_early_date_select_cb),
+  gtk_signal_connect (GTK_OBJECT (date_start_toggle), "toggled",
+                      GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_early_date_toggle_cb),
                       Find_Transactions);
-  gtk_signal_connect (GTK_OBJECT (button32), "clicked",
-                      GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_late_date_select_cb),
+  gtk_signal_connect (GTK_OBJECT (date_end_toggle), "toggled",
+                      GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_late_date_toggle_cb),
                       Find_Transactions);
   gtk_signal_connect (GTK_OBJECT (new_search_radiobutton), "toggled",
                       GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_search_type_cb),
@@ -2171,85 +2104,6 @@ create_Find_Transactions (void)
                       Find_Transactions);
 
   return Find_Transactions;
-}
-
-GtkWidget*
-create_Select_Date (void)
-{
-  GtkWidget *Select_Date;
-  GtkWidget *dialog_vbox8;
-  GtkWidget *vbox47;
-  GtkWidget *calendar1;
-  GtkWidget *button37;
-  GtkWidget *dialog_action_area8;
-  GtkWidget *button34;
-  GtkWidget *button36;
-
-  Select_Date = gnome_dialog_new (_("Select Date"), NULL);
-  gtk_object_set_data (GTK_OBJECT (Select_Date), "Select_Date", Select_Date);
-  gtk_window_set_policy (GTK_WINDOW (Select_Date), FALSE, FALSE, FALSE);
-
-  dialog_vbox8 = GNOME_DIALOG (Select_Date)->vbox;
-  gtk_object_set_data (GTK_OBJECT (Select_Date), "dialog_vbox8", dialog_vbox8);
-  gtk_widget_show (dialog_vbox8);
-
-  vbox47 = gtk_vbox_new (FALSE, 0);
-  gtk_widget_ref (vbox47);
-  gtk_object_set_data_full (GTK_OBJECT (Select_Date), "vbox47", vbox47,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (vbox47);
-  gtk_box_pack_start (GTK_BOX (dialog_vbox8), vbox47, TRUE, TRUE, 0);
-
-  calendar1 = gtk_calendar_new ();
-  gtk_widget_ref (calendar1);
-  gtk_object_set_data_full (GTK_OBJECT (Select_Date), "calendar1", calendar1,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (calendar1);
-  gtk_box_pack_start (GTK_BOX (vbox47), calendar1, TRUE, TRUE, 0);
-  gtk_calendar_display_options (GTK_CALENDAR (calendar1),
-                                GTK_CALENDAR_SHOW_HEADING
-                                | GTK_CALENDAR_SHOW_DAY_NAMES);
-
-  button37 = gtk_button_new_with_label (_("Today"));
-  gtk_widget_ref (button37);
-  gtk_object_set_data_full (GTK_OBJECT (Select_Date), "button37", button37,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button37);
-  gtk_box_pack_start (GTK_BOX (vbox47), button37, FALSE, FALSE, 0);
-
-  dialog_action_area8 = GNOME_DIALOG (Select_Date)->action_area;
-  gtk_object_set_data (GTK_OBJECT (Select_Date), "dialog_action_area8", dialog_action_area8);
-  gtk_widget_show (dialog_action_area8);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area8), GTK_BUTTONBOX_SPREAD);
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area8), 8);
-
-  gnome_dialog_append_button (GNOME_DIALOG (Select_Date), GNOME_STOCK_BUTTON_OK);
-  button34 = g_list_last (GNOME_DIALOG (Select_Date)->buttons)->data;
-  gtk_widget_ref (button34);
-  gtk_object_set_data_full (GTK_OBJECT (Select_Date), "button34", button34,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button34);
-  GTK_WIDGET_SET_FLAGS (button34, GTK_CAN_DEFAULT);
-
-  gnome_dialog_append_button (GNOME_DIALOG (Select_Date), GNOME_STOCK_BUTTON_CANCEL);
-  button36 = g_list_last (GNOME_DIALOG (Select_Date)->buttons)->data;
-  gtk_widget_ref (button36);
-  gtk_object_set_data_full (GTK_OBJECT (Select_Date), "button36", button36,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button36);
-  GTK_WIDGET_SET_FLAGS (button36, GTK_CAN_DEFAULT);
-
-  gtk_signal_connect (GTK_OBJECT (button37), "clicked",
-                      GTK_SIGNAL_FUNC (gnc_ui_select_date_dialog_today_cb),
-                      Select_Date);
-  gtk_signal_connect (GTK_OBJECT (button34), "clicked",
-                      GTK_SIGNAL_FUNC (gnc_ui_select_date_dialog_ok_cb),
-                      Select_Date);
-  gtk_signal_connect (GTK_OBJECT (button36), "clicked",
-                      GTK_SIGNAL_FUNC (gnc_ui_select_date_dialog_cancel_cb),
-                      Select_Date);
-
-  return Select_Date;
 }
 
 GtkWidget*
@@ -3933,7 +3787,6 @@ create_Account_Dialog (void)
 
   Account_Dialog = gnome_dialog_new (_("New Account"), NULL);
   gtk_object_set_data (GTK_OBJECT (Account_Dialog), "Account_Dialog", Account_Dialog);
-  gtk_window_set_policy (GTK_WINDOW (Account_Dialog), TRUE, TRUE, FALSE);
 
   dialog_vbox12 = GNOME_DIALOG (Account_Dialog)->vbox;
   gtk_object_set_data (GTK_OBJECT (Account_Dialog), "dialog_vbox12", dialog_vbox12);
@@ -3951,7 +3804,7 @@ create_Account_Dialog (void)
   gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "frame28", frame28,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame28);
-  gtk_box_pack_start (GTK_BOX (vbox75), frame28, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox75), frame28, FALSE, TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (frame28), 3);
 
   hbox62 = gtk_hbox_new (FALSE, 0);
@@ -4150,7 +4003,7 @@ create_Account_Dialog (void)
   gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "frame31", frame31,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame31);
-  gtk_box_pack_start (GTK_BOX (vbox75), frame31, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox75), frame31, FALSE, TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (frame31), 3);
 
   source_box = gtk_hbox_new (FALSE, 3);
@@ -4254,7 +4107,7 @@ create_New_Commodity_Format_Druid (void)
   New_Commodity_Format_Druid = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_object_set_data (GTK_OBJECT (New_Commodity_Format_Druid), "New_Commodity_Format_Druid", New_Commodity_Format_Druid);
   gtk_window_set_title (GTK_WINDOW (New_Commodity_Format_Druid), _("Import currency and stock information"));
-  gtk_window_set_policy (GTK_WINDOW (New_Commodity_Format_Druid), TRUE, TRUE, TRUE);
+  gtk_window_set_policy (GTK_WINDOW (New_Commodity_Format_Druid), FALSE, TRUE, TRUE);
 
   commodity_druid = gnome_druid_new ();
   gtk_widget_ref (commodity_druid);
@@ -4323,10 +4176,18 @@ create_QIF_Import_Druid (void)
   GtkWidget *label821;
   GtkWidget *qif_filename_entry;
   GtkWidget *button71;
-  GtkWidget *druidpagestandard8;
-  GdkColor druidpagestandard8_bg_color = { 0, 39321, 49087, 39578 };
-  GdkColor druidpagestandard8_logo_bg_color = { 0, 65535, 65535, 65535 };
-  GdkColor druidpagestandard8_title_color = { 0, 65535, 65535, 65535 };
+  GtkWidget *date_format_page;
+  GdkColor date_format_page_bg_color = { 0, 39321, 49087, 39578 };
+  GdkColor date_format_page_logo_bg_color = { 0, 65535, 65535, 65535 };
+  GdkColor date_format_page_title_color = { 0, 65535, 65535, 65535 };
+  GtkWidget *druid_vbox22;
+  GtkWidget *label841;
+  GtkWidget *date_format_combo;
+  GtkWidget *date_format_entry;
+  GtkWidget *account_name_page;
+  GdkColor account_name_page_bg_color = { 0, 39321, 49087, 39578 };
+  GdkColor account_name_page_logo_bg_color = { 0, 65535, 65535, 65535 };
+  GdkColor account_name_page_title_color = { 0, 65535, 65535, 65535 };
   GtkWidget *druid_vbox9;
   GtkWidget *label823;
   GtkWidget *hbox70;
@@ -4482,18 +4343,58 @@ create_QIF_Import_Druid (void)
   gtk_widget_show (button71);
   gtk_box_pack_start (GTK_BOX (hbox69), button71, FALSE, FALSE, 3);
 
-  druidpagestandard8 = gnome_druid_page_standard_new_with_vals ("", NULL);
-  gtk_widget_ref (druidpagestandard8);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druidpagestandard8", druidpagestandard8,
+  date_format_page = gnome_druid_page_standard_new_with_vals ("", NULL);
+  gtk_widget_ref (date_format_page);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "date_format_page", date_format_page,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show_all (druidpagestandard8);
-  gnome_druid_append_page (GNOME_DRUID (qif_import_druid), GNOME_DRUID_PAGE (druidpagestandard8));
-  gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (druidpagestandard8), &druidpagestandard8_bg_color);
-  gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (druidpagestandard8), &druidpagestandard8_logo_bg_color);
-  gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (druidpagestandard8), &druidpagestandard8_title_color);
-  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (druidpagestandard8), _("Set the default QIF account name"));
+  gtk_widget_show_all (date_format_page);
+  gnome_druid_append_page (GNOME_DRUID (qif_import_druid), GNOME_DRUID_PAGE (date_format_page));
+  gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (date_format_page), &date_format_page_bg_color);
+  gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (date_format_page), &date_format_page_logo_bg_color);
+  gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (date_format_page), &date_format_page_title_color);
+  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (date_format_page), _("Set a date format for this QIF file"));
 
-  druid_vbox9 = GNOME_DRUID_PAGE_STANDARD (druidpagestandard8)->vbox;
+  druid_vbox22 = GNOME_DRUID_PAGE_STANDARD (date_format_page)->vbox;
+  gtk_widget_ref (druid_vbox22);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druid_vbox22", druid_vbox22,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (druid_vbox22);
+
+  label841 = gtk_label_new (_("The QIF file format does not specify which order the day, month, and \nyear components of a date are printed.  In most cases, it is possible \nto automatically determine which format is in use in a particular file.\nHowever, in the file you have just imported there exist more than one\npossible format that fits the data.  \n\nPlease select a date format for the file.  QIF files created by European\nsoftware are likely  to be in \"d-m-y\" or day-month-year format, where\nUS QIF files are likely to be \"m-d-y\" or month-year-day.    \n"));
+  gtk_widget_ref (label841);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label841", label841,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label841);
+  gtk_box_pack_start (GTK_BOX (druid_vbox22), label841, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label841), GTK_JUSTIFY_LEFT);
+
+  date_format_combo = gtk_combo_new ();
+  gtk_widget_ref (date_format_combo);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "date_format_combo", date_format_combo,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (date_format_combo);
+  gtk_box_pack_start (GTK_BOX (druid_vbox22), date_format_combo, FALSE, FALSE, 0);
+  gtk_combo_set_value_in_list (GTK_COMBO (date_format_combo), TRUE, FALSE);
+
+  date_format_entry = GTK_COMBO (date_format_combo)->entry;
+  gtk_widget_ref (date_format_entry);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "date_format_entry", date_format_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (date_format_entry);
+  gtk_entry_set_editable (GTK_ENTRY (date_format_entry), FALSE);
+
+  account_name_page = gnome_druid_page_standard_new_with_vals ("", NULL);
+  gtk_widget_ref (account_name_page);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "account_name_page", account_name_page,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show_all (account_name_page);
+  gnome_druid_append_page (GNOME_DRUID (qif_import_druid), GNOME_DRUID_PAGE (account_name_page));
+  gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (account_name_page), &account_name_page_bg_color);
+  gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (account_name_page), &account_name_page_logo_bg_color);
+  gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (account_name_page), &account_name_page_title_color);
+  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (account_name_page), _("Set the default QIF account name"));
+
+  druid_vbox9 = GNOME_DRUID_PAGE_STANDARD (account_name_page)->vbox;
   gtk_widget_ref (druid_vbox9);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druid_vbox9", druid_vbox9,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -4877,10 +4778,13 @@ create_QIF_Import_Druid (void)
   gtk_signal_connect (GTK_OBJECT (button71), "clicked",
                       GTK_SIGNAL_FUNC (gnc_ui_qif_import_select_file_cb),
                       QIF_Import_Druid);
-  gtk_signal_connect (GTK_OBJECT (druidpagestandard8), "next",
+  gtk_signal_connect (GTK_OBJECT (date_format_page), "next",
+                      GTK_SIGNAL_FUNC (gnc_ui_qif_import_date_format_next_cb),
+                      QIF_Import_Druid);
+  gtk_signal_connect (GTK_OBJECT (account_name_page), "next",
                       GTK_SIGNAL_FUNC (gnc_ui_qif_import_default_acct_next_cb),
                       QIF_Import_Druid);
-  gtk_signal_connect (GTK_OBJECT (druidpagestandard8), "back",
+  gtk_signal_connect (GTK_OBJECT (account_name_page), "back",
                       GTK_SIGNAL_FUNC (gnc_ui_qif_import_default_acct_back_cb),
                       QIF_Import_Druid);
   gtk_signal_connect (GTK_OBJECT (loaded_files_page), "prepare",
@@ -4922,5 +4826,51 @@ create_QIF_Import_Druid (void)
 
   gtk_widget_grab_default (qif_filename_entry);
   return QIF_Import_Druid;
+}
+
+GtkWidget*
+create_window1 (void)
+{
+  GtkWidget *window1;
+  GtkWidget *vbox39;
+  GtkWidget *label754;
+  GtkWidget *hbox29;
+  GtkWidget *hbox30;
+
+  window1 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_object_set_data (GTK_OBJECT (window1), "window1", window1);
+  gtk_window_set_title (GTK_WINDOW (window1), _("window1"));
+
+  vbox39 = gtk_vbox_new (FALSE, 5);
+  gtk_widget_ref (vbox39);
+  gtk_object_set_data_full (GTK_OBJECT (window1), "vbox39", vbox39,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox39);
+  gtk_container_add (GTK_CONTAINER (window1), vbox39);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox39), 5);
+
+  label754 = gtk_label_new (_("Find transactions occurring in the date range:"));
+  gtk_widget_ref (label754);
+  gtk_object_set_data_full (GTK_OBJECT (window1), "label754", label754,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label754);
+  gtk_box_pack_start (GTK_BOX (vbox39), label754, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label754), 7.45058e-09, 0.5);
+
+  hbox29 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox29);
+  gtk_object_set_data_full (GTK_OBJECT (window1), "hbox29", hbox29,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox29);
+  gtk_box_pack_start (GTK_BOX (vbox39), hbox29, FALSE, FALSE, 0);
+
+  hbox30 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox30);
+  gtk_object_set_data_full (GTK_OBJECT (window1), "hbox30", hbox30,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox30);
+  gtk_box_pack_start (GTK_BOX (vbox39), hbox30, FALSE, FALSE, 0);
+
+  return window1;
 }
 

@@ -54,6 +54,8 @@
 
   (gnc:hook-run-danglers gnc:*startup-hook*)
 
+  (gnc:exp-parser-init)
+
   (if (gnc:config-var-value-get gnc:*arg-show-version*)
       (begin
         (gnc:prefs-show-version)
@@ -96,7 +98,10 @@
   
   (if (not (= (gnc:lowlev-app-init) 0))
       (gnc:shutdown 0))
-  
+
+  ;; add a hook to shut down the expression parser
+  (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:exp-parser-shutdown)
+
   ;; add a hook to save the user configs on shutdown
   (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:save-global-options)
 

@@ -32,14 +32,11 @@ struct GTable
 
   g_table_allocator allocator;
   g_table_deallocator deallocator;
-
-  gpointer user_data;
 };
 
 GTable *
 g_table_new (g_table_allocator allocator,
-             g_table_deallocator deallocator,
-             gpointer user_data)
+             g_table_deallocator deallocator)
 {
   GTable *gtable;
 
@@ -55,8 +52,6 @@ g_table_new (g_table_allocator allocator,
 
   gtable->allocator = allocator;
   gtable->deallocator = deallocator;
-
-  gtable->user_data = user_data;
 
   return gtable;
 }
@@ -120,7 +115,7 @@ g_table_resize (GTable *gtable, int rows, int cols)
 
     tcp = &gtable->array->pdata[new_len];
     for (i = new_len; i < old_len; i++, tcp++)
-      gtable->deallocator(*tcp, gtable->user_data);
+      gtable->deallocator(*tcp);
   }
 
   /* Change the size */
@@ -134,27 +129,9 @@ g_table_resize (GTable *gtable, int rows, int cols)
 
     tcp = &gtable->array->pdata[old_len];
     for (i = old_len; i < new_len; i++, tcp++)
-      *tcp = gtable->allocator(gtable->user_data);
+      *tcp = gtable->allocator();
   }
 
   gtable->rows = rows;
   gtable->cols = cols;
-}
-
-int
-g_table_rows (GTable *gtable)
-{
-  if (gtable == NULL)
-    return 0;
-
-  return gtable->rows;
-}
-
-int
-g_table_cols (GTable *gtable)
-{
-  if (gtable == NULL)
-    return 0;
-
-  return gtable->cols;
 }

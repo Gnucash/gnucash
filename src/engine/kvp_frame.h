@@ -50,7 +50,7 @@ typedef struct _kvp_list  kvp_list;
 typedef union  _kvp_value kvp_value;
 
 /* kvp_frame functions */
-kvp_frame   * kvp_frame_new();
+kvp_frame   * kvp_frame_new(void);
 void        kvp_frame_delete(kvp_frame * frame);
 kvp_frame   * kvp_frame_copy(const kvp_frame * frame);
 void        kvp_frame_set_slot(kvp_frame * frame, 
@@ -58,19 +58,29 @@ void        kvp_frame_set_slot(kvp_frame * frame,
 kvp_value   * kvp_frame_get_slot(kvp_frame * frame, 
                                  const char * key);
 
-kvp_value   * kvp_value_new();
+kvp_value   * kvp_value_new(void);
 void        kvp_value_delete(kvp_value * value);
 kvp_value   * kvp_value_copy(const kvp_value * value);
 
 /* kvp_list functions */
-kvp_list    * kvp_list_new();
+kvp_list    * kvp_list_new(void);
 void        kvp_list_delete(kvp_list * list);
 kvp_list    * kvp_list_copy(const kvp_list * list);
-int         kvp_list_null_p(const kvp_list * list);
+gboolean    kvp_list_null_p(const kvp_list * list);
 
 kvp_value   * kvp_list_car(kvp_list * list);
 kvp_list    * kvp_list_cdr(kvp_list * list);
 kvp_list    * kvp_list_cons(kvp_value * car, kvp_list * cdr);
+
+kvp_list * kvp_list_1(kvp_value * value);
+kvp_list * kvp_list_2(kvp_value * value1, kvp_value * value2);
+kvp_list * kvp_list_3(kvp_value * value1, kvp_value * value2,
+                      kvp_value * value3);
+kvp_list * kvp_list_4(kvp_value * value1, kvp_value * value2,
+                      kvp_value * value3, kvp_value * value4);
+kvp_list * kvp_list_5(kvp_value * value1, kvp_value * value2,
+                      kvp_value * value3, kvp_value * value4,
+                      kvp_value * value5);
 
 /* value constructors (copying for pointer args) */
 kvp_value   * kvp_value_new_int64(gint64 value);
@@ -82,14 +92,15 @@ kvp_value   * kvp_value_new_list(const kvp_list * value);
 kvp_value   * kvp_value_new_frame(const kvp_frame * value);
 
 /* value accessors (NON-copying for frames/lists/guids/binary) */
-kvp_value_t kvp_value_get_type(const kvp_value * val);
+kvp_value_t kvp_value_get_type(const kvp_value * value);
 
-gint64      kvp_value_get_int64(const kvp_value * val);
-double      kvp_value_get_float64(const kvp_value * val);
-char        * kvp_value_get_string(const kvp_value * val);
-GUID        * kvp_value_get_guid(const kvp_value * val);
-void        * kvp_value_get_binary(const kvp_value * val, int * size_return); 
-kvp_list    * kvp_value_get_list(const kvp_value * val);
-kvp_frame   * kvp_value_get_frame(const kvp_value * val);
+gint64      kvp_value_get_int64(const kvp_value * value);
+double      kvp_value_get_float64(const kvp_value * value);
+char        * kvp_value_get_string(const kvp_value * value);
+GUID        * kvp_value_get_guid(const kvp_value * value);
+void        * kvp_value_get_binary(const kvp_value * value,
+                                   int * size_return); 
+kvp_list    * kvp_value_get_list(const kvp_value * value);
+kvp_frame   * kvp_value_get_frame(const kvp_value * value);
 
 #endif

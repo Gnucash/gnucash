@@ -50,7 +50,7 @@
 /********************************************************************\
 \********************************************************************/
 
-void
+static void
 xaccInitializeAccountGroup (AccountGroup *grp)
 {
   grp->saved       = TRUE;
@@ -274,13 +274,13 @@ xaccGetAccountRoot (Account * acc)
   if (!acc) return NULL;
 
   /* find the root of the account group structure */
-  grp = (AccountGroup *) acc->parent;
+  grp = acc->parent;
   while (grp) {
     root = grp;
     parent_acc = grp -> parent;
     grp = NULL;
     if (parent_acc) {
-       grp = (AccountGroup *) parent_acc->parent;
+       grp = parent_acc->parent;
     }
   }
   return root;
@@ -621,8 +621,7 @@ xaccRecomputeGroupBalance (AccountGroup *grp)
        
        if (gnc_commodity_equiv(default_currency, acc->currency)) {
          grp->balance = 
-           gnc_numeric_add(grp->balance, acc->children->balance,
-                           GNC_DENOM_AUTO, GNC_DENOM_FIXED | GNC_RND_NEVER);
+           gnc_numeric_add_fixed(grp->balance, acc->children->balance);
        }
      }
       
@@ -630,8 +629,7 @@ xaccRecomputeGroupBalance (AccountGroup *grp)
       xaccAccountRecomputeBalance (acc);
       if (gnc_commodity_equiv(default_currency, acc->currency)) {
         grp->balance = 
-          gnc_numeric_add(grp->balance, acc->balance,
-                          GNC_DENOM_AUTO, GNC_DENOM_FIXED | GNC_RND_NEVER);
+          gnc_numeric_add_fixed(grp->balance, acc->balance);
       }
    }
 }

@@ -30,10 +30,7 @@ static void  prt_status(
 fi_ptr       fi,
 FILE        *ofile);
 
-int             main(
-unsigned        argc,
-unsigned char **argv,
-unsigned char **env)
+int             main(int argc, char **argv, char **env)
 {
 	financial_info  fininfo;
 	amort_sched     amortsched;

@@ -379,6 +379,17 @@
      (qif-file:xtns self))
     retval))
 
+;; if the date format was ambiguous, this will get called to reparse.
+(define (qif-file:reparse-dates self new-format)
+  (check-and-parse-field 
+   qif-xtn:date qif-xtn:set-date! 
+   qif-parse:check-date-format (list new-format)
+   qif-parse:parse-date/format 
+   (qif-file:xtns self)
+   qif-parse:print-date
+   'error-on-ambiguity
+   (lambda (e) e)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-file:parse-fields self 
 ;;  take a previously-read qif file and convert fields
@@ -391,7 +402,10 @@
          (start-time #f)
          (end-time #f)
          (set-error 
-          (lambda (e) (set! error e)))
+          (lambda (e) 
+            (if (not error)
+                (set! error (list e))
+                (set! error (cons e error)))))
          (errlist-to-string 
           (lambda (lst)
             (with-output-to-string 
@@ -401,7 +415,7 @@
                    (display elt))
                  lst))))))
     (set! start-time (gettimeofday))
-    
+    (display "starting \n")
     (and 
      ;; fields of categories. 
      (check-and-parse-field 
@@ -409,6 +423,7 @@
       qif-parse:check-number-format '(decimal comma)
       qif-parse:parse-number/format (qif-file:cats self)
       qif-parse:print-number
+      'guess-on-ambiguity
       set-error)
      
      (check-and-parse-field 
@@ -416,6 +431,7 @@
       qif-parse:check-number-format '(decimal comma) 
       qif-parse:parse-number/format (qif-file:cats self)
       qif-parse:print-number
+      'guess-on-ambiguity
       set-error)
      
      ;; fields of accounts 
@@ -424,6 +440,7 @@
       qif-parse:check-number-format '(decimal comma) 
       qif-parse:parse-number/format (qif-file:accounts self)
       qif-parse:print-number
+      'guess-on-ambiguity
       set-error)
      
      (check-and-parse-field 
@@ -431,6 +448,7 @@
       qif-parse:check-number-format '(decimal comma) 
       qif-parse:parse-number/format (qif-file:accounts self)
       qif-parse:print-number
+      'guess-on-ambiguity
       set-error)
     
      (parse-field 
@@ -445,6 +463,7 @@
       qif-parse:parse-date/format 
       (qif-file:xtns self)
       qif-parse:print-date
+      'error-on-ambiguity
       set-error)
      
      (parse-field 
@@ -460,6 +479,7 @@
       qif-parse:check-number-format '(decimal comma) 
       qif-parse:parse-number/format (qif-file:xtns self)
       qif-parse:print-number
+      'guess-on-ambiguity
       set-error)
      
      (check-and-parse-field 
@@ -467,6 +487,7 @@
       qif-parse:check-number-format '(decimal comma) 
       qif-parse:parse-number/format (qif-file:xtns self)
       qif-parse:print-number
+      'guess-on-ambiguity
       set-error)
      
      (check-and-parse-field 
@@ -474,6 +495,7 @@
       qif-parse:check-number-format '(decimal comma) 
       qif-parse:parse-number/format (qif-file:xtns self)
       qif-parse:print-number
+      'guess-on-ambiguity
       set-error)
      
      ;; this one's a little tricky... it checks and sets all the 
@@ -483,6 +505,7 @@
       qif-parse:check-number-formats '(decimal comma) 
       qif-parse:parse-numbers/format (qif-file:xtns self)
       qif-parse:print-numbers
+      'guess-on-ambiguity
       set-error)
      
      (begin 
@@ -490,11 +513,9 @@
        #t))
     
     (set! end-time (gettimeofday))
-
-    (cond ((list? error)
-           (list all-ok (errlist-to-string error)))
-          (error 
-           (list all-ok error))
+    (write error) (newline)
+    (cond (error
+           (cons all-ok error))
           (#t #t))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -524,7 +545,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (check-and-parse-field getter setter checker 
-                               formats parser objects printer errormsg)
+                               formats parser objects printer 
+                               on-error errormsg)
   ;; first find the right format for the field
   (let ((do-parsing #f)
         (retval #t)
@@ -540,15 +562,20 @@
                   (set! do-parsing #t)                  
                   (set! formats (checker val formats)))))
           (if (and (not (null? formats))
-                   (not (null? (cdr formats)))
+                   ;; (not (null? (cdr formats)))
                    (not (null? rest)))
               (loop (car rest) (cdr rest)))))
     
     ;; if there's nothing left in formats, there's no format that will
     ;; fit all the values for a given field.  We have to give up at
-    ;; that point.  If there are multiple items in formats, we just
-    ;; take the default (first) item in the list.  This is not super
-    ;; great.
+    ;; that point.  
+
+    ;; If there are multiple items in formats, we look at the on-error
+    ;; arg.  If it's 'guess-on-ambiguity, we take the default (first)
+    ;; item in the list.  This is not super great.  if it's
+    ;; 'fail-on-ambiguity (or anything else, actually) we return the
+    ;; list of acceptable formats.
+
     (cond 
      ((null? formats) 
       (errormsg "Data for number or date does not match a known format.")
@@ -560,15 +587,21 @@
       ;; just ignore the format ambiguity.  Otherwise, it's really an
       ;; error.  ATM since there's no way to correct the error let's 
       ;; just leave it be.
-      (all-formats-equivalent? getter parser formats objects printer 
-                               errormsg)      
-      (set! format (car formats)))
+      (if (or (all-formats-equivalent? getter parser formats objects printer 
+                                       errormsg)      
+              (eq? on-error 'guess-on-ambiguity))
+          (set! format (car formats))
+          (begin 
+            (errormsg formats)
+            (set! do-parsing #f)
+            (set! retval #t))))
      (#t 
       (set! format (car formats))))
     
     ;; do-parsing is false if there were no objects with non-#f values
-    ;; in the field.  We would have had to look at all of them once,
-    ;; but at least not twice.
+    ;; in the field, or the data format is ambiguous and
+    ;; 'fail-on-ambiguity was passed.  We would have had to look at
+    ;; all of them once, but at least not twice.
     (if do-parsing
         (for-each 
          (lambda (current)
@@ -585,6 +618,12 @@
                           "Data format inconsistent in QIF file.")))))))
          objects))
     retval))
+
+
+;; check for the off chance that even though there are multiple
+;; possible interpretations they are all the same. (i.e. the numbers
+;; "1000 2000 3000 4000" could be interpreted as decimal or comma
+;; radix, but who cares?  The values will be the same).
 
 (define (all-formats-equivalent? getter parser formats objects 
                                  printer errormsg)

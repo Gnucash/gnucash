@@ -149,8 +149,8 @@
 #define REG_CURR_MSG      _("You cannot transfer funds from the %s " \
                             "account.\nIt does not have a matching " \
                             "currency.\nTo transfer funds between " \
-                            "accounts with different currencies\n you" \
-                            "need an intermediate currency account.\n" \
+                            "accounts with different currencies\n" \
+                            "you need an intermediate currency account.\n" \
                             "Please see the GnuCash online manual")
 #define REPORT_ERR_MSG    _("Error executing scheme report.")
 #define REPORT_NOPARM_MSG _("This report has no parameters.")
@@ -344,7 +344,7 @@
 #define NUM_CELL_HELP     _("Enter the transaction number, such as the "\
                             "check number")
 #define PRICE_CELL_HELP   _("Enter the share price")
-#define SELL_CELL_HELP    _("Enter the number of shares sold")
+#define SHARES_CELL_HELP  _("Enter the number of shares bought or sold")
 #define VALUE_CELL_HELP   _("Enter the total value of the shares")
 #define XFER_CELL_HELP    _("Enter the account to transfer from, or choose "\
                             "one from the list")
@@ -434,6 +434,17 @@
 #define TRANSACTION_MENU_STR      _(TRANSACTION_MENU_STR_N)
 #define TRANSFER_MENU_STR         _("_Transfer")
 #define TRANSFER_MENU_E_STR_N    N_("_Transfer...")
+
+
+/* Error messages */
+#define ERROR_IN_AMOUNT            _("You must enter a valid amount.\n\n" \
+                                     "Error: %s.")
+#define PARSER_UNBALANCED_PARENS   _("Unbalanced parenthesis")
+#define PARSER_STACK_OVERFLOW      _("Stack overflow")
+#define PARSER_STACK_UNDERFLOW     _("Stack underflow")
+#define PARSER_UNDEFINED_CHARACTER _("Undefined character")
+#define PARSER_NOT_A_VARIABLE      _("Not a variable")
+#define PARSER_OUT_OF_MEMORY_STR   _("Out of memory")
 
 
 /** MISC INTERNATIONALIZATION STRINGS: ******************************/
@@ -665,6 +676,7 @@
 #define SECURITY_STR        _("Security")
 #define SELL_STR            _("Sell")
 #define SETTINGS_STR        _("Settings")
+#define SHARES_STR          _("Shares")
 #define SIMPLE_STR          _("Simple")
 #define SOLD_STR            _("Sold")
 #define SPEND_STR           _("Spend")
@@ -699,5 +711,24 @@
 #define RECONCILE_ABBREV    _("Reconciled:R"+11)
 #define RECONCILED_ABBREV   _("reconciled:y"+11)
 
+/* register sample strings */
+#define DATE_CELL_SAMPLE    _("sample:12/12/2000"+7)
+#define NUM_CELL_SAMPLE     _("sample:99999"+7)
+#define ACTN_CELL_SAMPLE    TRANSFER_STR
+#define XFRM_CELL_SAMPLE    _("sample:Expenses:Automobile:Gasoline"+7)
+#define MXFRM_CELL_SAMPLE   XFRM_CELL_SAMPLE
+#define XTO_CELL_SAMPLE     XFRM_CELL_SAMPLE
+#define DESC_CELL_SAMPLE    _("sample:Description of a transaction"+7)
+#define MEMO_CELL_SAMPLE    _("sample:Memo field sample text string"+7)
+#define RECN_CELL_SAMPLE    RECONCILE_ABBREV
+#define DEBT_CELL_SAMPLE    _("sample:999,999.000"+7)
+#define CRED_CELL_SAMPLE    DEBT_CELL_SAMPLE
+#define NDEBT_CELL_SAMPLE   DEBT_CELL_SAMPLE
+#define NCRED_CELL_SAMPLE   DEBT_CELL_SAMPLE
+#define PRIC_CELL_SAMPLE    DEBT_CELL_SAMPLE
+#define VALU_CELL_SAMPLE    DEBT_CELL_SAMPLE
+#define SHRS_CELL_SAMPLE    DEBT_CELL_SAMPLE
+#define BALN_CELL_SAMPLE    DEBT_CELL_SAMPLE
+#define SHRBALN_CELL_SAMPLE DEBT_CELL_SAMPLE
 
 #endif /* __XACC_MESSAGES_I18N_H__ */

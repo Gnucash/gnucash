@@ -112,7 +112,7 @@ const char * gnc_print_date(Timespec ts);
  *
  * Globals: global dateFormat value
  */
-void scanDate (const char *buff, int *day, int *monty, int *year);
+void scanDate (const char *buff, int *day, int *month, int *year);
 
 /**
  * dateSeparator
@@ -130,5 +130,8 @@ time_t xaccDMYToSec (int day, int month, int year);
 time_t xaccScanDateS (const char *buff);
 
 void xaccValidateDate (struct tm *date);
+
+/* Convert a day, month, and year to a Timespec */
+Timespec gnc_dmy2timespec(int day, int month, int year);
 
 #endif /* __XACC_DATE_H__ */

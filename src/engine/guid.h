@@ -28,6 +28,8 @@
 # include <config.h>
 #endif
 
+#include <glib.h>
+
 /* This file defines an API for using globally unique identifiers. */
 
 /* The type used to store guids */
@@ -60,7 +62,7 @@ typedef union _GUID
  * given in the salt argument, but not with any other source. Calling
  * guid_init_only_salt() with a specific argument will produce a
  * specific sequence of ids reliably. */
-void guid_init();
+void guid_init(void);
 void guid_init_with_salt(const void *salt, size_t salt_len);
 void guid_init_only_salt(const void *salt, size_t salt_len);
 
@@ -73,18 +75,21 @@ void guid_new(GUID *guid);
 /* Return a null-terminated string encoding of the id. String
  * encodings of identifiers are hex numbers printed only with the
  * characters '0' through '9' and 'a' through 'f'. The encoding will
- * always be 32 characters long. The returned string should be
- * freed when no longer needed.
- */
+ * always be GUID_ENCODING_LENGTH characters long. The returned string
+ * should be freed when no longer needed. */
 char * guid_to_string(const GUID * guid);
 
 
 /* Given a string, decode the id into the guid if guid is non-NULL.
- * The function returns true if the string was a valid 32 character
+ * The function returns TRUE if the string was a valid 32 character
  * hexadecimal number. This function accepts both upper and lower case
- * hex digits. If the return value if false, the effect on guid is
+ * hex digits. If the return value is FALSE, the effect on guid is
  * undefined. */
-int string_to_guid(const char * string, GUID * guid);
+gboolean string_to_guid(const char * string, GUID * guid);
 
+
+/* Given two GUIDs, return TRUE if they are non-NULL and equal.
+ * Return FALSE, otherwise. */
+gboolean guid_equal(const GUID *guid_1, const GUID *guid_2);
 
 #endif

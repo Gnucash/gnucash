@@ -29,11 +29,11 @@
 
 #include "top-level.h"
 #include "window-help.h"
-#include "messages_i18n.h"
+#include "messages.h"
 #include "print-session.h"
 #include "ui-callbacks.h"
+#include "glade-cb-gnc-dialogs.h"
 
-#ifdef HAVE_LIBGNOMEPRINT
 
 PrintPreviewDialog *
 gnc_ui_print_preview_create(PrintSession * ps) {
@@ -45,13 +45,13 @@ gnc_ui_print_preview_create(PrintSession * ps) {
   ppd->pc = 
     gnome_print_preview_new (GNOME_CANVAS(ppd->canvas), 
                              ps->paper);
-  
+
   gtk_object_set_data(GTK_OBJECT(ppd->toplevel), "print_preview_struct",
                       ppd);
 
   gnome_print_meta_render_from_object(GNOME_PRINT_CONTEXT(ppd->pc),
                                       GNOME_PRINT_META(ppd->session->meta)); 
-  
+
   gnome_print_context_close(GNOME_PRINT_CONTEXT(ppd->pc));
   gtk_widget_show_all(ppd->toplevel);
 
@@ -84,53 +84,57 @@ gnc_ui_print_preview_destroy(PrintPreviewDialog * ppd) {
 PrintDialog *
 gnc_ui_print_dialog_create(PrintSession * ps) {
   PrintDialog * pcd = g_new0(PrintDialog, 1);
-  char        * printer_string;
+  char        * printer_string = NULL;
 
   pcd->toplevel = create_Print_Dialog();
   pcd->session  = ps;
-  
+
   pcd->paper_entry = gtk_object_get_data(GTK_OBJECT(pcd->toplevel),
                                          "paper_entry");
 
   pcd->printer_entry = gtk_object_get_data(GTK_OBJECT(pcd->toplevel),
                                            "printer_entry");
-  
+
   gtk_object_set_data(GTK_OBJECT(pcd->toplevel), "print_struct",
                       pcd);
-  
 #if 0
   if(ps->printer->driver) {
     if(ps->printer->filename) {
-      asprintf(&printer_string, "(%s) %s",
-               ps->printer->driver, ps->printer->filename);
+      printer_string = g_strdup_printf("(%s) %s",
+                                       ps->printer->driver,
+                                       ps->printer->filename);
     }
     else {
-      printer_string = ps->printer->driver;
+      printer_string = g_strdup(ps->printer->driver);
     }
   }
   else {
-    printer_string = _("(none)");
+    printer_string = g_strdup(_("(none)"));
   }
 #endif
 
   gtk_entry_set_text(GTK_ENTRY(pcd->paper_entry), ps->paper);
+
 #if 0
   gtk_entry_set_text(GTK_ENTRY(pcd->printer_entry), printer_string);
 #endif
+
   gtk_widget_show_all(pcd->toplevel);
+
+  g_free(printer_string);
 
   return pcd;
 }
 
 void
-gnc_ui_paper_dialog_cancel_cb(GtkButton * widg, gpointer user_data) {
+gnc_ui_paper_dialog_cancel_cb(GtkButton * button, gpointer user_data) {
   PaperDialog * psd  = gtk_object_get_data(GTK_OBJECT(user_data),
                                            "paper_struct");
   gnc_ui_paper_dialog_destroy(psd);
 }
 
 void
-gnc_ui_paper_dialog_ok_cb(GtkButton * widg, gpointer user_data) {
+gnc_ui_paper_dialog_ok_cb(GtkButton * button, gpointer user_data) {
   PaperDialog * psd  = gtk_object_get_data(GTK_OBJECT(user_data),
                                            "paper_struct");
   char * newpaper = g_strdup(gnome_paper_selector_get_name
@@ -193,19 +197,21 @@ gnc_ui_print_dialog_select_printer_cb(GtkButton * button, gpointer user_data) {
 #if 0
       if(pcd->session->printer->driver) {
         if(pcd->session->printer->filename) {
-          asprintf(&printer_string, "(%s) %s",
-                   pcd->session->printer->driver, 
-                   pcd->session->printer->filename);
+          printer_string = g_strdup_printf("(%s) %s",
+                                           pcd->session->printer->driver, 
+                                           pcd->session->printer->filename);
         }
         else {
-          printer_string = pcd->session->printer->driver;
+          printer_string = g_strdup(pcd->session->printer->driver);
         }
       }
       else {
-        printer_string = _("(none)");
+        printer_string = g_strdup(_("(none)"));
       }
       gtk_entry_set_text(GTK_ENTRY(pcd->printer_entry), printer_string);
+      g_free(printer_string);
 #endif
+
     }
   }
 }
@@ -255,8 +261,7 @@ gnc_ui_print_dialog_cancel_cb(GtkButton * button, gpointer user_data) {
 }
 
 void
-gnc_ui_print_dialog_help_cb(GtkButton * button, 
-                                    gpointer user_data) {
+gnc_ui_print_dialog_help_cb(GtkButton * button, gpointer user_data) {
   helpWindow(NULL, HELP_STR, HH_PRINT);
 }
 
@@ -327,44 +332,3 @@ gnc_print_session_print(PrintSession * ps) {
   gnome_print_context_close(pc);
   gtk_object_unref(GTK_OBJECT(pc));
 }
-
-#else
-
-/* print preview dialog stuff */
-PrintPreviewDialog * gnc_ui_print_preview_create(PrintSession * ps) {
-  return NULL;
-}
-void gnc_ui_print_preview_OK_cb(GtkButton * button, gpointer user_data) { }
-void gnc_ui_print_preview_destroy(PrintPreviewDialog * ppd) { }
-
-/* print check dialog stuff */
-PrintDialog * gnc_ui_print_dialog_create(PrintSession * ps) {
-  return NULL;
-}
-
-void gnc_ui_print_dialog_destroy(PrintDialog * pcd) { } 
-
-void gnc_ui_print_dialog_help_cb(GtkButton * button, gpointer user_data) { } 
-void gnc_ui_print_dialog_select_printer_cb(GtkButton * button, 
-                                           gpointer user_data) { } 
-void gnc_ui_print_dialog_select_paper_cb(GtkButton * button, 
-                                         gpointer user_data) { } 
-void gnc_ui_print_dialog_preview_cb(GtkButton * button, gpointer user_data) {}
-void gnc_ui_print_dialog_ok_cb(GtkButton * button, gpointer user_data) {}
-void gnc_ui_print_dialog_cancel_cb(GtkButton * button, gpointer user_data) {}
-void gnc_ui_paper_dialog_cancel_cb(GtkWidget * widg, gpointer user_data) { }
-void gnc_ui_paper_dialog_ok_cb(GtkWidget * widg, gpointer user_data) {}
-
-/* printsession stuff */
-PrintSession * gnc_print_session_create() { return NULL; }
-void gnc_print_session_destroy(PrintSession * ps) {}
-
-void gnc_print_session_moveto(PrintSession * ps, double x, double y) {}
-void gnc_print_session_text(PrintSession * ps, char * text) {}
-void gnc_print_session_done(PrintSession * ps) {}
-
-void gnc_print_session_preview(PrintSession * ps) {}
-void gnc_print_session_print(PrintSession * ps) {}
-
-#endif
-

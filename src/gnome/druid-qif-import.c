@@ -54,6 +54,8 @@ struct _qifimportwindow {
   GtkWidget * druid;
   GtkWidget * filename_entry;
   GtkWidget * acct_entry;
+  GtkWidget * date_format_combo;
+  GtkWidget * date_format_entry;
   GtkWidget * selected_file_list;
   GtkWidget * acct_list;
   GtkWidget * cat_list;
@@ -62,6 +64,8 @@ struct _qifimportwindow {
 
   GtkWidget * loaded_files_page;
   GtkWidget * load_file_page;
+  GtkWidget * date_format_page;
+  GtkWidget * account_name_page;
   GtkWidget * commodity_page;
   GtkWidget * end_page;
 
@@ -133,14 +137,19 @@ gnc_ui_qif_import_druid_make()  {
   retval->druid          = gtk_object_get_data(wobj, "qif_import_druid");
   retval->filename_entry = gtk_object_get_data(wobj, "qif_filename_entry");
   retval->acct_entry     = gtk_object_get_data(wobj, "qif_account_entry");
+  retval->date_format_combo = gtk_object_get_data(wobj, "date_format_combo");
+  retval->date_format_entry = gtk_object_get_data(wobj, "date_format_entry");
   retval->selected_file_list = gtk_object_get_data(wobj, "selected_file_list");
   retval->currency_picker = gtk_object_get_data(wobj, "currency_combo");
   retval->currency_entry = gtk_object_get_data(wobj, "currency_entry");
   retval->acct_list      = gtk_object_get_data(wobj, "account_page_list");
   retval->cat_list       = gtk_object_get_data(wobj, "category_page_list");
+
   retval->load_file_page = gtk_object_get_data(wobj, "load_file_page");
   retval->loaded_files_page = gtk_object_get_data(wobj, "loaded_files_page");
   retval->commodity_page  = gtk_object_get_data(wobj, "commodity_page");  
+  retval->account_name_page  = gtk_object_get_data(wobj, "account_name_page"); 
+  retval->date_format_page  = gtk_object_get_data(wobj, "date_format_page"); 
   retval->end_page  = gtk_object_get_data(wobj, "end_page");
   
   retval->pages = NULL;
@@ -256,16 +265,22 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
   char * path_to_load;
   char * error_string = NULL;
   
+  GList * format_strings;
+  GList * listit;
+
   SCM make_qif_file   = gh_eval_str("make-qif-file");
   SCM qif_file_load   = gh_eval_str("qif-file:read-file");
   SCM qif_file_parse  = gh_eval_str("qif-file:parse-fields");
   SCM qif_file_loaded = gh_eval_str("qif-dialog:qif-file-loaded?");
   SCM unload_qif_file = gh_eval_str("qif-dialog:unload-qif-file");
   SCM check_from_acct = gh_eval_str("qif-file:check-from-acct");
+  SCM date_formats;
   SCM scm_filename;
   SCM scm_qiffile;
   SCM imported_files = SCM_EOL;
   SCM load_return, parse_return;
+
+  int ask_date_format = FALSE;
 
   /* get the file name */ 
   path_to_load = gtk_entry_get_text(GTK_ENTRY(wind->filename_entry));
@@ -323,6 +338,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
       g_free(error_string);
     }      
     
+    /* check success of the file load */
     if((load_return != SCM_BOOL_T) &&
        (!gh_list_p(load_return) || 
         (gh_car(load_return) != SCM_BOOL_T))) {
@@ -342,15 +358,32 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
       return TRUE;
     }
     else {
+      /* call the field parser */
       parse_return = gh_call1(qif_file_parse, gh_car(imported_files));
-      
+      gh_display(parse_return); gh_newline();
+
+      /* warning means the date format is ambiguous. Set up the 
+       * format selector page. */
       if(gh_list_p(parse_return) && 
          (gh_car(parse_return) == SCM_BOOL_T)) {
-        error_string = g_strdup_printf(QIF_PARSE_WARNING_FORMAT_MSG,
-                                       gh_scm2newstr(gh_cadr(parse_return),
-                                                     NULL));
-        gnc_warning_dialog_parented(GTK_WIDGET(wind->window), error_string);
-        g_free(error_string);
+        date_formats   = gh_cadr(parse_return);
+        format_strings = NULL;
+        while(gh_list_p(date_formats) && !gh_null_p(date_formats)) {
+          format_strings = 
+            g_list_append(format_strings, 
+                          gh_symbol2newstr(gh_car(date_formats), NULL));
+          date_formats = gh_cdr(date_formats);
+        }
+        gtk_combo_set_popdown_strings(GTK_COMBO(wind->date_format_combo),
+                                      format_strings);
+
+        for(listit = format_strings; listit; listit=listit->next) {
+          free(listit->data);
+          listit->data = NULL;
+        }
+        g_list_free(format_strings);
+        
+        ask_date_format = TRUE;
       }
 
       if((parse_return != SCM_BOOL_T) &&
@@ -379,10 +412,15 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     /* we're leaving the page, so clear the entry text */
     gtk_entry_set_text(GTK_ENTRY(wind->filename_entry), "");
 
-    /* now... is there a clear account name for every transaction? */
-    if(gh_call1(check_from_acct, gh_car(imported_files)) != SCM_BOOL_T) {
-      /* we need to get an account name, so go to the next page */
+    if(ask_date_format) {
+      /* we need to get a date format, so go to the next page */
       return FALSE;
+    }
+    else if(gh_call1(check_from_acct, gh_car(imported_files)) != SCM_BOOL_T) {
+      /* skip to the "ask account name" page */
+      gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                           GNOME_DRUID_PAGE(wind->account_name_page));
+      return TRUE;
     }
     else {
       /* skip ahead to the "loaded files" page */
@@ -394,6 +432,33 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
   }
   
   return FALSE;
+}
+
+gboolean
+gnc_ui_qif_import_date_format_next_cb(GnomeDruidPage * page, 
+                                      gpointer arg1,
+                                      gpointer user_data) {
+  GtkWidget       * druid = GTK_WIDGET(user_data);
+  QIFImportWindow * wind = 
+    gtk_object_get_data(GTK_OBJECT(druid), "qif_window_struct");  
+
+  SCM  reparse_dates   = gh_eval_str("qif-file:reparse-dates");
+  SCM  check_from_acct = gh_eval_str("qif-file:check-from-acct");
+  SCM  format_sym = 
+    gh_symbol2scm(gtk_entry_get_text(GTK_ENTRY(wind->date_format_entry)));
+  
+  gh_call2(reparse_dates, wind->selected_file, format_sym);
+  
+  if(gh_call1(check_from_acct, wind->selected_file) != SCM_BOOL_T) {
+    return FALSE;
+  }
+  else {
+    /* skip ahead to the "loaded files" page */
+    gnome_druid_set_page(GNOME_DRUID(wind->druid), 
+                         GNOME_DRUID_PAGE(wind->loaded_files_page));
+    
+    return TRUE;      
+  }
 }
 
 

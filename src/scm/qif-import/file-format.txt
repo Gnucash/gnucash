@@ -33,12 +33,16 @@ Type of account identifiers
 
 !Account         Account list or which account applies to following 
                  transactions 
+
 !Type:Cat        Category list
 !Type:Class      Class list
 !Type:Memorized  Memorized transaction list 
 
 Note that !Account is used both to be a header for account information,
 and to be a header for a list of transactions.
+
+Also note that international versions of Quicken and MS Money often
+translate the Type: tags into the local language.  But not always.
 
 Account Information Format
 --------------------------
@@ -221,15 +225,54 @@ General Notes:
 
 Dates: 
 -----
+
 Dates in US QIF files are usually in the format MM/DD/YY, although
-four-digit years are not uncommon.  Dates sometimes occur without the 
-slash separator, or using other separators in place of  the slash.
+four-digit years are not uncommon.  Dates sometimes occur without the
+slash separator, or using other separators in place of the slash,
+commonly '-' and '.'.  US Quicken seems to be using the ' to indicate
+post-2000 two-digit years (such as 01/01'00 for Jan 1 2000).  Some
+banks appear to be using a completely undifferentiated numeric string
+formateed YYYYMMDD in downloaded QIF files.
 
 European QIF files may have dates in the DD/MM/YY format.  
 
 Monetary Amounts:
 -----------------
 These may occur in either US or Euro format:
+
 10,000.00  Ten Thousand Dollars
 10.000,00  Ten Thousand Francs
+
+Within a given QIF file, the usage of US or Euro numeric format
+appears to be consistent within a particular field but may be
+different from one field to another.  For example, the Share Amount
+field can be in Euro format but the Split Amount in US.  No
+radix-point is required and no limit on decimal places is evident, so
+it's possible to see the number "1,000" meaning "1 franc per share"
+"1,000" meaning "one thousand shares" in the same transaction (!).
+
+Category/Transfer/Class line: 
+-----------------------------
+
+The "L" line of most transactions specifies the category, transfer
+account, and class (if any) of the transaction.  Square brackets 
+surrounding the contents mean the transaction is a transfer to the 
+named account.  A forward slash separates the category/account from
+the class.  So overall, the format is one of the following:
+
+   LCategory of transaction
+   L[Transfer account]
+   LCategory of transaction/Class of transaction
+   L[Transfer account]/Class of transaction
+
+In stock transactions, if the 'N' field (action) is MiscIncX or
+MiscExpX, there can be *two* account/class pairs on the L line, with
+the second guaranteed to be a transfer.  I believe they are
+separated by a '|', like so:
+   
+   D01/01/2000
+   NMiscExpX
+   T1000.00
+   Lexpense category/expense class|[Transfer account]/transfer class
+
 

@@ -535,7 +535,7 @@
 	  report (budget-subreport-get-maximum-expected subreport))))
      (budget-entry-get-subentries entry)
      (budget-report-get-subreports report))))
-	       
+
 ;; calculate the nominal value.
 (define budget-report-set-nominal!
   (record-modifier budget-report-structure 'nominal))
@@ -662,16 +662,18 @@
       (gnc:group-map-accounts
        (lambda (account)
 	 (let* ((line
-		 (budget-get-line-hash budget-hash (gnc:account-get-full-name account)))
+		 (budget-get-line-hash budget-hash
+                                       (gnc:account-get-full-name account)))
 		(line2 (cond (line line) 
 			     (else 
-			      (vector-ref others (gnc:account-get-type account)))))
+			      (vector-ref others
+                                          (gnc:account-get-type account)))))
 		(acc 0)
 		(filter-pred (budget-entry-get-filter-pred 
 			      (budget-line-get-entry line2))))
 	   (budget-report-set-account-type! (budget-line-get-report line2)
 					    (gnc:account-get-type account))
-	   (cond 
+	   (cond
 	    ((budget-entry-get-action (budget-line-get-entry line2))
 	     (set! acc 0)
 	     (gnc:for-each-split-in-account 
@@ -744,16 +746,16 @@
 	(set-tm:mday bdtime 1)
 	(set-tm:mon bdtime 0)
 	(let ((time (car (mktime bdtime))))
-	  (cons time 0))))
-    #f))
+	  (cons 'absolute (cons time 0)))))
+    #f 'absolute #f))
 
   ;; to-date
   (gnc:register-budget-report-option
    (gnc:make-date-option
     "Report Options" "To"
     "b" "Report end date"
-    (lambda () (cons (current-time) 0))
-    #f))
+    (lambda () (cons 'absolute (cons (current-time) 0)))
+    #f 'absolute #f))
 
   ;; view
   (gnc:register-budget-report-option
@@ -803,8 +805,8 @@
     (case type
       ((gnc:budget-day) (+ 1 
 			   (remainder 
-			    (inexact->exact (floor
-					     (gnc:date-to-day-fraction caltime)))
+			    (inexact->exact
+                             (floor (gnc:date-to-day-fraction caltime)))
 			    num-periods)))
       ((gnc:budget-week) (+ (gnc:date-get-week-day lt)
 			    (* 7 (remainder 
@@ -812,10 +814,11 @@
 				   (floor (gnc:date-to-week-fraction caltime)))
 				  num-periods))))
       ((gnc:budget-month) (+ (gnc:date-get-month-day lt)
-			     (let loop ((month 
-					 (inexact->exact 
-					  (floor
-					   (gnc:date-to-month-fraction caltime)))))
+			     (let loop
+                                 ((month 
+                                   (inexact->exact 
+                                    (floor
+                                     (gnc:date-to-month-fraction caltime)))))
 			       (if (= 0 (remainder month num-periods))
 				   0
 				   (+ (loop (- month 1))
@@ -1133,9 +1136,9 @@
   (let* ((begindate (gnc:lookup-option options "Report Options" "From"))
          (enddate (gnc:lookup-option options "Report Options" "To"))
          (begin-date-secs (car (gnc:timepair-canonical-day-time 
-                                (gnc:option-value begindate))))
+                                (gnc:date-option-absolute-time (gnc:option-value begindate)))))
          (end-date-secs (car (gnc:timepair-canonical-day-time
-                              (gnc:option-value enddate))))
+                              (gnc:date-option-absolute-time (gnc:option-value enddate)))))
          (budget-hash (make-hash-table 313))
          (budget-list
 	   (map

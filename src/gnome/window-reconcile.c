@@ -51,7 +51,6 @@
 #include "enriched-messages.h"
 #include "guile-util.h"
 #include "AccWindow.h"
-#include "AdjBWindow.h"
 #include "Scrub.h"
 #include "util.h"
 #include "date.h"
@@ -277,7 +276,8 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
 
   string = gtk_entry_get_text(entry);
 
-  value = xaccParseAmount(string, TRUE);
+  value = 0.0;
+  xaccParseAmount(string, TRUE, &value, NULL);
 
   account_type = xaccAccountGetType(account);
   if ((account_type == STOCK) || (account_type == MUTUAL) ||
@@ -424,7 +424,8 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
       string = gtk_entry_get_text(GTK_ENTRY(end_value));
 
-      *new_ending = xaccParseAmount(string, TRUE);
+      *new_ending = 0.0;
+      xaccParseAmount(string, TRUE, new_ending, NULL);
       *statement_date = gnc_date_edit_get_date(GNC_DATE_EDIT(date_value));
 
       if (gnc_reverse_balance(account))
@@ -667,10 +668,10 @@ gnc_ui_reconcile_window_new_cb(GtkButton *button, gpointer data)
 static void
 gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
 {
-  RecnWindow *recnData = (RecnWindow *) data;
-  Account **affected_accounts;
+  RecnWindow *recnData = data;
+  GList *affected_accounts = NULL;
   Transaction *trans;
-  Split *split, *s;
+  Split *split;
   int i, num_splits;
 
   split = gnc_reconcile_window_get_current_split(recnData);
@@ -681,7 +682,7 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
   {
     gboolean result;
 
-    result = gnc_verify_dialog_parented(GTK_WINDOW(recnData->window),
+    result = gnc_verify_dialog_parented(recnData->window,
                                         TRANS_DEL2_MSG, FALSE);
 
     if (!result)
@@ -693,22 +694,25 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
    * their register windows after the deletion. */
   trans = xaccSplitGetParent(split);
   num_splits = xaccTransCountSplits(trans);
-  affected_accounts = g_new(Account *, num_splits + 1);
 
   for (i = 0; i < num_splits; i++) 
   {
+    Account *a;
+    Split *s;
+
     s = xaccTransGetSplit(trans, i);
-    affected_accounts[i] = xaccSplitGetAccount(s);
+    a = xaccSplitGetAccount(s);
+    if (a != NULL)
+      affected_accounts = g_list_prepend(affected_accounts, a);
   }
-  affected_accounts[num_splits] = NULL;
 
   xaccTransBeginEdit(trans, 1);
   xaccTransDestroy(trans);
   xaccTransCommitEdit(trans);
 
-  gnc_account_list_ui_refresh(affected_accounts);
+  gnc_account_glist_ui_refresh(affected_accounts);
 
-  g_free(affected_accounts);
+  g_list_free(affected_accounts);
 
   gnc_refresh_main_window ();
 }
@@ -730,7 +734,7 @@ gnc_ui_reconcile_window_edit_cb(GtkButton *button, gpointer data)
     return;
 
   gnc_register_raise(regData);
-  gnc_register_jump_to_split(regData, split);
+  gnc_register_jump_to_split_amount(regData, split);
 }
 
 
@@ -782,18 +786,6 @@ gnc_recn_xfer_cb(GtkWidget * w, gpointer data)
     return;
 
   gnc_xfer_dialog(recnData->window, account);
-}
-
-static void 
-gnc_recn_adjust_cb(GtkWidget * w, gpointer data)
-{
-  RecnWindow *recnData = data;
-  Account *account = recnData->account;
-
-  if (account == NULL)
-    return;
-
-  adjBWindow(account);
 }
 
 static void
@@ -1032,13 +1024,6 @@ gnc_recn_create_menu_bar(RecnWindow *recnData, GtkWidget *statusbar)
       GNOME_APP_UI_ITEM,
       TRANSFER_MENU_E_STR_N, TOOLTIP_TRANSFER_N,
       gnc_recn_xfer_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      ADJ_BALN_MENU_E_STR_N, TOOLTIP_ADJUST_N,
-      gnc_recn_adjust_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
@@ -1650,8 +1635,7 @@ recnFinishCB(GtkWidget *w, gpointer data)
   time_t date;
 
   if (!DEQ(recnRecalculateBalance(recnData), 0.0))
-    if (!gnc_verify_dialog_parented(GTK_WINDOW(recnData->window),
-                                    RECN_BALN_WARN, FALSE))
+    if (!gnc_verify_dialog_parented(recnData->window, RECN_BALN_WARN, FALSE))
       return;
 
   date = recnData->statement_date;
@@ -1697,8 +1681,7 @@ recnCancelCB(GtkWidget *w, gpointer data)
     changed = TRUE;
 
   if (changed)
-    if (!gnc_verify_dialog_parented(GTK_WINDOW(recnData->window),
-                                    RECN_CANCEL_WARN, FALSE))
+    if (!gnc_verify_dialog_parented(recnData->window, RECN_CANCEL_WARN, FALSE))
       return;
 
   gtk_widget_destroy(recnData->window);

@@ -102,7 +102,7 @@ void item_edit_show_list (ItemEdit *item_edit);
 void item_edit_hide_list (ItemEdit *item_edit);
 
 gboolean item_edit_set_cursor_pos (ItemEdit *item_edit,
-                                   int p_row, int p_col, int x,
+                                   PhysicalLocation phys_loc, int x,
                                    gboolean changed_cells,
                                    gboolean extend_selection);
 

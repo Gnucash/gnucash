@@ -26,6 +26,7 @@
 #include <string.h>
 #include <gnome.h>
 
+#include "dialog-account.h"
 #include "AccWindow.h"
 #include "MainWindow.h"
 #include "FileDialog.h"
@@ -432,18 +433,18 @@ gnc_account_change_currency_security(Account *account,
       if (trans == NULL)
         continue;
 
-      if (xaccTransIsCommonCurrency(trans, currency))
+      if (xaccTransIsCommonExclSCurrency(trans, currency, split))
         continue;
 
-      if (xaccTransIsCommonCurrency(trans, security))
+      if (xaccTransIsCommonExclSCurrency(trans, security, split))
         continue;
 
       j = 0;
       while ((s = xaccTransGetSplit(trans, j++)) != NULL)
       {
         gboolean add_it = FALSE;
-        const gnc_commodity *commodity;
-        Account *a;
+        const gnc_commodity * commodity;
+        Account * a;
 
         a = xaccSplitGetAccount(s);
 
@@ -477,7 +478,7 @@ gnc_account_change_currency_security(Account *account,
           g_hash_table_insert(change_security, a, (gpointer) security);
           add_it = TRUE;
         }
-
+        
         if (new_currency && (gnc_commodity_equiv(old_currency, commodity)))
         {
           g_hash_table_insert(change_security, a, (gpointer) currency);
@@ -1361,7 +1362,7 @@ gnc_ui_set_default_new_account_currency(const char *currency)
  * Return: none                                                     *
 \********************************************************************/
 void
-gnc_ui_destroy_account_add_windows()
+gnc_ui_destroy_account_add_windows(void)
 {
   GnomeDialog *dialog;
 

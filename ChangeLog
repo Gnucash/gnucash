@@ -1,3 +1,91 @@
+2000-09-16  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/table-allgui.c: re-implement using gtables.
+
+	* src/register/cellblock.c: re-implement using gtables.
+
+	* src/register/gtable.c: implentation of a dynamic 2-d array.
+
+2000-09-13  Dave Peticolas  <dave@krondo.com>
+
+	* src/SplitLedger.c (xaccSRSaveChangedCells): don't copy memo
+	and action to other split.
+
+2000-09-12  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-transfer.c (gnc_xfer_dialog_close_cb):
+	disconnect amount edit entry signals to avoid gtk warnings.
+
+	* src/engine/Transaction.h: make xaccInitTransaction a private
+	function.
+
+	* src/scm/qif-import/qif-to-gnc.scm: Don't init a new transaction.
+	gnc:transaction-create does this automatically. Doing it again leaks
+	memory.
+
+2000-09-11  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-transfer.c: incorporate amount editing widget
+	into the transfer dialog.
+
+	* src/gnome/gnc-amount-edit.c: new widget to allow amount editing
+	with expression parsing.
+
+2000-09-05  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/date-utilities.scm ((gnc:reldate-initialize)): New function - initialise
+	explicitly at startup rather than in ad-hoc manner
+
+2000-08-31  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/balance-and-pnl.scm: Bug fixes for new date options.
+
+	* src/scm/report/transaction-report.scm: Bug fixes for new date options.
+
+	* src/scm/report/budget-report.scm: Bug fixes for new date options.
+
+2000-08-30  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/hello-world.scm: A couple of new functions to test the relative
+	and combination date style options.
+
+	* src/scm/report/*.scm: Modified date options to take the new function.  Most
+	are still using absolute options at this stage, will get modified to use relative
+	dates later.
+
+	* src/scm/options.scm (gnc:make-option): new argument (option-data-fns) 
+	for manipulating multi-choice style options.  Changes
+	to option-makers to either support this.  
+	(gnc:make-date-option): modified to support relative and combination dates.
+
+	* src/scm/date-utilities.scm: Extensive additions for manipulating 
+	relative dates.
+
+	* src/guile/option-util.c: Support for new relative-date and
+	combination options , and use of scheme getters
+	rather than direct data structure manipulation.
+	(gnc_oiption_db_lookup_date_option): modified to
+	support relative and combination date options.
+	(gnc_option_date_option_get_subtype: new function.
+
+	* src/guile/guile-util.c (gnc_timepair2timespec): Check to make
+	sure it's a timepair before doing conversion.
+
+	* src/gnome/dialog-options.c: Extensive changes to support relative
+	and combination date options.  Also changed multichoice callback
+	to use wrapped scheme getter rather than directly manipulating
+	scheme data structure.
+
+	* make-gnucash-patch.in: Exclude generated HTML.
+
+2000-08-26  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/Group.c (xaccGetAccountRoot): remove unnecessary
+	casts.
+
+	* src/gnome/window-reconcile.c
+	(gnc_ui_reconcile_window_delete_cb): rewrite to use g_lists.
+
 2000-08-23  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/kvp_frame.c: use g_strdup, not strdup.

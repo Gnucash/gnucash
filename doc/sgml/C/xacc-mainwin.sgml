@@ -1,11 +1,9 @@
-
 <ARTICLE ID="XACC-MAINWIN">
+
 <ARTHEADER>
 <TITLE>Main Window</TITLE>
 </ARTHEADER>
-<SECT1>
-<TITLE> Main GnuCash Window</TITLE>
-<PARA>    </PARA>
+
 <PARA>This is the main account window. You control your set of
     accounts from here.
 
@@ -20,7 +18,7 @@
     </PARA>
 <PARA><INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
-<IMAGEDATA FILEREF="contract.gif">
+<IMAGEDATA FILEREF="image/contract.png">
 </IMAGEOBJECT>
 </INLINEMEDIAOBJECT>
     
@@ -32,7 +30,7 @@
     </PARA>
 <PARA>     <INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
-<IMAGEDATA FILEREF="expand.gif">
+<IMAGEDATA FILEREF="image/expand.png">
 </IMAGEOBJECT>
 </INLINEMEDIAOBJECT>
     
@@ -52,5 +50,5 @@
     recommended only for accounting experts.
 
 </PARA>
-</SECT1>
+
 </ARTICLE>

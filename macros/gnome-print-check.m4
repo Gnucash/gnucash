@@ -39,8 +39,8 @@ AC_ARG_ENABLE(gnome-printtest, [  --disable-gnome-printtest       Do not try to 
   if test "$GNOME_CONFIG" = "no" ; then
     no_gnome_print=yes
   else
-    GNOME_PRINT_CFLAGS=`$GNOME_CONFIG $gnome_printconf_args --cflags print`
-    GNOME_PRINT_LIBS=`$GNOME_CONFIG $gnome_printconf_args --libs print`
+    GNOME_PRINT_CFLAGS=`$GNOME_CONFIG $gnome_printconf_args --cflags print unicode`
+    GNOME_PRINT_LIBS=`$GNOME_CONFIG $gnome_printconf_args --libs print unicode`
 
     gnome_print_major_version=`$GNOME_CONFIG $gnome_print_args --version | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`

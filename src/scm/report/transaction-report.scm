@@ -404,6 +404,7 @@
     (define gnc:*transaction-report-options* (gnc:new-options))
     (define (gnc:register-trep-option new-option)
       (gnc:register-option gnc:*transaction-report-options* new-option))
+
     ;; from date
     ;; hack alert - could somebody set this to an appropriate date?
     (gnc:register-trep-option
@@ -418,15 +419,17 @@
           (set-tm:mday bdtime 1)
           (set-tm:mon bdtime 0)
           (let ((time (car (mktime bdtime))))
-            (cons time 0))))
-      #f))
+            (cons 'absolute (cons time 0)))))
+      #f 'absolute #f))   
+
     ;; to-date
+
     (gnc:register-trep-option
      (gnc:make-date-option
       "Report Options" "To"
       "b" "Report items up to and including this date"
-      (lambda () (cons (current-time) 0))
-      #f))
+      (lambda () (cons 'absolute (cons (current-time) 0)))
+      #f 'absolute #f))
 
     ;; account to do report on
     (gnc:register-trep-option
@@ -518,7 +521,7 @@
 	(list
 	 #(ascend "Ascending" "smallest to largest, earliest to latest")
 	 #(descend "Descending" "largest to smallest, latest to earliest"))))
-       
+
       (gnc:register-trep-option
        (gnc:make-multichoice-option
 	"Sorting" "Secondary Key"
@@ -536,6 +539,7 @@
 	 #(ascend "Ascending" "smallest to largest, earliest to latest")
 	 #(descend "Descending" "largest to smallest, latest to earliest")))))
     
+  
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
       "Display" "Date"
@@ -569,7 +573,8 @@
     (gnc:register-trep-option
      (gnc:make-multichoice-option
       "Display" "Amount"
-      "i" "Display the amount?" 
+      "i" "Display the amount?"  
+
       'single
       (list #(none "None" "No amount display")
 	    #(single "Single" "Single Column Display")
@@ -577,8 +582,8 @@
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "Display" "Headers"
-      "j" "Display the headers?" #t))
+      "Display" "Headers" "j" "Display the headers?" #t))
+ 
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
@@ -592,8 +597,8 @@
 
 
   (define (gnc:trep-renderer options)
-    (let* ((begindate (gnc:lookup-option options "Report Options" "From"))
-           (enddate (gnc:lookup-option options "Report Options" "To"))
+    (let* ((begindate (gnc:date-option-absolute-time (gnc:option-value (gnc:lookup-option options "Report Options" "From"))))
+           (enddate (gnc:date-option-absolute-time (gnc:option-value (gnc:lookup-option options "Report Options" "To"))))
            (tr-report-account-op (gnc:lookup-option
                                   options "Report Options" "Account"))
            (tr-report-primary-key-op (gnc:lookup-option options
@@ -606,23 +611,23 @@
                                                           "Sorting"
                                                           "Secondary Key"))
            (tr-report-secondary-order-op
-            (gnc:lookup-option options "Sorting" "Secondary Sort Order"))
+(gnc:lookup-option options "Sorting" "Secondary Sort Order"))
 	   (tr-report-style-op (gnc:lookup-option options 
 					       "Report Options"
 					       "Style"))
            (accounts (gnc:option-value tr-report-account-op))
-           (date-filter-pred (split-report-make-date-filter-predicate
-                              (gnc:option-value begindate)
-                              (gnc:timepair-end-day-time
-			       (gnc:option-value enddate))))
+           (date-filter-pred (split-report-make-date-filter-predicate 
+                               begindate 
+                               (gnc:timepair-end-day-time
+			       enddate)))
 	   (s1 (split-report-get-sort-spec-entry
 		(gnc:option-value tr-report-primary-key-op)
 		(eq? (gnc:option-value tr-report-primary-order-op) 'ascend)
-		(gnc:option-value begindate)))
+		begindate))
 	   (s2 (split-report-get-sort-spec-entry
 		(gnc:option-value tr-report-secondary-key-op)
 		(eq? (gnc:option-value tr-report-secondary-order-op) 'ascend)
-		(gnc:option-value begindate)))
+		begindate))
 	   (s2b (if s2 (list s2) '()))
 	   (sort-specs (if s1 (cons s1 s2b) s2b))
 	   (split-list

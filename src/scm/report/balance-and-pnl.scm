@@ -26,9 +26,9 @@
 
 ;; Just a private scope.
 (let 
-    ((l0-collector (make-stats-collector))
-     (l1-collector (make-stats-collector))
-     (l2-collector (make-stats-collector)))
+    ((l0-collector (make-currency-collector))
+     (l1-collector (make-currency-collector))
+     (l2-collector (make-currency-collector)))
 
   (define string-db (gnc:make-string-database))
 
@@ -47,8 +47,8 @@
           (set-tm:min bdtime 59)
           (set-tm:hour bdtime 23)
           (let ((time (car (mktime bdtime))))
-            (cons time 0))))
-      #f))
+            (cons 'absolute (cons time 0)))))
+      #f 'absolute #f))
     gnc:*balsht-report-options*)
 
   (define  (pnl-options-generator)
@@ -68,8 +68,8 @@
           (set-tm:mday bdtime 1)
           (set-tm:mon bdtime 0)
           (let ((time (car (mktime bdtime))))
-            (cons time 0))))
-      #f)) 
+            (cons 'absolute (cons time 0)))))
+      #f 'absolute #f)) 
 
     (gnc:register-pnl-option
      (gnc:make-date-option
@@ -81,39 +81,64 @@
           (set-tm:min bdtime 59)
           (set-tm:hour bdtime 23)
           (let ((time (car (mktime bdtime))))
-            (cons time 0))))
-      #f))
+            (cons 'absolute (cons time 0)))))
+      #f 'absolute #f))
     gnc:*pnl-report-options*)
 
-  (define (render-level-2-account level-2-account l2-value)
-    (let ((account-name (list NBSP NBSP NBSP NBSP 
-					(gnc:account-get-full-name
-					 level-2-account)))
+  (define (render-level-2-account level-2-account l2-currency-collector)
+    (let ((account-name (string-append NBSP NBSP NBSP NBSP 
+                                       (gnc:account-get-full-name
+                                        level-2-account)))
           (type-name (gnc:account-get-type-string
                       (gnc:account-get-type level-2-account))))
-      (html-table-row-align
-       (list
-	account-name type-name (gnc:amount->formatted-string l2-value #f))
-       (list "left" "center" "right"))))
-
-  (define (render-level-1-account account l1-value)
-    (let ((name (gnc:account-get-full-name account))
-          (type (gnc:account-get-type-string (gnc:account-get-type account))))
-      (html-table-row-align
-       (list name type NBSP 
-             (gnc:amount->formatted-string l1-value #f)
-	     NBSP NBSP)
-       (list "left" "center" "right" "right" "right" "right"))))
-
-  (define (render-total l0-value)
-    (html-table-row-align
-     (list (html-strong (string-db 'lookup 'net))
-           NBSP NBSP 
-           (gnc:amount->formatted-string l0-value #f)
-	   NBSP NBSP 
-	   )
-     (list "left" "center" "right" "right" "right" "right")))
-
+      (l2-currency-collector 'format
+			     (lambda (currency value)
+			       (let ((tacc account-name)
+				     (ttype type-name))
+				 (set! account-name "")
+				 (set! type-name "")
+				 (html-table-row-align
+				  (list tacc ttype
+					(gnc:amount->formatted-currency-string
+					 value currency #f))
+				  (list "left" "center" "right"))))
+			     #f)))
+  
+  (define (render-level-1-account l1-account l1-currency-collector)
+    (let ((account-name (gnc:account-get-full-name l1-account))
+          (type-name (gnc:account-get-type-string
+                      (gnc:account-get-type l1-account))))
+      (l1-currency-collector 'format
+			     (lambda (currency value)
+			       (let ((tacc account-name)
+				     (ttype type-name))
+				 (set! account-name "")
+				 (set! type-name "")
+				 (html-table-row-align
+				  (list tacc ttype NBSP 
+					(gnc:amount->formatted-currency-string
+					 value currency #f)
+					NBSP NBSP)
+				  (list "left" "center" "right"
+					"right" "right" "right"))))
+			     #f)))
+  
+  (define (render-total l0-currency-collector)
+    (let ((account-name (string-html-strong (string-db 'lookup 'net))))
+      (l0-currency-collector 'format
+			     (lambda (currency value)
+			       (let ((tacc account-name))
+				 (set! account-name "")
+				 (html-table-row-align
+				  (list tacc NBSP NBSP 
+					(gnc:amount->formatted-currency-string
+					 value currency #f)
+					NBSP NBSP)
+				  (list "left" "center"
+					"right" "right"
+					"right" "right"))))
+			     #f)))
+  
   (define blank-line
     (html-table-row '()))
 
@@ -128,10 +153,10 @@
 					 balance-sheet?)
 
     (let* ((from-option (gnc:lookup-option options "Report Options" "From"))
-           (from-value (if from-option (gnc:option-value from-option) #f))
+           (from-value (if from-option (gnc:date-option-absolute-time (gnc:option-value from-option)) #f))
            (to-value (gnc:timepair-end-day-time
-                      (gnc:option-value
-                       (gnc:lookup-option options "Report Options" "To")))))
+                      (gnc:date-option-absolute-time (gnc:option-value
+                       (gnc:lookup-option options "Report Options" "To"))))))
 
       (define (handle-level-1-account account options)
         (let ((type (gnc:account-type->symbol (gnc:account-get-type account))))
@@ -157,14 +182,16 @@
 
                 (if (not balance-sheet?)
                     (set! account-balance (- account-balance)))
-                (l1-collector 'add account-balance)
-                (l1-collector 'add (l2-collector 'total #f))
-                (l0-collector 'add (l1-collector 'total #f))
+                (l1-collector 'add 
+                              (gnc:commodity-get-printname 
+                               (gnc:account-get-currency account))
+                              account-balance)
+                (l1-collector 'merge l2-collector #f)
+                (l0-collector 'merge l1-collector #f)
                 (let ((level-1-output
-                       (render-level-1-account account
-                                               (l1-collector 'total #f))))
-                  (l1-collector 'reset #f)
-                  (l2-collector 'reset #f)
+                       (render-level-1-account account l1-collector)))
+                  (l1-collector 'reset #f #f)
+                  (l2-collector 'reset #f #f)
                   (if (null? childrens-output)
                       level-1-output
                       (list blank-line
@@ -175,7 +202,7 @@
     (define (handle-level-2-account account options)
       (let
 	  ((type (gnc:account-type->symbol (gnc:account-get-type account)))
-	   (balance (make-stats-collector))
+	   (balance (make-currency-collector))
 	   (rawbal
 	    (if balance-sheet?
 		(gnc:account-get-balance-at-date account to-value #f)
@@ -184,6 +211,8 @@
 		 from-value
 		 to-value #f))))
 	(balance 'add 
+                 (gnc:commodity-get-printname 
+                  (gnc:account-get-currency account))
 		 (if balance-sheet? 
 		     rawbal
 		     (- rawbal)))
@@ -194,6 +223,8 @@
 	    (let ((grandchildren (gnc:account-get-children account)))
 	      (if (not (pointer-token-null? grandchildren))
 		  (balance 'add 
+			   (gnc:commodity-get-printname 
+                            (gnc:account-get-currency account))
 			   ((if balance-sheet? + -) 
 			    0
 			    (if balance-sheet? 
@@ -202,8 +233,8 @@
 				(gnc:group-get-balance-interval grandchildren
 								from-value
 								to-value)))))
-	      (l2-collector 'add (balance 'total #f))
-              (render-level-2-account account (balance 'total #f))))))
+	      (l2-collector 'merge balance #f)
+              (render-level-2-account account balance)))))
 
     (let
 	((current-group (gnc:get-current-group))
@@ -211,16 +242,16 @@
 
       ;; Now, the main body
       ;; Reset all the balance collectors
-      (l0-collector 'reset #f)
-      (l1-collector 'reset #f)
-      (l2-collector 'reset #f)
+      (l0-collector 'reset #f #f)
+      (l1-collector 'reset #f #f)
+      (l2-collector 'reset #f #f)
       (if (not (pointer-token-null? current-group))
 	  (set! output
 		(list
 		 (gnc:group-map-accounts
 		  (lambda (x) (handle-level-1-account x options))
 		  current-group)
-		 (render-total  (l0-collector 'total #f)))))
+		 (render-total  l0-collector))))
 
       (list
        "<html>"

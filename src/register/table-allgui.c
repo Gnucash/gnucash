@@ -63,8 +63,10 @@ static GMemChunk *cell_mem_chunk = NULL;
 /** Prototypes *********************************************************/
 static void gnc_table_init (Table * table);
 static void gnc_table_free_data (Table * table);
-static void gnc_virtual_cell_free (TableCell *tcell);
-static void gnc_physical_cell_free (TableCell *tcell);
+static gpointer gnc_virtual_cell_new (void);
+static gpointer gnc_physical_cell_new (void);
+static void gnc_virtual_cell_free (gpointer tcell);
+static void gnc_physical_cell_free (gpointer tcell);
 static void gnc_table_resize (Table * table,
                               int new_phys_rows, int new_phys_cols,
                               int new_virt_rows, int new_virt_cols);
@@ -85,8 +87,11 @@ gnc_table_new (void)
 
    gnc_table_init (table);
 
-   table->virt_cells = g_ptr_array_new();
-   table->phys_cells = g_ptr_array_new();
+   table->virt_cells = g_table_new(gnc_virtual_cell_new,
+                                   gnc_virtual_cell_free);
+
+   table->phys_cells = g_table_new(gnc_physical_cell_new,
+                                   gnc_physical_cell_free);
 
    return table;
 }
@@ -102,10 +107,10 @@ gnc_table_init (Table * table)
    table->num_virt_cols = -1;
 
    table->current_cursor = NULL;
-   table->current_cursor_virt_row = -1;
-   table->current_cursor_virt_col = -1;
-   table->current_cursor_phys_row = -1;
-   table->current_cursor_phys_col = -1;
+   table->current_cursor_virt_loc.virt_row = -1;
+   table->current_cursor_virt_loc.virt_col = -1;
+   table->current_cursor_phys_loc.phys_row = -1;
+   table->current_cursor_phys_loc.phys_col = -1;
 
    table->move_cursor = NULL;
    table->traverse = NULL;
@@ -114,15 +119,10 @@ gnc_table_init (Table * table)
 
    table->alternate_bg_colors = FALSE;
 
-
    /* initialize private data */
 
    table->virt_cells = NULL;
    table->phys_cells = NULL;
-
-   /* invalidate the "previous" traversed cell */
-   table->prev_phys_traverse_row = -1;
-   table->prev_phys_traverse_col = -1;
 
    table->ui_data = NULL;
    table->destroy = NULL;
@@ -140,11 +140,9 @@ gnc_table_destroy (Table * table)
    /* free the dynamic structures */
    gnc_table_free_data (table);
 
-   /* free the pointer arrays */
-   if (table->virt_cells != NULL)
-     g_ptr_array_free(table->virt_cells, FALSE);
-   if (table->phys_cells != NULL)
-     g_ptr_array_free(table->phys_cells, FALSE);
+   /* free the cell tables */
+   g_table_destroy(table->virt_cells);
+   g_table_destroy(table->phys_cells);
 
    /* intialize vars to null value so that any access is voided. */
    gnc_table_init (table);
@@ -155,21 +153,18 @@ gnc_table_destroy (Table * table)
 /* ==================================================== */
 
 VirtualCell *
-gnc_table_get_virtual_cell (Table *table, int virt_row, int virt_col)
+gnc_table_get_virtual_cell (Table *table, VirtualCellLocation vcell_loc)
 {
   TableCell *tcell;
-  guint index;
 
   if (table == NULL)
     return NULL;
 
-  if ((virt_row < 0) || (virt_row >= table->num_virt_rows) ||
-      (virt_col < 0) || (virt_col >= table->num_virt_cols))
+  tcell = g_table_index (table->virt_cells,
+                         vcell_loc.virt_row, vcell_loc.virt_col);
+
+  if (tcell == NULL)
     return NULL;
-
-  index = (virt_row * table->num_virt_cols) + virt_col;
-
-  tcell = table->virt_cells->pdata[index];
 
   return &tcell->virt_cell;
 }
@@ -177,21 +172,18 @@ gnc_table_get_virtual_cell (Table *table, int virt_row, int virt_col)
 /* ==================================================== */
 
 PhysicalCell *
-gnc_table_get_physical_cell (Table *table, int phys_row, int phys_col)
+gnc_table_get_physical_cell (Table *table, PhysicalLocation phys_loc)
 {
   TableCell *tcell;
-  guint index;
 
   if (table == NULL)
     return NULL;
 
-  if ((phys_row < 0) || (phys_row >= table->num_phys_rows) ||
-      (phys_col < 0) || (phys_col >= table->num_phys_cols))
+  tcell = g_table_index (table->phys_cells,
+                         phys_loc.phys_row, phys_loc.phys_col);
+
+  if (tcell == NULL)
     return NULL;
-
-  index = (phys_row * table->num_phys_cols) + phys_col;
-
-  tcell = table->phys_cells->pdata[index];
 
   return &tcell->phys_cell;
 }
@@ -201,7 +193,9 @@ gnc_table_get_physical_cell (Table *table, int phys_row, int phys_col)
 VirtualCell *
 gnc_table_get_header_cell (Table *table)
 {
-  return gnc_table_get_virtual_cell (table, 0, 0);
+  VirtualCellLocation vcell_loc = { 0, 0 };
+
+  return gnc_table_get_virtual_cell (table, vcell_loc);
 }
 
 /* ==================================================== */
@@ -223,10 +217,10 @@ gnc_table_set_size (Table * table,
    {
       CellBlock *curs;
 
-      table->current_cursor_virt_row = -1;
-      table->current_cursor_virt_col = -1;
-      table->current_cursor_phys_row = -1;
-      table->current_cursor_phys_col = -1;
+      table->current_cursor_virt_loc.virt_row = -1;
+      table->current_cursor_virt_loc.virt_col = -1;
+      table->current_cursor_phys_loc.phys_row = -1;
+      table->current_cursor_phys_loc.phys_col = -1;
 
       curs = table->current_cursor;
 
@@ -237,10 +231,6 @@ gnc_table_set_size (Table * table,
    }
 
    gnc_table_resize (table, phys_rows, phys_cols, virt_rows, virt_cols);
-
-   /* invalidate the "previous" traversed cell */
-   table->prev_phys_traverse_row = -1;
-   table->prev_phys_traverse_col = -1;
 }
 
 /* ==================================================== */
@@ -251,41 +241,8 @@ gnc_table_free_data (Table * table)
   if (table == NULL)
     return;
 
-  if (table->virt_cells != NULL)
-  {
-    gpointer *tcp;
-    guint len;
-
-    tcp = table->virt_cells->pdata;
-    len = table->virt_cells->len;
-
-    while (len > 0)
-    {
-      gnc_virtual_cell_free(*tcp);
-      tcp++;
-      len--;
-    }
-
-    g_ptr_array_set_size(table->virt_cells, 0);
-  }
-
-  if (table->phys_cells != NULL)
-  {
-    gpointer *tcp;
-    guint len;
-
-    tcp = table->phys_cells->pdata;
-    len = table->phys_cells->len;
-
-    while (len > 0)
-    {
-      gnc_physical_cell_free(*tcp);
-      tcp++;
-      len--;
-    }
-
-    g_ptr_array_set_size(table->phys_cells, 0);
-  }
+  g_table_resize (table->virt_cells, 0, 0);
+  g_table_resize (table->phys_cells, 0, 0);
 }
 
 /* ==================================================== */
@@ -298,8 +255,8 @@ gnc_virtual_location_init (VirtualLocation *vloc)
 
   vloc->phys_row_offset = -1;
   vloc->phys_col_offset = -1;
-  vloc->virt_row = -1;
-  vloc->virt_col = -1;
+  vloc->vcell_loc.virt_row = -1;
+  vloc->vcell_loc.virt_col = -1;
 }
 
 /* ==================================================== */
@@ -316,7 +273,7 @@ gnc_physical_location_init (PhysicalLocation *ploc)
 
 /* ==================================================== */
 
-static TableCell *
+static gpointer
 gnc_virtual_cell_new (void)
 {
   TableCell *tcell;
@@ -337,7 +294,7 @@ gnc_virtual_cell_new (void)
 /* ==================================================== */
 
 static void
-gnc_virtual_cell_free (TableCell *tcell)
+gnc_virtual_cell_free (gpointer tcell)
 {
   if (tcell == NULL)
     return;
@@ -347,7 +304,7 @@ gnc_virtual_cell_free (TableCell *tcell)
 
 /* ==================================================== */
 
-static TableCell *
+static gpointer
 gnc_physical_cell_new (void)
 {
   TableCell *tcell;
@@ -371,8 +328,10 @@ gnc_physical_cell_new (void)
 /* ==================================================== */
 
 static void
-gnc_physical_cell_free (TableCell *tcell)
+gnc_physical_cell_free (gpointer _tcell)
 {
+  TableCell *tcell = _tcell;
+
   if (tcell == NULL)
     return;
 
@@ -380,49 +339,6 @@ gnc_physical_cell_free (TableCell *tcell)
   tcell->phys_cell.entry = NULL;
 
   g_mem_chunk_free(cell_mem_chunk, tcell);
-}
-
-/* ==================================================== */
-
-typedef TableCell * (*CellAllocator)   (void);
-typedef void        (*CellDeAllocator) (TableCell *);
-
-static void
-gnc_array_resize (GPtrArray *array,
-                  int rows, int cols,
-                  CellAllocator allocator,
-                  CellDeAllocator deallocator)
-{
-  guint old_len = array->len;
-  guint new_len = rows * cols;
-
-  if (new_len == old_len)
-    return;
-
-  /* If shrinking, free extra cells */
-  if (new_len < old_len)
-  {
-    gpointer *tcp;
-    guint i;
-
-    tcp = &array->pdata[new_len];
-    for (i = new_len; i < old_len; i++, tcp++)
-      deallocator(*tcp);
-  }
-
-  /* Change the size */
-  g_ptr_array_set_size(array, new_len);
-
-  /* If expanding, create the new cells */
-  if (new_len > old_len)
-  {
-    gpointer *tcp;
-    guint i;
-
-    tcp = &array->pdata[old_len];
-    for (i = old_len; i < new_len; i++, tcp++)
-      *tcp = allocator();
-  }
 }
 
 /* ==================================================== */
@@ -444,15 +360,8 @@ gnc_table_resize (Table * table,
     exit (1);
   }
 
-  gnc_array_resize (table->virt_cells,
-                    new_virt_rows, new_virt_cols,
-                    gnc_virtual_cell_new,
-                    gnc_virtual_cell_free);
-
-  gnc_array_resize (table->phys_cells,
-                    new_phys_rows, new_phys_cols,
-                    gnc_physical_cell_new,
-                    gnc_physical_cell_free);
+  g_table_resize (table->virt_cells, new_virt_rows, new_virt_cols);
+  g_table_resize (table->phys_cells, new_phys_rows, new_phys_cols);
 
   table->num_phys_rows = new_phys_rows;
   table->num_phys_cols = new_phys_cols;
@@ -465,8 +374,8 @@ gnc_table_resize (Table * table,
 
 void
 gnc_table_set_cursor (Table *table, CellBlock *curs,
-                      int phys_row_origin, int phys_col_origin,
-                      int virt_row, int virt_col)
+                      PhysicalLocation phys_origin,
+                      VirtualCellLocation vcell_loc)
 {
   VirtualCell *vcell;
   int cell_row, cell_col;
@@ -474,35 +383,32 @@ gnc_table_set_cursor (Table *table, CellBlock *curs,
   if ((table == NULL) || (curs == NULL))
     return;
 
-  if ((phys_row_origin < 0) || (phys_row_origin >= table->num_phys_rows) ||
-      (phys_col_origin < 0) || (phys_col_origin >= table->num_phys_cols))
+  if (gnc_table_physical_cell_out_of_bounds (table, phys_origin))
     return;
 
-  vcell = gnc_table_get_virtual_cell (table, virt_row, virt_col);
+  vcell = gnc_table_get_virtual_cell (table, vcell_loc);
   if (vcell == NULL)
     return;
 
   /* this cursor is the handler for this block */
   vcell->cellblock = curs;
 
-  vcell->phys_loc.phys_row = phys_row_origin;
-  vcell->phys_loc.phys_col = phys_col_origin;
+  vcell->phys_loc = phys_origin;
 
   /* intialize the mapping so that we will be able to find
    * the handler, given this range of physical cell addresses */
-  for (cell_row = 0; cell_row < curs->numRows; cell_row++)
-    for (cell_col = 0; cell_col < curs->numCols; cell_col++)
+  for (cell_row = 0; cell_row < curs->num_rows; cell_row++)
+    for (cell_col = 0; cell_col < curs->num_cols; cell_col++)
     {
       PhysicalCell *pcell;
+      PhysicalLocation ploc = { phys_origin.phys_row + cell_row,
+                                phys_origin.phys_col + cell_col };
 
-      pcell = gnc_table_get_physical_cell (table,
-                                           phys_row_origin + cell_row,
-                                           phys_col_origin + cell_col);
+      pcell = gnc_table_get_physical_cell (table, ploc);
 
       pcell->virt_loc.phys_row_offset = cell_row;
       pcell->virt_loc.phys_col_offset = cell_col;
-      pcell->virt_loc.virt_row = virt_row;
-      pcell->virt_loc.virt_col = virt_col;
+      pcell->virt_loc.vcell_loc = vcell_loc;
     }
 }
 
@@ -517,34 +423,31 @@ gnc_table_make_passive (Table *table)
 {
   CellBlock *curs;
   PhysicalCell *pcell;
-  int phys_row_origin, phys_col_origin;
+  PhysicalLocation phys_origin;
   int cell_row, cell_col;
   int virt_row;
 
-  pcell = gnc_table_get_physical_cell (table,
-                                       table->current_cursor_phys_row,
-                                       table->current_cursor_phys_col);
+  pcell = gnc_table_get_physical_cell (table, table->current_cursor_phys_loc);
   if (pcell == NULL)
     return;
 
-  phys_row_origin = table->current_cursor_phys_row;
-  phys_col_origin = table->current_cursor_phys_col;
-  phys_row_origin -= pcell->virt_loc.phys_row_offset;
-  phys_col_origin -= pcell->virt_loc.phys_col_offset;
+  phys_origin = table->current_cursor_phys_loc;
+  phys_origin.phys_row -= pcell->virt_loc.phys_row_offset;
+  phys_origin.phys_col -= pcell->virt_loc.phys_col_offset;
 
-  virt_row = pcell->virt_loc.virt_row;
+  virt_row = pcell->virt_loc.vcell_loc.virt_row;
 
   curs = table->current_cursor;
 
-  for (cell_row=0; cell_row < curs->numRows; cell_row++)
-    for (cell_col = 0; cell_col < curs->numCols; cell_col++)
+  for (cell_row=0; cell_row < curs->num_rows; cell_row++)
+    for (cell_col = 0; cell_col < curs->num_cols; cell_col++)
     {
-      BasicCell *cell;
+      PhysicalLocation ploc = { phys_origin.phys_row + cell_row,
+                                phys_origin.phys_col + cell_col };
+      CellBlockCell *cb_cell;
       guint32 color;
 
-      pcell = gnc_table_get_physical_cell (table,
-                                           phys_row_origin + cell_row,
-                                           phys_col_origin + cell_col);
+      pcell = gnc_table_get_physical_cell (table, ploc);
 
       if (table->alternate_bg_colors)
       {
@@ -560,12 +463,14 @@ gnc_table_make_passive (Table *table)
 
       pcell->bg_color = color;
 
-      cell = curs->cells[cell_row][cell_col];
-      if (cell)
+      cb_cell = gnc_cellblock_get_cell (curs, cell_row, cell_col);
+      if (cb_cell && cb_cell->cell)
       {
+        BasicCell *cell = cb_cell->cell;
+
         if (cell->use_bg_color)
           pcell->bg_color = cell->bg_color;
-        if (cell->use_fg_color)
+        if (cb_cell->cell->use_fg_color)
           pcell->fg_color = cell->fg_color;
       }
     }
@@ -576,18 +481,18 @@ gnc_table_make_passive (Table *table)
 
 static void 
 gnc_table_move_cursor_internal (Table *table,
-                                int new_phys_row, int new_phys_col,
+                                PhysicalLocation new_phys_loc,
                                 gboolean do_move_gui)
 {
   int cell_row, cell_col;
-  int phys_row_origin, phys_col_origin;
-  int new_virt_row, new_virt_col;
+  PhysicalLocation phys_origin;
+  VirtualCellLocation new_vcell_loc;
   PhysicalCell *pcell;
   VirtualCell *vcell;
   CellBlock *curs;
 
   ENTER("new_phys=(%d %d) do_move_gui=%d\n", 
-        new_phys_row, new_phys_col, do_move_gui);
+        new_phys_loc.phys_row, new_phys_loc.phys_col, do_move_gui);
 
   /* Change the cell background colors to their "passive" values.
    * This denotes that the cursor has left this location (which means
@@ -600,7 +505,7 @@ gnc_table_move_cursor_internal (Table *table,
    * this callback may recursively call this routine. */
   if (table->move_cursor)
   {
-    (table->move_cursor) (table, &new_phys_row, &new_phys_col);
+    (table->move_cursor) (table, &new_phys_loc);
 
     /* The above callback can cause this routine to be called
      * recursively. As a result of this recursion, the cursor may
@@ -611,48 +516,52 @@ gnc_table_move_cursor_internal (Table *table,
       gnc_table_refresh_current_cursor_gui (table, FALSE);
   }
 
-  pcell = gnc_table_get_physical_cell (table, new_phys_row, new_phys_col);
+  pcell = gnc_table_get_physical_cell (table, new_phys_loc);
   if (pcell == NULL)
   {
-    new_virt_row = -1;
-    new_virt_col = -1;
+    new_vcell_loc.virt_row = -1;
+    new_vcell_loc.virt_col = -1;
   }
   else
   {
-    new_virt_row = pcell->virt_loc.virt_row;
-    new_virt_col = pcell->virt_loc.virt_col;
+    new_vcell_loc = pcell->virt_loc.vcell_loc;
   }
 
   /* invalidate the cursor for now; we'll fix it back up below */
-  table->current_cursor_phys_row = -1;
-  table->current_cursor_phys_col = -1;
-  table->current_cursor_virt_row = -1;
-  table->current_cursor_virt_col = -1;
-  table->prev_phys_traverse_row = -1;
-  table->prev_phys_traverse_col = -1;
+  table->current_cursor_phys_loc.phys_row = -1;
+  table->current_cursor_phys_loc.phys_col = -1;
+  table->current_cursor_virt_loc.virt_row = -1;
+  table->current_cursor_virt_loc.virt_col = -1;
+
   curs = table->current_cursor;
   if (curs)
     curs->user_data = NULL;
+
   table->current_cursor = NULL;
 
   /* check for out-of-bounds conditions (which may be deliberate) */
-  if ((0 > new_virt_row) || (0 > new_virt_col))
+  if ((0 > new_vcell_loc.virt_row) || (0 > new_vcell_loc.virt_col))
   {
     /* if the location is invalid, then we should take this 
      * as a command to unmap the cursor gui.  So do it .. */
     if (do_move_gui && curs)
     {
-      for (cell_row = 0; cell_row < curs->numRows; cell_row++)
-        for (cell_col = 0; cell_col < curs->numCols; cell_col++)
+      for (cell_row = 0; cell_row < curs->num_rows; cell_row++)
+        for (cell_col = 0; cell_col < curs->num_cols; cell_col++)
         {
-          BasicCell *cell;
+          CellBlockCell *cb_cell;
 
-          cell = curs->cells[cell_row][cell_col];
-          if (cell)
+          cb_cell = gnc_cellblock_get_cell (curs, cell_row, cell_col);
+          if (cb_cell && cb_cell->cell)
           {
+            BasicCell *cell = cb_cell->cell;
+
             cell->changed = 0;
             if (cell->move)
-              (cell->move) (cell, -1, -1);
+            {
+              PhysicalLocation ploc = { -1, -1 };
+              (cell->move) (cell, ploc);
+            }
           }
         }
     }
@@ -660,64 +569,51 @@ gnc_table_move_cursor_internal (Table *table,
     return;
   }
 
-  if (new_virt_row >= table->num_virt_rows) return;
-  if (new_virt_col >= table->num_virt_cols) return;
-  if (new_phys_row >= table->num_phys_rows) return;
-  if (new_phys_col >= table->num_phys_cols) return;
+  if (gnc_table_virtual_cell_out_of_bounds (table, new_vcell_loc))
+    return;
+  if (gnc_table_physical_cell_out_of_bounds (table, new_phys_loc))
+    return;
 
   /* ok, we now have a valid position.  Find the new cursor to use,
    * and initialize its cells */
-  vcell = gnc_table_get_virtual_cell (table, new_virt_row, new_virt_col);
+  vcell = gnc_table_get_virtual_cell (table, new_vcell_loc);
   curs = vcell->cellblock;
   table->current_cursor = curs;
 
   /* record the new position */
-  table->current_cursor_virt_row = new_virt_row;
-  table->current_cursor_virt_col = new_virt_col;
-  table->current_cursor_phys_row = new_phys_row;
-  table->current_cursor_phys_col = new_phys_col;
+  table->current_cursor_virt_loc = new_vcell_loc;
+  table->current_cursor_phys_loc = new_phys_loc;
 
   /* compute some useful offsets */
-  phys_row_origin = new_phys_row;
-  phys_row_origin -= pcell->virt_loc.phys_row_offset;
+  phys_origin = new_phys_loc;
 
-  phys_col_origin = new_phys_col;
-  phys_col_origin -= pcell->virt_loc.phys_col_offset;
-
-  /* setting the previous traversal value to the last of a traversal chain
-   * will guarantee that the first entry into a register will occur at the
-   * first cell */
-  table->prev_phys_traverse_row = (phys_row_origin +
-                                   curs->last_reenter_traverse_row);
-  table->prev_phys_traverse_col = (phys_col_origin +
-                                   curs->last_reenter_traverse_col);
+  phys_origin.phys_row -= pcell->virt_loc.phys_row_offset;
+  phys_origin.phys_col -= pcell->virt_loc.phys_col_offset;
 
   /* update the cell values to reflect the new position */
-  for (cell_row = 0; cell_row < curs->numRows; cell_row++)
-    for (cell_col = 0; cell_col < curs->numCols; cell_col++)
+  for (cell_row = 0; cell_row < curs->num_rows; cell_row++)
+    for (cell_col = 0; cell_col < curs->num_cols; cell_col++)
     {
-      BasicCell *cell;
+      CellBlockCell *cb_cell;
+      PhysicalLocation ploc = { phys_origin.phys_row + cell_row,
+                                phys_origin.phys_col + cell_col };
 
-      pcell = gnc_table_get_physical_cell (table,
-                                           phys_row_origin + cell_row,
-                                           phys_col_origin + cell_col);
+      pcell = gnc_table_get_physical_cell (table, ploc);
 
       /* change the cursor row to the active color */
       pcell->bg_color = curs->active_bg_color;
 
-      cell = curs->cells[cell_row][cell_col];
-      if (cell)
+      cb_cell = gnc_cellblock_get_cell(curs, cell_row, cell_col);
+      if (cb_cell && cb_cell->cell)
       {
-        if (do_move_gui) {
-          /* if a cell has a GUI, move that first, before setting
-           * the cell value.  Otherwise, we'll end up putting the 
-           * new values in the old cell locations, and that would 
-           * lead to confusion of all sorts. */
-          if (cell->move)
-            (cell->move) (cell,
-                          phys_row_origin + cell_row,
-                          phys_col_origin + cell_col);
-        }
+        BasicCell *cell = cb_cell->cell;
+
+        /* if a cell has a GUI, move that first, before setting
+         * the cell value.  Otherwise, we'll end up putting the 
+         * new values in the old cell locations, and that would 
+         * lead to confusion of all sorts. */
+        if (do_move_gui && cell->move)
+          (cell->move) (cell, ploc);
 
         /* OK, now copy the string value from the table at large 
          * into the cell handler. */
@@ -742,20 +638,20 @@ gnc_table_move_cursor_internal (Table *table,
 /* ==================================================== */
 
 void
-gnc_table_move_cursor (Table *table, int new_phys_row, int new_phys_col)
+gnc_table_move_cursor (Table *table, PhysicalLocation new_phys_loc)
 {
   if (!table) return;
 
-  gnc_table_move_cursor_internal (table, new_phys_row, new_phys_col, FALSE);
+  gnc_table_move_cursor_internal (table, new_phys_loc, FALSE);
 }
 
 /* same as above, but be sure to deal with GUI elements as well */
 void
-gnc_table_move_cursor_gui (Table *table, int new_phys_row, int new_phys_col)
+gnc_table_move_cursor_gui (Table *table, PhysicalLocation new_phys_loc)
 {
   if (!table) return;
 
-  gnc_table_move_cursor_internal (table, new_phys_row, new_phys_col, TRUE);
+  gnc_table_move_cursor_internal (table, new_phys_loc, TRUE);
 }
 
 /* ==================================================== */
@@ -767,46 +663,44 @@ gnc_table_commit_cursor (Table *table)
   VirtualCell *vcell;
   PhysicalCell *pcell;
   int cell_row, cell_col;
-  int virt_row, virt_col;
-  int phys_row, phys_col;
-  int phys_row_origin, phys_col_origin;
+  VirtualCellLocation vcell_loc;
+  PhysicalLocation phys_loc;
+  PhysicalLocation phys_origin;
 
   if (!table) return;
 
   curs = table->current_cursor;
   if (!curs) return;
 
-  virt_row = table->current_cursor_virt_row;
-  virt_col = table->current_cursor_virt_col;
+  vcell_loc = table->current_cursor_virt_loc;
 
   /* can't commit if cursor is bad */
-  if ((0 > virt_row) || (0 > virt_col)) return;
-  if (virt_row >= table->num_virt_rows) return;
-  if (virt_col >= table->num_virt_cols) return;
+  if (gnc_table_virtual_cell_out_of_bounds (table, vcell_loc))
+    return;
 
   /* compute the true origin of the cell block */
-  phys_row = table->current_cursor_phys_row;
-  phys_col = table->current_cursor_phys_col;
+  phys_loc = table->current_cursor_phys_loc;
 
-  pcell = gnc_table_get_physical_cell (table, phys_row, phys_col);
+  pcell = gnc_table_get_physical_cell (table, phys_loc);
   if (pcell == NULL) return;
 
-  phys_row_origin = table->current_cursor_phys_row;
-  phys_col_origin = table->current_cursor_phys_col;
-  phys_row_origin -= pcell->virt_loc.phys_row_offset;
-  phys_col_origin -= pcell->virt_loc.phys_col_offset;
+  phys_origin = table->current_cursor_phys_loc;
+  phys_origin.phys_row -= pcell->virt_loc.phys_row_offset;
+  phys_origin.phys_col -= pcell->virt_loc.phys_col_offset;
 
-  for (cell_row = 0; cell_row < curs->numRows; cell_row++)
-    for (cell_col = 0; cell_col < curs->numCols; cell_col++)
+  for (cell_row = 0; cell_row < curs->num_rows; cell_row++)
+    for (cell_col = 0; cell_col < curs->num_cols; cell_col++)
     {
-      BasicCell *cell;
+      CellBlockCell *cb_cell;
+      PhysicalLocation ploc = { phys_origin.phys_row + cell_row,
+                                phys_origin.phys_col + cell_col };
 
-      cell = curs->cells[cell_row][cell_col];
-      if (cell)
+      cb_cell = gnc_cellblock_get_cell(curs, cell_row, cell_col);
+      if (cb_cell && cb_cell->cell)
       {
-        pcell = gnc_table_get_physical_cell (table,
-                                             phys_row_origin + cell_row,
-                                             phys_col_origin + cell_col);
+        BasicCell *cell = cb_cell->cell;
+
+        pcell = gnc_table_get_physical_cell (table, ploc);
 
         g_free (pcell->entry);
         pcell->entry = g_strdup (cell->value);
@@ -817,7 +711,7 @@ gnc_table_commit_cursor (Table *table)
       }
     }
 
-  vcell = gnc_table_get_virtual_cell (table, virt_row, virt_col);
+  vcell = gnc_table_get_virtual_cell (table, vcell_loc);
   vcell->user_data = curs->user_data;
 }
 
@@ -838,21 +732,22 @@ gnc_table_refresh_header (Table *table)
   cb = vcell->cellblock;
   if (cb == NULL) return;
 
-  for (cell_row = 0; cell_row < cb->numRows; cell_row++)
-    for (cell_col = 0; cell_col < cb->numCols; cell_col++)
+  for (cell_row = 0; cell_row < cb->num_rows; cell_row++)
+    for (cell_col = 0; cell_col < cb->num_cols; cell_col++)
     {
+      PhysicalLocation ploc = { cell_row, cell_col };
+      CellBlockCell *cb_cell;
       PhysicalCell *pcell;
-      BasicCell *cell;
 
       /* Assumes header starts at physical (0, 0) */
-      pcell = gnc_table_get_physical_cell (table, cell_row, cell_col);
+      pcell = gnc_table_get_physical_cell (table, ploc);
 
       g_free(pcell->entry);
 
-      cell = cb->cells[cell_row][cell_col];
+      cb_cell = gnc_cellblock_get_cell(cb, cell_row, cell_col);
 
-      if (cell && cell->value)
-        pcell->entry = g_strdup (cell->value);
+      if (cb_cell && cb_cell->cell && cb_cell->cell->value)
+        pcell->entry = g_strdup (cb_cell->cell->value);
       else
         pcell->entry = g_strdup ("");
     }
@@ -866,7 +761,7 @@ gnc_table_refresh_header (Table *table)
  * cursor, and then moving the cursor and its GUI. Returns true if the
  * cursor was repositioned. */
 gboolean
-gnc_table_verify_cursor_position (Table *table, int phys_row, int phys_col)
+gnc_table_verify_cursor_position (Table *table, PhysicalLocation phys_loc)
 {
   gboolean do_commit = FALSE;
   gboolean moved_cursor = FALSE;
@@ -878,24 +773,21 @@ gnc_table_verify_cursor_position (Table *table, int phys_row, int phys_col)
    * example, in order to unmap it in preparation for a reconfig.
    * So, if the specified location is out of bounds, then the cursor
    * MUST be moved. */
-
-  if ((0 > phys_row) || (0 > phys_col)) do_commit = TRUE;
-  if (phys_row >= table->num_phys_rows) do_commit = TRUE;
-  if (phys_col >= table->num_phys_cols) do_commit = TRUE;
+  if (gnc_table_physical_cell_out_of_bounds (table, phys_loc))
+    do_commit = TRUE;
 
   /* Physical position is valid. Check the virtual position. */
   if (!do_commit)
   {
     PhysicalCell *pcell;
-    int virt_row, virt_col;
+    VirtualCellLocation vcell_loc;
 
-    pcell = gnc_table_get_physical_cell (table, phys_row, phys_col);
+    pcell = gnc_table_get_physical_cell (table, phys_loc);
 
-    virt_row = pcell->virt_loc.virt_row;
-    virt_col = pcell->virt_loc.virt_col;
+    vcell_loc = pcell->virt_loc.vcell_loc;
 
-    if ((virt_row != table->current_cursor_virt_row) ||
-        (virt_col != table->current_cursor_virt_col))
+    if ((vcell_loc.virt_row != table->current_cursor_virt_loc.virt_row) ||
+        (vcell_loc.virt_col != table->current_cursor_virt_loc.virt_col))
       do_commit = TRUE;
   }
 
@@ -904,7 +796,7 @@ gnc_table_verify_cursor_position (Table *table, int phys_row, int phys_col)
     /* before leaving the current virtual position, commit any edits
      * that have been accumulated in the cursor */
     gnc_table_commit_cursor (table);
-    gnc_table_move_cursor_gui (table, phys_row, phys_col);
+    gnc_table_move_cursor_gui (table, phys_loc);
     moved_cursor = TRUE;
   }
   else
@@ -915,15 +807,15 @@ gnc_table_verify_cursor_position (Table *table, int phys_row, int phys_col)
      * positions accurate, so record the new location.  (The move may
      * may also be one row up or down, which, for a two-row cursor,
      * also might not require a cursor movement). */
-    if (table->current_cursor_phys_row != phys_row)
+    if (table->current_cursor_phys_loc.phys_row != phys_loc.phys_row)
     {
-      table->current_cursor_phys_row = phys_row;
+      table->current_cursor_phys_loc.phys_row = phys_loc.phys_row;
       moved_cursor = TRUE;
     }
 
-    if (table->current_cursor_phys_col != phys_col)
+    if (table->current_cursor_phys_loc.phys_col != phys_loc.phys_col)
     {
-      table->current_cursor_phys_col = phys_col;
+      table->current_cursor_phys_loc.phys_col = phys_loc.phys_col;
       moved_cursor = TRUE;
     }
   }
@@ -934,22 +826,18 @@ gnc_table_verify_cursor_position (Table *table, int phys_row, int phys_col)
 /* ==================================================== */
 
 void *
-gnc_table_get_user_data_physical (Table *table, int phys_row, int phys_col)
+gnc_table_get_user_data_physical (Table *table, PhysicalLocation phys_loc)
 {
   PhysicalCell *pcell;
   VirtualCell *vcell;
-  int virt_row, virt_col;
 
   if (!table) return NULL;
 
-  pcell = gnc_table_get_physical_cell (table, phys_row, phys_col);
+  pcell = gnc_table_get_physical_cell (table, phys_loc);
   if (pcell == NULL)
     return NULL;
 
-  virt_row = pcell->virt_loc.virt_row;
-  virt_col = pcell->virt_loc.virt_col;
-
-  vcell = gnc_table_get_virtual_cell (table, virt_row, virt_col);
+  vcell = gnc_table_get_virtual_cell (table, pcell->virt_loc.vcell_loc);
   if (vcell == NULL)
     return NULL;
 
@@ -959,13 +847,13 @@ gnc_table_get_user_data_physical (Table *table, int phys_row, int phys_col)
 /* ==================================================== */
 
 void *
-gnc_table_get_user_data_virtual (Table *table, int virt_row, int virt_col)
+gnc_table_get_user_data_virtual (Table *table, VirtualCellLocation vcell_loc)
 {
   VirtualCell *vcell;
 
   if (!table) return NULL;
 
-  vcell = gnc_table_get_virtual_cell (table, virt_row, virt_col);
+  vcell = gnc_table_get_virtual_cell (table, vcell_loc);
   if (vcell == NULL)
     return NULL;
 
@@ -986,40 +874,41 @@ gnc_table_create_cursor (Table * table, CellBlock *curs)
   if (!curs || !table) return;  
   if (!table->ui_data) return;
   
-  for (cell_row = 0; cell_row < curs->numRows; cell_row++)
-    for (cell_col = 0; cell_col < curs->numCols; cell_col++)
+  for (cell_row = 0; cell_row < curs->num_rows; cell_row++)
+    for (cell_col = 0; cell_col < curs->num_cols; cell_col++)
     {
-      BasicCell *cell;
-      cell = curs->cells[cell_row][cell_col];
-      if (cell && cell->realize)
-        cell->realize (cell, table->ui_data);
+      CellBlockCell *cb_cell;
+
+      cb_cell = gnc_cellblock_get_cell (curs, cell_row, cell_col);
+
+      if (cb_cell && cb_cell->cell && cb_cell->cell->realize)
+        cb_cell->cell->realize (cb_cell->cell, table->ui_data);
     }
 }
 
 /* ==================================================== */
 
 void
-gnc_table_wrap_verify_cursor_position (Table *table,
-                                       int phys_row, int phys_col)
+gnc_table_wrap_verify_cursor_position (Table *table, PhysicalLocation phys_loc)
 {
    CellBlock *save_curs = table->current_cursor;
-   const int save_phys_row = table->current_cursor_phys_row;
-   const int save_phys_col = table->current_cursor_phys_col;
+   PhysicalLocation save_phys_loc;
    gboolean moved_cursor;
 
    if (!table) return;
 
-   ENTER("(%d %d)", phys_row, phys_col);
+   ENTER("(%d %d)", phys_loc.phys_row, phys_loc.phys_col);
+
+   save_phys_loc = table->current_cursor_phys_loc;
 
    /* VerifyCursor will do all sorts of gui-independent machinations */
-   moved_cursor = gnc_table_verify_cursor_position (table, phys_row, phys_col);
+   moved_cursor = gnc_table_verify_cursor_position (table, phys_loc);
 
    if (moved_cursor)
    {
       /* make sure *both* the old and the new cursor rows get redrawn */
       gnc_table_refresh_current_cursor_gui (table, TRUE);
-      gnc_table_refresh_cursor_gui (table, save_curs,
-                                    save_phys_row, save_phys_col, FALSE);
+      gnc_table_refresh_cursor_gui (table, save_curs, save_phys_loc, FALSE);
    }
 
    LEAVE ("\n");
@@ -1033,8 +922,7 @@ gnc_table_refresh_current_cursor_gui (Table * table, gboolean do_scroll)
   if (!table) return;
 
   gnc_table_refresh_cursor_gui (table, table->current_cursor,
-                                table->current_cursor_phys_row,
-                                table->current_cursor_phys_col,
+                                table->current_cursor_phys_loc,
                                 do_scroll);
 }
 
@@ -1042,20 +930,18 @@ gnc_table_refresh_current_cursor_gui (Table * table, gboolean do_scroll)
 
 gboolean
 gnc_table_physical_cell_valid(Table *table,
-                              int phys_row, int phys_col,
+                              PhysicalLocation phys_loc,
                               gboolean exact_cell)
 {
-  CellBlock *cb;
+  BasicCell *cell;
   VirtualCell *vcell;
   PhysicalCell *pcell;
-  gboolean invalid = FALSE;
-  int cell_row, cell_col;
-  int virt_row, virt_col;
-  int io_flag;
+  CellBlockCell *cb_cell;
+  VirtualLocation virt_loc;
 
   if (!table) return FALSE;
 
-  pcell = gnc_table_get_physical_cell(table, phys_row, phys_col);
+  pcell = gnc_table_get_physical_cell(table, phys_loc);
 
   /* can't edit outside of the physical space */
   if (pcell == NULL)
@@ -1066,43 +952,42 @@ gnc_table_physical_cell_valid(Table *table,
   if (vcell == NULL)
     return FALSE;
 
-  invalid = invalid || (phys_row < vcell->cellblock->numRows);
+  if (phys_loc.phys_row < vcell->cellblock->num_rows)
+    return FALSE;
 
   /* compute the cell location */
-  virt_row = pcell->virt_loc.virt_row;
-  virt_col = pcell->virt_loc.virt_col;
+  virt_loc = pcell->virt_loc;
 
-  cell_row = pcell->virt_loc.phys_row_offset;
-  cell_col = pcell->virt_loc.phys_col_offset;
-
-  vcell = gnc_table_get_virtual_cell(table, virt_row, virt_col);
+  vcell = gnc_table_get_virtual_cell(table, virt_loc.vcell_loc);
   if (vcell == NULL)
     return FALSE;
 
   /* verify that offsets are valid. This may occur if the app that is
    * using the table has a paritally initialized cursor. (probably due
    * to a programming error, but maybe they meant to do this). */
-  invalid = invalid || (0 > cell_row);
-  invalid = invalid || (0 > cell_col);
-
-  if (invalid) return FALSE;
-
-  cb = vcell->cellblock;
+  if ((0 > virt_loc.phys_row_offset) || (0 > virt_loc.phys_col_offset))
+    return FALSE;
 
   /* check for a cell handler, but only if cell address is valid */
-  if (cb == NULL) return FALSE;
-  if (cb->cells[cell_row][cell_col] == NULL) return FALSE;
+  if (vcell->cellblock == NULL) return FALSE;
+
+  cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
+                                    virt_loc.phys_row_offset,
+                                    virt_loc.phys_col_offset);
+  if (cb_cell == NULL)
+    return FALSE;
+
+  cell = cb_cell->cell;
+  if (cell == NULL)
+    return FALSE;
 
   /* if cell is marked as output-only, you can't enter */
-  io_flag = cb->cells[cell_row][cell_col]->input_output;
-  if (0 == (XACC_CELL_ALLOW_INPUT & io_flag)) return FALSE;
+  if (0 == (XACC_CELL_ALLOW_INPUT & cell->input_output)) return FALSE;
 
   /* if cell is pointer only and this is not an exact pointer test,
    * it cannot be entered. */
-  if (!exact_cell && ((XACC_CELL_ALLOW_EXACT_ONLY & io_flag) != 0))
+  if (!exact_cell && ((XACC_CELL_ALLOW_EXACT_ONLY & cell->input_output) != 0))
     return FALSE;
-
-  if (invalid) return FALSE;
 
   return TRUE;
 }
@@ -1112,7 +997,7 @@ gnc_table_physical_cell_valid(Table *table,
 /* Handle the non gui-specific parts of a cell enter callback */
 const char *
 gnc_table_enter_update(Table *table,
-                       int phys_row, int phys_col,
+                       PhysicalLocation phys_loc,
                        int *cursor_position,
                        int *start_selection,
                        int *end_selection)
@@ -1120,6 +1005,8 @@ gnc_table_enter_update(Table *table,
   const char *retval = NULL;
   PhysicalCell *pcell;
   CellEnterFunc enter;
+  CellBlockCell *cb_cell;
+  BasicCell *cell;
   CellBlock *cb;
   int cell_row;
   int cell_col;
@@ -1129,19 +1016,21 @@ gnc_table_enter_update(Table *table,
 
   cb = table->current_cursor;
 
-  pcell = gnc_table_get_physical_cell (table, phys_row, phys_col);
+  pcell = gnc_table_get_physical_cell (table, phys_loc);
   if (pcell == NULL)
     return NULL;
 
   cell_row = pcell->virt_loc.phys_row_offset;
   cell_col = pcell->virt_loc.phys_col_offset;
 
-  ENTER("enter %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
-        phys_row, phys_col, cell_row, cell_col, 
-        cb->cells[cell_row][cell_col], pcell->entry);
+  ENTER("enter %d %d (relrow=%d relcol=%d) val=%s\n", 
+        phys_loc.phys_row, phys_loc.phys_col,
+        cell_row, cell_col, pcell->entry);
 
   /* OK, if there is a callback for this cell, call it */
-  enter = cb->cells[cell_row][cell_col]->enter_cell;
+  cb_cell = gnc_cellblock_get_cell (cb, cell_row, cell_col);
+  cell = cb_cell->cell;
+  enter = cell->enter_cell;
 
   if (enter)
   {
@@ -1151,8 +1040,8 @@ gnc_table_enter_update(Table *table,
           cell_row, cell_col);
 
     val = pcell->entry;
-    retval = enter(cb->cells[cell_row][cell_col], val,
-                   cursor_position, start_selection, end_selection);
+
+    retval = enter(cell, val, cursor_position, start_selection, end_selection);
 
     /* enter() might return null, or it might return a pointer to val,
      * or it might return a new pointer (to newly malloc memory).
@@ -1162,7 +1051,7 @@ gnc_table_enter_update(Table *table,
     if (retval && (val != retval))
     {
       if (safe_strcmp(retval, val) != 0)
-        (cb->cells[cell_row][cell_col])->changed = GNC_CELL_CHANGED;
+        cell->changed = GNC_CELL_CHANGED;
       g_free (pcell->entry);
       pcell->entry = (char *) retval;
     }
@@ -1172,21 +1061,14 @@ gnc_table_enter_update(Table *table,
 
   if (table->set_help)
   {
-    BasicCell *cell;
     char *help_str;
 
-    cell = cb->cells[cell_row][cell_col];
     help_str = xaccBasicCellGetHelp(cell);
 
     table->set_help(table, help_str);
 
     g_free(help_str);
   }
-
-  /* record this position as the cell that will be
-   * traversed out of if a traverse even happens */
-  table->prev_phys_traverse_row = phys_row;
-  table->prev_phys_traverse_col = phys_col;
 
   LEAVE("return %s\n", retval);
 
@@ -1197,12 +1079,14 @@ gnc_table_enter_update(Table *table,
 
 const char *
 gnc_table_leave_update(Table *table,
-                       int phys_row, int phys_col,
+                       PhysicalLocation phys_loc,
                        const char *callback_text)
 {
   const char *retval = NULL;
   PhysicalCell *pcell;
   CellLeaveFunc leave;
+  CellBlockCell *cb_cell;
+  BasicCell *cell;
   CellBlock *cb;
   int cell_row;
   int cell_col;
@@ -1212,7 +1096,7 @@ gnc_table_leave_update(Table *table,
 
   cb = table->current_cursor;
 
-  pcell = gnc_table_get_physical_cell (table, phys_row, phys_col);
+  pcell = gnc_table_get_physical_cell (table, phys_loc);
   if (pcell == NULL)
     return NULL;
 
@@ -1220,16 +1104,20 @@ gnc_table_leave_update(Table *table,
   cell_col = pcell->virt_loc.phys_col_offset;
 
   ENTER("proposed (%d %d) rel(%d %d) \"%s\"\n",
-        phys_row, phys_col, cell_row, cell_col, callback_text);
+        phys_loc.phys_row, phys_loc.phys_col,
+        cell_row, cell_col, callback_text);
 
   if (!callback_text)
     callback_text = "";
 
   /* OK, if there is a callback for this cell, call it */
-  leave = cb->cells[cell_row][cell_col]->leave_cell;
+  cb_cell = gnc_cellblock_get_cell (cb, cell_row, cell_col);
+  cell = cb_cell->cell;
+  leave = cell->leave_cell;
+
   if (leave)
   {
-    retval = leave(cb->cells[cell_row][cell_col], callback_text);
+    retval = leave(cell, callback_text);
 
     /* leave() might return null, or it might return a pointer to
      * callback_text, or it might return a new pointer (to newly
@@ -1249,7 +1137,7 @@ gnc_table_leave_update(Table *table,
     {
       g_free (pcell->entry);
       pcell->entry = (char *) retval;
-      (cb->cells[cell_row][cell_col])->changed = GNC_CELL_CHANGED;
+      cell->changed = GNC_CELL_CHANGED;
     }
     else
     {
@@ -1261,7 +1149,7 @@ gnc_table_leave_update(Table *table,
   else
   {
     pcell->entry = (char *) retval;
-    (cb->cells[cell_row][cell_col])->changed = GNC_CELL_CHANGED;
+    cell->changed = GNC_CELL_CHANGED;
   }
 
   /* return the result of the final decisionmaking */
@@ -1281,7 +1169,7 @@ gnc_table_leave_update(Table *table,
  * NULL return value means the edit was rejected. */
 const char *
 gnc_table_modify_update(Table *table,
-                        int phys_row, int phys_col,
+                        PhysicalLocation phys_loc,
                         const char *oldval,
                         const char *change,
                         char *newval,
@@ -1292,6 +1180,8 @@ gnc_table_modify_update(Table *table,
   const char *retval = NULL;
   CellModifyVerifyFunc mv;
   PhysicalCell *pcell;
+  CellBlockCell *cb_cell;
+  BasicCell *cell;
   CellBlock *cb;
   int cell_row;
   int cell_col;
@@ -1301,7 +1191,7 @@ gnc_table_modify_update(Table *table,
 
   cb = table->current_cursor;
 
-  pcell = gnc_table_get_physical_cell (table, phys_row, phys_col);
+  pcell = gnc_table_get_physical_cell (table, phys_loc);
   if (pcell == NULL)
     return NULL;
 
@@ -1311,11 +1201,13 @@ gnc_table_modify_update(Table *table,
   ENTER ("\n");
 
   /* OK, if there is a callback for this cell, call it */
-  mv = cb->cells[cell_row][cell_col]->modify_verify;
+  cb_cell = gnc_cellblock_get_cell (cb, cell_row, cell_col);
+  cell = cb_cell->cell;
+  mv = cell->modify_verify;
+
   if (mv)
   {
-    retval = mv (cb->cells[cell_row][cell_col],
-                 oldval, change, newval, cursor_position,
+    retval = mv (cell, oldval, change, newval, cursor_position,
                  start_selection, end_selection);
 
     /* if the callback returned a non-null value, allow the edit */
@@ -1324,7 +1216,7 @@ gnc_table_modify_update(Table *table,
       /* update data. bounds check done earlier */
       g_free (pcell->entry);
       pcell->entry = (char *) retval;
-      (cb->cells[cell_row][cell_col])->changed = GNC_CELL_CHANGED;
+      cell->changed = GNC_CELL_CHANGED;
     }
   }
   else
@@ -1333,15 +1225,13 @@ gnc_table_modify_update(Table *table,
     g_free (pcell->entry);
     pcell->entry = newval;
     retval = newval;
-    (cb->cells[cell_row][cell_col])->changed = GNC_CELL_CHANGED;
+    cell->changed = GNC_CELL_CHANGED;
   }
 
   if (table->set_help)
   {
-    BasicCell *cell;
     char *help_str;
 
-    cell = cb->cells[cell_row][cell_col];
     help_str = xaccBasicCellGetHelp(cell);
 
     table->set_help(table, help_str);
@@ -1349,9 +1239,9 @@ gnc_table_modify_update(Table *table,
     g_free(help_str);
   }
 
-  LEAVE ("change %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
-         phys_row, phys_col, cell_row, cell_col, 
-         cb->cells[cell_row][cell_col], pcell->entry);
+  LEAVE ("change %d %d (relrow=%d relcol=%d) val=%s\n", 
+         phys_loc.phys_row, phys_loc.phys_col,
+         cell_row, cell_col, pcell->entry);
 
   return retval;
 }
@@ -1360,7 +1250,7 @@ gnc_table_modify_update(Table *table,
 
 gboolean
 gnc_table_direct_update(Table *table,
-                        int phys_row, int phys_col,
+                        PhysicalLocation phys_loc,
                         const char *oldval,
                         char **newval_ptr,
                         int *cursor_position,
@@ -1368,6 +1258,7 @@ gnc_table_direct_update(Table *table,
                         int *end_selection,
                         void *gui_data)
 {
+  CellBlockCell *cb_cell;
   PhysicalCell *pcell;
   gboolean result;
   BasicCell *cell;
@@ -1380,14 +1271,15 @@ gnc_table_direct_update(Table *table,
 
   cb = table->current_cursor;
 
-  pcell = gnc_table_get_physical_cell (table, phys_row, phys_col);
+  pcell = gnc_table_get_physical_cell (table, phys_loc);
   if (pcell == NULL)
     return FALSE;
 
   cell_row = pcell->virt_loc.phys_row_offset;
   cell_col = pcell->virt_loc.phys_col_offset;
 
-  cell = cb->cells[cell_row][cell_col];
+  cb_cell = gnc_cellblock_get_cell (cb, cell_row, cell_col);
+  cell = cb_cell->cell;
 
   ENTER ("\n");
 
@@ -1397,7 +1289,8 @@ gnc_table_direct_update(Table *table,
   result = cell->direct_update(cell, oldval, newval_ptr, cursor_position,
                                start_selection, end_selection, gui_data);
 
-  if ((*newval_ptr != oldval) && (*newval_ptr != NULL)) {
+  if ((*newval_ptr != oldval) && (*newval_ptr != NULL))
+  {
     g_free (pcell->entry);
     pcell->entry = *newval_ptr;
     cell->changed = GNC_CELL_CHANGED;
@@ -1421,31 +1314,41 @@ gnc_table_direct_update(Table *table,
 
 gboolean
 gnc_table_find_valid_cell_horiz(Table *table,
-                                int *phys_row, int *phys_col,
+                                PhysicalLocation *phys_loc,
                                 gboolean exact_cell)
 {
-  int left = *phys_col - 1;
-  int right = *phys_col + 1;
+  int left;
+  int right;
 
-  if ((*phys_row < 0) || (*phys_col < 0) ||
-      (*phys_row >= table->num_phys_rows) ||
-      (*phys_col >= table->num_phys_cols))
+  if (phys_loc == NULL)
     return FALSE;
 
-  if (gnc_table_physical_cell_valid(table, *phys_row, *phys_col, exact_cell))
+  if (gnc_table_physical_cell_out_of_bounds (table, *phys_loc))
+    return FALSE;
+
+  if (gnc_table_physical_cell_valid(table, *phys_loc, exact_cell))
     return TRUE;
+
+  left  = phys_loc->phys_col - 1;
+  right = phys_loc->phys_col + 1;
 
   while (left >= 0 || right < table->num_phys_cols)
   {
-    if (gnc_table_physical_cell_valid(table, *phys_row, right, FALSE))
+    PhysicalLocation ploc;
+
+    ploc.phys_row = phys_loc->phys_row;
+
+    ploc.phys_col = right;
+    if (gnc_table_physical_cell_valid(table, ploc, FALSE))
     {
-      *phys_col = right;
+      phys_loc->phys_col = right;
       return TRUE;
     }
 
-    if (gnc_table_physical_cell_valid(table, *phys_row, left, FALSE))
+    ploc.phys_col = left;
+    if (gnc_table_physical_cell_valid(table, ploc, FALSE))
     {
-      *phys_col = left;
+      phys_loc->phys_col = left;
       return TRUE;
     }
 
@@ -1460,77 +1363,78 @@ gnc_table_find_valid_cell_horiz(Table *table,
 
 gboolean
 gnc_table_traverse_update(Table *table,
-                          int phys_row, int phys_col,
+                          PhysicalLocation phys_loc,
                           gncTableTraversalDir dir,
-                          int *dest_row,
-                          int *dest_col) 
+                          PhysicalLocation *dest_loc)
 {
   CellBlock *cb;
 
-  if (table == NULL)
+  if ((table == NULL) || (dest_loc == NULL))
     return FALSE;
 
   cb = table->current_cursor;
 
   ENTER("proposed (%d %d) -> (%d %d)\n",
-        phys_row, phys_col, *dest_row, *dest_col);
+        phys_loc.phys_row, phys_loc.phys_col,
+        dest_loc->phys_row, dest_loc->phys_col);
 
-  /* first, make sure our destination cell is valid.  If it is out of
-   * bounds report an error. I don't think this ever happens. */
-  if ((*dest_row >= table->num_phys_rows) || (*dest_row < 0) ||
-      (*dest_col >= table->num_phys_cols) || (*dest_col < 0)) 
+  /* first, make sure our destination cell is valid. If it is out
+   * of bounds report an error. I don't think this ever happens. */
+  if (gnc_table_physical_cell_out_of_bounds (table, *dest_loc))
   {
     PERR("destination (%d, %d) out of bounds (%d, %d)\n",
-         *dest_row, *dest_col, table->num_phys_rows, table->num_phys_cols);
+         dest_loc->phys_row, dest_loc->phys_col,
+         table->num_phys_rows, table->num_phys_cols);
     return TRUE;
   }
 
   /* next, check the current row and column.  If they are out of bounds
    * we can recover by treating the traversal as a mouse point. This can
    * occur whenever the register widget is resized smaller, maybe?. */
-  if ((phys_row >= table->num_phys_rows) || (phys_row < 0) ||
-      (phys_col >= table->num_phys_cols) || (phys_col < 0))
+  if (gnc_table_physical_cell_out_of_bounds (table, phys_loc))
   {
-
     PINFO("source (%d, %d) out of bounds (%d, %d)\n",
-	  phys_row, phys_col, table->num_phys_rows, table->num_phys_cols);
-    table->prev_phys_traverse_row = *dest_row;
-    table->prev_phys_traverse_col = *dest_col;
+	  phys_loc.phys_row, phys_loc.phys_col,
+          table->num_phys_rows, table->num_phys_cols);
+
     dir = GNC_TABLE_TRAVERSE_POINTER;
   }
 
   /* process forward-moving traversals */
-  switch(dir)
+  switch (dir)
   {
     case GNC_TABLE_TRAVERSE_RIGHT:
     case GNC_TABLE_TRAVERSE_LEFT:      
       {
+        CellTraverseInfo *ct_info;
         PhysicalCell *pcell;
         int cell_row, cell_col;
 
 	/* cannot compute the cell location until we have checked that
 	 * row and column have valid values. compute the cell
 	 * location. */
-        pcell = gnc_table_get_physical_cell (table, phys_row, phys_col);
+        pcell = gnc_table_get_physical_cell (table, phys_loc);
         if (pcell == NULL)
           return FALSE;
 
         cell_row = pcell->virt_loc.phys_row_offset;
         cell_col = pcell->virt_loc.phys_col_offset;
 
+        ct_info = gnc_cellblock_get_traverse (cb, cell_row, cell_col);
+
         if (dir == GNC_TABLE_TRAVERSE_RIGHT)
         {
-          *dest_row = (phys_row - cell_row +
-                       cb->right_traverse_r[cell_row][cell_col]);
-          *dest_col = (phys_col - cell_col +
-                       cb->right_traverse_c[cell_row][cell_col]);
+          dest_loc->phys_row = (phys_loc.phys_row - cell_row +
+                                ct_info->right_traverse_row);
+          dest_loc->phys_col = (phys_loc.phys_col - cell_col +
+                                ct_info->right_traverse_col);
         }
         else
         {
-          *dest_row = (phys_row - cell_row +
-                       cb->left_traverse_r[cell_row][cell_col]);
-          *dest_col = (phys_col - cell_col +
-                       cb->left_traverse_c[cell_row][cell_col]);
+          dest_loc->phys_row = (phys_loc.phys_row - cell_row +
+                                ct_info->left_traverse_row);
+          dest_loc->phys_col = (phys_loc.phys_col - cell_col +
+                                ct_info->left_traverse_col);
         }
       }
 
@@ -1541,7 +1445,7 @@ gnc_table_traverse_update(Table *table,
       {
         VirtualCell *vcell = gnc_table_get_header_cell (table);
 	CellBlock *header = vcell->cellblock;
-	int new_row = *dest_row;
+	PhysicalLocation new_loc = *dest_loc;
 	int increment;
 
 	/* Keep going in the specified direction until we find a valid
@@ -1551,35 +1455,35 @@ gnc_table_traverse_update(Table *table,
 	 * going left and right. */
 	increment = (dir == GNC_TABLE_TRAVERSE_DOWN) ? 1 : -1;
 
-	while (!gnc_table_physical_cell_valid(table,
-                                              new_row, *dest_col, FALSE))
+	while (!gnc_table_physical_cell_valid(table, new_loc, FALSE))
 	{
-	  if (new_row == phys_row)
+	  if (new_loc.phys_row == phys_loc.phys_row)
           {
-            new_row = *dest_row;
-            gnc_table_find_valid_cell_horiz(table, &new_row, dest_col, FALSE);
+            new_loc.phys_row = dest_loc->phys_row;
+            gnc_table_find_valid_cell_horiz(table, &new_loc, FALSE);
             break;
           }
 
-	  if ((new_row < header->numRows) || (new_row >= table->num_phys_rows))
+	  if ((new_loc.phys_row < header->num_rows) ||
+              (new_loc.phys_row >= table->num_phys_rows))
 	  {
 	    increment *= -1;
-	    new_row = *dest_row;
+	    new_loc.phys_row = dest_loc->phys_row;
 	  }
 
-	  new_row += increment;
+	  new_loc.phys_row += increment;
 	}
 
-	*dest_row = new_row;
+	*dest_loc = new_loc;
       }
 
-      if (!gnc_table_physical_cell_valid(table, *dest_row, *dest_col, FALSE))
+      if (!gnc_table_physical_cell_valid(table, *dest_loc, FALSE))
 	return TRUE;
 
       break;
 
     case GNC_TABLE_TRAVERSE_POINTER:
-      if (!gnc_table_find_valid_cell_horiz(table, dest_row, dest_col, TRUE))
+      if (!gnc_table_find_valid_cell_horiz(table, dest_loc, TRUE))
         return TRUE;
 
       break;
@@ -1592,13 +1496,10 @@ gnc_table_traverse_update(Table *table,
 
   /* Call the table traverse callback for any modifications. */
   if (table->traverse)
-    (table->traverse) (table, dest_row, dest_col, dir);
-
-  table->prev_phys_traverse_row = *dest_row;
-  table->prev_phys_traverse_col = *dest_col;
+    (table->traverse) (table, dest_loc, dir);
 
   LEAVE("dest_row = %d, dest_col = %d\n",
-        *dest_row, *dest_col);
+        dest_loc->phys_row, dest_loc->phys_col);
 
   return FALSE;
 }

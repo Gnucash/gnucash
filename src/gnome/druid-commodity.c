@@ -197,13 +197,11 @@ make_commodity_druid_page(gnc_commodity * comm) {
 
   info_label = 
     gtk_label_new(_("Pick the type of the currency or security. For "
-                    "national currencies, use \"ISO-4217 Currencies\". "
-                    "Enter a new type in the box if the ones in the "
+                    "national currencies, \nuse \"ISO-4217 Currencies\"."
+                    "  Enter a new type in the box if the \nones in the "
                     "pick list are inappropriate."));
 
-  gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_FILL);
-  gtk_misc_set_alignment (GTK_MISC(info_label), 0.0, 0.5);
-  gtk_label_set_line_wrap (GTK_LABEL(info_label), TRUE);
+  gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_LEFT);
   gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
 
   temp = gtk_hbox_new(FALSE, 0);
@@ -221,11 +219,9 @@ make_commodity_druid_page(gnc_commodity * comm) {
 
   info_label = 
     gtk_label_new(_("Enter a descriptive name for the currency or stock, "
-                    "such as \"US Dollar\" or \"Red Hat Stock\""));
+                    "such as \n\"US Dollar\" or \"Red Hat Stock\""));
 
-  gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_FILL);
-  gtk_misc_set_alignment (GTK_MISC(info_label), 0.0, 0.5);
-  gtk_label_set_line_wrap (GTK_LABEL(info_label), TRUE); 
+  gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_LEFT);
   gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
 
   temp = gtk_hbox_new(FALSE, 0);
@@ -242,12 +238,10 @@ make_commodity_druid_page(gnc_commodity * comm) {
 
   info_label = 
     gtk_label_new(_("Enter the ticker symbol (such as \"RHAT\"), "
-                    "ISO currency symbol (such as \"USD\"), or "
+                    "ISO currency symbol \n(such as \"USD\"), or "
                     "other unique abbreviation for the name."));
 
-  gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_FILL);
-  gtk_misc_set_alignment (GTK_MISC(info_label), 0.0, 0.5);
-  gtk_label_set_line_wrap (GTK_LABEL(info_label), TRUE); 
+  gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_LEFT);
   gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
 
   temp = gtk_hbox_new(FALSE, 0);
@@ -263,10 +257,8 @@ make_commodity_druid_page(gnc_commodity * comm) {
   gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 5);
 
   next_label = gtk_label_new(_("Click \"Next\" to accept the information "
-                               "and move to the next currency or stock."));
-  gtk_label_set_justify (GTK_LABEL(next_label), GTK_JUSTIFY_FILL);
-  gtk_misc_set_alignment (GTK_MISC(next_label), 0.0, 0.5);
-  gtk_label_set_line_wrap (GTK_LABEL(next_label), TRUE);  
+                               "and move \nto the next currency or stock."));
+  gtk_label_set_justify (GTK_LABEL(next_label), GTK_JUSTIFY_LEFT);
   gtk_box_pack_start(GTK_BOX(top_vbox), next_label, TRUE, TRUE, 0);
 
   return retval;

@@ -309,7 +309,7 @@ gncPostFileOpen (const char * filename)
 void
 gncFileOpen (void)
 {
-  char * newfile;
+  const char * newfile;
 
   if (!gncFileQuerySave ())
     return;
@@ -412,7 +412,8 @@ gncFileSaveAs (void)
 {
   Session *newsess;
   AccountGroup *oldgrp;
-  char *filename, *newfile;
+  const char *filename;
+  char *newfile;
   AccountGroup *newgrp;
   char * oldfile;
   char buf[BUFSIZE];

@@ -6,6 +6,7 @@ libgncregister_a_SOURCES = \
   basiccell.c \
   cellblock.c \
   datecell.c \
+  gtable.c \
   numcell.c \
   pricecell.c \
   quickfillcell.c \
@@ -21,27 +22,30 @@ noinst_HEADERS = \
   cellblock.h \
   combocell.h \
   datecell.h \
+  gtable.h \
   numcell.h \
   pricecell.h \
   quickfillcell.h \
   recncell.h \
+  register-common.h \
   splitreg.h \
   table-allgui.h \
   textcell.h
 
 EXTRA_DIST = \
   .cvsignore \
-  design.txt \
   table-html.c \
   table-html.h
 
-CFLAGS = @CFLAGS@ ${GNOME_CFLAGS} ${GUILE_COMPILE_ARGS}
+CFLAGS = @CFLAGS@
 
 INCLUDES = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/guile \
-  -I${top_srcdir}/src/register/gnome
+  -I${top_srcdir}/src/register/gnome \
+  ${GNOME_INCLUDEDIR} \
+  ${GUILE_INCS}
 
 
 SUBDIRS = gnome

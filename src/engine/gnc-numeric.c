@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-numeric.c -- an exact-number library for gnucash.            *
+ * gncnumeric.c -- an exact-number library for gnucash.            *
  * Copyright (C) 2000 Bill Gribble                                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -31,9 +31,16 @@
 /* TODO 
  * - use longer intermediate values to make operations
  *   64-bit-overflow-proof 
- * - numeric_to_double... is there a better way? 
- * - add a string_to_numeric
  */
+
+static const char * _numeric_error_strings[] = 
+{
+  "No error",
+  "Argument is not a valid number",
+  "Intermediate result overflow",
+  "Argument denominators differ in GNC_DENOM_FIXED operation",
+  "Remainder part in GNC_RND_NEVER operation"
+};
 
 static gint64 gnc_numeric_lcd(gnc_numeric a, gnc_numeric b);
 
@@ -138,7 +145,13 @@ gnc_numeric_eq(gnc_numeric a, gnc_numeric b) {
 
 int
 gnc_numeric_equal(gnc_numeric a, gnc_numeric b) {
-  return ((a.num * b.denom) == (a.denom * b.num));
+  if(((a.denom > 0) && (b.denom > 0)) ||
+     ((a.denom < 0) && (b.denom < 0))) {    
+    return ((a.num * b.denom) == (a.denom * b.num));
+  }
+  else {
+    return 0;
+  }
 }
 
 
@@ -189,7 +202,7 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
       return gnc_numeric_error(GNC_ERROR_DENOM_DIFF);
     }
   }
-
+  
   if(a.denom < 0) {
     a.num *= a.denom;
     a.denom = 1;
@@ -217,6 +230,17 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
   }
   
   return gnc_numeric_convert(sum, denom, how);                             
+}
+
+
+/********************************************************************
+ *  gnc_numeric_add_fixed
+ ********************************************************************/
+
+gnc_numeric
+gnc_numeric_add_fixed(gnc_numeric a, gnc_numeric b) {
+  return gnc_numeric_add(a, b, GNC_DENOM_AUTO, 
+                         GNC_DENOM_FIXED | GNC_RND_NEVER);
 }
 
 
@@ -275,6 +299,17 @@ gnc_numeric_sub(gnc_numeric a, gnc_numeric b,
     how   = how & GNC_NUMERIC_RND_MASK;
   }
   return gnc_numeric_convert(diff, denom, how);                             
+}
+
+
+/********************************************************************
+ *  gnc_numeric_sub_fixed
+ ********************************************************************/
+
+gnc_numeric
+gnc_numeric_sub_fixed(gnc_numeric a, gnc_numeric b) {
+  return gnc_numeric_sub(a, b, GNC_DENOM_AUTO, 
+                         GNC_DENOM_FIXED | GNC_RND_NEVER);
 }
 
 
@@ -343,7 +378,6 @@ gnc_numeric
 gnc_numeric_div(gnc_numeric a, gnc_numeric b, 
                 gint64 denom, gint how) {
   gnc_numeric quotient;
-  int         sgn;
 
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
     return gnc_numeric_error(GNC_ERROR_ARG);
@@ -503,6 +537,10 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how) {
       break;
       
     case GNC_RND_TRUNC:
+      break;
+
+    case GNC_RND_PROMOTE:
+      out.num = out.num + 1;
       break;
       
     case GNC_RND_ROUND_HALF_DOWN:
@@ -744,7 +782,6 @@ double_to_gnc_numeric(double in, gint64 denom, gint how) {
   return out;
 }
 
-
 /********************************************************************
  *  gnc_numeric_to_double
  ********************************************************************/
@@ -754,7 +791,7 @@ gnc_numeric_to_double(gnc_numeric in) {
   if(in.denom >= 0) {
     return (double)in.num/(double)in.denom;
   }
-  else if(in.denom < 0) {
+  else {
     return (double)(in.num * in.denom);
   }
 }
@@ -779,6 +816,10 @@ gnc_numeric_create(gint64 num, gint64 denom) {
 
 gnc_numeric
 gnc_numeric_error(int error_code) {
+  if(abs(error_code) < 5) {
+    fprintf(stderr, " ** GNC-NUMERIC error : %s\n",
+            _numeric_error_strings[ - error_code]);
+  }
   return gnc_numeric_create(error_code, 0LL);
 }
 
@@ -893,8 +934,11 @@ gnc_numeric_check(gnc_numeric in) {
   if(in.denom != 0) {
     return GNC_ERROR_OK;
   }
-  else {
+  else if(in.num) {
     return in.num;
+  }
+  else {
+    return GNC_ERROR_ARG;
   }
 }
 

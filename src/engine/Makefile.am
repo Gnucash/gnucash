@@ -13,7 +13,6 @@ libgncengine_la_SOURCES = \
   DateUtils.c \
   FileIO.c \
   Group.c \
-  LedgerUtils.c \
   Query.c \
   Scrub.c \
   Session.c \
@@ -44,7 +43,6 @@ noinst_HEADERS = \
   GNCIdP.h \
   Group.h \
   GroupP.h \
-  LedgerUtils.h \
   Query.h \
   Scrub.h \
   Session.h \
@@ -66,8 +64,9 @@ EXTRA_DIST = \
   README.query-api \
   README.gnc-numeric \
   design.txt \
-  extensions.txt
+  extensions.txt \
+  kvp_doc.txt
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GUILE_COMPILE_ARGS}
+CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
 
 INCLUDES = -I..

@@ -398,7 +398,7 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
  * Returns: toolbar style                                           *
  \*******************************************************************/
 GtkToolbarStyle
-gnc_get_toolbar_style()
+gnc_get_toolbar_style(void)
 {
   GtkToolbarStyle tbstyle = GTK_TOOLBAR_BOTH;
   char *style_string;
@@ -466,6 +466,8 @@ gnc_set_label_color(GtkWidget *label, double value)
     style->fg[GTK_STATE_NORMAL] = style->black;
 
   gtk_widget_set_style(label, style);
+
+  gtk_style_unref(style);
 #endif
 }
 
@@ -478,7 +480,7 @@ gnc_set_label_color(GtkWidget *label, double value)
  * Returns: account separator character                             *
  \*******************************************************************/
 char
-gnc_get_account_separator()
+gnc_get_account_separator(void)
 {
   char separator = ':';
   char *string;
@@ -521,7 +523,7 @@ gnc_get_window_size(const char *prefix, int *width, int *height)
   int w, h;
   char *name;
 
-  if (gnc_lookup_boolean_option("General", "Save Window Geometry", FALSE))
+  if (gnc_lookup_boolean_option("General", "Save Window Geometry", TRUE))
   {
     name = g_strconcat(prefix, "_width", NULL);
     w = gnc_lookup_number_option("__gui", name, 0.0);

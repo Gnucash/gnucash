@@ -9,7 +9,7 @@
 ;(gnc:support "qif-import/qif-parse.scm")
 
 (define qif-category-compiled-rexp 
-  (make-regexp "^ *(\\[)?([^]/]*)(]?)(/?)([^[]*) *((\\[)?([^]/]*)(]?)(/?)(.*))? *$"))
+  (make-regexp "^ *(\\[)?([^]/]*)(]?)(/?)([^\|]*)(\\|(\\[)?([^]/]*)(]?)(/?)(.*))? *$"))
 
 (define qif-date-compiled-rexp 
   (make-regexp "^ *([0-9]+) *[-/.'] *([0-9]+) *[-/.'] *([0-9]+).*$"))

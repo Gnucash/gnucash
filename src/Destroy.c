@@ -22,10 +22,8 @@
 
 #include "Account.h"
 #include "AccWindow.h"
-#include "AdjBWindow.h"
 #include "Destroy.h"
 #include "Group.h"
-#include "LedgerUtils.h"
 #include "MultiLedger.h"
 #include "RecnWindow.h"
 
@@ -38,7 +36,6 @@ xaccAccountWindowDestroySimple (Account *account)
 {
   xaccDestroyLedgerDisplay (account);
   xaccDestroyRecnWindow (account);
-  xaccDestroyAdjBWindow (account);
   gnc_ui_destroy_edit_account_window (account);
 }
 

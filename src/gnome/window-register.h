@@ -32,5 +32,6 @@ RegWindow * regWindowLedger(xaccLedgerDisplay *ledger);
 void gnc_register_raise(RegWindow *regData);
 void gnc_register_jump_to_blank(RegWindow *regData);
 void gnc_register_jump_to_split(RegWindow *regData, Split *split);
+void gnc_register_jump_to_split_amount(RegWindow *regData, Split *split);
 
 #endif

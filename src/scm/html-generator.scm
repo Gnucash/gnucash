@@ -554,7 +554,7 @@
 
 ; Create a column entry
 (define (html-table-col val)
-  (html-table-col-align "right" val))
+  (html-table-col-align val "right"))
 
 (define (string-html-table-col-align val align)
   (string-append "<TD align=" align ">" (tostring val) "</TD>"))
@@ -623,7 +623,7 @@
 	    #f)
 	">"
 	(tostring val)
-	"</TH">))
+	"</TH>"))
 
 (define (html-table-headcol val)
   (html-table-headcol-justified val "center"))

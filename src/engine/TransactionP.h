@@ -134,11 +134,6 @@ struct _split
   gnc_numeric  share_balance;
   gnc_numeric  share_cleared_balance;
   gnc_numeric  share_reconciled_balance;
-
-  gnc_numeric cost_basis;
-
-
-  int ticket; /* used for matching up splits for QIFIO.c */
 };
 
 

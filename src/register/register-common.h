@@ -24,8 +24,6 @@
 #ifndef __REGISTER_COMMON_H__
 #define __REGISTER_COMMON_H__
 
-#include <glib.h>
-
 
 /* The VirtualCellLocation structure contains the virtual
  * location of a virtual cell.
@@ -35,16 +33,6 @@ struct _VirtualCellLocation {
   short virt_row;
   short virt_col;
 };
-
-
-G_INLINE_FUNC gboolean
-virt_cell_loc_equal (VirtualCellLocation vcl1, VirtualCellLocation vcl2);
-G_INLINE_FUNC gboolean
-virt_cell_loc_equal (VirtualCellLocation vcl1, VirtualCellLocation vcl2)
-{
-  return ((vcl1.virt_row == vcl2.virt_row) &&
-          (vcl1.virt_col == vcl2.virt_col));
-}
 
 
 /* The VirtualLocation structure contains the virtual
@@ -66,14 +54,15 @@ struct _VirtualLocation {
 };
 
 
-G_INLINE_FUNC gboolean
-virt_loc_equal (VirtualLocation vl1, VirtualLocation vl2);
-G_INLINE_FUNC gboolean
-virt_loc_equal (VirtualLocation vl1, VirtualLocation vl2)
-{
-  return (virt_cell_loc_equal (vl1.vcell_loc, vl2.vcell_loc) &&
-          (vl1.phys_row_offset == vl2.phys_row_offset) &&
-          (vl1.phys_col_offset == vl2.phys_col_offset));
-}
+/*  The PhysicalLocation contains physical row and column coordinates.
+ *  It is used to provide a mapping from a virtual cell block to the
+ *  origin of the block in physical coordinates.
+ *
+ *  There is one instance of a PhysicalLocation for each virtual cell.  */
+typedef struct _PhysicalLocation PhysicalLocation;
+struct _PhysicalLocation {
+  short phys_row;
+  short phys_col;
+};
 
 #endif

@@ -40,13 +40,6 @@
 #include "TransactionP.h"
 #include "util.h"
 
-/* The unsafe_ops flag allows certain unsafe manipulations to be 
- * performed on the data structures. Normally, this is disabled,
- * as it can lead to scrambled data.
- * hack alert -- this should be a configurable parameter.
- */
-int unsafe_ops = 1;
-
 int next_free_unique_account_id = 0;
 
 static short module = MOD_ENGINE; 
@@ -632,34 +625,28 @@ xaccAccountRecomputeBalance( Account * acc )
   while (split) {
     
     /* compute both dollar and share balances */
-    share_balance = 
-      gnc_numeric_add(share_balance, split->damount, GNC_DENOM_AUTO, 
-                      GNC_DENOM_FIXED | GNC_RND_NEVER);
-    dbalance      = 
-      gnc_numeric_add(dbalance, split->value, GNC_DENOM_AUTO, 
-                      GNC_DENOM_FIXED | GNC_RND_NEVER);
+    share_balance = gnc_numeric_add_fixed(share_balance, split->damount);
+    dbalance      = gnc_numeric_add_fixed(dbalance, split->value);
     
     if( NREC != split -> reconciled ) {
       share_cleared_balance = 
-        gnc_numeric_add(share_cleared_balance, split->damount,
-                        GNC_DENOM_AUTO, GNC_DENOM_FIXED | GNC_RND_NEVER);
+        gnc_numeric_add_fixed(share_cleared_balance, split->damount);
       dcleared_balance = 
-        gnc_numeric_add(dcleared_balance, split->value, GNC_DENOM_AUTO, 
-                        GNC_DENOM_FIXED | GNC_RND_NEVER);
+        gnc_numeric_add_fixed(dcleared_balance, split->value);
     }
     
     if( YREC == split -> reconciled ) {
       share_reconciled_balance = 
-        gnc_numeric_add(share_cleared_balance, split->damount,
-                        GNC_DENOM_AUTO, GNC_DENOM_FIXED | GNC_RND_NEVER);
+        gnc_numeric_add_fixed(share_cleared_balance, split->damount);
       dreconciled_balance =  
-        gnc_numeric_add(dreconciled_balance, split->value,
-                        GNC_DENOM_AUTO, GNC_DENOM_FIXED | GNC_RND_NEVER);
+        gnc_numeric_add_fixed(dreconciled_balance, split->value);
     }
     
     /* For bank accounts, the invariant subtotal is the dollar
      * amount.  For stock accounts, the invariant is the share amount */
-    if ( (STOCK == acc->type) || ( MUTUAL == acc->type) ) {
+    if ( (STOCK    == acc->type) ||
+         (MUTUAL   == acc->type) ||
+         (CURRENCY == acc->type) ) {
       split -> share_balance = share_balance;
       split -> share_cleared_balance = share_cleared_balance;
       split -> share_reconciled_balance = share_reconciled_balance;
@@ -676,9 +663,6 @@ xaccAccountRecomputeBalance( Account * acc )
       split -> cleared_balance = dcleared_balance;
       split -> reconciled_balance = dreconciled_balance;
     }
-    
-    /* invalidate the cost basis; this has to be computed with other routine */
-    split -> cost_basis = gnc_numeric_zero();
     
     last_split = split;
     i++;
@@ -717,49 +701,6 @@ xaccAccountRecomputeBalance( Account * acc )
   return;
 }
 
-/********************************************************************\
-\********************************************************************/
-
-void
-xaccAccountRecomputeCostBasis( Account * acc )
-{
-  printf("Cost basis calculation temporarily disabled.\n");
-#if 0
-  int         i = 0; 
-  gnc_numeric amt;
-  Split       * split = NULL;
-  Queue       * q;
-  
-  if( NULL == acc ) return;
-  if (0x0 == (ACC_INVALID_COSTB & acc->changed)) return;
-  acc->changed &= ~ACC_INVALID_COSTB;
-  
-  /* create the FIFO queue */
-  q = xaccMallocQueue ();
-  
-  /* loop over all splits in this account */
-  split = acc->splits[0];
-  while (split) {
-    
-    /* positive amounts are a purchase, negative are a sale. 
-     * Use FIFO accounting: purchase to head, sale from tail. */
-    amt = split->damount;
-    if (gnc_numeric_positive_p(amt)) {
-      xaccQueuePushHead (q, split);
-    } 
-    else if (gnc_numeric_negative_p(amt)) {
-      xaccQueuePopTailShares (q, gnc_numeric_neg(amt));
-    }
-    split->cost_basis = xaccQueueGetValue (q);
-    
-    i++;
-    split = acc->splits[i];
-  }
-
-  xaccFreeQueue (q);
-#endif
-
-}
 
 /********************************************************************\
  * xaccCheckDateOrder                                               *

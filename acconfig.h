@@ -38,6 +38,9 @@
 /* limits.h header present */
 #undef HAVE_LIMITS_H
 
+/* ieeefp.h header present */
+#undef HAVE_IEEEFP_H
+
 /* memcpy present */
 #undef HAVE_MEMCPY
 
@@ -51,11 +54,11 @@
 /* If configure found libXpm, then use it */
 #undef HAVE_XPM            
 
+/* is guile available */
+#undef HAVE_GUILE
+
 /* Use the new gtkhtml widget instead of the old xmhtml widget */
 #undef HAVE_LIBGTKHTML
-
-/* use gnomeprint if it's available */
-#undef HAVE_LIBGNOMEPRINT
 
 /* misc image and compression libs needed by html widget */
 #undef HAVE_ZLIB               

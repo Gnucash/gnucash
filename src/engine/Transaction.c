@@ -78,18 +78,19 @@ int force_double_entry = 0;
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_ENGINE;
 
+
 /********************************************************************\
  * xaccInitSplit
- * Initialize a splitaction structure
+ * Initialize a Split structure
 \********************************************************************/
 
-void
+static void
 xaccInitSplit(Split * split)
 {
   /* fill in some sane defaults */
   split->acc         = NULL;
   split->parent      = NULL;
-  
+
   split->action      = strdup("");
   split->memo        = strdup("");
   split->docref      = strdup("");
@@ -106,8 +107,6 @@ xaccInitSplit(Split * split)
   split->share_balance             = gnc_numeric_zero();
   split->share_cleared_balance     = gnc_numeric_zero();
   split->share_reconciled_balance  = gnc_numeric_zero();
-  split->cost_basis                = gnc_numeric_zero();
-  split->ticket = 0;
 
   split->kvp_data = NULL;
 
@@ -450,23 +449,17 @@ double xaccSplitGetShareReconciledBalance (Split *s)
    return gnc_numeric_to_double(s->share_reconciled_balance);
 }
 
-double xaccSplitGetCostBasis (Split *s) 
-{
-   if (!s) return 0.0;
-   xaccAccountRecomputeCostBasis (s->acc);
-   return gnc_numeric_to_double(s->cost_basis);
-}
 
 /********************************************************************\
  * xaccInitTransaction
  * Initialize a transaction structure
 \********************************************************************/
 
-void
+static void
 xaccInitTransaction( Transaction * trans )
 {
   Split *split;
-  
+
   /* Fill in some sane defaults */
   trans->num         = strdup("");
   trans->description = strdup("");
@@ -825,12 +818,10 @@ ComputeValue (Split **sarray, Split * skip_me,
           * shenanigans above.
           */
          if (gnc_commodity_equiv(s->acc->currency, base_currency)) {
-           value = gnc_numeric_add(value, s->value, GNC_DENOM_AUTO, 
-                                   GNC_DENOM_FIXED | GNC_RND_NEVER);
+           value = gnc_numeric_add_fixed(value, s->value);
          } 
          else if (gnc_commodity_equiv(s->acc->security, base_currency)) {
-           value  = gnc_numeric_add(value, s->damount, GNC_DENOM_AUTO,
-                                    GNC_DENOM_FIXED | GNC_RND_NEVER);
+           value  = gnc_numeric_add_fixed(value, s->damount);
          } 
          else {
            PERR ("inconsistent currencies\n");      
@@ -887,18 +878,25 @@ xaccIsCommonCurrency(const gnc_commodity * currency_1,
 }
 
 static const gnc_commodity *
-FindCommonCurrency (Split **slist, const gnc_commodity * ra, 
-                    const gnc_commodity * rb)
-{
-  Split *s;
+FindCommonExclSCurrency (Split **slist, const gnc_commodity * ra, 
+                         const gnc_commodity * rb, Split *excl_split) {
+  Split * s;
   int i = 0;
-
+  
   if (!slist) return NULL;
   
-  i=0; s = slist[0];
+  i = 0; 
+  s = slist[0];
+
+  /* If s is to be excluded, go ahead in the list until one split is
+     not excluded or is NULL. */
+  while (s && (s == excl_split)) { 
+    i++; s = slist[i]; 
+  }
+
   while (s) {
     const gnc_commodity * sa, * sb;
-
+    
     /* Novice/casual users may not want or use the double entry 
      * features of this engine.   Because of this, there
      * may be the occasional split without a parent account. 
@@ -940,12 +938,29 @@ FindCommonCurrency (Split **slist, const gnc_commodity * ra,
     }
 
     if ((!ra) && (!rb)) return NULL;
-    i++; s = slist[i];
+
+    i++; 
+    s = slist[i];
+
+    /* If s is to be excluded, go ahead in the list until one split is
+       not excluded or is NULL. */
+    while (s && (s == excl_split))
+      { i++; s = slist[i]; } 
   }
 
   return (ra);
 }
 
+/* This is the wrapper for those calls (i.e. the older ones) which
+ * don't exclude one split from the splitlist when looking for a
+ * common currency.  
+ */
+static const gnc_commodity *
+FindCommonCurrency (Split **slist, 
+                    const gnc_commodity * ra, const gnc_commodity * rb)
+{
+  return FindCommonExclSCurrency(slist, ra, rb, NULL);
+}
 
 const gnc_commodity *
 xaccTransFindCommonCurrency (Transaction *trans)
@@ -968,6 +983,14 @@ xaccTransIsCommonCurrency (Transaction *trans, const gnc_commodity * ra)
   return FindCommonCurrency (trans->splits, ra, NULL);
 }
 
+const gnc_commodity *
+xaccTransIsCommonExclSCurrency (Transaction *trans, 
+				const gnc_commodity * ra, 
+                                Split *excl_split)
+{
+  return FindCommonExclSCurrency (trans->splits, ra, NULL, excl_split);
+}
+
 /********************************************************************\
 \********************************************************************/
 
@@ -977,7 +1000,7 @@ xaccTransIsCommonCurrency (Transaction *trans, const gnc_commodity * ra)
  * not at all obvious.
  */
 
-void
+static void
 xaccTransRebalance (Transaction * trans)
 {
   xaccSplitRebalance (trans->splits[0]);
@@ -1125,7 +1148,7 @@ xaccSplitRebalance (Split *split)
 }
 
 void
-xaccTransBeginEdit (Transaction *trans, int defer)
+xaccTransBeginEdit (Transaction *trans, gboolean defer)
 {
    char open;
    Backend *be;
@@ -1701,62 +1724,6 @@ xaccSplitOrder (Split **sa, Split **sb)
 }
 
 int
-xaccSplitMatch (Split **sa, Split **sb)
-{
-  char *da, *db;
-  char diff;
-  int comp;
-
-  if ( (*sa) && !(*sb) ) return -1;
-  if ( !(*sa) && (*sb) ) return +1;
-  if ( !(*sa) && !(*sb) ) return 0;
-
-  /* compare amounts */
-  comp = gnc_numeric_compare((*sa)->value, (*sb)->value);
-  if(comp < 0) {
-    return -1;
-  }
-  else if (comp > 0) {
-    return +1;
-  }
-
-  comp = gnc_numeric_compare((*sa)->damount, (*sb)->damount);
-  if(comp < 0) {
-    return -1;
-  }
-  else if (comp > 0) {
-    return +1;
-  }
-
-  /* otherwise, sort on memo strings */
-  da = (*sa)->memo;
-  db = (*sb)->memo;
-  SAFE_STRCMP (da, db);
-
-  /* otherwise, sort on action strings */
-  da = (*sa)->action;
-  db = (*sb)->action;
-  SAFE_STRCMP (da, db);
-
-  /* If the reconciled flags are different, don't compare the
-   * dates, since we want to match splits with different reconciled
-   * values. But if they do match, the dates must match as well. 
-   * Note that 
-   */
-  diff = ((*sa)->reconciled) - ((*sb)->reconciled);
-  if (!diff) {
-    DATE_CMP(sa,sb,date_reconciled);
-  }
-
-  /* otherwise, sort on docref string */
-  da = (*sa)->docref;
-  db = (*sb)->docref;
-  SAFE_STRCMP (da, db);
-
-  return 0;
-}
-
-int
 xaccTransOrder (Transaction **ta, Transaction **tb)
 {
   char *da, *db;
@@ -1787,61 +1754,6 @@ xaccTransOrder (Transaction **ta, Transaction **tb)
   da = (*ta)->docref;
   db = (*tb)->docref;
   SAFE_STRCMP (da, db);
-
-  return 0;
-}
-
-int
-xaccTransMatch (Transaction **tap, Transaction **tbp)
-{
-  int retval;
-  Transaction *ta, *tb;
-  Split *sa, *sb;
-  int na, nb;
-
-  /* first, do the basic comparison */
-  retval = xaccTransOrder (tap, tbp);
-  if (0 != retval) return retval;
-  ta = *tap;
-  tb = *tbp;
-
-  /* Now, start comparing splits */
-  na=0; while (ta->splits[na]) na++;
-  nb=0; while (tb->splits[nb]) nb++;
-  if (na-nb) return (na-nb);
-
-  /* Ugh, no we've got to compare individual splits.  They do not necessarily
-   * have to be in identical order to match.  So we have to cycle through them,
-   * without creating bogus matches.
-   */
-  na=0; while ((sa=ta->splits[na])) { sa->ticket = -1; na++; }
-  nb=0; while ((sb=tb->splits[nb])) { sb->ticket = -1; nb++; }
-
-  na=0; 
-  while ((sa=ta->splits[na])) { 
-     if (-1 < sa->ticket) {na++; continue;}
-    
-     nb=0; 
-     while ((sb=tb->splits[nb])) { 
-        if (-1 < sb->ticket) {nb++; continue;}
-        retval = xaccSplitMatch (&sa, &sb);
-        if ((0 == retval) && (sa->acc == sb->acc)) {
-           sb->ticket = na;
-           sa->ticket = nb;
-           break;
-        }
-        nb++;
-     }
-
-     if (-1 == sa->ticket) return -1;
-     na++;
-  }
-
-  nb=0; 
-  while ((sb=tb->splits[nb])) { 
-     if (-1 == sb->ticket) return +1;
-     nb++;
-  }
 
   return 0;
 }
@@ -1886,21 +1798,6 @@ xaccTransSetDateSecs (Transaction *trans, time_t secs)
     * that until the commit phase, i.e. until the user has called the
     * xaccTransCommitEdit() routine.  So, for now, we are done.
     */
-}
-
-void
-xaccTransSetDateSecsL (Transaction *trans, long long secs)
-{
-   if (!trans) return;
-   CHECK_OPEN (trans);
-   DEBUGCMD ({ 
-      time_t sicko = secs;
-      PINFO ("addr=%p set date to %Lu %s \n",
-              trans, secs, ctime (&sicko));
-   })
-
-   trans->date_posted.tv_sec = secs;
-   trans->date_posted.tv_nsec = 0;
 }
 
 void
@@ -1952,46 +1849,6 @@ xaccTransSetDateEnteredTS (Transaction *trans, const Timespec *ts)
 
    trans->date_entered.tv_sec = ts->tv_sec;
    trans->date_entered.tv_nsec = ts->tv_nsec;
-}
-
-#define THIRTY_TWO_YEARS 0x3c30fc00LL
-
-Timespec
-gnc_dmy2timespec(int day, int month, int year) {
-  Timespec result;
-  struct tm date;
-  long long secs = 0;
-  long long era = 0;
-  
-  year -= 1900;
-  
-  /* make a crude attempt to deal with dates outside the 
-   * range of Dec 1901 to Jan 2038. Note the we screw up 
-   * centenial leap years here ... so hack alert --
-   */
-  if ((2 > year) || (136 < year)) 
-  {
-    era = year / 32;
-    year %= 32;
-    if (0 > year) { year += 32; era -= 1; } 
-  }
-  
-  date.tm_year = year;
-  date.tm_mon = month - 1;
-  date.tm_mday = day;
-  date.tm_hour = 11;
-  date.tm_min = 0;
-  date.tm_sec = 0;
-  
-  /* compute number of seconds */
-  secs = mktime (&date);
-  
-  secs += era * THIRTY_TWO_YEARS;
-  
-  result.tv_sec = secs;
-  result.tv_nsec = 0;
-  
-  return(result);
 }
 
 void

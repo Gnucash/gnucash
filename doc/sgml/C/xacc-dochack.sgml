@@ -27,21 +27,19 @@ The Definitive Guide (online)</ULINK>
 </PARA>
 </LISTITEM>
 
-<LISTITEM>
-<PARA> <ULINK
-URL="http://www.oasis-open.com/davenport/dbdoc/">References for the
-DocBook DTD </ULINK> </PARA>
-</LISTITEM>
+<LISTITEM> <PARA> <ULINK URL=
+"http://www.oasis-open.com/davenport/dbdoc/">References for the
+DocBook DTD </ULINK> </PARA> </LISTITEM>
+
+<LISTITEM> <PARA><ULINK URL=
+"http://www.oasis-open.org/docbook/documentation/index.html"> DocBook
+- Documentation</ULINK></PARA> </LISTITEM>
 
 <LISTITEM>
-<PARA><ULINK
-URL="http://www.oasis-open.org/docbook/documentation/index.html">
-DocBook - Documentation</ULINK></PARA>
+<PARA><ULINK URL="http://www.oasis-open.org/docbook/">DocBook -
+DocBook</ULINK></PARA>
 </LISTITEM>
 
-<LISTITEM>
-<PARA><ULINK URL="http://www.oasis-open.org/docbook/">DocBook - DocBook</ULINK></PARA>
-</LISTITEM>
 <LISTITEM>
 <PARA> <ULINK URL="http://fallout.campusview.indiana.edu/~jfieber/docbook/doc/over/index.html"> DocBook
 Overview </ULINK> </PARA>
@@ -130,7 +128,7 @@ be consulted to make up the body of the document, each file
 representing one of the ARTICLEs. </PARA>
 
 <para> Note that filenames for the HTML output files are generated in
-three notable ways:
+three ways:</para>
 
 <itemizedlist>
 
@@ -143,14 +141,18 @@ it is the first SECT1 in an ARTICLE;</para></listitem>
 <listitem><para> If you create a new ARTICLE or SECT1 without an ID
 tag, filenames will be generated with names like
 <filename>t1234.html</filename>, <filename>x892.html</filename>, and
-such.  They will look quite random. </para></listitem>
+such.  They will look quite random. </para>
+
+<PARA> This is a bad thing; make sure you assign an ID tag to the
+ARTICLE or SECT1. </para>
+</listitem>
 
 </itemizedlist>
-</para>
 
 <para> Styling is controlled by the DSSSL document,
 <filename>mysheet.dsl</filename>, using the conventions documented in
-the <link linkend="MODSTYLE"> Modular DocBook Stylesheets </link></para>
+the <link linkend="MODSTYLE"> Modular DocBook Stylesheets
+</link></para>
 
 <para> Components that need to be installed in order for the command
 <command>jade -ioutput.html -d mysheet.dsl -t sgml
