@@ -1,3 +1,9 @@
+2001-05-08  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/options-utilities.scm, src/scm/report/price-scatter.scm:
+	moved gnc:options-add-marker-choice! from price-scatter.scm to
+	options-utilities.scm.
+
 2001-05-08  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/price-quotes.scm: add currency quote support

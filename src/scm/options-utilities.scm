@@ -243,3 +243,21 @@
     (N_ "Height of plot in pixels.") default-height
     100 1000 0 1)))
 
+;; A multicoice option for the marker of a scatter plot.
+(define (gnc:options-add-marker-choice!
+	 options pagename optname sort-tag default)
+  (gnc:register-option
+   options
+   (gnc:make-multichoice-option
+    pagename optname 
+    sort-tag
+    (N_ "Choose the marker for each data point.")
+    default
+    (list
+     (vector 'circle "circle" "circle")
+     (vector 'cross "cross" "cross")
+     (vector 'square "square" "square")
+     (vector 'asterisk "asterisk" "asterisk")
+     (vector 'filledcircle "filled circle" "filled circle")
+     (vector 'filledsquare "filled square" "filled square")))))
+

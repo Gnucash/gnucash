@@ -86,19 +86,9 @@
        options gnc:pagename-display 
        optname-plot-width optname-plot-height "c" 500 400)
 
-      (add-option
-       (gnc:make-multichoice-option
-	gnc:pagename-display optname-marker
-	"a"
-	(N_ "Choose a marker")
-	'filledsquare
-	(list
-	 (vector 'circle "circle" "circle")
-	 (vector 'cross "cross" "cross")
-	 (vector 'square "square" "square")
-	 (vector 'asterisk "asterisk" "asterisk")
-	 (vector 'filledcircle "filled circle" "filled circle")
-	 (vector 'filledsquare "filled square" "filled square"))))
+      (gnc:options-add-marker-choice!
+       options gnc:pagename-display 
+       optname-marker "a" 'filledsquare)
 
       (add-option
        (gnc:make-color-option
