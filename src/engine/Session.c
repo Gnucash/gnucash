@@ -121,6 +121,15 @@ xaccSessionSetGroup (Session *sess, AccountGroup *grp)
 
 /* ============================================================== */
 
+char * 
+xaccSessionGetFilePath (Session *sess)
+{
+   if (!sess) return NULL;
+   return (sess->fullpath);
+}
+
+/* ============================================================== */
+
 /* hack alert -- we should be yanking this out of 
  * some config file 
  */

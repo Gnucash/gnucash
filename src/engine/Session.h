@@ -70,6 +70,11 @@ void       xaccSessionDestroy (Session *);
  * The xaccSessionBeginFile() routine is identical to the xaccSessionBegin()
  *    routine, except that the argument is a filename (i.e. the five
  *    letters "file:" should not be prepended).
+ *
+ * The xaccSessionGetFilePath() routine returns the fully-qualified file
+ *    path for the session.  That is, if a relative or partial filename
+ *    was for the session, then it had to have been fully resolved to
+ *    open the session.  This routine returns the result of this resolution.
  * 
  * The xaccSessionGetError() routine can be used to obtain the reason for
  *    any failure. Standard errno values are used.  Calling this routine resets
@@ -135,11 +140,12 @@ void       xaccSessionDestroy (Session *);
  *
  */
 
-AccountGroup * xaccSessionBegin     (Session *, char * sessionid);
-AccountGroup * xaccSessionBeginFile (Session *, char * filename);
-int            xaccSessionGetError  (Session *);
-AccountGroup * xaccSessionGetGroup  (Session *);
-void           xaccSessionSetGroup  (Session *, AccountGroup *topgroup);
+AccountGroup * xaccSessionBegin       (Session *, char * sessionid);
+AccountGroup * xaccSessionBeginFile   (Session *, char * filename);
+int            xaccSessionGetError    (Session *);
+AccountGroup * xaccSessionGetGroup    (Session *);
+void           xaccSessionSetGroup    (Session *, AccountGroup *topgroup);
+char         * xaccSessionGetFilePath (Session *);
 
 void           xaccSessionSave (Session *);
 void           xaccSessionEnd  (Session *);
