@@ -117,8 +117,8 @@ delete_initial_druid (HBCIInitialInfo *info)
 
   reset_initial_info (info);
   
-  if (info->interactor)
-    GNCInteractor_delete(info->interactor);
+  /* if (info->interactor)
+     GNCInteractor_delete(info->interactor);  -- being destroyed by AB_BANKING*/
 
   if (info->window != NULL) 
     gtk_widget_destroy (info->window);
