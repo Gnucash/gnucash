@@ -588,7 +588,6 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
                          CELL_ALIGN_LEFT,
                          FALSE,
                          FALSE);
-
 }
 
 TableLayout *
@@ -604,4 +603,3 @@ gnc_split_register_layout_new (SplitRegister *reg)
 
   return layout;
 }
-

@@ -444,14 +444,15 @@ void
 gnc_split_register_model_add_save_handlers (TableModel *model)
 {
   g_return_if_fail (model != NULL);
-  model->save_handler = gnc_split_register_save_cells;
+  gnc_table_model_set_post_save_handler (model, gnc_split_register_save_cells);
 }
 
 void
 gnc_template_register_model_add_save_handlers (TableModel *model)
 {
   g_return_if_fail (model != NULL);
-  model->save_handler = gnc_split_register_save_template_cells;
+  gnc_table_model_set_post_save_handler
+    (model, gnc_split_register_save_template_cells);
 }
 
 SRSaveData *

@@ -410,7 +410,7 @@ gnc_table_model_set_default_cell_border_handler
 
 TableGetCellBorderHandler
 gnc_table_model_get_cell_border_handler (TableModel *model,
-                                      const char * cell_name)
+                                         const char * cell_name)
 {
   g_return_val_if_fail (model != NULL, NULL);
 
@@ -452,4 +452,66 @@ gnc_table_model_get_confirm_handler (TableModel *model,
 
   return gnc_table_model_handler_hash_lookup (model->confirm_handlers,
                                               cell_name);
+}
+
+void
+gnc_table_model_set_save_handler
+                                 (TableModel *model,
+                                  TableSaveHandler save_handler,
+                                  const char * cell_name)
+{
+  g_return_if_fail (model != NULL);
+  g_return_if_fail (cell_name != NULL);
+
+  gnc_table_model_handler_hash_insert (model->save_handlers,
+                                       cell_name,
+                                       save_handler);
+}
+
+void
+gnc_table_model_set_pre_save_handler
+                                 (TableModel *model,
+                                  TableSaveHandler save_handler)
+{
+  g_return_if_fail (model != NULL);
+
+  model->pre_save_handler = save_handler;
+}
+
+void
+gnc_table_model_set_post_save_handler
+                                 (TableModel *model,
+                                  TableSaveHandler save_handler)
+{
+  g_return_if_fail (model != NULL);
+
+  model->post_save_handler = save_handler;
+}
+
+TableSaveHandler
+gnc_table_model_get_save_handler
+                                 (TableModel *model,
+                                  const char * cell_name)
+{
+  g_return_val_if_fail (model != NULL, NULL);
+
+  return gnc_table_model_handler_hash_lookup (model->save_handlers, cell_name);
+}
+
+TableSaveHandler
+gnc_table_model_get_pre_save_handler
+                                 (TableModel *model)
+{
+  g_return_val_if_fail (model != NULL, NULL);
+
+  return model->pre_save_handler;
+}
+
+TableSaveHandler
+gnc_table_model_get_post_save_handler
+                                 (TableModel *model)
+{
+  g_return_val_if_fail (model != NULL, NULL);
+
+  return model->post_save_handler;
 }

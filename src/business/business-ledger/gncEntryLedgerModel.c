@@ -589,7 +589,7 @@ static void gnc_entry_ledger_model_new_handlers (TableModel *model)
   model->cell_data_copy = ;
   */
 
-  model->save_handler = gnc_entry_ledger_save_cells;
+  gnc_table_model_set_post_save_handler (model, gnc_entry_ledger_save_cells);
 }
 
 /** Public Interface ***********************************************/

@@ -526,12 +526,39 @@ gnc_table_get_cell_location (Table *table,
 void
 gnc_table_save_cells (Table *table, gpointer save_data)
 {
-  if (!table || !table->model->save_handler)
+  TableSaveHandler save_handler;
+  GList * cells;
+  GList * node;
+
+  if (!table)
     return;
 
   gnc_table_leave_update (table, table->current_cursor_loc);
 
-  table->model->save_handler (save_data, table->model->handler_user_data);
+  save_handler = gnc_table_model_get_pre_save_handler (table->model);
+  if (save_handler)
+    save_handler (save_data, table->model->handler_user_data);
+
+  cells = gnc_table_layout_get_cells (table->layout);
+  for (node = cells; node; node = node->next)
+  {
+    BasicCell * cell = node->data;
+
+    if (!cell) continue;
+
+    if (!gnc_table_layout_get_cell_changed (table->layout,
+                                            cell->cell_name, TRUE))
+      continue;
+
+    save_handler = gnc_table_model_get_save_handler (table->model,
+                                                     cell->cell_name);
+    if (save_handler)
+      save_handler (save_data, table->model->handler_user_data);
+  }
+
+  save_handler = gnc_table_model_get_post_save_handler (table->model);
+  if (save_handler)
+    save_handler (save_data, table->model->handler_user_data);
 }
 
 void 

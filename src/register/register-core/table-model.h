@@ -102,7 +102,9 @@ typedef struct
   GHashTable *cell_border_handlers;
   GHashTable *confirm_handlers;
 
-  TableSaveHandler save_handler;
+  GHashTable *save_handlers;
+  TableSaveHandler pre_save_handler;
+  TableSaveHandler post_save_handler;
 
   gpointer handler_user_data;
 
@@ -206,5 +208,23 @@ void gnc_table_model_set_default_confirm_handler
 TableConfirmHandler gnc_table_model_get_confirm_handler
                                  (TableModel *model,
                                   const char * cell_name);
+
+void gnc_table_model_set_save_handler
+                                 (TableModel *model,
+                                  TableSaveHandler save_handler,
+                                  const char * cell_name);
+void gnc_table_model_set_pre_save_handler
+                                 (TableModel *model,
+                                  TableSaveHandler save_handler);
+void gnc_table_model_set_post_save_handler
+                                 (TableModel *model,
+                                  TableSaveHandler save_handler);
+TableSaveHandler gnc_table_model_get_save_handler
+                                 (TableModel *model,
+                                  const char * cell_name);
+TableSaveHandler gnc_table_model_get_pre_save_handler
+                                 (TableModel *model);
+TableSaveHandler gnc_table_model_get_post_save_handler
+                                 (TableModel *model);
 
 #endif
