@@ -496,8 +496,45 @@ double xaccParseQIFAmount (char * str)
 /********************************************************************\
 \********************************************************************/
 
-Account *
-GetSubQIFAccount (AccountGroup *rootgrp, char *qifline)
+static int
+GuessAccountType (char * qifline)
+{
+   int acc_type = EXPENSE;
+
+   /* Guessing Bank is dangerous, since it could be "Bank Charges"
+    * if (strstr (qifline, "Bank")) {
+    *    acc_type = BANK;
+    * } else
+    */
+
+   if (strstr (qifline, "Bills")) {
+      acc_type = EXPENSE;
+   } else
+
+   if (strstr (qifline, "Cash")) {
+      acc_type = CASH;
+   } else
+
+   if (strstr (qifline, "Income")) {
+      acc_type = INCOME;
+   } else
+
+   if (strstr (qifline, "Card")) {
+      acc_type = CREDIT;
+   } else
+
+   {
+      acc_type = EXPENSE;
+   }
+
+   return acc_type;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+static Account *
+GetSubQIFAccount (AccountGroup *rootgrp, char *qifline, int acc_type)
 {
    Account *xfer_acc;
    char * sub_ptr;
@@ -527,8 +564,8 @@ GetSubQIFAccount (AccountGroup *rootgrp, char *qifline)
       xfer_acc->description = XtNewString ("");
       xfer_acc->notes = XtNewString ("");
 
-      /* by default, assume its an expense-type category */
-      xfer_acc->type = EXPENSE;
+      if (0 > acc_type) acc_type = GuessAccountType (qifline);
+      xfer_acc->type = acc_type;
       insertAccount (rootgrp, xfer_acc);
    }
 
@@ -541,7 +578,7 @@ GetSubQIFAccount (AccountGroup *rootgrp, char *qifline)
          xfer_acc->children = rootgrp;
          rootgrp->parent = xfer_acc;
       }
-      xfer_acc = GetSubQIFAccount (rootgrp, sub_ptr);
+      xfer_acc = GetSubQIFAccount (rootgrp, sub_ptr, acc_type);
    }
    return xfer_acc;
 }
@@ -555,6 +592,7 @@ xaccGetXferQIFAccount (Account *acc, char *qifline)
    Account *xfer_acc;
    AccountGroup *rootgrp;
    char * tmp;
+   int acc_type = -1;
 
    /* remove square brackets from name, remove carriage return ... */
    qifline = &qifline[1];
@@ -562,15 +600,16 @@ xaccGetXferQIFAccount (Account *acc, char *qifline)
       qifline = &qifline[1];
       tmp = strchr (qifline, ']');
       if (tmp) *tmp = 0x0;
+      acc_type = BANK;
    }
    tmp = strchr (qifline, '\r');
    if(tmp) *tmp = 0x0;
    tmp = strchr (qifline, '\n');
    if(tmp) *tmp = 0x0;
 
-   /* see if the account exists */
+   /* see if the account exists, create it if not */
    rootgrp = xaccGetRootGroupOfAcct (acc);
-   xfer_acc = GetSubQIFAccount (rootgrp, qifline);
+   xfer_acc = GetSubQIFAccount (rootgrp, qifline, acc_type);
 
    return xfer_acc;
 }
@@ -597,7 +636,8 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
    tmp = strchr (qifline, '\n');
    if(tmp) *tmp = 0x0;
 
-   /* hack alert -- search for colons in name */
+   /* hack alert -- search for colons in name, do an algorithm
+    * similar to Xfer routine above  */
    /* see if the account exists */
    rootgrp = xaccGetRootGroupOfAcct (acc);
    xfer_acc = xaccGetAccountFromName (rootgrp, qifline);
