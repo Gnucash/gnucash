@@ -1,3 +1,8 @@
+2003-04-24  Christian Stimming  <stimming@tuhh.de>
+
+	* po/ta.po: Initial Tamil translation by Ganesan Rajesh
+	<ganesanrajish@eth.net>.
+
 2003-04-23  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c: Adapt to latest
