@@ -1,3 +1,11 @@
+2001-06-17  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/gnc-commodity-xml-v2.c (set_commodity_value): strip
+	string before setting things.
+
+	* src/engine/io-gncxml-v2.c (gnc_book_write_to_xml_file_v2): check
+	return of fclose.
+
 2001-06-17  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/cursors.c (gnc_set_busy_cursor): fix warning
