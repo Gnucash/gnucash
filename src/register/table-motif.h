@@ -46,14 +46,12 @@ typedef struct _Table {
    * consist of one or more physical rows.
    */
 
-  int num_header_rows;  /* hack alert -- remove this */
   int num_phys_rows;
   int num_phys_cols;
   int num_virt_rows;
   int num_virt_cols;
 
   CellBlock *header;
-  CellBlock **cursors;
 
   CellBlock *current_cursor;
   int current_cursor_row;
@@ -89,6 +87,12 @@ typedef struct _Table {
   int prev_phys_traverse_row;
   int prev_phys_traverse_col;
    
+  /* temporary counters */
+  int cnt_phys_rows;
+  int cnt_phys_cols;
+  int cnt_virt_rows;
+  int cnt_virt_cols;
+
 } Table;
 
 
@@ -111,10 +115,10 @@ void        xaccRefreshTableGUI (Table *);
 void        xaccAddCursor (Table *, CellBlock *);
 
 /* move the cursor (but not the GUI) to the indicated location. */
-void        xaccMoveCursor (Table *, int virt_row, int virt_col);
+void        xaccMoveCursor (Table *, CellBlock *, int virt_row, int virt_col);
 
 /* move the cursor GUI to the indicated location. */
-void        xaccMoveCursorGUI (Table *, int virt_row, int virt_col);
+void        xaccMoveCursorGUI (Table *, CellBlock *, int virt_row, int virt_col);
 
 /* copy text in the cursor cells to the table */
 void        xaccCommitCursor (Table *);

@@ -71,7 +71,11 @@ xaccInitTable (Table * table)
    table->num_phys_cols = 0;
    table->num_virt_rows = 0;
    table->num_virt_cols = 0;
-   table->num_header_rows = 0;
+
+   table->cnt_phys_rows = 0;
+   table->cnt_phys_cols = 0;
+   table->cnt_virt_rows = 0;
+   table->cnt_virt_cols = 0;
 
    table->current_cursor = NULL;
    table->current_cursor_row = -1;
@@ -81,7 +85,6 @@ xaccInitTable (Table * table)
    table->client_data = NULL;
 
    table->header = NULL;
-   table->cursors = NULL;
    table->entries = NULL;
    table->user_data = NULL;
 
@@ -113,7 +116,7 @@ xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
 
 /* ==================================================== */
 
-void xaccMoveCursor (Table *table, int virt_row, int virt_col)
+void xaccMoveCursor (Table *table, CellBlock *curs, int phys_row, int phys_col)
 {
    int i,j;
    int iphys,jphys;
@@ -124,8 +127,8 @@ void xaccMoveCursor (Table *table, int virt_row, int virt_col)
       (table->move_cursor) (table, table->client_data);
    }
 
-   table->current_cursor_row = virt_row;
-   table->current_cursor_col = virt_col;
+   table->current_cursor_row = phys_row;
+   table->current_cursor_col = phys_col;
    table->cursor->user_data = NULL;
 
    if ((0 > virt_row) || (0 > virt_col)) return;
@@ -785,7 +788,7 @@ xaccCreateTable (Table *table, Widget parent, char * name)
 
    table->table_widget = reg;
 
-   /* if any of the cells have GUI specific compnents that need 
+   /* if any of the cells have GUI specific components that need 
     * initialization, initialize them now. */
 
    curs = table->cursor;

@@ -31,108 +31,124 @@
 #include "table-allgui.h"
 
 /* ==================================================== */
+/* in C, we don't have templates. So cook up a $define that acts like a
+ * template.  This one will resize a 2D array.
+ */
+
+#define RESIZE_ARR(table_rows,table_cols,new_rows,new_cols,arr,type,null_val) \
+{									\
+   int old_rows, old_cols;						\
+   int i,j;								\
+									\
+   /* save old table size */						\
+   old_rows = table_rows;						\
+   old_cols = table_cols;						\
+									\
+   table_rows = new_rows;						\
+   table_cols = new_cols;						\
+									\
+   /* realloc to get the new table size.  Note that the */		\
+   /* new table may be wider or slimmer, taller or shorter. */		\
+   if (old_rows >= new_rows) {						\
+      if (old_cols >= new_cols) {					\
+									\
+         /* if we are here, new table has fewer cols */			\
+         /* simply truncate columns */					\
+         for (i=0; i<new_rows; i++) {					\
+            for (j=new_cols; j<old_cols; j++) {				\
+               free (arr[i][j]);					\
+               arr[i][j] = NULL;					\
+            }								\
+         }								\
+      } else {								\
+									\
+         /* if we are here, the new table has more */			\
+         /* columns. Realloc the columns.  */				\
+         for (i=0; i<new_rows; i++) {					\
+            type **old_row;						\
+									\
+            old_row = arr[i];						\
+            arr[i] = (type **) malloc (new_cols * sizeof (type *));	\
+            for (j=0; j<old_cols; j++) {				\
+               arr[i][j] = old_row[j];					\
+            }								\
+            for (j=old_cols; j<new_cols; j++) {				\
+               arr[i][j] = null_val;					\
+            }								\
+            free (old_row);						\
+         }								\
+      }									\
+									\
+      /* new table has fewer rows.  Simply truncate the rows */		\
+      for (i=new_rows; i<old_rows; i++) {				\
+         for (j=0; j<old_cols; j++) {					\
+            free (arr[i][j]);						\
+         }								\
+         free (arr[i]);							\
+         arr[i] = NULL;							\
+      }									\
+									\
+   } else {								\
+      type ***old_entries;						\
+									\
+      if (old_cols >= new_cols) {					\
+									\
+         /* new table has fewer columns. */ 				\
+         /* Simply truncate the columns  */				\
+         for (i=0; i<old_rows; i++) {					\
+            for (j=new_cols; j<old_cols; j++) {				\
+               free (arr[i][j]);					\
+               arr[i][j] = NULL;					\
+            }								\
+         }								\
+      } else {								\
+									\
+         /* if we are here, the new table has more */			\
+         /* columns. Realloc the columns.  */				\
+         for (i=0; i<old_rows; i++) {					\
+            type **old_row;						\
+									\
+            old_row = arr[i];						\
+            arr[i] = (type **) malloc (new_cols * sizeof (type *));	\
+            for (j=0; j<old_cols; j++) {				\
+               arr[i][j] = old_row[j];					\
+            }								\
+            for (j=old_cols; j<new_cols; j++) {				\
+               arr[i][j] = null_val;					\
+            }								\
+            free (old_row);						\
+         }								\
+      }									\
+									\
+      /* now, add all new rows */					\
+      old_entries = arr;						\
+      arr = (type ***) malloc (new_rows * sizeof (type **));		\
+      for (i=0; i<old_rows; i++) {					\
+         arr[i] = old_entries[i];					\
+      }									\
+      if (old_entries) free (old_entries);				\
+									\
+      for (i=old_rows; i<new_rows; i++) {				\
+         arr[i] = (type **) malloc (new_cols * sizeof (type *));	\
+         for (j=0; j<new_cols; j++) {					\
+            arr[i][j] = null_val;					\
+         }								\
+      }									\
+   }									\
+}
+
+/* ==================================================== */
 
 void 
-xaccTableResizeStringArr (Table * table, int num_phys_rows, int num_phys_cols)
+xaccTableResizeStringArr (Table * table, int new_phys_rows, int new_phys_cols)
 {
-   int old_phys_rows, old_phys_cols;
-   int i,j;
-
-   /* save old table size */
-   old_phys_rows = table->num_phys_rows;
-   old_phys_cols = table->num_phys_cols;
-
-   table->num_phys_rows = num_phys_rows;
-   table->num_phys_cols = num_phys_cols;
-
-   /* realloc to get the new table size.  Note that the
-    * new table may be wider or slimmer, taller or shorter. */
-   if (old_phys_rows >= num_phys_rows) {
-      if (old_phys_cols >= num_phys_cols) {
-
-         /* if we are here, new table has fewer cols 
-          * simply truncate columns */
-         for (i=0; i<num_phys_rows; i++) {
-            for (j=num_phys_cols; j<old_phys_cols; j++) {
-               free (table->entries[i][j]);
-               table->entries[i][j] = NULL;
-            }
-         }
-      } else {
-
-         /* if we are here, the new table has more
-          * columns. Realloc the columns.  */
-         for (i=0; i<num_phys_rows; i++) {
-            char **old_row;
-
-            old_row = table->entries[i];
-            table->entries[i] = (char **) malloc (num_phys_cols * sizeof (char *));
-            for (j=0; j<old_phys_cols; j++) {
-               table->entries[i][j] = old_row[j];
-            }
-            for (j=old_phys_cols; j<num_phys_cols; j++) {
-               table->entries[i][j] = strdup ("");
-            }
-            free (old_row);
-         }
-      }
-
-      /* new table has fewer rows.  Simply truncate the rows */
-      for (i=num_phys_rows; i<old_phys_rows; i++) {
-         for (j=0; j<old_phys_cols; j++) {
-            free (table->entries[i][j]);
-         }
-         free (table->entries[i]);
-         table->entries[i] = NULL;
-      }
-
-   } else {
-      char ***old_entries;
-
-      if (old_phys_cols >= num_phys_cols) {
-
-         /* new table has fewer columns. 
-          * Simply truncate the columns */
-         for (i=0; i<old_phys_rows; i++) {
-            for (j=num_phys_cols; j<old_phys_cols; j++) {
-               free (table->entries[i][j]);
-               table->entries[i][j] = NULL;
-            }
-         }
-      } else {
-
-         /* if we are here, the new table has more
-          * columns. Realloc the columns.  */
-         for (i=0; i<old_phys_rows; i++) {
-            char **old_row;
-
-            old_row = table->entries[i];
-            table->entries[i] = (char **) malloc (num_phys_cols * sizeof (char *));
-            for (j=0; j<old_phys_cols; j++) {
-               table->entries[i][j] = old_row[j];
-            }
-            for (j=old_phys_cols; j<num_phys_cols; j++) {
-               table->entries[i][j] = strdup ("");
-            }
-            free (old_row);
-         }
-      }
-
-      /* now, add all new rows */
-      old_entries = table->entries;
-      table->entries = (char ***) malloc (num_phys_rows * sizeof (char **));
-      for (i=0; i<old_phys_rows; i++) {
-         table->entries[i] = old_entries[i];
-      }
-      if (old_entries) free (old_entries);
-
-      for (i=old_phys_rows; i<num_phys_rows; i++) {
-         table->entries[i] = (char **) malloc (num_phys_cols * sizeof (char *));
-         for (j=0; j<num_phys_cols; j++) {
-            table->entries[i][j] = strdup ("");
-         }
-      }
-   }
+   RESIZE_ARR ((table->num_phys_rows),
+               (table->num_phys_cols),
+               new_phys_rows,
+               new_phys_cols,
+               (table->entries),
+               char,
+               (strdup ("")));
 }
 
 /* ==================================================== */
@@ -140,99 +156,29 @@ xaccTableResizeStringArr (Table * table, int num_phys_rows, int num_phys_cols)
 void 
 xaccTableResizeUserData (Table * table, int new_virt_rows, int new_virt_cols)
 {
-   int old_virt_rows, old_virt_cols;
-   int i,j;
+   RESIZE_ARR ((table->num_virt_rows),
+               (table->num_virt_cols),
+               new_virt_rows,
+               new_virt_cols,
+               (table->user_data),
+               void,
+               (NULL));
+}
 
-   /* save old table size */
-   old_virt_rows = table->num_virt_rows;
-   old_virt_cols = table->num_virt_cols;
+/* ==================================================== */
 
-   table->num_virt_rows = new_virt_rows;
-   table->num_virt_cols = new_virt_cols;
+void
+xaccTableCount (Table *table, CellBlock *curse)
+{
+   if (!table) return;
+   if (!curse) return;
+   
+   /* increment rows */
+   table->cnt_phys_rows += curse->numRows;
+   table->cnt_virt_rows ++;
 
-   /* realloc to get the new table size.  Note that the
-    * new table may be wider or slimmer, taller or shorter. */
-   if (old_virt_rows >= new_virt_rows) {
-      if (old_virt_cols >= new_virt_cols) {
-
-         /* if we are here, new table has fewer cols 
-          * simply truncate columns */
-         for (i=0; i<new_virt_rows; i++) {
-            for (j=new_virt_cols; j<old_virt_cols; j++) {
-               table->user_data[i][j] = NULL;
-            }
-         }
-      } else {
-
-         /* if we are here, the new table has more
-          * columns. Realloc the columns.  */
-         for (i=0; i<new_virt_rows; i++) {
-            void **old_row;
-
-            old_row = table->user_data[i];
-            table->user_data[i] = (void **) malloc (new_virt_cols * sizeof (void *));
-            for (j=0; j<old_virt_cols; j++) {
-               table->user_data[i][j] = old_row[j];
-            }
-            for (j=old_virt_cols; j<new_virt_cols; j++) {
-               table->user_data[i][j] = NULL;
-            }
-            free (old_row);
-         }
-      }
-
-      /* new table has fewer rows.  Simply truncate the rows */
-      for (i=new_virt_rows; i<old_virt_rows; i++) {
-         free (table->user_data[i]);
-         table->user_data[i] = NULL;
-      }
-
-   } else {
-      void ***old_user_data;
-
-      if (old_virt_cols >= new_virt_cols) {
-
-         /* new table has fewer columns. 
-          * Simply truncate the columns */
-         for (i=0; i<old_virt_rows; i++) {
-            for (j=new_virt_cols; j<old_virt_cols; j++) {
-               table->user_data[i][j] = NULL;
-            }
-         }
-      } else {
-
-         /* if we are here, the new table has more
-          * columns. Realloc the columns.  */
-         for (i=0; i<old_virt_rows; i++) {
-            void **old_row;
-
-            old_row = table->user_data[i];
-            table->user_data[i] = (void **) malloc (new_virt_cols * sizeof (void *));
-            for (j=0; j<old_virt_cols; j++) {
-               table->user_data[i][j] = old_row[j];
-            }
-            for (j=old_virt_cols; j<new_virt_cols; j++) {
-               table->user_data[i][j] = NULL;
-            }
-            free (old_row);
-         }
-      }
-
-      /* now, add all new rows */
-      old_user_data = table->user_data;
-      table->user_data = (void ***) malloc (new_virt_rows * sizeof (void **));
-      for (i=0; i<old_virt_rows; i++) {
-         table->user_data[i] = old_user_data[i];
-      }
-      if (old_user_data) free (old_user_data);
-
-      for (i=old_virt_rows; i<new_virt_rows; i++) {
-         table->user_data[i] = (void **) malloc (new_virt_cols * sizeof (void *));
-         for (j=0; j<new_virt_cols; j++) {
-            table->user_data[i][j] = NULL;
-         }
-      }
-   }
+   /* copy columns */
+   table->cnt_phys_cols = curse->numCols;
 }
 
 /* ==================================================== */
@@ -240,38 +186,6 @@ xaccTableResizeUserData (Table * table, int new_virt_rows, int new_virt_cols)
 void
 xaccAddCursor (Table *table, CellBlock *curs)
 {
-   CellBlock **old_arr;
-   size_t ncurs = 0;
-
-   /* count the old number of entries */
-   if (table->cursors) {
-      CellBlock *tmp = table->cursors[0];
-      while (tmp) {
-         ncurs ++;
-         tmp = table->cursors[ncurs];
-      }
-   }
-   old_arr = table->cursors;
-
-   /* malloc the list of new handlers */
-   table->cursors = (CellBlock **) malloc ((ncurs+2) * sizeof (CellBlock *));
-
-   /* copy the old array to the new array */
-   ncurs = 0;
-   if (old_arr) {
-      CellBlock *tmp = old_arr[0];
-      while (tmp) {
-         table->cursors[ncurs] = tmp;
-         ncurs ++;
-         tmp = old_arr[ncurs];
-      }
-   }
-
-   /* append the new cursor to the list */
-   table->cursors[ncurs] = curs;
-   table->cursors[ncurs+1] = NULL;
-
-   free (old_arr);
 }
 
 /* ================== end of file ======================= */

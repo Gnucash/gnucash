@@ -50,6 +50,10 @@ xaccTableResizeUserData (Table * table, int new_virt_rows, int new_virt_cols);
 extern void 
 xaccAddCursor (Table *table, CellBlock *curs);
 
+/* count the number of phys rows we'll need, in prep for the malloc */
+extern void
+xaccTableCount (Table *table, CellBlock *curs);
+
 #endif /* __XACC_TABLE_ALLGUI_H__ */
 
 /* ================== end of file ======================= */
