@@ -1719,7 +1719,7 @@ xaccTransSetDateEnteredSecs (Transaction *trans, time_t secs)
 void
 xaccTransSetDateTS (Transaction *trans, const Timespec *ts)
 {
-   if (!trans) return;
+   if (!trans || !ts) return;
    CHECK_OPEN (trans);
    DEBUGCMD ({
          time_t sicko = ts->tv_sec;
@@ -1734,7 +1734,7 @@ xaccTransSetDateTS (Transaction *trans, const Timespec *ts)
 void
 xaccTransSetDateEnteredTS (Transaction *trans, const Timespec *ts)
 {
-   if (!trans) return;
+   if (!trans || !ts) return;
    CHECK_OPEN (trans);
 
    trans->date_entered.tv_sec = ts->tv_sec;
@@ -1781,9 +1781,9 @@ gnc_dmy2timespec(int day, int month, int year) {
   return(result);
 }
 
-
 void
-xaccTransSetDate (Transaction *trans, int day, int mon, int year) {
+xaccTransSetDate (Transaction *trans, int day, int mon, int year) 
+{
   Timespec ts = gnc_dmy2timespec(day, mon, year);
   xaccTransSetDateTS (trans, &ts);
 }
@@ -2022,7 +2022,7 @@ xaccSplitSetDateReconciledSecs (Split *split, time_t secs)
 void
 xaccSplitSetDateReconciledTS (Split *split, Timespec *ts)
 {
-   if (!split) return;
+   if (!split || !ts) return;
    MARK_SPLIT (split);
 
    split->date_reconciled = *ts;
