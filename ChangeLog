@@ -1,3 +1,12 @@
+2000-04-03  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-register.c: changed menu definitions to be
+	statically allocated.
+	* src/gnome/window-main.c: ditto
+
+	* src/SplitLedger.c: added extra checks for boundary conditions.
+	When refreshing, try to go to the same cell offset as before.
+
 2000-04-01  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/SplitLedger.c: more generalizations needed for general

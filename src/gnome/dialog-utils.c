@@ -913,3 +913,28 @@ gnc_save_window_size(const char *prefix, int width, int height)
     gnc_set_option_default("__gui", name);
   g_free(name);
 }
+
+void
+gnc_fill_menu_with_data(GnomeUIInfo *info, gpointer data)
+{
+  if (info == NULL)
+    return;
+
+  while (1)
+  {
+    switch (info->type)
+    {
+      case GNOME_APP_UI_RADIOITEMS:
+      case GNOME_APP_UI_SUBTREE:
+        gnc_fill_menu_with_data((GnomeUIInfo *) info->moreinfo, data);
+        break;
+      case GNOME_APP_UI_ENDOFINFO:
+        return;
+      default:
+        info->user_data = data;
+        break;
+    }
+
+    info++;
+  }
+}

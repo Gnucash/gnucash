@@ -142,8 +142,8 @@ the account instead of opening a register." #f))
         #(double_line "Double Line"
                       "Show transactions on two lines with more information")
         #(multi_line  "Multi Line" "Show transactions on multiple lines with one line for each split in the transaction")
-        #(auto_single "Auto Single" "Single line mode with multi-line cursor")
-        #(auto_double "Auto Double" "Double line mode with multi-line cursor")
+        #(auto_single "Auto Single" "Single line mode with a multi-line cursor")
+        #(auto_double "Auto Double" "Double line mode with a multi-line cursor")
         )))
 
 (gnc:register-configuration-option

@@ -390,10 +390,11 @@ LedgerMoveCursor (Table *table,
       (info->pending_trans == trans) &&
       (trans != new_trans))
   {
-     xaccTransCommitEdit (trans);
-     info->pending_trans = NULL;
-     pending_trans = NULL;
-     saved = GNC_T;
+    if (xaccTransIsOpen(trans))
+      xaccTransCommitEdit (trans);
+    info->pending_trans = NULL;
+    pending_trans = NULL;
+    saved = GNC_T;
   }
   else
     pending_trans = info->pending_trans;
@@ -609,7 +610,7 @@ static Transaction *
 xaccSRGetTrans (SplitRegister *reg, int phys_row, int phys_col)
 {
   Split *split;
-  int vr, vc;
+  int virt_row, virt_col;
 
   if (reg == NULL)
     return NULL;
@@ -625,15 +626,16 @@ xaccSRGetTrans (SplitRegister *reg, int phys_row, int phys_col)
 
   /* Split is blank. Assume it is the blank split of a multi-line
    * transaction. Go back one row to find a split in the transaction. */
-  vr = reg->table->locators[phys_row][phys_col]->virt_row;
-  vc = reg->table->locators[phys_row][phys_col]->virt_col;
-  vr --;
-  if ((0 > vr) || (0 > vc)) {
+  virt_row = reg->table->locators[phys_row][phys_col]->virt_row;
+  virt_col = reg->table->locators[phys_row][phys_col]->virt_col;
+
+  virt_row --;
+  if ((0 > virt_row) || (0 > virt_col)) {
     PERR ("Internal Error: xaccSRGetTrans(): bad row \n");
     return NULL;
   }
 
-  split = (Split *) reg->table->user_data[vr][vc];
+  split = (Split *) reg->table->user_data[virt_row][virt_col];
   if (split == NULL) {
     PERR ("Internal Error: xaccSRGetTrans(): no parent \n");
     return NULL;
@@ -648,8 +650,8 @@ Transaction *
 xaccSRGetCurrentTrans (SplitRegister *reg)
 {
   Split *split;
-  int pr, pc;
-  int vr, vc;
+  int phys_row, phys_col;
+  int virt_row, virt_col;
 
   if (reg == NULL)
     return NULL;
@@ -660,17 +662,24 @@ xaccSRGetCurrentTrans (SplitRegister *reg)
 
   /* Split is blank. Assume it is the blank split of a multi-line
    * transaction. Go back one row to find a split in the transaction. */
-  pr = reg->table->current_cursor_phys_row;
-  pc = reg->table->current_cursor_phys_col;
-  vr = reg->table->locators[pr][pc]->virt_row;
-  vc = reg->table->locators[pr][pc]->virt_col;
-  vr --;
-  if ((0 > vr) || (0 > vc)) {
+  phys_row = reg->table->current_cursor_phys_row;
+  phys_col = reg->table->current_cursor_phys_col;
+
+  if ((phys_row < 0) || (phys_col < 0) ||
+      (phys_row >= reg->table->num_phys_rows) ||
+      (phys_col >= reg->table->num_phys_cols))
+    return NULL;
+
+  virt_row = reg->table->locators[phys_row][phys_col]->virt_row;
+  virt_col = reg->table->locators[phys_row][phys_col]->virt_col;
+
+  virt_row --;
+  if ((0 > virt_row) || (0 > virt_col)) {
     PERR ("Internal Error: xaccSRGetCurrentTrans(): bad row \n");
     return NULL;
   }
 
-  split = (Split *) reg->table->user_data[vr][vc];
+  split = (Split *) reg->table->user_data[virt_row][virt_col];
 
   return xaccSplitGetParent(split);
 }

@@ -151,4 +151,6 @@ char gnc_get_account_separator();
 void gnc_get_window_size(const char *prefix, int *width, int *height);
 void gnc_save_window_size(const char *prefix, int width, int height);
 
+void gnc_fill_menu_with_data(GnomeUIInfo *info, gpointer data);
+
 #endif

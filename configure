@@ -1464,7 +1464,7 @@ else
 fi
 
 
-GNC_EXPANDED_LOCALE_DIR=$(gnc_recursively_expand_var "${GNC_LOCALE_DIR}")
+GNC_EXPANDED_LOCALE_DIR=$(gnc_recursively_expand_var "${LOCALE_DIR}")
 
 
 

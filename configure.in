@@ -111,7 +111,7 @@ AC_ARG_WITH( locale-dir,
   LOCALE_DIR="$with_locale_dir",
   LOCALE_DIR="$prefix/share/locale")
 
-GNC_EXPANDED_LOCALE_DIR=$(gnc_recursively_expand_var "${GNC_LOCALE_DIR}")
+GNC_EXPANDED_LOCALE_DIR=$(gnc_recursively_expand_var "${LOCALE_DIR}")
 
 AC_SUBST(LOCALE_DIR)
 AC_SUBST(GNC_EXPANDED_LOCALE_DIR)

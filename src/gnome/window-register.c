@@ -751,25 +751,26 @@ static GtkWidget *
 gnc_register_create_tool_bar(RegWindow *regData)
 {
   GtkWidget *toolbar;
-  GnomeUIInfo toolbar_info[] =
+
+  static GnomeUIInfo toolbar_info[] =
   {
     {
       GNOME_APP_UI_ITEM,
-      RECORD_STR, TOOLTIP_RECORD,
+      RECORD_STR_N, TOOLTIP_RECORD_N,
       recordCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_ADD,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      CANCEL_STR, TOOLTIP_CANCEL_TRANS,
+      CANCEL_STR_N, TOOLTIP_CANCEL_TRANS_N,
       cancelCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_UNDELETE,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      DELETE_STR, TOOLTIP_DEL_TRANS,
+      DELETE_STR_N, TOOLTIP_DEL_TRANS_N,
       deleteCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_TRASH,
       0, 0, NULL
@@ -777,7 +778,7 @@ gnc_register_create_tool_bar(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      DUPLICATE_STR, TOOLTIP_DUP_TRANS,
+      DUPLICATE_STR_N, TOOLTIP_DUP_TRANS_N,
       duplicateCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_COPY,
       0, 0, NULL
@@ -785,14 +786,14 @@ gnc_register_create_tool_bar(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      BLANK_STR, TOOLTIP_BLANK_TRANS,
+      BLANK_STR_N, TOOLTIP_BLANK_TRANS_N,
       new_trans_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_NEW,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      JUMP_STR, TOOLTIP_JUMP_TRANS,
+      JUMP_STR_N, TOOLTIP_JUMP_TRANS_N,
       jump_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_JUMP_TO,
       0, 0, NULL
@@ -800,7 +801,7 @@ gnc_register_create_tool_bar(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      TRANSFER_STR, TOOLTIP_TRANSFER,
+      TRANSFER_STR_N, TOOLTIP_TRANSFER_N,
       xferCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_CONVERT,
       0, 0, NULL
@@ -808,7 +809,7 @@ gnc_register_create_tool_bar(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      CLOSE_STR, TOOLTIP_CLOSE_REG,
+      CLOSE_STR_N, TOOLTIP_CLOSE_REG_N,
       closeCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_CLOSE,
       0, 0, NULL
@@ -998,123 +999,123 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
   GtkWidget *menubar;
   GtkAccelGroup *accel_group;
 
-  GnomeUIInfo style_list[] =
+  static GnomeUIInfo style_list[] =
   {
-    GNOMEUIINFO_RADIOITEM_DATA(SINGLE_LINE_STR, TOOLTIP_SINGLE_LINE,
-                               gnc_register_style_single_cb, regData, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(DOUBLE_LINE_STR, TOOLTIP_DOUBLE_LINE,
-                               gnc_register_style_double_cb, regData, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(MULTI_LINE_STR, TOOLTIP_MULTI_LINE,
-                               gnc_register_style_multi_cb, regData, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(AUTO_SINGLE_STR, TOOLTIP_AUTO_SINGLE,
+    GNOMEUIINFO_RADIOITEM_DATA(SINGLE_LINE_STR_N, TOOLTIP_SINGLE_LINE_N,
+                               gnc_register_style_single_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(DOUBLE_LINE_STR_N, TOOLTIP_DOUBLE_LINE_N,
+                               gnc_register_style_double_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(MULTI_LINE_STR_N, TOOLTIP_MULTI_LINE_N,
+                               gnc_register_style_multi_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(AUTO_SINGLE_STR_N, TOOLTIP_AUTO_SINGLE_N,
                                gnc_register_style_auto_single_cb,
-                               regData, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(AUTO_DOUBLE_STR, TOOLTIP_AUTO_DOUBLE,
+                               NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(AUTO_DOUBLE_STR_N, TOOLTIP_AUTO_DOUBLE_N,
                                gnc_register_style_auto_double_cb,
-                               regData, NULL),
+                               NULL, NULL),
     GNOMEUIINFO_END
   };
 
-  GnomeUIInfo style_menu[] =
+  static GnomeUIInfo style_menu[] =
   {
     GNOMEUIINFO_RADIOLIST(style_list),
     GNOMEUIINFO_END
   };
 
-  GnomeUIInfo sort_list[] =
+  static GnomeUIInfo sort_list[] =
   {
-    GNOMEUIINFO_RADIOITEM_DATA(STANDARD_ORDER_STR, TOOLTIP_STANDARD_ORD,
-                               gnc_register_sort_standard_cb, regData, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_DATE_STR, TOOLTIP_SORT_BY_DATE,
-                               gnc_register_sort_date_cb, regData, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_NUM_STR, TOOLTIP_SORT_BY_NUM,
-                               gnc_register_sort_num_cb, regData, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_AMNT_STR, TOOLTIP_SORT_BY_AMNT,
-                               gnc_register_sort_amount_cb, regData, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_MEMO_STR, TOOLTIP_SORT_BY_MEMO,
-                               gnc_register_sort_memo_cb, regData, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_DESC_STR, TOOLTIP_SORT_BY_DESC,
-                               gnc_register_sort_desc_cb, regData, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(STANDARD_ORDER_STR_N, TOOLTIP_STANDARD_ORD_N,
+                               gnc_register_sort_standard_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_DATE_STR_N, TOOLTIP_SORT_BY_DATE_N,
+                               gnc_register_sort_date_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_NUM_STR_N, TOOLTIP_SORT_BY_NUM_N,
+                               gnc_register_sort_num_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_AMNT_STR_N, TOOLTIP_SORT_BY_AMNT_N,
+                               gnc_register_sort_amount_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_MEMO_STR_N, TOOLTIP_SORT_BY_MEMO_N,
+                               gnc_register_sort_memo_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_DESC_STR_N, TOOLTIP_SORT_BY_DESC_N,
+                               gnc_register_sort_desc_cb, NULL, NULL),
     GNOMEUIINFO_END
   };
 
-  GnomeUIInfo sort_menu[] =
+  static GnomeUIInfo sort_menu[] =
   {
     GNOMEUIINFO_RADIOLIST(sort_list),
     GNOMEUIINFO_END
   };
 
-  GnomeUIInfo date_menu[] =
+  static GnomeUIInfo date_menu[] =
   {
     {
       GNOME_APP_UI_ITEM,
-      SHOW_ALL_MENU_STR, TOOLTIP_SHOW_ALL,
-      show_all_cb, regData, NULL,
+      SHOW_ALL_MENU_STR_N, TOOLTIP_SHOW_ALL_N,
+      show_all_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      SET_RANGE_MENU_E_STR, TOOLTIP_DATE_RANGE,
-      dateCB, regData, NULL,
+      SET_RANGE_MENU_E_STR_N, TOOLTIP_DATE_RANGE_N,
+      dateCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     GNOMEUIINFO_END
   };
 
-  GnomeUIInfo register_menu[] =
+  static GnomeUIInfo register_menu[] =
   {
-    GNOMEUIINFO_SUBTREE(STYLE_MENU_STR, style_menu),
-    GNOMEUIINFO_SUBTREE(SORT_ORDER_MENU_STR, sort_menu),
-    GNOMEUIINFO_SUBTREE(DATE_RANGE_MENU_STR, date_menu),
+    GNOMEUIINFO_SUBTREE(STYLE_MENU_STR_N, style_menu),
+    GNOMEUIINFO_SUBTREE(SORT_ORDER_MENU_STR_N, sort_menu),
+    GNOMEUIINFO_SUBTREE(DATE_RANGE_MENU_STR_N, date_menu),
     GNOMEUIINFO_SEPARATOR,
-    GNOMEUIINFO_MENU_CLOSE_ITEM(closeCB, regData),
+    GNOMEUIINFO_MENU_CLOSE_ITEM(closeCB, NULL),
     GNOMEUIINFO_END
   };
 
-  GnomeUIInfo edit_menu[] =
+  static GnomeUIInfo edit_menu[] =
   {
-    GNOMEUIINFO_MENU_CUT_ITEM(cutCB, regData),
-    GNOMEUIINFO_MENU_COPY_ITEM(copyCB, regData),
-    GNOMEUIINFO_MENU_PASTE_ITEM(pasteCB, regData),
+    GNOMEUIINFO_MENU_CUT_ITEM(cutCB, NULL),
+    GNOMEUIINFO_MENU_COPY_ITEM(copyCB, NULL),
+    GNOMEUIINFO_MENU_PASTE_ITEM(pasteCB, NULL),
   };
 
-  GnomeUIInfo account_menu[] =
+  static GnomeUIInfo account_menu[] =
   {
     {
       GNOME_APP_UI_ITEM,
-      EDIT_ACC_MENU_STR, TOOLTIP_EDIT_REG,
-      editCB, regData, NULL,
+      EDIT_ACC_MENU_STR_N, TOOLTIP_EDIT_REG_N,
+      editCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      RECONCILE_MENU_E_STR, TOOLTIP_RECN_REG,
-      startRecnCB, regData, NULL,
+      RECONCILE_MENU_E_STR_N, TOOLTIP_RECN_REG_N,
+      startRecnCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      TRANSFER_MENU_E_STR, TOOLTIP_TRANSFER,
-      xferCB, regData, NULL,
+      TRANSFER_MENU_E_STR_N, TOOLTIP_TRANSFER_N,
+      xferCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      ADJ_BALN_MENU_E_STR, TOOLTIP_ADJUST_REG,
-      startAdjBCB, regData, NULL,
+      ADJ_BALN_MENU_E_STR_N, TOOLTIP_ADJUST_REG_N,
+      startAdjBCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      NEW_ACC_MENU_E_STR, TOOLTIP_NEW,
+      NEW_ACC_MENU_E_STR_N, TOOLTIP_NEW_N,
       newAccountCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1122,76 +1123,76 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      SCRUB_MENU_STR, TOOLTIP_SCRUB_REG,
-      gnc_register_scrub_cb, regData, NULL,
+      SCRUB_MENU_STR_N, TOOLTIP_SCRUB_REG_N,
+      gnc_register_scrub_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     GNOMEUIINFO_END
   };
 
-  GnomeUIInfo transaction_menu[] =
+  static GnomeUIInfo transaction_menu[] =
   {
     {
       GNOME_APP_UI_ITEM,
-      RECORD_MENU_STR, TOOLTIP_RECORD,
-      recordCB, regData, NULL,
+      RECORD_MENU_STR_N, TOOLTIP_RECORD_N,
+      recordCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      CANCEL_MENU_STR, TOOLTIP_CANCEL_TRANS,
-      cancelCB, regData, NULL,
+      CANCEL_MENU_STR_N, TOOLTIP_CANCEL_TRANS_N,
+      cancelCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      DELETE_MENU_STR, TOOLTIP_DEL_TRANS,
-      deleteCB, regData, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      DUPLICATE_MENU_STR, TOOLTIP_DUP_TRANS,
-      duplicateCB, regData, NULL,
+      DELETE_MENU_STR_N, TOOLTIP_DEL_TRANS_N,
+      deleteCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      BLANK_MENU_STR, TOOLTIP_BLANK_TRANS,
-      new_trans_cb, regData, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      JUMP_MENU_STR, TOOLTIP_JUMP_TRANS,
-      jump_cb, regData, NULL,
+      DUPLICATE_MENU_STR_N, TOOLTIP_DUP_TRANS_N,
+      duplicateCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      PRINT_CHECK_MENU_STR, TOOLTIP_PRINT_CHECK,
-      print_check_cb, regData, NULL,
+      BLANK_MENU_STR_N, TOOLTIP_BLANK_TRANS_N,
+      new_trans_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      JUMP_MENU_STR_N, TOOLTIP_JUMP_TRANS_N,
+      jump_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      PRINT_CHECK_MENU_E_STR_N, TOOLTIP_PRINT_CHECK_N,
+      print_check_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     GNOMEUIINFO_END
   };
 
-  GnomeUIInfo help_menu[] =
+  static GnomeUIInfo help_menu[] =
   {
     {
       GNOME_APP_UI_ITEM,
-      HELP_MENU_STR, TOOLTIP_HELP,
+      HELP_MENU_STR_N, TOOLTIP_HELP_N,
       helpCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1199,15 +1200,17 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_END
   };
 
-  GnomeUIInfo register_window_menu[] =
+  static GnomeUIInfo register_window_menu[] =
   {
-    GNOMEUIINFO_SUBTREE(REGISTER_MENU_STR, register_menu),
+    GNOMEUIINFO_SUBTREE(REGISTER_MENU_STR_N, register_menu),
     GNOMEUIINFO_MENU_EDIT_TREE(edit_menu),
-    GNOMEUIINFO_SUBTREE(ACCOUNT_MENU_STR, account_menu),
-    GNOMEUIINFO_SUBTREE(TRANSACTION_MENU_STR, transaction_menu),
+    GNOMEUIINFO_SUBTREE(ACCOUNT_MENU_STR_N, account_menu),
+    GNOMEUIINFO_SUBTREE(TRANSACTION_MENU_STR_N, transaction_menu),
     GNOMEUIINFO_MENU_HELP_TREE(help_menu),
     GNOMEUIINFO_END
   };
+
+  gnc_fill_menu_with_data(register_window_menu, regData);
 
   menubar = gtk_menu_bar_new();
 
@@ -1267,54 +1270,56 @@ gnc_register_create_popup_menu(RegWindow *regData)
 {
   GtkWidget *popup;
 
-  GnomeUIInfo transaction_menu[] =
+  static GnomeUIInfo transaction_menu[] =
   {
     {
       GNOME_APP_UI_ITEM,
-      RECORD_MENU_STR, TOOLTIP_RECORD,
-      recordCB, regData, NULL,
+      RECORD_MENU_STR_N, TOOLTIP_RECORD_N,
+      recordCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      CANCEL_MENU_STR, TOOLTIP_CANCEL_TRANS,
-      cancelCB, regData, NULL,
+      CANCEL_MENU_STR_N, TOOLTIP_CANCEL_TRANS_N,
+      cancelCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      DELETE_MENU_STR, TOOLTIP_DEL_TRANS,
-      deleteCB, regData, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      DUPLICATE_MENU_STR, TOOLTIP_DUP_TRANS,
-      duplicateCB, regData, NULL,
+      DELETE_MENU_STR_N, TOOLTIP_DEL_TRANS_N,
+      deleteCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      BLANK_MENU_STR, TOOLTIP_BLANK_TRANS,
-      new_trans_cb, regData, NULL,
+      DUPLICATE_MENU_STR_N, TOOLTIP_DUP_TRANS_N,
+      duplicateCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      BLANK_MENU_STR_N, TOOLTIP_BLANK_TRANS_N,
+      new_trans_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      JUMP_MENU_STR, TOOLTIP_JUMP_TRANS,
-      jump_cb, regData, NULL,
+      JUMP_MENU_STR_N, TOOLTIP_JUMP_TRANS_N,
+      jump_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     GNOMEUIINFO_END
   };
+
+  gnc_fill_menu_with_data(transaction_menu, regData);
 
   popup = gnome_popup_menu_new(transaction_menu);
 

@@ -594,11 +594,11 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
 {
   GSList *list;
 
-  GnomeUIInfo toolbar[] = 
+  static GnomeUIInfo toolbar[] = 
   {
     { GNOME_APP_UI_ITEM,
-      OPEN_STR,
-      TOOLTIP_OPEN_FILE,
+      OPEN_STR_N,
+      TOOLTIP_OPEN_FILE_N,
       gnc_ui_filemenu_cb, 
       GINT_TO_POINTER(FMB_OPEN),
       NULL,
@@ -607,8 +607,8 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
       0, 0, NULL
     },
     { GNOME_APP_UI_ITEM,
-      SAVE_STR,
-      TOOLTIP_SAVE_FILE,
+      SAVE_STR_N,
+      TOOLTIP_SAVE_FILE_N,
       gnc_ui_filemenu_cb, 
       GINT_TO_POINTER(FMB_SAVE),
       NULL,
@@ -617,8 +617,8 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
       0, 0, NULL
     },
     { GNOME_APP_UI_ITEM,
-      IMPORT_STR,
-      TOOLTIP_IMPORT_QIF,
+      IMPORT_STR_N,
+      TOOLTIP_IMPORT_QIF_N,
       gnc_ui_filemenu_cb, 
       GINT_TO_POINTER(FMB_IMPORT),
       NULL,
@@ -628,8 +628,8 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
     },
     GNOMEUIINFO_SEPARATOR,
     { GNOME_APP_UI_ITEM, 
-      OPEN_STR,
-      TOOLTIP_OPEN,
+      OPEN_STR_N,
+      TOOLTIP_OPEN_N,
       gnc_ui_mainWindow_toolbar_open, 
       NULL,
       NULL,
@@ -638,8 +638,8 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
       0, 0, NULL 
     },
     { GNOME_APP_UI_ITEM,
-      EDIT_STR,
-      TOOLTIP_EDIT,
+      EDIT_STR_N,
+      TOOLTIP_EDIT_N,
       gnc_ui_mainWindow_toolbar_edit, 
       NULL,
       NULL,
@@ -649,8 +649,8 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
     },
     GNOMEUIINFO_SEPARATOR,
     { GNOME_APP_UI_ITEM,
-      NEW_STR,
-      TOOLTIP_NEW,
+      NEW_STR_N,
+      TOOLTIP_NEW_N,
       gnc_ui_add_account, 
       NULL,
       NULL,
@@ -659,8 +659,8 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
       0, 0, NULL
     },
     { GNOME_APP_UI_ITEM,
-      DELETE_STR,
-      TOOLTIP_DELETE,
+      DELETE_STR_N,
+      TOOLTIP_DELETE_N,
       gnc_ui_delete_account_cb, 
       NULL,
       NULL,
@@ -670,8 +670,8 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
     },
     GNOMEUIINFO_SEPARATOR,
     { GNOME_APP_UI_ITEM,
-      EXIT_STR,
-      TOOLTIP_EXIT,
+      EXIT_STR_N,
+      TOOLTIP_EXIT_N,
       gnc_ui_exit_cb, 
       NULL,
       NULL,
@@ -700,9 +700,9 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
   GtkWidget *popup;
   GSList *list;
 
-  GnomeUIInfo filemenu[] = {
-    GNOMEUIINFO_MENU_NEW_ITEM(NEW_FILE_STR,
-                              TOOLTIP_NEW_FILE,
+  static GnomeUIInfo filemenu[] = {
+    GNOMEUIINFO_MENU_NEW_ITEM(NEW_FILE_STR_N,
+                              TOOLTIP_NEW_FILE_N,
                               gnc_ui_filemenu_cb,
                               GINT_TO_POINTER(FMB_NEW)),
     GNOMEUIINFO_MENU_OPEN_ITEM(gnc_ui_filemenu_cb,
@@ -714,7 +714,7 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      IMPORT_QIF_E_STR, TOOLTIP_IMPORT_QIF,
+      IMPORT_QIF_E_STR_N, TOOLTIP_IMPORT_QIF_N,
       gnc_ui_filemenu_cb, GINT_TO_POINTER(FMB_IMPORT), NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_CONVERT,
       'i', GDK_CONTROL_MASK, NULL
@@ -725,10 +725,10 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     GNOMEUIINFO_END
   };
 
-  GnomeUIInfo optionsmenu[] = {
+  static GnomeUIInfo optionsmenu[] = {
     {
       GNOME_APP_UI_ITEM,
-      PREFERENCES_MENU_E_STR, TOOLTIP_PREFERENCES,
+      PREFERENCES_MENU_E_STR_N, TOOLTIP_PREFERENCES_N,
       gnc_ui_options_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PREF,
       0, 0, NULL
@@ -736,24 +736,24 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     GNOMEUIINFO_END
   };
 
-  GnomeUIInfo scrubmenu[] = {
+  static GnomeUIInfo scrubmenu[] = {
     {
       GNOME_APP_UI_ITEM,
-      SCRUB_ACC_MENU_STR, TOOLTIP_SCRUB_ACCT,
+      SCRUB_ACC_MENU_STR_N, TOOLTIP_SCRUB_ACCT_N,
       gnc_ui_mainWindow_scrub, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      SCRUB_SUB_MENU_STR, TOOLTIP_SCRUB_SUB,
+      SCRUB_SUB_MENU_STR_N, TOOLTIP_SCRUB_SUB_N,
       gnc_ui_mainWindow_scrub_sub, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      SCRUB_ALL_MENU_STR, TOOLTIP_SCRUB_ALL,
+      SCRUB_ALL_MENU_STR_N, TOOLTIP_SCRUB_ALL_N,
       gnc_ui_mainWindow_scrub_all, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -761,24 +761,24 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     GNOMEUIINFO_END
   };
 
-  GnomeUIInfo accountsmenu[] = {
+  static GnomeUIInfo accountsmenu[] = {
     {
       GNOME_APP_UI_ITEM,
-      OPEN_ACC_MENU_STR, TOOLTIP_OPEN,
+      OPEN_ACC_MENU_STR_N, TOOLTIP_OPEN_N,
       gnc_ui_mainWindow_toolbar_open, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
       'o', GDK_CONTROL_MASK, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      OPEN_SUB_MENU_STR, TOOLTIP_OPEN_SUB,
+      OPEN_SUB_MENU_STR_N, TOOLTIP_OPEN_SUB_N,
       gnc_ui_mainWindow_toolbar_open_subs, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      EDIT_ACC_MENU_STR, TOOLTIP_EDIT,
+      EDIT_ACC_MENU_STR_N, TOOLTIP_EDIT_N,
       gnc_ui_mainWindow_toolbar_edit, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PROP,
       'e', GDK_CONTROL_MASK, NULL
@@ -786,21 +786,21 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      RECONCILE_MENU_E_STR, TOOLTIP_RECONCILE,
+      RECONCILE_MENU_E_STR_N, TOOLTIP_RECONCILE_N,
       gnc_ui_mainWindow_reconcile, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       'r', GDK_CONTROL_MASK, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      TRANSFER_MENU_E_STR, TOOLTIP_TRANSFER,
+      TRANSFER_MENU_E_STR_N, TOOLTIP_TRANSFER_N,
       gnc_ui_mainWindow_transfer, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       't', GDK_CONTROL_MASK, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      ADJ_BALN_MENU_E_STR, TOOLTIP_ADJUST,
+      ADJ_BALN_MENU_E_STR_N, TOOLTIP_ADJUST_N,
       gnc_ui_mainWindow_adjust_balance, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       'b', GDK_CONTROL_MASK, NULL
@@ -808,27 +808,27 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      NEW_ACC_MENU_E_STR, TOOLTIP_NEW,
+      NEW_ACC_MENU_E_STR_N, TOOLTIP_NEW_N,
       gnc_ui_add_account, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_ADD,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      DEL_ACC_MENU_STR, TOOLTIP_DELETE,
+      DEL_ACC_MENU_STR_N, TOOLTIP_DELETE_N,
       gnc_ui_delete_account_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_REMOVE,
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,
-    GNOMEUIINFO_SUBTREE(SCRUB_MENU_STR, scrubmenu),
+    GNOMEUIINFO_SUBTREE(SCRUB_MENU_STR_N, scrubmenu),
     GNOMEUIINFO_END
   };  
 
-  GnomeUIInfo helpmenu[] = {
+  static GnomeUIInfo helpmenu[] = {
     {
       GNOME_APP_UI_ITEM,
-      HELP_MENU_STR, TOOLTIP_HELP,
+      HELP_MENU_STR_N, TOOLTIP_HELP_N,
       gnc_ui_help_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -837,9 +837,9 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     GNOMEUIINFO_END
   };
 
-  GnomeUIInfo mainmenu[] = {
+  static GnomeUIInfo mainmenu[] = {
     GNOMEUIINFO_MENU_FILE_TREE(filemenu),
-    GNOMEUIINFO_SUBTREE(ACCOUNTS_MENU_STR, accountsmenu),
+    GNOMEUIINFO_SUBTREE(ACCOUNTS_MENU_STR_N, accountsmenu),
     GNOMEUIINFO_MENU_SETTINGS_TREE(optionsmenu),
     GNOMEUIINFO_MENU_HELP_TREE(helpmenu),
     GNOMEUIINFO_END
