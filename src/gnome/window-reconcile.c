@@ -733,7 +733,6 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
   xaccTransDestroy(trans);
   xaccTransCommitEdit(trans);
 
-  gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 }
 
@@ -822,7 +821,6 @@ gnc_recn_scrub_cb(GtkWidget *widget, gpointer data)
   xaccAccountTreeScrubOrphans (account);
   xaccAccountTreeScrubImbalance (account);
 
-  gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 }
 

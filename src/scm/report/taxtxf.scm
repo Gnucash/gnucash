@@ -530,7 +530,6 @@
 						payer 
 						(substring str 1 len)))))
 			       (txf-status acc tax-key tax-end-key str))))))
-		(gnc:refresh-main-window)
 		;; make "<" char html compatable
 		(if str
 		    (set! str (string-substitute str "<" "&lt;" 0)))
@@ -719,7 +718,7 @@
 				     '()
 				     (list a))))
 			   accounts))))
-  
+
   ;; Set or Reset key in account notes
   (define (key-status accounts set key end-key kids)
     (let ((key-len (string-length key)))
@@ -746,7 +745,7 @@
 		    (gnc:group-ptr->list (gnc:account-get-children a))
 		    set key end-key #t))))
 	   accounts)))
-  
+
   (define (generate-tax-or-txf report-name
 			       report-description
 			       options
@@ -1010,17 +1009,13 @@
 		 (not-used 
 		  (case tax-stat
 		    ((tax-set)
-		     (key-status user-sel-accnts #t tax-key tax-end-key #f)
-		     (gnc:refresh-main-window))
+		     (key-status user-sel-accnts #t tax-key tax-end-key #f))
 		    ((tax-reset)
-		     (key-status user-sel-accnts #f tax-key tax-end-key #f)
-		     (gnc:refresh-main-window))
+		     (key-status user-sel-accnts #f tax-key tax-end-key #f))
 		    ((tax-set-kids)
-		     (key-status user-sel-accnts #t tax-key tax-end-key #t)
-		     (gnc:refresh-main-window))
+		     (key-status user-sel-accnts #t tax-key tax-end-key #t))
 		    ((tax-reset-kids)
-		     (key-status user-sel-accnts #f tax-key tax-end-key #t)
-		     (gnc:refresh-main-window))))
+		     (key-status user-sel-accnts #f tax-key tax-end-key #t))))
 		 
 		 (txf-fun-str-lst (map (lambda (a) (txf-function 
 						    a txf-income txf-expense

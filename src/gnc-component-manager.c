@@ -21,6 +21,8 @@
 
 #include <stdio.h>
 
+#include "FileDialog.h"
+#include "Group.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 
@@ -585,12 +587,17 @@ gnc_gui_refresh_internal (gboolean force)
   GList *list;
   GList *node;
 
+  if (!got_events && !force)
+    return;
+
 #if CM_DEBUG
   fprintf (stderr, "refresh!\n");
 #endif
 
-  if (!got_events && !force)
-    return;
+  /* is this a bug? if we need this call, this seems the
+   * place to put it. But should the engine keep this up
+   * to date itself? */
+  xaccRecomputeGroupBalance (gncGetCurrentGroup());
 
   list = find_component_ids_by_class (NULL);
 

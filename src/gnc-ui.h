@@ -88,7 +88,6 @@ int      gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
 
 /* Managing the GUI Windows *****************************************/
 
-void gnc_refresh_main_window(void);
 void gnc_ui_destroy_all_subwindows(void);
 
 

@@ -1159,7 +1159,6 @@ gnc_register_scrub_all_cb (GtkWidget *widget, gpointer data)
     xaccTransScrubImbalance (trans, root);
   }
 
-  gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 }
 
@@ -1184,7 +1183,6 @@ gnc_register_scrub_current_cb (GtkWidget *widget, gpointer data)
   xaccTransScrubOrphans (trans, root);
   xaccTransScrubImbalance (trans, root);
 
-  gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 }
 

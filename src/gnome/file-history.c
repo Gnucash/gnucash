@@ -95,7 +95,6 @@ static void
 __gnc_history_file_cb(GtkWidget *w, char *data)
 {
   gncFileOpenFile(data);
-  gnc_refresh_main_window();
 }
 
 void

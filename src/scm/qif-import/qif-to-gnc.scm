@@ -282,8 +282,7 @@
     
     ;; now take the new account tree and merge it in with the 
     ;; existing gnucash account tree. 
-    (gnc:group-merge-accounts account-group)
-    (gnc:refresh-main-window)))
+    (gnc:group-merge-accounts account-group)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

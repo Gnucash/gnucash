@@ -42,7 +42,6 @@ LDADD = \
 gnucash_SOURCES = \
   MultiLedger.c \
   SplitLedger.c \
-  Destroy.c \
   EuroUtils.c \
   FileDialog.c \
   gnc-component-manager.c \
@@ -51,7 +50,6 @@ gnucash_SOURCES = \
 
 noinst_HEADERS = \
   AccWindow.h \
-  Destroy.h \
   EuroUtils.h \
   FileBox.h \
   FileDialog.h \

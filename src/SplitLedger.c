@@ -1129,8 +1129,6 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
 
       xaccSRSaveChangedCells(reg, trans, blank_split);
 
-      gnc_refresh_main_window ();
-
       gnc_resume_gui_refresh ();
 
       /* now move to the non-empty amount column */
@@ -1964,7 +1962,6 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
   }
 
   /* Refresh the GUI. */
-  gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 
   return return_split;
@@ -2233,7 +2230,6 @@ xaccSRPasteCurrent (SplitRegister *reg)
   }
 
   /* Refresh the GUI. */
-  gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 }
 
@@ -2285,7 +2281,6 @@ xaccSRDeleteCurrentSplit (SplitRegister *reg)
     pending_trans = NULL;
   }
 
-  gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 }
 
@@ -2352,7 +2347,6 @@ xaccSRDeleteCurrentTrans (SplitRegister *reg)
     pending_trans = NULL;
   }
 
-  gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 }
 
@@ -2425,7 +2419,6 @@ xaccSREmptyCurrentTrans (SplitRegister *reg)
     pending_trans = NULL;
   }
 
-  gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 
   g_list_free(splits);
@@ -2484,7 +2477,6 @@ xaccSRCancelCursorTransChanges (SplitRegister *reg)
 
   info->pending_trans_guid = *xaccGUIDNULL ();
 
-  gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 }
 
@@ -2493,7 +2485,6 @@ xaccSRCancelCursorTransChanges (SplitRegister *reg)
 void
 xaccSRRedrawReg (SplitRegister *reg) 
 {
-  gnc_refresh_main_window ();
   xaccLedgerDisplayRefreshByReg (reg);
 }
 
@@ -2771,7 +2762,6 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
 
    xaccSplitRegisterClearChangeFlag(reg);
 
-   gnc_refresh_main_window ();
    gnc_resume_gui_refresh ();
 
    return TRUE;

@@ -852,8 +852,6 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     gnc_resume_gui_refresh ();
   }
 
-  gnc_refresh_main_window();
-
   gnc_close_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
 }
 
@@ -1097,27 +1095,4 @@ gnc_xfer_dialog (GtkWidget * parent, Account * initial)
   gnc_window_adjust_for_screen(GTK_WINDOW(xferData->dialog));
 
   return xferData;
-}
-
-
-static void
-destroy_helper (const char *component_class,
-                gint component_id,
-                gpointer iter_data)
-{
-  gnc_close_gui_component (component_id);
-}
-
-/********************************************************************\
- * gnc_ui_destroy_xfer_windows                                      *
- *   destroy all open transfer dialogs                              *
- *                                                                  *
- * Args:   none                                                     *
- * Return: none                                                     *
-\********************************************************************/
-void
-gnc_ui_destroy_xfer_windows (void)
-{
-  gnc_forall_gui_components (DIALOG_TRANSFER_CM_CLASS,
-                             destroy_helper, NULL);
 }

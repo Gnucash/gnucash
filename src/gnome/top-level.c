@@ -32,7 +32,6 @@
 #include <stdlib.h>
 
 #include "AccWindow.h"
-#include "Destroy.h"
 #include "FileBox.h"
 #include "FileDialog.h"
 #include "FileIO.h"
@@ -287,13 +286,13 @@ gnucash_ui_init(void)
   return 0;
 }
 
-static int hasstarted = 0;
+static gboolean hasstarted = FALSE;
 void gnc_default_ui_start(void)
 {
     if(!hasstarted)
     {
         mainWindow();
-        hasstarted = 1;
+        hasstarted = TRUE;
     }
 }
 
@@ -310,18 +309,6 @@ gnc_ui_shutdown (void)
     gtk_widget_hide(app);
     gtk_main_quit();
   }
-}
-
-/* ============================================================== */
-
-void
-gnc_ui_destroy_all_subwindows (void)
-{
-  xaccGroupWindowDestroy(gncGetCurrentGroup());
-  gnc_ui_destroy_help_windows();
-  gnc_ui_destroy_report_windows();
-  gnc_ui_destroy_account_add_windows();
-  gnc_ui_destroy_xfer_windows();
 }
 
 /* ============================================================== */
@@ -362,7 +349,6 @@ gnc_ui_main(void)
   gnucash_ui_init();
   gnc_default_ui_start();
   
-  gnc_refresh_main_window();
   gtk_widget_show(app);
 
   gnome_is_running = TRUE;
@@ -670,7 +656,6 @@ gnc_configure_negative_color_cb (gpointer data)
   gnc_configure_negative_color ();
 
   gnc_gui_refresh_all ();
-  gnc_refresh_main_window ();
 }
 
 /* gnc_configure_negative_color
@@ -703,7 +688,6 @@ gnc_configure_reverse_balance_cb (gpointer not_used)
 {
   gnc_configure_reverse_balance ();
   gnc_gui_refresh_all ();
-  gnc_refresh_main_window ();
 }
 
 static gboolean reverse_type[NUM_ACCOUNT_TYPES];

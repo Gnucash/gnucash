@@ -325,7 +325,6 @@ gnc_ui_commodity_druid_cancel_cb(GnomeDruidPage * page, gpointer druid,
                                           "commodity_druid_struct");
   /* unload the current file (can't have out-of-date commodities) */
   gncFileQuit();
-  gnc_refresh_main_window();
 
   /* destroy the dialog */
   gnc_ui_commodity_druid_destroy(cd);
@@ -424,7 +423,5 @@ gnc_ui_commodity_druid_finish_cb(GnomeDruidPage * page, gpointer druid,
 
   /* destroy the dialog */
   gnc_ui_commodity_druid_destroy(cd);
-
-  gnc_refresh_main_window();
 }
 

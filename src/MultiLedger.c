@@ -464,6 +464,8 @@ refresh_handler (GHashTable *changes, gpointer user_data)
     }
   }
 
+  xaccQuerySetGroup (ld->query, gncGetCurrentGroup ());
+
   xaccLedgerDisplayRefresh (ld);
 }
 

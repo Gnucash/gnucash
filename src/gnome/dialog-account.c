@@ -272,11 +272,8 @@ gnc_finish_ok (AccountWindow *aw,
   gnc_suspend_gui_refresh ();
 
   /* make the account changes */
-  make_account_changes(change_currency, change_security, change_type);
+  make_account_changes (change_currency, change_security, change_type);
   gnc_ui_to_account (aw);
-
-  /* Refresh the main window. This will also refresh all account lists. */
-  gnc_refresh_main_window ();
 
   gnc_resume_gui_refresh ();
 
@@ -1731,29 +1728,6 @@ gnc_ui_edit_account_window(Account *account)
                                        GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
   return aw;
-}
-
-
-static void
-destroy_new_helper (const char *component_class,
-                    gint component_id,
-                    gpointer iter_data)
-{
-  gnc_close_gui_component (component_id);
-}
-
-/********************************************************************\
- * Function: gnc_ui_destroy_account_add_windows - destroy all open  *
- *           account add windows.                                   *
- *                                                                  *
- * Args:   none                                                     *
- * Return: none                                                     *
-\********************************************************************/
-void
-gnc_ui_destroy_account_add_windows (void)
-{
-  gnc_forall_gui_components (DIALOG_NEW_ACCOUNT_CM_CLASS,
-                             destroy_new_helper, NULL);
 }
 
 

@@ -29,7 +29,6 @@
 #include <string.h>
 
 #include "AccWindow.h"
-#include "Destroy.h"
 #include "EuroUtils.h"
 #include "FileDialog.h"
 #include "MainWindow.h"
@@ -58,9 +57,12 @@
 #include "window-main.h"
 #include "window-reconcile.h"
 #include "window-register.h"
+#include "window-report.h"
 
 /* FIXME get rid of these */
 #include "gnc.h"
+
+#define WINDOW_MAIN_CM_CLASS "window-main"
 
 /* Main Window information structure */
 typedef struct _GNCMainInfo GNCMainInfo;
@@ -74,7 +76,9 @@ struct _GNCMainInfo
   SCM euro_change_callback_id;
   SCM toolbar_change_callback_id;
 
-  GSList *account_sensitives;
+  GList *account_sensitives;
+
+  gint component_id;
 };
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -479,10 +483,9 @@ gnc_refresh_main_window_title (void)
   g_free(title);
 }
 
-void
+static void
 gnc_refresh_main_window (void)
 {
-  xaccRecomputeGroupBalance (gncGetCurrentGroup());
   gnc_ui_refresh_statusbar ();
   gnc_history_update_menu ();
   gnc_refresh_main_window_title ();
@@ -546,7 +549,6 @@ gnc_ui_delete_account (Account *account)
   xaccRemoveAccount (account);
   xaccFreeAccount (account);
 
-  gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 }
 
@@ -679,7 +681,6 @@ gnc_ui_mainWindow_scrub(GtkWidget *widget, gpointer data)
   xaccAccountScrubOrphans (account);
   xaccAccountScrubImbalance (account);
 
-  gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 }
 
@@ -700,7 +701,6 @@ gnc_ui_mainWindow_scrub_sub(GtkWidget *widget, gpointer data)
   xaccAccountTreeScrubOrphans (account);
   xaccAccountTreeScrubImbalance (account);
 
-  gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 }
 
@@ -714,7 +714,6 @@ gnc_ui_mainWindow_scrub_all(GtkWidget *widget, gpointer data)
   xaccGroupScrubOrphans (group);
   xaccGroupScrubImbalance (group);
 
-  gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 }
 
@@ -731,11 +730,9 @@ gnc_ui_filemenu_cb(GtkWidget *widget, gpointer menuItem)
   {
     case FMB_NEW:
       gncFileNew();
-      gnc_refresh_main_window();
       break;
     case FMB_OPEN:
       gncFileOpen();
-      gnc_refresh_main_window();
       break;
     case FMB_SAVE:
       gncFileSave();
@@ -747,7 +744,6 @@ gnc_ui_filemenu_cb(GtkWidget *widget, gpointer menuItem)
       break;
     case FMB_IMPORT:
       gncFileQIFImport();
-      gnc_refresh_main_window();
       break;
     case FMB_QUIT:
       gnc_shutdown(0);
@@ -803,9 +799,11 @@ gnc_ui_mainWindow_save_size(void)
 }
 
 static void
-gnc_ui_mainWindow_destroy_cb(GtkObject *object, gpointer user_data)
+gnc_ui_mainWindow_destroy_cb (GtkObject *object, gpointer user_data)
 {
   GNCMainInfo *main_info = user_data;
+
+  gnc_unregister_gui_component (main_info->component_id);
 
   gnc_unregister_option_change_callback_id
     (main_info->main_window_change_callback_id);
@@ -816,26 +814,26 @@ gnc_ui_mainWindow_destroy_cb(GtkObject *object, gpointer user_data)
   gnc_unregister_option_change_callback_id
     (main_info->toolbar_change_callback_id);
 
-  g_slist_free(main_info->account_sensitives);
+  g_list_free(main_info->account_sensitives);
   main_info->account_sensitives = NULL;
 
-  g_free(main_info);
+  g_free (main_info);
 }
 
 GNCMainWinAccountTree *
-gnc_get_current_account_tree(void)
+gnc_get_current_account_tree (void)
 {
   GNCMainInfo *main_info;
 
-  main_info = gnc_get_main_info();
+  main_info = gnc_get_main_info ();
   if (main_info == NULL)
     return NULL;
 
-  return GNC_MAINWIN_ACCOUNT_TREE(main_info->account_tree);
+  return GNC_MAINWIN_ACCOUNT_TREE (main_info->account_tree);
 }
 
 Account *
-gnc_get_current_account(void)
+gnc_get_current_account (void)
 {
   GNCMainWinAccountTree *list  = gnc_get_current_account_tree();
   return gnc_mainwin_account_tree_get_current_account(list);
@@ -877,16 +875,15 @@ gnc_account_tree_activate_cb(GNCMainWinAccountTree *tree,
 }
 
 static void
-gnc_configure_account_tree(void *data)
+gnc_configure_account_tree (gpointer data)
 {
-  GNCMainInfo *info;
+  GNCMainInfo *info = data;
   GNCMainWinAccountTree *tree;
   AccountViewInfo new_avi;
   GSList *list, *node;
 
-  memset(&new_avi, 0, sizeof(new_avi));
+  memset (&new_avi, 0, sizeof(new_avi));
 
-  info = gnc_get_main_info();
   tree = GNC_MAINWIN_ACCOUNT_TREE(info->account_tree);
 
   list = gnc_lookup_list_option("Main Window",
@@ -929,7 +926,7 @@ gnc_configure_account_tree(void *data)
       new_avi.include_type[EQUITY] = TRUE;
   }
 
-  gnc_free_list_option_value(list);
+  gnc_free_list_option_value (list);
 
   list = gnc_lookup_list_option("Main Window",
                                 "Account fields to display",
@@ -972,13 +969,11 @@ gnc_configure_account_tree(void *data)
     }
   }
 
-  gnc_free_list_option_value(list);
+  gnc_free_list_option_value (list);
 
   new_avi.show_field[ACCOUNT_NAME] = TRUE;
 
-  gnc_mainwin_account_tree_set_view_info(tree, new_avi);
-
-  return;
+  gnc_mainwin_account_tree_set_view_info (tree, new_avi);
 }
 
 static void
@@ -992,7 +987,7 @@ gnc_euro_change (gpointer data)
 static void
 gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
 {
-  GSList *list;
+  GList *list;
 
   static GnomeUIInfo toolbar[] = 
   {
@@ -1087,9 +1082,9 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
 
   list = main_info->account_sensitives;
 
-  list = g_slist_prepend(list, toolbar[3].widget);
-  list = g_slist_prepend(list, toolbar[4].widget);
-  list = g_slist_prepend(list, toolbar[7].widget);
+  list = g_list_prepend(list, toolbar[3].widget);
+  list = g_list_prepend(list, toolbar[4].widget);
+  list = g_list_prepend(list, toolbar[7].widget);
 
   main_info->account_sensitives = list;
 }
@@ -1098,7 +1093,7 @@ static void
 gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
                       GNCMainInfo *main_info)
 {
-  GSList *list;
+  GList *list;
 
   static GnomeUIInfo filemenu[] =
   {
@@ -1287,28 +1282,28 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
 
   list = main_info->account_sensitives;
 
-  list = g_slist_prepend(list, scrubmenu[0].widget);
-  list = g_slist_prepend(list, scrubmenu[1].widget);
+  list = g_list_prepend(list, scrubmenu[0].widget);
+  list = g_list_prepend(list, scrubmenu[1].widget);
 
-  list = g_slist_prepend(list, accountsmenu[0].widget);
-  list = g_slist_prepend(list, accountsmenu[1].widget);
-  list = g_slist_prepend(list, accountsmenu[2].widget);
-  list = g_slist_prepend(list, accountsmenu[4].widget);
-  list = g_slist_prepend(list, accountsmenu[6].widget);
-  list = g_slist_prepend(list, accountsmenu[9].widget);
+  list = g_list_prepend(list, accountsmenu[0].widget);
+  list = g_list_prepend(list, accountsmenu[1].widget);
+  list = g_list_prepend(list, accountsmenu[2].widget);
+  list = g_list_prepend(list, accountsmenu[4].widget);
+  list = g_list_prepend(list, accountsmenu[6].widget);
+  list = g_list_prepend(list, accountsmenu[9].widget);
 
   gnc_mainwin_account_tree_attach_popup
     (GNC_MAINWIN_ACCOUNT_TREE (account_tree), accountsmenu);
 
-  list = g_slist_prepend(list, scrubmenu[0].widget);
-  list = g_slist_prepend(list, scrubmenu[1].widget);
+  list = g_list_prepend(list, scrubmenu[0].widget);
+  list = g_list_prepend(list, scrubmenu[1].widget);
 
-  list = g_slist_prepend(list, accountsmenu[0].widget);
-  list = g_slist_prepend(list, accountsmenu[1].widget);
-  list = g_slist_prepend(list, accountsmenu[2].widget);
-  list = g_slist_prepend(list, accountsmenu[4].widget);
-  list = g_slist_prepend(list, accountsmenu[6].widget);
-  list = g_slist_prepend(list, accountsmenu[9].widget);
+  list = g_list_prepend(list, accountsmenu[0].widget);
+  list = g_list_prepend(list, accountsmenu[1].widget);
+  list = g_list_prepend(list, accountsmenu[2].widget);
+  list = g_list_prepend(list, accountsmenu[4].widget);
+  list = g_list_prepend(list, accountsmenu[6].widget);
+  list = g_list_prepend(list, accountsmenu[9].widget);
 
   main_info->account_sensitives = list;
 }
@@ -1325,7 +1320,7 @@ gnc_get_main_info (void)
 }
 
 static void
-gnc_configure_toolbar(void *data)
+gnc_configure_toolbar (gpointer data)
 {
   GtkWidget *app_w = gnc_get_ui_data ();
   GnomeApp *app;
@@ -1352,7 +1347,7 @@ gnc_configure_toolbar(void *data)
 }
 
 static void
-gnc_account_foreach_cb(gpointer widget, gpointer sensitive)
+gnc_account_foreach_cb (gpointer widget, gpointer sensitive)
 {
   gtk_widget_set_sensitive(GTK_WIDGET(widget), GPOINTER_TO_INT(sensitive));
 }
@@ -1363,9 +1358,9 @@ gnc_account_set_sensititives(GNCMainInfo *main_info, gboolean sensitive)
   if (main_info == NULL)
     return;
 
-  g_slist_foreach(main_info->account_sensitives,
-                  gnc_account_foreach_cb,
-                  GINT_TO_POINTER(sensitive));
+  g_list_foreach(main_info->account_sensitives,
+                 gnc_account_foreach_cb,
+                 GINT_TO_POINTER(sensitive));
 }
 
 static void
@@ -1379,8 +1374,14 @@ gnc_account_cb(GNCMainWinAccountTree *tree, Account *account, gpointer data)
   gnc_account_set_sensititives(gnc_get_main_info(), sensitive);
 }
 
+static void
+refresh_handler (GHashTable *changes, gpointer user_data)
+{
+  gnc_refresh_main_window ();
+}
+
 void
-mainWindow()
+mainWindow (void)
 {
   GNCMainInfo *main_info;
   GtkWidget *app = gnc_get_ui_data();
@@ -1393,15 +1394,23 @@ mainWindow()
     height = 400;
   gtk_window_set_default_size(GTK_WINDOW(app), width, height);
 
-  main_info = g_new0(GNCMainInfo, 1);
-  gtk_object_set_data(GTK_OBJECT(app), "gnc_main_info", main_info);
+  main_info = g_new0 (GNCMainInfo, 1);
+  gtk_object_set_data (GTK_OBJECT(app), "gnc_main_info", main_info);
+
+  main_info->component_id = gnc_register_gui_component (WINDOW_MAIN_CM_CLASS,
+                                                        refresh_handler, NULL,
+                                                        main_info);
+
+  gnc_gui_component_watch_entity_type (main_info->component_id,
+                                       GNC_ID_ACCOUNT,
+                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
   main_info->main_window_change_callback_id =
-    gnc_register_option_change_callback(gnc_configure_account_tree, NULL,
+    gnc_register_option_change_callback(gnc_configure_account_tree, main_info,
                                         "Main Window", NULL);
 
   main_info->euro_change_callback_id =
-    gnc_register_option_change_callback(gnc_euro_change, NULL,
+    gnc_register_option_change_callback(gnc_euro_change, main_info,
                                         "International",
                                         "Enable EURO support");
 
@@ -1413,7 +1422,6 @@ mainWindow()
 
   gnome_app_set_statusbar(GNOME_APP(app), GTK_WIDGET(statusbar));
 
-  
 
   gnc_main_create_toolbar(GNOME_APP(app), main_info);
   gnc_configure_toolbar(NULL);
@@ -1477,7 +1485,7 @@ mainWindow()
   gtk_widget_show_all(statusbar);
   gtk_widget_show(main_info->account_tree);
 
-  gnc_configure_account_tree(NULL);
+  gnc_configure_account_tree (main_info);
 
   gnc_refresh_main_window ();
   gnc_account_tree_refresh
@@ -1487,5 +1495,31 @@ mainWindow()
 
   gtk_widget_grab_focus(main_info->account_tree);
 } 
+
+static void
+component_handler (const char *class, gint component_id, gpointer iter_data)
+{
+  GNCMainInfo *info = iter_data;
+
+  if (info->component_id == component_id)
+    return;
+
+  gnc_close_gui_component (component_id);
+}
+
+void
+gnc_ui_destroy_all_subwindows (void)
+{
+  GNCMainInfo *info = gnc_get_main_info ();
+
+  gnc_suspend_gui_refresh ();
+
+  gnc_forall_gui_components (NULL, component_handler, info);
+
+  gnc_ui_destroy_help_windows ();
+  gnc_ui_destroy_report_windows ();
+
+  gnc_resume_gui_refresh ();
+}
 
 /********************* END OF FILE **********************************/

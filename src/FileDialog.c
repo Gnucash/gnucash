@@ -25,7 +25,6 @@
 #include <guile/gh.h>
 #include <string.h>
 
-#include "Destroy.h"
 #include "FileBox.h"
 #include "FileDialog.h"
 #include "FileIO.h"
@@ -159,10 +158,6 @@ gncFileNew (void)
 
   book = gncGetCurrentBook ();
   group = gnc_book_get_group (book);
-
-  /* when starting new everything, destroy old stuff first */
-  /* destroy open windows first, before destroying the group itself */
-  xaccGroupWindowDestroy (group);
 
   /* close any ongoing file sessions, and free the accounts.
    * disable logging and events so we don't get all that junk. */
@@ -339,7 +334,6 @@ gncPostFileOpen (const char * filename)
   xaccLogDisable();
   xaccLogSetBaseName (newfile);
 
-  xaccGroupWindowDestroy (old_group);
   gnc_book_destroy (current_book);
   current_book = new_book;
 
