@@ -275,6 +275,7 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
   
   gncTableTraversalDir dir;
 
+  ENTER ("traverseCB()\n");
   if(cbs->qparam == QRight) dir = GNC_TABLE_TRAVERSE_RIGHT;
   else if(cbs->qparam == QLeft) dir = GNC_TABLE_TRAVERSE_LEFT;
   else if(cbs->qparam == QUp) dir = GNC_TABLE_TRAVERSE_UP;
@@ -309,7 +310,7 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
       }
     }
   } else {
-    PERR("SERIOUS: Completely invalid traversal direction. (%s)\n",
+    PERR("traverseCB(): Invalid traversal direction. (%s)\n",
          __FUNCTION__);
     return;
   }
@@ -326,6 +327,7 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
       }
     }
   }
+  LEAVE ("traverseCB()\n");
 }
 
 /* ==================================================== */
