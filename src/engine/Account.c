@@ -748,13 +748,15 @@ xaccAccountSetCurrency (Account *acc, char *str)
    if ((!acc) || (!str)) return;
    CHECK (acc);
 
-   if (acc->currency) {
+   if (acc->currency && (0x0 != acc->currency[0])) {
       printf ("Error: xacAccountSetCurrency(): "
               "the currency denomination of an account "
               "cannot be changed!\n"
              );
       return;
    }
+   /* free the zero-length string */
+   if (acc->currency) free (acc->currency);
    acc->currency = strdup (str);
 }
 
@@ -764,13 +766,15 @@ xaccAccountSetSecurity (Account *acc, char *str)
    if ((!acc) || (!str)) return;
    CHECK (acc);
 
-   if (acc->security) {
+   if (acc->security && (0x0 != acc->security[0])) {
       printf ("Error: xacAccountSetCurrency(): "
-              "the security denomination of an account "
+              "the security traded in an account "
               "cannot be changed!\n"
              );
       return;
    }
+   /* free the zero-length string */
+   if (acc->security) free (acc->security);
    acc->security = strdup (str);
 }
 
