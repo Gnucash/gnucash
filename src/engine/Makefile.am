@@ -84,6 +84,8 @@ noinst_HEADERS = \
   kvp-util-p.h \
   md5.h
 
+noinst_SCRIPTS = iso-currencies-to-c
+
 libgncmod_engine_la_LDFLAGS = -module
 libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS} \
  ${top_srcdir}/src/gnc-module/libgncmodule.la \
@@ -120,6 +122,7 @@ EXTRA_DIST = \
   design.txt \
   extensions.txt \
   iso-4217-currencies.scm \
+  iso-currencies-to-c \
   kvp_doc.txt \
   ${gncmod_DATA} \
   ${gncscm_DATA} \
