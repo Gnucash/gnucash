@@ -50,12 +50,7 @@ struct TTSplitInfo_s
 TTInfo *
 gnc_ttinfo_malloc(void)
 {
-  TTInfo *tti = g_malloc(sizeof(TTInfo));
-  
-  tti->description = NULL;
-  tti->num = NULL;
-  tti->common_currency = NULL;
-  tti->splits = NULL;
+  TTInfo *tti = g_new0(TTInfo, 1);
   return tti;
 }
 
@@ -124,8 +119,8 @@ gnc_ttinfo_set_num(TTInfo *tti, const char *num)
   return;
 }
 
-const char
-*gnc_ttinfo_get_num(TTInfo *tti)
+const char*
+gnc_ttinfo_get_num(TTInfo *tti)
 {
   g_return_val_if_fail(tti, NULL);
 
@@ -178,13 +173,7 @@ gnc_ttinfo_get_template_splits(TTInfo *tti)
 TTSplitInfo *
 gnc_ttsplitinfo_malloc(void)
 {
-  TTSplitInfo *ttsi = g_malloc(sizeof(TTSplitInfo));
-  
-  ttsi->action = NULL;
-  ttsi->memo = NULL;
-  ttsi->credit_formula = NULL;
-  ttsi->debit_formula = NULL;
-  ttsi->acc = NULL;
+  TTSplitInfo *ttsi = g_new0(TTSplitInfo, 1);
   return ttsi;
 }
 
@@ -282,7 +271,6 @@ const char *
 gnc_ttsplitinfo_get_credit_formula(TTSplitInfo *ttsi)
 {
   g_return_val_if_fail(ttsi, NULL);
-
   return ttsi->credit_formula;
 }
 
@@ -291,9 +279,6 @@ const char *
 gnc_ttsplitinfo_get_debit_formula(TTSplitInfo *ttsi)
 {
   g_return_val_if_fail(ttsi, NULL);
-
-  if (ttsi->debit_formula)
-    g_free(ttsi->credit_formula);
   return ttsi->debit_formula;
 }
 

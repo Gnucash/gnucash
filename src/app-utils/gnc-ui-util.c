@@ -1610,6 +1610,9 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   return strlen(buf);
 }
 
+/**
+ * @param bufp Should be at least 64 chars.
+ **/
 int
 xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
 {

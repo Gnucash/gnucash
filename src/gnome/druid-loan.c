@@ -40,6 +40,7 @@
 #include "gnc-account-sel.h"
 #include "gnc-exp-parser.h"
 #include "gnc-component-manager.h"
+#include "global-options.h"
 #include "date.h"
 #include "dialog-utils.h"
 #include "Account.h"
@@ -75,7 +76,6 @@
 #  define TXN_NAME       "txn_title"
 #  define REPAY_TABLE    "repay_table"
 #  define AMOUNT_ENTRY   "amount_ent"
-#  define REMAINDER_OPT  "remain_opt"
 #  define FREQ_CONTAINER "freq_frame"
 #define PG_PAYMENT "payment_pg"
 #  define PAY_TXN_TITLE      "pay_txn_title"
@@ -130,7 +130,7 @@ typedef struct RepayOptData_ {
         gboolean throughEscrowP;
         gboolean specSrcAcctP;
         Account *to;
-        Account *from; /* If NULL { If throughEscrowP, then through escrowP;
+        Account *from; /* If NULL { If throughEscrowP, then through escrowAcct };
                         * else: undefined. */
         FreqSpec *fs;  /* If NULL, part of repayment; otherwise: defined
                         * here. */
@@ -214,7 +214,6 @@ typedef struct LoanData_ {
         Account *repPriAcct;
         Account *repIntAcct;
         Account *escrowAcct;
-        int remainderChoice;
         FreqSpec *repFreq;
         GDate *repStartDate;
 
@@ -273,7 +272,6 @@ typedef struct LoanDruidData_ {
         GNCAccountSel *repAssetsFromGAS;
         GNCAccountSel *repPrincToGAS;
         GNCAccountSel *repIntToGAS;
-        GtkOptionMenu *repRemainderOpt;
         GtkFrame      *repFreqFrame;
         GNCFrequency  *repGncFreq;
 
@@ -305,6 +303,25 @@ typedef struct LoanDruidData_ {
         GtkScrolledWindow *revScrollWin;
         GtkCList          *revCL;
 } LoanDruidData;
+
+/**
+ * A transient structure to contain SX details during the creation process.
+ **/
+typedef struct toCreateSX_
+{
+  /** The name of the SX */
+  gchar *name;
+  /** The start, last-occurred and end dates. */
+  GDate start, last, end;
+  /** The SX FreqSpec */
+  FreqSpec *freq;
+  /** The current 'instance-num' count. */
+  gint instNum;
+  /** The main/source transaction being created. */
+  TTInfo *mainTxn;
+  /** The optional escrow transaction being created. */
+  TTInfo *escrowTxn;
+} toCreateSX;
 
 static void gnc_loan_druid_data_init( LoanDruidData *ldd );
 static void gnc_loan_druid_get_widgets( LoanDruidData *ldd );
@@ -372,6 +389,10 @@ static gboolean ld_rev_back ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static void     ld_rev_fin  ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 
 static void ld_create_sxes( LoanDruidData *ldd );
+static gint ld_find_ttsplit_with_acct( gconstpointer elt,
+                                       gconstpointer crit );
+static void ld_create_sx_from_tcSX( LoanDruidData *ldd, toCreateSX *tcSX );
+static void ld_tcSX_free( gpointer data, gpointer user_data );
 
 struct LoanDruidData_*
 gnc_ui_sx_loan_druid_create(void)
@@ -543,7 +564,6 @@ gnc_ui_sx_loan_druid_create(void)
                
                 gnc_option_menu_init( GTK_WIDGET(ldd->prmType) );
                 gnc_option_menu_init( GTK_WIDGET(ldd->prmLengthType) );
-                gnc_option_menu_init( GTK_WIDGET(ldd->repRemainderOpt) );
                 gnc_option_menu_init( GTK_WIDGET(ldd->revRangeOpt) );
 
                 gtk_signal_connect( GTK_OBJECT(ldd->optEscrowCb), "toggled",
@@ -830,8 +850,6 @@ gnc_loan_druid_get_widgets( LoanDruidData *ldd )
                 GET_CASTED_WIDGET( GTK_TABLE,          REPAY_TABLE );
         ldd->repAmtEntry =
                 GET_CASTED_WIDGET( GTK_ENTRY,          AMOUNT_ENTRY );
-        ldd->repRemainderOpt =
-                GET_CASTED_WIDGET( GTK_OPTION_MENU,    REMAINDER_OPT );
         ldd->repFreqFrame =
                 GET_CASTED_WIDGET( GTK_FRAME,          FREQ_CONTAINER );
 
@@ -1283,8 +1301,6 @@ ld_rep_save( LoanDruidData *ldd )
                                             "\"interest\" account.") );
                 return TRUE;
         }
-        ldd->ld.remainderChoice =
-                gnc_option_menu_get_active( GTK_WIDGET(ldd->repRemainderOpt) );
         gnc_frequency_save_state( ldd->repGncFreq,
                                   ldd->ld.repFreq,
                                   ldd->ld.repStartDate );
@@ -1372,8 +1388,6 @@ ld_rep_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                                      ldd->ld.repPriAcct );
         gnc_account_sel_set_account( ldd->repIntToGAS,
                                      ldd->ld.repIntAcct );
-        gtk_option_menu_set_history( ldd->repRemainderOpt,
-                                     ldd->ld.remainderChoice );
         gnc_frequency_setup( ldd->repGncFreq,
                              ldd->ld.repFreq,
                              ldd->ld.repStartDate );
@@ -1654,7 +1668,6 @@ ld_pay_use_esc_toggle( GtkToggleButton *tb, gpointer ud )
         gboolean newState;
         LoanDruidData *ldd = (LoanDruidData*)ud;
 
-        DEBUG( "foo" );
         newState = gtk_toggle_button_get_active( tb );
         ld_pay_use_esc_setup( ldd, newState );
 }
@@ -1808,6 +1821,8 @@ ld_rev_fin( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 {
         LoanDruidData *ldd = (LoanDruidData*)ud;
         ld_create_sxes( ldd );
+        ld_close_handler( ldd );
+
 }
 
 static
@@ -1855,6 +1870,296 @@ ld_calc_current_instance_num( int monthsPassed, FreqSpec *fs )
         return floor( monthsPassed * mult );
 }
 
+static
+void
+ld_tcSX_free( gpointer data, gpointer user_data )
+{
+        toCreateSX *tcSX = (toCreateSX*)data;
+        g_free( tcSX->name );
+        if ( tcSX->mainTxn )
+                gnc_ttinfo_free( tcSX->mainTxn );
+        if ( tcSX->escrowTxn )
+                gnc_ttinfo_free( tcSX->escrowTxn );
+        g_free( tcSX );
+}
+
+/**
+ * Custom GCompareFunc to find the element of a GList of TTSplitInfo's which
+ * has the given [Account*] criteria.
+ * @return 0 if match, as per GCompareFunc in the g_list_find_custom context.
+ **/
+static
+gint
+ld_find_ttsplit_with_acct( gconstpointer elt,
+                           gconstpointer crit )
+{
+        TTSplitInfo *ttsi = (TTSplitInfo*)elt;
+        return ( (gnc_ttsplitinfo_get_account( ttsi )
+                  == (Account*)crit) ? 0 : 1 );
+}
+
+/**
+ * Enters into the books a Scheduled Transaction from the given toCreateSX.
+ **/
+static
+void
+ld_create_sx_from_tcSX( LoanDruidData *ldd, toCreateSX *tcSX )
+{
+        SchedXaction *sx;
+        GList *ttxnList, *sxList;
+
+        sx = xaccSchedXactionMalloc( gnc_get_current_book() );
+        xaccSchedXactionSetName( sx, tcSX->name );
+        xaccSchedXactionSetFreqSpec( sx, tcSX->freq );
+        xaccSchedXactionSetStartDate( sx, &tcSX->start );
+        xaccSchedXactionSetLastOccurDate( sx, &tcSX->last );
+        xaccSchedXactionSetEndDate( sx, &tcSX->end );
+        gnc_sx_set_instance_count( sx, tcSX->instNum );
+
+        ttxnList = NULL;
+        if ( tcSX->mainTxn )
+                ttxnList = g_list_append( ttxnList, tcSX->mainTxn );
+        if ( tcSX->escrowTxn )
+                ttxnList = g_list_append( ttxnList, tcSX->escrowTxn );
+
+        g_assert( ttxnList != NULL );
+
+        xaccSchedXactionSetTemplateTrans( sx, ttxnList,
+                                          gnc_get_current_book() );
+
+        sxList = gnc_book_get_schedxactions( gnc_get_current_book() );
+        sxList = g_list_append( sxList, sx );
+        gnc_book_set_schedxactions( gnc_get_current_book(), sxList );
+
+        g_list_free( ttxnList );
+        ttxnList = NULL;
+}
+
+/**
+ * Does the work to setup the given toCreateSX structure for a specific
+ * repayment.  Note that if the RepayOptData doesn't specify a unique
+ * FreqSpec, the paymentSX and the tcSX parameters will be the same.
+ **/
+static
+void
+ld_setup_repayment_sx( LoanDruidData *ldd,
+                       RepayOptData *rod,
+                       toCreateSX *paymentSX,
+                       toCreateSX *tcSX )
+{
+        /* In DoubleEntryAccounting-ease, this is what we're going to do,
+         * below...
+         *
+         * if ( rep->escrow ) {
+         *   if ( rep->from ) {
+         *      a: paymentSX.main.splits += split( rep->fromAcct, repAmt )
+         *      b: paymentSX.main.split( ldd->ld.escrowAcct ).debCred += repAmt
+         *         tcSX.escrow.split( rep->escrow ).debCred += repAmt
+         *     c1: tcSX.escrow.splits += split( rep->toAcct, +repAmt )
+         *   } else {
+         *      d: paymentSX.main.split( ldd->ld.repFromAcct ).debcred += -repAmt
+         *      b: paymentSX.main.split( ldd->ld.escrowAcct ).debCred += repAmt
+         *         tcSX.escrow.splits += split( rep->escrow, -repAmt )
+         *     c1: tcSX.escrow.splits += split( rep->toAcct, +repAmt )
+         *   }
+         * } else {
+         *   if ( rep->from ) {
+         *      a: paymentSX.main.splits += split( rep->fromAcct, -repAmt )
+         *     c2: paymentSX.main.splits += split( rep->toAcct,   +repAmt )
+         *   } else {
+         *      d: paymentSX.main.split( ldd->ld.payFromAcct ).debcred += -repAmt
+         *     c2: paymentSX.main.splits += split( rep->toAcct, +repAmt )
+         *   }
+         * }
+         */
+
+        /* Now, we refactor the common operations from the above out...
+         *
+         * fromSplit = NULL;
+         * if ( rep->escrow ) {
+         *   b: paymentSX.main.split( ldd->ld.escrowAcct ).debCred += repAmt
+         *  c1: ( toTTI = tcSX.escrow )
+         *   if ( rep->from ) {
+         *     a1: (fromSplit = NULL) paymentSX.main.splits += split( rep->fromAcct, repAmt )
+         *      b: 
+         *         tcSX.escrow.split( rep->escrow ).debCred += repAmt
+         *     c1:
+         *   } else {
+         *     a2: (fromSplit = paymentSX.main.split( ldd->ld.repFromAcct )) .debcred += -repAmt
+         *      b: 
+         *         tcSX.escrow.splits += split( rep->escrow, -repAmt )
+         *     c1:
+         *   }
+         * } else {
+         *   c2: ( toTTI = paymentSX.main )
+         *   if ( rep->from ) {
+         *     a1: (fromSplit = NULL) paymentSX.main.splits += split( rep->fromAcct, -repAmt )
+         *     c2: 
+         *   } else {
+         *     a2: (fromSplit = paymentSX.main.split( ldd->ld.payFromAcct )).debcred += -repAmt
+         *     c2: 
+         *   }
+         * }
+         * if ( fromSplit ) {
+         *   fromSplit.debCred += (-repAmt);
+         * } else {
+         *   fromSplit = split( rep->fromAcct, -repAmt )
+         *   paymentSX.main.splits += fromSplit
+         * }
+         * toTTI.splits += split( rep->toAcct, +repAmt );
+         */
+
+        /** Now, the actual implementation... */
+
+        GString *gstr;
+        GList *elt;
+        TTSplitInfo *fromSplit = NULL;
+        TTSplitInfo *ttsi;
+        TTInfo *toTxn = NULL;
+        GNCPrintAmountInfo pricePAI = gnc_default_price_print_info();
+#define AMTBUF_LEN 64
+        gchar amtBuf[AMTBUF_LEN];
+        gint GNCN_HOW = (GNC_DENOM_SIGFIGS(2) | GNC_RND_ROUND);
+
+        /* We're going to use this a lot, below, so just create it once. */
+        xaccSPrintAmount( amtBuf,
+                          double_to_gnc_numeric( rod->amount, 100,
+                                                  GNCN_HOW ),
+                          pricePAI );
+
+        if ( rod->throughEscrowP && ldd->ld.escrowAcct ) {
+                toTxn = tcSX->escrowTxn;
+
+                /* Add the repayment amount into the string of the existing
+                 * ttsplit. */
+                {
+                        elt = g_list_find_custom(
+                                gnc_ttinfo_get_template_splits( paymentSX->mainTxn ),
+                                ldd->ld.escrowAcct,
+                                ld_find_ttsplit_with_acct );
+                        g_assert( elt );
+                        ttsi = (TTSplitInfo*)elt->data;
+                        g_assert( ttsi );
+                        gstr = g_string_new( gnc_ttsplitinfo_get_debit_formula( ttsi ) );
+                        g_string_sprintfa( gstr, " + %s", amtBuf );
+                        gnc_ttsplitinfo_set_debit_formula( ttsi, gstr->str );
+                        g_string_free( gstr, TRUE );
+                        gstr = NULL;
+                        ttsi = NULL;
+                }
+                
+                if ( rod->from != NULL ) {
+                        gchar *str;
+
+                        fromSplit = NULL;
+
+                        /* tcSX.escrow.split( rep->escrow ).debCred += repAmt */
+                        elt = g_list_find_custom(
+                                gnc_ttinfo_get_template_splits( tcSX->escrowTxn ),
+                                ldd->ld.escrowAcct,
+                                ld_find_ttsplit_with_acct );
+                        ttsi = NULL;
+                        if ( elt ) {
+                                ttsi = (TTSplitInfo*)elt->data;
+                        }
+                        if ( !ttsi ) {
+                                /* create split */
+                                ttsi = gnc_ttsplitinfo_malloc();
+                                gnc_ttsplitinfo_set_memo( ttsi, rod->txnMemo );
+                                gnc_ttsplitinfo_set_account( ttsi, ldd->ld.escrowAcct );
+                                gnc_ttinfo_append_template_split( tcSX->escrowTxn, ttsi );
+                        }
+                        if ( (str = (gchar*)gnc_ttsplitinfo_get_credit_formula( ttsi ))
+                             == NULL ) {
+                                gstr = g_string_sized_new( 16 );
+                        } else {
+                                /* If we did get a split/didn't have to
+                                 * create a split, then we need to add our
+                                 * amount in rather than replace. */
+                                gstr = g_string_new( str );
+                                g_string_sprintfa( gstr, " + " );
+                        }
+                        g_string_sprintfa( gstr, "%s", amtBuf );
+                        gnc_ttsplitinfo_set_credit_formula( ttsi, gstr->str );
+                        g_string_free( gstr, TRUE );
+                        gstr = NULL;
+                        ttsi = NULL;
+                } else {
+                        /* (fromSplit = paymentSX.main.split( ldd->ld.repFromAcct )) */
+                        elt = g_list_find_custom(
+                                gnc_ttinfo_get_template_splits( paymentSX->mainTxn ),
+                                ldd->ld.repFromAcct,
+                                ld_find_ttsplit_with_acct );
+                        g_assert( elt );
+                        fromSplit = (TTSplitInfo*)elt->data;
+
+                        /* tcSX.escrow.splits += split( rep->escrow, -repAmt ) */
+                        ttsi = gnc_ttsplitinfo_malloc();
+                        gnc_ttsplitinfo_set_memo( ttsi, rod->txnMemo );
+                        gnc_ttsplitinfo_set_account( ttsi, ldd->ld.escrowAcct );
+                        gnc_ttsplitinfo_set_credit_formula( ttsi, amtBuf );
+                        gnc_ttinfo_append_template_split( tcSX->escrowTxn, ttsi );
+                        ttsi = NULL;
+                }
+        } else {
+                toTxn = tcSX->mainTxn;
+
+                if ( rod->from != NULL ) {
+                        fromSplit = NULL;
+                } else {
+                        /* (fromSplit = paymentSX.main.split( ldd->ld.repFromAcct )) */
+                        elt = g_list_find_custom(
+                                gnc_ttinfo_get_template_splits( tcSX->mainTxn ),
+                                ldd->ld.repFromAcct,
+                                ld_find_ttsplit_with_acct );
+                        fromSplit = NULL;
+                        if ( elt ) {
+                                /* This is conditionally true in the case of
+                                 * a repayment on it's own schedule. */
+                                fromSplit = (TTSplitInfo*)elt->data;
+                        }
+                }
+        }
+
+        if ( fromSplit != NULL ) {
+                /* Update the existing from-split. */
+                gstr = g_string_new( gnc_ttsplitinfo_get_credit_formula( fromSplit ) );
+                g_string_sprintfa( gstr, " + %s", amtBuf );
+                gnc_ttsplitinfo_set_credit_formula( fromSplit, gstr->str );
+                g_string_free( gstr, TRUE );
+                gstr = NULL;
+
+        } else {
+                TTInfo *tti;
+                /* Create a new from-split. */
+                ttsi = gnc_ttsplitinfo_malloc();
+                gnc_ttsplitinfo_set_memo( ttsi, rod->txnMemo );
+                if ( rod->from ) {
+                        gnc_ttsplitinfo_set_account( ttsi, rod->from );
+                } else {
+                        gnc_ttsplitinfo_set_account( ttsi, ldd->ld.repFromAcct );
+                }
+                gnc_ttsplitinfo_set_credit_formula( ttsi, amtBuf );
+                tti = tcSX->mainTxn;
+                if ( rod->throughEscrowP ) {
+                        tti = paymentSX->mainTxn;
+                }
+                gnc_ttinfo_append_template_split( tti, ttsi );
+                ttsi = NULL;
+                tti  = NULL;
+        }
+        
+        /* Add to-account split. */
+        {
+                ttsi = gnc_ttsplitinfo_malloc();
+                gnc_ttsplitinfo_set_memo( ttsi, rod->txnMemo );
+                gnc_ttsplitinfo_set_account( ttsi, rod->to );
+                gnc_ttsplitinfo_set_debit_formula( ttsi, amtBuf );
+                gnc_ttinfo_append_template_split( toTxn, ttsi );
+                ttsi = NULL;
+        }
+}
+
 /**
  * Actually does the heavy-lifting of creating the SXes from the
  * LoanDruidData.
@@ -1869,258 +2174,242 @@ ld_calc_current_instance_num( int monthsPassed, FreqSpec *fs )
  * - Escrow-diverted repayments cause new Txns w/in their
  *   SX. [Assets->Escrow, Escrow->(Expense|Liability)]
  **/
-#if 0
-static
-void
-new_ld_create_sxes( LoanDruidData *ldd )
-{
-        /* Plan:
-         * . Create SX/ttinfo's for payment; create the summed src-split string.
-         * . Process repayments
-         *   . if ( uniq freq ) { thisSX <- create new SX } else { thisSX <- payment SX }
-         *   . if ( uniq from-acct ) {  txn += new src_ttinfo } else { src_ttinfo.debcred += val }
-         *   . new dst_ttinfo += rep->toAcct
-         *   . if ( escrow ) { new txn( src_ttinfo, escrow_dst_ttinfo ),
-         *                     new txn( escrow_src_ttinfo, dst_ttinfo ) }
-         *   . thisSX += txns
-         */
-}
-#endif
-
-
 static
 void
 ld_create_sxes( LoanDruidData *ldd )
 {
+        /* The main loan-payment SX.*/
+        toCreateSX *paymentSX = NULL;
+        /* A GList of any other repayment SXes with different FreqSpecs. */
+        GList *repaySXes = NULL;
+        /* The currently-being-referenced toCreateSX. */
+        toCreateSX *tcSX;
         int i;
-        TTInfo *tti;
+        TTInfo *ttxn;
         TTSplitInfo *ttsi;
-        RepayOptData *rod;
-        SchedXaction *tmpSX;
-        GList *repTTList;
-        GList *repSplits;
-        gchar *tmpStr;
-        GString *repAssetsDebitFormula, *tmpGS;
-        GList *sxList;
-        GDate *loanEndDate;
-        int curInstNum;
-        int monPassed;
+        GString *gstr;
 
-        /* Create a string for the Asset-account debit, which we will build
-         * up in the processing of the LoanData and Options. */
-        repAssetsDebitFormula = g_string_sized_new( 64 );
-        repTTList = NULL;
-
-        loanEndDate = g_date_new();
-        g_date_set_time( loanEndDate, time(NULL) );
-        g_date_add_months( loanEndDate, ldd->ld.numMonRemain );
-
+        paymentSX = g_new0( toCreateSX, 1 );
+        paymentSX->name  = g_strdup(ldd->ld.repMemo);
+        paymentSX->start = *ldd->ld.startDate;
+        paymentSX->last  = *ldd->ld.repStartDate;
+        {
+                paymentSX->end = *ldd->ld.repStartDate;
+                g_date_add_months( &paymentSX->end, ldd->ld.numMonRemain );
+        }
+        paymentSX->freq = ldd->ld.repFreq;
         /* Figure out the correct current instance-count for the txns in the
          * SX. */
-        monPassed =
+        paymentSX->instNum =
                 (ldd->ld.numPer * ( ldd->ld.perSize == YEARS ? 12 : 1 ))
                 - ldd->ld.numMonRemain;
 
-        /* first, start to deal with the repayment uber-SX */
+        paymentSX->mainTxn = gnc_ttinfo_malloc();
+        gnc_ttinfo_set_currency( paymentSX->mainTxn,
+                                 gnc_default_currency() );
         {
-                repSplits = NULL;
-
-                /* Just add the repayment amount to a string for the moment;
-                 * create the split out of it after we've processed the
-                 * options [and gotten their contributions to the asset debit
-                 * formula]. */
-                g_string_sprintf( repAssetsDebitFormula, ldd->ld.repAmount );
-
-                /* Principal credit */
-                ttsi = gnc_ttsplitinfo_malloc();
-                gnc_ttsplitinfo_set_memo( ttsi, _("Repayment - Principal Portion") );
-                tmpStr = xaccAccountGetFullName( ldd->ld.repPriAcct,
-                                                 gnc_get_account_separator() );
-                g_free( tmpStr );
-                gnc_ttsplitinfo_set_account( ttsi, ldd->ld.repPriAcct );
-                tmpGS = g_string_sized_new( 64 );
-                ld_get_ppmt_formula( ldd, tmpGS );
-                gnc_ttsplitinfo_set_debit_formula( ttsi, tmpGS->str );
-                g_string_free( tmpGS, FALSE );
-                repSplits = g_list_append( repSplits, ttsi );
-
-                /* Interest credit */
-                ttsi = gnc_ttsplitinfo_malloc();
-                gnc_ttsplitinfo_set_memo( ttsi, _("Repayment - Interest Portion") );
-                tmpStr = xaccAccountGetFullName( ldd->ld.repIntAcct,
-                                                 gnc_get_account_separator() );
-                g_free( tmpStr );
-                gnc_ttsplitinfo_set_account( ttsi, ldd->ld.repIntAcct );
-                tmpGS = g_string_sized_new( 64 );
-                ld_get_ipmt_formula( ldd, tmpGS );
-                gnc_ttsplitinfo_set_debit_formula( ttsi, tmpGS->str );
-                g_string_free( tmpGS, FALSE );
-                repSplits = g_list_append( repSplits, ttsi );
-        }
-
-        /* Take a side-trip to process the options. */
-        for ( i=0; i<ldd->ld.repayOptCount; i++ ) {
-                Account *fromAcct;
-                GList *optSplits;
-                GList *optTTList;
-
-                optSplits = NULL;
-                optTTList = NULL;
-                rod = ldd->ld.repayOpts[i];
-
-                if ( !rod->enabled )
-                        continue;
-
-                /* Only create the 'from' part of the SX if requested. */
-                if ( rod->specSrcAcctP ) {
-                        fromAcct = rod->from;
-                        if ( rod->throughEscrowP ) {
-                                GString *amt = g_string_sized_new( 5 );
-                                g_string_sprintf( amt, "%0.2f", rod->amount );
-
-                                /* Add assets -> escrow Splits. */
-                                g_string_sprintfa( repAssetsDebitFormula, " + %s", amt->str );
-
-                                ttsi = gnc_ttsplitinfo_malloc();
-                                gnc_ttsplitinfo_set_memo( ttsi, rod->txnMemo );
-                                gnc_ttsplitinfo_set_account( ttsi, ldd->ld.escrowAcct );
-                                gnc_ttsplitinfo_set_debit_formula( ttsi, amt->str );
-                                repSplits = g_list_append( repSplits, ttsi );
-
-                                g_string_free( amt, TRUE );
-                                fromAcct = ldd->ld.escrowAcct;
-                        }
-
-                        ttsi = gnc_ttsplitinfo_malloc();
-                        gnc_ttsplitinfo_set_memo( ttsi, rod->txnMemo );
-                        gnc_ttsplitinfo_set_account( ttsi, fromAcct );
-
-                        {
-                                GString *amt = g_string_sized_new(5);
-                                g_string_sprintf( amt, "%0.2f", rod->amount );
-                                gnc_ttsplitinfo_set_credit_formula( ttsi, amt->str );
-                                g_string_free( amt, TRUE );
-                        }
-                        optSplits = g_list_append( optSplits, ttsi );
-                }
-
-                ttsi = gnc_ttsplitinfo_malloc();
-                gnc_ttsplitinfo_set_memo( ttsi, rod->txnMemo );
-                gnc_ttsplitinfo_set_account( ttsi, rod->to );
-                {
-                        GString *amt = g_string_sized_new( 5 );
-                        g_string_sprintf( amt, "%0.2f", rod->amount );
-                        gnc_ttsplitinfo_set_debit_formula( ttsi, amt->str );
-                        g_string_free( amt, TRUE );
-                }
-                optSplits = g_list_append( optSplits, ttsi );
+                GString *payMainTxnDesc = g_string_sized_new( 32 );
+                g_string_sprintf( payMainTxnDesc,
+                                  "%s - %s%s",
+                                  ldd->ld.repMemo,
+                                  ( ldd->ld.escrowAcct == NULL
+                                    ? "" : _("Escrow ") ),
+                                  _("Payment") );
                 
-                tti = gnc_ttinfo_malloc();
-                {
-                        GString *memoStr = g_string_new( ldd->ld.repMemo );
-                        g_string_sprintfa( memoStr, " - %s",
-                                           rod->name );
-                        gnc_ttinfo_set_description( tti, memoStr->str );
-                        g_string_free( memoStr, TRUE );
-                }
-                gnc_ttinfo_set_template_splits( tti, optSplits );
-                /* we're no longer responsible for this list. */
-                optSplits = NULL;
+                gnc_ttinfo_set_description( paymentSX->mainTxn,
+                                            payMainTxnDesc->str );
+                g_string_free( payMainTxnDesc, TRUE );
+        }
 
-                if ( ! rod->fs ) {
-                        /* Add transaction to existing repayment SX. */
-                        repTTList = g_list_append( repTTList, tti );
-                        continue;
-                }
+        /* Create the basic txns and splits...
+         *
+         * ttxn <- mainTxn
+         * srcAcct <- assets
+         * if ( escrow ) {
+         *  realSrcAcct <- srcAcct
+         *  srcAcct     <- escrow;
+         *  ttxn <- escrowTxn
+         *  main.splits += split( realSrcAcct, -pmt )
+         *  main.splits += split( escrow,       pmt )
+         * }
+         * ttxn.splits += split( escrow,            -pmt)
+         * ttxn.splits += split( liability,          ppmt )
+         * ttxn.splits += split( expenses:interest,  ipmt ) */
+        
+        {
+                Account *srcAcct;
 
-                /* Otherwise, we didn't continue, so create a new transaction
-                 * for repayment. */
-                {
-                        GList *ttList;
+                ttxn = paymentSX->mainTxn;
+                srcAcct = ldd->ld.repFromAcct;
 
-                        ttList = NULL;
-                        /* Create new SX with given FreqSpec */
-                        ttList = g_list_append( ttList, tti );
+                if ( ldd->ld.escrowAcct != NULL ) {
+                        Account *realSrcAcct = srcAcct;
+                        srcAcct = ldd->ld.escrowAcct;
 
-                        tmpSX = xaccSchedXactionMalloc( gnc_get_current_book() );
+                        gstr = g_string_sized_new( 32 );
+                        ld_get_pmt_formula( ldd, gstr );
+                        /* ttxn.splits += split( realSrcAcct, -pmt ); */
                         {
-                                GString *txnName = g_string_new( ldd->ld.repMemo );
-                                g_string_sprintfa( txnName, " - %s",
-                                                  rod->name );
-                                xaccSchedXactionSetName( tmpSX, txnName->str );
-                                g_string_free( txnName, TRUE );
+                                ttsi = gnc_ttsplitinfo_malloc();
+                                gnc_ttsplitinfo_set_memo( ttsi, ldd->ld.repMemo );
+                                gnc_ttsplitinfo_set_account( ttsi, realSrcAcct );
+                                gnc_ttsplitinfo_set_credit_formula( ttsi, gstr->str );
+                                gnc_ttinfo_append_template_split( ttxn, ttsi );
+                                ttsi = NULL;
                         }
-                        xaccSchedXactionSetFreqSpec( tmpSX, rod->fs );
-                        rod->fs = NULL;
-                        /* set to NULL to prevent destroy-time free */
-                        xaccSchedXactionSetStartDate( tmpSX, rod->startDate );
-                        xaccSchedXactionSetLastOccurDate( tmpSX, rod->startDate );
-                        xaccSchedXactionSetEndDate( tmpSX, loanEndDate );
-                        curInstNum = ld_calc_current_instance_num( monPassed,
-                                                                   rod->fs );
-                        DEBUG( "%s instance num: %d", ldd->ld.repMemo, curInstNum );
-                        gnc_sx_set_instance_count( tmpSX, curInstNum );
-                        xaccSchedXactionSetTemplateTrans( tmpSX, ttList,
-                                                          gnc_get_current_book() );
 
-                        sxList = gnc_book_get_schedxactions( gnc_get_current_book() );
-                        sxList = g_list_append( sxList, tmpSX );
-                        gnc_book_set_schedxactions( gnc_get_current_book(), sxList );
+                        /* ttxn.splits += split( escrowAcct, +pmt ); */
+                        {
+                                ttsi = gnc_ttsplitinfo_malloc();
+                                gnc_ttsplitinfo_set_memo( ttsi, ldd->ld.repMemo );
+                                gnc_ttsplitinfo_set_account( ttsi, ldd->ld.escrowAcct );
+                                gnc_ttsplitinfo_set_debit_formula( ttsi, gstr->str );
+                                gnc_ttinfo_append_template_split( ttxn, ttsi );
+                                ttsi = NULL;
+                        }
+                        g_string_free( gstr, TRUE );
+                        gstr = NULL;
 
-                        gnc_ttinfo_free( tti );
-                        g_list_free( ttList );
-                        ttList = NULL;
+                        paymentSX->escrowTxn = gnc_ttinfo_malloc();
+                        gnc_ttinfo_set_currency( paymentSX->escrowTxn,
+                                                 gnc_default_currency() );
+
+                        {
+                                GString *escrowTxnDesc;
+                                escrowTxnDesc = g_string_new( ldd->ld.repMemo );
+                                g_string_sprintfa( escrowTxnDesc, " - %s", _("Payment") );
+                                gnc_ttinfo_set_description( paymentSX->escrowTxn,
+                                                            escrowTxnDesc->str );
+                                g_string_free( escrowTxnDesc, TRUE );
+                        }
+                        ttxn = paymentSX->escrowTxn;
+                }
+
+                /* ttxn.splits += split( srcAcct, -pmt ); */
+                {
+                        ttsi = gnc_ttsplitinfo_malloc();
+                        {
+                                gstr = g_string_new( ldd->ld.repMemo );
+                                g_string_sprintfa( gstr, " - %s",
+                                                   _("Payment") );
+                                gnc_ttsplitinfo_set_memo( ttsi, gstr->str );
+                                g_string_free( gstr, TRUE );
+                                gstr = NULL;
+                        }
+                        gnc_ttsplitinfo_set_account( ttsi, srcAcct );
+                        gstr = g_string_sized_new( 32 );
+                        ld_get_pmt_formula( ldd, gstr );
+                        gnc_ttsplitinfo_set_credit_formula( ttsi, gstr->str );
+                        gnc_ttinfo_append_template_split( ttxn, ttsi );
+                        g_string_free( gstr, TRUE );
+                        gstr = NULL;
+                        ttsi = NULL;
+                }
+
+                /* ttxn.splits += split( ldd->ld.repPriAcct, +ppmt ); */
+                {
+                        ttsi = gnc_ttsplitinfo_malloc();
+                        {
+                                gstr = g_string_new( ldd->ld.repMemo );
+                                g_string_sprintfa( gstr, " - %s",
+                                                   _("Principal") );
+                                gnc_ttsplitinfo_set_memo( ttsi, gstr->str );
+                                g_string_free( gstr, TRUE );
+                                gstr = NULL;
+                        }
+                        gnc_ttsplitinfo_set_account( ttsi, ldd->ld.repPriAcct );
+                        gstr = g_string_sized_new( 32 );
+                        ld_get_ppmt_formula( ldd, gstr );
+                        gnc_ttsplitinfo_set_debit_formula( ttsi, gstr->str );
+                        gnc_ttinfo_append_template_split( ttxn, ttsi );
+                        g_string_free( gstr, TRUE );
+                        gstr = NULL;
+                        ttsi = NULL;
+                }
+
+                /* ttxn.splits += split( ldd->ld.repIntAcct, +ipmt ); */
+                {
+                        ttsi = gnc_ttsplitinfo_malloc();
+                        {
+                                gstr = g_string_new( ldd->ld.repMemo );
+                                g_string_sprintfa( gstr, " - %s",
+                                                   _("Interest") );
+                                gnc_ttsplitinfo_set_memo( ttsi, gstr->str );
+                                g_string_free( gstr, TRUE );
+                                gstr = NULL;
+                        }
+                        gnc_ttsplitinfo_set_account( ttsi, ldd->ld.repIntAcct );
+                        gstr = g_string_sized_new( 32 );
+                        ld_get_ipmt_formula( ldd, gstr );
+                        gnc_ttsplitinfo_set_debit_formula( ttsi, gstr->str );
+                        gnc_ttinfo_append_template_split( ttxn, ttsi );
+                        g_string_free( gstr, TRUE );
+                        gstr = NULL;
+                        ttsi = NULL;
                 }
         }
 
-        /* Create repayment assets debit split. */
-        ttsi = gnc_ttsplitinfo_malloc();
-        tmpStr = xaccAccountGetFullName( ldd->ld.repPriAcct,
-                                         gnc_get_account_separator() );
-        g_free( tmpStr );
-        gnc_ttsplitinfo_set_memo( ttsi, ldd->ld.repMemo );
-        gnc_ttsplitinfo_set_account( ttsi, ldd->ld.repFromAcct );
-        gnc_ttsplitinfo_set_credit_formula( ttsi, repAssetsDebitFormula->str );
-        repSplits = g_list_append( repSplits, ttsi );
+        for ( i=0; i < ldd->ld.repayOptCount; i++ ) {
+                RepayOptData *rod = ldd->ld.repayOpts[i];
+                if ( ! rod->enabled )
+                        continue;
 
-        tti = gnc_ttinfo_malloc();
-        gnc_ttinfo_set_description( tti, ldd->ld.repMemo );
-        gnc_ttinfo_set_template_splits( tti, repSplits );
-        /* we're no longer responsible for this list. */
-        repSplits = NULL;
+                tcSX = paymentSX;
+                if ( rod->fs != NULL ) {
+                        tcSX = g_new0( toCreateSX, 1 );
+                        gstr = g_string_new( ldd->ld.repMemo );
+                        g_string_sprintfa( gstr, " - %s",
+                                           rod->name );
+                        tcSX->name    = g_strdup(gstr->str);
+                        tcSX->start   = *ldd->ld.startDate;
+                        tcSX->last    = *ldd->ld.repStartDate;
+                        {
+                                tcSX->end = tcSX->last;
+                                g_date_add_months( &tcSX->end, ldd->ld.numMonRemain );
+                        }
+                        tcSX->freq    = rod->fs;
+                        /* So it won't get destroyed when the close the
+                         * Druid. */
+                        tcSX->instNum = ld_calc_current_instance_num( paymentSX->instNum,
+                                                                      rod->fs );
+                        rod->fs       = NULL;
+                        tcSX->mainTxn   = gnc_ttinfo_malloc();
+                        gnc_ttinfo_set_currency( tcSX->mainTxn,
+                                                 gnc_default_currency() );
+                        gnc_ttinfo_set_description( tcSX->mainTxn,
+                                                    gstr->str );
+                        tcSX->escrowTxn = gnc_ttinfo_malloc();
+                        gnc_ttinfo_set_currency( tcSX->escrowTxn,
+                                                 gnc_default_currency() );
+                        gnc_ttinfo_set_description( tcSX->escrowTxn,
+                                                    gstr->str );
+                        
+                        g_string_free( gstr, TRUE );
+                        gstr = NULL;
 
-        repTTList = g_list_append( repTTList, tti );
+                        repaySXes = g_list_append( repaySXes, tcSX );
 
-        /* Actually create the SX for the repayment. */
-        tmpSX = xaccSchedXactionMalloc( gnc_get_current_book() );
-        xaccSchedXactionSetName( tmpSX, ldd->ld.repMemo );
-        xaccSchedXactionSetStartDate( tmpSX, ldd->ld.repStartDate );
-        xaccSchedXactionSetLastOccurDate( tmpSX, ldd->ld.repStartDate );
-        xaccSchedXactionSetFreqSpec( tmpSX, ldd->ld.repFreq );
-        xaccSchedXactionSetEndDate( tmpSX, loanEndDate );
-        /* we should fixup these values with the user-specified repayment
-         * frequency. */
-        curInstNum =
-                ld_calc_current_instance_num( monPassed,
-                                              ldd->ld.repFreq );
-        gnc_sx_set_instance_count( tmpSX, curInstNum );
+                }
 
-        xaccSchedXactionSetTemplateTrans( tmpSX, repTTList,
-                                          gnc_get_current_book() );
+                /* repayment */
+                ld_setup_repayment_sx( ldd, rod, paymentSX, tcSX );
+        }
 
-        sxList = gnc_book_get_schedxactions( gnc_get_current_book() );
-        sxList = g_list_append( sxList, tmpSX );
-        gnc_book_set_schedxactions( gnc_get_current_book(), sxList );
+        /* Create the SXes */
+        {
+                GList *l;
 
-        g_list_foreach( repTTList, ld_gnc_ttinfo_free, NULL );
-        g_list_free( repTTList );
-        repTTList = NULL;
+                ld_create_sx_from_tcSX( ldd, paymentSX );
 
-        g_date_free( loanEndDate );
+                for ( l=repaySXes; l; l = l->next ) {
+                        ld_create_sx_from_tcSX( ldd, (toCreateSX*)l->data );
+                }
+        }
 
-        g_string_free( repAssetsDebitFormula, TRUE );
-
-        ld_close_handler( ldd );
+        /* Clean up. */
+        ld_tcSX_free( paymentSX, NULL );
+        g_list_foreach( repaySXes, ld_tcSX_free, NULL );
+        g_list_free( repaySXes );
 }
 
 static

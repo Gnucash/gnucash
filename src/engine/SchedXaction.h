@@ -232,12 +232,13 @@ GDate xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
                                         void *stateData );
 
 /*
- * Set the schedxaction's template transaction.  t_t_list is a glist
- * of TTInfo's as defined in SX-ttinfo.h
- * the edit dialog doesn't use this mechanism.  Maybe it should
+ * Set the schedxaction's template transaction.  t_t_list is a glist of
+ * TTInfo's as defined in SX-ttinfo.h.  The edit dialog doesn't use this
+ * mechanism; maybe it should.
  */
-void xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
-                                      GNCBook *book);
+void xaccSchedXactionSetTemplateTrans( SchedXaction *sx,
+                                       GList *t_t_list,
+                                       GNCBook *book );
 
 /**
  * Adds an instance to the deferred list of the SX.  Added instances are

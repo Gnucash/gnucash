@@ -1,3 +1,17 @@
+2002-12-15  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/glade/sched-xact.glade: Clarified some text, removed
+	unused widgets.
+	
+	* src/app-utils/gnc-ui-util.c (xaccSPrintAmount): Added useful comment.
+
+	* src/gnome/druid-loan.c (ld_create_sxes): Re-written; now a much
+	more principled implementation which passes a test-script; fixes
+	Bug#100088, Bug#100085.
+
+	* src/engine/SX-ttinfo.c (gnc_ttsplitinfo_get_debit_formula):
+	Fixed potentially-nasty mem-handling bug.
+
 2002-12-14  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/import-backend.c (matchmap_store_destination):

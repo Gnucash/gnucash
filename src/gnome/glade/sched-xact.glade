@@ -4913,7 +4913,7 @@ years
 	  <class>GtkTable</class>
 	  <name>repay_table</name>
 	  <border_width>5</border_width>
-	  <rows>6</rows>
+	  <rows>5</rows>
 	  <columns>4</columns>
 	  <homogeneous>False</homogeneous>
 	  <row_spacing>5</row_spacing>
@@ -4978,34 +4978,8 @@ years
 
 	  <widget>
 	    <class>GtkLabel</class>
-	    <name>label847914</name>
-	    <label>Remainder to:</label>
-	    <justify>GTK_JUSTIFY_CENTER</justify>
-	    <wrap>False</wrap>
-	    <xalign>1</xalign>
-	    <yalign>0.5</yalign>
-	    <xpad>0</xpad>
-	    <ypad>0</ypad>
-	    <child>
-	      <left_attach>0</left_attach>
-	      <right_attach>1</right_attach>
-	      <top_attach>4</top_attach>
-	      <bottom_attach>5</bottom_attach>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	      <xexpand>False</xexpand>
-	      <yexpand>False</yexpand>
-	      <xshrink>False</xshrink>
-	      <yshrink>False</yshrink>
-	      <xfill>True</xfill>
-	      <yfill>False</yfill>
-	    </child>
-	  </widget>
-
-	  <widget>
-	    <class>GtkLabel</class>
 	    <name>label847918</name>
-	    <label>Transaction Memo:</label>
+	    <label>Name:</label>
 	    <justify>GTK_JUSTIFY_RIGHT</justify>
 	    <wrap>False</wrap>
 	    <xalign>1</xalign>
@@ -5031,7 +5005,7 @@ years
 	  <widget>
 	    <class>GtkLabel</class>
 	    <name>label847909</name>
-	    <label>Payment Amount:</label>
+	    <label>Amount:</label>
 	    <justify>GTK_JUSTIFY_RIGHT</justify>
 	    <wrap>False</wrap>
 	    <xalign>1</xalign>
@@ -5148,40 +5122,6 @@ years
 
 	  <widget>
 	    <class>GtkAlignment</class>
-	    <name>alignment15</name>
-	    <xalign>0</xalign>
-	    <yalign>0.5</yalign>
-	    <xscale>0.75</xscale>
-	    <yscale>1</yscale>
-	    <child>
-	      <left_attach>1</left_attach>
-	      <right_attach>4</right_attach>
-	      <top_attach>4</top_attach>
-	      <bottom_attach>5</bottom_attach>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	      <xexpand>False</xexpand>
-	      <yexpand>False</yexpand>
-	      <xshrink>False</xshrink>
-	      <yshrink>False</yshrink>
-	      <xfill>True</xfill>
-	      <yfill>False</yfill>
-	    </child>
-
-	    <widget>
-	      <class>GtkOptionMenu</class>
-	      <name>remain_opt</name>
-	      <can_focus>True</can_focus>
-	      <items>Principal
-Interest
-Escrow
-</items>
-	      <initial_choice>0</initial_choice>
-	    </widget>
-	  </widget>
-
-	  <widget>
-	    <class>GtkAlignment</class>
 	    <name>alignment21</name>
 	    <xalign>0.5</xalign>
 	    <yalign>0.5</yalign>
@@ -5190,8 +5130,8 @@ Escrow
 	    <child>
 	      <left_attach>0</left_attach>
 	      <right_attach>4</right_attach>
-	      <top_attach>5</top_attach>
-	      <bottom_attach>6</bottom_attach>
+	      <top_attach>4</top_attach>
+	      <bottom_attach>5</bottom_attach>
 	      <xpad>0</xpad>
 	      <ypad>0</ypad>
 	      <xexpand>False</xexpand>
@@ -5324,7 +5264,7 @@ Escrow
 	      <widget>
 		<class>GtkLabel</class>
 		<name>label847919</name>
-		<label>Transaction Memo:</label>
+		<label>Name:</label>
 		<justify>GTK_JUSTIFY_CENTER</justify>
 		<wrap>False</wrap>
 		<xalign>1</xalign>
