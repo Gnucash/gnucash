@@ -329,7 +329,7 @@ owner_from_lot (GNCLot *lot)
 static void
 reg_lot (void)
 {
-  static QofQueryObject params[] = {
+  static QofParam params[] = {
     { OWNER_FROM_LOT, _GNC_MOD_NAME, (QofAccessFunc)owner_from_lot },
     { NULL },
   };
@@ -339,7 +339,7 @@ reg_lot (void)
 
 gboolean gncOwnerRegister (void)
 {
-  static QofQueryObject params[] = {
+  static QofParam params[] = {
     { OWNER_TYPE, QOF_TYPE_INT64, (QofAccessFunc)gncOwnerGetType },
     { OWNER_CUSTOMER, GNC_CUSTOMER_MODULE_NAME,
       (QofAccessFunc)gncOwnerGetCustomer },

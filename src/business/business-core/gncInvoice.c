@@ -1369,7 +1369,7 @@ static QofObject gncInvoiceDesc = {
 static void
 reg_lot (void)
 {
-  static QofQueryObject params[] = {
+  static QofParam params[] = {
     { INVOICE_FROM_LOT, _GNC_MOD_NAME,
       (QofAccessFunc)gncInvoiceGetInvoiceFromLot },
     { NULL },
@@ -1381,7 +1381,7 @@ reg_lot (void)
 static void
 reg_txn (void)
 {
-  static QofQueryObject params[] = {
+  static QofParam params[] = {
     { INVOICE_FROM_TXN, _GNC_MOD_NAME,
       (QofAccessFunc)gncInvoiceGetInvoiceFromTxn },
     { NULL },
@@ -1392,7 +1392,7 @@ reg_txn (void)
 
 gboolean gncInvoiceRegister (void)
 {
-  static QofQueryObject params[] = {
+  static QofParam params[] = {
     { INVOICE_ID, QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetID },
     { INVOICE_OWNER, GNC_OWNER_MODULE_NAME, (QofAccessFunc)gncInvoiceGetOwner },
     { INVOICE_OPENED, QOF_TYPE_DATE, (QofAccessFunc)gncInvoiceGetDateOpened },

@@ -429,7 +429,7 @@ static QofObject gncEmployeeDesc = {
 
 gboolean gncEmployeeRegister (void)
 {
-  static QofQueryObject params[] = {
+  static QofParam params[] = {
     { EMPLOYEE_ID, QOF_TYPE_STRING, (QofAccessFunc)gncEmployeeGetID },
     { EMPLOYEE_USERNAME, QOF_TYPE_STRING, (QofAccessFunc)gncEmployeeGetUsername },
     { EMPLOYEE_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncEmployeeGetAddr },

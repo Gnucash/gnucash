@@ -236,7 +236,7 @@ int gncAddressCompare (const GncAddress *a, const GncAddress *b)
 
 gboolean gncAddressRegister (void)
 {
-  static QofQueryObject params[] = {
+  static QofParam params[] = {
 
     { ADDRESS_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetName },
     { ADDRESS_PHONE, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetPhone },

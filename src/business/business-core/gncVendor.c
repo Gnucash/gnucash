@@ -490,7 +490,7 @@ static QofObject gncVendorDesc = {
 
 gboolean gncVendorRegister (void)
 {
-  static QofQueryObject params[] = {
+  static QofParam params[] = {
     { VENDOR_ID, QOF_TYPE_STRING, (QofAccessFunc)gncVendorGetID },
     { VENDOR_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncVendorGetName },
     { VENDOR_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncVendorGetAddr },

@@ -382,7 +382,7 @@ static QofObject gncJobDesc = {
 
 gboolean gncJobRegister (void)
 {
-  static QofQueryObject params[] = {
+  static QofParam params[] = {
     { JOB_ID, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetID },
     { JOB_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetName },
     { JOB_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetReference },

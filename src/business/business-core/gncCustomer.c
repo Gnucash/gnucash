@@ -550,7 +550,7 @@ static QofObject gncCustomerDesc = {
 
 gboolean gncCustomerRegister (void)
 {
-  static QofQueryObject params[] = {
+  static QofParam params[] = {
     { CUSTOMER_ID, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetID },
     { CUSTOMER_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetName },
     { CUSTOMER_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetAddr },

@@ -436,7 +436,7 @@ static QofObject gncOrderDesc = {
 
 gboolean gncOrderRegister (void)
 {
-  static QofQueryObject params[] = {
+  static QofParam params[] = {
     { ORDER_ID, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetID },
     { ORDER_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetReference },
     { ORDER_OWNER, GNC_OWNER_MODULE_NAME, (QofAccessFunc)gncOrderGetOwner },

@@ -1204,7 +1204,7 @@ static QofObject gncEntryDesc = {
 
 gboolean gncEntryRegister (void)
 {
-  static QofQueryObject params[] = {
+  static QofParam params[] = {
     { ENTRY_DATE, QOF_TYPE_DATE, (QofAccessFunc)gncEntryGetDate },
     { ENTRY_DATE_ENTERED, QOF_TYPE_DATE, (QofAccessFunc)gncEntryGetDateEntered },
     { ENTRY_DESC, QOF_TYPE_STRING, (QofAccessFunc)gncEntryGetDescription },

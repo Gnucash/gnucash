@@ -761,7 +761,7 @@ static QofObject gncTaxTableDesc = {
 
 gboolean gncTaxTableRegister (void)
 {
-  static QofQueryObject params[] = {
+  static QofParam params[] = {
     { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gncTaxTableGetBook },
     { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncTaxTableGetGUID },
     { NULL },
