@@ -61,6 +61,7 @@
     (lambda () (cons 'relative 'start-cal-year))
      #f 'both 
      '(
+       today
        start-this-month 
        start-prev-month 
        start-current-quarter
