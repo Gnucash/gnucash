@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GNUCash 1.4\n"
-"POT-Creation-Date: 2000-12-05 02:10-0800\n"
+"POT-Creation-Date: 2001-01-14 02:02-0800\n"
 "PO-Revision-Date: 2000-08-28 22:00+0000\n"
 "Last-Translator: Juan Manuel García Molina <juanmagm@mail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -6390,29 +6390,35 @@ msgstr "Fondo de partida activa en multi modo"
 msgid "All Accounts"
 msgstr "Todas las Cuentas"
 
-#: src/gnome/dialog-qif-import.c:190
+#: src/gnome/dialog-qif-import.c:202
 msgid "Select QIF File"
 msgstr "Seleccione Archivo QIF"
 
-#: src/gnome/dialog-qif-import.c:251
+#: src/gnome/dialog-qif-import.c:263
 msgid "You must specify a file to load."
 msgstr "Debe especificar el archivo a cargar."
 
-#: src/gnome/dialog-qif-import.c:255
+#: src/gnome/dialog-qif-import.c:268
+msgid ""
+"File not found or read permission denied.\n"
+"Please select another file."
+msgstr ""
+
+#: src/gnome/dialog-qif-import.c:273
 msgid "You must specify a currency."
 msgstr "Debe especificar una moneda."
 
-#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:622
-#: src/gnome/dialog-qif-import.c:679 src/gnome/dialog-qif-import.c:777
+#: src/gnome/dialog-qif-import.c:288 src/gnome/dialog-qif-import.c:640
+#: src/gnome/dialog-qif-import.c:697 src/gnome/dialog-qif-import.c:795
 msgid "QIF File scheme code not loaded properly."
 msgstr "Código de esquema de Archivo QIF no correctamente cargado."
 
-#: src/gnome/dialog-qif-import.c:291
+#: src/gnome/dialog-qif-import.c:309
 msgid "QIF File already loaded. Reload with current settings?"
 msgstr ""
 "El Archivo cargado QIF ya existe. ¿Recargar con la configuración actual?"
 
-#: src/gnome/dialog-qif-import.c:707 src/gnome/dialog-qif-import.c:804
+#: src/gnome/dialog-qif-import.c:725 src/gnome/dialog-qif-import.c:822
 msgid "Something is very wrong with QIF Importing."
 msgstr "Algo va muy mal en la Importación de QIF."
 

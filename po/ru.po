@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5.0\n"
-"POT-Creation-Date: 2000-12-05 02:10-0800\n"
+"POT-Creation-Date: 2001-01-14 02:02-0800\n"
 "PO-Revision-Date: 2000-08-06 20:43+00:00\n"
 "Last-Translator: Valek Filippov <frob@df.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -6320,28 +6320,34 @@ msgstr ""
 msgid "All Accounts"
 msgstr "Все счета"
 
-#: src/gnome/dialog-qif-import.c:190
+#: src/gnome/dialog-qif-import.c:202
 msgid "Select QIF File"
 msgstr "Выбрать QIF файл"
 
-#: src/gnome/dialog-qif-import.c:251
+#: src/gnome/dialog-qif-import.c:263
 msgid "You must specify a file to load."
 msgstr "Вы должны указать файл для загрузки."
 
-#: src/gnome/dialog-qif-import.c:255
+#: src/gnome/dialog-qif-import.c:268
+msgid ""
+"File not found or read permission denied.\n"
+"Please select another file."
+msgstr ""
+
+#: src/gnome/dialog-qif-import.c:273
 msgid "You must specify a currency."
 msgstr "Вы должны указать валюту."
 
-#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:622
-#: src/gnome/dialog-qif-import.c:679 src/gnome/dialog-qif-import.c:777
+#: src/gnome/dialog-qif-import.c:288 src/gnome/dialog-qif-import.c:640
+#: src/gnome/dialog-qif-import.c:697 src/gnome/dialog-qif-import.c:795
 msgid "QIF File scheme code not loaded properly."
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:291
+#: src/gnome/dialog-qif-import.c:309
 msgid "QIF File already loaded. Reload with current settings?"
 msgstr "Файл QIF уже загружен. Перезагрузить с текущими установками?"
 
-#: src/gnome/dialog-qif-import.c:707 src/gnome/dialog-qif-import.c:804
+#: src/gnome/dialog-qif-import.c:725 src/gnome/dialog-qif-import.c:822
 msgid "Something is very wrong with QIF Importing."
 msgstr "Что-то очень неправильное с импортированием QIF."
 

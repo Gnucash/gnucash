@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.4.9\n"
-"POT-Creation-Date: 2000-12-05 02:10-0800\n"
+"POT-Creation-Date: 2001-01-14 02:02-0800\n"
 "PO-Revision-Date: 2001-01-23 22:17+01:00\n"
 "Last-Translator: Dennis Björklund <db@zigo.dhs.org>\n"
 "Language-Team: Sv <sv@li.org>\n"
@@ -3495,7 +3495,8 @@ msgstr ""
 # po/guile_strings.txt:75
 #: po/guile_strings.txt:89
 msgid "This page shows your Taxable Income and Deductable Expenses."
-msgstr "Denna sida visar dina beskattningsbara inkomster och avdragsgilla utgifter."
+msgstr ""
+"Denna sida visar dina beskattningsbara inkomster och avdragsgilla utgifter."
 
 # po/guile_strings.txt:34
 # po/guile_strings.txt:40
@@ -8437,21 +8438,27 @@ msgstr "Alla konton"
 # src/gnome/dialog-qif-import.c:221
 # src/gnome/dialog-qif-import.c:224
 # src/gnome/dialog-qif-import.c:190
-#: src/gnome/dialog-qif-import.c:190
+#: src/gnome/dialog-qif-import.c:202
 msgid "Select QIF File"
 msgstr "Välj QIF-fil"
 
 # src/gnome/dialog-qif-import.c:310
 # src/gnome/dialog-qif-import.c:313
 # src/gnome/dialog-qif-import.c:251
-#: src/gnome/dialog-qif-import.c:251
+#: src/gnome/dialog-qif-import.c:263
 msgid "You must specify a file to load."
 msgstr "Du måste välja en fil att läsa in."
+
+#: src/gnome/dialog-qif-import.c:268
+msgid ""
+"File not found or read permission denied.\n"
+"Please select another file."
+msgstr ""
 
 # src/gnome/dialog-qif-import.c:314
 # src/gnome/dialog-qif-import.c:317
 # src/gnome/dialog-qif-import.c:255
-#: src/gnome/dialog-qif-import.c:255
+#: src/gnome/dialog-qif-import.c:273
 msgid "You must specify a currency."
 msgstr "Du måste välja en valuta."
 
@@ -8461,22 +8468,22 @@ msgstr "Du måste välja en valuta."
 # src/gnome/dialog-qif-import.c:769 src/gnome/dialog-qif-import.c:867
 # src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:622
 # src/gnome/dialog-qif-import.c:679 src/gnome/dialog-qif-import.c:777
-#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:622
-#: src/gnome/dialog-qif-import.c:679 src/gnome/dialog-qif-import.c:777
+#: src/gnome/dialog-qif-import.c:288 src/gnome/dialog-qif-import.c:640
+#: src/gnome/dialog-qif-import.c:697 src/gnome/dialog-qif-import.c:795
 msgid "QIF File scheme code not loaded properly."
 msgstr "QIF filschema-kod kunde inte läsas in ordentligt."
 
 # src/gnome/dialog-qif-import.c:351
 # src/gnome/dialog-qif-import.c:354
 # src/gnome/dialog-qif-import.c:291
-#: src/gnome/dialog-qif-import.c:291
+#: src/gnome/dialog-qif-import.c:309
 msgid "QIF File already loaded. Reload with current settings?"
 msgstr "QIF-fil är redan inläst. Läsa in igen med nuvarande inställningar?"
 
 # src/gnome/dialog-qif-import.c:794 src/gnome/dialog-qif-import.c:892
 # src/gnome/dialog-qif-import.c:797 src/gnome/dialog-qif-import.c:895
 # src/gnome/dialog-qif-import.c:707 src/gnome/dialog-qif-import.c:804
-#: src/gnome/dialog-qif-import.c:707 src/gnome/dialog-qif-import.c:804
+#: src/gnome/dialog-qif-import.c:725 src/gnome/dialog-qif-import.c:822
 msgid "Something is very wrong with QIF Importing."
 msgstr "Det är något som är väldigt fel med QIF-importering."
 

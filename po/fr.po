@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.4.X\n"
-"POT-Creation-Date: 2000-12-05 02:10-0800\n"
+"POT-Creation-Date: 2001-01-14 02:02-0800\n"
 "PO-Revision-Date: 2000-10-07 16:40+0100\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: FRENCH <FR@li.org>\n"
@@ -7079,34 +7079,40 @@ msgid "All Accounts"
 msgstr "Tous les comptes"
 
 # src/gnome/dialog-qif-import.c:221
-#: src/gnome/dialog-qif-import.c:190
+#: src/gnome/dialog-qif-import.c:202
 msgid "Select QIF File"
 msgstr "Sélectionner un fichier QIF"
 
 # src/gnome/dialog-qif-import.c:310
-#: src/gnome/dialog-qif-import.c:251
+#: src/gnome/dialog-qif-import.c:263
 msgid "You must specify a file to load."
 msgstr "Vous devez spécifier un fichier à charger."
 
+#: src/gnome/dialog-qif-import.c:268
+msgid ""
+"File not found or read permission denied.\n"
+"Please select another file."
+msgstr ""
+
 # src/gnome/dialog-qif-import.c:314
-#: src/gnome/dialog-qif-import.c:255
+#: src/gnome/dialog-qif-import.c:273
 msgid "You must specify a currency."
 msgstr "Vous devez spécifier une monnaie."
 
 # src/gnome/dialog-qif-import.c:328 src/gnome/dialog-qif-import.c:664
 # src/gnome/dialog-qif-import.c:766 src/gnome/dialog-qif-import.c:864
-#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:622
-#: src/gnome/dialog-qif-import.c:679 src/gnome/dialog-qif-import.c:777
+#: src/gnome/dialog-qif-import.c:288 src/gnome/dialog-qif-import.c:640
+#: src/gnome/dialog-qif-import.c:697 src/gnome/dialog-qif-import.c:795
 msgid "QIF File scheme code not loaded properly."
 msgstr "Le code scheme pour les fichiers QIF ne s'est pas chargé correctement."
 
 # src/gnome/dialog-qif-import.c:351
-#: src/gnome/dialog-qif-import.c:291
+#: src/gnome/dialog-qif-import.c:309
 msgid "QIF File already loaded. Reload with current settings?"
 msgstr "Le fichier QIF est déjà chargé.Recharger avec les paramètres actuels?"
 
 # src/gnome/dialog-qif-import.c:794 src/gnome/dialog-qif-import.c:892
-#: src/gnome/dialog-qif-import.c:707 src/gnome/dialog-qif-import.c:804
+#: src/gnome/dialog-qif-import.c:725 src/gnome/dialog-qif-import.c:822
 msgid "Something is very wrong with QIF Importing."
 msgstr "Quelque chose est très mauvais avec l'importation de fichier QIF."
 
