@@ -2788,8 +2788,8 @@ December
 	<spacing>0</spacing>
 	<child>
 	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
+	  <expand>False</expand>
+	  <fill>False</fill>
 	</child>
 
 	<widget>

@@ -279,17 +279,49 @@ xaccSchedXactionGetManual( SchedXaction *sx )
 GDate
 xaccSchedXactionGetNextInstance( SchedXaction *sx )
 {
-        GDate         last_occur, next_occur;
+        GDate         last_occur, next_occur, tmpDate;
+
+        g_date_clear( &last_occur, 1 );
+        g_date_clear( &next_occur, 1 );
+        g_date_clear( &tmpDate, 1 );
 
         if ( g_date_valid( &sx->last_date ) ) {
                 last_occur = sx->last_date;
-        } else {
-                if ( g_date_valid( &sx->start_date ) ) {
-                        last_occur = sx->start_date;
+        } 
+
+        if ( g_date_valid( &sx->start_date ) ) {
+                if ( g_date_valid(&last_occur) ) {
+                        last_occur =
+                                ( g_date_compare( &last_occur,
+                                                  &sx->start_date ) > 0 ?
+                                  last_occur : sx->start_date );
                 } else {
-                        g_date_set_time( &last_occur, time(NULL) );
+                        last_occur = sx->start_date;
                 }
         }
+
+        if ( g_date_valid( &last_occur ) ) {
+                g_date_set_time( &tmpDate, time(NULL) );
+                last_occur =
+                        ( g_date_compare( &last_occur,
+                                          &tmpDate ) > 0 ?
+                          last_occur : tmpDate );
+        } else {
+                g_date_set_time( &last_occur, time(NULL) );
+        }
+        
+        if ( g_date_valid( &sx->start_date )
+             && ! g_date_valid( &sx->last_date ) ) {
+                // Think about this for a second, and you realize
+                // that if the start date is _today_, we need a
+                // last-occur date such that the 'next instance' is
+                // after that date... one day should be good.
+                //
+                // This only holds for the first instance [read: if the
+                // last[-occur]_date is invalid.
+                g_date_subtract_days( &last_occur, 1 );
+        }
+
         xaccFreqSpecGetNextInstance( sx->freq, &last_occur, &next_occur );
         return next_occur;
 }

@@ -637,6 +637,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
                   str = CHECKBOX_NAMES[i];
                   o = glade_xml_get_widget( gf->gxml, str );
                   if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(o) ) ) {
+
                           tmpFS = xaccFreqSpecMalloc();
                           xaccFreqSpecSetUIType( tmpFS, uift );
                           /*  struct-copy is expected to work, here */

@@ -5,7 +5,7 @@ Main Scheduled Transaction todo list
 
 . Engine ...Init() functions should be private.
 . FreqSpec.c
-  . xaccFreqSpecGetFreqStr [display] needs to go away
+  . xaccFreqSpecGetFreqStr [display] needs to go away [?]
 
 X add the ...GetFreqStr() code for the complex composite FreqSpecs
 X fix the ...GetNextInstance() code
@@ -47,6 +47,7 @@ X fix GetNextInstance and GetInstanceAfter, mostly for composite FreqSpecs
     template-creation time.
 . GNCFrequency
   . initial-settings synchronization [start date, optionmenus]
+    . only a couple left; which ones?
 . backend support
   . PostgreSQL
   . others? 
@@ -57,9 +58,9 @@ Bugs:
   . transitioning to a new tab doesn't correctly setup the agreement between
     the startdate and the page elements.
 . Scheduled Transaction Editor
-  . auto-shrink on window create [the register is too wide]
+  . auto-shrink on window create [the register is too wide, leading to too
+    much whitespace on the two top panels]
 . Scheduled Transaction List
-  . Dates earlier than the start date/today are listed in the "next" column.
 
 Enhancements:
 . SX name should be default value for template transaction description

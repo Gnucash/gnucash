@@ -234,27 +234,6 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
 
         g_date_free( gdate );
 
-        /* get the new Split list. */
-#if 0
-        {
-                GList        *splitList;
-                GList        *iter;
-
-                splitList = xaccAccountGetSplitList( gncGetTemplateAccount() );
-                if ( splitList != NULL ) {
-                        printf( "Got the following splits: \n" );
-                        iter = splitList;
-                        do {
-                                printf( "__split: \"%s\"\n",
-                                        xaccSplitGetMemo( (Split*)iter->data ) );
-                        } while ((iter = iter->next));
-                } else {
-                        printf( "Got no splits\n" );
-                }
-                xaccSchedXactionSetSplits( sxed->sx, splitList );
-        }
-#endif /* 0 */
-
         /* add to list */
         putSchedXactionInClist( sxed->sx, sxed->sxd );
         if ( sxed->new ) {
@@ -907,7 +886,6 @@ putSchedXactionInClist( gpointer data, gpointer user_data )
         time_t nextTime;
         GString *nextDate;
         time_t now;
-        struct tm *nowTm;
         gint row;
         int i;
         GDate gd;
@@ -921,28 +899,21 @@ putSchedXactionInClist( gpointer data, gpointer user_data )
         xaccFreqSpecGetFreqStr( xaccSchedXactionGetFreqSpec(sx), freqStr );
 
         gd = xaccSchedXactionGetNextInstance( sx );
-        nowTm = g_new0( struct tm, 1 );
+
         if ( ! g_date_valid( &gd ) ) {
                 g_string_sprintf( nextDate, "not scheduled" );
         } else {
-                g_date_to_struct_tm( &gd, nowTm );
-                nextTime = mktime( nowTm );
-                g_free( nowTm );
-                if ( nextTime == 0 ) {
-                        g_string_sprintf( nextDate, "not scheduled" );
-                } else {
-                        tmpStr = g_new0( char, 25 );
-                        strftime( tmpStr, 25, "%a, %b %e, %Y", localtime(&nextTime) );
-                        g_string_sprintf( nextDate, "%s", tmpStr );
-                        g_free( tmpStr );
-                }
+                char tmpBuf[26];
+                       
+                g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y", &gd );
+                g_string_sprintf( nextDate, "%s", tmpBuf );
         }
 
         text[0] = xaccSchedXactionGetName( sx );
         text[1] = freqStr->str;
         text[2] = nextDate->str;
 
-        /* FIXME: leaky */
+        /* FIXME: leaky? */
         g_string_free( freqStr, FALSE );
         g_string_free( nextDate, FALSE );
 

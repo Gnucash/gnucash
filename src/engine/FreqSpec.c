@@ -436,12 +436,18 @@ xaccFreqSpecGetNextInstance(
                         /* This implements || composites. */
                         guint32 min_julian = 0xFFFFFFFF; /* the biggest unsigned 32 bit number */
                         guint32 this_julian;
+                        char tmpBuf[25];
+                        DEBUG( "List length: %d", g_list_length( list ) );
                         do {
                                 GDate next_repeat;
                                 xaccFreqSpecGetNextInstance(
                                         (FreqSpec*) list->data,
                                         in_date,
                                         &next_repeat );
+                                g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y", in_date );
+                                DEBUG( "in date: %s", tmpBuf );
+                                g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y", &next_repeat );
+                                DEBUG( "next repeat: %s", tmpBuf );
                                 this_julian = g_date_julian( &next_repeat );
                                         
                                 min_julian = min( min_julian, this_julian );
