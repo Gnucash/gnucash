@@ -662,3 +662,12 @@
      (gnc:html-markup-p
       (_ "This report requires accounts to be selected.")))
     p))
+
+(define (gnc:html-make-empty-data-warning)
+  (let ((p (gnc:make-html-text)))
+    (gnc:html-text-append! 
+     p 
+     (gnc:html-markup-h2 (_ "No data"))
+     (gnc:html-markup-p
+      (_ "The selected accounts contain no data for the selected time period")))
+    p))

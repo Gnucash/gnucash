@@ -38,6 +38,7 @@
 #include "gnc-html-guppi.h"
 #include "gnc-ui-util.h"
 
+static short module = MOD_GUI;
 
 static int handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 static int handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
@@ -193,6 +194,31 @@ free_strings(char ** strings, int nstrings) {
     strings[count] = NULL;
   }
   g_free(strings);
+}
+
+
+/* 
+ * if at least one is non-zero, return TRUE
+ * ie TRUE==good
+ */
+
+static gboolean
+check_doubles(double *numbers, int size)
+{
+  int count;
+
+  for(count = 0;count < size; count++)
+  {
+    /* FIXME: floating point equalities are strictly evil but 
+     * it shouldn't catch us here
+     */
+    if(numbers[count] != 0.0)
+    {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
 }
 
 

@@ -314,67 +314,72 @@ developing over time"))
 	    ;; choose sorting.
 	    
 	    
-	    ;;(warn "all-data" all-data)
+	    (gnc:warn "all-data" all-data)
 	    
-	    ;; Set chart title, subtitle etc.
-	    (gnc:html-barchart-set-title! chart report-title)
-	    (gnc:html-barchart-set-subtitle!
-	     chart (sprintf #f
-			    (if do-intervals?
-				(_ "%s to %s")
-				(_ "Balances %s to %s"))
-			    (gnc:timepair-to-datestring from-date-tp) 
-			    (gnc:timepair-to-datestring to-date-tp)))
-	    (gnc:html-barchart-set-width! chart width)
-	    (gnc:html-barchart-set-height! chart height)
+	    (let ((all-data-amounts (map cadr all-data)))
+	      (if 
+	       (and (not (null? all-data-amounts))
+		    (gnc:not-all-zeros all-data-amounts))
+		  ;; Set chart title, subtitle etc.
+	       (begin 
+		 (gnc:html-barchart-set-title! chart report-title)
+		 (gnc:html-barchart-set-subtitle!
+		  chart (sprintf #f
+				 (if do-intervals?
+				     (_ "%s to %s")
+				     (_ "Balances %s to %s"))
+				 (gnc:timepair-to-datestring from-date-tp) 
+				 (gnc:timepair-to-datestring to-date-tp)))
+		 (gnc:html-barchart-set-width! chart width)
+		 (gnc:html-barchart-set-height! chart height)
+		 
+		 ;; row labels etc.
+		 (gnc:html-barchart-set-row-labels! chart date-string-list)
+		 ;; FIXME: why doesn't the y-axis label get printed?!?
+		 (gnc:html-barchart-set-y-axis-label!
+		  chart (gnc:commodity-get-mnemonic report-currency))
+		 (gnc:html-barchart-set-row-labels-rotated?! chart #t)
+		 (gnc:html-barchart-set-stacked?! chart stacked?)
+		 ;; If this is a stacked barchart, then reverse the legend.
+		 (gnc:html-barchart-set-legend-reversed?! chart stacked?)
+		 
+		 ;; If we have too many categories, we sum them into a new
+		 ;; 'other' category and add a link to a new report with just
+		 ;; those accounts.
+		 (if (> (length all-data) max-slices)
+		     (let* ((start (take all-data (- max-slices 1)))
+			    (finish (drop all-data (- max-slices 1)))
+			    (other-sum (map 
+					(lambda (l) (apply + l))
+					(apply zip (map cadr finish)))))
+		       (set! all-data
+			     (append start
+				     (list (list (_ "Other") other-sum))))
+		       (let* ((options (gnc:make-report-options reportname))
+			      (id #f))
+			 ;; now copy all the options
+			 (gnc:options-copy-values 
+			  (gnc:report-options report-obj) options)
+			 ;; and set the destination accounts
+			 (gnc:option-set-value
+			  (gnc:lookup-option options gnc:pagename-accounts 
+					     optname-accounts)
+			  (map car finish))
+			 ;; Set the URL to point to this report.
+			 (set! id (gnc:make-report reportname options))
+			 (gnc:report-add-child-by-id! report-obj id)
+			 (gnc:report-set-parent! (gnc:find-report id) report-obj)
+			 (set! other-anchor (gnc:report-anchor-text id)))))
+		 
+		 
+		 ;; This adds the data. Note the apply-zip stuff: This
+		 ;; transposes the data, i.e. swaps rows and columns. Pretty
+		 ;; cool, eh? Courtesy of dave_p.
+		 (if (not (null? all-data))
+		     (gnc:html-barchart-set-data! chart 
+						  (apply zip all-data-amounts)))
 	    
-	    ;; row labels etc.
-	    (gnc:html-barchart-set-row-labels! chart date-string-list)
-	    ;; FIXME: why doesn't the y-axis label get printed?!?
-	    (gnc:html-barchart-set-y-axis-label!
-	     chart (gnc:commodity-get-mnemonic report-currency))
-	    (gnc:html-barchart-set-row-labels-rotated?! chart #t)
-	    (gnc:html-barchart-set-stacked?! chart stacked?)
-	    ;; If this is a stacked barchart, then reverse the legend.
-	    (gnc:html-barchart-set-legend-reversed?! chart stacked?)
-	    
-	    ;; If we have too many categories, we sum them into a new
-	    ;; 'other' category and add a link to a new report with just
-	    ;; those accounts.
-	    (if (> (length all-data) max-slices)
-		(let* ((start (take all-data (- max-slices 1)))
-		       (finish (drop all-data (- max-slices 1)))
-		       (other-sum (map 
-				   (lambda (l) (apply + l))
-				   (apply zip (map cadr finish)))))
-		  (set! all-data
-			(append start
-				(list (list (_ "Other") other-sum))))
-		  (let* ((options (gnc:make-report-options reportname))
-			 (id #f))
-		    ;; now copy all the options
-		    (gnc:options-copy-values 
-		     (gnc:report-options report-obj) options)
-		    ;; and set the destination accounts
-		    (gnc:option-set-value
-		     (gnc:lookup-option options gnc:pagename-accounts 
-					optname-accounts)
-		     (map car finish))
-		    ;; Set the URL to point to this report.
-		    (set! id (gnc:make-report reportname options))
-		    (gnc:report-add-child-by-id! report-obj id)
-		    (gnc:report-set-parent! (gnc:find-report id) report-obj)
-		    (set! other-anchor (gnc:report-anchor-text id)))))
-	    
-	    
-	    ;; This adds the data. Note the apply-zip stuff: This
-	    ;; transposes the data, i.e. swaps rows and columns. Pretty
-	    ;; cool, eh? Courtesy of dave_p.
-	    (if (not (null? all-data))
-		(gnc:html-barchart-set-data! chart 
-					     (apply zip (map cadr all-data))))
-	    
-	    ;; Labels and colors
+		 ;; Labels and colors
 	    (gnc:html-barchart-set-col-labels!
 	     chart (map (lambda (pair)
 			  (if (string? (car pair))
@@ -443,14 +448,19 @@ if that account doesn't have subaccounts, the register for the account.")
 		  (gnc:html-markup-p "Remove this text by disabling \
 the global Preference \"Display Tip of the Day\".")))))
 
+	       ;; else if empty data
+	       (gnc:html-document-add-object!
+		document
+		(gnc:html-make-empty-data-warning)))))
+	  
 	  ;; else if no accounts selected
 	  (gnc:html-document-add-object! 
 	   document 
 	   (gnc:html-make-no-account-warning)))
-					 
-	    
-	    document))
-
+      
+	      
+	      document))
+	  
   (for-each 
    (lambda (l)
      (gnc:define-report

@@ -259,7 +259,8 @@
                 (push "\">\n")))
           (push "Unable to display pie chart\n")
           (push "</object> &nbsp;\n"))
-        " ")
+	(begin (gnc:warn "null-data, not rendering piechart")
+	       " "))
     retval))
 
 

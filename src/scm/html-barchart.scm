@@ -228,6 +228,17 @@
        (set! rownum (+ 1 rownum)))
      newcol)))
 
+(define (gnc:not-all-zeros data)
+  (define (myor list)
+    (begin 
+      (gnc:debug "list" list)
+      (if (null? list) #f
+	  (or (car list) (myor (cdr list))))))
+
+  (cond ((number? data) (not (= 0 data)))
+	((list? data) (myor (map gnc:not-all-zeros data)))
+	(else #f)))
+
 (define (gnc:html-barchart-prepend-column! barchart newcol)
   (let ((rows (gnc:html-barchart-data barchart))
         (this-row #f)
@@ -309,6 +320,7 @@
          (x-label (gnc:html-barchart-x-axis-label barchart))
          (y-label (gnc:html-barchart-y-axis-label barchart))
          (data (gnc:html-barchart-data barchart))
+	 (dummy1 (gnc:debug "data " data))
          (row-labels (catenate-escaped-strings 
                       (gnc:html-barchart-row-labels barchart)))
          (col-labels (catenate-escaped-strings 
@@ -316,7 +328,8 @@
          (col-colors (catenate-escaped-strings 
                       (gnc:html-barchart-col-colors barchart))))
     (if (and (list? data)
-             (not (null? data)))
+             (not (null? data))
+	     (gnc:not-all-zeros data))
         (begin 
           (push "<object classid=\"gnc-guppi-bar\" width=")
           (push (gnc:html-barchart-width barchart))
@@ -421,5 +434,7 @@
 		    "0\">\n"))
           (push "Unable to push bar chart\n")
           (push "</object> &nbsp;\n"))
-        " ")
+        (begin 
+	  (gnc:warn "barchart has no non-zero data.")
+	  " "))
     retval))

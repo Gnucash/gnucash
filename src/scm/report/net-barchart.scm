@@ -236,103 +236,122 @@
 				    (gnc:timepair-to-datestring
 				     (car date-list-item)))
 				  gnc:timepair-to-datestring)
-			      dates-list)))
+			      dates-list))
+	   (non-zeros #f))
+      (define (add-column! data-list)
+	(begin
+	  (gnc:html-barchart-append-column! chart data-list)
+	  (if (gnc:not-all-zeros data-list) (set! non-zeros #t))
+	  #f))
       
-      (gnc:html-barchart-set-title! 
-       chart (if inc-exp? (_ "Income/Expense Chart") 
-		 (_ "Net Worth Chart")))
-      (gnc:html-barchart-set-subtitle!
-       chart (sprintf #f
-                      (_ "%s to %s")
-                      (gnc:timepair-to-datestring from-date-tp) 
-                      (gnc:timepair-to-datestring to-date-tp)))
-      (gnc:html-barchart-set-width! chart width)
-      (gnc:html-barchart-set-height! chart height)
-      (gnc:html-barchart-set-row-labels! chart date-string-list)
-      (gnc:html-barchart-set-y-axis-label!
-       chart (gnc:commodity-get-mnemonic report-currency))
-      ;; Determine whether we have enough space for horizontal labels
-      ;; -- kind of a hack. Assumptions: y-axis labels and legend
-      ;; require 200 pixels, and each x-axes label needs 60 pixels.
-      (gnc:html-barchart-set-row-labels-rotated?! 
-       chart (< (/ (- width 200) 
-		   (length date-string-list)) 60))
+      (if 
+       (not (null? accounts))
+       (begin
 
-      (if show-sep?
-          (begin
-            (gnc:html-barchart-append-column! chart assets-list)
-            (gnc:html-barchart-append-column! chart 
-					      ;;(if inc-exp?
-					      (map - liability-list)
-					      ;;liability-list)
-					      )))
-      (if show-net?
-	  (gnc:html-barchart-append-column! 
-	   chart net-list))
-      (gnc:html-barchart-set-col-labels! 
-       chart (append
-	      (if show-sep?
-		  (if inc-exp?
-		      (list (_ "Income") (_ "Expense"))
-		      (list (_ "Assets") (_ "Liabilities")))
-		  '())
-	      (if show-net?
-		  (if inc-exp?
-		      (list (_ "Net Profit"))
-		      (list (_ "Net Worth")))
-		  '())))
-      (gnc:html-barchart-set-col-colors! 
-       chart (append
-	      (if show-sep?
-		  '("blue" "red") '())
-	      (if show-net?
-		  '("green") '())))
+	 (gnc:html-barchart-set-title! 
+	  chart (if inc-exp? (_ "Income/Expense Chart") 
+		    (_ "Net Worth Chart")))
+	 (gnc:html-barchart-set-subtitle!
+	  chart (sprintf #f
+			 (_ "%s to %s")
+			 (gnc:timepair-to-datestring from-date-tp) 
+			 (gnc:timepair-to-datestring to-date-tp)))
+	 (gnc:html-barchart-set-width! chart width)
+	 (gnc:html-barchart-set-height! chart height)
+	 (gnc:html-barchart-set-row-labels! chart date-string-list)
+	 (gnc:html-barchart-set-y-axis-label!
+	  chart (gnc:commodity-get-mnemonic report-currency))
+	 ;; Determine whether we have enough space for horizontal labels
+	 ;; -- kind of a hack. Assumptions: y-axis labels and legend
+	 ;; require 200 pixels, and each x-axes label needs 60 pixels.
+	 (gnc:html-barchart-set-row-labels-rotated?! 
+	  chart (< (/ (- width 200) 
+		      (length date-string-list)) 60))
+	 
+	 (if show-sep?
+	     (begin
+	       (add-column! assets-list)
+	       (add-column!		      ;;(if inc-exp?
+		(map - liability-list)
+		;;liability-list)
+		)))
+	 (if show-net?
+	     (add-column! net-list))
+	 (gnc:html-barchart-set-col-labels! 
+	  chart (append
+		 (if show-sep?
+		     (if inc-exp?
+			 (list (_ "Income") (_ "Expense"))
+			 (list (_ "Assets") (_ "Liabilities")))
+		     '())
+		 (if show-net?
+		     (if inc-exp?
+			 (list (_ "Net Profit"))
+			 (list (_ "Net Worth")))
+		     '())))
+	 (gnc:html-barchart-set-col-colors! 
+	  chart (append
+		 (if show-sep?
+		     '("blue" "red") '())
+		 (if show-net?
+		     '("green") '())))
+	 
+	 (if show-sep?
+	     (let ((urls
+		    (list
+		     (gnc:make-report-anchor
+		      (if inc-exp?
+			  "Income Over Time"
+			  "Assets Over Time")
+		      report-obj
+		      (list 
+		       (list gnc:pagename-display
+			     "Use Stacked Bars" #t)
+		       (list gnc:pagename-general
+			     gnc:optname-reportname
+			     (if inc-exp?
+				 (_ "Income Chart")
+				 (_ "Asset Chart")))))
+		     (gnc:make-report-anchor
+		      (if inc-exp?
+			  "Expense Over Time"
+			  "Liabilities Over Time")
+		      report-obj
+		      (list 
+		       (list gnc:pagename-display
+			     "Use Stacked Bars" #t)
+		       (list gnc:pagename-general
+			     gnc:optname-reportname
+			     (if inc-exp?
+				 (_ "Expense Chart")
+				 (_ "Liability Chart"))))))))
+	       (gnc:html-barchart-set-button-1-bar-urls! 
+		chart urls)
+	       (gnc:html-barchart-set-button-1-legend-urls! 
+		chart urls)))
+	 
+	 (if non-zeros
+	     (gnc:html-document-add-object! document chart) 
+	     (gnc:html-document-add-object!
+	      document
+	      (gnc:html-make-empty-data-warning))))
+       
+       ;; else no accounts selected
+
+       (gnc:html-document-add-object!
+	document
+	(gnc:html-make-no-account-warning)))
+       
+	 
+	 document))
       
-      (if show-sep?
-	  (let ((urls
-		 (list
-		  (gnc:make-report-anchor
-		   (if inc-exp?
-		       "Income Over Time"
-		       "Assets Over Time")
-		   report-obj
-		   (list 
-		    (list gnc:pagename-display
-			  "Use Stacked Bars" #t)
-		    (list gnc:pagename-general
-			  gnc:optname-reportname
-			  (if inc-exp?
-			  (_ "Income Chart")
-			  (_ "Asset Chart")))))
-		  (gnc:make-report-anchor
-		   (if inc-exp?
-		       "Expense Over Time"
-		       "Liabilities Over Time")
-		   report-obj
-		   (list 
-		    (list gnc:pagename-display
-			  "Use Stacked Bars" #t)
-		    (list gnc:pagename-general
-			  gnc:optname-reportname
-			  (if inc-exp?
-			      (_ "Expense Chart")
-			      (_ "Liability Chart"))))))))
-	    (gnc:html-barchart-set-button-1-bar-urls! 
-	     chart urls)
-	    (gnc:html-barchart-set-button-1-legend-urls! 
-	     chart urls)))
-
-      (gnc:html-document-add-object! document chart) 
-
-      document))
-
-  ;; Here we define the actual report
-  (gnc:define-report
-   'version 1
-   'name (N_ "Net Worth Barchart")
-   'menu-path (list gnc:menuname-asset-liability)
-   'options-generator (lambda () (options-generator #f))
-   'renderer (lambda (report-obj) (net-renderer report-obj #f)))
+      ;; Here we define the actual report
+      (gnc:define-report
+       'version 1
+       'name (N_ "Net Worth Barchart")
+       'menu-path (list gnc:menuname-asset-liability)
+       'options-generator (lambda () (options-generator #f))
+       'renderer (lambda (report-obj) (net-renderer report-obj #f)))
 
   (gnc:define-report
    'version 1
