@@ -111,6 +111,7 @@
 (export gnc:get-credit-string)
 (export gnc:*options-entries*)
 (export gnc:config-file-format-version)
+(export gnc:*save-options-hook*)
 
 ;; date-utilities.scm
 
@@ -236,8 +237,8 @@
 (load-from-path "c-interface.scm")
 (load-from-path "config-var.scm")
 (load-from-path "options.scm")
-(load-from-path "prefs.scm")
 (load-from-path "hooks.scm")
+(load-from-path "prefs.scm")
 (load-from-path "date-utilities.scm")
 (load-from-path "utilities.scm")
 

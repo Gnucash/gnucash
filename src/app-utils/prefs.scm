@@ -69,13 +69,18 @@
 (define (gnc:global-options-clear-changes)
   (gnc:options-clear-changes gnc:*options-entries*))
 
+(define gnc:*save-options-hook*
+  (gnc:hook-define 
+   'ui-shutdown-hook
+   "Functions to run at ui shutdown.  Hook args: ()"))
+
 ;; save-all-options: this is the actual hook that gets called at
 ;; shutdown.  right now, we put all the options in the same file so
 ;; it's important to make sure it happens in this order.  later the
 ;; hook should probably revert back to just save-global-options.
 (define (gnc:save-all-options)
-  (gnc:save-global-options))
-;  (gnc:save-style-sheet-options))
+  (gnc:save-global-options)
+  (gnc:hook-run-danglers gnc:*save-options-hook*))
 
 (define (gnc:save-global-options)
   (gnc:make-home-dir)

@@ -385,7 +385,6 @@
 (export gnc:html-style-sheet-set-renderer!)
 (export gnc:make-html-style-sheet-internal)
 (export gnc:html-style-sheet-style)
-(export gnc:save-style-sheet-options)
 (export gnc:html-style-sheet-set-style!)
 (export gnc:make-html-style-sheet)
 (export gnc:restore-html-style-sheet)
@@ -551,3 +550,5 @@
 (load-from-path "options-utilities.scm")
 (load-from-path "report-utilities.scm")
 (load-from-path "report.scm")
+
+(gnc:hook-add-dangler gnc:*save-options-hook* gnc:save-style-sheet-options)
