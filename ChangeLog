@@ -1,3 +1,9 @@
+2003-02-16  David Hampton  <hampton@employees.org>
+
+	* src/quotes: List HTML::TableExtract as an explicit requirement,
+	since about half of the of Finance::Quote modules require it even
+	though F::Q doesn't list it as a dependency.
+
 2003-02-16  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/import-backend.c: fix a bug keeping the code

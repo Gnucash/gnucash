@@ -41,7 +41,7 @@ use FileHandle;
 # non-zero - failure
 
 sub check_modules {
-  my @modules = qw(Date::Manip Finance::Quote LWP);
+  my @modules = qw(Date::Manip Finance::Quote LWP HTML::TableExtract);
   my @missing;
 
   foreach my $mod (@modules) {
