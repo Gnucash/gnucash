@@ -233,21 +233,45 @@ Pro's & Con's
 -------------
 I am not aware of any con's to plan A at this point.
 
-Handling of Lots
-----------------
-If a transaction has a split in an open lot, then that transaction is not
-moved to the closed book.  It needs to stay with the open book.
+Imlementation Overview
+----------------------
+Plan A has been implemented in the engine.  To quickly summarize:
+-- Partitioning involves splitting one book into two, called the
+   "old, closing book", and the "current open book".
 
-If a lot is closed, and all of the other lots associated with all of
-the transactions in this lot are also closed, then the lot may be moved
-to the closed book (and all of the other associated lots must then 
-also be moved).
+-- Accounts are copied between old and new books.  One of the copies
+   is issued new GUID's, but the rest of teh account data is copied.
+   KVP pairs are then added so that each copy points at the other,
+   and can thus be easily found.  The "gemini" KVP keyword is used.
+   The opening balance is zeroed for income accounts.  A transaction
+   is created to set the correct opening balance on asset accounts. 
+   The transaction is a tranfer from equity.  An equity account is
+   created automagically, if neeeded.
 
-The above is implemented in Period.c.
+-- Transactions. Transactions are partitioned, and end up either
+   in the old or the new book.  Splits move with transactions.
+   Note that some transactions, associated with open lots, may be
+   kept in the new book (See below).  
+
+-- Lots.  If a transaction has a split in an open lot, then that 
+   transaction is not moved to the closed book.  It needs to stay 
+   with the open book.  If a lot is closed, and all of the other 
+   lots associated with all of the transactions in this lot are 
+   also closed, then the lot may be moved to the closed book 
+   (and all of the other associated lots must then also be moved).
+
+-- Prices. Prices are sorted into the new and old books according
+   to the date on the price.
+
+-- Scheduled transactions/recurring transactions.  These are left
+   in the new book, untouched.   They are not copied into the old
+   book, and no trace of thier existance is left in the old book.
+
+-- Business Objects. Not implemented.
+
 
 Implementation Notes:
 ---------------------
-Plan A has been implemented in the engine. 
 -- src/engine/Period.[ch]
       Implements the main logic to split one book into two, and populate
       it with the appropriate keys, markup, etc. and to carry balances 
@@ -329,7 +353,7 @@ I am so flooded in email that I may not be able to react for a while.
 Open Issues/Questions that Need Discussion:
 -------------------------------------------
 *) How to handle business objects? e.g. vendors, customers should be
-   copied into both old and new books. but invocies should be in one 
+   copied into both old and new books.  But invocies should be in one 
    or the other.  Need to document which is which.
 
 *) Discussion Q: What should the naming convention be for the different 
@@ -343,20 +367,20 @@ Open Issues/Questions that Need Discussion:
    quickly find the book/file) and 'my-gnucash-file.xac' is the name of
    the orignial file whose books were closed.
 
+   Need to change the name to include the word "archive".
+
 *) Discussion Q: When saving books, make the book title part of the 
    book name (user convenience).
 
 *) Should closed books be allowed to have unreconciled transactions?
    Answer: probably.  Should there be a warning? 
 
-*) Special considerations for scheduled transactions/recurring 
-   transactions?  Probably none needed.  Should copies of SX's be 
-   placed in old books? Probably not -- what purpose would that serve?
-
-
 
 Open Issues / ToDo
 ------------------
+*) Change GUI to allow user to specify a default equity account
+   for dealing with opening balances.  Should be done with kvp markup. 
+
 *) Fix crash when exiting gnucash after closing books. 
 
 *) The filename of the old, closed books should probably be saved 
