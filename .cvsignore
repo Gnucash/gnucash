@@ -5,7 +5,6 @@ config.status
 config.h
 *.tar.gz
 *.log
-*.bin
 *.patch
 *.diff
 *.diffs
