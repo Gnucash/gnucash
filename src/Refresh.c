@@ -27,7 +27,9 @@
 #include "MultiLedger.h"
 
 #ifdef KDE
+#if 0
 #include "qt/reconciledlg.h"
+#endif
 #endif
 
 #ifdef GNOME

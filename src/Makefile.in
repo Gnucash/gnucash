@@ -74,6 +74,7 @@ qt: $(QT_OBJS)
 	@cd engine;            $(MAKE) default
 	@cd register;          $(MAKE) qt
 	@cd reports;           $(MAKE) default
+	@cd g-wrap;            $(MAKE) qt
 	@cd swig;              $(MAKE) qt
 	@cd guile;             $(MAKE) default 	
 	@cd qt;                $(MAKE) qt
