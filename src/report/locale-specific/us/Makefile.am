@@ -1,13 +1,13 @@
-SUBDIRS=. test
+SUBDIRS = . test
 
-pkglib_LTLIBRARIES=libgncmod-locale-reports-us.la
+pkglib_LTLIBRARIES = libgncmod-locale-reports-us.la
 
-libgncmod_locale_reports_us_la_SOURCES=\
+libgncmod_locale_reports_us_la_SOURCES = \
   gncmod-locale-reports-us.c 
 
-libgncmod_locale_reports_us_la_LDFLAGS=-module
+libgncmod_locale_reports_us_la_LDFLAGS = -module
 
-INCLUDES=-I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS}
+INCLUDES = -I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS}
 
 .scm-links:
 	rm -f gnucash report locale-specific us 
@@ -19,13 +19,10 @@ INCLUDES=-I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS}
 
 noinst_DATA = .scm-links
 
-gncscmmoddir=${GNC_SHAREDIR}/guile-modules/gnucash/report/locale-specific
+gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/locale-specific
 gncscmmod_DATA = us.scm 
 
-gncscmothermoddir=${GNC_SHAREDIR}/guile-modules/gnucash/report/
-gncscmothermod_DATA=taxtxf.scm 
-
-gncscmdir=${GNC_SHAREDIR}/scm
-gncscm_DATA = txf-export.scm txf-export-help.scm 
+gncscmothermoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
+gncscmothermod_DATA = taxtxf.scm 
 
 CLEANFILES += gnucash report locale-specific us

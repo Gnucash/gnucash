@@ -6,6 +6,7 @@ SUBDIRS = \
   engine \
   backend \
   calculation \
+  tax \
   app-utils \
   register \
   import-export \

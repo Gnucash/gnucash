@@ -681,6 +681,9 @@ AC_OUTPUT(
           src/scm/Makefile
           src/scm/gnumeric/Makefile
           src/scm/printing/Makefile
+          src/tax/Makefile
+          src/tax/us/Makefile
+          src/tax/us/test/Makefile
           src/test-core/Makefile
 
           dnl # non-makefiles

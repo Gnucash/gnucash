@@ -38,3 +38,5 @@ report/stylesheets          predefined style sheet templates
 
 app-utils                   utils for the gnucash app framework (component 
                             mgr, cmd line processing, gettext stuff, etc)
+
+tax/us                      US tax information

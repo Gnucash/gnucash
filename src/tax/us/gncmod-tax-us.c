@@ -1,6 +1,6 @@
 /*********************************************************************
- * gncmod-locale-reports-us.c
- * module definition/initialization for the US reports
+ * gncmod-tax-us.c
+ * module definition/initialization for us tax info 
  * 
  * Copyright (c) 2001 Linux Developers Group, Inc. 
  *********************************************************************/
@@ -22,32 +22,25 @@ int gnc_module_age      = 0;
 
 char *
 gnc_module_path(void) {
-  return g_strdup("gnucash/report/locale-specific/us");
+  return g_strdup("gnucash/tax/us");
 }
 
 char * 
 gnc_module_description(void) {
-  return g_strdup("US income tax reports and related material");
+  return g_strdup("US income tax information");
+}
+
+static void
+lmod(char * mn) 
+{
+  char * form = g_strdup_printf("(use-modules %s)\n", mn);
+  gh_eval_str(form);
+  g_free(form);
 }
 
 int
 gnc_module_init(int refcount) {
-  /* load us tax info */
-  if(!gnc_module_load("gnucash/tax/us", 0)) {
-    return FALSE;
-  }
-
-  /* load the report system */
-  if(!gnc_module_load("gnucash/report/report-system", 0)) {
-    return FALSE;
-  }
-
-  /* load the report generation scheme code */
-  if(gh_eval_str("(use-modules (gnucash report locale-specific us))") 
-     == SCM_BOOL_F) {
-    return FALSE;
-  }
-  
+  lmod("(gnucash tax us)");
   return TRUE;
 }
 

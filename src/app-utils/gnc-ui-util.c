@@ -266,12 +266,12 @@ gnc_ui_account_get_tax_info_string (Account *account)
   {
     GNCModule module;
 
-    module = gnc_module_load ("gnucash/report/locale-specific/us", 0);
+    module = gnc_module_load ("gnucash/tax/us", 0);
 
     g_return_val_if_fail (module, NULL);
 
-    get_form = gh_eval_str ("gnc:txf-get-form");
-    get_desc = gh_eval_str ("gnc:txf-get-description");
+    get_form = gh_eval_str ("(false-if-exception gnc:txf-get-form)");
+    get_desc = gh_eval_str ("(false-if-exception gnc:txf-get-description)");
   }
 
   g_return_val_if_fail (gh_procedure_p (get_form), NULL);
