@@ -1491,13 +1491,14 @@ xaccAccountVisitUnvisitedTransactions(Account *acc,
   for(lp = xaccAccountGetSplitList(acc); lp && keep_going; lp = lp->next) {
     Split *s = (Split *) lp->data;
     Transaction *t = xaccSplitGetParent(s);
-    
+
     if(t) {
       const GUID *guid = xaccTransGetGUID(t);
       gpointer been_here = g_hash_table_lookup(visited_txns, guid);
-      
-      if(!been_here) {
-        g_hash_table_insert(visited_txns, (gpointer) guid, (gpointer) 1);
+
+      if(!GPOINTER_TO_INT(been_here)) {
+        g_hash_table_insert(visited_txns, (gpointer) guid,
+                            GINT_TO_POINTER(TRUE));
         if(!proc(t, data)) {
           keep_going = FALSE;
         }
