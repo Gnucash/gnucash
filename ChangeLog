@@ -1,3 +1,11 @@
+2002-11-16  David Hampton  <hampton@employees.org>
+
+	* src/register/ledger-core/split-register.c (gnc_split_register_save):
+	Check whats in the transfer cell values and possible ask the user
+	if they want to create the account.
+	(gnc_split_register_get_account_by_name): Return quietly if passed
+	a null string.
+
 2002-11-16  Derek Atkins  <derek@ihtfp.com>
 
 	* Matthew Vanecek's patch:

@@ -1370,6 +1370,10 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    if (!gnc_split_register_auto_calc (reg, split))
      return FALSE;
 
+   /* Validate the transfer account names */
+   (void *)gnc_split_register_get_account (reg, MXFRM_CELL);
+   (void *)gnc_split_register_get_account (reg, XFRM_CELL);
+
    gnc_suspend_gui_refresh ();
 
    /* determine whether we should commit the pending transaction */
@@ -1481,6 +1485,9 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
   char *fullname;
   ComboCell *cell = (ComboCell *) bcell;
   Account *account;
+
+  if (!name || (strlen(name) == 0))
+    return NULL;
 
   /* Find the account */
   account = xaccGetAccountFromFullName (gnc_get_current_group (),
