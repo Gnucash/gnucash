@@ -145,12 +145,12 @@
       (obj)->do_free = FALSE; \
       (on_error)((obj), errcode); \
       qof_backend_set_error (be, errcode); \
-    } \
-  } \
-  if (on_done) { (on_done)(obj); } \
-  obj->dirty = FALSE;              \
-  \
-  if ((obj)->do_free) { (on_free)(obj); } \
+    }                                      \
+  }                                        \
+  (on_done)(obj);                          \
+  (obj)->dirty = FALSE;                    \
+                                           \
+  if ((obj)->do_free) { (on_free)(obj); }  \
 }
 
 
