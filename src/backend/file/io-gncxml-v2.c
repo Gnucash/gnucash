@@ -1,4 +1,6 @@
 /********************************************************************\
+ * Copyright (C) 2000,2001 Gnumatic Inc.                            *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -516,14 +518,16 @@ write_counts(FILE* out, ...)
 }
 
 static gint
-compare_namespaces(gconstpointer a, gconstpointer b) {
+compare_namespaces(gconstpointer a, gconstpointer b)
+{
   const gchar *sa = (const gchar *) a;
   const gchar *sb = (const gchar *) b;
   return(safe_strcmp(sa, sb));
 }
 
 static gint
-compare_commodity_ids(gconstpointer a, gconstpointer b) {
+compare_commodity_ids(gconstpointer a, gconstpointer b)
+{
   const gnc_commodity *ca = (const gnc_commodity *) a;
   const gnc_commodity *cb = (const gnc_commodity *) b;
   return(safe_strcmp(gnc_commodity_get_mnemonic(ca),
