@@ -316,7 +316,7 @@ gnc_commodity_import_legacy(const char * currency_name) {
     if(!old) {
       old = gnc_commodity_new(currency_name, 
                               GNC_COMMODITY_NS_LEGACY, currency_name,
-                              0, 10000);
+                              0, 100000);
       gnc_commodity_table_insert(gnc_engine_commodities(), 
                                  old);
     }
@@ -628,6 +628,24 @@ readAccount( int fd, AccountGroup *grp, int token )
      if(tmp) free (tmp);
 
      tmp = readString( fd, token );
+
+     if (!tmp || *tmp == '\0')
+     {
+        GNCAccountType account_type;
+
+        account_type = xaccAccountGetType (acc);
+
+        if (account_type == STOCK  ||
+            account_type == MUTUAL ||
+            account_type == CURRENCY)
+        {
+          if (tmp) free (tmp);
+
+          tmp = strdup (xaccAccountGetName (acc));
+          if (tmp == NULL) return NULL;
+        }
+     }
+
      security = gnc_commodity_import_legacy(tmp);
      xaccAccountSetSecurity (acc, security);
 

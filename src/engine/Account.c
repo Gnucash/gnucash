@@ -591,7 +591,7 @@ xaccAccountRecomputeBalance( Account * acc ) {
       split -> cleared_balance = price_xfer(split, share_cleared_balance);
       split -> reconciled_balance = 
         price_xfer(split, share_reconciled_balance);
-    } 
+    }
     else {
       split -> share_balance = dbalance;
       split -> share_cleared_balance = dcleared_balance;
@@ -600,11 +600,13 @@ xaccAccountRecomputeBalance( Account * acc ) {
       split -> cleared_balance = dcleared_balance;
       split -> reconciled_balance = dreconciled_balance;
     }
-    
+
     last_split = split;
   }
 
-  if ( (STOCK == acc->type) || ( MUTUAL == acc->type) ) {
+  if ( (STOCK == acc->type)  ||
+       (MUTUAL == acc->type) ||
+       (CURRENCY == acc->type) ) {
     if (last_split) {
       acc -> share_balance = share_balance;
       acc -> share_cleared_balance = share_cleared_balance;
@@ -613,7 +615,6 @@ xaccAccountRecomputeBalance( Account * acc ) {
       acc -> cleared_balance = price_xfer(last_split, share_cleared_balance);
       acc -> reconciled_balance = 
         price_xfer(last_split, share_reconciled_balance);
-      
     } 
     else {
       acc -> share_balance = gnc_numeric_zero();

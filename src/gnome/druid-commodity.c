@@ -139,9 +139,9 @@ gnc_ui_commodity_druid_create(const char * filename) {
       found = gnc_commodity_new(gnc_commodity_get_mnemonic(lost),
                                 GNC_COMMODITY_NS_NASDAQ,
                                 gnc_commodity_get_mnemonic(lost),
-                                NULL, 1000);
+                                NULL, 100000);
     }
-    
+
     g_hash_table_insert(d->new_map, (gpointer)gnc_commodity_get_mnemonic(lost),
                         (gpointer)found);
     g_hash_table_insert(d->old_map, (gpointer)gnc_commodity_get_mnemonic(lost),
