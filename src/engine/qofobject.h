@@ -32,7 +32,7 @@
     
     XXX todo, we should split out the storage aspects of this 
     thing from the 'foreach' that query depends on.  These are
-    kinad unrelated concepts.
+    kinda unrelated concepts.
 
     @{ */
 /** @file qofobject.h
@@ -50,7 +50,7 @@
  * interface.  Only object modules compiled against this version
  * of the interface will load properly
  */
-#define QOF_OBJECT_VERSION 1
+#define QOF_OBJECT_VERSION 2
 
 
 typedef struct _QofObject QofObject;
@@ -68,7 +68,10 @@ struct _QofObject
   QofIdType           e_type;            /* the Object's QOF_ID */
   const char *        type_label;        /* "Printable" type-label string */
 
-  /** Create a new instance of this object type. */
+  /** Create a new instance of this object type.  This routine might be
+   *  NULL if the object type doesn't provide a way of creating new 
+   *  instances. 
+   */
   gpointer            (*new)(QofBook *);
 
   /** book_begin is called from within the Book routines to create
@@ -87,13 +90,18 @@ struct _QofObject
   /** Mark this object's book clean (for after a load) */
   void                (*mark_clean)(QofCollection *);
 
-  /** foreach() is used to execute a callback over each object
-   * stored in the particular book
+  /** Traverse over all of the items in the collection, calling
+   *  the callback on each item.  The third argument can be any 
+   *  arbitrary caller-supplied data, and is passed to the callback. 
+   *  Although (*foreach) may be NULL, allmost all objects should
+   *  provide this routine, as without it, little of interest can 
+    * be done.
    */
   void                (*foreach)(QofCollection *, QofEntityForeachCB, gpointer);
 
-  /** Given a particular instance of this type, return a printable string.
-   * Argument should really be QofInstance not gpointer.. */
+  /** Given a particular item of this type, return a printable string.
+   *  XXX In the future, the argument should probably be changes to be 
+   *  QofEntity and not gpointer.. */
   const char *        (*printable)(gpointer instance);
 
 };
