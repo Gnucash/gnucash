@@ -53,25 +53,25 @@
   <act:parent type="new">1880e89ec9fe82622b8648df481dd2b7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Revenu</act:name>
-  <act:id type="new">4b3e36f325569b80efc7d3331bdf851b</act:id>
+  <act:name>Revenus</act:name>
+  <act:id type="new">9da3c880bd04b9db49eb7f5b06403bda</act:id>
   <act:type>INCOME</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
-  <act:description>Revenu</act:description>
+  <act:description>Revenus</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Revenu d'intérêt</act:name>
-  <act:id type="new">fd131cae797d1fb83c2e2bf57254eca5</act:id>
+  <act:name>Revenu d'intérêts</act:name>
+  <act:id type="new">c47361e40d9478ec11758097e64d693c</act:id>
   <act:type>INCOME</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Revenu d'intérêt</act:description>
-  <act:parent type="new">4b3e36f325569b80efc7d3331bdf851b</act:parent>
+  <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Intérêt CD</act:name>
@@ -82,7 +82,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Intérêt CD</act:description>
-  <act:parent type="new">fd131cae797d1fb83c2e2bf57254eca5</act:parent>
+  <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Intérêt du marché monétaire</act:name>
@@ -93,7 +93,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Intérêt du marché monétaire</act:description>
-  <act:parent type="new">fd131cae797d1fb83c2e2bf57254eca5</act:parent>
+  <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
 </gnc-account-example>
 

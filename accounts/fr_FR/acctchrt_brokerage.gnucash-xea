@@ -11,8 +11,8 @@
     Vous devriez sélectionner cet ensemble de comptes si vous avez des investissements (action, obligation, fond commun, fond d'indices, intérêt, dividende).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
-  <act:name>Avoir</act:name>
-  <act:id type="new">52b5942b5beaec856eaca5a75ee71592</act:id>
+  <act:name>Actif</act:name>
+  <act:id type="new">98f262dfab9a2b99ac42919dcf58d304</act:id>
   <act:type>ASSET</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
@@ -29,7 +29,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Investissements</act:description>
-  <act:parent type="new">52b5942b5beaec856eaca5a75ee71592</act:parent>
+  <act:parent type="new">98f262dfab9a2b99ac42919dcf58d304</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Compte de bourse/titre</act:name>
@@ -108,8 +108,8 @@
   <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Revenu d'intérets</act:name>
-  <act:id type="new">7943bc59ffbb9a7be4afcd2996147119</act:id>
+  <act:name>Revenu d'intérêts</act:name>
+  <act:id type="new">c47361e40d9478ec11758097e64d693c</act:id>
   <act:type>INCOME</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
@@ -127,7 +127,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Intérêts d'obligation</act:description>
-  <act:parent type="new">7943bc59ffbb9a7be4afcd2996147119</act:parent>
+  <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dépenses</act:name>

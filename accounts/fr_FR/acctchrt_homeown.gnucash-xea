@@ -31,14 +31,14 @@
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Assurance</act:name>
-  <act:id type="new">4677fe36914ebcf23758f3bf20686b4a</act:id>
+  <act:name>Assurances</act:name>
+  <act:id type="new">5bda5ff833bc395dc1b00f95c66ce555</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
-  <act:description>Assurance</act:description>
+  <act:description>Assurances</act:description>
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -50,7 +50,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Assurance habitation</act:description>
-  <act:parent type="new">4677fe36914ebcf23758f3bf20686b4a</act:parent>
+  <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Taxes</act:name>

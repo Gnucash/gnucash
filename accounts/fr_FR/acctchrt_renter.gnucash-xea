@@ -20,14 +20,14 @@
   <act:description>Dépenses</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Assurance</act:name>
-  <act:id type="new">b79b231807a98cd562c46cf0454e9f25</act:id>
+  <act:name>Assurances</act:name>
+  <act:id type="new">5bda5ff833bc395dc1b00f95c66ce555</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
-  <act:description>Assurance</act:description>
+  <act:description>Assurances</act:description>
   <act:parent type="new">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -39,7 +39,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Assurance locative</act:description>
-  <act:parent type="new">b79b231807a98cd562c46cf0454e9f25</act:parent>
+  <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Location</act:name>

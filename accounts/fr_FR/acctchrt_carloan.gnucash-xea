@@ -52,14 +52,14 @@
   <act:description>Dépenses</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Intérets</act:name>
-  <act:id type="new">9e8495e80ebfb762089be917dff7ab72</act:id>
+  <act:name>Intérêts</act:name>
+  <act:id type="new">3dc58d8a51b5deaa22e0c65d81e90346</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
-  <act:description>Intérets</act:description>
+  <act:description>Intérêts</act:description>
   <act:parent type="new">acacdcb998e45fb741766622e8542f0b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -71,7 +71,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Intérêts emprunt automobile</act:description>
-  <act:parent type="new">9e8495e80ebfb762089be917dff7ab72</act:parent>
+  <act:parent type="new">3dc58d8a51b5deaa22e0c65d81e90346</act:parent>
 </gnc:account>
 </gnc-account-example>
 

@@ -31,36 +31,46 @@
   <act:parent type="new">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Impôts (épouse)</act:name>
+  <act:name>Dépenses</act:name>
+  <act:id type="new">1884bbd7394883ebafec8b9e2eb091a4</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Dépenses</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Taxes (épouse)</act:name>
   <act:id type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
-  <act:description>Impôts (épouse)</act:description>
-  <act:parent type="new">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:parent>
+  <act:description>Taxes (épouse)</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Divers</act:name>
+  <act:name>Impôts</act:name>
   <act:id type="new">78df9cf06ee197272a695a4c3044f749</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
-  <act:description>Divers</act:description>
+  <act:description>Impôts</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Assurance maladie</act:name>
+  <act:name>Complémentaire maladie</act:name>
   <act:id type="new">eba0c095658c7c3a4f4294db9c7392f3</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
-  <act:description>Assurance maladie</act:description>
+  <act:description>Complémentaire maladie</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

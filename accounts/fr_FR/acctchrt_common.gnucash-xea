@@ -96,14 +96,14 @@
   <act:parent type="new">a8186db64d71dc2ca5fdccb3234b531b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Revenu</act:name>
-  <act:id type="new">a7ab23dd2d41616042034d5a012a0850</act:id>
+  <act:name>Revenus</act:name>
+  <act:id type="new">9da3c880bd04b9db49eb7f5b06403bda</act:id>
   <act:type>INCOME</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
-  <act:description>Revenu</act:description>
+  <act:description>Revenus</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bonus</act:name>
@@ -114,7 +114,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Bonus</act:description>
-  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+  <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dons reçus</act:name>
@@ -125,10 +125,10 @@
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Dons reçus</act:description>
-  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+  <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Revenu d'intérets</act:name>
+  <act:name>Revenu d'intérêts</act:name>
   <act:id type="new">c47361e40d9478ec11758097e64d693c</act:id>
   <act:type>INCOME</act:type>
   <act:currency>
@@ -136,7 +136,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Revenu d'intérets</act:description>
-  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+  <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Intérets du compte chèque</act:name>
@@ -180,7 +180,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Autre revenu</act:description>
-  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+  <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Salaire</act:name>
@@ -191,7 +191,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Salaire</act:description>
-  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+  <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dépenses</act:name>
