@@ -134,6 +134,7 @@ const GUID  * xaccTransGetGUID (Transaction *trans);
 GUID          xaccTransReturnGUID (Transaction *trans);
 Transaction * xaccTransLookup (const GUID *guid, GNCBook *book);
 Transaction * xaccTransLookupDirect (GUID guid, GNCBook *book);
+GNCBook *     xaccTransGetBook (Transaction *trans);
 
 /* Transaction slots are used to store arbitrary strings, numbers, and
  * structures which aren't members of the transaction struct.  */

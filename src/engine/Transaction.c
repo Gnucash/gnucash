@@ -790,6 +790,13 @@ xaccMallocTransaction (GNCBook *book)
   return trans;
 }
 
+GNCBook *
+xaccTransGetBook (Transaction *trans)
+{
+  if (!trans) return NULL;
+  return trans->book;
+}
+
 /********************************************************************\
 \********************************************************************/
 /* This routine is not exposed externally, since it does weird things, 
