@@ -429,10 +429,10 @@ xaccSplitRebalance (Split *split)
    * quietly return. 
    */
   if (!trans) return;
+  if (!(split->acc)) return;
 
   assert (trans->splits);
   assert (trans->splits[0]);
-  assert (split->acc);
 
   /* lets find out if we are dealing with multiple currencies.  */
   base_currency = split->acc->currency;
