@@ -12,6 +12,28 @@
 
 #define BUFSIZE 1024
 
+/* ======================================================== */
+
+void 
+xaccCommitEdits (BasicRegister *reg)
+{
+   CellBlock *cursor;
+   Split *split;
+   Transaction *trans;
+
+   cursor = reg->table->cursor;
+
+   split = (Split *) cursor->user_data;
+   if (!split) return;
+
+   trans = (Transaction *) (split->parent);
+   
+   if (trans->num) free (trans->num);
+   trans->num = strdup (reg->numCell->value);
+}
+
+/* ======================================================== */
+
 void
 xaccLoadRegister (BasicRegister *reg, Split **slist)
 {
@@ -19,14 +41,23 @@ xaccLoadRegister (BasicRegister *reg, Split **slist)
    Split *split;
    Transaction *trans;
    char buff[BUFSIZE];
+   Table *table;
 
+   table = reg->table;
+
+   /* set table size to number of items in list */
+   i=0;
+   while (slist[i]) i++;
+   xaccSetTableSize (table, i, 1);
+
+   /* populate the table */
    i=0;
    split = slist[0]; 
    while (split) {
 
       trans = (Transaction *) (split->parent);
 
-      xaccMoveCursor (reg->table, i, 0);
+      xaccMoveCursor (table, i, 0);
 
       sprintf (buff, "%2d/%2d/%4d", trans->date.day, 
                                     trans->date.month,
@@ -47,12 +78,16 @@ xaccLoadRegister (BasicRegister *reg, Split **slist)
                                reg->creditCell, split->damount);
 
       xaccSetAmountCellValue (reg->balanceCell, split->balance);
-      xaccCommitEdits (reg->table);
+
+      table->cursor->user_data = (void *) split;
+
+      /* copy cursor contents into the table */
+      xaccCommitCursor (table);
 
       i++;
       split = slist[i];
    }
-   xaccRefreshTable (reg->table);
+   xaccRefreshTableGUI (table);
 }
 
 /* ======================================================== */
