@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-06-04 23:42-0500\n"
+"POT-Creation-Date: 2000-06-04 17:16-0700\n"
 "PO-Revision-Date: 2000-04-25 00:00+0900\n"
 "Last-Translator: Shimpei Yamashita <shimpei@gol.com>\n"
 "Language-Team: \n"

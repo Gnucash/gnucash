@@ -41,7 +41,7 @@
 	* guid-md5.* -> md5.* - Dave liked this better, and I did too.
 
 	* src/register/gnome/* - restored ... for now.
-	
+
 2000-06-01  Rob Browning  <rlb@cs.utexas.edu>
 
 	* README: many mods to accomodate new changes, but still unfinished.

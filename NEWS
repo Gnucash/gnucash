@@ -1,5 +1,13 @@
 Version history:
 ------- -------
+ 1.3.99 - 05 June 2000
+         o transaction auto-completion
+         o improved qif importing
+         o fixes for 64-bit architectures
+         o updated translations
+         o automaked build system
+         o bug fixes and ui improvements
+
  1.3.8  - 25 May 2000
          o transaction cut/copy/paste
          o new Japanese translations
