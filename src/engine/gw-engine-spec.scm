@@ -2429,7 +2429,7 @@ of having a parent transaction with which one is working...")
  '()
  "Run the RPC Server") 
 
-;; src/engine/date.h
+;; gnc-date.h
 
 (gw:wrap-function
  ws
