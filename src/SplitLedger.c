@@ -237,6 +237,7 @@ static void xaccSRSetTransVisible (SplitRegister *reg,
                                    gboolean visible,
                                    gboolean only_blank_split);
 static gboolean trans_has_reconciled_splits (Transaction *trans);
+static void sr_set_last_num (SplitRegister *reg, const char *num);
 
 
 /** implementations *******************************************************/
@@ -1889,7 +1890,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
   if ((split == NULL) && (cursor_class == CURSOR_CLASS_TRANS))
     return NULL;
 
-  changed = xaccSplitRegisterGetChangeFlag(reg);
+  changed = xaccSplitRegisterGetChangeFlag (reg);
 
   /* See if we were asked to duplicate an unchanged blank split.
    * There's no point in doing that! */
@@ -1906,8 +1907,8 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
                             "Would you like to record it?");
     GNCVerifyResult result;
 
-    result = gnc_ok_cancel_dialog_parented(xaccSRGetParent(reg),
-                                           message, GNC_VERIFY_OK);
+    result = gnc_ok_cancel_dialog_parented (xaccSRGetParent(reg),
+                                            message, GNC_VERIFY_OK);
 
     if (result == GNC_VERIFY_CANCEL)
     {
@@ -1915,14 +1916,14 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
       return NULL;
     }
 
-    xaccSRSaveRegEntry(reg, TRUE);
+    xaccSRSaveRegEntry (reg, TRUE);
 
     /* If the split is NULL, then we were on a blank split row
      * in an expanded transaction. The new split (created by
      * xaccSRSaveRegEntry above) will be the last split in the
      * current transaction, as it was just added. */
     if (split == NULL)
-      split = xaccTransGetSplit(trans, xaccTransCountSplits(trans) - 1);
+      split = xaccTransGetSplit (trans, xaccTransCountSplits (trans) - 1);
   }
 
   /* Ok, we are now ready to make the copy. */
@@ -1934,13 +1935,13 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
     /* We are on a split in an expanded transaction.
      * Just copy the split and add it to the transaction. */
 
-    new_split = xaccMallocSplit();
+    new_split = xaccMallocSplit ();
 
-    xaccTransBeginEdit(trans);
-    xaccTransAppendSplit(trans, new_split);
-    xaccTransCommitEdit(trans);
+    xaccTransBeginEdit (trans);
+    xaccTransAppendSplit (trans, new_split);
+    xaccTransCommitEdit (trans);
 
-    gnc_copy_split_onto_split(split, new_split, FALSE);
+    gnc_copy_split_onto_split (split, new_split, FALSE);
 
     return_split = new_split;
 
@@ -1950,13 +1951,34 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
   else
   {
     Transaction *new_trans;
-    int split_index;
     int trans_split_index;
+    int split_index;
+    const char *in_num = NULL;
+    char *out_num;
+    time_t date;
 
     /* We are on a transaction row. Copy the whole transaction. */
 
-    split_index = gnc_trans_split_index(trans, split);
-    trans_split_index = gnc_trans_split_index(trans, trans_split);
+    date = info->last_date_entered;
+    if (gnc_strisnum (xaccTransGetNum (trans)))
+    {
+      Account *account = sr_get_default_account (reg);
+
+      if (account)
+        in_num = xaccAccountGetLastNum (account);
+      else
+        in_num = xaccTransGetNum (trans);
+    }
+
+    if (!gnc_dup_trans_dialog (xaccSRGetParent (reg),
+                               &date, in_num, &out_num))
+    {
+      gnc_resume_gui_refresh ();
+      return NULL;
+    }
+
+    split_index = gnc_trans_split_index (trans, split);
+    trans_split_index = gnc_trans_split_index (trans, trans_split);
 
     /* we should *always* find the split, but be paranoid */
     if (split_index < 0)
@@ -1965,20 +1987,26 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
       return NULL;
     }
 
-    new_trans = xaccMallocTransaction();
+    new_trans = xaccMallocTransaction ();
 
-    gnc_copy_trans_onto_trans(trans, new_trans, FALSE, TRUE);
+    gnc_copy_trans_onto_trans (trans, new_trans, FALSE, TRUE);
 
-    xaccTransBeginEdit(new_trans);
-    xaccTransSetDateSecs(new_trans, info->last_date_entered);
-    xaccTransCommitEdit(new_trans);
+    xaccTransBeginEdit (new_trans);
+    xaccTransSetDateSecs (new_trans, date);
+    xaccTransSetNum (new_trans, out_num);
+    xaccTransCommitEdit (new_trans);
+
+    if (xaccSetNumCellLastNum (reg->numCell, out_num))
+      sr_set_last_num (reg, out_num);
+
+    g_free (out_num);
 
     /* This shouldn't happen, but be paranoid. */
-    if (split_index >= xaccTransCountSplits(new_trans))
+    if (split_index >= xaccTransCountSplits (new_trans))
       split_index = 0;
 
-    return_split = xaccTransGetSplit(new_trans, split_index);
-    trans_split = xaccTransGetSplit(new_trans, trans_split_index);
+    return_split = xaccTransGetSplit (new_trans, split_index);
+    trans_split = xaccTransGetSplit (new_trans, trans_split_index);
 
     info->cursor_hint_trans = new_trans;
     info->cursor_hint_split = return_split;
@@ -2755,7 +2783,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
    xaccSRSaveChangedCells (reg, trans, split);
 
    PINFO ("finished saving split %s of trans %s \n", 
-          xaccSplitGetMemo(split), xaccTransGetDescription(trans));
+          xaccSplitGetMemo (split), xaccTransGetDescription (trans));
 
    /* If the modified split is the "blank split", then it is now an
     * official part of the account. Set the blank split to NULL, so
@@ -2765,9 +2793,9 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
    {
      if (do_commit)
      {
-       info->blank_split_guid = *xaccGUIDNULL();
+       info->blank_split_guid = *xaccGUIDNULL ();
        blank_split = NULL;
-       info->last_date_entered = xaccTransGetDate(trans);
+       info->last_date_entered = xaccTransGetDate (trans);
      }
      else
        info->blank_split_edited = TRUE;
@@ -2781,11 +2809,11 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
      if (pending_trans == trans)
      {
        pending_trans = NULL;
-       info->pending_trans_guid = *xaccGUIDNULL();
+       info->pending_trans_guid = *xaccGUIDNULL ();
      }
    }
 
-   xaccSplitRegisterClearChangeFlag(reg);
+   xaccSplitRegisterClearChangeFlag (reg);
 
    gnc_resume_gui_refresh ();
 
@@ -2795,21 +2823,15 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
 /* ======================================================== */
 
 static void
-sr_set_last_num (SplitRegister *reg, Transaction *trans, const char *num)
+sr_set_last_num (SplitRegister *reg, const char *num)
 {
-  SRInfo *info = xaccSRGetInfo (reg);
-  Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
-  Transaction *blank_trans = xaccSplitGetParent (blank_split);
   Account *account;
-
-  if (trans != blank_trans)
-    return;
 
   account = sr_get_default_account (reg);
   if (!account)
     return;
 
-  xaccAccountSetLastNum (account, reg->numCell->cell.value);
+  xaccAccountSetLastNum (account, num);
 }
 
 /* ======================================================== */
@@ -2844,7 +2866,14 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
     DEBUG ("MOD_NUM: %s\n", reg->numCell->cell.value);
     xaccTransSetNum (trans, reg->numCell->cell.value);
     if (xaccSetNumCellLastNum (reg->numCell, reg->numCell->cell.value))
-      sr_set_last_num (reg, trans, reg->numCell->cell.value);
+    {
+      SRInfo *info = xaccSRGetInfo (reg);
+      Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
+      Transaction *blank_trans = xaccSplitGetParent (blank_split);
+
+      if (trans != blank_trans)
+        sr_set_last_num (reg, reg->numCell->cell.value);
+    }
   }
 
   if (MOD_DESC & changed)

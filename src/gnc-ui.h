@@ -85,10 +85,13 @@ int      gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
                                                  int default_value,
                                                  char **radio_list);
 
+gboolean gnc_dup_trans_dialog (GtkWidget * parent, time_t *date_p,
+                               const char *num, char **out_num);
+
 
 /* Managing the GUI Windows *****************************************/
 
-void gnc_ui_destroy_all_subwindows(void);
+void gnc_ui_destroy_all_subwindows (void);
 
 
 /* Changing the GUI Cursor ******************************************/

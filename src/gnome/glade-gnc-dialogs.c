@@ -5269,7 +5269,9 @@ create_Tax_Information_Dialog (void)
   GtkWidget *dialog_vbox14;
   GtkWidget *hbox81;
   GtkWidget *account_frame;
+  GtkWidget *vbox96;
   GtkWidget *account_scroll;
+  GtkWidget *button78;
   GtkWidget *frame40;
   GtkWidget *vbox92;
   GtkWidget *tax_related_button;
@@ -5311,14 +5313,29 @@ create_Tax_Information_Dialog (void)
   gtk_widget_show (account_frame);
   gtk_box_pack_start (GTK_BOX (hbox81), account_frame, TRUE, TRUE, 0);
 
+  vbox96 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox96);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "vbox96", vbox96,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox96);
+  gtk_container_add (GTK_CONTAINER (account_frame), vbox96);
+
   account_scroll = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_ref (account_scroll);
   gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "account_scroll", account_scroll,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (account_scroll);
-  gtk_container_add (GTK_CONTAINER (account_frame), account_scroll);
+  gtk_box_pack_start (GTK_BOX (vbox96), account_scroll, TRUE, TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (account_scroll), 3);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (account_scroll), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+
+  button78 = gtk_button_new_with_label (_("Toggle Subaccounts"));
+  gtk_widget_ref (button78);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "button78", button78,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button78);
+  gtk_box_pack_start (GTK_BOX (vbox96), button78, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (button78), 3);
 
   frame40 = gtk_frame_new (_("Tax Information"));
   gtk_widget_ref (frame40);
@@ -5450,5 +5467,118 @@ create_Tax_Information_Dialog (void)
   GTK_WIDGET_SET_FLAGS (button75, GTK_CAN_DEFAULT);
 
   return Tax_Information_Dialog;
+}
+
+GtkWidget*
+create_Duplicate_Transaction_Dialog (void)
+{
+  GtkWidget *Duplicate_Transaction_Dialog;
+  GtkWidget *dialog_vbox15;
+  GtkWidget *frame41;
+  GtkWidget *hbox84;
+  GtkWidget *vbox94;
+  GtkWidget *label847669;
+  GtkWidget *label847670;
+  GtkWidget *vbox95;
+  GtkWidget *date_hbox;
+  GtkObject *num_spin_adj;
+  GtkWidget *num_spin;
+  GtkWidget *dialog_action_area15;
+  GtkWidget *button76;
+  GtkWidget *button77;
+
+  Duplicate_Transaction_Dialog = gnome_dialog_new (_("Duplicate Transaction"), NULL);
+  gtk_object_set_data (GTK_OBJECT (Duplicate_Transaction_Dialog), "Duplicate_Transaction_Dialog", Duplicate_Transaction_Dialog);
+  gtk_window_set_modal (GTK_WINDOW (Duplicate_Transaction_Dialog), TRUE);
+  gtk_window_set_policy (GTK_WINDOW (Duplicate_Transaction_Dialog), FALSE, FALSE, FALSE);
+  gnome_dialog_close_hides (GNOME_DIALOG (Duplicate_Transaction_Dialog), TRUE);
+
+  dialog_vbox15 = GNOME_DIALOG (Duplicate_Transaction_Dialog)->vbox;
+  gtk_object_set_data (GTK_OBJECT (Duplicate_Transaction_Dialog), "dialog_vbox15", dialog_vbox15);
+  gtk_widget_show (dialog_vbox15);
+
+  frame41 = gtk_frame_new (_("Transaction Information"));
+  gtk_widget_ref (frame41);
+  gtk_object_set_data_full (GTK_OBJECT (Duplicate_Transaction_Dialog), "frame41", frame41,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame41);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox15), frame41, TRUE, TRUE, 0);
+
+  hbox84 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_ref (hbox84);
+  gtk_object_set_data_full (GTK_OBJECT (Duplicate_Transaction_Dialog), "hbox84", hbox84,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox84);
+  gtk_container_add (GTK_CONTAINER (frame41), hbox84);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox84), 3);
+
+  vbox94 = gtk_vbox_new (TRUE, 5);
+  gtk_widget_ref (vbox94);
+  gtk_object_set_data_full (GTK_OBJECT (Duplicate_Transaction_Dialog), "vbox94", vbox94,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox94);
+  gtk_box_pack_start (GTK_BOX (hbox84), vbox94, FALSE, FALSE, 0);
+
+  label847669 = gtk_label_new (_("Date:"));
+  gtk_widget_ref (label847669);
+  gtk_object_set_data_full (GTK_OBJECT (Duplicate_Transaction_Dialog), "label847669", label847669,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847669);
+  gtk_box_pack_start (GTK_BOX (vbox94), label847669, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label847669), 1, 0.5);
+
+  label847670 = gtk_label_new (_("Num:"));
+  gtk_widget_ref (label847670);
+  gtk_object_set_data_full (GTK_OBJECT (Duplicate_Transaction_Dialog), "label847670", label847670,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847670);
+  gtk_box_pack_start (GTK_BOX (vbox94), label847670, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label847670), 1, 0.5);
+
+  vbox95 = gtk_vbox_new (TRUE, 5);
+  gtk_widget_ref (vbox95);
+  gtk_object_set_data_full (GTK_OBJECT (Duplicate_Transaction_Dialog), "vbox95", vbox95,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox95);
+  gtk_box_pack_start (GTK_BOX (hbox84), vbox95, TRUE, TRUE, 0);
+
+  date_hbox = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (date_hbox);
+  gtk_object_set_data_full (GTK_OBJECT (Duplicate_Transaction_Dialog), "date_hbox", date_hbox,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (date_hbox);
+  gtk_box_pack_start (GTK_BOX (vbox95), date_hbox, TRUE, TRUE, 0);
+
+  num_spin_adj = gtk_adjustment_new (0, 0, 100000, 1, 10, 10);
+  num_spin = gtk_spin_button_new (GTK_ADJUSTMENT (num_spin_adj), 1, 0);
+  gtk_widget_ref (num_spin);
+  gtk_object_set_data_full (GTK_OBJECT (Duplicate_Transaction_Dialog), "num_spin", num_spin,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (num_spin);
+  gtk_box_pack_start (GTK_BOX (vbox95), num_spin, FALSE, FALSE, 0);
+
+  dialog_action_area15 = GNOME_DIALOG (Duplicate_Transaction_Dialog)->action_area;
+  gtk_object_set_data (GTK_OBJECT (Duplicate_Transaction_Dialog), "dialog_action_area15", dialog_action_area15);
+  gtk_widget_show (dialog_action_area15);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area15), GTK_BUTTONBOX_END);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area15), 8);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Duplicate_Transaction_Dialog), GNOME_STOCK_BUTTON_OK);
+  button76 = g_list_last (GNOME_DIALOG (Duplicate_Transaction_Dialog)->buttons)->data;
+  gtk_widget_ref (button76);
+  gtk_object_set_data_full (GTK_OBJECT (Duplicate_Transaction_Dialog), "button76", button76,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button76);
+  GTK_WIDGET_SET_FLAGS (button76, GTK_CAN_DEFAULT);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Duplicate_Transaction_Dialog), GNOME_STOCK_BUTTON_CANCEL);
+  button77 = g_list_last (GNOME_DIALOG (Duplicate_Transaction_Dialog)->buttons)->data;
+  gtk_widget_ref (button77);
+  gtk_object_set_data_full (GTK_OBJECT (Duplicate_Transaction_Dialog), "button77", button77,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button77);
+  GTK_WIDGET_SET_FLAGS (button77, GTK_CAN_DEFAULT);
+
+  return Duplicate_Transaction_Dialog;
 }
 

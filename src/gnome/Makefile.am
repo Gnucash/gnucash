@@ -8,6 +8,7 @@ libgncgnome_a_SOURCES = \
   dialog-account-picker.c \
   dialog-budget.c \
   dialog-commodity.c \
+  dialog-dup-trans.c \
   dialog-filebox.c \
   dialog-fincalc.c \
   dialog-find-transactions.c \
