@@ -19,7 +19,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup Register
+/** @addtogroup Ledger
     The register is the spread-sheet-like area that looks like a 
     checkbook register.  It displays transactions, and allows the 
     user to edit transactions in-place.  The register does *not*
@@ -37,12 +37,13 @@
     the fact that this register can display multiple rows of 
     transaction splits underneath a transaction title/summary row.
 
-    This code is almost, but not quite, independent of the GnuCash
-    financial object definitions, and thus can be almost, but not 
-    quite, be used in software other than GnuCash.  Unfortunately, 
-    crud has snuck in; there's several places where Gnucash Transactions
-    and GnuCash Accounts are accessed directly, and that's wrong;
-    these should be cleaned up.
+    The Register itself is independent of GnuCash, and is designed 
+    so that it can be used with other applications.
+    The Ledger is an adaptation of the Register for use by GnuCash.
+    The Ledger sets up an explicit visual layout, putting certain 
+    types of cells in specific locations (e.g. date on left, summary 
+    in middle, value at right), and hooks up these cells to 
+    the various GnuCash financial objects.
 
     This code is also theoretically independent of the actual GUI
     toolkit/widget-set (it once worked with both Motif and Gnome).
