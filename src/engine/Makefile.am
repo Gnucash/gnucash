@@ -90,9 +90,6 @@ libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS} \
  ${top_srcdir}/src/engine/libgw-engine.la \
  ${top_srcdir}/src/engine/libgw-kvp.la 
 
-#libgw_glib_la_SOURCES = gw-glib.c
-#libgw_glib_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
-
 libgw_kvp_la_SOURCES = gw-kvp.c kvp-scm.c
 libgw_kvp_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
 
@@ -148,12 +145,6 @@ gw-engine.scm gw-engine.c gw-engine.h: .scm-links gw-engine-spec.scm
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \
 	 (primitive-load \"./gw-engine-spec.scm\") \
 	 (gw:generate-wrapset \"gw-engine\")"
-
-#gw-glib.scm gw-glib.c gw-glib.h: .scm-links gw-glib-spec.scm
-#	FLAVOR=gnome guile -c \
-#	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-#	 (primitive-load \"./gw-glib-spec.scm\") \
-#	 (gw:generate-wrapset \"gw-glib\")"
 
 gw-kvp.scm gw-kvp.c gw-kvp.h: .scm-links gw-kvp-spec.scm
 	FLAVOR=gnome guile -c \

@@ -428,6 +428,14 @@ xaccSplitLookup (const GUID *guid, GNCBook *book)
                           guid, GNC_ID_SPLIT);
 }
 
+Split *
+xaccSplitLookupDirect (GUID guid, GNCBook *book)
+{
+  if (!book) return NULL;
+  return xaccLookupEntity(gnc_book_get_entity_table (book),
+                          &guid, GNC_ID_SPLIT);
+}
+
 /********************************************************************\
 \********************************************************************/
 
@@ -1091,7 +1099,8 @@ xaccTransSetGUID (Transaction *trans, const GUID *guid)
   if (!trans || !guid) return;
   xaccRemoveEntity(trans->book->entity_table, &trans->guid);
   trans->guid = *guid;
-  xaccStoreEntity(trans->book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
+  xaccStoreEntity(trans->book->entity_table, trans,
+                  &trans->guid, GNC_ID_TRANS);
 }
 
 
@@ -1104,6 +1113,14 @@ xaccTransLookup (const GUID *guid, GNCBook *book)
   if (!guid || !book) return NULL;
   return xaccLookupEntity (gnc_book_get_entity_table (book),
                            guid, GNC_ID_TRANS);
+}
+
+Transaction *
+xaccTransLookupDirect (GUID guid, GNCBook *book)
+{
+  if (!book) return NULL;
+  return xaccLookupEntity (gnc_book_get_entity_table (book),
+                           &guid, GNC_ID_TRANS);
 }
 
 /********************************************************************\

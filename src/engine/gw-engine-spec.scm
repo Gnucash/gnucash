@@ -311,6 +311,15 @@
 
 (gw:wrap-function
  ws
+ 'gnc:split-lookup
+ '<gnc:Split*>
+ "xaccSplitLookupDirect"
+ '((<gnc:guid-scm> guid)
+   (<gnc:Book*> book))
+ "Lookup a split with its GUID.")
+
+(gw:wrap-function
+ ws
  'gnc:split-get-balance
  '<gnc:numeric>
  "xaccSplitGetBalance"
@@ -464,6 +473,15 @@ code of its account")
  "xaccTransReturnGUID"
  '((<gnc:Transaction*> t))
  "Return the GUID of Transaction t.")
+
+(gw:wrap-function
+ ws
+ 'gnc:transaction-lookup
+ '<gnc:Transaction*>
+ "xaccTransLookupDirect"
+ '((<gnc:guid-scm> guid)
+   (<gnc:Book*> book))
+ "Lookup a transaction with its GUID.")
 
 (gw:wrap-function
  ws

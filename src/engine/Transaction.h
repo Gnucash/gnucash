@@ -133,7 +133,7 @@ gboolean      xaccTransIsOpen (Transaction *trans);
 const GUID  * xaccTransGetGUID (Transaction *trans);
 GUID          xaccTransReturnGUID (Transaction *trans);
 Transaction * xaccTransLookup (const GUID *guid, GNCBook *book);
-
+Transaction * xaccTransLookupDirect (GUID guid, GNCBook *book);
 
 /* Transaction slots are used to store arbitrary strings, numbers, and
  * structures which aren't members of the transaction struct.  */
@@ -279,6 +279,7 @@ void xaccSplitSetSlots_nc(Split *s, kvp_frame *frm);
 const GUID * xaccSplitGetGUID (Split *split);
 GUID         xaccSplitReturnGUID (Split *split);
 Split      * xaccSplitLookup (const GUID *guid, GNCBook *book);
+Split      * xaccSplitLookupDirect (GUID guid, GNCBook *book);
 
 /* The memo is an arbitrary string associated with a split.
  *    Users typically type in free form text from the GUI.

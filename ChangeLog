@@ -1,3 +1,19 @@
+2002-01-12  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/gw-glib-spec.scm: remove
+
+	* src/engine/gw-engine-spec.scm: g-wrap split & trans lookup
+
+	* src/engine/gnc-engine-util.h: add more timing utils
+
+	* src/engine/gnc-engine-util.c: add more timing utils
+
+	* src/engine/Transaction.h: g-wrap split & trans lookup
+
+	* src/engine/Transaction.c: g-wrap split & trans lookup
+
+	* src/engine/Makefile.am: Take out glib wrapping cruft
+
 2002-01-09  Rob Browning  <rlb@defaultvalue.org>
 
 	* lib/srfi/Makefile.am: handle conditional per-SRFI install.

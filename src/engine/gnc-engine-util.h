@@ -62,7 +62,8 @@ typedef enum
   MOD_KVP     = 15,
   MOD_SX      = 16,
   MOD_BOOK    = 17,
-  MOD_LAST    = 17
+  MOD_TEST    = 18,
+  MOD_LAST    = 18
 } gncModuleType;
 
 typedef enum
@@ -152,11 +153,19 @@ void gnc_log (gncModuleType module, gncLogLevel log_level,
 }
 
 void gnc_start_clock (int clockno, gncModuleType module, gncLogLevel log_level,
-        const char *function_name, const char *format, ...);
+                      const char *function_name, const char *format, ...);
 
-void gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
-        const char *function_name, const char *format, ...);
+void gnc_report_clock (int clockno,
+                       gncModuleType module,
+                       gncLogLevel log_level,
+                       const char *function_name,
+                       const char *format, ...);
 
+void gnc_report_clock_total (int clockno,
+                             gncModuleType module,
+                             gncLogLevel log_level,
+                             const char *function_name,
+                             const char *format, ...);
 
 #define START_CLOCK(clockno,format, args...) {     \
   if (gnc_should_log (module, GNC_LOG_INFO))       \
@@ -170,6 +179,11 @@ void gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
              __FUNCTION__, format, ## args);       \
 }
 
+#define REPORT_CLOCK_TOTAL(clockno,format, args...) {       \
+  if (gnc_should_log (module, GNC_LOG_INFO))                \
+    gnc_report_clock_total (clockno, module, GNC_LOG_INFO,  \
+             __FUNCTION__, format, ## args);                \
+}
 
 /* Set the logging level of the given module. */
 void gnc_set_log_level(gncModuleType module, gncLogLevel level);

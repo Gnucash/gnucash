@@ -64,6 +64,7 @@ static gncLogLevel loglevel[MOD_LAST + 1] =
   GNC_LOG_WARNING,      /* KVP */
   GNC_LOG_DEBUG,        /* SX */
   GNC_LOG_WARNING,      /* BOOK */
+  GNC_LOG_TRACE,        /* TEST */
 };
 
 static FILE *fout = NULL;
@@ -173,15 +174,23 @@ struct timeval gnc_clock[NUM_CLOCKS] = {
    {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, 
 };
 
+static
+struct timeval gnc_clock_total[NUM_CLOCKS] = {
+   {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, 
+   {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, 
+};
+
 void
 gnc_start_clock (int clockno, gncModuleType module, gncLogLevel log_level,
-        const char *function_name, const char *format, ...)
+                 const char *function_name, const char *format, ...)
 {
   struct timezone tz;
   va_list ap;
 
   if ((0>clockno) || (NUM_CLOCKS <= clockno)) return;
   gettimeofday (&gnc_clock[clockno], &tz);
+
+  if (!fout) fout = stderr;
 
   fprintf (fout, "Clock %d Start: %s: ",
            clockno, prettify (function_name));
@@ -197,7 +206,7 @@ gnc_start_clock (int clockno, gncModuleType module, gncLogLevel log_level,
 
 void
 gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
-        const char *function_name, const char *format, ...)
+                  const char *function_name, const char *format, ...)
 {
   struct timezone tz;
   struct timeval now;
@@ -206,7 +215,7 @@ gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
   if ((0>clockno) || (NUM_CLOCKS <= clockno)) return;
   gettimeofday (&now, &tz);
 
-  /* need to borrow to make differnce */
+  /* need to borrow to make difference */
   if (now.tv_usec < gnc_clock[clockno].tv_usec)
   {
     now.tv_sec --;
@@ -215,8 +224,48 @@ gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
   now.tv_sec -= gnc_clock[clockno].tv_sec;
   now.tv_usec -= gnc_clock[clockno].tv_usec;
 
-  fprintf (fout, "Clock %d Elapsed: %ld.%06ld  %s: ",
+  gnc_clock_total[clockno].tv_sec += now.tv_sec;
+  gnc_clock_total[clockno].tv_usec += now.tv_usec;
+
+  if (!fout) fout = stderr;
+
+  fprintf (fout, "Clock %d Elapsed: %ld.%06lds %s: ",
            clockno, now.tv_sec, now.tv_usec, prettify (function_name));
+
+  va_start (ap, format);
+
+  vfprintf (fout, format, ap);
+
+  va_end (ap);
+
+  fprintf (fout, "\n");
+}
+
+void
+gnc_report_clock_total (int clockno,
+                        gncModuleType module, gncLogLevel log_level,
+                        const char *function_name, const char *format, ...)
+{
+  struct timezone tz;
+  struct timeval now;
+  va_list ap;
+
+  if ((0>clockno) || (NUM_CLOCKS <= clockno)) return;
+
+  /* need to normalize usec */
+  while (gnc_clock_total[clockno].tv_usec >= 1000000)
+  {
+    gnc_clock_total[clockno].tv_sec ++;
+    gnc_clock_total[clockno].tv_usec -= 1000000;
+  }
+
+  if (!fout) fout = stderr;
+
+  fprintf (fout, "Clock %d Total Elapsed: %ld.%06lds  %s: ",
+           clockno,
+           gnc_clock_total[clockno].tv_sec,
+           gnc_clock_total[clockno].tv_usec,
+           prettify (function_name));
 
   va_start (ap, format);
 
