@@ -247,8 +247,8 @@ gnc_register_jump_to_split(GNCRegWidget *rw, Split *split)
   if (!rw) return;
 
   trans = xaccSplitGetParent(split);
-  if (trans != NULL)
 #if 0   /* jsled: If we don't know about dates, what do we do? */
+  if (trans != NULL)
     if (gnc_register_include_date(rw, xaccTransGetDate(trans)))
     {
       gnc_ledger_display_refresh (rw->ledger);
@@ -692,7 +692,9 @@ emit_cb( GNCRegWidget *rw, const char *signal_name, gpointer ud )
 static void
 jump_cb(GNCRegWidget *rw, gpointer data)
 {
+#if 0
   RegWindow *regData;
+#endif
   SplitRegister *reg;
   Account *account;
   Account *leader;
@@ -723,9 +725,11 @@ jump_cb(GNCRegWidget *rw, gpointer data)
       return;
   }
 
+#if 0
   regData = regWindowSimple(account);
   if (regData == NULL)
     return;
+#endif
 
   gnc_register_raise (rw);
   gnc_register_jump_to_split (rw, split);
