@@ -75,6 +75,8 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
                            LedgerDisplayType ld_type,
                            SplitRegisterType reg_type,
                            SplitRegisterStyle style);
+static void xaccLedgerDisplayRefreshInternal (xaccLedgerDisplay *ld,
+                                              GList *splits);
 
 
 /** Implementations *************************************************/
@@ -483,11 +485,34 @@ xaccGUIDCopy (gpointer _to, gconstpointer _from)
 }
 
 static void
+ledger_set_watches (xaccLedgerDisplay *ld, GList *splits)
+{
+  GList *node;
+
+  gnc_gui_component_clear_watches (ld->component_id);
+
+  gnc_gui_component_watch_entity_type (ld->component_id,
+                                       GNC_ID_ACCOUNT,
+                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+
+  for (node = splits; node; node = node->next)
+  {
+    Split *split = node->data;
+    Transaction *trans = xaccSplitGetParent (split);
+
+    gnc_gui_component_watch_entity (ld->component_id,
+                                    xaccTransGetGUID (trans),
+                                    GNC_EVENT_MODIFY);
+  }
+}
+
+static void
 refresh_handler (GHashTable *changes, gpointer user_data)
 {
   xaccLedgerDisplay *ld = user_data;
   const EventInfo *info;
   gboolean has_leader;
+  GList *splits;
 
   if (ld->loading)
     return;
@@ -516,7 +541,11 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 
   xaccQuerySetGroup (ld->query, gncGetCurrentGroup ());
 
-  xaccLedgerDisplayRefresh (ld);
+  splits = xaccQueryGetSplits (ld->query);
+
+  ledger_set_watches (ld, splits);
+
+  xaccLedgerDisplayRefreshInternal (ld, splits);
 }
 
 static void
@@ -618,6 +647,7 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
   xaccLedgerDisplay *ld;
   gboolean show_all;
   const char *class;
+  GList *splits;
 
   switch (ld_type)
   {
@@ -709,14 +739,6 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
                                                  refresh_handler,
                                                  close_handler, ld);
 
-  gnc_gui_component_watch_entity_type (ld->component_id,
-                                       GNC_ID_ACCOUNT,
-                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
-
-  gnc_gui_component_watch_entity_type (ld->component_id,
-                                       GNC_ID_TRANS,
-                                       GNC_EVENT_MODIFY);
-
   /******************************************************************\
    * The main register window itself                                *
   \******************************************************************/
@@ -738,7 +760,11 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
                  xaccLedgerDisplayParent,
                  xaccLedgerDisplaySetHelp);
 
-  xaccLedgerDisplayRefresh (ld);
+  splits = xaccQueryGetSplits (ld->query);
+
+  ledger_set_watches (ld, splits);
+
+  xaccLedgerDisplayRefreshInternal (ld, splits);
 
   return ld;
 }
@@ -768,27 +794,26 @@ xaccFindGeneralLedgerByQuery (Query *q)
  * refresh only the indicated register window                       *
 \********************************************************************/
 
-void
-xaccLedgerDisplayRefresh (xaccLedgerDisplay *ld)
+static void
+xaccLedgerDisplayRefreshInternal (xaccLedgerDisplay *ld, GList *splits)
 {
-  if (!ld)
-    return;
-
-  if (ld->loading)
+  if (!ld || ld->loading)
     return;
 
   ld->loading = TRUE;
 
-  /* The leader account is used by the register gui to
-   * assign a default source account for a "blank split"
-   * that is attached to the bottom of the register.
-   * The "blank split" is what the user edits to create 
-   * new splits and get them into the system. */
-  xaccSRLoadRegister (ld->reg,
-                      xaccQueryGetSplits (ld->query),
-                      xaccLedgerDisplayLeader (ld));
+  xaccSRLoadRegister (ld->reg, splits, xaccLedgerDisplayLeader (ld));
 
   ld->loading = FALSE;
+}
+
+void
+xaccLedgerDisplayRefresh (xaccLedgerDisplay *ld)
+{
+  if (!ld || ld->loading)
+    return;
+
+  xaccLedgerDisplayRefreshInternal (ld, xaccQueryGetSplits (ld->query));
 }
 
 void
@@ -801,7 +826,6 @@ xaccLedgerDisplayRefreshByReg (SplitRegister *reg)
 
   ld = gnc_find_first_gui_component (REGISTER_SINGLE_CM_CLASS,
                                      find_by_reg, reg);
-
   if (ld)
   {
     xaccLedgerDisplayRefresh (ld);
@@ -810,7 +834,6 @@ xaccLedgerDisplayRefreshByReg (SplitRegister *reg)
 
   ld = gnc_find_first_gui_component (REGISTER_SUBACCOUNT_CM_CLASS,
                                      find_by_reg, reg);
-
   if (ld)
   {
     xaccLedgerDisplayRefresh (ld);
@@ -819,7 +842,6 @@ xaccLedgerDisplayRefreshByReg (SplitRegister *reg)
 
   ld = gnc_find_first_gui_component (REGISTER_GL_CM_CLASS,
                                      find_by_reg, reg);
-
   if (ld)
   {
     xaccLedgerDisplayRefresh (ld);

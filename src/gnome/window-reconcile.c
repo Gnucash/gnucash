@@ -68,6 +68,8 @@ struct _RecnWindow
   time_t statement_date;    /* The statement date                   */
   gboolean use_shares;      /* Use share balances                   */
 
+  gint component_id;        /* id of component                      */
+
   sort_type_t debit_sort;   /* Sorting style of the debit list      */
   sort_type_t credit_sort;  /* Sorting style of the credit list     */
 
@@ -1318,6 +1320,44 @@ find_by_account (gpointer find_data, gpointer user_data)
 }
 
 static void
+recn_set_watches (RecnWindow *recnData)
+{
+  Account *account;
+  GList *node;
+
+  gnc_gui_component_clear_watches (recnData->component_id);
+
+  gnc_gui_component_watch_entity (recnData->component_id,
+                                  &recnData->account,
+                                  GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+
+  account = recn_get_account (recnData);
+
+  for (node = xaccAccountGetSplitList (account); node; node = node->next)
+  {
+    Split *split = node->data;
+    Transaction *trans;
+    char recn;
+
+    recn = xaccSplitGetReconcile (split);
+    switch (recn)
+    {
+      case NREC:
+      case CREC:
+        trans = xaccSplitGetParent (split);
+        
+        gnc_gui_component_watch_entity (recnData->component_id,
+                                        xaccTransGetGUID (trans),
+                                        GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+        break;
+
+      default:
+        break;
+    }
+  }
+}
+
+static void
 refresh_handler (GHashTable *changes, gpointer user_data)
 {
   RecnWindow *recnData = user_data;
@@ -1340,6 +1380,8 @@ refresh_handler (GHashTable *changes, gpointer user_data)
       return;
     }
   }
+
+  recn_set_watches (recnData);
 
   recnRefresh (recnData);
 }
@@ -1372,7 +1414,6 @@ recnWindow (GtkWidget *parent, Account *account)
   gnc_numeric new_ending;
   time_t statement_date;
   GNCAccountType type;
-  gint component_id;
 
   if (account == NULL)
     return NULL;
@@ -1386,17 +1427,12 @@ recnWindow (GtkWidget *parent, Account *account)
 
   recnData->account = *xaccAccountGetGUID (account);
 
-  component_id = gnc_register_gui_component (WINDOW_RECONCILE_CM_CLASS,
-                                             refresh_handler, close_handler,
-                                             recnData);
+  recnData->component_id =
+    gnc_register_gui_component (WINDOW_RECONCILE_CM_CLASS,
+                                refresh_handler, close_handler,
+                                recnData);
 
-  gnc_gui_component_watch_entity (component_id,
-                                  xaccAccountGetGUID (account),
-                                  GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
-
-  gnc_gui_component_watch_entity_type (component_id,
-                                       GNC_ID_TRANS,
-                                       GNC_EVENT_MODIFY);
+  recn_set_watches (recnData);
 
   type = xaccAccountGetType(account);
   recnData->use_shares = ((type == STOCK) || (type == MUTUAL) ||
