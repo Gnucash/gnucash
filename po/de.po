@@ -1330,11 +1330,11 @@ msgstr "Telefon"
 #: messages-i18n.c:285 po/guile_strings.txt:174
 #: src/gnome/glade-gnc-dialogs.c:567
 msgid "Asset"
-msgstr "Haben"
+msgstr "Anlagevermögen"
 
 #: messages-i18n.c:286
 msgid "Assets"
-msgstr "Haben"
+msgstr "Anlagevermögen"
 
 #: messages-i18n.c:287
 msgid "ATM"
@@ -1490,7 +1490,7 @@ msgstr "Bearbeiten"
 #: messages-i18n.c:324 po/guile_strings.txt:8
 #: src/gnome/glade-gnc-dialogs.c:591
 msgid "Equity"
-msgstr "Nettowert"
+msgstr "Eigenkapital"
 
 #: messages-i18n.c:325
 msgid "EUR (total)"
