@@ -53,14 +53,15 @@
  *       (hack alert -- this is not currently tested for or enforced,
  *       so this is a very unsafe assumption. Maybe urlencoding should 
  *       be used.)
+ * (2.b) Saving space, being compact is not a priority, I don't think.
  *       
  * (3) There are no compatibility requirements from release to release.
  *     Sounds OK to me to change the format of the output when needed.
  */
 
 
-int gen_logs = 1;
-FILE * trans_log = 0x0;
+static int gen_logs = 1;
+static FILE * trans_log = 0x0;
 
 /********************************************************************\
 \********************************************************************/
@@ -84,8 +85,11 @@ xaccOpenLog (void)
    trans_log = fopen (filename, "a");
 
    /* use tab-separated fields */
-   fprintf (trans_log, "mod	date_entered	date_posted	num description	" \
-        "account	memo	action	reconciled	amount	price date_reconciled\n");
+   fprintf (trans_log, "mod	id	time_now	" \
+                       "date_entered	date_posted	" \
+                       "num description	" \
+                       "account	memo	action	reconciled	" \
+                       "amount	price date_reconciled\n");
    fprintf (trans_log, "-----------------\n");
 
    free (timestamp);
@@ -99,11 +103,12 @@ xaccTransWriteLog (Transaction *trans, char flag)
 {
    Split *split;
    int i = 0;
-   char *dent, *dpost, *drecn; 
+   char *dnow, *dent, *dpost, *drecn; 
 
    if (!gen_logs) return;
    if (!trans_log) return;
 
+   dnow = xaccDateUtilGetStampNow ();
    dent = xaccDateUtilGetStamp (trans->date_entered.tv_sec);
    dpost = xaccDateUtilGetStamp (trans->date_posted.tv_sec);
 
@@ -116,9 +121,11 @@ xaccTransWriteLog (Transaction *trans, char flag)
       drecn = xaccDateUtilGetStamp (split->date_reconciled.tv_sec);
 
       /* use tab-separated fields */
-      fprintf (trans_log, "%c	%s	%s	%s	%s	" \
+      fprintf (trans_log, "%c	%p	%s	%s	%s	%s	%s	" \
                "%s	%s	%s	%c	%10.6f	%10.6f	%s\n",
                flag,
+               trans,
+               dnow,
                dent, 
                dpost, 
                trans->num, 
@@ -136,6 +143,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
       split = trans->splits[i];
    }
    fprintf (trans_log, "===== END\n");
+   free (dnow);
    free (dent);
    free (dpost);
 
