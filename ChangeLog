@@ -10,6 +10,9 @@
 
 	* src/bin/overrides/gnucash-build-env.in: add business-utils
 
+	* src/business/business-utils/Makefile.am: make scm-links so you
+	  can run gnucash from within the build tree
+	
 2003-02-04  Christian Stimming  <stimming@tuhh.de>
 
 	* po/it.po: Updated Italian translation by Lorenzo Cappelletti
