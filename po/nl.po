@@ -1,12 +1,13 @@
 # Dutch translation of GnuCash.
 # Copyright (C) 2002 Free Software Foundation, Inc.
+# Jan Willem Harmanny <jwharmanny@zeelandnet.nl>
 # Hendrik-Jan Heins <hjh@passys.nl>.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 1.7.3\n"
 "POT-Creation-Date: 2002-11-17 23:43-0800\n"
-"PO-Revision-Date: 2002-12-02 23:53+0100\n"
+"PO-Revision-Date: 2002-12-09 20:34+0100\n"
 "Last-Translator: Hendrik-Jan Heins <hjh@passys.nl>\n"
 "Language-Team: NL <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -251,7 +252,6 @@ msgid "Password:"
 msgstr "Wachtwoord"
 
 #: src/gnome/glade/sched-xact.glade:23 src/gnome/glade/sched-xact.glade:2675
-#, fuzzy
 msgid "Edit Scheduled Transaction"
 msgstr "Geplande transactie bewerken"
 
@@ -289,7 +289,6 @@ msgid "Notify me when created"
 msgstr "Waarschuw me na generatie"
 
 #: src/gnome/glade/sched-xact.glade:289 src/gnome/glade/sched-xact.glade:2870
-#, fuzzy
 msgid "Create "
 msgstr "Genereer"
 
@@ -303,17 +302,14 @@ msgid "Remind me "
 msgstr "Help me herinneren"
 
 #: src/gnome/glade/sched-xact.glade:427 src/gnome/glade/sched-xact.glade:3159
-#, fuzzy
 msgid "End"
 msgstr "Einde "
 
 #: src/gnome/glade/sched-xact.glade:447 src/gnome/glade/sched-xact.glade:3030
-#, fuzzy
 msgid "No End"
 msgstr "Oneindig"
 
 #: src/gnome/glade/sched-xact.glade:480 src/gnome/glade/sched-xact.glade:3063
-#, fuzzy
 msgid "End Date: "
 msgstr "Einddatum:"
 
@@ -339,7 +335,6 @@ msgid "Recurrence Frequency"
 msgstr "Voorkomens frequentie"
 
 #: src/gnome/glade/sched-xact.glade:684
-#, fuzzy
 msgid "Template Transaction"
 msgstr "Transactie sjabloon"
 
@@ -348,17 +343,14 @@ msgid "This window should never be realized."
 msgstr "Dit venster zou nooit zichtbaar moeten zijn"
 
 #: src/gnome/glade/sched-xact.glade:758 src/gnome/glade/sched-xact.glade:3406
-#, fuzzy
 msgid "Frequency:"
 msgstr "frequentie:"
 
 #: src/gnome/glade/sched-xact.glade:784 src/gnome/glade/sched-xact.glade:4454
-#, fuzzy
 msgid "Start Date:"
 msgstr "Begindatum"
 
 #: src/gnome/glade/sched-xact.glade:885
-#, fuzzy
 msgid "Not scheduled"
 msgstr "Niet gepland"
 
@@ -372,12 +364,10 @@ msgid "None"
 msgstr "Geen"
 
 #: src/gnome/glade/sched-xact.glade:916
-#, fuzzy
 msgid "Select occurrence date above."
 msgstr "Selecteer uit bovenstaande de datum"
 
 #: src/gnome/glade/sched-xact.glade:935
-#, fuzzy
 msgid "Once"
 msgstr "Eenmalig"
 
@@ -391,7 +381,6 @@ msgid "days."
 msgstr "dagen"
 
 #: src/gnome/glade/sched-xact.glade:1024 src/engine/FreqSpec.c:732
-#, fuzzy
 msgid "Daily"
 msgstr "Dagelijks"
 
@@ -405,7 +394,6 @@ msgstr "Dagelijks [ma-vr]"
 
 #: src/gnome/glade/sched-xact.glade:1142 src/gnome/glade/sched-xact.glade:1435
 #: src/gnome/glade/sched-xact.glade:2276
-#, fuzzy
 msgid "Every"
 msgstr "Iedere"
 
@@ -422,7 +410,6 @@ msgid "Sunday"
 msgstr "Zondag"
 
 #: src/gnome/glade/sched-xact.glade:1245
-#, fuzzy
 msgid "Monday"
 msgstr "Maandag"
 
@@ -439,7 +426,6 @@ msgid "Thursday"
 msgstr "Donderdag"
 
 #: src/gnome/glade/sched-xact.glade:1313
-#, fuzzy
 msgid "Friday"
 msgstr "Vrijdag"
 
@@ -456,17 +442,14 @@ msgid "Select initial date, above."
 msgstr "Kies hieruit een begindatum"
 
 #: src/gnome/glade/sched-xact.glade:1394
-#, fuzzy
 msgid "Bi-Weekly"
 msgstr "Twee maal per week"
 
 #: src/gnome/glade/sched-xact.glade:1475 src/gnome/glade/sched-xact.glade:1724
-#, fuzzy
 msgid "months."
 msgstr "Maanden"
 
 #: src/gnome/glade/sched-xact.glade:1504
-#, fuzzy
 msgid "First on the:"
 msgstr "Eerst op de:"
 
@@ -475,9 +458,8 @@ msgid "then on the:"
 msgstr "daarna op de:"
 
 #: src/gnome/glade/sched-xact.glade:1644
-#, fuzzy
 msgid "Semi-Monthly"
-msgstr "Om de maand"
+msgstr "Twee maal per maand"
 
 #: src/gnome/glade/sched-xact.glade:1753 src/gnome/glade/sched-xact.glade:1895
 #: src/gnome/glade/sched-xact.glade:2037 src/gnome/glade/sched-xact.glade:2181
@@ -491,7 +473,6 @@ msgstr "Maandelijks"
 
 #: src/gnome/glade/sched-xact.glade:1849 src/gnome/glade/sched-xact.glade:1990
 #: src/gnome/glade/sched-xact.glade:2132
-#, fuzzy
 msgid "Occuring in"
 msgstr "Voorkomend in"
 
@@ -500,12 +481,10 @@ msgid "Quarterly"
 msgstr "Ieder kwartaal"
 
 #: src/gnome/glade/sched-xact.glade:2102
-#, fuzzy
 msgid "Tri-Yearly"
-msgstr "Elke vier maanden"
+msgstr "Drie maal per jaar"
 
 #: src/gnome/glade/sched-xact.glade:2246
-#, fuzzy
 msgid "Semi-Yearly"
 msgstr "Halfjaarlijks"
 
@@ -532,7 +511,6 @@ msgstr "Jaarlijks"
 #: intl-scm/guile-strings.c:503 intl-scm/guile-strings.c:509
 #: intl-scm/guile-strings.c:515 intl-scm/guile-strings.c:521
 #: intl-scm/guile-strings.c:527
-#, fuzzy
 msgid "Scheduled Transactions"
 msgstr "Geplande Transacties"
 
@@ -584,7 +562,6 @@ msgid "Upcoming"
 msgstr "Volgende"
 
 #: src/gnome/glade/sched-xact.glade:3010
-#, fuzzy
 msgid "Creation Options"
 msgstr "Generatie-opties"
 
@@ -601,12 +578,10 @@ msgid "REPLACEME with the Register control box"
 msgstr "REPLACEME door een kasboek bewerkingsvak"
 
 #: src/gnome/glade/sched-xact.glade:3251
-#, fuzzy
 msgid "Template Transactions"
 msgstr "Transactie sjabloon"
 
 #: src/gnome/glade/sched-xact.glade:3277
-#, fuzzy
 msgid "Make Scheduled transaction"
 msgstr "Een geplande transactie uitvoeren"
 
@@ -615,12 +590,10 @@ msgid "Advanced..."
 msgstr "Geavanceerd..."
 
 #: src/gnome/glade/sched-xact.glade:3432
-#, fuzzy
 msgid "Start Date: "
 msgstr "Begindatum:"
 
 #: src/gnome/glade/sched-xact.glade:3536
-#, fuzzy
 msgid "End "
 msgstr "Eind "
 
@@ -629,7 +602,6 @@ msgid "Never End"
 msgstr "Oneindig"
 
 #: src/gnome/glade/sched-xact.glade:3581
-#, fuzzy
 msgid "End Date:"
 msgstr "Einddatum:"
 
@@ -642,7 +614,6 @@ msgid "What to do, what to do?"
 msgstr "Wat nu toch te doen..."
 
 #: src/gnome/glade/sched-xact.glade:3719
-#, fuzzy
 msgid "Creating transactions..."
 msgstr "transacties genereren..."
 
@@ -651,7 +622,6 @@ msgid "%v/%u (%p%%)"
 msgstr "%v/%u (%p%%)"
 
 #: src/gnome/glade/sched-xact.glade:3749
-#, fuzzy
 msgid "Transaction Reminders"
 msgstr "Transactienoot"
 
@@ -665,7 +635,6 @@ msgstr ""
 "\"Next\" om ze te genereren."
 
 #: src/gnome/glade/sched-xact.glade:3812
-#, fuzzy
 msgid "Scheduled Transaction"
 msgstr "Geplande Transactie"
 
@@ -682,17 +651,14 @@ msgid "To-Create Transaction Preparation"
 msgstr "Te genereren transactie voorbereiding"
 
 #: src/gnome/glade/sched-xact.glade:3952
-#, fuzzy
 msgid "State"
 msgstr "Status"
 
 #: src/gnome/glade/sched-xact.glade:3987
-#, fuzzy
 msgid "Disposition?"
-msgstr "Rangschikking"
+msgstr "Beschikking?"
 
 #: src/gnome/glade/sched-xact.glade:4023
-#, fuzzy
 msgid "Variables"
 msgstr "Variabelen"
 
@@ -704,12 +670,10 @@ msgid "Value"
 msgstr "Waarde"
 
 #: src/gnome/glade/sched-xact.glade:4095
-#, fuzzy
 msgid "Variable"
 msgstr "Variabele"
 
 #: src/gnome/glade/sched-xact.glade:4135
-#, fuzzy
 msgid "Value:"
 msgstr "Waarde"
 
@@ -718,12 +682,10 @@ msgid "Transaction"
 msgstr "Transactie"
 
 #: src/gnome/glade/sched-xact.glade:4187
-#, fuzzy
 msgid "Created Transaction Review"
 msgstr "Gecreëerde transactie herzien"
 
 #: src/gnome/glade/sched-xact.glade:4217
-#, fuzzy
 msgid "Obsolete Scheduled Transactions"
 msgstr "Overbodige geplande transacties"
 
@@ -745,7 +707,6 @@ msgid "Select All"
 msgstr "Alles selecteren"
 
 #: src/gnome/glade/sched-xact.glade:4346
-#, fuzzy
 msgid "Unselect All"
 msgstr "Alles de-selecteren"
 
@@ -778,12 +739,10 @@ msgstr ""
 "de gecreëerde geplande transacties direct bewerken."
 
 #: src/gnome/glade/sched-xact.glade:4392
-#, fuzzy
 msgid "Loan Information"
 msgstr "Lenings gegevens"
 
 #: src/gnome/glade/sched-xact.glade:4428
-#, fuzzy
 msgid "Interest Rate:"
 msgstr "Rente percentage"
 
@@ -792,12 +751,10 @@ msgid "Length:"
 msgstr "Looptijd:"
 
 #: src/gnome/glade/sched-xact.glade:4506
-#, fuzzy
 msgid "Loan Amount:"
 msgstr "Geleende bedrag:"
 
 #: src/gnome/glade/sched-xact.glade:4532
-#, fuzzy
 msgid "Loan Account:"
 msgstr "Lenings dagboek"
 
@@ -817,7 +774,6 @@ msgid "Months Remaining:"
 msgstr "Resterende maanden:"
 
 #: src/gnome/glade/sched-xact.glade:4827
-#, fuzzy
 msgid "Interest Rate Change Frequency"
 msgstr "Frequentie van rente percentage verandering"
 
@@ -830,17 +786,14 @@ msgid "... utilize an escrow account for payments?"
 msgstr "... een onderpand-dagboek voor de betalingen?"
 
 #: src/gnome/glade/sched-xact.glade:4932
-#, fuzzy
 msgid "Escrow Account:"
 msgstr "Onderpand-dagboek"
 
 #: src/gnome/glade/sched-xact.glade:4978
-#, fuzzy
 msgid "Repayment"
 msgstr "Aflossing"
 
 #: src/gnome/glade/sched-xact.glade:5013 src/gnome/glade/sched-xact.glade:5384
-#, fuzzy
 msgid "Payment From:"
 msgstr "Betaling vanaf:"
 
@@ -853,17 +806,14 @@ msgid "Remainder to:"
 msgstr "Herinnering om:"
 
 #: src/gnome/glade/sched-xact.glade:5091 src/gnome/glade/sched-xact.glade:5410
-#, fuzzy
 msgid "Transaction Memo:"
 msgstr "Transactie memo:"
 
 #: src/gnome/glade/sched-xact.glade:5117
-#, fuzzy
 msgid "Payment Amount:"
 msgstr "Te betalen bedrag:"
 
 #: src/gnome/glade/sched-xact.glade:5143
-#, fuzzy
 msgid "Interest To:"
 msgstr "Rente naar:"
 
@@ -876,7 +826,6 @@ msgid "<repayment type>"
 msgstr "<aflossingstype>"
 
 #: src/gnome/glade/sched-xact.glade:5436
-#, fuzzy
 msgid "Payment To:"
 msgstr "Betaling aan:"
 
@@ -885,7 +834,6 @@ msgid "Payment Frequency"
 msgstr "Aflossings frequentie"
 
 #: src/gnome/glade/sched-xact.glade:5564
-#, fuzzy
 msgid "Part of Payment Transaction"
 msgstr "Deel van de aflossingstransactie"
 
@@ -895,12 +843,10 @@ msgid "Other"
 msgstr "Ander"
 
 #: src/gnome/glade/sched-xact.glade:5636
-#, fuzzy
 msgid "Creation State"
 msgstr "Generatie status"
 
 #: src/gnome/glade/sched-xact.glade:5651
-#, fuzzy
 msgid "Ignore"
 msgstr "Negeren"
 
@@ -909,7 +855,6 @@ msgid "Postpone"
 msgstr "Uitstellen"
 
 #: src/gnome/glade/sched-xact.glade:5677
-#, fuzzy
 msgid "Create"
 msgstr "Genereren"
 
@@ -961,7 +906,6 @@ msgid "Print a check using a standard format"
 msgstr "Druk een cheque af op standaard formaat"
 
 #: src/gnome/glade/register.glade:154
-#, fuzzy
 msgid "Print _Check"
 msgstr "Cheque afdrukken"
 
@@ -976,7 +920,6 @@ msgid "_Edit Account"
 msgstr "_Bewerk dagboek"
 
 #: src/gnome/glade/register.glade:223
-#, fuzzy
 msgid "_Find"
 msgstr "_Zoek"
 
@@ -1014,7 +957,6 @@ msgstr "Kies _bereik"
 #: src/gnome/glade/register.glade:326 src/gnome/glade/register.glade:1877
 #: src/gnome/window-main.c:1001
 #: src/business/business-gnome/glade/invoice.glade:928
-#, fuzzy
 msgid "_Actions"
 msgstr "_Acties"
 
@@ -1030,7 +972,6 @@ msgid "_Reconcile..."
 msgstr "_Kloppend maken"
 
 #: src/gnome/glade/register.glade:365 src/gnome/glade/register.glade:669
-#, fuzzy
 msgid "_Stock Split..."
 msgstr "_Effecten Splitsen --"
 
@@ -1039,12 +980,10 @@ msgid "Chec_k & Repair"
 msgstr "Controlee_r & repareer"
 
 #: src/gnome/glade/register.glade:387
-#, fuzzy
 msgid "_All transactions"
 msgstr "_Alle transacties"
 
 #: src/gnome/glade/register.glade:399
-#, fuzzy
 msgid "_This transaction"
 msgstr "_Deze transactie"
 
@@ -1059,12 +998,10 @@ msgid "Open a register report window for this transaction"
 msgstr "Open een kasboek rapportage venster voor deze transactie"
 
 #: src/gnome/glade/register.glade:426
-#, fuzzy
 msgid "_Account Report"
 msgstr "_Dagboek rapport"
 
 #: src/gnome/glade/register.glade:439
-#, fuzzy
 msgid "_Transaction Report"
 msgstr "_Transactie Rapport"
 
@@ -1100,7 +1037,6 @@ msgstr "Bekijk en bewerk de randvoorwaarden voor aandelen en beleggingsfondsen"
 
 #: src/gnome/glade/register.glade:490
 #: src/business/business-gnome/glade/invoice.glade:1078
-#, fuzzy
 msgid "_Commodity Editor"
 msgstr "_Randvoorwaarden bewerken"
 
@@ -1111,7 +1047,6 @@ msgstr "Gebruik de financiële rekenmachine"
 
 #: src/gnome/glade/register.glade:503
 #: src/business/business-gnome/glade/invoice.glade:1091
-#, fuzzy
 msgid "_Financial Calculator"
 msgstr "Financiële rekenmachine"
 
@@ -1122,7 +1057,6 @@ msgstr "_GnuCash Gebruikers Handleiding"
 
 #: src/gnome/glade/register.glade:538
 #: src/business/business-gnome/glade/invoice.glade:1165
-#, fuzzy
 msgid "_Tip Of The Day"
 msgstr "_Tip van de Dag"
 
@@ -1192,13 +1126,11 @@ msgstr "Maak een copie van de huidige transactie "
 
 #: src/gnome/glade/register.glade:746 src/gnome/glade/register.glade:1951
 #: src/gnome/glade/register.glade:2182
-#, fuzzy
 msgid "Dup_licate Transaction..."
 msgstr "Dup_liceer de transactie"
 
 #: src/gnome/glade/register.glade:758 src/gnome/glade/register.glade:1964
 #: src/gnome/glade/register.glade:2194 src/gnome/gnc-split-reg.c:955
-#, fuzzy
 msgid "Remove Transaction Splits"
 msgstr "Verwijder transactie opsplitsing"
 
@@ -1209,13 +1141,11 @@ msgstr "Toon alle opsplitsingen in de huidige transactie"
 
 #: src/gnome/glade/register.glade:771 src/gnome/glade/register.glade:1977
 #: src/gnome/glade/register.glade:2207
-#, fuzzy
 msgid "S_plit Transaction"
 msgstr "Transactie ops_plitsen"
 
 #: src/gnome/glade/register.glade:784 src/gnome/glade/register.glade:1990
 #: src/gnome/glade/register.glade:2220
-#, fuzzy
 msgid "Schedule..."
 msgstr "Plan..."
 
@@ -1371,7 +1301,6 @@ msgstr "Sorteer op datum"
 
 #: src/gnome/glade/register.glade:1697
 #: src/business/business-gnome/glade/invoice.glade:855
-#, fuzzy
 msgid "_Date"
 msgstr "Datum"
 
@@ -1394,12 +1323,10 @@ msgid "_Statement Date"
 msgstr "_Statement datum"
 
 #: src/gnome/glade/register.glade:1736
-#, fuzzy
 msgid "Sort by Number"
 msgstr "Sorteer op nummer"
 
 #: src/gnome/glade/register.glade:1742
-#, fuzzy
 msgid "_Number"
 msgstr "_Nummer"
 
@@ -1408,7 +1335,6 @@ msgid "Sort by Amount"
 msgstr "Sorteer op bedrag"
 
 #: src/gnome/glade/register.glade:1757
-#, fuzzy
 msgid "_Amount"
 msgstr "Bedrag"
 
@@ -1417,7 +1343,6 @@ msgid "Sort by Memo"
 msgstr "Sorteer op memo"
 
 #: src/gnome/glade/register.glade:1772
-#, fuzzy
 msgid "_Memo"
 msgstr "_Memo"
 
@@ -1426,7 +1351,6 @@ msgid "Sort by Description"
 msgstr "Sorteer op omschrijving"
 
 #: src/gnome/glade/register.glade:1787
-#, fuzzy
 msgid "Descri_ption"
 msgstr "Omschrijving (_p)"
 
@@ -2030,7 +1954,6 @@ msgid "Date format:"
 msgstr "Datum formaat:"
 
 #: src/gnome/glade/print.glade:209
-#, fuzzy
 msgid "Months:"
 msgstr "Maanden:"
 
@@ -2039,12 +1962,10 @@ msgid "Years:"
 msgstr "Jaren:"
 
 #: src/gnome/glade/print.glade:261
-#, fuzzy
 msgid "Format:"
 msgstr "Format:"
 
 #: src/gnome/glade/print.glade:287
-#, fuzzy
 msgid "Sample:"
 msgstr "Voorbeeld:"
 
@@ -2057,7 +1978,6 @@ msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
 #: src/gnome/glade/print.glade:447
-#, fuzzy
 msgid "December 31, 2000"
 msgstr "December  31, 2000"
 
@@ -2066,7 +1986,6 @@ msgid "Use month number for date format."
 msgstr "Gebruik maandnummers in het datumformat."
 
 #: src/gnome/glade/print.glade:480
-#, fuzzy
 msgid "number"
 msgstr "nummer"
 
@@ -2075,7 +1994,6 @@ msgid "Use abbreviated month name for date format."
 msgstr "Gebruik afgekortte maandnamen voor het datumformat"
 
 #: src/gnome/glade/print.glade:510
-#, fuzzy
 msgid "abbreviation"
 msgstr "afkorting"
 
@@ -2084,7 +2002,6 @@ msgid "Use normal month name for date format."
 msgstr "Gebruik de complete maandnaam voor het datumformat"
 
 #: src/gnome/glade/print.glade:540
-#, fuzzy
 msgid "name"
 msgstr "Naam"
 
@@ -2389,7 +2306,6 @@ msgid "Price:"
 msgstr "Prijs:"
 
 #: src/gnome/druid-hierarchy.c:832
-#, fuzzy
 msgid "You must enter a valid balance."
 msgstr "U moet een geldige balans opgeven."
 
@@ -2413,7 +2329,7 @@ msgid "No such entity: %s"
 msgstr "Zoiets bestaat niet: %s"
 
 #: src/gnome/top-level.c:198
-#, fuzzy, c-format
+#, c-format
 msgid "Transaction with no Accounts: %s"
 msgstr "Transacties zonder dagboek: %s"
 
@@ -2555,7 +2471,6 @@ msgid "Reconciled:R"
 msgstr "Gecorrigeerd:R"
 
 #: src/gnome/druid-loan.c:361
-#, fuzzy
 msgid "Fixed"
 msgstr "Vastgelegd"
 
@@ -2609,39 +2524,32 @@ msgid "Loan"
 msgstr "Lening"
 
 #: src/gnome/druid-loan.c:720
-#, fuzzy
 msgid "Are you sure you want to cancel the Mortgage/Loan Setup Druid?"
-msgstr ""
-"Weet u zeker dat u de hypotheek/leings configuratie Hulp wilt annuleren?"
+msgstr "Weet u zeker dat u de hypotheek/lenings instellings Hulp wilt annuleren?"
 
 
 #: src/gnome/druid-loan.c:837
-#, fuzzy
 msgid "Please select a valid loan account."
 msgstr "Selecteer een geldig leingsdagboek."
 
 #: src/gnome/druid-loan.c:925
-#, fuzzy
 msgid "Please select a valid Escrow Account."
-msgstr "Selecteer een geldig ondepand dagboek.\n"
+msgstr "Selecteer een geldig onderpand dagboek."
 
 #: src/gnome/druid-loan.c:991 src/gnome/druid-loan.c:1193
-#, fuzzy
 msgid "Please select a valid \"from\" account."
-msgstr "Selecteer een geldig \"from\" dagboek.\n"
+msgstr "Selecteer een geldig \"from\" dagboek."
 
 #: src/gnome/druid-loan.c:999 src/gnome/druid-loan.c:1200
-#, fuzzy
 msgid "Please select a valid \"to\" account."
 msgstr "Selecteer een geldig \"to\" dagboek"
 
 #: src/gnome/druid-loan.c:1007
-#, fuzzy
 msgid "Please select a valid \"interest\" account."
 msgstr "Selecteer een geldig \"interest\" dagboek."
 
 #: src/gnome/druid-loan.c:1128
-#, fuzzy, c-format
+#, c-format
 msgid "Payment: \"%s\""
 msgstr "Betaling: \"%s\""
 
@@ -2672,7 +2580,7 @@ msgid "You can't transfer from and to the same account!"
 msgstr "U kunt niet van en naar hetzelfde dagboek boeken!"
 
 #: src/gnome/dialog-transfer.c:1077
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The account %s\n"
 "does not allow transactions.\n"
@@ -2729,7 +2637,6 @@ msgstr ""
 "Wilt u de verandering opslaan?"
 
 #: src/gnome/gnc-split-reg.c:957
-#, fuzzy
 msgid "Are you sure you want to remove the Splits of this transaction?"
 msgstr "Weet u zeker dat u de opsplitsingen van de huidige transactie wilt verwijderen?"
 
@@ -2894,7 +2801,7 @@ msgid "Please name the Scheduled Transaction."
 msgstr "Geef de naam op van de geplande transactie."
 
 #: src/gnome/dialog-scheduledxaction.c:716
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "A Scheduled Transaction with the name \"%s\" already exists.\n"
 "Are you sure you want to name this one the same?"
@@ -2932,7 +2839,6 @@ msgstr ""
 "Weet u zeker dat u dit wilt doen?"
 
 #: src/gnome/dialog-scheduledxaction.c:1441
-#, fuzzy
 msgid "(never)"
 msgstr "(nooit)"
 
@@ -2945,12 +2851,10 @@ msgstr ""
 "weet u zeker dat u ze wilt verwijderen?"
 
 #: src/gnome/dialog-scheduledxaction.c:1621
-#, fuzzy
 msgid "Delete the selected Scheduled Transactions?"
 msgstr "Moeten de geselecteerde geplande transacties verwijderd worden?"
 
 #: src/gnome/dialog-scheduledxaction.c:1940
-#, fuzzy
 msgid ""
 "The current template transaction has been changed.\n"
 "Would you like to record the changes?"
@@ -2977,7 +2881,6 @@ msgstr ""
 "http://www.gnucash.org/"
 
 #: src/gnome/window-main.c:779
-#, fuzzy
 msgid "Export _Accounts..."
 msgstr "Dagboeken exporteren..."
 
@@ -2986,7 +2889,6 @@ msgid "Export the account hierarchy to a new file"
 msgstr "Exporteer de dagboek hierarchie naar een nieuw bestand"
 
 #: src/gnome/window-main.c:790
-#, fuzzy
 msgid "_New File"
 msgstr "_Nieuw bestand"
 
@@ -2995,7 +2897,6 @@ msgid "Create a new file"
 msgstr "Genereer een nieuw bestand"
 
 #: src/gnome/window-main.c:795
-#, fuzzy
 msgid "New Account _Tree"
 msgstr "Nieuwe dagboek hierarchie (_T)"
 
@@ -3024,7 +2925,6 @@ msgid "_Export"
 msgstr "_Exporteer"
 
 #: src/gnome/window-main.c:839
-#, fuzzy
 msgid "Ta_x Options"
 msgstr "Belasting opties (_X)"
 
@@ -3053,12 +2953,10 @@ msgid "Show/Hide the status bar on this window"
 msgstr "Toon/verberg de statusbalk in dit venster"
 
 #: src/gnome/window-main.c:885
-#, fuzzy
 msgid "_Scheduled Transaction Editor"
 msgstr "Geplande tran_sactie bewerken"
 
 #: src/gnome/window-main.c:886
-#, fuzzy
 msgid "The list of Scheduled Transactions"
 msgstr "Lijst met geplande transacties"
 
@@ -3079,7 +2977,6 @@ msgid "Setup scheduled transactions for repayment of a loan"
 msgstr "Configureer geplande transacties voor de flossing van een lening"
 
 #: src/gnome/window-main.c:911
-#, fuzzy
 msgid "_Scheduled Transactions"
 msgstr "Geplande transactie_s"
 
@@ -3158,7 +3055,6 @@ msgstr ""
 "hem niet verwijderen."
 
 #: src/gnome/dialog-commodities.c:264
-#, fuzzy
 msgid ""
 "Are you sure you want to delete the\n"
 "selected commodity?"
@@ -3167,7 +3063,6 @@ msgstr ""
 "wilt verwijderen?"
 
 #: src/gnome/dialog-price-edit-db.c:305
-#, fuzzy
 msgid ""
 "Are you sure you want to delete the\n"
 "selected price?"
@@ -3234,7 +3129,7 @@ msgid "Are you sure you want to delete the %s account?"
 msgstr "Weet u eker dat u het %s dagboek wilt verwijderen?"
 
 #: src/gnome/window-acct-tree.c:414
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Are you sure you want to delete the %s\n"
 "account and all its children?"
@@ -3243,7 +3138,7 @@ msgstr ""
 "en alle sub-dagboeken wilt verwijderen?"
 
 #: src/gnome/window-acct-tree.c:417
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This account contains transactions.  Are you sure you\n"
 "want to delete the %s account?"
@@ -3333,7 +3228,6 @@ msgid "Check for and repair unbalanced transactions and orphan splits in all acc
 msgstr "Controleer op- en repareer niet-gebalanceerde transacties en opsplitsingen in alle dagboeken"
 
 #: src/gnome/window-acct-tree.c:951
-#, fuzzy
 msgid "Open Account"
 msgstr "Open dagboek"
 
@@ -3395,12 +3289,10 @@ msgid "Tip of the Day:"
 msgstr "Tip van de Dag:"
 
 #: src/gnome/window-reconcile.c:415
-#, fuzzy
 msgid "Interest Payment"
 msgstr "Rente betaling"
 
 #: src/gnome/window-reconcile.c:418
-#, fuzzy
 msgid "Interest Charge"
 msgstr "Rentekosten"
 
@@ -3408,32 +3300,26 @@ msgstr "Rentekosten"
 #: src/business/business-gnome/glade/payment.glade:90
 #: src/business/business-gnome/glade/vendor.glade:614
 #: src/business/business-gnome/glade/vendor.glade:786
-#, fuzzy
 msgid "Payment Information"
 msgstr "Betalings informatie"
 
 #: src/gnome/window-reconcile.c:436
-#, fuzzy
 msgid "Payment From"
 msgstr "Betalings van"
 
 #: src/gnome/window-reconcile.c:440 src/gnome/window-reconcile.c:450
-#, fuzzy
 msgid "Reconcile Account"
 msgstr "Corrigeer dagboek"
 
 #: src/gnome/window-reconcile.c:455
-#, fuzzy
 msgid "Payment To"
 msgstr "Betaling aan"
 
 #: src/gnome/window-reconcile.c:466
-#, fuzzy
 msgid "No Auto Interest Payments for this Account"
 msgstr "Geen automatische rentebetalingen voor dit dagboek"
 
 #: src/gnome/window-reconcile.c:467
-#, fuzzy
 msgid "No Auto Interest Charges for this Account"
 msgstr "Geen automatische rentekosten voor dit dagboek"
 
@@ -3479,7 +3365,6 @@ msgid "Total:"
 msgstr "Totaal:"
 
 #: src/gnome/window-reconcile.c:1062
-#, fuzzy
 msgid "Are you sure you want to delete the selected transaction?"
 msgstr ""
 "Weet u zeker dat u de geselecteerde transactie wilt verwijderen?"
@@ -3541,7 +3426,6 @@ msgstr "Bewerk de huidige transactie"
 
 #: src/gnome/window-reconcile.c:1285 src/gnome/window-reconcile.c:1357
 #: src/gnome/window-reconcile.c:1417
-#, fuzzy
 msgid "Delete the selected transaction"
 msgstr "Verwijder de geselecteerde transactie"
 
@@ -3662,7 +3546,6 @@ msgid "Equity"
 msgstr "Actief vermogen"
 
 #: src/app-utils/gnc-exp-parser.c:644
-#, fuzzy
 msgid "Illegal variable in expression."
 msgstr "Ongeoorloofde variabele in expressie"
 
@@ -3699,57 +3582,46 @@ msgid "Numeric error"
 msgstr "Numerieke fout"
 
 #: src/gnome-search/search-account.c:166
-#, fuzzy
 msgid "You have not selected any accounts"
 msgstr "U heeft geen dagboek geselecteerd"
 
 #: src/gnome-search/search-account.c:209
-#, fuzzy
 msgid "matches all accounts"
 msgstr "Overeenkomende met alle dagboeken"
 
 #: src/gnome-search/search-account.c:212
-#, fuzzy
 msgid "matches any account"
 msgstr "Overeenkomend met ieder dagboek"
 
 #: src/gnome-search/search-account.c:214
-#, fuzzy
 msgid "matches no accounts"
 msgstr "Overeenkomend met geen enkel dagboek"
 
 #: src/gnome-search/search-account.c:230
-#, fuzzy
 msgid "Selected Accounts"
 msgstr "Geselecteerde dagboeken"
 
 #: src/gnome-search/search-account.c:231
-#, fuzzy
 msgid "Choose Accounts"
 msgstr "Kies dagboeken"
 
 #: src/gnome-search/search-account.c:262
-#, fuzzy
 msgid "Select Accounts to Match"
 msgstr "Selecteer overeenkomende dagboeken"
 
 #: src/gnome-search/search-account.c:266
-#, fuzzy
 msgid "Select the Accounts to Compare"
 msgstr "Selecteer te vergelijken dagboeken"
 
 #: src/gnome-search/dialog-search.c:123
-#, fuzzy
 msgid "You must select an item from the list"
 msgstr "U moet een item uit de lijst selecteren"
 
 #: src/gnome-search/dialog-search.c:290
-#, fuzzy
 msgid "Select"
 msgstr "selecteer"
 
 #: src/gnome-search/dialog-search.c:817
-#, fuzzy
 msgid "Add criterion"
 msgstr "Voeg een criterium toe"
 
@@ -3762,7 +3634,7 @@ msgid "any criteria are met"
 msgstr "voldaan aan ieder criterium"
 
 #: src/gnome-search/dialog-search.c:859
-#, fuzzy, c-format
+#, c-format
 msgid "New %s"
 msgstr "Nieuwe %s"
 
@@ -3771,12 +3643,11 @@ msgid "item"
 msgstr "item"
 
 #: src/gnome-search/search-string.c:183
-#, fuzzy
 msgid "You need to enter a string value"
 msgstr "U moet een string-waarde invoeren"
 
 #: src/gnome-search/search-string.c:209
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error in regular expression '%s':\n"
 "%s"
@@ -3784,7 +3655,6 @@ msgstr "Fout in reguliere expressie '%s':\n"
 "%s"
 
 #: src/gnome-search/search-string.c:270
-#, fuzzy
 msgid "contains"
 msgstr "bevat"
 
@@ -3801,7 +3671,6 @@ msgid "does not match regex"
 msgstr "komt niet overeen met regex"
 
 #: src/gnome-search/search-string.c:344
-#, fuzzy
 msgid "Case Insensitive?"
 msgstr "Hoofdletter on-gevoelig?"
 
@@ -3880,7 +3749,6 @@ msgid "Search for..."
 msgstr "Zoek op..."
 
 #: src/gnome-search/search.glade:117
-#, fuzzy
 msgid "New Item...."
 msgstr "Nieuw item..."
 
@@ -3889,7 +3757,6 @@ msgid "()"
 msgstr "()"
 
 #: src/gnome-search/search.glade:188
-#, fuzzy
 msgid " Search "
 msgstr "Zoeken"
 
@@ -3926,7 +3793,6 @@ msgid "greater than or equal to"
 msgstr "groter dan of gelijk aan"
 
 #: src/gnome-search/search-numeric.c:284
-#, fuzzy
 msgid "has credits or debits"
 msgstr "bevat credit of debet"
 
@@ -3939,12 +3805,10 @@ msgid "has credits"
 msgstr "bevat credit"
 
 #: src/gnome-search/search-reconciled.c:256
-#, fuzzy
 msgid "Not Cleared"
 msgstr "Niet goedgekeurd"
 
 #: src/gnome-search/search-reconciled.c:262
-#, fuzzy
 msgid "Reconciled"
 msgstr "Gecorrigeerd"
 
@@ -3953,7 +3817,6 @@ msgid "Frozen"
 msgstr "Bevroren"
 
 #: src/gnome-search/search-reconciled.c:268
-#, fuzzy
 msgid "Voided"
 msgstr "Ongeldige gemaakt"
 
@@ -4124,7 +3987,6 @@ msgid "Unknown file type"
 msgstr "Onbekend bestandstype"
 
 #: src/app-file/gnc-file.c:195
-#, fuzzy
 msgid ""
 "This database is from an older version of GnuCash.\n"
 "Do you want to want to upgrade the database to the current version?"
@@ -4153,7 +4015,6 @@ msgid "Changes have been made since the last Save. Save the data to file?"
 msgstr "Gegevens zijn veranderd sinds de laatste keer opslaan. Gegevens opslaan in bestand?"
 
 #: src/app-file/gnc-file.c:376
-#, fuzzy
 msgid "Quit"
 msgstr "Stoppen"
 
@@ -4166,7 +4027,7 @@ msgid "Create New File"
 msgstr "Genereer een nieuw bestand"
 
 #: src/app-file/gnc-file.c:378
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "GnuCash could not obtain the lock for\n"
 "   %s.\n"
@@ -4208,7 +4069,7 @@ msgid "Exporting file..."
 msgstr "Bestand exporteren..."
 
 #: src/app-file/gnc-file.c:621
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was an error saving the file.\n"
 "\n"
@@ -4300,7 +4161,7 @@ msgid "Once: %s"
 msgstr "Eenmalig: %s"
 
 #: src/engine/FreqSpec.c:727
-#, fuzzy, c-format
+#, c-format
 msgid "Daily (x%u)"
 msgstr "Dagelijks (x%u)"
 
@@ -4310,7 +4171,6 @@ msgid "Weekdays: (x%u)"
 msgstr "Weekdagen: (x%u)"
 
 #: src/engine/FreqSpec.c:755
-#, fuzzy
 msgid "Weekdays"
 msgstr "Weekdagen"
 
@@ -4320,24 +4180,24 @@ msgid "Weekly (x%d): %s"
 msgstr "Wekelijks (x%d): %s"
 
 #: src/engine/FreqSpec.c:797
-#, fuzzy, c-format
+#, c-format
 msgid "Weekly: %s"
 msgstr "Wekelijks: %s"
 
 #: src/engine/FreqSpec.c:804
-#, fuzzy, c-format
+#, c-format
 msgid "Bi-Weekly, %ss"
 msgstr "Twee maal per week: %ss"
 
 #: src/engine/FreqSpec.c:825
-#, fuzzy, c-format
+#, c-format
 msgid "Semi-monthly (x%u): %s, %s"
 msgstr "Om de maand (x%u): %s, %s"
 
 #: src/engine/FreqSpec.c:834
-#, fuzzy, c-format
+#, c-format
 msgid "Semi-monthly: %s, %s"
-msgstr "Om de maand"
+msgstr "Om de maand: %s, %s"
 
 #: src/engine/FreqSpec.c:849
 #, c-format
@@ -4345,17 +4205,17 @@ msgid "Monthly (x%u): %u"
 msgstr "Maandelijks (x%u): %u"
 
 #: src/engine/FreqSpec.c:856
-#, fuzzy, c-format
+#, c-format
 msgid "Monthly: %u"
 msgstr "Maandelijks: %u"
 
 #: src/engine/FreqSpec.c:865
-#, fuzzy, c-format
+#, c-format
 msgid "Quarterly (x%u): %u"
 msgstr "Ieder kwartaal (x%u): %u"
 
 #: src/engine/FreqSpec.c:872
-#, fuzzy, c-format
+#, c-format
 msgid "Quarterly: %u"
 msgstr "Ieder kwartaal: %u"
 
@@ -4601,12 +4461,10 @@ msgid "Set the report options you want using this dialog."
 msgstr "Kies de rapport opties die u wilt gebruiken in dit venster."
 
 #: src/report/report-gnome/window-report.c:1102
-#, fuzzy
 msgid "Report error"
 msgstr "Rapport fout"
 
 #: src/report/report-gnome/window-report.c:1103
-#, fuzzy
 msgid "An error occurred while running the report."
 msgstr "Er is een fout opgetreden tijdens genereren van het rapport."
 
@@ -4663,9 +4521,8 @@ msgstr ""
 "om het proces te annuleren."
 
 #: src/import-export/ofx/ofx.glade:82
-#, fuzzy
 msgid "Select a OFX file to load"
-msgstr "Selecteer een te laden OFX bestand.\n"
+msgstr "Selecteer een te laden OFX bestand."
 
 #: src/import-export/ofx/ofx.glade:103
 #: src/import-export/qif-import/qif.glade:256
@@ -4685,7 +4542,6 @@ msgstr ""
 "data verspreid is over meerdere bestanden.\n"
 
 #: src/import-export/ofx/ofx.glade:137
-#, fuzzy
 msgid "OFX Filename:"
 msgstr "OFX bestandsnaam:"
 
@@ -4766,12 +4622,10 @@ msgstr ""
 "Het dagboek nu corrigeren?"
 
 #: src/import-export/hbci/gnc-hbci-getbalance.c:161
-#, fuzzy
 msgid "noted balance"
 msgstr "Ge-annoteerde balans"
 
 #: src/import-export/hbci/gnc-hbci-getbalance.c:161
-#, fuzzy
 msgid "booked balance"
 msgstr "geboekte balans"
 
@@ -4852,12 +4706,10 @@ msgid "Choose OpenHBCI Configuration File"
 msgstr "Kies een OpenHBCI configuratie bestand"
 
 #: src/import-export/hbci/glade/hbci.glade:161
-#, fuzzy
 msgid "Enter Bank Information"
 msgstr "Geef bankgegevens op"
 
 #: src/import-export/hbci/glade/hbci.glade:182
-#, fuzzy
 msgid "Bank Identification"
 msgstr "Bank identificatie"
 
@@ -4871,7 +4723,6 @@ msgstr "280"
 
 #: src/import-export/hbci/glade/hbci.glade:278
 #: src/import-export/hbci/glade/hbci.glade:2267
-#, fuzzy
 msgid "Bank Code"
 msgstr "Bank code"
 
@@ -4880,7 +4731,6 @@ msgid "Server Address"
 msgstr "Server adres"
 
 #: src/import-export/hbci/glade/hbci.glade:328
-#, fuzzy
 msgid "Internet Address"
 msgstr "Internet adres"
 
@@ -4889,12 +4739,10 @@ msgid "www.hbci-kernel.de"
 msgstr "www.hbci-kernel.de"
 
 #: src/import-export/hbci/glade/hbci.glade:382
-#, fuzzy
 msgid "Enter User Information"
 msgstr "Geef gebruikersinformatie ip"
 
 #: src/import-export/hbci/glade/hbci.glade:422
-#, fuzzy
 msgid "Bank Code:"
 msgstr "Bank code:"
 
@@ -4916,18 +4764,15 @@ msgstr "Gebruikers ID"
 
 #: src/import-export/hbci/glade/hbci.glade:578
 #: src/import-export/hbci/glade/hbci.glade:654
-#, fuzzy
 msgid "Name (optional)"
 msgstr "Naam (optioneel)"
 
 #: src/import-export/hbci/glade/hbci.glade:628
 #: src/business/business-gnome/dialog-customer.c:793
-#, fuzzy
 msgid "Customer ID"
 msgstr "Klant ID"
 
 #: src/import-export/hbci/glade/hbci.glade:749
-#, fuzzy
 msgid "Security Medium"
 msgstr "Beveiligings medium"
 
@@ -4980,7 +4825,6 @@ msgid "Match HBCI accounts with GnuCash accounts"
 msgstr "Koppel HBCI dagboeken met GnuCash dagboeken"
 
 #: src/import-export/hbci/glade/hbci.glade:988
-#, fuzzy
 msgid "HBCI account name"
 msgstr "HBCI dagboek Naam"
 
@@ -5001,7 +4845,6 @@ msgid "New?"
 msgstr "Nieuw?"
 
 #: src/import-export/hbci/glade/hbci.glade:1041
-#, fuzzy
 msgid ""
 "Add \n"
 "Bank"
@@ -5183,12 +5026,10 @@ msgid "Select or add a GnuCash account"
 msgstr "GnuCash dagboek selecteren of toevoegen"
 
 #: src/import-export/hbci/glade/hbci.glade:1610
-#, fuzzy
 msgid "New Account (not implemented)"
 msgstr "Nieuw dagboek (nog niet ge-implementeerd)"
 
 #: src/import-export/hbci/glade/hbci.glade:1624
-#, fuzzy
 msgid "Online Transaction"
 msgstr "Online transactie"
 
@@ -5201,12 +5042,10 @@ msgid "Execute Later (unimpl.)"
 msgstr "Later uitvoeren (nog niet ge-implementeerd)"
 
 #: src/import-export/hbci/glade/hbci.glade:1704
-#, fuzzy
 msgid "Enter an Online Transaction"
 msgstr "Geef een online transactie in"
 
 #: src/import-export/hbci/glade/hbci.glade:1769
-#, fuzzy
 msgid "Recipient Account Number"
 msgstr "Nummer van de ontvangende rekening"
 
@@ -5215,13 +5054,11 @@ msgid "Recipient Bank Code"
 msgstr "Bank code ontvanger"
 
 #: src/import-export/hbci/glade/hbci.glade:1869
-#, fuzzy
 msgid "Recipient Name"
 msgstr "Naam ontvanger"
 
 #: src/import-export/hbci/glade/hbci.glade:1914
 #: src/import-export/hbci/glade/hbci.glade:2163
-#, fuzzy
 msgid "at Bank"
 msgstr "bij bank"
 
@@ -5234,7 +5071,6 @@ msgid "Payment Purpose (only for recipient)"
 msgstr "Doel van de betaling (alleen voor ontvanger)"
 
 #: src/import-export/hbci/glade/hbci.glade:2061
-#, fuzzy
 msgid "Payment Purpose continued"
 msgstr "Vervolg betalingsdoel"
 
@@ -5263,12 +5099,10 @@ msgid "Progress"
 msgstr "Voortgang"
 
 #: src/import-export/hbci/glade/hbci.glade:2461
-#, fuzzy
 msgid "Current Job"
 msgstr "Huidige opdracht"
 
 #: src/import-export/hbci/glade/hbci.glade:2487
-#, fuzzy
 msgid "Current Action"
 msgstr "Huidige actie"
 
@@ -5277,7 +5111,6 @@ msgid "Log Messages"
 msgstr "Log berichten"
 
 #: src/import-export/hbci/glade/hbci.glade:2652
-#, fuzzy
 msgid "Get Transactions Online"
 msgstr "Transacties online ophalen"
 
@@ -5299,7 +5132,6 @@ msgstr "Laatste ophaal datum"
 
 #: src/import-export/hbci/glade/hbci.glade:2784
 #: src/import-export/hbci/glade/hbci.glade:2877
-#, fuzzy
 msgid "Enter date:"
 msgstr "Geef datum op:"
 
@@ -5503,37 +5335,30 @@ msgstr ""
 "Geef een online ... "
 
 #: src/import-export/hbci/dialog-hbcitrans.c:147
-#, fuzzy
 msgid "Debited Account Owner"
 msgstr "Eigenaar gedebiteerde rekening"
 
 #: src/import-export/hbci/dialog-hbcitrans.c:149
-#, fuzzy
 msgid "Debited Account Number"
 msgstr "Gedebiteerde rekening nummer"
 
 #: src/import-export/hbci/dialog-hbcitrans.c:151
-#, fuzzy
 msgid "Debited Account Bank Code"
 msgstr "Bank code voor gedebiteerde rekening"
 
 #: src/import-export/hbci/dialog-hbcitrans.c:154
-#, fuzzy
 msgid "Credited Account Owner"
 msgstr "Eigenaar gecrediteerde rekening"
 
 #: src/import-export/hbci/dialog-hbcitrans.c:156
-#, fuzzy
 msgid "Credited Account Number"
 msgstr "Gecrediteerd rekeningnummer"
 
 #: src/import-export/hbci/dialog-hbcitrans.c:158
-#, fuzzy
 msgid "Credited Account Bank Code"
 msgstr "Bank code gecrediteerde rekening"
 
 #: src/import-export/hbci/dialog-hbcitrans.c:179
-#, fuzzy
 msgid "(unknown)"
 msgstr "(onbekend)"
 
@@ -5547,12 +5372,10 @@ msgstr ""
 
 #: src/import-export/hbci/hbci-progressmon.c:93
 #: src/import-export/hbci/hbci-progressmon.c:94
-#, fuzzy
 msgid "Finished"
-msgstr "Beeindigd"
+msgstr "Beëindigd"
 
 #: src/import-export/hbci/hbci-progressmon.c:114
-#, fuzzy
 msgid "Opening Dialog"
 msgstr "Opening venster"
 
@@ -5569,17 +5392,14 @@ msgid "Closing Network Connection"
 msgstr "sluiten netwerk verbinding"
 
 #: src/import-export/hbci/hbci-progressmon.c:131
-#, fuzzy
 msgid "Job: Get Balance"
 msgstr "Opdracht: haal balans"
 
 #: src/import-export/hbci/hbci-progressmon.c:135
-#, fuzzy
 msgid "Job: Get Transactions"
 msgstr "Opdracht: haal transacties"
 
 #: src/import-export/hbci/hbci-progressmon.c:139
-#, fuzzy
 msgid "Job: New Transfer"
 msgstr "Opdracht: nieuwe transactie"
 
@@ -5617,7 +5437,6 @@ msgstr "Opdracht: stuur sleutels op"
 
 #: src/import-export/hbci/hbci-progressmon.c:193
 #: src/import-export/hbci/hbci-progressmon.c:253
-#, fuzzy
 msgid "Done"
 msgstr "Voltooid"
 
@@ -5654,12 +5473,10 @@ msgid "Online HBCI Direct Debit Note"
 msgstr "Online HBCI ..."
 
 #: src/import-export/hbci/gnc-hbci-transfer.c:115
-#, fuzzy
 msgid "Online HBCI Transaction"
 msgstr "Online HBCI transactie"
 
 #: src/import-export/hbci/gncmod-hbci.c:93
-#, fuzzy
 msgid "HBCI Get Balance"
 msgstr "HBCI, haal balans"
 
@@ -5668,7 +5485,6 @@ msgid "Get the account balance online through HBCI"
 msgstr "Haal de dagboek balans online op via HBCI"
 
 #: src/import-export/hbci/gncmod-hbci.c:97
-#, fuzzy
 msgid "HBCI Get Transactions"
 msgstr "Transacties zoeken"
 
@@ -5677,7 +5493,6 @@ msgid "Get the transactions online through HBCI"
 msgstr "Haal de transacties online op via HBCI"
 
 #: src/import-export/hbci/gncmod-hbci.c:101
-#, fuzzy
 msgid "HBCI Issue Transaction"
 msgstr "Geef HBCI transactie op"
 
@@ -5694,12 +5509,11 @@ msgid "Issue a new direct debit note online through HBCI"
 msgstr "Geef online een nieuwe ... op via HBCI"
 
 #: src/import-export/hbci/gncmod-hbci.c:114
-#, fuzzy
 msgid "Online Actions"
 msgstr "Online Acties"
 
 #: src/import-export/hbci/druid-hbci-utils.c:255
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file %s does not exist. \n"
 "Would you like to create it now?"
@@ -6358,12 +6172,10 @@ msgid "Online account ID here..."
 msgstr "Hier het online dagboek ID..."
 
 #: src/import-export/generic-import.glade:120
-#, fuzzy
 msgid "Please select or create the matching Gnucash account:"
 msgstr "Selecteer of genereer het bijbehorende GnuCash dagboek:"
 
 #: src/import-export/generic-import.glade:187
-#, fuzzy
 msgid "Account ID"
 msgstr "Dagboek ID"
 
@@ -6380,7 +6192,6 @@ msgid "Potential splits matching the selected transaction: "
 msgstr "Potentiële opsplitsingen komen overeen met de geselecteerde transactie:"
 
 #: src/import-export/generic-import.glade:540
-#, fuzzy
 msgid "Confidence"
 msgstr "Vertrouwelijk"
 
@@ -6421,7 +6232,6 @@ msgid "You must choose a valid parent account."
 msgstr "U moet een geldig bovenliggend dagboek kiezen."
 
 #: src/gnome-utils/dialog-account.c:828 src/gnome-utils/dialog-account.c:979
-#, fuzzy
 msgid "You must choose a commodity."
 msgstr "U moet een goed kiezen."
 
@@ -6483,7 +6293,6 @@ msgid "Select Default"
 msgstr "Selecteer standaardwaarden"
 
 #: src/gnome-utils/dialog-options.c:1108
-#, fuzzy
 msgid "Defaults"
 msgstr "Standaardwaarden"
 
@@ -6500,7 +6309,6 @@ msgid "Select pixmap"
 msgstr "Selecteer afbeelding"
 
 #: src/gnome-utils/dialog-commodity.c:130
-#, fuzzy
 msgid ""
 "\n"
 "Please select a commodity to match:"
@@ -6509,7 +6317,6 @@ msgstr ""
 "Selecteer een overeenkomend goed:"
 
 #: src/gnome-utils/dialog-commodity.c:134
-#, fuzzy
 msgid ""
 "\n"
 "Commodity: "
@@ -6605,12 +6412,10 @@ msgid "Edit..."
 msgstr "Bewerken..."
 
 #: src/gnome-utils/gnc-general-select.c:189
-#, fuzzy
 msgid "View..."
 msgstr "Bekijken..."
 
 #: src/gnome-utils/gnc-dense-cal.c:983
-#, fuzzy
 msgid "(unnamed)"
 msgstr "(geen naam)"
 
@@ -6623,12 +6428,10 @@ msgid "Not found"
 msgstr "Niet gevonden"
 
 #: src/gnome-utils/gnc-html.c:111
-#, fuzzy
 msgid "The specified URL could not be loaded."
 msgstr "De gespecificeerde URL kon niet worden geladen."
 
 #: src/gnome-utils/gnc-html.c:117
-#, fuzzy
 msgid "There was an error loading the specified URL."
 msgstr "Fout bij het laden van gespecificeerde URL."
 
@@ -6728,7 +6531,6 @@ msgid "Enter the smallest fraction of the commodity which can be traded. For sto
 msgstr "Geef het kleinste deel op waarin het goed kan worden verhandeld. Voor aandelen die enkel in hele getallen worden verhandeld geeft u 1 op."
 
 #: src/business/dialog-tax-table/dialog-tax-table.c:71
-#, fuzzy
 msgid "You must provide a name for this Tax Table."
 msgstr "U moet een naam opgeven voor deze belasting tabel."
 
@@ -6752,12 +6554,10 @@ msgid "Percentage amount must be between 0 and 100."
 msgstr "Procentuele getallen moeten tussen de 0 en 100 zijn."
 
 #: src/business/dialog-tax-table/dialog-tax-table.c:104
-#, fuzzy
 msgid "You must choose a Tax Account."
 msgstr "U moet belasting dagboek kiezen."
 
 #: src/business/dialog-tax-table/dialog-tax-table.c:195
-#, fuzzy
 msgid "Value $"
 msgstr "Waarde $"
 
@@ -6773,7 +6573,7 @@ msgstr "Belastingtabel \"%s\" is in gebruik. U kunt deze niet verwijderen"
 
 #: src/business/dialog-tax-table/dialog-tax-table.c:518
 #: src/business/business-gnome/dialog-billterms.c:616
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete \"%s\"?"
 msgstr "Weet u zeker dat u \"%s\" wilt verwijderen?"
 
@@ -6786,7 +6586,6 @@ msgstr ""
 "Probeert u de belastingtabel te verwijderen als u dat wilt."
 
 #: src/business/dialog-tax-table/dialog-tax-table.c:562
-#, fuzzy
 msgid "Are you sure you want to delete this entry?"
 msgstr "Weet u zeker dat u de laatste opgave wilt verwijderen?"
 
@@ -6799,7 +6598,6 @@ msgstr "Belasting tabellen"
 #: src/business/dialog-tax-table/tax-tables.glade:129
 #: src/business/business-gnome/glade/billterms.glade:130
 #: src/business/business-gnome/glade/date-close.glade:139
-#, fuzzy
 msgid "label1"
 msgstr "label1"
 
@@ -6808,18 +6606,15 @@ msgid "Tax Table Entries"
 msgstr "Belasting tabel opgaven"
 
 #: src/business/dialog-tax-table/tax-tables.glade:227
-#, fuzzy
 msgid "label8"
 msgstr "label8"
 
 #: src/business/dialog-tax-table/tax-tables.glade:240
-#, fuzzy
 msgid "label9"
 msgstr "label9"
 
 #: src/business/dialog-tax-table/tax-tables.glade:380
 #: src/business/business-ledger/gncEntryLedgerModel.c:84
-#, fuzzy
 msgid "Tax Table"
 msgstr "Belasting tabel"
 
@@ -6829,7 +6624,6 @@ msgstr "Belasting tabel"
 #: src/business/business-gnome/glade/vendor.glade:288
 #: src/business/business-gnome/glade/employee.glade:287
 #: src/business/business-gnome/glade/billterms.glade:462
-#, fuzzy
 msgid "Name: "
 msgstr "Naam:"
 
@@ -6840,22 +6634,18 @@ msgstr "Belasting tabel opgave"
 #: src/business/dialog-tax-table/tax-tables.glade:475
 #: src/business/business-gnome/glade/billterms.glade:246
 #: src/business/business-gnome/glade/billterms.glade:556
-#, fuzzy
 msgid "Type: "
 msgstr "Type:"
 
 #: src/business/dialog-tax-table/tax-tables.glade:492
-#, fuzzy
 msgid "Value: "
 msgstr "Waarde"
 
 #: src/business/dialog-tax-table/tax-tables.glade:567
-#, fuzzy
 msgid "Tax Account"
 msgstr "Belasting dagboek"
 
 #: src/business/business-gnome/dialog-order.c:133
-#, fuzzy
 msgid "The Order must be given an ID."
 msgstr "De opdracht moet een ID hebben."
 
@@ -6879,7 +6669,6 @@ msgstr ""
 "opgaven gefactureerd heeft?"
 
 #: src/business/business-gnome/dialog-order.c:266
-#, fuzzy
 msgid "Do you really want to close the order?"
 msgstr "Wilt u de order echt sluiten?"
 
@@ -6892,7 +6681,6 @@ msgid "View/Edit Order"
 msgstr "Bekijk/bewerk order"
 
 #: src/business/business-gnome/dialog-order.c:841
-#, fuzzy
 msgid "Order Notes"
 msgstr "Order opmerkingen"
 
@@ -6935,7 +6723,6 @@ msgstr "Order ID"
 #: src/business/business-gnome/glade/job.glade:264
 #: src/business/business-gnome/dialog-job.c:534
 #: src/business/business-gnome/dialog-job.c:544 intl-scm/guile-strings.c:811
-#, fuzzy
 msgid "Billing ID"
 msgstr "Factuur ID"
 
@@ -6949,18 +6736,15 @@ msgid "Company"
 msgstr "Bedrijf"
 
 #: src/business/business-gnome/dialog-order.c:862
-#, fuzzy
 msgid "Closed"
 msgstr "Gesloten"
 
 #: src/business/business-gnome/dialog-order.c:864
 #: src/business/business-gnome/dialog-invoice.c:2088
-#, fuzzy
 msgid "Opened"
 msgstr "Geopend"
 
 #: src/business/business-gnome/dialog-invoice.c:422
-#, fuzzy
 msgid "Are you sure you want to delete the selected entry?"
 msgstr "Weet u zeker dat u de geselecteerde opgave wilt verwijderen?"
 
@@ -6973,7 +6757,6 @@ msgid "The Invoice must have at least one Entry."
 msgstr "De factuur moet tenminste een opgave bevatten."
 
 #: src/business/business-gnome/dialog-invoice.c:538
-#, fuzzy
 msgid "Do you really want to post the invoice?"
 msgstr "Weet u zeker dat u de factuur wilt versturen?"
 
@@ -6981,22 +6764,18 @@ msgstr "Weet u zeker dat u de factuur wilt versturen?"
 #: src/register/ledger-core/split-register-model.c:123
 #: intl-scm/guile-strings.c:859 intl-scm/guile-strings.c:881
 #: intl-scm/guile-strings.c:921
-#, fuzzy
 msgid "Due Date"
 msgstr "Verval datum"
 
 #: src/business/business-gnome/dialog-invoice.c:540
-#, fuzzy
 msgid "Post Date"
 msgstr "Datum verstuurd"
 
 #: src/business/business-gnome/dialog-invoice.c:541
-#, fuzzy
 msgid "Post to Account"
 msgstr "Versturen naar dagboek"
 
 #: src/business/business-gnome/dialog-invoice.c:595
-#, fuzzy
 msgid "Unposting this Invoice will delete the posted transaction.  Are you sure you want to unpost it?"
 msgstr "Ongedaan maken van het versturen van deze factuur zal de verstuurde transactie ongedaan maken. Weet u zeker dat u ongedaan wilt maken?"
 
@@ -7024,7 +6803,6 @@ msgstr "Bekijk/bewerk factuur"
 #: src/business/business-gnome/dialog-job.c:522 intl-scm/guile-strings.c:571
 #: intl-scm/guile-strings.c:573 intl-scm/guile-strings.c:601
 #: intl-scm/guile-strings.c:603
-#, fuzzy
 msgid "Process Payment"
 msgstr "Periodieke afbetaling"
 
@@ -7039,7 +6817,6 @@ msgstr "Factuur opmerkingen"
 
 #: src/business/business-gnome/dialog-invoice.c:2064
 #: src/business/business-gnome/glade/invoice.glade:1495
-#, fuzzy
 msgid "Date Posted"
 msgstr "Datum verstuurd"
 
@@ -7064,7 +6841,6 @@ msgstr "Verstuurd"
 #: src/business/business-gnome/glade/customer.glade:22
 #: src/business/business-gnome/dialog-customer.c:332
 #: intl-scm/guile-strings.c:547 intl-scm/guile-strings.c:549
-#, fuzzy
 msgid "New Customer"
 msgstr "Nieuwe klant"
 
@@ -7090,7 +6866,6 @@ msgstr "Bedrijfsnaam:"
 #: src/business/business-gnome/glade/vendor.glade:179
 #: src/business/business-gnome/glade/job.glade:329
 #: src/business/business-gnome/glade/employee.glade:178
-#, fuzzy
 msgid "Active"
 msgstr "Actief"
 
@@ -7131,7 +6906,6 @@ msgstr "E-mail:"
 #: src/business/business-gnome/search-owner.c:233
 #: src/register/ledger-core/split-register-model.c:149
 #: intl-scm/guile-strings.c:957
-#, fuzzy
 msgid "Customer"
 msgstr "Klant"
 
@@ -7142,7 +6916,6 @@ msgstr "Klant"
 #: src/business/business-gnome/glade/order.glade:296
 #: src/business/business-gnome/glade/order.glade:729
 #: src/business/business-gnome/glade/order.glade:1131
-#, fuzzy
 msgid "Billing Information"
 msgstr "Rekening informatie"
 
@@ -7156,7 +6929,6 @@ msgid "Discount: "
 msgstr "Korting:"
 
 #: src/business/business-gnome/glade/customer.glade:676
-#, fuzzy
 msgid "Credit Limit: "
 msgstr "Crediet limiet:"
 
@@ -7178,7 +6950,6 @@ msgid "What Tax Table should be applied to this customer?"
 msgstr "Welke belastingtabel moet worden toegepast op deze klant?"
 
 #: src/business/business-gnome/glade/customer.glade:870
-#, fuzzy
 msgid "Shipping Information"
 msgstr "Verzend informatie"
 
@@ -7193,7 +6964,6 @@ msgstr "Nieuwe factuur"
 
 #: src/business/business-gnome/glade/invoice.glade:101
 #: src/business/business-gnome/glade/invoice.glade:1432
-#, fuzzy
 msgid "Invoice Information"
 msgstr "Factuur informatie"
 
@@ -7204,7 +6974,6 @@ msgstr "Factuur informatie"
 #: src/business/business-gnome/glade/order.glade:759
 #: src/business/business-gnome/glade/order.glade:1161
 #: src/business/business-gnome/glade/job.glade:246
-#, fuzzy
 msgid "(owner)"
 msgstr "(eigenaar)"
 
@@ -7237,7 +7006,6 @@ msgid "_New Invoice"
 msgstr "_Nieuwe factuur"
 
 #: src/business/business-gnome/glade/invoice.glade:603
-#, fuzzy
 msgid "Create a new Account"
 msgstr "Genereer een nieuw dagboek"
 
@@ -7284,7 +7052,6 @@ msgid "Sort by price"
 msgstr "Sorteer op prijs"
 
 #: src/business/business-gnome/glade/invoice.glade:900
-#, fuzzy
 msgid "_Price"
 msgstr "_Prijs"
 
@@ -7294,28 +7061,24 @@ msgid "Sort by description"
 msgstr "Sorteer op omschrijving"
 
 #: src/business/business-gnome/glade/invoice.glade:915
-#, fuzzy
 msgid "_Description"
 msgstr "Omschrijving (_D)"
 
 #: src/business/business-gnome/glade/invoice.glade:938
 #: src/business/business-gnome/glade/invoice.glade:1258
 #: src/business/business-gnome/glade/invoice.glade:2034
-#, fuzzy
 msgid "Record the current entry"
 msgstr "Sla de huidige opgave op"
 
 #: src/business/business-gnome/glade/invoice.glade:951
 #: src/business/business-gnome/glade/invoice.glade:1273
 #: src/business/business-gnome/glade/invoice.glade:2047
-#, fuzzy
 msgid "Cancel the current entry"
 msgstr "Annuleer de huidige opgave"
 
 #: src/business/business-gnome/glade/invoice.glade:964
 #: src/business/business-gnome/glade/invoice.glade:1288
 #: src/business/business-gnome/glade/invoice.glade:2060
-#, fuzzy
 msgid "Delete the current entry"
 msgstr "Verwijder de huidige opgave"
 
@@ -7360,12 +7123,10 @@ msgid "_Billing Terms Editor"
 msgstr "Rekening voorwaarden _bewerken"
 
 #: src/business/business-gnome/glade/invoice.glade:1124
-#, fuzzy
 msgid "Enter a payment for the owner of this Invoice"
 msgstr "Voer een betaling in voor de eigenaar van deze factuur"
 
 #: src/business/business-gnome/glade/invoice.glade:1130
-#, fuzzy
 msgid "Process Pa_yment"
 msgstr "Periodieke afbetaling (_Y)"
 
@@ -7382,7 +7143,6 @@ msgid "Post this Invoice to your Chart of Accounts"
 msgstr "Verzend deze factuur naar uw daboek overzicht"
 
 #: src/business/business-gnome/glade/invoice.glade:1371
-#, fuzzy
 msgid "Post"
 msgstr "Verzend"
 
@@ -7395,12 +7155,10 @@ msgid "Unpost"
 msgstr "Verzending ongedaan maken"
 
 #: src/business/business-gnome/glade/invoice.glade:1512
-#, fuzzy
 msgid "Posted Account"
 msgstr "Verzonden dagboek"
 
 #: src/business/business-gnome/glade/invoice.glade:1929
-#, fuzzy
 msgid "Customer: "
 msgstr "Klant:"
 
@@ -7409,7 +7167,6 @@ msgid "Job: "
 msgstr "Opdracht:"
 
 #: src/business/business-gnome/glade/invoice.glade:1997
-#, fuzzy
 msgid "Invoice Entries"
 msgstr "Factuur opgaven"
 
@@ -7418,12 +7175,10 @@ msgid "Post To"
 msgstr "Verzend aan"
 
 #: src/business/business-gnome/glade/order.glade:22
-#, fuzzy
 msgid "Order Entry"
 msgstr "Sorteer opgaven"
 
 #: src/business/business-gnome/glade/order.glade:83
-#, fuzzy
 msgid "Invoices"
 msgstr "Facturen"
 
@@ -7434,7 +7189,6 @@ msgstr "Sluit order"
 #: src/business/business-gnome/glade/order.glade:120
 #: src/business/business-gnome/glade/order.glade:618
 #: src/business/business-gnome/glade/order.glade:956
-#, fuzzy
 msgid "Order Information"
 msgstr "Order informatie"
 
@@ -7447,12 +7201,10 @@ msgstr "Referentie"
 
 #: src/business/business-gnome/glade/order.glade:507
 #: src/business/business-gnome/glade/order.glade:1342
-#, fuzzy
 msgid "Order Entries"
 msgstr "Order opgaven"
 
 #: src/business/business-gnome/glade/order.glade:539
-#, fuzzy
 msgid "New Order"
 msgstr "Nieuwe order"
 
@@ -7463,7 +7215,6 @@ msgstr "Order"
 #: src/business/business-gnome/glade/vendor.glade:22
 #: src/business/business-gnome/dialog-vendor.c:256
 #: intl-scm/guile-strings.c:577 intl-scm/guile-strings.c:579
-#, fuzzy
 msgid "New Vendor"
 msgstr "Nieuwe verkoper"
 
@@ -7473,7 +7224,6 @@ msgstr "Verkopersnummer:"
 
 #: src/business/business-gnome/glade/vendor.glade:257
 #: src/business/business-gnome/glade/employee.glade:256
-#, fuzzy
 msgid "Payment Address"
 msgstr "Factuuradres"
 
@@ -7501,25 +7251,21 @@ msgid "Job Dialog"
 msgstr "Opdracht venster"
 
 #: src/business/business-gnome/glade/job.glade:101
-#, fuzzy
 msgid "Job Information"
 msgstr "Opdracht informatie"
 
 #: src/business/business-gnome/glade/job.glade:132
 #: src/business/business-gnome/dialog-job.c:536
-#, fuzzy
 msgid "Job Number"
 msgstr "Opdrachtnummer"
 
 #: src/business/business-gnome/glade/job.glade:150
 #: src/business/business-gnome/dialog-job.c:538
 #: src/business/business-gnome/dialog-job.c:548
-#, fuzzy
 msgid "Job Name"
 msgstr "Opdrachtnaam"
 
 #: src/business/business-gnome/glade/job.glade:215
-#, fuzzy
 msgid "Owner Information"
 msgstr "Eigenaar informatie"
 
@@ -7542,7 +7288,6 @@ msgid "Username: "
 msgstr "Gebruikersnaam:"
 
 #: src/business/business-gnome/glade/employee.glade:560
-#, fuzzy
 msgid "Interface"
 msgstr "Interface"
 
@@ -7551,7 +7296,6 @@ msgid "Language: "
 msgstr "Taal:"
 
 #: src/business/business-gnome/glade/employee.glade:627
-#, fuzzy
 msgid "Billing"
 msgstr "Factureren"
 
@@ -7564,7 +7308,6 @@ msgid "Default Rate: "
 msgstr "Standaard tarief:"
 
 #: src/business/business-gnome/glade/employee.glade:740
-#, fuzzy
 msgid "Employee"
 msgstr "Werknemer"
 
@@ -7595,7 +7338,6 @@ msgstr "Termijn definitie"
 
 #: src/business/business-gnome/glade/billterms.glade:229
 #: src/business/business-gnome/glade/billterms.glade:539
-#, fuzzy
 msgid "Description: "
 msgstr "Omschrijving:"
 
@@ -7605,7 +7347,6 @@ msgid "The description of the Billing Term, printed on invoices"
 msgstr "De omschrijving van de factuur voorwaarden afgedrukt op de facturen"
 
 #: src/business/business-gnome/glade/billterms.glade:303
-#, fuzzy
 msgid "(type)"
 msgstr "(type)"
 
@@ -7705,13 +7446,11 @@ msgid "The cutoff day for applying bills to the next month.  After the cutoff, b
 msgstr "De afsluitende dag om facturen op te geven voor de volgende maand. Na de afsluitende dag worden facturen verzet naar de volgende maand. Negatieve waarden tellen terug vanaf het einde van de maand."
 
 #: src/business/business-gnome/glade/billterms.glade:1110
-#, fuzzy
 msgid "Table"
 msgstr "Tabel"
 
 #: src/business/business-gnome/glade/date-close.glade:22
 #: src/business/business-gnome/glade/date-close.glade:193
-#, fuzzy
 msgid "Question"
 msgstr "Vraag"
 
@@ -7736,32 +7475,26 @@ msgid "Yes"
 msgstr "Ja"
 
 #: src/business/business-gnome/business-utils.c:387
-#, fuzzy
 msgid "No"
 msgstr "Nee"
 
 #: src/business/business-gnome/business-utils.c:392
-#, fuzzy
 msgid "Use Global"
-msgstr "Gebruik globalen"
+msgstr "Gebruik globale instellingen"
 
 #: src/business/business-gnome/dialog-employee.c:174
-#, fuzzy
 msgid "The Employee must be given an ID."
 msgstr "De werknemer moet een ID hebben."
 
 #: src/business/business-gnome/dialog-employee.c:179
-#, fuzzy
 msgid "You must enter a username."
 msgstr "U moet een gebruikersnaam opgeven."
 
 #: src/business/business-gnome/dialog-employee.c:184
-#, fuzzy
 msgid "You must enter the employee's name."
-msgstr "U moet de werknemersnam opgeven."
+msgstr "U moet de naam van de werknemer opgeven."
 
 #: src/business/business-gnome/dialog-employee.c:192
-#, fuzzy
 msgid "You must enter an address."
 msgstr "U moet een adres opgeven."
 
@@ -7798,12 +7531,10 @@ msgstr "ID #"
 
 #: src/business/business-gnome/dialog-customer.c:229
 #: src/business/business-gnome/dialog-vendor.c:168
-#, fuzzy
 msgid "You must enter a company name."
 msgstr "U moet een bedrijfsnaam opgeven."
 
 #: src/business/business-gnome/dialog-customer.c:237
-#, fuzzy
 msgid "You must enter a billing address."
 msgstr "U moet een factuuradres opgeven."
 
@@ -7812,12 +7543,10 @@ msgid "Discount percentage must be between 0-100 or you must leave it blank."
 msgstr "Het kortingspercentage moet tussen de 0 en 100 liggen; u kunt het ook leeg laten."
 
 #: src/business/business-gnome/dialog-customer.c:252
-#, fuzzy
 msgid "Credit must be a positive amount or you must leave it blank."
-msgstr "Crediet moet een positief bedrg zijn, of u kunt het leeg laten."
+msgstr "Crediet moet een positief bedrag zijn, of u kunt het leeg laten."
 
 #: src/business/business-gnome/dialog-customer.c:330
-#, fuzzy
 msgid "Edit Customer"
 msgstr "Bewerk klant"
 
@@ -7850,7 +7579,6 @@ msgstr "Bedrijfsnaam"
 
 #: src/business/business-gnome/dialog-customer.c:801
 #: src/business/business-gnome/dialog-vendor.c:656
-#, fuzzy
 msgid "Contact"
 msgstr "Contactpersoon"
 
@@ -7895,17 +7623,14 @@ msgid "Entity is not Account entity: %s"
 msgstr "Dit is geen dagboek gegeven: %s"
 
 #: src/business/business-gnome/dialog-job.c:104
-#, fuzzy
 msgid "The Job must be given a name."
 msgstr "De opdracht moet een naam hebben."
 
 #: src/business/business-gnome/dialog-job.c:113
-#, fuzzy
 msgid "You must choose an owner for this job."
 msgstr "U moet een eigenaar van deze opdracht kiezen."
 
 #: src/business/business-gnome/dialog-job.c:212
-#, fuzzy
 msgid "Edit Job"
 msgstr "Bewerk opdracht"
 
@@ -7936,17 +7661,14 @@ msgid "You must enter the amount of the payment.  The payment amount must be gre
 msgstr "U moet het bedrag van de betaling opgeven. Het betaalde bedrag moet groter dan 0 zijn."
 
 #: src/business/business-gnome/dialog-payment.c:132
-#, fuzzy
 msgid "You must select a company for payment processing."
 msgstr "U moet een bedrijf selecteren om de betaling te verwerken."
 
 #: src/business/business-gnome/dialog-payment.c:140
-#, fuzzy
 msgid "You must select a transfer account from the account tree."
 msgstr "U moet een transactie dagboek uit de balans selecteren."
 
 #: src/business/business-gnome/dialog-payment.c:148
-#, fuzzy
 msgid "You must enter an account name for posting."
 msgstr "U moet een dagboeknaam voor verzending opgeven."
 
@@ -7965,7 +7687,6 @@ msgid "Payment"
 msgstr "Betaling"
 
 #: src/business/business-gnome/dialog-billterms.c:259
-#, fuzzy
 msgid "You must provide a name for this Billing Term."
 msgstr "U moet een naam opgeven voor deze rekeningvoorwaarden."
 
@@ -7984,12 +7705,10 @@ msgid "Term \"%s\" is in use.  You cannot delete it."
 msgstr "Voorwaarde \"%s\" is in gebruik. U kunt deze niet verwijderen."
 
 #: src/business/business-gnome/search-owner.c:151
-#, fuzzy
 msgid "You have not selected an owner"
 msgstr "U heeft geen eigenaar geselecteerd"
 
 #: src/business/business-gnome/dialog-vendor.c:176
-#, fuzzy
 msgid "You must enter a payment address."
 msgstr "U moet een betalingsadres opgeven."
 
@@ -8010,7 +7729,6 @@ msgid "Vendor's Bills"
 msgstr "Facturen verkoper"
 
 #: src/business/business-gnome/dialog-vendor.c:637
-#, fuzzy
 msgid "Pay Bill"
 msgstr "Betaal factuur"
 
@@ -8020,7 +7738,7 @@ msgstr "Verkoper's ID"
 
 #: src/business/business-ledger/gncEntryLedger.c:65
 #: src/register/ledger-core/split-register.c:1482
-#, fuzzy, c-format
+#, c-format
 msgid "The account %s does not allow transactions.\n"
 msgstr "Het dagboek %s staat geen transacties toe.\n"
 
@@ -8048,7 +7766,6 @@ msgstr "Materiaal"
 
 #: src/business/business-ledger/gncEntryLedger.c:747
 #: src/business/business-ledger/gncEntryLedgerControl.c:579
-#, fuzzy
 msgid ""
 "The current entry has been changed.\n"
 "Would you like to save it?"
@@ -8063,12 +7780,11 @@ msgstr "Ongeldige opgave: u moet %s aangeven."
 
 #: src/business/business-ledger/gncEntryLedgerControl.c:147
 #: src/business/business-ledger/gncEntryLedgerControl.c:152
-#, fuzzy
 msgid "an Account"
 msgstr "Een dagboek"
 
 #: src/business/business-ledger/gncEntryLedgerControl.c:353
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The tax table %s does not exist.\n"
 "Would you like to create it?"
@@ -8089,7 +7805,6 @@ msgstr ""
 "daarmee uw order veranderen?"
 
 #: src/business/business-ledger/gncEntryLedgerControl.c:495
-#, fuzzy
 msgid ""
 "The current entry has been changed.\n"
 "Would you like to record the change?"
@@ -8099,12 +7814,10 @@ msgstr ""
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:59
 #: intl-scm/guile-strings.c:729 intl-scm/guile-strings.c:769
-#, fuzzy
 msgid "Discount"
 msgstr "Korting"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:64
-#, fuzzy
 msgid "Discount Type"
 msgstr "Kortings type"
 
@@ -8114,7 +7827,6 @@ msgstr "Hoe korting"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:74
 #: intl-scm/guile-strings.c:727
-#, fuzzy
 msgid "Unit Price"
 msgstr "Eenheidsprijs"
 
@@ -8137,7 +7849,6 @@ msgstr "Gefactureerd?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:104
 #: intl-scm/guile-strings.c:845
-#, fuzzy
 msgid "Subtotal"
 msgstr "Subtotaal"
 
@@ -8148,7 +7859,6 @@ msgid "Tax"
 msgstr "Belasting"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:114
-#, fuzzy
 msgid "Billable?"
 msgstr "Factureerbaar?"
 
@@ -8157,12 +7867,10 @@ msgid "Enter the income/expense account for the Entry, or choose one from the li
 msgstr "Geef het inkomsten/uitgaven dagboek op voor de opgave, of kies er een uit de lijst"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:490
-#, fuzzy
 msgid "Enter the type of Entry"
 msgstr "Geef het type opgave op"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:526
-#, fuzzy
 msgid "Enter the Entry Description"
 msgstr "Geef een omschrijving van de opgave"
 
@@ -8187,7 +7895,6 @@ msgid "Discount Type: Percent"
 msgstr "Kortings type: percentage"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:570
-#, fuzzy
 msgid "Select the Discount Type"
 msgstr "Selecteer het kortings type"
 
@@ -8208,7 +7915,6 @@ msgid "Select how to compute the Discount and Taxes"
 msgstr "Kies hoe de korting en belastingen moeten worden berekend"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:608
-#, fuzzy
 msgid "Enter the unit-Price for this Entry"
 msgstr "Geef de eenheidsprijs op voor deze opgave"
 
@@ -8237,17 +7943,14 @@ msgid "Include this entry on this invoice?"
 msgstr "Deze opgave meenemen op deze factuur?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:672
-#, fuzzy
 msgid "Unknown EntryLedger Type"
 msgstr "Onbekend grootboek opgave type"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:685
-#, fuzzy
 msgid "The subtotal value of this entry "
 msgstr "Het subtotaal van deze opgave"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:697
-#, fuzzy
 msgid "The total tax of this entry "
 msgstr "De totale belastingen van deze opgave"
 
@@ -8272,14 +7975,12 @@ msgid ">"
 msgstr ">"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:58
-#, fuzzy
 msgid "sample:X"
 msgstr "Voorbeeld:X:"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:60
 #: src/register/ledger-core/split-register-layout.c:497
 #: src/register/ledger-core/split-register-layout.c:505
-#, fuzzy
 msgid "sample:12/12/2000"
 msgstr "Voorbeeld:31/12/2000"
 
@@ -8288,7 +7989,6 @@ msgid "sample:Description of an Entry"
 msgstr "Voorbeeld: omschrijving ven een opgave"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:65
-#, fuzzy
 msgid "sample:Action"
 msgstr "Voorbeeld: Actie"
 
@@ -8561,12 +8261,10 @@ msgid "Debit Formula"
 msgstr "Debet Formule"
 
 #: src/register/ledger-core/split-register-model.c:338
-#, fuzzy
 msgid "Credit Formula"
 msgstr "Credit Formule"
 
 #: src/register/ledger-core/split-register-model.c:789
-#, fuzzy
 msgid "Scheduled"
 msgstr "Gepland"
 
@@ -8579,12 +8277,10 @@ msgid "Enter the transaction number, such as the check number"
 msgstr "Geef het transactienummer op, bijvoorbeeld het cheque nummer"
 
 #: src/register/ledger-core/split-register-model.c:858
-#, fuzzy
 msgid "Enter the name of the Customer"
 msgstr "Geef de naam van de klant op"
 
 #: src/register/ledger-core/split-register-model.c:861
-#, fuzzy
 msgid "Enter the name of the Vendor"
 msgstr "Geef de naam van de verkoper op"
 
@@ -8664,14 +8360,13 @@ msgstr "voorbeeld:999.999.000"
 #: src/register/ledger-core/split-register-layout.c:558
 #: src/register/ledger-core/split-register-layout.c:566
 msgid "sample:Expenses:Automobile:Gasoline"
-msgstr "voorbeeld:Onkosten:Auto:Brandstof"
+msgstr "voorbeeld:uitgaven:Auto:Brandstof"
 
 #: src/register/ledger-core/split-register-layout.c:574
 msgid "sample:Memo field sample text string"
 msgstr "voorbeeld:Memo veld voorbeeld tekst"
 
 #: src/register/ledger-core/split-register-layout.c:648
-#, fuzzy
 msgid "Type:T"
 msgstr "Type:T"
 
@@ -8899,7 +8594,6 @@ msgid "Date Format Display"
 msgstr "Datum format display"
 
 #: intl-scm/guile-strings.c:154
-#, fuzzy
 msgid "US (12/31/2001)"
 msgstr "US (12/31/2001)"
 
@@ -8908,7 +8602,6 @@ msgid "US-style: mm/dd/yyyy"
 msgstr "US-stijl: mm/dd/yyyy"
 
 #: intl-scm/guile-strings.c:158
-#, fuzzy
 msgid "UK (31/12/2001)"
 msgstr "UK (31/12/2001)"
 
@@ -9487,12 +9180,10 @@ msgid "Company Address"
 msgstr "Bedrijfs adres"
 
 #: intl-scm/guile-strings.c:545
-#, fuzzy
 msgid "Customers"
 msgstr "Klanten"
 
 #: intl-scm/guile-strings.c:551 intl-scm/guile-strings.c:553
-#, fuzzy
 msgid "Find Customer"
 msgstr "Zoek klant"
 
@@ -9502,7 +9193,6 @@ msgstr "Vindt factuur"
 
 #: intl-scm/guile-strings.c:567 intl-scm/guile-strings.c:569
 #: intl-scm/guile-strings.c:597 intl-scm/guile-strings.c:599
-#, fuzzy
 msgid "Find Job"
 msgstr "Zoek "
 
@@ -9511,17 +9201,14 @@ msgid "Vendors"
 msgstr "Verkopers"
 
 #: intl-scm/guile-strings.c:581 intl-scm/guile-strings.c:583
-#, fuzzy
 msgid "Find Vendor"
 msgstr "Zoek verkoper"
 
 #: intl-scm/guile-strings.c:585 intl-scm/guile-strings.c:587
-#, fuzzy
 msgid "New Bill"
 msgstr "Nieuwe factuur"
 
 #: intl-scm/guile-strings.c:589 intl-scm/guile-strings.c:591
-#, fuzzy
 msgid "Find Bill"
 msgstr "Zoek factuur"
 
@@ -9582,7 +9269,6 @@ msgid "Reload receivable report scheme file"
 msgstr "Laadt te ontvngen rapport schema bestand opnieuw"
 
 #: intl-scm/guile-strings.c:643 intl-scm/guile-strings.c:645
-#, fuzzy
 msgid "Initialize Test Data"
 msgstr "Initialiseer test gegevens"
 
@@ -9599,7 +9285,6 @@ msgid "Bill Tax Included?"
 msgstr "Factuur inclusief belasting?"
 
 #: intl-scm/guile-strings.c:655
-#, fuzzy
 msgid "The name of your business"
 msgstr "De naam van uw bedrijf"
 
@@ -9646,12 +9331,10 @@ msgid "Sort companys by"
 msgstr "Sorteer bedrijven op"
 
 #: intl-scm/guile-strings.c:677
-#, fuzzy
 msgid "Name of the company"
 msgstr "Naam van het bedrijf"
 
 #: intl-scm/guile-strings.c:679
-#, fuzzy
 msgid "Total Owed"
 msgstr "Totaal te betalen"
 
@@ -9672,7 +9355,6 @@ msgid "Sort order"
 msgstr "Sorteer volgorde"
 
 #: intl-scm/guile-strings.c:689
-#, fuzzy
 msgid "Increasing"
 msgstr "Cummulatief"
 
@@ -9681,7 +9363,6 @@ msgid "0 -> $999,999.99, A->Z"
 msgstr "0 -> $999,999.99, A->Z"
 
 #: intl-scm/guile-strings.c:693
-#, fuzzy
 msgid "Decreasing"
 msgstr "Negatief-cummulatief"
 
@@ -9714,7 +9395,6 @@ msgid "Business Reports"
 msgstr "Zakelijke rapporten"
 
 #: intl-scm/guile-strings.c:717
-#, fuzzy
 msgid "Invoice Number"
 msgstr "Factuur nummer"
 
@@ -9723,7 +9403,6 @@ msgid "Charge Type"
 msgstr "Kosten type"
 
 #: intl-scm/guile-strings.c:733
-#, fuzzy
 msgid "Tax Amount"
 msgstr "Belasting totaal"
 
@@ -9761,12 +9440,10 @@ msgid "Display the entry's discount"
 msgstr "De korting voor dit item tonen?"
 
 #: intl-scm/guile-strings.c:777
-#, fuzzy
 msgid "Display the entry's tax"
 msgstr "De belastingen voor dit item tonen"
 
 #: intl-scm/guile-strings.c:781
-#, fuzzy
 msgid "Tax Value"
 msgstr "Belaste waarde"
 
@@ -9775,7 +9452,6 @@ msgid "Display the entry's monetary tax"
 msgstr "Toon de monetaire belasting van het item"
 
 #: intl-scm/guile-strings.c:789
-#, fuzzy
 msgid "Display the entry's value"
 msgstr "Toon de waarde van het item"
 
@@ -9809,7 +9485,6 @@ msgid "Display the totals?"
 msgstr "De totalen tonen?"
 
 #: intl-scm/guile-strings.c:799
-#, fuzzy
 msgid "References"
 msgstr "Verwijzingen"
 
@@ -9822,17 +9497,14 @@ msgid "Display the invoice billing terms?"
 msgstr "De factuur voorwaarden voor de factuur tonen?"
 
 #: intl-scm/guile-strings.c:813
-#, fuzzy
 msgid "Display the billing id?"
 msgstr "De factuur ID tonen?"
 
 #: intl-scm/guile-strings.c:819
-#, fuzzy
 msgid "Display the invoice notes?"
 msgstr "De factuur opmerkingen tonen?"
 
 #: intl-scm/guile-strings.c:823 intl-scm/guile-strings.c:841
-#, fuzzy
 msgid "Payments"
 msgstr "Betalingen"
 
@@ -9841,7 +9513,6 @@ msgid "Display the payments applied to this invoice?"
 msgstr "De betalingen die bij deze factuur horen tonen?"
 
 #: intl-scm/guile-strings.c:829
-#, fuzzy
 msgid "Extra Notes"
 msgstr "Extra opmerkingen"
 
@@ -9851,7 +9522,6 @@ msgstr "Extra opmerkingen voor op de factuur"
 
 #: intl-scm/guile-strings.c:835 intl-scm/guile-strings.c:947
 #: intl-scm/guile-strings.c:963
-#, fuzzy
 msgid "Today Date Format"
 msgstr "Datum format vandaag"
 
@@ -9860,12 +9530,10 @@ msgid "The format for the date->string conversion for today's date."
 msgstr "Het format voor de datum -> string conversie voor de datum van vandaag."
 
 #: intl-scm/guile-strings.c:843 intl-scm/guile-strings.c:899
-#, fuzzy
 msgid "Payment, thank you"
 msgstr "Betaling, dank u"
 
 #: intl-scm/guile-strings.c:849
-#, fuzzy
 msgid "Amount Due"
 msgstr "Bedrag verschuldigd"
 
@@ -9891,19 +9559,16 @@ msgid "Printable Invoice"
 msgstr "Afdrukbare factuur"
 
 #: intl-scm/guile-strings.c:903
-#, fuzzy
 msgid "Total Credit"
 msgstr "Totaal credit"
 
 #: intl-scm/guile-strings.c:905
-#, fuzzy
 msgid "Total Due"
 msgstr "Totaal te betalen"
 
 #: intl-scm/guile-strings.c:907
-#, fuzzy
 msgid "The company for this report"
-msgstr "Het bedrijf van dit rapport"
+msgstr "Het bedrijf voor dit rapport"
 
 #: intl-scm/guile-strings.c:909
 msgid "The account to search for transactions"
@@ -9922,7 +9587,6 @@ msgid "Display the transaction type?"
 msgstr "Het transactie type tonen?"
 
 #: intl-scm/guile-strings.c:941
-#, fuzzy
 msgid "Display the transaction description?"
 msgstr "De transactie omschrijving tonen?"
 
@@ -9931,7 +9595,6 @@ msgid " Report: "
 msgstr "Rapport:"
 
 #: intl-scm/guile-strings.c:965 intl-scm/guile-strings.c:969
-#, fuzzy
 msgid "Customer Report"
 msgstr "Klanten rapport"
 
@@ -9940,12 +9603,10 @@ msgid "Vendor Report"
 msgstr "Verkopers rapport"
 
 #: intl-scm/guile-strings.c:973
-#, fuzzy
 msgid "Payable Account"
 msgstr "Te betalen dagboek"
 
 #: intl-scm/guile-strings.c:975
-#, fuzzy
 msgid "The payable account you wish to examine"
 msgstr "Het te betalen dagboek dat u wilt onderzoeken"
 
@@ -9954,12 +9615,10 @@ msgid "Payable Aging"
 msgstr "Te betalen verouderd"
 
 #: intl-scm/guile-strings.c:981
-#, fuzzy
 msgid "Receivables Account"
 msgstr "Te ontvangen dagboek"
 
 #: intl-scm/guile-strings.c:983
-#, fuzzy
 msgid "The receivables account you wish to examine"
 msgstr "Het te ontvangen dagboek dat u wilt onderzoeken"
 
@@ -10005,128 +9664,128 @@ msgstr "Kapitaalwinst (lange termijn)"
 
 #: intl-scm/guile-strings.c:1013 intl-scm/guile-strings.c:1041
 msgid "Cap. gain (mid)"
-msgstr ""
+msgstr "Kapitaal winst (middelange termijn)"
 
 #: intl-scm/guile-strings.c:1015 intl-scm/guile-strings.c:1043
 msgid "Cap. gain (short)"
-msgstr ""
+msgstr "Kaptiaal winst (korte termijn)"
 
 #: intl-scm/guile-strings.c:1021 intl-scm/guile-strings.c:1049
 msgid "Commissions"
-msgstr ""
+msgstr "Commissies"
 
 #: intl-scm/guile-strings.c:1023 intl-scm/guile-strings.c:1051
 msgid "Margin Interest"
-msgstr ""
+msgstr "Rentemarge"
 
 #: intl-scm/guile-strings.c:1025 intl-scm/guile-strings.c:1053
 msgid "Unspecified"
-msgstr ""
+msgstr "Niet gespecificeerd"
 
 #: intl-scm/guile-strings.c:1027
 #, c-format
 msgid "The file contains an unknown Action '%s'."
-msgstr ""
+msgstr "Het bestand bevat een onbekende actie '%s'."
 
 #: intl-scm/guile-strings.c:1029
 msgid "Some transactions may be discarded."
-msgstr ""
+msgstr "Enkele trnsacties kunnen weggegooid worden"
 
 #: intl-scm/guile-strings.c:1031
 msgid "QIF import: Name conflict with another account."
-msgstr ""
+msgstr "QIF import: Naam conflict met een ander dagboek"
 
 #: intl-scm/guile-strings.c:1059
 msgid "Alternate Period"
-msgstr ""
+msgstr "Afwisselende periode"
 
 #: intl-scm/guile-strings.c:1061
 msgid "Override or modify From: & To:"
-msgstr ""
+msgstr "Overschrijf of verander van: & tot:"
 
 #: intl-scm/guile-strings.c:1063
 msgid "Use From - To"
-msgstr ""
+msgstr "Gebruik van - tot"
 
 #: intl-scm/guile-strings.c:1065
 msgid "Use From - To period"
-msgstr ""
+msgstr "Gebruik van - tot periode"
 
 #: intl-scm/guile-strings.c:1067
 msgid "1st Est Tax Quarter"
-msgstr ""
+msgstr "1e geschatte belstingkwartaal"
 
 #: intl-scm/guile-strings.c:1069
 msgid "Jan 1 - Mar 31"
-msgstr ""
+msgstr "1 jan. - 31 mrt."
 
 #: intl-scm/guile-strings.c:1071
 msgid "2nd Est Tax Quarter"
-msgstr ""
+msgstr "2e geschatte belastingkwartaal"
 
 #: intl-scm/guile-strings.c:1073
 msgid "Apr 1 - May 31"
-msgstr ""
+msgstr "1 apr. - 31 mei"
 
 #: intl-scm/guile-strings.c:1075
 msgid "3rd Est Tax Quarter"
-msgstr ""
+msgstr "3e geschatte belastingkwartaal"
 
 #: intl-scm/guile-strings.c:1077
 msgid "Jun 1 - Aug 31"
-msgstr ""
+msgstr "1 jun. - 31 aug."
 
 #: intl-scm/guile-strings.c:1079
 msgid "4th Est Tax Quarter"
-msgstr ""
+msgstr "4e geschatte belastingkwrtaal"
 
 #: intl-scm/guile-strings.c:1081
 msgid "Sep 1 - Dec 31"
-msgstr ""
+msgstr "1 sept. - 31 dec."
 
 #: intl-scm/guile-strings.c:1083 intl-scm/guile-strings.c:1085
 msgid "Last Year"
-msgstr ""
+msgstr "Afgelopen jaar"
 
 #: intl-scm/guile-strings.c:1087
 msgid "Last Yr 1st Est Tax Qtr"
-msgstr ""
+msgstr "Afgelopen jaar 1e geschatte belastingkwartaal"
 
 #: intl-scm/guile-strings.c:1089
 msgid "Jan 1 - Mar 31, Last year"
-msgstr ""
+msgstr "1 jan. - 31 mrt. afgelopen jaar"
 
 #: intl-scm/guile-strings.c:1091
 msgid "Last Yr 2nd Est Tax Qtr"
-msgstr ""
+msgstr "Afgelopen jaar 2e geschatte belastingkwartaal"
 
 #: intl-scm/guile-strings.c:1093
 msgid "Apr 1 - May 31, Last year"
-msgstr ""
+msgstr "1 apr. - 31 mei afgelopen jaar"
 
 #: intl-scm/guile-strings.c:1095
 msgid "Last Yr 3rd Est Tax Qtr"
-msgstr ""
+msgstr "Afgelopen jaar 3e geschatte belastingkwartaal"
 
 #: intl-scm/guile-strings.c:1097
 msgid "Jun 1 - Aug 31, Last year"
-msgstr ""
+msgstr "1 jun. - 31 aug. afgelopen jaar"
 
 #: intl-scm/guile-strings.c:1099
 msgid "Last Yr 4th Est Tax Qtr"
-msgstr ""
+msgstr "Afgelopen jaar 4e geschatte belastingkwartaal"
 
 #: intl-scm/guile-strings.c:1101
 msgid "Sep 1 - Dec 31, Last year"
-msgstr ""
+msgstr "1 sept. - 31 dec. afgelopen jaar"
 
 #: intl-scm/guile-strings.c:1103
 msgid "Select Accounts (none = all)"
-msgstr ""
+msgstr "Selecteer dagboeken (geen selectie=alles)"
 
 #: intl-scm/guile-strings.c:1105
 msgid "Select accounts"
-msgstr ""
+msgstr "Selecteer dagboeken"
 
 #: intl-scm/guile-strings.c:1107
 msgid "Suppress $0.00 values"
@@ -10134,77 +9793,77 @@ msgstr "Toon 0,00 waardes niet"
 
 #: intl-scm/guile-strings.c:1109
 msgid "$0.00 valued Accounts won't be printed."
-msgstr ""
+msgstr "Dagboeken met een waarde van 0,00 worden niet getoond"
 
 #: intl-scm/guile-strings.c:1111
 msgid "Print Full account names"
-msgstr ""
+msgstr "Druk complete dagboek namen af"
 
 #: intl-scm/guile-strings.c:1113
 msgid "Print all Parent account names"
-msgstr ""
+msgstr "Druk alle bovenliggende dagboeknamen af"
 
 #: intl-scm/guile-strings.c:1115
 msgid "WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF codes with payer sources may be repeated."
-msgstr ""
+msgstr "Opgelet: er zijn duplicaat TXF codes toegewezen aan enkele dagboeken. Alleen TXF codes met betalers-informtie mag worden herhaald"
 
 #: intl-scm/guile-strings.c:1121
 msgid "Sub-"
-msgstr ""
+msgstr "Sub-"
 
 #: intl-scm/guile-strings.c:1123
 #, c-format
 msgid "Period from %s to %s"
-msgstr ""
+msgstr "Periode van %s tot %s"
 
 #: intl-scm/guile-strings.c:1125
 msgid "Blue items are exportable to a .TXF file."
-msgstr ""
+msgstr "De blauwe items zijn te exporteren naar een .TXF bestand."
 
 #: intl-scm/guile-strings.c:1127
 msgid "No Tax Related accounts were found.  Go to the Edit->Tax Options dialog to set up tax-related accounts."
-msgstr ""
+msgstr "Er zijn geen belasting-gerelateerde dagboeken gevonden. Ga naar Bewerken -> Belasting opties om belasting gerelateerde dagboeken op te genereren,"
 
 #: intl-scm/guile-strings.c:1129
 msgid "Tax Report / TXF Export"
-msgstr ""
+msgstr "Belasting rapport / TXF export"
 
 #: intl-scm/guile-strings.c:1131
 msgid "Tax Report & TXF Export"
-msgstr ""
+msgstr "Belasting Rapport & TXF export"
 
 #: intl-scm/guile-strings.c:1133
 msgid "Taxable Income / Deductible Expenses / Export to .TXF file"
-msgstr ""
+msgstr "Belastbaar inkomen / aftrekbare uitgaven / exporteer naar .TXF bestand"
 
 #: intl-scm/guile-strings.c:1135 intl-scm/guile-strings.c:1141
 msgid "Taxable Income / Deductible Expenses"
-msgstr ""
+msgstr "Belastbaar inkomen / aftrekbare uitgaven"
 
 #: intl-scm/guile-strings.c:1137
 msgid "This report shows your Taxable Income and Deductible Expenses."
-msgstr ""
+msgstr "Dit rapport toont uw belastbare inkomen en aftrekbare uitgaven"
 
 #: intl-scm/guile-strings.c:1139
 msgid "TXF"
-msgstr ""
+msgstr "TXF"
 
 #: intl-scm/guile-strings.c:1143
 msgid "This page shows your Taxable Income and Deductible Expenses."
-msgstr ""
+msgstr "Deze pagina toont uw belastbare inkomen en aftrekbare uitgaven"
 
 #: intl-scm/guile-strings.c:1145
 msgid "This report has no options."
-msgstr ""
+msgstr "Dit rapport bevat geen opties"
 
 #: intl-scm/guile-strings.c:1149
 #, c-format
 msgid "Display the %s report"
-msgstr ""
+msgstr "Toon het %s rapport"
 
 #: intl-scm/guile-strings.c:1151
 msgid "Can't save style sheet"
-msgstr ""
+msgstr "Kan het stijl bestand niet opslaan"
 
 #: intl-scm/guile-strings.c:1153 intl-scm/guile-strings.c:1321
 #: intl-scm/guile-strings.c:2593
@@ -10217,67 +9876,67 @@ msgstr "Dagboek naam"
 
 #: intl-scm/guile-strings.c:1161
 msgid "Exchange rate"
-msgstr ""
+msgstr "Wisselkoers"
 
 #: intl-scm/guile-strings.c:1163
 msgid "Exchange rates"
-msgstr ""
+msgstr "Wisselkoersen"
 
 #: intl-scm/guile-strings.c:1165
 msgid "No accounts selected"
-msgstr ""
+msgstr "Geen dagboeken geselecteerd"
 
 #: intl-scm/guile-strings.c:1167
 msgid "This report requires accounts to be selected."
-msgstr ""
+msgstr "Voor dit rapport moeten er dagboeken geselecteerd zijn."
 
 #: intl-scm/guile-strings.c:1171 intl-scm/guile-strings.c:1861
 msgid "No data"
-msgstr ""
+msgstr "Geen gegevens"
 
 #: intl-scm/guile-strings.c:1173
 msgid "The selected accounts contain no data/transactions (or only zeroes) for the selected time period"
-msgstr ""
+msgstr "De geselecteerde dagboeken bevatten geen gegevens/transacties (of alleen nullen) voor de gekozen tijdsperiode"
 
 #: intl-scm/guile-strings.c:1177
 msgid "Select a date to report on"
-msgstr ""
+msgstr "Kies een rapportage datum"
 
 #: intl-scm/guile-strings.c:1179
 msgid "Start of reporting period"
-msgstr ""
+msgstr "Begin van de rapportage periode"
 
 #: intl-scm/guile-strings.c:1181
 msgid "End of reporting period"
-msgstr ""
+msgstr "Einde van de rapportage periode"
 
 #: intl-scm/guile-strings.c:1183
 msgid "The amount of time between data points"
-msgstr ""
+msgstr "De tijd tussen de twee data"
 
 #: intl-scm/guile-strings.c:1189 intl-scm/guile-strings.c:1191
 msgid "Week"
-msgstr ""
+msgstr "Week"
 
 #: intl-scm/guile-strings.c:1193
 msgid "2Week"
-msgstr ""
+msgstr "2week"
 
 #: intl-scm/guile-strings.c:1195
 msgid "Two Week"
-msgstr ""
+msgstr "Twee weken"
 
 #: intl-scm/guile-strings.c:1201 intl-scm/guile-strings.c:1203
 msgid "Quarter"
-msgstr ""
+msgstr "Kwartaal"
 
 #: intl-scm/guile-strings.c:1205 intl-scm/guile-strings.c:1207
 msgid "Half Year"
-msgstr ""
+msgstr "Half jaar"
 
 #: intl-scm/guile-strings.c:1209 intl-scm/guile-strings.c:1211
 msgid "Year"
-msgstr ""
+msgstr "Jaar"
 
 #: intl-scm/guile-strings.c:1213
 msgid "All"
@@ -10285,124 +9944,124 @@ msgstr "Alle"
 
 #: intl-scm/guile-strings.c:1215
 msgid "All accounts"
-msgstr ""
+msgstr "Alle dagboeken"
 
 #: intl-scm/guile-strings.c:1219
 msgid "Second-level"
-msgstr ""
+msgstr "Tweede niveau"
 
 #: intl-scm/guile-strings.c:1221
 msgid "Third-level"
-msgstr ""
+msgstr "Derde niveau"
 
 #: intl-scm/guile-strings.c:1223 intl-scm/guile-strings.c:1225
 msgid "Fourth-level"
-msgstr ""
+msgstr "Vierde niveau"
 
 #: intl-scm/guile-strings.c:1227
 msgid "Sixth-level"
-msgstr ""
+msgstr "Zesde niveau"
 
 #: intl-scm/guile-strings.c:1229
 msgid "Show accounts to this depth, overriding any other option."
-msgstr ""
+msgstr "Toon alle dgboeken tot dit niveau, ongeacht andere instellingen."
 
 #: intl-scm/guile-strings.c:1231
 msgid "Override account-selection and show sub-accounts of all selected accounts?"
-msgstr ""
+msgstr "De dagboek selectie negeren en de sub-dagboeken van alle geselecteerde dagboeken tonen?"
 
 #: intl-scm/guile-strings.c:1233
 msgid "Report on these accounts, if display depth allows."
-msgstr ""
+msgstr "Rapporteer over deze dagboeken, wanneerde ingestelde toonbare niveaudiepte dit toestaat."
 
 #: intl-scm/guile-strings.c:1235
 msgid "Include sub-account balances in printed balance?"
-msgstr ""
+msgstr "De sub-dagboek balansen bijsluiten in de afgedrukte balans?"
 
 #: intl-scm/guile-strings.c:1237
 msgid "Group the accounts in main categories?"
-msgstr ""
+msgstr "De dagboeken groeperen in hoofd categorieën?"
 
 #: intl-scm/guile-strings.c:1239
 msgid "Select the currency to display the values of this report in."
-msgstr ""
+msgstr "Selecteer de valuta die gebruikt moet worden voor dit rapport."
 
 #: intl-scm/guile-strings.c:1241 intl-scm/guile-strings.c:1417
 #: intl-scm/guile-strings.c:1563 intl-scm/guile-strings.c:1747
 msgid "Display the account's foreign currency amount?"
-msgstr ""
+msgstr "De hoeveelheid vreemde valuta van het dagboek tonen?"
 
 #: intl-scm/guile-strings.c:1243 intl-scm/guile-strings.c:1821
 msgid "The source of price information"
-msgstr ""
+msgstr "De bron van de prijsinformatie"
 
 #: intl-scm/guile-strings.c:1245 intl-scm/guile-strings.c:1823
 msgid "Weighted Average"
-msgstr ""
+msgstr "Gewogen gemiddelde"
 
 #: intl-scm/guile-strings.c:1247 intl-scm/guile-strings.c:1825
 msgid "The weighted average of all currency transactions of the past"
-msgstr ""
+msgstr "Het gewogen gemiddelde vn alle valutatransacties in het verleden"
 
 #: intl-scm/guile-strings.c:1249
 msgid "Most recent"
-msgstr ""
+msgstr "Meest recente"
 
 #: intl-scm/guile-strings.c:1251
 msgid "The most recent recorded price"
-msgstr ""
+msgstr "De meest recent opgeslagen prijs"
 
 #: intl-scm/guile-strings.c:1253
 msgid "Nearest in time"
-msgstr ""
+msgstr "Meest recent in tijd"
 
 #: intl-scm/guile-strings.c:1255
 msgid "The price recorded nearest in time to the report date"
-msgstr ""
+msgstr "De meest recent in tijd tot de rapportge datum opgeslagen prijs"
 
 #: intl-scm/guile-strings.c:1257
 msgid "Width of plot in pixels."
-msgstr ""
+msgstr "Breedte van de afbeelding in pixels"
 
 #: intl-scm/guile-strings.c:1259
 msgid "Height of plot in pixels."
-msgstr ""
+msgstr "Hoogte van de afbeelding in pixels"
 
 #: intl-scm/guile-strings.c:1261
 msgid "Choose the marker for each data point."
-msgstr ""
+msgstr "Kies de markering voor ieder data punt"
 
 #: intl-scm/guile-strings.c:1269 intl-scm/guile-strings.c:1349
 #: intl-scm/guile-strings.c:1567 intl-scm/guile-strings.c:1569
 #: intl-scm/guile-strings.c:1697
 msgid "Assets"
-msgstr ""
+msgstr "Activa"
 
 #: intl-scm/guile-strings.c:1271 intl-scm/guile-strings.c:1351
 #: intl-scm/guile-strings.c:1571 intl-scm/guile-strings.c:1573
 #: intl-scm/guile-strings.c:1699
 msgid "Liabilities"
-msgstr ""
+msgstr "Passiva"
 
 #: intl-scm/guile-strings.c:1273
 msgid "Stocks"
-msgstr ""
+msgstr "Aandelen"
 
 #: intl-scm/guile-strings.c:1275
 msgid "Mutual Funds"
-msgstr "Bellegingsfonds"
+msgstr "Belegingsfonds"
 
 #: intl-scm/guile-strings.c:1277
 msgid "Currencies"
-msgstr ""
+msgstr "Valuta"
 
 #: intl-scm/guile-strings.c:1281
 msgid "Expenses"
-msgstr ""
+msgstr "uitgaven"
 
 #: intl-scm/guile-strings.c:1283
 msgid "Equities"
-msgstr ""
+msgstr "Actief vermogen"
 
 #: intl-scm/guile-strings.c:1285
 msgid "Checking"
@@ -10414,21 +10073,19 @@ msgstr "Spaarrekening(en)"
 
 #: intl-scm/guile-strings.c:1289
 msgid "Money Market"
-msgstr ""
+msgstr "Valutamarkt"
 
 #: intl-scm/guile-strings.c:1291 intl-scm/guile-strings.c:2895
-#, fuzzy
 msgid "Accounts Receivable"
-msgstr "Te ontvangen dagboeken"
+msgstr "Te ontvangen dagboek"
 
 #: intl-scm/guile-strings.c:1293 intl-scm/guile-strings.c:2893
-#, fuzzy
 msgid "Accounts Payable"
-msgstr "Te betalen dagboeken"
+msgstr "Te betalen dagboek"
 
 #: intl-scm/guile-strings.c:1295
 msgid "Credit Lines"
-msgstr ""
+msgstr "Crediet regels"
 
 #: intl-scm/guile-strings.c:1299
 msgid "_Assets & Liabilities"
@@ -10444,152 +10101,152 @@ msgstr "Belas_tingen"
 
 #: intl-scm/guile-strings.c:1305
 msgid "_Sample & Custom"
-msgstr ""
+msgstr "Voorbeeld & Aangepa_st"
 
 #: intl-scm/guile-strings.c:1313
 msgid "Report name"
-msgstr ""
+msgstr "Rapport naam"
 
 #: intl-scm/guile-strings.c:1315
 msgid "Enter a descriptive name for this report"
-msgstr ""
+msgstr "Geef een omschrijvende naam voor dit rapport"
 
 #: intl-scm/guile-strings.c:1317 intl-scm/guile-strings.c:1325
 #: intl-scm/guile-strings.c:1327
-msgid "Stylesheet"
-msgstr "Sjabloon"
+msgid "Style sheet"
+msgstr "Stijl sjabloon"
 
 #: intl-scm/guile-strings.c:1319
 msgid "Select a stylesheet for the report."
-msgstr ""
+msgstr "Selecteer een stijlsjabloon voor het rapport"
 
 #: intl-scm/guile-strings.c:1323
-msgid " Stylesheet"
-msgstr ""
+msgid "Stylesheet"
+msgstr "Stijlsjabloon"
 
 #: intl-scm/guile-strings.c:1329
 msgid "Income Piechart"
-msgstr ""
+msgstr "Inkomsten taartgrafiek"
 
 #: intl-scm/guile-strings.c:1331
 msgid "Expense Piechart"
-msgstr ""
+msgstr "Uitgaven taartgrafiek"
 
 #: intl-scm/guile-strings.c:1333
 msgid "Asset Piechart"
-msgstr ""
+msgstr "Activa taartgrafiek"
 
 #: intl-scm/guile-strings.c:1335
 msgid "Liability Piechart"
-msgstr ""
+msgstr "Passiva taartgrafiek"
 
 #: intl-scm/guile-strings.c:1337
 msgid "Shows a piechart with the Income per given time interval"
-msgstr ""
+msgstr "Toont een taartgrafiek met inkomsten over een gegeven tijdsinterval"
 
 #: intl-scm/guile-strings.c:1339
 msgid "Shows a piechart with the Expenses per given time interval"
-msgstr ""
+msgstr "Toont een taartgrafiek met uitgaven over en gegeven tijdsinterval"
 
 #: intl-scm/guile-strings.c:1341
 msgid "Shows a piechart with the Assets balance at a given time"
-msgstr ""
+msgstr "Toont een taartgrafiek met de activa balans op een gegeven moment"
 
 #: intl-scm/guile-strings.c:1343
 msgid "Shows a piechart with the Liabilities balance at a given time"
-msgstr ""
+msgstr "Toont een taartgrafiek met de passiva balns op een gegeven moment"
 
 #: intl-scm/guile-strings.c:1345
 msgid "Income Accounts"
-msgstr "Inkomsten dagboeken"
+msgstr "Inkomsten dagboek"
 
 #: intl-scm/guile-strings.c:1347
 msgid "Expense Accounts"
-msgstr "Uitgaven dagboeken"
+msgstr "Uitgaven dagboek"
 
 #: intl-scm/guile-strings.c:1363 intl-scm/guile-strings.c:1625
 msgid "Show Accounts until level"
-msgstr ""
+msgstr "Toon dagboeken tot niveau"
 
 #: intl-scm/guile-strings.c:1365 intl-scm/guile-strings.c:1627
 msgid "Show long account names"
-msgstr ""
+msgstr "Toon lange dagboek namen"
 
 #: intl-scm/guile-strings.c:1367
 msgid "Show Totals"
-msgstr ""
+msgstr "Toon totalen"
 
 #: intl-scm/guile-strings.c:1369
 msgid "Maximum Slices"
-msgstr ""
+msgstr "Maximale taartpunten"
 
 #: intl-scm/guile-strings.c:1371 intl-scm/guile-strings.c:1505
 #: intl-scm/guile-strings.c:1533 intl-scm/guile-strings.c:1633
 #: intl-scm/guile-strings.c:1673 intl-scm/guile-strings.c:1815
 msgid "Plot Width"
-msgstr ""
+msgstr "Afbeeldings breedte"
 
 #: intl-scm/guile-strings.c:1373 intl-scm/guile-strings.c:1507
 #: intl-scm/guile-strings.c:1535 intl-scm/guile-strings.c:1635
 #: intl-scm/guile-strings.c:1675 intl-scm/guile-strings.c:1817
 msgid "Plot Height"
-msgstr ""
+msgstr "Afbeeldings hoogte"
 
 #: intl-scm/guile-strings.c:1375 intl-scm/guile-strings.c:1637
 #: intl-scm/guile-strings.c:1677
 msgid "Report on these accounts, if chosen account level allows."
-msgstr ""
+msgstr "Rapporteer over deze dagboeken, als het gekozen dagboek niveau dat toestaat"
 
 #: intl-scm/guile-strings.c:1377 intl-scm/guile-strings.c:1639
 msgid "Show accounts to this depth and not further"
-msgstr ""
+msgstr "Toon daboeke tot dit niveau en niet lager"
 
 #: intl-scm/guile-strings.c:1379 intl-scm/guile-strings.c:1641
 msgid "Show the full account name in legend?"
-msgstr ""
+msgstr "De complete dagboeknaam in de legenda tonen?"
 
 #: intl-scm/guile-strings.c:1381
 msgid "Show the total balance in legend?"
-msgstr ""
+msgstr "De totaalbalans in de legenda tonen?"
 
 #: intl-scm/guile-strings.c:1383
 msgid "Maximum number of slices in pie"
-msgstr ""
+msgstr "Maximum aantal taartpunten in de taart"
 
 #: intl-scm/guile-strings.c:1387 intl-scm/guile-strings.c:1647
 #: intl-scm/guile-strings.c:1691 intl-scm/guile-strings.c:1837
 #, c-format
 msgid "%s to %s"
-msgstr ""
+msgstr "%s tot %s"
 
 #: intl-scm/guile-strings.c:1389
 #, c-format
 msgid "Balance at %s"
-msgstr ""
+msgstr "Balsans op %s"
 
 #: intl-scm/guile-strings.c:1393 intl-scm/guile-strings.c:1541
 #: intl-scm/guile-strings.c:1723 intl-scm/guile-strings.c:2335
 msgid "Account Display Depth"
-msgstr ""
+msgstr "Zichtbaar Dagboek niveau"
 
 #: intl-scm/guile-strings.c:1395
 msgid "Show Foreign Currencies/Shares of Stock"
-msgstr ""
+msgstr "Toon buitenlandse valuta / aandelen in bezit"
 
 #: intl-scm/guile-strings.c:1401 intl-scm/guile-strings.c:1543
 #: intl-scm/guile-strings.c:1725 intl-scm/guile-strings.c:2337
 msgid "Always show sub-accounts"
-msgstr ""
+msgstr "Toon de sub-dagboeken altijd"
 
 #: intl-scm/guile-strings.c:1405 intl-scm/guile-strings.c:1729
 msgid "Group the accounts"
-msgstr ""
+msgstr "Groepeer de dagboeken"
 
 #: intl-scm/guile-strings.c:1407 intl-scm/guile-strings.c:1413
 #: intl-scm/guile-strings.c:1547 intl-scm/guile-strings.c:1559
 #: intl-scm/guile-strings.c:1731 intl-scm/guile-strings.c:1743
 msgid "Show balances for parent accounts"
-msgstr ""
+msgstr "Toon de balans voor de hoger liggende dagboeken"
 
 #: intl-scm/guile-strings.c:1409 intl-scm/guile-strings.c:1549
 #: intl-scm/guile-strings.c:1733
@@ -10617,23 +10274,23 @@ msgstr "Dagboek samenvatting"
 
 #: intl-scm/guile-strings.c:1427 intl-scm/guile-strings.c:1761
 msgid "Include accounts with no shares"
-msgstr ""
+msgstr "Inclusief dagboeken zonder aandelen"
 
 #: intl-scm/guile-strings.c:1431 intl-scm/guile-strings.c:1765
 msgid "Report Currency"
-msgstr ""
+msgstr "Valuta rpportage"
 
 #: intl-scm/guile-strings.c:1435 intl-scm/guile-strings.c:1769
 msgid "Stock Accounts to report on"
-msgstr ""
+msgstr "Aandelen dagboeken om over te rapporteren"
 
 #: intl-scm/guile-strings.c:1437 intl-scm/guile-strings.c:1771
 msgid "Include accounts that have a zero share balances."
-msgstr ""
+msgstr "Inclusief dagboeken die een nul hebben op de aandelenbalans."
 
 #: intl-scm/guile-strings.c:1443 intl-scm/guile-strings.c:1777
 msgid "Listing"
-msgstr ""
+msgstr "Lijst"
 
 #: intl-scm/guile-strings.c:1451 intl-scm/guile-strings.c:2351
 #: intl-scm/guile-strings.c:2353
@@ -10655,436 +10312,435 @@ msgstr "Totale inkomsten"
 
 #: intl-scm/guile-strings.c:1461
 msgid "Advanced Portfolio"
-msgstr ""
+msgstr "Geavanceerde Portofolio"
 
 #: intl-scm/guile-strings.c:1467 intl-scm/guile-strings.c:1617
 #: intl-scm/guile-strings.c:1657 intl-scm/guile-strings.c:1793
 msgid "Step Size"
-msgstr ""
+msgstr "Stap grootte"
 
 #: intl-scm/guile-strings.c:1473
 msgid "Include Sub-Accounts"
-msgstr ""
+msgstr "Inclusief sub-dagboeken"
 
 #: intl-scm/guile-strings.c:1475
 msgid "Include sub-accounts of all selected accounts"
-msgstr ""
+msgstr "Inclusief sub-dagboeken van alle geselecteerde dagboeken"
 
 #: intl-scm/guile-strings.c:1479
 msgid "Do transaction report on this account"
-msgstr ""
+msgstr "Maak een transctie rapport voor dit dagboek"
 
 #: intl-scm/guile-strings.c:1481 intl-scm/guile-strings.c:1531
 msgid "Show table"
-msgstr ""
+msgstr "Toon tabel"
 
 #: intl-scm/guile-strings.c:1483
 msgid "Display a table of the selected data."
-msgstr ""
+msgstr "Toon een tabel met de geselecteerde gegevens."
 
 #: intl-scm/guile-strings.c:1485 intl-scm/guile-strings.c:1529
 msgid "Show plot"
-msgstr ""
+msgstr "Toon afbeelding"
 
 #: intl-scm/guile-strings.c:1487
 msgid "Display a graph of the selected data."
-msgstr ""
+msgstr "Toon een grafiek met de geselecteerde gegevens"
 
 #: intl-scm/guile-strings.c:1489 intl-scm/guile-strings.c:1527
 msgid "Plot Type"
-msgstr ""
+msgstr "Afbeeldings type"
 
 #: intl-scm/guile-strings.c:1491
 msgid "The type of graph to generate"
-msgstr ""
+msgstr "Het te genereren type afbeelding"
 
 #: intl-scm/guile-strings.c:1493 intl-scm/guile-strings.c:1513
 msgid "Average"
-msgstr ""
+msgstr "Gemiddeld"
 
 #: intl-scm/guile-strings.c:1495 intl-scm/guile-strings.c:1537
 msgid "Average Balance"
-msgstr ""
+msgstr "Gemiddelde balans"
 
 #: intl-scm/guile-strings.c:1497 intl-scm/guile-strings.c:1523
 #: intl-scm/guile-strings.c:1753
 msgid "Profit"
-msgstr ""
+msgstr "Winst"
 
 #: intl-scm/guile-strings.c:1499
 msgid "Profit (Gain minus Loss)"
-msgstr ""
+msgstr "Netto winst (bruto winst min verlies)"
 
 #: intl-scm/guile-strings.c:1501
 msgid "Gain/Loss"
-msgstr ""
+msgstr "Winst/verlies"
 
 #: intl-scm/guile-strings.c:1503
 msgid "Gain And Loss"
-msgstr ""
+msgstr "Winst en verlies"
 
 #: intl-scm/guile-strings.c:1509
 msgid "Period start"
-msgstr ""
+msgstr "Begin periode"
 
 #: intl-scm/guile-strings.c:1511
 msgid "Period end"
-msgstr ""
+msgstr "Einde periode"
 
 #: intl-scm/guile-strings.c:1515
 msgid "Maximum"
-msgstr ""
+msgstr "Maximum"
 
 #: intl-scm/guile-strings.c:1517
 msgid "Minimum"
-msgstr ""
+msgstr "Minimum"
 
 #: intl-scm/guile-strings.c:1521
 msgid "Loss"
-msgstr ""
+msgstr "Verlies"
 
 #: intl-scm/guile-strings.c:1555 intl-scm/guile-strings.c:1735
 msgid "Show Foreign Currencies"
-msgstr ""
+msgstr "Toon vreemde valuta"
 
 #: intl-scm/guile-strings.c:1575
 msgid "Unrealized Gains(Losses)"
-msgstr ""
+msgstr "Niet gereliseerde winsten (verliezen)"
 
 #: intl-scm/guile-strings.c:1579 intl-scm/guile-strings.c:1701
 msgid "Net Profit"
-msgstr ""
+msgstr "Netto winst"
 
 #: intl-scm/guile-strings.c:1581
 msgid "Total Equity"
-msgstr ""
+msgstr "Totaal"
 
 #: intl-scm/guile-strings.c:1583
 msgid "Liabilities & Equity"
-msgstr ""
+msgstr "Passiva & actief vermogen"
 
 #: intl-scm/guile-strings.c:1585 intl-scm/guile-strings.c:1587
 msgid "Balance Sheet"
-msgstr ""
+msgstr "Balans"
 
 #: intl-scm/guile-strings.c:1589
 msgid "Income Barchart"
-msgstr ""
+msgstr "Inkomsten balkgrafiek"
 
 #: intl-scm/guile-strings.c:1591
 msgid "Expense Barchart"
-msgstr ""
+msgstr "Uitgaven balkgrafiek"
 
 #: intl-scm/guile-strings.c:1593
 msgid "Asset Barchart"
-msgstr ""
+msgstr "Activa balkgrafiek"
 
 #: intl-scm/guile-strings.c:1595
 msgid "Liability Barchart"
-msgstr ""
+msgstr "Passiva balkgrafiek"
 
 #: intl-scm/guile-strings.c:1597
 msgid "Shows a barchart with the Income per interval developing over time"
-msgstr ""
+msgstr "Toont een balkgrafiek met inkomsten op een interval dat zich over tijd ontwikkelt"
 
 #: intl-scm/guile-strings.c:1599
 msgid "Shows a barchart with the Expenses per interval developing over time"
-msgstr ""
+msgstr "Toont een balkgrafiek met uitgaven op een interval dat zich over tijd ontwikkelt"
 
 #: intl-scm/guile-strings.c:1601
 msgid "Shows a barchart with the Assets developing over time"
-msgstr ""
+msgstr "Toont een balkgrafiek met de ontwikkeling van actva over tijd"
 
 #: intl-scm/guile-strings.c:1603
 msgid "Shows a barchart with the Liabilities developing over time"
-msgstr ""
+msgstr "Toont een balkgrafiek met de ontwikkeling van passiva over tijd"
 
 #: intl-scm/guile-strings.c:1605
 msgid "Income Over Time"
-msgstr ""
+msgstr "Inkomsten over tijd"
 
 #: intl-scm/guile-strings.c:1607
 msgid "Expense Over Time"
-msgstr ""
+msgstr "Uitgaven over tijd"
 
 #: intl-scm/guile-strings.c:1609
 msgid "Assets Over Time"
-msgstr ""
+msgstr "Activa over tijd"
 
 #: intl-scm/guile-strings.c:1611
 msgid "Liabilities Over Time"
-msgstr ""
+msgstr "Passiva over tijd"
 
 #: intl-scm/guile-strings.c:1629
 msgid "Use Stacked Bars"
-msgstr ""
+msgstr "Gebruik gestapelde balken"
 
 #: intl-scm/guile-strings.c:1631
 msgid "Maximum Bars"
-msgstr ""
+msgstr "Maximum aantal balken"
 
 #: intl-scm/guile-strings.c:1643
 msgid "Show barchart as stacked barchart? (Guppi>=0.35.4 required)"
-msgstr ""
+msgstr "Balkgrafiek als gestapelde balkgrafiek tonen? (Guppi>=0.35.4 noodzakelijk)"
 
 #: intl-scm/guile-strings.c:1645
 msgid "Maximum number of bars in the chart"
-msgstr ""
+msgstr "Maximum aantal balken in de grafiek"
 
 #: intl-scm/guile-strings.c:1649
 #, c-format
 msgid "Balances %s to %s"
-msgstr ""
+msgstr "Balansen %s tot %s"
 
 #: intl-scm/guile-strings.c:1667 intl-scm/guile-strings.c:1805
 msgid "Show Net Profit"
-msgstr ""
+msgstr "Toon netto winst"
 
 #: intl-scm/guile-strings.c:1669 intl-scm/guile-strings.c:1807
 msgid "Show Asset & Liability bars"
-msgstr ""
+msgstr "Toon activa en passiva balken"
 
 #: intl-scm/guile-strings.c:1671 intl-scm/guile-strings.c:1809
 msgid "Show Net Worth bars"
-msgstr ""
+msgstr "Toon netto waarde balken"
 
 #: intl-scm/guile-strings.c:1679
 msgid "Show Income and Expenses?"
-msgstr ""
+msgstr "Inkomsten en uitgaven tonen?"
 
 #: intl-scm/guile-strings.c:1681
 msgid "Show the Asset and the Liability bars?"
-msgstr ""
+msgstr "De activa en passiva balken tonen?"
 
 #: intl-scm/guile-strings.c:1683
 msgid "Show the net profit?"
-msgstr ""
+msgstr "De betto winst tonen?"
 
 #: intl-scm/guile-strings.c:1685
 msgid "Show a Net Worth bar?"
-msgstr ""
+msgstr "Een netto waarde balk tonen?"
 
 #: intl-scm/guile-strings.c:1687 intl-scm/guile-strings.c:1715
 msgid "Income/Expense Chart"
-msgstr ""
+msgstr "Inkomsten/uitgaven grafiek"
 
 #: intl-scm/guile-strings.c:1689
 msgid "Net Worth Chart"
-msgstr ""
+msgstr "Netto waarde grafiek"
 
 #: intl-scm/guile-strings.c:1703
 msgid "Net Worth"
-msgstr ""
+msgstr "Netto waarde"
 
 #: intl-scm/guile-strings.c:1705
 msgid "Income Chart"
-msgstr ""
+msgstr "Inkomsten grafiek"
 
 #: intl-scm/guile-strings.c:1707
 msgid "Asset Chart"
-msgstr ""
+msgstr "Activa grafiek"
 
 #: intl-scm/guile-strings.c:1709
 msgid "Expense Chart"
-msgstr ""
+msgstr "Uitgaven grafiek"
 
 #: intl-scm/guile-strings.c:1711
 msgid "Liability Chart"
-msgstr ""
+msgstr "Passiva grafiek"
 
 #: intl-scm/guile-strings.c:1713
 msgid "Net Worth Barchart"
-msgstr ""
+msgstr "Netto waarde balkgrafiek"
 
 #: intl-scm/guile-strings.c:1717
 msgid "Income & Expense Chart"
-msgstr ""
+msgstr "Inkomsten en uitgaven grafiek"
 
 #: intl-scm/guile-strings.c:1751
 #, c-format
 msgid "Profit and Loss - %s to %s"
-msgstr ""
+msgstr "Winst en verlies - %s tot %s"
 
 #: intl-scm/guile-strings.c:1755
 msgid "Profit And Loss"
-msgstr ""
+msgstr "Winst en verlies"
 
 #: intl-scm/guile-strings.c:1757
 msgid "Profit & Loss"
-msgstr ""
+msgstr "Winst & Verlies"
 
 #: intl-scm/guile-strings.c:1779
 msgid "Units"
-msgstr ""
+msgstr "Eenheden"
 
 #: intl-scm/guile-strings.c:1787
 msgid "Investment Portfolio"
-msgstr ""
+msgstr "Investerings budget"
 
 #: intl-scm/guile-strings.c:1799
 msgid "Price of Commodity"
-msgstr ""
+msgstr "Prijs van goed"
 
 #: intl-scm/guile-strings.c:1811
 msgid "Marker"
-msgstr ""
+msgstr "Markering"
 
 #: intl-scm/guile-strings.c:1813
 msgid "Marker Color"
-msgstr ""
+msgstr "Markerings kleur"
 
 #: intl-scm/guile-strings.c:1819
 msgid "Calculate the price of this commodity."
-msgstr ""
+msgstr "Bereken de prijs vn dit goed."
 
 #: intl-scm/guile-strings.c:1827
 msgid "Actual Transactions"
-msgstr ""
+msgstr "Actuele transacties"
 
 #: intl-scm/guile-strings.c:1829
 msgid "The instantaneous price of actual currency transactions in the past"
-msgstr ""
+msgstr "De directe prijs van actuele valuta trnsacties in het verleden"
 
 #: intl-scm/guile-strings.c:1831
 msgid "Price Database"
-msgstr ""
+msgstr "Prijs database"
 
 #: intl-scm/guile-strings.c:1833
 msgid "The recorded prices"
-msgstr ""
+msgstr "De opgeslagen prijs"
 
 #: intl-scm/guile-strings.c:1835
 msgid "Color of the marker"
-msgstr ""
+msgstr "Kleur van de markering"
 
 #: intl-scm/guile-strings.c:1843
 msgid "Double-Weeks"
-msgstr ""
+msgstr "Dubbele weken"
 
 #: intl-scm/guile-strings.c:1849
 msgid "All Prices equal"
-msgstr ""
+msgstr "Alle prijzen zijn gelijk"
 
 #: intl-scm/guile-strings.c:1851
 msgid "All the prices found are equal. This would result in a plot with one straight line. Unfortunately, the plotting tool can't handle that."
-msgstr ""
+msgstr "Al de gevonden prijzen zijn gelijk. Dit zou resulteren in een afbeelding met een rechte lijn. Helaas kan het afdruk gereedschap daar niet mee omgaan."
 
 #: intl-scm/guile-strings.c:1853
 msgid "All Prices at the same date"
-msgstr ""
+msgstr "Alle prijzen van dezelfde datum"
 
 #: intl-scm/guile-strings.c:1855
 msgid "All the prices found are from the same date. This would result in a plot with one straight line. Unfortunately, the plotting tool can't handle that."
-msgstr ""
+msgstr "Al de gevonde prijzen hebben dezelfde datum. Dit zou resulteren in een afbeelding met een rechte lijn. Helaas kan het afdruk gereesschap daar niet mee omgaan."
 
 #: intl-scm/guile-strings.c:1857
 msgid "Only one price"
-msgstr ""
+msgstr "Slechts een prijs"
 
 #: intl-scm/guile-strings.c:1859
 msgid "There was only one single price found for the selected commodities in the selected time period. This doesn't give a useful plot."
-msgstr ""
+msgstr "Er is slechts een prijs gevonden voor de geselecteerde goederen in de gekozen tijdsspanne. Dit geeft geen bruikbare grafiek."
 
 #: intl-scm/guile-strings.c:1863
 msgid "There is no price information available for the selected commodities in the selected time period."
-msgstr ""
+msgstr "Er is geen prijsinformatie beschikbaar voor de geselecteerde goederen in de gekozen tijdsspanne"
 
 #: intl-scm/guile-strings.c:1865
 msgid "Identical commodities"
-msgstr ""
+msgstr "Identieke goederen"
 
 #: intl-scm/guile-strings.c:1867
 msgid "Your selected commodity and the currency of the report are identical. It doesn't make sense to show prices for identical commodities."
-msgstr ""
+msgstr "De door u geselecteerde goederen en de valuta van het rapport zijn identiek. Het is zinloos om de prijzen te tonen voor identieke goederen."
 
 #: intl-scm/guile-strings.c:1871
 msgid "Price Scatterplot"
-msgstr ""
+msgstr "Prijs spreidings grafiek"
 
 #: intl-scm/guile-strings.c:1897
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 #: intl-scm/guile-strings.c:1899
 msgid "The title of the report"
-msgstr ""
+msgstr "De titel van het rapport"
 
 #: intl-scm/guile-strings.c:1913 intl-scm/guile-strings.c:2227
 msgid "Display the check number?"
-msgstr ""
+msgstr "Het cheque nummer tonen?"
 
 #: intl-scm/guile-strings.c:1925 intl-scm/guile-strings.c:2239
 msgid "Display the account?"
-msgstr ""
+msgstr "Het dagboek tonen?"
 
 #: intl-scm/guile-strings.c:1931 intl-scm/guile-strings.c:2251
 msgid "Display the number of shares?"
-msgstr ""
+msgstr "Het aantal aandelen tonen?"
 
 #: intl-scm/guile-strings.c:1941 intl-scm/guile-strings.c:2267
 msgid "Display the amount?"
-msgstr ""
+msgstr "Het bedrag tonen?"
 
 #: intl-scm/guile-strings.c:1943 intl-scm/guile-strings.c:2083
 #: intl-scm/guile-strings.c:2273
 msgid "Single"
-msgstr ""
+msgstr "Enkel"
 
 #: intl-scm/guile-strings.c:1945 intl-scm/guile-strings.c:2275
 msgid "Single Column Display"
-msgstr ""
+msgstr "Toon enkelvoudige kolom"
 
 #: intl-scm/guile-strings.c:1947 intl-scm/guile-strings.c:2277
 msgid "Double"
-msgstr ""
+msgstr "Dubbel"
 
 #: intl-scm/guile-strings.c:1949 intl-scm/guile-strings.c:2279
 msgid "Two Column Display"
-msgstr ""
+msgstr "Toon dubbele kolom"
 
 #: intl-scm/guile-strings.c:1953 intl-scm/guile-strings.c:2035
 #: intl-scm/guile-strings.c:2257
 msgid "Running Balance"
-msgstr ""
+msgstr "Lopende balans"
 
 #: intl-scm/guile-strings.c:1955 intl-scm/guile-strings.c:2259
 msgid "Display a running balance"
-msgstr ""
+msgstr "Toon een lopende balans"
 
 #: intl-scm/guile-strings.c:1965
 msgid "Client"
-msgstr ""
+msgstr "Klant"
 
 #: intl-scm/guile-strings.c:1977
 msgid "Sorting"
-msgstr ""
+msgstr "Sorteren"
 
 #: intl-scm/guile-strings.c:1979
 msgid "Primary Key"
-msgstr ""
+msgstr "Primaire sleutel"
 
 #: intl-scm/guile-strings.c:1981
 msgid "Primary Subtotal"
-msgstr ""
+msgstr "Primair subtotaal"
 
 #: intl-scm/guile-strings.c:1983
 msgid "Primary Subtotal for Date Key"
-msgstr ""
+msgstr "Primair subtotaal voor data sleutel"
 
 #: intl-scm/guile-strings.c:1985
 msgid "Secondary Key"
-msgstr ""
+msgstr "Secondaire sleutel"
 
 #: intl-scm/guile-strings.c:1987
 msgid "Secondary Subtotal"
-msgstr ""
+msgstr "Secondair subtotaal"
 
 #: intl-scm/guile-strings.c:1989
 msgid "Secondary Subtotal for Date Key"
-msgstr ""
+msgstr "Secundair subtotaal voor data sleutel"
 
 #: intl-scm/guile-strings.c:1991
-#, fuzzy
 msgid "Void Transactions?"
 msgstr "Transacties leegmaken?"
 
@@ -11098,9 +10754,8 @@ msgstr "Totaal"
 
 #: intl-scm/guile-strings.c:2003 intl-scm/guile-strings.c:2047
 #: intl-scm/guile-strings.c:2145 intl-scm/guile-strings.c:2221
-#, fuzzy
 msgid "Reconciled Date"
-msgstr "Gecorrigeerde datum"
+msgstr "Datum gecorrigeerd"
 
 #: intl-scm/guile-strings.c:2019 intl-scm/guile-strings.c:2245
 msgid "Other Account"
@@ -11116,137 +10771,135 @@ msgstr "Boek over van/naar"
 
 #: intl-scm/guile-strings.c:2075 intl-scm/guile-strings.c:2323
 msgid "Style"
-msgstr ""
+msgstr "Stijl"
 
 #: intl-scm/guile-strings.c:2077
 msgid "Report style"
-msgstr ""
+msgstr "Rapport stijl"
 
 #: intl-scm/guile-strings.c:2079
 msgid "Multi-Line"
-msgstr ""
+msgstr "Meer-regelig"
 
 #: intl-scm/guile-strings.c:2081
 msgid "Display N lines"
-msgstr ""
+msgstr "Toon N regels"
 
 #: intl-scm/guile-strings.c:2085
 msgid "Display 1 line"
-msgstr ""
+msgstr "Toon 1 regel"
 
 #: intl-scm/guile-strings.c:2087
 msgid "Report Accounts"
-msgstr ""
+msgstr "Dagboeken rapport"
 
 #: intl-scm/guile-strings.c:2089
 msgid "Report on these accounts"
-msgstr ""
+msgstr "Rapport voor deze dagboeken"
 
 #: intl-scm/guile-strings.c:2091
 msgid "Filter Accounts"
-msgstr ""
+msgstr "Filter dagboeken"
 
 #: intl-scm/guile-strings.c:2093
 msgid "Filter on these accounts"
-msgstr ""
+msgstr "Filter deze dagboeken"
 
 #: intl-scm/guile-strings.c:2095
 msgid "Filter Type"
-msgstr ""
+msgstr "Filter op type"
 
 #: intl-scm/guile-strings.c:2097
 msgid "Filter account"
-msgstr ""
+msgstr "Filter dagboek"
 
 #: intl-scm/guile-strings.c:2101
 msgid "Do not do any filtering"
-msgstr ""
+msgstr "Filter niets"
 
 #: intl-scm/guile-strings.c:2103
 msgid "Include Transactions to/from Filter Accounts"
-msgstr ""
+msgstr "Inclusief transacties van/naar gefilterde dagboeken"
 
 #: intl-scm/guile-strings.c:2105
 msgid "Include transactions to/from filter accounts only"
-msgstr ""
+msgstr "Alleen inclusief transacties van/naar gefilterde dagboeken"
 
 #: intl-scm/guile-strings.c:2107
 msgid "Exclude Transactions to/from Filter Accounts"
-msgstr ""
+msgstr "Exclusief transacties van/naar gefilterde dagboeken"
 
 #: intl-scm/guile-strings.c:2109
 msgid "Exclude transactions to/from all filter accounts"
-msgstr ""
+msgstr "Exclusief transacties van/naar alle gefilterde dagboeken"
 
 #: intl-scm/guile-strings.c:2111
 msgid "How to handle void transactions"
-msgstr ""
+msgstr "Hoe om te gaan met lege transacties"
 
 #: intl-scm/guile-strings.c:2113
 msgid "Non-void only"
-msgstr ""
+msgstr "Alleen niet-lege transacties"
 
 #: intl-scm/guile-strings.c:2115
 msgid "Show only non-voided transactions"
-msgstr ""
+msgstr "Toon alleen niet-lege transacties"
 
 #: intl-scm/guile-strings.c:2117
 msgid "Void only"
-msgstr ""
+msgstr "Alleen lege transacties"
 
 #: intl-scm/guile-strings.c:2119
-#, fuzzy
 msgid "Show only voided transactions"
-msgstr "Transacties zoeken"
+msgstr "Toon alleen lege transacties"
 
 #: intl-scm/guile-strings.c:2121
-#, fuzzy
 msgid "Both"
-msgstr "Onderaan"
+msgstr "Beiden"
 
 #: intl-scm/guile-strings.c:2123
 msgid "Show both (and include void transactions in totals)"
-msgstr ""
+msgstr "Toon beiden (en neem lege transacties op in totalen)"
 
 #: intl-scm/guile-strings.c:2127
 msgid "Do not sort"
-msgstr ""
+msgstr "Sorteer niet"
 
 #: intl-scm/guile-strings.c:2131
 msgid "Sort & subtotal by account name"
-msgstr ""
+msgstr "Sortering & subtotaal op dagboeknaam"
 
 #: intl-scm/guile-strings.c:2135
 msgid "Sort & subtotal by account code"
-msgstr ""
+msgstr "Sortering & subtotaal op dagboek code"
 
 #: intl-scm/guile-strings.c:2141
 msgid "Exact Time"
-msgstr ""
+msgstr "Exacte tijd"
 
 #: intl-scm/guile-strings.c:2143
 msgid "Sort by exact time"
-msgstr ""
+msgstr "Sorteer op exacte tijd"
 
 #: intl-scm/guile-strings.c:2147
 msgid "Sort by the Reconciled Date"
-msgstr ""
+msgstr "Sorteer op correctie datum"
 
 #: intl-scm/guile-strings.c:2149
 msgid "Register Order"
-msgstr ""
+msgstr "Kasboek volgorde"
 
 #: intl-scm/guile-strings.c:2151
 msgid "Sort as with the register"
-msgstr ""
+msgstr "Sorteer zoals in het kasboek"
 
 #: intl-scm/guile-strings.c:2153
 msgid "Other Account Name"
-msgstr ""
+msgstr "Naam andere dagboek"
 
 #: intl-scm/guile-strings.c:2155
 msgid "Sort by account transferred from/to's name"
-msgstr ""
+msgstr "Sorteer op naam van transactie van/naar dagboek"
 
 #: intl-scm/guile-strings.c:2157
 msgid "Other Account Code"
@@ -11254,124 +10907,124 @@ msgstr ""
 
 #: intl-scm/guile-strings.c:2159
 msgid "Sort by account transferred from/to's code"
-msgstr ""
+msgstr "Sorteer op code van transactie van/naar dagboek"
 
 #: intl-scm/guile-strings.c:2163
 msgid "Sort by amount"
-msgstr ""
+msgstr "Sorteer op hoeveelheid"
 
 #: intl-scm/guile-strings.c:2171
 msgid "Sort by check/transaction number"
-msgstr ""
+msgstr "Sorteer op cheque/transactie nummer"
 
 #: intl-scm/guile-strings.c:2175
 msgid "Sort by memo"
-msgstr ""
+msgstr "Sorteer op memo"
 
 #: intl-scm/guile-strings.c:2177
 msgid "Ascending"
-msgstr ""
+msgstr "Oplopend"
 
 #: intl-scm/guile-strings.c:2179
 msgid "smallest to largest, earliest to latest"
-msgstr ""
+msgstr "Kleinste naar grootste, eerste naar laatste"
 
 #: intl-scm/guile-strings.c:2181
 msgid "Descending"
-msgstr ""
+msgstr "Aflopend"
 
 #: intl-scm/guile-strings.c:2183
 msgid "largest to smallest, latest to earliest"
-msgstr ""
+msgstr "Grootste naar kleinste, jongste naar oudste"
 
 #: intl-scm/guile-strings.c:2197
 msgid "Sort by this criterion first"
-msgstr ""
+msgstr "Sorteer in eerste instantie op dit criterium"
 
 #: intl-scm/guile-strings.c:2199
 msgid "Subtotal according to the primary key?"
-msgstr ""
+msgstr "Subtotaal volgens de primaire sleutel?"
 
 #: intl-scm/guile-strings.c:2201 intl-scm/guile-strings.c:2211
 msgid "Do a date subtotal"
-msgstr ""
+msgstr "Subtotaal op datum"
 
 #: intl-scm/guile-strings.c:2203
 msgid "Primary Sort Order"
-msgstr ""
+msgstr "Primaire sorteer volgorde"
 
 #: intl-scm/guile-strings.c:2205
 msgid "Order of primary sorting"
-msgstr ""
+msgstr "Volgorde van de primaire sortering"
 
 #: intl-scm/guile-strings.c:2207
 msgid "Sort by this criterion second"
-msgstr ""
+msgstr "Sorteer in tweede instantie op dit criterium"
 
 #: intl-scm/guile-strings.c:2209
 msgid "Subtotal according to the secondary key?"
-msgstr ""
+msgstr "Subtotaal volgens de secundaire sleutel?"
 
 #: intl-scm/guile-strings.c:2213
 msgid "Secondary Sort Order"
-msgstr ""
+msgstr "Secundaire sorteer volgorde"
 
 #: intl-scm/guile-strings.c:2215
 msgid "Order of Secondary sorting"
-msgstr ""
+msgstr "Volgorde van secundaire sortering"
 
 #: intl-scm/guile-strings.c:2223
 msgid "Display the reconciled date?"
-msgstr ""
+msgstr "De correctie datum tonen?"
 
 #: intl-scm/guile-strings.c:2235
 msgid "Display the memo?"
-msgstr ""
+msgstr "De memo tonen?"
 
 #: intl-scm/guile-strings.c:2243
 msgid "Display the full account name"
-msgstr ""
+msgstr "Toon de volledige dagboeknaam"
 
 #: intl-scm/guile-strings.c:2247
 msgid "Display the other account? (if this is a split transaction, this parameter is guessed)."
-msgstr ""
+msgstr "Het andere dgboek tonen? (wanneer dit een opgesplitste transacties is, wordt de randvoorwaarde gegokt)."
 
 #: intl-scm/guile-strings.c:2255
 msgid "Display the shares price?"
-msgstr ""
+msgstr "De aandelenprij tonen?"
 
 #: intl-scm/guile-strings.c:2271
 msgid "No amount display"
-msgstr ""
+msgstr "Geen hoeveelheid te tonen"
 
 #: intl-scm/guile-strings.c:2281 intl-scm/guile-strings.c:2321
 msgid "Sign Reverses?"
-msgstr ""
+msgstr "Het teken omdraaien?"
 
 #: intl-scm/guile-strings.c:2283
 msgid "Reverse amount display for certain account types"
-msgstr ""
+msgstr "Draai de getoonde hoeveelheid om voor bepaalde dagboektypen"
 
 #: intl-scm/guile-strings.c:2287
 msgid "Don't change any displayed amounts"
-msgstr ""
+msgstr "Verander geen van de getoonde hoeveelheden"
 
 #: intl-scm/guile-strings.c:2289
 msgid "Income and Expense"
-msgstr ""
+msgstr "Inkomsten en uitgaven"
 
 #: intl-scm/guile-strings.c:2291
 msgid "Reverse amount display for Income and Expense Accounts"
-msgstr ""
+msgstr "Draai de getoonde hoeveelheid om voor inkomsten en uitgaven dagboeken"
 
 #: intl-scm/guile-strings.c:2295
 msgid "Reverse amount display for Liability, Payable, Equity, Credit Card, and Income accounts"
-msgstr ""
+msgstr "Draai de getoonde hoeveelheid om voor passiva, actief vermogen, creditcard en inkomsten dagboeken"
 
 #: intl-scm/guile-strings.c:2297
 #, c-format
 msgid "From %s To %s"
-msgstr ""
+msgstr "Van %s tot %s"
 
 #: intl-scm/guile-strings.c:2299 intl-scm/guile-strings.c:2303
 #: intl-scm/guile-strings.c:2307 intl-scm/guile-strings.c:2311
@@ -11385,178 +11038,177 @@ msgstr ""
 #: intl-scm/guile-strings.c:2509 intl-scm/guile-strings.c:2513
 #: intl-scm/guile-strings.c:2517
 msgid "Colors"
-msgstr ""
+msgstr "Kleuren"
 
 #: intl-scm/guile-strings.c:2301
 msgid "Primary Subtotals/headings"
-msgstr ""
+msgstr "Brimaire subtotalen/kopteksten"
 
 #: intl-scm/guile-strings.c:2305
 msgid "Secondary Subtotals/headings"
-msgstr ""
+msgstr "Secundaire subtotalen/kopteksten"
 
 #: intl-scm/guile-strings.c:2313
 msgid "Split Odd"
-msgstr ""
+msgstr "Splits oneven op"
 
 #: intl-scm/guile-strings.c:2317
 msgid "Split Even"
-msgstr ""
+msgstr "Splits even op"
 
 #: intl-scm/guile-strings.c:2325
 msgid "No matching transactions found"
-msgstr ""
+msgstr "Geen overeenkomende transacties gevonden"
 
 #: intl-scm/guile-strings.c:2327
 msgid "No transactions were found that match the given time interval and account selection."
-msgstr ""
+msgstr "Er zijn geen transacties gevonden die overeenkomen met de gegeven tijdsinterval en dagboekselectie"
 
 #: intl-scm/guile-strings.c:2329
 msgid "Transaction Report"
-msgstr ""
+msgstr "Transactie rapport"
 
 #: intl-scm/guile-strings.c:2349
 #, c-format
 msgid "%s - %s to %s for"
-msgstr ""
+msgstr "%s - %s tot %s voor"
 
 #: intl-scm/guile-strings.c:2359
 msgid "Difference"
-msgstr ""
+msgstr "Verschil"
 
 #: intl-scm/guile-strings.c:2361 intl-scm/guile-strings.c:2363
-#, fuzzy
 msgid "Cash Flow"
-msgstr "Losgeld"
+msgstr "Geldstromen"
 
 #: intl-scm/guile-strings.c:2367 intl-scm/guile-strings.c:2475
 msgid "Preparer"
-msgstr ""
+msgstr "Voorbereider"
 
 #: intl-scm/guile-strings.c:2369
 msgid "Name of person preparing the report"
-msgstr ""
+msgstr "Naam van de persoon die het rapport voorbereid"
 
 #: intl-scm/guile-strings.c:2373 intl-scm/guile-strings.c:2479
 msgid "Prepared for"
-msgstr ""
+msgstr "Voorbereid voor"
 
 #: intl-scm/guile-strings.c:2375
 msgid "Name of organization or company prepared for"
-msgstr ""
+msgstr "Naam van de organisatie of het bedrijf waarvoor voorbereid is"
 
 #: intl-scm/guile-strings.c:2379 intl-scm/guile-strings.c:2483
 msgid "Show preparer info"
-msgstr ""
+msgstr "Toon gegevens voorbereider"
 
 #: intl-scm/guile-strings.c:2381
 msgid "Name of organization or company"
-msgstr ""
+msgstr "Naam van de organisatie of bedrijf"
 
 #: intl-scm/guile-strings.c:2385 intl-scm/guile-strings.c:2487
 #: intl-scm/guile-strings.c:2569
 msgid "Enable Links"
-msgstr ""
+msgstr "activeer links"
 
 #: intl-scm/guile-strings.c:2387
 msgid "Enable hyperlinks in reports"
-msgstr ""
+msgstr "activeer hyperlinks in rapporten"
 
 #: intl-scm/guile-strings.c:2389 intl-scm/guile-strings.c:2395
 #: intl-scm/guile-strings.c:2401 intl-scm/guile-strings.c:2521
 #: intl-scm/guile-strings.c:2525 intl-scm/guile-strings.c:2529
 msgid "Images"
-msgstr ""
+msgstr "Afbeeldingen"
 
 #: intl-scm/guile-strings.c:2391 intl-scm/guile-strings.c:2523
 msgid "Background Tile"
-msgstr ""
+msgstr "Achtergrond patroon"
 
 #: intl-scm/guile-strings.c:2393 intl-scm/guile-strings.c:2565
 msgid "Background tile for reports."
-msgstr ""
+msgstr "Achtergrond patroon voor rapporten"
 
 #: intl-scm/guile-strings.c:2397 intl-scm/guile-strings.c:2527
 msgid "Heading Banner"
-msgstr ""
+msgstr "Koptekst bannier"
 
 #: intl-scm/guile-strings.c:2399
 msgid "Banner for top of report."
-msgstr ""
+msgstr "Bannier voor boven rapport"
 
 #: intl-scm/guile-strings.c:2403 intl-scm/guile-strings.c:2531
 msgid "Logo"
-msgstr ""
+msgstr "Logo"
 
 #: intl-scm/guile-strings.c:2405
 msgid "Company logo image."
-msgstr ""
+msgstr "Bedrijfslogo afbeelding"
 
 #: intl-scm/guile-strings.c:2409 intl-scm/guile-strings.c:2491
 #: intl-scm/guile-strings.c:2557 intl-scm/guile-strings.c:2663
 msgid "Background Color"
-msgstr ""
+msgstr "Achtergrondkleur"
 
 #: intl-scm/guile-strings.c:2411
 msgid "General background color for report."
-msgstr ""
+msgstr "Algemene achtergrondkleur voor rapport."
 
 #: intl-scm/guile-strings.c:2415 intl-scm/guile-strings.c:2495
 #: intl-scm/guile-strings.c:2669
 msgid "Text Color"
-msgstr ""
+msgstr "Tekst kleur"
 
 #: intl-scm/guile-strings.c:2417
 msgid "Normal body text color."
-msgstr ""
+msgstr "Kleur normale alinea tekst"
 
 #: intl-scm/guile-strings.c:2421 intl-scm/guile-strings.c:2499
 msgid "Link Color"
-msgstr ""
+msgstr "Link kleur"
 
 #: intl-scm/guile-strings.c:2423
 msgid "Link text color."
-msgstr ""
+msgstr "Link tekst kleur"
 
 #: intl-scm/guile-strings.c:2427 intl-scm/guile-strings.c:2503
 msgid "Table Cell Color"
-msgstr ""
+msgstr "Cel kleur tabel"
 
 #: intl-scm/guile-strings.c:2429
 msgid "Default background for table cells."
-msgstr ""
+msgstr "Standaard achtergrond voor cellen in een tabel"
 
 #: intl-scm/guile-strings.c:2433 intl-scm/guile-strings.c:2507
 msgid "Alternate Table Cell Color"
-msgstr ""
+msgstr "Alternatieve cel kleur tabel"
 
 #: intl-scm/guile-strings.c:2435
 msgid "Default alternate background for table cells."
-msgstr ""
+msgstr "Standaard alternatieve achtergrond voor cellen in tabel"
 
 #: intl-scm/guile-strings.c:2439 intl-scm/guile-strings.c:2511
 msgid "Subheading/Subtotal Cell Color"
-msgstr ""
+msgstr "Sub-koptekst/sub-totaal cel kleur"
 
 #: intl-scm/guile-strings.c:2441
 msgid "Default color for subtotal rows."
-msgstr ""
+msgstr "Standaard kleur voor subtotaal rijen"
 
 #: intl-scm/guile-strings.c:2445 intl-scm/guile-strings.c:2515
 msgid "Sub-subheading/total Cell Color"
-msgstr ""
+msgstr "Sub-koptekst/totaal cel kleur"
 
 #: intl-scm/guile-strings.c:2447
 msgid "Color for subsubtotals"
-msgstr ""
+msgstr "Kleur voor sub-sub-totalen"
 
 #: intl-scm/guile-strings.c:2451 intl-scm/guile-strings.c:2519
 msgid "Grand Total Cell Color"
-msgstr ""
+msgstr "Kleur totalen cellen"
 
 #: intl-scm/guile-strings.c:2453
 msgid "Color for grand totals"
-msgstr ""
+msgstr "Kleur voor totalen"
 
 #: intl-scm/guile-strings.c:2455 intl-scm/guile-strings.c:2461
 #: intl-scm/guile-strings.c:2467 intl-scm/guile-strings.c:2533
@@ -11564,67 +11216,67 @@ msgstr ""
 #: intl-scm/guile-strings.c:2573 intl-scm/guile-strings.c:2579
 #: intl-scm/guile-strings.c:2585
 msgid "Tables"
-msgstr ""
+msgstr "Tabellen"
 
 #: intl-scm/guile-strings.c:2457 intl-scm/guile-strings.c:2535
 #: intl-scm/guile-strings.c:2575
 msgid "Table cell spacing"
-msgstr ""
+msgstr "Tabel cel afstand"
 
 #: intl-scm/guile-strings.c:2459 intl-scm/guile-strings.c:2465
 #: intl-scm/guile-strings.c:2577 intl-scm/guile-strings.c:2583
 msgid "Space between table cells"
-msgstr ""
+msgstr "Ruimte tussen cellen in tabel"
 
 #: intl-scm/guile-strings.c:2463 intl-scm/guile-strings.c:2539
 #: intl-scm/guile-strings.c:2581
 msgid "Table cell padding"
-msgstr ""
+msgstr "Tabel cel opvulling"
 
 #: intl-scm/guile-strings.c:2469 intl-scm/guile-strings.c:2543
 #: intl-scm/guile-strings.c:2587
 msgid "Table border width"
-msgstr ""
+msgstr "Tabel grens breedte"
 
 #: intl-scm/guile-strings.c:2471 intl-scm/guile-strings.c:2589
 msgid "Bevel depth on tables"
-msgstr ""
+msgstr "Grensvlak diepte in tabellen"
 
 #: intl-scm/guile-strings.c:2545
 msgid "Prepared by: "
-msgstr ""
+msgstr "Voorbereid door:"
 
 #: intl-scm/guile-strings.c:2547
 msgid "Prepared for: "
-msgstr ""
+msgstr "Voorbereid voor:"
 
 #: intl-scm/guile-strings.c:2549
 msgid "Date: "
-msgstr ""
+msgstr "Datum"
 
 #: intl-scm/guile-strings.c:2551
 msgid "Fancy"
-msgstr ""
+msgstr "Fancy"
 
 #: intl-scm/guile-strings.c:2553
 msgid "Technicolor"
-msgstr ""
+msgstr "Technicolor"
 
 #: intl-scm/guile-strings.c:2559
 msgid "Background color for reports."
-msgstr ""
+msgstr "Achtergrond kleur voor rapporten"
 
 #: intl-scm/guile-strings.c:2563
 msgid "Background Pixmap"
-msgstr ""
+msgstr "Achtergrond afbeelding"
 
 #: intl-scm/guile-strings.c:2571
 msgid "Enable hyperlinks in reports."
-msgstr ""
+msgstr "Activeer hyperlinks in rapporten"
 
 #: intl-scm/guile-strings.c:2591
 msgid "Plain"
-msgstr ""
+msgstr "Plain"
 
 #: intl-scm/guile-strings.c:2595 intl-scm/guile-strings.c:2601
 #: intl-scm/guile-strings.c:2623 intl-scm/guile-strings.c:2631
@@ -11632,63 +11284,63 @@ msgstr ""
 #: intl-scm/guile-strings.c:2649 intl-scm/guile-strings.c:2655
 #: intl-scm/guile-strings.c:2661 intl-scm/guile-strings.c:2667
 msgid "Hello, World!"
-msgstr ""
+msgstr "Hallo, wereld"
 
 #: intl-scm/guile-strings.c:2597
 msgid "Boolean Option"
-msgstr ""
+msgstr "boolean optie"
 
 #: intl-scm/guile-strings.c:2599
 msgid "This is a boolean option."
-msgstr ""
+msgstr "Dit is een boolean optie"
 
 #: intl-scm/guile-strings.c:2603
 msgid "Multi Choice Option"
-msgstr ""
+msgstr "Multiple gok optie"
 
 #: intl-scm/guile-strings.c:2605
 msgid "This is a multi choice option."
-msgstr ""
+msgstr "Dit is een multiple gok optie"
 
 #: intl-scm/guile-strings.c:2607
 msgid "First Option"
-msgstr ""
+msgstr "Eerste optie"
 
 #: intl-scm/guile-strings.c:2609
 msgid "Help for first option"
-msgstr ""
+msgstr "Hulp voor de eerste optie"
 
 #: intl-scm/guile-strings.c:2611
 msgid "Second Option"
-msgstr ""
+msgstr "Tweede optie"
 
 #: intl-scm/guile-strings.c:2613
 msgid "Help for second option"
-msgstr ""
+msgstr "Hulp voor de tweede optie"
 
 #: intl-scm/guile-strings.c:2615
 msgid "Third Option"
-msgstr ""
+msgstr "Derde optie"
 
 #: intl-scm/guile-strings.c:2617
 msgid "Help for third option"
-msgstr ""
+msgstr "Hulp voor de derde optie"
 
 #: intl-scm/guile-strings.c:2619
 msgid "Fourth Options"
-msgstr ""
+msgstr "Vierde optie"
 
 #: intl-scm/guile-strings.c:2621
 msgid "The fourth option rules!"
-msgstr ""
+msgstr "De vierde optie is geweldig!"
 
 #: intl-scm/guile-strings.c:2625
 msgid "String Option"
-msgstr ""
+msgstr "String optie"
 
 #: intl-scm/guile-strings.c:2627
 msgid "This is a string option"
-msgstr ""
+msgstr "Dit is een string optie"
 
 #: intl-scm/guile-strings.c:2629 intl-scm/guile-strings.c:2703
 #: intl-scm/guile-strings.c:2749
@@ -11697,484 +11349,485 @@ msgstr "Hallo wereld"
 
 #: intl-scm/guile-strings.c:2633
 msgid "Just a Date Option"
-msgstr ""
+msgstr "Een datum optie"
 
 #: intl-scm/guile-strings.c:2635
 msgid "This is a date option"
-msgstr ""
+msgstr "Dit is een datum optie"
 
 #: intl-scm/guile-strings.c:2639
 msgid "Time and Date Option"
-msgstr ""
+msgstr "Tijd en datum optie"
 
 #: intl-scm/guile-strings.c:2641
 msgid "This is a date option with time"
-msgstr ""
+msgstr "Dit is een datum optie met tijd"
 
 #: intl-scm/guile-strings.c:2645
 msgid "Combo Date Option"
-msgstr ""
+msgstr "Gecombineerde datum optie"
 
 #: intl-scm/guile-strings.c:2647
 msgid "This is a combination date option"
-msgstr ""
+msgstr "Dit is een gecombineerde datum optie"
 
 #: intl-scm/guile-strings.c:2651
 msgid "Relative Date Option"
-msgstr ""
+msgstr "Relatieve datum optie"
 
 #: intl-scm/guile-strings.c:2653
 msgid "This is a relative date option"
-msgstr ""
+msgstr "Dit is een relatieve datum optie"
 
 #: intl-scm/guile-strings.c:2657
 msgid "Number Option"
-msgstr ""
+msgstr "Nummer optie"
 
 #: intl-scm/guile-strings.c:2659
 msgid "This is a number option."
-msgstr ""
+msgstr "Dit is een nummer optie"
 
 #: intl-scm/guile-strings.c:2665 intl-scm/guile-strings.c:2671
 msgid "This is a color option"
-msgstr ""
+msgstr "Dit is een kleur optie"
 
 #: intl-scm/guile-strings.c:2673 intl-scm/guile-strings.c:2679
 msgid "Hello Again"
-msgstr ""
+msgstr "Nogmaals hallo"
 
 #: intl-scm/guile-strings.c:2675
 msgid "An account list option"
-msgstr ""
+msgstr "Een dagboek lijst optie"
 
 #: intl-scm/guile-strings.c:2677
 msgid "This is an account list option"
-msgstr ""
+msgstr "Dit is een dagboek lijst optie"
 
 #: intl-scm/guile-strings.c:2681
 msgid "A list option"
-msgstr ""
+msgstr "Een lijst optie"
 
 #: intl-scm/guile-strings.c:2683
 msgid "This is a list option"
-msgstr ""
+msgstr "Dit is een lijst optie"
 
 #: intl-scm/guile-strings.c:2685
 msgid "The Good"
-msgstr ""
+msgstr "De goede"
 
 #: intl-scm/guile-strings.c:2687
 msgid "Good option"
-msgstr ""
+msgstr "Goede optie"
 
 #: intl-scm/guile-strings.c:2689
 msgid "The Bad"
-msgstr ""
+msgstr "De slechte"
 
 #: intl-scm/guile-strings.c:2691
 msgid "Bad option"
-msgstr ""
+msgstr "Slechte optie"
 
 #: intl-scm/guile-strings.c:2693
 msgid "The Ugly"
-msgstr ""
+msgstr "De lelijke"
 
 #: intl-scm/guile-strings.c:2695
 msgid "Ugly option"
-msgstr ""
+msgstr "Lelijke optie"
 
 #: intl-scm/guile-strings.c:2697
 msgid "Testing"
-msgstr ""
+msgstr "Testen"
 
 #: intl-scm/guile-strings.c:2699
 msgid "Crash the report"
-msgstr ""
+msgstr "Crash het rapport"
 
 #: intl-scm/guile-strings.c:2701
 msgid "This is for testing. Your reports probably shouldn't have an option like this."
-msgstr ""
+msgstr "Dit is om meet te testen. Uw rapporten moeten wwaarschijnlijk niet dergelijke opties bevatten."
 
 #: intl-scm/guile-strings.c:2705
 msgid "This is a sample GnuCash report. See the guile (scheme) source code in the scm/report directory for details on writing your own reports, or extending existing reports."
-msgstr ""
+msgstr "Dit is een voorbeeld GnuCash rapport. Zie de verborgen broncode in de scm/ rapport directory voor meer informatie over het schrijven van uw eigen rapporten, of het uitbereiden van bestaande rapporten."
 
 #: intl-scm/guile-strings.c:2707
 #, c-format
 msgid "For help on writing reports, or to contribute your brand new, totally cool report, consult the mailing list %s."
-msgstr ""
+msgstr "Voor hulp bij het schrijven van rapporten, of om uw eigen, nieuwe, zeer coole rapport bij te dragen, kunt u de mailinglist raadplegen %s."
 
 #: intl-scm/guile-strings.c:2709
 #, c-format
 msgid "For details on subscribing to that list, see %s."
-msgstr ""
+msgstr "Voor meer informatie over inschrijving op die lijst, zie %s."
 
 #: intl-scm/guile-strings.c:2711
 #, c-format
 msgid "You can learn more about writing scheme using this %s."
-msgstr ""
+msgstr "U kunt meer te weten komen over het schrijf schema met hulp van dit %s."
 
 #: intl-scm/guile-strings.c:2713
 msgid "online book"
-msgstr ""
+msgstr "Online boek"
 
 #: intl-scm/guile-strings.c:2715
 #, c-format
 msgid "The current time is %s."
-msgstr ""
+msgstr "De huidige tijd is %s."
 
 #: intl-scm/guile-strings.c:2717
 #, c-format
 msgid "The boolean option is %s."
-msgstr ""
+msgstr "De boolean keuze is %s."
 
 #: intl-scm/guile-strings.c:2719
 msgid "true"
-msgstr ""
+msgstr "Waar"
 
 #: intl-scm/guile-strings.c:2721
 msgid "false"
-msgstr ""
+msgstr "Niet waar"
 
 #: intl-scm/guile-strings.c:2723
 #, c-format
 msgid "The multi-choice option is %s."
-msgstr ""
+msgstr "De multiple-gok keuze is %s."
 
 #: intl-scm/guile-strings.c:2725
 #, c-format
 msgid "The string option is %s."
-msgstr ""
+msgstr "De string keuze is %s."
 
 #: intl-scm/guile-strings.c:2727
 #, c-format
 msgid "The date option is %s."
-msgstr ""
+msgstr "De datum keuze is %s."
 
 #: intl-scm/guile-strings.c:2729
 #, c-format
 msgid "The date and time option is %s."
-msgstr ""
+msgstr "De datum en tijd keuze is %s."
 
 #: intl-scm/guile-strings.c:2731
 #, c-format
 msgid "The relative date option is %s."
-msgstr ""
+msgstr "De relatieve datum keuze is %s."
 
 #: intl-scm/guile-strings.c:2733
 #, c-format
 msgid "The combination date option is %s."
-msgstr ""
+msgstr "De gecombineerde datum keuze is %s."
 
 #: intl-scm/guile-strings.c:2735
 #, c-format
 msgid "The number option is %s."
-msgstr ""
+msgstr "De nummer keuze is %s."
 
 #: intl-scm/guile-strings.c:2737
 #, c-format
 msgid "The number option formatted as currency is %s."
-msgstr ""
+msgstr "De nummer keuze in valuta format is %s."
 
 #: intl-scm/guile-strings.c:2739
 msgid "Items you selected:"
-msgstr ""
+msgstr "De items die u geselecteerd heeft:"
 
 #: intl-scm/guile-strings.c:2741
 msgid "List items selected"
-msgstr ""
+msgstr "Lijst van geselecteerde items"
 
 #: intl-scm/guile-strings.c:2743
 msgid "(You selected no list items.)"
-msgstr ""
+msgstr "(U heeft geen item uit de lijst gekozen.)"
 
 #: intl-scm/guile-strings.c:2745
 msgid "You have selected no accounts."
-msgstr ""
+msgstr "U heeft geen dagboeken geselecteerd."
 
 #: intl-scm/guile-strings.c:2747
 msgid "Have a nice day!"
-msgstr ""
+msgstr "Nog een prettige dag!"
 
 #: intl-scm/guile-strings.c:2751
 msgid "Sample Report with Examples"
-msgstr ""
+msgstr "Voorbeeld rapport met voorbeelden"
 
 #: intl-scm/guile-strings.c:2753
 msgid "A sample report with examples."
-msgstr ""
+msgstr "Een voorbeeldrapport met voorbeelden"
 
 #: intl-scm/guile-strings.c:2757 intl-scm/guile-strings.c:2763
 msgid "URL to frame"
-msgstr ""
+msgstr "URL in frame"
 
 #: intl-scm/guile-strings.c:2759
 msgid "URL to display in report"
-msgstr ""
+msgstr "URL getoond in rapport"
 
 #: intl-scm/guile-strings.c:2765
 msgid "Frame URL"
-msgstr ""
+msgstr "URL in frame"
 
 #: intl-scm/guile-strings.c:2767
-#, fuzzy
 msgid "Custom Web Report"
-msgstr "Aangepast formaat"
+msgstr "Aangepast web rapport"
 
 #: intl-scm/guile-strings.c:2771 intl-scm/guile-strings.c:2777
 msgid "Number of columns"
-msgstr ""
+msgstr "Aantal kolommen"
 
 #: intl-scm/guile-strings.c:2773
 msgid "Number of columns before wrapping to a new row"
-msgstr ""
+msgstr "Aantal kolommen voor begin in een nieuwe rij"
 
 #: intl-scm/guile-strings.c:2779
 msgid "Edit Options"
-msgstr ""
+msgstr "Bewerk opties"
 
 #: intl-scm/guile-strings.c:2781
 msgid "Single Report"
-msgstr ""
+msgstr "Enkel rapport"
 
 #: intl-scm/guile-strings.c:2783
 msgid "Multicolumn View"
-msgstr ""
+msgstr "Multi-kolom aanzicht"
 
 #: intl-scm/guile-strings.c:2785
 msgid "Custom Multicolumn Report"
-msgstr ""
+msgstr "Aangepast multi-kolom rapport"
 
 #: intl-scm/guile-strings.c:2787 intl-scm/guile-strings.c:2793
 msgid "Welcome to GnuCash"
-msgstr ""
+msgstr "Welkom bij GnuCash"
 
 #: intl-scm/guile-strings.c:2789
 msgid "Welcome to GnuCash 1.8!"
-msgstr ""
+msgstr "Welkom bij GnuCash 1.8!"
 
 #: intl-scm/guile-strings.c:2791
 msgid "GnuCash 1.8 has lots of nice features. Here are a few."
-msgstr ""
+msgstr "GnuCash 1.8 heeft veel gweldige mogelijkheden, hier zijn er een paar."
 
 #: intl-scm/guile-strings.c:2795
 msgid "Show version."
-msgstr ""
+msgstr "Toon versie."
 
 #: intl-scm/guile-strings.c:2797 intl-scm/guile-strings.c:2799
 msgid "Generate an argument summary."
-msgstr ""
+msgstr "Genereer een arumenten samenvatting."
 
 #: intl-scm/guile-strings.c:2801
 msgid "Don't load any file, including autoloading the last file."
-msgstr ""
+msgstr "Laadt geen enkel bestand, ook geen automatisch laden van het laatste bestand."
 
 #: intl-scm/guile-strings.c:2803
 msgid "Enable debugging code."
-msgstr ""
+msgstr "Activeer debug code."
 
 #: intl-scm/guile-strings.c:2805
 msgid "Enable developers mode."
-msgstr ""
+msgstr "Activeer ontwikkelaarsmodus."
 
 #: intl-scm/guile-strings.c:2807
 msgid "Logging level from 0 (least logging) to 5 (most logging)."
-msgstr ""
+msgstr "Log niveau's vanaf 0 (weinig loggen) tot 5 (heel veel loggen)."
 
 #: intl-scm/guile-strings.c:2809
 msgid "List of directories to search when looking for config files. Each element must be a string representing a directory or a symbol where 'default expands to the default path, and 'current expands to the current value of the path."
-msgstr ""
+msgstr "Lijst van te doorzoeken directories wanneer er gezocht wordt naar configuratie bestanden. Ieder element moet een string zijn die een map of een symbool voorstelt met 'default als verwijzing naar het standaard pad en 'current verwijst naar de locatie van het huidige pad."
 
 #: intl-scm/guile-strings.c:2811
 msgid "List of directories to search when looking for shared data files. Each element must be a string representing a directory or a symbol where 'default expands to the default path, and 'current expands to the current value of the path."
-msgstr ""
+msgstr "Lijst van te doorzoeken directories wanneer er gezocht wordt naar gedeelde data bestanden. Ieder element moet een string zijn die een map of een symbool voorstelt met 'default als verwijzing naar het standard pad.en 'current verwijst naar de huidige waarde van het pad."
 
 #: intl-scm/guile-strings.c:2813
 msgid "A list of directories (strings) indicating where to look for html and parsed-html files. Each element must be a string representing a directory or a symbol where 'default expands to the default path, and 'current expands to the current value of the path."
-msgstr ""
+msgstr "Een lijst met mappen (strings) die aangeven waar de html en gecontroleerde html bestanden te vinden zijn. Ieder element moet een string zijn die een map of een symbool representeert met 'default als verwijzing naar het standaard pad en 'current verwijst naar het huidige pad."
 
 #: intl-scm/guile-strings.c:2815
 msgid "Show GnuCash version"
-msgstr ""
+msgstr "Toon GnuCash versie"
 
 #: intl-scm/guile-strings.c:2817
 msgid "Show GnuCash usage information"
-msgstr ""
+msgstr "Toon GnuCash gebruiksinformatie"
 
 #: intl-scm/guile-strings.c:2819
 msgid "Show this help message"
-msgstr ""
+msgstr "Toon dit help bericht"
 
 #: intl-scm/guile-strings.c:2821
 msgid "Enable debugging mode"
-msgstr ""
+msgstr "Activeer debug modus"
 
 #: intl-scm/guile-strings.c:2823
 msgid "Enable developers mode"
-msgstr ""
+msgstr "Activeer ontwikkelaars modus"
 
 #: intl-scm/guile-strings.c:2825
 msgid "Set the logging level from 0 (least) to 6 (most)"
-msgstr ""
+msgstr "Kies het log niveau van 0 (minst) tot 6 (meest)"
 
 #: intl-scm/guile-strings.c:2827
 msgid "Do not load the last file opened"
-msgstr ""
+msgstr "Laadt het laatst geopende bestand niet in"
 
 #: intl-scm/guile-strings.c:2829
 msgid "Set configuration path"
-msgstr ""
+msgstr "Stel configuratie pad in"
 
 #: intl-scm/guile-strings.c:2831
 msgid "Set shared data file search path"
-msgstr ""
+msgstr "Stel gedeelde databestand zoekpad in"
 
 #: intl-scm/guile-strings.c:2833
 msgid "Set the search path for documentation files"
-msgstr ""
+msgstr "Stel het zoekpad voor documentatie bestanden in"
 
 #: intl-scm/guile-strings.c:2835
 msgid "Evaluate the guile command"
-msgstr ""
+msgstr "Evalueer het veborgen commando"
 
 #: intl-scm/guile-strings.c:2837
 msgid "Load the given .scm file"
-msgstr ""
+msgstr "laadt het gegeven .scm bestand in"
 
 #: intl-scm/guile-strings.c:2839
 msgid "Add price quotes to given FILE."
-msgstr ""
+msgstr "Voeg prijsopgaven toe aan opgegeven bestand"
 
 #: intl-scm/guile-strings.c:2841
 msgid "Load the user configuration"
-msgstr ""
+msgstr "Laadt de gebruikers instelling"
 
 #: intl-scm/guile-strings.c:2843
 msgid "Load the system configuration"
-msgstr ""
+msgstr "Laadt de systeem instelling"
 
 #: intl-scm/guile-strings.c:2845
 msgid "Run the RPC Server"
-msgstr ""
+msgstr "Start de RPC server"
 
 #: intl-scm/guile-strings.c:2847
 msgid "GnuCash Manual"
-msgstr ""
+msgstr "GnuCash handleiding"
 
 #: intl-scm/guile-strings.c:2849
 msgid "More on GnuCash"
-msgstr ""
+msgstr "Meer over GnuCash"
 
 #: intl-scm/guile-strings.c:2851
 msgid "Report a bug"
-msgstr ""
+msgstr "Rapporteer een bug"
 
 #: intl-scm/guile-strings.c:2857
 msgid "If you keep multiple account views open, it may be helpful to give each one a descriptive name"
-msgstr ""
+msgstr "Wanneer u meerdere dagboekvensters open heeft, kan het handig zijn om ze allemaal een beschrijvende naam te geven"
 
 #: intl-scm/guile-strings.c:2863
 msgid "Double click expands parent accounts"
-msgstr ""
+msgstr "Dubbelklikken vergroot de bovenliggende dagboeken"
 
 #: intl-scm/guile-strings.c:2865
 msgid "Double clicking on an account with children expands the account instead of opening a register."
-msgstr ""
+msgstr "Dubbelklikken op een dagboek met sub-dagboeken vergroot het dagboek en opent niet het kasboek."
 
 #: intl-scm/guile-strings.c:2869
 msgid "Account types to display"
-msgstr ""
+msgstr "Te tonen dagboek typen"
 
 #: intl-scm/guile-strings.c:2899
 msgid "Account fields to display"
-msgstr ""
+msgstr "Te tonen velden"
 
 #: intl-scm/guile-strings.c:2917
 msgid "Can't save window state"
-msgstr ""
+msgstr "Kan de venster staat niet bewaren"
 
 #: intl-scm/guile-strings.c:2919
 msgid "This is a development version. It may or may not work.\n"
-msgstr ""
+msgstr "Dit is een ontwikkelings versie. Hij werkt misschien niet geheel.\n"
 
 #: intl-scm/guile-strings.c:2921
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org.\n"
-msgstr ""
+msgstr "Rapporteer bugs en andere problemen op: gnucash-devel@gnucash.org. \n"
 
 #: intl-scm/guile-strings.c:2923
 msgid "The last stable version was "
-msgstr ""
+msgstr "De laaste stabiele versie was "
 
 #: intl-scm/guile-strings.c:2925
 msgid "The next stable version will be "
-msgstr ""
+msgstr "De volgende stabiele versie zal zijn "
 
 #: intl-scm/guile-strings.c:2927
 msgid "Loading modules... "
-msgstr ""
+msgstr "Modules inladen... "
 
 #: intl-scm/guile-strings.c:2929
 msgid "Loading tip-of-the-day..."
-msgstr ""
+msgstr "Tip van de dag inladen... "
 
 #: intl-scm/guile-strings.c:2931
 msgid "Loading configs..."
-msgstr ""
+msgstr "Instellingen inladen..."
 
 #: intl-scm/guile-strings.c:2933
 msgid "_Style Sheets..."
-msgstr ""
+msgstr "_Stijl sjablonen..."
 
 #: intl-scm/guile-strings.c:2935
 msgid "Edit report style sheets."
-msgstr ""
+msgstr "Bewerk rapportage stijl sjablonen."
 
 #: intl-scm/guile-strings.c:2937
 msgid "Welcome Sample Report"
-msgstr ""
+msgstr "Welkom bij het voorbeeld rapport"
 
 #: intl-scm/guile-strings.c:2939
 msgid "Welcome-to-GnuCash report screen"
-msgstr ""
+msgstr "Welkom bij het GnuCash rapportage scherm"
 
 #: intl-scm/guile-strings.c:2941
 msgid "Loading data..."
-msgstr ""
+msgstr "Gegevens inladen..."
 
 #: intl-scm/guile-strings.c:2943 intl-scm/guile-strings.c:2946
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'update-finance-quote' as root to install them."
 msgstr ""
+"U mist enkele noodzakelijke Perl bestanden. \n"
+"Start 'update-financiële-bron' als root om ze te installeren."
 
 #: intl-scm/guile-strings.c:2949 intl-scm/guile-strings.c:2951
 msgid "Unable to get quotes or diagnose the problem."
-msgstr ""
+msgstr "Bron of diagnose van het probleem niet te vinden."
 
 #: intl-scm/guile-strings.c:2953 intl-scm/guile-strings.c:2957
 #: intl-scm/guile-strings.c:2959
 msgid "Unable to retrieve quotes for these items:"
-msgstr ""
+msgstr "Kan geen bronnen voor deze items vinden:"
 
 #: intl-scm/guile-strings.c:2955
 msgid "Continue using only the good quotes?"
-msgstr ""
+msgstr "Doorgaan met alleen de goede bronnen?"
 
 #: intl-scm/guile-strings.c:2961
 msgid "Continuing with good quotes."
-msgstr ""
+msgstr "Doorgaan met de goede bronnen."
 
 #: intl-scm/guile-strings.c:2963 intl-scm/guile-strings.c:2967
 msgid "Unable to create prices for these items:"
-msgstr ""
+msgstr "Kan geen prijzen genereren voor deze items."
 
 #: intl-scm/guile-strings.c:2965
 msgid "Add remaining good quotes?"
-msgstr ""
+msgstr "Overgebleven juiste bronnen toevoegen?"
 
 #: intl-scm/guile-strings.c:2969
 msgid "Adding remaining good quotes."
-msgstr ""
+msgstr "Toevoegen overgebleven juiste bronnen."
 
 #: intl-scm/guile-strings.c:2971
 msgid ""
@@ -12183,6 +11836,10 @@ msgid ""
 "If you are looking for a stable personal finance application,\n"
 "you should use the latest release of GnuCash 1.6."
 msgstr ""
+"Waarschuwing!!! Dit is een ontwikkelaarsversie van GnuCash.\n"
+"Er zitten waarschijnlijk veel bugs en onstabiele mogelijkheden in!\n"
+"Als u een stabiele financiele applicatie zoekt, kunt\n"
+"u het beste de laaatste versie van GnuCash 1.6 gebruiken."
 
 #: intl-scm/guile-strings.c:2976
 msgid ""
@@ -12191,6 +11848,10 @@ msgid ""
 "GnuCash 1.6\" is particularly interesting. You can access the manual\n"
 "under the Help menu."
 msgstr ""
+"De GuCash online handleiding bevat veel handige informatie. \n"
+"Wanneer u een upgrade pleegt vanaf GnuCash versie 1.4, is de sectie \"wat is er\n"
+"nieuw in GnuCash 1.6\" vooral interessant. U kunt de handleiding vinden in\n"
+"het help menu."
 
 #: intl-scm/guile-strings.c:2981
 msgid ""
@@ -12199,6 +11860,10 @@ msgid ""
 "Format) files.  Click the Import button in the main window tool\n"
 "bar and follow the instructions provided."
 msgstr ""
+"U kunt eenvoudig bestaande financiële gegevens uit Quicken, MS Money\n"
+"of andere programma's die exporteren in QIF (Quicken Interchange Format)\n"
+"importeren. Kies de importeer knop in de gereedschapsbalk in het hoofdvenster\n"
+"en volg de instructies op."
 
 #: intl-scm/guile-strings.c:2986
 msgid ""
@@ -12207,6 +11872,10 @@ msgid ""
 "income and expenses.  For more information on income and expense\n"
 "accounts, please see the GnuCash online manual."
 msgstr ""
+"Wanneer u bekend bent met andere financiële programma's, zoals Quicken,\n"
+"zult u opmerken dat GnuCash gebruik makt van dagboeken in plaats van\n"
+"categorieën onm inkomsten en uitgaven terug te vinden. Voor meer informatie\n"
+"over ikomsten en uitgaven dagboeken, zie ook de GnuCash online handleiding."
 
 #: intl-scm/guile-strings.c:2991
 msgid ""
@@ -12216,6 +11885,10 @@ msgid ""
 "or setting up a chart of accounts, please see the GnuCash online\n"
 "manual."
 msgstr ""
+"Genereer nieuwe dagboeken door de Nieuw-knop te kiezen in de gereerdschapsbalk\n"
+"in het hoofdvenster. Hieerdoor wordt er een venster geopend waarin u meer gegevens\n"
+"over het dagboek kunt aangeven. Voor meer informatie over het keizen van een dagboek\n"
+"type of het instellen van een seie dagboeken, zie de GnuCash online handleiding."
 
 #: intl-scm/guile-strings.c:2997
 msgid ""
@@ -12223,6 +11896,9 @@ msgid ""
 "account menu options. Within each register, clicking the right\n"
 "mouse button brings up the transaction menu options."
 msgstr ""
+"Gebruik de rechter muisknop in het hoofvenster om de opties voor\n"
+"de dagboeken te kiezen. In ieder kasboek opent de rechtermuis knop\n"
+"de transactie menu opties."
 
 #: intl-scm/guile-strings.c:3001
 msgid ""
@@ -12231,6 +11907,10 @@ msgid ""
 "the first value, then select '+', '-','*', or '/'.  Type the\n"
 "second value and press Enter to record the calculated amount."
 msgstr ""
+"Wanneer u bedragen ingeeft in het kasboek, kunt u GnuCash gebruiken\n"
+"als rekenmachine voor optellen, aftrekken, vermenigvuldigen en delen. Type\n"
+"simpleweg de eerste waarde, selecteer vervolgens '+', '-', '*' of '/'. Type\n"
+"vervolgens de tweede waarde en kies 'Enter' om de berekende waarde op te slaan."
 
 #: intl-scm/guile-strings.c:3006
 msgid ""
@@ -12239,6 +11919,10 @@ msgid ""
 "GnuCash will automatically complete the remainder of the\n"
 "transaction as it was last entered."
 msgstr ""
+"Met Quick-fill is het eenvoudig om veel voorkomende transacties op te geven.\n"
+"Wanneer u de eerste letter(s) van een veel voorkomende transactie omschrijving\n"
+"ingeeft, zal GnuCash automtisch de rest van de transactie zoals die de latste keer\n"
+"is ingevoerd, afmaken."
 
 #: intl-scm/guile-strings.c:3011
 msgid ""
@@ -12248,6 +11932,11 @@ msgid ""
 "of the parent account, followed by ':' and the first letter(s) of\n"
 "the subaccount (e.g. A:C for Assets:Cash.)"
 msgstr ""
+"Type de eerste letter(s) van een besaandde dagboeknaam in de\n"
+"transactie kasboek kolom, en GnuCash zal de naam uit uw dagboeklijst\n"
+"afmaken. Voor sub-dagboeken, typed u de eerste letters van het bovenliggende\n"
+"dagboek, gevolgd door ':' en de eerste letter(s) van het sub-dagboek\n"
+"zoals A:K voor activa:kas.)"
 
 #: intl-scm/guile-strings.c:3017
 msgid ""
@@ -12256,6 +11945,10 @@ msgid ""
 "Alternatively, you can choose the register style Auto-Split Ledger or\n"
 "Transaction Journal from the Register|Style menu option."
 msgstr ""
+"Om meerdere opgesplitste transacties zoals een betaalopdracht met meerdere\n"
+"betalingen, kiest u de opsplits knop in de gereedschapsbalk. U kunt\n"
+"ook het kasboek-stijl automatisch opsplits grootboek of het transactie\n"
+"journaal uit het kasboek|Stijlmenu optie, kiezen."
 
 #: intl-scm/guile-strings.c:3022
 msgid ""
