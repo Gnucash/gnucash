@@ -88,8 +88,8 @@ static gnc_commodity_help_callback help_callback = NULL;
 
 /* The commodity selection window */
 static SelectCommodityWindow *
-gnc_ui_select_commodity_create(const gnc_commodity * orig_sel);
-
+gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
+			       dialog_commodity_mode mode);
 void gnc_ui_select_commodity_new_cb(GtkButton * button,
 				    gpointer user_data);
 void gnc_ui_select_commodity_changed_cb(GtkEditable * entry,
@@ -121,6 +121,7 @@ gnc_ui_commodity_set_help_callback (gnc_commodity_help_callback cb)
 gnc_commodity * 
 gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel, 
 				   GtkWidget * parent,
+				   dialog_commodity_mode mode,
 				   const char * user_message,
 				   const char * code,
 				   const char * fullname,
@@ -133,7 +134,7 @@ gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
   gboolean done;
   gint value;
   
-  win = gnc_ui_select_commodity_create(orig_sel);
+  win = gnc_ui_select_commodity_create(orig_sel, mode);
   win->default_exchange_code=code;
   win->default_fullname=fullname;
   win->default_mnemonic=mnemonic;
@@ -191,10 +192,12 @@ gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
 
 gnc_commodity *
 gnc_ui_select_commodity_modal(gnc_commodity * orig_sel,
-                              GtkWidget * parent)
+                              GtkWidget * parent,
+			      dialog_commodity_mode mode)
 {
   return gnc_ui_select_commodity_modal_full(orig_sel, 
 					    parent,
+					    mode,
 					    NULL,
 					    NULL,
 					    NULL,
@@ -207,11 +210,13 @@ gnc_ui_select_commodity_modal(gnc_commodity * orig_sel,
  ********************************************************************/
 
 static SelectCommodityWindow *
-gnc_ui_select_commodity_create(const gnc_commodity * orig_sel)
+gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
+			       dialog_commodity_mode mode)
 {
   SelectCommodityWindow * retval = g_new0(SelectCommodityWindow, 1);
   GladeXML *xml;
-  const char * namespace;
+  const char * namespace, *title;
+  GtkWidget *button;
 
   xml = gnc_glade_xml_new ("commodity.glade", "Commodity Selector Dialog");
   glade_xml_signal_autoconnect_full( xml,
@@ -227,10 +232,26 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel)
 
   gtk_label_set_text ((GtkLabel *)retval->select_user_prompt, "");
 
+  switch (mode) {
+    case DIAG_COMM_ALL:
+      title = _("Select currency/security");
+      break;
+    case DIAG_COMM_NON_CURRENCY:
+      title = _("Select security");
+      break;
+    case DIAG_COMM_CURRENCY:
+    default:
+      title = _("Select currency");
+      button = glade_xml_get_widget (xml, "new_button");
+      gtk_widget_destroy(button);
+      break;
+  }
+  gtk_window_set_title (GTK_WINDOW(retval->dialog), title);
+
   /* build the menus of namespaces and commodities */
   gnc_ui_update_namespace_picker(retval->namespace_combo, 
 				 gnc_commodity_get_namespace(orig_sel),
-				 TRUE, FALSE);
+				 mode);
   namespace = gnc_ui_namespace_picker_ns(retval->namespace_combo);
   gnc_ui_update_commodity_picker(retval->commodity_combo, namespace,
                                  gnc_commodity_get_printname(orig_sel));
@@ -270,7 +291,7 @@ gnc_ui_select_commodity_new_cb(GtkButton * button,
   if(new_commodity) {
     gnc_ui_update_namespace_picker(w->namespace_combo, 
                                    gnc_commodity_get_namespace(new_commodity),
-				   TRUE, FALSE);
+                                   DIAG_COMM_ALL);
     gnc_ui_update_commodity_picker(w->commodity_combo,
                                    gnc_commodity_get_namespace(new_commodity),
                                    gnc_commodity_get_printname(new_commodity));
@@ -406,55 +427,49 @@ gnc_ui_update_commodity_picker(GtkWidget * combobox,
 void
 gnc_ui_update_namespace_picker(GtkWidget * combobox, 
                                const char * init_string,
-                               gboolean include_iso,
-                               gboolean include_all)
+                               dialog_commodity_mode mode)
 {
-  GList * namespaces;
+  GList * namespaces, *node;
   const char * active;
 
   /* fetch a list of the namespaces */
-  if (!include_all)
-    namespaces =
-      gnc_commodity_table_get_namespaces (gnc_get_current_commodities());
-  else
-  {
-    namespaces = NULL;
-    namespaces = g_list_prepend (namespaces, GNC_COMMODITY_NS_ISO);
-    namespaces = g_list_prepend (namespaces, GNC_COMMODITY_NS_NASDAQ);
-    namespaces = g_list_prepend (namespaces, GNC_COMMODITY_NS_NYSE);
-    namespaces = g_list_prepend (namespaces, GNC_COMMODITY_NS_EUREX);
-    namespaces = g_list_prepend (namespaces, GNC_COMMODITY_NS_MUTUAL);
-    namespaces = g_list_prepend (namespaces, GNC_COMMODITY_NS_ASX);
-    namespaces = g_list_prepend (namespaces, GNC_COMMODITY_NS_AMEX);
+  switch (mode) {
+    case DIAG_COMM_ALL:
+      namespaces =
+	gnc_commodity_table_get_namespaces (gnc_get_current_commodities());
+      break;
+
+   case DIAG_COMM_NON_CURRENCY:
+     namespaces =
+       gnc_commodity_table_get_namespaces (gnc_get_current_commodities());
+     node = g_list_find_custom (namespaces, GNC_COMMODITY_NS_ISO, g_strcmp);
+     if (node) {
+       namespaces = g_list_remove_link (namespaces, node);
+       g_list_free_1 (node);
+     } else {
+       node->data = "CURRENCY";
+     }
+
+     if (gnc_commodity_namespace_is_iso (init_string))
+       init_string = NULL;
+     break;
+
+   case DIAG_COMM_CURRENCY:
+   default:
+    namespaces = g_list_prepend (NULL, "CURRENCY");
+    break;     
   }
 
-  namespaces = g_list_sort(namespaces, g_strcmp);
-
-  {
-    GList *node;
-
-    node = g_list_find_custom (namespaces, GNC_COMMODITY_NS_ISO, g_strcmp);
-    if (node && !include_iso)
-    {
-      namespaces = g_list_remove_link (namespaces, node);
-      g_list_free_1 (node);
-    }
-    else
-      node->data = "CURRENCY";
-
-    node = g_list_find_custom (namespaces, GNC_COMMODITY_NS_LEGACY, g_strcmp);
-    if (node)
-    {
-      namespaces = g_list_remove_link (namespaces, node);
-      g_list_free_1 (node);
-    }
+  /* Legacy namespace should never be seen */
+  node = g_list_find_custom (namespaces, GNC_COMMODITY_NS_LEGACY, g_strcmp);
+  if (node) {
+    namespaces = g_list_remove_link (namespaces, node);
+    g_list_free_1 (node);
   }
 
   /* stick them in the combobox */
+  namespaces = g_list_sort(namespaces, g_strcmp);
   gtk_combo_set_popdown_strings (GTK_COMBO (combobox), namespaces);
-
-  if (!include_iso && gnc_commodity_namespace_is_iso (init_string))
-    init_string = NULL;
 
   /* set the entry text */
   if (init_string)
@@ -615,7 +630,7 @@ gnc_ui_new_commodity_dialog(const char * selected_namespace,
   gtk_entry_set_text (GTK_ENTRY (retval->mnemonic_entry), mnemonic ? mnemonic : "");
   gnc_ui_update_namespace_picker(retval->namespace_combo,
 				 selected_namespace,
-				 include_iso, TRUE);
+				 include_iso ? DIAG_COMM_ALL : DIAG_COMM_NON_CURRENCY);
   gtk_entry_set_text (GTK_ENTRY (retval->code_entry), cusip ? cusip : "");
   if (fraction > 0)
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (retval->fraction_spinbutton),

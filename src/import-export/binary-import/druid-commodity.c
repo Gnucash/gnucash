@@ -283,7 +283,7 @@ make_commodity_druid_page(gnc_commodity * comm)
 
   gnc_ui_update_namespace_picker(retval->new_type_combo, 
                                  gnc_commodity_get_namespace(comm),
-                                 TRUE, TRUE);
+                                 DIAG_COMM_ALL);
 
   temp = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 5);

@@ -1583,7 +1583,7 @@ make_qif_druid_page(gnc_commodity * comm)
 
   gnc_ui_update_namespace_picker(retval->new_type_combo, 
                                  gnc_commodity_get_namespace(comm),
-                                 TRUE, TRUE);
+                                 DIAG_COMM_ALL);
 
   info_label = 
     gtk_label_new(_("Enter the full name of the commodity, "

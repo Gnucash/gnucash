@@ -36,6 +36,21 @@
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 
+/** The dialog commodity types are used to determine what commodity
+ *  namespaces the currency dialog will present to a user.  These
+ *  values can be safely changed from one release to the next.  Note
+ *  that if values are added, the routines in dialog-commodity.c will
+ *  need to be updated to match.
+ */
+typedef enum {
+  DIAG_COMM_CURRENCY,	  /**< Dialog box should only allow selection
+			       of a currency. */
+  DIAG_COMM_NON_CURRENCY, /**< Dialog box should allow selection of
+			       anything but a currency. */
+  DIAG_COMM_ALL,	  /**< Dialog box should allow selection of
+			       anything. */
+} dialog_commodity_mode;
+
 typedef void (* gnc_commodity_help_callback)(void);
 
 /** This function is used to set the action routine for the help
@@ -79,12 +94,16 @@ void gnc_ui_commodity_set_help_callback (gnc_commodity_help_callback cb);
  *  instruction providing this commodity's mnemonic, and this will be
  *  the default mnemonic for any newly created commodities.
  *
+ *  @param mode Determines which namespaces the user may select a
+ *  commodity from.
+ *
  *  @return The commodity selected.  May or may not be a newly created
  *  commodity.
  */
 gnc_commodity * 
 gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel, 
 				   GtkWidget * parent,
+				   dialog_commodity_mode mode,
 				   const char * user_message,
 				   const char * exchange_code,
 				   const char * fullname,
@@ -100,12 +119,18 @@ gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
  *  @param orig_sel A pointer to a commodity that should initially be
  *  selected in the dialog box.
  *
+ *  @param parent The parent window for this new selection window.
+ *
+ *  @param mode Determines which namespaces the user may select a
+ *  commodity from.
+ *
  *  @return The commodity selected.  May or may not be a newly created
  *  commodity.
  */
 gnc_commodity * 
 gnc_ui_select_commodity_modal(gnc_commodity * orig_sel, 
-                              GtkWidget * parent);
+                              GtkWidget * parent,
+                              dialog_commodity_mode mode);
 /** @} */
 
 
@@ -194,14 +219,8 @@ gnc_ui_edit_commodity_modal(gnc_commodity *commodity,
  *  @param sel The namespace that should be initially selected when
  *  the combo box appears.
  *
- *  @param include_iso Set to TRUE if the combo box should inlude the
- *  ISO4217 namespace for currencies.  FALSE if the currency namespace
- *  should not be included.  This flag has precedence over the
- *  following flag.
- *
- *  @param include_all Set to TRUE if the combo box should include all
- *  known namespaces, both application and user defined.  FALSE if
- *  only the default application namespaces should be included.
+ *  @param mode Determines which namespaces the user may select a
+ *  commodity
  *
  *  @return The currently selected namespace.
  *
@@ -209,8 +228,7 @@ gnc_ui_edit_commodity_modal(gnc_commodity *commodity,
  */
 void gnc_ui_update_namespace_picker(GtkWidget * combobox,
 				    const char * sel,
-				    gboolean include_iso,
-				    gboolean include_all);
+				    dialog_commodity_mode mode);
 
 /** Given a combo box, return the currently selected namespaces.
  *

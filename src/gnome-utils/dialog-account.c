@@ -30,6 +30,7 @@
 #include "AccWindow.h"
 #include "Transaction.h"
 #include "dialog-account.h"
+#include "dialog-commodity.h"
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-account-tree.h"
@@ -80,6 +81,7 @@ struct _AccountWindow
   GtkWidget * notes_text;
 
   GtkWidget * commodity_edit;
+  dialog_commodity_mode commodity_mode;
   GtkWidget * account_scu;
   
   GList * valid_types;
@@ -145,6 +147,24 @@ aw_get_account (AccountWindow *aw)
   return xaccAccountLookup (&aw->account, gnc_get_current_book ());
 }
 
+static void
+gnc_account_commodity_from_type (AccountWindow * aw, gboolean update)
+{
+  dialog_commodity_mode new_mode;
+
+  if ((aw->type == STOCK) || (aw->type == MUTUAL))
+    new_mode = DIAG_COMM_NON_CURRENCY;
+  else
+    new_mode = DIAG_COMM_CURRENCY;
+
+  if (update && (new_mode != aw->commodity_mode)) {
+    gnc_general_select_set_selected(GNC_GENERAL_SELECT (aw->commodity_edit),
+				    NULL);
+  }
+
+  aw->commodity_mode = new_mode;
+}
+
 /* Copy the account values to the GUI widgets */
 static void
 gnc_account_to_ui(AccountWindow *aw)
@@ -169,6 +189,7 @@ gnc_account_to_ui(AccountWindow *aw)
   commodity = xaccAccountGetCommodity (account);
   gnc_general_select_set_selected (GNC_GENERAL_SELECT (aw->commodity_edit),
                                     commodity);
+  gnc_account_commodity_from_type (aw, FALSE);
 
   nonstd_scu = xaccAccountGetNonStdSCU (account);
   if (nonstd_scu) {
@@ -417,6 +438,7 @@ gnc_finish_ok (AccountWindow *aw,
     commodity = xaccAccountGetCommodity (parent);
     gnc_general_select_set_selected (GNC_GENERAL_SELECT (aw->commodity_edit),
                                       commodity);
+    gnc_account_commodity_from_type (aw, FALSE);
 
     gnc_account_tree_select_account (GNC_ACCOUNT_TREE(aw->parent_tree),
                                      parent, TRUE);
@@ -1090,6 +1112,7 @@ gnc_type_list_select_cb(GtkCList * type_list, gint row, gint column,
                aw->type != STOCK &&
                aw->type != MUTUAL);
 
+  gnc_account_commodity_from_type (aw, TRUE);
   gtk_widget_set_sensitive(aw->opening_balance_page, sensitive);
   if (!sensitive)
   {
@@ -1388,7 +1411,7 @@ gnc_account_window_create(AccountWindow *aw)
   aw->commodity_edit = gnc_general_select_new (GNC_GENERAL_SELECT_TYPE_SELECT,
 					       gnc_commodity_edit_get_string,
 					       gnc_commodity_edit_new_select,
-					       NULL);
+					       &aw->commodity_mode);
   gtk_box_pack_start(GTK_BOX(box), aw->commodity_edit, TRUE, TRUE, 0);
 
   gtk_signal_connect (GTK_OBJECT (aw->commodity_edit), "changed",
@@ -1629,16 +1652,16 @@ gnc_ui_new_account_window_internal (Account *base_account,
 
   gnc_resume_gui_refresh ();
 
-  if(default_commodity!=NULL)
-    {
-      commodity = default_commodity;
-    }
-  else
-    {
-      commodity = gnc_default_currency ();
-    }
+  if (default_commodity != NULL) {
+    commodity = default_commodity;
+  } else if ((aw->type != STOCK) && (aw->type != MUTUAL)) {
+    commodity = gnc_default_currency ();
+  } else {
+    commodity = NULL;
+  }
   gnc_general_select_set_selected (GNC_GENERAL_SELECT (aw->commodity_edit),
                                     commodity);
+  gnc_account_commodity_from_type (aw, FALSE);
 
   gtk_widget_show_all (aw->dialog);
 
