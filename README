@@ -270,7 +270,7 @@ Christopher B. Browne <cbbrowne@hex.net> for perl stock scripts
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
 Jeremey Collins <linux@cyberramp.net> for GnoMoney & GTK port
 Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
-Tyson Dowd   <tyson@tyse.net>  for configure/makefile patches
+Tyson Dowd   <tyson@tyse.net> for config/make patches & debian maint.
 Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
 Bob Drzyzgula <bob@mostly.com> for budgeting design notes
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
