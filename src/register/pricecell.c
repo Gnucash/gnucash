@@ -61,4 +61,44 @@ xaccInitPriceCell (PriceCell *cell)
    cell->cell.modify_verify = PriceMV;
 }
 
+/* ================================================ */
+
+void xaccSetPriceCellValue (PriceCell * cell, double amt)
+{
+   char buff[40];
+   cell->amount = amt;
+   sprintf (buff, "%.3f", amt);
+   xaccSetBasicCellValue ( &(cell->cell), buff);
+}
+
+/* ================================================ */
+
+void xaccSetAmountCellValue (PriceCell * cell, double amt)
+{
+   char buff[40];
+   cell->amount = amt;
+   sprintf (buff, "%.2f", amt);
+   xaccSetBasicCellValue ( &(cell->cell), buff);
+}
+
+/* ================================================ */
+
+void xaccSetDebCredCellValue (PriceCell * deb, 
+                              PriceCell * cred, double amt)
+{
+   char buff[40];
+   deb->amount = -amt;
+   cred->amount = amt;
+
+   if (0.0 <= amt) {
+      sprintf (buff, "%.2f", amt);
+      xaccSetBasicCellValue ( &(cred->cell), buff);
+      xaccSetBasicCellValue ( &(deb->cell), "");
+   } else {
+      sprintf (buff, "%.2f", -amt);
+      xaccSetBasicCellValue ( &(cred->cell), "");
+      xaccSetBasicCellValue ( &(deb->cell), buff);
+   }
+}
+
 /* --------------- end of file ---------------------- */

@@ -38,10 +38,12 @@ xaccLoadRegister (BasicRegister *reg, Split **slist)
       buff[1] = 0x0;
       xaccSetBasicCellValue (reg->recnCell, buff);
 
+      xaccSetDebCredCellValue (reg->debitCell, 
+                               reg->creditCell, split->damount);
+
+      xaccSetAmountCellValue (reg->balanceCell, split->balance);
       xaccCommitEdits (reg->table);
-/*
-      reg->PriceCell
-*/
+
       i++;
       split = slist[i];
    }

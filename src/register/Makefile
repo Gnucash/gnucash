@@ -1,6 +1,7 @@
 
 srcdir   = .
 CC       = gcc
+RANLIB   = ranlib
 INCLPATH = -I/usr/include \
            -I/usr/X11R6/include/. \
            -I./../../include \
@@ -17,7 +18,7 @@ LFLAGS   = -O2
 # LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11 -lm -lefence
 LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11 -lm
 LIBPATH  = -L/lib -L/usr/lib -L/usr/X11R6/lib/.
-TARGET   = demo
+TARGET   = ../libregister.a
 
 # LIBHTMLW = ../lib/libhtmlw/libhtmlw.a
 LIBXMHTML= ../lib/XmHTML-1.1.0/src/libXmHTML.a
@@ -25,16 +26,17 @@ LIBXBAE  = ../../lib/Xbae-4.6.2-linas/libXbae.a
 LIBCOMBO = ../lib/ComboBox-1.33/libComboBox.a
 LIBTRANS = ../Account.o ../Data.o ../FileIO.o ../Transaction.o ../date.o
 ######################################################################
-SRCS = 	basiccell.c cellblock.c datecell.c main.c pricecell.c \
+SRCS = 	basiccell.c cellblock.c datecell.c pricecell.c \
 	recncell.c register.c table.c textcell.c
-OBJS = ${SRCS:.c=.o} $(LIBTRANS) $(LIBXBAE)
+OBJS = ${SRCS:.c=.o} 
 ######################################################################
 
 default: $(TARGET)
 
 $(TARGET): $(OBJS)
 	@echo "++++++"
-	$(CC) $(LFLAGS) $(OBJS) $(LIBPATH) $(LIBS) -o $@
+	$(AR) rv $(TARGET) $(OBJS)
+	$(RANLIB) $(TARGET)
 
 static: $(STATIC)
 
