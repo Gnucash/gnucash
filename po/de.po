@@ -941,11 +941,11 @@ msgstr "Einkünfte/Ausgaben verstecken"
 #: messages-i18n.c:193
 #, fuzzy
 msgid "Import QIF..."
-msgstr "QIF-File importieren"
+msgstr "QIF-File importieren..."
 
 #: messages-i18n.c:194
 msgid "Import QIF"
-msgstr "QIF-File importieren"
+msgstr "QIF Import"
 
 #: messages-i18n.c:195
 msgid "Lost Accounts"
@@ -1191,7 +1191,7 @@ msgstr "Vermögen"
 
 #: messages-i18n.c:255
 msgid "Assets"
-msgstr "Vermögenssaldo"
+msgstr "Vermögen"
 
 #: messages-i18n.c:256
 msgid "ATM"
@@ -1385,7 +1385,7 @@ msgstr "Hilfe"
 
 #: messages-i18n.c:302
 msgid "Import"
-msgstr "QIF-File importieren"
+msgstr "QIF Import"
 
 #: messages-i18n.c:303 po/guile_strings.txt:208
 #: src/gnome/glade-gnc-dialogs.c:644
@@ -1488,7 +1488,7 @@ msgstr "Drucken"
 
 #: messages-i18n.c:327
 msgid "Profits"
-msgstr "Saldo Einnahmen/Ausgaben"
+msgstr "Gewinn / Verlust"
 
 #: messages-i18n.c:328
 msgid "Quit"

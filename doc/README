@@ -590,7 +590,7 @@ Mike Simons <msimons@fsimons01.erols.com> misc configure.in patches
 Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
 Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
 Robby Stephenson <parys@freewwweb.com> register patch
-Herbert Thoma <tma@iis.fhg.de> gnome register patch
+Herbert Thoma <tma@iis.fhg.de> gnome register & euro support patches
 Diane Trout <detrout@earthlink.net> scheme qif import patch
 Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices
 Rob Walker <rob@valinux.com> guile and register patches

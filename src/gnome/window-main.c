@@ -49,6 +49,7 @@
 #include "Scrub.h"
 #include "util.h"
 #include "gnc.h"
+#include "EuroUtils.h"
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -71,15 +72,23 @@ gnc_ui_refresh_statusbar()
   GNCMainInfo *main_info;
   double assets  = 0.0;
   double profits = 0.0;
+  double euro_assets  = 0.0;
+  double euro_profits = 0.0;
   double amount;
   AccountGroup *group;
   AccountGroup *children;
   Account *account;
-  char *asset_string;
-  char *profit_string;
+  char asset_string[256];
+  char profit_string[256];
   int num_accounts;
   int account_type;
+  char *account_currency;
+  gboolean euro;
   int i;
+
+  euro = gnc_lookup_boolean_option("International",
+				   "Enable EURO support",
+				   FALSE);
 
   main_info = gnc_get_main_info();
   if (main_info == NULL)
@@ -92,6 +101,7 @@ gnc_ui_refresh_statusbar()
     account = xaccGroupGetAccount(group, i);
 
     account_type = xaccAccountGetType(account);
+    account_currency = xaccAccountGetCurrency(account);
     children = xaccAccountGetChildren(account);
 
     switch (account_type)
@@ -108,6 +118,10 @@ gnc_ui_refresh_statusbar()
 	  amount += xaccGroupGetBalance(children);
 
         assets += amount;
+	if(euro)
+	{
+	  euro_assets += gnc_convert_to_euro(account_currency, amount);
+	}
 	break;
       case INCOME:
       case EXPENSE:
@@ -116,6 +130,10 @@ gnc_ui_refresh_statusbar()
 	  amount += xaccGroupGetBalance(children);
 
         profits -= amount;
+	if(euro)
+	{
+	  euro_profits -= gnc_convert_to_euro(account_currency, amount);
+	}
 	break;
       case EQUITY:
       case CURRENCY:
@@ -124,16 +142,26 @@ gnc_ui_refresh_statusbar()
     }
   }
 
-  asset_string = xaccPrintAmount(assets, PRTSYM | PRTSEP);
+
+  xaccSPrintAmount(asset_string, assets, PRTSYM | PRTSEP);
+  if(euro)
+  {
+    strcat(asset_string, " / EURO");
+    strcat(asset_string, xaccPrintAmount(euro_assets, PRTSEP));
+  }
   gtk_label_set_text(GTK_LABEL(main_info->assets_label), asset_string);
   gnc_set_label_color(main_info->assets_label, assets);
 
-  profit_string = xaccPrintAmount(profits, PRTSYM | PRTSEP);
+  xaccSPrintAmount(profit_string, profits, PRTSYM | PRTSEP);
+  if(euro)
+  {
+    strcat(profit_string, " / EURO");
+    strcat(profit_string, xaccPrintAmount(euro_profits, PRTSEP));
+  }
   gtk_label_set_text(GTK_LABEL(main_info->profits_label), profit_string);
   gnc_set_label_color(main_info->profits_label, profits);
 }
 
-/* Required for compatibility with Motif code. */
 void
 gnc_refresh_main_window()
 {
@@ -430,6 +458,9 @@ gnc_ui_mainWindow_destroy_cb(GtkObject *object, gpointer user_data)
     (main_info->main_window_change_callback_id);
 
   gnc_unregister_option_change_callback_id
+    (main_info->euro_change_callback_id);
+
+  gnc_unregister_option_change_callback_id
     (main_info->toolbar_change_callback_id);
 
   g_slist_free(main_info->account_sensitives);
@@ -590,6 +621,13 @@ gnc_configure_account_tree(void *data)
 
   if (memcmp(&old_avi, &new_avi, sizeof(AccountViewInfo)) != 0)
     gnc_account_tree_set_view_info(tree, &new_avi);
+}
+
+static void
+gnc_euro_change(void *data)
+{
+  gnc_ui_refresh_statusbar();
+  gnc_configure_account_tree(data);
 }
 
 static void
@@ -959,6 +997,11 @@ mainWindow()
   main_info->main_window_change_callback_id =
     gnc_register_option_change_callback(gnc_configure_account_tree, NULL,
                                         "Main Window", NULL);
+
+  main_info->euro_change_callback_id =
+    gnc_register_option_change_callback(gnc_euro_change, NULL,
+                                        "International",
+                                        "Enable EURO support");
 
   gtk_signal_connect(GTK_OBJECT(main_info->account_tree), "activate_account",
 		     GTK_SIGNAL_FUNC (gnc_account_tree_activate_cb), NULL);

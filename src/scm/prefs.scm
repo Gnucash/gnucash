@@ -131,6 +131,11 @@ the account instead of opening a register." #f))
   "International" "Use 24-hour time format"
   "c" "Use a 24 hour (instead of a 12 hour) time format." #f))
 
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "International" "Enable EURO support"
+  "d" "Enables support for the European Union EURO currency" #f))
+
 
 ;; Register options
 
