@@ -65,3 +65,16 @@ EXTRA_DIST = \
   ${gncscm_DATA} \
   ${glade_DATA} \
   file-format.txt
+
+CLEANFILES =
+
+noinst_DATA = .scm-links
+
+.scm-links: 
+	rm -f g-wrapped gnucash import-export qif-import
+	ln -sf . qif-import # to fix (load "qif-import/foo.scm")
+	ln -sf . import-export
+	ln -sf . gnucash 
+	ln -sf . g-wrapped 
+	touch .scm-links
+CLEANFILES += qif-import import-export gnucash g-wrapped .scm-links
