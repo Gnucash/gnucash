@@ -39,6 +39,4 @@ void             gnc_help_window_show_help(gnc_help_window * hw,
                                            const gchar * loc,
                                            const gchar * label);
 
-void gnc_ui_destroy_help_windows(void);
-
 #endif

@@ -63,13 +63,16 @@
 #endif
 #endif
 
-#include "glade-gnc-dialogs.h"
-#include "glade-cb-gnc-dialogs.h"
-#include "window-help.h"
-#include "gnc-html.h"
-#include "gnc-html-history.h"
-#include "gnc-engine-util.h"
 #include "File.h"
+#include "glade-cb-gnc-dialogs.h"
+#include "glade-gnc-dialogs.h"
+#include "gnc-component-manager.h"
+#include "gnc-engine-util.h"
+#include "gnc-html-history.h"
+#include "gnc-html.h"
+#include "window-help.h"
+
+#define WINDOW_HELP_CM_CLASS "window-help"
 
 struct _gnc_help_window {
   GtkWidget   * toplevel;
@@ -88,8 +91,6 @@ struct _gnc_help_window {
   DB          * index_db;
   gnc_html    * html;
 };
-  
-static GList * open_help_windows = NULL;
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
@@ -297,7 +298,7 @@ gnc_help_window_load_topics(gnc_help_window * help, const gchar * file) {
 static void
 gnc_help_window_destroy_cb(GtkWidget * w, gpointer data) {
   gnc_help_window * help = data;
-  
+
   gnc_help_window_destroy(help);
 }
 
@@ -404,13 +405,21 @@ gnc_help_window_search_result_select_cb(GtkWidget * list, GtkWidget * child,
   gnc_help_window_show_help(help, helpfile, NULL);
 }
 
+static void
+close_handler (gpointer user_data)
+{
+  gnc_help_window *help = user_data;
+
+  gnc_help_window_destroy (help);
+}
+
 /********************************************************************
  * gnc_help_window_new 
  * allocates and opens up a help window
  ********************************************************************/
 
 gnc_help_window *
-gnc_help_window_new() {
+gnc_help_window_new (void) {
   
   gnc_help_window * help = g_new0(gnc_help_window, 1);
   GtkObject       * tlo;
@@ -460,7 +469,9 @@ gnc_help_window_new() {
   
   help->toplevel = create_Help_Window();
   tlo = GTK_OBJECT(help->toplevel);
-  
+
+  gnc_register_gui_component (WINDOW_HELP_CM_CLASS, NULL, close_handler, help);
+
   help->toolbar      = gtk_object_get_data(tlo, "help_toolbar");
   help->statusbar    = gtk_object_get_data(tlo, "help_statusbar");
   help->statusbar_hbox = gtk_object_get_data(tlo, "statusbar_hbox");
@@ -511,7 +522,6 @@ gnc_help_window_new() {
 
   gtk_widget_show_all(help->toplevel);
   
-  open_help_windows = g_list_append(open_help_windows, help);
   return help;
 }
 
@@ -523,13 +533,13 @@ gnc_help_window_new() {
 
 void
 gnc_help_window_destroy(gnc_help_window * help) {
-  
-  /* take the window off the open list */
-  open_help_windows = g_list_remove(open_help_windows, help);
+
+  gnc_unregister_gui_component_by_data (WINDOW_HELP_CM_CLASS, help);
 
   gtk_signal_disconnect_by_func(GTK_OBJECT(help->toplevel), 
                                 GTK_SIGNAL_FUNC(gnc_help_window_destroy_cb), 
                                 (gpointer)help);
+
   /* close the help index db */
   if(help->index_db) {
     help->index_db->close(help->index_db);
@@ -566,11 +576,4 @@ void
 helpWindow(GtkWidget * parent, const char * title, const char * htmlfile) {
   gnc_help_window * help = gnc_help_window_new();
   gnc_help_window_show_help(help, htmlfile, NULL);
-}
-
-void
-gnc_ui_destroy_help_windows() {
-  while(open_help_windows != NULL) {
-    gnc_help_window_destroy((gnc_help_window *)(open_help_windows->data));
-  }
 }
