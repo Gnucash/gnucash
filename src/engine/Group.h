@@ -29,12 +29,16 @@
 
 #include "Account.h"
 #include "GNCId.h"
+#include "gnc-book.h"
 #include "gnc-engine.h"
 
 
 /** PROTOTYPES ******************************************************/
-AccountGroup *xaccMallocAccountGroup (GNCSession *session);
+AccountGroup *xaccMallocAccountGroup (GNCBook *book);
 void          xaccFreeAccountGroup (AccountGroup *account_group);
+
+GNCBook * xaccGroupGetBook (AccountGroup *group);
+
 void          xaccAccountGroupBeginEdit (AccountGroup *grp);
 void 	      xaccAccountGroupCommitEdit (AccountGroup *grp);
 

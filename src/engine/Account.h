@@ -25,14 +25,14 @@
 #ifndef XACC_ACCOUNT_H
 #define XACC_ACCOUNT_H
 
+#include "gnc-book.h"
 #include "GNCId.h"
-#include "Transaction.h"
 #include "gnc-engine.h"
 #include "kvp_frame.h"
 
 
-/** PROTOTYPES ******************************************************/
 
+/** ENUMS ******************************************************/
 /*
  * The account types are used to determine how the transaction data
  * in the account is displayed.   These values can be safely changed
@@ -101,6 +101,7 @@ typedef enum
   CREDITLINE = 14,     /* line of credit */
 } GNCAccountType;
 
+/* ------------------ */
 const char * xaccAccountGetTypeStr (GNCAccountType type); /* GUI names */
 
 /* Conversion routines for the account types to/from strings.
@@ -115,9 +116,7 @@ GNCAccountType xaccAccountStringToEnum (const char* str);
 gboolean xaccAccountTypesCompatible (GNCAccountType parent_type,
                                      GNCAccountType child_type);
 
-/* Compare two accounts for equality - this is a deep compare. */
-gboolean xaccAccountEqual(Account *a, Account* b, gboolean check_guids);
-
+/** PROTOTYPES ******************************************************/
 /* 
  * The xaccAccountBeginEdit() and xaccAccountCommitEdit() subroutines
  * provide a two-phase-commit wrapper for account updates. 
@@ -136,6 +135,7 @@ void         xaccAccountDestroy (Account *account);
 kvp_frame * xaccAccountGetSlots (Account *account);
 void xaccAccountSetSlots_nc(Account *account, kvp_frame *frame);
 
+/* ------------------ */
 /*
  * The xaccAccountGetGUID() subroutine will return the
  *    globally unique id associated with that account.
@@ -153,6 +153,14 @@ GUID         xaccAccountReturnGUID (Account *account);
 Account    * xaccAccountLookup (const GUID *guid, GNCBook *book);
 Account    * xaccAccountLookupDirect (GUID guid, GNCBook *book);
 
+GNCBook * xaccAccountGetBook (Account *account);
+
+/* ------------------ */
+
+/* Compare two accounts for equality - this is a deep compare. */
+gboolean xaccAccountEqual(Account *a, Account* b, gboolean check_guids);
+
+/* ------------------ */
 /*
  * The xaccAccountInsertSplit() method will insert the indicated
  *    split into the indicated account.  If the split already 

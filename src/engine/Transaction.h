@@ -1,7 +1,7 @@
 /********************************************************************\
  * Transaction.h -- api for transactions & splits (journal entries) *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
+ * Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -40,15 +40,6 @@
 #define FREC 'f'              /* frozen into accounting period     */
 #define NREC 'n'              /* not reconciled or cleared         */
 #define VREC 'v'              /* split is void                     */
-
-/** STRUCTS *********************************************************/
-
-typedef struct account_s       Account;
-typedef struct account_group_s AccountGroup;
-typedef struct split_s         Split;
-typedef struct transaction_s   Transaction;
-typedef GList                  AccountList;
-typedef GList                  SplitList;
 
 
 /** PROTOTYPES ******************************************************/

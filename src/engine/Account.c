@@ -34,6 +34,7 @@
 #include "TransactionP.h"
 #include "date.h"
 #include "gnc-book.h"
+#include "gnc-book-p.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
@@ -1503,7 +1504,6 @@ DxaccAccountGetCurrency (Account *acc, GNCBook *book)
 {
   kvp_value *v;
   const char *s;
-  GNCBook *book;
   gnc_commodity_table *table;
 
   if (!acc) return NULL;
@@ -1534,7 +1534,6 @@ DxaccAccountGetSecurity (Account *acc, GNCBook *book)
 {
   kvp_value *v;
   const char *s;
-  GNCBook *book;
   gnc_commodity_table *table;
 
   if (!acc || !book) return NULL;

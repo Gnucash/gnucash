@@ -60,7 +60,7 @@ typedef enum
 
 
 /* Return the type of an identifier. */
-GNCIdType xaccGUIDType (const GUID * guid, GNCSession *session);
+GNCIdType xaccGUIDType (const GUID * guid, GNCBook *book);
 
 /* Returns a GUID which is guaranteed to never reference any entity. */
 const GUID * xaccGUIDNULL (void);

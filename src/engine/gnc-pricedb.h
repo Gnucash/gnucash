@@ -116,12 +116,12 @@ typedef struct gnc_price_lookup_s GNCPriceLookup;
 
 /* gnc_price_create - returns a newly allocated and initialized price
    with a reference count of 1. */
-GNCPrice *gnc_price_create(GNCSession *session);
+GNCPrice *gnc_price_create(GNCBook *book);
 
 /* gnc_price_clone - returns a newly allocated price that's a
    content-wise duplicate of the given price, p.  The returned clone
    will have a reference count of 1. */
-GNCPrice *gnc_price_clone(GNCPrice* p, GNCSession *session);
+GNCPrice *gnc_price_clone(GNCPrice* p, GNCBook *book);
 
 /*********************/
 /* memory management */
@@ -163,7 +163,7 @@ void gnc_price_set_version(GNCPrice *p, gint32 versn);
 
 /* As mentioned above all of the getters return data that's internal
    to the GNCPrice, not copies, so don't free these values. */
-GNCPrice *      gnc_price_lookup (const GUID *guid, GNCSession *session);
+GNCPrice *      gnc_price_lookup (const GUID *guid, GNCBook *book);
 const GUID *    gnc_price_get_guid (GNCPrice *p);
 gnc_commodity * gnc_price_get_commodity(GNCPrice *p);
 gnc_commodity * gnc_price_get_currency(GNCPrice *p);

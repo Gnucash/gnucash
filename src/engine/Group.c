@@ -34,10 +34,10 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
+#include "gnc-book-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-numeric.h"
-#include "gnc-session-p.h"
 
 static short module = MOD_ENGINE;
 
@@ -83,11 +83,11 @@ xaccMallocAccountGroupEntityTable (GNCEntityTable *entity_table)
 }
 
 AccountGroup *
-xaccMallocAccountGroup (GNCSession *session)
+xaccMallocAccountGroup (GNCBook *book)
 {
-  g_return_val_if_fail (session, NULL);
+  g_return_val_if_fail (book, NULL);
   return xaccMallocAccountGroupEntityTable
-    (gnc_session_get_entity_table (session));
+    (gnc_book_get_entity_table (book));
 }
 
 /********************************************************************\

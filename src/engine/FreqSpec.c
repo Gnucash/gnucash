@@ -84,12 +84,12 @@
 #include <langinfo.h>
 #endif
 
+#include "date.h"
 #include "FreqSpecP.h"
 #include "GNCIdP.h"
-#include "date.h"
+#include "gnc-book-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
-#include "gnc-session-p.h"
 #include "messages.h"
 
 /* I have done this to prevent compiler warnings...
@@ -172,14 +172,14 @@ get_abbrev_month_name(guint month)
  **/
 
 static void
-xaccFreqSpecInit( FreqSpec *fs, GNCSession *session )
+xaccFreqSpecInit( FreqSpec *fs, GNCBook *book )
 {
         g_return_if_fail( fs );
-        g_return_if_fail (session);
+        g_return_if_fail (book);
 
-        fs->entity_table = gnc_session_get_entity_table (session);
+        fs->entity_table = gnc_book_get_entity_table (book);
 
-        xaccGUIDNew( &fs->guid, session );
+        xaccGUIDNew( &fs->guid, book );
         xaccStoreEntity( fs->entity_table, fs, &fs->guid, GNC_ID_FREQSPEC );
 
         fs->type = INVALID;
@@ -189,14 +189,14 @@ xaccFreqSpecInit( FreqSpec *fs, GNCSession *session )
 }
 
 FreqSpec*
-xaccFreqSpecMalloc(GNCSession *session)
+xaccFreqSpecMalloc(GNCBook *book)
 {
         FreqSpec        *fs;
 
-        g_return_val_if_fail (session, NULL);
+        g_return_val_if_fail (book, NULL);
 
         fs = g_new0(FreqSpec, 1);
-        xaccFreqSpecInit( fs, session );
+        xaccFreqSpecInit( fs, book );
         /* FIXME:event */
         gnc_engine_generate_event( &fs->guid, GNC_EVENT_CREATE );
         return fs;
