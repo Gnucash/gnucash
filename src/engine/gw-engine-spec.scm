@@ -31,6 +31,7 @@
     "#include <gnc-session-scm.h>\n"
     "#include <gnc-engine-util.h>\n"
     "#include <gnc-event.h>\n"
+    "#include <gnc-pricedb.h>\n"
     "#include <gnc-lot.h>\n"
     "#include <gnc-date.h>\n"
     "#include <engine-helpers.h>\n"
