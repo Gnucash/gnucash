@@ -88,21 +88,39 @@ ftp://ftp.ultra.net/pub/eugene/RPMS/i386/
 Development versions:
 http://linas.org/linux/xacc/
 
-Important Note:
----------------
-Core dumps have been reported when using various
-versions of lesstif.  Some versions work, others don't.
-Lesstif 0.81: works
-Lesstif 0.82: broken
-Lesstif 0.86.0: works
-Lesstif 0.86.5: broken
-Lesstif 0.87.0: broken (missing symbols for XmeDrawShadows, etc.)
-
-These core dumps do not occur with RedHat Motif (or other commercial
-versions of Motif).
-
 Running:
 --------
+Only the Motif version of GnuCash is currently functional.  The Gnome version
+will give you a taste for Gnome, but most functions will not work.   See the 
+notes below for non-Linux support.
+
+To be able to use certain features of GnuCash, such as reports and network stock
+price downloads, you must have the following packages below installed.
+RPM's for most of these can be found at http://rufus.w3.org/linux/  
+
+perl    -- Almost any version of perl5 should work.  I run perl-5.004 
+eperl   -- Almost any version of eperl should work.  I run eperl-2.2.14
+
+In addition, some perl modules need to be installed:
+
+perl-LWP/libwww-perl-5.36
+perl-HTML/HTML-0.6
+perl-HTML/HTML-Parser-2.20
+        -- these perl modules are used to fetch stock & mutual fund quotes
+           off the net.  You can pick up RPMS at
+           ftp://ftp.gnucash.org/pub/gnucash/binaries/RPMS
+           http://rufus.w3.org/linux/RPM/PByName.html
+           http://linas.org/linux/xacc (last resort)
+           or sources at
+           http://www.cpan.org/CPAN.html
+
+The binary-only distribution of GnuCash comes with several executables: 
+one has Motif statically linked in, and another has Motif linked in dynamically.
+The motif dynamic-link version requires that either motif or lesstif be
+installed.  Motif is a commercial product available form several vendors for
+approx $50.  Lesstif is an open source clone available for free. Note that 
+not all version of lesstif work with Gnucash: thhe the note below.
+
 The binary-only distribution includes two binary files: 'gnucash.bin'
 and 'gnucash-static.bin'. The former requires a Motif shared library;
 the latter has Motif statically linked in.  If you have Motif,
@@ -117,6 +135,19 @@ opened with the "Open File" menu entry.  *.qif files are
 Quicken Import Format files that can be opened with the 
 "Import QIF" menu entry.
 
+Important Note:
+---------------
+Core dumps have been reported when using various
+versions of lesstif.  Some versions work, others don't.
+Lesstif 0.81: works
+Lesstif 0.82: broken
+Lesstif 0.86.0: works
+Lesstif 0.86.5: broken
+Lesstif 0.86.9  works ... but some menus come out 2 pixels high.
+Lesstif 0.87.0: broken (missing symbols for XmeDrawShadows, etc.)
+
+These core dumps do not occur with RedHat Motif (or other commercial
+versions of Motif).
 
 Building & Installing:
 ----------------------
@@ -151,6 +182,7 @@ Motif or Lesstif  --
            Lesstif 0.86.0  is reported to work     
            Lesstif 0.86.5  crashes.   
            Lesstif 0.86.9  works ... but some menus come out 2 pixels high.
+           Lesstif 0.87.0: broken (missing symbols for XmeDrawShadows, etc.)
            Commercial Motif seems to work, but beware old libXm's 
            combined with new glibc's, 
 
@@ -275,14 +307,17 @@ path-defaults.h is now gone.  The startup file setting is in
 gnucash.h, generated from gnucash.h.in.
 
 
+Supported OS's:
+---------------
+GnuCash version 1.1.x is known to work in the following configs:
 
-
-Status:
--------
-As of version 1.0.18:
-
-GnuCash is known to work in the following configs:
 Linux 2.x.x           -- Intel  w/ RedHat Motif
+FreeBSD               -- Intel
+OpenBSD               -- Intel
+
+Xacc-1.0.18, the predecessor to GnuCash, is known to work on the following
+platforms:
+
 Slackware 3.4         -- Intel  w/ Mootif (OSF Motif 2.0.1)
 Linux 2.x.x           -- Intel  w/ Lesstif v0.81
 SGI IRIX              -- MIPS 
@@ -290,14 +325,15 @@ IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
 Unixware 7            -- Intel
 SCO OpenServer 5.0.4  -- Intel
 
-See http://linas.org/linux/xacc for precompiled binaries for these platforms
+See ftp://ftp.gnucash.org/pub/xacc (high-bandwdith)
+or  http://linas.org/linux/xacc (slowwww ) 
+for precompiled binaries for these platforms
 
 GnuCash seems to be having problems with:
 Solaris -- Sparc  -- won't compile due to va-args in XmHTML
-Linux 2.x.x -- Intel w/ Lesstif v0.82
 
-Download Sites:
----------------
+Additional Download Sites:
+--------------------------
 All of the precompiled binaries & the latest source versions can be found
 at http://linas.org/linux/xacc  However, it is recommended that the master
 sites for each particular binary be used instead, for two reasons:
@@ -320,10 +356,6 @@ SGI Irix
       -- in SGI install format
       -- warning, this is a very down-level version
       http://linas.org/linux/xacc/xacc-1.0b7-sgi-irix.inst.tar
-
-Linux Debian
-      -- use debian tools to install
-      http://linas.org/linux/xacc/xacc_1.0.15-1_i386.deb
 
 That's all folks!
 
