@@ -1,3 +1,10 @@
+2003-03-13  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/option-util.c (gnc_option_get_range_info): Reapply
+	Derek's fix for a crash when opening the Pref's dialog when using
+	guile-1.6.1.  Lost when converting to the scheme scm_xxx
+	interface.
+	
 2003-03-13  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/Makefile.am: make sure to add INTLLIBS in case

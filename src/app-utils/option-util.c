@@ -1123,8 +1123,13 @@ gboolean gnc_option_get_range_info(GNCOption *option,
   if (!SCM_NUMBERP(value))
     return FALSE;
 
-  if (num_decimals != NULL)
-    *num_decimals = scm_num2int(value, SCM_ARG1, __FUNCTION__);
+  /* Guile-1.6 returns this as a double, so let's use that in all cases.
+   * This is still safe for earlier guiles, too -- tested with 1.3.4.
+   */
+  if (num_decimals != NULL) {
+    double decimals = scm_num2dbl(value, __FUNCTION__);
+    *num_decimals = (int)decimals;
+  }
 
   if (!SCM_LISTP(list) || SCM_NULLP(list))
     return FALSE;
