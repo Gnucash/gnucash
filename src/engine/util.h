@@ -68,6 +68,9 @@ extern int loglevel[MODULE_MAX];
 #define LDEBUG  (4 <= loglevel[module])
 #define LDETAIL (5 <= loglevel[module])
 
+#ifdef KDE
+#undef DEBUG
+#endif
 
 /* utility macros  */
 #define PERR(x...)     LG(LERR,    "Error: ");   LG(LERR,    ##x);
