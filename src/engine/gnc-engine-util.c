@@ -60,6 +60,7 @@ static gncLogLevel loglevel[MOD_LAST + 1] =
   GNC_LOG_WARNING,      /* QUERY */
   GNC_LOG_WARNING,      /* PRICE */
   GNC_LOG_WARNING,      /* EVENT */
+  GNC_LOG_WARNING,      /* TXN */
 };
 
 

@@ -294,7 +294,7 @@ operation is probably OK.
    They're not needed until there are a lot of transactions in the 
    system.  Need to recompute checkpoints on some periodic basis.
 
--- get notify timestamp from trail. (to avoid clock skew)
+-- put marks on transactions during FillOut
 
 -- NOTIFY is not updating main window balances ...
 

@@ -1,5 +1,6 @@
 /********************************************************************\
  * events.c -- implements event handling for postgres backend       *
+ * Copyright (c) 2001 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,18 +21,6 @@
 \********************************************************************/
 
 
-/* 
- * FILE:
- * events.c
- *
- * FUNCTION:
- * Implements the event-handling callbacks for the Postgres backend.
- *
- * HISTORY:
- * Copyright (c) 2000, 2001 Linas Vepstas
- * 
- */
-
 #define _GNU_SOURCE
 
 #include "config.h"
@@ -49,8 +38,8 @@
 #include "GNCIdP.h"
 
 #include "PostgresBackend.h"
-
 #include "putil.h"
+#include "txn.h"
 
 static short module = MOD_EVENT; 
 
@@ -139,69 +128,53 @@ pgendEventsPending (Backend *bend)
    return FALSE;
 }
 
+/* ============================================================= */
+
+typedef struct _event {
+   Timespec stamp;
+   GNCEngineEventType type;
+   GUID guid;
+} Event; 
+
+
 static gpointer
 get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GNCEngineEventType type;
-   char * guid_str;
-   GUID guid;
-   GNCIdType obj_type;
-   Timespec ts;
-   Timespec *latest = (Timespec *) data;
+   GList *list = (GList *) data;
+   char *guid_str;
+   Event *ev;
    char change = (DB_GET_VAL("change",j))[0];
 
    guid_str = DB_GET_VAL("guid",j);
-   string_to_guid (guid_str, &guid);
+   PINFO ("event %c for %s", change, guid_str);
 
-   /* lets see if the local cache has this item in it */
-   obj_type = xaccGUIDType (&guid);
-   switch (obj_type)
-   {
-      case GNC_ID_NONE:
-      case GNC_ID_NULL:
-         PINFO ("unknown object for guid=%s", guid_str);
-         break;
-      case GNC_ID_ACCOUNT:
-         break;
-      case GNC_ID_TRANS:
-//         pgendCopyTransactionToEngine (be, &guid);
-         break;
-      case GNC_ID_SPLIT:
-         break;
-      case GNC_ID_PRICE:
-         break;
-      default:
-         PERR ("unknown guid type %d for guid=%s", obj_type, guid_str);
-   }
+   ev = g_new (Event, 1);
 
-   /* get event timestamp */
-   ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_changed",j));
-   if (0 < timespec_cmp(&ts, latest)) *latest = ts;
-
-   /* send out the event to listeners */
+   /* convert from SQL type to engine type */
    switch (change)
    {
-      case 'a': type = GNC_EVENT_CREATE; break;
-      case 'm': type = GNC_EVENT_MODIFY; break;
-      case 'd': type = GNC_EVENT_DESTROY; break;
+      case 'a': ev->type = GNC_EVENT_CREATE; break;
+      case 'm': ev->type = GNC_EVENT_MODIFY; break;
+      case 'd': ev->type = GNC_EVENT_DESTROY; break;
       default:
-         PERR ("unknown change type %c", change);
+         PERR ("unknown change type %c for guid=%s", change, guid_str);
+         g_free (ev);
          return data;
    }
+   string_to_guid (guid_str, &(ev->guid));
 
-   PINFO ("event %c for %s", change, guid_str);
-   gnc_engine_generate_event (&guid, type);
+   /* get event timestamp */
+   ev->stamp = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_changed",j));
 
-   return data;
+   /* add it to our list */
+   list = g_list_prepend (list, ev);
+
+   return (gpointer) list;
 }
 
-#define GET_EVENTS(guid_name,table,timestamp)			\
+#define GET_EVENTS(guid_name,table, timestamp)			\
 {								\
-   Timespec latest;						\
    char *p;							\
-   latest.tv_sec = -2;						\
-   latest.tv_nsec = 0;						\
-								\
    p = be->buff; *p = 0;					\
    p = stpcpy (p, "SELECT change, date_changed, " #guid_name 	\
                   " AS guid  FROM " #table			\
@@ -212,24 +185,20 @@ get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    p = stpcpy (p, "';");					\
 								\
    SEND_QUERY (be, be->buff, FALSE);				\
-   pgendGetResults (be, get_event_cb, &latest);			\
-								\
-   if (0 < timespec_cmp(&latest, &(timestamp))) 		\
-   {								\
-      (timestamp) = latest;					\
-   }								\
+   pending = (GList *) pgendGetResults (be, get_event_cb, pending);	\
 }
 
 gboolean
 pgendProcessEvents (Backend *bend)
 {
    PGBackend *be = (PGBackend *) bend;
+   GList *node, *pending = NULL;
 
    if (!be) return FALSE;
 
    ENTER (" ");
 
-   /* handle each event type */
+   /* get all recent events from teh SQL db. */
    if (be->do_account)
    {
       GET_EVENTS (accountGuid, gncAccountTrail, be->last_account);
@@ -245,6 +214,43 @@ pgendProcessEvents (Backend *bend)
       /* gnc_cm_event_handler() doesn't really want to see any split guids */
       // GET_EVENTS (entryGuid, gncEntryTrail, be->last_transaction);
    }
+
+   /* Loop over each item, updating the engine, and dispatching events */
+   for (node = pending; node; node = node->next)
+   {
+      Event *ev = (Event *) node->data;
+      GNCIdType obj_type;
+
+      /* lets see if the local cache has this item in it */
+      obj_type = xaccGUIDType (&(ev->guid));
+      switch (obj_type)
+      {
+         case GNC_ID_NONE:
+         case GNC_ID_NULL:
+            PINFO ("object not present in local cache");
+            break;
+         case GNC_ID_ACCOUNT:
+            if (0 < timespec_cmp(&(ev->stamp), &(be->last_account))) be->last_account = ev->stamp;
+            break;
+         case GNC_ID_TRANS:
+            if (0 < timespec_cmp(&(ev->stamp), &(be->last_transaction))) be->last_transaction = ev->stamp;
+            // pgendCopyTransactionToEngine (be, &(ev->guid));
+            break;
+         case GNC_ID_SPLIT:
+            if (0 < timespec_cmp(&(ev->stamp), &(be->last_transaction))) be->last_transaction = ev->stamp;
+            break;
+         case GNC_ID_PRICE:
+            if (0 < timespec_cmp(&(ev->stamp), &(be->last_price))) be->last_price = ev->stamp;
+            break;
+         default:
+            PERR ("unknown guid type %d", obj_type);
+      }
+   
+      gnc_engine_generate_event (&(ev->guid), ev->type);
+   
+      g_free (ev);
+   }
+   g_list_free (pending);
 
    be->do_account = 0;
    be->do_checkpoint = 0;
@@ -289,10 +295,31 @@ pgendSessionGetPid (PGBackend *be)
 
 /* ============================================================= */
 
+static gpointer
+get_latest_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   Timespec latest;
+
+   /* get event timestamp */
+   latest = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_changed",j));
+
+   be->last_account = latest;
+   be->last_price = latest;
+   be->last_transaction = latest;
+
+   return data;
+}
+
 void 
 pgendSessionSetupNotifies (PGBackend *be)
 {
    char *p;
+
+   /* get latest times from the database; this to avoid clock 
+    * skew between database and this local process */
+   p = "SELECT date_changed FROM gncAuditTrail* ORDER BY date_changed DESC LIMIT 1;";
+   SEND_QUERY (be, p, );
+   pgendGetResults (be, get_latest_cb, NULL);
 
    p = "LISTEN gncSession;\nLISTEN gncAccount;\n"
        "LISTEN gncPrice;\nLISTEN gncTransaction;\n"
