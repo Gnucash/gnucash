@@ -148,7 +148,7 @@ network stock price downloads, you must have the following packages
 below installed (in addition to those listed above).
 RPM's for most of these can be found at http://rufus.w3.org/linux/
 
-slib    -- scheme libraries for guile.  Need version slib2c0 or later.
+slib    -- scheme libraries for guile.  Need version slib2c6 or later.
 perl    -- Almost any version of perl5 should work.  I run perl-5.004 
 eperl   -- Almost any version of eperl should work.  I run eperl-2.2.14
 
