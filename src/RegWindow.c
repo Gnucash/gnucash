@@ -379,12 +379,9 @@ regWindowLedger( Widget parent, Account *lead_acc, Account **acclist, int ledger
    * and then, store them. */
   regData->numAcc = accListCount (acclist);
   regData->blackacc = accListCopy (acclist);
-
-  ledgerListAddList (regData->blackacc, regData);
-
-  setBusyCursor( parent );
-
   regData->type = ledger_type;
+
+  fullList = ledgerListAdd (fullList, regData);
 
   /******************************************************************\
    * Start creating the Motif Widgets ...                           *
@@ -408,6 +405,8 @@ regWindowLedger( Widget parent, Account *lead_acc, Account **acclist, int ledger
   } else {
     windowname = "General Ledger";
   }
+
+  setBusyCursor( parent );
 
   regData->dialog =
     XtVaCreatePopupShell( "dialog", 
@@ -495,6 +494,10 @@ regWindowLedger( Widget parent, Account *lead_acc, Account **acclist, int ledger
   
   regData->reg     = reg;
     
+  /* complete GUI initialization */
+  /* hack alert ------- wrong list of accounts */
+  xaccLoadXferCell (regData->ledger->xfrmCell, regData->blackacc[0]->parent);
+
   XtManageChild (reg);
   XtManageChild (frame);
   XtManageChild (pane);
@@ -634,19 +637,31 @@ regWindowLedger( Widget parent, Account *lead_acc, Account **acclist, int ledger
 }
 
 /********************************************************************\
+ * refresh *all* register windows which contain this account        * 
 \********************************************************************/
 
 void regRefresh (Account *acc)
 {
    RegWindow *regData;
+   int n;
 
-   FIND_IN_LIST (RegWindow, regList, acc, blackacc[0], regData);
+   xaccRecomputeBalance (acc);
 
-   /* complete GUI initialization */
-   xaccLoadXferCell (regData->ledger->xfrmCell, regData->blackacc[0]->parent);
+   /* find all registers whch contain this account */
+   n = 0;
+   regData = fullList[n];
+   while (regData) {
+      int got_one;
 
-   xaccRecomputeBalance (regData->blackacc[0]);
-   xaccLoadRegister (regData->ledger, regData->blackacc[0]->splits);
+      got_one = ledgerIsMember (regData, acc);
+      if (got_one) {
+        /* hack alert -- should be recomputing the list of splits */
+        /* and problbly the balance too */
+        xaccLoadRegister (regData->ledger, acc->splits);
+      }
+      n++;
+      regData = fullList[n];
+   }
 }
 
 /********************************************************************\
@@ -659,12 +674,27 @@ void
 xaccDestroyRegWindow (Account *acc)
 {
    RegWindow *regData;
+   int n;
 
-   /* hack alert -- this is not correct yeah */
-   REMOVE_FROM_LIST (RegWindow, regList, acc, blackacc[0], regData);
+   /* find the single-account window for this account, if any */
+   FIND_IN_LIST (RegWindow, regList, acc, leader, regData);
+   if (regData) XtDestroyWidget(regData->dialog);
 
-   XtDestroyWidget(regData->dialog);
-   free (regData);
+   /* find the multiple-account window for this account, if any */
+   FIND_IN_LIST (RegWindow, ledgerList, acc, leader, regData);
+   if (regData) XtDestroyWidget(regData->dialog);
+
+   /* cruise throught the miscellanous account windows */
+   n = 0;
+   regData = fullList[n];
+   while (regData) {
+      int got_one;
+
+      got_one = ledgerIsMember (regData, acc);
+      if (got_one) XtDestroyWidget(regData->dialog);
+      n++;
+      regData = fullList[n];
+   }
 }
 
 /********************************************************************\
@@ -681,13 +711,18 @@ static void
 closeRegWindow( Widget mw, XtPointer cd, XtPointer cb )
 {
   RegWindow *regData = (RegWindow *)cd;
+  Account *acc = regData->leader;
   
   /* Save any unsaved changes */
   xaccSaveRegEntry (regData->ledger);
   
-  ledgerListRemoveList (regData->blackacc, regData);
+  /* whether this is a single or multi-account window, remove it */
+  REMOVE_FROM_LIST (RegWindow, regList, acc, leader);
+  REMOVE_FROM_LIST (RegWindow, ledgerList, acc, leader);
+
+  ledgerListRemove (fullList, regData);
+
   free(regData);
-  
   DEBUG("closed RegWindow\n");
 }
 
@@ -702,7 +737,7 @@ closeRegWindow( Widget mw, XtPointer cd, XtPointer cb )
 \********************************************************************/
 static void 
 startAdjBCB( Widget mw, XtPointer cd, XtPointer cb )
-  {
+{
   RegWindow *regData = (RegWindow *)cd;
   Account *acc;
   
@@ -710,11 +745,14 @@ startAdjBCB( Widget mw, XtPointer cd, XtPointer cb )
    * then this callback should never have been called,
    * since the menu entry is supposed to be greyed out.
    */
-  if (1 != regData->numAcc) return;
-
-  acc = regData->blackacc[0];
-  adjBWindow( toplevel, acc );
+  if (regData->leader) {
+    acc = regData->leader;
+  } else {
+    if (1 != regData->numAcc) return;
+    acc = regData->blackacc[0];
   }
+  adjBWindow( toplevel, acc );
+}
 
 /********************************************************************\
  * startRecnCB -- open up the reconcile window... called from       *
@@ -727,7 +765,7 @@ startAdjBCB( Widget mw, XtPointer cd, XtPointer cb )
 \********************************************************************/
 static void 
 startRecnCB( Widget mw, XtPointer cd, XtPointer cb )
-  {
+{
   RegWindow *regData = (RegWindow *)cd;
   Account *acc;
   
@@ -735,11 +773,14 @@ startRecnCB( Widget mw, XtPointer cd, XtPointer cb )
    * then this callback should never have been called,
    * since the menu entry is supposed to be greyed out.
    */
-  if (1 != regData->numAcc) return;
-
-  acc = regData->blackacc[0];
-  recnWindow( toplevel, acc );
+  if (regData->leader) {
+    acc = regData->leader;
+  } else {
+    if (1 != regData->numAcc) return;
+    acc = regData->blackacc[0];
   }
+  recnWindow( toplevel, acc );
+}
 
 /********************************************************************\
  * recordCB                                                         *
