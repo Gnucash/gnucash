@@ -129,6 +129,11 @@
      'attribute (list "align" "left"))
     
     (gnc:html-document-set-style!
+     ssdoc "centered-label-cell"
+     'tag '("td" "b")
+     'attribute (list "align" "center"))
+    
+    (gnc:html-document-set-style!
      ssdoc "normal-row"
      'tag "tr")
     
