@@ -120,9 +120,15 @@ the account instead of opening a register.") #f))
 
 (define (gnc:main-window-book-close-handler book-url)
   (let* ((conf-file-name (gnc:html-encode-string book-url))
-         (file-dir (build-path (getenv "HOME") ".gnucash" "books"))
+	 (dotgnucash-dir (build-path (getenv "HOME") ".gnucash"))
+         (file-dir (build-path dotgnucash-dir "books"))
          (book-path #f))
-    ;; make sure the books directory is there 
+    
+    ;; make sure ~/.gnucash is there
+    (if (not (access? dotgnucash-dir X_OK)) (mkdir dotgnucash-dir #o700))
+
+    ;; make sure the books directory is there
+    
     (if (not (access? file-dir X_OK)) (mkdir file-dir #o700))
     
     (if conf-file-name 
