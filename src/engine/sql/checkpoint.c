@@ -303,8 +303,8 @@ pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
 /* ============================================================= */
 /* get checkpoint value for one accounts */
 
-void
-pgendAccountGetBalance (PGBackend *be, Account *acc, gint64 as_of_date)
+Timespec
+pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
 {
    Checkpoint chk;
    const gnc_commodity *com;
@@ -313,12 +313,11 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, gint64 as_of_date)
    gnc_numeric cleared_baln;
    gnc_numeric reconciled_baln;
 
-   if (!be || !acc) return;
+   if (!be || !acc) return (Timespec) {0,0};
    ENTER("be=%p", be);
 
    /* setup what we will match for */
-   chk.date_end.tv_sec = as_of_date;
-   chk.date_end.tv_nsec = 0;
+   chk.date_end = as_of_date;
 
    com = xaccAccountGetCommodity(acc);
    chk.commodity = gnc_commodity_get_unique_name(com);
@@ -340,6 +339,8 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, gint64 as_of_date)
                                      cleared_baln, reconciled_baln);
    LEAVE("be=%p baln=%lld/%lld clr=%lld/%lld rcn=%lld/%lld", be, 
      chk.balance, deno, chk.cleared_balance, deno, chk.reconciled_balance, deno);
+
+   return chk.date_start;
 }
 
 /* ============================================================= */
@@ -347,7 +348,7 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, gint64 as_of_date)
 
 void
 pgendGroupGetAllBalances (PGBackend *be, AccountGroup *grp, 
-                             gint64 as_of_date)
+                             Timespec as_of_date)
 {
    GList *acclist, *node;
 

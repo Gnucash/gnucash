@@ -78,7 +78,13 @@ typedef struct _checkpoint {
 
 
 void pgendGroupRecomputeAllCheckpoints (PGBackend *, AccountGroup *);
-void pgendGroupGetAllBalances (PGBackend *, AccountGroup *, gint64 as_of_date);
-void pgendAccountGetBalance (PGBackend *, Account *, gint64 as_of_date);
+void pgendGroupGetAllBalances (PGBackend *, AccountGroup *, Timespec as_of_date);
+
+/* The pgendAccountGetBalance() routine goes to the sql database and finds the
+ *    checkpoint with the latest date before the 'as_of_date' argument. 
+ *    It sets the starting balance for this account based on that checkpoint.
+ *    It returns the date of the starting balance.
+ */
+Timespec pgendAccountGetBalance (PGBackend *, Account *, Timespec as_of_date);
 
 #endif /* __CHECKPOINT_H__ */

@@ -792,7 +792,10 @@ pgendStoreAllTransactions (PGBackend *be, AccountGroup *grp)
  *    If this routine finds a pre-existing transaction in the engine,
  *    and the version of last modification of this transaction is 
  *    equal to or *newer* then what the DB holds, then this routine
- *    returns TRUE, and does *not* perform any update.
+ *    returns 0 if equal, and +1 if newr, and does *not* perform any 
+ *    update.  (Note that 0 is returned for various error conditions.
+ *    Thus, testing for 0 is a bad idea.  This is a hack, and should
+ *    probably be fixed.
  */
 
 static int
@@ -1157,27 +1160,60 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
 /* ============================================================= */
 /* The pgendRunQuery() routine performs a search on the SQL database for 
  * all of the splits that correspond to gnc-style query, and then 
- * integrates them into the engine cache.  It does this in several steps:
+ * integrates them into the engine cache.  It then performs a 'closure'
+ * in order to maintain accurate balances.  Warning: this routine
+ * is a bit of a pig, and should be replaced with a better algorithm.
+ * See below.
+ * 
+ * The problem that this routine is trying to solve is the need to
+ * to run a query *and* maintain consistent balance checkpoints
+ * within the engine data. As a by-product, it can pull in a vast 
+ * amount of sql data into the engine.  The steps of teh algorithm
+ * are:
  *
- * 1) convert the engine style query to SQL.
+ * 1) convert the engine style query to an SQL query string.
  * 2) run the SQL query to get the splits that satisfy the query
- * 3) pull the transaction ids out of the split, and
- * 4) 'synchronize' the transactions.
+ * 3) pull the transaction ids out of the matching splits,
+ * 4) fetch the corresponding transactions, put them into the engine.
+ * 5) get the balance checkpoint with the latest date earlier
+ *    than the earliest transaction,
+ * 6) get all splits later than the checkpoint start,
+ * 7) go to step 3) until a consistent set of transactions
+ *    has been pulled into the engine.
  *
- * That is, we only ever pull complete transactions out of the 
- * engine, and never dangling splits. This helps make sure that
- * the splits always balance in a transaction; it also allows
- * the ledger to operate in 'journal' mode.
+ * Note regarding step 4): 
+ * We only ever pull complete transactions out of the engine, 
+ * and never dangling splits. This helps make sure that the 
+ * splits always balance in a transaction; it also allows the
+ * ledger to operate in 'journal' mode.
  *
- * The pgendRunQueryHelper() routine does most of the dirty work.
- *    It takes as an argument an sql command that must be of the
- *    form "SELECT * FROM gncEntry [...]"
+ * Note regarding step 6):
+ * During the fill-out up to the checkpoint, new transactions may
+ * pulled in.  These splits may link accounts we haven't seen before,
+ * which is why we need to go back to step 3.
+ *
+ * The process may pull in a huge amount of data.
+ *
+ * Oops: mega-bug: if the checkpoints on all accounts don't share 
+ * a common set of dates, then the above process will 'walk' until
+ * the start of time, essentially pulling *all* data, and not that 
+ * efficiently, either.  This is a killer bug with this implementation.
+ * We can work around it by fixing checkpoints in time ...
+ *
+ * There are certainly alternate possible implementations.  In one
+ * alternate, 'better' implementation, we don't fill out to to the 
+ * checkpoint for all accounts, but only for the one being displayed.
+ * However, doing so would require considerable jiggering in the 
+ * engine proper, where we'd have to significantly modify 
+ * RecomputeBalance() to do the 'right thing' when it has access to 
+ * only some of the splits.   Yow.  Wait til after gnucash-1.6 for 
+ * this tear-up.
  */
 
 static gpointer
 query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GList *node, *xact_list = (GList *) data;
+   GList *node, *xaction_list = (GList *) data;
    GUID *trans_guid;
 
    /* find the transaction this goes into */
@@ -1186,35 +1222,124 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    string_to_guid (DB_GET_VAL("transGUID",j), trans_guid);
 
    /* don't put transaction into the list more than once ... */
-   for (node=xact_list; node; node=node->next)
+   for (node=xaction_list; node; node=node->next)
    {
       if (guid_equal ((GUID *)node->data, trans_guid)) 
       {
-         return xact_list;
+         return xaction_list;
       }
    }
 
-   xact_list = g_list_prepend (xact_list, trans_guid);
-   return xact_list;
+   xaction_list = g_list_prepend (xaction_list, trans_guid);
+   return xaction_list;
 }
 
+typedef struct acct_earliest {
+   Account *acct;
+   Timespec ts;
+} AcctEarliest;
+
+static int ncalls = 0;
+
 static void 
-pgendRunQueryHelper (PGBackend *be, const char *qstring)
+pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
 {
-   GList *node, *xact_list = NULL;
+   GList *node, *anode, *xaction_list= NULL, *acct_list = NULL;
 
-   ENTER ("string=%s\n", qstring ? qstring : "(null)");
+   ENTER (" ");
+   if (!be) return;
+   ncalls ++;
 
-   SEND_QUERY (be, qstring, );
-   xact_list = pgendGetResults (be, query_cb, xact_list);
+   gnc_engine_suspend_events();
+   pgendDisable(be);
+
+   SEND_QUERY (be, query_string, );
+   xaction_list = pgendGetResults (be, query_cb, xaction_list);
+   if (NULL == xaction_list) return;
 
    /* restore the transactions */
-   for (node=xact_list; node; node=node->next)
+   for (node=xaction_list; node; node=node->next)
    {
-      pgendCopyTransactionToEngine (be, (GUID *)node->data);
-      xaccGUIDFree (node->data);
+      int engine_data_is_newer;
+      GUID *trans_guid = (GUID *)node->data;
+
+      engine_data_is_newer = pgendCopyTransactionToEngine (be, trans_guid);
+
+      /* if we restored this transaction from the db, scan over the accounts 
+       * it affects and see how far back the data goes.
+       */
+      if (0 > engine_data_is_newer) 
+      {
+         GList *split_list, *snode;
+         Timespec ts;
+         Transaction *trans;
+         int found = 0;
+
+         trans = xaccTransLookup (trans_guid);
+         ts = xaccTransRetDatePostedTS (trans);
+         split_list = xaccTransGetSplitList (trans);
+         for (snode=split_list; snode; snode=snode->next)
+         {
+            Split *s = (Split *) snode->data;
+            Account *acc = xaccSplitGetAccount (s);
+
+            /* lets see if we have a record of this account already */
+            for (anode = acct_list; anode; anode = anode->next)
+            {
+               AcctEarliest * ae = (AcctEarliest *) anode->data;
+               if (ae->acct == acc) 
+               {
+                  if (0 > timespec_cmp(&ts, &(ae->ts)))
+                  {
+                     ae->ts = ts;
+                  }
+                  found = 1;
+                  break;
+               }
+            }
+
+            /* if not found, make note of this account, and the date */
+            if (0 == found)
+            {
+               AcctEarliest * ae = g_new (AcctEarliest, 1);
+               ae->acct = acc;
+               ae->ts = ts;
+               acct_list = g_list_prepend (acct_list, ae);
+            }
+         }
+      }
+      xaccGUIDFree (trans_guid);
    }
-   g_list_free(xact_list);
+   g_list_free(xaction_list);
+
+   if (NULL == acct_list) return;
+
+   /* OK, at this point, we have a list of accounts, including the 
+    * date of the earliest split in that account.  Now, we need to 
+    * do two queries: first, get the latest checkpoint that is earlier
+    * than the earliest split. Next, we get *all* of the splits from
+    * that checkpoint onwards.
+    */
+   for (anode = acct_list; anode; anode->next)
+   {
+      char *p;
+      Timespec start_date;
+      AcctEarliest * ae = (AcctEarliest *) anode->data;
+      start_date = pgendAccountGetBalance (be, ae->acct, ae->ts);
+   
+      p = be->buff; *p = 0;
+      p = stpcpy (p, "SELECT DISTINCT gncEntry.transGuid from gncEntry, gncTransaction WHERE "
+                     "   gncEntry.transGuid = gncTransaction.transGuid AND accountGuid='");
+      p = guid_to_string_buff(xaccAccountGetGUID(ae->acct), p);
+      p = stpcpy (p, "' AND gncTransaction.date_posted > '");
+      p = gnc_timespec_to_iso8601_buff (ae->ts, p);
+      p = stpcpy (p, "';");
+     
+      pgendFillOutToCheckpoint (be, be->buff);
+
+      g_free (ae);
+   }
+   g_list_free(acct_list);
 
    LEAVE (" ");
 }
@@ -1225,6 +1350,7 @@ pgendRunQuery (Backend *bend, Query *q)
    PGBackend *be = (PGBackend *)bend;
    const char * sql_query_string;
    sqlQuery *sq;
+   GList *node, *anode, *xaction_list= NULL, *acct_list = NULL;
 
    ENTER (" ");
    if (!be || !q) return;
@@ -1237,7 +1363,9 @@ pgendRunQuery (Backend *bend, Query *q)
    sq = sqlQuery_new();
    sql_query_string = sqlQuery_build (sq, q);
 
-   pgendRunQueryHelper (be, sql_query_string);
+   ncalls = 0;
+   pgendFillOutToCheckpoint (be, sql_query_string);
+   PINFO ("number of calls to fill out=%d", ncalls);
 
    sql_Query_destroy(sq);
 
@@ -1247,44 +1375,6 @@ pgendRunQuery (Backend *bend, Query *q)
    LEAVE (" ");
 }
 
-/* ============================================================= */
-/* The RunQueryToCheckpoint() routine performs the query as above.
- * However, it first fleshes out the query to the nearest checkpoints,
- * so that when the user opens a register window, the starting balance
- * has been correctly set for the display.
- *
- * This is very much a hack at this point, since we adjust only one 
- * very special query.  BTW, its buggy at the moment anyway.
- */
-
-static void 
-pgendRunQueryToCheckpoint (Backend *bend, Query *q)
-{
-   PGBackend *be = (PGBackend *)bend;
-
-   if (!be || !q) return;
-   
-   PERR ("incompletely implemented");
-   pgendRunQuery (bend, q);
-
- xaccQueryPrint (q);
-
-   if ((1 == xaccQueryNumTerms(q)) && xaccQueryHasTermType(q, PD_ACCOUNT)) {
-      GList *o, *a, *p;
-      QueryTerm *qt;
-      Account *acct;
-      Timespec ts = gnc_iso8601_to_timespec_local (CK_AFTER_EARLIEST_DATE);
-
-      o = xaccQueryGetTerms(q); 
-      a = o->data;
-      qt = a->data;
-      for (p=qt->data.acct.accounts; p; p=p->next) {
-         pgendAccountGetBalance (be, p->data, ts.tv_sec);
-      }
-   }
-
-// xxx
-}
 
 /* ============================================================= */
 /* The pgendGetAllTransactions() routine sucks *all* of the 
@@ -1299,11 +1389,21 @@ pgendRunQueryToCheckpoint (Backend *bend, Query *q)
 static void
 pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
 {
+   GList *node, *xaction_list = NULL;
 
    gnc_engine_suspend_events();
    pgendDisable(be);
 
-   pgendRunQueryHelper (be, "SELECT * FROM gncEntry;");
+   SEND_QUERY (be, "SELECT transGuid FROM gncTransaction;", );
+   xaction_list = pgendGetResults (be, query_cb, xaction_list);
+
+   /* restore the transactions */
+   for (node=xaction_list; node; node=node->next)
+   {
+      pgendCopyTransactionToEngine (be, (GUID *)node->data);
+      xaccGUIDFree (node->data);
+   }
+   g_list_free(xaction_list);
 
    pgendEnable(be);
    gnc_engine_resume_events();
@@ -1563,7 +1663,7 @@ pgendPriceLookup (Backend *bend, GNCPriceLookup *look)
          break;
       case LOOKUP_AT_TIME:
          p = stpcpy (p, "AND time='");
-         gnc_timespec_to_iso8601_buff (look->date, p);
+         p = gnc_timespec_to_iso8601_buff (look->date, p);
          p = stpcpy (p, "';");
          break;
       case LOOKUP_NEAREST_IN_TIME:
@@ -1572,12 +1672,12 @@ pgendPriceLookup (Backend *bend, GNCPriceLookup *look)
          break;
       case LOOKUP_LATEST_BEFORE:
          p = stpcpy (p, "AND time <= '");
-         gnc_timespec_to_iso8601_buff (look->date, p);
+         p = gnc_timespec_to_iso8601_buff (look->date, p);
          p = stpcpy (p, "' ORDER BY time DESC LIMIT 1;");
          break;
       case LOOKUP_EARLIEST_AFTER:
          p = stpcpy (p, "AND time >= '");
-         gnc_timespec_to_iso8601_buff (look->date, p);
+         p = gnc_timespec_to_iso8601_buff (look->date, p);
          p = stpcpy (p, "' ORDER BY time ASC LIMIT 1;");
          break;
       default:
@@ -1910,7 +2010,7 @@ pgendSync (Backend *bend, AccountGroup *grp)
        (MODE_SINGLE_UPDATE != be->session_mode))
    {
       Timespec ts = gnc_iso8601_to_timespec_local (CK_AFTER_LAST_DATE);
-      pgendGroupGetAllBalances (be, grp, ts.tv_sec);
+      pgendGroupGetAllBalances (be, grp, ts);
    } 
    else
    {
@@ -2334,7 +2434,7 @@ pgend_book_load_poll (Backend *bend)
 
    pgendKVPInit(be);
    grp = pgendGetAllAccounts (be, NULL);
-   pgendGroupGetAllBalances (be, grp, ts.tv_sec);
+   pgendGroupGetAllBalances (be, grp, ts);
 
    /* re-enable events */
    pgendEnable(be);
@@ -2852,7 +2952,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.trans_rollback_edit = NULL;
             be->be.price_begin_edit = pgend_price_begin_edit;
             be->be.price_commit_edit = pgend_price_commit_edit;
-            be->be.run_query = pgendRunQueryToCheckpoint;
+            be->be.run_query = pgendRunQuery;
             be->be.price_lookup = pgendPriceLookup;
             be->be.sync = pgendSync;
             be->be.sync_price = pgendSyncPriceDB;
