@@ -219,8 +219,6 @@ done:
                   "NOTIFY gncCheckpoint;\n");
    SEND_QUERY (be,be->buff, );
    FINISH_QUERY(be->connection);
-
-   g_free ((gpointer) guid_string);
 }
 
 /* ============================================================= */

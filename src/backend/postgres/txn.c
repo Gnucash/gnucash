@@ -596,11 +596,16 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
      }
      else
      {
+       gchar str1[GUID_ENCODING_LENGTH+1];
+       gchar str2[GUID_ENCODING_LENGTH+1];
+
+       guid_to_string_buff(xaccSplitGetGUID (sri->split), str1);
+       guid_to_string_buff(&sri->account_guid, str2);
+
        PERR ("account not found, will delete this split\n"
              "\t(split with  guid=%s\n" 
              "\twants an acct with guid=%s)\n", 
-             guid_to_string(xaccSplitGetGUID (sri->split)),
-             guid_to_string(&sri->account_guid));
+	     str1, str2);
 
        /* Remove the split from the list */
        db_splits = g_list_remove (db_splits, sri->split);

@@ -365,6 +365,8 @@ test_updates(GNCSession * session, DbInfo *dbinfo, gboolean multi_user)
     GNCBackendError io_err;
     GNCSession *session_2;
     char *filename;
+    char str1[GUID_ENCODING_LENGTH+1];
+    char str2[GUID_ENCODING_LENGTH+1];
     gboolean ok;
 
     g_return_val_if_fail(session && dbinfo->dbname && dbinfo->mode, FALSE);
@@ -406,12 +408,12 @@ test_updates(GNCSession * session, DbInfo *dbinfo, gboolean multi_user)
     ok = gnc_book_equal(gnc_session_get_book(session),
                         gnc_session_get_book(session_2));
 
+    guid_to_string_buff(gnc_book_get_guid(gnc_session_get_book(session)), str1);
+    guid_to_string_buff(gnc_book_get_guid(gnc_session_get_book(session_2))), str2);
     do_test_args(ok, "Books equal after update", __FILE__, __LINE__,
                  "Books not equal for session %s in mode %si\n"
                  "book 1: %s,\nbook 2: %s",
-                 dbinfo->dbname, dbinfo->mode,
-                 guid_to_string(gnc_book_get_guid(gnc_session_get_book(session))),
-                 guid_to_string(gnc_book_get_guid(gnc_session_get_book(session_2))));
+                 dbinfo->dbname, dbinfo->mode, str1, str2);
 
     if (multi_user) {
         gnc_session_end(session);

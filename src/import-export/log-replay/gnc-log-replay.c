@@ -279,15 +279,11 @@ static void dump_split_record(split_record record)
     }
   if(record.trans_guid_present)
     {
-      string_ptr = guid_to_string (&(record.trans_guid));
-      DEBUG("Transaction GUID: %s", string_ptr);
-      g_free(string_ptr);
+      DEBUG("Transaction GUID: %s", guid_to_string (&(record.trans_guid)));
     }
   if(record.split_guid_present)
     {
-      string_ptr = guid_to_string (&(record.split_guid));
-      DEBUG("Split GUID: %s", string_ptr);
-      g_free(string_ptr);
+      DEBUG("Split GUID: %s", guid_to_string (&(record.split_guid)));
     }
   if(record.log_date_present)
     {
@@ -306,9 +302,7 @@ static void dump_split_record(split_record record)
     }
   if(record.acc_guid_present)
     {
-      string_ptr = guid_to_string (&(record.acc_guid));
-      DEBUG("Account GUID: %s", string_ptr);
-      g_free(string_ptr);
+      DEBUG("Account GUID: %s", guid_to_string (&(record.acc_guid)));
     }
   if(record.acc_name_present)
     {

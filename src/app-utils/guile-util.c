@@ -482,7 +482,7 @@ gnc_is_trans_scm(SCM scm)
 void
 gnc_split_scm_set_account(SCM split_scm, Account *account)
 {
-  char *guid_string;
+  const char *guid_string;
   SCM arg;
 
   initialize_scm_functions();
@@ -499,8 +499,6 @@ gnc_split_scm_set_account(SCM split_scm, Account *account)
   arg = scm_makfrom0str(guid_string);
 
   scm_call_2(setters.split_scm_account_guid, split_scm, arg);
-
-  g_free(guid_string);
 }
 
 
@@ -854,7 +852,6 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
     SCM map = SCM_EOL;
     SCM args = SCM_EOL;
     SCM commit;
-    char *guid_str;
 
     args = scm_cons(gnc_book_to_scm (book), args);
 
@@ -862,13 +859,8 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
 
     args = scm_cons(commit, args);
 
-    guid_str = guid_to_string(guid_1);
-    from = scm_makfrom0str(guid_str);
-    g_free (guid_str);
-
-    guid_str = guid_to_string(guid_2);
-    to = scm_makfrom0str(guid_str);
-    g_free (guid_str);
+    from = scm_makfrom0str(guid_to_string(guid_1));
+    to = scm_makfrom0str(guid_to_string(guid_2));
 
     map = scm_cons(scm_cons(from, to), map);
     map = scm_cons(scm_cons(to, from), map);
@@ -1096,7 +1088,7 @@ gnc_trans_scm_get_num_splits(SCM trans_scm)
 char *
 gnc_get_debit_string(GNCAccountType account_type)
 {
-  char *type_string;
+  const char *type_string;
   char *string;
   char *temp;
   SCM result;
@@ -1141,7 +1133,7 @@ gnc_get_debit_string(GNCAccountType account_type)
 char *
 gnc_get_credit_string(GNCAccountType account_type)
 {
-  char *type_string;
+  const char *type_string;
   char *string;
   char *temp;
   SCM result;

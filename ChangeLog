@@ -1,3 +1,40 @@
+2003-06-27  David Hampton  <hampton@employees.org>
+
+	* src/backend/file/gnc-backend-file.c: Fix 'Save As' so it can
+	write to non-existing files.
+
+	* src/gnc-module/gnc-module.c: Fix a small memory leak.
+
+	* src/import-export/import-main-matcher.c:
+	* src/import-export/import-match-picker.c: No need to duplicate
+	the string returned by xaccPrintDateSecs.
+
+	* src/engine/Account.[ch]: Correctly mark a function as returning
+	a const char string.
+
+	* src/engine/guid.c: Use a thread local buffer for guid_to_string.
+	Mark this routine as returning a const char string so any attempts
+	to free this buffer will be caught at compile time.
+
+	* src/app-utils/guile-util.c:
+	* src/backend/file/gnc-schedxaction-xml-v2.c:
+	* src/backend/file/sixtp-dom-generators.c:
+	* src/backend/postgres/checkpoint.c:
+	* src/backend/postgres/gncquery.c:
+	* src/backend/postgres/txn.c:
+	* src/backend/postgres/test/test-db.c:
+	* src/engine/SchedXaction.c:
+	* src/engine/TransLog.c:
+	* src/engine/Transaction.c:
+	* src/engine/kvp_frame.c:
+	* src/engine/qofquery.c:
+	* src/experimental/cgi-bin/gnc-server.c:
+	* src/gnome/dialog-scheduledxaction.c:
+	* src/gnome/dialog-sxsincelast.c:
+	* src/import-export/log-replay/gnc-log-replay.c: Clean up usage of
+	guid_to_string() function. There is no longer any need to release
+	the pointer returned by this function.
+
 2003-06-27  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/gnc-event*.[ch]:
