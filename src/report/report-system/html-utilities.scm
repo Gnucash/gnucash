@@ -26,17 +26,17 @@
       (cons #f (gnc:html-make-empty-cells (- n 1)))
       '()))
 
-(define (register-guid guid)
-  (gnc:html-build-url gnc:url-type-register (string-append "guid=" guid) #f))
+(define (register-guid type guid)
+  (gnc:html-build-url gnc:url-type-register (string-append type guid) #f))
 
 (define (gnc:account-anchor-text acct)
-  (register-guid (gnc:account-get-guid acct)))
+  (register-guid "acct-guid=" (gnc:account-get-guid acct)))
 
 (define (gnc:split-anchor-text split)
-  (register-guid (gnc:split-get-guid split)))
+  (register-guid "split-guid=" (gnc:split-get-guid split)))
 
 (define (gnc:transaction-anchor-text trans)
-  (register-guid (gnc:transaction-get-guid trans)))
+  (register-guid "trans-guid=" (gnc:transaction-get-guid trans)))
 
 (define (gnc:report-anchor-text report-id)
   (gnc:html-build-url gnc:url-type-report
@@ -45,7 +45,7 @@
 
 (define (gnc:price-anchor-text price)
   (gnc:html-build-url gnc:url-type-price
-		      (string-append "guid=" (gnc:price-get-guid price))
+		      (string-append "price-guid=" (gnc:price-get-guid price))
 		      #f))
 
 ;; Make a new report and return the anchor to it. The new report of

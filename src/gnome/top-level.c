@@ -137,15 +137,45 @@ gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
   helpWindow (NULL, NULL, HH_GLOBPREFS);
 }
 
+static void
+gnc_commodity_help_cb (void)
+{
+  helpWindow (NULL, _("Help"), HH_COMMODITY);
+}
+
+/* ============================================================== */
+/* HTML Hadler for reports. */
+
+#define IF_TYPE(URL_TYPE_STR,ENTITY_TYPE)                                   \
+  if (strncmp (URL_TYPE_STR, location, strlen (URL_TYPE_STR)) == 0)         \
+  {                                                                         \
+    GUID guid;                                                              \
+    QofCollection *col;                                                     \
+    QofEntity *entity;                                                      \
+    if (!string_to_guid (location + strlen(URL_TYPE_STR), &guid))           \
+    {                                                                       \
+      result->error_message = g_strdup_printf (_("Bad URL: %s"), location); \
+      return FALSE;                                                         \
+    }                                                                       \
+    col = qof_book_get_collection (book, ENTITY_TYPE);                      \
+    entity = qof_collection_lookup_entity (col, &guid);                     \
+    if (NULL == entity)                                                     \
+    {                                                                       \
+      result->error_message = g_strdup_printf (_("Entity Not Found: %s"), location); \
+      return FALSE;                                                         \
+    }                                                                       \
+
+
 static gboolean
 gnc_html_register_url_cb (const char *location, const char *label,
                           gboolean new_window, GNCURLResult *result)
 {
   GNCSplitReg * gsr   = NULL;
   Split       * split = NULL;
-  Account     * account;
+  Account     * account = NULL;
   Transaction * trans;
   GList       * node;
+  QofBook     * book = gnc_get_current_book();
 
   g_return_val_if_fail (location != NULL, FALSE);
   g_return_val_if_fail (result != NULL, FALSE);
@@ -158,135 +188,78 @@ gnc_html_register_url_cb (const char *location, const char *label,
     account = xaccGetAccountFromFullName (gnc_get_current_group (),
                                           location + 8, 
                                           gnc_get_account_separator ());
-    gsr = regWindowSimple (account);
-    gnc_split_reg_raise( gsr );
   }
-  /* href="gnc-register:guid=12345678901234567890123456789012" */
-  else if (strncmp ("guid=", location, 5) == 0)
-  {
-    GUID guid;
-    GNCIdType id_type;
 
-    if (!string_to_guid (location + 5, &guid))
+  /* href="gnc-register:guid=12345678901234567890123456789012" */
+  else IF_TYPE ("acct-guid=", GNC_ID_ACCOUNT)
+    account = GNC_ACCOUNT(entity);
+  }
+
+  else IF_TYPE ("trans-guid=", GNC_ID_TRANS)
+    trans = (Transaction *) entity;
+
+    for (node = xaccTransGetSplitList (trans); node; node = node->next)
     {
-      result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
+      split = node->data;
+      account = xaccSplitGetAccount(split);
+      if (account) break;
+    }
+
+    if (!account)
+    {
+      result->error_message =
+        g_strdup_printf (_("Transaction with no Accounts: %s"), location);
       return FALSE;
     }
-
-    id_type = xaccGUIDType (&guid, gnc_get_current_book ());
-    if (id_type == GNC_ID_NONE || !safe_strcmp (id_type, GNC_ID_NULL))
-    {
-        result->error_message = g_strdup_printf (_("No such entity: %s"),
-                                                 location);
-        return FALSE;
-    }
-    else if (!safe_strcmp (id_type, GNC_ID_ACCOUNT))
-    {
-        account = xaccAccountLookup (&guid, gnc_get_current_book ());
-        gsr = regWindowSimple( account );
-    }
-    else if (!safe_strcmp (id_type, GNC_ID_TRANS))
-    {
-        trans = xaccTransLookup (&guid, gnc_get_current_book ());
-        split = NULL;
-
-        for (node = xaccTransGetSplitList (trans); node; node = node->next)
-        {
-          split = node->data;
-          if (xaccSplitGetAccount (split))
-            break;
-        }
-
-        if (!split)
-        {
-          result->error_message =
-            g_strdup_printf (_("Transaction with no Accounts: %s"), location);
-          return FALSE;
-        }
-
-        gsr = regWindowSimple( xaccSplitGetAccount(split) );
-    }
-    else if (!safe_strcmp (id_type, GNC_ID_SPLIT))
-    {
-        split = xaccSplitLookup (&guid, gnc_get_current_book ());
-        if (!split)
-        {
-          result->error_message = g_strdup_printf (_("No such split: %s"),
-                                                   location);
-          return FALSE;
-        }
-
-        gsr = regWindowSimple( xaccSplitGetAccount(split) );
-    }
-    else
-    {
-        result->error_message =
-          g_strdup_printf (_("Unsupported entity type: %s"), location);
-        return FALSE;
-    }
-
-    gnc_split_reg_raise(gsr);
-    if (split)
-      gnc_split_reg_jump_to_split( gsr, split );
+  }
+  else IF_TYPE ("split-guid=", GNC_ID_SPLIT)
+    split = (Split *) entity;
+    account = xaccSplitGetAccount(split);
   }
   else
   {
-    result->error_message = g_strdup_printf (_("Badly formed URL %s"),
-                                             location);
+    result->error_message =
+          g_strdup_printf (_("Unsupported entity type: %s"), location);
     return FALSE;
   }
+
+  gsr = regWindowSimple (account);
+  gnc_split_reg_raise(gsr);
+  if (split)
+      gnc_split_reg_jump_to_split( gsr, split );
 
   return TRUE;
 }
 
+/* ============================================================== */
+
 static gboolean
 gnc_html_price_url_cb (const char *location, const char *label,
-		       gboolean new_window, GNCURLResult *result)
+                       gboolean new_window, GNCURLResult *result)
 {
+  QofBook * book = gnc_get_current_book();
   g_return_val_if_fail (location != NULL, FALSE);
   g_return_val_if_fail (result != NULL, FALSE);
 
   result->load_to_stream = FALSE;
 
   /* href="gnc-register:guid=12345678901234567890123456789012" */
-  if (strncmp ("guid=", location, 5) == 0)
-  {
-      GUID guid;
-      GNCIdType id_type;
-
-      if (!string_to_guid (location + 5, &guid))
-      {
-	  result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
-	  return FALSE;
-      }
-
-      id_type = xaccGUIDType (&guid, gnc_get_current_book ());
-      if (id_type == GNC_ID_NONE || safe_strcmp (id_type, GNC_ID_PRICE))
-      {
-          result->error_message =
-	    g_strdup_printf (_("Unsupported entity type: %s"), location);
-	  return FALSE;
-      }
-      if (!gnc_price_edit_by_guid (NULL, &guid)) {
-          result->error_message = g_strdup_printf (_("No such entity: %s"),
-						 location);
-	  return FALSE;
-      }
+  IF_TYPE ("price-guid=", GNC_ID_PRICE)
+    if (!gnc_price_edit_by_guid (NULL, &guid)) 
+    {
+        result->error_message = g_strdup_printf (_("No such price: %s"),
+                                                 location);
+        return FALSE;
+    }
   }
   else
   {
       result->error_message = g_strdup_printf (_("Badly formed URL %s"),
-					       location);
+                                               location);
       return FALSE;
   }
 
   return TRUE;
-}
-
-static void
-gnc_commodity_help_cb (void)
-{
-  helpWindow (NULL, _("Help"), HH_COMMODITY);
 }
 
 /* ============================================================== */
@@ -503,8 +476,7 @@ gnc_ui_check_events (gpointer not_used)
 }
 
 static int
-gnc_x_error (Display	 *display,
-	     XErrorEvent *error)
+gnc_x_error (Display        *display, XErrorEvent *error)
 {
   if (error->error_code)
   {
@@ -860,7 +832,7 @@ gnc_configure_file_be_retention_days (void)
 {
   gnc_file_be_set_retention_days
     (gnc_lookup_number_option("General",
-			      "Days to retain log files", 0));
+                              "Days to retain log files", 0));
 }
 
 /* gnc_configure_file_be_retention_days_cb
