@@ -393,8 +393,8 @@ xaccAccountRemoveSplit ( Account *acc, Split *split )
  * The way the computation is done depends on whether the partial
  * balances are for a monetary account (bank, cash, etc.) or a 
  * certificate account (stock portfolio, mutual fund).  For bank
- * accounts, the invarient amount is the dollar amount. For share
- * accounts, the invarient amount is the number of shares. For
+ * accounts, the invariant amount is the dollar amount. For share
+ * accounts, the invariant amount is the number of shares. For
  * share accounts, the share price fluctuates, and the current 
  * value of such an account is the number of shares times the current 
  * share price.
@@ -448,8 +448,8 @@ xaccAccountRecomputeBalance( Account * acc )
       dreconciled_balance += amt * (split->share_price);
     }
 
-    /* For bank accounts, the invarient subtotal is the dollar
-     * amount.  For stock accoounts, the invarient is the share amount */
+    /* For bank accounts, the invariant subtotal is the dollar
+     * amount.  For stock accounts, the invariant is the share amount */
     if ( (STOCK == acc->type) || ( MUTUAL == acc->type) ) {
       split -> share_balance = share_balance;
       split -> share_cleared_balance = share_cleared_balance;
@@ -859,8 +859,8 @@ xaccConsolidateTransactions (Account * acc)
          if (retval) continue;
 
          /* OK, looks like the two splits are a matching pair. 
-          * Blow one of them, and its entie associated transaction, away. 
-          * (We blow away the trasnaction because not only do the splits 
+          * Blow one of them, and its entire associated transaction, away. 
+          * (We blow away the transaction because not only do the splits 
           * match, but so do all of thier partner-splits. )
           */
 

@@ -462,7 +462,7 @@ xaccSplitSetBaseValue (Split *s, double value, char * base_currency)
 {
    if (!s) return;
 
-   /* ahh -- stupid users may not want or use the double entry 
+   /* Novice/casual users may not want or use the double entry 
     * features of this engine.  So, in particular, there
     * may be the occasional split without a parent account. 
     * Well, that's ok,  we'll just go with the flow. 
