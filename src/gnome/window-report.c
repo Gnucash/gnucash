@@ -301,7 +301,7 @@ static void
 gnc_report_export(ReportData *report_data)
 {
   GtkWindow *parent;
-  char *export_filename;
+  const char *export_filename;
   struct stat file_status;
   FILE *export_dest;
   char *message;
