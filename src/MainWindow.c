@@ -467,10 +467,11 @@ mainWindow( Widget parent )
     accountlist
       = XtVaCreateWidget( "list",
 			  xbaeMatrixWidgetClass,  actionform,
-			  XmNvisibleRows,         7,
+			  XmNvisibleRows,         8,
 			  XmNcolumns,             XACC_MAIN_NUM_COLS,
 			  XmNcolumnWidths,        colWidths,
 			  XmNcolumnAlignments,    alignments,
+			  XmNcolumnLabelAlignments,    alignments,
 			  XmNcolumnLabels,        labels,
 			  XmNtraversalOn,         False,
 			  XmNfill,                True,
