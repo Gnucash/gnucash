@@ -11,7 +11,6 @@
 @ifinfo
 @format
 
-@dircategory Personal Finance
 @dircategory Programming
 
 @direntry
