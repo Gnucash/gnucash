@@ -883,8 +883,7 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
   sw->free_cb = free_cb;
 
   /* Grab the get_guid function */
-  sw->get_guid = qof_class_get_parameter (sw->search_for,
-						   QOF_QUERY_PARAM_GUID);
+  sw->get_guid = qof_class_get_parameter (sw->search_for, QOF_PARAM_GUID);
   if (start_query)
     sw->start_q = gncQueryCopy (start_query);
   sw->q = show_start_query;

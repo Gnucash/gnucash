@@ -126,8 +126,7 @@ gnc_query_list_construct (GNCQueryList *list, GList *param_list, Query *query)
 
   /* cache the function to get the guid of this query type */
   list->priv->get_guid =
-    qof_class_get_parameter (qof_query_get_search_for(query),
-                  QOF_QUERY_PARAM_GUID);
+    qof_class_get_parameter (qof_query_get_search_for(query), QOF_PARAM_GUID);
 
   /* Initialize the CList */
   gnc_query_list_init_clist(list);

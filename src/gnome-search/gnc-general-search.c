@@ -299,7 +299,7 @@ gnc_general_search_new (GNCIdTypeConst type, const char *label,
 
 	g_return_val_if_fail (type && label && search_cb, NULL);
 
-	get_guid = qof_class_get_parameter (type, QOF_QUERY_PARAM_GUID);
+	get_guid = qof_class_get_parameter (type, QOF_PARAM_GUID);
 	g_return_val_if_fail (get_guid, NULL);
 
 	gsl = gtk_type_new (gnc_general_search_get_type ());
