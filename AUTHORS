@@ -62,7 +62,7 @@ Robert Graham Merkel <rgmerk@mira.net> extensive work on reports and
 James LewisMoss <dres@debian.org> design doc patches, XML refactoring, 
    automated test suite, new file hierarchy import.
 
-Christian Stimming <stimming@uclink.berkeley.edu> is a report-generating 
+Christian Stimming <stimming@tuhh.de> is a report-generating 
    monster. He's been on of the largest contributors to the current report
    infrastructure, creating many of the important reports. 
 
@@ -163,7 +163,7 @@ Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
 Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
 Ben Stanley <bds02@uow.edu.au> test infrastructure
 Robby Stephenson <robby.stephenson@usa.net> register & file history patches
-Christian Stimming <stimming@uclink.berkeley.edu> report patch
+Christian Stimming <stimming@tuhh.de> report patch
 Bartek Szady <bszx@bszxdomain.edu.eu.org> engine and build system patches
 Herbert Thoma <tma@iis.fhg.de> gnome register & euro support patches
 Arnold Troeger <troeger@samart.co.th> Mandrake packager

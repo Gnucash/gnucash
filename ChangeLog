@@ -1,5 +1,12 @@
 2001-06-09  Dave Peticolas  <dave@krondo.com>
 
+	* doc/sgml/C/xacc-about.sgml: update credits
+
+	* src/gnome/window-main.c (gnc_main_window_about_cb): update
+	credits
+
+	* AUTHORS: update credits
+
 	* src/gnome/reconcile-list.c (gnc_reconcile_list_refresh): fix
 	bugs
 

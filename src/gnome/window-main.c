@@ -872,15 +872,21 @@ gnc_main_window_about_cb (GtkWidget *widget, gpointer data)
                            "The GNU way to manage your money!");
   const gchar *copyright = "(C) 1998-2001 Linas Vepstas";
   const gchar *authors[] = {
+    "Rob Browning <rlb@cs.utexas.edu>",
+    "Bill Gribble <grib@billgribble.com>",
+    "James LewisMoss <dres@debian.org>",
+    "Robert Graham Merkel <rgmerk@mira.net>",
+    "Dave Peticolas <dave@krondo.com>",
+    "Christian Stimming <stimming@tuhh.de>",
     "Linas Vepstas <linas@linas.org>",
     NULL
   };
-  
+
   about = gnome_about_new ("GnuCash", VERSION, copyright,
                            authors, message, NULL);
   gnome_dialog_set_parent (GNOME_DIALOG(about),
                            GTK_WINDOW(gnc_ui_get_toplevel()));
-  
+
   gnome_dialog_run_and_close (GNOME_DIALOG(about));
 }
 
