@@ -8,11 +8,11 @@
  * important functions:
  * -- an array of strings, one for each cell of the displayed table.
  *    These strings are kept in sync with what the user sees in 
- *    the GUI (although they may be out of sync in  currently 
+ *    the GUI (although they may be out of sync in currently 
  *    edited row(s)).
  * -- an array of cell-block handlers.  The handlers provide
  *    the actual GUI editing infrastructure: the handlers 
- *    ake sure that only allowed edits are made to a block
+ *    make sure that only allowed edits are made to a block
  *    of cells.
  * -- The "cursor", which defines the region of cells that 
  *    are currently being edited.
@@ -20,7 +20,7 @@
  *    to the cellblock handlers that know how to handle edits
  *    to the physical, display cells.
  * -- A table of user-defined data hooks that can be associated 
- *    with each cell block.  By "user" we ean the prograer who
+ *    with each cell block.  By "user" we mean the programmer who
  *    makes use of this object.
  * -- Tab-traversing mechanism so that operator can tab in a
  *    predefined order between cells.

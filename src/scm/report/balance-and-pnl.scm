@@ -1,7 +1,6 @@
 ;; -*-scheme-*-
 
 (gnc:support "report/balance-and-pnl.scm")
-
 (gnc:depend "text-export.scm")
 
 (let ()
@@ -94,7 +93,6 @@
 
               ;; Ignore
               '()
-
               (let ((childrens-output (gnc:group-map-accounts
                                        handle-level-2-account
                                        (gnc:account-get-children account)))
@@ -107,13 +105,13 @@
                 (set! level-1-balance (+ level-1-balance account-balance))
                 (set! level-0-balance (+ level-0-balance level-1-balance))
 
-                (let ((level-1-output (render-level-1-account account
-                                                              level-1-balance
-                                                              level-2-balance)))
+                (let ((level-1-output 
+		       (render-level-1-account account
+					       level-1-balance
+					       level-2-balance)))
                   (set! level-1-balance 0)
                   (set! level-2-balance 0)
                   (list childrens-output level-1-output))))))
-
       (if (not (pointer-token-null? current-group))
           (set! output
                 (list

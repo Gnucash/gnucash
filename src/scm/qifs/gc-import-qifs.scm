@@ -1,4 +1,8 @@
 ;;; $Id$
+(gnc:support "qifs/gc-import-qifs.scm")
+(gnc:depend "qifs/qifcats.scm")
+(gnc:depend "qifs/qif2gc.scm")
+
 (display "Started gc-impor.scm")
 (newline)
 (define (gnc:get-account-list account-group)
@@ -12,7 +16,6 @@
 	(display fullacclist)
 	(newline)
 	(filteroutnulls fullacclist))))
-
 
 (define (gnc:import-file-into-account-group account-group)
   ;(sample-dialog)

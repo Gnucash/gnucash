@@ -10,47 +10,12 @@
 ;; Matt Martin <matt.martin@ieee.org>
 
 (gnc:support "report/average-balance.scm")
-
 (use-modules (ice-9 regex))
 (require 'hash-table)
 
 (gnc:depend "structure.scm")
-(gnc:depend "report/transaction-report.scm")
-
-;; Modify a date
-(define (moddate op adate delta)
-  (let ((newtm (localtime (car adate))))
-    (begin
-      (set-tm:sec newtm (op (tm:sec newtm) (tm:sec delta)))
-      (set-tm:min newtm (op (tm:min newtm) (tm:min delta)))
-      (set-tm:hour newtm (op (tm:hour newtm) (tm:hour delta)))
-      (set-tm:mday newtm (op (tm:mday newtm) (tm:mday delta)))
-      (set-tm:mon newtm (op (tm:mon newtm) (tm:mon delta)))
-      (set-tm:year newtm (op (tm:year newtm) (tm:year delta)))
-
-       (let ((time (car (mktime newtm))))
-	 (cons time 0))
-       ))
-  )
-
-;; Add or subtract time from a date
-(define (decdate adate delta)(moddate - adate delta ))
-(define (incdate adate delta)(moddate + adate delta ))
-
-;; Time comparison, true if t2 is later than t1
-(define (gnc:timepair-later t1 t2)
-    (< (car t1) (car t2)))
-
-;; Build a list of time intervals 
-(define (dateloop curd endd incr) 
-  (cond ((gnc:timepair-later curd endd)
-	 (let ((nextd (incdate curd incr)))
-	 (cons (list curd (decdate nextd SecDelta) '())
-	       (dateloop nextd endd incr))))
-	(else '())
-	)
-  )
-
+(gnc:depend "html-generator.scm")
+(gnc:depend "date-utilities.scm")
 
 ;; Options
 (define (runavg-options-generator)
@@ -73,9 +38,8 @@
         (set-tm:hour bdtime 0)
         (set-tm:mday bdtime 1)
         (set-tm:mon bdtime 0)
-        (let ((time (car (mktime bdtime))))
-          (cons time 0))))
-    #f))
+          (cons (car (mktime bdtime)) 0))))
+   #f))
 
   ;; to-date
   (gnc:register-runavg-option
@@ -135,44 +99,9 @@
     (list #(NoPlot "Nothing" "Make No Plot")
 	  #(AvgBalPlot "Average" "Average Balance")
 	  #(GainPlot "Net Gain" "Net Gain")
-	  #(GLPlot "Gain/Loss" "Gain And Loss")
-	  )))
+	  #(GLPlot "Gain/Loss" "Gain And Loss"))))
   
   gnc:*runavg-track-options*)
-
-; A reference zero date
-(define zdate (let ((zd (localtime 0)))
-		(set-tm:hour zd 0)
-		(set-tm:min zd 0)
-		(set-tm:sec zd 0)
-		(set-tm:mday zd 0)
-		(set-tm:mon zd 0)
-		(set-tm:year zd 0)
-		(set-tm:yday zd 0)
-		(set-tm:wday zd 0)
-                zd
-		))
-
-(define SecDelta (let ((ddt (eval zdate)))
-		   (set-tm:sec ddt 1)
-		   ddt))
-(define YearDelta (let ((ddt (eval zdate)))
-		   (set-tm:year ddt 1)
-		   ddt))
-
-(define DayDelta (let ((ddt (eval zdate)))
-		   (set-tm:mday ddt 1)
-		   ddt))
-(define WeekDelta (let ((ddt (eval zdate)))
-		   (set-tm:mday ddt 7)
-		   ddt))
-(define TwoWeekDelta (let ((ddt (eval zdate)))
-		   (set-tm:mday ddt 14)
-		   ddt))
-
-(define MonthDelta (let ((ddt (eval zdate)))
-		   (set-tm:mon ddt 1)
-		   ddt))
 
 ;; Plot strings
 (define AvgBalPlot "using 2:3:4:5 t 'Average Balance' with errorbars, '' using 2:3 smooth sbezier t '' with lines")
@@ -198,64 +127,6 @@
 ;; get the account name of a split
 (define (gnc:split-get-account-name split)  
   (gnc:account-get-name (gnc:split-get-account split)))
-
-(define (gnc:timepair-to-ldatestring tp)
-  (let ((bdtime (localtime (car tp))))
-    (strftime "%m/%d/%Y" bdtime)))
-
-
-;; Find difference in seconds (?) between time 1 and time2
-(define (gnc:timepair-delta t1 t2)
-    (- (car t2) (car t1)))
-
-; Convert to string
-(define (tostring val) 
-  (cond ((number? val) (sprintf #f "%.2f" val))
-	(else (call-with-output-string (lambda (p)(display val p))))
-	))
-
-;;;;;;;;;;;;;;;;;;;;
-;; HTML Table
-;;;;;;;;;;;;;;;;;;;;
-
-; Create a column entry
-(define (html-table-col val)
-  (sprintf #f "<TD align=right> %s </TD>" (tostring val))
-  )
-
-; Create an html table row from a list of entries
-(define (html-table-row lst)
-  (cond ((string? lst) lst)
-	(else
-	 (string-append
-	  (sprintf #f "<TR>")
-	  (apply string-append (map html-table-col lst))
-	  (sprintf #f "</TR>\n")
-	  )))
-  )
-
-; Create an html table from a list of rows, each containing 
-;   a list of column entries
-(define (html-table hdrlst llst)
-  (string-append
-   (html-table-header hdrlst)
-   (apply string-append (map html-table-row llst))
-   (html-table-footer)
-   )
-  )
-
-(define (html-table-headcol val)
-  (sprintf #f "<TH justify=center> %s </TH>" (tostring val))
-  )
-
-(define (html-table-header vec)
-   (apply string-append "<TABLE cellspacing=10 rules=\"rows\">\n" (map html-table-headcol vec))
-  )
-
-(define (html-table-footer)
-   (sprintf #f "</TABLE>")
-  )
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Text table 
@@ -489,6 +360,120 @@
 		 (gnc:account-get-children (car accounts)))
 	       (allsubaccounts (cdr accounts))))))
 
+(define (average-balance-renderer options)
+  (let* ((begindate (gnc:option-value  
+		     (gnc:lookup-option options "Report Options" "From")))
+	 (enddate (gnc:option-value
+		   (gnc:lookup-option options "Report Options" "To")))
+	 (stepsize (gnc:option-value
+		    (gnc:lookup-option options "Report Options" "Step Size")))
+
+	 (plotstr (gnc:option-value
+		   (gnc:lookup-option options "Report Options" "Plot Type")))
+
+	 (accounts (gnc:option-value  
+		    (gnc:lookup-option options
+				       "Report Options" "Account")))
+
+	 (dosubs (gnc:option-value  
+		  (gnc:lookup-option options
+				     "Report Options" "Sub-Accounts")))
+
+	 (prefix  (list "<HTML>" "<BODY>"))
+	 (suffix  (list "</BODY>" "</HTML>"))
+	 (collist
+	  (list "Beginning" "Ending" "Average" "Max" "Min" "Net Gain" "Gain" "Loss"))
+
+	 (report-lines '())
+	 (rept-data '())
+	 (sum-data '())
+	 (tempstruct '())
+	 (rept-text "")
+	 (gncq (gnc:malloc-query))
+
+	 (slist '()))
+
+    (gnc:init-query gncq)
+
+    (if (null? accounts)
+	(set! rept-text
+	      (list "<TR><TD>You have not selected an account.</TD></TR>"))
+	(begin
+					; Grab account names
+	  (set! acctname (string-join 
+			  (map gnc-account-getname accounts) 
+			  " , "))
+	  (cond ((equal? dosubs #t)
+		 (map (lambda (a)
+			(set! accounts (addunique accounts a)))
+		      (allsubaccounts accounts))
+
+		 (set! acctname (string-append acctname " and sub-accounts"))))
+
+	  (map (lambda(acct) (gnc:query-add-account gncq acct)) accounts)
+
+	  (set! tempstruct 
+		(build-mystruct-instance 
+		 (define-mystruct 
+		   (gnc:acctnames-from-list accounts))))
+
+	  (set! acctcurrency (gnc:account-get-currency (car accounts)))
+
+	  (set! report-lines 
+		(gnc:convert-split-list (gnc:query-get-splits gncq)))
+
+	  (gnc:free-query gncq)
+
+	  (display (length report-lines))
+	  (display " Splits\n")
+
+					; Set initial balances to zero
+	  (map (lambda(an) (tempstruct 'put an 0)) 
+	       (gnc:acctnames-from-list accounts))
+
+	  (dateloop begindate
+		    enddate
+		    (eval stepsize))
+	  (set! rept-data 
+		(reduce-split-list
+		 (dateloop begindate
+			   enddate
+			   (eval stepsize))
+		 report-lines zdate tempstruct))
+
+	  (set! sum-data (get-averages rept-data))
+
+	  ;; Create HTML
+	  (set! rept-text 
+		(html-table 
+		 collist
+		 (append rept-data 
+			 (list "<TR cellspacing=0><TD><TD><TD colspan=3><HR size=2 noshade><TD colspan=3><HR size=2 noshade></TR>" sum-data))))
+
+	  ;; Do a plot
+	  (if (not (equal? NoPlot (eval plotstr)))
+	      (let* ((fn "/tmp/gncplot.dat")
+		     (preplot (string-append
+			       "set xdata time\n"
+			       "set timefmt '%m/%d/%Y'\n"
+			       "set pointsize 2\n"
+			       "set title '" acctname "'\n"
+			       "set ylabel '" acctcurrency "'\n"
+			       "set xlabel 'Period Ending'\n"
+			       )))
+
+		(data-to-gpfile collist  rept-data fn (eval plotstr))
+		(system 
+		 (string-append "echo \"" preplot "plot '"
+				fn "'" (eval plotstr) 
+				"\"|gnuplot -persist " ))))))
+
+    (append prefix
+	    (if (null? accounts)
+		()
+		(list "Report for " acctname "<p>\n"))
+	    (list rept-text) suffix))))
+
 (gnc:define-report
  ;; version
  1
@@ -497,128 +482,4 @@
  ;; Options
  runavg-options-generator
  ;; renderer
- (lambda (options)
-   (let* (
-	  (begindate (gnc:option-value  
-		      (gnc:lookup-option options "Report Options" "From")))
-          (enddate (gnc:option-value
-		    (gnc:lookup-option options "Report Options" "To")))
-	  (stepsize (gnc:option-value
-		     (gnc:lookup-option options "Report Options" "Step Size")))
-
-	  (plotstr (gnc:option-value
-		    (gnc:lookup-option options "Report Options" "Plot Type")))
-
-	  (accounts (gnc:option-value  
-		    (gnc:lookup-option options
-				       "Report Options" "Account")))
-
-	  (dosubs (gnc:option-value  
-		    (gnc:lookup-option options
-				       "Report Options" "Sub-Accounts")))
-
-	  (prefix  (list "<HTML>" "<BODY>"))
-	  (suffix  (list "</BODY>" "</HTML>"))
-	  (collist
-	   (list "Beginning" "Ending" "Average" "Max" "Min" "Net Gain" "Gain" "Loss"))
-
-	  (report-lines '())
-	  (rept-data '())
-	  (sum-data '())
-	  (tempstruct '())
-	  (rept-text "")
-	  (gncq (gnc:malloc-query))
-
-	  (slist '())
-
-	  )
-
-     (gnc:init-query gncq)
-
-     (if (null? accounts)
-         (set! rept-text
-               (list "<TR><TD>You have not selected an account.</TD></TR>"))
-	 (begin
-	   ; Grab account names
-	   (set! acctname (gnc:account-get-name (car accounts)))
-	   (map (lambda(an) 
-		  (set! acctname
-			(string-append 
-			 acctname
-			 " , "
-			 (gnc:account-get-name an))))
-		      (cdr accounts) )
-	   
-	   (cond ((equal? dosubs #t)
-		  (map (lambda (a)
-			 (set! accounts (addunique accounts a)))
-		       (allsubaccounts accounts))
-
-	       (set! acctname (string-append acctname " and sub-accounts"))
-	       ))
-
-	   (map (lambda(acct) (gnc:query-add-account gncq acct)) accounts)
-
-           (set! tempstruct 
-                 (build-mystruct-instance 
-                  (define-mystruct 
-                    (gnc:acctnames-from-list accounts))))
-
-           (set! acctcurrency (gnc:account-get-currency (car accounts)))
-
-           (set! report-lines 
-                 (gnc:convert-split-list (gnc:query-get-splits gncq)))
-
-           (gnc:free-query gncq)
-
-           (display (length report-lines))
-           (display " Splits\n")
-
-           ; Set initial balances to zero
-           (map (lambda(an) (tempstruct 'put an 0)) 
-                (gnc:acctnames-from-list accounts))
-
-           (dateloop begindate
-                     enddate
-                     (eval stepsize))
-           (set! rept-data 
-                 (reduce-split-list
-                  (dateloop begindate
-                            enddate
-                            (eval stepsize))
-                  report-lines zdate tempstruct))
-
-           (set! sum-data (get-averages rept-data))
-
-           ;; Create HTML
-           (set! rept-text 
-                 (html-table 
-                  collist
-                  (append rept-data 
-                          (list "<TR cellspacing=0><TD><TD><TD colspan=3><HR size=2 noshade><TD colspan=3><HR size=2 noshade></TR>" sum-data))))
-
-           ;; Do a plot
-           (if (not (equal? NoPlot (eval plotstr)))
-               (let* ((fn "/tmp/gncplot.dat")
-                      (preplot (string-append
-                                "set xdata time\n"
-                                "set timefmt '%m/%d/%Y'\n"
-                                "set pointsize 2\n"
-                                "set title '" acctname "'\n"
-                                "set ylabel '" acctcurrency "'\n"
-                                "set xlabel 'Period Ending'\n"
-                                )))
-
-                 (data-to-gpfile collist  rept-data fn (eval plotstr))
-                 (system 
-                  (string-append "echo \"" preplot "plot '"
-                                 fn "'" (eval plotstr) 
-                                 "\"|gnuplot -persist " ))))
-           ))
-
-     (append prefix
-             (if (null? accounts)
-                 ()
-                 (list "Report for " acctname "<p>\n"))
-	     (list rept-text) suffix)))
-)
+average-balance-renderer)

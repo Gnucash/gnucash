@@ -1,4 +1,7 @@
 ;;; $Id$
+(gnc:support "qifs/guess-category-qif.scm")
+(gnc:depend "substring-search.scm")
+
 ;;; Need a bunch of metrics, and probably to vectorize this...
 ;;; 1. Braces --> pick gnucash entries from account list
 ;;;    No braces --> pick gnucash entries from category list

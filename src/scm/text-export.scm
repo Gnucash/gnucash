@@ -27,15 +27,11 @@
 ;                 (gnc:transaction-set-write-flag transaction 2)))
 ;           (loop num-splits (+ i 1))))))
 
-
-
-
 (define (gnc:main-win-export-data-as-text win) 
   (let ((account-group (gnc:get-current-group)))
     (if (not account-group)
         (gnc:error-dialog "No account group available for text export.")
         (gnc:account-group-export-as-text account-group))))
-
 
 (define (gnc:account->output-form a)
   (list

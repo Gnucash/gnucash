@@ -1,4 +1,6 @@
 ;;; $Id$
+(gnc:support "qifs/qif2gc.scm")
+(gnc:depend "qifs/guess-category-qif.scm")
 ;;;;  Take the set of stuff from a QIF file, and turn it into the
 ;;;;  structures expected by GnuCash.
 

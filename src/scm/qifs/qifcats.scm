@@ -1,5 +1,6 @@
 ;;; $Id$
 ;;;;; Category management
+(gnc:support "qifs/qifcats.scm")
 
 (define qif-cat-list (initialize-hashtable))
 

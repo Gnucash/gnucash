@@ -1,4 +1,5 @@
-
+;;;; $Id$
+;;;; These utilities are loaded straight off
 (define (directory? path)
   ;; This follows symlinks normally.
   (let* ((status (false-if-exception (stat path)))
@@ -7,8 +8,7 @@
 
 (define (gnc:directory-subdirectories dir-name)
   ;; Return a recursive list of the subdirs of dir-name, including
-  ;; dir-name.  Follow symlinks.
-  
+  ;; dir-name.  Follow symlinks.  
   (let ((dir-port (opendir dir-name)))
     (if (not dir-port)
         #f
@@ -48,3 +48,56 @@ string and 'directories' must be a list of strings."
             (gnc:debug "found file " file-name)
             (set! finished? #t)
             (set! result file-name))))))
+
+(define (filteroutnulls lst)
+  (cond
+   ((null? lst) '())
+   ((eq? (car lst) #f) (filteroutnulls (cdr lst)))
+   (else
+    (cons (car lst) (filteroutnulls (cdr lst))))))
+
+(define (atom? x)
+  (and
+   (not (pair? x))
+   (not (null? x))))
+
+(define (flatten lst)
+  (cond
+   ((null? lst) '())
+   ((atom? lst) (list lst))
+   ((list? lst) 
+    (append (flatten (car lst)) 
+	    (flatten (cdr lst))))
+   (else lst)))
+
+(define (striptrailingwhitespace line)
+  (let
+      ((stringsize (string-length line)))
+    (if
+     (< stringsize 1)
+     ""
+     (let*
+	 ((lastchar (string-ref line (- stringsize 1))))
+       (if
+	(char-whitespace? lastchar)
+	(striptrailingwhitespace (substring line 0  (- stringsize 1)))
+	line)))))
+
+(define (string-join lst joinstr)
+  (let ((len (length lst)))
+    (cond 
+     ((< 1 len)
+      (string-append (car lst) joinstr (string-join (cdr lst) joinstr)))
+     ((= 1 len)
+      (car lst))
+     (else
+      ""))))
+
+;;;; Simple lookup scheme; can be turned into a hash table If Need Be.
+;;; Initialize lookup table
+(define (initialize-hashtable . size)
+  (make-vector
+   (if (null? size)
+       313
+       (car size))
+   '()))

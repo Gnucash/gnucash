@@ -1,75 +1,6 @@
 ;;; $Id$
-(define (directory? path)
-  ;; This follows symlinks normally.
-  (let* ((status (false-if-exception (stat path)))
-         (type (if status (stat:type status) #f)))
-    (eq? type 'directory)))
-
-(define (filteroutnulls lst)
-  (cond
-   ((null? lst) '())
-   ((eq? (car lst) #f) (filteroutnulls (cdr lst)))
-   (else
-    (cons (car lst) (filteroutnulls (cdr lst))))))
-
-(if testing?
-    (let ((i1 '(a b #f f g h #f #f (c d e #f #f) #f))
-	  (i2 '(#f #f #f #f)))
-      (testing  "filteroutnulls"
-		i1
-		'(a b f g h (c d e #f #f))
-		(filteroutnulls i1))
-	
-      (testing  "filteroutnulls"
-		i2
-		'()
-		(filteroutnulls i2))))
-
-(define (atom? x)
-  (and
-   (not (pair? x))
-   (not (null? x))))
-
-(define (flatten lst)
-  (cond
-   ((null? lst) '())
-   ((atom? lst) (list lst))
-   ((list? lst) 
-    (append (flatten (car lst)) 
-	    (flatten (cdr lst))))
-   (else lst)))
-
-(if testing?
-    (let ((input '(a b (c d (e (f) (g) (h i (j k))) l m no p))))
-      (testing "flatten" 
-	       input
-	       '(a b c d e f g h i j k l m no p)
-	       (flatten input))))
-
-(define (striptrailingwhitespace line)
-  (let
-      ((stringsize (string-length line)))
-    (if
-     (< stringsize 1)
-     ""
-     (let*
-	 ((lastchar (string-ref line (- stringsize 1))))
-       (if
-	(char-whitespace? lastchar)
-	(striptrailingwhitespace (substring line 0  (- stringsize 1)))
-	line)))))
-
-(if testing?
-    (begin
-      (newline)
-      (display "Test striptrailingwhitespace") (newline)
-      (let ((tstring "Here's a string        
-
-
-
-"))
-      (display tstring) (newline)
-      (display "Result:") (display (striptrailingwhitespace tstring)) (newline))))
+(gnc:support "qifs/qifutils.scm")
+(gnc:depend "utilities.scm")
 
 (define (strip-qif-header line)
   (substring line 1 (string-length line)))
@@ -129,16 +60,6 @@
 		 num
 		 #\.
 		 (thousands-separator num)))))
-
-(define (string-join lst joinstr)
-  (let ((len (length lst)))
-    (cond 
-     ((< 1 len)
-      (string-append (car lst) joinstr (string-join (cdr lst) joinstr)))
-     ((= 1 len)
-      (car lst))
-     (else
-      ""))))
 
 (define (numerizeamount amount-as-string)
   (let*
@@ -215,11 +136,3 @@
 	       '(d a e)
 	       (shorten-to-best! 3 alist))))
 
-;;;; Simple lookup scheme; can be turned into a hash table If Need Be.
-;;; Initialize lookup table
-(define (initialize-hashtable . size)
-  (make-vector
-   (if (null? size)
-       313
-       (car size))
-   '()))

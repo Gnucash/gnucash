@@ -1,7 +1,7 @@
 ;;; $Id$
 ;;; Import QIF File
-
 (gnc:support "importqif.scm")
+(gnc:depend "qifs/gc-import-qifs.scm")
 
 (define testing? #f)  ;;; Should we do testing?
 
@@ -15,7 +15,7 @@
 	(begin
 	  (display "account-group:") 
 	  (display account-group) (newline)
-	  (let ((loadfun (lambda (x) (gnc:load x)))
+	  (let ((loadfun (lambda (x) (gnc:load (string-append "qifs/" x))))
 		(loadlist '("testbed.scm" "analytical-qifs.scm"
 			    "gc-import-qifs.scm"
 			    "qifutils.scm" "acc-create.scm"))) 
@@ -35,7 +35,7 @@
 	(begin
 	  (display "account-group:") 
 	  (display account-group) (newline)
-	  (let ((loadfun (lambda (x) (gnc:load x)))
+	  (let ((loadfun (lambda (x) (gnc:load (string-append "qifs/" x))))
 		(loadlist '("testbed.scm" "analytical-qifs.scm"
 			    "gc-import-qifs.scm" "qifutils.scm"
 			    "acc-create.scm" "txn-create.scm"))) 
@@ -55,8 +55,8 @@
 	(begin
 	  (display "account-group:") 
 	  (display account-group) (newline)
-	  (let ((loadfun (lambda (x) (gnc:load x)))
-		(loadlist '("testbed.scm" "sstring-qif.scm"
+	  (let ((loadfun (lambda (x) (gnc:load (string-append "qifs/" x))))
+		(loadlist '("testbed.scm" 
 			    "qifutils.scm" "dates-qif.scm"
 			    "acc-create.scm"
 			    "txn-create.scm"

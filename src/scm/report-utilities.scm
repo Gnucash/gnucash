@@ -1,6 +1,5 @@
 ;;; $Id$
 ;;; Reporting utilities
-
 (gnc:support "report-utilities.scm")
 
 (define (gnc:account-separator-char)
@@ -197,4 +196,127 @@
 			   (vector-N-ref vector ref-list))
 			  (loop (+ 1 i))))))))))
 
+;;; applies thunk to each split in account account
+(define (gnc:for-each-split-in-account account thunk)
+  (gnc:for-loop (lambda (x) 
+		  (thunk (gnc:account-get-split account x)))
+		0 (gnc:account-get-split-count account) 1))
+
+;; register a configuration option for the transaction report
+(define (trep-options-generator)
+  (define gnc:*transaction-report-options* (gnc:new-options))
+  (define (gnc:register-trep-option new-option)
+    (gnc:register-option gnc:*transaction-report-options* new-option))
+  ;; from date
+  ;; hack alert - could somebody set this to an appropriate date?
+  (gnc:register-trep-option
+   (gnc:make-date-option
+    "Report Options" "From"
+    "a" "Report Items from this date" 
+    (lambda ()
+      (let ((bdtime (localtime (current-time))))
+        (set-tm:sec bdtime 0)
+        (set-tm:min bdtime 0)
+        (set-tm:hour bdtime 0)
+        (set-tm:mday bdtime 1)
+        (set-tm:mon bdtime 0)
+        (let ((time (car (mktime bdtime))))
+          (cons time 0))))
+    #f))
+
+  ;; to-date
+  (gnc:register-trep-option
+   (gnc:make-date-option
+    "Report Options" "To"
+    "b" "Report items up to and including this date"
+    (lambda () (cons (current-time) 0))
+    #f))
+
+  ;; account to do report on
+  (gnc:register-trep-option
+   (gnc:make-account-list-option
+    "Report Options" "Account"
+    "c" "Do transaction report on this account"
+    (lambda ()
+      (let ((current-accounts (gnc:get-current-accounts))
+            (num-accounts (gnc:group-get-num-accounts (gnc:get-current-group)))
+            (first-account (gnc:group-get-account (gnc:get-current-group) 0)))
+        (cond ((not (null? current-accounts)) (list (car current-accounts)))
+              ((> num-accounts 0) (list first-account))
+              (else ()))))
+    #f #f))
+
+  ;; primary sorting criterion
+  (gnc:register-trep-option
+   (gnc:make-multichoice-option
+    "Sorting" "Primary Key"
+     "a" "Sort by this criterion first"
+     'date
+     (list #(date
+	     "Date"
+	     "Sort by date")
+	   #(time
+	     "Time"
+	     "Sort by EXACT entry time")
+	   #(corresponding-acc
+	     "Transfer from/to"
+	     "Sort by account transferred from/to's name")
+	   #(amount
+	     "Amount"
+	     "Sort by amount")
+	   #(description
+	     "Description"
+	     "Sort by description")
+	   #(number
+	     "Number"
+	     "Sort by check/transaction number")
+	   #(memo
+	     "Memo"
+	     "Sort by memo"))))
+
+  (gnc:register-trep-option
+   (gnc:make-multichoice-option
+    "Sorting" "Primary Sort Order"
+    "b" "Order of primary sorting"
+    'ascend
+    (list #(ascend "Ascending" "smallest to largest, earliest to latest")
+	  #(descend "Descending" "largest to smallest, latest to earliest"))))
+
+  (gnc:register-trep-option
+   (gnc:make-multichoice-option
+    "Sorting" "Secondary Key"
+     "c"
+     "Sort by this criterion second"
+     'corresponding-acc
+     (list #(date
+	     "Date"
+	     "Sort by date")
+	   #(time
+	     "Time"
+	     "Sort by EXACT entry time")
+	   #(corresponding-acc
+	     "Transfer from/to"
+	     "Sort by account transferred from/to's name")
+	   #(amount
+	     "Amount"
+	     "Sort by amount")
+	   #(description
+	     "Description"
+	     "Sort by description")
+	   #(number
+	     "Number"
+	     "Sort by check/transaction number")
+	   #(memo
+	     "Memo"
+	     "Sort by memo"))))
+
+  (gnc:register-trep-option
+   (gnc:make-multichoice-option
+    "Sorting" "Secondary Sort Order"
+    "d" "Order of Secondary sorting"
+    'ascend
+    (list #(ascend "Ascending" "smallest to largest, earliest to latest")
+	  #(descend "Descending" "largest to smallest, latest to earliest"))))
+
+  gnc:*transaction-report-options*)
 

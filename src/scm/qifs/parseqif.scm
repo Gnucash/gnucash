@@ -1,7 +1,12 @@
 ;;; $Id$
-;;;;;;;;;;;  QIF Parsing  ;;;;;;;;;;;;;;
-
 (require 'hash-table)
+(gnc:support "qifs/parseqif.scm")
+(gnc:depend "qifs/qifcats.scm")
+(gnc:depend "qifs/dates-qif.scm")
+(gnc:depend "qifs/gc-import-qifs.scm")
+(gnc:depend "qifs/qifstate.scm")
+(gnc:depend "qifs/split-qif.scm")
+(gnc:depend "qifs/guess-category-qif.scm")
 
 (define qif-txn-list '())
 

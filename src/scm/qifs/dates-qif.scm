@@ -1,4 +1,7 @@
 ;; $Id$
+(gnc:support "qifs/dates-qif.scm")
+(gnc:depend "substring-search.scm")
+
 ;;;;;;;  Date-related code 
 (define findspace (substring-search-maker " "))
 

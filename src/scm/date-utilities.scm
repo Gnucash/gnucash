@@ -1,7 +1,9 @@
 ;; -*-scheme-*-
+;; $ID$
 ;; dateutils.scm
 ;; date utility functions.  mainly used by budget
 ;; Bryan Larsen (blarsen@ada-works.com)
+;; Revised by Christopher Browne
 
 (gnc:support "dateutils.scm")
 
@@ -79,4 +81,122 @@
     ((gnc:budget-week) "weeks")
     ((gnc:budget-month) "months")
     ((gnc:budget-year) "years")))
+
+;; Modify a date
+(define (moddate op adate delta)
+  (let ((newtm (localtime (car adate))))
+    (begin
+      (set-tm:sec newtm (op (tm:sec newtm) (tm:sec delta)))
+      (set-tm:min newtm (op (tm:min newtm) (tm:min delta)))
+      (set-tm:hour newtm (op (tm:hour newtm) (tm:hour delta)))
+      (set-tm:mday newtm (op (tm:mday newtm) (tm:mday delta)))
+      (set-tm:mon newtm (op (tm:mon newtm) (tm:mon delta)))
+      (set-tm:year newtm (op (tm:year newtm) (tm:year delta)))
+
+       (let ((time (car (mktime newtm))))
+	 (cons time 0)))))
+
+;; Add or subtract time from a date
+(define (decdate adate delta)(moddate - adate delta ))
+(define (incdate adate delta)(moddate + adate delta ))
+
+;; Time comparison, true if t2 is later than t1
+(define (gnc:timepair-later t1 t2)
+    (< (car t1) (car t2)))
+
+;; Build a list of time intervals 
+(define (dateloop curd endd incr) 
+  (cond ((gnc:timepair-later curd endd)
+	 (let ((nextd (incdate curd incr)))
+	 (cons (list curd (decdate nextd SecDelta) '())
+	       (dateloop nextd endd incr))))
+	(else '())))
+
+; A reference zero date - the Beginning Of The Epoch
+; Note: use of eval is evil... by making this a generator function, 
+; each delta function gets its own instance of Zero Date
+(define (make-zdate) 
+  (let ((zd (localtime 0)))
+    (set-tm:hour zd 0)
+    (set-tm:min zd 0)
+    (set-tm:sec zd 0)
+    (set-tm:mday zd 0)
+    (set-tm:mon zd 0)
+    (set-tm:year zd 0)
+    (set-tm:yday zd 0)
+    (set-tm:wday zd 0)
+    zd))
+
+(define SecDelta 
+  (let ((ddt (make-zdate)))
+    (set-tm:sec ddt 1)
+    ddt))
+
+(define YearDelta 
+  (let ((ddt (make-zdate)))
+    (set-tm:year ddt 1)
+    ddt))
+
+(define DayDelta
+  (let ((ddt (make-zdate)))
+    (set-tm:mday ddt 1)
+    ddt))
+
+(define WeekDelta 
+  (let ((ddt (make-zdate)))
+    (set-tm:mday ddt 7)
+    ddt))
+
+(define TwoWeekDelta
+  (let ((ddt (make-zdate)))
+    (set-tm:mday ddt 14)
+    ddt))
+
+(define MonthDelta
+  (let ((ddt (make-zdate)))
+    (set-tm:mon ddt 1)
+    ddt))
+
+(define (gnc:timepair-to-ldatestring tp)
+  (let ((bdtime (localtime (car tp))))
+    (strftime "%m/%d/%Y" bdtime)))
+
+;; Find difference in seconds (?) between time 1 and time2
+(define (gnc:timepair-delta t1 t2)
+    (- (car t2) (car t1)))
+
+;; timepair manipulation functions
+;; hack alert  - these should probably be put somewhere else
+;; and be implemented PROPERLY rather than hackily
+;;; Added from transaction-report.scm
+
+(define (gnc:timepair-to-datestring tp)
+  (let ((bdtime (localtime (car tp))))
+    (strftime "%x" bdtime)))
+
+;; given a timepair contains any time on a certain day (local time)
+;; converts it to be midday that day.
+
+(define (gnc:timepair-canonical-day-time tp)
+  (let ((bdt (localtime (car tp))))
+    (set-tm:sec bdt 0)
+    (set-tm:min bdt 0)
+    (set-tm:hour bdt 12)
+    (let ((newtime (car (mktime bdt))))
+      ; alert - blarsen@ada-works.com fixed this.  you may want to
+      ; revert if I'm wrong.
+      (cons newtime 0))))
+
+(define (gnc:timepair-earlier-or-eq-date t1 t2)
+  (let ((time1 (car (gnc:timepair-canonical-day-time t1)))
+        (time2 (car (gnc:timepair-canonical-day-time t2))))
+    (<= time1 time2)))
+
+(define (gnc:timepair-later-date t1 t2)
+  (let ((time1 (car (gnc:timepair-canonical-day-time t1))) 
+        (time2 (car (gnc:timepair-canonical-day-time t2))))
+    (< time1 time2)))
+
+(define (gnc:timepair-later-or-eq-date t1 t2)
+  (gnc:timepair-earlier-or-eq-date t2 t1))
 

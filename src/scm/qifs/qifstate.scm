@@ -1,4 +1,5 @@
 ;;; $Id$
+(gnc:support "qifs/qifstate.scm")
 ;;;;; - Transactions should not be marked off as being finally reconciled on
 ;;;;;   the GnuCash side, as the reconciliation hasn't been done there.  
 ;;;;;

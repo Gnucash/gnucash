@@ -15,7 +15,6 @@
 (gnc:depend "html-generator.scm")
 (gnc:depend "date-utilities.scm")
 
-
 ;; time values
 ;(define gnc:budget-day 1)
 ;(define gnc:budget-week 2)
@@ -38,10 +37,21 @@
 ;; 3 - period: the time span of the budget line in #4
 ;; 4 - period-type:
 ;; 5 - triggers:  as yet undefined
-(define gnc:budget 
-  #(#("lunch" 8 ("Food:Lunch") 1 gnc:budget-day gnc:budget-recurring)
-    #("junk food" 0.50 ("Food:Junk") 1 gnc:budget-day gnc:budget-recurring)
-    #("car repairs" 2500 ("Car:Repairs") 5 gnc:budget-year gnc:budget-contingency)))
+
+(define (make-budget-entry desc amt acct per ptype trigger)
+  (list->vector  desc amt acct per ptype trigger))
+
+(define gnc:budget
+  (list->vector 
+   (make-budget-entry "lunch" 8 ("Food:Lunch") 1 
+		      gnc:budget-day gnc:budget-recurring)
+   (make-budget-entry "junk food" 0.50 ("Food:Junk") 1 
+		      gnc:budget-day gnc:budget-recurring)
+   (make-budget-entry "car repairs" 2500 ("Car:Repairs") 5
+		      gnc:budget-year gnc:budget-contingency)))
+
+;;; For future: make-budget-entry should create a structure.
+;;; And gnc:budget should be a list, not a vector.
 
 (define gnc:budget-headers
   #(("" "Description")
@@ -239,11 +249,7 @@
 	  #(status
 	    "Status"
 	    "How are you doing on your budget?"))))
-  
-
   gnc:*budget-report-options*)
-
-
 
 (gnc:define-report
  ;; version
@@ -254,7 +260,11 @@
  budget-report-options-generator
  ;; renderer
  (lambda (options)
-   (let* ((begindate (gnc:lookup-option options "Report Options" "From"))
+   (let* ((maxrow (vector-length gnc:budget))
+	  ;;; Note that by using maxrow, *all* references to
+	  ;;; (vector-length gnc:budget) disappear, and this notably
+	  ;;; takes some code out of at least 3 loops...
+	  (begindate (gnc:lookup-option options "Report Options" "From"))
 	  (enddate (gnc:lookup-option options "Report Options" "To"))
 	  (date-filter-pred (gnc:tr-report-make-filter-predicate
 			     (gnc:option-value begindate) 
@@ -263,13 +273,13 @@
 				  (gnc:option-value begindate))))
 	  (end-date-secs (car (gnc:timepair-canonical-day-time
 			       (gnc:option-value enddate))))
-	  (budget-report (make-vector (vector-length gnc:budget)))
+	  (budget-report (make-vector maxrow))
 	  (budget-order #())
 	  (budget-report-order #()))
      (gnc:debug gnc:budget)
      
      (do ((i 0 (+ i 1)))
-	 ((= i (vector-length gnc:budget)))
+	 ((= i maxrow))
        (vector-set! budget-report i (vector 0 0 0 0 0 0)))
 
      (let loop ((group (gnc:get-current-group)))
@@ -291,8 +301,10 @@
 		(loop children)))
 	    group)))
 
+     ;;; Note: This shouldn't need to use a set of vectors...
+     
      (do ((i 0 (+ i 1)))
-	 ((= i (vector-length gnc:budget)))
+	 ((= i maxrow))
        (let ((budget-line (vector-ref gnc:budget i))
 	     (budget-report-line (vector-ref budget-report i)))
 	 (gnc:budget-calculate-periods!
@@ -316,9 +328,8 @@
 	(set! budget-report-order #(10 #f #f 4 5 2)))
        (else
 	(gnc:debug "Invalid view option")))
-
      (let ((order (find-vector-mappings 
-		  (vector budget-order budget-report-order))))
+		   (vector budget-order budget-report-order))))
        (list
 	(html-start-document)
 	"<p>This is a budget report.  It is very preliminary, but you may find it useful.  To actually change the budget, currently you have to edit budget-report.scm.</p>"
@@ -333,17 +344,18 @@
 	  (lambda (item) (html-cell-header (cadr item)))
 	  (vector gnc:budget-headers gnc:budget-report-headers)
 	  order))
+	;;; This loop ought not to need to use a vector
 	(let loop ((row 0))
-	  (cond ((= row (vector-length gnc:budget)) '())
-		(else
-		 (cons
-		  (html-table-row-manual
-		   (vector-map-in-specified-order-uniquely
-		    (vector (gnc:budget-html-cell-pred) 
-			    (gnc:budget-report-html-cell-pred))
-		    (vector (vector-ref gnc:budget row) 
-			    (vector-ref budget-report row))
-		    order))
-		  (loop (+ row 1))))))
+	  (if (= row maxrow) 
+	      '()		
+	      (cons
+	       (html-table-row-manual
+		(vector-map-in-specified-order-uniquely
+		 (vector (gnc:budget-html-cell-pred) 
+			 (gnc:budget-report-html-cell-pred))
+		 (vector (vector-ref gnc:budget row) 
+			 (vector-ref budget-report row))
+		 order))
+	       (loop (+ row 1)))))
 	(html-end-table)
 	(html-end-document))))))

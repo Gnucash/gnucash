@@ -3,6 +3,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 ;;;;  Variables used to handle splits  ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+(gnc:support "qifs/split-qif.scm")
+(gnc:depend "structure.scm")
+
 (define splits? #f)
 (define splitlist '())
 (define qif-split-structure 

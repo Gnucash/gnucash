@@ -3,22 +3,19 @@
 ;; Report on all transactions in an account
 ;; Robert Merkel (rgmerk@mira.net)
 
-(gnc:support "report/transaction-report.scm")
-
 (require 'sort)
-
+(gnc:support "report/transaction-report.scm")
 ;hack alert - is this line necessary?
 (gnc:depend "text-export.scm")
 (gnc:depend "report-utilities.scm")
+(gnc:depend "date-utilities.scm")
+(gnc:depend "html-generator.scm")
 
 ;; hack alert - possibly unecessary globals
-
-
 ;; functions for manipulating total inflow and outflow counts.
 
 (define gnc:total-inflow 0)
 (define gnc:total-outflow 0)
-
 
 (define (gnc:set-total-inflow! x)
     (set! gnc:total-inflow x))
@@ -52,128 +49,6 @@
 	((null? the-list) '())
 	(else (cons (fn (car the-list))
 		    (gnc:inorder-map (cdr the-list) fn)))))
-
-;; register a configuration option for the transaction report
-(define (trep-options-generator)
-
-  (define gnc:*transaction-report-options* (gnc:new-options))
-
-  (define (gnc:register-trep-option new-option)
-    (gnc:register-option gnc:*transaction-report-options* new-option))
-
-  ;; from date
-  ;; hack alert - could somebody set this to an appropriate date?
-  (gnc:register-trep-option
-   (gnc:make-date-option
-    "Report Options" "From"
-    "a" "Report Items from this date" 
-    (lambda ()
-      (let ((bdtime (localtime (current-time))))
-        (set-tm:sec bdtime 0)
-        (set-tm:min bdtime 0)
-        (set-tm:hour bdtime 0)
-        (set-tm:mday bdtime 1)
-        (set-tm:mon bdtime 0)
-        (let ((time (car (mktime bdtime))))
-          (cons time 0))))
-    #f))
-
-  ;; to-date
-  (gnc:register-trep-option
-   (gnc:make-date-option
-    "Report Options" "To"
-    "b" "Report items up to and including this date"
-    (lambda () (cons (current-time) 0))
-    #f))
-
-  ;; account to do report on
-  (gnc:register-trep-option
-   (gnc:make-account-list-option
-    "Report Options" "Account"
-    "c" "Do transaction report on this account"
-    (lambda ()
-      (let ((current-accounts (gnc:get-current-accounts))
-            (num-accounts (gnc:group-get-num-accounts (gnc:get-current-group)))
-            (first-account (gnc:group-get-account (gnc:get-current-group) 0)))
-        (cond ((not (null? current-accounts)) (list (car current-accounts)))
-              ((> num-accounts 0) (list first-account))
-              (else ()))))
-    #f #f))
-
-  ;; primary sorting criterion
-  (gnc:register-trep-option
-   (gnc:make-multichoice-option
-    "Sorting" "Primary Key"
-     "a" "Sort by this criterion first"
-     'date
-     (list #(date
-	     "Date"
-	     "Sort by date")
-	   #(time
-	     "Time"
-	     "Sort by EXACT entry time")
-	   #(corresponding-acc
-	     "Transfer from/to"
-	     "Sort by account transferred from/to's name")
-	   #(amount
-	     "Amount"
-	     "Sort by amount")
-	   #(description
-	     "Description"
-	     "Sort by description")
-	   #(number
-	     "Number"
-	     "Sort by check/transaction number")
-	   #(memo
-	     "Memo"
-	     "Sort by memo"))))
-
-  (gnc:register-trep-option
-   (gnc:make-multichoice-option
-    "Sorting" "Primary Sort Order"
-    "b" "Order of primary sorting"
-    'ascend
-    (list #(ascend "Ascending" "smallest to largest, earliest to latest")
-	  #(descend "Descending" "largest to smallest, latest to earliest"))))
-
-  (gnc:register-trep-option
-   (gnc:make-multichoice-option
-    "Sorting" "Secondary Key"
-     "c"
-     "Sort by this criterion second"
-     'corresponding-acc
-     (list #(date
-	     "Date"
-	     "Sort by date")
-	   #(time
-	     "Time"
-	     "Sort by EXACT entry time")
-	   #(corresponding-acc
-	     "Transfer from/to"
-	     "Sort by account transferred from/to's name")
-	   #(amount
-	     "Amount"
-	     "Sort by amount")
-	   #(description
-	     "Description"
-	     "Sort by description")
-	   #(number
-	     "Number"
-	     "Sort by check/transaction number")
-	   #(memo
-	     "Memo"
-	     "Sort by memo"))))
-
-  (gnc:register-trep-option
-   (gnc:make-multichoice-option
-    "Sorting" "Secondary Sort Order"
-    "d" "Order of Secondary sorting"
-    'ascend
-    (list #(ascend "Ascending" "smallest to largest, earliest to latest")
-	  #(descend "Descending" "largest to smallest, latest to earliest"))))
-
-  gnc:*transaction-report-options*)
-
 
 ;; extract fields out of the scheme split representation
 
@@ -210,25 +85,10 @@
 (define (gnc:tr-report-get-other-splits split-scm)
   (vector-ref split-scm 10))
 
-
-
 (define (gnc:tr-report-get-first-acc-name split-scm)
   (let ((other-splits (gnc:tr-report-get-other-splits split-scm)))
     (cond ((= (length other-splits) 0) "-")
 	  (else  (caar other-splits)))))
-
-;;; something like 
-;;; for(i = first; i < last; i+= step) { thunk(i);}
-
-(define (gnc:for-loop thunk first last step)
-  (cond ((< first last) (thunk first) 
-	 (gnc:for-loop thunk (+ first step) last step))
-	(else #f)))
-
-;;; applies thunk to each split in account account
-(define (gnc:for-each-split-in-account account thunk)
-  (gnc:for-loop (lambda (x) (thunk (gnc:account-get-split account x)))
-		0 (gnc:account-get-split-count account) 1))
 
 ;; get transactions date from split - needs to be done indirectly
 ;; as it's stored in the parent transaction
@@ -284,39 +144,8 @@
 	  (gnc:split-get-corresponding-account-name-and-values split
 							       split-filter)))
 
-;; timepair manipulation functions
-;; hack alert  - these should probably be put somewhere else
-;; and be implemented PROPERLY rather than hackily
-
-(define (gnc:timepair-to-datestring tp)
-  (let ((bdtime (localtime (car tp))))
-    (strftime "%x" bdtime)))
-
-;; given a timepair contains any time on a certain day (local time)
-;; converts it to be midday that day.
-
-(define (gnc:timepair-canonical-day-time tp)
-  (let ((bdt (localtime (car tp))))
-    (set-tm:sec bdt 0)
-    (set-tm:min bdt 0)
-    (set-tm:hour bdt 12)
-    (let ((newtime (car (mktime bdt))))
-      ; alert - blarsen@ada-works.com fixed this.  you may want to
-      ; revert if I'm wrong.
-      (cons newtime 0))))
-
-(define (gnc:timepair-earlier-or-eq-date t1 t2)
-  (let ((time1 (car (gnc:timepair-canonical-day-time t1)))
-        (time2 (car (gnc:timepair-canonical-day-time t2))))
-    (<= time1 time2)))
-
-(define (gnc:timepair-later-date t1 t2)
-  (let ((time1 (car (gnc:timepair-canonical-day-time t1))) 
-        (time2 (car (gnc:timepair-canonical-day-time t2))))
-    (< time1 time2)))
-
-(define (gnc:timepair-later-or-eq-date t1 t2)
-  (gnc:timepair-earlier-or-eq-date t2 t1))
+;;;; Note: This can be turned into a lookup table which will
+;;;; *massively* simplify it...
 
 (define (gnc:sort-predicate-component component order)
   (let ((ascending-order-comparator
@@ -439,7 +268,8 @@
 				     (gnc:tr-report-get-value split-scm))))
 	  (else 
 	   (gnc:set-total-outflow! (+ gnc:total-outflow
-				      (- (gnc:tr-report-get-value split-scm))))))
+				      (- (gnc:tr-report-get-value 
+					  split-scm))))))
     (for-each
      (lambda (split-sub first last)
        (set! report-string
