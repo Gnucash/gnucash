@@ -419,7 +419,7 @@
       </tr>
 
       <tr>
-        <td><a href="#alerts">Alerts, Recurring Transactions</a></td>
+        <td><a href="#alerts">Alerts, Recurring & Scheduled Transactions</a></td>
 
         <td>Medium</td>
         <td>RLB</td>
@@ -760,16 +760,34 @@
         configurable interface, so that people can build custom
         reports. The <a href="xacc-reports.html#NEWREP">New
         Reporting Infrastructure</a> is seeking to build this up
-        using Guile.</p>
+        using Guile.   Note there are several flavours of customization:
+        <ul>
+        <li>Adding a custom logo (e.g. company logo/address) to every page
+            (generically, having a header and footer for every page).
+        <li>Allowing user to modify report title/subtitle on the fly
+            (and possibly add notes at the top or bottom of the report,
+            e.g. to explain line items).
+        <li>Remember the report that was asked for, give that report
+            a name, and in the future, allow that same exact report 
+            to be re-run.  Allow user to edit this report properties
+            at a later date.
+        </ul>
+        </p>
 
         <p>Generated reports should be exportable to other gnome
-        systems using bonobo. Reports should also be exportable to
+        systems (probably using bonobo). 
+        Reports should also be exportable to
         the Gnumeric spreadsheet (possibly by writing out gnumeric
-        file format??).  Tables & etc should be exportable to AbiWord,
-        StarOffice, other word processors.</p>
+        file format?? or writing out csv (comma separated values) ?? ).  
+        Tables & etc should be exportable to AbiWord,
+        StarOffice, other word processors. (formats: docbook sgml?
+        would then make convert to richtext, TeX easy.)
+        </p>
 
         <p>Must be possible to e-mail reports (including html) to
-        users. This might be a built-in function of gtk-html?</p>
+        users. This might be a built-in function of gtk-html?
+        or a little bitty evolution bonobo part?
+        </p>
 
         <p>Reports should make use of the 'action' field ...</p>
         Relationship to budgeting not clear ... 
@@ -778,7 +796,8 @@
         report, Market Index report, Stock Option values,
         Estimation of capital gains tax liabilities.</p>
 
-        <p>Reports should be printable to printer.</p>
+        <p>Reports should be printable to printer. (this should 
+        be automatic with the gtk-html widget.)</p>
 
         <p><b>Status:</b></p>
 
@@ -1342,7 +1361,8 @@
         <br>
       </dd>
 
-      <dt><a name="alerts"><b>Recurring Transactions, Calendar Alerts</b></a></dt>
+      <dt><a name="alerts"><b>Recurring Transactions, Calendar Alerts,
+          Scheduled Transactions</b></a></dt>
 
       <dd>
         (1)Add support for automatic, recurring transactions, <em>
