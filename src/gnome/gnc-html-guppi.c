@@ -513,6 +513,7 @@ gnc_html_embedded_barchart(gnc_html * parent,
   char        * param;
   int         datarows=0;
   int         datacols=0;
+  int         legend_reversed=0;
   int         rotate=0;
   int         stacked=0;  
   int         normalize_stacks=0;  
@@ -586,6 +587,13 @@ gnc_html_embedded_barchart(gnc_html * parent,
   if((param = g_hash_table_lookup(params, "rotate_row_labels")) != NULL) {
     sscanf(param, "%d", &rotate);
     arglist[argind].name   = "rotate_x_axis_labels";
+    arglist[argind].type   = GTK_TYPE_BOOL;
+    GTK_VALUE_BOOL(arglist[argind]) = rotate;
+    argind++;    
+  }
+  if((param = g_hash_table_lookup(params, "legend_reversed")) != NULL) {
+    sscanf(param, "%d", &rotate);
+    arglist[argind].name   = "legend_reversed";
     arglist[argind].type   = GTK_TYPE_BOOL;
     GTK_VALUE_BOOL(arglist[argind]) = rotate;
     argind++;    

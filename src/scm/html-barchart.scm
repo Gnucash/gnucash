@@ -34,6 +34,7 @@
                       col-labels
                       row-labels 
                       col-colors 
+		      legend-reversed?
                       row-labels-rotated?
 		      stacked?
                       data
@@ -55,7 +56,7 @@
 
 (define (gnc:make-html-barchart)
   (gnc:make-html-barchart-internal -1 -1 #f #f #f #f '() '() '() 
-				   #f #f '() #f #f #f #f #f #f))
+				   #f #f #f '() #f #f #f #f #f #f))
 
 (define gnc:html-barchart-data
   (record-accessor <html-barchart> 'data))
@@ -116,6 +117,12 @@
 
 (define gnc:html-barchart-set-col-colors!
   (record-modifier <html-barchart> 'col-colors))
+
+(define gnc:html-barchart-legend-reversed?
+  (record-accessor <html-barchart> 'legend-reversed?))
+
+(define gnc:html-barchart-set-legend-reversed?!
+  (record-modifier <html-barchart> 'legend-reversed?))
 
 (define gnc:html-barchart-title
   (record-accessor <html-barchart> 'title))
@@ -396,13 +403,18 @@
                 (push "  <param name=\"col_labels\" value=\"")
                 (push col-labels)
                 (push "\">\n")))
-          (let ((rot? (gnc:html-barchart-row-labels-rotated? barchart)))
-            (push "  <param name=\"rotate_row_labels\" value=\"")
-            (if rot? 
-                (push "1\">\n")
-                (push "0\">\n")))
-	  (if (gnc:html-barchart-stacked? barchart)
-            (push "  <param name=\"stacked\" value=\"1\">\n"))
+	  (push "  <param name=\"rotate_row_labels\" value=\"")
+	  (push (if (gnc:html-barchart-row-labels-rotated? barchart)
+		    "1\">\n"
+		    "0\">\n"))
+	  (push "  <param name=\"stacked\" value=\"")
+	  (push (if (gnc:html-barchart-stacked? barchart)
+		    "1\">\n"
+		    "0\">\n"))
+	  (push "  <param name=\"legend_reversed\" value=\"")
+	  (push (if (gnc:html-barchart-legend-reversed? barchart)
+		    "1\">\n"
+		    "0\">\n"))
           (push "Unable to push bar chart\n")
           (push "</object> &nbsp;\n"))
         " ")

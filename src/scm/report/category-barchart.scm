@@ -27,11 +27,11 @@
 (gnc:depend  "date-utilities.scm")
 
 ;; The option names are defined here to a) save typing and b) avoid
-;; spelling errors. The reportnames are defined here (and not only
+;; spelling errors. The *reportnames* are defined here (and not only
 ;; once at the very end) because I need them to define the "other"
 ;; report, thus needing them twice.
-(let ((reportname-income (N_ "Income Category Barchart"))
-      (reportname-expense (N_ "Expense Category Barchart"))
+(let ((reportname-income (N_ "Income Barchart"))
+      (reportname-expense (N_ "Expense Barchart"))
       
       (pagename-general (N_ "General"))
       (optname-from-date (N_ "From"))
@@ -295,6 +295,8 @@
 	 chart (gnc:commodity-get-mnemonic report-currency))
 	(gnc:html-barchart-set-row-labels-rotated?! chart #t)
 	(gnc:html-barchart-set-stacked?! chart stacked?)
+	;; If this is a stacked barchart, then reverse the legend.
+	(gnc:html-barchart-set-legend-reversed?! chart stacked?)
 
 	;; If we have too many categories, we sum them into a new
 	;; 'other' category and add a link to a new report with just

@@ -89,10 +89,23 @@
 ;; Builds and returns a tree-(hierarchy-)shaped table as a html-table
 ;; object. 
 ;;
+;; Arguments by topic: 
+;;
+;; Reporting period -- start-date, end-date
+;;
+;; Selected accounts -- tree-depth, show-subaccts?, accounts,
+;;                      do-subtot?
+;;
+;; Foreign currency -- show-other-curr?, report-commodity,
+;;                     exchange-fn
+;;
+;; Output fine-tuning -- show-col-headers?, show-total? (with
+;;                       total-name, get-total-fn), group-types?
+;;
 ;; Note: The returned table object will have 2*tree-depth columns if
 ;; show-other-curr?==#f, else it will have 3*tree-depth columns.
 ;;
-;; Arguments: 
+;; Arguments in detail: 
 ;;
 ;; <gnc:time-pair> start-date: Start date of reporting period. If #f,
 ;; everything till end-date will be considered. 
@@ -106,7 +119,10 @@
 ;; are totally independent from the calculated balance and vice
 ;; versa. 
 ;;
-;; <bool> show-total? If #f, no total sum is shown. 
+;; <bool> show-col-headers?: show column headings "Account" and
+;; "Balance"
+;;
+;; <bool> show-total?: If #f, no total sum is shown. 
 ;;
 ;; #<procedure ...> get-total-fn: The function to calculate the total
 ;; sum, e.g. gnc:accounts-get-comm-total-{profit,assets}. 
@@ -118,8 +134,6 @@
 ;;
 ;; <bool> do-subtot?: Specify whether to include sub-account balances
 ;; in each account's balance. 
-;;
-;; <bool> col-headers? : show column headings "Account" and "Balance"
 ;;
 ;; <bool> show-other-curr?, <gnc:commodity*> report-commodity,
 ;; #<procedure ...> exchange-fn: The rightmost column always shows
@@ -443,15 +457,15 @@
 
     ;; set some column headers 
     (if show-col-headers?
-	 (gnc:html-table-set-col-headers!
+	(gnc:html-table-set-col-headers!
 	 table 
-     (list (gnc:make-html-table-header-cell/size 
-	    1 tree-depth (_ "Account name"))
-	   (gnc:make-html-table-header-cell/size
-	    1 (if show-other-curr? 
-		  (* 2 tree-depth)
-		  tree-depth)
-	    (_ "Balance")))))
+	 (list (gnc:make-html-table-header-cell/size 
+		1 tree-depth (_ "Account name"))
+	       (gnc:make-html-table-header-cell/size
+		1 (if show-other-curr? 
+		      (* 2 tree-depth)
+		      tree-depth)
+		(_ "Balance")))))
     
     ;; there are tree-depth account name columns. 
     (let loop ((col 0))
