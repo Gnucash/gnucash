@@ -700,15 +700,22 @@ gnc_numeric_lcd(gnc_numeric a, gnc_numeric b) {
   
   max_square = small_denom;
   
-  /* the LCM algorithm : take the union of the prime factors of the
-   * two args and multiply them together. To do this, we find the
-   * successive prime factors of the smaller denominator and eliminate
-   * them from the larger denominator, then multiply the smaller by
-   * the remains of the larger. */
+  /* the LCM algorithm : factor out the union of the prime factors of the
+   * two args and then multiply the remainders together. 
+   *
+   * To do this, we find the successive prime factors of the smaller
+   * denominator and eliminate them from both the smaller and larger
+   * denominator (so we only count factors on a one-on-one basis),
+   * then multiply the original smaller by the remains of the larger.
+   *
+   * I.e. LCM 100,96875 == 2*2*5*5,31*5*5*5*5 = 2*2,31*5*5
+   *      answer: multiply 100 by 31*5*5 == 387500
+   */
   while(current_divisor * current_divisor <= max_square) {
     if(((small_denom % current_divisor) == 0) &&
        ((big_denom % current_divisor) == 0)) {
       big_denom = big_denom / current_divisor;
+      small_denom = small_denom / current_divisor;
     }
     else {
       if(current_divisor == 2) {
@@ -730,7 +737,8 @@ gnc_numeric_lcd(gnc_numeric a, gnc_numeric b) {
     }
   }
   
-  return small_denom * big_denom;
+  /* max_sqaure is the original small_denom */
+  return max_square * big_denom;
 
 }
   

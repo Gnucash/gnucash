@@ -5,6 +5,12 @@
 	  So, let's use g_list_prepend() and g_list_reverse() to speed
 	  up the process significantly.
 
+	* src/engine/gnc-numeric. -- fix the gnc_numeric_lcd() algo to
+	  actually work with numbers that are not co-divisible but have
+	  multiple-powers of co-factors.  For example, the old algorithm
+	  thought the LCM of 100,96875 was 3100, when it is really 387500,
+	  because it was removing the factor of '5' too many times..
+	
 2003-01-19  John Pierce <john@killterm.org>
 
 	* doc/Makefile.am
