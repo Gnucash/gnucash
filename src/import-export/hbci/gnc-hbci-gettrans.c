@@ -234,7 +234,7 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     }
 
     /* Clean up behind ourself. */
-    HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);
+    HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
   }
 }
 

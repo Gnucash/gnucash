@@ -214,7 +214,7 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 				 booked_tt);
 	}
       
-      HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);
+      HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
     }
   }
 }
