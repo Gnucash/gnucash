@@ -291,6 +291,7 @@ xaccSessionSave (Session *sess)
 
    /* if the fullpath doesn't exist, either the user failed to initialize,
     * or the lockfile was never obtained ... either way, we can't write. */
+   sess->errtype = 0;
    if (!(sess->fullpath)) {
       sess->errtype = ENOLCK;
       return;
