@@ -1,5 +1,10 @@
 2002-12-23  David Hampton  <hampton@employees.org>
 
+	* src/import-export/qif-import/qif-parse.scm: Fix regexps to
+	handle a leading '+' sign in the currency field. (Bug reported on
+	gnucash-user.)
+
+
 	* src/gnome-utils/gnc-html.c: The stream_handler hook needs to
 	return a file size. Not all files opened by this function are
 	ASCII text.  Reset the base_location properly when switching
