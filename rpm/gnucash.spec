@@ -12,9 +12,11 @@ BuildRoot: /tmp/gnucash-build
 
 
 %description
-Gnucash is an application to keep track of your finances.  It is similar in
-concept to Quicken(TM).  Although GnuCash still lacks the advanced
-features of Quicken, it does have the basic functionality.
+GnuCash is a personal finance manager.  A check-book like
+register GUI allows you to enter and track bank accounts,
+stocks, income and even currency trades.  The interface is
+designed to be simple and easy to use, but is backed with
+double-entry accounting principles to ensure balanced books.
 
 
 %prep
