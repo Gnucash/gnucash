@@ -327,7 +327,7 @@ char * xaccReadQIFAccList (int fd, AccountGroup *grp, int cat)
       } else {
          qifline = xaccReadQIFAccount (fd, acc);
       }
-      if ('!' == qifline [0]) break;
+      if (qifline && ('!' == qifline [0])) break;
 
       /* free up malloced data if unknown account type */
       if (-1 == xaccAccountGetType (acc)) {  
