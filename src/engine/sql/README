@@ -224,8 +224,6 @@ multi-user mode is fundamentally broken unless they are fixed.
 
 -- add support for price queries.
 
--- provide support for remainder of query types in gncquery.c
-
 -- if another user deletes a transaction, or an account, there is no way
    for us to know.  Thus, any sort of sync will probably (incorrectly)
    add the deleted transaction back in.  Question: what is the best way
@@ -325,4 +323,17 @@ multi-user mode is fundamentally broken unless they are fixed.
    currently have an opinion on the 'best' way of dealing with this 
    situation.  A reasonable solution may well be 'don't do that'.
 
+-- Implement PR_BALANCE query type in gncquery.c.  This query is 
+   supposed to return unbalanced transactions from the database.
+   I think it might be better to leave this unbalanced, and just
+   plain force everything in the database to be balanced.  In this
+   case, we should then modify the code to check for unbalanced 
+   transactions before commiting them, or otherwise force the backend
+   to run in balanced mode.  We could set 'force_double_entry=2'
+   but this is currently unimplmented in the engine.  Alternately, 
+   we could call 'Scrub' at appropriate times.
+    
+   
+   
+============================= END OF FILE ========================
 

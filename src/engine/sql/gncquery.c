@@ -159,6 +159,24 @@ sql_Query_destroy (sqlQuery *sq)
 }
 
 /* =========================================================== */
+/* Macro for PR_CLEARED term */
+
+#define CLR_TERM(howie,flagchar)				\
+{								\
+   if (pd->cleared.how & howie)					\
+   {								\
+      if (got_one)						\
+      {								\
+         sq->pq = stpcpy(sq->pq, "OR ");			\
+      }								\
+      sq->pq = stpcpy(sq->pq, "gncEntry.reconciled = '");	\
+      *(sq->pq) = flagchar;  (sq->pq) ++;			\
+      sq->pq = stpcpy(sq->pq, "' ");				\
+      got_one = 1;						\
+   }								\
+}
+
+/* =========================================================== */
 
 const char *
 sqlQuery_build (sqlQuery*sq, Query *q)
@@ -175,7 +193,7 @@ sqlQuery_build (sqlQuery*sq, Query *q)
    /* reset the buffer pointers */
    sq->pq = sq->q_base;
    sq->pq = stpcpy(sq->pq, 
-               "SELECT gncEntry.transGuid "
+               "SELECT DISTINCT gncEntry.transGuid "
                "  FROM gncEntry, gncTransaction, gncAccount, gncCommodity "
                "  WHERE gncEntry.transGuid = gncTransaction.transGuid AND ( ");
 
@@ -250,18 +268,51 @@ sqlQuery_build (sqlQuery*sq, Query *q)
             }
 
             case PR_BALANCE:
+            {
                PINFO("term is PR_BALANCE");
-               PERR ("not implemented");
+               PWARN("PR_BALANCE query term not properly implemented");
+               if (0 == pd->balance.sense)
+               {
+                  sq->pq = stpcpy (sq->pq, "NOT (");
+               }
+               if (pd->balance.how & BALANCE_BALANCED) 
+               {
+                  sq->pq = stpcpy(sq->pq, "TRUE ");
+               }
+               else 
+               {
+                  sq->pq = stpcpy(sq->pq, "FALSE ");
+               }
+               if (0 == pd->balance.sense)
+               {
+                  sq->pq = stpcpy (sq->pq, ") ");
+               }
                break;
+            }
+
             case PR_CLEARED:
+            {
+               int got_one = 0;
                PINFO("term is PR_CLEARED");
-               PERR ("not implemented");
+               if (0 == pd->cleared.sense)
+               {
+                  sq->pq = stpcpy (sq->pq, "NOT ");
+               }
+               sq->pq = stpcpy (sq->pq, "(");
+
+               CLR_TERM (CLEARED_NO, NREC);
+               CLR_TERM (CLEARED_CLEARED, CREC);
+               CLR_TERM (CLEARED_RECONCILED, YREC);
+               CLR_TERM (CLEARED_FROZEN, FREC);
+
+               sq->pq = stpcpy (sq->pq, ") ");
                break;
+            }
 
             case PR_DATE:
             {
                PINFO("term is PR_DATE");
-               if (0 == pd->acct.sense)
+               if (0 == pd->date.sense)
                {
                   sq->pq = stpcpy (sq->pq, "NOT (");
                }
@@ -285,7 +336,7 @@ sqlQuery_build (sqlQuery*sq, Query *q)
                {
                   sq->pq = stpcpy(sq->pq, "TRUE ");
                }
-               if (0 == pd->acct.sense)
+               if (0 == pd->date.sense)
                {
                   sq->pq = stpcpy (sq->pq, ") ");
                }
@@ -297,6 +348,47 @@ sqlQuery_build (sqlQuery*sq, Query *q)
                STRING_TERM ("gncTransaction.description");
                break;
 
+            case PR_GUID:
+            {
+               PINFO("term is PR_GUID");
+               if (0 == pd->guid.sense)
+               {
+                  sq->pq = stpcpy (sq->pq, "NOT (");
+               }
+               switch (xaccGUIDType (&pd->guid.guid))
+               {
+                  case GNC_ID_NONE:
+                  case GNC_ID_NULL:
+                  default:
+                     sq->pq = stpcpy(sq->pq, "FALSE ");
+                     break;
+              
+                  case GNC_ID_ACCOUNT:
+                     sq->pq = stpcpy(sq->pq, "gncAccount.accountGuid = '");
+                     sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
+                     sq->pq = stpcpy(sq->pq, "' ");
+                     break;
+              
+                  case GNC_ID_TRANS:
+                     sq->pq = stpcpy(sq->pq, "gncTransaction.transGuid = '");
+                     sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
+                     sq->pq = stpcpy(sq->pq, "' ");
+                     break;
+              
+                  case GNC_ID_SPLIT:
+                     sq->pq = stpcpy(sq->pq, "gncEntry.entryGuid = '");
+                     sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
+                     sq->pq = stpcpy(sq->pq, "' ");
+                     break;
+               }
+
+               if (0 == pd->guid.sense)
+               {
+                  sq->pq = stpcpy (sq->pq, ") ");
+               }
+               break;
+            }
+
             case PR_MEMO:
                PINFO("term is PR_MEMO");
                STRING_TERM ("gncEntry.memo");
@@ -304,7 +396,7 @@ sqlQuery_build (sqlQuery*sq, Query *q)
 
             case PR_MISC:
                PINFO("term is PR_MISC");
-               PERR ("not implemented");
+               sq->pq = stpcpy(sq->pq, "TRUE ");
                break;
 
             case PR_NUM:
