@@ -764,7 +764,9 @@ gnc_html_embedded_barchart(gnc_html * parent,
     g_free(callbacks);
   }
 #endif
+  /* This was broken in Guppi 0.40.0 - 0.40.3. */
   if(gnc_has_guppi_version(0,35,4) &&
+     (!gnc_has_guppi_version(0,40,0) || gnc_has_guppi_version(0,40,4)) &&
      (param = g_hash_table_lookup(params, "legend_reversed")) != NULL) {
     sscanf(param, "%d", &rotate);
     arglist[argind].name   = "legend_reversed";
