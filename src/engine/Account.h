@@ -105,13 +105,16 @@ typedef enum
 const char * xaccAccountGetTypeStr (GNCAccountType type); /* GUI names */
 
 /* Conversion routines for the account types to/from strings.
-   Critical for the text communication mechanisms. i.e. INCOME ->
-   "INCOME". */
+ * Critical for the text communication mechanisms. i.e. INCOME ->
+ * "INCOME". */
 char *   xaccAccountTypeEnumAsString (GNCAccountType type); 
-gboolean xaccAccountStringToType (const char* str, int *type);
+gboolean xaccAccountStringToType (const char* str, GNCAccountType *type);
 GNCAccountType xaccAccountStringToEnum (const char* str);
 
-gboolean xaccAccountTypesCompatible (int parent_type, int child_type);
+/* Return TRUE if accounts of type parent_type can have accounts
+ * of type child_type as children. */
+gboolean xaccAccountTypesCompatible (GNCAccountType parent_type,
+                                     GNCAccountType child_type);
 
 /* Compare two accounts for equality - this is a deep compare. */
 gboolean xaccAccountEqual(Account *a, Account* b, gboolean check_guids);

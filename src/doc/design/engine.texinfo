@@ -1744,6 +1744,8 @@ In addition to the above, Accounts contain a key-value pair frame.
 @menu
 * Account Types::               
 * General Account API::         
+* Account Type API::            
+* Account Getters::             
 @end menu
 
 
@@ -1802,7 +1804,7 @@ Possible values are:
   @end table
 
 
-@node General Account API,  , Account Types, Accounts
+@node General Account API, Account Type API, Account Types, Accounts
 @subsection General Account API
 
 @deftypefun {Account *} xaccMallocAccount (void)
@@ -1852,6 +1854,88 @@ may modify this @code{kvp_frame}, but must not destroy it.
 @deftypefun void xaccAccountSetSlots_nc (Account * @var{account}, kvp_frame * @var{frame})
 Set the @code{kvp_frame} associated wih @var{account}. After the call,
 @var{frame} is owned by @var{account}, so don't destroy it.
+@end deftypefun
+
+
+@node Account Type API, Account Getters, General Account API, Accounts
+@subsection Account Type API
+
+@deftypefun {const char *} xaccAccountGetTypeStr (GNCAccountType @var{type})
+Return a string corresponding to the given Account type suitable for
+display by a GUI. The string is translated with gettext according to
+the current locale.
+@end deftypefun
+
+@deftypefun {char *} xaccAccountTypeEnumAsString (GNCAccountType @var{type})
+Return a string corresponding to the given Account type. The string
+is not translated and is independent of the current locale.
+@end deftypefun
+
+@deftypefun gboolean xaccAccountStringToType (const char * @var{str}, GNCAccountType * @var{type})
+Converts a string of the form returned by @code{xaccAccountTypeEnumAsString}
+to a type, return in @var{type}. Returns true if the string corresponds
+to an actual type.
+@end deftypefun
+
+@deftypefun GNCAccountType xaccAccountStringToEnum (const char * @var{str})
+Similar to @code{xaccAccountStringToEnum}, but returns the type. If
+@var{str} does not correspond to any valid type, @code{BAD_TYPE} is
+returned.
+@end deftypefun
+
+@deftypefun gboolean xaccAccountTypesCompatible (GNCAccountType @var{parent_type}, GNCAccountType @var{child_type})
+Returns TRUE if accounts of type @var{parent_type} can have child accounts
+of type @var{child_type}. This compatibility is not enforced by the
+engine, but one day it may be!
+@end deftypefun
+
+
+@node Account Getters,  , Account Type API, Accounts
+@subsection Account Getters
+
+@deftypefun GNCAccountType xaccAccountGetType (Account * @var{account})
+Return the type of @var{account}.
+@end deftypefun
+
+@deftypefun {const char *} xaccAccountGetName (Account * @var{account})
+Return the name of @var{account}.
+@end deftypefun
+
+@deftypefun {const char *} xaccAccountGetCode (Account * @var{account})
+Return the code of @var{account}.
+@end deftypefun
+
+@deftypefun {const char *} xaccAccountGetDescription (Account * @var{account})
+Return the description of @var{account}.
+@end deftypefun
+
+@deftypefun {const char *} xaccAccountGetNotes (Account * @var{account})
+Return the notes of @var{account}.
+@end deftypefun
+
+@deftypefun {gnc_commodity *} xaccAccountGetCurrency (Account * @var{account})
+Return the currency of @var{account}.
+@end deftypefun
+
+@deftypefun int xaccAccountGetCurrencySCU (Account * @var{account})
+Return the SCU (smallest convertible unit) of @var{account}'s
+currency.
+@end deftypefun
+
+@deftypefun {gnc_commodity *} xaccAccountGetSecurity (Account * @var{account})
+Return the security of @var{account}. For accounts without shares, this
+field will be @code{NULL}.
+@end deftypefun
+
+@deftypefun int xaccAccountGetSecuritySCU (Account * @var{account})
+Return the SCU (smallest convertible unit) of @var{account}'s
+security.
+@end deftypefun
+
+@deftypefun {gnc_commodity *} xaccAccountGetEffectiveSecurity (Account * @var{account})
+Get the `effective' security of the account. If the account has a non-NULL
+security field, that field will be returned. Otherwise, the currency will
+be returned.
 @end deftypefun
 
 

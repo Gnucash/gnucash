@@ -1,3 +1,13 @@
+2001-05-17  Dave Peticolas  <dave@krondo.com>
+
+	* src/doc/design/gnucash-design.texinfo: update docs
+
+	* src/doc/design/engine.texinfo: update docs
+
+	* src/engine/Account.c: same as below
+
+	* src/engine/Account.h: use GNCAccountType instead of 'int'
+
 2001-05-17  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* doc/sgml/C/xacc-gnucash-web-browser.sgml: New file.

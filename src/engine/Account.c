@@ -1810,7 +1810,7 @@ xaccAccountTypeEnumAsString(GNCAccountType type) {
   if(safe_strcmp(#x, (str)) == 0) { *type = x; return(TRUE); }
 
 gboolean
-xaccAccountStringToType(const char* str, int *type) {
+xaccAccountStringToType(const char* str, GNCAccountType *type) {
 
   GNC_RETURN_ON_MATCH(NO_TYPE);
   GNC_RETURN_ON_MATCH(BANK);
@@ -1841,11 +1841,11 @@ xaccAccountStringToType(const char* str, int *type) {
 GNCAccountType
 xaccAccountStringToEnum(const char* str) 
 {
-  int type;
+  GNCAccountType type;
   gboolean rc;
   rc = xaccAccountStringToType(str, &type);
   if (FALSE == rc) return BAD_TYPE;
-  return ((GNCAccountType) type);
+  return type;
 }
 
 /********************************************************************\
@@ -1883,7 +1883,8 @@ xaccAccountGetTypeStr(GNCAccountType type) {
 \********************************************************************/
 
 gboolean
-xaccAccountTypesCompatible (int parent_type, int child_type)
+xaccAccountTypesCompatible (GNCAccountType parent_type,
+                            GNCAccountType child_type)
 {
   gboolean compatible = FALSE;
 

@@ -140,6 +140,8 @@ Accounts
 
 * Account Types::               
 * General Account API::         
+* Account Type API::            
+* Account Getters::             
 
 GNCBooks
 
