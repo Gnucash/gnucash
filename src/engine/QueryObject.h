@@ -28,7 +28,7 @@
 #ifndef GNC_QUERYOBJECT_H
 #define GNC_QUERYOBJECT_H
 
-#include "QueryCore.h"
+#include "qofquerycore.h"
 #include "QueryNew.h"
 
 /** This structure is for each queriable parameter in an object
@@ -40,8 +40,8 @@
  */
 typedef struct query_object_def {
   const char *	param_name;
-  QueryCoreType	param_type;
-  QueryAccess	param_getfcn;
+  QofQueryCoreType	param_type;
+  QofQueryAccess	param_getfcn;
 } QueryObjectDef;
 
 /** This function is the default sort function for a particular object type */
@@ -66,9 +66,9 @@ void gncQueryObjectRegister (GNCIdTypeConst obj_name,
  * #define MY_QUERY_OBJ_TRANS	"trans"
  *
  * static QueryObjectDef myQueryObjectParams[] = {
- * { MY_QUERY_OBJ_MEMO, QUERYCORE_STRING, myMemoGetter },
- * { MY_QUERY_OBJ_VALUE, QUERYCORE_NUMERIC, myValueGetter },
- * { MY_QUERY_OBJ_DATE, QUERYCORE_DATE, myDateGetter },
+ * { MY_QUERY_OBJ_MEMO, QOF_QUERYCORE_STRING, myMemoGetter },
+ * { MY_QUERY_OBJ_VALUE, QOF_QUERYCORE_NUMERIC, myValueGetter },
+ * { MY_QUERY_OBJ_DATE, QOF_QUERYCORE_DATE, myDateGetter },
  * { MY_QUERY_OBJ_ACCOUNT, GNC_ID_ACCOUNT, myAccountGetter },
  * { MY_QUERY_OBJ_TRANS, GNC_ID_TRANS, myTransactionGetter },
  * NULL };
@@ -78,7 +78,7 @@ void gncQueryObjectRegister (GNCIdTypeConst obj_name,
  */
 
 /** Return the core datatype of the specified object's parameter */
-QueryCoreType gncQueryObjectParameterType (GNCIdTypeConst obj_name,
+QofQueryCoreType gncQueryObjectParameterType (GNCIdTypeConst obj_name,
 					   const char *param_name);
 
 /** Return the registered Object Definition for the requested parameter */
@@ -86,7 +86,7 @@ const QueryObjectDef * gncQueryObjectGetParameter (GNCIdTypeConst obj_name,
 						   const char *parameter);
 
 /** Return the object's parameter getter function */
-QueryAccess gncQueryObjectGetParameterGetter (GNCIdTypeConst obj_name,
+QofQueryAccess gncQueryObjectGetParameterGetter (GNCIdTypeConst obj_name,
 					      const char *parameter);
 
 
