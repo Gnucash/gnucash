@@ -48,7 +48,7 @@
  * 
  *
  * HISTORY:
- * Copyright (c) 1998 Linas Vepstas
+ * Copyright (c) 1998,1999 Linas Vepstas
  */
 
 /********************************************************************\
@@ -1103,6 +1103,8 @@ LoadXferCell (ComboCell *cell,
    Account * acc;
    int n;
 
+   ENTER ("LoadXferCell(): curr=%s secu=%s\n", base_currency, base_security);
+
    if (!grp) return;
 
    /* Build the xfer menu out of account names.
@@ -1119,6 +1121,8 @@ LoadXferCell (ComboCell *cell,
       secu = xaccAccountGetSecurity (acc);
       if (secu && (0x0 == secu[0])) secu = 0x0;
 
+      DEBUG ("LoadXferCell(): curr=%s secu=%s acct=%s\n", 
+        curr, secu, xaccAccountGetName (acc));
       if ( (!safe_strcmp(curr,base_currency)) ||
            (!safe_strcmp(curr,base_security)) ||
            (secu && (!safe_strcmp(secu,base_currency))) ||
@@ -1131,6 +1135,7 @@ LoadXferCell (ComboCell *cell,
       n++;
       acc = xaccGroupGetAccount (grp, n);
    }
+   LEAVE ("LoadXferCell()\n");
 }
 
 /* ======================================================== */
