@@ -16,7 +16,6 @@ gnc_regular_scm_files = \
   depend.scm \
   doc.scm \
   extensions.scm \
-  graph.scm \
   help-topics-index.scm \
   main.scm \
   main-window.scm \
