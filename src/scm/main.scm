@@ -18,8 +18,10 @@
 (define-module (gnucash main))
 
 (use-modules (ice-9 slib))
+
+(use-modules (g-wrap gw-wct))
+
 (use-modules (g-wrapped gw-gnc))
-(use-modules (g-wrapped gw-runtime))
 
 ;; Load the srfis (eventually, we should see where these are needed
 ;; and only have the use-modules statements in those files).
@@ -54,6 +56,7 @@
 (export gnc:find-file)
 (export gnc:find-localized-file)
 (export gnc:main)
+(export gnc:safe-strcmp) ;; only used by aging.scm atm...
 
 ;; from path.scm
 (export gnc:make-home-dir)
@@ -142,6 +145,18 @@
    (else
     (lambda (module)
       (process-use-modules (list (list module)))))))
+
+(define (gnc:safe-strcmp a b)
+  (cond
+   (if (and a b)
+       (cond
+        ((string<? a b) -1)
+        ((string>? a b) 1)
+        (else 0))
+       (cond
+        (a 1)
+        (b -1)
+        (else 0)))))
 
 (if (not (defined? 'hash-fold))
     (define (hash-fold proc init table)
