@@ -1,3 +1,11 @@
+2003-05-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif-import/qif-parse.scm: Don't assume that a
+	  date of the form XXXXXXXX is always YYYYMMDD.  There is at least
+	  one example where it is MMDDYYYY.  So, test it both ways:
+	  xxxxYYYY and YYYYxxxx.  Make sure a 4-digit year "makes sense"
+	  (e.g., the year is after 1930). Fixes bug #111889.
+
 2003-04-29  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/test/Makefile.am: disable the test-scm-query-import
