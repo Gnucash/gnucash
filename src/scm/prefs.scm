@@ -134,7 +134,9 @@ the account instead of opening a register." #f))
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
   "International" "Enable EURO support"
-  "d" "Enables support for the European Union EURO currency" #f))
+  "d" "Enables support for the European Union EURO currency" 
+  (gnc:is-euro-currency
+   (gnc:locale-default-currency))))
 
 
 ;; Register options

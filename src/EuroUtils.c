@@ -35,26 +35,37 @@ gnc_euro_rate_struct;
 /* This array MUST be sorted ! */
 static gnc_euro_rate_struct _gnc_euro_rate_[] =
 {
+  { "ATS",  13.7603 },  /* austrian schilling */
+  { "BEF",  40.3399 },  /* belgian franc */
   { "BFR",  40.3399 },  /* belgian franc */
   { "DEM",  1.95583 },  /* german mark */
   { "DM",   1.95583 },  /* german mark */
   { "ESC",  200.482 },  /* portugese escudo */
+  { "ESP",  166.386 },  /* spanish peseta */
   { "EUR",  1.00000 },  /* euro */
   { "EURO", 1.00000 },  /* euro */
   { "FF",   6.55957 },  /* french franc */
+  { "FIM",  5.94573 },  /* finnmark */
   { "FMK",  5.94573 },  /* finnmark */
+  { "FRF",  6.55957 },  /* french franc */
   { "HFL",  2.20371 },  /* netherland gulden */
+  { "IEP",  .787564 },  /* irish pound */
   { "IRP",  .787564 },  /* irish pound */
+  { "ITL",  1936.27 },  /* italian lira */
   { "LFR",  40.3399 },  /* luxembourg franc */
   { "LIT",  1936.27 },  /* italian lira */
+  { "LUF",  40.3399 },  /* luxembourg franc */
+  { "NLG",  2.20371 },  /* netherland gulden */
   { "PTA",  166.386 },  /* spanish peseta */
-  { "S",    13.7603 }   /* austrian schilling */
+  { "PTE",  200.482 },  /* portugese escudo */
+  { "S",    13.7603 },  /* austrian schilling */
+  { "SCH",  13.7603 }   /* austrian schilling */
 };
 
 static int _gnc_euro_rate_compare_(const void *euro_rate_struct1, const void *euro_rate_struct2)
 {
-  return (strcmp(((const gnc_euro_rate_struct *)euro_rate_struct1)->currency,
-		 ((const gnc_euro_rate_struct *)euro_rate_struct2)->currency));
+  return (strcasecmp(((const gnc_euro_rate_struct *)euro_rate_struct1)->currency,
+		     ((const gnc_euro_rate_struct *)euro_rate_struct2)->currency));
 }
 
 /* ------------------------------------------------------ */
