@@ -10,7 +10,7 @@
  *    time, thus avoiding lost data due to race conditions.  Thus
  *    an open session implies that the associated file is locked.
  *
- * 2) Provides a search path for the file to be edited.  This should
+ * 2) Provides a search path for the file to be edited.  This should 
  *    simplify install & maintenance problems for naive users who
  *    may not have a good grasp on what a file ssytem is, or where
  *    they want to keep thier data files.

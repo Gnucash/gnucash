@@ -75,13 +75,13 @@ struct _split
   Transaction *parent;       /* parent of split                           */
 
   /* The memo field is an arbitrary user-assiged value. 
-   * It is intended to hold a short (zero to forty cahracter) string 
+   * It is intended to hold a short (zero to forty character) string 
    * that is displayed by the GUI along with this split. 
    */
   char  * memo;
 
   /* The action field is an arbitrary user-assigned value.
-   * It is meant to be a very short (oen to ten cahracter) string that
+   * It is meant to be a very short (one to ten cahracter) string that
    * signifies the "type" of this split, such as e.g. Buy, Sell, Div,
    * Withdraw, Deposit, ATM, Check, etc. The idea is that this field
    * can be used to create custom reports or graphs of data.

@@ -172,14 +172,10 @@ char * xaccReadQIFCategory (int fd, Account * acc)
    char * qifline;
    char * tmp;
 
-
    if (!acc) return NULL;
 
    xaccAccountBeginEdit (acc, 0);
    xaccAccountSetType (acc, -1);
-   xaccAccountSetName (acc, "");
-   xaccAccountSetDescription (acc, "");
-   xaccAccountSetNotes (acc, "");
 
    qifline = xaccReadQIFLine (fd);
    if (!qifline) return NULL;
@@ -269,9 +265,6 @@ char * xaccReadQIFAccount (int fd, Account * acc)
 
    xaccAccountBeginEdit (acc, 0);
    xaccAccountSetType (acc, -1);
-   xaccAccountSetName (acc, "");
-   xaccAccountSetDescription (acc, "");
-   xaccAccountSetNotes (acc, "");
 
    qifline = xaccReadQIFLine (fd);
    if (!qifline) return NULL;
@@ -518,8 +511,6 @@ GetSubQIFAccount (AccountGroup *rootgrp, char *qifline, int acc_type)
    if (!xfer_acc) {
       xfer_acc = xaccMallocAccount ();
       xaccAccountSetName (xfer_acc, qifline);
-      xaccAccountSetDescription (xfer_acc, "");
-      xaccAccountSetNotes (xfer_acc, "");
       xaccAccountSetCurrency (xfer_acc, gnc_qif_import_currency);
 
       if (0 > acc_type) acc_type = GuessAccountType (qifline);
@@ -604,8 +595,6 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
    if (!xfer_acc) {
       xfer_acc = xaccMallocAccount ();
       xaccAccountSetName (xfer_acc, qifline);
-      xaccAccountSetDescription (xfer_acc, "");
-      xaccAccountSetNotes (xfer_acc, "");
       xaccAccountSetCurrency (xfer_acc, gnc_qif_import_currency);
 
       xaccAccountSetType (xfer_acc, STOCK);
@@ -624,6 +613,10 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
  *                                                                  * 
  * Args:   fd -- file descriptor                                    * 
  * Args:   acc -- account structure to fill in                      * 
+ * Args:   guess_name -- true if we should try and guess the name   *
+ *                       based on an opening balance entry          * 
+ * Args:   first_trans -- true if this is the first transaction to  *
+ *                        be processed in this account              *
  * Return: first new line after end of transaction                  * 
 \********************************************************************/
 
@@ -634,13 +627,15 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
 
 
 char * 
-xaccReadQIFTransaction (int fd, Account *acc, int *name_not_yet_set)
+xaccReadQIFTransaction (int fd, Account *acc, int guess_name,
+			int first_trans)
 {
    Transaction *trans;
    Split *source_split;
    Split *split = NULL;
    char * qifline;
    char * tmp;
+   int opening_balance = 0;
    int isneg = 0;
    int got_share_quantity = 0;
    int share_xfer = 0;
@@ -681,6 +676,7 @@ xaccReadQIFTransaction (int fd, Account *acc, int *name_not_yet_set)
 	   time_t secs;
 	   secs = xaccParseQIFDate (&qifline[1]);
 	   xaccTransSetDateSecs (trans, secs);
+	   xaccTransSetDateEnteredSecs (trans, secs);
 	 }
 	 break;
        case 'E':    /* E == memo for split */
@@ -697,25 +693,27 @@ xaccReadQIFTransaction (int fd, Account *acc, int *name_not_yet_set)
 	 break;
        case 'L': /* L == name of acount from which transfer occured */
 	 /* MSMoney uses a cute trick to overcome the lack of an account name
-	* in the QIF format.  Basically, if the very very first transaction
-	* has a payee field of "Opening Balance", then the L field is the name
-	* of this account, and not the transfer account.  But this only works
-	* for the very, very first transaction.
-	*/
-	 if (*name_not_yet_set) {
-	   *name_not_yet_set = 0;
-	   /* remove square brackets from name, remove carriage return ... */
-	   qifline = &qifline[1];
-	   if ('[' == qifline[0]) {
+	  * in the QIF format.  Basically, if the very very first transaction
+	  * has a payee field of "Opening Balance", then the L field is the name
+	  * of this account, and not the transfer account.  But this only works
+	  * for the very, very first transaction. This also seems to be the case
+	  * for Quicken 5.0 (and others?).
+	  */
+	 if (opening_balance) {
+	   if (guess_name) {
+	     /* remove square brackets from name, remove carriage return ... */
 	     qifline = &qifline[1];
-	     tmp = strchr (qifline, ']');
+	     if ('[' == qifline[0]) {
+	       qifline = &qifline[1];
+	       tmp = strchr (qifline, ']');
+	       if (tmp) *tmp = 0x0;
+	     }
+	     tmp = strchr (qifline, '\r');
 	     if (tmp) *tmp = 0x0;
+	     tmp = strchr (qifline, '\n');
+	     if (tmp) *tmp = 0x0;
+	     xaccAccountSetName (acc, qifline);
 	   }
-	   tmp = strchr (qifline, '\r');
-	   if(tmp) *tmp = 0x0;
-	   tmp = strchr (qifline, '\n');
-	   if(tmp) *tmp = 0x0;
-	   xaccAccountSetName (acc, qifline);
 	 } else {
 	   /* locate the transfer account */
 	   xfer_acc = xaccGetXferQIFAccount (acc, qifline);
@@ -770,11 +768,12 @@ xaccReadQIFTransaction (int fd, Account *acc, int *name_not_yet_set)
 	  * in the QIF format.  Basically, if the very very first transaction
 	  * has a payee field of "Opening Balance", then the L field is the name
 	  * of this account, and not the transfer account.  But this only works
-	  * for the very, very first transaction.
+	  * for the very, very first transaction. This also seems to be the case
+	  * for Quicken 5.0 (and others?).
 	  */
-	 if (*name_not_yet_set) {
-	   if (! NSTRNCMP (qifline, "POpening Balance")) *name_not_yet_set = 0;
-	 }
+	 if (first_trans)
+	   if (NSTRNCMP (qifline, "POpening Balance"))
+	     opening_balance = GNC_T;
 	 break;
 
        case 'Q':
@@ -940,15 +939,15 @@ xaccReadQIFTransaction (int fd, Account *acc, int *name_not_yet_set)
  * the indicated account
 \********************************************************************/
 
-char * xaccReadQIFTransList (int fd, Account *acc, int *acc_name_not_yet_set)
+char * xaccReadQIFTransList (int fd, Account *acc, int guess_name)
 {
    char * qifline;
 
    if (!acc) return 0x0;
-   qifline = xaccReadQIFTransaction (fd, acc, acc_name_not_yet_set);
+   qifline = xaccReadQIFTransaction (fd, acc, guess_name, GNC_T);
    while (qifline) {
       if ('!' == qifline[0]) break;
-      qifline = xaccReadQIFTransaction (fd, acc, acc_name_not_yet_set);
+      qifline = xaccReadQIFTransaction (fd, acc, guess_name, GNC_F);
    } 
    return qifline;
 }
@@ -958,7 +957,7 @@ char * xaccReadQIFTransList (int fd, Account *acc, int *acc_name_not_yet_set)
 \********************************************************************/
 
 /********************************************************************\
- * xaccReadQIFAccountGroup                                                  * 
+ * xaccReadQIFAccountGroup                                          * 
  *   reads in the data from file datafile                           *
  *                                                                  * 
  * Args:   datafile - the file to load the data from                * 
@@ -1025,14 +1024,13 @@ xaccReadQIFAccountGroup( char *datafile )
      } 
         
      if (name) {
-        int bogus_acc_name = 1;
         Account * acc = xaccMallocAccount();
         xaccAccountSetType (acc, typo);
         xaccAccountSetName (acc, name);
         xaccAccountSetCurrency (acc, gnc_qif_import_currency);
 
         xaccGroupInsertAccount( grp, acc );
-        qifline = xaccReadQIFTransList (fd, acc, &bogus_acc_name);
+        qifline = xaccReadQIFTransList (fd, acc, GNC_T);
         typo = -1; name = NULL;
         continue;
      } else
@@ -1083,8 +1081,7 @@ xaccReadQIFAccountGroup( char *datafile )
            /* read account name, followed by dollar data ... */
            char * acc_name;
            Account *preexisting;
-           Account *acc   = xaccMallocAccount();
-           int guess_acc_name = 0;
+           Account *acc = xaccMallocAccount();
 
            DEBUG ("got account\n");
            xaccAccountSetCurrency (acc, gnc_qif_import_currency);
@@ -1099,7 +1096,7 @@ xaccReadQIFAccountGroup( char *datafile )
            acc_name = xaccAccountGetName (acc);
            preexisting = xaccGetAccountFromName (grp, acc_name);
            if (preexisting) 
-            {
+	   {
               xaccFreeAccount (acc);
               acc = preexisting;
            } 
@@ -1122,7 +1119,7 @@ xaccReadQIFAccountGroup( char *datafile )
    
            /* read transactions */
            /* note, we have a real account name, so no need to go guessing it. */
-           if (qifline) qifline = xaccReadQIFTransList (fd, acc, &guess_acc_name);
+           if (qifline) qifline = xaccReadQIFTransList (fd, acc, GNC_F);
         }    
         continue;
      } else
