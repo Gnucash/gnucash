@@ -1,5 +1,5 @@
 /********************************************************************\
- * dialog-nextrun.c - "since last run" dialog.                      *
+ * dialog-sxsincelast.c - "since last run" dialog.                  *
  * Copyright (c) 2001 Joshua Sled <jsled@asynchronous.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -33,13 +33,14 @@
 #include "gnc-numeric.h"
 #include "SchedXaction.h"
 #include "gnc-component-manager.h"
-#include "dialog-nextrun.h"
 #include "SplitLedger.h"
 #include "gnc-ui-util.h"
 #include "gnc-exp-parser.h"
 #include "dialog-utils.h"
 
-#define DIALOG_NEXTRUN_CM_CLASS "dialog-nextrun"
+#include "dialog-sxsincelast.h"
+
+#define DIALOG_SXSINCELAST_CM_CLASS "dialog-sxsincelast"
 
 static short module = MOD_SX;
 
@@ -51,64 +52,70 @@ typedef struct _toCreateTransaction {
 } toCreateTransaction;
 
 typedef struct _sxSinceLastData {
-        GtkWidget *nextrunDlg;
+        GtkWidget *sxsincelastDlg;
         GladeXML *gxml;
         GList /* <toCreateTransaction*> */ *transList;
 } sxSinceLastData;
 
-static void nextrun_init( sxSinceLastData *sxsld );
-static void nextrun_close_handler( gpointer ud );
-static void nr_ok_clicked( GtkButton *b, gpointer ud );
-static void nr_next_clicked( GtkButton *b, gpointer ud );
-static void nr_prev_xaction_clicked( GtkButton *b, gpointer ud );
-static void nr_next_xaction_clicked( GtkButton *b, gpointer ud );
+typedef struct _reminderTuple {
+        GDate	*endDate;
+        GDate	*occurDate;
+} reminderTuple;
 
-static void nextrun_destroy( GtkObject *o, gpointer ud );
+static void sxsincelast_init( sxSinceLastData *sxsld );
+static void sxsincelast_populate( sxSinceLastData *sxsld );
+static void sxsincelast_close_handler( gpointer ud );
+static void sxsincelast_ok_clicked( GtkButton *b, gpointer ud );
+static void sxsincelast_cancel_clicked( GtkButton *b, gpointer ud );
 
-static void slr_create_transactions( SchedXaction *sx, GDate *gd );
+static void sxsincelast_destroy( GtkObject *o, gpointer ud );
+
+static void _create_transactions_on( SchedXaction *sx, GDate *gd );
+
+static void processAutoCreateList( GList *, sxSinceLastData *sxsld, SchedXaction * );
+static void processToCreateList( GList *, sxSinceLastData *sxsld, SchedXaction * );
+static void processReminderList( GList *, sxSinceLastData *sxsld, SchedXaction * );
 
 /* int parse_vars_from_formula( const char *formula, GHashTable *varHash ); */
 
 void
-gnc_ui_nextrun_guile_wrapper( char *foo )
+gnc_ui_sxsincelast_guile_wrapper( char *foo )
 {
-        gnc_ui_nextrun_dialog_create();
+        gnc_ui_sxsincelast_dialog_create();
 }
 
 void
-gnc_ui_nextrun_dialog_create(void)
+gnc_ui_sxsincelast_dialog_create(void)
 {
         sxSinceLastData        *sxsld = g_new0( sxSinceLastData, 1 );
-        sxsld->gxml = gnc_glade_xml_new( "sched-xact.glade", "Since-Last-Run Instantiation" );
-        sxsld->nextrunDlg = glade_xml_get_widget( sxsld->gxml, "Since-Last-Run Instantiation" );
+        sxsld->gxml = gnc_glade_xml_new( "sched-xact.glade", "Real Since-Last-Run Dialog" );
+        sxsld->sxsincelastDlg = glade_xml_get_widget( sxsld->gxml, "Real Since-Last-Run Dialog" );
 
-        nextrun_init( sxsld );
+        sxsincelast_init( sxsld );
 }
 
 static void
-nextrun_init( sxSinceLastData *sxsld )
+sxsincelast_init( sxSinceLastData *sxsld )
 {
         GtkWidget        *o;
         int                i;
-        struct widgetNameSignalHandlerTuple {
+        struct widgetSignalHandlerTuple {
                 char *name;
                 char *signal;
                 void (*handlerFn)();
         } widgets[] = {
-                { "ok",           "clicked", nr_ok_clicked },
-                { "next",         "clicked", nr_next_clicked },
-                { "prev_xaction", "clicked", nr_prev_xaction_clicked },
-                { "next_xaction", "clicked", nr_next_xaction_clicked },
-                { NULL,           NULL,      NULL }
+                { "ok_button",     "clicked", sxsincelast_ok_clicked },
+                { "cancel_button", "clicked", sxsincelast_cancel_clicked },
+                { NULL,            NULL,      NULL }
         };
 
-        gnc_register_gui_component( DIALOG_NEXTRUN_CM_CLASS,
+        gnc_register_gui_component( DIALOG_SXSINCELAST_CM_CLASS,
                                     NULL,
-                                    nextrun_close_handler,
-                                    sxsld->nextrunDlg );
+                                    sxsincelast_close_handler,
+                                    sxsld->sxsincelastDlg );
         
-        gtk_signal_connect( GTK_OBJECT(sxsld->nextrunDlg), "destroy",
-                            GTK_SIGNAL_FUNC( nextrun_destroy ), sxsld );
+        gtk_signal_connect( GTK_OBJECT(sxsld->sxsincelastDlg), "destroy",
+                            GTK_SIGNAL_FUNC( sxsincelast_destroy ), sxsld );
 
         for ( i=0; widgets[i].name != NULL ; i++ ) {
                 o = glade_xml_get_widget( sxsld->gxml, widgets[i].name );
@@ -118,48 +125,248 @@ nextrun_init( sxSinceLastData *sxsld )
                 
         }
 
-        o = glade_xml_get_widget( sxsld->gxml, "next" );
-        gtk_signal_connect( GTK_OBJECT(o), "clicked",
-                            GTK_SIGNAL_FUNC(nr_next_clicked),
-                            sxsld );
+        sxsincelast_populate( sxsld );
 
-        o = glade_xml_get_widget( sxsld->gxml, "prev_xaction" );
-        gtk_signal_connect( GTK_OBJECT(o), "clicked",
-                            GTK_SIGNAL_FUNC(nr_prev_xaction_clicked),
-                            sxsld );
-        o = glade_xml_get_widget( sxsld->gxml, "next_xaction" );
-        gtk_signal_connect( GTK_OBJECT(o), "clicked",
-                            GTK_SIGNAL_FUNC(nr_next_xaction_clicked),
-                            sxsld );
-
-        gtk_widget_show_all( sxsld->nextrunDlg );
+        gtk_widget_show_all( sxsld->sxsincelastDlg );
 }
 
 static void
-nextrun_close_handler( gpointer ud )
+_generate_instances( SchedXaction *sx,
+                     GDate *end,
+                     GList **instanceList )
 {
-        gnome_dialog_close( GNOME_DIALOG( ((sxSinceLastData*)ud)->nextrunDlg ) );
-}
+        GDate gd, *gdToReturn;
+        char tmpBuf[26];
 
-static void
-nr_ok_clicked( GtkButton *b, gpointer ud )
-{
-        sxSinceLastData                *sxsld;
-        GList                        *tctList;
-        toCreateTransaction        *tct;
+        gd = xaccSchedXactionGetNextInstance( sx );
+        while ( g_date_valid(&gd)
+                && g_date_compare( &gd, end ) <= 0 ) {
 
-        sxsld = (sxSinceLastData*)ud;
+                g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y", &gd );
+                DEBUG( "Adding instance %s", tmpBuf );
 
-        tctList = sxsld->transList;
-        if ( tctList == NULL ) {
-                PERR( "no transactions to create\n" );
+                gdToReturn = g_date_new();
+                *gdToReturn = gd;
+                *instanceList = g_list_append( *instanceList, gdToReturn );
+
+                gd = xaccSchedXactionGetInstanceAfter( sx, &gd );
         }
-        do {
-                tct = (toCreateTransaction*)tctList->data;
-                slr_create_transactions( tct->sx, tct->date );
-        } while ( (tctList = tctList->next) );
+        if ( ! g_date_valid( &gd ) ) {
+                PERR( "Should be added to dead-list..." );
+        }
+}
 
-        nextrun_close_handler( ud );
+static void
+_free_gdate_list_elts( gpointer data, gpointer user_data )
+{
+        g_date_free( (GDate*)data );
+}
+
+static void
+_free_reminderTuple_list_elts( gpointer data, gpointer user_data )
+{
+        g_date_free( ((reminderTuple*)data)->occurDate );
+        g_free( (reminderTuple*)data );
+}
+
+static void
+processAutoCreateList( GList *autoCreateList, sxSinceLastData *sxsld, SchedXaction *sx )
+{
+        char tmpBuf[26];
+        int row;
+        GtkCList *cl;
+        gboolean autoCreateState, notifyState;
+        char *rowText[2];
+
+        row = 0;
+
+        /*
+          get the "automagically created and notification requested"
+          register, and create the entires.
+          For now, this is a clist...
+        */
+        cl = GTK_CLIST( glade_xml_get_widget( sxsld->gxml, "auto_create_clist" ) );
+        gtk_clist_freeze( cl );
+        while ( autoCreateList ) {
+                g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y",
+                                 (GDate*)autoCreateList->data );
+                xaccSchedXactionGetAutoCreate( sx, &autoCreateState, &notifyState );
+
+                _create_transactions_on( sx, (GDate*)autoCreateList->data );
+
+                if ( notifyState ) {
+                        rowText[0] = xaccSchedXactionGetName( sx );
+                        rowText[1] = malloc( sizeof(gchar) * 26 ); /* FIXME */
+                        g_date_strftime( rowText[1], 25, "%a, %b %e, %Y",
+                                         (GDate*)autoCreateList->data );
+                        gtk_clist_insert( cl, row++, rowText );
+                }
+
+                autoCreateList = autoCreateList->next;
+        }
+        gtk_clist_thaw( cl );
+
+}
+
+static void
+processToCreateList( GList *toCreateList, sxSinceLastData *sxsld, SchedXaction *sx )
+{
+        GtkCList *clist;
+        int row;
+        char *rowText[2];
+
+        row = 0;
+        if ( toCreateList == NULL )
+                return;
+
+        clist = GTK_CLIST( glade_xml_get_widget( sxsld->gxml, "to_create_clist" ) );
+        do {
+                /* add to clist [ahem... register... ahem] */
+                rowText[0] = xaccSchedXactionGetName( sx );
+                rowText[1] = malloc( sizeof(char) * 25 ); /* FIXME */
+                g_date_strftime( rowText[1], 25, "%a, %b %e, %Y", (GDate*)toCreateList->data );
+                gtk_clist_insert( clist, row++, rowText );
+        } while ( (toCreateList = toCreateList->next) );
+}
+
+static void
+processReminderList( GList *reminderList, sxSinceLastData *sxsld, SchedXaction *sx )
+{
+        GtkCList *clist;
+        int row;
+        char *rowText[3];
+        reminderTuple *rt;
+
+        /* . need
+             . orig end date
+             . this instance date
+             . sx
+        */
+
+        row = 0;
+
+        if ( reminderList == NULL )
+                return;
+
+        clist = GTK_CLIST( glade_xml_get_widget( sxsld->gxml, "reminders_clist" ) );
+
+        do {
+                rt = (reminderTuple*)reminderList->data;
+                /* add to clist [ahem... register... ahem] */
+                rowText[0] = xaccSchedXactionGetName( sx );
+                rowText[1] = malloc( sizeof(gchar) * 25 ); /* FIXME */
+                g_date_strftime( rowText[1], 25, "%a, %b %e, %Y", rt->occurDate );
+                rowText[2] = malloc( sizeof(gchar) * 5 ); /* FIXME */
+                sprintf( rowText[2], "%d",
+                         (g_date_julian(rt->occurDate) - g_date_julian(rt->endDate)) );
+
+                gtk_clist_insert( clist, row++, rowText );
+        } while ( (reminderList = reminderList->next) );
+}
+
+
+static void
+sxsincelast_populate( sxSinceLastData *sxsld )
+{
+
+        GList *sxList, *instanceList;
+        GList *autoCreateList, *toCreateList, *reminderList;
+        SchedXaction *sx;
+        GDate end, endPlusReminders;
+        GDate *instDate;
+        gint daysInAdvance;
+        gboolean autocreateState, notifyState;
+        gchar *rowText[3];
+        GtkWidget *w;
+        gint autoCreateRow, toCreateRow, remindersRow;
+        reminderTuple *rt;
+
+        autoCreateList = toCreateList = reminderList = NULL;
+        autoCreateRow  = toCreateRow  = remindersRow = 0;
+
+        sxList = gnc_book_get_schedxactions( gncGetCurrentBook() );
+
+        if ( sxList == NULL ) {
+                DEBUG( "No scheduled transactions to populate." );
+        }
+
+        do {
+                sx = (SchedXaction*)sxList->data;
+                g_date_set_time( &end, time(NULL) );
+                daysInAdvance = xaccSchedXactionGetAdvanceCreation( sx );
+                g_date_add_days( &end, daysInAdvance );
+                
+                endPlusReminders = end;
+                daysInAdvance = xaccSchedXactionGetAdvanceReminder( sx );
+                g_date_add_days( &endPlusReminders, daysInAdvance );
+                
+                
+                if (0) {
+                        char tmpBuf[26];
+
+                        g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y", &end );
+                        DEBUG( "We'll generate the appropriate instances, now for "
+                               "SX \"%s\" with end time %s...",
+                               xaccSchedXactionGetName(sx),
+                               tmpBuf );
+                }
+                instanceList = NULL;
+                _generate_instances( sx, &endPlusReminders, &instanceList );
+
+                if ( instanceList == NULL )
+                        continue;
+
+                xaccSchedXactionGetAutoCreate( sx, &autocreateState, &notifyState );
+                do {
+                        instDate = (GDate*)instanceList->data;
+                        if ( 0 ) {
+                                char tmpBuf[26];
+                                g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y", instDate );
+                                DEBUG( "SX \"%s\" instance on %s",
+                                       xaccSchedXactionGetName(sx), tmpBuf );
+                        }
+
+                        if ( (g_date_compare( &end, &endPlusReminders ) != 0)
+                             && (g_date_compare( &end, instDate ) <= 0) ) {
+                                /* DEBUG( "\tIs a reminder" ); */
+                                rt = g_new0( reminderTuple, 1 );
+                                rt->endDate = &end;
+                                rt->occurDate = instDate;
+                                reminderList = g_list_append( reminderList, rt );
+                        } else {
+                                if ( autocreateState ) {
+                                        /* DEBUG( "\tauto-create" ); */
+                                        autoCreateList = g_list_append( autoCreateList,
+                                                                        instDate );
+                                } else {
+                                        /* DEBUG( "\tAdding to create list" ); */
+                                        toCreateList = g_list_append( toCreateList,
+                                                                      instDate );
+                                }
+                        }
+                } while ( (instanceList = instanceList->next) );
+
+                /* process the lists */
+                processAutoCreateList( autoCreateList, sxsld, sx );
+                processToCreateList  ( toCreateList,   sxsld, sx );
+                processReminderList  ( reminderList,   sxsld, sx );
+
+                g_list_foreach( autoCreateList, _free_gdate_list_elts, NULL );
+                g_list_free( autoCreateList );
+
+                g_list_foreach( reminderList, _free_reminderTuple_list_elts, NULL );
+                g_list_free( reminderList );
+
+                /* FIXME: freeup the toCreate list at a more appropriate
+                   time. */
+
+        } while ( (sxList = sxList->next) );
+}
+
+static void
+sxsincelast_close_handler( gpointer ud )
+{
+        gnome_dialog_close( GNOME_DIALOG( ((sxSinceLastData*)ud)->sxsincelastDlg ) );
 }
 
 static void
@@ -169,23 +376,28 @@ free_elts( gpointer data, gpointer user_data )
 }
 
 static void
-nr_next_clicked( GtkButton *b, gpointer ud )
+sxsincelast_ok_clicked( GtkButton *b, gpointer ud )
 {
         sxSinceLastData *sxsld;
-        GtkWidget        *dlg;
-        GtkWidget        *o;
-        GtkCList        *cl;
-        time_t                gdeDate;
-        GList                *sxList;
-        GNCBook                *book;
-        SchedXaction        *sx;
-        GDate                gd, *endDate;
-        gchar                buf[1024];
-        gint                row;
-        char                *rowText[2];
-        toCreateTransaction        *tct;
+        GtkWidget *dlg;
+        GtkWidget *o;
+        GtkCList *cl;
+        time_t gdeDate;
+        GList *sxList;
+        GNCBook *book;
+        SchedXaction *sx;
+        GDate gd, *endDate;
+        gchar buf[1024];
+        gint row;
+        char *rowText[2];
+        toCreateTransaction *tct;
+
 
         sxsld = (sxSinceLastData*)ud;
+
+        sxsincelast_close_handler( sxsld );
+        /* FIXME: the SX/date list already has been generated; we should use that. */
+#if 0
         o = glade_xml_get_widget( sxsld->gxml, "next_date" );
         gdeDate = gnome_date_edit_get_date( GNOME_DATE_EDIT(o) );
 
@@ -206,7 +418,6 @@ nr_next_clicked( GtkButton *b, gpointer ud )
                 return;
         }
         
-        /* FIXME: This is actually a non-changeable date. */
         endDate = g_date_new();
         g_date_set_time( endDate, gdeDate );
 
@@ -218,10 +429,10 @@ nr_next_clicked( GtkButton *b, gpointer ud )
         row = 0;
         do {
                 sx = (SchedXaction*)sxList->data;
-                /* this is really "last-run-date", right? */
+                // this is really "last-run-date", right?
                 g_date_set_time( &gd, time(NULL) );
                 
-                gd = xaccSchedXactionGetNextInstance( sx );
+                gd = xaccSchedXactionGetInstanceAfter( sx, &gd );
                 while ( g_date_compare( &gd, endDate ) <= 0
                         && g_date_valid( &gd ) ) {
                         
@@ -245,26 +456,23 @@ nr_next_clicked( GtkButton *b, gpointer ud )
         } while ( (sxList = sxList->next) );
 
         g_date_free( endDate );
+#endif
 }
 
 static void
-nextrun_destroy( GtkObject *o, gpointer ud )
+sxsincelast_cancel_clicked( GtkButton *o, gpointer ud )
+{
+        sxsincelast_close_handler( ud );
+}
+
+static void
+sxsincelast_destroy( GtkObject *o, gpointer ud )
 {
         DEBUG( "nuttin' doin...\n" );
 }
 
-static void
-nr_prev_xaction_clicked( GtkButton *b, gpointer ud )
-{
-}
-
-static void
-nr_next_xaction_clicked( GtkButton *b, gpointer ud )
-{
-}
-
 static gboolean
-create_each_transaction( Transaction *t, void *d )
+_create_each_transaction( Transaction *t, void *d )
 {
         Transaction        *newT;
         GDate                *gd;
@@ -277,7 +485,7 @@ create_each_transaction( Transaction *t, void *d )
 
         errFlag = FALSE;
 
-        DEBUG( "I'm seeing Transaction \"%s\"\n",
+        DEBUG( "I'm seeing Transaction \"%s\"",
                 xaccTransGetDescription( t ) );
 
         gd = (GDate*)d;
@@ -297,7 +505,7 @@ create_each_transaction( Transaction *t, void *d )
         osList = xaccTransGetSplitList( t );
         sList = xaccTransGetSplitList( newT );
         if ( (osList == NULL) || (sList == NULL) ) {
-                PERR( "\tseen transaction w/o splits. :(\n" );
+                PERR( "\tseen transaction w/o splits. :(" );
                 return FALSE;
         }
         do {
@@ -307,7 +515,7 @@ create_each_transaction( Transaction *t, void *d )
                    will, but I'd rather not have to count on it. --jsled */
                 split_kvpf = xaccSplitGetSlots( (Split*)osList->data );
 
-                DEBUG( "\tProcessing Split \"%s\"\n",
+                DEBUG( "\tProcessing Split \"%s\"",
                         xaccSplitGetMemo( split ) );
 
                 DEBUG( "\tkvp_frame: %s\n",
@@ -321,11 +529,11 @@ create_each_transaction( Transaction *t, void *d )
                         /* contains the guid of the split's actual account. */
                         kvp_val = kvp_frame_get_slot( split_kvpf, "sched-xaction/xfrm" );
                         if ( kvp_val == NULL ) {
-                                PERR( "Null kvp_val for xfrm\n" );
+                                PERR( "Null kvp_val for xfrm" );
                         }
                         acct_guid = kvp_value_get_guid( kvp_val );
                         acct = xaccAccountLookup( acct_guid );
-                        DEBUG( "Got account with name \"%s\"\n",
+                        DEBUG( "Got account with name \"%s\"",
                                 xaccAccountGetName( acct ) );
                         /* xaccSplitSetAccount( split, acct ); */
                         xaccAccountInsertSplit( acct, split );
@@ -342,15 +550,11 @@ create_each_transaction( Transaction *t, void *d )
                         str = kvp_value_get_string( kvp_val );
                         credit_num = gnc_numeric_create( 0, 1 );
                         if ( str != NULL ) {
-                                
-                                printf( "---------------\n" );
-                                printf( "Parsing formula:\n" );
                                 /* parse_vars_from_formula( str, NULL ); */
-                                printf( "---------------\n" );
 
                                 xaccParseAmount( str, TRUE, &credit_num, NULL );
                                 /* string_to_gnc_numeric( str, &credit_num ); */
-                                printf( "gnc_numeric::credit: \"%s\" -> \"%s\"\n",
+                                DEBUG( "gnc_numeric::credit: \"%s\" -> \"%s\"",
                                         str, gnc_numeric_to_string( credit_num ) );
                         }
                         
@@ -359,27 +563,23 @@ create_each_transaction( Transaction *t, void *d )
 
                         debit_num = gnc_numeric_create( 0, 1 );
                         if ( str != NULL ) {
-
-                                printf( "---------------\n" );
-                                printf( "Parsing formula:\n" );
                                 /* parse_vars_from_formula( str, NULL ); */
-                                printf( "---------------\n" );
 
                                 xaccParseAmount( str, TRUE, &debit_num, NULL );
                                 /* string_to_gnc_numeric( str, &debit_num ); */
-                                printf( "gnc_numeric::debit: \"%s\" -> \"%s\"\n",
-                                        str, gnc_numeric_to_string( debit_num ) );
+                                DEBUG( "gnc_numeric::debit: \"%s\" -> \"%s\"",
+                                       str, gnc_numeric_to_string( debit_num ) );
                         }
                         
                         final = gnc_numeric_sub_fixed( credit_num, debit_num );
                         
                         gncn_error = gnc_numeric_check( final );
                         if ( gncn_error != GNC_ERROR_OK ) {
-                                printf( "Error %d in final gnc_numeric value\n", gncn_error );
+                                PERR( "Error %d in final gnc_numeric value", gncn_error );
                                 errFlag = TRUE;
                                 break;
                         }
-                        DEBUG( "gnc_numeric::final: \"%s\"\n",
+                        DEBUG( "gnc_numeric::final: \"%s\"",
                                gnc_numeric_to_string( final ) );
                         xaccSplitSetValue( split, final );
                 }
@@ -390,7 +590,7 @@ create_each_transaction( Transaction *t, void *d )
         } while ( (sList = sList->next) && (osList = osList->next) );
 
         if ( errFlag ) {
-                PERR( "Some error in new transaction creation...\n" );
+                PERR( "Some error in new transaction creation..." );
                 xaccTransRollbackEdit( newT );
         } else {
                 xaccTransCommitEdit( newT );
@@ -401,13 +601,19 @@ create_each_transaction( Transaction *t, void *d )
 }
 
 static void
-slr_create_transactions( SchedXaction *sx, GDate *gd )
+_create_transactions_on( SchedXaction *sx, GDate *gd )
 {
-        AccountGroup        *ag;
-        Account                *acct;
-        char                *id;
+        AccountGroup *ag;
+        Account *acct;
+        char *id;
+        char tmpBuf[26];
 
-        /* get template account group */
+        {
+                g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y", gd );
+                DEBUG( "Creating transactions on %s for %s",
+                       tmpBuf, xaccSchedXactionGetName( sx ) );
+        }
+
         ag = gnc_book_get_template_group( gncGetCurrentBook() );
         id = guid_to_string( xaccSchedXactionGetGUID(sx) );
         acct = xaccGetAccountFromName( ag, id );
@@ -416,8 +622,9 @@ slr_create_transactions( SchedXaction *sx, GDate *gd )
         g_free( id );
 
         xaccAccountForEachTransaction( acct,
-                                       create_each_transaction,
+                                       _create_each_transaction,
                                        gd );
+        xaccSchedXactionSetLastOccurDate( sx, gd );
 
 }
 

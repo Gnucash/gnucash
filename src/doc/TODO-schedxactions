@@ -3,66 +3,160 @@ Author: jsled@asynchronous.org
 Main Scheduled Transaction todo list
 ------------------------------------
 
-. Engine ...Init() functions should be private.
-. FreqSpec.c
-  . xaccFreqSpecGetFreqStr [display] needs to go away [?]
+##################################################
+### Done
+##################################################
 
 X add the ...GetFreqStr() code for the complex composite FreqSpecs
 X fix the ...GetNextInstance() code
 X XMLv2 I/O
+X need policy for start-dates in GNCFrequency
+X fix GetNextInstance and GetInstanceAfter, mostly for composite FreqSpecs
+  X also needs to deal with >28-mday values WRT last-occur date + multipliers
+
+##################################################
+### To-Do
+##################################################
+
+. Engine ...Init() functions should be private.
+
+. FreqSpec.c
+  . xaccFreqSpecGetFreqStr [display] needs to go away [?]
+
 X create a template register
   X store account and amount data in kvp_frames.
   . find a way to list multiple registers for template transaction purposes.
     . this is a "normal" general ledger + a "stock" general ledger
     . this is going to be: a tabbed notebook in which the tabs contain
       the number of transactions the GL they hold contain.
-X need policy for start-dates in GNCFrequency
-X fix GetNextInstance and GetInstanceAfter, mostly for composite FreqSpecs
-  X also needs to deal with >28-mday values WRT last-occur date + multipliers
 
-. add a big calendar [gnome-pim?  evo?]  SXaction List code
+. Hook into 'book data changed' save-on-exit decision.
+
+. add a big calendar [gnome-pim?  evo?] to SXaction List/overview
+
 . match existing transactions for long-time users
   . based off template-transaction data, some big existing-transaction
     scanning code.
+
 . need "since-last-run" UI for instanatiation.
   X/O create transactions
     X numeric
     . formula
       . need variable fill-in UI...
         . re-use gnome-sheet code for a variable-binding table?
-. need way to expire/purge scheduled transactions which have no chance of
-  being created [outside their end date; once-scheduled and past].
-. need 'reminders' of upcoming scheduled transactions during since-last-run
-. need some configuration for constantly-running GnuCash users of when to pop
-  up the 'new scheduled transactions' dialog [option, time-of-day]
+  . need way to expire/purge scheduled transactions which have no chance of
+    being created [outside their end date; once-scheduled and past].
+  . need 'reminders' of upcoming scheduled transactions during since-last-run
+    . Is it sufficient to look at the next instance of ea. transaction only?
+      I think not... we probably want to look out until the transaction is
+      outside the reminder range.
+  . need some configuration for constantly-running GnuCash users of when to
+    pop up the 'new scheduled transactions' dialog [option, time-of-day]
+  . Should deal with "nothing-to-do" better [not even show up].
+
 . register mods
   . to see upcoming xactions, modifying future balance
-  . to instantiate xactions.
   . to note which are "recurring"
     . the mozilla "reload" glyph is kinda neat...
-. would like "don't even tell me you instantiated it, just fscking do
+  . Differently-colored "not-yet-created" entries for a configurable
+    window.
+  . Context menus/sensitive toolbar button/menu item for creation of
+    not-yet-created transactions.
+  . The ability to turn a non-recurring transaction into a recurring one...
+
+X would like "don't even tell me you instantiated it, just fscking do
   it!" option for non-manual-conf SXes
+
+
 . deal better with formulas in template transactions [real FormulaCell]
   . recognize purely numeric template transactions and balance at
     template-creation time.
+
 . GNCFrequency
   . initial-settings synchronization [start date, optionmenus]
     . only a couple left; which ones?
+
 . backend support
   . PostgreSQL
   . others? 
 
-Bugs:
+. SX Creation...
+  . Creation occurs due to a variety of circumstances:
+    . GnuCash starts and hasn't been run in some length of time; the
+      transactions which have "come due" since the last run are available for
+      creation.
+    . A user opens a register with future transactions in it; they manually
+      force the creation of the [perhaps not immediately next [though this
+      seems a bit weird]] one.
+    . A user is reminded of something which hasn't come due, but will w/in a
+      configurable amount of time, and thus they pay/create it.
+
+. Configuration options...
+  . Overall
+    . Size of template register window
+    . color of future register entries
+    . conrad's desires
+    . policy
+      . create for N days in advance
+      . show for N days in advance, create when come-due
+    . defaults
+      . create/show for 'N' days in advance
+      . remind me 'M' days in advance
+      . just create
+      . notify when created
+  . Per-SX
+    . just create/notify
+    . create/show
+      . lead-time
+    . reminder
+      . lead-time
+
+. Changes
+  . Create-into-future vs. create-normal
+    . into-future -> normal : no change; the last_occur date will be
+      appropriate, and will catch up eventually [unless the have-been-created
+      transactions should go away]
+    . normal -> into-future : should create immed, or wait for user?
+    . into-future [t_0] -> into_future [t_1]
+  . frequency
+    . in presence of create-into-future?
+  . transaction
+    . in presence of create-into-future?
+
+
+##################################################
+### Bugs
+##################################################
+
+. General
+  . Date l10n.
+
 . GNCFreqency
-  . Can't click-out of the register
   . transitioning to a new tab doesn't correctly setup the agreement between
     the startdate and the page elements.
+  . Example calendar month change isn't handled correctly/doesn't refresh the
+    marks.
+  . "Inappropriate FreqSpec type" on new-SX editing.
+  . "new; weekly: click on day, click off day: GLib-CRITICAL **: file gdate.c: line 1236 (g_date_to_struct_tm): assertion `g_date_valid (d)' failed."
+
 . Scheduled Transaction Editor
+  . Can't click-out of the register
   . auto-shrink on window create [the register is too wide, leading to too
     much whitespace on the two top panels]
+  . Size/space issues.
+  . Un-selecting "End Date" leaves calendar widget sensitive
+
 . Scheduled Transaction List
 
-Enhancements:
+. Since-last-run
+  . always goes one date past the instantiation date.
+  X credit and debit seem reversed at instantiation time...
+    . this is fixed, but is the fix correct?
+
+##################################################
+### Enhancements
+##################################################
+
 . SX name should be default value for template transaction description
 . loan/repayment SX's
   . integrate "Financial Calculator"
@@ -70,6 +164,11 @@ Enhancements:
     account amount.
 . SX since-last-run should be able to sort by Date [conditional on the dialog
   staying around].
+. There probably wants to be a multi-month "example" View which the
+  GNCFrequency can work with.
+  . jalapeno[ben] has some thoughts on this...
+. Evolution calendar integ.
+. Evolution To-Do list integ. [SX reminders]
 
 ========================================
 
@@ -161,14 +260,15 @@ normal people, or a sexp for Schemers.
 
 =================================================
 
-Instantiation
--------------
+Instantiation Notes
+-------------------
 
 <jsled> Wilddev, conrad:  Something that came out of Aaron's mail [see my reply to -devel] that I'd like your comment on:
 <jsled> How do you intend to use scheduled transactions?
 <jsled> Do you intend to use it to create things have should be in there since you last ran GnuCash?
 <jsled> Or, do you intend to use it to create future transactions [perhaps a weeks worth] before they occur?
 <jsled> Or, just primarily the former, but use the fact that the future transaction will be in the register to remind you to pay things, &c.?
+
 <conrad> Personally, I'd be looking at future transactions as a reminder thing. But then, I run gnucash every day.
 <jsled> conrad: Do you re-invoke it every day, or leave it running?
 <conrad> I can see other people wanting case 1 though.
@@ -178,7 +278,6 @@ Instantiation
 <conrad> I think a further configurable sub-option should be "redisplay on change of day" (possibly with an "at time <blah> option?)")
 <conrad> without that option, it will not do what I'm counting on it to do - remind my I'm supposed to pay my bills.
 <jsled> Yup yup.
-* jsled takes notes this.
 
 
 Summary...
@@ -195,7 +294,6 @@ being created ATM.
 <Wilddev> and second
 <Wilddev> as an actual transaction that goes into the register on a future date, ie I know that this money leaves my account in 2 days, so I want it to go in automatically on that day. If I leave gnucash running all the time, it'll wait until that day then enter the transaction
 <Wilddev> as you can see the purpose of each is quite different
- Wilddev WildWEnd 
 <jsled> Wilddev: Indeed...
 <jsled> For the first, you're saying that reminders should start some number of days before the transaction is usually due/paid... and that there are two acknowledgements of that... 'remind me later' or 'here's the amount/create'.
 <jsled> For the second, you're looking at ad-hoc once-scheduled transactions... which should go away immediately afterwards.
@@ -205,7 +303,6 @@ being created ATM.
 <jsled> Okay... so this brings up something that isn't presently in the scheme at all: reminders.
 <jsled> I think it's as simple as a "[ ] Remind me __ days in advance" element in the SXEditor, and the appropriate logic in the since-last-run code... 
 <Wilddev> how often is the last run code 'run'?
- Wilddev WildWEnd 
 <jsled> Wilddev: On startup, or when the timer [a-la conrad's requirement] goes off.
 <Wilddev> yes that would work
 <jsled> So the "since-last-run" dialog has three panes: 1) auto-created, notification requested.  2) To-create. 3) To-create-soon + reminders.

@@ -52,7 +52,10 @@
  * <gnc:schedxaction version="1.0.0">
  *   <sx:id type="guid">...</sx:id>
  *   <sx:name>Rent</sx:name>
- *   <sx:manual-conf>f</sx:manual-conf>
+ *   <sx:autoCreate>y</sx:autoCreate>
+ *   <sx:autoCreateNotify>n</sx:autoCreateNotify>
+ *   <sx:advanceCreateDays>0</sx:advanceCreateDays>
+ *   <sx:advanceRemindDays>5</sx:advanceRemindDays>
  *   <sx:lastOccur>
  *     <gdate>2001-02-28</gdate>
  *   </sx:lastOccur>
@@ -118,13 +121,21 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
 
     xmlNewTextChild( ret, NULL, "sx:name", xaccSchedXactionGetName(sx) );
 
-    xmlNewTextChild( ret, NULL, "sx:manual-conf",
-                     (xaccSchedXactionGetManual(sx) == 1 ? "t" : "f") );
+    //xmlNewTextChild( ret, NULL, "sx:manual-conf",
+    //(xaccSchedXactionGetManual(sx) == 1 ? "t" : "f") );
+
+    xmlNewTextChild( ret, NULL, "sx:autoCreate",
+                     ( sx->autoCreateOption ? "y" : "n" ) );
+    xmlNewTextChild( ret, NULL, "sx:autoCreateNotify",
+                     ( sx->autoCreateNotify ? "y" : "n" ) );
+    xml_add_gint32( ret, "sx:advanceCreateDays", sx->advanceCreateDays );
+    xml_add_gint32( ret, "sx:advanceRemindDays", sx->advanceRemindDays );
+
     xmlAddChild( ret,
                  gdate_to_dom_tree( "sx:start",
                                     xaccSchedXactionGetStartDate(sx) ) );
-    date = xaccSchedXactionGetLastOccurDate(sx);
 
+    date = xaccSchedXactionGetLastOccurDate(sx);
     if ( g_date_valid( date ) ) {
             xmlAddChild( ret, gdate_to_dom_tree( "sx:last", date ) );
     }
@@ -176,11 +187,53 @@ static
 gboolean
 sx_name_handler( xmlNodePtr node, gpointer sx )
 {
-    gchar        *tmp = dom_tree_to_text( node );
+    gchar *tmp = dom_tree_to_text( node );
     g_return_val_if_fail( tmp, FALSE );
     xaccSchedXactionSetName( (SchedXaction*)sx, tmp );
     g_free( tmp );
     return TRUE;
+}
+
+static gboolean
+sx_autoCreate_handler( xmlNodePtr node, gpointer sx )
+{
+        gchar *tmp = dom_tree_to_text( node );
+        ((SchedXaction*)sx)->autoCreateOption = (safe_strcmp( tmp, "y" ) == 0 ? TRUE : FALSE );
+        return TRUE;
+}
+
+static gboolean
+sx_notify_handler( xmlNodePtr node, gpointer sx )
+{
+        gchar *tmp = dom_tree_to_text( node );
+        ((SchedXaction*)sx)->autoCreateNotify = (safe_strcmp( tmp, "y" ) == 0 ? TRUE : FALSE );
+        return TRUE;
+}
+
+static gboolean
+sx_advCreate_handler( xmlNodePtr node, gpointer sx )
+{
+        gint64 advCreate;
+
+        if ( ! dom_tree_to_integer( node, &advCreate ) ) {
+                return FALSE;
+        }
+
+        xaccSchedXactionSetAdvanceCreation( (SchedXaction*)sx, advCreate );
+        return TRUE;
+}
+
+static gboolean
+sx_advRemind_handler( xmlNodePtr node, gpointer sx )
+{
+        gint64 advRemind;
+
+        if ( ! dom_tree_to_integer( node, &advRemind ) ) {
+                return FALSE;
+        }
+
+        xaccSchedXactionSetAdvanceReminder( (SchedXaction*)sx, advRemind );
+        return TRUE;
 }
 
 static
@@ -236,6 +289,7 @@ sx_freqspec_handler( xmlNodePtr node, gpointer sx )
     return TRUE;
 }
 
+#if 0
 static
 gboolean
 sx_manualConf_handler( xmlNodePtr node, gpointer sx )
@@ -251,6 +305,7 @@ sx_manualConf_handler( xmlNodePtr node, gpointer sx )
     g_free(tmp);
     return TRUE;
 }
+#endif //0
 
 static
 gboolean
@@ -291,16 +346,19 @@ sx_slots_handler( xmlNodePtr node, gpointer sx )
 }
 
 struct dom_tree_handler sx_dom_handlers[] = {
-    { "sx:id",          sx_id_handler,         1, 0 },
-    { "sx:name",        sx_name_handler,       1, 0 },
-    { "sx:start",       sx_start_handler,      1, 0 },
-    { "sx:last",        sx_last_handler,       0, 0 },
-    { "sx:manual-conf", sx_manualConf_handler, 1, 0 },
-    { "sx:num-occur",   sx_numOccur_handler,   0, 0 },
-    { "sx:rem-occur",   sx_remOccur_handler,   0, 0 },
-    { "sx:end",         sx_end_handler,        0, 0 },
-    { "sx:freqspec",    sx_freqspec_handler,   1, 0 },
-    { "sx:slots",       sx_slots_handler,      0, 0 },
+    { "sx:id",                sx_id_handler,         1, 0 },
+    { "sx:name",              sx_name_handler,       1, 0 },
+    { "sx:autoCreate",        sx_autoCreate_handler, 1, 0 },
+    { "sx:autoCreateNotify",  sx_notify_handler,     1, 0 },
+    { "sx:advanceCreateDays", sx_advCreate_handler,  1, 0 },
+    { "sx:advanceRemindDays", sx_advRemind_handler,  1, 0 },
+    { "sx:start",             sx_start_handler,      1, 0 },
+    { "sx:last",              sx_last_handler,       0, 0 },
+    { "sx:num-occur",         sx_numOccur_handler,   0, 0 },
+    { "sx:rem-occur",         sx_remOccur_handler,   0, 0 },
+    { "sx:end",               sx_end_handler,        0, 0 },
+    { "sx:freqspec",          sx_freqspec_handler,   1, 0 },
+    { "sx:slots",             sx_slots_handler,      0, 0 },
 };
 
 static gboolean

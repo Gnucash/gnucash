@@ -77,8 +77,7 @@
 ;; hook should probably revert back to just save-global-options.
 (define (gnc:save-all-options)
   (gnc:save-global-options)
-;  (gnc:save-report-options)
-;  (gnc:save-acct-tree-options)
+;  (gnc:save-report-options);  (gnc:save-acct-tree-options)
   (gnc:save-style-sheet-options))
 
 (define (gnc:save-global-options)
@@ -530,6 +529,66 @@ without one.")
   (N_ "Network") (N_ "GnuCash Network server") 
   "d" (N_ "Host to connect to for user registration and support services")
   "www.gnumatic.com"))
+
+
+;; Scheduled|Recurring Transactions
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "Scheduled Transactions")
+  (N_ "Run on GnuCash Start")
+  "a" (N_ "Should the Since-Last-Run window appear on GnuCash startup?")
+  #f ))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "Scheduled Transactions")
+  (N_ "Default: Auto-Create new Scheduled Transactions?")
+  "b" (N_ "Should new SchedXactions have the 'AutoCreate' flag set by default?")
+  #f ))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "Scheduled Transactions")
+  (N_ "Default: Notify on new, auto-created scheduled transactions")
+  "c" (N_ "Should new SchedXactions with the 'AutoCreate' flag set also be set to notify?")
+  #t ))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  (N_ "Scheduled Transactions")
+  (N_ "Default create-in-advance days")
+  "d" (N_ "Default number of days-in-advance to create new SXes")
+  0 ; default
+  0 ; min
+  99999999 ; max
+  0 ; num decimals
+  1 ; step size
+  ))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  (N_ "Scheduled Transactions")
+  (N_ "Default remind-in-advance days")
+  "e" (N_ "Default number of days-in-advance to remind on new SXes")
+  0 ; default
+  0 ; min
+  99999 ; max
+  0 ; num-decimals
+  1 ; step size
+  ))
+      
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  (N_ "Scheduled Transactions")
+  (N_ "Template Register Lines")
+  "f" (N_ "How many lines in the template register?")
+  4  ; default
+  1  ; min
+  50 ; max
+  0  ; num-decimals
+  1  ; step size
+  ))
 
 ;;; Configuation variables
 

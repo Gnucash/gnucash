@@ -56,29 +56,29 @@
  * of the internal ledger] for this editing.
  **/
 typedef struct gncp_SchedXaction {
-        gchar                *name;
+        gchar           *name;
 
         FreqSpec        *freq;
 
-        GDate                last_date;
+        GDate           last_date;
 
-        GDate                start_date;
+        GDate           start_date;
         /* if end_date is invalid, then no end. */
-        GDate                end_date;
+        GDate           end_date;
 
         /* if num_occurances_total == 0, then no limit */
-        gint                num_occurances_total;
+        gint            num_occurances_total;
        /* reminaing occurances are as-of the 'last_date'. */
-        gint                num_occurances_remain;
+        gint            num_occurances_remain;
 
-        /* If true, confirmation is required.
-           If false, then this can be created when due without
-           intervention. */
-        gboolean        manual;
+        gboolean        autoCreateOption;
+        gboolean        autoCreateNotify;
+        gint            advanceCreateDays;
+        gint            advanceRemindDays;
 
-        GList                *templateSplits;
+        GList           *templateSplits;
 
-        GUID                guid;
+        GUID             guid;
         kvp_frame        *kvp_data;
 } SchedXaction;
 
@@ -136,8 +136,14 @@ void xaccSchedXactionSetRemOccur( SchedXaction *sx, gint numRemain );
 GList *xaccSchedXactionGetSplits( SchedXaction *sx );
 void xaccSchedXactionSetSplits( SchedXaction *sx, GList *newSplits );
 
-gboolean xaccSchedXactionGetManual( SchedXaction *sx );
-void xaccSchedXactionSetManual( SchedXaction *sx, gboolean newManual );
+void xaccSchedXactionGetAutoCreate( SchedXaction *sx, gboolean *outAutoCreate, gboolean *outNotify );
+void xaccSchedXactionSetAutoCreate( SchedXaction *sx, gboolean newAutoCreate, gboolean newNotify );
+
+gint xaccSchedXactionGetAdvanceCreation( SchedXaction *sx );
+void xaccSchedXactionSetAdvanceCreation( SchedXaction *sx, gint createDays );
+
+gint xaccSchedXactionGetAdvanceReminder( SchedXaction *sx );
+void xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays );
 
 #if 0
 #error vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv

@@ -44,7 +44,7 @@
 static short module = MOD_SX;
 
 /** Local data defs *****/
-void transactionListMapDelete( gpointer data, gpointer user_data );
+void _transactionListMapDelete( gpointer data, gpointer user_data );
 
 /** Local Prototypes *****/
 
@@ -75,7 +75,10 @@ xaccSchedXactionInit( SchedXaction *sx, GNCBook *book )
 
         sx->num_occurances_total = -1;
         sx->kvp_data = kvp_frame_new();
-        sx->manual = FALSE;
+        sx->autoCreateOption = FALSE;
+        sx->autoCreateNotify = FALSE;
+        sx->advanceCreateDays = 0;
+        sx->advanceRemindDays = 0;
 
         sx->templateSplits = NULL;
         /* create a new template account for our splits */
@@ -102,7 +105,7 @@ xaccSchedXactionFree( SchedXaction *sx )
         xaccRemoveEntity( &sx->guid );
 
         g_list_foreach( sx->templateSplits,
-                        transactionListMapDelete,
+                        _transactionListMapDelete,
                         NULL );
         g_list_free( sx->templateSplits );
         if ( sx->name )
@@ -113,7 +116,7 @@ xaccSchedXactionFree( SchedXaction *sx )
 }
 
 void
-transactionListMapDelete( gpointer data, gpointer user_data )
+_transactionListMapDelete( gpointer data, gpointer user_data )
 {
         Transaction *t = (Transaction*)data;
         xaccTransBeginEdit( t );
@@ -265,15 +268,45 @@ xaccSchedXactionSetGUID( SchedXaction *sx, GUID g )
 }
 
 void
-xaccSchedXactionSetManual( SchedXaction *sx, gboolean newManual )
+xaccSchedXactionGetAutoCreate( SchedXaction *sx,
+                               gboolean *outAutoCreate,
+                               gboolean *outNotify )
 {
-        sx->manual = newManual;
+        *outAutoCreate = sx->autoCreateOption;
+        *outNotify     = sx->autoCreateNotify;
 }
 
-int
-xaccSchedXactionGetManual( SchedXaction *sx )
+void
+xaccSchedXactionSetAutoCreate( SchedXaction *sx,
+                               gboolean newAutoCreate,
+                               gboolean newNotify )
 {
-        return sx->manual;
+        sx->autoCreateOption = newAutoCreate;
+        sx->autoCreateNotify = newNotify;
+}
+
+gint
+xaccSchedXactionGetAdvanceCreation( SchedXaction *sx )
+{
+        return sx->advanceCreateDays;
+}
+
+void
+xaccSchedXactionSetAdvanceCreation( SchedXaction *sx, gint createDays )
+{
+        sx->advanceCreateDays = createDays;
+}
+
+gint
+xaccSchedXactionGetAdvanceReminder( SchedXaction *sx )
+{
+        return sx->advanceRemindDays;
+}
+
+void
+xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays )
+{
+        sx->advanceRemindDays = reminderDays;
 }
 
 GDate
@@ -300,6 +333,7 @@ xaccSchedXactionGetNextInstance( SchedXaction *sx )
                 }
         }
 
+#if 0
         if ( g_date_valid( &last_occur ) ) {
                 g_date_set_time( &tmpDate, time(NULL) );
                 last_occur =
@@ -309,6 +343,7 @@ xaccSchedXactionGetNextInstance( SchedXaction *sx )
         } else {
                 g_date_set_time( &last_occur, time(NULL) );
         }
+#endif // 0
         
         if ( g_date_valid( &sx->start_date )
              && ! g_date_valid( &sx->last_date ) ) {

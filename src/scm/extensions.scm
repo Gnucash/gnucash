@@ -73,13 +73,17 @@
 			(list "Extensions" "")
 			(lambda () (gnc:sx-editor)))
     )
-  (define schedxact-slr-item
-    (gnc:make-menu-item (N_ "SchedXact: Since Last Run")
+  (define schedxact-old-slr-item
+    (gnc:make-menu-item (N_ "SchedXact: [Old] Since Last Run")
 			(N_ "since last run dialog")
 			(list "Extensions" "")
 			(lambda () (gnc:sx-since-last-run)))
     )
-
+  (define schedxact-slr-item
+    (gnc:make-menu-item (N_ "SchedXact: [New] Since Last Run")
+                        (N_ "since last run dialog")
+                        (list "Extensions" "" )
+                        (lambda () (gnc:sx-sincelast-create ))))
   (define progress-item
     (gnc:make-menu-item (N_ "Test progress dialog")
                         (N_ "Test progress dialog")
@@ -110,6 +114,7 @@
 ;; appear in the menu [prepending to some list]...
 
   (gnc:add-extension progress-item)
+  (gnc:add-extension schedxact-old-slr-item)
   (gnc:add-extension schedxact-slr-item)
   (gnc:add-extension schedxact-editor-item)
 )

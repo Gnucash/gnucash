@@ -1,3 +1,26 @@
+2001-07-06  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/gnc-schedxaction-xml-v2.c: Support for new
+	SchedXaction options [create/remind-days-in-advance; auto-create,
+	notify-on-creation].
+	
+	* src/gnome/dialog-scheduledxaction.c (putSchedXactionInClist):
+	Fix for next-occurance processing.
+
+	* src/engine/SchedXaction.c (xaccSchedXactionGetNextInstance):
+	Better handling of start date/last-occur date/current dates when
+	generating the next occurance date.  Gotta remember to clear those
+	g_dates, lest the come up 'valid' due to stack trash... :(
+
+	* src/gnome/gnc-sxlastrun.{h,c}: Added; newer/better
+	since-last-occur dialog.
+
+	* src/gnome/window-main.c: Added Scheduled Transaction stuff to
+	"Tools" menu.
+
+	* src/scm/prefs.scm: Added initial cut at Scheduled Transaction
+	preferences.
+
 2001-07-06  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* doc/sgml/C/xacc-balancreport.sgml: minor updates

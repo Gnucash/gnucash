@@ -1,5 +1,5 @@
 /********************************************************************\
- * dialog-scheduledxaction.h : dialogs for a scheduled transactions *
+ * dialog-scheduledxaction.h : dialogs for scheduled transactions   *
  * Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *

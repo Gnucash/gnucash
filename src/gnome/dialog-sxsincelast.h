@@ -1,5 +1,5 @@
 /********************************************************************\
- * dialog-nextrun.h - Beginnings of "since last run" dialog.        *
+ * dialog-sxsincelast.h - SchedXaction "Since-Last-Run" dialog      *
  * Copyright (c) 2001 Joshua Sled <jsled@asynchronous.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,10 +20,10 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef DIALOG_NEXTRUN_H
-#define DIALOG_NEXTRUN_H
+#ifndef DIALOG_SXSINCELAST_H
+#define DIALOG_SXSINCELAST_H
 
-void gnc_ui_nextrun_dialog_create( void );
-void gnc_ui_nextrun_guile_wrapper( char* );
+void gnc_ui_sxsincelast_dialog_create( void );
+void gnc_ui_sxsincelast_guile_wrapper( char* );
 
-#endif
+#endif // !defined(DIALOG_SXSINCELAST_H)

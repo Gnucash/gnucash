@@ -157,9 +157,9 @@
 
 	  <widget>
 	    <class>GtkFrame</class>
-	    <name>frame66</name>
+	    <name>frame73</name>
 	    <label>Creation Options</label>
-	    <label_xalign>0.05</label_xalign>
+	    <label_xalign>0.1</label_xalign>
 	    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	    <child>
 	      <padding>0</padding>
@@ -169,41 +169,52 @@
 
 	    <widget>
 	      <class>GtkVBox</class>
-	      <name>vbox127</name>
+	      <name>vbox133</name>
 	      <homogeneous>False</homogeneous>
 	      <spacing>0</spacing>
 
 	      <widget>
 		<class>GtkCheckButton</class>
-		<name>manual_conf</name>
+		<name>autocreate_opt</name>
+		<tooltip>Conditional on splits not having variables</tooltip>
 		<can_focus>True</can_focus>
-		<label>. Create automatically.</label>
+		<label>Create Automatically</label>
 		<active>False</active>
 		<draw_indicator>True</draw_indicator>
 		<child>
-		  <padding>2</padding>
+		  <padding>0</padding>
 		  <expand>False</expand>
 		  <fill>False</fill>
 		</child>
 	      </widget>
 
 	      <widget>
-		<class>GtkCheckButton</class>
-		<name>auto_create_notify</name>
-		<can_focus>True</can_focus>
-		<label>. Notify me when created.</label>
-		<active>False</active>
-		<draw_indicator>True</draw_indicator>
+		<class>GtkAlignment</class>
+		<name>alignment2</name>
+		<xalign>1</xalign>
+		<yalign>0.5</yalign>
+		<xscale>0.66</xscale>
+		<yscale>1</yscale>
 		<child>
-		  <padding>2</padding>
+		  <padding>0</padding>
 		  <expand>False</expand>
 		  <fill>False</fill>
 		</child>
+
+		<widget>
+		  <class>GtkCheckButton</class>
+		  <name>notify_opt</name>
+		  <sensitive>False</sensitive>
+		  <can_focus>True</can_focus>
+		  <label>Notify me when created</label>
+		  <active>False</active>
+		  <draw_indicator>True</draw_indicator>
+		</widget>
 	      </widget>
 
 	      <widget>
 		<class>GtkCheckButton</class>
-		<name>checkbutton1</name>
+		<name>advance_opt</name>
 		<can_focus>True</can_focus>
 		<active>False</active>
 		<draw_indicator>True</draw_indicator>
@@ -215,14 +226,14 @@
 
 		<widget>
 		  <class>GtkHBox</class>
-		  <name>hbox144</name>
+		  <name>hbox150</name>
 		  <homogeneous>False</homogeneous>
 		  <spacing>0</spacing>
 
 		  <widget>
 		    <class>GtkLabel</class>
-		    <name>label847789</name>
-		    <label>. Remind me </label>
+		    <name>label847807</name>
+		    <label>Create </label>
 		    <justify>GTK_JUSTIFY_CENTER</justify>
 		    <wrap>False</wrap>
 		    <xalign>0.5</xalign>
@@ -238,15 +249,16 @@
 
 		  <widget>
 		    <class>GtkSpinButton</class>
-		    <name>spinbutton1</name>
+		    <name>advance_days</name>
+		    <sensitive>False</sensitive>
 		    <can_focus>True</can_focus>
 		    <climb_rate>1</climb_rate>
 		    <digits>0</digits>
 		    <numeric>True</numeric>
 		    <update_policy>GTK_UPDATE_ALWAYS</update_policy>
 		    <snap>True</snap>
-		    <wrap>True</wrap>
-		    <value>1</value>
+		    <wrap>False</wrap>
+		    <value>0</value>
 		    <lower>0</lower>
 		    <upper>100</upper>
 		    <step>1</step>
@@ -255,14 +267,92 @@
 		    <child>
 		      <padding>0</padding>
 		      <expand>False</expand>
-		      <fill>True</fill>
+		      <fill>False</fill>
 		    </child>
 		  </widget>
 
 		  <widget>
 		    <class>GtkLabel</class>
-		    <name>label847790</name>
-		    <label> days in advance.</label>
+		    <name>label847808</name>
+		    <label> days in advance</label>
+		    <justify>GTK_JUSTIFY_CENTER</justify>
+		    <wrap>False</wrap>
+		    <xalign>0.5</xalign>
+		    <yalign>0.5</yalign>
+		    <xpad>0</xpad>
+		    <ypad>0</ypad>
+		    <child>
+		      <padding>0</padding>
+		      <expand>False</expand>
+		      <fill>False</fill>
+		    </child>
+		  </widget>
+		</widget>
+	      </widget>
+
+	      <widget>
+		<class>GtkCheckButton</class>
+		<name>remind_opt</name>
+		<can_focus>True</can_focus>
+		<active>False</active>
+		<draw_indicator>True</draw_indicator>
+		<child>
+		  <padding>0</padding>
+		  <expand>False</expand>
+		  <fill>False</fill>
+		</child>
+
+		<widget>
+		  <class>GtkHBox</class>
+		  <name>hbox151</name>
+		  <homogeneous>False</homogeneous>
+		  <spacing>0</spacing>
+
+		  <widget>
+		    <class>GtkLabel</class>
+		    <name>label847809</name>
+		    <label>Remind me </label>
+		    <justify>GTK_JUSTIFY_CENTER</justify>
+		    <wrap>False</wrap>
+		    <xalign>0.5</xalign>
+		    <yalign>0.5</yalign>
+		    <xpad>0</xpad>
+		    <ypad>0</ypad>
+		    <child>
+		      <padding>0</padding>
+		      <expand>False</expand>
+		      <fill>False</fill>
+		    </child>
+		  </widget>
+
+		  <widget>
+		    <class>GtkSpinButton</class>
+		    <name>remind_days</name>
+		    <sensitive>False</sensitive>
+		    <can_focus>True</can_focus>
+		    <climb_rate>1</climb_rate>
+		    <digits>0</digits>
+		    <numeric>True</numeric>
+		    <update_policy>GTK_UPDATE_ALWAYS</update_policy>
+		    <snap>True</snap>
+		    <wrap>False</wrap>
+		    <value>0</value>
+		    <lower>0</lower>
+		    <upper>100</upper>
+		    <step>1</step>
+		    <page>10</page>
+		    <page_size>10</page_size>
+		    <child>
+		      <padding>0</padding>
+		      <expand>False</expand>
+		      <fill>False</fill>
+		    </child>
+		  </widget>
+
+		  <widget>
+		    <class>GtkLabel</class>
+		    <name>label847810</name>
+		    <label> days in advance</label>
 		    <justify>GTK_JUSTIFY_CENTER</justify>
 		    <wrap>False</wrap>
 		    <xalign>0.5</xalign>
@@ -315,52 +405,12 @@
 	      </widget>
 
 	      <widget>
-		<class>GtkHBox</class>
-		<name>hbox98</name>
-		<homogeneous>False</homogeneous>
-		<spacing>0</spacing>
-		<child>
-		  <padding>2</padding>
-		  <expand>True</expand>
-		  <fill>True</fill>
-		</child>
-
-		<widget>
-		  <class>GtkRadioButton</class>
-		  <name>rb_enddate</name>
-		  <can_focus>True</can_focus>
-		  <label>End Date:</label>
-		  <active>False</active>
-		  <draw_indicator>True</draw_indicator>
-		  <group>sx_end_opt</group>
-		  <child>
-		    <padding>0</padding>
-		    <expand>False</expand>
-		    <fill>False</fill>
-		  </child>
-		</widget>
-
-		<widget>
-		  <class>GnomeDateEdit</class>
-		  <name>sxe_end_date</name>
-		  <show_time>False</show_time>
-		  <use_24_format>True</use_24_format>
-		  <week_start_monday>False</week_start_monday>
-		  <lower_hour>7</lower_hour>
-		  <upper_hour>19</upper_hour>
-		  <child>
-		    <padding>2</padding>
-		    <expand>False</expand>
-		    <fill>False</fill>
-		  </child>
-		</widget>
-	      </widget>
-
-	      <widget>
-		<class>GtkHBox</class>
-		<name>hbox99</name>
-		<homogeneous>False</homogeneous>
-		<spacing>0</spacing>
+		<class>GtkRadioButton</class>
+		<name>rb_enddate</name>
+		<can_focus>True</can_focus>
+		<active>False</active>
+		<draw_indicator>True</draw_indicator>
+		<group>sx_end_opt</group>
 		<child>
 		  <padding>2</padding>
 		  <expand>False</expand>
@@ -368,39 +418,101 @@
 		</child>
 
 		<widget>
-		  <class>GtkRadioButton</class>
-		  <name>rb_num_occur</name>
-		  <can_focus>True</can_focus>
-		  <label>Number of Occurances:</label>
-		  <active>False</active>
-		  <draw_indicator>True</draw_indicator>
-		  <group>sx_end_opt</group>
-		  <child>
-		    <padding>0</padding>
-		    <expand>False</expand>
-		    <fill>False</fill>
-		  </child>
-		</widget>
-
-		<widget>
-		  <class>GnomeNumberEntry</class>
-		  <name>end_nentry</name>
-		  <max_saved>10</max_saved>
-		  <child>
-		    <padding>2</padding>
-		    <expand>False</expand>
-		    <fill>False</fill>
-		  </child>
+		  <class>GtkHBox</class>
+		  <name>hbox152</name>
+		  <homogeneous>False</homogeneous>
+		  <spacing>0</spacing>
 
 		  <widget>
-		    <class>GtkEntry</class>
-		    <child_name>GnomeEntry:entry</child_name>
-		    <name>combo-entry1</name>
-		    <can_focus>True</can_focus>
-		    <editable>True</editable>
-		    <text_visible>True</text_visible>
-		    <text_max_length>0</text_max_length>
-		    <text></text>
+		    <class>GtkLabel</class>
+		    <name>label847812</name>
+		    <label>End Date: </label>
+		    <justify>GTK_JUSTIFY_CENTER</justify>
+		    <wrap>False</wrap>
+		    <xalign>0.5</xalign>
+		    <yalign>0.5</yalign>
+		    <xpad>0</xpad>
+		    <ypad>0</ypad>
+		    <child>
+		      <padding>0</padding>
+		      <expand>False</expand>
+		      <fill>False</fill>
+		    </child>
+		  </widget>
+
+		  <widget>
+		    <class>GnomeDateEdit</class>
+		    <name>sxe_end_date</name>
+		    <show_time>False</show_time>
+		    <use_24_format>True</use_24_format>
+		    <week_start_monday>False</week_start_monday>
+		    <lower_hour>7</lower_hour>
+		    <upper_hour>19</upper_hour>
+		    <child>
+		      <padding>0</padding>
+		      <expand>False</expand>
+		      <fill>False</fill>
+		    </child>
+		  </widget>
+		</widget>
+	      </widget>
+
+	      <widget>
+		<class>GtkRadioButton</class>
+		<name>rb_num_occur</name>
+		<can_focus>True</can_focus>
+		<active>False</active>
+		<draw_indicator>True</draw_indicator>
+		<group>sx_end_opt</group>
+		<child>
+		  <padding>2</padding>
+		  <expand>False</expand>
+		  <fill>False</fill>
+		</child>
+
+		<widget>
+		  <class>GtkVBox</class>
+		  <name>vbox134</name>
+		  <homogeneous>False</homogeneous>
+		  <spacing>0</spacing>
+
+		  <widget>
+		    <class>GtkLabel</class>
+		    <name>label847811</name>
+		    <label>Number of Occurances:</label>
+		    <justify>GTK_JUSTIFY_LEFT</justify>
+		    <wrap>False</wrap>
+		    <xalign>7.45058e-09</xalign>
+		    <yalign>0.5</yalign>
+		    <xpad>0</xpad>
+		    <ypad>0</ypad>
+		    <child>
+		      <padding>0</padding>
+		      <expand>False</expand>
+		      <fill>False</fill>
+		    </child>
+		  </widget>
+
+		  <widget>
+		    <class>GnomeNumberEntry</class>
+		    <name>end_nentry</name>
+		    <max_saved>10</max_saved>
+		    <child>
+		      <padding>0</padding>
+		      <expand>False</expand>
+		      <fill>False</fill>
+		    </child>
+
+		    <widget>
+		      <class>GtkEntry</class>
+		      <child_name>GnomeEntry:entry</child_name>
+		      <name>combo-entry1</name>
+		      <can_focus>True</can_focus>
+		      <editable>True</editable>
+		      <text_visible>True</text_visible>
+		      <text_max_length>0</text_max_length>
+		      <text></text>
+		    </widget>
 		  </widget>
 		</widget>
 	      </widget>
@@ -413,11 +525,11 @@
 	  <name>recur_frame</name>
 	  <border_width>4</border_width>
 	  <label>Recurrance Frequency</label>
-	  <label_xalign>0.05</label_xalign>
+	  <label_xalign>0.1</label_xalign>
 	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	  <child>
 	    <padding>2</padding>
-	    <expand>True</expand>
+	    <expand>False</expand>
 	    <fill>False</fill>
 	  </child>
 
@@ -447,13 +559,13 @@
 	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	  <child>
 	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
+	    <expand>False</expand>
+	    <fill>False</fill>
 	  </child>
 
 	  <widget>
 	    <class>GtkVBox</class>
-	    <name>vbox124</name>
+	    <name>register_vbox</name>
 	    <homogeneous>False</homogeneous>
 	    <spacing>0</spacing>
 
@@ -495,7 +607,7 @@
 		<child>
 		  <padding>0</padding>
 		  <expand>True</expand>
-		  <fill>True</fill>
+		  <fill>False</fill>
 		</child>
 	      </widget>
 	    </widget>
@@ -661,8 +773,8 @@ Yearly
       <popup_enable>False</popup_enable>
       <child>
 	<padding>0</padding>
-	<expand>True</expand>
-	<fill>True</fill>
+	<expand>False</expand>
+	<fill>False</fill>
       </child>
 
       <widget>
@@ -829,7 +941,7 @@ Yearly
 	    <can_focus>True</can_focus>
 	    <show_heading>True</show_heading>
 	    <show_day_names>True</show_day_names>
-	    <no_month_change>True</no_month_change>
+	    <no_month_change>False</no_month_change>
 	    <show_week_numbers>False</show_week_numbers>
 	    <week_start_monday>False</week_start_monday>
 	  </widget>
@@ -943,7 +1055,7 @@ Yearly
 	    <can_focus>True</can_focus>
 	    <show_heading>True</show_heading>
 	    <show_day_names>True</show_day_names>
-	    <no_month_change>True</no_month_change>
+	    <no_month_change>False</no_month_change>
 	    <show_week_numbers>False</show_week_numbers>
 	    <week_start_monday>False</week_start_monday>
 	  </widget>
@@ -1212,7 +1324,7 @@ Yearly
 	    <can_focus>True</can_focus>
 	    <show_heading>True</show_heading>
 	    <show_day_names>True</show_day_names>
-	    <no_month_change>True</no_month_change>
+	    <no_month_change>False</no_month_change>
 	    <show_week_numbers>False</show_week_numbers>
 	    <week_start_monday>False</week_start_monday>
 	  </widget>
@@ -1523,9 +1635,9 @@ Yearly
 	    <name>semimonthly_cal</name>
 	    <sensitive>False</sensitive>
 	    <can_focus>True</can_focus>
-	    <show_heading>False</show_heading>
+	    <show_heading>True</show_heading>
 	    <show_day_names>True</show_day_names>
-	    <no_month_change>True</no_month_change>
+	    <no_month_change>False</no_month_change>
 	    <show_week_numbers>False</show_week_numbers>
 	    <week_start_monday>False</week_start_monday>
 	  </widget>
@@ -2443,18 +2555,10 @@ December
 
       <widget>
 	<class>GtkButton</class>
-	<name>ok_button</name>
+	<name>close_button</name>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
-	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
-      </widget>
-
-      <widget>
-	<class>GtkButton</class>
-	<name>cancel_button</name>
-	<can_default>True</can_default>
-	<can_focus>True</can_focus>
-	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
+	<stock_button>GNOME_STOCK_BUTTON_CLOSE</stock_button>
       </widget>
     </widget>
 
@@ -2866,11 +2970,13 @@ December
 
 <widget>
   <class>GnomeDialog</class>
-  <name>real since-last-run dialog</name>
+  <name>Real Since-Last-Run Dialog</name>
   <title>Since Last Run...</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_CENTER</position>
   <modal>False</modal>
+  <default_width>550</default_width>
+  <default_height>500</default_height>
   <allow_shrink>True</allow_shrink>
   <allow_grow>True</allow_grow>
   <auto_shrink>True</auto_shrink>
@@ -2908,7 +3014,7 @@ December
 
       <widget>
 	<class>GtkButton</class>
-	<name>button1</name>
+	<name>ok_button</name>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
 	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
@@ -2916,15 +3022,7 @@ December
 
       <widget>
 	<class>GtkButton</class>
-	<name>button2</name>
-	<can_default>True</can_default>
-	<can_focus>True</can_focus>
-	<stock_button>GNOME_STOCK_BUTTON_APPLY</stock_button>
-      </widget>
-
-      <widget>
-	<class>GtkButton</class>
-	<name>button3</name>
+	<name>cancel_button</name>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
 	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
@@ -2955,60 +3053,76 @@ December
 	</child>
 
 	<widget>
-	  <class>GtkScrolledWindow</class>
-	  <name>scrolledwindow4</name>
-	  <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
-	  <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
-	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+	  <class>GtkVBox</class>
+	  <name>vbox135</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
 
 	  <widget>
-	    <class>GtkCList</class>
-	    <name>clist1</name>
-	    <can_focus>True</can_focus>
-	    <columns>3</columns>
-	    <column_widths>80,80,80</column_widths>
-	    <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
-	    <show_titles>True</show_titles>
-	    <shadow_type>GTK_SHADOW_IN</shadow_type>
+	    <class>GtkLabel</class>
+	    <name>label847814</name>
+	    <label>...Replace with GL...</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkScrolledWindow</class>
+	    <name>scrolledwindow7</name>
+	    <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
+	    <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	    <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	    <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
 
 	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label847791</name>
-	      <label>label847791</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	    </widget>
+	      <class>GtkCList</class>
+	      <name>auto_create_clist</name>
+	      <can_focus>True</can_focus>
+	      <columns>2</columns>
+	      <column_widths>207,80</column_widths>
+	      <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+	      <show_titles>True</show_titles>
+	      <shadow_type>GTK_SHADOW_IN</shadow_type>
 
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label847792</name>
-	      <label>label847792</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	    </widget>
+	      <widget>
+		<class>GtkLabel</class>
+		<child_name>CList:title</child_name>
+		<name>label847815</name>
+		<label>Name</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+	      </widget>
 
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label847793</name>
-	      <label>label847793</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
+	      <widget>
+		<class>GtkLabel</class>
+		<child_name>CList:title</child_name>
+		<name>label847816</name>
+		<label>Date</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+	      </widget>
 	    </widget>
 	  </widget>
 	</widget>
@@ -3027,7 +3141,49 @@ December
 	</child>
 
 	<widget>
-	  <class>Placeholder</class>
+	  <class>GtkScrolledWindow</class>
+	  <name>scrolledwindow6</name>
+	  <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
+	  <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+
+	  <widget>
+	    <class>GtkCList</class>
+	    <name>to_create_clist</name>
+	    <can_focus>True</can_focus>
+	    <columns>2</columns>
+	    <column_widths>210,80</column_widths>
+	    <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+	    <show_titles>True</show_titles>
+	    <shadow_type>GTK_SHADOW_IN</shadow_type>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <child_name>CList:title</child_name>
+	      <name>label847802</name>
+	      <label>Name</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <child_name>CList:title</child_name>
+	      <name>label847803</name>
+	      <label>Date</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	    </widget>
+	  </widget>
 	</widget>
       </widget>
 
@@ -3044,7 +3200,63 @@ December
 	</child>
 
 	<widget>
-	  <class>Placeholder</class>
+	  <class>GtkScrolledWindow</class>
+	  <name>scrolledwindow5</name>
+	  <border_width>3</border_width>
+	  <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
+	  <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+
+	  <widget>
+	    <class>GtkCList</class>
+	    <name>reminders_clist</name>
+	    <can_focus>True</can_focus>
+	    <columns>3</columns>
+	    <column_widths>147,198,80</column_widths>
+	    <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+	    <show_titles>True</show_titles>
+	    <shadow_type>GTK_SHADOW_IN</shadow_type>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <child_name>CList:title</child_name>
+	      <name>label847795</name>
+	      <label>Name</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <child_name>CList:title</child_name>
+	      <name>label847796</name>
+	      <label>Next Date</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <child_name>CList:title</child_name>
+	      <name>label847797</name>
+	      <label>Days</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	    </widget>
+	  </widget>
 	</widget>
       </widget>
     </widget>

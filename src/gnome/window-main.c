@@ -53,6 +53,7 @@
 #include "dialog-utils.h"
 #include "dialog-scheduledxaction.h"
 #include "dialog-nextrun.h"
+#include "dialog-sxsincelast.h"
 
 #include "window-help.h"
 #include "window-main.h"
@@ -918,6 +919,16 @@ gnc_main_window_find_transactions_cb (GtkWidget *widget, gpointer data) {
 }
 
 static void
+gnc_main_window_sched_xaction_cb (GtkWidget *widget, gpointer data) {
+  gnc_ui_scheduled_xaction_dialog_create();
+}
+
+static void
+gnc_main_window_sched_xaction_slr_cb (GtkWidget *widget, gpointer data) {
+  gnc_ui_sxsincelast_dialog_create();
+}
+
+static void
 gnc_main_window_about_cb (GtkWidget *widget, gpointer data)
 {
   GtkWidget *about;
@@ -1079,6 +1090,20 @@ gnc_main_window_create_menus(GNCMainInfo * maininfo) {
       N_("_Find Transactions"),
       N_("Find transactions with a search"),
       gnc_main_window_find_transactions_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      N_("Scheduled Transactions List"),
+      N_("A list of Scheduled Transactions"),
+      gnc_main_window_sched_xaction_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      N_("Scheduled Transactions Since-Last-Run..."),
+      N_("Create Scheduled Transactions since the last-time-run."),
+      gnc_main_window_sched_xaction_slr_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
