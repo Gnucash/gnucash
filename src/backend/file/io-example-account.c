@@ -375,7 +375,7 @@ gnc_write_example_account(GncExampleAccount *gea, const gchar *filename)
 
     write_string_part(out, GNC_ACCOUNT_LONG, gea->long_description);
     
-    write_account_group(out, gea->group);
+    write_account_group(out, gea->group, NULL);
 
     fprintf(out, "</" GNC_ACCOUNT_STRING ">\n\n");
     

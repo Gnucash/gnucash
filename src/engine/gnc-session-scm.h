@@ -1,7 +1,6 @@
 /********************************************************************\
- * io-utils.h -- api for gnucash file i/o                           *
- *                                                                  *
- * Copyright (C) 2001 James LewisMoss <dres@debian.org>             *
+ * gnc-session-scm.h -- session access (connection to backend)      *
+ *    Scheme specific code.                                         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,21 +21,30 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef IO_UTILS_H
-#define IO_UTILS_H
+/*
+ * FILE:
+ * gnc-session-scm.h
+ *
+ * FUNCTION:
+ * Encapsulates a connection to a GnuCash backend.  That is, it
+ * manages the connection to a persistant data store; whereas
+ * the backend is the thing that performs the actual datastore 
+ * access.
+ *
+ * HISTORY:
+ * Created by David Hampton, September 2002
+ * Copyright (c) 2002 Linas Vepstas <linas@linas.org>
+ */
 
-#include <stdio.h>
+#ifndef GNC_SESSION_SCM_H
+#define GNC_SESSION_SCM_H
 
-#include "gnc-book.h"
-#include "Group.h"
-#include "io-gncxml-v2.h"
+#include <guile/gh.h>
 
-void write_account_group(FILE *out, AccountGroup *grp, sixtp_gdv2 *gd);
-void write_accounts(FILE *out, GNCBook *book, sixtp_gdv2 *gd);
-void write_book_parts(FILE *out, GNCBook *book);
-void write_commodities(FILE *out, GNCBook *book, sixtp_gdv2 *gd);
+void gnc_session_scm_load (GNCSession *session);
+gboolean gnc_session_scm_export (GNCSession *tmp_session,
+				 GNCSession *real_session);
+void     gnc_session_scm_save (GNCSession *session);
+void gnc_session_scm_set_callback (SCM percentage_cb);
 
-void write_emacs_trailer(FILE *out);
-
-
-#endif /* IO_UTILS_H */    
+#endif /* GNC_SESSION_SCM_H */

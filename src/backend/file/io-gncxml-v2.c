@@ -64,12 +64,12 @@ struct file_backend {
 #define GNC_V2_STRING "gnc-v2"
 static const gchar *book_version_string;
 
-static void
+void
 run_callback(sixtp_gdv2 *data, const char *type)
 {
     if(data->countCallback)
     {
-        data->countCallback(type, data->counter);
+        data->countCallback(data, type);
     }
 }
 
@@ -298,6 +298,8 @@ add_schedXaction_local(sixtp_gdv2 *data, SchedXaction *sx)
     list = g_list_append(list, sx);
 
     gnc_book_set_schedxactions(data->book, list);
+    data->counter.schedXactions_loaded++;
+    run_callback(data, "schedXactions");
 
     return TRUE;
 }
@@ -473,20 +475,55 @@ gnc_counter_sixtp_parser_create(void)
 
 #if 0
 static void
-print_counter_data(load_counter data)
+print_counter_data(load_counter *data)
 {
     PINFO("Transactions: Total: %d, Loaded: %d\n",
-           data.transactions_total, data.transactions_loaded);
+           data->transactions_total, data->transactions_loaded);
     PINFO("Accounts: Total: %d, Loaded: %d\n",
-           data.accounts_total, data.accounts_loaded);
+           data->accounts_total, data->accounts_loaded);
     PINFO("Books: Total: %d, Loaded: %d\n",
-           data.books_total, data.books_loaded);
+           data->books_total, data->books_loaded);
     PINFO("Commodities: Total: %d, Loaded: %d\n",
-           data.commodities_total, data.commodities_loaded);
+           data->commodities_total, data->commodities_loaded);
     PINFO("Scheduled Tansactions: Total: %d, Loaded: %d\n",
-           data.schedXactions_total, data.schedXactions_loaded);
+           data->schedXactions_total, data->schedXactions_loaded);
 }
 #endif
+
+static void
+file_rw_feedback (sixtp_gdv2 *gd, const char *type)
+{
+    load_counter *counter;
+    int loaded, total, percentage;
+
+    g_assert(gd != NULL);
+    if (!gd->gui_display_fn)
+      return;
+
+    counter = &gd->counter;
+    loaded = counter->transactions_loaded + counter->accounts_loaded +
+      counter->books_loaded + counter->commodities_loaded +
+      counter->schedXactions_loaded;
+    total = counter->transactions_total + counter->accounts_total +
+      counter->books_total + counter->commodities_total +
+      counter->schedXactions_total;
+
+    percentage = (loaded * 100)/total;
+    if (percentage > 100) {
+      printf("Transactions: Total: %d, Loaded: %d\n",
+	     counter->transactions_total, counter->transactions_loaded);
+      printf("Accounts: Total: %d, Loaded: %d\n",
+	     counter->accounts_total, counter->accounts_loaded);
+      printf("Books: Total: %d, Loaded: %d\n",
+	     counter->books_total, counter->books_loaded);
+      printf("Commodities: Total: %d, Loaded: %d\n",
+	     counter->commodities_total, counter->commodities_loaded);
+      printf("Scheduled Tansactions: Total: %d, Loaded: %d\n",
+	     counter->schedXactions_total, counter->schedXactions_loaded);
+    }
+    percentage = MIN(percentage, 100);
+    gd->gui_display_fn(NULL, percentage);
+}
 
 static const char *BOOK_TAG = "gnc:book";
 static const char *BOOK_ID_TAG = "book:id";
@@ -605,21 +642,15 @@ add_parser_cb (const char *type, gpointer data_p, gpointer be_data_p)
       be_data->ok = FALSE;
 }
 
-gboolean
-gnc_session_load_from_xml_file_v2(
-    GNCSession *session,
-    void (*countcallback)(const char *type, load_counter count))
+static sixtp_gdv2 *
+gnc_sixtp_gdv2_new (
+    GNCBook *book,
+    countCallbackFn countcallback,
+    GNCBePercentageFunc gui_display_fn)
 {
-    GNCBook *book;
-    sixtp_gdv2 *gd;
-    sixtp *top_parser;
-    sixtp *main_parser;
-    sixtp *book_parser;
-    struct file_backend be_data;
+    sixtp_gdv2 *gd = g_new0(sixtp_gdv2, 1);
 
-    gd = g_new0(sixtp_gdv2, 1);
-
-    book = gnc_session_get_book (session);
+    if (gd == NULL) return NULL;
 
     gd->book = book;
     gd->counter.accounts_loaded = 0;
@@ -636,6 +667,24 @@ gnc_session_load_from_xml_file_v2(
     gd->counter.schedXactions_total = 0;
 
     gd->countCallback = countcallback;
+    gd->gui_display_fn = gui_display_fn;
+    return gd;
+}
+
+gboolean
+gnc_session_load_from_xml_file_v2(GNCSession *session)
+{
+    GNCBook *book;
+    Backend *be;
+    sixtp_gdv2 *gd;
+    sixtp *top_parser;
+    sixtp *main_parser;
+    sixtp *book_parser;
+    struct file_backend be_data;
+
+    book = gnc_session_get_book (session);
+    be = (Backend *)gnc_book_get_backend(book);
+    gd = gnc_sixtp_gdv2_new(book, file_rw_feedback, be->percentage);
 
     top_parser = sixtp_new();
     main_parser = sixtp_new();
@@ -646,7 +695,7 @@ gnc_session_load_from_xml_file_v2(
         GNC_V2_STRING, main_parser,
         NULL, NULL))
     {
-        return FALSE;
+        goto bail;
     }
 
     if(!sixtp_add_some_sub_parsers(
@@ -665,7 +714,7 @@ gnc_session_load_from_xml_file_v2(
            TEMPLATE_TRANSACTION_TAG, gnc_template_transaction_sixtp_parser_create(),
            NULL, NULL))
     {
-        return FALSE;
+        goto bail;
     }
 
     if(!sixtp_add_some_sub_parsers(
@@ -681,14 +730,14 @@ gnc_session_load_from_xml_file_v2(
            TEMPLATE_TRANSACTION_TAG, gnc_template_transaction_sixtp_parser_create(),
            NULL, NULL))
     {
-        return FALSE;
+        goto bail;
     }
 
     be_data.ok = TRUE;
     be_data.parser = book_parser;
     gncObjectForeachBackend (GNC_FILE_BACKEND, add_parser_cb, &be_data);
     if (be_data.ok == FALSE)
-      return FALSE;
+      goto bail;
 
     /* stop logging while we load */
     xaccLogDisable ();
@@ -698,7 +747,7 @@ gnc_session_load_from_xml_file_v2(
     {
         sixtp_destroy(top_parser);
         xaccLogEnable ();
-        return FALSE;
+        goto bail;
     }
 
     /* If the parse succeeded, but there is no pricedb,
@@ -729,9 +778,13 @@ gnc_session_load_from_xml_file_v2(
 
     g_free(gd);
     /* DEBUG */
-    /* print_counter_data(gd.counter); */
+    /* print_counter_data(&gd->counter); */
 
     return TRUE;
+
+ bail:
+    g_free(gd);
+    return FALSE;
 }
 
 /***********************************************************************/
@@ -790,10 +843,10 @@ compare_commodity_ids(gconstpointer a, gconstpointer b)
                      gnc_commodity_get_mnemonic(cb)));
 }
 
-static void write_pricedb (FILE *out, GNCBook *book);
-static void write_transactions (FILE *out, GNCBook *book);
-static void write_template_transaction_data (FILE *out, GNCBook *book);
-static void write_schedXactions(FILE *out, GNCBook *book);
+static void write_pricedb (FILE *out, GNCBook *book, sixtp_gdv2 *gd);
+static void write_transactions (FILE *out, GNCBook *book, sixtp_gdv2 *gd);
+static void write_template_transaction_data (FILE *out, GNCBook *book, sixtp_gdv2 *gd);
+static void write_schedXactions(FILE *out, GNCBook *book, sixtp_gdv2 *gd);
 
 static void
 write_counts_cb (const char *type, gpointer data_p, gpointer be_data_p)
@@ -824,7 +877,7 @@ write_data_cb (const char *type, gpointer data_p, gpointer be_data_p)
 }
 
 static void
-write_book(FILE *out, GNCBook *book)
+write_book(FILE *out, GNCBook *book, sixtp_gdv2 *gd)
 {
     struct file_backend be_data;
 
@@ -860,7 +913,7 @@ write_book(FILE *out, GNCBook *book)
                  gnc_commodity_table_get_size(
                      gnc_book_get_commodity_table(book)),
                  "account",
-                 xaccGroupGetNumSubAccounts(gnc_book_get_group(book)),
+                 1 + xaccGroupGetNumSubAccounts(gnc_book_get_group(book)),
                  "transaction",
                  gnc_book_count_transactions(book),
                  "schedxaction",
@@ -869,12 +922,12 @@ write_book(FILE *out, GNCBook *book)
 
     gncObjectForeachBackend (GNC_FILE_BACKEND, write_counts_cb, &be_data);
 
-    write_commodities(out, book);
-    write_pricedb(out, book);
-    write_accounts(out, book);
-    write_transactions(out, book);
-    write_template_transaction_data(out, book);
-    write_schedXactions(out, book);
+    write_commodities(out, book, gd);
+    write_pricedb(out, book, gd);
+    write_accounts(out, book, gd);
+    write_transactions(out, book, gd);
+    write_template_transaction_data(out, book, gd);
+    write_schedXactions(out, book, gd);
 
     gncObjectForeachBackend (GNC_FILE_BACKEND, write_data_cb, &be_data);
 
@@ -882,7 +935,7 @@ write_book(FILE *out, GNCBook *book)
 }
 
 void
-write_commodities(FILE *out, GNCBook *book)
+write_commodities(FILE *out, GNCBook *book, sixtp_gdv2 *gd)
 {
     gnc_commodity_table *tbl;
     GList *namespaces;
@@ -916,6 +969,8 @@ write_commodities(FILE *out, GNCBook *book)
                 fprintf(out, "\n");
 
                 xmlFreeNode(comnode);
+		gd->counter.commodities_loaded++;
+		run_callback(gd, "commodities");
             }
 
             g_list_free (comms);
@@ -926,7 +981,7 @@ write_commodities(FILE *out, GNCBook *book)
 }
 
 static void
-write_pricedb(FILE *out, GNCBook *book)
+write_pricedb(FILE *out, GNCBook *book, sixtp_gdv2 *gd)
 {
     xmlNodePtr node;
 
@@ -946,27 +1001,34 @@ write_pricedb(FILE *out, GNCBook *book)
 static gboolean
 xml_add_trn_data(Transaction *t, gpointer data)
 {
+    struct file_backend *be_data = data;
     xmlNodePtr node;
 
     node = gnc_transaction_dom_tree_create(t);
 
-    xmlElemDump((FILE*)data, NULL, node);
-    fprintf((FILE*)data, "\n");
+    xmlElemDump(be_data->out, NULL, node);
+    fprintf(be_data->out, "\n");
 
     xmlFreeNode(node);
+    be_data->gd->counter.transactions_loaded++;
+    run_callback(be_data->gd, "transaction");
     return TRUE;
 }
 
 static void
-write_transactions(FILE *out, GNCBook *book)
+write_transactions(FILE *out, GNCBook *book, sixtp_gdv2 *gd)
 {
+    struct file_backend be_data;
+
+    be_data.out = out;
+    be_data.gd = gd;
     xaccGroupForEachTransaction(gnc_book_get_group(book),
                                 xml_add_trn_data,
-                                (gpointer) out);
+                                (gpointer) &be_data);
 }
 
 static void
-write_template_transaction_data( FILE *out, GNCBook *book )
+write_template_transaction_data( FILE *out, GNCBook *book, sixtp_gdv2 *gd )
 {
     AccountGroup *ag;
 
@@ -974,14 +1036,14 @@ write_template_transaction_data( FILE *out, GNCBook *book )
     if ( xaccGroupGetNumSubAccounts(ag) > 0 )
     {
         fprintf( out, "<%s>\n", TEMPLATE_TRANSACTION_TAG );
-        write_account_group( out, ag );
+        write_account_group( out, ag, gd );
         xaccGroupForEachTransaction( ag, xml_add_trn_data, (gpointer)out );
         fprintf( out, "</%s>\n", TEMPLATE_TRANSACTION_TAG );
     }
 }
 
 static void
-write_schedXactions( FILE *out, GNCBook *book )
+write_schedXactions( FILE *out, GNCBook *book, sixtp_gdv2 *gd)
 {
     GList *schedXactions;
     SchedXaction *tmpSX;
@@ -999,6 +1061,8 @@ write_schedXactions( FILE *out, GNCBook *book )
         xmlElemDump( out, NULL, node );
         fprintf( out, "\n" );
         xmlFreeNode( node );
+	gd->counter.schedXactions_loaded++;
+	run_callback(gd, "schedXactions");
     } while ( (schedXactions = schedXactions->next) );
 }
 
@@ -1032,6 +1096,9 @@ write_v2_header (FILE *out)
 gboolean
 gnc_book_write_to_xml_filehandle_v2(GNCBook *book, FILE *out)
 {
+    Backend *be;
+    sixtp_gdv2 *gd;
+
     if (!out) return FALSE;
 
     write_v2_header (out);
@@ -1040,19 +1107,34 @@ gnc_book_write_to_xml_filehandle_v2(GNCBook *book, FILE *out)
                  "book", 1,
                  NULL);
 
-    write_book(out, book);
+    be = (Backend *)gnc_book_get_backend(book);
+    gd = gnc_sixtp_gdv2_new(book, file_rw_feedback, be->percentage);
+    gd->counter.commodities_total =
+      gnc_commodity_table_get_size(gnc_book_get_commodity_table(book));
+    gd->counter.accounts_total = 1 + 
+      xaccGroupGetNumSubAccounts(gnc_book_get_group(book));
+    gd->counter.transactions_total = gnc_book_count_transactions(book);
+    gd->counter.schedXactions_total =
+      g_list_length( gnc_book_get_schedxactions(book));
+
+    write_book(out, book, gd);
 
     fprintf(out, "</" GNC_V2_STRING ">\n\n");
     
+    g_free(gd);
     return TRUE;
 }
 
+/*
+ * This function is called by the "export" code.
+ */
 gboolean
-gnc_book_write_accounts_to_xml_filehandle_v2(GNCBook *book, FILE *out)
+gnc_book_write_accounts_to_xml_filehandle_v2(Backend *be, GNCBook *book, FILE *out)
 {
+    sixtp_gdv2 *gd;
+
     if (!out) return FALSE;
 
-PWARN ("huhhhh ???? Who is using this thing  ??? \n");
     write_v2_header (out);
 
     write_counts(out,
@@ -1060,20 +1142,29 @@ PWARN ("huhhhh ???? Who is using this thing  ??? \n");
                  gnc_commodity_table_get_size(
                      gnc_book_get_commodity_table(book)),
                  "account",
-                 xaccGroupGetNumSubAccounts(gnc_book_get_group(book)),
+                 1 + xaccGroupGetNumSubAccounts(gnc_book_get_group(book)),
                  NULL);
 
-    write_commodities(out, book);
+    gd = gnc_sixtp_gdv2_new(book, file_rw_feedback, be->percentage);
+    gd->counter.commodities_total =
+      gnc_commodity_table_get_size(gnc_book_get_commodity_table(book));
+    gd->counter.accounts_total = 1 +
+      xaccGroupGetNumSubAccounts(gnc_book_get_group(book));
 
-    write_accounts(out, book);
+    write_commodities(out, book, gd);
+
+    write_accounts(out, book, gd);
 
     fprintf(out, "</" GNC_V2_STRING ">\n\n");
 
+    g_free(gd);
     return TRUE;
 }
 
 gboolean
-gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename)
+gnc_book_write_to_xml_file_v2(
+    GNCBook *book,
+    const char *filename)
 {
     FILE *out;
 
@@ -1084,6 +1175,37 @@ gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename)
     }
 
     gnc_book_write_to_xml_filehandle_v2 (book, out);
+
+    write_emacs_trailer(out);
+
+    if (fclose(out) != 0)
+    {
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+/*
+ * Have to pass in the backend as this routine needs the temporary
+ * backend for file export, not the real backend which could be
+ * postgress or anything else.
+ */
+gboolean
+gnc_book_write_accounts_to_xml_file_v2(
+    Backend *be,
+    GNCBook *book,
+    const char *filename)
+{
+    FILE *out;
+
+    out = fopen(filename, "w");
+    if (out == NULL)
+    {
+        return FALSE;
+    }
+
+    gnc_book_write_accounts_to_xml_filehandle_v2 (be, book, out);
 
     write_emacs_trailer(out);
 

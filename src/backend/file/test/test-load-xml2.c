@@ -57,7 +57,7 @@ test_load_file(const char *filename)
     ignore_lock = (strcmp(getenv("SRCDIR"), ".") != 0);
     gnc_session_begin(session, filename, ignore_lock, FALSE);
 
-    gnc_session_load_from_xml_file_v2(session, NULL);
+    gnc_session_load_from_xml_file_v2(session);
 
     book = gnc_session_get_book (session);
 

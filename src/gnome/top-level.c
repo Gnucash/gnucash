@@ -405,7 +405,6 @@ gnc_gui_init (SCM command_line)
     /* initialize gnome MDI and set up application window defaults  */
     if (!gnc_mdi_get_current ())
       gnc_main_window_new ();
-    gnc_destroy_splash_screen();
 
     /* Run the ui startup hooks. */
     {

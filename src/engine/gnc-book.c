@@ -269,6 +269,13 @@ gnc_book_set_backend (GNCBook *book, Backend *be)
   book->backend = be;
 }
 
+gpointer gnc_book_get_backend (GNCBook *book)
+{
+  if (!book) return NULL;
+  return (gpointer)book->backend;
+}
+
+
 void
 gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db)
 {

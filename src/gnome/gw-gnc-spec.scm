@@ -117,6 +117,14 @@
 
   (gw:wrap-function
    ws
+   'gnc:destroy-splash-screen
+   '<gw:void>
+   "gnc_destroy_splash_screen"
+   '()
+   "Destroy the splash screen dialog.")
+
+  (gw:wrap-function
+   ws
    'gnc:gui-shutdown
    '<gw:void>
    "gnc_gui_shutdown"

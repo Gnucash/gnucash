@@ -104,6 +104,8 @@ static void rpcendEnable (RPCBackend *be)
    be->be.price_lookup        = be->snr.price_lookup;
    be->be.sync_all            = be->snr.sync_all;
    be->be.sync_price          = be->snr.sync_price;
+   be->be.export              = be->snr.export;
+   be->be.percentage          = be->snr.percentage;
 }
 
 static void rpcendDisable (RPCBackend *be)
@@ -127,6 +129,8 @@ static void rpcendDisable (RPCBackend *be)
    be->snr.price_lookup        = be->be.price_lookup;
    be->snr.sync_all            = be->be.sync_all;
    be->snr.sync_price          = be->be.sync_price;
+   be->snr.export              = be->be.export;
+   be->snr.percentage          = be->be.percentage;
 
    /* And turn off future calls */
    be->be.account_begin_edit  = NULL;
@@ -140,6 +144,8 @@ static void rpcendDisable (RPCBackend *be)
    be->be.price_lookup        = NULL;
    be->be.sync_all            = NULL;
    be->be.sync_price          = NULL;
+   be->be.export              = NULL;
+   be->be.percentage          = NULL;
 }
 
 static void myClose (void *arg)
@@ -977,6 +983,8 @@ rpcend_session_begin (Backend *backend,
   be->be.price_lookup = rpcend_price_lookup;
   be->be.sync_all = rpcend_sync_all;
   be->be.sync_price = rpcend_sync_price;
+  be->be.export = NULL;
+  be->be.percentage = NULL;
   be->be.events_pending = rpcend_events_pending;
   be->be.process_events = rpcend_process_events;
 

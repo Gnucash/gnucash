@@ -66,6 +66,8 @@ static void gnc_file_be_load_from_file(Backend *, GNCBook *);
 static gboolean gnc_file_be_get_file_lock (FileBackend *be);
 static gboolean gnc_file_be_write_to_file(FileBackend *be,
                                           gboolean make_backup);
+static void gnc_file_be_write_accounts_to_file(Backend *be,
+					       GNCBook *book);
 static void gnc_file_be_remove_old_files(FileBackend *be);
 
 void
@@ -213,6 +215,7 @@ gnc_backend_new(void)
     be->process_events = NULL;
 
     be->sync_all = file_sync_all;
+    be->export = gnc_file_be_write_accounts_to_file;
 
     fbe->dirname = NULL;
     fbe->fullpath = NULL;
@@ -371,7 +374,7 @@ gnc_file_be_load_from_file (Backend *bend, GNCBook *book)
     switch (gnc_file_be_determine_file_type(be->fullpath))
     {
     case GNC_BOOK_XML2_FILE:
-        rc = gnc_session_load_from_xml_file_v2 (be->session, NULL);
+        rc = gnc_session_load_from_xml_file_v2 (be->session);
         if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
         break;
 
@@ -706,5 +709,14 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
         g_free(tmp_name);
         return FALSE;
     }
+}
+
+static void
+gnc_file_be_write_accounts_to_file(Backend *be, GNCBook *book)
+{
+    const gchar *datafile;
+
+    datafile = ((FileBackend *)be)->fullpath;
+    gnc_book_write_accounts_to_xml_file_v2(be, book, datafile);
 }
 

@@ -85,7 +85,7 @@ test_file(const char *filename)
             return g_strdup_printf("gnc_session_begin errorid %d", err);
         }
 
-        gnc_session_load(session);
+        gnc_session_load(session, NULL);
         err = gnc_session_pop_error (session);
         if(err)
         {
@@ -109,7 +109,7 @@ test_file(const char *filename)
                                    possible_envs[i]);
         }
 
-        gnc_session_save(new_session);
+        gnc_session_save(new_session, NULL);
 
         cmd = g_strdup_printf(diff_command, filename, new_file);
 

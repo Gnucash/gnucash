@@ -415,7 +415,8 @@ gnc_session_begin (GNCSession *session, const char * book_id,
 /* ====================================================================== */
 
 void
-gnc_session_load (GNCSession *session)
+gnc_session_load (GNCSession *session,
+		  GNCPercentageFunc percentage_func)
 {
   GNCBook *newbook;
   BookList *oldbooks, *node;
@@ -448,6 +449,7 @@ gnc_session_load (GNCSession *session)
    * generic, backend-independent operation.
    */
   be = session->backend;
+  gnc_book_set_backend(newbook, be);
 
   /* Starting the session should result in a bunch of accounts
    * and currencies being downloaded, but probably no transactions;
@@ -456,6 +458,7 @@ gnc_session_load (GNCSession *session)
   if (be)
   {
       xaccLogDisable();
+      be->percentage = percentage_func;
 
       if (be->book_load) 
       {
@@ -470,8 +473,6 @@ gnc_session_load (GNCSession *session)
 
           gnc_session_push_error(session, xaccBackendGetError(be), NULL);
       }
-
-      gnc_book_set_backend (newbook, be);
 
       /* we just got done loading, it can't possibly be dirty !! */
       gnc_book_mark_saved (newbook);
@@ -566,7 +567,8 @@ save_error_handler(Backend *be, GNCSession *session)
 }
 
 void
-gnc_session_save (GNCSession *session)
+gnc_session_save (GNCSession *session,
+		  GNCPercentageFunc percentage_func)
 {
   GList *node;
   Backend *be;
@@ -596,6 +598,7 @@ gnc_session_save (GNCSession *session)
 
       /* if invoked as SaveAs(), then backend not yet set */
       gnc_book_set_backend (abook, be);
+      be->percentage = percentage_func;
   
       if (be->sync_all)
       {
@@ -632,6 +635,42 @@ gnc_session_save (GNCSession *session)
   }
 
   LEAVE(" ");
+}
+
+/* ====================================================================== */
+
+gboolean
+gnc_session_export (GNCSession *tmp_session,
+		    GNCSession *real_session,
+		    GNCPercentageFunc percentage_func)
+{
+  GNCBook *book;
+  Backend *be;
+
+  if ((!tmp_session) || (!real_session)) return FALSE;
+
+  book = gnc_session_get_book (real_session);
+  ENTER ("tmp_session=%p real_session=%p book=%p book_id=%s", 
+         tmp_session, real_session, book,
+         gnc_session_get_url(tmp_session)
+         ? gnc_session_get_url(tmp_session) : "(null)");
+
+  /* There must be a backend or else.  (It should always be the file
+   * backend too.)
+   */
+  be = tmp_session->backend;
+  if (!be)
+    return FALSE;
+
+  be->percentage = percentage_func;
+  if (be->export)
+    {
+
+      (be->export)(be, book);
+      if (save_error_handler(be, tmp_session)) return FALSE;
+    }
+
+  return TRUE;
 }
 
 /* ====================================================================== */

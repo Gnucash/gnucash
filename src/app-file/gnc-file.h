@@ -97,6 +97,11 @@
  *    routine, except that the new file to open is passed as a char *
  *    argument.
  *
+ * The gnc_file_export_file() routine will check for an existing edit
+ *    session, and if one exists, it will save just the commodities
+ *    and accounts to a file.  If an error occurs, a popup dialogue
+ *    will inform the user of the error.
+ *
  * The gnc_file_quit() routine will close out and destroy the current session.
  *    The user WILL NOT BE PROMPTED to confirm this action, or do do
  *    any kind of saving beforehand.
@@ -120,6 +125,7 @@ void gnc_file_save (void);
 void gnc_file_save_as (void);
 
 gboolean gnc_file_open_file (const char *filename);
+void gnc_file_export_file(const char * filename);
 
 gboolean gnc_file_query_save (void);
 
@@ -127,5 +133,8 @@ void gnc_file_quit (void);
 
 typedef gboolean (*GNCCanCancelSaveCB) (void);
 void gnc_file_set_can_cancel_callback (GNCCanCancelSaveCB cb);
+
+typedef void (*GNCFilePercentageFunc) (const char *message, int percent);
+void gnc_file_set_pct_handler (GNCFilePercentageFunc file_percentage_func);
 
 #endif /* GNC_FILE_H */

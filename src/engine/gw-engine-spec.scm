@@ -28,6 +28,7 @@
     "#include <Group.h>\n"
     "#include <gnc-book.h>\n"
     "#include <gnc-session.h>\n"
+    "#include <gnc-session-scm.h>\n"
     "#include <gnc-engine-util.h>\n"
     "#include <gnc-event.h>\n"
     "#include <gnc-lot.h>\n"
@@ -1362,7 +1363,7 @@ when no longer needed.")
  ws
  'gnc:session-load
  '<gw:void>
- "gnc_session_load"
+ "gnc_session_scm_load"
  '((<gnc:Session*> session))
  "Load the data associated with the given session.")
 
@@ -1370,9 +1371,27 @@ when no longer needed.")
  ws
  'gnc:session-save
  '<gw:void>
- "gnc_session_save"
+ "gnc_session_scm_save"
  '((<gnc:Session*> session))
  "Save the data in the session.")
+
+(gw:wrap-function
+ ws
+ 'gnc:session-export
+ '<gw:bool>
+ "gnc_session_scm_export"
+ '((<gnc:Session*> tmp_session) (<gnc:Session*> real_session))
+ "Export the accounts in the session.")
+
+(gw:wrap-function
+ ws
+ 'gnc:session-set-callback
+ '<gw:void>
+ "gnc_session_scm_set_callback"
+ '((<gw:scm> callback))
+ "Setup a callback for the load/save functions to provide progress
+reports. This function will be called with a string and an integer
+argument between 0 and 100 (inclusive).")
 
 (gw:wrap-function
  ws

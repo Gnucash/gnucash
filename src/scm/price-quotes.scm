@@ -709,7 +709,7 @@ Run 'update-finance-quote' as root to install them.") "\n")))
                           (gnc:session-get-book session)))))
 
     (if (not quote-ok?) (gnc:msg "book-add-quotes failed"))
-    (and session (gnc:session-save session))
+    (and session (gnc:session-save session #f))
     (if (not (eq? 'no-err
                   (gw:enum-<gnc:BackendError>-val->sym
                    (gnc:session-get-error session) #f)))

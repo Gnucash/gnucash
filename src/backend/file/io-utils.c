@@ -53,7 +53,7 @@ write_emacs_trailer(FILE *out)
 }
 
 void
-write_account_group(FILE *out, AccountGroup *grp)
+write_account_group(FILE *out, AccountGroup *grp, sixtp_gdv2 *gd)
 {
     GList *list;
     GList *node;
@@ -71,18 +71,20 @@ write_account_group(FILE *out, AccountGroup *grp)
         fprintf(out, "\n");
 
         xmlFreeNode(accnode);
+	gd->counter.accounts_loaded++;
+	run_callback(gd, "account");
 
         newgrp = xaccAccountGetChildren((Account*)(node->data));
 
         if (newgrp)
         {
-            write_account_group(out, newgrp);
+            write_account_group(out, newgrp, gd);
         }
     }
 }
 
 void
-write_accounts(FILE *out, GNCBook *book)
+write_accounts(FILE *out, GNCBook *book, sixtp_gdv2 *gd)
 {
-    write_account_group(out, gnc_book_get_group(book));
+    write_account_group(out, gnc_book_get_group(book), gd);
 }

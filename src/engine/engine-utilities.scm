@@ -32,7 +32,7 @@
                       (gnc:session-begin session url
                                          ignore-lock?
                                          create-if-needed?)
-                      (gnc:session-load session)
+                      (gnc:session-load session #f)
                       session)))
     (or result
         (begin (gnc:session-destroy session) #f))))

@@ -245,6 +245,10 @@ struct backend_s
   void (*sync_group) (Backend *, GNCBook *);
   void (*sync_price) (Backend *, GNCBook *);
 
+  void (*export) (Backend *, GNCBook *);
+
+  GNCBePercentageFunc percentage;
+
   gint64 (*counter) (Backend *, const char *counter_name);
 
   gboolean (*events_pending) (Backend *be);

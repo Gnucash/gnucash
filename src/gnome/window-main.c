@@ -55,7 +55,6 @@
 #include "gnc-menu-extensions.h"
 #include "gnc-ui.h"
 #include "guile-util.h"
-#include "io-gncxml-v2.h"
 #include "mainwindow-account-tree.h"
 #include "option-util.h"
 #include "top-level.h"
@@ -173,7 +172,7 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
   }
 
   /* add the statusbar */ 
-  statusbar = gnome_appbar_new(FALSE, TRUE, GNOME_PREFERENCES_USER);
+  statusbar = gnome_appbar_new(TRUE, TRUE, GNOME_PREFERENCES_USER);
   gnome_app_set_statusbar(app, statusbar);
 
   /* set up extensions menu and hints */
@@ -519,71 +518,8 @@ gnc_main_window_file_save_as_cb(GtkWidget * widget, gpointer data)
 static void
 gnc_main_window_file_export_cb(GtkWidget * widget, gpointer data)
 {
-  const char *filename;
-  struct stat statbuf;
-  gboolean ok;
-  FILE *file;
-  int rc;
-
-  filename =  gnc_file_dialog (_("Export"), NULL, NULL);
-  if (!filename)
-    return;
-
-  rc = stat (filename, &statbuf);
-
-  /* Check for an error that isn't a non-existent file. */
-  if (rc != 0 && errno != ENOENT)
-  {
-    const char *format = _("You cannot save to that filename.\n\n%s");
-
-    gnc_error_dialog_parented (GTK_WINDOW (gtk_widget_get_toplevel (widget)),
-                               format, strerror(errno));
-    return;
-  }
-
-  /* Check for a file that isn't a regular file. */
-  if (rc == 0 && !S_ISREG (statbuf.st_mode))
-  {
-    const char *message = _("You cannot save to that file.");
-
-    gnc_error_dialog_parented (GTK_WINDOW (gtk_widget_get_toplevel (widget)),
-                               message);
-    return;
-  }
-
-  if (rc == 0)
-  {
-    const char *format = _("The file \n    %s\n already exists.\n"
-                           "Are you sure you want to overwrite it?");
-    if (!gnc_verify_dialog_parented (gtk_widget_get_toplevel (widget),
-				     FALSE, format, filename))
-      return;
-  }
-
-  file = fopen (filename, "w");
-  if (!file)
-  {
-    const char *format = _("You cannot save to that file.\n\n%s");
-
-    gnc_error_dialog_parented (GTK_WINDOW (gtk_widget_get_toplevel (widget)),
-                               format, strerror(errno));
-    return;
-  }
-
-  ok = gnc_book_write_accounts_to_xml_filehandle_v2 (gnc_get_current_book (),
-                                                     file);
-
-  if (fclose (file) != 0)
-    ok = FALSE;
-
-  if (!ok)
-  {
-    const char *format = _("There was an error saving the file.\n\n%s");
-
-    gnc_error_dialog_parented (GTK_WINDOW (gtk_widget_get_toplevel (widget)),
-                               format, strerror(errno));
-    return;
-  }
+  gnc_file_export_file(NULL);
+  gnc_refresh_main_window_info ();
 }
 
 static void

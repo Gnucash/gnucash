@@ -56,6 +56,7 @@ static GNCHistoryAddFileFunc history_add_file_func = NULL;
 static GNCHistoryGetLastFunc history_get_last_func = NULL;
 
 static GNCFileDialogFunc file_dialog_func = NULL;
+static GNCFilePercentageFunc file_percentage_func = NULL;
 
 
 void
@@ -66,6 +67,12 @@ gnc_file_set_handlers (GNCHistoryAddFileFunc history_add_file_func_in,
   history_add_file_func = history_add_file_func_in;
   history_get_last_func = history_get_last_func_in;
   file_dialog_func = file_dialog_func_in;
+}
+
+void
+gnc_file_set_pct_handler (GNCFilePercentageFunc file_percentage_func_in)
+{
+  file_percentage_func = file_percentage_func_in;
 }
 
 static GNCSession *
@@ -427,7 +434,13 @@ gnc_post_file_open (const char * filename)
   {
     AccountGroup *new_group;
 
-    gnc_session_load (new_session);
+    if (file_percentage_func) {
+      file_percentage_func(_("Reading file..."), 0.0);
+      gnc_session_load (new_session, file_percentage_func);
+      file_percentage_func(NULL, -1.0);
+    } else {
+      gnc_session_load (new_session, NULL);
+    }
 
     /* check for i/o error, put up appropriate error dialog */
     io_err = gnc_session_get_error (new_session);
@@ -528,6 +541,82 @@ gnc_file_open_file (const char * newfile)
   return gnc_post_file_open (newfile);
 }
 
+void
+gnc_file_export_file(const char * newfile)
+{
+  GNCSession *new_session;
+  gboolean ok;
+  GNCBackendError io_err = ERR_BACKEND_NO_ERR;
+
+  if (!newfile) {
+    if (!file_dialog_func) {
+      PWARN ("no file dialog function");
+      return;
+    }
+
+    newfile =  file_dialog_func (_("Export"), NULL, NULL);
+    if (!newfile)
+      return;
+  }
+
+  gnc_engine_suspend_events();
+
+  /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
+
+  new_session = gnc_session_new ();
+  gnc_session_begin (new_session, newfile, FALSE, FALSE);
+
+  io_err = gnc_session_get_error (new_session);
+
+  /* if file appears to be locked, ask the user ... */
+  if (ERR_BACKEND_LOCKED == io_err) 
+  {
+    if (FALSE == show_session_error (io_err, newfile))
+    {
+       /* user told us to ignore locks. So ignore them. */
+      gnc_session_begin (new_session, newfile, TRUE, FALSE);
+    }
+  }
+
+  /* --------------- END CORE SESSION CODE -------------- */
+
+  /* oops ... file already exists ... ask user what to do... */
+  if (gnc_session_save_may_clobber_data (new_session))
+  {
+    const char *format = _("The file \n    %s\n already exists.\n"
+                           "Are you sure you want to overwrite it?");
+
+    /* if user says cancel, we should break out */
+    if (!gnc_verify_dialog (FALSE, format, newfile))
+    {
+      return;
+    }
+
+    /* Whoa-ok. Blow away the previous file. */
+  }
+
+  /* use the current session to save to file */
+  gnc_set_busy_cursor (NULL, TRUE);
+  if (file_percentage_func) {
+    file_percentage_func(_("Exporting file..."), 0.0);
+    ok = gnc_session_export (new_session, current_session,
+			     file_percentage_func);
+    file_percentage_func(NULL, -1.0);
+  } else {
+    ok = gnc_session_export (new_session, current_session, NULL);
+  }
+  gnc_unset_busy_cursor (NULL);
+  gnc_session_destroy (new_session);
+  gnc_engine_resume_events();
+
+  if (!ok)
+  {
+    const char *format = _("There was an error saving the file.\n\n%s");
+
+    gnc_error_dialog_parented (NULL, format, strerror(errno));
+    return;
+  }
+}
 
 static gboolean been_here_before = FALSE;
 
@@ -552,7 +641,13 @@ gnc_file_save (void)
 
   /* use the current session to save to file */
   gnc_set_busy_cursor (NULL, TRUE);
-  gnc_session_save (session);
+  if (file_percentage_func) {
+    file_percentage_func(_("Writing file..."), 0.0);
+    gnc_session_save (session, file_percentage_func);
+    file_percentage_func(NULL, -1.0);
+  } else {
+    gnc_session_save (session, NULL);
+  }
   gnc_unset_busy_cursor (NULL);
 
   /* Make sure everything's OK - disk could be full, file could have

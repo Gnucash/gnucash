@@ -394,7 +394,7 @@ string and 'directories' must be a list of strings."
         (bootstrap (resolve-module '(gnucash main))))
     
     (define (load-module name vers optional?)
-      (let ((str (string-append "Loading modules... " name)))
+      (let ((str (string-append (_ "Loading modules... ") name)))
 	(gnc:update-splash-screen str)
 	(if optional?
 	    (gnc:module-load-optional name vers)
@@ -404,7 +404,6 @@ string and 'directories' must be a list of strings."
     
     ;; right now we have to statically load all these at startup time.
     ;; Hopefully we can gradually make them autoloading.
-    (gnc:update-splash-screen "Loading modules...")
     (load-module "gnucash/engine" 0 #f)
 
     (load-module "gnucash/app-file" 0 #f)
@@ -432,7 +431,7 @@ string and 'directories' must be a list of strings."
     ;; +jsled - 2002.07.08
     (load-from-path "fin.scm")
 
-    (gnc:update-splash-screen "Loading tip-of-the-day...")
+    (gnc:update-splash-screen (_ "Loading tip-of-the-day..."))
     (gnc:initialize-tip-of-the-day)
 
     (gnc:use-guile-module-here! '(gnucash price-quotes))
@@ -456,7 +455,7 @@ string and 'directories' must be a list of strings."
                                 (gnc:ui-hierarchy-druid)))))
 
   ;; Load the system configs
-  (gnc:update-splash-screen "Loading configs...")
+  (gnc:update-splash-screen (_ "Loading configs..."))
   (if (not (gnc:load-system-config-if-needed))
       (gnc:shutdown 1))
 
@@ -520,9 +519,11 @@ string and 'directories' must be a list of strings."
 
 (define (gnc:load-account-file)
   (let ((file (gnc:account-file-to-load)))
-    (if file 
-        (and (not (gnc:file-open-file file))
-             (gnc:hook-run-danglers gnc:*book-opened-hook* #f))
+      (if file 
+	(begin
+	  (gnc:update-splash-screen (_ "Loading data..."))
+	  (and (not (gnc:file-open-file file))
+	       (gnc:hook-run-danglers gnc:*book-opened-hook* #f)))
         (gnc:hook-run-danglers gnc:*book-opened-hook* #f))))
 
 (define (gnc:main)
@@ -570,7 +571,9 @@ string and 'directories' must be a list of strings."
              (gnc:option-value
               (gnc:lookup-global-option "__new_user" "first_startup")))
             (gnc:new-user-dialog)
-            (gnc:load-account-file))
+            (begin
+	      (gnc:load-account-file)
+	      (gnc:destroy-splash-screen)))
         (gnc:start-ui-event-loop)
         (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:gui-finish))
 

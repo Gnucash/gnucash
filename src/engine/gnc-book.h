@@ -73,6 +73,8 @@ AccountGroup        * gnc_book_get_template_group( GNCBook *book );
 void gnc_book_set_data (GNCBook *book, const char *key, gpointer data);
 gpointer gnc_book_get_data (GNCBook *book, const char *key);
 
+gpointer gnc_book_get_backend (GNCBook *book);
+
 /*
  * The gnc_book_not_saved() subroutine will return TRUE if any 
  *    data in the book hasn't been saved to long-term storage.

@@ -1,3 +1,77 @@
+2002-09-17  David Hampton  <hampton@employees.org>
+
+	Add progress bar to main window.  Shows progress of read, write
+	and export functions.  Adds a callback for the backend to pass a
+	percentage done number out to the session code, and a callback for
+	the session code to pass this percentage out to the caller's gui
+	display funtion.
+	
+	* src/app-file/gnc-file-p.h:
+	* src/app-file/gnc-file.c (gnc_file_set_pct_handler): Add a file
+	handler "percent done" routine that can be installed.
+	
+	* src/app-file/gnc-file.c (gnc_post_file_open) (gnc_file_save):
+	Call the file handler routine pre/post file read/write, and pass
+	the handler into the backend so that it can report percentage
+	complete.
+
+	* src/app-file/gnc-file.c (gnc_file_export_file): 
+	New export function.  This is the upper half of the exporting
+	function.  This is designed similar to the read/write routines.
+
+	* src/backend/file/gnc-backend-file.c
+	(gnc_file_be_write_accounts_to_file): New export function.  This
+	is part of the lower half of the exporting function.  This is
+	designed similar to the read/write routines.
+
+	* src/backend/file/io-example-account.c
+	(gnc_write_example_account):New calling arguments.  Add counters.
+	Invoke the percentage done callback where appropriate.
+	
+	* src/backend/file/io-gncxml-v2.c (add_schedXaction_local)
+	(run_callback) (write_xxx): New calling arguments.  Add counters.
+	Invoke the percentage done callback where appropriate.
+	(file_rw_feedback): New function for XML read/write.  Computed
+	percentage done then calls the callback function handed in from
+	outside of the backend code.  (gnc_sixtp_gdv2_new): New auxiliary
+	function. (gnc_book_write_to_xml_filehandle_v2)
+	(gnc_book_write_accounts_to_xml_filehandle_v2): Remember count of
+	items to process. (gnc_book_write_accounts_to_xml_file_v2): Other
+	part of the lower half of the exporting function.
+	
+	* src/backend/file/io-utils.c (write_account_group)
+	(write_accounts):New calling arguments.  Add counters.  Invoke the
+	percentage done callback where appropriate.
+
+	* src/backend/postgres/PostgresBackend.c:
+	* src/backend/rpc/RpcBackend.c:
+	* src/enfine/Backend.c:
+	Initialize the new pointers in the backend data structure.
+	
+	* src/gnome/window-main.c (gnc_main_window_file_export_cb):
+	The file export function was moved into gnc-file.c.
+
+	* src/engine/Makefile.am:
+	* src/engine/gnc-session-scm.[ch]: New files.  Moved the scheme
+	session read/write hooks here because of the new callback. Keeps
+	scheme out of the main session sources.
+
+	* src/engine/gnc-session.c (gnc_session_load): 
+	(gnc_session_save): Added a callback for percentage done.
+	(gnc_session_export): New export function. This is the middle of
+	the exporting function.  This is designed similar to the
+	load/save routines.
+
+	* src/engine/gw-engine-spec.scm: New arguments to session
+	load/save. New session export function.
+
+	* src/gnome/gw-gnc-spec.scm: New function to destroy the splash screen.
+
+	* src/gnome/top-level.c: No longer destroys splash screen.
+
+	* src/scm/main.scm: I18n new splash screen strings. Destroy splash
+	screen after loading data file.
+	
 2002-09-16  Derek Atkins  <derek@ihtfp.com>
 	Fix bug #91413 -- Add TaxTable defaults to Customers and Vendors
 

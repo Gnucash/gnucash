@@ -34,6 +34,7 @@
 #include <glib.h>
 
 #include "Account.h"
+#include "Backend.h"
 #include "Transaction.h"
 #include "gnc-book.h"
 #include "gnc-commodity.h"
@@ -64,12 +65,15 @@ typedef struct
     int schedXactions_loaded;
 } load_counter;
 
-typedef struct
+typedef struct sixtp_gdv2 sixtp_gdv2;
+typedef void (*countCallbackFn)(sixtp_gdv2 *gd, const char *type);
+struct sixtp_gdv2
 {
     GNCBook *book;
     load_counter counter;
-    void (*countCallback)(const char *type, load_counter counter);
-} sixtp_gdv2;
+    countCallbackFn countCallback;
+    GNCBePercentageFunc gui_display_fn;
+};
 
 /**
  * Struct used to pass in a new data type for XML storage.  This contains
@@ -114,18 +118,20 @@ typedef struct
         GNCBook *book;
 } gnc_template_xaction_data;
 
+/* Call after loading each record */
+void run_callback(sixtp_gdv2 *data, const char *type);
+
 /* read in an account group from a file */
-gboolean gnc_session_load_from_xml_file_v2(
-    GNCSession *session,
-    void (*countcallback)(const char *type, load_counter count));
+gboolean gnc_session_load_from_xml_file_v2(GNCSession *session);
 
 /* write all book info to a file */
 gboolean gnc_book_write_to_xml_filehandle_v2(GNCBook *book, FILE *fh);
 gboolean gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename);
 
 /* write just the commodities and accounts to a file */
-gboolean gnc_book_write_accounts_to_xml_filehandle_v2(GNCBook *book,
-                                                      FILE *out);
+gboolean gnc_book_write_accounts_to_xml_filehandle_v2(Backend *be, GNCBook *book, FILE *fh);
+gboolean gnc_book_write_accounts_to_xml_file_v2(Backend * be, GNCBook *book,
+						const char *filename);
 
 /* The is_gncxml_file() routine checks to see if the first few 
  * chars of the file look like gnc-xml data.

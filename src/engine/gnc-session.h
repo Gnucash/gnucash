@@ -148,7 +148,12 @@ void gnc_session_begin (GNCSession *session, const char * book_id,
  *    to make the book actually usable; it would not cause *all* of the
  *    data to be loaded.
  */
-void gnc_session_load (GNCSession *session);
+typedef void (*GNCPercentageFunc) (const char *message, int percent);
+void gnc_session_load (GNCSession *session,
+		       GNCPercentageFunc percentage_func);
+gboolean gnc_session_export (GNCSession *tmp_session,
+			     GNCSession *real_session,
+			     GNCPercentageFunc percentage_func);
 
 /* The gnc_session_get_error() routine can be used to obtain the reason
  *    for any failure.  Calling this routine returns the current error.
@@ -208,7 +213,8 @@ gboolean gnc_session_save_may_clobber_data (GNCSession *session);
  *    been written out before this, and so this routines wouldn't 
  *    roll-back anything; it would just shut the connection.
  */
-void     gnc_session_save (GNCSession *session);
+void     gnc_session_save (GNCSession *session,
+			   GNCPercentageFunc percentage_func);
 void     gnc_session_end  (GNCSession *session);
 
 /* The gnc_session_events_pending() method will return TRUE if the backend

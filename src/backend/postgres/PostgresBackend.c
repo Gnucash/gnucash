@@ -2108,6 +2108,8 @@ pgend_session_begin (Backend *backend,
             be->be.sync_all             = pgendSyncSingleFile;
             be->be.sync_group           = NULL;
             be->be.sync_price           = pgendSyncPriceDBSingleFile;
+            be->be.export               = NULL;
+            be->be.percentage           = NULL;
             be->be.events_pending       = NULL;
             be->be.process_events       = NULL;
             PWARN ("mode=single-file is final beta -- \n"
@@ -2133,6 +2135,8 @@ pgend_session_begin (Backend *backend,
             be->be.sync_all             = pgendSync;
             be->be.sync_group           = NULL;
             be->be.sync_price           = pgendSyncPriceDB;
+            be->be.export               = NULL;
+            be->be.percentage           = NULL;
             be->be.events_pending       = NULL;
             be->be.process_events       = NULL;
             PWARN ("mode=single-update is final beta -- \n"
@@ -2158,6 +2162,8 @@ pgend_session_begin (Backend *backend,
             be->be.sync_all             = pgendSync;
             be->be.sync_group           = NULL;
             be->be.sync_price           = pgendSyncPriceDB;
+            be->be.export               = NULL;
+            be->be.percentage           = NULL;
             be->be.events_pending       = NULL;
             be->be.process_events       = NULL;
 
@@ -2188,6 +2194,8 @@ pgend_session_begin (Backend *backend,
             be->be.sync_all             = pgendSync;
             be->be.sync_group           = NULL;
             be->be.sync_price           = pgendSyncPriceDB;
+            be->be.export               = NULL;
+            be->be.percentage           = NULL;
             be->be.events_pending       = pgendEventsPending;
             be->be.process_events       = pgendProcessEvents;
 
@@ -2239,6 +2247,8 @@ pgendDisable (PGBackend *be)
    be->snr.sync_all             = be->be.sync_all;
    be->snr.sync_group           = be->be.sync_group;
    be->snr.sync_price           = be->be.sync_price;
+   be->snr.export               = be->be.export;
+   be->snr.percentage           = be->be.percentage;
    be->snr.events_pending       = be->be.events_pending;
    be->snr.process_events       = be->be.process_events;
 
@@ -2260,6 +2270,8 @@ pgendDisable (PGBackend *be)
    be->be.sync_all             = NULL;
    be->be.sync_group           = NULL;
    be->be.sync_price           = NULL;
+   be->be.export               = NULL;
+   be->be.percentage           = NULL;
    be->be.events_pending       = NULL;
    be->be.process_events       = NULL;
 }
@@ -2296,6 +2308,8 @@ pgendEnable (PGBackend *be)
    be->be.sync_all             = be->snr.sync_all;
    be->be.sync_group           = be->snr.sync_group;
    be->be.sync_price           = be->snr.sync_price;
+   be->be.export               = be->snr.export;
+   be->be.percentage           = be->snr.percentage;
    be->be.events_pending       = be->snr.events_pending;
    be->be.process_events       = be->snr.process_events;
 }

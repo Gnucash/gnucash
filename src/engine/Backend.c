@@ -121,6 +121,8 @@ xaccInitBackend(Backend *be)
     be->sync_all = NULL;
     be->sync_group = NULL;
     be->sync_price = NULL;
+    be->export = NULL;
+    be->percentage = NULL;
 
     be->events_pending = NULL;
     be->process_events = NULL;

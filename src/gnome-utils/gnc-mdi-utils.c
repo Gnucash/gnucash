@@ -28,6 +28,7 @@
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
+#include "gnc-file.h"
 #include "gnc-html.h"
 #include "gnc-mdi-utils.h"
 #include "gnc-ui-util.h"
@@ -94,6 +95,34 @@ void
 gnc_mdi_set_toolbar_visibility (gboolean visible)
 {
   gnc_toolbar_visible = visible;
+}
+
+static void
+gnc_mdi_file_percentage (const char *message, int percentage)
+{
+  GtkWidget *app;
+  GnomeAppBar *appbar;
+
+  app = gnc_ui_get_toplevel();
+  if (app == NULL)
+    return;
+  if (GNOME_APP(app)->statusbar == NULL)
+    return;
+
+  appbar = GNOME_APPBAR(GNOME_APP(app)->statusbar);
+
+  if (percentage < 0) {
+    gnome_appbar_refresh(appbar);
+    gnome_appbar_set_progress(appbar, 0.0);
+  } else {
+    if (message)
+      gnome_appbar_set_status(appbar, message);
+    gnome_appbar_set_progress(appbar, ((gfloat)percentage)/100);
+  }
+
+  /* make sure new text is up */
+  while (gtk_events_pending ())
+    gtk_main_iteration ();
 }
 
 /**
@@ -489,6 +518,8 @@ gnc_mdi_app_created_cb (GnomeMDI * mdi, GnomeApp * app, gpointer data)
 
   /* enable save and restore of menubar positions */
   gnome_app_enable_layout_config (app, TRUE);
+
+  gnc_file_set_pct_handler (gnc_mdi_file_percentage);
 
   /* flag the app as gnc mdi created */
   gtk_object_set_data (GTK_OBJECT (app), "gnc_mdi", mainwin);
