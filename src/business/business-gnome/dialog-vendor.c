@@ -342,8 +342,10 @@ gnc_vendor_new_window (GtkWidget *parent, GNCBook *bookp,
   /* default to ok */
   gnome_dialog_set_default (vwd, 0);
 
-  if (parent)
+  if (parent) {
     gnome_dialog_set_parent (vwd, GTK_WINDOW (parent));
+    gtk_window_set_modal (GTK_WINDOW (vw->dialog), TRUE);
+  }
 
   /* Get entry points */
   vw->id_entry = glade_xml_get_widget (xml, "id_entry");
@@ -501,8 +503,6 @@ gnc_vendor_new (GtkWidget *parent, GNCBook *bookp)
 		      GTK_SIGNAL_FUNC (gnc_vendor_on_close_cb),
 		      &created_vendor);
 
-  gtk_window_set_modal (GTK_WINDOW (vw->dialog), TRUE);
-
   gtk_main ();
 
   return created_vendor;
@@ -520,8 +520,6 @@ gnc_vendor_edit (GtkWidget *parent, GncVendor *vendor)
   gtk_signal_connect (GTK_OBJECT (vw->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_vendor_on_close_cb),
 		      NULL);
-
-  gtk_window_set_modal (GTK_WINDOW (vw->dialog), TRUE);
 
   gtk_main ();
 

@@ -688,8 +688,10 @@ gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
   // gtk_box_pack_start (GTK_BOX(vbox), toolbar, FALSE, FALSE, 2);
   gtk_box_pack_start (GTK_BOX(vbox), regWidget, TRUE, TRUE, 2);
 
-  if (parent)
+  if (parent) {
     gnome_dialog_set_parent (iwd, GTK_WINDOW (parent));
+    gtk_window_set_modal (GTK_WINDOW (iw->dialog), TRUE);
+  }
 
   gtk_signal_connect (GTK_OBJECT (iw->dialog), "destroy",
 		      GTK_SIGNAL_FUNC(gnc_invoice_window_destroy_cb), iw);
@@ -793,9 +795,6 @@ gnc_invoice_new (GtkWidget *parent, GncOwner *ownerp, GNCBook *bookp)
 		      GTK_SIGNAL_FUNC (gnc_invoice_on_close_cb),
 		      &created_invoice);
 
-  if (parent)
-    gtk_window_set_modal (GTK_WINDOW (iw->dialog), TRUE);
-
   gtk_main ();
 
   return created_invoice;
@@ -821,9 +820,6 @@ gnc_invoice_edit (GtkWidget *parent, GncInvoice *invoice)
   gtk_signal_connect (GTK_OBJECT (iw->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_invoice_on_close_cb),
 		      NULL);
-
-  if (parent)
-    gtk_window_set_modal (GTK_WINDOW (iw->dialog), TRUE);
 
   gtk_main ();
 

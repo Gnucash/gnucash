@@ -266,6 +266,7 @@ gnc_job_choose (GtkWidget * parent, GncJob *start_job,
 
   if(parent) {
     gnome_dialog_set_parent(GNOME_DIALOG(win->dialog), GTK_WINDOW(parent));
+    gtk_window_set_modal(GTK_WINDOW(win->dialog), TRUE);
   }
 
   /* Connect the glade signals */
@@ -318,7 +319,6 @@ gnc_job_choose (GtkWidget * parent, GncJob *start_job,
   update_owner_select_picker (win);
 
   /* Run the widget */
-  gtk_window_set_modal(GTK_WINDOW(win->dialog), TRUE);
   gtk_widget_show_all (win->dialog);
   gtk_main();
 

@@ -388,8 +388,10 @@ gnc_customer_new_window (GtkWidget *parent, GNCBook *bookp,
   /* default to ok */
   gnome_dialog_set_default (cwd, 0);
 
-  if (parent)
+  if (parent) {
     gnome_dialog_set_parent (cwd, GTK_WINDOW (parent));
+    gtk_window_set_modal (GTK_WINDOW (cw->dialog), TRUE);
+  }
 
   /* Get entry points */
   cw->id_entry = glade_xml_get_widget (xml, "id_entry");
@@ -606,8 +608,6 @@ gnc_customer_new (GtkWidget *parent, GNCBook *bookp)
 		      GTK_SIGNAL_FUNC (gnc_customer_on_close_cb),
 		      &created_customer);
 
-  gtk_window_set_modal (GTK_WINDOW (cw->dialog), TRUE);
-
   gtk_main ();
 
   return created_customer;
@@ -625,8 +625,6 @@ gnc_customer_edit (GtkWidget *parent, GncCustomer *cust)
   gtk_signal_connect (GTK_OBJECT (cw->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_customer_on_close_cb),
 		      NULL);
-
-  gtk_window_set_modal (GTK_WINDOW (cw->dialog), TRUE);
 
   gtk_main ();
 

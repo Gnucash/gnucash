@@ -341,8 +341,10 @@ gnc_employee_new_window (GtkWidget *parent, GNCBook *bookp,
   /* default to ok */
   gnome_dialog_set_default (ewd, 0);
 
-  if (parent)
+  if (parent) {
     gnome_dialog_set_parent (ewd, GTK_WINDOW (parent));
+    gtk_window_set_modal (GTK_WINDOW (ew->dialog), TRUE);
+  }
 
   /* Get entry points */
   ew->id_entry = glade_xml_get_widget (xml, "id_entry");
@@ -507,8 +509,6 @@ gnc_employee_new (GtkWidget *parent, GNCBook *bookp)
 		      GTK_SIGNAL_FUNC (gnc_employee_on_close_cb),
 		      &created_employee);
 
-  gtk_window_set_modal (GTK_WINDOW (ew->dialog), TRUE);
-
   gtk_main ();
 
   return created_employee;
@@ -526,8 +526,6 @@ gnc_employee_edit (GtkWidget *parent, GncEmployee *employee)
   gtk_signal_connect (GTK_OBJECT (ew->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_employee_on_close_cb),
 		      NULL);
-
-  gtk_window_set_modal (GTK_WINDOW (ew->dialog), TRUE);
 
   gtk_main ();
 

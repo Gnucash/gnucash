@@ -597,8 +597,10 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
   // gtk_box_pack_start (GTK_BOX(vbox), toolbar, FALSE, FALSE, 2);
   gtk_box_pack_start (GTK_BOX(vbox), regWidget, TRUE, TRUE, 2);
 
-  if (parent)
+  if (parent) {
     gnome_dialog_set_parent (owd, GTK_WINDOW (parent));
+    gtk_window_set_modal (GTK_WINDOW (ow->dialog), TRUE);
+  }
 
   gtk_signal_connect (GTK_OBJECT (ow->dialog), "destroy",
 		      GTK_SIGNAL_FUNC(gnc_order_window_destroy_cb), ow);
@@ -691,9 +693,6 @@ gnc_order_new (GtkWidget *parent, GncOwner *ownerp, GNCBook *bookp)
 		      GTK_SIGNAL_FUNC (gnc_order_on_close_cb),
 		      &created_order);
 
-  if (parent)
-    gtk_window_set_modal (GTK_WINDOW (ow->dialog), TRUE);
-
   gtk_main ();
 
   return created_order;
@@ -720,9 +719,6 @@ gnc_order_edit (GtkWidget *parent, GncOrder *order)
   gtk_signal_connect (GTK_OBJECT (ow->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_order_on_close_cb),
 		      NULL);
-
-  if (parent)
-    gtk_window_set_modal (GTK_WINDOW (ow->dialog), TRUE);
 
   gtk_main ();
 
