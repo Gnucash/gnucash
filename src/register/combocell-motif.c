@@ -7,7 +7,7 @@
  * embedded in a table cell.
  *
  * HISTORY:
- * Copyright (c) 1998 Linas Vepstas
+ * Copyright (c) 1998 Linas Vepstas <linas@linas.org>
  */
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
@@ -61,7 +61,6 @@ static const char * leaveCombo (BasicCell *bcell, const char *value);
 #define SET(cell,str) { 			\
    if ((cell)->value) free ((cell)->value);	\
    (cell)->value = strdup (str);		\
-   (cell)->changed = 0xffffffff;		\
 }
 
 /* =============================================== */
@@ -459,6 +458,7 @@ static void selectCB (Widget w, XtPointer cd, XtPointer cb )
     * unmap the combobox widget */
    XbaeMatrixSetCell (box->parent, box->currow, box->curcol, choice); 
    SET (&(cell->cell), choice);
+   cell->cell.changed = 0xffffffff;
    XtFree (choice);
 
    /* a diffeent way of getting the user's selection ... */

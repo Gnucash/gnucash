@@ -7,7 +7,7 @@
  * embedded in a table cell.
  *
  * HISTORY:
- * Copyright (c) 1998 Linas Vepstas
+ * Copyright (c) 1998 Linas Vepstas <linas@linas.org>
  * Copyright (c) 1998 Rob Browning <rlb@cs.utexas.edu>
  */
 /********************************************************************\
@@ -45,7 +45,6 @@
 #define SET(cell,str) { 			\
    if ((cell)->value) free ((cell)->value);	\
    (cell)->value = strdup (str);		\
-   (cell)->changed = 0xffffffff;		\
 }
 
 typedef struct _PopBox {
@@ -213,13 +212,6 @@ void realizeCombo (BasicCell *bcell, void *data, int pixel_width)
   cell->cell.enter_cell = enterCombo;
   cell->cell.leave_cell = leaveCombo;
   cell->cell.destroy = destroyCombo;
-  
-#if 0
-  /* add callbacks to detect a selection */
-  
-  XtAddCallback (combobox, XmNselectionCallback, selectCB, (XtPointer)cell);
-  XtAddCallback (combobox, XmNunselectionCallback, selectCB, (XtPointer)cell);
-#endif
 }
 
 /* =============================================== */
@@ -305,6 +297,7 @@ const char * leaveCombo (BasicCell *bcell, const char *value)
                      text); 
   
   SET (&(cell->cell), text);
+  cell->cell.changed = 0xffffffff;
   gtk_container_remove(GTK_CONTAINER(box->table->entry_frame),
                        GTK_WIDGET(box->combobox));
   gtk_container_add(GTK_CONTAINER(box->table->entry_frame),
@@ -312,55 +305,5 @@ const char * leaveCombo (BasicCell *bcell, const char *value)
   
   return NULL;
 }
-
-/* =============================================== */
-
-#if 0
-static void selectCB (Widget w, XtPointer cd, XtPointer cb )
-{
-   ComboCell *cell;
-   PopBox *box;
-   char * choice = 0x0;
-
-   XmComboBoxSelectionCallbackStruct *selection = 
-               (XmComboBoxSelectionCallbackStruct *) cb;
-
-   cell = (ComboCell *) cd;
-   box = (PopBox *) (cell->cell.gui_private);
-
-   /* check for a valid mapping of the widget.  
-    * Note that if the combo box value is set to 
-    * a string that is not in the combo box menu
-    * (for example, the empty string ""), then the 
-    * combobox will issue an XmCR_UNSELECT event.
-    * This typically happens while loading the array.
-    * We want to ignore these. */
-   if ((0 > box->currow) || (0 > box->curcol)) return;
-
-   /* check the reason, because the unslect callback 
-    * doesn't even have a value field! */
-   if ( (XmCR_SINGLE_SELECT == selection->reason) ||
-        (XmCR_BROWSE_SELECT == selection->reason) ) {
-      choice = XmCvtXmStringToCT (selection->value);
-      if (!choice) choice = XtNewString ("");   /* null if blank/unselect */
-   } else 
-   if (XmCR_UNSELECT == selection->reason) {
-      choice = XtNewString ("");
-   } else {
-      return;
-   }
-
-   /* be sure to set the string into the matrix widget as well,
-    * so that we don't end up blanking out the cell when we 
-    * unmap the combobox widget */
-   XbaeMatrixSetCell (box->parent, box->currow, box->curcol, choice); 
-   SET (&(cell->cell), choice);
-   XtFree (choice);
-
-   /* a diffeent way of getting the user's selection ... */
-   /* text = XmComboBoxGetString (ab->combobox); */
-}
-#endif
-
 
 /* =============== end of file =================== */
