@@ -39,6 +39,22 @@
 	* src/gnome-utils/transfer.glade:
 	Convert to the new gtktreeview based account tree code.
 
+	* src/gnome-utils/dialog-transfer.c: Get this working for both the
+	case where it is run as a modal dialog (e.g. reconcile) and the
+	case where it is thrown up on the screen and forgotten
+	(e.g. transfer).
+
+	* src/gnome/gnc-main-window.c:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/gnc-plugin-page.[ch]: Add another function to the
+	plugin interface for deleting the ui widget.  Allows the page to
+	destroy/release anything it needs to.
+	
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/gnc-split-reg.c: Correctly clean up when closing a
+	register.
+
 2003-09-01  David Hampton  <hampton@employees.org>
 
 	* configure.in:

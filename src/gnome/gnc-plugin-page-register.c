@@ -44,6 +44,7 @@ static void gnc_plugin_page_register_finalize (GObject *object);
 static void gnc_plugin_page_register_plugin_page_init (GncPluginPageIface *iface);
 
 static GtkWidget *gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page);
+static void gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_register_merge_actions (GncPluginPage *plugin_page, EggMenuMerge *ui_merge);
 static void gnc_plugin_page_register_unmerge_actions (GncPluginPage *plugin_page, EggMenuMerge *ui_merge);
 static G_CONST_RETURN gchar *gnc_plugin_page_register_get_title (GncPluginPage *plugin_page);
@@ -238,6 +239,7 @@ static void
 gnc_plugin_page_register_plugin_page_init (GncPluginPageIface *iface)
 {
 	iface->create_widget   = gnc_plugin_page_register_create_widget;
+	iface->destroy_widget  = gnc_plugin_page_register_destroy_widget;
 	iface->merge_actions   = gnc_plugin_page_register_merge_actions;
 	iface->unmerge_actions = gnc_plugin_page_register_unmerge_actions;
 	iface->get_title       = gnc_plugin_page_register_get_title;
@@ -274,6 +276,20 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 
 	/* DRH - Probably lots of other stuff from regWindowLedger should end up here. */
 	return priv->widget;
+}
+
+static void
+gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page)
+{
+	GncPluginPageRegister *page = GNC_PLUGIN_PAGE_REGISTER (plugin_page);
+	GncPluginPageRegisterPrivate *priv = page->priv;
+
+	if (priv->widget == NULL)
+		return;
+
+	gtk_widget_hide(priv->widget);
+	gnc_ledger_display_close (priv->ld);
+	priv->ld = NULL;
 }
 
 static void

@@ -323,7 +323,8 @@ gnc_main_window_open_page (GncMainWindow *window,
 				  child, label_box);
 
 	gnc_plugin_page_inserted (page);
-/*
+
+#if 0
 	pos = gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)) - 1;
 	if (gtk_notebook_get_current_page (GTK_NOTEBOOK (window->priv->notebook)) == pos) {
 		window->priv->current_page = page;
@@ -332,7 +333,8 @@ gnc_main_window_open_page (GncMainWindow *window,
 	} else {
 		gtk_notebook_set_current_page (GTK_NOTEBOOK (window->priv->notebook),
 					       pos);
-	}*/
+	}
+#endif
 }
 
 void
@@ -367,7 +369,10 @@ gnc_main_window_close_page (GncMainWindow *window,
 
 	egg_menu_merge_ensure_update (window->ui_merge);
 
-	/*
+	gnc_plugin_page_destroy_widget (page);
+	g_object_unref(page);
+
+#if 0
 	i = gtk_notebook_get_current_page (GTK_NOTEBOOK (window->priv->notebook));
 	child = gtk_notebook_get_nth_page (GTK_NOTEBOOK (window->priv->notebook), i);
 	if (child == NULL) {
@@ -381,7 +386,8 @@ gnc_main_window_close_page (GncMainWindow *window,
 	if (page != NULL) {
 		gnc_plugin_page_merge_actions (page, window->ui_merge);
 		gnc_plugin_page_selected (page);
-	}*/
+	}
+#endif
 }
 
 GncPluginPage *

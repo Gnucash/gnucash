@@ -51,6 +51,7 @@ typedef struct {
 
 	/* Virtual Table */
 	GtkWidget *(* create_widget) (GncPluginPage *plugin_page);
+	void (* destroy_widget) (GncPluginPage *plugin_page);
 
 	void (* merge_actions) (GncPluginPage *plugin_page, EggMenuMerge *merge);
 	void (* unmerge_actions) (GncPluginPage *plugin_page, EggMenuMerge *merge);
@@ -66,6 +67,7 @@ typedef struct {
 GType                 gnc_plugin_page_get_type        (void);
 
 GtkWidget            *gnc_plugin_page_create_widget   (GncPluginPage *plugin_page);
+void                  gnc_plugin_page_destroy_widget  (GncPluginPage *plugin_page);
 
 void                  gnc_plugin_page_merge_actions   (GncPluginPage *plugin_page,
                                                        EggMenuMerge *merge);

@@ -68,6 +68,7 @@ static Account *gnc_plugin_page_account_tree_get_current_account (GncPluginPageA
 static void gnc_plugin_page_account_tree_plugin_page_init (GncPluginPageIface *iface);
 
 static GtkWidget *gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page);
+static void gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_account_tree_merge_actions (GncPluginPage *plugin_page, EggMenuMerge *ui_merge);
 static void gnc_plugin_page_account_tree_unmerge_actions (GncPluginPage *plugin_page, EggMenuMerge *ui_merge);
 static G_CONST_RETURN gchar *gnc_plugin_page_account_tree_get_title (GncPluginPage *plugin_page);
@@ -155,6 +156,7 @@ static const gchar *actions_requiring_account[] = {
 	"FileOpenSubaccountsAction",
 	"EditEditAccountAction",
 	"EditDeleteAccountAction",
+	"ActionsReconcileAction",
 	NULL
 };
 
@@ -426,6 +428,7 @@ gnc_plugin_page_account_tree_plugin_page_init (GncPluginPageIface *iface)
 {
 	ENTER(" ");
 	iface->create_widget   = gnc_plugin_page_account_tree_create_widget;
+	iface->destroy_widget  = gnc_plugin_page_account_tree_destroy_widget;
 	iface->merge_actions   = gnc_plugin_page_account_tree_merge_actions;
 	iface->unmerge_actions = gnc_plugin_page_account_tree_unmerge_actions;
 	iface->get_title       = gnc_plugin_page_account_tree_get_title;
@@ -438,7 +441,7 @@ gnc_plugin_page_account_tree_plugin_page_init (GncPluginPageIface *iface)
 static GtkWidget *
 gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 {
-	GncPluginPageAccountTree *page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
+	GncPluginPageAccountTree *page;
 	GtkTreeSelection *selection;
 	GtkTreeView *tree_view;
 	GtkWidget *scrolled_window;
@@ -476,6 +479,21 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 
 	LEAVE("widget = %p", page->priv->widget);
 	return page->priv->widget;
+}
+
+static void
+gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
+{
+	GncPluginPageAccountTree *page;
+
+	ENTER("page %p", plugin_page);
+	page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
+	if (page->priv->widget == NULL) {
+		LEAVE("no widget");
+		return;
+	}
+
+	LEAVE("widget destroyed");
 }
 
 static void

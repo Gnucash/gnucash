@@ -68,10 +68,32 @@ gnc_plugin_page_get_type (void)
 GtkWidget *
 gnc_plugin_page_create_widget (GncPluginPage *plugin_page)
 {
+	GtkWidget *widget;
+
 	g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page), NULL);
 	g_return_val_if_fail (GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->create_widget != NULL, NULL);
 
-	return GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->create_widget (plugin_page);
+	widget = GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->create_widget (plugin_page);
+
+	/*
+	 * If there is a destroy function, add a ref so that the
+	 * widgets will exists when the destroy function is called.
+	 * Otherwise it will be destroyed when it is removed from the
+	 * main notebook for the window.
+	 */
+	if (GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->destroy_widget)
+		g_object_ref(widget);
+
+	return widget;
+}
+
+void
+gnc_plugin_page_destroy_widget (GncPluginPage *plugin_page)
+{
+	g_return_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page));
+	g_return_if_fail (GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->destroy_widget != NULL);
+
+	return GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->destroy_widget (plugin_page);
 }
 
 void
