@@ -416,11 +416,6 @@ the account instead of opening a register." #f))
   "General" "Display \"Tip of the Day\""
   "f" "Display hints for using GnuCash at startup" #t))
 
-;(gnc:register-configuration-option
-; (gnc:make-simple-boolean-option
-;  "General" "Automatic Decimal Point"
-;  "g" "Automatically insert a decimal point into values that are entered without one.  Example:  '2000' is changed to '20.00'." #f))
-
 ; this option also changes the next option so that its
 ; selectability matches the state of this option.
 (gnc:register-configuration-option
@@ -434,13 +429,6 @@ the account instead of opening a register." #f))
                                                  x))))
 
 (gnc:register-configuration-option
- (gnc:make-complex-boolean-option
-  "General" "complex boolean test"
-  "h" "some random text" #f
-  (lambda (x) (gnc:warn "setter cb function"))
-  (lambda (x) (gnc:warn "widget cb function"))))
-
-(gnc:register-configuration-option
  (gnc:make-number-range-option
   "General" "Auto Decimal Places"
   "h" "How many automatic decimal places will be filled in."
@@ -451,7 +439,6 @@ the account instead of opening a register." #f))
     0.0 ;; number of decimals used for this range calculation
     1.0 ;; step size
   ))
-
 
 
 ;;; Configuation variables
