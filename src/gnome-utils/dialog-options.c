@@ -24,6 +24,7 @@
 
 #include <gnome.h>
 #include <g-wrap-wct.h>
+#include "gtk/gtktextview.h"
 
 #include "dialog-options.h"
 #include "dialog-utils.h"
@@ -43,7 +44,6 @@
 #include "guile-util.h"
 #include "messages.h"
 #include "option-util.h"
-
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
@@ -1285,7 +1285,7 @@ gnc_options_dialog_cancel_stub_cb(GtkWidget * w, gpointer data)
     gtk_widget_hide(container);
 
   /* at this point, window may point to freed data */
-  if (!GTK_OBJECT_DESTROYED (container))
+  if (!container)
     gtk_signal_handler_unblock_by_func(GTK_OBJECT(container),
                                        GTK_SIGNAL_FUNC
                                        (gnc_options_dialog_destroy_stub_cb),
@@ -1331,6 +1331,34 @@ gnc_options_dialog_list_select_cb(GtkWidget * list, GtkWidget * item,
   gtk_notebook_set_page(GTK_NOTEBOOK(win->notebook), index);
 }
 
+void
+gnc_options_register_stocks (void)
+{
+	static gboolean done = FALSE;
+	GtkIconFactory *factory;
+	
+	GtkStockItem items[] = {
+		{ GTK_STOCK_APPLY		,"gnc_option_apply_button",	0, 0, NULL },
+		{ GTK_STOCK_HELP		,"gnc_options_dialog_help",	0, 0, NULL },
+		{ GTK_STOCK_OK			,"gnc_options_dialog_ok",	0, 0, NULL },
+		{ GTK_STOCK_CANCEL		,"gnc_options_dialog_cancel",	0, 0, NULL },
+	};
+
+	if (done) 
+	{
+		return;
+	}
+	done = TRUE;
+
+	gtk_stock_add (items, G_N_ELEMENTS (items));
+
+	factory = gtk_icon_factory_new ();
+	gtk_icon_factory_add_default (factory);
+
+	g_object_unref (G_OBJECT (factory));
+}
+
+
 GNCOptionWin *
 gnc_options_dialog_new(gboolean make_toplevel, gchar *title)
 {
@@ -1363,6 +1391,8 @@ gnc_options_dialog_new(gboolean make_toplevel, gchar *title)
     gtk_object_sink(GTK_OBJECT(vbox));
   }
 
+  gnc_options_register_stocks ();
+
   buttonbox = gtk_hbutton_box_new ();
 
   gtk_button_box_set_layout (GTK_BUTTON_BOX (buttonbox),
@@ -1373,10 +1403,10 @@ gnc_options_dialog_new(gboolean make_toplevel, gchar *title)
 
   gtk_container_set_border_width(GTK_CONTAINER (buttonbox), 5);
 
-  apply_button = gnome_stock_button (GNOME_STOCK_BUTTON_APPLY);
-  help_button  = gnome_stock_button (GNOME_STOCK_BUTTON_HELP);
-  ok_button    = gnome_stock_button (GNOME_STOCK_BUTTON_OK);
-  cancel_button = gnome_stock_button (GNOME_STOCK_BUTTON_CANCEL);
+  apply_button =  gtk_button_new_from_stock (GTK_STOCK_APPLY);
+  help_button  =  gtk_button_new_from_stock (GTK_STOCK_HELP);
+  ok_button    =  gtk_button_new_from_stock (GTK_STOCK_OK);
+  cancel_button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
   separator = gtk_hseparator_new();
 
   gtk_widget_set_sensitive (apply_button, FALSE);
@@ -1555,7 +1585,7 @@ gnc_options_dialog_close_cb(GNCOptionWin *propertybox,
 {
   GNCOptionWin **options_dialog = user_data;
 
-  if (!GTK_OBJECT_DESTROYED (GTK_OBJECT (propertybox->container)))
+  if (!propertybox->container)
     gtk_widget_destroy (propertybox->container);
 
   *options_dialog = NULL;
@@ -1692,10 +1722,9 @@ gnc_option_set_ui_widget_text (GNCOption *option, GtkBox *page_box,
   gtk_container_add(GTK_CONTAINER(frame), scroll);
 
   *enclosing = gtk_hbox_new(FALSE, 10);
-  value = gtk_text_new(NULL, NULL);
-  gtk_text_set_word_wrap(GTK_TEXT(value), TRUE);
-  gtk_text_set_editable(GTK_TEXT(value), TRUE);
-
+  value = gtk_text_view_new();
+  gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(value), GTK_WRAP_WORD);
+  gtk_text_view_set_editable(GTK_TEXT_VIEW(value), TRUE);
   gtk_container_add (GTK_CONTAINER (scroll), value);
 
   gnc_option_set_widget (option, value);
@@ -2005,10 +2034,11 @@ gnc_option_set_ui_widget_number_range (GNCOption *option, GtkBox *page_box,
 
       string = g_strnfill(num_digits, '8');
       
-      width = gdk_text_measure(style->font, string, num_digits);
+      width = gdk_text_measure(gdk_font_from_description(style->font_desc), 
+                               string, num_digits);
 
       /* sync with gtkspinbutton.c. why doesn't it do this itself? */
-      width += 11 + (2 * style->klass->xthickness);
+      width += 11 + (2 * style->xthickness);
 
       g_free(string);
 
@@ -2755,7 +2785,7 @@ static SCM
 gnc_option_get_ui_value_font (GNCOption *option, GtkWidget *widget)
 {
   GnomeFontPicker *picker = GNOME_FONT_PICKER(widget);
-  char * string;
+  const gchar * string;
 
   string = gnome_font_picker_get_font_name(picker);
   return (gh_str02scm(string));

@@ -1,4 +1,24 @@
 
+2003-04-02 TomF changes for gnucash-gnome2-dev, 10th batch
+	* src/gnome-utils/dialog-account.c
+	  Change declares of name to const gchar.
+	* src/gnome-utils/dialog-account-pick.c
+	  Parentheses around assignment in expression
+	* src/gnome-utils/dialog-commodity.c
+	  Change declare of fullname to const gchar
+	* src/gnome-utils/dialog-options.c
+	  Replace "if (!GTK_OBJECT_DESTROYED(xxx))" by "if (!container)"
+	  to remove deprecated macro
+	  Replace call of gnome_stock_button by call to new function
+	  gnc_options_register_stocks
+	  Replace deprecated gtk_text* functions by gtk_text_view*
+	  Change style->font to gdk_font_from_description(style->font_desc)
+	  Change style->klas->xthickness to style->xthickness
+	* src/gnome-utils/dialog-options.h
+	  Prototype for gnc_options_register_stocks
+	* TODO : Started categorized todo list for internal work items
+
+
 2003-04-01 TomF changes for gnucash-gnome2-dev, 9th batch
 
 	* src/gnome-utils/gnc-html.h 

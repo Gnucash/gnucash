@@ -38,6 +38,7 @@ typedef void (* GNCOptionWinCallback)(GNCOptionWin *, gpointer data);
 
 GNCOptionWin * gnc_options_dialog_new(gboolean make_toplevel, gchar *title);
 void gnc_options_dialog_destroy(GNCOptionWin * win);
+void gnc_options_register_stocks (void);
 
 GtkWidget * gnc_options_dialog_widget(GNCOptionWin * win);
 GtkWidget * gnc_options_dialog_notebook(GNCOptionWin * win);

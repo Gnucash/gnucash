@@ -317,7 +317,7 @@ gnc_ui_select_commodity_ok_cb(GtkButton * button,
 {
   SelectCommodityWindow * w = user_data;
   const char    * namespace;  
-  char          * fullname;
+  const gchar   * fullname;
   gnc_commodity * retval = NULL;
 
   namespace       = gnc_ui_namespace_picker_ns (w->namespace_combo);

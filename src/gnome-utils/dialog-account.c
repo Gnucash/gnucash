@@ -935,10 +935,10 @@ gnc_new_account_ok (AccountWindow *aw)
   const gnc_commodity * commodity;
   Account *parent_account;
   gnc_numeric balance;
-  char *name;
+  const gchar *name;
 
   /* check for valid name */
-  name = (char *) gtk_entry_get_text(GTK_ENTRY(aw->name_entry));
+  name = gtk_entry_get_text(GTK_ENTRY(aw->name_entry));
   if (safe_strcmp(name, "") == 0)
   {
     const char *message = _("The account must be given a name.");
@@ -1632,9 +1632,9 @@ get_ui_fullname (AccountWindow *aw)
 {
   Account *parent_account;
   char *fullname;
-  char *name;
+  const gchar *name;
 
-  name = (char *) gtk_entry_get_text (GTK_ENTRY(aw->name_entry));
+  name = gtk_entry_get_text (GTK_ENTRY(aw->name_entry));
   if (!name || *name == '\0')
     name = _("<No name>");
 

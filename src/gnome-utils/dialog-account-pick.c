@@ -185,11 +185,11 @@ gnc_account_picker_dialog(Account *initial_sel) {
   //   GTK_SIGNAL_FUNC (gnc_ui_qif_account_picker_new_cb), wind);
 
   g_assert
-    (wind->dialog = glade_xml_get_widget (xml, "Account Picker"));
+    ((wind->dialog = glade_xml_get_widget (xml, "Account Picker")));
   g_assert
-    (wind->treeview   = glade_xml_get_widget (xml, "account_tree"));
+    ((wind->treeview = glade_xml_get_widget (xml, "account_tree")));
   g_assert
-    (new_account_button = glade_xml_get_widget (xml, "new_account_button"));
+    ((new_account_button = glade_xml_get_widget (xml, "new_account_button")));
 
   wind->select  = initial_sel;
   wind->hash = g_hash_table_new(&g_direct_hash, &g_direct_equal);
