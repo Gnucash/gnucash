@@ -267,6 +267,7 @@ void realizeCombo (BasicCell *bcell, void *w, int pixel_width)
    cell->cell.destroy = destroyCombo;
 
    /* the combobox wants width in pixels, not in chars.
+    * the XbaeMatrix only provides us width in chars, not pixels...
     * It would be nice if ComboBox supported the XmNunits 
     * resource, but it doesn't.  Also, while we are at it,
     * increase the size of the drop-down box as well. 
