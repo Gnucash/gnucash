@@ -91,7 +91,7 @@ int      gnc_choose_radio_option_dialog (gncUIWidget parent,
 gboolean gnc_dup_trans_dialog (gncUIWidget parent, time_t *date_p,
                                const char *num, char **out_num);
 void     gnc_tax_info_dialog (gncUIWidget parent);
-void     gnc_stock_split_dialog (Account * initial);
+void     gnc_stock_split_dialog (gncUIWidget parent, Account * initial);
 
 typedef enum
 {

@@ -1362,7 +1362,7 @@ gnc_register_stock_split_cb (GtkWidget * w, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnc_stock_split_dialog (gnc_ledger_display_leader (regData->ledger));
+  gnc_stock_split_dialog (NULL, gnc_ledger_display_leader (regData->ledger));
 }
 
 

@@ -672,7 +672,7 @@ gnc_acct_tree_window_menu_stock_split_cb (GtkWidget * widget,
   Account *account;
 
   account = gnc_acct_tree_find_account_from_gncmdi(info);
-  gnc_stock_split_dialog (account);
+  gnc_stock_split_dialog (NULL, account);
 }
 
 static void

@@ -570,7 +570,7 @@ gnc_plugin_page_account_tree_cmd_stock_split (EggAction *action, GncPluginPageAc
 {
 	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
 
-	gnc_stock_split_dialog (account);
+	gnc_stock_split_dialog (NULL, account);
 }
 
 static void

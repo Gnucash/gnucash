@@ -709,11 +709,12 @@ close_handler (gpointer user_data)
  * gnc_stock_split_dialog                                           *
  *   opens up a window to record a stock split                      *
  *                                                                  * 
- * Args:   initial - the initial account to use                     *
+ * Args:   parent  - the parent ofthis window                       *
+ *         initial - the initial account to use                     *
  * Return: nothing                                                  *
 \********************************************************************/
 void
-gnc_stock_split_dialog (Account * initial)
+gnc_stock_split_dialog (GtkWidget *parent, Account * initial)
 {
   StockSplitInfo *info;
   gint component_id;
@@ -734,8 +735,7 @@ gnc_stock_split_dialog (Account * initial)
 
   if (fill_account_list (info, initial) == 0)
   {
-    gnc_warning_dialog (gnc_ui_get_toplevel(),
-			_("You don't have any stock accounts with balances!"));
+    gnc_warning_dialog (parent, _("You don't have any stock accounts with balances!"));
     gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
     return;
   }
