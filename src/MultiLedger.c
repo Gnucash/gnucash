@@ -117,7 +117,7 @@ ledgerIsMember (xaccLedgerDisplay *reg, Account * acc)
    if (!acc) return 0;
    if (!reg) return 0;
 
-   if (acc == reg->lead_acct) return 1;
+   if (acc == reg->leader) return 1;
 
    if (! (reg->displayed_accounts)) return 0; 
 
@@ -274,38 +274,42 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
   \******************************************************************/
 
   /* the two macros below will search for a register windows associated
-   * with the leading account.  If they exist, then they will be returned,
+   * with the leading account.  If they exist, then they will return,
    * and that will be that.  If they do not exist, they will be created.
    *
    * There are two lists for lead-accounts: simple, single-account 
    * registers, which display one account only, and multiple-account
    * registers.  A leading account can have at most one of each. 
-   * For a multiple-account register with a lead_acct, all accounts
-   * shown in the register are sub-accounts of the lead_acct.
+   * For a multiple-account register with a leader, all accounts
+   * shown in the register are sub-accounts of the leader.
    *
    * A third possibility exists: a multiple-account register, with
-   * no lead_acct account.  In such a case, the list of accounts being
+   * no leader account.  In such a case, the list of accounts being
    * displayed have no particular relationshp to each other.  There
-   * can be an arbitrary number of multiple-account lead_acct-less
+   * can be an arbitrary number of multiple-account leader-less
    * registers.
    */
   regData = NULL;
   if (lead_acc) {
      if (!acclist) {
-       FETCH_FROM_LIST (xaccLedgerDisplay, regList, lead_acc, lead_acct, regData);
+       FETCH_FROM_LIST (xaccLedgerDisplay, regList, lead_acc, leader, regData);
      } else {
-       FETCH_FROM_LIST (xaccLedgerDisplay, ledgerList, lead_acc, lead_acct, regData);
+       FETCH_FROM_LIST (xaccLedgerDisplay, ledgerList, lead_acc, leader, regData);
      }
   }
   
-  /* if regData is null, then no lead_acct account was specified */
+  /* if regData is null, then no leader account was specified */
   if (!regData) {
     regData = (xaccLedgerDisplay *) malloc (sizeof (xaccLedgerDisplay));
-    regData->lead_acct = NULL;
-    regData->redraw = NULL;
-    regData->gui_hook = NULL;
-    regData->dirty = 0;
   }
+
+  regData->leader = lead_acc;
+  regData->redraw = NULL;
+  regData->destroy = NULL;
+  regData->gui_hook = NULL;
+  regData->dirty = 0;
+  regData->balance = 0.0;
+  regData->clearedBalance = 0.0;
 
   /* count the number of accounts we are supposed to display,
    * and then, store them. */
@@ -314,8 +318,6 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
   regData->type = ledger_type;
 
   fullList = ledgerListAdd (fullList, regData);
-
-  /* create GUI here */
 
   /******************************************************************\
    * The main register window itself                                *
@@ -342,42 +344,37 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
    if (!(regData->dirty)) return;
    regData->dirty = 0;  /* mark clean */
 
-   /* The lead_acct account is used by the register gui to
+   /* The leader account is used by the register gui to
     * assign a default source account for a "blank split"
     * that is attached to the bottom of the register.
     * The "blank split" is what the user edits to create 
     * new splits and get them into the system.
     */
    xaccSRLoadRegister (regData->ledger, 
-                     xaccAccountGetSplitList (regData->lead_acct),
-                     regData->lead_acct);
+                     xaccAccountGetSplitList (regData->leader),
+                     regData->leader);
 
 
   /* hack alert -- this computation of totals is incorrect 
    * for multi-account ledgers */
 
-#ifdef LATER
   /* provide some convenience data for the ture GUI window.
    * If the GUI wants to display yet other stuff, its on its own.
    */
 
-  if( NULL != regData->balance ) {
-    double prt_balance, prt_clearedBalance;
-    prt_balance = xaccAccountGetBalance (regData->lead_acct);
-    prt_clearedBalance = xaccAccountGetClearedBalance (regData->lead_acct);
+  regData->balance = xaccAccountGetBalance (regData->leader);
+  regData->clearedBalance = xaccAccountGetClearedBalance (regData->leader);
 
-    /* for income and expense acounts, we have to reverse
-     * the meaning of balance, since, in a dual entry
-     * system, income will show up as a credit to a
-     * bank account, and a debit to the income account.
-     * Thus, positive and negative are interchanged */
-    if ((INCOME_REGISTER == regData->type) ||
-        (EXPENSE_REGISTER == regData->type)) { 
-      prt_balance = -prt_balance;
-      prt_clearedBalance = -prt_clearedBalance;
-    }
+  /* for income and expense acounts, we have to reverse
+   * the meaning of balance, since, in a dual entry
+   * system, income will show up as a credit to a
+   * bank account, and a debit to the income account.
+   * Thus, positive and negative are interchanged */
+  if ((INCOME_REGISTER == regData->type) ||
+      (EXPENSE_REGISTER == regData->type)) { 
+    regData->balance = - (regData->balance);
+    regData->clearedBalance = - (regData->clearedBalance);
   }
-#endif
 
   /* OK, now tell this specific GUI window to redraw itself ... */
   if (regData->redraw) {
@@ -441,11 +438,52 @@ xaccAccountDisplayRefresh (Account *acc)
    RefreshAllRegs (acc);
 }
 
-#ifdef LATER
 /********************************************************************\
- * xaccDestroyxaccLedgerDisplay()
- * It is enought to call just XtDestroy Widget.  Any allocated
- * memory will be freed by the close callbacks.
+\********************************************************************/
+
+void 
+xaccAccListDisplayRefresh (Account **acc_list)
+{
+   Account *acc;
+   int i;
+
+   /* avoid excess screen flicker with a two-phase refresh */
+   i = 0; acc = acc_list[0];
+   while (acc) {
+      MarkDirtyAllRegs (acc);
+      i++; acc = acc_list[i];
+   }
+   i = 0; acc = acc_list[0];
+   while (acc) {
+      RefreshAllRegs (acc);
+      i++; acc = acc_list[i];
+   }
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void 
+xaccTransDisplayRefresh (Transaction *trans)
+{
+   int i, num_splits;  
+
+   /* avoid excess screen flicker with a two-phase refresh */
+   num_splits = xaccTransCountSplits (trans);
+   for (i=0; i<num_splits; i++) {
+      Split *split = xaccTransGetSplit (trans, i);
+      Account *acc = xaccSplitGetAccount (split);
+      MarkDirtyAllRegs (acc);
+   }
+   for (i=0; i<num_splits; i++) {
+      Split *split = xaccTransGetSplit (trans, i);
+      Account *acc = xaccSplitGetAccount (split);
+      RefreshAllRegs (acc);
+   }
+}
+
+/********************************************************************\
+ * xaccDestroyLedgerDisplay()
 \********************************************************************/
 
 void
@@ -455,12 +493,16 @@ xaccDestroyLedgerDisplay (Account *acc)
    int n;
 
    /* find the single-account window for this account, if any */
-   FIND_IN_LIST (xaccLedgerDisplay, regList, acc, lead_acct, regData);
-   if (regData) XtDestroyWidget(regData->dialog);
+   FIND_IN_LIST (xaccLedgerDisplay, regList, acc, leader, regData);
+   if (regData) {
+      if (regData->destroy) { (regData->destroy) (regData); }
+   } 
 
    /* find the multiple-account window for this account, if any */
-   FIND_IN_LIST (xaccLedgerDisplay, ledgerList, acc, lead_acct, regData);
-   if (regData) XtDestroyWidget(regData->dialog);
+   FIND_IN_LIST (xaccLedgerDisplay, ledgerList, acc, leader, regData);
+   if (regData) {
+      if (regData->destroy) { (regData->destroy) (regData); }
+   } 
 
    /* cruise throught the miscellanous account windows */
    n = 0;
@@ -469,7 +511,9 @@ xaccDestroyLedgerDisplay (Account *acc)
       int got_one;
 
       got_one = ledgerIsMember (regData, acc);
-      /* if (got_one) XtDestroyWidget(regData->dialog);  */
+      if (got_one) {
+         if (regData->destroy) { (regData->destroy) (regData); }
+      }
       n++;
       regData = fullList[n];
    }
@@ -485,25 +529,23 @@ xaccDestroyLedgerDisplay (Account *acc)
  *         cb -                                                     *
  * Return: none                                                     *
 \********************************************************************/
-static void 
-closeLedgerDisplay( Widget mw, XtPointer cd, XtPointer cb )
+void 
+xaccLedgerDisplayClose (xaccLedgerDisplay *regData)
 {
-  xaccLedgerDisplay *regData = (xaccLedgerDisplay *)cd;
-  Account *acc = regData->lead_acct;
+  Account *acc = regData->leader;
   
   /* Save any unsaved changes */
   xaccSRSaveRegEntry (regData->ledger);
 
-  xaccDestroyBasicRegister (regData->ledger);
+  xaccDestroySplitRegister (regData->ledger);
   
   /* whether this is a single or multi-account window, remove it */
-  REMOVE_FROM_LIST (xaccLedgerDisplay, regList, acc, lead_acct);
-  REMOVE_FROM_LIST (xaccLedgerDisplay, ledgerList, acc, lead_acct);
+  REMOVE_FROM_LIST (xaccLedgerDisplay, regList, acc, leader);
+  REMOVE_FROM_LIST (xaccLedgerDisplay, ledgerList, acc, leader);
 
   ledgerListRemove (fullList, regData);
 
   free(regData);
 }
-#endif
 
 /************************** END OF FILE *************************/

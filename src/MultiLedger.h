@@ -37,17 +37,21 @@
 typedef struct _xaccLedgerDisplay xaccLedgerDisplay;
 
 struct _xaccLedgerDisplay {
-  Account *lead_acct;            /* leading. "master" account               */
+  Account *leader;               /* leading. "master" account               */
   Account **displayed_accounts;  /* The list of accounts shown here         */
   short   numAcc;                /* number of accounts in list              */
 
   short type;                    /* register display type, usually equal to *
                                   * account type, but not always.           */
+  double balance;                /* balance */
+  double clearedBalance;
 
+  /* GUI related stuff */
   short dirty;                   /* dirty flag, non zero if redraw needed   */
   SplitRegister *ledger;         /* main ledger window                      */
   void *gui_hook;                /* GUI-specific state                      */
   void (*redraw) (xaccLedgerDisplay *); /* redraw callback                  */
+  void (*destroy) (xaccLedgerDisplay *); /* destroy callback                */
 };
 
 
@@ -75,6 +79,7 @@ extern xaccLedgerDisplay * xaccLedgerDisplayGeneral
  * that are associated with the indicated account.
  */
 extern void        xaccAccountDisplayRefresh (Account *acc);
+extern void        xaccAccListDisplayRefresh (Account **acc);
 
 /* 
  * redisplay/redraw all windows that contain this transaction
@@ -87,6 +92,10 @@ extern void        xaccTransDisplayRefresh (Transaction *trans);
  */
 extern void        xaccLedgerDisplayRefresh (xaccLedgerDisplay *);
 
+/* 
+ * close the window 
+ */
+extern void        xaccLedgerDisplayClose (xaccLedgerDisplay *);
 #endif /* __MULTI_LEDGER_H__ */
 
 /************************** END OF FILE *************************/
