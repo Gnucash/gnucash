@@ -56,14 +56,17 @@ motif:
 	@cd ComboBox-1.33;    $(MAKE) default
 	@cd Xbae-4.6.2-linas; $(MAKE) default
 	@cd g-wrap;           $(MAKE) all
+	@cd g-wrap;           $(MAKE) install
 
 gnome:
 	@cd ${GTKSHEET_DIR};  $(MAKE) default
 	@cd gtkfilesel2;      $(MAKE) default
 	@cd g-wrap;           $(MAKE) all
+	@cd g-wrap;           $(MAKE) install
 
 qt:
 	@cd g-wrap;           $(MAKE) all
+	@cd g-wrap;           $(MAKE) install
 
 .PHONY: gnome motif qt
 
