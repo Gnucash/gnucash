@@ -510,7 +510,7 @@ without one.")
  (gnc:make-number-range-option
   (N_ "General") (N_ "Days to retain log files")
   "k" (N_ "Delete old log/backup files after this many days (0 = never).")
-    0.0 ;; default
+    30.0 ;; default
     0.0 ;; lower bound
     99999.0 ;; upper bound
     0.0 ;; number of decimals used for this range calculation
