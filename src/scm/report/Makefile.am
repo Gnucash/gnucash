@@ -4,6 +4,7 @@ gncscmdir = ${GNC_SCM_INSTALL_DIR}/report
 gncscm_DATA = \
   account-summary.scm \
   average-balance.scm \
+  balance-sheet.scm \
   category-barchart.scm \
   hello-world.scm \
   income-expense-graph.scm \

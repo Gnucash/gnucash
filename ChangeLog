@@ -1,3 +1,21 @@
+2001-04-03  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/html-table.scm (gnc:html-table-prepend-row!): Fix
+	bug.
+
+	* src/scm/report/html-utilities.scm (gnc:build-html-acct-table): Add
+	show-col-headers option.
+
+	* src/scm/report/balance-sheet.scm: New file.  Code for a balance
+	sheet report.  Numbers should be correct, presentation is
+	rudimentary as usual.
+
+	* src/scm/report/account-summary.scm: modify for changed arguments
+	to gnc:build-html-acct-table.
+
+	* src/scm/report/pnl.scm: modify for changed arguments to
+	gnc:build-html-account-table.
+	
 2001-04-02  Dave Peticolas  <dave@krondo.com>
 
 	* Makefile.am: add po/README

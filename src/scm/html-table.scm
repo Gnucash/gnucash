@@ -339,7 +339,7 @@
     new-num-rows))
 
 (define (gnc:html-table-prepend-row! table newrow)
-  (let ((dd (gnc:html-table-data table))
+  (let* ((dd (gnc:html-table-data table))
 	(current-num-rows (gnc:html-table-num-rows table))
 	(new-num-rows (+ current-num-rows 1)))
     (set! dd (append dd (list newrow)))

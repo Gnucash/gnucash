@@ -135,7 +135,8 @@
 		 ;; do the processing here
 		 (table (gnc:html-build-acct-table 
 			 #f date-tp 
-			 tree-depth show-subaccts? accounts 
+			 tree-depth show-subaccts? accounts
+			 #t
 			 #t gnc:accounts-get-comm-total-assets 
 			 (_ "Total") do-grouping? do-subtotals?
 			 show-fcur? report-currency exchange-fn)))

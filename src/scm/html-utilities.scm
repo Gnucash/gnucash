@@ -119,6 +119,8 @@
 ;; <bool> do-subtot?: Specify whether to include sub-account balances
 ;; in each account's balance. 
 ;;
+;; <bool> col-headers? : show column headings "Account" and "Balance"
+;;
 ;; <bool> show-other-curr?, <gnc:commodity*> report-commodity,
 ;; #<procedure ...> exchange-fn: The rightmost column always shows
 ;; balances in the currency report-commodity. If those balances happen
@@ -131,6 +133,7 @@
 (define (gnc:html-build-acct-table 
 	 start-date end-date 
 	 tree-depth show-subaccts? accounts 
+	 show-col-headers?
 	 show-total? get-total-fn
 	 total-name group-types? do-subtot? 
 	 show-other-curr? report-commodity exchange-fn)
@@ -439,15 +442,16 @@
      'attribute '("valign" "top"))
 
     ;; set some column headers 
-    (gnc:html-table-set-col-headers!
-     table 
+    (if show-col-headers?
+	 (gnc:html-table-set-col-headers!
+	 table 
      (list (gnc:make-html-table-header-cell/size 
 	    1 tree-depth (_ "Account name"))
 	   (gnc:make-html-table-header-cell/size
 	    1 (if show-other-curr? 
 		  (* 2 tree-depth)
 		  tree-depth)
-	    (_ "Balance"))))
+	    (_ "Balance")))))
     
     ;; there are tree-depth account name columns. 
     (let loop ((col 0))

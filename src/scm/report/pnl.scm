@@ -139,7 +139,7 @@
 		 ;; do the processing here
 		 (table (gnc:html-build-acct-table 
 			 from-date-tp to-date-tp 
-			 tree-depth show-subaccts? accounts 
+			 tree-depth show-subaccts? accounts #t
 			 #t gnc:accounts-get-comm-total-profit 
 			 (_ "Profit") do-grouping? do-subtotals?
 			 show-fcur? report-currency exchange-fn)))
