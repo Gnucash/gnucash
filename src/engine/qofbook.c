@@ -221,6 +221,8 @@ qof_book_get_collection (QofBook *book, QofIdType entity_type)
 {
   QofCollection *col;
                                                                                 
+  if (!book || !entity_type) return NULL;
+
   col = g_hash_table_lookup (book->hash_of_collections, entity_type);
   if (col) return col;
                                                                                 
@@ -324,7 +326,7 @@ gboolean qof_book_register (void)
 {
   static QofParam params[] = {
     { QOF_BOOK_KVP, QOF_TYPE_KVP, (QofAccessFunc)qof_book_get_slots, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
     { NULL },
   };
 

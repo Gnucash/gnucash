@@ -1263,6 +1263,7 @@ static QofObject group_object_def =
   interface_version: QOF_OBJECT_VERSION,
   e_type:            GNC_ID_GROUP,
   type_label:        "AccountGroup",
+  new:               NULL,
   book_begin:        group_book_begin,
   book_end:          group_book_end,
   is_dirty:          group_is_dirty,

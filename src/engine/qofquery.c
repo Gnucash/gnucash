@@ -1222,9 +1222,10 @@ void qof_query_set_book (QofQuery *q, QofBook *book)
   if (g_list_index (q->books, book) == -1)
     q->books = g_list_prepend (q->books, book);
 
-  qof_query_add_guid_match (q, g_slist_prepend (g_slist_prepend (NULL,
-                                                             QOF_QUERY_PARAM_GUID),
-                                            QOF_QUERY_PARAM_BOOK),
+  GSList *slist = NULL;
+  g_slist_prepend (slist, QOF_PARAM_GUID);
+  g_slist_prepend (slist, QOF_PARAM_BOOK);
+  qof_query_add_guid_match (q, slist,
                         qof_book_get_guid(book), QOF_QUERY_AND);
 }
 

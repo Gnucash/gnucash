@@ -269,6 +269,7 @@ static QofObject sxtt_object_def =
   interface_version: QOF_OBJECT_VERSION,
   e_type:            GNC_ID_SXTT,
   type_label:        "Scheduled Transaction Templates",
+  new:               NULL,
   book_begin:        sxtt_book_begin,
   book_end:          sxtt_book_end,
   is_dirty:          book_sxlist_notsaved,

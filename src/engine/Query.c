@@ -266,7 +266,7 @@ xaccQueryAddAccountGUIDMatch(Query *q, AccountGUIDList *guid_list,
   switch (how) {
   case QOF_GUID_MATCH_ANY:
   case QOF_GUID_MATCH_NONE:
-    param_list = qof_query_build_param_list (SPLIT_ACCOUNT, QOF_QUERY_PARAM_GUID, NULL);
+    param_list = qof_query_build_param_list (SPLIT_ACCOUNT, QOF_PARAM_GUID, NULL);
     break;
   case QOF_GUID_MATCH_ALL:
     param_list = qof_query_build_param_list (SPLIT_TRANS, TRANS_SPLITLIST,
@@ -484,11 +484,11 @@ xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
     return;
 
   if (!safe_strcmp (id_type, GNC_ID_SPLIT)) 
-    param_list = qof_query_build_param_list (QOF_QUERY_PARAM_GUID, NULL);
+    param_list = qof_query_build_param_list (QOF_PARAM_GUID, NULL);
   else if (!safe_strcmp (id_type, GNC_ID_TRANS))
-    param_list = qof_query_build_param_list (SPLIT_TRANS, QOF_QUERY_PARAM_GUID, NULL);
+    param_list = qof_query_build_param_list (SPLIT_TRANS, QOF_PARAM_GUID, NULL);
   else if (!safe_strcmp (id_type, GNC_ID_ACCOUNT))
-    param_list = qof_query_build_param_list (SPLIT_ACCOUNT, QOF_QUERY_PARAM_GUID, NULL);
+    param_list = qof_query_build_param_list (SPLIT_ACCOUNT, QOF_PARAM_GUID, NULL);
   else
     PERR ("Invalid match type: %s", id_type);
 

@@ -22,7 +22,7 @@
 
 /**
     @file qofsql.c
-    @breif QOF client-side SQL parser.
+    @brief QOF client-side SQL parser.
     @author Copyright (C) 2004 Linas Vepstas <linas@linas.org>
 
 */

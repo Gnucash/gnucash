@@ -182,6 +182,7 @@ qof_collection_get_type (QofCollection *col)
 static void
 qof_collection_remove_entity (QofEntity *ent)
 {
+  if (!ent) return;
   QofCollection *col = ent->collection;
   if (!col) return;
   g_hash_table_remove (col->hash_of_entities, &ent->guid);
@@ -191,6 +192,7 @@ qof_collection_remove_entity (QofEntity *ent)
 void
 qof_collection_insert_entity (QofCollection *col, QofEntity *ent)
 {
+  if (!col || !ent) return;
   if (guid_equal(&ent->guid, guid_null())) return;
   g_return_if_fail (col->e_type == ent->e_type);
   qof_collection_remove_entity (ent);

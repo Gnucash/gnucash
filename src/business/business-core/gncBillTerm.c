@@ -678,6 +678,7 @@ static QofObject gncBillTermDesc =
   interface_version:   QOF_OBJECT_VERSION,
   e_type:              _GNC_MOD_NAME,
   type_label:          "Billing Term",
+  new:                 NULL,
   book_begin:          _gncBillTermCreate,
   book_end:            _gncBillTermDestroy,
   is_dirty:            qof_collection_is_dirty,
@@ -689,8 +690,8 @@ static QofObject gncBillTermDesc =
 gboolean gncBillTermRegister (void)
 {
   static QofParam params[] = {
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 

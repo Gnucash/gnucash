@@ -105,11 +105,11 @@ typedef enum {
 #define QUERY_DEFAULT_SORT      "QofQueryDefaultSort"
 
 /** "Known" Object Parameters -- all objects must support these */
-#define QOF_QUERY_PARAM_BOOK    "book"
-#define QOF_QUERY_PARAM_GUID    "guid"
+#define QOF_PARAM_BOOK    "book"
+#define QOF_PARAM_GUID    "guid"
 
 /** "Known" Object Parameters -- some objects might support these */
-#define QOF_QUERY_PARAM_ACTIVE  "active" 
+#define QOF_PARAM_ACTIVE  "active" 
 
 /* --------------------------------------------------------- */
 /** @name Query Subsystem Initialization and Shudown  */

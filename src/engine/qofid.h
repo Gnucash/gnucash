@@ -73,14 +73,16 @@ typedef const char * QofIdType;
 typedef const char * QofIdTypeConst;
 
 #define QOF_ID_NONE           NULL
-#define QOF_ID_BOOK           "Book"
 #define QOF_ID_NULL           "null"
+
+#define QOF_ID_BOOK           "Book"
+#define QOF_ID_FREQSPEC       "FreqSpec"
 #define QOF_ID_SESSION        "Session"
 
-/* simple,cheesy cast but holds water for now */
+/** simple,cheesy cast but holds water for now */
 #define QOF_ENTITY(object) ((QofEntity *)(object))
 
-/* Inline string comparision; compiler will optimize away most of this */
+/** Inline string comparision; compiler will optimize away most of this */
 #define QSTRCMP(da,db) ({                \
   int val = 0;                           \
   if ((da) && (db)) {                    \
@@ -131,7 +133,7 @@ void qof_entity_init (QofEntity *, QofIdType, QofCollection *);
 void qof_entity_release (QofEntity *);
  /* @} */
 
-/* Return the GUID of this entity */
+/** Return the GUID of this entity */
 const GUID * qof_entity_get_guid (QofEntity *);
 
 /** @name Collections of Entities 
@@ -161,7 +163,7 @@ void qof_collection_foreach (QofCollection *,
 gpointer qof_collection_get_data (QofCollection *col);
 void qof_collection_set_data (QofCollection *col, gpointer user_data);
 
-/* Return value of 'dirty' flag on collection */
+/** Return value of 'dirty' flag on collection */
 gboolean qof_collection_is_dirty (QofCollection *col);
 /** @} */
 
