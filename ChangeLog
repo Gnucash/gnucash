@@ -1,3 +1,8 @@
+2005-03-12  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-gettrans.c, hbci-interaction.h:
+	Improve error handling in HBCI operations.
+
 2005-02-26  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-kvp.c (force_account_dirty):

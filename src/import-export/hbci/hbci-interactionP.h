@@ -76,6 +76,8 @@ struct _inter_data
   GHashTable *showbox_hash; 
   GtkWidget *showbox_last;
 
+  /* Flag whether the last dialog showed any error */
+  gboolean msgBoxError;
 };
 
 void delete_GNCInteractor (GNCInteractor *data);

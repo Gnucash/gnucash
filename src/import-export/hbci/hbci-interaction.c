@@ -203,6 +203,12 @@ void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent)
     }
 }
 
+gboolean GNCInteractor_hadErrors (const GNCInteractor *i)
+{
+  g_assert (i);
+  return i->msgBoxError != 0;
+}
+
 /* ************************************************************ 
  */
 
@@ -530,6 +536,7 @@ static int messageBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
   g_assert(ab);
   data = AB_Banking_GetUserData(ab);
   g_assert(data);
+  data->msgBoxError = flags & AB_BANKING_MSG_FLAGS_TYPE_ERROR;
 
   text = gnc_hbci_utf8ToLatin1(data, utf8text);
   title = gnc_hbci_utf8ToLatin1(data, utf8title);
