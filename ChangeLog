@@ -13,6 +13,10 @@
 	* src/report/standard-reports/transaction.scm: include split
 	  transactions in the filtering of the transaction report.
 	  Fixes #113461.
+
+	* src/report/standard-reports/balance-sheet.scm: use a 'from' date
+	  to better compute the Net Income on the report.  Fixes #113196
+	  (although not its dependency, #101519; that requires new strings)
 	
 2003-05-23  Derek Atkins  <derek@ihtfp.com>
 
