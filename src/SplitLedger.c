@@ -3197,7 +3197,7 @@ sr_split_auto_calc (SplitRegister *reg, Split *split)
 
     if (!price_changed)
       default_value = 1;
-    if (!shares_changed)
+    else if (!shares_changed)
       default_value = 0;
     else if (!amount_changed)
       default_value = 2;
