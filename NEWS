@@ -14,6 +14,7 @@ Version history:
 	   dangling pointer reference.
 	 o Add upper bounds checking on the versions of guile and g-wrap.
 	 o Fix for guile-1.4.1 srfi problem.
+	 o Added support for VWD as a quote source (Joachim Breitner)
 
  1.6.6  - 10 March 2002
  	 o Updated or new translations for Dutch, Norwegian, Russian,

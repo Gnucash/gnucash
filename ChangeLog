@@ -1,3 +1,12 @@
+2002-08-14  Chris Lyttle  <chris@wilddev.net>
+
+	* acinclude.m4: remove dependency on guile-config (David Hampton)
+	* src/gnc-ui-util.c: Joachim Breitner Patch to add VWD as a
+	Quote-source
+	* src/gnc-ui-util.h:
+	* src/quotes/finance-quote-helper.in:
+	* src/scm/price-quotes.scm:
+	
 2002-08-11  David Hampton  <hampton@employees.org>
 
 	* acinclude.m4: 
