@@ -1,3 +1,9 @@
+2004-11-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/Makefile.am:
+	  Add DESTDIR to the install hooks
+	* src/gnome/gnc-plugin-page-account-tree.c: Fix spelling of "Account"
+
 2004-10-31  Derek Atkins  <derek@ihtfp.com>
 
 	Heath Martin's x86_64 patch:

@@ -255,7 +255,7 @@ DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
 # them in ${pkgdatadir}/gnome/help/${program}.
 #
 install-data-hook:
-	ln -sf ../gnome ${pkgdatadir}
+	ln -sf ../gnome ${DESTDIR}/${pkgdatadir}
 
 uninstall-hook:
-	rm -f ${pkgdatadir}/gnome
+	rm -f ${DESTDIR}/${pkgdatadir}/gnome

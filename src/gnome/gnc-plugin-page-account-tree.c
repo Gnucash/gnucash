@@ -133,10 +133,10 @@ static EggActionEntry gnc_plugin_page_account_tree_actions [] = {
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_subaccounts) },
 
 	/* Edit menu */
-	{ "EditEditAccountAction", N_("_Edit Acount"), GNC_STOCK_EDIT_ACCOUNT, "<control>e",
+	{ "EditEditAccountAction", N_("_Edit Account"), GNC_STOCK_EDIT_ACCOUNT, "<control>e",
 	  N_("Edit the selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_edit_account) },
-	{ "EditDeleteAccountAction", N_("_Delete Acount"), GNC_STOCK_DELETE_ACCOUNT, NULL,
+	{ "EditDeleteAccountAction", N_("_Delete Account"), GNC_STOCK_DELETE_ACCOUNT, NULL,
 	  N_("Delete selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_delete_account) },
 	{ "EditAccountViewOptionsAction", N_("Account Tree Options"), GTK_STOCK_PROPERTIES, NULL,
