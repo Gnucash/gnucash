@@ -964,7 +964,7 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
     if (info->interactor)
       GNCInteractor_show (info->interactor);
 
-    HBCI_Hbci_setDebugLevel(3);
+    HBCI_Hbci_setDebugLevel(2);
     err = HBCI_API_executeQueue (info->api, TRUE);
     g_assert (err);
     if (!HBCI_Error_isOk(err)) {
@@ -1091,27 +1091,6 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
     HBCI_OutboxJob *job;
     HBCI_Error *err;
     
-    {
-      HBCI_Error *err;
-      err = HBCI_API_saveEnvironment (info->api, info->configfile);
-      if (err != NULL) {
-	if (!HBCI_Error_isOk (err)) 
-	  printf("on_iniletter_info_next: Error at saving OpenHBCI data: %s.\n",
-		 HBCI_Error_message (err));
-	HBCI_Error_delete (err);
-      }
-    }
-    {
-      HBCI_Error *err;
-      err = HBCI_API_loadEnvironment (info->api, info->configfile);
-      if (err != NULL) {
-	if (!HBCI_Error_isOk (err)) 
-	  printf("on_iniletter_info_next: Error at loading OpenHBCI data: %s.\n",
-		 HBCI_Error_message (err));
-	HBCI_Error_delete (err);
-      }
-    }
-
     job = HBCI_OutboxJobGetKeys_OutboxJob 
       (HBCI_OutboxJobGetKeys_new (info->api, info->newcustomer));
     HBCI_API_addJob (info->api, job);
@@ -1119,6 +1098,7 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
     if (info->interactor)
       GNCInteractor_show (info->interactor);
   
+    HBCI_Hbci_setDebugLevel(2);
     err = HBCI_API_executeQueue (info->api, TRUE);
     g_assert (err);
     if (!HBCI_Error_isOk(err)) {
@@ -1262,7 +1242,7 @@ on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
     if (info->interactor)
       GNCInteractor_show (info->interactor);
   
-    HBCI_Hbci_setDebugLevel(3);
+    HBCI_Hbci_setDebugLevel(2);
     err = HBCI_API_executeQueue (info->api, TRUE);
     g_assert (err);
     if (!HBCI_Error_isOk(err)) {
