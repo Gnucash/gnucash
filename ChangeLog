@@ -1,3 +1,7 @@
+2003-07-26  Benoit Grégoire  <bock@step.polymtl.ca>
+	
+	* src/import-export/import-account-matcher.c: Fix bug #105293
+
 2003-07-26  Christian Stimming  <stimming@tuhh.de>
 
 	* accounts/it/*: Updates to the Italian account templates by
