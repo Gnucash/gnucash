@@ -31,7 +31,7 @@
 #include <string.h>
 #include <math.h>
 
-#include "gnc-engine.h"
+#include "gnc-date.h"
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
 #include "guid.h"

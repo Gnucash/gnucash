@@ -29,9 +29,9 @@
 
 #include <glib.h>
 
+#include "gnc-date.h"
 #include "gnc-numeric.h"
 #include "guid.h"
-#include "date.h"
 
 /** a kvp_frame is a set of associations between character strings
  * (keys) and kvp_value structures.  A kvp_value is a union with
