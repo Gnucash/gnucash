@@ -365,10 +365,10 @@ char * xaccReadQIFAccList (int fd, AccountGroup *grp, int cat)
             xaccInsertSubAccount( parent, acc );
          } else {
             /* we should never get here if the qif file is OK */
-            insertAccount( grp, acc );  
+            xaccGroupInsertAccount( grp, acc );  
          }
       } else {
-         insertAccount( grp, acc );
+         xaccGroupInsertAccount( grp, acc );
       }
 
    } while (qifline);
@@ -501,7 +501,7 @@ GetSubQIFAccount (AccountGroup *rootgrp, char *qifline, int acc_type)
 
       if (0 > acc_type) acc_type = GuessAccountType (qifline);
       xaccAccountSetType (xfer_acc, acc_type);
-      insertAccount (rootgrp, xfer_acc);
+      xaccGroupInsertAccount (rootgrp, xfer_acc);
    }
 
    /* if this account name had sub-accounts, get those */
@@ -1014,7 +1014,7 @@ xaccReadQIFAccountGroup( char *datafile )
         xaccAccountSetType (acc, typo);
         xaccAccountSetName (acc, name);
 
-        insertAccount( grp, acc );
+        xaccGroupInsertAccount( grp, acc );
         qifline = xaccReadQIFTransList (fd, acc, &bogus_acc_name);
         typo = -1; name = NULL;
         continue;
@@ -1091,7 +1091,7 @@ xaccReadQIFAccountGroup( char *datafile )
            }
            else
            {
-              insertAccount( grp, acc );
+              xaccGroupInsertAccount( grp, acc );
            }
    
            /* spin until start of transaction records */

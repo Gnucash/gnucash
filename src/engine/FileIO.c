@@ -319,7 +319,7 @@ xaccReadAccountGroup( char *datafile )
     xaccAccountSetName (acc, LOST_ACC_STR);
     acc -> children = holder;
     xaccAccountCommitEdit (acc);
-    insertAccount (grp, acc);
+    xaccGroupInsertAccount (grp, acc);
   } else {
     xaccFreeAccountGroup (holder);
     holder = NULL;
@@ -412,7 +412,7 @@ readAccount( int fd, AccountGroup *grp, int token )
     acc = locateAccount (accID);
   } else {
     acc = xaccMallocAccount();
-    insertAccount (holder, acc);
+    xaccGroupInsertAccount (holder, acc);
   }
   
   xaccAccountBeginEdit (acc, 1);
@@ -520,7 +520,7 @@ readAccount( int fd, AccountGroup *grp, int token )
     }
   
   springAccount (acc->id);
-  insertAccount (grp, acc);
+  xaccGroupInsertAccount (grp, acc);
 
   /* version 4 is the first file version that introduces
    * sub-accounts */
@@ -576,7 +576,7 @@ locateAccount (int acc_id)
    acc = xaccMallocAccount ();
    acc->id = acc_id;
    acc->open = ACC_DEFER_REBALANCE;
-   insertAccount (holder, acc);
+   xaccGroupInsertAccount (holder, acc);
 
    /* normalize the account numbers -- positive-definite.
     * That is, the unique id must never decrease,

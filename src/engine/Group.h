@@ -57,9 +57,6 @@ void    xaccMergeAccounts (AccountGroup *grp);
 int     xaccAccountGroupNotSaved  (AccountGroup *grp);
 void    xaccAccountGroupMarkSaved (AccountGroup *grp);
 
-Account *removeAccount( AccountGroup *grp, int num );
-int     insertAccount( AccountGroup *grp, Account *acc );
-
 /*
  * The xaccRemoveAccount() subroutine will remove the indicated
  * account from its parent account group. It will NOT free the
@@ -77,6 +74,7 @@ int     insertAccount( AccountGroup *grp, Account *acc );
  */
 void    xaccRemoveAccount (Account *);
 void    xaccRemoveGroup (AccountGroup *);
+int     xaccGroupInsertAccount( AccountGroup *grp, Account *acc );
 int     xaccInsertSubAccount( Account *parent, Account *child );
 
 /*

@@ -283,34 +283,6 @@ xaccGetPeerAccountFromName ( Account *acc, const char * name )
 
 /********************************************************************\
 \********************************************************************/
-Account *
-removeAccount( AccountGroup *grp, int num )
-{
-  int i,j, nacc;
-  Account **arr;
-  Account *acc = NULL;
-  
-  if (!grp) return NULL;
-
-  arr = grp->account;
-
-  grp->saved = FALSE;
-  
-  nacc = grp->numAcc;
-  for( i=0,j=0; i<nacc; i++,j++ )
-    {
-    arr[i] = arr[j];
-    if (j == num) { acc = arr[j]; i--; }
-    }
-
-  grp->numAcc--;
-  arr[grp->numAcc] = NULL;
-
-  return acc;
-}
-
-/********************************************************************\
-\********************************************************************/
 
 void
 xaccRemoveGroup (AccountGroup *grp)
@@ -396,14 +368,14 @@ xaccInsertSubAccount( Account *adult, Account *child )
   /* allow side-effect of creating a child-less account group */
   if (NULL == child) return -1;
 
-  retval = insertAccount (adult->children, child);
+  retval = xaccGroupInsertAccount (adult->children, child);
   return retval;
 }
 
 /********************************************************************\
 \********************************************************************/
 int
-insertAccount( AccountGroup *grp, Account *acc )
+xaccGroupInsertAccount( AccountGroup *grp, Account *acc )
   {
   int i=-1;
   Account **oldAcc;
@@ -484,7 +456,7 @@ xaccConcatGroups (AccountGroup *togrp, AccountGroup *fromgrp)
    
    for (i=0; i<fromgrp->numAcc; i++) {
       acc = fromgrp->account[i];
-      insertAccount (togrp, acc);
+      xaccGroupInsertAccount (togrp, acc);
       fromgrp->account[i] = NULL;
    }
    fromgrp->account[0] = NULL;

@@ -110,7 +110,7 @@ add_account_dialog_okclicked_cb(GtkWidget * dialog, gpointer data)
   if (info->parent_account) {
     g_print( "Return Code (SUB): %d\n", xaccInsertSubAccount (info->parent_account, account));
   } else {
-    g_print( "Return Code (TOPGROUP): %d\n", insertAccount( topgroup, account ));
+    g_print( "Return Code (TOPGROUP): %d\n", xaccGroupInsertAccount( topgroup, account ));
   }
   xaccAccountCommitEdit (account);
 
