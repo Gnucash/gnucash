@@ -9,6 +9,11 @@
 	Small documentation tweak to make QofEntity and QofParam
 	structures visible to doxygen.
 
+	* src/import-export/qif-import/qif-dialog-utils.scm:
+	  Perry Smith's Null Account Patch.  Make sure the security is
+	  a real string before appending an account separator, so we
+	  don't try to create a "null" account.
+
 2004-08-19  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: change the gtkhtml order to search for >= 1.1 before
