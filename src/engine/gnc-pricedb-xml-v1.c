@@ -98,6 +98,7 @@ price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node)
     GUID *c = dom_tree_to_guid(sub_node);
     if(!c) return FALSE; 
     gnc_price_set_guid(p, c);
+    g_free(c);
   } else if(safe_strcmp("price:commodity", sub_node->name) == 0) {
     gnc_commodity *c = dom_tree_to_commodity_ref(sub_node);
     if(!c) return FALSE;

@@ -1,3 +1,11 @@
+2001-05-28  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/gnc-pricedb.c (compare_prices_by_date): stabilize
+	sort using guids
+
+	* src/engine/gnc-pricedb-xml-v1.c (price_parse_xml_sub_node): fix
+	mem leak
+
 2001-05-27  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/tip-list.scm: edited some tips after consultation with
