@@ -264,7 +264,6 @@ do
       $ACLOCAL $aclocalinclude
       if grep "^AM_CONFIG_HEADER" configure.in >/dev/null; then
 	echo "Running ${AUTOHEADER}..."
-	echo "Note: you can ignore messages about using deprecated aux files"
 	${AUTOHEADER} || { echo "**Error**: autoheader failed."; exit 1; }
       fi
       echo "Running $AUTOMAKE --gnu $am_opt ..."
