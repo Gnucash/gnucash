@@ -34,12 +34,21 @@
 #include "date.h"
 
 
-/* Values for the reconciled field in Splits */
+/* Values for the reconciled field in Splits.. If you change these
+ * be sure to change gnc-ui-util.c:gnc_get_reconciled_str() and
+ * associated functions
+ */
 #define CREC 'c'              /* The Split has been cleared        */
 #define YREC 'y'              /* The Split has been reconciled     */
 #define FREC 'f'              /* frozen into accounting period     */
 #define NREC 'n'              /* not reconciled or cleared         */
 #define VREC 'v'              /* split is void                     */
+
+
+/* Values for the Transaction Type field in Transactions */
+#define TXN_TYPE_NONE	 '\0'
+#define TXN_TYPE_INVOICE 'I'
+#define TXN_TYPE_PAYMENT 'P'
 
 
 /** PROTOTYPES ******************************************************/
@@ -156,8 +165,9 @@ void          xaccTransSetDateEnteredSecs (Transaction *trans, time_t time);
 void          xaccTransSetDateEnteredTS (Transaction *trans,
                                          const Timespec *ts);
 
-/* Dates for A/R and A/P "invoice" postings */
+/* Dates and txn-type for A/R and A/P "invoice" postings */
 void	      xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts);
+void	      xaccTransSetTxnType (Transaction *trans, char type);
 
 /* set the Num, Description, and Notes fields */
 void          xaccTransSetNum (Transaction *trans, const char *num);
@@ -215,8 +225,9 @@ void          xaccTransGetDateEnteredTS (Transaction *trans, Timespec *ts);
 Timespec      xaccTransRetDateEnteredTS (Transaction *trans);
 Timespec      xaccTransRetDatePostedTS (Transaction *trans);
 
-/* Dates for A/R and A/P "invoice" postings */
+/* Dates and txn-type for A/R and A/P "invoice" postings */
 void	      xaccTransGetDateDueTS (Transaction *trans, Timespec *ts);
+char	      xaccTransGetTxnType (Transaction *trans);
 
 /* The xaccTransCountSplits() method returns the number of splits
  * in a transaction.

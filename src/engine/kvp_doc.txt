@@ -220,6 +220,11 @@ Type: Timespec
 Entities: Transaction
 Use: Accounts/Receivable, Accounts/Payable Due Date.
 
+Name: trans-txn-type
+Type: string
+Entities: Transaction
+Use: A/R, A/P Transaction Type (Invoice or Payment)
+
 Name: user-keys
 Type: frame
 Entities: All

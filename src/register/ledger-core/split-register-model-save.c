@@ -78,18 +78,13 @@ gnc_split_register_save_type_cell (BasicCell * cell,
 				   gpointer user_data)
 {
   SRSaveData *sd = save_data;
-  const char *value;
-  kvp_frame *kvp;
-  kvp_value *k_val;
+  char value;
 
   g_return_if_fail (gnc_basic_cell_has_name (cell, TYPE_CELL));
 
-  value = gnc_basic_cell_get_value (cell);
+  value = gnc_recn_cell_get_flag ((RecnCell *)cell);
 
-  kvp = xaccTransGetSlots (sd->trans);
-  k_val = kvp_value_new_string (value);
-  kvp_frame_set_slot_path (kvp, k_val, SR_TRANS_TYPE, NULL);
-  kvp_value_delete (k_val);
+  xaccTransSetTxnType (sd->trans, value);
 }
 
 static void

@@ -70,6 +70,7 @@ const char *void_former_val_str = "void-former-value";
 
 /* KVP entry for date-due value */
 #define TRANS_DATE_DUE_KVP	"trans-date-due"
+#define TRANS_TXN_TYPE_KVP	"trans-txn-type"
 
 #define PRICE_SIGFIGS 6
 
@@ -2427,6 +2428,23 @@ xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts)
   kvp_value_delete (value);
 }
 
+void
+xaccTransSetTxnType (Transaction *trans, char type)
+{
+  kvp_value *value;
+  char s[2];
+
+  if (!trans) return;
+
+  s[0] = type;
+  s[1] = '\0';
+
+  value = kvp_value_new_string (s);
+  kvp_frame_set_slot_path (trans->kvp_data, value, TRANS_TXN_TYPE_KVP, NULL);
+  kvp_value_delete (value);
+}
+
+
 /********************************************************************\
 \********************************************************************/
 
@@ -2566,6 +2584,22 @@ xaccTransGetDateDueTS (Transaction *trans, Timespec *ts)
     *ts = kvp_value_get_timespec (value);
   else
     xaccTransGetDatePostedTS (trans, ts);
+}
+
+char
+xaccTransGetTxnType (Transaction *trans)
+{
+  kvp_value *value;
+  const char *s;
+
+  if (!trans) return TXN_TYPE_NONE;
+
+  value = kvp_frame_get_slot_path (trans->kvp_data, TRANS_TXN_TYPE_KVP, NULL);
+  if (value) {
+    s = kvp_value_get_string (value);
+    return *s;
+  }
+  return TXN_TYPE_NONE;
 }
 
 int

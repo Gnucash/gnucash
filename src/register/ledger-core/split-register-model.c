@@ -633,26 +633,23 @@ gnc_split_register_get_type_entry (VirtualLocation virt_loc,
 {
   SplitRegister *reg = user_data;
   Transaction *trans;
-  kvp_frame *kvp;
-  kvp_value *val;
+  char type;
+  static char s[2];
 
   trans = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
   if (!trans)
     return NULL;
 
-  kvp = xaccTransGetSlots (trans);
-  val = kvp_frame_get_slot_path (kvp, SR_TRANS_TYPE, NULL);
-  if (!val)
-  {
-    static char s[2];
+  type = xaccTransGetTxnType (trans);
 
-    s[0] = 'I';
-    s[1] = '\0';
+  if (type == TXN_TYPE_NONE)
+    /* Change the default? */
+    (type);
 
-    return s;
-  }
-  else
-    return kvp_value_get_string (val);
+  s[0] = type;
+  s[1] = '\0';
+
+  return s;
 }
 
 static char
@@ -698,7 +695,7 @@ gnc_split_register_get_due_date_entry (VirtualLocation virt_loc,
   }
 
   /* Only print the due date for invoice transactions */
-  if (type != 'I') {
+  if (type != TXN_TYPE_INVOICE) {
     //PWARN ("returning NULL due_date entry");
     return NULL;
   }
@@ -1333,7 +1330,7 @@ gnc_split_register_get_ddue_io_flags (VirtualLocation virt_loc,
   type = gnc_split_register_get_type_value (reg, virt_loc);
 
   /* Only print the due date for invoice transactions */
-  if (type != 'I') {
+  if (type != TXN_TYPE_INVOICE) {
     return XACC_CELL_ALLOW_NONE;
   }
 

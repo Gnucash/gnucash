@@ -700,6 +700,7 @@ gnc_get_reconcile_str (char reconciled_flag)
     case CREC: return _("cleared:c") + 8;
     case YREC: return _("reconciled:y") + 11;
     case FREC: return _("frozen:f") + 7;
+    case VREC: return _("void:v") + 5;
     default:
       PERR("Bad reconciled flag\n");
       return NULL;
@@ -715,7 +716,7 @@ gnc_get_reconcile_str (char reconciled_flag)
 const char *
 gnc_get_reconcile_valid_flags (void)
 {
-  static const char flags[] = { NREC, CREC, YREC, FREC, 0 };
+  static const char flags[] = { NREC, CREC, YREC, FREC, VREC, 0 };
   return flags;
 }
 
