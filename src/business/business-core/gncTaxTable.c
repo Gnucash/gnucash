@@ -143,7 +143,7 @@ mark_table (GncTaxTable *table)
   table->dirty = TRUE;
   gncBusinessSetDirtyFlag (table->book, _GNC_MOD_NAME, TRUE);
 
-  gnc_engine_generate_event (&table->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&table->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
 }
 
 G_INLINE_FUNC void mod_table (GncTaxTable *table);
@@ -164,7 +164,7 @@ GncTaxTable * gncTaxTableCreate (QofBook *book)
   table->name = CACHE_INSERT ("");
   qof_entity_guid_new (qof_book_get_entity_table (book), &table->guid);
   addObj (table);
-  gnc_engine_generate_event (&table->guid, GNC_EVENT_CREATE);
+  gnc_engine_generate_event (&table->guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
   return table;
 }
 
@@ -183,7 +183,7 @@ static void gncTaxTableFree (GncTaxTable *table)
 
   if (!table) return;
 
-  gnc_engine_generate_event (&table->guid, GNC_EVENT_DESTROY);
+  gnc_engine_generate_event (&table->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
   CACHE_REMOVE (table->name);
   remObj (table);
 

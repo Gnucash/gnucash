@@ -75,7 +75,7 @@ mark_order (GncOrder *order)
   order->dirty = TRUE;
   gncBusinessSetDirtyFlag (order->book, _GNC_MOD_NAME, TRUE);
 
-  gnc_engine_generate_event (&order->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&order->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
 }
 
 /* Create/Destroy Functions */
@@ -98,7 +98,7 @@ GncOrder *gncOrderCreate (QofBook *book)
   qof_entity_guid_new (qof_book_get_entity_table (book), &order->guid);
   addObj (order);
 
-  gnc_engine_generate_event (&order->guid, GNC_EVENT_CREATE);
+  gnc_engine_generate_event (&order->guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
 
   return order;
 }
@@ -114,7 +114,7 @@ static void gncOrderFree (GncOrder *order)
 {
   if (!order) return;
 
-  gnc_engine_generate_event (&order->guid, GNC_EVENT_DESTROY);
+  gnc_engine_generate_event (&order->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
 
   g_list_free (order->entries);
   CACHE_REMOVE (order->id);

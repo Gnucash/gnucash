@@ -27,7 +27,7 @@
 #include <glib.h>
 
 #include "guid.h"
-
+#include "qofid.h"
 
 typedef enum
 {
@@ -43,10 +43,11 @@ typedef enum
  *   Handler invoked when an engine event occurs.
  *
  * entity:      GUID of entity generating event
+ * type:	QofIdType of the entity generating the event
  * event_type:  one of the single-bit GNCEngineEventTypes, not a combination
  * user_data:   user_data supplied when handler was registered.
  */
-typedef void (*GNCEngineEventHandler) (GUID *entity,
+typedef void (*GNCEngineEventHandler) (GUID *entity, QofIdType type,
                                        GNCEngineEventType event_type,
                                        gpointer user_data);
 

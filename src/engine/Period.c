@@ -112,7 +112,7 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
    }
 
    xaccTransCommitEdit (newtrans);
-   gnc_engine_generate_event (&newtrans->guid, GNC_EVENT_CREATE);
+   gnc_engine_generate_event (&newtrans->guid, GNC_ID_TRANS, GNC_EVENT_CREATE);
 }
 
 /* ================================================================ */
@@ -172,7 +172,7 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
    }
 
    xaccTransCommitEdit (trans);
-   gnc_engine_generate_event (&trans->guid, GNC_EVENT_MODIFY);
+   gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_MODIFY);
 }
 
 /* ================================================================ */

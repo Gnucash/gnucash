@@ -70,7 +70,7 @@ mark_customer (GncCustomer *customer)
   customer->dirty = TRUE;
   gncBusinessSetDirtyFlag (customer->book, _GNC_MOD_NAME, TRUE);
 
-  gnc_engine_generate_event (&customer->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&customer->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
 }
 
 /* Create/Destroy Functions */
@@ -87,8 +87,8 @@ GncCustomer *gncCustomerCreate (QofBook *book)
   cust->id = CACHE_INSERT ("");
   cust->name = CACHE_INSERT ("");
   cust->notes = CACHE_INSERT ("");
-  cust->addr = gncAddressCreate (book, &cust->guid);
-  cust->shipaddr = gncAddressCreate (book, &cust->guid);
+  cust->addr = gncAddressCreate (book, &cust->guid, _GNC_MOD_NAME);
+  cust->shipaddr = gncAddressCreate (book, &cust->guid, _GNC_MOD_NAME);
   cust->discount = gnc_numeric_zero();
   cust->credit = gnc_numeric_zero();
   cust->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
@@ -98,7 +98,7 @@ GncCustomer *gncCustomerCreate (QofBook *book)
   qof_entity_guid_new (qof_book_get_entity_table (book),&cust->guid);
   addObj (cust);
 
-  gnc_engine_generate_event (&cust->guid, GNC_EVENT_CREATE);
+  gnc_engine_generate_event (&cust->guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
 
   return cust;
 }
@@ -114,7 +114,7 @@ static void gncCustomerFree (GncCustomer *cust)
 {
   if (!cust) return;
 
-  gnc_engine_generate_event (&cust->guid, GNC_EVENT_DESTROY);
+  gnc_engine_generate_event (&cust->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (cust->id);
   CACHE_REMOVE (cust->name);
@@ -284,7 +284,7 @@ void gncCustomerAddJob (GncCustomer *cust, GncJob *job)
     cust->jobs = g_list_insert_sorted (cust->jobs, job,
 				       (GCompareFunc)gncJobCompare);
 
-  gnc_engine_generate_event (&cust->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&cust->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
 }
 
 void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
@@ -301,7 +301,7 @@ void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
     cust->jobs = g_list_remove_link (cust->jobs, node);
     g_list_free_1 (node);
   }
-  gnc_engine_generate_event (&cust->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&cust->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
 }
 
 void gncCustomerBeginEdit (GncCustomer *cust)

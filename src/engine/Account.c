@@ -70,7 +70,7 @@ G_INLINE_FUNC void account_event (Account *account);
 G_INLINE_FUNC void
 account_event (Account *account)
 {
-  gnc_engine_generate_event (&account->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&account->guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
 }
 
 
@@ -146,7 +146,7 @@ xaccMallocAccount (QofBook *book)
 
   xaccInitAccount (acc, book);
 
-  gnc_engine_generate_event (&acc->guid, GNC_EVENT_CREATE);
+  gnc_engine_generate_event (&acc->guid, GNC_ID_ACCOUNT, GNC_EVENT_CREATE);
 
   return acc;
 }
@@ -279,7 +279,7 @@ xaccFreeAccount (Account *acc)
 
   if (!acc || !acc->book) return;
 
-  gnc_engine_generate_event (&acc->guid, GNC_EVENT_DESTROY);
+  gnc_engine_generate_event (&acc->guid, GNC_ID_ACCOUNT, GNC_EVENT_DESTROY);
 
   qof_entity_remove (acc->book->entity_table, &acc->guid);
 
@@ -1082,7 +1082,7 @@ xaccAccountInsertSplit (Account *acc, Split *split)
 
       mark_account (acc);
       if (split->parent)
-          gnc_engine_generate_event (&split->parent->guid, GNC_EVENT_MODIFY);
+          gnc_engine_generate_event (&split->parent->guid, GNC_ID_TRANS, GNC_EVENT_MODIFY);
   }
 
   xaccTransCommitEdit(trans);
@@ -1128,7 +1128,7 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
 
       mark_account (acc);
       if (split->parent)
-        gnc_engine_generate_event (&split->parent->guid, GNC_EVENT_MODIFY);
+        gnc_engine_generate_event (&split->parent->guid, GNC_ID_TRANS, GNC_EVENT_MODIFY);
     }
   }
   xaccAccountCommitEdit(acc);

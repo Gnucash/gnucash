@@ -40,9 +40,11 @@
  * event_type: the type of event -- this should be one of the
  *             single-bit GNCEngineEventType values, not a combination.
  */
-void gnc_engine_generate_event (const GUID *entity, GNCEngineEventType event_type);
+void gnc_engine_generate_event (const GUID *entity, QofIdType type,
+				GNCEngineEventType event_type);
 
 /* generates an event even when events are suspended! */
-void gnc_engine_force_event (const GUID *entity, GNCEngineEventType event_type);
+void gnc_engine_force_event (const GUID *entity, QofIdType type,
+			     GNCEngineEventType event_type);
 
 #endif

@@ -174,7 +174,7 @@ mark_entry (GncEntry *entry)
   entry->dirty = TRUE;
   gncBusinessSetDirtyFlag (entry->book, _GNC_MOD_NAME, TRUE);
 
-  gnc_engine_generate_event (&entry->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&entry->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
 }
 
 /* Create/Destroy Functions */
@@ -210,7 +210,7 @@ GncEntry *gncEntryCreate (QofBook *book)
   qof_entity_guid_new (qof_book_get_entity_table (book), &entry->guid);
   addObj (entry);
 
-  gnc_engine_generate_event (&entry->guid, GNC_EVENT_CREATE);
+  gnc_engine_generate_event (&entry->guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
 
   return entry;
 }
@@ -226,7 +226,7 @@ static void gncEntryFree (GncEntry *entry)
 {
   if (!entry) return;
 
-  gnc_engine_generate_event (&entry->guid, GNC_EVENT_DESTROY);
+  gnc_engine_generate_event (&entry->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (entry->desc);
   CACHE_REMOVE (entry->action);
@@ -511,8 +511,10 @@ void gncEntrySetOrder (GncEntry *entry, GncOrder *order)
   gncEntryCommitEdit (entry);
 
   /* Generate an event modifying the Order's end-owner */
+#if 0  
   gnc_engine_generate_event (gncOwnerGetEndGUID (gncOrderGetOwner (order)),
 			     GNC_EVENT_MODIFY);
+#endif
 }
 
 /* called from gncInvoice when we're added to the Invoice */

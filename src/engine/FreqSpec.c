@@ -202,7 +202,7 @@ xaccFreqSpecMalloc(QofBook *book)
 
         fs = g_new0(FreqSpec, 1);
         xaccFreqSpecInit( fs, book );
-        gnc_engine_generate_event( &fs->guid, GNC_EVENT_CREATE );
+        gnc_engine_generate_event( &fs->guid, GNC_ID_FREQSPEC, GNC_EVENT_CREATE );
         return fs;
 }
 
@@ -233,7 +233,7 @@ void
 xaccFreqSpecFree( FreqSpec *fs )
 {
         if ( fs == NULL ) return;
-        gnc_engine_generate_event( &fs->guid, GNC_EVENT_DESTROY );
+        gnc_engine_generate_event( &fs->guid, GNC_ID_FREQSPEC, GNC_EVENT_DESTROY );
         qof_entity_remove( fs->entity_table, &fs->guid );
 
         xaccFreqSpecCleanUp( fs );

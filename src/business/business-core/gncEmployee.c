@@ -65,7 +65,7 @@ mark_employee (GncEmployee *employee)
   employee->dirty = TRUE;
   gncBusinessSetDirtyFlag (employee->book, _GNC_MOD_NAME, TRUE);
 
-  gnc_engine_generate_event (&employee->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&employee->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
 }
 
 /* Create/Destroy Functions */
@@ -84,7 +84,7 @@ GncEmployee *gncEmployeeCreate (QofBook *book)
   employee->username = CACHE_INSERT ("");
   employee->language = CACHE_INSERT ("");
   employee->acl = CACHE_INSERT ("");
-  employee->addr = gncAddressCreate (book, &employee->guid);
+  employee->addr = gncAddressCreate (book, &employee->guid, _GNC_MOD_NAME);
   employee->workday = gnc_numeric_zero();
   employee->rate = gnc_numeric_zero();
   employee->active = TRUE;
@@ -92,7 +92,7 @@ GncEmployee *gncEmployeeCreate (QofBook *book)
   qof_entity_guid_new (qof_book_get_entity_table (book), &employee->guid);
   addObj (employee);
 
-  gnc_engine_generate_event (&employee->guid, GNC_EVENT_CREATE);
+  gnc_engine_generate_event (&employee->guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
 
   return employee;
 }
@@ -108,7 +108,7 @@ static void gncEmployeeFree (GncEmployee *employee)
 {
   if (!employee) return;
 
-  gnc_engine_generate_event (&employee->guid, GNC_EVENT_DESTROY);
+  gnc_engine_generate_event (&employee->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (employee->id);
   CACHE_REMOVE (employee->username);

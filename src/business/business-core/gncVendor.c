@@ -65,7 +65,7 @@ mark_vendor (GncVendor *vendor)
   vendor->dirty = TRUE;
   gncBusinessSetDirtyFlag (vendor->book, _GNC_MOD_NAME, TRUE);
 
-  gnc_engine_generate_event (&vendor->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&vendor->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
 }
 
 /* Create/Destroy Functions */
@@ -82,14 +82,14 @@ GncVendor *gncVendorCreate (QofBook *book)
   vendor->id = CACHE_INSERT ("");
   vendor->name = CACHE_INSERT ("");
   vendor->notes = CACHE_INSERT ("");
-  vendor->addr = gncAddressCreate (book, &vendor->guid);
+  vendor->addr = gncAddressCreate (book, &vendor->guid, _GNC_MOD_NAME);
   vendor->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   vendor->active = TRUE;
 
   qof_entity_guid_new (qof_book_get_entity_table (book), &vendor->guid);
   addObj (vendor);
 
-  gnc_engine_generate_event (&vendor->guid, GNC_EVENT_CREATE);
+  gnc_engine_generate_event (&vendor->guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
 
   return vendor;
 }
@@ -105,7 +105,7 @@ static void gncVendorFree (GncVendor *vendor)
 {
   if (!vendor) return;
 
-  gnc_engine_generate_event (&vendor->guid, GNC_EVENT_DESTROY);
+  gnc_engine_generate_event (&vendor->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (vendor->id);
   CACHE_REMOVE (vendor->name);
@@ -329,7 +329,7 @@ void gncVendorAddJob (GncVendor *vendor, GncJob *job)
     vendor->jobs = g_list_insert_sorted (vendor->jobs, job,
 					 (GCompareFunc)gncJobCompare);
 
-  gnc_engine_generate_event (&vendor->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&vendor->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
 }
 
 void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
@@ -347,7 +347,7 @@ void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
     g_list_free_1 (node);
   }
 
-  gnc_engine_generate_event (&vendor->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&vendor->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
 }
 
 void gncVendorBeginEdit (GncVendor *vendor)

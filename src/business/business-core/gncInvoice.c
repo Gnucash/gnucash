@@ -93,7 +93,7 @@ mark_invoice (GncInvoice *invoice)
   invoice->dirty = TRUE;
   gncBusinessSetDirtyFlag (invoice->book, _GNC_MOD_NAME, TRUE);
 
-  gnc_engine_generate_event (&invoice->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&invoice->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
 }
 
 /* Create/Destroy Functions */
@@ -119,7 +119,7 @@ GncInvoice *gncInvoiceCreate (QofBook *book)
   qof_entity_guid_new (qof_book_get_entity_table (book), &invoice->guid);
   addObj (invoice);
 
-  gnc_engine_generate_event (&invoice->guid, GNC_EVENT_CREATE);
+  gnc_engine_generate_event (&invoice->guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
 
   return invoice;
 }
@@ -135,7 +135,7 @@ static void gncInvoiceFree (GncInvoice *invoice)
 {
   if (!invoice) return;
 
-  gnc_engine_generate_event (&invoice->guid, GNC_EVENT_DESTROY);
+  gnc_engine_generate_event (&invoice->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (invoice->id);
   CACHE_REMOVE (invoice->notes);

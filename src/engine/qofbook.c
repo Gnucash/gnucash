@@ -84,9 +84,7 @@ qof_book_new (void)
   qof_book_init(book);
   qof_object_book_begin (book);
 
-#if 0
-  gnc_engine_generate_event (&book->guid, GNC_EVENT_CREATE);
-#endif
+  gnc_engine_generate_event (&book->guid, QOF_ID_BOOK, GNC_EVENT_CREATE);
   LEAVE ("book=%p", book);
   return book;
 }
@@ -97,7 +95,7 @@ qof_book_destroy (QofBook *book)
   if (!book) return;
 
   ENTER ("book=%p", book);
-  gnc_engine_force_event (&book->guid, GNC_EVENT_DESTROY);
+  gnc_engine_force_event (&book->guid, QOF_ID_BOOK, GNC_EVENT_DESTROY);
 
   qof_object_book_end (book);
 

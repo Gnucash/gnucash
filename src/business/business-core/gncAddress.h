@@ -16,7 +16,7 @@ typedef struct _gncAddress GncAddress;
 
 /* Create/Destroy functions */
 
-GncAddress * gncAddressCreate (QofBook *book, const GUID *parent);
+GncAddress * gncAddressCreate (QofBook *book, const GUID *parent, QofIdType ptype);
 void gncAddressDestroy (GncAddress *addr);
 
 /* Set functions */

@@ -57,7 +57,7 @@ mark_job (GncJob *job)
   job->dirty = TRUE;
   gncBusinessSetDirtyFlag (job->book, _GNC_MOD_NAME, TRUE);
 
-  gnc_engine_generate_event (&job->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&job->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
 }
 
 /* Create/Destroy Functions */
@@ -80,7 +80,7 @@ GncJob *gncJobCreate (QofBook *book)
   qof_entity_guid_new (qof_book_get_entity_table (book), &job->guid);
   addObj (job);
 
-  gnc_engine_generate_event (&job->guid, GNC_EVENT_CREATE);
+  gnc_engine_generate_event (&job->guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
 
   return job;
 }
@@ -96,7 +96,7 @@ static void gncJobFree (GncJob *job)
 {
   if (!job) return;
 
-  gnc_engine_generate_event (&job->guid, GNC_EVENT_DESTROY);
+  gnc_engine_generate_event (&job->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (job->id);
   CACHE_REMOVE (job->name);

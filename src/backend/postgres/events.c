@@ -368,7 +368,7 @@ pgendProcessEvents (Backend *bend)
          local_obj_type = pgendGUIDType (be, &(ev->guid));
          if (GNC_ID_NONE != local_obj_type)
          {
-            gnc_engine_generate_event (&(ev->guid), GNC_EVENT_CREATE);
+            gnc_engine_generate_event (&(ev->guid), local_obj_type, GNC_EVENT_CREATE);
          }
       }
       else 
@@ -376,11 +376,11 @@ pgendProcessEvents (Backend *bend)
          local_obj_type = pgendGUIDType (be, &(ev->guid));
          if (GNC_ID_NONE != local_obj_type)
          {
-            gnc_engine_generate_event (&(ev->guid), GNC_EVENT_MODIFY);
+            gnc_engine_generate_event (&(ev->guid), local_obj_type, GNC_EVENT_MODIFY);
          }
          else
          {
-            gnc_engine_generate_event (&(ev->guid), GNC_EVENT_DESTROY);
+            gnc_engine_generate_event (&(ev->guid), local_obj_type, GNC_EVENT_DESTROY);
          }
       }
    

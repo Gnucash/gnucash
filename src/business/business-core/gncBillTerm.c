@@ -83,7 +83,7 @@ mark_term (GncBillTerm *term)
   term->dirty = TRUE;
   gncBusinessSetDirtyFlag (term->book, _GNC_MOD_NAME, TRUE);
 
-  gnc_engine_generate_event (&term->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&term->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
 }
 
 /* Create/Destroy Functions */
@@ -99,7 +99,7 @@ GncBillTerm * gncBillTermCreate (QofBook *book)
   term->discount = gnc_numeric_zero ();
   qof_entity_guid_new (qof_book_get_entity_table (book), &term->guid);
   addObj (term);
-  gnc_engine_generate_event (&term->guid, GNC_EVENT_CREATE);
+  gnc_engine_generate_event (&term->guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
   return term;
 }
 
@@ -118,7 +118,7 @@ static void gncBillTermFree (GncBillTerm *term)
 
   if (!term) return;
 
-  gnc_engine_generate_event (&term->guid, GNC_EVENT_DESTROY);
+  gnc_engine_generate_event (&term->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
   CACHE_REMOVE (term->name);
   CACHE_REMOVE (term->desc);
   remObj (term);
