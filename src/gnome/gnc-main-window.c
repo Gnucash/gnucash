@@ -59,6 +59,7 @@
 #include "gnc-version.h"
 #include "gnc-window.h"
 #include "window-main.h"
+#include "window-main-summarybar.h"
 #include "messages.h"
 
 // +JSLED
@@ -135,11 +136,14 @@ struct GncMainWindowPrivate
 	GtkWidget *statusbar;
 	GtkWidget *progressbar;
 
+        GtkWidget *gncSummaryBar;
+
 	EggActionGroup *action_group;
 
 	GncPluginPage *current_page;
 	GList *installed_pages;
 	gint event_handler_id;
+
 
 	GHashTable *merged_actions_table;
 };
@@ -767,6 +771,13 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	gtk_widget_show (priv->statusbar);
 	gtk_box_pack_start (GTK_BOX (main_vbox), priv->statusbar,
 			    FALSE, TRUE, 0);
+        gtk_statusbar_set_has_resize_grip( GTK_STATUSBAR(priv->statusbar), TRUE );
+
+        priv->gncSummaryBar = gnc_main_window_summary_new();
+        gtk_widget_show( priv->gncSummaryBar );
+        gtk_box_pack_start( GTK_BOX(priv->statusbar), priv->gncSummaryBar, FALSE, TRUE, 0 );
+        // re-position at the beginning of the status area.
+        gtk_box_reorder_child( GTK_BOX(priv->statusbar), priv->gncSummaryBar, 0 );
 
 	priv->progressbar = gtk_progress_bar_new ();
 	gtk_widget_show (priv->progressbar);

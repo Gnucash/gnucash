@@ -76,8 +76,9 @@ Stock Split Dialog
 ------------------------------------------------------------------------------
 | Main Window   | - New registers should open in new top-level  |            |
 |               |   windows.                                    |            |
-|               | - Summary bar isn't shown, even when option in|            |
-|               |   view is checked.                            |            |
+|               | - Summary bar select list doesn't have effect.|            |
+|               | - Startup progress bar not working; default   |            |
+|               |   "window" needs to be set.                   |            |
 ------------------------------------------------------------------------------
 | Register Core | - Can navigate, enter transactions, etc.      |            |
 | MOSTLY        | - Insertion point not shown.                  |            |
