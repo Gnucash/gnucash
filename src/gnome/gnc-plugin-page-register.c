@@ -1515,8 +1515,6 @@ gnc_plugin_page_help_changed_cb (GNCSplitReg *gsr, GncPluginPageRegister *regist
 	GncPluginPageRegisterPrivate *priv;
 	SplitRegister *reg;
 	GncWindow *window;
-	GtkStatusbar *statusbar;
-	const char *status;
 	char *help;
 
 	g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(register_page));
@@ -1527,11 +1525,7 @@ gnc_plugin_page_help_changed_cb (GNCSplitReg *gsr, GncPluginPageRegister *regist
 	priv = register_page->priv;
 	reg = gnc_ledger_display_get_split_register(priv->ledger);
 	help = gnc_table_get_help(reg->table);
-	status = help ? help : "";
-
-	statusbar = GTK_STATUSBAR(gnc_window_get_statusbar(window));
-	gtk_statusbar_pop(statusbar, 0);
-	gtk_statusbar_push(statusbar, 0, status);
+	gnc_window_set_status(window, GNC_PLUGIN_PAGE(register_page), help);
 	g_free(help);
 }
 

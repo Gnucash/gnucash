@@ -53,6 +53,8 @@ typedef struct GncPluginPage {
 	gchar *title;
 	gchar *tab_name;
 	gchar *uri;
+
+	gchar *statusbar_text;
 } GncPluginPage;
 
 typedef struct {

@@ -244,6 +244,8 @@ gnc_plugin_page_finalize (GObject *object)
   GList *item;
 
   page = GNC_PLUGIN_PAGE (object);
+  if (page->statusbar_text)
+    g_free (page->statusbar_text);
   if (page->title)
 	g_free(page->title);
   if (page->tab_name)
