@@ -990,15 +990,17 @@
 ;; copies the values of all options from src which exist in dest to
 ;; there.
 (define (gnc:options-copy-values src-options dest-options)
-  (gnc:options-for-each 
-   (lambda (src-option) 
-     (let ((dest-option (gnc:lookup-option dest-options 
-					   (gnc:option-section src-option)
-					   (gnc:option-name src-option))))
-       (if dest-option
-	   (gnc:option-set-value dest-option 
-				 (gnc:option-value src-option)))))
-   src-options))
+  (if 
+   dest-options
+   (gnc:options-for-each 
+    (lambda (src-option) 
+      (let ((dest-option (gnc:lookup-option dest-options 
+					    (gnc:option-section src-option)
+					    (gnc:option-name src-option))))
+	(if dest-option
+	    (gnc:option-set-value dest-option 
+				  (gnc:option-value src-option)))))
+    src-options)))
 
 (define (gnc:send-options db_handle options)
   (gnc:options-for-each

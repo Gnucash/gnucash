@@ -194,8 +194,7 @@
 		  '("green") '())))
 
       (if show-incexp?
-	  (let ((set-options (list '()))
-		(urls
+	  (let ((urls
 		 (list
 		  (gnc:make-report-anchor
 		   "Income Over Time"
@@ -222,28 +221,16 @@
       
       (gnc:html-document-add-object! document chart) 
 
-;      (gnc:html-document-add-object! 
-;       document ;;(gnc:html-markup-p
-;       (gnc:html-make-exchangerates 
-;	report-currency exchange-alist accounts #f))
-
       document))
 
   ;; Here we define the actual report with gnc:define-report
   (gnc:define-report
-
-   ;; The version of this report.
    'version 1
 
-   ;; The name of this report. This will be used, among other things,
-   ;; for making its menu item in the main menu. You need to use the
-   ;; untranslated value here!
    'name (N_ "Income/Expense Chart")
 
    'menu-path (list gnc:menuname-income-expense)
 
-   ;; The options generator function defined above.
    'options-generator options-generator
 
-   ;; The rendering function defined above.
    'renderer inc-exp-graph-renderer))

@@ -12,6 +12,17 @@
 	occur if the date entry is changed again.  Changed 
    gnc_get_reconcile_info to use the *AsOfDate funcs if possible.
 
+2001-04-22  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/transaction-report.scm: More work on subtotal
+	options.
+
+	* src/scm/report/net-worth-timeseries.scm: Add links to new
+	reports on bars.
+
+	* src/scm/options.scm, html-utilities.scm: Fix bugs with wrong
+	report names.
+
 2001-04-22  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-find-transactions.c: remove tags notebook page.

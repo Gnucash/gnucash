@@ -60,17 +60,20 @@
 (define (gnc:make-report-anchor reportname 
 				src-options optionlist)
   (let ((options (gnc:make-report-options reportname)))
-    (gnc:options-copy-values src-options options)
-    (for-each
-     (lambda (l)
-       (let ((o (gnc:lookup-option options (car l) (cadr l))))
-	 (if o
-	     (gnc:option-set-value o (caddr l))
-	     (warn "gnc:make-report-anchor:" reportname
-		   " No such option: " (car l) (cadr l)))))
-     optionlist)
-    (gnc:report-anchor-text 
-     (gnc:make-report reportname options))))
+    (if options
+	(begin
+	  (gnc:options-copy-values src-options options)
+	  (for-each
+	   (lambda (l)
+	     (let ((o (gnc:lookup-option options (car l) (cadr l))))
+	       (if o
+		   (gnc:option-set-value o (caddr l))
+		   (warn "gnc:make-report-anchor:" reportname
+			 " No such option: " (car l) (cadr l)))))
+	   optionlist)
+	  (gnc:report-anchor-text 
+	   (gnc:make-report reportname options)))
+	(warn "gnc:make-report-anchor: No such report: " reportname))))
 
 
 ;; returns the account name as html-text and anchor to the register.

@@ -153,7 +153,6 @@
                         (gnc:timepair-end-day-time from-date-tp) 
                         (gnc:timepair-end-day-time to-date-tp)
                         (eval interval)))
-	   (dummy134 (gnc:debug "dates-list" dates-list))
            (assets-collector-list (collector-fn asset-accounts dates-list))
 	   (expense-collector-list
             (collector-fn liability-equity-accounts dates-list))
@@ -211,30 +210,45 @@
 	      (if show-net?
 		  '("green") '())))
       
-      (gnc:html-document-add-object! document chart) 
+      (if show-sep?
+	  (let ((urls
+		 (list
+		  (gnc:make-report-anchor
+		   "Assets Over Time"
+		   (gnc:report-options report-obj)
+		   (list 
+		    (list gnc:pagename-display
+			  "Use Stacked Bars" #t)
+		    (list gnc:pagename-general
+			  gnc:optname-reportname
+			  (_ "Asset Chart"))))
+		  (gnc:make-report-anchor
+		   "Liabilities/Equity Over Time"
+		   (gnc:report-options report-obj)
+		   (list 
+		    (list gnc:pagename-display
+			  "Use Stacked Bars" #t)
+		    (list gnc:pagename-general
+			  gnc:optname-reportname
+			  (_ "Liability/Equity Chart")))))))
+	    (gnc:html-barchart-set-button-1-bar-urls! 
+	     chart urls)
+	    (gnc:html-barchart-set-button-1-legend-urls! 
+	     chart urls)))
 
-;      (gnc:html-document-add-object! 
-;       document ;;(gnc:html-markup-p
-;       (gnc:html-make-exchangerates 
-;	report-currency exchange-alist accounts #f))
+      (gnc:html-document-add-object! document chart) 
 
       document))
 
   ;; Here we define the actual report with gnc:define-report
   (gnc:define-report
 
-   ;; The version of this report.
    'version 1
 
-   ;; The name of this report. This will be used, among other things,
-   ;; for making its menu item in the main menu. You need to use the
-   ;; untranslated value here!
    'name (N_ "Net Worth Barchart")
 
    'menu-path (list gnc:menuname-asset-liability)
 
-   ;; The options generator function defined above.
    'options-generator options-generator
 
-   ;; The rendering function defined above.
    'renderer net-worth-series-renderer))
