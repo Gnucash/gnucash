@@ -29,7 +29,7 @@
 (use-modules (gnucash process))
 (use-modules (www main))
 (use-modules (srfi srfi-1))
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/app-utils" 0)
