@@ -107,7 +107,7 @@ void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data)
 }
 
 void qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
-		       foreachObjectCB cb, gpointer user_data)
+		       QofEntityForeachCB cb, gpointer user_data)
 {
   const QofObject *obj;
 

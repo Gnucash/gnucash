@@ -28,7 +28,6 @@
 #include <string.h>
 
 #include "BackendP.h"
-#include "GNCIdP.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
@@ -37,6 +36,7 @@
 #include "kvp-util.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofid-p.h"
 #include "qofobject.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -70,7 +70,7 @@ gnc_price_create (QofBook *book)
   p->book = book;
   p->entity_table = qof_book_get_entity_table (book);
 
-  xaccGUIDNew (&p->guid, book);
+  qof_entity_guid_new (p->entity_table, &p->guid);
   qof_entity_store (p->entity_table, p, &p->guid, GNC_ID_PRICE); 
   gnc_engine_generate_event (&p->guid, GNC_EVENT_CREATE);
 

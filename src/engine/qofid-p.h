@@ -43,7 +43,7 @@ void qof_entity_destroy (QofEntityTable *table);
  * When considered over all possible instances of gnucash, the odds of 
  * this routine returning a non-unique id are still astronomically small.
  * If you had a gazzillion computers computing new ids, for the entire
- * age of teh universe, you'd still have a one-in-a-million chance of
+ * age of the universe, you'd still have a one-in-a-million chance of
  * coming up with a duplicate.  2^128 is a really really big number.
  */
 void qof_entity_guid_new (QofEntityTable *entity_table, GUID *guid);
@@ -66,6 +66,6 @@ void qof_entity_remove (QofEntityTable *entity_table, const GUID * guid);
 
 /* Call a function for each object of type 'type' in the entity table */
 void qof_entity_foreach (QofEntityTable *entity_table, QofIdType type,
-			foreachObjectCB cb_func, gpointer user_data);
+			QofEntityForeachCB cb_func, gpointer user_data);
 
 #endif /* QOF_ID_P_H */

@@ -67,7 +67,7 @@ struct _QofObject {
   /* foreach() is used to execute a callback over each object
    * stored in the particular book
    */
-  void		(*foreach)(QofBook *, foreachObjectCB, gpointer);
+  void		(*foreach)(QofBook *, QofEntityForeachCB, gpointer);
 
   /* Given a particular object, return a printable string */
   const char *	(*printable)(gpointer obj);
@@ -77,7 +77,7 @@ struct _QofObject {
 void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data);
 
 void qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
-		       foreachObjectCB cb, gpointer user_data);
+		       QofEntityForeachCB cb, gpointer user_data);
 
 const char * qof_object_printable (QofIdTypeConst type_name, gpointer obj);
 

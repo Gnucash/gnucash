@@ -3164,7 +3164,7 @@ xaccAccountGetBackend (Account * acc)
 /* gncObject function implementation and registration */
 
 static void
-account_foreach (QofBook *book, foreachObjectCB cb, gpointer ud)
+account_foreach (QofBook *book, QofEntityForeachCB cb, gpointer ud)
 {
   QofEntityTable *et;
 

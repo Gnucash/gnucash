@@ -34,7 +34,6 @@
 #include "AccountP.h"
 #include "Backend.h"
 #include "BackendP.h"
-#include "GNCIdP.h"
 #include "Group.h"
 #include "TransactionP.h"
 #include "TransLog.h"
@@ -49,6 +48,7 @@
 
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofid-p.h"
 #include "qofobject.h"
 #include "qofqueryobject.h"
 
@@ -132,7 +132,7 @@ xaccInitSplit(Split * split, QofBook *book)
 
   split->book = book;
 
-  xaccGUIDNew (&split->guid, book);
+  qof_entity_guid_new (book->entity_table, &split->guid);
   qof_entity_store(book->entity_table, split, &split->guid, GNC_ID_SPLIT);
 }
 
@@ -213,7 +213,7 @@ xaccSplitClone (Split *s)
   split->reconciled_balance  = s->reconciled_balance;
   split->idata               = 0;
 
-  xaccGUIDNew(&split->guid, s->book);
+  qof_entity_guid_new(s->book->entity_table, &split->guid);
   qof_entity_store(s->book->entity_table, split, &split->guid, GNC_ID_SPLIT);
 
   xaccAccountInsertSplit(s->acc, split);
@@ -839,7 +839,7 @@ xaccInitTransaction (Transaction * trans, QofBook *book)
 
   trans->book = book;
 
-  xaccGUIDNew (&trans->guid, book);
+  qof_entity_guid_new (book->entity_table, &trans->guid);
   qof_entity_store (book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
 }
 
@@ -1005,7 +1005,7 @@ xaccTransClone (Transaction *t)
   trans->orig          	 = NULL;
   trans->idata         	 = 0;
 
-  xaccGUIDNew (&trans->guid, t->book);
+  qof_entity_guid_new (t->book->entity_table, &trans->guid);
   qof_entity_store (t->book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
 
   xaccTransBeginEdit(trans);
@@ -3542,7 +3542,7 @@ xaccTransactionGetBackend (Transaction *trans)
 \********************************************************************/
 /* gncObject function implementation */
 static void
-do_foreach (QofBook *book, QofIdType type, foreachObjectCB cb, gpointer ud)
+do_foreach (QofBook *book, QofIdType type, QofEntityForeachCB cb, gpointer ud)
 {
   QofEntityTable *et;
 
@@ -3554,7 +3554,7 @@ do_foreach (QofBook *book, QofIdType type, foreachObjectCB cb, gpointer ud)
 }
 
 static void
-split_foreach (QofBook *book, foreachObjectCB fcn, gpointer user_data)
+split_foreach (QofBook *book, QofEntityForeachCB fcn, gpointer user_data)
 {
   do_foreach (book, GNC_ID_SPLIT, fcn, user_data);
 }
@@ -3642,7 +3642,7 @@ gboolean xaccSplitRegister (void)
 }
 
 static void
-trans_foreach (QofBook *book, foreachObjectCB fcn, gpointer user_data)
+trans_foreach (QofBook *book, QofEntityForeachCB fcn, gpointer user_data)
 {
   do_foreach (book, GNC_ID_TRANS, fcn, user_data);
 }

@@ -44,7 +44,7 @@ typedef struct entity_node
   gpointer entity;
 } EntityNode;
 
-struct gnc_entity_table
+struct _QofEntityTable
 {
   GHashTable * hash;
 };
@@ -63,7 +63,7 @@ entity_node_destroy(gpointer key, gpointer value, gpointer not_used)
   EntityNode *e_node = value;
 
   CACHE_REMOVE (e_node->entity_type);
-  e_node->entity_type = GNC_ID_NONE;
+  e_node->entity_type = QOF_ID_NONE;
   e_node->entity = NULL;
 
   guid_free(guid);
@@ -149,30 +149,30 @@ qof_entity_new (void)
 
   entity_table->hash = g_hash_table_new (id_hash, id_compare);
 
-  qof_entity_store (entity_table, NULL, guid_null(), GNC_ID_NULL);
+  qof_entity_store (entity_table, NULL, guid_null(), QOF_ID_NULL);
 
   return entity_table;
 }
 
-QofIdType
-qof_guid_type (QofEntityTable *entity_table, const GUID * guid);
+QofIdType 
+qof_entity_type (QofEntityTable *entity_table, const GUID * guid)
 {
   EntityNode *e_node;
 
   if (guid == NULL)
-    return GNC_ID_NONE;
+    return QOF_ID_NONE;
 
-  g_return_val_if_fail (entity_table, GNC_ID_NONE);
+  g_return_val_if_fail (entity_table, QOF_ID_NONE);
 
   e_node = g_hash_table_lookup (entity_table->hash, guid->data);
   if (e_node == NULL)
-    return GNC_ID_NONE;
+    return QOF_ID_NONE;
 
   return e_node->entity_type;
 }
 
 void
-qof_entity_guid_new (GUID *guid, QofEntityTable *entity_table)
+qof_entity_guid_new (QofEntityTable *entity_table, GUID *guid)
 {
   if (guid == NULL)
     return;
@@ -183,7 +183,7 @@ qof_entity_guid_new (GUID *guid, QofEntityTable *entity_table)
   {
     guid_new(guid);
 
-    if (qof_guid_type (guid, entity_table) == GNC_ID_NONE)
+    if (qof_entity_type (entity_table, guid) == QOF_ID_NONE)
       break;
 
     PWARN("duplicate id created, trying again");
@@ -277,7 +277,7 @@ qof_entity_remove (QofEntityTable *entity_table, const GUID * guid)
   {
     e_node = node;
 
-    if (!safe_strcmp (e_node->entity_type, GNC_ID_NULL))
+    if (!safe_strcmp (e_node->entity_type, QOF_ID_NULL))
       return;
 
     g_hash_table_remove (entity_table->hash, old_guid);
@@ -286,7 +286,7 @@ qof_entity_remove (QofEntityTable *entity_table, const GUID * guid)
 }
 
 struct _iterate {
-  foreachObjectCB	fcn;
+  QofEntityForeachCB	fcn;
   gpointer		data;
   QofIdType		type;
 };
@@ -303,7 +303,7 @@ static void foreach_cb (gpointer key, gpointer item, gpointer arg)
 
 void
 qof_entity_foreach (QofEntityTable *entity_table, QofIdType type,
-		   foreachObjectCB cb_func, gpointer user_data)
+		   QofEntityForeachCB cb_func, gpointer user_data)
 {
   struct _iterate iter;
 

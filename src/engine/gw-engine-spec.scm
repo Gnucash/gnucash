@@ -252,7 +252,7 @@
   #t)
 
 ;
-; Definitions from GNCId.h
+; Definitions from gnc-engine.h
 ;
 (gw:wrap-value ws 'gnc:id-account '<gnc:id-type> "GNC_ID_ACCOUNT")
 (gw:wrap-value ws 'gnc:id-book '<gnc:id-type> "GNC_ID_BOOK")

@@ -63,14 +63,7 @@ typedef struct _QofEntityTable QofEntityTable;
 /** Return the type of the indicated guid */
 QofIdType qof_entity_type (QofEntityTable *entity_table, const GUID * guid);
 
-/* Returns a GUID which is guaranteed to never reference any entity. */
-const GUID * guid_null (void);
-
-/* Efficiently allocate & free memory for GUIDs */
-GUID * guid_malloc (void);
-void   guid_free (GUID *guid);
-
 /* Callback type for qof_entity_foreach */
-typedef void (*foreachObjectCB) (gpointer object, gpointer user_data);
+typedef void (*QofEntityForeachCB) (gpointer object, gpointer user_data);
 
 #endif /* QOF_ID_H */

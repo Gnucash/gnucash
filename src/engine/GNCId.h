@@ -8,7 +8,7 @@
  */
 
 #define xaccGUIDType(guid,book)      \
-    qof_guid_type ((guid), qof_book_get_entity_table (book))
+    qof_entity_type (qof_book_get_entity_table (book), (guid))
 
 /* Equivalent function prototype:
  * void xaccGUIDNew (GUID *guid, QofBook *book)

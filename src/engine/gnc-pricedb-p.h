@@ -28,10 +28,10 @@
 #include <glib.h>
 
 #include "Backend.h"
-#include "GNCIdP.h"
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
 #include "qofbook.h"
+#include "qofid.h"
 
 struct gnc_price_s
 {

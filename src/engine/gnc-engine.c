@@ -25,7 +25,6 @@
 
 #include <glib.h>
 
-#include "GNCIdP.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 
@@ -38,6 +37,7 @@
 #include "gnc-pricedb-p.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofid.h"
 #include "qofobject.h"
 #include "qofobject-p.h"
 #include "qofquery.h" 

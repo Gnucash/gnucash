@@ -44,6 +44,7 @@
 #include "qofqueryobject.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofid-p.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_LOT;
@@ -60,7 +61,7 @@ gnc_lot_init (GNCLot *lot, QofBook *book)
    lot->is_closed = -1;
   
    lot->book = book;
-   xaccGUIDNew (&lot->guid, book);
+   qof_entity_guid_new (book->entity_table, &lot->guid);
    qof_entity_store (book->entity_table, lot, &lot->guid, GNC_ID_LOT);
    LEAVE ("(lot=%p, book=%p)", lot, book);
 }
