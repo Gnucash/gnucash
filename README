@@ -149,6 +149,8 @@ The following packages are required to be installed to run gnucash:
 
   gnome-print: any recent version should work.
 
+  gdk-pixbuf: any recent version should work.
+
   gtkhtml: version 0.4 and later should work. You can obtain the latest
     version of gtkhtml from Helix Code.  Note that this has changed since
     1.4, which used the older gtkxmhtml library.
@@ -274,8 +276,9 @@ Building & Installing
 (For additional build system details, see doc/README.build-system.)
 
 GnuCash uses GNU Automake to handle the build process, so for most of
-the details, see the generic instructions in INSTALL.  Below we detail
-the GnuCash specific bits.
+the details, see the generic instructions in INSTALL.  (Note that, in
+order to get a working ./configure, you should run
+./macros/autogen.sh.)  Below we detail the GnuCash specific bits.
 
 Prior to building GnuCash, you will have to obtain and install the
 following packages:
