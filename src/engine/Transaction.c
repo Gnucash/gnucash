@@ -34,7 +34,6 @@
 #include "BackendP.h"
 #include "GNCIdP.h"
 #include "Group.h"
-#include "Scrub.h"
 #include "TransactionP.h"
 #include "TransLog.h"
 #include "date.h"
