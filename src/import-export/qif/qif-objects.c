@@ -80,7 +80,7 @@ qif_account_new(void)
  * the existing acct.  If the account does not already exist, then
  * insert it into the ctx and return it.
  */
-static QifAccount
+QifAccount
 qif_account_merge(QifContext ctx, QifAccount acct)
 {
   QifAccount acct2 = 
@@ -190,7 +190,7 @@ qif_cat_new(void)
  * the existing cat.  If the category does not already exist, then
  * insert it into the ctx and return it.
  */
-static QifCategory
+QifCategory
 qif_cat_merge(QifContext ctx, QifCategory cat)
 {
   QifCategory cat2 = 
@@ -297,7 +297,7 @@ qif_class_new()
  * the existing qclass.  If the class does not already exist, then
  * insert it into the ctx and return it.
  */
-static QifClass
+QifClass
 qif_class_merge(QifContext ctx, QifClass qclass)
 {
   QifClass qclass2 = 
@@ -382,7 +382,7 @@ qif_security_new()
  * the existing security.  If the security does not already exist, then
  * insert it into the ctx and return it.
  */
-static QifSecurity
+QifSecurity
 qif_security_merge(QifContext ctx, QifSecurity security)
 {
   QifSecurity security2 = 

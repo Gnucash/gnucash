@@ -225,6 +225,9 @@ qif_file_new(QifContext ctx, const char *filename)
   if (fctx) {
     ctx->files = g_list_prepend(ctx->files, fctx);
     fctx->parent = ctx;
+
+    /* Make sure the file gets merged into the parent */
+    ctx->parsed = FALSE;
   }
 
   return fctx;
@@ -237,6 +240,8 @@ qif_file_parse(QifContext ctx, gpointer ui_args)
   g_return_val_if_fail(!qif_file_needs_account(ctx), QIF_E_BADSTATE);
 
   qif_parse_all(ctx, ui_args);
+  ctx->parsed = TRUE;
+
   return QIF_E_OK;
 }
 

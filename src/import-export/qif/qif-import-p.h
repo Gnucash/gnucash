@@ -36,6 +36,7 @@ struct _QifContext {
 
   /* A bunch of flags for the current handler */
   gint		parse_flags;
+  gboolean	parsed;
 
   /* The current and "opening balance" account */
   QifAccount	current_acct;
