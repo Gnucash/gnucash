@@ -1,5 +1,3 @@
-#SUBDIRS = . test
-
 gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
 # When you add a file here, please modify ../test/Makefile.am's overrides.stamp
 gncoverrides_SCRIPTS = \
@@ -11,8 +9,11 @@ gncoverrides_SCRIPTS = \
 
 EXTRA_DIST = \
   .cvsignore \
+  gnucash \
   gnucash-env.in \
   gnucash-build-env.in \
+  gnucash-make-guids \
+  gnucash-run-script \
   guile.in 
 
 noinst_DATA = gnucash-build-env

@@ -44,4 +44,5 @@ bin_SCRIPTS = gnc-test-env
 
 EXTRA_DIST = \
   .cvsignore \
-  README.modules
+  README.modules \
+  gnc-test-env
