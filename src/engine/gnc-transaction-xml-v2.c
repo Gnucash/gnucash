@@ -484,30 +484,16 @@ gnc_transaction_end_handler(gpointer data_for_children,
     
     g_return_val_if_fail(tree, FALSE);
     
-    trn = xaccMallocTransaction();
-    g_return_val_if_fail(trn, FALSE);
-    xaccTransBeginEdit(trn);
-
-    successful = dom_tree_generic_parse(tree, trn_dom_handlers, trn);
-    
-    xaccTransCommitEdit(trn);
-
-    if(successful)
+    trn = dom_tree_to_transaction(tree);
+    if(trn != NULL)
     {
         gdata->cb(tag, gdata->data, trn);
         successful = TRUE;
     }
-    else
-    {
-        xmlElemDump(stdout, NULL, tree);
-        xaccTransBeginEdit(trn);
-        xaccTransDestroy(trn);
-        xaccTransCommitEdit(trn);
-    }
 
     xmlFreeNode(tree);
     
-    return successful;
+    return trn != NULL;
 }
 
 Transaction *
