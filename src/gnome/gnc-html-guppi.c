@@ -63,6 +63,15 @@ gnc_html_guppi_shutdown(void) {
   guppi_tank_shutdown();
 }
 
+static void 
+gnc_html_guppi_print_cb(GtkHTMLEmbedded * eb, GnomePrintContext * pc,
+                        gpointer data) {
+  GtkWidget   * w = data;
+  GuppiObject * o = gtk_object_get_user_data(GTK_OBJECT(w));
+
+  guppi_object_print(o, pc);
+}
+
 /* the handlers for pie. bar, and scatter charts */ 
 static int
 handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer data) {
@@ -70,7 +79,13 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer data) {
   int       retval;
   widg = gnc_html_embedded_piechart(html, eb->width, eb->height, 
                                     eb->params); 
+
   if(widg) {
+    if(gtk_signal_lookup("draw_print", gtk_html_embedded_get_type())) {
+      gtk_signal_connect(GTK_OBJECT(eb), "draw_print", gnc_html_guppi_print_cb,
+                         widg);    
+    }
+
     gtk_widget_show_all(widg);
     gtk_container_add(GTK_CONTAINER(eb), widg);
     gtk_widget_set_usize(GTK_WIDGET(eb), eb->width, eb->height);
@@ -89,6 +104,11 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer data) {
   widg = gnc_html_embedded_barchart(html, eb->width, eb->height, 
                                     eb->params); 
   if(widg) {
+    if(gtk_signal_lookup("draw_print",  gtk_html_embedded_get_type())) {
+      gtk_signal_connect(GTK_OBJECT(eb), "draw_print", gnc_html_guppi_print_cb,
+                         widg);    
+    }
+
     gtk_widget_show_all(widg);
     gtk_container_add(GTK_CONTAINER(eb), widg);
     gtk_widget_set_usize(GTK_WIDGET(eb), eb->width, eb->height);
@@ -107,6 +127,11 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer data) {
   widg = gnc_html_embedded_scatter(html, eb->width, eb->height, 
                                    eb->params); 
   if(widg) {
+    if(gtk_signal_lookup("draw_print",  gtk_html_embedded_get_type())) {
+      gtk_signal_connect(GTK_OBJECT(eb), "draw_print", gnc_html_guppi_print_cb,
+                         widg);    
+    }
+
     gtk_widget_show_all(widg);
     gtk_container_add(GTK_CONTAINER(eb), widg);
     gtk_widget_set_usize(GTK_WIDGET(eb), eb->width, eb->height);
@@ -536,8 +561,10 @@ gnc_html_embedded_piechart(gnc_html * parent, int w, int h,
   free_strings(labels, datasize);
   free_strings(colors, datasize);
   
-  if(chart)
+  if(chart) {
+    gtk_object_set_user_data(GTK_OBJECT(chart->widget), chart->guppiobject);
     return chart->widget;
+  }
   else 
     return NULL;
 }
@@ -782,8 +809,10 @@ gnc_html_embedded_barchart(gnc_html * parent,
   free_strings(row_labels, datarows);
   free_strings(col_colors, datacols);
 
-  if(chart) 
+  if(chart) {
+    gtk_object_set_user_data(GTK_OBJECT(chart->widget), chart->guppiobject);
     return chart->widget;
+  }
   else
     return NULL;
 }
@@ -884,8 +913,10 @@ gnc_html_embedded_scatter(gnc_html * parent,
   g_free(x_data);
   g_free(y_data);
   
-  if(chart)
+  if(chart) {
+    gtk_object_set_user_data(GTK_OBJECT(chart->widget), chart->guppiobject);
     return chart->widget;
+  }
   else 
     return NULL;
 }

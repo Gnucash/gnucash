@@ -658,28 +658,6 @@ gnc_html_url_requested_cb(GtkHTML * html, char * url,
 }
 
 
-#ifdef USE_GUPPI
-static void 
-gnc_html_guppi_print_cb(GtkHTMLEmbedded * eb, GnomePrintContext * pc,
-                        gpointer data) {
-  GtkWidget   * w = data;
-  GuppiObject * o = gtk_object_get_user_data(GTK_OBJECT(w));
-
-  /* this is a magical scaling factor (gtkhtml and guppi assume different 
-   * screen resolutions) */
-  gnome_print_scale(pc, 0.6944, 0.6944);
-  guppi_object_print(o, pc);
-}
-
-static void 
-gnc_html_guppi_redraw_cb(GtkHTMLEmbedded * eb,
-                         GdkPixmap * pix, GdkGC * gc, gint x, gint y, 
-                         gpointer data) {
-  /* nothing special to do */
-}
-#endif /* USE_GUPPI */
-
-
 /********************************************************************
  * gnc_html_object_requested_cb - called when an applet needs to be
  * loaded.  

@@ -174,7 +174,7 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
 }
 
 static void
-gnc_childwin_set_title (GNCMainChildInfo *childwin)
+gnc_main_window_child_set_title (GNCMainChildInfo *childwin)
 {
   GNCBook *book;
   const char *filename;
@@ -224,7 +224,7 @@ gnc_app_set_title (GnomeApp *app)
   childwin = gtk_object_get_user_data (GTK_OBJECT (child));
   if (!childwin) return;
 
-  gnc_childwin_set_title (childwin);
+  gnc_main_window_child_set_title (childwin);
 }
 
 static void
@@ -339,7 +339,7 @@ gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used,
   }
 
   /* set the window title */ 
-  gnc_childwin_set_title (childwin);
+  gnc_main_window_child_set_title (childwin);
 
   /* install menu hints if relevant */
   if(mdi->active_child) {
@@ -400,51 +400,32 @@ gnc_main_window_configure_mdi_cb (gpointer data)
  * MDI session restore time 
  ********************************************************************/
 
-static void
-gfec_create_child_error (const char *error_string)
-{
-  g_warning ("error creating mdi child\n\n%s",
-             error_string ? error_string : "(null)");
-}
-
 GnomeMDIChild * 
 gnc_main_window_create_child(const gchar * configstring) {
   GnomeMDIChild *child;
   URLType type;
   char * location;
   char * label;
-  char * url;
-  SCM scm;
 
   if (!configstring)
     return NULL;
 
-  scm = gfec_eval_string(configstring, gfec_create_child_error);
-  if (!gh_string_p(scm))
-    return NULL;
-
-  url = gh_scm2newstr(scm, NULL);
-  if (!url)
-    return NULL;
-
-  type = gnc_html_parse_url(NULL, url, &location, &label);
+  type = gnc_html_parse_url(NULL, configstring, &location, &label);
   g_free(location);
   g_free(label);
 
   switch(type) {
   case URL_TYPE_REPORT:
-    child = gnc_report_window_create_child(url);
+    child = gnc_report_window_create_child(configstring);
     break;
     
   case URL_TYPE_ACCTTREE:
-    child = gnc_acct_tree_window_create_child(url);
+    child = gnc_acct_tree_window_create_child(configstring);
     break;
     
   default:
     child = NULL;
   }
-
-  free (url);
 
   return child;
 }
@@ -452,55 +433,11 @@ gnc_main_window_create_child(const gchar * configstring) {
 
 /********************************************************************
  * gnc_main_window_child_save_func()
- * save a Scheme form that will allow the child to be restored.  This 
- * is called at MDI session save time. 
  ********************************************************************/
 
 static char * 
 gnc_main_window_child_save_func(GnomeMDIChild * child, gpointer user_data) {
-
-  GNCMainChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
-  SCM  save_report = gh_eval_str("gnc:report-generate-restore-forms-complete");
-  SCM  save_acctree = gh_eval_str("gnc:acct-tree-generate-restore-forms");
-  URLType type;
-  char * location;
-  char * label;
-
-  type = gnc_html_parse_url(NULL, child->name, &location, &label);
-  g_free(location);
-  g_free(label);
-  
-  switch(type) {
-  case URL_TYPE_REPORT: {
-    gnc_report_window * win = mc->user_data;
-    SCM report = gnc_report_window_get_report(win);
-    if(report != SCM_BOOL_F) {
-      return gh_scm2newstr(gh_call1(save_report, report), NULL);
-    }
-    else {
-      return NULL;
-    }    
-    break;
-  }
-    
-  case URL_TYPE_ACCTTREE: {
-    GNCAcctTreeWin * win = mc->user_data;
-    SCM options          = gnc_acct_tree_window_get_options(win);    
-    int options_id       = gnc_acct_tree_window_get_id(win);
-
-    if(options != SCM_BOOL_F) {
-      return gh_scm2newstr(gh_call2(save_acctree, options, 
-                                    gh_int2scm(options_id)), NULL);
-    }
-    else {
-      return NULL;
-    }
-    break;
-  }
-  
-  default:
-    return NULL;
-  }
+  return g_strdup(child->name);
 }
 
 
@@ -673,7 +610,7 @@ gnc_main_window_child_refresh(gpointer data) {
   /* pesky child_set_name tries to change the window title... set 
    * it back. */
   if((gnc_ui_get_data()->mdi->active_child == child->child) && child->app) {
-    gnc_childwin_set_title (child);
+    gnc_main_window_child_set_title (child);
   }
 }
 

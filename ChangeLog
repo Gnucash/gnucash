@@ -1,3 +1,42 @@
+2001-05-10  Bill Gribble  <grib@billgribble.com>
+
+	* src/gnome/dialog-column-view.c: change handling of component
+	reports.  now we explicitly handle the case of the column view,
+	which is the only report that needs to save/restore its children.
+
+	* src/gnome/gnc-html-guppi.c: add printing support for graphs.
+	Doesn't really work on my system ATM.  I'll follow up on it.
+
+	* src/gnome/window-main.c: move save/restore forms out of gnome
+	MDI config string.  rename some functions. 
+
+	* src/gnome/window-report.c: save the initial report in a window
+	for special treatment.  It's the one that gets saved and restored,
+	and whose title appears in the tab.
+
+	* src/scm/*: remove instances of report-add-child and friends.
+	The concept is unnecessary.
+
+	* src/scm/main-window.scm: save report and account data to a new
+	file named after the book in the directory ~/.gnucash/books.
+
+	* src/scm/options.scm: run option-changed callbacks in the order
+	they were added.  Add gnc:options-touch to dirty the options 
+	without changing anything. 
+
+	* src/scm/report.scm: add new optional fields for the
+	define-report form: 'options-cleanup-cb and 'options-changed-cb.
+	'options-cleanup-cb is called before book save to allow you to
+	clean up any mess that you don't want saved.  'options-changed-cb
+	is called after any report option is changed.  Both are optional.
+	
+	Also get rid of the concept of 'display-lists' for reports and
+	let the displays update themselves with callbacks.  Get rid of 
+	parents and children for the reports. 
+
+	* src/scm/report/view-column.scm: revamp to handle options
+	processing, saving, and rendering better.
+	
 2001-05-10  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/scm/main.scm ((gnc:main)): remove the main window startup

@@ -36,23 +36,15 @@
       (gnc:option-set-value 
        (gnc:lookup-option options section name) value))
     
-    (for-each 
-     (lambda (child)
-       (gnc:report-add-child! (gnc:find-report view) 
-                              (gnc:find-report child))
-       (gnc:report-set-parent! (gnc:find-report child) 
-                               (gnc:find-report view)))
-     (list sub-welcome sub-accounts sub-expense-pie sub-income-pie sub-bar))
-    
     (set! options (gnc:report-options (gnc:find-report view)))
     (set-option! "General" "Report name" "Welcome to GnuCash 1.6")
     (set-option! "General" "Number of columns" 2)
     (set-option! "__general" "report-list" 
-                 (list (list sub-welcome 1 1)
-                       (list sub-accounts 1 1)
-                       (list sub-expense-pie 1 1)
-                       (list sub-income-pie 1 1)
-                       (list sub-bar 2 1)))
+                 (list (list sub-welcome 1 1 #f)
+                       (list sub-accounts 1 1 #f)
+                       (list sub-expense-pie 1 1 #f)
+                       (list sub-income-pie 1 1 #f)
+                       (list sub-bar 2 1 #f)))
     
     (set! options (gnc:report-options (gnc:find-report sub-expense-pie)))
     (set-option! "Display" "Plot Width" 400)

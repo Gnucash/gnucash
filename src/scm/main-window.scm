@@ -110,17 +110,72 @@ the account instead of opening a register.") #f))
    (simple-format
     #f "  \"gnc-acct-tree:id=~S\")" id)))
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; book open and close hooks for mdi 
+;; 
+;; we need to save all the active report and acct tree info during
+;; book close.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (gnc:main-window-book-close-handler book-url)
-  (gnc:main-window-save (gnc:get-ui-data) book-url))
+  (let* ((conf-file-name (gnc:html-encode-string book-url))
+         (file-dir (build-path (getenv "HOME") ".gnucash" "books"))
+         (book-path #f))
+    ;; make sure the books directory is there 
+    (if (not (access? file-dir X_OK)) (mkdir file-dir #o700))
+    
+    (if conf-file-name 
+        (let ((book-path (build-path (getenv "HOME") ".gnucash" "books" 
+                                     conf-file-name)))
+          (with-output-to-port (open-output-file book-path)
+            (lambda ()
+              (hash-fold 
+               (lambda (k v p)
+                 (if (gnc:report-needs-save? v)
+                     (display 
+                      (gnc:report-generate-restore-forms v))))
+               #t *gnc:_reports_*)
+              
+              (hash-fold 
+               (lambda (k v p)
+                 (display (gnc:acct-tree-generate-restore-forms v k)) #t)
+               #t gnc:*acct-tree-options*)))))
+    (gnc:main-window-save (gnc:get-ui-data) book-url)
 
+    (let ((dead-reports '()))
+      ;; get a list of the reports we'll be needing to nuke     
+      (hash-fold 
+       (lambda (k v p)
+         (set! dead-reports (cons k dead-reports)) #t) #t *gnc:_reports_*)
+
+      ;; actually remove them (if they're being displayed, the
+      ;; window's reference will keep the report alive until the
+      ;; window is destroyed, but find-report will fail)
+      (for-each 
+       (lambda (dr) 
+         (hash-remove! *gnc:_reports_* dr))
+       dead-reports))))
+  
 (define (gnc:main-window-book-open-handler book-url)
-  (gnc:main-window-restore (gnc:get-ui-data) book-url))
+  (define (try-load file-suffix)
+    (let ((file (build-path (getenv "HOME") ".gnucash" "books" file-suffix)))
+      ;; make sure the books directory is there 
+      (if (access? file F_OK)
+          (if (not (false-if-exception (primitive-load file)))
+              (begin
+                (gnc:warn "failure loading " file)
+                #f))
+          #f)))
+  (let ((conf-file-name (gnc:html-encode-string book-url))
+        (dead-reports '()))
+    (if conf-file-name 
+        (begin 
+          (try-load conf-file-name)
+          (gnc:main-window-restore (gnc:get-ui-data) book-url)))))
 
 (gnc:hook-add-dangler gnc:*book-opened-hook* 
                       gnc:main-window-book-open-handler)
 (gnc:hook-add-dangler gnc:*book-closed-hook* 
                       gnc:main-window-book-close-handler)
+

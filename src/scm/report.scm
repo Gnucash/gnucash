@@ -129,7 +129,9 @@
 (define <report-template>
   (make-record-type "<report-template>"
                     ;; The data items in a report record
-                    '(version name options-generator options-editor
+                    '(version name 
+                              options-generator options-editor 
+                              options-cleanup-cb options-changed-cb
                               renderer in-menu? menu-path menu-name
                               menu-tip export-thunk)))
 
@@ -147,6 +149,8 @@
      #f                         ;; name
      #f                         ;; options-generator
      gnc:default-options-editor ;; options-editor
+     #f                         ;; options-cleanup-cb
+     #f                         ;; options-changed-cb
      #f                         ;; renderer
      #t                         ;; in-menu?
      #f                         ;; menu-path
@@ -182,6 +186,10 @@
   (record-accessor <report-template> 'options-generator))
 (define gnc:report-template-options-editor
   (record-accessor <report-template> 'options-editor))
+(define gnc:report-template-options-cleanup-cb
+  (record-accessor <report-template> 'options-cleanup-cb))
+(define gnc:report-template-options-changed-cb
+  (record-accessor <report-template> 'options-changed-cb))
 (define gnc:report-template-renderer
   (record-accessor <report-template> 'renderer))
 (define gnc:report-template-in-menu?
@@ -234,8 +242,7 @@
 
 (define <report>
   (make-record-type "<report>"
-                    '(type id options parent children 
-                           dirty? display-list editor-widget ctext)))
+                    '(type id options dirty? needs-save? editor-widget ctext)))
 
 (define gnc:report-type 
   (record-accessor <report> 'type))
@@ -255,54 +262,17 @@
 (define gnc:report-set-options!
   (record-modifier <report> 'options))
 
-(define gnc:report-children 
-  (record-accessor <report> 'children))
+(define gnc:report-needs-save? 
+  (record-accessor <report> 'needs-save?))
 
-(define gnc:report-set-parent-by-id!
-  (record-modifier <report> 'parent))
-
-(define (gnc:report-set-parent! report parent)
-  (gnc:report-set-parent-by-id! report (gnc:report-id parent)))
-
-(define gnc:report-parent
-  (record-accessor <report> 'parent))
-
-(define gnc:report-set-children!
-  (record-modifier <report> 'children))
-
-(define (gnc:report-add-child! report child)
-  (gnc:report-set-children! 
-   report (cons (gnc:report-id child) (gnc:report-children report))))
-
-(define (gnc:report-add-child-by-id! report child)
-  (gnc:report-set-children! 
-   report (cons child (gnc:report-children report))))
+(define gnc:report-set-needs-save?!
+  (record-modifier <report> 'needs-save?))
 
 (define gnc:report-dirty? 
   (record-accessor <report> 'dirty?))
 
-(define gnc:report-set-dirty?-internal!
+(define gnc:report-set-dirty?!
   (record-modifier <report> 'dirty?))
-
-(define (gnc:report-set-dirty?! report val)
-  (gnc:report-set-dirty?-internal! report val)
-  (if val 
-      (begin 
-        (if (gnc:report-parent report)
-            (gnc:report-set-dirty?! 
-             (gnc:find-report (gnc:report-parent report)) val))
-
-        ;; reload the window 
-        (for-each 
-         (lambda (win)
-           (gnc:report-window-reload win))
-         (gnc:report-display-list report)))))
-
-(define gnc:report-display-list 
-  (record-accessor <report> 'display-list))
-
-(define gnc:report-set-display-list!
-  (record-modifier <report> 'display-list))
 
 (define gnc:report-editor-widget 
   (record-accessor <report> 'editor-widget))
@@ -316,40 +286,8 @@
 (define gnc:report-set-ctext!
   (record-modifier <report> 'ctext))
 
-(define (gnc:report-register-display report window)
-  (if (and window report
-           (not (member window (gnc:report-display-list report))))
-      (begin 
-        (gnc:report-set-display-list! 
-         report 
-         (cons window (gnc:report-display-list report)))
-        (for-each 
-         (lambda (rep)
-           (gnc:report-register-display (gnc:find-report rep) window))
-         (gnc:report-children report))
-
-        (let ((parent (gnc:find-report (gnc:report-parent report))))
-          (if parent
-              (gnc:report-register-display parent window))))))
-
-(define (gnc:report-unregister-display report window)
-  (if (and report window
-           (member window (gnc:report-display-list report)))
-      (begin
-        (gnc:report-set-display-list! 
-         report 
-         (delete window (gnc:report-display-list report)))
-        (for-each 
-         (lambda (rep)
-           (gnc:report-unregister-display (gnc:find-report rep) window))
-         (gnc:report-children report))
-        (let ((parent (gnc:find-report (gnc:report-parent report))))
-          (if parent 
-              (gnc:report-unregister-display parent window))))))
-  
 (define (gnc:report-edit-options report) 
-  (let* ((editor-widg (gnc:report-editor-widget report))
-         (displist (gnc:report-display-list report)))
+  (let* ((editor-widg (gnc:report-editor-widget report)))
     (if editor-widg
         (gnc:report-raise-editor report)
         (begin
@@ -359,24 +297,16 @@
                       ((gnc:report-options-editor report)
                        (gnc:report-options report)
                        report))
-                (gnc:report-set-editor-widget! report editor-widg)
-                (if (and editor-widg (not (null? displist)))
-                    (for-each 
-                     (lambda (repwin) 
-                       (gnc:report-window-add-edited-report repwin report))
-                     displist)))
+                (gnc:report-set-editor-widget! report editor-widg))
               (gnc:warning-dialog "This report has no options."))))))
-    
 
 (define (gnc:make-report template-name . rest)
   (let ((r ((record-constructor <report>) 
             template-name ;; type
             #f            ;; id
             #f            ;; options
-            #f            ;; parent
-            '()           ;; children
             #t            ;; dirty
-            '()           ;; display-list
+            #f            ;; needs-save
             #f            ;; editor-widget
             #f            ;; ctext
             ))
@@ -388,14 +318,22 @@
            (if (not (null? rest))
                (car rest)
                (gnc:report-template-new-options template))))
-      (gnc:report-set-options! r options))
-
+      (gnc:report-set-options! r options)
+      (gnc:options-register-callback 
+       #f #f 
+       (lambda () 
+         (gnc:report-set-dirty?! r #t)
+         (let ((cb (gnc:report-template-options-changed-cb template)))
+           (if cb
+               (cb r))))
+       options))
+    
     (hash-set! *gnc:_reports_* (gnc:report-id r) r)
     id))
 
-(define (gnc:restore-report id template-name parent children options)
+(define (gnc:restore-report id template-name options)
   (let ((r ((record-constructor <report>)
-            template-name id options parent children #t '() #f #f)))
+            template-name id options #t #t #f #f)))
     (if (>= id *gnc:_report-next-serial_*)
         (set! *gnc:_report-next-serial_* (+ id 1)))
     (hash-set! *gnc:_reports_* id r)))
@@ -464,34 +402,17 @@
 (define (gnc:find-report id) 
   (hash-ref *gnc:_reports_* id))
 
-(define (gnc:report-generate-restore-forms-complete report)
-  (define (find-root r)
-    (let* ((pid (gnc:report-parent r))
-           (p (if pid (gnc:find-report pid) #f)))
-      (if (not p) r (find-root p))))
-
-  (define (generate-forms/children r)
-    (apply 
-     string-append 
-     (gnc:report-generate-restore-forms r)
-     (map 
-      (lambda (c)
-        (let ((child (gnc:find-report c)))
-          (generate-forms/children child)))
-      (gnc:report-children r))))
-
-  (let ((toplevel (find-root report)))
-    (string-append 
-     ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
-     (simple-format #f ";; options for report ~A and all parents/children \n" 
-                    (gnc:report-name report))
-     "(let () \n"
-     (generate-forms/children toplevel)
-     (simple-format 
-      #f "  \"gnc-report:id=~S\"" (gnc:report-id report))
-     ")\n")))
-
 (define (gnc:report-generate-restore-forms report)
+  ;; clean up the options if necessary.  this is only needed 
+  ;; in special cases.  
+  (let* ((template 
+          (hash-ref  *gnc:_report-templates_* 
+                     (gnc:report-type report)))
+         (thunk (gnc:report-template-options-cleanup-cb template)))
+    (if thunk 
+        (thunk report)))
+  
+  ;; save them 
   (string-append 
    ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
    (simple-format #f ";; options for report ~S\n" (gnc:report-name report))
@@ -500,10 +421,8 @@
     (gnc:report-type report))
    (gnc:generate-restore-forms (gnc:report-options report) "options")
    (simple-format 
-    #f "  (gnc:restore-report ~S ~S ~S '~S options))\n"
-    (gnc:report-id report) (gnc:report-type report)
-    (gnc:report-parent report)
-    (gnc:report-children report))))
+    #f "  (gnc:restore-report ~S ~S options))\n"
+    (gnc:report-id report) (gnc:report-type report))))
 
 (define (gnc:backtrace-if-exception proc . args)
   (define (dumper key . args)
@@ -553,9 +472,9 @@
        (if report
            (begin 
              (set! html (gnc:report-render-html report #t))
-             (display "total time to run report: ")
-             (display (gnc:time-elapsed start-time (gettimeofday)))
-             (newline)
+;;             (display "total time to run report: ")
+;;             (display (gnc:time-elapsed start-time (gettimeofday)))
+;;             (newline)
 ;;             (display html) (newline)
              html)
            #f)))))

@@ -73,8 +73,6 @@
 			 " No such option: " (car l) (cadr l)))))
 	   optionlist)
 	  (let ((id (gnc:make-report reportname options)))
-	    (gnc:report-add-child-by-id! src-report id)
-	    (gnc:report-set-parent! (gnc:find-report id) src-report)
 	    (gnc:report-anchor-text id)))
 	(warn "gnc:make-report-anchor: No such report: " reportname))))
 

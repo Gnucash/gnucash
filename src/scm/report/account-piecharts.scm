@@ -281,9 +281,6 @@ balance at a given time"))
 					  optname-accounts)
 		       (map cadr finish))
 		      (set! id (gnc:make-report reportname options))
-		      (gnc:report-add-child-by-id! report-obj id)
-		      (gnc:report-set-parent! (gnc:find-report id) report-obj)
-		      
 		      ;; set the URL.
 		      (set! other-anchor (gnc:report-anchor-text id)))))
 	      

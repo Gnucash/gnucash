@@ -51,12 +51,23 @@
   (define (edit-options option-obj report-obj)
     (gnc:column-view-edit-options option-obj report-obj))
   
+  (define (make-child-options-callback view child)
+    (let* ((view-opts (gnc:report-options view))
+           (child-opts (gnc:report-options child))
+           (id 
+            (gnc:options-register-callback
+             #f #f 
+             (lambda ()
+               (gnc:report-set-dirty?! child #t)
+               (gnc:options-touch view-opts))
+             child-opts)))
+      id))
+  
   (define (render-view report)
     (let* ((view-doc (gnc:make-html-document))
            (options (gnc:report-options report))
-           (reports
-            (gnc:option-value
-             (gnc:lookup-option options "__general" "report-list")))
+           (report-opt (gnc:lookup-option options "__general" "report-list"))
+           (reports (gnc:option-value report-opt))
            (table-width 
             (gnc:option-value
              (gnc:lookup-option 
@@ -67,6 +78,26 @@
            (current-width 0)
            (current-row-num 0))
 
+      ;; make sure each subreport has an option change callback that 
+      ;; pings the parent 
+      (let ((new-reports '()))
+        (for-each 
+         (lambda (report-info)
+           (let ((child (car report-info))
+                 (rowspan (cadr report-info))
+                 (colspan (caddr report-info))
+                 (callback (cadddr report-info)))
+             (if (not callback)
+                 (begin 
+                   (set! callback 
+                         (make-child-options-callback
+                          report (gnc:find-report child)))
+                   (set! report-info 
+                         (list child rowspan colspan callback))))
+             (set! new-reports (cons report-info new-reports))))
+         reports)
+        (gnc:option-set-value report-opt (reverse new-reports)))
+      
       ;; we really would rather do something smart here with the
       ;; report's cached text if possible.  For the moment, we'll have
       ;; to rerun every report, every time... FIXME
@@ -82,6 +113,7 @@
          (let* ((subreport (gnc:find-report (car report-info)))
                 (colspan (cadr report-info))
                 (rowspan (caddr report-info))
+                (opt-callback (cadddr report-info))
                 (toplevel-cell (gnc:make-html-table-cell/size rowspan colspan))
                 (report-table (gnc:make-html-table))
                 (contents-cell (gnc:make-html-table-cell)))
@@ -153,11 +185,41 @@
       (gnc:html-document-add-object! view-doc column-tab)
       ;; and we're done.
       view-doc))
-  
+
+  (define (options-changed-cb report)
+    (let* ((options (gnc:report-options report))
+           (reports
+            (gnc:option-value
+             (gnc:lookup-option options "__general" "report-list"))))
+      (simple-format #t "view options changed cb\n")
+      (for-each 
+       (lambda (child)
+         (gnc:report-set-dirty?! (gnc:find-report (car child)) #t))
+       reports)))
+
+  (define (cleanup-options report)
+    (let* ((options (gnc:report-options report))
+           (report-opt (gnc:lookup-option options "__general" "report-list"))
+           (reports (gnc:option-value report-opt))
+           (new-reports '()))
+      (for-each 
+       (lambda (report-info)
+         (let ((rep (car report-info))
+               (rowspan (cadr report-info))
+               (colspan (caddr report-info)))
+           (set! report-info 
+                 (list rep rowspan colspan #f))
+           (set! new-reports (cons report-info new-reports))))
+       reports)
+      (gnc:option-set-value report-opt (reverse new-reports))))
+    
   ;; define the view now.
   (gnc:define-report 
    'version 1
    'name (N_ "Multicolumn View")
    'renderer render-view
    'options-generator make-options
-   'options-editor edit-options))
+   'options-editor edit-options
+   'options-cleanup-cb cleanup-options 
+   'options-changed-cb options-changed-cb))
+

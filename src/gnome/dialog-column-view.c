@@ -51,6 +51,19 @@ struct gncp_column_view_edit {
   int       contents_selected;
 };
 
+static void
+gnc_column_view_set_option(GNCOptionDB * odb, char * section, char * name,
+                           SCM new_value) {
+  GNCOption *  option = 
+    gnc_option_db_get_option_by_name(odb, section, name);
+  
+  if(option) {
+    gnc_option_db_set_option(odb, section, name, new_value);
+    /* set_option doesn't do this */
+    option->changed = TRUE;
+  }
+}
+
 static void 
 gnc_column_view_edit_destroy(gnc_column_view_edit * view) {
   gnc_options_dialog_destroy(view->optwin);
@@ -168,6 +181,7 @@ gnc_column_view_edit_apply_cb(GNCOptionWin * w, gpointer user_data) {
   gnc_column_view_edit * win = user_data;
   
   if(!win) return;
+  printf("calling option_db_commit\n");
   gnc_option_db_commit(win->odb);
   gh_call2(dirty_report, win->view, SCM_BOOL_T);
 }
@@ -176,14 +190,6 @@ static void
 gnc_column_view_edit_close_cb(GNCOptionWin * win, gpointer user_data) {
   gnc_column_view_edit * r = user_data;
   SCM set_editor = gh_eval_str("gnc:report-set-editor-widget!");
-  SCM get_windows = gh_eval_str("gnc:report-display-list");
-  SCM windows;
-  
-  for(windows = gh_call1(get_windows, r->view);
-      !gh_null_p(windows); windows = gh_cdr(windows)) {
-    gnc_report_window_remove_edited_report(gw_wcp_get_ptr(gh_car(windows)),
-                                           r->view);
-  }
   
   gh_call2(set_editor, r->view, SCM_BOOL_F);
   gnc_column_view_edit_destroy(r);
@@ -262,31 +268,28 @@ gnc_column_view_edit_options(SCM options, SCM view) {
   }
 }
 
-
 void
 gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data) {
   gnc_column_view_edit * r = 
     gtk_object_get_data(GTK_OBJECT(user_data), "view_edit_struct");
   SCM make_report = gh_eval_str("gnc:make-report");
+  SCM mark_report = gh_eval_str("gnc:report-set-needs-save?!");
   SCM find_report = gh_eval_str("gnc:find-report");
-  SCM add_child = gh_eval_str("gnc:report-add-child-by-id!");
-  SCM set_parent = gh_eval_str("gnc:report-set-parent!");
   SCM template_name;
   SCM set_value = gh_eval_str("gnc:option-set-value");
   SCM new_report;
+  SCM report_obj;
   SCM newlist = SCM_EOL;
   SCM oldlist = r->contents_list;
   int count;
   int oldlength; 
-
+  
   if(gh_list_p(r->available_list) && 
      (gh_length(r->available_list) > r->available_selected)) {
     template_name = gh_list_ref(r->available_list, 
                                 gh_int2scm(r->available_selected));
     new_report = gh_call1(make_report, template_name);
-    gh_call2(add_child, r->view, new_report);
-    gh_call2(set_parent, gh_call1(find_report, new_report), r->view);
-    
+    gh_call2(mark_report, gh_call1(find_report, new_report), SCM_BOOL_T);
     oldlength = gh_length(r->contents_list);
     
     if(oldlength > r->contents_selected) {
@@ -294,17 +297,19 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data) {
         newlist = gh_cons(gh_car(oldlist), newlist);
         oldlist = gh_cdr(oldlist);
       }
-      newlist = gh_append2(gh_reverse(gh_cons(SCM_LIST3(new_report,
+      newlist = gh_append2(gh_reverse(gh_cons(SCM_LIST4(new_report,
                                                         gh_int2scm(1),
-                                                        gh_int2scm(1)), 
+                                                        gh_int2scm(1),
+                                                        SCM_BOOL_F), 
                                               newlist)),
                            oldlist);
     }
     else {
       newlist = gh_append2(oldlist, 
-                           SCM_LIST1(SCM_LIST3(new_report,
+                           SCM_LIST1(SCM_LIST4(new_report,
                                                gh_int2scm(1),
-                                               gh_int2scm(1))));
+                                               gh_int2scm(1),
+                                               SCM_BOOL_F)));
       r->contents_selected = oldlength;
     }
     
@@ -312,9 +317,8 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data) {
     r->contents_list = newlist;
     scm_protect_object(r->contents_list);
     
-    gnc_option_db_set_option(r->odb, "__general", "report-list",
-                             r->contents_list);
-
+    gnc_column_view_set_option(r->odb, "__general", "report-list",
+                               r->contents_list);
     gnc_options_dialog_changed (r->optwin);
   }
 
@@ -350,8 +354,8 @@ gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data) {
     r->contents_list = newlist;
     scm_protect_object(r->contents_list);
 
-    gnc_option_db_set_option(r->odb, "__general", "report-list",
-                             r->contents_list);
+    gnc_column_view_set_option(r->odb, "__general", "report-list",
+                               r->contents_list);
 
     gnc_options_dialog_changed (r->optwin);
   }
@@ -386,9 +390,9 @@ gnc_edit_column_view_move_up_cb(GtkButton * button, gpointer user_data) {
 
     r->contents_selected = r->contents_selected - 1;
 
-    gnc_option_db_set_option(r->odb, "__general", "report-list",
-                             r->contents_list);
-
+    gnc_column_view_set_option(r->odb, "__general", "report-list",
+                               r->contents_list);
+    
     gnc_options_dialog_changed (r->optwin);
 
     update_display_lists(r);
@@ -422,8 +426,8 @@ gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data) {
 
     r->contents_selected = r->contents_selected + 1;
 
-    gnc_option_db_set_option(r->odb, "__general", "report-list",
-                             r->contents_list);    
+    gnc_column_view_set_option(r->odb, "__general", "report-list",
+                               r->contents_list);    
 
     gnc_options_dialog_changed (r->optwin);
 

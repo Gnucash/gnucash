@@ -930,11 +930,24 @@
                           (callback))))))))
 
     (if options-changed
-        (hash-for-each run-callback callback-hash))
+        (let ((cblist '()))
+          (hash-for-each 
+           (lambda (k v) (set! cblist (cons (cons k v) cblist)))
+           callback-hash)
+          (set! cblist (sort cblist 
+                             (lambda (a b) 
+                               (< (car a) (car b)))))
+          (for-each 
+           (lambda (elt) (run-callback (car elt) (cdr elt))) 
+           cblist)))
     (clear-changes))
-
+  
   (define default-section #f)
 
+  (define (touch)
+    (set! options-changed #t)
+    (run-callbacks))
+  
   (define (set-default-section section-name)
     (set! default-section section-name))
 
@@ -950,6 +963,7 @@
       ((for-each) options-for-each)
       ((for-each-general) options-for-each-general)
       ((generate-restore-forms) generate-restore-forms)
+      ((touch) touch)
       ((clear-changes) clear-changes)
       ((run-callbacks) run-callbacks)
       ((set-default-section) set-default-section)
@@ -985,6 +999,9 @@
 
 (define (gnc:options-clear-changes options)
   ((options 'clear-changes)))
+
+(define (gnc:options-touch options)
+  ((options 'touch)))
 
 (define (gnc:options-run-callbacks options)
   ((options 'run-callbacks)))
