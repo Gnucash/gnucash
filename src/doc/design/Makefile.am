@@ -10,3 +10,5 @@ gnucash_design_TEXINFOS = concept-index.texinfo \
                           top-level.texinfo \
                           type-index.texinfo \
 			  user-preferences.texinfo
+
+CLEANFILES = gnucash-design.info gnucash-design.info-[0-9]*

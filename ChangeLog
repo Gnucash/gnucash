@@ -1,3 +1,11 @@
+2000-11-17  James LewisMoss  <dres@debian.org>
+
+	* src/doc/design/reports.texinfo (Reports): Reorder option
+	descriptions to match the order in the example function.
+
+	* src/doc/design/Makefile.am (gnucash_design_TEXINFOS): Add info
+	files to clean list (why the hell aren't they already cleaned?)
+
 2000-11-09  Bill Gribble  <grib@billgribble.com>
 
 	* src/engine/gnc_numeric.c: fix remainder-handling error
