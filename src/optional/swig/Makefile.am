@@ -1,3 +1,5 @@
+SUBDIRS = examples
+
 
 SWIG = swig
 
@@ -16,7 +18,7 @@ libgncswig_la_SOURCES = \
   helperfuncs.c \
   gnucash-engine-perl5_wrap.c
 
-libgncswig_la_LDFLAGS = -version-info 1:2:1
+libgncswig_la_LDFLAGS = -version-info 2:0:2
 
 noinst_HEADERS = \
   helperfuncs.h
@@ -37,7 +39,8 @@ AM_CFLAGS = \
 # we need to specify the inlcude path for glibconfig.h, and so this is the way
 
 libgncswig_la_LIBADD = \
-  -lgncengine -lxml -lgnc_postgres \
+  -L${prefix}/lib/gnucash \
+  -lgncmod-engine -lxml \
   ${GLIB_LIBS} 
 
 
@@ -52,7 +55,8 @@ SWIG_INPUT_HDRS := \
   ${top_srcdir}/src/engine/date.h \
   ${top_srcdir}/src/engine/gnc-book.h \
   ${top_srcdir}/src/engine/gnc-engine.h \
-  ${top_srcdir}/src/engine/gnc-numeric.h
+  ${top_srcdir}/src/engine/gnc-numeric.h \
+  ${top_srcdir}/src/engine/gnc-session.h
 
 ## This is kinda ugly, but swig insists that the .so file be named the
 ## same as the .pm file, and automake won't tolerate libraries that
