@@ -1,5 +1,5 @@
 /********************************************************************\
- * table-gnome.c -- implemntation of table object in GNOME          *
+ * table-gnome.c -- implementation of table object in GNOME         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -36,37 +36,36 @@
  * Copyright (c) 2000 Dave Peticolas <dave@krondo.com>
  */
 
+#include "config.h"
 
+#include <gnome.h>
+#include <guile/gh.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include <gnome.h>
-#include <guile/gh.h>
-
 #include "global-options.h"
-#include "table-allgui.h"
-#include "splitreg.h"
-
 #include "gnucash-sheet.h"
 #include "gnucash-style.h"
+#include "splitreg.h"
+#include "table-allgui.h"
 
 
-static void
-table_destroy_cb(Table *table)
+void
+gnc_table_save_state (Table *table)
 {
-        int header_widths[CELL_TYPE_COUNT];
         GnucashSheet *sheet;
+        int header_widths[CELL_TYPE_COUNT];
         SCM alist;
         int i;
 
-        if (table == NULL)
+        if (!table)
                 return;
 
         if (table->ui_data == NULL)
                 return;
 
-        sheet = GNUCASH_SHEET(table->ui_data);
+        sheet = GNUCASH_SHEET (table->ui_data);
 
         for (i = 0; i < CELL_TYPE_COUNT; i++)
                 header_widths[i] = -1;
@@ -91,10 +90,24 @@ table_destroy_cb(Table *table)
                         alist = gh_cons (assoc, alist);
                 }
 
-        if (!gh_null_p(alist))
+        if (!gh_null_p (alist))
                 gnc_set_option ("__gui", "reg_column_widths", alist);
+}
 
-        gtk_widget_unref(GTK_WIDGET(sheet));
+static void
+table_destroy_cb(Table *table)
+{
+        GnucashSheet *sheet;
+
+        if (table == NULL)
+                return;
+
+        if (table->ui_data == NULL)
+                return;
+
+        sheet = GNUCASH_SHEET (table->ui_data);
+
+        gtk_widget_unref (GTK_WIDGET(sheet));
 
         table->ui_data = NULL;
 }

@@ -258,6 +258,7 @@ Table *     gnc_table_new (TableGetEntryHandler entry_handler,
                            VirtCellDataDeallocator deallocator,
                            VirtCellDataCopy copy);
 
+void        gnc_table_save_state (Table *table);
 void        gnc_table_destroy (Table *table);
 
 /* These functions check the bounds of virtal locations in the table

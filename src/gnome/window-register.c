@@ -1135,7 +1135,7 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
   {
     GNOMEUIINFO_RADIOLIST(style_list),
     GNOMEUIINFO_SEPARATOR,
-    GNOMEUIINFO_TOGGLEITEM(N_("Double Line"),
+    GNOMEUIINFO_TOGGLEITEM(N_("_Double Line"),
                            N_("Show two lines of information for each "
                               "transaction"),
                            gnc_register_double_line_cb, NULL),
@@ -2031,6 +2031,8 @@ regDestroy (xaccLedgerDisplay *ledger)
   if (regData)
   {
     gnc_reg_save_size (regData);
+    if (ledger->reg && ledger->reg->table)
+      gnc_table_save_state (ledger->reg->table);
 
     gtk_widget_destroy (regData->window);
   }
