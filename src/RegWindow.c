@@ -100,6 +100,91 @@ static void deleteCB( Widget mw, XtPointer cd, XtPointer cb );
 static void cancelCB( Widget mw, XtPointer cd, XtPointer cb );
 
 /********************************************************************\
+ * Ledger utilities                                                 *
+\********************************************************************/
+
+int 
+ledgerListCount (RegWindow **list)
+{
+   int n = 0;
+   if (!list) return 0;
+   while (list[n]) n++;
+   return n;
+}
+
+/* ------------------------------------------------------ */
+
+RegWindow ** 
+ledgerListAdd (RegWindow **oldlist, RegWindow *addreg)
+{
+   RegWindow **newlist;
+   RegWindow *reg;
+   int n;
+
+   if (!addreg) return oldlist;
+
+   n = ledgerListCount (oldlist);
+   newlist = (RegWindow **) _malloc ((n+2) * sizeof (RegWindow *));
+
+   n = 0;
+   if (oldlist) {
+      reg = oldlist[0];
+      while (reg) {
+         newlist[n] = reg;
+         n++;
+         reg = oldlist[n];
+      }
+      _free (oldlist);
+   }
+   newlist[n] = addreg;
+   newlist[n+1] = NULL;
+
+   return newlist;
+}
+
+/* ------------------------------------------------------ */
+
+void
+ledgerListRemove (RegWindow **list, RegWindow *delreg)
+{
+   RegWindow *reg;
+   int n, i;
+
+   if (!list) return;
+   if (!delreg) return;
+
+   n = 0;
+   i = 0; 
+   while (list[n]) {
+      list[i] = list[n];
+      if (delreg == list[n]) i--;
+      i++;
+      n++;
+   }
+   list[i] = NULL;
+}
+
+/* ------------------------------------------------------ */
+
+int
+ledgerIsMember (RegWindow *reg, Account * acc)
+{
+   int n; 
+
+   if (!acc) return 0;
+   if (!reg) return 0;
+
+   if (acc == reg->leader) return 1;
+
+   n = 0;
+   while (reg->blackacc[n]) {
+      if (acc == reg->blackacc[n]) return 1;
+      n++;
+   }
+   return 0;
+}
+
+/********************************************************************\
  * regWindowSimple                                                  *
  *   opens up a register window for Account account                 *
  *                                                                  *
