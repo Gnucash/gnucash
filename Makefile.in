@@ -160,7 +160,7 @@ install:
 	$(INSTALL) src/quotes/gnc-prices ${GNC_BINDIR}
 
 	$(INSTALL_DATA) src/swig/perl5/gnucash.pm ${GNC_LIBDIR}
-	$(INSTALL_DATA) src/swig/perl5/gnucash.so ${GNC_LIBDIR}
+	$(INSTALL) src/swig/perl5/gnucash.so ${GNC_LIBDIR}
 	$(INSTALL_DATA) src/quotes/Quote.pm ${GNC_LIBDIR}
 
 	$(INSTALL_DATA) README* ${GNC_DOCDIR}
