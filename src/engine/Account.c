@@ -213,7 +213,7 @@ xaccAccountLookupTwin (Account *acc,  GNCBook *book)
    if (!acc || !book) return NULL;
    ENTER (" ");
 
-   v_ncopies = kvp_frame_get_slot_path (acc->kvp_data, "gemini", "ncopies");
+   v_ncopies = kvp_frame_get_slot_path (acc->kvp_data, "gemini", "ncopies", NULL);
    if (!v_ncopies) return NULL;
    ncopies = kvp_value_get_gint64 (v_ncopies);
    for (i=0; i<ncopies; i++)
@@ -224,7 +224,7 @@ xaccAccountLookupTwin (Account *acc,  GNCBook *book)
 
       sprintf (buff, "%d", i);
       v_book_guid = kvp_frame_get_slot_path (acc->kvp_data, 
-             "gemini", buff, "book_guid");
+             "gemini", buff, "book_guid", NULL);
       if (!v_book_guid) continue;
       book_guid = kvp_value_get_guid (v_book_guid);
 
@@ -235,7 +235,7 @@ xaccAccountLookupTwin (Account *acc,  GNCBook *book)
          kvp_value *v_acct_guid;
 
          v_acct_guid = kvp_frame_get_slot_path (acc->kvp_data, 
-             "gemini", buff, "acct_guid");
+             "gemini", buff, "acct_guid", NULL);
          if (!v_acct_guid) return NULL;
          acct_guid = kvp_value_get_guid (v_acct_guid);
 
