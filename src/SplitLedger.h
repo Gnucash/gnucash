@@ -207,6 +207,8 @@ const char * xaccSRGetEntryHandler (VirtualLocation virt_loc,
                                     short _cell_type,
                                     gboolean *changed,
                                     gpointer user_data);
+CellIOFlags  xaccSRGetIOFlagsHandler (VirtualLocation virt_loc,
+                                      gpointer user_data);
 guint32      xaccSRGetFGColorHandler (VirtualLocation virt_loc,
                                       gpointer user_data);
 guint32      xaccSRGetBGColorHandler (VirtualLocation virt_loc,

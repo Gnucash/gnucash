@@ -60,6 +60,7 @@ static void gnc_table_resize (Table * table, int virt_rows, int virt_cols);
 
 Table * 
 gnc_table_new (TableGetEntryHandler entry_handler,
+               TableGetCellIOFlags io_flag_handler,
                TableGetFGColorHandler fg_color_handler,
                TableGetBGColorHandler bg_color_handler,
                TableGetCellBorderHandler cell_border_handler,
@@ -75,6 +76,7 @@ gnc_table_new (TableGetEntryHandler entry_handler,
    table = g_new0(Table, 1);
 
    table->entry_handler = entry_handler;
+   table->io_flag_handler = io_flag_handler;
    table->fg_color_handler = fg_color_handler;
    table->bg_color_handler = bg_color_handler;
    table->cell_border_handler = cell_border_handler;
@@ -217,10 +219,11 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
   if (virt_cell_loc_equal (table->current_cursor_loc.vcell_loc,
                            virt_loc.vcell_loc))
   {
-    if (cb_cell->cell == NULL)
-      return "";
+    CellIOFlags io_flags;
 
-    if (XACC_CELL_ALLOW_SHADOW & (cb_cell->cell->input_output))
+    io_flags = gnc_table_get_io_flags (table, virt_loc);
+
+    if (io_flags & XACC_CELL_ALLOW_SHADOW)
       return cb_cell->cell->value;
   }
 
@@ -230,6 +233,17 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
     entry = "";
 
   return entry;
+}
+
+/* ==================================================== */
+
+CellIOFlags
+gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc)
+{
+  if (!table->io_flag_handler)
+    return XACC_CELL_ALLOW_NONE;
+
+  return table->io_flag_handler (virt_loc, table->handler_user_data);
 }
 
 /* ==================================================== */
@@ -595,6 +609,7 @@ gnc_table_move_cursor_internal (Table *table,
     for (cell_col = 0; cell_col < curs->num_cols; cell_col++)
     {
       CellBlockCell *cb_cell;
+      CellIOFlags io_flags;
 
       virt_loc.phys_row_offset = cell_row;
       virt_loc.phys_col_offset = cell_col;
@@ -613,7 +628,8 @@ gnc_table_move_cursor_internal (Table *table,
 
         /* OK, now copy the string value from the table at large 
          * into the cell handler. */
-        if (XACC_CELL_ALLOW_SHADOW & (cell->input_output))
+        io_flags = gnc_table_get_io_flags (table, virt_loc);
+        if (io_flags & XACC_CELL_ALLOW_SHADOW)
         {
           const char *entry;
           gboolean conditionally_changed = FALSE;
@@ -778,9 +794,8 @@ gnc_table_virtual_loc_valid(Table *table,
                             VirtualLocation virt_loc,
                             gboolean exact_pointer)
 {
-  BasicCell *cell;
   VirtualCell *vcell;
-  CellBlockCell *cb_cell;
+  CellIOFlags io_flags;
 
   if (!table) return FALSE;
 
@@ -804,23 +819,13 @@ gnc_table_virtual_loc_valid(Table *table,
   /* check for a cell handler, but only if cell address is valid */
   if (vcell->cellblock == NULL) return FALSE;
 
-  cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
-                                    virt_loc.phys_row_offset,
-                                    virt_loc.phys_col_offset);
-  if (cb_cell == NULL)
-    return FALSE;
-
-  cell = cb_cell->cell;
-  if (cell == NULL)
-    return FALSE;
-
+  io_flags = gnc_table_get_io_flags (table, virt_loc);
   /* if cell is marked as output-only, you can't enter */
-  if (0 == (XACC_CELL_ALLOW_INPUT & cell->input_output)) return FALSE;
+  if (0 == (XACC_CELL_ALLOW_INPUT & io_flags)) return FALSE;
 
   /* if cell is pointer only and this is not an exact pointer test,
    * it cannot be entered. */
-  if (!exact_pointer &&
-      ((XACC_CELL_ALLOW_EXACT_ONLY & cell->input_output) != 0))
+  if (!exact_pointer && ((XACC_CELL_ALLOW_EXACT_ONLY & io_flags) != 0))
     return FALSE;
 
   return TRUE;
@@ -1236,6 +1241,7 @@ gnc_table_move_tab (Table *table,
   while (1)
   {
     CellBlockCell *cb_cell;
+    CellIOFlags io_flags;
 
     if (move_right)
     {
@@ -1272,10 +1278,12 @@ gnc_table_move_tab (Table *table,
     if ((cb_cell == NULL) || (cb_cell->cell == NULL))
       continue;
 
-    if (!(XACC_CELL_ALLOW_INPUT & cb_cell->cell->input_output))
+    io_flags = gnc_table_get_io_flags (table, vloc);
+
+    if (!(io_flags & XACC_CELL_ALLOW_INPUT))
       continue;
 
-    if (XACC_CELL_ALLOW_EXACT_ONLY & cb_cell->cell->input_output)
+    if (io_flags & XACC_CELL_ALLOW_EXACT_ONLY)
       continue;
 
     break;

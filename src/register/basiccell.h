@@ -173,11 +173,14 @@
 
 
 /* define a bitmask */
-#define XACC_CELL_ALLOW_NONE       0x0
-#define XACC_CELL_ALLOW_SHADOW     0x1
-#define XACC_CELL_ALLOW_INPUT      0x2
-#define XACC_CELL_ALLOW_ALL        0x3
-#define XACC_CELL_ALLOW_EXACT_ONLY 0x4
+typedef enum
+{
+  XACC_CELL_ALLOW_NONE       = 0,
+  XACC_CELL_ALLOW_SHADOW     = 1 << 0,
+  XACC_CELL_ALLOW_INPUT      = 1 << 1,
+  XACC_CELL_ALLOW_ALL        = XACC_CELL_ALLOW_SHADOW | XACC_CELL_ALLOW_INPUT,
+  XACC_CELL_ALLOW_EXACT_ONLY = 1 << 2
+} CellIOFlags;
 
 #define GNC_CELL_CHANGED 0xffffffff
 
@@ -222,7 +225,6 @@ struct _BasicCell
 
   guint32 changed;               /* 2^32-1 if value modified */
   guint32 conditionally_changed; /* value if modified conditionally */
-  guint8  input_output;          /* allowed behavior flags */
 
   /* "virtual", overloaded set-value method */
   CellSetValueFunc set_value;

@@ -655,7 +655,7 @@ gnc_split_get_quantity_denom (Split *split)
 static void
 sr_set_cell_fractions (SplitRegister *reg, Split *split)
 {
-  SRInfo *info = xaccSRGetInfo(reg);
+  SRInfo *info = xaccSRGetInfo (reg);
   Account *account;
 
   account = xaccSplitGetAccount (split);
@@ -893,8 +893,6 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
     xaccSRSetTransVisible (reg, vc_loc, TRUE,
                            reg->style == REG_STYLE_JOURNAL);
 
-    gnc_table_find_close_valid_cell (table, p_new_virt_loc, exact_traversal);
-
     do_refresh = TRUE;
   }
   else
@@ -907,8 +905,13 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
 
   sr_set_cell_fractions (reg, new_split);
 
+  gnc_table_find_close_valid_cell (table, p_new_virt_loc, exact_traversal);
+
   if (do_refresh)
-    gnc_table_refresh_gui (reg->table);
+  {
+    gnc_table_refresh_gui (table);
+    gnc_table_leave_update (table, table->current_cursor_loc);
+  }
 }
 
 /* This function determines if auto-completion is appropriate and,
@@ -1465,10 +1468,10 @@ xaccSRGetTrans (SplitRegister *reg, VirtualCellLocation vcell_loc)
   vcell_loc.virt_row--;
 
   split = sr_get_split (reg, vcell_loc);
-  if (split == NULL) {
-    PERR ("no parent \n");
+
+  /* This split could be NULL during register initialization. */
+  if (split == NULL)
     return NULL;
-  }
 
   return xaccSplitGetParent(split);
 }
@@ -1550,7 +1553,7 @@ xaccSRGetCurrentTrans (SplitRegister *reg)
 
 /* ======================================================== */
 
-Split * 
+Split *
 xaccSRGetCurrentSplit (SplitRegister *reg)
 {
   if (reg == NULL)
@@ -1561,7 +1564,7 @@ xaccSRGetCurrentSplit (SplitRegister *reg)
 
 /* ======================================================== */
 
-Split * 
+Split *
 xaccSRGetBlankSplit (SplitRegister *reg)
 {
   SRInfo *info = xaccSRGetInfo(reg);
@@ -3468,6 +3471,79 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, short _cell_type,
     default:
       return "";
       break;
+  }
+}
+
+CellIOFlags
+xaccSRGetIOFlagsHandler (VirtualLocation virt_loc, gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  CellType cell_type;
+
+  cell_type = xaccSplitRegisterGetCellType (reg, virt_loc);
+
+  switch (cell_type)
+  {
+    case DATE_CELL:
+    case NUM_CELL:
+    case DESC_CELL:
+    case ACTN_CELL:
+    case XFRM_CELL:
+    case XTO_CELL:
+    case MEMO_CELL:
+    case CRED_CELL:
+    case DEBT_CELL:
+    case MXFRM_CELL:
+    case NOTES_CELL:
+      return XACC_CELL_ALLOW_ALL;
+
+    case RECN_CELL:
+      return XACC_CELL_ALLOW_ALL | XACC_CELL_ALLOW_EXACT_ONLY;
+
+    case PRIC_CELL:
+    case SHRS_CELL:
+      {
+        Split *split = sr_get_split (reg, virt_loc.vcell_loc);
+        GNCAccountType account_type;
+        CursorClass cursor_class;
+        Account *account;
+        guint32 changed;
+
+        if (!split)
+          return XACC_CELL_ALLOW_ALL;
+
+        cursor_class = xaccSplitRegisterGetCursorClass (reg,
+                                                        virt_loc.vcell_loc);
+        if (cursor_class != CURSOR_CLASS_SPLIT)
+          return XACC_CELL_ALLOW_ALL;
+
+        changed = xaccSplitRegisterGetChangeFlag (reg);
+        if (MOD_XFRM & changed)
+        {
+          account = xaccGetAccountFromFullName (gncGetCurrentGroup (),
+                                                reg->xfrmCell->cell.value,
+                                                account_separator);
+          if (!account)
+            account = xaccSplitGetAccount (split);
+        }
+        else
+          account = xaccSplitGetAccount (split);
+
+        if (!account)
+          return XACC_CELL_ALLOW_ALL;
+
+        account_type = xaccAccountGetType (account);
+
+        if (account_type == STOCK  ||
+            account_type == MUTUAL ||
+            account_type == CURRENCY)
+          return XACC_CELL_ALLOW_ALL;
+
+        return XACC_CELL_ALLOW_SHADOW;
+      }
+
+    default:
+      return XACC_CELL_ALLOW_NONE;
   }
 }
 

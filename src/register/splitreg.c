@@ -140,6 +140,7 @@ xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterStyle style,
                        gboolean use_double_line,
                        TableGetEntryHandler entry_handler,
+                       TableGetCellIOFlags io_flag_handler,
                        TableGetFGColorHandler fg_color_handler,
                        TableGetBGColorHandler bg_color_handler,
                        VirtCellDataAllocator allocator,
@@ -501,7 +502,6 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, DATE_CELL,  0, 0);
         set_cell (reg, curs, NUM_CELL,   0, 1);
         set_cell (reg, curs, DESC_CELL,  0, 2);
-        set_cell (reg, curs, XTO_CELL,   0, 3);
         set_cell (reg, curs, TDEBT_CELL, 0, 6);
         set_cell (reg, curs, TCRED_CELL, 0, 7);
 
@@ -563,7 +563,7 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, ACTN_CELL, 0, 1);
         set_cell (reg, curs, MEMO_CELL, 0, 2);
         set_cell (reg, curs, XFRM_CELL, 0, 3);
-        set_cell (reg, curs, RECN_CELL, 0,  4);
+        set_cell (reg, curs, RECN_CELL, 0, 4);
         set_cell (reg, curs, SHRS_CELL, 0, 5);
         set_cell (reg, curs, PRIC_CELL, 0, 6);
         set_cell (reg, curs, DEBT_CELL, 0, 7);
@@ -597,7 +597,6 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, DATE_CELL,  0, 0);
         set_cell (reg, curs, NUM_CELL,   0, 1);
         set_cell (reg, curs, DESC_CELL,  0, 2);
-        set_cell (reg, curs, XTO_CELL,   0, 3);
         set_cell (reg, curs, TSHRS_CELL, 0, 6);
         set_cell (reg, curs, TDEBT_CELL, 0, 8);
         set_cell (reg, curs, TCRED_CELL, 0, 9);
@@ -634,6 +633,7 @@ xaccMallocSplitRegister (SplitRegisterType type,
                          SplitRegisterStyle style,
                          gboolean use_double_line,
                          TableGetEntryHandler entry_handler,
+                         TableGetCellIOFlags io_flag_handler,
                          TableGetFGColorHandler fg_color_handler,
                          TableGetBGColorHandler bg_color_handler,
                          VirtCellDataAllocator allocator,
@@ -645,7 +645,8 @@ xaccMallocSplitRegister (SplitRegisterType type,
   reg = g_new0 (SplitRegister, 1);
 
   xaccInitSplitRegister (reg, type, style, use_double_line,
-                         entry_handler, fg_color_handler, bg_color_handler,
+                         entry_handler, io_flag_handler,
+                         fg_color_handler, bg_color_handler,
                          allocator, deallocator, copy);
 
   return reg;
@@ -755,6 +756,7 @@ xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterStyle style,
                        gboolean use_double_line,
                        TableGetEntryHandler entry_handler,
+                       TableGetCellIOFlags io_flag_handler,
                        TableGetFGColorHandler fg_color_handler,
                        TableGetBGColorHandler bg_color_handler,
                        VirtCellDataAllocator allocator,
@@ -825,7 +827,6 @@ xaccInitSplitRegister (SplitRegister *reg,
    * result of which is that an empty cell has landed on a cell that
    * was previously non-empty.  We want to make sure that we erase
    * those cell contents. The null cells handles this for us. */
-  reg->nullCell->input_output = XACC_CELL_ALLOW_NONE;
   xaccSetBasicCellValue (reg->nullCell, "");
 
   /* The num cell is the transaction number */
@@ -869,24 +870,11 @@ xaccInitSplitRegister (SplitRegister *reg,
   xaccSetBasicCellBlankHelp (&reg->notesCell->cell,
                              _("Enter notes for the transaction"));
 
-  /* The balance and total cells are just placeholders */
-  reg->balanceCell->cell.input_output  = XACC_CELL_ALLOW_NONE;
-  reg->shrbalnCell->cell.input_output  = XACC_CELL_ALLOW_NONE;
-  reg->tcreditCell->cell.input_output  = XACC_CELL_ALLOW_NONE;
-  reg->tdebitCell->cell.input_output   = XACC_CELL_ALLOW_NONE;
-  reg->tsharesCell->cell.input_output  = XACC_CELL_ALLOW_NONE;
-  reg->tbalanceCell->cell.input_output = XACC_CELL_ALLOW_NONE;
-  reg->tshrbalnCell->cell.input_output = XACC_CELL_ALLOW_NONE;
-
   /* by default, don't blank zeros on the price cells. */
   xaccSetPriceCellBlankZero(reg->priceCell, FALSE);
 
   /* Use 5 decimal places for prices */
   xaccSetPriceCellFraction (reg->priceCell, 1000000);
-
-  /* The reconcile cell should only be entered with the pointer, and
-   * only then when the user clicks directly on the cell.  */
-  reg->recnCell->cell.input_output |= XACC_CELL_ALLOW_EXACT_ONLY;
 
   /* Initialize price cells */
   xaccSetPriceCellValue (reg->debitCell, gnc_numeric_zero ());
@@ -932,6 +920,7 @@ xaccInitSplitRegister (SplitRegister *reg,
   configAction (reg);
 
   table = gnc_table_new (entry_handler,
+                         io_flag_handler,
                          fg_color_handler,
                          bg_color_handler,
                          sr_get_cell_borders,
@@ -939,6 +928,8 @@ xaccInitSplitRegister (SplitRegister *reg,
                          allocator,
                          deallocator,
                          copy);
+
+  reg->table = table;
 
   /* Set up header */
   {
@@ -961,8 +952,6 @@ xaccInitSplitRegister (SplitRegister *reg,
                          NULL, TRUE, TRUE, vloc.vcell_loc);
     gnc_table_move_cursor (table, vloc);
   }
-
-  reg->table = table;
 }
 
 /* ============================================== */
