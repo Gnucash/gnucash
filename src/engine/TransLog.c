@@ -212,7 +212,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
       /* use tab-separated fields */
       fprintf (trans_log,
                "%c\t%p/%p\t%s\t%s\t%s\t%s\t%s\t"
-               "%s\t%s\t%s\t%c\t%Ld/%Ld\t%Ld/%Ld\t%s\n",
+               "%s\t%s\t%s\t%c\t%lld/%lld\t%lld/%lld\t%s\n",
                flag,
                trans, split,  /* trans+split make up unique id */
                dnow ? dnow : "",
