@@ -46,7 +46,7 @@ static short module = MOD_BACKEND;
 static gpointer
 version_table_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   return (gpointer) TRUE;
+   return GINT_TO_POINTER (TRUE);
 }
 
 static void
@@ -60,8 +60,9 @@ pgendVersionTable (PGBackend *be)
 
    p = "SELECT tablename FROM pg_tables WHERE tablename='gncversion';";
    SEND_QUERY (be,p, );
-   table_exists = (gboolean) pgendGetResults (be, version_table_cb, FALSE);
-   
+   table_exists = GPOINTER_TO_INT (pgendGetResults (be, version_table_cb,
+                                                    FALSE));
+
    if (table_exists) return;
 
    /* create the table if it doesn't exist */

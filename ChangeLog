@@ -1,3 +1,11 @@
+2002-01-03  Dave Peticolas  <dave@krondo.com>
+
+	* src/backend/postgres/PostgresBackend.c: allow gnucash tables
+	to be installed in an existing database.
+
+	* src/backend/postgres/upgrade.c: use pointer<->int conversion
+	macros
+
 2001-12-27  Dave Peticolas  <dave@krondo.com>
 
 	* src/backend/postgres/test/test-db.c: expand testing

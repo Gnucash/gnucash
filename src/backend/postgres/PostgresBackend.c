@@ -1412,11 +1412,28 @@ pgend_price_load_single (Backend *bend, GNCBook *book)
  */
 
 static gpointer 
-db_exists_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+has_results_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    return GINT_TO_POINTER (TRUE);
 }
 
+static void
+pgend_create_db (PGBackend *be)
+{
+  /* We do this in pieces, so as not to exceed the max length
+   * for postgres queries (which is 8192). */
+
+  SEND_QUERY (be,table_create_str, );
+  FINISH_QUERY(be->connection);
+  SEND_QUERY (be,table_version_str, );
+  FINISH_QUERY(be->connection);
+  SEND_QUERY (be,table_audit_str, );
+  FINISH_QUERY(be->connection);
+  SEND_QUERY (be,sql_functions_str, );
+  FINISH_QUERY(be->connection);
+  be->freshly_created_db = TRUE;
+  be->freshly_created_prdb = TRUE;
+}
 
 static void
 pgend_session_begin (Backend *backend,
@@ -1654,7 +1671,7 @@ pgend_session_begin (Backend *backend,
          p = stpcpy (p, "';");
 
          SEND_QUERY (be,be->buff, );
-         db_exists = GPOINTER_TO_INT(pgendGetResults(be, db_exists_cb,
+         db_exists = GPOINTER_TO_INT(pgendGetResults(be, has_results_cb,
                                                      GINT_TO_POINTER (FALSE)));
 
          PQfinish (be->connection);
@@ -1736,7 +1753,7 @@ pgend_session_begin (Backend *backend,
       p = stpcpy (p, "';");
 
       SEND_QUERY (be,be->buff, );
-      db_exists = GPOINTER_TO_INT (pgendGetResults (be, db_exists_cb,
+      db_exists = GPOINTER_TO_INT (pgendGetResults (be, has_results_cb,
                                                     GINT_TO_POINTER (FALSE)));
 
       if (FALSE == db_exists)
@@ -1775,30 +1792,21 @@ pgend_session_begin (Backend *backend,
             return;
          }
 
-         /* Finally, create all the tables and indexes.
-          * We do this in pieces, so as not to exceed the max length
-          * for postgres queries (which is 8192). 
-          */
-         SEND_QUERY (be,table_create_str, );
-         FINISH_QUERY(be->connection);
-         SEND_QUERY (be,table_version_str, );
-         FINISH_QUERY(be->connection);
-         SEND_QUERY (be,table_audit_str, );
-         FINISH_QUERY(be->connection);
-         SEND_QUERY (be,sql_functions_str, );
-         FINISH_QUERY(be->connection);
-         be->freshly_created_db = TRUE;
-         be->freshly_created_prdb = TRUE;
+         /* Finally, create all the tables and indexes. */
+         pgend_create_db (be);
       }
       else 
       {
+         gboolean gncaccount_exists;
+
          /* Database exists, although we were asked to create it.
-          * We interpret this to mean that its downlevel, and
-          * user wants us to upgrade it.  So connect and upgrade.
-          */
-         
+          * We interpret this to mean that either it's downlevel,
+          * and user wants us to upgrade it, or we are installing
+          * gnucash tables into an existing database. So do one or
+          * the other. */
+
          PQfinish (be->connection);
-         
+
          /* Connect to the database */
          be->connection = PQsetdbLogin (be->hostname, 
                                   be->portno,
@@ -1826,49 +1834,64 @@ pgend_session_begin (Backend *backend,
             return;
          }
 
-         rc = pgendDBVersionIsCurrent (be);
-         if (0 > rc)
+         /* See if the gncaccount table exists. If it does not,
+          * create all the tables. We assume that there will always
+          * be a gncaccount table. */
+         p = "SELECT tablename FROM pg_tables WHERE tablename='gncaccount';";
+         SEND_QUERY (be,p, );
+         gncaccount_exists =
+           GPOINTER_TO_INT (pgendGetResults (be, has_results_cb, FALSE));
+
+         if (!gncaccount_exists)
          {
-            /* The server is newer than we are, or another error
-             * occured, we don't know how to talk to it. The err
-             * code is already set. */
-            PQfinish (be->connection);
-            be->connection = NULL;
-            return;
+           pgend_create_db (be);
          }
-         if (0 < rc)
+         else
          {
-            gboolean someones_still_on;
-            /* The server is older than we are; lets upgrade */
-            /* But first, make sure all users are logged off ... */
-            p = "BEGIN;\n"
-                "LOCK TABLE gncSession IN ACCESS EXCLUSIVE MODE;\n"
-                "SELECT time_off FROM gncSession WHERE time_off ='infinity';";
-            SEND_QUERY (be,p, );
-            someones_still_on =
-              GPOINTER_TO_INT (pgendGetResults (be, db_exists_cb,
-                                                GINT_TO_POINTER (FALSE)));
-            if (someones_still_on)
-            {
+           rc = pgendDBVersionIsCurrent (be);
+           if (0 > rc)
+           {
+             /* The server is newer than we are, or another error
+              * occured, we don't know how to talk to it. The err
+              * code is already set. */
+             PQfinish (be->connection);
+             be->connection = NULL;
+             return;
+           }
+           if (0 < rc)
+           {
+             gboolean someones_still_on;
+             /* The server is older than we are; lets upgrade */
+             /* But first, make sure all users are logged off ... */
+             p = "BEGIN;\n"
+               "LOCK TABLE gncSession IN ACCESS EXCLUSIVE MODE;\n"
+               "SELECT time_off FROM gncSession WHERE time_off ='infinity';";
+             SEND_QUERY (be,p, );
+             someones_still_on =
+               GPOINTER_TO_INT (pgendGetResults (be, has_results_cb,
+                                                 GINT_TO_POINTER (FALSE)));
+             if (someones_still_on)
+             {
                p = "COMMIT;\n";
                SEND_QUERY (be,p, );
                FINISH_QUERY(be->connection);
                xaccBackendSetError (&be->be, ERR_SQL_DB_BUSY);
                return;
-            }
-            pgendUpgradeDB (be);
-            p = "COMMIT;\n";
-            SEND_QUERY (be,p, );
-            FINISH_QUERY(be->connection);
-         }
-         else
-         {
-            /* Wierd. We were asked to create something that exists.
-             * This shouldn't really happen ... */
-            PWARN ("Asked to create the database %s,\n"
-                   "\tbut it already exists!\n"
-                   "\tThis shouldn't really happen.",
-                   be->dbName);
+             }
+             pgendUpgradeDB (be);
+             p = "COMMIT;\n";
+             SEND_QUERY (be,p, );
+             FINISH_QUERY(be->connection);
+           }
+           else
+           {
+             /* Wierd. We were asked to create something that exists.
+              * This shouldn't really happen ... */
+             PWARN ("Asked to create the database %s,\n"
+                    "\tbut it already exists!\n"
+                    "\tThis shouldn't really happen.",
+                    be->dbName);
+           }
          }
       }
    }
