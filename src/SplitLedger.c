@@ -518,7 +518,14 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
          if (s) {
             accname = xaccAccountGetName (xaccSplitGetAccount (s));
          } else {
-            accname = SPLIT_STR;
+            /* determine whether s is null because threre are three
+             * or more splits, or whether there is only one ... */
+            s = xaccTransGetSplit (xaccSplitGetParent(split), 1);
+            if (s) {
+               accname = SPLIT_STR;    /* three or more .. */
+            } else {
+               accname  = "";          /* none ... */
+            }
          }
          xaccSetComboCellValue (reg->mxfrmCell, accname);
       }
