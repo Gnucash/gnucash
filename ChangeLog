@@ -1,3 +1,15 @@
+2001-03-29  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/portfolio.scm: New file.  Stock portfolio
+	overview.
+
+	* src/engine/date.[ch]: Added timespec_normalize,
+	timespec_diff, and timespec_abs.
+
+	* src/engine/gnc-pricedb.[ch]: added
+	gnc_pricedb_lookup_nearest_in_time, courtesy Rob B.
+
+
 2001-03-28  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-tax-info.c: more work

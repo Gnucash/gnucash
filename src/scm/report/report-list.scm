@@ -12,6 +12,7 @@
 (gnc:depend "report/income-or-expense-pie.scm")
 (gnc:depend "report/pnl.scm")
 (gnc:depend "report/hello-world.scm")
+(gnc:depend "report/portfolio.scm")
 (gnc:depend "report/register.scm")
 (let ((locale (setlocale LC_MESSAGES)))
   (if (or (equal? locale "C")

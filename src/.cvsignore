@@ -8,3 +8,4 @@ Makefile.in
 gnucash
 .deps
 .libs
+gnc-dir.h

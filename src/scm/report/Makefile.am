@@ -8,6 +8,7 @@ gncscm_DATA = \
   income-expense-graph.scm \
   income-or-expense-pie.scm \
   hello-world.scm \
+  portfolio.scm \
   register.scm \
   report-list.scm \
   stylesheet-plain.scm \

@@ -57,6 +57,7 @@
     (member type '(stock mutual-fund))))
 
 ;; True if the account is of type income or expense
+
 (define (gnc:account-is-inc-exp? account)
   (let ((type (gw:enum-<gnc:AccountType>-val->sym
                (gnc:account-get-type account)

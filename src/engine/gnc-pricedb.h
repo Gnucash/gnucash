@@ -152,6 +152,13 @@ GList      * gnc_pricedb_lookup_at_time(GNCPriceDB *db,
                                         gnc_commodity *currency,
                                         Timespec t);
 
+/* Return the price that occurs nearest to t */
+GNCPrice *
+gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
+                                   gnc_commodity *c,
+                                   gnc_commodity *currency,
+                                   Timespec t);
+
 /* Call f once for each price in db, until and unless f returns FALSE.
    If stable_order is not FALSE, make sure the ordering of the
    traversal is stable (i.e. the same order every time given the same

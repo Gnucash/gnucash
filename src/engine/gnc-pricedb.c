@@ -628,6 +628,64 @@ stable_price_traversal(GNCPriceDB *db,
   return ok;
 }
 
+GNCPrice *
+gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
+                                   gnc_commodity *c,
+                                   gnc_commodity *currency,
+                                   Timespec t)
+{
+  GList *price_list;
+  GNCPrice *before_price = NULL;
+  GNCPrice *after_price = NULL;
+  GNCPrice *result = NULL;
+  GList *item = NULL;
+  GHashTable *currency_hash;
+
+  if(!db || !c || !currency) return NULL;
+
+  currency_hash = g_hash_table_lookup(db->commodity_hash, c);
+  if(!currency_hash) return NULL;
+
+  price_list = g_hash_table_lookup(currency_hash, currency);
+  if(!price_list) return NULL;
+
+  item = price_list;
+
+  /* default answer */
+  before_price = item->data;
+
+  /* find the first candidate past the one we want.  Remember that
+     prices are in most-recent-first order. */
+  while(!after_price && item) {
+    GNCPrice *p = item->data;
+    Timespec price_time = gnc_price_get_time(p);
+    if(timespec_cmp(&price_time, &t) > 0) {
+      after_price = item->data;
+    }
+    item = item->next;
+  }
+
+  if(before_price && !after_price) result = before_price;
+
+  {
+    Timespec before_t = gnc_price_get_time(before_price);
+    Timespec after_t = gnc_price_get_time(after_price);
+    Timespec diff_before = timespec_diff(&before_t, &t);
+    Timespec diff_after = timespec_diff(&after_t, &t);
+    Timespec abs_before = timespec_abs(&diff_before);
+    Timespec abs_after = timespec_abs(&diff_after);
+
+    if(timespec_cmp(&abs_before, &abs_after) < 0) {
+      result = before_price;
+    } else {
+      result = after_price;
+    }
+  }
+
+  gnc_price_ref(result);
+  return result;
+}
+
 gboolean
 gnc_pricedb_foreach_price(GNCPriceDB *db,
                           gboolean (*f)(GNCPrice *p, gpointer user_data),

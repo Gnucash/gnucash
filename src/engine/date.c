@@ -41,6 +41,8 @@
 #include "date.h"
 #include "gnc-engine-util.h"
 
+#define NANOS_PER_SECOND 1000000000
+
 /* This is now user configured through the gnome options system() */
 static DateFormat dateFormat = DATE_FORMAT_US;
 
@@ -50,6 +52,36 @@ static short module = MOD_ENGINE;
 
 /********************************************************************\
 \********************************************************************/
+
+static void
+timespec_normalize(Timespec *t)
+{
+  if(t->tv_nsec > NANOS_PER_SECOND)
+  {
+    t->tv_sec+= (t->tv_nsec / NANOS_PER_SECOND);
+    t->tv_nsec= t->tv_nsec % NANOS_PER_SECOND;
+  }
+
+  if(t->tv_nsec < - NANOS_PER_SECOND)
+  {
+    t->tv_sec+= t->tv_nsec / NANOS_PER_SECOND;
+    t->tv_nsec = - ( -t->tv_nsec / NANOS_PER_SECOND);
+  }
+
+  if (t->tv_sec > 0 && t->tv_nsec < 0)
+  {
+    t->tv_sec--;
+    t->tv_nsec = NANOS_PER_SECOND + t->tv_nsec;
+  }
+  
+  if (t->tv_sec < 0 && t->tv_nsec > 0)
+  {
+    t->tv_sec++;
+    t->tv_nsec = - NANOS_PER_SECOND + t->tv_nsec;
+  }
+  return;
+}
+  
 
 gboolean
 timespec_equal (const Timespec *ta, const Timespec *tb)
@@ -71,6 +103,31 @@ timespec_cmp(const Timespec *ta, const Timespec *tb)
   return 0;
 }
 
+Timespec
+timespec_diff(const Timespec *ta, const Timespec *tb)
+{
+  Timespec retval;
+  retval.tv_sec = ta->tv_sec - tb->tv_sec;
+  retval.tv_nsec = ta->tv_nsec - tb->tv_nsec;
+  timespec_normalize(&retval);
+  return retval;
+}
+
+Timespec
+timespec_abs(const Timespec *t)
+{
+  Timespec retval = *t;
+
+  timespec_normalize(&retval);
+  if (retval.tv_sec < 0)
+  {
+    retval.tv_sec = - retval.tv_sec;
+    retval.tv_nsec = - retval.tv_nsec;
+  }
+  
+  return retval;
+}
+    
 /**
  * setDateFormat
  * set date format to one of US, UK, CE, OR ISO

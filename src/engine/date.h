@@ -80,6 +80,18 @@ gboolean timespec_equal(const Timespec *ta, const Timespec *tb);
 /* comparison:  if (ta < tb) -1; else if (ta > tb) 1; else 0; */
 int      timespec_cmp(const Timespec *ta, const Timespec *tb);
 
+/* difference between ta and tb, results are normalised
+ * ie tv_sec and tv_nsec of the result have the same size
+ * abs(result.tv_nsec) <= 1000000000
+ */
+
+Timespec timespec_diff(const Timespec *ta, const Timespec *tb);
+
+/*
+ * absolute value, also normalised
+ */
+Timespec timespec_abs(const Timespec *t);
+
 void setDateFormat(DateFormat df);
 
 /**
