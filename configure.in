@@ -766,6 +766,7 @@ AC_OUTPUT(
           src/backend/postgres/Makefile
           src/backend/postgres/test/Makefile
           src/backend/rpc/Makefile
+          src/core-utils/Makefile
           src/calculation/Makefile 
           src/calculation/test/Makefile 
           src/dialog-account/Makefile
