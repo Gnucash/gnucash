@@ -527,6 +527,21 @@ then
 	LIBOFX_CFLAGS="-I${OFXPREFIX}/include"
     fi
 
+    # check libofx version
+    AC_MSG_CHECKING(for libofx version >= 0.7.0)
+    if test x${OFXPREFIX} = x ; then
+	LIBOFX_VERSION=`ofxdump --version | cut -d" " -f2`
+    else
+	LIBOFX_VERSION=`${OFXPREFIX}/bin/ofxdump --version | cut -d" " -f2`
+    fi
+    if test `echo ${LIBOFX_VERSION} | cut -d. -f1` -ge 1 -o \
+	     `echo ${LIBOFX_VERSION} | cut -d. -f2` -ge 7; then
+	# This is libofx >= 0.7.x
+	AC_MSG_RESULT([found ${LIBOFX_VERSION}])
+    else
+	AC_MSG_ERROR([Libofx 0.7.0 or newer needed for ofx support])
+    fi
+
     AC_MSG_CHECKING(for libofx/libofx.h)
     AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
     save_CPPFLAGS="${CPPFLAGS}"

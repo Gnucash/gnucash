@@ -1,3 +1,8 @@
+2004-11-22  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in, README: Add configure check for libofx version
+	0.7.0 and respective error message. Update docs. Fixes #159050
+
 2004-11-13  Christian Stimming  <stimming@tuhh.de>
 
 	* src/report/report-gnome/window-report.c,

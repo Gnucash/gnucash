@@ -242,8 +242,8 @@ versions of required packages.
 To use the new import features (OFX and HBCI) you need to obtain
 the following;
   libofx: This library provide support for OFX file imports. 
-    GnuCash has mostly been tested against the 0.6.2 version, though
-    any newer version should also work. Sources can be found at
+    GnuCash-1.8.10 and newer needs at least the version libofx-0.7.0
+    or newer. Sources can be found at
     http://sourceforge.net/projects/libofx/
   aqbanking/aqhbci: This library provide support for HBCI file imports. 
     GnuCash has mostly been tested against the 0.9.7 version, though
