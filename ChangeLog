@@ -1,3 +1,8 @@
+2002-12-11  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-gettrans.c: Fix broken changes
+	by Benoit.
+
 2002-12-10  Christian Stimming  <stimming@tuhh.de>
 
 	* src/report/report-system/commodity-utilities.scm: Fix bug
