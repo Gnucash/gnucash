@@ -10,28 +10,19 @@
 struct _gncInvoice;
 typedef struct _gncInvoice GncInvoice;
 
-typedef enum {
-  GNC_INVOICE_NONE = 0,
-  GNC_INVOICE_CUSTOMER = 1,
-  GNC_INVOICE_VENDOR = 2
-} GncInvoiceType;
-
-#include "gncCustomer.h"
-#include "gncVendor.h"
 #include "gncEntry.h"
+#include "gncOwner.h"
 
 #define GNC_INVOICE_MODULE_NAME "gncInvoice"
 
 /* Create/Destroy Functions */
 
-GncInvoice *gncInvoiceCreate (GNCBook *book, GncInvoiceType type);
+GncInvoice *gncInvoiceCreate (GNCBook *book);
 void gncInvoiceDestroy (GncInvoice *invoice);
 
 /* Set Functions */
 
 void gncInvoiceSetID (GncInvoice *invoice, const char *id);
-void gncInvoiceSetCustomer (GncInvoice *invoice, GncCustomer *customer);
-void gncInvoiceSetVendor (GncInvoice *invoice, GncVendor *vendor);
 void gncInvoiceSetDateOpened (GncInvoice *invoice, const Timespec *date);
 void gncInvoiceSetDateDue (GncInvoice *invoice, const Timespec *date);
 void gncInvoiceSetDateClosed (GncInvoice *invoice, const Timespec *date);
@@ -47,9 +38,7 @@ void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry);
 GNCBook * gncInvoiceGetBook (GncInvoice *invoice);
 const GUID * gncInvoiceGetGUID (GncInvoice *invoice);
 const char * gncInvoiceGetID (GncInvoice *invoice);
-GncInvoiceType gncInvoiceGetType (GncInvoice *invoice);
-GncCustomer * gncInvoiceGetCustomer (GncInvoice *invoice);
-GncVendor * gncInvoiceGetVendor (GncInvoice *invoice);
+GncOwner * gncInvoiceGetOwner (GncInvoice *invoice);
 Timespec gncInvoiceGetDateOpened (GncInvoice *invoice);
 Timespec gncInvoiceGetDateDue (GncInvoice *invoice);
 Timespec gncInvoiceGetDateClosed (GncInvoice *invoice);

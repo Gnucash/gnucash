@@ -24,6 +24,7 @@ AM_CFLAGS = \
 libgncmod_business_gnome_la_SOURCES = \
   businessmod-gnome.c \
   business-chooser.c \
+  business-utils.c \
   dialog-customer.c \
   dialog-employee.c \
   dialog-job.c \
@@ -33,6 +34,7 @@ libgncmod_business_gnome_la_SOURCES = \
 
 noinst_HEADERS = \
   business-chooser.h \
+  business-utils.h \
   dialog-customer.h \
   dialog-employee.h \
   dialog-job.h \

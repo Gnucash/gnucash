@@ -12,6 +12,9 @@
 
 #include "Account.h"
 #include "gnc-ui-util.h"
+#include "combocell.h"
+#include "pricecell.h"
+#include "messages.h"
 
 #include "gncEntry.h"
 #include "gncEntryLedger.h"
@@ -79,6 +82,54 @@ GncEntry * gnc_entry_ledger_get_current_entry (GncEntryLedger *ledger)
 				ledger->table->current_cursor_loc.vcell_loc);
 }
 
+static void gnc_entry_ledger_config_action (GncEntryLedger *ledger)
+{
+  ComboCell *cell;
+
+  cell = (ComboCell *) gnc_table_layout_get_cell (ledger->table->layout,
+						  ENTRY_ACTN_CELL);
+  if (!cell) return;
+
+  /* XXX: change this based on the ledger type */
+
+  gnc_combo_cell_add_menu_item (cell, _("Hours"));
+  gnc_combo_cell_add_menu_item (cell, _("Project"));
+  gnc_combo_cell_add_menu_item (cell, _("Material"));
+}
+
+static void
+gnc_entry_ledger_config_cells (GncEntryLedger *ledger)
+{
+  /* the action cell */
+  gnc_combo_cell_set_autosize
+    ((ComboCell *)
+     gnc_table_layout_get_cell (ledger->table->layout, ENTRY_ACTN_CELL), TRUE);
+
+  /* Use 6 decimal places for all prices and quantities */
+  gnc_price_cell_set_fraction
+    ((PriceCell *)
+     gnc_table_layout_get_cell (ledger->table->layout, ENTRY_PRIC_CELL),
+     1000000);
+
+  gnc_price_cell_set_fraction
+    ((PriceCell *)
+     gnc_table_layout_get_cell (ledger->table->layout, ENTRY_DISC_CELL),
+     1000000);
+
+  gnc_price_cell_set_fraction
+    ((PriceCell *)
+     gnc_table_layout_get_cell (ledger->table->layout, ENTRY_TAX_CELL),
+     1000000);
+
+  gnc_price_cell_set_fraction
+    ((PriceCell *) gnc_table_layout_get_cell (ledger->table->layout,
+					      ENTRY_QTY_CELL),
+     1000000);
+
+  /* add menu items for the action cell */
+  gnc_entry_ledger_config_action (ledger);
+}
+
 /* Create and return a new GncEntry Ledger */
 GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type)
 {
@@ -110,7 +161,7 @@ GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type)
     ledger->table = gnc_table_new (layout, model, control);
   }
 
-  /* config_cells? */
+  gnc_entry_ledger_config_cells (ledger);
 
   /* set up header */
   {

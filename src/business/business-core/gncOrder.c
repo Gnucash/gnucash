@@ -16,12 +16,11 @@
 #include "GNCIdP.h"
 
 #include "gncBusiness.h"
-#include "gncJob.h"
-#include "gncVendor.h"
 #include "gncEntry.h"
 #include "gncEntryP.h"
 #include "gncOrder.h"
 #include "gncOrderP.h"
+#include "gncOwner.h"
 
 struct _gncOrder {
   GNCBook *book;
@@ -29,11 +28,7 @@ struct _gncOrder {
   GUID		guid;
   char *	id;
   char *	notes;
-  GncOrderType 	type;
-  union {
-    GncJob *	job;
-    GncVendor *	vendor;
-  } owner;
+  GncOwner	owner;
   GList *	entries;
   Timespec 	opened;
   Timespec 	closed;
@@ -61,12 +56,11 @@ static void remObj (GncOrder *order);
 
 /* Create/Destroy Functions */
 
-GncOrder *gncOrderCreate (GNCBook *book, GncOrderType type)
+GncOrder *gncOrderCreate (GNCBook *book)
 {
   GncOrder *order;
 
   if (!book) return NULL;
-  if (type != GNC_ORDER_SALES && type != GNC_ORDER_PURCHASE) return NULL;
 
   order = g_new0 (GncOrder, 1);
   order->book = book;
@@ -75,7 +69,6 @@ GncOrder *gncOrderCreate (GNCBook *book, GncOrderType type)
   order->notes = CACHE_INSERT ("");
 
   order->active = TRUE;
-  order->type = type;
 
   xaccGUIDNew (&order->guid, book);
   addObj (order);
@@ -116,20 +109,11 @@ void gncOrderSetID (GncOrder *order, const char *id)
   order->dirty = TRUE;
 }
 
-void gncOrderSetJob (GncOrder *order, GncJob *job)
+void gncOrderSetOwner (GncOrder *order, GncOwner *owner)
 {
-  if (!order) return;
-  if (order->type != GNC_ORDER_SALES) return;
-  order->owner.job = job;
-  order->dirty = TRUE;
-}
+  if (!order || !owner) return;
 
-void gncOrderSetVendor (GncOrder *order, GncVendor *vendor)
-{
-  if (!order) return;
-  if (order->type != GNC_ORDER_PURCHASE) return;
-
-  order->owner.vendor = vendor;
+  gncOwnerCopy (owner, &order->owner);
   order->dirty = TRUE;
 }
 
@@ -212,24 +196,10 @@ const char * gncOrderGetID (GncOrder *order)
   return order->id;
 }
 
-GncOrderType gncOrderGetType (GncOrder *order)
-{
-  if (!order) return GNC_ORDER_NONE;
-  return order->type;
-}
-
-GncJob * gncOrderGetJob (GncOrder *order)
+GncOwner * gncOrderGetOwner (GncOrder *order)
 {
   if (!order) return NULL;
-  if (order->type != GNC_ORDER_SALES) return NULL;
-  return order->owner.job;
-}
-
-GncVendor * gncOrderGetVendor (GncOrder *order)
-{
-  if (!order) return NULL;
-  if (order->type != GNC_ORDER_PURCHASE) return NULL;
-  return order->owner.vendor;
+  return &order->owner;
 }
 
 Timespec gncOrderGetDateOpened (GncOrder *order)

@@ -18,12 +18,11 @@
 #include "GNCIdP.h"
 
 #include "gncBusiness.h"
-#include "gncCustomer.h"
-#include "gncVendor.h"
 #include "gncEntry.h"
 #include "gncEntryP.h"
 #include "gncInvoice.h"
 #include "gncInvoiceP.h"
+#include "gncOwner.h"
 
 struct _gncInvoice {
   GNCBook *book;
@@ -32,11 +31,7 @@ struct _gncInvoice {
   char *	id;
   char *	notes;
   GList * 	entries;
-  GncInvoiceType type;
-  union {
-    GncCustomer *customer;
-    GncVendor *	vendor;
-  } owner;
+  GncOwner	owner;
   Timespec 	date_opened;
   Timespec 	date_due;
   Timespec 	date_closed;
@@ -72,12 +67,11 @@ static void remObj (GncInvoice *invoice);
 
 /* Create/Destroy Functions */
 
-GncInvoice *gncInvoiceCreate (GNCBook *book, GncInvoiceType type)
+GncInvoice *gncInvoiceCreate (GNCBook *book)
 {
   GncInvoice *invoice;
 
   if (!book) return NULL;
-  if (type != GNC_INVOICE_CUSTOMER && type != GNC_INVOICE_VENDOR) return NULL;
 
   invoice = g_new0 (GncInvoice, 1);
   invoice->book = book;
@@ -86,7 +80,6 @@ GncInvoice *gncInvoiceCreate (GNCBook *book, GncInvoiceType type)
   invoice->notes = CACHE_INSERT ("");
 
   invoice->active = TRUE;
-  invoice->type = type;
 
   xaccGUIDNew (&invoice->guid, book);
   addObj (invoice);
@@ -125,19 +118,10 @@ void gncInvoiceSetID (GncInvoice *invoice, const char *id)
   invoice->dirty = TRUE;
 }
 
-void gncInvoiceSetCustomer (GncInvoice *invoice, GncCustomer *customer)
+void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner)
 {
-  if (!invoice) return;
-  if (invoice->type != GNC_INVOICE_CUSTOMER) return;
-  invoice->owner.customer = customer;
-  invoice->dirty = TRUE;
-}
-
-void gncInvoiceSetVendor (GncInvoice *invoice, GncVendor *vendor)
-{
-  if (!invoice) return;
-  if (invoice->type != GNC_INVOICE_VENDOR) return;
-  invoice->owner.vendor = vendor;
+  if (!invoice || !owner) return;
+  gncOwnerCopy (owner, &invoice->owner);
   invoice->dirty = TRUE;
 }
 
@@ -249,24 +233,10 @@ const char * gncInvoiceGetID (GncInvoice *invoice)
   return invoice->id;
 }
 
-GncInvoiceType gncInvoiceGetType (GncInvoice *invoice)
-{
-  if (!invoice) return GNC_INVOICE_NONE;
-  return invoice->type;
-}
-
-GncCustomer * gncInvoiceGetCustomer (GncInvoice *invoice)
+GncOwner * gncInvoiceGetOwner (GncInvoice *invoice)
 {
   if (!invoice) return NULL;
-  if (invoice->type != GNC_INVOICE_CUSTOMER) return NULL;
-  return invoice->owner.customer;
-}
-
-GncVendor * gncInvoiceGetVendor (GncInvoice *invoice)
-{
-  if (!invoice) return NULL;
-  if (invoice->type != GNC_INVOICE_VENDOR) return NULL;
-  return invoice->owner.vendor;
+  return &invoice->owner;
 }
 
 Timespec gncInvoiceGetDateOpened (GncInvoice *invoice)
@@ -393,10 +363,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
   /* Set Transaction Description (customer), Num (invoice ID), Currency */
   xaccTransSetDescription
-    (txn, 
-     ((gncInvoiceGetType (invoice) == GNC_INVOICE_CUSTOMER) ?
-      gncCustomerGetName (gncInvoiceGetCustomer (invoice)) :
-      gncVendorGetName (gncInvoiceGetVendor (invoice))));
+    (txn, gncOwnerGetName (gncInvoiceGetOwner (invoice)));
 			   
   xaccTransSetNum (txn, gncInvoiceGetID (invoice));
   xaccTransSetCurrency (txn, commonCommodity);

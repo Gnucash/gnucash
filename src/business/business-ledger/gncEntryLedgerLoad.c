@@ -13,6 +13,7 @@
 #include "Account.h"
 #include "gnc-ui-util.h"
 #include "recncell.h"
+#include "combocell.h"
 #include "messages.h"
 
 #include "gncEntry.h"
@@ -21,8 +22,7 @@
 
 
 /* XXX: This should go elsewhere */
-const char * 
-gnc_entry_ledger_type_string_getter (char flag)
+const char * gnc_entry_ledger_type_string_getter (char flag)
 {
   switch (flag) {
   case '0': return _("$");
@@ -34,8 +34,7 @@ gnc_entry_ledger_type_string_getter (char flag)
   };
 }
 
-static void
-load_tax_type_cells (GncEntryLedger *ledger)
+static void load_tax_type_cells (GncEntryLedger *ledger)
 {
   RecnCell *cell;
   const char * s;
@@ -52,8 +51,7 @@ load_tax_type_cells (GncEntryLedger *ledger)
   gnc_recn_cell_set_string_getter (cell, gnc_entry_ledger_type_string_getter);
 }
 
-static void
-load_discount_type_cells (GncEntryLedger *ledger)
+static void load_discount_type_cells (GncEntryLedger *ledger)
 {
   RecnCell *cell;
   const char * s;
@@ -70,6 +68,52 @@ load_discount_type_cells (GncEntryLedger *ledger)
   gnc_recn_cell_set_string_getter (cell, gnc_entry_ledger_type_string_getter);
 }
 
+static void load_xfer_cell (ComboCell * cell, AccountGroup * grp)
+{
+  GList *list;
+  GList *node;
+
+  if (!grp) return;
+
+  /* Build the xfer menu out of account names. */
+
+  list = xaccGroupGetSubAccounts (grp);
+
+  for (node = list; node; node = node->next) {
+    Account *account = node->data;
+    char *name;
+
+    name = xaccAccountGetFullName (account, gnc_get_account_separator ());
+    if (name != NULL) {
+      gnc_combo_cell_add_menu_item (cell, name);
+      g_free(name);
+    }
+  }
+
+  g_list_free (list);
+}
+
+static void load_xfer_type_cells (GncEntryLedger *ledger)
+{
+  AccountGroup *group;
+  ComboCell *cell;
+
+  group = gnc_book_get_group (ledger->book);
+  if (group == NULL)
+    return;
+
+  cell = (ComboCell *)
+    gnc_table_layout_get_cell (ledger->table->layout, ENTRY_ACCT_CELL);
+  gnc_combo_cell_clear_menu (cell);
+  load_xfer_cell (cell, group);
+
+  cell = (ComboCell *)
+    gnc_table_layout_get_cell (ledger->table->layout, ENTRY_TAXACC_CELL);
+  gnc_combo_cell_clear_menu (cell);
+  load_xfer_cell (cell, group);
+}
+
+/* XXX (FIXME): This should be in a config file! */
 /* Copy GncEntry information from the list to the rows of the Ledger. */
 void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 {
@@ -88,6 +132,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
   /* Load up cells */
   load_discount_type_cells (ledger);
   load_tax_type_cells (ledger);
+  load_xfer_type_cells (ledger);
 
   blank_entry = gncEntryLookup (ledger->book, &(ledger->blank_entry_guid));
 

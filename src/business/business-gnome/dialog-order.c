@@ -25,6 +25,7 @@
 
 #include "dialog-order.h"
 #include "business-chooser.h"
+#include "business-utils.h"
 
 #define DIALOG_NEW_ORDER_CM_CLASS "dialog-new-order"
 #define DIALOG_EDIT_ORDER_CM_CLASS "dialog-edit-order"
@@ -41,6 +42,13 @@ struct _order_select_window {
 
 typedef struct _order_window {
   GtkWidget *	dialog;
+
+  GtkWidget *	id_entry;
+  GtkWidget *	owner_choice;
+  GtkWidget *	notes_text;
+  GtkWidget *	opened_date;
+  GtkWidget *	closed_date;
+  GtkWidget *	active_check;
 
   GnucashRegister *	reg;
 
@@ -63,9 +71,30 @@ ow_get_order (OrderWindow *ow)
 
 static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
 {
-  /* Fill this in */
+  Timespec ts;
+  time_t tt;
 
-  // gncOrderCommitEdit (order);
+  gnc_suspend_gui_refresh ();
+  
+  gncOrderSetID (order, gtk_editable_get_chars
+		 (GTK_EDITABLE (ow->id_entry), 0, -1));
+  gncOrderSetNotes (order, gtk_editable_get_chars
+		    (GTK_EDITABLE (ow->notes_text), 0, -1));
+
+  tt = gnome_date_edit_get_date (GNOME_DATE_EDIT (ow->opened_date));
+  timespecFromTime_t (&ts, tt);
+  gncOrderSetDateOpened (order, &ts);
+
+  tt = gnome_date_edit_get_date (GNOME_DATE_EDIT (ow->closed_date));
+  timespecFromTime_t (&ts, tt);
+  gncOrderSetDateClosed (order, &ts);
+
+  gncOrderSetActive (order, gtk_toggle_button_get_active
+		     (GTK_TOGGLE_BUTTON (ow->active_check)));
+
+  /* XXX: Set the owner? */
+
+  gncOrderCommitEdit (order);
   gnc_resume_gui_refresh ();
 }
 
@@ -75,11 +104,21 @@ gnc_order_window_ok_cb (GtkWidget *widget, gpointer data)
   OrderWindow *ow = data;
   GncOrder *order;
 
+  {
+    const char *res = gtk_entry_get_text (GTK_ENTRY (ow->id_entry));
+    if (safe_strcmp (res, "") == 0) {
+      gnc_error_dialog_parented (GTK_WINDOW (ow->dialog),
+				 _("The Order must be given an ID."));
+      return;
+    }
+  }
+
   /* Now save it off */
   {
     GncOrder *order = ow_get_order (ow);
     if (order) {
       gnc_ui_to_order (ow, order);
+
     }
     ow->created_order = order;
     ow->order_guid = *xaccGUIDNULL ();
@@ -206,11 +245,11 @@ gnc_configure_register_colors (void)
 
 static OrderWindow *
 gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
-			 GncOrder *order)
+			 GncOrder *order, GncOwner *owner)
 {
   OrderWindow *ow;
   GladeXML *xml;
-  GtkWidget *vbox, *regWidget;
+  GtkWidget *label, *hbox, *vbox, *regWidget;
   GncEntryLedger *entry_ledger;
   GnomeDialog *owd;
   GList *entries;
@@ -227,7 +266,18 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
 
   gtk_object_set_data (GTK_OBJECT (ow->dialog), "dialog_info", ow);
 
+  /* Grab the widgets */
+  ow->id_entry = glade_xml_get_widget (xml, "id_entry");
+  ow->notes_text = glade_xml_get_widget (xml, "notes_text");
+  ow->opened_date = glade_xml_get_widget (xml, "opened_date");
+  ow->closed_date = glade_xml_get_widget (xml, "closed_date");
+  ow->active_check = glade_xml_get_widget (xml, "active_check");
+
+  hbox = glade_xml_get_widget (xml, "owner_hbox");
+  label = glade_xml_get_widget (xml, "owner_label");
+
   /* default to ok */
+  gnome_dialog_editable_enters (owd, GTK_EDITABLE (ow->id_entry));
   gnome_dialog_set_default (owd, 0);
 
   /* Build the ledger */
@@ -265,6 +315,11 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
   if (order != NULL) {
     ow->dialog_type = EDIT_ORDER;
     ow->order_guid = *gncOrderGetGUID (order);
+    owner = gncOrderGetOwner (order); /* Overwrite what was passed in */
+
+    ow->owner_choice = gnc_owner_edit_create (label, hbox, bookp, owner);
+
+    gtk_entry_set_text (GTK_ENTRY (ow->id_entry), gncOrderGetID (order));
 
     ow->component_id =
       gnc_register_gui_component (DIALOG_EDIT_ORDER_CM_CLASS,
@@ -273,16 +328,55 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
 				  ow);
 
   } else {
-    order = gncOrderCreate (bookp, GNC_ORDER_SALES); /* XXX */
+    order = gncOrderCreate (bookp);
     ow->order_guid = *gncOrderGetGUID (order);
+    gncOrderSetOwner (order, owner);
+
+    ow->owner_choice = gnc_owner_select_create (label, hbox, bookp, owner);
 
     ow->dialog_type = NEW_ORDER;
+
+    gtk_entry_set_text (GTK_ENTRY (ow->id_entry),
+			g_strdup_printf ("%.6d", gncOrderNextID(bookp)));
 
     ow->component_id =
       gnc_register_gui_component (DIALOG_NEW_ORDER_CM_CLASS,
 				  gnc_order_window_refresh_handler,
 				  gnc_order_window_close_handler,
 				  ow);
+  }
+
+  /* We know that "order" (and "owner") exist now */
+  {
+    const char *string;
+    Timespec ts, ts_zero = {0,0};
+    time_t tt;
+    gint pos = 0;
+
+    string = gncOrderGetNotes (order);
+    gtk_editable_delete_text (GTK_EDITABLE (ow->notes_text), 0, -1);
+    gtk_editable_insert_text (GTK_EDITABLE (ow->notes_text), string,
+			      strlen (string), &pos);
+
+    ts = gncOrderGetDateOpened (order);
+    if (timespec_equal (&ts, &ts_zero)) {
+      tt = time(NULL);
+    } else {
+      tt = ts.tv_sec;		/* XXX */
+    }
+    gnome_date_edit_set_time (GNOME_DATE_EDIT (ow->opened_date), tt);
+
+    ts = gncOrderGetDateClosed (order);
+    if (timespec_equal (&ts, &ts_zero)) {
+      tt = time(NULL);
+    } else {
+      tt = ts.tv_sec;		/* XXX */
+    }
+    gnome_date_edit_set_time (GNOME_DATE_EDIT (ow->closed_date), tt);
+
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ow->active_check),
+                                gncOrderGetActive (order));
+
   }
 
   gnc_gui_component_watch_entity_type (ow->component_id,
@@ -302,11 +396,14 @@ gnc_order_new (GtkWidget *parent, GNCBook *bookp)
 {
   OrderWindow *ow;
   GncOrder *created_order = NULL;
+  GncOwner owner;
+
+  gncOwnerInitCustomer (&owner, NULL);
 
   /* Make sure required options exist */
   if (!bookp) return NULL;
 
-  ow = gnc_order_new_window (parent, bookp, NULL);
+  ow = gnc_order_new_window (parent, bookp, NULL, &owner);
 
   gtk_signal_connect (GTK_OBJECT (ow->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_order_on_close_cb),
@@ -323,10 +420,11 @@ void
 gnc_order_edit (GtkWidget *parent, GncOrder *order)
 {
   OrderWindow *ow;
+  GncOwner owner;
 
   if (!order) return;
 
-  ow = gnc_order_new_window (parent, gncOrderGetBook(order), order);
+  ow = gnc_order_new_window (parent, gncOrderGetBook(order), order, NULL);
 
   gtk_signal_connect (GTK_OBJECT (ow->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_order_on_close_cb),

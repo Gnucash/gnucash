@@ -9,29 +9,21 @@
 
 typedef struct _gncOrder GncOrder;
 
-typedef enum {
-  GNC_ORDER_NONE = 0,
-  GNC_ORDER_SALES = 1,
-  GNC_ORDER_PURCHASE = 2
-} GncOrderType;
-
 #include "gnc-book.h"
 #include "gncEntry.h"
-#include "gncJob.h"
-#include "gncVendor.h"
+#include "gncOwner.h"
 
 #define GNC_ORDER_MODULE_NAME "gncOrder"
 
 /* Create/Destroy Functions */
 
-GncOrder *gncOrderCreate (GNCBook *book, GncOrderType type);
+GncOrder *gncOrderCreate (GNCBook *book);
 void gncOrderDestroy (GncOrder *order);
 
 /* Set Functions */
 
 void gncOrderSetID (GncOrder *order, const char *id);
-void gncOrderSetJob (GncOrder *order, GncJob *job);
-void gncOrderSetVendor (GncOrder *order, GncVendor *vendor);
+void gncOrderSetOwner (GncOrder *order, GncOwner *owner);
 void gncOrderSetDateOpened (GncOrder *order, Timespec *date);
 void gncOrderSetDateClosed (GncOrder *order, Timespec *date);
 void gncOrderSetNotes (GncOrder *order, const char *notes);
@@ -46,9 +38,7 @@ void gncOrderRemoveEntry (GncOrder *order, GncEntry *entry);
 GNCBook * gncOrderGetBook (GncOrder *order);
 const GUID * gncOrderGetGUID (GncOrder *order);
 const char * gncOrderGetID (GncOrder *order);
-GncOrderType gncOrderGetType (GncOrder *order);
-GncJob * gncOrderGetJob (GncOrder *order);
-GncVendor * gncOrderGetVendor (GncOrder *order);
+GncOwner * gncOrderGetOwner (GncOrder *order);
 Timespec gncOrderGetDateOpened (GncOrder *order);
 Timespec gncOrderGetDateClosed (GncOrder *order);
 const char * gncOrderGetNotes (GncOrder *order);

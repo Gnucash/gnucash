@@ -90,6 +90,32 @@ static void gnc_entry_ledger_cancel_cursor_changes (GncEntryLedger *ledger)
   gnc_table_refresh_gui (ledger->table, TRUE);
 }
 
+static gboolean
+gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
+				  gncTableTraversalDir dir,
+				  VirtualLocation *p_new_virt_loc)
+{
+  VirtualLocation new_virt_loc;
+  GncEntry *entry;
+  GncEntry *blank_entry;
+  const char *cell_name;
+  BasicCell *cell;
+
+  blank_entry = gncEntryLookup (ledger->book, &ledger->blank_entry_guid);
+
+  /* auto-completion is only triggered by a tab out */
+  if (dir != GNC_TABLE_TRAVERSE_RIGHT)
+    return FALSE;
+
+  entry = gnc_entry_ledger_get_current_entry (ledger);
+  if (entry == NULL)
+    return FALSE;
+
+  /* No other autocompletion, yet */
+
+  return TRUE;
+}
+
 static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
 					   gncTableTraversalDir dir,
 					   gpointer user_data)
@@ -225,8 +251,8 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
   if (!gnc_table_virtual_cell_out_of_bounds (ledger->table,
 					     virt_loc.vcell_loc))
   {
-    //    if (gnc_split_register_auto_completion (ledger, dir, p_new_virt_loc))
-    //      return FALSE;
+    if (gnc_entry_ledger_auto_completion (ledger, dir, p_new_virt_loc))
+      return FALSE;
   }
 
   /* See if we are tabbing off the end of a blank entry */
