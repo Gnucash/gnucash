@@ -1,6 +1,6 @@
 Begin3
 Title:		gnucash -- simple single-user accounting program
-Version:	1.3.1
+Version:	1.5.0
 Entered-date:	18JUN99
 Description:    GnuCash is a personal finance manager.  A check-book like
                 register GUI allows you to enter and track bank accounts,
@@ -54,7 +54,7 @@ Description:    GnuCash is a personal finance manager.  A check-book like
                     It also provides a convenient way of viewing a
                     portfolio of many stocks, by showing all transactions
                     in that portfolio.
-                  - Written in C, with perl, scheme and tcl support for easy
+                  - Written in C, with perl and scheme support for easy
                     configuration and extensibility.
 
 Keywords:	X11 Accounting Finance double entry
