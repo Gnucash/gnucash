@@ -380,7 +380,7 @@ the account instead of opening a register." #f))
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
   "General" "Use accounting labels"
-  "e" "Only use 'debit' and 'credit' instead of informal synonyms." #f))
+  "e" "Only use 'debit' and 'credit' instead of informal synonyms" #f))
 
 
 ;; Configuation variables
