@@ -359,19 +359,23 @@ decode (char *enc)
 		int ch,cl;
 		p++;
 		ch = *p - 0x30;               /* ascii 0 = 0x30 */
-		if (9 < ch) ch -= 0x11 + 10;  /* uppercase A = 0x41 */
+		if (9 < ch) ch -= 0x11 - 10;  /* uppercase A = 0x41 */
 		if (16 < ch) ch -= 0x20;      /* lowercase a = 0x61 */
 
 		p++;
 		cl = *p - 0x30;               /* ascii 0 = 0x30 */
-		if (9 < cl) cl -= 0x11 + 10;  /* uppercase A = 0x41 */
+		if (9 < cl) cl -= 0x11 - 10;  /* uppercase A = 0x41 */
 		if (16 < cl) cl -= 0x20;      /* lowercase a = 0x61 */
 
 		*w = (char) (ch<<4 | cl);
 		
-		w++;
-		*w = 0x0;    /* null-terminate in case loop terminates */
-		p = strchr (p, '%');
+		do
+		{
+			++w; ++p;
+			*w = *p;
+			if (0x0 == *p) { p = 0; break; }
+			if ('%' == *p) { break; }
+		} while (*p);
 	}
 }
 
@@ -400,7 +404,7 @@ kvp_frame_add_url_encoding (KvpFrame *frame, const char *enc)
 		kvp_frame_set_slot_nc (frame, p, kvp_value_new_string(v));
 
 		if (!n) break; /* no next key, we are done */
-		p = n++;
+		p = ++n;
 	}
 	
 	g_free(buff);
