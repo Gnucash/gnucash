@@ -1,6 +1,7 @@
 /********************************************************************
  * gnc-pricedb-p.h -- a simple price database for gnucash.          *
  * Copyright (C) 2001 Rob Browning                                  *
+ * Copyright (C) 2003 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -102,5 +103,7 @@ void     gnc_pricedb_substitute_commodity(GNCPriceDB *db,
                                           gnc_commodity *new_c);
 void     gnc_price_set_guid (GNCPrice *p, const GUID *guid);
 
+/** register the pricedb object with the gncObject system */
+gboolean gnc_pricedb_register (void);
 
 #endif

@@ -431,6 +431,12 @@ gnc_commodity_table * gnc_commodity_table_get_table(GNCBook *book);
  */
 void gnc_commodity_table_set_table(GNCBook *book, gnc_commodity_table *ct);
 
+/** You should probably not be using gnc_commodity_table_register()
+ * It is an internal routine for registering the gncObject for the
+ * commodity table.
+ */
+gboolean gnc_commodity_table_register (void);
+		  
 /** @} */
 
 

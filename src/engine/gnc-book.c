@@ -48,137 +48,10 @@
 #include "gnc-book-p.h"
 #include "gnc-event.h"
 #include "gnc-event-p.h"
+#include "gnc-trace.h"
 #include "gncObjectP.h"
 
-/* remove these when finished */
-#include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "GroupP.h"
-#include "gnc-pricedb-p.h"
-#include "SchedXaction.h"
-#include "SchedXactionP.h"
-#include "SX-book.h"
-#include "SX-book-p.h"
-
 static short module = MOD_ENGINE;
-
-/* ====================================================================== */
-/* dirty flag stuff */
-/* XXX these need to be moved to gncObject is_dirty/mark_clean() callbacks! */
-
-static void
-mark_sx_clean(gpointer data, gpointer user_data)
-{
-  SchedXaction *sx = (SchedXaction *) data;
-  xaccSchedXactionSetDirtyness(sx, FALSE);
-  return;
-}
-
-static void
-book_sxns_mark_saved(GNCBook *book)
-{
-  SchedXactions *sxl;
-
-  sxl = gnc_book_get_schedxaction_list (book);
-  if (sxl) sxl->sx_notsaved = FALSE;
-  g_list_foreach(gnc_book_get_schedxactions(book),
-                 mark_sx_clean, 
-                 NULL);
-  return;
-}
-
-static gboolean
-book_sxlist_notsaved(GNCBook *book)
-{
-  GList *sxlist;
-  SchedXaction *sx;
-  SchedXactions *sxl;
-
-  sxl = gnc_book_get_schedxaction_list (book);
-  if((sxl && sxl->sx_notsaved)
-     ||
-     xaccGroupNotSaved(gnc_book_get_template_group(book))) return TRUE;
- 
-  for(sxlist = gnc_book_get_schedxactions(book);
-      sxlist != NULL;
-      sxlist = g_list_next(sxlist))
-  {
-    sx = (SchedXaction *) (sxlist->data);
-    if (xaccSchedXactionIsDirty( sx ))
-      return TRUE;
-  }
-
-  return FALSE;
-}
-  
-void
-gnc_book_mark_saved(GNCBook *book)
-{
-  if (!book) return;
-
-  book->dirty = FALSE;
-
-  gnc_pricedb_mark_clean(gnc_pricedb_get_db(book));
-
-  xaccGroupMarkSaved(gnc_book_get_template_group(book));
-  book_sxns_mark_saved(book);
-
-  /* Mark everything as clean */
-  gncObjectMarkClean (book);
-}
-
-/* ====================================================================== */
-/* XXX the following 'populates' need to be moved to GNCObject->book_begin 
- * callbacks! 
- */
-
-static void
-gnc_book_populate (GNCBook *book)
-{
-  gnc_commodity_table *ct;
-  
-  ct = gnc_commodity_table_new ();
-  if(!gnc_commodity_table_add_default_data(ct))
-  {
-    PWARN("unable to initialize book's commodity_table");
-  }
-  gnc_commodity_table_set_table (book, ct);
-  
-  gnc_pricedb_set_db (book, gnc_pricedb_create(book));
-
-  gnc_book_set_schedxactions (book, NULL);
-  gnc_book_set_template_group (book, xaccMallocAccountGroup(book));
-
-}
-
-static void
-gnc_book_depopulate (GNCBook *book)
-{
-  /* unhook the prices */
-  gnc_pricedb_set_db (book, NULL);
-
-  gnc_commodity_table_set_table (book, NULL);
-
-  gnc_book_set_template_group (book, NULL);
-
-  gnc_book_set_schedxactions (book, NULL);
-}
-
-/* ====================================================================== */
-
-gboolean
-gnc_book_not_saved(GNCBook *book)
-{
-  if (!book) return FALSE;
-
-  return(book->dirty
-         ||
-         gnc_pricedb_dirty(gnc_book_get_pricedb(book))
-         ||
-         book_sxlist_notsaved(book)
-         ||
-         gncObjectIsDirty (book));
-}
 
 /* ====================================================================== */
 /* constructor / destructor */
@@ -197,9 +70,6 @@ gnc_book_init (GNCBook *book)
   
   book->data_tables = g_hash_table_new (g_str_hash, g_str_equal);
   
-  /* XXX this needs to go away */
-  gnc_book_populate (book);
-
   book->book_open = 'y';
   book->version = 0;
   book->idata = 0;
@@ -232,9 +102,6 @@ gnc_book_destroy (GNCBook *book)
 
   gncObjectBookEnd (book);
 
-  /* XXX this needs to go away */
-  gnc_book_depopulate (book);
-
   xaccRemoveEntity (book->entity_table, &book->guid);
   xaccEntityTableDestroy (book->entity_table);
   book->entity_table = NULL;
@@ -257,6 +124,25 @@ gnc_book_equal (GNCBook *book_1, GNCBook *book_2)
   if (book_1 == book_2) return TRUE;
   if (!book_1 || !book_2) return FALSE;
   return TRUE;
+}
+
+/* ====================================================================== */
+
+gboolean
+gnc_book_not_saved(GNCBook *book)
+{
+  if (!book) return FALSE;
+
+  return(book->dirty || gncObjectIsDirty (book));
+}
+
+void
+gnc_book_mark_saved(GNCBook *book)
+{
+  if (!book) return;
+
+  book->dirty = FALSE;
+  gncObjectMarkClean (book);
 }
 
 /* ====================================================================== */

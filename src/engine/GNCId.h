@@ -51,15 +51,18 @@ typedef const char * GNCIdTypeConst;
 #define GNC_ID_NONE           NULL
 #define GNC_ID_ACCOUNT        "Account"
 #define GNC_ID_BOOK           "Book"
+#define GNC_ID_COMMODITY_TABLE "CommodityTable"
 #define GNC_ID_FREQSPEC       "FreqSpec"
 #define GNC_ID_GROUP          "AccountGroup"
 #define GNC_ID_LOT            "Lot"
 #define GNC_ID_NULL           "null"
 #define GNC_ID_PERIOD	      "Period"
 #define GNC_ID_PRICE          "Price"
+#define GNC_ID_PRICEDB        "PriceDB"
 #define GNC_ID_SPLIT          "Split"
 #define GNC_ID_SCHEDXACTION   "SchedXaction"
 #define GNC_ID_SESSION        "Session"
+#define GNC_ID_SXTT           "SXTT"
 #define GNC_ID_TRANS          "Trans"
 
 

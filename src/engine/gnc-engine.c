@@ -33,9 +33,12 @@
 
 #include "AccountP.h"
 #include "GroupP.h"
+#include "SX-book-p.h"
 #include "TransactionP.h"
 #include "gnc-book-p.h"
+#include "gnc-commodity.h"
 #include "gnc-lot-p.h"
+#include "gnc-pricedb-p.h"
 
 static GList * engine_init_hooks = NULL;
 static int engine_is_initialized = 0;
@@ -85,6 +88,9 @@ gnc_engine_init(int argc, char ** argv)
   xaccTransRegister ();
   xaccAccountRegister ();
   xaccGroupRegister ();
+  gnc_sxtt_register ();
+  gnc_pricedb_register ();
+  gnc_commodity_table_register();
   gnc_book_register ();
   gnc_lot_register ();
 

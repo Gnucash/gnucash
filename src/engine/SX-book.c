@@ -38,6 +38,7 @@
 
 #include <glib.h>
 
+#include "gncObject.h"
 #include "gnc-book.h"
 #include "gnc-book-p.h"
 #include "gnc-engine.h"
@@ -125,6 +126,102 @@ gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup)
 
   xaccAccountGroupBeginEdit (old_grp);
   xaccAccountGroupDestroy (old_grp);
+}
+
+
+/* ====================================================================== */
+/* gncObject function implementation and registration */
+/* XXX Its not clear to me if the template group and the sched xactions 
+ * should be treated together or not.  I got lazy, and mashed them together.
+ * For right now, this works. If you feel you need to slit this up into 
+ * two separate gnc Objects, that's OK with me.
+ */
+
+static void 
+sxtt_book_begin (GNCBook *book)
+{
+  gnc_book_set_schedxactions (book, NULL);
+  gnc_book_set_template_group (book, xaccMallocAccountGroup(book));
+}
+
+static void 
+sxtt_book_end (GNCBook *book)
+{
+  gnc_book_set_template_group (book, NULL);
+  gnc_book_set_schedxactions (book, NULL);
+}
+
+/* ====================================================================== */
+/* dirty flag stuff */
+
+static void
+mark_sx_clean(gpointer data, gpointer user_data)
+{
+  SchedXaction *sx = (SchedXaction *) data;
+  xaccSchedXactionSetDirtyness(sx, FALSE);
+}
+
+static void
+book_sxns_mark_saved(GNCBook *book)
+{
+  SchedXactions *sxl;
+
+  sxl = gnc_book_get_schedxaction_list (book);
+  if (sxl) sxl->sx_notsaved = FALSE;
+  g_list_foreach(gnc_book_get_schedxactions(book),
+                 mark_sx_clean, 
+                 NULL);
+}
+
+static gboolean
+book_sxlist_notsaved(GNCBook *book)
+{
+  GList *sxlist;
+  SchedXaction *sx;
+  SchedXactions *sxl;
+
+  sxl = gnc_book_get_schedxaction_list (book);
+  if((sxl && sxl->sx_notsaved)
+     ||
+     xaccGroupNotSaved(gnc_book_get_template_group(book))) return TRUE;
+ 
+  for(sxlist = gnc_book_get_schedxactions(book);
+      sxlist != NULL;
+      sxlist = g_list_next(sxlist))
+  {
+    sx = (SchedXaction *) (sxlist->data);
+    if (xaccSchedXactionIsDirty( sx ))
+      return TRUE;
+  }
+
+  return FALSE;
+}
+  
+static void
+sxtt_mark_clean(GNCBook *book)
+{
+  xaccGroupMarkSaved(gnc_book_get_template_group(book));
+  book_sxns_mark_saved(book);
+}
+
+
+static GncObject_t sxtt_object_def = 
+{
+  interface_version: GNC_OBJECT_VERSION,
+  name:              GNC_ID_SXTT,
+  type_label:        "SXTT",
+  book_begin:        sxtt_book_begin,
+  book_end:          sxtt_book_end,
+  is_dirty:          book_sxlist_notsaved,
+  mark_clean:        sxtt_mark_clean,
+  foreach:           NULL,
+  printable:         NULL,
+};
+
+gboolean 
+gnc_sxtt_register (void)
+{
+  return gncObjectRegister (&sxtt_object_def);
 }
 
 /* ========================== END OF FILE =============================== */

@@ -29,10 +29,11 @@
 
 #include "BackendP.h"
 #include "GNCIdP.h"
+#include "gncObject.h"
+#include "gnc-book-p.h"
 #include "gnc-book-p.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
-#include "gnc-book-p.h"
 #include "gnc-event-p.h"
 #include "gnc-pricedb-p.h"
 #include "guid.h"
@@ -1909,6 +1910,68 @@ gnc_pricedb_print_contents(GNCPriceDB *db, FILE *f)
   fprintf(f, "<gnc:pricedb>\n");
   gnc_pricedb_foreach_price(db, print_pricedb_adapter, f, FALSE);
   fprintf(f, "</gnc:pricedb>\n");
+}
+
+/* ==================================================================== */
+/* gncObject function implementation and registration */
+
+static void
+pricedb_foreach (GNCBook *book, foreachObjectCB cb, gpointer ud)
+{
+  // GNCEntityTable *et;
+
+  g_return_if_fail (book);
+  g_return_if_fail (cb);
+
+printf ("duude calling pricedb foreach \n");
+/*
+  et = gnc_book_get_entity_table (book);
+  xaccForeachEntity (et, GNC_ID_PRICEDB, cb, ud);
+*/
+}
+
+static void 
+pricedb_book_begin (GNCBook *book)
+{
+  gnc_pricedb_set_db (book, gnc_pricedb_create(book));
+}
+
+static void 
+pricedb_book_end (GNCBook *book)
+{
+  /* unhook the prices */
+  gnc_pricedb_set_db (book, NULL);
+}
+
+static gboolean
+pricedb_is_dirty (GNCBook *book)
+{
+  return gnc_pricedb_dirty(gnc_book_get_pricedb(book));
+}
+
+static void
+pricedb_mark_clean(GNCBook *book)
+{
+  gnc_pricedb_mark_clean(gnc_pricedb_get_db(book));
+}
+
+static GncObject_t pricedb_object_def = 
+{
+  interface_version: GNC_OBJECT_VERSION,
+  name:              GNC_ID_PRICEDB,
+  type_label:        "PriceDB",
+  book_begin:        pricedb_book_begin,
+  book_end:          pricedb_book_end,
+  is_dirty:          pricedb_is_dirty,
+  mark_clean:        pricedb_mark_clean,
+  foreach:           pricedb_foreach,
+  printable:         NULL,
+};
+
+gboolean 
+gnc_pricedb_register (void)
+{
+  return gncObjectRegister (&pricedb_object_def);
 }
 
 /* ========================= END OF FILE ============================== */

@@ -1,7 +1,7 @@
 /********************************************************************
  * gnc-commodity.c -- api for tradable commodities (incl. currency) *
  * Copyright (C) 2000 Bill Gribble                                  *
- * Copyright (C) 2001 Linas Vepstas <linas@linas.org>               *
+ * Copyright (C) 2001,2003 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -31,19 +31,22 @@
 #include <stdio.h>
 #include <glib.h>
 
+#include "gncObject.h"
 #include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
+#include "gnc-trace.h"
 #include "guid.h"
 
 static short module = MOD_ENGINE; 
 
-/* parts per unit is nominal, i.e. number of 'partname' units in
+/* Parts per unit is nominal, i.e. number of 'partname' units in
  * a 'unitname' unit.  fraction is transactional, i.e. how many
  * of the smallest-transactional-units of the currency are there
  * in a 'unitname' unit. */ 
 
-struct gnc_commodity_s { 
+struct gnc_commodity_s 
+{ 
   char    * fullname;  
   char    * namespace;
   char    * mnemonic;
@@ -1092,6 +1095,69 @@ gnc_commodity_table_add_default_data(gnc_commodity_table *table)
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_EUREX);
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_MUTUAL);
   return TRUE;
+}
+
+/********************************************************************
+ ********************************************************************/
+/* gncObject function implementation and registration */
+
+static void
+commodity_table_foreach (GNCBook *book, foreachObjectCB cb, gpointer ud)
+{
+  // GNCEntityTable *et;
+
+  g_return_if_fail (book);
+  g_return_if_fail (cb);
+
+printf ("duude calling commodity_table foreach \n");
+/*
+  et = gnc_book_get_entity_table (book);
+  xaccForeachEntity (et, GNC_ID_COMMODITY, cb, ud);
+*/
+}
+
+static void 
+commodity_table_book_begin (GNCBook *book)
+{
+  gnc_commodity_table *ct;
+  
+printf ("duude call commodity_table book begin \n");
+  ct = gnc_commodity_table_new ();
+  if(!gnc_commodity_table_add_default_data(ct))
+  {
+    PWARN("unable to initialize book's commodity_table");
+  }
+  gnc_commodity_table_set_table (book, ct);
+  
+}
+
+static void 
+commodity_table_book_end (GNCBook *book)
+{
+  gnc_commodity_table_set_table (book, NULL);
+}
+
+/* XXX Why is the commodity table never marked dirty/clean?
+ * Don't we have to save user-created/modified commodities?
+ * I don't get it ... does this need fixing?
+ */
+static GncObject_t commodity_table_object_def = 
+{
+  interface_version: GNC_OBJECT_VERSION,
+  name:              GNC_ID_COMMODITY_TABLE,
+  type_label:        "CommodityTable",
+  book_begin:        commodity_table_book_begin,
+  book_end:          commodity_table_book_end,
+  is_dirty:          NULL,
+  mark_clean:        NULL,
+  foreach:           commodity_table_foreach,
+  printable:         NULL,
+};
+
+gboolean 
+gnc_commodity_table_register (void)
+{
+  return gncObjectRegister (&commodity_table_object_def);
 }
 
 /* ========================= END OF FILE ============================== */

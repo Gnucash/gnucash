@@ -47,4 +47,6 @@ void gnc_book_set_schedxactions( GNCBook *book, GList *newList );
 /* Associate the given template group with a book */
 void gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup);
 
+gboolean gnc_sxtt_register (void);
+
 #endif /* GNC_SX_BOOK_P_H */

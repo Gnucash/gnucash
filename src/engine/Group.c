@@ -1297,7 +1297,6 @@ printf ("duude calling group foreach \n");
 static void 
 group_book_begin (GNCBook *book)
 {
-printf ("duude call group book begin \n");
   xaccSetAccountGroup (book, xaccMallocAccountGroup(book));
 }
 
