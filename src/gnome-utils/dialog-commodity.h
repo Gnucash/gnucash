@@ -77,10 +77,10 @@ gboolean
 gnc_ui_edit_commodity_modal(gnc_commodity *commodity,
                             GtkWidget * parent);
 
-char * gnc_ui_update_namespace_picker(GtkWidget * combobox,
-                                      const char * sel,
-                                      gboolean include_iso,
-                                      gboolean include_all);
+void gnc_ui_update_namespace_picker(GtkWidget * combobox,
+				    const char * sel,
+				    gboolean include_iso,
+				    gboolean include_all);
 
 const char * gnc_ui_namespace_picker_ns (GtkWidget *combobox);
 

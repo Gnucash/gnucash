@@ -197,7 +197,7 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
                                void * callback_data) {
   SelectCommodityWindow * retval = g_new0(SelectCommodityWindow, 1);
   GladeXML *xml;
-  char * namespace;
+  const char * namespace;
 
   xml = gnc_glade_xml_new ("commodity.glade", "Commodity Selector Dialog");
 
@@ -233,14 +233,12 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
                                              "");
 
   /* build the menus of namespaces and commodities */
-  namespace = 
-    gnc_ui_update_namespace_picker(retval->namespace_combo, 
-                                   gnc_commodity_get_namespace(orig_sel),
-                                   TRUE, FALSE);
+  gnc_ui_update_namespace_picker(retval->namespace_combo, 
+				 gnc_commodity_get_namespace(orig_sel),
+				 TRUE, FALSE);
+  namespace = gnc_ui_namespace_picker_ns(retval->namespace_combo);
   gnc_ui_update_commodity_picker(retval->commodity_combo, namespace,
                                  gnc_commodity_get_printname(orig_sel));
-  g_free(namespace);
-  
   return retval;
 }
 
@@ -357,14 +355,9 @@ gnc_ui_select_commodity_new_cb(GtkButton * button,
 				    w->default_mnemonic,
 				    w->default_fraction);
   if(new_commodity) {
-    char *namespace;
-    
-    namespace = 
-      gnc_ui_update_namespace_picker(w->namespace_combo, 
-                                     gnc_commodity_get_namespace
-                                     (new_commodity),
-                                     TRUE, FALSE);
-    g_free(namespace);
+    gnc_ui_update_namespace_picker(w->namespace_combo, 
+                                   gnc_commodity_get_namespace(new_commodity),
+				   TRUE, FALSE);
     gnc_ui_update_commodity_picker(w->commodity_combo,
                                    gnc_commodity_get_namespace(new_commodity),
                                    gnc_commodity_get_printname(new_commodity));
@@ -405,7 +398,7 @@ gnc_ui_select_commodity_namespace_changed_cb(GtkEditable * entry,
  * gnc_ui_update_namespace_picker
  ********************************************************************/
 
-char * 
+void
 gnc_ui_update_namespace_picker(GtkWidget * combobox, 
                                const char * init_string,
                                gboolean include_iso,
@@ -471,15 +464,10 @@ gnc_ui_update_namespace_picker(GtkWidget * combobox,
       safe_strcmp (init_string, "CURRENCY") == 0)
   {
     active = "CURRENCY";
-    init_string = GNC_COMMODITY_NS_ISO;
   }
-  else
-    init_string = active;
 
   gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(combobox)->entry), active);
   g_list_free(namespaces);
-
-  return g_strdup (init_string);
 }
 
 const char *
@@ -521,7 +509,6 @@ gnc_ui_new_commodity_create(const char * selected_namespace,
   CommodityWindow * retval = g_new0(CommodityWindow, 1);
   GtkWidget *help_button;
   GladeXML *xml;
-  char *namespace;
 
   xml = gnc_glade_xml_new ("commodity.glade", "Commodity Dialog");
 
@@ -565,10 +552,9 @@ gnc_ui_new_commodity_create(const char * selected_namespace,
   gnome_dialog_editable_enters(GNOME_DIALOG(retval->dialog),
 			       GTK_EDITABLE(retval->code_entry));
 
-  namespace = gnc_ui_update_namespace_picker(retval->namespace_combo,
-                                             selected_namespace,
-                                             FALSE, TRUE);
-  g_free(namespace);
+  gnc_ui_update_namespace_picker(retval->namespace_combo,
+				 selected_namespace,
+				 FALSE, TRUE);
 
   return retval;
 }
@@ -583,7 +569,6 @@ gnc_ui_edit_commodity_create(gnc_commodity *commodity,
                              void * callback_data) {
   CommodityWindow *retval;
   const char *str;
-  char *namespace;
 
   g_return_val_if_fail (commodity != NULL, NULL);
 
@@ -599,11 +584,9 @@ gnc_ui_edit_commodity_create(gnc_commodity *commodity,
   gtk_entry_set_text (GTK_ENTRY (retval->mnemonic_entry),
                       str ? str : "");
 
-  namespace = gnc_ui_update_namespace_picker
-    (retval->namespace_combo,
-     gnc_commodity_get_namespace (commodity),
-     FALSE, TRUE);
-  g_free (namespace);
+  gnc_ui_update_namespace_picker (retval->namespace_combo,
+				  gnc_commodity_get_namespace (commodity),
+				  FALSE, TRUE);
 
   str = gnc_commodity_get_exchange_code (commodity);
   gtk_entry_set_text (GTK_ENTRY (retval->code_entry),
