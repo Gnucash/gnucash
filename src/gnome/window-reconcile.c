@@ -47,6 +47,7 @@
 #include "query-user.h"
 #include "window-help.h"
 #include "enriched-messages.h"
+#include "guile-util.h"
 #include "AccWindow.h"
 #include "AdjBWindow.h"
 #include "Scrub.h"
@@ -455,16 +456,33 @@ gnc_reconcile_window_create_list_frame(Account *account,
                                        GtkWidget **total_save)
 {
   GtkWidget *frame, *scrollWin, *list, *vbox, *label, *hbox;
+  gboolean formal;
   gchar * title;
 
-  if (type == RECLIST_DEBIT)
-    title = DEBITS_STR;
-  else
-    title = CREDITS_STR;
+  formal = gnc_lookup_boolean_option("General",
+                                     "Use accounting labels", GNC_F);
 
-  vbox = gtk_vbox_new(FALSE, 5);
+  if (type == RECLIST_DEBIT)
+  {
+    if (formal)
+      title = DEBITS_STR;
+    else
+      title = gnc_get_debit_string(NO_TYPE);
+  }
+  else
+  {
+    if (formal)
+      title = CREDITS_STR;
+    else
+      title = gnc_get_credit_string(NO_TYPE);
+  }
 
   frame = gtk_frame_new(title);
+
+  if (!formal)
+    free(title);
+
+  vbox = gtk_vbox_new(FALSE, 5);
 
   list = gnc_reconcile_list_new(account, type);
   *list_save = list;
@@ -959,6 +977,14 @@ gnc_recn_create_tool_bar(RecnWindow *recnData)
       OPEN_STR, TOOLTIP_OPEN_ACC,
       gnc_recn_open_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_JUMP_TO,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      FINISH_STR, TOOLTIP_RECN_FINISH_N,
+      recnFinishCB, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_DOWN,
       0, 0, NULL
     },
     GNOMEUIINFO_END
