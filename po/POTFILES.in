@@ -376,7 +376,6 @@ src/import-export/import-account-matcher.c
 src/import-export/import-backend.c
 src/import-export/import-commodity-matcher.c
 src/import-export/import-main-matcher.c
-src/import-export/gnc-gen-transaction.c
 src/import-export/import-match-map.c
 src/import-export/import-match-picker.c
 src/import-export/import-settings.c

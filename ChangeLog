@@ -32,6 +32,10 @@
 	  Warn the user when we find this situation.
 
 	* src/quotes/Makefile.am: add dump-finance-quote to the DIST
+
+	* po/POTFILES.in:
+	* src/import-export/Makefile.am:
+	  Removed gnc-gen-transaction.[ch] "properly" for the dist.
 	
 2003-02-01  Benoit Grégoire  <bock@step.polymtl.ca>
 

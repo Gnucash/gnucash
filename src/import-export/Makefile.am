@@ -18,7 +18,6 @@ gncinclude_HEADERS = \
   import-match-map.h
 
 noinst_HEADERS = \
-  gnc-gen-transaction.h \
   import-account-matcher.h \
   import-backend.h \
   import-commodity-matcher.h \
