@@ -1,8 +1,8 @@
 /********************************************************************\
- * date.c -- utility functions to handle the date (adjusting, get   * 
- *           current date, etc.) for xacc (X-Accountant)            *
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998, 1999, 2000 Linas Vepstas                     *
+ * gnc-date.c -- misc utility functions to handle date and time     * 
+ *                                                                  *
+ * Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>            *
+ * Copyright (C) 1998-2000, 20003 Linas Vepstas <linas@linas.org>   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,8 +21,6 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
- *   Author: Rob Clark rclark@cs.hmc.edu                            *
- *                                                                  * 
 \********************************************************************/
 
 #define _GNU_SOURCE
@@ -1281,6 +1279,38 @@ gnc_timet_get_day_end (time_t time_val)
 
   gnc_tm_get_day_end(&tm, time_val);
   return mktime(&tm);
+}
+
+time_t
+gnc_timet_get_day_start_gdate (GDate *date)
+{
+  struct tm stm;
+  time_t secs;
+
+  stm.tm_year = g_date_year (date) - 1900;
+  stm.tm_mon = g_date_month (date) - 1;
+  stm.tm_mday = g_date_day (date);
+  gnc_tm_set_day_start(&stm);
+
+  /* Compute number of seconds */
+  secs = mktime (&stm);
+  return secs;
+}
+
+time_t
+gnc_timet_get_day_end_gdate (GDate *date)
+{
+  struct tm stm;
+  time_t secs;
+
+  stm.tm_year = g_date_year (date) - 1900;
+  stm.tm_mon = g_date_month (date) - 1;
+  stm.tm_mday = g_date_day (date);
+  gnc_tm_set_day_end(&stm);
+
+  /* Compute number of seconds */
+  secs = mktime (&stm);
+  return secs;
 }
 
 /* ======================================================== */
