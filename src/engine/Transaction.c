@@ -1454,7 +1454,7 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
 
     /* The split-editor often sends us 'temp' splits whose account
      * hasn't yet been set.  Be lenient, and assume an implied base
-     * currency. If theres a problem later, teh scrub routines will
+     * currency. If theres a problem later, the scrub routines will
      * pick it up.
      */
     if (NULL == s->acc) 
@@ -1795,13 +1795,11 @@ restart:
          for (node=trans->splits; node; node=node->next)
          {
             split = node->data;
-            CHECK_GAINS_STATUS (split);
-            if ((split->gains & GAINS_STATUS_GAINS) &&
-                 split->gains_split &&
-                (split->gains_split->gains & GAINS_STATUS_VDIRTY))
+            if ((split->gains & GAINS_STATUS_VDIRTY) ||
+                (split->gains_split &&
+                (split->gains_split->gains & GAINS_STATUS_VDIRTY)))
             {
                xaccSplitComputeCapGains (split, NULL);
-               split->gains_split->gains |= ~GAINS_STATUS_VDIRTY;
             }
          }
       }
