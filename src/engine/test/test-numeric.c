@@ -400,12 +400,60 @@ check_add_subtract (void)
                    gnc_numeric_sub(a, b, 100, GNC_HOW_RND_ROUND),
 						 a, b, "expected %s got %s = %s - %s for sub 100ths (banker's)");
   
+  /* ------------------------------------------------------------ */
   /* This test has failed before */
-  gnc_numeric c = gnc_numeric_neg (b);
+  gnc_numeric c = gnc_numeric_neg (a);
+  gnc_numeric d = gnc_numeric_neg (b);
   gnc_numeric z = gnc_numeric_zero();
   check_binary_op (c, gnc_numeric_add_fixed(z,c),
 						 z, c, "expected %s got %s = %s + %s for add fixed");
   
+  check_binary_op (d, gnc_numeric_add_fixed(z,d),
+						 z, d, "expected %s got %s = %s + %s for add fixed");
+  
+  /* ------------------------------------------------------------ */
+  /* Same as above, but with signs reviersed */
+  a = c;
+  b = d;
+  /* Well, actually 14/24 would be acceptable/better in this case */
+  check_binary_op (gnc_numeric_create(-7,12), 
+                   gnc_numeric_add(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT),
+						 a, b, "expected %s got %s = %s + %s for add exact");
+  
+  check_binary_op (gnc_numeric_create(-58,100), 
+                   gnc_numeric_add(a, b, 100, GNC_HOW_RND_ROUND),
+						 a, b, "expected %s got %s = %s + %s for add 100ths (banker's)");
+  
+  check_binary_op (gnc_numeric_create(-5833,10000), 
+                   gnc_numeric_add(a, b, GNC_DENOM_AUTO, 
+                                         GNC_HOW_DENOM_SIGFIGS(4) |
+                                         GNC_HOW_RND_ROUND),
+						 a, b, "expected %s got %s = %s + %s for add 4 sig figs");
+  
+  check_binary_op (gnc_numeric_create(-583333,1000000), 
+                   gnc_numeric_add(a, b, GNC_DENOM_AUTO, 
+                                         GNC_HOW_DENOM_SIGFIGS(6) |
+                                         GNC_HOW_RND_ROUND),
+						 a, b, "expected %s got %s = %s + %s for add 6 sig figs");
+  
+  check_binary_op (gnc_numeric_create(-1,12), 
+                   gnc_numeric_sub(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT),
+						 a, b, "expected %s got %s = %s - %s for sub exact");
+  
+  /* We should try something trickier for reduce & lcd */
+  check_binary_op (gnc_numeric_create(-1,12), 
+                   gnc_numeric_sub(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE),
+						 a, b, "expected %s got %s = %s - %s for sub reduce");
+  
+  check_binary_op (gnc_numeric_create(-1,12), 
+                   gnc_numeric_sub(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD),
+						 a, b, "expected %s got %s = %s - %s for sub reduce");
+  
+  check_binary_op (gnc_numeric_create(-8,100), 
+                   gnc_numeric_sub(a, b, 100, GNC_HOW_RND_ROUND),
+						 a, b, "expected %s got %s = %s - %s for sub 100ths (banker's)");
+  
+  /* ------------------------------------------------------------ */
 #if CHECK_ERRORS_TOO
   gnc_numeric c;
   c = gnc_numeric_add_with_error(a, b, 100, GNC_HOW_RND_ROUND, &err);
@@ -422,6 +470,7 @@ check_add_subtract (void)
   
 #endif
 
+  /* ------------------------------------------------------------ */
 	/* Add and subtract some random numbers */
 	int i;
 	for (i=0; i<NREPS; i++)
