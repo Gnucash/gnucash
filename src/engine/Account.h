@@ -165,7 +165,7 @@ int          xaccAccountOrder (Account **account_1, Account **account_2);
 /** @name Account lookup and GUID routines */
 /** @{ */
 
-/** deprecated */
+/** @deprecated */
 #define xaccAccountGetBook(X)     qof_instance_get_book(QOF_INSTANCE(X))
 #define xaccAccountGetGUID(X)     qof_entity_get_guid(QOF_ENTITY(X))
 #define xaccAccountReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))
@@ -252,7 +252,7 @@ gboolean xaccAccountGetAutoInterestXfer (Account *account, gboolean default_valu
 void     xaccAccountSetAutoInterestXfer (Account *account, gboolean value);
 /** @} */
 
-/* @name Account Commodity setters/getters
+/** @name Account Commodity setters/getters
  *   Accounts are used to store an amount of 'something', that 'something'
  *   is called the 'commodity'.  An account can only hold one kind of
  *   commodity.  The following are used to get and set the commodity,
@@ -285,13 +285,13 @@ void     xaccAccountSetAutoInterestXfer (Account *account, gboolean value);
 /** Set the account's commodity */
 void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
 
-/* deprecated do not use */
+/** @deprecated do not use */
 #define DxaccAccountSetSecurity xaccAccountSetCommodity
 
 /** Get the account's commodity  */
 gnc_commodity * xaccAccountGetCommodity (Account *account);
 
-/* deprecated do not use */
+/** @deprecated do not use */
 #define DxaccAccountGetSecurity xaccAccountGetCommodity
 
 /** Return the SCU for the account.  If a non-standard SCU has been
@@ -310,7 +310,7 @@ int  xaccAccountGetCommoditySCUi (Account *account);
  */
 void xaccAccountSetCommoditySCU (Account *account, int frac);
 
-/* deprecated -- do not use for future development */
+/** @deprecated -- do not use for future development */
 #define xaccAccountSetCommoditySCUandFlag xaccAccountSetCommoditySCU 
 
 /** Set the flag indicating that this account uses a non-standard SCU. */
@@ -676,7 +676,7 @@ void           xaccClearMarkDownGr (AccountGroup *group, short val);
 /*@}*/
 
 
-/** @name Account deprecated routines. */
+/** @name Deprecated Routines. */
 /** @{ */
 
 /** @deprecated The current API associates only one thing with an

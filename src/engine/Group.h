@@ -1,7 +1,5 @@
 /********************************************************************\
  * Group.h -- chart of accounts (hierarchical tree of accounts)     *
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2000,2003 Linas Vepstas <linas@linas.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,6 +19,18 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+/** @addtogroup Engine
+    @{ */
+/** @addtogroup AccountGroup
+    Accounts are organized into a heirarchical tree.  The account
+    group is the parent node that holds accounts.
+    @{ */
+/** @file Group.h
+    @brief Account handling public routines
+    @author Copyright (C) 1997 Robin D. Clark
+    @author Copyright (C) 1997-2000,2003 Linas Vepstas <linas@linas.org>
+*/
+
 
 #ifndef XACC_ACCOUNT_GROUP_H
 #define XACC_ACCOUNT_GROUP_H
@@ -34,79 +44,104 @@
 
 
 /** PROTOTYPES ******************************************************/
-/*
+/** @name Constructors, Destructors */
+/** @{ */
+/**
  * The xaccMallocAccountGroup() routine will create a new account group.
  *    This is an internal-use function, you almost certainly want to
  *    be using the xaccGetAccountGroup() routine instead.
  */
 AccountGroup *xaccMallocAccountGroup (QofBook *book);
 
-/*
+/**
  * The xaccGetAccountGroup() routine will return the top-most
  * account group associated with the indicated book.
  */
 AccountGroup * xaccGetAccountGroup (QofBook *book);
+
+/** huh  ?? */
 AccountGroup * xaccCollGetAccountGroup (QofCollection *col);
 
-/*
- * The xaccAccountDestroy() routine will destroy and free all 
+/** The xaccAccountDestroy() routine will destroy and free all 
  *    the data associated with this account group.  The group
  *    must have been opened for editing with 
  *    xaccAccountGroupBeginEdit() first, before the Destroy is called.
  */
 void          xaccAccountGroupDestroy (AccountGroup *grp);
 
-
-/* XXX backwards-compat define, remove at later convenience */
+/* @deprecated XXX backwards-compat define, remove at later convenience */
 #define gnc_book_get_group xaccGetAccountGroup
 
+/** Return the book to which this account belongs */
 QofBook * xaccGroupGetBook (AccountGroup *group);
 
+/** DOCUMENT ME! */
+gboolean xaccGroupEqual(AccountGroup *a, AccountGroup *b,
+                        gboolean check_guids);
+
+/** @} */
+
+/** @name Editing */
+/** @{ */
+/** Start of begine/commit sequence.  All changes to an account 
+ *  group should be bracketed by calls to begin-edit/commit-edit
+ */
 void          xaccAccountGroupBeginEdit (AccountGroup *grp);
+
+/** End of begine/commit sequence.  All changes to an account 
+ *  group should be bracketed by calls to begin-edit/commit-edit
+ */
 void          xaccAccountGroupCommitEdit (AccountGroup *grp);
 
-/*
+/** The xaccGroupNotSaved() subroutine will return TRUE
+ *    if any account in the group or in any subgroup
+ *    hasn't been saved.
+ XXX this should be moved to private header file, this is not a public routine!
+ */
+gboolean xaccGroupNotSaved  (AccountGroup *grp);
+
+/** The xaccGroupMarkSaved() subroutine will mark
+ *    the entire group as having been saved, including 
+ *    all of the child accounts.
+
+ XXX this should be moved to private header file, this is not a public routine!
+ */
+void     xaccGroupMarkSaved (AccountGroup *grp);
+
+/** The xaccGroupMarkNotSaved() subroutine will mark
+ *    the given group as not having been saved.
+ XXX this should be moved to private header file, this is not a public routine!
+ */
+void     xaccGroupMarkNotSaved (AccountGroup *grp);
+/** @} */
+
+/** @name Concatenation, Merging */
+/** @{ */
+/**
  * The xaccGroupConcatGroup() subroutine will move (reparent) 
  *    all accounts from the "src" group to the "dest" group,
  *    preserving the account heirarchy.  It will also take care 
  *    that the moved accounts will have the "dest" group's book
  *    parent as well.
- *
- * The xaccGroupCopyGroup() subroutine will copy all accounts
+ */
+void    xaccGroupConcatGroup (AccountGroup *dest, AccountGroup *src);
+
+/** The xaccGroupCopyGroup() subroutine will copy all accounts
  *    from the "src" group to the "dest" group, preserving the 
  *    account heirarchy.  It will also take care that the moved 
  *    accounts will have the "dest" group's book parent as well.
  *    This routine will *NOT* copy any splits/transactions.
  *    It will copy the KVP trees in each account.
- *
- * The xaccGroupMergeAccounts() subroutine will go through a group,
+ */
+void    xaccGroupCopyGroup (AccountGroup *dest, AccountGroup *src);
+
+/** The xaccGroupMergeAccounts() subroutine will go through a group,
  *    merging all accounts that have the same name and description.
  *    This function is useful when importing Quicken(TM) files.
  */
-
-void    xaccGroupConcatGroup (AccountGroup *dest, AccountGroup *src);
-void    xaccGroupCopyGroup (AccountGroup *dest, AccountGroup *src);
 void    xaccGroupMergeAccounts (AccountGroup *grp);
 
-/*
- * The xaccGroupNotSaved() subroutine will return TRUE
- *    if any account in the group or in any subgroup
- *    hasn't been saved.
- *
- * The xaccGroupMarkSaved() subroutine will mark
- *    the entire group as having been saved, including 
- *    all of the child accounts.
- *
- * The xaccGroupMarkNotSaved() subroutine will mark
- *    the given group as not having been saved.
- */
-
-gboolean xaccGroupNotSaved  (AccountGroup *grp);
-void     xaccGroupMarkSaved (AccountGroup *grp);
-void     xaccGroupMarkNotSaved (AccountGroup *grp);
-
-/*
- * The xaccGroupInsertAccount() subroutine will insert the indicated
+/** The xaccGroupInsertAccount() subroutine will insert the indicated
  *    account into the indicated group.  If it already is the child 
  *    of another group, it will be removed there first.  If the
  *    account belongs to a different book than the the group, it
@@ -114,100 +149,118 @@ void     xaccGroupMarkNotSaved (AccountGroup *grp);
  *    entity tables, generating destroy & create events).  If the 
  *    account is removed from and inserted into the same group, the 
  *    overall account sort order will be recomputed.  
- *
- * The xaccAccountInsertSubAccount() does the same, except that
+ */
+void    xaccGroupInsertAccount (AccountGroup *grp, Account *acc);
+
+/** The xaccAccountInsertSubAccount() does the same, except that
  *    the parent is specified as an account.
  */
-
-void    xaccGroupInsertAccount (AccountGroup *grp, Account *acc);
 void    xaccAccountInsertSubAccount (Account *parent, Account *child);
+/** @} */
 
-/*
- * The xaccGroupGetNumSubAccounts() subroutine returns the number
+/** @name Counting the Size and Depth of the Account Tree */
+/** @{ */
+/** The xaccGroupGetNumSubAccounts() subroutine returns the number
  *    of accounts, including subaccounts, in the account group
- *
- * The xaccGroupGetNumAccounts() subroutine returns the number
+ */
+int     xaccGroupGetNumSubAccounts (AccountGroup *grp);
+
+/** The xaccGroupGetNumAccounts() subroutine returns the number
  *    of accounts in the indicated group only (children not counted).
- *
- * The xaccGroupGetDepth() subroutine returns the length of the 
+ */
+int     xaccGroupGetNumAccounts (AccountGroup *grp);
+
+/** The xaccGroupGetDepth() subroutine returns the length of the 
  *    longest tree branch.  Each link between an account and its
  *    (non-null) children counts as one unit of length.
  */
-
-int     xaccGroupGetNumSubAccounts (AccountGroup *grp);
-int     xaccGroupGetNumAccounts (AccountGroup *grp);
 int     xaccGroupGetDepth (AccountGroup *grp);
+/** @} */
+
+/** @name Getting Accounts and Subaccounts */
+/** @{ */
+/** DOCUMENT ME! is this routine deprecated? XXX using index is weird! */
 Account * xaccGroupGetAccount (AccountGroup *group, int index);
 
-/*
- * The xaccGroupGetSubAccounts() subroutine returns an list of the accounts,
+/** The xaccGroupGetSubAccounts() subroutine returns an list of the accounts,
  *    including subaccounts, in the account group. The returned list
  *    should be freed with g_list_free() when no longer needed.
- *
- * The xaccGroupGetAccountList() subroutines returns only the immediate
+ */
+AccountList * xaccGroupGetSubAccounts (AccountGroup *grp);
+
+/** The xaccGroupGetAccountList() subroutines returns only the immediate
  *    children of the account group. The returned list should *not*
  *    be freed by the caller.
  */
-
-AccountList * xaccGroupGetSubAccounts (AccountGroup *grp);
 AccountList * xaccGroupGetAccountList (AccountGroup *grp);
 
-/* 
- * The xaccGetAccountFromName() subroutine fetches the
- *    account by name from the collection of accounts
- *    in the indicated AccountGroup group.  It returns NULL if the
- *    account was not found.
- *
- * The xaccGetAccountFromFullName() subroutine works like
- *    xaccGetAccountFromName, but uses fully-qualified names
- *    using the given separator.
- *
- * The xaccGetPeerAccountFromName() subroutine fetches the
- *    account by name from the collection of accounts
- *    in the same AccountGroup anchor group. It returns NULL if the
- *    account was not found.
- *
- * The xaccGetPeerAccountFromFullName() subroutine works like
- *     xaccGetPeerAccountFromName, but uses fully-qualified
- *     names using the given separator.
- */
-
-Account *xaccGetAccountFromName     (AccountGroup *group, const char *name);
-Account *xaccGetAccountFromFullName (AccountGroup *group,
-                                     const char *name,
-                                     const char separator);
-Account *xaccGetPeerAccountFromName (Account *account, const char *name);
-Account *xaccGetPeerAccountFromFullName (Account *acc,
-                                         const char * name,
-                                         const char separator);
-
-/*
- * The xaccGroupGetRoot() subroutine will find the topmost 
+/** The xaccGroupGetRoot() subroutine will find the topmost 
  *    (root) group to which this group belongs.
- *
- * The xaccGetAccountRoot() subroutine will find the topmost 
- *    (root) group to which this account belongs.
  */
 AccountGroup * xaccGroupGetRoot (AccountGroup *grp);
+
+/** The xaccGetAccountRoot() subroutine will find the topmost 
+ *    (root) group to which this account belongs.
+ */
 AccountGroup * xaccAccountGetRoot (Account *account);
 
-/* The xaccGroupGetParentAccount() subroutine returns the parent
+/** The xaccGroupGetParentAccount() subroutine returns the parent
  * account of the group, or NULL.
  */
 Account * xaccGroupGetParentAccount (AccountGroup *group);
 
-/* The xaccGroupMapAccounts() routine will traverse the account 
+/** @} */
+
+/** @name Getting Accounts and Subaccounts by Name */
+/** @{ */
+/** The xaccGetAccountFromName() subroutine fetches the
+ *    account by name from the collection of accounts
+ *    in the indicated AccountGroup group.  It returns NULL if the
+ *    account was not found.
+ */
+Account *xaccGetAccountFromName     (AccountGroup *group, const char *name);
+
+/** The xaccGetAccountFromFullName() subroutine works like
+ *    xaccGetAccountFromName, but uses fully-qualified names
+ *    using the given separator.
+ */
+Account *xaccGetAccountFromFullName (AccountGroup *group,
+                                     const char *name,
+                                     const char separator);
+
+/** The xaccGetPeerAccountFromName() subroutine fetches the
+ *    account by name from the collection of accounts
+ *    in the same AccountGroup anchor group. It returns NULL if the
+ *    account was not found.
+ */
+Account *xaccGetPeerAccountFromName (Account *account, const char *name);
+
+/** The xaccGetPeerAccountFromFullName() subroutine works like
+ *     xaccGetPeerAccountFromName, but uses fully-qualified
+ *     names using the given separator.
+ */
+Account *xaccGetPeerAccountFromFullName (Account *acc,
+                                         const char * name,
+                                         const char separator);
+
+/** @} */
+
+/** @name Traversal, ForEach */
+/** @{ */
+
+typedef  gpointer (*AccountCallback)(Account *a, gpointer data);
+
+/** The xaccGroupMapAccounts() routine will traverse the account 
       group, returning a list of accounts.  If the callback
       returns null for a given item, it won't show up in
       the result list.  You should free the returned list when
       you are done with it.
 */
-typedef  gpointer (*AccountCallback)(Account *a, gpointer data);
 AccountList *xaccGroupMapAccounts(AccountGroup *grp,
                              AccountCallback,
                              gpointer data);
 
-/* The xaccGroupForEachAccount() method will traverse the AccountGroup
+/** The xaccGroupForEachAccount() method will traverse the AccountGroup
  *    tree, calling 'func' on each account.   Traversal will stop when
  *    func returns a non-null value, and the routine wil return with that 
  *    value.  If 'deeply' is FALSE, then only the immediate children of 
@@ -220,10 +273,9 @@ gpointer xaccGroupForEachAccount (AccountGroup *grp,
                                   gpointer data,
                                   gboolean deeply);
 
-gboolean xaccGroupEqual(AccountGroup *a, AccountGroup *b,
-                        gboolean check_guids);
+/** @} */
 
-/*
+/** @name Staged Traversal 
  * The following functions provide support for "staged traversals"
  * over all of the transactions in an account or group.  The idea
  * is to be able to perform a sequence of traversals ("stages"),
@@ -259,37 +311,38 @@ gboolean xaccGroupEqual(AccountGroup *a, AccountGroup *b,
  * can be changed by enlarging "marker" in the transaction struct.
  * */
 
-/* xaccGroupBeginStagedTransactionTraversals() resets the traversal
+/** @{ */
+/** xaccGroupBeginStagedTransactionTraversals() resets the traversal
  *    marker inside each of all the transactions in the group so that
  *    a new sequence of staged traversals can begin.
- *
- * xaccSplitsBeginStagedTransactionTraversals() resets the traversal
+ */
+void xaccGroupBeginStagedTransactionTraversals(AccountGroup *grp);
+
+/** xaccSplitsBeginStagedTransactionTraversals() resets the traversal
  *    marker for each transaction which is a parent of one of the
  *    splits in the list.
- *
- * xaccAccountBeginStagedTransactionTraversals() resets the traversal
+ */
+void xaccSplitsBeginStagedTransactionTraversals(SplitList *splits);
+
+/** xaccAccountBeginStagedTransactionTraversals() resets the traversal
  *    marker for each transaction which is a parent of one of the
  *    splits in the account.
- *
  */
-
-void xaccGroupBeginStagedTransactionTraversals(AccountGroup *grp);
-void xaccSplitsBeginStagedTransactionTraversals(SplitList *splits);
 void xaccAccountBeginStagedTransactionTraversals(Account *account);
 
-/* xaccTransactionTraverse() checks the stage of the given transaction.
+/** xaccTransactionTraverse() checks the stage of the given transaction.
  *    If the transaction hasn't reached the given stage, the transaction
  *    is updated to that stage and the function returns TRUE. Otherwise
  *    no change is made and the function returns FALSE.
- *
- * xaccSplitTransactionTraverse() behaves as above using the parent of
+ */
+gboolean xaccTransactionTraverse(Transaction *trans, int stage);
+
+/** xaccSplitTransactionTraverse() behaves as above using the parent of
  *    the given split.
  */
-
-gboolean xaccTransactionTraverse(Transaction *trans, int stage);
 gboolean xaccSplitTransactionTraverse(Split *split, int stage);
 
-/* xaccGroupStagedTransactionTraversal() calls thunk on each
+/** xaccGroupStagedTransactionTraversal() calls thunk on each
  *    transaction in the group whose current marker is less than the
  *    given `stage' and updates each transaction's marker to be `stage'.
  *    The traversal will stop if thunk() returns a non-zero value.
@@ -306,7 +359,7 @@ int xaccGroupStagedTransactionTraversal(AccountGroup *grp,
                                     TransactionCallback,
                                     void *data);
 
-/* xaccAccountStagedTransactionTraversal() calls thunk on each
+/** xaccAccountStagedTransactionTraversal() calls thunk on each
  *    transaction in the account whose current marker is less than the
  *    given `stage' and updates each transaction's marker to be `stage'.
  *    The traversal will stop if thunk() returns a non-zero value.
@@ -353,4 +406,8 @@ int xaccAccountStagedTransactionTraversal(Account *a,
 int xaccGroupForEachTransaction(AccountGroup *g, 
                                 TransactionCallback, void *data);
 
+/** @} */
 #endif /* XACC_ACCOUNT_GROUP_H */
+/** @} */
+/** @} */
+

@@ -21,6 +21,8 @@
 /** @addtogroup Engine
     @{ */
 /** @addtogroup Period Accounting Periods
+    The architecture of the Accounting Period design is discussed
+    in greater detail in the file "src/doc/books.txt"
     @{ */
 /** @file Period.h
  *  @breif Implement accounting periods, as per design in src/doc/books.txt
