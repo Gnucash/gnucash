@@ -33,8 +33,9 @@
 #include <string.h>  
 #include <sys/types.h>  
 #include <unistd.h>  
+#if HAVE_LANGINFO_CODESET
 #include <langinfo.h>
-
+#endif
 #include <libpq-fe.h>  
 
 #include "AccountP.h"
@@ -2057,8 +2058,11 @@ pgend_session_begin (Backend *backend,
 
       if (FALSE == db_exists)
       {
+#if HAVE_LANGINFO_CODESET
          char* encoding = nl_langinfo(CODESET);
-
+#else
+		 char* encoding = "SQL_ASCII";	 
+#endif
          if (!strcmp (encoding, "ANSI_X3.4-1968"))
            encoding = "SQL_ASCII";
 

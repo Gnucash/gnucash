@@ -70,6 +70,8 @@ static void gnc_file_be_write_accounts_to_file(Backend *be,
 					       GNCBook *book);
 static void gnc_file_be_remove_old_files(FileBackend *be);
 
+Backend * libgncmod_backend_file_LTX_gnc_backend_new(void);
+
 void
 gnc_file_be_set_retention_days (int days)
 {
@@ -178,7 +180,7 @@ file_sync_all(Backend* be, GNCBook *book)
 }
 
 Backend *
-gnc_backend_new(void)
+libgncmod_backend_file_LTX_gnc_backend_new(void)
 {
     FileBackend *fbe;
     Backend *be;

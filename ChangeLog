@@ -12,6 +12,12 @@
 	* dialog-options.c -- remove unused variable
 	* gnc-regwidget.c -- remove unused (module) variable
 
+	* Peter O'Gorman's MacOS patch
+	  This is mostly just a bunch of libgncmod_name_LTX_ symbol changes to
+	  the modules.
+	  Also had to remove -Werror from hbci/Makefile.am due to darn cc
+	  warnings about order of includes.
+	
 2002-10-20  Benoit Grégoire  <bock@step.polymtl.ca>
 	* Investment transactions now create two accounts, one is for the stock,
 	  the other is the account defined by the FI, where the cash is swaped.

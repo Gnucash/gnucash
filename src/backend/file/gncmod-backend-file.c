@@ -19,7 +19,7 @@ int libgncmod_backend_file_LTX_gnc_module_current  = 0;
 int libgncmod_backend_file_LTX_gnc_module_revision = 0;
 int libgncmod_backend_file_LTX_gnc_module_age      = 0;
 
-GNCModule engine;
+static GNCModule engine;
 
 /* forward references */
 char *libgncmod_backend_file_LTX_gnc_module_path(void);

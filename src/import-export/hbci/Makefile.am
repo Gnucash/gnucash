@@ -58,7 +58,7 @@ AM_CFLAGS = \
   ${GLADE_CFLAGS} \
   ${GNOME_INCLUDEDIR} \
   ${GTKHTML_CFLAGS} \
-  ${HBCI_CFLAGS} -Werror
+  ${HBCI_CFLAGS}
 
 #gladedir = $(GNC_GLADE_DIR)
 #glade_DATA = 

@@ -30,7 +30,7 @@ char *libgncmod_backend_rpc_LTX_gnc_module_path(void);
 char *libgncmod_backend_rpc_LTX_gnc_module_description(void);
 int libgncmod_backend_rpc_LTX_gnc_module_init(int refcount);
 int libgncmod_backend_rpc_LTX_gnc_module_end(int refcount);
-
+Backend * libgncmod_backend_rpc_LTX_gnc_backend_new(void);
 
 char *
 libgncmod_backend_rpc_LTX_gnc_module_path(void) 
@@ -77,6 +77,6 @@ libgncmod_backend_rpc_LTX_gnc_module_end(int refcount)
  ****************************************************************/
 
 Backend * 
-gnc_backend_new(void) {
+libgncmod_backend_rpc_LTX_gnc_backend_new(void) {
   return rpcendNew();
 }

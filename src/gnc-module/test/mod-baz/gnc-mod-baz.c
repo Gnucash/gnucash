@@ -8,24 +8,29 @@
 #include "gnc-module-api.h"
 #include "baz-gwrap.h"
 
-int gnc_module_system_interface = 0;
+int libgncmodbaz_LTX_gnc_module_system_interface = 0;
 
-int gnc_module_current = 0;
-int gnc_module_age = 0;
-int gnc_module_revision = 0;
+int libgncmodbaz_LTX_gnc_module_current = 0;
+int libgncmodbaz_LTX_gnc_module_age = 0;
+int libgncmodbaz_LTX_gnc_module_revision = 0;
+
+/* forward references */
+char *libgncmodbaz_LTX_gnc_module_path(void);
+char *libgncmodbaz_LTX_gnc_module_description(void);
+int libgncmodbaz_LTX_gnc_module_init(int refcount);
 
 char * 
-gnc_module_path(void) {
+libgncmodbaz_LTX_gnc_module_path(void) {
   return g_strdup("gnucash/baz");
 }
 
 char * 
-gnc_module_description(void) {
+libgncmodbaz_LTX_gnc_module_description(void) {
   return g_strdup("this is the baz module");
 }
 
 int
-gnc_module_init(int refcount) {
+libgncmodbaz_LTX_gnc_module_init(int refcount) {
   /* load libfoo */
   if(gnc_module_load("gnucash/foo", 0)) {
     /* publish the g-wrapped Scheme bindings for libbaz */

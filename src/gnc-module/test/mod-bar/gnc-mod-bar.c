@@ -8,24 +8,29 @@
 #include "bar-gwrap.h"
 #include "gnc-module-api.h"
 
-int gnc_module_system_interface = 0;
+int libgncmodbar_LTX_gnc_module_system_interface = 0;
 
-int gnc_module_current = 0;
-int gnc_module_age = 0;
-int gnc_module_revision = 0;
+int libgncmodbar_LTX_gnc_module_current = 0;
+int libgncmodbar_LTX_gnc_module_age = 0;
+int libgncmodbar_LTX_gnc_module_revision = 0;
+
+/* forward references */
+char *libgncmodbar_LTX_gnc_module_path(void);
+char *libgncmodbar_LTX_gnc_module_description(void);
+int libgncmodbar_LTX_gnc_module_init(int refcount);
 
 char *
-gnc_module_path(void) {
+libgncmodbar_LTX_gnc_module_path(void) {
   return g_strdup("gnucash/bar");
 }
 
 char *
-gnc_module_description(void) {
+libgncmodbar_LTX_gnc_module_description(void) {
   return g_strdup("this is a bar module");
 }
 
 int
-gnc_module_init(int refcount) {
+libgncmodbar_LTX_gnc_module_init(int refcount) {
   /* publish the g-wrapped Scheme bindings for libbar */
   gw_init_wrapset_bar_gwrap();
   
