@@ -1,3 +1,7 @@
+2003-09-07  Benoit Grégoire  <bock@step.polymtl.ca>
+	
+	* src/engine/TransLog.c,h:  Merge missing part of my 2003-05-28 commit.  The log format changes didn't get commited for some reason, making the log replayer completely unusable.  We now officially have 3 of the 4 importers broken.  I think it's time to think about going straight to string freeze to allow for a quick 1.8.6 release.  
+	
 2003-09-04  Derek Atkins  <derek@ihtfp.com>
 
 	Apply Nigel Titley's patch to fix #103174:
