@@ -657,6 +657,7 @@
 #define WEEKS_STR           _("Weeks")
 #define WIRE_STR            _("Wire")         /* Electronic Wire transfer */
 #define WITHDRAW_STR        _("Withdraw")
+#define WITHDRAWAL_STR      _("Withdrawal")
 #define YEARS_STR           _("Years")
 #define YES_STR             _("Yes")
 

@@ -231,7 +231,10 @@ gnc_run_report(ReportData *report_data)
   gnc_unset_busy_cursor(NULL);
 
   if (!gh_string_p(result))
+  {
+    PERR("Report output was not a string.\n");
     return NULL;
+  }
 
   return gh_scm2newstr(result, NULL);
 }

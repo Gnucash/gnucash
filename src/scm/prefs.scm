@@ -100,7 +100,7 @@
 
 (define gnc:*credit-strings*
   (list '(NO_TYPE   . "Funds Out")
-        '(BANK      . "Payment")
+        '(BANK      . "Withdrawal")
         '(CASH      . "Spend")
         '(CREDIT    . "Charge")
         '(ASSET     . "Depreciation")
