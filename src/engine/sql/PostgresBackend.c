@@ -1,3 +1,25 @@
+/********************************************************************\
+ * PostgresBackend.c -- implements postgres backend                 *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+\********************************************************************/
+
+
 /* 
  * FILE:
  * PostgresBackend.c
@@ -1270,6 +1292,59 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
 
 /* ============================================================= */
 /* ============================================================= */
+/*                PRICE  STUFF                                   */
+/* ============================================================= */
+/* ============================================================= */
+
+static void
+pgendStorePriceDBNoLock (PGBackend *be, GNCPriceDB *prdb)
+{
+   PERR ("not implemented");
+}
+
+static void
+pgendStorePriceDB (PGBackend *be, GNCPriceDB *prdb)
+{
+   char *p;
+   ENTER ("be=%p, prdb=%p", be, prdb);
+   if (!be || !prdb) return;
+
+   /* lock it up so that we store atomically */
+   p = "BEGIN;\n"
+       "LOCK TABLE gncPrice IN EXCLUSIVE MODE;\n";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+
+   pgendStorePriceDBNoLock (be, prdb);
+
+   p = "COMMIT;";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+   LEAVE(" ");
+}
+
+/* ============================================================= */
+/* The pgendGetAllPrices() routine sucks *all* of the 
+ *    prices out of the database.  This is a potential 
+ *    CPU and memory-burner; its use is not suggested for anything
+ *    but single-user mode.
+ */
+
+static GNCPriceDB *
+pgendGetAllPrices (PGBackend *be)
+{
+   GNCPriceDB *prdb;
+
+   prdb = gnc_pricedb_create();
+
+   /* XXX Not finished */
+   PERR ("postgress backend price db loading not implemented");
+
+   return prdb;
+}
+
+/* ============================================================= */
+/* ============================================================= */
 /*         HIGHER LEVEL ROUTINES AND BACKEND PROPER              */
 /* ============================================================= */
 /* ============================================================= */
@@ -1567,6 +1642,57 @@ pgendSyncSingleFile (Backend *bend, AccountGroup *grp)
     * flags. We use this to avoid infinite recursion */
    xaccGroupBeginStagedTransactionTraversals(grp);
    xaccGroupStagedTransactionTraversal (grp, 1, trans_traverse_cb, be);
+
+   p = "COMMIT;";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+
+   LEAVE(" ");
+}
+
+/* ============================================================= */
+
+static void
+pgendSyncPriceDB (Backend *bend, GNCPriceDB *prdb)
+{
+   PERR ("not implemented");
+}
+
+/* ============================================================= */
+/* The pgendSyncPriceSingleFile() routine syncs the prices in the 
+ *    engine with the database.
+ *    In single file mode, we treat 'sync' as 'file save'.
+ *    We start by deleting *everything*, and then writing 
+ *    everything out.  This is rather nasty, ugly and dangerous,
+ *    but that's the nature of single-file mode.  Note: we
+ *    have to delete everything because in this mode, there is 
+ *    no other way of finding out that a price was deleted. 
+ *    i.e. there's no other way to delete.  
+ *    So start with a clean slate.
+ *
+ *    The use of this routine/this mode is 'depricated'.
+ *    Its handy for testing, sanity-checking, and as a failsafe,
+ *    but its use shouldn't be encouraged.
+ *
+ * XXX hack alert -- database consistency depends on commodities 
+ * having been stored with the pgendSyncSingleFile() routine.  
+ */
+
+static void
+pgendSyncPriceDBSingleFile (Backend *bend, GNCPriceDB *prdb)
+{
+   char *p;
+   PGBackend *be = (PGBackend *)bend;
+   ENTER ("be=%p, prdb=%p", be, prdb);
+    
+   p = "BEGIN;\n"
+       "LOCK TABLE gncPrice IN EXCLUSIVE MODE;\n"
+       "DELETE FROM gncPrice;\n";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+
+   /* Store accounts and commodities */
+   pgendStorePriceDBNoLock (be, prdb);
 
    p = "COMMIT;";
    SEND_QUERY (be,p, );
@@ -1903,6 +2029,31 @@ pgend_book_load_single (Backend *bend)
 }
 
 /* ============================================================= */
+/* The pgend_price_load_single() routine loads the engine with
+ *    price data from the database.  
+ */
+
+static GNCPriceDB *
+pgend_price_load_single (Backend *bend)
+{
+   GNCPriceDB *prdb;
+   PGBackend *be = (PGBackend *)bend;
+   if (!be) return NULL;
+
+   /* don't send events  to GUI, don't accept callaback to backend */
+   gnc_engine_suspend_events();
+   pgendDisable(be);
+
+   prdb = pgendGetAllPrices (be);
+
+   /* re-enable events */
+   pgendEnable(be);
+   gnc_engine_resume_events();
+
+   return prdb;
+}
+
+/* ============================================================= */
 /* The pgend_session_begin() routine implements the main entrypoint
  *    into the SQL backend code.
  *
@@ -2203,6 +2354,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
          case MODE_SINGLE_FILE:
             pgendEnable(be);
             be->be.book_load = pgend_book_load_single;
+            be->be.price_load = pgend_price_load_single;
             be->be.account_begin_edit = NULL;
             be->be.account_commit_edit = NULL;
             be->be.trans_begin_edit = NULL;
@@ -2210,6 +2362,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.trans_rollback_edit = NULL;
             be->be.run_query = NULL;
             be->be.sync = pgendSyncSingleFile;
+            be->be.sync_price = pgendSyncPriceDBSingleFile;
             PWARN ("MODE_SINGLE_FILE is beta -- \n"
                    "we've fixed all known bugs but that doesn't mean\n"
                    "there aren't any!\n");
@@ -2218,6 +2371,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
          case MODE_SINGLE_UPDATE:
             pgendEnable(be);
             be->be.book_load = pgend_book_load_single;
+            be->be.price_load = pgend_price_load_single;
             be->be.account_begin_edit = NULL;
             be->be.account_commit_edit = pgend_account_commit_edit;
             be->be.trans_begin_edit = NULL;
@@ -2225,7 +2379,8 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.trans_rollback_edit = NULL;
             be->be.run_query = NULL;
             be->be.sync = pgendSync;
-            PWARN ("MODE_SINGLE_FILE is beta -- \n"
+            be->be.sync_price = pgendSyncPriceDB;
+            PWARN ("MODE_SINGLE_UPDATE is beta -- \n"
                    "we've fixed all known bugs but that doesn't mean\n"
                    "there aren't any!\n");
             break;
@@ -2240,6 +2395,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.trans_rollback_edit = NULL;
             be->be.run_query = pgendRunQuery;
             be->be.sync = pgendSync;
+            be->be.sync_price = pgendSyncPriceDB;
             PWARN ("MODE_POLL is experimental -- you might corrupt your data\n");
             break;
 
@@ -2278,6 +2434,7 @@ pgendDisable (PGBackend *be)
    be->snr.trans_rollback_edit = be->be.trans_rollback_edit;
    be->snr.run_query           = be->be.run_query;
    be->snr.sync                = be->be.sync;
+   be->snr.sync_price          = be->be.sync_price;
 
    be->be.account_begin_edit  = NULL;
    be->be.account_commit_edit = NULL;
@@ -2286,6 +2443,7 @@ pgendDisable (PGBackend *be)
    be->be.trans_rollback_edit = NULL;
    be->be.run_query           = NULL;
    be->be.sync                = NULL;
+   be->be.sync_price          = NULL;
 }
 
 /* ============================================================= */
@@ -2309,6 +2467,7 @@ pgendEnable (PGBackend *be)
    be->be.trans_rollback_edit = be->snr.trans_rollback_edit;
    be->be.run_query           = be->snr.run_query;
    be->be.sync                = be->snr.sync;
+   be->be.sync_price          = be->snr.sync_price;
 }
 
 /* ============================================================= */
@@ -2331,6 +2490,7 @@ pgendInit (PGBackend *be)
    /* generic backend handlers */
    be->be.book_begin = pgend_session_begin;
    be->be.book_load = NULL;
+   be->be.price_load = NULL;
    be->be.book_end = pgend_session_end;
 
    be->be.account_begin_edit = NULL;
@@ -2340,6 +2500,9 @@ pgendInit (PGBackend *be)
    be->be.trans_rollback_edit = NULL;
    be->be.run_query = NULL;
    be->be.sync = NULL;
+   be->be.sync_price = NULL;
+   be->be.events_pending = NULL;
+   be->be.process_events = NULL;
 
    be->nest_count = 0;
    pgendDisable(be);

@@ -294,6 +294,7 @@ xmlendNew (void)
   /* generic backend handlers */
   be->be.book_begin = NULL;
   be->be.book_load = xmlbeBookLoad;
+  be->be.price_load = NULL;
   be->be.book_end = xmlbeBookEnd;
 
   be->be.account_begin_edit = NULL;
@@ -303,6 +304,9 @@ xmlendNew (void)
   be->be.trans_rollback_edit = NULL;
   be->be.run_query = xmlbeRunQuery;
   be->be.sync = NULL;
+  be->be.sync_price = NULL;
+  be->be.events_pending = NULL;
+  be->be.process_events = NULL;
 
   be->be.last_err = ERR_BACKEND_NO_ERR;
 

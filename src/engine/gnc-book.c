@@ -80,12 +80,14 @@ struct _gnc_book
    * This is a 'stack' that is one deep.
    * FIXME: This is a hack.  I'm trying to move us away from static
    * global vars. This may be a temp fix if we decide to integrate
-   * FileIO errors into GNCBook errors. */
+   * FileIO errors into GNCBook errors. 
+   */
   GNCBackendError last_err;
   char *error_message;
     
   /* ---------------------------------------------------- */
   /* the following struct members apply only for file-io */
+  /* these should be moved to a file-io backend. */
   /* the fully-resolved path to the file */
   char *fullpath;
 
@@ -95,8 +97,8 @@ struct _gnc_book
   int lockfd;
 
   /* ---------------------------------------------------- */
-  /* This struct member applies for network and SQL i/o */
-  /* It is not currently used for file i/o, but maybe it should be ?? */
+  /* This struct member applies for network, rpc and SQL i/o */
+  /* It is not currently used for file i/o, but it should be. */
   Backend *backend;
 };
 
@@ -768,7 +770,7 @@ gnc_book_begin (GNCBook *book, const char * book_id,
 
       /* For the rpc backend, do the equivalent of 
        * the statically loaded
-       * book->backend = pgendNew (); */
+       * book->backend = rpcendNew (); */
       rpc_new = dlsym (dll_handle, "rpcendNew");
       dll_err = dlerror();
       if (dll_err) 
@@ -828,39 +830,35 @@ gnc_book_load (GNCBook *book)
 
   if (strncmp(book->book_id, "file:", 5) == 0)
   {
-    /* file: */
-
     if (!book->lockfile)
     {
       gnc_book_push_error (book, ERR_BACKEND_LOCKED, NULL);
       return FALSE;
     }
+  }
       
-    /* At this point, we should are supposed to have a valid book 
-     * id and a lock on the file. */
+  /* At this point, we should are supposed to have a valid book 
+   * id and a lock on the file. */
 
+  xaccLogDisable();
+  xaccGroupMarkDoFree (book->topgroup);
+  xaccFreeAccountGroup (book->topgroup);
+  book->topgroup = NULL;
+  gnc_pricedb_destroy(book->pricedb);
+  book->pricedb = NULL;
+
+  xaccLogSetBaseName(book->fullpath);
+  xaccLogEnable();
+
+  gnc_book_clear_error (book);
+
+  if (strncmp(book->book_id, "file:", 5) == 0)
+  {
     xaccLogDisable();
-    xaccGroupMarkDoFree (book->topgroup);
-    xaccFreeAccountGroup (book->topgroup);
-    book->topgroup = NULL;
-    gnc_pricedb_destroy(book->pricedb);
-    book->pricedb = NULL;
-
-    xaccLogSetBaseName(book->fullpath);
-
-    gnc_book_clear_error (book);
     gnc_book_load_from_file(book);
-
+    xaccGroupScrubSplits (book->topgroup);
     xaccLogEnable();
 
-    if (!book->topgroup) return FALSE;
-    if (!book->pricedb) return FALSE;
-    if (gnc_book_get_error(book) != ERR_BACKEND_NO_ERR) return FALSE;
-
-    xaccGroupScrubSplits (book->topgroup);
-
-    LEAVE("book_id=%s", book->book_id ? book->book_id : "(null)");
-    return TRUE;
   }
   else if ((strncmp(book->book_id, "http://", 7) == 0) ||
            (strncmp(book->book_id, "https://", 8) == 0) ||
@@ -875,15 +873,8 @@ gnc_book_load (GNCBook *book)
      * generic, backend-independent operation.
      */
     Backend *be = book->backend;
-    xaccLogDisable();
-    xaccGroupMarkDoFree (book->topgroup);
-    xaccFreeAccountGroup (book->topgroup);
-    xaccLogEnable();
-    book->topgroup = NULL;
 
-    gnc_book_clear_error (book);
-
-    /* starting the session should result in a bunch of accounts
+    /* Starting the session should result in a bunch of accounts
      * and currencies being downloaded, but probably no transactions;
      * The GUI will need to do a query for that.
      */
@@ -893,21 +884,30 @@ gnc_book_load (GNCBook *book)
        xaccLogSetBaseName(book->fullpath);
 
        book->topgroup = (be->book_load) (be);
-
        xaccGroupSetBackend (book->topgroup, be);
-
        gnc_book_push_error(book, xaccBackendGetError(be), NULL);
+
+       if (be->price_load) 
+       {
+          book->pricedb = (be->price_load) (be);
+          gnc_book_push_error(book, xaccBackendGetError(be), NULL);
+       }
        xaccLogEnable();
     }
 
-    LEAVE("book_id=%s", book->book_id ? book->book_id : "(null)");
-    return TRUE;
   } 
   else
   {
     gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND, NULL);
     return FALSE;
   }  
+
+  if (!book->topgroup) return FALSE;
+  if (!book->pricedb) return FALSE;
+  if (gnc_book_get_error(book) != ERR_BACKEND_NO_ERR) return FALSE;
+
+  LEAVE("book_id=%s", book->book_id ? book->book_id : "(null)");
+  return TRUE;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -957,21 +957,40 @@ gnc_book_save (GNCBook *book)
    * then give the user the option to save to disk. 
    */
   be = book->backend;
-  if (be && be->sync && book->topgroup) {
-    GNCBackendError err;
+  if (be) {
     
     /* if invoked as SaveAs(), then backend not yet set */
     xaccGroupSetBackend (book->topgroup, be);
 
-    (be->sync)(be, book->topgroup);
-    err = xaccBackendGetError(be);
+    if (be->sync && book->topgroup) {
+      GNCBackendError err;
+      (be->sync)(be, book->topgroup);
+      err = xaccBackendGetError(be);
     
-    if (ERR_BACKEND_NO_ERR != err) {
-      gnc_book_push_error (book, err, NULL);
+      if (ERR_BACKEND_NO_ERR != err) {
+        gnc_book_push_error (book, err, NULL);
       
-      /* we close the backend here ... isn't this a bit harsh ??? */
-      if (be->book_end) {
-        (be->book_end)(be);
+        /* we close the backend here ... isn't this a bit harsh ??? */
+        if (be->book_end) {
+          (be->book_end)(be);
+          return;
+        }
+      }
+    }
+
+    if (be->sync_price && book->pricedb) {
+      GNCBackendError err;
+      (be->sync_price)(be, book->pricedb);
+      err = xaccBackendGetError(be);
+    
+      if (ERR_BACKEND_NO_ERR != err) {
+        gnc_book_push_error (book, err, NULL);
+      
+        /* we close the backend here ... isn't this a bit harsh ??? */
+        if (be->book_end) {
+          (be->book_end)(be);
+          return;
+        }
       }
     }
     return;
@@ -1290,6 +1309,7 @@ xaccResolveURL (const char * pathfrag)
   return (xaccResolveFilePath (pathfrag));
 }
 
+/* ---------------------------------------------------------------------- */
 
 void
 gnc_run_rpc_server (void)

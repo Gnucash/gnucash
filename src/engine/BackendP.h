@@ -144,6 +144,7 @@ struct _backend
   void (*book_begin) (GNCBook *, const char *book_id, 
                       gboolean ignore_lock, gboolean create_if_nonexistent);
   AccountGroup * (*book_load) (Backend *);
+  GNCPriceDB * (*price_load) (Backend *);
   void (*book_end) (Backend *);
   int (*account_begin_edit) (Backend *, Account *);
   int (*account_commit_edit) (Backend *, Account *);
@@ -153,6 +154,7 @@ struct _backend
 
   void (*run_query) (Backend *, Query *);
   void (*sync) (Backend *, AccountGroup *);
+  void (*sync_price) (Backend *, GNCPriceDB *);
 
   gboolean (*events_pending) (Backend *be);
   gboolean (*process_events) (Backend *be);

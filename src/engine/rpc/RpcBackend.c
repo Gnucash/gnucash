@@ -33,6 +33,7 @@
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
+#include "gnc-pricedb.h"
 #include "guid.h"
 #include "TransactionP.h"
 
@@ -99,6 +100,7 @@ static void rpcendEnable (RPCBackend *be)
    be->be.trans_rollback_edit = be->snr.trans_rollback_edit;
    be->be.run_query           = be->snr.run_query;
    be->be.sync                = be->snr.sync;
+   be->be.sync_price          = be->snr.sync_price;
 }
 
 static void rpcendDisable (RPCBackend *be)
@@ -118,6 +120,7 @@ static void rpcendDisable (RPCBackend *be)
    be->snr.trans_rollback_edit = be->be.trans_rollback_edit;
    be->snr.run_query           = be->be.run_query;
    be->snr.sync                = be->be.sync;
+   be->snr.sync_price          = be->be.sync_price;
 
    /* And turn off future calls */
    be->be.account_begin_edit  = NULL;
@@ -127,6 +130,7 @@ static void rpcendDisable (RPCBackend *be)
    be->be.trans_rollback_edit = NULL;
    be->be.run_query           = NULL;
    be->be.sync                = NULL;
+   be->be.sync_price          = NULL;
 }
 
 static void myClose (void *arg)
@@ -316,7 +320,8 @@ static void rpcend_add_gnccommoditylist (RPCBackend *be, gnc_commoditylist *cl)
 /*
  * book_load will only load the commodity table and account tree 
  */
-static AccountGroup * rpcend_book_load (Backend *bend)
+static AccountGroup * 
+rpcend_book_load (Backend *bend)
 {
   RPCBackend *be = (RPCBackend *)bend;
   AccountGroup *ag = NULL;
@@ -366,6 +371,14 @@ static AccountGroup * rpcend_book_load (Backend *bend)
   LEAVE ("be=%p, ag=%p", be, ag);
 
   return ag;
+}
+
+static GNCPriceDB * 
+rpcend_price_load (Backend *bend)
+{
+   /* XXX hack alert -- implement this */
+   PERR ("price loading not implemented");
+   return gnc_pricedb_create();
 }
 
 static void rpcend_book_end (Backend *bend)
@@ -666,7 +679,8 @@ static void rpcend_run_query (Backend *bend, Query *q)
   LEAVE ("be=%p, q=%p", be, q);
 }
 
-static void rpcend_sync (Backend *bend, AccountGroup *acctgrp)
+static void 
+rpcend_sync (Backend *bend, AccountGroup *acctgrp)
 {
   RPCBackend *be = (RPCBackend *)bend;
   gncrpc_sync1_args args1;
@@ -745,6 +759,13 @@ static void rpcend_sync (Backend *bend, AccountGroup *acctgrp)
   xaccBackendSetError (&be->be, ret2);
   LEAVE ("be=%p, ag=%p", be, acctgrp);
   return;
+}
+
+static void 
+rpcend_sync_price (Backend *bend, GNCPriceDB *prdb)
+{
+   /* XXX hack alert --  implement this */
+   PERR ("Price saving not implemented");
 }
 
 static gboolean rpcend_events_pending (Backend *bend)
@@ -876,9 +897,11 @@ static void rpcend_book_begin (GNCBook *book, const char *book_id,
   }
 
   /* Setup callbacks */
+  /* XXX hack alert -- need to implement price saving/loading */
   rpcendEnable (be);
   be->be.book_end = rpcend_book_end;
   be->be.book_load = rpcend_book_load;
+  be->be.price_load = rpcend_price_load;
   be->be.account_begin_edit = rpcend_account_begin_edit;
   be->be.account_commit_edit = rpcend_account_commit_edit;
   be->be.trans_begin_edit = rpcend_trans_begin_edit;
@@ -886,6 +909,7 @@ static void rpcend_book_begin (GNCBook *book, const char *book_id,
   be->be.trans_rollback_edit = rpcend_trans_rollback_edit;
   be->be.run_query = rpcend_run_query;
   be->be.sync = rpcend_sync;
+  be->be.sync_price = rpcend_sync_price;
   be->be.events_pending = rpcend_events_pending;
   be->be.process_events = rpcend_process_events;
 
