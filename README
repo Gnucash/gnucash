@@ -350,7 +350,7 @@ packages.
 Supported OS's
 --------------
 
-GnuCash 1.3.x is known to work with the following operating systems:
+GnuCash 1.5.x is known to work with the following operating systems:
 
 GNU/Linux             -- x86, Sparc, Alpha
 Solaris		      -- Sparc
@@ -387,6 +387,7 @@ You can dowload GnuCash Solaris packages from:
 
 You can get GnuCash Mandrake packages on Mandrake Cooker sites.
 
+
 Precompiled binaries & pre-requisite packages can be found at the
 following sites. The GnuCash versions here are all *extremely*
 old, and were indeed from GnuCash's ancestor "x-accountant".
@@ -397,7 +398,6 @@ IBM AIX 4.1.5
       http://www.bull.de/pub/
       see also http://www-frec.bull.com/
       
-
 SCO OpenServer 5.0.4 
       http://www.sco.com/skunkware/osr5/x11/apps/xacc/VOLS.tar
       -- this is from the 1.0 series of xacc
