@@ -42,13 +42,15 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; gnc:html-build-acct-table
-;; builds and returns a tree-(hierarchy-)shaped table as a html-table object
+;; builds and returns a tree-(hierarchy-)shaped table as a html-table
+;; object
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ok, i will write more doc, later
 (define (gnc:html-build-acct-table 
 	 start-date end-date 
 	 tree-depth show-subaccts? accounts 
-	 show-total? do-subtot? 
+	 show-total? get-total-fn
+	 total-name do-subtot? 
 	 show-other-curr? report-commodity exchange-fn)
   (let ((table (gnc:make-html-table))
 	(topl-accounts (gnc:group-get-account-list 
@@ -229,22 +231,17 @@
 
     ;; Show the total sum.
     (if show-total?
-	(let ((total-collector (make-commodity-collector)))
-	  (for-each (lambda (acct)
-		      (total-collector 
-		       (if (gnc:account-reverse-balance? acct)
-			   'minusmerge
-			   'merge)
-		       (my-get-balance acct) #f))
-		    (filter show-acct? topl-accounts))
+	(let ((total-collector 
+	       (get-total-fn (filter show-acct? topl-accounts) 
+			     my-get-balance)))
 	  (if show-other-curr?
 	      (begin
-		;; Show other currencies. Then show the report's
+		;; Show other currencies. Therefore show the report's
 		;; currency in the first line.
 		(gnc:html-table-append-row! 
 		 table
 		 (append (list (gnc:make-html-table-cell/size 
-				1 tree-depth (_ "Total")))
+				1 tree-depth total-name))
 			 (gnc:html-make-empty-cells 
 			  (+ 1 (* 2 (- tree-depth 1))))
 			 (list (gnc:commodity-value->string 
@@ -272,12 +269,12 @@
 			   (exchange-fn (list curr val) 
 					report-commodity)))))))
 		 #f))
-	      ;; Show no other currencies. Then just calculate one
-	      ;; total via sum-collector-commodity and show it.
+	      ;; Show no other currencies. Therefore just calculate
+	      ;; one total via sum-collector-commodity and show it.
 	      (gnc:html-table-append-row! 
 	       table
 	       (append (list (gnc:make-html-table-cell/size 
-			      1 tree-depth (_ "Total")))
+			      1 tree-depth total-name))
 		       (gnc:html-make-empty-cells (- tree-depth 1))
 		       (list (gnc:sum-collector-commodity 
 			      total-collector report-commodity 

@@ -121,7 +121,8 @@
 		 (table (gnc:html-build-acct-table 
 			 #f date-tp 
 			 tree-depth show-subaccts? accounts 
-			 #t do-subtotals?
+			 #t gnc:accounts-get-comm-total-assets 
+			 (_ "Net Assets") do-subtotals?
 			 show-fcur? report-currency exchange-fn)))
 
 	    ;; set some column headers 

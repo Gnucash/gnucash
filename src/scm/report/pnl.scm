@@ -114,7 +114,11 @@
           (doc (gnc:make-html-document))
 	  (txt (gnc:make-html-text)))
       
-      (gnc:html-document-set-title! doc "Profit And Loss")
+      (gnc:html-document-set-title! 
+       doc (string-append (_ "Profit and Loss") " "
+			  (gnc:timepair-to-datestring from-date-tp)
+			  " " (_ "to") " "
+			  (gnc:timepair-to-datestring to-date-tp)))
       (if (not (null? accounts))
 	  ;; if no max. tree depth is given we have to find the
 	  ;; maximum existing depth
@@ -129,7 +133,8 @@
 		 (table (gnc:html-build-acct-table 
 			 from-date-tp to-date-tp 
 			 tree-depth show-subaccts? accounts 
-			 #t do-subtotals?
+			 #t gnc:accounts-get-comm-total-profit 
+			 (_ "Profit") do-subtotals?
 			 show-fcur? report-currency exchange-fn)))
 
 	    ;; set some column headers 

@@ -421,15 +421,44 @@
             (gnc:account-get-balance-at-date account date #f)) 
           group)))
 
+;; Adds all accounts' balances, where the balances are determined with
+;; the get-balance-fn. Intended for usage with a profit and loss
+;; report, hence a) only the income/expense accounts are regarded, and
+;; b) the result is sign reversed. Returns a commodity-collector.
+(define (gnc:accounts-get-comm-total-profit accounts 
+					    get-balance-fn)
+  (let ((collector (make-commodity-collector)))
+    (for-each 
+     (lambda (acct)
+       (collector 'minusmerge (get-balance-fn acct) #f))
+     (filter gnc:account-is-inc-exp? 
+	     accounts))
+    collector))
+
+;; Adds all accounts' balances, where the balances are determined with
+;; the get-balance-fn. Intended for usage with a balance sheet, hence
+;; a) the income/expense accounts are ignored, and b) no signs are
+;; reversed at all. Returns a commodity-collector.
+(define (gnc:accounts-get-comm-total-assets accounts 
+					    get-balance-fn)
+  (let ((collector (make-commodity-collector)))
+    (for-each 
+     (lambda (acct)
+       (collector 'merge (get-balance-fn acct) #f))
+     (filter (lambda (a) (not (gnc:account-is-inc-exp? a))) 
+	     accounts))
+    collector))
+
 ;; returns a commodity-collector
 (define (gnc:group-get-comm-balance-at-date group date)
   (let ((this-collector (make-commodity-collector)))
-    (for-each (lambda (x) (this-collector 'merge x #f))
-	      (gnc:group-map-accounts
-	       (lambda (account)
-		 (gnc:account-get-comm-balance-at-date 
-		  account date #f)) 
-	       group))
+    (for-each 
+     (lambda (x) (this-collector 'merge x #f))
+     (gnc:group-map-accounts
+      (lambda (account)
+	(gnc:account-get-comm-balance-at-date 
+	 account date #f)) 
+      group))
     this-collector))
 
 ;; get the change in balance from the 'from' date to the 'to' date.
