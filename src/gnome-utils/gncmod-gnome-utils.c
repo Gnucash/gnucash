@@ -5,6 +5,8 @@
  * Copyright (c) 2001 Linux Developers Group, Inc. 
  *********************************************************************/
 
+#include "config.h"
+
 #include <stdio.h>
 #include <guile/gh.h>
 #include <glib.h>
