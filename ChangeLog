@@ -2,6 +2,9 @@
 
 	* Neil Williams' QOF Book Merge Patch #2.
 
+	* src/engine/gnc-pricedb.c:
+	  Phil Longstaff's patch to prevent duplicate pricedb entries.
+
 2004-10-30  Christian Stimming  <stimming@tuhh.de>
 
 	* doc/README.HBCI: Updated HBCI readme.

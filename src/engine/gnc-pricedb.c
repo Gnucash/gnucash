@@ -445,13 +445,52 @@ compare_prices_by_date(gconstpointer a, gconstpointer b)
                        gnc_price_get_guid((GNCPrice *) b));
 }
 
+typedef struct {
+	GNCPrice* pPrice;
+	gboolean isDupl;
+} PriceListIsDuplStruct;
+
+static void
+price_list_is_duplicate( gpointer data, gpointer user_data )
+{
+	GNCPrice* pPrice = (GNCPrice*)data;
+	PriceListIsDuplStruct* pStruct = (PriceListIsDuplStruct*)user_data;
+	Timespec time_a, time_b;
+
+    time_a = timespecCanonicalDayTime( gnc_price_get_time( pPrice ) );
+    time_b = timespecCanonicalDayTime( gnc_price_get_time( pStruct->pPrice ) );
+
+	/* If the date, currency, commodity and price match, it's a duplicate */
+	if( !gnc_numeric_equal( gnc_price_get_value( pPrice ),  gnc_price_get_value( pStruct->pPrice ) ) ) return;
+	if( gnc_price_get_commodity( pPrice ) != gnc_price_get_commodity( pStruct->pPrice ) ) return;
+	if( gnc_price_get_currency( pPrice ) != gnc_price_get_currency( pStruct->pPrice ) ) return;
+
+  if( timespec_cmp( &time_a, &time_b ) != 0 ) return;
+
+	pStruct->isDupl = TRUE;
+}
+
 gboolean
 gnc_price_list_insert(GList **prices, GNCPrice *p)
 {
   GList *result_list;
+  PriceListIsDuplStruct* pStruct;
+  gboolean isDupl;
 
   if(!prices || !p) return FALSE;
   gnc_price_ref(p);
+
+  pStruct = g_new0( PriceListIsDuplStruct, 1 );
+  pStruct->pPrice = p;
+  pStruct->isDupl = FALSE;
+  g_list_foreach( *prices, price_list_is_duplicate, pStruct );
+  isDupl = pStruct->isDupl;
+  g_free( pStruct );
+
+  if( isDupl ) {
+	return TRUE;
+  }
+
   result_list = g_list_insert_sorted(*prices, p, compare_prices_by_date);
   if(!result_list) return FALSE;
   *prices = result_list;
