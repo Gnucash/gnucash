@@ -748,7 +748,8 @@ make_random_changes_to_group (GNCSession *session, AccountGroup *group)
         continue;
       }
 
-      if (xaccAccountHasAncestor (a1, a2) ||
+      if (a1 == a2 ||
+          xaccAccountHasAncestor (a1, a2) ||
           xaccAccountHasAncestor (a2, a1))
       {
         i++;
