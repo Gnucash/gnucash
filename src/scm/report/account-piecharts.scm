@@ -321,31 +321,35 @@ balance at a given time"))
 		(gnc:html-piechart-set-button-1-legend-urls! 
 		 chart urls))
 	      
-	      (gnc:html-piechart-set-title!
-	       chart report-title)
-	      (gnc:html-piechart-set-width! chart width)
-	      (gnc:html-piechart-set-height! chart height)
-	      (gnc:html-piechart-set-data! chart (unzip1 combined))
-	      (gnc:html-piechart-set-colors! chart
-					     (gnc:assign-colors (length combined)))
 	      
-	      (gnc:html-piechart-set-subtitle!
-	       chart (string-append
-		      (if do-intervals?
-			  (sprintf #f
-				   (_ "%s to %s")
-				   (gnc:timepair-to-datestring from-date-tp) 
-				   (gnc:timepair-to-datestring to-date-tp))
-			  (sprintf #f
-				   (_ "Balance at %s")
-				   (gnc:timepair-to-datestring to-date-tp)))
-		      (if show-total?
-			  (let ((total (apply + (unzip1 combined))))
-			    (sprintf #f ": %s"
-				     (gnc:amount->string total print-info)))
-			  
-			  "")))
-	      
+	      (if 
+	       (not (null? combined))
+	       (begin
+		 (gnc:html-piechart-set-title!
+		  chart report-title)
+		 (gnc:html-piechart-set-width! chart width)
+		 (gnc:html-piechart-set-height! chart height)
+		 (gnc:html-piechart-set-data! chart (unzip1 combined))
+		 (gnc:html-piechart-set-colors! chart
+						(gnc:assign-colors (length combined)))
+		 
+		 (gnc:html-piechart-set-subtitle!
+		  chart (string-append
+			 (if do-intervals?
+			     (sprintf #f
+				      (_ "%s to %s")
+				      (gnc:timepair-to-datestring from-date-tp) 
+				      (gnc:timepair-to-datestring to-date-tp))
+			     (sprintf #f
+				      (_ "Balance at %s")
+				      (gnc:timepair-to-datestring to-date-tp)))
+			 (if show-total?
+			     (let ((total (apply + (unzip1 combined))))
+			       (sprintf #f ": %s"
+					(gnc:amount->string total print-info)))
+			     
+			     "")))
+		 
 	      (let ((legend-labels
 		     (map 
 		      (lambda (pair)
@@ -381,6 +385,10 @@ Dragging with right button lets you rotate the pie. ")
 		    (gnc:html-markup-p "Remove this text by disabling \
 the global Preference \"Display Tip of the Day\".")))))
 	
+	       (gnc:html-document-add-object!
+		document
+		(gnc:html-make-empty-data-warning))))
+
 	(gnc:html-document-add-object!
 	  document
 	  (gnc:html-make-no-account-warning)))
