@@ -1432,7 +1432,7 @@ None
 	  <widget>
 	    <class>GtkLabel</class>
 	    <name>label752</name>
-	    <label>Find transactions whose Description matches:</label>
+	    <label>Find transactions whose Description contains:</label>
 	    <justify>GTK_JUSTIFY_CENTER</justify>
 	    <wrap>False</wrap>
 	    <xalign>7.45058e-09</xalign>
@@ -1533,7 +1533,7 @@ None
 	  <widget>
 	    <class>GtkLabel</class>
 	    <name>label761</name>
-	    <label>Find transactions whose Number matches:</label>
+	    <label>Find transactions whose Number contains:</label>
 	    <justify>GTK_JUSTIFY_CENTER</justify>
 	    <wrap>False</wrap>
 	    <xalign>7.45058e-09</xalign>
@@ -1786,7 +1786,7 @@ Exactly
 	  <widget>
 	    <class>GtkLabel</class>
 	    <name>label759</name>
-	    <label>Find splits whose Memo matches:</label>
+	    <label>Find splits whose Memo contains:</label>
 	    <justify>GTK_JUSTIFY_CENTER</justify>
 	    <wrap>False</wrap>
 	    <xalign>7.45058e-09</xalign>
@@ -2101,7 +2101,7 @@ Exactly
 	  <widget>
 	    <class>GtkLabel</class>
 	    <name>label772</name>
-	    <label>Find transactions whose Action matches:</label>
+	    <label>Find transactions whose Action contains:</label>
 	    <justify>GTK_JUSTIFY_CENTER</justify>
 	    <wrap>False</wrap>
 	    <xalign>7.45058e-09</xalign>

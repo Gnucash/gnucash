@@ -817,7 +817,7 @@ sr_balance_trans (SplitRegister *reg, Transaction *trans)
     gboolean two_accounts;
 
     split = xaccTransGetSplit (trans, 0);
-    other_split = xaccGetOtherSplit (split);
+    other_split = xaccSplitGetOtherSplit (split);
   
     if (other_split == NULL)
     {
@@ -3284,13 +3284,13 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
   }
 
   if (reg->style == REG_STYLE_LEDGER && !info->trans_expanded)
-    other_split = xaccGetOtherSplit (split);
+    other_split = xaccSplitGetOtherSplit (split);
 
   if (MOD_MXFRM & changed)
   {
     DEBUG ("MOD_MXFRM: %s", reg->mxfrmCell->cell.value);
 
-    other_split = xaccGetOtherSplit (split);
+    other_split = xaccSplitGetOtherSplit (split);
 
     /* other_split may be null for two very different reasons:
      * (1) the parent transaction has three or more splits in it,
@@ -3811,7 +3811,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc,
 
     case MXFRM_CELL:
       {
-         Split *s = xaccGetOtherSplit (split);
+         Split *s = xaccSplitGetOtherSplit (split);
          static char *name = NULL;
 
          g_free (name);

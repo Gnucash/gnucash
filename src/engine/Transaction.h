@@ -555,11 +555,11 @@ Account * xaccGetAccountByFullName (Transaction *trans,
                                     const char separator);
 
 /* 
- * The xaccGetOtherSplit() is a convenience routine that returns
+ * The xaccSplitGetOtherSplit() is a convenience routine that returns
  *    the other of a pair of splits.  If there are more than two 
  *    splits, it returns NULL.
  */
-Split * xaccGetOtherSplit (Split *split);
+Split * xaccSplitGetOtherSplit (Split *split);
 
 /* The xaccIsPeerSplit() is a convenience routine that returns
  *    a non-zero value if the two splits share a common 

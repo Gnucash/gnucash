@@ -1138,7 +1138,7 @@ jump_cb(GtkWidget *widget, gpointer data)
 
   if (account == leader)
   {
-    split = xaccGetOtherSplit(split);
+    split = xaccSplitGetOtherSplit(split);
     if (split == NULL)
       return;
 

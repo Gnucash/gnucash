@@ -979,7 +979,7 @@ create_Find_Transactions (void)
   gtk_container_add (GTK_CONTAINER (frame8), vbox16);
   gtk_container_set_border_width (GTK_CONTAINER (vbox16), 5);
 
-  label752 = gtk_label_new (_("Find transactions whose Description matches:"));
+  label752 = gtk_label_new (_("Find transactions whose Description contains:"));
   gtk_widget_ref (label752);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label752", label752,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -1037,7 +1037,7 @@ create_Find_Transactions (void)
   gtk_container_add (GTK_CONTAINER (frame15), vbox42);
   gtk_container_set_border_width (GTK_CONTAINER (vbox42), 5);
 
-  label761 = gtk_label_new (_("Find transactions whose Number matches:"));
+  label761 = gtk_label_new (_("Find transactions whose Number contains:"));
   gtk_widget_ref (label761);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label761", label761,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -1195,7 +1195,7 @@ create_Find_Transactions (void)
   gtk_container_add (GTK_CONTAINER (frame10), vbox22);
   gtk_container_set_border_width (GTK_CONTAINER (vbox22), 5);
 
-  label759 = gtk_label_new (_("Find splits whose Memo matches:"));
+  label759 = gtk_label_new (_("Find splits whose Memo contains:"));
   gtk_widget_ref (label759);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label759", label759,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -1393,7 +1393,7 @@ create_Find_Transactions (void)
   gtk_container_add (GTK_CONTAINER (frame20), vbox50);
   gtk_container_set_border_width (GTK_CONTAINER (vbox50), 5);
 
-  label772 = gtk_label_new (_("Find transactions whose Action matches:"));
+  label772 = gtk_label_new (_("Find transactions whose Action contains:"));
   gtk_widget_ref (label772);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label772", label772,
                             (GtkDestroyNotify) gtk_widget_unref);

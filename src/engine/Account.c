@@ -1557,14 +1557,14 @@ xaccAccountSetTaxRelated (Account *account, gboolean tax_related)
 }
 
 const char *
-xaccAccountGetTaxCode (Account *account)
+xaccAccountGetTaxUSCode (Account *account)
 {
   kvp_value *value;
 
   if (!account)
     return FALSE;
 
-  value = kvp_frame_get_slot_path (account->kvp_data, "tax", "code", NULL);
+  value = kvp_frame_get_slot_path (account->kvp_data, "tax-US", "code", NULL);
   if (!value)
     return NULL;
 
@@ -1572,7 +1572,7 @@ xaccAccountGetTaxCode (Account *account)
 }
 
 void
-xaccAccountSetTaxCode (Account *account, const char *code)
+xaccAccountSetTaxUSCode (Account *account, const char *code)
 {
   kvp_frame *frame;
 
@@ -1581,7 +1581,7 @@ xaccAccountSetTaxCode (Account *account, const char *code)
 
   xaccAccountBeginEdit (account);
 
-  frame = kvp_frame_get_frame (account->kvp_data, "tax", NULL);
+  frame = kvp_frame_get_frame (account->kvp_data, "tax-US", NULL);
 
   kvp_frame_set_slot_nc (frame, "code",
                          code ? kvp_value_new_string (code) : NULL);
@@ -1592,7 +1592,7 @@ xaccAccountSetTaxCode (Account *account, const char *code)
 }
 
 const char *
-xaccAccountGetTaxPayerNameSource (Account *account)
+xaccAccountGetTaxUSPayerNameSource (Account *account)
 {
   kvp_value *value;
 
@@ -1600,7 +1600,7 @@ xaccAccountGetTaxPayerNameSource (Account *account)
     return FALSE;
 
   value = kvp_frame_get_slot_path (account->kvp_data,
-                                   "tax", "payer-name-source", NULL);
+                                   "tax-US", "payer-name-source", NULL);
   if (!value)
     return NULL;
 
@@ -1608,7 +1608,7 @@ xaccAccountGetTaxPayerNameSource (Account *account)
 }
 
 void
-xaccAccountSetTaxPayerNameSource (Account *account, const char *source)
+xaccAccountSetTaxUSPayerNameSource (Account *account, const char *source)
 {
   kvp_frame *frame;
 
@@ -1617,7 +1617,7 @@ xaccAccountSetTaxPayerNameSource (Account *account, const char *source)
 
   xaccAccountBeginEdit (account);
 
-  frame = kvp_frame_get_frame (account->kvp_data, "tax", NULL);
+  frame = kvp_frame_get_frame (account->kvp_data, "tax-US", NULL);
 
   kvp_frame_set_slot_nc (frame, "payer-name-source",
                          source ? kvp_value_new_string (source) : NULL);

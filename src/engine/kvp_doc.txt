@@ -98,12 +98,12 @@ Entities: Split
 Use: xaccSplitGetType, xaccSplitMakeStockSplit
      Store a string representing the type of split, if not normal.
 
-Name: tax/code
+Name: tax-US/code
 Type: string
 Entities: Account
 Use: see src/scm/report/[tax,txf]*.scm
 
-Name: tax/payer-name-source
+Name: tax-US/payer-name-source
 Type: string
 Entities: Account
 Use: see src/scm/report/[tax,txf]*.scm

@@ -1,3 +1,25 @@
+2001-03-26  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/report/transaction-report.scm: fix i18n bug
+
+	* src/scm/report/register.scm: more work
+
+	* src/SplitLedger.c: update for api change
+
+	* src/gnome/window-register.c: update for api change
+
+	* src/engine/Transaction.c (xaccSplitGetCorrAccountName): update
+	name used for split transactions
+	(xaccSplitGetOtherSplit): rename to be more consistent
+
+	* src/gnome/gnc-dialogs.glade: use 'contains' instead of
+	'matches' in search dialog
+
+	* src/guile/gnc.gwp: update for api changes below
+
+	* src/engine/Account.c: use US in api names and tags of
+	US-specific tax info.
+
 2001-03-25  Dave Peticolas  <dave@krondo.com>
 
 	* src/test/test-exp-parser.c (test_parser): add / 0 test

@@ -1975,7 +1975,7 @@ xaccSplitGetCorrAccountName(Split *sa)
   if(get_corr_account_split(sa, &other_split))
   {
     if (!split_const)
-      split_const = _("Split");
+      split_const = _("-- Split Transaction --");
 
     return split_const;
   }
@@ -2528,7 +2528,7 @@ xaccGetAccountByFullName (Transaction *trans, const char * name,
 \********************************************************************/
 
 Split *
-xaccGetOtherSplit (Split *split)
+xaccSplitGetOtherSplit (Split *split)
 {
   Split *s1, *s2;
   Transaction *trans;
