@@ -1,3 +1,16 @@
+2003-08-08  David Hampton  <hampton@employees.org>
+
+	* lots of files: Sync up at the gnome2-merge-2 tag.
+
+	* acconfig.h:
+	* macros/autogen.sh:
+	* macros/gnome-guile-checks.m4: Make autoheader stop complaining.
+
+	* all glade files: Run through glade-2 to update syntax and
+	formatting.  The conversion tool and glade-2 itself don't produce
+	the same output.
+ 
+	
 2003-07-16  David Hampton  <hampton@employees.org>
 
 	* most every file: Sync up at the gnome2-merge-1 tag.

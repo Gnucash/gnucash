@@ -1,98 +1,96 @@
 <?xml version="1.0" standalone="no"?> <!--*- mode: xml -*-->
-<!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd" >
+<!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
-  <widget class="GtkWindow" id="Progress Dialog">
-    <property name="title" translatable="yes">Working...</property>
-    <property name="type">GTK_WINDOW_DIALOG</property>
-    <property name="modal">yes</property>
-    <property name="allow_shrink">no</property>
-    <property name="allow_grow">no</property>
-    <property name="window-position">GTK_WIN_POS_NONE</property>
-    <property name="visible">yes</property>
+<requires lib="gnome"/>
 
-    <child>
-      <widget class="GtkVBox" id="vbox85">
-        <property name="border_width">5</property>
-        <property name="homogeneous">no</property>
-        <property name="spacing">5</property>
-        <property name="visible">yes</property>
+<widget class="GtkWindow" id="Progress Dialog">
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">Working...</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">True</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
 
-        <child>
-          <widget class="GtkLabel" id="heading_label">
-            <property name="label" translatable="yes">Heading</property>
-            <property name="justify">GTK_JUSTIFY_CENTER</property>
-            <property name="wrap">no</property>
-            <property name="xalign">0.5</property>
-            <property name="yalign">0.5</property>
-            <property name="xpad">0</property>
-            <property name="ypad">0</property>
-            <property name="visible">yes</property>
-          </widget>
-          <packing>
-            <property name="padding">0</property>
-            <property name="expand">no</property>
-            <property name="fill">no</property>
-          </packing>
-        </child>
+  <child>
+    <widget class="GtkVBox" id="vbox85">
+      <property name="border_width">5</property>
+      <property name="visible">True</property>
+      <property name="homogeneous">False</property>
+      <property name="spacing">5</property>
 
-        <child>
-          <widget class="GtkProgressBar" id="progress_bar">
-            <property name="bar_style">GTK_PROGRESS_CONTINUOUS</property>
-            <property name="orientation">GTK_PROGRESS_LEFT_TO_RIGHT</property>
-            <property name="activity_mode">no</property>
-            <property name="show_text">yes</property>
-            <property name="format" translatable="yes">%P %%</property>
-            <property name="text_xalign">0.5</property>
-            <property name="text_yalign">0.5</property>
-            <property name="visible">yes</property>
-            <property name="adjustment">0 0 100 1 10 10</property>
-          </widget>
-          <packing>
-            <property name="padding">0</property>
-            <property name="expand">no</property>
-            <property name="fill">no</property>
-          </packing>
-        </child>
+      <child>
+	<widget class="GtkLabel" id="heading_label">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">Heading</property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">False</property>
+	  <property name="justify">GTK_JUSTIFY_CENTER</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">False</property>
+	</packing>
+      </child>
 
-        <child>
-          <widget class="GtkHButtonBox" id="hbuttonbox3">
-            <property name="layout_style">GTK_BUTTONBOX_DEFAULT_STYLE</property>
-            <property name="spacing">30</property>
-            <property name="visible">yes</property>
+      <child>
+	<widget class="GtkProgressBar" id="progress_bar">
+	  <property name="visible">True</property>
+	  <property name="orientation">GTK_PROGRESS_LEFT_TO_RIGHT</property>
+	  <property name="fraction">0</property>
+	  <property name="pulse_step">0.1</property>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">False</property>
+	</packing>
+      </child>
 
-            <child>
-              <widget class="GtkButton" id="ok_button">
-                <property name="sensitive">no</property>
-                <property name="can_default">yes</property>
-                <property name="can_focus">yes</property>
-                <property name="relief">GTK_RELIEF_NORMAL</property>
-                <property name="visible">yes</property>
-                <property name="label">gtk-ok</property>
-                <property name="use_stock">yes</property>
-                <property name="use_underline">yes</property>
-              </widget>
-            </child>
+      <child>
+	<widget class="GtkHButtonBox" id="hbuttonbox3">
+	  <property name="visible">True</property>
+	  <property name="layout_style">GTK_BUTTONBOX_DEFAULT_STYLE</property>
+	  <property name="spacing">30</property>
 
-            <child>
-              <widget class="GtkButton" id="cancel_button">
-                <property name="visible">no</property>
-                <property name="can_default">yes</property>
-                <property name="can_focus">yes</property>
-                <property name="relief">GTK_RELIEF_NORMAL</property>
-                <property name="label">gtk-cancel</property>
-                <property name="use_stock">yes</property>
-                <property name="use_underline">yes</property>
-              </widget>
-            </child>
-          </widget>
-          <packing>
-            <property name="padding">0</property>
-            <property name="expand">yes</property>
-            <property name="fill">yes</property>
-          </packing>
-        </child>
-      </widget>
-    </child>
-  </widget>
+	  <child>
+	    <widget class="GtkButton" id="ok_button">
+	      <property name="visible">True</property>
+	      <property name="sensitive">False</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-ok</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="cancel_button">
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-cancel</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">True</property>
+	  <property name="fill">True</property>
+	</packing>
+      </child>
+    </widget>
+  </child>
+</widget>
+
 </glade-interface>

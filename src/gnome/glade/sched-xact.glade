@@ -6020,9 +6020,9 @@
 	<widget class="GnomeDruidPageStandard" id="what_to_do">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">What to do, what to do?</property>
-	  <property name="title_foreground">#7ec0081e09eb</property>
-	  <property name="background">#7ec0081ed3b8</property>
-	  <property name="logo_background">#1780407fd3a8</property>
+	  <property name="title_foreground">#41b0083dceb8</property>
+	  <property name="background">#2b38083de9eb</property>
+	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="what_to_do_vbox">
@@ -6082,9 +6082,9 @@
 	<widget class="GnomeDruidPageStandard" id="reminders_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Transaction Reminders</property>
-	  <property name="title_foreground">#7ec0081e09eb</property>
-	  <property name="background">#7ec0081ed3b8</property>
-	  <property name="logo_background">#1780407fd3a8</property>
+	  <property name="title_foreground">#6270083dceb8</property>
+	  <property name="background">#7250083de9eb</property>
+	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox5">
@@ -6150,9 +6150,9 @@ Select any which you would like to create now, and click
 	<widget class="GnomeDruidPageStandard" id="auto_create_notify_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Auto-Created Transactions Notification</property>
-	  <property name="title_foreground">#7ec0081e09eb</property>
-	  <property name="background">#7ec0081ed3b8</property>
-	  <property name="logo_background">#1780407fd3a8</property>
+	  <property name="title_foreground">#ab50083dceb8</property>
+	  <property name="background">#bf60083de9eb</property>
+	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="ac_vbox">
@@ -6177,9 +6177,9 @@ Select any which you would like to create now, and click
 	<widget class="GnomeDruidPageStandard" id="to_create_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">To-Create Transaction Preparation</property>
-	  <property name="title_foreground">#7ec0081e09eb</property>
-	  <property name="background">#7ec0081ed3b8</property>
-	  <property name="logo_background">#1780407fd3a8</property>
+	  <property name="title_foreground">#c898083dceb8</property>
+	  <property name="background">#c1e0083de9eb</property>
+	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox7">
@@ -6529,9 +6529,9 @@ Select any which you would like to create now, and click
 	<widget class="GnomeDruidPageStandard" id="created_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Created Transaction Review</property>
-	  <property name="title_foreground">#7ec0081e09eb</property>
-	  <property name="background">#7ec0081ed3b8</property>
-	  <property name="logo_background">#1780407fd3a8</property>
+	  <property name="title_foreground">#7b20083eceb8</property>
+	  <property name="background">#8500083ee9eb</property>
+	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="created_vbox">
@@ -6556,9 +6556,9 @@ Select any which you would like to create now, and click
 	<widget class="GnomeDruidPageStandard" id="obsolete_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Obsolete Scheduled Transactions</property>
-	  <property name="title_foreground">#7ec0081e09eb</property>
-	  <property name="background">#7ec0081ed3b8</property>
-	  <property name="logo_background">#1780407fd3a8</property>
+	  <property name="title_foreground">#9b10083eceb8</property>
+	  <property name="background">#ac00083ee9eb</property>
+	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox9">
@@ -6698,9 +6698,9 @@ the created Scheduled Transactions directly.</property>
 	<widget class="GnomeDruidPageStandard" id="loan_info_pg">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Loan Information</property>
-	  <property name="title_foreground">#7ec0081e09eb</property>
-	  <property name="background">#7ec0081ed3b8</property>
-	  <property name="logo_background">#1780407fd3a8</property>
+	  <property name="title_foreground">#4da8083fceb8</property>
+	  <property name="background">#6b80083fe9eb</property>
+	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox10">
@@ -7127,9 +7127,9 @@ the created Scheduled Transactions directly.</property>
 	<widget class="GnomeDruidPageStandard" id="loan_opts_pg">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Options</property>
-	  <property name="title_foreground">#7ec0081e09eb</property>
-	  <property name="background">#7ec0081ed3b8</property>
-	  <property name="logo_background">#1780407fd3a8</property>
+	  <property name="title_foreground">#ecb0083fceb8</property>
+	  <property name="background">#f8f8083fe9eb</property>
+	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="opt_vbox">
@@ -7277,9 +7277,9 @@ the created Scheduled Transactions directly.</property>
 	<widget class="GnomeDruidPageStandard" id="repayment_pg">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Repayment</property>
-	  <property name="title_foreground">#7ec0081e09eb</property>
-	  <property name="background">#7ec0081ed3b8</property>
-	  <property name="logo_background">#1780407fd3a8</property>
+	  <property name="title_foreground">#23b00840ceb8</property>
+	  <property name="background">#39e00840e9eb</property>
+	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox12">
@@ -7546,10 +7546,10 @@ the created Scheduled Transactions directly.</property>
       <child>
 	<widget class="GnomeDruidPageStandard" id="payment_pg">
 	  <property name="visible">True</property>
-	  <property name="title" translatable="yes">&lt;repayment type&gt;</property>
-	  <property name="title_foreground">#7ec0081e09eb</property>
-	  <property name="background">#7ec0081ed3b8</property>
-	  <property name="logo_background">#1780407fd3a8</property>
+	  <property name="title" translatable="yes">repayment type</property>
+	  <property name="title_foreground">#94780840ceb8</property>
+	  <property name="background">#7e400840e9eb</property>
+	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox13">
@@ -7957,9 +7957,9 @@ the created Scheduled Transactions directly.</property>
 	<widget class="GnomeDruidPageStandard" id="review_pg">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Review</property>
-	  <property name="title_foreground">#7ec0081e09eb</property>
-	  <property name="background">#7ec0081ed3b8</property>
-	  <property name="logo_background">#1780407fd3a8</property>
+	  <property name="title_foreground">#1e500841ceb8</property>
+	  <property name="background">#1ba80841e9eb</property>
+	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox14">

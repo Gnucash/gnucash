@@ -1305,6 +1305,7 @@
 	      <child>
 		<widget class="GtkVSeparator" id="vseparator1">
 		  <property name="visible">True</property>
+		  <property name="new_group">True</property>
 		</widget>
 		<packing>
 		  <property name="new_group">True</property>
@@ -1347,6 +1348,7 @@
 	      <child>
 		<widget class="GtkVSeparator" id="vseparator2">
 		  <property name="visible">True</property>
+		  <property name="new_group">True</property>
 		</widget>
 		<packing>
 		  <property name="new_group">True</property>
@@ -1378,6 +1380,7 @@
 	      <child>
 		<widget class="GtkVSeparator" id="vseparator3">
 		  <property name="visible">True</property>
+		  <property name="new_group">True</property>
 		</widget>
 		<packing>
 		  <property name="new_group">True</property>
@@ -2554,7 +2557,6 @@ Are you sure you want to unpost it?</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="active">False</property>
-		      <property name="group">reset tax tables</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>
 		      <signal name="toggled" handler="on_yes_tt_reset_toggled" object="Invoice Entry Window" last_modification_time="Wed, 16 Jul 2003 07:22:26 GMT"/>
@@ -2574,7 +2576,6 @@ Are you sure you want to unpost it?</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="active">True</property>
-		      <property name="group">reset tax tables</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>
 		      <signal name="toggled" handler="on_no_tt_reset_toggled" object="Invoice Entry Window" last_modification_time="Wed, 16 Jul 2003 07:23:29 GMT"/>

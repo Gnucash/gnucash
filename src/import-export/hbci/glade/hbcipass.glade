@@ -1,326 +1,340 @@
 <?xml version="1.0" standalone="no"?> <!--*- mode: xml -*-->
-<!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd" >
+<!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
-  <widget class="GtkDialog" id="Password Dialog">
-    <property name="title" translatable="yes">Enter Password</property>
-    <property name="type">GTK_WINDOW_TOPLEVEL</property>
-    <property name="modal">no</property>
-    <property name="allow_shrink">no</property>
-    <property name="allow_grow">no</property>
-    <property name="visible">yes</property>
-    <property name="window-position">GTK_WIN_POS_NONE</property>
+<requires lib="gnome"/>
 
-    <child internal-child="vbox">
-      <widget class="GtkVBox" id="dialog-vbox16">
-        <property name="homogeneous">no</property>
-        <property name="spacing">8</property>
-        <property name="visible">yes</property>
+<widget class="GtkDialog" id="Password Dialog">
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">Enter Password</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">False</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="has_separator">True</property>
 
-        <child internal-child="action_area">
-          <widget class="GtkHButtonBox" id="dialog-action_area16">
-            <property name="layout_style">GTK_BUTTONBOX_END</property>
-            <property name="spacing">8</property>
-            <property name="visible">yes</property>
+  <child internal-child="vbox">
+    <widget class="GtkVBox" id="dialog-vbox16">
+      <property name="visible">True</property>
+      <property name="homogeneous">False</property>
+      <property name="spacing">8</property>
 
-            <child>
-              <widget class="GtkButton" id="button79">
-                <property name="can_default">yes</property>
-                <property name="can_focus">yes</property>
-                <property name="visible">yes</property>
-                <property name="label">gtk-ok</property>
-                <property name="use_stock">yes</property>
-                <property name="use_underline">yes</property>
-              </widget>
-            </child>
+      <child internal-child="action_area">
+	<widget class="GtkHButtonBox" id="dialog-action_area16">
+	  <property name="visible">True</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
-            <child>
-              <widget class="GtkButton" id="button81">
-                <property name="can_default">yes</property>
-                <property name="can_focus">yes</property>
-                <property name="visible">yes</property>
-                <property name="label">gtk-cancel</property>
-                <property name="use_stock">yes</property>
-                <property name="use_underline">yes</property>
-              </widget>
-            </child>
-          </widget>
-          <packing>
-            <property name="padding">0</property>
-            <property name="expand">no</property>
-            <property name="fill">yes</property>
-            <property name="pack_type">GTK_PACK_END</property>
-          </packing>
-        </child>
+	  <child>
+	    <widget class="GtkButton" id="button79">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-ok</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="response_id">0</property>
+	    </widget>
+	  </child>
 
-        <child>
-          <widget class="GtkLabel" id="heading_label">
-            <property name="label" translatable="yes">Enter your password</property>
-            <property name="justify">GTK_JUSTIFY_CENTER</property>
-            <property name="wrap">no</property>
-            <property name="xalign">0.5</property>
-            <property name="yalign">0.5</property>
-            <property name="xpad">0</property>
-            <property name="ypad">0</property>
-            <property name="visible">yes</property>
-          </widget>
-          <packing>
-            <property name="padding">0</property>
-            <property name="expand">no</property>
-            <property name="fill">no</property>
-          </packing>
-        </child>
+	  <child>
+	    <widget class="GtkButton" id="button81">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-cancel</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="response_id">0</property>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">True</property>
+	  <property name="pack_type">GTK_PACK_END</property>
+	</packing>
+      </child>
 
-        <child>
-          <widget class="GtkFrame" id="frame47">
-            <property name="label_xalign">0</property>
-            <property name="shadow">GTK_SHADOW_ETCHED_IN</property>
-            <property name="visible">yes</property>
+      <child>
+	<widget class="GtkLabel" id="heading_label">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">Enter your password</property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">False</property>
+	  <property name="justify">GTK_JUSTIFY_CENTER</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">False</property>
+	</packing>
+      </child>
 
-            <child>
-              <widget class="GtkHBox" id="hbox95">
-                <property name="border_width">10</property>
-                <property name="homogeneous">no</property>
-                <property name="spacing">2</property>
-                <property name="visible">yes</property>
+      <child>
+	<widget class="GtkFrame" id="frame47">
+	  <property name="visible">True</property>
+	  <property name="label_xalign">0</property>
+	  <property name="label_yalign">0.5</property>
+	  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
-                <child>
-                  <widget class="GtkLabel" id="label847714">
-                    <property name="label" translatable="yes">Password:</property>
-                    <property name="justify">GTK_JUSTIFY_CENTER</property>
-                    <property name="wrap">no</property>
-                    <property name="xalign">0.5</property>
-                    <property name="yalign">0.5</property>
-                    <property name="xpad">0</property>
-                    <property name="ypad">0</property>
-                    <property name="visible">yes</property>
-                  </widget>
-                  <packing>
-                    <property name="padding">0</property>
-                    <property name="expand">no</property>
-                    <property name="fill">no</property>
-                  </packing>
-                </child>
+	  <child>
+	    <widget class="GtkHBox" id="hbox95">
+	      <property name="border_width">10</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">2</property>
 
-                <child>
-                  <widget class="GtkEntry" id="password_entry">
-                    <property name="can_focus">yes</property>
-                    <property name="editable">yes</property>
-                    <property name="text" translatable="yes"></property>
-                    <property name="max-length">0</property>
-                    <property name="visibility">no</property>
-                    <property name="visible">yes</property>
-                  </widget>
-                  <packing>
-                    <property name="padding">0</property>
-                    <property name="expand">yes</property>
-                    <property name="fill">yes</property>
-                  </packing>
-                </child>
-              </widget>
-            </child>
-          </widget>
-          <packing>
-            <property name="padding">0</property>
-            <property name="expand">yes</property>
-            <property name="fill">yes</property>
-          </packing>
-        </child>
-      </widget>
-      <packing>
-        <property name="padding">4</property>
-        <property name="expand">yes</property>
-        <property name="fill">yes</property>
-      </packing>
-    </child>
-  </widget>
-  <widget class="GtkDialog" id="Initial Password Dialog">
-    <property name="title" translatable="yes">Enter new Password</property>
-    <property name="type">GTK_WINDOW_TOPLEVEL</property>
-    <property name="modal">no</property>
-    <property name="allow_shrink">no</property>
-    <property name="allow_grow">no</property>
-    <property name="visible">yes</property>
-    <property name="window-position">GTK_WIN_POS_NONE</property>
+	      <child>
+		<widget class="GtkLabel" id="label847714">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Password:</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_CENTER</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
 
-    <child internal-child="vbox">
-      <widget class="GtkVBox" id="vbox106">
-        <property name="homogeneous">no</property>
-        <property name="spacing">8</property>
-        <property name="visible">yes</property>
+	      <child>
+		<widget class="GtkEntry" id="password_entry">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="editable">True</property>
+		  <property name="visibility">False</property>
+		  <property name="max_length">0</property>
+		  <property name="text" translatable="yes"></property>
+		  <property name="has_frame">True</property>
+		  <property name="invisible_char" translatable="yes">*</property>
+		  <property name="activates_default">False</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">True</property>
+		  <property name="fill">True</property>
+		</packing>
+	      </child>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">True</property>
+	  <property name="fill">True</property>
+	</packing>
+      </child>
+    </widget>
+  </child>
+</widget>
 
-        <child internal-child="action_area">
-          <widget class="GtkHButtonBox" id="hbuttonbox1">
-            <property name="layout_style">GTK_BUTTONBOX_END</property>
-            <property name="spacing">8</property>
-            <property name="visible">yes</property>
+<widget class="GtkDialog" id="Initial Password Dialog">
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">Enter new Password</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">False</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="has_separator">True</property>
 
-            <child>
-              <widget class="GtkButton" id="button82">
-                <property name="can_default">yes</property>
-                <property name="can_focus">yes</property>
-                <property name="visible">yes</property>
-                <property name="label">gtk-ok</property>
-                <property name="use_stock">yes</property>
-                <property name="use_underline">yes</property>
-              </widget>
-            </child>
+  <child internal-child="vbox">
+    <widget class="GtkVBox" id="vbox106">
+      <property name="visible">True</property>
+      <property name="homogeneous">False</property>
+      <property name="spacing">8</property>
 
-            <child>
-              <widget class="GtkButton" id="button83">
-                <property name="can_default">yes</property>
-                <property name="can_focus">yes</property>
-                <property name="visible">yes</property>
-                <property name="label">gtk-cancel</property>
-                <property name="use_stock">yes</property>
-                <property name="use_underline">yes</property>
-              </widget>
-            </child>
-          </widget>
-          <packing>
-            <property name="padding">0</property>
-            <property name="expand">no</property>
-            <property name="fill">yes</property>
-            <property name="pack_type">GTK_PACK_END</property>
-          </packing>
-        </child>
+      <child internal-child="action_area">
+	<widget class="GtkHButtonBox" id="hbuttonbox1">
+	  <property name="visible">True</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
-        <child>
-          <widget class="GtkLabel" id="heading_label">
-            <property name="label" translatable="yes">Enter and confirm your new password</property>
-            <property name="justify">GTK_JUSTIFY_CENTER</property>
-            <property name="wrap">no</property>
-            <property name="xalign">0.5</property>
-            <property name="yalign">0.5</property>
-            <property name="xpad">0</property>
-            <property name="ypad">0</property>
-            <property name="visible">yes</property>
-          </widget>
-          <packing>
-            <property name="padding">0</property>
-            <property name="expand">no</property>
-            <property name="fill">no</property>
-          </packing>
-        </child>
+	  <child>
+	    <widget class="GtkButton" id="button82">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-ok</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="response_id">0</property>
+	    </widget>
+	  </child>
 
-        <child>
-          <widget class="GtkFrame" id="frame48">
-            <property name="label_xalign">0</property>
-            <property name="shadow">GTK_SHADOW_ETCHED_IN</property>
-            <property name="visible">yes</property>
+	  <child>
+	    <widget class="GtkButton" id="button83">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-cancel</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="response_id">0</property>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">True</property>
+	  <property name="pack_type">GTK_PACK_END</property>
+	</packing>
+      </child>
 
-            <child>
-              <widget class="GtkTable" id="table1">
-                <property name="border_width">10</property>
-                <property name="homogeneous">no</property>
-                <property name="row_spacing">0</property>
-                <property name="column_spacing">0</property>
-                <property name="n-rows">2</property>
-                <property name="n-columns">2</property>
-                <property name="visible">yes</property>
+      <child>
+	<widget class="GtkLabel" id="heading_label">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">Enter and confirm your new password</property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">False</property>
+	  <property name="justify">GTK_JUSTIFY_CENTER</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">False</property>
+	</packing>
+      </child>
 
-                <child>
-                  <widget class="GtkEntry" id="password_entry">
-                    <property name="can_focus">yes</property>
-                    <property name="editable">yes</property>
-                    <property name="text" translatable="yes"></property>
-                    <property name="max-length">0</property>
-                    <property name="visibility">no</property>
-                    <property name="visible">yes</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">0</property>
-                    <property name="bottom_attach">1</property>
-                    <property name="x_padding">0</property>
-                    <property name="y_padding">0</property>
-                    <property name="x_options">expand|fill</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
+      <child>
+	<widget class="GtkFrame" id="frame48">
+	  <property name="visible">True</property>
+	  <property name="label_xalign">0</property>
+	  <property name="label_yalign">0.5</property>
+	  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
-                <child>
-                  <widget class="GtkLabel" id="label847716">
-                    <property name="label" translatable="yes">Password:</property>
-                    <property name="justify">GTK_JUSTIFY_CENTER</property>
-                    <property name="wrap">no</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">0.5</property>
-                    <property name="xpad">0</property>
-                    <property name="ypad">0</property>
-                    <property name="visible">yes</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="right_attach">1</property>
-                    <property name="top_attach">0</property>
-                    <property name="bottom_attach">1</property>
-                    <property name="x_padding">0</property>
-                    <property name="y_padding">0</property>
-                    <property name="x_options">fill</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
+	  <child>
+	    <widget class="GtkTable" id="table1">
+	      <property name="border_width">10</property>
+	      <property name="visible">True</property>
+	      <property name="n_rows">2</property>
+	      <property name="n_columns">2</property>
+	      <property name="homogeneous">False</property>
+	      <property name="row_spacing">0</property>
+	      <property name="column_spacing">0</property>
 
-                <child>
-                  <widget class="GtkEntry" id="confirm_entry">
-                    <property name="can_focus">yes</property>
-                    <property name="editable">yes</property>
-                    <property name="text" translatable="yes"></property>
-                    <property name="max-length">0</property>
-                    <property name="visibility">no</property>
-                    <property name="visible">yes</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
-                    <property name="x_padding">0</property>
-                    <property name="y_padding">0</property>
-                    <property name="x_options">expand|fill</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
+	      <child>
+		<widget class="GtkEntry" id="password_entry">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="editable">True</property>
+		  <property name="visibility">False</property>
+		  <property name="max_length">0</property>
+		  <property name="text" translatable="yes"></property>
+		  <property name="has_frame">True</property>
+		  <property name="invisible_char" translatable="yes">*</property>
+		  <property name="activates_default">False</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">1</property>
+		  <property name="right_attach">2</property>
+		  <property name="top_attach">0</property>
+		  <property name="bottom_attach">1</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
 
-                <child>
-                  <widget class="GtkLabel" id="label847717">
-                    <property name="label" translatable="yes">Confirm Password:</property>
-                    <property name="justify">GTK_JUSTIFY_CENTER</property>
-                    <property name="wrap">no</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">0.5</property>
-                    <property name="xpad">0</property>
-                    <property name="ypad">0</property>
-                    <property name="visible">yes</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="right_attach">1</property>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
-                    <property name="x_padding">0</property>
-                    <property name="y_padding">0</property>
-                    <property name="x_options">fill</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-              </widget>
-            </child>
-          </widget>
-          <packing>
-            <property name="padding">0</property>
-            <property name="expand">yes</property>
-            <property name="fill">yes</property>
-          </packing>
-        </child>
-      </widget>
-      <packing>
-        <property name="padding">4</property>
-        <property name="expand">yes</property>
-        <property name="fill">yes</property>
-      </packing>
-    </child>
-  </widget>
+	      <child>
+		<widget class="GtkLabel" id="label847716">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Password:</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_CENTER</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">0</property>
+		  <property name="bottom_attach">1</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkEntry" id="confirm_entry">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="editable">True</property>
+		  <property name="visibility">False</property>
+		  <property name="max_length">0</property>
+		  <property name="text" translatable="yes"></property>
+		  <property name="has_frame">True</property>
+		  <property name="invisible_char" translatable="yes">*</property>
+		  <property name="activates_default">False</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">1</property>
+		  <property name="right_attach">2</property>
+		  <property name="top_attach">1</property>
+		  <property name="bottom_attach">2</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="label847717">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Confirm Password:</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_CENTER</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">1</property>
+		  <property name="bottom_attach">2</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">True</property>
+	  <property name="fill">True</property>
+	</packing>
+      </child>
+    </widget>
+  </child>
+</widget>
+
 </glade-interface>

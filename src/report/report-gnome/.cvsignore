@@ -1,3 +1,4 @@
+*.gladep
 *.lo
 *.la
 .scm-links
