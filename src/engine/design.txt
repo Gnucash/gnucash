@@ -10,8 +10,8 @@ price of that quantity (the price of one dollar is 1.00 dollars, etc.)
 a memo, a pointer to the "credited" account, a reconciled flag and timestamp, 
 an "action" field, and a pointer to any additional generic data.   Because 
 the word "entry" has many other meanings, the remainder of the documentation, 
-and the code, refers to it as a "split".  So when you see "Split", think "Journal
-Entry".
+and the code, refers to it as a "split".  So when you see "Split", think 
+"Journal Entry".
 
 The notion of "double entry" is embodied in the "transaction" structure.
 The transaction consists of a date, a description field, a number, and
@@ -32,8 +32,8 @@ better to leave double-entry enabled, but credit all dangling splits
 to some dummy account, and then simply not show that dummy account to 
 the user.
 
-Note that the sum of the values of the splits is always computed with respect to 
-a currency; thus splits can be balanced even when they are in different
+Note that the sum of the values of the splits is always computed with respect 
+to a currency; thus splits can be balanced even when they are in different
 currencies, as long as they share a common currency.  The conversion price
 is simply the price stored in the split.  This feature allows currency-trading 
 accounts to be established.
@@ -124,7 +124,52 @@ and the "security" field is set to "USD", while the currency for ABC bank is
 
 Note that we ignored the price when adding the second split.
 
+Recoding a Stock Price
+----------------------
+A stock price may be recorded in a brokerage account with a single
+split that has zero value:
+(share price) * (zero shares) == (zero dollars)
+This transaction does not violate the rules that all transactions must
+have zero value.  This transaction is ideal for recording prices.  Its
+the only transaction type that may have a single split; everything else
+requires at least two splits to balance. (at least when double-entry
+is enabled).
 
+Recording a Stock Split
+-----------------------
+Stock splits (i.e. when a company issues x shares of new stock for every
+share already owned) may be recorded with a pair of journal entries as
+follows:
+
+(-old num shrs) * (old price) + (new num shrs) * (new price) == 0.0
+where each journal entry credits/debits the same account.
+Of course  (new num shrs) == (1+x) * (old num shrs)
+and the price goes inversely.
+
+Stock Options
+-------------
+Stock options are note currently supported.  To support them, the
+following needs to be added:
+
+A stock option is an option to purchase stock at a specified price.
+Options have an expiration date.  When you purchase an option it is 
+pretty much like buying stock.  However, some extra information needs 
+to be recorded.  To fully record an option purchase, you need to record 
+the underlying stock that the option is on, the strike price (i.e. the 
+price that the underlying stock can be purchases for), an expiration date, 
+and whether the option is a put or a call.  A put option is the option 
+to sell stock at the strike price, and a call option is the option to 
+purchase stock at the strike price.  Once an option is bought, it can 
+have one of three dispositions: it can be sold, in which case, it is 
+pretty much just like a stock transaction.  It can expire, in which 
+case the option is worthless, and (IIRC) can be/is treated as a sale 
+at a zero price.  Thirdly, it can be exercised, which is a single 
+transaction where by stock is purchased at the strike price, and
+the  option becomes worthless.
+
+Another point: with standardized options one option contract represents
+the ability to purchase (with a call option) or sell (with a put option) 
+100 shares of the underlying stock.  
 
 Error Reporting
 ---------------
@@ -146,9 +191,9 @@ Many programmers are used to a different interface, e.g.
         if (bad_thing_happened) return (42);
     }  
 
-Because of this, it is important to explain why the former design was choosen over
-the latter.  Let us begin by listing how the choosen design is as good as, and in
-many ways can be better to the later design.
+Because of this, it is important to explain why the former design was 
+choosen over the latter.  Let us begin by listing how the choosen design 
+is as good as, and in many ways can be better to the later design.
 
  (1) Allows programmer to check for errors asynchronously, e.g. outside
      of a performance critical loop, or far away, after the return of
