@@ -463,7 +463,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
                       Account *default_source_acc)
 {
    int i;
-   Split *split;
+   Split *split=NULL, *last_split=NULL;
    Table *table;
    int save_cursor_phys_row;
    int num_phys_rows;
@@ -630,6 +630,7 @@ printf ("load split %d at phys row %d \n", j, phys_row);
          } 
       }
 
+      last_split = split;
       i++; 
       split = slist[i];
    }
@@ -641,6 +642,8 @@ printf ("load split %d at phys row %d \n", j, phys_row);
       split = (Split *) reg->user_hook;
    } else {
       Transaction *trans;
+      double last_price = 0.0;
+
       trans = xaccMallocTransaction ();
       xaccTransBeginEdit (trans);
       xaccTransSetDateToday (trans);
@@ -649,6 +652,13 @@ printf ("load split %d at phys row %d \n", j, phys_row);
       xaccAccountInsertSplit (default_source_acc, split);
       reg->user_hook =  (void *) split;
       reg->destroy = LedgerDestroy;
+
+      /* kind of a cheesy hack to get the price on the last split right
+       * when doing stock accounts.   This will guess incorrectly for a 
+       * ledger showing multiple stocks, but seems cool for a single stock.
+       */
+      last_price = xaccSplitGetSharePrice (last_split);
+      xaccSplitSetSharePrice (split, last_price);
    }
 
    /* do the transaction row of the blank split */
