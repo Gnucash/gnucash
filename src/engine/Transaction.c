@@ -527,14 +527,14 @@ xaccConfigGetForceDoubleEntry (void)
 
 /********************************************************************\
 \********************************************************************/
-/* routines for marking splits dirty, and for sending out change
+/* Routines for marking splits dirty, and for sending out change
  * events.  Note that we can't just mark-n-generate-event in one
  * step, since sometimes we need to mark things up before its suitable
  * to send out a change event.
  */
 
-static void
-DetermineGainStatus (Split *split)
+void
+xaccSplitDetermineGainStatus (Split *split)
 {
    Split *other;
    KvpValue *val;
@@ -567,10 +567,10 @@ DetermineGainStatus (Split *split)
 }
 
 #define CHECK_GAINS_STATUS(s)  \
-   if (GAINS_STATUS_UNKNOWN == s->gains) DetermineGainStatus(s);
+   if (GAINS_STATUS_UNKNOWN == s->gains) xaccSplitDetermineGainStatus(s);
 
 #define SET_GAINS_DIRTY(s,flg) {                                        \
-   if (GAINS_STATUS_GAINS != s->gains) {                                \
+   if (FALSE == (GAINS_STATUS_GAINS & s->gains)) {                      \
       s->gains |= flg;;                                                 \
    } else {                                                             \
       if (s->gains_split) s->gains_split->gains |= flg;                 \
@@ -1810,7 +1810,7 @@ destroy_gains (Transaction *trans)
   for (node = trans->splits; node; node = node->next)
   {
     Split *s = node->data;
-    if (GAINS_STATUS_UNKNOWN == s->gains) DetermineGainStatus(s);
+    if (GAINS_STATUS_UNKNOWN == s->gains) xaccSplitDetermineGainStatus(s);
     if (s->gains_split && (GAINS_STATUS_GAINS & s->gains_split->gains))
     {
       Transaction *t = s->gains_split->parent;
@@ -2897,7 +2897,7 @@ restart_search:
    for (node = trans->splits; node; node=node->next)
    {
       Split *s = node->data;
-      if (GAINS_STATUS_UNKNOWN == s->gains) DetermineGainStatus(s);
+      if (GAINS_STATUS_UNKNOWN == s->gains) xaccSplitDetermineGainStatus(s);
 
       if ((GAINS_STATUS_GAINS & s->gains) && 
           s->gains_split &&
