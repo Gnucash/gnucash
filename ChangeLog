@@ -1,3 +1,9 @@
+2001-09-21  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/engine/SchedXaction.c: fix split account bugs.
+
+	* src/gnome/dialog-sx-from-trans.c: fix freqspec bugs.
+
 2001-09-14  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/register-gnome: add new headers

@@ -220,7 +220,7 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
 static guint
 sxftd_compute_sx(SXFromTransInfo *sxfti)
 {
-GtkWidget *w;
+  GtkWidget *w;
   gchar *name;
   GDate date;
   time_t trans_t;
@@ -229,7 +229,7 @@ GtkWidget *w;
   getEndTuple end_info;
   guint sxftd_errno = 0; /* 0 == OK, > 0 means dialog needs to be run again */
 
-  FreqSpec *fs;
+  FreqSpec *fs, *tmpfs;
 
   SchedXaction *sx = sxfti->sx;
 
@@ -272,8 +272,13 @@ GtkWidget *w;
 
   case FREQ_WEEKLY:
     g_date_add_days(&date, 7);
-    xaccFreqSpecSetWeekly(fs, &date, 1);
+    
+    tmpfs = xaccFreqSpecMalloc();
+    xaccFreqSpecSetComposite(fs);
+    xaccFreqSpecSetWeekly(tmpfs, &date, 1);
     xaccFreqSpecSetUIType(fs, UIFREQ_WEEKLY);
+    xaccFreqSpecCompositeAdd(fs,tmpfs);
+
     break;
 
   case FREQ_MONTHLY:

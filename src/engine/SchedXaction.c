@@ -503,7 +503,7 @@ xaccSchedXactionIsDirty(SchedXaction *sx)
 
 
 static Split *
-pack_split_info(TTSplitInfo *s_info, Account *parent_acct)
+pack_split_info(TTSplitInfo *s_info, Account *parent_acct, Transaction *parent_trans)
 {
   Split *split;
   kvp_frame *split_frame, *sx_frame;
@@ -519,8 +519,9 @@ pack_split_info(TTSplitInfo *s_info, Account *parent_acct)
 		     gnc_ttsplitinfo_get_action(s_info));
   
 
-  xaccSplitSetAccount(split, 
-		      parent_acct);
+  xaccAccountInsertSplit(parent_acct, 
+			 split);
+
   split_frame = xaccSplitGetSlots(split);
   
   tmp_value 
@@ -591,7 +592,7 @@ void xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list)
 	split_list = split_list->next)
     {
       s_info = split_list->data;
-      new_split = pack_split_info(s_info, sx->template_acct);
+      new_split = pack_split_info(s_info, sx->template_acct, new_trans);
       xaccTransAppendSplit(new_trans, new_split);
     }
     xaccTransCommitEdit(new_trans);
