@@ -990,6 +990,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
   else if (old_trans &&
            (old_trans != new_trans) &&
            !trans_has_reconciled_splits (old_trans) &&
+           !info->first_pass &&
            sr_balance_trans (reg, old_trans))
   {
     /* no matter what, stay there so the user can see what happened */
@@ -1357,6 +1358,9 @@ LedgerTraverse (Table *table,
   GNCVerifyResult result;
   guint32 changed;
   Split *split;
+
+  if (info->first_pass)
+    return FALSE;
 
   info->exact_traversal = (dir == GNC_TABLE_TRAVERSE_POINTER);
 

@@ -744,7 +744,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     xaccAccountBeginEdit(from);
     xaccAccountInsertSplit(from, from_split);
 
-    xaccSplitSetShareAmount(from_split, gnc_numeric_neg (amount));
+    xaccSplitSetBaseValue(from_split, gnc_numeric_neg (amount), from_currency);
     xaccSplitSetBaseValue(curr_split, amount, from_currency);
     xaccSplitSetBaseValue(curr_split, to_amount, to_currency);
 
@@ -784,7 +784,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     xaccAccountBeginEdit(curr);
     xaccAccountInsertSplit(curr, curr_split);
 
-    xaccSplitSetShareAmount(to_split, to_amount);
+    xaccSplitSetBaseValue(to_split, to_amount, to_currency);
     xaccSplitSetBaseValue(curr_split, gnc_numeric_neg(amount), from_currency);
     xaccSplitSetBaseValue(curr_split, gnc_numeric_neg(to_amount), to_currency);
 
