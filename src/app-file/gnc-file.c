@@ -141,6 +141,16 @@ show_session_error (QofBackendError io_error, const char *newfile)
       if (gnc_verify_dialog (TRUE, fmt, newfile)) { uh_oh = FALSE; }
       break;
 
+    case ERR_BACKEND_READONLY:
+      fmt = _("WARNING!!!  GnuCash could not obtain the lock for\n"
+              "   %s.\n"
+              "That database may be on a read-only file system,\n"
+	      "or you may not have write permission for the directory.\n"
+	      "If you proceed you may not be able to save any changes.\n"
+              "\nAre you sure want to proceed with opening the database?");
+      if (gnc_verify_dialog (TRUE, fmt, newfile)) { uh_oh = FALSE; }
+      break;
+
     case ERR_BACKEND_DATA_CORRUPT:
       fmt = _("The file/URL \n    %s\n"
               "does not contain GnuCash data or the data is corrupt.");
@@ -374,15 +384,23 @@ gnc_post_file_open (const char * filename)
   io_err = qof_session_get_error (new_session);
 
   /* if file appears to be locked, ask the user ... */
-  if (ERR_BACKEND_LOCKED == io_err)
+  if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
   {
     const char *buttons[] = { N_("Quit"), N_("Open Anyway"),
 			      N_("Create New File"), NULL };
-    char *fmt = _("GnuCash could not obtain the lock for\n"
-		  "   %s.\n"
-		  "That database may be in use by another user,\n"
-		  "in which case you should not open the database.\n"
-		  "\nWhat would you like to do?");
+    char *fmt = ((ERR_BACKEND_LOCKED == io_err) ?
+		 _("GnuCash could not obtain the lock for\n"
+		   "   %s.\n"
+		   "That database may be in use by another user,\n"
+		   "in which case you should not open the database.\n"
+		   "\nWhat would you like to do?") :
+		 _("WARNING!!!  GnuCash could not obtain the lock for\n"
+		   "   %s.\n"
+		   "That database may be on a read-only file system,\n"
+		   "or you may not have write permission for the directory.\n"
+		   "If you proceed you may not be able to save any changes.\n"
+		   "\nWhat would you like to do?")
+		 );
     int rc;
 
     if (shutdown_cb) {
@@ -428,6 +446,7 @@ gnc_post_file_open (const char * filename)
    * don't bother with the message, just die. */
   io_err = qof_session_get_error (new_session);
   if ((ERR_BACKEND_LOCKED == io_err) ||
+      (ERR_BACKEND_READONLY == io_err) ||
       (ERR_BACKEND_NO_SUCH_DB == io_err) ||
       (ERR_SQL_DB_TOO_OLD == io_err))
   {
@@ -587,7 +606,7 @@ gnc_file_export_file(const char * newfile)
   io_err = qof_session_get_error (new_session);
 
   /* if file appears to be locked, ask the user ... */
-  if (ERR_BACKEND_LOCKED == io_err) 
+  if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err) 
   {
     if (FALSE == show_session_error (io_err, newfile))
     {
@@ -753,7 +772,7 @@ gnc_file_save_as (void)
   io_err = qof_session_get_error (new_session);
 
   /* if file appears to be locked, ask the user ... */
-  if (ERR_BACKEND_LOCKED == io_err) 
+  if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err) 
   {
     if (FALSE == show_session_error (io_err, newfile))
     {

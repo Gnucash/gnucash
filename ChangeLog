@@ -1,3 +1,15 @@
+2003-07-26  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/qofbackend.h: add a new error, ERR_BACKEND_READONLY
+	* src/engine/gw-engine-spec.scm: add new error type
+	* src/backend/file/gnc-backend-file.c: differentiate between
+	  "file is already locked" and "we can't create the lockfile"
+	  so we can let the user know.
+	* src/app-file/gnc-file.c: handle the new ERR_BACKEND_READONLY
+	  error message by changing the error dialog presented to the
+	  user.
+	Fixes #117665
+
 2003-07-26  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* src/import-export/import-account-matcher.c: Fix bug #105293
