@@ -34,6 +34,9 @@ static void test_query_object (void)
     { NULL },
   };
 
+  fprintf (stderr, "\tTesting the QueryObject interface. \n"
+	   "\tYou may see some \"** CRITICAL **\" messages, which you can safely ignore\n");
+
   gncQueryObjectRegister (TEST_MODULE_NAME, (QuerySort)test_sort, params);
 
   do_test (gncQueryObjectGetParameter (TEST_MODULE_NAME, TEST_PARAM)

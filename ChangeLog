@@ -26,6 +26,9 @@
 	  via the RECONCILED_MATCH_TYPE string
 	* src/engine/Transaction.h -- add RECONCILED_MATCH_TYPE string
 	* hook into the Find Transactions window (fixes bug #95634)
+
+	* src/engine/test/test-querynew.c -- add a warning message about
+	  known CRITICAL messages, which are safe to ignore..
 	
 2002-10-16  Joshua Sled  <jsled@asynchronous.org>
 
