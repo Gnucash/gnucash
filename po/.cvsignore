@@ -3,8 +3,8 @@
 *.mo
 Makefile
 Makefile.in
+Makefile.in.in
 POTFILES
 cat-id-tbl.c
-pseudo-source.c
 stamp-cat-id
 gnucash.pot

@@ -1,3 +1,4 @@
+ABOUT-NLS
 COPYING
 INSTALL
 Makefile
@@ -12,6 +13,7 @@ config.status
 config.h
 config.h.in
 install-sh
+intl
 libtool
 ltconfig
 ltmain.sh
