@@ -25,11 +25,13 @@ Owen Taylor.
    entries are mandatory. Changes with out ChangeLog entries will be
    reverted.
 
+ + When you commit, use your ChangeLog entry as the log message.
+
  + You must not break the build! Never check in changes that do not
-   compile or install. Just because your local tree compiles doesn't
-   mean you are done. The most common way to break the build is to
-   forget to add new files or directories to CVS. But it is easy to
-   fix this problem:
+   compile, install or run. Just because your local tree compiles
+   doesn't mean you are done. The most common way to break the build
+   is to forget to add new files or directories to CVS. But it is easy
+   to fix this problem:
 
     +  Keep two directories, one where you make changes and another
        'pristine' tree that you keep up to date. As soon as you check

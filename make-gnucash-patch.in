@@ -89,7 +89,7 @@ my $filename = undef;
 
 $result = GetOptions("old=s" => \$old, "new=s" => \$new, 
             "prefix=s" => \$gnc_home, "help" => \$help,
-            "file=s" => \$filename, "ask!" => \$ask_description,
+            "file=s" => \$filename, "ask!" => \$::ask_description,
             "diff=s" => \$diffname, "uuencode!" => \$::should_uuencode,
             "zip!" => \$zip, "ignore=s" => \$ignorename);
 
