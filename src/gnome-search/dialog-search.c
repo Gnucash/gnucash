@@ -6,8 +6,8 @@
 
 #include "config.h"
 
-#include <gnome.h>
 #include <glib.h>
+#include <gtk/gtk.h>
 
 #include "dialog-utils.h"
 #include "window-help.h"
@@ -96,7 +96,7 @@ struct _crit_data {
   GtkWidget *		elemwidget;
   GtkWidget *		container;
   GtkWidget *		button;
-  GnomeDialog *		dialog;
+  GtkDialog *		dialog;
 };
 
 static void search_clear_criteria (GNCSearchWindow *sw);
@@ -554,7 +554,7 @@ option_activate (GtkMenuItem *item, struct _crit_data *data)
    */
   if (data->elemwidget)
     gtk_container_remove (GTK_CONTAINER (data->container), data->elemwidget);
-  gtk_object_destroy (GTK_OBJECT (data->element));
+  g_object_unref (G_OBJECT (data->element));
 
   newelem = gnc_search_core_type_new_type_name
     (gnc_search_param_get_param_type (param));
@@ -600,7 +600,7 @@ get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
 
   data = g_new0 (struct _crit_data, 1);
   data->element = element;
-  data->dialog = GNOME_DIALOG (sw->dialog);
+  data->dialog = GTK_DIALOG (sw->dialog);
 
   hbox = gtk_hbox_new (FALSE, 0);
   /* only set to automaticaly clean up the memory */
@@ -681,7 +681,7 @@ add_criterion (GtkWidget *button, GNCSearchWindow *sw)
 }
 
 static int
-gnc_search_dialog_close_cb (GnomeDialog *dialog, GNCSearchWindow *sw)
+gnc_search_dialog_close_cb (GtkDialog *dialog, GNCSearchWindow *sw)
 {
   g_return_val_if_fail (sw, TRUE);
 
@@ -718,7 +718,8 @@ close_handler (gpointer data)
   GNCSearchWindow * sw = data;
 
   g_return_if_fail (sw);
-  gnome_dialog_close (GNOME_DIALOG (sw->dialog));
+  gtk_widget_destroy (sw->dialog);
+  /* DRH: should sw be freed here? */
 }
 
 static void
@@ -805,7 +806,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
       /* Translators: %s is either "item" or the name of some other
        * item, e.g. "Customer" or "Invoice". */
       g_strdup_printf (_("New %s"), type_label ? type_label : _("item"));
-    gtk_label_set_text (GTK_LABEL (GTK_BIN (new_item_button)->child), desc);
+    gtk_button_set_label (GTK_BUTTON(new_item_button), desc);
     g_free (desc);
   }
   /* add the first criterion */
