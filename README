@@ -1,18 +1,17 @@
 
-############## WARNING ######################
 ************ BETA  RELEASE ******************
+The version 1.1.x series of gnucash are considered BETA development code.
+Things mopstly work these days; some things may still be broken. Feel 
+free to try it.  Please report bugs to http://www.gnucash.org/
 
-THIS IS VERSION 1.1, WHICH IS A BETA RELEASE.
-THINGS MAY BE BROKEN
+The last stable, production version was xacc-1.0.18
+The next stable, production version will be gnucash-1.2.x
 
-IF YOU WANT TO USE XACC, USE VERSION 1.0.18 INSTEAD!!
 ##############################################
-
 
 GnuCash
 -------
-
-gnucash is a program to keep track of your finances.  It is similar in
+GnuCash is an application to keep track of your finances.  It is similar in
 concept to Quicken(TM).  Although GnuCash still lacks the advanced
 features of Quicken, it does have the basic functionality.  Some
 of the features of GnuCash are:
@@ -82,12 +81,16 @@ http://www.cs.hmc.edu/~rclark/xacc
 
 Important Note:
 ---------------
-Numerous core dumps have been reported that occur with lesstif
-version 0.82.  These core dumps do not occur with lesstif v 0.81,
-nor with RedHat Motif, and appear to be gone with lesstif 0.83. 
-If it's crashing, please try using a different motif, or the 
-statically-linked Motif version, as described below.
+Numerous core dumps have been reported when using various
+versions of lesstif.  Some versions work, others don't.
+Lesstif 0.81: works
+Lesstif 0.82: broken
+Lesstif 0.81: works
+Lesstif 0.86.0: works
+Lesstif 0.86.5: broken
 
+These core dumps do not occur with RedHat Motif (or other commercial
+versions of Motif).
 
 Running:
 --------
@@ -227,12 +230,12 @@ Getting Source with CVS
 A read-only version of the cvs tree is available on the net.
 To access it, first, login, as so:
 
-cvs -d :pserver:cvs@linas.org:/home/cvs/cvsroot login
+cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot login
 The password is "guest"
 
 To get a copy of the source, do a 
 
-cvs -d :pserver:cvs@linas.org:/home/cvs/cvsroot checkout xacc
+cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout xacc
 
 
 Main Developers:
