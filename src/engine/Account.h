@@ -349,6 +349,11 @@ gboolean       xaccAccountGetReconcileLastDate (Account *account,
 void           xaccAccountSetReconcileLastDate (Account *account,
                                                 time_t last_date);
 
+gboolean       xaccAccountGetReconcileLastInterval (Account *account,
+						    int *months, int *days);
+void           xaccAccountSetReconcileLastInterval (Account *account,
+						    int months, int days);
+
 gboolean       xaccAccountGetReconcilePostponeDate (Account *account,
                                                     time_t *postpone_date);
 void           xaccAccountSetReconcilePostponeDate (Account *account,

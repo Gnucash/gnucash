@@ -2122,6 +2122,54 @@ xaccAccountSetReconcileLastDate (Account *account, time_t last_date)
 
 /********************************************************************\
 \********************************************************************/
+gboolean
+xaccAccountGetReconcileLastInterval (Account *account, int *months, int *days)
+{
+  kvp_value *value1, *value2;
+
+  if (!account)
+    return FALSE;
+
+  value1 = kvp_frame_get_slot_path (account->kvp_data, "reconcile-info",
+				    "last-interval", "months", NULL);
+  value2 = kvp_frame_get_slot_path (account->kvp_data, "reconcile-info",
+				    "last-interval", "days", NULL);
+  if (!value1 || (kvp_value_get_type (value1) != KVP_TYPE_GINT64) ||
+      !value2 || (kvp_value_get_type (value2) != KVP_TYPE_GINT64))
+    return FALSE;
+
+  if (months)
+    *months = kvp_value_get_gint64 (value1);
+  if (days)
+    *days = kvp_value_get_gint64 (value2);
+  return TRUE;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccAccountSetReconcileLastInterval (Account *account, int months, int days)
+{
+  kvp_frame *frame;
+  if (!account)
+    return;
+
+  xaccAccountBeginEdit (account);
+  frame = kvp_frame_get_frame (account->kvp_data, "reconcile-info",
+			       "last-interval", NULL);
+  kvp_frame_set_slot_nc (frame, "months", 
+                               kvp_value_new_gint64 (months));
+  kvp_frame_set_slot_nc (frame, "days", 
+                               kvp_value_new_gint64 (days));
+
+  mark_account (account);
+  account->core_dirty = TRUE;
+  xaccAccountCommitEdit (account);
+}
+
+/********************************************************************\
+\********************************************************************/
 
 gboolean
 xaccAccountGetReconcilePostponeDate (Account *account,

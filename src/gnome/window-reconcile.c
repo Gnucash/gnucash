@@ -539,6 +539,51 @@ gnc_start_recn_interest_clicked_cb(GtkButton *button, startRecnWindowData *data)
   gnc_reconcile_interest_xfer_run( data );
 }
 
+static void
+gnc_save_reconcile_interval(Account *account, time_t statement_date)
+{
+  time_t prev_statement_date;
+  int days = 0, months = 0;
+  double seconds;
+
+  if (!xaccAccountGetReconcileLastDate (account, &prev_statement_date))
+    return;
+
+  /*
+   * Compute the number of days difference.
+   */
+  seconds = difftime(statement_date, prev_statement_date);
+  days = (int)(seconds / 60 / 60 / 24);
+
+  /*
+   * See if we need to remember days(weeks) or months.  The only trick
+   * value is 28 days which could be wither 4 weeks or 1 month.
+   */
+  if (days == 28) {
+    int prev_days = 0, prev_months = 1;
+
+    /* What was it last time? */
+    xaccAccountGetReconcileLastInterval (account, &prev_months, &prev_days);
+    if (prev_months == 1) {
+      months = 1;
+      days = 0;
+    }
+  } else if (days > 28) {
+    struct tm current, prev;
+
+    current = * localtime(&statement_date);
+    prev = * localtime(&prev_statement_date);
+    months = ((12 * current.tm_year + current.tm_mon) -
+	      (12 * prev.tm_year + prev.tm_mon));
+    days = 0;
+  }
+  
+  /*
+   * Remember for next time.
+   */
+  xaccAccountSetReconcileLastInterval(account, months, days);
+}
+
 /********************************************************************\
  * startRecnWindow                                                  *
  *   opens up the window to prompt the user to enter the ending     *
@@ -728,6 +773,8 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
       xaccAccountSetReconcileChildrenStatus
         (account, GTK_TOGGLE_BUTTON(include_children_button)->active);
+
+      gnc_save_reconcile_interval(account, *statement_date);
     }
 
     /* cancel or delete */
@@ -1606,16 +1653,30 @@ gnc_get_reconcile_info (Account *account,
                         gnc_numeric *new_ending,
                         time_t *statement_date)
 {
+  struct tm tm;
+
   if (xaccAccountGetReconcileLastDate (account, statement_date))
   {
-    struct tm *tm;
+    int months = 1, days = 0;
 
-    tm = localtime (statement_date);
+    tm = * localtime (statement_date);
 
-    tm->tm_mon++;
-    tm->tm_isdst = -1;
+    /* How far should the date be moved?  Args unchanged on failure. */
+    xaccAccountGetReconcileLastInterval (account, &months, &days);
 
-    *statement_date = mktime (tm);
+    if (months) {
+      /*
+       * Add in the months and normalize
+       */
+      date_add_months(&tm, months, TRUE);
+    } else {
+      /*
+       * Add in the days (weeks if multiple of seven).
+       */
+      tm.tm_mday += days;
+    }
+    tm.tm_isdst = -1;
+    *statement_date = mktime (&tm);
   }
 
   xaccAccountGetReconcilePostponeDate (account, statement_date);

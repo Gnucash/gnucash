@@ -102,6 +102,22 @@ Timespec timespec_abs(const Timespec *t);
 
 Timespec timespecCanonicalDayTime(Timespec t);
 
+/*
+ * Get the numerical last date of the month. (28, 29, 30, 31)
+ */
+int date_get_last_mday(struct tm *tm);
+
+/*
+ * Is the mday field the last day of the specified month.
+ */
+gboolean date_is_last_mday(struct tm *tm);
+
+/*
+ * Add a number of months to a time value and normalize.  Optionally
+ * also track the last day of hte month, i.e. 1/31 -> 2/28 -> 3/30.
+ */
+void date_add_months (struct tm *tm, int months, gboolean track_last_day);
+
 void setDateFormat(DateFormat df);
 
 /**

@@ -1,5 +1,15 @@
 2002-04-27  David Hampton  <hampton@employees.org>
 
+	* src/engine/Account.[c,h]: New routines to get/save last
+	reconciliation interval.
+
+	* src/engine/date.[c,h]: New routines for manipulating dates.
+
+	* src/gnome/window-reconcile.c: When creating the reconcile
+	window, bump the date by the same interval as last time, not a
+	constant one month.  Also save whatever interval the user actually
+	specified for next time.
+
 	* src/app-utils/prefs.scm:
 	* src/engine/date.c: 
 	* src/gnome/top-level.c (gnc_configure_date_format): Change the

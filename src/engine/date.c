@@ -162,7 +162,79 @@ timespecCanonicalDayTime(Timespec t)
   retval.tv_nsec = 0;
   return retval;
 }
-    
+
+/**
+ * date_get_last_mday
+ * Retrieve the last nomerical day for the month specified in the
+ * tm_year and tm_mon fields.
+ * Args:  tm: the time value in question
+ * returns: T/F
+ **/
+int date_get_last_mday(struct tm *tm)
+{
+  int year;
+  gboolean is_leap;
+  static int days_in_month[2][12] =
+    {/* non leap */ {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
+     /*   leap   */ {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}};
+
+  /* Is this a leap year? */
+  year = tm->tm_year + 1900;
+  if (year / 2000 == 0)
+    is_leap = TRUE;
+  else if (year / 400 == 0)
+      is_leap = FALSE;
+  else
+    is_leap = (year / 4 == 0);
+
+  return days_in_month[is_leap][tm->tm_mon];
+}
+
+/**
+ * date_is_last_mday
+ * Determines whether the tm_mday field contains the last day of the
+ * month as specified in the tm_year and tm_mon fields.
+ * Args:  tm: the time value in question
+ * returns: T/F
+ **/
+gboolean date_is_last_mday(struct tm *tm)
+{
+  return(tm->tm_mday == date_get_last_mday(tm));
+}
+
+/**
+ * date_add_months
+ * Add a number of months to a time value, and normalize.  Optionally
+ * also track the last day of hte month, i.e. 1/31 -> 2/28 -> 3/30.
+ * Args:  tm: base time value
+ *        months: The number of months to add to this time
+ *        track_last_day: Coerce the date value if necessary.
+ * returns: nothing
+ **/
+void date_add_months (struct tm *tm, int months, gboolean track_last_day)
+{
+  gboolean was_last_day;
+  int new_last_mday;
+
+  /* Have to do this now */
+  was_last_day = date_is_last_mday(tm);
+
+  /* Add in the months and normalize */
+  tm->tm_mon += months;
+  while (tm->tm_mon > 11) {
+    tm->tm_mon -= 12;
+    tm->tm_year++;
+  }
+
+  if (!track_last_day)
+    return;
+
+  /* Track last day of the month, i.e. 1/31 -> 2/28 -> 3/30 */
+  new_last_mday = date_get_last_mday(tm);
+  if (was_last_day || (tm->tm_mday > new_last_mday))
+    tm->tm_mday = new_last_mday;
+}
+
 /**
  * setDateFormat
  * set date format to one of US, UK, CE, OR ISO
@@ -172,7 +244,6 @@ timespecCanonicalDayTime(Timespec t)
  *
  * Globals: dateFormat
  **/
-
 void setDateFormat(DateFormat df)
 {
   if(df >= DATE_FORMAT_FIRST && df <= DATE_FORMAT_LAST)
