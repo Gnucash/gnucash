@@ -9,7 +9,7 @@
 "-- work under Postgres 7.0 \n"
 "-- \n"
 "-- HISTORY: \n"
-"-- Copyright (C) 2001 Linux Developers Group \n"
+"-- Copyright (C) 2001 Linas Vepstas <linas@linas.org>\n"
 "-- \n"
 " \n"
 "INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,0,0,'Version Table'); \n"
@@ -17,5 +17,5 @@
 "INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,2,1,'Fix gncSubtotalReconedBalance'); \n"
 "INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,3,1,'Add kvp_timespec tables'); \n"
 "INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,4,1,'Add support for multiple books');"
-"INSERT INTO gncVersion (major, minor, rev, name, date) VALUES (1, 5, 0, 'Change timestamp definition', now());\n";
+"INSERT INTO gncVersion (major, minor, rev, name, date) VALUES (1, 5, 1, 'Change timestamp definition', now());\n";
 
