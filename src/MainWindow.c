@@ -31,6 +31,7 @@
 #include <Xm/List.h>
 #include <Xm/MainW.h>
 #include <Xm/PanedW.h>
+#include <Xm/Protocols.h>
 #include <Xm/RowColumn.h>
 #include <Xm/Text.h>
 #include <Xbae/Matrix.h>
@@ -484,6 +485,14 @@ mainWindow( Widget parent )
       NULL,              (XtPointer)0,     (MenuItem *)NULL, 0 },
   };
   
+  {
+  /* make sure that the user is given a chance to save unsaved work 
+   * if the window manager close window button is hit.  */
+  Atom protocol;
+  protocol = XmInternAtom (XtDisplay (toplevel), "WM_DELETE_WINDOW", False);
+  XmAddWMProtocolCallback ( toplevel, protocol, fileMenubarCB, FMB_QUIT);
+  }
+
   mainwindow = XtVaCreateManagedWidget( "mainwindow", 
 					xmMainWindowWidgetClass, parent, 
 					XmNdeleteResponse,       XmDESTROY,
@@ -495,14 +504,9 @@ mainWindow( Widget parent )
                                          */
 					NULL );
   
-  /* Umm... the closeMainWindow callback doesn't get called if the user 
-   * kills the window from the window manager; don't know why, since
-   * VendorShell should have handled WM_DELETE ...
-   * closeMainWindow does get called if "quit" is selected from the menu
-   */
   XtAddCallback( mainwindow, XmNdestroyCallback, 
 		 closeMainWindow, (XtPointer)NULL );
-  
+
   menubar = XmCreateMenuBar( mainwindow, "menubar", NULL, 0 );  
   
   BuildMenu( menubar, XmMENU_PULLDOWN, "File",   'F', False, 0, fileMenu );

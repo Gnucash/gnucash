@@ -23,6 +23,8 @@
 \********************************************************************/
 
 #include <Xm/Xm.h>
+#include <X11/Shell.h>
+
 #include <stdlib.h>
 
 #include "config.h"
@@ -139,8 +141,9 @@ main( int argc, char *argv[] )
   DEBUG("Done initializing memory");
 #endif
   
-  toplevel = XtVaAppInitialize( &app, "Xacc", NULL, 0,
+  toplevel = XtVaOpenApplication( &app, "Xacc", NULL, 0,
 				&argc, argv, fbRes,
+                                topLevelShellWidgetClass,
 				NULL );
   
   /* get environment var stuff... TODO let cmd-line opts override this stuff */
