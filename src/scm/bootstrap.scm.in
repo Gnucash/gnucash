@@ -161,12 +161,12 @@
 string and 'directories' must be a list of strings."
 
   (gnc:debug "gnc:find-in-directories looking for " file " in " directories)
-  
+
   (do ((rest directories (cdr rest))
        (finished? #f)
        (result #f))
       ((or (null? rest) finished?) result)
-    
+
     (let ((file-name (string-append (car rest) "/" file)))
       (gnc:debug "  checking for " file-name)
       (if (access? file-name F_OK)
@@ -211,7 +211,8 @@ file in all of the directories specified by gnc:*load-path*."
                  ((symbol? item)
                   (case item
                     ((default)
-                     (list 
+                     (list
+                      (string-append (getenv "HOME") "/.gnucash")
                       (string-append (getenv "HOME") "/.gnucash/scm")
                       (string-append gnc:_share-dir-default_ "/scm")))
                     ((current)

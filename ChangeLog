@@ -1,3 +1,7 @@
+2000-07-12  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/bootstrap.scm.in: add HOME/.gnucash to scm search path.
+
 2000-07-04  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/bootstrap.scm.in: bump up the stack limit
