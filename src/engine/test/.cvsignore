@@ -4,6 +4,7 @@ Makefile.in
 .deps
 .libs
 test-load-engine
+test-book-merge
 test-commodities
 test-date
 test-freq-spec
