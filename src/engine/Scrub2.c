@@ -31,6 +31,7 @@
  */
 
 #include "AccountP.h"
+#include "Transaction.h"
 #include "TransactionP.h"
 #include "Scrub2.h"
 #include "gnc-engine.h"
@@ -50,10 +51,10 @@ xaccAccountHasTrades (Account *acc)
 
    for (node=acc->splits; node; node=node->next)
    {
-   	Split *s = node->data;
+      Split *s = node->data;
       Transaction *t = s->parent;
       if (acc_comm != t->common_currency) return TRUE;
-	}
+   }
 
    return FALSE;
 }
@@ -111,21 +112,113 @@ xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign)
 
 /* ============================================================== */
 
-#if 0
 void
 xaccAccountScrubLots (Account *acc)
 {
+   SplitList *node;
+
    if (!acc) return;
 
+   /* Loop over all splits, and make sure that every split
+    * belongs to some lot.  If a split does not belong to 
+    * any lots, its is placed into the earliest possible
+    * lot (thus enforcing FIFO accounting rules).
+    */
    for (node=acc->splits; node; node=node->next)
    {
-   	Split * s = node->data;
-      GNCLot *lot = s->lot;
+      Split * split = node->data;
+      GNCLot *lot = split->lot;
 
-      
-      gnc_lot_is_closed (lot);
-	}
+      /* If this split belongs to a lot, its good. */
+      if (lot) continue;
+
+      /* If we are here, this split does not belong to any lot.
+       * Lets put it in the earliest one we can find.  This 
+       * block is written in the form of a while loop, since we
+       * may have to bust a split across several lots.
+       */
+     while (split)
+     {
+        lot = xaccAccountFindEarliestOpenLot (acc, split->amount);
+        if (lot)
+        {
+           /* If the amount is smaller than open balance ... */
+           gnc_numeric baln = gnc_lot_get_balance (lot);
+           int cmp = gnc_numeric_compare (split->amount, baln);
+
+           /* cmp == +1 if amt > baln */
+           if (0 < cmp) 
+           {
+              Split * new_split;
+              gnc_numeric amt_a, amt_b, amt_tot;
+              gnc_numeric val_a, val_b, val_tot;
+              Transaction *trans;
+              Timespec ts;
+
+              trans = split->parent;
+              xaccTransBeginEdit (trans);
+
+              amt_tot = split->amount;
+              amt_a = gnc_numeric_neg (baln);
+              amt_b = gnc_numeric_sub_fixed (amt_tot, amt_a);
+
+              /* Compute the value so that it holds in the same proportion:
+               * i.e. so that (amt_a / amt_tot) = (val_a / val_tot)
+               */
+              val_tot = split->value;
+              val_a = gnc_numeric_mul (amt_a, val_tot, GNC_DENOM_AUTO, GNC_RND_NEVER);
+              val_a = gnc_numeric_div (val_a, amt_tot, gnc_numeric_denom(val_tot), GNC_DENOM_EXACT);
+
+              val_b = gnc_numeric_sub_fixed (val_tot, val_a);
+        
+              xaccSplitSetAmount (split, amt_a);
+              xaccSplitSetValue (split, val_a);
+
+              /* Adding this split will have the effect of closing this lot,
+               * because the new balance should be precisely zero. */
+              gnc_lot_add_split (lot, split);
+
+              /* put the remainder of teh balance into a new split, which is
+               * in other respects just a clone of this one */
+              /* XXX FIXME: we should add some kvp markup to indicate that these
+               * two splits used to be one before being 'split' */
+              new_split = xaccMallocSplit (acc->book);
+
+              /* Copy most of teh split attributes */
+              xaccSplitSetMemo (new_split, xaccSplitGetMemo (split));
+              xaccSplitSetAction (new_split, xaccSplitGetAction (split));
+              xaccSplitSetReconcile (new_split, xaccSplitGetReconcile (split));
+              ts = xaccSplitRetDateReconciledTS (split);
+              xaccSplitSetDateReconciledTS (new_split, &ts);
+
+              /* Copying the KVP tree seems like the right thing to do, 
+               * this is potentially dangerous, depending on how other 
+               * users use it.*/
+              xaccSplitSetSlots_nc (new_split, kvp_frame_copy(xaccSplitGetSlots (split)));  
+
+              xaccSplitSetAmount (new_split, amt_b);
+              xaccSplitSetValue (new_split, val_b);
+              
+              xaccAccountInsertSplit (acc, new_split);
+              xaccTransAppendSplit (trans, new_split);
+              xaccTransCommitEdit (trans);
+              split = new_split;
+           }
+           else
+           {
+              gnc_lot_add_split (lot, split);
+              split = NULL;
+           }
+        }
+        else
+        {
+           /* No lot was found.  Start a new lot */
+           lot = gnc_lot_new (acc->book);
+           gnc_lot_add_split (lot, split);
+           split = NULL;
+        }
+      }
+   }
 }
-#endif
 
 /* =========================== END OF FILE ======================= */

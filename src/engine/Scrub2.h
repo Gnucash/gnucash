@@ -59,9 +59,11 @@ gboolean xaccAccountHasTrades (Account *);
 GNCLot * xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign);
 
 
-/** XXX need docos
+/** The xaccAccountScrubLots() routine will walk over all of
+ *   the splits in an account, and make sure that each belongs
+ *   to a lot, as appropriate
  */
-
+void xaccAccountScrubLots (Account *acc);
 
 #endif /* XACC_SCRUB2_H */
 /** @} */
