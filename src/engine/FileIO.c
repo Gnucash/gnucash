@@ -1598,7 +1598,7 @@ writeAccount( int fd, Account *acc )
   
   DEBUG ("writeAccount(): will write %d trans\n", numUnwrittenTrans);
 
-  if(!xaccAccountStagedTransactionTraversal(acc, 2,
+  if (0 != xaccAccountStagedTransactionTraversal(acc, 2,
                                             _write_transaction_wrapper_, &fd)) {
     return -1;
   }
