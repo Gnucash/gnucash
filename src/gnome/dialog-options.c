@@ -378,6 +378,36 @@ gnc_option_get_ui_value(GNCOption *option)
   return result;
 }
 
+
+/********************************************************************\
+ * gnc_set_option_selectable_by_name                                *
+ *   Change the selectable state of the widget that represents a    *
+ *   GUI option.                                                    *
+ *                                                                  *
+ * Args: section     - section of option                            *
+ *       name        - name of option
+ *       selectable  - if false, update the widget so that it       *
+ *                     cannot be selected by the user.  If true,    *
+ *                     update the widget so that it can be selected.*
+ * Return: nothing                                                  *
+\********************************************************************/
+void
+gnc_set_option_selectable_by_name( const char *section,
+                                   const char *name,
+                                   gncBoolean selectable)
+{
+  GNCOption *option = gnc_get_option_by_name( section, name );
+
+  if ((option == NULL) || (option->widget == NULL))
+    return;
+
+  gtk_widget_set_sensitive( GTK_WIDGET(option->widget),
+                            selectable                  );
+
+  return;
+} /* gnc_set_option_selectable_by_name */
+
+
 static void
 default_button_cb(GtkButton *button, gpointer data)
 {

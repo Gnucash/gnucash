@@ -752,7 +752,6 @@ static void
 gnc_configure_auto_decimal_cb(void *not_used)
 {
   gnc_configure_auto_decimal();
-  gnc_group_ui_refresh(gncGetCurrentGroup());
 }
 
 /* gnc_configure_auto_decimal
