@@ -424,9 +424,6 @@ gnc_module_load(char * module_name, gint interface)
     /* module already loaded ... call the init thunk */
     if(info->init_func) 
     {
-      printf("calling init func for '%s' .. refcount = %d\n", 
-	     module_name, info->load_count);
-	     
       if(info->init_func(info->load_count)) 
       {
 	info->load_count++;
@@ -467,9 +464,6 @@ gnc_module_load(char * module_name, gint interface)
         
         /* now call its init function.  this should load any dependent
          * modules, too.  If it doesn't return TRUE unload the module. */
-	printf("calling init func for '%s' .. refcount = 0\n", 
-	       module_name);
-	
         if(!info->init_func(0)) 
 	{
           /* init failed. unload the module. */
