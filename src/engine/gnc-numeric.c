@@ -216,24 +216,36 @@ gnc_numeric_positive_p(gnc_numeric a)
  ********************************************************************/
 
 int
-gnc_numeric_compare(gnc_numeric a, gnc_numeric b) {
-  gint64 ab, ba;
+gnc_numeric_compare(gnc_numeric a, gnc_numeric b) 
+{
+  gint64 aa, bb;
 
-  if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
+  if(gnc_numeric_check(a) || gnc_numeric_check(b)) 
+  {
     return 0;
   }
-  ab = a.num * b.denom;
-  ba = b.num * a.denom;
 
-  if(ab == ba) {
-    return 0;
-  }
-  else if(ab > ba) {
-    return 1;
-  }
-  else {
+  if (a.denom == b.denom)
+  {
+    if(a.num == b.num) return 0;
+    if(a.num > b.num) return 1;
     return -1;
   }
+
+  if  ((a.denom > 0) && (b.denom > 0))
+  {
+    /* Avoid overflows using 128-bit intermediate math */
+    qofint128 l = mult128 (a.num, b.denom);
+    qofint128 r = mult128 (b.num, a.denom);
+    return cmp128 (l,r);
+  }
+
+  aa = a.num * a.denom;
+  bb = b.num * b.denom;
+
+  if(aa == bb) return 0;
+  if(aa > bb) return 1;
+  return -1;
 }
 
 
