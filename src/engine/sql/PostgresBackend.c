@@ -885,7 +885,7 @@ pgendStoreAllTransactions (PGBackend *be, AccountGroup *grp)
  */
 
 static int
-pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
+pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
 {
    char *pbuff;
    Transaction *trans;
@@ -2029,7 +2029,7 @@ pgend_trans_rollback_edit (Backend * bend,
                          Transaction * trans)
 {
    PGBackend *be = (PGBackend *)bend;
-   GUID * trans_guid;
+   const GUID * trans_guid;
 
    if (!be || !trans) return 0;
 
