@@ -723,7 +723,7 @@ DateMV (BasicCell *_cell,
   if (box->in_date_select)
   {
     char *newval_mb = gnc_wcstombs (newval);
-    xaccSetBasicCellValue (_cell, newval_mb);
+    gnc_basic_cell_set_value (_cell, newval_mb);
     g_free (newval_mb);
     return;
   }

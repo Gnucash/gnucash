@@ -86,7 +86,7 @@ QuickFillDirect (BasicCell *bcell,
         if ((match_str != NULL) &&
             (strncmp (match_str, bcell->value, strlen (bcell->value)) == 0) &&
             (strcmp (match_str, bcell->value) != 0))
-                xaccSetBasicCellValue (bcell, match_str);
+                gnc_basic_cell_set_value (bcell, match_str);
 
         *cursor_position += prefix_len;
         *start_selection = *cursor_position;
@@ -104,8 +104,6 @@ xaccQuickFillGUIInit (QuickFillCell *cell)
 
         cell->cell.direct_update = QuickFillDirect;
 }
-
-/* =============== end of file =================== */
 
 /*
   Local Variables:

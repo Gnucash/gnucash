@@ -354,7 +354,7 @@ restore_cell (BasicCell *bcell, CellBuffer *cb, CellBlock *cursor)
 
       if (cb_cell->cell == bcell)
       {
-        xaccSetBasicCellValue (bcell, cb->value);
+        gnc_basic_cell_set_value (bcell, cb->value);
         bcell->changed = cb->changed;
         bcell->conditionally_changed = cb->conditionally_changed;
         return;

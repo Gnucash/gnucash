@@ -450,15 +450,11 @@ xaccAddComboCellMenuItem (ComboCell *cell, char * menustr)
         box->list_sorted = FALSE;
 }
 
-/* =============================================== */
-
 void
 xaccSetComboCellValue (ComboCell *cell, const char *str)
 {
-	xaccSetBasicCellValue (&cell->cell, str);
+	gnc_basic_cell_set_value (&cell->cell, str);
 }
-
-/* =============================================== */
 
 static void
 ComboMV (BasicCell *_cell,

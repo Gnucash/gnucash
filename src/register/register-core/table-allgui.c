@@ -795,7 +795,7 @@ gnc_table_move_cursor_internal (Table *table,
           entry = gnc_table_get_entry_internal (table, virt_loc,
                                                 &conditionally_changed);
 
-          xaccSetBasicCellValue (cell, entry);
+          gnc_basic_cell_set_value (cell, entry);
 
           cell->changed = FALSE;
           cell->conditionally_changed = conditionally_changed;
@@ -1169,7 +1169,7 @@ gnc_table_modify_update(Table *table,
   else
   {
     char *newval_mb = gnc_wcstombs (newval);
-    xaccSetBasicCellValue (cell, newval_mb);
+    gnc_basic_cell_set_value (cell, newval_mb);
     g_free (newval_mb);
   }
 
@@ -1242,7 +1242,7 @@ gnc_table_direct_update (Table *table,
         ! (table->model->confirm_handler (virt_loc,
                                           table->model->handler_user_data)))
     {
-      xaccSetBasicCellValue (cell, old_value);
+      gnc_basic_cell_set_value (cell, old_value);
       *newval_ptr = NULL;
       result = TRUE;
     }

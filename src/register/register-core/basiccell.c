@@ -155,6 +155,28 @@ gnc_basic_cell_set_sample_text (BasicCell *cell,
   cell->sample_text = g_strdup (sample_text);
 }
 
+void
+gnc_basic_cell_set_alignment (BasicCell *cell,
+                              CellAlignment alignment)
+{
+  if (!cell) return;
+  cell->alignment = alignment;
+}
+
+void
+gnc_basic_cell_set_expandable (BasicCell *cell, gboolean expandable)
+{
+  if (!cell) return;
+  cell->expandable = expandable;
+}
+
+void
+gnc_basic_cell_set_span (BasicCell *cell, gboolean span)
+{
+  if (!cell) return;
+  cell->span = span;
+}
+
 const char *
 gnc_basic_cell_get_value (BasicCell *cell)
 {
@@ -164,7 +186,7 @@ gnc_basic_cell_get_value (BasicCell *cell)
 }
 
 void
-xaccSetBasicCellValue (BasicCell *cell, const char *val)
+gnc_basic_cell_set_value (BasicCell *cell, const char *val)
 {
   CellSetValueFunc cb;
 
@@ -355,5 +377,3 @@ gnc_wcsdup (const GdkWChar *src)
 
   return dest;
 }
-
-/* ================== end of file ====================== */

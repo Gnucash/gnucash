@@ -240,9 +240,15 @@ void         gnc_basic_cell_set_name (BasicCell *cell, int cell_type);
 
 void         gnc_basic_cell_set_sample_text (BasicCell *cell,
                                              const char *sample_text);
+void         gnc_basic_cell_set_alignment (BasicCell *cell,
+                                           CellAlignment alignment);
+void         gnc_basic_cell_set_expandable (BasicCell *cell,
+                                            gboolean expandable);
+void         gnc_basic_cell_set_span (BasicCell *cell,
+                                      gboolean span);
 
 const char * gnc_basic_cell_get_value (BasicCell *cell);
-void         xaccSetBasicCellValue (BasicCell *bcell, const char *value);
+void         gnc_basic_cell_set_value (BasicCell *bcell, const char *value);
 
 gboolean     gnc_basic_cell_get_changed (BasicCell *cell);
 gboolean     gnc_basic_cell_get_conditionally_changed (BasicCell *cell);

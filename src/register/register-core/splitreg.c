@@ -58,61 +58,6 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_REGISTER;
 
-typedef struct
-{
-  const char *string;
-  int offset;
-} sample_string;
-
-static sample_string cell_sample_strings[] =
-{
-  { N_("sample: 12/12/2000"), 7},                    /* date cell */
-  { N_("sample:99999"), 7},                          /* num cell */
-  { N_("sample:Description of a transaction"), 7},   /* desc cell */
-  { N_("Reconciled:R"), 11},                         /* recn cell */
-  { N_("sample:999,999.000"), 7},                    /* balance cell */
-  { N_("Transfer"), 0},                              /* action cell */
-  { N_("sample:Expenses:Automobile:Gasoline"), 7},   /* xfrm cell */
-  { N_("sample:Memo field sample text string"), 7},  /* memo cell */
-  { N_("sample:999,999.000"), 7},                    /* credit cell */
-  { N_("sample:999,999.000"), 7},                    /* debit cell */
-  { N_("sample:999,999.000"), 7},                    /* price cell */
-  { N_("sample:999,999.000"), 7},                    /* shares cell */
-  { N_("sample:Expenses:Automobile:Gasoline"), 7},   /* mxfrm cell */
-  { N_("sample:999,999.000"), 7},                    /* tcredit cell */
-  { N_("sample:999,999.000"), 7},                    /* tdebit cell */
-  { N_("sample:999,999.000"), 7},                    /* tshares cell */
-  { N_("sample:999,999.000"), 7},                    /* tbalance cell */
-  { N_("sample:Notes field sample text string"), 7}, /* notes cell */
-  { N_("sample:(x + 0.33 * y + (x+y) )"), 7 },       /* formula credit cell */
-  { N_("sample:(x + 0.33 * y + (x+y) )"), 7 },       /* formula debit cell */
-};
-
-static CellAlignment cell_alignments[] =
-{
-  CELL_ALIGN_RIGHT,  /* date cell */
-  CELL_ALIGN_LEFT,   /* num cell */
-  CELL_ALIGN_LEFT,   /* desc cell */
-  CELL_ALIGN_CENTER, /* recn cell */
-  CELL_ALIGN_RIGHT,  /* balance cell */
-  CELL_ALIGN_LEFT,   /* action cell */
-  CELL_ALIGN_RIGHT,  /* xfrm cell */
-  CELL_ALIGN_LEFT,   /* memo cell */
-  CELL_ALIGN_RIGHT,  /* credit cell */
-  CELL_ALIGN_RIGHT,  /* debit cell */
-  CELL_ALIGN_RIGHT,  /* price cell */
-  CELL_ALIGN_RIGHT,  /* shares cell */
-  CELL_ALIGN_RIGHT,  /* mxfrm cell */
-  CELL_ALIGN_RIGHT,  /* tcredit cell */
-  CELL_ALIGN_RIGHT,  /* tdebit cell */
-  CELL_ALIGN_RIGHT,  /* tshares cell */
-  CELL_ALIGN_RIGHT,  /* tbalance cell */
-  CELL_ALIGN_LEFT,   /* notes cell */
-  CELL_ALIGN_LEFT,   /* formula credit cell */
-  CELL_ALIGN_LEFT,   /* formula debit cell */
-};
-
-
 static void
 xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterType type,
@@ -126,7 +71,11 @@ xaccInitSplitRegister (SplitRegister *reg,
 static void
 gnc_register_add_cell (SplitRegister *sr,
                        CellType cell_type,
-                       const char *cell_type_name)
+                       const char *cell_type_name,
+                       const char *sample_text,
+                       CellAlignment alignment,
+                       gboolean expandable,
+                       gboolean span)
 {
   BasicCell *cell;
 
@@ -136,6 +85,10 @@ gnc_register_add_cell (SplitRegister *sr,
   cell = gnc_register_make_cell (cell_type_name);
 
   gnc_basic_cell_set_name (cell, cell_type);
+  gnc_basic_cell_set_sample_text (cell, sample_text);
+  gnc_basic_cell_set_alignment (cell, alignment);
+  gnc_basic_cell_set_expandable (cell, expandable);
+  gnc_basic_cell_set_span (cell, span);
 
   gnc_table_layout_add_cell (sr->table->layout, cell);
 }
@@ -254,11 +207,8 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
   CellBlock *header;
   CellBlock *cursor_sl;
   CellBlockCell *cb_cell;
-  sample_string *ss;
 
   header = gnc_table_layout_get_cursor (reg->table->layout, CURSOR_HEADER);
-
-  ss = &cell_sample_strings[cell_type];
 
   cursor->start_col = MIN (cursor->start_col, col);
   cursor->stop_col  = MAX (cursor->stop_col,  col);
@@ -269,10 +219,6 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
   cb_cell = gnc_cellblock_get_cell (cursor, row, col);
 
   cb_cell->cell = gnc_table_layout_get_cell (reg->table->layout, cell_type);
-  cb_cell->cell->sample_text = g_strdup (_(ss->string) + ss->offset);
-  cb_cell->cell->alignment = cell_alignments[cell_type];
-  cb_cell->cell->expandable = cell_type == DESC_CELL;
-  cb_cell->cell->span = cell_type == MEMO_CELL || cell_type == NOTES_CELL;
 
   cb_cell = gnc_cellblock_get_cell (header, row, col);
 
@@ -280,13 +226,7 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
                                            CURSOR_SINGLE_LEDGER);
 
   if (cb_cell && (cursor == cursor_sl))
-  {
     cb_cell->cell = gnc_table_layout_get_cell (reg->table->layout, cell_type);
-    cb_cell->cell->sample_text = g_strdup (_(ss->string) + ss->offset);
-    cb_cell->cell->alignment = cell_alignments[cell_type];
-    cb_cell->cell->expandable = cell_type == DESC_CELL;
-    cb_cell->cell->span = cell_type == MEMO_CELL || cell_type == NOTES_CELL;
-  }
 }
 
 static void
@@ -700,26 +640,165 @@ xaccInitSplitRegister (SplitRegister *reg,
   /* --------------------------- */
   /* malloc the workhorse cells */
 
-  gnc_register_add_cell (reg, DATE_CELL,  DATE_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, NUM_CELL,   NUM_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, DESC_CELL,  QUICKFILL_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, RECN_CELL,  RECN_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, BALN_CELL,  PRICE_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, XFRM_CELL,  COMBO_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, ACTN_CELL,  COMBO_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, MEMO_CELL,  QUICKFILL_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, CRED_CELL,  PRICE_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, DEBT_CELL,  PRICE_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, PRIC_CELL,  PRICE_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, SHRS_CELL,  PRICE_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, MXFRM_CELL, COMBO_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, TCRED_CELL, PRICE_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, TDEBT_CELL, PRICE_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, TSHRS_CELL, PRICE_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, TBALN_CELL, PRICE_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, NOTES_CELL, QUICKFILL_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, FCRED_CELL, QUICKFILL_CELL_TYPE_NAME);
-  gnc_register_add_cell (reg, FDEBT_CELL, QUICKFILL_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg,
+                         DATE_CELL,
+                         DATE_CELL_TYPE_NAME,
+                         N_("sample:12/12/2000") + 7,
+                         CELL_ALIGN_RIGHT,
+                         FALSE,
+                         FALSE);
+
+  gnc_register_add_cell (reg,
+                         NUM_CELL,
+                         NUM_CELL_TYPE_NAME,
+                         N_("sample:99999") + 7,
+                         CELL_ALIGN_LEFT,
+                         FALSE,
+                         FALSE);
+
+  gnc_register_add_cell (reg,
+                         DESC_CELL,
+                         QUICKFILL_CELL_TYPE_NAME,
+                         N_("sample:Description of a transaction") + 7,
+                         CELL_ALIGN_LEFT,
+                         TRUE,
+                         FALSE);
+
+  gnc_register_add_cell (reg,
+                         RECN_CELL,
+                         RECN_CELL_TYPE_NAME,
+                         N_("Reconciled:R") + 11,
+                         CELL_ALIGN_CENTER,
+                         FALSE,
+                         FALSE);
+
+  gnc_register_add_cell (reg,
+                         BALN_CELL,
+                         PRICE_CELL_TYPE_NAME,
+                         N_("sample:999,999.000") + 7,
+                         CELL_ALIGN_RIGHT,
+                         FALSE,
+                         FALSE);
+
+  gnc_register_add_cell (reg,
+                         XFRM_CELL,
+                         COMBO_CELL_TYPE_NAME,
+                         N_("Transfer"),
+                         CELL_ALIGN_LEFT,
+                         FALSE,
+                         FALSE);
+
+  gnc_register_add_cell (reg,
+                         MXFRM_CELL,
+                         COMBO_CELL_TYPE_NAME,
+                         N_("sample:Expenses:Automobile:Gasoline") + 7,
+                         CELL_ALIGN_RIGHT,
+                         FALSE,
+                         FALSE);
+
+  gnc_register_add_cell (reg,
+                         ACTN_CELL,
+                         COMBO_CELL_TYPE_NAME,
+                         N_("sample:Expenses:Automobile:Gasoline") + 7,
+                         CELL_ALIGN_RIGHT,
+                         FALSE,
+                         FALSE);
+
+  gnc_register_add_cell (reg,
+                         MEMO_CELL,
+                         QUICKFILL_CELL_TYPE_NAME,
+                         N_("sample:Memo field sample text string") + 7,
+                         CELL_ALIGN_LEFT,
+                         FALSE,
+                         TRUE);
+
+  gnc_register_add_cell (reg,
+                         DEBT_CELL,
+                         PRICE_CELL_TYPE_NAME,
+                         N_("sample:999,999.000") + 7,
+                         CELL_ALIGN_RIGHT,
+                         FALSE,
+                         FALSE);
+
+  gnc_register_add_cell (reg,
+                         CRED_CELL,
+                         PRICE_CELL_TYPE_NAME,
+                         N_("sample:999,999.000") + 7,
+                         CELL_ALIGN_RIGHT,
+                         FALSE,
+                         FALSE);
+
+  gnc_register_add_cell (reg,
+                         PRIC_CELL,
+                         PRICE_CELL_TYPE_NAME,
+                         N_("sample:999,999.000") + 7,
+                         CELL_ALIGN_RIGHT,
+                         FALSE,
+                         FALSE);
+
+  gnc_register_add_cell (reg,
+                         SHRS_CELL,
+                         PRICE_CELL_TYPE_NAME,
+                         N_("sample:999,999.000") + 7,
+                         CELL_ALIGN_RIGHT,
+                         FALSE,
+                         FALSE);
+
+  gnc_register_add_cell (reg,
+                         TDEBT_CELL,
+                         PRICE_CELL_TYPE_NAME,
+                         N_("sample:999,999.000") + 7,
+                         CELL_ALIGN_RIGHT,
+                         FALSE,
+                         FALSE);
+
+  gnc_register_add_cell (reg,
+                         TCRED_CELL,
+                         PRICE_CELL_TYPE_NAME,
+                         N_("sample:999,999.000") + 7,
+                         CELL_ALIGN_RIGHT,
+                         FALSE,
+                         FALSE);
+
+  gnc_register_add_cell (reg,
+                         TSHRS_CELL,
+                         PRICE_CELL_TYPE_NAME,
+                         N_("sample:999,999.000") + 7,
+                         CELL_ALIGN_RIGHT,
+                         FALSE,
+                         FALSE);
+
+  gnc_register_add_cell (reg,
+                         TBALN_CELL,
+                         PRICE_CELL_TYPE_NAME,
+                         N_("sample:999,999.000") + 7,
+                         CELL_ALIGN_RIGHT,
+                         FALSE,
+                         FALSE);
+
+  gnc_register_add_cell (reg,
+                         NOTES_CELL,
+                         QUICKFILL_CELL_TYPE_NAME,
+                         N_("sample:Notes field sample text string") + 7,
+                         CELL_ALIGN_LEFT,
+                         FALSE,
+                         TRUE);
+
+  gnc_register_add_cell (reg,
+                         FCRED_CELL,
+                         QUICKFILL_CELL_TYPE_NAME,
+                         N_("sample:(x + 0.33 * y + (x+y) )") + 7,
+                         CELL_ALIGN_LEFT,
+                         FALSE,
+                         FALSE);
+
+  gnc_register_add_cell (reg,
+                         FDEBT_CELL,
+                         QUICKFILL_CELL_TYPE_NAME,
+                         N_("sample:(x + 0.33 * y + (x+y) )") + 7,
+                         CELL_ALIGN_LEFT,
+                         FALSE,
+                         FALSE);
 
   /* --------------------------- */
 
