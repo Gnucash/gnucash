@@ -197,6 +197,8 @@ kvp_frame_set_slot(kvp_frame * frame, const char * slot,
   if (!frame)
     return;
 
+  g_return_if_fail (slot && *slot != '\0');
+
   if(value) new_value = kvp_value_copy(value);
   kvp_frame_set_slot_destructively(frame, slot, new_value);
 }
@@ -208,6 +210,8 @@ kvp_frame_set_slot_nc(kvp_frame * frame, const char * slot,
 
   if (!frame)
     return;
+
+  g_return_if_fail (slot && *slot != '\0');
 
   kvp_frame_set_slot_destructively(frame, slot, value);
 }
@@ -229,8 +233,10 @@ kvp_frame_set_slot_path (kvp_frame *frame,
   va_list ap;
   const char *key;
 
-  if (!frame || !first_key)
+  if (!frame)
     return;
+
+  g_return_if_fail (first_key && *first_key != '\0');
 
   va_start (ap, first_key);
 
@@ -245,6 +251,8 @@ kvp_frame_set_slot_path (kvp_frame *frame,
       kvp_frame_set_slot (frame, key, new_value);
       break;
     }
+
+    g_return_if_fail (*next_key != '\0');
 
     value = kvp_frame_get_slot (frame, key);
     if (!value) {
@@ -281,6 +289,8 @@ kvp_frame_set_slot_path_gslist (kvp_frame *frame,
 
     if (!key)
       return;
+
+    g_return_if_fail (*key != '\0');
 
     key_path = key_path->next;
     if (!key_path) {

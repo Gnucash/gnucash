@@ -346,19 +346,17 @@ get_random_kvp_frame_depth (gint depth)
     vals_to_add = get_random_int_in_range(1,kvp_frame_max_elements);
     val_added = FALSE;
 
-    for(;vals_to_add > 0; vals_to_add--)
+    for (;vals_to_add > 0; vals_to_add--)
     {
         gchar *key;
         kvp_value *val;
 
-        key = get_random_string_without("/");
-        val = get_random_kvp_value_depth (-1, depth + 1);
-
-        if(!key)
+        do
         {
-            return NULL;
-        }
+          key = get_random_string_without("/");
+        } while (!key || *key == '\0');
 
+        val = get_random_kvp_value_depth (-1, depth + 1);
         if (!val)
         {
           if (!val_added)
