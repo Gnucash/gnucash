@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<gnc>
+  <version>1</version>
+  <ledger-data>
+    <account>
+      <restore>
+        <name>Home Repair</name>
+        <guid>a2a85849ba534678e1970ec49515e6fa</guid>
+        <type>EXPENSE</type>
+        <description>Home Repair</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Insurance</name>
+        <guid>900dfe72555fdc3cbf6019c5a4603279</guid>
+        <type>EXPENSE</type>
+        <description>Insurance</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Home Insurance</name>
+        <guid>dc00b72b5d10aebe6b1665499a0cfddb</guid>
+        <type>EXPENSE</type>
+        <description>Home Insurance</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>900dfe72555fdc3cbf6019c5a4603279</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Taxes</name>
+        <guid>9c154b2a736879d3fe5ba128f7a62169</guid>
+        <type>EXPENSE</type>
+        <description>Taxes</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Property Tax</name>
+        <guid>40cbf9afed3e15e241e52f9e59a2cfd1</guid>
+        <type>EXPENSE</type>
+        <description>Property Tax</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>9c154b2a736879d3fe5ba128f7a62169</guid>
+        </parent>
+      </restore>
+    </account>
+  </ledger-data>
+</gnc>

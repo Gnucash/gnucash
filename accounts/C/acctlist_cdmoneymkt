@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<gnc>
+  <version>1</version>
+  <ledger-data>
+    <account>
+      <restore>
+        <name>Bank CD</name>
+        <guid>a2e2f8fd2396ad134fa3721767f56a4a</guid>
+        <type>BANK</type>
+        <description>Bank CD</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Money Market</name>
+        <guid>1c220d832ee37e660837a3753f221079</guid>
+        <type>BANK</type>
+        <description>Money Market</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>CD Interest</name>
+        <guid>a78ff890768703e6d88ea01366a93eff</guid>
+        <type>INCOME</type>
+        <description>CD Interest</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Money Market Interest</name>
+        <guid>88986ef5fbe8e1b9ffda8485fe8c0f93</guid>
+        <type>INCOME</type>
+        <description>Money Market Interest</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+  </ledger-data>
+</gnc>

@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<gnc>
+  <version>1</version>
+  <ledger-data>
+    <account>
+      <restore>
+        <name>Brokerage Account</name>
+        <guid>a4b92830ee9ab7db17221f156bc15d87</guid>
+        <type>BANK</type>
+        <description>Brokerage Account</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Bond</name>
+        <guid>fbb97d1d8f6ae60d0e699af8c5b8dbfd</guid>
+        <type>STOCK</type>
+        <description>Bond</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>a4b92830ee9ab7db17221f156bc15d87</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Stock</name>
+        <guid>2b85576ddedda530fd80b17451cd37e8</guid>
+        <type>STOCK</type>
+        <description>Stock</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>a4b92830ee9ab7db17221f156bc15d87</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Market Index</name>
+        <guid>d9934aaf4fc86463bb43088df18498ab</guid>
+        <type>MUTUAL</type>
+        <description>Market Index</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>a4b92830ee9ab7db17221f156bc15d87</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Mutual Fund</name>
+        <guid>31f4e66a69252f7b91fbdea85bdd0781</guid>
+        <type>MUTUAL</type>
+        <description>Mutual Fund</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>a4b92830ee9ab7db17221f156bc15d87</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Dividend Income</name>
+        <guid>741e084d7449e1ec774082ae9c838189</guid>
+        <type>INCOME</type>
+        <description>Dividend Income</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Interest Income</name>
+        <guid>d50762c0a7c86969f9ac1ade01ffd224</guid>
+        <type>INCOME</type>
+        <description>Interest Income</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Bond Interest</name>
+        <guid>e9b8d2fd441762aade7068a3a0a0830d</guid>
+        <type>INCOME</type>
+        <description>Bond Interest</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>d50762c0a7c86969f9ac1ade01ffd224</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Commissions</name>
+        <guid>1e9cae201e379af3ebc90206fc0a823c</guid>
+        <type>EXPENSE</type>
+        <description>Commissions</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+  </ledger-data>
+</gnc>

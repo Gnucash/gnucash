@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<gnc>
+  <version>1</version>
+  <ledger-data>
+    <account>
+      <restore>
+        <name>Expenses</name>
+        <guid>84732f5fdd27b6463d75bf958e3a4b06</guid>
+        <type>EXPENSE</type>
+        <description>Expenses</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Home Repair</name>
+        <guid>fa27de57090e107fa99fe1db53790f23</guid>
+        <type>EXPENSE</type>
+        <description>Home Repair</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>84732f5fdd27b6463d75bf958e3a4b06</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Insurance</name>
+        <guid>4677fe36914ebcf23758f3bf20686b4a</guid>
+        <type>EXPENSE</type>
+        <description>Insurance</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>84732f5fdd27b6463d75bf958e3a4b06</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Home Insurance</name>
+        <guid>3b5909f31bda0e0f76149fd600e0cb1d</guid>
+        <type>EXPENSE</type>
+        <description>Home Insurance</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>4677fe36914ebcf23758f3bf20686b4a</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Taxes</name>
+        <guid>a931b8ffe2917ff9a069333623da96ca</guid>
+        <type>EXPENSE</type>
+        <description>Taxes</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>84732f5fdd27b6463d75bf958e3a4b06</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Property Tax</name>
+        <guid>3994b8f5a6a8b2a0a48126fa955e03f7</guid>
+        <type>EXPENSE</type>
+        <description>Property Tax</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>a931b8ffe2917ff9a069333623da96ca</guid>
+        </parent>
+      </restore>
+    </account>
+  </ledger-data>
+</gnc>

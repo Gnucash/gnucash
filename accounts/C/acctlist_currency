@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<gnc>
+  <version>1</version>
+  <ledger-data>
+    <account>
+      <restore>
+        <name>Currency Trading</name>
+        <guid>34613c96becb35522e7cdc327e9890e0</guid>
+        <type>CURRENCY</type>
+        <description>Currency Trading</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>DEM</id>
+        </currency>
+      </restore>
+    </account>
+  </ledger-data>
+</gnc>

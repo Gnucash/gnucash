@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<gnc>
+  <version>1</version>
+  <ledger-data>
+    <account>
+      <restore>
+        <name>Childcare</name>
+        <guid>f37587dab73433d30ce6fa1a2c0ee53d</guid>
+        <type>EXPENSE</type>
+        <description>Childcare</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+  </ledger-data>
+</gnc>

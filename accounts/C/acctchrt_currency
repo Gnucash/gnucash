@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<gnc>
+  <version>1</version>
+  <ledger-data>
+    <account>
+      <restore>
+        <name>Assets</name>
+        <guid>b3c65be1c5d163746ddc0c506f3f4619</guid>
+        <type>ASSET</type>
+        <description>Assets</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Investments</name>
+        <guid>d9c796b35784533aee4309e28a3cbfc5</guid>
+        <type>ASSET</type>
+        <description>Investments</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>b3c65be1c5d163746ddc0c506f3f4619</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Currency Trading</name>
+        <guid>9206632307989cb5b244ad5da5d3131b</guid>
+        <type>CURRENCY</type>
+        <description>Currency Trading</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>DEM</id>
+        </currency>
+        <parent>
+          <guid>d9c796b35784533aee4309e28a3cbfc5</guid>
+        </parent>
+      </restore>
+    </account>
+  </ledger-data>
+</gnc>

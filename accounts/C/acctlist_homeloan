@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<gnc>
+  <version>1</version>
+  <ledger-data>
+    <account>
+      <restore>
+        <name>Mortgage Loan</name>
+        <guid>b3f97c81a91eabbd7ff647a980c788e8</guid>
+        <type>LIABILITY</type>
+        <description>Mortgage Loan</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Interest</name>
+        <guid>92d78493399e05c800764dd576fb46e2</guid>
+        <type>EXPENSE</type>
+        <description>Interest</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Mortgage Interest</name>
+        <guid>e948e72a223cb0293ae5a27b2d35b324</guid>
+        <type>EXPENSE</type>
+        <description>Mortgage Interest</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>92d78493399e05c800764dd576fb46e2</guid>
+        </parent>
+      </restore>
+    </account>
+  </ledger-data>
+</gnc>

@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<gnc>
+  <version>1</version>
+  <ledger-data>
+    <account>
+      <restore>
+        <name>Spouse Retirement</name>
+        <guid>dc3935401534fddc3faaaa5e45e5327e</guid>
+        <type>BANK</type>
+        <description>Spouse Retirement</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <slots>
+          <s>
+            <k>notes</k>
+            <string>IRA, 401(k), or other retirement</string>
+          </s>
+        </slots>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Bond</name>
+        <guid>b14714232d594305ba778f4ff06d6f14</guid>
+        <type>STOCK</type>
+        <description>Bond</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>dc3935401534fddc3faaaa5e45e5327e</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Stock</name>
+        <guid>0d50f44e1b46db9690528a7f8b35de37</guid>
+        <type>STOCK</type>
+        <description>Stock</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>dc3935401534fddc3faaaa5e45e5327e</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Market Index</name>
+        <guid>5fc96bedc14211f822a39c91dabe9aa5</guid>
+        <type>MUTUAL</type>
+        <description>Market Index</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>dc3935401534fddc3faaaa5e45e5327e</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Mutual Fund</name>
+        <guid>ee6f523d36ff66e2f29a62b658fa7a7a</guid>
+        <type>MUTUAL</type>
+        <description>Mutual Fund</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>dc3935401534fddc3faaaa5e45e5327e</guid>
+        </parent>
+      </restore>
+    </account>
+  </ledger-data>
+</gnc>

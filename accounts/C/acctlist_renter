@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<gnc>
+  <version>1</version>
+  <ledger-data>
+    <account>
+      <restore>
+        <name>Insurance</name>
+        <guid>bf8401ffdca9c53c3b220fb7e0c3a09e</guid>
+        <type>EXPENSE</type>
+        <description>Insurance</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Rental Insurance</name>
+        <guid>6d89107d688f6694e2d06039d9c6f692</guid>
+        <type>EXPENSE</type>
+        <description>Rental Insurance</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>bf8401ffdca9c53c3b220fb7e0c3a09e</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Rent</name>
+        <guid>7b6f5d9dda6295f594dd3efac34d2d46</guid>
+        <type>EXPENSE</type>
+        <description>Rent</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+  </ledger-data>
+</gnc>

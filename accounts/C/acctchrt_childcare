@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<gnc>
+  <version>1</version>
+  <ledger-data>
+    <account>
+      <restore>
+        <name>Expenses</name>
+        <guid>ee8238ee2c2ce590160761df09b99b72</guid>
+        <type>EXPENSE</type>
+        <description>Expenses</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Childcare</name>
+        <guid>8999739a6bfc46088a3ea5ec45e5f8a4</guid>
+        <type>EXPENSE</type>
+        <description>Childcare</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>ee8238ee2c2ce590160761df09b99b72</guid>
+        </parent>
+      </restore>
+    </account>
+  </ledger-data>
+</gnc>

@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<gnc>
+  <version>1</version>
+  <ledger-data>
+    <account>
+      <restore>
+        <name>Assets</name>
+        <guid>7b1a39efc6234d1db148baa722c9471e</guid>
+        <type>ASSET</type>
+        <description>Assets</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Current Assets</name>
+        <guid>1880e89ec9fe82622b8648df481dd2b7</guid>
+        <type>ASSET</type>
+        <description>Current Assets</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>7b1a39efc6234d1db148baa722c9471e</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Bank CD</name>
+        <guid>c1620f9c3082e33d8fd559e17f90a122</guid>
+        <type>BANK</type>
+        <description>Bank CD</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>1880e89ec9fe82622b8648df481dd2b7</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Money Market</name>
+        <guid>3a01e5b0132ba26803b49732a3242654</guid>
+        <type>BANK</type>
+        <description>Money Market</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>1880e89ec9fe82622b8648df481dd2b7</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Income</name>
+        <guid>4b3e36f325569b80efc7d3331bdf851b</guid>
+        <type>INCOME</type>
+        <description>Income</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Interest Income</name>
+        <guid>fd131cae797d1fb83c2e2bf57254eca5</guid>
+        <type>INCOME</type>
+        <description>Interest Income</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>4b3e36f325569b80efc7d3331bdf851b</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>CD Interest</name>
+        <guid>28d311f0f38da5e35628e76ad8bcc853</guid>
+        <type>INCOME</type>
+        <description>CD Interest</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>fd131cae797d1fb83c2e2bf57254eca5</guid>
+        </parent>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Money Market Interest</name>
+        <guid>dc537946f39e84ccef7ce38f016249af</guid>
+        <type>INCOME</type>
+        <description>Money Market Interest</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>fd131cae797d1fb83c2e2bf57254eca5</guid>
+        </parent>
+      </restore>
+    </account>
+  </ledger-data>
+</gnc>

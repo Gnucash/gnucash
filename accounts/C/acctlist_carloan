@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<gnc>
+  <version>1</version>
+  <ledger-data>
+    <account>
+      <restore>
+        <name>Vehicle Loan</name>
+        <guid>ea1d37f0246bcdbbeab144e7753cb092</guid>
+        <type>LIABILITY</type>
+        <description>Vehicle Loan</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Interest</name>
+        <guid>7643a09ee539628314452ce99da702a4</guid>
+        <type>EXPENSE</type>
+        <description>Interest</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+      </restore>
+    </account>
+    <account>
+      <restore>
+        <name>Vehicle Loan Interest</name>
+        <guid>d1fda33bb708b037266dbc5d50cf46f3</guid>
+        <type>EXPENSE</type>
+        <description>Vehicle Loan Interest</description>
+        <currency>
+          <space>ISO4217</space>
+          <id>USD</id>
+        </currency>
+        <parent>
+          <guid>7643a09ee539628314452ce99da702a4</guid>
+        </parent>
+      </restore>
+    </account>
+  </ledger-data>
+</gnc>
