@@ -2233,7 +2233,7 @@ msgstr "Gesamt"
 
 #: src/gnome/window-reconcile.c:676 src/gnome/window-register.c:2474
 msgid "Are you sure you want to delete the current transaction?"
-msgstr "Sind Sie sicher das Sie das %s Konto löschen wollen?"
+msgstr "Sind sie sicher daß sie die aktuelle Buchung löschen wollen?"
 
 #: src/gnome/window-reconcile.c:742 src/scm/guile-strings.c:172
 msgid "Reconcile"
