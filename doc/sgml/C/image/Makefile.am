@@ -28,6 +28,14 @@ image_DATA = \
   new-user-frame3.png \
   new-user-frame4.png \
   new-user-frame5.png \
+  prefs-general.png \
+  prefs-international.png \
+  prefs-network.png \
+  prefs-qif-import.png \
+  prefs-reconcile.png \
+  prefs-register-colors.png \
+  prefs-register.png \
+  prefs-user-info.png \
   recnwin.png \
   recninfo.png \
   regwin-double.png \
