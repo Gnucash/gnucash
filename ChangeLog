@@ -1,3 +1,10 @@
+2000-10-22  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-find-transactions.c: use the standard date
+	widgets.
+
+	* src/engine/Queue.c: fix a cost basis bug
+
 2000-08-22  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/reconcile-list.c (gnc_reconcile_list_fill): fix a
