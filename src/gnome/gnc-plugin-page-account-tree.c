@@ -44,7 +44,6 @@
 #include "gnc-plugin-account-tree.h"
 #include "gnc-session.h"
 #include "gnc-split-reg.h"
-#include "gnc-tree-model-account.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"

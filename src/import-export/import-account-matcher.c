@@ -34,7 +34,6 @@
 
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
-#include "gnc-tree-model-account.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 
