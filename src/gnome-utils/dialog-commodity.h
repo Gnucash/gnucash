@@ -32,60 +32,43 @@
 typedef struct select_commodity_window SelectCommodityWindow;
 typedef struct commodity_window CommodityWindow;
 
-typedef void (* gnc_commodity_callback)(const gnc_commodity *, void * data);
-typedef void (* gnc_commodity_help_callback)(void);
+typedef void (*gnc_commodity_callback) (const gnc_commodity *, void *data);
+typedef void (*gnc_commodity_help_callback) (void);
 
 void gnc_ui_commodity_set_help_callback (gnc_commodity_help_callback cb);
 
-void gnc_ui_select_commodity_destroy(SelectCommodityWindow * w);
+void gnc_ui_select_commodity_destroy (SelectCommodityWindow * w);
 
-void gnc_ui_commodity_destroy(CommodityWindow * w);
+void gnc_ui_commodity_destroy (CommodityWindow * w);
 
 /*Offer the user to select a commodity matching exchange_code,
  fullname and mnemonic.  If the user decides to create a new one, those
  values are used as default.  If fullname is NULL, the user won't be
  told he has to match anything in perticular.*/
 
-gnc_commodity * 
-gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel, 
-				   GtkWidget * parent,
-				   char * user_message,
-				   char * exchange_code,
-				   char * fullname,
-				   char * mnemonic,
-				   int fraction);
+gnc_commodity *gnc_ui_select_commodity_modal_full (gnc_commodity * orig_sel,
+						   GtkWidget * parent,
+						   char *user_message,
+						   char *exchange_code,
+						   char *fullname, char *mnemonic, int fraction);
 
-gnc_commodity * 
-gnc_ui_select_commodity_modal(gnc_commodity * orig_sel, 
-                              GtkWidget * parent);
+gnc_commodity *gnc_ui_select_commodity_modal (gnc_commodity * orig_sel, GtkWidget * parent);
 
 
-gnc_commodity * 
-gnc_ui_new_commodity_modal_full(const char * default_namespace, 
-				GtkWidget * parent,
-				char * exchange_code,
-				char * fullname,
-				char * mnemonic,
-				int fraction);
+gnc_commodity *gnc_ui_new_commodity_modal_full (const char *default_namespace,
+						GtkWidget * parent,
+						char *exchange_code,
+						char *fullname, char *mnemonic, int fraction);
 
-gnc_commodity * 
-gnc_ui_new_commodity_modal(const char * default_namespace, 
-                           GtkWidget * parent
-			   );
+gnc_commodity *gnc_ui_new_commodity_modal (const char *default_namespace, GtkWidget * parent);
 
-gboolean
-gnc_ui_edit_commodity_modal(gnc_commodity *commodity,
-                            GtkWidget * parent);
+gboolean gnc_ui_edit_commodity_modal (gnc_commodity * commodity, GtkWidget * parent);
 
-char * gnc_ui_update_namespace_picker(GtkWidget * combobox,
-                                      const char * sel,
-                                      gboolean include_iso,
-                                      gboolean include_all);
+char *gnc_ui_update_namespace_picker (GtkWidget * combobox,
+				      const char *sel, gboolean include_iso, gboolean include_all);
 
-const char * gnc_ui_namespace_picker_ns (GtkWidget *combobox);
+const char *gnc_ui_namespace_picker_ns (GtkWidget * combobox);
 
-void gnc_ui_update_commodity_picker(GtkWidget * combobox, 
-                                    const char * namespace,
-                                    const char * sel);
+void gnc_ui_update_commodity_picker (GtkWidget * combobox, const char *namespace, const char *sel);
 
 #endif

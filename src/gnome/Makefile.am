@@ -1,4 +1,4 @@
-SUBDIRS = glade
+SUBDIRS = glade ui
 
 lib_LTLIBRARIES = libgncgnome.la libgw-gnc.la 
 
@@ -15,6 +15,7 @@ libgncgnome_la_LIBADD = \
   ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
   ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
+  ${top_builddir}/src/gnome-utils/egg/libegg.la \
   ${GUILE_LIBS} ${GNOME_LIBDIR} ${GNOMEUI_LIBS} ${GLIB_LIBS}
 
 libgw_gnc_la_SOURCES = gw-gnc.c
@@ -40,6 +41,11 @@ libgncgnome_la_SOURCES = \
   druid-hierarchy.c \
   druid-loan.c \
   druid-stock-split.c \
+  gnc-main-window.c \
+  gnc-plugin.c \
+  gnc-plugin-account-tree.c \
+  gnc-plugin-page-account-tree.c \
+  gnc-plugin-page.c \
   gnc-splash.c \
   gnc-split-reg.c \
   mainwindow-account-tree.c \
@@ -75,6 +81,11 @@ noinst_HEADERS = \
   dialog-scheduledxaction.h \
   druid-hierarchy.h \
   druid-loan.h \
+  gnc-main-window.h \
+  gnc-plugin.h \
+  gnc-plugin-account-tree.h \
+  gnc-plugin-page.h \
+  gnc-plugin-page-account-tree.h \
   gnc-network.h \
   gnc-splash.h \
   gnc-split-reg.h \
@@ -112,12 +123,14 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/g-wrap \
   -I${top_srcdir}/src/gnome-utils \
+  -I${top_srcdir}/src/gnome-utils/egg \
   -I${top_srcdir}/src/gnome-search \
   -I${top_srcdir}/src/register/ledger-core \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
   -I${top_srcdir}/src/report/report-system \
   -I${top_srcdir}/src/report/report-gnome \
+  -DGNC_UI_DIR=\"$(GNC_UI_DIR)\"   \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GNOME_INCLUDEDIR} \

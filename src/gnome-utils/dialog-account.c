@@ -84,7 +84,7 @@ struct _AccountWindow
   
   GList * valid_types;
   GtkWidget * type_list;
-  GtkWidget * parent_tree;
+  GtkTreeView * parent_tree;
 
   GtkWidget * opening_balance_edit;
   GtkWidget * opening_balance_date_edit;
@@ -1578,11 +1578,10 @@ gnc_account_window_create(AccountWindow *aw)
  
   group = gnc_book_get_group (gnc_get_current_book ());
 
-  aw->parent_tree = glade_xml_get_widget (xml, "parent_tree_view");
+  aw->parent_tree = GTK_TREE_VIEW (glade_xml_get_widget (xml, "parent_tree_view"));
   model = gnc_tree_model_account_new (group);
   gnc_tree_model_account_set_toplevel (model, aw->top_level_account);
-  gtk_tree_view_set_model (GTK_TREE_VIEW (aw->parent_tree),
-		 	   GTK_TREE_MODEL (model));
+  gtk_tree_view_set_model (aw->parent_tree, GTK_TREE_MODEL (model));
   g_object_unref (G_OBJECT (model));
   
   renderer = gtk_cell_renderer_text_new ();
@@ -1590,31 +1589,8 @@ gnc_account_window_create(AccountWindow *aw)
 		  				     renderer,
 						     "text", GNC_TREE_MODEL_ACCOUNT_COL_NAME,
 						     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (aw->parent_tree),
-		  	       column);
-  gtk_tree_view_expand_all (GTK_TREE_VIEW (aw->parent_tree));
-
-  /*aw->parent_tree = gnc_account_tree_new_with_root(aw->top_level_account);
-  gtk_clist_column_titles_hide(GTK_CLIST(aw->parent_tree));
-  gnc_account_tree_hide_all_but_name(GNC_ACCOUNT_TREE(aw->parent_tree));*/
-
-  /* hack alert -- why do we need to refresh just to put up an account 
-   * edit window?  This refresh triggers a massive retraversal
-   * of the price database (presumably to compute account balances)
-   * and can suck up a lot of cpu juice from the SQL backend as 
-   * a result.  We should only refresh the account names, not
-   * the balances here.
-   */
-  /*c_account_tree_refresh(GNC_ACCOUNT_TREE(aw->parent_tree));
-  gnc_account_tree_expand_account(GNC_ACCOUNT_TREE(aw->parent_tree),
-                                  aw->top_level_account);
-  gtk_container_add(GTK_CONTAINER(box), GTK_WIDGET(aw->parent_tree));
-  gtk_widget_show_all (GTK_WIDGET (box));*/
-
-  /* g_signal_connect(G_OBJECT (aw->parent_tree), "select_account",
-		   G_CALLBACK (gnc_parent_tree_select), aw);
-  g_signal_connect(G_OBJECT (aw->parent_tree), "unselect_account",
-		   G_CALLBACK (gnc_parent_tree_select), aw);*/
+  gtk_tree_view_append_column (aw->parent_tree, column);
+  gtk_tree_view_expand_all (aw->parent_tree);
 
   aw->tax_related_button = glade_xml_get_widget (xml, "tax_related_button");
   aw->placeholder_button = glade_xml_get_widget (xml, "placeholder_button");
@@ -1843,6 +1819,10 @@ gnc_ui_new_account_window_internal (Account *base_account,
                                     commodity);
 
   gtk_widget_show (aw->dialog);
+
+  if (base_account == NULL) {
+	  base_account = aw->top_level_account;
+  }
 
   gtk_tree_view_expand_all (GTK_TREE_VIEW (aw->parent_tree));
   model = GNC_TREE_MODEL_ACCOUNT (gtk_tree_view_get_model (GTK_TREE_VIEW (aw->parent_tree)));
@@ -2091,10 +2071,10 @@ gnc_ui_edit_account_window(Account *account)
   if (parent == NULL)
     parent = aw->top_level_account;
 
-  gtk_tree_view_expand_all (GTK_TREE_VIEW (aw->parent_tree));
-  model = GNC_TREE_MODEL_ACCOUNT (gtk_tree_view_get_model (GTK_TREE_VIEW (aw->parent_tree)));
+  gtk_tree_view_expand_all (aw->parent_tree);
+  model = GNC_TREE_MODEL_ACCOUNT (gtk_tree_view_get_model (aw->parent_tree));
   gnc_tree_model_account_get_iter_from_account (model, parent, &iter);
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (aw->parent_tree));
+  selection = gtk_tree_view_get_selection (aw->parent_tree);
   gtk_tree_selection_select_iter (selection, &iter);
 
   gnc_account_window_set_name (aw);

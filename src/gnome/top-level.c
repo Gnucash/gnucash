@@ -45,7 +45,9 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-file.h"
+#include "gnc-main-window.h"
 #include "gnc-menu-extensions.h"
+#include "gnc-plugin-account-tree.h" /* FIXME Remove this line*/
 #include "gnc-network.h"
 #include "gnc-splash.h"
 #include "gnc-html.h"
@@ -62,7 +64,7 @@
 #include "split-register.h"
 #include "top-level.h"
 #include "window-help.h"
-#include "window-main.h"
+/*#include "window-main.h" */
 #include "window-acct-tree.h"
 #include "window-register.h"
 #include "window-report.h"
@@ -315,6 +317,7 @@ SCM
 gnc_gui_init (SCM command_line)
 {
   SCM ret = command_line;
+  GncMainWindow *main_window;
 
   ENTER (" ");
 
@@ -414,8 +417,13 @@ gnc_gui_init (SCM command_line)
     gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
 
     /* initialize gnome MDI and set up application window defaults  */
-    if (!gnc_mdi_get_current ())
-      gnc_main_window_new ();
+    /* if (!gnc_mdi_get_current ())
+      gnc_main_window_new (); */
+    main_window = gnc_main_window_new ();
+    gtk_widget_show (GTK_WIDGET (main_window));
+
+    /* FIXME Remove this test code */
+    gnc_main_window_register_plugin (main_window, gnc_plugin_account_tree_new (main_window));
 
     /* Run the ui startup hooks. */
     {

@@ -1,3 +1,167 @@
+2003-05-25  Jan Arne Petersen  <jpetersen@uni-bonn.de>
+
+	Add some libegg files to the repository.
+	* configure.in:
+	* src/gnome-utils/egg:
+
+	Start to create a replacement for gnome-mdi.
+	* src/gnome/gnc-main-window.c:
+	* src/gnome/gnc-main-window.h:
+	* src/gnome/gnc-plugin-page.c:
+	* src/gnome/gnc-plugin-page.h:
+	* src/gnome/gnc-plugin.c:
+	* src/gnome/gnc-plugin.h:
+	* src/gnome/ui
+	* src/gnome/Makefile.am:
+	* src/gnome/mainwindow-account-tree.c: (select_account_callback):
+	* src/gnome/top-level.c: (gnc_gui_init):
+	* src/gnome/window-acct-tree.c:
+	(gnc_acct_tree_window_set_sensitives),
+	(gnc_acct_tree_window_add_sensitive),
+	(gnc_acct_tree_window_find_popup_item),
+	(gnc_acct_tree_view_labeler), (gnc_acct_tree_view_destroy),
+	(gnc_acct_tree_view_refresh), (gnc_acct_tree_view_new),
+	(gnc_acct_tree_window_create_child),
+	(gnc_main_window_open_accounts),
+	(gnc_acct_tree_window_toolbar_open_cb),
+	(gnc_acct_tree_window_toolbar_edit_cb),
+	(gnc_acct_tree_window_toolbar_add_account_cb),
+	(delete_account_helper), (gnc_acct_tree_window_delete_common),
+	(gnc_acct_tree_window_toolbar_delete_account_cb),
+	(gnc_acct_tree_find_account_from_gncmdi),
+	(gnc_acct_tree_window_menu_open_subs_cb),
+	(gnc_acct_tree_window_menu_edit_cb),
+	(gnc_acct_tree_window_menu_reconcile_cb),
+	(gnc_acct_tree_window_menu_transfer_cb),
+	(gnc_acct_tree_window_menu_stock_split_cb),
+	(gnc_acct_tree_window_menu_add_account_cb),
+	(gnc_acct_tree_window_menu_delete_account_cb),
+	(gnc_acct_tree_window_menu_scrub_cb),
+	(gnc_acct_tree_window_menu_scrub_sub_cb),
+	(gnc_acct_tree_window_menu_scrub_all_cb),
+	(gnc_acct_tree_window_menu_open_cb),
+	(gnc_acct_tree_window_activate_cb),
+	(gnc_acct_tree_window_configure), (gnc_euro_change),
+	(gnc_acct_tree_window_create_toolbar),
+	(gnc_acct_tree_window_create_menu),
+	(gnc_acct_tree_window_select_cb),
+	(gnc_acct_tree_window_get_current_account),
+	(gnc_acct_tree_window_options_new), (gnc_acct_tree_window_destroy),
+	(gnc_acct_tree_button_press_cb), (gnc_acct_tree_window_new),
+	(gnc_acct_tree_window_get_widget),
+	(gnc_acct_tree_window_get_options), (gnc_acct_tree_window_get_id),
+	(gnc_options_dialog_apply_cb), (gnc_options_dialog_help_cb),
+	(gnc_options_dialog_close_cb),
+	(gnc_acct_tree_window_toolbar_options_cb),
+	(gnc_acct_tree_tweak_menu),
+	(gnc_acct_tree_window_cmd_open_account),
+	(gnc_acct_tree_window_cmd_open_subaccounts),
+	(gnc_acct_tree_window_cmd_edit_account),
+	(gnc_acct_tree_window_cmd_reconcile),
+	(gnc_acct_tree_window_cmd_transfer),
+	(gnc_acct_tree_window_cmd_stock_split),
+	(gnc_acct_tree_window_cmd_new_account),
+	(gnc_acct_tree_window_cmd_delete_account),
+	(gnc_acct_tree_window_cmd_view_options):
+	* src/gnome/window-main.c:
+	* src/gnome/window-main.h:
+	* src/scm/main-window.scm:
+
+	Start to convert the acct-tree into a new gnucash plugin.
+	* src/gnome/gnc-plugin-account-tree.c:
+	* src/gnome/gnc-plugin-account-tree.h:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-plugin-page-account-tree.h:
+
+	Add a GtkTreeModel for TreeModelAccountTypes.
+	* src/gnome-utils/gnc-tree-model-account-types.c
+	* src/gnome-utils/gnc-tree-model-account-types.h
+
+	* src/gnome-utils/Makefile.am: Add new files to the Makefile.
+
+	* src/gnome-utils/dialog-account.c: Some small account dialog fixes.
+	(gnc_account_window_create),
+	(gnc_ui_new_account_window_internal), (gnc_ui_edit_account_window):
+
+	Fix the commodity dialog. (Replace GnomeDialog by GtkDialog,
+	GtkSignal by GSignal, etc).
+	* src/gnome-utils/commodity.glade:
+	* src/gnome-utils/dialog-commodity.c: (select_modal_callback),
+	(gnc_ui_commodity_set_help_callback),
+	(gnc_ui_select_commodity_modal_full),
+	(gnc_ui_select_commodity_modal), (select_commodity_close),
+	(gnc_ui_select_commodity_create), (g_strcmp),
+	(gnc_ui_update_commodity_picker),
+	(gnc_ui_select_commodity_destroy),
+	(gnc_ui_select_commodity_response_cb),
+	(gnc_ui_select_commodity_namespace_changed_cb),
+	(gnc_ui_update_namespace_picker), (gnc_ui_namespace_picker_ns),
+	(commodity_close), (gnc_ui_new_commodity_create),
+	(gnc_ui_edit_commodity_create), (new_modal_callback),
+	(gnc_ui_new_commodity_modal_full), (gnc_ui_new_commodity_modal),
+	(gnc_ui_edit_commodity_modal), (gnc_ui_commodity_destroy),
+	(gnc_ui_commodity_ok_cb), (gnc_ui_commodity_help_cb),
+	(gnc_ui_commodity_cancel_cb):
+	* src/gnome-utils/dialog-commodity.h:
+
+	Fix the transfer dialog. (Replace GnomeDialog by GtkDialog,
+	GtkSignal by GSignal, GncAccountTree by GtkTreeModel etc).
+	* src/gnome-utils/dialog-transfer.c:
+	(gnc_xfer_dialog_update_price), (gnc_xfer_dialog_toggle_cb),
+	(gnc_xfer_dialog_set_price_auto),
+	(gnc_xfer_dialog_curr_acct_activate),
+	(price_amount_radio_toggled_cb),
+	(gnc_xfer_dialog_reload_quickfill),
+	(gnc_xfer_dialog_from_tree_selection_changed_cb),
+	(gnc_xfer_dialog_to_tree_selection_changed_cb),
+	(gnc_xfer_dialog_show_inc_exp_visible_cb),
+	(gnc_xfer_dialog_fill_tree_view), (gnc_parse_error_dialog),
+	(gnc_xfer_dialog_quickfill), (gnc_xfer_description_insert_cb),
+	(common_post_quickfill_handler),
+	(gnc_xfer_description_key_press_cb),
+	(gnc_xfer_description_button_release_cb),
+	(gnc_xfer_dialog_update_conv_info), (gnc_xfer_amount_update_cb),
+	(gnc_xfer_update_to_amount), (gnc_xfer_price_update_cb),
+	(gnc_xfer_date_changed_cb), (gnc_xfer_to_amount_update_cb),
+	(gnc_xfer_dialog_select_from_account),
+	(gnc_xfer_dialog_select_to_account),
+	(gnc_xfer_dialog_select_from_currency),
+	(gnc_xfer_dialog_select_to_currency),
+	(gnc_xfer_dialog_lock_account_tree),
+	(gnc_xfer_dialog_lock_from_account_tree),
+	(gnc_xfer_dialog_lock_to_account_tree),
+	(gnc_xfer_dialog_hide_from_account_tree),
+	(gnc_xfer_dialog_hide_to_account_tree),
+	(gnc_xfer_dialog_is_exchange_dialog), (gnc_xfer_dialog_set_amount),
+	(gnc_xfer_dialog_set_description), (gnc_xfer_dialog_set_memo),
+	(gnc_xfer_dialog_set_num), (gnc_xfer_dialog_set_date),
+	(gnc_xfer_dialog_set_exchange_rate), (gnc_xfer_dialog_response_cb),
+	(gnc_xfer_dialog_close_cb), (gnc_xfer_dialog_create),
+	(close_handler), (gnc_xfer_dialog), (gnc_xfer_dialog_close),
+	(gnc_xfer_dialog_set_title),
+	(gnc_xfer_dialog_set_information_frame_label),
+	(gnc_xfer_dialog_set_account_frame_label),
+	(gnc_xfer_dialog_set_from_account_frame_label),
+	(gnc_xfer_dialog_set_to_account_frame_label),
+	(gnc_xfer_dialog_set_from_show_button_active),
+	(gnc_xfer_dialog_set_to_show_button_active),
+	(gnc_xfer_dialog_add_user_specified_button),
+	(gnc_xfer_dialog_toggle_currency_frame), (find_xfer),
+	(gnc_xfer_dialog_run_until_done),
+	(gnc_xfer_dialog_quickfill_to_account),
+	(gnc_transfer_dialog_get_selected_account),
+	(gnc_transfer_dialog_set_selected_account):
+	* src/gnome-utils/dialog-transfer.h:
+	* src/gnome-utils/transfer.glade:
+
+	Fix GncDateEdit. (Replace GtkSignal by GSignal and backport
+	some GnomeDateEdit fixes)
+	* src/gnome-utils/gnc-date-edit.c: (day_selected),
+	(key_press_popup), (position_popup), (set_time), (fill_time_popup),
+	(gnc_date_edit_class_init), (gnc_date_edit_destroy),
+	(date_accel_key_press), (create_children):
+	* src/gnome-utils/gnc-date-edit.h:
+
 2003-05-25  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome-utils/gnc-tree-model-example-account.c,

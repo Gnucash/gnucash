@@ -38,10 +38,6 @@ typedef enum {
 	GNC_DATE_EDIT_SHOW_TIME             = 1 << 0,
 	GNC_DATE_EDIT_24_HR                 = 1 << 1,
 	GNC_DATE_EDIT_WEEK_STARTS_ON_MONDAY = 1 << 2,
-#if 0
-        GNC_DATE_EDIT_SHOW_DATE             = 1 << 3,
-        GNC_DATE_EDIT_SHOW_DELTA            = 1 << 4
-#endif
 } GNCDateEditFlags;
 
 #define GNC_DATE_EDIT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_date_edit_get_type(), GNCDateEdit)

@@ -1,0 +1,83 @@
+<Root>
+<menu>
+<submenu name="File" verb="FileAction">
+	<menuitem name="FileNew" verb="FileNewAction"/>
+	<placeholder name="FileNewPlaceholder"/>
+	<separator name="FileSep1"/>
+	<menuitem name="FileOpen" verb="FileOpenAction"/>
+	<placeholder name="FileOpenPlaceholder"/>
+	<menuitem name="FileOpenNewWindow" verb="FileOpenNewWindowAction"/>
+	<submenu name="FileOpenRecent" verb="FileOpenRecentAction"/>
+	<separator name="FileSep2"/>
+	<menuitem name="FileSave" verb="FileSaveAction"/>
+	<menuitem name="FileSaveAs" verb="FileSaveAsAction"/>
+	<placeholder name="FileSavePlaceholder"/>
+	<separator name="FileSep3"/>
+	<submenu name="FileImport" verb="FileImportAction">
+		<placeholder name="FileImportPlaceholder"/>
+	</submenu>
+	<submenu name="FileExport" verb="FileExportAction">
+		<menuitem name="FileExportAccounts" verb="FileExportAccountsAction"/>
+		<placeholder name="FileExportPlaceholder"/>
+	</submenu>
+	<separator name="FileSep4"/>
+	<menuitem name="FilePrint" verb="FilePrintAction"/>
+	<separator name="FileSep5"/>
+	<menuitem name="FileClose" verb="FileCloseAction"/>
+	<menuitem name="FileQuit" verb="FileQuitAction"/>
+</submenu>
+
+<submenu name="Edit" verb="EditAction">
+        <menuitem name="EditCut" verb="EditCutAction"/>
+        <menuitem name="EditCopy" verb="EditCopyAction"/>
+        <menuitem name="EditPaste" verb="EditPasteAction"/>
+        <separator name="EditSep1"/>
+	<placeholder name="EditPlaceholder"/>
+	<menuitem name="EditPreferences" verb="EditPreferencesAction"/>
+	<placeholder name="EditPreferencesPlaceholder"/>
+	<menuitem name="EditTaxOptions" verb="EditTaxOptionsAction"/>
+</submenu>
+
+<submenu name="View" verb="ViewAction">
+        <menuitem name="ViewRefresh" verb="ViewRefreshAction"/>
+        <separator name="ViewSep1"/>
+        <menuitem name="ViewToolbar" verb="ViewToolbarAction"/>
+        <menuitem name="ViewSummary" verb="ViewSummaryAction"/>
+        <menuitem name="ViewStatusbar" verb="ViewStatusbarAction"/>
+</submenu>
+
+<submenu name="Actions" verb="ActionsAction">
+	<submenu name="ActionsScheduledTransactions" verb="ActionsScheduledTransactionsAction">
+		<menuitem name="ActionsScheduledTransactionEditor" verb="ActionsScheduledTransactionEditorAction"/>
+		<menuitem name="ActionsSinceLastRun" verb="ActionsSinceLastRunAction"/>
+		<menuitem name="ActionsMortgageLoan" verb="ActionsMortgageLoanAction"/>
+	</submenu>
+	<placeholder name="ActionsPlaceholder"/>
+</submenu>
+
+<placeholder name="AdditionalMenusPlaceholder"/>
+
+<submenu name="Tools" verb="ToolsAction">
+	<placeholder name="ToolsPlaceholder"/>
+	<menuitem name="ToolsGeneralLedger" verb="ToolsGeneralLedgerAction"/>
+	<menuitem name="ToolsPriceEditor" verb="ToolsPriceEditorAction"/>
+	<menuitem name="ToolsCommodityEditor" verb="ToolsCommodityEditorAction"/>
+	<menuitem name="ToolsFinancialCalculator" verb="ToolsFinancialCalculatorAction"/>
+	<menuitem name="ToolsFindTransactions" verb="ToolsFindTransactionsAction"/>
+</submenu>
+
+<submenu name="Help" verb="HelpAction">
+	<menuitem name="HelpTutorial" verb="HelpTutorialAction"/>
+	<menuitem name="HelpTipsOfTheDay" verb="HelpTipsOfTheDayAction"/>
+	<menuitem name="HelpContents" verb="HelpContentsAction"/>
+	<menuitem name="HelpAbout" verb="HelpAboutAction"/>
+</submenu>
+</menu>
+<dockitem name="DefaultToolbar">
+	<toolitem name="ToolbarSave" verb="FileSaveAction"/>
+	<toolitem name="ToolbarClose" verb="FileCloseAction"/>
+	<placeholder name="DefaultToolbarPlaceholder"/>
+	<separator name="ToolbarSep1"/>
+	<toolitem name="ToolbarQuit" verb="FileQuitAction"/>
+</dockitem>
+</Root>

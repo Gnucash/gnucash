@@ -1,0 +1,9 @@
+<Root>
+<menu>
+<submenu name="File" verb="FileAction">
+	<placeholder name="FileNewPlaceholder">
+		<menuitem name="FileNewAccountTree" verb="FileNewAccountTreeAction"/>
+	</placeholder>
+</submenu>
+</menu>
+</Root>

@@ -1,0 +1,61 @@
+<Root>
+<menu>
+<submenu name="File" verb="FileAction">
+	<placeholder name="FileNewPlaceholder">
+		<menuitem name="FileNewAccount" verb="FileNewAccountAction"/>
+	</placeholder>
+	<placeholder name="FileOpenPlaceholder">
+		<menuitem name="FileOpenAccount" verb="FileOpenAccountAction"/>
+		<menuitem name="FileOpenSubaccounts" verb="FileOpenSubaccountsAction"/>
+	</placeholder>
+</submenu>
+<submenu name="Edit" verb="EditAction">
+	<placeholder name="EditPlaceholder">
+		<menuitem name="EditEditAccount" verb="EditEditAccountAction"/>
+		<menuitem name="EditDeleteAccount" verb="EditDeleteAccountAction"/>
+		<separator name="EditSep2"/>
+	</placeholder>
+	<placeholder name="EditPreferencesPlaceholder">
+		<menuitem name="EditAccountViewOptions" verb="EditAccountViewOptionsAction"/>
+	</placeholder>
+</submenu>
+<submenu name="Actions" verb="ActionsAction">
+	<placeholder name="ActionsPlaceholder">
+		<separator name="ActionsSep1"/>
+		<menuitem name="ActionsReconcile" verb="ActionsReconcileAction"/>
+		<menuitem name="ActionsTransfer" verb="ActionsTransferAction"/>
+		<menuitem name="ActionsStockSplit" verb="ActionsStockSplitAction"/>
+	</placeholder>
+</submenu>
+</menu>
+<popups>
+<popup name="AccountPopup" verb="FakeToplevel">
+	<menuitem name="AccountOpenAccount" verb="FileOpenAccountAction"/>
+	<menuitem name="AccountOpenSubaccounts" verb="FileOpenSubaccountsAction"/>
+	<menuitem name="AccountEditAccount" verb="EditEditAccountAction"/>
+	<separator name="AccountSep1"/>
+	<menuitem name="AccountReconcile" verb="ActionsReconcileAction"/>
+	<menuitem name="AccountTransfer" verb="ActionsTransferAction"/>
+	<menuitem name="AccountStockSplit" verb="ActionsStockSplitAction"/>
+	<separator name="AccountSep2"/>
+	<menuitem name="AccountNewAccount" verb="FileNewAccountAction"/>
+	<menuitem name="AccountDeleteAccount" verb="EditDeleteAccountAction"/>
+	<separator name="AccountSep3"/>
+	<!--placeholder name="CheckAndRepairPlaceholder"/>
+	<separator name="AccountSep4"/-->
+	<menuitem name="AccountViewOptions" verb="EditAccountViewOptionsAction"/>
+</popup>
+</popups>
+<dockitem name="DefaultToolbar">
+	<placeholder name="DefaultToolbarPlaceholder">
+		<separator name="ToolbarSep2"/>
+		<toolitem name="ToolbarOpenAccount" verb="FileOpenAccountAction"/>
+		<toolitem name="ToolbarEditAccount" verb="EditEditAccountAction"/>
+		<separator name="ToolbarSep3"/>
+		<toolitem name="ToolbarAccountViewOptions" verb="EditAccountViewOptionsAction"/>
+		<separator name="ToolbarSep4"/>
+		<toolitem name="ToolbarNewAccount" verb="FileNewAccountAction"/>
+		<toolitem name="ToolbarDeleteAccount" verb="EditDeleteAccountAction"/>
+	</placeholder>
+</dockitem>
+</Root>

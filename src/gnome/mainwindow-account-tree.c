@@ -81,8 +81,8 @@ select_account_callback(GNCAccountTree  *tree, Account *account, gpointer user_d
   }
 
   g_signal_emit(G_OBJECT(clicked_window),
-		  mainwinaccounttree_signals[SELECT_ACCOUNT_SIGNAL], 0,
-		  account);
+		mainwinaccounttree_signals[SELECT_ACCOUNT_SIGNAL], 0,
+		account);
 
   return;
 }

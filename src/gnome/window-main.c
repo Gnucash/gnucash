@@ -70,6 +70,7 @@
 #include "window-report.h"
 #include "messages.h"
 
+#if 0
 static gboolean gnc_show_status_bar = TRUE;
 static gboolean gnc_show_summary_bar = TRUE;
 
@@ -109,6 +110,7 @@ gnc_main_window_get_mdi_child (void)
  * gnc_shutdown
  * close down gnucash from the C side...
  ********************************************************************/
+#endif
 void
 gnc_shutdown (int exit_status)
 {
@@ -129,6 +131,7 @@ gnc_shutdown (int exit_status)
   }
 }
 
+#if 0
 /********************************************************************
  * gnc_main_window_app_created_cb()
  * called when a new top-level GnomeApp is created.  
@@ -476,13 +479,14 @@ gnc_main_window_new (void)
 
   return retval;
 }
+#endif
 
 /********************************************************************
  * menu/toolbar data structures and callbacks 
  * these are the "templates" that are installed in every top level
  * MDI window
  ********************************************************************/
-
+#if 0
 static void
 gnc_main_window_options_cb(GtkWidget *widget, gpointer data)
 {
@@ -796,6 +800,7 @@ gnc_main_window_file_new_account_tree_cb(GtkWidget * w, gpointer data)
   gnc_main_window_open_accounts(FALSE);
 }
 
+
 static void
 gnc_main_window_create_menus(GNCMDIInfo * maininfo)
 {
@@ -1101,3 +1106,5 @@ gnc_main_window_toolbar_suffix (void)
 
   return suffix;
 }
+
+#endif
