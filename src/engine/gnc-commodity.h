@@ -48,12 +48,12 @@ gnc_commodity * gnc_commodity_new(const char * fullname,
      
 void  gnc_commodity_destroy(gnc_commodity * cm);
 
-char  * gnc_commodity_get_mnemonic(const gnc_commodity * cm);
-char  * gnc_commodity_get_namespace(const gnc_commodity * cm);
-char  * gnc_commodity_get_fullname(const gnc_commodity * cm);
-char  * gnc_commodity_get_unitname(const gnc_commodity * cm);
-char  * gnc_commodity_get_partname(const gnc_commodity * cm);
-char  * gnc_commodity_get_printname(const gnc_commodity * cm);
+const char * gnc_commodity_get_mnemonic(const gnc_commodity * cm);
+const char * gnc_commodity_get_namespace(const gnc_commodity * cm);
+const char * gnc_commodity_get_fullname(const gnc_commodity * cm);
+const char * gnc_commodity_get_unitname(const gnc_commodity * cm);
+const char * gnc_commodity_get_partname(const gnc_commodity * cm);
+const char * gnc_commodity_get_printname(const gnc_commodity * cm);
 int   gnc_commodity_get_exchange_code(const gnc_commodity * cm);
 int   gnc_commodity_get_parts_per_unit(const gnc_commodity * cm);
 int   gnc_commodity_get_fraction(const gnc_commodity * cm);

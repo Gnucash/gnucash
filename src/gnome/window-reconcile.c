@@ -171,7 +171,7 @@ recnRefresh(Account *account)
 static double
 recnRecalculateBalance(RecnWindow *recnData)
 {
-  char *amount;
+  const char *amount;
   const gnc_commodity * currency;
   double debit;
   double credit;
@@ -248,7 +248,7 @@ recnRecalculateBalance(RecnWindow *recnData)
   diff = ending - reconciled;
   if (reverse_balance)
     diff = -diff;
-  amount = xaccPrintAmount(diff, flags, 
+  amount = xaccPrintAmount(diff, flags,
                            gnc_commodity_get_mnemonic(currency));
   gnc_set_label_color(recnData->difference, diff);
   gtk_label_set_text(GTK_LABEL(recnData->difference), amount);

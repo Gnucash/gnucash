@@ -162,7 +162,7 @@ gnc_ui_update_commodity_picker(GtkWidget * combobox,
   for(iterator = commodities; iterator; iterator = iterator->next) {
     commodity_items = 
       g_list_append(commodity_items, 
-                    gnc_commodity_get_printname(iterator->data));
+                    (gpointer) gnc_commodity_get_printname(iterator->data));
   }
   commodity_items = g_list_sort(commodity_items, g_strcmp);
 
