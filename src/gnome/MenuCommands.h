@@ -1,6 +1,6 @@
 /********************************************************************\
- * main.h -- main for xacc (X-Accountant)                           *
- * Copyright (C) 1997 Robin D. Clark                                *
+ * MenuCommands.h -- just what is says                              *
+ * Copyright (C) 1998 Jeremy Collins                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,8 +22,8 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __MAIN_H__
-#define __MAIN_H__
+#ifndef __MENUCOMMANDS_H__
+#define __MENUCOMMANDS_H__
 
 #include <gtk/gtk.h>
 
@@ -35,30 +35,20 @@
 #include "util.h"
 #include "MainWindow.h" 
 
-/** HELP STUFF: *****************************************************/
-#define HELP_VAR     "XACC_HELP"
-#define HH_ABOUT     "xacc-about.html"
-#define HH_ACC       "xacc-accwin.html"
-#define HH_REGWIN    "xacc-regwin.html"
-#define HH_RECNWIN   "xacc-recnwin.html"
-#define HH_ADJBWIN   "xacc-adjbwin.html"
-#define HH_MAIN      "xacc-main.html"
-#define HH_GPL       "xacc-gpl.html"
-
 /** STRUCTS *********************************************************/
 
 /** PROTOTYPES ******************************************************/
-void gnucash_shutdown (GtkWidget *widget, gpointer *data);
+/* void gnucash_shutdown (GtkWidget *widget, gpointer *data); */
 void file_cmd_open (GtkWidget *widget, gpointer data);
 void file_cmd_import (GtkWidget *widget, gpointer data);
 void file_cmd_quit (GtkWidget *widget, gpointer data);
 void file_cmd_save (GtkWidget *widget, gpointer data);
-void prepare_app ( void );
+/* void prepare_app ( void ); */
 
 /** GLOBALS *********************************************************/
-extern char  *helpPath;
-extern GtkWidget   *app;
-extern AccountGroup *topgroup;
+//extern char  *helpPath;
+//extern GtkWidget   *app;
+//extern AccountGroup *topgroup;
 
 #endif
 
@@ -70,4 +60,4 @@ extern AccountGroup *topgroup;
   c-indentation-style: gnu
   eval: (c-set-offset 'block-open '-)
   End:
-*/
+*/ 
