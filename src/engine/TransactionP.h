@@ -56,7 +56,8 @@
  * between "dining", "tips" and "taxes" categories.
  */
 
-struct _split {
+struct _split 
+{
   Account *acc;     /* back-pointer to debited/credited account   */
   Transaction *parent; /* parent of split                         */
   char  * memo;
@@ -78,7 +79,8 @@ struct _split {
 };
 
 
-struct _transaction {
+struct _transaction 
+{
   char  * num;               /* transaction id                            */
   Date    date;              /* transaction date                          */
   char  * description;        
@@ -87,6 +89,10 @@ struct _transaction {
   Split   **dest_splits;     /* list of splits, null terminated           */
 
   char    write_flag;        /* used only during file IO                  */
+
+  /* the "open" flag indicates if the transaction has been 
+   * opened for editing. */
+  char open;
 };
 
 

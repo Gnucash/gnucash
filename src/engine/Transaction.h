@@ -68,6 +68,9 @@ void          xaccInitTransaction (Transaction *);/* clears a trans struct */
  * account. (i.e. if none of the member splits are in an account). */
 void          xaccFreeTransaction (Transaction *);
 
+void          xaccTransBeginEdit (Transaction *);
+void          xaccTransCommitEdit (Transaction *);
+
 void          xaccTransSetDate (Transaction *, int day, int mon, int year);
 void          xaccTransSetDateStr (Transaction *, char *);
 

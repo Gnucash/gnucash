@@ -32,15 +32,27 @@
 #include "date.h"
 #include "Transaction.h"
 #include "TransactionP.h"
+#include "TransLog.h"
 #include "util.h"
 
 
-/* if the "force_double_entry" flag has a non-zero value,
+/* 
+ * If the "force_double_entry" flag has a non-zero value,
  * then all transactions will be *forced* to balance.
  * This will be forced even if it requires a new split 
  * to be created.
  */
 int force_double_entry = 0;
+
+/*
+ * The logfiles are useful for tracing, journalling.
+ * Note that the current support for journalling is at best 
+ * embryonic, at worst, sets the wrong expectations.
+ */
+int gen_logs = 0;
+FILE * trans_log;
+
+
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
@@ -231,6 +243,7 @@ xaccInitTransaction( Transaction * trans )
   trans->date.year   = 1900;        
   trans->date.month  = 1;        
   trans->date.day    = 1;        
+  trans->open        = 0;
   }
 
 /********************************************************************\
@@ -302,7 +315,26 @@ xaccFreeTransaction( Transaction *trans )
   trans->date.month  = 1;        
   trans->date.day    = 1;        
 
+  trans->open = 0;
+
   _free(trans);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccTransBeginEdit (Transaction *trans)
+{
+   trans->open = 1;
+   xaccOpenLog ();
+}
+
+void
+xaccTransCommitEdit (Transaction *trans)
+{
+   trans->open = 0;
+   xaccTransWriteLog (trans);
 }
 
 /********************************************************************\
