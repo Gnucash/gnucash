@@ -16,6 +16,7 @@ AM_CFLAGS = \
 
 libgncmod_app_file_la_SOURCES = \
   gnc-file.c \
+  gnc-file-history.c \
   gncmod-app-file.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
