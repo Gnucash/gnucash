@@ -1,5 +1,28 @@
 2003-01-02  David Hampton  <hampton@employees.org>
 
+	* src/report/report-system/options-utilities.scm:
+	* src/report/report-system/report-system.scm: Add new option for
+	specifying sort critera for piecharts and barcharts.
+
+	* src/report/standard-reports/account-piecharts.scm: Add various
+	sorting options.  Work around Guppi problem by replacing the
+	character "&" with the word "and".
+
+	* src/report/standard-reports/category-barchart.scm: Add various
+	sorting options. The default is now by ammount instead of by
+	account-code, which is a much more interesting report.  #102342
+	Work around Guppi problem by replacing the character "&" with the
+	word "and".  Don't "reverse" the barchart legend.  Double-clicking
+	on the legend now opend the right child report.
+
+	* src/report/standard-reports/net-barchart.scm: The report title
+	should change when the report name field is changed in the
+	options. #102266
+
+	* src/report/standard-reports/pnl.scm: The report title should
+	change when the report name field is changed in the
+	options. #102267
+
 	* src/gnome-utils/window-help.c (helpWindow): Correctly pass on
 	the label when first opening a help window.
 

@@ -28,6 +28,7 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 slib))
+(use-modules (ice-9 regex))
 (use-modules (gnucash gnc-module))
 
 (require 'printf)
@@ -72,6 +73,7 @@ balance at a given time"))
 (define optname-slices (N_ "Maximum Slices"))
 (define optname-plot-width (N_ "Plot Width"))
 (define optname-plot-height (N_ "Plot Height"))
+(define optname-sort-method (N_ "Sort Method"))
 
 ;; The option-generator. The only dependance on the type of piechart
 ;; is the list of account types that the account selection option
@@ -138,6 +140,10 @@ balance at a given time"))
      options gnc:pagename-display 
      optname-plot-width optname-plot-height "d" 500 350)
 
+    (gnc:options-add-sort-method! 
+     options gnc:pagename-display
+     optname-sort-method "e" 'amount)
+
     (gnc:options-set-default-section options gnc:pagename-general)      
 
     options))
@@ -182,6 +188,7 @@ balance at a given time"))
         (max-slices (get-option gnc:pagename-display optname-slices))
         (height (get-option gnc:pagename-display optname-plot-height))
         (width (get-option gnc:pagename-display optname-plot-width))
+	(sort-method (get-option gnc:pagename-display optname-sort-method))
 
 	(work-done 0)
 	(work-to-do 0)
@@ -297,7 +304,21 @@ balance at a given time"))
 		  (sort (filter (lambda (pair) (not (>= 0.0 (car pair))))
 				(fix-signs
                                  (traverse-accounts 1 topl-accounts)))
-			(lambda (a b) (> (car a) (car b)))))
+			(cond
+			 ((eq? sort-method 'acct-code)
+			  (lambda (a b) 
+			    (string<? (gnc:account-get-code (cadr a))
+				      (gnc:account-get-code (cadr b)))))
+			 ((eq? sort-method 'alphabetical)
+			  (lambda (a b) 
+			    (string<? ((if show-fullname?
+					   gnc:account-get-full-name
+					   gnc:account-get-name) (cadr a))
+				      ((if show-fullname?
+					   gnc:account-get-full-name
+					   gnc:account-get-name) (cadr b)))))
+			 (else
+			  (lambda (a b) (> (car a) (car b)))))))
 
             ;; if too many slices, condense them to an 'other' slice
             ;; and add a link to a new pie report with just those
@@ -397,21 +418,23 @@ balance at a given time"))
                       (map 
                        (lambda (pair)
                          (string-append
-                          (if (string? (cadr pair))
-                              (cadr pair)
-                              ((if show-fullname?
-                                   gnc:account-get-full-name
-                                   gnc:account-get-name) (cadr pair)))
-                          (if show-total?
-                              (string-append 
-                               " - "
-                               (gnc:amount->string
-                                (gnc:double-to-gnc-numeric
-                                 (car pair)
-                                 (gnc:commodity-get-fraction report-currency)
-                                 GNC-RND-ROUND)
-                                print-info))
-                              "")))
+			  (regexp-substitute/global #f "&"
+                           (if (string? (cadr pair))
+			       (cadr pair)
+			       ((if show-fullname?
+				    gnc:account-get-full-name
+				    gnc:account-get-name) (cadr pair)))
+			       'pre " " (_ "and") " " 'post)
+			   (if show-total?
+			       (string-append 
+				" - "
+				(gnc:amount->string
+				 (gnc:double-to-gnc-numeric
+				  (car pair)
+				  (gnc:commodity-get-fraction report-currency)
+				  GNC-RND-ROUND)
+				 print-info))
+			       "")))
                        combined)))
                  (gnc:html-piechart-set-labels! chart legend-labels))
 

@@ -273,3 +273,18 @@
      (vector 'filledcircle "filled circle" "filled circle")
      (vector 'filledsquare "filled square" "filled square")))))
 
+
+(define (gnc:options-add-sort-method!
+	 options pagename optname sort-tag default)
+  (gnc:register-option
+   options
+   (gnc:make-multichoice-option
+    pagename optname 
+    sort-tag
+    (N_ "Choose the method for sorting accounts.")
+    default
+    (list
+     (vector 'acct-code "Account Code" "Alphabetical by account code")
+     (vector 'alphabetical "Alphabetical" "Alphabetical by account name")
+     (vector 'amount "Amount" "By amount, largest to smallest")))))
+

@@ -27,6 +27,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (ice-9 slib))
+(use-modules (ice-9 regex))
 (use-modules (gnucash gnc-module))
 
 (require 'printf)
@@ -79,6 +80,7 @@ developing over time"))
 (define optname-slices (N_ "Maximum Bars"))
 (define optname-plot-width (N_ "Plot Width"))
 (define optname-plot-height (N_ "Plot Height"))
+(define optname-sort-method (N_ "Sort Method"))
 
 (define (options-generator account-types)
   (let* ((options (gnc:new-options)) 
@@ -142,7 +144,11 @@ developing over time"))
 
     (gnc:options-add-plot-size! 
      options gnc:pagename-display 
-     optname-plot-width optname-plot-height "c" 400 400)
+     optname-plot-width optname-plot-height "d" 400 400)
+
+    (gnc:options-add-sort-method! 
+     options gnc:pagename-display
+     optname-sort-method "e" 'amount)
 
     (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -193,6 +199,7 @@ developing over time"))
         (max-slices (get-option gnc:pagename-display optname-slices))
         (height (get-option gnc:pagename-display optname-plot-height))
         (width (get-option gnc:pagename-display optname-plot-width))
+	(sort-method (get-option gnc:pagename-display optname-sort-method))
         
 	(work-done 0)
 	(work-to-do 0)
@@ -355,9 +362,23 @@ developing over time"))
                           (filter (lambda (l) 
                                     (not (= 0.0 (apply + (cadr l))))) 
                                   (traverse-accounts 1 topl-accounts))
-                          (lambda (a b) 
-                            (string<? (gnc:account-get-code (car a))
-                                      (gnc:account-get-code (car b))))))
+			  (cond
+			   ((eq? sort-method 'acct-code)
+			    (lambda (a b) 
+			      (string<? (gnc:account-get-code (car a))
+					(gnc:account-get-code (car b)))))
+			   ((eq? sort-method 'alphabetical)
+			    (lambda (a b) 
+			      (string<? ((if show-fullname?
+					     gnc:account-get-full-name
+					     gnc:account-get-name) (car a))
+					((if show-fullname?
+					     gnc:account-get-full-name
+					     gnc:account-get-name) (car b)))))
+			   (else
+			    (lambda (a b)
+			      (> (apply + (cadr a))
+				 (apply + (cadr b))))))))
           ;; Or rather sort by total amount?
           ;;(< (apply + (cadr a)) 
           ;;   (apply + (cadr b))))))
@@ -394,7 +415,8 @@ developing over time"))
              (gnc:html-barchart-set-row-labels-rotated?! chart #t)
              (gnc:html-barchart-set-stacked?! chart stacked?)
              ;; If this is a stacked barchart, then reverse the legend.
-             (gnc:html-barchart-set-legend-reversed?! chart stacked?)
+	     ;; Doesn't do what you'd expect. - DRH
+             ;;(gnc:html-barchart-set-legend-reversed?! chart stacked?)
              
              ;; If we have too many categories, we sum them into a new
              ;; 'other' category and add a link to a new report with just
@@ -436,11 +458,13 @@ developing over time"))
 	     (gnc:report-percent-done 94)
              (gnc:html-barchart-set-col-labels!
               chart (map (lambda (pair)
+			  (regexp-substitute/global #f "&"
                            (if (string? (car pair))
                                (car pair)
                                ((if show-fullname?
                                     gnc:account-get-full-name
-                                    gnc:account-get-name) (car pair))))
+                                    gnc:account-get-name) (car pair)))
+			   'pre " " (_ "and") " " 'post))
                          all-data))
              (gnc:html-barchart-set-col-colors! 
               chart
