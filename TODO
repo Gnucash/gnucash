@@ -5,10 +5,6 @@ Open, known bugs, desired enhancements:
 Its supposed to work that way, erasing old work.  Clarify
 the docs or change the menu entry name.
 
-9) For SGI Irix, mystery core dump when creating submenus ...
-   related to menu initialization complaints with sgi compiler.
-   ??? probably fixed ???
-
 10) cleared balances are incorrectly shown for stock accounts
 
 12) all messages should be moved out so that translation to foreign
@@ -20,14 +16,8 @@ the docs or change the menu entry name.
 
 15) Allow an account to be designated as a double-entry-only account.
 
-16) QuickFill doesn't work with some window managers
-
-17) Cells lose focus with some window managers.
-
 18) add (none) to transfer list, or explain that a second selection 
     will clear it.
-
-19) verify that tabbing works for mutualfunds and for ledgers
 
 20) fix quickfill for ledgers.
 
@@ -42,8 +32,8 @@ the docs or change the menu entry name.
 25) provide menu item to create automaticly a default set
     of accounts for business, home use.
 
-26) provide user-default menu, to disable listing of zero-balance 
-    accounts
+26) provide menu item to not show accounts (esp inc/expense)
+    acocounts with zero balances.
 
 27) add reports
 
@@ -56,15 +46,15 @@ the docs or change the menu entry name.
 31) move resources out of main.c into a resource file.
     This requires fixing install first.
 
-32) make instqall should work
+32) "make install" should work
 
-33) automatic deposit-wthdrawl on regular basis.
+33) automatic deposit-withdrawl on regular basis.
 
 34) create example accounts for home assets (car, jewelry, etc.
-   and how they plug into balance sheet
+    and how they plug into balance sheet
 
 35) balance sheet, profit&loss sheet.  I wanna know what my net worth is,
-   what percentage of it is bank, stocks, car, house.
+    what percentage of it is bank, stocks, car, house.
 
 36) business features, for tracking inventory, costing jobs, etc.
 
@@ -93,9 +83,19 @@ the docs or change the menu entry name.
 45) grey out menu entry for "subaccount" unless account
     has sub-accounts.
 
-46) fix traversal for ledger windows
+47) provide a simplified portfolio ledger window.
 
+48) allow tab traversal from memo field to commit button in the ledger
+    window.
 
+49) fix recn window. Its completely broken right now.
+
+50) provide a menu item to not show income/expense accounts.
+    this makes it work more like quicken categories.  See also #26
+
+52) add sql interfaces. Use optimistic record modification policies,
+    to avoid record locking. Something that is CVS, as opposed to 
+    RCS, in style & philosophy.
 
 
 Fixed bugs:
@@ -144,8 +144,25 @@ fixed.
 8) tab-traversing  doesn't work for mutual, stock funds
 should work now.
 
+9) For SGI Irix, mystery core dump when creating submenus ...
+   related to menu initialization complaints with sgi compiler.
+Fixed.
+
 11) stock portfolio should indicate total $ amount of transaction
 fixed.
 
 14) Allow transfers of funds to be done in-line
 fixed.
+
+16) QuickFill doesn't work with some window managers
+Seems to work now, after 17&19 (navigation/traversal) was fixed.
+
+17) Cells lose focus with some window managers.
+fixed. changed XmNnavigation
+
+19) verify that tabbing works for mutual funds and for ledgers
+fixed.
+
+46) fix traversal for ledger windows
+fixed.
+
