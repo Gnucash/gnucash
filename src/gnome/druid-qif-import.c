@@ -328,22 +328,24 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
      * (#t error-message) for a warning */
     if(gh_list_p(load_return) &&
        (gh_car(load_return) == SCM_BOOL_T)) {
+      char *warn_str = gh_scm2newstr(gh_cadr(load_return), NULL);
       error_string = g_strdup_printf(_("QIF file load warning:\n%s"),
-                                     gh_scm2newstr(gh_cadr(load_return),
-                                                   NULL));
+                                     warn_str);
       gnc_warning_dialog_parented(GTK_WIDGET(wind->window), error_string);
       g_free(error_string);
-    }      
-    
+      free (warn_str);
+    }
+
     /* check success of the file load */
     if((load_return != SCM_BOOL_T) &&
        (!gh_list_p(load_return) || 
         (gh_car(load_return) != SCM_BOOL_T))) {
+      char *warn_str = gh_scm2newstr(gh_cadr(load_return), NULL);
       error_string = g_strdup_printf(_("QIF file load failed:\n%s"),
-                                     gh_scm2newstr(gh_cadr(load_return),
-                                                   NULL));
+                                     warn_str);
       gnc_error_dialog_parented(GTK_WINDOW(wind->window), error_string);
       g_free(error_string);
+      free (warn_str);
 
       imported_files = 
         gh_call2(unload_qif_file, scm_qiffile, imported_files);
@@ -386,11 +388,12 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
       if((parse_return != SCM_BOOL_T) &&
          (!gh_list_p(parse_return) ||
           (gh_car(parse_return) != SCM_BOOL_T))) {
+        char *warn_str = gh_scm2newstr(gh_cadr(parse_return), NULL);
         error_string = g_strdup_printf(_("QIF file parse failed:\n%s"),
-                                       gh_scm2newstr(gh_cadr(parse_return),
-                                                     NULL));
+                                       warn_str);
         gnc_error_dialog_parented(GTK_WINDOW(wind->window), error_string);
         g_free(error_string);
+        free(warn_str);
 
         imported_files = 
           gh_call2(unload_qif_file, scm_qiffile, imported_files);
@@ -577,18 +580,19 @@ update_file_page(QIFImportWindow * wind) {
   while(!gh_null_p(loaded_file_list)) {  
     scm_qiffile = gh_car(loaded_file_list);
     row_text    = gh_scm2newstr(gh_call1(qif_file_path, scm_qiffile), NULL);
-    
+
     row = gtk_clist_append(GTK_CLIST(wind->selected_file_list),
                            &row_text);
-    
+    free (row_text);
+
     if(scm_qiffile == wind->selected_file) {
       sel_item = row;
     }
-    
+
     loaded_file_list = gh_cdr(loaded_file_list);
   }
   gtk_clist_thaw(GTK_CLIST(wind->selected_file_list));
-  
+
   if(sel_item >= 0) {
     gtk_clist_select_row(GTK_CLIST(wind->selected_file_list), sel_item, 0);
   }  
@@ -706,6 +710,9 @@ update_accounts_page(QIFImportWindow * wind) {
     
     gtk_clist_append(GTK_CLIST(wind->acct_list), row_text);
     accts_left = gh_cdr(accts_left);
+
+    free(row_text[0]);
+    free(row_text[1]);
   }
   gtk_clist_thaw(GTK_CLIST(wind->acct_list));
 }
@@ -763,6 +770,9 @@ update_categories_page(QIFImportWindow * wind) {
     
     gtk_clist_append(GTK_CLIST(wind->cat_list), row_text);
     cats_left = gh_cdr(cats_left);
+
+    free (row_text[0]);
+    free (row_text[1]);
   }
   gtk_clist_thaw(GTK_CLIST(wind->cat_list));
 }
@@ -810,6 +820,8 @@ gnc_ui_qif_import_account_line_select_cb(GtkCList * clist, gint row,
   }
 
   update_accounts_page(wind);
+
+  free (gnc_name);
 }
 
 
@@ -842,19 +854,21 @@ gnc_ui_qif_import_category_line_select_cb(GtkCList * clist, gint row,
   
   /* call the account picker to get the new account */
   gnc_name     = gh_scm2newstr(gh_call1(get_gnc_name, selected_acct), NULL);
-  initial_type = 
+  initial_type =
     gh_scm2int(gh_car(gh_call1(get_allowed_types, selected_acct)));
-  
+
   new_acct_info = accountPickerBox(gnc_name, initial_type);
-  
+
   if(gh_list_p(new_acct_info)) {
     gh_call2(set_gnc_name, selected_acct, gh_car(new_acct_info));
     gh_call2(set_allowed_types, selected_acct, 
              SCM_LIST1(gh_cadr(new_acct_info)));    
     gh_call2(set_description, selected_acct, gh_caddr(new_acct_info));    
   }
-  
+
   update_categories_page(wind);
+
+  free(gnc_name);
 }
 
 
