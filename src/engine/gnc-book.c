@@ -873,6 +873,7 @@ xaccResolveFilePath (const char * filefrag)
   struct stat statbuf;
   char pathbuf[PATH_MAX];
   pathGenerator gens[4];
+  char *filefrag_dup;
   int namelen;
   int i;
 
@@ -928,32 +929,42 @@ xaccResolveFilePath (const char * filefrag)
   /* make sure that the gnucash home dir exists. */
   MakeHomeDir();
 
+  filefrag_dup = g_strdup (filefrag);
+
   /* Replace '/' with ',' for non file backends */
   if (strstr (filefrag, "://"))
   {
     char *p;
 
-    p = strchr (filefrag, '/');
+    p = strchr (filefrag_dup, '/');
     while (p) {
       *p = ',';
-      p = strchr (filefrag, '/');
+      p = strchr (filefrag_dup, '/');
     }
   }
 
   /* Lets try creating a new file in $HOME/.gnucash/data */
   if (xaccDataPathGenerator(pathbuf, 0))
   {
-      if(xaccAddEndPath(pathbuf, filefrag, namelen))
+      if(xaccAddEndPath(pathbuf, filefrag_dup, namelen))
+      {
+          g_free (filefrag_dup);
           return (g_strdup (pathbuf));
+      }
   } 
 
   /* OK, we still didn't find the file */
   /* Lets try creating a new file in the cwd */
   if (xaccCwdPathGenerator(pathbuf, 0))
   {
-      if(xaccAddEndPath(pathbuf, filefrag, namelen))
+      if(xaccAddEndPath(pathbuf, filefrag_dup, namelen))
+      {
+          g_free (filefrag_dup);
           return (g_strdup (pathbuf));
+      }
   }
+
+  g_free (filefrag_dup);
 
   return NULL;
 }
