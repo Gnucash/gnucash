@@ -1,0 +1,98 @@
+<ARTICLE ID="XACC-TXF-EXPORT-REPORT">
+
+<ARTHEADER>
+<TITLE>TXF Export Report</TITLE>
+</ARTHEADER>
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/report-txf.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+
+<PARA>This report allows you to export all tax related Income and Expenses
+      to a TXF (Tax eXchange Format) file that can be imported into tax
+      filing programs such as TaxCut or TurboTax.
+
+    </PARA>
+
+<PARA><EMPHASIS>NOTE:</EMPHASIS> For this to work, the user has to
+      segregate taxable and not taxable income to different accounts, as
+      well as deductible and non deductible expenses. The user also must
+      Set the TXF category of each tax related account.  The "Txf Export
+      Init" tab on the parameter dialog allows this.  It is best to set
+      this up from the Tax Report before actually running this report.
+      Otherwise, you will just get an empty file.  There is a
+      taxreport.xac file in the examples directory, which shows one way
+      this can be set up. 
+
+    </PARA>
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/report-txf-options.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+<PARA><EMPHASIS>IMPORTANT:</EMPHASIS> Most TXF codes should only appear
+      on a single account!  The exceptions are codes preceded with
+      "&lt;" or "^", which can appear many times.  Of course, each
+      duplicate should have a unique payer name.
+
+    </PARA>
+
+<PARA>All of the parameters for the Tax Report still apply for the
+      actual export.  Only the "Txf Export Init" parameters are described
+      here.
+
+    <ITEMIZEDLIST>
+      <LISTITEM><PARA>The account(s) for which to set a TXF category.
+        If no account is selected nothing is changed.  If multiple
+        accounts are selected, all of the Income accounts will be set to
+        the selected item in the INCOME list box, and all of the Expense
+        accounts will be set to the selected item in the EXPENSE list
+        box. </PARA></LISTITEM>
+
+      <LISTITEM><PARA>Print extended TXF HELP messages gives <ULINK
+        URL="xacc-txf-categories.html">detailed descriptions</ULINK>
+        of each TXF category, instead of the usual tax
+        report. </PARA></LISTITEM>
+
+      <LISTITEM><PARA>INCOME TXF category selection (Select ONLY
+        ONE!)</PARA></LISTITEM> 
+
+      <LISTITEM><PARA>TXF categories preceded with a "&lt;" or "^"
+        export a payer name along with the value of the account.  This
+        is usually the name of a bank, stock, or mutual fund that pays
+        dividends or interest.  Occasionally, it is a description of a
+        deduction.</PARA>
+
+        <PARA>On the report above, "Money Market Fund One" is an example
+        of where the name of the current account is exported.  This is
+        typically used when the fund pays only one type if income, such
+        as interest.  For "Mutual Fund Four" and "Mutual Fund Five", the
+        categories "Long Term Cap Gain" and "Dividend Income" both will
+        export the name of the parent account.  This is typically used
+        when the fund pays several different types of distributions.  As
+        shown in this example, these funds have three types of
+        distributions, but the "Income" and "Short Term Cap Gain"
+        categories are totaled and exported together as "Dividend
+        Income", as they are taxed the same.</PARA>
+
+	<ITEMIZEDLIST>
+	  <LISTITEM><PARA>Default as indicated in the list box</PARA>
+          </LISTITEM>
+	  <LISTITEM><PARA>&lt; Current Account</PARA></LISTITEM>
+	  <LISTITEM><PARA>^ Parent Account</PARA></LISTITEM>
+	</ITEMIZEDLIST></LISTITEM>
+
+      <LISTITEM><PARA>EXPENSE TXF category selection (Select ONLY
+        ONE!)</PARA></LISTITEM> 
+    </ITEMIZEDLIST>
+
+    <LINK LINKEND="XACC-TXF-EXPORT-ANOMALIES">Known anomalies and
+      limitations.</LINK>
+</PARA>
+
+</ARTICLE>

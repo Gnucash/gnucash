@@ -5,7 +5,7 @@
 <SECT1>
 <TITLE> Reports</TITLE>
 <PARA>A variety of financial reports can be selected on the
-    "Reports" menu":
+    "Reports" menu:
 
     <ITEMIZEDLIST>
 <LISTITEM>
@@ -37,6 +37,18 @@
 <LISTITEM>
 <PARA><LINK LINKEND="XACC-TAX-REPORT">Tax Report:</LINK>
       shows tax related Income and Expenses.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-TXF-EXPORT-REPORT">TXF Export Report:</LINK>
+      exports a .TXF file that can be imported to TaxCut or TurboTax.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-HIERARCHICAL-REPORT">Hierarchical Report:</LINK>
+      shows accounts in a Hierarchical fashion.
 
       </PARA>
 </LISTITEM>

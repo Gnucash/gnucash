@@ -28,10 +28,14 @@ image_DATA = \
   report-av-baln.png \
   report-baln.png \
   report-folio.png \
+  report-hierarchical-options.png \
+  report-hierarchical.png \
   report-option.png \
   report-pnl.png \
   report-tax.png \
   report-tax-options.png \
+  report-txf-options.png \
+  report-txf.png \
   reportwin.png \
   ticker-a.png \
   ticker-b.png

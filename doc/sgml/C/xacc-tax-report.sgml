@@ -3,13 +3,15 @@
 <ARTHEADER>
 <TITLE>Tax Report</TITLE>
 </ARTHEADER>
-<PARA>    <INLINEMEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="image/report-tax.png">
-</IMAGEOBJECT>
-</INLINEMEDIAOBJECT> 
-
-    </PARA>
+<PARA>
+  <ULINK URL="xacc-tax-report-example.html">
+    <INLINEMEDIAOBJECT>
+      <IMAGEOBJECT>
+        <IMAGEDATA FILEREF="image/report-tax.png">
+      </IMAGEOBJECT>
+    </INLINEMEDIAOBJECT> 
+  </ULINK>
+</PARA>
 
 <PARA>This report allows you to view all tax related Income and Expenses.
       Up to fifteen sub-accounts are displayed. Lower sub-accounts are ignored.
@@ -31,6 +33,7 @@
 </INLINEMEDIAOBJECT> 
 
     </PARA>
+
 <PARA>Options specifiable for this report include:
     
     <ITEMIZEDLIST>
@@ -48,9 +51,9 @@
 	</ITEMIZEDLIST></PARA></LISTITEM>
       <LISTITEM><PARA>The accounts for which the report is to be
         produced.  If no account is selected, all tax related accounts
-        are displayed. Non-tax related accounts are not displaied, even
+        are displayed. Non-tax related accounts are not displayed, even
         if selected, though tax related sub-accounts will be
-        displaied.</PARA></LISTITEM>
+        displayed.</PARA></LISTITEM>
 
       <LISTITEM><PARA>Suppress $0.00 values</PARA></LISTITEM>
       <LISTITEM><PARA>Display Full account names</PARA></LISTITEM>
@@ -65,10 +68,6 @@
 	</ITEMIZEDLIST></PARA></LISTITEM>
     </ITEMIZEDLIST>
 
-</PARA>
-
-    <PARA> I plan to add export capability to TaxCut and TurboTax, as soon
-      as I can get a hold of the spec for .txf files.
 </PARA>
 
 </ARTICLE>

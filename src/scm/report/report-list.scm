@@ -8,4 +8,4 @@
 (gnc:depend "report/transaction-report.scm")
 (gnc:depend "report/budget-report.scm")
 (gnc:depend "report/account-summary.scm")
-(gnc:depend "report/tax.scm")
+(gnc:depend "report/taxtxf.scm")

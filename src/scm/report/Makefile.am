@@ -10,7 +10,9 @@ gncscm_DATA = \
   hello-world.scm \
   report-list.scm \
   transaction-report.scm \
-  tax.scm
+  taxtxf.scm \
+  txf-export-help.scm \
+  txf-export.scm
 
 EXTRA_DIST = \
   .cvsignore \

@@ -1,0 +1,53 @@
+<ARTICLE ID="XACC-HIERARCHICAL-REPORT">
+
+<ARTHEADER>
+<TITLE>Hierarchical Accounts Report</TITLE>
+</ARTHEADER>
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/report-hierarchical.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+
+<PARA>This report allows you to view all accounts in a hierarchical
+      fashion.  Up to fifteen sub-accounts are displayed. Lower
+      sub-accounts are ignored. (This is a minor change to the Tax
+      Report, so the source file is scm/report/taxtxf.scm)
+
+    </PARA>
+
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/report-hierarchical-options.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+<PARA>Options specifiable for this report include:
+    
+    <ITEMIZEDLIST>
+      <LISTITEM><PARA>The start and end dates - default: Year-to-Date.
+                </PARA></LISTITEM>
+      <LISTITEM><PARA>Alternate Period: (Year is relative to From:)
+	<ITEMIZEDLIST>
+	  <LISTITEM><PARA>Use From - To (default)</PARA></LISTITEM>
+	  <LISTITEM><PARA>1st, 2nd, 3rd, 4th Estimated Tax Quarters 
+          (From: year)</PARA></LISTITEM>
+	  <LISTITEM><PARA>Last Year (year before From: year)
+                    </PARA></LISTITEM>
+	  <LISTITEM><PARA>1st, 2nd, 3rd, 4th Estimated Tax Quarters for
+           Last Year</PARA></LISTITEM>
+	</ITEMIZEDLIST></PARA></LISTITEM>
+      <LISTITEM><PARA>The accounts for which the report is to be
+        produced.  If no account is selected, all accounts
+        are displayed.</PARA></LISTITEM>
+
+      <LISTITEM><PARA>Suppress $0.00 values</PARA></LISTITEM>
+      <LISTITEM><PARA>Display Full account names</PARA></LISTITEM>
+    </ITEMIZEDLIST>
+
+</PARA>
+
+</ARTICLE>

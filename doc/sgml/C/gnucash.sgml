@@ -13,6 +13,7 @@
 <!entity xaccdoubleentry system "xacc-doubleentry.sgml">
 <!entity xacceuro system "xacc-euro.sgml">
 <!entity xaccdateinput system "xacc-dateinput.sgml">
+<!entity xacchierarchicalreport system "xacc-hierarchical-report.sgml">
 <!entity xaccincomeexpense system "xacc-incomeexpense.sgml">
 <!entity xacclocatingtxns system "xacc-locatingtxns.sgml">
 <!entity xaccpreferences system "xacc-preferences.sgml">
@@ -32,6 +33,8 @@
 <!entity xaccticker system "xacc-ticker.sgml">
 <!entity xacctaxreport system "xacc-tax-report.sgml">
 <!entity xacctransreport system "xacc-trans-report.sgml">
+<!entity xacctxfexportanomalies system "xacc-txf-export-anomalies.sgml">
+<!entity xacctxfexportreport system "xacc-txf-export-report.sgml">
 <!entity xaccdochack system "xacc-dochack.sgml">
 <!entity xaccy2k system "xacc-y2k.sgml">
 <!entity xaccgpl system "xacc-gpl.sgml">
@@ -55,6 +58,7 @@
 &xaccdoubleentry;
 &xacceuro;
 &xaccdateinput;
+&xacchierarchicalreport;
 &xaccincomeexpense;
 &xacclocatingtxns;
 &xaccpreferences;
@@ -74,6 +78,8 @@
 &xacctaxreport;
 &xaccticker;
 &xacctransreport;
+&xacctxfexportanomalies;
+&xacctxfexportreport;
 &xaccdochack;
 &xaccy2k;
 &xaccgpl;
