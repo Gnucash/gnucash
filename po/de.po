@@ -367,7 +367,7 @@ msgstr "Beschreibung"
 #: src/SplitLedger.c:4021 src/gnome/reconcile-list.c:151
 #: src/register/splitreg.c:96
 msgid "Reconciled:R"
-msgstr "Ausgeglichen:A"
+msgstr "Reconciled:A"
 
 #: src/SplitLedger.c:4024 src/SplitLedger.c:4097
 msgid "Share Balance"
