@@ -38,7 +38,7 @@ test_employee (void)
   GncBusiness *bus;
   GncEmployee *employee;
 
-  bus = gncBusinessCreate ((GNCSession *)1);
+  bus = gncBusinessCreate ((GNCBook *)1);
 
   /* Test creation/destruction */
   {

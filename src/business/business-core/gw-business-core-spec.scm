@@ -92,7 +92,7 @@
    'gnc:business-create
    '<gnc:GncBusiness*>
    "gncBusinessCreate"
-   '((<gnc:Session*> session))
+   '((<gnc:Book*> book))
    "Return a newly-created GncBusiness state object.")
 
   (gw:wrap-function

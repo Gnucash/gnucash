@@ -48,12 +48,12 @@ static void test_business (void)
   {
     bus = gncBusinessCreate (NULL);
     do_test (bus == NULL, "business create NULL");
-    bus = gncBusinessCreate ((GNCSession *)1);
+    bus = gncBusinessCreate ((GNCBook *)1);
     do_test (bus != NULL, "business create non-NULL");
 
-    do_test (gncBusinessGetSession (NULL) == NULL,
+    do_test (gncBusinessGetBook (NULL) == NULL,
 	     "business get session NULL");
-    do_test (gncBusinessGetSession (bus) == (GNCSession *)1,
+    do_test (gncBusinessGetBook (bus) == (GNCBook *)1,
 	     "business get session");
 
     gncBusinessDestroy (bus);
@@ -66,7 +66,7 @@ static void test_business (void)
     gpointer ptr, res;
     GHashTable *ht;
 
-    bus = gncBusinessCreate ((GNCSession *)1);
+    bus = gncBusinessCreate ((GNCBook *)1);
     do_test (gncBusinessEntityTable (NULL, NULL) == NULL,
 	     "business entity table NULL NULL");
     do_test (gncBusinessEntityTable (NULL, TEST_MODULE_NAME) == NULL,

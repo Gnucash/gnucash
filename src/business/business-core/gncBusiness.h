@@ -7,7 +7,7 @@
 #ifndef GNC_BUSINESS_H_
 #define GNC_BUSINESS_H_
 
-#include "gnc-session.h"
+#include "gnc-book.h"
 
 /* Defines the version of the core business object registration
  * interface.  Only business modules compiled against this version
@@ -29,11 +29,11 @@ struct _gncBusinessObject {
 };
 
 /* Create and Destroy the Gnc Business subsystem state */
-GncBusiness *gncBusinessCreate (GNCSession *session);
+GncBusiness *gncBusinessCreate (GNCBook *book);
 void gncBusinessDestroy (GncBusiness *business);
 
 /* Return the GNC Session from the Business Object */
-GNCSession * gncBusinessGetSession (const GncBusiness *bus);
+GNCBook * gncBusinessGetBook (const GncBusiness *bus);
 
 /* Obtain an object from the type and GUID */
 gpointer gncBusinessLookupGUID (GncBusiness *business, const char *type_name,

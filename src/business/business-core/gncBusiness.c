@@ -19,19 +19,19 @@ static GList *business_modules = NULL;
 
 struct _gncBusiness {
   GHashTable *	objects;
-  GNCSession *	session;
+  GNCBook *	book;
 };
 
-GncBusiness *gncBusinessCreate (GNCSession *session)
+GncBusiness *gncBusinessCreate (GNCBook *book)
 {
   GncBusiness *bus;
   GList *iter;
 
-  if (!session) return NULL;
+  if (!book) return NULL;
 
   bus = g_new0 (GncBusiness, 1);
   bus->objects = g_hash_table_new (g_str_hash, g_str_equal);
-  bus->session = session;
+  bus->book = book;
 
   /* Populate the objects hash table with hash tables for
    * each of the business objects.
@@ -54,11 +54,11 @@ void gncBusinessDestroy (GncBusiness *bus)
   g_free (bus);
 }
 
-GNCSession * gncBusinessGetSession (const GncBusiness *bus)
+GNCBook * gncBusinessGetBook (const GncBusiness *bus)
 {
   if (!bus) return NULL;
 
-  return bus->session;
+  return bus->book;
 }
 
 gpointer

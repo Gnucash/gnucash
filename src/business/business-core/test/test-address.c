@@ -20,7 +20,7 @@ test_address (void)
   GncBusiness *bus;
   GncAddress *address;
 
-  bus = gncBusinessCreate ((GNCSession *)1);
+  bus = gncBusinessCreate ((GNCBook *)1);
 
   /* Test creation/destruction */
   {

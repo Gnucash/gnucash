@@ -63,7 +63,7 @@
       gnc:extensions-temp-business
       (begin
 	(set! gnc:extensions-temp-business (gnc:business-create
-					    (gnc:get-current-session)))
+					    (gnc:get-current-book)))
 	gnc:extensions-temp-business)))
 
 (define (gnc:extensions-menu-setup)
