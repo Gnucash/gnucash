@@ -2,6 +2,7 @@ Version history:
 ------- -------
  1.0.19 - 25 July 98
          o Add note to README for where to find libXm2.0 lessstif libraries
+         o Fix for accounts types for certain (rare?) types of QIF file imports.
 
  1.0.18 - 14 June 98
          o Fix Quicken QIF import to recognize "transaction cleared" flag.
