@@ -248,12 +248,13 @@ xaccTransWriteLog (Transaction *trans, char flag)
  */
 
 char *
-xaccSplitAsString(Split *split, const char prefix[]) {
+xaccSplitAsString(Split *split, const char prefix[]) 
+{
   char *result = NULL;
   size_t result_size;
   FILE *stream = open_memstream(&result, &result_size); 
   const char *split_memo = xaccSplitGetMemo(split);
-  const double split_value = DxaccSplitGetValue(split);
+  const double split_value = gnc_numeric_to_double(xaccSplitGetValue(split));
   Account *split_dest = xaccSplitGetAccount(split);
   const char *dest_name =
     split_dest ? xaccAccountGetName(split_dest) : NULL;
@@ -287,7 +288,8 @@ xaccTransGetDateStr (Transaction *trans)
 }
 
 char *
-xaccTransAsString(Transaction *txn, const char prefix[]) {
+xaccTransAsString(Transaction *txn, const char prefix[]) 
+{
   char *result = NULL;
   size_t result_size;
   FILE *stream = open_memstream(&result, &result_size); 
@@ -295,7 +297,7 @@ xaccTransAsString(Transaction *txn, const char prefix[]) {
   const char *num = xaccTransGetNum(txn);
   const char *desc = xaccTransGetDescription(txn);
   const char *memo = xaccSplitGetMemo(xaccTransGetSplit(txn, 0));
-  const double total = DxaccSplitGetValue(xaccTransGetSplit(txn, 0));
+  const double total = gnc_numeric_to_double(xaccSplitGetValue(xaccTransGetSplit(txn, 0)));
   
   g_return_val_if_fail (stream, NULL);
 
