@@ -981,7 +981,7 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
   if (!gnc_split_register_get_split_virt_loc(reg, split, &vcell_loc))
     return;
   split = gnc_split_register_get_current_trans_split (reg, &vcell_loc);
-  gnc_split_register_emtpy_current_trans_except_split (reg, split);
+  gnc_split_register_empty_current_trans_except_split (reg, split);
 }
 
 /**
@@ -991,7 +991,7 @@ void
 gnc_split_reg_reinitialize_trans_cb(GtkWidget *widget, gpointer data)
 {
   GNCSplitReg *gsr = data;
-  gsr_emit_signal( gsr, "reinit" );
+  gsr_emit_signal( gsr, "reinit_ent" );
 }
 
 void
@@ -1295,7 +1295,6 @@ gnc_split_reg_jump_to_split(GNCSplitReg *gsr, Split *split)
 void
 gnc_split_reg_jump_to_split_amount(GNCSplitReg *gsr, Split *split)
 {
-  Transaction *trans;
   VirtualLocation virt_loc;
   SplitRegister *reg;
 

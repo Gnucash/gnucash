@@ -241,8 +241,8 @@ void gnc_split_register_delete_current_trans (SplitRegister *reg);
 
 /* Deletes the non-transaction splits associated wih the current
  *    cursor, if both are non-NULL. */
-void gnc_split_register_emtpy_current_trans_except_split  (SplitRegister *reg, Split *split);
-void gnc_split_register_emtpy_current_trans  (SplitRegister *reg);
+void gnc_split_register_empty_current_trans_except_split  (SplitRegister *reg, Split *split);
+void gnc_split_register_empty_current_trans  (SplitRegister *reg);
 
 /* Cancels any changes made to the current cursor, reloads the cursor
  *    from the engine, reloads the table from the cursor, and updates

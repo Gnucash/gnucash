@@ -1,3 +1,27 @@
+2002-11-10  David Hampton  <hampton@employees.org>
+
+	* src/scm/price-quotes.scm ((gnc:book-add-quotes book)): Don't get
+	stock quotes for accounts where all the shares have all been
+	sold. #95547
+
+	* src/register/ledger-core/split-register.c
+	(gnc_split_register_empty_current_trans_except_split): After
+	modifying the transaction, leave it in "open" state and mark it as
+	the currently pending transaction.  This insures that the register
+	does the right thing when leaving this transaction. Also fix
+	spelling error in function name.
+	(gnc_split_register_empty_current_trans): Fix spelling error in
+	function name.
+
+	* src/register/ledger-core/split-register.c: Fix spelling error in
+	function names.
+
+	* src/gnome/gnc-split-reg.c (gsr_default_reinit_handler): Fix
+	spelling error in function name.
+	(gnc_split_reg_reinitialize_trans_cb): Emit the right signal.
+	(gnc_split_reg_jump_to_split_amount): Remove uninitialized
+	variable.
+
 2002-11-09  Herbert Thoma  <herbie@hthoma.de>
 
 	* /src/report/standard-reports/cash-flow.scm: bug fix for cash flow

@@ -1018,7 +1018,7 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
 }
 
 void
-gnc_split_register_emtpy_current_trans_except_split (SplitRegister *reg, Split *split)
+gnc_split_register_empty_current_trans_except_split (SplitRegister *reg, Split *split)
 {
   SRInfo *info = gnc_split_register_get_info (reg);
   Transaction *pending_trans;
@@ -1077,14 +1077,9 @@ gnc_split_register_emtpy_current_trans_except_split (SplitRegister *reg, Split *
   for (node = splits; node; node = node->next)
     if (node->data != split)
       xaccSplitDestroy (node->data);
-  xaccTransCommitEdit (trans);
 
-  /* Check pending transaction */
-  if (trans == pending_trans)
-  {
-    info->pending_trans_guid = *xaccGUIDNULL ();
-    pending_trans = NULL;
-  }
+  /* This is now the  pending transaction */
+  info->pending_trans_guid = *xaccTransGetGUID(trans);
 
   gnc_resume_gui_refresh ();
 
@@ -1092,13 +1087,13 @@ gnc_split_register_emtpy_current_trans_except_split (SplitRegister *reg, Split *
 }
 
 void
-gnc_split_register_emtpy_current_trans (SplitRegister *reg)
+gnc_split_register_empty_current_trans (SplitRegister *reg)
 {
   Split *split;
 
   /* get the current split based on cursor position */
   split = gnc_split_register_get_current_split (reg);
-  gnc_split_register_emtpy_current_trans_except_split (reg, split);
+  gnc_split_register_empty_current_trans_except_split (reg, split);
 }
 
 void
