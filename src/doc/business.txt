@@ -32,4 +32,9 @@ explanation:
                                                                                 
 - children don't use refcounts, only parents do.
 
+- A child always points to its parent (it can have only 1).
+- A parent has a list of all children.
+- A parent has a pointer to the current 'replica child', if one exists.
+
+
 ------------------------- end of file ------------------------------
