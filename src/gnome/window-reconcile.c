@@ -427,9 +427,9 @@ gnc_reconcile_window_create_list_frame(Account *account,
   scrollWin = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollWin),
 				 GTK_POLICY_NEVER, 
-				 GTK_POLICY_AUTOMATIC);
+				 GTK_POLICY_ALWAYS);
   gtk_container_set_border_width(GTK_CONTAINER(scrollWin), 5);
-    
+
   gtk_container_add(GTK_CONTAINER(frame), scrollWin);
   gtk_container_add(GTK_CONTAINER(scrollWin), list);
   gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
@@ -1102,11 +1102,8 @@ recnWindow(GtkWidget *parent, Account *account)
 
     /* Clamp down on the size */
     {
-      gint row_height, num_debits, num_credits, num_show;
-
-      gtk_widget_realize(recnData->credit);
-      row_height = gnc_reconcile_list_get_row_height
-        (GNC_RECONCILE_LIST(recnData->credit));
+      GNCReconcileList *rlist;
+      gint height, num_debits, num_credits, num_show;
 
       num_credits = gnc_reconcile_list_get_num_splits
         (GNC_RECONCILE_LIST(recnData->credit));
@@ -1114,10 +1111,15 @@ recnWindow(GtkWidget *parent, Account *account)
         (GNC_RECONCILE_LIST(recnData->debit));
 
       num_show = MAX(num_debits, num_credits);
-      num_show = MIN(num_show, 15) + 2;
+      num_show = MIN(num_show, 15);
+      num_show = MAX(num_show, 8);
 
-      gtk_widget_set_usize(recnData->credit, 0, row_height * num_show);
-      gtk_widget_set_usize(recnData->debit, 0, row_height * num_show);
+      gtk_widget_realize(recnData->credit);
+      rlist = GNC_RECONCILE_LIST(recnData->credit);
+      height = gnc_reconcile_list_get_needed_height(rlist, num_show);
+
+      gtk_widget_set_usize(recnData->credit, 0, height);
+      gtk_widget_set_usize(recnData->debit, 0, height);
     }
   }
 

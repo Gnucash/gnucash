@@ -816,14 +816,14 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
       NEW_ACC_MENU_E_STR, TOOLTIP_NEW,
       gnc_ui_add_account, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_ADD,
-      'a', GDK_CONTROL_MASK, NULL
+      0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
       DEL_ACC_MENU_STR, TOOLTIP_DELETE,
       gnc_ui_delete_account_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_REMOVE,
-      'd', GDK_CONTROL_MASK, NULL
+      0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,
     GNOMEUIINFO_SUBTREE(SCRUB_MENU_STR, scrubmenu),

@@ -1056,6 +1056,8 @@ item_edit_show_list (ItemEdit *item_edit)
 	else
 		list_anchor = GTK_ANCHOR_NW;
 
+        gnc_item_list_autosize(item_edit->item_list);
+
 	gnome_canvas_item_set(GNOME_CANVAS_ITEM(item_edit->item_list),
 			      "x", (gdouble) list_x,
 			      "y", (gdouble) list_y,

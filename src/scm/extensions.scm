@@ -15,6 +15,8 @@
          path
          ;; The script to call when the menu item is selected
          script)
+  (if (gnc:debugging?)
+      (gnc:register-translatable-strings name documentation-string))
   (vector type
           name
           documentation-string
@@ -61,7 +63,21 @@
 
   (gnc:add-extension menu)
   (gnc:add-extension export-item)
-  (gnc:add-extension qif-item))
+  (gnc:add-extension qif-item)
+
+  (if (gnc:debugging?)
+      (begin
+        (define strings-item
+          (gnc:make-menu-item
+           "Save Translatable Strings"
+           "Save strings that need to be translated"
+           (list "Extensions" "")
+           (lambda ()
+             (let ((file-name (gnc:file-selection-dialog
+                               "Select file to save strings in" "")))
+               (if file-name (gnc:save-translatable-strings file-name))))))
+        (gnc:add-extension strings-item))))
+
 
 (if (gnc:debugging?)
     (gnc:hook-add-dangler gnc:*main-window-opened-hook*
@@ -91,6 +107,8 @@
                                  (substring name k length))))
                   (hash-set! letter-hash char #t)
                   (hash-set! name-hash name new-name)
+                  (if (gnc:debugging?)
+                      (gnc:register-translatable-strings new-name))
                   new-name)
                 (try-at-k (+ k 1))))))
 

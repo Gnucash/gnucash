@@ -22,7 +22,12 @@
 	 ;; on success, and (#f "failure-message") on failure. If #t,
 	 ;; the supplied value will be used by the gui to set the option.
          value-validator
-	 option-data)
+	 option-data
+         ;; This function should return a list of all the strings in the
+         ;; option other than the section, name, and documentation-string
+         ;; that might be displayed to the user (and thus should be
+         ;; translated).
+         strings-getter)
   (let ((changed-callback #f))
     (vector section
             name
@@ -37,7 +42,8 @@
             generate-restore-form
             value-validator
             option-data
-            (lambda (callback) (set! changed-callback callback)))))
+            (lambda (callback) (set! changed-callback callback))
+            strings-getter)))
 
 (define (gnc:option-section option)
   (vector-ref option 0))
@@ -64,6 +70,8 @@
 (define (gnc:option-set-changed-callback option callback)
   (let ((cb-setter (vector-ref option 11)))
     (cb-setter callback)))
+(define (gnc:option-strings-getter option)
+  (vector-ref option 12))
 
 (define (gnc:option-value option)
   (let ((getter (gnc:option-getter option)))
@@ -72,6 +80,7 @@
 (define (gnc:option-default-value option)
   (let ((getter (gnc:option-default-getter option)))
     (getter)))
+
 
 (define (gnc:restore-form-generator value->string)
   (lambda () (string-append
@@ -101,7 +110,7 @@
      (lambda (x)
        (cond ((string? x)(list #t x))
              (else (list #f "string-option: not a string"))))
-     #f )))
+     #f #f )))
 
 (define (gnc:make-simple-boolean-option
 	 section
@@ -121,7 +130,7 @@
        (if (boolean? x)
            (list #t x)
            (list #f "boolean-option: not a boolean")))
-     #f )))
+     #f #f )))
 
 ;; date options use the option-data as a boolean value. If true,
 ;; the gui should allow the time to be entered as well.
@@ -152,7 +161,7 @@
        (if (date-legal date)
            (list #t date)
            (list #f "date-option: illegal date")))
-     show-time )))
+     show-time #f)))
 
 ;; account-list options use the option-data as a boolean value.  If
 ;; true, the gui should allow the user to select multiple accounts.
@@ -186,11 +195,11 @@
      default-getter
      #f
      validator
-     multiple-selection )))
+     multiple-selection #f)))
 
 ;; multichoice options use the option-data as a list of vectors.
-;; Each vector contains a permissible value (scheme symbol) and
-;; a description string.
+;; Each vector contains a permissible value (scheme symbol), a
+;; name, and a description string.
 (define (gnc:make-multichoice-option
          section
          name
@@ -203,6 +212,13 @@
     (cond ((null? p-vals) #f)
           ((eq? val (vector-ref (car p-vals) 0)) #t)
           (else (multichoice-legal val (cdr p-vals)))))
+
+  (define (multichoice-strings p-vals)
+    (if (null? p-vals)
+        ()
+        (cons (vector-ref (car p-vals) 1)
+              (cons (vector-ref (car p-vals) 2)
+                    (multichoice-strings (cdr p-vals))))))
 
   (let* ((value default-value)
          (value->string (lambda ()
@@ -220,7 +236,8 @@
        (if (multichoice-legal x ok-values)
            (list #t x)
            (list #f "multichoice-option: illegal choice")))
-     ok-values)))
+     ok-values
+     (lambda () (multichoice-strings ok-values)))))
 
 ;; list options use the option-data in the same way as multichoice
 ;; options. List options allow the user to select more than one option.
@@ -244,6 +261,13 @@
             (legal-value? (car values) ok-values)
             (list-legal (cdr values))))))
 
+  (define (list-strings p-vals)
+    (if (null? p-vals)
+        ()
+        (cons (vector-ref (car p-vals) 1)
+              (cons (vector-ref (car p-vals) 2)
+                    (list-strings (cdr p-vals))))))
+
   (let* ((value default-value)
          (value->string (lambda ()
                           (string-append "'" (gnc:value->string value)))))
@@ -260,7 +284,8 @@
        (if (list-legal x)
            (list #t x)
            (list #f "list-option: illegal value")))
-     ok-values)))
+     ok-values
+     (lambda () (list-strings ok-values)))))
 
 ;; number range options use the option-data as a list whose
 ;; elements are: (lower-bound upper-bound num-decimals step-size)
@@ -288,7 +313,8 @@
                    (<= value upper-bound))
               (list #t x))
              (else (list #f "number-range-option: out of range"))))
-     (list lower-bound upper-bound num-decimals step-size))))
+     (list lower-bound upper-bound num-decimals step-size)
+     #f)))
 
 ;; Color options store rgba values in a list.
 ;; The option-data is a list, whose first element
@@ -333,7 +359,8 @@
      (lambda () (canonicalize default-value))
      (gnc:restore-form-generator value->string)
      validate-color
-     (list range use-alpha))))
+     (list range use-alpha)
+     #f)))
 
 (define (gnc:color->html color range)
 
@@ -545,3 +572,15 @@
                (display header port)
                (display code port)
                (close port)))))
+
+(define (gnc:options-register-translatable-strings options)
+  (gnc:options-for-each-general
+   (lambda (section hash)
+     (gnc:register-translatable-strings section))
+   (lambda (option)
+     (gnc:register-translatable-strings (gnc:option-name option))
+     (gnc:register-translatable-strings (gnc:option-documentation option))
+     (let ((getter (gnc:option-strings-getter option)))
+       (if getter
+           (apply gnc:register-translatable-strings (getter)))))
+   options))

@@ -80,7 +80,8 @@ GtkType gnc_reconcile_list_get_type (void);
 GtkWidget * gnc_reconcile_list_new (Account * account,
 				    GNCReconcileListType type);
 
-gint gnc_reconcile_list_get_row_height(GNCReconcileList *list);
+gint gnc_reconcile_list_get_needed_height(GNCReconcileList *list,
+                                          gint num_rows);
 
 gint gnc_reconcile_list_get_num_splits(GNCReconcileList *list);
 

@@ -114,6 +114,16 @@ gnc_item_list_sort(GNCItemList *item_list)
 }
 
 
+void
+gnc_item_list_autosize(GNCItemList *item_list)
+{
+        g_return_if_fail(item_list != NULL);
+	g_return_if_fail(IS_GNC_ITEM_LIST(item_list));
+
+        gtk_clist_columns_autosize(item_list->clist);
+}
+
+
 static void
 item_edit_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 {
@@ -334,7 +344,6 @@ gnc_item_list_new(GnomeCanvasGroup *parent)
 
 	clist = gtk_clist_new(1);
 	gtk_box_pack_start(GTK_BOX(hbox), clist, TRUE, TRUE, 0);
-	gtk_clist_set_column_auto_resize(GTK_CLIST(clist), 0, TRUE);
         gtk_clist_set_selection_mode(GTK_CLIST(clist), GTK_SELECTION_BROWSE);
 
 	scrollbar = gtk_vscrollbar_new(NULL);
@@ -347,6 +356,7 @@ gnc_item_list_new(GnomeCanvasGroup *parent)
 				     "widget", hbox,
 				     "size_pixels", TRUE,
 				     "x", -10000.0,
+                                     "y", -10000.0,
 				     NULL);
 
         item_list = GNC_ITEM_LIST(item);

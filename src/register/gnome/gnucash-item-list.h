@@ -49,6 +49,8 @@ void gnc_item_list_select(GNCItemList *item_list, const char *string);
 
 void gnc_item_list_sort(GNCItemList *item_list);
 
+void gnc_item_list_autosize(GNCItemList *item_list);
+
 
 typedef struct
 {

@@ -5,19 +5,1010 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.2.0\n"
-"POT-Creation-Date: 2000-02-29 02:59-0800\n"
-"PO-Revision-Date: 1999-08-24 19:15+0200\n"
+"POT-Creation-Date: 2000-03-03 01:59-0800\n"
+"PO-Revision-Date: 2000-02-29 23:47+0200\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: messages-i18n.c:10
+#: ../po/guile_strings.txt:1
+msgid "String Option"
+msgstr ""
+
+#: ../po/guile_strings.txt:2
+msgid "Second Option"
+msgstr ""
+
+#: ../po/guile_strings.txt:3 messages-i18n.c:180
+msgid "Mutual Fund"
+msgstr "SICAV / FCP "
+
+#: ../po/guile_strings.txt:4 messages-i18n.c:156
+msgid "Account Name"
+msgstr "Nom du compte"
+
+#: ../po/guile_strings.txt:5 messages-i18n.c:257
+msgid "Date"
+msgstr "Date"
+
+#: ../po/guile_strings.txt:6 messages-i18n.c:270
+msgid "Equity"
+msgstr "Capitaux propres"
+
+#: ../po/guile_strings.txt:7
+#, fuzzy
+msgid "Account Separator"
+msgstr "Informations du compte"
+
+#: ../po/guile_strings.txt:8
+msgid ""
+"The default background color for splits in multi-line mode and the auto modes"
+msgstr ""
+
+#: ../po/guile_strings.txt:9
+msgid "Auto-Raise Lists"
+msgstr ""
+
+#: ../po/guile_strings.txt:10 messages-i18n.c:240
+msgid "Balance"
+msgstr "Solde"
+
+#: ../po/guile_strings.txt:11
+#, fuzzy
+msgid "Secondary Sort Order"
+msgstr "Ordre de tri"
+
+#: ../po/guile_strings.txt:12
+msgid "The types of accounts for which balances are sign-reversed"
+msgstr ""
+
+#: ../po/guile_strings.txt:13
+msgid "The Good"
+msgstr ""
+
+#: ../po/guile_strings.txt:14 messages-i18n.c:168
+msgid "Double Line"
+msgstr "Ligne double"
+
+#: ../po/guile_strings.txt:15
+msgid "Use a 24 hour (instead of a 12 hour) time format."
+msgstr ""
+
+#: ../po/guile_strings.txt:16
+msgid "Income:Salary:Taxable"
+msgstr ""
+
+#: ../po/guile_strings.txt:17
+msgid "reg_win_width"
+msgstr ""
+
+#: ../po/guile_strings.txt:18
+#, fuzzy
+msgid "Time"
+msgstr "Simple"
+
+#: ../po/guile_strings.txt:19 messages-i18n.c:290
+msgid "Memo"
+msgstr "Memo"
+
+#: ../po/guile_strings.txt:20
+msgid "International"
+msgstr ""
+
+#: ../po/guile_strings.txt:21
+msgid ""
+"The background color for an active split in multi-line mode and the auto "
+"modes"
+msgstr ""
+
+#: ../po/guile_strings.txt:22
+msgid "Double mode active background"
+msgstr ""
+
+#: ../po/guile_strings.txt:23
+msgid "This is a string option"
+msgstr ""
+
+#: ../po/guile_strings.txt:24
+#, fuzzy
+msgid "Main Window"
+msgstr "Fermer la fenetre"
+
+#: ../po/guile_strings.txt:25
+#, fuzzy
+msgid "_Account Transactions"
+msgstr "Transaction"
+
+#: ../po/guile_strings.txt:26
+msgid "UK"
+msgstr ""
+
+#: ../po/guile_strings.txt:27
+#, fuzzy
+msgid "Sort by date"
+msgstr "Trier par date"
+
+#: ../po/guile_strings.txt:28
+#, fuzzy
+msgid "Account types to display"
+msgstr "Type de compte"
+
+#: ../po/guile_strings.txt:29
+msgid "Gain And Loss"
+msgstr ""
+
+#: ../po/guile_strings.txt:30
+#, fuzzy
+msgid "Double click expands parent accounts"
+msgstr "Montrer les comptes de revenus et dépenses."
+
+#: ../po/guile_strings.txt:31
+msgid "main_win_height"
+msgstr ""
+
+#: ../po/guile_strings.txt:32
+msgid "Boolean Option"
+msgstr ""
+
+#: ../po/guile_strings.txt:33
+msgid "Income-Salary-Taxable"
+msgstr ""
+
+#: ../po/guile_strings.txt:34
+#, fuzzy
+msgid "Testing"
+msgstr "Paramètres"
+
+#: ../po/guile_strings.txt:35
+msgid "US-style: mm/dd/yyyy"
+msgstr ""
+
+#: ../po/guile_strings.txt:36
+#, fuzzy
+msgid "By default, show every transaction in an account."
+msgstr "Montrer toutes les transactions dans le compte"
+
+#: ../po/guile_strings.txt:37 messages-i18n.c:233
+msgid "Amount"
+msgstr "Montant"
+
+#: ../po/guile_strings.txt:38 messages-i18n.c:179
+msgid "Multi Line"
+msgstr "Ligne multiple"
+
+#: ../po/guile_strings.txt:39
+msgid "The default background color for odd rows in double mode"
+msgstr ""
+
+#: ../po/guile_strings.txt:40
+msgid "UK-style dd/mm/yyyy"
+msgstr ""
+
+#: ../po/guile_strings.txt:41 messages-i18n.c:227
+msgid "Account"
+msgstr "Compte"
+
+#: ../po/guile_strings.txt:42
+msgid "Header background"
+msgstr ""
+
+#: ../po/guile_strings.txt:43
+#, fuzzy
+msgid "Sorting"
+msgstr "Paramètres"
+
+#: ../po/guile_strings.txt:44
+msgid "Show icons only"
+msgstr ""
+
+#: ../po/guile_strings.txt:45
+msgid "The default background color for odd rows in single mode"
+msgstr ""
+
+#: ../po/guile_strings.txt:46 messages-i18n.c:160
+msgid "Auto Single"
+msgstr "Simple automatique"
+
+#: ../po/guile_strings.txt:47
+msgid "Display the Hello, World report."
+msgstr ""
+
+#: ../po/guile_strings.txt:48
+msgid "Hello Again"
+msgstr ""
+
+#: ../po/guile_strings.txt:49
+msgid "This page shows your profits and losses."
+msgstr ""
+
+#: ../po/guile_strings.txt:50
+msgid "Show Vertical Borders"
+msgstr ""
+
+#: ../po/guile_strings.txt:51
+msgid "This is a boolean option."
+msgstr ""
+
+#: ../po/guile_strings.txt:52
+#, fuzzy
+msgid "_Profit and Loss"
+msgstr "Profits"
+
+#: ../po/guile_strings.txt:53
+msgid "Background Color"
+msgstr ""
+
+#: ../po/guile_strings.txt:54
+msgid "Income/Salary/Taxable"
+msgstr ""
+
+#: ../po/guile_strings.txt:55
+msgid "Continental Europe: dd.mm.yyyy"
+msgstr ""
+
+#: ../po/guile_strings.txt:56
+msgid "account_edit_win_height"
+msgstr ""
+
+#: ../po/guile_strings.txt:57
+msgid "Import QIF File - Scripted in Guile."
+msgstr ""
+
+#: ../po/guile_strings.txt:58
+msgid "Show Horizontal Borders"
+msgstr ""
+
+#: ../po/guile_strings.txt:59
+msgid "Sort by check/transaction number"
+msgstr ""
+
+#: ../po/guile_strings.txt:60
+msgid "The background color for the active transaction in double mode"
+msgstr ""
+
+#: ../po/guile_strings.txt:61
+#, fuzzy
+msgid "Register Colors"
+msgstr "Registre"
+
+#: ../po/guile_strings.txt:62
+msgid "Multi mode default transaction background"
+msgstr ""
+
+#: ../po/guile_strings.txt:63
+msgid ""
+"Double clicking on an account with children expands the account instead of "
+"opening a register."
+msgstr ""
+
+#: ../po/guile_strings.txt:64
+msgid "The background color for the active transaction in single mode"
+msgstr ""
+
+#: ../po/guile_strings.txt:65
+#, fuzzy
+msgid "Credit Accounts"
+msgstr "Afficher un compte"
+
+#: ../po/guile_strings.txt:66
+#, fuzzy
+msgid "Sort by description"
+msgstr "Trier par description"
+
+#: ../po/guile_strings.txt:67
+msgid "largest to smallest, latest to earliest"
+msgstr ""
+
+#: ../po/guile_strings.txt:68
+msgid "Secondary Key"
+msgstr ""
+
+#: ../po/guile_strings.txt:69
+msgid "Save window sizes and positions."
+msgstr ""
+
+#: ../po/guile_strings.txt:70 messages-i18n.c:241
+msgid "Bank"
+msgstr "Banque"
+
+#: ../po/guile_strings.txt:71
+#, fuzzy
+msgid "Reverse Income and Expense Accounts"
+msgstr "Montrer les comptes de revenus et dépenses."
+
+#: ../po/guile_strings.txt:72
+msgid "Europe"
+msgstr ""
+
+#: ../po/guile_strings.txt:73
+msgid "Add in sub-accounts of each selected"
+msgstr ""
+
+#: ../po/guile_strings.txt:74
+msgid "Day"
+msgstr ""
+
+#: ../po/guile_strings.txt:75
+msgid ""
+"This is for testing. Your reports probably shouldn't have an option like "
+"this."
+msgstr ""
+
+#: ../po/guile_strings.txt:76
+msgid "Average"
+msgstr ""
+
+#: ../po/guile_strings.txt:77
+msgid "A_ccount Balance Tracker"
+msgstr ""
+
+#: ../po/guile_strings.txt:78 messages-i18n.c:278
+msgid "From"
+msgstr "Depuis"
+
+#: ../po/guile_strings.txt:79
+msgid "Sort by EXACT entry time"
+msgstr ""
+
+#: ../po/guile_strings.txt:80
+msgid "account_add_win_width"
+msgstr ""
+
+#: ../po/guile_strings.txt:81
+msgid "Multi mode default split background"
+msgstr ""
+
+#: ../po/guile_strings.txt:82 messages-i18n.c:256
+msgid "Currency"
+msgstr "Monnaie"
+
+#: ../po/guile_strings.txt:83
+msgid "Week"
+msgstr ""
+
+#: ../po/guile_strings.txt:84
+#, fuzzy
+msgid "Get number at each one of these"
+msgstr "Mettre une échelle de date pour ce registre"
+
+#: ../po/guile_strings.txt:85
+msgid "Crash the report"
+msgstr ""
+
+#: ../po/guile_strings.txt:86 messages-i18n.c:246
+msgid "Cash"
+msgstr "Liquidités"
+
+#: ../po/guile_strings.txt:87
+msgid "Step Size"
+msgstr ""
+
+#: ../po/guile_strings.txt:88
+msgid "Hello, World!"
+msgstr ""
+
+#: ../po/guile_strings.txt:89
+msgid "ISO"
+msgstr ""
+
+#: ../po/guile_strings.txt:90
+msgid "Date Format Display"
+msgstr ""
+
+#: ../po/guile_strings.txt:91
+msgid "Reversed-balance account types"
+msgstr ""
+
+#: ../po/guile_strings.txt:92 messages-i18n.c:73
+msgid "Show transactions on two lines with more information"
+msgstr "Montrer les transactions sur deux lignes avec plus d'informations"
+
+#: ../po/guile_strings.txt:93
+msgid "Account fields to display"
+msgstr ""
+
+#: ../po/guile_strings.txt:94
+#, fuzzy
+msgid "Report Options"
+msgstr "Rapports"
+
+#: ../po/guile_strings.txt:95 messages-i18n.c:107
+msgid "Show transactions on single lines"
+msgstr "Montrer les transactions sur des lignes simples"
+
+#: ../po/guile_strings.txt:96 messages-i18n.c:265
+msgid "Description"
+msgstr "Description"
+
+#: ../po/guile_strings.txt:97
+msgid "Alternate the even and odd colors with each transaction, not each row"
+msgstr ""
+
+#: ../po/guile_strings.txt:98
+msgid "Gain/Loss"
+msgstr ""
+
+#: ../po/guile_strings.txt:99
+#, fuzzy
+msgid "Transfer from/to"
+msgstr "Transfert depuis"
+
+#: ../po/guile_strings.txt:100
+msgid "Text only"
+msgstr ""
+
+#: ../po/guile_strings.txt:101
+msgid "Toolbar Buttons"
+msgstr ""
+
+#: ../po/guile_strings.txt:102
+msgid "Report Items from this date"
+msgstr ""
+
+#: ../po/guile_strings.txt:103
+msgid ""
+"The default background color for transactions in multi-line mode and the "
+"auto modes"
+msgstr ""
+
+#: ../po/guile_strings.txt:104
+msgid "Fourth Options"
+msgstr ""
+
+#: ../po/guile_strings.txt:105
+#, fuzzy
+msgid "Sort by this criterion first"
+msgstr "Trier par description"
+
+#: ../po/guile_strings.txt:106
+msgid "Ugly option"
+msgstr ""
+
+#: ../po/guile_strings.txt:107
+msgid "Save Translatable Strings"
+msgstr ""
+
+#: ../po/guile_strings.txt:108
+msgid "Save strings that need to be translated"
+msgstr ""
+
+#: ../po/guile_strings.txt:109
+msgid "Number of Rows"
+msgstr ""
+
+#: ../po/guile_strings.txt:110
+msgid "/ (Slash)"
+msgstr ""
+
+#: ../po/guile_strings.txt:111 messages-i18n.c:236
+msgid "Asset"
+msgstr "Avoir"
+
+#: ../po/guile_strings.txt:112
+msgid "Use 24-hour time format"
+msgstr ""
+
+#: ../po/guile_strings.txt:113
+msgid "Date Format"
+msgstr ""
+
+#: ../po/guile_strings.txt:114
+msgid "A list option"
+msgstr ""
+
+#: ../po/guile_strings.txt:115
+msgid "ISO Standard: yyyy-mm-dd"
+msgstr ""
+
+#: ../po/guile_strings.txt:116
+#, fuzzy
+msgid "Default Currency"
+msgstr "Monnaie"
+
+#: ../po/guile_strings.txt:117
+#, fuzzy
+msgid "Do transaction report on this account"
+msgstr "Ajouter une nouvelle transaction au compte"
+
+#: ../po/guile_strings.txt:118
+msgid "Single mode default even row background"
+msgstr ""
+
+#: ../po/guile_strings.txt:119
+msgid "Double mode default even row background"
+msgstr ""
+
+#: ../po/guile_strings.txt:120
+#, fuzzy
+msgid "Double mode colors alternate with transactions"
+msgstr "Supprimer la transaction en cours"
+
+#: ../po/guile_strings.txt:121
+#, fuzzy
+msgid "General"
+msgstr "Registre général"
+
+#: ../po/guile_strings.txt:122 messages-i18n.c:318
+msgid "Security"
+msgstr "Valeur"
+
+#: ../po/guile_strings.txt:123 messages-i18n.c:211
+msgid "Single Line"
+msgstr "Ligne unique"
+
+#: ../po/guile_strings.txt:124
+#, fuzzy
+msgid "Sub-Accounts"
+msgstr "Nettoyer le compte"
+
+#: ../po/guile_strings.txt:125 messages-i18n.c:286
+msgid "Liability"
+msgstr "Dette"
+
+#: ../po/guile_strings.txt:126
+#, fuzzy
+msgid "Don't reverse any accounts"
+msgstr "Créer un nouveau compte."
+
+#: ../po/guile_strings.txt:127
+msgid "Good option"
+msgstr ""
+
+#: ../po/guile_strings.txt:128
+msgid "US"
+msgstr ""
+
+#: ../po/guile_strings.txt:129
+msgid "account_edit_win_width"
+msgstr ""
+
+#: ../po/guile_strings.txt:130
+#, fuzzy
+msgid "_Balance sheet"
+msgstr "Solde"
+
+#: ../po/guile_strings.txt:131
+msgid "Help for first option"
+msgstr ""
+
+#: ../po/guile_strings.txt:132
+#, fuzzy
+msgid "Number"
+msgstr "Num"
+
+#: ../po/guile_strings.txt:133
+#, fuzzy
+msgid "Show both icons and text"
+msgstr "Montrer les comptes de revenus et dépenses."
+
+#: ../po/guile_strings.txt:134 messages-i18n.c:294
+msgid "Notes"
+msgstr "Notes"
+
+#: ../po/guile_strings.txt:135
+#, fuzzy
+msgid "_Reports"
+msgstr "Rapports"
+
+#: ../po/guile_strings.txt:136
+msgid "Single mode active background"
+msgstr ""
+
+#: ../po/guile_strings.txt:137 messages-i18n.c:312
+msgid "Register"
+msgstr "Registre"
+
+#: ../po/guile_strings.txt:138
+msgid "Year"
+msgstr ""
+
+#: ../po/guile_strings.txt:139
+#, fuzzy
+msgid "Profit and Loss"
+msgstr "Profits"
+
+#: ../po/guile_strings.txt:140
+msgid "Month"
+msgstr ""
+
+#: ../po/guile_strings.txt:141
+msgid "Multi mode active transaction background"
+msgstr ""
+
+#: ../po/guile_strings.txt:142
+msgid ". (Period)"
+msgstr ""
+
+#: ../po/guile_strings.txt:143
+#, fuzzy
+msgid "Primary Sort Order"
+msgstr "Ordre de tri"
+
+#: ../po/guile_strings.txt:144
+msgid "Descending"
+msgstr ""
+
+#: ../po/guile_strings.txt:145
+msgid "This is a date option"
+msgstr ""
+
+#: ../po/guile_strings.txt:146
+msgid "Two Week"
+msgstr ""
+
+#: ../po/guile_strings.txt:147
+msgid "Save Window Geometry"
+msgstr ""
+
+#: ../po/guile_strings.txt:148
+msgid "Income\\Salary\\Taxable"
+msgstr ""
+
+#: ../po/guile_strings.txt:149
+#, fuzzy
+msgid "Code"
+msgstr "Fermer"
+
+#: ../po/guile_strings.txt:150
+msgid "Export data as text."
+msgstr ""
+
+#: ../po/guile_strings.txt:151
+msgid "- (Dash)"
+msgstr ""
+
+#: ../po/guile_strings.txt:152
+msgid "Order of primary sorting"
+msgstr ""
+
+#: ../po/guile_strings.txt:153
+msgid "Default Currency For New Accounts"
+msgstr ""
+
+#: ../po/guile_strings.txt:154
+#, fuzzy
+msgid "Sort by this criterion second"
+msgstr "Trier par description"
+
+#: ../po/guile_strings.txt:155
+msgid "Income.Salary.Taxable"
+msgstr ""
+
+#: ../po/guile_strings.txt:156 messages-i18n.c:282
+msgid "Income"
+msgstr "Revenus"
+
+#: ../po/guile_strings.txt:157
+msgid "The Ugly"
+msgstr ""
+
+#: ../po/guile_strings.txt:158
+msgid "By default, show horizontal borders on the cells."
+msgstr ""
+
+#: ../po/guile_strings.txt:159
+msgid ": (Colon)"
+msgstr ""
+
+#: ../po/guile_strings.txt:160
+msgid "By default, show vertical borders on the cells."
+msgstr ""
+
+#: ../po/guile_strings.txt:161 messages-i18n.c:254
+msgid "Credit"
+msgstr "Crédit"
+
+#: ../po/guile_strings.txt:162
+msgid "Ascending"
+msgstr ""
+
+#: ../po/guile_strings.txt:163
+msgid "The Bad"
+msgstr ""
+
+#: ../po/guile_strings.txt:164
+msgid "Just a Date Option"
+msgstr ""
+
+#: ../po/guile_strings.txt:165
+msgid "The default background color for even rows in single mode"
+msgstr ""
+
+#: ../po/guile_strings.txt:166
+msgid "The default background color for even rows in double mode"
+msgstr ""
+
+#: ../po/guile_strings.txt:167
+msgid "_Hello, World"
+msgstr ""
+
+#: ../po/guile_strings.txt:168
+msgid "First Option"
+msgstr ""
+
+#: ../po/guile_strings.txt:169
+#, fuzzy
+msgid "Double line mode with multi-line cursor"
+msgstr "Mode ligne double avec un curseur multi-ligne"
+
+#: ../po/guile_strings.txt:170
+#, fuzzy
+msgid "Single line mode with multi-line cursor"
+msgstr "Mode ligne simple avec un curseur multi-ligne"
+
+#: ../po/guile_strings.txt:171
+#, fuzzy
+msgid ""
+"Show transactions on multiple lines with one line for each split in the "
+"transaction"
+msgstr ""
+"Montrer les transactions sur de multiples lignes avec une ligne pour chaque "
+"répartition"
+
+#: ../po/guile_strings.txt:172
+msgid "account_add_win_height"
+msgstr ""
+
+#: ../po/guile_strings.txt:173
+#, fuzzy
+msgid "Plot Type"
+msgstr "Type de compte"
+
+#: ../po/guile_strings.txt:174
+msgid "Choose whether to display icons, text, or both for toolbar buttons"
+msgstr ""
+
+#: ../po/guile_strings.txt:175
+#, fuzzy
+msgid "Show text only"
+msgstr "Montrer le dernier"
+
+#: ../po/guile_strings.txt:176
+msgid "Icons and Text"
+msgstr ""
+
+#: ../po/guile_strings.txt:177
+msgid "Automatically raise the list of accounts or actions during input."
+msgstr ""
+
+#: ../po/guile_strings.txt:178
+msgid "Sort by account transferred from/to's name"
+msgstr ""
+
+#: ../po/guile_strings.txt:179
+msgid "Net Gain"
+msgstr ""
+
+#: ../po/guile_strings.txt:180
+msgid "The fourth option rules!"
+msgstr ""
+
+#: ../po/guile_strings.txt:181
+msgid "This is a date option with time"
+msgstr ""
+
+#: ../po/guile_strings.txt:182
+msgid "The header background color"
+msgstr ""
+
+#: ../po/guile_strings.txt:183
+#, fuzzy
+msgid "Sort by memo"
+msgstr "Trier par mémo"
+
+#: ../po/guile_strings.txt:184
+msgid "Third Option"
+msgstr ""
+
+#: ../po/guile_strings.txt:185
+#, fuzzy
+msgid "Choose the default mode for register windows"
+msgstr "Fermer cette fenetre du registre"
+
+#: ../po/guile_strings.txt:186
+msgid "Default number of register rows to display."
+msgstr ""
+
+#: ../po/guile_strings.txt:187
+#, fuzzy
+msgid "None"
+msgstr "Téléphone"
+
+#: ../po/guile_strings.txt:188
+msgid "Export data as text (Danger: Unfinished)"
+msgstr ""
+
+#: ../po/guile_strings.txt:189
+msgid "Primary Key"
+msgstr ""
+
+#: ../po/guile_strings.txt:190
+msgid "Time and Date Option"
+msgstr ""
+
+#: ../po/guile_strings.txt:191
+msgid "Single mode default odd row background"
+msgstr ""
+
+#: ../po/guile_strings.txt:192
+msgid "Double mode default odd row background"
+msgstr ""
+
+#: ../po/guile_strings.txt:193
+msgid "The character used to separate fully-qualified account names"
+msgstr ""
+
+#: ../po/guile_strings.txt:194
+msgid "__gui"
+msgstr ""
+
+#: ../po/guile_strings.txt:195 messages-i18n.c:330
+msgid "To"
+msgstr "Vers"
+
+#: ../po/guile_strings.txt:196
+msgid "smallest to largest, earliest to latest"
+msgstr ""
+
+#: ../po/guile_strings.txt:197 messages-i18n.c:333
+msgid "Type"
+msgstr "Type"
+
+#: ../po/guile_strings.txt:198
+msgid "\\ (Backslash)"
+msgstr ""
+
+#: ../po/guile_strings.txt:199
+msgid "Icons only"
+msgstr ""
+
+#: ../po/guile_strings.txt:200
+msgid "Help for third option"
+msgstr ""
+
+#: ../po/guile_strings.txt:201
+msgid "Default Register Mode"
+msgstr ""
+
+#: ../po/guile_strings.txt:202 messages-i18n.c:159
+msgid "Auto Double"
+msgstr "Double automatique"
+
+#: ../po/guile_strings.txt:203
+msgid "main_win_width"
+msgstr ""
+
+#: ../po/guile_strings.txt:204
+#, fuzzy
+msgid "Sort by amount"
+msgstr "Trier par montant"
+
+#: ../po/guile_strings.txt:205
+msgid "This is an account list option"
+msgstr ""
+
+#: ../po/guile_strings.txt:206
+#, fuzzy
+msgid "Average Balance"
+msgstr "Nouveau solde"
+
+#: ../po/guile_strings.txt:207
+#, fuzzy
+msgid "Show All Transactions"
+msgstr "Transaction"
+
+#: ../po/guile_strings.txt:208
+msgid "Display the Profit and Loss report."
+msgstr ""
+
+#: ../po/guile_strings.txt:209
+msgid "Display the Account Balance Tracker report."
+msgstr ""
+
+#: ../po/guile_strings.txt:210
+msgid "2Week"
+msgstr ""
+
+#: ../po/guile_strings.txt:211
+msgid "Nothing"
+msgstr ""
+
+#: ../po/guile_strings.txt:212 messages-i18n.c:272
+msgid "Expense"
+msgstr "Dépense"
+
+#: ../po/guile_strings.txt:213
+#, fuzzy
+msgid "An account list option"
+msgstr "Informations du compte"
+
+#: ../po/guile_strings.txt:214
+msgid "Multi Choice Option"
+msgstr ""
+
+#: ../po/guile_strings.txt:215
+msgid "This is a color option"
+msgstr ""
+
+#: ../po/guile_strings.txt:216
+msgid "QIF File Import (Danger: Unfinished)"
+msgstr ""
+
+#: ../po/guile_strings.txt:217
+msgid "Make No Plot"
+msgstr ""
+
+#: ../po/guile_strings.txt:218
+msgid "Bad option"
+msgstr ""
+
+#: ../po/guile_strings.txt:219
+msgid "Display the Balance sheet report."
+msgstr ""
+
+#: ../po/guile_strings.txt:220
+#, fuzzy
+msgid "Display the Account Transactions report."
+msgstr "Supprimer la transaction en cours"
+
+#: ../po/guile_strings.txt:221
+msgid "This is a list option"
+msgstr ""
+
+#: ../po/guile_strings.txt:222
+msgid "Order of Secondary sorting"
+msgstr ""
+
+#: ../po/guile_strings.txt:223
+msgid "Help for second option"
+msgstr ""
+
+#: ../po/guile_strings.txt:224
+msgid "reg_stock_win_width"
+msgstr ""
+
+#: ../po/guile_strings.txt:225
+msgid "Report items up to and including this date"
+msgstr ""
+
+#: ../po/guile_strings.txt:226
+msgid ""
+"The background color for an active transaction in multi-line mode and the "
+"auto modes"
+msgstr ""
+
+#: ../po/guile_strings.txt:227
+msgid "This is a multi choice option."
+msgstr ""
+
+#: ../po/guile_strings.txt:228
+#, fuzzy
+msgid "Income & Expense"
+msgstr "Dépense"
+
+#: ../po/guile_strings.txt:229
+msgid "Reverse Credit Card, Liability, Equity, and Income Accounts"
+msgstr ""
+
+#: ../po/guile_strings.txt:230 messages-i18n.c:326
+msgid "Stock"
+msgstr "Actions"
+
+#: ../po/guile_strings.txt:231 messages-i18n.c:274
+msgid "Extensions"
+msgstr "Extensions"
+
+#: ../po/guile_strings.txt:232
+msgid "Multi mode active split background"
+msgstr ""
+
+#: messages-i18n.c:12
 msgid "$"
 msgstr "F"
 
-#: messages-i18n.c:11
+#: messages-i18n.c:13
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!"
@@ -25,8 +1016,7 @@ msgstr ""
 "Le gestionnaire de finances personnelles GnuCash.\n"
 "La voie GNU pour gérer votre argent!"
 
-#: messages-i18n.c:12
-#, fuzzy
+#: messages-i18n.c:14
 msgid ""
 "To adjust an account's balance, you must first\n"
 "choose an account to adjust.\n"
@@ -34,12 +1024,11 @@ msgstr ""
 "Pour ajuster le solde d'un compte, vous devez d'abord \n"
 "choisir un compte à ajuster.\n"
 
-#: messages-i18n.c:13
-#, fuzzy
+#: messages-i18n.c:15
 msgid "You must choose a valid parent account."
-msgstr "Vous devez sélectionner un type de compte."
+msgstr "Vous devez choisir un compte parent valide."
 
-#: messages-i18n.c:14
+#: messages-i18n.c:16
 msgid ""
 "Do you want to create a new account?\n"
 "If not, then please select an account\n"
@@ -49,8 +1038,7 @@ msgstr ""
 "Sinon, sélectionnez alors un compte\n"
 "à ouvrir dans la fenetre principale.\n"
 
-#: messages-i18n.c:15
-#, fuzzy
+#: messages-i18n.c:17
 msgid ""
 "To edit an account, you must first\n"
 "choose an account to edit.\n"
@@ -58,8 +1046,7 @@ msgstr ""
 "Pour afficher un compte, vous devez d'abord \n"
 "choisir un compte à afficher.\n"
 
-#: messages-i18n.c:16
-#, fuzzy
+#: messages-i18n.c:18
 msgid ""
 "To delete an account, you must first\n"
 "choose an account to delete.\n"
@@ -67,17 +1054,16 @@ msgstr ""
 "Pour supprimer un compte, vous devez d'abord \n"
 "choisir un compte à supprimer.\n"
 
-#: messages-i18n.c:17
+#: messages-i18n.c:19
 #, c-format
 msgid "Are you sure you want to delete the %s account?"
 msgstr "Etes-vous sur de vouloir supprimer le compte %s ?"
 
-#: messages-i18n.c:18
+#: messages-i18n.c:20
 msgid "The account must be given a name! \n"
-msgstr "Un nom doit etre donné au compte! \n"
+msgstr "Un nom doit être donné au compte! \n"
 
-#: messages-i18n.c:19
-#, fuzzy
+#: messages-i18n.c:21
 msgid ""
 "To open an account, you must first\n"
 "choose an account to open.\n"
@@ -85,17 +1071,15 @@ msgstr ""
 "Pour ouvrir un compte, vous devez d'abord \n"
 "choisir un compte à ouvrir.\n"
 
-#: messages-i18n.c:20
+#: messages-i18n.c:22
 msgid "You must select an account to scrub."
 msgstr "Vous devez sélectionner un compte à nettoyer."
 
-#: messages-i18n.c:21
-#, fuzzy
+#: messages-i18n.c:23
 msgid "You must select an account type."
 msgstr "Vous devez sélectionner un type de compte."
 
-#: messages-i18n.c:22
-#, fuzzy
+#: messages-i18n.c:24
 msgid ""
 "To reconcile an account, you must first\n"
 "choose an account to reconcile.\n"
@@ -103,46 +1087,43 @@ msgstr ""
 "Pour rapprocher un compte, vous devez d'abord \n"
 "choisir un compte à rapprocher.\n"
 
-#: messages-i18n.c:23
-#, fuzzy
+#: messages-i18n.c:25
 msgid "The amount must be a number."
 msgstr "Le montant doit être un nombre."
 
-#: messages-i18n.c:24
-#, fuzzy
+#: messages-i18n.c:26
 msgid "The balance must be a number."
 msgstr "Le solde doit être un nombre."
 
-#: messages-i18n.c:25
+#: messages-i18n.c:27
 msgid "Delete all the splits"
-msgstr "Supprimer toutes les divisions"
+msgstr "Supprimer toutes les répartitions"
 
-#: messages-i18n.c:26
-#, fuzzy
+#: messages-i18n.c:28
 msgid "Delete the whole transaction"
 msgstr "Supprimer la transaction en totalité"
 
-#: messages-i18n.c:27
+#: messages-i18n.c:29
 msgid ""
 "This selection will delete the whole transaction. This is what you usually "
 "want."
 msgstr ""
-"Cette sélection supprimera transaction en totalité. C'est celà que vous "
+"Cette sélection supprimera la transaction en totalité. C'est celà que vous "
 "voulez."
 
-#: messages-i18n.c:28
+#: messages-i18n.c:30
 msgid ""
 "Warning: Just deleting all the splits will make your account unbalanced. You "
 "probably shouldn't do this unless you're going to immediately add another "
 "split to bring the transaction back into balance."
 msgstr ""
-"Attention: l'ffacement de juste toutes les divisions fera de votre compte, "
-"un compte anormal.Vous ne devrez probablement pas faire celà à moins que "
-"vous n'allez immediatement ajouter un autredivision amener la transaction de "
-"retour dans le solde."
+"Attention: l'ffacement de juste toutes les répartitions fera de votre "
+"compte, un compte non soldé.Vous ne devez probablement pas faire celà à "
+"moins que vous n'allez immediatement ajouter une autre division qui amènera "
+"la transaction de retour comme soldé."
 
-#: messages-i18n.c:29
-#, fuzzy, c-format
+#: messages-i18n.c:31
+#, c-format
 msgid ""
 "It is dangerous to change the currency type\n"
 "of an account. You asked to change it\n"
@@ -154,28 +1135,28 @@ msgstr ""
 "de %s vers %s\n"
 "Etes-vous sur?\n"
 
-#: messages-i18n.c:30
-#, fuzzy, c-format
+#: messages-i18n.c:32
+#, c-format
 msgid ""
 "It is dangerous to change the security\n"
 "of an account. You asked to change it\n"
 "from %s to %s.\n"
 "Are You Sure?\n"
 msgstr ""
-"Il est dangereux de changer le type de monnaie\n"
+"Il est dangereux de changer le titre\n"
 "d'un compte.  Vous demandez a le changer\n"
 "de %s vers %s\n"
 "Etes-vous sur?\n"
 
-#: messages-i18n.c:31
+#: messages-i18n.c:33
 msgid ""
 "This file is from an older version of GnuCash.  \n"
 "Do you want to continue?"
 msgstr ""
-"Ce fichier provient d'une ancienne version de GnuCash.  Voulez-vous "
-"continuer?"
+"Ce fichier provient d'une ancienne version de GnuCash. \n"
+"Voulez-vous continuer?"
 
-#: messages-i18n.c:32
+#: messages-i18n.c:34
 msgid ""
 "This file appears to be from a newer version of GnuCash.  \n"
 "Do you want to continue?"
@@ -183,7 +1164,7 @@ msgstr ""
 "Ce fichier semble provenir d'une nouvelle version de GnuCash. \n"
 "Voulez-vous continuer?"
 
-#: messages-i18n.c:33
+#: messages-i18n.c:35
 msgid ""
 "There was an error reading the file. \n"
 "Do you want to continue?"
@@ -191,34 +1172,34 @@ msgstr ""
 "Il y a une erreur de lecture du fichier. \n"
 "Voulez-vous continuer?"
 
-#: messages-i18n.c:34
-#, fuzzy, c-format
+#: messages-i18n.c:36
+#, c-format
 msgid ""
 "There was an error writing the file\n"
 "     %s."
 msgstr ""
-"Il y a une erreur de lecture du fichier. \n"
-"Voulez-vous continuer?"
+"Il y a une erreur d'écriture du fichier\n"
+"     %s."
 
-#: messages-i18n.c:35
-#, fuzzy, c-format
+#: messages-i18n.c:37
+#, c-format
 msgid ""
 "There was an error opening the file\n"
 "     %s."
 msgstr ""
-"Il y a une erreur de lecture du fichier. \n"
-"Voulez-vous continuer?"
+"Il y a une erreur d'ouverture du fichier\n"
+"     %s."
 
-#: messages-i18n.c:36
-#, fuzzy, c-format
+#: messages-i18n.c:38
+#, c-format
 msgid ""
 "There was an error closing the file\n"
 "     %s."
 msgstr ""
-"Il y a une erreur de lecture du fichier. \n"
-"Voulez-vous continuer?"
+"Il y a une erreur de fermeture du fichier\n"
+"      %s."
 
-#: messages-i18n.c:37
+#: messages-i18n.c:39
 #, c-format
 msgid ""
 "The file \n"
@@ -229,7 +1210,7 @@ msgstr ""
 "    %s\n"
 " ne peut pas être trouvé."
 
-#: messages-i18n.c:38
+#: messages-i18n.c:40
 #, c-format
 msgid ""
 "The file \n"
@@ -240,13 +1221,13 @@ msgstr ""
 "    %s\n"
 " est vide."
 
-#: messages-i18n.c:39
+#: messages-i18n.c:41
 msgid "Changes have been made since last Save.  Save data to file?"
 msgstr ""
 "Des changements ont été fait depuis la derniere sauvegarde.\n"
 "Enregistrer les changements dans le fichier?"
 
-#: messages-i18n.c:40
+#: messages-i18n.c:42
 #, c-format
 msgid ""
 "The file \n"
@@ -259,7 +1240,7 @@ msgstr ""
 " existe déjà.\n"
 "Etes-vous sûr de vouloir l'écraser ?"
 
-#: messages-i18n.c:41
+#: messages-i18n.c:43
 #, c-format
 msgid ""
 "The filepath \n"
@@ -270,7 +1251,7 @@ msgstr ""
 "    %s\n"
 "n'est pas un chemin valide dans le système de fichiers."
 
-#: messages-i18n.c:42
+#: messages-i18n.c:44
 #, c-format
 msgid ""
 "The file \n"
@@ -283,12 +1264,11 @@ msgstr ""
 "apparait etre utiliser par un autre utilisateur.\n"
 "Si ce n'est pas le cas, supprimer le fichier .LCK et essayer de nouveau."
 
-#: messages-i18n.c:43
+#: messages-i18n.c:45
 msgid "The source for price quotes"
 msgstr "La source des cours des actions"
 
-#: messages-i18n.c:44
-#, fuzzy
+#: messages-i18n.c:46
 msgid ""
 "The account is not balanced.\n"
 "Are you sure you want to finish?"
@@ -296,33 +1276,42 @@ msgstr ""
 "Le compte n'est pas soldé.\n"
 "Etes-vous sûr de vouloir terminer?"
 
-#: messages-i18n.c:45
-#, fuzzy
+#: messages-i18n.c:47
 msgid ""
 "You have made changes to this reconcile window.\n"
 "Are you sure you want to cancel?"
 msgstr ""
-"Le compte n'est pas soldé.\n"
-"Etes-vous sûr de vouloir terminer?"
+"Vous avez fait des changements dans cette fenêtre de rapprochement.\n"
+"Etes-vous sûr de vouloir annuler?"
 
-#: messages-i18n.c:46
-msgid "Warning!  This is a reconciled transaction. Do you want do continue?"
+#: messages-i18n.c:48
+#, fuzzy
+msgid "Warning! This is a reconciled transaction. Do you want do continue?"
 msgstr ""
 "Attention! Ceci est une transaction de rapprochement. Voulez-vous continuer?"
 
-#: messages-i18n.c:47
-msgid "Error executing scheme report."
-msgstr ""
-
-#: messages-i18n.c:48
-msgid "This report has no parameters."
-msgstr ""
-
 #: messages-i18n.c:49
+#, fuzzy, c-format
+msgid ""
+"You cannot transfer funds from the %s account.\n"
+"It does not have a matching currency."
+msgstr ""
+"Vous ne pouvez pas transférer entre ces comptes.\n"
+"Ils n'ont pas une monnaie commune."
+
+#: messages-i18n.c:50
+msgid "Error executing scheme report."
+msgstr "Erreur d'éxécution du rapport scheme"
+
+#: messages-i18n.c:51
+msgid "This report has no parameters."
+msgstr "Ce rapport n'a pas de paramètres"
+
+#: messages-i18n.c:52
 msgid "Show the income and expense accounts."
 msgstr "Montrer les comptes de revenus et dépenses."
 
-#: messages-i18n.c:50
+#: messages-i18n.c:53
 msgid ""
 "The current transaction has been changed.\n"
 "Would you like to record it?"
@@ -330,7 +1319,7 @@ msgstr ""
 "La transaction en cours a été modifié.\n"
 "Voulez vous l'enregistrer?"
 
-#: messages-i18n.c:51
+#: messages-i18n.c:54
 #, c-format
 msgid ""
 "Are you sure you want to delete\n"
@@ -343,12 +1332,11 @@ msgstr ""
 " depuis la transaction\n"
 "   %s ?"
 
-#: messages-i18n.c:52
-#, fuzzy
+#: messages-i18n.c:55
 msgid "Are you sure you want to delete the current transaction?"
 msgstr "Etes-vous sur de vouloir supprimer la transaction en cours?"
 
-#: messages-i18n.c:53
+#: messages-i18n.c:56
 msgid ""
 "There must be at least two accounts\n"
 "created before you can transfer funds."
@@ -356,7 +1344,7 @@ msgstr ""
 "Il doit y avoir au moins deux comptes\n"
 "créés avant que vous ne puissiez transférer des fonds."
 
-#: messages-i18n.c:54
+#: messages-i18n.c:57
 msgid ""
 "You cannot transfer between those accounts.\n"
 "They do not have a common currency."
@@ -364,7 +1352,7 @@ msgstr ""
 "Vous ne pouvez pas transférer entre ces comptes.\n"
 "Ils n'ont pas une monnaie commune."
 
-#: messages-i18n.c:55
+#: messages-i18n.c:58
 msgid ""
 "The \"From\" and \"To\" accounts\n"
 " must be different!"
@@ -372,1243 +1360,1015 @@ msgstr ""
 "Les comptes \"depuis\" et \"vers\" \n"
 " doivent etre differents!"
 
-#: messages-i18n.c:56
+#: messages-i18n.c:59
 msgid "You can't transfer from and to the same account!"
 msgstr "Vous ne pouvez pas transférer depuis et vers le meme compte!"
 
-#: messages-i18n.c:57
+#: messages-i18n.c:60
 #, fuzzy
 msgid ""
 "You must specify an account to transfer from,\n"
-"or to, or both, for this transaction; otherise\n"
-"it will not be recorded."
+"or to, or both, for this transaction.\n"
+"Otherwise, it will not be recorded."
 msgstr ""
 "Vous devez spécifier un compte à transférer depuis, \n"
 "ou vers,ou l'un et l'autre, pour cette transaction; \n"
 "autrement il ne sera pas enregistré."
 
-#: messages-i18n.c:58
-#, fuzzy
+#: messages-i18n.c:61
 msgid "Adjust the balance of the selected account"
 msgstr "Ajuster le solde du compte sélectionné."
 
-#: messages-i18n.c:59
-#, fuzzy
+#: messages-i18n.c:62
 msgid "Adjust the ending balance"
 msgstr "Ajuster le solde final"
 
-#: messages-i18n.c:60
-#, fuzzy
+#: messages-i18n.c:63
 msgid "Adjust the balance of the main account for this register"
 msgstr "Ajuster le solde du compte principal pour ce registre."
 
-#: messages-i18n.c:61
+#: messages-i18n.c:64
 msgid "Double line mode with a multi-line cursor"
 msgstr "Mode ligne double avec un curseur multi-ligne"
 
-#: messages-i18n.c:62
+#: messages-i18n.c:65
 msgid "Single line mode with a multi-line cursor"
 msgstr "Mode ligne simple avec un curseur multi-ligne"
 
-#: messages-i18n.c:63
+#: messages-i18n.c:66
 msgid "Move to the blank transaction at the bottom of the register"
-msgstr ""
+msgstr "Se déplacer à la transaction vierge en bas du registre"
 
-#: messages-i18n.c:64
-#, fuzzy
+#: messages-i18n.c:67
 msgid "Cancel the current transaction"
 msgstr "Supprimer la transaction en cours"
 
-#: messages-i18n.c:65
-#, fuzzy
+#: messages-i18n.c:68
 msgid "Close this HTML window"
 msgstr "Fermer cette fenêtre HTML."
 
-#: messages-i18n.c:66
-#, fuzzy
+#: messages-i18n.c:69
 msgid "Close this register window"
 msgstr "Fermer cette fenetre du registre"
 
-#: messages-i18n.c:67
+#: messages-i18n.c:70
 msgid "Set the date range of this register"
 msgstr "Mettre une échelle de date pour ce registre"
 
-#: messages-i18n.c:68
-#, fuzzy
+#: messages-i18n.c:71
 msgid "Delete selected account"
 msgstr "Supprimer le compte sélectionné."
 
-#: messages-i18n.c:69
-#, fuzzy
+#: messages-i18n.c:72
 msgid "Delete the current transaction"
 msgstr "Supprimer la transaction en cours"
 
-#: messages-i18n.c:70
-msgid "Show transactions on two lines with more information"
-msgstr "Montrer les transactions sur deux lignes avec plus d'informations"
-
-#: messages-i18n.c:71
-#, fuzzy
+#: messages-i18n.c:74
 msgid "Edit the selected account"
 msgstr "Afficher le compte sélectionné."
 
-#: messages-i18n.c:72
-#, fuzzy
+#: messages-i18n.c:75
 msgid "Edit the main account for this register"
 msgstr "Afficher le compte principal pour ce registre."
 
-#: messages-i18n.c:73
-#, fuzzy
+#: messages-i18n.c:76
 msgid "Edit the current transaction"
 msgstr "Afficher la transaction en cours"
 
-#: messages-i18n.c:74
-#, fuzzy
+#: messages-i18n.c:77
 msgid "Exit GnuCash"
 msgstr "Quitter GnuCash."
 
-#: messages-i18n.c:75
+#: messages-i18n.c:78
 msgid "Export HTML-formatted report to file"
-msgstr ""
+msgstr "Exporter un rapport formatté en HTML vers un fichier"
 
-#: messages-i18n.c:76
-#, fuzzy
+#: messages-i18n.c:79
 msgid "Open the GnuCash help window"
 msgstr "Ouvrir la fenêtre d'aide de Gnucash."
 
-#: messages-i18n.c:77
-#, fuzzy
+#: messages-i18n.c:80
 msgid "Move back one step in the history"
 msgstr "Reculer d'un pas dans l'historique."
 
-#: messages-i18n.c:78
-#, fuzzy
+#: messages-i18n.c:81
 msgid "Move forward one step in the history"
 msgstr "Avancer d'un pas dans l'historique."
 
-#: messages-i18n.c:79
-#, fuzzy
+#: messages-i18n.c:82
 msgid "Import a Quicken QIF file"
 msgstr "Importer un fichier QIF de Quicken."
 
-#: messages-i18n.c:80
-#, fuzzy
+#: messages-i18n.c:83
 msgid "Jump to the corresponding transaction in the other account"
 msgstr "Sauter à la transaction correspondante dans l'autre compte"
 
-#: messages-i18n.c:81
+#: messages-i18n.c:84
 msgid "Show transactions on multiple lines with one line for each split"
 msgstr ""
 "Montrer les transactions sur de multiples lignes avec une ligne pour chaque "
-"division"
+"répartition"
 
-#: messages-i18n.c:82
-#, fuzzy
+#: messages-i18n.c:85
 msgid ""
 "This transaction has multiple splits; switch to multi-line mode to see them "
 "all"
 msgstr ""
-"Montrer les transactions sur de multiples lignes avec une ligne pour chaque "
-"division"
+"Cette transaction a de multiples répartitions ; activer le mode "
+"ligne-multiple pour les voir toutes"
 
-#: messages-i18n.c:83
-#, fuzzy
+#: messages-i18n.c:86
 msgid "Create a new account"
 msgstr "Créer un nouveau compte."
 
-#: messages-i18n.c:84
-#, fuzzy
+#: messages-i18n.c:87
 msgid "Create a new file"
 msgstr "Créer un nouveau fichier."
 
-#: messages-i18n.c:85
-#, fuzzy
+#: messages-i18n.c:88
 msgid "Add a new transaction to the account"
 msgstr "Ajouter une nouvelle transaction au compte"
 
-#: messages-i18n.c:86
-#, fuzzy
+#: messages-i18n.c:89
 msgid "Open the selected account"
 msgstr "Ouvrir le compte sélectionné."
 
-#: messages-i18n.c:87
-#, fuzzy
+#: messages-i18n.c:90
 msgid "Open the account"
-msgstr "Ouvrir un compte."
+msgstr "Ouvrir le compte."
 
-#: messages-i18n.c:88
-#, fuzzy
+#: messages-i18n.c:91
 msgid "Open the selected account and all its subaccounts"
 msgstr "Ouvrir le compte sélectionné et tous ses sous-comptes."
 
-#: messages-i18n.c:89
-#, fuzzy
+#: messages-i18n.c:92
 msgid "Open a file"
 msgstr "Ouvrir un fichier"
 
-#: messages-i18n.c:90
-#, fuzzy
+#: messages-i18n.c:93
 msgid "Open the global preferences dialog"
-msgstr "Ouvrir la boîte des préférence globales."
+msgstr "Ouvrir la boîte des préférences globales."
 
-#: messages-i18n.c:91
-#, fuzzy
+#: messages-i18n.c:94
 msgid "Reconcile the selected account"
 msgstr "Rapprocher le compte sélectionné."
 
-#: messages-i18n.c:92
-#, fuzzy
+#: messages-i18n.c:95
 msgid "Cancel the reconciliation of this account"
-msgstr "Ajouter une nouvelle transaction au compte"
+msgstr "Annuler le rapprochement de ce compte"
 
-#: messages-i18n.c:93
+#: messages-i18n.c:96
 msgid "Finish the reconciliation of this account"
-msgstr ""
+msgstr "Finir le rapprochement de ce compte"
 
-#: messages-i18n.c:94
-#, fuzzy
+#: messages-i18n.c:97
 msgid "Reconcile the main account for this register"
 msgstr "Rapprocher le compte principal pour ce registre."
 
-#: messages-i18n.c:95
-#, fuzzy
+#: messages-i18n.c:98
 msgid "Record the current transaction"
 msgstr "Enregistrer la transaction en cours"
 
-#: messages-i18n.c:96
-#, fuzzy
+#: messages-i18n.c:99
 msgid "Set the parameters for this report"
 msgstr "Mettre des paramètres pour ce rapport."
 
-#: messages-i18n.c:97
-#, fuzzy
+#: messages-i18n.c:100
 msgid "Save the file to disk"
 msgstr "Sauvegarder le fichier sur le disque."
 
-#: messages-i18n.c:98
-#, fuzzy
-msgid "Identify and fix problems in the account"
-msgstr "Identification et corrrection des problèmes dans le compte."
-
-#: messages-i18n.c:99
-#, fuzzy
-msgid "Identify and fix problems in all the accounts"
-msgstr "Identification et corrrection des problèmes dans tous les comptes."
-
-#: messages-i18n.c:100
-#, fuzzy
-msgid "Identify and fix problems in the account and its subaccounts"
-msgstr ""
-"Identification et corrrection des problèmes dans le compte et ces "
-"sous-comptes."
-
 #: messages-i18n.c:101
-#, fuzzy
-msgid "Identify and fix problems in the accounts of this register"
-msgstr ""
-"Identification et corrrection des problèmes dans les comptes de ce registre."
+msgid "Identify and fix problems in the account"
+msgstr "Identifie et corrige les problèmes dans le compte."
 
 #: messages-i18n.c:102
-msgid "Set the option to its default value"
-msgstr ""
+msgid "Identify and fix problems in all the accounts"
+msgstr "Identifie et corrige les problèmes dans tous les comptes."
 
 #: messages-i18n.c:103
-#, fuzzy
-msgid "Show all of the transactions in the account"
-msgstr "Ajouter une nouvelle transaction au compte"
+msgid "Identify and fix problems in the account and its subaccounts"
+msgstr "Identifie et corrige les problèmes dans le compte et ces sous-comptes."
 
 #: messages-i18n.c:104
-msgid "Show transactions on single lines"
-msgstr "Montrer les transactions sur des lignes simples"
+msgid "Identify and fix problems in the accounts of this register"
+msgstr "Identifie et corrige les problèmes dans les comptes de ce registre."
 
 #: messages-i18n.c:105
+msgid "Set the option to its default value"
+msgstr "Mettre l'option à sa valeur par défaut"
+
+#: messages-i18n.c:106
+msgid "Show all of the transactions in the account"
+msgstr "Montrer toutes les transactions dans le compte"
+
+#: messages-i18n.c:108
 msgid "Sort by Amount, then Date, then Num"
 msgstr "Trier par Montant, puis Date, puis Num"
 
-#: messages-i18n.c:106
+#: messages-i18n.c:109
 msgid "Sort by Date, then Num, then Amount"
 msgstr "Trier par Date, puis Num, puis Montant"
 
-#: messages-i18n.c:107
+#: messages-i18n.c:110
 msgid "Sort by Description, then Date, then Num"
 msgstr "Trier par Description, puis Date, puis Num"
 
-#: messages-i18n.c:108
+#: messages-i18n.c:111
 msgid "Sort by Memo, then Date, then Num"
 msgstr "Trier par Memo, puis Date, puis Num"
 
-#: messages-i18n.c:109
+#: messages-i18n.c:112
 msgid "Sort by Num, then Date, then Amount"
 msgstr "Trier par Num, puis Date, puis Montant"
 
-#: messages-i18n.c:110
+#: messages-i18n.c:113
 msgid "Keep normal account order"
 msgstr "Garder l'ordre normal du compte"
 
-#: messages-i18n.c:111
-#, fuzzy
+#: messages-i18n.c:114
 msgid "Transfer funds from one account to another"
 msgstr "Transfert de fonds depuis un compte vers un autre."
 
-#: messages-i18n.c:112
-msgid "Enter the type of transaction, or choose one from the list"
-msgstr ""
-
-#: messages-i18n.c:113
-#, fuzzy
-msgid "Enter a description of the transaction"
-msgstr "Afficher la transaction en cours"
-
-#: messages-i18n.c:114
-msgid "Enter a description of the split"
-msgstr ""
-
 #: messages-i18n.c:115
-msgid "Enter the transaction number, such as the check number"
-msgstr ""
+msgid "Enter the type of transaction, or choose one from the list"
+msgstr "Entrez le type de transaction,ou choisissez en une dans la liste"
 
 #: messages-i18n.c:116
-msgid "Enter the share price"
-msgstr ""
+msgid "Enter a description of the transaction"
+msgstr "Entrez une description pour la transaction"
 
 #: messages-i18n.c:117
-msgid "Enter the number of shares sold"
-msgstr ""
+msgid "Enter a description of the split"
+msgstr "Entrez une description pour la répartition"
 
 #: messages-i18n.c:118
-msgid "Enter the total value of the shares"
-msgstr ""
+msgid "Enter the transaction number, such as the check number"
+msgstr "Entrez le numéro de transaction, tel que le numéro de chèque"
 
 #: messages-i18n.c:119
-#, fuzzy
-msgid "Enter the transfer account, or choose one from the list"
-msgstr "Afficher le compte principal pour ce registre."
+msgid "Enter the share price"
+msgstr "Entrez le cours du titre"
 
 #: messages-i18n.c:120
-#, fuzzy
+msgid "Enter the number of shares sold"
+msgstr "Entrez le nombre de titres vendus"
+
+#: messages-i18n.c:121
+msgid "Enter the total value of the shares"
+msgstr "Entrez la valeur totale des titres"
+
+#: messages-i18n.c:122
+msgid "Enter the transfer account, or choose one from the list"
+msgstr "Entrez le compte à transférer, ou choisissez en un dans la liste."
+
+#: messages-i18n.c:123
 msgid "_Account"
 msgstr "Compte"
 
-#: messages-i18n.c:121
-#, fuzzy
+#: messages-i18n.c:124
 msgid "_Accounts"
 msgstr "Comptes"
 
-#: messages-i18n.c:122
-#, fuzzy
+#: messages-i18n.c:125
 msgid "_Adjust Balance"
 msgstr "Ajuster le solde"
 
-#: messages-i18n.c:123
-#, fuzzy
+#: messages-i18n.c:126
 msgid "_Blank"
-msgstr "Banque"
+msgstr "Vierge"
 
-#: messages-i18n.c:124
-#, fuzzy
+#: messages-i18n.c:127
 msgid "_Cancel"
 msgstr "Annuler"
 
-#: messages-i18n.c:125
-#, fuzzy
+#: messages-i18n.c:128
 msgid "_Date Range"
 msgstr "Echelle de date"
 
-#: messages-i18n.c:126
-#, fuzzy
+#: messages-i18n.c:129
 msgid "_Delete Account"
 msgstr "Supprimer le compte"
 
-#: messages-i18n.c:127
-#, fuzzy
+#: messages-i18n.c:130
 msgid "_Delete"
 msgstr "Supprimer"
 
-#: messages-i18n.c:128
-#, fuzzy
+#: messages-i18n.c:131
 msgid "_Edit"
 msgstr "Afficher"
 
-#: messages-i18n.c:129
-#, fuzzy
+#: messages-i18n.c:132
 msgid "_Edit Account"
 msgstr "Afficher un compte"
 
-#: messages-i18n.c:130
-#, fuzzy
+#: messages-i18n.c:133
 msgid "_Ending Balance"
 msgstr "Solde final"
 
-#: messages-i18n.c:131
+#: messages-i18n.c:134
 msgid "_Finish"
-msgstr ""
+msgstr "Finis"
 
-#: messages-i18n.c:132
-#, fuzzy
+#: messages-i18n.c:135
 msgid "_Help"
 msgstr "Aide"
 
-#: messages-i18n.c:133
-#, fuzzy
+#: messages-i18n.c:136
 msgid "_Jump"
 msgstr "Sauter"
 
-#: messages-i18n.c:134
-#, fuzzy
+#: messages-i18n.c:137
 msgid "_New"
 msgstr "Nouveau"
 
-#: messages-i18n.c:135
-#, fuzzy
+#: messages-i18n.c:138
 msgid "_New Account"
 msgstr "Nouveau compte"
 
-#: messages-i18n.c:136
-#, fuzzy
+#: messages-i18n.c:139
 msgid "_Open Account"
 msgstr "Ouvrir compte"
 
-#: messages-i18n.c:137
-#, fuzzy
+#: messages-i18n.c:140
 msgid "Open S_ubaccounts"
 msgstr "Ouvrir sous-comptes"
 
-#: messages-i18n.c:138
-#, fuzzy
+#: messages-i18n.c:141
 msgid "_Preferences"
-msgstr "Préferences"
+msgstr "Préférences"
 
-#: messages-i18n.c:139
-#, fuzzy
+#: messages-i18n.c:142
 msgid "_Reconcile"
 msgstr "Rapprocher"
 
-#: messages-i18n.c:140
-#, fuzzy
+#: messages-i18n.c:143
 msgid "_Record"
 msgstr "Enregistrer"
 
-#: messages-i18n.c:141
-#, fuzzy
+#: messages-i18n.c:144
 msgid "_Register"
 msgstr "Registre"
 
-#: messages-i18n.c:142
-#, fuzzy
+#: messages-i18n.c:145
 msgid "_Scrub"
 msgstr "Nettoyer"
 
-#: messages-i18n.c:143
-#, fuzzy
+#: messages-i18n.c:146
 msgid "Scrub A_ccount"
 msgstr "Nettoyer le compte"
 
-#: messages-i18n.c:144
-#, fuzzy
+#: messages-i18n.c:147
 msgid "Scrub A_ll"
 msgstr "Tout nettoyer"
 
-#: messages-i18n.c:145
-#, fuzzy
+#: messages-i18n.c:148
 msgid "Scrub Su_baccounts"
 msgstr "Nettoyer les sous-comptes"
 
-#: messages-i18n.c:146
-#, fuzzy
+#: messages-i18n.c:149
 msgid "Set _Range"
-msgstr "Echelle de date"
+msgstr "Mettre échelle"
 
-#: messages-i18n.c:147
+#: messages-i18n.c:150
 msgid "Show _All"
-msgstr ""
+msgstr "Tout montrer"
 
-#: messages-i18n.c:148
-#, fuzzy
+#: messages-i18n.c:151
 msgid "Sort _Order"
 msgstr "Ordre de tri"
 
-#: messages-i18n.c:149
-#, fuzzy
+#: messages-i18n.c:152
 msgid "_Style"
 msgstr "Style"
 
-#: messages-i18n.c:150
-#, fuzzy
+#: messages-i18n.c:153
 msgid "_Transaction"
 msgstr "Transaction"
 
-#: messages-i18n.c:151
-#, fuzzy
+#: messages-i18n.c:154
 msgid "_Transfer"
 msgstr "Transférer"
 
-#: messages-i18n.c:152
+#: messages-i18n.c:155
 msgid "Account Code"
 msgstr "Code du compte"
 
-#: messages-i18n.c:153
-msgid "Account Name"
-msgstr "Nom du compte"
-
-#: messages-i18n.c:154
+#: messages-i18n.c:157
 msgid "Account Type"
 msgstr "Type de compte"
 
-#: messages-i18n.c:155
+#: messages-i18n.c:158
 msgid "Adjust Balance"
 msgstr "Ajuster le solde"
 
-#: messages-i18n.c:156
-#, fuzzy
-msgid "Auto Double"
-msgstr "Double automatique"
-
-#: messages-i18n.c:157
-msgid "Auto Single"
-msgstr "Simple automatique"
-
-#: messages-i18n.c:158
-#, fuzzy
+#: messages-i18n.c:161
 msgid "Clear All"
 msgstr "Tout pointé"
 
-#: messages-i18n.c:159
+#: messages-i18n.c:162
 msgid "Close Window"
 msgstr "Fermer la fenetre"
 
-#: messages-i18n.c:160
+#: messages-i18n.c:163
 msgid "Credit Card"
 msgstr "Carte de crédit"
 
-#: messages-i18n.c:161
+#: messages-i18n.c:164
 msgid "Credit Line"
 msgstr "Ligne de crédit"
 
-#: messages-i18n.c:162
+#: messages-i18n.c:165
 msgid "Date Range"
 msgstr "Echelle de date"
 
-#: messages-i18n.c:163
+#: messages-i18n.c:166
 msgid "Delete Account"
 msgstr "Supprimer le compte"
 
-#: messages-i18n.c:164
+#: messages-i18n.c:167
 msgid "Delete Transaction"
 msgstr "Supprimer la transaction"
 
-#: messages-i18n.c:165
-msgid "Double Line"
-msgstr "Ligne double"
-
-#: messages-i18n.c:166
+#: messages-i18n.c:169
 msgid "Edit Account"
 msgstr "Afficher un compte"
 
-#: messages-i18n.c:167
+#: messages-i18n.c:170
 msgid "Ending Balance"
 msgstr "Solde final"
 
-#: messages-i18n.c:168
+#: messages-i18n.c:171
 msgid "End date"
 msgstr "Date de fin"
 
-#: messages-i18n.c:169
+#: messages-i18n.c:172
 msgid "Export To"
-msgstr ""
+msgstr "Exporter vers"
 
-#: messages-i18n.c:170
+#: messages-i18n.c:173
 msgid "Finish"
-msgstr ""
+msgstr "Finis"
 
-#: messages-i18n.c:171
+#: messages-i18n.c:174
 msgid "General Ledger"
 msgstr "Registre général"
 
-#: messages-i18n.c:172
+#: messages-i18n.c:175
 msgid "Hide Inc/Exp"
 msgstr "Cacher Revenus/Dépenses"
 
-#: messages-i18n.c:173
+#: messages-i18n.c:176
 msgid "Import QIF"
 msgstr "Importer QIF"
 
-#: messages-i18n.c:174
+#: messages-i18n.c:177
 msgid "Lost Accounts"
 msgstr "Comptes perdus/abandonnés"
 
-#: messages-i18n.c:175
+#: messages-i18n.c:178
 msgid "Money Market"
 msgstr "Marché monétaire"
 
-#: messages-i18n.c:176
-msgid "Multi Line"
-msgstr "Ligne multiple"
-
-#: messages-i18n.c:177
-msgid "Mutual Fund"
-msgstr "SICAV / FCP "
-
-#: messages-i18n.c:178
+#: messages-i18n.c:181
 msgid "New Account"
 msgstr "Nouveau compte"
 
-#: messages-i18n.c:179
+#: messages-i18n.c:182
 msgid "New Balance"
 msgstr "Nouveau solde"
 
-#: messages-i18n.c:180
+#: messages-i18n.c:183
 msgid "New File"
 msgstr "Nouveau fichier"
 
-#: messages-i18n.c:181
-#, fuzzy
+#: messages-i18n.c:184
 msgid "New top level account"
-msgstr "Nouveau compte de niveau supérieur."
+msgstr "Nouveau compte de niveau supérieur/ de base."
 
-#: messages-i18n.c:182
+#: messages-i18n.c:185
 msgid "Open Account"
 msgstr "Ouvrir compte"
 
-#: messages-i18n.c:183
+#: messages-i18n.c:186
 msgid "Opening Balance"
 msgstr "Solde initial"
 
-#: messages-i18n.c:184
+#: messages-i18n.c:187
 msgid "Open File"
 msgstr "Ouvrir fichier"
 
-#: messages-i18n.c:185
+#: messages-i18n.c:188
 msgid "Open Subaccounts"
 msgstr "Ouvrir sous-comptes"
 
-#: messages-i18n.c:186
+#: messages-i18n.c:189
 msgid "Pick One"
 msgstr "Choisissez en un"
 
-#: messages-i18n.c:187
+#: messages-i18n.c:190
 msgid "Parent Account"
 msgstr "Compte parent"
 
-#: messages-i18n.c:188
+#: messages-i18n.c:191
 msgid "Previous Balance"
 msgstr "Précédent solde"
 
-#: messages-i18n.c:189
+#: messages-i18n.c:192
 msgid "Purch Price"
 msgstr "Prix d'achat"
 
-#: messages-i18n.c:190
+#: messages-i18n.c:193
 msgid "Price Quote Source"
 msgstr "Source des cours d'actions"
 
-#: messages-i18n.c:191
+#: messages-i18n.c:194
 msgid "Register date ranges"
 msgstr "Echelles de dates du registre"
 
-#: messages-i18n.c:192
+#: messages-i18n.c:195
 msgid "Sale Price"
 msgstr "Prix de vente"
 
-#: messages-i18n.c:193
+#: messages-i18n.c:196
 msgid "Save As"
 msgstr "Enregistrer sous"
 
-#: messages-i18n.c:194
-#, fuzzy
+#: messages-i18n.c:197
 msgid "Scrub Account"
 msgstr "Nettoyer le compte"
 
-#: messages-i18n.c:195
-#, fuzzy
+#: messages-i18n.c:198
 msgid "Scrub All"
 msgstr "Tout nettoyer"
 
-#: messages-i18n.c:196
-#, fuzzy
+#: messages-i18n.c:199
 msgid "Scrub Subaccounts"
 msgstr "Nettoyer les sous-comptes"
 
-#: messages-i18n.c:197
-#, fuzzy
+#: messages-i18n.c:200
 msgid "Select All"
 msgstr "Tout sélectionner"
 
-#: messages-i18n.c:198
-#, fuzzy
+#: messages-i18n.c:201
 msgid "Select Default"
 msgstr "Selectionner par défaut"
 
-#: messages-i18n.c:199
-#, fuzzy
+#: messages-i18n.c:202
 msgid "Set Date Range"
-msgstr "Echelle de date"
+msgstr "mettre échelle de date"
 
-#: messages-i18n.c:200
-#, fuzzy
+#: messages-i18n.c:203
 msgid "Set Range"
-msgstr "Echelle de date"
+msgstr "Metre échelle"
 
-#: messages-i18n.c:201
+#: messages-i18n.c:204
 msgid "Set to default"
 msgstr "Mettre par défaut"
 
-#: messages-i18n.c:202
+#: messages-i18n.c:205
 msgid "Set Up Account"
 msgstr "Configurer un compte"
 
-#: messages-i18n.c:203
+#: messages-i18n.c:206
 msgid "Show All"
-msgstr ""
+msgstr "Montrer Tout"
 
-#: messages-i18n.c:204
+#: messages-i18n.c:207
 msgid "Show Inc/Exp"
 msgstr "Montrer Revenus/Dépenses"
 
-#: messages-i18n.c:205
+#: messages-i18n.c:208
 msgid "Show Categories"
 msgstr "Montrer catégories"
 
-#: messages-i18n.c:206
-#, fuzzy
-msgid "Show Earliest"
-msgstr "Montrer catégories"
-
-#: messages-i18n.c:207
-#, fuzzy
-msgid "Show Latest"
-msgstr "Montrer catégories"
-
-#: messages-i18n.c:208
-msgid "Single Line"
-msgstr "Ligne unique"
-
 #: messages-i18n.c:209
-#, fuzzy
+msgid "Show Earliest"
+msgstr "Montrer le premier"
+
+#: messages-i18n.c:210
+msgid "Show Latest"
+msgstr "Montrer le dernier"
+
+#: messages-i18n.c:212
 msgid "Sort by Amount"
 msgstr "Trier par montant"
 
-#: messages-i18n.c:210
+#: messages-i18n.c:213
 msgid "Sort by Date"
 msgstr "Trier par date"
 
-#: messages-i18n.c:211
-#, fuzzy
+#: messages-i18n.c:214
 msgid "Sort by Description"
 msgstr "Trier par description"
 
-#: messages-i18n.c:212
+#: messages-i18n.c:215
 msgid "Sort by Memo"
 msgstr "Trier par mémo"
 
-#: messages-i18n.c:213
+#: messages-i18n.c:216
 msgid "Sort by Num"
 msgstr "Trier par num"
 
-#: messages-i18n.c:214
+#: messages-i18n.c:217
 msgid "Sort Order"
 msgstr "Ordre de tri"
 
-#: messages-i18n.c:215
+#: messages-i18n.c:218
 msgid "Start date"
 msgstr "Date de départ"
 
-#: messages-i18n.c:216
+#: messages-i18n.c:219
 msgid "Standard order"
 msgstr "Ordre standard"
 
-#: messages-i18n.c:217
-#, fuzzy
+#: messages-i18n.c:220
 msgid "Top level account"
-msgstr "Nouveau compte de niveau supérieur."
+msgstr "Nouveau compte de niveau supérieur/base."
 
-#: messages-i18n.c:218
+#: messages-i18n.c:221
 msgid "Tot Shrs"
 msgstr "Nombre"
 
-#: messages-i18n.c:219
-#, fuzzy
+#: messages-i18n.c:222
 msgid "Transfer Information"
 msgstr "Transfert d'informations"
 
-#: messages-i18n.c:220
+#: messages-i18n.c:223
 msgid "Transfer Money"
 msgstr "Transfert d'argent"
 
-#: messages-i18n.c:221
+#: messages-i18n.c:224
 msgid "Transfer From"
 msgstr "Transfert depuis"
 
-#: messages-i18n.c:222
+#: messages-i18n.c:225
 msgid "Transfer To"
 msgstr "Transferer vers"
 
-#: messages-i18n.c:223
+#: messages-i18n.c:226
 msgid "About"
 msgstr "A propos de"
 
-#: messages-i18n.c:224
-msgid "Account"
-msgstr "Compte"
-
-#: messages-i18n.c:225
+#: messages-i18n.c:228
 msgid "Accounts"
 msgstr "Comptes"
 
-#: messages-i18n.c:226
-#, fuzzy
+#: messages-i18n.c:229
 msgid "Account Information"
 msgstr "Informations du compte"
 
-#: messages-i18n.c:227
+#: messages-i18n.c:230
 msgid "AutoDep"
 msgstr "Dépot Automatique"
 
-#: messages-i18n.c:228
+#: messages-i18n.c:231
 msgid "Action"
 msgstr "Action"
 
-#: messages-i18n.c:229
+#: messages-i18n.c:232
 msgid "Activities"
 msgstr "Activitées"
 
-#: messages-i18n.c:230
-msgid "Amount"
-msgstr "Montant"
-
-#: messages-i18n.c:231
+#: messages-i18n.c:234
 msgid "Appreciation"
 msgstr "Appréciation"
 
-#: messages-i18n.c:232
+#: messages-i18n.c:235
 msgid "Phone"
 msgstr "Téléphone"
 
-#: messages-i18n.c:233
-msgid "Asset"
-msgstr "Avoir"
-
-#: messages-i18n.c:234
+#: messages-i18n.c:237
 msgid "Assets"
 msgstr "Avoirs"
 
-#: messages-i18n.c:235
+#: messages-i18n.c:238
 msgid "ATM"
 msgstr "ATM"
 
-#: messages-i18n.c:236
+#: messages-i18n.c:239
 msgid "Back"
 msgstr "Précédent"
 
-#: messages-i18n.c:237
-msgid "Balance"
-msgstr "Solde"
-
-#: messages-i18n.c:238
-msgid "Bank"
-msgstr "Banque"
-
-#: messages-i18n.c:239
-#, fuzzy
+#: messages-i18n.c:242
 msgid "Blank"
-msgstr "Banque"
+msgstr "Vierge"
 
-#: messages-i18n.c:240
+#: messages-i18n.c:243
 msgid "Bought"
 msgstr "Acheté"
 
-#: messages-i18n.c:241
+#: messages-i18n.c:244
 msgid "Buy"
 msgstr "Acheter"
 
-#: messages-i18n.c:242
+#: messages-i18n.c:245
 msgid "Cancel"
 msgstr "Annuler"
 
-#: messages-i18n.c:243
-msgid "Cash"
-msgstr "Liquidités"
-
-#: messages-i18n.c:244
+#: messages-i18n.c:247
 msgid "Charge"
 msgstr "Prix"
 
-#: messages-i18n.c:245
+#: messages-i18n.c:248
 msgid "Check"
 msgstr "Vérifier"
 
-#: messages-i18n.c:246
+#: messages-i18n.c:249
 msgid "Checking"
 msgstr "Vérification"
 
-#: messages-i18n.c:247
+#: messages-i18n.c:250
 msgid "Cleared"
 msgstr "Pointé"
 
-#: messages-i18n.c:248
+#: messages-i18n.c:251
 msgid "Close"
 msgstr "Fermer"
 
-#: messages-i18n.c:249
+#: messages-i18n.c:252
 msgid "Commit"
 msgstr "Livrer"
 
-#: messages-i18n.c:250
+#: messages-i18n.c:253
 msgid "Create"
 msgstr "Créér"
 
-#: messages-i18n.c:251
-msgid "Credit"
-msgstr "Crédit"
-
-#: messages-i18n.c:252
+#: messages-i18n.c:255
 msgid "Credits"
 msgstr "Crédits"
 
-#: messages-i18n.c:253
-msgid "Currency"
-msgstr "Monnaie"
-
-#: messages-i18n.c:254
-msgid "Date"
-msgstr "Date"
-
-#: messages-i18n.c:255
+#: messages-i18n.c:258
 msgid "Debit"
 msgstr "Débiter"
 
-#: messages-i18n.c:256
+#: messages-i18n.c:259
 msgid "Debits"
 msgstr "Débits"
 
-#: messages-i18n.c:257
+#: messages-i18n.c:260
 msgid "Decrease"
 msgstr "Réduire"
 
-#: messages-i18n.c:258
+#: messages-i18n.c:261
 msgid "Deficit"
 msgstr "Déficit"
 
-#: messages-i18n.c:259
+#: messages-i18n.c:262
 msgid "Delete"
 msgstr "Supprimer"
 
-#: messages-i18n.c:260
+#: messages-i18n.c:263
 msgid "Deposit"
 msgstr "Dépot"
 
-#: messages-i18n.c:261
+#: messages-i18n.c:264
 msgid "Depreciation"
 msgstr "Dépréciation"
 
-#: messages-i18n.c:262
-msgid "Description"
-msgstr "Description"
-
-#: messages-i18n.c:263
+#: messages-i18n.c:266
 msgid "Difference"
 msgstr "Différence"
 
-#: messages-i18n.c:264
+#: messages-i18n.c:267
 msgid "Dist"
 msgstr "Dist"
 
-#: messages-i18n.c:265
+#: messages-i18n.c:268
 msgid "Div"
 msgstr "Div"
 
-#: messages-i18n.c:266
+#: messages-i18n.c:269
 msgid "Edit"
 msgstr "Afficher"
 
-#: messages-i18n.c:267
-msgid "Equity"
-msgstr "Capitaux propres"
-
-#: messages-i18n.c:268
-#, fuzzy
+#: messages-i18n.c:271
 msgid "Exit"
 msgstr "Quitter"
 
-#: messages-i18n.c:269
-msgid "Expense"
-msgstr "Dépense"
-
-#: messages-i18n.c:270
-#, fuzzy
+#: messages-i18n.c:273
 msgid "Export"
-msgstr "Importer"
+msgstr "Exporter"
 
-#: messages-i18n.c:271
-msgid "Extensions"
-msgstr "Extensions"
-
-#: messages-i18n.c:272
+#: messages-i18n.c:275
 msgid "Fee"
 msgstr "Taxes/Impots"
 
-#: messages-i18n.c:273
+#: messages-i18n.c:276
 msgid "File"
 msgstr "Fichier"
 
-#: messages-i18n.c:274
+#: messages-i18n.c:277
 msgid "Forward"
 msgstr "Suivant"
 
-#: messages-i18n.c:275
-msgid "From"
-msgstr "Depuis"
-
-#: messages-i18n.c:276
-#, fuzzy
+#: messages-i18n.c:279
 msgid "GnuCash Preferences"
 msgstr "Préférences de GnuCash"
 
-#: messages-i18n.c:277
+#: messages-i18n.c:280
 msgid "Help"
 msgstr "Aide"
 
-#: messages-i18n.c:278
-#, fuzzy
+#: messages-i18n.c:281
 msgid "Import"
 msgstr "Importer"
 
-#: messages-i18n.c:279
-msgid "Income"
-msgstr "Revenus"
-
-#: messages-i18n.c:280
+#: messages-i18n.c:283
 msgid "Increase"
 msgstr "Augmenter"
 
-#: messages-i18n.c:281
+#: messages-i18n.c:284
 msgid "Int"
 msgstr "Int"
 
-#: messages-i18n.c:282
+#: messages-i18n.c:285
 msgid "Jump"
 msgstr "Sauter"
 
-#: messages-i18n.c:283
-msgid "Liability"
-msgstr "Dette"
-
-#: messages-i18n.c:284
+#: messages-i18n.c:287
 msgid "License"
 msgstr "Licence"
 
-#: messages-i18n.c:285
+#: messages-i18n.c:288
 msgid "Loan"
 msgstr "Emprunt"
 
-#: messages-i18n.c:286
+#: messages-i18n.c:289
 msgid "LTCG"
 msgstr "LTCG"
 
-#: messages-i18n.c:287
-msgid "Memo"
-msgstr "Memo"
-
-#: messages-i18n.c:288
+#: messages-i18n.c:291
 msgid "New"
 msgstr "Nouveau"
 
-#: messages-i18n.c:289
+#: messages-i18n.c:292
 msgid "No"
 msgstr "Non"
 
-#: messages-i18n.c:290
+#: messages-i18n.c:293
 msgid "(none)"
 msgstr "(aucun)"
 
-#: messages-i18n.c:291
-msgid "Notes"
-msgstr "Notes"
-
-#: messages-i18n.c:292
+#: messages-i18n.c:295
 msgid "Num"
 msgstr "Num"
 
-#: messages-i18n.c:293
+#: messages-i18n.c:296
 msgid "Ok"
 msgstr "Ok"
 
-#: messages-i18n.c:294
+#: messages-i18n.c:297
 msgid "Online"
 msgstr "En ligne"
 
-#: messages-i18n.c:295
+#: messages-i18n.c:298
 msgid "Open"
 msgstr "Ouvrir"
 
-#: messages-i18n.c:296
+#: messages-i18n.c:299
 msgid "Parameters"
 msgstr "Paramètres"
 
-#: messages-i18n.c:297
+#: messages-i18n.c:300
 msgid "Payment"
 msgstr "Paiement"
 
-#: messages-i18n.c:298
+#: messages-i18n.c:301
 msgid "Portfolio"
 msgstr "Portefeuille"
 
-#: messages-i18n.c:299
+#: messages-i18n.c:302
 msgid "POS"
 msgstr "DAB"
 
-#: messages-i18n.c:300
-#, fuzzy
+#: messages-i18n.c:303
 msgid "Preferences"
 msgstr "Préferences"
 
-#: messages-i18n.c:301
+#: messages-i18n.c:304
 msgid "Price"
 msgstr "Cours"
 
-#: messages-i18n.c:302
+#: messages-i18n.c:305
 msgid "Print"
 msgstr "Imprimer"
 
-#: messages-i18n.c:303
+#: messages-i18n.c:306
 msgid "Profits"
 msgstr "Profits"
 
-#: messages-i18n.c:304
+#: messages-i18n.c:307
 msgid "Quit"
 msgstr "Quitter"
 
-#: messages-i18n.c:305
+#: messages-i18n.c:308
 msgid "Rebate"
 msgstr "Rabais"
 
-#: messages-i18n.c:306
+#: messages-i18n.c:309
 msgid "Receive"
 msgstr "Reçu"
 
-#: messages-i18n.c:307
+#: messages-i18n.c:310
 msgid "Reconcile"
 msgstr "Rapprocher"
 
-#: messages-i18n.c:308
+#: messages-i18n.c:311
 msgid "Record"
 msgstr "Enregistrer"
 
-#: messages-i18n.c:309
-msgid "Register"
-msgstr "Registre"
-
-#: messages-i18n.c:310
+#: messages-i18n.c:313
 msgid "Report"
 msgstr "Rapport"
 
-#: messages-i18n.c:311
-#, fuzzy
+#: messages-i18n.c:314
 msgid "Reports"
-msgstr "Rapport"
+msgstr "Rapports"
 
-#: messages-i18n.c:312
+#: messages-i18n.c:315
 msgid "Save"
 msgstr "Sauvegarder"
 
-#: messages-i18n.c:313
+#: messages-i18n.c:316
 msgid "Savings"
 msgstr "Epargne"
 
-#: messages-i18n.c:314
+#: messages-i18n.c:317
 msgid "Scrub"
 msgstr "Nettoyer"
 
-#: messages-i18n.c:315
-msgid "Security"
-msgstr "Valeur"
-
-#: messages-i18n.c:316
+#: messages-i18n.c:319
 msgid "Sell"
 msgstr "Vendre"
 
-#: messages-i18n.c:317
-#, fuzzy
+#: messages-i18n.c:320
 msgid "Settings"
 msgstr "Paramètres"
 
-#: messages-i18n.c:318
+#: messages-i18n.c:321
 msgid "Simple"
 msgstr "Simple"
 
-#: messages-i18n.c:319
+#: messages-i18n.c:322
 msgid "Sold"
 msgstr "Vendu"
 
-#: messages-i18n.c:320
+#: messages-i18n.c:323
 msgid "Spend"
 msgstr "Dépenser"
 
-#: messages-i18n.c:321
+#: messages-i18n.c:324
 msgid "Split"
-msgstr "Diviser"
+msgstr "Réparti"
 
-#: messages-i18n.c:322
+#: messages-i18n.c:325
 msgid "STCG"
 msgstr "STCG"
 
-#: messages-i18n.c:323
-msgid "Stock"
-msgstr "Actions"
-
-#: messages-i18n.c:324
+#: messages-i18n.c:327
 msgid "Style"
 msgstr "Style"
 
-#: messages-i18n.c:325
+#: messages-i18n.c:328
 msgid "Surplus"
 msgstr "Excédent"
 
-#: messages-i18n.c:326
+#: messages-i18n.c:329
 msgid "Teller"
 msgstr "Caissier"
 
-#: messages-i18n.c:327
-msgid "To"
-msgstr "Vers"
-
-#: messages-i18n.c:328
-#, fuzzy
+#: messages-i18n.c:331
 msgid "Today"
 msgstr "Aujourd'hui"
 
-#: messages-i18n.c:329
+#: messages-i18n.c:332
 msgid "Total"
 msgstr "Total"
 
-#: messages-i18n.c:330
-msgid "Type"
-msgstr "Type"
-
-#: messages-i18n.c:331
-#, fuzzy
+#: messages-i18n.c:334
 msgid "Transaction"
 msgstr "Transaction"
 
-#: messages-i18n.c:332
+#: messages-i18n.c:335
 msgid "Transfer"
 msgstr "Transférer"
 
-#: messages-i18n.c:333
+#: messages-i18n.c:336
 msgid "Value"
 msgstr "Montant"
 
-#: messages-i18n.c:334
+#: messages-i18n.c:337
 msgid "WARNING"
 msgstr "ATTENTION"
 
-#: messages-i18n.c:335
+#: messages-i18n.c:338
 msgid "Wire"
 msgstr "Télétransmission"
 
-#: messages-i18n.c:336
+#: messages-i18n.c:339
 msgid "Withdraw"
 msgstr "Se retirer"
 
-#: messages-i18n.c:337
+#: messages-i18n.c:340
 msgid "Yes"
 msgstr "Oui"

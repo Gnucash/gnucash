@@ -1,4 +1,33 @@
+2000-03-03  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/c-interface.scm: new functionality for registering
+ 	translatable strings and saving them to a file in a suitable
+ 	format for po creation. This touched a bunch of other .scm
+	files as well.
+
 2000-03-02  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/dialog-options.c: use gettext to translate the strings
+	used to make the gui components.
+
+	* src/gnome/window-reconcile.c
+ 	(gnc_reconcile_window_create_list_frame): always show vertical
+ 	scrollbars, the columns widths work out better that way.
+
+	* src/gnome/reconcile-list.c
+ 	(gnc_reconcile_list_get_needed_height): better estimate of needed
+ 	height than just multiplying row height times rows.
+
+	* src/register/gnome/gnucash-item-list.c (gnc_item_list_autosize):
+ 	new function to autosize the list. For some reason, have the list
+ 	autosize for each new insertion wasn't working for very large
+ 	registers.
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_new): bump up
+ 	the scroll region for very large registers.
+
+	* src/gnome/window-main.c (gnc_main_create_toolbar): removed the
+ 	C-a and C-d shortcuts for adding and deleting accounts.
 
 	* src/gnome/reconcile-list.c (gnc_reconcile_list_init): print
  	selected 'y' reconcile flags in yellow for better contrast.

@@ -53,6 +53,10 @@
 
   (hash-for-each
    (lambda (name report)
+     (if (gnc:debugging?)
+         (let ((options (false-if-exception (gnc:report-new-options report))))
+           (if options
+               (gnc:options-register-translatable-strings options))))
      (define item
        (gnc:make-menu-item
         ((menu-namer 'add-name) name)

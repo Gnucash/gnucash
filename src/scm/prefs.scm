@@ -477,3 +477,8 @@ the current value of the path."
         0.0 ;; number of decimals
         1.0 ;; step size
         ))
+
+
+;; This needs to be after all the global options definitions
+(if (gnc:debugging?)
+    (gnc:options-register-translatable-strings gnc:*options-entries*))

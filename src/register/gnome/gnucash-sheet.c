@@ -376,6 +376,7 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
                 if (y + style->dimensions->height >= height)
                         break;
                 y += style->dimensions->height;
+
                 block++;
         } while (block < sheet->num_virt_rows - 1);
 
@@ -446,8 +447,10 @@ gnucash_sheet_set_top_row (GnucashSheet *sheet, gint new_top_row, gint align)
         x = cx;
 
         height = GTK_WIDGET(sheet)->allocation.height;
+
         distance = gnucash_sheet_row_get_distance(sheet, new_top_row,
                                                   sheet->num_virt_rows);
+
         while ((new_top_row > 1) && height > distance)
         {
                 SheetBlockStyle *style;
@@ -469,7 +472,6 @@ gnucash_sheet_set_top_row (GnucashSheet *sheet, gint new_top_row, gint align)
         y += diff;
 
         sheet->top_block_offset = -diff;
-
         sheet->top_block = new_top_row;
 
         if (x != cx || y != cy) {
@@ -477,7 +479,7 @@ gnucash_sheet_set_top_row (GnucashSheet *sheet, gint new_top_row, gint align)
                 gnome_canvas_scroll_to (GNOME_CANVAS(sheet), x, y);
         }
 
-        gnucash_sheet_update_adjustments (sheet);        
+        gnucash_sheet_update_adjustments (sheet);
 }
 
 
@@ -550,8 +552,6 @@ gnucash_sheet_update_adjustments (GnucashSheet *sheet)
                 hadj->step_increment = hadj->page_size / 50.0;
                 gtk_adjustment_changed (hadj);
         }
-
-        
 }
 
 
@@ -583,8 +583,8 @@ gnucash_sheet_vadjustment_value_changed (GtkAdjustment *adj,
         gint oy;
 
         if (sheet->smooth_scroll) {
-                new_top_row = gnucash_sheet_y_pixel_to_block (sheet, (gint) adj->value);
-
+                oy = (gint) adj->value;
+                new_top_row = gnucash_sheet_y_pixel_to_block (sheet, oy);
                 if (new_top_row < 0) {
                         sheet->top_block = 0;
                         sheet->top_block_offset = 0;
@@ -2427,7 +2427,7 @@ gnucash_sheet_new (Table *table)
 
         /* FIXME: */
         gnome_canvas_set_scroll_region(GNOME_CANVAS (sheet),
-				       0, 0, 100000, 100000);
+				       0, 0, 1000000, 1000000);
 
         /* handy shortcuts */
         sheet_canvas = GNOME_CANVAS (sheet);
@@ -2441,8 +2441,11 @@ gnucash_sheet_new (Table *table)
         sheet->grid = item;
 
         /* some register data */
-        sheet->layout_info_hash_table = g_hash_table_new (g_str_hash, g_str_equal);
-        sheet->dimensions_hash_table = g_hash_table_new (g_str_hash, g_str_equal);
+        sheet->layout_info_hash_table = g_hash_table_new (g_str_hash,
+                                                          g_str_equal);
+
+        sheet->dimensions_hash_table = g_hash_table_new (g_str_hash,
+                                                         g_str_equal);
 
         /* The cursor */
         sheet->cursor = gnucash_cursor_new (sheet_group);

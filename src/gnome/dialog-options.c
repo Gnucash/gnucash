@@ -1,6 +1,6 @@
 /********************************************************************\
  * dialog-options.c -- GNOME option handling                        *
- * Copyright (C) 1998,1999 Linas Vepstas                            *
+ * Copyright (C) 1998-2000 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -410,6 +410,8 @@ gnc_option_create_multichoice_widget(GNCOption *option)
   GtkWidget *widget;
   GNCOptionInfo *info;
   int num_values;
+  char **raw_strings;
+  char **raw;
   int i;
 
   num_values = gnc_option_num_permissible_values(option);
@@ -417,22 +419,36 @@ gnc_option_create_multichoice_widget(GNCOption *option)
   g_return_val_if_fail(num_values >= 0, NULL);
 
   info = g_new0(GNCOptionInfo, num_values);
+  raw_strings = g_new0(char *, num_values * 2);
+  raw = raw_strings;
 
   for (i = 0; i < num_values; i++)
   {
-    info[i].name = gnc_option_permissible_value_name(option, i);
-    info[i].tip  = gnc_option_permissible_value_description(option, i);
+    *raw = gnc_option_permissible_value_name(option, i);
+    if (*raw != NULL)
+      info[i].name = _(*raw);
+    else
+      info[i].name = "";
+
+    raw++;
+
+    *raw = gnc_option_permissible_value_description(option, i);
+    if (*raw != NULL)
+      info[i].tip = _(*raw);
+    else
+      info[i].tip = "";
+
     info[i].callback = gnc_option_multichoice_cb;
     info[i].user_data = option;
   }
 
   widget = gnc_build_option_menu(info, num_values);
 
-  for (i = 0; i < num_values; i++)
-  {
-    free(info[i].name);
-    free(info[i].tip);
-  }
+  for (i = 0; i < num_values * 2; i++)
+    if (raw_strings[i] != NULL)
+      free(raw_strings[i]);
+
+  g_free(raw_strings);
   g_free(info);
 
   return widget;
@@ -713,6 +729,7 @@ gnc_option_set_ui_widget(GNCOption *option,
   GtkWidget *enclosing = NULL;
   GtkWidget *value = NULL;
   gboolean packed = FALSE;
+  char *raw_name, *raw_documentation;
   char *name, *documentation;
   char *type;
 
@@ -720,8 +737,17 @@ gnc_option_set_ui_widget(GNCOption *option,
   if (type == NULL)
     return;
 
-  name = gnc_option_name(option);
-  documentation = gnc_option_documentation(option);
+  raw_name = gnc_option_name(option);
+  if (raw_name != NULL)
+    name = _(raw_name);
+  else
+    name = NULL;
+
+  raw_documentation = gnc_option_documentation(option);
+  if (raw_documentation != NULL)
+    documentation = _(raw_documentation);
+  else
+    documentation = NULL;
 
   if (safe_strcmp(type, "boolean") == 0)
   {
@@ -960,10 +986,10 @@ gnc_option_set_ui_widget(GNCOption *option,
   if (enclosing != NULL)
     gtk_widget_show_all(enclosing);
 
-  if (documentation != NULL)
-    free(documentation);
-  if (name != NULL)
-    free(name);
+  if (raw_name != NULL)
+    free(raw_name);
+  if (raw_documentation != NULL)
+    free(raw_documentation);
   free(type);
 }
 
@@ -991,7 +1017,7 @@ gnc_options_dialog_append_page(GnomePropertyBox *propertybox,
   if (strncmp(name, "__", 2) == 0)
     return;
 
-  page_label = gtk_label_new(name);
+  page_label = gtk_label_new(_(name));
   gtk_widget_show(page_label);
 
   page_content_box = gtk_vbox_new(FALSE, 5);

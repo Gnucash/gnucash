@@ -302,17 +302,27 @@ gnc_reconcile_list_destroy(GtkObject *object)
 }
 
 gint
-gnc_reconcile_list_get_row_height(GNCReconcileList *list)
+gnc_reconcile_list_get_needed_height(GNCReconcileList *list, gint num_rows)
 {
+  GtkCList *clist;
+  gint list_height;
+  gint title_height;
+
   g_return_val_if_fail(list != NULL, 0);
   g_return_val_if_fail(IS_GNC_RECONCILE_LIST(list), 0);
 
   if (!GTK_WIDGET_REALIZED(list))
     return 0;
 
-  gtk_clist_set_row_height(GTK_CLIST(list), 0);
+  clist = GTK_CLIST(list);
 
-  return GTK_CLIST(list)->row_height;
+  /* sync with gtkclist.c */
+  title_height = (clist->column_title_area.height +
+                  (GTK_WIDGET(list)->style->klass->ythickness +
+                   GTK_CONTAINER(list)->border_width) * 2);
+  list_height = (clist->row_height * num_rows) + (num_rows + 1);
+
+  return title_height + list_height;
 }
 
 gint

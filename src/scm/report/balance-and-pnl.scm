@@ -121,16 +121,17 @@
       (list
        "<html>"
        "<head>"
-       "<title>" report-name "</title>"
+       "<title>" (gnc:_ report-name) "</title>"
        "</head>"
 
        "<body bgcolor=#ccccff>"
-       report-description
+       (gnc:_ report-description)
        "<p>"
 
        "<table cellpadding=1>"
-       "<caption><b>" report-name "</b></caption>"
-       "<tr><th>Account Name<th align=center>Type<th> <th align=center>Balance"
+       "<caption><b>" (gnc:_ report-name) "</b></caption>"
+       "<tr><th>"(gnc:_ "Account Name")"<th align=center>"(gnc:_ "Type")
+       "<th> <th align=center>"(gnc:_ "Balance")
 
        output
 

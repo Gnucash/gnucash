@@ -1691,7 +1691,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
                secondary = xaccTransGetSplit (trans, j);
 
                if (secondary != split) {
-                  xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
+                  xaccSetCursor (table, reg->split_cursor,
+                                 phys_row, 0, vrow, 0);
                   xaccMoveCursor (table, phys_row, 0);
                   xaccSRLoadRegEntry (reg, secondary);
                   PINFO ("xaccSRLoadRegister(): "
