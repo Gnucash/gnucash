@@ -20,12 +20,14 @@
 
 #include <Xm/Xm.h>
 #include <ComboBox.h>
+#include <Xbae/Matrix.h>
 #include "Action.h"
 #include "util.h"
 
 /** STRUCTS *********************************************************/
 typedef struct _ActionBox {
    Widget combobox;
+   Widget reg;       /* the parent register widget */
    int currow;
    int curcol;
 } ActionBox;
@@ -60,9 +62,8 @@ actionBox (Widget parent)
    actionData = (ActionBox *) _malloc (sizeof (ActionBox));
    actionData->currow = -1;
    actionData->curcol = -1;
+   actionData->reg = parent;
 
-/* hack alert -- the width of the combobox should be relative to the font, should
-   be relative to the size of the cell in which it will fit. */
    /* create the action GUI */
    combobox = XtVaCreateManagedWidget("actionbox", xmComboBoxWidgetClass, parent, 
                        XmNshadowThickness, 0, /* don't draw a shadow, use bae shadows */
@@ -71,6 +72,11 @@ actionBox (Widget parent)
                        XmNshowLabel, False, 
                        XmNmarginHeight, 0,
                        XmNmarginWidth, 0,
+                       XmNselectionPolicy, XmSINGLE_SELECT,
+                       XmNvalue, "",
+
+/* hack alert -- the width of the combobox should be relative to the font, should
+   be relative to the size of the cell in which it will fit. */
                        XmNwidth, 43,
                        NULL);
 
@@ -79,6 +85,7 @@ actionBox (Widget parent)
    /* build the action menu */
    ADD_MENU_ITEM("Buy");
    ADD_MENU_ITEM("Sell");
+   ADD_MENU_ITEM("Price");
    ADD_MENU_ITEM("Div");
    ADD_MENU_ITEM("LTCG");
    ADD_MENU_ITEM("STCG");
@@ -87,6 +94,7 @@ actionBox (Widget parent)
 
    /* add callbacks to detect a selection */
    XtAddCallback (combobox, XmNselectionCallback, selectCB, (XtPointer)actionData);
+   XtAddCallback (combobox, XmNunselectionCallback, selectCB, (XtPointer)actionData);
 
 
    return actionData;
@@ -95,30 +103,56 @@ actionBox (Widget parent)
 /********************************************************************\
 \********************************************************************/
 
-void SetActionBox (ActionBox *ab, Widget reg, int row, int col)
+void SetActionBox (ActionBox *ab, int row, int col)
 {
+   String choice;
+   XmString choosen;
+
+   /* if the drop-down menu is showing, hide it now */
+   XmComboBoxHideList (ab->combobox);
+
    /* if there is an old widget, remove it */
    if ((0 <= ab->currow) && (0 <= ab->curcol)) {
-     XbaeMatrixSetCellWidget (reg, ab->currow, ab->curcol, NULL);
+      XbaeMatrixSetCellWidget (ab->reg, ab->currow, ab->curcol, NULL);
    }
    ab->currow = row;
    ab->curcol = col;
 
-   /* if the new position is valid, go to it, otherwise, unmanage 
-    * the widget */
+   /* if the new position is valid, go to it, 
+    * otherwise, unmanage the widget */
    if ((0 <= ab->currow) && (0 <= ab->curcol)) {
-     XbaeMatrixSetCellWidget (reg, row, col, ab->combobox);
 
-     if (!XtIsManaged (ab->combobox)) {
-       XtManageChild (ab->combobox);
-     }
+      /* Get the current cell contents, and set the
+       * combobox menu selction to match the contents */
+      choice = XbaeMatrixGetCell (ab->reg, ab->currow, ab->curcol);
+
+      /* do a menu selection only if the cell ain't empty. */
+      if (0x0 != choice[0]) {
+         /* convert String to XmString ... arghhh */
+         choosen = XmCvtCTToXmString (choice);
+         XmComboBoxSelectItem (ab->combobox, choosen, False);
+         XmStringFree (choosen);
+      } else {
+         XmComboBoxClearItemSelection (ab->combobox);
+      }
+
+      /* set the cell widget */
+      XbaeMatrixSetCellWidget (ab->reg, row, col, ab->combobox);
+
+      if (!XtIsManaged (ab->combobox)) {
+         XtManageChild (ab->combobox);
+      }
+
+      /* drop down the menu so that its ready to go. */
+      XmComboBoxShowList (ab->combobox);
    } else {
-     XtUnmanageChild (ab->combobox); 
+      XtUnmanageChild (ab->combobox); 
   }
 }
 
 /********************************************************************\
- * selectCB -- figure out the user's selection                      *
+ * selectCB -- get the user's selection, put the string into the    *
+ *             cell.                                                *
  *                                                                  *
  * Args:   w - the widget that called us                            *
  *         cd - actionData - the data struct for this combobox      *
@@ -129,12 +163,17 @@ void SetActionBox (ActionBox *ab, Widget reg, int row, int col)
 void selectCB (Widget w, XtPointer cd, XtPointer cb )
 
 {
-    ActionBox *actionData = (ActionBox *) cd;
+    ActionBox *ab = (ActionBox *) cd;
     XmComboBoxSelectionCallbackStruct *selection = 
                (XmComboBoxSelectionCallbackStruct *) cb;
+    char * choice;
 
-    printf (" choosed %s \n", XmCvtXmStringToCT(selection->value));
+    choice = XmCvtXmStringToCT (selection->value);
+    if (0x0 == choice) choice = "";
 
-    /* text = XmComboBoxGetString(ComboBox1); */
+    XbaeMatrixSetCell (ab->reg, ab->currow, ab->curcol, choice); 
+
+    /* a diffeent way of getting the user's selection ... */
+    /* text = XmComboBoxGetString (ab->combobox); */
 }
 /************************* END OF FILE ******************************/

@@ -1062,7 +1062,6 @@ regWindow( Widget parent, Account *acc )
 
   /* create action box for the first time */
   regData->ab = actionBox (reg);
-  /* SetActionBox (regData->ab, reg, 1, 2);  hack laert -- need work on row counts*/
  
 
   /******************************************************************\
@@ -1181,6 +1180,9 @@ regWindow( Widget parent, Account *acc )
   
   XtPopup( regData->dialog, XtGrabNone );
   
+  /* unmanage the action box, until it is needed */
+  SetActionBox (regData->ab, -1, -1);
+
   unsetBusyCursor( parent );
   
   return regData;
@@ -1425,8 +1427,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       else if( ((PORTFOLIO == acc->type) && IN_ACTN_CELL(row,col)) ||
                ((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) ) 
         {
-printf ("yoooo enter actin cell %d %d \n", row, col);
-           SetActionBox (regData->ab, reg, row, col);
+           SetActionBox (regData->ab, row, col);
         }
       break;
     }
