@@ -45,13 +45,6 @@
   (newline)
   (newline))
 
-(define (append-path pathname val)
-  (let* ((current (getenv pathname))
-         (new-value (if current
-                        (string-append current ":" val)
-                        val)))
-    (setenv pathname new-value)))
-
 (define (gnc:report-menu-setup)
   ;; since this menu gets added to every child window, we say it 
   ;; comes after the "_File" menu. 
@@ -135,13 +128,6 @@
   (gnc:setup-debugging)
 
   ;; initialize the gnucash module system 
-
-  ;; first make sure the search paths are reasonable. probably shouldn't
-  ;; need to do this.
-  (append-path "LD_LIBRARY_PATH" gnc:_lib-dir-default_)
-  (append-path "LD_LIBRARY_PATH" gnc:_pkglib-dir-default_)
-  (append-path "GNC_MODULE_PATH" gnc:_pkglib-dir-default_)
-
   (gnc:module-system-init)
   
   ;; SUPER UGLY HACK -- this should go away when I come back for the
@@ -282,6 +268,8 @@
 
 ;;  (statprof-reset 0 50000) ;; 20 times/sec
 ;;  (statprof-start)
+
+  (setlocale LC_ALL "")
 
   ;; Now the fun begins.
   (gnc:startup)
