@@ -1,3 +1,8 @@
+2004-01-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/register/ledger-core/split-register-layout.c:  Remove the
+	  RECN cell from payable/receivable to stop confusing people.
+
 2004-01-21  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-utils.c: Set application log

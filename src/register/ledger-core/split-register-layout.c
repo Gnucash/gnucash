@@ -178,10 +178,9 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
         gnc_table_layout_set_cell (layout, curs, NUM_CELL,   0, 3);
         gnc_table_layout_set_cell (layout, curs, DESC_CELL,  0, 4);
         gnc_table_layout_set_cell (layout, curs, MXFRM_CELL, 0, 5);
-        gnc_table_layout_set_cell (layout, curs, RECN_CELL,  0, 6);
-	gnc_table_layout_set_cell (layout, curs, DEBT_CELL,  0, 7);
-	gnc_table_layout_set_cell (layout, curs, CRED_CELL,  0, 8);
-        gnc_table_layout_set_cell (layout, curs, BALN_CELL,  0, 9);
+	gnc_table_layout_set_cell (layout, curs, DEBT_CELL,  0, 6);
+	gnc_table_layout_set_cell (layout, curs, CRED_CELL,  0, 7);
+        gnc_table_layout_set_cell (layout, curs, BALN_CELL,  0, 8);
 
         curs_last = curs;
         curs = gnc_table_layout_get_cursor (layout,
@@ -201,9 +200,9 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
         gnc_table_layout_set_cell (layout, curs, NUM_CELL,   0, 3);
         gnc_table_layout_set_cell (layout, curs, DESC_CELL,  0, 4);
 
-        gnc_table_layout_set_cell (layout, curs, TDEBT_CELL, 0, 7);
-        gnc_table_layout_set_cell (layout, curs, TCRED_CELL, 0, 8);
-        gnc_table_layout_set_cell (layout, curs, TBALN_CELL, 0, 9);
+        gnc_table_layout_set_cell (layout, curs, TDEBT_CELL, 0, 6);
+        gnc_table_layout_set_cell (layout, curs, TCRED_CELL, 0, 7);
+        gnc_table_layout_set_cell (layout, curs, TBALN_CELL, 0, 8);
 
         curs_last = curs;
         curs = gnc_table_layout_get_cursor (layout,
@@ -219,9 +218,8 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
         gnc_table_layout_set_cell (layout, curs, ACTN_CELL, 0, 3);
         gnc_table_layout_set_cell (layout, curs, MEMO_CELL, 0, 4);
         gnc_table_layout_set_cell (layout, curs, XFRM_CELL, 0, 5);
-        gnc_table_layout_set_cell (layout, curs, RECN_CELL, 0, 6);
-	gnc_table_layout_set_cell (layout, curs, DEBT_CELL, 0, 7);
-	gnc_table_layout_set_cell (layout, curs, CRED_CELL, 0, 8);
+	gnc_table_layout_set_cell (layout, curs, DEBT_CELL, 0, 6);
+	gnc_table_layout_set_cell (layout, curs, CRED_CELL, 0, 7);
 
         break;
       }
