@@ -446,6 +446,8 @@ gnc_table_save_cells (Table *table, gpointer save_data)
   if (!table || !table->model->save_handler)
     return;
 
+  gnc_table_leave_update (table, table->current_cursor_loc);
+
   table->model->save_handler (save_data, table->model->handler_user_data);
 }
 
