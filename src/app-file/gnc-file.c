@@ -193,7 +193,7 @@ show_session_error (GNCBackendError io_error, const char *newfile)
       
     case ERR_SQL_DB_TOO_OLD:
       fmt = _("This database is from an older version of GnuCash.\n"
-              "Do you want to want to upgrade the database"
+              "Do you want to want to upgrade the database "
               "to the current version?");
       if (gnc_verify_dialog (TRUE, fmt)) { uh_oh = FALSE; }
       break;

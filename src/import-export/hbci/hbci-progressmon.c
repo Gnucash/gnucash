@@ -107,62 +107,64 @@ static void jobStarted(JobProgressType type, int actions, void *user_data)
     
   switch(type){
   case JOB_OPENINGDIALOG:
-    msg = "Eröffne Dialog";
+    msg = _("Opening Dialog");
     break;
   case JOB_CLOSINGDIALOG:
-    msg = "Schließe Dialog";
+    msg = _("Closing Dialog");
     break;
     /** Opening network connection. */
   case    JOB_OPENINGNETWORK:
-    msg = "Beginne Netzwerkverbindung";
+    msg = _("Opening Network Connection");
     break;
     /** Closing network connection. */
   case    JOB_CLOSINGNETWORK:
-    msg = "Schließe Netzwerkverbindung";
+    msg = _("Closing Network Connection");
     break;
     /** Get balance */
   case    JOB_GET_BALANCE:
-    msg = "Job: Saldo abholen";
+    /* Translate those with keeping the leading "Job:", but of course
+       using a translation for "Job". */
+    msg = _("Job: Get Balance");
     break;
     /** Get transaction statement */
   case    JOB_GET_TRANS:
-    msg = "Job: Umsätze abholen";
+    msg = _("Job: Get Transactions");
     break;
     /** Transfer money */
   case    JOB_NEW_TRANSFER:
-    msg = "Job: Neue Überweisung";
+    msg = _("Job: New Transfer");
     break;
     /** Debit note */
   case    JOB_DEBIT_NOTE:
-    msg = "Job: Debit note";
+    msg = _("Job: Debit Note");
     break;
     /** Get standing orders */
   case    JOB_GET_STO:
-    msg = "";
+    msg = _("Job: Get Standing Orders");
     break;
     /** Create a new standing order */
   case    JOB_NEW_STO:
-    msg = "";
+    msg = _("Job: New Standing Order");
     break;
     /** Delete a standing order */
   case    JOB_DELETE_STO:
-    msg = "";
+    msg = _("Job: Delete Standing Order");
     break;
     /** Get account list */
   case    JOB_GET_ACCOUNTS:
-    msg = "Job: Kontenliste abholen";
+    msg = _("Job: Retrieve Account List");
     break;
     /** Get SystemId */
   case    JOB_GET_SYSTEMID:
-    msg = "Job: System-Kennung abgleichen";
+    msg = _("Job: Get System ID");
     break;
     /** Get keys */
   case    JOB_GET_KEYS:
-    msg = "Job: Schlüssel holen";
+    msg = _("Job: Get Keys");
     break;
     /** Send keys */
   case    JOB_SEND_KEYS:
-    msg = "Job: Schlüssel senden";
+    msg = _("Job: Send Keys");
     break;
   }
   g_assert(msg);
@@ -203,31 +205,31 @@ static void actStarted (ActionProgressType type, void *user_data)
   switch (type) {
     /** Sending message. */
   case ACT_SENDINGMESSAGE:
-    msg = "Sending message";
+    msg = _("Sending message");
     break;
     /** Waiting for response. */
   case ACT_WAITRESPONSE:
-    msg = "Waiting for response";
+    msg = _("Waiting for response");
     break;
     /** Creating HBCI job. Number of Job will follow in string argument. */
   case ACT_CREATEHBCIJOB:
-    msg = "Creatin HBCI Job";
+    msg = _("Creating HBCI Job");
     break;
     /** Contacting server. Server IP address will follow in string argument. */
   case ACT_CONTACTINGSERVER:
-    msg = "Contacting server";
+    msg = _("Contacting Server");
     break;
     /** Checking Job result. */
   case ACT_CHKRESULT:
-    msg = "Checking Job result";
+    msg = _("Checking Job result");
     break;
     /** Updating local system. */
   case ACT_UPDATESYSTEM:
-    msg = "Updating local system";
+    msg = _("Updating local system");
     break;
     /** Closing connection. */
   case ACT_CLOSECONNECTION:
-    msg = "Closing connection";
+    msg = _("Closing connection");
     break;
   }
   
