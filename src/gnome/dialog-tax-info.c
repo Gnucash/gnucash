@@ -24,7 +24,6 @@
 #include "config.h"
 
 /* GNOME 2 Port (Replace GtkText) */
-#define GTK_ENABLE_BROKEN
 
 #include <gnome.h>
 #include <guile/gh.h>
@@ -672,7 +671,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
                         GTK_SIGNAL_FUNC (tax_related_toggled_cb), ti_dialog);
 
     text = glade_xml_get_widget (xml, "txf_help_text");
-    gtk_text_set_word_wrap (GTK_TEXT (text), TRUE);
+    gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(text), GTK_WRAP_WORD);
     ti_dialog->txf_help_text = text;
 
     /* set text height */

@@ -1,3 +1,83 @@
+
+2003-05-19 TomF changes for gnucash-gnome2-dev, 18th batch
+	* src/gnome/dialog-tax-info.c:
+	  Replace broken gtk_text_set_word_wrap (GTK_TEXT (text), TRUE);
+	  by gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(text), GTK_WRAP_WORD);
+
+	  Changes made by Jan Arne Petersen  <jpetersen@uni-bonn.de>:
+	* src/gnome/druid-hierarchy.c:
+	  include "gnc-tree-model-account.h", "gnc-tree-model-example-account.h"
+	  Replace deprecated GTK_TREE by GTK_TREE_VIEW; Clear by using
+          gtk_tree_store_clear(GTK_TREE_STORE(gtk_tree_view_get_model()));
+
+	  Replace GTK_SIGNAL_FUNC by G_CALLBACK 
+	  gtk_object_set_data by g_object_set_data 
+	  Replace gtk_signal_connect by g_signal_connect 
+	  Rewrite on_final_account_tree_placeholder_toggled to use:
+	  Replace gtk_signal_handler_block_by_func
+	  by g_signal_handlers_block_by_func, 
+ 	  gtk_signal_handler_unblock_by_func by
+	  g_signal_handlers_unblock_by_func,
+	  Replace update_account_balance (GtkCTree *ctree, GtkCTreeNode *node)
+	  by update_account_balance (GNCTreeModelAccount *model,
+		 GtkTreeIter *iter).  In update_account_balance:
+	  Replace gtk_ctree_node_get_row_data 
+	  by gnc_tree_model_account_get_account,
+	  gnc_amount_edit_get_amount, xaccAccountGetPlaceholder,
+	  gnc_numeric_zero_p
+
+	  Replace gtk_ctree_node_set_text by 
+	  gtk_tree_model_get_path, gtk_tree_model_row_changed,
+	  gtk_tree_path_free (path);
+ 
+	  Use: GtkTreeView, GtkTreeSelection, GtkTreeModel, GtkTreeIter
+ 	  GTK_TREE_VIEW (hierarchy_get_widget ()), gtk_tree_view_get_selection,
+	  gtk_ctree_node_nth (ctree, GTK_CLIST()),
+	  gtk_tree_selection_get_selected, update_account_balance, 
+	  GNC_TREE_MODEL_ACCOUNT, g_object_set_data, G_OBJECT,
+	  GSList, get_example_account_list, GncExampleAccount, Account,
+	  g_new0, gnc_get_current_book, xaccMallocAccountGroup
+
+	  Rewrite account_types_tree_view_prepare, 
+	  on_choose_account_types_prepare,
+	  account_types_selection_changed, select_all_clicked,
+	  clear_all_clicked, get_selected_account_list,
+	  balance_cell_data_func, on_final_account_tree_placeholder_toggled,
+	  on_final_account_tree_selection_changed
+
+	  Commented out: struct FinalInsertData_struct, 
+	  generate_account_titles, free_account_titles,
+	  add_to_ctree_final_account, insert_final_accounts
+
+	  Rewrite on_final_account_prepare to use:
+	  GtkTreeView, GNCTreeModelAccount, GtkTreeSelection, GtkCellRenderer, 
+	  GtkTreeViewColumn, g_object_get_data, gnc_tree_model_account_new,
+	  gtk_tree_view_set_model (tree_view, GTK_TREE_MODEL (model));
+	  g_object_unref, gtk_tree_view_get_selection, 
+	  gtk_tree_selection_set_mode, g_signal_connect, G_CALLBACK, 
+	  gtk_cell_renderer_text_new, gtk_tree_view_column_new_with_attributes,
+	  gtk_tree_view_append_column, gtk_tree_view_column_new_with_attributes, 
+	  gtk_cell_renderer_toggle_new, g_object_set, 
+	  gtk_tree_view_column_set_cell_data_func, g_object_set_data,
+	  GNC_TREE_MODEL_ACCOUNT, gtk_tree_view_get_model, 
+	  gnc_suspend_gui_refresh, gnc_tree_model_account_set_root,
+	  delete_our_final_group, get_selected_account_list, 
+	  hierarchy_merge_groups, gnc_tree_model_account_set_root, 
+	  gtk_tree_view_expand_all
+
+	  Rewrite on_final_account_tree_selection_changed to use:
+	  GtkTreeModel, GtkTreeIter, gboolean, Account, GNCAmountEdit, 
+	  GNCPrintAmountInfo, gnc_numeric, GtkWidget, 
+	  gtk_tree_selection_get_selected, get_balance_editor, 
+	  gnc_amount_edit_gtk_entry, gtk_entry_set_text, 
+	  gtk_widget_set_sensitive, gnc_tree_model_account_get_account,
+	  get_final_balance, gnc_reverse_balance, gnc_numeric_neg,
+	  gnc_account_print_info, gnc_amount_edit_set_print_info,
+	  gnc_amount_edit_set_fraction , block_amount_changed,
+	  gnc_amount_edit_set_amount (balance_edit, balance),
+	  gnc_numeric_zero_p, unblock_amount_changed
+
+
 2003-05-19  Jan Arne Petersen  <jpetersen@uni-bonn.de>
 
 	Fix some nome-mdi problems:
@@ -149,7 +229,6 @@
 	(gnc_ui_qif_import_default_acct_back_cb), (make_qif_druid_page):
 
 2003-05-15  Jan Arne Petersen  <jpetersen@uni-bonn.de>
-
 	* TODO: Remove 15 th batch task
 	* configure.in: Add pkgconfig checks for libgnomeprintui, gal and setenv, putenv checks
 	* src/app-file/gnome/gnc-file-history.c: (gnc_history_update_menu):
