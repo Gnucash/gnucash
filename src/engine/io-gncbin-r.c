@@ -662,20 +662,6 @@ readAccount( int fd, AccountGroup *grp, int token )
             "\texpected %d got %d transactions \n",numTrans,i);
       break;
       }
-#ifdef DELINT_BLANK_SPLITS_HACK
-      /* This is dangerous, as it can destroy real data. */
-      {
-        int j=0;   
-        Split *s = trans->splits[0];
-        while (s) {
-          if (DEQ(0.0,s->damount) && DEQ (1.0,s->share_price)) {
-             xaccTransRemoveSplit (trans, s);
-             break;
-          }
-          j++; s=trans->splits[j];
-        }
-      }
-#endif /* DELINT_BLANK_SPLITS_HACK */
     }
   
   /* Not needed now.  Since we always look in ids_to_finished_accounts
@@ -780,6 +766,40 @@ readAccInfo(int fd, Account *acc, int token) {
   return(TRUE);
 }
 
+static void
+xaccTransSetMemo (Transaction *trans, const char *memo)
+{
+  Split *s;
+
+  if (!trans || !memo) return;
+
+  s = xaccTransGetSplit (trans, 0);
+  xaccSplitSetMemo (s, memo);
+
+  if (xaccTransCountSplits (trans) != 2)
+    return;
+
+  s = xaccTransGetSplit (trans, 1);
+  xaccSplitSetMemo (s, memo);
+}
+
+static void
+xaccTransSetAction (Transaction *trans, const char *action)
+{
+  Split *s;
+
+  if (!trans || !action) return;
+
+  s = xaccTransGetSplit (trans, 0);
+  xaccSplitSetAction (s, action);
+
+  if (xaccTransCountSplits (trans) != 2)
+    return;
+
+  s = xaccTransGetSplit (trans, 1);
+  xaccSplitSetAction (s, action);
+}
+
 /********************************************************************\
  * readTransaction                                                  * 
  *   reads in the data for a transaction from the datafile          *
@@ -808,6 +828,12 @@ readTransaction( int fd, Account *acc, int token )
   /* create a transaction structure */
   trans = xaccMallocTransaction();
   xaccTransBeginEdit (trans, 1);  
+
+  /* add in one split -- xaccMallocTransaction no longer auto-creates them. */
+  {
+    Split *s = xaccMallocSplit ();
+    xaccTransAppendSplit (trans, s);
+  }
 
   tmp = readString( fd, token );
   if (NULL == tmp)
@@ -1084,14 +1110,16 @@ readTransaction( int fd, Account *acc, int token )
 
     if (5 == token) 
     {
+      Split *s = trans->splits->data;
+
       /* Version 5 files included a split that immediately
        * followed the transaction, before the destination splits.
        * Later versions don't have this. */
       offset = 1;
       split = readSplit (fd, token);
-      xaccRemoveEntity(&trans->splits[0]->guid);
-      xaccFreeSplit (trans->splits[0]);
-      trans->splits[0] = split;
+      xaccRemoveEntity(&s->guid);
+      xaccFreeSplit (s);
+      trans->splits->data = split;
       split->parent = trans;
     }
 
@@ -1108,13 +1136,14 @@ readTransaction( int fd, Account *acc, int token )
     for (i=0; i<numSplits; i++) {
         split = readSplit (fd, token);
         if (0 == i+offset) {
+           Split *s = trans->splits->data;
            /* the first split has been malloced. just replace it */
-           xaccRemoveEntity (&trans->splits[i+offset]->guid);
-           xaccFreeSplit (trans->splits[i+offset]);
-           trans->splits[i+offset] = split;
+           xaccRemoveEntity (&s->guid);
+           xaccFreeSplit (s);
+           trans->splits->data = split;
            split->parent = trans;
         } else {
-           xaccTransAppendSplit( trans, split);
+           xaccTransAppendSplit(trans, split);
         }
      }
   }

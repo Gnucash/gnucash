@@ -664,30 +664,25 @@ xaccAccountFixSplitDateOrder (Account * acc, Split *split ) {
 /********************************************************************\
  * xaccCheckTransDateOrder                                          *
  *   check this transaction to see if the date is in correct order  *
- *   If it is not, reorder the transactions ...                     *
+ *   If it is not, reorder the transactions.                        *
  *   This routine perfroms the check for both of the double-entry   *
- *   transaction entries ...                                        *
+ *   transaction entries.                                           *
  *                                                                  *
  * Args:   trans -- the transaction to check                        *
  * Return: int -- non-zero if out of order                          *
 \********************************************************************/
 
 void
-xaccTransFixSplitDateOrder (Transaction *trans )
+xaccTransFixSplitDateOrder (Transaction *trans)
 {
-  Account * acc;
-  Split *s;
-  int i = 0;
+  GList *node;
 
-  if (NULL == trans) return;
+  if (trans == NULL) return;
 
-  i=0;
-  s = trans->splits[0];
-  while (s) {
-    acc = (Account *) (s->acc);
-    xaccAccountFixSplitDateOrder (acc, s);
-    i++;
-    s = trans->splits[i];
+  for (node = trans->splits; node; node = node->next)
+  {
+    Split *s = node->data;
+    xaccAccountFixSplitDateOrder (s->acc, s);
   }
 }
 

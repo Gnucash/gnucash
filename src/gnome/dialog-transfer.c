@@ -726,9 +726,11 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     string = gtk_entry_get_text(GTK_ENTRY(xferData->description_entry));
     xaccTransSetDescription(trans, string);
 
-    /* first split is already there */
-    curr_split = xaccTransGetSplit(trans, 0);
-    /* second split must be created */
+    /* create first split */
+    curr_split = xaccMallocSplit();
+    xaccTransAppendSplit(trans, curr_split); 
+
+    /* create second split */
     from_split = xaccMallocSplit();
     xaccTransAppendSplit(trans, from_split); 
 
@@ -741,9 +743,10 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     DxaccSplitSetBaseValue(curr_split, amount, from_currency);
     DxaccSplitSetBaseValue(curr_split, to_amount, to_currency);
 
-    /* TransSetMemo will set the memo for both splits */
+    /* Set the memo fields */
     string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));
-    xaccTransSetMemo(trans, string);
+    xaccSplitSetMemo(curr_split, string);
+    xaccSplitSetMemo(from_split, string);
 
     /* finish transaction */
     xaccAccountCommitEdit(from);
@@ -763,9 +766,11 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     string = gtk_entry_get_text(GTK_ENTRY(xferData->description_entry));
     xaccTransSetDescription(trans, string);
 
-    /* first split is already there */
-    curr_split = xaccTransGetSplit(trans, 0);
-    /* second split must be created */
+    /* create first split */
+    curr_split = xaccMallocSplit();
+    xaccTransAppendSplit(trans, curr_split); 
+
+    /* create second split */
     to_split = xaccMallocSplit();
     xaccTransAppendSplit(trans, to_split); 
 
@@ -778,9 +783,10 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     DxaccSplitSetBaseValue(curr_split, -amount, from_currency);
     DxaccSplitSetBaseValue(curr_split, -to_amount, to_currency);
 
-    /* TransSetMemo will set the memo for both splits */
+    /* set the memo fields */
     string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));
-    xaccTransSetMemo(trans, string);
+    xaccSplitSetMemo(curr_split, string);
+    xaccSplitSetMemo(to_split, string);
 
     /* finish transaction */
     xaccAccountCommitEdit(curr);
@@ -806,18 +812,20 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     string = gtk_entry_get_text(GTK_ENTRY(xferData->description_entry));
     xaccTransSetDescription(trans, string);
 
-    /* first split is already there */
-    to_split = xaccTransGetSplit(trans, 0);
+    /* create first split */
+    to_split = xaccMallocSplit();
+    xaccTransAppendSplit(trans, to_split); 
     DxaccSplitSetShareAmount(to_split, amount);
 
-    /* second split must be created */
+    /* create second split */
     from_split = xaccMallocSplit();
     DxaccSplitSetShareAmount(from_split, -amount);
     xaccTransAppendSplit(trans, from_split); 
 
-    /* TransSetMemo will set the memo for both splits */
+    /* set the memo fields */
     string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));
-    xaccTransSetMemo(trans, string);
+    xaccSplitSetMemo(to_split, string);
+    xaccSplitSetMemo(from_split, string);
 
     /* Now do the 'to' account */
     xaccAccountBeginEdit(to);

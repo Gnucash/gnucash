@@ -3344,21 +3344,10 @@ txn_restore_start_handler(GSList* sibling_data,
                             gpointer *result,
                             const gchar *tag) {
   Transaction *trans = xaccMallocTransaction();
-  
+
   if(!trans) return(FALSE);
 
   xaccTransBeginEdit(trans, 1);
-
-  /* Kill the pointless initial splits -- why are these here?
-     FIXME: Can we kill them in Transaction.c? */
-  {
-    int i = 0;
-    Split *useless;
-    while((useless = xaccTransGetSplit(trans, i))) {
-      xaccSplitDestroy(useless);
-      i++;
-    }
-  }
 
   *data_for_children = trans;
 

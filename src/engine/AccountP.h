@@ -114,7 +114,7 @@ struct _account {
   gnc_numeric share_cleared_balance;
   gnc_numeric share_reconciled_balance;
 
-  GList *splits;               /* ptr to array of ptrs to splits */
+  GList *splits;           /* list of split pointers */
 
   /* The "changed" flag is used to invalidate cached values in this structure.
    * Currently, the balances and the cost basis are cached.

@@ -64,21 +64,21 @@ xaccAccountGetBackend (Account * acc)
 Backend *
 xaccTransactionGetBackend (Transaction *trans)
 {
-  Backend *be;
+  GList *node;
   Split *s;
+
   if (!trans) return NULL;
 
   /* find an account */
-  s = trans->splits[0];
+  s = xaccTransGetSplit (trans, 0);
   if (!s) return NULL;
 
   /* I suppose it would be more 'technically correct' to make sure that
-   * all splits share teh same backend, and flag an error if they
+   * all splits share the same backend, and flag an error if they
    * don't.  However, at this point, it seems quite unlikely, so we'll
-   * just use teh first backend we find.
+   * just use the first backend we find.
    */
-  be = xaccAccountGetBackend (s->acc);
-  return be;
+  return xaccAccountGetBackend (s->acc);
 }
 
 /********************************************************************\

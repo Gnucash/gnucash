@@ -22,11 +22,11 @@
 \********************************************************************/
 
 #define _GNU_SOURCE
+#include "config.h"
+
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
-
-#include "config.h"
 
 #include "Account.h"
 #include "AccountP.h"
@@ -189,8 +189,7 @@ xaccCloseLog (void)
 void
 xaccTransWriteLog (Transaction *trans, char flag)
 {
-   Split *split;
-   int i = 0;
+   GList *node;
    char *dnow, *dent, *dpost, *drecn; 
 
    if (!gen_logs) return;
@@ -202,10 +201,13 @@ xaccTransWriteLog (Transaction *trans, char flag)
 
    fprintf (trans_log, "===== START\n");
 
-   split = trans->splits[0];
-   while (split) {
+   for (node = trans->splits; node; node = node->next) {
+      Split *split = node->data;
       char * accname = "";
-      if (split->acc) accname = split->acc->accountName;
+
+      if (split->acc)
+        accname = split->acc->accountName;
+
       drecn = xaccDateUtilGetStamp (split->date_reconciled.tv_sec);
 
       /* use tab-separated fields */
@@ -229,9 +231,8 @@ xaccTransWriteLog (Transaction *trans, char flag)
                drecn
                );
       free (drecn);
-      i++;
-      split = trans->splits[i];
    }
+
    fprintf (trans_log, "===== END\n");
    free (dnow);
    free (dent);

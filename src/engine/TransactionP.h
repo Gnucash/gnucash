@@ -100,9 +100,7 @@ struct _split
    * it's NULL until accessed. */
   kvp_frame * kvp_data;
 
-  /* The reconciled field ...
-   */
-  char    reconciled;
+  char    reconciled;        /* The reconciled field                      */
   Timespec date_reconciled;  /* date split was reconciled                 */
 
   /* value is the amount of the account's currency involved,
@@ -155,7 +153,7 @@ struct _transaction
    * it's NULL until accessed. */
   kvp_frame * kvp_data;
 
-  Split   **splits;          /* list of splits, null terminated           */
+  GList *splits; /* list of splits */
 
   /* marker is used to track the progress of transaction traversals. 
    * 0 is never a legitimate marker value, so we can tell is we hit
@@ -192,7 +190,7 @@ void xaccSplitSetGUID (Split *split, GUID *guid);
  * not check to see if any of the member splits are referenced
  * by an account.
  */
-void  xaccFreeTransaction (Transaction *);
+void  xaccFreeTransaction (Transaction *trans);
 
 /* The xaccFreeSplit() method simply frees all memory associated
  * with the split.  It does not verify that the split isn't
@@ -200,13 +198,7 @@ void  xaccFreeTransaction (Transaction *);
  * account, then calling this method will leave the system in an 
  * inconsistent state.
  */
-void  xaccFreeSplit   (Split *);    /* frees memory */
-
-/* The xaccTransRemoveSplit() routine will remove the indicated
- *    split from the transaction.  It will *NOT* otherwise 
- *    re-adjust balances, modify accounts, etc.
- */
-void  xaccTransRemoveSplit (Transaction*, Split *);
+void  xaccFreeSplit   (Split *split);    /* frees memory */
 
 
 /*
@@ -216,7 +208,7 @@ void  xaccTransRemoveSplit (Transaction*, Split *);
  * splits in a transaction to total up to exactly zero.
  *
  * It is worthwhile to understand the algorithm that this routine
- * uses to acheive balance.  It goes like this:
+ * uses to achieve balance.  It goes like this:
  * If the indicated split is a destination split (i.e. is not
  * the first split), then the total value of the destination 
  * splits is computed, and the value of the source split (ie.
@@ -224,7 +216,7 @@ void  xaccTransRemoveSplit (Transaction*, Split *);
  * (the share price of the source split is not changed).
  * If the indicated split is the source split, then the value
  * of the very first destination split is adjusted so that
- * the balance is zero.  If there is not destination split,
+ * the balance is zero. If there is not destination split,
  * one of two outcomes are possible, depending on whether
  * "forced_double_entry" is enabled or disabled.
  * (1) if forced-double-entry is disabled, the fact that
@@ -236,12 +228,12 @@ void  xaccTransRemoveSplit (Transaction*, Split *);
  *     destination split properly.
  */
 
-void xaccSplitRebalance (Split *);
+void xaccSplitRebalance (Split *split);
 
 
 /* FIXME: this is probably wrong, but it'll have to wait until Bill
    returns.  It's *ONLY* for file IO.  Don't use these elsewhere. */
-void xaccSplitSetValueDirectly(Split *s, gnc_numeric n);
-void xaccSplitSetQuantityDirectly(Split *s, gnc_numeric n);
+void xaccSplitSetValueDirectly(Split *split, gnc_numeric value);
+void xaccSplitSetQuantityDirectly(Split *split, gnc_numeric quantity);
 
 #endif /* __XACC_TRANSACTION_P_H__ */

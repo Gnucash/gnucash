@@ -234,20 +234,11 @@
                 (let ((gnc-xtn (gnc:transaction-create)))
                   (gnc:transaction-begin-edit gnc-xtn 1)
 
-                  ;; destroy any automagic splits in the transaction
-                  (let ((numsplits (gnc:transaction-get-split-count gnc-xtn)))
-                    (if (not (eqv? 0 numsplits))
-                        (let splitloop ((ind (- numsplits 1)))
-                          (gnc:split-destroy 
-                           (gnc:transaction-get-split gnc-xtn ind))
-                          (if (> ind 0)
-                              (loop (- ind 1))))))
-                  
                   ;; build the transaction
                   (qif-import:qif-xtn-to-gnc-xtn 
                    xtn qif-file gnc-xtn gnc-acct-hash 
                    qif-acct-map qif-cat-map)
-                  
+
                   ;; rebalance and commit everything
                   (gnc:transaction-commit-edit gnc-xtn)))))
         (qif-file:xtns qif-file)))

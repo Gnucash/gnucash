@@ -23,13 +23,13 @@
  *                                                                  *
 \********************************************************************/
 
+#include "config.h"
+
 #include <assert.h>
 #include <string.h>
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
-
-#include "config.h"
 
 #include "Account.h"
 #include "AccountP.h"
@@ -300,13 +300,13 @@ xaccConfigGetForceDoubleEntry (void)
 static void
 MarkChanged (Transaction *trans)
 {
-   if (trans->splits) {
-      int i=0;
-      while (trans->splits[i]) {
-         MARK_SPLIT (trans->splits[i]);
-         i++;
-      }
-   }
+  GList *node;
+
+  for (node = trans->splits; node; node = node->next)
+  {
+    Split *s = node->data;
+    MARK_SPLIT (s);
+  }
 }
 
 /********************************************************************\
@@ -554,23 +554,13 @@ xaccSplitGetShareReconciledBalance (Split *s) {
 \********************************************************************/
 
 static void
-xaccInitTransaction( Transaction * trans )
+xaccInitTransaction (Transaction * trans)
 {
-  Split *split;
-
   /* Fill in some sane defaults */
   trans->num         = g_strdup("");
   trans->description = g_strdup("");
 
-  trans->splits    = g_malloc (3 * sizeof (Split *));
-
-  /* Create a single split only.  As soon as the balance becomes
-   * non-zero, additional splits will get created. 
-   */
-  split = xaccMallocSplit ();
-  split->parent = trans;
-  trans->splits[0] = split;
-  trans->splits[1] = NULL;
+  trans->splits = NULL;
 
   trans->date_entered.tv_sec  = 0;
   trans->date_entered.tv_nsec = 0;
@@ -611,22 +601,16 @@ static Transaction *
 xaccCloneTransaction (Transaction *t)
 {
   Transaction *trans;
-  int n;
+  GList *node;
 
   trans = g_new(Transaction, 1);
 
   trans->num         = g_strdup(t->num);
   trans->description = g_strdup(t->description);
 
-  n=0; while (t->splits[n]) n++;
-  trans->splits = g_malloc ((n+1)* sizeof (Split *));
-
-  n=0; 
-  while (t->splits[n]) {
-    trans->splits[n] = xaccCloneSplit (t->splits[n]);
-    n++;
-  }
-  trans->splits[n] = NULL;
+  trans->splits = g_list_copy (t->splits);
+  for (node = trans->splits; node; node = node->next)
+    node->data = xaccCloneSplit (node->data);
 
   trans->date_entered.tv_sec  = t->date_entered.tv_sec;
   trans->date_entered.tv_nsec = t->date_entered.tv_nsec;
@@ -649,27 +633,19 @@ xaccCloneTransaction (Transaction *t)
 \********************************************************************/
 
 void
-xaccFreeTransaction( Transaction *trans )
+xaccFreeTransaction (Transaction *trans)
 {
-  int i;
-  Split *s;
+  GList *node;
 
   if (!trans) return;
 
   ENTER ("addr=%p\n", trans);
 
   /* free up the destination splits */
-  if (trans->splits) {
-    i = 0;
-    s = trans->splits[i];
-    while (s) {
-      xaccFreeSplit (s);
-      i++;
-      s = trans->splits[i];
-    }
-  }
-
-  g_free (trans->splits);
+  for (node = trans->splits; node; node = node->next)
+    xaccFreeSplit (node->data);
+  g_list_free (trans->splits);
+  trans->splits = NULL;
 
   /* free up transaction strings */
   g_free (trans->num);
@@ -728,23 +704,25 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
   if(kvp_frame_compare(ta->kvp_data, tb->kvp_data) != 0) return FALSE;
 
   if(check_splits) {
-    Split** sa = ta->splits;
-    Split** sb = tb->splits;
+    GList *sa = ta->splits;
+    GList *sb = tb->splits;
 
     if(!sa && sb) return FALSE;
     if(!sb && sa) return FALSE;
-    
+
     if(sa && sb) {
       /* presume that the splits are in the same order */
-      while(*sa && *sb) {
-        if(!xaccSplitEqual(*sa, *sb, check_guids, FALSE)) return(FALSE);
-        sa++;
-        sb++;
+      while(sa && sb) {
+        if(!xaccSplitEqual(sa->data, sb->data, check_guids, FALSE))
+          return(FALSE);
+        sa = sa->next;
+        sb = sb->next;
       }
-      if(*sa != NULL) return(FALSE);
-      if(*sb != NULL) return(FALSE);
+      if(sa != NULL) return(FALSE);
+      if(sb != NULL) return(FALSE);
     }
   }
+
   return(TRUE);
 }
 
@@ -918,61 +896,62 @@ xaccSplitGetBaseValue (Split *s, const gnc_commodity * base_currency) {
 \********************************************************************/
 
 static gnc_numeric
-ComputeValue (Split **sarray, Split * skip_me, 
+ComputeValue (GList *splits, Split * skip_me, 
               const gnc_commodity * base_currency)
 {
-   Split *s;
-   int i=0;
-   gnc_numeric value;
-   
-   s     = sarray[0];
-   value = gnc_numeric_zero();
+  GList *node;
+  gnc_numeric value;
 
-   while (s) {
-     if (s != skip_me) {
-       /* ahh -- users may not want or use the double entry 
-        * features of this engine.  So, in particular, there
-        * may be the occasional split without a parent account. 
-        * Well, that's ok, we'll just go with the flow. 
-        */
-       if (!(s->acc)) {
-         if (force_double_entry) {
-           assert (s->acc);
-         } 
-         else { 
-           value = gnc_numeric_add(value, s->value, GNC_DENOM_AUTO, 
-                                   GNC_DENOM_LCD);
-         }
-       } 
-       else if ((0x0 == base_currency) && (0 == force_double_entry)) {
-         value = gnc_numeric_add(value, s->value, GNC_DENOM_AUTO, 
-                                 GNC_DENOM_LCD);
-       } 
-       else {         
-         /* OK, we've got a parent account, we've got currency, 
-          * lets behave like professionals now, instead of the
-          * shenanigans above.
-          */
-         if (gnc_commodity_equiv(s->acc->currency, base_currency)) {
-           value = gnc_numeric_add_fixed(value, s->value);
-         } 
-         else if (gnc_commodity_equiv(s->acc->security, base_currency)) {
-           value  = gnc_numeric_add_fixed(value, s->damount);
-         } 
-         else {
-           PERR ("inconsistent currencies\n");      
-           printf("base = '%s', curr='%s', sec='%s'\n",
-                  gnc_commodity_get_printname(base_currency),
-                  gnc_commodity_get_printname(s->acc->currency),
-                  gnc_commodity_get_printname(s->acc->security));
-           assert (0);
-         }
-       }
-     }
-     i++; s = sarray [i];
-   }
+  value = gnc_numeric_zero();
 
-   return value;
+  for (node = splits; node; node = node->next)
+  {
+    Split *s = node->data;
+
+    if (s == skip_me)
+      continue;
+
+    /* ahh -- users may not want or use the double entry 
+     * features of this engine.  So, in particular, there
+     * may be the occasional split without a parent account. 
+     * Well, that's ok, we'll just go with the flow. 
+     */
+    if (!(s->acc)) {
+      if (force_double_entry) {
+        assert (s->acc);
+      } 
+      else { 
+        value = gnc_numeric_add(value, s->value, GNC_DENOM_AUTO, 
+                                GNC_DENOM_LCD);
+      }
+    } 
+    else if ((0x0 == base_currency) && (0 == force_double_entry)) {
+      value = gnc_numeric_add(value, s->value, GNC_DENOM_AUTO, 
+                              GNC_DENOM_LCD);
+    } 
+    else {         
+      /* OK, we've got a parent account, we've got currency, 
+       * lets behave like professionals now, instead of the
+       * shenanigans above.
+       */
+      if (gnc_commodity_equiv(s->acc->currency, base_currency)) {
+        value = gnc_numeric_add_fixed(value, s->value);
+      } 
+      else if (gnc_commodity_equiv(s->acc->security, base_currency)) {
+        value  = gnc_numeric_add_fixed(value, s->damount);
+      } 
+      else {
+        PERR ("inconsistent currencies\n");      
+        printf("base = '%s', curr='%s', sec='%s'\n",
+               gnc_commodity_get_printname(base_currency),
+               gnc_commodity_get_printname(s->acc->currency),
+               gnc_commodity_get_printname(s->acc->security));
+        assert (0);
+      }
+    }
+  }
+
+  return value;
 }
 
 double
@@ -1020,36 +999,30 @@ xaccIsCommonCurrency(const gnc_commodity * currency_1,
 }
 
 static const gnc_commodity *
-FindCommonExclSCurrency (Split **slist, const gnc_commodity * ra, 
-                         const gnc_commodity * rb, Split *excl_split) {
-  Split * s;
-  int i = 0;
-  
-  if (!slist) return NULL;
-  
-  i = 0; 
-  s = slist[0];
+FindCommonExclSCurrency (GList *splits, const gnc_commodity * ra, 
+                         const gnc_commodity * rb, Split *excl_split)
+{
+  GList *node;
 
-  /* If s is to be excluded, go ahead in the list until one split is
-     not excluded or is NULL. */
-  while (s && (s == excl_split)) { 
-    i++; s = slist[i]; 
-  }
+  if (!splits) return NULL;
 
-  while (s) {
+  for (node = splits; node; node = node->next)
+  {
+    Split *s = node->data;
     const gnc_commodity * sa, * sb;
-    
+
+    if (s == excl_split)
+      continue;
+
     /* Novice/casual users may not want or use the double entry 
      * features of this engine.   Because of this, there
      * may be the occasional split without a parent account. 
      * Well, that's ok,  we'll just go with the flow. 
      */
-    if (force_double_entry) {
+    if (force_double_entry)
        assert (s->acc);
-    } else
-    if (NULL == s->acc) {
-       i++; s=slist[i]; continue;
-    }
+    else if (s->acc == NULL)
+      continue;
 
     sa = s->acc->currency;
     sb = s->acc->security;
@@ -1071,7 +1044,7 @@ FindCommonExclSCurrency (Split **slist, const gnc_commodity * ra,
        if ( aa && bb && ab && ba ) { ra = NULL; rb = NULL; }
 
        if (!ra) { ra = rb; rb = NULL; }
-    } 
+    }
     else
     if (ra && !rb) {
        int aa = !gnc_commodity_equiv(ra,sa);
@@ -1080,14 +1053,6 @@ FindCommonExclSCurrency (Split **slist, const gnc_commodity * ra,
     }
 
     if ((!ra) && (!rb)) return NULL;
-
-    i++; 
-    s = slist[i];
-
-    /* If s is to be excluded, go ahead in the list until one split is
-       not excluded or is NULL. */
-    while (s && (s == excl_split))
-      { i++; s = slist[i]; } 
   }
 
   return (ra);
@@ -1098,23 +1063,26 @@ FindCommonExclSCurrency (Split **slist, const gnc_commodity * ra,
  * common currency.  
  */
 static const gnc_commodity *
-FindCommonCurrency (Split **slist, 
+FindCommonCurrency (GList *splits,
                     const gnc_commodity * ra, const gnc_commodity * rb)
 {
-  return FindCommonExclSCurrency(slist, ra, rb, NULL);
+  return FindCommonExclSCurrency(splits, ra, rb, NULL);
 }
 
 const gnc_commodity *
 xaccTransFindCommonCurrency (Transaction *trans)
 {
   const gnc_commodity * ra, * rb;
+  Split *split;
 
   if (trans->splits == NULL) return NULL;
-  if (trans->splits[0] == NULL) return NULL;
-  if (trans->splits[0]->acc == NULL) return NULL;
 
-  ra = trans->splits[0]->acc->currency;
-  rb = trans->splits[0]->acc->security;
+  split = trans->splits->data;
+
+  if (split->acc == NULL) return NULL;
+
+  ra = split->acc->currency;
+  rb = split->acc->security;
 
   return FindCommonCurrency (trans->splits, ra, rb);
 }
@@ -1145,15 +1113,16 @@ xaccTransIsCommonExclSCurrency (Transaction *trans,
 static void
 xaccTransRebalance (Transaction * trans)
 {
-  xaccSplitRebalance (trans->splits[0]);
+  if (!trans || !trans->splits)
+    return;
+
+  xaccSplitRebalance (trans->splits->data);
 }
 
 void
 xaccSplitRebalance (Split *split)
 {
   Transaction *trans;
-  Split *s;
-  int i = 0;
   gnc_numeric value;
   const gnc_commodity  * base_currency = NULL;
 
@@ -1162,7 +1131,7 @@ xaccSplitRebalance (Split *split)
   /* We might have gotten here if someone is manipulating
    * a split that has not yet been inserted in a transaction.
    * Rather than punishing them with an assert, lets just
-   * quietly return. 
+   * quietly return.
    */
   if (!trans) return;
 
@@ -1174,8 +1143,8 @@ xaccSplitRebalance (Split *split)
     if(split->acc->editlevel > 0) return;
 
     assert (trans->splits);
-    assert (trans->splits[0]);
-  
+    assert (trans->splits->data);
+
     /* lets find out if we are dealing with multiple currencies,
      * and which one(s) all of the splits have in common.  */
     ra = split->acc->currency;
@@ -1183,9 +1152,11 @@ xaccSplitRebalance (Split *split)
     base_currency = FindCommonCurrency (trans->splits, ra, rb);
 
     if (!base_currency) {
+      GList *node;
       PERR ("no common split currencies\n");
-      s = trans->splits[0];
-      while (s) {
+      for (node = trans->splits; node; node = node->next) {
+        Split *s = node->data;
+
         if (s->acc) {
           PERR ("\taccount=%s currency=%s security=%s\n",
                 s->acc->accountName, 
@@ -1194,47 +1165,49 @@ xaccSplitRebalance (Split *split)
         } else {
           PERR ("\t*** No parent account *** \n");
         }
-        i++; s = trans->splits[i];
       }
       assert (0);
       return;
     }
   } else {
     assert (trans->splits);
-    assert (trans->splits[0]);
+    assert (trans->splits->data);
   }
 
-  if (split == trans->splits[0]) {
+  if (split == trans->splits->data) {
+    Split *s;
+
     /* The indicated split is the source split.
      * Pick a destination split (by default, 
      * the first destination split), and force 
      * the total on it. 
      */
 
-    s = trans->splits[1];
+    s = g_list_nth_data (trans->splits, 1);
     if (s) {
       /* the new value of the destination split will be the result.  */
       value = ComputeValue (trans->splits, s, base_currency);
 
       /* what do we do if the value is different in the denominator
        * than the one for the account? */
-      
+
       /* KLUDGE -- bg */
       xaccSplitSetBaseValue (s, 
                              gnc_numeric_neg(value), 
                              base_currency);
       MARK_SPLIT (s);
       xaccAccountRecomputeBalance (s->acc); 
-
     } 
     else {
+      Split *s;
+
       /* There are no destination splits !! 
        * Either this is allowed, in which case 
        * we just blow it off, or its forbidden,
        * in which case we force a balancing split 
        * to be created.
        */
-      
+
       if (force_double_entry) {
         if (! gnc_numeric_zero_p(split->damount)) {
           s = xaccMallocSplit ();
@@ -1254,20 +1227,21 @@ xaccSplitRebalance (Split *split)
 
           s->memo    = g_strdup (split->memo);
           s->action  = g_strdup (split->action);
-          
         }
       }
     }
   } 
   else {
-    
+    Split *s;
+
     /* The indicated split is a destination split.
      * Compute grand total of all destination splits,
      * and force the source split to balance.
      */
-    s = trans->splits[0];
+
+    s = trans->splits->data;
     value = ComputeValue (trans->splits, s, base_currency);
-    
+
     /* KLUDGE -- bg */
     xaccSplitSetBaseValue (s, 
                            gnc_numeric_neg(value), 
@@ -1275,14 +1249,13 @@ xaccSplitRebalance (Split *split)
     MARK_SPLIT (s);
     xaccAccountRecomputeBalance (s->acc); 
   }
-  
+
   /* hack alert -- if the "force-double-entry" flag is set,
    * we should check to make sure that every split belongs
    * to some account.  If any of them don't, force them 
    * into the current account. If there's not current account,
    * force them into a lost & found account */
   /* hack alert -- implement the above */
-
 }
 
 /********************************************************************\
@@ -1327,9 +1300,8 @@ xaccTransBeginEdit (Transaction *trans, gboolean defer)
 void
 xaccTransCommitEdit (Transaction *trans)
 {
-   int i;
+   GList *node;
    Split *split;
-   Account *acc;
    Backend *be;
 
    if (!trans) return;
@@ -1341,8 +1313,7 @@ xaccTransCommitEdit (Transaction *trans)
     * has no splits in it, in which case we delete the transaction and
     * return.  
     */
-   split = trans->splits[0];
-   if (!split || (trans->open & BEING_DESTROYED))
+   if (!trans->splits || (trans->open & BEING_DESTROYED))
    {
       PINFO ("delete trans at addr=%p\n", trans);
       /* Make a log in the journal before destruction.  */
@@ -1351,6 +1322,8 @@ xaccTransCommitEdit (Transaction *trans)
       xaccFreeTransaction (trans);
       return;
    }
+
+   split = trans->splits->data;
 
    /* try to get the sorting order lined up according to 
     * when the user typed things in.  */
@@ -1362,19 +1335,20 @@ xaccTransCommitEdit (Transaction *trans)
    }
 
    /* Alternately the transaction may have only one split in 
-    * it, in which case ... that's OK if and only if the split has no 
-    * value (i.e. is only recording a price).  Otherwise, a single
+    * it, in which case that's OK if and only if the split has no 
+    * value (i.e. is only recording a price). Otherwise, a single
     * split with a value can't possibly balance, thus violating the 
     * rules of double-entry, and that's way bogus. So create 
     * a matching opposite and place it either here (if force==1), 
     * or in some dummy account (if force==2).
     */
    if ((1 == force_double_entry) &&
-       (NULL == trans->splits[1]) && (!gnc_numeric_zero_p(split->damount))) {
+       (NULL == g_list_nth(trans->splits, 1)) &&
+       (!gnc_numeric_zero_p(split->damount))) {
      Split * s = xaccMallocSplit();
      xaccTransAppendSplit (trans, s);
      xaccAccountInsertSplit (split->acc, s);
-     xaccSplitSetMemo  (s, split->memo);
+     xaccSplitSetMemo (s, split->memo);
      xaccSplitSetAction (s, split->action);
      xaccSplitSetShareAmount(s, gnc_numeric_neg(split->damount));
      xaccSplitSetValue(s, gnc_numeric_neg(split->value));
@@ -1407,23 +1381,15 @@ xaccTransCommitEdit (Transaction *trans)
    /* ------------------------------------------------- */
    /* Make sure all associated splits are in proper order
     * in their accounts. */
-   i=0;
-   split = trans->splits[i];
-   while (split) {
-      acc = split ->acc;
-      xaccAccountFixSplitDateOrder(acc, trans->splits[i]);
-      i++;
-      split = trans->splits[i];
+   for (node = trans->splits; node; node = node->next) {
+     split = node->data;
+     xaccAccountFixSplitDateOrder(split->acc, split);
    }
 
    /* Recompute the account balances. */
-   i=0;
-   split = trans->splits[i];
-   while (split) {
-      acc = split->acc;
-      xaccAccountRecomputeBalance (acc); 
-      i++;
-      split = trans->splits[i];
+   for (node = trans->splits; node; node = node->next) {
+     split = node->data;
+     xaccAccountRecomputeBalance (split->acc); 
    }
 
    trans->open = 0;
@@ -1441,9 +1407,8 @@ void
 xaccTransRollbackEdit (Transaction *trans)
 {
    Transaction *orig;
-   Split *s, *so;
-   Account * acc;
-   int force_it=0, mismatch=0, i;
+   int force_it=0, mismatch=0;
+   int i;
 
    if (!trans) return;
 
@@ -1476,79 +1441,91 @@ xaccTransRollbackEdit (Transaction *trans)
     * forcing will suck memory cycles.  So instead we'll try the gentle 
     * approach first.  Note that even in the gentle approach, the 
     * CheckDateOrder routine could be cpu-cyle brutal, so it maybe 
-    * it could use some tuning ...
+    * it could use some tuning.
     */
    if (trans->open & BEING_DESTROYED) {
       force_it = 1;
       mismatch = 0;
-   } else  {
-      i=0;
-      s = trans->splits[0];
-      so = orig->splits[0];
-      while (s && so) {
+   }
+   else  {
+      GList *node;
+      GList *node_orig;
+      Split *s, *so;
+
+      s = so = NULL;
+
+      for (i = 0, node = trans->splits, node_orig = orig->splits ;
+           node && node_orig ;
+           i++, node = node->next, node_orig = node_orig->next) {
+         s = node->data;
+         so = node_orig->data;
+
          if (so->acc != s->acc) { force_it = 1;  mismatch=i; break; }
-   
+
 #define HONKY_CAT(val) { g_free(s->val); s->val=so->val; so->val=NULL; }
 
          HONKY_CAT (action);
          HONKY_CAT (memo);
-   
+
          s->reconciled  = so->reconciled;
          s->damount     = so->damount;
          s->value       = so->value;
-         
+
          s->date_reconciled.tv_sec  = so->date_reconciled.tv_sec;
          s->date_reconciled.tv_nsec = so->date_reconciled.tv_nsec;
-         
+
          /* do NOT check date order until all of the other fields 
           * have been properly restored */
          xaccAccountFixSplitDateOrder (s->acc, s); 
          MARK_SPLIT (s);
          xaccAccountRecomputeBalance (s->acc);
-         i++;
-         s = trans->splits[i];
-         so = orig->splits[i];
       }
+
       if (so != s) { force_it = 1; mismatch=i; }
    }
-   
+
    /* OK, if force_it got set, we'll have to tough it out and brute-force
     * the rest of the way.  Clobber all the edited splits, add all new splits.
     * Unfortunately, this can suck up CPU cycles in the Remove/Insert routines.
     */  
    if (force_it) {
-      i=0; s = trans->splits[i];
-      while (s && (i<mismatch)) {
-         xaccFreeSplit (orig->splits[i]);
-         orig->splits[i] = s;
-         i++;
-         s = trans->splits[i];
+      GList *node;
+
+      for (i = 0, node = trans->splits ;
+           node && i < mismatch ;
+           i++, node = node->next) {
+         Split *s = node->data;
+         GList *node_orig;
+
+         node_orig = g_list_nth (orig->splits, i);
+         xaccFreeSplit (node_orig->data);
+         node_orig->data = s;
       }
-      i=mismatch; s = trans->splits[i];
-      while (s) {
-         acc = s->acc;
+
+      for (node = g_list_nth (trans->splits, mismatch) ;
+           node ; node = node->next) {
+         Split *s = node->data;
+
          MARK_SPLIT (s);
-         xaccAccountRemoveSplit (acc, s);
-         xaccAccountRecomputeBalance (acc);
+         xaccAccountRemoveSplit (s->acc, s);
+         xaccAccountRecomputeBalance (s->acc);
          xaccRemoveEntity(&s->guid);
          xaccFreeSplit (s);
-         i++;
-         s =  trans->splits[i];
       }
-      g_free (trans->splits);
+
+      g_list_free (trans->splits);
 
       trans->splits = orig->splits;
       orig->splits = NULL;
 
-      i=mismatch; s = trans->splits[i];
-      while (s) {
-         acc = s->acc;
+      for (node = g_list_nth (trans->splits, mismatch) ;
+           node ; node = node->next) {
+         Split *s = node->data;
+
          MARK_SPLIT (s);
          xaccStoreEntity(s, &s->guid, GNC_ID_SPLIT);
-         xaccAccountInsertSplit (acc, s);
-         xaccAccountRecomputeBalance (acc);
-         i++;
-         s = trans->splits[i];
+         xaccAccountInsertSplit (s->acc, s);
+         xaccAccountRecomputeBalance (s->acc);
       }
    }
 
@@ -1575,28 +1552,28 @@ xaccTransIsOpen (Transaction *trans)
 void
 xaccTransDestroy (Transaction *trans)
 {
-   int i;
-   Split *split;
-   Account *acc;
+   GList *node;
 
    if (!trans) return;
    CHECK_OPEN (trans);
    trans->open |= BEING_DESTROYED;
    xaccTransWriteLog (trans, 'D');
 
-   i=0;
-   split = trans->splits[i];
-   while (split) {
+   for (node = trans->splits; node; node = node->next) {
+      Split *split = node->data;
+
       MARK_SPLIT (split);
-      acc = split ->acc;
-      xaccAccountRemoveSplit (acc, split);
-      xaccAccountRecomputeBalance (acc); 
+
+      xaccAccountRemoveSplit (split->acc, split);
+      xaccAccountRecomputeBalance (split->acc); 
       xaccRemoveEntity(&split->guid);
       xaccFreeSplit (split);
-      trans->splits[i] = NULL;
-      i++;
-      split = trans->splits[i];
+
+      node->data = NULL;
    }
+
+   g_list_free (trans->splits);
+   trans->splits = NULL;
 
    xaccRemoveEntity(&trans->guid);
 
@@ -1605,16 +1582,28 @@ xaccTransDestroy (Transaction *trans)
 }
 
 /********************************************************************\
+ * TransRemoveSplit is an engine private function and does not/should
+ * not cause any rebalancing to occur.
+\********************************************************************/
+
+static void
+xaccTransRemoveSplit (Transaction *trans, Split *split) 
+{
+  if (trans == NULL)
+    return;
+
+  trans->splits = g_list_remove (trans->splits, split);
+}
+
+/********************************************************************\
 \********************************************************************/
 
 void
 xaccSplitDestroy (Split *split)
 {
-   Account *acc;
    Transaction *trans;
-   int numsplits = 0;
-   int ismember = 0;
-   Split *s;
+   gboolean ismember = FALSE;
+   GList *node;
 
    if (!split) return;
 
@@ -1625,14 +1614,16 @@ xaccSplitDestroy (Split *split)
 
    xaccRemoveEntity(&split->guid);
 
-   numsplits = 0;
-   s = trans->splits[0];
-   while (s) {
-      MARK_SPLIT(s);
-      if (s == split) ismember = 1;
-      numsplits ++;
-      s = trans->splits[numsplits];
+   for (node = trans->splits; node; node = node->next)
+   {
+     Split *s = node->data;
+
+     MARK_SPLIT(s); /* why??? */
+
+     if (s == split)
+       ismember = TRUE;
    }
+
    assert (ismember);
 
    /* If the account has three or more splits, 
@@ -1646,14 +1637,12 @@ xaccSplitDestroy (Split *split)
     */
    MARK_SPLIT (split);
    xaccTransRemoveSplit (trans, split);
-   acc = split->acc;
-   xaccAccountRemoveSplit (acc, split);
-   xaccAccountRecomputeBalance (acc);
+   xaccAccountRemoveSplit (split->acc, split);
+   xaccAccountRecomputeBalance (split->acc);
    xaccFreeSplit (split);
 
-   if (2 < numsplits) {
-      xaccSplitRebalance (trans->splits[0]);
-   }
+   if (g_list_length (trans->splits) > 1)
+     xaccTransRebalance (trans);
 }
 
 /********************************************************************\
@@ -1662,8 +1651,6 @@ xaccSplitDestroy (Split *split)
 void
 xaccTransAppendSplit (Transaction *trans, Split *split) 
 {
-   int i, num;
-   Split **oldarray;
    Transaction *oldtrans;
 
    if (!trans) return;
@@ -1674,54 +1661,17 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
    /* first, make sure that the split isn't already inserted 
     * elsewhere. If so, then remove it. */
    oldtrans = split->parent;
-   if (oldtrans) {
+   if (oldtrans)
       xaccTransRemoveSplit (oldtrans, split);
-      xaccTransRebalance (oldtrans);
-   }
-   
+
    /* now, insert the split into the array */
    split->parent = trans;
-   num = xaccCountSplits (trans->splits);
-
-   oldarray = trans->splits;
-   trans->splits = (Split **) g_malloc ((num+2)*sizeof(Split *));
-   for (i=0; i<num; i++) {
-      (trans->splits)[i] = oldarray[i];
-   }
-   trans->splits[num] = split;
-   trans->splits[num+1] = NULL;
-
-   g_free (oldarray);
+   trans->splits = g_list_append (trans->splits, split);
 
    /* force double entry to always be consistent */
    xaccSplitRebalance (split);
-}
-
-/********************************************************************\
- * TransRemoveSplit is an engine private function and does not/should
- * not cause any rebalancing to occur.
-\********************************************************************/
-
-
-void
-xaccTransRemoveSplit (Transaction *trans, Split *split) 
-{
-   int i=0, n=0;
-   Split *s;
-
-   if (!split) return;
-   if (!trans) return;
-   split->parent = NULL;
-
-   s = trans->splits[0];
-   while (s) {
-     trans->splits[i] = trans->splits[n];
-     if (split == s) { i--; }
-     i++;
-     n++;
-     s = trans->splits[n];
-   }
-   trans->splits[i] = NULL;
+   if (oldtrans && oldtrans != trans)
+     xaccTransRebalance (oldtrans);
 }
 
 /********************************************************************\
@@ -1864,25 +1814,6 @@ xaccTransOrder (Transaction *ta, Transaction *tb)
 /********************************************************************\
 \********************************************************************/
 
-int
-xaccCountTransactions (Transaction **tarray)
-{
-   Transaction *trans;
-   int ntrans = 0;
-
-   if (!tarray) return 0;
-
-   trans = tarray[0];
-   while (trans) {
-      ntrans ++;
-      trans = tarray[ntrans];
-   }
-   return ntrans;
-}
-
-/********************************************************************\
-\********************************************************************/
-
 void
 xaccTransSetDateSecs (Transaction *trans, time_t secs)
 {
@@ -1991,50 +1922,6 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
    MarkChanged (trans);
 }
 
-#define SET_TRANS_FIELD(trans,field,value)			\
-{								\
-   char * tmp;							\
-   if (!trans) return;						\
-   CHECK_OPEN (trans);						\
-								\
-   /* the engine *must* always be internally consistent */	\
-   assert (trans->splits);					\
-   assert (trans->splits[0]);					\
-								\
-   /* there must be two splits if value of one non-zero */	\
-   if (force_double_entry) {					\
-     if (! gnc_numeric_zero_p(trans->splits[0]->damount)) {     \
-        assert (trans->splits[1]);				\
-     }								\
-   }								\
-								\
-   tmp = g_strdup (value);					\
-   g_free (trans->splits[0]->field);				\
-   trans->splits[0]->field = tmp;				\
-   MARK_SPLIT (trans->splits[0]);				\
-								\
-   /* If there are just two splits, then keep them in sync. */	\
-   if (NULL != trans->splits[1]) {				\
-      if (NULL == trans->splits[2]) {				\
-         g_free (trans->splits[1]->field);			\
-         trans->splits[1]->field = g_strdup (tmp);		\
-         MARK_SPLIT (trans->splits[1]);				\
-      }								\
-   }								\
-}
-
-void
-xaccTransSetMemo (Transaction *trans, const char *mimeo)
-{
-   SET_TRANS_FIELD (trans, memo, mimeo);
-}
-
-void
-xaccTransSetAction (Transaction *trans, const char *actn)
-{
-   SET_TRANS_FIELD (trans, action, actn);
-}
-
 /********************************************************************\
 \********************************************************************/
 
@@ -2042,12 +1929,9 @@ Split *
 xaccTransGetSplit (Transaction *trans, int i) 
 {
    if (!trans) return NULL;
-   if (0 > i) return NULL;
-   /* hack alert - should check if i > sizeof array */
-   if (trans->splits) {
-      return (trans->splits[i]);
-   }
-   return NULL;
+   if (i < 0) return NULL;
+
+   return g_list_nth_data (trans->splits, i);
 }
 
 const char *
@@ -2092,11 +1976,11 @@ xaccTransGetDateEnteredTS (Transaction *trans, Timespec *ts)
    *ts = (trans->date_entered);
 }
 
-int 
+int
 xaccTransCountSplits (Transaction *trans)
 {
    if (!trans) return 0;
-   return (xaccCountSplits (trans->splits));
+   return g_list_length (trans->splits);
 }
 
 /********************************************************************\
@@ -2256,28 +2140,25 @@ xaccSplitGetSharePrice (Split * split) {
 Account *
 xaccGetAccountByName (Transaction *trans, const char * name)
 {
-   Split *s;
    Account *acc = NULL;
-   int i;
+   GList *node;
 
    if (!trans) return NULL;
    if (!name) return NULL;
 
    /* walk through the splits, looking for one, any one, that has a
     * parent account */
-   i = 0;
-   s = trans->splits[0];
-   while (s) {
-      acc = s->acc;
-      if (acc) break;
-      i++;
-      s = trans->splits[i];
+   for (node = trans->splits; node; node = node->next)
+   {
+     Split *s = node->data;
+
+     acc = s->acc;
+     if (acc) break;
    }
    
-   if (!acc) return 0x0;
+   if (!acc) return NULL;
 
-   acc = xaccGetPeerAccountFromName (acc, name);
-   return acc;
+   return xaccGetPeerAccountFromName (acc, name);
 }
 
 /********************************************************************\
@@ -2287,28 +2168,25 @@ Account *
 xaccGetAccountByFullName (Transaction *trans, const char * name,
                           const char separator)
 {
-   Split *s;
    Account *acc = NULL;
-   int i;
+   GList *node;
 
    if (!trans) return NULL;
    if (!name) return NULL;
 
    /* walk through the splits, looking for one, any one, that has a
     * parent account */
-   i = 0;
-   s = trans->splits[0];
-   while (s) {
-      acc = s->acc;
-      if (acc) break;
-      i++;
-      s = trans->splits[i];
+   for (node = trans->splits; node; node = node->next)
+   {
+     Split *s = node->data;
+
+     acc = s->acc;
+     if (acc) break;
    }
    
    if (!acc) return NULL;
 
-   acc = xaccGetPeerAccountFromFullName (acc, name, separator);
-   return acc;
+   return xaccGetPeerAccountFromFullName (acc, name, separator);
 }
 
 /********************************************************************\
@@ -2317,17 +2195,22 @@ xaccGetAccountByFullName (Transaction *trans, const char * name,
 Split *
 xaccGetOtherSplit (Split *split)
 {
-   Transaction *trans;
+  Split *s1, *s2;
+  Transaction *trans;
 
-   if (!split) return NULL;
-   trans = split->parent;
+  if (!split) return NULL;
+  trans = split->parent;
 
-   /* if more than two splits, return NULL */
-   if ((trans->splits[1]) && (trans->splits[2])) return NULL;
+  if (g_list_length (trans->splits) != 2)
+    return NULL;
 
-   if (split == trans->splits[0]) return (trans->splits[1]);
-   if (split == trans->splits[1]) return (trans->splits[0]);
-   return NULL;  /* never reached, in theory */
+  s1 = g_list_nth_data (trans->splits, 0);
+  s2 = g_list_nth_data (trans->splits, 1);
+
+  if (s1 == split)
+    return s2;
+
+  return s1;
 }
 
 /********************************************************************\
@@ -2349,13 +2232,6 @@ xaccIsPeerSplit (Split *sa, Split *sb)
 
 Split *
 IthSplit (Split **list, int i)
-{
-   if (!list || 0 > i) return NULL;
-   return list[i];
-}
-
-Transaction *
-IthTransaction (Transaction **list, int i)
 {
    if (!list || 0 > i) return NULL;
    return list[i];

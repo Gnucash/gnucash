@@ -172,16 +172,6 @@ void          xaccTransSetDateEnteredTS (Transaction *trans,
 void          xaccTransSetNum (Transaction *trans, const char *num);
 void          xaccTransSetDescription (Transaction *trans, const char *desc);
 
-/* The xaccTransSetMemo() and xaccTransSetAction() methods are
- * convenience routines to keep the memo and action fields
- * of two-split transactions in sync.  If the transaction has
- * precisely two splits, then these routines will set the memo 
- * and action of both splits.   Otherwise, they will set the
- * memo and action of the first split (source split) only.
- */
-void          xaccTransSetMemo (Transaction *trans, const char *memo);
-void          xaccTransSetAction (Transaction *trans, const char *action);
-
 /* The xaccTransAppendSplit() method will append the indicated 
  *    split to the collection of splits in this transaction.
  *    If the split is already a part of another transaction,
@@ -473,10 +463,6 @@ int  xaccSplitDateOrder (Split *sa, Split *sb);
 /********************************************************************\
  * Miscellaneous utility routines.
 \********************************************************************/
-/*
- * count the number of transactions in the null-terminated array
- */
-int xaccCountTransactions (Transaction **tarray);
 
 /* count the number of splits in the indicated array */
 int xaccCountSplits (Split **sarray);
@@ -507,12 +493,11 @@ Split * xaccGetOtherSplit (Split *split);
  */
 int xaccIsPeerSplit (Split *split_1, Split *split_2);
 
-/* The IthSplit() and IthTransaction() routines merely dereference
- *    the lists supplied as arguments; i.e. they return list[i].
- *    These routines are needed by the perl swig wrappers, which
- *    are unable to dereference on their own.
+/* The IthSplit() routine merely dereferences
+ *    the list supplied as argument; i.e. it returns list[i].
+ *    This routine is needed by the perl swig wrappers, which
+ *    is unable to dereference on their own.
  */
-Transaction * IthTransaction (Transaction **tarray, int i);
 Split       * IthSplit       (Split **sarray,       int i);
 
 #endif /* __XACC_TRANSACTION_H__ */

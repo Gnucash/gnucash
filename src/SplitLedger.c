@@ -3230,9 +3230,10 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 
     xaccTransBeginEdit (trans, TRUE);
     xaccTransSetDateSecs (trans, info->last_date_entered);
+    blank_split = xaccMallocSplit ();
+    xaccTransAppendSplit (trans, blank_split);
     xaccTransCommitEdit (trans);
 
-    blank_split = xaccTransGetSplit (trans, 0);
     info->blank_split_guid = *xaccSplitGetGUID (blank_split);
 
     info->blank_split_edited = FALSE;
