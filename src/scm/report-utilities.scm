@@ -238,6 +238,81 @@
 	  ('reset (reset-all))
           (else (gnc:warn "bad dr-cr-collector action: " action)))))))
 
+;; This is a collector of values -- works similar to the stats-collector but
+;; has much less overhead. It is used by the currency-collector (see below).
+(define (make-value-collector)
+  (let ;;; values
+      ((value 0))
+    (lambda (action amount)  ;;; Dispatch function
+      (case action
+	('add (if (number? amount) 
+		  (set! value (+ amount value))))
+	('total value)
+	(else (gnc:warn "bad value-collector action: " action))))))
+
+;; A currency collector. This is intended to handle multiple currencies' 
+;; amounts. The amounts are accumulated via 'add, the result can be 
+;; fetched via 'format.
+;; Example: (define a (make-currency-collector)) ... (a 'add 'USD 12) ...
+;; (a 'format (lambda(x y)(list x y)) #f) 
+;; gives you something like ((USD 123.4) (DEM 12.21) (FRF -23.32))
+;;
+;; The functions:
+;;   'add <currency> <amount>: Add the given amount to the 
+;;       appropriate currencies' total amount.
+;;   'format <fn> #f: Call the function <fn> (where fn takes two arguments) for 
+;;       each currency with the arguments <currency> and the corresponding 
+;;       total <amount>. The results is a list of each call's result.
+;;   'merge <currency-collector> #f: Merge the given other currency-collector into
+;;       this one, adding all currencies' amounts, respectively.
+;;   'reset #f #f: Delete everything that has been accumulated 
+;;       (even the fact that any currency showed up at all).
+;;   (internal) 'list #f #f: get the association list of currency->value-collector
+
+(define (make-currency-collector)
+  (let 
+      ;; the association list of (currency -> value-collector) pairs.
+      ((currencylist '()))
+    
+    ;; helper function to add a currency->value pair to our list. 
+    ;; If no pair with this currency exists, we will create one.
+    (define (add-currency-value currency value)
+      ;; lookup the corresponding pair
+      (let ((pair (assoc currency currencylist)))
+	(if (not pair)
+	    (begin
+	      ;; create a new pair, using the value-collector
+	      (set! pair (list currency (make-value-collector)))
+	      ;; and add it to the alist
+	      (set! currencylist (cons pair currencylist))))
+	;; add the value
+	((cadr pair) 'add value)))
+    
+    ;; helper function to walk an association list, adding each
+    ;; (currency -> collector) pair to our list
+    (define (add-currency-clist clist)
+      (cond ((null? clist) '())
+	    (else (add-currency-value (caar clist) 
+				      ((cadar clist) 'total #f))
+		  (add-currency-clist (cdr clist)))))
+    
+    ;; helper function walk the association list doing a callback on
+    ;; each key-value pair.
+    (define (process-currency-list fn clist)
+      (cond ((null? clist) '())
+	    (else (cons (fn (caar clist) ((cadar clist) 'total #f))
+			(process-currency-list fn (cdr clist))))))
+    
+    ;; Dispatch function
+    (lambda (action currency amount)
+      (case action
+	('add (add-currency-value currency amount))
+	('merge (add-currency-clist (currency 'list #f #f)))
+	('format (process-currency-list currency currencylist))
+	('reset (set! currencylist '()))
+	('list currencylist) ; this one is only for internal use
+	(else (gnc:warn "bad currency-collector action: " action))))))
+
 ;; Add x to list lst if it is not already in there
 (define (addunique lst x)
   (if (null? lst)  
