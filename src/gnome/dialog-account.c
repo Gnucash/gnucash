@@ -366,7 +366,7 @@ gnc_account_change_currency_security(Account *account,
   gboolean new_security;
   GSList *stack;
 
-  if ((account == NULL) || (currency == NULL) || (security == NULL))
+  if (account == NULL)
     return;
 
   old_currency = xaccAccountGetCurrency(account);
@@ -416,16 +416,17 @@ gnc_account_change_currency_security(Account *account,
       if (trans == NULL)
         continue;
 
-      if (xaccTransIsCommonCurrency(trans, currency))
+      if (xaccTransIsCommonExclSCurrency(trans, currency, split))
         continue;
 
-      if (xaccTransIsCommonCurrency(trans, security))
+      if (xaccTransIsCommonExclSCurrency(trans, security, split))
         continue;
 
       j = 0;
       while ((s = xaccTransGetSplit(trans, j++)) != NULL)
       {
         gboolean add_it = FALSE;
+        const char *commodity;
         Account *a;
 
         a = xaccSplitGetAccount(s);
@@ -439,17 +440,31 @@ gnc_account_change_currency_security(Account *account,
         if (g_hash_table_lookup(change_security, a) != NULL)
           continue;
 
-        if (new_currency &&
-            (safe_strcmp(old_currency, xaccAccountGetCurrency(a)) == 0))
+        commodity = xaccAccountGetCurrency(a);
+
+        if (new_currency && (safe_strcmp(old_currency, commodity) == 0))
         {
-          g_hash_table_insert(change_currency, a, (char *) currency);
+          g_hash_table_insert(change_currency, a, (gpointer) currency);
           add_it = TRUE;
         }
 
-        if (new_security &&
-            (safe_strcmp(old_security, xaccAccountGetSecurity(a)) == 0))
+        if (new_security && (safe_strcmp(old_security, commodity) == 0))
         {
-          g_hash_table_insert(change_security, a, (char *) security);
+          g_hash_table_insert(change_currency, a, (gpointer) security);
+          add_it = TRUE;
+        }
+
+        commodity = xaccAccountGetSecurity(a);
+
+        if (new_security && (safe_strcmp(old_security, commodity) == 0))
+        {
+          g_hash_table_insert(change_security, a, (gpointer) security);
+          add_it = TRUE;
+        }
+
+        if (new_currency && (safe_strcmp(old_currency, commodity) == 0))
+        {
+          g_hash_table_insert(change_security, a, (gpointer) currency);
           add_it = TRUE;
         }
 
