@@ -27,6 +27,7 @@
    ws
    (lambda (wrapset client-wrapset) 
      (list
+      "#include <dialog-options.h>\n"
       "#include <dialog-utils.h>\n"
       "#include <druid-utils.h>\n"
       "#include <gnc-amount-edit.h>\n"
@@ -62,6 +63,7 @@
 
   (gw:wrap-as-wct ws '<gnc:UIWidget> "gncUIWidget" "const gncUIWidget")
   (gw:wrap-as-wct ws '<gnc:mdi-info*> "GNCMDIInfo*" "const GNCMDIInfo*")
+  (gw:wrap-as-wct ws '<gnc:OptionWin*> "GNCOptionWin*" "const GNCOptionWin*")
   (gw:wrap-as-wct ws '<gnc:url-type> "URLType" "const URLType")
 
   ;;
@@ -83,6 +85,38 @@
   (gw:wrap-value ws 'gnc:url-type-price '<gnc:url-type> "URL_TYPE_PRICE")
   (gw:wrap-value ws 'gnc:url-type-other '<gnc:url-type> "URL_TYPE_OTHER")
 
+
+  (gw:wrap-function
+   ws
+   'gnc:option-dialog-new
+   '<gnc:OptionWin*>
+   "gnc_options_dialog_new"
+   '((<gw:bool> make-toplevel) ((<gw:mchars> caller-owned) title))
+   "Create a new option dialog")
+
+  (gw:wrap-function
+   ws
+   'gnc:option-dialog-destroy
+   '<gw:void>
+   "gnc_options_dialog_destroy"
+   '((<gnc:OptionWin*> option-window))
+   "Destroy an option dialog")
+
+  (gw:wrap-function
+   ws
+   'gnc:option-dialog-build-contents
+   '<gw:void>
+   "gnc_build_options_dialog_contents"
+   '((<gnc:OptionWin*> option-window) (<gnc:OptionDB*> option-db))
+   "Fill in the option window with the provided option db")
+
+  (gw:wrap-function
+   ws
+   'gnc:option-dialog-set-callbacks
+   '<gw:void>
+   "gnc_options_dialog_set_scm_callbacks"
+   '((<gnc:OptionWin*> option-window) (<gw:scm> apply-cb) (<gw:scm> close-cb))
+   "Setup callbacks for the option window.")
 
   (gw:wrap-function
    ws

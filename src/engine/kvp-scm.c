@@ -111,12 +111,5 @@ gnc_kvp_value_ptr_to_scm(kvp_value* val)
 void
 gnc_kvp_frame_delete_at_path (kvp_frame *frame, GSList *key_path)
 {
-  kvp_value *val;
-
-  val = kvp_frame_get_slot_path_gslist (frame, key_path);
-  if (!val) return;
-  if (kvp_value_get_type (val) == KVP_TYPE_FRAME) {
-    frame = kvp_value_get_frame (val);
-    kvp_frame_delete (frame);
-  }
+  kvp_frame_set_slot_path_gslist (frame, NULL, key_path);
 }

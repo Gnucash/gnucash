@@ -2734,3 +2734,59 @@ void gnc_options_ui_initialize (void)
   /* add known types */
   gnc_options_initialize_options ();
 }
+
+struct scm_cb
+{
+  SCM	apply_cb;
+  SCM	close_cb;
+};
+
+static void
+scm_apply_cb (GNCOptionWin *win, gpointer data)
+{
+  struct scm_cb *cbdata = data;
+
+  gnc_option_db_commit (win->option_db);
+  if (cbdata->apply_cb != SCM_BOOL_F) {
+    gh_call0 (cbdata->apply_cb);
+  }
+}
+
+static void
+scm_close_cb (GNCOptionWin *win, gpointer data)
+{
+  struct scm_cb *cbdata = data;
+
+  if (cbdata->close_cb != SCM_BOOL_F) {
+    gh_call0 (cbdata->close_cb);
+    scm_unprotect_object (cbdata->close_cb);
+  }
+
+  if (cbdata->apply_cb != SCM_BOOL_F)
+    scm_unprotect_object (cbdata->apply_cb);
+
+  g_free (cbdata);
+}
+
+/* Both apply_cb and close_cb should be scheme functions with 0 arguments.
+ * References to these functions will be held until the close_cb is called
+ */
+void
+gnc_options_dialog_set_scm_callbacks (GNCOptionWin *win, SCM apply_cb,
+				      SCM close_cb)
+{
+  struct scm_cb *cbdata;
+
+  cbdata = g_new0 (struct scm_cb, 1);
+  cbdata->apply_cb = apply_cb;
+  cbdata->close_cb = close_cb;
+
+  if (apply_cb != SCM_BOOL_F)
+    scm_protect_object (cbdata->apply_cb);
+
+  if (close_cb != SCM_BOOL_F)
+    scm_protect_object (cbdata->close_cb);
+
+  gnc_options_dialog_set_apply_cb (win, scm_apply_cb, cbdata);
+  gnc_options_dialog_set_close_cb (win, scm_close_cb, cbdata);
+}

@@ -44,6 +44,8 @@
                   '<gnc:OptionChangeCallback>
                   "GNCOptionChangeCallback" "const GNCOptionChangeCallback")
 
+  (gw:wrap-as-wct ws '<gnc:OptionDB*> "GNCOptionDB*" "const GNCOptionDB*")
+
   (gw:wrap-function
    ws
    'gnc:get-current-group
@@ -108,6 +110,22 @@
    "gnc_gettext_helper"
    '(((<gw:mchars> caller-owned const) str))
    "Returns the translated version of string")
+
+  (gw:wrap-function
+   ws
+   'gnc:option-db-new
+   '<gnc:OptionDB*>
+   "gnc_option_db_new"
+   '((<gw:scm> guile-options))
+   "Create an option DB with the set of guile options")
+
+  (gw:wrap-function
+   ws
+   'gnc:option-db-destroy
+   '<gw:void>
+   "gnc_option_db_destroy"
+   '((<gnc:OptionDB*> option-db))
+   "Destroy the OptionDB")
 
   (gw:wrap-function
    ws

@@ -57,6 +57,13 @@ void gnc_show_options_dialog(void);
 void gnc_build_options_dialog_contents(GNCOptionWin *win,
                                        GNCOptionDB  *odb);
 
+/* Both apply_cb and close_cb should be scheme functions with 0 arguments.
+ * References to these functions will be held until the close_cb is called
+ */
+void gnc_options_dialog_set_scm_callbacks (GNCOptionWin *win,
+					   SCM apply_cb,
+					   SCM close_cb);
+
 /*****************************************************************/
 /* Option Registration                                           */
 

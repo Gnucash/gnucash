@@ -1136,11 +1136,14 @@
     (options-for-each
      (lambda (option)
        (let ((value (gnc:option-value option))
-	     (default-value (gnc:option-default-value option)))
+	     (default-value (gnc:option-default-value option))
+	     (section (gnc:option-section option))
+	     (name (gnc:option-name option)))
+	 (gnc:debug "value: " value "; default: " default-value
+		    "; section: " section "; name: " name)
 	 (if (not (equal? value default-value))
-	     (let ((section (gnc:option-section option))
-		   (name (gnc:option-name option))
-		   (save-fcn (gnc:option-scm->kvp option)))
+	     (let ((save-fcn (gnc:option-scm->kvp option)))
+	       (gnc:debug "save-fcn: " save-fcn)
 	       (if save-fcn
 		   (save-fcn kvp-frame (append key-path
 					       (list section name))))))))))
@@ -1152,7 +1155,7 @@
 	     (name (gnc:option-name option))
 	     (load-fcn (gnc:option-kvp->scm option)))
 	 (if load-fcn
-	     (load-fcn kcp-frame (append key-path
+	     (load-fcn kvp-frame (append key-path
 					(list section name))))))))
 
   (define (register-callback section name callback)
@@ -1251,7 +1254,9 @@
 (define (gnc:generate-restore-forms options options-string)
   ((options 'generate-restore-forms) options-string))
 
-(define (gnc:options-scm->kvp options kvp-frame key-path)
+(define (gnc:options-scm->kvp options kvp-frame key-path clear-kvp?)
+  (if clear-kvp?
+      (gnc:kvp-frame-delete-at-path kvp-frame key-path))
   ((options 'scm->kvp) kvp-frame key-path))
 
 (define (gnc:options-kvp->scm options kvp-frame key-path)

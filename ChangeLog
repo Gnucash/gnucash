@@ -12,6 +12,20 @@
 	* binary-import.scm: fix the book-opened-hook.
 	* main-window.scm: fix the book-opened/closed-hook calls
 	* main.scm: fix the book-opened/closed-hook calls	  
+
+	* gw-app-utils-spec.scm: wrap <gnc:OptionDB*>, option_db_new,
+	  option_db_destroy()
+	* options.scm: fix scm->kvp method; fix a typo; add clear-kvp?
+	  argument to gnc:options-scm->kvp for whether to clear out the
+	  kvp before saving it.
+	* business-gnome.scm: add code to test the kvp option-dialog
+	* kvp-scm.c: fix the delete_at_path() function to actually work right.
+	* dialog-options: create a function (and support routines) to 
+	  use SCM apply_cb and close_cb callback functions:
+	  options_dialog_set_callbacks()
+	* gw-gnome-utils-spec.scm: wrap <gnc:OptionWin*>, options_dialog_new(),
+	  options_dialog_destroy(), options_dialog_build_contents(), and
+	  options_dialog_set_callbacks()
 	
 2002-07-06  Derek Atkins  <derek@ihtfp.com>
 
