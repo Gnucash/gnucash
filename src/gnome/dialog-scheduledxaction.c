@@ -465,6 +465,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
          * Do checks on validity and such, interrupting the user if
          * things aren't right.
          *
+         * . support formulas [?!]
          * . balancing the SX if contain numeric-only formula data.
          *   . agreement with create-automagically/notification controls
          * X the 'will ever be valid' check should take num-occur vals into
@@ -1427,6 +1428,10 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
                 gtk_toggle_button_set_active( sxed->remindOpt, TRUE );
                 gtk_spin_button_set_value( sxed->remindSpin,
                                            (gfloat)daysInAdvance );
+        }
+
+        if ( sxed->newsxP ) {
+                gnc_sx_set_instance_count( sxed->sx, 1 );
         }
 
         /* populate the ledger */

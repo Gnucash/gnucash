@@ -64,6 +64,9 @@ struct gncp_SchedXaction
   gint            num_occurances_total;
   /* reminaing occurances are as-of the 'last_date'. */
   gint            num_occurances_remain;
+
+  /* the current instance-count of the SX. */
+  gint            instance_num;
   
   gboolean        autoCreateOption;
   gboolean        autoCreateNotify;

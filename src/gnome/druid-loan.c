@@ -30,6 +30,10 @@
 
 #include "druid-loan.h"
 
+#include "SchedXaction.h"
+#include "SX-ttinfo.h"
+#include "gnc-book-p.h"
+#include "gnc-book.h"
 #include "gnc-amount-edit.h"
 #include "gnc-account-sel.h"
 #include "gnc-component-manager.h"
@@ -53,7 +57,6 @@
 #  define ORIG_PRINC_GNE   "orig_princ_gne"
 #  define ORIG_PRINC_ENTRY "orig_princ_ent"
 #  define IRATE_SPIN       "irate_spin"
-#  define TYPE_OPT         "type_opt"
 #  define VAR_CONTAINER    "type_freq_frame"
 #  define START_DATE       "start_gde"
 #  define LENGTH_SPIN      "len_spin"
@@ -61,12 +64,11 @@
 #  define REMAIN_SPIN      "rem_spin"
 #define PG_OPTS "loan_opts_pg"
 #  define OPT_CONTAINER        "opt_vbox"
-#  define OPT_ESCROW           "opt_escrow"
+#  define OPT_ESCROW           "opt_escrow_cb"
 #  define OPT_ESCROW_CONTAINER "opt_escrow_hbox"
 #define PG_REPAYMENT "repayment_pg"
 #  define TXN_NAME       "txn_title"
 #  define REPAY_TABLE    "repay_table"
-#  define AMOUNT_GNE     "amount_gne"
 #  define AMOUNT_ENTRY   "amount_ent"
 #  define REMAINDER_OPT  "remain_opt"
 #  define FREQ_CONTAINER "freq_frame"
@@ -91,6 +93,8 @@
  *   . Frequency <- sensitive
  **/
 
+struct LoanDruidData_;
+
 /**
  * The data relating to a single "repayment option" -- a potential
  * [sub-]transaction in the repayment.
@@ -101,7 +105,7 @@ typedef struct RepayOptData_ {
         char *txnMemo;
         float amount;
         gboolean throughEscrowP;
-        //Account *to;
+        Account *to;
         Account *from; // If NULL { If throughEscrowP, then through escrowP;
                        //   else: undefined.
         FreqSpec *fs; // If NULL, part of repayment; otherwise: defined here.
@@ -119,9 +123,9 @@ typedef struct RepayOptDataDefault_ {
 
 static RepayOptDataDefault REPAY_DEFAULTS[] = {
      /* { name, default txn memo, throughEscrowP } */
-     { "Taxes",         "Tax Payment",           FALSE },
-     { "Insurance",     "Insurance Payment",     FALSE },
-     { "PMI",           "PMI Payment",           FALSE },
+     { "Taxes",         "Tax Payment",           TRUE  },
+     { "Insurance",     "Insurance Payment",     TRUE  },
+     { "PMI",           "PMI Payment",           TRUE  },
      { "Other Expense", "Miscellaneous Payment", FALSE },
      { NULL }
 };
@@ -130,6 +134,9 @@ static RepayOptDataDefault REPAY_DEFAULTS[] = {
  * The UI-side storage of the repayment options.
  **/
 typedef struct RepayOptUI_ {
+        /* must be stated this way [instead of 'LoanDruidData*'] because of
+         * forward decl. */
+        struct LoanDruidData_ *ldd;
         GtkCheckButton *optCb;
         GtkCheckButton *escrowCb;
         RepayOptData *optData;
@@ -138,7 +145,8 @@ typedef struct RepayOptUI_ {
 typedef enum {
         FIXED = 0,
         VARIABLE,
-        VARIABLE_5_1 = VARIABLE,
+        VARIABLE_3_1 = VARIABLE,
+        VARIABLE_5_1,
         VARIABLE_7_1,
         VARIABLE_10_1,
         /* ... FIXME */
@@ -163,6 +171,16 @@ typedef struct LoanData_ {
         int numPer;
         int numPerRemain;
         PeriodSize perSize;
+
+        char *repMemo;
+        char *repAmount;
+        Account *repFromAcct;
+        Account *repPriAcct;
+        Account *repIntAcct;
+        Account *escrowAcct;
+        int remainderChoice;
+        FreqSpec *repFreq;
+        GDate *repStartDate;
 
         int repayOptCount;
         RepayOptData **repayOpts;
@@ -201,16 +219,17 @@ typedef struct LoanDruidData_ {
 
         /* opt = options */
         GtkVBox *optVBox;
+        GtkCheckButton *optEscrowCb;
+        GtkHBox *optEscrowHBox;
+        GNCAccountSel *optEscrowGAS;
 
         /* rep = repayment */
         GtkEntry *repTxnName;
         GtkTable *repTable;
-        GnomeNumberEntry *repAmtGNE;
+        GtkEntry *repAmtEntry;
         GNCAccountSel *repAssetsFromGAS;
         GNCAccountSel *repPrincToGAS;
         GNCAccountSel *repIntToGAS;
-        GNCAccountSel *repEscrowToGAS;
-        GtkEntry *repAmtEntry;
         GtkOptionMenu *repRemainderOpt;
         GtkFrame *repFreqFrame;
         GNCFrequency *repGncFreq;
@@ -219,7 +238,8 @@ typedef struct LoanDruidData_ {
         GtkEntry *payTxnName;
         GnomeNumberEntry *payAmtGNE;
         GtkEntry *payAmtEntry;
-        GNCAccountSel *payAccountGAS;
+        GNCAccountSel *payAcctFromGAS;
+        GNCAccountSel *payAcctToGAS;
         GtkTable *payTable;
         GtkRadioButton *payTxnFreqPartRb;
         GtkRadioButton *payTxnFreqUniqRb;
@@ -235,42 +255,32 @@ static void ld_destroy( GtkObject *o, gpointer ud );
 
 static void ld_cancel_check( GnomeDruid *gd, LoanDruidData *ldd );
 
-static void ld_prm_type_change( GtkButton *b, gpointer ud );
+static void ld_prm_type_changed( GtkWidget *w, gint index, gpointer ud );
+
+static void ld_escrow_toggle( GtkToggleButton *tb, gpointer ud );
 static void ld_opt_toggled( GtkToggleButton *tb, gpointer ud );
 static void ld_opt_consistency( GtkToggleButton *tb, gpointer ud );
-static void ld_escrow_tog( GtkToggleButton *tb, gpointer ud );
+static void ld_escrow_toggled( GtkToggleButton *tb, gpointer ud );
 
 static void ld_pay_freq_toggle( GtkToggleButton *tb, gpointer ud );
 
 static gboolean ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static void     ld_info_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
-static gboolean ld_opts_next( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
+static gboolean ld_opts_tran( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static void     ld_opts_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static gboolean ld_rep_next ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static void     ld_rep_prep ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
+static gboolean ld_rep_back ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static gboolean ld_pay_next ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static void     ld_pay_prep ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static gboolean ld_pay_back ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
+static void     ld_fin_prep ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static gboolean ld_fin_back ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
+static void     ld_fin_fin  ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 
 struct LoanDruidData_*
 gnc_ui_sx_loan_druid_create()
 {
-        static struct {
-                char *pageName;
-                gboolean (*nextFn)();
-                void     (*prepFn)();
-                gboolean (*backFn)();
-                void     (*finishFn)();
-                /* cancel is handled by the druid itself. */
-        } DRUID_HANDLERS[] = {
-                { PG_INFO,      ld_info_save, ld_info_prep, ld_info_save, NULL },
-                { PG_OPTS,      ld_opts_next, ld_opts_prep, NULL,         NULL },
-                { PG_REPAYMENT, ld_rep_next,  ld_rep_prep },
-                { PG_PAYMENT,   ld_pay_next,  ld_pay_prep, ld_pay_back, NULL },
-                { PG_FINISH,    NULL,         NULL,        ld_fin_back, NULL },
-                { NULL }
-        };
         int i;
         LoanDruidData *ldd;
 
@@ -298,11 +308,11 @@ gnc_ui_sx_loan_druid_create()
                                 int left, right, top, bottom;
                         } gas_data[] = {
                                 { &ldd->prmAccountGAS,    ldd->prmTable, 1, 4, 0, 1 },
-                                { &ldd->repAssetsFromGAS, ldd->repTable, 1, 2, 2, 3 },
+                                { &ldd->repAssetsFromGAS, ldd->repTable, 1, 4, 2, 3 },
                                 { &ldd->repPrincToGAS,    ldd->repTable, 1, 2, 3, 4 },
-                                { &ldd->repIntToGAS,      ldd->repTable, 1, 2, 4, 5 },
-                                { &ldd->repEscrowToGAS,   ldd->repTable, 1, 2, 5, 6 },
-                                { &ldd->payAccountGAS,    ldd->payTable, 1, 2, 2, 3 }, 
+                                { &ldd->repIntToGAS,      ldd->repTable, 3, 4, 3, 4 },
+                                { &ldd->payAcctFromGAS,   ldd->payTable, 1, 2, 2, 3 }, 
+                                { &ldd->payAcctToGAS,     ldd->payTable, 3, 4, 2, 3 },
                                 { NULL }
                         };
 
@@ -334,9 +344,24 @@ gnc_ui_sx_loan_druid_create()
                         }
                 }
 
-                gtk_widget_set_sensitive( ldd->prmVarFrame, FALSE );
-                gtk_signal_connect( GTK_OBJECT(ldd->prmType), "clicked",
-                                    GTK_SIGNAL_FUNC(ld_prm_type_change), (gpointer)ldd );
+                gtk_widget_set_sensitive( GTK_WIDGET(ldd->prmVarFrame), FALSE );
+                {
+                        GtkAlignment *a;
+                        GNCOptionInfo typeOptInfo[] = {
+                                { "Fixed", "A Fixed-Rate loan", ld_prm_type_changed, ldd },
+                                { "3/1",   "A 3/1 ARM",         ld_prm_type_changed, ldd },
+                                { "5/1",   "A 5/1 ARM",         ld_prm_type_changed, ldd },
+                                { "7/1",   "A 7/1 ARM",         ld_prm_type_changed, ldd },
+                                { "10/1",  "A 10/1 ARM",        ld_prm_type_changed, ldd },
+                        };
+                        ldd->prmType =
+                                GTK_OPTION_MENU( gnc_build_option_menu( typeOptInfo, 5 ) );
+                        a = GTK_ALIGNMENT( gtk_alignment_new( 0.0, 0.5, 0.25, 1.0 ) );
+                        gtk_container_add( GTK_CONTAINER(a), GTK_WIDGET(ldd->prmType) );
+                        gtk_table_attach( ldd->prmTable, GTK_WIDGET(a),
+                                          3, 4, 2, 3,
+                                          0, 0, 2, 2 );
+                }
 
                 {
                         GtkAdjustment *a;
@@ -365,6 +390,13 @@ gnc_ui_sx_loan_druid_create()
                 gnc_option_menu_init( GTK_WIDGET(ldd->prmLengthType) );
                 gnc_option_menu_init( GTK_WIDGET(ldd->repRemainderOpt) );
 
+                gtk_signal_connect( GTK_OBJECT(ldd->optEscrowCb), "toggled",
+                                    GTK_SIGNAL_FUNC(ld_escrow_toggle), ldd );
+                gtk_widget_set_sensitive( GTK_WIDGET(ldd->optEscrowHBox), FALSE );
+                ldd->optEscrowGAS = GNC_ACCOUNT_SEL(gnc_account_sel_new());
+                gtk_container_add( GTK_CONTAINER(ldd->optEscrowHBox),
+                                   GTK_WIDGET(ldd->optEscrowGAS) );
+
                 /* FIXME : too deep, factor out. */
                 {
                         /* . Each RepayOpt gets an entry in the optContainer.
@@ -387,31 +419,39 @@ gnc_ui_sx_loan_druid_create()
                                 vb = GTK_VBOX(gtk_vbox_new( FALSE, OPT_VBOX_SPACING ));
 
                                 /* Add payment checkbox. */
-                                g_string_sprintf( str, "... pay \"%s\"?", rouid->optData->name );
+                                g_string_sprintf( str, "... pay \"%s\"?",
+                                                  rouid->optData->name );
                                 rouid->optCb =
-                                        GTK_CHECK_BUTTON(gtk_check_button_new_with_label( str->str ));
-                                gtk_box_pack_start( GTK_BOX(vb), GTK_WIDGET(rouid->optCb),
+                                        GTK_CHECK_BUTTON(
+                                                gtk_check_button_new_with_label(
+                                                        str->str ));
+                                gtk_box_pack_start( GTK_BOX(vb),
+                                                    GTK_WIDGET(rouid->optCb),
                                                     FALSE, FALSE, 2 );
                                 rouid->escrowCb =
-                                        GTK_CHECK_BUTTON(gtk_check_button_new_with_label( _("via Escrow account?") ));
-                                gtk_widget_set_sensitive( GTK_WIDGET(rouid->escrowCb), FALSE );
-                                subOptAlign = GTK_ALIGNMENT(gtk_alignment_new( 0.5, 0.5, 0.75, 1.0 ));
+                                        GTK_CHECK_BUTTON(
+                                                gtk_check_button_new_with_label(
+                                                        _("via Escrow account?") ));
+                                gtk_widget_set_sensitive(
+                                        GTK_WIDGET(rouid->escrowCb),
+                                        FALSE );
+                                subOptAlign =
+                                        GTK_ALIGNMENT(
+                                                gtk_alignment_new(
+                                                        0.5, 0.5, 0.75, 1.0 ));
                                 gtk_container_add( GTK_CONTAINER(subOptAlign),
                                                    GTK_WIDGET(rouid->escrowCb) );
                                 gtk_box_pack_start( GTK_BOX(vb), GTK_WIDGET(subOptAlign),
                                                     FALSE, FALSE, 2 );
 
-                                gtk_signal_connect( GTK_OBJECT( rouid->optCb ),
-                                                    "toggled",
+                                gtk_signal_connect( GTK_OBJECT( rouid->optCb ), "toggled",
                                                     GTK_SIGNAL_FUNC(ld_opt_toggled),
                                                     (gpointer)rouid );
-                                gtk_signal_connect( GTK_OBJECT( rouid->optCb ),
-                                                    "toggled",
+                                gtk_signal_connect( GTK_OBJECT( rouid->optCb ), "toggled",
                                                     GTK_SIGNAL_FUNC(ld_opt_consistency),
-                                                    (gpointer)rouid->escrowCb );
-                                gtk_signal_connect( GTK_OBJECT( rouid->escrowCb ),
-                                                    "toggled",
-                                                    GTK_SIGNAL_FUNC(ld_escrow_tog),
+                                                    (gpointer)rouid );
+                                gtk_signal_connect( GTK_OBJECT( rouid->escrowCb ), "toggled",
+                                                    GTK_SIGNAL_FUNC(ld_escrow_toggled),
                                                     (gpointer)rouid );
 
                                 optAlign = GTK_ALIGNMENT(gtk_alignment_new( 0.5, 0.5, 0.75, 1.0 ));
@@ -445,53 +485,71 @@ gnc_ui_sx_loan_druid_create()
                                    GTK_WIDGET(ldd->payGncFreq) );
         }
 
+        {
+                static struct {
+                        char *pageName;
+                        gboolean (*nextFn)();
+                        void     (*prepFn)();
+                        gboolean (*backFn)();
+                        void     (*finishFn)();
+                        /* cancel is handled by the druid itself. */
+                } DRUID_HANDLERS[] = {
+                        { PG_INFO,      ld_info_save, ld_info_prep, ld_info_save, NULL },
+                        { PG_OPTS,      ld_opts_tran, ld_opts_prep, ld_opts_tran, NULL },
+                        { PG_REPAYMENT, ld_rep_next,  ld_rep_prep,  ld_rep_back },
+                        { PG_PAYMENT,   ld_pay_next,  ld_pay_prep,  ld_pay_back,  NULL },
+                        { PG_FINISH,    NULL,         ld_fin_prep,  ld_fin_back,  ld_fin_fin },
+                        { NULL }
+                };
+
+                /* setup page-transition handlers */
+                /* setup druid-global handler for cancel */
+                gtk_signal_connect( GTK_OBJECT(ldd->druid), "cancel",
+                                    GTK_SIGNAL_FUNC(ld_cancel_check),
+                                    (gpointer)ldd );
+                /* FIXME: this is substantially similar to the code in
+                 * dialog-sxsincelast.c ... it should probably be factored out
+                 * somewhere. */
+                for ( i=0; DRUID_HANDLERS[i].pageName != NULL; i++ ) {
+                        GtkWidget *pg;
+
+                        pg = glade_xml_get_widget( ldd->gxml,
+                                                   DRUID_HANDLERS[i].pageName );
+                        if ( DRUID_HANDLERS[i].prepFn ) {
+                                gtk_signal_connect( GTK_OBJECT(pg), "prepare",
+                                                    GTK_SIGNAL_FUNC(DRUID_HANDLERS[i].
+                                                                    prepFn),
+                                                    ldd);
+                        }
+                        if ( DRUID_HANDLERS[i].backFn ) {
+                                gtk_signal_connect( GTK_OBJECT(pg), "back",
+                                                    GTK_SIGNAL_FUNC(DRUID_HANDLERS[i].
+                                                                    backFn),
+                                                    ldd);
+                        }
+                        if ( DRUID_HANDLERS[i].nextFn ) {
+                                gtk_signal_connect( GTK_OBJECT(pg), "next",
+                                                    GTK_SIGNAL_FUNC(DRUID_HANDLERS[i].
+                                                                    nextFn),
+                                                    ldd);
+                        }
+                        if ( DRUID_HANDLERS[i].finishFn ) {
+                                gtk_signal_connect( GTK_OBJECT(pg), "finish",
+                                                    GTK_SIGNAL_FUNC(DRUID_HANDLERS[i].
+                                                                    finishFn),
+                                                    ldd);
+                        }
+                }
+        }
+
         gnc_register_gui_component( DIALOG_LOAN_DRUID_CM_CLASS,
                                     NULL, /* no refresh handler */
-                                    (GNCComponentCloseHandler*)ld_close_handler,
+                                    (GNCComponentCloseHandler)ld_close_handler,
                                     ldd );
 
         gtk_signal_connect( GTK_OBJECT(ldd->dialog), "destroy",
                             GTK_SIGNAL_FUNC(ld_destroy),
                             ldd );
-
-        /* setup page-transition handlers */
-        /* setup druid-global handler for cancel */
-        gtk_signal_connect( GTK_OBJECT(ldd->druid), "cancel",
-                            GTK_SIGNAL_FUNC(ld_cancel_check),
-                            (gpointer)ldd );
-        /* FIXME: this is substantially similar to the code in
-         * dialog-sxsincelast.c ... it should probably be factored out
-         * somewhere. */
-        for ( i=0; DRUID_HANDLERS[i].pageName != NULL; i++ ) {
-                GtkWidget *pg;
-
-                pg = glade_xml_get_widget( ldd->gxml,
-                                           DRUID_HANDLERS[i].pageName );
-                if ( DRUID_HANDLERS[i].prepFn ) {
-                        gtk_signal_connect( GTK_OBJECT(pg), "prepare",
-                                            GTK_SIGNAL_FUNC(DRUID_HANDLERS[i].
-                                                            prepFn),
-                                            ldd);
-                }
-                if ( DRUID_HANDLERS[i].backFn ) {
-                        gtk_signal_connect( GTK_OBJECT(pg), "back",
-                                            GTK_SIGNAL_FUNC(DRUID_HANDLERS[i].
-                                                            backFn),
-                                            ldd);
-                }
-                if ( DRUID_HANDLERS[i].nextFn ) {
-                        gtk_signal_connect( GTK_OBJECT(pg), "next",
-                                            GTK_SIGNAL_FUNC(DRUID_HANDLERS[i].
-                                                            nextFn),
-                                            ldd);
-                }
-                if ( DRUID_HANDLERS[i].finishFn ) {
-                        gtk_signal_connect( GTK_OBJECT(pg), "finish",
-                                            GTK_SIGNAL_FUNC(DRUID_HANDLERS[i].
-                                                            finishFn),
-                                            ldd);
-                }
-        }
 
         gtk_widget_show_all( ldd->dialog );
         return ldd;
@@ -514,7 +572,13 @@ gnc_loan_druid_data_init( LoanDruidData *ldd )
         ldd->ld.startDate = g_date_new();
         ldd->ld.varStartDate = g_date_new();
         g_date_set_time( ldd->ld.startDate, time(NULL) );
-        ldd->ld.loanFreq = xaccFreqSpecMalloc( gnc_get_current_book() );
+        ldd->ld.loanFreq  = xaccFreqSpecMalloc( gnc_get_current_book() );
+        ldd->ld.repFreq   = xaccFreqSpecMalloc( gnc_get_current_book() );
+        xaccFreqSpecSetMonthly( ldd->ld.repFreq, ldd->ld.startDate, 1 );
+        xaccFreqSpecSetUIType( ldd->ld.repFreq, UIFREQ_MONTHLY );
+
+        ldd->ld.repAmount = NULL;
+        ldd->ld.repStartDate = g_date_new();
         ldd->ld.repayOptCount = optCount;
         ldd->ld.repayOpts = g_new0( RepayOptData*, optCount );
         /* copy all the default lines into the LDD */
@@ -523,6 +587,8 @@ gnc_loan_druid_data_init( LoanDruidData *ldd )
                 g_assert( REPAY_DEFAULTS[i].name != NULL );
 
                 ldd->repayOptsUI[i] = g_new0( RepayOptUIData, 1 );
+                ldd->repayOptsUI[i]->ldd = ldd;
+
                 optData = ldd->ld.repayOpts[i]
                         = ldd->repayOptsUI[i]->optData
                         = g_new0( RepayOptData, 1 );
@@ -555,8 +621,6 @@ gnc_loan_druid_get_widgets( LoanDruidData *ldd )
                 GET_CASTED_WIDGET( GTK_TABLE,          PARAM_TABLE );
         ldd->prmIrateSpin =
                 GET_CASTED_WIDGET( GTK_SPIN_BUTTON,    IRATE_SPIN );
-        ldd->prmType =
-                GET_CASTED_WIDGET( GTK_OPTION_MENU,    TYPE_OPT );
         ldd->prmVarFrame =
                 GET_CASTED_WIDGET( GTK_FRAME,          VAR_CONTAINER );
         ldd->prmStartDateGDE =
@@ -570,15 +634,17 @@ gnc_loan_druid_get_widgets( LoanDruidData *ldd )
         
         /* opt = options */
         ldd->optVBox =
-                GET_CASTED_WIDGET( GTK_VBOX,         OPT_CONTAINER );
+                GET_CASTED_WIDGET( GTK_VBOX,           OPT_CONTAINER );
+        ldd->optEscrowCb =
+                GET_CASTED_WIDGET( GTK_CHECK_BUTTON,   OPT_ESCROW );
+        ldd->optEscrowHBox =
+                GET_CASTED_WIDGET( GTK_HBOX,           OPT_ESCROW_CONTAINER );
 
         /* rep = repayment */
         ldd->repTxnName =
                 GET_CASTED_WIDGET( GTK_ENTRY,          TXN_NAME );
         ldd->repTable =
                 GET_CASTED_WIDGET( GTK_TABLE,          REPAY_TABLE );
-        ldd->repAmtGNE =
-                GET_CASTED_WIDGET( GNOME_NUMBER_ENTRY, AMOUNT_GNE );
         ldd->repAmtEntry =
                 GET_CASTED_WIDGET( GTK_ENTRY,          AMOUNT_ENTRY );
         ldd->repRemainderOpt =
@@ -644,13 +710,56 @@ ld_cancel_check( GnomeDruid *gd, LoanDruidData *ldd )
 
 static
 void
-ld_prm_type_change( GtkButton *b, gpointer ud )
+ld_prm_type_changed( GtkWidget *w, gint index, gpointer ud )
 {
         LoanDruidData *ldd;
 
         ldd = (LoanDruidData*)ud;
-        gtk_widget_set_sensitive( ldd->prmVarFrame,
-                                  gnc_option_menu_get_active( ldd->prmType ) );
+        gtk_widget_set_sensitive( GTK_WIDGET(ldd->prmVarFrame),
+                                  index != FIXED );
+}
+
+static
+void
+ld_escrow_toggle( GtkToggleButton *tb, gpointer ud )
+{
+        int i;
+        gboolean newState;
+        RepayOptUIData *rouid;
+        LoanDruidData *ldd;
+
+        ldd = (LoanDruidData*)ud;
+        newState = gtk_toggle_button_get_active(tb);
+        gtk_widget_set_sensitive( GTK_WIDGET(ldd->optEscrowHBox), newState );
+        /* deal with escrow options. */
+        for ( i=0; i<ldd->ld.repayOptCount; i++ ) {
+                rouid = ldd->repayOptsUI[i];
+                /* If we're going off, then uncheck and desensitize all escrow opts. */
+                /* If we're going on, then sensitize all escrow opts. */
+
+                /* prevent the toggle handler from running and "trashing" the
+                 * state of the throughEscrowP selection */
+                gtk_signal_handler_block_by_func( GTK_OBJECT(rouid->escrowCb),
+                                                  GTK_SIGNAL_FUNC(ld_escrow_toggled),
+                                                  rouid );
+                gtk_toggle_button_set_active(
+                        GTK_TOGGLE_BUTTON(rouid->escrowCb),
+                        newState
+                        && gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(rouid->optCb) )
+                        && rouid->optData->throughEscrowP );
+                gtk_widget_set_sensitive(
+                        GTK_WIDGET(rouid->escrowCb),
+                        newState
+                        && gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(rouid->optCb) ) );
+                gtk_signal_handler_unblock_by_func( GTK_OBJECT(rouid->escrowCb),
+                                                    GTK_SIGNAL_FUNC(ld_escrow_toggled),
+                                                    rouid );
+                if ( newState ) {
+                        rouid->optData->from = ldd->ld.escrowAcct;
+                } else {
+                        rouid->optData->from = NULL;
+                }
+        }
 }
 
 static
@@ -668,20 +777,25 @@ void
 ld_opt_consistency( GtkToggleButton *tb, gpointer ud )
 {
         GtkToggleButton *escrowCb;
+        RepayOptUIData *rouid;
 
-        escrowCb = GTK_TOGGLE_BUTTON(ud);
+        rouid = (RepayOptUIData*)ud;
+        escrowCb = GTK_TOGGLE_BUTTON(rouid->escrowCb);
         /* make sure the escrow option is only selected if we're active. */
         gtk_toggle_button_set_state( escrowCb,
-                                     gtk_toggle_button_get_active(escrowCb)
-                                     & gtk_toggle_button_get_active(tb) );
-        /* make sure the escrow option is only sensitive if we're active. */
+                                     rouid->optData->throughEscrowP
+                                     && gtk_toggle_button_get_active(tb) );
+        /* make sure the escrow option is only sensitive if we're active, and
+         * the escrow account is enabled  */
         gtk_widget_set_sensitive( GTK_WIDGET(escrowCb),
-                                  gtk_toggle_button_get_active(tb) );
+                                  gtk_toggle_button_get_active(tb)
+                                  && gtk_toggle_button_get_active(
+                                          GTK_TOGGLE_BUTTON(rouid->ldd->optEscrowCb)) );
 }
 
 static
 void
-ld_escrow_tog( GtkToggleButton *tb, gpointer ud )
+ld_escrow_toggled( GtkToggleButton *tb, gpointer ud )
 {
         RepayOptUIData *rouid;
 
@@ -693,27 +807,15 @@ static
 gboolean
 ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 {
-        gchar *txt;
-        float amt;
         LoanDruidData *ldd;
 
         ldd = (LoanDruidData*)ud;
 
-        /* FIXME: account */
-        ldd->ld.principal = gnc_amount_edit_get_amount( ldd->prmOrigPrincGAE );
-#if 0
-        txt = gtk_editable_get_chars( GTK_EDITABLE(ldd->prmOrigPrincEntry),
-                                      0, -1 );
-        amt = -1.0;
-        amt = (float)strtod( txt, NULL );
-        if ( amt < 0 ) {
-                gnc_error_dialog( _("The original principal must "
-                                    "be a valid number.") );
-                return TRUE;
+        ldd->ld.primaryAcct = gnc_account_sel_get_account( ldd->prmAccountGAS );
+        if ( ! ldd->ld.repPriAcct ) {
+                ldd->ld.repPriAcct = ldd->ld.primaryAcct;
         }
-        ldd->ld.principal = amt;
-        g_free( txt );
-#endif /* 0 */
+        ldd->ld.principal = gnc_amount_edit_get_amount( ldd->prmOrigPrincGAE );
         ldd->ld.interestRate =
                 gtk_spin_button_get_value_as_float( ldd->prmIrateSpin );
         ldd->ld.type = gnc_option_menu_get_active( GTK_WIDGET(ldd->prmType) );
@@ -731,7 +833,9 @@ ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                 tmpTT = gnome_date_edit_get_date( ldd->prmStartDateGDE );
                 tmpTm = localtime( &tmpTT );
                 g_date_set_dmy( ldd->ld.startDate,
-                                1, (tmpTm->tm_mon+1), tmpTm->tm_mday );
+                                tmpTm->tm_mday,
+                                (tmpTm->tm_mon+1),
+                                (1900 + tmpTm->tm_year) );
         }
 
         /* len / periods */
@@ -754,17 +858,7 @@ ld_info_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         LoanDruidData *ldd;
 
         ldd = (LoanDruidData*)ud;
-        /* FIXME: account. */
         gnc_amount_edit_set_amount( ldd->prmOrigPrincGAE, ldd->ld.principal );
-#if 0
- {
-        GString *str;
-        str = g_string_sized_new( 16 );
-        g_string_sprintf( str, "%0.2f", ldd->principal );
-        gtk_entry_set_text( ldd->prmOrigPrincEntry, str->str );
-        g_string_free( str, TRUE );
- }
-#endif /* 0 */
         gtk_spin_button_set_value( ldd->prmIrateSpin, ldd->ld.interestRate );
         gtk_option_menu_set_history( ldd->prmType, ldd->ld.type );
         if ( ldd->ld.type != FIXED ) {
@@ -787,20 +881,29 @@ ld_info_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 
         /* length: total and remaining */
         {
-                // prmLengthSpin
                 gtk_spin_button_set_value( ldd->prmLengthSpin, ldd->ld.numPer );
-                // prmLengthType
                 gtk_option_menu_set_history( ldd->prmLengthType, ldd->ld.perSize );
-                // prmRemainSpin
                 gtk_spin_button_set_value( ldd->prmRemainSpin, ldd->ld.numPerRemain );
         }
 }
 
 static
-gboolean
-ld_opts_next( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
+void
+ld_opts_save_state( LoanDruidData *ldd )
 {
-        /* FIXME: do anything here? */
+        if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(ldd->optEscrowCb) ) ) {
+                ldd->ld.escrowAcct =
+                        gnc_account_sel_get_account( ldd->optEscrowGAS );
+        } else {
+                ldd->ld.escrowAcct = NULL;
+        }
+}
+
+static
+gboolean
+ld_opts_tran( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
+{
+        ld_opts_save_state( (LoanDruidData*)ud );
         return FALSE;
 }
 
@@ -808,7 +911,66 @@ static
 void
 ld_opts_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 {
-        /* FIXME: setup the options */
+        int i;
+        RepayOptUIData *rouid;
+        LoanDruidData *ldd;
+
+        ldd = (LoanDruidData*)ud;
+        if ( ldd->ld.escrowAcct ) {
+                gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ldd->optEscrowCb),
+                                              TRUE );
+                gnc_account_sel_set_account( ldd->optEscrowGAS, ldd->ld.escrowAcct );
+        }
+        for ( i=0; i<ldd->ld.repayOptCount; i++ ) {
+                rouid = ldd->repayOptsUI[i];
+                gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(rouid->optCb),
+                                              rouid->optData->enabled );
+                gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(rouid->escrowCb),
+                                              rouid->optData->throughEscrowP
+                                              && rouid->optData->enabled
+                                              && ldd->ld.escrowAcct );
+                gtk_widget_set_sensitive( GTK_WIDGET(rouid->escrowCb),
+                                          rouid->optData->enabled
+                                          && ldd->ld.escrowAcct );
+        }
+}
+
+static
+void
+ld_rep_save( LoanDruidData *ldd )
+{
+        int i;
+
+        if ( ldd->ld.repMemo )
+                g_free( ldd->ld.repMemo );
+        ldd->ld.repMemo =
+                gtk_editable_get_chars( GTK_EDITABLE(ldd->repTxnName), 0, -1 );
+
+        if ( ldd->ld.repAmount )
+                g_free( ldd->ld.repAmount );
+        ldd->ld.repAmount =
+                gtk_editable_get_chars( GTK_EDITABLE(ldd->repAmtEntry), 0, -1 );
+
+        ldd->ld.repFromAcct =
+                gnc_account_sel_get_account( ldd->repAssetsFromGAS );
+        ldd->ld.repPriAcct =
+                gnc_account_sel_get_account( ldd->repPrincToGAS );
+        ldd->ld.repIntAcct =
+                gnc_account_sel_get_account( ldd->repIntToGAS );
+        ldd->ld.remainderChoice =
+                gnc_option_menu_get_active( GTK_WIDGET(ldd->repRemainderOpt) );
+        gnc_frequency_save_state( ldd->repGncFreq,
+                                  ldd->ld.repFreq,
+                                  ldd->ld.repStartDate );
+
+        /* Set the 'from' accounts of the various options to be the
+         * Assets-From account, if they're not already something else. */
+        for ( i=0; i<ldd->ld.repayOptCount; i++ ) {
+                RepayOptData *rod = ldd->ld.repayOpts[i];
+                if ( ! rod->from ) {
+                        rod->from = ldd->ld.repFromAcct;
+                }
+        }
 }
 
 static
@@ -818,6 +980,9 @@ ld_rep_next( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         LoanDruidData *ldd;
 
         ldd = (LoanDruidData*)ud;
+
+        ld_rep_save( ldd );
+
         if ( (ldd->currentIdx < 0)
              || (ldd->currentIdx >= ldd->ld.repayOptCount)
              || !ldd->ld.repayOpts[ldd->currentIdx]->enabled ) {
@@ -840,10 +1005,55 @@ ld_rep_next( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 }
 
 static
+gboolean
+ld_rep_back( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
+{
+        LoanDruidData *ldd;
+
+        ldd = (LoanDruidData*)ud;
+        ld_rep_save(ldd);
+        return FALSE;
+}
+
+static
 void
 ld_rep_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 {
-        /* do anything? */
+        LoanDruidData *ldd;
+
+        ldd = (LoanDruidData*)ud;
+
+        if ( !ldd->ld.repAmount ) {
+                GString *str;
+                str = g_string_sized_new( 64 );
+
+                g_string_sprintfa( str, "pmt( %.4f / 12 : %d : %0.2f : 0 : 0 )",
+                                   (ldd->ld.interestRate / 100),
+                                   ldd->ld.numPer,
+                                   gnc_numeric_to_double(ldd->ld.principal) );
+
+                ldd->ld.repAmount = str->str;
+                g_string_free( str, FALSE );
+        }
+
+        if ( ldd->ld.repMemo )
+                gtk_entry_set_text( ldd->repTxnName, ldd->ld.repMemo );
+
+        if ( ldd->ld.repAmount )
+                gtk_entry_set_text( ldd->repAmtEntry, ldd->ld.repAmount );
+
+        gnc_account_sel_set_account( ldd->repAssetsFromGAS,
+                                     ldd->ld.repFromAcct );
+        gnc_account_sel_set_account( ldd->repPrincToGAS,
+                                     ldd->ld.repPriAcct );
+        gnc_account_sel_set_account( ldd->repIntToGAS,
+                                     ldd->ld.repIntAcct );
+        gtk_option_menu_set_history( ldd->repRemainderOpt,
+                                     ldd->ld.remainderChoice );
+        gnc_frequency_setup( ldd->repGncFreq,
+                             ldd->ld.repFreq,
+                             ldd->ld.repStartDate );
+                                   
 }
 
 static
@@ -870,8 +1080,8 @@ ld_pay_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         g_string_sprintf( str, "%0.2f", rod->amount );
         gtk_entry_set_text( ldd->payAmtEntry, str->str );
 
-        gnc_account_sel_set_account( ldd->payAccountGAS,
-                                     rod->from );
+        gnc_account_sel_set_account( ldd->payAcctFromGAS, rod->from );
+        gnc_account_sel_set_account( ldd->payAcctToGAS,   rod->to );
 
         uniq = (rod->fs != NULL);
         gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqPartRb),
@@ -912,8 +1122,9 @@ ld_pay_save_current( LoanDruidData *ldd )
         rod->amount = (float)strtod( tmpStr, NULL );
         g_free( tmpStr );
 
-        rod->from = gnc_account_sel_get_account( ldd->payAccountGAS );
-
+        rod->from = gnc_account_sel_get_account( ldd->payAcctFromGAS );
+        rod->to   = gnc_account_sel_get_account( ldd->payAcctToGAS );
+        
         /* if ( rb toggled )
          *   ensure freqspec/startdate setup
          *   save
@@ -1035,6 +1246,257 @@ ld_pay_freq_toggle( GtkToggleButton *tb, gpointer ud )
         g_assert( ldd->currentIdx >= 0 );
         g_assert( ldd->currentIdx <= ldd->ld.repayOptCount );
                   
-        uniq = gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqUniqRb) );
+        uniq = gtk_toggle_button_get_active(
+                GTK_TOGGLE_BUTTON(ldd->payTxnFreqUniqRb) );
         gtk_widget_set_sensitive( GTK_WIDGET(ldd->payFreqAlign), uniq );
+
+        if ( uniq ) {
+                RepayOptData *rod;
+                rod = ldd->ld.repayOpts[ ldd->currentIdx ];
+
+                if ( rod->fs == NULL ) {
+                        rod->fs = xaccFreqSpecMalloc( gnc_get_current_book() );
+                        xaccFreqSpecSetMonthly( rod->fs, ldd->ld.startDate, 1 );
+                        xaccFreqSpecSetUIType( rod->fs, UIFREQ_MONTHLY );
+                }
+                if ( rod->startDate == NULL ) {
+                        rod->startDate = g_date_new();
+                        *rod->startDate = *ldd->ld.startDate;
+                }
+                gnc_frequency_setup( ldd->payGncFreq,
+                                     rod->fs, rod->startDate );
+        }
+}
+
+static
+void
+ld_fin_prep ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
+{
+        /* FIXME? */
+}
+
+static
+void
+ld_free_ttsi( gpointer data, gpointer ud )
+{
+        gnc_ttsplitinfo_free( (TTSplitInfo*)data );
+}
+
+static
+void
+ld_gnc_ttinfo_free( gpointer data, gpointer ud )
+{
+        gnc_ttinfo_free( (TTInfo*)data );
+}
+
+static
+void
+ld_fin_fin  ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
+{
+        LoanDruidData *ldd;
+        int i;
+        TTInfo *tti;
+        TTSplitInfo *ttsi;
+        RepayOptData *rod;
+        SchedXaction *tmpSX;
+        GList *repTTList;
+        GList *repSplits;
+        gchar *tmpStr;
+        GString *repAssetsDebitFormula, *tmpGS;
+        GList *sxList;
+
+        ldd = (LoanDruidData*)ud;
+        
+        /* Create a string for the Asset-account debit, which we will build
+         * up in the processing of the LoanData and Options. */
+        repAssetsDebitFormula = g_string_sized_new( 64 );
+        repTTList = NULL;
+
+        /* first, start to deal with the repayment uber-SX */
+        {
+                repSplits = NULL;
+
+                /* Just add the repayment amount to a string for the moment;
+                 * create the split out of it after we've processed the
+                 * options [and gotten their contributions to the asset debit
+                 * formula]. */
+                g_string_sprintf( repAssetsDebitFormula, ldd->ld.repAmount );
+
+                /* Principal credit */
+                ttsi = gnc_ttsplitinfo_malloc();
+                gnc_ttsplitinfo_set_memo( ttsi, "Repayment - Principal Portion" );
+                tmpStr = xaccAccountGetFullName( ldd->ld.repPriAcct,
+                                                 gnc_get_account_separator() );
+                g_free( tmpStr );
+                gnc_ttsplitinfo_set_account( ttsi, ldd->ld.repPriAcct );
+                tmpGS = g_string_sized_new( 64 );
+                g_string_sprintf( tmpGS, "ppmt( %.4f / 12 : i : %d : %0.2f : 0 : 0 )",
+                                  (ldd->ld.interestRate / 100),
+                                  ldd->ld.numPer,
+                                  gnc_numeric_to_double(ldd->ld.principal));
+                gnc_ttsplitinfo_set_debit_formula( ttsi, tmpGS->str );
+                g_string_free( tmpGS, FALSE );
+                repSplits = g_list_append( repSplits, ttsi );
+
+                /* Interest credit */
+                ttsi = gnc_ttsplitinfo_malloc();
+                gnc_ttsplitinfo_set_memo( ttsi, "Repayment - Interest Portion" );
+                tmpStr = xaccAccountGetFullName( ldd->ld.repIntAcct,
+                                                 gnc_get_account_separator() );
+                g_free( tmpStr );
+                gnc_ttsplitinfo_set_account( ttsi, ldd->ld.repIntAcct );
+                tmpGS = g_string_sized_new( 64 );
+                g_string_sprintf( tmpGS, "ipmt( %.4f / 12 : i : %d : %0.2f : 0 : 0 )",
+                                  (ldd->ld.interestRate / 100),
+                                  ldd->ld.numPer,
+                                  gnc_numeric_to_double( ldd->ld.principal ) );
+                gnc_ttsplitinfo_set_debit_formula( ttsi, tmpGS->str );
+                g_string_free( tmpGS, FALSE );
+                repSplits = g_list_append( repSplits, ttsi );
+        }
+
+        /* Process the options. */
+        for ( i=0; i<ldd->ld.repayOptCount; i++ ) {
+                Account *fromAcct;
+                GList *optSplits;
+                GList *optTTList;
+
+                optSplits = NULL;
+                optTTList = NULL;
+                rod = ldd->ld.repayOpts[i];
+
+                if ( !rod->enabled )
+                        continue;
+
+                fromAcct = rod->from;
+		if ( rod->throughEscrowP ) {
+                        GString *amt = g_string_sized_new( 5 );
+                        g_string_sprintf( amt, "%0.2f", rod->amount );
+
+			/* Add assets -> escrow Splits. */
+                        g_string_sprintfa( repAssetsDebitFormula, " + %s", amt->str );
+
+                        ttsi = gnc_ttsplitinfo_malloc();
+                        gnc_ttsplitinfo_set_memo( ttsi, rod->txnMemo );
+                        gnc_ttsplitinfo_set_account( ttsi, ldd->ld.escrowAcct );
+                        gnc_ttsplitinfo_set_debit_formula( ttsi, amt->str );
+                        repSplits = g_list_append( repSplits, ttsi );
+
+                        g_string_free( amt, TRUE );
+                        fromAcct = ldd->ld.escrowAcct;
+		}
+
+                ttsi = gnc_ttsplitinfo_malloc();
+                gnc_ttsplitinfo_set_memo( ttsi, rod->txnMemo );
+                gnc_ttsplitinfo_set_account( ttsi, fromAcct );
+
+                tmpStr = xaccAccountGetFullName( fromAcct,
+                                                 gnc_get_account_separator() );
+                g_free( tmpStr );
+                {
+                        GString *amt = g_string_sized_new(5);
+                        g_string_sprintf( amt, "%0.2f", rod->amount );
+                        gnc_ttsplitinfo_set_credit_formula( ttsi, amt->str );
+                        g_string_free( amt, TRUE );
+                }
+                optSplits = g_list_append( optSplits, ttsi );
+
+                ttsi = gnc_ttsplitinfo_malloc();
+                gnc_ttsplitinfo_set_memo( ttsi, rod->txnMemo );
+                gnc_ttsplitinfo_set_account( ttsi, rod->to );
+                tmpStr = xaccAccountGetFullName( rod->to,
+                                                 gnc_get_account_separator() );
+                g_free( tmpStr );
+                {
+                        GString *amt = g_string_sized_new( 5 );
+                        g_string_sprintf( amt, "%0.2f", rod->amount );
+                        gnc_ttsplitinfo_set_debit_formula( ttsi, amt->str );
+                        g_string_free( amt, TRUE );
+                }
+                optSplits = g_list_append( optSplits, ttsi );
+                
+                tti = gnc_ttinfo_malloc();
+                gnc_ttinfo_set_description( tti, ldd->ld.repMemo );
+                gnc_ttinfo_set_template_splits( tti, optSplits );
+                /* we're no longer responsible for this list. */
+                optSplits = NULL;
+
+                if ( rod->fs ) {
+                        GList *ttList;
+
+                        ttList = NULL;
+                        /* Create new SX with given FreqSpec */
+                        ttList = g_list_append( ttList, tti );
+
+                        tmpSX = xaccSchedXactionMalloc( gnc_get_current_book() );
+                        /* FIXME?  Get name from Liability/LoanAccount name? */
+                        xaccSchedXactionSetName( tmpSX, ldd->ld.repMemo );
+                        xaccSchedXactionSetFreqSpec( tmpSX, rod->fs );
+                        xaccSchedXactionSetStartDate( tmpSX, rod->startDate );
+                        xaccSchedXactionSetLastOccurDate( tmpSX, rod->startDate );
+                        /* FIXME ... what are these values? */
+                        xaccSchedXactionSetNumOccur( tmpSX, ldd->ld.numPer );
+                        xaccSchedXactionSetRemOccur( tmpSX, ldd->ld.numPerRemain );
+                        xaccSchedXactionSetTemplateTrans( tmpSX, ttList,
+                                                          gnc_get_current_book() );
+
+                        sxList = gnc_book_get_schedxactions( gnc_get_current_book() );
+                        sxList = g_list_append( sxList, tmpSX );
+                        gnc_book_set_schedxactions( gnc_get_current_book(), sxList );
+
+                        gnc_ttinfo_free( tti );
+                        g_list_free( ttList );
+                        ttList = NULL;
+
+                } else {
+                        /* Add transaction to existing repayment SX. */
+                        repTTList = g_list_append( repTTList, tti );
+                }
+        }
+
+        /* Create repayment assets debit split. */
+        ttsi = gnc_ttsplitinfo_malloc();
+        tmpStr = xaccAccountGetFullName( ldd->ld.repPriAcct,
+                                         gnc_get_account_separator() );
+        g_free( tmpStr );
+        gnc_ttsplitinfo_set_memo( ttsi, ldd->ld.repMemo );
+        gnc_ttsplitinfo_set_account( ttsi, ldd->ld.repFromAcct );
+        gnc_ttsplitinfo_set_credit_formula( ttsi, repAssetsDebitFormula->str );
+        repSplits = g_list_append( repSplits, ttsi );
+
+        tti = gnc_ttinfo_malloc();
+        gnc_ttinfo_set_description( tti, ldd->ld.repMemo );
+        gnc_ttinfo_set_template_splits( tti, repSplits );
+        /* we're no longer responsible for this list. */
+        repSplits = NULL;
+
+        repTTList = g_list_append( repTTList, tti );
+
+        /* Actually create the SX for the repayment. */
+        tmpSX = xaccSchedXactionMalloc( gnc_get_current_book() );
+        xaccSchedXactionSetName( tmpSX, ldd->ld.repMemo );
+        xaccSchedXactionSetStartDate( tmpSX, ldd->ld.repStartDate );
+        xaccSchedXactionSetLastOccurDate( tmpSX, ldd->ld.repStartDate );
+        xaccSchedXactionSetFreqSpec( tmpSX, ldd->ld.repFreq );
+        /* FIXME: we should compare these values with the user-specified
+         * repayment frequency. */
+        xaccSchedXactionSetNumOccur( tmpSX, ldd->ld.numPer );
+        xaccSchedXactionSetRemOccur( tmpSX, ldd->ld.numPerRemain );
+        xaccSchedXactionSetTemplateTrans( tmpSX, repTTList,
+                                          gnc_get_current_book() );
+
+        gnc_sx_set_instance_count( tmpSX,
+                                   ldd->ld.numPer - ldd->ld.numPerRemain + 1 );
+
+        sxList = gnc_book_get_schedxactions( gnc_get_current_book() );
+        sxList = g_list_append( sxList, tmpSX );
+        gnc_book_set_schedxactions( gnc_get_current_book(), sxList );
+
+        g_list_foreach( repTTList, ld_gnc_ttinfo_free, NULL );
+        g_list_free( repTTList );
+        repTTList = NULL;
+        
+        g_string_free( repAssetsDebitFormula, TRUE );
+
+        ld_close_handler( ldd );
 }

@@ -69,11 +69,18 @@ ParseError;
  */
 typedef struct var_store *var_store_ptr;
 
+/* the type of entity contained in the var_store */
+typedef enum {
+  VST_NUMERIC = 0,
+  VST_STRING
+} VarStoreType;
+
 typedef struct var_store
 {
   char *variable_name;	  /* variable name if variable, NULL otherwise       */
   char use_flag;	  /* flag if variable has been assigned to           */
   char assign_flag;	  /* flag if variable is used                        */
+  VarStoreType type;
   void *value;		  /* pointer to implementation defined numeric value */
   var_store_ptr next_var; /* pointer to next variable in linked list         */
 }

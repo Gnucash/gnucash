@@ -191,10 +191,14 @@ gnc_ttsplitinfo_malloc(void)
 void
 gnc_ttsplitinfo_free(TTSplitInfo *ttsi)
 {
-  g_free(ttsi->action);
-  g_free(ttsi->memo);
-  g_free(ttsi->credit_formula);
-  g_free(ttsi->debit_formula);
+  if ( ttsi->action )
+    g_free(ttsi->action);
+  if ( ttsi->memo )
+    g_free(ttsi->memo);
+  if ( ttsi->credit_formula )
+    g_free(ttsi->credit_formula);
+  if ( ttsi->debit_formula )
+    g_free(ttsi->debit_formula);
   g_free(ttsi);
   return;
 }

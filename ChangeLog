@@ -1,3 +1,54 @@
+2002-07-24  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/scm/fin.scm: Made the exposed calcualtion functions output
+	positive values.
+
+	* src/gnome/window-main.c (gnc_main_window_create_menus): Added
+	accelerators to SX-related menu items.
+
+	* src/gnome/druid-loan.c: Primary change: actually create the
+	Scheduled Transactions which are setup by the user.  Miscellaneous
+	other cleanups, text, layout and consistency changes.
+
+	* src/gnome/dialog-sxsincelast.c: Support handling of the
+	instance-count in forward-looking transaction creation.  Simplfied
+	some of the internal data-representation regarding lists of items
+	to be created [removed autoCreateTuple, now uses toCreateTuple].
+	Removed some DEBUGging output.  Handles setting up the implicit
+	'i' variable.
+
+	* src/gnome/dialog-sx-from-trans.c (sxftd_compute_sx): Create SXes
+	with an appropriate initial instance-count value.
+	
+	* src/gnome/dialog-scheduledxaction.c
+	(schedXact_editor_populate): Create SXes with an appropriate
+	initial instance-count value.
+
+	* src/engine/SchedXaction.[ch]: Added support for an
+	instance-count, in order to support an implicit 'i' [of N]
+	variable to SX formula/function processing.
+	
+	* src/engine/SX-ttinfo.c (gnc_ttsplitinfo_free): Made the
+	ttsplitinfo_free'ing a bit safer.
+
+	* src/calculation/expression_parser.c: Added support for
+	parsing/handling quoted strings.  Intended to be parameters to
+	functions.  Fixed bug regarding nested handling of strings in the
+	parser.
+
+	* src/backend/file/gnc-schedxaction-xml-v2.c: Added support for
+	saving/restoring instance-count field of SXes.
+
+	* src/app-utils/test/test-exp-parser.c
+	(run_parser_test): Fixed pass/fail indication check.
+	(test_parser): Added tests for string params to functions.
+
+	* ChangeLog: Added entry I forgot from last time.
+	
+	* src/app-utils/gnc-exp-parser.c (func_op): Added support for
+	typed parameters to functions; params are either numerics or
+	strings.  Result of function is now parsed correctly.
+
 2002-07-24  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/glade/hbci.glade: Some HBCI GUI work --
@@ -12,6 +63,16 @@
 
 	* src/backend/file/gnc-backend-file.c: File permission fix by Matt
 	Brubeck <mbrubeck@cs.hmc.edu>
+
+2002-07-12  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/glade/sched-xact.glade: Glade-side UI cleanup.
+
+	* src/gnome/druid-loan.c: Many updates; now uses GNCAccountSel,
+	more inter-page consistency checks. UI cleanup
+
+	* src/gnome-utils/gnc-account-sel.[ch]: Added; GTK combobox for
+	selecting an Account.
 
 2002-07-11  Derek Atkins  <derek@ihtfp.com>
 

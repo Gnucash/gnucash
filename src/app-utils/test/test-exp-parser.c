@@ -8,6 +8,8 @@
 #include "gnc-numeric.h"
 #include "test-stuff.h"
 
+void real_main (int argc, char **argv);
+
 static GList *tests = NULL;
 
 typedef struct
@@ -62,12 +64,12 @@ run_parser_test (TestNode *node)
   succeeded = gnc_exp_parser_parse (node->exp, &result, &error_loc);
   {
     int pass;
-    pass = succeeded;
-    pass ^= node->should_succeed;
-    pass = !pass;
-    printf( "%0.2f [%s]\n",
-            ( ( pass && node->should_succeed ) ?
-              gnc_numeric_to_double( result ) : 0.0 ),
+    pass = (succeeded == node->should_succeed);
+    if ( pass && node->should_succeed ) {
+      pass &= gnc_numeric_equal( result, node->expected_result );
+    }
+    printf( "%0.4f [%s]\n",
+            gnc_numeric_to_double( result ),
             (pass ? "PASS" : "FAIL" ) );
   }
 
@@ -139,7 +141,7 @@ test_parser (void)
                  "- 42.72 + 13.32 + 15.48 + 23.4 + 115.4",
                  gnc_numeric_create(35897, 100) );
 
-  gh_eval_str( "(define (plus a b) (+ a b))" );
+  gh_eval_str( "(define (gnc:plus a b) (+ a b))" );
   add_pass_test( "plus( 1 : 2 ) + 3", NULL, gnc_numeric_create( 6, 1 ) );
   add_pass_test( "plus( 1 : 2 ) * 3", NULL, gnc_numeric_create( 9, 1 ) );
   add_pass_test( "plus( 1 + 2 : 3 ) * 5", NULL, gnc_numeric_create( 30, 1 ) );
@@ -148,14 +150,31 @@ test_parser (void)
   add_pass_test( "plus( plus( 1 : 2 ) : 3 )", NULL, gnc_numeric_create( 6, 1 ) );
   add_pass_test( "plus( 4 : plus( plus( 1 : 2 ) : 3))", NULL, gnc_numeric_create( 10, 1 ) );
 
-  gh_eval_str( "(define (foo a b) (+ a b))" );
-  add_pass_test( "foo( 1 : 2 ) + 4", NULL, gnc_numeric_create( 7, 1 ) );
+  gh_eval_str( "(define (gnc:foo a b) (- a b))" );
+  add_pass_test( "foo( 1 : 2 ) + 4", NULL, gnc_numeric_create( 3, 1 ) );
+
   add_pass_test( "foo( (1 + 2 * 3) : 4 ) + 5",
-                 NULL, gnc_numeric_create( 16, 1 ) );
+                 NULL, gnc_numeric_create( 8, 1 ) );
   add_pass_test( "foo( 1 : 2 ) + foo( 3 : 4 ) + 5",
-                 NULL, gnc_numeric_create( 15, 1 ) );
-  add_pass_test( "foo( a = 42 : foo( foo( 1 : 2 ) : 6 * 7 )) + a",
-                 NULL, gnc_numeric_create( 129, 1 ) );
+                 NULL, gnc_numeric_create( 3, 1 ) );
+  add_pass_test( "foo( a = 42 : foo( plus( 1 : 2 ) : 6 * 7 )) + a",
+                 NULL, gnc_numeric_create( 123, 1 ) );
+
+  gh_eval_str( "(define (gnc:test_str str b)"
+               "  (+ b (cond ((equal? str \"one\") 1)"
+               "             ((equal? str \"two\") 2)"
+               "             ((equal? str \"three\") 3)"
+               "             (0))))" );
+  add_pass_test( "test_str( \"one\" : 1 )",  NULL, gnc_numeric_create( 2, 1 ) );
+  add_pass_test( "test_str( \"two\" : 2 )",  NULL, gnc_numeric_create( 4, 1 ) );
+  add_fail_test( "test_str( 3 : \"three\" )", NULL, 0 );
+  add_pass_test( "test_str( \"asdf\" : 1 )", NULL, gnc_numeric_create( 1, 1 ) );
+  add_fail_test( "\"asdf\" + 0", NULL, 0 );
+
+  gh_eval_str( "(define (gnc:blindreturn val) val)" );
+  add_pass_test( "blindreturn( 123.1 )", NULL, gnc_numeric_create( 1231, 10 ) );
+  add_pass_test( "blindreturn( 123.01 )", NULL, gnc_numeric_create( 12301, 100 ) );
+  add_pass_test( "blindreturn( 123.001 )", NULL, gnc_numeric_create( 123001, 1000 ) );
 
   run_parser_tests ();
 
@@ -163,7 +182,7 @@ test_parser (void)
   success ("shutdown expression parser");
 }
 
-int
+void
 real_main (int argc, char **argv)
 {
   /* set_should_print_success (TRUE); */
@@ -176,5 +195,5 @@ int main( int argc, char **argv )
 {
   /* do things this way so we can test scheme function calls from expressions */
   gh_enter( argc, argv, real_main );
-  
+  return 0;
 }

@@ -16,26 +16,37 @@
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
 ;; Copyright 2002 Joshua Sled <jsled@asynchronous.org>
-;; pretty literal copies of similar code from gnumeric-1.0.8
+;;
+;; pretty literal copies of similar code from gnumeric-1.0.8, except we want
+;; positive values to be returned [as gnucash will handle the credit/debit
+;; appropriately]
 
-(define (gnc:ipmt rate nper per pv fv type)
-  (* rate
-     (- 0 (calc-principal pv
-                          (calc-pmt rate nper pv fv type)
-                          rate (- per 1))
-     )
-   )
+(define (gnc:ipmt rate per nper pv fv type)
+  (* -1 (* rate
+           (- 0 (calc-principal pv
+                                (calc-pmt rate nper pv fv type)
+                                rate (- per 1)))
+        ))
 )
 
-(define (gnc:ppmt rate nper per pv fv type)
-  (let ((pmt (calc-pmt rate nper pv fv type)))
-     (let ((ipmt (* rate
-                    (- 0 (calc-principal pv pmt rate (- per 1))))))
-      (- pmt ipmt)))
+(define (gnc:ppmt rate per nper pv fv type)
+  (let* ((pmt (calc-pmt rate nper pv fv type))
+         (ipmt (* rate
+                  (calc-principal pv pmt rate (- per 1)))))
+    (* -1 (-
+           pmt
+           (* -1 ipmt))))
 )
 
 (define (gnc:pmt rate nper pv fv type)
-  (calc-pmt rate nper pv fv type))
+  (* -1 (calc-pmt rate nper pv fv type)))
+
+(define (gnc:foobar val) val)
+
+;;;;;
+;; below: not-exposed/"private" functions, used by the "public" functions
+;; above.
+;;;;;
 
 (define (calc-pmt rate nper pv fv type)
   (let ((pvif (calc-pvif rate nper))

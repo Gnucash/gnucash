@@ -476,7 +476,6 @@ http://www.interest.com/hugh/calc/mort_links.html
 
 Druid Feedback:
 
-
 <Wilddev> jsled: <auspex> Wilddev: The labels need colons, mnemonics, and right-alignment. 
 <Wilddev> <auspex> Wilddev: It may be worthwhile for gnucash to create GtkSpinButton subclasses which show the percent symbol and others within the field.
 <Wilddev> <auspex> Wilddev: I don't know how complicated that will be.
@@ -495,3 +494,29 @@ Druid Feedback:
 <jsled> Hmm.  Okay.  The between-transaction period is a frequency editor on the Repayment page.
 <Wilddev> <auspex> I'm wondering if "Original Principal" should be a vulgate
 such as "Loan Amount"
+
+----------
+
+Expression changes, round 2
+
+We need the following abilities in order to get mortgage/loan repayment
+working:
+. Ability to get the original value of an account
+  . [perhaps, ability to reference an external value?]
+. Ability to get the present value of an account
+. Ability to get the current i in an "i-of-N" sequence
+
+As well, it'd be nice to have:
+. some sort of signature checking on functions in expressions
+. safe[r] error handling?
+
+We decide that the original/present value of the account should be handled in
+scheme, and thus we actually need a way to reference accounts down to the
+scheme expressions.  We decide to use the Quote symbols to refer to a string
+literal.  The expression parser should be modified to parse this.
+
+----------
+
+The current 'i' and 'N' are going to be handled by having a list of
+predefined variables which the user cannot have access to.  For the time
+being, this is 'i' and 'N'.

@@ -59,6 +59,7 @@ static short module = MOD_SX;
  *   <sx:autoCreateNotify>n</sx:autoCreateNotify>
  *   <sx:advanceCreateDays>0</sx:advanceCreateDays>
  *   <sx:advanceRemindDays>5</sx:advanceRemindDays>
+ *   <sx:instanceCount>100</sx:instanceCount>
  *   <sx:lastOccur>
  *     <gdate>2001-02-28</gdate>
  *   </sx:lastOccur>
@@ -80,6 +81,7 @@ static short module = MOD_SX;
  *   <sx:end type="date">
  *     <gdate>2004-03-20</gdate>
  *   </sx:end>
+ *   <sx:instanceCount>100</sx:instanceCount>
  *   <sx:freq>
  *     <!-- freqspec tree -->
  *   </sx:freq>
@@ -88,6 +90,7 @@ static short module = MOD_SX;
  *   <sx:id type="guid">...</sx:id>
  *   <sx:name>Loan 2</sx:name>
  *   <sx:manual-conf>f</sx:manual-conf>
+ *   <sx:instanceCount>100</sx:instanceCount>
  *   <sx:start>
  *      <gdate>2000-12-31</gdate>
  *   </sx:start>
@@ -113,6 +116,7 @@ static short module = MOD_SX;
 #define SX_AUTOCREATE_NOTIFY    "sx:autoCreateNotify"
 #define SX_ADVANCE_CREATE_DAYS  "sx:advanceCreateDays"
 #define SX_ADVANCE_REMIND_DAYS  "sx:advanceRemindDays"
+#define SX_INSTANCE_COUNT       "sx:instanceCount"
 #define SX_START                "sx:start"
 #define SX_LAST                 "sx:last"
 #define SX_NUM_OCCUR            "sx:num-occur"
@@ -139,6 +143,7 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     xmlNodePtr	ret;
     xmlNodePtr	fsNode;
     GDate	*date;
+    gint        instCount;
     const GUID        *templ_acc_guid;
 
     templ_acc_guid = xaccAccountGetGUID(sx->template_acct);
@@ -162,6 +167,10 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
                                      sx->advanceCreateDays));
     xmlAddChild(ret, int_to_dom_tree(SX_ADVANCE_REMIND_DAYS,
                                      sx->advanceRemindDays));
+
+    instCount = gnc_sx_get_instance_count( sx, NULL );
+    xmlAddChild( ret, int_to_dom_tree( SX_INSTANCE_COUNT,
+                                       instCount ) );
 
     xmlAddChild( ret,
                  gdate_to_dom_tree( SX_START,
@@ -320,6 +329,22 @@ sx_set_date( xmlNodePtr node, SchedXaction *sx,
 
 static
 gboolean
+sx_instcount_handler( xmlNodePtr node, gpointer sx_pdata )
+{
+  struct sx_pdata *pdata = sx_pdata;
+  SchedXaction *sx = pdata->sx;
+  gint64 instanceNum;
+
+  if ( ! dom_tree_to_integer( node, &instanceNum ) ) {
+    return FALSE;
+  }
+
+  gnc_sx_set_instance_count( sx, instanceNum );
+  return TRUE;
+}
+
+static
+gboolean
 sx_start_handler( xmlNodePtr node, gpointer sx_pdata )
 {
     struct sx_pdata *pdata = sx_pdata;
@@ -436,6 +461,7 @@ struct dom_tree_handler sx_dom_handlers[] = {
     { SX_AUTOCREATE_NOTIFY,   sx_notify_handler,     1, 0 },
     { SX_ADVANCE_CREATE_DAYS, sx_advCreate_handler,  1, 0 },
     { SX_ADVANCE_REMIND_DAYS, sx_advRemind_handler,  1, 0 },
+    { SX_INSTANCE_COUNT,      sx_instcount_handler,  0, 0 },
     { SX_START,               sx_start_handler,      1, 0 },
     { SX_LAST,                sx_last_handler,       0, 0 },
     { SX_NUM_OCCUR,           sx_numOccur_handler,   0, 0 },

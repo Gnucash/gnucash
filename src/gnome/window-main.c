@@ -916,14 +916,14 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
   static GnomeUIInfo gnc_sched_xaction_tools_submenu_template[] = 
   {
     { GNOME_APP_UI_ITEM,
-      N_("List and Editor"),
+      N_("_List and Editor"),
       N_("The list of Scheduled Transactions"),
       gnc_main_window_sched_xaction_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     { GNOME_APP_UI_ITEM,
-      N_("Since Last Run..."),
+      N_("_Since Last Run..."),
       N_("Create Scheduled Transactions since the last time run."),
       gnc_main_window_sched_xaction_slr_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
@@ -931,7 +931,7 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
     },
     GNOMEUIINFO_SEPARATOR,
     { GNOME_APP_UI_ITEM,
-      N_( "Mortgage/Loan Repayment Setup" ),
+      N_( "_Mortgage/Loan Repayment Setup" ),
       N_( "Setup scheduled transactions for repayment of a loan" ),
       gnc_main_window_sx_loan_druid_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
@@ -942,7 +942,7 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
   
   static GnomeUIInfo gnc_actions_menu_template[] =
   {
-    GNOMEUIINFO_SUBTREE( N_("Scheduled Transactions"),
+    GNOMEUIINFO_SUBTREE( N_("_Scheduled Transactions"),
                          gnc_sched_xaction_tools_submenu_template ),
     GNOMEUIINFO_END
   };

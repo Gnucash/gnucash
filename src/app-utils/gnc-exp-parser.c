@@ -350,6 +350,8 @@ func_op( const char *fname,
 {
   SCM scmFn, scmArgs, scmTmp;
   int i;
+  var_store *vs;
+  gchar *str;
   gnc_numeric n, *result;
   GString *realFnName;
 
@@ -365,15 +367,37 @@ func_op( const char *fname,
   scmArgs = gh_list( SCM_UNDEFINED );
   for ( i=0; i<argc; i++ ) {
     /* cons together back-to-front. */
-    n = *(gnc_numeric*)argv[argc - i - 1];
-    scmTmp = gh_double2scm( gnc_numeric_to_double( n ) );
+    vs = (var_store*)argv[argc - i - 1];
+    switch ( vs->type ) {
+    case VST_NUMERIC:
+      n = *(gnc_numeric*)(vs->value);
+      scmTmp = gh_double2scm( gnc_numeric_to_double( n ) );
+      break;
+    case VST_STRING:
+      str = (char*)(vs->value);
+      scmTmp = gh_str2scm( str, strlen(str) );
+      break;
+    default:
+      /* FIXME: error */
+      printf( "argument %d not a numeric or string [type = %d]\n",
+              i, vs->type );
+      return NULL;
+      break; /* notreached */
+    }
     scmArgs = gh_cons( scmTmp, scmArgs );
   }
   scmTmp = gh_apply( scmFn, scmArgs );
   
   result = g_new0( gnc_numeric, 1 );
-  *result = double_to_gnc_numeric( gh_scm2double(scmTmp), 1,
-                                   GNC_DENOM_SIGFIG | (6<<8) );
+  *result = double_to_gnc_numeric( gh_scm2double(scmTmp),
+                                   GNC_DENOM_AUTO,
+                                   GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND );
+  /* I'm not sure why this explicit negation step is necessary, but it
+   * doesn't seem like it should be. */
+  if ( gh_scm2double( scmTmp ) < 0 ) {
+    *result = gnc_numeric_neg( *result );
+  }
+  /* FIXME: cleanup scmArgs = gh_list, cons'ed cells? */
   return (void*)result;
 }
 

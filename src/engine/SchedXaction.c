@@ -51,6 +51,7 @@ typedef struct _temporalStateData {
   GDate end_date;
   gint num_occur_total;
   gint num_occur_rem;
+  gint num_inst;
 } temporalStateData;
 
 /** Local Prototypes *****/
@@ -80,6 +81,7 @@ xaccSchedXactionInit( SchedXaction *sx, GNCBook *book)
         sx->autoCreateNotify = FALSE;
         sx->advanceCreateDays = 0;
         sx->advanceRemindDays = 0;
+        sx->instance_num = 0;
 	sx->dirty = TRUE;
 
         /* create a new template account for our splits */
@@ -507,6 +509,29 @@ xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
         return next_occur;
 }
 
+gint
+gnc_sx_get_instance_count( SchedXaction *sx, void *stateData )
+{
+  gint toRet = -1;
+  temporalStateData *tsd;
+
+  if ( stateData ) {
+    tsd = (temporalStateData*)stateData;
+    toRet = tsd->num_inst;
+  } else {
+    toRet = sx->instance_num;
+  }
+
+  return toRet;
+}
+
+void
+gnc_sx_set_instance_count( SchedXaction *sx, gint instanceNum )
+{
+  g_return_if_fail( sx );
+  sx->instance_num = instanceNum;
+}
+
 GList *
 xaccSchedXactionGetSplits( SchedXaction *sx )
 {
@@ -642,10 +667,11 @@ void
 xaccSchedXactionIncrSequenceState( SchedXaction *sx,
                                    void *stateData )
 {
+        temporalStateData *tsd = (temporalStateData*)stateData;
         if ( xaccSchedXactionHasOccurDef( sx ) ) {
-                temporalStateData *tsd = (temporalStateData*)stateData;
                 tsd->num_occur_rem -= 1;
         }
+        tsd->num_inst += 1;
 }
 
 void
@@ -663,6 +689,7 @@ gnc_sx_create_temporal_state_snapshot( SchedXaction *sx )
         toRet->end_date        = sx->end_date;
         toRet->num_occur_total = sx->num_occurances_total;
         toRet->num_occur_rem   = sx->num_occurances_remain;
+        toRet->num_inst        = sx->instance_num;
         return (void*)toRet;
 }
 
@@ -675,6 +702,7 @@ gnc_sx_revert_to_temporal_state_snapshot( SchedXaction *sx, void *stateData )
         sx->end_date              = tsd->end_date;
         sx->num_occurances_total  = tsd->num_occur_total;
         sx->num_occurances_remain = tsd->num_occur_rem;
+        sx->instance_num          = tsd->num_inst;
 
         sx->dirty = TRUE;
 }

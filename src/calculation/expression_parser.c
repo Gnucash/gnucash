@@ -388,7 +388,7 @@ typedef struct parser_env
   const char *parse_str;
   char radix_point;
   char group_char;
-  char name[50];
+  char name[128];
 
   char Token;
   char asn_op;
@@ -417,6 +417,7 @@ parser_env;
 #define ARG_TOKEN ':'
 #define VAR_TOKEN 'V'
 #define NUM_TOKEN 'I'
+#define STR_TOKEN '"'
 
 #define STACK_INIT 50
 
@@ -671,6 +672,7 @@ get_named_var (parser_env_ptr pe)
     else
       bv->next_var = retp;
     retp->variable_name = g_strdup (pe->name);
+    retp->type = VST_NUMERIC;
     retp->value =
       pe->trans_numeric ("0", pe->radix_point, pe->group_char, NULL);
   }
@@ -691,6 +693,7 @@ get_unnamed_var (parser_env_ptr pe)
       retp = &(pe->unnamed_vars[cntr]);
       retp->variable_name = NULL;
       retp->use_flag = USED_VAR;
+      retp->type = VST_NUMERIC;
       if (retp->value)
       {
 	pe->free_numeric (retp->value);
@@ -756,8 +759,8 @@ next_token (parser_env_ptr pe)
     add_token (pe, *str_parse++);
     if (*str_parse == ASN_OP)
     {
-      /* BUG/FIXME: this allows '(=' and ')=' [?], neither of which make
-       * sense. */
+      /* BUG/FIXME: this seems to allow '(=' and ')=' [?], neither of which
+       * make sense. */
       if (pe->Token != ASN_OP)
       {
         str_parse++;
@@ -767,6 +770,18 @@ next_token (parser_env_ptr pe)
       else
         pe->error_code = UNDEFINED_CHARACTER;
     }				/* endif */
+  }
+  /* test for string */
+  else if ( *str_parse == '"' ) { 
+    nstr = pe->name;
+    /* skip over the '"'. */
+    str_parse++;
+    do {
+      *nstr++ = *str_parse++;
+    } while ( *str_parse != '"' );
+    *nstr = EOS;
+    str_parse++;
+    add_token( pe, STR_TOKEN );
   }
   /* test for name */
   else if (isalpha (*str_parse)
@@ -818,15 +833,6 @@ next_token (parser_env_ptr pe)
   pe->parse_str = str_parse;
 }				/* next_token */
 
-/* evaluate function operators
- * <name>( arg0, arg1, ... )
- */
-static void
-function_op( parser_env_ptr pe )
-{
-  
-}
-
 /* evaluate assignment operators,
  * =
  * +=
@@ -834,6 +840,7 @@ function_op( parser_env_ptr pe )
  * \=
  * *=
  */
+/* FIXME: add non-numeric checking. */
 static void
 assignment_op (parser_env_ptr pe)
 {
@@ -913,6 +920,7 @@ assignment_op (parser_env_ptr pe)
 }				/* assignment_op */
 
 /* evaluate addition, subtraction operators */
+/* FIXME: add non-numeric checking. */
 static void
 add_sub_op (parser_env_ptr pe)
 {
@@ -972,6 +980,7 @@ add_sub_op (parser_env_ptr pe)
 }				/* add_sub_op */
 
 /* evaluate multiplication, division operators */
+/* FIXME: add non-numeric checking. */
 static void
 multiply_divide_op (parser_env_ptr pe)
 {
@@ -1036,14 +1045,24 @@ multiply_divide_op (parser_env_ptr pe)
  *  numerics
  *  grouped expressions, "()"
  *  functions [ <name>( [exp, exp, ..., exp] ) ]
+ *  strings
  */
 static void
 primary_exp (parser_env_ptr pe)
 {
   var_store_ptr rslt = NULL;
-  char *fnIdent;
+  char *ident = NULL;
   int funcArgCount;
   char LToken = pe->Token;
+
+  /* If we are in a state where the non-stacked 'pe->name' is valuable, then
+   * save it before we process the next token. */
+  switch ( LToken ) {
+  case FN_TOKEN:
+  case STR_TOKEN:
+    ident = g_strdup( pe->name );
+    break;
+  }
 
   next_token (pe);
   if (pe->error_code)
@@ -1099,7 +1118,6 @@ primary_exp (parser_env_ptr pe)
       break;
 
     case FN_TOKEN:
-      fnIdent = pe->name;
       funcArgCount = 0;
 
       do {
@@ -1126,18 +1144,28 @@ primary_exp (parser_env_ptr pe)
 
         argv = g_new0( void*, funcArgCount );
         for ( i=0; i<funcArgCount; i++ ) {
-          /* fill back-to-front */
+          /* fill, in back-to-front order, the funcArgCount tokens we just
+           * parsed out of the expression into a argument list to hand back
+           * to the caller's func_op callback. */
           val = pop(pe);
-          argv[funcArgCount - i - 1] = val->value;
+          argv[funcArgCount - i - 1] = val;
         }
+
         rslt = get_unnamed_var(pe);
-        rslt->value = (*pe->func_op)( fnIdent, funcArgCount, argv );
+        rslt->value = (*pe->func_op)( ident, funcArgCount, argv );
+
+        for ( i=0; i<funcArgCount; i++ ) {
+          free_var( argv[i], pe );
+        }
         g_free( argv );
+        g_free( ident );
+
         if ( rslt->value == NULL ) {
           pe->error_code = NOT_A_FUNC;
           add_token( pe, EOS );
           return;
         }
+
       }
 
       next_token(pe);
@@ -1145,6 +1173,11 @@ primary_exp (parser_env_ptr pe)
 
     case VAR_TOKEN:
       rslt = get_named_var (pe);
+      break;
+    case STR_TOKEN:
+      rslt = get_unnamed_var( pe );
+      rslt->type = VST_STRING;
+      rslt->value = ident;
       break;
   }				/* endswitch */
 

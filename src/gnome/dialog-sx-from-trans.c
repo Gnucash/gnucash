@@ -387,6 +387,8 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
     break;
   }
 
+  gnc_sx_set_instance_count( sx, 1 );
+
   sxftd_add_template_trans( sxfti );
 
   return sxftd_errno;

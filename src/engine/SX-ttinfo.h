@@ -47,7 +47,6 @@ void gnc_ttinfo_set_num(TTInfo *tti, const char *num);
 
 
 /* this one points to a persistent pointer so ownership isn't relevant */
-
 void gnc_ttinfo_set_currency(TTInfo *tti, gnc_commodity *common_currency);
 
 

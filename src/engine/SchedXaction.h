@@ -118,11 +118,27 @@ void xaccSchedXactionSetNumOccur( SchedXaction *sx, gint numNum );
 gint xaccSchedXactionGetRemOccur( SchedXaction *sx );
 void xaccSchedXactionSetRemOccur( SchedXaction *sx, gint numRemain );
 
+/**
+ * Set the instance count.  This is incremented by one for every created
+ * instance of the SX.
+ * @param stateData may be NULL.
+ **/
+gint gnc_sx_get_instance_count( SchedXaction *sx, void *stateData );
+/**
+ * Sets the instance count to something other than the default.  As the
+ * default is the incorrect value '0', callers should DTRT here.
+ **/
+void gnc_sx_set_instance_count( SchedXaction *sx, gint instanceNum );
+
 GList *xaccSchedXactionGetSplits( SchedXaction *sx );
 void xaccSchedXactionSetSplits( SchedXaction *sx, GList *newSplits );
 
-void xaccSchedXactionGetAutoCreate( SchedXaction *sx, gboolean *outAutoCreate, gboolean *outNotify );
-void xaccSchedXactionSetAutoCreate( SchedXaction *sx, gboolean newAutoCreate, gboolean newNotify );
+void xaccSchedXactionGetAutoCreate( SchedXaction *sx,
+                                    gboolean *outAutoCreate,
+                                    gboolean *outNotify );
+void xaccSchedXactionSetAutoCreate( SchedXaction *sx,
+                                    gboolean newAutoCreate,
+                                    gboolean newNotify );
 
 gint xaccSchedXactionGetAdvanceCreation( SchedXaction *sx );
 void xaccSchedXactionSetAdvanceCreation( SchedXaction *sx, gint createDays );
@@ -177,6 +193,9 @@ void xaccSchedXactionSetGUID( SchedXaction *sx, GUID g );
  * looking at reminders... and generally thinking about not wanting the
  * caller to know every possible thing that needs to be kept track of in a
  * forward-looking sequence of SXes.
+ *
+ * 	THESE (3) FUNCTIONS ARE DEPRECATED.  See/Use the
+ * 	'temporal_state_snapshot' functions below.
  **/
 void *xaccSchedXactionCreateSequenceState( SchedXaction *sx );
 void xaccSchedXactionIncrSequenceState( SchedXaction *sx, void *stateData );
@@ -194,7 +213,8 @@ void xaccSchedXactionDestroySequenceState( void *stateData );
  * SX without having to rollback all the individual state changes.
  *
  * NOTE that this is similar to the above SequenceState interface, and
- * perhaps can be seen as entailing the above interface.
+ * perhaps can be seen as entailing the above interface.  In fact, the above
+ * interface is deprecated in favor of this one.
  **/
 void *gnc_sx_create_temporal_state_snapshot( SchedXaction *sx );
 void gnc_sx_revert_to_temporal_state_snapshot( SchedXaction *sx, void *stateData );
