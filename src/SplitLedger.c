@@ -187,12 +187,15 @@ LedgerDestroy (SplitRegister *reg)
    /* be sure to destroy the "blank split" */
    if (reg->user_hook) {
       Split *split;
+      Transaction *trans;
 
       split = (Split *) (reg->user_hook);
 
       /* split destroy will automatically remove it
        * from its parent account */
-      xaccSplitDestroy (split);
+      trans = xaccSplitGetParent (split);
+      xaccTransBeginEdit (trans);
+      xaccTransDestroy (trans);
       reg->user_hook = NULL;
    }
 }
@@ -445,7 +448,7 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
    time_t secs;
    double baln;
    int typo = reg->type & REG_TYPE_MASK;
-   int style = reg->type & REG_STYLE_MASK;
+   /* int style = reg->type & REG_STYLE_MASK; */
 
    /* don't even bother doing a load if there is no current cursor */
    if (!(reg->table->current_cursor)) return;
@@ -635,7 +638,11 @@ xaccSRCountRows (SplitRegister *reg, Split **slist,
    num_virt_rows = 1;
 
    i=0;
-   split = slist[0]; 
+   if (slist) {
+      split = slist[0]; 
+   } else {
+      split = NULL;
+   }
    while (split) {
       /* do not count the blank split */
       if (split != ((Split *) reg->user_hook)) {
@@ -801,7 +808,11 @@ printf ("load register of %d phys rows ----------- \n", reg->num_phys_rows);
    i=0;
    vrow = 1;   /* header is vrow zero */
    phys_row = reg->header->numRows;
-   split = slist[0]; 
+   if (slist) {
+      split = slist[0]; 
+   } else {
+      split = NULL;
+   }
    while (split) {
 
       /* do not load the blank split */
