@@ -42,6 +42,7 @@ typedef struct _dialog_date_close_window {
   GtkWidget *post_date;
   GtkWidget *acct_combo;
   GtkWidget *memo_entry;
+  GtkWidget *question_check;
   GncBillTerm *terms;
   Timespec *ts, *ts2;
   GList * acct_types;
@@ -49,6 +50,7 @@ typedef struct _dialog_date_close_window {
   Account *acct;
   char **memo;
   gboolean retval;
+  gboolean answer;
 } DialogDateClose;
 
 static void
@@ -83,7 +85,8 @@ gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
   if (ddc->memo_entry && ddc->memo)
     *(ddc->memo) = gtk_editable_get_chars (GTK_EDITABLE (ddc->memo_entry),
 					   0, -1);
-
+  if (ddc->question_check)
+	  ddc->answer = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ddc->question_check));
   ddc->retval = TRUE;
   gnome_dialog_close (GNOME_DIALOG (ddc->dialog));
 }
@@ -226,16 +229,17 @@ post_date_changed_cb (GNCDateEdit *gde, gpointer d)
 }
 
 gboolean
-gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
+gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
 				const char *ddue_label_message,
 				const char *post_label_message,
 				const char *acct_label_message,
+				const char *question_check_message,
 				gboolean ok_is_default,
 				GList * acct_types, GNCBook *book,
 				GncBillTerm *terms,
 				/* Returned Data... */
 				Timespec *ddue, Timespec *post,
-				char **memo, Account **acct)
+				char **memo, Account **acct, gboolean *answer)
 {
   DialogDateClose *ddc;
   GtkWidget *hbox;
@@ -248,6 +252,8 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
   if (!message || !ddue_label_message || !post_label_message ||
       !acct_label_message || !acct_types || !book || !ddue || !post || !acct)
     return FALSE;
+  if (question_check_message && !answer)
+	  return FALSE;
 
   ddc = g_new0 (DialogDateClose, 1);
   ddc->ts = ddue;
@@ -274,6 +280,8 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
   ddc->post_date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
   gtk_box_pack_start (GTK_BOX(date_box), ddc->post_date, TRUE, TRUE, 0);
 
+  ddc->question_check = glade_xml_get_widget(xml, "question_check");
+  
   if (parent)
     gnome_dialog_set_parent (GNOME_DIALOG(ddc->dialog), GTK_WINDOW(parent));
 
@@ -286,6 +294,16 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
   gtk_label_set_text (GTK_LABEL (label), post_label_message);
   label = glade_xml_get_widget (xml, "acct_label");
   gtk_label_set_text (GTK_LABEL (label), acct_label_message);
+
+  if (question_check_message)
+  {
+	  gtk_label_set_text(GTK_LABEL(GTK_BIN(ddc->question_check)->child), question_check_message);
+	  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ddc->question_check), *answer);
+  } else {
+	  gtk_widget_hide(ddc->question_check);
+	  gtk_widget_hide(glade_xml_get_widget(xml, "hide1"));
+  }
+
 
   /* Set the post date widget */
   gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->post_date), *post);
@@ -319,6 +337,8 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
 
   retval = ddc->retval;
   *acct = ddc->acct;
+  if (question_check_message)
+	  *answer = ddc->answer;
   g_free (ddc);
 
   return retval;

@@ -616,10 +616,11 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
   GncInvoice *invoice;
-  char *message, *memo, *ddue_label, *post_label, *acct_label;
+  char *message, *memo, *ddue_label, *post_label, *acct_label, *question_label;
   Account *acc = NULL;
   GList * acct_types = NULL;
   Timespec ddue, postdate;
+  gboolean accumulate;
 
   /* Make sure the invoice is ok */
   if (!gnc_invoice_window_verify_ok (iw))
@@ -644,6 +645,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   ddue_label = _("Due Date");
   post_label = _("Post Date");
   acct_label = _("Post to Account");
+  question_label = _("Accumulate Splits?");
 
   /* Determine the type of account to post to */
   acct_types = gnc_business_account_types (&(iw->owner));
@@ -653,10 +655,13 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   ddue = postdate;
   memo = NULL;
 
-  if (!gnc_dialog_dates_acct_parented (iw->dialog, message, ddue_label,
-				       post_label, acct_label, TRUE,
+  /* Get the default for the accumulate option */
+  accumulate = gnc_lookup_boolean_option("Business", "Accumulate splits on Post?", TRUE);
+
+  if (!gnc_dialog_dates_acct_question_parented (iw->dialog, message, ddue_label,
+				       post_label, acct_label, question_label, TRUE,
 				       acct_types, iw->book, iw->terms,
-				       &ddue, &postdate, &memo, &acc))
+				       &ddue, &postdate, &memo, &acc, &accumulate))
     return;
 
   /* Yep, we're posting.  So, save the invoice... 
@@ -668,7 +673,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   gnc_invoice_window_ok_save (iw);
 
   /* ... post it; post date is set to now ... */
-  gncInvoicePostToAccount (invoice, acc, &postdate, &ddue, memo);
+  gncInvoicePostToAccount (invoice, acc, &postdate, &ddue, memo, accumulate);
   gncInvoiceCommitEdit (invoice);
   gnc_resume_gui_refresh ();
 

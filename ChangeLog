@@ -1,3 +1,14 @@
+2004-10-15  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncInvoice.[ch]
+	* src/business/business-gnome/dialog-date-close.[ch]
+	* src/business/business-gnome/dialog-invoice.c
+	* src/business/business-gnome/glade/date-close.glade
+	* src/business/business-utils/business-prefs.scm
+	  Daniel Lindenaar's patch to implement a check-box in the Invoice Post
+	  Dialog (with a default in the File Preferences) to choose to accumulate
+	  splits when posting an invoice, or post a 1:1 mapping.
+
 2004-10-13  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif-import/qif-object.scm:

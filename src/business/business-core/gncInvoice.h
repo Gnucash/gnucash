@@ -111,7 +111,7 @@ GList * gncInvoiceGetEntries (GncInvoice *invoice);
 Transaction *
 gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 			 Timespec *posted_date, Timespec *due_date,
-			 const char *memo);
+			 const char *memo, gboolean accumulatesplits);
 
 /**
  * UNpost this invoice.  This will destroy the posted transaction and

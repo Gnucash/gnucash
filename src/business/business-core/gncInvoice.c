@@ -612,6 +612,7 @@ gboolean gncInvoiceGetActive (GncInvoice *invoice)
   return invoice->active;
 }
 
+
 gnc_numeric gncInvoiceGetToChargeAmount (GncInvoice *invoice)
 {
   if (!invoice) return gnc_numeric_zero();
@@ -742,7 +743,7 @@ gnc_lot_match_owner_payment (GNCLot *lot, gpointer user_data)
 
 Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 				       Timespec *post_date, Timespec *due_date,
-				       const char * memo)
+				       const char * memo, gboolean accumulatesplits)
 {
   Transaction *txn;
   GNCLot *lot = NULL;
@@ -853,7 +854,25 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 		gncEntryGetBillAccount (entry));
     if (this_acc) {
       if (gnc_numeric_check (value) == GNC_ERROR_OK) {
-	splitinfo = gncAccountValueAdd (splitinfo, this_acc, value);
+	if (accumulatesplits) {
+	    gncAccountValueAdd (splitinfo, this_acc, value);
+	} else {
+		Split *split;
+
+		split = xaccMallocSplit (invoice->inst.book);
+		/* set action and memo? */
+
+		xaccSplitSetMemo (split, gncEntryGetDescription (entry));
+		xaccSplitSetAction (split, type);
+
+		xaccSplitSetBaseValue (split, (reverse ? gnc_numeric_neg (value)
+				: value),
+				 invoice->currency);
+       	xaccAccountBeginEdit (this_acc);
+        xaccAccountInsertSplit (this_acc, split);
+        xaccAccountCommitEdit (this_acc);
+        xaccTransAppendSplit (txn, split);
+	}
 
 	/* If there is a credit-card account, and this is a CCard
 	 * payment type, the don't add it to the total, and instead
