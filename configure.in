@@ -339,11 +339,11 @@ AC_SUBST(GNC_LIBEXECDIR)
 AC_ARG_ENABLE(error-on-warning,
   [  --enable-error-on-warning    treat compile warnings as errors],
   [case "${enableval}" in
-     yes) CFLAGS="${CFLAGS} -Werror"; enable_compile_warnings=no ;;
+     yes) CFLAGS="${CFLAGS} -Werror" ;;
      no)  ;;
      *) AC_MSG_ERROR(bad value ${enableval} for --enable-error-on-warning) ;;
-   esac]
-  [  CFLAGS="${CFLAGS} -Werror"; enable_compile_warnings=no ])
+   esac],
+  [  CFLAGS="${CFLAGS} -Werror" ])
 
 AC_ARG_ENABLE( debug,
   [  --enable-debug               compile with debugging flags set],
@@ -920,9 +920,9 @@ then
   #warnFLAGS="${warnFLAGS} -Wno-uninitialized"
   #warnFLAGS="${warnFLAGS} -Wno-unused"
   # other flags...
-  warnFLAGS="${warnFLAGS} -Wmissing-prototypes"
-  warnFLAGS="${warnFLAGS} -Wmissing-declarations"
-  warnFLAGS="${warnFLAGS} -Werror-implicit-function-declaration"
+  #warnFLAGS="${warnFLAGS} -Wmissing-prototypes"
+  #warnFLAGS="${warnFLAGS} -Wmissing-declarations"
+  #warnFLAGS="${warnFLAGS} -Werror-implicit-function-declaration" # In -Wall
 
   CFLAGS="${CFLAGS} ${warnFLAGS}"
 else
