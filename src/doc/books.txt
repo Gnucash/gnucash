@@ -323,6 +323,29 @@ Open Issues / ToDo
    it would be 'easy' to add this: right be fore I close a book, I have a
    list of transactions which can be added to/removed from).
 
+*) add 13-period support to SX.  e.g.
+   One of the calenders my company uses is like this:
+   13 periods
+   1st period begins jan 1st, partial first week plus 4 weeks.
+   2nd - 13th period begins on a sunday every four weeks.
+   13th period - 4th week may be less than full week because it ends on 12/31.
+
+   For 2003:
+   01. 01/01 - 02/01
+   02. 02/02 - 03/01
+   03. 03/02 - 03/29
+   04. 03/30 - 04/26
+   05. 04/27 - 05/24
+   06. 05/25 - 06/21
+   07. 06/22 - 07/19
+   08. 07/20 - 08/16
+   09. 08/17 - 09/13
+   10. 09/14 - 10/11
+   11. 10/12 - 11/08
+   12. 11/09 - 12/06
+   13. 12/07 - 12/31
+                                                                                
+
 
 =========================== end of file ========================
 
