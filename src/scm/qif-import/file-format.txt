@@ -1,8 +1,22 @@
 
-QIF file format.
+QIF file format
+---------------
+The QIF is an old and rather broken file format defined by Intuit
+for exporting Quicken data.  It is 'broken' because the format
+is ambigous in many places, non-standard between different releases
+and applications, and even varies subtly from country to country (in
+particular, the way dates and amounts are reprensted), and fails
+to define important data (such as the currency denomination, or the 
+exchange rates when transfering between accounts marked in different
+currencies).  Importing a QIF file can require significant manual
+intervention by the user in order to get the data straight.
 
-Note that the WebConnect or QFX file format is very similar, and is the
-'new' standard for on-line bank statement downloads.
+Extensions
+----------
+TEF -- Time and Expense Format (see below)
+
+QFX -- also known as 'WebConnect' --  very similar, and is the
+       'new' standard for on-line bank statement downloads.
 
 Type of account identifiers
 ----------------------------
@@ -100,6 +114,9 @@ P      first line text for transfers/reminders
 M      Memo
 O      Commission
 L      Account for transfer
+       (category/class or transfer/class)
+       (For MiscIncX or MiscExpX actions, this will be 
+       category/class|transfer/class or |transfer/class)
 T      Amount of transaction
 U      Amount of transaction (higher possible value than T)
 $      Amount transferred
@@ -116,8 +133,9 @@ N      Number (check or reference number)
 P      Payee/description
 M      Memo
 A      Address (up to 5 lines; 6th line is an optional message) 
-L      Category (or subcategory/transfer/class)
-S      Category in split (category/transfer/class) 
+L      Category (category/class or transfer/class)
+
+S      Category in split (category/class or transfer/class) 
 E      Memo in split
 $      Dollar amount of split
 %      Percentage of split if percentages are used
@@ -127,6 +145,76 @@ X      Small Business extensions
 
 Note that S,E and $ lines are repeated as needed for splits.
 
+Time and Expense Format
+-----------------------
+The following QIF extension added by Iambic Software
+to handle time and expense tracking.  This is used in particular
+by handhelds (Palm and WinCE).  TEF is claimed to be a superset
+of the QIF format.
+
+TEF Files begin with the header:
+#TEF VERSION X.YYY 
+Documented below is version 1.01
+
+#      Any line beginning with # is a comment and not parsed 
+B      City 
+F      Reported           
+H      Report # 
+J      Attendees 
+K      Reimbursable 
+R      Receipt 
+U      Begin Odometer 
+V      End Odometer 
+W      Private 
+X      Exchange Rate 
+Z      User 
+
+1      Client 
+2      Project 
+3      Activity 
+4      Expense Type 
+5      Account 
+6      Vehicle 
+7      Currency 
+8      Task 
+9      (not used) 
+0      (not used) 
+
+@      Billing Code 
+!      Tax Amount 
+%      Uses Splits 
+(      SalesTaxRate1 
+)      SalesTaxRate2 
+=      Flat Fee Amount 
+\      Status1 
+/      Status2 
+&      Status3 
+<      Status4 
+>      Status5 
+?      Keyword: TIME, EXPENSE, CLIENT, PROJECT, ACTIVITY, TYPE,
+       TASK, VEHICLE, PAYEE, CURRENCY. If absent, entry is 
+       assumed EXPENSE type as compatible with QIF 
+
+*      Duration hh:mm:ss 
+
++      Timer On 
+[      Start time
+]      End Time
+{      TimerLastStoppedAt 
+}      (not used) 
+|      Notes 
+
+
+When importing type CLIENT, PROJECT, ACTIVITY, TYPE, TASK, VEHICLE,
+PAYEE, CURRENCY the following are used: 
+
+N      Name 
+C      Code 
+R      Rate 
+L      Link 
+W      Private 
+
+         
 =====================================================================
 General Notes:
 
