@@ -1,3 +1,7 @@
+2003-06-19  Chris Lyttle  <chris@wilddev.net>
+
+	* src/scm/help-topics-index.scm: add Jon Lapham's patch
+
 2003-06-18  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c: Tolerate some

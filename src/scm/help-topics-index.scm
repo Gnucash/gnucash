@@ -84,9 +84,15 @@
   )
  ((N_ "Organizing Your Accounts")
   "gnc-help:gnucash-guide/chapter3.html"
-   (((N_ "Using Accounts vs. Categories")
-     "gnc-help:gnucash-guide/categories1.html" #f)
-     ((N_ "Types of GnuCash Accounts")
+   (((N_ "Basic Accounting Concepts")
+     "gnc-help:gnucash-guide/basic_acct1.html"
+     (((N_ "Balance Sheet Accounts")
+       "gnc-help:gnucash-guide/basic_acct1.html#basic_acct_bsm2" #f)
+      ((N_ "Income and Expense Accounts")
+       "gnc-help:gnucash-guide/basic_acct1.html#basic_acct_ie2" #f)
+      )
+     )
+     ((N_ "GnuCash Accounts")
       "gnc-help:gnucash-guide/types1.html"
        (((N_ "Balance sheet accounts")
          "gnc-help:gnucash-guide/types1.html#balance2" #f)
