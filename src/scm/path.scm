@@ -35,8 +35,6 @@
          (append user-paths locale-paths base-paths))))
 
 (define (gnc:_expand-doc-path_ new-path)
-  ;; FIXME: Bad items should probably cause this to abort with #f or
-  ;; throw an exception.
   (gnc:debug "expanding doc-path value " new-path)
   (let ((path-interpret
          (lambda (item)
