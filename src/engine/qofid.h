@@ -52,6 +52,7 @@
  * type of the identifier. 
  */
 
+#include <string.h>
 #include "guid.h"
 
 typedef const char * QofIdType;
@@ -64,6 +65,37 @@ typedef const char * QofIdTypeConst;
 
 /* simple,cheesy cast but holds water for now */
 #define QOF_ENTITY(object) ((QofEntity *)(object))
+
+/* Inline string comparision; compiler will optimize away most of this */
+#define QSTRCMP(da,db) ({                \
+  int val = 0;                           \
+  if ((da) && (db)) {                    \
+    if ((da) != (db)) {                  \
+      val = strcmp ((da), (db));         \
+    }                                    \
+  } else                                 \
+  if ((!(da)) && (db)) {                 \
+    val = -1;                            \
+  } else                                 \
+  if ((da) && (!(db))) {                 \
+    val = 1;                             \
+  }                                      \
+  val; /* block assumes value of last statment */  \
+})
+
+/** return TRUE if object is of the given type */
+#define QOF_CHECK_TYPE(obj,type) (0 == QSTRCMP((type),(((QofEntity *)(obj))->e_type)))
+
+/** cast object to the indicated type, print error message if its bad  */
+#define QOF_CHECK_CAST(obj,e_type,c_type) (                   \
+  QOF_CHECK_TYPE((obj),(e_type)) ?                            \
+  (c_type *) (obj) :                                          \
+  (c_type *) ({                                               \
+     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,               \
+       "Error: Bad QofEntity at %s:%s", __FILE__, __LINE__);  \
+     (obj);                                                   \
+  }))
+
 
 typedef struct QofEntity_s QofEntity;
 typedef struct QofCollection_s QofCollection;
