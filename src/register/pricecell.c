@@ -37,6 +37,7 @@ static void PriceSetValue (struct _BasicCell *, const char *);
 
 #define DECIMAL_PT  '.'
 
+/* hack alert -- use color for cells as per old xacc */
 
 #define SET(cell,str) { 			\
    if ((cell)->value) free ((cell)->value);	\

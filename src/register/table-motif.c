@@ -623,7 +623,7 @@ xaccRefreshTableGUI (Table * table)
 {int i;
 printf (" refresh %d %d \n",  table->num_phys_rows,table->num_phys_cols);
 for (i=0; i<table->num_phys_rows; i++) {
-printf ("cell %d %s \n", i, table->entries[i][3]);
+printf ("cell %d descr: %s \n", i, table->entries[i][3]);
 }}
   XtVaSetValues (table->table_widget, XmNrows,    table->num_phys_rows,
                                       XmNcolumns, table->num_phys_cols,
