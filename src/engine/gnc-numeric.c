@@ -104,6 +104,40 @@ gnc_numeric_lcd(gnc_numeric a, gnc_numeric b)
   return lcm.lo;
 }
 
+
+/** Return the ratio n/d reduced so that there are no common factors. */
+static inline gnc_numeric
+reduce128(qofint128 n, gint64 d)
+{
+  gint64   t;
+  gint64   num;
+  gint64   denom;
+  gnc_numeric out;
+
+  t =  rem128 (n, d);
+  num = d;
+  denom = t;
+
+  /* The strategy is to use Euclid's algorithm */
+  while (denom > 0) 
+  {
+    t = num % denom;
+    num = denom;
+    denom = t;
+  }
+  /* num now holds the GCD (Greatest Common Divisor) */
+
+  qofint128 red = div128 (n, num);
+  if (red.isbig)
+  {
+    return gnc_numeric_error (GNC_ERROR_OVERFLOW);
+  }
+  out.num   = red.lo;
+  if (red.isneg) out.num = -out.num;
+  out.denom = d / num;
+  return out;
+}
+
 /********************************************************************
  *  gnc_numeric_zero_p
  ********************************************************************/
@@ -555,17 +589,11 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
         {
           return gnc_numeric_error (GNC_ERROR_OVERFLOW);
         }
-printf ("duude start shift nu=%llx %llx (%d) / %llx %llx %d\n", rnume.hi,
-rnume.lo, rnume.isbig, rdeno.hi, rdeno.lo, rdeno.isbig);
         while (rnume.isbig || rdeno.isbig)
         {
            rnume = shift128 (rnume);
            rdeno = shift128 (rdeno);
-printf ("duude shift nu=%llx %llx (%d) / %llx %llx %d\n", rnume.hi,
-rnume.lo, rnume.isbig, rdeno.hi, rdeno.lo, rdeno.isbig);
         }
-double rat=((double)rnume.lo) / ((double) rdeno.lo);
-printf ("duude reduced raat=%g\n", rat);
         quotient.num = sgn * rnume.lo;
         quotient.denom = rdeno.lo;
       }
@@ -932,8 +960,6 @@ gnc_numeric_to_double(gnc_numeric in)
 {
   if(in.denom >= 0) 
   {
-printf ("duude to touble %g / %g = %g\n", (double)in.num, (double)in.denom ,
-(double)in.num/(double)in.denom);
     return (double)in.num/(double)in.denom;
   }
   else 
