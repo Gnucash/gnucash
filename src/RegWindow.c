@@ -1738,7 +1738,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
       startRecnCB, NULL, (MenuItem *)NULL },
     { "Adjust Balance...",  &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
       startAdjBCB, NULL, (MenuItem *)NULL },
-    { "Report",             &xmPushButtonWidgetClass, 'D', NULL, NULL, False,
+    { "Report",             &xmPushButtonWidgetClass, 'R', NULL, NULL, False,
       NULL, (XtPointer)0,  reportMenu },
     { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                    (MenuItem *)NULL },
