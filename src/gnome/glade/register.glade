@@ -1777,7 +1777,7 @@
 		<last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
 	      </signal>
 	      <label>_Standard</label>
-	      <active>False</active>
+	      <active>True</active>
 	      <always_show_toggle>True</always_show_toggle>
 	      <group>sort</group>
 	    </widget>
@@ -1888,7 +1888,37 @@
 		<last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
 	      </signal>
 	      <label>Descri_ption</label>
-	      <active>True</active>
+	      <active>False</active>
+	      <always_show_toggle>True</always_show_toggle>
+	      <group>sort</group>
+	    </widget>
+
+	    <widget>
+	      <class>GtkRadioMenuItem</class>
+	      <name>menu_sort_action</name>
+	      <tooltip>Sort by Action</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_split_reg_sort_action_cb</handler>
+		<last_modification_time>Fri, 30 May 2003 00:03:32 GMT</last_modification_time>
+	      </signal>
+	      <label>A_ction</label>
+	      <active>False</active>
+	      <always_show_toggle>True</always_show_toggle>
+	      <group>sort</group>
+	    </widget>
+
+	    <widget>
+	      <class>GtkRadioMenuItem</class>
+	      <name>menu_sort_notes</name>
+	      <tooltip>Sort by Notes</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_split_reg_sort_notes_cb</handler>
+		<last_modification_time>Fri, 30 May 2003 00:05:06 GMT</last_modification_time>
+	      </signal>
+	      <label>N_otes</label>
+	      <active>False</active>
 	      <always_show_toggle>True</always_show_toggle>
 	      <group>sort</group>
 	    </widget>
