@@ -162,6 +162,42 @@ Use:  date that the copy was created.
 
 -----------------------
 
+Name: /hbci
+Type: frame
+Entitites: Account, Book
+Use: subdirectory for information related to the German online banking
+protocol HBCI
+
+Name: /hbci/account-id
+Type: string
+Entities: Account
+Use: HBCI Account code of the HBCI counterpart of this gnucash account
+in the real world
+
+Name: /hbci/bank-code
+Type: string
+Entitites: Account
+Use: Bank code of HBCI account
+
+Name: /hbci/country-code
+Type: gint64
+Entitites: Account
+Use: Country code of the bank of HBCI account
+
+Name: /hbci/trans-retrieval
+Type: Timespec
+Entities: Account
+Use: Time of the last statement retrieval through HBCI for this
+specific account
+
+Name: /hbci/config-filename
+Type: string
+Entitied: Book
+Use: OpenHBCI configuration file name, where the real HBCI
+configuration for the OpenHBCI library can be found 
+
+-----------------------
+
 Name: last-num
 Type: string
 Entities: Account
@@ -328,41 +364,5 @@ Use: To store the amount of the this split before it was voided.  Note
 that it should only exist if the parent transaction has been voided (but
 checking the reconcile status of the split is a more direct way of finding
 out a split has been voided).
-
------------------------
-
-Name: /hbci
-Type: frame
-Entitites: Account, Book
-Use: subdirectory for information related to the German online banking
-protocol HBCI
-
-Name: /hbci/account-id
-Type: string
-Entities: Account
-Use: HBCI Account code of the HBCI counterpart of this gnucash account
-in the real world
-
-Name: /hbci/bank-code
-Type: string
-Entitites: Account
-Use: Bank code of HBCI account
-
-Name: /hbci/country-code
-Type: gint64
-Entitites: Account
-Use: Country code of the bank of HBCI account
-
-Name: /hbci/trans-retrieval
-Type: Timespec
-Entities: Account
-Use: Time of the last statement retrieval through HBCI for this
-specific account
-
-Name: /hbci/config-filename
-Type: string
-Entitied: Book
-Use: OpenHBCI configuration file name, where the real HBCI
-configuration for the OpenHBCI library can be found 
 
 --------------------------- end of document ------------------------
