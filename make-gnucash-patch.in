@@ -294,3 +294,5 @@ __DATA__
 *.xac.*.xac
 *~
 .#*
+doc/gnc-prices.1
+doc/gnucash.1

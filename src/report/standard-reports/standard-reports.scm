@@ -68,6 +68,7 @@
 
 (use-modules (gnucash report account-piecharts))
 (use-modules (gnucash report account-summary))
+(use-modules (gnucash report advanced-portfolio))
 (use-modules (gnucash report average-balance))
 (use-modules (gnucash report balance-sheet))
 (use-modules (gnucash report category-barchart))

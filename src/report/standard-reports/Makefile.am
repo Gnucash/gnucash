@@ -21,6 +21,7 @@ gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
 gncscmmod_DATA = \
    account-piecharts.scm \
    account-summary.scm \
+   advanced-portfolio.scm \
    average-balance.scm \
    balance-sheet.scm \
    category-barchart.scm \
