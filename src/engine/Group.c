@@ -930,7 +930,7 @@ xaccGroupGetDepth (AccountGroup *grp)
    int i, depth=0, maxdepth=0;
    if (!grp) return 0;
 
-   for (i=0; i<grp->numAcc; i++) {
+   for (i=0; i < grp->numAcc; i++) {
       depth = xaccGroupGetDepth (grp->account[i]->children);
       if (depth > maxdepth) maxdepth = depth;
    }
@@ -946,12 +946,12 @@ void
 xaccSplitsBeginStagedTransactionTraversals (Split **splits)
 {
   Transaction *trans;
-  Split *split;
+  Split **sptr;
 
   if (splits == NULL) return;
 
-  for (split = *splits; split != NULL; split++) {
-    trans = split->parent;
+  for (sptr = splits; *sptr != NULL; sptr++) {
+    trans = (*sptr)->parent;
     if (trans != NULL)
       trans->marker = 0;
   }
@@ -968,12 +968,12 @@ xaccAccountBeginStagedTransactionTraversals (Account *account)
 void
 xaccAccountsBeginStagedTransactionTraversals (Account **accounts)
 {
-  Account *account;
+  Account **aptr;
 
   if (accounts == NULL) return;
 
-  for (account = *accounts; account != NULL; account++)
-    xaccAccountBeginStagedTransactionTraversals(account);
+  for (aptr = accounts; *aptr != NULL; aptr++)
+    xaccAccountBeginStagedTransactionTraversals(*aptr);
 }
 
 gncBoolean
@@ -1011,6 +1011,7 @@ xaccGroupBeginStagedTransactionTraversals (AccountGroup *grp)
     unsigned int n = 0;
     Account *acc;
     Split *s = NULL;
+
     acc = xaccGroupGetAccount(grp, i);
 
     if (!acc) return;
@@ -1045,6 +1046,7 @@ xaccAccountStagedTransactionTraversal (Account *acc,
     int retval;
     while (s) {
       Transaction *trans = s->parent;
+
       if (trans && (trans->marker < stage)) {
         trans->marker = stage;
         retval = callback(trans, cb_data);
@@ -1056,6 +1058,7 @@ xaccAccountStagedTransactionTraversal (Account *acc,
   } else {
     while (s) {
       Transaction *trans = s->parent;
+
       if (trans && (trans->marker < stage)) {
         trans->marker = stage;
       }

@@ -424,16 +424,16 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) {
   char   *da, *db;                               
   double fa, fb;                                
   
-  if(sa && !sb)  return -1; 
-  if(!sa && sb)  return 1; 
-  if(!sa && !sb) return 0; 
+  if (sa && !sb)  return -1; 
+  if (!sa && sb)  return 1; 
+  if (!sa && !sb) return 0; 
 
   ta = sa->parent; 
   tb = sb->parent; 
 
   if (ta->orig) ta = ta->orig; 
   if (tb->orig) tb = tb->orig; 
-                                                
+
   if ( (ta) && !(tb) ) return -1; 
   if ( !(ta) && (tb) ) return +1; 
   if ( !(ta) && !(tb) ) return 0; 
@@ -521,7 +521,7 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) {
       return 0;                                   
     } 
     return strcmp (da, db); 
-    
+
     break;
 
   case BY_MEMO:
@@ -562,7 +562,7 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) {
       return 0;
     }
     break;
-    
+
   case BY_AMOUNT:    
     fa = (sa->damount) * (sa->share_price); 
     fb = (sb->damount) * (sb->share_price); 
@@ -590,7 +590,7 @@ split_sort_func(gconstpointer a, gconstpointer b) {
   int retval; 
 
   assert(split_sort_query);
-  
+
   retval = split_cmp_func(split_sort_query->primary_sort, a, b);
   if((retval == 0) && 
      (split_sort_query->secondary_sort != BY_NONE)) {
@@ -653,14 +653,14 @@ xaccQueryGetSplits(Query * q) {
   Split     ** splits;
   Split     ** sptr;
   QueryTerm * qt;
-  
+
   int       total_splits_checked = 0;
   int       split_count = 0;
   int       acct_ok;
   int       posn;
 
   struct timeval start, end;
-  
+
   gettimeofday(&start, NULL);
 
   /* tmp hack alert */
@@ -729,7 +729,7 @@ xaccQueryGetSplits(Query * q) {
    * split_sort_query is an unforgivable use of static global data...
    * I just can't figure out how else to do this sanely. */
   split_sort_query = q;
-  g_list_sort(matching_splits, split_sort_func);
+  matching_splits = g_list_sort(matching_splits, split_sort_func);
 
   /* crop the list to limit the number of splits */
   if((split_count > q->max_splits) && (q->max_splits > -1)) {
@@ -740,7 +740,7 @@ xaccQueryGetSplits(Query * q) {
     }
     split_count = q->max_splits;
   }
-  
+
   /* convert the g_list into a split array. */
   splits = g_new0(Split *, split_count+1);
   posn = 0;
