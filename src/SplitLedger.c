@@ -787,6 +787,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    table->move_cursor = NULL;
    xaccMoveCursorGUI (table, -1, -1);
 
+   /* resize the table to the sizes we just counted above */
    /* num_virt_cols is always one. */
    xaccSetTableSize (table, reg->num_phys_rows, reg->num_cols, 
                             reg->num_virt_rows, 1);
@@ -840,10 +841,10 @@ printf ("load trans %d at phys row %d \n", i, phys_row);
                secondary = xaccTransGetSplit (trans, j);
 
                if (secondary != split) {
-printf ("load split %d at phys row %d \n", j, phys_row);
                   xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
                   xaccMoveCursor (table, phys_row, 0);
                   xaccSRLoadSplitEntry (reg, secondary, 1);
+printf ("load split %d at phys row %d addr=%p \n", j, phys_row, secondary);
                   vrow ++;
                   phys_row += reg->split_cursor->numRows; 
                }
