@@ -283,6 +283,7 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
    BASIC (num,     Text,      NUM);
    FANCY (action,  Combo,     ACTN);
    FANCY (xfrm,    Combo,     XFRM);
+   FANCY (xto,     Combo,     XTO);
    FANCY (desc,    QuickFill, DESC);
    BASIC (memo,    Text,      MEMO);
    BASIC (recn,    Recn,      RECN);
