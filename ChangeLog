@@ -1,3 +1,15 @@
+2002-10-28  Chris Lyttle  <chris@wilddev.net>
+
+	* src/scm/help-topics-index.old: Moved old file to here for now
+	* src/scm/help-topics-index.scm: deleted the junk and put temp in
+	* doc/sgml/C/topic.dat: add help topic
+	* doc/sgml/C/Makefile.am: delete bunch of crud, add new crud yippie
+	* doc/sgml/Makefile.am: remove translations of docs
+	* doc/Makefile.am: remove html dir
+	* doc/sgml/C/guide.sgml: temp placeholder for new help
+	* doc/sgml/C/help.sgml: temp placeholder for new help
+	* configure.in: remove translated doc dirs from makefiles
+
 2002-10-28  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-html.c: 

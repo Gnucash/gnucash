@@ -1,95 +1,35 @@
-SUBDIRS = image
+SUBDIRS = 
 
 gnucash_helpdir = $(GNC_HELPDIR)/C
 
 GNUCASH_SGML_FILES = \
-	bofa-mym.sgml \
-	gnucash.sgml \
-	xacc-about.sgml \
-	xacc-accountedit.sgml \
-	xacc-acctypes.sgml \
-	xacc-account-hierarchy-creator.sgml \
-	xacc-account-summary.sgml \
-	xacc-apar.sgml \
-	xacc-asset-liability-barcharts.sgml \
-	xacc-asset-liability-piecharts.sgml \
-	xacc-balancereport.sgml \
-	xacc-balancesheet.sgml \
-	xacc-calculator.sgml \
-	xacc-chartofaccts.sgml \
-	xacc-commodity.sgml \
-        xacc-common-report-options.sgml \
-	xacc-currencyhandling.sgml \
-	xacc-dateinput.sgml \
-	xacc-depreciation.sgml \
-        xacc-dochack.sgml \
-	xacc-doubleentry.sgml \
-	xacc-euro.sgml \
-	xacc-features.sgml \
-	xacc-file-operations.sgml \
-	xacc-gnome-mdi.sgml \
-	xacc-gnucash-web-browser.sgml \
-	xacc-gpl.sgml \
-	xacc-incomeexpense.sgml \
-	xacc-income-expense-barcharts.sgml \
-	xacc-income-expense-piecharts.sgml \
-	xacc-locatingtxns.sgml \
-	xacc-mainwin.sgml \
-	xacc-multicolumn-view-reports.sgml \
-	xacc-net-worth-barchart.sgml \
-	xacc-newacctwin.sgml \
-	xacc-pnl.sgml \
-	xacc-portfolio-report.sgml \
-	xacc-price-editor.sgml \
-	xacc-price-sources.sgml \
-	xacc-preferences.sgml \
-	xacc-print-check.sgml \
-	xacc-print.sgml \
-	xacc-qif-import.sgml \
-	xacc-quicken.sgml \
-	xacc-quickstart.sgml \
-	xacc-recnwin.sgml \
-	xacc-regwin-kbd.sgml \
-	xacc-regwin.sgml \
-	xacc-repdev.sgml \
-	xacc-reports.sgml \
-	xacc-scheme.sgml \
-	xacc-stock-price-report.sgml \
-	xacc-sxeditor.sgml \
-	xacc-tax-report.sgml \
-	xacc-toplevel.sgml \
-	xacc-trans-report.sgml \
-	xacc-txf-categories.sgml \
-	xacc-txf-export.sgml \
-	xacc-txf-export-anomalies.sgml \
-	xacc-userdocs.sgml \
-	xacc-whats-new.sgml \
-	xacc-y2k.sgml
+	help.sgml \
+	guide.sgml
 
-gnucash_html_dir = $(top_srcdir)/doc/html/C
-
-GNUCASH_HTML_FILES = \
-	$(gnucash_html_dir)/xacc-tax-report-example.html
-
-install-data-local: gnucash/index.html gnucash/help-search-index.db
+install-data-local: gnucash/help.html gnucash/index.html gnucash/help-search-index.db
 	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)
-	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)/image
+	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)/figures
 	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)/stylesheet-images
 	$(INSTALL_DATA) $(srcdir)/topic.dat \
 			$(DESTDIR)$(gnucash_helpdir)/topic.dat
-	-$(INSTALL_DATA) gnucash/help-search-index.db \
+	-$(INSTALL_DATA) $(srcdir)/help-search-index.db \
 			 $(DESTDIR)$(gnucash_helpdir)/help-search-index.db
-	-(for file in gnucash/*.html; do \
+	-(for file in help/*.html; do \
 	    basefile=`basename $$file` \
 	    $(INSTALL_DATA) $(srcdir)/$$file \
                             $(DESTDIR)$(gnucash_helpdir)/$$basefile; \
 	  done)
-	-(for file in gnucash/*.css; do \
+	-(for file in guide/*.html; do \
 	    basefile=`basename $$file` \
 	    $(INSTALL_DATA) $(srcdir)/$$file \
                             $(DESTDIR)$(gnucash_helpdir)/$$basefile; \
 	  done)
-	-(for file in gnucash/stylesheet-images/*.gif; do \
+	-(for file in guide/*.css; do \
+	    basefile=`basename $$file` \
+	    $(INSTALL_DATA) $(srcdir)/$$file \
+                            $(DESTDIR)$(gnucash_helpdir)/$$basefile; \
+	  done)
+	-(for file in guide/stylesheet-images/*.gif; do \
 	    basefile=`basename $$file` \
 	    $(INSTALL_DATA) \
               $(srcdir)/$$file \
@@ -115,51 +55,40 @@ uninstall-local:
 EXTRA_DIST = \
 	topic.dat
 
-manual-html: gnucash/index.html
-manual-dvi: gnucash/gnucash.dvi
-manual-ps: gnucash/gnucash.ps
-manual-rtf: gnucash/gnucash.rtf
-manual-all: manual-html manual-ps manual-rtf
-
-all: manual-html
-
 clean:
-	rm -rf gnucash
-	rm -rf gnucash.junk
-
-gnucash/gnucash.dvi: $(GNUCASH_SGML_FILES)
-	db2dvi ${srcdir}/gnucash.sgml
-
-gnucash/gnucash.ps: $(GNUCASH_SGML_FILES)
-	db2ps ${srcdir}/gnucash.sgml
-
-gnucash/gnucash.rtf: $(GNUCASH_SGML_FILES)
-	db2rtf ${srcdir}/gnucash.sgml
+	rm -rf guide
+	rm -rf guide.junk
+	rm -rf help
+	rm -rf help.junk
 
 gnucash/index.html: $(GNUCASH_SGML_FILES) $(GNUCASH_HTML_FILES)
-	-(db2html -V %root-filename%=index ${srcdir}/gnucash.sgml \
-	  && cp $(GNUCASH_HTML_FILES) gnucash \
-	  && mkdir -p gnucash/image \
-	  && cp $(srcdir)/image/*.png gnucash/image || exit 1) 
+	-(db2html -V %root-filename%=index -u ${srcdir}/guide.sgml || exit 1) 
 
+gnucash/help.html: $(GNUCASH_SGML_FILES) $(GNUCASH_HTML_FILES)
+	-(db2html -V %root-filename%=help -u ${srcdir}/help.sgml || exit 1)
+	  
 gnucash/help-search-index.db: $(GNUCASH_SGML_FILES) $(GNUCASH_HTML_FILES)
-	-(cd gnucash && \
-	  rm -f help-search-index.db && \
-	  ../$(top_srcdir)/doc-tools/build-help-index \
-            ../$(top_srcdir)/doc-tools/dbadd help-search-index.db *.html)
+	-(rm -f help-search-index.db && \
+	  $(top_srcdir)/doc-tools/build-help-index \
+            $(top_srcdir)/doc-tools/dbadd help-search-index.db help/*.html \
+	    guide/*.html || exit 1)
 
-dist-hook:
+dist-hook: gnucash/help.html gnucash/index.html gnucash/help-search-index.db
 	mkdir $(distdir)/gnucash
-	mkdir $(distdir)/gnucash/image
+	mkdir $(distdir)/gnucash/figures
 	mkdir $(distdir)/gnucash/stylesheet-images
-	-(if test -f gnucash.sgml; then dir=.; \
+	-(if test -f guide.sgml; then dir=.; \
 	  else dir="${srcdir}"; fi; \
 	  for file in $(GNUCASH_SGML_FILES); do \
 	    cp $${dir}/$$file $(distdir)/$$file; \
 	  done)
-	-(if test -f gnucash/index.html; then dir=.; \
+	-(if test -f guide/index.html; then dir=.; \
 	  else dir="${srcdir}"; fi; \
-	  cp $${dir}/gnucash/*.html $(distdir)/gnucash; \
-	  cp $${dir}/gnucash/image/*.png $(distdir)/gnucash/image; \
-	  cp $${dir}/gnucash/*.css $(distdir)/gnucash; \
-	  cp $${dir}/gnucash/stylesheet-images/*.gif $(distdir)/gnucash/stylesheet-images)
+	  cp $${dir}/help/*.html $(distdir)/gnucash; \
+	  cp $${dir}/help/figures/*.png $(distdir)/gnucash/figures; \
+	  cp $${dir}/help/*.css $(distdir)/gnucash; \
+	  cp $${dir}/help/stylesheet-images/*.gif $(distdir)/gnucash/stylesheet-images) \
+	  cp $${dir}/guide/*.html $(distdir)/gnucash; \
+	  cp $${dir}/guide/figures/*.png $(distdir)/gnucash/figures; \
+	  cp $${dir}/guide/*.css $(distdir)/gnucash; \
+	  cp $${dir}/guide/stylesheet-images/*.gif $(distdir)/gnucash/stylesheet-images)

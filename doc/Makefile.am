@@ -1,7 +1,7 @@
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
-SUBDIRS = examples html sgml
+SUBDIRS = examples sgml
 
 doc_DATA = \
   README.francais \
