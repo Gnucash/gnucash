@@ -75,6 +75,50 @@
   ;; gncAddress.h
   ;;
 
+  ; Set Functions
+
+  (gw:wrap-function
+   ws
+   'gnc:address-set-name
+   '<gw:void>
+   "gncAddressSetName"
+   '((<gnc:GncAddress*> address) ((<gw:mchars> callee-owned const) name))
+   "Set the address name")
+
+  (gw:wrap-function
+   ws
+   'gnc:address-set-addr1
+   '<gw:void>
+   "gncAddressSetAddr1"
+   '((<gnc:GncAddress*> address) ((<gw:mchars> callee-owned const) addr1))
+   "Set the address's addr1")
+
+  (gw:wrap-function
+   ws
+   'gnc:address-set-addr2
+   '<gw:void>
+   "gncAddressSetAddr2"
+   '((<gnc:GncAddress*> address) ((<gw:mchars> callee-owned const) addr2))
+   "Set the address's addr2")
+
+  (gw:wrap-function
+   ws
+   'gnc:address-set-addr3
+   '<gw:void>
+   "gncAddressSetAddr3"
+   '((<gnc:GncAddress*> address) ((<gw:mchars> callee-owned const) addr3))
+   "Set the address's addr3")
+
+  (gw:wrap-function
+   ws
+   'gnc:address-set-addr4
+   '<gw:void>
+   "gncAddressSetAddr4"
+   '((<gnc:GncAddress*> address) ((<gw:mchars> callee-owned const) addr4))
+   "Set the address's addr4")
+
+  ; Get Functions
+
   (gw:wrap-function
    ws
    'gnc:address-get-name
@@ -142,6 +186,34 @@
   ;;
   ;; gncCustomer.h
   ;;
+
+  ; Set Functions
+
+  (gw:wrap-function
+   ws
+   'gnc:customer-create
+   '<gnc:GncCustomer*>
+   "gncCustomerCreate"
+   '((<gnc:Book*> book))
+   "Create a new customer")
+
+  (gw:wrap-function
+   ws
+   'gnc:customer-set-id
+   '<gw:void>
+   "gncCustomerSetID"
+   '((<gnc:GncCustomer*> customer) ((<gw:mchars> callee-owned const) id))
+   "Set the customer ID")
+
+  (gw:wrap-function
+   ws
+   'gnc:customer-set-name
+   '<gw:void>
+   "gncCustomerSetName"
+   '((<gnc:GncCustomer*> customer) ((<gw:mchars> callee-owned const) name))
+   "Set the customer Name")
+
+  ; Get Functions
 
   (gw:wrap-function
    ws
@@ -241,6 +313,14 @@
 
   (gw:wrap-function
    ws
+   'gnc:entry-get-tax-type
+   '<gw:int>
+   "gncEntryGetTaxType"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's tax type")
+
+  (gw:wrap-function
+   ws
    'gnc:entry-get-tax-type-string
    '(<gw:mchars> callee-owned const)
    "gncEntryGetTaxTypeStr"
@@ -254,6 +334,14 @@
    "gncEntryGetDiscount"
    '((<gnc:GncEntry*> entry))
    "Return the Entry's Discount")
+
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-discount-type
+   '<gw:int>
+   "gncEntryGetDiscountType"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's discount type")
 
   (gw:wrap-function
    ws
@@ -298,6 +386,42 @@
   ;;
   ;; gncInvoice.h
   ;;
+
+  ; Set Functions
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-create
+   '<gnc:GncInvoice*>
+   "gncInvoiceCreate"
+   '((<gnc:Book*> book))
+   "Create a new invoice")
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-set-id
+   '<gw:void>
+   "gncInvoiceSetID"
+   '((<gnc:GncInvoice*> invoice) ((<gw:mchars> callee-owned const) id))
+   "Set the Invoice ID")
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-set-owner
+   '<gw:void>
+   "gncInvoiceSetOwner"
+   '((<gnc:GncInvoice*> invoice) (<gnc:GncOwner*> owner))
+   "Set the Invoice Owner")
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-set-date-opened
+   '<gw:void>
+   "gncInvoiceSetDateOpened"
+   '((<gnc:GncInvoice*> invoice) (<gnc:time-pair> date))
+   "Set the Invoice-Opened Date")
+
+  ; Get Functions
 
   (gw:wrap-function
    ws

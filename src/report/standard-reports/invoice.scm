@@ -4,6 +4,7 @@
 (define-module (gnucash report invoice))
 
 (use-modules (srfi srfi-1))
+(use-modules (srfi srfi-19))
 (use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
 
@@ -99,11 +100,32 @@
 	(addto! heading-list (_ "Total Charge")))
     (reverse heading-list)))
 
+(define (monetary-or-percent numeric currency entry-type)
+  (if (gnc:entry-type-percent-p entry-type)
+      (let ((table (gnc:make-html-table)))
+	(gnc:html-table-set-style!
+	 table "table"
+	 'attribute (list "border" 0)
+	 'attribute (list "cellspacing" 1)
+	 'attribute (list "cellpadding" 0))
+	(gnc:html-table-append-row!
+	 table
+	 (list numeric (_ "%")))
+	(set-last-row-style!
+	 table "td"
+	 'attribute (list "valign" "top"))
+	table)
+      (gnc:make-gnc-monetary currency numeric)))      
+
 (define (add-entry-row table entry column-vector row-style)
   (let* ((row-contents '())
          (currency (gnc:default-currency)) ; XXX: FIXME
-	 (entry-value (gnc:make-gnc-monetary currency
-					     (gnc:entry-get-value entry))))
+	 (entry-value (gnc:make-gnc-monetary
+		       currency
+		       (gnc:entry-get-value entry)))
+	 (entry-tax-value (gnc:make-gnc-monetary
+			   currency
+			   (gnc:entry-get-tax-value entry))))
 
     (if (date-col column-vector)
         (addto! row-contents
@@ -119,33 +141,49 @@
 
     (if (quantity-col column-vector)
 	(addto! row-contents
-		(gnc:entry-get-quantity entry)))
+		(gnc:make-html-table-cell/markup
+		 "number-cell"
+		 (gnc:entry-get-quantity entry))))
 
     (if (price-col column-vector)
 	(addto! row-contents
-		(gnc:make-gnc-monetary
-		 currency (gnc:entry-get-price entry))))
+		(gnc:make-html-table-cell/markup
+		 "number-cell"
+		 (gnc:make-gnc-monetary
+		  currency (gnc:entry-get-price entry)))))
 
     (if (discount-col column-vector)
 	(addto! row-contents
-		(gnc:entry-get-discount entry)))
+		(gnc:make-html-table-cell/markup
+		 "number-cell"
+		 (monetary-or-percent (gnc:entry-get-discount entry)
+				      currency
+				      (gnc:entry-get-discount-type entry)))))
 
     (if (tax-col column-vector)
 	(addto! row-contents
-		(gnc:entry-get-tax entry)))
+		(gnc:make-html-table-cell/markup
+		 "number-cell"
+		 (monetary-or-percent (gnc:entry-get-tax entry)
+				      currency
+				      (gnc:entry-get-tax-type entry)))))
 
     (if (taxvalue-col column-vector)
 	(addto! row-contents
-		(gnc:make-gnc-monetary
-		 currency (gnc:entry-get-tax-value entry))))
+		(gnc:make-html-table-cell/markup
+		 "number-cell"
+		 entry-tax-value)))
 
     (if (value-col column-vector)
-	(addto! row-contents entry-value))
+	(addto! row-contents
+		(gnc:make-html-table-cell/markup
+		 "number-cell"
+		 entry-value)))
 
     (gnc:html-table-append-row/markup! table row-style
                                        (reverse row-contents))
     
-    entry-value))
+    (cons entry-value entry-tax-value)))
 
 (define (options-generator)
 
@@ -156,12 +194,6 @@
 
   (gnc:register-inv-option
    (gnc:make-internal-option "__reg" "invoice" #f))
-
-  (gnc:register-inv-option
-   (gnc:make-string-option
-    (N_ "General") (N_ "Title")
-    "a" (N_ "The title of the report")
-    (N_ "Invoice Report")))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -220,7 +252,7 @@
 (define (make-entry-table entries options)
                           
   (define (add-subtotal-row leader table used-columns
-                            subtotal-collector subtotal-style)
+                            subtotal-collector subtotal-style subtotal-label)
     (let ((currency-totals (subtotal-collector
                             'format gnc:make-gnc-monetary #f)))
 
@@ -247,7 +279,7 @@
                    table
                    subtotal-style
                    (append (cons (gnc:make-html-table-cell/markup
-                                  "total-label-cell" (_ "Total"))
+                                  "total-label-cell" subtotal-label)
                                  '())
                            (list (gnc:make-html-table-cell/size/markup
                                   1 (colspan currency)
@@ -261,31 +293,51 @@
                                   used-columns
                                   width
                                   odd-row?
-                                  total-collector)
+				  value-collector
+                                  tax-collector
+				  total-collector)
     (if (null? entries)
-        (add-subtotal-row leader table used-columns
-                          total-collector "grand-total")
+	(for-each
+	 (lambda (this)
+	   (add-subtotal-row leader table used-columns (car this)
+			     "grand-total" (cdr this)))
+	 (list (cons value-collector (_ "Subtotal"))
+	       (cons tax-collector (_ "Tax"))
+	       (cons total-collector (_"Total"))))
 
         (let* ((current (car entries))
                (current-row-style (if odd-row? "normal-row" "alternate-row"))
                (rest (cdr entries))
                (next (if (null? rest) #f
                          (car rest)))
-               (entry-value (add-entry-row table
-                                           current
-                                           used-columns
-                                           current-row-style)))
+               (entry-values (add-entry-row table
+					    current
+					    used-columns
+					    current-row-style)))
+
+          (value-collector 'add
+                           (gnc:gnc-monetary-commodity (car entry-values))
+                           (gnc:gnc-monetary-amount (car entry-values)))
+
+          (tax-collector 'add
+                           (gnc:gnc-monetary-commodity (cdr entry-values))
+                           (gnc:gnc-monetary-amount (cdr entry-values)))
 
           (total-collector 'add
-                           (gnc:gnc-monetary-commodity entry-value)
-                           (gnc:gnc-monetary-amount entry-value))
+                           (gnc:gnc-monetary-commodity (car entry-values))
+                           (gnc:gnc-monetary-amount (car entry-values)))
+          (total-collector 'add
+                           (gnc:gnc-monetary-commodity (cdr entry-values))
+                           (gnc:gnc-monetary-amount (cdr entry-values)))
 
           (do-rows-with-subtotals leader
                                   rest
                                   table
                                   used-columns
-                                  width 
-                                  (not odd-row?)                       
+                                  width
+                                  (not odd-row?)
+				  value-collector
+				  tax-collector
                                   total-collector))))
 
   (define (entries-leader entries) #f)
@@ -304,7 +356,9 @@
                             used-columns
                             width
                             #t
-                            (gnc:make-commodity-collector))
+                            (gnc:make-commodity-collector)
+			    (gnc:make-commodity-collector)
+			    (gnc:make-commodity-collector))
     table))
 
 (define (string-expand string character replace-string)
@@ -335,32 +389,62 @@
     (gnc:html-table-append-row!
      table
      (list
-      (string-append (_ "Customer") ":&nbsp;")
       (string-expand address #\newline "<br>")))
     (set-last-row-style!
      table "td"
      'attribute (list "valign" "top"))
     table))
 
-(define (make-info-table address)
+(define (make-date-row! table label date)
+  (gnc:html-table-append-row!
+   table
+   (list
+    (string-append label ":&nbsp;")
+    (string-expand (gnc:print-date date) #\space "&nbsp;"))))
+
+(define (make-date-table)
   (let ((table (gnc:make-html-table)))
     (gnc:html-table-set-style!
      table "table"
      'attribute (list "border" 0)
-     'attribute (list "cellspacing" 20)
      'attribute (list "cellpadding" 0))
-    (gnc:html-table-append-row!
-     table
-     (list
-      (string-append
-       (_ "Date") ":&nbsp;"
-       (string-expand (gnc:print-date (cons (current-time) 0))
-                      #\space "&nbsp;"))
-      (make-client-table address)))
     (set-last-row-style!
      table "td"
      'attribute (list "valign" "top"))
     table))
+
+(define (make-myname-table)
+  (let ((table (gnc:make-html-table)))
+    (gnc:html-table-set-style!
+     table "table"
+     'attribute (list "border" 0)
+     'attribute (list "align" "right")
+     'attribute (list "valign" "top")
+     'attribute (list "cellspacing" 0)
+     'attribute (list "cellpadding" 0))
+    (gnc:html-table-append-row!
+     table
+     (list
+      (gnc:option-value
+       (gnc:lookup-global-option "User Info" "User Name"))))
+    (gnc:html-table-append-row!
+     table
+     (list
+      (gnc:option-value
+       (gnc:lookup-global-option "User Info" "User Address"))))
+    (gnc:html-table-append-row!
+     table
+     (list
+      "Day, Month day, year"
+      ;;(date->string (current-date) "~A, ~B ~e, ~Y")
+      ))
+    table))
+
+(define (make-break! document)
+  (gnc:html-document-add-object!
+   document
+   (gnc:make-html-text
+    (gnc:html-markup-br))))
 
 (define (reg-renderer report-obj)
   (define (opt-val section name)
@@ -372,35 +456,47 @@
 	(owner #f)
 	(entries '())
         (invoice (opt-val "__reg" "invoice"))
-        (title (opt-val "General" "Title")))
+        (title #f))
 
     (set! owner (gnc:invoice-get-owner invoice))
     (set! entries (gnc:invoice-get-entries invoice))
     (set! table (make-entry-table entries (gnc:report-options report-obj)))
+    (set! title (string-append (_ "Invoice #") (gnc:invoice-get-id invoice)))
 
-    (gnc:html-document-add-object!
-     document
-     (gnc:make-html-text
-      (gnc:html-markup-br)
-      (gnc:option-value
-       (gnc:lookup-global-option "User Info" "User Name"))
-      (gnc:html-markup-br)
-      (string-expand
-       (gnc:option-value
-	(gnc:lookup-global-option "User Info" "User Address"))
-       #\newline
-       "<br>")
-      (gnc:html-markup-br)))
+    (gnc:html-document-set-title! document title)
+
     (gnc:html-table-set-style!
      table "table"
      'attribute (list "border" 1)
      'attribute (list "cellspacing" 0)
      'attribute (list "cellpadding" 4))
+
     (gnc:html-document-add-object!
      document
-     (make-info-table (gnc:owner-get-address owner)))
+     (make-myname-table))
 
-    (gnc:html-document-set-title! document title)
+    (let ((date-table (make-date-table)))
+      (make-date-row!
+       date-table
+       (_ "Invoice Date")
+       (gnc:invoice-get-date-posted invoice))
+      (make-date-row!
+       date-table
+       (_ "Due Date")
+       (gnc:invoice-get-date-due invoice))
+      (gnc:html-document-add-object! document date-table))
+
+    (make-break! document)
+    (make-break! document)
+
+    (gnc:html-document-add-object!
+     document
+     (make-client-table (gnc:owner-get-address owner)))
+
+    (make-break! document)
+    (make-break! document)
+    (make-break! document)
+
     (gnc:html-document-add-object! document table)
 
     document))
@@ -412,13 +508,11 @@
  'renderer reg-renderer
  'in-menu? #f)
 
-(define (gnc:invoice-report-create-internal invoice title)
+(define (gnc:invoice-report-create-internal invoice)
   (let* ((options (gnc:make-report-options "Invoice"))
-         (invoice-op (gnc:lookup-option options "__reg" "invoice"))
-         (title-op (gnc:lookup-option options "General" "Title")))
+         (invoice-op (gnc:lookup-option options "__reg" "invoice")))
 
     (gnc:option-set-value invoice-op invoice)
-    (gnc:option-set-value title-op title)
     (gnc:make-report "Invoice" options)))
 
 (export gnc:invoice-report-create-internal)

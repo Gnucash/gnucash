@@ -132,31 +132,31 @@ void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner)
   invoice->dirty = TRUE;
 }
 
-void gncInvoiceSetDateOpened (GncInvoice *invoice, const Timespec *date)
+void gncInvoiceSetDateOpened (GncInvoice *invoice, Timespec date)
 {
-  if (!invoice || !date) return;
-  invoice->date_opened = *date;
+  if (!invoice) return;
+  invoice->date_opened = date;
   invoice->dirty = TRUE;
 }
 
-void gncInvoiceSetDatePosted (GncInvoice *invoice, const Timespec *date)
+void gncInvoiceSetDatePosted (GncInvoice *invoice, Timespec date)
 {
-  if (!invoice || !date) return;
-  invoice->date_posted = *date;
+  if (!invoice) return;
+  invoice->date_posted = date;
   invoice->dirty = TRUE;
 }
 
-void gncInvoiceSetDateDue (GncInvoice *invoice, const Timespec *date)
+void gncInvoiceSetDateDue (GncInvoice *invoice, Timespec date)
 {
-  if (!invoice || !date) return;
-  invoice->date_due = *date;
+  if (!invoice) return;
+  invoice->date_due = date;
   invoice->dirty = TRUE;
 }
 
-void gncInvoiceSetDatePaid (GncInvoice *invoice, const Timespec *date)
+void gncInvoiceSetDatePaid (GncInvoice *invoice, Timespec date)
 {
-  if (!invoice || !date) return;
-  invoice->date_paid = *date;
+  if (!invoice) return;
+  invoice->date_paid = date;
   invoice->dirty = TRUE;
 }
 
@@ -416,7 +416,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   if (date) {
     xaccTransSetDateEnteredTS (txn, date);
     xaccTransSetDatePostedTS (txn, date);
-    gncInvoiceSetDatePosted (invoice, date);
+    gncInvoiceSetDatePosted (invoice, *date);
   }
 
   /* Set the txn due date to be equal to the invoice */
@@ -549,7 +549,7 @@ gncInvoicePayToAccount (GncInvoice *invoice, Account *acc,
   if (paid_date) {
     xaccTransSetDateEnteredTS (txn, paid_date);
     xaccTransSetDatePostedTS (txn, paid_date);
-    gncInvoiceSetDatePaid (invoice, paid_date);
+    gncInvoiceSetDatePaid (invoice, *paid_date);
   }
 
   /* create the split to the payment account */

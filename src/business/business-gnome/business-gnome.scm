@@ -215,6 +215,82 @@
 			  (gnc:search-dialog-test))))
 
 
+  (define reload-invoice
+    (gnc:make-menu-item (N_ "Reload invoice report")
+			(N_ "Reload invoice report")
+			(list "Extensions" "")
+			(lambda ()
+			  (load-from-path "gnucash/report/invoice.scm"))))
+
+  (define init-data
+    (gnc:make-menu-item (N_ "Initialize Test Data")
+			(N_ "Initialize Test Data")
+			(list "Extensions" "")
+			(lambda ()
+			  (let* ((book (gnc:get-current-book))
+				 (customer (gnc:customer-create book))
+				 (address (gnc:customer-get-addr customer))
+				 (invoice (gnc:invoice-create book))
+				 (owner (gnc:owner-create))
+				 (group (gnc:book-get-group book))
+				 (inc-acct (gnc:malloc-account book))
+				 (bank-acct (gnc:malloc-account book))
+				 (tax-acct (gnc:malloc-account book))
+				 (ar-acct (gnc:malloc-account book)))
+
+			    ;; Create Customer
+			    (gnc:customer-set-id customer "000001")
+			    (gnc:customer-set-name customer "Test Customer")
+			    (gnc:address-set-name address "Contact Person")
+			    (gnc:address-set-addr1 address
+						   "20 Customer Lane")
+			    (gnc:address-set-addr2 address "Customer M/S")
+			    (gnc:address-set-addr3 address "Addr3, XXX  12345")
+			    
+			    ;; Create the Owner
+			    (gnc:owner-init-customer owner customer)
+			    
+			    ;; Create the Invoice
+			    (gnc:invoice-set-id invoice "000012")
+			    (gnc:invoice-set-owner invoice owner)
+			    (gnc:invoice-set-date-opened
+			     invoice (cons (current-time) 0))
+
+			    ;; Create the A/R account
+			    (gnc:account-set-type ar-acct 'receivable)
+			    (gnc:account-set-name ar-acct "A/R")
+			    (gnc:account-set-commodity ar-acct
+						       (gnc:default-currency))
+			    (gnc:group-insert-account group ar-acct)
+
+			    ;; Create the Income account
+			    (gnc:account-set-type inc-acct 'income)
+			    (gnc:account-set-name inc-acct "Income")
+			    (gnc:account-set-commodity inc-acct
+						       (gnc:default-currency))
+			    (gnc:group-insert-account group inc-acct)
+
+			    ;; Create the Bank account
+			    (gnc:account-set-type bank-acct 'bank)
+			    (gnc:account-set-name bank-acct "Bank")
+			    (gnc:account-set-commodity bank-acct
+						       (gnc:default-currency))
+			    (gnc:group-insert-account group bank-acct)
+
+			    ;; Create the Tax account
+			    (gnc:account-set-type tax-acct 'liability)
+			    (gnc:account-set-name tax-acct "Tax-Holding")
+			    (gnc:account-set-commodity tax-acct
+						       (gnc:default-currency))
+			    (gnc:group-insert-account group tax-acct)
+
+			    ;; Launch the invoice editor
+			    (gnc:invoice-edit #f invoice)
+			    ))))
+
+
+  (gnc:add-extension init-data)
+  (gnc:add-extension reload-invoice)
   (gnc:add-extension test-search)
 
   (add-employee-extensions)
@@ -224,7 +300,5 @@
 
 (gnc:hook-add-dangler gnc:*add-extension-hook* add-business-extensions)
 
-(define (gnc:invoice-make-printable invoice)
-  (gnc:invoice-report-create invoice "Invoice"))
-
+(define gnc:invoice-make-printable gnc:invoice-report-create)
 (export gnc:invoice-make-printable)

@@ -64,5 +64,10 @@
 			       (gnc:owner-get-job owner))))
       (else ""))))
 
+;; This MUST match the definitions in gncEntry.h or you'll be in trouble!
+(define (gnc:entry-type-percent-p type)
+  (or (= type 1) (= type 3)))
+
 (export gnc:owner-get-address)
 (export gnc:owner-get-owner-id)
+(export gnc:entry-type-percent-p)

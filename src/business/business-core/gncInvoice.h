@@ -24,10 +24,10 @@ void gncInvoiceDestroy (GncInvoice *invoice);
 
 void gncInvoiceSetID (GncInvoice *invoice, const char *id);
 void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner);
-void gncInvoiceSetDateOpened (GncInvoice *invoice, const Timespec *date);
-void gncInvoiceSetDatePosted (GncInvoice *invoice, const Timespec *date);
-void gncInvoiceSetDateDue (GncInvoice *invoice, const Timespec *date);
-void gncInvoiceSetDatePaid (GncInvoice *invoice, const Timespec *date);
+void gncInvoiceSetDateOpened (GncInvoice *invoice, Timespec date);
+void gncInvoiceSetDatePosted (GncInvoice *invoice, Timespec date);
+void gncInvoiceSetDateDue (GncInvoice *invoice, Timespec date);
+void gncInvoiceSetDatePaid (GncInvoice *invoice, Timespec date);
 void gncInvoiceSetTerms (GncInvoice *invoice, const char *terms);
 void gncInvoiceSetNotes (GncInvoice *invoice, const char *notes);
 void gncInvoiceSetActive (GncInvoice *invoice, gboolean active);

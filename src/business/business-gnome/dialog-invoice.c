@@ -107,7 +107,7 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
 
   tt = gnome_date_edit_get_date (GNOME_DATE_EDIT (iw->opened_date));
   timespecFromTime_t (&ts, tt);
-  gncInvoiceSetDateOpened (invoice, &ts);
+  gncInvoiceSetDateOpened (invoice, ts);
 
   if (iw->active_check)
     gncInvoiceSetActive (invoice, gtk_toggle_button_get_active
@@ -282,7 +282,7 @@ gnc_invoice_window_post_invoice_cb (GtkWidget *widget, gpointer data)
     return;
 
   /* Save the Due Date */
-  gncInvoiceSetDateDue (invoice, &ddue);
+  gncInvoiceSetDateDue (invoice, ddue);
 
   /* Yep, we're posting.  So, save the invoice... 
    * Note that we can safely ignore the return value; we checked
