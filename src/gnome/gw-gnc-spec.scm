@@ -1,48 +1,30 @@
-;;; -*-scheme-*-
-(use-modules (g-wrap))
-
+(define-module (g-wrapped gw-gnc-spec))
 (debug-set! maxdepth 100000)
 (debug-set! stack    2000000)
 
-(define-module (g-wrapped gw-gnc-spec)
-  :use-module (g-wrap))
+(use-modules (g-wrap))
+
+(use-modules (g-wrap gw-standard-spec))
+(use-modules (g-wrap gw-wct-spec))
+(use-modules (g-wrap gw-glib-spec))
 
 (use-modules (g-wrapped gw-engine-spec))
-(use-modules (g-wrapped gw-glib-spec))
 (use-modules (g-wrapped gw-gnome-utils-spec))
 
-(let ((mod (gw:new-module "gw-gnc")))
-  (define (standard-c-call-gen result func-call-code)
-    (list (gw:result-get-c-name result) " = " func-call-code ";\n"))
-  
-  (define (add-standard-result-handlers! type c->scm-converter)
-    (define (standard-pre-handler result)
-      (let* ((ret-type-name (gw:result-get-proper-c-type-name result))
-             (ret-var-name (gw:result-get-c-name result)))
-        (list "{\n"
-              "    " ret-type-name " " ret-var-name ";\n")))
-    
-    (gw:type-set-pre-call-result-ccodegen! type standard-pre-handler)
-    
-    (gw:type-set-post-call-result-ccodegen!
-     type
-     (lambda (result)
-       (let* ((scm-name (gw:result-get-scm-name result))
-              (c-name (gw:result-get-c-name result)))
-         (list
-          (c->scm-converter scm-name c-name)
-          "  }\n")))))
-  
-  (gw:module-depends-on mod "gw-runtime")
-  (gw:module-depends-on mod "gw-engine")
-  (gw:module-depends-on mod "gw-glib")
-  (gw:module-depends-on mod "gw-gnome-utils")
+(let ((ws (gw:new-wrapset "gw-gnc")))
 
-  (gw:module-set-guile-module! mod '(g-wrapped gw-gnc))
+  (gw:wrapset-depends-on ws "gw-standard")
+  (gw:wrapset-depends-on ws "gw-wct")
+  (gw:wrapset-depends-on ws "gw-glib")
 
-  (gw:module-set-declarations-ccodegen!
-   mod
-   (lambda (client-only?)
+  (gw:wrapset-depends-on ws "gw-engine")
+  (gw:wrapset-depends-on ws "gw-gnome-utils")
+
+  (gw:wrapset-set-guile-module! ws '(g-wrapped gw-gnc))
+
+  (gw:wrapset-add-cs-declarations!
+   ws
+   (lambda (wrapset client-wrapset)
      (list
       "#include <glib.h>\n"
       "#include <gnc-ui.h>\n"
@@ -70,7 +52,7 @@
       "#include <dialog-sxsincelast.h>\n" )))
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:ui-hierarchy-druid
    '<gw:void>
    "gnc_ui_hierarchy_druid"
@@ -78,7 +60,7 @@
    "Open the hierarchy druid for importing an account hierarchy.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:ui-is-running?
    '<gw:bool>
    "gnucash_ui_is_running"
@@ -86,7 +68,7 @@
    "Predicate to determine if the UI is running.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:ui-is-terminating?
    '<gw:bool>
    "gnucash_ui_is_terminating"
@@ -94,7 +76,7 @@
    "Predicate to determine if the UI is in the process of terminating.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:new-user-dialog
    '<gw:void>
    "gnc_ui_new_user_dialog"
@@ -102,7 +84,7 @@
    "Show the new user dialog.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:start-ui-event-loop
    '<gw:int>
    "gnc_ui_start_event_loop"
@@ -110,7 +92,7 @@
    "Start the UI event loop.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:gui-init
    '<gw:scm>
    "gnc_gui_init"
@@ -118,7 +100,7 @@
    "Initialize the lower level ui parts. Returns remaining command line.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:gui-shutdown
    '<gw:void>
    "gnc_gui_shutdown"
@@ -126,21 +108,19 @@
    "Shutdown the UI.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:gui-destroy
    '<gw:void>
    "gnc_gui_destroy"
    '()
    "Destroy the UI.")
 
-  (let ((nnt (gw:wrap-non-native-type
-              mod
-              '<gnc:PrintCheckDialog*>
-              "PrintCheckDialog*" "const PrintCheckDialog*")))
-    #t)
+  (gw:wrap-as-wct ws
+                  '<gnc:PrintCheckDialog*>
+                  "PrintCheckDialog*" "const PrintCheckDialog*")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:print-check-dialog-create
    '<gnc:PrintCheckDialog*>
    "gnc_ui_print_check_dialog_create"
@@ -148,21 +128,19 @@
    "Pop up a dialog to set up printing a check.")
   
   (gw:wrap-function
-   mod
+   ws
    'gnc:ui-totd-dialog-create-and-run
    '<gw:void>
    "gnc_ui_totd_dialog_create_and_run"
    '()
    "Create and run the \"Tip Of The Day\" dialog")
 
-  (let ((nnt (gw:wrap-non-native-type
-              mod
-              '<gnc:ProgressDialog*>
-              "GNCProgressDialog *" "const GNCProgressDialog *")))
-    #t)
+  (gw:wrap-as-wct ws
+                  '<gnc:ProgressDialog*>
+                  "GNCProgressDialog *" "const GNCProgressDialog *")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:progress-dialog-new
    '<gnc:ProgressDialog*>
    "gnc_progress_dialog_new"
@@ -170,25 +148,25 @@
    "Create and return a progress dialog. The parent may be NULL.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:progress-dialog-set-title
    '<gw:void>
    "gnc_progress_dialog_set_title"
    '((<gnc:ProgressDialog*> progress)
-     ((<gw:m-chars-caller-owned> gw:const) title))
+     ((<gw:mchars> caller-owned const) title))
    "Set the title of 'progress' to 'title'.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:progress-dialog-set-heading
    '<gw:void>
    "gnc_progress_dialog_set_heading"
    '((<gnc:ProgressDialog*> progress)
-     ((<gw:m-chars-caller-owned> gw:const) heading))
+     ((<gw:mchars> caller-owned const) heading))
    "Set the heading of 'progress' to 'heading'.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:progress-dialog-set-limits
    '<gw:void>
    "gnc_progress_dialog_set_limits"
@@ -198,7 +176,7 @@
    "Set the mininum and maximum range of 'progress'.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:progress-dialog-set-activity-mode
    '<gw:void>
    "gnc_progress_dialog_set_activity_mode"
@@ -207,7 +185,7 @@
    "Set the mininum and maximum range of 'progress'.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:progress-dialog-set-cancel-scm-func
    '<gw:void>
    "gnc_progress_dialog_set_cancel_scm_func"
@@ -218,7 +196,7 @@ with no arguments when the user hits the cancel button. If the callback
 returns #t, the dialog is closed, but not destroyed.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:progress-dialog-set-value
    '<gw:void>
    "gnc_progress_dialog_set_value"
@@ -226,7 +204,7 @@ returns #t, the dialog is closed, but not destroyed.")
    "Set the value of the progress dialog to 'value'.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:progress-dialog-update
    '<gw:void>
    "gnc_progress_dialog_update"
@@ -234,7 +212,7 @@ returns #t, the dialog is closed, but not destroyed.")
    "Update the progress bar, calling any pending cancel callback.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:progress-dialog-finish
    '<gw:void>
    "gnc_progress_dialog_finish"
@@ -243,7 +221,7 @@ returns #t, the dialog is closed, but not destroyed.")
 sensitive and the dialog closes after the user clicks it.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:progress-dialog-destroy
    '<gw:void>
    "gnc_progress_dialog_destroy"
@@ -253,23 +231,22 @@ order to destroy the dialog. The dialog will not be destroyed
 by the user closing the window.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:sx-editor
    '<gw:void>
    "gnc_ui_scheduled_xaction_dialog_create" '()
    "Open the Scheduled Transaction Editor" )
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:sx-sincelast-create
    '<gw:bool>
    "gnc_ui_sxsincelast_dialog_create" '()
    "Wrapper to open the since-last-run dialog from a book-open hook." )
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:sx-since-last-run-wrapper
    '<gw:bool>
-   "gnc_ui_sxsincelast_guile_wrapper" '(((<gw:m-chars-caller-owned>) bookfile))
-   "Wrapper to open the since-last-run dialog from a book-open hook." )
-  )
+   "gnc_ui_sxsincelast_guile_wrapper" '(((<gw:mchars> caller-owned) bookfile))
+   "Wrapper to open the since-last-run dialog from a book-open hook." ))
