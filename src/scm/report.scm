@@ -110,7 +110,7 @@
     (lambda ()
       (gnc:style-sheet-dialog-open))))
 
-  (gnc:add-extension tax-menu)
+;  (gnc:add-extension tax-menu)
   (gnc:add-extension income-expense-menu)
   (gnc:add-extension asset-liability-menu)
 
