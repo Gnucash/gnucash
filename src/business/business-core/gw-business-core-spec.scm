@@ -603,6 +603,30 @@
 
   (gw:wrap-function
    ws
+   'gnc:invoice-get-posted-lot
+   '<gnc:Lot*>
+   "gncInvoiceGetPostedLot"
+   '((<gnc:GncInvoice*> invoice))
+   "Return the posted Lot for this Invoice.")
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-get-posted-account
+   '<gnc:Account*>
+   "gncInvoiceGetPostedAcc"
+   '((<gnc:GncInvoice*> invoice))
+   "Return the posted Account for this Invoice.")
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-get-posted-txn
+   '<gnc:Transaction*>
+   "gncInvoiceGetPostedTxn"
+   '((<gnc:GncInvoice*> invoice))
+   "Return the posted Transaction for this Invoice.")
+
+  (gw:wrap-function
+   ws
    'gnc:invoice-get-invoice-from-lot
    '<gnc:GncInvoice*>
    "gncInvoiceGetInvoiceFromLot"

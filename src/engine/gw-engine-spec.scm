@@ -2364,3 +2364,11 @@ the timepair representing midday on that day")
  "gnc_lot_is_closed"
  '((<gnc:Lot*> lot))
  "Is this Lot closed (is the balance zero)?")
+
+(gw:wrap-function
+ ws
+ 'gnc:lot-get-splits
+ '(gw:glist-of <gnc:Split*> callee-owned)
+ "gnc_lot_get_split_list"
+ '((<gnc:Lot*> lot))
+ "Return the list of splits attached to this lot.")
