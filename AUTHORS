@@ -146,6 +146,7 @@ Sven Kuenzler <sk@xgm.de> for SuSE README file
 Eneko Lacunza <enlar@enlar.net> Spanish Translation
 Bryan Larsen <blarsen@ada-works.com> guile budget report
 Chris J (Oakton) Leach <LeachCJ@az1.bp.com> autoconf patch
+Rich Johnson <rich@dogstar-interactive.com> Mac OS X patch
 Nicholas Lee <nj.lee@plumtree.co.nz> scheme bug fix
 Graham Leggett <minfrin@sharp.fm> for fixing a hang
 Georg Lehner <Jorge.Lehner@gmx.net> Nicaraguan Spanish translation
