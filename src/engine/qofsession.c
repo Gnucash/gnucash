@@ -269,8 +269,6 @@ qof_session_get_url (QofSession *session)
    return session->book_id;
 }
 
-/* ====================================================================== */
-
 #ifdef GNUCASH_MAJOR_VERSION 
 
 static void
@@ -469,7 +467,7 @@ qof_session_begin (QofSession *session, const char * book_id,
   /* destroy the old backend */
   qof_session_destroy_backend(session);
 
-  /* Look for somthing of the form of "file:/", "http://" or 
+  /* Look for something of the form of "file:/", "http://" or 
    * "postgres://". Everything before the colon is the access 
    * method.  Load the first backend found for that access method.
    */

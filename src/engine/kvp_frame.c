@@ -496,8 +496,9 @@ kvp_frame_replace_value_nc (KvpFrame * frame, const char * key_path,
                             KvpValue * new_value) 
 {
   KvpValue * old_value;
-  char *last_key = NULL;
+  char *last_key;
 
+  last_key = NULL;
   if (new_value)
   {
      frame = get_trailer_make (frame, key_path, &last_key);
@@ -1633,6 +1634,81 @@ kvp_value_glist_to_string(const GList *list)
     g_free(tmp1);
     
     return tmp2;
+}
+
+gchar*
+kvp_value_to_bare_string(const KvpValue *val)
+{
+    gchar *tmp1;
+    gchar *tmp2;
+    const gchar *ctmp;
+    
+    g_return_val_if_fail(val, NULL);
+    
+    switch(kvp_value_get_type(val))
+    {
+    case KVP_TYPE_GINT64:
+        return g_strdup_printf("%lld",(long long int) kvp_value_get_gint64(val));
+        break;
+
+    case KVP_TYPE_DOUBLE:
+        return g_strdup_printf("(%g)", kvp_value_get_double(val));
+        break;
+
+    case KVP_TYPE_NUMERIC:
+        tmp1 = gnc_numeric_to_string(kvp_value_get_numeric(val));
+        tmp2 = g_strdup_printf("%s", tmp1 ? tmp1 : "");
+        g_free(tmp1);
+        return tmp2;
+        break;
+
+    case KVP_TYPE_STRING:
+        tmp1 = kvp_value_get_string (val);
+        return g_strdup_printf("%s", tmp1 ? tmp1 : "");
+        break;
+
+    case KVP_TYPE_GUID:
+        ctmp = guid_to_string(kvp_value_get_guid(val));
+        tmp2 = g_strdup_printf("%s", ctmp ? ctmp : "");
+        return tmp2;
+        break;
+
+    case KVP_TYPE_TIMESPEC:
+        tmp1 = g_new0 (char, 40);
+        gnc_timespec_to_iso8601_buff (kvp_value_get_timespec (val), tmp1);
+        tmp2 = g_strdup_printf("%s", tmp1);
+        g_free(tmp1);
+        return tmp2;
+        break;
+
+    case KVP_TYPE_BINARY:
+    {
+        guint64 len;
+        void *data;
+        data = kvp_value_get_binary(val, &len);
+        tmp1 = binary_to_string(data, len);
+        return g_strdup_printf("%s", tmp1 ? tmp1 : "");
+    }
+        break;
+ 
+    case KVP_TYPE_GLIST:
+        tmp1 = kvp_value_glist_to_string(kvp_value_get_glist(val));
+        tmp2 = g_strdup_printf("%s", tmp1 ? tmp1 : "");
+        g_free(tmp1);
+        return tmp2;
+        break;
+
+    case KVP_TYPE_FRAME:
+        tmp1 = kvp_frame_to_string(kvp_value_get_frame(val));
+        tmp2 = g_strdup_printf("%s", tmp1 ? tmp1 : "");
+        g_free(tmp1);
+        return tmp2;
+        break;
+
+    default:
+        return g_strdup_printf(" ");
+        break;
+    }
 }
 
 gchar*

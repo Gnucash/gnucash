@@ -1,3 +1,16 @@
+2005-02-20  Neil Williams  <linux@codehelp.co.uk>
+	* src/engine/qof_book_merge.c: Fix double free of the targetList
+	entities that cause xaccGroupGetNumSubAccounts to generate a
+	segmentation fault.
+	* src/engine/kvp_frame.c: 
+	* src/engine/kvp_frame.h:
+	Add kvp_value_to_bare_string to
+	generate strings without debug information.
+	* src/engine/qofsession.h:
+	* src/engine/qofsession.c:
+	Documentation tweaks to bring them into line with QOF and the
+	gnucash-gnome2-dev branch.
+
 2005-02-16  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/dialog-utils.c: When trying to load the symbol

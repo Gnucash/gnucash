@@ -603,7 +603,17 @@ gint          kvp_value_compare(const KvpValue *va, const KvpValue *vb);
 
 /*@}*/
 
+/** \brief General purpose function to convert any KvpValue to a string.
 
+Only the bare string is returned, there is no debugging information.
+*/
+gchar* kvp_value_to_bare_string(const KvpValue *val);
+
+/** \brief Debug version of kvp_value_to_string
+
+This version is used only by ::qof_query_printValueForParam,
+itself a debugging and development utility function.
+*/
 gchar* kvp_value_to_string(const KvpValue *val);
 
 /** Manipulator: 

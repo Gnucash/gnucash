@@ -92,7 +92,6 @@
 
 /* PROTOTYPES ******************************************************/
 
-/** QofSession definition */
 typedef struct _QofSession    QofSession;
 
 QofSession * qof_session_new (void);
