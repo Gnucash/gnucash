@@ -47,33 +47,16 @@
 #define  HAVE_XPM            1
 
 /* Use the new XmHTML widdget instead of the old htmlw widget */
-#define HAVE_Z               1
-#define HAVE_PNG             1
-#define HAVE_JPEG            1
+#define HAVE_Z 1               
+#define HAVE_PNG 1             
+#define HAVE_JPEG 1            
 
-#if (HAVE_Z && HAVE_JPEG && HAVE_PNG && HAVE_XPM)
+#if HAVE_XPM
 #define USE_HTMLW            0
 #define USE_XMHTML           1
 #else
 #define USE_HTMLW            1
 #define USE_XMHTML           0
-#endif
-
-/* try to keep if-def-based configs from breaking */
-#if 0==HAVE_Z
-#define HAVE_Z 1
-#endif
-
-#if 0==HAVE_PNG
-#define HAVE_PNG 1
-#endif
-
-#if 0==HAVE_JPEG
-#define HAVE_JPEG 1
-#endif
-
-#if 0==HAVE_XPM
-#define HAVE_XPM 1
 #endif
 
 #endif

@@ -1461,6 +1461,7 @@ fi
 
 
 # the XmHTML widget needs libz, libjpeg, libpng and libm
+# it also uses #ifdef's not #if's so DONT #def to zero.
 LIBS="-lm"
 
 echo $ac_n "checking for -lz""... $ac_c" 1>&6
@@ -1471,7 +1472,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lz  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 1475 "configure"
+#line 1476 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -1483,7 +1484,7 @@ int t() {
 deflateEnd()
 ; return 0; }
 EOF
-if { (eval echo configure:1487: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
+if { (eval echo configure:1488: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -1502,10 +1503,6 @@ EOF
  LIBS="-lz $LIBS"
 else
   echo "$ac_t""no" 1>&6
-cat >> confdefs.h <<\EOF
-#define HAVE_Z 0
-EOF
-
 fi
 
 
@@ -1518,7 +1515,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-ljpeg  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 1522 "configure"
+#line 1519 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -1530,7 +1527,7 @@ int t() {
 jpeg_read_scanlines()
 ; return 0; }
 EOF
-if { (eval echo configure:1534: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
+if { (eval echo configure:1531: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -1549,10 +1546,6 @@ EOF
  LIBS="-ljpeg $LIBS"
 else
   echo "$ac_t""no" 1>&6
-cat >> confdefs.h <<\EOF
-#define HAVE_JPEG 0
-EOF
-
 fi
 
 
@@ -1565,7 +1558,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lpng  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 1569 "configure"
+#line 1562 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -1577,7 +1570,7 @@ int t() {
 png_read_image()
 ; return 0; }
 EOF
-if { (eval echo configure:1581: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
+if { (eval echo configure:1574: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -1596,10 +1589,6 @@ EOF
  LIBS="-lpng $LIBS"
 else
   echo "$ac_t""no" 1>&6
-cat >> confdefs.h <<\EOF
-#define HAVE_PNG 0
-EOF
-
 fi
 
 
@@ -1615,7 +1604,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lXpm -L $x_libraries $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 1619 "configure"
+#line 1608 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -1627,7 +1616,7 @@ int t() {
 XpmReadFileToXpmImage()
 ; return 0; }
 EOF
-if { (eval echo configure:1631: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
+if { (eval echo configure:1620: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
