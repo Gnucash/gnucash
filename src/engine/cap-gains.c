@@ -327,7 +327,7 @@ xaccSplitAssignToLot (Split *split,
   while (split)
   {
      PINFO ("have split amount=%s", gnc_numeric_to_string (split->amount));
-     split->gains = GAINS_STATUS_DIRTY;
+     split->gains |= GAINS_STATUS_VDIRTY;
      lot = policy (acc, split, user_data);
      if (lot)
      {

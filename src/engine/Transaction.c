@@ -520,10 +520,13 @@ DetermineGainStatus (Split *split)
 {
    Split *other;
    KvpValue *val;
+
+   if (GAINS_STATUS_UNKNOWN != split->gains) return;
+
    other = xaccSplitGetCapGainsSplit (split);
    if (other) 
    {
-      split->gains = GAINS_STATUS_DIRTY;
+      split->gains = GAINS_STATUS_VDIRTY | GAINS_STATUS_DATE_DIRTY;
       split->gains_split = other;
       return;
    }
@@ -542,19 +545,18 @@ DetermineGainStatus (Split *split)
       split->gains_split = other;
       return;
    }
-   split->gains = GAINS_STATUS_CLEAN;
+   split->gains = GAINS_STATUS_VDIRTY | GAINS_STATUS_DATE_DIRTY;
 }
 
 #define CHECK_GAINS_STATUS(s)  \
    if (GAINS_STATUS_UNKNOWN == s->gains) DetermineGainStatus(s);
 
-#define SET_GAINS_DIRTY(s) {                                          \
-   if (GAINS_STATUS_UNKNOWN == s->gains) DetermineGainStatus(s);      \
-   if (GAINS_STATUS_GAINS != s->gains) {                              \
-      s->gains = GAINS_STATUS_DIRTY;                                  \
-   } else {                                                           \
-      if (s->gains_split) s->gains_split->gains = GAINS_STATUS_DIRTY; \
-   }                                                                  \
+#define SET_GAINS_VDIRTY(s) {                                           \
+   if (GAINS_STATUS_GAINS != s->gains) {                                \
+      s->gains |= GAINS_STATUS_VDIRTY;                                  \
+   } else {                                                             \
+      if (s->gains_split) s->gains_split->gains |= GAINS_STATUS_VDIRTY; \
+   }                                                                    \
 }
 
 G_INLINE_FUNC void mark_split (Split *s);
@@ -567,8 +569,6 @@ G_INLINE_FUNC void mark_split (Split *s)
     account->balance_dirty = TRUE;
     account->sort_dirty = TRUE;
   }
-
-  if (GAINS_STATUS_UNKNOWN == s->gains) DetermineGainStatus(s);
 
   /* set dirty flag on lot too. */
   if (s->lot) s->lot->is_closed = -1;
@@ -699,7 +699,7 @@ DxaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
   s->value  = double_to_gnc_numeric(price * amt, get_currency_denom(s),
                                     GNC_RND_ROUND);
 
-  SET_GAINS_DIRTY(s);
+  SET_GAINS_VDIRTY(s);
   mark_split (s);
   gen_event (s);
 }
@@ -715,7 +715,7 @@ xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price,
   s->value  = gnc_numeric_mul(s->amount, price, 
                               get_currency_denom(s), GNC_RND_ROUND);
 
-  SET_GAINS_DIRTY(s);
+  SET_GAINS_VDIRTY(s);
   mark_split (s);
   gen_event (s);
 }
@@ -738,7 +738,7 @@ xaccSplitSetSharePrice (Split *s, gnc_numeric price)
   s->value = gnc_numeric_mul(s->amount, price, get_currency_denom(s),
                              GNC_RND_ROUND);
 
-  SET_GAINS_DIRTY(s);
+  SET_GAINS_VDIRTY(s);
   mark_split (s);
   gen_event (s);
 }
@@ -766,7 +766,7 @@ DxaccSplitSetShareAmount (Split *s, double damt)
   s->value  = gnc_numeric_mul(s->amount, old_price, 
                               get_currency_denom(s), GNC_RND_ROUND);
 
-  SET_GAINS_DIRTY(s);
+  SET_GAINS_VDIRTY(s);
   mark_split (s);
   gen_event (s);
 }
@@ -782,7 +782,7 @@ DxaccSplitSetAmount (Split *s, double damt)
 
   s->amount = gnc_numeric_convert(amt, get_commodity_denom(s), GNC_RND_ROUND);
 
-  SET_GAINS_DIRTY(s);
+  SET_GAINS_VDIRTY(s);
   mark_split (s);
   gen_event (s);
 }
@@ -795,7 +795,7 @@ xaccSplitSetAmount (Split *s, gnc_numeric amt)
 
   s->amount = gnc_numeric_convert(amt, get_commodity_denom(s), GNC_RND_ROUND);
 
-  SET_GAINS_DIRTY(s);
+  SET_GAINS_VDIRTY(s);
   mark_split (s);
   gen_event (s);
 }
@@ -829,7 +829,7 @@ DxaccSplitSetValue (Split *s, double damt)
                                 GNC_RND_ROUND);
   }
 
-  SET_GAINS_DIRTY(s);
+  SET_GAINS_VDIRTY(s);
   mark_split (s);
   gen_event (s);
 }
@@ -842,7 +842,7 @@ xaccSplitSetValue (Split *s, gnc_numeric amt)
 
   s->value = gnc_numeric_convert(amt, get_currency_denom(s), GNC_RND_ROUND);
 
-  SET_GAINS_DIRTY(s);
+  SET_GAINS_VDIRTY(s);
   mark_split (s);
   gen_event (s);
 }
@@ -2696,32 +2696,14 @@ xaccTransSetDateInternal(Transaction *trans, Timespec *dadate, Timespec val)
     * routine. So, for now, we are done. */
 }
 
-/* Freeze the date value for cap-gains splits.  Can't set the date for
- * those directly. This predicate returns T if its a gains transaction. */
-static inline gboolean
-is_gains_txn (Transaction *trans)
-{
-   SplitList *node;
-   for (node = trans->splits; node; node=node->next)
-   {
-      Split *s = node->data;
-      DetermineGainStatus (s);
-      if (GAINS_STATUS_GAINS == s->gains) return TRUE;
-   }
-   return FALSE;
-}
-
-/* Copy the date of the transaction that is causing the cap gains 
- * over to the transaction that is recording the cap gains. */
 static inline void
-fiddle_cap_gains_date (Transaction *trans, Timespec ts)
+set_gains_date_dirty (Transaction *trans)
 {
    SplitList *node;
    for (node = trans->splits; node; node=node->next)
    {
       Split *s = node->data;
-      s = s->gains_split;
-      if (s) xaccTransSetDatePostedTS (s->parent, &ts);
+      s->gains |= GAINS_STATUS_DATE_DIRTY;
    }
 }
 
@@ -2730,9 +2712,8 @@ xaccTransSetDatePostedSecs (Transaction *trans, time_t secs)
 {
    Timespec ts = {secs, 0};
    if(!trans) return;
-   if (is_gains_txn (trans)) return;
    xaccTransSetDateInternal(trans, &trans->date_posted, ts);
-   fiddle_cap_gains_date (trans, ts);
+   set_gains_date_dirty (trans);
 }
 
 void
@@ -2747,9 +2728,8 @@ void
 xaccTransSetDatePostedTS (Transaction *trans, const Timespec *ts)
 {
    if (!trans || !ts) return;
-   if (is_gains_txn (trans)) return;
    xaccTransSetDateInternal(trans, &trans->date_posted, *ts);
-   fiddle_cap_gains_date (trans, *ts);
+   set_gains_date_dirty (trans);
 }
 
 void
@@ -2764,10 +2744,9 @@ xaccTransSetDate (Transaction *trans, int day, int mon, int year)
 {
    Timespec ts;
    if(!trans) return;
-   if (is_gains_txn (trans)) return;
    ts = gnc_dmy2timespec(day, mon, year);
    xaccTransSetDateInternal(trans, &trans->date_posted, ts);
-   fiddle_cap_gains_date (trans, ts);
+   set_gains_date_dirty (trans);
 }
 
 void
@@ -2874,21 +2853,48 @@ xaccTransGetDescription (const Transaction *trans)
 const char * 
 xaccTransGetNotes (const Transaction *trans)
 {
-  KvpValue *v;
-
   if (!trans) return NULL;
+  return kvp_frame_get_string (trans->kvp_data, trans_notes_str);
+}
 
-  v = kvp_frame_get_slot (trans->kvp_data, trans_notes_str);
-  if (!v)
-    return NULL;
+/********************************************************************\
+\********************************************************************/
 
-  return kvp_value_get_string (v);
+static inline void
+handle_gains_date (Transaction *trans)
+{
+   SplitList *node;
+printf ("duude handel gains=========================================\n");
+printf ("duuud before=%s\n", qof_print_date(trans->date_posted.tv_sec));
+   for (node = trans->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      if (GAINS_STATUS_UNKNOWN == s->gains) DetermineGainStatus(s);
+
+printf ("duude split=%p gan=%x ptr=%p\n", s, s->gains, s->gains_split);
+if (s->gains_split) printf ("duude other stat= %x\n", s->gains_split->gains);
+
+      if ((GAINS_STATUS_GAINS & s->gains) && 
+          s->gains_split &&
+          ((s->gains_split->gains & GAINS_STATUS_DATE_DIRTY) ||
+           (s->gains & GAINS_STATUS_DATE_DIRTY)))
+      {
+         Transaction *source_trans = s->parent;
+         xaccTransBeginEdit (trans);
+         xaccTransSetDatePostedTS(trans, &source_trans->date_posted);
+         xaccTransCommitEdit (trans);
+         s->gains_split->gains &= ~GAINS_STATUS_DATE_DIRTY;
+         s->gains &= ~GAINS_STATUS_DATE_DIRTY;
+printf ("duuud yeeeeeeeha! %s\n", qof_print_date(trans->date_posted.tv_sec));
+      }
+   }
 }
 
 time_t
 xaccTransGetDate (const Transaction *trans)
 {
    if (!trans) return 0;
+   handle_gains_date((Transaction *) trans);  /* XXX wrong not const ! */
    return (trans->date_posted.tv_sec);
 }
 
@@ -2896,6 +2902,7 @@ void
 xaccTransGetDatePostedTS (const Transaction *trans, Timespec *ts)
 {
    if (!trans || !ts) return;
+   handle_gains_date((Transaction *) trans);  /* XXX wrong not const ! */
    *ts = (trans->date_posted);
 }
 
@@ -2909,17 +2916,16 @@ xaccTransGetDateEnteredTS (const Transaction *trans, Timespec *ts)
 Timespec
 xaccTransRetDatePostedTS (const Transaction *trans)
 {
-   Timespec ts;
-   ts.tv_sec = 0; ts.tv_nsec = 0;
+   Timespec ts = {0, 0};
    if (!trans) return ts;
+   handle_gains_date((Transaction *) trans);  /* XXX wrong not const ! */
    return (trans->date_posted);
 }
 
 Timespec
 xaccTransRetDateEnteredTS (const Transaction *trans)
 {
-   Timespec ts;
-   ts.tv_sec = 0; ts.tv_nsec = 0;
+   Timespec ts = {0, 0};
    if (!trans) return ts;
    return (trans->date_entered);
 }
@@ -2951,31 +2957,19 @@ xaccTransRetDateDueTS (const Transaction *trans)
 char
 xaccTransGetTxnType (const Transaction *trans)
 {
-  KvpValue *value;
   const char *s;
-
   if (!trans) return TXN_TYPE_NONE;
+  s = kvp_frame_get_string (trans->kvp_data, TRANS_TXN_TYPE_KVP);
+  if (s) return *s;
 
-  value = kvp_frame_get_slot_path (trans->kvp_data, TRANS_TXN_TYPE_KVP, NULL);
-  if (value) {
-    s = kvp_value_get_string (value);
-    return *s;
-  }
   return TXN_TYPE_NONE;
 }
 
 const char * 
 xaccTransGetReadOnly (const Transaction *trans)
 {
-  KvpValue *v;
-
   if (!trans) return NULL;
-
-  v = kvp_frame_get_slot (trans->kvp_data, TRANS_READ_ONLY_REASON);
-  if (!v)
-    return NULL;
-
-  return kvp_value_get_string (v);
+  return kvp_frame_get_string (trans->kvp_data, TRANS_READ_ONLY_REASON);
 }
 
 int
@@ -3256,16 +3250,12 @@ xaccSplitGetBook (const Split *split)
 const char *
 xaccSplitGetType(const Split *s)
 {
-  KvpFrame *frame;
-  KvpValue *split_type;
+  char *split_type;
 
   if(!s) return NULL;
-  frame = s->kvp_data;
-  if(!frame) return NULL;
-  split_type = kvp_frame_get_slot(frame, "split-type");
+  split_type = kvp_frame_get_string(s->kvp_data, "split-type");
   if(!split_type) return "normal";
-  if(kvp_value_get_type(split_type) != KVP_TYPE_STRING) return NULL;
-  return(kvp_value_get_string(split_type));
+  return split_type;
 }
 
 /* reconfigure a split to be a stock split - after this, you shouldn't
@@ -3453,19 +3443,8 @@ xaccTransGetVoidStatus(const Transaction *trans)
 char *
 xaccTransGetVoidReason(const Transaction *trans)
 {
-  KvpValue *val;
-  char *reason;
   g_return_val_if_fail(trans, NULL);
-
-  val = kvp_frame_get_slot(trans->kvp_data, void_reason_str);
-  
-  if(val)
-  {
-    reason = kvp_value_get_string(val);
-    return reason;
-  }
-
-  return NULL;
+  return kvp_frame_get_string(trans->kvp_data, void_reason_str);
 }
 
 gnc_numeric
@@ -3506,16 +3485,15 @@ xaccSplitVoidFormerValue(const Split *split)
 Timespec
 xaccTransGetVoidTime(const Transaction *tr)
 {
-  KvpValue *val;
+  char *val;
   Timespec void_time = {0,0};
 
   g_return_val_if_fail(tr, void_time);
 
-  val = kvp_frame_get_slot(tr->kvp_data, void_time_str);
-  
+  val = kvp_frame_get_string(tr->kvp_data, void_time_str);
   if(val)
   {
-    void_time = gnc_iso8601_to_timespec_local(kvp_value_get_string(val));
+    void_time = gnc_iso8601_to_timespec_local(val);
   }
 
   return void_time;

@@ -77,10 +77,13 @@
  */
 
 /* Flags for handling cap-gains status */
-#define GAINS_STATUS_UNKNOWN   0
-#define GAINS_STATUS_CLEAN     1
-#define GAINS_STATUS_DIRTY     2
-#define GAINS_STATUS_GAINS     3
+#define GAINS_STATUS_UNKNOWN        0xff
+#define GAINS_STATUS_CLEAN           0x0
+#define GAINS_STATUS_GAINS           0x3
+#define GAINS_STATUS_DATE_DIRTY     0x10
+#define GAINS_STATUS_VALU_DIRTY     0x20
+#define GAINS_STATUS_LOT_DIRTY      0x40
+#define GAINS_STATUS_VDIRTY    (GAINS_STATUS_VALU_DIRTY|GAINS_STATUS_LOT_DIRTY)
 
 struct split_s
 {
