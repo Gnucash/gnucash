@@ -392,10 +392,17 @@ gnc_register_gui_component_internal (const char * component_class)
   /* look for a free handler id */
   component_id = next_component_id;
 
+  /* design warning: if we ever get 2^32-1 components, 
+     this loop is infinite.  Instead of fixing it, we'll just 
+     complain when (if) we get half way there (probably never).
+  */ 
   while (find_component (component_id))
     if (++component_id == NO_COMPONENT)
       component_id++;
 
+  if (component_id < 0) 
+    PERR("Amazing! Half way to running out of component_ids.");
+  
   /* found one, add the handler */
   ci = g_new0 (ComponentInfo, 1);
 
@@ -520,7 +527,7 @@ gnc_gui_component_watch_entity_type (gint component_id,
 }
 
 const EventInfo *
-gnc_gui_get_entity_events (GHashTable *changes, GUID *entity)
+gnc_gui_get_entity_events (GHashTable *changes, const GUID *entity)
 {
   if (!changes || !entity)
     return GNC_EVENT_NONE;

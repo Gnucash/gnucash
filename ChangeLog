@@ -25,6 +25,13 @@
 	Chris Shoemaker's patch: Various comments and typo fixes.
 	* Comments and typo fixes
 
+	Chris Shoemaker's patch: Comments and tweaks for gnc-component-manager.
+	* gnc-component-manager tweaks
+	  - Warn if we approach design limitation of component manager
+	  - pass GUID as const in gnc_gui_get_entity_events, change
+	    prototype, callers, and docs
+	  - Clarify comments about receiving events after entity life-cycle
+
 2005-02-02  Derek Atkins  <derek@ihtfp.com>
 
 	Neil Williams' patch to clean up the test-book-merge:

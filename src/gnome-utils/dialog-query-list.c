@@ -140,7 +140,7 @@ gnc_dialog_query_list_refresh_handler (GHashTable *changes, gpointer user_data)
   {
     for (node = dql->books; node; node = node->next)
     {
-      info = gnc_gui_get_entity_events (changes, (GUID*)(node->data));
+      info = gnc_gui_get_entity_events (changes, (const GUID*)(node->data));
       if (info && (info->event_mask & GNC_EVENT_DESTROY))
       {
 	gnc_close_gui_component (dql->component_id);

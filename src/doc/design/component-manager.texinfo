@@ -207,7 +207,7 @@ every Engine event, @code{event_mask} may have all three values.
 
 There is a utility function for accessing the @var{changes} hash:
 
-@deftypefun {const EventInfo *} gnc_gui_get_entity_events (GHashTable * @var{changes}, GUID * @var{entity})
+@deftypefun {const EventInfo *} gnc_gui_get_entity_events (GHashTable * @var{changes}, const GUID * @var{entity})
 Return the event info for the entity specified by @var{entity}. If there
 are no events for that entity, @code{NULL} is returned.
 @end deftypefun
