@@ -139,7 +139,7 @@ GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type)
     {
       g_warning ("Can't find valid initial location");
     }
-}
+  }
 
   return ledger;
 }
