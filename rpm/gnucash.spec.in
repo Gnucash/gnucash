@@ -5,7 +5,7 @@ Release: 1
 Copyright: Free Software Foundation
 Group: Applications/Finance
 Source: http://www.gnucash.org/pub/gnucash/sources/stable/gnucash-%{PACKAGE_VERSION}.tar.gz
-Packager: Dave Peticolas <peticola@cs.ucdavis.edu>
+Packager: Dave Peticolas <dave@krondo.com>
 BuildRoot: /var/tmp/gnucash-%version
 Requires: gnome-libs >= 1.0.40
 
@@ -23,6 +23,7 @@ double-entry accounting principles to ensure balanced books.
 
 
 %build
+unset LINGUAS
 ./configure --prefix=/usr --sysconfdir=/etc
 make gnome
 
@@ -44,10 +45,11 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/gnucash
 /usr/share/gnucash
 /usr/share/gnome/apps/Applications/gnucash.desktop
-/usr/share/locale/de/LC_MESSAGES/gnucash.mo
-/usr/share/locale/en_GB/LC_MESSAGES/gnucash.mo
-/usr/share/locale/fr/LC_MESSAGES/gnucash.mo
-/usr/share/locale/sv/LC_MESSAGES/gnucash.mo
+/usr/share/locale/de/LC_MESSAGES/gnucash.*mo
+/usr/share/locale/en_GB/LC_MESSAGES/gnucash.*mo
+/usr/share/locale/fr/LC_MESSAGES/gnucash.*mo
+/usr/share/locale/ja/LC_MESSAGES/gnucash.*mo
+/usr/share/locale/sv/LC_MESSAGES/gnucash.*mo
 %config /etc/gnucash
 %doc /usr/doc/gnucash
 %doc /usr/man/man1/gnucash.1
