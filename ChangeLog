@@ -3,6 +3,8 @@
 	* src/gnome-search/Makefile.am: add GDK_PIXBUF_CFLAGS because
 	  it is pulled in by gtkhtml, which is pulled in from window-help.	  
 
+	* revert patch -- not needed.  Oops.
+	
 2002-12-04  David Hampton  <hampton@employees.org>
 
 	* src/quotes/finance-quote-helper.in (schemify_quote): Allow stock
