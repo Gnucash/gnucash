@@ -47,19 +47,25 @@ CPU     = @target_cpu@
 
 
 default:
-	echo "Please choose one of the following targets:"
-	echo "motif           dynamically linked motif version"
-	echo "motif-static    statically linked motif version"
-	echo "gnome           gnome/gtk version"
+	@echo " "
+	@echo "Please choose one of the following targets:"
+	@echo "motif           dynamically linked motif version"
+	@echo "motif-static    statically linked motif version"
+	@echo "gnome           gnome/gtk version"
+	@echo " "
 
 motif:
 	@cd lib;    $(MAKE)
-	@cd src;    $(MAKE)
+	@cd src;    $(MAKE) motif
 
 # link in motif libs statically
 motif-static:
 	@cd lib;    $(MAKE)
-	@cd src;    $(MAKE) static
+	@cd src;    $(MAKE) motif-static
+
+gnome:
+	@cd lib;    $(MAKE)
+	@cd src;    $(MAKE) gnome
 
 depend:
 	@cd lib;    $(MAKE) depend

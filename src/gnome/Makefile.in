@@ -42,10 +42,10 @@ INCLPATH = -I/usr/include \
 
 CFLAGS   = @cflags@
 LFLAGS   = @lflags@
-LIBS     = @LIBS@
+# LIBS     = @LIBS@
+LIBS     = -lgtk -lgdk -lglib -lXpm -lXext -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
 LIBPATH  = -L/lib -L/usr/lib -L/usr/local/lib -L@x_libraries@/.
 TARGET   = ../../xacc.gtk.bin
-STATIC   = ../../xacc-static.bin
 
 LIBREG   = ../libregister.a
 LIBENG   = ../libengine.a
@@ -53,13 +53,16 @@ LIBENG   = ../libengine.a
 SRCS = main.c MainWindow.c MenuBar.c 
 
 # SRCS = AccWindow.c AccountMenu.c AdjBWindow.c    \
-#        BuildMenu.c Destroy.c FileBox.c HelpWindow.c MainWindow.c   \
+#        BuildMenu.c Destroy.c FileBox.c HelpWindow.c  \
 #        RecnWindow.c RegWindow.c Reports.c TextBox.c  \
-#        XferWindow.c date.c main.c xtutil.c
-OBJS = ${SRCS:.c=.o} $(LIBENG) $(LIBREG) ../Ledger.o 
+#        XferWindow.c date.c xtutil.c
+# OBJS = ${SRCS:.c=.o} $(LIBENG) $(LIBREG) ../Ledger.o 
+OBJS = ${SRCS:.c=.o} $(LIBENG)  
 ######################################################################
 
 default: $(TARGET)
+
+gnome: default
 
 $(TARGET): $(OBJS)
 	@echo "++++++"

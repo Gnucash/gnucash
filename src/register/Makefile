@@ -32,7 +32,7 @@ RANLIB   = ranlib
 INCLPATH = -I/usr/include \
            -I/usr/local/include/. \
            -I/usr/X11R6/include/. \
-           -I./../..
+           -I./../.. \
            -I./../../include \
            -I./../engine \
            -I./../../lib/ComboBox-1.33 \
@@ -51,7 +51,9 @@ SRCS = 	basiccell.c cellblock.c combocell.c \
 OBJS = ${SRCS:.c=.o} 
 ######################################################################
 
-default: $(TARGET)
+motif: $(TARGET)
+
+gnome: $(TARGET)
 
 $(TARGET): $(OBJS)
 	@echo "++++++"

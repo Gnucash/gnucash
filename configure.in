@@ -77,7 +77,7 @@ AC_SUBST(LIBS)
 # *******************************************
 AC_CONFIG_HEADER(config.h)
 
-AC_OUTPUT(xacc Makefile src/Makefile src/engine/Makefile src/motif/Makefile src/register/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile)
+AC_OUTPUT(xacc Makefile src/Makefile src/engine/Makefile src/gtk/Makefile src/motif/Makefile src/register/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile)
 
 chmod +x xacc
 

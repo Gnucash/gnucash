@@ -30,34 +30,39 @@ CC       = gcc
 INCLPATH = -I/usr/include \
            -I.. \
            -I../.. \
-           -I../../include \
            -I../engine \
            -I../register \
            -I/usr/local/include \
            -I/usr/X11R6/include/. \
            -I./../../include 
- 
 
-CFLAGS   = -g 
-LFLAGS   = -g
-LIBS     = -lXpm -lgtk -lgdk -lglib -lXext -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
+# libhtmlw eliminated due to license restrictions 
+# and general brokenness
+#           -I./../../lib/libhtmlw 
+
+CFLAGS   = -O2
+LFLAGS   = -O2
+# LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
+LIBS     = -lgtk -lgdk -lglib -lXpm -lXext -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
 LIBPATH  = -L/lib -L/usr/lib -L/usr/local/lib -L/usr/X11R6/lib/.
 TARGET   = ../../xacc.gtk.bin
 
-#LIBREG   = ../libregister.a
+LIBREG   = ../libregister.a
 LIBENG   = ../libengine.a
 ######################################################################
-SRCS = main.c MainWindow.c MenuBar.c
+SRCS = main.c MainWindow.c MenuBar.c 
 
-#SRCS = AccWindow.c AccountMenu.c AdjBWindow.c    \
-#       BuildMenu.c Destroy.c FileBox.c HelpWindow.c MainWindow.c  \
-#       RecnWindow.c RegWindow.c Reports.c TextBox.c  \
-#       XferWindow.c main.c  xtutil.c
-#OBJS = ${SRCS:.c=.o} $(LIBENG) ../Ledger.o 
-OBJS = ${SRCS:.c=.o} $(LIBENG)
+# SRCS = AccWindow.c AccountMenu.c AdjBWindow.c    \
+#        BuildMenu.c Destroy.c FileBox.c HelpWindow.c  \
+#        RecnWindow.c RegWindow.c Reports.c TextBox.c  \
+#        XferWindow.c date.c xtutil.c
+# OBJS = ${SRCS:.c=.o} $(LIBENG) $(LIBREG) ../Ledger.o 
+OBJS = ${SRCS:.c=.o} $(LIBENG)  
 ######################################################################
 
 default: $(TARGET)
+
+gnome: default
 
 $(TARGET): $(OBJS)
 	@echo "++++++"

@@ -46,9 +46,16 @@ OBJS = ${SRCS:.c=.o}
 ######################################################################
 
 default: $(OBJS)
+
+motif: default
 	@cd engine;            $(MAKE) default
-	@cd register;          $(MAKE) default
-	@cd motif;             $(MAKE) default
+	@cd register;          $(MAKE) motif
+	@cd motif;             $(MAKE) motif
+
+gnome: default
+	@cd engine;            $(MAKE) default
+	@cd register;          $(MAKE) gnome
+	@cd gtk;               $(MAKE) gnome
 
 .c.o:
 	@echo "+++"
