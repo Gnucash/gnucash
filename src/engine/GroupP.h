@@ -46,7 +46,7 @@
 
 
 /** STRUCTS *********************************************************/
-struct _account_group
+struct account_group_s
 {
   /* The flags: */
   unsigned int saved : 1;

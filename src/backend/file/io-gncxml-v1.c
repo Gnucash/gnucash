@@ -3064,7 +3064,8 @@ txn_restore_split_start_handler(GSList* sibling_data, gpointer parent_data,
                                 gpointer *data_for_children, gpointer *result,
                                 const gchar *tag, gchar **attrs)
 {
-  Split *s = xaccMallocSplit();
+  GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
+  Split *s = xaccMallocSplit(pstatus->session);
   g_return_val_if_fail(s, FALSE);
   *data_for_children = s;
   return(TRUE);

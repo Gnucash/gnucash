@@ -927,7 +927,7 @@ gnc_account_create_opening_balance (Account *account,
   xaccTransSetDateSecs (trans, date);
   xaccTransSetDescription (trans, _("Opening Balance"));
 
-  split = xaccMallocSplit ();
+  split = xaccMallocSplit (session);
 
   xaccTransAppendSplit (trans, split);
   xaccAccountInsertSplit (account, split);
@@ -937,7 +937,7 @@ gnc_account_create_opening_balance (Account *account,
 
   balance = gnc_numeric_neg (balance);
 
-  split = xaccMallocSplit ();
+  split = xaccMallocSplit (session);
 
   xaccTransAppendSplit (trans, split);
   xaccAccountInsertSplit (equity_account, split);

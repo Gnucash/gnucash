@@ -200,7 +200,8 @@ gnc_copy_trans_onto_trans(Transaction *from, Transaction *to,
   if (trans_scm == SCM_UNDEFINED)
     return;
 
-  gnc_copy_trans_scm_onto_trans(trans_scm, to, do_commit);
+  gnc_copy_trans_scm_onto_trans(trans_scm, to, do_commit,
+                                gnc_get_current_session ());
 }
 
 static int
@@ -522,7 +523,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
     /* We are on a split in an expanded transaction.
      * Just copy the split and add it to the transaction. */
 
-    new_split = xaccMallocSplit ();
+    new_split = xaccMallocSplit (gnc_get_current_session ());
 
     xaccTransBeginEdit (trans);
     xaccTransAppendSplit (trans, new_split);
@@ -802,7 +803,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
     xaccTransBeginEdit(trans);
     if (split == NULL)
     { /* We are on a null split in an expanded transaction. */
-      split = xaccMallocSplit();
+      split = xaccMallocSplit(gnc_get_current_session ());
       xaccTransAppendSplit(trans, split);
     }
 
@@ -851,10 +852,12 @@ gnc_split_register_paste_current (SplitRegister *reg)
       new_guid = &info->default_account;
       gnc_copy_trans_scm_onto_trans_swap_accounts(copied_item, trans,
                                                   &copied_leader_guid,
-                                                  new_guid, TRUE);
+                                                  new_guid, TRUE,
+                                                  gnc_get_current_session ());
     }
     else
-      gnc_copy_trans_scm_onto_trans(copied_item, trans, TRUE);
+      gnc_copy_trans_scm_onto_trans(copied_item, trans, TRUE,
+                                    gnc_get_current_session ());
 
     num_splits = xaccTransCountSplits(trans);
     if (split_index >= num_splits)
@@ -1219,7 +1222,7 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
       {
         Split *temp_split;
 
-        temp_split = xaccMallocSplit ();
+        temp_split = xaccMallocSplit (gnc_get_current_session ());
         other_split_scm = gnc_copy_split (temp_split, use_cut_semantics);
         xaccSplitDestroy (temp_split);
 
@@ -1389,7 +1392,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
       * the split to the pre-existing transaction. */
      Split *trans_split;
 
-     split = xaccMallocSplit ();
+     split = xaccMallocSplit (gnc_get_current_session ());
      xaccTransAppendSplit (trans, split);
 
      gnc_table_set_virt_cell_data (reg->table,

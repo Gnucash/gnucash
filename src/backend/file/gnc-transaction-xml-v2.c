@@ -312,11 +312,13 @@ struct dom_tree_handler spl_dom_handlers[] =
 };
 
 Split*
-dom_tree_to_split(xmlNodePtr node)
+dom_tree_to_split(xmlNodePtr node, GNCSession *session)
 {
     Split *ret;
 
-    ret = xaccMallocSplit();
+    g_return_val_if_fail (session, NULL);
+
+    ret = xaccMallocSplit(session);
     g_return_val_if_fail(ret, NULL);
 
     /* this isn't going to work in a testing setup */
@@ -331,43 +333,17 @@ dom_tree_to_split(xmlNodePtr node)
     }
 }
 
-
-static gboolean
-trn_splits_handler(xmlNodePtr node, gpointer trn)
-{
-    xmlNodePtr mark;
-
-    g_return_val_if_fail(node, FALSE);
-    g_return_val_if_fail(node->xmlChildrenNode, FALSE);
-
-    for(mark = node->xmlChildrenNode; mark; mark = mark->next)
-    {
-        Split *spl;
-        
-        if(safe_strcmp("trn:split", mark->name))
-        {
-            return FALSE;
-        }
-        
-        spl = dom_tree_to_split(mark);
-
-        if(spl)
-        {
-            xaccTransAppendSplit((Transaction*)trn, spl);
-        }
-        else
-        {
-            return FALSE;
-        }
-    }
-    return TRUE;
-}
-
 /***********************************************************************/
+
+struct trans_pdata
+{
+  Transaction *trans;
+  GNCSession *session;
+};
 
 static gboolean
 set_tran_string(xmlNodePtr node, Transaction *trn,
-           void (*func)(Transaction *trn, const char *txt))
+                void (*func)(Transaction *trn, const char *txt))
 {
     gchar *tmp;
 
@@ -384,7 +360,7 @@ set_tran_string(xmlNodePtr node, Transaction *trn,
 
 static gboolean
 set_tran_date(xmlNodePtr node, Transaction *trn,
-         void (*func)(Transaction *trn, const Timespec *tm))
+              void (*func)(Transaction *trn, const Timespec *tm))
 {
     Timespec *tm;
 
@@ -400,9 +376,12 @@ set_tran_date(xmlNodePtr node, Transaction *trn,
 }
 
 static gboolean
-trn_id_handler(xmlNodePtr node, gpointer trn)
+trn_id_handler(xmlNodePtr node, gpointer trans_pdata)
 {
+    struct trans_pdata *pdata = trans_pdata;
+    Transaction *trn = pdata->trans;
     GUID *tmp = dom_tree_to_guid(node);
+
     g_return_val_if_fail(tmp, FALSE);
 
     xaccTransSetGUID((Transaction*)trn, tmp);
@@ -413,8 +392,10 @@ trn_id_handler(xmlNodePtr node, gpointer trn)
 }
 
 static gboolean
-trn_currency_handler(xmlNodePtr node, gpointer trn)
+trn_currency_handler(xmlNodePtr node, gpointer trans_pdata)
 {
+    struct trans_pdata *pdata = trans_pdata;
+    Transaction *trn = pdata->trans;
     gnc_commodity *ref;
 
     ref = dom_tree_to_commodity_ref_no_engine(node);
@@ -424,32 +405,46 @@ trn_currency_handler(xmlNodePtr node, gpointer trn)
 }
 
 static gboolean
-trn_num_handler(xmlNodePtr node, gpointer trn)
+trn_num_handler(xmlNodePtr node, gpointer trans_pdata)
 {
-    return set_tran_string(node, (Transaction*)trn, xaccTransSetNum);
+    struct trans_pdata *pdata = trans_pdata;
+    Transaction *trn = pdata->trans;
+
+    return set_tran_string(node, trn, xaccTransSetNum);
 }
 
 static gboolean
-trn_date_posted_handler(xmlNodePtr node, gpointer trn)
+trn_date_posted_handler(xmlNodePtr node, gpointer trans_pdata)
 {
-    return set_tran_date(node, (Transaction*)trn, xaccTransSetDatePostedTS);
+    struct trans_pdata *pdata = trans_pdata;
+    Transaction *trn = pdata->trans;
+
+    return set_tran_date(node, trn, xaccTransSetDatePostedTS);
 }
 
 static gboolean
-trn_date_entered_handler(xmlNodePtr node, gpointer trn)
+trn_date_entered_handler(xmlNodePtr node, gpointer trans_pdata)
 {
-    return set_tran_date(node, (Transaction*)trn, xaccTransSetDateEnteredTS);
+    struct trans_pdata *pdata = trans_pdata;
+    Transaction *trn = pdata->trans;
+
+    return set_tran_date(node, trn, xaccTransSetDateEnteredTS);
 }
 
 static gboolean
-trn_description_handler(xmlNodePtr node, gpointer trn)
+trn_description_handler(xmlNodePtr node, gpointer trans_pdata)
 {
-    return set_tran_string(node, (Transaction*)trn, xaccTransSetDescription);
+    struct trans_pdata *pdata = trans_pdata;
+    Transaction *trn = pdata->trans;
+
+    return set_tran_string(node, trn, xaccTransSetDescription);
 }
 
 static gboolean
-trn_slots_handler(xmlNodePtr node, gpointer trn)
+trn_slots_handler(xmlNodePtr node, gpointer trans_pdata)
 {
+    struct trans_pdata *pdata = trans_pdata;
+    Transaction *trn = pdata->trans;
     gboolean successful;
 
     successful = dom_tree_to_kvp_frame_given(node, xaccTransGetSlots(trn));
@@ -459,6 +454,38 @@ trn_slots_handler(xmlNodePtr node, gpointer trn)
     return TRUE;
 }
 
+static gboolean
+trn_splits_handler(xmlNodePtr node, gpointer trans_pdata)
+{
+    struct trans_pdata *pdata = trans_pdata;
+    Transaction *trn = pdata->trans;
+    xmlNodePtr mark;
+
+    g_return_val_if_fail(node, FALSE);
+    g_return_val_if_fail(node->xmlChildrenNode, FALSE);
+
+    for(mark = node->xmlChildrenNode; mark; mark = mark->next)
+    {
+        Split *spl;
+        
+        if(safe_strcmp("trn:split", mark->name))
+        {
+            return FALSE;
+        }
+        
+        spl = dom_tree_to_split(mark, pdata->session);
+
+        if(spl)
+        {
+            xaccTransAppendSplit(trn, spl);
+        }
+        else
+        {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
 
 struct dom_tree_handler trn_dom_handlers[] =
 {
@@ -516,15 +543,20 @@ dom_tree_to_transaction( xmlNodePtr node, GNCSession *session )
 {
     Transaction *trn;
     gboolean	successful;
+    struct trans_pdata pdata;
 
-    g_return_val_if_fail(node, FALSE);
+    g_return_val_if_fail(node, NULL);
+    g_return_val_if_fail(session, NULL);
     
     trn = xaccMallocTransaction(session);
-    g_return_val_if_fail(trn, FALSE);
+    g_return_val_if_fail(trn, NULL);
     xaccTransBeginEdit(trn);
 
-    successful = dom_tree_generic_parse(node, trn_dom_handlers, trn);
-    
+    pdata.trans = trn;
+    pdata.session = session;
+
+    successful = dom_tree_generic_parse(node, trn_dom_handlers, &pdata);
+
     xaccTransCommitEdit(trn);
 
     if ( !successful )
@@ -536,7 +568,6 @@ dom_tree_to_transaction( xmlNodePtr node, GNCSession *session )
 	trn = NULL;
     }
 
-    //xmlFreeNode(tree);
     return trn;
 }
 

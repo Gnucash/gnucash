@@ -29,15 +29,21 @@
 #define GNC_SESSION_P_H
 
 #include "BackendP.h"
+#include "GNCIdP.h"
 #include "TransLog.h"
-#include "gnc-book.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-session.h"
 
 struct gnc_session_struct
 {
+  /* The book is the cache for the underlying gnucash dataset. */
   GNCBook *book;
+
+  /* The entity table associates the GUIDs of all the objects
+   * created in the session with their respective objects
+   * (pointer addresses) */
+  GNCEntityTable *entity_table;
 
   /* the requested book id, in the form or a URI, such as
    * file:/some/where, or sql:server.host.com:555
@@ -66,7 +72,9 @@ struct gnc_session_struct
 
 void gnc_session_set_book (GNCSession *session, GNCBook *book);
 
-Backend *  gnc_session_get_backend (GNCSession *session);
+GNCEntityTable *gnc_session_get_entity_table (GNCSession *session);
+
+Backend * gnc_session_get_backend (GNCSession *session);
 
 /*
  * used by backends to mark the notsaved as FALSE just after 

@@ -364,7 +364,7 @@
                                        gnc-acct-hash 
                                        qif-acct-map qif-cat-map qif-memo-map)
   (let ((splits (qif-xtn:splits qif-xtn))
-        (gnc-near-split (gnc:split-create))
+        (gnc-near-split (gnc:split-create (gnc:get-current-session)))
         (near-split-total (gnc:numeric-zero))
         (near-acct-info #f)
         (near-acct-name #f)
@@ -413,7 +413,8 @@
           (for-each 
            (lambda (qif-split)
              (if (not (qif-split:mark qif-split))
-                 (let ((gnc-far-split (gnc:split-create))
+                 (let ((gnc-far-split (gnc:split-create
+                                       (gnc:get-current-session)))
                        (far-acct-info #f)
                        (far-acct-name #f)
                        (far-acct-type #f)
@@ -501,7 +502,7 @@
                (commission-amt (qif-xtn:commission qif-xtn))
                (commission-split #f)
                (defer-share-price #f)
-               (gnc-far-split (gnc:split-create)))
+               (gnc-far-split (gnc:split-create (gnc:get-current-session))))
           
           (if (not num-shares) (set! num-shares (gnc:numeric-zero)))
           (if (not share-price) (set! share-price (gnc:numeric-zero)))
@@ -616,10 +617,11 @@
           
           (if (and commission-amt commission-acct)
               (begin 
-                (set! commission-split (gnc:split-create))
+                (set! commission-split (gnc:split-create
+                                        (gnc:get-current-session)))
                 (gnc:split-set-value commission-split commission-amt)
                 (gnc:split-set-amount commission-split commission-amt)))
-          
+
           (if (and qif-near-acct qif-far-acct)
               (begin 
                 (gnc:transaction-append-split gnc-xtn gnc-near-split)

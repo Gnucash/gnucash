@@ -179,7 +179,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     xaccTransBeginEdit (trans);
     xaccTransSetCurrency (trans, gnc_default_currency ()); /* is this lame? */
     xaccTransSetDateSecs (trans, info->last_date_entered);
-    blank_split = xaccMallocSplit ();
+    blank_split = xaccMallocSplit (gnc_get_current_session ());
     xaccTransAppendSplit (trans, blank_split);
     xaccTransCommitEdit (trans);
 

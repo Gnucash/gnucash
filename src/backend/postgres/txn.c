@@ -407,7 +407,7 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
             s = xaccSplitLookup (&guid);
             if (!s)
             {
-               s = xaccMallocSplit();
+               s = xaccMallocSplit(be->session);
                xaccSplitSetGUID(s, &guid);
             }
 

@@ -43,10 +43,10 @@
 
 /** STRUCTS *********************************************************/
 
-typedef struct _account       Account;
-typedef struct _account_group AccountGroup;
-typedef struct _split         Split;
-typedef struct _transaction   Transaction;
+typedef struct account_s       Account;
+typedef struct account_group_s AccountGroup;
+typedef struct split_s         Split;
+typedef struct transaction_s   Transaction;
 
 
 /** PROTOTYPES ******************************************************/
@@ -243,7 +243,7 @@ void xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr);
 gnc_numeric xaccTransGetImbalance (Transaction * trans);
 
 /* ------------- splits --------------- */
-Split       * xaccMallocSplit (void);
+Split       * xaccMallocSplit (GNCSession *session);
 
 gboolean xaccSplitEqual(const Split *sa, const Split *sb,
                         gboolean check_guids,

@@ -502,8 +502,8 @@ get_random_split(GNCSession *session, gnc_numeric num)
 {
     Split *ret;
     gnc_numeric oneVal;
-    
-    ret = xaccMallocSplit();
+
+    ret = xaccMallocSplit(session);
 
     set_split_random_string(ret, xaccSplitSetMemo);
     set_split_random_string(ret, xaccSplitSetAction);

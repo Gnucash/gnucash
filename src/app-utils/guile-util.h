@@ -68,12 +68,13 @@ gnc_numeric gnc_split_scm_get_value(SCM split_scm);
 
 SCM    gnc_copy_trans(Transaction *trans, gboolean use_cut_semantics);
 void   gnc_copy_trans_scm_onto_trans(SCM trans_scm, Transaction *trans,
-                                     gboolean do_commit);
+                                     gboolean do_commit, GNCSession *session);
 void   gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
                                                    Transaction *trans,
                                                    const GUID *guid_1,
                                                    const GUID *guid_2,
-                                                   gboolean do_commit);
+                                                   gboolean do_commit,
+                                                   GNCSession *session);
 
 void   gnc_trans_scm_set_date(SCM trans_scm, Timespec *ts);
 void   gnc_trans_scm_set_num(SCM trans_scm, const char *num);

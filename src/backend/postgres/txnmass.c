@@ -141,7 +141,7 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    s = xaccSplitLookup (&guid);
    if (!s)
    {
-      s = xaccMallocSplit();
+      s = xaccMallocSplit(be->session);
       xaccSplitSetGUID(s, &guid);
    }
 

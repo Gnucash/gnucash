@@ -382,7 +382,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
     xaccTransSetDescription (trans, description);
   }
 
-  split = xaccMallocSplit ();
+  split = xaccMallocSplit (gnc_get_current_session ());
 
   xaccAccountBeginEdit (account);
   account_commits = g_list_prepend (NULL, account);
@@ -441,7 +441,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
     account = gnc_account_tree_get_current_account
       (GNC_ACCOUNT_TREE (info->asset_tree));
 
-    split = xaccMallocSplit ();
+    split = xaccMallocSplit (gnc_get_current_session ());
 
     xaccAccountBeginEdit (account);
     account_commits = g_list_prepend (account_commits, account);
@@ -460,7 +460,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
     account = gnc_account_tree_get_current_account
       (GNC_ACCOUNT_TREE (info->income_tree));
 
-    split = xaccMallocSplit ();
+    split = xaccMallocSplit (gnc_get_current_session ());
 
     xaccAccountBeginEdit (account);
     account_commits = g_list_prepend (account_commits, account);

@@ -31,13 +31,11 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "Account.h"
 #include "AccountP.h"
 #include "BackendP.h"
 #include "GNCIdP.h"
 #include "Group.h"
 #include "Scrub.h"
-#include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
 #include "date.h"
@@ -45,6 +43,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-event-p.h"
+#include "gnc-session-p.h"
 #include "messages.h"
 
 
@@ -93,7 +92,7 @@ check_open (Transaction *trans)
 \********************************************************************/
 
 static void
-xaccInitSplit(Split * split)
+xaccInitSplit(Split * split, GNCEntityTable *entity_table)
 {
   /* fill in some sane defaults */
   xaccSplitSetAccount(split, NULL);
@@ -122,12 +121,26 @@ xaccInitSplit(Split * split)
 /********************************************************************\
 \********************************************************************/
 
-Split *
-xaccMallocSplit(void)
+static Split *
+xaccMallocSplitEntityTable (GNCEntityTable *entity_table)
 {
-  Split *split = g_new(Split, 1);
-  xaccInitSplit (split);
+  Split *split;
+
+  /* FIXME: uncomment this when done with moving entity
+   * tables into sessions. */
+  /*  g_return_val_if_fail (entity_table, NULL); */
+
+  split = g_new (Split, 1);
+  xaccInitSplit (split, entity_table);
+
   return split;
+}
+
+Split *
+xaccMallocSplit(GNCSession *session)
+{
+  g_return_val_if_fail (session, NULL);
+  return xaccMallocSplitEntityTable (gnc_session_get_entity_table (session));
 }
 
 /********************************************************************\
@@ -638,6 +651,7 @@ xaccInitTransaction (Transaction * trans, GNCSession *session)
 
   xaccGUIDNew(&trans->guid);
   xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
+  trans->entity_table = NULL;
 }
 
 /********************************************************************\
@@ -1312,7 +1326,7 @@ xaccTransCommitEdit (Transaction *trans)
          trans->date_entered.tv_sec = tv.tv_sec;
          trans->date_entered.tv_nsec = 1000 * tv.tv_usec;
       }
-   
+
       /* Alternately the transaction may have only one split in 
        * it, in which case that's OK if and only if the split has no 
        * value (i.e. is only recording a price). Otherwise, a single
@@ -1324,7 +1338,7 @@ xaccTransCommitEdit (Transaction *trans)
       if ((1 == force_double_entry) &&
           (NULL == g_list_nth(trans->splits, 1)) &&
           (!gnc_numeric_zero_p(split->amount))) {
-        Split * s = xaccMallocSplit();
+        Split * s = xaccMallocSplitEntityTable(trans->entity_table);
         xaccTransAppendSplit (trans, s);
         xaccAccountInsertSplit (xaccSplitGetAccount(s), s);
         xaccSplitSetMemo (s, split->memo);

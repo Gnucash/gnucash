@@ -733,10 +733,10 @@ gnc_copy_trans(Transaction *trans, gboolean use_cut_semantics)
 \********************************************************************/
 void
 gnc_copy_trans_scm_onto_trans(SCM trans_scm, Transaction *trans,
-                              gboolean do_commit)
+                              gboolean do_commit, GNCSession *session)
 {
   gnc_copy_trans_scm_onto_trans_swap_accounts(trans_scm, trans, NULL, NULL,
-                                              do_commit);
+                                              do_commit, session);
 }
 
 
@@ -758,7 +758,8 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
                                             Transaction *trans,
                                             const GUID *guid_1,
                                             const GUID *guid_2,
-                                            gboolean do_commit)
+                                            gboolean do_commit,
+                                            GNCSession *session)
 {
   static SCM trans_type = SCM_UNDEFINED;
   SCM result;
@@ -770,6 +771,8 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
 
   if (trans == NULL)
     return;
+
+  g_return_if_fail (session);
 
   func = gh_eval_str("gnc:transaction-scm?");
   if (!gh_procedure_p(func))
@@ -798,6 +801,7 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
 
     commit = gh_bool2scm(do_commit);
 
+    args = gh_cons(gnc_session_to_scm (session), args);
     args = gh_cons(commit, args);
     args = gh_cons(SCM_EOL, args);
     args = gh_cons(arg, args);
@@ -812,6 +816,8 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
     SCM args = SCM_EOL;
     SCM commit;
     char *guid_str;
+
+    args = gh_cons(gnc_session_to_scm (session), args);
 
     commit = gh_bool2scm(do_commit);
 

@@ -81,6 +81,7 @@ int gnc_numeric_p(SCM arg);
 gnc_commodity * gnc_scm_to_commodity(SCM scm);
 SCM gnc_commodity_to_scm (const gnc_commodity *commodity);
 SCM gnc_book_to_scm (GNCBook *book);
+SCM gnc_session_to_scm (GNCSession *session);
 
 /* The GList is freed */
 SCM     gnc_glist_account_ptr_to_scm(GList *account_list);

@@ -155,7 +155,7 @@
              (acct-type (cdr acct-info))
              (acct (qif-io:acct-table-lookup 
                     gnc-acct-info acct-name acct-type))
-             (split (gnc:split-create)))
+             (split (gnc:split-create (gnc:get-current-session))))
         ;; make the account if necessary 
         (if (not acct)
             (begin 

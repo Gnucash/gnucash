@@ -120,7 +120,7 @@ gnc_session_init (GNCSession *session)
   if (!session) return;
 
   session->book = gnc_book_new ();
-
+  session->entity_table = NULL;
   session->book_id = NULL;
   session->fullpath = NULL;
   session->logpath = NULL;
@@ -156,6 +156,13 @@ gnc_session_set_book (GNCSession *session, GNCBook *book)
     return;
 
   session->book = book;
+}
+
+GNCEntityTable *
+gnc_session_get_entity_table (GNCSession *session)
+{
+  if (!session) return NULL;
+  return session->entity_table;
 }
 
 Backend * 

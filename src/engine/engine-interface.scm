@@ -240,7 +240,7 @@
 ;; guid-mapping must be an alist, mapping guids to guids. This list is
 ;; used to use alternate account guids when creating splits.
 (define (gnc:transaction-scm-onto-transaction trans-scm trans guid-mapping
-                                              commit?)
+                                              commit? session)
   (if (not trans)
       #f
       (begin
@@ -272,7 +272,7 @@
         ;; order as in the original transaction. This is important.
         (let loop ((split-scms (gnc:transaction-scm-get-split-scms trans-scm)))
           (if (pair? split-scms)
-              (let* ((new-split (gnc:split-create))
+              (let* ((new-split (gnc:split-create session))
                      (split-scm (car split-scms))
                      (old-guid  (gnc:split-scm-get-account-guid split-scm))
                      (new-guid  (assoc-ref guid-mapping old-guid)))

@@ -52,7 +52,7 @@
 #include "kvp_frame.h"
 #include "gnc-numeric.h"
 #include "Transaction.h"   /* for typedefs */
-#include "GNCId.h"
+#include "GNCIdP.h"
 
 
 /** STRUCTS *********************************************************/
@@ -74,7 +74,7 @@
  */
 
 
-struct _split 
+struct split_s
 {
   GUID guid;  /* globally unique id */
 
@@ -128,12 +128,15 @@ struct _split
 };
 
 
-struct _transaction 
+struct transaction_s
 {
   /* guid is a globally unique identifier which can be used to
    * reference the transaction.
    */
   GUID guid;
+
+  /* entity_table is the table where the transaction is stored by guid */
+  GNCEntityTable *entity_table;
 
   Timespec date_entered;     /* date register entry was made              */
   Timespec date_posted;      /* date transaction was posted at bank       */

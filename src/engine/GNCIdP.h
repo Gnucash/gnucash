@@ -24,10 +24,14 @@
 #ifndef GNC_ID_P_H
 #define GNC_ID_P_H 1
 
+#include <glib.h>
+
 #include "GNCId.h"
 
 /* This file defines an engine-only API for using gnucash entity
  * identifiers. */
+
+typedef GHashTable GNCEntityTable;
 
 /* Generate a new id. This function is guaranteed to return an id that
  * is unique within the scope of all GnuCash entities being managed by

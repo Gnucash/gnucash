@@ -1682,7 +1682,7 @@ of having a parent transaction with which one is working...")
    'gnc:split-create
    '<gnc:Split*>
    "xaccMallocSplit"
-   '()
+   '((<gnc:Session*> session>>))
    "Create a Split structure")
 
   (gw:wrap-function

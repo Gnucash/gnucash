@@ -354,7 +354,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
     /* put split into account before setting split value */
     if (!balance_split)
     {
-      balance_split = xaccMallocSplit ();
+      balance_split = xaccMallocSplit (session);
 
       xaccAccountBeginEdit (account);
       xaccAccountInsertSplit (account, balance_split);

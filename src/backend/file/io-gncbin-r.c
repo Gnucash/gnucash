@@ -1089,9 +1089,9 @@ readTransaction(GNCSession *session, int fd, Account *acc, int revision)
     /* The code below really wants to assume that there are a pair
      * of splits in every transaction, so make it so. 
      */
-    s = xaccMallocSplit ();
+    s = xaccMallocSplit (session);
     xaccTransAppendSplit (trans, s);
-    s = xaccMallocSplit ();
+    s = xaccMallocSplit (session);
     xaccTransAppendSplit (trans, s);
     
     s = xaccTransGetSplit (trans, 0);
@@ -1275,7 +1275,7 @@ readSplit ( GNCSession *session, int fd, int token )
   ENTER (" ");
 
   /* create a split structure */
-  split = xaccMallocSplit();
+  split = xaccMallocSplit(session);
 
   tmp = readString( fd, token );
   if( NULL == tmp )

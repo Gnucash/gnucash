@@ -1126,11 +1126,11 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   xaccTransSetDescription(trans, string);
 
   /* create from split */
-  from_split = xaccMallocSplit();
+  from_split = xaccMallocSplit(gnc_get_current_session ());
   xaccTransAppendSplit(trans, from_split); 
 
   /* create to split */
-  to_split = xaccMallocSplit();
+  to_split = xaccMallocSplit(gnc_get_current_session ());
   xaccTransAppendSplit(trans, to_split); 
 
   xaccAccountBeginEdit(from_account);

@@ -53,7 +53,8 @@
 
 
 /** STRUCTS *********************************************************/
-struct _account {
+struct account_s
+{
   /* public data, describes account */
   GUID      guid;          /* globally unique account id */
 

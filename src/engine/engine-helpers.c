@@ -1555,6 +1555,29 @@ gnc_book_to_scm (GNCBook *book)
 }
 
 /********************************************************************
+ * gnc_session_to_scm
+ ********************************************************************/
+SCM
+gnc_session_to_scm (GNCSession *session)
+{
+  static SCM session_type = SCM_UNDEFINED;
+
+  if (!session)
+    return SCM_BOOL_F;
+
+  if (session_type == SCM_UNDEFINED)
+  {
+    session_type = gh_eval_str ("<gnc:Session*>");
+
+    /* don't really need this - types are bound globally anyway. */
+    if (session_type != SCM_UNDEFINED)
+      scm_protect_object (session_type);
+  }
+
+  return gw_wcp_assimilate_ptr ((void *) session, session_type);
+}
+
+/********************************************************************
  * gnc_glist_commodity_ptr_to_scm
  ********************************************************************/
 SCM

@@ -204,7 +204,7 @@ gnc_split_register_save_cells (gpointer save_data,
       other_split = xaccTransGetSplit (trans, 1);
       if (!other_split)
       {
-        other_split = xaccMallocSplit ();
+        other_split = xaccMallocSplit (gnc_get_current_session ());
         xaccTransAppendSplit (trans, other_split);
       }
     }

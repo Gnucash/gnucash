@@ -27,16 +27,12 @@
 
 #include "config.h"
 
-#include "gnc-xml-helper.h"
-
-#include "Account.h"
-#include "gnc-commodity.h"
-
-#include "sixtp.h"
-#include "gnc-pricedb.h"
-
 #include "FreqSpec.h"
 #include "SchedXaction.h"
+#include "gnc-pricedb.h"
+#include "gnc-session.h"
+#include "gnc-xml-helper.h"
+#include "sixtp.h"
 
 xmlNodePtr gnc_account_dom_tree_create(Account *act);
 sixtp* gnc_account_sixtp_parser_create(void);
@@ -48,7 +44,7 @@ xmlNodePtr gnc_transaction_dom_tree_create(Transaction *com);
 sixtp* gnc_transaction_sixtp_parser_create(void);
 
 xmlNodePtr split_to_dom_tree(const gchar *tag, Split *spl);
-Split* dom_tree_to_split(xmlNodePtr node);
+Split* dom_tree_to_split(xmlNodePtr node, GNCSession *session);
 
 xmlNodePtr gnc_pricedb_dom_tree_create(GNCPriceDB *db);
 sixtp* gnc_pricedb_sixtp_parser_create(void);

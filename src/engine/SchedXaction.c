@@ -509,14 +509,15 @@ xaccSchedXactionIsDirty(SchedXaction *sx)
 
 
 static Split *
-pack_split_info(TTSplitInfo *s_info, Account *parent_acct, Transaction *parent_trans)
+pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
+                 Transaction *parent_trans, GNCSession *session)
 {
   Split *split;
   kvp_frame *split_frame, *sx_frame;
   kvp_value *tmp_value;
   const GUID *acc_guid; 
   
-  split = xaccMallocSplit();
+  split = xaccMallocSplit(session);
 
   xaccSplitSetMemo(split, 
 		   gnc_ttsplitinfo_get_memo(s_info));
@@ -571,14 +572,15 @@ void
 xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
                                  GNCSession *session)
 {
-  
   Transaction *new_trans;
   TTInfo *tti;
   TTSplitInfo *s_info;
   Split *new_split;
-  /* delete any old transactions, if there are any */
-
   GList *split_list;
+
+  g_return_if_fail (session);
+
+  /* delete any old transactions, if there are any */
   delete_template_trans( sx );
 
   for(;t_t_list != NULL; t_t_list = t_t_list->next)
@@ -600,15 +602,10 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
 	split_list = split_list->next)
     {
       s_info = split_list->data;
-      new_split = pack_split_info(s_info, sx->template_acct, new_trans);
+      new_split = pack_split_info(s_info, sx->template_acct,
+                                  new_trans, session);
       xaccTransAppendSplit(new_trans, new_split);
     }
     xaccTransCommitEdit(new_trans);
-
   }
-
-  return;
 }
-
-  
-   
