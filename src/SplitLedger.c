@@ -343,7 +343,10 @@ printf ("save split is %p \n", split);
       Account *old_acc=NULL, *new_acc=NULL;
       Split *split_to_modify = NULL;
 
-      if (REG_MULTI_LINE == style) {
+      if ((REG_MULTI_LINE == style) ||
+          (REG_SINGLE_DYNAMIC == style) || 
+          (REG_DOUBLE_DYNAMIC == style))
+      {
          split_to_modify = split;
       } else {
          split_to_modify = xaccGetOtherSplit(split);
@@ -487,7 +490,10 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
        * For a one or two-line display, show the other account, but only    
        * if there are exactly two splits.                                   
        */
-      if (REG_MULTI_LINE == style) {	
+      if ((REG_MULTI_LINE == style) ||
+          (REG_SINGLE_DYNAMIC == style) || 
+          (REG_DOUBLE_DYNAMIC == style))
+      {
          accname = xaccAccountGetName (xaccSplitGetAccount (split));
          xaccSetComboCellValue (reg->xfrmCell, accname);
       } else {
