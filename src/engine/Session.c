@@ -341,7 +341,7 @@ xaccSessionBeginFile (Session *sess, const char * filefrag)
 #ifdef SQLHACK
 /* for testing the sql, just a hack, remove later ... */
 /* this should never ever appear here ...  */
-xaccSessionBeginSQL (sess, "gnc_bogus");
+xaccSessionBeginSQL (sess, "postgres://localhost/gnc_bogus");
 #endif
 
    return (sess->topgroup);

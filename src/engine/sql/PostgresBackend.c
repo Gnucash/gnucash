@@ -139,7 +139,7 @@ static short module = MOD_BACKEND;
  */
 
 static void
-pgendStoreOneGroupOnly (PGBackend *be, AccountGroup *grp)
+pgendStoreOneGroupOnly (PGBackend *be, AccountGroup *grp, int update)
 {
    Account *parent;
    const char *parent_guid, *grp_guid;
@@ -153,31 +153,87 @@ pgendStoreOneGroupOnly (PGBackend *be, AccountGroup *grp)
    parent_guid = guid_to_string(xaccAccountGetGUID (parent));
    nacc = xaccGroupGetNumAccounts(grp);
 
-   for (i=0; i<nacc; i++) {
-      Account *acc = xaccGroupGetAccount(grp, i);
-      const char * acc_guid = guid_to_string(xaccAccountGetGUID (acc));
-
+   if (update) {
+      /* hack alert -- values should be escaped so that no '' apear in them */
+      snprintf (be->buff, be->bufflen, 
+               "UPDATE gncGroup SET "
+               "parentGuid ='%s' "
+               "WHERE"
+               "groupGuid='%s';",
+               parent_guid,
+               grp_guid
+               );
+   } else {
       /* hack alert -- values should be escaped so that no '' apear in them */
       snprintf (be->buff, be->bufflen, 
                "INSERT INTO gncGroup "
-               "(groupGuid, parentGuid, childGuid)"
+               "(groupGuid, parentGuid)"
                " values "
-               "('%s', '%s', '%s');",
+               "('%s', '%s');",
                grp_guid,
-               parent_guid,
-               acc_guid
+               parent_guid
                );
-
-      free ((char *) acc_guid);
-      SEND_QUERY(be);
-   
-      /* complete/commit the transaction, check the status */
-      FINISH_QUERY(be->connection);
    }
    free ((char *) grp_guid);
    free ((char *) parent_guid);
 
+   SEND_QUERY(be);
+   
+   /* complete/commit the transaction, check the status */
+   FINISH_QUERY(be->connection);
+
    LEAVE ("\n");
+}
+
+/* ============================================================= */
+/* this routine routine returns non-zero if the indicated group 
+ * differs from that in the SQL database.
+ * this routine grabs no locks.
+ */
+
+static int 
+pgendCompareOneGroupOnly (PGBackend *be, AccountGroup *grp)
+{
+   const char *grp_guid;
+   PGresult *result;
+   int i=0, nrows=0, ndiffs=0;
+
+   ENTER ("be=%p, grp=%p\n", be, grp);
+   if (!be || !grp) return;
+
+   grp_guid = guid_to_string(xaccGroupGetGUID (grp));
+
+   /* try to find this group in the database */
+   /* hack alert -- values should be escaped so that no '' apear in them */
+   snprintf (be->buff, be->bufflen, 
+            "SELECT parentGuid "
+            "FROM gncGroup "
+            "WHERE groupGuid = '%s';",
+            grp_guid
+            );
+   free ((char *) grp_guid);
+
+   /* hack alert -- if error occurs here, what is the return value ????  */
+   SEND_QUERY (be);
+
+   i=0; nrows=0;
+   do {
+      GET_RESULTS (be->connection, result);
+      IF_ONE_ROW (result, nrows, i) {
+ 
+         /* compared queried values to input values */
+         COMP_GUID ("parentGuid", 
+            xaccAccountGetGUID (xaccGroupGetParentAccount(grp)), ndiffs);
+      }
+
+      PQclear (result);
+      i++;
+   } while (result);
+
+   if (0 == nrows) ndiffs = -1;
+
+   LEAVE ("\n");
+   return ndiffs;
 }
 
 /* ============================================================= */
@@ -528,8 +584,9 @@ pgendCompareOneSplitOnly (PGBackend *be, Split *split)
             xaccTransGetGUID (xaccSplitGetParent(split)), ndiffs);
 
 /* hack alert -- need to also compare recconcile flag, amount, and price */
-PINFO ("recn=%s amt=%s price=%s\n", GETV("reconciled"), GETV("amount"),
-GETV("share_price"));
+PINFO ("recn=%s amt=%s price=%s\n", GET_DB_VAL("reconciled"), 
+GET_DB_VAL("amount"),
+GET_DB_VAL("share_price"));
 /*
             xaccSplitGetReconcile(split),
             xaccSplitGetShareAmount(split),
@@ -549,9 +606,12 @@ GETV("share_price"));
 }
 
 /* ============================================================= */
-/* This routine traverses the account structure and stores/updates
- * it in the database.  If checks the account parents as well,
- * updating those.  
+/* This routine updates the account structure if needed, and/or
+ * stores it the first time if it hasn't yet been stored.
+ * Note that it sets a mark to avoid excessive recursion:
+ * This routine shouldn't be used outside of locks,
+where the recursion prevention clears the marks ...
+ah hell. this is a bad idea maybe ....
  */
 
 static void
@@ -561,11 +621,14 @@ pgendStoreAccount (PGBackend *be, Account *acct)
 
    if (!be || !acct) return;
 
-   /* hack alert -- because this query is potentially quite
-heavy-hitting to the database, and also because it will probably be
-performed redundantly, we should use a check-flag to mark this accountas
-having been checked already. The check-flag should be zeroed after
-things get unlocked */
+   /* Check to see if we've processed this account recently.
+    * If so, then return.  The goal here is to avoid excess
+    * hits to the database, leading to poor performance.
+    * Note that this marking makes this routine unsafe to use 
+    * outside a lock (since we never clear the mark)
+    */
+   if (xaccAccountGetMark (acct)) return;
+   xaccAccountSetMark (acct, 1);
 
    ndiffs = pgendCompareOneAccountOnly (be, acct);
 
@@ -573,8 +636,6 @@ things get unlocked */
    if (0<ndiffs) pgendStoreOneAccountOnly (be, acct, 1);
    /* insert account if it doesn't exist */
    if (0>ndiffs) pgendStoreOneAccountOnly (be, acct, 0);
-
-   /* hack alert -- walk over tree of parents, children */
 
 }
 
@@ -592,12 +653,12 @@ pgendStoreTransaction (PGBackend *be, Transaction *trans)
 
    if (!be || !trans) return;
 
-   ndiffs = pgendCompareOneTransOnly (be, trans);
+   ndiffs = pgendCompareOneTransactionOnly (be, trans);
 
    /* update transaction if there are differences ... */
-   if (0<ndiffs) pgendStoreOneTransOnly (be, trans, 1);
+   if (0<ndiffs) pgendStoreOneTransactionOnly (be, trans, 1);
    /* insert trans if it doesn't exist */
-   if (0>ndiffs) pgendStoreOneTransOnly (be, trans, 0);
+   if (0>ndiffs) pgendStoreOneTransactionOnly (be, trans, 0);
 
    /* walk over the list of splits */
    nsplits = xaccTransCountSplits (trans);
@@ -625,6 +686,11 @@ pgendStoreTransaction (PGBackend *be, Transaction *trans)
 static int
 traverse_cb (Transaction *trans, void *cb_data)
 {
+   /* clear marks .. is this a good thing to do here ???
+    * hack alert rexaminte this issue .. */
+   Split * s = xaccTransGetSplit (trans, 0);
+   Account * acc = xaccSplitGetAccount (s);
+   xaccClearMark (acc, 0);
    pgendStoreTransaction ((PGBackend *) cb_data, trans);
    return 0;
 }
@@ -632,12 +698,16 @@ traverse_cb (Transaction *trans, void *cb_data)
 static void
 pgendStoreGroupNoLock (PGBackend *be, AccountGroup *grp)
 {
-   int i, nacc;
+   int i, nacc, ndiffs;
 
    if (!be || !grp) return;
 
    /* first, store the top-group */
-   pgendStoreOneGroupOnly (be, grp);
+   ndiffs = pgendCompareOneGroupOnly (be, grp);
+   /* update group if there are differences ... */
+   if (0<ndiffs) pgendStoreOneGroupOnly (be, grp, 1);
+   /* insert group if it doesn't exist */
+   if (0>ndiffs) pgendStoreOneGroupOnly (be, grp, 0);
 
    /* next, walk the account tree, and store subaccounts */
    nacc = xaccGroupGetNumAccounts(grp);
@@ -670,6 +740,10 @@ pgendStoreGroup (PGBackend *be, AccountGroup *grp)
    SEND_QUERY (be);
    FINISH_QUERY(be->connection);
 
+   /* clear the account marks; useful later to avoid recurision
+    * during account consistency checks. */
+   xaccClearMarkDownGr (grp, 0);
+
    /* reset the write flags. We use this to amek sure we don't
     * get caught in infinite recursion */
    xaccGroupBeginStagedTransactionTraversals(grp);
@@ -677,6 +751,8 @@ pgendStoreGroup (PGBackend *be, AccountGroup *grp)
 
    /* recursively walk transactions */
    xaccGroupStagedTransactionTraversal (grp, 1, traverse_cb, be);
+
+   xaccClearMarkDownGr (grp, 0);
 
    snprintf (be->buff, be->bufflen, "COMMIT;");
    SEND_QUERY (be);
@@ -687,6 +763,7 @@ pgendStoreGroup (PGBackend *be, AccountGroup *grp)
 /* this routine fills in the structure pointed at by split
  * with data sucked out of the database.  It does only that 
  * one split,
+ * hack alert unfinished, incom[plete 
  */
 
 static void
@@ -724,7 +801,10 @@ pgend_session_begin (Session *sess, const char * sessionid)
    ENTER("sessionid=%s\n", sessionid);
    /* connect to a bogus database ... */
    /* hack alert -- we should be parsing the sessionid for the
-    * hostname, port number, db name, etc... clean this up ... */
+    * hostname, port number, db name, etc... clean this up ... 
+    * format should be something like
+    * postgres://some.host.com:portno/db_name
+    */
    be->dbName = strdup ("gnc_bogus");
    be->connection = PQsetdbLogin (NULL, NULL, NULL, NULL, be->dbName, NULL, NULL);
 

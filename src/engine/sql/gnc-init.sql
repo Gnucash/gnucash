@@ -5,9 +5,8 @@
 -- each child of a group will have its own record.
 DROP TABLE gncGroup;
 CREATE TABLE gncGroup (
-	groupGuid	CHAR(32),
-	parentGuid	CHAR(32),
-	childGuid	CHAR(32)
+	groupGuid	CHAR(32) PRIMARY KEY, 
+	parentGuid	CHAR(32)
 );
 
 -- hack alert -- docref ??
