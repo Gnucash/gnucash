@@ -167,7 +167,7 @@ xaccCloneSplit (Split *s)
 \********************************************************************/
 
 void
-xaccFreeSplit( Split *split )
+xaccFreeSplit (Split *split)
 {
   if (!split) return;
 
@@ -1179,6 +1179,9 @@ xaccSplitRebalance (Split *split)
   gnc_numeric value;
   const gnc_commodity * base_currency = NULL;
 
+  /* let's see how we do without all this stuff */
+  return;
+
   trans = split->parent;
 
   /* We might have gotten here if someone is manipulating
@@ -1273,13 +1276,13 @@ xaccSplitRebalance (Split *split)
           xaccAccountInsertSplit (split->acc, s);
 
 	  g_cache_remove(gnc_string_cache, s->memo);
+	  s->memo = g_cache_insert(gnc_string_cache, split->memo);
+
 	  g_cache_remove(gnc_string_cache, s->action);
-          
+	  s->action = g_cache_insert(gnc_string_cache, split->action);
+
           xaccSplitSetValue(s, gnc_numeric_neg(split->value));
           xaccSplitSetShareAmount(s, gnc_numeric_neg(split->value));
-
-	  s->memo    = g_cache_insert(gnc_string_cache, split->memo);
-	  s->action  = g_cache_insert(gnc_string_cache, split->action);
         }
       }
     }
@@ -1476,13 +1479,13 @@ xaccTransRollbackEdit (Transaction *trans)
     * the guid would have been unlisted. Restore that */
    xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
 
-#define PUT_BACK(val) { g_free(trans->val); \
-                        trans->val=orig->val; orig->val=NULL; }
-#define PUT_BACK_CACHE(val) { g_cache_remove(gnc_string_cache, trans->val); \
-                        trans->val=orig->val; orig->val=NULL; }
+   g_cache_remove (gnc_string_cache, trans->num);
+   trans->num = orig->num;
+   orig->num = g_cache_insert(gnc_string_cache, "");
 
-   PUT_BACK (num);
-   PUT_BACK_CACHE (description);
+   g_cache_remove (gnc_string_cache, trans->description);
+   trans->description = orig->description;
+   orig->description = g_cache_insert(gnc_string_cache, "");
 
    trans->date_entered.tv_sec  = orig->date_entered.tv_sec;
    trans->date_entered.tv_nsec = orig->date_entered.tv_nsec;
@@ -1517,10 +1520,13 @@ xaccTransRollbackEdit (Transaction *trans)
 
          if (so->acc != s->acc) { force_it = 1;  mismatch=i; break; }
 
-#define HONKY_CAT(val) { g_free(s->val); s->val=so->val; so->val=NULL; }
+         g_cache_remove (gnc_string_cache, s->action);
+         s->action = so->action;
+         so->action = g_cache_insert(gnc_string_cache, "");
 
-         HONKY_CAT (action);
-         HONKY_CAT (memo);
+         g_cache_remove (gnc_string_cache, s->memo);
+         s->memo = so->memo;
+         so->memo = g_cache_insert(gnc_string_cache, "");
 
          s->reconciled  = so->reconciled;
          s->damount     = so->damount;
@@ -1944,7 +1950,7 @@ xaccTransSetDateToday (Transaction *trans)
    trans->date_posted.tv_nsec = 1000 * tv.tv_usec;
 
    PINFO ("addr=%p set date to %lu %s \n",
-         trans, tv.tv_sec, ctime ((time_t *)&tv.tv_sec));
+          trans, tv.tv_sec, ctime ((time_t *)&tv.tv_sec));
 }
 
 
