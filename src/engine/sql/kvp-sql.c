@@ -545,7 +545,7 @@ pgendKVPDeleteStr (PGBackend *be, const char *guid)
    iguid = pgendGetGUIDCacheIDStr (be, guid);
    if (0 == iguid) return;
 
-   sprintf (iguid_str, "%d;", iguid);
+   sprintf (iguid_str, "%d;\n", iguid);
    guid_to_string_buff (be->sessionGuid, sess_str);
 
    /* first, copy values to the audit tables */

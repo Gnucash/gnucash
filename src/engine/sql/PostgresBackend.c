@@ -702,7 +702,13 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
          p = guid_to_string_buff (xaccSplitGetGUID(s), p);
          p = stpcpy (p, "';\n");
       }
-      pgendStoreAuditTransaction (be, trans, SQL_DELETE);
+ 
+      /* If this trans is marked for deletetion, use the 'orig' values
+       * as the base for recording the audit.  This wouldn't be normally
+       * reqquired, except that otherwise one gets a trashed currency 
+       * value.
+       */
+      pgendStoreAuditTransaction (be, trans->orig, SQL_DELETE);
       p = be->buff; 
       p = stpcpy (p, "DELETE FROM gncTransaction WHERE transGuid='");
       p = guid_to_string_buff (xaccTransGetGUID(trans), p);
