@@ -55,29 +55,19 @@
       "#include <gnc-numeric.h>\n"
       "#include <window-main.h>\n"
       "#include <gnc-gui-query.h>\n"
-      "#include <dialog-column-view.h>\n"
       "#include <dialog-new-user.h>\n"
       "#include <dialog-print-check.h>\n"
       "#include <dialog-progress.h>\n"
-      "#include <dialog-style-sheet.h>\n"
       "#include <dialog-totd.h>\n"
       "#include <dialog-commodity.h>\n"
       "#include <druid-hierarchy.h>\n"
       "#include <top-level.h>\n"
       "#include <window-help.h>\n"
-      "#include <window-report.h>\n"
       "#include <window-main.h>\n"
       "#include <gnc-html.h>\n"
       "#include <dialog-find-transactions.h>\n"
       "#include <dialog-scheduledxaction.h>\n"
       "#include <dialog-sxsincelast.h>\n" )))
-
-  (let ((nnt (gw:wrap-non-native-type
-              mod
-              '<gnc:column-view-edit*>
-              "gnc_column_view_edit*" "const gnc_column_view_edit*")))
-    #t)
-
 
   (gw:wrap-function
    mod
@@ -142,22 +132,6 @@
    "gnc_ui_destroy"
    '()
    "Destroy the UI.")
-
-  (gw:wrap-function
-   mod
-   'gnc:main-window-open-report
-   '<gw:void>
-   "gnc_main_window_open_report"
-   '((<gw:int> report-id) (<gw:bool> top-level))
-   "Show report window")
-
-  (gw:wrap-function
-   mod
-   'gnc:style-sheet-dialog-open
-   '<gw:void>
-   "gnc_style_sheet_dialog_open"
-   '()
-   "Show the style sheet editor window.")
 
   (gw:wrap-function
    mod
@@ -309,22 +283,6 @@ by the user closing the window.")
 
   (gw:wrap-function
    mod
-   'gnc:default-options-editor
-   '<gnc:UIWidget>
-   "gnc_report_window_default_params_editor"
-   '((<gw:scm> options) (<gw:scm> report))
-   "Default options editor window for reports")
-
-  (gw:wrap-function
-   mod
-   'gnc:column-view-edit-options
-   '<gnc:UIWidget>
-   "gnc_column_view_edit_options"
-   '((<gw:scm> options) (<gw:scm> view))
-   "Create an editor for a column-view options object")
-
-  (gw:wrap-function
-   mod
    'gnc:sx-editor
    '<gw:void>
    "gnc_ui_scheduled_xaction_dialog_create" '()
@@ -343,5 +301,4 @@ by the user closing the window.")
    '<gw:bool>
    "gnc_ui_sxsincelast_guile_wrapper" '(((<gw:m-chars-caller-owned>) bookfile))
    "Wrapper to open the since-last-run dialog from a book-open hook." )
-
   )

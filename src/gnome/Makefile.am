@@ -24,7 +24,6 @@ libgw_gnc_la_LIBADD =
 
 libgncgnome_la_SOURCES = \
   argv-list-converters.c \
-  dialog-column-view.c \
   dialog-commodities.c \
   dialog-fincalc.c \
   dialog-find-transactions.c \
@@ -32,7 +31,6 @@ libgncgnome_la_SOURCES = \
   dialog-price-editor.c \
   dialog-print-check.c \
   dialog-progress.c \
-  dialog-style-sheet.c \
   dialog-sx-from-trans.c \
   dialog-sxsincelast.c \
   dialog-tax-info.c \
@@ -67,13 +65,11 @@ mime_DATA = gnucash.keys gnucash.mime
 
 noinst_HEADERS = \
   argv-list-converters.h \
-  dialog-column-view.h \
   dialog-fincalc.h \
   dialog-find-transactions.h \
   dialog-new-user.h \
   dialog-print-check.h \
   dialog-progress.h \
-  dialog-style-sheet.h \
   dialog-sx-from-trans.h \
   dialog-sxsincelast.h \
   dialog-totd.h \
