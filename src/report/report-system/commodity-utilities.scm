@@ -111,6 +111,10 @@
    (gnc:make-gnc-monetary foreign-commodity foreign-numeric)
    domestic date))
 
+;; Returns true if the given pricealist element is a non-zero price.
+(define (gnc:price-is-not-zero? elem)
+  (not (gnc:numeric-zero-p (second elem))))
+
 ;; Create a list of all prices of 'price-commodity' measured in the
 ;; currency 'report-currency'. The prices are taken from all splits in
 ;; 'currency-accounts' up until the date 'end-date-tp'. Returns a list
@@ -120,76 +124,78 @@
 	 currency-accounts end-date-tp price-commodity report-currency)
   (let ((total-foreign (gnc:numeric-zero))
 	(total-domestic (gnc:numeric-zero)))
-    (map-in-order
-     (lambda (a)
-       (let* ((transaction-comm (gnc:transaction-get-currency 
-				 (gnc:split-get-parent a)))
-	      (account-comm (gnc:account-get-commodity 
-			     (gnc:split-get-account a)))
-	      (share-amount (gnc:numeric-abs
-			     (gnc:split-get-amount a)))
-	      (value-amount (gnc:numeric-abs
-			     (gnc:split-get-value a)))
-	      (transaction-date (gnc:transaction-get-date-posted
-				 (gnc:split-get-parent a)))
-	      (foreignlist
-	       (if (gnc:commodity-equiv? transaction-comm 
-					 price-commodity)
-		   (list account-comm
-			 share-amount value-amount)
-		   (list transaction-comm
-			 value-amount share-amount))))
-	 
-	 ;;(warn "gnc:get-commodity-totalavg-prices: value " 
-	 ;;    (gnc:commodity-numeric->string
-	 ;;(first foreignlist) (second foreignlist))
-	 ;;      " bought shares "
-	 ;;    (gnc:commodity-numeric->string
-	 ;;price-commodity (third foreignlist)))
+    (filter 
+     gnc:price-is-not-zero?
+     (map-in-order
+      (lambda (a)
+	(let* ((transaction-comm (gnc:transaction-get-currency 
+				  (gnc:split-get-parent a)))
+	       (account-comm (gnc:account-get-commodity 
+			      (gnc:split-get-account a)))
+	       (share-amount (gnc:numeric-abs
+			      (gnc:split-get-amount a)))
+	       (value-amount (gnc:numeric-abs
+			      (gnc:split-get-value a)))
+	       (transaction-date (gnc:transaction-get-date-posted
+				  (gnc:split-get-parent a)))
+	       (foreignlist
+		(if (gnc:commodity-equiv? transaction-comm 
+					  price-commodity)
+		    (list account-comm
+			  share-amount value-amount)
+		    (list transaction-comm
+			  value-amount share-amount))))
+	  
+	  ;;(warn "gnc:get-commodity-totalavg-prices: value " 
+	  ;;    (gnc:commodity-numeric->string
+	  ;;(first foreignlist) (second foreignlist))
+	  ;;      " bought shares "
+	  ;;    (gnc:commodity-numeric->string
+	  ;;price-commodity (third foreignlist)))
 
-	 ;; Try EURO exchange if necessary
-	 (if (not (gnc:commodity-equiv? (first foreignlist) 
-					report-currency))
-	     (let ((exchanged (gnc:exchange-by-euro-numeric
-			       (first foreignlist) (second foreignlist)
-			       report-currency transaction-date)))
-	       (if exchanged
-		   (set! foreignlist
-			 (list report-currency
-			       (gnc:gnc-monetary-amount exchanged)
-			       (third foreignlist))))))
-	 
-	 (list
-	  transaction-date
+	  ;; Try EURO exchange if necessary
 	  (if (not (gnc:commodity-equiv? (first foreignlist) 
 					 report-currency))
-	      (begin
-		(warn "gnc:get-commodity-totalavg-prices: " 
-		      "Sorry, currency exchange not yet implemented:"
-		      (gnc:commodity-numeric->string
-		       (first foreignlist) (second foreignlist))
-		      " (buying "
-		      (gnc:commodity-numeric->string
-		       price-commodity (third foreignlist))
-		      ") =? "
-		      (gnc:commodity-numeric->string
-		       report-currency (gnc:numeric-zero)))
-		(gnc:numeric-zero))
-	      (begin
-		(set! total-foreign (gnc:numeric-add-fixed 
-				     total-foreign (third foreignlist)))
-		(set! total-domestic (gnc:numeric-add-fixed 
-				      total-domestic (second foreignlist)))
-		(gnc:numeric-div 
-		 total-domestic
-		 total-foreign
-		 GNC-DENOM-AUTO 
-		 (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)))))))
-     ;; Get all the interesting splits, and sort them according to the
-     ;; date.
-     (gnc:get-match-commodity-splits-sorted
-      currency-accounts 
-      end-date-tp price-commodity))))
+	      (let ((exchanged (gnc:exchange-by-euro-numeric
+				(first foreignlist) (second foreignlist)
+				report-currency transaction-date)))
+		(if exchanged
+		    (set! foreignlist
+			  (list report-currency
+				(gnc:gnc-monetary-amount exchanged)
+				(third foreignlist))))))
+	  
+	  (list
+	   transaction-date
+	   (if (not (gnc:commodity-equiv? (first foreignlist) 
+					  report-currency))
+	       (begin
+		 (warn "gnc:get-commodity-totalavg-prices: " 
+		       "Sorry, currency exchange not yet implemented:"
+		       (gnc:commodity-numeric->string
+			(first foreignlist) (second foreignlist))
+		       " (buying "
+		       (gnc:commodity-numeric->string
+			price-commodity (third foreignlist))
+		       ") =? "
+		       (gnc:commodity-numeric->string
+			report-currency (gnc:numeric-zero)))
+		 (gnc:numeric-zero))
+	       (begin
+		 (set! total-foreign (gnc:numeric-add-fixed 
+				      total-foreign (third foreignlist)))
+		 (set! total-domestic (gnc:numeric-add-fixed 
+				       total-domestic (second foreignlist)))
+		 (gnc:numeric-div 
+		  total-domestic
+		  total-foreign
+		  GNC-DENOM-AUTO 
+		  (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)))))))
+      ;; Get all the interesting splits, and sort them according to the
+      ;; date.
+      (gnc:get-match-commodity-splits-sorted
+       currency-accounts 
+       end-date-tp price-commodity)))))
 
 ;; Create a list of prices for all commodities in 'commodity-list',
 ;; i.e. the same thing as in get-commodity-totalavg-prices but
@@ -226,69 +232,71 @@
 (define (gnc:get-commodity-inst-prices
 	 currency-accounts end-date-tp price-commodity report-currency)
   ;; go through all splits; convert all splits into a price.
-  (map-in-order
-   (lambda (a)
-     (let* ((transaction-comm (gnc:transaction-get-currency 
-			       (gnc:split-get-parent a)))
-	    (account-comm (gnc:account-get-commodity 
-			   (gnc:split-get-account a)))
-	    (share-amount (gnc:numeric-abs
-			   (gnc:split-get-amount a)))
-	    (value-amount (gnc:numeric-abs
-			   (gnc:split-get-value a)))
-	    (transaction-date (gnc:transaction-get-date-posted
-			       (gnc:split-get-parent a)))
-	    (foreignlist 
-	     (if (gnc:commodity-equiv? transaction-comm price-commodity)
-		 (list account-comm
-		       share-amount value-amount)
-		 (list transaction-comm
-		       value-amount share-amount))))
-       
-       ;;(warn "get-commodity-inst-prices: value " 
-       ;;    (gnc:commodity-numeric->string
-       ;;   (first foreignlist) (second foreignlist))
-       ;; " bought shares "
-       ;;(gnc:commodity-numeric->string
-       ;; price-commodity (third foreignlist)))
-       
-       ;; Try EURO exchange if necessary
-       (if (not (gnc:commodity-equiv? (first foreignlist) 
-				      report-currency))
-	   (let ((exchanged (gnc:exchange-by-euro-numeric
-			     (first foreignlist) (second foreignlist)
-			     report-currency transaction-date)))
-	     (if exchanged
-		 (set! foreignlist
-		       (list report-currency
-			     (gnc:gnc-monetary-amount exchanged)
-			     (third foreignlist))))))
-       
-       (list
-	transaction-date
+  (filter 
+   gnc:price-is-not-zero?
+   (map-in-order
+    (lambda (a)
+      (let* ((transaction-comm (gnc:transaction-get-currency 
+				(gnc:split-get-parent a)))
+	     (account-comm (gnc:account-get-commodity 
+			    (gnc:split-get-account a)))
+	     (share-amount (gnc:numeric-abs
+			    (gnc:split-get-amount a)))
+	     (value-amount (gnc:numeric-abs
+			    (gnc:split-get-value a)))
+	     (transaction-date (gnc:transaction-get-date-posted
+				(gnc:split-get-parent a)))
+	     (foreignlist 
+	      (if (gnc:commodity-equiv? transaction-comm price-commodity)
+		  (list account-comm
+			share-amount value-amount)
+		  (list transaction-comm
+			value-amount share-amount))))
+	
+	;;(warn "get-commodity-inst-prices: value " 
+	;;    (gnc:commodity-numeric->string
+	;;   (first foreignlist) (second foreignlist))
+	;; " bought shares "
+	;;(gnc:commodity-numeric->string
+	;; price-commodity (third foreignlist)))
+	
+	;; Try EURO exchange if necessary
 	(if (not (gnc:commodity-equiv? (first foreignlist) 
 				       report-currency))
-	    (begin
-	      (warn "get-commodity-inst-prices: " 
-		    "Sorry, currency exchange not yet implemented:"
-		    (gnc:commodity-numeric->string
-		     (first foreignlist) (second foreignlist))
-		    " (buying "
-		    (gnc:commodity-numeric->string
-		     price-commodity (third foreignlist))
-		    ") =? "
-		    (gnc:commodity-numeric->string
-		     report-currency (gnc:numeric-zero)))
-	      (gnc:numeric-zero))
-	    (gnc:numeric-div 
-	     (second foreignlist)
-	     (third foreignlist)
-	     GNC-DENOM-AUTO 
-	     (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND))))))
-   ;; Get all the interesting splits, sorted by date.
-   (gnc:get-match-commodity-splits-sorted
-    currency-accounts 
-    end-date-tp price-commodity)))
+	    (let ((exchanged (gnc:exchange-by-euro-numeric
+			      (first foreignlist) (second foreignlist)
+			      report-currency transaction-date)))
+	      (if exchanged
+		  (set! foreignlist
+			(list report-currency
+			      (gnc:gnc-monetary-amount exchanged)
+			      (third foreignlist))))))
+	
+	(list
+	 transaction-date
+	 (if (not (gnc:commodity-equiv? (first foreignlist) 
+					report-currency))
+	     (begin
+	       (warn "get-commodity-inst-prices: " 
+		     "Sorry, currency exchange not yet implemented:"
+		     (gnc:commodity-numeric->string
+		      (first foreignlist) (second foreignlist))
+		     " (buying "
+		     (gnc:commodity-numeric->string
+		      price-commodity (third foreignlist))
+		     ") =? "
+		     (gnc:commodity-numeric->string
+		      report-currency (gnc:numeric-zero)))
+	       (gnc:numeric-zero))
+	     (gnc:numeric-div 
+	      (second foreignlist)
+	      (third foreignlist)
+	      GNC-DENOM-AUTO 
+	      (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND))))))
+    ;; Get all the interesting splits, sorted by date.
+    (gnc:get-match-commodity-splits-sorted
+     currency-accounts 
+     end-date-tp price-commodity))))
 
 ;; Get the instantaneous prices for all commodities in
 ;; 'commodity-list', i.e. the same thing as get-commodity-inst-prices

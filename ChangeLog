@@ -1,3 +1,8 @@
+2002-12-10  Christian Stimming  <stimming@tuhh.de>
+
+	* src/report/report-system/commodity-utilities.scm: Fix bug
+	#100463.
+
 2002-12-10  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/*: Add user pref to allow HBCI users
 	to select if they want Christian's matcher or mine.  
