@@ -361,6 +361,9 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
 
    FANCY (balance, Price,     BALN);
    reg->balanceCell->cell.input_output = 0;
+   reg->debitCell->blank_zero = 1;
+   reg->creditCell->blank_zero = 1;
+   reg->valueCell->blank_zero = 1;
 
    /* -------------------------------- */   
    /* define how traversal works */

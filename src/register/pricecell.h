@@ -49,7 +49,9 @@
 
 typedef struct _PriceCell {
    BasicCell cell;
-   double amount;
+   double amount;   /* the amount associated with this cell */
+   short blank_zero;   /* controls printing of zero values */
+   
 } PriceCell;
 
 /* installs a callback to handle price recording */

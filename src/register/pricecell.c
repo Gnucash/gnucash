@@ -33,9 +33,11 @@
 #include "basiccell.h"
 #include "pricecell.h"
 
-static void PriceSetValue (BasicCell *, const char *);
-
 #define DECIMAL_PT  '.'
+
+#define VERY_SMALL (1.0e-30)
+
+static void PriceSetValue (BasicCell *, const char *);
 
 /* hack alert -- use color for cells as per old xacc */
 
@@ -95,6 +97,7 @@ xaccInitPriceCell (PriceCell *cell)
 {
    xaccInitBasicCell( &(cell->cell));
    cell->amount = 0.0;
+   cell->blank_zero = 0;
 
    SET ( &(cell->cell), "0.0");
 
@@ -117,7 +120,13 @@ void xaccSetPriceCellValue (PriceCell * cell, double amt)
 {
    char buff[40];
    cell->amount = amt;
-   sprintf (buff, "%.3f", amt);
+
+   /* if amount is zero, and blanking is set, then print blank */
+   if (cell->blank_zero && (VERY_SMALL > amt) && ((-VERY_SMALL) < amt)) {
+      buff[0] = 0x0;
+   } else {
+      sprintf (buff, "%.3f", amt);
+   }
    SET ( &(cell->cell), buff);
 }
 
@@ -127,7 +136,13 @@ void xaccSetAmountCellValue (PriceCell * cell, double amt)
 {
    char buff[40];
    cell->amount = amt;
-   sprintf (buff, "%.2f", amt);
+
+   /* if amount is zero, and blanking is set, then print blank */
+   if (cell->blank_zero && (VERY_SMALL > amt) && ((-VERY_SMALL) < amt)) {
+      buff[0] = 0x0;
+   } else {
+      sprintf (buff, "%.2f", amt);
+   }
    SET ( &(cell->cell), buff);
 }
 
@@ -140,7 +155,11 @@ void xaccSetDebCredCellValue (PriceCell * deb,
    deb->amount = -amt;
    cred->amount = amt;
 
-   if (0.0 <= amt) {
+   if (cred->blank_zero && (VERY_SMALL > amt) && ((-VERY_SMALL) < amt)) {
+      SET ( &(cred->cell), "");
+      SET ( &(deb->cell), "");
+   } else
+   if (0.0 < amt) {
       sprintf (buff, "%.2f", amt);
       SET ( &(cred->cell), buff);
       SET ( &(deb->cell), "");
