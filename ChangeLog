@@ -1,5 +1,8 @@
 2001-06-25  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/window-main-summarybar.c: fix bug in euro profit
+	calculation. use share prices in calculating totals.
+
 	* AUTHORS: credits
 
 	* doc/sgml/C/xacc-about.sgml: credits
