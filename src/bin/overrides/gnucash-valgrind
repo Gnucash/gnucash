@@ -5,7 +5,11 @@
 # modified version of the overrides/gnucash shell script (and should
 # be kept in sync with that).
 #
-exec ./src/bin/overrides/gnucash-build-env valgrind -v --suppressions=./src/valgrind-gnucash.supp guile -e main -s "$0" "$@"
+exec ./src/bin/overrides/gnucash-build-env valgrind -v \
+        --suppressions=./src/valgrind-gnucash.supp  \
+        --error-limit=no \
+        guile -e main -s "$0" "$@"
+
 !#
 
 (use-modules (gnucash main))
