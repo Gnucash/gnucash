@@ -105,7 +105,8 @@
     (gnc:html-document-set-style!
      ssdoc "number-cell"
      'tag "td"
-     'attribute (list "align" "right"))
+     'attribute (list "align" "left")
+     'attribute (list "nowrap"))
 
     (gnc:html-document-set-style!
      ssdoc "number-header"

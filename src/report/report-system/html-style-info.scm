@@ -96,7 +96,10 @@
           (if (eq? field 'attribute)
               (if (list? value)
                   (gnc:html-markup-style-info-set-attribute!
-                   style (car value) (cadr value)))
+                   style (car value) 
+		   (if (null? (cdr value))
+		       #f
+		       (cadr value))))
 	      (begin 
 		(if (memq field '(font-size font-face font-color))
 		    (gnc:html-markup-style-info-set-closing-font-tag!

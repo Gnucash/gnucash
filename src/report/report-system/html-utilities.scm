@@ -163,10 +163,12 @@
      (- tree-depth (+ current-depth (if group-header-line? 1 0))))
     ;; the account balance
     (list (and my-balance
-	       (gnc:make-html-text
-		((if boldface? gnc:html-markup-b identity)
-		 ((if reverse-balance? gnc:monetary-neg identity)
-		  my-balance)))))
+	       (gnc:make-html-table-cell/markup 
+		"number-cell"
+		(gnc:make-html-text
+		 ((if boldface? gnc:html-markup-b identity)
+		  ((if reverse-balance? gnc:monetary-neg identity)
+		   my-balance))))))
     (gnc:html-make-empty-cells (- current-depth 
 				  (if group-header-line? 0 1))))))
 
@@ -210,10 +212,21 @@
 	(if boldface?
 	    (list 
 	     (and foreign-balance 
-		  (gnc:make-html-text (gnc:html-markup-b foreign-balance)))
-	     (and domestic-balance
-		  (gnc:make-html-text (gnc:html-markup-b domestic-balance))))
-	    (list foreign-balance domestic-balance))
+		  (gnc:make-html-table-cell/markup 
+		   "number-cell"
+		   (gnc:make-html-text (gnc:html-markup-b foreign-balance))))
+	     (and 
+	      domestic-balance
+	      (gnc:make-html-table-cell/markup 
+	       "number-cell"
+	       (gnc:make-html-text (gnc:html-markup-b domestic-balance)))))
+	    (list 
+	     (gnc:make-html-table-cell/markup 
+	      "number-cell"
+	      foreign-balance)
+	     (gnc:make-html-table-cell/markup 
+	      "number-cell"
+	      domestic-balance)))
 	(gnc:html-make-empty-cells (* 2 (- current-depth 
 					   (if group-header-line? 0 1)))))))
     
@@ -688,4 +701,3 @@
      (gnc:html-markup-p
       (_ "The selected accounts contain no data/transactions (or only zeroes) for the selected time period")))
     p))
-

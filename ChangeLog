@@ -1,3 +1,9 @@
+2002-01-05  Christian Stimming  <stimming@tuhh.de>
+
+	* src/report/report-system/html-*.scm,
+	src/report/stylesheets/stylesheet-*.scm: Added nowrap attribute
+	for cells containing numbers.
+
 2002-01-03  Dave Peticolas  <dave@krondo.com>
 
 	* src/backend/postgres/PostgresBackend.c: allow gnucash tables
