@@ -161,6 +161,9 @@ struct _transaction
    * we store it here an in the account, and test its value dynamically
    * for correctness.  If we can run for a few months without errors,
    * then we'll make the conversion permanent.
+   *
+   * Alternate, better(?) name: "valuation currency": it is the
+   * currency in which all of the splits can be valued.
    */
   const gnc_commodity *common_currency;
 
