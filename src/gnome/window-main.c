@@ -67,6 +67,7 @@
 #include "window-reconcile.h"
 #include "window-register.h"
 #include "window-report.h"
+#include "messages.h"
 
 static gboolean gnc_show_status_bar = TRUE;
 static gboolean gnc_show_summary_bar = TRUE;

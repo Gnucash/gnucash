@@ -76,6 +76,7 @@
 #include "gnucash-sheet.h"
 #include "gnc-split-reg.h"
 #include "window-register.h"
+#include "messages.h"
 
 #include "dialog-sxsincelast.h"
 #include "dialog-scheduledxaction.h"
