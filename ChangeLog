@@ -49,12 +49,14 @@
 	exactly what the exchange rate means.
 
 	* src/register/ledger-core/split-register-control.c: Remove
-	function call to obolete routine.
+	function call to obsolete routine.
 	
 	* src/engine/gnc-pricedb.c:
 	* src/engine/gw-engine-spec.scm: Added a new function
 	(gnc_pricedb_lookup_day) to retrieve a price quote from a certain
 	day, not just an exact time.
+
+	* ChangeLog: Spell check this file.
 
 2002-12-22  Chris Lyttle  <chris@wilddev.net>
 
@@ -101,9 +103,9 @@
 	list of splits used to fill the register.
 	
 	* src/register/ledger-core/split-register-load.c: 
-	If there is a transction pending when updating the register, use
+	If there is a transaction pending when updating the register, use
 	the saved list so that the transaction is guaranteed to remain in
-	the register intil the user finishes editing it. Otherwise,
+	the register until the user finishes editing it. Otherwise,
 	populate the saved split list. #92158
 
 	* src/gnome/gnc-split-reg.c: Don't let users delete the split that
@@ -242,7 +244,7 @@
 	* src/gnome-utils/dialog-account.c: Support for having an account
 	scu that doesn't match the account commodity's scu.  This allows a
 	user to notice/correct a case where the two are out of whack and
-	corect them (#100295), or to intentionally set them that
+	correct them (#100295), or to intentionally set them that
 	way. (E.G. A currency trading account that trades in $0.0001 USD
 	even though the scu for USD is $0.01.)
 
@@ -291,7 +293,7 @@
 2002-12-09  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/window-acct-tree.c: Disallow the deletion of accounts
-	  with ReadOnly Transacation in them.  You must first "delete" the
+	  with ReadOnly Transactions in them.  You must first "delete" the
 	  RO Txns before you delete the account.  Fix for bug# 100727 (although
 	  it requires invoice unposting to work).	 
 
@@ -321,7 +323,7 @@
 	split have the correct amount in all cases by using 
 	xaccTransGetImbalance() instead of the first split's value.
 	* src/import-export/import-account-matcher.c:
-	-Performance improvements in the display code, and skiping 
+	-Performance improvements in the display code, and skipping 
 	lookup of the kvp frame when not needed.
 	-Expand the tree when a subaccount is selected
 	-Remove redundant selection lookup.
@@ -348,7 +350,7 @@
 	cause of Bugs#97063 and #97062.
 
 	* src/gnome/glade/sched-xact.glade: Remove "[Last Day]" option;
-	add "/last day" to 29/30/31 options in gnc-frequnecy month-based
+	add "/last day" to 29/30/31 options in gnc-frequency month-based
 	selections.
 
 	* src/gnome/dialog-scheduledxaction.c (new_button_clicked): Change
@@ -530,7 +532,7 @@
 	really test.  Please note that there is some code 
 	simplification that could be done there now that there is a 
 	clean backend, and that some values passed between the functions
-	might no longuer have any effect.
+	might no longer have any effect.
 	
 	* src/import-export/ofx/gnc-ofx-import.c:  Update for new 
 	matcher.  Use the currency reported by libofx and 
@@ -604,7 +606,7 @@
 	  exchange rate and to set "swapped currencies".  The former will
 	  set the "price" and the latter will set a (as of yet unused) flag.
 	* src/register/ledger-core/split-register-control.c: Don't pop up
-	  the exchange dialog when it is not needed, even when reqested.
+	  the exchange dialog when it is not needed, even when requested.
 	
 2002-12-04  David Hampton  <hampton@employees.org>
 
@@ -895,7 +897,7 @@
 	* src/import-export/hbci/gnc-hbci-gettrans.c: Give correct
 	feedback when no transactions are there.
 
-	* src/import-export/generic-import.glade: Add explaning label for
+	* src/import-export/generic-import.glade: Add explaining label for
 	importer window.
 
 2002-11-27  Benoit Grégoire  <bock@step.polymtl.ca>
@@ -1023,7 +1025,7 @@
 
 	* src/register/ledger-core/split-register-model.c -- Always
 	  display amounts in the currency of the current account.  Use the
-	  pricedb to lookup converstion values if the transaction currency
+	  pricedb to lookup conversion values if the transaction currency
 	  is not the same as the current account commodity.
 	* src/gnome/dialog-transfer.c -- Make sure the exchange rate stays
 	  a decimal number instead of converting to a fraction.
@@ -1141,7 +1143,7 @@
 
 	* src/import-export/Transaction-matcher.c: Refactor *a lot* of the
 	code -- try to separate GUI-dependent tasks from GUI-independent
-	ones, and make many functions publically reachable by declaring
+	ones, and make many functions publicly reachable by declaring
 	them in the header file.
 
 	* src/import-export/gnc-generic-import.h, *.h: Move some function
@@ -1186,12 +1188,12 @@
 	some banks. 
 	* src/import-export/ofx/gnc-ofx-import.c:  Transaction memo is
 	always written in the split's memo. 
-	* src/doc/user-prefs-howto.txt:  Add new file, by Christian Stimmings.
+	* src/doc/user-prefs-howto.txt:  Add new file, by Christian Stimming.
 	
 2002-11-21  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/generic-import.scm: New file, contains user
 	prefs for the Transaction matcher:
-	Display, Auto-ADD and Auto-CLEAR thresholds can be ajusted.
+	Display, Auto-ADD and Auto-CLEAR thresholds can be adjusted.
 	SKIP and REPLACE action can now be disabled.
 	* src/import-export/gncmod-generic-import.c: Load generic-import.scm
 	* src/import-export/Makefile.am: Add generic-import.scm
@@ -1409,7 +1411,7 @@
 	* po/*.po: Updated translations (merged from 1.6 branch plus
 	updates from the Translation Project).
 
-	* po/nb.po: New filename for norwegian (bokmal) translation -- it
+	* po/nb.po: New filename for Norwegian (bokmal) translation -- it
 	used to be stored under no.po but that is no longer.
 
 2002-11-13  Benoit Grégoire  <bock@step.polymtl.ca>
@@ -1428,12 +1430,12 @@
 
 	* src/import-export/ofx/gnc-ofx-import.c: MAJOR improvement to 
 	investment support.  All transactions created from an investment
-	account are now already balanced.  Explicitely support Dividend 
+	account are now already balanced.  Explicitly support Dividend 
 	Reinvestment transactions which will now directly create a 
 	income account -> stock account transaction, and Income 
 	transactions which will directly create a
 	income account -> cash account transaction.
-	Support memorising the income account association.  Several 
+	Support memorizing the income account association.  Several 
 	stock account can use the same income account if desired.
 	
 	* src/import-export/Transaction-matcher.c: Various bug fixes.
@@ -1492,7 +1494,7 @@
 	after a delete. (gnc_split_register_get_account_by_name): Add the
 	new function that checks for non-existent and placeholder
 	accounts.  (gnc_split_register_get_account): Call the new function
-	to get the addditional checks.  This solves #92157.
+	to get the additional checks.  This solves #92157.
 
 	* src/business/business-ledger/gncEntryLedger.c: 
 	* src/business/business-ledger/gncEntryLedgerControl.c: Implement
@@ -1678,7 +1680,7 @@
 	GNCRegWidget.
 
 	* src/gnome/glade/register.glade: Moved a bunch of the
-	previously-shared widget definitions into seperate places to be
+	previously-shared widget definitions into separate places to be
 	accessed by window-register.c and gnc-split-reg.c.
 
 	* src/gnome/window-register.c: Massive code-sucking into
@@ -1862,7 +1864,7 @@
 	printing a message on stdout. #96166
 
 	* src/gnome-utils/gnc-currency-edit.c (currency_compare): Sort by
-	currency identifer since it appears first in the display. #96159
+	currency identifier since it appears first in the display. #96159
 	Change a couple other functions so that the full currency name is
 	always displayed in the widget.
 
@@ -1923,7 +1925,7 @@
 	used function from first pass at the placeholder account code.
 
 	* src/gnc-ui.h: 
-	* src/gnome/window-main.c: Add a new help menu item for Wildev and
+	* src/gnome/window-main.c: Add a new help menu item for Wilddev and
 	rename another one. #96821
 
 	* src/gnome/window-register.c: Split the transaction delete
@@ -1938,7 +1940,7 @@
 	gnc_split_register_get_current_trans_split() a public function.
 
 	* src/register/ledger-core/split-register.c
-	(gnc_split_register_emtpy_current_trans_except_split): New
+	(gnc_split_register_empty_current_trans_except_split): New
 	function that lets you specify which split to keep when
 	reinitializing a transaction.
 
@@ -1982,7 +1984,7 @@
 2002-10-21  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_update_cal): Check
-	validatity of date before subsequent processing; fixes Bug#96467.
+	validity of date before subsequent processing; fixes Bug#96467.
 
 	* src/gnome-utils/gnc-dense-cal.c
 	(gnc_dense_cal_mark)
@@ -2032,7 +2034,7 @@
 	
 2002-10-20  Benoit Grégoire  <bock@step.polymtl.ca>
 	* Investment transactions now create two accounts, one is for the stock,
-	  the other is the account defined by the FI, where the cash is swaped.
+	  the other is the account defined by the FI, where the cash is swapped.
 
 2002-10-19  Derek Atkins  <derek@ihtfp.com>
 	* gnome/gw-gnc-spec.scm -- add "#include <gnc-splash.h>"
@@ -2276,7 +2278,7 @@
 	the dialog box any time one of the controls is updated.
 	(gnc_ui_print_check_format_changed_cb): New callback function.
 	(gnc_ui_print_check_dialog_create): Update for new controls and
-	for the dynamicly updating sample date string. #95022
+	for the dynamically updating sample date string. #95022
 
 	* src/gnome-utils/dialog-utils.c (gnc_option_menu_init_w_signal):
 	Set up an option menu with an attached callback so that the
@@ -2297,10 +2299,10 @@
 2002-10-09  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* src/import-export/Account-matcher.c: Change "Account ID" text
-	to "Full account ID" and make it translateable. 
+	to "Full account ID" and make it translatable. 
 	* src/import-export/ofx/gnc-ofx-import.c: Use the new account 
 	name field of LibOFX to help the user identify the account.
-	Starting now, until furter notice you 	need LibOFX CVS available
+	Starting now, until further notice you 	need LibOFX CVS available
 	at http://sourceforge.net/cvs/?group_id=61170 to build the
 	ofx module.
 
@@ -2384,7 +2386,7 @@
 2002-10-06  David Hampton  <hampton@employees.org>
 
 	* src/engine/Account.c (xaccAccountGetDescendantPlaceholder): New
-	function to check all descendents of an account to see if any of
+	function to check all descendants of an account to see if any of
 	them is a placeholder account.
 
 	* src/gnome/window-register.c (gnc_reg_get_placeholder): 
@@ -2464,7 +2466,7 @@
 	though.
 
 	* src/import-export/hbci/gnc-hbci-getbalance.[hc]: Separate the
-	Get-Balance related functions to a seperate file. Add invocation
+	Get-Balance related functions to a separate file. Add invocation
 	of account reconcile upon successful balance retrieval.
 
 	* src/import-export/hbci/hbci-progressmon.c: Change to a
@@ -2629,9 +2631,9 @@
 	be completely ignored (will be a user preference).
 	-Added a split's memo column to downloaded list and match list
 	(will be possible to turn it off in user prefs)
-	-Fix segfault when togling buttons without a transaction selected.
+	-Fix segfault when toggling buttons without a transaction selected.
 	-Fix action buttons refresh bugs.
-	-Grayout inapropriate selections for action list and change the look
+	-Grayout inappropriate selections for action list and change the look
 	of the buttons.
 	-The REPLACE action really works this time.
 
@@ -2684,7 +2686,7 @@
 	and export functions.  Adds a callback for the backend to pass a
 	percentage done number out to the session code, and a callback for
 	the session code to pass this percentage out to the caller's gui
-	display funtion.
+	display function.
 	
 	* src/app-file/gnc-file-p.h:
 	* src/app-file/gnc-file.c (gnc_file_set_pct_handler): Add a file
@@ -2817,7 +2819,7 @@
 	Font Problems
 	
 	* src/gnome/top-level.c (gnc_gui_init): Exit gracefully if the
-	register fonts can't be looaded.
+	register fonts can't be loaded.
 
 	* src/gnome/window-main.[ch] (gnc_shutdown): Export this function.
 
@@ -2865,7 +2867,7 @@
 
 	* src/import-export/gnc-generic-import.c, ...: Patch by Benoit
 	Gregoire <bock@step.polymtl.ca>: This is the new transaction
-	matcher GUI.  Basic functionnality is 100% implemented.
+	matcher GUI.  Basic functionality is 100% implemented.
 	Transaction matching using unique-id was temporarily disabled to
 	ease testing of the heuristics.  Will be re-implemented very soon.
 
@@ -2885,7 +2887,7 @@
 	* src/gnome-utils/gnc-menu-extensions.[ch]:
 	* src/gnome-utils/gw-gnome-utils-spec.scm: Add support for a
 	window name "prefix" to the menu extensions code.  All menu
-	extensions must now indocate to which window they apply.
+	extensions must now indicate to which window they apply.
 
 	* src/gnome/window-main.c: Added a prefix to the call that
 	installs menu extensions.
@@ -2939,7 +2941,7 @@
 
 	* src/gnome/dialog-scheduledxaction.c: Added editor support for
 	using the dense-calendar for showing the effects of FreqSpec
-	changes; re-arranged the editor layout to accomodate.  Added
+	changes; re-arranged the editor layout to accommodate.  Added
 	editor support for showing the last-occurred date of an SX.
 
 	* src/gnome/glade/sched-xact.glade: Changes to sx-from-trans
@@ -3181,7 +3183,7 @@
 
 2002-07-24  Joshua Sled  <jsled@asynchronous.org>
 
-	* src/scm/fin.scm: Made the exposed calcualtion functions output
+	* src/scm/fin.scm: Made the exposed calculation functions output
 	positive values.
 
 	* src/gnome/window-main.c (gnc_main_window_create_menus): Added
@@ -3192,7 +3194,7 @@
 	other cleanups, text, layout and consistency changes.
 
 	* src/gnome/dialog-sxsincelast.c: Support handling of the
-	instance-count in forward-looking transaction creation.  Simplfied
+	instance-count in forward-looking transaction creation.  Simplified
 	some of the internal data-representation regarding lists of items
 	to be created [removed autoCreateTuple, now uses toCreateTuple].
 	Removed some DEBUGging output.  Handles setting up the implicit
@@ -3353,7 +3355,7 @@
 	* dialog-options.c: only call the SCM apply_cb if the optiondb
 	  actually changed.
 	* gnome-utils.scm: create gnc:kvp-option-dialog procedure to create
-	  an kvp-option dialog for the speficied type.  Export this procedure.
+	  an kvp-option dialog for the specified type.  Export this procedure.
 
 2002-07-07  Derek Atkins  <derek@ihtfp.com>
 
@@ -3410,7 +3412,7 @@
 
 	* option-util.c: add gnc_option_get_option_data() function
 	* dialog-options: publish gnc_options_dialog_changed_internal() so
-	  pluggible options can set the flag, too.
+	  pluggable options can set the flag, too.
 
 	* business-options: (new files) implement owner/customer/vendor
 	  options to plug into the options dialog.
@@ -3523,7 +3525,7 @@
 	(gnc_sxed_check_consistent): Added.
 	(gnc_sxed_check_changed): Added; used when the cancel button is
 	pressed.  SX editor now queries the user if the SX has changed.
-	(gnc_sxed_save_sx): Added; seperated from consistency-check.
+	(gnc_sxed_save_sx): Added; separated from consistency-check.
 	(_gnc_sxed_get_widgets): Added; many glade_xml_get_widget(...)s
 	removed from code.
 	(free_var_numeric): Added; we now cleanup the temporary variable
@@ -3535,7 +3537,7 @@
 
 	* src/engine/SchedXaction.c (xaccSchedXactionGetNextInstance),
 	(xaccSchedXactionGetInstanceAfter): Fixed bug in
-	number-of-occurance instance-state processing.
+	number-of-occurrence instance-state processing.
 
 	* src/register/ledger-core/gnc-regwidget.c: 
 	* src/gnome/dialog-schedxaction.c:
@@ -3596,9 +3598,9 @@
 	* gncOwner.[ch]: Provide functions to store/lookup an owner in a
 	Lot's kvp_frame.
 
-	* gncInvoice.c: add implemention of GetPostedLot(); when posting
+	* gncInvoice.c: add implementation of GetPostedLot(); when posting
 	to an Account, look for any pre-payment Lots and post to that.  If
-	the Invoice total < pre-payment, then autmatically forward the
+	the Invoice total < pre-payment, then automatically forward the
 	payments to a future Lot.  If no pre-payment Lot is found, then
 	create a new one.
 
@@ -3694,7 +3696,7 @@
 
 	* src/gnome/dialog-scheduledxaction.c (editor_ok_button_clicked):
 	Query the user if they want to create an unbalanceable
-	[varible-containing] transaction. Inform the user if they try to
+	[variable-containing] transaction. Inform the user if they try to
 	create an auto-create transaction which has variables, as this is
 	not allowed.
 	
@@ -3727,7 +3729,7 @@
 
 	Integrate the tax table into the gncEntry object; change how taxes
 	and discounts are computed, stored, and returned.  Fix the Entry
-	XML code to save/load the new taxtable data (not backwards
+	XML code to save/load the new taxtable data (not backward
 	compatible).  Integrate new changes into the entry-ledger.
 
 	fix some bugs in the business xml code.  fix some memory leaks.
