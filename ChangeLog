@@ -1,3 +1,41 @@
+2003-06-15  David Hampton  <hampton@employees.org>
+
+	* src/gnome/gnc-split-reg.c:
+	* src/gnome/window-register.c:
+	* src/gnome/glade/register.glade:
+	* src/register/ledger-core/split-register.c: Add new menu items
+	and functions for voiding, un-voiding, and reversing transactions.
+
+	* src/register/ledger-core/split-register-layout.c:
+	* src/register/ledger-core/split-register-model.c: Utilized an
+	empty register cell for displaying the note entered when a
+	transaction is voided.  Added an extra test to
+	gnc_split_register_cursor_is_readonly() to see if a transaction
+	has been marked read-only.
+
+	* src/engine/Transaction.h: Documentation.
+	
+	* src/engine/Transaction.c: Create a couple of new functions by
+	extracting common code from existing functions.  New functions to
+	clone Splits and Transactions.  New debug functions to dump Splits
+	and Transactions to stdout.  New functions to un-void a
+	transaction and to reverse all the values in a transaction.  Mark
+	voided transactions as read-only.
+
+	* src/engine/test-core/test-engine-stuff.c: Randomly un-void a
+	transaction.
+
+	* src/engine/test/test-transaction-voiding.c: Add code to un-void
+	a transaction and check that all the values are restored to their
+	original state.
+	
+	* src/engine/test/test-transaction-reversal.c: Add a new test to
+	test the code that clones and reverses transactions.
+
+	* src/engine/Account.c: 
+	* src/backend/postgres/test/test-db.c: 
+	* src/backend/file/test/test-xml-transaction.c: Changed function args.
+
 2003-06-15  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif-import/druid-qif-import.c:  raise the

@@ -146,6 +146,8 @@ void gnc_register_stock_split_cb (GtkWidget * w, gpointer data);
 void gnc_register_edit_cb(GtkWidget *w, gpointer data);
 void gnc_register_new_account_cb(GtkWidget * w, gpointer data);
 
+void gnc_register_void_trans_cb(GtkWidget *w, gpointer data);
+void gnc_register_unvoid_trans_cb(GtkWidget *w, gpointer data);
 void gnc_register_close_cb(GtkWidget *w, gpointer data);
 void gnc_register_exit_cb(GtkWidget *w, gpointer data);
 void gnc_register_report_account_cb(GtkWidget *w, gpointer data);
@@ -928,6 +930,11 @@ regWindowLedger( GNCLedgerDisplay *ledger )
   gtk_signal_connect( GTK_OBJECT(regData->gsr), "help-changed",
                       GTK_SIGNAL_FUNC( gnc_register_help_changed_cb ),
                       regData );
+  gtk_signal_connect(GTK_OBJECT(regData->gsr), "void_txn",
+		     GTK_SIGNAL_FUNC(gnc_register_void_trans_cb), regData);
+
+  gtk_signal_connect(GTK_OBJECT(regData->gsr), "unvoid_txn",
+		     GTK_SIGNAL_FUNC(gnc_register_unvoid_trans_cb), regData);
 
   /* The "include-date" and "read-only" signals. */
   gtk_signal_connect( GTK_OBJECT(regData->gsr), "include-date",
@@ -1418,6 +1425,86 @@ gnc_register_set_read_only( RegWindow *regData )
 
   regData->read_only = TRUE;
 }
+
+/********************************************************************\
+ * gnc_register_void_trans_cb                                       *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data   - the data struct for this register               *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gnc_register_void_trans_cb(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
+  SplitRegister *reg;
+  GtkWidget *dialog, *entry;
+  Transaction *trans;
+  GladeXML *xml;
+  char *reason;
+  gint result;
+
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+  trans = gnc_split_register_get_current_trans (reg);
+  if (trans == NULL)
+    return;
+  if (xaccTransHasSplitsInState(trans, VREC)) {
+    gnc_error_dialog(_("This transaction has already been voided."));
+    return;
+  }
+  if (xaccTransHasReconciledSplits(trans) || xaccTransHasSplitsInState(trans, CREC)) {
+    gnc_error_dialog(_("You cannot void a transaction with reconciled or cleared splits."));
+    return;
+  }
+
+  xml = gnc_glade_xml_new ("register.glade", "Void Transaction");
+  dialog = glade_xml_get_widget (xml, "Void Transaction");
+  entry = glade_xml_get_widget (xml, "reason");
+  gnome_dialog_editable_enters(GNOME_DIALOG(dialog),
+			       GTK_EDITABLE(entry));
+
+  /* Keep around after closing so we can get the user's text out. */
+  gnome_dialog_close_hides (GNOME_DIALOG (dialog), TRUE);
+  result = gnome_dialog_run_and_close(GNOME_DIALOG(dialog));
+  if (result == 0)
+    return;
+
+  reason = gtk_entry_get_text(GTK_ENTRY(entry));
+  if (reason == NULL)
+    reason = "";
+  gnc_split_register_void_current_trans
+    (gnc_ledger_display_get_split_register (regData->ledger), reason);
+
+  /* All done. Get rid of it. */
+  gtk_widget_destroy(dialog);
+  g_free(xml);
+}
+
+
+/********************************************************************\
+ * gnc_register_unvoid_trans_cb                                     *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data   - the data struct for this register               *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gnc_register_unvoid_trans_cb(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
+  SplitRegister *reg;
+  Transaction *trans;
+
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+  trans = gnc_split_register_get_current_trans (reg);
+  if (!xaccTransHasSplitsInState(trans, VREC)) {
+    gnc_error_dialog(_("This transaction is not voided."));
+    return;
+  }
+  gnc_split_register_unvoid_current_trans
+    (gnc_ledger_display_get_split_register (regData->ledger));
+}
+
 
 /********************************************************************\
  * gnc_register_close_cb                                            *

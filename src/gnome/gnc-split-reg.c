@@ -136,6 +136,9 @@ void gsr_default_copy_handler     ( GNCSplitReg *w, gpointer ud );
 void gsr_default_copy_txn_handler ( GNCSplitReg *w, gpointer ud );
 void gsr_default_paste_handler    ( GNCSplitReg *w, gpointer ud );
 void gsr_default_paste_txn_handler( GNCSplitReg *w, gpointer ud );
+void gsr_default_void_txn_handler ( GNCSplitReg *w, gpointer ud );
+void gsr_default_unvoid_txn_handler  ( GNCSplitReg *w, gpointer ud );
+void gsr_default_reverse_txn_handler ( GNCSplitReg *w, gpointer ud );
 
 static void gsr_emit_simple_signal( GNCSplitReg *gsr, const char *sigName );
 static void gsr_emit_help_changed( GnucashRegister *reg, gpointer user_data );
@@ -148,6 +151,9 @@ void gnc_split_reg_paste_cb(GtkWidget *w, gpointer data);
 void gnc_split_reg_cut_trans_cb(GtkWidget *w, gpointer data);
 void gnc_split_reg_copy_trans_cb(GtkWidget *w, gpointer data);
 void gnc_split_reg_paste_trans_cb(GtkWidget *w, gpointer data);
+void gnc_split_reg_void_trans_cb(GtkWidget *w, gpointer data);
+void gnc_split_reg_unvoid_trans_cb(GtkWidget *w, gpointer data);
+void gnc_split_reg_reverse_trans_cb(GtkWidget *w, gpointer data);
 
 void gnc_split_reg_record_cb (GnucashRegister *reg, gpointer data);
 void gnc_split_reg_reinitialize_trans_cb(GtkWidget *w, gpointer data);
@@ -237,6 +243,9 @@ enum gnc_split_reg_signal_enum {
   COPY_TXN_SIGNAL,
   PASTE_SIGNAL,
   PASTE_TXN_SIGNAL,
+  VOID_TXN_SIGNAL,
+  UNVOID_TXN_SIGNAL,
+  REVERSE_TXN_SIGNAL,
   HELP_CHANGED_SIGNAL,
   INCLUDE_DATE_SIGNAL,
   LAST_SIGNAL
@@ -269,6 +278,9 @@ gnc_split_reg_class_init( GNCSplitRegClass *class )
     { COPY_TXN_SIGNAL,     "copy_txn",     GTK_SIGNAL_OFFSET( GNCSplitRegClass, copy_txn_cb ) },
     { PASTE_SIGNAL,        "paste",        GTK_SIGNAL_OFFSET( GNCSplitRegClass, paste_cb ) },
     { PASTE_TXN_SIGNAL,    "paste_txn",    GTK_SIGNAL_OFFSET( GNCSplitRegClass, paste_txn_cb ) },
+    { VOID_TXN_SIGNAL,     "void_txn",     GTK_SIGNAL_OFFSET( GNCSplitRegClass, void_txn_cb ) },
+    { UNVOID_TXN_SIGNAL,   "unvoid_txn",   GTK_SIGNAL_OFFSET( GNCSplitRegClass, unvoid_txn_cb ) },
+    { REVERSE_TXN_SIGNAL,  "reverse_txn",  GTK_SIGNAL_OFFSET( GNCSplitRegClass, reverse_txn_cb ) },
     { HELP_CHANGED_SIGNAL, "help-changed", GTK_SIGNAL_OFFSET( GNCSplitRegClass, help_changed_cb ) },
     { INCLUDE_DATE_SIGNAL, "include-date", GTK_SIGNAL_OFFSET( GNCSplitRegClass, include_date_cb ) },
     { LAST_SIGNAL, NULL, 0 }
@@ -313,6 +325,9 @@ gnc_split_reg_class_init( GNCSplitRegClass *class )
   class->copy_txn_cb     = gsr_default_copy_txn_handler;
   class->paste_cb        = gsr_default_paste_handler;
   class->paste_txn_cb    = gsr_default_paste_txn_handler;
+  class->void_txn_cb     = gsr_default_void_txn_handler;
+  class->unvoid_txn_cb   = gsr_default_unvoid_txn_handler;
+  class->reverse_txn_cb  = gsr_default_reverse_txn_handler;
 
   class->help_changed_cb = NULL;
   class->include_date_cb = NULL;
@@ -1014,6 +1029,102 @@ gnc_split_reg_paste_trans_cb (GtkWidget *w, gpointer data)
 {
   GNCSplitReg *gsr = data;
   gsr_emit_simple_signal( gsr, "paste_txn" );
+}
+
+/********************************************************************\
+ * gnc_split_reg_void_trans_cb                                      *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data   - the data struct for this register               *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gsr_default_void_txn_handler (GNCSplitReg *gsr, gpointer data)
+{
+  // Override this function.
+}
+
+void
+gnc_split_reg_void_trans_cb (GtkWidget *w, gpointer data)
+{
+  GNCSplitReg *gsr = data;
+  gsr_emit_simple_signal( gsr, "void_txn" );
+}
+
+/********************************************************************\
+ * gnc_split_reg_unvoid_trans_cb                                      *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data   - the data struct for this register               *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gsr_default_unvoid_txn_handler (GNCSplitReg *gsr, gpointer data)
+{
+  // Override this function.
+}
+
+void
+gnc_split_reg_unvoid_trans_cb (GtkWidget *w, gpointer data)
+{
+  GNCSplitReg *gsr = data;
+  gsr_emit_simple_signal( gsr, "unvoid_txn" );
+}
+
+/********************************************************************\
+ * gnc_split_reg_reverse_trans_cb                                   *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data   - the data struct for this register               *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gsr_default_reverse_txn_handler (GNCSplitReg *gsr, gpointer data)
+{
+  SplitRegister *reg;
+  Transaction *trans, *new_trans;
+  kvp_frame *txn_frame;
+  kvp_value *kvp_val;
+
+  reg = gnc_ledger_display_get_split_register( gsr->ledger );
+  trans = gnc_split_register_get_current_trans (reg);
+  if (trans == NULL)
+    return;
+
+  txn_frame = xaccTransGetSlots( trans );
+  if ( txn_frame != NULL ) {
+    kvp_val = kvp_frame_get_slot( txn_frame, "reversed-by" );
+    if ( kvp_val ) {
+      // GUID *fromSXId = kvp_value_get_guid( kvp_val );
+      gnc_error_dialog(_("This transaction has already been reversed."));
+      return;
+    }
+  }
+
+  new_trans = xaccTransClone(trans);
+  xaccTransReverse(new_trans);
+
+  /* Clear transaction level info */
+  xaccTransBeginEdit(new_trans);
+  xaccTransSetDatePostedSecs(new_trans, time(NULL));
+  xaccTransSetDateEnteredSecs(new_trans, time(NULL));
+  xaccTransCommitEdit(new_trans);
+
+  /* Now update the original with a pointer to the new one */
+  xaccTransBeginEdit(trans);
+  kvp_val = kvp_value_new_guid (xaccTransGetGUID(new_trans));
+  kvp_frame_set_slot_nc(txn_frame, "reversed-by", kvp_val);
+  xaccTransCommitEdit(trans);
+
+  /* Now jump to new trans */
+  gnc_split_reg_jump_to_split(gsr, xaccTransGetSplit(new_trans, 0));
+}
+
+void
+gnc_split_reg_reverse_trans_cb (GtkWidget *w, gpointer data)
+{
+  GNCSplitReg *gsr = data;
+  gsr_emit_simple_signal( gsr, "reverse_txn" );
 }
 
 /* Remove when porting to gtk2.0 */

@@ -91,6 +91,7 @@ typedef enum
 #define TSHRS_CELL "trans-shares"
 #define TYPE_CELL  "split-type"
 #define XFRM_CELL  "account"
+#define VNOTES_CELL "void-notes"
 
 /* Cursor Names */
 #define CURSOR_SINGLE_LEDGER  "cursor-single-ledger"
@@ -239,6 +240,15 @@ void gnc_split_register_delete_current_split (SplitRegister *reg);
 /* Deletes the transaction associated with the current cursor, if both
  *    are non-NULL. */
 void gnc_split_register_delete_current_trans (SplitRegister *reg);
+
+/* Voids the transaction associated with the current cursor, if
+ *    non-NULL. */
+void gnc_split_register_void_current_trans (SplitRegister *reg,
+					    const char *reason);
+
+/* Unvoids the transaction associated with the current cursor, if
+ *    non-NULL. */
+void gnc_split_register_unvoid_current_trans (SplitRegister *reg);
 
 /* Deletes the non-transaction splits associated wih the current
  *    cursor, if both are non-NULL. */

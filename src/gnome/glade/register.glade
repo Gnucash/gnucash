@@ -1745,6 +1745,51 @@
 	  <label>Paste Transaction</label>
 	  <right_justify>False</right_justify>
 	</widget>
+
+	<widget>
+	  <class>GtkMenuItem</class>
+	  <name>separator16</name>
+	  <right_justify>False</right_justify>
+	</widget>
+
+	<widget>
+	  <class>GtkMenuItem</class>
+	  <name>menu_void_trans</name>
+	  <tooltip>Void the selected transaction</tooltip>
+	  <signal>
+	    <name>activate</name>
+	    <handler>gnc_split_reg_void_trans_cb</handler>
+	    <last_modification_time>Tue, 19 Nov 2002 03:25:59 GMT</last_modification_time>
+	  </signal>
+	  <label>Void Transaction...</label>
+	  <right_justify>False</right_justify>
+	</widget>
+
+	<widget>
+	  <class>GtkMenuItem</class>
+	  <name>menu_unvoid_trans</name>
+	  <tooltip>Restore a voided transaction</tooltip>
+	  <signal>
+	    <name>activate</name>
+	    <handler>gnc_split_reg_unvoid_trans_cb</handler>
+	    <last_modification_time>Fri, 13 Jun 2003 03:56:55 GMT</last_modification_time>
+	  </signal>
+	  <label>Unvoid Transaction</label>
+	  <right_justify>False</right_justify>
+	</widget>
+
+	<widget>
+	  <class>GtkMenuItem</class>
+	  <name>reverse_transaction</name>
+	  <tooltip>Create a new transaction that cancels out the current transaction</tooltip>
+	  <signal>
+	    <name>activate</name>
+	    <handler>gnc_split_reg_reverse_trans_cb</handler>
+	    <last_modification_time>Fri, 13 Jun 2003 06:37:26 GMT</last_modification_time>
+	  </signal>
+	  <label>Reverse Transaction</label>
+	  <right_justify>False</right_justify>
+	</widget>
       </widget>
     </widget>
 
@@ -1777,7 +1822,7 @@
 		<last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
 	      </signal>
 	      <label>_Standard</label>
-	      <active>True</active>
+	      <active>False</active>
 	      <always_show_toggle>True</always_show_toggle>
 	      <group>sort</group>
 	    </widget>
@@ -1918,7 +1963,7 @@
 		<last_modification_time>Fri, 30 May 2003 00:05:06 GMT</last_modification_time>
 	      </signal>
 	      <label>N_otes</label>
-	      <active>False</active>
+	      <active>True</active>
 	      <always_show_toggle>True</always_show_toggle>
 	      <group>sort</group>
 	    </widget>
@@ -2390,6 +2435,112 @@
     </signal>
     <label>_Jump</label>
     <right_justify>False</right_justify>
+  </widget>
+</widget>
+
+<widget>
+  <class>GnomeDialog</class>
+  <name>Void Transaction</name>
+  <title>Void Transaction</title>
+  <type>GTK_WINDOW_POPUP</type>
+  <position>GTK_WIN_POS_NONE</position>
+  <modal>True</modal>
+  <allow_shrink>False</allow_shrink>
+  <allow_grow>False</allow_grow>
+  <auto_shrink>False</auto_shrink>
+  <auto_close>False</auto_close>
+  <hide_on_close>False</hide_on_close>
+
+  <widget>
+    <class>GtkVBox</class>
+    <child_name>GnomeDialog:vbox</child_name>
+    <name>dialog-vbox16</name>
+    <homogeneous>False</homogeneous>
+    <spacing>8</spacing>
+    <child>
+      <padding>4</padding>
+      <expand>True</expand>
+      <fill>True</fill>
+    </child>
+
+    <widget>
+      <class>GtkHButtonBox</class>
+      <child_name>GnomeDialog:action_area</child_name>
+      <name>dialog-action_area18</name>
+      <layout_style>GTK_BUTTONBOX_END</layout_style>
+      <spacing>8</spacing>
+      <child_min_width>85</child_min_width>
+      <child_min_height>27</child_min_height>
+      <child_ipad_x>7</child_ipad_x>
+      <child_ipad_y>0</child_ipad_y>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>True</fill>
+	<pack>GTK_PACK_END</pack>
+      </child>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>button84</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>button86</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GtkVBox</class>
+      <name>vbox100</name>
+      <homogeneous>False</homogeneous>
+      <spacing>5</spacing>
+      <child>
+	<padding>0</padding>
+	<expand>True</expand>
+	<fill>True</fill>
+      </child>
+
+      <widget>
+	<class>GtkLabel</class>
+	<name>label847671</name>
+	<label>Reason for voiding transaction:</label>
+	<justify>GTK_JUSTIFY_CENTER</justify>
+	<wrap>False</wrap>
+	<xalign>0.5</xalign>
+	<yalign>0.5</yalign>
+	<xpad>0</xpad>
+	<ypad>0</ypad>
+	<child>
+	  <padding>0</padding>
+	  <expand>False</expand>
+	  <fill>False</fill>
+	</child>
+      </widget>
+
+      <widget>
+	<class>GtkEntry</class>
+	<name>reason</name>
+	<can_focus>True</can_focus>
+	<has_focus>True</has_focus>
+	<editable>True</editable>
+	<text_visible>True</text_visible>
+	<text_max_length>0</text_max_length>
+	<text></text>
+	<child>
+	  <padding>0</padding>
+	  <expand>False</expand>
+	  <fill>False</fill>
+	</child>
+      </widget>
+    </widget>
   </widget>
 </widget>
 

@@ -111,11 +111,41 @@ Transaction * xaccMallocTransaction (GNCBook *book);
  original order. */
 void          xaccTransDestroy (Transaction *trans);
 
-/** DOCUMENT ME!*/
+/**
+ The xaccTransClone() method will create a complete copy of an
+ existing transaction.
+ */
+Transaction * xaccTransClone (Transaction *t);
+
+/** Equality.
+ *
+ * @param ta First transaction to compare
+ * @param tb Second transaction to compare
+ *
+ * @param check_guids If TRUE, try a guid_equal() on the GUIDs of both
+ * transactions if their pointers are not equal in the first place.
+ * Also passed to subsidiary calls to xaccSplitEqual.
+ *
+ * @param check_splits If TRUE, after checking the transaction data
+ * structures for equality, also check all splits attached to the
+ * transation for equality.
+ *
+ * @param check_balances If TRUE, when checking splits also compare
+ * balances between the two splits.  Balances are recalculated
+ * whenever a split is added or removed from an account, so YMMV on
+ * whether this should be set.
+ *
+ * @param assume_ordered If TRUE, assume that the splits in each
+ * transaction appear in the same order.  This saves some time looking
+ * up splits by GUID, and is required for checking duplicated
+ * transactions because all the splits have new GUIDs.
+ */
 gboolean xaccTransEqual(const Transaction *ta,
                         const Transaction *tb,
                         gboolean check_guids,
-                        gboolean check_splits);
+                        gboolean check_splits,
+                        gboolean check_balances,
+                        gboolean assume_ordered);
 
 /** The xaccTransBeginEdit() method must be called before any changes
     are made to a transaction or any of its component splits.  If 
@@ -172,6 +202,14 @@ GUID          xaccTransReturnGUID (const Transaction *trans);
 /** Returns the book in which the transaction is stored */
 GNCBook *     xaccTransGetBook (const Transaction *trans);
 
+/** Sorts the splits in a transaction, putting the debits first,
+ *  followed by the credits.
+ */
+void          xaccTransSortSplits (Transaction *trans);
+
+/** Print the transaction out to the console. Used for debugging.
+ */
+void          xaccTransDump (Transaction *trans, const char *tag);
 
 /** Returns the transaction's kvp_frame slots.
  *
@@ -254,6 +292,13 @@ gboolean      xaccTransHasReconciledSplits (const Transaction *trans);
 /** FIXME: document me */
 gboolean      xaccTransHasReconciledSplitsByAccount (const Transaction *trans,
 						     const Account *account);
+
+/** FIXME: document me */
+gboolean      xaccTransHasSplitsInState (const Transaction *trans, const char state);
+/** FIXME: document me */
+gboolean      xaccTransHasSplitsInStateByAccount (const Transaction *trans,
+						  const char state,
+						  const Account *account);
 
 
 /** Returns the valuation commodity of this transaction.
@@ -608,6 +653,10 @@ gnc_numeric xaccSplitGetReconciledBalance (const Split *split);
  * @param check_guids If TRUE, try a guid_equal() on the GUIDs of both
  * splits if their pointers are not equal in the first place.
  *
+ * @param check_balances If TRUE, compare balances between the two
+ * splits.  Balances are recalculated whenever a split is added or
+ * removed from an account, so YMMV on whether this should be set.
+ *
  * @param check_txn_splits If the pointers are not equal, but
  * everything else so far is equal (including memo, amount, value,
  * kvp_frame), then, when comparing the parenting transactions with
@@ -615,6 +664,7 @@ gnc_numeric xaccSplitGetReconciledBalance (const Split *split);
  */
 gboolean xaccSplitEqual(const Split *sa, const Split *sb,
                         gboolean check_guids,
+                	gboolean check_balances,
                         gboolean check_txn_splits);
 
 /** The xaccSplitLookup() subroutine will return the
@@ -762,27 +812,81 @@ Account * xaccGetAccountByFullName (Transaction *trans,
 
 /** @name Transaction voiding */
 /*@{*/
-/** xaccTransactionVoid voids a transaction.  A void transaction
- * has no values, is unaffected by reconciliation, and, by default
- * is not included in any queries.  A voided transaction 
- * should not be altered (and we'll try to make it so it can't be).
- * voiding is irreversible.  Once voided, a transaction cannot be
- * un-voided.
+/** xaccTransVoid voids a transaction.  A void transaction has no
+ *  values, is unaffected by reconciliation, and, by default is not
+ *  included in any queries.  A voided transaction may not be altered.
+ *
+ *  @param transaction The transaction to void.
+ *
+ *  @param reason The textual reason why this transaction is being
+ *  voided.
  */
 void xaccTransVoid(Transaction *transaction, 
-			 const char *reason);
-/** document me */
+		   const char *reason);
+
+/** xaccTransUnvoid restores a voided transaction to its original
+ *  state.  At some point when gnucash is enhanced to support an audit
+ *  trail (i.e. write only transactions) this command should be
+ *  automatically disabled when the audit trail feature is enabled.
+ *
+ *  @param transaction The transaction to restore from voided state.
+ */
+void xaccTransUnvoid(Transaction *transaction);
+
+/** xaccTransReverse inverts all the numerical values on the given
+ *  transaction.  This function can be used after xaccTransClone
+ *  to create a transaction that cancels out the effect of an
+ *  earlier transaction.  This will be needed by write only accounts
+ *  as a way to void a previous transaction (since you can't alter
+ *  the existing transaction).
+ *
+ *  @param transaction The transaction to reverse.
+ */
+void xaccTransReverse(Transaction *transaction);
+
+/** Retrieve information on whether or not a transaction has been voided.
+ *
+ *  @param transaction The transaction in question.
+ *
+ *  @return TRUE if the transaction is void, FALSE otherwise. Also
+ *  returns FALSE upon an error.
+ */
 gboolean xaccTransGetVoidStatus(const Transaction *transaction);
 
-/** document me */
+/** Returns the user supplied textual reason why a transaction was
+ *  voided.
+ *
+ *  @param transaction The transaction in question.
+ *
+ *  @return A pointer to the user supplied reason for voiding.
+ */
 char *xaccTransGetVoidReason(const Transaction *transaction);
 
-/** document me */
+/** Returns the original pre-void amount of a split.
+ *
+ *  @param split The split in question.
+ *
+ *  @return A gnc_numeric containing the original value of this split.
+ *  Returns a gnc_numeric of zero upon error.
+ */
 gnc_numeric xaccSplitVoidFormerAmount(const Split *split);
-/** document me */
+
+/** Returns the original pre-void value of a split.
+ *
+ *  @param split The split in question.
+ *
+ *  @return A gnc_numeric containing the original amount of this split.
+ *  Returns a gnc_numeric of zero upon error.
+ */
 gnc_numeric xaccSplitVoidFormerValue(const Split *split);
 
-/** document me */
+/** Returns the time that a transaction was voided.
+ *
+ *  @param split The transaction in question.
+ *
+ *  @return A Timespec containing the time that this transaction was
+ *  voided. Returns a time of zero upon error.
+ */
 Timespec xaccTransGetVoidTime(const Transaction *tr);
 /**@}*/
 

@@ -149,6 +149,9 @@ struct _GNCSplitRegClass {
   void (*copy_txn_cb)     ( GNCSplitReg *w, gpointer user_data );
   void (*paste_cb)        ( GNCSplitReg *w, gpointer user_data );
   void (*paste_txn_cb)    ( GNCSplitReg *w, gpointer user_data );
+  void (*void_txn_cb)     ( GNCSplitReg *w, gpointer user_data );
+  void (*unvoid_txn_cb)   ( GNCSplitReg *w, gpointer user_data );
+  void (*reverse_txn_cb)  ( GNCSplitReg *w, gpointer user_data );
   void (*help_changed_cb) ( GNCSplitReg *w, gpointer user_data );
   void (*include_date_cb) ( GNCSplitReg *w, time_t date, gpointer user_data );
 };

@@ -1018,6 +1018,104 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
 }
 
 void
+gnc_split_register_void_current_trans (SplitRegister *reg, const char *reason)
+{
+  SRInfo *info = gnc_split_register_get_info (reg);
+  Transaction *pending_trans;
+  Transaction *trans;
+  Split *blank_split;
+  Split *split;
+
+  if (!reg) return;
+
+  blank_split = xaccSplitLookup (&info->blank_split_guid,
+                                 gnc_get_current_book ());
+  pending_trans = xaccTransLookup (&info->pending_trans_guid,
+                                   gnc_get_current_book ());
+
+  /* get the current split based on cursor position */
+  split = gnc_split_register_get_current_split (reg);
+  if (split == NULL)
+    return;
+
+  /* Bail if trying to void the blank split. */
+  if (split == blank_split)
+    return;
+
+  /* already voided. */
+  if (xaccSplitGetReconcile (split) == VREC)
+    return;
+
+  info->trans_expanded = FALSE;
+
+  gnc_suspend_gui_refresh ();
+
+  trans = xaccSplitGetParent(split);
+
+  xaccTransBeginEdit(trans);
+  xaccTransVoid(trans, reason);
+  xaccTransCommitEdit(trans);
+
+  /* Check pending transaction */
+  if (trans == pending_trans)
+  {
+    info->pending_trans_guid = *xaccGUIDNULL();
+    pending_trans = NULL;
+  }
+
+  gnc_resume_gui_refresh ();
+}
+
+void
+gnc_split_register_unvoid_current_trans (SplitRegister *reg)
+{
+  SRInfo *info = gnc_split_register_get_info (reg);
+  Transaction *pending_trans;
+  Transaction *trans;
+  Split *blank_split;
+  Split *split;
+
+  if (!reg) return;
+
+  blank_split = xaccSplitLookup (&info->blank_split_guid,
+                                 gnc_get_current_book ());
+  pending_trans = xaccTransLookup (&info->pending_trans_guid,
+                                   gnc_get_current_book ());
+
+  /* get the current split based on cursor position */
+  split = gnc_split_register_get_current_split (reg);
+  if (split == NULL)
+    return;
+
+  /* Bail if trying to unvoid the blank split. */
+  if (split == blank_split)
+    return;
+
+  /* not voided. */
+  if (xaccSplitGetReconcile (split) != VREC)
+    return;
+
+  info->trans_expanded = FALSE;
+
+  gnc_suspend_gui_refresh ();
+
+  trans = xaccSplitGetParent(split);
+
+  xaccTransBeginEdit(trans);
+  xaccTransUnvoid(trans);
+  xaccTransCommitEdit(trans);
+
+  /* Check pending transaction */
+  if (trans == pending_trans)
+  {
+    info->pending_trans_guid = *xaccGUIDNULL();
+    pending_trans = NULL;
+  }
+
+  gnc_resume_gui_refresh ();
+}
+
+void
 gnc_split_register_empty_current_trans_except_split (SplitRegister *reg, Split *split)
 {
   SRInfo *info;
