@@ -102,16 +102,28 @@ GtkWidget * gnc_account_tree_new_with_root (Account *account);
 
 void gnc_account_tree_refresh (GNCAccountTree *tree);
 
-void gnc_account_tree_set_view_info(GNCAccountTree *tree,
-				    AccountViewInfo *info);
+void gnc_account_tree_set_view_info (GNCAccountTree *tree,
+                                     AccountViewInfo *info);
 
 gboolean gnc_account_tree_select_account (GNCAccountTree *tree,
 					  Account *account,
                                           gboolean show_account);
 
-gboolean gnc_account_tree_select_accounts(GNCAccountTree *tree,
-                                          GList          *account_list,
-                                          gboolean        show_last);
+gboolean gnc_account_tree_select_subaccounts (GNCAccountTree *tree,
+                                              Account *account,
+                                              gboolean show_account);
+
+gboolean gnc_account_tree_select_accounts (GNCAccountTree *tree,
+                                           GList          *account_list,
+                                           gboolean        show_last);
+
+gboolean gnc_account_tree_unselect_account (GNCAccountTree *tree,
+                                            Account        *account,
+                                            gboolean       show_account);
+
+gboolean gnc_account_tree_unselect_subaccounts (GNCAccountTree *tree,
+                                                Account *account,
+                                                gboolean show_account);
 
 void gnc_account_tree_expand_account (GNCAccountTree *tree,
                                       Account *account);
@@ -119,12 +131,19 @@ void gnc_account_tree_expand_account (GNCAccountTree *tree,
 void gnc_account_tree_toggle_account_expansion (GNCAccountTree *tree,
                                                 Account *account);
 
+void gnc_account_tree_expand_all (GNCAccountTree *tree);
+
 void gnc_account_tree_show_income_expense (GNCAccountTree *tree);
 
 void gnc_account_tree_hide_income_expense (GNCAccountTree *tree);
 
 Account * gnc_account_tree_get_current_account (GNCAccountTree *tree);
 GList *   gnc_account_tree_get_current_accounts (GNCAccountTree *tree);
+
+Account * gnc_account_tree_get_focus_account (GNCAccountTree *tree);
+
+gboolean  gnc_account_tree_account_selected (GNCAccountTree *tree,
+                                             Account *account);
 
 void gnc_account_tree_hide_all_but_name (GNCAccountTree *tree);
 
@@ -139,9 +158,7 @@ void gnc_account_tree_get_view_info (GNCAccountTree *tree,
 void gnc_account_tree_set_filter (GNCAccountTree *tree,
                                   AccountFilter filter,
                                   gpointer user_data);
-gboolean
-gnc_account_tree_unselect_account(GNCAccountTree *tree,
-				  Account        *account);
+
 #ifdef __cplusplus
 }
 #endif				/* __cplusplus */

@@ -456,8 +456,8 @@ gnc_account_tree_expand_account(GNCAccountTree *tree, Account *account)
  * gnc_account_tree_toggle_account_expansion                        *
  *   toggle the expansion status for the given account              *
  *                                                                  *
- * Args: tree   - the tree to toggle expansion status for           *
- *       accout - the account to toggle expansion status            *
+ * Args: tree    - the tree to toggle expansion status for          *
+ *       account - the account to toggle expansion status           *
  * Returns: nothing                                                 *
 \********************************************************************/
 void
@@ -478,6 +478,27 @@ gnc_account_tree_toggle_account_expansion (GNCAccountTree *tree,
     return;
 
   gtk_ctree_toggle_expansion(ctree, node);
+}
+
+
+/********************************************************************\
+ * gnc_account_tree_expand_all                                      *
+ *   fully expand the tree                                          *
+ *                                                                  *
+ * Args: tree   - the tree to fully expand                          *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_account_tree_expand_all (GNCAccountTree *tree)
+{
+  GtkCTree *ctree;
+
+  g_return_if_fail (tree != NULL);
+  g_return_if_fail (IS_GNC_ACCOUNT_TREE(tree));
+
+  ctree = GTK_CTREE(tree);
+
+  gtk_ctree_expand_recursive (ctree, NULL);
 }
 
 
@@ -527,18 +548,70 @@ gnc_account_tree_select_account(GNCAccountTree *tree,
 
   return TRUE;
 }
+
+
+/********************************************************************\
+ * gnc_account_tree_select_subaccounts                              *
+ *   select the account and all subaccounts of an account that are  *
+ *   in the tree and expands the tree to ensure they are visible.   *
+ *   It may also scroll the tree to ensure it is visible.           *
+ *                                                                  *
+ * Args: tree    - tree to be modified                              *
+ *       account - account whose subaccountn are to be selected     *
+ *       show    - if true, scroll the tree                         *
+ * Returns: true if the account was found                           *
+\********************************************************************/
+gboolean
+gnc_account_tree_select_subaccounts (GNCAccountTree *tree,
+                                     Account *account,
+                                     gboolean show)
+{
+  GtkCTree *ctree = GTK_CTREE(tree);
+  GtkCTreeNode *node, *n;
+  GtkCTreeRow  *row;
+
+  /* Get the node with the account */
+  node = gtk_ctree_find_by_row_data (ctree, NULL, account);
+
+  if (node == NULL)
+    return FALSE;
+
+  /* Expand all the parents */
+  row = GTK_CTREE_ROW(node);
+  while ((n = row->parent) != NULL)
+  {
+    gtk_ctree_expand (ctree, n);
+    row = GTK_CTREE_ROW(n);
+  }
+
+  /* Expand them & select them */
+  gtk_ctree_expand_recursive (ctree, node);
+  gtk_ctree_select_recursive (ctree, node);
+
+  if (!show)
+    return TRUE;
+
+  /* Make sure it's visible */
+  if (gtk_ctree_node_is_visible (ctree, node) != GTK_VISIBILITY_FULL)
+    gtk_ctree_node_moveto (ctree, node, 0, 0.5, 0.0);
+
+  return TRUE;
+}
+
+
 /********************************************************************\
  * gnc_account_tree_unselect_account                                *
  *   unselect an account in the tree                                *
  *                                                                  *
  * Args: tree    - tree to be modified                              *
- *       account - account to be selected                           *
+ *       account - account to be unselected                         *
  *       show    - if true, scroll the tree                         *
  * Returns: true if the account was found                           *
 \********************************************************************/
 gboolean
-gnc_account_tree_unselect_account(GNCAccountTree *tree,
-                                Account        *account)
+gnc_account_tree_unselect_account (GNCAccountTree *tree,
+                                   Account        *account,
+                                   gboolean       show)
 {
   GtkCTree *ctree = GTK_CTREE(tree);
   GtkCTreeNode *node;
@@ -552,8 +625,53 @@ gnc_account_tree_unselect_account(GNCAccountTree *tree,
   /* unselect it */
   gtk_ctree_unselect(ctree, node);
 
+  if (!show)
+    return TRUE;
+
+  /* Make sure it's visible */
+  if (gtk_ctree_node_is_visible(ctree, node) != GTK_VISIBILITY_FULL)
+    gtk_ctree_node_moveto(ctree, node, 0, 0.5, 0.0);
+
   return TRUE;
 }
+
+
+/********************************************************************\
+ * gnc_account_tree_unselect_subaccounts                            *
+ *   unselect an account and all its subaccounts in the tree        *
+ *                                                                  *
+ * Args: tree    - tree to be modified                              *
+ *       account - account to be unselected recursively             *
+ *       show    - if true, scroll the tree                         *
+ * Returns: true if the account was found                           *
+\********************************************************************/
+gboolean
+gnc_account_tree_unselect_subaccounts (GNCAccountTree *tree,
+                                       Account *account,
+                                       gboolean show)
+{
+  GtkCTree *ctree = GTK_CTREE(tree);
+  GtkCTreeNode *node;
+
+  /* Get the node with the account */
+  node = gtk_ctree_find_by_row_data(ctree, NULL, account);
+
+  if (node == NULL)
+    return FALSE;
+
+  /* unselect it */
+  gtk_ctree_unselect_recursive (ctree, node);
+
+  if (!show)
+    return TRUE;
+
+  /* Make sure it's visible */
+  if (gtk_ctree_node_is_visible(ctree, node) != GTK_VISIBILITY_FULL)
+    gtk_ctree_node_moveto(ctree, node, 0, 0.5, 0.0);
+
+  return TRUE;
+}
+
 
 /********************************************************************\
  * gnc_account_tree_select_accounts                                 *
@@ -691,6 +809,56 @@ gnc_account_tree_get_current_accounts (GNCAccountTree *tree)
     return NULL;
 
   return g_list_copy(tree->current_accounts);
+}
+
+
+/********************************************************************\
+ * gnc_account_tree_get_focus_account                               *
+ *   return the account at the focus row, or NULL if no focus       *
+ *                                                                  *
+ * Args: tree - tree to get focus account from                      *
+ * Returns: Account at focus row or NULL                            *
+\********************************************************************/
+Account *
+gnc_account_tree_get_focus_account (GNCAccountTree *tree)
+{
+  GtkCTree *ctree;
+  GtkCTreeNode *node;
+  gint row;
+
+  if (!tree)
+    return NULL;
+
+  ctree = GTK_CTREE (tree);
+
+  row = GTK_CLIST(tree)->focus_row;
+  if (row < 0)
+    return NULL;
+
+  node = gtk_ctree_node_nth (ctree, row);
+  if (!node)
+    return NULL;
+
+  return gtk_ctree_node_get_row_data (ctree, node);
+}
+
+
+/********************************************************************\
+ * gnc_account_tree_account_selected                                *
+ *   return TRUE if the account is selected                         *
+ *                                                                  *
+ * Args: tree    - tree to check selection for                      *
+ *       account - account to check selection for                   *
+ * Returns: TRUE if account is selected                             *
+\********************************************************************/
+gboolean
+gnc_account_tree_account_selected (GNCAccountTree *tree,
+                                   Account *account)
+{
+  if (tree == NULL)
+    return FALSE;
+
+  return g_list_find (tree->current_accounts, account) != NULL;
 }
 
 

@@ -5388,7 +5388,8 @@ create_Tax_Information_Dialog (void)
   GtkWidget *account_frame;
   GtkWidget *vbox96;
   GtkWidget *account_scroll;
-  GtkWidget *button78;
+  GtkWidget *select_subaccounts_button;
+  GtkWidget *unselect_subaccounts_button;
   GtkWidget *frame40;
   GtkWidget *vbox92;
   GtkWidget *tax_related_button;
@@ -5448,13 +5449,21 @@ create_Tax_Information_Dialog (void)
   gtk_container_set_border_width (GTK_CONTAINER (account_scroll), 3);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (account_scroll), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
 
-  button78 = gtk_button_new_with_label (_("Toggle Subaccounts"));
-  gtk_widget_ref (button78);
-  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "button78", button78,
+  select_subaccounts_button = gtk_button_new_with_label (_("Select Subaccounts"));
+  gtk_widget_ref (select_subaccounts_button);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "select_subaccounts_button", select_subaccounts_button,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button78);
-  gtk_box_pack_start (GTK_BOX (vbox96), button78, FALSE, FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (button78), 3);
+  gtk_widget_show (select_subaccounts_button);
+  gtk_box_pack_start (GTK_BOX (vbox96), select_subaccounts_button, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (select_subaccounts_button), 3);
+
+  unselect_subaccounts_button = gtk_button_new_with_label (_("Unselect Subaccounts"));
+  gtk_widget_ref (unselect_subaccounts_button);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "unselect_subaccounts_button", unselect_subaccounts_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (unselect_subaccounts_button);
+  gtk_box_pack_start (GTK_BOX (vbox96), unselect_subaccounts_button, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (unselect_subaccounts_button), 3);
 
   frame40 = gtk_frame_new (_("Tax Information"));
   gtk_widget_ref (frame40);

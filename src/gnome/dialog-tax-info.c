@@ -27,6 +27,7 @@
 
 #include "account-tree.h"
 #include "glade-gnc-dialogs.h"
+#include "glade-support.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "messages.h"
@@ -61,6 +62,66 @@ window_destroy_cb (GtkObject *object, gpointer data)
 }
 
 static void
+select_subaccounts_clicked (GtkWidget *widget, gpointer data)
+{
+  TaxInfoDialog *ti_dialog = data;
+  GNCAccountTree *tree;
+  Account *account;
+
+  tree = GNC_ACCOUNT_TREE (ti_dialog->account_tree);
+
+  account = gnc_account_tree_get_focus_account (tree);
+  if (!account)
+    return;
+
+  gnc_account_tree_select_subaccounts (tree, account, FALSE);
+
+  gtk_widget_grab_focus (ti_dialog->account_tree);
+}
+
+static void
+unselect_subaccounts_clicked (GtkWidget *widget, gpointer data)
+{
+  TaxInfoDialog *ti_dialog = data;
+  GNCAccountTree *tree;
+  Account *account;
+
+  tree = GNC_ACCOUNT_TREE (ti_dialog->account_tree);
+
+  account = gnc_account_tree_get_focus_account (tree);
+  if (!account)
+    return;
+
+  gnc_account_tree_unselect_subaccounts (tree, account, FALSE);
+
+  gtk_widget_grab_focus (ti_dialog->account_tree);
+}
+
+static void
+tax_info_ok_clicked (GtkWidget *widget, gpointer data)
+{
+  TaxInfoDialog *ti_dialog = data;
+
+  gnc_close_gui_component_by_data (DIALOG_TAX_INFO_CM_CLASS, ti_dialog);
+}
+
+static void
+tax_info_apply_clicked (GtkWidget *widget, gpointer data)
+{
+  TaxInfoDialog *ti_dialog = data;
+
+  return;
+}
+
+static void
+tax_info_cancel_clicked (GtkWidget *widget, gpointer data)
+{
+  TaxInfoDialog *ti_dialog = data;
+
+  gnc_close_gui_component_by_data (DIALOG_TAX_INFO_CM_CLASS, ti_dialog);
+}
+
+static void
 gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
 {
   GtkWidget *dialog;
@@ -70,8 +131,20 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
   ti_dialog->dialog = dialog;
   tido = GTK_OBJECT (dialog);
 
-  gtk_signal_connect(tido, "destroy",
-                     GTK_SIGNAL_FUNC (window_destroy_cb), ti_dialog);
+  gnome_dialog_button_connect (tido, 0,
+                               GTK_SIGNAL_FUNC (tax_info_ok_clicked),
+                               ti_dialog);
+
+  gnome_dialog_button_connect (tido, 1,
+                               GTK_SIGNAL_FUNC (tax_info_apply_clicked),
+                               ti_dialog);
+
+  gnome_dialog_button_connect (tido, 2,
+                               GTK_SIGNAL_FUNC (tax_info_cancel_clicked),
+                               ti_dialog);
+
+  gtk_signal_connect (tido, "destroy",
+                      GTK_SIGNAL_FUNC (window_destroy_cb), ti_dialog);
 
   /* parent */
   if (parent != NULL)
@@ -91,6 +164,8 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
     tree = GNC_ACCOUNT_TREE (ti_dialog->account_tree);
 
     gtk_clist_column_titles_hide (GTK_CLIST (ti_dialog->account_tree));
+    gtk_clist_set_selection_mode (GTK_CLIST (ti_dialog->account_tree),
+                                  GTK_SELECTION_MULTIPLE);
     gnc_account_tree_hide_all_but_name (tree);
 
     gnc_account_tree_get_view_info (tree, &info);
@@ -101,11 +176,27 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
     gnc_account_tree_set_view_info (tree, &info);
 
     gnc_account_tree_refresh (tree);
+    gnc_account_tree_expand_all (tree);
 
     gtk_widget_show (ti_dialog->account_tree);
 
     scroll = gtk_object_get_data (tido, "account_scroll");
     gtk_container_add (GTK_CONTAINER (scroll), ti_dialog->account_tree);
+  }
+
+  /* account buttons */
+  {
+    GtkWidget *button;
+
+    button = lookup_widget (dialog, "select_subaccounts_button");
+    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+                        GTK_SIGNAL_FUNC (select_subaccounts_clicked),
+                        ti_dialog);
+
+    button = lookup_widget (dialog, "unselect_subaccounts_button");
+    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+                        GTK_SIGNAL_FUNC (unselect_subaccounts_clicked),
+                        ti_dialog);
   }
 }
 

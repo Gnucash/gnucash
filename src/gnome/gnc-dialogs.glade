@@ -8028,10 +8028,23 @@ words.
 
 	  <widget>
 	    <class>GtkButton</class>
-	    <name>button78</name>
+	    <name>select_subaccounts_button</name>
 	    <border_width>3</border_width>
 	    <can_focus>True</can_focus>
-	    <label>Toggle Subaccounts</label>
+	    <label>Select Subaccounts</label>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkButton</class>
+	    <name>unselect_subaccounts_button</name>
+	    <border_width>3</border_width>
+	    <can_focus>True</can_focus>
+	    <label>Unselect Subaccounts</label>
 	    <child>
 	      <padding>0</padding>
 	      <expand>False</expand>

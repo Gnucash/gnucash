@@ -71,8 +71,10 @@ select_account_callback(GNCAccountTree  *tree, Account *account, gpointer user_d
     current_window = list_iterator->data;
     if(current_window != clicked_window)
     {
-      gnc_account_tree_unselect_account(current_window->acc_tree,
-				       gnc_account_tree_get_current_account(current_window->acc_tree));
+      gnc_account_tree_unselect_account
+        (current_window->acc_tree,
+         gnc_account_tree_get_current_account(current_window->acc_tree),
+         FALSE);
     }
   }
 
