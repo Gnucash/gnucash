@@ -46,7 +46,7 @@ SWIG_INPUT_HDRS := \
 ## aren't named lib*.so...
 install-data-local: libgncswig.la
 	cd ${perllibdir} && rm -f gnucash.so
-	cd ${perllibdir} && ln libgncswig.so gnucash.so
+	cd ${perllibdir} && ln -s libgncswig.so gnucash.so
 
 uninstall-local:
 	rm -f ${perllibdir}/gnucash.so

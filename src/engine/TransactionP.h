@@ -36,7 +36,7 @@
  * routines that perform sub-atomic updates of the accounting
  * structures.  If these routines are not used properly, they
  * can result in inconsistent, unbalanced accounting structures.
- * In other words, thier use is dangerous, and thier use outside
+ * In other words, their use is dangerous, and their use outside
  * of the scope of the engine is forbidden.
  *
  */

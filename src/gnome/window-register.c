@@ -2119,7 +2119,7 @@ recordCB(GtkWidget *w, gpointer data)
 
   trans = xaccSRGetCurrentTrans(regData->ledger->ledger);
 
-  really_saved = xaccSRSaveRegEntry(regData->ledger->ledger, NULL);
+  really_saved = xaccSRSaveRegEntry(regData->ledger->ledger, GNC_T);
   if (!really_saved)
     return;
 
@@ -2388,10 +2388,10 @@ cancelCB(GtkWidget *w, gpointer data)
 static void
 gnc_register_check_close(RegWindow *regData)
 {
-  unsigned int changed;
+  gncBoolean pending_changes;
 
-  changed = xaccSplitRegisterGetChangeFlag(regData->ledger->ledger);
-  if (changed)
+  pending_changes = xaccSRHasPendingChanges(regData->ledger->ledger);
+  if (pending_changes)
   {
     if (gnc_verify_dialog_parented
         (GTK_WINDOW(regData->window), TRANS_CHANGED_MSG, GNC_T))

@@ -268,5 +268,7 @@ void         xaccSetBasicCellValue (BasicCell *, const char *);
 void         xaccSetBasicCellBlankHelp (BasicCell *, const char *);
 char *       xaccBasicCellGetHelp (BasicCell *);
 
+void         xaccBasicCellSetChanged (BasicCell *, gncBoolean);
+
 #endif /* __XACC_BASIC_CELL_H__ */
 /* ------------------ end of file ---------------------- */

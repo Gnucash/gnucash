@@ -1275,12 +1275,6 @@ gnc_table_traverse_update(Table *table, int row, int col,
         }
       }
 
-      if (gnc_register_cell_valid(table, *dest_row, *dest_col, GNC_F))
-	break;
-
-      if (!gnc_table_find_valid_cell_horiz(table, dest_row, dest_col, GNC_F))
-        return GNC_T;
-
       break;
 
     case GNC_TABLE_TRAVERSE_UP:

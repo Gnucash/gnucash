@@ -666,10 +666,6 @@ xaccLedgerDisplayClose (xaccLedgerDisplay *regData)
   if (!regData) return;
   acc = regData->leader;
 
-  /* Save any unsaved changes */
-  if (xaccSRSaveRegEntry (regData->ledger, NULL))
-    xaccSRRedrawRegEntry (regData->ledger);
-
   xaccDestroySplitRegister (regData->ledger);
 
   /* whether this is a single or multi-account window, remove it */

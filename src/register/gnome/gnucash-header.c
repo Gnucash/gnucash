@@ -227,6 +227,7 @@ gnucash_header_reconfigure (GnucashHeader *header)
         GnomeCanvas *canvas;
         GtkWidget *widget;
         GnucashSheet *sheet;
+        SheetBlockStyle *old_style;
 
         g_return_if_fail (header != NULL);
         g_return_if_fail (GNUCASH_IS_HEADER (header));
@@ -234,6 +235,7 @@ gnucash_header_reconfigure (GnucashHeader *header)
         canvas = GNOME_CANVAS_ITEM(header)->canvas;
         widget = GTK_WIDGET (header->sheet);
         sheet = GNUCASH_SHEET(header->sheet);
+        old_style = header->style;
 
         header->style = header->sheet->cursor_style[header->type];
 
@@ -250,7 +252,8 @@ gnucash_header_reconfigure (GnucashHeader *header)
         w = MAX (widget->allocation.width, header->style->dimensions->width);
         h = header->style->dimensions->height;
 
-        if (header->height != h || header->width != w) {
+        if (header->height != h || header->width != w ||
+            header->style != old_style) {
                 header->height = h;
                 header->width = w;
 

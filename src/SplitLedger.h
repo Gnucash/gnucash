@@ -96,11 +96,11 @@
  * The xaccSRSaveRegEntry() method will copy the contents 
  *    from the cursor to a split.  The split/transaction
  *    that is updated is the one associated with the current 
- *    cursor (register entry) position. If the current transaction
- *    is different from newtrans, the current transaction will be
- *    comitted. Pass in NULL for newtrans to force a commit.
- *    The method returns GNC_T if the cursor was really saved,
- *    i.e., it had been changed. Otherwise, it returns GNC_F.
+ *    cursor (register entry) position. If the do_commit flag
+ *    is set, the transaction will also be committed. If it is
+ *    the blank transaction, and the do_commit flag is set,
+ *    a refresh will result in a new blank transaction.
+ *    The method returns GNC_T if something was changed.
  *
  * The xaccSRRedrawRegEntry() method should be called soon 
  *    after the xaccSRSaveRegEntry() method.  It checks the 
@@ -161,9 +161,11 @@ void    xaccSRCancelCursorTransChanges (SplitRegister *reg);
 void    xaccSRLoadRegister (SplitRegister *reg, Split **slist,
                             Account *default_source_acc);
 
-gncBoolean xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans);
+gncBoolean xaccSRSaveRegEntry (SplitRegister *reg, gncBoolean do_commit);
 void       xaccSRRedrawRegEntry (SplitRegister *reg);
 
 void    xaccSRLoadXferCells (SplitRegister *reg, Account *base_account);
+
+gncBoolean xaccSRHasPendingChanges (SplitRegister *reg);
 
 #endif /* __XACC_SPLIT_LEDGER_H__ */

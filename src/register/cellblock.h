@@ -124,7 +124,7 @@ struct _CellBlock {
    *  (exit_r, exit_c) is the last cell of this tab group.
    */
 
-  /* the last-reneter row and column should contain the very last
+  /* the last-reenter row and column should contain the very last
    * cell when the cursor was traversed out of.  They determine 
    * the first cell that will be entered (since the first follows 
    * the last).

@@ -68,13 +68,6 @@
                         (list "Extensions" "")
                         (lambda () (gnc:main-win-export-data-as-text win))))
 
-  (define qif-item
-    (gnc:make-menu-item "QIF File Import (Danger: Unfinished)"
-                        "Import QIF File - Scripted in Guile."
-                        (list "Extensions"
-                              "Export data as text (Danger: Unfinished)")
-                        (lambda () (gnc:extensions-qif-import win))))
-
   (define strings-item
     (gnc:make-menu-item
      "Save Translatable Strings"

@@ -247,13 +247,15 @@
 ;; Copy a scheme representation of a transaction onto a C transaction.
 ;; guid-mapping must be an alist, mapping guids to guids. This list is
 ;; used to use alternate account guids when creating splits.
-(define (gnc:transaction-scm-onto-transaction trans-scm trans guid-mapping)
+(define (gnc:transaction-scm-onto-transaction trans-scm trans guid-mapping
+                                              commit?)
   (if (pointer-token-null? trans)
       #f
       (begin
 
         ;; open the transaction for editing
-        (gnc:transaction-begin-edit trans 1)
+        (if (not (gnc:transaction-is-open trans))
+            (gnc:transaction-begin-edit trans 1))
 
         ;; copy in the transaction values
         (let ((description (gnc:transaction-scm-get-description trans-scm))
@@ -285,4 +287,5 @@
                 (loop (cdr split-scms)))))
 
         ;; close the transaction
-        (gnc:transaction-commit-edit trans))))
+        (if commit?
+            (gnc:transaction-commit-edit trans)))))

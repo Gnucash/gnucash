@@ -170,12 +170,18 @@ Split *        xaccAccountGetSplit (Account *acc, int i);
 Split **       xaccAccountGetSplitList (Account *acc);
 int            xaccAccountGetNumSplits (Account *acc);
 
-/* WAKE UP! 
+/* The xaccAccountGetFullName routine returns the fully qualified name
+ * of the account using the given separator char. The name must be freed
+ * after use. The fully qualified name of an account is the concatenation
+ * of the names of the account and all its ancestor accounts starting with
+ * the topmost account and ending with the given account. Each name is
+ * separated by the given character.
+ *
+ * WAKE UP!
  * Unlike all other gets, the string returned by xaccAccountGetFullName() 
- * must be freed by you the user !!! 
- * hack alert -- can someone document what this routine does, and also,
- * since it breaks the rule of string allocation, maybe this routine
- * should not be in this library, but some utility library ???
+ * must be freed by you the user !!!
+ * hack alert -- since it breaks the rule of string allocation, maybe this
+ * routine should not be in this library, but some utility library?
  */
 char *         xaccAccountGetFullName (Account *, const char separator);
 
@@ -205,7 +211,7 @@ gncBoolean     xaccAccountHasAncestor (Account *, Account * ancestor);
  *
  * The xaccClearMark will find the topmost group, and clear the mark in
  * the entire group tree.  
- * The xaccClearMarkDown will clear the mark inly in this and in
+ * The xaccClearMarkDown will clear the mark only in this and in
  * sub-accounts.
  */
 short          xaccAccountGetMark (Account *acc); 

@@ -518,7 +518,7 @@
 	'ascend
 	(list
 	 #(ascend "Ascending" "smallest to largest, earliest to latest")
-	 #(descend "Descending" "largest to t, latest to earliest")))))
+	 #(descend "Descending" "largest to smallest, latest to earliest")))))
     
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option

@@ -162,4 +162,15 @@ xaccBasicCellGetHelp (BasicCell *cell)
   return cell->get_help_value(cell);
 }
 
+/* ===================================================== */
+
+void
+xaccBasicCellSetChanged (BasicCell *cell, gncBoolean changed)
+{
+  if (cell == NULL)
+    return;
+
+  cell->changed = changed ? 0xffffffff : 0;
+}
+
 /* ================== end of file ====================== */

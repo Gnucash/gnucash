@@ -101,30 +101,6 @@ static SplitRegisterColors reg_colors = {
 };
 
 
-/* utility defines for cell configuration data */
-#define DATE_CELL      0
-#define NUM_CELL       1
-#define DESC_CELL      2
-#define RECN_CELL      3   
-#define SHRS_CELL      4
-#define BALN_CELL      5
-#define ACTN_CELL      6
-#define XFRM_CELL      7
-#define XTO_CELL       8
-#define MEMO_CELL      9
-#define CRED_CELL      10
-#define DEBT_CELL      11
-#define PRIC_CELL      12
-#define VALU_CELL      13
-
-/* NCRED & NDEBT handle minus the usual quantities */
-#define NCRED_CELL     14
-#define NDEBT_CELL     15
-
-/* MXFRM is the "mirrored" transfer-from account */
-#define MXFRM_CELL     16
-
-
 #define DATE_CELL_WIDTH    11
 #define NUM_CELL_WIDTH      7
 #define ACTN_CELL_WIDTH     7
@@ -203,9 +179,9 @@ configLabels (SplitRegister *reg)
   LABEL (SHRS,  TOTAL_SHARES_STR);
   LABEL (BALN,  BALN_STR);
   LABEL (ACTN,  ACTION_STR);
-  LABEL (XFRM,  XFRM_STR);
-  LABEL (MXFRM, XFRM_STR);
-  LABEL (XTO,   XFTO_STR);
+  LABEL (XFRM,  ACCOUNT_STR);
+  LABEL (MXFRM, TRANSFER_STR);
+  LABEL (XTO,   ACCOUNT_STR);
   LABEL (MEMO,  MEMO_STR);
   LABEL (CRED,  CREDIT_STR);
   LABEL (DEBT,  DEBIT_STR);
@@ -1384,6 +1360,198 @@ xaccSplitRegisterGetCursorTypeRowCol (SplitRegister *reg,
     return CURSOR_NONE;
 
   return sr_cellblock_cursor_type(reg, table->handlers[virt_row][virt_col]);
+}
+
+/* ============================================== */
+
+CellType
+sr_cell_type (SplitRegister *reg, void * cell)
+{
+  if (cell == reg->dateCell)
+    return DATE_CELL;
+
+  if (cell == reg->numCell)
+    return NUM_CELL;
+
+  if (cell == reg->descCell)
+    return DESC_CELL;
+
+  if (cell == reg->recnCell)
+    return RECN_CELL;
+
+  if (cell == reg->shrsCell)
+    return SHRS_CELL;
+
+  if (cell == reg->balanceCell)
+    return BALN_CELL;
+
+  if (cell == reg->actionCell)
+    return ACTN_CELL;
+
+  if (cell == reg->xfrmCell)
+    return XFRM_CELL;
+
+  if (cell == reg->mxfrmCell)
+    return MXFRM_CELL;
+
+  if (cell == reg->xtoCell)
+    return XTO_CELL;
+
+  if (cell == reg->memoCell)
+    return MEMO_CELL;
+
+  if (cell == reg->creditCell)
+    return CRED_CELL;
+
+  if (cell == reg->debitCell)
+    return DEBT_CELL;
+
+  if (cell == reg->priceCell)
+    return PRIC_CELL;
+
+  if (cell == reg->valueCell)
+    return VALU_CELL;
+
+  if (cell == reg->ncreditCell)
+    return NCRED_CELL;
+
+  if (cell == reg->ndebitCell)
+    return NDEBT_CELL;
+
+  return NO_CELL;
+}
+
+/* ============================================== */
+
+CellType
+xaccSplitRegisterGetCellType (SplitRegister *reg)
+{
+  Table *table;
+
+  if (reg == NULL)
+    return NO_CELL;
+
+  table = reg->table;
+  if (table == NULL)
+    return NO_CELL;
+
+  return xaccSplitRegisterGetCellTypeRowCol(reg,
+                                            table->current_cursor_phys_row,
+                                            table->current_cursor_phys_col);
+}
+
+/* ============================================== */
+
+static BasicCell *
+sr_current_cell (SplitRegister *reg)
+{
+  Table *table;
+  Locator *locator;
+  CellBlock *cellblock;
+  int phys_row, phys_col;
+  int virt_row, virt_col;
+  int cell_row, cell_col;
+
+  if (reg == NULL)
+    return NULL;
+
+  table = reg->table;
+  if (table == NULL)
+    return NULL;
+
+  phys_row = table->current_cursor_phys_row;
+  phys_col = table->current_cursor_phys_col;
+
+  if ((phys_row < 0) || (phys_row >= table->num_phys_rows) ||
+      (phys_col < 0) || (phys_col >= table->num_phys_cols))
+    return NULL;
+
+  locator = table->locators[phys_row][phys_col];
+
+  virt_row = locator->virt_row;
+  virt_col = locator->virt_col;
+  cell_row = locator->phys_row_offset;
+  cell_col = locator->phys_col_offset;
+
+  cellblock = table->handlers[virt_row][virt_col];
+
+  return cellblock->cells[cell_row][cell_col];
+}
+
+/* ============================================== */
+
+CellType
+xaccSplitRegisterGetCellTypeRowCol (SplitRegister *reg,
+                                    int phys_row, int phys_col)
+{
+  BasicCell *cell;
+
+  cell = sr_current_cell (reg);
+  if (cell == NULL)
+    return NO_CELL;
+
+  return sr_cell_type (reg, cell);
+}
+
+/* ============================================== */
+
+gncBoolean
+xaccSplitRegisterGetCellRowCol (SplitRegister *reg, CellType cell_type,
+                                int *p_phys_row, int *p_phys_col)
+{
+  Table *table;
+  Locator *locator;
+  CellBlock *cellblock;
+  int phys_row, phys_col;
+  int virt_row, virt_col;
+  int cell_row, cell_col;
+
+  if (reg == NULL)
+    return GNC_F;
+
+  table = reg->table;
+  if (table == NULL)
+    return GNC_F;
+
+  phys_row = table->current_cursor_phys_row;
+  phys_col = table->current_cursor_phys_col;
+
+  if ((phys_row < 0) || (phys_row >= table->num_phys_rows) ||
+      (phys_col < 0) || (phys_col >= table->num_phys_cols))
+    return GNC_F;
+
+  locator = table->locators[phys_row][phys_col];
+
+  virt_row = locator->virt_row;
+  virt_col = locator->virt_col;
+
+  cellblock = table->handlers[virt_row][virt_col];
+
+  for (cell_row = 0; cell_row < cellblock->numRows; cell_row++)
+    for (cell_col = 0; cell_col < cellblock->numCols; cell_col++)
+    {
+      BasicCell *cell = cellblock->cells[cell_row][cell_col];
+
+      if (sr_cell_type (reg, cell) == cell_type)
+      {
+        RevLocator *rev_locator;
+
+        rev_locator = table->rev_locators[virt_row][virt_col];
+
+        phys_row = rev_locator->phys_row + cell_row;
+        phys_col = rev_locator->phys_col + cell_col;
+
+        if (p_phys_row != NULL)
+          *p_phys_row = phys_row;
+
+        if (p_phys_col != NULL)
+          *p_phys_col = phys_col;
+
+        return GNC_T;
+      }
+    }
+
+  return GNC_F;
 }
 
 /* ============================================== */

@@ -82,6 +82,33 @@ typedef enum
 
 #define REG_TYPE_MASK       0xff
 
+/* These values are used to identify the cells in the register. */
+typedef enum
+{
+  NO_CELL    = -1,
+  DATE_CELL  =  0,
+  NUM_CELL   =  1,
+  DESC_CELL  =  2,
+  RECN_CELL  =  3,
+  SHRS_CELL  =  4,
+  BALN_CELL  =  5,
+  ACTN_CELL  =  6,
+  XFRM_CELL  =  7,
+  XTO_CELL   =  8,
+  MEMO_CELL  =  9,
+  CRED_CELL  = 10,
+  DEBT_CELL  = 11,
+  PRIC_CELL  = 12,
+  VALU_CELL  = 13,
+
+  /* NCRED & NDEBT handle minus the usual quantities */
+  NCRED_CELL = 14,
+  NDEBT_CELL = 15,
+
+  /* MXFRM is the "mirrored" transfer-from account */
+  MXFRM_CELL = 16
+} CellType;
+
 /*
  * enumerated display styles 
  * REG_SINGLE_LINE    -- show one line per transaction
@@ -236,9 +263,26 @@ void            xaccSplitRegisterClearChangeFlag (SplitRegister *reg);
 
 /* Returns the type of the current cursor */
 CursorType      xaccSplitRegisterGetCursorType (SplitRegister *reg);
+
+/* Returns the type of the cursor at the given virtual row and column. */
 CursorType      xaccSplitRegisterGetCursorTypeRowCol (SplitRegister *reg,
                                                       int virt_row,
                                                       int virt_col);
+/* Returns the type of the current cell */
+CellType        xaccSplitRegisterGetCellType (SplitRegister *reg);
+
+/* Returns the type of the cell at the given physical row and column. */
+CellType        xaccSplitRegisterGetCellTypeRowCol (SplitRegister *reg,
+                                                    int phys_row,
+                                                    int phys_col);
+
+/* Returns the physical row and column in the current cursor of the
+ * given cell using the pointer values. The function returns true if
+ * the given cell type is in the current cursor, false otherwise. */
+gncBoolean      xaccSplitRegisterGetCellRowCol (SplitRegister *reg,
+                                                CellType cell_type,
+                                                int *p_phys_row,
+                                                int *p_phys_col);
 
 /* Functions for working with split register buffers */
 SplitRegisterBuffer * xaccMallocSplitRegisterBuffer ();

@@ -289,10 +289,10 @@ const char * xaccTransFindCommonCurrency (Transaction *trans);
  *    currency and a common security.  If the desired match is the
  *    security, a simple string match won't reveal this fact.
  *
- *    This routine is useful in dealing
- *    with currency trading accounts and/or with "stock boxes", where
- *    transaction have in common.  This routine is useful in dealing
- *    securities of differing types are moved across accounts.
+ *    This routine is useful in dealing with currency trading accounts
+ *    and/or with "stock boxes", where transaction have a security in
+ *    common. This routine is useful in dealing with securities of
+ *    differing types as they are moved across accounts.
  */
 const char * xaccTransIsCommonCurrency (Transaction *trans,
                                         const char * currency);
