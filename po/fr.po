@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5.X\n"
 "POT-Creation-Date: 2000-08-11 19:49-0700\n"
-"PO-Revision-Date: 2000-07-27 01:30+0100\n"
+"PO-Revision-Date: 2000-08-13 11:15+0100\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: FRENCH  <FR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -43,7 +43,6 @@ msgstr "Vous devez choisir un compte parent valide."
 
 # po/guile_strings.txt:96
 #: messages-i18n.c:14
-#, fuzzy
 msgid "There is already an account with that name."
 msgstr "Il y a déjà un compte avec ce nom."
 
@@ -127,15 +126,15 @@ msgstr "Le solde doit être un nombre."
 
 #: messages-i18n.c:26
 msgid "The interest rate cannot be zero."
-msgstr ""
+msgstr "Le taux d'intérêt ne peut être zéro."
 
 #: messages-i18n.c:27
 msgid "You must enter values for the other quantities."
-msgstr ""
+msgstr "Vous devez entrer les valeurs des autres quantitées."
 
 #: messages-i18n.c:28
 msgid "The number of payments cannot be zero."
-msgstr ""
+msgstr "Le nombre de paiements ne peut être zéro"
 
 #: messages-i18n.c:29
 msgid ""
@@ -684,10 +683,9 @@ msgstr "Exporter un rapport formatté en HTML vers un fichier"
 
 #: messages-i18n.c:99
 msgid "Use the financial calculator"
-msgstr ""
+msgstr "Utiliser la calculatrice financière"
 
 #: messages-i18n.c:100
-#, fuzzy
 msgid "Find transactions with a search"
 msgstr "Trouver des transactions avec une recherche."
 
@@ -1176,9 +1174,8 @@ msgstr "Style"
 
 # po/guile_strings.txt:264
 #: messages-i18n.c:196
-#, fuzzy
 msgid "_Tools"
-msgstr "Totaux"
+msgstr "Ou_tils"
 
 #: messages-i18n.c:197
 msgid "_Tips Of The Day"
@@ -1296,7 +1293,7 @@ msgstr "Exporter vers"
 
 #: messages-i18n.c:220 src/gnome/glade-gnc-dialogs.c:3257
 msgid "Financial Calculator"
-msgstr ""
+msgstr "Calculatrice financière"
 
 #: messages-i18n.c:221
 msgid "FIN_CALC_STR_N"
@@ -1870,7 +1867,7 @@ msgstr "Capitaux propres"
 
 #: messages-i18n.c:338
 msgid "EUR (total)"
-msgstr ""
+msgstr "EUR (total)"
 
 # messages-i18n.c:283
 #: messages-i18n.c:339
@@ -2329,9 +2326,8 @@ msgstr "Etats"
 
 # messages-i18n.c:123
 #: po/guile_strings.txt:9
-#, fuzzy
 msgid "'Enter' moves to blank transaction"
-msgstr "Entrez une description pour la transaction"
+msgstr "'Entrez' les mouvements vers une transaction vierge"
 
 # messages-i18n.c:194
 #: po/guile_strings.txt:10
@@ -2433,7 +2429,7 @@ msgstr "Compte (avec/sous-total)"
 # po/guile_strings.txt:27
 #: po/guile_strings.txt:33
 msgid "International"
-msgstr ""
+msgstr "International"
 
 # po/guile_strings.txt:28
 #: po/guile_strings.txt:34
@@ -2468,7 +2464,7 @@ msgstr "L'option de date est %s."
 # po/guile_strings.txt:36
 #: po/guile_strings.txt:40
 msgid "UK"
-msgstr ""
+msgstr "UK"
 
 # po/guile_strings.txt:37
 #: po/guile_strings.txt:41
@@ -2555,9 +2551,8 @@ msgstr ""
 
 # po/guile_strings.txt:153
 #: po/guile_strings.txt:61
-#, fuzzy
 msgid "Report on these account(s)"
-msgstr "Faire un rapport de transaction sur ces comptes"
+msgstr "Rapport sur ce(s) compte(s)"
 
 # po/guile_strings.txt:54
 #: po/guile_strings.txt:62
@@ -2593,9 +2588,8 @@ msgstr ""
 
 # messages-i18n.c:203
 #: po/guile_strings.txt:71
-#, fuzzy
 msgid "Register hint font"
-msgstr "Echelles de dates du registre"
+msgstr "Enregistrer la police conseillée"
 
 # po/guile_strings.txt:63
 #: po/guile_strings.txt:72
@@ -2605,7 +2599,7 @@ msgstr "Affiche le rapport Bonjour,tout le monde"
 # po/guile_strings.txt:64
 #: po/guile_strings.txt:73
 msgid "Gain"
-msgstr ""
+msgstr "Gain"
 
 # po/guile_strings.txt:65
 #: po/guile_strings.txt:74
@@ -2672,9 +2666,8 @@ msgid "_Budget"
 msgstr "Budget"
 
 #: po/guile_strings.txt:87
-#, fuzzy
 msgid "Test the budget dialog"
-msgstr "Tester la boîte de dialogue du budget."
+msgstr "Tester la boîte de dialogue du budget"
 
 # po/guile_strings.txt:76
 #: po/guile_strings.txt:88
@@ -2683,13 +2676,12 @@ msgstr "Europe continentale: jj.mm.aaaa"
 
 #: po/guile_strings.txt:89
 msgid "The font used to show hints in the register"
-msgstr ""
+msgstr "La police utilisé pour montrer les conseils dans le registre"
 
 # po/guile_strings.txt:282
 #: po/guile_strings.txt:90
-#, fuzzy
 msgid "Display the Account Summary report."
-msgstr "Affiche le rapport des transactions du compte."
+msgstr "Affiche le rapport récapitulatif du compte."
 
 # messages-i18n.c:169 po/guile_strings.txt:62
 #: po/guile_strings.txt:91
@@ -2805,7 +2797,7 @@ msgstr "Inverser les comptes de revenus et dépenses."
 # po/guile_strings.txt:99
 #: po/guile_strings.txt:113
 msgid "Europe"
-msgstr ""
+msgstr "Europe"
 
 # po/guile_strings.txt:101
 #: po/guile_strings.txt:116
@@ -2872,9 +2864,8 @@ msgstr "Plein"
 
 # messages-i18n.c:87
 #: po/guile_strings.txt:132
-#, fuzzy
 msgid "The font to use in the register"
-msgstr "Avancer d'un pas dans l'historique."
+msgstr "Police à utiliser dans le registre"
 
 #: po/guile_strings.txt:133
 msgid "The amount of time between data points"
@@ -2886,9 +2877,8 @@ msgstr "Limite supérieure"
 
 # po/guile_strings.txt:9
 #: po/guile_strings.txt:135
-#, fuzzy
 msgid "Account Summary"
-msgstr "Séparateur de compte"
+msgstr "Récapitulatif du compte"
 
 # po/guile_strings.txt:111
 #: po/guile_strings.txt:136
@@ -2918,7 +2908,7 @@ msgstr "Bonjour, tout le monde!"
 # po/guile_strings.txt:119
 #: po/guile_strings.txt:143
 msgid "ISO"
-msgstr ""
+msgstr "ISO"
 
 # po/guile_strings.txt:120
 #: po/guile_strings.txt:144
@@ -2961,9 +2951,9 @@ msgstr "Champs du compte à afficher"
 
 # po/guile_strings.txt:38
 #: po/guile_strings.txt:153
-#, fuzzy, c-format
+#, c-format
 msgid "Date: %s<br>Report for %s and all Sub-Accounts.<br>Accounts Total: %s"
-msgstr "Rapport pour %s et tous les sous-comptes."
+msgstr "Date: %s<br>Rapport pour %s et tous les sous-comptes.<br>Total des comptes: %s"
 
 # po/guile_strings.txt:126
 #: po/guile_strings.txt:154
@@ -3066,6 +3056,8 @@ msgid ""
 "Automatically insert a decimal point into values that are entered without "
 "one.  Example:  '2000' is changed to '20.00'."
 msgstr ""
+"Insérer automatiquement un point décimal dans les valeurs qui sont entrées sans."
+"Exemple: '2000' est changé en '20.00'."
 
 # po/guile_strings.txt:143
 #: po/guile_strings.txt:176
@@ -3074,7 +3066,7 @@ msgstr "Sauvegarder les chaines qui ont besoin d'être traduites"
 
 #: po/guile_strings.txt:177
 msgid "Automatic credit card payments"
-msgstr ""
+msgstr "Paiements automatiques par carte de crédit"
 
 # po/guile_strings.txt:144
 #: po/guile_strings.txt:178
@@ -3083,9 +3075,8 @@ msgstr "Nombre de lignes"
 
 # messages-i18n.c:130
 #: po/guile_strings.txt:179
-#, fuzzy
 msgid "_Account Summary"
-msgstr "Compte"
+msgstr "Réc_apitulatif du compte"
 
 # po/guile_strings.txt:145
 #: po/guile_strings.txt:180
@@ -3132,6 +3123,8 @@ msgid ""
 "Please choose appropriate dates - the \"To\" date should be *after* the "
 "\"From\" date."
 msgstr ""
+"S'il vous plait choisissez les dates appropriées - la date \"vers\" devrait"
+"être *après* la date \"depuis\"."  
 
 # po/guile_strings.txt:156
 #: po/guile_strings.txt:191
@@ -3188,7 +3181,7 @@ msgstr "Bonne option"
 # po/guile_strings.txt:169
 #: po/guile_strings.txt:205
 msgid "US"
-msgstr ""
+msgstr "US"
 
 # messages-i18n.c:346
 #: po/guile_strings.txt:206
@@ -3254,7 +3247,7 @@ msgstr "Année"
 
 #: po/guile_strings.txt:224
 msgid "Automatic Decimal Point"
-msgstr ""
+msgstr "Point décimal automatique"
 
 # po/guile_strings.txt:183
 #: po/guile_strings.txt:225
@@ -3326,6 +3319,8 @@ msgid ""
 "After reconciling a credit card statement, prompt the user to enter a credit "
 "card payment"
 msgstr ""
+"Après avoir rapproché un relevé de carte de crédit, suggérer à l'utilisateur"
+"d'entrer un paiement par carte de crédit" 
 
 # po/guile_strings.txt:195
 #: po/guile_strings.txt:239
@@ -3353,9 +3348,8 @@ msgstr "Fonds dans"
 
 # messages-i18n.c:324 po/guile_strings.txt:181
 #: po/guile_strings.txt:244
-#, fuzzy
 msgid "Register font"
-msgstr "Registre"
+msgstr "Police du registre"
 
 # po/guile_strings.txt:199
 #: po/guile_strings.txt:245
@@ -3384,7 +3378,7 @@ msgstr "Ne pas trier"
 #: po/guile_strings.txt:251
 #, c-format
 msgid "Date: %s<br>Report for %s.<br>Accounts Total: %s"
-msgstr ""
+msgstr "Date: %s<br>Rapport pour %s.<br>Total des comptes: %s"
 
 # po/guile_strings.txt:203
 #: po/guile_strings.txt:252
@@ -3414,18 +3408,16 @@ msgstr "Le laid"
 # po/guile_strings.txt:207
 #: po/guile_strings.txt:259
 msgid "Max"
-msgstr ""
+msgstr "Max"
 
 # po/guile_strings.txt:100
 #: po/guile_strings.txt:260
-#, fuzzy
 msgid "Include Sub-Accounts of each selected Account"
-msgstr "Inclure les sous-comptes de tous les comptes sélectionnés"
+msgstr "Inclure les sous-comptes de chacun des comptes sélectionnés"
 
 #: po/guile_strings.txt:261
-#, fuzzy
 msgid "Budget (Testing, Unfinished)"
-msgstr "Boîte de dialogue du budget (Test)"
+msgstr "Budget (En test, non terminé)"
 
 # po/guile_strings.txt:208
 #: po/guile_strings.txt:262
@@ -3614,9 +3606,8 @@ msgid "The header background color"
 msgstr "Couleur de l'arrière-plan de l'en-tête des colonnes"
 
 #: po/guile_strings.txt:299
-#, fuzzy
 msgid "Display \"Tip of the Day\""
-msgstr "Astuce du jour"
+msgstr "Affiche \"Astuce du jour\""
 
 # po/guile_strings.txt:238
 #: po/guile_strings.txt:300
@@ -3709,7 +3700,7 @@ msgstr "Affiche le rapport Rapport de transactions."
 # po/guile_strings.txt:255
 #: po/guile_strings.txt:319
 msgid "\\ (Backslash)"
-msgstr ""
+msgstr "\\ (Backslash)"
 
 # po/guile_strings.txt:256
 #: po/guile_strings.txt:320
@@ -3816,9 +3807,8 @@ msgstr "C'est une option de couleur"
 
 # po/guile_strings.txt:290
 #: po/guile_strings.txt:344
-#, fuzzy
 msgid "Report up to and including this date"
-msgstr "Eléments du rapport jusqu'à et incluant cette date"
+msgstr "Rapport jusqu'à et incluant cette date"
 
 # po/guile_strings.txt:279
 #: po/guile_strings.txt:345
@@ -3858,11 +3848,11 @@ msgstr "C'est une liste d'option"
 # po/guile_strings.txt:286
 #: po/guile_strings.txt:352
 msgid "Min"
-msgstr ""
+msgstr "Min"
 
 #: po/guile_strings.txt:353
 msgid "Display hints for using GnuCash at startup"
-msgstr ""
+msgstr "Afficher les conseils pour utiliser Gnucash au démarrage"
 
 # po/guile_strings.txt:287
 #: po/guile_strings.txt:354
@@ -3886,7 +3876,7 @@ msgstr "Affichage"
 
 #: po/guile_strings.txt:358 src/gnome/glade-gnc-dialogs.c:3114
 msgid "Nominal"
-msgstr ""
+msgstr "Nominal"
 
 # po/guile_strings.txt:291
 #: po/guile_strings.txt:359
@@ -4217,32 +4207,32 @@ msgstr "31 Décembre, 2000"
 # src/gnome/glade-gnc-dialogs.c:1258
 #: src/gnome/glade-gnc-dialogs.c:1236
 msgid "Dec 31, 2000"
-msgstr ""
+msgstr "Dec 31, 2000"
 
 # src/gnome/glade-gnc-dialogs.c:1261
 #: src/gnome/glade-gnc-dialogs.c:1239
 msgid "31 Dec, 2000"
-msgstr ""
+msgstr "31 Dec, 2000"
 
 # src/gnome/glade-gnc-dialogs.c:1264
 #: src/gnome/glade-gnc-dialogs.c:1242
 msgid "12/31/2000"
-msgstr ""
+msgstr "12/31/2000"
 
 # src/gnome/glade-gnc-dialogs.c:1267
 #: src/gnome/glade-gnc-dialogs.c:1245
 msgid "12/31/00"
-msgstr ""
+msgstr "12/31/00"
 
 # src/gnome/glade-gnc-dialogs.c:1270
 #: src/gnome/glade-gnc-dialogs.c:1248
 msgid "31/12/2000"
-msgstr ""
+msgstr "31/12/2000"
 
 # src/gnome/glade-gnc-dialogs.c:1273
 #: src/gnome/glade-gnc-dialogs.c:1251
 msgid "31/12/00"
-msgstr ""
+msgstr "31/12/00"
 
 # src/gnome/glade-gnc-dialogs.c:1281
 #: src/gnome/glade-gnc-dialogs.c:1259
@@ -4282,7 +4272,7 @@ msgstr "Unités"
 # src/gnome/glade-gnc-dialogs.c:1387
 #: src/gnome/glade-gnc-dialogs.c:1365
 msgid "x"
-msgstr ""
+msgstr "x"
 
 # src/gnome/glade-gnc-dialogs.c:1457
 #: src/gnome/glade-gnc-dialogs.c:1442
@@ -4302,20 +4292,20 @@ msgstr "Millimètres"
 # src/gnome/glade-gnc-dialogs.c:1466
 #: src/gnome/glade-gnc-dialogs.c:1451
 msgid "Points"
-msgstr ""
+msgstr "Points"
 
 # src/gnome/glade-gnc-dialogs.c:1478
 #: src/gnome/glade-gnc-dialogs.c:1464
 msgid "y"
-msgstr ""
+msgstr "y"
 
 #: src/gnome/glade-gnc-dialogs.c:1523
 msgid "                                  "
-msgstr ""
+msgstr "                                  "
 
 #: src/gnome/glade-gnc-dialogs.c:1530
 msgid "                    "
-msgstr ""
+msgstr "                    "
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
 #: src/gnome/glade-gnc-dialogs.c:1707
@@ -4352,7 +4342,7 @@ msgstr "Trouver les transactions ayant eu lieu entre les dates:"
 #: src/gnome/glade-gnc-dialogs.c:1830 src/gnome/glade-gnc-dialogs.c:1846
 #: src/gnome/glade-gnc-dialogs.c:1883 src/gnome/glade-gnc-dialogs.c:1898
 msgid "/"
-msgstr ""
+msgstr "/"
 
 # messages-i18n.c:275 po/guile_strings.txt:129
 #: src/gnome/glade-gnc-dialogs.c:1927 src/gnome/glade-gnc-dialogs.c:1985
@@ -4521,7 +4511,7 @@ msgstr "Entrées du budget"
 
 #: src/gnome/glade-gnc-dialogs.c:2835
 msgid "label773"
-msgstr ""
+msgstr "label773"
 
 #: src/gnome/glade-gnc-dialogs.c:2859
 msgid "Add"
@@ -4558,7 +4548,7 @@ msgstr "Type:"
 
 #: src/gnome/glade-gnc-dialogs.c:2979
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 # messages-i18n.c:344
 #: src/gnome/glade-gnc-dialogs.c:2982
@@ -4611,186 +4601,169 @@ msgstr "Eventualité"
 
 # po/guile_strings.txt:186
 #: src/gnome/glade-gnc-dialogs.c:3302
-#, fuzzy
 msgid "Payment Periods"
-msgstr "Période de répit:"
+msgstr "Périodes de paiements"
 
 # messages-i18n.c:260
 #: src/gnome/glade-gnc-dialogs.c:3311 src/gnome/glade-gnc-dialogs.c:3356
 #: src/gnome/glade-gnc-dialogs.c:3401 src/gnome/glade-gnc-dialogs.c:3446
 #: src/gnome/glade-gnc-dialogs.c:3491
-#, fuzzy
 msgid "Clear"
-msgstr "Pointé"
+msgstr "Effacer"
 
 #: src/gnome/glade-gnc-dialogs.c:3317 src/gnome/glade-gnc-dialogs.c:3362
 #: src/gnome/glade-gnc-dialogs.c:3407 src/gnome/glade-gnc-dialogs.c:3452
 #: src/gnome/glade-gnc-dialogs.c:3497
 msgid "Clear the entry"
-msgstr ""
+msgstr "Effacer l'entrée"
 
 #: src/gnome/glade-gnc-dialogs.c:3319 src/gnome/glade-gnc-dialogs.c:3364
 #: src/gnome/glade-gnc-dialogs.c:3409 src/gnome/glade-gnc-dialogs.c:3454
 #: src/gnome/glade-gnc-dialogs.c:3499
 msgid "Calculate"
-msgstr ""
+msgstr "Calculer"
 
 # messages-i18n.c:227
 #: src/gnome/glade-gnc-dialogs.c:3347
-#, fuzzy
 msgid "Interest Rate"
-msgstr "Date de départ"
+msgstr "Taux d'intérêt"
 
 # messages-i18n.c:348 po/guile_strings.txt:57
 #: src/gnome/glade-gnc-dialogs.c:3392
-#, fuzzy
 msgid "Present Value"
-msgstr "Nouvelle valeur"
+msgstr "Valeur actuelle"
 
 # messages-i18n.c:312
 #: src/gnome/glade-gnc-dialogs.c:3437
-#, fuzzy
 msgid "Periodic Payment"
-msgstr "Paiement"
+msgstr "Paiement périodique"
 
 # messages-i18n.c:348 po/guile_strings.txt:57
 #: src/gnome/glade-gnc-dialogs.c:3482
-#, fuzzy
 msgid "Future Value"
-msgstr "Nouvelle valeur"
+msgstr "Valeur future"
 
 #: src/gnome/glade-gnc-dialogs.c:3543 src/gnome/glade-gnc-dialogs.c:3791
 msgid "Compounding:"
-msgstr ""
+msgstr "Composé:"
 
 # messages-i18n.c:312
 #: src/gnome/glade-gnc-dialogs.c:3552 src/gnome/glade-gnc-dialogs.c:3800
-#, fuzzy
 msgid "Payments:"
-msgstr "Paiement"
+msgstr "Paiements:"
 
 # src/gnome/glade-gnc-dialogs.c:638
 #: src/gnome/glade-gnc-dialogs.c:3575 src/gnome/glade-gnc-dialogs.c:3617
 #: src/gnome/glade-gnc-dialogs.c:3837 src/gnome/glade-gnc-dialogs.c:3879
-#, fuzzy
 msgid "Annual"
-msgstr "Réel"
+msgstr "Annuel"
 
 #: src/gnome/glade-gnc-dialogs.c:3578 src/gnome/glade-gnc-dialogs.c:3620
 #: src/gnome/glade-gnc-dialogs.c:3840 src/gnome/glade-gnc-dialogs.c:3882
 msgid "Semi-annual"
-msgstr ""
+msgstr "Semestriel"
 
 #: src/gnome/glade-gnc-dialogs.c:3581 src/gnome/glade-gnc-dialogs.c:3623
 #: src/gnome/glade-gnc-dialogs.c:3843 src/gnome/glade-gnc-dialogs.c:3885
 msgid "Tri-annual"
-msgstr ""
+msgstr "Tri-annuel"
 
 #: src/gnome/glade-gnc-dialogs.c:3584 src/gnome/glade-gnc-dialogs.c:3626
 #: src/gnome/glade-gnc-dialogs.c:3846 src/gnome/glade-gnc-dialogs.c:3888
 msgid "Quarterly"
-msgstr ""
+msgstr "Trimestriel"
 
 #: src/gnome/glade-gnc-dialogs.c:3587 src/gnome/glade-gnc-dialogs.c:3629
 #: src/gnome/glade-gnc-dialogs.c:3849 src/gnome/glade-gnc-dialogs.c:3891
 msgid "Bi-monthly"
-msgstr ""
+msgstr "Bimensuel"
 
 # po/guile_strings.txt:184
 #: src/gnome/glade-gnc-dialogs.c:3590 src/gnome/glade-gnc-dialogs.c:3632
 #: src/gnome/glade-gnc-dialogs.c:3852 src/gnome/glade-gnc-dialogs.c:3894
-#, fuzzy
 msgid "Monthly"
-msgstr "Mois"
+msgstr "Mensuel"
 
 #: src/gnome/glade-gnc-dialogs.c:3593 src/gnome/glade-gnc-dialogs.c:3635
 #: src/gnome/glade-gnc-dialogs.c:3855 src/gnome/glade-gnc-dialogs.c:3897
 msgid "Semi-monthly"
-msgstr ""
+msgstr "Semi-mensuel"
 
 #: src/gnome/glade-gnc-dialogs.c:3596 src/gnome/glade-gnc-dialogs.c:3638
 #: src/gnome/glade-gnc-dialogs.c:3858 src/gnome/glade-gnc-dialogs.c:3900
 msgid "Bi-weekly"
-msgstr ""
+msgstr "Bi-hebdomadaire"
 
 # po/guile_strings.txt:113
 #: src/gnome/glade-gnc-dialogs.c:3599 src/gnome/glade-gnc-dialogs.c:3641
 #: src/gnome/glade-gnc-dialogs.c:3861 src/gnome/glade-gnc-dialogs.c:3903
-#, fuzzy
 msgid "Weekly"
-msgstr "Semaine"
+msgstr "Hebdomadaire"
 
 #: src/gnome/glade-gnc-dialogs.c:3602 src/gnome/glade-gnc-dialogs.c:3644
 #: src/gnome/glade-gnc-dialogs.c:3864 src/gnome/glade-gnc-dialogs.c:3906
 msgid "Daily (360)"
-msgstr ""
+msgstr "Quotidien (360)"
 
 #: src/gnome/glade-gnc-dialogs.c:3605 src/gnome/glade-gnc-dialogs.c:3647
 #: src/gnome/glade-gnc-dialogs.c:3867 src/gnome/glade-gnc-dialogs.c:3909
 msgid "Daily (365)"
-msgstr ""
+msgstr "Quotidien (365)"
 
 #: src/gnome/glade-gnc-dialogs.c:3659
 msgid "End of Period Payments"
-msgstr ""
+msgstr "Fin de la période des paiements"
 
 #: src/gnome/glade-gnc-dialogs.c:3668
 msgid "Beginning of Period Payments"
-msgstr ""
+msgstr "Début de la période des paiements"
 
 # po/guile_strings.txt:189
 #: src/gnome/glade-gnc-dialogs.c:3683
-#, fuzzy
 msgid "Discrete Compounding"
-msgstr "Descendant"
+msgstr "Composé discontinu"
 
 #: src/gnome/glade-gnc-dialogs.c:3692
 msgid "Continuous Compounding"
-msgstr ""
+msgstr "Composé continu"
 
 #: src/gnome/glade-gnc-dialogs.c:3706
 msgid "Schedule"
-msgstr ""
+msgstr "Plan"
 
 # messages-i18n.c:210
 #: src/gnome/glade-gnc-dialogs.c:3773
-#, fuzzy
 msgid "Effective Date:"
-msgstr "Sélectionner date"
+msgstr "Date effective:"
 
 # messages-i18n.c:312
 #: src/gnome/glade-gnc-dialogs.c:3782
-#, fuzzy
 msgid "Initial Payment:"
-msgstr "Paiement"
+msgstr "Paiement initial:"
 
 # messages-i18n.c:165 po/guile_strings.txt:7
 #: src/gnome/glade-gnc-dialogs.c:4023
-#, fuzzy
 msgid "Account Name:"
-msgstr "Nom du compte"
+msgstr "Nom du compte:"
 
 # messages-i18n.c:330 po/guile_strings.txt:161
 #: src/gnome/glade-gnc-dialogs.c:4050
-#, fuzzy
 msgid "Security:"
-msgstr "Valeur"
+msgstr "Valeur:"
 
 # messages-i18n.c:164
 #: src/gnome/glade-gnc-dialogs.c:4059
-#, fuzzy
 msgid "Account Code:"
-msgstr "Code du compte"
+msgstr "Code du compte:"
 
 #: src/gnome/glade-gnc-dialogs.c:4145
 msgid "label812"
-msgstr ""
+msgstr "label812"
 
 # messages-i18n.c:46
 #: src/gnome/glade-gnc-dialogs.c:4185
-#, fuzzy
 msgid "The source for price quotes:"
-msgstr "La source des cours des actions"
+msgstr "La source des cours des actions:"
 
 # src/gnome/print-session.c:230
 #: src/gnome/print-session.c:233
