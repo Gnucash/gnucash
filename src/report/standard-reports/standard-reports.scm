@@ -6,11 +6,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash report standard-reports))
-
 (export gnc:show-register-report)
 (export gnc:print-register-report)
 (export gnc:show-invoice-report)
 
+(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash report account-piecharts))
 (use-modules (gnucash report account-summary))
 (use-modules (gnucash report average-balance))
