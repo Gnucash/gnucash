@@ -1,0 +1,5 @@
+Makefile
+Makefile.in
+.deps
+*.diff
+gnc-dir.h
