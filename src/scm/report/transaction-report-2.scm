@@ -171,10 +171,10 @@
         (eq? (gnc:option-value
  	(gnc:lookup-option options "Display" "Amount")) 'double)
         (make-report-spec
- 	(string-db 'lookup -debit-string)
- 	(lambda (split) (min 0 (gnc:split-get-value split)))
+ 	(string-db 'lookup 'debit-string)
+ 	(lambda (split) (max 0 (- (gnc:split-get-value split))))
  	(lambda (value)
- 	  (if (< value 0) (html-right-cell (html-currency value))
+ 	  (if (> value 0) (html-right-cell (html-currency value))
  	      (html-right-cell (html-string " "))))
  	+ ; total-proc
  	(lambda (value)
@@ -185,7 +185,7 @@
  	(lambda (split)
  	  (map gnc:split-get-value (gnc:split-get-other-splits split)))
  	(lambda (value)
- 	  (if (< value 0) (html-right-cell (html-ital (html-currency value)))
+ 	  (if (> value 0) (html-right-cell (html-ital (html-currency value)))
  	      (html-right-cell (html-ital (html-string " "))))))
         #f)
 

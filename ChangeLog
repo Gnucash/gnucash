@@ -1,3 +1,10 @@
+2000-05-02  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* man/gnc-prices.1: fixed typo.
+
+	* src/scm/report/transaction-report-2.scm: fixed typo for debit string
+	and reversed displayed sign in debit column.
+
 2000-05-01  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/transaction-report-2.scm : Added i18n and

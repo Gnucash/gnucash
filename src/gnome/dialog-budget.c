@@ -537,6 +537,50 @@ get_selected_node(BudgetDialog *bd, EntryType type)
   }
 }
 
+static GtkCTreeNode *
+get_previous_sibling_node(BudgetDialog *bd, GtkCTreeNode *node)
+{
+  GtkCTreeNode *sibling;
+  GtkCTree *ctree;
+  BudgetItem *bi;
+  EntryType type;
+
+  if (node == NULL)
+    return NULL;
+
+  ctree = GTK_CTREE(bd->entry_tree);
+
+  bi = gtk_ctree_node_get_row_data(ctree, node);
+  type = bi->type;
+
+  sibling = GTK_CTREE_NODE_PREV(node);
+  if (sibling == NULL)
+    return NULL;
+
+  bi = gtk_ctree_node_get_row_data(ctree, sibling);
+  switch (type)
+  {
+    case BUDGET_ENTRY:
+      while (bi->type != BUDGET_ENTRY)
+      {
+        sibling = GTK_CTREE_NODE_PREV(sibling);
+        if (sibling == NULL)
+          return NULL;
+        bi = gtk_ctree_node_get_row_data(ctree, sibling);
+      }
+      break;
+    case BUDGET_SUBENTRY:
+      if (bi->type == BUDGET_ENTRY)
+        return NULL;
+      break;
+    default:
+      g_warning("get_previous_sibling_node: bad entry type");
+      return NULL;
+  }
+
+  return sibling;
+}
+
 static void
 entry_description_entry_changed(GtkEditable *editable, BudgetDialog *bd)
 {
@@ -603,7 +647,6 @@ entry_up_button_clicked(GtkButton *button, BudgetDialog *bd)
   GtkCTreeNode *parent;
   GtkCTreeNode *sibling;
   GtkCTree *ctree;
-  BudgetItem *bi;
 
   if (bd->num_entries == 0)
     return;
@@ -616,32 +659,10 @@ entry_up_button_clicked(GtkButton *button, BudgetDialog *bd)
   row   = GTK_CTREE_ROW(node);
 
   parent  = row->parent;
-  sibling = GTK_CTREE_NODE_PREV(node);
+  sibling = get_previous_sibling_node(bd, node);
 
   if (sibling == NULL)
     return;
-
-  bi = gtk_ctree_node_get_row_data(ctree, node);
-  switch (bi->type)
-  {
-    case BUDGET_SUBENTRY:
-      if (parent == sibling)
-        return;
-      break;
-    case BUDGET_ENTRY:
-      bi = gtk_ctree_node_get_row_data(ctree, sibling);
-      while (bi->type != BUDGET_ENTRY)
-      {
-        sibling = GTK_CTREE_NODE_PREV(sibling);
-        if (sibling == NULL)
-          return;
-        bi = gtk_ctree_node_get_row_data(ctree, sibling);
-      }
-      break;
-    default:
-      g_warning("entry_up_button_clicked: bad item type");
-      return;
-  }
 
   gtk_ctree_move(ctree, node, parent, sibling);
   if (gtk_ctree_node_is_visible(ctree, node) != GTK_VISIBILITY_FULL)
@@ -749,13 +770,8 @@ mechanism_menu_changed(GtkButton *button, BudgetDialog *bd)
 static void
 allow_edits(BudgetDialog *bd, gboolean allow_edits)
 {
-  GtkWidget *widget;
-
-  widget = gtk_object_get_data(GTK_OBJECT(bd->dialog), "entry_frame");
-  gtk_widget_set_sensitive(widget, allow_edits);
-
-  widget = gtk_object_get_data(GTK_OBJECT(bd->dialog), "subentry_frame");
-  gtk_widget_set_sensitive(widget, allow_edits);
+  gtk_widget_set_sensitive(bd->entry_frame, allow_edits);
+  gtk_widget_set_sensitive(bd->subentry_frame, allow_edits);
 }
 
 void
@@ -970,7 +986,7 @@ gnc_ui_budget_dialog_create(SCM budget, SCM apply_func)
   menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(menu));
   gtk_container_forall(GTK_CONTAINER(menu), connect_mechanism_menu_item, bd);
 
-  bd->entry_frame = gtk_object_get_data(bdo, "entry_frame");
+  bd->subentry_frame = gtk_object_get_data(bdo, "subentry_frame");
 
   button = gtk_object_get_data(bdo, "entry_up_button");
   arrow = gtk_arrow_new(GTK_ARROW_UP, GTK_SHADOW_IN);
