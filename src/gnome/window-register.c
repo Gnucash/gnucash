@@ -2131,7 +2131,6 @@ static void
 recordCB(GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
-  gboolean really_saved;
   Transaction *trans;
 
   trans = xaccSRGetCurrentTrans(regData->ledger->ledger);
