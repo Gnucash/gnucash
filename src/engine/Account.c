@@ -204,11 +204,9 @@ xaccGetAccountID (Account *acc)
 
 void
 xaccAccountInsertSplit ( Account *acc, Split *split )
-  {
+{
   int  i,j;
-  int  inserted = FALSE;
   Split **oldsplits;
-  Transaction *trans;
 
   if (!acc) return;
   if (!split) return;
@@ -230,36 +228,28 @@ xaccAccountInsertSplit ( Account *acc, Split *split )
   acc->numSplits ++;
   acc->splits = (Split **)_malloc(((acc->numSplits) + 1) * sizeof(Split *));
   
-  /* dt is the date of the transaction we are inserting, and dj
-   * is the date of the "cursor" transaction... we want to insert
-   * the new transaction before the first transaction of the same
-   * or later date.  The !inserted bit is a bit of a kludge to 
-   * make sure we only insert the new transaction once! */
-  trans = (Transaction *) (split->parent);
-  for( i=0,j=0; i<acc->numSplits; i++,j++ ) {
-    /* if we didn't do this, and we needed to insert into the
-     * last spot in the array, we would walk off the end of the
-     * old array, which is no good! */
-    if( j>=(acc->numSplits-1) ) {
-      acc->splits[i] = split;
+  /* Find the insertion point */
+  /* to get realy fancy, could use binary search. */
+  for(i = 0; i < (acc->numSplits - 1);) {
+    if(xaccSplitOrder(&(oldsplits[i]), &split) > 0) {
       break;
     } else {
-      if (!inserted) {
-        Transaction *ot;
-        ot = (Transaction *) (oldsplits[j] -> parent);
-        if (xaccTransOrder (&ot,&trans) > 0) {
-          acc->splits[i] = split;
-          j--;
-          inserted = TRUE;
-        } else {
-          acc->splits[i] = oldsplits[j];
-        }
-      } else {
-        acc->splits[i] = oldsplits[j];
-      }
+      acc->splits[i] = oldsplits[i];
     }
+    i++;  /* Don't put this in the loop guard!  It'll go too far. */
   }
-  
+  /* Insertion point is now i */
+
+  //fprintf(stderr, "Insertion position is: %d\n", i);
+
+  /* Move all the other splits down (this could be done faster with memmove)*/
+  for( j = acc->numSplits; j > i; j--) {
+    acc->splits[j] = oldsplits[j - 1];
+  }
+
+  /* Now insert the new split */
+  acc->splits[i] = split;
+
   /* make sure the array is NULL terminated */
   acc->splits[acc->numSplits] = NULL;
 
