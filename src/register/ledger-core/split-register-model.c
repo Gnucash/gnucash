@@ -643,8 +643,7 @@ gnc_split_register_get_type_entry (VirtualLocation virt_loc,
   type = xaccTransGetTxnType (trans);
 
   if (type == TXN_TYPE_NONE)
-    /* Change the default? */
-    (type);
+    type = '?';
 
   s[0] = type;
   s[1] = '\0';
