@@ -35,7 +35,7 @@
 
 #include "config.h"
 #include "date.h"
-#include "util.h"
+#include "gnc-engine-util.h"
 
 /* This is now user configured through the gnome options system() */
 static DateFormat dateFormat = DATE_FORMAT_US;

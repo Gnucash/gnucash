@@ -22,7 +22,7 @@
  *                                                                  *
 \********************************************************************/
 
-#include "top-level.h"
+#include "config.h"
 
 #include <stdlib.h>
 #include <guile/gh.h>
@@ -32,7 +32,6 @@
 #include "g-wrap.h"
 #include "gnc.h"
 #include "gnucash.h"
-#include "gnome-top-level.h"
 #include "window-main.h"
 #include "dialog-account.h"
 #include "dialog-transfer.h"
@@ -40,7 +39,7 @@
 #include "gnucash-sheet.h"
 #include "gnucash-color.h"
 #include "gnucash-style.h"
-#include "ui-callbacks.h"
+#include "gnc-ui.h"
 #include "extensions.h"
 #include "window-help.h"
 #include "window-report.h"
@@ -53,7 +52,7 @@
 #include "Refresh.h"
 #include "messages.h"
 #include "TransLog.h"
-#include "util.h"
+#include "gnc-engine-util.h"
 #include "date.h"
 #include "AccWindow.h"
 #include "SplitLedger.h"

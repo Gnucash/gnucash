@@ -32,6 +32,7 @@
 #include <assert.h>
 
 #include "gnc-common.h"
+#include "gnc-engine-util.h"
 #include "gnc-numeric.h"
 #include "TransactionP.h"
 #include "Transaction.h"

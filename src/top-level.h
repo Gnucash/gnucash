@@ -30,29 +30,4 @@
 #include "gnc-common.h"
 #include "gnc-ui-common.h"
 
-
-/** HELP STUFF: *****************************************************/
-#define HH_ABOUT             "xacc-about.html"
-#define HH_ACC               "xacc-newacctwin.html"
-#define HH_REGWIN            "xacc-regwin.html"
-#define HH_RECNWIN           "xacc-recnwin.html"
-#define HH_ADJBWIN           "xacc-adjbwin.html"
-#define HH_MAIN              "index.html"
-#define HH_GPL               "xacc-gpl.html"
-#define HH_GLOBPREFS         "xacc-preferences.html"
-#define HH_ACCEDIT           "xacc-accountedit.html"
-#define HH_QIFIMPORT         "xacc-qif-import.html"
-#define HH_PRINTCHECK        "xacc-print-check.html"
-#define HH_FIND_TRANSACTIONS "xacc-locatingtxns.html"
-#define HH_PRINT             "xacc-print.html"
-#define HH_COMMODITY         "xacc-commodity.html"
-
-
-/** PROTOTYPES ******************************************************/
-
-gncUIWidget gnc_get_ui_data(void);
-
-gboolean gnc_reverse_balance(Account *account);
-gboolean gnc_reverse_balance_type(GNCAccountType type);
-
 #endif

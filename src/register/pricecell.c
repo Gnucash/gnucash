@@ -30,6 +30,8 @@
  * Copyright (c) 2000 Dave Peticolas
  */
 
+#include "config.h"
+
 #include <ctype.h>
 #include <string.h>
 #include <locale.h>
@@ -37,14 +39,17 @@
 
 #include "gnc-common.h"
 #include "gnc-exp-parser.h"
-#include "util.h"
+#include "gnc-engine-util.h"
+#include "gnc-ui-util.h"
 
 #include "basiccell.h"
 #include "pricecell.h"
 
+
 /* GUI-dependent */
 extern void xaccPriceGUIInit (PriceCell *);
 
+static void xaccInitPriceCell (PriceCell *cell);
 static void PriceSetValue (BasicCell *, const char *);
 static const char * xaccPriceCellPrintValue (PriceCell *cell);
 
@@ -110,15 +115,16 @@ PriceMV (BasicCell *_cell,
     return;
   }
 
-  if (cell->monetary)
+  if (cell->print_info.monetary)
     decimal_point = lc->mon_decimal_point[0];
   else
     decimal_point = lc->decimal_point[0];
 
-  if (cell->monetary)
+  if (cell->print_info.monetary)
     thousands_sep = lc->mon_thousands_sep[0];
   else
     thousands_sep = lc->thousands_sep[0];
+
   for (i = 0; change[i] != '\0'; i++)
     if (!isdigit(change[i]) &&
         !isspace(change[i]) &&
@@ -210,16 +216,15 @@ xaccMallocPriceCell (void)
 
 /* ================================================ */
 
-void
+static void
 xaccInitPriceCell (PriceCell *cell)
 {
    xaccInitBasicCell (&(cell->cell));
 
    cell->amount = 0.0;
    cell->blank_zero = TRUE;
-   cell->monetary = TRUE;
-   cell->is_currency = FALSE;
-   cell->shares_value = FALSE;
+
+   cell->print_info = gnc_default_print_info (FALSE);
 
    cell->need_to_parse = FALSE;
 
@@ -250,18 +255,10 @@ xaccDestroyPriceCell (PriceCell *cell)
 static const char *
 xaccPriceCellPrintValue (PriceCell *cell)
 {
-  GNCPrintAmountFlags flags = PRTSEP;
-
   if (cell->blank_zero && DEQ(cell->amount, 0.0))
     return "";
 
-  if (cell->shares_value)
-    flags |= PRTSHR;
-
-  if (cell->is_currency)
-    flags |= PRTCUR;
-
-  return DxaccPrintAmount(cell->amount, flags, NULL);
+  return DxaccPrintAmount(cell->amount, cell->print_info);
 }
 
 /* ================================================ */
@@ -312,34 +309,12 @@ xaccSetPriceCellBlank (PriceCell *cell)
 /* ================================================ */
 
 void
-xaccSetPriceCellSharesValue (PriceCell * cell, gboolean shares_value)
+xaccSetPriceCellPrintInfo (PriceCell *cell, GNCPrintAmountInfo print_info)
 {
   if (cell == NULL)
     return;
 
-  cell->shares_value = shares_value;
-}
-
-/* ================================================ */
-
-void
-xaccSetPriceCellMonetary (PriceCell * cell, gboolean monetary)
-{
-  if (cell == NULL)
-    return;
-
-  cell->monetary = monetary;
-}
-
-/* ================================================ */
-
-void
-xaccSetPriceCellIsCurrency (PriceCell *cell, gboolean is_currency)
-{
-  if (cell == NULL)
-    return;
-
-  cell->is_currency = is_currency;
+  cell->print_info = print_info;
 }
 
 /* ================================================ */

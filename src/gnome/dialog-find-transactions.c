@@ -32,7 +32,7 @@
 
 #include "top-level.h"
 #include "messages.h"
-#include "ui-callbacks.h"
+#include "gnc-ui.h"
 #include "RegWindow.h"
 #include "window-register.h"
 #include "account-tree.h"

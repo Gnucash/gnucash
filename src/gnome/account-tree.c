@@ -24,7 +24,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include "top-level.h"
+#include "config.h"
 
 #include <gnome.h>
 
@@ -35,8 +35,7 @@
 #include "window-main.h"
 #include "dialog-utils.h"
 #include "account-tree.h"
-#include "util.h"
-
+#include "gnc-engine-util.h"
 
 /* Signal codes */
 enum

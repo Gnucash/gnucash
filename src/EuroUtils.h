@@ -30,6 +30,8 @@ gboolean gnc_is_euro_currency(const gnc_commodity * currency);
 double   gnc_convert_to_euro(const gnc_commodity * currency, double value);
 double   gnc_convert_from_euro(const gnc_commodity * currency, double value);
 
+const gnc_commodity * gnc_get_euro (void);
+
 #endif  /* __EURO_UTILS_H__ */
 
 /************************** END OF FILE *************************/

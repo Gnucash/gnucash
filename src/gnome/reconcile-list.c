@@ -32,7 +32,7 @@
 #include "FileDialog.h"
 #include "messages.h"
 #include "date.h"
-#include "util.h"
+#include "gnc-ui-util.h"
 
 
 /* Signal codes */
@@ -100,8 +100,8 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
 {
   GNCReconcileList *list;
 
-  assert(account != NULL);
-  assert((type == RECLIST_DEBIT) || (type == RECLIST_CREDIT));
+  g_assert(account != NULL);
+  g_assert((type == RECLIST_DEBIT) || (type == RECLIST_CREDIT));
 
   list = GNC_RECONCILE_LIST(gtk_type_new(gnc_reconcile_list_get_type()));
 
@@ -271,8 +271,8 @@ gnc_reconcile_list_toggle(GNCReconcileList *list)
   char recn;
   gint row;
 
-  assert(IS_GNC_RECONCILE_LIST(list));
-  assert(list->reconciled != NULL);
+  g_assert(IS_GNC_RECONCILE_LIST(list));
+  g_assert(list->reconciled != NULL);
 
   if (list->no_toggle)
     return;
@@ -626,7 +626,7 @@ static void
 gnc_reconcile_list_fill(GNCReconcileList *list)
 {
   const gchar *strings[list->num_columns + 1];
-  GNCPrintAmountFlags flags = PRTSEP;
+  GNCPrintAmountInfo print_info;
   GNCAccountType account_type;
   gboolean reconciled;
 
@@ -634,23 +634,16 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
   Split **splits;
   Split *split;
 
-  const gnc_commodity * currency;
-  char recn;
-
   double amount;
+  char recn;
   int row;
 
   account_type = xaccAccountGetType(list->account);
-  currency = xaccAccountGetCurrency(list->account);
   strings[5] = NULL;
 
-  if ((account_type == STOCK) || (account_type == MUTUAL) ||
-      (account_type == CURRENCY))
-    flags |= PRTSHR;
+  print_info = gnc_account_print_info (list->account, FALSE);
 
-  splits = xaccQueryGetSplits(list->query);
-
-  for ( ; *splits != NULL; splits++)
+  for (splits = xaccQueryGetSplits(list->query); *splits != NULL; splits++)
   {
     Timespec ts;
 
@@ -677,8 +670,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     strings[0] = gnc_print_date(ts);
     strings[1] = xaccTransGetNum(trans);
     strings[2] = xaccTransGetDescription(trans);
-    strings[3] = DxaccPrintAmount(ABS(amount), flags, 
-                                  gnc_commodity_get_mnemonic(currency));
+    strings[3] = DxaccPrintAmount(ABS(amount), print_info);
 
     reconciled = g_hash_table_lookup(list->reconciled, split) != NULL;
     recn = reconciled ? YREC : recn;

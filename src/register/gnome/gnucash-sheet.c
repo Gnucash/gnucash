@@ -37,7 +37,7 @@
 #include "gnucash-style.h"
 #include "gnucash-header.h"
 #include "gnucash-item-edit.h"
-#include "util.h"
+#include "gnc-engine-util.h"
 
 #define DEFAULT_REGISTER_HEIGHT 400
 #define DEFAULT_REGISTER_WIDTH  630

@@ -26,14 +26,13 @@
 
 #define _GNU_SOURCE
 
-#include "top-level.h"
+#include "config.h"
 
 #include <gnome.h>
 #include <math.h>
 
-#include "gnome-top-level.h"
 #include "window-register.h"
-#include "ui-callbacks.h"
+#include "gnc-ui.h"
 #include "MultiLedger.h"
 #include "MainWindow.h"
 #include "Refresh.h"
@@ -51,7 +50,8 @@
 #include "global-options.h"
 #include "dialog-find-transactions.h"
 #include "gnc-dateedit.h"
-#include "util.h"
+#include "gnc-engine-util.h"
+#include "gnc-ui-util.h"
 #include "EuroUtils.h"
 
 
@@ -1813,7 +1813,7 @@ static void
 regRefresh(xaccLedgerDisplay *ledger)
 {
   RegWindow *regData = (RegWindow *) (ledger->gui_hook);
-  GNCPrintAmountFlags print_flags = PRTSYM | PRTSEP;
+  GNCPrintAmountInfo print_info;
   gboolean euro = gnc_lookup_boolean_option("International",
 					    "Enable EURO support",
 					    FALSE);
@@ -1821,15 +1821,13 @@ regRefresh(xaccLedgerDisplay *ledger)
 
   /* no EURO converson, if account is already EURO or no EURO currency */
   if(currency != NULL)
-  {
     euro = (euro && gnc_is_euro_currency(currency));
-  }
   else
-  {
     euro = FALSE;
-  }
 
   xaccSRLoadXferCells(ledger->ledger, ledger->leader);
+
+  print_info = gnc_account_print_info (ledger->leader, TRUE);
 
   if (regData->window != NULL)
   {
@@ -1843,14 +1841,13 @@ regRefresh(xaccLedgerDisplay *ledger)
       if (reverse)
         amount = -amount;
 
-      DxaccSPrintAmount(string, amount, print_flags,
-                       gnc_commodity_get_mnemonic(currency));
+      DxaccSPrintAmount(string, amount, print_info);
       if(euro)
       {
 	strcat(string, " / ");
 	DxaccSPrintAmount(string + strlen(string),
-			 gnc_convert_to_euro(currency, amount),
-			 print_flags | PRTEUR, NULL);
+                          gnc_convert_to_euro(currency, amount),
+                          gnc_commodity_print_info (gnc_get_euro (), TRUE));
       }
 
       gnc_set_label_color(regData->balance_label, amount);
@@ -1864,14 +1861,13 @@ regRefresh(xaccLedgerDisplay *ledger)
       if (reverse)
         amount = -amount;
 
-      DxaccSPrintAmount(string, amount, print_flags,
-                       gnc_commodity_get_mnemonic(currency));
+      DxaccSPrintAmount(string, amount, print_info);
       if(euro)
       {
 	strcat(string, " / ");
 	DxaccSPrintAmount(string + strlen(string),
-			 gnc_convert_to_euro(currency, amount),
-			 print_flags | PRTEUR, NULL);
+                          gnc_convert_to_euro(currency, amount),
+                          gnc_commodity_print_info (gnc_get_euro (), TRUE));
       }
 
       gnc_set_label_color(regData->cleared_label, amount);

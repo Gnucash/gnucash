@@ -22,14 +22,15 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include "top-level.h"
+#include "config.h"
 
 #include <gnome.h>
 
 #include "FileBox.h"
 #include "file-history.h"
 #include "messages.h"
-#include "util.h"
+#include "gnc-engine-util.h"
+#include "gnc-ui.h"
 
 
 typedef struct _FileBoxInfo FileBoxInfo;

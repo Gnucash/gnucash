@@ -37,6 +37,8 @@
 #include "query-user.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
+#include "gnc-ui.h"
+
 
 struct _commoditydruid {
   GtkWidget  * window; 

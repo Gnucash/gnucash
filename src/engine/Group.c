@@ -35,8 +35,8 @@
 #include "GroupP.h"
 #include "TransactionP.h"
 #include "gnc-common.h"
+#include "gnc-engine-util.h"
 #include "gnc-numeric.h"
-#include "util.h"
 
 /* static short module = MOD_ENGINE; */
 

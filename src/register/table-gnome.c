@@ -42,14 +42,11 @@
 #include <gnome.h>
 #include <guile/gh.h>
 
-#include "cellblock.h"
 #include "global-options.h"
 #include "table-allgui.h"
 #include "splitreg.h"
-#include "util.h"
 
 #include "gnucash-sheet.h"
-#include "gnucash-color.h"
 #include "gnucash-style.h"
 
 

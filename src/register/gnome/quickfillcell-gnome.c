@@ -30,7 +30,6 @@
 #include <gnome.h>
 
 #include "quickfillcell.h"
-#include "util.h"
 
 
 static gboolean

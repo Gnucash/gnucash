@@ -31,6 +31,8 @@
 #include "window-help.h"
 #include "FileDialog.h"
 #include "query-user.h"
+#include "gnc-ui.h"
+
 
 struct _selectcommoditywindow {
   GtkWidget * dialog;

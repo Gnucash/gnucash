@@ -97,7 +97,7 @@
 
 #define _GNU_SOURCE
 
-#include <config.h>
+#include "config.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -105,10 +105,8 @@
 #include <glib.h>
 #include <guile/gh.h>
 
-#include "top-level.h"
-
 #include "Account.h"
-#include "ui-callbacks.h"
+#include "gnc-ui.h"
 #include "SplitLedger.h"
 #include "MultiLedger.h"
 #include "FileDialog.h"
@@ -118,7 +116,8 @@
 #include "guile-util.h"
 #include "global-options.h"
 #include "messages.h"
-#include "util.h"
+#include "gnc-engine-util.h"
+#include "gnc-ui-util.h"
 
 
 typedef struct _SRInfo SRInfo;
@@ -2831,7 +2830,8 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
 
         balance = DxaccSplitGetShareBalance (split);
 
-        return DxaccPrintAmount (balance, PRTSEP | PRTSHR, NULL);
+        return DxaccPrintAmount (balance,
+                                 gnc_split_quantity_print_info (split, FALSE));
       }
       break;
 
@@ -2862,7 +2862,8 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
                  (EXPENSE_REGISTER == reg->type))
           balance = -balance;
 
-        return DxaccPrintAmount (balance, PRTSEP, NULL);
+        return DxaccPrintAmount (balance,
+                                 gnc_split_value_print_info (split, FALSE));
       }
       break;
 
@@ -2905,7 +2906,8 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
 
         amount = ABS (amount);
 
-        return DxaccPrintAmount (amount, PRTSEP, NULL);
+        return DxaccPrintAmount (amount,
+                                 gnc_split_value_print_info (split, FALSE));
       }
 
     case PRIC_CELL:
@@ -2914,7 +2916,7 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
 
         price = DxaccSplitGetSharePrice (split);
 
-        return DxaccPrintAmount (price, PRTSEP | PRTCUR, NULL);
+        return DxaccPrintAmount (price, gnc_default_price_print_info ());
       }
 
     case SHRS_CELL:
@@ -2926,7 +2928,8 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
         if (DEQ (shares, 0.0))
           return "";
 
-        return DxaccPrintAmount (shares, PRTSEP | PRTSHR, NULL);
+        return DxaccPrintAmount (shares,
+                                 gnc_split_quantity_print_info (split, FALSE));
       }
 
     case MXFRM_CELL:

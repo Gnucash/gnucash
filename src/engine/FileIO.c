@@ -26,6 +26,7 @@
 
 #include "FileIO.h"
 
+#include <stdlib.h>
 #include <string.h>
 
 #include "io-gncxml.h"

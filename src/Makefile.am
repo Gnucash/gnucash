@@ -43,7 +43,8 @@ gnucash_SOURCES = \
   EuroUtils.c \
   FileDialog.c \
   Refresh.c \
-  gnc-exp-parser.c
+  gnc-exp-parser.c \
+  gnc-ui-util.c
 
 noinst_HEADERS = \
   AccWindow.h \
@@ -59,10 +60,11 @@ noinst_HEADERS = \
   SplitLedger.h \
   file-history.h \
   gnc-exp-parser.h \
+  gnc-ui.h \
   gnc-ui-common.h \
+  gnc-ui-util.h \
   messages.h \
-  top-level.h \
-  ui-callbacks.h
+  top-level.h
 
 EXTRA_DIST = \
   .cvsignore

@@ -38,7 +38,7 @@
 
 #include "table-allgui.h"
 #include "cellblock.h"
-#include "util.h"
+#include "gnc-engine-util.h"
 
 
 /** Static Globals *****************************************************/

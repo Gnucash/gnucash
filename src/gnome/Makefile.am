@@ -69,7 +69,6 @@ noinst_HEADERS = \
   gnc-currency-edit.h \
   gnc-datedelta.h \
   gnc-dateedit.h \
-  gnome-top-level.h \
   gtkselect.h \
   print-session.h \
   query-user.h \

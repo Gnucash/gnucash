@@ -28,13 +28,12 @@
 #include <gnome.h>
 #include <guile/gh.h>
 
-#include "top-level.h"
 #include "messages.h"
 #include "dialog-print-check.h"
 #include "dialog-utils.h"
 #include "window-help.h"
 #include "print-session.h"
-#include "ui-callbacks.h"
+#include "gnc-ui.h"
 
 #define CHECK_PRINT_NUM_FORMATS 2
 #define CHECK_PRINT_NUM_POSITIONS 4

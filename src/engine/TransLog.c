@@ -35,7 +35,7 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
-#include "util.h"
+#include "gnc-engine-util.h"
 
 /*
  * The logfiles are useful for tracing, journalling, error recovery.

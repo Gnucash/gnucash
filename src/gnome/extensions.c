@@ -25,9 +25,9 @@
 #include <gnome.h>
 
 #include "extensions.h"
-#include "top-level.h"
 #include "guile-util.h"
-#include "util.h"
+#include "gnc-engine-util.h"
+#include "gnc-ui.h"
 
 
 typedef struct _ExtensionInfo ExtensionInfo;

@@ -33,8 +33,8 @@
 #include "Session.h"
 #include "TransLog.h"
 #include "Destroy.h"
-#include "util.h"
-#include "ui-callbacks.h"
+#include "gnc-engine-util.h"
+#include "gnc-ui.h"
 #include "file-history.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */

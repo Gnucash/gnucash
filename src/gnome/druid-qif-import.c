@@ -23,7 +23,7 @@
 
 #define _GNU_SOURCE
 
-#include "top-level.h"
+#include "config.h"
 
 #include <gnome.h>
 #include <stdio.h>
@@ -37,15 +37,15 @@
 #include "dialog-commodity.h"
 #include "window-help.h"
 #include "messages.h"
-#include "gnome-top-level.h"
-#include "ui-callbacks.h"
+#include "gnc-ui.h"
 
 #include "Account.h"
 #include "FileDialog.h"
 #include "FileBox.h"
 #include "dialog-utils.h"
 #include "query-user.h"
-#include "util.h"
+#include "gnc-ui-util.h"
+
 
 struct _qifimportwindow {
   GtkWidget * window;

@@ -37,7 +37,6 @@
 #include <config.h>
 
 #include "guid.h"
-#include "util.h"
 
 
 /* Identifiers are 'typed' with integers. The ids used in gnucash are

@@ -27,8 +27,6 @@
 #include "MultiLedger.h"
 #include "RecnWindow.h"
 
-#include "util.h"
-
    
 /* ------------------------------------------------------ */
 void

@@ -42,7 +42,8 @@
 #include "FileIO.h"
 #include "Group.h"
 #include "Session.h"
-#include "util.h"
+#include "gnc-engine-util.h"
+
 
 struct _session {
    AccountGroup *topgroup;

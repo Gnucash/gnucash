@@ -22,13 +22,12 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include "top-level.h"
+#include "config.h"
 
 #include <gnome.h>
 #include <guile/gh.h>
 #include <string.h>
 
-#include "gnome-top-level.h"
 #include "AccWindow.h"
 #include "global-options.h"
 #include "dialog-options.h"
@@ -36,7 +35,7 @@
 #include "gnucash.h"
 #include "MainWindow.h"
 #include "Destroy.h"
-#include "ui-callbacks.h"
+#include "gnc-ui.h"
 #include "messages.h"
 #include "RegWindow.h"
 #include "Refresh.h"
@@ -54,7 +53,7 @@
 #include "gtkselect.h"
 #include "EuroUtils.h"
 #include "Scrub.h"
-#include "util.h"
+#include "gnc-engine-util.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gtkselect.h"
@@ -401,14 +400,14 @@ gnc_ui_refresh_statusbar (void)
     currency_item->touched = 1;
 
     DxaccSPrintAmount(asset_string, currency_accum->assets,
-		     PRTSYM | PRTSEP, 
-                     gnc_commodity_get_mnemonic(currency_accum->currency));
+                      gnc_commodity_print_info (currency_accum->currency,
+                                                TRUE));
     gtk_label_set_text(GTK_LABEL(currency_item->assets_label), asset_string);
     gnc_set_label_color(currency_item->assets_label, currency_accum->assets);
 
     DxaccSPrintAmount(profit_string, currency_accum->profits,
-		     PRTSYM | PRTSEP, 
-                     gnc_commodity_get_mnemonic(currency_accum->currency));
+                      gnc_commodity_print_info (currency_accum->currency,
+                                                TRUE));
     gtk_label_set_text(GTK_LABEL(currency_item->profits_label), profit_string);
     gnc_set_label_color(currency_item->profits_label, currency_accum->profits);
 

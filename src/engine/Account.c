@@ -25,32 +25,24 @@
 #include "config.h"
 
 #include <assert.h>
+#include <glib.h>
 #include <string.h>
 
 #include "Account.h"
 #include "AccountP.h"
-#include "gnc-commodity.h"
-#include "kvp_frame.h"
 #include "date.h"
+#include "gnc-commodity.h"
+#include "gnc-engine-util.h"
 #include "GNCIdP.h"
 #include "Group.h"
 #include "GroupP.h"
+#include "kvp_frame.h"
 #include "messages.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "util.h"
-
-int next_free_unique_account_id = 0;
 
 static short module = MOD_ENGINE; 
 
-#ifndef FALSE
-#define FALSE 0
-#endif
-
-#ifndef TRUE
-#define TRUE 1
-#endif
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *

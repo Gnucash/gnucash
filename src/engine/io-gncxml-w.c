@@ -16,8 +16,8 @@
 #include "messages.h"
 #include "Transaction.h"
 #include "TransLog.h"
-#include "util.h"
 #include "gnc-engine.h"
+#include "gnc-engine-util.h"
 
 #include "io-gncxml.h"
 

@@ -18,7 +18,6 @@ libgncengine_la_SOURCES = \
   Transaction.c \
   TransLog.c \
   date.c \
-  util.c \
   GNCId.c \
   guid.c \
   io-gncbin-r.c \
@@ -28,7 +27,8 @@ libgncengine_la_SOURCES = \
   kvp_frame.c \
   gnc-commodity.c\
   gnc-numeric.c \
-  gnc-engine.c
+  gnc-engine.c \
+  gnc-engine-util.c
 
 libgncengine_la_LDFLAGS = -version-info 2:1:1
 
@@ -55,11 +55,11 @@ noinst_HEADERS = \
   io-gncbin.h \
   io-gncxml.h \
   md5.h \
-  util.h \
   kvp_frame.h \
   gnc-commodity.h \
   gnc-numeric.h \
-  gnc-engine.h
+  gnc-engine.h \
+  gnc-engine-util.h
 
 EXTRA_DIST = \
   .cvsignore \

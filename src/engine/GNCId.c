@@ -1,6 +1,6 @@
 /********************************************************************\
  * GNCId.c -- Gnucash entity identifier implementation              *
- * Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>      *
+ * Copyright (C) 2000 Dave Peticolas <dave@krondo.com>              *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -27,6 +27,7 @@
 #include <glib.h>
 
 #include "GNCIdP.h"
+#include "gnc-engine-util.h"
 
 
 /** #defines ********************************************************/

@@ -37,7 +37,7 @@
 
 #include "basiccell.h"
 #include "recncell.h"
-#include "ui-callbacks.h"
+#include "gnc-ui.h"
 #include "messages.h"
 
 /* hack alert -- I am uncomfortable with including engine

@@ -31,6 +31,7 @@
 
 #include "gnc-common.h"
 #include "gnc-commodity.h"
+#include "gnc-numeric.h"
 #include "kvp_frame.h"
 #include "GNCId.h"
 #include "date.h"

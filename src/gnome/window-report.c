@@ -23,7 +23,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include "top-level.h"
+#include "config.h"
 
 #include <gnome.h>
 #include <sys/stat.h>
@@ -35,10 +35,10 @@
 #include "option-util.h"
 #include "guile-util.h"
 #include "dialog-options.h"
-#include "ui-callbacks.h"
+#include "gnc-ui.h"
 #include "query-user.h"
 #include "messages.h"
-#include "util.h"
+#include "gnc-engine-util.h"
 #include "FileBox.h"
 #include "gfec.h"
 

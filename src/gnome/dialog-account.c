@@ -40,11 +40,11 @@
 #include "gnc-commodity-edit.h"
 #include "gnc-engine.h"
 #include "glade-gnc-dialogs.h"
-#include "ui-callbacks.h"
+#include "gnc-ui.h"
 #include "window-help.h"
 #include "query-user.h"
 #include "messages.h"
-#include "util.h"
+#include "gnc-engine-util.h"
 
 
 typedef enum

@@ -37,8 +37,8 @@
 #include <string.h>
 #include <time.h>
 
-#include "date.h"  /* hack alert -- don't include from engine directory */
-#include "util.h"
+#include "date.h"
+#include "gnc-engine-util.h"
 
 #include "basiccell.h"
 #include "datecell.h"

@@ -26,8 +26,8 @@
 #include "BackendP.h"
 #include "Group.h"
 #include "GroupP.h"
+#include "gnc-engine-util.h"
 #include "TransactionP.h"
-#include "util.h"
 
 /* static short module = MOD_ENGINE; */
 

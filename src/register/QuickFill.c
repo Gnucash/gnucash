@@ -29,7 +29,7 @@
 #include "config.h"
 
 #include "QuickFill.h"
-#include "util.h"
+#include "gnc-engine-util.h"
 
 
 struct _QuickFill

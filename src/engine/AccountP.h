@@ -168,9 +168,4 @@ void         xaccAccountRecomputeBalances (Account **);
  * call this on an existing account! */
 void xaccAccountSetGUID (Account *account, GUID *guid);
 
-
-/** GLOBALS *********************************************************/
-
-extern int next_free_unique_account_id;
- 
 #endif /* __XACC_ACCOUNT_P_H__ */

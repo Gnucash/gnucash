@@ -105,8 +105,9 @@
 #include "TransLog.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
+#include "gnc-engine-util.h"
 #include "GNCIdP.h"
-#include "util.h"
+
 
 #define PERMS   0666
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)

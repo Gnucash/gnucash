@@ -22,7 +22,9 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "gnc-commodity.h"
+#include "gnc-engine.h"
 
 #include "EuroUtils.h"
 
@@ -164,6 +166,16 @@ gnc_convert_from_euro(const gnc_commodity * currency, double value) {
     return 0.0;
 
   return (value * result->rate);
+}
+
+/* ------------------------------------------------------ */
+
+const gnc_commodity *
+gnc_get_euro (void)
+{
+  return gnc_commodity_table_lookup (gnc_engine_commodities (),
+                                     GNC_COMMODITY_NS_ISO,
+                                     "EUR");
 }
 
 /************************** END OF FILE *************************/

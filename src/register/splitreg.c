@@ -46,7 +46,7 @@
 #include "table-allgui.h"
 #include "textcell.h"
 #include "messages.h"
-#include "util.h"
+#include "gnc-engine-util.h"
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -808,8 +808,8 @@ xaccInitSplitRegister (SplitRegister *reg,
   xaccSetPriceCellValue (reg->sharesCell, 0.0);
 
   /* Initialize shares and share balance cells */
-  xaccSetPriceCellSharesValue (reg->sharesCell, TRUE);
-  xaccSetPriceCellSharesValue (reg->shrbalnCell, TRUE);
+  xaccSetPriceCellPrintInfo (reg->sharesCell, gnc_default_share_print_info ());
+  xaccSetPriceCellPrintInfo (reg->shrbalnCell,gnc_default_share_print_info ());
 
   /* The action cell should accept strings not in the list */
   xaccComboCellSetStrict (reg->actionCell, FALSE);
@@ -821,11 +821,10 @@ xaccInitSplitRegister (SplitRegister *reg,
   switch (type)
   {
     case CURRENCY_REGISTER:
-      xaccSetPriceCellIsCurrency (reg->priceCell, TRUE);
-      /* fall through */
     case STOCK_REGISTER:
     case PORTFOLIO_LEDGER:
-      xaccSetPriceCellIsCurrency (reg->priceCell, TRUE);
+      xaccSetPriceCellPrintInfo (reg->priceCell,
+                                 gnc_default_price_print_info ());
 
       xaccSetBasicCellBlankHelp (&reg->priceCell->cell,
                                  _("Enter the share price"));

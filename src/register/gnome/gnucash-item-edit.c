@@ -24,12 +24,12 @@
  */
 
 
-#include <config.h>
+#include "config.h"
 
 #include <gnome.h>
+
 #include "gnucash-item-edit.h"
 #include "gnucash-style.h"
-#include "util.h"
 
 
 /* The arguments we take */

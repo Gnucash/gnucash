@@ -41,7 +41,6 @@
 #include "global-options.h"
 #include "print-session.h"
 #include "File.h"
-#include "util.h"
 
 
 /********************************************************************\
@@ -168,7 +167,7 @@ historyInsert(HTMLHistory *history, HTMLData *data)
   HTMLHistoryNode *new;
   HTMLHistoryNode *temp;
 
-  assert(history != NULL);
+  g_assert(history != NULL);
 
   new = history_node_new(data);
 

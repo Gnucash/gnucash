@@ -25,7 +25,7 @@
 #include <gnome.h>
 
 #include "gnucash-item-list.h"
-#include "util.h"
+#include "gnc-engine-util.h"
 
 
 /* Item list signals */

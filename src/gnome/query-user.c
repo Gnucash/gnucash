@@ -20,14 +20,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include "top-level.h"
+#include "config.h"
 
 #include <gnome.h>
  
-#include "ui-callbacks.h"
+#include "gnc-ui.h"
 #include "messages.h"
 #include "query-user.h"
-#include "util.h"
+#include "gnc-engine-util.h"
 
 
 /* This static indicates the debugging module that this .o belongs to.  */

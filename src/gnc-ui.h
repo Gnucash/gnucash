@@ -1,5 +1,5 @@
 /********************************************************************\
- * ui-callbacks.h                                                   *
+ * gnc-ui.h - High level UI functions for GnuCash                   *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1999, 2000 Rob Browning <rlb@cs.utexas.edu>        *
  *                                                                  *
@@ -16,22 +16,42 @@
  * You should have received a copy of the GNU General Public License*
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
- *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __UI_CALLBACKS_H__
-#define __UI_CALLBACKS_H__
+#ifndef __GNC_UI_H__
+#define __GNC_UI_H__
+
+#include "config.h"
 
 #include <glib.h>
 
-#include "top-level.h"
+#include "gnc-ui-common.h"
+#include "Account.h"
+
+
+/** Help Files ******************************************************/
+#define HH_ABOUT             "xacc-about.html"
+#define HH_ACC               "xacc-newacctwin.html"
+#define HH_REGWIN            "xacc-regwin.html"
+#define HH_RECNWIN           "xacc-recnwin.html"
+#define HH_ADJBWIN           "xacc-adjbwin.html"
+#define HH_MAIN              "index.html"
+#define HH_GPL               "xacc-gpl.html"
+#define HH_GLOBPREFS         "xacc-preferences.html"
+#define HH_ACCEDIT           "xacc-accountedit.html"
+#define HH_QIFIMPORT         "xacc-qif-import.html"
+#define HH_PRINTCHECK        "xacc-print-check.html"
+#define HH_FIND_TRANSACTIONS "xacc-locatingtxns.html"
+#define HH_PRINT             "xacc-print.html"
+#define HH_COMMODITY         "xacc-commodity.html"
+
+
+/* Return the main GnuCash window ***********************************/
+gncUIWidget gnc_get_ui_data(void);
 
 
 /* Dialog windows ***************************************************/
+
 typedef enum
 {
   GNC_VERIFY_NO,
@@ -41,52 +61,66 @@ typedef enum
 } GNCVerifyResult;
 
 GNCVerifyResult
-gnc_verify_cancel_dialog_parented(gncUIWidget parent,
-                                  const char *message,
-                                  GNCVerifyResult default_result);
+         gnc_verify_cancel_dialog_parented(gncUIWidget parent,
+                                           const char *message,
+                                           GNCVerifyResult default_result);
 
 gboolean gnc_verify_dialog_parented(gncUIWidget parent,
                                     const char *message,
                                     gboolean yes_is_default);
 
 GNCVerifyResult
-gnc_ok_cancel_dialog_parented(gncUIWidget parent,
-                              const char *message,
-                              GNCVerifyResult default_result);
+         gnc_ok_cancel_dialog_parented(gncUIWidget parent,
+                                       const char *message,
+                                       GNCVerifyResult default_result);
 
-void gnc_warning_dialog_parented(gncUIWidget parent, const char *message);
+void     gnc_warning_dialog_parented(gncUIWidget parent, const char *message);
 
 gboolean gnc_verify_dialog(const char *message, gboolean yes_is_default);
 void     gnc_error_dialog(const char *message);
 
-int gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
-                                            const char *title,
-                                            const char *msg,
-                                            int default_value,
-                                            char **radio_list);
+int      gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
+                                                 const char *title,
+                                                 const char *msg,
+                                                 int default_value,
+                                                 char **radio_list);
 
 
 /* Managing the GUI Windows *****************************************/
-void gnc_refresh_main_window( void );
-void gnc_ui_destroy_all_subwindows( void );
+
+void gnc_refresh_main_window(void);
+void gnc_ui_destroy_all_subwindows(void);
 
 
 /* Changing the GUI Cursor ******************************************/
-void gnc_set_busy_cursor( gncUIWidget w );
-void gnc_unset_busy_cursor( gncUIWidget w );
+
+void gnc_set_busy_cursor(gncUIWidget w);
+void gnc_unset_busy_cursor(gncUIWidget w);
+
 
 /* Getting main window information **********************************/
+
 Account * gnc_get_current_account(void);
 GList   * gnc_get_current_accounts(void);
 
+
 /* QIF Import Windows ***********************************************/
+
 typedef struct _qifimportwindow QIFImportWindow;
 
 QIFImportWindow * gnc_ui_qif_import_dialog_make(void);
-void gnc_ui_qif_import_dialog_destroy(QIFImportWindow * window);
+void              gnc_ui_qif_import_dialog_destroy(QIFImportWindow * window);
+
 
 /* Register font information ****************************************/
+
 const char * gnc_register_default_font(void);
 const char * gnc_register_default_hint_font(void);
+
+
+/* Reverse balance information **************************************/
+
+gboolean gnc_reverse_balance(Account *account);
+gboolean gnc_reverse_balance_type(GNCAccountType type);
 
 #endif

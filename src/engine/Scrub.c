@@ -41,8 +41,8 @@
 #include "GroupP.h"
 #include "Scrub.h"
 #include "Transaction.h"
+#include "gnc-engine-util.h"
 #include "messages.h"
-#include "util.h"
 
 static short module = MOD_SCRUB;
 static Account * GetOrMakeAccount (Account *, Transaction *, const char *);

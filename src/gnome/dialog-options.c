@@ -38,7 +38,9 @@
 #include "query-user.h"
 #include "window-help.h"
 #include "messages.h"
-#include "util.h"
+#include "gnc-engine-util.h"
+#include "gnc-ui.h"
+
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;

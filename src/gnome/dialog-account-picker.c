@@ -21,7 +21,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include "top-level.h"
+#include "config.h"
 
 #include <gnome.h>
 #include <stdio.h>
@@ -36,7 +36,7 @@
 
 #include "dialog-utils.h"
 #include "query-user.h"
-#include "util.h"
+
 
 static void
 build_acct_tree(AccountGroup * group, GtkWidget * tree, GtkWidget * picker) {

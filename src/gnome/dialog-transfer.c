@@ -39,9 +39,9 @@
 #include "gnc-dateedit.h"
 #include "gnc-exp-parser.h"
 #include "messages.h"
-#include "ui-callbacks.h"
+#include "gnc-ui.h"
 #include "global-options.h"
-#include "util.h"
+#include "gnc-engine-util.h"
 
 
 typedef enum
@@ -932,8 +932,6 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
     GtkWidget *hbox;
 
     amount = gnc_amount_edit_new();
-    gnc_amount_edit_set_print_flags (GNC_AMOUNT_EDIT(amount), PRTSEP);
-
     hbox = gtk_object_get_data(tdo, "amount_hbox");
     gtk_box_pack_end(GTK_BOX(hbox), amount, TRUE, TRUE, 0);
     xferData->amount_edit = amount;
@@ -1012,7 +1010,8 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
     xferData->curr_acct_combo_entry = entry;
 
     edit = gnc_amount_edit_new();
-    gnc_amount_edit_set_print_flags(GNC_AMOUNT_EDIT(edit), PRTSEP | PRTCUR);
+    gnc_amount_edit_set_print_info(GNC_AMOUNT_EDIT(edit),
+                                   gnc_default_price_print_info ());
     hbox = gtk_object_get_data(tdo, "price_hbox");
     gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 0);
     xferData->price_edit = edit;
@@ -1022,7 +1021,6 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
     gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
 
     edit = gnc_amount_edit_new();
-    gnc_amount_edit_set_print_flags(GNC_AMOUNT_EDIT(edit), PRTSEP);
     hbox = gtk_object_get_data(tdo, "to_amount_hbox");
     gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 0);
     xferData->to_amount_edit = edit;

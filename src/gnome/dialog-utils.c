@@ -22,16 +22,18 @@
  *                                                                  *
 \********************************************************************/
 
-#include "top-level.h"
+#include "config.h"
 
-#include "gnome-top-level.h"
 #include "account-tree.h"
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-commodity.h"
 #include "messages.h"
 #include "EuroUtils.h"
-#include "util.h"
+#include "Group.h"
+#include "gnc-engine-util.h"
+#include "gnc-ui-util.h"
+#include "gnc-ui.h"
 
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -274,9 +276,8 @@ gnc_ui_get_account_field_value_string(Account *account, int field)
       {
         double balance = gnc_ui_account_get_balance(account, FALSE);
 
-	return DxaccPrintAmount(balance, PRTSYM | PRTSEP,
-			       gnc_commodity_get_mnemonic
-                               (xaccAccountGetCurrency(account)));
+        return DxaccPrintAmount(balance,
+                                gnc_account_print_info (account, TRUE));
       }
       break;
     case ACCOUNT_BALANCE_EURO :
@@ -286,16 +287,17 @@ gnc_ui_get_account_field_value_string(Account *account, int field)
         double balance = gnc_ui_account_get_balance(account, FALSE);
 	double euro_balance = gnc_convert_to_euro(account_currency, balance);
 
-	return DxaccPrintAmount(euro_balance, PRTSYM | PRTSEP | PRTEUR, NULL);
+	return DxaccPrintAmount(euro_balance,
+                                gnc_commodity_print_info (gnc_get_euro (),
+                                                          TRUE));
       }
       break;
     case ACCOUNT_TOTAL :
       {
 	double balance = gnc_ui_account_get_balance(account, TRUE);
 
-	return DxaccPrintAmount(balance, PRTSYM | PRTSEP,
-			       gnc_commodity_get_mnemonic
-                               (xaccAccountGetCurrency(account)));
+        return DxaccPrintAmount(balance,
+                                gnc_account_print_info (account, TRUE));
       }
       break;
     case ACCOUNT_TOTAL_EURO :
@@ -305,7 +307,9 @@ gnc_ui_get_account_field_value_string(Account *account, int field)
 	double balance = gnc_ui_account_get_balance(account, TRUE);
 	double euro_balance = gnc_convert_to_euro(account_currency, balance);
 
-	return DxaccPrintAmount(euro_balance, PRTSYM | PRTSEP | PRTEUR, NULL);
+	return DxaccPrintAmount(euro_balance,
+                                gnc_commodity_print_info (gnc_get_euro (),
+                                                          TRUE));
       }
       break;
   }

@@ -28,7 +28,8 @@
 #include <glib.h>
 
 #include "gnc-commodity.h"
-#include "util.h"
+#include "gnc-engine-util.h"
+
 
 /* parts per unit is nominal, i.e. number of 'partname' units in
  * a 'unitname' unit.  fraction is transactional, i.e. how many

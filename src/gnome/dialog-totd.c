@@ -22,16 +22,16 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include "top-level.h"
+#include "config.h"
 
 #include <gnome.h>
 
 #include "global-options.h"
 #include "query-user.h"
 #include "messages.h"
-#include "util.h"
 #include "tip-of-the-day.h"
 #include "dialog-totd.h"
+#include "gnc-ui.h"
 
 
 /* This static indicates the debugging module that this .o belongs to.  */

@@ -29,7 +29,7 @@
 
 #include <gnome.h>
 
-#include "util.h"
+#include "gnc-ui-util.h"
 
 BEGIN_GNOME_DECLS
 
@@ -46,7 +46,7 @@ typedef struct
 
   gboolean need_to_parse;
 
-  GNCPrintAmountFlags print_flags;
+  GNCPrintAmountInfo print_info;
   char *currency;
 
   double amount;
@@ -73,8 +73,8 @@ double    gnc_amount_edit_get_amount      (GNCAmountEdit *gae);
 
 gboolean  gnc_amount_edit_evaluate        (GNCAmountEdit *gae);
 
-void      gnc_amount_edit_set_print_flags (GNCAmountEdit *gae,
-                                           GNCPrintAmountFlags print_flags);
+void      gnc_amount_edit_set_print_info (GNCAmountEdit *gae,
+                                          GNCPrintAmountInfo print_info);
 
 void      gnc_amount_edit_set_currency    (GNCAmountEdit *gae,
                                            const char * currency);

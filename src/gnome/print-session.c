@@ -27,11 +27,10 @@
 #include <stdio.h>
 #include <gnome.h>
 
-#include "top-level.h"
 #include "window-help.h"
 #include "messages.h"
 #include "print-session.h"
-#include "ui-callbacks.h"
+#include "gnc-ui.h"
 #include "glade-cb-gnc-dialogs.h"
 
 

@@ -28,7 +28,7 @@
 #include "global-options.h"
 #include "gnc-exp-parser.h"
 #include "messages.h"
-#include "util.h"
+#include "gnc-ui-util.h"
 
 
 /** Data Types *****************************************************/

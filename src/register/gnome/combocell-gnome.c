@@ -41,7 +41,8 @@
 #include "gnucash-item-edit.h"
 #include "gnucash-item-list.h"
 #include "messages.h"
-#include "util.h"
+#include "gnc-engine-util.h"
+#include "gnc-ui-util.h"
 
 
 typedef struct _PopBox

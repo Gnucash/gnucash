@@ -34,7 +34,7 @@
 
 #include "pricecell.h"
 #include "gnc-exp-parser.h"
-#include "util.h"
+#include "gnc-ui-util.h"
 
 
 static gboolean
@@ -88,7 +88,7 @@ PriceDirect (BasicCell *bcell,
             return FALSE;
     }
 
-    if (cell->monetary)
+    if (cell->print_info.monetary)
 	decimal_point = lc->mon_decimal_point[0];
     else
 	decimal_point = lc->decimal_point[0];
@@ -108,7 +108,8 @@ PriceDirect (BasicCell *bcell,
     newval[*cursor_position] = decimal_point;
 
     /* copy the end of oldval : */
-    strcpy (newval + (*cursor_position) + 1, bcell->value + (*cursor_position));
+    strcpy (newval + (*cursor_position) + 1,
+            bcell->value + (*cursor_position));
 
     /* update the cursor position */
     (*cursor_position)++;

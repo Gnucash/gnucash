@@ -24,7 +24,7 @@
  *                                                                  *
 \********************************************************************/
 
-#include <top-level.h>
+#include "config.h"
 
 #include <gnome.h>
 
@@ -32,7 +32,7 @@
 #include "window-html.h"
 #include "File.h"
 #include "messages.h"
-#include "util.h"
+#include "gnc-engine-util.h"
 
 static short module = MOD_HTML; 
 

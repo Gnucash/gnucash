@@ -1,8 +1,6 @@
 /********************************************************************\
- * util.c -- utility functions that are used everywhere else for    *
- *           xacc (X-Accountant)                                    *
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
+ * gnc-ui-util.h -- utility functions for the GnuCash UI            *
+ * Copyright (C) 2000 Dave Peticolas <dave@krondo.com>              *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,13 +18,7 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
- *                                                                  *
- *   Author: Rob Clark (rclark@cs.hmc.edu)                          *
- *   Author: Linas Vepstas (linas@linas.org)                        *
 \********************************************************************/
-
-#define _GNU_SOURCE
-#include <string.h>
 
 #include "config.h"
 
@@ -42,358 +34,21 @@
 #include <math.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
-#include "messages.h"
-#include "gnc-engine.h"
+#include "gnc-ui-util.h"
 #include "gnc-common.h"
-#include "gnc-commodity.h"
-#include "util.h"
-
-/** GLOBALS *********************************************************/
-gncLogLevel loglevel[MOD_LAST + 1] =
-{
-  GNC_LOG_FATAL,        /* DUMMY */
-  GNC_LOG_WARNING,      /* ENGINE */
-  GNC_LOG_WARNING,      /* IO */
-  GNC_LOG_WARNING,      /* REGISTER */
-  GNC_LOG_WARNING,      /* LEDGER */
-  GNC_LOG_WARNING,      /* HTML */
-  GNC_LOG_WARNING,      /* GUI */
-  GNC_LOG_WARNING,      /* SCRUB */
-  GNC_LOG_WARNING,      /* GTK_REG */
-  GNC_LOG_WARNING,      /* GUILE */
-  GNC_LOG_DEBUG,        /* BACKEND */
-  GNC_LOG_WARNING,      /* QUERY */
-};
-
-/* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_ENGINE;
+#include "gnc-engine.h"
+#include "gnc-engine-util.h"
+#include "messages.h"
 
 
-/* Set the logging level of the given module. */
-void
-gnc_set_log_level(gncModuleType module, gncLogLevel level)
-{
-  if ((module < 0) || (module > MOD_LAST))
-    return;
+static short module = MOD_GUI;
 
-  loglevel[module] = level;
-}
-
-/* Set the logging level for all modules. */
-void
-gnc_set_log_level_global(gncLogLevel level)
-{
-  gncModuleType module;
-
-  for (module = 0; module <= MOD_LAST; module++)
-    loglevel[module] = level;
-}
-
-/* prettify() cleans up subroutine names. AIX/xlC has the habit of
- * printing signatures not names; clean this up. On other operating
- * systems, truncate name to 30 chars. Note this routine is not thread
- * safe. Note we wouldn't need this routine if AIX did something more
- * reasonable. Hope thread safety doesn't poke us in eye. */
-static const char *
-prettify (const char *name)
-{
-  static char bf[128];
-  char *p;
-
-  strncpy (bf, name, 29); bf[28] = 0;
-  p = strchr (bf, '(');
-
-  if (p)
-  {
-    *(p+1) = ')';
-    *(p+2) = 0x0;
-  }
-  else
-    strcpy (&bf[26], "...()");
-
-  return bf;
-}
-
-void
-gnc_log (gncModuleType module, gncLogLevel log_level, const char *prefix,
-         const char *function_name, const char *format, ...)
-{
-  va_list ap;
-
-  if (module < 0 || module > MOD_LAST)
-  {
-    PERR ("Bad module: %d", module);
-    return;
-  }
-
-  if (log_level > loglevel[module])
-    return;
-
-  fprintf (stderr, "%s: %s: ", prefix, prettify (function_name));
-
-  va_start (ap, format);
-
-  vfprintf (stderr, format, ap);
-
-  va_end (ap);
-
-  fprintf (stderr, "\n");
-}
-
-/* DxaccParseAmount configuration */
 static gboolean auto_decimal_enabled = FALSE;
 static int auto_decimal_places = 2;    /* default, can be changed */
 
-/* enable/disable the auto_decimal_enabled option */
-void
-gnc_set_auto_decimal_enabled(gboolean enabled)
-{
-  auto_decimal_enabled = enabled;
-}
-
-/* set the number of auto decimal places to use */
-void
-gnc_set_auto_decimal_places( int places )
-{
-  auto_decimal_places = places;
-}
-
-
-/********************************************************************\
-\********************************************************************/
-
-/* Search for str2 in first nchar chars of str1, ignore case.. 
- * Return pointer to first match, or null.
- */
-
-char *
-strncasestr(const char *str1, const char *str2, size_t len) 
-{
-  while (*str1 && len--) 
-  {
-    if (toupper(*str1) == toupper(*str2)) 
-    {
-      if (strncasecmp(str1,str2,strlen(str2)) == 0) 
-      {
-        return (char *) str1;
-      }
-    }
-    str1++;
-  }
-  return NULL;
-}
-
-/* Search for str2 in str1, ignore case. 
- * Return pointer to first match, or null. 
- */
-
-char *
-strcasestr(const char *str1, const char *str2) 
-{
-   size_t len = strlen (str1);
-   char * retval = strncasestr (str1, str2, len);
-   return retval;
-}
-
-/* Reversed strstr -- search for a needle in the haystack,
- * from the far end 
- */
-
-char *
-rstrstr (const char *haystack, const char * needle)
-{
-    int haylen = strlen (haystack);
-    int neelen = strlen (needle);
-
-    const char * hp = haystack + haylen - 1;
-    const char * np = needle + neelen - 1;
-
-    if ((0 == neelen) || (0 == haylen)) return NULL;
-
-    while (hp >= haystack+neelen) {
-        if (*hp == *np) {
-            --np;
-            if (np < needle) return (char *) hp;
-        } else {
-            np = needle + neelen - 1;
-        }
-        --hp;
-    }
-
-    return NULL;
-}
-
-
-/* The strpskip() function locates the first occurrence in the
- * string s that does not match any of the characters in "reject".
- * This is the opposite of strpbrk()
- */
-
-char * 
-strpskip (const char * s, const char *reject)
-{
-   size_t i, rlen;
-   char * retval;
-
-   if (!s) return NULL;
-   if (!reject) return (char *) s;
-
-   rlen = sizeof (reject);
-   retval = (char *) s;
-
-   while (*retval) {
-      int match = 0;
-      for (i=0; i<rlen; i++) {
-         if (reject[i] == *retval) {match=1; break; }
-      }
-      if (!match) return retval;
-      retval ++;
-   }
-   return NULL;
-}
-
-
-/********************************************************************\
-\********************************************************************/
-
-int 
-safe_strcmp (const char * da, const char * db)
-{
-   SAFE_STRCMP (da, db);
-   return 0;
-}
-
-/********************************************************************\
-\********************************************************************/
-/* inverse of strtoul */
-
-#define MAX_DIGITS 50
-
-char *
-ultostr (unsigned long val, int base)
-{
-  char buf[MAX_DIGITS];
-  unsigned long broke[MAX_DIGITS];
-  int i;
-  unsigned long places=0, reval;
-  
-  if ((2>base) || (36<base)) return NULL;
-
-  /* count digits */
-  places = 0;
-  for (i=0; i<MAX_DIGITS; i++) {
-     broke[i] = val;
-     places ++;
-     val /= base;
-     if (0 == val) break;
-  }
-
-  /* normalize */
-  reval = 0;
-  for (i=places-2; i>=0; i--) {
-    reval += broke[i+1];
-    reval *= base;
-    broke[i] -= reval;
-  }
-
-  /* print */
-  for (i=0; i<places; i++) {
-    if (10>broke[i]) {
-       buf[places-1-i] = 0x30+broke[i];  /* ascii digit zero */
-    } else {
-       buf[places-1-i] = 0x41-10+broke[i];  /* ascii capital A */
-    }
-  }
-  buf[places] = 0x0;
-
-  return g_strdup (buf);
-}
-
-/********************************************************************\
- * utility function to convert floating point value to a string
-\********************************************************************/
-
-static int
-util_fptostr(char *buf, double val, int prec)
-{
-  int  i;
-  char formatString[10];
-  char prefix[]  = "%0.";
-  char postfix[] = "f";
-
-  /* This routine can only handle precision between 0 and 9, so
-   * clamp precision to that range */
-  if (prec > 9) prec = 9;
-  if (prec < 0) prec = 0;
-
-  /* Make sure that the output does not resemble "-0.00" by forcing
-   * val to 0.0 when we have a very small negative number */
-  if ((val <= 0.0) && (val > -pow(0.1, prec+1) * 5.0))
-    val = 0.0;
-
-  /* Create a format string to pass into sprintf.  By doing this,
-   * we can get sprintf to convert the number to a string, rather
-   * than maintaining conversion code ourselves.  */
-  i = 0;
-  strcpy(&formatString[i], prefix);
-  i += strlen(prefix);
-  formatString[i] = '0' + prec;  /* add prec to ASCII code for '0' */
-  i += 1;
-  strcpy(&formatString[i], postfix);
-  i += strlen(postfix);
-
-  sprintf(buf, formatString, val);
-
-  return strlen(buf);
-}
-
-/********************************************************************\
- * returns TRUE if the string is a number, possibly with whitespace
-\********************************************************************/
-
-gboolean
-gnc_strisnum(const char *s)
-{
-  if (s == NULL) return FALSE;
-  if (*s == 0) return FALSE;
-
-  while (*s && isspace(*s))
-    s++;
-
-  if (*s == 0) return FALSE;
-  if (!isdigit(*s)) return FALSE;
-
-  while (*s && isdigit(*s))
-    s++;
-
-  if (*s == 0) return TRUE;
-
-  while (*s && isspace(*s))
-    s++;
-
-  if (*s == 0) return TRUE;
-
-  return FALSE;
-}
-
-/********************************************************************\
- * stpcpy for those platforms that don't have it.
-\********************************************************************/
-
-#if !HAVE_STPCPY
-char *
-stpcpy (char *dest, const char *src)
-{
-   strcpy(dest, src);
-   return(dest + strlen(src));
-}
-#endif
-
-
-/********************************************************************\
- * currency & locale related stuff.
-\********************************************************************/
 
 static void
 gnc_lconv_set(char **p_value, char *default_value)
@@ -453,7 +108,7 @@ gnc_locale_default_currency(void)
   struct lconv         * lc;
   static gboolean      got_it = FALSE;
 
-  if (got_it == FALSE)
+  if (!got_it)
   {
     char *symbol;
 
@@ -487,32 +142,231 @@ gnc_locale_decimal_places( void )
   static int places;
   struct lconv *lc;
 
-  if( got_it )
-    return( places );
+  if (got_it)
+    return places;
 
   lc = gnc_localeconv();
   places = lc->frac_digits;
 
-  /* frac_digits is already initialized by gnc_localeconv,
-   * hopefully to a reasonable default.                    */
-
+  /* frac_digits is already initialized by gnc_localeconv, hopefully
+   * to a reasonable default. */
   got_it = TRUE;
 
-  return( places );
+  return places;
 }
 
 
+/* utility function to convert floating point value to a string */
+static int
+util_fptostr(char *buf, double val, int prec)
+{
+  int  i;
+  char formatString[10];
+  char prefix[]  = "%0.";
+  char postfix[] = "f";
+
+  /* This routine can only handle precision between 0 and 9, so
+   * clamp precision to that range */
+  if (prec > 9) prec = 9;
+  if (prec < 0) prec = 0;
+
+  /* Make sure that the output does not resemble "-0.00" by forcing
+   * val to 0.0 when we have a very small negative number */
+  if ((val <= 0.0) && (val > -pow(0.1, prec+1) * 5.0))
+    val = 0.0;
+
+  /* Create a format string to pass into sprintf.  By doing this,
+   * we can get sprintf to convert the number to a string, rather
+   * than maintaining conversion code ourselves.  */
+  i = 0;
+  strcpy(&formatString[i], prefix);
+  i += strlen(prefix);
+  formatString[i] = '0' + prec;  /* add prec to ASCII code for '0' */
+  i += 1;
+  strcpy(&formatString[i], postfix);
+  i += strlen(postfix);
+
+  sprintf(buf, formatString, val);
+
+  return strlen(buf);
+}
+
+
+static char *
+gnc_stpcpy (char *dest, const char *src)
+{
+   strcpy(dest, src);
+   return(dest + strlen(src));
+}
+
+
+GNCPrintAmountInfo
+gnc_default_print_info (gboolean use_symbol)
+{
+  static GNCPrintAmountInfo info;
+  static gboolean got_it = FALSE;
+
+  struct lconv *lc;
+
+  if (got_it)
+    return info;
+
+  lc = gnc_localeconv ();
+
+  info.commodity = gnc_locale_default_currency ();
+
+  info.max_decimal_places = lc->frac_digits;
+  info.min_decimal_places = lc->frac_digits;
+
+  info.use_separators = 1;
+  info.use_symbol = use_symbol ? 1 : 0;
+  info.use_locale = 1;
+  info.monetary = 1;
+
+  got_it = TRUE;
+
+  return info;
+}
+
+static gboolean
+is_decimal_fraction (int fraction, guint8 *max_decimal_places)
+{
+  if (fraction % 10 != 0)
+    return FALSE;
+
+  if (max_decimal_places == NULL)
+    return TRUE;
+
+  *max_decimal_places = 0;
+  while (fraction != 1)
+  {
+    fraction = fraction / 10;
+    *max_decimal_places += 1;
+  }
+
+  return TRUE;
+}
+
+GNCPrintAmountInfo
+gnc_commodity_print_info (const gnc_commodity *commodity,
+                          gboolean use_symbol)
+{
+  GNCPrintAmountInfo info;
+  gboolean is_iso;
+
+  if (commodity == NULL)
+    return gnc_default_print_info (use_symbol);
+
+  info.commodity = commodity;
+
+  is_iso = (safe_strcmp (gnc_commodity_get_namespace (commodity),
+                         GNC_COMMODITY_NS_ISO) == 0);
+
+  if (is_decimal_fraction (gnc_commodity_get_fraction (commodity),
+                           &info.max_decimal_places))
+  {
+    if (is_iso)
+      info.min_decimal_places = info.max_decimal_places;
+    else
+      info.min_decimal_places = 0;
+  }
+  else
+    info.max_decimal_places = info.min_decimal_places = 0;
+
+  info.use_separators = 1;
+  info.use_symbol = use_symbol ? 1 : 0;
+  info.use_locale = is_iso ? 1 : 0;
+  info.monetary = 1;
+
+  return info;
+}
+
+GNCPrintAmountInfo
+gnc_account_print_info (Account *account, gboolean use_symbol)
+{
+  const gnc_commodity *currency;
+
+  currency = xaccAccountGetCurrency (account);
+  if (currency == NULL)
+    return gnc_default_print_info (use_symbol);
+
+  return gnc_commodity_print_info (currency, use_symbol);
+}
+
+GNCPrintAmountInfo
+gnc_split_quantity_print_info (Split *split, gboolean use_symbol)
+{
+  return gnc_account_print_info (xaccSplitGetAccount (split), use_symbol);
+}
+
+GNCPrintAmountInfo
+gnc_split_value_print_info (Split *split, gboolean use_symbol)
+{
+  const gnc_commodity *security;
+
+  security = xaccAccountGetSecurity (xaccSplitGetAccount (split));
+
+  return gnc_commodity_print_info (security, use_symbol);
+}
+
+GNCPrintAmountInfo
+gnc_default_share_print_info (void)
+{
+  static GNCPrintAmountInfo info;
+  static gboolean got_it = FALSE;
+
+  if (got_it)
+    return info;
+
+  info.commodity = NULL;
+
+  info.max_decimal_places = 4;
+  info.min_decimal_places = 0;
+
+  info.use_separators = 1;
+  info.use_symbol = 0;
+  info.use_locale = 1;
+  info.monetary = 1;
+
+  got_it = TRUE;
+
+  return info;
+}
+
+GNCPrintAmountInfo
+gnc_default_price_print_info (void)
+{
+  static GNCPrintAmountInfo info;
+  static gboolean got_it = FALSE;
+
+  if (got_it)
+    return info;
+
+  info.commodity = NULL;
+
+  info.max_decimal_places = 5;
+  info.min_decimal_places = 0;
+
+  info.use_separators = 1;
+  info.use_symbol = 0;
+  info.use_locale = 1;
+  info.monetary = 1;
+
+  got_it = TRUE;
+
+  return info;
+}
+
 /* Utility function for printing non-negative amounts */
 static int
-PrintAmt(char *buf, double val, int prec,
-         gboolean use_separators,
-         gboolean monetary,
-         int min_trailing_zeros)
+PrintAmountInternal(char *buf, double val, const GNCPrintAmountInfo *info)
 {
   int i, string_length, num_whole_digits;
   struct lconv *lc = gnc_localeconv();
   char decimal_point;
   char temp_buf[50];
+
+  g_assert (info != NULL);
 
   /* check if we're printing infinity */
   if (!finite(val)) {
@@ -525,9 +379,9 @@ PrintAmt(char *buf, double val, int prec,
     val = ABS(val);
 
   /* print the value without separators */
-  util_fptostr(temp_buf, val, prec);
+  util_fptostr(temp_buf, val, info->max_decimal_places);
 
-  if (monetary)
+  if (info->monetary)
     decimal_point = lc->mon_decimal_point[0];
   else
     decimal_point = lc->decimal_point[0];
@@ -551,15 +405,15 @@ PrintAmt(char *buf, double val, int prec,
                                         * a whole number */
 
   /* just a quick check */
-  assert (num_whole_digits > 0);
+  g_assert (num_whole_digits > 0);
 
   /* Here we strip off trailing decimal zeros per the argument. */
-  if (prec > 0)
+  if (info->max_decimal_places > 0)
   {
     int max_delete;
     char *p;
 
-    max_delete = prec - min_trailing_zeros;
+    max_delete = info->max_decimal_places - info->min_decimal_places;
 
     p = temp_buf + strlen(temp_buf) - 1;
 
@@ -573,7 +427,7 @@ PrintAmt(char *buf, double val, int prec,
       *p = '\0';
   }
 
-  if (!use_separators)
+  if (!info->use_separators)
   {
     strcpy(buf, temp_buf);
   }
@@ -585,7 +439,7 @@ PrintAmt(char *buf, double val, int prec,
     char *buf_ptr;
     char *group;
 
-    if (monetary)
+    if (info->monetary)
     {
       separator = lc->mon_thousands_sep[0];
       group = lc->mon_grouping;
@@ -643,11 +497,7 @@ PrintAmt(char *buf, double val, int prec,
 }
 
 int
-DxaccSPrintAmountGeneral (char * bufp, double val,
-                         GNCPrintAmountFlags flags,
-                         int precision,
-                         int min_trailing_zeros,
-                         const char *curr_sym)
+DxaccSPrintAmount (char * bufp, double val, GNCPrintAmountInfo info)
 {
    struct lconv *lc;
 
@@ -668,27 +518,29 @@ DxaccSPrintAmountGeneral (char * bufp, double val,
    if (DEQ(val, 0.0))
      val = 0.0;
 
-   if (flags & PRTSHR)
+   if (info.use_symbol)
    {
-     currency_symbol = "shrs";
-     cs_precedes = 0;  /* currency symbol follows amount */
+     if (gnc_commodity_equiv (info.commodity, gnc_locale_default_currency ()))
+       currency_symbol = lc->currency_symbol;
+     else
+     {
+       currency_symbol = gnc_commodity_get_mnemonic (info.commodity);
+       info.use_locale = 0;
+     }
+
+     if (currency_symbol == NULL)
+       currency_symbol = "";
+   }
+   else
+     currency_symbol = NULL;
+
+   if (!info.use_locale)
+   {
+     cs_precedes = 1;  /* currency symbol precedes amount */
      sep_by_space = 1; /* they are separated by a space  */
    }
    else
    {
-     if (flags & PRTEUR)
-     {
-       currency_symbol = "EUR ";
-     }
-     else if (curr_sym == NULL)
-     {
-       currency_symbol = lc->currency_symbol;
-     }
-     else
-     {
-       currency_symbol = curr_sym;
-     }
-
      if (val < 0.0)
      {
        cs_precedes  = lc->n_cs_precedes;
@@ -717,139 +569,75 @@ DxaccSPrintAmountGeneral (char * bufp, double val,
 
    /* See if we print sign now */
    if (print_sign && (sign_posn == 1))
-     bufp = stpcpy(bufp, sign);
+     bufp = gnc_stpcpy(bufp, sign);
 
    /* Now see if we print currency */
    if (cs_precedes)
    {
      /* See if we print sign now */
      if (print_sign && (sign_posn == 3))
-       bufp = stpcpy(bufp, sign);
+       bufp = gnc_stpcpy(bufp, sign);
 
-     if (flags & PRTSYM)
+     if (info.use_symbol)
      {
-       bufp = stpcpy(bufp, currency_symbol);
+       bufp = gnc_stpcpy(bufp, currency_symbol);
        if (sep_by_space)
-         bufp = stpcpy(bufp, " ");
+         bufp = gnc_stpcpy(bufp, " ");
      }
 
      /* See if we print sign now */
      if (print_sign && (sign_posn == 4))
-       bufp = stpcpy(bufp, sign);
+       bufp = gnc_stpcpy(bufp, sign);
    }
 
    /* Now see if we print parentheses */
    if (print_sign && (sign_posn == 0))
-     bufp = stpcpy(bufp, "(");
+     bufp = gnc_stpcpy(bufp, "(");
 
    /* Now print the value */
-   bufp += PrintAmt(bufp, ABS(val), precision, flags & PRTSEP,
-                    !(flags & PRTNMN), min_trailing_zeros);
+   bufp += PrintAmountInternal(bufp, ABS(val), &info);
 
    /* Now see if we print parentheses */
    if (print_sign && (sign_posn == 0))
-     bufp = stpcpy(bufp, ")");
+     bufp = gnc_stpcpy(bufp, ")");
 
    /* Now see if we print currency */
    if (!cs_precedes)
    {
      /* See if we print sign now */
      if (print_sign && (sign_posn == 3))
-       bufp = stpcpy(bufp, sign);
+       bufp = gnc_stpcpy(bufp, sign);
 
-     if (flags & PRTSYM)
+     if (info.use_symbol)
      {
        if (sep_by_space)
-         bufp = stpcpy(bufp, " ");
-       bufp = stpcpy(bufp, currency_symbol);
+         bufp = gnc_stpcpy(bufp, " ");
+       bufp = gnc_stpcpy(bufp, currency_symbol);
      }
 
      /* See if we print sign now */
      if (print_sign && (sign_posn == 4))
-       bufp = stpcpy(bufp, sign);
+       bufp = gnc_stpcpy(bufp, sign);
    }
 
    /* See if we print sign now */
    if (print_sign && (sign_posn == 2))
-     bufp = stpcpy(bufp, sign);
+     bufp = gnc_stpcpy(bufp, sign);
 
    /* return length of printed string */
    return (bufp - orig_bufp);
 }
 
-int
-DxaccSPrintAmount (char * bufp, double val, GNCPrintAmountFlags flags,
-                  const char * curr_code) 
-{
-   struct lconv *lc;
-   int precision;
-   int min_trailing_zeros;
-   char curr_sym[5];
-
-   lc = gnc_localeconv();
-
-   if (curr_code && (strncmp(curr_code, lc->int_curr_symbol, 3) == 0))
-     curr_code = NULL;
-   else if (curr_code)
-   {
-     strncpy(curr_sym, curr_code, 3);
-     curr_sym[3] = '\0';
-     strcat(curr_sym, " ");
-     curr_code = curr_sym;
-   }
-
-   if (curr_code && (strncmp(curr_code, "EUR", 3) == 0))
-     flags |= PRTEUR;
-
-   if (flags & PRTCUR)
-   {
-     precision = 5;
-     min_trailing_zeros = 0;
-   }
-   else if (flags & PRTSHR)
-   {
-     precision = 4;
-     min_trailing_zeros = 0;
-   }
-   else if (flags & PRTEUR)
-   {
-     precision = 2;
-     min_trailing_zeros = 2;
-   }
-   else
-   {
-     precision = lc->frac_digits;
-     min_trailing_zeros = lc->frac_digits;
-   }
-
-   return DxaccSPrintAmountGeneral(bufp, val, flags, precision,
-                                  min_trailing_zeros, curr_code);
-}
-
 const char *
-DxaccPrintAmount (double val, GNCPrintAmountFlags flags, const char *curr_code) 
+DxaccPrintAmount (double val, GNCPrintAmountInfo info)
 {
    /* hack alert -- this is not thread safe ... */
    static char buf[BUFSIZE];
 
-   DxaccSPrintAmount (buf, val, flags, curr_code);
+   DxaccSPrintAmount (buf, val, info);
 
    /* its OK to return buf, since we declared it static */
    return buf;
-}
-
-const char *
-DxaccPrintAmountArgs (double val, gboolean print_currency_symbol,
-                     gboolean print_separators, gboolean is_shares_value,
-                     const char *curr_code)
-{
-  GNCPrintAmountFlags flags = 0;
-
-  if (print_currency_symbol) flags |= PRTSYM;
-  if (print_separators)      flags |= PRTSEP;
-  if (is_shares_value)       flags |= PRTSHR;
-
-  return DxaccPrintAmount(val, flags, curr_code);
 }
 
 
@@ -1344,6 +1132,16 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
   return TRUE;
 }
 
+/* enable/disable the auto_decimal_enabled option */
+void
+gnc_set_auto_decimal_enabled(gboolean enabled)
+{
+  auto_decimal_enabled = enabled;
+}
 
-/************************* END OF FILE ******************************\
-\********************************************************************/
+/* set the number of auto decimal places to use */
+void
+gnc_set_auto_decimal_places( int places )
+{
+  auto_decimal_places = places;
+}

@@ -35,7 +35,7 @@
 #include "gnc-dateedit.h"
 #include "query-user.h"
 #include "messages.h"
-#include "util.h"
+#include "gnc-engine-util.h"
 
 
 typedef enum
@@ -141,7 +141,7 @@ fi_to_gui(FinCalcDialog *fcd)
                               -fcd->financial_info.fv);
   total = fcd->financial_info.npp * fcd->financial_info.pmt;
 
-  DxaccSPrintAmount (string, total, PRTSEP, NULL);
+  DxaccSPrintAmount (string, total, gnc_default_print_info (FALSE));
   gtk_label_set_text (GTK_LABEL(fcd->payment_total_label), string);
 
   i = normalize_period(&fcd->financial_info.CF);
@@ -514,7 +514,6 @@ gnc_ui_fincalc_dialog_create(void)
 
   edit = gnc_amount_edit_new();
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
-  gnc_amount_edit_set_print_flags (GNC_AMOUNT_EDIT(edit), PRTSEP);
   fcd->amounts[PRESENT_VALUE] = edit;
   gtk_widget_show (edit);
 
@@ -528,7 +527,6 @@ gnc_ui_fincalc_dialog_create(void)
 
   edit = gnc_amount_edit_new();
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
-  gnc_amount_edit_set_print_flags (GNC_AMOUNT_EDIT(edit), PRTSEP);
   fcd->amounts[PERIODIC_PAYMENT] = edit;
   gtk_widget_show (edit);
 
@@ -542,7 +540,6 @@ gnc_ui_fincalc_dialog_create(void)
 
   edit = gnc_amount_edit_new();
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
-  gnc_amount_edit_set_print_flags (GNC_AMOUNT_EDIT(edit), PRTSEP);
   fcd->amounts[FUTURE_VALUE] = edit;
   gtk_widget_show (edit);
 

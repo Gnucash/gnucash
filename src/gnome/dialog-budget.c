@@ -28,7 +28,8 @@
 #include "gnc-datedelta.h"
 #include "guile-util.h"
 #include "messages.h"
-#include "util.h"
+#include "gnc-engine-util.h"
+#include "gnc-ui-util.h"
 
 
 /** Datatypes ***********************************************************/
@@ -362,7 +363,7 @@ load_subentry(BudgetDialog *bd)
 
     value = gh_call1(getters.subentry_amount, subentry);
     amount = gh_scm2double(value);
-    const_string = DxaccPrintAmount(amount, PRTSEP, NULL);
+    const_string = DxaccPrintAmount(amount, gnc_default_print_info (FALSE));
     gtk_entry_set_text(GTK_ENTRY(bd->subentry_amount_entry), const_string);
 
     value = gh_call1(getters.subentry_period, subentry);
@@ -868,7 +869,7 @@ subentry_amount_entry_focus_out(GtkWidget *widget, GdkEventFocus *event,
   value = 0.0;
   DxaccParseAmount(string, TRUE, &value, NULL);
 
-  new_string = DxaccPrintAmount(value, PRTSEP, NULL);
+  new_string = DxaccPrintAmount(value, gnc_default_print_info (FALSE));
 
   if (safe_strcmp(string, new_string) == 0)
     return FALSE;

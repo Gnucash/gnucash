@@ -20,14 +20,10 @@
 
 #include "config.h"
 
-#include "top-level.h"
-
 #include "Refresh.h"
 #include "MultiLedger.h"
 #include "RecnWindow.h"
 #include "AccWindow.h"
-
-#include "util.h"
 
 
 /* ------------------------------------------------------ */

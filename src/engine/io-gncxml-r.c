@@ -15,7 +15,6 @@
 #include <xmlmemory.h>
 #include <parserInternals.h>
 
-#include "util.h"
 #include "Account.h"
 #include "date.h"
 #include "DateUtils.h"
@@ -24,6 +23,7 @@
 #include "Transaction.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
+#include "gnc-engine-util.h"
 
 #include "io-gncxml.h"
 

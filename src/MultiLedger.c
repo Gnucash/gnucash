@@ -32,7 +32,7 @@
 #include "Transaction.h"
 #include "FileDialog.h"
 #include "global-options.h"
-#include "util.h"
+#include "gnc-engine-util.h"
 
 
 /** GLOBALS *********************************************************/

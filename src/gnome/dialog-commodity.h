@@ -26,7 +26,6 @@
 
 #include "glade-gnc-dialogs.h"
 #include "glade-cb-gnc-dialogs.h"
-#include "ui-callbacks.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 

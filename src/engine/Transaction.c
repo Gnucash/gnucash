@@ -39,9 +39,9 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
-#include "util.h"
 #include "date.h"
 #include "gnc-commodity.h"
+#include "gnc-engine-util.h"
 
 /* 
  * The "force_double_entry" flag determines how 

@@ -26,7 +26,7 @@
 
 #include <gnome.h>
 
-#include "ui-callbacks.h"
+#include "gnc-ui.h"
 #include "cursors.h"
 
 

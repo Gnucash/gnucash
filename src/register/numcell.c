@@ -34,7 +34,8 @@
 #include <string.h>
 
 #include "numcell.h"
-#include "util.h"
+#include "gnc-engine-util.h"
+
 
 /* This static indicates the debugging module that this .o belongs to. */
 /* static short module = MOD_REGISTER; */

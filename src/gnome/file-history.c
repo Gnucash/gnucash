@@ -26,9 +26,9 @@
 
 #include "file-history.h"
 #include "FileDialog.h"
-#include "ui-callbacks.h"
+#include "gnc-ui.h"
 #include "messages.h"
-#include "util.h"
+
 
 static GSList *history_list = NULL;
 static gint num_menu_entries = -1;

@@ -36,7 +36,8 @@
 #include "gnc-exp-parser.h"
 #include "messages.h"
 #include "query-user.h"
-#include "ui-callbacks.h"
+#include "gnc-ui-util.h"
+#include "gnc-engine-util.h"
 
 
 /* Signal codes */
@@ -122,7 +123,7 @@ gnc_amount_edit_init (GNCAmountEdit *gae)
 {
   gae->need_to_parse = FALSE;
   gae->amount = 0.0;
-  gae->print_flags = 0;
+  gae->print_info = gnc_default_print_info (FALSE);
   gae->currency = NULL;
   gae->evaluate_on_enter = FALSE;
 }
@@ -322,7 +323,7 @@ gnc_amount_edit_set_amount (GNCAmountEdit *gae, double amount)
   gae->amount = amount;
   gae->need_to_parse = FALSE;
 
-  amount_string = DxaccPrintAmount (amount, gae->print_flags, gae->currency);
+  amount_string = DxaccPrintAmount (amount, gae->print_info);
 
   gtk_entry_set_text (GTK_ENTRY (gae->amount_entry), amount_string);
 }
@@ -336,13 +337,14 @@ gnc_amount_edit_set_amount (GNCAmountEdit *gae, double amount)
  * Returns nothing.
  */
 void
-gnc_amount_edit_set_print_flags (GNCAmountEdit *gae,
-                                 GNCPrintAmountFlags print_flags)
+gnc_amount_edit_set_print_info (GNCAmountEdit *gae,
+                                GNCPrintAmountInfo print_info)
 {
   g_return_if_fail(gae != NULL);
   g_return_if_fail(GNC_IS_AMOUNT_EDIT(gae));
 
-  gae->print_flags = print_flags;
+  gae->print_info = print_info;
+  gae->print_info.use_symbol = 0;
 }
 
 
