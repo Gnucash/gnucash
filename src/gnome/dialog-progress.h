@@ -34,7 +34,8 @@ typedef gboolean (*GNCProgressCancelFunc) (gpointer user_data);
 
 /* Create and return a dialog for displaying the progress of
  * an activity. Useful for long-running operations. */
-GNCProgressDialog * gnc_progress_dialog_new (GtkWidget *parent);
+GNCProgressDialog * gnc_progress_dialog_new (GtkWidget *parent,
+                                             gboolean use_ok_button);
 
 /* Set the title of the progress dialog. */
 void gnc_progress_dialog_set_title (GNCProgressDialog *progress,

@@ -44,15 +44,15 @@
          (file-size (stat:size file-stats))
          (bytes-read 0))
     (set! start-time (gettimeofday))
-    
+
     (if (> file-size 10000)
         (begin
-          (set! progress-dialog (gnc:progress-dialog-new #f))
+          (set! progress-dialog (gnc:progress-dialog-new #f #f))
           (gnc:progress-dialog-set-title progress-dialog "Progress")
           (gnc:progress-dialog-set-heading progress-dialog
                                            "Loading QIF file...")
           (gnc:progress-dialog-set-limits progress-dialog 0.0 100.0)))
-                                          
+
     (with-input-from-file path
       (lambda ()
         ;; loop over lines

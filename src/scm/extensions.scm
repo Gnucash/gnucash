@@ -68,13 +68,13 @@
                         (list "Extensions" "")
                         (lambda () (gnc:main-win-account-group-write win))))
 
-  (define export-item
+  (define progress-item
     (gnc:make-menu-item "Test progress dialog"
                         "Test progress dialog"
                         (list "Extensions" "")
                         (lambda ()
                           (let ((dialog (gnc:progress-dialog-new
-                                         (gnc:get-ui-data)))
+                                         (gnc:get-ui-data) #f))
                                 (canceled #f))
                             (gnc:progress-dialog-set-cancel-scm-func
                              dialog
@@ -104,6 +104,7 @@
 
   (gnc:add-extension menu)
   (gnc:add-extension export-item)
+  (gnc:add-extension progress-item)
 
   (if (gnc:debugging?)
       (gnc:add-extension strings-item)))

@@ -46,6 +46,7 @@ struct _GNCProgressDialog
 
   SCM cancel_scm_func;
 
+  gboolean use_ok_button;
   gboolean closed;
   gboolean finished;
   gboolean destroyed;
@@ -184,6 +185,9 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
   gtk_signal_connect(GTK_OBJECT(progress->ok_button), "clicked",
                      GTK_SIGNAL_FUNC(ok_cb), progress);
 
+  if (!progress->use_ok_button)
+    gtk_widget_hide (progress->ok_button);
+
   progress->cancel_button = gtk_object_get_data(tdo, "cancel_button");
 
   gtk_signal_connect(GTK_OBJECT(progress->cancel_button), "clicked",
@@ -201,11 +205,13 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
 }
 
 GNCProgressDialog *
-gnc_progress_dialog_new (GtkWidget * parent)
+gnc_progress_dialog_new (GtkWidget * parent, gboolean use_ok_button)
 {
   GNCProgressDialog *progress;
 
   progress = g_new0(GNCProgressDialog, 1);
+
+  progress->use_ok_button = use_ok_button;
 
   gnc_progress_dialog_create(parent, progress);
 
@@ -321,6 +327,12 @@ gnc_progress_dialog_finish (GNCProgressDialog *progress)
 {
   if (progress == NULL)
     return;
+
+  if (!progress->use_ok_button)
+  {
+    gtk_widget_hide (progress->dialog);
+    progress->closed = TRUE;
+  }
 
   gtk_progress_set_percentage (GTK_PROGRESS (progress->progress_bar), 1.0);
 
