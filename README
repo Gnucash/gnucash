@@ -1,10 +1,10 @@
 -*-text-*-
 
 ************ DEVELOPMENT  RELEASE ******************
-The version 1.3.x series of gnucash are experimental development
+The version 1.3.x series of GnuCash are experimental development
 releases.  They may or may not work. Use at your own risk.
 
-The last stable, production version was xacc-1.2.0
+The last stable, production version was gnucash-1.2.0
 The next stable, production version will be gnucash-1.4.x 
 
 ##############################################
@@ -22,7 +22,7 @@ Features include:
   - An easy-to-use interface.  If you can use the
     register in the back of your checkbook, you 
     can use GnuCash.  Type directly into the register,
-    tab between fields, and use quickfill to
+    tab between fields, and use quick-fill to
     automatically complete the transaction.
   - Reconcile window  with running reconciled 
     and cleared balances makes reconciliation easy.
@@ -34,10 +34,10 @@ Features include:
     currencies are supported and can be bought and
     sold (traded).  Currency movements between accounts
     are fully balanced when double-entry is enabled.
-    (Some aspects of mutiple currency support are not 
+    (Some aspects of multiple currency support are not 
     fully implemented.)
   - Quicken File Import: Import Quicken QIF style files.
-    QIF files are automtically merged to eliminate 
+    QIF files are automatically merged to eliminate 
     duplicate transactions.
   - Reports: Display Balance Sheet, Profit&Loss, Portfolio 
     Valuation, or print them as HTML.
@@ -47,7 +47,7 @@ Features include:
     into one master account (e.g. Assets).
   - Split Transactions: A single transaction can be split
     into several pieces to record taxes, fees, and
-    other compund entries.
+    other compound entries.
   - Double Entry: When enabled, every transaction must 
     debit one account and credit another by an equal amount.
     This ensures that the "books balance": that the 
@@ -64,7 +64,7 @@ Features include:
     portfolio of many stocks, by showing all transactions
     in that portfolio.
   - Written in C with embedded scheme support via Guile.
-  - Perl support is optionally available for standalone scripting via SWIG.
+  - Perl support is optionally available for stand-alone scripting via SWIG.
   - File access is locked in a network-safe fashion, preventing
     accidental damage if several users attempt to access the 
     same file, even if the file is NFS-mounted.
@@ -81,28 +81,71 @@ Home Page:
 ----------
 http://gnucash.org/
 
-Origianl X-Accountant home page:
+Original X-Accountant home page:
 http://www.cs.hmc.edu/~rclark/xacc
 
-Precomipled binaries:
+Precompiled binaries:
 ftp://ftp.ultra.net/pub/eugene/RPMS/i386/
 
 Development versions:
-http://linas.org/linux/xacc/
+http://linas.org/linux/gnucash/
 
 Running:
 --------
 Only the Motif version of GnuCash is currently functional.  The Gnome version
-will give you a taste for Gnome, but most functions will not work.   The qt
-version doesn't compile, most functions are missing.  See below for OS's other
-than Linux/*BSD support.
+will give you a taste for Gnome, and is coming along fine, but is probably not
+stable enough for regular use.   The qt/kde version doesn't compile, most 
+functions are missing.  See below for OS's other than Linux/*BSD support.
+
+The following packages are required to be installed to run the gnucash 
+Motif binary:
+
+guile   -- Provides main extension language infrastructure.
+           This is used extensively in gnucash for initialization & startup.
+           Require version 1.3 or later (or build 1998.08.18 or 1998.09.10 or later) ...
+           ftp://ftp.gnucash.org/pub/gnucash/extra_libs/TAR/guile-core-19980818.tar.gz 
+           guile-core-19980818-1.i386.rpm works
+           guile-1.3.1-1 from redhat.com/pub/rawhide works ...
+
+Motif or Lesstif  --
+           Either a commercial Motif, or the free software clone Lesstif is
+           needed.  If you use a commercial version of Motif (widely available
+           for roughly 50 USD), be sure to get a version compatible with your
+           glibc and libXt version.  Lesstif mostly works, but there have been
+           problems.  Here's our experience:
+
+           Lesstif 0.81    works   
+           Lesstif 0.82    broken    
+           Lesstif 0.83    works ... but get fast blinking cursor ...
+           Lesstif 0.86.0  is reported to work     
+           Lesstif 0.86.5  crashes.   
+           Lesstif 0.86.9  works ... but some menus come out 2 pixels high.(?)
+           Lesstif 0.87.0: broken (missing symbols for XmeDrawShadows, etc.)
+           Lesstif 0.88.1  works
+
+XmHTML  -- Provides HTML display capabilities. Used for Help Dialogues, Reports.
+           Require version 1.1.4 or later
+           http://www.llp.fu-berlin.de/lsoft/F/5/XMHTML.html
+           http://www.xs4all.nl/~ripley/XmHTML/XmHTML.html
+           ftp://ftp.ultra.net/pub/eugene/RPMS/i386/XmHTML-1.1.5-1.i386.rpm
+           ftp://ftp.ultra.net/pub/eugene/SRPMS/XmHTML-1.1.5-1.src.rpm
+
+           Note: some precompiled versions of XmHTML have been compiled with 
+           Motif.  When used with most precompiled versions of Lesstif, you 
+           will get a "undefined symbol XmeDrawShadows" error.  There are several
+           solutions; the simplest is probably to download the XmHTML source
+           package and compile it yourself.
+
+libpng  -- portable network graphics library. Any version.
+libjpeg -- JPEG image handling library. Any version.
+libz    -- compression library. Any version.
+xpm     -- X Pixmap extension. Any version.
+
 
 To be able to use certain features of GnuCash, such as reports and
 network stock price downloads, you must have the following packages
-below installed (in addition to the packages you need to install in
-order to build GnuCash.  See "Building & Installing" below for more
-details).  RPM's for most of these can be found at
-http://rufus.w3.org/linux/
+below installed (in addition to those listed above).
+RPM's for most of these can be found at http://rufus.w3.org/linux/
 
 slib    -- scheme libraries for guile.  Need version slib2c0 or later.
 perl    -- Almost any version of perl5 should work.  I run perl-5.004 
@@ -117,26 +160,14 @@ perl-HTML/HTML-Parser-2.20
            off the net.  You can pick up RPMS at
            ftp://ftp.gnucash.org/pub/gnucash/binaries/RPMS
            http://rufus.w3.org/linux/RPM/PByName.html
-           http://linas.org/linux/xacc (last resort)
+           http://linas.org/linux/gnucash (last resort)
            or sources at
            http://www.cpan.org/CPAN.html
 
-The binary-only distribution of GnuCash comes with several executables: 
-one has Motif statically linked in, and another has Motif linked in dynamically.
-The motif dynamic-link version requires that either motif or lesstif be
-installed.  Motif is a commercial product available form several vendors for
-approx $50.  Lesstif is an open source clone available for free. Note that 
-not all version of lesstif work with Gnucash: thhe the note below.
 
-The binary-only distribution includes two binary files: 'gnucash.bin'
-and 'gnucash-static.bin'. The former requires a Motif shared library;
-the latter has Motif statically linked in.  If you have Motif,
-then just run xacc.  If you do not have Motif, then copy 
-'gnucash-static.bin' to 'gnucash.bin'.
 
 Invocation:
 -----------
-
 You can start GnuCash at the command-line, with "gnucash" or "gnucash
 <filename>", where <filename> is a GnuCash account file.  Sample
 accounts can be found in "data" subdirectory.  *.dat files are GnuCash
@@ -171,25 +202,6 @@ GnuCash responds to the following environment variables:
   GNC_DEBUG - enable debugging output.  This allows you to turn on
   debugging earlier in the startup process than you can with --debug.
 
-Important Note:
----------------
-Core dumps have been reported when using various
-versions of lesstif.  Some versions work, others don't.
-Lesstif 0.81: works
-Lesstif 0.82: broken
-Lesstif 0.86.0: works
-Lesstif 0.86.5: broken
-Lesstif 0.86.9  works 
-Lesstif 0.87.0: works 
-Lesstif 0.88.1: works 
-
-Note: some versions of XmHTML have been compiled with Motif, and these
-need XmeDrawShadows to link and run.  However, this is an undefined symbol
-in most versions of lesstif. Solution: download XmHTML source and 
-compile/install it.
-
-These core dumps do not occur with RedHat Motif (or other commercial
-versions of Motif).
 
 Other Tools
 -----------
@@ -201,65 +213,20 @@ here).
 
 Building & Installing:
 ----------------------
-These steps does not apply to binary distributions; only to
-source distributions.  
+These steps does not apply to binary distributions; only to source distributions.  
 
 Prior to building GnuCash, you will have to obtain and install the following
 packages:
 
 libtool -- Used to build our internal version of g-wrap which handles
            our guile C wrappers.  Available at ftp://ftp.gnu.org/gnu.
-           RPM's and debs are widely available with most disributions.
+           RPM's and debs are widely available with most distributions.
 nana    -- Used to provide a debugging infrastructure.
            Any version should work.
            http://www.fsf.org/software/nana/nana.html
 	   http://www.cs.ntu.edu.au/homepages/pjm/nana-home/
 SWIG    -- Used to autogenerate perl wrappers.
            available at www.swig.org need 1.1p5 or later ...
-guile   -- Provides main extension language infrastructure.
-           This is used extensively in gnucash for initialization & startup.
-           need version 1.3 or later (or build 1998.08.18 or 1998.09.10 or later) ...
-           ftp://ftp.gnucash.org/pub/gnucash/extra_libs/TAR/guile-core-19980818.tar.gz 
-           guile-core-19980818-1.i386.rpm works
-           guile-1.3.1-1 from redhat.com/pub/rawhide works ...
-eperl   -- embeddedPerl needed for Reports.  The menu item "Reports" will not
-           work witout this.
-           version eperl-2.2.14 works well with perl 5.00404
-           http://www.engelschall.com/sw/eperl/
-           ftp://ftp.ultra.net/pub/eugene/RPMS/i386/eperl-2.2.14-1.i386.rpm
-
-Motif or Lesstif  --
-           Lesstif 0.81    works   
-           Lesstif 0.82    broken    
-           Lesstif 0.83    works ... but get fast blinking cursor ...
-           Lesstif 0.86.0  is reported to work     
-           Lesstif 0.86.5  crashes.   
-           Lesstif 0.86.9  works ... but some menus come out 2 pixels high.
-           Lesstif 0.87.0: broken (missing symbols for XmeDrawShadows, etc.)
-           Commercial Motif seems to work, but beware old libXm's 
-           combined with new glibc's, 
-
-XmHTML  -- Provides HTML display capabilities. Used for Help Dialogues, Reports.
-           version 1.1.4 or later
-           http://www.llp.fu-berlin.de/lsoft/F/5/XMHTML.html
-           http://www.xs4all.nl/~ripley/XmHTML/XmHTML.html
-           ftp://ftp.ultra.net/pub/eugene/RPMS/i386/XmHTML-1.1.5-1.i386.rpm
-           ftp://ftp.ultra.net/pub/eugene/SRPMS/XmHTML-1.1.5-1.src.rpm
-
-libpng  -- portable network graphics library
-libjpeg -- JPEG image handling library
-libz    -- compression library
-xpm     -- X Pixmap extension
-
-perl-LWP/libwww-perl-5.36 
-perl-HTML/HTML-0.6
-perl-HTML/HTML-Parser-2.20
-        -- these perl modules are used to fetch stock & mutual fund quotes 
-           off the net.  You can pick up RPMS at 
-           http://rufus.w3.org/linux/RPM/PByName.html
-           http://linas.org/linux/xacc (last resort)
-           or sources at 
-           http://www.cpan.org/CPAN.html
 
 Normally, to build and install GnuCash, all you have to do is:
 
@@ -268,14 +235,13 @@ Normally, to build and install GnuCash, all you have to do is:
   # make install
 
 To build French or German language versions, or to enable European date
-handling, you will need to examine & modify the contents of the /include
-directory.
+handling, you will need to examine & modify the language setup in the 
+/include/messages.h file.
 
 You can build Motif, Gnome, and Qt versions. Currently, the Motif version
 is the most stable, bug-free, correct, and feature rich.  The gtk/gnome
-version compiles and is being actively developed, but will take a while to
-reach the stibility level of the motif version. The Qt version may not 
-compile.
+version compiles and is being actively developed, is not yet at the stability
+level of the Motif version. The Qt version may not compile.
 
 Depending on your make target, you'll produce:
 
@@ -284,6 +250,11 @@ Depending on your make target, you'll produce:
   gnucash.gnome
   gnucash.gnome.static
   gnucash.qt
+
+The 'static' version statically link in the libraries that GnuCash uses.
+For example, gnucash.motif.static is handy when compiling against a 
+commercial version of Motif, and distributing this version to the
+general public.
 
 Whichever one you produce last ends up the target of a local
 gnucash.bin symlink, so that you can always run the local ./gnucash
@@ -335,7 +306,7 @@ to that location.  This feature is mostly useful for package
 builders, but it shouldn't hurt anyone else.
 
 Only the location of startup.scm is hardcoded into the
-binary, and even that can be overriden with --startup-file on the
+binary, and even that can be overridden with --startup-file on the
 command line.  The other defaults are now in startup.scm.
 path-defaults.h is now gone.  The startup file setting is in
 gnucash.h, generated from gnucash.h.in.
@@ -360,8 +331,8 @@ Unixware 7            -- Intel
 SCO OpenServer 5.0.4  -- Intel
 Solaris               -- Sparc  
 
-See ftp://ftp.gnucash.org/pub/xacc (high-bandwdith)
-or  http://linas.org/linux/xacc (slowwww ) 
+See ftp://ftp.gnucash.org/pub/xacc (high-bandwidth)
+or  http://linas.org/linux/gnucash (slow-www ) 
 for precompiled binaries for these platforms
 
 
@@ -415,7 +386,7 @@ Linas Vepstas <linas@linas.org> liked what he saw: the GUI was slick,
    the code was documented and well structured, and it was all GPL'ed.  
    And so he re-wrote it: adding cell-widgets to XbaeMatrix, so that 
    the combobox and arrows would make an even slicker GUI, rewrote the 
-   X-Accountant internals to add double-entry, an account heirarchy,
+   X-Accountant internals to add double-entry, an account hierarchy,
    split out a transaction mini-engine, add support for stocks, and spiff
    up the help menus.  This was version 1.0 as of January 1998.  Since
    then, for version 1.1, the engine was expanded & refined, and the 
