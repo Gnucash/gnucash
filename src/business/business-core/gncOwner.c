@@ -61,6 +61,13 @@ void gncOwnerInitVendor (GncOwner *owner, GncVendor *vendor)
   owner->owner.vendor = vendor;
 }
 
+void gncOwnerInitEmployee (GncOwner *owner, GncEmployee *employee)
+{
+  if (!owner) return;
+  owner->type = GNC_OWNER_EMPLOYEE;
+  owner->owner.employee = employee;
+}
+
 GncOwnerType gncOwnerGetType (const GncOwner *owner)
 {
   if (!owner) return GNC_OWNER_NONE;
@@ -95,6 +102,13 @@ GncVendor * gncOwnerGetVendor (const GncOwner *owner)
   return owner->owner.vendor;
 }
 
+GncEmployee * gncOwnerGetEmployee (const GncOwner *owner)
+{
+  if (!owner) return NULL;
+  if (owner->type != GNC_OWNER_EMPLOYEE) return NULL;
+  return owner->owner.employee;
+}
+
 gnc_commodity * gncOwnerGetCurrency (GncOwner *owner)
 {
   if (!owner) return NULL;
@@ -107,6 +121,8 @@ gnc_commodity * gncOwnerGetCurrency (GncOwner *owner)
     return gncCustomerGetCurrency (owner->owner.customer);
   case GNC_OWNER_VENDOR:
     return gncVendorGetCurrency (owner->owner.vendor);
+  case GNC_OWNER_EMPLOYEE:
+    return gncEmployeeGetCurrency (owner->owner.employee);
   case GNC_OWNER_JOB:
     return gncOwnerGetCurrency (gncJobGetOwner (owner->owner.job));
   }
@@ -140,6 +156,8 @@ const char * gncOwnerGetName (GncOwner *owner)
     return gncJobGetName (owner->owner.job);
   case GNC_OWNER_VENDOR:
     return gncVendorGetName (owner->owner.vendor);
+  case GNC_OWNER_EMPLOYEE:
+    return gncEmployeeGetUsername (owner->owner.employee);
   }
 }
 
@@ -158,6 +176,8 @@ const GUID * gncOwnerGetGUID (GncOwner *owner)
     return gncJobGetGUID (owner->owner.job);
   case GNC_OWNER_VENDOR:
     return gncVendorGetGUID (owner->owner.vendor);
+  case GNC_OWNER_EMPLOYEE:
+    return gncEmployeeGetGUID (owner->owner.employee);
   }
 }
 
@@ -179,6 +199,7 @@ GncOwner * gncOwnerGetEndOwner (GncOwner *owner)
     return NULL;
   case GNC_OWNER_CUSTOMER:
   case GNC_OWNER_VENDOR:
+  case GNC_OWNER_EMPLOYEE:
     return owner;
   case GNC_OWNER_JOB:
     return gncJobGetOwner (owner->owner.job);
@@ -203,6 +224,8 @@ int gncOwnerCompare (const GncOwner *a, const GncOwner *b)
     return gncCustomerCompare (a->owner.customer, b->owner.customer);
   case GNC_OWNER_VENDOR:
     return gncVendorCompare (a->owner.vendor, b->owner.vendor);
+  case GNC_OWNER_EMPLOYEE:
+    return gncEmployeeCompare (a->owner.employee, b->owner.employee);
   case GNC_OWNER_JOB:
     return gncJobCompare (a->owner.job, b->owner.job);
   }
@@ -267,6 +290,9 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner)
   case GNC_OWNER_VENDOR:
     gncOwnerInitVendor (owner, gncVendorLookup (book, guid));
     break;
+  case GNC_OWNER_EMPLOYEE:
+    gncOwnerInitEmployee (owner, gncEmployeeLookup (book, guid));
+    break;
   case GNC_OWNER_JOB:
     gncOwnerInitJob (owner, gncJobLookup (book, guid));
     break;
@@ -317,6 +343,7 @@ gboolean gncOwnerRegister (void)
       (QueryAccess)gncOwnerGetCustomer },
     { OWNER_JOB, GNC_JOB_MODULE_NAME, (QueryAccess)gncOwnerGetJob },
     { OWNER_VENDOR, GNC_VENDOR_MODULE_NAME, (QueryAccess)gncOwnerGetVendor },
+    { OWNER_EMPLOYEE, GNC_EMPLOYEE_MODULE_NAME, (QueryAccess)gncOwnerGetEmployee },
     { OWNER_PARENT, _GNC_MOD_NAME, (QueryAccess)gncOwnerGetEndOwner },
     { OWNER_PARENTG, QUERYCORE_GUID, (QueryAccess)gncOwnerGetEndGUID },
     { OWNER_NAME, QUERYCORE_STRING, (QueryAccess)gncOwnerGetName },
