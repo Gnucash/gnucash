@@ -1,3 +1,7 @@
+2003-03-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/scm/main-window.scm:  turn off the report-total by default
+
 2003-03-10  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncEmployee.c: name the employee name

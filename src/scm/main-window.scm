@@ -75,7 +75,7 @@ the account instead of opening a register.") #f))
      (gnc:make-list-option
       (N_ "Account Tree") (N_ "Account fields to display")
       "c" ""
-      (list 'description 'total 'total_report)
+      (list 'description 'total)
       (list (list->vector (list 'type           (N_ "Type") ""))
             (list->vector (list 'code           (N_ "Code") ""))
             (list->vector (list 'description    (N_ "Description") ""))
