@@ -41,6 +41,7 @@ Status:
 -------
 As of version 0.9k:
 Bugs:
+-- Cash distributions & cash dividends on stock not handled properly
 -- tabbing between fields for mutual funds does not work correctly. 
 -- should add "number of shares" to transfer popup when transferring
    from bank account to portfolio.
