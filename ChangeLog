@@ -1,3 +1,13 @@
+2004-05-02  David Hampton  <hampton@employees.org>
+
+	* src/business/business-core/Makefile.am:
+	* src/business/business-gnome/Makefile.am:
+	* src/import-export/binary-import/Makefile.am: Work around
+	  problems with libltdl3.
+
+	* src/import-export/hbci/druid-hbci-initial.c: Eliminate a couiple
+	of compiler warning messages.
+
 2004-05-02  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/report/report-gnome/gnc-plugin-page-report.[ch]: Plugin-Page
