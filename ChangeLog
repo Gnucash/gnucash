@@ -9,6 +9,10 @@
 	  
 2002-11-26  Christian Stimming  <stimming@tuhh.de>
 
+	* src/import-export/Transaction-matcher.c:
+	More code cleanup -- use getter functions instead of direct
+	structure access to make potential file split easier.
+	
 	* src/import-export/gnc-gen-transaction.[hc]
 	(gnc_gen_trans_get_fuzzy_amount): Add functions to get/set the
 	fuzzy amount matching threshold, so that this feature can be used

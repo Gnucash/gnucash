@@ -202,6 +202,9 @@ GList *gnc_import_TransInfo_get_match_list (const GNCImportTransInfo *info);
 /* Returns the transaction of this TransInfo. */
 Transaction *gnc_import_TransInfo_get_trans (const GNCImportTransInfo *info);
 
+/* Returns the first split of the transaction of this TransInfo. */
+Split *gnc_import_TransInfo_get_fsplit (const GNCImportTransInfo *info);
+
 /* Returns the currently selected match in this TransInfo. */
 GNCImportMatchInfo *
 gnc_import_TransInfo_get_selected_match (const GNCImportTransInfo *info);
