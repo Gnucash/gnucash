@@ -92,6 +92,7 @@
 (if (not (defined? 'simple-format))
     (begin
       (require 'format)
+      (export simple-format)
       (define simple-format format)))
 
 ;; Automatically generated defaults
