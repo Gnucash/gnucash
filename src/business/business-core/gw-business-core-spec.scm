@@ -324,7 +324,7 @@
    'gnc:entry-get-tax-type-string
    '(<gw:mchars> callee-owned const)
    "gncEntryGetTaxTypeStr"
-   '((<gnc:GncEntry*> entry))
+   '((<gw:int> tax-type))
    "Return the Entry's Tax Type String")
 
   (gw:wrap-function
@@ -348,7 +348,7 @@
    'gnc:entry-get-discount-type-string
    '(<gw:mchars> callee-owned const)
    "gncEntryGetDiscountTypeStr"
-   '((<gnc:GncEntry*> entry))
+   '((<gw:int> discount-type))
    "Return the Entry's Discount Type String")
 
   (gw:wrap-function
