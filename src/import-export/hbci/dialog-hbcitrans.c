@@ -686,11 +686,11 @@ on_template_list_select_child          (GtkList         *list,
                                         gpointer         user_data)
 {
   HBCITransDialog *td = user_data;
+  GNCTransTempl *templ = gtk_object_get_user_data (GTK_OBJECT(widget)) ;
+
   g_assert(td);
 
   td->selected_template = widget;
-  
-  GNCTransTempl *templ = gtk_object_get_user_data (GTK_OBJECT(widget)) ;
 
       fill_entry(gnc_trans_templ_get_recp_name(templ), td->recp_name_entry);
       fill_entry(gnc_trans_templ_get_recp_account(templ), td->recp_account_entry);

@@ -1,3 +1,9 @@
+2004-05-15  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/hbci/dialog-hbcitrans.c:  Don't use C++/C99
+	  declarations.  Declare variables at the top of the function.
+	  Fixes #140070
+
 2004-04-11  Chris Lyttle  <chris@wilddev.net>
 
 	* configure.in: Release 1.8.9
