@@ -121,7 +121,7 @@ John Hasler <john@dhh.gt.org> engine patch
 Jon Kåre Hellan <hellan@acm.org> misc core dump fixes
 Claus Hindsgaul <claus_h@image.dk> messages Danish translation
 Péter Hosszú <hosszu@web.de> Hungarian translation
-Miquel Jordana Vilamitjana <jjvmjv@mundomail.net> Spanish translation of manual
+Tomokazu Iwashita <iwashita@center.nitech.ac.jp> Japanese translation of xea
 Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
 Alexey Kakunin <small@arcadia.spb.ru> quickfill patch for Cyrillic
 Ben Kelly <ben.kelly@ieee.org> for Motif menu bug fix, core dump fixes
@@ -188,6 +188,7 @@ Arnold Troeger <troeger@samart.co.th> Mandrake packager
 Diane Trout <detrout@earthlink.net> scheme QIF import patch
 Richard -Gilligan- Uschold <uschold@cs.ucf.edu> tax report & txf export
 Matthew Vanecek <mevanecek@yahoo.com> for pg_config configure.in patch
+Miquel Jordana Vilamitjana <jjvmjv@mundomail.net> Spanish translation of manual
 Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices, qif import fixes
 Rob Walker <rob@valinux.com> guile and register patches
 David Woodhouse <dwmw2@infradead.org> messages  British translations
