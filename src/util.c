@@ -81,6 +81,8 @@ dcoresize(void)
 /********************************************************************\
  * currency & locale related stuff.
  * first attempt at internationalization i18n of currency amounts
+ * In the long run, amounts should be printed with punctuation
+ * returned from the localconv() subroutine
 \********************************************************************/
 
 char * xaccPrintAmount (double val, short shrs) 
