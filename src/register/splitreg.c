@@ -476,6 +476,20 @@ configCursors (SplitRegister *reg)
    /* set the color of the cells in the cursors */
    /* hack alert -- the actual color should depend on the 
     * type of register. */
+/* they used top be the following:
+  "*regbank.oddRowBackground:      #aaccff",
+  "*regcash.oddRowBackground:      #ccffcc",
+  "*regasset.oddRowBackground:     #aaffcc",
+  "*regcredit.oddRowBackground:    #ffffaa",
+  "*regliability.oddRowBackground: #ffcccc",
+  "*ledportfolio.oddRowBackground: #ccffff",
+  "*regmutual.oddRowBackground:    #ccffff",
+  "*regincome.oddRowBackground:    #aaccff",
+  "*regexpense.oddRowBackground:   #ffcccc",
+  "*regequity.oddRowBackground:    #ffffaa",
+  "*ledgportfolio.evenRowBackground:grey",
+  "*regmutual.evenRowBackground:   grey",
+*/
    reg->single_cursor->active_bg_color = 0xffdddd; /* pale red */
    reg->single_cursor->passive_bg_color = 0xccccff; /* pale blue */
 

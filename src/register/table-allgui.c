@@ -359,7 +359,16 @@ makePassive (Table *table)
       for (j=0; j<curs->numCols; j++) {
          BasicCell *cell;
       
+/* yooooo hack alert -- the color capabilities for the cursor should
+ * be per-cell, not per cursor; so we do a quickie hack ughhh.
+ * first line is whatever was speced, the second line is white.
+ */
+if (0==i) {
          table->bg_colors[i+r_origin][j+c_origin] = curs->passive_bg_color;
+} else {
+table->bg_colors[i+r_origin][j+c_origin] = 0xffffff;
+}
+
          cell = curs->cells[i][j];
          if (cell) {
             if (cell->use_bg_color) {
