@@ -35,7 +35,7 @@
 /* The debuging macros enable the setting of trace messages */
 #include <stdio.h>
 
-#if HAVE_NANA
+#if HAVE_NANA_H
 #include <nana.h>
 
 /* override standard system assert with nana I assertion */
@@ -43,11 +43,11 @@
 #undef assert
 #endif 
 #define assert I
-#else	/* HAVE_NANA */
+#else	/* HAVE_NANA_H */
 /* if there is no nana, use he system assert and mush up LG */
 #include <assert.h>
 #define LG(condition,args...)	if (condition) fprintf(stderr, ##args)
-#endif	/* HAVE_NANA */
+#endif	/* HAVE_NANA_H */
 
 #define MOD_ENGINE     1
 #define MOD_IO         2

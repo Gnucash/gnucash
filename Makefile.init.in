@@ -15,9 +15,14 @@ sysconfdir=@sysconfdir@
 includedir=@includedir@
 
 CC           = @CC@
+CFLAGS       = @CFLAGS@
+CPPFLAGS     = @CPPFLAGS@
 INSTALL      = @INSTALL@
 RANLIB       = @RANLIB@
 INSTALL_DATA = @INSTALL_DATA@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+SWIG         = @SWIG@
+PERL         = @PERL@
 
 CPU          = @target_cpu@
 
@@ -31,3 +36,4 @@ GNC_CONFIGDIR=@GNC_CONFIGDIR@
 GNC_SHAREDIR=@GNC_SHAREDIR@
 
 HAVE_PLOTUTILS=@HAVE_PLOTUTILS@
+LIBNANA      = @LIBNANA@	# -lnana, if defined

@@ -24,7 +24,7 @@
 include @top_srcdir@/Makefile.init
 
 INCLPATH = -I.. -I./engine -I./register -Ireports -I@srcdir@/../include -I@prefix@/include
-CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH}
+CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH} ${CPPFLAGS}
 
 
 ######################################################################

@@ -86,13 +86,13 @@ gnucash.all.i: guile_swig_annotations.i ${SWIG_ALL_HDRS}
 TRASH += gnucash.all.i gnucash.all_wrap.doc
 
 gnucash-engine-guile_wrap.c: gnucash.engine.i
-	swig ${SWIG_FLAGS} -o $@ $< 
-	perl -pi -e 's/^void gnucash\(\)/void gnucash_swig_init\(\)/' $@
+	${SWIG} ${SWIG_FLAGS} -o $@ $< 
+	${PERL} -pi -e 's/^void gnucash\(\)/void gnucash_swig_init\(\)/' $@
 TRASH += gnucash-engine-guile_wrap.c
 
 gnucash-all-guile_wrap.c: gnucash.all.i
-	swig ${SWIG_FLAGS} -o $@ $< 
-	perl -pi -e 's/^void gnucash\(\)/void gnucash_swig_init\(\)/' $@
+	${SWIG} ${SWIG_FLAGS} -o $@ $< 
+	${PERL} -pi -e 's/^void gnucash\(\)/void gnucash_swig_init\(\)/' $@
 TRASH += gnucash-all-guile_wrap.c
 
 # Local Variables:
