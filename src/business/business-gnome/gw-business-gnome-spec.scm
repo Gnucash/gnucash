@@ -163,6 +163,14 @@
    "Dialog: Select a GncInvoice.  Either start_selection or "
    "owner may be NULL.")
   
+  (gw:wrap-function
+   ws
+   'gnc:invoice-show-bills-due
+   '<gw:void>
+   "gnc_invoice_show_bills_due"
+   '((<gnc:Book*> book) (<gw:int> days_in_advance))
+   "Dialog: display the bills due within the next \"days\"")
+
   ;;
   ;; dialog-job.h
   ;;

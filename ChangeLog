@@ -8,6 +8,17 @@
 	* src/engine/gnc-event*: add an api to force an event even when
 	  events are suspended.  Without such an API, events can be lost
 	  if the event system is suspended when the event comes in.
+
+	* src/gnome-utils/dialog-query-list*: the glade and C code for
+	  a general QueryList Dialog.
+	* src/gnome-utils/Makefile.am: compile the new dialog.
+	* src/business/business-gnome/business-gnome.scm: use the new
+	  querylist dialog to display the due bills
+	* src/business/business-gnome/dialog-invoice.[ch]: create a new
+	  API to run a due-bills dialog.
+	* src/business/businss-gnome/gw-business-gnome-spec.scm: wrap the
+	  new due-bills api
+	* src/engine/gnc-book.c: forcibly signal a book destroy event
 	
 2003-05-18  Derek Atkins  <derek@ihtfp.com>
 

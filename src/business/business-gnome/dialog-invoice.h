@@ -13,6 +13,7 @@ typedef struct _invoice_window InvoiceWindow;
 #include "gncInvoice.h"
 #include "gncOwner.h"
 #include "dialog-search.h"
+#include "dialog-query-list.h"
 
 /* Create and edit an invoice */
 InvoiceWindow * gnc_ui_invoice_edit (GncInvoice *invoice);
@@ -31,5 +32,7 @@ GNCSearchWindow * gnc_invoice_search_select (gpointer start, gpointer book);
 GNCSearchWindow * gnc_invoice_search_edit (gpointer start, gpointer book);
 
 void gnc_business_call_owner_report (GncOwner *owner, Account *acc);
+
+DialogQueryList *gnc_invoice_show_bills_due (GNCBook *book, int days_in_advance);
 
 #endif /* GNC_DIALOG_INVOICE_H_ */

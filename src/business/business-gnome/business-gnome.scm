@@ -25,6 +25,16 @@
   (define (option-value name)
     (gnc:option-value (gnc:lookup-global-option gnc:*business-label* name)))
 
+  (let ((check-bills? (option-value "Notify Bills Due?")))
+    (if (and session check-bills?)
+	(let* ((book (gnc:session-get-book session))
+	       (days (option-value "Bills Due Days")))
+	  (gnc:invoice-show-bills-due book days)))))
+
+(define (old-remind-bills-due session)
+  (define (option-value name)
+    (gnc:option-value (gnc:lookup-global-option gnc:*business-label* name)))
+
   (define (get-payables book)
     (let* ((group (gnc:book-get-group book))
 	   (acct-list (gnc:group-get-subaccounts group))
@@ -527,6 +537,6 @@
 
 (gnc:hook-add-dangler gnc:*report-hook* business-report-function)
 (gnc:hook-add-dangler gnc:*ui-startup-hook* add-business-items)
-(gnc:hook-add-dangler gnc:*ui-post-startup-hook* business-ui-started)
-;(gnc:hook-add-dangler gnc:*book-opened-hook* business-book-opened)
+;(gnc:hook-add-dangler gnc:*ui-post-startup-hook* business-ui-started)
+(gnc:hook-add-dangler gnc:*book-opened-hook* business-book-opened)
 (gnc:hook-add-dangler gnc:*add-extension-hook* add-business-test)

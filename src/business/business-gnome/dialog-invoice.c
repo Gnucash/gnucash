@@ -43,6 +43,8 @@
 #include "AccWindow.h"
 #include "guile-mappings.h"
 
+#include "dialog-query-list.h"
+
 #define DIALOG_NEW_INVOICE_CM_CLASS "dialog-new-invoice"
 #define DIALOG_VIEW_INVOICE_CM_CLASS "dialog-view-invoice"
 
@@ -2193,38 +2195,43 @@ gnc_ui_invoice_new (GncOwner *ownerp, GNCBook *bookp)
 /* Functions for invoice selection widgets */
 
 static void
+edit_invoice_direct (gpointer invoice, gpointer user_data)
+{
+  g_return_if_fail (invoice);
+  gnc_ui_invoice_edit (invoice);
+}
+
+static void
 edit_invoice_cb (gpointer *invoice_p, gpointer user_data)
 {
-  GncInvoice *invoice;
-
   g_return_if_fail (invoice_p && user_data);
-
-  invoice = *invoice_p;
-
-  if (!invoice)
+  if (! *invoice_p)
     return;
+  edit_invoice_direct (*invoice_p, user_data);
+}
 
-  gnc_ui_invoice_edit (invoice);
+static void
+pay_invoice_direct (gpointer inv, gpointer user_data)
+{
+  GncInvoice *invoice = inv;
+  GNCLot *lot;
+  gnc_numeric val;
+
+  g_return_if_fail (invoice);
+
+  lot = gncInvoiceGetPostedLot (invoice);
+  val = gnc_numeric_abs (gnc_lot_get_balance (lot));
+  gnc_ui_payment_new_with_value (gncInvoiceGetOwner (invoice),
+				 gncInvoiceGetBook (invoice), val);
 }
 
 static void
 pay_invoice_cb (gpointer *invoice_p, gpointer user_data)
 {
-  struct _invoice_select_window *sw = user_data;
-  GncInvoice *invoice;
-  GNCLot *lot;
-  gnc_numeric val;
-
   g_return_if_fail (invoice_p && user_data);
-
-  invoice = *invoice_p;
-
-  if (!invoice)
+  if (! *invoice_p)
     return;
-
-  lot = gncInvoiceGetPostedLot (invoice);
-  val = gnc_numeric_abs (gnc_lot_get_balance (lot));
-  gnc_ui_payment_new_with_value (gncInvoiceGetOwner (invoice), sw->book, val);
+  pay_invoice_direct (*invoice_p, user_data);
 }
 
 static gpointer
@@ -2388,4 +2395,72 @@ gnc_invoice_search_edit (gpointer start, gpointer book)
     gnc_ui_invoice_edit (start);
 
   return NULL;
+}
+
+DialogQueryList *
+gnc_invoice_show_bills_due (GNCBook *book, int days_in_advance)
+{
+  GNCIdType type = GNC_INVOICE_MODULE_NAME;
+  Query *q;
+  QueryPredData_t pred_data;
+  time_t end_date;
+  GList *res;
+  gint len;
+  static GList *param_list = NULL;
+  static GNCDisplayListButton buttons[] = {
+    { N_("View/Edit Bill"), edit_invoice_direct },
+    { N_("Process Payment"), pay_invoice_direct },
+    { NULL },
+  };
+
+  /* create the param list (in reverse order) */
+  if (param_list == NULL) {
+    param_list = gnc_search_param_prepend (param_list, _("Amount"), NULL, type,
+					   INVOICE_POST_LOT, LOT_BALANCE, NULL);
+    param_list = gnc_search_param_prepend (param_list, _("Company"), NULL, type,
+					   INVOICE_OWNER, OWNER_NAME, NULL);
+    param_list = gnc_search_param_prepend (param_list, _("Due"), NULL, type,
+					   INVOICE_DUE, NULL);
+  }
+
+  /* Create the query to search for invoices; set the book */
+  q = gncQueryCreate();
+  gncQuerySearchFor(q, GNC_INVOICE_MODULE_NAME);
+  gncQuerySetBook (q, book);
+
+  /* we want to find all invoices where:
+   *      invoice -> is_posted == TRUE
+   * AND  invoice -> lot -> is_closed? == FALSE
+   * AND  invoice -> type != _("Invoice")
+   * AND  invoice -> due >= (today - days_in_advance)
+   */
+
+  gncQueryAddBooleanMatch (q, g_slist_prepend(NULL, INVOICE_IS_POSTED), TRUE,
+			   QUERY_AND);
+
+  gncQueryAddBooleanMatch (q, g_slist_prepend(g_slist_prepend(NULL, LOT_IS_CLOSED),
+					      INVOICE_POST_LOT), FALSE, QUERY_AND);
+
+  pred_data = gncQueryStringPredicate (COMPARE_NEQ, _("Invoice"),
+				       STRING_MATCH_NORMAL, FALSE);
+  gncQueryAddTerm (q, g_slist_prepend(NULL, INVOICE_TYPE), pred_data, QUERY_AND);
+
+  end_date = time(NULL);
+  if (days_in_advance < 0)
+    days_in_advance = 0;
+  end_date += days_in_advance*60*60*24;
+  xaccQueryAddDateMatchTT(q, FALSE, 0, TRUE, end_date, QUERY_AND);
+
+  res = gncQueryRun(q);
+  len = g_list_length (res);
+  if (!res || len <= 0)
+    return NULL;
+
+  return gnc_dialog_query_list_create(param_list, q,
+				      _("Due Bills Reminder"),
+				      (len > 1) ?
+				      _("The following bills are due") :
+				      _("The following bill is due"),
+				      TRUE, FALSE,
+				      buttons, NULL);
 }
