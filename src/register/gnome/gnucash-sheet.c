@@ -232,7 +232,7 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
 
         style = gnucash_sheet_get_style (sheet, virt_loc.vcell_loc);
         if (style->cursor_type == GNUCASH_CURSOR_HEADER ||
-            !gnc_table_physical_cell_valid (table, phys_loc, TRUE))
+            !gnc_table_virtual_cell_valid (table, virt_loc, TRUE))
                 return;
 
         editable = GTK_EDITABLE(sheet->entry);
@@ -241,7 +241,7 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
         start_sel = 0;
         end_sel = 0;
 
-        allow_edits = gnc_table_enter_update (table, phys_loc, &cursor_pos,
+        allow_edits = gnc_table_enter_update (table, virt_loc, &cursor_pos,
                                               &start_sel, &end_sel);
 
 	if (!allow_edits)

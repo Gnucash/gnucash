@@ -650,7 +650,7 @@ gnc_table_move_cursor_internal (Table *table,
   if ((0 > new_vcell_loc.virt_row) || (0 > new_vcell_loc.virt_col))
   {
     /* if the location is invalid, then we should take this 
-     * as a command to unmap the cursor gui.  So do it .. */
+     * as a command to unmap the cursor gui. */
     if (do_move_gui && curs)
     {
       for (cell_row = 0; cell_row < curs->num_rows; cell_row++)
@@ -802,8 +802,6 @@ gnc_table_verify_cursor_position (Table *table, PhysicalLocation phys_loc)
 
   if (do_commit)
   {
-    /* before leaving the current virtual position, commit any edits
-     * that have been accumulated in the cursor */
     gnc_table_move_cursor_gui (table, phys_loc);
     moved_cursor = TRUE;
   }
@@ -1002,16 +1000,67 @@ gnc_table_physical_cell_valid(Table *table,
 
 /* ==================================================== */
 
+gboolean
+gnc_table_virtual_cell_valid(Table *table,
+                             VirtualLocation virt_loc,
+                             gboolean exact_pointer)
+{
+  BasicCell *cell;
+  VirtualCell *vcell;
+  CellBlockCell *cb_cell;
+
+  if (!table) return FALSE;
+
+  /* header rows cannot be modified */
+  if (virt_loc.vcell_loc.virt_row == 0)
+    return FALSE;
+
+  vcell = gnc_table_get_virtual_cell(table, virt_loc.vcell_loc);
+  if (vcell == NULL)
+    return FALSE;
+
+  /* verify that offsets are valid. This may occur if the app that is
+   * using the table has a paritally initialized cursor. (probably due
+   * to a programming error, but maybe they meant to do this). */
+  if ((0 > virt_loc.phys_row_offset) || (0 > virt_loc.phys_col_offset))
+    return FALSE;
+
+  /* check for a cell handler, but only if cell address is valid */
+  if (vcell->cellblock == NULL) return FALSE;
+
+  cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
+                                    virt_loc.phys_row_offset,
+                                    virt_loc.phys_col_offset);
+  if (cb_cell == NULL)
+    return FALSE;
+
+  cell = cb_cell->cell;
+  if (cell == NULL)
+    return FALSE;
+
+  /* if cell is marked as output-only, you can't enter */
+  if (0 == (XACC_CELL_ALLOW_INPUT & cell->input_output)) return FALSE;
+
+  /* if cell is pointer only and this is not an exact pointer test,
+   * it cannot be entered. */
+  if (!exact_pointer &&
+      ((XACC_CELL_ALLOW_EXACT_ONLY & cell->input_output) != 0))
+    return FALSE;
+
+  return TRUE;
+}
+
+/* ==================================================== */
+
 /* Handle the non gui-specific parts of a cell enter callback */
 gboolean
 gnc_table_enter_update(Table *table,
-                       PhysicalLocation phys_loc,
+                       VirtualLocation virt_loc,
                        int *cursor_position,
                        int *start_selection,
                        int *end_selection)
 {
   gboolean can_edit = TRUE;
-  PhysicalCell *pcell;
   CellEnterFunc enter;
   CellBlockCell *cb_cell;
   BasicCell *cell;
@@ -1024,15 +1073,13 @@ gnc_table_enter_update(Table *table,
 
   cb = table->current_cursor;
 
-  pcell = gnc_table_get_physical_cell (table, phys_loc);
-  if (pcell == NULL)
-    return FALSE;
-
-  cell_row = pcell->virt_loc.phys_row_offset;
-  cell_col = pcell->virt_loc.phys_col_offset;
+  cell_row = virt_loc.phys_row_offset;
+  cell_col = virt_loc.phys_col_offset;
 
   ENTER("enter %d %d (relrow=%d relcol=%d)",
-        phys_loc.phys_row, phys_loc.phys_col, cell_row, cell_col);
+        virt_loc.vcell_loc.virt_row,
+        virt_loc.vcell_loc.virt_col,
+        cell_row, cell_col);
 
   /* OK, if there is a callback for this cell, call it */
   cb_cell = gnc_cellblock_get_cell (cb, cell_row, cell_col);

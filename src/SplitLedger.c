@@ -3183,7 +3183,19 @@ xaccSRCountRows (SplitRegister *reg,
    if ((split != NULL) && (split == find_trans_split))
      found_trans_split = TRUE;
 
-   present = time(NULL);
+   {
+     struct tm *tm;
+
+     present = time (NULL);
+
+     tm = localtime (&present);
+     tm->tm_sec = 59;
+     tm->tm_min = 59;
+     tm->tm_hour = 23;
+
+     present = mktime (tm);
+   }
+
    table->dividing_row = -1;
 
    /* now count the rows */

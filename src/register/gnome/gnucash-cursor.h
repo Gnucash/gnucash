@@ -57,8 +57,6 @@ typedef struct {
         /* precomputed pixel coords for the item cursor*/
         gint      x, y, w, h;
 
-        gint      visible;
-
 } GnucashItemCursor;
 
 

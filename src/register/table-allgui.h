@@ -370,14 +370,16 @@ void        gnc_table_refresh_gui (Table *table);
 
 
 /* ==================================================== */
-/* Functions used internally by table-gnome.c.
- * perhaps these should go in a table-allguiP.h */
 
 void       gnc_table_wrap_verify_cursor_position (Table *table,
                                                   PhysicalLocation phys_loc);
 
 gboolean   gnc_table_physical_cell_valid(Table *table,
                                          PhysicalLocation phys_loc,
+                                         gboolean exact_pointer);
+
+gboolean   gnc_table_virtual_cell_valid(Table *table,
+                                         VirtualLocation virt_loc,
                                          gboolean exact_pointer);
 
 void       gnc_table_refresh_cursor_gui (Table * table, CellBlock *curs,
@@ -397,7 +399,7 @@ void       gnc_table_refresh_cursor_gui (Table * table, CellBlock *curs,
  *   mapped editing widget will be modified accordingly.
  */
 gboolean gnc_table_enter_update(Table *table,
-                                PhysicalLocation phys_loc,
+                                VirtualLocation virt_loc,
                                 int *cursor_position,
                                 int *start_selection,
                                 int *end_selection);
