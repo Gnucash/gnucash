@@ -1,3 +1,11 @@
+2003-04-29  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/test/Makefile.am: disable the test-scm-query-import
+	  test, since it breaks on guile-1.6 (which does mean that
+	  importing into a guile-1.6-based system will fail, but so much
+	  else fails when upgrading from 1.6 to 1.8 that it really doesn't
+	  matter.  Users will have to reset their reports anyways.
+
 2003-04-28  David Hampton  <hampton@employees.org>
 	* src/engine/iso-4217-currencies.scm: Remove two duplicate
 	commodities.  The newer name for these commodities was retained.

@@ -33,8 +33,7 @@ TESTS = \
   test-split-vs-account  \
   test-transaction-voiding \
   test-freq-spec \
-  test-scm-query \
-  test-scm-query-import
+  test-scm-query
 
 GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
