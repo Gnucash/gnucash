@@ -35,11 +35,6 @@
           (start-time #f)
           (end-time #f)
           (delimiters (string #\cr #\nl))
-          (valid-acct-types 
-           '(type:bank type:cash
-                       type:ccard type:invst
-                       type:port
-                       #{type:oth\ a}#  #{type:oth\ l}#))
           (progress-dialog #f)
           (file-stats (stat path))
           (file-size (stat:size file-stats))

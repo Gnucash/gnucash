@@ -271,6 +271,14 @@
                  (ok-types (qif-map-entry:allowed-types acctinfo))
                  (equity? (memv GNC-EQUITY-TYPE ok-types)))
             
+	    ;; Debug
+	    ;; (for-each
+	    ;;  (lambda (expr)
+	    ;;    (display expr))
+	    ;;  (list "Account: " acctinfo "\nsecurity = " security 
+	    ;;	   "\nequity? = " equity? 
+	    ;;	   "\n"))
+
             (cond ((and equity? security)  ;; a "retained holdings" acct
                    (qif-import:find-or-make-acct acctinfo #f
                                                  security security
@@ -452,15 +460,12 @@
                     ;; in the acct-hash if it's an account.
                     ((and (not (string=? cat ""))
                           (qif-split:category-is-account? qif-split))
-                     (set! far-acct-info
-                           (hash-ref qif-acct-map 
-                                     (qif-split:category qif-split))))
+                     (set! far-acct-info (hash-ref qif-acct-map cat)))
                     
                     ;; .. look it up in the cat-hash if it's a category 
                     ((not (string=? cat ""))
-                     (set! far-acct-info
-                           (hash-ref qif-cat-map 
-                                     (qif-split:category qif-split))))
+                     (set! far-acct-info (hash-ref qif-cat-map cat)))
+
                     ;; otherwise, try to find the payee in the
                     ;; memo-map if it's likely to have been used (only
                     ;; 1 split).  then try the memo.  if neither
@@ -476,10 +481,8 @@
                                  (not (string=? qif-memo ""))
                                  (hash-ref qif-memo-map memo))))
                      (if (not far-acct-info)
-                         (set! far-acct-info
-                               (hash-ref 
-                                qif-cat-map 
-                                (qif-split:category qif-split))))))
+                         (set! far-acct-info (hash-ref qif-cat-map cat)))))
+
                    (set! far-acct-name (qif-map-entry:gnc-name far-acct-info))
                    (set! far-acct (hash-ref gnc-acct-hash far-acct-name))
                    
