@@ -1330,10 +1330,32 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
   }
 }
 
+static gboolean
+gnc_split_register_cursor_is_readonly (VirtualLocation virt_loc,
+				       gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  Split *split;
+  Transaction *txn;
+  char type;
+
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+  if (!split) return FALSE;
+
+  txn = xaccSplitGetParent (split);
+  if (!txn) return FALSE;
+
+  type = xaccTransGetTxnType (txn);
+  return (type != TXN_TYPE_NONE);
+}
+
 static CellIOFlags
 gnc_split_register_get_inactive_io_flags (VirtualLocation virt_loc,
                                           gpointer user_data)
 {
+  if (gnc_split_register_cursor_is_readonly (virt_loc, user_data))
+    return XACC_CELL_ALLOW_READ_ONLY;
+
   return XACC_CELL_ALLOW_NONE;
 }
 
@@ -1341,6 +1363,9 @@ static CellIOFlags
 gnc_split_register_get_standard_io_flags (VirtualLocation virt_loc,
                                           gpointer user_data)
 {
+  if (gnc_split_register_cursor_is_readonly (virt_loc, user_data))
+    return XACC_CELL_ALLOW_READ_ONLY;
+
   return XACC_CELL_ALLOW_ALL;
 }
 
@@ -1348,6 +1373,9 @@ static CellIOFlags
 gnc_split_register_get_recn_io_flags (VirtualLocation virt_loc,
                                       gpointer user_data)
 {
+  if (gnc_split_register_cursor_is_readonly (virt_loc, user_data))
+    return XACC_CELL_ALLOW_READ_ONLY;
+
   return XACC_CELL_ALLOW_ALL | XACC_CELL_ALLOW_EXACT_ONLY;
 }
 
@@ -1365,7 +1393,7 @@ gnc_split_register_get_ddue_io_flags (VirtualLocation virt_loc,
     return XACC_CELL_ALLOW_NONE;
   }
 
-  return XACC_CELL_ALLOW_ALL;
+  return XACC_CELL_ALLOW_READ_ONLY;
 }
 
 static CellIOFlags
@@ -1374,6 +1402,9 @@ gnc_split_register_get_debcred_io_flags (VirtualLocation virt_loc,
 {
   SplitRegister *reg = user_data;
   Split *split;
+
+  if (gnc_split_register_cursor_is_readonly (virt_loc, user_data))
+    return XACC_CELL_ALLOW_READ_ONLY;
 
   split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
@@ -1388,6 +1419,9 @@ gnc_split_register_get_security_io_flags (VirtualLocation virt_loc,
                                           gpointer user_data)
 {
   SplitRegister *reg = user_data;
+
+  if (gnc_split_register_cursor_is_readonly (virt_loc, user_data))
+    return XACC_CELL_ALLOW_READ_ONLY;
 
   if (gnc_split_register_use_security_cells (reg, virt_loc))
     return XACC_CELL_ALLOW_ALL;

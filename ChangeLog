@@ -31,6 +31,15 @@
 	  known CRITICAL messages, which are safe to ignore..
 
 	* gnc-ledger-display.c -- honor user defaults for A/R and A/P windows
+
+	* table-model.h -- add a flag for "READ_ONLY" cells, to all you to
+	  specify a cell as readonly.
+	* table-allgui.c -- allow the cursor to enter a READ_ONLY cell.  Make
+	  sure "editable" is FALSE for READ_ONLY cells.
+	* split-register-model.c -- If the TxnType != NONE, set all cells as
+	  READ_ONLY.
+	* fixes bugs 96024 and 96028 by making posted invoices and payments
+	  read-only.
 	
 2002-10-16  Joshua Sled  <jsled@asynchronous.org>
 

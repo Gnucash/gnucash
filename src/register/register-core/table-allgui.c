@@ -1022,6 +1022,10 @@ gnc_table_virtual_loc_valid(Table *table,
   if (gnc_table_model_read_only (table->model)) return TRUE;
 
   io_flags = gnc_table_get_io_flags (table, virt_loc);
+
+  /* if the cell allows ENTER, then it is ok */
+  if (io_flags & XACC_CELL_ALLOW_ENTER) return TRUE;
+
   /* if cell is marked as output-only, you can't enter */
   if (0 == (XACC_CELL_ALLOW_INPUT & io_flags)) return FALSE;
 
@@ -1047,6 +1051,7 @@ gnc_table_enter_update (Table *table,
   CellBlock *cb;
   int cell_row;
   int cell_col;
+  CellIOFlags io_flags;
 
   if (table == NULL)
     return FALSE;
@@ -1064,6 +1069,10 @@ gnc_table_enter_update (Table *table,
   /* OK, if there is a callback for this cell, call it */
   cell = gnc_cellblock_get_cell (cb, cell_row, cell_col);
   if (!cell)
+    return FALSE;
+
+  io_flags = gnc_table_get_io_flags (table, virt_loc);
+  if (io_flags == XACC_CELL_ALLOW_READ_ONLY)
     return FALSE;
 
   enter = cell->enter_cell;
