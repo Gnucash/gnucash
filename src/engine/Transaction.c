@@ -1007,48 +1007,56 @@ xaccSplitSetReconcile (Split *split, char recn)
 Transaction * 
 xaccSplitGetParent (Split *split)
 {
+   if (!split) return NULL;
    return (split->parent);
 }
 
 Account *
 xaccSplitGetAccount (Split *split)
 {
+   if (!split) return NULL;
    return (split->acc);
 }
 
 char *
 xaccSplitGetMemo (Split *split)
 {
+   if (!split) return NULL;
    return (split->memo);
 }
 
 char *
 xaccSplitGetAction (Split *split)
 {
+   if (!split) return NULL;
    return (split->action);
 }
 
 char 
 xaccSplitGetReconcile (Split *split)
 {
+   if (!split) return ' ';
    return (split->reconciled);
 }
 
 double
 xaccSplitGetShareAmount (Split * split)
 {
+   if (!split) return 0.0;
    return (split->damount);
 }
 
 double
 xaccSplitGetValue (Split * split)
 {
+   if (!split) return 0.0;
    return ((split->damount) * (split->share_price));
 }
 
 double
 xaccSplitGetSharePrice (Split * split)
 {
+   if (!split) return 1.0;
    return (split->share_price);
 }
 
