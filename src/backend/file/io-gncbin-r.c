@@ -556,7 +556,9 @@ qof_session_load_from_binfile(QofBook *book, const char * datafile)
     return;
   }
 
+  xaccDisableDataScrubbing();
   gnc_load_financials_from_fd(book, fd);
+  xaccEnableDataScrubbing();
 
   close(fd);
 }

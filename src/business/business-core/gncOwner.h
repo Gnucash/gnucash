@@ -1,5 +1,26 @@
+/********************************************************************\
+ * gncOwner.h -- Business Interface:  Object OWNERs                 *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
- * gncOwner.h -- Business Interface:  Object OWNERs
  * Copyright (C) 2001, 2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
@@ -9,7 +30,7 @@
 
 typedef struct gnc_owner_s GncOwner;
 
-#define GNC_OWNER_MODULE_NAME	"gncOwner"
+#define GNC_ID_OWNER   "gncOwner"
 
 #include "gncCustomer.h"
 #include "gncJob.h"
@@ -27,13 +48,13 @@ typedef enum {
 } GncOwnerType;
 
 struct gnc_owner_s {
-  GncOwnerType		type;
+  GncOwnerType     type;
   union {
-    gpointer		undefined;
-    GncCustomer *	customer;
-    GncJob *		job;
-    GncVendor *		vendor;
-    GncEmployee *	employee;
+    gpointer       undefined;
+    GncCustomer *  customer;
+    GncJob *       job;
+    GncVendor *    vendor;
+    GncEmployee *  employee;
   } owner;
 };
 
@@ -78,16 +99,16 @@ void gncOwnerAttachToLot (GncOwner *owner, GNCLot *lot);
  */
 gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner);
 
-#define OWNER_TYPE	"type"
-#define OWNER_CUSTOMER	"customer"
-#define OWNER_JOB	"job"
-#define OWNER_VENDOR	"vendor"
-#define OWNER_EMPLOYEE	"employee"
-#define OWNER_PARENT	"parent"
-#define OWNER_PARENTG	"parent-guid"
-#define OWNER_NAME	"name"
+#define OWNER_TYPE        "type"
+#define OWNER_CUSTOMER    "customer"
+#define OWNER_JOB         "job"
+#define OWNER_VENDOR      "vendor"
+#define OWNER_EMPLOYEE    "employee"
+#define OWNER_PARENT      "parent"
+#define OWNER_PARENTG     "parent-guid"
+#define OWNER_NAME        "name"
 
-#define OWNER_FROM_LOT	"owner-from-lot"
+#define OWNER_FROM_LOT    "owner-from-lot"
 
 /*
  * These two functions are mainly for the convenience of scheme code.

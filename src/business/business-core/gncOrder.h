@@ -1,5 +1,26 @@
+/********************************************************************\
+ * gncOrder.h -- the Core Business Order Interface                  *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
- * gncOrder.h -- the Core Business Order Interface
  * Copyright (C) 2001 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
@@ -9,11 +30,15 @@
 
 typedef struct _gncOrder GncOrder;
 
-#include "gnc-book.h"
 #include "gncEntry.h"
 #include "gncOwner.h"
+#include "qofbook.h"
+#include "qofid.h"
+#include "qofinstance.h"
 
-#define GNC_ORDER_MODULE_NAME "gncOrder"
+#define GNC_ID_ORDER "gncOrder"
+#define GNC_IS_ORDER(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_ORDER))
+#define GNC_ORDER(obj)     (QOF_CHECK_CAST((obj), GNC_ID_ORDER, GncOrder))
 
 /* Create/Destroy Functions */
 
@@ -36,8 +61,6 @@ void gncOrderRemoveEntry (GncOrder *order, GncEntry *entry);
 
 /* Get Functions */
 
-QofBook * gncOrderGetBook (GncOrder *order);
-const GUID * gncOrderGetGUID (GncOrder *order);
 const char * gncOrderGetID (GncOrder *order);
 GncOwner * gncOrderGetOwner (GncOrder *order);
 Timespec gncOrderGetDateOpened (GncOrder *order);
@@ -49,13 +72,21 @@ gboolean gncOrderGetActive (GncOrder *order);
 /* Get the list Entries */
 GList * gncOrderGetEntries (GncOrder *order);
 
-GncOrder * gncOrderLookup (QofBook *book, const GUID *guid);
 gboolean gncOrderIsDirty (GncOrder *order);
 void gncOrderBeginEdit (GncOrder *order);
 void gncOrderCommitEdit (GncOrder *order);
 int gncOrderCompare (GncOrder *a, GncOrder *b);
 
 gboolean gncOrderIsClosed (GncOrder *order);
+
+/** Return a pointer to the instance gncOrder that is identified
+ *  by the guid, and is residing in the book. Returns NULL if the 
+ *  instance can't be found.
+ *  Equivalent function prototype is
+ *  GncOrder * gncOrderLookup (QofBook *book, const GUID *guid);
+ */
+#define gncOrderLookup(book,guid)    \
+       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_ORDER, GncOrder)
 
 #define ORDER_ID	"id"
 #define ORDER_REFERENCE	"reference"
@@ -64,5 +95,9 @@ gboolean gncOrderIsClosed (GncOrder *order);
 #define ORDER_CLOSED	"date_closed"
 #define ORDER_IS_CLOSED	"is_closed?"
 #define ORDER_NOTES	"notes"
+
+/** deprecated functions */
+#define gncOrderGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
+#define gncOrderGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))
 
 #endif /* GNC_ORDER_H_ */

@@ -197,18 +197,38 @@ pgendSplitLookup (PGBackend *be, const GUID *split_guid)
    return NULL;
 }
 
+struct _iter {
+  const GUID *guid;
+  QofEntity *ent;
+};
+
+static void
+cforeach (QofCollection *col, gpointer data)
+{
+  struct _iter *iter = data;
+  if (iter->ent) return;
+  iter->ent = qof_collection_lookup_entity (col, iter->guid);
+}
+
 QofIdType
 pgendGUIDType (PGBackend *be, const GUID *guid)
 {
    GList *node;
-   QofIdType tip = GNC_ID_NONE;
+   struct _iter iter;
+
+   iter.guid = guid;
+   iter.ent = NULL;
 
    ENTER("guid = %s", guid_to_string(guid));
    for (node=be->blist; node; node=node->next)
    {
       QofBook *book = node->data;
-      tip = qof_entity_type (qof_book_get_entity_table(book), guid);
-      if (GNC_ID_NONE != tip) { LEAVE("tip = %s", tip); return tip; }
+      qof_book_foreach_collection (book, cforeach, &iter);
+      if (iter.ent) 
+      { 
+         LEAVE("tip = %s", iter.ent->e_type); 
+         return iter.ent->e_type; 
+      }
    }
 
    LEAVE("tip = NULL");
@@ -559,7 +579,7 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
       Transaction *trans = (Transaction *) node->data;
       GList *engine_splits, *snode;
 
-      trans->kvp_data = pgendKVPFetch (be, trans->idata, trans->kvp_data);
+      trans->inst.kvp_data = pgendKVPFetch (be, trans->idata, trans->inst.kvp_data);
    
       engine_splits = xaccTransGetSplitList(trans);
       for (snode = engine_splits; snode; snode=snode->next)
@@ -911,7 +931,7 @@ pgendSync (QofBackend *bend, QofBook *book)
    /* hack alert -- In some deranged theory, we should be
     * syncing prices here, as well as syncing any/all other
     * engine structures that need to be stored.  But instead,
-    * price syn is handled as a separate routine ...
+    * price sync is handled as a separate routine ...
     */
 
    /* re-enable events */

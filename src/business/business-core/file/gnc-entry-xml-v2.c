@@ -49,9 +49,10 @@
 #include "gnc-owner-xml-v2.h"
 #include "gnc-engine-util.h"
 
-#include "gncObject.h"
+#include "qofinstance.h"
+#include "qofobject.h"
 
-#define _GNC_MOD_NAME	GNC_ENTRY_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_ENTRY
 
 static short module = MOD_IO;
 
@@ -123,7 +124,7 @@ entry_dom_tree_create (GncEntry *entry)
     xmlSetProp(ret, "version", entry_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(entry_guid_string,
-				      gncEntryGetGUID (entry)));
+				      qof_instance_get_guid(QOF_INSTANCE(entry))));
 
     ts = gncEntryGetDate (entry);
     xmlAddChild(ret, timespec_to_dom_tree (entry_date_string, &ts));
@@ -143,7 +144,7 @@ entry_dom_tree_create (GncEntry *entry)
     acc = gncEntryGetInvAccount (entry);
     if (acc)
       xmlAddChild (ret, guid_to_dom_tree (entry_invacct_string,
-					  xaccAccountGetGUID (acc)));
+					  qof_instance_get_guid(QOF_INSTANCE(acc))));
 
     maybe_add_numeric (ret, entry_iprice_string, gncEntryGetInvPrice (entry));
 
@@ -152,7 +153,7 @@ entry_dom_tree_create (GncEntry *entry)
     invoice = gncEntryGetInvoice (entry);
     if (invoice) {
       xmlAddChild (ret, guid_to_dom_tree (entry_invoice_string,
-					  gncInvoiceGetGUID (invoice)));
+					  qof_instance_get_guid(QOF_INSTANCE(invoice))));
 
       xmlAddChild(ret, text_to_dom_tree(entry_idisctype_string,
 					gncAmountTypeToString (
@@ -170,14 +171,14 @@ entry_dom_tree_create (GncEntry *entry)
     taxtable = gncEntryGetInvTaxTable (entry);
     if (taxtable)
       xmlAddChild (ret, guid_to_dom_tree (entry_itaxtable_string,
-					  gncTaxTableGetGUID (taxtable)));
+					  qof_instance_get_guid (QOF_INSTANCE(taxtable))));
 
     /* vendor bills */
 
     acc = gncEntryGetBillAccount (entry);
     if (acc)
       xmlAddChild (ret, guid_to_dom_tree (entry_billacct_string,
-					  xaccAccountGetGUID (acc)));
+					  qof_instance_get_guid (QOF_INSTANCE(acc))));
 
     maybe_add_numeric (ret, entry_bprice_string, gncEntryGetBillPrice (entry));
 
@@ -185,7 +186,7 @@ entry_dom_tree_create (GncEntry *entry)
     if (invoice) {
       GncOwner *owner;
       xmlAddChild (ret, guid_to_dom_tree (entry_bill_string,
-					  gncInvoiceGetGUID (invoice)));
+					  qof_instance_get_guid(QOF_INSTANCE(invoice))));
       xmlAddChild(ret, int_to_dom_tree(entry_billable_string,
 				       gncEntryGetBillable (entry)));
       owner = gncEntryGetBillTo (entry);
@@ -203,14 +204,14 @@ entry_dom_tree_create (GncEntry *entry)
     taxtable = gncEntryGetBillTaxTable (entry);
     if (taxtable)
       xmlAddChild (ret, guid_to_dom_tree (entry_btaxtable_string,
-					  gncTaxTableGetGUID (taxtable)));
+					  qof_instance_get_guid (QOF_INSTANCE(taxtable))));
 
     /* Other stuff */
 
     order = gncEntryGetOrder (entry);
     if (order)
       xmlAddChild (ret, guid_to_dom_tree (entry_order_string,
-					  gncOrderGetGUID (order)));
+					  qof_instance_get_guid(QOF_INSTANCE (order))));
 
     return ret;
 }
@@ -784,7 +785,7 @@ entry_sixtp_parser_create(void)
 }
 
 static void
-do_count (gpointer entry_p, gpointer count_p)
+do_count (QofEntity * entry_p, gpointer count_p)
 {
   int *count = count_p;
   (*count)++;
@@ -794,15 +795,15 @@ static int
 entry_get_count (GNCBook *book)
 {
   int count = 0;
-  gncObjectForeach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
+  qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
   return count;
 }
 
 static void
-xml_add_entry (gpointer entry_p, gpointer out_p)
+xml_add_entry (QofEntity * entry_p, gpointer out_p)
 {
   xmlNodePtr node;
-  GncEntry *entry = entry_p;
+  GncEntry *entry = (GncEntry *) entry_p;
   FILE *out = out_p;
 
   /* Don't save non-attached entries! */
@@ -819,7 +820,7 @@ xml_add_entry (gpointer entry_p, gpointer out_p)
 static void
 entry_write (FILE *out, GNCBook *book)
 {
-  gncObjectForeach (_GNC_MOD_NAME, book, xml_add_entry, (gpointer) out);
+  qof_object_foreach (_GNC_MOD_NAME, book, xml_add_entry, (gpointer) out);
 }
 
 void
@@ -835,7 +836,7 @@ gnc_entry_xml_initialize (void)
     NULL,			/* scrub */
   };
 
-  gncObjectRegisterBackend (_GNC_MOD_NAME,
+  qof_object_register_backend (_GNC_MOD_NAME,
 			    GNC_FILE_BACKEND,
 			    &be_data);
 }

@@ -1,6 +1,28 @@
+/********************************************************************\
+ * gncOwner.c -- Business Interface:  Object OWNERs                 *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
- * gncOwner.c -- Business Interface:  Object OWNERs
  * Copyright (C) 2001, 2002 Derek Atkins
+ * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -9,14 +31,19 @@
 #include <glib.h>
 #include <string.h>		/* for memcpy() */
 
+#include "qofbook.h"
+#include "qofclass.h"
 #include "qofquerycore.h"
 #include "qofquery.h"
-#include "qofqueryobject.h"
 
+#include "gncCustomerP.h"
+#include "gncEmployeeP.h"
+#include "gncJobP.h"
 #include "gncOwner.h"
 #include "gncOwnerP.h"
+#include "gncVendorP.h"
 
-#define _GNC_MOD_NAME	GNC_OWNER_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_OWNER
 
 #define GNC_OWNER_ID	"gncOwner"
 #define GNC_OWNER_TYPE	"owner-type"
@@ -137,6 +164,36 @@ void gncOwnerCopy (const GncOwner *src, GncOwner *dest)
   memcpy (dest, src, sizeof (*dest));
 }
 
+GncOwner
+gncCloneOwner (const GncOwner *from, QofBook *book)
+{
+  GncOwner owner = { GNC_OWNER_NONE };
+  if (!from) return owner;
+  owner.type = from->type;
+  switch (from->type)
+  {
+    case GNC_OWNER_NONE:
+      return owner;
+    case GNC_OWNER_UNDEFINED:
+      owner.owner.undefined = from->owner.undefined;  /* XXX probably wrong ! */
+      return owner;
+    case GNC_OWNER_CUSTOMER:
+      owner.owner.customer = gncCustomerObtainTwin (from->owner.customer, book);
+      return owner;
+    case GNC_OWNER_JOB:
+      owner.owner.job = gncJobObtainTwin (from->owner.job, book);
+      return owner;
+    case GNC_OWNER_VENDOR:
+      owner.owner.vendor = gncVendorObtainTwin (from->owner.vendor, book);
+      return owner;
+    case GNC_OWNER_EMPLOYEE:
+      owner.owner.employee = gncEmployeeObtainTwin (from->owner.employee, book);
+      return owner;
+    default:
+      return owner;
+  }
+}
+
 gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b)
 {
   if (!a || !b) return FALSE;
@@ -173,13 +230,13 @@ const GUID * gncOwnerGetGUID (GncOwner *owner)
   default:
     return NULL;
   case GNC_OWNER_CUSTOMER:
-    return gncCustomerGetGUID (owner->owner.customer);
+    return qof_instance_get_guid (QOF_INSTANCE(owner->owner.customer));
   case GNC_OWNER_JOB:
-    return gncJobGetGUID (owner->owner.job);
+    return qof_instance_get_guid (QOF_INSTANCE(owner->owner.job));
   case GNC_OWNER_VENDOR:
-    return gncVendorGetGUID (owner->owner.vendor);
+    return qof_instance_get_guid (QOF_INSTANCE(owner->owner.vendor));
   case GNC_OWNER_EMPLOYEE:
-    return gncEmployeeGetGUID (owner->owner.employee);
+    return qof_instance_get_guid (QOF_INSTANCE(owner->owner.employee));
   }
 }
 
@@ -329,31 +386,31 @@ owner_from_lot (GNCLot *lot)
 static void
 reg_lot (void)
 {
-  static QofQueryObject params[] = {
-    { OWNER_FROM_LOT, _GNC_MOD_NAME, (QofAccessFunc)owner_from_lot },
+  static QofParam params[] = {
+    { OWNER_FROM_LOT, _GNC_MOD_NAME, (QofAccessFunc)owner_from_lot, NULL },
     { NULL },
   };
 
-  qof_query_object_register (GNC_ID_LOT, NULL, params);
+  qof_class_register (GNC_ID_LOT, NULL, params);
 }
 
 gboolean gncOwnerRegister (void)
 {
-  static QofQueryObject params[] = {
-    { OWNER_TYPE, QOF_QUERYCORE_INT64, (QofAccessFunc)gncOwnerGetType },
-    { OWNER_CUSTOMER, GNC_CUSTOMER_MODULE_NAME,
-      (QofAccessFunc)gncOwnerGetCustomer },
-    { OWNER_JOB, GNC_JOB_MODULE_NAME, (QofAccessFunc)gncOwnerGetJob },
-    { OWNER_VENDOR, GNC_VENDOR_MODULE_NAME, (QofAccessFunc)gncOwnerGetVendor },
-    { OWNER_EMPLOYEE, GNC_EMPLOYEE_MODULE_NAME, (QofAccessFunc)gncOwnerGetEmployee },
-    { OWNER_PARENT, _GNC_MOD_NAME, (QofAccessFunc)gncOwnerGetEndOwner },
-    { OWNER_PARENTG, QOF_QUERYCORE_GUID, (QofAccessFunc)gncOwnerGetEndGUID },
-    { OWNER_NAME, QOF_QUERYCORE_STRING, (QofAccessFunc)gncOwnerGetName },
-    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gncOwnerGetGUID },
+  static QofParam params[] = {
+    { OWNER_TYPE, QOF_TYPE_INT64, (QofAccessFunc)gncOwnerGetType, NULL },
+    { OWNER_CUSTOMER, GNC_ID_CUSTOMER,
+      (QofAccessFunc)gncOwnerGetCustomer, NULL },
+    { OWNER_JOB, GNC_ID_JOB, (QofAccessFunc)gncOwnerGetJob, NULL },
+    { OWNER_VENDOR, GNC_ID_VENDOR, (QofAccessFunc)gncOwnerGetVendor, NULL },
+    { OWNER_EMPLOYEE, GNC_ID_EMPLOYEE, (QofAccessFunc)gncOwnerGetEmployee, NULL },
+    { OWNER_PARENT, GNC_ID_OWNER, (QofAccessFunc)gncOwnerGetEndOwner, NULL },
+    { OWNER_PARENTG, QOF_TYPE_GUID, (QofAccessFunc)gncOwnerGetEndGUID, NULL },
+    { OWNER_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncOwnerGetName, NULL },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncOwnerGetGUID, NULL },
     { NULL },
   };
 
-  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncOwnerCompare, params);
+  qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncOwnerCompare, params);
   reg_lot ();
 
   return TRUE;

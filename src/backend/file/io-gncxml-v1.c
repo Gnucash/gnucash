@@ -370,6 +370,7 @@ qof_session_load_from_xml_file(QofBook *book, const char *filename)
   g_return_val_if_fail(book, FALSE);
   g_return_val_if_fail(filename, FALSE);
 
+  xaccDisableDataScrubbing();
   top_level_pr = gncxml_setup_for_read (&global_parse_status);
   g_return_val_if_fail(top_level_pr, FALSE);
 
@@ -380,6 +381,7 @@ qof_session_load_from_xml_file(QofBook *book, const char *filename)
                               &parse_result);
 
   sixtp_destroy(top_level_pr);
+  xaccEnableDataScrubbing();
 
   if(parse_ok) 
   {
@@ -1384,8 +1386,8 @@ account_restore_after_child_handler(gpointer data_for_children,
   if(strcmp(child_result->tag, "slots") == 0) {
     kvp_frame *f = (kvp_frame *) child_result->data;
     g_return_val_if_fail(f, FALSE);
-    if(a->kvp_data) kvp_frame_delete(a->kvp_data);
-    a->kvp_data = f;
+    if(a->inst.kvp_data) kvp_frame_delete(a->inst.kvp_data);
+    a->inst.kvp_data = f;
     child_result->should_cleanup = FALSE;
   }
   else if(strcmp(child_result->tag, "currency") == 0) {
@@ -2819,8 +2821,7 @@ txn_restore_after_child_handler(gpointer data_for_children,
   if(strcmp(child_result->tag, "slots") == 0) {
     kvp_frame *f = (kvp_frame *) child_result->data;
     g_return_val_if_fail(f, FALSE);
-    if(trans->kvp_data) kvp_frame_delete(trans->kvp_data);
-    trans->kvp_data = f;
+    qof_instance_set_slots(QOF_INSTANCE(trans),f);
     child_result->should_cleanup = FALSE;
   }
   return(TRUE);

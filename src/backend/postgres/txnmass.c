@@ -269,7 +269,7 @@ pgendGetMassTransactions (PGBackend *be, QofBook *book)
    
       if (trans->idata)
       {
-         trans->kvp_data = pgendKVPFetch (be, trans->idata, trans->kvp_data);
+         trans->inst.kvp_data = pgendKVPFetch (be, trans->idata, trans->inst.kvp_data);
       }
    
       splits = xaccTransGetSplitList(trans);

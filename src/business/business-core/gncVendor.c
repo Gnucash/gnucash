@@ -1,6 +1,28 @@
+/********************************************************************\
+ * gncVendor.c -- the Core Vendor Interface                         *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
- * gncVendor.c -- the Core Vendor Interface
  * Copyright (C) 2001, 2002 Derek Atkins
+ * Copyright (C) 2003 <linas@linas.org>
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -10,64 +32,67 @@
 #include <string.h>
 
 #include "guid.h"
+#include "qofbook.h"
+#include "qofclass.h"
+#include "qofid.h"
+#include "qofid-p.h"
+#include "qofinstance.h"
+#include "qofinstance-p.h"
+#include "qofobject.h"
+#include "qofquery.h"
+#include "qofquerycore.h"
+
 #include "messages.h"
-#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
-#include "qofid.h"
-#include "qofquerycore.h"
-#include "qofquery.h"
-#include "qofqueryobject.h"
 #include "gnc-be-utils.h"
-#include "qofid-p.h"
 
+#include "gncAddressP.h"
+#include "gncBillTermP.h"
 #include "gncBusiness.h"
+#include "gncJobP.h"
+#include "gncTaxTableP.h"
 #include "gncVendor.h"
 #include "gncVendorP.h"
-#include "gncAddress.h"
 
-struct _gncVendor {
-  QofBook *	book;
-  GUID		guid;
-  char *	id;
-  char *	name;
-  char *	notes;
-  GncBillTerm *	terms;
-  GncAddress *	addr;
+struct _gncVendor 
+{
+  QofInstance     inst;
+
+  char *          id;
+  char *          name;
+  char *          notes;
+  GncBillTerm *   terms;
+  GncAddress *    addr;
   gnc_commodity * currency;
-  GncTaxIncluded taxincluded;
-  gboolean	active;
-  GList *	jobs;
-  GncTaxTable*	taxtable;
-  gboolean	taxtable_override;
-
-  int		editlevel;
-  gboolean	do_free;
-
-  gboolean	dirty;
+  GncTaxTable*    taxtable;
+  gboolean        taxtable_override;
+  GncTaxIncluded  taxincluded;
+  gboolean        active;
+  GList *         jobs;
 };
 
-static short	module = MOD_BUSINESS;
+static short        module = MOD_BUSINESS;
 
-#define _GNC_MOD_NAME	GNC_VENDOR_MODULE_NAME
+#define _GNC_MOD_NAME        GNC_ID_VENDOR
+
+/* ============================================================ */
+/* Misc inline funcs */
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
-
-static void addObj (GncVendor *vendor);
-static void remObj (GncVendor *vendor);
 
 G_INLINE_FUNC void mark_vendor (GncVendor *vendor);
 G_INLINE_FUNC void
 mark_vendor (GncVendor *vendor)
 {
-  vendor->dirty = TRUE;
-  gncBusinessSetDirtyFlag (vendor->book, _GNC_MOD_NAME, TRUE);
-
-  gnc_engine_generate_event (&vendor->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
+  vendor->inst.dirty = TRUE;
+  qof_collection_mark_dirty (vendor->inst.entity.collection);
+  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_MODIFY);
 }
 
+/* ============================================================== */
 /* Create/Destroy Functions */
 
 GncVendor *gncVendorCreate (QofBook *book)
@@ -77,19 +102,17 @@ GncVendor *gncVendorCreate (QofBook *book)
   if (!book) return NULL;
 
   vendor = g_new0 (GncVendor, 1);
-  vendor->book = book;
-  vendor->dirty = FALSE;
+  qof_instance_init (&vendor->inst, _GNC_MOD_NAME, book);
+  
   vendor->id = CACHE_INSERT ("");
   vendor->name = CACHE_INSERT ("");
   vendor->notes = CACHE_INSERT ("");
-  vendor->addr = gncAddressCreate (book, &vendor->guid, _GNC_MOD_NAME);
+  vendor->addr = gncAddressCreate (book, &vendor->inst.entity);
   vendor->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   vendor->active = TRUE;
+  vendor->jobs = NULL;
 
-  qof_entity_guid_new (qof_book_get_entity_table (book), &vendor->guid);
-  addObj (vendor);
-
-  gnc_engine_generate_event (&vendor->guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
+  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_CREATE);
 
   return vendor;
 }
@@ -97,7 +120,7 @@ GncVendor *gncVendorCreate (QofBook *book)
 void gncVendorDestroy (GncVendor *vendor)
 {
   if (!vendor) return;
-  vendor->do_free = TRUE;
+  vendor->inst.do_free = TRUE;
   gncVendorCommitEdit (vendor);
 }
 
@@ -105,7 +128,7 @@ static void gncVendorFree (GncVendor *vendor)
 {
   if (!vendor) return;
 
-  gnc_engine_generate_event (&vendor->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
+  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (vendor->id);
   CACHE_REMOVE (vendor->name);
@@ -113,27 +136,84 @@ static void gncVendorFree (GncVendor *vendor)
   gncAddressDestroy (vendor->addr);
   g_list_free (vendor->jobs);
 
-  remObj (vendor);
-
   if (vendor->terms)
     gncBillTermDecRef (vendor->terms);
   if (vendor->taxtable)
     gncTaxTableDecRef (vendor->taxtable);
 
+  qof_instance_release (&vendor->inst);
   g_free (vendor);
 }
 
+/** Create a copy of a vendor, placing the copy into a new book. */
+GncVendor *
+gncCloneVendor (GncVendor *from, QofBook *book)
+{
+  GList *node;
+  GncVendor *vendor;
+
+  if (!book) return NULL;
+
+  vendor = g_new0 (GncVendor, 1);
+  qof_instance_init (&vendor->inst, _GNC_MOD_NAME, book);
+  qof_instance_gemini (&vendor->inst, &from->inst);
+  
+  vendor->id = CACHE_INSERT (from->id);
+  vendor->name = CACHE_INSERT (from->name);
+  vendor->notes = CACHE_INSERT (from->notes);
+  vendor->addr = gncCloneAddress (from->addr, &vendor->inst.entity, book);
+  vendor->taxincluded = from->taxincluded;
+  vendor->taxtable_override = from->taxtable_override;
+  vendor->active = from->active;
+
+  vendor->terms = gncBillTermObtainTwin (from->terms, book);
+  gncBillTermIncRef (vendor->terms);
+
+  vendor->currency = gnc_commodity_obtain_twin (from->currency, book);
+
+  vendor->taxtable = gncTaxTableObtainTwin (from->taxtable, book);
+  gncTaxTableIncRef (vendor->taxtable);
+
+  vendor->jobs = NULL;
+  for (node=g_list_last(from->jobs); node; node=node->prev)
+  {
+    GncJob *job = node->data;
+    job = gncJobObtainTwin (job, book);
+    vendor->jobs = g_list_prepend(vendor->jobs, job);
+  }
+
+  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_CREATE);
+
+  return vendor;
+}
+
+GncVendor *
+gncVendorObtainTwin (GncVendor *from, QofBook *book)
+{
+  GncVendor *vendor;
+  if (!book) return NULL;
+
+  vendor = (GncVendor *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
+  if (!vendor)
+  {
+    vendor = gncCloneVendor (from, book);
+  }
+
+  return vendor;
+}
+
+/* ============================================================== */
 /* Set Functions */
 
 #define SET_STR(obj, member, str) { \
-	char * tmp; \
-	\
-	if (!safe_strcmp (member, str)) return; \
-	gncVendorBeginEdit (obj); \
-	tmp = CACHE_INSERT (str); \
-	CACHE_REMOVE (member); \
-	member = tmp; \
-	}
+        char * tmp; \
+        \
+        if (!safe_strcmp (member, str)) return; \
+        gncVendorBeginEdit (obj); \
+        tmp = CACHE_INSERT (str); \
+        CACHE_REMOVE (member); \
+        member = tmp; \
+        }
 
 void gncVendorSetID (GncVendor *vendor, const char *id)
 {
@@ -162,18 +242,6 @@ void gncVendorSetNotes (GncVendor *vendor, const char *notes)
   gncVendorCommitEdit (vendor);
 }
 
-void gncVendorSetGUID (GncVendor *vendor, const GUID *guid)
-{
-  if (!vendor || !guid) return;
-  if (guid_equal (guid, &vendor->guid)) return;
-
-  gncVendorBeginEdit (vendor);
-  remObj (vendor);
-  vendor->guid = *guid;
-  addObj (vendor);
-  gncVendorCommitEdit (vendor);
-}
-
 void gncVendorSetTerms (GncVendor *vendor, GncBillTerm *terms)
 {
   if (!vendor) return;
@@ -184,7 +252,7 @@ void gncVendorSetTerms (GncVendor *vendor, GncBillTerm *terms)
     gncBillTermDecRef (vendor->terms);
   vendor->terms = terms;
   if (vendor->terms)
-    gncBillTermDecRef (vendor->terms);
+    gncBillTermIncRef (vendor->terms);
   mark_vendor (vendor);
   gncVendorCommitEdit (vendor);
 }
@@ -245,19 +313,8 @@ void gncVendorSetTaxTable (GncVendor *vendor, GncTaxTable *table)
   gncVendorCommitEdit (vendor);
 }
 
+/* ============================================================== */
 /* Get Functions */
-
-QofBook * gncVendorGetBook (GncVendor *vendor)
-{
-  if (!vendor) return NULL;
-  return vendor->book;
-}
-
-const GUID * gncVendorGetGUID (GncVendor *vendor)
-{
-  if (!vendor) return NULL;
-  return &vendor->guid;
-}
 
 const char * gncVendorGetID (GncVendor *vendor)
 {
@@ -327,9 +384,9 @@ void gncVendorAddJob (GncVendor *vendor, GncJob *job)
 
   if (g_list_index(vendor->jobs, job) == -1)
     vendor->jobs = g_list_insert_sorted (vendor->jobs, job,
-					 (GCompareFunc)gncJobCompare);
+                                         (GCompareFunc)gncJobCompare);
 
-  gnc_engine_generate_event (&vendor->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_MODIFY);
 }
 
 void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
@@ -347,32 +404,39 @@ void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
     g_list_free_1 (node);
   }
 
-  gnc_engine_generate_event (&vendor->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_MODIFY);
 }
 
 void gncVendorBeginEdit (GncVendor *vendor)
 {
-  GNC_BEGIN_EDIT (vendor, _GNC_MOD_NAME);
+  GNC_BEGIN_EDIT (&vendor->inst);
 }
 
-static void gncVendorOnError (GncVendor *vendor, QofBackendError errcode)
+static inline void gncVendorOnError (QofInstance *vendor, QofBackendError errcode)
 {
   PERR("Vendor QofBackend Failure: %d", errcode);
 }
 
-static void gncVendorOnDone (GncVendor *vendor)
+static inline void gncVendorOnDone (QofInstance *inst)
 {
-  vendor->dirty = FALSE;
+  GncVendor *vendor = (GncVendor *) inst;
   gncAddressClearDirty (vendor->addr);
+}
+
+static inline void vendor_free (QofInstance *inst)
+{
+  GncVendor *vendor = (GncVendor *) inst;
+  gncVendorFree (vendor);
 }
 
 void gncVendorCommitEdit (GncVendor *vendor)
 {
-  GNC_COMMIT_EDIT_PART1 (vendor);
-  GNC_COMMIT_EDIT_PART2 (vendor, _GNC_MOD_NAME, gncVendorOnError,
-			 gncVendorOnDone, gncVendorFree);
+  GNC_COMMIT_EDIT_PART1 (&vendor->inst);
+  GNC_COMMIT_EDIT_PART2 (&vendor->inst, gncVendorOnError,
+                         gncVendorOnDone, vendor_free);
 }
 
+/* ============================================================== */
 /* Other functions */
 
 int gncVendorCompare (GncVendor *a, GncVendor *b)
@@ -395,117 +459,59 @@ GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all)
     for (iterator = vendor->jobs; iterator; iterator=iterator->next) {
       GncJob *j = iterator->data;
       if (gncJobGetActive (j))
-	list = g_list_append (list, j);
+        list = g_list_append (list, j);
     }
     return list;
   }
 }
 
-GUID gncVendorRetGUID (GncVendor *vendor)
-{
-  if (!vendor)
-    return *guid_null();
-
-  return vendor->guid;
-}
-
-GncVendor * gncVendorLookupDirect (GUID guid, QofBook *book)
-{
-  if (!book) return NULL;
-  return gncVendorLookup (book, &guid);
-}
-
-GncVendor * gncVendorLookup (QofBook *book, const GUID *guid)
-{
-  if (!book || !guid) return NULL;
-  return qof_entity_lookup (gnc_book_get_entity_table (book),
-			   guid, _GNC_MOD_NAME);
-}
-
 gboolean gncVendorIsDirty (GncVendor *vendor)
 {
   if (!vendor) return FALSE;
-  return (vendor->dirty || gncAddressIsDirty (vendor->addr));
+  return (vendor->inst.dirty || gncAddressIsDirty (vendor->addr));
 }
 
+/* ============================================================== */
 /* Package-Private functions */
-
-static void addObj (GncVendor *vendor)
-{
-  gncBusinessAddObject (vendor->book, _GNC_MOD_NAME, vendor, &vendor->guid);
-}
-
-static void remObj (GncVendor *vendor)
-{
-  gncBusinessRemoveObject (vendor->book, _GNC_MOD_NAME, &vendor->guid);
-}
-
-static void _gncVendorCreate (QofBook *book)
-{
-  gncBusinessCreate (book, _GNC_MOD_NAME);
-}
-
-static void _gncVendorDestroy (QofBook *book)
-{
-  gncBusinessDestroy (book, _GNC_MOD_NAME);
-}
-
-static gboolean _gncVendorIsDirty (QofBook *book)
-{
-  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
-}
-
-static void _gncVendorMarkClean (QofBook *book)
-{
-  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
-}
-
-static void _gncVendorForeach (QofBook *book, QofEntityForeachCB cb,
-			       gpointer user_data)
-{
-  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
-}
 
 static const char * _gncVendorPrintable (gpointer item)
 {
-  GncVendor *v;
-
+  GncVendor *v = item;
   if (!item) return NULL;
-
-  v = item;
   return v->name;
 }
 
-static QofObject gncVendorDesc = {
-  QOF_OBJECT_VERSION,
-  _GNC_MOD_NAME,
-  "Vendor",
-  _gncVendorCreate,
-  _gncVendorDestroy,
-  _gncVendorIsDirty,
-  _gncVendorMarkClean,
-  _gncVendorForeach,
-  _gncVendorPrintable
+static QofObject gncVendorDesc = 
+{
+  interface_version:  QOF_OBJECT_VERSION,
+  e_type:             _GNC_MOD_NAME,
+  type_label:         "Vendor",
+  book_begin:         NULL,
+  book_end:           NULL,
+  is_dirty:           qof_collection_is_dirty,
+  mark_clean:         qof_collection_mark_clean,
+  foreach:            qof_collection_foreach,
+  printable:          _gncVendorPrintable
 };
 
 gboolean gncVendorRegister (void)
 {
-  static QofQueryObject params[] = {
-    { VENDOR_ID, QOF_QUERYCORE_STRING, (QofAccessFunc)gncVendorGetID },
-    { VENDOR_NAME, QOF_QUERYCORE_STRING, (QofAccessFunc)gncVendorGetName },
-    { VENDOR_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncVendorGetAddr },
-    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gncVendorGetBook },
-    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gncVendorGetGUID },
-    { QOF_QUERY_PARAM_ACTIVE, QOF_QUERYCORE_BOOLEAN, (QofAccessFunc)gncVendorGetActive },
+  static QofParam params[] = {
+    { VENDOR_ID, QOF_TYPE_STRING, (QofAccessFunc)gncVendorGetID, NULL },
+    { VENDOR_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncVendorGetName, NULL },
+    { VENDOR_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncVendorGetAddr, NULL },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncVendorGetActive, NULL },
     { NULL },
   };
 
-  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncVendorCompare, params);
+  qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncVendorCompare, params);
 
   return qof_object_register (&gncVendorDesc);
 }
 
 gint64 gncVendorNextID (QofBook *book)
 {
-  return gnc_book_get_counter (book, _GNC_MOD_NAME);
+  return qof_book_get_counter (book, _GNC_MOD_NAME);
 }

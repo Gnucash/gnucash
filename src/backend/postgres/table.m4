@@ -362,7 +362,7 @@ define(`compare_version',
 
    p = be->buff; *p = 0;
    p = stpcpy (p, "SELECT version FROM tablename($@) WHERE key_fieldname($@) = ''`");
-   p = guid_to_string_buff (&(ptr->guid), p);
+   p = guid_to_string_buff (qof_entity_get_guid(QOF_ENTITY(ptr)), p);
    p = stpcpy (p, "''`;");
    SEND_QUERY (be,be->buff, -1);
    sql_version = (int) pgendGetResults (be, get_version_cb, (gpointer) -1);
@@ -392,7 +392,7 @@ define(`is_deleted',
 
    p = be->buff; *p = 0;
    p = stpcpy (p, "SELECT version FROM tablename($@)" "Trail WHERE key_fieldname($@) = ''`");
-   p = guid_to_string_buff (&(ptr->guid), p);
+   p = guid_to_string_buff (qof_entity_get_guid(QOF_ENTITY(ptr)), p);
    p = stpcpy (p, "''` AND change = ''`d''`;");
    SEND_QUERY (be,be->buff, -1);
    sql_version = (int) pgendGetResults (be, get_version_cb, (gpointer) -1);

@@ -1,5 +1,26 @@
+/********************************************************************\
+ * gncAddress.c -- an Address object                                *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
- * gncAddress.h -- an Address object
  * Copyright (C) 2001 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
@@ -10,17 +31,17 @@
 
 #include "gnc-engine-util.h"	/* safe_strcmp */
 #include "qofquerycore.h"
-#include "qofqueryobject.h"
+#include "qofclass.h"
 #include "guid.h"
 #include "gnc-event-p.h"
 
 #include "gncAddress.h"
 #include "gncAddressP.h"
 
-struct _gncAddress {
+struct _gncAddress 
+{
   QofBook *	book;
-  const GUID *	parent_guid;
-  QofIdType	parent_type;
+  QofEntity * parent;
   gboolean	dirty;
   char *	name;
   char *	addr1;
@@ -30,7 +51,6 @@ struct _gncAddress {
   char *	phone;
   char *	fax;
   char *	email;
-
 };
 
 #define _GNC_MOD_NAME	GNC_ADDRESS_MODULE_NAME
@@ -44,12 +64,13 @@ mark_address (GncAddress *address)
 {
   address->dirty = TRUE;
 
-  gnc_engine_generate_event (address->parent_guid, address->parent_type, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (address->parent, GNC_EVENT_MODIFY);
 }
 
 /* Create/Destroy functions */
 
-GncAddress * gncAddressCreate (QofBook *book, const GUID *parent, QofIdType ptype)
+GncAddress * 
+gncAddressCreate (QofBook *book, QofEntity *prnt)
 {
   GncAddress *addr;
 
@@ -58,8 +79,7 @@ GncAddress * gncAddressCreate (QofBook *book, const GUID *parent, QofIdType ptyp
   addr = g_new0 (GncAddress, 1);
   addr->book = book;
   addr->dirty = FALSE;
-  addr->parent_guid = parent;
-  addr->parent_type = ptype;
+  addr->parent = prnt;
 
   addr->name = CACHE_INSERT ("");
   addr->addr1 = CACHE_INSERT ("");
@@ -73,7 +93,33 @@ GncAddress * gncAddressCreate (QofBook *book, const GUID *parent, QofIdType ptyp
   return addr;
 }
 
-void gncAddressDestroy (GncAddress *addr){
+GncAddress * 
+gncCloneAddress (GncAddress *from, QofEntity *new_parent, QofBook *book)
+{
+  GncAddress *addr;
+
+  if (!book) return NULL;
+
+  addr = g_new0 (GncAddress, 1);
+  addr->book = book;
+  addr->dirty = TRUE;
+  addr->parent = new_parent;
+
+  addr->name = CACHE_INSERT (from->name);
+  addr->addr1 = CACHE_INSERT (from->addr1);
+  addr->addr2 = CACHE_INSERT (from->addr2);
+  addr->addr3 = CACHE_INSERT (from->addr3);
+  addr->addr4 = CACHE_INSERT (from->addr4);
+  addr->phone = CACHE_INSERT (from->phone);
+  addr->fax = CACHE_INSERT (from->fax);
+  addr->email = CACHE_INSERT (from->email);
+
+  return addr;
+}
+
+void 
+gncAddressDestroy (GncAddress *addr)
+{
   if (!addr) return;
 
   CACHE_REMOVE (addr->name);
@@ -93,6 +139,7 @@ void gncAddressDestroy (GncAddress *addr){
 #define SET_STR(member, str) { \
 	char * tmp; \
 	\
+	if (member == str) return; \
 	if (!safe_strcmp (member, str)) return; \
 	tmp = CACHE_INSERT (str); \
 	CACHE_REMOVE (member); \
@@ -236,16 +283,16 @@ int gncAddressCompare (const GncAddress *a, const GncAddress *b)
 
 gboolean gncAddressRegister (void)
 {
-  static QofQueryObject params[] = {
+  static QofParam params[] = {
 
-    { ADDRESS_NAME, QOF_QUERYCORE_STRING, (QofAccessFunc)gncAddressGetName },
-    { ADDRESS_PHONE, QOF_QUERYCORE_STRING, (QofAccessFunc)gncAddressGetPhone },
-    { ADDRESS_FAX, QOF_QUERYCORE_STRING, (QofAccessFunc)gncAddressGetFax },
-    { ADDRESS_EMAIL, QOF_QUERYCORE_STRING, (QofAccessFunc)gncAddressGetEmail },
+    { ADDRESS_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetName, NULL },
+    { ADDRESS_PHONE, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetPhone, NULL },
+    { ADDRESS_FAX, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetFax, NULL },
+    { ADDRESS_EMAIL, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetEmail, NULL },
     { NULL },
   };
 
-  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncAddressCompare, params);
+  qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncAddressCompare, params);
 
   return TRUE;
 }

@@ -41,14 +41,15 @@
 #include "io-gncxml-gen.h"
 #include "io-gncxml-v2.h"
 
+#include "gncEntry.h"
 #include "gncTaxTableP.h"
 #include "gnc-tax-table-xml-v2.h"
 #include "gnc-engine-util.h"
 
-#include "gncObject.h"
-#include "gncEntry.h"
+#include "qofobject.h"
+#include "qofinstance.h"
 
-#define _GNC_MOD_NAME	GNC_TAXTABLE_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_TAXTABLE
 
 static short module = MOD_IO;
 
@@ -74,7 +75,8 @@ static void
 maybe_add_guid (xmlNodePtr ptr, const char *tag, GncTaxTable *table)
 {
   if (table)
-    xmlAddChild (ptr, guid_to_dom_tree (tag, gncTaxTableGetGUID (table)));
+    xmlAddChild (ptr, guid_to_dom_tree (tag, 
+            qof_instance_get_guid(QOF_INSTANCE(table))));
 }
 
 static xmlNodePtr
@@ -89,7 +91,7 @@ ttentry_dom_tree_create (GncTaxTableEntry *entry)
   account = gncTaxTableEntryGetAccount (entry);
   if (account)
     xmlAddChild(ret, guid_to_dom_tree (ttentry_account_string,
-				       xaccAccountGetGUID (account)));
+				       qof_instance_get_guid (QOF_INSTANCE(account))));
 
   amount = gncTaxTableEntryGetAmount (entry);
   xmlAddChild (ret, gnc_numeric_to_dom_tree (ttentry_amount_string, &amount));
@@ -447,7 +449,7 @@ taxtable_sixtp_parser_create(void)
 }
 
 static void
-do_count (gpointer table_p, gpointer count_p)
+do_count (QofEntity * table_p, gpointer count_p)
 {
   int *count = count_p;
   (*count)++;
@@ -457,15 +459,15 @@ static int
 taxtable_get_count (GNCBook *book)
 {
   int count = 0;
-  gncObjectForeach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
+  qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
   return count;
 }
 
 static void
-xml_add_taxtable (gpointer table_p, gpointer out_p)
+xml_add_taxtable (QofEntity * table_p, gpointer out_p)
 {
   xmlNodePtr node;
-  GncTaxTable *table = table_p;
+  GncTaxTable *table = (GncTaxTable *) table_p;
   FILE *out = out_p;
 
   node = taxtable_dom_tree_create (table);
@@ -477,7 +479,7 @@ xml_add_taxtable (gpointer table_p, gpointer out_p)
 static void
 taxtable_write (FILE *out, GNCBook *book)
 {
-  gncObjectForeach (_GNC_MOD_NAME, book, xml_add_taxtable, (gpointer) out);
+  qof_object_foreach (_GNC_MOD_NAME, book, xml_add_taxtable, (gpointer) out);
 }
 
 
@@ -522,9 +524,9 @@ taxtable_find_senior (GncTaxTable *table)
 
 /* build a list of tax tables that are grandchildren or bogus (empty entry list). */
 static void
-taxtable_scrub_cb (gpointer table_p, gpointer list_p)
+taxtable_scrub_cb (QofEntity * table_p, gpointer list_p)
 {
-  GncTaxTable *table = table_p;
+  GncTaxTable *table = GNC_TAXTABLE(table_p);
   GList **list = list_p;
 
   if (taxtable_is_grandchild(table) || gncTaxTableGetEntries(table) == NULL)
@@ -535,10 +537,10 @@ taxtable_scrub_cb (gpointer table_p, gpointer list_p)
  * grandchildren, then fix them to point to the most senior child
  */
 static void
-taxtable_scrub_entries (gpointer entry_p, gpointer ht_p)
+taxtable_scrub_entries (QofEntity * entry_p, gpointer ht_p)
 {
   GHashTable *ht = ht_p;
-  GncEntry *entry = entry_p;
+  GncEntry *entry = GNC_ENTRY(entry_p);
   GncTaxTable *table, *new_tt;
   gint32 count;
 
@@ -546,7 +548,7 @@ taxtable_scrub_entries (gpointer entry_p, gpointer ht_p)
   if (table) {
     if (taxtable_is_grandchild(table)) {
       PINFO("Fixing i-taxtable on entry %s\n",
-	     guid_to_string(gncEntryGetGUID(entry)));
+	     guid_to_string(qof_instance_get_guid(QOF_INSTANCE(entry))));
       new_tt = taxtable_find_senior(table);
       gncEntryBeginEdit(entry);
       gncEntrySetInvTaxTable(entry, new_tt);
@@ -564,7 +566,7 @@ taxtable_scrub_entries (gpointer entry_p, gpointer ht_p)
   if (table) {
     if (taxtable_is_grandchild(table)) {
       PINFO("Fixing b-taxtable on entry %s\n",
-	     guid_to_string(gncEntryGetGUID(entry)));
+	     guid_to_string(qof_instance_get_guid(QOF_INSTANCE(entry))));
       new_tt = taxtable_find_senior(table);
       gncEntryBeginEdit(entry);
       gncEntrySetBillTaxTable(entry, new_tt);
@@ -580,10 +582,10 @@ taxtable_scrub_entries (gpointer entry_p, gpointer ht_p)
 }
 
 static void
-taxtable_scrub_cust (gpointer cust_p, gpointer ht_p)
+taxtable_scrub_cust (QofEntity * cust_p, gpointer ht_p)
 {
   GHashTable *ht = ht_p;
-  GncCustomer *cust = cust_p;
+  GncCustomer *cust = GNC_CUSTOMER(cust_p);
   GncTaxTable *table;
   gint32 count;
   
@@ -596,10 +598,10 @@ taxtable_scrub_cust (gpointer cust_p, gpointer ht_p)
 }
 
 static void
-taxtable_scrub_vendor (gpointer vendor_p, gpointer ht_p)
+taxtable_scrub_vendor (QofEntity * vendor_p, gpointer ht_p)
 {
   GHashTable *ht = ht_p;
-  GncVendor *vendor = vendor_p;
+  GncVendor *vendor = GNC_VENDOR(vendor_p);
   GncTaxTable *table;
   gint32 count;
 
@@ -619,7 +621,7 @@ taxtable_reset_refcount (gpointer key, gpointer value, gpointer notused)
 
   if (count != gncTaxTableGetRefcount(table) && !gncTaxTableGetInvisible(table)) {
     PWARN("Fixing refcount on taxtable %s (%lld -> %d)\n",
-	  guid_to_string(gncTaxTableGetGUID(table)),
+	  guid_to_string(qof_instance_get_guid(QOF_INSTANCE(table))),
 	  gncTaxTableGetRefcount(table), count)
       gncTaxTableSetRefcount(table, count);
   }
@@ -633,17 +635,17 @@ taxtable_scrub (GNCBook *book)
   GncTaxTable *parent, *table;
   GHashTable *ht = g_hash_table_new(g_direct_hash, g_direct_equal);
 
-  gncObjectForeach (GNC_ENTRY_MODULE_NAME, book, taxtable_scrub_entries, ht);
-  gncObjectForeach (GNC_CUSTOMER_MODULE_NAME, book, taxtable_scrub_cust, ht);
-  gncObjectForeach (GNC_VENDOR_MODULE_NAME, book, taxtable_scrub_vendor, ht);
-  gncObjectForeach (_GNC_MOD_NAME, book, taxtable_scrub_cb, &list);
+  qof_object_foreach (GNC_ID_ENTRY, book, taxtable_scrub_entries, ht);
+  qof_object_foreach (GNC_ID_CUSTOMER, book, taxtable_scrub_cust, ht);
+  qof_object_foreach (GNC_ID_VENDOR, book, taxtable_scrub_vendor, ht);
+  qof_object_foreach (GNC_ID_TAXTABLE, book, taxtable_scrub_cb, &list);
 
   /* destroy the list of "grandchildren" tax tables */
   for (node = list; node; node = node->next) {
     table = node->data;
 
     PINFO ("deleting grandchild taxtable: %s\n",
-	   guid_to_string(gncTaxTableGetGUID(table)));
+	   guid_to_string(qof_instance_get_guid(QOF_INSTANCE(table))));
 
     /* Make sure the parent has no children */
     parent = gncTaxTableGetParent(table);
@@ -674,7 +676,7 @@ gnc_taxtable_xml_initialize (void)
     taxtable_scrub,
   };
 
-  gncObjectRegisterBackend (_GNC_MOD_NAME,
+  qof_object_register_backend (_GNC_MOD_NAME,
 			    GNC_FILE_BACKEND,
 			    &be_data);
 }

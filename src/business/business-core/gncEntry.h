@@ -1,5 +1,26 @@
+/********************************************************************\
+ * gncEntry.h -- the Core Business Entry Interface                  *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
- * gncEntry.h -- the Core Business Entry Interface
  * Copyright (C) 2001,2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
@@ -20,13 +41,18 @@ typedef enum {
   GNC_DISC_POSTTAX
 } GncDiscountHow;
 
-#include "gnc-book.h"
-#include "gnc-date.h"
-#include "gncTaxTable.h"
-#include "gncOrder.h"
-#include "gncInvoice.h"
+#include "qofbook.h"
+#include "qofinstance.h"
 
-#define GNC_ENTRY_MODULE_NAME "gncEntry"
+#include "gnc-date.h"
+#include "gncBusiness.h"
+#include "gncInvoice.h"
+#include "gncOrder.h"
+#include "gncTaxTable.h"
+
+#define GNC_ID_ENTRY "gncEntry"
+#define GNC_IS_ENTRY(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_ENTRY))
+#define GNC_ENTRY(obj)     (QOF_CHECK_CAST((obj), GNC_ID_ENTRY, GncEntry))
 
 /* How to apply the discount and taxes.  There are three distinct ways to
  * apply them:
@@ -82,8 +108,6 @@ void gncEntrySetBillPayment (GncEntry *entry, GncEntryPaymentType type);
 
 /* GET FUNCTIONS */
 /* Generic (shared) data */
-QofBook * gncEntryGetBook (GncEntry *entry);
-const GUID * gncEntryGetGUID (GncEntry *entry);
 Timespec gncEntryGetDate (GncEntry *entry);
 Timespec gncEntryGetDateEntered (GncEntry *entry);
 const char * gncEntryGetDescription (GncEntry *entry);
@@ -148,7 +172,14 @@ GncOrder * gncEntryGetOrder (GncEntry *entry);
 GncInvoice * gncEntryGetInvoice (GncEntry *entry);
 GncInvoice * gncEntryGetBill (GncEntry *entry);
 
-GncEntry * gncEntryLookup (QofBook *book, const GUID *guid);
+/** Return a pointer to the instance gncEntry that is identified
+ *  by the guid, and is residing in the book. Returns NULL if the 
+ *  instance can't be found.
+ *  Equivalent function prototype is
+ *  GncEntry * gncEntryLookup (QofBook *book, const GUID *guid);
+ */
+#define gncEntryLookup(book,guid)    \
+       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_ENTRY, GncEntry)
 
 gboolean gncEntryIsOpen (GncEntry *entry);
 void gncEntryBeginEdit (GncEntry *entry);
@@ -170,5 +201,8 @@ int gncEntryCompare (GncEntry *a, GncEntry *b);
 #define ENTRY_ORDER	"order"
 #define ENTRY_INVOICE	"invoice"
 #define ENTRY_BILL	"bill"
+
+/* deprecated functions, should be removed */
+#define gncEntryGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
 
 #endif /* GNC_ENTRY_H_ */

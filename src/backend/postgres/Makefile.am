@@ -102,10 +102,10 @@ AM_CFLAGS = \
 
 $(M4_SRC): table.m4
 
-%-autogen.c: %-objects.m4
+%-autogen.c: %-objects.m4  table.m4
 	m4 -I ${srcdir} $< > $@
 
-%-autogen.h: %-objects-header.m4
+%-autogen.h: %-objects-header.m4 table.m4
 	m4 -I ${srcdir} $< > $@
 
 .sql.c:

@@ -48,9 +48,12 @@
 #include "gnc-address-xml-v2.h"
 #include "gnc-engine-util.h"
 
-#include "gncObject.h"
+#include "qofobject.h"
+#include "qofinstance.h"
 
-#define _GNC_MOD_NAME	GNC_CUSTOMER_MODULE_NAME
+#include "xml-helpers.h"
+
+#define _GNC_MOD_NAME	GNC_ID_CUSTOMER
 
 static short module = MOD_IO;
 
@@ -74,17 +77,10 @@ const gchar *customer_version_string = "2.0.0";
 #define cust_taxtableoverride_string "cust:use-tt"
 #define cust_slots_string "cust:slots"
 
-static void
-maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
-{
-  if (str && strlen(str) > 0)
-    xmlAddChild (ptr, text_to_dom_tree (tag, str));
-}
-
 static xmlNodePtr
 customer_dom_tree_create (GncCustomer *cust)
 {
-    xmlNodePtr ret;
+    xmlNodePtr ret, kvpnode;
     gnc_numeric num;
     GncBillTerm *term;
     GncTaxTable *taxtable;
@@ -93,7 +89,7 @@ customer_dom_tree_create (GncCustomer *cust)
     xmlSetProp(ret, "version", customer_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(cust_guid_string,
-				      gncCustomerGetGUID (cust)));
+				      qof_instance_get_guid(QOF_INSTANCE(cust))));
 
     xmlAddChild(ret, text_to_dom_tree(cust_name_string,
                                       gncCustomerGetName (cust)));
@@ -112,7 +108,7 @@ customer_dom_tree_create (GncCustomer *cust)
     term = gncCustomerGetTerms (cust);
     if (term)
       xmlAddChild(ret, guid_to_dom_tree(cust_terms_string,
-					gncBillTermGetGUID (term)));
+					qof_instance_get_guid (QOF_INSTANCE(term))));
 
     xmlAddChild(ret, text_to_dom_tree(cust_taxincluded_string,
 				      gncTaxIncludedTypeToString (
@@ -137,7 +133,11 @@ customer_dom_tree_create (GncCustomer *cust)
     taxtable = gncCustomerGetTaxTable (cust);
     if (taxtable)
       xmlAddChild (ret, guid_to_dom_tree (cust_taxtable_string,
-					  gncTaxTableGetGUID (taxtable)));
+					  qof_instance_get_guid(QOF_INSTANCE(taxtable))));
+
+    kvpnode = kvp_frame_to_dom_tree (cust_slots_string, 
+                 qof_instance_get_slots (QOF_INSTANCE(cust)));
+    if (kvpnode) xmlAddChild (ret, kvpnode);
 
     return ret;
 }
@@ -371,7 +371,9 @@ customer_taxtableoverride_handler (xmlNodePtr node, gpointer cust_pdata)
 static gboolean
 customer_slots_handler (xmlNodePtr node, gpointer cust_pdata)
 {
-  return TRUE;
+  struct customer_pdata *pdata = cust_pdata;
+  return dom_tree_to_kvp_frame_given (node, 
+       qof_instance_get_slots (QOF_INSTANCE(pdata->customer)));
 }
 
 static struct dom_tree_handler customer_handlers_v2[] = {
@@ -478,10 +480,10 @@ customer_should_be_saved (GncCustomer *customer)
 }
 
 static void
-do_count (gpointer cust_p, gpointer count_p)
+do_count (QofEntity * cust_p, gpointer count_p)
 {
   int *count = count_p;
-  if (customer_should_be_saved (cust_p))
+  if (customer_should_be_saved ((GncCustomer *)cust_p))
     (*count)++;
 }
 
@@ -489,18 +491,18 @@ static int
 customer_get_count (GNCBook *book)
 {
   int count = 0;
-  gncObjectForeach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
+  qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
   return count;
 }
 
 static void
-xml_add_customer (gpointer cust_p, gpointer out_p)
+xml_add_customer (QofEntity * cust_p, gpointer out_p)
 {
   xmlNodePtr node;
-  GncCustomer *cust = cust_p;
+  GncCustomer *cust = (GncCustomer *) cust_p;
   FILE *out = out_p;
 
-  if (!customer_should_be_saved (cust_p))
+  if (!customer_should_be_saved (cust))
     return;
 
   node = customer_dom_tree_create (cust);
@@ -512,7 +514,7 @@ xml_add_customer (gpointer cust_p, gpointer out_p)
 static void
 customer_write (FILE *out, GNCBook *book)
 {
-  gncObjectForeach (_GNC_MOD_NAME, book, xml_add_customer, (gpointer) out);
+  qof_object_foreach (_GNC_MOD_NAME, book, xml_add_customer, (gpointer) out);
 }
 
 void
@@ -528,7 +530,7 @@ gnc_customer_xml_initialize (void)
     NULL,			/* scrub */
   };
 
-  gncObjectRegisterBackend (_GNC_MOD_NAME,
+  qof_object_register_backend (_GNC_MOD_NAME,
 			    GNC_FILE_BACKEND,
 			    &be_data);
 }

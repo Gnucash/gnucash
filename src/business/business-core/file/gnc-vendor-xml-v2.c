@@ -48,9 +48,12 @@
 #include "gnc-address-xml-v2.h"
 #include "gnc-engine-util.h"
 
-#include "gncObject.h"
+#include "qofinstance.h"
+#include "qofobject.h"
 
-#define _GNC_MOD_NAME	GNC_VENDOR_MODULE_NAME
+#include "xml-helpers.h"
+
+#define _GNC_MOD_NAME	GNC_ID_VENDOR
 
 static short module = MOD_IO;
 
@@ -71,13 +74,6 @@ const gchar *vendor_version_string = "2.0.0";
 #define vendor_taxtableoverride_string "vendor:use-tt"
 #define vendor_slots_string "vendor:slots"
 
-static void
-maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
-{
-  if (str && strlen(str) > 0)
-    xmlAddChild (ptr, text_to_dom_tree (tag, str));
-}
-
 static xmlNodePtr
 vendor_dom_tree_create (GncVendor *vendor)
 {
@@ -89,7 +85,7 @@ vendor_dom_tree_create (GncVendor *vendor)
     xmlSetProp(ret, "version", vendor_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(vendor_guid_string,
-				      gncVendorGetGUID (vendor)));
+				      qof_instance_get_guid (QOF_INSTANCE(vendor))));
 
     xmlAddChild(ret, text_to_dom_tree(vendor_name_string,
                                       gncVendorGetName (vendor)));
@@ -105,7 +101,7 @@ vendor_dom_tree_create (GncVendor *vendor)
     term = gncVendorGetTerms (vendor);
     if (term)
       xmlAddChild(ret, guid_to_dom_tree(vendor_terms_string,
-					gncBillTermGetGUID (term)));
+					qof_instance_get_guid(QOF_INSTANCE(term))));
 
     xmlAddChild(ret, text_to_dom_tree(vendor_taxincluded_string,
 				      gncTaxIncludedTypeToString (
@@ -124,7 +120,7 @@ vendor_dom_tree_create (GncVendor *vendor)
     taxtable = gncVendorGetTaxTable (vendor);
     if (taxtable)
       xmlAddChild (ret, guid_to_dom_tree (vendor_taxtable_string,
-					  gncTaxTableGetGUID (taxtable)));
+					  qof_instance_get_guid(QOF_INSTANCE(taxtable))));
 
     return ret;
 }
@@ -422,10 +418,10 @@ vendor_should_be_saved (GncVendor *vendor)
 }
 
 static void
-do_count (gpointer vendor_p, gpointer count_p)
+do_count (QofEntity * vendor_p, gpointer count_p)
 {
   int *count = count_p;
-  if (vendor_should_be_saved (vendor_p))
+  if (vendor_should_be_saved ((GncVendor *)vendor_p))
     (*count)++;
 }
 
@@ -433,15 +429,15 @@ static int
 vendor_get_count (GNCBook *book)
 {
   int count = 0;
-  gncObjectForeach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
+  qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
   return count;
 }
 
 static void
-xml_add_vendor (gpointer vendor_p, gpointer out_p)
+xml_add_vendor (QofEntity * vendor_p, gpointer out_p)
 {
   xmlNodePtr node;
-  GncVendor *vendor = vendor_p;
+  GncVendor *vendor = (GncVendor *) vendor_p;
   FILE *out = out_p;
 
   if (!vendor_should_be_saved (vendor))
@@ -456,7 +452,7 @@ xml_add_vendor (gpointer vendor_p, gpointer out_p)
 static void
 vendor_write (FILE *out, GNCBook *book)
 {
-  gncObjectForeach (_GNC_MOD_NAME, book, xml_add_vendor, (gpointer) out);
+  qof_object_foreach (_GNC_MOD_NAME, book, xml_add_vendor, (gpointer) out);
 }
 
 void
@@ -472,7 +468,7 @@ gnc_vendor_xml_initialize (void)
     NULL,			/* scrub */
   };
 
-  gncObjectRegisterBackend (_GNC_MOD_NAME,
+  qof_object_register_backend (_GNC_MOD_NAME,
 			    GNC_FILE_BACKEND,
 			    &be_data);
 }

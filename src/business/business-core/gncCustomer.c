@@ -1,6 +1,28 @@
+/********************************************************************\
+ * gncCustomer.c -- the Core Customer Interface                     *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
- * gncCustomer.c -- the Core Customer Interface
  * Copyright (C) 2001,2002 Derek Atkins
+ * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -13,66 +35,70 @@
 #include "gnc-engine-util.h"
 #include "gnc-commodity.h"
 #include "gnc-numeric.h"
-#include "qofobject.h"
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"
 
 #include "qofbook.h"
+#include "qofclass.h"
 #include "qofid-p.h"
 #include "qofid.h"
+#include "qofinstance.h"
+#include "qofinstance-p.h"
+#include "qofobject.h"
 #include "qofquerycore.h"
 #include "qofquery.h"
-#include "qofqueryobject.h"
 
+#include "gncAddressP.h"
+#include "gncBillTermP.h"
 #include "gncBusiness.h"
 #include "gncCustomer.h"
 #include "gncCustomerP.h"
-#include "gncAddress.h"
+#include "gncJobP.h"
+#include "gncTaxTableP.h"
 
-struct _gncCustomer {
-  QofBook *	book;
-  GUID		guid;
-  char *	id;
-  char *	name;
-  char *	notes;
-  GncBillTerm *	terms;
-  GncAddress *	addr;
-  GncAddress *	shipaddr;
-  gnc_commodity	* currency;
-  gnc_numeric	discount;
-  gnc_numeric	credit;
-  GncTaxIncluded taxincluded;
-  gboolean	active;
-  GList *	jobs;
+struct _gncCustomer 
+{
+  QofInstance     inst;
 
-  int		editlevel;
-  gboolean	do_free;
+  /* The following fields are identical to 'vendor' */
+  char *          id;
+  char *          name;
+  char *          notes;
+  GncBillTerm *   terms;
+  GncAddress *    addr;
+  gnc_commodity * currency;
+  GncTaxTable*    taxtable;
+  gboolean        taxtable_override;
+  GncTaxIncluded  taxincluded;
+  gboolean        active;
+  GList *         jobs;
 
-  GncTaxTable*	taxtable;
-  gboolean	taxtable_override;
-  gboolean	dirty;
+  /* The following fields aer unique to 'customer' */
+  gnc_numeric     credit;
+  gnc_numeric     discount;
+  GncAddress *    shipaddr;
 };
 
-static short	module = MOD_BUSINESS;
+static short module = MOD_BUSINESS;
 
-#define _GNC_MOD_NAME	GNC_CUSTOMER_MODULE_NAME
+#define _GNC_MOD_NAME        GNC_ID_CUSTOMER
+
+/* ============================================================== */
+/* misc inline funcs */
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
-
-static void addObj (GncCustomer *cust);
-static void remObj (GncCustomer *cust);
 
 G_INLINE_FUNC void mark_customer (GncCustomer *customer);
 G_INLINE_FUNC void
 mark_customer (GncCustomer *customer)
 {
-  customer->dirty = TRUE;
-  gncBusinessSetDirtyFlag (customer->book, _GNC_MOD_NAME, TRUE);
-
-  gnc_engine_generate_event (&customer->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
+  customer->inst.dirty = TRUE;
+  qof_collection_mark_dirty (customer->inst.entity.collection);
+  gnc_engine_gen_event (&customer->inst.entity, GNC_EVENT_MODIFY);
 }
 
+/* ============================================================== */
 /* Create/Destroy Functions */
 
 GncCustomer *gncCustomerCreate (QofBook *book)
@@ -82,23 +108,65 @@ GncCustomer *gncCustomerCreate (QofBook *book)
   if (!book) return NULL;
 
   cust = g_new0 (GncCustomer, 1);
-  cust->book = book;
-  cust->dirty = FALSE;
+  qof_instance_init (&cust->inst, _GNC_MOD_NAME, book);
+
   cust->id = CACHE_INSERT ("");
   cust->name = CACHE_INSERT ("");
   cust->notes = CACHE_INSERT ("");
-  cust->addr = gncAddressCreate (book, &cust->guid, _GNC_MOD_NAME);
-  cust->shipaddr = gncAddressCreate (book, &cust->guid, _GNC_MOD_NAME);
-  cust->discount = gnc_numeric_zero();
-  cust->credit = gnc_numeric_zero();
+  cust->addr = gncAddressCreate (book, &cust->inst.entity);
   cust->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   cust->active = TRUE;
   cust->jobs = NULL;
 
-  qof_entity_guid_new (qof_book_get_entity_table (book),&cust->guid);
-  addObj (cust);
+  cust->discount = gnc_numeric_zero();
+  cust->credit = gnc_numeric_zero();
+  cust->shipaddr = gncAddressCreate (book, &cust->inst.entity);
 
-  gnc_engine_generate_event (&cust->guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
+  gnc_engine_gen_event (&cust->inst.entity, GNC_EVENT_CREATE);
+
+  return cust;
+}
+
+/** Create a copy of a customer, placing the copy into a new book. */
+GncCustomer *
+gncCloneCustomer (GncCustomer *from, QofBook *book)
+{
+  GList *node;
+  GncCustomer *cust;
+
+  cust = g_new0 (GncCustomer, 1);
+
+  qof_instance_init (&cust->inst, _GNC_MOD_NAME, book);
+  qof_instance_gemini (&cust->inst, &from->inst);
+
+  cust->id = CACHE_INSERT (from->id);
+  cust->name = CACHE_INSERT (from->name);
+  cust->notes = CACHE_INSERT (from->notes);
+  cust->discount = from->discount;
+  cust->credit = from->credit;
+  cust->taxincluded = from->taxincluded;
+  cust->active = from->active;
+  cust->taxtable_override = from->taxtable_override;
+
+  cust->addr = gncCloneAddress (from->addr, &cust->inst.entity, book);
+  cust->shipaddr = gncCloneAddress (from->shipaddr, &cust->inst.entity, book);
+
+  /* Find the matching currency in the new book, assumes
+   * currency has already been copied into new book. */
+  cust->currency = gnc_commodity_obtain_twin (from->currency, book);
+
+  /* Find the matching bill term, tax table in the new book */
+  cust->terms = gncBillTermObtainTwin(from->terms, book);
+  cust->taxtable = gncTaxTableObtainTwin (from->taxtable, book);
+
+  for (node=g_list_last(cust->jobs); node; node=node->next)
+  {
+    GncJob *job = node->data;
+    job = gncJobObtainTwin (job, book);
+    cust->jobs = g_list_prepend(cust->jobs, job);
+  }
+
+  gnc_engine_gen_event (&cust->inst.entity, GNC_EVENT_CREATE);
 
   return cust;
 }
@@ -106,7 +174,8 @@ GncCustomer *gncCustomerCreate (QofBook *book)
 void gncCustomerDestroy (GncCustomer *cust)
 {
   if (!cust) return;
-  cust->do_free = TRUE;
+  cust->inst.do_free = TRUE;
+  qof_collection_mark_dirty (cust->inst.entity.collection);
   gncCustomerCommitEdit (cust);
 }
 
@@ -114,7 +183,7 @@ static void gncCustomerFree (GncCustomer *cust)
 {
   if (!cust) return;
 
-  gnc_engine_generate_event (&cust->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
+  gnc_engine_gen_event (&cust->inst.entity, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (cust->id);
   CACHE_REMOVE (cust->name);
@@ -123,27 +192,41 @@ static void gncCustomerFree (GncCustomer *cust)
   gncAddressDestroy (cust->shipaddr);
   g_list_free (cust->jobs);
 
-  remObj (cust);
-
   if (cust->terms)
     gncBillTermDecRef (cust->terms);
   if (cust->taxtable)
     gncTaxTableDecRef (cust->taxtable);
 
+  qof_instance_release (&cust->inst);
   g_free (cust);
 }
 
+GncCustomer *
+gncCustomerObtainTwin (GncCustomer *from, QofBook *book)
+{
+  GncCustomer *cust;
+  if (!from) return NULL;
+
+  cust = (GncCustomer *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
+  if (!cust)
+  {
+    cust = gncCloneCustomer (from, book);
+  }
+  return cust;
+}
+
+/* ============================================================== */
 /* Set Functions */
 
 #define SET_STR(obj, member, str) { \
-	char * tmp; \
-	\
-	if (!safe_strcmp (member, str)) return; \
-	gncCustomerBeginEdit (obj); \
-	tmp = CACHE_INSERT (str); \
-	CACHE_REMOVE (member); \
-	member = tmp; \
-	}
+        char * tmp; \
+        \
+        if (!safe_strcmp (member, str)) return; \
+        gncCustomerBeginEdit (obj); \
+        tmp = CACHE_INSERT (str); \
+        CACHE_REMOVE (member); \
+        member = tmp; \
+        }
 
 void gncCustomerSetID (GncCustomer *cust, const char *id)
 {
@@ -169,18 +252,6 @@ void gncCustomerSetNotes (GncCustomer *cust, const char *notes)
   if (!notes) return;
   SET_STR(cust, cust->notes, notes);
   mark_customer (cust);
-  gncCustomerCommitEdit (cust);
-}
-
-void gncCustomerSetGUID (GncCustomer *cust, const GUID *guid)
-{
-  if (!cust || !guid) return;
-  if (guid_equal (guid, &cust->guid)) return;
-
-  gncCustomerBeginEdit (cust);
-  remObj (cust);
-  cust->guid = *guid;
-  addObj (cust);
   gncCustomerCommitEdit (cust);
 }
 
@@ -282,9 +353,9 @@ void gncCustomerAddJob (GncCustomer *cust, GncJob *job)
 
   if (g_list_index(cust->jobs, job) == -1)
     cust->jobs = g_list_insert_sorted (cust->jobs, job,
-				       (GCompareFunc)gncJobCompare);
+                                       (GCompareFunc)gncJobCompare);
 
-  gnc_engine_generate_event (&cust->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&cust->inst.entity, GNC_EVENT_MODIFY);
 }
 
 void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
@@ -301,46 +372,41 @@ void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
     cust->jobs = g_list_remove_link (cust->jobs, node);
     g_list_free_1 (node);
   }
-  gnc_engine_generate_event (&cust->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&cust->inst.entity, GNC_EVENT_MODIFY);
 }
 
 void gncCustomerBeginEdit (GncCustomer *cust)
 {
-  GNC_BEGIN_EDIT (cust, _GNC_MOD_NAME);
+  GNC_BEGIN_EDIT (&cust->inst);
 }
 
-static void gncCustomerOnError (GncCustomer *cust, QofBackendError errcode)
+static inline void gncCustomerOnError (QofInstance *inst, QofBackendError errcode)
 {
   PERR("Customer QofBackend Failure: %d", errcode);
 }
 
-static void gncCustomerOnDone (GncCustomer *cust)
+static inline void gncCustomerOnDone (QofInstance *inst)
 {
-  cust->dirty = FALSE;
+  GncCustomer *cust = (GncCustomer *) inst;
   gncAddressClearDirty (cust->addr);
   gncAddressClearDirty (cust->shipaddr);
 }
 
+static inline void cust_free (QofInstance *inst)
+{
+  GncCustomer *cust = (GncCustomer *) inst;
+  gncCustomerFree (cust);
+}
+
 void gncCustomerCommitEdit (GncCustomer *cust)
 {
-  GNC_COMMIT_EDIT_PART1 (cust);
-  GNC_COMMIT_EDIT_PART2 (cust, _GNC_MOD_NAME, gncCustomerOnError,
-			 gncCustomerOnDone, gncCustomerFree);
+  GNC_COMMIT_EDIT_PART1 (&cust->inst);
+  GNC_COMMIT_EDIT_PART2 (&cust->inst, gncCustomerOnError,
+                         gncCustomerOnDone, cust_free);
 }
 
+/* ============================================================== */
 /* Get Functions */
-
-QofBook * gncCustomerGetBook (GncCustomer *cust)
-{
-  if (!cust) return NULL;
-  return cust->book;
-}
-
-const GUID * gncCustomerGetGUID (GncCustomer *cust)
-{
-  if (!cust) return NULL;
-  return &cust->guid;
-}
 
 const char * gncCustomerGetID (GncCustomer *cust)
 {
@@ -431,39 +497,18 @@ GList * gncCustomerGetJoblist (GncCustomer *cust, gboolean show_all)
     for (iterator = cust->jobs; iterator; iterator=iterator->next) {
       GncJob *j = iterator->data;
       if (gncJobGetActive (j))
-	list = g_list_append (list, j);
+        list = g_list_append (list, j);
     }
     return list;
   }
 }
 
-GUID gncCustomerRetGUID (GncCustomer *customer)
-{
-  if (!customer)
-    return *guid_null();
-
-  return customer->guid;
-}
-
-GncCustomer * gncCustomerLookupDirect (GUID guid, QofBook *book)
-{
-  if (!book) return NULL;
-  return gncCustomerLookup (book, &guid);
-}
-
-GncCustomer * gncCustomerLookup (QofBook *book, const GUID *guid)
-{
-  if (!book || !guid) return NULL;
-  return qof_entity_lookup (gnc_book_get_entity_table (book),
-			   guid, _GNC_MOD_NAME);
-}
-
 gboolean gncCustomerIsDirty (GncCustomer *cust)
 {
   if (!cust) return FALSE;
-  return (cust->dirty ||
-	  gncAddressIsDirty (cust->addr) ||
-	  gncAddressIsDirty (cust->shipaddr));
+  return (cust->inst.dirty ||
+          gncAddressIsDirty (cust->addr) ||
+          gncAddressIsDirty (cust->shipaddr));
 }
 
 /* Other functions */
@@ -477,85 +522,47 @@ int gncCustomerCompare (GncCustomer *a, GncCustomer *b)
   return(strcmp(a->name, b->name));
 }
 
+/* ============================================================== */
 /* Package-Private functions */
-
-static void addObj (GncCustomer *cust)
-{
-  gncBusinessAddObject (cust->book, _GNC_MOD_NAME, cust, &cust->guid);
-}
-
-static void remObj (GncCustomer *cust)
-{
-  gncBusinessRemoveObject (cust->book, _GNC_MOD_NAME, &cust->guid);
-}
-
-static void _gncCustomerCreate (QofBook *book)
-{
-  gncBusinessCreate (book, _GNC_MOD_NAME);
-}
-
-static void _gncCustomerDestroy (QofBook *book)
-{
-  return gncBusinessDestroy (book, _GNC_MOD_NAME);
-}
-
-static gboolean _gncCustomerIsDirty (QofBook *book)
-{
-  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
-}
-
-static void _gncCustomerMarkClean (QofBook *book)
-{
-  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
-}
-
-static void _gncCustomerForeach (QofBook *book, QofEntityForeachCB cb,
-				 gpointer user_data)
-{
-  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
-}
-
 static const char * _gncCustomerPrintable (gpointer item)
 {
-  GncCustomer *c;
-
+  GncCustomer *c = item;
   if (!item) return NULL;
-
-  c = item;
   return c->name;
 }
 
-static QofObject gncCustomerDesc = {
-  QOF_OBJECT_VERSION,
-  _GNC_MOD_NAME,
-  "Customer",
-  _gncCustomerCreate,
-  _gncCustomerDestroy,
-  _gncCustomerIsDirty,
-  _gncCustomerMarkClean,
-  _gncCustomerForeach,
-  _gncCustomerPrintable,
+static QofObject gncCustomerDesc = 
+{
+  interface_version:  QOF_OBJECT_VERSION,
+  e_type:             _GNC_MOD_NAME,
+  type_label:         "Customer",
+  book_begin:         NULL,
+  book_end:           NULL,
+  is_dirty:           qof_collection_is_dirty,
+  mark_clean:         qof_collection_mark_clean,
+  foreach:            qof_collection_foreach,
+  printable:          _gncCustomerPrintable,
 };
 
 gboolean gncCustomerRegister (void)
 {
-  static QofQueryObject params[] = {
-    { CUSTOMER_ID, QOF_QUERYCORE_STRING, (QofAccessFunc)gncCustomerGetID },
-    { CUSTOMER_NAME, QOF_QUERYCORE_STRING, (QofAccessFunc)gncCustomerGetName },
-    { CUSTOMER_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetAddr },
-    { CUSTOMER_SHIPADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetShipAddr },
-    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gncCustomerGetBook },
-    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gncCustomerGetGUID },
-    { QOF_QUERY_PARAM_ACTIVE, QOF_QUERYCORE_BOOLEAN, (QofAccessFunc)gncCustomerGetActive },
+  static QofParam params[] = {
+    { CUSTOMER_ID, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetID, NULL },
+    { CUSTOMER_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetName, NULL },
+    { CUSTOMER_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetAddr, NULL },
+    { CUSTOMER_SHIPADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetShipAddr, NULL },
+    { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetActive, NULL },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 
-  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncCustomerCompare,params);
+  qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncCustomerCompare,params);
 
   return qof_object_register (&gncCustomerDesc);
 }
 
 gint64 gncCustomerNextID (QofBook *book)
 {
-  return gnc_book_get_counter (book, _GNC_MOD_NAME);
+  return qof_book_get_counter (book, _GNC_MOD_NAME);
 }

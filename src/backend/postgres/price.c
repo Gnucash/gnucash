@@ -489,7 +489,7 @@ pgend_price_commit_edit (QofBackend * bend, GNCPrice *pr)
     * made changes, and we must roll back. */
    if (0 < pgendPriceCompareVersion (be, pr))
    {
-      pr->do_free = FALSE;
+      pr->inst.do_free = FALSE;
       bufp = "ROLLBACK;";
       SEND_QUERY (be,bufp,);
       FINISH_QUERY(be->connection);
@@ -506,7 +506,7 @@ pgend_price_commit_edit (QofBackend * bend, GNCPrice *pr)
    pr->version ++;   /* be sure to update the version !! */
    pr->version_check = be->version_check;
 
-   if (pr->do_free) 
+   if (pr->inst.do_free) 
    {
       pgendStoreAuditPrice (be, pr, SQL_DELETE);
       bufp = be->buff; *bufp = 0;

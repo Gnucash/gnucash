@@ -42,13 +42,16 @@
 #include "io-gncxml-v2.h"
 
 #include "gncBillTermP.h"
+#include "gncInvoice.h"
 #include "gnc-bill-term-xml-v2.h"
 #include "gnc-engine-util.h"
 
-#include "gncObject.h"
-#include "gncInvoice.h"
+#include "qofinstance.h"
+#include "qofobject.h"
 
-#define _GNC_MOD_NAME	GNC_BILLTERM_MODULE_NAME
+#include "xml-helpers.h"
+
+#define _GNC_MOD_NAME	GNC_ID_BILLTERM
 
 static short module = MOD_IO;
 
@@ -76,36 +79,15 @@ const gchar *billterm_version_string = "2.0.0";
 #define prox_discount_string "bt-prox:discount"
 #define prox_cutoff_string "bt-prox:cutoff-day"
 
-static void
-maybe_add_guid (xmlNodePtr ptr, const char *tag, GncBillTerm *term)
-{
-  if (term)
-    xmlAddChild (ptr, guid_to_dom_tree (tag, gncBillTermGetGUID (term)));
-}
-
-static void
-maybe_add_int (xmlNodePtr ptr, const char *tag, gint val)
-{
-  if (val)
-    xmlAddChild (ptr, int_to_dom_tree (tag, val));
-}
-
-static void
-maybe_add_numeric (xmlNodePtr ptr, const char *tag, gnc_numeric val)
-{
-  if (!gnc_numeric_zero_p (val))
-    xmlAddChild (ptr, gnc_numeric_to_dom_tree (tag, &val));
-}
-
 static xmlNodePtr
 billterm_dom_tree_create (GncBillTerm *term)
 {
-    xmlNodePtr ret, data;
+    xmlNodePtr ret, data, kvpnode;
 
     ret = xmlNewNode(NULL, gnc_billterm_string);
     xmlSetProp(ret, "version", billterm_version_string);
 
-    maybe_add_guid(ret, billterm_guid_string, term);
+    maybe_add_guid(ret, billterm_guid_string, QOF_INSTANCE(term));
     xmlAddChild(ret, text_to_dom_tree (billterm_name_string,
 				       gncBillTermGetName (term)));
     xmlAddChild(ret, text_to_dom_tree (billterm_desc_string,
@@ -116,11 +98,18 @@ billterm_dom_tree_create (GncBillTerm *term)
     xmlAddChild(ret, int_to_dom_tree (billterm_invisible_string,
 				      gncBillTermGetInvisible (term)));
 
+    kvpnode = kvp_frame_to_dom_tree (billterm_slots_string,
+                 qof_instance_get_slots (QOF_INSTANCE(term)));
+    if (kvpnode) xmlAddChild (ret, kvpnode);
+
+
     /* We should not be our own child */
     if (gncBillTermGetChild(term) != term)
-      maybe_add_guid(ret, billterm_child_string, gncBillTermGetChild (term));
+      maybe_add_guid(ret, billterm_child_string, 
+                    QOF_INSTANCE(gncBillTermGetChild (term)));
 
-    maybe_add_guid(ret, billterm_parent_string, gncBillTermGetParent (term));
+    maybe_add_guid(ret, billterm_parent_string,
+                    QOF_INSTANCE(gncBillTermGetParent (term)));
 
     switch (gncBillTermGetType (term)) {
     case GNC_TERM_TYPE_DAYS:
@@ -407,7 +396,9 @@ billterm_prox_data_handler (xmlNodePtr node, gpointer billterm_pdata)
 static gboolean
 billterm_slots_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-  return TRUE;
+  struct billterm_pdata *pdata = billterm_pdata;
+  return dom_tree_to_kvp_frame_given (node, 
+        qof_instance_get_slots (QOF_INSTANCE(pdata->term)));
 }
 
 static struct dom_tree_handler billterm_handlers_v2[] = {
@@ -494,7 +485,7 @@ billterm_sixtp_parser_create(void)
 }
 
 static void
-do_count (gpointer term_p, gpointer count_p)
+do_count (QofEntity *term_p, gpointer count_p)
 {
   int *count = count_p;
   (*count)++;
@@ -504,15 +495,15 @@ static int
 billterm_get_count (GNCBook *book)
 {
   int count = 0;
-  gncObjectForeach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
+  qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
   return count;
 }
 
 static void
-xml_add_billterm (gpointer term_p, gpointer out_p)
+xml_add_billterm (QofEntity *term_p, gpointer out_p)
 {
   xmlNodePtr node;
-  GncBillTerm *term = term_p;
+  GncBillTerm *term = (GncBillTerm *) term_p;
   FILE *out = out_p;
 
   node = billterm_dom_tree_create (term);
@@ -524,7 +515,7 @@ xml_add_billterm (gpointer term_p, gpointer out_p)
 static void
 billterm_write (FILE *out, GNCBook *book)
 {
-  gncObjectForeach (_GNC_MOD_NAME, book, xml_add_billterm, (gpointer) out);
+  qof_object_foreach (_GNC_MOD_NAME, book, xml_add_billterm, (gpointer) out);
 }
 
 static gboolean
@@ -568,9 +559,9 @@ billterm_find_senior (GncBillTerm *term)
 
 /* build a list of bill terms that are grandchildren or bogus (empty entry list). */
 static void
-billterm_scrub_cb (gpointer term_p, gpointer list_p)
+billterm_scrub_cb (QofEntity *term_p, gpointer list_p)
 {
-  GncBillTerm *term = term_p;
+  GncBillTerm *term = GNC_BILLTERM(term_p);
   GList **list = list_p;
 
   if (billterm_is_grandchild(term)) {
@@ -581,7 +572,7 @@ billterm_scrub_cb (gpointer term_p, gpointer list_p)
     if (t) {
       /* Fix up the broken "copy" function */
       PWARN("Fixing broken child billterm: %s",
-	    guid_to_string(gncBillTermGetGUID(term)));
+	    guid_to_string(qof_instance_get_guid(QOF_INSTANCE(term))));
 
       gncBillTermBeginEdit(term);
       gncBillTermSetType(term, gncBillTermGetType(t));
@@ -602,10 +593,10 @@ billterm_scrub_cb (gpointer term_p, gpointer list_p)
  * grandchildren, then fix them to point to the most senior child
  */
 static void
-billterm_scrub_invoices (gpointer invoice_p, gpointer ht_p)
+billterm_scrub_invoices (QofEntity * invoice_p, gpointer ht_p)
 {
   GHashTable *ht = ht_p;
-  GncInvoice *invoice = invoice_p;
+  GncInvoice *invoice = GNC_INVOICE(invoice_p);
   GncBillTerm *term, *new_bt;
   gint32 count;
 
@@ -613,7 +604,7 @@ billterm_scrub_invoices (gpointer invoice_p, gpointer ht_p)
   if (term) {
     if (billterm_is_grandchild(term)) {
       PWARN("Fixing i-billterm on invoice %s\n",
-	     guid_to_string(gncInvoiceGetGUID(invoice)));
+	     guid_to_string(qof_instance_get_guid(QOF_INSTANCE(invoice))));
       new_bt = billterm_find_senior(term);
       gncInvoiceBeginEdit(invoice);
       gncInvoiceSetTerms(invoice, new_bt);
@@ -629,10 +620,10 @@ billterm_scrub_invoices (gpointer invoice_p, gpointer ht_p)
 }
 
 static void
-billterm_scrub_cust (gpointer cust_p, gpointer ht_p)
+billterm_scrub_cust (QofEntity * cust_p, gpointer ht_p)
 {
   GHashTable *ht = ht_p;
-  GncCustomer *cust = cust_p;
+  GncCustomer *cust = GNC_CUSTOMER(cust_p);
   GncBillTerm *term;
   gint32 count;
   
@@ -645,10 +636,10 @@ billterm_scrub_cust (gpointer cust_p, gpointer ht_p)
 }
 
 static void
-billterm_scrub_vendor (gpointer vendor_p, gpointer ht_p)
+billterm_scrub_vendor (QofEntity * vendor_p, gpointer ht_p)
 {
   GHashTable *ht = ht_p;
-  GncVendor *vendor = vendor_p;
+  GncVendor *vendor = GNC_VENDOR(vendor_p);
   GncBillTerm *term;
   gint32 count;
 
@@ -668,7 +659,7 @@ billterm_reset_refcount (gpointer key, gpointer value, gpointer notused)
 
   if (count != gncBillTermGetRefcount(term) && !gncBillTermGetInvisible(term)) {
     PWARN("Fixing refcount on billterm %s (%lld -> %d)\n",
-	  guid_to_string(gncBillTermGetGUID(term)),
+	  guid_to_string(qof_instance_get_guid(QOF_INSTANCE(term))),
 	  gncBillTermGetRefcount(term), count)
       gncBillTermSetRefcount(term, count);
   }
@@ -682,17 +673,17 @@ billterm_scrub (GNCBook *book)
   GncBillTerm *parent, *term;
   GHashTable *ht = g_hash_table_new(g_direct_hash, g_direct_equal);
 
-  gncObjectForeach (GNC_INVOICE_MODULE_NAME, book, billterm_scrub_invoices, ht);
-  gncObjectForeach (GNC_CUSTOMER_MODULE_NAME, book, billterm_scrub_cust, ht);
-  gncObjectForeach (GNC_VENDOR_MODULE_NAME, book, billterm_scrub_vendor, ht);
-  gncObjectForeach (_GNC_MOD_NAME, book, billterm_scrub_cb, &list);
+  qof_object_foreach (GNC_ID_INVOICE,  book, billterm_scrub_invoices, ht);
+  qof_object_foreach (GNC_ID_CUSTOMER, book, billterm_scrub_cust, ht);
+  qof_object_foreach (GNC_ID_VENDOR,   book, billterm_scrub_vendor, ht);
+  qof_object_foreach (GNC_ID_BILLTERM, book, billterm_scrub_cb, &list);
 
   /* destroy the list of "grandchildren" bill terms */
   for (node = list; node; node = node->next) {
     term = node->data;
 
     PINFO ("deleting grandchild billterm: %s\n",
-	   guid_to_string(gncBillTermGetGUID(term)));
+	   guid_to_string(qof_instance_get_guid(QOF_INSTANCE(term))));
 
     /* Make sure the parent has no children */
     parent = gncBillTermGetParent(term);
@@ -723,7 +714,7 @@ gnc_billterm_xml_initialize (void)
     billterm_scrub,
   };
 
-  gncObjectRegisterBackend (_GNC_MOD_NAME,
+  qof_object_register_backend (_GNC_MOD_NAME,
 			    GNC_FILE_BACKEND,
 			    &be_data);
 }

@@ -1,8 +1,30 @@
-/*
- * gncTaxTable.h -- the Gnucash Tax Table interface
- * Copyright (C) 2002 Derek Atkins
- * Author: Derek Atkins <warlord@MIT.EDU>
- */
+/********************************************************************\
+ * gncTaxTable.h -- the Gnucash Tax Table interface                 *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+/** @addtogroup Business-Engine
+    @{ */
+/** @file gncTaxTable.h
+    @breif Tax Table programming interface
+    @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
+*/
 
 #ifndef GNC_TAXTABLE_H_
 #define GNC_TAXTABLE_H_
@@ -11,14 +33,19 @@ typedef struct _gncTaxTable GncTaxTable;
 typedef struct _gncTaxTableEntry GncTaxTableEntry;
 typedef struct _gncAccountValue GncAccountValue;
 
-#include "gnc-numeric.h"
-#include "gnc-book.h"
-#include "gnc-date.h"
 #include "Account.h"
+#include "gnc-date.h"
+#include "gnc-numeric.h"
 
-#define GNC_TAXTABLE_MODULE_NAME "gncTaxTable"
+#include "qofbook.h"
+#include "qofinstance.h"
+#include "gncBusiness.h"
 
-/*
+#define GNC_ID_TAXTABLE       "gncTaxTable"
+#define GNC_IS_TAXTABLE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_TAXTABLE))
+#define GNC_TAXTABLE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_TAXTABLE, GncTaxTable))
+
+/**
  * How to interpret the amount.
  * You can interpret it as a VALUE or a PERCENT.
  */
@@ -27,7 +54,7 @@ typedef enum {
   GNC_AMT_TYPE_PERCENT
 } GncAmountType;
 
-/* How to interpret the TaxIncluded */
+/** How to interpret the TaxIncluded */
 typedef enum {
   GNC_TAXINCLUDED_YES = 1,
   GNC_TAXINCLUDED_NO,
@@ -40,13 +67,13 @@ gboolean gncAmountStringToType (const char *str, GncAmountType *type);
 const char * gncTaxIncludedTypeToString (GncTaxIncluded type);
 gboolean gncTaxIncludedStringToType (const char *str, GncTaxIncluded *type);
 
-/* Create/Destroy Functions */
+/** Create/Destroy Functions */
 GncTaxTable * gncTaxTableCreate (QofBook *book);
 void gncTaxTableDestroy (GncTaxTable *table);
 GncTaxTableEntry * gncTaxTableEntryCreate (void);
 void gncTaxTableEntryDestroy (GncTaxTableEntry *entry);
 
-/* Set Functions */
+/** Set Functions */
 void gncTaxTableSetName (GncTaxTable *table, const char *name);
 void gncTaxTableIncRef (GncTaxTable *table);
 void gncTaxTableDecRef (GncTaxTable *table);
@@ -62,13 +89,21 @@ void gncTaxTableChanged (GncTaxTable *table);
 void gncTaxTableBeginEdit (GncTaxTable *table);
 void gncTaxTableCommitEdit (GncTaxTable *table);
 
-/* Get Functions */
-GncTaxTable *gncTaxTableLookup (QofBook *book, const GUID *guid);
+/** Get Functions */
+
+/** Return a pointer to the instance gncTaxTable that is identified
+ *  by the guid, and is residing in the book. Returns NULL if the 
+ *  instance can't be found.
+ *  Equivalent function prototype is
+ *  GncTaxTable * gncTaxTableLookup (QofBook *book, const GUID *guid);
+ */
+#define gncTaxTableLookup(book,guid)    \
+       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_TAXTABLE, GncTaxTable)
+
 GncTaxTable *gncTaxTableLookupByName (QofBook *book, const char *name);
+
 GList * gncTaxTableGetTables (QofBook *book);
 
-const GUID *gncTaxTableGetGUID (GncTaxTable *table);
-QofBook *gncTaxTableGetBook (GncTaxTable *table);
 const char *gncTaxTableGetName (GncTaxTable *table);
 GncTaxTable *gncTaxTableGetParent (GncTaxTable *table);
 GncTaxTable *gncTaxTableReturnChild (GncTaxTable *table, gboolean make_new);
@@ -84,9 +119,6 @@ gnc_numeric gncTaxTableEntryGetAmount (GncTaxTableEntry *entry);
 int gncTaxTableCompare (GncTaxTable *a, GncTaxTable *b);
 int gncTaxTableEntryCompare (GncTaxTableEntry *a, GncTaxTableEntry *b);
 
-GUID gncTaxTableRetGUID (GncTaxTable *table);
-GncTaxTable *gncTaxTableLookupDirect (GUID guid, QofBook *book);
-
 /************************************************/
 
 struct _gncAccountValue {
@@ -94,20 +126,25 @@ struct _gncAccountValue {
   gnc_numeric	value;
 };
 
-/*
+/**
  * This will add value to the account-value for acc, creating a new
  * list object if necessary
  */
 GList *gncAccountValueAdd (GList *list, Account *acc, gnc_numeric value);
 
-/* Merge l2 into l1.  l2 is not touched. */
+/** Merge l2 into l1.  l2 is not touched. */
 GList *gncAccountValueAddList (GList *l1, GList *l2);
 
-/* return the total for this list */
+/** return the total for this list */
 gnc_numeric gncAccountValueTotal (GList *list);
 
-/* Destroy a list of accountvalues */
+/** Destroy a list of accountvalues */
 void gncAccountValueDestroy (GList *list);
 
+/** deprecated routine */
+#define gncTaxTableGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
+#define gncTaxTableRetGUID(x) (*(qof_instance_get_guid(QOF_INSTANCE(x))))
+#define gncTaxTableLookupDirect(G,B) gncTaxTableLookup((B), &(G))
 
 #endif /* GNC_TAXTABLE_H_ */
+/** @} */

@@ -1,5 +1,26 @@
+/********************************************************************\
+ * gncEntry.c -- the Core Business Entry Interface                  *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
- * gncEntry.c -- the Core Business Entry Interface
  * Copyright (C) 2001,2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
@@ -9,17 +30,21 @@
 #include <glib.h>
 
 #include "messages.h"
-#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-numeric.h"
-#include "qofid.h"
-#include "qofquerycore.h"
-#include "qofquery.h"
-#include "qofqueryobject.h"
 #include "gnc-be-utils.h"
+
+#include "qofbook.h"
+#include "qofclass.h"
+#include "qofid.h"
 #include "qofid-p.h"
+#include "qofinstance.h"
+#include "qofinstance-p.h"
+#include "qofobject.h"
+#include "qofquery.h"
+#include "qofquerycore.h"
 
 #include "gncBusiness.h"
 #include "gncEntry.h"
@@ -27,10 +52,10 @@
 #include "gncInvoice.h"
 #include "gncOrder.h"
 
-struct _gncEntry {
-  QofBook *	book;
+struct _gncEntry 
+{
+  QofInstance inst;
 
-  GUID		guid;
   Timespec	date;
   Timespec	date_entered;
   char *	desc;
@@ -65,12 +90,7 @@ struct _gncEntry {
   GncInvoice *	invoice;
   GncInvoice *	bill;
 
-  int		editlevel;
-  gboolean	do_free;
-  gboolean	dirty;
-
   /* CACHED VALUES */
-
   gboolean	values_dirty;
 
   /* customer invoice */
@@ -149,7 +169,7 @@ gboolean gncEntryPaymentStringToType (const char *str, GncEntryPaymentType *type
 }
 #undef GNC_RETURN_ON_MATCH
 
-#define _GNC_MOD_NAME	GNC_ENTRY_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_ENTRY
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
@@ -164,19 +184,16 @@ gboolean gncEntryPaymentStringToType (const char *str, GncEntryPaymentType *type
 	member = tmp; \
 	}
 
-static void addObj (GncEntry *entry);
-static void remObj (GncEntry *entry);
-
 G_INLINE_FUNC void mark_entry (GncEntry *entry);
 G_INLINE_FUNC void
 mark_entry (GncEntry *entry)
 {
-  entry->dirty = TRUE;
-  gncBusinessSetDirtyFlag (entry->book, _GNC_MOD_NAME, TRUE);
-
-  gnc_engine_generate_event (&entry->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
+  entry->inst.dirty = TRUE;
+  qof_collection_mark_dirty (entry->inst.entity.collection);
+  gnc_engine_gen_event (&entry->inst.entity, GNC_EVENT_MODIFY);
 }
 
+/* ================================================================ */
 /* Create/Destroy Functions */
 
 GncEntry *gncEntryCreate (QofBook *book)
@@ -187,7 +204,7 @@ GncEntry *gncEntryCreate (QofBook *book)
   if (!book) return NULL;
 
   entry = g_new0 (GncEntry, 1);
-  entry->book = book;
+  qof_instance_init (&entry->inst, _GNC_MOD_NAME, book);
 
   entry->desc = CACHE_INSERT ("");
   entry->action = CACHE_INSERT ("");
@@ -207,10 +224,7 @@ GncEntry *gncEntryCreate (QofBook *book)
 
   entry->values_dirty = TRUE;
 
-  qof_entity_guid_new (qof_book_get_entity_table (book), &entry->guid);
-  addObj (entry);
-
-  gnc_engine_generate_event (&entry->guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
+  gnc_engine_gen_event (&entry->inst.entity, GNC_EVENT_CREATE);
 
   return entry;
 }
@@ -218,7 +232,7 @@ GncEntry *gncEntryCreate (QofBook *book)
 void gncEntryDestroy (GncEntry *entry)
 {
   if (!entry) return;
-  entry->do_free = TRUE;
+  entry->inst.do_free = TRUE;
   gncEntryCommitEdit(entry);
 }
 
@@ -226,7 +240,7 @@ static void gncEntryFree (GncEntry *entry)
 {
   if (!entry) return;
 
-  gnc_engine_generate_event (&entry->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
+  gnc_engine_gen_event (&entry->inst.entity, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (entry->desc);
   CACHE_REMOVE (entry->action);
@@ -239,24 +253,36 @@ static void gncEntryFree (GncEntry *entry)
     gncTaxTableDecRef (entry->i_tax_table);
   if (entry->b_tax_table)
     gncTaxTableDecRef (entry->b_tax_table);
-  remObj (entry);
 
+  qof_instance_release (&entry->inst);
   g_free (entry);
 }
 
-/* Set Functions */
-
-void gncEntrySetGUID (GncEntry *entry, const GUID *guid)
+GncEntry *
+gncCloneEntry (GncEntry *from, QofBook *book)
 {
-  if (!entry || !guid) return;
-  if (guid_equal (guid, &entry->guid)) return;
-
-  gncEntryBeginEdit (entry);
-  remObj (entry);
-  entry->guid = *guid;
-  addObj (entry);
-  gncEntryCommitEdit (entry);
+  /* XXX unfinished */
+  return NULL;
 }
+
+GncEntry *
+gncEntryObtainTwin (GncEntry *from, QofBook *book)
+{
+  GncEntry *entry;
+  if (!book) return NULL;
+
+  entry = (GncEntry *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
+  if (!entry)
+  {
+    entry = gncCloneEntry (from, book);
+  }
+
+  return entry;
+}
+
+
+/* ================================================================ */
+/* Set Functions */
 
 void gncEntrySetDate (GncEntry *entry, Timespec date)
 {
@@ -512,7 +538,7 @@ void gncEntrySetOrder (GncEntry *entry, GncOrder *order)
 
   /* Generate an event modifying the Order's end-owner */
 #if 0  
-  gnc_engine_generate_event (gncOwnerGetEndGUID (gncOrderGetOwner (order)),
+  gnc_engine_gen_event (gncOwnerGetEndGUID (gncOrderGetOwner (order)),
 			     GNC_EVENT_MODIFY);
 #endif
 }
@@ -537,12 +563,6 @@ void gncEntrySetBill (GncEntry *entry, GncInvoice *bill)
   entry->bill = bill;
   mark_entry (entry);
   gncEntryCommitEdit (entry);
-}
-
-void gncEntrySetDirty (GncEntry *entry, gboolean dirty)
-{
-  if (!entry) return;
-  entry->dirty = dirty;
 }
 
 void gncEntryCopy (const GncEntry *src, GncEntry *dest)
@@ -592,19 +612,8 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest)
   gncEntryCommitEdit (dest);
 }
 
+/* ================================================================ */
 /* Get Functions */
-
-QofBook * gncEntryGetBook (GncEntry *entry)
-{
-  if (!entry) return NULL;
-  return entry->book;
-}
-
-const GUID * gncEntryGetGUID (GncEntry *entry)
-{
-  if (!entry) return NULL;
-  return &(entry->guid);
-}
 
 Timespec gncEntryGetDate (GncEntry *entry)
 {
@@ -762,13 +771,7 @@ GncOrder * gncEntryGetOrder (GncEntry *entry)
   return entry->order;
 }
 
-GncEntry * gncEntryLookup (QofBook *book, const GUID *guid)
-{
-  if (!book || !guid) return NULL;
-  return qof_entity_lookup (gnc_book_get_entity_table (book),
-			   guid, _GNC_MOD_NAME);
-}
-
+/* ================================================================ */
 /*
  * This is the logic of computing the total for an Entry, so you know
  * what values to put into various Splits or to display in the ledger.
@@ -1101,32 +1104,38 @@ gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry, gboolean is_inv)
   return (is_inv ? entry->i_disc_value_rounded : gnc_numeric_zero());
 }
 
+/* XXXX this exsitnace of this routine is just wrong */
 gboolean gncEntryIsOpen (GncEntry *entry)
 {
   if (!entry) return FALSE;
-  return (entry->editlevel > 0);
+  return (entry->inst.editlevel > 0);
 }
+
+/* ================================================================ */
 
 void gncEntryBeginEdit (GncEntry *entry)
 {
-  GNC_BEGIN_EDIT (entry, _GNC_MOD_NAME);
+  GNC_BEGIN_EDIT (&entry->inst);
 }
 
-static void gncEntryOnError (GncEntry *entry, QofBackendError errcode)
+static inline void gncEntryOnError (QofInstance *entry, QofBackendError errcode)
 {
   PERR("Entry QofBackend Failure: %d", errcode);
 }
 
-static void gncEntryOnDone (GncEntry *entry)
+static inline void gncEntryOnDone (QofInstance *inst) {}
+
+static inline void entry_free (QofInstance *inst)
 {
-  entry->dirty = FALSE;
+  GncEntry *entry = (GncEntry *)inst;
+  gncEntryFree (entry);
 }
 
 void gncEntryCommitEdit (GncEntry *entry)
 {
-  GNC_COMMIT_EDIT_PART1 (entry);
-  GNC_COMMIT_EDIT_PART2 (entry, _GNC_MOD_NAME, gncEntryOnError,
-			 gncEntryOnDone, gncEntryFree);
+  GNC_COMMIT_EDIT_PART1 (&entry->inst);
+  GNC_COMMIT_EDIT_PART2 (&entry->inst, gncEntryOnError,
+			 gncEntryOnDone, entry_free);
 }
 
 int gncEntryCompare (GncEntry *a, GncEntry *b)
@@ -1149,81 +1158,47 @@ int gncEntryCompare (GncEntry *a, GncEntry *b)
   compare = safe_strcmp (a->action, b->action);
   if (compare) return compare;
 
-  return guid_compare (&(a->guid), &(b->guid));
+  return guid_compare (&(a->inst.entity.guid), &(b->inst.entity.guid));
 }
 
-/* Package-Private functions */
+/* ============================================================= */
+/* Object declaration */
 
-static void addObj (GncEntry *entry)
+static QofObject gncEntryDesc = 
 {
-  gncBusinessAddObject (entry->book, _GNC_MOD_NAME, entry, &entry->guid);
-}
-
-static void remObj (GncEntry *entry)
-{
-  gncBusinessRemoveObject (entry->book, _GNC_MOD_NAME, &entry->guid);
-}
-
-static void _gncEntryCreate (QofBook *book)
-{
-  gncBusinessCreate (book, _GNC_MOD_NAME);
-}
-
-static void _gncEntryDestroy (QofBook *book)
-{
-  gncBusinessDestroy (book, _GNC_MOD_NAME);
-}
-
-static gboolean _gncEntryIsDirty (QofBook *book)
-{
-  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
-}
-
-static void _gncEntryMarkClean (QofBook *book)
-{
-  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
-}
-
-static void _gncEntryForeach (QofBook *book, QofEntityForeachCB cb,
-			      gpointer user_data)
-{
-  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
-}
-
-static QofObject gncEntryDesc = {
-  QOF_OBJECT_VERSION,
-  _GNC_MOD_NAME,
-  "Order/Invoice/Bill Entry",
-  _gncEntryCreate,
-  _gncEntryDestroy,
-  _gncEntryIsDirty,
-  _gncEntryMarkClean,
-  _gncEntryForeach,
-  NULL				/* printable */
+  interface_version:  QOF_OBJECT_VERSION,
+  e_type:             _GNC_MOD_NAME,
+  type_label:         "Order/Invoice/Bill Entry",
+  book_begin:         NULL,
+  book_end:           NULL,
+  is_dirty:           qof_collection_is_dirty,
+  mark_clean:         qof_collection_mark_clean,
+  foreach:            qof_collection_foreach,
+  printable:          NULL,
 };
 
 gboolean gncEntryRegister (void)
 {
-  static QofQueryObject params[] = {
-    { ENTRY_DATE, QOF_QUERYCORE_DATE, (QofAccessFunc)gncEntryGetDate },
-    { ENTRY_DATE_ENTERED, QOF_QUERYCORE_DATE, (QofAccessFunc)gncEntryGetDateEntered },
-    { ENTRY_DESC, QOF_QUERYCORE_STRING, (QofAccessFunc)gncEntryGetDescription },
-    { ENTRY_ACTION, QOF_QUERYCORE_STRING, (QofAccessFunc)gncEntryGetAction },
-    { ENTRY_NOTES, QOF_QUERYCORE_STRING, (QofAccessFunc)gncEntryGetNotes },
-    { ENTRY_QTY, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)gncEntryGetQuantity },
-    { ENTRY_IPRICE, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)gncEntryGetInvPrice },
-    { ENTRY_BPRICE, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)gncEntryGetBillPrice },
-    { ENTRY_INVOICE, GNC_INVOICE_MODULE_NAME, (QofAccessFunc)gncEntryGetInvoice },
-    { ENTRY_BILL, GNC_INVOICE_MODULE_NAME, (QofAccessFunc)gncEntryGetBill },
-    { ENTRY_BILLABLE, QOF_QUERYCORE_BOOLEAN, (QofAccessFunc)gncEntryGetBillable },
-    { ENTRY_BILLTO, GNC_OWNER_MODULE_NAME, (QofAccessFunc)gncEntryGetBillTo },
-    { ENTRY_ORDER, GNC_ORDER_MODULE_NAME, (QofAccessFunc)gncEntryGetOrder },
-    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gncEntryGetBook },
-    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gncEntryGetGUID },
+  static QofParam params[] = {
+    { ENTRY_DATE, QOF_TYPE_DATE, (QofAccessFunc)gncEntryGetDate, NULL },
+    { ENTRY_DATE_ENTERED, QOF_TYPE_DATE, (QofAccessFunc)gncEntryGetDateEntered, NULL },
+    { ENTRY_DESC, QOF_TYPE_STRING, (QofAccessFunc)gncEntryGetDescription, NULL },
+    { ENTRY_ACTION, QOF_TYPE_STRING, (QofAccessFunc)gncEntryGetAction, NULL },
+    { ENTRY_NOTES, QOF_TYPE_STRING, (QofAccessFunc)gncEntryGetNotes, NULL },
+    { ENTRY_QTY, QOF_TYPE_NUMERIC, (QofAccessFunc)gncEntryGetQuantity, NULL },
+    { ENTRY_IPRICE, QOF_TYPE_NUMERIC, (QofAccessFunc)gncEntryGetInvPrice, NULL },
+    { ENTRY_BPRICE, QOF_TYPE_NUMERIC, (QofAccessFunc)gncEntryGetBillPrice, NULL },
+    { ENTRY_INVOICE, GNC_ID_INVOICE, (QofAccessFunc)gncEntryGetInvoice, NULL },
+    { ENTRY_BILL, GNC_ID_INVOICE, (QofAccessFunc)gncEntryGetBill, NULL },
+    { ENTRY_BILLABLE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncEntryGetBillable, NULL },
+    { ENTRY_BILLTO, GNC_ID_OWNER, (QofAccessFunc)gncEntryGetBillTo, NULL },
+    { ENTRY_ORDER, GNC_ID_ORDER, (QofAccessFunc)gncEntryGetOrder, NULL },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 
-  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncEntryCompare, params);
+  qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncEntryCompare, params);
 
   return qof_object_register (&gncEntryDesc);
 }
