@@ -32,7 +32,7 @@
 #ifndef GNC_DATE_EDIT_H
 #define GNC_DATE_EDIT_H 
 
-#include <gnome.h>
+#include <glib.h>
 
 typedef enum {
 	GNC_DATE_EDIT_SHOW_TIME             = 1 << 0,
@@ -70,6 +70,8 @@ typedef struct {
 	int       upper_hour;
 	
 	int       flags;
+
+	int       disposed;
 } GNCDateEdit;
 
 typedef struct {
@@ -78,7 +80,7 @@ typedef struct {
 	void (*time_changed) (GNCDateEdit *gde);
 } GNCDateEditClass;
 
-guint     gnc_date_edit_get_type        (void);
+GType     gnc_date_edit_get_type        (void);
 
 GtkWidget *gnc_date_edit_new            (time_t the_time,
                                          int show_time, int use_24_format);

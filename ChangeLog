@@ -1,3 +1,19 @@
+2004-12-17  Derek Atkins  <derek@ihtfp.com>
+
+	Stephen Evanchik's GNCDateEdit GObject patch:
+        * src/gnome-utils/gnc-date-edit.h:
+          Removed #include <gnome.h>
+          Added #include <glib.h>
+          Added private member 'disposed' to GNCDateEdit struct
+        * src/gnome-utils/gnc-date-edit.c:
+          Converted the following functions to use GObject:
+                gnc_date_edit_get_type,
+                gnc_date_edit_class_init
+          Renamed gnc_date_edit_destroy to gnc_date_edit_finalize
+          Added gnc_date_edit_dispose function that handles 
+          child widget destruction
+          Explicit casts to GTK_WIDGET in create_children
+
 2004-12-16  Joshua Sled  <jsled@asynchronous.org>
 
 	Stephen Evanchik's GncGeneralSelect GObject cleanup patch:

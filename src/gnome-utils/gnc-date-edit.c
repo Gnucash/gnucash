@@ -57,8 +57,9 @@ static gint date_edit_signals [LAST_SIGNAL] = { 0 };
 
 
 static void gnc_date_edit_init         (GNCDateEdit      *gde);
-static void gnc_date_edit_class_init   (GNCDateEditClass *class);
-static void gnc_date_edit_destroy      (GtkObject          *object);
+static void gnc_date_edit_class_init   (GNCDateEditClass *klass);
+static void gnc_date_edit_dispose      (GObject          *object);
+static void gnc_date_edit_finalize     (GObject          *object);
 static void gnc_date_edit_forall       (GtkContainer       *container,
                                         gboolean	    include_internals,
                                         GtkCallback	    callback,
@@ -76,24 +77,28 @@ static GtkHBoxClass *parent_class;
  *
  * Returns the GtkType for the GNCDateEdit widget
  */
-guint
+GType
 gnc_date_edit_get_type (void)
 {
-	static guint date_edit_type = 0;
+	static GType date_edit_type = 0;
 
-	if (!date_edit_type){
-		GtkTypeInfo date_edit_info = {
-			"GNCDateEdit",
-			sizeof (GNCDateEdit),
+	if (date_edit_type == 0){
+		static const GTypeInfo date_edit_info = {
 			sizeof (GNCDateEditClass),
-			(GtkClassInitFunc) gnc_date_edit_class_init,
-			(GtkObjectInitFunc) gnc_date_edit_init,
 			NULL,
+			NULL,
+			(GClassInitFunc) gnc_date_edit_class_init,
+			NULL,
+			NULL,
+			sizeof (GNCDateEdit),
+			0, /* n_preallocs */
+			(GInstanceInitFunc) gnc_date_edit_init,
 			NULL,
 		};
 
-		date_edit_type = gtk_type_unique (gtk_hbox_get_type (),
-                                                  &date_edit_info);
+		date_edit_type = g_type_register_static (GTK_TYPE_HBOX,
+							"GNCDateEdit",
+							 &date_edit_info, 0);
 	}
 	
 	return date_edit_type;
@@ -370,19 +375,18 @@ fill_time_popup (GtkWidget *widget, GNCDateEdit *gde)
 }
 
 static void
-gnc_date_edit_class_init (GNCDateEditClass *class)
+gnc_date_edit_class_init (GNCDateEditClass *klass)
 {
-	GtkContainerClass *container_class = (GtkContainerClass *) class;
-	GtkObjectClass *object_class = (GtkObjectClass *) class;
-	GObjectClass *gobject_class = (GObjectClass *) class;
+	GtkContainerClass *container_class = (GtkContainerClass *) klass;
+	GObjectClass *object_class = (GObjectClass *) klass;
 
-	object_class = (GtkObjectClass*) class;
+	object_class = (GObjectClass*) klass;
 	
-	parent_class = gtk_type_class (gtk_hbox_get_type ());
+	parent_class = g_type_class_ref(GTK_TYPE_HBOX);
 
 	date_edit_signals [TIME_CHANGED] =
 		g_signal_new ("time_changed",
-			      G_TYPE_FROM_CLASS (gobject_class),
+			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (GnomeDateEditClass, time_changed),
 			      NULL, NULL,
@@ -391,7 +395,7 @@ gnc_date_edit_class_init (GNCDateEditClass *class)
 
 	date_edit_signals [DATE_CHANGED] =
 		g_signal_new ("date_changed",
-			      G_TYPE_FROM_CLASS (gobject_class),
+			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (GnomeDateEditClass, date_changed),
 			      NULL, NULL,
@@ -400,22 +404,24 @@ gnc_date_edit_class_init (GNCDateEditClass *class)
 
 	container_class->forall = gnc_date_edit_forall;
 
-	object_class->destroy = gnc_date_edit_destroy;
+	object_class->dispose = gnc_date_edit_dispose;
+	object_class->finalize = gnc_date_edit_finalize;
 
-	class->date_changed = NULL;
-	class->time_changed = NULL;
+	klass->date_changed = NULL;
+	klass->time_changed = NULL;
 }
 
 static void
 gnc_date_edit_init (GNCDateEdit *gde)
 {
+	gde->disposed = FALSE;
 	gde->lower_hour = 7;
 	gde->upper_hour = 19;
 	gde->flags = GNC_DATE_EDIT_SHOW_TIME;
 }
 
 static void
-gnc_date_edit_destroy (GtkObject *object)
+gnc_date_edit_finalize (GObject *object)
 {
 	GNCDateEdit *gde;
 
@@ -424,13 +430,42 @@ gnc_date_edit_destroy (GtkObject *object)
 
 	gde = GNC_DATE_EDIT (object);
 
-	if (gde->cal_popup != NULL) {
-		gtk_widget_destroy (gde->cal_popup);
-		gde->cal_popup = NULL;
-	}
 
-	if (GTK_OBJECT_CLASS (parent_class)->destroy)
-		(* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+	if (G_OBJECT_CLASS (parent_class)->finalize)
+		(* G_OBJECT_CLASS (parent_class)->finalize) (object);
+}
+
+static void
+gnc_date_edit_dispose (GObject *object)
+{
+	GNCDateEdit *gde;
+
+	g_return_if_fail (object != NULL);
+	g_return_if_fail (GNC_IS_DATE_EDIT (object));
+
+	gde = GNC_DATE_EDIT (object);
+
+	if(gde->disposed)
+		return;
+
+	gde->disposed = TRUE;
+
+	/* Only explicitly destroy the toplevel elements */
+
+	gtk_widget_destroy (GTK_WIDGET(gde->date_entry));
+	gde->date_entry = NULL;
+
+	gtk_widget_destroy (GTK_WIDGET(gde->date_button));
+	gde->date_button= NULL;
+
+	gtk_widget_destroy (GTK_WIDGET(gde->time_entry));
+	gde->time_entry = NULL;
+
+	gtk_widget_destroy (GTK_WIDGET(gde->time_popup));
+	gde->time_popup = NULL;
+
+	if (G_OBJECT_CLASS (parent_class)->dispose)
+		(* G_OBJECT_CLASS (parent_class)->dispose) (object);
 }
 
 static void
@@ -589,7 +624,7 @@ create_children (GNCDateEdit *gde)
 	gde->date_entry  = gtk_entry_new ();
 	gtk_entry_set_width_chars (GTK_ENTRY (gde->date_entry), 11);
 	gtk_box_pack_start (GTK_BOX (gde), gde->date_entry, TRUE, TRUE, 0);
-	gtk_widget_show (gde->date_entry);
+	gtk_widget_show (GTK_WIDGET(gde->date_entry));
 	g_signal_connect (G_OBJECT (gde->date_entry), "key_press_event",
 			  G_CALLBACK (key_press_entry), gde);
 #if 0
@@ -604,7 +639,7 @@ create_children (GNCDateEdit *gde)
 
 	hbox = gtk_hbox_new (FALSE, 3);
 	gtk_container_add (GTK_CONTAINER (gde->date_button), hbox);
-	gtk_widget_show (hbox);
+	gtk_widget_show (GTK_WIDGET(hbox));
 
 	/* Calendar label, only shown if the date editor has a time field */
 
@@ -612,16 +647,16 @@ create_children (GNCDateEdit *gde)
 	gtk_misc_set_alignment (GTK_MISC (gde->cal_label), 0.0, 0.5);
 	gtk_box_pack_start (GTK_BOX (hbox), gde->cal_label, TRUE, TRUE, 0);
 	if (gde->flags & GNC_DATE_EDIT_SHOW_TIME)
-		gtk_widget_show (gde->cal_label);
+		gtk_widget_show (GTK_WIDGET(gde->cal_label));
 
 	arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_OUT);
 	gtk_box_pack_start (GTK_BOX (hbox), arrow, TRUE, FALSE, 0);
-	gtk_widget_show (arrow);
+	gtk_widget_show (GTK_WIDGET(arrow));
 
-	gtk_widget_show (gde->date_button);
+	gtk_widget_show (GTK_WIDGET(gde->date_button));
 
 	gde->time_entry = gtk_entry_new_with_max_length (12);
-	gtk_widget_set_usize (gde->time_entry, 88, 0);
+	gtk_widget_set_usize (GTK_WIDGET(gde->time_entry), 88, 0);
 	gtk_box_pack_start (GTK_BOX (gde), gde->time_entry, TRUE, TRUE, 0);
 
 	gde->time_popup = gtk_option_menu_new ();
@@ -635,13 +670,13 @@ create_children (GNCDateEdit *gde)
 			  G_CALLBACK  (fill_time_popup), gde);
 
 	if (gde->flags & GNC_DATE_EDIT_SHOW_TIME) {
-		gtk_widget_show (gde->time_entry);
-		gtk_widget_show (gde->time_popup);
+		gtk_widget_show (GTK_WIDGET(gde->time_entry));
+		gtk_widget_show (GTK_WIDGET(gde->time_popup));
 	}
 
 	gde->cal_popup = gtk_window_new (GTK_WINDOW_POPUP);
-	gtk_widget_set_events (gde->cal_popup,
-			       gtk_widget_get_events (gde->cal_popup) |
+	gtk_widget_set_events (GTK_WIDGET(gde->cal_popup),
+			       gtk_widget_get_events (GTK_WIDGET(gde->cal_popup)) |
                                GDK_KEY_PRESS_MASK);
 	g_signal_connect (G_OBJECT (gde->cal_popup), "delete_event",
 			    (GtkSignalFunc) delete_popup,
@@ -658,7 +693,7 @@ create_children (GNCDateEdit *gde)
 	frame = gtk_frame_new (NULL);
 	gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
 	gtk_container_add (GTK_CONTAINER (gde->cal_popup), frame);
-	gtk_widget_show (frame);
+	gtk_widget_show (GTK_WIDGET(frame));
 
 	gde->calendar = gtk_calendar_new ();
 	gtk_calendar_display_options
@@ -673,7 +708,7 @@ create_children (GNCDateEdit *gde)
                             "day_selected_double_click",
 			  G_CALLBACK  (day_selected_double_click), gde);
 	gtk_container_add (GTK_CONTAINER (frame), gde->calendar);
-        gtk_widget_show (gde->calendar);
+        gtk_widget_show (GTK_WIDGET(gde->calendar));
 }
 
 /**
