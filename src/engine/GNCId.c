@@ -104,7 +104,7 @@ id_compare(gconstpointer key_1, gconstpointer key_2)
   return memcmp(key_1, key_2, sizeof(GUID)) == 0;
 }
 
-#ifdef USE_DEBUG
+#if GNCID_DEBUG
 static void
 print_node(gpointer key, gpointer value, gpointer not_used)
 {
@@ -135,7 +135,7 @@ entity_table_init()
 
   xaccStoreEntity(NULL, xaccGUIDNULL(), GNC_ID_NULL);
 
-#ifdef USE_DEBUG
+#if GNCID_DEBUG
   atexit(summarize_table);
 #endif
 }

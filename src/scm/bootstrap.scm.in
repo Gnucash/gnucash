@@ -1,11 +1,26 @@
-;;;; bootstrap.scm -*-scheme-*-
+;; bootstrap.scm -*-scheme-*-
 ;;
-;; Minimal startup code.  This file should just contain enough code to
+;; This program is free software; you can redistribute it and/or    
+;; modify it under the terms of the GNU General Public License as   
+;; published by the Free Software Foundation; either version 2 of   
+;; the License, or (at your option) any later version.              
+;;                                                                  
+;; This program is distributed in the hope that it will be useful,  
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
+;; GNU General Public License for more details.                     
+;;                                                                  
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, contact:
+;;
+;; Free Software Foundation           Voice:  +1-617-542-5942
+;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+;; Boston, MA  02111-1307,  USA       gnu@gnu.org
+;;
+;; Minimal startup code. This file should just contain enough code to
 ;; get gnc:load defined, and the "default" environment setup.  After
 ;; that *everything* should be loaded via gnc:load, starting with
 ;; startup.scm
-
-;; (use-modules (gnc))
 
 (define (display-slib-error)
         (display "Obtain slib at: http://swissnet.ai.mit.edu/~jaffer/SLIB.html\n")
@@ -122,6 +137,18 @@
         (display "gnucash: [D] ")
         (for-each (lambda (i) (write i)) items)
         (newline))))
+
+
+;; Set up timing functions
+
+(define gnc:*last-time* (gettimeofday))
+
+(define (gnc:timestamp . stuff)
+  (let* ((now (gettimeofday))
+         (delta (+ (- (car now) (car gnc:*last-time*))
+                   (/ (- (cdr now) (cdr gnc:*last-time*)) 1000000))))
+    (gnc:msg stuff "-- Elapsed time: " delta "seconds.")
+    (set! gnc:*last-time* now)))
 
 
 ;;; Set up gnc:load.

@@ -99,6 +99,7 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <guile/gh.h>
 
 #include "top-level.h"
 
@@ -109,6 +110,7 @@
 #include "Refresh.h"
 #include "splitreg.h"
 #include "table-allgui.h"
+#include "guile-util.h"
 #include "messages.h"
 #include "util.h"
 
@@ -179,6 +181,10 @@ static char account_separator = ':';
 
 /* The reverse balance callback, if any. */
 static SRReverseBalanceCallback reverse_balance = NULL;
+
+/* The copied split or transaction, if any */
+static SCM copied_item = SCM_UNDEFINED;
+static SCM copied_item_id = SCM_UNDEFINED;
 
 /* static prototypes */
 static void xaccSRLoadRegEntry (SplitRegister *reg, Split *split);
@@ -276,24 +282,25 @@ xaccSRSetReverseBalanceCallback(SRReverseBalanceCallback callback)
  * doesn't copy reconciled flag, or open the parent transactions
  * for editing. Does *not* insert the 'to' split into an account!! */
 static void
-gnc_copy_split(Split *from, Split *to)
+gnc_copy_split_onto_split(Split *from, Split *to)
 {
+  SCM split_scm;
+
   if ((from == NULL) || (to == NULL))
     return;
 
-  xaccSplitSetMemo(to, xaccSplitGetMemo(from));
-  xaccSplitSetAction(to, xaccSplitGetAction(from));
-  xaccSplitSetDocref(to, xaccSplitGetDocref(from));
-  xaccSplitSetSharePriceAndAmount(to,
-                                  xaccSplitGetSharePrice(from),
-                                  xaccSplitGetShareAmount(from));
+  split_scm = gnc_copy_split(from);
+  if (split_scm == SCM_UNDEFINED)
+    return;
+
+  gnc_copy_split_scm_onto_split(split_scm, to);
 }
 
 /* copies the basic transaction values and the splits from the
  * 'from' trans to the 'to' trans. Any existing splits in the
  * 'to' trans are deleted. Does *not* open the 'to' trans for
- * editing!!! Splits are copied using gnc_copy_split above.
- * The new splits will be in exactly the same order as in
+ * editing!!! Splits are copied using gnc_copy_split_onto_split
+ * above. The new splits will be in exactly the same order as in
  * the 'from' transaction. */
 static void
 gnc_copy_trans(Transaction *from, Transaction *to)
@@ -321,7 +328,7 @@ gnc_copy_trans(Transaction *from, Transaction *to)
     from_split = xaccTransGetSplit(from, i);
 
     to_split = xaccMallocSplit();
-    gnc_copy_split(from_split, to_split);
+    gnc_copy_split_onto_split(from_split, to_split);
 
     xaccTransAppendSplit(to, to_split);
   }
@@ -862,7 +869,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
 
     new_split = xaccMallocSplit();
 
-    gnc_copy_split(split, new_split);
+    gnc_copy_split_onto_split(split, new_split);
 
     account = xaccSplitGetAccount(split);
 

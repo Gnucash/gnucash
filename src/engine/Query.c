@@ -38,6 +38,7 @@
 #include "Group.h"
 #include "Query.h"
 
+#if 0
 static void 
 print_query(Query * q) {
   GList * aterms;
@@ -60,7 +61,7 @@ print_query(Query * q) {
   }
   printf("\n");
 }
-
+#endif
 
 /********************************************************************
  * xaccMallocQuery 
@@ -82,7 +83,7 @@ void
 xaccInitQuery(Query * q, QueryTerm * initial_term) {
   GList * or  = NULL;
   GList * and = NULL;
-  
+
   if(initial_term) {
     or   = g_list_alloc();
     and  = g_list_alloc();
@@ -93,7 +94,7 @@ xaccInitQuery(Query * q, QueryTerm * initial_term) {
   q->terms      = or;
   q->split_list = NULL;
   q->changed    = 1;
-  
+
   q->max_splits = -1;
 
   q->primary_sort = BY_STANDARD;
@@ -129,7 +130,7 @@ void
 xaccQuerySingleTerm(Query * q, QueryTerm * qt) {
   GList * or  = NULL;
   GList * and = NULL;
-  
+
   or   = g_list_alloc();
   and  = g_list_alloc();
   and->data = qt;
@@ -158,7 +159,12 @@ xaccQueryHasTerms(Query * q) {
 
 void    
 xaccFreeQuery(Query * q) {
-  GList * gl = q->terms;
+  GList * gl;
+
+  if (q == NULL)
+    return;
+
+  gl = q->terms;
   for(gl=q->terms; gl; gl=gl->next) {
     g_list_free(gl->data);
   }
