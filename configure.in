@@ -927,6 +927,8 @@ AC_OUTPUT( m4/Makefile  intl/Makefile
           src/import-export/qif-import/test/Makefile
           src/import-export/qif-io-core/Makefile
           src/import-export/qif-io-core/test/Makefile
+          src/import-export/hbci/Makefile
+          src/import-export/hbci/test/Makefile
           src/network-utils/Makefile
           src/network-utils/test/Makefile
           src/optional/Makefile

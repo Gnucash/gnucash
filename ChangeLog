@@ -1,3 +1,8 @@
+2002-06-05  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/*: Add directory and initial files for
+	HBCI support module.
+
 2002-05-31  David Hampton  <hampton@employees.org>
 
 	* src/gnome/reconcile-list.c: Fix the direction of the sort
