@@ -85,6 +85,10 @@ static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
   Timespec ts;
   time_t tt;
 
+  /* Do nothing if this is view only */
+  if (ow->dialog_type == VIEW_ORDER)
+    return;
+
   gnc_suspend_gui_refresh ();
   
   gncOrderSetID (order, gtk_editable_get_chars
@@ -298,6 +302,9 @@ gnc_order_owner_changed_cb (GtkWidget *widget, gpointer data)
   GncOrder *order;
 
   if (!ow)
+    return FALSE;
+
+  if (ow->dialog_type == VIEW_ORDER)
     return FALSE;
 
   gnc_owner_get_owner (ow->owner_choice, &(ow->owner));

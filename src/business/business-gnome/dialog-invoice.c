@@ -83,6 +83,9 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
   Timespec ts;
   time_t tt;
 
+  if (iw->dialog_type == VIEW_INVOICE)
+    return;
+
   gnc_suspend_gui_refresh ();
   
   gncInvoiceSetID (invoice, gtk_editable_get_chars
@@ -337,6 +340,9 @@ gnc_invoice_owner_changed_cb (GtkWidget *widget, gpointer data)
   GncInvoice *invoice;
 
   if (!iw)
+    return FALSE;
+
+  if (iw->dialog_type == VIEW_INVOICE)
     return FALSE;
 
   gnc_owner_get_owner (iw->owner_choice, &(iw->owner));
