@@ -296,25 +296,29 @@ xaccConfigGetForceDoubleEntry (void)
 /********************************************************************\
 \********************************************************************/
 
-#define MARK_SPLIT(split) {				\
-   Account *acc = (Account *) ((split)->acc);		\
-   if (acc) { /* right now be real conservative */      \
-     acc->balance_dirty = TRUE;                         \
-     acc->sort_dirty = TRUE;                            \
-   }                                                    \
-   if (acc) xaccGroupMarkNotSaved(acc->parent);		\
+G_INLINE_FUNC void mark_split (Split *split);
+G_INLINE_FUNC void
+mark_split (Split *split)
+{
+  Account *account = split->acc;
+
+  if (account)
+  {
+    account->balance_dirty = TRUE;
+    account->sort_dirty = TRUE;
+
+    xaccGroupMarkNotSaved (account->parent);
+  }
 }
 
-static void
-MarkChanged (Transaction *trans)
+G_INLINE_FUNC void mark_trans (Transaction *trans);
+G_INLINE_FUNC void
+mark_trans (Transaction *trans)
 {
   GList *node;
 
   for (node = trans->splits; node; node = node->next)
-  {
-    Split *s = node->data;
-    MARK_SPLIT (s);
-  }
+    mark_split (node->data);
 }
 
 /********************************************************************\
@@ -377,7 +381,7 @@ xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price,
 {
   if (!s) return;
 
-  MARK_SPLIT(s);
+  mark_split (s);
 
   s->damount = gnc_numeric_convert(amt, get_security_denom(s), GNC_RND_ROUND);;
   s->value   = gnc_numeric_mul(s->damount, price, 
@@ -397,7 +401,7 @@ void
 xaccSplitSetSharePrice (Split *s, gnc_numeric price) {
   if (!s) return;
 
-  MARK_SPLIT(s);
+  mark_split (s);
 
   s->value = gnc_numeric_mul(s->damount, price, get_currency_denom(s),
                              GNC_RND_ROUND);
@@ -413,7 +417,8 @@ DxaccSplitSetShareAmount (Split *s, double damt) {
                                           GNC_RND_ROUND); 
   if (!s) return;
   
-  MARK_SPLIT(s);
+  mark_split (s);
+
   if(!gnc_numeric_zero_p(s->damount)) {
     old_price = gnc_numeric_div(s->value, s->damount, GNC_DENOM_AUTO,
                                 GNC_DENOM_REDUCE);
@@ -435,7 +440,7 @@ void
 xaccSplitSetShareAmount (Split *s, gnc_numeric amt) {
   if(!s) return;
 
-  MARK_SPLIT(s);
+  mark_split (s);
 
   s->damount = gnc_numeric_convert(amt, get_security_denom(s), GNC_RND_ROUND);
 
@@ -450,7 +455,7 @@ DxaccSplitSetValue (Split *s, double damt) {
   gnc_numeric old_price;
   if (!s) return;
 
-  MARK_SPLIT(s);
+  mark_split (s);
 
   if(!gnc_numeric_zero_p(s->damount)) {
     old_price = gnc_numeric_div(s->value, s->damount, GNC_DENOM_AUTO,
@@ -475,7 +480,8 @@ DxaccSplitSetValue (Split *s, double damt) {
 void 
 xaccSplitSetValue (Split *s, gnc_numeric amt) {
   if(!s) return;
-  MARK_SPLIT(s);
+
+  mark_split (s);
   
   s->value = gnc_numeric_convert(amt, get_currency_denom(s), GNC_RND_ROUND);;
 
@@ -806,7 +812,7 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
 
   if (!s) return;
 
-  MARK_SPLIT(s);
+  mark_split (s);
 
   /* Novice/casual users may not want or use the double entry
    * features of this engine. So, in particular, there may be the
@@ -1235,20 +1241,23 @@ xaccSplitRebalance (Split *split)
 
   /* KLUDGE -- bg */
   xaccSplitSetBaseValue (s, gnc_numeric_neg (value), base_currency);
-  MARK_SPLIT (s);
+  mark_split (s);
   xaccAccountRecomputeBalance (s->acc); 
 }
 
 /********************************************************************\
 \********************************************************************/
 
-#define CHECK_OPEN(trans) {					\
-   if (!trans->open) {						\
-      PERR ("transaction %p not open for editing\n", trans);	\
-      /* assert (trans->open); */				\
-      PERR ("\t%s:%d \n", __FILE__, __LINE__);			\
-      /* return; */						\
-   }								\
+G_INLINE_FUNC void check_open (Transaction *trans);
+G_INLINE_FUNC void
+check_open (Transaction *trans)
+{
+  if (!trans->open)
+  {
+    PERR ("transaction %p not open for editing\n", trans);
+    /* assert (trans->open); */
+    PERR ("\t%s:%d \n", __FILE__, __LINE__);
+  }
 }
 
 void
@@ -1287,7 +1296,7 @@ xaccTransCommitEdit (Transaction *trans)
 
    if (!trans) return;
    ENTER ("trans addr=%p\n", trans);
-   CHECK_OPEN (trans);
+   check_open (trans);
 
    /* At this point, we check to see if we have a valid transaction.
     * As a result of editing, we could end up with a transaction that
@@ -1395,7 +1404,7 @@ xaccTransRollbackEdit (Transaction *trans)
 
    if (!trans) return;
 
-   CHECK_OPEN (trans);
+   check_open (trans);
 
    ENTER ("trans addr=%p\n", trans);
 
@@ -1485,7 +1494,7 @@ xaccTransRollbackEdit (Transaction *trans)
          /* do NOT check date order until all of the other fields 
           * have been properly restored */
          xaccAccountFixSplitDateOrder (s->acc, s); 
-         MARK_SPLIT (s);
+         mark_split (s);
          xaccAccountRecomputeBalance (s->acc);
       }
 
@@ -1521,7 +1530,7 @@ xaccTransRollbackEdit (Transaction *trans)
       {
          Split *s = node->data;
 
-         MARK_SPLIT (s);
+         mark_split (s);
          xaccAccountRemoveSplit (s->acc, s);
          xaccAccountRecomputeBalance (s->acc);
          xaccRemoveEntity(&s->guid);
@@ -1538,7 +1547,7 @@ xaccTransRollbackEdit (Transaction *trans)
       {
          Split *s = node->data;
 
-         MARK_SPLIT (s);
+         mark_split (s);
          xaccStoreEntity(s, &s->guid, GNC_ID_SPLIT);
          xaccAccountInsertSplit (s->acc, s);
          xaccAccountRecomputeBalance (s->acc);
@@ -1571,7 +1580,7 @@ xaccTransDestroy (Transaction *trans)
    GList *node;
 
    if (!trans) return;
-   CHECK_OPEN (trans);
+   check_open (trans);
    trans->open |= BEING_DESTROYED;
    xaccTransWriteLog (trans, 'D');
 
@@ -1579,7 +1588,7 @@ xaccTransDestroy (Transaction *trans)
    {
       Split *split = node->data;
 
-      MARK_SPLIT (split);
+      mark_split (split);
 
       xaccAccountRemoveSplit (split->acc, split);
       xaccAccountRecomputeBalance (split->acc); 
@@ -1626,7 +1635,7 @@ xaccSplitDestroy (Split *split)
    trans = split->parent;
    assert (trans);
    assert (trans->splits);
-   CHECK_OPEN (trans);
+   check_open (trans);
 
    xaccRemoveEntity(&split->guid);
 
@@ -1643,7 +1652,7 @@ xaccSplitDestroy (Split *split)
     * value of the remaining split. (The rebalance 
     * happens later(?) during commit(?).)
     */
-   MARK_SPLIT (split);
+   mark_split (split);
    xaccTransRemoveSplit (trans, split);
    xaccAccountRemoveSplit (split->acc, split);
    xaccAccountRecomputeBalance (split->acc);
@@ -1664,7 +1673,7 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
    if (!trans) return;
    if (!split) return;
 
-   CHECK_OPEN (trans);
+   check_open (trans);
 
    /* first, make sure that the split isn't already inserted 
     * elsewhere. If so, then remove it. */
@@ -1826,14 +1835,14 @@ void
 xaccTransSetDateSecs (Transaction *trans, time_t secs)
 {
    if (!trans) return;
-   CHECK_OPEN (trans);
+   check_open (trans);
    PINFO ("addr=%p set date to %lu %s \n",
            trans, secs, ctime (&secs));
 
    trans->date_posted.tv_sec = secs;
    trans->date_posted.tv_nsec = 0;
 
-   MarkChanged (trans);
+   mark_trans (trans);
 
    /* Because the date has changed, we need to make sure that each of the
     * splits is properly ordered in each of their accounts.  We could do that
@@ -1848,19 +1857,19 @@ void
 xaccTransSetDateEnteredSecs (Transaction *trans, time_t secs)
 {
    if (!trans) return;
-   CHECK_OPEN (trans);
+   check_open (trans);
 
    trans->date_entered.tv_sec = secs;
    trans->date_entered.tv_nsec = 0;
 
-   MarkChanged (trans);
+   mark_trans (trans);
 }
 
 void
 xaccTransSetDateTS (Transaction *trans, const Timespec *ts)
 {
    if (!trans || !ts) return;
-   CHECK_OPEN (trans);
+   check_open (trans);
    DEBUGCMD ({
          time_t sicko = ts->tv_sec;
          PINFO ("addr=%p set date to %Lu %s \n",
@@ -1870,19 +1879,19 @@ xaccTransSetDateTS (Transaction *trans, const Timespec *ts)
    trans->date_posted.tv_sec = ts->tv_sec;
    trans->date_posted.tv_nsec = ts->tv_nsec;
 
-   MarkChanged (trans);
+   mark_trans (trans);
 }
 
 void
 xaccTransSetDateEnteredTS (Transaction *trans, const Timespec *ts)
 {
    if (!trans || !ts) return;
-   CHECK_OPEN (trans);
+   check_open (trans);
 
    trans->date_entered.tv_sec = ts->tv_sec;
    trans->date_entered.tv_nsec = ts->tv_nsec;
 
-   MarkChanged (trans);
+   mark_trans (trans);
 }
 
 void
@@ -1898,13 +1907,13 @@ xaccTransSetDateToday (Transaction *trans)
    struct timeval tv;
 
    if (!trans) return;
-   CHECK_OPEN (trans);
+   check_open (trans);
 
    gettimeofday (&tv, NULL);
    trans->date_posted.tv_sec = tv.tv_sec;
    trans->date_posted.tv_nsec = 1000 * tv.tv_usec;
 
-   MarkChanged (trans);
+   mark_trans (trans);
 
    PINFO ("addr=%p set date to %lu %s \n",
           trans, tv.tv_sec, ctime ((time_t *)&tv.tv_sec));
@@ -1919,12 +1928,12 @@ xaccTransSetNum (Transaction *trans, const char *xnum)
 {
    char * tmp;
    if (!trans || !xnum) return;
-   CHECK_OPEN (trans);
+   check_open (trans);
 
    tmp = g_cache_insert(gnc_string_cache, (gpointer) xnum);
    g_cache_remove(gnc_string_cache, trans->num);
    trans->num = tmp;
-   MarkChanged (trans);
+   mark_trans (trans);
 }
 
 void
@@ -1932,12 +1941,12 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
 {
    char * tmp;
    if (!trans || !desc) return;
-   CHECK_OPEN (trans);
+   check_open (trans);
 
    tmp = g_cache_insert(gnc_string_cache, (gpointer) desc);
    g_cache_remove(gnc_string_cache, trans->description);
    trans->description = tmp;
-   MarkChanged (trans);
+   mark_trans (trans);
 }
 
 void
@@ -1947,7 +1956,7 @@ xaccTransSetNotes (Transaction *trans, const char *notes)
   
   if (!trans || !notes) return;
 
-  CHECK_OPEN (trans);
+  check_open (trans);
 
   new_value = kvp_value_new_string (notes);
 
@@ -1955,7 +1964,7 @@ xaccTransSetNotes (Transaction *trans, const char *notes)
   {
     kvp_frame_set_slot (xaccTransGetSlots (trans), "notes", new_value);
     kvp_value_delete (new_value);
-    MarkChanged (trans);
+    mark_trans (trans);
   }
   else
   {
@@ -2058,7 +2067,7 @@ xaccSplitSetMemo (Split *split, const char *memo)
    tmp = g_cache_insert(gnc_string_cache, (gpointer) memo);
    g_cache_remove(gnc_string_cache, split->memo);
    split->memo = tmp;
-   MARK_SPLIT (split);
+   mark_split (split);
 }
 
 void
@@ -2070,7 +2079,7 @@ xaccSplitSetAction (Split *split, const char *actn)
    tmp = g_cache_insert(gnc_string_cache, (gpointer) actn);
    g_cache_remove(gnc_string_cache, split->action);
    split->action = tmp;
-   MARK_SPLIT (split);
+   mark_split (split);
 }
 
 void
@@ -2091,7 +2100,7 @@ xaccSplitSetReconcile (Split *split, char recn)
    }
 
    split->reconciled = recn;
-   MARK_SPLIT (split);
+   mark_split (split);
 
    xaccAccountRecomputeBalance (split->acc);
 }
@@ -2100,7 +2109,8 @@ void
 xaccSplitSetDateReconciledSecs (Split *split, time_t secs)
 {
    if (!split) return;
-   MARK_SPLIT (split);
+
+   mark_split (split);
 
    split->date_reconciled.tv_sec = secs;
    split->date_reconciled.tv_nsec = 0;
@@ -2110,7 +2120,8 @@ void
 xaccSplitSetDateReconciledTS (Split *split, Timespec *ts)
 {
    if (!split || !ts) return;
-   MARK_SPLIT (split);
+
+   mark_split (split);
 
    split->date_reconciled = *ts;
 }
