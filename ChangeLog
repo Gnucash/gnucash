@@ -1,3 +1,8 @@
+2000-12-14  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/engine/gnc-associate-account.[ch] : New files with code for associating
+	income/expense accounts with a stock account.  Not yet hooked up to the UI.
+
 2000-12-13  Rob Browning  <rlb@cs.utexas.edu>
 
 	* src/scm/text-export.scm: kill pointer-token*

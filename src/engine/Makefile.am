@@ -24,6 +24,7 @@ libgncengine_la_SOURCES = \
   io-gncxml-w.c \
   md5.c \
   kvp_frame.c \
+  gnc-associate-account.c \
   gnc-book.c \
   gnc-commodity.c \
   gnc-engine.c \
@@ -56,6 +57,7 @@ noinst_HEADERS = \
   io-gncxml.h \
   md5.h \
   kvp_frame.h \
+  gnc-associate-account.h \
   gnc-book.h \
   gnc-commodity.h \
   gnc-engine.h \
