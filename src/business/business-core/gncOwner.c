@@ -97,6 +97,7 @@ gnc_commodity * gncOwnerGetCommodity (GncOwner *owner)
   switch (owner->type) {
   case GNC_OWNER_NONE:
   case GNC_OWNER_UNDEFINED:
+  default:
     return NULL;
   case GNC_OWNER_CUSTOMER:
     return gncCustomerGetCommodity (owner->owner.customer);
