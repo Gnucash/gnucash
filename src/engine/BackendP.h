@@ -219,8 +219,8 @@ struct backend_s
                          const char *book_id, 
                          gboolean ignore_lock,
                          gboolean create_if_nonexistent);
-  void (*book_load) (Backend *);
-  void (*price_load) (Backend *);
+  void (*book_load) (Backend *, GNCBook *);
+  void (*price_load) (Backend *, GNCBook *);
   void (*session_end) (Backend *);
   void (*destroy_backend) (Backend *);
 
@@ -238,9 +238,9 @@ struct backend_s
 
   void (*run_query) (Backend *, Query *);
   void (*price_lookup) (Backend *, GNCPriceLookup *);
-  void (*sync_all) (Backend *, GNCBook *book);
-  void (*sync_group) (Backend *, AccountGroup *);
-  void (*sync_price) (Backend *, GNCPriceDB *);
+  void (*sync_all) (Backend *, GNCBook *);
+  void (*sync_group) (Backend *, GNCBook *);
+  void (*sync_price) (Backend *, GNCBook *);
 
   gboolean (*events_pending) (Backend *be);
   gboolean (*process_events) (Backend *be);

@@ -355,6 +355,7 @@ gnc_session_begin (GNCSession *session, const char * book_id,
 gboolean
 gnc_session_load (GNCSession *session)
 {
+  GNCBook *oldbook;
   Backend *be;
 
   if (!session) return FALSE;
@@ -363,18 +364,15 @@ gnc_session_load (GNCSession *session)
   ENTER ("sess=%p book_id=%s", session, gnc_session_get_url(session)
          ? gnc_session_get_url(session) : "(null)");
 
+
   /* At this point, we should are supposed to have a valid book 
    * id and a lock on the file. */
 
-  xaccLogDisable();
-
-  gnc_book_set_backend (session->book, NULL);
-  gnc_book_destroy (session->book);
+  oldbook = session->book;
   session->book = gnc_book_new ();
   PINFO ("new book=%p", session->book);
 
   xaccLogSetBaseName(session->logpath);
-  xaccLogEnable();
 
   gnc_session_clear_error (session);
 
@@ -397,16 +395,14 @@ gnc_session_load (GNCSession *session)
 
       if (be->book_load) 
       {
-          xaccLogSetBaseName(session->logpath);
-
-          be->book_load (be);
+          be->book_load (be, session->book);
 
           gnc_session_push_error (session, xaccBackendGetError(be), NULL);
       }
 
       if (be->price_load) 
       {
-          be->price_load (be);
+          be->price_load (be, session->book);
 
           gnc_session_push_error(session, xaccBackendGetError(be), NULL);
       }
@@ -421,12 +417,14 @@ gnc_session_load (GNCSession *session)
 
   if (!gnc_book_get_group (session->book))
   {
+      /* ?? should we restore the oldbook here ?? */
       LEAVE("topgroup NULL");
       return FALSE;
   }
   
   if (!gnc_book_get_pricedb (session->book))
   {
+      /* ?? should we restore the oldbook here ?? */
       LEAVE("pricedb NULL");
       return FALSE;
   }
@@ -436,6 +434,11 @@ gnc_session_load (GNCSession *session)
       LEAVE("error from backend %d", gnc_session_get_error(session));
       return FALSE;
   }
+
+  xaccLogDisable();
+  gnc_book_set_backend (oldbook, NULL);
+  gnc_book_destroy (oldbook);
+  xaccLogEnable();
 
   LEAVE ("sess = %p, book_id=%s", session, gnc_session_get_url(session)
          ? gnc_session_get_url(session) : "(null)");
@@ -509,16 +512,16 @@ gnc_session_save (GNCSession *session)
         return;
     }
 
-    if (be->sync_group && gnc_book_get_group (session->book))
+    if (be->sync_group)
     {
-      (be->sync_group)(be, gnc_book_get_group (session->book));
+      (be->sync_group)(be, session->book);
       if (save_error_handler(be, session))
         return;
     }
 
-    if (be->sync_price && gnc_book_get_pricedb (session->book))
+    if (be->sync_price)
     {
-      (be->sync_price)(be, gnc_book_get_pricedb (session->book));
+      (be->sync_price)(be, session->book);
       if(save_error_handler(be, session))
         return;
     }
@@ -526,7 +529,7 @@ gnc_session_save (GNCSession *session)
     return;
   } 
 
-  /* if the fullpath doesn't exist, either the user failed to initialize,
+  /* If the fullpath doesn't exist, either the user failed to initialize,
    * or the lockfile was never obtained. Either way, we can't write. */
   gnc_session_clear_error (session);
 
