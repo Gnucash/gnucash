@@ -64,7 +64,8 @@ void gnc_search_dialog_test (void);
  * the show_start_query, if it exists, will become the property of the
  * dialog and will be automatically destroyed.
  */
-gpointer gnc_search_dialog_choose_object (GNCIdTypeConst obj_type,
+gpointer gnc_search_dialog_choose_object (GtkWidget *parent,
+					  GNCIdTypeConst obj_type,
 					  GList *param_list,
 					  QueryNew *start_query,
 					  QueryNew *show_start_query,

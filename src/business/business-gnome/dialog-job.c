@@ -22,6 +22,8 @@
 #include "business-utils.h"
 #include "dialog-job-select.h"
 #include "dialog-job.h"
+#include "dialog-order.h"
+#include "dialog-invoice.h"
 
 #define DIALOG_NEW_JOB_CM_CLASS "dialog-new-job"
 #define DIALOG_EDIT_JOB_CM_CLASS "dialog-edit-job"
@@ -81,10 +83,9 @@ static void gnc_ui_to_job (JobWindow *jw, GncJob *job)
   gnc_resume_gui_refresh ();
 }
 
-static void
-gnc_job_window_ok_cb (GtkWidget *widget, gpointer data)
+static gboolean
+gnc_job_verify_ok (JobWindow *jw)
 {
-  JobWindow *jw = data;
   const char *res;
 
   /* Check for valid id */
@@ -92,7 +93,7 @@ gnc_job_window_ok_cb (GtkWidget *widget, gpointer data)
   if (safe_strcmp (res, "") == 0) {
     const char *message = _("The Job must be given an ID.");
     gnc_error_dialog_parented(GTK_WINDOW(jw->dialog), message);
-    return;
+    return FALSE;
   }
 
   /* Check for valid name */
@@ -100,7 +101,7 @@ gnc_job_window_ok_cb (GtkWidget *widget, gpointer data)
   if (safe_strcmp (res, "") == 0) {
     const char *message = _("The Job must be given a name.");
     gnc_error_dialog_parented(GTK_WINDOW(jw->dialog), message);
-    return;
+    return FALSE;
   }
 
   /* Check for owner */
@@ -109,7 +110,7 @@ gnc_job_window_ok_cb (GtkWidget *widget, gpointer data)
   if (res == NULL || safe_strcmp (res, "") == 0) {
     const char *message = _("You must choose an owner for this job.");
     gnc_error_dialog_parented(GTK_WINDOW(jw->dialog), message);
-    return;
+    return FALSE;
   }
 
   /* Now save it off */
@@ -119,8 +120,21 @@ gnc_job_window_ok_cb (GtkWidget *widget, gpointer data)
       gnc_ui_to_job (jw, job);
     }
     jw->created_job = job;
-    jw->job_guid = *xaccGUIDNULL ();
   }
+
+  return TRUE;
+}
+
+static void
+gnc_job_window_ok_cb (GtkWidget *widget, gpointer data)
+{
+  JobWindow *jw = data;
+
+  if (!gnc_job_verify_ok (jw))
+    return;
+
+  /* Make sure this is ok */
+  jw->job_guid = *xaccGUIDNULL ();
 
   gnc_close_gui_component (jw->component_id);
 }
@@ -141,6 +155,32 @@ gnc_job_window_help_cb (GtkWidget *widget, gpointer data)
   /* XXX */
 
   helpWindow(NULL, NULL, help_file);
+}
+
+static void
+gnc_job_order_cb(GtkButton * button, gpointer user_data)
+{
+  JobWindow *jw = user_data;
+  GncOwner owner;
+
+  if (!gnc_job_verify_ok (jw))
+    return;
+
+  gncOwnerInitJob (&owner, jw_get_job (jw));
+  gnc_order_find (jw->dialog, NULL, &owner, jw->book);
+}
+
+static void
+gnc_job_invoice_cb(GtkButton * button, gpointer user_data)
+{
+  JobWindow *jw = user_data;
+  GncOwner owner;
+
+  if (!gnc_job_verify_ok (jw))
+    return;
+
+  gncOwnerInitJob (&owner, jw_get_job (jw));
+  gnc_invoice_find (jw->dialog, NULL, &owner, jw->book);
 }
 
 static void
@@ -276,7 +316,7 @@ gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncOwner *owner,
   owner_box = glade_xml_get_widget (xml, "customer_hbox");
   owner_label = glade_xml_get_widget (xml, "owner_label");
 
-  /* Setup signals (XXX) */
+  /* Connect buttons */
   gnome_dialog_button_connect (jwd, 0,
 			       GTK_SIGNAL_FUNC(gnc_job_window_ok_cb), jw);
   gnome_dialog_button_connect (jwd, 1,
@@ -284,6 +324,13 @@ gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncOwner *owner,
   gnome_dialog_button_connect (jwd, 2,
 			       GTK_SIGNAL_FUNC(gnc_job_window_help_cb), jw);
 
+  glade_xml_signal_connect_data
+    (xml, "gnc_job_order_cb", GTK_SIGNAL_FUNC (gnc_job_order_cb), jw);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_job_invoice_cb", GTK_SIGNAL_FUNC (gnc_job_invoice_cb), jw);
+
+  /* Setup signals (XXX) */
   gtk_signal_connect (jwo, "destroy",
 		      GTK_SIGNAL_FUNC(gnc_job_window_destroy_cb), jw);
 
@@ -372,7 +419,7 @@ gnc_job_new (GtkWidget *parent, GncOwner *ownerp, GNCBook *bookp)
   gtk_signal_connect (GTK_OBJECT (jw->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_job_on_close_cb), &created_job);
 
-  gtk_window_set_modal (GTK_WINDOW (jw->dialog), TRUE);
+  // gtk_window_set_modal (GTK_WINDOW (jw->dialog), TRUE);
 
   gtk_main ();
 

@@ -14,11 +14,14 @@
 #include "gnc-gui-query.h"
 #include "gncObject.h"
 #include "gnc-general-select.h"
+#include "window-help.h"
 
 #include "gncJob.h"
 #include "business-utils.h"
 #include "dialog-job-select.h"
 #include "dialog-job.h"
+#include "dialog-order.h"
+#include "dialog-invoice.h"
 
 struct select_job_window {
   GtkWidget * dialog;
@@ -144,6 +147,40 @@ gnc_ui_select_job_ok_cb(GtkButton * button, gpointer user_data)
 }
 
 static void
+gnc_ui_select_job_order_cb(GtkButton * button, gpointer user_data)
+{
+  struct select_job_window * w = user_data;
+  GncOwner owner;
+
+  if(!w->job)
+    return;
+
+  gncOwnerInitJob (&owner, w->job);
+  gnc_order_find (w->dialog, NULL, &owner, w->book);
+}
+
+static void
+gnc_ui_select_job_invoice_cb(GtkButton * button, gpointer user_data)
+{
+  struct select_job_window * w = user_data;
+  GncOwner owner;
+
+  if(!w->job)
+    return;
+
+  gncOwnerInitJob (&owner, w->job);
+  gnc_invoice_find (w->dialog, NULL, &owner, w->book);
+}
+
+static void
+gnc_ui_select_job_help_cb(GtkButton * button, gpointer user_data)
+{
+  char *help_file = "";		/* XXX */
+
+  helpWindow(NULL, NULL, help_file);
+}
+
+static void
 gnc_ui_select_job_new_cb(GtkButton * button, gpointer user_data)
 {
   struct select_job_window * w = user_data;
@@ -232,20 +269,32 @@ gnc_job_choose (GtkWidget * parent, GncJob *start_job,
 
   /* Connect the glade signals */
   glade_xml_signal_connect_data
-    (xml, "gnc_ui_select_job_ok_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_select_job_ok_cb), win);
-
-  glade_xml_signal_connect_data
     (xml, "gnc_ui_select_job_new_cb",
      GTK_SIGNAL_FUNC (gnc_ui_select_job_new_cb), win);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_select_job_cancel_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_select_job_cancel_cb), win);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_select_job_help_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_select_job_help_cb), win);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_select_job_ok_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_select_job_ok_cb), win);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_select_job_edit_cb",
      GTK_SIGNAL_FUNC (gnc_ui_select_job_edit_cb), win);
 
   glade_xml_signal_connect_data
-    (xml, "gnc_ui_select_job_cancel_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_select_job_cancel_cb), win);
+    (xml, "gnc_ui_select_job_order_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_select_job_order_cb), win);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_select_job_invoice_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_select_job_invoice_cb), win);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_select_job_showjobs_toggled_cb",

@@ -611,7 +611,7 @@ gnc_employee_select (GtkWidget *parent, GncEmployee *start, GNCBook *book,
   /* launch select dialog and return the result */
   sw.book = book;
   sw.parent = parent;
-  res = gnc_search_dialog_choose_object (type, params, q, q2,
+  res = gnc_search_dialog_choose_object (parent, type, params, q, q2,
 					 (provide_select ? buttons :
 					  &(buttons[1])), NULL,
 					 new_employee_cb, &sw);

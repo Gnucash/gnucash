@@ -769,7 +769,8 @@ gnc_search_dialog_test (void)
   gtk_main ();
 }
 
-gpointer gnc_search_dialog_choose_object (GNCIdTypeConst obj_type,
+gpointer gnc_search_dialog_choose_object (GtkWidget *parent,
+					  GNCIdTypeConst obj_type,
 					  GList *param_list,
 					  QueryNew *start_query,
 					  QueryNew *show_start_query,
@@ -784,6 +785,11 @@ gpointer gnc_search_dialog_choose_object (GNCIdTypeConst obj_type,
 						  show_start_query,
 						  callbacks, result_callback,
 						  new_item_cb, user_data);
+
+  if (parent) {
+    gnome_dialog_set_parent (GNOME_DIALOG (sw->dialog), GTK_WINDOW (parent));
+    gtk_window_set_modal(GTK_WINDOW(sw->dialog), TRUE);
+  }
 
   gtk_signal_connect (GTK_OBJECT (sw->dialog), "close",
 		      GTK_SIGNAL_FUNC (on_close_cb), &result);
