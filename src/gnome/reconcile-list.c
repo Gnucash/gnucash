@@ -29,6 +29,7 @@
 #include "FileDialog.h"
 #include "date.h"
 #include "dialog-utils.h"
+#include "global-options.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
 #include "reconcile-list.h"
@@ -655,8 +656,13 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
   GNCPrintAmountInfo print_info;
   GNCAccountType account_type;
   Transaction *trans;
+  gboolean auto_check;
   GList *splits;
   Split *split;
+
+  auto_check = gnc_lookup_boolean_option ("Reconcile",
+                                          "Check off cleared transactions",
+                                          TRUE);
 
   account_type = xaccAccountGetType (list->account);
   strings[5] = NULL;
@@ -701,7 +707,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     strings[3] = xaccPrintAmount (gnc_numeric_abs (amount), print_info);
     strings[4] = "";
 
-    if (list->first_fill && recn == CREC)
+    if (list->first_fill && auto_check && recn == CREC)
       g_hash_table_insert (list->reconciled, split, split);
 
     row = gtk_clist_append (GTK_CLIST(list), (gchar **) strings);
