@@ -902,6 +902,10 @@ gnc_find_first_gui_component (const char *component_class,
   GList *list;
   gpointer user_data;
 
+#if CM_DEBUG
+  fprintf (stderr, "find: class %s, fn %p, data %p\n", component_class,
+	   find_handler, find_data);
+#endif
   if (!component_class)
     return NULL;
 
@@ -913,6 +917,9 @@ gnc_find_first_gui_component (const char *component_class,
 
   g_list_free (list);
 
+#if CM_DEBUG
+  fprintf (stderr, "found: data %p\n", user_data);
+#endif
   return user_data;
 }
 
