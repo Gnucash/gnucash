@@ -204,7 +204,9 @@ char *        xaccTransGetNum (Transaction *);
 char *        xaccTransGetDescription (Transaction *);
 char *        xaccTransGetDocref (Transaction *);
 time_t        xaccTransGetDate (Transaction *);
+#ifndef SWIG  /* swig chokes on long long */
 long long     xaccTransGetDateL (Transaction *);
+#endif
 void          xaccTransGetDateTS (Transaction *, Timespec *);
 void          xaccTransGetDateEnteredTS (Transaction *, Timespec *);
 

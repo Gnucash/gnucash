@@ -1511,13 +1511,29 @@ xaccTransSetDateEnteredTS (Transaction *trans, Timespec *ts)
    trans->date_entered.tv_nsec = ts->tv_nsec;
 }
 
+#define THIRTY_TWO_YEARS 0x3c30fc00L
+
 void
 xaccTransSetDate (Transaction *trans, int day, int mon, int year)
 {
    struct tm date;
-   time_t secs;
+   long long secs;
+   long long era = 0;
 
-   date.tm_year = year - 1900;
+   year -= 1900;
+
+   /* make a crude attempt to deal with dates outside the 
+    * range of Dec 1901 to Jan 2038. Note the we screw up 
+    * centenial leap years here ... so hack alert --
+    */
+   if ((2 > year) || (136 < year)) 
+   {
+      era = year / 32;
+      year %= 32;
+      if (0 > year) { year += 32; era -= 1; } 
+   }
+
+   date.tm_year = year;
    date.tm_mon = mon - 1;
    date.tm_mday = day;
    date.tm_hour = 11;
@@ -1527,7 +1543,9 @@ xaccTransSetDate (Transaction *trans, int day, int mon, int year)
    /* compute number of seconds */
    secs = mktime (&date);
 
-   xaccTransSetDateSecs (trans, secs);
+   secs += era * THIRTY_TWO_YEARS;
+
+   xaccTransSetDateSecsL (trans, secs);
 }
 
 void
