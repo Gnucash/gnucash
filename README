@@ -123,48 +123,17 @@ sorry, no "make install" yet.
 
 Status:
 -------
-As of version 0.9t:
+As of version 1.0b11:
 
----------------
-Bare-bones general ledger capabilities added.
-Working Features:
--- accounts can have sub-accounts
--- Income and Expense account types added.
--- General Ledger windows for sub-accounts
+xacc is known to work in the following configs:
+Linux 2.0.x -- Intel  w/ RedHat Motif
+Linux 2.0.x -- Intel  w/ Lesstif v0.81
+SGI IRIX    -- 
 
----------------
-Bare-bones Mutual Fund and Stock Portfolio handling
-is implemented. 
-Working Features:
--- transfers between bank account & fund work correctly
--- save to disk, restore from disk.
--- Type of transaction (Buy, Cap Gain, Dividend Reinvest, etc.) now 
-   supported for portfolio/mutual fund accounts.  This field can be set 
-   and cleared, but is not currently used anywhere.  It will become 
-   useful when reports and graphs are generated.
+xacc seems to be having problems with:
+Solaris -- Sparc  -- won't compile due to va-args in XmHTML
+Linux 2.0.x -- Intel w/ Lesstif v0.82
 
----------------
-An beta-level double-entry system has been created.
-"Double-entry" is a form of accounting where all transactions
-show up in two accounts (for example, a transfer from
-a credit card(Diners Club) to a cash account(Entertainment Expense)
-will show up in both accounts.  Modifying/deleting a transaction 
-in one account window automatically modifies/deletes it in the 
-other too.  
-
-The system does not force the use of double-entry: in fact,
-double entries are made ONLY when the "transfer" menu item is 
-used.
-
-A future extension to force the use of double-entry for an account
-is planned, as well as the ability to make transfers directly
-from the register(ledger) window.  However, this function will
-be tricky, since it requires hacks on the Xbae widget used to
-display the register.
-
--------------
-The "reports" menu item is unimplemented.
--------------
 
 That's all folks!
 
