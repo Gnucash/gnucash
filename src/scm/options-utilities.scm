@@ -94,7 +94,9 @@
 	    (list->vector
 	     (list 4 "4" (_ "Fourth-level")))
 	    (list->vector
-	     (list 5 "5" (_ "Fifth-level"))))))
+	     (list 5 "5" (_ "Fourth-level")))
+	    (list->vector
+	     (list 6 "6" (_ "Sixth-level"))))))
     
     (gnc:register-option 
      options  
@@ -127,6 +129,16 @@
     (gnc:make-simple-boolean-option
      pagename optname
      sort-tag (_ "Include sub-account balances in printed balance?") #t)))
+
+;; The single checkbox whether to group the accounts into main
+;; categories and ahow a subtotal for those.
+(define (gnc:options-add-group-accounts!
+	 options pagename optname sort-tag default?)
+  (gnc:register-option 
+    options  
+    (gnc:make-simple-boolean-option
+     pagename optname
+     sort-tag (_ "Group the accounts in main categories?") default?)))
 
 ;; These are common options for the selection of the report's
 ;; currency/commodity.

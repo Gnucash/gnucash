@@ -1,3 +1,20 @@
+2001-02-15  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report-utilities.scm: Added functions to filter accounts
+	by type, and helpers for calculating balances.
+
+	* src/scm/commodity-utilities.scm: (gnc:make-exchange-function)
+	now uses <gnc-monetary>.
+
+	* src/scm/html-utilities.scm: (gnc:html-build-acct-table) major
+	code cleanup. Added new function to generate a <html-table> of
+	exchange rates.
+
+	* src/scm/options-utilities.scm: Added function for another
+	option.
+
+	* src/scm/report/{pnl,account-summary}.scm: Added options.
+
 2001-02-15  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/engine/Account.h: Add prototype for SetSlots.

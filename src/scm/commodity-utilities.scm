@@ -109,7 +109,8 @@
 		    ;; If neither the currency of otherlist nor of
 		    ;; pair was found in reportlist then we can't
 		    ;; resolve the exchange rate to this currency.
-		    (warn "can't calculate rate for "
+		    (warn "gnc:resolve-unknown-comm:" 
+			  "can't calculate rate for "
 			  (gnc:commodity-value->string 
 			   (list (car pair) ((caadr pair) 'total #f)))
 			  " = "
@@ -123,7 +124,8 @@
 			;; went wrong inside
 			;; gnc:get-exchange-totals. FIXME: Find a
 			;; better thing to do in this case.
-			(warn "Oops - exchange rate ambiguity error: "
+			(warn "gnc:resolve-unknown-comm:" 
+			      "Oops - exchange rate ambiguity error: "
 			      (gnc:commodity-value->string 
 			       (list (car pair) ((caadr pair) 'total #f)))
 			      " = "
@@ -265,30 +267,30 @@
    (gnc:get-exchange-totals report-commodity end-date)))
 
 ;; This one returns the ready-to-use function for calculation of the
-;; exchange rates. The returned function in turn returns a pair
-;; commodity - value which instantly can be plugged into
-;; gnc:commodity-amount->string .
+;; exchange rates. The returned function takes a <gnc-monetary> and
+;; the domestic-commodity, exchanges the amount in the domestic
+;; currency and returns a <gnc-monetary>.
 (define (gnc:make-exchange-function exchange-alist)
   (let ((exchangelist exchange-alist))
-    (lambda (foreign-pair domestic)
-      (cons domestic
-	    (cons 
-	     (let ((pair (assoc (car foreign-pair) exchangelist)))
-	       (if (not pair)
-		   (gnc:numeric-zero)
-		   (gnc:numeric-mul (cadr foreign-pair) (cadr pair)
-				    ;; FIXME: the constant 100 here is
-				    ;; not a durable solution --
-				    ;; anyone has a better idea?
-				    100 GNC-RND-ROUND)))
-	     '())))))
-
+    (lambda (foreign domestic)
+      (gnc:make-gnc-monetary 
+       domestic
+       (let ((pair (assoc (gnc:gnc-monetary-commodity foreign) 
+			  exchangelist)))
+	 (if (not pair)
+	     (gnc:numeric-zero)
+	     (gnc:numeric-mul (gnc:gnc-monetary-amount foreign) 
+			      (cadr pair)
+			      ;; FIXME: the constant 100 here is
+			      ;; not a durable solution --
+			      ;; anyone has a better idea?
+			      100 GNC-RND-ROUND)))))))
 
 ;; Adds all different commodities in the commodity-collector <foreign>
 ;; by using the exchange rates of <exchange-fn> to calculate the
-;; exchange rates to the commodity <domestic>. Returns the
-;; two-element-list with the domestic commodity and its corresponding
-;; balance, like (gnc:commodity* gnc:numeric).
+;; exchange rates to the commodity <domestic>. Returns a
+;; <gnc-monetary> with the domestic commodity and its corresponding
+;; balance.
 (define (gnc:sum-collector-commodity foreign domestic exchange-fn)
   (let ((balance (make-commodity-collector)))
     (foreign
@@ -297,7 +299,9 @@
        (if (gnc:commodity-equiv? domestic curr)
 	   (balance 'add domestic val)
 	   (balance 'add domestic 
-		    (cadr (exchange-fn (list curr val) domestic)))))
+		    (gnc:gnc-monetary-amount 
+		     (exchange-fn (gnc:make-gnc-monetary curr val) 
+				  domestic)))))
      #f)
     (balance 'getmonetary domestic #f)))
 

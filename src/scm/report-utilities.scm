@@ -56,6 +56,30 @@
                #f)))
     (member type '(income expense))))
 
+;; Returns only those accounts out of the list <accounts> which have
+;; one of the type identifiers in typelist.
+(define (gnc:filter-accountlist-type typelist accounts)
+  (filter (lambda (a) 
+	    (member (gw:enum-<gnc:AccountType>-val->sym
+		     (gnc:account-get-type a) #f)
+		    typelist) )
+	  accounts))
+
+;; Decompose a given list of accounts accts into different lists
+;; according to their types, each with the name of that category as
+;; first element.
+(define (gnc:decompose-accountlist accounts)
+  (map (lambda (x) (cons
+		    (car x)
+		    (gnc:filter-accountlist-type (cdr x) accounts)))
+       (list
+	(cons (_ "Assets") 
+	      '(asset bank cash checking savings money-market 
+		      stock mutual-fund currency))
+	(cons (_ "Liabilities") '(liability equity credit-line))
+	(cons (_ "Income") '(income))
+	(cons (_ "Expense") '(expense)))))
+
 ;; Returns the depth of the current account heirarchy, that is, the
 ;; maximum level of subaccounts in the current-group.
 (define (gnc:get-current-group-depth)
@@ -73,6 +97,7 @@
   (accounts-get-children-depth 
    (gnc:group-get-account-list (gnc:get-current-group))))
 
+;;
 (define (gnc:account-separator-char)
   (let ((option (gnc:lookup-option gnc:*options-entries*
                                    "General" "Account Separator")))
@@ -310,7 +335,8 @@
        clist))
 
     ;; helper function which is given a commodity and returns, if
-    ;; existing, a list (gnc:commodity gnc:numeric) 
+    ;; existing, a list (gnc:commodity gnc:numeric). If the second
+    ;; argument was #t, the sign gets reversed.
     (define (getpair c sign?)
       (let ((pair (assoc c commoditylist)))
 	(cons c (cons 
@@ -322,7 +348,8 @@
 	      '()))))
 
     ;; helper function which is given a commodity and returns, if
-    ;; existing, a <gnc:monetary> value.
+    ;; existing, a <gnc:monetary> value. If the second argument was
+    ;; #t, the sign gets reversed.
     (define (getmonetary c sign?)
       (let ((pair (assoc c commoditylist)))
 	(gnc:make-gnc-monetary
@@ -422,18 +449,32 @@
           group)))
 
 ;; Adds all accounts' balances, where the balances are determined with
+;; the get-balance-fn. The reverse-balance-fn
+;; (e.g. gnc:account-reverse-balance?) should return #t if the
+;; account's balance sign should get reversed. Returns a
+;; commodity-collector.
+(define (gnc:accounts-get-balance-helper 
+	 accounts get-balance-fn reverse-balance-fn)
+  (let ((collector (make-commodity-collector)))
+    (for-each 
+     (lambda (acct)
+       (collector (if (reverse-balance-fn acct)
+		      'minusmerge 
+		      'merge) 
+		  (get-balance-fn acct) #f))
+     accounts)
+    collector))
+
+;; Adds all accounts' balances, where the balances are determined with
 ;; the get-balance-fn. Intended for usage with a profit and loss
 ;; report, hence a) only the income/expense accounts are regarded, and
 ;; b) the result is sign reversed. Returns a commodity-collector.
 (define (gnc:accounts-get-comm-total-profit accounts 
 					    get-balance-fn)
-  (let ((collector (make-commodity-collector)))
-    (for-each 
-     (lambda (acct)
-       (collector 'minusmerge (get-balance-fn acct) #f))
-     (filter gnc:account-is-inc-exp? 
-	     accounts))
-    collector))
+  (gnc:accounts-get-balance-helper
+   (gnc:filter-accountlist-type '(income expense) accounts)
+   get-balance-fn
+   (lambda(x) #t)))
 
 ;; Adds all accounts' balances, where the balances are determined with
 ;; the get-balance-fn. Intended for usage with a balance sheet, hence
@@ -441,13 +482,11 @@
 ;; reversed at all. Returns a commodity-collector.
 (define (gnc:accounts-get-comm-total-assets accounts 
 					    get-balance-fn)
-  (let ((collector (make-commodity-collector)))
-    (for-each 
-     (lambda (acct)
-       (collector 'merge (get-balance-fn acct) #f))
-     (filter (lambda (a) (not (gnc:account-is-inc-exp? a))) 
-	     accounts))
-    collector))
+  (gnc:accounts-get-balance-helper
+   (filter (lambda (a) (not (gnc:account-is-inc-exp? a)))
+	   accounts)
+   get-balance-fn
+   (lambda(x) #f)))
 
 ;; returns a commodity-collector
 (define (gnc:group-get-comm-balance-at-date group date)

@@ -120,69 +120,37 @@
 	      (string<? (gnc:account-get-code a)
 			(gnc:account-get-code b)))))
 
-    ;; just a trivial helper...
-    (define (identity a) a)
-    
     ;; The following functions are defined inside build-acct-table
     ;; to avoid passing tons of arguments which are constant anyway
     ;; inside this function.
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;; functions for table without foreign commodities 
+    ;; function for table without foreign commodities 
     
-    ;; Returns a list which makes up a row in the table. current-depth
-    ;; determines the number of empty cells, my-name is the
-    ;; html-object to be displayed as name, and my-balance is a
-    ;; gnc-monetary to be displayed in the balance column.
-    (define (make-row-helper current-depth my-name my-balance)
-      (append
-       (gnc:html-make-empty-cells (- current-depth 1))
-       (list (gnc:make-html-table-cell/size 
-	      1 (+ 1 (- tree-depth current-depth)) 
-	      my-name))
-       (gnc:html-make-empty-cells (- tree-depth current-depth))
-       ;; the account balance
-       (list my-balance)
-       (gnc:html-make-empty-cells (- current-depth 1))))
-
-    ;; Returns a list which makes up a row in the table. The account
-    ;; balance calculation is done here, but the row/cell setup is
-    ;; done in the helper function.
-    (define (make-row acct current-depth)
-      (make-row-helper 
-       current-depth 
-       (gnc:html-account-anchor acct)
-       ;; get the account balance, then exchange everything into the
-       ;; report-commodity via gnc:sum-collector-commodity. If the
-       ;; account-reverse-balance? returns true, then the sign gets
-       ;; reversed, otherwise the value is left unchanged.
-       ((if (gnc:account-reverse-balance? acct)
-	    gnc:monetary-neg
-	    identity)
-	(gnc:sum-collector-commodity (my-get-balance acct) 
-				     report-commodity exchange-fn))))
-    
-    ;; Adds rows to the table. Therefore it goes through the list of
-    ;; accounts, runs make-row on each account.  If tree-depth and 
-    ;; current-depth require, it will recursively call itself on the
-    ;; list of children accounts. Is used if no foreign commodity is
-    ;; shown.
-    (define (traverse-accounts! accnts current-depth)
-      (if (<= current-depth tree-depth)
-	  (for-each (lambda (acct)
-		      (begin
-			(if (show-acct? acct)
-			    (gnc:html-table-append-row!
-			     table 
-			     (make-row acct current-depth)))
-			(traverse-accounts! 
-			 (gnc:account-get-immediate-subaccounts acct)
-			 (+ 1 current-depth))))
-		    (sort-fn accnts))))
+    ;; Adds one row to the table. current-depth determines the number
+    ;; of empty cells, my-name is the html-object to be displayed as
+    ;; name, my-balance is a gnc-monetary to be displayed in the
+    ;; balance column, and if reverse-balance? is #t the balance will
+    ;; be displayed with the sign reversed.
+    (define (add-row-helper! 
+	     current-depth my-name my-balance reverse-balance?)
+      (gnc:html-table-append-row! 
+       table
+       (append
+	(gnc:html-make-empty-cells (- current-depth 1))
+	(list (gnc:make-html-table-cell/size 
+	       1 (+ 1 (- tree-depth current-depth)) 
+	       my-name))
+	(gnc:html-make-empty-cells (- tree-depth current-depth))
+	;; the account balance
+	(list (if reverse-balance? 
+		  (gnc:monetary-neg my-balance) 
+		  my-balance))
+	(gnc:html-make-empty-cells (- current-depth 1)))))
     
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;; functions for table with foreign commodities visible
-    
+    ;; function for table with foreign commodities visible
+
     ;; Adds all appropriate rows to the table which belong to one
     ;; balance, i.e. one row for each commodity. (Note: Multiple
     ;; commodities come e.g. from subaccounts with different
@@ -192,11 +160,15 @@
     ;; account. balance (a commodity-collector) is the balance to be
     ;; printed. If reverse-balance? == #t then the balance's signs get
     ;; reversed.
-    (define (add-commodity-row-helper! 
+    (define (add-commodity-rows! 
 	     current-depth my-name my-commodity balance reverse-balance?) 
-      (begin
-	;; the first row for each account: shows the name and the
-	;; balance in the report-commodity
+      ;; Adds one row to the table. my-name is the html-object
+      ;; displayed in the name column; foreign-balance is the
+      ;; <gnc-monetary> for the foreign column or #f if to be left
+      ;; empty; domestic-balance is the <gnc-monetary> for the
+      ;; domestic column.
+      (define (commodity-row-helper! 
+	       my-name foreign-balance domestic-balance)
 	(gnc:html-table-append-row! 
 	 table
 	 (append
@@ -205,156 +177,120 @@
 		 1 (+ 1 (- tree-depth current-depth)) 
 		 my-name))
 	  (gnc:html-make-empty-cells (* 2 (- tree-depth current-depth)))
-	  (if (or do-subtot? 
-		  (gnc:commodity-equiv? my-commodity report-commodity))
-	      ;; usual case: the account balance in terms of report
-	      ;; commodity
-	      (list
-	       (car (gnc:html-make-empty-cells 1))
-	       (gnc:commodity-value->string 
-		(balance 'getpair report-commodity reverse-balance?)))
-	      ;; special case if do-subtot? was false and it is in a
-	      ;; different commodity than the report: then the
-	      ;; foreign commodity gets displayed in this line
-	      ;; rather then the following lines (loop below).
-	      (let ((my-balance 
-		     (balance 'getpair my-commodity reverse-balance)))
-		(list 
-		 (gnc:commodity-value->string my-balance)
-		 (gnc:commodity-value->string 
-		  (exchange-fn my-balance report-commodity)))))
-	  (gnc:html-make-empty-cells (* 2 (- current-depth 1)))))
-	;; The additional rows: show no name, but the foreign currency
-	;; balance and its corresponding value in the
-	;; report-currency. One row for each non-report-currency. Is
-	;; only used when do-subtot? == #f (otherwise this balance has
-	;; only one commodity).
-	(if do-subtot?
-	    (balance 
-	     'format 
-	     (lambda (curr val)
-	       (if (gnc:commodity-equiv? curr report-commodity)
-		   '()
-		   (gnc:html-table-append-row! 
-		    table
-		    (append
-		     ;; print no account name 
-		     (gnc:html-make-empty-cells tree-depth)
-		     (gnc:html-make-empty-cells  
-		      (* 2 (- tree-depth current-depth)))
-		     ;; print the account balance in the respective
-		     ;; commodity
-		     (list
-		      (gnc:commodity-value->string 
-		       (list curr (if reverse-balance?
-				      (gnc:numeric-neg val) val)))
-		      (gnc:commodity-value->string 
-		       (exchange-fn 
-			(list curr (if reverse-balance?
-				       (gnc:numeric-neg val) val))
-			report-commodity)))
-		     (gnc:html-make-empty-cells 
-		      (* 2 (- current-depth 1))))))) 
-	     #f))))
-    
-    
-    
-    
+	  (list (if (not foreign-balance)
+		    (car (gnc:html-make-empty-cells 1))
+		    foreign-balance)
+		domestic-balance)
+	  (gnc:html-make-empty-cells (* 2 (- current-depth 1))))))
+      
+      ;;;;;;;;;;
+      ;; the first row for each account: shows the name and the
+      ;; balance in the report-commodity
+      (if (or do-subtot? 
+	      (gnc:commodity-equiv? my-commodity report-commodity))
+	  ;; usual case: the account balance in terms of report
+	  ;; commodity
+	  (commodity-row-helper! 
+	   my-name #f
+	   (balance 'getmonetary report-commodity reverse-balance?))
+	  ;; special case if do-subtot? was false and it is in a
+	  ;; different commodity than the report: then the
+	  ;; foreign commodity gets displayed in this line
+	  ;; rather then the following lines (loop below).
+	  (let ((my-balance (balance 'getmonetary 
+				     my-commodity reverse-balance?)))
+	    (commodity-row-helper! 
+	     my-name
+	     my-balance
+	     (exchange-fn my-balance report-commodity))))
+      
+      ;; The additional rows: show no name, but the foreign currency
+      ;; balance and its corresponding value in the
+      ;; report-currency. One row for each non-report-currency. Is
+      ;; only used when do-subtot? == #f (otherwise this balance has
+      ;; only one commodity).
+      (if do-subtot?
+	  (balance 
+	   'format 
+	   (lambda (curr val)
+	     (if (gnc:commodity-equiv? curr report-commodity)
+		 '()
+		 (let ((bal 
+			(if reverse-balance?
+			    (gnc:monetary-neg (gnc:make-gnc-monetary curr val))
+			    (gnc:make-gnc-monetary curr val))))
+		   (commodity-row-helper!
+		    ;; print no account name 
+		    (car (gnc:html-make-empty-cells 1))
+		    ;; print the account balance in the respective
+		    ;; commodity
+		    bal
+		    (exchange-fn bal report-commodity)))))
+	   #f)))
+        
     ;; Adds all appropriate rows to the table which belong to one
     ;; account. Uses the above helper function, i.e. here the
-    ;; necessary values only are "extracted" from the account. Is used
-    ;; only if options "show foreign commodities" == #t.
-    (define (add-commodity-rows! acct current-depth) 
-      (add-commodity-row-helper! current-depth 
-				 (gnc:html-account-anchor acct)
-				 (gnc:account-get-commodity acct) 
-				 (my-get-balance acct)
-				 (gnc:account-reverse-balance? acct)))
-    
-    ;; The same as above (traverse-accounts!), but for showing foreign
-    ;; currencies/commodities.
-    (define (traverse-accounts-fcur! accnts current-depth) 
+    ;; necessary values only are "extracted" from the account.
+    (define (add-account-rows! acct current-depth) 
+      (if show-other-curr?
+	  (add-commodity-rows! current-depth 
+				     (gnc:html-account-anchor acct)
+				     (gnc:account-get-commodity acct) 
+				     (my-get-balance acct)
+				     (gnc:account-reverse-balance? acct))
+	  (add-row-helper! 
+	   current-depth 
+	   (gnc:html-account-anchor acct)
+	   (gnc:sum-collector-commodity (my-get-balance acct) 
+					report-commodity exchange-fn)
+	   (gnc:account-reverse-balance? acct))))
+  
+    ;; Adds rows to the table. Therefore it goes through the list of
+    ;; accounts, runs add-account-rows! on each account.  If
+    ;; tree-depth and current-depth require, it will recursively call
+    ;; itself on the list of children accounts.
+    (define (traverse-accounts! accnts current-depth)
       (if (<= current-depth tree-depth)
 	  (for-each (lambda (acct)
 		      (begin
 			(if (show-acct? acct)
-			    (add-commodity-rows! acct current-depth))
-			(traverse-accounts-fcur! 
+			    (add-account-rows! acct current-depth))
+			(traverse-accounts! 
 			 (gnc:account-get-immediate-subaccounts acct)
 			 (+ 1 current-depth))))
 		    (sort-fn accnts))))
-
-    ;; First iteration -- make the case destinction for
-    ;; show-other-curr?.
-    (define (start-traverse-accounts l d)
-      (if show-other-curr?
-	  (traverse-accounts-fcur! l d)
-	  (traverse-accounts! l d)))
-
-
-    ;;;;;;;;;;;;;;
-    ;; Helper functions for the grouping of accounts according to their types.
-
-    ;; Returns only those accounts out of the list l which have one of
-    ;; the type identifiers in typelist.
-    (define (filter-accountlist-type typelist l)
-      (filter (lambda (a) 
-		(member (gw:enum-<gnc:AccountType>-val->sym
-			 (gnc:account-get-type a) #f)
-			typelist) )
-	      accounts))
-
-    ;; Decompose a given list of accounts accts into different lists,
-    ;; each with the name of that category as first element.
-    (define (decompose-accountlist accts)
-      (map (lambda (x) (cons
-			(car x)
-			(filter-accountlist-type (cdr x) accts)))
-	   (list
-	    (cons (_ "Assets") 
-		  '(asset bank cash checking savings money-market 
-			  stock mutual-fund currency))
-	    (cons (_ "Liabilities") '(liability equity credit-line))
-	    (cons (_ "Income") '(income))
-	    (cons (_ "Expense") '(expense)))))
-
+    
     ;; Generalization for a subtotal or the total balance.
     (define (add-subtotal-row! 
 	     current-depth subtotal-name balance)
       (if show-other-curr?
-	  (add-commodity-row-helper! current-depth subtotal-name 
-				     report-commodity balance #f)
+	  (add-commodity-rows! current-depth subtotal-name 
+			       report-commodity balance #f)
 	  ;; Show no other currencies. Therefore just calculate
 	  ;; one total via sum-collector-commodity and show it.
-	  (gnc:html-table-append-row!
-	   table 
-	   (make-row-helper current-depth subtotal-name 
-			    (gnc:sum-collector-commodity 
-			     balance report-commodity 
-			     exchange-fn)))))
+	  (add-row-helper! current-depth subtotal-name 
+			   (gnc:sum-collector-commodity 
+			    balance report-commodity exchange-fn)
+			   #f)))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
     ;; start the recursive account processing
     (if group-types?
-	;; do a subtotal for each group
+	;; Print a subtotal for each group.
 	(for-each 
 	 (lambda (accts) 
 	   (if (and (not (null? accts)) (not (null? (cdr accts))))
 	       (begin
 		 (add-subtotal-row! 
 		  1 (car accts)
-		  (let ((coll (make-commodity-collector)))
-		    (for-each (lambda (x)
-				(coll (if (gnc:account-reverse-balance? x)
-					  'minusmerge 'merge)
-				      (my-get-balance x) #f))
-			      (cdr accts))
-		    coll))
-		 (start-traverse-accounts (cdr accts) 2))))
-	 (decompose-accountlist topl-accounts))
+		  (gnc:accounts-get-balance-helper 
+		   (cdr accts) my-get-balance gnc:account-reverse-balance?))
+		 (traverse-accounts! (cdr accts) 2))))
+	 (gnc:decompose-accountlist (lset-intersection 
+				     equal? accounts topl-accounts)))
 	;; No extra grouping.
-	(start-traverse-accounts topl-accounts 1))
+	(traverse-accounts! topl-accounts 1))
     
     ;; Show the total sum.
     (if show-total?
@@ -374,6 +310,17 @@
      'attribute '("align" "right")
      'attribute '("valign" "top"))
 
+    ;; set some column headers 
+    (gnc:html-table-set-col-headers!
+     table 
+     (list (gnc:make-html-table-header-cell/size 
+	    1 tree-depth (_ "Account name"))
+	   (gnc:make-html-table-header-cell/size
+	    1 (if show-other-curr? 
+		  (* 2 tree-depth)
+		  tree-depth)
+	    (_ "Balance"))))
+    
     ;; there are tree-depth account name columns. 
     (let loop ((col 0))
       (gnc:html-table-set-col-style! 
@@ -385,25 +332,50 @@
     
     table))
 
-;; Print the exchangerate-list alist into the given html-txt object
-;; txt-object, where the report's commodity is common-commodity.
-(define (gnc:html-print-exchangerates!
-	 txt-object common-commodity alist)
-  (for-each 
-   (lambda (pair)
-     (gnc:html-text-append! 
-      txt-object
-      (gnc:html-markup-p
-       (_ "Exchange rate ")
-       (gnc:commodity-value->string 
-	(list (car pair) (gnc:numeric-create 1 1)))
-       " = "
-       (gnc:commodity-value->string 
-	(list common-commodity 
-              ;; convert to 6 significant figures
-	      (gnc:numeric-convert 
-	       (cadr pair) 
-               GNC-DENOM-AUTO 
-               (logior (GNC-DENOM-SIGFIGS 6) GNC-RND-ROUND)))))))
-   alist))
+
+;; Returns a html-object which is a table of all exchange rates.
+;; Where the report's commodity is common-commodity.
+(define (gnc:html-make-exchangerates
+	 common-commodity rate-alist accounts show-always?) 
+  (let ((comm-list (delete-duplicates
+		    (sort (map gnc:account-get-commodity accounts) 
+			  (lambda (a b) 
+			    (string<? (gnc:commodity-get-mnemonic a)
+				      (gnc:commodity-get-mnemonic b))))))
+	(table (gnc:make-html-table))
+	(any-printed? #f))
+
+    ;; Do something with each exchange rate.
+    (for-each 
+     (lambda (pair)
+       (if (or show-always?
+	       (member (car pair) comm-list))
+	   (begin
+	     (set! any-printed? #t)
+	     (gnc:html-table-append-row! 
+	      table
+	      (list 
+	       (gnc:make-gnc-monetary (car pair) (gnc:numeric-create 1 1))
+	       ;; convert the foreign commodity to 6 significant digits
+	       (gnc:make-gnc-monetary 
+		common-commodity 
+		(gnc:numeric-convert (cadr pair) GNC-DENOM-AUTO 
+				     (logior (GNC-DENOM-SIGFIGS 6) 
+					     GNC-RND-ROUND))))))))
+     rate-alist)
+
+    ;; Set some style
+    (gnc:html-table-set-style! 
+     table "td" 
+     'attribute '("align" "right")
+     'attribute '("valign" "top"))
+
+    (if any-printed?
+	;; set some column headers 
+	(gnc:html-table-set-col-headers!
+	 table 
+	 (list (gnc:make-html-table-header-cell/size 
+		1 2 (_ "Exchange rate ")))))
+
+    table))
 

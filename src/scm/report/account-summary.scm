@@ -38,11 +38,15 @@
 (let ((pagename-general (N_ "General"))
       (optname-date (N_ "Date"))
       (optname-display-depth (N_ "Account Display Depth"))
+
+      (optname-show-foreign (N_ "Show Foreign Currencies"))
+      (optname-report-currency (N_ "Report's currency"))
+
+      (pagename-accounts (N_ "Accounts"))
       (optname-show-subaccounts (N_ "Always show sub-accounts"))
       (optname-accounts (N_ "Account"))
-      (optname-include-subbalances (N_ "Include Sub-Account balances"))
-      (optname-show-foreign (N_ "Show Foreign Currencies"))
-      (optname-report-currency (N_ "Report's currency")))
+      (optname-group-accounts (N_ "Group the accouts"))
+      (optname-include-subbalances (N_ "Include Sub-Account balances")))
   
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; options generator
@@ -58,26 +62,33 @@
       (gnc:options-add-report-date!
        options pagename-general optname-date "a")
 
+      ;; all about currencies
+      (gnc:options-add-currency-selection!
+       options pagename-general 
+       optname-show-foreign optname-report-currency
+       "b")
+
       ;; accounts to work on
       (gnc:options-add-account-selection! 
-       options pagename-general 
+       options pagename-accounts 
        optname-display-depth optname-show-subaccounts
-       optname-accounts "b" 2
+       optname-accounts "a" 1
        (lambda ()
 	 (let ((current-accounts (gnc:get-current-accounts)))
 	   (cond ((not (null? current-accounts)) current-accounts)
 		 (else
 		  (gnc:group-get-account-list (gnc:get-current-group)))))))
 
+      ;; with or without grouping
+      (gnc:options-add-group-accounts!      
+       options pagename-accounts optname-group-accounts "b" #f)
+
       ;; with or without subaccounts
       (gnc:options-add-include-subaccounts!
-       options pagename-general optname-include-subbalances "c")
+       options pagename-accounts optname-include-subbalances "c")
 
-      ;; all about currencies
-      (gnc:options-add-currency-selection!
-       options pagename-general 
-       optname-show-foreign optname-report-currency
-       "f")
+      ;; Set the general page as default option tab
+      (gnc:options-set-default-section options pagename-general)      
 
       options))
   
@@ -87,23 +98,26 @@
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   (define (accsum-renderer report-obj)
-    (define (get-option optname)
+    (define (get-option pagename optname)
       (gnc:option-value
        (gnc:lookup-option 
-        (gnc:report-options report-obj) pagename-general optname)))
+        (gnc:report-options report-obj) pagename optname)))
     
-    (let ((display-depth (get-option optname-display-depth))
-	  (show-subaccts? (get-option optname-show-subaccounts))
-	  (accounts (get-option optname-accounts))
-          (do-subtotals? (get-option optname-include-subbalances))
-	  (show-fcur? (get-option optname-show-foreign))
-	  (report-currency (get-option optname-report-currency))
-	  ;; FIXME: So which splits are actually included and which
-	  ;; are not??  Permanent repair (?): Change the semantics of
-	  ;; the date-option to return not the first but the last
-	  ;; second of the desired day.
+    (let ((display-depth (get-option pagename-accounts 
+				     optname-display-depth ))
+	  (show-subaccts? (get-option pagename-accounts
+				      optname-show-subaccounts))
+	  (accounts (get-option pagename-accounts optname-accounts))
+          (do-grouping? (get-option pagename-accounts
+				    optname-group-accounts))
+          (do-subtotals? (get-option pagename-accounts
+				     optname-include-subbalances))
+	  (show-fcur? (get-option pagename-general optname-show-foreign))
+	  (report-currency (get-option pagename-general 
+				       optname-report-currency))
           (date-tp (gnc:timepair-end-day-time 
-		    (vector-ref (get-option optname-date) 1)))
+		    (vector-ref (get-option pagename-general 
+					    optname-date) 1)))
           (doc (gnc:make-html-document))
 	  (txt (gnc:make-html-text)))
       
@@ -111,9 +125,10 @@
       (if (not (null? accounts))
 	  ;; if no max. tree depth is given we have to find the
 	  ;; maximum existing depth
-	  (let* ((tree-depth (if (equal? display-depth 'all)
-				 (gnc:get-current-group-depth)
-				 display-depth))
+	  (let* ((tree-depth (+ (if (equal? display-depth 'all)
+				  (gnc:get-current-group-depth)
+				  display-depth)
+				(if do-grouping? 1 0)))
 		 (exchange-alist (gnc:make-exchange-alist 
 				  report-currency date-tp))
 		 (exchange-fn (gnc:make-exchange-function exchange-alist))
@@ -122,29 +137,21 @@
 			 #f date-tp 
 			 tree-depth show-subaccts? accounts 
 			 #t gnc:accounts-get-comm-total-assets 
-			 (_ "Net Assets") #t do-subtotals?
+			 (_ "Net Assets") do-grouping? do-subtotals?
 			 show-fcur? report-currency exchange-fn)))
-
-	    ;; set some column headers 
-	    (gnc:html-table-set-col-headers!
-	     table 
-	     (list (gnc:make-html-table-header-cell/size 
-		    1 tree-depth (_ "Account name"))
-		   (gnc:make-html-table-header-cell/size
-		    1 (if show-fcur? 
-			  (* 2 tree-depth)
-			  tree-depth)
-		    (_ "Balance"))))
 	    
 	    ;; add the table 
 	    (gnc:html-document-add-object! doc table)
 
 	    ;; add the currency information
-	    (gnc:html-print-exchangerates! 
-	     txt report-currency exchange-alist)
+	    ;(gnc:html-print-exchangerates! 
+	    ; txt report-currency exchange-alist)
 
 	    ;;(if show-fcur?
-	    (gnc:html-document-add-object! doc txt))
+	    (gnc:html-document-add-object! 
+	     doc ;;(gnc:html-markup-p
+	     (gnc:html-make-exchangerates 
+	      report-currency exchange-alist accounts #f)));;)
 	  
 	  ;; error condition: no accounts specified
           (let ((p (gnc:make-html-text)))

@@ -39,6 +39,7 @@
        (optname-display-depth (N_ "Account Display Depth"))
        (optname-show-subaccounts (N_ "Always show sub-accounts"))
        (optname-accounts (N_ "Account"))
+       (optname-group-accounts (N_ "Group the accouts"))
        (optname-include-subbalances (N_ "Include Sub-Account balances"))
        
 ;;      (pagename-currencies (N_ "Currencies")) too little options :)
@@ -55,27 +56,31 @@
        options pagename-general 
        optname-from-date optname-to-date "a")
 
+      ;; all about currencies
+      (gnc:options-add-currency-selection!
+       options pagename-currencies
+       optname-show-foreign optname-report-currency
+       "b")
+
       ;; accounts to work on
       (gnc:options-add-account-selection! 
        options pagename-accounts
        optname-display-depth optname-show-subaccounts
-       optname-accounts "b" 2
+       optname-accounts "a" 2
        ;; FIXME: get income/expense accounts
        (lambda ()
 	 (filter 
 	  gnc:account-is-inc-exp?
 	  (gnc:group-get-account-list (gnc:get-current-group)))))
-      
+
+      ;; with or without grouping
+      (gnc:options-add-group-accounts!      
+       options pagename-accounts optname-group-accounts "b" #t)
+
       ;; with or without subaccounts
       (gnc:options-add-include-subaccounts!
        options pagename-accounts optname-include-subbalances "c")
       
-      ;; all about currencies
-      (gnc:options-add-currency-selection!
-       options pagename-currencies
-       optname-show-foreign optname-report-currency
-       "d")
-
       ;; Set the general page as default option tab
       (gnc:options-set-default-section options pagename-general)      
 
@@ -99,6 +104,8 @@
 				      optname-show-subaccounts))
 	  (accounts (get-option pagename-accounts
 				optname-accounts))
+          (do-grouping? (get-option pagename-accounts
+				    optname-group-accounts))
           (do-subtotals? (get-option pagename-accounts
 				     optname-include-subbalances))
 	  (show-fcur? (get-option pagename-currencies
@@ -123,7 +130,8 @@
 	  ;; if no max. tree depth is given we have to find the
 	  ;; maximum existing depth
 	  (let* ((tree-depth (if (equal? display-depth 'all)
-				 (gnc:get-current-group-depth)
+				 (+ (gnc:get-current-group-depth) 
+				    (if do-grouping? 1 0))
 				 display-depth))
 		 ;; calculate the exchange rates
 		 (exchange-alist (gnc:make-exchange-alist 
@@ -134,29 +142,17 @@
 			 from-date-tp to-date-tp 
 			 tree-depth show-subaccts? accounts 
 			 #t gnc:accounts-get-comm-total-profit 
-			 (_ "Profit") #t do-subtotals?
+			 (_ "Profit") do-grouping? do-subtotals?
 			 show-fcur? report-currency exchange-fn)))
 
-	    ;; set some column headers 
-	    (gnc:html-table-set-col-headers!
-	     table 
-	     (list (gnc:make-html-table-header-cell/size 
-		    1 tree-depth (_ "Account name"))
-		   (gnc:make-html-table-header-cell/size
-		    1 (if show-fcur? 
-			  (* 2 tree-depth)
-			  tree-depth)
-		    (_ "Balance"))))
-	    
 	    ;; add the table 
 	    (gnc:html-document-add-object! doc table)
 
-	    ;; add the currency information
-	    (gnc:html-print-exchangerates! 
-	     txt report-currency exchange-alist)
-
-	    ;;(if show-fcur?
-	    (gnc:html-document-add-object! doc txt))
+	    ;; add currency information
+	    (gnc:html-document-add-object! 
+	     doc ;;(gnc:html-markup-p
+	     (gnc:html-make-exchangerates 
+	      report-currency exchange-alist accounts #f)));;)
 	  
 	  ;; error condition: no accounts specified
           (let ((p (gnc:make-html-text)))
