@@ -51,6 +51,7 @@
 /** STRUCTS *********************************************************/
 struct _account {
   /* public data, describes account */
+  GUID      guid;          /* globally unique account id */
 
   /* The accountName is an arbitrary string assinged by the user. 
    * It is intended to a short, 5 to 30 character long string that
@@ -117,8 +118,6 @@ struct _account {
    */
   int       id;            /* unique account id, internally assigned */
   char      flags;
-
-  GUID      guid;          /* globally unique account id */
 
   /* protected data, cached parameters */
   double balance;

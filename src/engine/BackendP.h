@@ -50,6 +50,8 @@ Backend * xaccTransactionGetBackend (Transaction *);
  * The xaccGroupSetBackend() associates a backend to a group
  */
 void xaccGroupSetBackend (AccountGroup *, Backend *);
+Backend * xaccGroupGetBackend (AccountGroup *);
+Backend * xaccSessionGetBackend (Session *);
 
 
 #endif /* __XACC_BACKEND_P_H__ */

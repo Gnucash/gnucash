@@ -92,4 +92,11 @@ xaccGroupSetBackend (AccountGroup *grp, Backend *be)
    grp->backend = be;
 }
 
+Backend *
+xaccGroupGetBackend (AccountGroup *grp)
+{
+   if (!grp) return NULL;
+   return (grp->backend);
+}
+
 /************************* END OF FILE ********************************/

@@ -132,6 +132,15 @@ xaccSessionSetGroup (Session *sess, AccountGroup *grp)
 
 /* ============================================================== */
 
+Backend * 
+xaccSessionGetBackend (Session *sess)
+{
+   if (!sess) return NULL;
+   return (sess->backend);
+}
+
+/* ============================================================== */
+
 char * 
 xaccSessionGetFilePath (Session *sess)
 {
