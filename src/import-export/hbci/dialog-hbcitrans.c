@@ -27,6 +27,7 @@
 #endif
 
 #include <gnome.h>
+#include <aqbanking/version.h>
 #include <aqbanking/account.h>
 #include <aqbanking/jobsingletransfer.h>
 #include <aqbanking/jobsingledebitnote.h>
@@ -440,7 +441,16 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
       printf("gnc_hbci_trans_dialog_enqueue: Oops, job not available. Aborting.\n");
       return -1;
     }
+#if ((AQBANKING_VERSION_MAJOR > 1) || \
+     ((AQBANKING_VERSION_MAJOR == 1) && \
+      ((AQBANKING_VERSION_MINOR > 0) || \
+       ((AQBANKING_VERSION_MINOR == 0) && \
+        (AQBANKING_VERSION_PATCHLEVEL > 6)))))
+    max_purpose_lines = AB_TransactionLimits_GetMaxLinesPurpose
+      ( AB_JobSingleTransfer_GetFieldLimits(job) );
+#else
     max_purpose_lines = AB_JobSingleTransfer_GetMaxPurposeLines(job);
+#endif
     /* these are the number of fields, 27 characters each. */
     AB_Job_free(job);
   }

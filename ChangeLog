@@ -1,3 +1,8 @@
+2005-04-02  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c: Fix warning about
+	deprecated aqbanking function in aqbanking-1.0.7
+
 2005-03-20  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-utils.c: Retrieve the current
