@@ -69,6 +69,7 @@ void
 xaccInitInvAcct (InvAcct *iacc)
 {
    if (!iacc) return;
+   iacc->type = -1;
    iacc->pricesrc = NULL;
    iacc->brokerid = NULL;
    iacc->acctid = NULL;
@@ -89,6 +90,7 @@ xaccFreeInvAcct (InvAcct *iacc)
    if (iacc->prodtype) { free(iacc->prodtype); iacc->prodtype = NULL; }
    if (iacc->secid) { free(iacc->secid); iacc->secid = NULL; }
    if (iacc->secidtype) { free(iacc->secidtype); iacc->secidtype = NULL; }
+   iacc->type = -1;
 }
 
 /* =========================================================== */

@@ -84,6 +84,7 @@ xaccInitAccount (Account * acc)
 
   acc->flags = 0;
   acc->type  = -1;
+  acc->accInfo = NULL;
   
   acc->accountName = NULL;
   acc->accountCode = NULL;

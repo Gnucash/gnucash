@@ -43,6 +43,7 @@
  */
 struct _BankAcct 
 {
+  short type;          /* must match Account::type */
   char * bankid;       /* routing and transit number */
   char * branchid;     /* branch office bank identifier */  
   char * acctid;       /* account number */
@@ -57,6 +58,7 @@ struct _BankAcct
  */
 struct _InvAcct 
 {
+  short type;          /* must match Account::type */
   char * pricesrc;     /* source for price quotes ...
                         * one of Yahoo, Fidelity, TRowePrice, etc. 
                         */
@@ -74,6 +76,7 @@ struct _InvAcct
 };
 
 union _AccInfo {
+  short type;          /* must match Account::type */
   BankAcct bank_acct;
   InvAcct  inv_acct;
 };
