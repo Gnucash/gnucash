@@ -119,15 +119,22 @@ gboolean xaccAccountTypesCompatible (GNCAccountType parent_type,
 /** PROTOTYPES ******************************************************/
 /* 
  * The xaccAccountBeginEdit() and xaccAccountCommitEdit() subroutines
- * provide a two-phase-commit wrapper for account updates. 
- * They are incompletely implemented.
+ *    provide a two-phase-commit wrapper for account updates. 
  *
  * The xaccAccountDestroy() routine can be used to get rid of an
  *    account.  The account should have been opened for editing 
  *    (by calling xaccAccountBeginEdit()) before calling this routine.
+ *
+ * The xaccCloneAccountSimple() routine makes a simple copy of the
+ *    indicated account, placing it in the indicated book.  It copies
+ *    the account type, name, description, and the kvp values;
+ *    it does not copy splits/transactions.  Note also that it 
+ *    does NOT use the 'gemini' kvp value to indicate where it 
+ *    was copied from.
  */
 Account    * xaccMallocAccount (GNCBook *book);
 Account    * xaccCloneAccountSimple(const Account *from, GNCBook *book);
+
 void         xaccAccountBeginEdit (Account *account);
 void         xaccAccountCommitEdit (Account *account);
 void         xaccAccountDestroy (Account *account);
