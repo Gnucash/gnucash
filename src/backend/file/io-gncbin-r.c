@@ -300,6 +300,16 @@ gnc_get_binfile_io_error(void)
 /*******************************************************/
 /* some endian stuff */
 
+/* if we are running on a little-endian system, we need to
+ * do some endian flipping, because the xacc/gnucash native data
+ * format is big-endian. In particular, Intel x86 is little-endian. */
+#if WORDS_BIGENDIAN
+  #define XACC_FLIP_DOUBLE(x)
+  #define XACC_FLIP_LONG_LONG(x) 
+  #define XACC_FLIP_INT(x) 
+  #define XACC_FLIP_SHORT(x) 
+#else
+
 /* flip endianness of int, short, etc */
 static int
 xaccFlipInt (int val) 
@@ -346,15 +356,6 @@ xaccFlipLongLong (gint64 val)
   return u.d;
 }
 
-/* if we are running on a little-endian system, we need to
- * do some endian flipping, because the xacc/gnucash native data
- * format is big-endian. In particular, Intel x86 is little-endian. */
-#if WORDS_BIGENDIAN
-  #define XACC_FLIP_DOUBLE(x)
-  #define XACC_FLIP_LONG_LONG(x) 
-  #define XACC_FLIP_INT(x) 
-  #define XACC_FLIP_SHORT(x) 
-#else
   #define XACC_FLIP_DOUBLE(x) { (x) = xaccFlipDouble (x); }
   #define XACC_FLIP_LONG_LONG(x) { (x) = xaccFlipLongLong (x); }
   #define XACC_FLIP_INT(x) { (x) = xaccFlipInt (x); }

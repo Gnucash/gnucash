@@ -92,7 +92,6 @@ want to keep your financial data in a database instead of a flat file
 %setup -q
 
 %build
-autoconf
 %configure \
 %if %{_with_ofx}
  --enable-ofx \
