@@ -1,18 +1,18 @@
-# gnucash-glossary sk.po
-# Copyright (C) 2001 Free Software Foundation, Inc.
-# Zdenko Podobny <zdpo@mailbox.sk>, 2001.
+# Slovak translation of gnucash-glossary package 
+# Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
+# Zdenko Podobný <zdpo1@centrum.sk>, 2001, 2002, 2003.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash-glossary\n"
-"POT-Creation-Date: 2001-10-05 20:16-0400\n"
-"PO-Revision-Date: 2001-10-19 17:13GMT+0100\n"
-"Last-Translator: Zdenko Podobný <zdpo@mailbox.sk>\n"
-"Language-Team: Slovak <sk-i18n@linux.sk>\n"
+"Project-Id-Version: gnucash-glossary 1.7.4\n"
+"POT-Creation-Date: 2002-12-02 14:51MET\n"
+"PO-Revision-Date: 2003-09-01 09:37+0100\n"
+"Last-Translator: Zdenko Podobný <zdpo1@centrum.sk>\n"
+"Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Type: text/plain; charset=iso-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 0.9.5\n"
+"X-Generator: KBabel 1.2\n"
 
 #. "English Definition"
 msgid "Term"
@@ -36,135 +36,135 @@ msgstr "názov úètu"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts"
 msgid "account type: Asset"
-msgstr "úètovný typ: Aktíva"
+msgstr "account type: Aktíva"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
-msgstr "úètovný typ: ¹ek"
+msgstr "account type: ¹ek"
 
 #. "-"
 msgid "account type: currency"
-msgstr "úètovný typ: mena"
+msgstr "account type: mena"
 
 #. "see: Equity"
 msgid "account type: Equity"
-msgstr "úètovný typ: Majetok"
+msgstr "account type: Majetok"
 
 #. "-"
 msgid "account type: Expense"
-msgstr "úètovný typ: Výdaje"
+msgstr "account type: Výdaje"
 
 #. "-"
 msgid "account type: Income"
-msgstr "úètovný typ: Príjem"
+msgstr "account type: Príjem"
 
 #. "A debt, a financial obligation"
 msgid "account type: Liability"
-msgstr "úètovný typ: Pasíva"
+msgstr "account type: Pasíva"
 
 #. "-"
 msgid "account type: money-market"
-msgstr "úètovný typ: peòa¾ný trh"
+msgstr "account type: peòa¾ný trh"
 
 #. "-"
 msgid "account type: Mutual fund"
-msgstr "úètovný typ: Investièný fond"
+msgstr "account type: Investièný fond"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
-msgstr "úètovný typ: úspory"
+msgstr "account type: úspory"
 
 #. "-"
 msgid "account type: Stock"
-msgstr "úètovný typ: Akcie"
+msgstr "account type: Akcie"
 
 #. "-"
 msgid "account: parent account"
-msgstr "úèet: rodièovský úèet"
+msgstr "account: rodièovský úèet"
 
 #. "-"
 msgid "account: subaccount"
-msgstr "úèet: podúèet"
+msgstr "account: podúèet"
 
 #. "-"
 msgid "account: top level account"
-msgstr "úèet: úèet najvy¹¹ej úrovne"
+msgstr "account: úèet najvy¹¹ej úrovne"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
-msgstr "Úkon {register}"
+msgstr "Úkon (register)"
 
 #. "Automated teller machine"
 msgid "action: ATM"
-msgstr "úkon: ATM"
+msgstr "action: ATM"
 
 #. "Transaction was an auto deposit"
 msgid "action: autoDep"
-msgstr "úkon: autoVklad"
+msgstr "action: autoVklad"
 
 #. "-"
 msgid "action: buy"
-msgstr "úkon: nákup"
+msgstr "action: nákup"
 
 #. "-"
 msgid "action: deposit"
-msgstr "úkon: vklad"
+msgstr "action: vklad"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
 msgid "action: direct debit"
-msgstr "úkon: priamy vklad"
+msgstr "action: priamy vklad"
 
 #. "transaction is a distribution (???)"
 msgid "action: dist"
-msgstr "úkon: distribúcia"
+msgstr "action: distribúcia"
 
 #. "transaction is a dividend"
 msgid "action: div"
-msgstr "úkon: dividenda"
+msgstr "action: dividenda"
 
 #. "-"
 msgid "action: fee"
-msgstr "úkon: poplatok"
+msgstr "action: poplatok"
 
 #. "transaction comes from interest"
 msgid "action: int"
-msgstr "úkon: úrok"
+msgstr "action: úrok"
 
 #. "-"
 msgid "action: loan"
-msgstr "úkon: úver"
+msgstr "action: úver"
 
 #. "see: payment 1."
 msgid "action: payment"
-msgstr "úkon: platba"
+msgstr "action: platba"
 
 #. "-"
 msgid "action: POS"
-msgstr "úkon: POS"
+msgstr "action: POS"
 
 #. "-"
 msgid "action: rebate"
-msgstr "úkon: zµava"
+msgstr "action: zµava"
 
 #. "-"
 msgid "action: sell"
-msgstr "úkon: predaj"
+msgstr "action: predaj"
 
 #. "-"
 msgid "action: Teller"
-msgstr "úkon: bankomat"
+msgstr "action: bankomat"
 
 #. "see: transfer 2. (=credit transfer)"
 msgid "action: transfer"
-msgstr "úkon: prevod"
+msgstr "action: prevod"
 
 #. "-"
 msgid "action: wire"
-msgstr ""
+msgstr "action: linka"
 
 #. "-"
 msgid "action: withdraw"
-msgstr "úkon: výber"
+msgstr "action: výber"
 
 #. "A sum of money"
 msgid "amount"
@@ -176,7 +176,7 @@ msgstr "priemer"
 
 #. "The amount of money that is in one's account"
 msgid "balance (noun)"
-msgstr "saldo"
+msgstr "zostatok (podstatné meno)"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -190,13 +190,25 @@ msgstr "vyrovna»"
 msgid "bank"
 msgstr "banka"
 
+#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received, whereas an 'invoice' is one that we sent out."
+msgid "bill"
+msgstr "úèet"
+
+#. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
+msgid "billing terms"
+msgstr "platobné podmienky"
+
 #. "-"
 msgid "business (adjective)"
 msgstr "obchodný (prídavné meno)"
 
+#. "as Menu Item: Headline for features that are related to small business accounting"
+msgid "business (noun)"
+msgstr "podnikanie (podstatné meno)"
+
 #. "Profits made from the sale of investments or property"
 msgid "capital gains"
-msgstr "Kapitálový výnos"
+msgstr "kapitálový výnos"
 
 #. "Distinguishing the uppercase and lowercase letters"
 msgid "case sensitive"
@@ -204,7 +216,7 @@ msgstr "rozli¹ovanie veµkosti písmen"
 
 #. "Money in coins or notes"
 msgid "cash"
-msgstr "Hotovos»"
+msgstr "hotovos»"
 
 #. "(esp. US) (= cheque) A special printed form on which one writes an order to a bank to pay a sum of money from one's account to another person"
 msgid "check"
@@ -228,11 +240,11 @@ msgstr "zoznam komodít"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
-msgstr "nastavenie komodity: èas»"
+msgstr "commodity option: èas»"
 
 #. "e.g. USD, DEM"
 msgid "commodity option: Symbol"
-msgstr "nastavenie komodity: Symbol"
+msgstr "commodity option: Symbol"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
@@ -284,7 +296,7 @@ msgstr "vklad (v dialógu vysporiadania)"
 
 #. "The process of something becoming less valuable"
 msgid "depreciation"
-msgstr "znehodnotenie"
+msgstr "odpisy"
 
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
@@ -294,9 +306,17 @@ msgstr "Popis (ståpec v registri)"
 msgid "double entry"
 msgstr "dvoj-polo¾ka"
 
+#. "a person who works for somebody or a company in return for wages"
+msgid "employee"
+msgstr "zamestnanec"
+
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
 msgstr "majetok"
+
+#. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
+msgid "escrow (account)"
+msgstr "escrow (úèet)"
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
@@ -316,11 +336,11 @@ msgstr "typ súboru"
 
 #. "-"
 msgid "financial calculator: interest rate"
-msgstr "finanèná kalkulaèka: úroková miera"
+msgstr "financial calculator: úroková miera"
 
 #. "see: payment"
 msgid "financial calculator: payments"
-msgstr "finanèná kalkulaèka: platby"
+msgstr "financial calculator: platby"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -338,9 +358,13 @@ msgstr "import"
 msgid "interest"
 msgstr "úrok"
 
-#. "A list of goods sold or services provided together with the prices charged; a bill"
+#. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out, whereas a 'bill' is one that we received."
 msgid "invoice"
 msgstr "faktúra"
+
+#. "In small business accounting: A piece of work or task undertaken on order at a stated rate?????"
+msgid "job"
+msgstr "úloha"
 
 #. "A book in which a bank, business firm, etc. records its financial accounts"
 msgid "ledger"
@@ -350,13 +374,17 @@ msgstr "úètovná kniha"
 msgid "liabilities/equity"
 msgstr "pasíva/majetok"
 
+#. "A sum of money that is lent (by a bank)"
+msgid "loan"
+msgstr "úver"
+
 #. "The money lost in business activity"
 msgid "loss"
 msgstr "strata"
 
 #. "name of an automatically created account"
 msgid "Lost Accounts"
-msgstr "Stratený úèet"
+msgstr "Stratené úèty"
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
@@ -364,11 +392,15 @@ msgstr "zvýrazòovaè"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
-msgstr "MDI mód"
+msgstr "MDI re¾im"
 
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
 msgstr "Poznámka"
+
+#. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
+msgid "Mortgage"
+msgstr "Hypotéka"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -388,7 +420,7 @@ msgstr "èistý zisk"
 
 #. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
 msgid "net worth"
-msgstr "èistý hodnota"
+msgstr "èistá hodnota"
 
 #. "One textfield per transaction that can hold explanatory text about the transaction."
 msgid "notes (register)"
@@ -396,7 +428,7 @@ msgstr "poznámky (register)"
 
 #. "Abbreviation for: number; Field in a transaction. If this transaction was done by check, then the check number should be noted in this field."
 msgid "Num (column in register)"
-msgstr "Èíslo {ståpec v registri}"
+msgstr "Èíslo (ståpec v registri)"
 
 #. "to make accessible"
 msgid "open, to"
@@ -404,11 +436,15 @@ msgstr "otvori»"
 
 #. "If an account starts with a non-zero balance, then this amount is called the opening balance."
 msgid "opening balance"
-msgstr "Zaèiatoèný úèet"
+msgstr "Poèiatoèný stav"
 
 #. "A menu choice in the graphical user interface that allows the user to specify how the application will act each time it is used. "
 msgid "options"
 msgstr "mo¾nos»"
+
+#. "In small business accounting: unused term at the moment (maybe: a particular piece of work, maybe created through an order from a customer???)"
+msgid "order"
+msgstr "objednávka"
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
@@ -434,6 +470,10 @@ msgstr "platca"
 msgid "payment"
 msgstr "platba"
 
+#. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
+msgid "placeholder"
+msgstr "Syntetický úèet"
+
 #. "A set of investments owned by a person"
 msgid "portfolio"
 msgstr "portfólio"
@@ -448,15 +488,15 @@ msgstr "cena (v rozdelení)"
 
 #. "An ask is an offer to sell, and the price you want to sell at."
 msgid "price type: ask"
-msgstr "typ ceny: dopyt"
+msgstr "price type: dopyt"
 
 #. "A bid is an offer to buy, and the price you want to buy at."
 msgid "price type: bid"
-msgstr "typ ceny: ponuka"
+msgstr "price type: ponuka"
 
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
 msgid "price: quotes"
-msgstr "cena: akcie"
+msgstr "price: akcie"
 
 #. "Money gained in business, esp. the difference between the amount earned and the amount spent"
 msgid "profit"
@@ -488,11 +528,11 @@ msgstr "register"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
-msgstr "polo¾ka registra: rozdelenie transakcie"
+msgstr "register entry: rozdelenie transakcie"
 
 #. "-"
 msgid "register entry: stock split"
-msgstr "polo¾ka registra: rozdelenie akcií"
+msgstr "register entry: rozdelenie akcií"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
@@ -522,6 +562,10 @@ msgstr "Získané výnosy"
 msgid "save, to (to a file)"
 msgstr "ulo¾i»"
 
+#. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
+msgid "Scheduled Transaction"
+msgstr "Plánovaná transakcia"
+
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
 msgstr "uprata»"
@@ -532,11 +576,11 @@ msgstr "cenný papier"
 
 #. "-"
 msgid "Share Balance (register)"
-msgstr "Saldo akcií (podielov) (register)"
+msgstr "Zostatok podielov (register)"
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
-msgstr "podiely (akcie)"
+msgstr "podiely"
 
 #. "(of a price) A place wfrom which sth comes or is obtained"
 msgid "source"
@@ -560,7 +604,7 @@ msgstr "daòové informácie"
 
 #. "if you create a new e.g. style sheet, you can start from a template"
 msgid "template"
-msgstr "vzor"
+msgstr "¹ablóna"
 
 #. "see: date range"
 msgid "time period"
@@ -574,21 +618,25 @@ msgstr "Cel"
 msgid "total"
 msgstr "Súèet"
 
-#. "A piece of business done; the transfer of money from one account to one or more other accounts"
+#. "A piece of business done; the transfer of money from one account to one or more other accounts. (see also: Scheduled Transaction)"
 msgid "transaction"
 msgstr "transakcia"
 
-#. "-"
+#. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
-msgstr "stav transakcie: èistá"
+msgstr "transaction state: èistá"
 
 #. "-"
 msgid "transaction state: frozen"
-msgstr "stav transakcie: zmrazená"
+msgstr "transaction state: zmrazená"
 
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
-msgstr "stav transakcie: vysporiadaná"
+msgstr "transaction state: vysporiadaná"
+
+#. "A transaction that is void i.e. not valid (anymore)."
+msgid "transaction state: voided"
+msgstr "transaction state: neplatná"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
@@ -618,7 +666,10 @@ msgstr "URL"
 msgid "value (in a split)"
 msgstr "hodnota (v rozdelení)"
 
+#. "In small business accounting: A person or company that sells items and is supplying goods"
+msgid "vendor"
+msgstr "dodávateµ"
+
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "výber (v dialógu vysporiadania)"
-

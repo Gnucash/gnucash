@@ -68,6 +68,7 @@ gpointer pgendGetResults (PGBackend *be,
  */
 gnc_commodity * gnc_string_to_commodity (const char *str, GNCBook *book);
 
+ExecStatusType execQuery(PGBackend *be, const char * q);
 int sendQuery(PGBackend *be,char * buff);
 int finishQuery(PGBackend *be);
 

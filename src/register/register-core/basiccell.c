@@ -42,6 +42,8 @@
 #include "dialog-utils.h"
 #include "gnc-engine-util.h"
 
+/* Debugging module */
+static short module = MOD_REGISTER;
 
 gboolean
 gnc_cell_name_equal (const char * cell_name_1,
@@ -105,6 +107,7 @@ gnc_basic_cell_init (BasicCell *cell)
 void
 gnc_basic_cell_destroy (BasicCell *cell)
 {
+  ENTER(" ");
   if (cell->destroy)
     cell->destroy (cell);
 
@@ -124,6 +127,7 @@ gnc_basic_cell_destroy (BasicCell *cell)
 
   /* free the object itself */
   g_free (cell);
+  LEAVE(" ");
 }
 
 void
@@ -242,6 +246,14 @@ gnc_basic_cell_set_value_internal (BasicCell *cell, const char *value)
 {
   if (value == NULL)
     value = "";
+
+  /* If the caller tries to set the value with our own value then do
+   * nothing because we have no work to do (or, at least, all the work
+   * will result in the status-quo, so why do anything?)  See bug
+   * #103174 and the description in the changelog on 2003-09-04.
+   */
+  if (cell->value == value)
+    return;
 
   g_free (cell->value);
   cell->value = g_strdup (value);

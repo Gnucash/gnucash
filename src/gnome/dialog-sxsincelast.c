@@ -1010,6 +1010,7 @@ sxsld_revert_to_create_txns( sxSinceLastData *sxsld,
         }
         g_list_free( tci->createdTxnGUIDs );
         tci->createdTxnGUIDs = NULL;
+	gnc_resume_gui_refresh();
 }
 
 /**
@@ -2448,7 +2449,12 @@ create_each_transaction_helper( Transaction *t, void *d )
                                                            GNC_SX_ACCOUNT,
                                                            NULL );
                         if ( kvp_val == NULL ) {
-                                PERR( "Null kvp_val for account" );
+                                PERR( "Null kvp_val for account in SX \"%s\" -- fix manually; "
+                                      "see http://bugzilla.gnome.org/show_bug.cgi?id=102311",
+                                      xaccSchedXactionGetName( createUD->tci->parentTCT->sx ) );
+                                /* Fix for bug#102311 -- skip the offending
+                                 * transaction by skipping the split. */
+                                continue;
                         }
                         acct_guid = kvp_value_get_guid( kvp_val );
                         acct = xaccAccountLookup( acct_guid,

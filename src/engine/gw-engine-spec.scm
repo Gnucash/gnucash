@@ -221,6 +221,7 @@
   (gw:enum-add-value! we "ERR_BACKEND_CONN_LOST" 'connection-lost)
   (gw:enum-add-value! we "ERR_BACKEND_NO_SUCH_DB" 'no-such-db)
   (gw:enum-add-value! we "ERR_BACKEND_LOCKED" 'locked)
+  (gw:enum-add-value! we "ERR_BACKEND_READONLY" 'read-only)
   (gw:enum-add-value! we "ERR_BACKEND_DATA_CORRUPT" 'data-corrupt)
   (gw:enum-add-value! we "ERR_BACKEND_SERVER_ERR" 'server-error)
   (gw:enum-add-value! we "ERR_BACKEND_ALLOC" 'alloc)
@@ -1285,12 +1286,29 @@ when no longer needed.")
 
 (gw:wrap-function
  ws
+ 'gnc:price-list-destroy
+ '<gw:void>
+ "gnc_price_list_destroy"
+ '(((gw:glist-of <gnc:Price*> callee-owned) prices))
+ "Destroys a gnc price list unrefing the prices included in the list")
+
+(gw:wrap-function
+ ws
  'gnc:pricedb-lookup-latest
  '<gnc:Price*>
  "gnc_pricedb_lookup_latest"
  '((<gnc:PriceDB*> db)
    (<gnc:commodity*> commodity) (<gnc:commodity*> currency))
  "Returns the latest price.  Unref the price when you're finished with it.")
+
+(gw:wrap-function
+ ws
+ 'gnc:pricedb-lookup-latest-any-currency
+ '(gw:glist-of <gnc:Price*> caller-owned)
+ "gnc_pricedb_lookup_latest_any_currency"
+ '((<gnc:PriceDB*> db)
+   (<gnc:commodity*> commodity))
+ "Returns the latest price(s) in any currency available.")
 
 (gw:wrap-function
  ws
@@ -1301,6 +1319,15 @@ when no longer needed.")
    (<gnc:commodity*> commodity) (<gnc:commodity*> currency)
    (<gnc:time-pair> t))
  "Returns the price quote nearest to t.  Unref price when finished with it.")
+
+(gw:wrap-function
+ ws
+ 'gnc:pricedb-lookup-nearest-in-time-any-currency
+ '(gw:glist-of <gnc:Price*> caller-owned)
+ "gnc_pricedb_lookup_nearest_in_time_any_currency"
+ '((<gnc:PriceDB*> db)
+   (<gnc:commodity*> commodity) (<gnc:time-pair> t))
+ "Returns the price(s) nearest to t in any currency available.")
 
 (gw:wrap-function
  ws
@@ -1331,6 +1358,28 @@ when no longer needed.")
    (<gnc:commodity*> commodity) (<gnc:commodity*> currency)
    (<gnc:time-pair> t))
  "Lookup a price on the day specified by time t.")
+
+(gw:wrap-function
+ ws
+ 'gnc:pricedb-convert-balance-latest-price
+ '<gnc:numeric>
+ "gnc_pricedb_convert_balance_latest_price"
+ '((<gnc:PriceDB*> db)
+   (<gnc:numeric> balance)
+   (<gnc:commodity*> balance_commodity) (<gnc:commodity*> new_currency))
+ "convert balance in commodity balance_commodity to new_currency using latest price.")
+
+(gw:wrap-function
+ ws
+ 'gnc:pricedb-convert-balance-nearest-price
+ '<gnc:numeric>
+ "gnc_pricedb_convert_balance_nearest_price"
+ '((<gnc:PriceDB*> db)
+   (<gnc:numeric> balance)
+   (<gnc:commodity*> balance_commodity) (<gnc:commodity*> new_currency)
+   (<gnc:time-pair> t))
+ "convert balance in commodity balance_commodity to new_currency using nearest price
+to time t.")
 
 ;;===========
 ;; GNCSession

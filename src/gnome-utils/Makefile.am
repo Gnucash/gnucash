@@ -1,4 +1,5 @@
 SUBDIRS = . test
+PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
 
@@ -35,6 +36,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-currency-edit.c \
   gnc-date-delta.c \
   gnc-date-edit.c \
+  gnc-date-format.c \
   gnc-dense-cal.c \
   gnc-frequency.c \
   gnc-general-select.c \
@@ -45,9 +47,11 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-html.c \
   gnc-mdi-utils.c \
   gnc-menu-extensions.c \
+  gnc-query-list.c \
   gncmod-gnome-utils.c \
   gtkselect.c \
   print-session.c \
+  search-param.c \
   window-help.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
@@ -67,6 +71,7 @@ gncinclude_HEADERS = \
   gnc-currency-edit.h \
   gnc-date-delta.h \
   gnc-date-edit.h \
+  gnc-date-format.h \
   gnc-dense-cal.h \
   gnc-frequency.h \
   gnc-general-select.h \
@@ -77,6 +82,7 @@ gncinclude_HEADERS = \
   gnc-html.h \
   gnc-mdi-utils.h \
   gnc-menu-extensions.h \
+  gnc-query-list.h \
   gtkselect.h \
   print-session.h \
   window-help.h
@@ -84,7 +90,8 @@ gncinclude_HEADERS = \
 noinst_HEADERS = \
   argv-list-converters.h \
   gnc-dir.h \
-  gw-gnome-utils.h
+  gw-gnome-utils.h \
+  search-param.h
 
 libgncmod_gnome_utils_la_LDFLAGS = -module
 
@@ -122,6 +129,7 @@ gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
   commodity.glade \
   exchange-dialog.glade \
+  gnc-date-format.glade \
   transfer.glade
 
 EXTRA_DIST = \

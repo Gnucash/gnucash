@@ -100,7 +100,7 @@ gnc_gpg_transform_async(const gchar * input, gint input_size,
     /* parent process. write passphrase to pipe first. */
     if(passphrase) {
       total_bytes = 0;    
-      while(total_bytes < strlen(passphrase)) {
+      while(total_bytes < (int)strlen(passphrase)) {
         bytes = write(to_child[1], 
                       passphrase+total_bytes, 
                       strlen(passphrase)-total_bytes); 

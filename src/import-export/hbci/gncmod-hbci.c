@@ -73,10 +73,6 @@ libgncmod_hbci_LTX_gnc_module_init(int refcount)
   /* Add menu items with C callbacks */
   gnc_hbci_addmenus();
   
-  
-  //gh_new_procedure("gnc:hbci-finish-setup", 
-  //scm_hbci_final_druid, 0, 0, 0);
-  
   return TRUE;
 }
 

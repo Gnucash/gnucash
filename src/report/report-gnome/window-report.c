@@ -70,6 +70,9 @@ struct gnc_report_window_s
   
   SCM          edited_reports;
 
+  /* This is set to mark the fact that we need to reload the html */
+  gboolean	need_reload;
+
   gnc_html     * html;
 };
 
@@ -386,7 +389,7 @@ gnc_get_export_type_choice (SCM export_types)
     return SCM_BOOL_T;
 
   choice--;
-  if (choice >= gh_length (export_types))
+  if (choice >= (int)gh_length (export_types))
     return SCM_BOOL_F;
 
   return gh_list_ref (export_types, gh_int2scm (choice));
@@ -528,6 +531,19 @@ gnc_report_window_params_cb(GtkWidget * w, gpointer data)
   return TRUE;
 }
 
+/* We got a draw event.  See if we need to reload the report */
+static void
+gnc_report_window_draw_cb(GtkWidget *unused, GdkRectangle *unused1, gpointer data)
+{
+  gnc_report_window *win = data;
+
+  if (!win->need_reload)
+    return;
+
+  win->need_reload = FALSE;
+  gnc_html_reload(win->html);
+}
+
 static void
 gnc_report_window_reload_cb(GtkWidget * unused, gpointer data)
 {
@@ -536,7 +552,10 @@ gnc_report_window_reload_cb(GtkWidget * unused, gpointer data)
 
   if(report->cur_report != SCM_BOOL_F) {
     gh_call2(dirty_report, report->cur_report, SCM_BOOL_T);
-    gnc_html_reload(report->html);
+
+    /* now queue the fact that we need to reload this report */
+    report->need_reload = TRUE;
+    gtk_widget_queue_draw(report->container);
   }
 }
 
@@ -585,7 +604,10 @@ gnc_report_window_option_change_cb(gpointer data)
   if(report->cur_report != SCM_BOOL_F) {
     /* it's probably already dirty, but make sure */
     gh_call2(dirty_report, report->cur_report, SCM_BOOL_T);
-    gnc_html_reload(report->html);
+
+    /* now queue the fact that we need to reload this report */
+    report->need_reload = TRUE;
+    gtk_widget_queue_draw(report->container);
   }
 }
 
@@ -791,6 +813,9 @@ gnc_report_window_new(GNCMDIChildInfo * mc)
   gtk_signal_connect(GTK_OBJECT(report->container), "destroy",
                      GTK_SIGNAL_FUNC(gnc_report_window_destroy_cb),
                      report);
+  gtk_signal_connect(GTK_OBJECT(report->container), "draw",
+		     GTK_SIGNAL_FUNC(gnc_report_window_draw_cb), report);
+
   
   gtk_widget_show_all(report->container);
   
