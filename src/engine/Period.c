@@ -25,10 +25,8 @@
  * FUNCTION:
  * Implement accounting periods.
  *
- * CAUTION: this is currently a semi-functional, untested implementation
+ * CAUTION: This is currently a semi-functional, poorly implementation
  * of the design described in src/doc/book.txt
-
-Open questions: how do we deal with the backends ???
  *
  * HISTORY:
  * created by Linas Vepstas November 2001
@@ -38,6 +36,7 @@ Open questions: how do we deal with the backends ???
 #include "AccountP.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
+#include "gnc-lot.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "kvp-util-p.h"
@@ -176,6 +175,52 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
 }
 
 /* ================================================================ */
+/* Return TRUE if any of the splits in the transaction belong 
+ * to an open lot. */
+
+static gboolean
+trans_has_open_lot (Transaction *trans)
+{
+   GList *split_list, *node;
+
+   split_list = xaccTransGetSplitList (trans);
+   for (node = split_list; node; node=node->next)
+   {
+      Split *s = node->data;
+      GNCLot *lot = xaccSplitGetLot(s);
+      if (NULL == lot) continue;
+      if (gnc_lot_is_closed(lot)) continue;
+      return TRUE;
+   }
+
+   return FALSE;
+}
+
+/* Remove any transactions that have associated open lots. 
+ * These transactions cannot be moved to a closed book.
+ */
+
+static GList *
+remove_open_lots_from_trans_list (GList *trans_list)
+{
+   GList *node;
+
+   for (node=trans_list; node; )
+   {
+      Transaction *trans = node->data;
+      GList *next = node->next;
+      if (trans_has_open_lot (trans))
+      {
+         trans_list = g_list_remove_link (trans_list, node);
+         g_list_free_1 (node);
+      }
+      node = next;
+   }
+
+   return trans_list;
+}
+
+/* ================================================================ */
 
 void 
 gnc_book_partition (QofBook *dest_book, QofBook *src_book, QofQuery *query)
@@ -220,6 +265,7 @@ gnc_book_partition (QofBook *dest_book, QofBook *src_book, QofQuery *query)
    trans_list = qof_query_run (query);
 
    /* And start moving transactions over */
+   trans_list = remove_open_lots_from_trans_list (trans_list);
    for (tnode = trans_list; tnode; tnode=tnode->next)
    {
       Transaction *trans = tnode->data;
