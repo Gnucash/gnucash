@@ -21,6 +21,8 @@
 	* src/gnome-search/dialog-search.c --Use the "New Search Limit" pref
 	  to decide when to start a new search vs. when refine the search.
 	  Really fix #97095.
+
+	* configure.in: scrub GNOME_PRINT_CFLAGS
 	
 2003-01-18  Derek Atkins  <derek@ihtfp.com>
 

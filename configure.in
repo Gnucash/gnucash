@@ -754,6 +754,7 @@ then
     
     # gnome-print-check appears tobe sort of b0rked for the time being
     GNOME_PRINT_CFLAGS=`${GNOME_CONFIG} --cflags print`
+    AS_SCRUB_INCLUDE(GNOME_PRINT_CFLAGS)
     
     ### ----------------------------------------------------------------------
     ### Check for glade
