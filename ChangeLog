@@ -1,3 +1,14 @@
+2001-07-04  Dave Peticolas  <dave@krondo.com>
+
+	* AUTHORS: credits
+
+	* doc/sgml/C/xacc-about.sgml: credits
+
+	* src/scm/report/transaction.scm: Michael T. Garrison Stuber's
+	transaction report patch.
+
+	* doc/sgml/C/xacc-common-report-options.sgml: fix warning
+
 2001-07-05  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/gnome/druid-qif-import.c: fix syntax bug.

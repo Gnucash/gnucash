@@ -5,6 +5,8 @@
 ;; Contributions by Bryan Larsen <blarsen@ada-works.com>
 ;; More contributions for new report generation code by Robert Merkel
 ;; More contributions by Christian Stimming <stimming@tuhh.de>
+;; Modified to support the intersection of two account lists by
+;; Michael T. Garrison Stuber
 ;;
 ;; This program is free software; you can redistribute it and/or    
 ;; modify it under the terms of the GNU General Public License as   
@@ -31,6 +33,7 @@
 
 (define-module (gnucash report transaction))
 
+(use-modules (srfi srfi-1))
 (use-modules (ice-9 slib))
 (require 'printf)
 (require 'record)
@@ -435,8 +438,8 @@
   ;; account to do report on
   (gnc:register-trep-option
    (gnc:make-account-list-option
-    gnc:pagename-accounts (N_ "Accounts")
-    "c" (N_ "Do transaction report on these accounts")
+        gnc:pagename-accounts (N_ "Report Accounts")
+        "a" (N_ "Report on these accounts")
     (lambda ()
       ;; FIXME : gnc:get-current-accounts disappeared.
       (let ((current-accounts '())
@@ -450,6 +453,39 @@
               (else ()))))
     #f #t))
   
+      (gnc:register-trep-option
+       (gnc:make-account-list-option
+        gnc:pagename-accounts (N_ "Filter Accounts")
+        "b" (N_ "Filter on these accounts")
+        (lambda ()
+          ;; FIXME : gnc:get-current-accounts disappeared.
+          (let ((current-accounts '())
+                (num-accounts (gnc:group-get-num-accounts
+                               (gnc:get-current-group)))
+                (first-account (gnc:group-get-account
+                                (gnc:get-current-group) 0)))
+            (cond ((not (null? current-accounts))
+                   (list (car current-accounts)))
+                  ((> num-accounts 0) (list first-account))
+                  (else ()))))
+        #f #t))
+
+      (gnc:register-trep-option
+       (gnc:make-multichoice-option
+        gnc:pagename-accounts (N_ "Filter Type")
+        "c" (N_ "Filter account")
+        'none
+        (list (vector 'none
+                      (N_ "None")
+                      (N_ "Do not do any filtering"))
+              (vector 'include
+                      (N_ "Include Transactions to/from Filter Accounts")
+                      (N_ "Include transactions to/from filter accounts only"))
+              (vector 'exclude
+                      (N_ "Exclude Transactions to/from Filter Accounts")
+                      (N_ "Exclude transactions to/from all filter accounts"))
+	      )))
+      
   ;; Sorting options
   
   (let ((options gnc:*transaction-report-options*)
@@ -973,8 +1009,13 @@ and Income accounts")))))
      name-sortkey name-subtotal name-date-subtotal
      3 2))
 
+      (define (get-other-account-names account-list)
+	( map (lambda (acct)  (gnc:account-get-full-name acct)) account-list))
+
   (let ((document (gnc:make-html-document))
-        (c_accounts (opt-val gnc:pagename-accounts "Accounts"))
+            (c_account_1 (opt-val gnc:pagename-accounts "Report Accounts"))
+            (c_account_2 (opt-val gnc:pagename-accounts "Filter Accounts"))
+	    (filter-mode (opt-val gnc:pagename-accounts "Filter Type"))
         (begindate (gnc:timepair-start-day-time
                     (gnc:date-option-absolute-time
                      (opt-val gnc:pagename-general "From"))))
@@ -991,14 +1032,15 @@ and Income accounts")))))
         (splits '())
         (query (gnc:malloc-query)))
 
-    
-    
-    ;;(warn "accts in trep-renderer:" c_accounts) 
-    (if (not (or (null? c_accounts) (and-map not c_accounts)))
+        ;;(gnc:warn "accts in trep-renderer:" c_account_1)
+	  ;;(gnc:warn "Report Account names:" (get-other-account-names c_account_1))
+
+        (if (not (or (null? c_account_1) (and-map not c_account_1)))
         (begin
           (gnc:query-set-group query (gnc:get-current-group))
+	      ;;(gnc:warn "query is:" query)
           (gnc:query-add-account-match query
-                                       (gnc:list->glist c_accounts)
+                                           (gnc:list->glist c_account_1)
                                        'acct-match-any 'query-and)
           (gnc:query-add-date-match-timepair
            query #t begindate #t enddate 'query-and)
@@ -1014,6 +1056,29 @@ and Income accounts")))))
           (set! splits (gnc:glist->list (gnc:query-get-splits query)
                                         <gnc:Split*>))
           ;;(gnc:warn "Splits in trep-renderer:" splits)
+
+	      ;;(gnc:warn "Filter account names:" (get-other-account-names c_account_2))
+
+	      ;;This should probably a cond or a case to allow for different filter types.
+	      ;;(gnc:warn "Filter Mode: " filter-mode)
+	      (if (string=? filter-mode "include")
+		(begin
+		  ;;(gnc:warn "Including Filter Accounts")
+		  (set! splits (filter (lambda (split) 
+			(member (gnc:split-get-corr-account-full-name split) (get-other-account-names c_account_2)))
+		      splits))
+		 )
+		)
+
+	      (if (string=? filter-mode "exclude")
+		(begin
+		  ;;(gnc:warn "Excluding Filter Accounts")
+		  (set! splits (filter (lambda (split) 
+			(not (member (gnc:split-get-corr-account-full-name split) (get-other-account-names c_account_2))))
+		      splits))
+		 )
+		)
+	
           (if (not (null? splits))
               (let ((table 
                      (make-split-table 
