@@ -140,7 +140,7 @@
 
   (gw:wrap-function
    ws
-   'gnc:ui-totd-dialog-create-and-run
+   'gnc:totd-dialog-create-and-run
    '<gw:void>
    "gnc_totd_dialog_create_and_run"
    '()
