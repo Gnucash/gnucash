@@ -28,13 +28,13 @@
 
 void pgendGetAllCommodities (PGBackend *be);
 void pgendGetCommodity (PGBackend *be, const char * unique_name);
-void pgendStorePriceDB (PGBackend *be, GNCBook *book);
-void pgendStorePriceDBNoLock (PGBackend *be, GNCBook *book);
-void pgendGetAllPricesInBook (PGBackend *be, GNCBook *);
-void pgendPriceFind (Backend *bend, gpointer olook);
+void pgendStorePriceDB (PGBackend *be, QofBook *book);
+void pgendStorePriceDBNoLock (PGBackend *be, QofBook *book);
+void pgendGetAllPricesInBook (PGBackend *be, QofBook *);
+void pgendPriceFind (QofBackend *bend, gpointer olook);
 
 
-void pgend_price_begin_edit (Backend * bend, GNCPrice *pr);
-void pgend_price_commit_edit (Backend * bend, GNCPrice *pr);
+void pgend_price_begin_edit (QofBackend * bend, GNCPrice *pr);
+void pgend_price_commit_edit (QofBackend * bend, GNCPrice *pr);
 
 #endif /* POSTGRES_PRICE_H */

@@ -15,8 +15,8 @@
 #include "Account.h"
 #include "Group.h"
 #include "Period.h"
-#include "gnc-book.h"
-#include "gnc-book-p.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-module.h"
 #include "test-stuff.h"
@@ -28,9 +28,9 @@
 static void
 run_test (void)
 {
-  GNCBackendError io_err;
-  GNCSession *session;
-  GNCBook *openbook, *closedbook;
+  QofBackendError io_err;
+  QofSession *session;
+  QofBook *openbook, *closedbook;
   AccountGroup *grp;
   AccountList *acclist, *anode;
   Account * acc = NULL;
@@ -51,12 +51,12 @@ run_test (void)
   session = get_random_session ();
 
   test_url = "postgres://localhost/qqq?mode=single-update";
-  gnc_session_begin (session, test_url, FALSE, TRUE);
+  qof_session_begin (session, test_url, FALSE, TRUE);
 
-  io_err = gnc_session_get_error (session);
+  io_err = qof_session_get_error (session);
   g_return_if_fail (io_err == ERR_BACKEND_NO_ERR);
 
-  openbook = gnc_session_get_book (session);
+  openbook = qof_session_get_book (session);
   if (!openbook)
   {
     failure("book not created");
@@ -119,8 +119,8 @@ run_test (void)
   tsmiddle = tsfirst;
   tsmiddle.tv_sec = (tsfirst.tv_sec + tslast.tv_sec)/2;
 
-  gnc_session_save (session, NULL);
-  io_err = gnc_session_get_error (session);
+  qof_session_save (session, NULL);
+  io_err = qof_session_get_error (session);
   g_return_if_fail (io_err == ERR_BACKEND_NO_ERR);
 
   // stdout is broken with guile for some reason
@@ -135,12 +135,12 @@ run_test (void)
     exit(get_rv());
   }
 
-  gnc_session_save (session, NULL);
-  io_err = gnc_session_get_error (session);
+  qof_session_save (session, NULL);
+  io_err = qof_session_get_error (session);
   g_return_if_fail (io_err == ERR_BACKEND_NO_ERR);
 
-  gnc_session_end (session);
-  io_err = gnc_session_get_error (session);
+  qof_session_end (session);
+  io_err = qof_session_get_error (session);
   g_return_if_fail (io_err == ERR_BACKEND_NO_ERR);
 
   success ("periods lightly tested and seem to work");

@@ -23,10 +23,10 @@
 #ifndef POSTGRES_TXN_MASS_H
 #define POSTGRES_TXN_MASS_H
 
-#include "gnc-book.h"
+#include "qofbook.h"
 #include "PostgresBackend.h"
 
-void pgendGetMassTransactions (PGBackend *be, GNCBook*);
+void pgendGetMassTransactions (PGBackend *be, QofBook*);
 
 
 #endif /* POSTGRES_TXN_MASS_H */

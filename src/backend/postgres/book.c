@@ -31,10 +31,10 @@
 
 #include <libpq-fe.h>  
  
-#include "Backend.h"
-#include "BackendP.h"
+#include "qofbackend.h"
+#include "qofbackend-p.h"
 #include "book.h"
-#include "gnc-book-p.h"
+#include "qofbook-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-pricedb.h"
 #include "guid.h"
@@ -73,7 +73,7 @@ static short module = MOD_BACKEND;
  */
 
 void
-pgendStoreBookNoLock (PGBackend *be, GNCBook *book,
+pgendStoreBookNoLock (PGBackend *be, QofBook *book,
                          gboolean do_check_version)
 {
    if (!be || !book) return;
@@ -87,7 +87,7 @@ pgendStoreBookNoLock (PGBackend *be, GNCBook *book,
    book->version ++;  /* be sure to update the version !! */
 
    if ((0 == book->idata) &&
-       (FALSE == kvp_frame_is_empty (gnc_book_get_slots(book))))
+       (FALSE == kvp_frame_is_empty (qof_book_get_slots(book))))
    {
       book->idata = pgendNewGUIDidx(be);
    }
@@ -103,7 +103,7 @@ pgendStoreBookNoLock (PGBackend *be, GNCBook *book,
 }
 
 void
-pgendStoreBook (PGBackend *be, GNCBook *book)
+pgendStoreBook (PGBackend *be, QofBook *book)
 {
    char *p;
    ENTER ("be=%p, book=%p", be, book);
@@ -137,7 +137,7 @@ pgendStoreBook (PGBackend *be, GNCBook *book)
 static gpointer
 get_one_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GNCBook *book = (GNCBook *) data;
+   QofBook *book = (QofBook *) data;
    GUID guid;
 
    /* first, lets see if we've already got this one */
@@ -145,7 +145,7 @@ get_one_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("bookGuid",j), &guid);
 
-   gnc_book_set_guid (book, guid);
+   qof_book_set_guid (book, guid);
 
    book->book_open = (DB_GET_VAL("book_open",j))[0];
    book->version = atoi(DB_GET_VAL("version",j));
@@ -155,7 +155,7 @@ get_one_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 }
 
 void
-pgendGetBook (PGBackend *be, GNCBook *book)
+pgendGetBook (PGBackend *be, QofBook *book)
 {
    char * bufp;
 
@@ -186,9 +186,9 @@ pgendGetBook (PGBackend *be, GNCBook *book)
 static gpointer
 get_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   BookList *blist = (BookList *) data;
-   BookList *node;
-   GNCBook *book;
+   QofBookList *blist = (QofBookList *) data;
+   QofBookList *node;
+   QofBook *book;
    GUID guid;
 
    PINFO ("book GUID=%s", DB_GET_VAL("bookGUID",j));
@@ -206,8 +206,8 @@ get_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    
    if (!book) 
    {
-      book = gnc_book_new();
-      gnc_book_set_guid (book, guid);
+      book = qof_book_new();
+      qof_book_set_guid (book, guid);
    }
 
    book->book_open = (DB_GET_VAL("book_open",j))[0];
@@ -217,10 +217,10 @@ get_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    return blist;
 }
 
-BookList *
-pgendGetAllBooks (PGBackend *be, BookList *blist)
+QofBookList *
+pgendGetAllBooks (PGBackend *be, QofBookList *blist)
 {
-   BookList *node;
+   QofBookList *node;
    char * bufp;
 
    ENTER ("be=%p", be);
@@ -234,7 +234,7 @@ pgendGetAllBooks (PGBackend *be, BookList *blist)
    /* get the KVP data for each book too */
    for (node=blist; node; node=node->next)
    {
-      GNCBook *book = node->data;
+      QofBook *book = node->data;
       if (0 != book->idata) 
       {
          book->kvp_data = pgendKVPFetch (be, book->idata, book->kvp_data);
@@ -248,7 +248,7 @@ pgendGetAllBooks (PGBackend *be, BookList *blist)
 /* ============================================================= */
 
 void 
-pgend_book_transfer_begin(Backend *bend, GNCBook *newbook)
+pgend_book_transfer_begin(QofBackend *bend, QofBook *newbook)
 {
    PGBackend *be = (PGBackend *) bend;
 
@@ -261,7 +261,7 @@ pgend_book_transfer_begin(Backend *bend, GNCBook *newbook)
 }
 
 void 
-pgend_book_transfer_commit(Backend *bend, GNCBook *newbook)
+pgend_book_transfer_commit(QofBackend *bend, QofBook *newbook)
 {
    /* PGBackend *be = (PGBackend *) bend; */
    ENTER (" ");

@@ -40,12 +40,8 @@
 #include <libpq-fe.h>  
 
 #include "AccountP.h"
-#include "Backend.h"
-#include "BackendP.h"
 #include "Group.h"
 #include "GroupP.h"
-#include "gnc-book.h"
-#include "gnc-book-p.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
@@ -54,8 +50,12 @@
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
 #include "guid.h"
-#include "GNCId.h"
+#include "qofbackend.h"
+#include "qofbackend-p.h"
+#include "qofid.h"
 #include "qofid-p.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 #include "TransactionP.h"
 
 #include "account.h"
@@ -152,7 +152,7 @@ pgendAccountLookup (PGBackend *be, const GUID *acct_guid)
    ENTER("guid = %s", guid_to_string(acct_guid));
    for (node=be->blist; node; node=node->next)
    {
-      GNCBook *book = node->data;
+      QofBook *book = node->data;
       acc = xaccAccountLookup (acct_guid, book);
       if (acc) { LEAVE("acc = %p", acc); return acc; }
    }
@@ -170,7 +170,7 @@ pgendTransLookup (PGBackend *be, const GUID *txn_guid)
    ENTER("guid = %s", guid_to_string(txn_guid));
    for (node=be->blist; node; node=node->next)
    {
-      GNCBook *book = node->data;
+      QofBook *book = node->data;
       txn = xaccTransLookup (txn_guid, book);
       if (txn) { LEAVE("txt = %p", txn); return txn; }
    }
@@ -188,7 +188,7 @@ pgendSplitLookup (PGBackend *be, const GUID *split_guid)
    ENTER("guid = %s", guid_to_string(split_guid));
    for (node=be->blist; node; node=node->next)
    {
-      GNCBook *book = node->data;
+      QofBook *book = node->data;
       split = xaccSplitLookup (split_guid, book);
       if (split) { LEAVE("split = %p", split); return split; }
    }
@@ -197,17 +197,17 @@ pgendSplitLookup (PGBackend *be, const GUID *split_guid)
    return NULL;
 }
 
-GNCIdType
+QofIdType
 pgendGUIDType (PGBackend *be, const GUID *guid)
 {
    GList *node;
-   GNCIdType tip = GNC_ID_NONE;
+   QofIdType tip = GNC_ID_NONE;
 
    ENTER("guid = %s", guid_to_string(guid));
    for (node=be->blist; node; node=node->next)
    {
-      GNCBook *book = node->data;
-      tip = xaccGUIDType (guid, book);
+      QofBook *book = node->data;
+      tip = qof_entity_type (qof_book_get_entity_table(book), guid);
       if (GNC_ID_NONE != tip) { LEAVE("tip = %s", tip); return tip; }
    }
 
@@ -218,7 +218,7 @@ pgendGUIDType (PGBackend *be, const GUID *guid)
 /* ============================================================= */
 
 static void 
-pgend_set_book (PGBackend *be, GNCBook *book)
+pgend_set_book (PGBackend *be, QofBook *book)
 {
    GList *node;
    be->book = book;
@@ -237,7 +237,7 @@ pgend_set_book (PGBackend *be, GNCBook *book)
  */
 
 gnc_commodity *
-gnc_string_to_commodity (const char *str, GNCBook *book)
+gnc_string_to_commodity (const char *str, QofBook *book)
 {
    gnc_commodity_table *comtab;
    gnc_commodity *com;
@@ -677,18 +677,18 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
 }
 
 static gpointer
-pgendCompileQuery (Backend *bend, Query *q)
+pgendCompileQuery (QofBackend *bend, Query *q)
 {
   return q;
 }
 
 static void
-pgendFreeQuery (Backend *bend, gpointer q)
+pgendFreeQuery (QofBackend *bend, gpointer q)
 {
 }
 
 static void 
-pgendRunQuery (Backend *bend, gpointer q_p)
+pgendRunQuery (QofBackend *bend, gpointer q_p)
 {
    PGBackend *be = (PGBackend *)bend;
    Query *q = (Query*) q_p;
@@ -763,7 +763,7 @@ get_all_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    GUID *trans_guid;
 
    /* find the transaction this goes into */
-   trans_guid = xaccGUIDMalloc();
+   trans_guid = guid_malloc();
    *trans_guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("transGUID",j), trans_guid);
 
@@ -788,7 +788,7 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
    for (node=xaction_list; node; node=node->next)
    {
       xxxpgendCopyTransactionToEngine (be, (GUID *)node->data);
-      xaccGUIDFree (node->data);
+      guid_free (node->data);
    }
    g_list_free(xaction_list);
    xaccAccountGroupCommitEdit (grp);
@@ -848,7 +848,7 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
 
 
 static void
-pgendSync (Backend *bend, GNCBook *book)
+pgendSync (QofBackend *bend, QofBook *book)
 {
    PGBackend *be = (PGBackend *)bend;
    AccountGroup *grp = gnc_book_get_group (book);
@@ -932,7 +932,7 @@ trans_traverse_cb (Transaction *trans, void *cb_data)
 }
 
 static void
-pgendSyncSingleFile (Backend *bend, GNCBook *book)
+pgendSyncSingleFile (QofBackend *bend, QofBook *book)
 {
    char book_guid[40];
    char buff[4000];
@@ -956,7 +956,7 @@ pgendSyncSingleFile (Backend *bend, GNCBook *book)
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
-   guid_to_string_buff (gnc_book_get_guid(book), book_guid);
+   guid_to_string_buff (qof_book_get_guid(book), book_guid);
 
    /* First, we delete all of the accounts, splits and transactions
     * associated with this book.  Its very tempting to just delete
@@ -1026,7 +1026,7 @@ pgendSyncSingleFile (Backend *bend, GNCBook *book)
  */
 
 static void
-pgendSyncPriceDB (Backend *bend, GNCBook *book)
+pgendSyncPriceDB (QofBackend *bend, QofBook *book)
 {
    PGBackend *be = (PGBackend *)bend;
    ENTER ("be=%p", be);
@@ -1079,7 +1079,7 @@ pgendSyncPriceDB (Backend *bend, GNCBook *book)
  */
 
 static void
-pgendSyncPriceDBSingleFile (Backend *bend, GNCBook *book)
+pgendSyncPriceDBSingleFile (QofBackend *bend, QofBook *book)
 {
    char buff[400], *p;
    PGBackend *be = (PGBackend *)bend;
@@ -1091,7 +1091,7 @@ pgendSyncPriceDBSingleFile (Backend *bend, GNCBook *book)
    p = stpcpy (p, "BEGIN;\n"
                   "LOCK TABLE gncPrice IN EXCLUSIVE MODE;\n"
                   "DELETE FROM gncPrice WHERE bookGuid='\n");
-   p = guid_to_string_buff (gnc_book_get_guid(book), p);
+   p = guid_to_string_buff (qof_book_get_guid(book), p);
    p = stpcpy (p, "';");
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
@@ -1132,13 +1132,13 @@ pgendSessionGetMode (PGBackend *be)
 /* Instead of loading the book, just set the lock error */
 
 static void
-pgend_book_load_single_lockerr (Backend *bend, GNCBook *book)
+pgend_book_load_single_lockerr (QofBackend *bend, QofBook *book)
 {
    PGBackend *be = (PGBackend *)bend;
 
    if (!be) return;
 
-   xaccBackendSetError (&be->be, ERR_BACKEND_LOCKED);
+   qof_backend_set_error (&be->be, ERR_BACKEND_LOCKED);
 }
 
 /* ============================================================= */
@@ -1267,7 +1267,7 @@ pgendSessionValidate (PGBackend *be, int break_lock)
                                               is_gnucash_cb,
                                               GINT_TO_POINTER (FALSE)));
    if (FALSE == retval) {
-      xaccBackendSetError (&be->be, ERR_BACKEND_DATA_CORRUPT);
+      qof_backend_set_error (&be->be, ERR_BACKEND_DATA_CORRUPT);
       return FALSE;
    }
    
@@ -1305,7 +1305,7 @@ pgendSessionValidate (PGBackend *be, int break_lock)
    
    if (FALSE == retval)
    {
-      xaccBackendSetError (&be->be, ERR_BACKEND_PERM);
+      qof_backend_set_error (&be->be, ERR_BACKEND_PERM);
       p = "ROLLBACK;";
       SEND_QUERY (be,p, FALSE);
       FINISH_QUERY(be->connection);
@@ -1321,12 +1321,12 @@ pgendSessionValidate (PGBackend *be, int break_lock)
        * (The GUI allows users to break the lock, if desired).
        */
       be->be.load = pgend_book_load_single_lockerr;
-      xaccBackendSetError (&be->be, ERR_BACKEND_LOCKED);
+      qof_backend_set_error (&be->be, ERR_BACKEND_LOCKED);
       retval = FALSE;
    } else {
 
       /* make note of the session. */
-      be->sessionGuid = xaccGUIDMalloc();
+      be->sessionGuid = guid_malloc();
       guid_new (be->sessionGuid);
       guid_to_string_buff (be->sessionGuid, be->session_guid_str);
       pgendStoreOneSessionOnly (be, (void *)-1, SQL_INSERT);
@@ -1375,7 +1375,7 @@ pgendSessionEnd (PGBackend *be)
    SEND_QUERY (be,be->buff, );
    FINISH_QUERY(be->connection);
 
-   xaccGUIDFree (be->sessionGuid); be->sessionGuid = NULL;
+   guid_free (be->sessionGuid); be->sessionGuid = NULL;
    guid_to_string_buff (&nullguid, be->session_guid_str);
 }
 
@@ -1387,7 +1387,7 @@ pgendSessionEnd (PGBackend *be)
  */
 
 static void
-pgend_session_end (Backend *bend)
+pgend_session_end (QofBackend *bend)
 {
    int i;
    PGBackend *be = (PGBackend *)bend;
@@ -1458,7 +1458,7 @@ pgend_session_end (Backend *bend)
  *    and never the transactions, need to be loaded. 
  */
 static void
-pgend_book_load_poll (Backend *bend, GNCBook *book)
+pgend_book_load_poll (QofBackend *bend, QofBook *book)
 {
    Timespec ts = gnc_iso8601_to_timespec_local (CK_BEFORE_LAST_DATE);
    AccountGroup *grp;
@@ -1486,10 +1486,10 @@ pgend_book_load_poll (Backend *bend, GNCBook *book)
    }
    pgend_set_book (be, book);
    pgendGetBook (be, book);
-   gnc_session_set_book(be->session, book);
+   qof_session_set_book(be->session, book);
                         
    PINFO("Book GUID = %s\n",
-           guid_to_string(gnc_book_get_guid(book)));
+           guid_to_string(qof_book_get_guid(book)));
 
    pgendGetAllAccountsInBook (be, book);
 
@@ -1512,7 +1512,7 @@ pgend_book_load_poll (Backend *bend, GNCBook *book)
  */
 
 static void
-pgend_book_load_single (Backend *bend, GNCBook *book)
+pgend_book_load_single (QofBackend *bend, QofBook *book)
 {
    PGBackend *be = (PGBackend *)bend;
 
@@ -1553,7 +1553,7 @@ pgend_book_load_single (Backend *bend, GNCBook *book)
  */
 
 static void
-pgend_price_load_single (Backend *bend, GNCBook *book)
+pgend_price_load_single (QofBackend *bend, QofBook *book)
 {
    PGBackend *be = (PGBackend *)bend;
 
@@ -1575,13 +1575,13 @@ pgend_price_load_single (Backend *bend, GNCBook *book)
 
 /* ============================================================= */
 /*
- * These are the Backend Entry Points, which call into the various
+ * These are the QofBackend Entry Points, which call into the various
  * functions herein..  These are generic, and (eventually) pluggable.
  *
  */
 
 static void
-pgend_do_load_single (Backend *bend, GNCBook *book)
+pgend_do_load_single (QofBackend *bend, QofBook *book)
 {
   ENTER ("be=%p", bend);
   pgend_book_load_single (bend, book);
@@ -1592,7 +1592,7 @@ pgend_do_load_single (Backend *bend, GNCBook *book)
 }
 
 static void
-pgendDoSyncSingleFile (Backend *bend, GNCBook *book)
+pgendDoSyncSingleFile (QofBackend *bend, QofBook *book)
 {
   ENTER ("be=%p", bend);
   pgendSyncSingleFile (bend, book);
@@ -1603,7 +1603,7 @@ pgendDoSyncSingleFile (Backend *bend, GNCBook *book)
 }
 
 static void
-pgendDoSync (Backend *bend, GNCBook *book)
+pgendDoSync (QofBackend *bend, QofBook *book)
 {
   ENTER ("be=%p", bend);
   pgendSync (bend, book);
@@ -1614,7 +1614,7 @@ pgendDoSync (Backend *bend, GNCBook *book)
 }
 
 static void
-pgend_do_begin (Backend *bend, GNCIdTypeConst type, gpointer object)
+pgend_do_begin (QofBackend *bend, QofIdTypeConst type, gpointer object)
 {
   PGBackend *be = (PGBackend*)bend;
 
@@ -1639,7 +1639,7 @@ pgend_do_begin (Backend *bend, GNCIdTypeConst type, gpointer object)
 }
 
 static void
-pgend_do_commit (Backend *bend, GNCIdTypeConst type, gpointer object)
+pgend_do_commit (QofBackend *bend, QofIdTypeConst type, gpointer object)
 {
   PGBackend *be = (PGBackend*)bend;
 
@@ -1674,7 +1674,7 @@ pgend_do_commit (Backend *bend, GNCIdTypeConst type, gpointer object)
 }
 
 static void
-pgend_do_rollback (Backend *bend, GNCIdTypeConst type, gpointer object)
+pgend_do_rollback (QofBackend *bend, QofIdTypeConst type, gpointer object)
 {
   PGBackend *be = (PGBackend*)bend;
 
@@ -1734,8 +1734,8 @@ pgend_create_db (PGBackend *be)
 }
 
 static void
-pgend_session_begin (Backend *backend,
-                     GNCSession *session,
+pgend_session_begin (QofBackend *backend,
+                     QofSession *session,
                      const char * sessionid, 
                      gboolean ignore_lock,
                      gboolean create_new_db)
@@ -1756,7 +1756,7 @@ pgend_session_begin (Backend *backend,
          sessionid ? sessionid : "(null)");
 
    /* close any dangling sessions from before; reinitialize */
-   pgend_session_end ((Backend *) be);
+   pgend_session_end ((QofBackend *) be);
    pgendInit (be);
 
    be->session = session;
@@ -1768,7 +1768,7 @@ pgend_session_begin (Backend *backend,
       g_list_free (be->blist);
       be->blist = NULL;
    }
-   pgend_set_book (be, gnc_session_get_book(session));
+   pgend_set_book (be, qof_session_get_book(session));
 
    /* Parse the sessionid for the hostname, port number and db name.
     * The expected URL format is
@@ -1785,7 +1785,7 @@ pgend_session_begin (Backend *backend,
 
    if (strncmp (sessionid, "postgres://", 11)) 
    {
-      xaccBackendSetError (&be->be, ERR_BACKEND_BAD_URL);
+      qof_backend_set_error (&be->be, ERR_BACKEND_BAD_URL);
       return;
    }
    url = g_strdup(sessionid);
@@ -1812,7 +1812,7 @@ pgend_session_begin (Backend *backend,
    start = end+1;
    if (0x0 == *start) 
    { 
-      xaccBackendSetError (&be->be, ERR_BACKEND_BAD_URL);
+      qof_backend_set_error (&be->be, ERR_BACKEND_BAD_URL);
       g_free(url); 
       return; 
    }
@@ -1849,7 +1849,7 @@ pgend_session_begin (Backend *backend,
              PWARN ("the following message should be shown in a gui");
              PWARN ("unknown mode %s, will use multi-user mode",
                     start ? start : "(null)");
-             xaccBackendSetMessage((Backend *)be, _("Unknown database access mode '%s'. Using default mode: multi-user."),
+             qof_backend_set_message((QofBackend *)be, _("Unknown database access mode '%s'. Using default mode: multi-user."),
 			           start ? start : "(null)");
              be->session_mode = MODE_EVENT;
          } 
@@ -1966,8 +1966,8 @@ pgend_session_begin (Backend *backend,
             /* I wish that postgres returned usable error codes. 
              * Alas, it does not, so we just bomb out.
              */
-            xaccBackendSetError (&be->be, ERR_BACKEND_CANT_CONNECT);
-            xaccBackendSetMessage(&be->be, msg);
+            qof_backend_set_error (&be->be, ERR_BACKEND_CANT_CONNECT);
+            qof_backend_set_message(&be->be, msg);
             return;
          }
 
@@ -1991,12 +1991,12 @@ pgend_session_begin (Backend *backend,
             /* Weird.  We couldn't connect to the database, but it 
              * does seem to exist.  I presume that this is some 
              * sort of access control problem. */
-            xaccBackendSetError (&be->be, ERR_BACKEND_PERM);
+            qof_backend_set_error (&be->be, ERR_BACKEND_PERM);
             return;
          }
 
          /* Let GUI know that we connected, but we couldn't find it. */
-         xaccBackendSetError (&be->be, ERR_BACKEND_NO_SUCH_DB);
+         qof_backend_set_error (&be->be, ERR_BACKEND_NO_SUCH_DB);
          return;
       }
 
@@ -2017,7 +2017,7 @@ pgend_session_begin (Backend *backend,
           * upgrade the database contents. */
          PQfinish (be->connection);
          be->connection = NULL;
-         xaccBackendSetError (&be->be, ERR_SQL_DB_TOO_OLD);
+         qof_backend_set_error (&be->be, ERR_SQL_DB_TOO_OLD);
          return;
       }
    }
@@ -2049,7 +2049,7 @@ pgend_session_begin (Backend *backend,
          /* I wish that postgres returned usable error codes. 
           * Alas, it does not, so we just bomb out.
           */
-         xaccBackendSetError (&be->be, ERR_BACKEND_CANT_CONNECT);
+         qof_backend_set_error (&be->be, ERR_BACKEND_CANT_CONNECT);
          return;
       }
       
@@ -2106,7 +2106,7 @@ pgend_session_begin (Backend *backend,
             be->connection = NULL;
             /* We just created the database! If we can't connect now, 
              * the server is insane! */
-            xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);
+            qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
             return;
          }
 
@@ -2148,7 +2148,7 @@ pgend_session_begin (Backend *backend,
              * just not to this database. Therefore, it must be a 
              * permission problem.
              */
-            xaccBackendSetError (&be->be, ERR_BACKEND_PERM);
+            qof_backend_set_error (&be->be, ERR_BACKEND_PERM);
             return;
          }
 
@@ -2193,7 +2193,7 @@ pgend_session_begin (Backend *backend,
                p = "COMMIT;\n";
                SEND_QUERY (be,p, );
                FINISH_QUERY(be->connection);
-               xaccBackendSetError (&be->be, ERR_SQL_DB_BUSY);
+               qof_backend_set_error (&be->be, ERR_SQL_DB_BUSY);
                return;
              }
              pgendUpgradeDB (be);
@@ -2431,7 +2431,7 @@ pgendInit (PGBackend *be)
    ENTER(" ");
    
    /* initialize global variable */
-   nullguid = *(xaccGUIDNULL());
+   nullguid = *(guid_null());
 
    /* access mode */
    be->session_mode = MODE_EVENT;
@@ -2439,7 +2439,7 @@ pgendInit (PGBackend *be)
    guid_to_string_buff (&nullguid, be->session_guid_str);
 
    /* generic backend handlers */
-   xaccInitBackend((Backend*)be);
+   qof_backend_init((QofBackend*)be);
 
    be->be.session_begin = pgend_session_begin;
    be->be.session_end = pgend_session_end;
@@ -2497,7 +2497,7 @@ pgendInit (PGBackend *be)
 
 /* ============================================================= */
 
-Backend * 
+QofBackend * 
 pgendNew (void)
 {
    PGBackend *be;
@@ -2507,7 +2507,7 @@ pgendNew (void)
    pgendInit (be);
 
    LEAVE(" ")
-   return (Backend *) be;
+   return (QofBackend *) be;
 }
 
 /* ======================== END OF FILE ======================== */

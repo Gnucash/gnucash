@@ -36,12 +36,12 @@
 #include "AccountP.h"
 #include "Group.h"
 #include "GroupP.h"
-#include "gnc-book.h"
-#include "gnc-book-p.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
 #include "guid.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 
@@ -59,7 +59,7 @@ static short module = MOD_TXN;
 static gpointer
 get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GNCBook *book = data;
+   QofBook *book = data;
    GList *xaction_list = be->tmp_return;
    Transaction *trans;
    gnc_commodity *currency = NULL;
@@ -123,7 +123,7 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 static gpointer
 get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GNCBook *book = data;
+   QofBook *book = data;
    Transaction *trans=NULL;
    Account *acc;
    Split *s;
@@ -218,7 +218,7 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 /* ============================================================= */
 
 void
-pgendGetMassTransactions (PGBackend *be, GNCBook *book)
+pgendGetMassTransactions (PGBackend *be, QofBook *book)
 {
    char *p, buff[900];
    GList *node, *xaction_list = NULL;
@@ -235,7 +235,7 @@ pgendGetMassTransactions (PGBackend *be, GNCBook *book)
                   " WHERE gncTransaction.transGuid = gncEntry.transGuid AND "
                   " gncEntry.accountGuid = gncAccount.accountGuid AND "
                   " gncAccount.bookGuid = '");
-   p = guid_to_string_buff(gnc_book_get_guid (book), p);
+   p = guid_to_string_buff(qof_book_get_guid (book), p);
    p = stpcpy (p, "';");
    SEND_QUERY (be, buff, );
 
@@ -252,7 +252,7 @@ pgendGetMassTransactions (PGBackend *be, GNCBook *book)
                   " FROM gncEntry, gncAccount "
                   " WHERE gncEntry.accountGuid = gncAccount.accountGuid AND "
                   " gncAccount.bookGuid = '");
-   p = guid_to_string_buff(gnc_book_get_guid (book), p);
+   p = guid_to_string_buff(qof_book_get_guid (book), p);
    p = stpcpy (p, "';");
    SEND_QUERY (be, buff, );
    pgendGetResults (be, get_mass_entry_cb, book);

@@ -203,7 +203,7 @@ typedef struct store_data_s {
 #include "kvp-autogen.c"
 
 static void 
-store_cb (const char *key, kvp_value *val, gpointer p)
+store_cb (const char *key, KvpValue *val, gpointer p)
 {
    store_data_t *cb_data = (store_data_t *) p;
    PGBackend *be = cb_data->be;
@@ -310,7 +310,7 @@ store_cb (const char *key, kvp_value *val, gpointer p)
 
          case KVP_TYPE_FRAME: 
             {
-               kvp_frame *frame;
+               KvpFrame *frame;
                PINFO ("path=%s type=frame", cb_data->path);
                frame = kvp_value_get_frame (val);
                kvp_frame_for_each_slot (frame, store_cb, p);
@@ -328,7 +328,7 @@ store_cb (const char *key, kvp_value *val, gpointer p)
 }
 
 void 
-pgendKVPStore (PGBackend *be, guint32 iguid, kvp_frame *kf)
+pgendKVPStore (PGBackend *be, guint32 iguid, KvpFrame *kf)
 {
    store_data_t cb_data;
    if (!be || 0 == iguid || !kf) return;
@@ -389,9 +389,9 @@ pgendKVPInit (PGBackend *be)
  */
 
 #define KVP_HANDLER_SETUP				\
-   kvp_frame *kf = (kvp_frame *) data;			\
-   kvp_frame *final;					\
-   kvp_value * kv=NULL;					\
+   KvpFrame *kf = (KvpFrame *) data;			\
+   KvpFrame *final;					\
+   KvpValue * kv=NULL;					\
    char *path, *tail;					\
    int ipath;						\
 							\
@@ -495,8 +495,8 @@ list_handler (PGBackend *be, PGresult *result, int j, gpointer data)
    kf = pgendGetResults (be, TYPE##_handler, kf);	\
 }
 
-kvp_frame * 
-pgendKVPFetch (PGBackend *be, guint32 iguid, kvp_frame *kf)
+KvpFrame * 
+pgendKVPFetch (PGBackend *be, guint32 iguid, KvpFrame *kf)
 {
    char * p;
    char iguid_str[40];

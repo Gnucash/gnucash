@@ -30,8 +30,8 @@
 #include <string.h>
 #include <libpq-fe.h>  
 
-#include "gnc-book.h"
-#include "gnc-book-p.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
@@ -66,7 +66,7 @@ get_commodities_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    for (node=be->blist; node; node=node->next)
    {
       gnc_commodity *com;
-      GNCBook *book = node->data;
+      QofBook *book = node->data;
       gnc_commodity_table *comtab = gnc_book_get_commodity_table (book);
    
       if (!comtab) continue;
@@ -207,7 +207,7 @@ commodity_mark_cb (gnc_commodity *cm, gpointer user_data)
 
 
 void
-pgendStorePriceDBNoLock (PGBackend *be, GNCBook *book)
+pgendStorePriceDBNoLock (PGBackend *be, QofBook *book)
 {
    GNCPriceDB *prdb;
    gnc_commodity_table *comtab;
@@ -226,7 +226,7 @@ pgendStorePriceDBNoLock (PGBackend *be, GNCBook *book)
 }
 
 void
-pgendStorePriceDB (PGBackend *be, GNCBook *book)
+pgendStorePriceDB (PGBackend *be, QofBook *book)
 {
    char *p;
    ENTER ("be=%p, book=%p", be, book);
@@ -257,7 +257,7 @@ pgendStorePriceDB (PGBackend *be, GNCBook *book)
 static gpointer
 get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GNCBook *book = data;
+   QofBook *book = data;
    GNCPriceDB *prdb;
    GNCPrice *pr;
    gint32 sql_vers, local_vers;
@@ -329,7 +329,7 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
 
 void
-pgendGetAllPricesInBook (PGBackend *be, GNCBook *book)
+pgendGetAllPricesInBook (PGBackend *be, QofBook *book)
 {
    char buff[400], *p;
 
@@ -342,7 +342,7 @@ pgendGetAllPricesInBook (PGBackend *be, GNCBook *book)
    /* Get them ALL */
    p = buff;
    p = stpcpy (p, "SELECT * FROM gncPrice WHERE bookGuid='");
-   p = guid_to_string_buff (gnc_book_get_guid(book), p);
+   p = guid_to_string_buff (qof_book_get_guid(book), p);
    p = stpcpy (p, "';");
    SEND_QUERY (be, buff, );
    pgendGetResults (be, get_price_cb, book);
@@ -353,7 +353,7 @@ pgendGetAllPricesInBook (PGBackend *be, GNCBook *book)
 /* ============================================================= */
 
 void
-pgendPriceFind (Backend *bend, gpointer olook)
+pgendPriceFind (QofBackend *bend, gpointer olook)
 {
    PGBackend *be = (PGBackend *)bend;
    GNCPriceLookup *look = (GNCPriceLookup *)olook;
@@ -451,7 +451,7 @@ pgendPriceFind (Backend *bend, gpointer olook)
 /* ============================================================= */
 
 void
-pgend_price_begin_edit (Backend * bend, GNCPrice *pr)
+pgend_price_begin_edit (QofBackend * bend, GNCPrice *pr)
 {
    if (pr && pr->db && pr->db->dirty) 
    {
@@ -461,7 +461,7 @@ pgend_price_begin_edit (Backend * bend, GNCPrice *pr)
 }
 
 void
-pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
+pgend_price_commit_edit (QofBackend * bend, GNCPrice *pr)
 {
    char * bufp;
    PGBackend *be = (PGBackend *)bend;
@@ -491,7 +491,7 @@ pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
             " price must be rolled back.  This function\n"
             " is not completely implemented !! \n");
       LEAVE ("rolled back");
-      xaccBackendSetError (&be->be, ERR_BACKEND_MODIFIED);
+      qof_backend_set_error (&be->be, ERR_BACKEND_MODIFIED);
       return;
    }
    pr->version ++;   /* be sure to update the version !! */

@@ -710,7 +710,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
        /* I beleive its a programming error to get this case.
         * Print a warning for now... */
        PERR ("no such transaction in the database. This is unexpected ...\n");
-       xaccBackendSetError (&be->be, ERR_SQL_MISSING_DATA);
+       qof_backend_set_error (&be->be, ERR_SQL_MISSING_DATA);
        pgendEnable(be);
        gnc_engine_resume_events();
        return 0;
@@ -723,7 +723,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
        PERR ("!!!!!!!!!!!SQL database is corrupt!!!!!!!\n"
              "too many transactions with GUID=%s\n",
              guid_to_string (trans_guid));
-       xaccBackendSetError (&be->be, ERR_BACKEND_DATA_CORRUPT);
+       qof_backend_set_error (&be->be, ERR_BACKEND_DATA_CORRUPT);
        pgendEnable(be);
        gnc_engine_resume_events();
        return 0;
@@ -923,7 +923,7 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
 /* ============================================================= */
 
 void
-pgend_trans_commit_edit (Backend * bend, 
+pgend_trans_commit_edit (QofBackend * bend, 
                          Transaction * trans,
                          Transaction * oldtrans)
 {
@@ -1025,7 +1025,7 @@ pgend_trans_commit_edit (Backend * bend,
           * routine.  Our rollback routine updates from the latest in 
           * the sql database, and voila! we are good to go. 
           */
-         xaccBackendSetError (&be->be, ERR_BACKEND_MODIFIED);
+         qof_backend_set_error (&be->be, ERR_BACKEND_MODIFIED);
          return;
       } 
    }
@@ -1088,7 +1088,7 @@ pgend_trans_commit_edit (Backend * bend,
  */
 
 void
-pgend_trans_rollback_edit (Backend * bend, Transaction * trans)
+pgend_trans_rollback_edit (QofBackend * bend, Transaction * trans)
 {
    PGBackend *be = (PGBackend *)bend;
    const GUID * trans_guid;
@@ -1102,7 +1102,7 @@ pgend_trans_rollback_edit (Backend * bend, Transaction * trans)
    if (-1 < pgendTransactionGetDeletedVersion (be, trans))
    {
       LEAVE ("destroyed");
-      xaccBackendSetError (&be->be, ERR_BACKEND_MOD_DESTROY);
+      qof_backend_set_error (&be->be, ERR_BACKEND_MOD_DESTROY);
       return;
    }
 
