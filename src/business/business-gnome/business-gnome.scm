@@ -99,16 +99,16 @@
 					     (gnc:get-current-book)))))
 
     (define new-invoice-item
-      (gnc:make-menu-item (N_ "New Invoice")
-			  (N_ "New Invoice")
+      (gnc:make-menu-item (N_ "New Bill")
+			  (N_ "New Bill")
 			  (list "Extensions" "Vendors" "")
 			  (lambda ()
 			    (gnc:invoice-new last-vendor
 					     (gnc:get-current-book)))))
 
     (define find-invoice-item
-      (gnc:make-menu-item (N_ "Find Invoice")
-			  (N_ "Find Invoice")
+      (gnc:make-menu-item (N_ "Find Bill")
+			  (N_ "Find Bill")
 			  (list "Extensions" "Vendors" "")
 			  (lambda ()
 			    (gnc:invoice-search #f last-vendor

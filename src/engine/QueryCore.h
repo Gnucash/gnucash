@@ -45,22 +45,32 @@ typedef int (*QueryCompare) (gpointer a, gpointer b,
                              gint compare_options,
 			     QueryAccess get_fcn);
 
+/* A function to take the object, apply the get_fcn, and return
+ * a printable string.  Note that this QueryAccess function should
+ * be returning a type equal to this core object type.
+ *
+ * Note that this string MUST be freed by the caller.
+ */
+typedef char * (*QueryToString) (gpointer object, QueryAccess get_fcn);
+
 
 /* This function registers a new Core Object with the QueryNew
  * subsystem.  It maps the "core_name" object to the given
- * query_predicate and predicate_data_free functions.
+ * query_predicate, predicate_copy, and predicate_data_free functions.
  */
 void gncQueryRegisterCoreObject (char const *type_name,
 				 QueryPredicate pred,
 				 QueryCompare comp,
 				 QueryPredicateCopy copy,
-				 QueryPredDataFree pd_free);
+				 QueryPredDataFree pd_free,
+				 QueryToString to_string);
 
 
 /* An example:
  *
  * gncQueryRegisterCoreObject (QUERYCORE_STRING, string_match_predicate,
- *			       string_compare_fcn, string_free_pdata);
+ *			       string_compare_fcn, string_free_pdata,
+ *			       string_print_fcn);
  */
 
 
@@ -71,6 +81,10 @@ QueryPredData_t gncQueryCorePredicateCopy (QueryPredData_t pdata);
 
 /* Destroy a type */
 void gncQueryCorePredicateFree (QueryPredData_t pdata);
+
+/* Return a string for a core data object */
+char * gncQueryCoreToString (char const *type, gpointer object,
+			     QueryAccess fcn);
 
 /* Core Data Type Predicates */
 QueryPredData_t gncQueryStringPredicate (query_compare_t how, char *str,

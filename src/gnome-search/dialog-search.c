@@ -17,6 +17,7 @@
 #include "gncObject.h"
 #include "QueryNew.h"
 #include "QueryObject.h"
+#include "QueryCore.h"
 
 #include "dialog-search.h"
 #include "search-core-type.h"
@@ -71,6 +72,8 @@ struct _GNCSearchWindow {
   /* The list of criteria */
   GNCSearchParam * last_param;
   GList *	params_list;	/* List of GNCSearchParams */
+  GList *	display_list;	/* List of GNCSearchParams for Display */
+  gint		num_cols;	/* Number of Display Columns */
   GList *	crit_list;	/* list of crit_data */
 
   gint		component_id;
@@ -135,6 +138,96 @@ gnc_search_dialog_unselect_row_cb (GtkCList *clist, gint row, gint column,
 }
 
 static void
+gnc_search_dialog_init_result_list (GNCSearchWindow *sw)
+{
+  GList *col;
+  gint i;
+  char **titles;
+
+  /* How many columns? */
+  sw->num_cols = g_list_length (sw->display_list);
+  titles = g_new0 (char*, sw->num_cols);
+
+  for (i = 0, col = sw->display_list; col; col = col->next) {
+    GNCSearchParam *param = col->data;
+    titles[i] = (char *)param->title;
+    i++;
+  }
+
+  sw->result_list = gtk_clist_new_with_titles (sw->num_cols, titles);
+  g_free (titles);
+  gtk_clist_set_selection_mode (GTK_CLIST (sw->result_list),
+				GTK_SELECTION_SINGLE);
+
+  /* Setup list properties */
+  gtk_clist_set_shadow_type(GTK_CLIST(sw->result_list), GTK_SHADOW_IN);
+  gtk_clist_column_titles_passive(GTK_CLIST(sw->result_list));
+  
+  /* Setup column parameters */
+  for (i = 0, col = sw->display_list; col; col = col->next) {
+    GNCSearchParam *param = col->data;
+    gtk_clist_set_column_justification (GTK_CLIST (sw->result_list), i,
+					param->justify);
+    gtk_clist_set_column_auto_resize (GTK_CLIST (sw->result_list), i, TRUE);
+    i++;
+  }
+
+  /* Setup the list callbacks */
+  gtk_signal_connect (GTK_OBJECT (sw->result_list), "select-row",
+		      gnc_search_dialog_select_row_cb, sw);
+  gtk_signal_connect (GTK_OBJECT (sw->result_list), "unselect-row",
+		      gnc_search_dialog_unselect_row_cb, sw);
+}
+
+static void
+gnc_search_dialog_prepend_item (GNCSearchWindow *sw, gpointer object)
+{
+  const GUID *guid = (const GUID *) ((sw->get_guid)(object));
+  GList *col;
+  char ** row_text;
+  gint row, i;
+
+  row_text = g_new0 (char *, sw->num_cols);
+
+  /* Iterate over each column, and compute the particular text
+   * to display for that column.
+   */
+  for (i = 0, col = sw->display_list; col; col = col->next) {
+    GNCSearchParam *param = col->data;
+    GSList *converters = gnc_search_param_get_converters (param);
+    const char *type = gnc_search_param_get_param_type (param);
+    gpointer res = object;
+    QueryAccess fcn = NULL;
+
+    /* Do all the object conversions */
+    for (; converters; converters = converters->next) {
+      fcn = converters->data;
+
+      if (converters->next)
+	res = fcn (res);
+    }
+
+    /* Now convert this to a text value for the row */
+    row_text[i++] = gncQueryCoreToString (type, res, fcn);
+  }
+
+  row = gtk_clist_prepend (GTK_CLIST (sw->result_list), row_text);
+  gtk_clist_set_row_data (GTK_CLIST (sw->result_list), row, object);
+  gtk_clist_set_selectable (GTK_CLIST (sw->result_list), row, TRUE);
+  
+  /* Free up our strings */
+  for (i = 0; i < sw->num_cols; i++) {
+    if (row_text[i])
+      g_free (row_text[i]);
+  }
+  g_free (row_text);
+
+  /* Watch this item in case it changes */
+  gnc_gui_component_watch_entity (sw->component_id, guid,
+				  GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+}
+
+static void
 gnc_search_dialog_display_results (GNCSearchWindow *sw)
 {
   GList *list;
@@ -148,24 +241,11 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
    */
   if (sw->result_list == NULL) {
     GtkWidget *scroller, *button_box, *button;
-    char * titles [] = { "Result" }; /* XXX */
 
     have_list = FALSE;
 
-    /* Create the list : XXX : move to function, provide multiple columns */
-    sw->result_list = gtk_clist_new_with_titles (1, titles);
-    gtk_clist_set_selection_mode (GTK_CLIST (sw->result_list),
-				  GTK_SELECTION_SINGLE);
-
-    /* Setup list properties */
-    gtk_clist_set_shadow_type(GTK_CLIST(sw->result_list), GTK_SHADOW_IN);
-    gtk_clist_column_titles_passive(GTK_CLIST(sw->result_list));
-
-    /* Setup the list callbacks */
-    gtk_signal_connect (GTK_OBJECT (sw->result_list), "select-row",
-			gnc_search_dialog_select_row_cb, sw);
-    gtk_signal_connect (GTK_OBJECT (sw->result_list), "unselect-row",
-			gnc_search_dialog_unselect_row_cb, sw);
+    /* Create the list */
+    gnc_search_dialog_init_result_list (sw);
 
     /* Create the scroller and add the list to the scroller */
     scroller = gtk_scrolled_window_new (NULL, NULL);
@@ -226,18 +306,7 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
 
   /* Add the list of items to the clist */
   for (; list; list = list->next) {
-    const GUID *guid = (const GUID *) ((sw->get_guid)(list->data));
-    char * row_text[2] = { NULL, NULL };
-    gint row;
-
-    /* XXX: Move into a function and provide multiple columns */
-    row_text[0] = (char *) gncObjectPrintable (sw->search_for, list->data);
-    row = gtk_clist_prepend (GTK_CLIST (sw->result_list), row_text);
-    gtk_clist_set_row_data (GTK_CLIST (sw->result_list), row, list->data);
-    gtk_clist_set_selectable (GTK_CLIST (sw->result_list), row, TRUE);
-
-    /* Watch this item in case it changes */
-    gnc_gui_component_watch_entity (sw->component_id, guid, GNC_EVENT_MODIFY);
+    gnc_search_dialog_prepend_item (sw, list->data);
   }
 
   /* Need to reverse again for internal consistency */
@@ -796,6 +865,7 @@ gnc_search_dialog_raise (GNCSearchWindow *sw)
 
 GNCSearchWindow *
 gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
+			  GList *display_list,
 			  QueryNew *start_query, QueryNew *show_start_query,
 			  GNCSearchCallbackButton *callbacks,
 			  GNCSearchResultCB result_callback,
@@ -807,6 +877,7 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
   g_return_val_if_fail (obj_type, NULL);
   g_return_val_if_fail (*obj_type != '\0', NULL);
   g_return_val_if_fail (param_list, NULL);
+  g_return_val_if_fail (display_list, NULL);
 
   /* Make sure the caller supplies callbacks xor result_callback */
   g_return_val_if_fail ((callbacks && !result_callback) ||
@@ -814,6 +885,7 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
 
   sw->search_for = obj_type;
   sw->params_list = param_list;
+  sw->display_list = display_list;
   sw->buttons = callbacks;
   sw->result_cb = result_callback;
   sw->new_item_cb = new_item_cb;
@@ -914,6 +986,20 @@ get_params_list (GNCIdTypeConst type)
   return list;
 }
 
+static GList *
+get_display_list (GNCIdTypeConst type)
+{
+  GList *list = NULL;
+
+  list = gnc_search_param_prepend (list, "Amount", NULL, type, SPLIT_AMOUNT,
+				   NULL);
+  list = gnc_search_param_prepend (list, "Memo", NULL, type, SPLIT_MEMO, NULL);
+  list = gnc_search_param_prepend (list, "Date", NULL, type, SPLIT_TRANS,
+				   TRANS_DATE_POSTED, NULL);
+
+  return list;
+}
+
 static void
 do_nothing (gpointer *a, gpointer b)
 {
@@ -924,6 +1010,8 @@ void
 gnc_search_dialog_test (void)
 {
   GNCSearchWindow *sw;
+  static GList *params = NULL;
+  static GList *display = NULL;
   static GNCSearchCallbackButton buttons[] = {
     { N_("View Split"), do_nothing },
     { N_("New Split"), do_nothing },
@@ -933,6 +1021,12 @@ gnc_search_dialog_test (void)
     { NULL }
   };
 
-  sw = gnc_search_dialog_create (GNC_ID_SPLIT, get_params_list (GNC_ID_SPLIT),
+  if (params == NULL)
+    params = get_params_list (GNC_ID_SPLIT);
+
+  if (display == NULL)
+    display = get_display_list (GNC_ID_SPLIT);
+
+  sw = gnc_search_dialog_create (GNC_ID_SPLIT, params, display,
 				 NULL, NULL, buttons, NULL, NULL, NULL, NULL);
 }

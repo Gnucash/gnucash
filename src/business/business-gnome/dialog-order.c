@@ -826,6 +826,7 @@ gnc_order_search (GncOrder *start, GncOwner *owner, GNCBook *book)
   struct _order_select_window *sw;
   QueryNew *q, *q2 = NULL;
   static GList *params = NULL;
+  static GList *columns = NULL;
   static GNCSearchCallbackButton buttons[] = { 
     { N_("View/Edit Order"), edit_order_cb},
     { NULL },
@@ -847,6 +848,21 @@ gnc_order_search (GncOrder *start, GncOwner *owner, GNCBook *book)
 				       ORDER_OWNER, OWNER_NAME, NULL);
     params = gnc_search_param_prepend (params, _("Order ID"), NULL, type,
 				       ORDER_ID, NULL);
+  }
+
+  /* Build the column list in reverse order */
+  if (columns == NULL) {
+    columns = gnc_search_param_prepend (columns, _("Billing ID"), NULL, type,
+					ORDER_REFERENCE, NULL);
+    columns = gnc_search_param_prepend (columns, _("Company"), NULL, type,
+					ORDER_OWNER, OWNER_PARENT,
+					OWNER_NAME, NULL);
+    columns = gnc_search_param_prepend (columns, _("Closed"), NULL, type,
+					ORDER_CLOSED, NULL);
+    columns = gnc_search_param_prepend (columns, _("Opened"), NULL, type,
+					ORDER_OPENED, NULL);
+    columns = gnc_search_param_prepend (columns, _("Num"), NULL, type,
+					ORDER_ID, NULL);
   }
 
   /* Build the queries */
@@ -894,7 +910,7 @@ gnc_order_search (GncOrder *start, GncOwner *owner, GNCBook *book)
   sw->book = book;
   sw->q = q;
 
-  return gnc_search_dialog_create (type, params, q, q2,
+  return gnc_search_dialog_create (type, params, columns, q, q2,
 				   buttons, NULL, new_order_cb,
 				   sw, free_order_cb);
 }

@@ -1,3 +1,13 @@
+2002-05-13   Derek Atkins   <derek@ihtfp.com>
+
+	Change the Search Dialog to use a CList and allow each object to
+	provide its own column list for displaying search results.  Change
+	the interface to require the list of columns.  Modify all the
+	business dialogs to use the new search interface.
+
+	Add a new interface to the QueryCore to convert any Core object
+	into a string (or have it return NULL)
+
 2002-05-09   Derek Atkins   <derek@ihtfp.com>
 
 	Change the Date-Close dialog to use gnc-date-edit instead of the

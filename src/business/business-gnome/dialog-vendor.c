@@ -576,11 +576,12 @@ gnc_vendor_search (GncVendor *start, GNCBook *book)
   struct _vendor_select_window *sw;
   QueryNew *q, *q2 = NULL;
   static GList *params = NULL;
+  static GList *columns = NULL;
   static GNCSearchCallbackButton buttons[] = { 
     { N_("View/Edit Vendor"), edit_vendor_cb},
     { N_("Vendor Jobs"), jobs_vendor_cb},
     //    { N_("Vendor Orders"), order_vendor_cb},
-    { N_("Vendor Invoices"), invoice_vendor_cb},
+    { N_("Vendor Bills"), invoice_vendor_cb},
     { NULL },
   };
 
@@ -594,6 +595,16 @@ gnc_vendor_search (GncVendor *start, GNCBook *book)
 				       VENDOR_ID, NULL);
     params = gnc_search_param_prepend (params, _("Vendor Name"), NULL, type,
 				       VENDOR_NAME, NULL);
+  }
+
+  /* Build the column list in reverse order */
+  if (columns == NULL) {
+    columns = gnc_search_param_prepend (columns, _("Contact"), NULL, type,
+					VENDOR_ADDR, ADDRESS_NAME, NULL);
+    columns = gnc_search_param_prepend (columns, _("Company"), NULL, type,
+					VENDOR_NAME, NULL);
+    columns = gnc_search_param_prepend (columns, _("ID #"), NULL, type,
+					VENDOR_ID, NULL);
   }
 
   /* Build the queries */
@@ -611,7 +622,7 @@ gnc_vendor_search (GncVendor *start, GNCBook *book)
   sw->book = book;
   sw->q = q;
 
-  return gnc_search_dialog_create (type, params, q, q2,
+  return gnc_search_dialog_create (type, params, columns, q, q2,
 				   buttons, NULL,
 				   new_vendor_cb, sw, free_vendor_cb);
 }

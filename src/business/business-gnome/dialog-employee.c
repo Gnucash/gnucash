@@ -574,6 +574,7 @@ gnc_employee_search (GncEmployee *start, GNCBook *book)
   struct _employee_select_window *sw;
   QueryNew *q, *q2 = NULL;
   static GList *params = NULL;
+  static GList *columns = NULL;
   static GNCSearchCallbackButton buttons[] = { 
     { N_("View/Edit Employee"), edit_employee_cb},
     { NULL },
@@ -591,6 +592,16 @@ gnc_employee_search (GncEmployee *start, GNCBook *book)
 				       type, EMPLOYEE_USERNAME, NULL);
   }
 
+  /* Build the column list in reverse order */
+  if (columns == NULL) {
+    columns = gnc_search_param_prepend (columns, _("Name"), NULL, type,
+					EMPLOYEE_ADDR, ADDRESS_NAME, NULL);
+    columns = gnc_search_param_prepend (columns, _("Username"), NULL, type,
+					EMPLOYEE_USERNAME, NULL);
+    columns = gnc_search_param_prepend (columns, _("ID #"), NULL, type,
+					EMPLOYEE_ID, NULL);
+  }
+
   /* Build the queries */
   q = gncQueryCreate ();
   gncQuerySetBook (q, book);
@@ -606,7 +617,7 @@ gnc_employee_search (GncEmployee *start, GNCBook *book)
   sw->book = book;
   sw->q = q;
 
-  return gnc_search_dialog_create (type, params, q, q2,
+  return gnc_search_dialog_create (type, params, columns, q, q2,
 				   buttons, NULL, new_employee_cb,
 				   sw, free_employee_cb);
 }

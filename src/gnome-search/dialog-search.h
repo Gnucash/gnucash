@@ -54,16 +54,21 @@ typedef struct {
 /* Caller MUST supply _EITHER_ a result_callback or a list of callback
  * buttons.  The caller MUST NOT supply both.
  *
- * The param_list is the property of the dialog but will NOT be destroyed.
+ * Both the param_list and display_list are the property of the dialog
+ * but will NOT be destroyed..  They should be a GList of
+ * GNCSearchParam objects.  The display_list defines which paramters
+ * of the found transactions are printed, and how.
+ * 
  * The start_query is the property of the caller and will only be copied.
  * The show_start_query, if it exists, will become the property of the
  * dialog and will be automatically destroyed.
  *
  * The user_data becomes the property of the search dialog and will
  * be freed via the callback when the dialog is closed.
- */
+  */
 GNCSearchWindow *
 gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
+			  GList *display_list,
 			  QueryNew *start_query, QueryNew *show_start_query,
 			  GNCSearchCallbackButton *callbacks,
 			  GNCSearchResultCB result_callback,

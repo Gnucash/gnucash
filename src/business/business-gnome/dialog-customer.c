@@ -716,6 +716,7 @@ gnc_customer_search (GncCustomer *start, GNCBook *book)
   GNCIdType type = GNC_CUSTOMER_MODULE_NAME;
   struct _customer_select_window *sw;
   static GList *params = NULL;
+  static GList *columns = NULL;
   static GNCSearchCallbackButton buttons[] = { 
     { N_("View/Edit Customer"), edit_customer_cb},
     { N_("Customer Jobs"), jobs_customer_cb},
@@ -738,6 +739,16 @@ gnc_customer_search (GncCustomer *start, GNCBook *book)
 				       CUSTOMER_NAME, NULL);
   }
 
+  /* Build the column list in reverse order */
+  if (columns == NULL) {
+    columns = gnc_search_param_prepend (columns, _("Contact"), NULL, type,
+					CUSTOMER_ADDR, ADDRESS_NAME, NULL);
+    columns = gnc_search_param_prepend (columns, _("Company"), NULL, type,
+					CUSTOMER_NAME, NULL);
+    columns = gnc_search_param_prepend (columns, _("ID #"), NULL, type,
+					CUSTOMER_ID, NULL);
+  }
+
   /* Build the queries */
   q = gncQueryCreate ();
   gncQuerySetBook (q, book);
@@ -754,7 +765,7 @@ gnc_customer_search (GncCustomer *start, GNCBook *book)
   sw->book = book;
   sw->q = q;
 
-  return gnc_search_dialog_create (type, params,
+  return gnc_search_dialog_create (type, params, columns,
 				   q, q2, buttons, NULL,
 				   new_customer_cb, sw, free_userdata_cb);
 }

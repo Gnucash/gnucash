@@ -492,6 +492,7 @@ gnc_job_search (GncJob *start, GncOwner *owner, GNCBook *book)
   GNCIdType type = GNC_JOB_MODULE_NAME;
   struct _job_select_window *sw;
   static GList *params = NULL;
+  static GList *columns = NULL;
   static GNCSearchCallbackButton buttons[] = { 
     { N_("View/Edit Job"), edit_job_cb},
     { N_("View Invoices"), invoice_job_cb},
@@ -507,11 +508,23 @@ gnc_job_search (GncJob *start, GncOwner *owner, GNCBook *book)
     params = gnc_search_param_prepend (params, _("Only Active?"), NULL, type,
 				       JOB_ACTIVE, NULL);
     params = gnc_search_param_prepend (params, _("Billing ID"), NULL, type,
-				       JOB_ID, NULL);
+				       JOB_REFERENCE, NULL);
     params = gnc_search_param_prepend (params, _("Job Number"), NULL, type,
 				       JOB_ID, NULL);
     params = gnc_search_param_prepend (params, _("Job Name"), NULL, type,
 				       JOB_NAME, NULL);
+  }
+
+  /* Build the column list in reverse order */
+  if (columns == NULL) {
+    columns = gnc_search_param_prepend (columns, _("Billing ID"), NULL, type,
+					JOB_REFERENCE, NULL);
+    columns = gnc_search_param_prepend (columns, _("Company"), NULL, type,
+					JOB_OWNER, OWNER_NAME, NULL);
+    columns = gnc_search_param_prepend (columns, _("Job Name"), NULL, type,
+					JOB_NAME, NULL);
+    columns = gnc_search_param_prepend (columns, _("ID #"), NULL, type,
+					JOB_ID, NULL);
   }
 
   /* Build the queries */
@@ -548,7 +561,7 @@ gnc_job_search (GncJob *start, GncOwner *owner, GNCBook *book)
   sw->book = book;
   sw->q = q;
 
-  return gnc_search_dialog_create (type, params,
+  return gnc_search_dialog_create (type, params, columns,
 				   q, q2, buttons, NULL,
 				   new_job_cb, sw, free_userdata_cb);
 }

@@ -19,7 +19,8 @@ struct _GNCSearchParam {
   GtkObject parent;
   struct _GNCSearchParamPrivate *priv;
 
-  const char *	title;
+  const char *		title;
+  GtkJustification	justify;
 };
 
 struct _GNCSearchParamClass {
@@ -45,9 +46,14 @@ GSList *		gnc_search_param_get_param_path (GNCSearchParam *param);
 GNCIdTypeConst		gnc_search_param_get_param_type (GNCSearchParam *param);
 void			gnc_search_param_set_title (GNCSearchParam *param,
 						    const char *title);
+void			gnc_search_param_set_justify (GNCSearchParam *param,
+						      GtkJustification justify);
 gboolean		gnc_search_param_type_match (GNCSearchParam *a,
 						     GNCSearchParam *b);
 
+/* Return the list of QueryAccess functions for this parameter.  This list
+ * is owned by the param object -- users should not change it */
+GSList *		gnc_search_param_get_converters (GNCSearchParam *param);
 
 /* This will override the automatic param_type logic from "set_param_path()"
  * so that the programmer can force a particular UI to appear for a given
@@ -59,7 +65,7 @@ void	gnc_search_param_override_param_type (GNCSearchParam *param,
 					      GNCIdTypeConst param_type);
 
 /*************************************************************
- * Helper function ..
+ * Helper functions ..
  */
 
 /* Create a paramter and prepend it to a GSList */
@@ -67,6 +73,13 @@ GList *		gnc_search_param_prepend (GList *list, char const *title,
 					  GNCIdTypeConst type_override,
 					  GNCIdTypeConst search_type,
 					  const char *param, ...);
+					  
+
+GList *	gnc_search_param_prepend_with_justify (GList *list, char const *title,
+					       GtkJustification justify,
+					       GNCIdTypeConst type_override,
+					       GNCIdTypeConst search_type,
+					       const char *param, ...);
 					  
 
 #endif /* _GNCSEARCH_PARAM_H */

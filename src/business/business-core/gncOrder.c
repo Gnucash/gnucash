@@ -395,6 +395,7 @@ gboolean gncOrderRegister (void)
 {
   static QueryObjectDef params[] = {
     { ORDER_ID, QUERYCORE_STRING, (QueryAccess)gncOrderGetID },
+    { ORDER_REFERENCE, QUERYCORE_STRING, (QueryAccess)gncOrderGetReference },
     { ORDER_OWNER, GNC_OWNER_MODULE_NAME, (QueryAccess)gncOrderGetOwner },
     { ORDER_OPENED, QUERYCORE_DATE, (QueryAccess)gncOrderGetDateOpened },
     { ORDER_IS_CLOSED, QUERYCORE_BOOLEAN, (QueryAccess)gncOrderIsClosed },

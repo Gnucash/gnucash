@@ -1245,6 +1245,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
   struct _invoice_select_window *sw;
   QueryNew *q, *q2 = NULL;
   static GList *params = NULL;
+  static GList *columns = NULL;
   static GNCSearchCallbackButton buttons[] = { 
     { N_("View/Edit Invoice"), edit_invoice_cb},
     { NULL },
@@ -1252,7 +1253,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
 
   g_return_val_if_fail (book, NULL);
 
-  /* Build parameter list in reverse invoice*/
+  /* Build parameter list in reverse order */
   if (params == NULL) {
     params = gnc_search_param_prepend (params, _("Invoice Notes"), NULL, type,
 				       INVOICE_NOTES, NULL);
@@ -1264,10 +1265,26 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
 				       INVOICE_IS_POSTED, NULL);
     params = gnc_search_param_prepend (params, _("Date Opened"), NULL, type,
 				       INVOICE_OPENED, NULL);
-    params = gnc_search_param_prepend (params, _("Owner Name "), NULL, type,
-				       INVOICE_OWNER, OWNER_NAME, NULL);
+    params = gnc_search_param_prepend (params, _("Company Name "), NULL, type,
+				       INVOICE_OWNER, OWNER_PARENT,
+				       OWNER_NAME, NULL);
     params = gnc_search_param_prepend (params, _("Invoice ID"), NULL, type,
 				       INVOICE_ID, NULL);
+  }
+
+  /* Build the column list in reverse order */
+  if (columns == NULL) {
+    columns = gnc_search_param_prepend (columns, _("Billing ID"), NULL, type,
+					INVOICE_BILLINGID, NULL);
+    columns = gnc_search_param_prepend (columns, _("Company"), NULL, type,
+					INVOICE_OWNER, OWNER_PARENT,
+					OWNER_NAME, NULL);
+    columns = gnc_search_param_prepend (columns, _("Posted"), NULL, type,
+					INVOICE_POSTED, NULL);
+    columns = gnc_search_param_prepend (columns, _("Opened"), NULL, type,
+					INVOICE_OPENED, NULL);
+    columns = gnc_search_param_prepend (columns, _("Num"), NULL, type,
+					INVOICE_ID, NULL);
   }
 
   /* Build the queries */
@@ -1304,7 +1321,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
   sw->book = book;
   sw->q = q;
 
-  return gnc_search_dialog_create (type, params, q, q2,
+  return gnc_search_dialog_create (type, params, columns, q, q2,
 				   buttons, NULL, new_invoice_cb,
 				   sw, free_invoice_cb);
 

@@ -23,6 +23,7 @@ static void gnc_search_param_finalise	(GtkObject *obj);
 
 #define _PRIVATE(x) (((GNCSearchParam *)(x))->priv)
 struct _GNCSearchParamPrivate {
+  GSList *		converters;
   GSList *		param_path;
   GNCIdTypeConst	type;
 };
@@ -86,6 +87,8 @@ gnc_search_param_finalise (GtkObject *obj)
   GNCSearchParam *o = (GNCSearchParam *)obj;
   g_slist_free (o->priv->param_path);
   o->priv->param_path = NULL;
+  g_slist_free (o->priv->converters);
+  o->priv->converters = NULL;
   g_free(o->priv);
   ((GtkObjectClass *)(parent_class))->finalize(obj);
 }
@@ -125,6 +128,7 @@ gnc_search_param_set_param_path (GNCSearchParam *param,
 				 GSList *param_path)
 {
   GNCIdTypeConst type = NULL;
+  GSList *converters = NULL;
 
   g_assert (IS_GNCSEARCH_PARAM (param));
 
@@ -142,11 +146,20 @@ gnc_search_param_set_param_path (GNCSearchParam *param,
     if (!objDef)
       break;
 
+    /* Save the converter */
+    converters = g_slist_prepend (converters, objDef->param_getfcn);
+
     /* And reset for the next parameter */
     type = search_type = objDef->param_type;
   }
 
+  /* Save the type */
   param->priv->type = type;
+
+  /* Save the converters */
+  if (param->priv->converters)
+    g_slist_free (param->priv->converters);
+  param->priv->converters = g_slist_reverse (converters);
 }
 
 void
@@ -156,6 +169,7 @@ gnc_search_param_override_param_type (GNCSearchParam *param,
   g_assert (IS_GNCSEARCH_PARAM (param));
   g_assert (param_type != NULL && *param_type != '\0');
   param->priv->type = param_type;
+  /* XXX: What about the converters? */
 }
 
 GSList *
@@ -164,6 +178,14 @@ gnc_search_param_get_param_path (GNCSearchParam *param)
   g_assert (IS_GNCSEARCH_PARAM (param));
 
   return g_slist_copy (param->priv->param_path);
+}
+
+GSList *
+gnc_search_param_get_converters (GNCSearchParam *param)
+{
+  g_assert (IS_GNCSEARCH_PARAM (param));
+
+  return param->priv->converters;
 }
 
 GNCIdTypeConst
@@ -182,6 +204,14 @@ gnc_search_param_set_title (GNCSearchParam *param, const char *title)
   param->title = title;
 }
 
+void
+gnc_search_param_set_justify (GNCSearchParam *param, GtkJustification justify)
+{
+  g_assert (IS_GNCSEARCH_PARAM (param));
+
+  param->justify = justify;
+}
+
 gboolean
 gnc_search_param_type_match (GNCSearchParam *a, GNCSearchParam *b)
 {
@@ -195,33 +225,24 @@ gnc_search_param_type_match (GNCSearchParam *a, GNCSearchParam *b)
   return FALSE;
 }
 
-GList *
-gnc_search_param_prepend (GList *list, char const *title,
-			  GNCIdTypeConst type_override,
-			  GNCIdTypeConst search_type,
-			  const char *param, ...)
+static GList *
+gnc_search_param_prepend_internal (GList *list, char const *title,
+				   GtkJustification justify,
+				   GNCIdTypeConst type_override,
+				   GNCIdTypeConst search_type,
+				   const char *param, va_list args)
 {
   GNCSearchParam *p;
   GSList *path = NULL;
-  va_list ap;
   const char *this_param;
-
-  g_return_val_if_fail (title, list);
-  g_return_val_if_fail (search_type, list);
-  g_return_val_if_fail (param, list);
 
   p = gnc_search_param_new ();
   gnc_search_param_set_title (p, title);
 
-  /* Build the parameter path */
-  va_start (ap, param);
-
   for (this_param = param; this_param;
-       this_param = va_arg (ap, const char *)) {
+       this_param = va_arg (args, const char *)) {
     path = g_slist_prepend (path, (gpointer)this_param);
   }
-
-  va_end (ap);
 
   /* put the path into the right order, and set it */
   path = g_slist_reverse (path);
@@ -234,4 +255,49 @@ gnc_search_param_prepend (GList *list, char const *title,
   /* And return it */
   return g_list_prepend (list, p);
 }
+					  
 
+GList *
+gnc_search_param_prepend_with_justify (GList *list, char const *title,
+				       GtkJustification justify,
+				       GNCIdTypeConst type_override,
+				       GNCIdTypeConst search_type,
+				       const char *param, ...)
+{
+  GList *result;
+  va_list ap;
+
+  g_return_val_if_fail (title, list);
+  g_return_val_if_fail (search_type, list);
+  g_return_val_if_fail (param, list);
+
+  /* Build the parameter path */
+  va_start (ap, param);
+  result = gnc_search_param_prepend_internal (list, title, justify,
+					      type_override, search_type,
+					      param, ap);
+  va_end (ap);
+  return result;
+}
+
+GList *
+gnc_search_param_prepend (GList *list, char const *title,
+			  GNCIdTypeConst type_override,
+			  GNCIdTypeConst search_type,
+			  const char *param, ...)
+{
+  GList *result;
+  va_list ap;
+
+  g_return_val_if_fail (title, list);
+  g_return_val_if_fail (search_type, list);
+  g_return_val_if_fail (param, list);
+
+  /* Build the parameter path */
+  va_start (ap, param);
+  result = gnc_search_param_prepend_internal (list, title, GTK_JUSTIFY_LEFT,
+					      type_override, search_type,
+					      param, ap);
+  va_end (ap);
+  return result;
+}
