@@ -151,6 +151,9 @@ gnucash.keys: gnucash.keys.in
 
 noinst_DATA = .scm-links
 
+# Prime the dependancies.
+gnc-splash.c: gnc-version.h
+
 gnc-version.h: _gnc-version.h
 	-[ ! -f gnc-version.h ] && cp _gnc-version.h gnc-version.h
 	-cmp -s _gnc-version.h gnc-version.h || cp _gnc-version.h gnc-version.h
