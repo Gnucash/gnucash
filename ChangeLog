@@ -1,5 +1,9 @@
 2003-08-10  Derek Atkins  <derek@ihtfp.com>
 
+	* rpm/Makefile.am: add gnucash.spec to the DIST; clean during
+	  distclean.  Rebuild it whenever the .in, Makefile, or config.status
+	  changes.  Fixes #119446.
+
 	* src/backend/file/sixtp.c: Add code to read XML files with real
 	  namespace declarations.  (see bug #88078)
 
