@@ -107,6 +107,7 @@ kvp_frame_new() {
 
 static void
 kvp_frame_delete_worker(gpointer key, gpointer value, gpointer user_data) {
+  g_free(key);
   kvp_value_delete((kvp_value *)value);  
 }
 
@@ -144,10 +145,25 @@ kvp_frame_copy(const kvp_frame * frame) {
 void
 kvp_frame_set_slot(kvp_frame * frame, const char * slot, 
                    const kvp_value * value) {
+  gpointer orig_key;
+  gpointer orig_value;
+  gpointer new_value;
+  int      key_exists;
+
+  new_value = kvp_value_copy(value);
+
   g_hash_table_freeze(frame->hash);
-  g_hash_table_insert(frame->hash, 
-                      (gpointer)g_strdup(slot), 
-                      (gpointer)kvp_value_copy(value));
+
+  key_exists = g_hash_table_lookup_extended(frame->hash, slot,
+                                            & orig_key, & orig_value);
+  if (key_exists) {
+    g_hash_table_remove(frame->hash, slot);
+    g_free(orig_key);
+    kvp_value_delete(orig_value);
+  }
+
+  g_hash_table_insert(frame->hash, g_strdup(slot), new_value);
+
   g_hash_table_thaw(frame->hash);
 }
 
