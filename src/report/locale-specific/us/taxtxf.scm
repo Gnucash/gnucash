@@ -27,7 +27,6 @@
 ;; subtracts 2!  see "(to-value"
 
 ;; depends must be outside module scope -- and should eventually go away.
-(simple-format #t "loading taxtxf scheme code\n")
 
 (define-module (gnucash report taxtxf))
 (use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
