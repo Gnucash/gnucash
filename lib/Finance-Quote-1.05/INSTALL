@@ -6,12 +6,40 @@ IMPORTANT
 
 Read Documentation/License for the license (GPL) covering this code.
 
+Dependancies
+------------
+Finance::Quote depends upon a number of other perl modules to
+function correctly.  These modules include:
+
+	LWP::UserAgent
+	HTTP::Request::Common
+	HTML::TableExtract
+
+You will receive a warning during the make process if one or more of
+these modules are missing.
+
+One easy way to install the modules that Finance::Quote requires is
+to use perl's CPAN module:
+
+	hostname$ perl -MCPAN -e shell (as root)
+
+If you haven't used the CPAN module before, then it may ask you a few
+simple configuration questions before you get to the cpan> prompt.
+You can install any module from CPAN using:
+
+	cpan> install my::module
+
+Indeed, it's possible to install Finance::Quote and all the modules
+it depends upon using:
+
+	cpan> install Finance::Quote
+
 Install instructions
 --------------------
 
-% perl Makefile.PL
-% make
-% make test		(optional)
+$ perl Makefile.PL
+$ make
+$ make test		(optional)
 # make install		(as root)
 
 Couldn't be easier, could it?
@@ -26,16 +54,20 @@ Internet, if your machine must use an HTTP proxy and you do not have
 your http_proxy environment variable set, or if one or more of the
 servers that Finance::Quote uses is down or unhappy.
 
-The tests can also fail if you do not have LWP installed, which
-Finance::Quote depends.
+The tests can also fail if you have not installed all the modules
+that Finance::Quote depends upon.  See the section on dependancies
+above.
 
-If you believe you've found a bug, please contact Paul Fenwick
-<pjf@cpan.org>.
+If you believe you've found a bug, please report it using our
+bugtracking system at http://sourceforge.net/bugs/?group_id=4232
+or send mail to <finance-quote-devel@lists.sourceforge.net>.
 
 More information?
 -----------------
-Try visiting http://finance-quote.sourceforge.net/
+Try visiting the Finance::Quote webpage
+at http://finance-quote.sourceforge.net/
 
 Maintainer
 ----------
 Paul Fenwick <pjf@cpan.org>
+
