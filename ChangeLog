@@ -1,5 +1,8 @@
 2001-05-25  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/dialog-column-view.c (gnc_column_view_edit_size_cb):
+	fix bug
+
 	* src/scm/report/transaction-report.scm: default to sign-reverse
 	credit accounts. fix i18n bug.
 

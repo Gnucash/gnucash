@@ -464,11 +464,12 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data) {
     dlg_ret = gnome_dialog_run_and_close(GNOME_DIALOG(dlg));
 
     if(dlg_ret == 0) {
-      current = SCM_LIST3(gh_car(current),
+      current = SCM_LIST4(gh_car(current),
                           gh_int2scm(gtk_spin_button_get_value_as_int
                                      (GTK_SPIN_BUTTON(colspin))),
                           gh_int2scm(gtk_spin_button_get_value_as_int
-                                     (GTK_SPIN_BUTTON(rowspin))));
+                                     (GTK_SPIN_BUTTON(rowspin))),
+                          SCM_BOOL_F);
       scm_unprotect_object(r->contents_list);
       r->contents_list = scm_list_set_x(r->contents_list, 
                                         gh_int2scm(r->contents_selected),
