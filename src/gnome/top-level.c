@@ -434,8 +434,6 @@ gnucash_ui_init(void)
     poptFreeContext (returnedPoptContext);
     gnc_free_argv (restargv);
 
-    gnc_component_manager_init ();
-
     /* initialization required for gtkhtml */
     gdk_rgb_init ();    
     gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
@@ -585,8 +583,6 @@ gnc_ui_destroy (void)
   gnc_mdi_destroy (gnc_mdi_get_current ());
 
   gnc_extensions_shutdown ();
-
-  gnc_component_manager_shutdown ();
 }
 
 /* ============================================================== */
