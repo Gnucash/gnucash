@@ -3206,6 +3206,7 @@ gboolean xaccSplitRegister (void)
       (QueryAccess)xaccSplitVoidFormerAmount },
     { SPLIT_VOIDED_VALUE, QUERYCORE_NUMERIC,
       (QueryAccess)xaccSplitVoidFormerValue },
+    { SPLIT_LOT, GNC_ID_LOT, (QueryAccess)xaccSplitGetLot },
     { SPLIT_TRANS, GNC_ID_TRANS, (QueryAccess)xaccSplitGetParent },
     { SPLIT_ACCOUNT, GNC_ID_ACCOUNT, (QueryAccess)xaccSplitGetAccount },
     { SPLIT_ACCOUNT_GUID, QUERYCORE_GUID, split_account_guid_getter },

@@ -67,5 +67,8 @@ struct gnc_lot_struct
 
 void gnc_lot_set_guid(GNCLot *lot, GUID guid);
 
+/* Register with the Query engine */
+void gnc_lot_register (void);
+
 #endif /* GNC_LOT_P_H */
 

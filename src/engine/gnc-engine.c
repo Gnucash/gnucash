@@ -33,6 +33,7 @@
 #include "TransactionP.h"
 #include "AccountP.h"
 #include "gnc-book-p.h"
+#include "gnc-lot-p.h"
 
 static GList * engine_init_hooks = NULL;
 static int engine_is_initialized = 0;
@@ -84,6 +85,7 @@ gnc_engine_init(int argc, char ** argv)
   xaccTransRegister ();
   xaccAccountRegister ();
   gnc_book_register ();
+  gnc_lot_register ();
 
   /* call any engine hooks */
   for (cur = engine_init_hooks; cur; cur = cur->next)

@@ -264,6 +264,7 @@
 ; Definitions for query parameter names
 ;
 (gw:wrap-value ws 'gnc:query-default-sort '<gnc:id-type> "QUERY_DEFAULT_SORT")
+(gw:wrap-value ws 'gnc:split-lot '<gnc:id-type> "SPLIT_LOT")
 (gw:wrap-value ws 'gnc:split-trans '<gnc:id-type> "SPLIT_TRANS")
 (gw:wrap-value ws 'gnc:split-account '<gnc:id-type> "SPLIT_ACCOUNT")
 (gw:wrap-value ws 'gnc:split-value '<gnc:id-type> "SPLIT_VALUE")
@@ -1879,6 +1880,15 @@ of having a parent transaction with which one is working...")
  "xaccQueryAddClearedMatch"
  '((<gnc:Query*> q) (<gnc:cleared-match-how> cleared-how) (<gnc:query-op> how))
  "match splits against the cleared state.")
+
+(gw:wrap-function
+ ws
+ 'gnc:query-add-guid-match
+ '<gw:void>
+ "xaccQueryAddGUIDMatchGL"
+ '((<gnc:Query*> q) ((gw:glist-of <gnc:id-type> callee-owned) param_path)
+   (<gnc:guid-scm> guid) (<gnc:query-op> how))
+ "Add a GUID match against the specified param_path")
 
 (gw:wrap-function
  ws

@@ -42,6 +42,7 @@
 #include "gnc-lot-p.h"
 #include "Transaction.h"
 #include "TransactionP.h"
+#include "QueryObject.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_LOT;
@@ -259,6 +260,17 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
    {
       lot->account = NULL;
    }
+}
+
+void gnc_lot_register (void)
+{
+  static const QueryObjectDef params[] = {
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gnc_lot_get_book },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gnc_lot_get_guid },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (GNC_ID_LOT, NULL, params);
 }
 
 /* ========================== END OF FILE ========================= */

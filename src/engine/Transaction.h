@@ -536,6 +536,7 @@ Timespec xaccTransGetVoidTime(Transaction *tr);
 #define SPLIT_TYPE		"type"
 #define SPLIT_VOIDED_AMOUNT	"voided-amount"
 #define SPLIT_VOIDED_VALUE	"voided-value"
+#define SPLIT_LOT		"lot"
 #define SPLIT_TRANS		"trans"
 #define SPLIT_ACCOUNT		"account"
 #define SPLIT_ACCOUNT_GUID	"account-guid" /* for guid_match_all */
