@@ -20,15 +20,17 @@
   (gnc:depend "report.scm")
   (gnc:depend "report/report-list.scm")
 
-  (gnc:config-var-value-set! gnc:*load-path* #f
-                             (cons (string-append gnc:_share-dir-default_ 
-                                                  "/scm/qif-import")
-                                   (gnc:config-var-value-get gnc:*load-path*)))
-
-  (gnc:config-var-value-set! gnc:*load-path* #f
-                             (cons (string-append gnc:_share-dir-default_ 
-                                                  "/scm/printing")
-                                   (gnc:config-var-value-get gnc:*load-path*)))
+  (gnc:config-var-value-set!
+   gnc:*load-path* #f
+   (let loop ((load-path (gnc:config-var-value-get gnc:*load-path*)))
+     (if (null? load-path) '()
+	 (cons
+	  (string-append (car load-path) "/printing")
+	  (cons
+	   (string-append (car load-path) "/qif-import")
+	   (cons
+	    (car load-path)
+	    (loop (cdr load-path))))))))
 
   (gnc:depend "qif-import.scm")
   (gnc:depend "print-check.scm")
