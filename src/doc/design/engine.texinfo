@@ -24,6 +24,7 @@ be created as a shared library for use by other programs.
 * Globally Unique Identifiers::  
 * Numeric Library::             
 * Key-Value Pair Frames::       
+* Events::                      
 * Splits::                      
 * Transactions::                
 * Accounts::                    
@@ -772,7 +773,7 @@ main(int argc, char ** argv)
 @end example
 
 
-@node Key-Value Pair Frames, Splits, Numeric Library, Engine
+@node Key-Value Pair Frames, Events, Numeric Library, Engine
 @section Key-Value Pair Frames
 @cindex Key-Value Pairs
 
@@ -1042,7 +1043,81 @@ the caller and should not be accessed after the function returns.
 @end deftypefun
 
 
-@node Splits, Transactions, Key-Value Pair Frames, Engine
+@node Events, Splits, Key-Value Pair Frames, Engine
+@section Events
+
+The Engine supports the concept of @dfn{Events} which notify
+external code when engine entities are created, modified, or
+destroyed.
+
+User code can register event handers which are invoked for each event,
+giving information about the specific engine entity generating the event
+and the nature of the event (creation, modification, or deletion).
+
+
+@menu
+* Event API::                   
+@end menu
+
+
+@node Event API,  , Events, Events
+@subsection Event API
+@tindex GNCEngineEventType
+
+Engine events are classified using the @code{GNCEngineEventType}
+bitmask which has the following predefined values:
+
+@table @code
+
+@item GNC_EVENT_NONE
+A null value.
+
+@item GNC_EVENT_CREATE
+Indicates an entity has been created.
+
+@item GNC_EVENT_MODIFY
+Indicates an entity has been changed in some way.
+
+@item GNC_EVENT_DESTROY
+Indicates an entity is being destroyed.
+
+@item GNC_EVENT_ALL
+The boolean OR of @code{GNC_EVENT_CREATE}, @code{GNC_EVENT_MODIFY},
+and @code{GNC_EVENT_DESTROY}.
+
+@end table
+
+Event handlers are functions with the following type:
+
+@deftypefun void (*GNCEngineEventHandler) (GUID * @var{entity}, GNCEngineEventType @var{event_type}, gpointer @var{user_data})
+A callback invoked when an engine event occurs. @var{entity} is the
+@code{GUID} of the entity generating the event. @var{event_type} is
+one of @code{GNC_EVENT_CREATE}, @code{GNC_EVENT_MODIFY}, or
+@code{GNC_EVENT_DESTROY}. @var{user_data} is the user data parameter
+supplied when the handler was registered.
+@end deftypefun
+
+@deftypefun gint gnc_engine_register_event_handler (GNCEngineEventHandler @var{handler}, gpointer @var{user_data})
+Register a handler for engine events. The return value is an identifier used
+to specify this handler in other API calls.
+@end deftypefun
+
+@deftypefun void gnc_engine_unregister_event_handler (gint @var{handler_id})
+Unregister the event handler specified by @var{handler_id}.
+@end deftypefun
+
+@deftypefun void gnc_engine_suspend_events (void)
+Suspend all engine events. This function may be called multiple
+times. To resume event generation, an equal number of calls to
+@code{gnc_engine_resume_events} must be made.
+@end deftypefun
+
+@deftypefun void gnc_engine_resume_events (void)
+Resume engine event generation.
+@end deftypefun
+
+
+@node Splits, Transactions, Events, Engine
 @section Splits
 @tindex Split
 

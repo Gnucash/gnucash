@@ -83,6 +83,7 @@ Engine
 * Globally Unique Identifiers::  
 * Numeric Library::             
 * Key-Value Pair Frames::       
+* Events::                      
 * Splits::                      
 * Transactions::                
 * Accounts::                    
@@ -116,6 +117,10 @@ Key-Value Pair Frames
 * kvp_frame::                   
 * kvp_value::                   
 * kvp_list::                    
+
+Events
+
+* Event API::                   
 
 Splits
 

@@ -39,12 +39,12 @@ typedef enum
 } GNCEngineEventType;
 
 
-/* GNCEngineEventCallback
- *   Callback invoked when an engine event occurs.
+/* GNCEngineEventHandler
+ *   Handler invoked when an engine event occurs.
  *
  * entity:      GUID of entity generating event
  * event_type:  one of the single-bit GNCEngineEventTypes, not a combination
- * user_data:   user_data supplied when callback was registered.
+ * user_data:   user_data supplied when handler was registered.
  */
 typedef void (*GNCEngineEventHandler) (GUID *entity,
                                        GNCEngineEventType event_type,
@@ -54,9 +54,9 @@ typedef void (*GNCEngineEventHandler) (GUID *entity,
  *   Register a handler for engine events.
  *
  * handler:   handler to register
- * user_data: data provided in future callbacks
+ * user_data: data provided when handler is invoked
  *
- * Returns: id identifying callback
+ * Returns: id identifying handler
  */
 gint gnc_engine_register_event_handler (GNCEngineEventHandler handler,
                                         gpointer user_data);
