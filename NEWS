@@ -1,5 +1,10 @@
 Version history:
 ------- -------
+ 1.6.2  - 12 August 2001
+         o Updated Danish and German translations
+         o SQL backend performance improvements
+         o bug fixes
+
  1.6.1  - 07 July 2001
          o updated documentation
          o updated French, German, Japanese, and Portuguese translations

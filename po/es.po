@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GNUCash 1.5\n"
-"POT-Creation-Date: 2001-08-12 14:39-0700\n"
+"POT-Creation-Date: 2001-08-12 23:00-0700\n"
 "PO-Revision-Date: 2001-06-29 08:00+0000\n"
 "Last-Translator: Juan Manuel García Molina <juanmagm@mail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"

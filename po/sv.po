@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.6\n"
-"POT-Creation-Date: 2001-08-12 14:39-0700\n"
+"POT-Creation-Date: 2001-08-12 23:00-0700\n"
 "PO-Revision-Date: 2001-07-06 22:58-0700\n"
 "Last-Translator: Martin Norbäck <d95mback@dtek.chalmers.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
