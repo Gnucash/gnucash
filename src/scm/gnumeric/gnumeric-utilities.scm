@@ -3,8 +3,9 @@
 
 (use-modules (srfi srfi-19))
 
-(gnc:support "gnumeric/gnumeric-utilities.scm")
-(gnc:depend "xml-generator.scm")
+;; (gnc:depend "xml-generator.scm") -- this needs to be changed to a
+;; use-modules, but since this file doesn't appear to be used right
+;; now, that can wait.
 
 ;;;; Gnumeric spreadsheet consists of:
 ;;;; gmr:Workbook
