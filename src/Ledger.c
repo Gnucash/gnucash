@@ -4,6 +4,11 @@
  *
  * FUNCTION:
  * copy transaction data from engine into ledger object
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+HACK ALERT -- THIS CODE IS MORE OR LESS OBSOLESCENT, AND HAS BEEN
+REPLACED BY SPLITLEDGER.C    IT SHOULD BE DELETED BEFORE TOO LONG.
+
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
@@ -237,11 +242,11 @@ xaccBRLoadRegEntry (BasicRegister *reg, Split *split)
        (EXPENSE_REGISTER == reg->type)) { 
       baln = -baln;
    }
-   xaccSetAmountCellValue (reg->balanceCell, baln);
+   xaccSetPriceCellValue (reg->balanceCell, baln);
 
-   xaccSetAmountCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
+   xaccSetPriceCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
    xaccSetPriceCellValue  (reg->shrsCell,  xaccSplitGetShareBalance (split));
-   xaccSetAmountCellValue (reg->valueCell, xaccSplitGetValue (split));
+   xaccSetPriceCellValue (reg->valueCell, xaccSplitGetValue (split));
 
    reg->table->current_cursor->user_data = (void *) split;
 

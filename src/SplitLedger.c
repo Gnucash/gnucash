@@ -108,6 +108,7 @@ xaccSRSaveRegEntry (SplitRegister *reg)
    Transaction *trans;
    Account * acc;
    unsigned int changed;
+   int i;
 
    /* use the changed flag to avoid heavy-weight updates
     * of the split & transaction fields. This will help
@@ -124,8 +125,8 @@ printf ("save split is %p \n", split);
       /* If we were asked to save data for a row for which there
        * is no associated split, then assume that this was a row
        * that was set aside for adding splits to an existing 
-       * transaction.  The pre-existing trransaction will be the 
-       * one in the row(s) iediately above.  Therefore, get  
+       * transaction.  The pre-existing transaction will be the 
+       * one in the row(s) immediately above.  Therefore, get  
        * the cursor location; subtract one row, and get the 
        * associated transaction.  We will then create a new
        * split, copy the row contents to that split, and 
@@ -197,6 +198,9 @@ printf ("save split is %p \n", split);
       old_acc = xaccSplitGetAccount (split);
       new_acc = xaccGetPeerAccountFromName (old_acc, reg->xfrmCell->cell.value);
       xaccAccountInsertSplit (new_acc, split);
+
+      /* make sure any open windows of the old account get redrawn */
+      accRefresh (old_acc);
    }
 
 
@@ -205,7 +209,9 @@ printf ("save split is %p \n", split);
    }
    xaccTransCommitEdit (trans);
 
-printf ("finished saving %s \n", xaccTransGetDescription(trans));
+printf ("finished saving split %s of trans %s \n", 
+xaccSplitGetMemo(split),
+xaccTransGetDescription(trans));
 
    /* if the modified split is the "blank split", 
     * then it is now an official part of the account.
@@ -216,9 +222,21 @@ printf ("finished saving %s \n", xaccTransGetDescription(trans));
       reg->user_hook = NULL;
    }
 
-   /* refresh the register windows *only* if something changed */
-   acc = xaccSplitGetAccount (split);
-   accRefresh (acc);
+   /* refresh the register windows */
+   /* This split belongs to a transaction that might be displayed
+    * in any number of windows.  Changing any one split is likely
+    * to affect any account windows associated with the other splits
+    * in this transaction.  So basically, send redraw events to all
+    * of the splits.
+    */
+   i = 0;
+   split = xaccTransGetSplit (trans, i);
+   while (split) {
+      acc = xaccSplitGetAccount (split);
+      accRefresh (acc);
+      i++;
+      split = xaccTransGetSplit (trans, i);
+   }
 }
 
 /* ======================================================== */
@@ -243,10 +261,10 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
       xaccSetComboCellValue (reg->xfrmCell, "");
       xaccSetDebCredCellValue (reg->debitCell, 
                                reg->creditCell, 0.0);
-      xaccSetAmountCellValue (reg->balanceCell, 0.0);
-      xaccSetAmountCellValue (reg->priceCell, 0.0);
+      xaccSetPriceCellValue (reg->balanceCell, 0.0);
+      xaccSetPriceCellValue (reg->priceCell, 0.0);
       xaccSetPriceCellValue  (reg->shrsCell,  0.0);
-      xaccSetAmountCellValue (reg->valueCell, 0.0);
+      xaccSetPriceCellValue (reg->valueCell, 0.0);
 
    } else {
       trans = xaccSplitGetParent (split);
@@ -280,11 +298,11 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
           (EXPENSE_REGISTER == reg->type)) { 
          baln = -baln;
       }
-      xaccSetAmountCellValue (reg->balanceCell, baln);
+      xaccSetPriceCellValue (reg->balanceCell, baln);
    
-      xaccSetAmountCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
-      xaccSetPriceCellValue  (reg->shrsCell,  xaccSplitGetShareBalance (split));
-      xaccSetAmountCellValue (reg->valueCell, -xaccSplitGetValue (split));
+      xaccSetPriceCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
+      xaccSetPriceCellValue (reg->shrsCell,  xaccSplitGetShareBalance (split));
+      xaccSetPriceCellValue (reg->valueCell, -xaccSplitGetValue (split));
    }
 
    reg->table->current_cursor->user_data = (void *) split;
