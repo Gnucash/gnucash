@@ -1,5 +1,52 @@
 Version history:
 ------- -------
+ 1.7.6  - 22 December 2002
+ 	 o Welcome to Release Candidate 1
+	 o Put the build date into the about box for development versions
+	 o Deal with broken QIF files that give broken bang-fields. In
+	   particular, handle the case where it supplies "!Type Bank"
+	   instead of "!Type:Bank"
+	 o Fix g-wrap test to fail properly if it cannot find g-wrap-config
+	 o Add "Edit Exchange Rate" menu items to the Actions menu and the
+	   context menu
+	 o Fix the amount display so that the exchange dialog always shows the
+	   "amount" in the the local (register) currency.
+	 o Add an additional module to check for (LWP aka libwww-perl)
+	   before attempting to call Finance::Quote.
+	 o Updated translations, po/nl.po by Hendrik-Jan Heins <hjh@passys.nl>,
+	   po/uk.po by Volodymyr M. Lisivka <lvm@mystery.lviv.net>, po/el.po,
+	   accounts/el_GR by Nikos Charonitakis <charosn@her.forthnet.gr>
+	 o Major update to generic import architecture/transaction matcher.
+	 o Change HBCI to using new Transaction Matcher GUI
+	 o Require openhbci 0.9.4 for HBCI version choosing.
+	 o When not retrieving stock quotes for an account, dim the price
+	   source labels as well as the option menus.
+	 o Consolidate all knowledge about Finance::Quote sources into one
+	   place. Functions to record whether or not F::Q is installed
+	   properly, and if so, whether a particular source is available.
+	 o Change default new SX frequency to monthly
+	 o Filled in a long-thought of idea for a formula cell: can contain
+	   text unlike a pricecell, but doesn't really want to do
+	   auto-complete like a quickfill cell [what we had been using].  This
+	   allows us to provide the gnome formula cell which can remap the
+	   keypad '.' character based on locale
+	 o Disallow the deletion of accounts with ReadOnly Transacation in
+	   them. You must first "delete" the RO Txns before you delete the
+	   account.
+	 o NOTE: As of now you ABSOLUTELY REQUIRE G-WRAP >= 1.3.3
+	 o Loan Druid re-written
+	 o Add menu items and code so a user can limit transactions in a
+	   register to any combination of the
+	   Reconciled/Cleared/Voided/Unreconciled states.
+	 o Give user feedback during the rendering of a report.
+	 o Remove old user docs and tools that are now in gnucash-docs
+	 o Fix for large accounts overflowing the data types used in the
+	   register code which are causing crashes.
+	 o Add support for new GnuCash icon made by Jakub Steiner
+	   <jimmac@ximian.com>
+	 o Connect up help buttons in dialog's to help files
+	 o Lots more bugfixes
+	 
  1.7.5  - 02 December 2002
  	 o Fix for a problem with multi-currency that could result in data
 	   corruption. Recommend to use this version over 1.7.4
