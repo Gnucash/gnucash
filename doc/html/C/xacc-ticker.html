@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content=
+    "text/html; charset=iso-8859-1">
+
+    <title>Stock Ticker</title>
+    <link rel="stylesheet" title="normal" type="text/css" href= 
+    "gnucash.css">
+  </head>
+
+  <body>
+    <h1>Stock Pricing and Ticker Symbols</h1>
+    GnuCash provides a somewhat rudimentary automated stock quote
+    gathering system. 
+
+    <p>If a GnuCash <a href="xacc-acctypes.html#stockacct">stock
+    account</a> is suitably configured, and the host computer is
+    connected to the internet, the program <tt>gnc-prices</tt> may
+    be used to load stock and mutual fund price quotes from various
+    web sites directly into GnuCash.</p>
+
+    <p>To make use of this facility, the following must be
+    done:</p>
+
+    <ul>
+      <li>Create an account and mark it as being of type "Mutual
+      Fund" or "Stock".</li>
+
+      <li>Enter a valid ticker symbol in the box marked
+      "Security:"</li>
+
+      <li>Select a quote source from the pull-down menu. Currently
+      supported quote sources include <b>Yahoo</b>, <b>Yahoo
+      Europe</b>, <b>Fidelity Investments</b>, <b>T. Rowe Price</b>
+      and the <b>Vanguard Group</b>. Note that Yahoo will provide
+      price quotes for many mutual funds <i>including</i> Fidelity,
+      T.Rowe Price and Vanguard, and that the quoted prices at
+      Yahoo <i>should</i> be identical to those that may be found
+      at the source sites (otherwise, somebody's reporting wrong
+      information!). If you choose Yahoo Europe, you should append
+      the market code for the security, such as PA for Paris, BE
+      for Berlin, etc. Example: 12150.PA (a Peugot security in the
+      Paris market).</li>
+    </ul>
+
+    <table>
+      <caption>
+         Code list for European markets
+      </caption>
+
+      <tr>
+        <th>Code</th>
+
+        <th>Market</th>
+      </tr>
+
+      <tr>
+        <td>PA</td>
+
+        <td>Paris</td>
+      </tr>
+
+      <tr>
+        <td>BC</td>
+
+        <td>Barcelona</td>
+      </tr>
+
+      <tr>
+        <td>BE</td>
+
+        <td>Berlin</td>
+      </tr>
+
+      <tr>
+        <td>BI</td>
+
+        <td>Bilbao</td>
+      </tr>
+
+      <tr>
+        <td>BR</td>
+
+        <td>Br&ecirc;me</td>
+      </tr>
+
+      <tr>
+        <td>CO</td>
+
+        <td>Copenhagen</td>
+      </tr>
+
+      <tr>
+        <td>D</td>
+
+        <td>Dusseldorf</td>
+      </tr>
+
+      <tr>
+        <td>F</td>
+
+        <td>Frankfurt</td>
+      </tr>
+
+      <tr>
+        <td>H</td>
+
+        <td>Hambourg</td>
+      </tr>
+
+      <tr>
+        <td>HA</td>
+
+        <td>Hanover</td>
+      </tr>
+
+      <tr>
+        <td>L</td>
+
+        <td>London</td>
+      </tr>
+
+      <tr>
+        <td>MA</td>
+
+        <td>Madrid</td>
+      </tr>
+
+      <tr>
+        <td>MC</td>
+
+        <td>Madrid (M.C.)</td>
+      </tr>
+
+      <tr>
+        <td>MI</td>
+
+        <td>Milan</td>
+      </tr>
+
+      <tr>
+        <td>MU</td>
+
+        <td>Munich</td>
+      </tr>
+
+      <tr>
+        <td>O</td>
+
+        <td>Oslo</td>
+      </tr>
+
+      <tr>
+        <td>ST</td>
+
+        <td>Stockholm</td>
+      </tr>
+
+      <tr>
+        <td>SG</td>
+
+        <td>Stuttgart</td>
+      </tr>
+
+      <tr>
+        <td>VA</td>
+
+        <td>Valence</td>
+      </tr>
+
+      <tr>
+        <td>FX</td>
+
+        <td>Xetra</td>
+      </tr>
+    </table>
+
+    <p>A sample image is shown below:<br>
+    <img src="ticker-a.gif" alt="Sample Diagram"></p>
+
+    <p>To update the prices stored in a gnucash account file, run
+    the command line command <tt>gnc-price</tt>, specifying the
+    filename; for example:</p>
+<pre>
+    gnc-prices myaccts.xac
+</pre>
+
+    <p>Running this command will print various diagnostic messages
+    to the screen while it loads data. It will work only when the
+    host computer is attached to the internet. It can function in
+    conjunction with masquerading-style firewalls and proxy
+    servers.</p>
+
+    <p>The command can be run many times in one day; however, it
+    will update the accounts at most once with the most recent
+    trading days price data.</p>
+
+    <p>Thus, if <tt>gnc-prices</tt> is run on Friday, Saturday,
+    Sunday and Monday, only two price entires will be made: one
+    containing Friday's data, and one containing Monday's data,
+    since the Saturday and Sunday runs will only retrieve the
+    Friday closing price.</p>
+
+    <p>To keep <tt>gnc-prices</tt> from updating one account, while
+    allowing it to update another account, merely mark the data
+    source for that account as <tt>(none)</tt>. You can do this
+    from the <tt>Edit Account</tt> window.</p>
+
+    <p>After running <tt>gnc-prices</tt> for a few days, your
+    accounts will begin to resemble the following:<br>
+    <img src="ticker-b.gif" alt="Later Ticker Listing"></p>
+    <hr>
+
+    <p>Return to <a href="xacc-main.html">Main Documentation
+    Page.</a></p>
+  </body>
+</html>

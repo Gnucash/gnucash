@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.06 [fr] (Win98; I) [Netscape]">
+   <TITLE>Importation des fichiers MYM</TITLE>
+   <link rel="stylesheet" title="normal" type="text/css" href="gnucash.css">
+</HEAD>
+<BODY>
+
+<H1>
+Managing Your Money --> GNUCash</H1>
+J'ai finallement produit le script Perl qui me permet d'utiliser GNUCash
+jusque sur un site web. J'ai deux ann&eacute;es de donn&eacute;es dans
+Managing Your Money 2.x que je ne veux pas r&eacute;entrer. Le script sortira
+un simple fichier QIF avec toutes les transactions, comptes, et cat&eacute;gories.
+(Actuellement seulement les transactions de non-investissement sont trait&eacute;es.)
+Le fichier QIF peut &ecirc;tre import&eacute; vers xacc-1.0.18 si un petit
+patch est appliqu&eacute; &agrave; QIFIO.c. Le site est:
+<P>http://www-cad.eecs.berkeley.edu/~gooch/mymdump.html
+<H1>
+Transactions dupliqu&eacute;es</H1>
+J'ai aussi un script que j'utilise pour enlever les transactions dupliqu&eacute;es
+au niveau du QIF. J'utilise ce script parce que Xacc est tr&egrave;s strict
+&agrave; propos des duplications (ce qui est tr&egrave;s bon) et parce
+qu'&eacute;diter des transactions import&eacute;es causera une r&eacute;-importation
+des m&ecirc;mes transactions qui produiront des doubles. (Je t&eacute;l&eacute;charge
+les transactions du m&ecirc;me mois depuis ma&nbsp; banque plusieurs fois
+chaque mois, alors chaque fichier QIF t&eacute;l&eacute;charg&eacute; --apr&egrave;s
+le premier--contient des transactions que j'ai&nbsp; d&eacute;j&agrave;
+import&eacute;. Je ne veux pas compter sur ma banque pour m'envoyer les
+transactions dans le m&ecirc;me ordre ou avec le m&ecirc;me&nbsp; formatage.)
+Le site est
+<P>http://www-cad.eecs.berkeley.edu/~gooch/qifuniq.html
+<P>J'esp&egrave;re que les autres trouveront ces scripts facile &agrave;
+utiliser.
+<P>Ken Yamaguchi Octobre 1998
+</BODY>
+</HTML>

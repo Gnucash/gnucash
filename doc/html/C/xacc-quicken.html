@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML//EN">
+
+<html>
+  <head>
+    <link rel="stylesheet" title="normal" type="text/css" href= 
+    "gnucash.css">
+
+    <title>A Guide for Former Users of Quicken</title>
+  </head>
+
+  <body>
+    <h1>Quicken (TM) User's Guide</h1>
+
+    <p> Not all accounting systems use the same words to describe
+    the same concepts. The following are some notes that may be
+    helpful to users accustomed to Intuit's products.</p>
+
+    <h1>Quicken Categories</h1>
+    <a name="QUICKENCATS"></a> 
+
+    <p> What Quicken calls <tt>Categories</tt> are really just <a
+    href="xacc-expense.html">Income/Expense accounts</a>. Thus, if
+    you are used to specifying a category in Quicken, just create
+    an income/expense account of the same name in GnuCash, and use
+    that as the name of the account.</p>
+
+    <h1>Quicken QIF File Import</h1>
+    <a name="QIF"></a> GnuCash supports the import of Quicken
+    Import Files (QIF). (Note: Only Quicken Version 3.0 QIF has
+    been formally tested so far.) 
+
+    <p> Note that the QIF format is representive of a somewhat
+    peculiar data model that is not as expressive as one might
+    wish; it requires dumping out a separate data file for each
+    account, rather than permitting you to have one file that
+    represents <em> all</em> of the accounts you might have had in
+    Quicken.</p>
+
+    <p> Furthermore, while there are plans to do so in the future,
+    there is not, at this point, a way of mapping the account or
+    category names used in Quicken to a <em> different</em> set of
+    account names that you might be using in GnuCash.</p>
+
+    <p> As a result, please read this section carefully. You may be
+    somewhat disappointed with the results of a QIF import; this
+    will at least give you some more accurate expectations as to
+    what will happen.</p>
+
+    <h2> Creating QIF Files</h2>
+
+    <p> To create a set of Quicken <tt>QIF</tt> files, perform the
+    following procedure:</p>
+
+    <ul>
+      <li>
+        Start Quicken. 
+
+        <p> It works on <a href="http://www.winehq.com/"> Wine,</a>
+        Caldera's Wabi, and doubtless on VMWare, so this may not
+        forcibly require that you run Windows.</p>
+      </li>
+
+      <li>
+        Select the account that you wish to export. 
+
+        <p> Quicken can only export one account to each data file,
+        which means that if you have many accounts, this may prove
+        to be a somewhat tedious process. (On the other hand, it
+        should be a whole lot <em> less</em> tedious than entering
+        the data from scratch.)</p>
+      </li>
+
+      <li>
+        Choose the menu <tt>File</tt> and select the <tt>
+        Export...</tt> menu entry. 
+
+        <p> This will provide a dialog that requests a filename,
+        effective dates, as well as a series of checkboxes,
+        including <tt>Transactions</tt>, <tt>Accounts List</tt>,
+        <tt> Category List</tt>, and so forth.</p>
+
+        <p> For best results, you should make sure that those three
+        are checked.</p>
+
+        <p> If you do <em> not</em> check the <tt>Accounts
+        List</tt> box, then the name of your account will likely be
+        lost, and that will cause problems when you try to import
+        the data into GnuCash later.</p>
+      </li>
+    </ul>
+    Now you have a set of <tt>.QIF</tt> files, and should run
+    GnuCash. 
+
+    <h2> Loading QIF files into GnuCash</h2>
+
+    <ul>
+      <li>To import a Quicken QIF file, choose the menu <tt>
+      File</tt> and select the entry <tt>Import QIF</tt>.</li>
+
+      <li>The imported file will be merged with whatever other data
+      you currently have in GnuCash. The merge allows multiple
+      Quicken accounts to be imported and merged into one account
+      group.<br>
+      <br>
+      </li>
+    </ul>
+
+    <h2> Things To Note About QIF Import</h2>
+
+    <ul>
+      <li>
+        <b> Duplicate Entry Scanning</b> 
+
+        <p> Note that during merge, a scan is made for duplicate
+        transactions, and duplicates are removed. A duplicate
+        transaction is one where the date, description (payee),
+        memo, quantity, share price, and debited/credited accounts
+        or categories match <em> exactly.</em> Thus, the merge <em>
+        should</em> be safe unless you have multiple transactions
+        on the same date, to the same account, for the same amount,
+        with the same description and memo.</p>
+
+        <p> This unfortunately <em> can</em> occur, the typical
+        scenario involving where you make multiple withdrawals of
+        identical amounts from ATM machines on the same day.</p>
+      </li>
+
+      <li>
+        <b>Empty Accounts</b> 
+
+        <p>Note that when the <tt>Accounts List</tt> and <tt>
+        Category List</tt> is exported from Quicken, <b>all</b>
+        accounts and categories will be exported, even if they are
+        empty and contain no transactions. When these are imported,
+        they will appear as accounts with a balance of zero. If you
+        do not plan to use such accounts, feel free to delete them.
+        Future enhancements may allow you to delete them "en
+        masse," or to make them invisible without deleting
+        them.</p>
+      </li>
+
+      <li>
+        <b> QIF Mark II</b> An ongoing project is to build an
+        alternative import utility in Guile that will be more
+        flexible, and which, by virtue of being stored as a set of
+        Scheme scripts, may be modified without needing to
+        recompile the whole application. 
+
+        <p> At this point, it successfully parses <tt>QIF</tt>
+        files; what remains is the (rather complex task) of
+        determine appropriate correspondences between the Quicken
+        <b> Categories</b> and the GnuCash equivalents. That is one
+        of the most significant weaknesses with the present QIF
+        import scheme.</p>
+      </li>
+
+      <li>
+        <b> More about QIF</b> 
+
+        <p> Further details about the QIF Interchange Format may be
+        found <a href= 
+        "http://www.ntlug.org/~cbbrowne/financeformats.html#QIF">
+        here.</a></p>
+      </li>
+    </ul>
+    <hr>
+
+    <p> Return to <a href="xacc-main.html"> Main Documentation
+    Page.</a></p>
+  </body>
+</html>
+

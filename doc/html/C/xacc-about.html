@@ -1,0 +1,673 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+  <head>
+    <link rel="stylesheet" title="normal" type="text/css" href= 
+    "gnucash.css">
+
+    <title>About GnuCash</title>
+  </head>
+
+  <body>
+    <h1>About GnuCash</h1>
+
+    <p> GnuCash is a program to keep track of your finances. Its
+    features include:</p>
+
+    <ul>
+      <li><b> Multiple accounts,</b> which can be open at the same
+      time. Create an GnuCash account for each of your bank
+      accounts.</li>
+
+      <li>Each account maintains both a running balance and a
+      reconciled balance, so you can keep track of the checks that
+      have cleared your account.</li>
+
+      <li>
+        <b>A simple user interface.</b> 
+
+        <p> If you can use the register in the back of your
+        checkbook, you can use <tt>GnuCash.</tt></p>
+      </li>
+
+      <li>
+        <b> <a href="xacc-recnwin.html"> Automated Tools for
+        Reconciling Accounts.</a></b> 
+
+        <p>At the end of the month, open up the <b> reconcile</b>
+        window, enter the ending balance from your bank statement,
+        and check off the transactions that appear in the bank
+        statement. This agrees what you have recorded in GnuCash
+        with what your bank has reported, and makes it easier to
+        track down any discrepancies.</p>
+      </li>
+
+      <li>
+        <b> QuickFill.</b> 
+
+        <p> If you begin typing in the description field, and the
+        text matches a previous transaction, hitting <tt> TAB</tt>
+        will copy in that previous transaction. This is a handy
+        time saver if you regularly create similar
+        transactions.</p>
+      </li>
+
+      <li>
+        <b>Stock/Mutual Fund Portfolios.</b> 
+
+        <p> Track stocks individually (one per account) or in
+        portfolio of accounts (a group of accounts that can be
+        displayed together).</p>
+
+        <p> There are tools to <a href="xacc-ticker.html">
+        automatically collect stock quotes.</a></p>
+      </li>
+
+      <li>
+        Support for <b> <a href="xacc-currency.html"> multiple
+        currencies</a></b> and <b> currency trading accounts.</b>
+        (partial, still broken). 
+
+        <p> Bank accounts may be established in different
+        currencies, and trades at varying exchange rates may be
+        made, in much the same way stocks trade at varying
+        prices.</p>
+      </li>
+
+      <li>
+        <b><a href="xacc-quicken.html#QIF">Quicken File
+        Import</a>.</b> 
+
+        <p> Imports Quicken-style QIF files.</p>
+      </li>
+
+      <li><b> <a href="xacc-reports.html">Reports</a>.</b> Display
+      or output as HTML Balance, Transaction, andProfit/Loss reports, 
+      as well as graphical account balance tracking (requires gnuplot).</li>
+    </ul>
+
+    <h2>Advanced Features</h2>
+
+    <p> GnuCash offers some features not found in simpler
+    accounting programs.</p>
+
+    <ul>
+      <li>
+        <b> <a href="xacc-groups.html"> Account Hierarchy</a></b> 
+
+        <p>A master account can have a hierarchy of more detailed
+        accounts arranged underneath it. This allows related
+        account types (<em>e.g.</em> - Cash, Bank, Stock) to be
+        grouped under one master account (<em> e.g.</em> -
+        Assets).</p>
+      </li>
+
+      <li>
+        <b> <a href="xacc-double.html">Double Entry</a></b> 
+
+        <p>Every transaction involves two accounts, and <em> each
+        transaction</em> is required to balance. This provides
+        assurance that the overall set of books will add up
+        correctly, and prevents out-of-balance errors
+        altogether.</p>
+      </li>
+
+      <li>
+        <b> <a href="xacc-expense.html"> Income/Expense Account
+        Types</a></b> 
+
+        <p> Intuit's <a href="xacc-quicken.html"> Quicken</a>
+        product has what they call "categories" that are used to
+        track incomes and expenses. These may be used to create
+        Profit/Loss reports.</p>
+      </li>
+
+      <li>
+        <b> General Ledger</b> 
+
+        <p> Multiple accounts may be displayed in one register
+        window at the same time. This can make it easier to track
+        down data errors. It also provides a convenient way of
+        viewing a portfolio of many stocks, by showing all
+        transactions in that portfolio.</p>
+      </li>
+
+      <li><b> Handling of <a href="xacc-currency.html"> multiple
+      currencies</a></b></li>
+    </ul>
+
+    <h2>Versioning</h2>
+
+    <p> The versioning scheme for GnuCash parallels that of the
+    Linux kernel, where "even" sub-versions indicate versions that
+    are intended to be stable, only seeing maintenance to fix bugs,
+    and "odd" sub-versions indicate an "experimental" stream that
+    seeks to add enhancement.</p>
+
+    <p> The present "experimental" stream is gnucash-1.3.x, which
+    is somewhat unstable.</p>
+
+    <p> The latest stable release is 1.2.x; if you don't intend to
+    do development work, you should be using either this version,
+    or an older 1.0.x version. These versions are fairly stable,
+    with all currently known bugs fixed.</p>
+
+    <p> Once the 1.3.x series stabilizes, the next stable series
+    will be 1.4.x, and experimentation will likely continue on
+    1.5.x.</p>
+
+    <p> If you wish to "hack" on the experimental version, you
+    should first start by reading through the <a href=
+    "projects.html"> GnuCash Project Goals</a> document in order to
+    get some perspective on the overall design.</p>
+
+    <h2>Lead Developers</h2>
+
+    <dl>
+      <dt> <a href="mailto:rclark@hmc.edu"> Robin Clark</a></dt>
+
+      <dd>wrote the original X-Accountant in Motif as a school
+      project, taking it to version 0.9 by October 1997.</dd>
+
+      <dt> <a href="mailto:linas@linas.org"> Linas Vepstas</a></dt>
+
+      <dd>liked what he saw: the GUI was slick, the code was
+      documented and well structured, and it was all GPL'ed. And so
+      he re-wrote it: adding cell-widgets to XbaeMatrix, so that
+      the combobox and arrows would make an even slicker GUI,
+      rewrote the X-Accountant internals to add double-entry, an
+      account hierarchy, split out a transaction mini-engine, add
+      support for stocks, and spiff up the help menus. This was
+      version 1.0 as of January 1998. Since then, for version 1.1,
+      the engine was expanded and refined, and the register window
+      code completely redesigned and made mostly Motif-(and
+      GUI-)independent. Did some prototype OFX work.</dd>
+
+      <dt> <a href="mailto:jcollins@gnucash.org"> Jeremy
+      Collins</a></dt>
+
+      <dd>publicized the GnoMoney project widely and broadly, and
+      then changed its name to GnuCash. Jeremy created the
+      gnucash.org web site, registered the domain, got the initial
+      GTK/gnome code working.</dd>
+
+      <dt> <a href="mailto:rlb@cs.utexas.edu"> Rob
+      Browning</a></dt>
+
+      <dd>abused everyone for not using perl, and then added
+      guile/scheme support. Rob maintains the build infrastructure,
+      is handling the whole guile/perl extension language thing,
+      and is dealing with configuration and configurability.</dd>
+
+      <dt> <a href="mailto:schoenberger@signsoft.com"> Dirk
+      Schoenberger</a></dt>
+
+      <dd>is working on the Qt/KDE port</dd>
+
+      <dt> <a href="mailto:peticola@cs.ucdavis.edu"> Dave
+      Peticolas</a></dt>
+
+      <dd>hacks obsessively on GnuCash. But he can stop anytime he
+      wants to. Really.</dd>
+    </dl>
+
+    <h2>Fixers and Patchers</h2>
+
+    <p> The <em> cast of thousands</em> includes:</p>
+
+    <dl>
+      <dt> <a href="mailto:arensb@cfar.umd.edu"> Andrew
+      Arensburger</a></dt>
+
+      <dd>for FreeBSD and other patches</dd>
+
+      <dt> <a href="mailto:matt_armstrong@bigfoot.com"> Matt
+      Armstrong</a></dt>
+
+      <dd>for misc fixes</dd>
+
+      <dt> <a href="mailto:fred@moremagic.com"> Fred Baube</a></dt>
+
+      <dd>for attempted Java port/MoneyDance</dd>
+
+      <dt> <a href="mailto:dennisb@cs.chalmers.se"> Dennis
+      Björklund</a></dt>
+
+      <dd>Swedish translation</dd>
+
+      <dt> <a href="mailto:bojsen@worldnet.att.net"> Per Bojsen</a></dt>
+
+      <dd>several core dump fixes</dd>
+
+      <dt> <a href="http://www.hex.net/~cbbrowne"> Christopher B.
+      Browne</a></dt>
+
+      <dd>for perl stock scripts, Guile-based QIF import code, lots
+      of changes to English documentation, and lots of guile code</dd>
+
+      <dt> <a href="mailto:grahamc@zeta.org.au"> Graham
+      Chapman</a></dt>
+
+      <dd>for the xacc-rpts addon package</dd>
+
+      <dt> <a href="mailto:georgec@sco.com"> George Chen</a></dt>
+
+      <dd>for MS-Money QIF support</dd>
+
+      <dt> <a href="mailtochina@thewrittenword.com">Albert
+      Chin-A-Young</a></dt>
+
+      <dd>configure.in patch</dd>
+
+      <dt> <a href="mailto:jcollins@gnucash.org"> Jeremey
+      Collins</a></dt>
+
+      <dd>for GnoMoney and GTK port</dd>
+
+      <dt> <a href="mailto:pcondon@rackspace.com"> Patrick
+      Condron</a></dt>
+
+      <dd>for webserver and T1 connection.</dd>
+
+      <dt> <a href="mailto:Ciaran.Deignan@bull.net"> Ciaran
+      Deignan</a></dt>
+
+      <dd>for AIX binary version</dd>
+
+      <dt> <a href="mailto:tyson@tyse.net"> Tyson Dowd</a></dt>
+
+      <dd>for config/make patches and debian maintenance</dd>
+
+      <dt> <a href="mailto:ripley@xs4all.nl"> Koen D'Hondt</a></dt>
+
+      <dd>for Solaris patches to XmHTML</dd>
+
+      <dt> <a href="mailto:bob@mostly.com"> Bob Drzyzgula</a></dt>
+
+      <dd>for budgeting design notes</dd>
+
+      <dt> <a href="mailto:pjf@schools.net.au"> Paul Fenwick</a></dt>
+
+      <dd>ASX support</dd>
+
+      <dt> <a href="mailto:ju_finck@mail.netwave.de"> Jan-Uwe
+      Finck</a></dt>
+
+      <dd>for German message translation</dd>
+
+      <dt> <a href="mailto:rjf@aracnet.com"> Ron Forrester</a></dt>
+
+      <dd>for gnome patches</dd>
+
+      <dt> <a href="mailto:DFreese@osc.uscg.mil"> Dave
+      Freese</a></dt>
+
+      <dd>for leap-year fix</dd>
+
+      <dt> <a href="mailto:grib@billgribble.com"> Bill Gribble</a></dt>
+
+      <dd>qif importation code</dd>
+
+      <dt> <a href="mailto:otto@bug.redhat.com"> Otto
+      Hammersmith</a></dt>
+
+      <dd>for RedHat RPM packaging</dd>
+
+      <dt> <a href="mailto:haral@codec.ro"> Alexandru
+      Harsanyi</a></dt>
+
+      <dd>for fixing miscellaneous core dumps and lockups.</dd>
+
+      <dt> <a href="mailto:jk@isdn-a33.itea.ntnu.no"> Jon K}re
+      Hellan</a></dt>
+
+      <dd>for fixing miscellaneous core dumps and lockups.</dd>
+
+      <dt> <a href="mailto:PrakashK@bigfoot.com"> Prakash
+      Kailasa</a></dt>
+
+      <dd>for gnome build fixes</dd>
+
+      <dt> <a href="mailto:tkludy@csd.sgi.com"> Tom Kludy</a></dt>
+
+      <dd>for SGI Irix port</dd>
+
+      <dt> <a href="mailto:sk@xgm.de"> Sven Kuenzler</a></dt>
+
+      <dd>for SuSE README file</dd>
+
+      <dt><a href="mailto:blarsen@ada-works.com"> Bryan Larsen</a></dt>
+
+      <dd>guile budget report</dd>
+
+      <dt> <a href="mailto:mellon@andare.fugue.com"> Ted
+      Lemon</a></dt>
+
+      <dd>for NetBSD port</dd>
+
+      <dt> <a href="mailto:y-le-ny@ifrance.com"> Yannick Le
+      Ny</a></dt>
+
+      <dd>pour la traduction en francais</dd>
+
+      <dt> <a href="mailto:glikely@nortelnetworks.com"> Grant
+      Likely</a></dt>
+
+      <dd>gnome and engine patches</dd>
+
+      <dt> <a href="mailto:martinh@pegasus.cc.ucf.edu"> Heath
+      Martin</a></dt>
+
+      <dd>major work on the gnome register</dd>
+
+      <dt> <a href="mailto:mgmartin@abacusnet.net"> Matt
+      Martin</a></dt>
+
+      <dd>guile error handling code</dd>
+
+      <dt> <a href="mailto:rgmerk@mira.net"> Robert Graham
+      Merkel</a></dt>
+
+      <dd>reporting, gnome, and configuration patches.</dd>
+
+      <dt> <a href="mailto:mooney@dogbert.cc.ndsu.NoDak.edu"> Tim
+      Mooney</a></dt>
+
+      <dd>port to alpha-dec-osf4.0f</dd>
+
+      <dt> <a href="mailto:gam3@ann.softgams.com"> G. Allen Morris
+      III</a></dt>
+
+      <dd>for QIF core dump fix</dd>
+
+      <dt> <a href="mailto:spacey@inch.com"> Peter Norton</a></dt>
+
+      <dd>for a valiant attempt at a GTK port</dd>
+
+      <dt> <a href="mailto:webmaster@obsidian.uia.net">
+      OmNiBuS</a></dt>
+
+      <dd>web site graphics and content</dd>
+
+      <dt> <a href="mailto:mopyr@IPM.Lviv.UA"> Myroslav
+      Opyr</a></dt>
+
+      <dd>for misc patches</dd>
+
+      <dt> <a href="mailto:laurent.pelecq@wanadoo.fr"> Laurent
+      P{'e}lecq</a></dt>
+
+      <dd>i18n patches with gettext</dd>
+
+      <dt> <a href="mailto:Alain.Peyrat@nmu.alcatel.fr"> Alain
+      Peyrat</a></dt>
+
+      <dd>for <tt>configure.in</tt> patches</dd>
+
+      <dt> <a href="mailto:peter@wuzel.m.isar.de"> Peter
+      Pointner</a></dt>
+
+      <dd>motif and configuration patches</dd>
+
+      <dt> <a href="mailto:maufk@csv.warwick.ac.uk"> Gavin
+      Porter</a></dt>
+
+      <dd>for euro style dates</dd>
+
+      <dt> <a href="mailto:rr@sco.com"> Ron Record</a></dt>
+
+      <dd>for SCO Unixware and OpenServer binaries</dd>
+
+      <dt> <a href="mailto:jan.schrage@urz.uni-heidelberg.de"> Jan
+      Schrage</a></dt>
+
+      <dd>documentation patches</dd>
+
+      <dt> <a href="mailto:cls@seawood.org"> Christopher
+      Seawood</a></dt>
+
+      <dd>for XbaeMatrix core dump</dd>
+
+      <dt> <a href="mailto:msimons@fsimons01.erols.com"> Mike
+      Simons</a></dt>
+
+      <dd>misc <tt> configure.in</tt> patches</dd>
+
+      <dt> <a href="mailto:rich@brake.demon.co.uk"> Richard
+      Skelton</a></dt>
+
+      <dd>for Solaris cleanup</dd>
+
+      <dt> <a href="mailto:spruth@bigfoot.com"> Henning
+      Spruth</a></dt>
+
+      <dd>for German text and euro date rework</dd>
+
+      <dt> <a href="mailto:parys@freewwweb.com"> Robby Stephenson</a></dt>
+
+      <dd>register patch</dd>
+
+      <dt> <a href="mailto:tma@iis.fhg.de"> Herbert Thoma</a></dt>
+
+      <dd>gnome register patch</dd>
+
+      <dt> <a href="mailto:detrout@earthlink.net"> Diane
+      Trout</a></dt>
+
+      <dd>scheme qif import patch</dd>
+
+      <dt> <a href="mailto:rob@valinux.com"> Rob Walker</a></dt>
+
+      <dd>guile and register patches</dd>
+
+      <dt> <a href="mailto:dwmw2@infradead.org"> David Woodhouse</a></dt>
+
+      <dd>Great Britain translations</dd>
+
+      <dt> <a href="mailto:gooch@ic.EECS.Berkeley.EDU"> Ken
+      Yamaguchi</a></dt>
+
+      <dd>QIF import fixes; MYM import</dd>
+    </dl>
+
+    <h2>Supported Operating Systems</h2>
+    gnucash-1.0.18 (xacc-1.0.18) is known to work on the following
+    systems: 
+
+    <ul>
+      <li>Linux 2.0.x -- Intel w/ RedHat Motif</li>
+
+      <li>Linux 2.0.x -- Intel w/ Lesstif v0.81</li>
+
+      <li>Linux Debian -- Intel w/ Lesstif v0.81</li>
+
+      <li>SGI IRIX -- MIPS</li>
+
+      <li>IBM AIX 4.1.5 -- RS/6000</li>
+
+      <li>SCO Unixware 7 -- Intel</li>
+
+      <li>SCO OpenServer 5.0.4 -- Intel</li>
+
+      <li>NetBSD -- Intel</li>
+    </ul>
+
+    <p> <a href="http://www.gnucash.org/"> <img src=
+    "logos/linux.gif"></a> <a href="http://www.sco.com/skunkware">
+    <img src="logos/skunkware.gif"></a> <a href= 
+    "http://www.bull.de/pub/"><img src="logos/bullogogross.gif">
+    <a href="http://www.ibm.com"> <img src="logos/ibm.gif"></a>
+    <a href="http://www.sgi.com"> <img src="logos/sgi.gif"></a>
+    <a href="http://www.debian.org"> <img src="logos/debian.jpg"></a>
+    <a href="http://www.netbsd.org"> <img src= "logos/NetBSD-banner.gif">
+    </p>
+
+    <h2>History</h2>
+    The table below shows some historical lines-of-code and
+    number-of-files counts for the X-Accountant/GnuCash development
+    project <br>
+     
+
+    <table border="1">
+      <caption>
+         Historical Development Stats
+      </caption>
+
+      <tr align="center">
+        <th>Version</th>
+
+        <th>engine</th>
+
+        <th>register</th>
+
+        <th>ledger</th>
+
+        <th>motif</th>
+
+        <th>gnome</th>
+
+        <th>qt</th>
+
+        <th>prefs (scm)</th>
+
+        <th>docs (html)</th>
+
+        <th>misc</th>
+
+        <th>Total</th>
+      </tr>
+
+      <tr align="center">
+        <td>xacc-0.9<br>
+         Sept 97</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>34 files<br>
+         (7.5+0.9)</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>5 files<br>
+         (0.4)</td>
+
+        <td>-</td>
+
+        <td>39 files<br>
+         (8.8)</td>
+      </tr>
+
+      <tr align="center">
+        <td>xacc-0.9w<br>
+         Dec 97</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>51 files<br>
+         (13.8+1.5)</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>9 files<br>
+         (0.8)</td>
+
+        <td>-</td>
+
+        <td>60 files<br>
+         (16.1)</td>
+      </tr>
+
+      <tr align="center">
+        <td>xacc-1.0.17<br>
+         Feb 98</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>52 files<br>
+         (14.8+1.8)</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>12 files<br>
+         (1.4)</td>
+
+        <td>-</td>
+
+        <td>64 files<br>
+         (18.0)</td>
+      </tr>
+
+      <tr align="center">
+        <td>gnucash-1.1.15<br>
+         Aug 98</td>
+
+        <td>24 files<br>
+         (6.2+1.5)</td>
+
+        <td>31 files<br>
+         (6.1+1.7)</td>
+
+        <td>5 files<br>
+         (1.4+0.4)</td>
+
+        <td>30 files<br>
+         (7.4+0.7)</td>
+
+        <td>17 files<br>
+         (3.4+0.5)</td>
+
+        <td>16 files<br>
+         (1.2+0.2)</td>
+
+        <td>3 files<br>
+         (0.3)</td>
+
+        <td>16 files<br>
+         (1.9)</td>
+
+        <td>not counted<br>
+         (&gt;1.0)</td>
+
+        <td>142 files<br>
+         (32.9)</td>
+      </tr>
+    </table>
+
+    <p> Each cell contains:<br>
+    <br>
+     number of *c and *.h files<br>
+     (KLOCS in *.c + KLOCS in *.h),</p>
+
+    <p> where KLOC == kilo-lines-of-code, as reported by <tt>
+    wc</tt>.</p>
+    <hr>
+
+    <p> Return to <a href="xacc-main.html"> Main Documentation
+    Page.</a></p>
+  </body>
+</html>
+

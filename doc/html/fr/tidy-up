@@ -1,0 +1,7 @@
+#!/bin/ksh
+# $ID$
+# If you have Dave Raggett's "tidy" utility, this will tidy up
+# the HTML files here.
+for i in *.html ; do
+   tidy -m -i $i
+done

@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+  <head>
+    <title></title>
+    <link rel="stylesheet" title="normal" type="text/css" href= 
+    "gnucash.css">
+
+    <title>Understanding Double Entry Accounting</title>
+  </head>
+
+  <body>
+    <h1>What is Double Entry Accounting?</h1>
+
+    <p> Double entry bookkeeping is an accounting methodology
+    introduced in the 13th century to to make sure that each
+    accounts and indeed <em> each transaction</em> is properly
+    balanced.</p>
+
+    <p> When these are all required to balance, the likelihood of
+    data-entry errors is greatly reduced. For large, complex sets
+    of accounts with many transactions, it is distressingly easy to
+    make errors that may go undetected for a long time, and be
+    appallingly difficult to track down, even when double-entry
+    bookkeeping is used.</p>
+
+    <p> A double-entry transaction is a transaction that contains
+    entries for two (or more) accounts that balance against one
+    another. One account is <em>debited</em> by an amount exactly
+    equal to what the other is <em>credited.</em> By ensuring that
+    each transaction balances, a balanced set of accounts is
+    guaranteed. This doesn't prevent you from having errors, but
+    certainly eliminates the large class of <b> I forgot to enter
+    that part of the transaction</b> errors.</p>
+
+    <p> Double-entry may be introduced in a more intuitive way via
+    the notion of a transfer from one bank account to another,
+    where an amount is taken out of one bank account and deposited
+    in the other. This is effectively the "rule" of double entry
+    accounting; if you add something in to one account, you <em>
+    have</em> to have another component to that transaction to
+    balance this.</p>
+
+    <p> <b> Not-quite-an-aside:</b> If you look at your bank
+    statements, they are typically written up from the <b>
+    bank's</b> perspective, which is exactly <em> opposite</em> to
+    yours. For instance, when you put money in, establishing a
+    deposit, this establishes a <b> DEBT</b> on their part.</p>
+
+    <p> The perhaps less obvious extension is the notion that
+    double entry can be used to represent income and expenses as
+    well as bank transfers. See the <a href="xacc-expense.html">
+    Income/Expense</a> page for a more detailed discussion of
+    that.</p>
+
+    <p> <a name="IDENTITY"> In a traditional system that records
+    debits and credits separately, the identity that all
+    transactions are required to satisfy is that <tt> Total of
+    Debits = Total of Credits.</tt></a></p>
+
+    <p> The fact that the identity requires merely that the <em>
+    total</em> balances means that it is a little bit misleading to
+    call this <em> double</em>-entry bookkeeping; it would be
+    somewhat more accurate to call it <em> multiple-</em>entry
+    bookkeeping. Unfortunately, there's 700 years of history of use
+    of the term, which sufficiently discourages changing it. (And
+    some people think that UNIX has some crufty old bits of
+    oddness. Hah!)</p>
+
+    <p> GnuCash treats "Debits" as positive values, and "Credits"
+    as negative values, so that this identity simplifies to <tt>
+    value<sub>1</sub> + value<sub>2</sub> + value<sub>3</sub> + ...
+    = 0</tt></p>
+
+    <h1>Using Double Entry</h1>
+
+    <h2> Creating Transactions</h2>
+
+    <p> To create a double-entry transaction:</p>
+
+    <ul>
+      <li>
+        Click on a box in the column marked <tt>Transfer From</tt>
+        on the left-hand side of the register. 
+
+        <p> A menu will drop down, listing all of the accounts from
+        which a transfer may be made.</p>
+      </li>
+
+      <li>
+        Select one. 
+
+        <p>When you record the transaction, the double-entry will
+        automatically be made, and the transaction automatically
+        appear in all windows showing the transferred-from and the
+        transferred-to accounts.</p>
+      </li>
+    </ul>
+
+    <h2> Changing Transactions</h2>
+
+    <p> To <em> change</em> a double-entry transaction:</p>
+
+    <p> Simply edit the transaction in any window in which it
+    appears.</p>
+
+    <p> Any changes made will be automatically reflected in both
+    accounts and all windows displaying the transaction.</p>
+
+    <p> Similarly, when a double-entry transaction is deleted, the
+    "splits" will be deleted from both accounts, and balances will
+    automatically be recalculated for <em> both</em> accounts.</p>
+
+    <p> To change the transfer account, simply select a new account
+    from the pull-down menu. When you record the transaction, it
+    will automatically be selected from the old account, and
+    inserted into the new account.</p>
+
+    <h1>Scrubbing Clean</h1>
+
+    <p> GnuCash can be configured to be strict about double entry,
+    or you may configure it to be "loose."</p>
+
+    <p> In "loose" mode, you can create <em>unbalanced
+    transactions,</em> that is, transactions where the "splits"
+    don't balance to zero. That discards the validation that comes
+    from using the more strict double entry scheme, which is
+    probably not a really wise move. In effect:</p>
+
+    <ul>
+      <li>If you aren't sure of what you're doing, you likely do
+      not want to discard the validation of <b> double entry,</b>
+      as this helps you keep your accounts balanced even when
+      you're not perfectly clear on this.</li>
+
+      <li>If you are an <em> accounting whiz,</em> you'll know that
+      it's <em> really important</em> to keep things in balance,
+      and again will prefer <b> double entry.</b></li>
+    </ul>
+
+    <p> But if you decide to "outsmart the system," and have a
+    number of unbalanced transactions, you'll probably want to
+    clean this up at some point. To clean up these unbalanced
+    transactions, you <b> Scrub</b> the account clean by choosing
+    <tt>Scrub</tt> from the window menu. This will examine each
+    transaction; if the transaction doesn't balance, a split entry
+    will be created and placed into an account named <b>
+    Unbalanced.</b> You may then review these splits and move them
+    to their proper accounts.</p>
+    <hr>
+
+    <p> Return to <a href="xacc-main.html"> Main Documentation
+    Page.</a></p>
+  </body>
+</html>
+
