@@ -1,3 +1,7 @@
+2003-02-03  Derek Atkins  <derek@ihtfp.com>
+
+	* src/calculation/Makefile.am: need to add GUILE_INCS
+
 2003-02-02  Chris Lyttle  <chris@wilddev.net>
 
 	* configure.in: change to 1.9.0 version
