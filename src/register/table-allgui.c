@@ -104,21 +104,31 @@ void
 xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
                                  int virt_rows, int virt_cols)
 {
+   /* invalidate the current cursor position, if the array
+    * is shrinking.  This must be done since the table is probably
+    * shrinking because some rows were deleted, and there's a 
+    * pretty good chance (100% with current design) that the
+    * cursor is located on the deleted rows.
+    */
+   if ((virt_rows < table->num_virt_rows) ||
+       (virt_cols < table->num_virt_cols) ||
+       (phys_rows < table->num_phys_rows) ||
+       (phys_cols < table->num_phys_cols)) 
+   {
+      CellBlock *curs;
+      table->current_cursor_virt_row = -1;
+      table->current_cursor_virt_col = -1;
+      table->current_cursor_phys_row = -1;
+      table->current_cursor_phys_col = -1;
+      curs = table->current_cursor;
+      if (curs) curs->user_data = NULL;
+      table->current_cursor = NULL;
+   }
    xaccTableResize (table, phys_rows, phys_cols, virt_rows, virt_cols);
 
    /* invalidate the "previous" traversed cell */
    table->prev_phys_traverse_row = -1;
    table->prev_phys_traverse_col = -1;
-
-   /* invalidate the current cursor position, if needed */
-   if ((table->current_cursor_virt_row >= table->num_virt_rows) ||
-       (table->current_cursor_virt_col >= table->num_virt_cols)) {
-      table->current_cursor_virt_row = -1;
-      table->current_cursor_virt_col = -1;
-      table->current_cursor_phys_row = -1;
-      table->current_cursor_phys_col = -1;
-      table->current_cursor = NULL;
-   }
 }
 
 /* ==================================================== */
@@ -150,8 +160,6 @@ xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
 static void
 xaccFreeTableEntries (Table * table)
 {
-   int i,j;
-
    /* free the entries */
    FREE_ARR (entries, FREEUP, NULL);
 
@@ -163,12 +171,8 @@ xaccFreeTableEntries (Table * table)
    FREE_ARR (bg_colors, NOOP, 0x0);
 
    /* null out user data and handlers */
-   for (i=0; i<table->num_virt_rows; i++) {
-      for (j=0; j<table->num_virt_cols; j++) {
-         table->handlers = NULL;
-         table->user_data = NULL;
-      }
-   }
+   FREE_ARR (handlers,  NOOP, NULL);
+   FREE_ARR (user_data, NOOP, NULL);
 }
 
 /* ==================================================== */
