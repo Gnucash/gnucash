@@ -1,3 +1,9 @@
+2002-10-14  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/app-utils/gnc-exp-parser.c (func_op): Remove
+	seemed-like-a-bad-idea explicit negation of calculated values;
+	fixes Bug#95781.
+
 2002-10-14  Derek Atkins  <derek@ihtfp.com>
 	* src/backend/file/test-xml-transaction.c -- use gnc_numeric_equal()
 	  to compare split value and quantities in tests, because Splits can

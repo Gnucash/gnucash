@@ -392,11 +392,6 @@ func_op( const char *fname,
   *result = double_to_gnc_numeric( gh_scm2double(scmTmp),
                                    GNC_DENOM_AUTO,
                                    GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND );
-  /* I'm not sure why this explicit negation step is necessary, but it
-   * doesn't seem like it should be. */
-  if ( gh_scm2double( scmTmp ) < 0 ) {
-    *result = gnc_numeric_neg( *result );
-  }
   /* FIXME: cleanup scmArgs = gh_list, cons'ed cells? */
   return (void*)result;
 }

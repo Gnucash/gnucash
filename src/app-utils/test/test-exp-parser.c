@@ -150,14 +150,14 @@ test_parser (void)
   add_pass_test( "plus( plus( 1 : 2 ) : 3 )", NULL, gnc_numeric_create( 6, 1 ) );
   add_pass_test( "plus( 4 : plus( plus( 1 : 2 ) : 3))", NULL, gnc_numeric_create( 10, 1 ) );
 
-  gh_eval_str( "(define (gnc:foo a b) (- a b))" );
-  add_pass_test( "foo( 1 : 2 ) + 4", NULL, gnc_numeric_create( 3, 1 ) );
+  gh_eval_str( "(define (gnc:sub a b) (- a b))" );
+  add_pass_test( "sub( 1 : 2 ) + 4", NULL, gnc_numeric_create( 3, 1 ) );
 
-  add_pass_test( "foo( (1 + 2 * 3) : 4 ) + 5",
+  add_pass_test( "sub( (1 + 2 * 3) : 4 ) + 5",
                  NULL, gnc_numeric_create( 8, 1 ) );
-  add_pass_test( "foo( 1 : 2 ) + foo( 3 : 4 ) + 5",
+  add_pass_test( "sub( 1 : 2 ) + sub( 3 : 4 ) + 5",
                  NULL, gnc_numeric_create( 3, 1 ) );
-  add_pass_test( "foo( a = 42 : foo( plus( 1 : 2 ) : 6 * 7 )) + a",
+  add_pass_test( "sub( a = 42 : sub( plus( 1 : 2 ) : 6 * 7 )) + a",
                  NULL, gnc_numeric_create( 123, 1 ) );
 
   gh_eval_str( "(define (gnc:test_str str b)"
