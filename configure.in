@@ -36,9 +36,6 @@ AC_PROG_MAKE_SET
 ### Variables
 ### Set up all the initial variable values...
 
-
-
-
 # USE_QUICKFILL:
 AC_DEFINE(USE_QUICKFILL,1)
 
@@ -116,19 +113,6 @@ if test x"$SWIG" = xno; then
     AC_MSG_ERROR([Cannot find Swig. Try using the --with-swig flag.])
 fi
 
-# Let the user specify gnome paths:
-GNOME_CONFIG_BIN="gnome-config"
-AC_ARG_WITH( gnome-config, 
-  [  --with-gnome-config=executable  which gnome-config to use to find gnome ],
-  GNOME_CONFIG_BIN="$with_gnome_config")
-
-# If the user hasn't specified the binary, then try to find it.
-if test x"${GNOME_CONFIG_BIN}" = x
-then
-  AC_PATH_PROG(GNOME_CONFIG_BIN, gnome-config, GNOME_CONFIG_NOT_FOUND)
-fi
-AC_SUBST(GNOME_CONFIG_BIN)
-
 ### --------------------------------------------------------------------------
 ### Libraries
 LIBS="$LIBS -lm"
@@ -168,33 +152,7 @@ AC_ARG_WITH( motif-libraries,
        X_LIBS="${X_LIBS} -L$with_motif_libraries" )
 
 ### --------------------------------------------------------------------------
-### Gnome libs -- these are needed for the gnome builds only
-# Let the user specify gnome paths:
-# -I...libgnomesupport is to fix bug in gnome-1.3 release
-#
-# I believe all the gnome configuration can and should be superceded by
-# --with-gnome-config.
-
-AC_ARG_WITH( gnome, 
-       [  --with-gnome=PATH       specify where to look for gnome includes and libs],
-       X_LIBS="${X_LIBS} -L$with_gnome/lib" X_CFLAGS="$X_CFLAGS -I$with_gnome/include -I$with_gnome/lib/gnome-libs/include" )
-
-AC_ARG_WITH( gnome-includes, 
-       [  --with-gnome-includes=DIR    specify where to look for gnome includes],
-       X_CFLAGS="${X_CFLAGS} -I$with_gnome_includes -I$with_gnome_includes/libgnomesupport" )
-
-AC_ARG_WITH( gnome-libraries, 
-       [  --with-gnome-libraries=DIR   specify where to look for gnome libs],
-       X_LIBS="${X_LIBS} -L$with_gnome_libraries" )
-
-
-# Let the user specify imlib paths:
-AC_ARG_WITH( imlib, 
-       [  --with-imlib=PATH       specify where to look for imlib includes and libs],
-       X_LIBS="${X_LIBS} -L$with_imlib/lib" X_CFLAGS="$X_CFLAGS -I$with_imlib/include" )
-
-### --------------------------------------------------------------------------
-# The XmHTML widget is used by motif and gnome alike.
+# The XmHTML widget 
 
 AC_ARG_WITH( xmhtml-includes, 
        [  --with-xmhtml-includes=DIR   specify where to look for xmhtml headers],
@@ -341,20 +299,6 @@ AC_SUBST(GUILE_BIN)
 AC_SUBST(GUILE_INC)
 AC_SUBST(GUILELIBS)
 
-### --------------------------------------------------------------------------
-### Plotutils
-
-#AC_CHECK_LIB(plot, pl_openpl,
-#  AC_DEFINE(HAVE_PLOTUTILS,1)
-#  HAVE_PLOTUTILS=1
-#  AC_DEFINE(PLOTUTILS_LIBS,"-lXaw -lXt -lplot"),
-#  ,
-#  $X_PRE_LIBS $MOTIF_LIBS $X_EXTRA_LIBS -lXaw $X_LIBS) 
-
-# We need this in at least one of the Makefile.in's
-#AC_SUBST(HAVE_PLOTUTILS)
-#AC_SUBST(PLOTUTILS_LIBS) 
-
 AC_SUBST(MOTIF_LIBS)
 
 ### --------------------------------------------------------------------------
@@ -402,11 +346,6 @@ GNC_RUNTIME_CONFIGDIR=`eval echo ${GNC_CONFIGDIR}`
 AC_SUBST(GNC_RUNTIME_SHAREDIR)
 AC_SUBST(GNC_RUNTIME_CONFIGDIR)
 
-# UGLY HACK
-
-GTKSHEET_DIR="gtksheet"
-AC_SUBST(GTKSHEET_DIR)
-
 CFLAGS="${CFLAGS} -Werror -Wno-unused"
 
 ABSOLUTE_TOP_SRCDIR=`pwd`
@@ -421,20 +360,15 @@ AC_OUTPUT(Makefile
           src/guile/Makefile
           src/scm/Makefile
           src/g-wrap/Makefile
-          src/gnome/Makefile
           src/motif/Makefile
-          src/qt/Makefile
           src/register/Makefile
           src/reports/Makefile
           src/swig/Makefile
           src/swig/perl5/Makefile
           lib/Makefile
-          lib/${GTKSHEET_DIR}/Makefile
           lib/Xbae-4.6.2-linas/Makefile
           lib/Xbae-4.6.2-linas/src/Makefile
-          lib/ComboBox-1.33/Makefile
-          lib/gtkfilesel2/Makefile
-          lib/gtkfilesel2/config.h)
+          lib/ComboBox-1.33/Makefile)
 
 chmod +x gnucash
 
