@@ -14,6 +14,7 @@ EXTRA_DIST = \
   gnucash-build-env.in \
   gnucash-make-guids \
   gnucash-run-script \
+  gnucash-valgrind \
   guile.in 
 
 noinst_DATA = gnucash-build-env
