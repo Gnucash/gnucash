@@ -193,6 +193,8 @@ xaccQueryHasTerms(Query * q) {
 static void
 free_query_term(QueryTerm *qt)
 {
+  GList *node;
+
   if (qt == NULL)
     return;
 
@@ -201,6 +203,11 @@ free_query_term(QueryTerm *qt)
     case PD_ACCOUNT:
       g_list_free (qt->data.acct.accounts);
       qt->data.acct.accounts = NULL;
+
+      for (node = qt->data.acct.account_guids; node; node = node->next)
+        g_free (node->data);
+      g_list_free (qt->data.acct.account_guids);
+      qt->data.acct.account_guids = NULL;
       break;
 
     case PD_STRING:
@@ -218,6 +225,7 @@ free_query_term(QueryTerm *qt)
 static QueryTerm *
 copy_query_term(QueryTerm * qt) {
   QueryTerm * nqt;
+  GList *node;
 
   if (qt == NULL)
     return NULL;
@@ -230,6 +238,16 @@ copy_query_term(QueryTerm * qt) {
   {
     case PD_ACCOUNT:
       nqt->data.acct.accounts = g_list_copy (nqt->data.acct.accounts);
+      nqt->data.acct.account_guids =
+        g_list_copy (nqt->data.acct.account_guids);
+      for (node = nqt->data.acct.account_guids; node; node = node->next)
+      {
+        GUID *old = node->data;
+        GUID *new = g_new (GUID, 1);
+
+        *new = *old;
+        node->data = new;
+      }
       break;
 
     case PD_STRING:
@@ -520,7 +538,6 @@ acct_query_matches(QueryTerm * qt, Account * acct) {
 
   assert(qt && acct);
   assert(qt->data.type == PD_ACCOUNT);
-  assert(qt->data.acct.accounts);
 
   for(node = qt->data.acct.accounts; node ; node = node->next) {
     if(acct == node->data) {
@@ -789,6 +806,79 @@ xaccQueryCheckSplit(Query * q, Split * s) {
   return 0;
 }
 
+static GList *
+account_list_to_guid_list (GList *accounts)
+{
+  GList *guids = NULL;
+  GList *node;
+
+  for (node = accounts; node; node = node->next)
+  {
+    Account *account = node->data;
+    GUID *guid;
+
+    if (!account)
+      continue;
+
+    guid = g_new (GUID, 1);
+    *guid = *xaccAccountGetGUID (account);
+
+    guids = g_list_prepend (guids, guid);
+  }
+
+  return g_list_reverse (guids);
+}
+
+static GList *
+guid_list_to_account_list (GList *guids)
+{
+  GList *accounts = NULL;
+  GList *node;
+
+  for (node = guids; node; node = node->next)
+  {
+    GUID *guid = node->data;
+    Account *account;
+
+    if (!guid)
+      continue;
+
+    account = xaccAccountLookup (guid);
+    if (!account)
+      continue;
+
+    accounts = g_list_prepend (accounts, account);
+  }
+
+  return g_list_reverse (accounts);
+}
+
+/********************************************************************
+ * xaccQueryCompileTerms
+ * Prepare terms for processing by xaccQueryGetSplits
+ ********************************************************************/
+static void
+xaccQueryCompileTerms (Query *q)
+{
+  GList * or_ptr, * and_ptr;
+
+  for(or_ptr = q->terms; or_ptr ; or_ptr = or_ptr->next) {
+    for(and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next) {
+      QueryTerm *qt = and_ptr->data;
+      switch (qt->data.type)
+      {
+        case PD_ACCOUNT:
+          g_list_free (qt->data.acct.accounts);
+          qt->data.acct.accounts =
+            guid_list_to_account_list (qt->data.acct.account_guids);
+          break;
+
+        default:
+          break;
+      }
+    }
+  }
+}
 
 /********************************************************************
  * xaccQueryGetSplits
@@ -807,6 +897,8 @@ xaccQueryGetSplits(Query * q) {
   int       split_count = 0;
   int       acct_ok;
 
+  if (!q) return NULL;
+
   /* tmp hack alert */
   q->changed = 1;
 
@@ -823,6 +915,9 @@ xaccQueryGetSplits(Query * q) {
     and_ptr = or_ptr->data;
     or_ptr->data = g_list_sort(and_ptr, query_sort_func);
   }
+
+  /* prepare the terms for processing */
+  xaccQueryCompileTerms (q);
 
   /* iterate over accounts */
   all_accts = xaccGroupGetSubAccounts (q->acct_group);
@@ -933,9 +1028,10 @@ xaccQueryAddAccountMatch(Query * q, GList * accounts, acct_match_t how,
 
   qt->p      = & xaccAccountMatchPredicate;
   qt->sense  = 1;
-  qt->data.type           = PD_ACCOUNT;
-  qt->data.acct.how       = how;
-  qt->data.acct.accounts  = g_list_copy(accounts);
+  qt->data.type               = PD_ACCOUNT;
+  qt->data.acct.how           = how;
+  qt->data.acct.accounts      = NULL;
+  qt->data.acct.account_guids = account_list_to_guid_list (accounts);
 
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);
@@ -970,7 +1066,9 @@ xaccQueryAddSingleAccountMatch(Query * q, Account * acct,
   qt->data.type           = PD_ACCOUNT;
   qt->data.acct.how       = ACCT_MATCH_ANY;
   qt->data.acct.accounts  = g_list_prepend(NULL, acct);
-  
+  qt->data.acct.account_guids
+    = account_list_to_guid_list (qt->data.acct.accounts);
+
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);
   

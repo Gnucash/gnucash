@@ -120,6 +120,7 @@ typedef struct {
   pd_type_t    type;
   acct_match_t how;
   GList        * accounts;
+  GList        * account_guids;
 } AccountPredicateData;
 
 typedef struct {
