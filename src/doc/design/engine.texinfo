@@ -2095,6 +2095,27 @@ Accounts, Splits, and Transactions.
 
 Account Groups do not have key-value frames or GUIDs.
 
+@menu
+* General Account Group API::   
+@end menu
+
+@node General Account Group API,  , Account Groups, Account Groups
+@subsection General Account Group API
+
+@deftypefun {AccountGroup *} xaccMallocAccountGroup (void)
+Return a newly-allocated & initialized Account Group.
+The Group must be freed with @code{xaccFreeAccountGroup}.
+@end deftypefun
+
+@deftypefun void xaccFreeAccountGroup (AccountGroup * @var{account_group})
+Free the given Group and all its resources, including the Accounts.
+@end deftypefun
+
+@deftypefun void xaccAccountGroupCommitEdit (AccountGroup * @var{grp})
+Recursively call @code{xaccAccountCommitEdit} on all child accounts
+and their children.
+@end deftypefun
+
 
 @node GNCBooks, Scrub, Account Groups, Engine
 @section GNCBooks

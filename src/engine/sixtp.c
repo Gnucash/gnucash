@@ -751,7 +751,6 @@ gnc_is_our_xml_file(const char *filename, const char *first_tag)
   char first_chunk[256];
   char* cursor = NULL;
   ssize_t num_read;
-  char *tag_compare;
   
   g_return_val_if_fail(filename, FALSE);
   g_return_val_if_fail(first_tag, FALSE);
@@ -759,8 +758,6 @@ gnc_is_our_xml_file(const char *filename, const char *first_tag)
   f = fopen(filename, "r");
   if (f == NULL)
     return FALSE;
-
-  tag_compare = g_strdup_printf("<%s>", first_tag);
 
   num_read = fread(first_chunk, sizeof(char), sizeof(first_chunk) - 1, f);
   fclose(f);
@@ -781,6 +778,9 @@ gnc_is_our_xml_file(const char *filename, const char *first_tag)
   
   if(strncmp(cursor, "<?xml", 5) == 0) 
   {
+      char *tag_compare;
+      gboolean result;
+
       if(!search_for('>', &cursor))
       {
           return FALSE;
@@ -791,18 +791,16 @@ gnc_is_our_xml_file(const char *filename, const char *first_tag)
           return FALSE;
       }
 
-      if(strncmp(cursor, tag_compare, strlen(tag_compare)) == 0)
-      {
-          return TRUE;
-      }
-      else
-      {
-          return FALSE;
-      }
+      tag_compare = g_strdup_printf("<%s>", first_tag);
+
+      result = (strncmp(cursor, tag_compare, strlen(tag_compare)) == 0);
+      g_free (tag_compare);
+      return result;
   }
   else
   {
       return FALSE;
   }
+
   return FALSE;
 }

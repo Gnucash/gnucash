@@ -209,6 +209,8 @@ xaccFreeAccountGroup (AccountGroup *grp)
     if (!root_grp) return;
   }
 
+  if (grp->parent) grp->parent->children = NULL;
+
   grp->parent   = NULL;
   grp->balance  = gnc_numeric_zero();
   g_free (grp);
@@ -536,7 +538,8 @@ xaccAccountRemoveGroup (Account *acc)
   if (!acc) return;
 
   grp = acc->children;
-  
+
+  if (grp) grp->parent = NULL;
   acc->children = NULL;
 
   /* make sure that the parent of the group is marked 

@@ -225,17 +225,22 @@ static gboolean
 account_parent_handler (xmlNodePtr node, gpointer act)
 {
     Account *parent;
-    GUID *gid = dom_tree_to_guid(node);
+    GUID *gid;
 
+    gid = dom_tree_to_guid(node);
     g_return_val_if_fail(gid, FALSE);
-    
-    parent = xaccAccountLookup(gid);
 
-    g_return_val_if_fail(parent, FALSE);
-    
+    parent = xaccAccountLookup(gid);
+    if (!parent)
+    {
+      g_free (gid);
+      g_return_val_if_fail(parent, FALSE);
+    }
+
     xaccAccountInsertSubAccount(parent, (Account*)act);
 
-    /* xaccGUIDFree(gid); */
+    g_free (gid);
+
     return TRUE;
 }
 

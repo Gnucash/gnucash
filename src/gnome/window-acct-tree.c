@@ -126,6 +126,9 @@ gnc_acct_tree_view_labeler(GnomeMDIChild * child, GtkWidget * current,
     gtk_label_set_text(GTK_LABEL(current), name);
   }
   gtk_label_set_justify(GTK_LABEL(current), GTK_JUSTIFY_LEFT);
+
+  if (name) free (name);
+
   return current;
 }
 
@@ -154,7 +157,8 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data) {
   GNCMainInfo        * maininfo = user_data;
   GNCMainChildInfo   * mc = g_new0(GNCMainChildInfo, 1);
   GNCAcctTreeWin     * win = gnc_acct_tree_window_new(child->name);
-  
+  char               * name;
+
   mc->contents     = gnc_acct_tree_window_get_widget(win);
   mc->child        = child;
   mc->app          = NULL;
@@ -166,10 +170,10 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data) {
 
   gtk_object_set_user_data(GTK_OBJECT(child), mc);
 
-  /* set the child name that will get used to save app state */ 
-  gnome_mdi_child_set_name(mc->child, 
-                           g_strdup_printf("gnc-acct-tree:id=%d", 
-                                           win->options_id));
+  /* set the child name that will get used to save app state */
+  name = g_strdup_printf("gnc-acct-tree:id=%d", win->options_id);
+  gnome_mdi_child_set_name(mc->child, name);
+  g_free (name);
 
   gtk_signal_connect(GTK_OBJECT(child), "destroy", 
                      gnc_acct_tree_view_destroy, mc);
@@ -974,8 +978,6 @@ gnc_acct_tree_window_new(const gchar * url)  {
   SCM temp;
   int options_id;
   URLType type;
-  char * location;
-  char * label;
 
   treewin->euro_change_callback_id =
     gnc_register_option_change_callback(gnc_euro_change, treewin,
@@ -991,6 +993,9 @@ gnc_acct_tree_window_new(const gchar * url)  {
     gnc_acct_tree_window_options_new(treewin);
   }
   else {
+    char * location = NULL;
+    char * label = NULL;
+
     /* if an URL is specified, it should look like 
      * gnc-acct-tree:id=17 .  We want to get the number out,
      * then look up the options in the global DB. */
@@ -1014,8 +1019,11 @@ gnc_acct_tree_window_new(const gchar * url)  {
     else {
       gnc_acct_tree_window_options_new(treewin);
     }
+
+    g_free (location);
+    g_free (label);
   }
-  
+
   treewin->odb     = gnc_option_db_new(treewin->options);
   
   gtk_signal_connect(GTK_OBJECT(treewin->account_tree), "activate_account",

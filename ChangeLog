@@ -1,3 +1,28 @@
+2001-05-19  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/sixtp.c (gnc_is_our_xml_file): fix mem leak
+
+	* src/engine/io-gncxml-v2.c (gnc_book_load_from_xml_file_v2): fix
+	mem leak
+
+	* src/gnome/window-acct-tree.c: fix mem leak
+
+	* src/doc/design/engine.texinfo: update docs
+
+	* src/gnome/window-acct-tree.c: fix mem leaks
+
+	* src/engine/io-gncxml-v2.c (gnc_counter_end_handler): fix mem
+	leak
+
+	* src/engine/gnc-account-xml-v2.c (account_parent_handler): fix
+	mem leak
+
+	* src/engine/Group.c (xaccFreeAccountGroup): set parent's child
+	pointer to NULL
+	(xaccAccountRemoveGroup): set parent's child pointer to NULL
+
+	* src/engine/sixtp-dom-parsers.c (dom_tree_to_integer): fix mem leak
+
 2001-05-18  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/io-gncxml-w.c: remove

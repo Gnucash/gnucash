@@ -170,9 +170,12 @@ gnc_counter_end_handler(gpointer data_for_children,
     {
         g_warning("string_to_integer failed with input: %s",
                   strval ? strval : "(null)");
+        g_free (strval);
+        xmlFree (type);
         return FALSE;
     }
-    
+    g_free (strval);
+
     if(safe_strcmp(type, "transaction") == 0)
     {
         sixdata->counter.transactions_total = val;
@@ -189,8 +192,12 @@ gnc_counter_end_handler(gpointer data_for_children,
     {
         g_warning("Unknown type: %s",
                   type ? type : "(null)");
+        xmlFree (type);
         return FALSE;
     }
+
+    xmlFree (type);
+    xmlFreeNode(tree);
 
     return TRUE;
 }
@@ -329,6 +336,9 @@ gnc_book_load_from_xml_file_v2(
 
     /* set up various state that is not normally stored in the byte stream */
     xaccRecomputeGroupBalance (gnc_book_get_group(book));
+
+    /* destroy the parser */
+    sixtp_destroy (top_parser);
 
     /* start logging again */
     xaccLogEnable ();

@@ -95,17 +95,15 @@ gboolean
 dom_tree_to_integer(xmlNodePtr node, gint64 *daint)
 {
     gchar *text;
-    
+    gboolean ret;
+
     text = dom_tree_to_text(node);
 
-    if(string_to_gint64(text, daint))
-    {
-        return TRUE;
-    }
-    else 
-    {
-        return FALSE;
-    }
+    ret = string_to_gint64(text, daint);
+
+    g_free (text);
+
+    return ret;
 }
 
 kvp_value*
@@ -306,12 +304,18 @@ struct kvp_val_converter val_converters[] = {
 kvp_value*
 dom_tree_to_kvp_value(xmlNodePtr node)
 {
+    xmlChar *xml_type;
     gchar *type;
     struct kvp_val_converter *mark;
     kvp_value *ret = NULL;
-    
-    type = xmlGetProp(node, "type");
-    if(!type)
+
+    xml_type = xmlGetProp(node, "type");
+    if(xml_type)
+    {
+        type = g_strdup (xml_type);
+        xmlFree (xml_type);
+    }
+    else
     {
         type = g_strdup_printf("string");
     }
