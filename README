@@ -181,6 +181,8 @@ The following packages are required to be installed to run GnuCash:
    library used by several different programs.  You can find it at
    ftp://ftp.gnome.org/pub/GNOME/unstable/sources/gal/.
 
+  libdb: Version 1.85 or a compatible version.
+
 The above urls are from June 5, 2001.  Source locations can change,
 but will likely be found near the same place (maybe moved from
 unstable to stable).
