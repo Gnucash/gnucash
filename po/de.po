@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8\n"
-"POT-Creation-Date: 2003-04-02 19:33+0200\n"
-"PO-Revision-Date: 2003-04-02 19:38+0200\n"
+"POT-Creation-Date: 2003-04-14 22:09+0200\n"
+"PO-Revision-Date: 2003-04-14 22:56+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -485,7 +485,7 @@ msgstr "Anfangsbestand:"
 #: src/register/ledger-core/split-register.c:1893
 #: intl-scm/guile-strings.c:2186 intl-scm/guile-strings.c:2468
 msgid "Debit"
-msgstr "Belastung"
+msgstr "Soll"
 
 #: src/app-utils/guile-util.c:1158
 #: src/register/ledger-core/split-register.c:1916
@@ -494,7 +494,7 @@ msgstr "Belastung"
 #: src/register/ledger-core/split-register.c:2025 intl-scm/guile-strings.c:111
 #: intl-scm/guile-strings.c:2188 intl-scm/guile-strings.c:2470
 msgid "Credit"
-msgstr "Gutschrift"
+msgstr "Haben"
 
 #: src/backend/file/io-gncbin-r.c:489
 msgid "Lost Accounts"
@@ -1728,7 +1728,7 @@ msgstr ""
 #: src/import-export/hbci/hbci-interaction.c:172
 #: src/import-export/hbci/hbci-interaction.c:173
 #: src/import-export/hbci/hbci-interaction.c:297
-#: src/import-export/hbci/hbci-interaction.c:337
+#: src/import-export/hbci/hbci-interaction.c:367
 #: src/import-export/hbci/hbci-progressmon.c:189 intl-scm/guile-strings.c:3200
 msgid "Unknown"
 msgstr "Unbekannt"
@@ -2811,7 +2811,7 @@ msgstr "Mehrteilig"
 
 #: src/gnome/glade/register.glade:38
 msgid "Check Register"
-msgstr "Kassenbericht überprüfen"
+msgstr "Kontobuch überprüfen"
 
 #: src/gnome/glade/register.glade:90 src/gnome/window-acct-tree.c:904
 #: src/gnome/window-acct-tree.c:1040 src/gnome/window-acct-tree.c:1301
@@ -2917,7 +2917,7 @@ msgstr "_Dieser Geschäftsvorgang"
 
 #: src/gnome/glade/register.glade:527 src/gnome/glade/register.glade:540
 msgid "Open a register report window for this transaction"
-msgstr "Kassenbericht als Bericht für diesen Geschäftsvorgang öffnen"
+msgstr "Kontobuch als Bericht für diesen Geschäftsvorgang öffnen"
 
 #: src/gnome/glade/register.glade:533
 msgid "_Account Report"
@@ -2955,7 +2955,7 @@ msgstr "Beträge von einem Konto zu einem anderen umbuchen"
 
 #: src/gnome/glade/register.glade:772
 msgid "Reconcile the main account for this register"
-msgstr "Abgleichen des Hauptkontos für diesen Kassenbericht"
+msgstr "Abgleichen des Hauptkontos für dieses Kontobuch"
 
 #: src/gnome/glade/register.glade:785 src/gnome/window-acct-tree.c:1031
 #: src/gnome/window-acct-tree.c:1376
@@ -2980,7 +2980,7 @@ msgstr "Aktuellen Geschäftsvorgang löschen"
 #: src/gnome/glade/register.glade:843 src/gnome/glade/register.glade:1620
 #: src/gnome/glade/register.glade:2029 src/gnome/glade/register.glade:2272
 msgid "Move to the blank transaction at the bottom of the register"
-msgstr "Zur freien Zeile am Ende dieses Kassenberichts gehen"
+msgstr "Zur freien Zeile am Ende dieses Kontobuchs gehen"
 
 #: src/gnome/glade/register.glade:862 src/gnome/glade/register.glade:1572
 #: src/gnome/glade/register.glade:2048 src/gnome/glade/register.glade:2291
@@ -3043,7 +3043,7 @@ msgstr "Nummer:"
 
 #: src/gnome/glade/register.glade:1107
 msgid "Register date ranges"
-msgstr "Datumbereich des Kassenberichts"
+msgstr "Datumbereich des Kontobuchs"
 
 #: src/gnome/glade/register.glade:1157
 msgid "Set Date Range"
@@ -4020,7 +4020,7 @@ msgid "Start Date:"
 msgstr "Anfangsdatum:"
 
 #: src/gnome/glade/sched-xact.glade:851
-#: src/gnome/dialog-scheduledxaction.c:1952
+#: src/gnome/dialog-scheduledxaction.c:1954
 msgid "Not scheduled"
 msgstr "Nicht vorgemerkt"
 
@@ -4702,7 +4702,7 @@ msgstr "Sie müssen eine Währung/Aktie auswählen."
 msgid "You must select a currency."
 msgstr "Sie müssen eine Währung auswählen."
 
-#: src/gnome/dialog-price-editor.c:185 src/gnome-utils/dialog-transfer.c:1348
+#: src/gnome/dialog-price-editor.c:185 src/gnome-utils/dialog-transfer.c:1358
 msgid "You must enter a valid amount."
 msgstr "Sie müssen einen gültigen Betrag eingeben."
 
@@ -4786,7 +4786,7 @@ msgstr ""
 msgid "Delete the selected Scheduled Transactions?"
 msgstr "Ausgewählte terminierte Buchung löschen?"
 
-#: src/gnome/dialog-scheduledxaction.c:2037
+#: src/gnome/dialog-scheduledxaction.c:2039
 msgid ""
 "The current template transaction has been changed.\n"
 "Would you like to record the changes?"
@@ -5493,11 +5493,11 @@ msgstr "Zahlung Sollzins eingeben..."
 
 #: src/gnome/window-reconcile.c:927
 msgid "Debits"
-msgstr "Belastungen"
+msgstr "Soll"
 
 #: src/gnome/window-reconcile.c:937 intl-scm/guile-strings.c:1416
 msgid "Credits"
-msgstr "Gutschriften"
+msgstr "Haben"
 
 #: src/gnome/window-reconcile.c:1092
 msgid "Are you sure you want to delete the selected transaction?"
@@ -5547,7 +5547,7 @@ msgstr "Konto öffnen"
 
 #: src/gnome/window-reconcile.c:1263
 msgid "Edit the main account for this register"
-msgstr "Bearbeiten des Hauptkonto für diesen Kassenbericht"
+msgstr "Bearbeiten des Hauptkonto für dieses Kontobuch"
 
 #: src/gnome/window-reconcile.c:1293 src/gnome/window-reconcile.c:1365
 msgid "_New"
@@ -5643,11 +5643,11 @@ msgstr "Suchergebnisse Bericht"
 #: intl-scm/guile-strings.c:633 intl-scm/guile-strings.c:641
 #: intl-scm/guile-strings.c:2552
 msgid "Register"
-msgstr "Kassenbericht"
+msgstr "Kontobuch"
 
 #: src/gnome/window-register.c:824 intl-scm/guile-strings.c:2478
 msgid "Register Report"
-msgstr "Bericht zum Kassenbericht"
+msgstr "Bericht zum Kontobuch"
 
 #: src/gnome/window-register.c:1445
 #, c-format
@@ -5709,8 +5709,8 @@ msgid ""
 "This is the split anchoring this transaction to the register. You may not "
 "delete it from this register window."
 msgstr ""
-"Diese Buchung verankert diesen Geschäftsvorgang im Kassenbericht. Sie können "
-"sie nicht in diesem Kassenbericht löschen."
+"Diese Buchung verankert diesen Geschäftsvorgang im Kontobuch. Sie können "
+"sie nicht in diesem Kontobuch löschen."
 
 #: src/gnome/gnc-split-reg.c:1074
 msgid "(no memo)"
@@ -6194,15 +6194,15 @@ msgstr "Voreinstellung"
 msgid "Defaults"
 msgstr "Voreinstellung"
 
-#: src/gnome-utils/dialog-options.c:1575
+#: src/gnome-utils/dialog-options.c:1576
 msgid "No options!"
 msgstr "Keine Optionen."
 
-#: src/gnome-utils/dialog-options.c:1595
+#: src/gnome-utils/dialog-options.c:1596
 msgid "GnuCash Preferences"
 msgstr "GnuCash Einstellungen"
 
-#: src/gnome-utils/dialog-options.c:2119
+#: src/gnome-utils/dialog-options.c:2120
 msgid "Select pixmap"
 msgstr "Bild auswählen"
 
@@ -6333,7 +6333,7 @@ msgstr "Beim Laden der URL ist ein Fehler aufgetreten."
 msgid "Error message"
 msgstr "Fehlermeldung"
 
-#: src/gnome-utils/gnc-html.c:612 src/gnome-utils/gnc-html.c:1100
+#: src/gnome-utils/gnc-html.c:614 src/gnome-utils/gnc-html.c:1102
 msgid ""
 "Secure HTTP access is disabled.\n"
 "You can enable it in the Network section of\n"
@@ -6343,7 +6343,7 @@ msgstr ""
 "Um ihn zu aktivieren, wählen Sie den Netzwerk Abschnitt der\n"
 "Einstellungen und aktivieren die entsprechende Option."
 
-#: src/gnome-utils/gnc-html.c:620 src/gnome-utils/gnc-html.c:1109
+#: src/gnome-utils/gnc-html.c:622 src/gnome-utils/gnc-html.c:1111
 msgid ""
 "Network HTTP access is disabled.\n"
 "You can enable it in the Network section of\n"
@@ -6352,7 +6352,7 @@ msgstr ""
 "Sie haben den \"HTTP Netzwerkzugang\" abgeschaltet.\n"
 "Sie können ihn wieder im Menü \"Voreinstellungen\"einschalten"
 
-#: src/gnome-utils/gnc-html.c:926
+#: src/gnome-utils/gnc-html.c:928
 msgid ""
 "GnuCash Network is disabled and the link you have clicked requires it.\n"
 "You can enable it in the Network section\n"
@@ -6361,7 +6361,7 @@ msgstr ""
 "GnuCash Netzwerk is deaktiviert, aber der angeklickte Link benötigt es.\n"
 "Sie können das Netzwerk im 'Einstellungen'-Dialog aktivieren."
 
-#: src/gnome-utils/gnc-html.c:1042
+#: src/gnome-utils/gnc-html.c:1044
 #, c-format
 msgid "There was an error accessing %s."
 msgstr "Beim Zugriff auf %s ist ein Fehler aufgetreten."
@@ -6514,15 +6514,24 @@ msgstr ""
 "Das Konto %s\n"
 "kann keine Buchungen enthalten.\n"
 
-#: src/gnome-utils/dialog-transfer.c:1361
+#: src/gnome-utils/dialog-transfer.c:1348
+msgid ""
+"You can't transfer from a non-currency account.  Try reversing the \"from\" "
+"and \"to\" accounts and making the \"amount\" negative."
+msgstr ""
+"Sie können nicht _von_ einem Aktienkonto buchen, nur von einem Konto\n"
+"mit normaler Währung. Übergangsweise sollten Sie die Von/Nach-Konten\n"
+"vertauschen und den Betrag negativ eingeben."
+
+#: src/gnome-utils/dialog-transfer.c:1371
 msgid "You must enter an amount to transfer."
 msgstr "Sie müssen einen Betrag angeben."
 
-#: src/gnome-utils/dialog-transfer.c:1375
+#: src/gnome-utils/dialog-transfer.c:1385
 msgid "You must enter a valid price."
 msgstr "Sie müssen einen gültigen Preis angeben."
 
-#: src/gnome-utils/dialog-transfer.c:1386
+#: src/gnome-utils/dialog-transfer.c:1396
 msgid "You must enter a valid `to' amount."
 msgstr "Sie müssen einen gültigen Betrag eingeben."
 
@@ -7618,7 +7627,27 @@ msgstr ""
 "Die PIN muß mindestens %d Zeichen lang \n"
 "sein.  Erneut versuchen?"
 
-#: src/import-export/hbci/hbci-interaction.c:301
+#: src/import-export/hbci/hbci-interaction.c:305
+#, c-format
+msgid ""
+"Please make sure the key file for \n"
+"user '%s' at bank '%s' can be accessed."
+msgstr ""
+"Bitte stellen Sie sicher, daß auf die Schlüsseldatei \n"
+"für Benutzer '%s' der Bank '%s' \n"
+"zugegriffen werden kann."
+
+#: src/import-export/hbci/hbci-interaction.c:310
+#, c-format
+msgid ""
+"Please make sure the key file for \n"
+"user '%s' at unknown bank can be accessed."
+msgstr ""
+"Bitte stellen Sie sicher, daß auf die Schlüsseldatei \n"
+"für Benutzer '%s' einer unbekannten Bank\n"
+"zugegriffen werden kann."
+
+#: src/import-export/hbci/hbci-interaction.c:319
 #, c-format
 msgid ""
 "Please insert chip card for \n"
@@ -7627,7 +7656,7 @@ msgstr ""
 "Bitte die Chipkarte für \n"
 "Benutzer '%s' der Bank '%s' einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:306
+#: src/import-export/hbci/hbci-interaction.c:324
 #, c-format
 msgid ""
 "Please insert chip card for \n"
@@ -7636,7 +7665,16 @@ msgstr ""
 "Bitte die Chipkarte für \n"
 "Benutzer '%s' einer unbekannten Bank einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:311
+#: src/import-export/hbci/hbci-interaction.c:334
+msgid ""
+"Please make sure the key file for \n"
+"unknown user at unknown bank can be accessed."
+msgstr ""
+"Bitte stellen Sie sicher, daß auf die Schlüsseldatei \n"
+"für unbekannten Benutzer einer unbekannten Bank \n"
+"zugegriffen werden kann."
+
+#: src/import-export/hbci/hbci-interaction.c:340
 msgid ""
 "Please insert chip card for \n"
 "unknown user at unknown bank."
@@ -7644,7 +7682,29 @@ msgstr ""
 "Bitte die Chipkarte für unbekannten Benutzer \n"
 "einer unbekannten Bank einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:341
+#: src/import-export/hbci/hbci-interaction.c:375
+#, c-format
+msgid ""
+"The key file does not seem to be the correct \n"
+"file for user '%s' at bank '%s'. Please make \n"
+"sure the correct key file can be accessed."
+msgstr ""
+"Die Schlüsseldatei scheint nicht die richtige für Benutzer '%s' der\n"
+"Bank '%s' zu sein. Bitte stellen Sie sicher, daß auf die richtige\n"
+"Schlüsseldatei zugegriffen werden kann."
+
+#: src/import-export/hbci/hbci-interaction.c:381
+#, c-format
+msgid ""
+"The key file does not seem to be the correct \n"
+"file for user '%s' at unknown bank. Please make \n"
+"sure the correct key file can be accessed."
+msgstr ""
+"Die Schlüsseldatei scheint nicht die richtige für Benutzer '%s' einer\n"
+"unbekannten Bank zu sein. Bitte stellen Sie sicher, daß auf die\n"
+"richtige Schlüsseldatei zugegriffen werden kann."
+
+#: src/import-export/hbci/hbci-interaction.c:391
 #, c-format
 msgid ""
 "Please insert the correct chip card for \n"
@@ -7653,7 +7713,7 @@ msgstr ""
 "Bitte die korrekte Chipkarte für \n"
 "Benutzer '%s' der Bank '%s' einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:346
+#: src/import-export/hbci/hbci-interaction.c:396
 #, c-format
 msgid ""
 "Please insert the correct chip card for \n"
@@ -7662,7 +7722,17 @@ msgstr ""
 "Bitte die korrekte Chipkarte für \n"
 "Benutzer '%s' einer unbekannten Bank einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:351
+#: src/import-export/hbci/hbci-interaction.c:406
+msgid ""
+"The key file does not seem to be the correct \n"
+"file for unknown user at unknown bank. Please make \n"
+"sure the correct key file can be accessed."
+msgstr ""
+"Die Schlüsseldatei scheint nicht die richtige für unbekannten Benutzer\n"
+"einer unbekannten Bank zu sein. Bitte stellen Sie sicher, daß auf die\n"
+"richtige Schlüsseldatei zugegriffen werden kann."
+
+#: src/import-export/hbci/hbci-interaction.c:413
 msgid ""
 "Please insert the correct chip card for \n"
 "unknown user at unknown bank."
@@ -8535,15 +8605,15 @@ msgstr "(Komplette Kontonummer: "
 msgid "Auto-Balance split"
 msgstr "Automatische Ausgleichsbuchung"
 
-#: src/import-export/import-commodity-matcher.c:118
+#: src/import-export/import-commodity-matcher.c:120
 msgid ""
 "Please select a commodity to match the following exchange code.\n"
 "Please note that the exchange code of the commodity you select will be "
-"overwritten."
+"overwritten.\n"
 msgstr ""
 "Bitte wählen Sie eine Währung/Aktie, die zum folgenden Aktiencode\n"
 "passt.  Achtung: Der Aktiencode der ausgewählten Währung/Aktie wird\n"
-"anschließend überschrieben."
+"anschließend überschrieben.\n"
 
 #: src/import-export/import-main-matcher.c:258
 msgid "Destination account for the auto-balance split."
@@ -8677,11 +8747,11 @@ msgstr "Gesamt %s"
 
 #: src/register/ledger-core/split-register-model.c:277
 msgid "Tot Credit"
-msgstr "Gesamt Gutschrift"
+msgstr "Gesamt Haben"
 
 #: src/register/ledger-core/split-register-model.c:301
 msgid "Tot Debit"
-msgstr "Gesamt Belastung"
+msgstr "Gesamt Soll"
 
 #: src/register/ledger-core/split-register-model.c:310
 msgid "Tot Shares"
@@ -9170,7 +9240,7 @@ msgid ""
 "mouse button brings up the transaction menu options."
 msgstr ""
 "Ein Klick mit der rechten Maustaste im Hauptfenster öffnet die \"Konto\"\n"
-"Menüpunkte. Ein Klick mit der rechten Maustaste im Kassenbericht\n"
+"Menüpunkte. Ein Klick mit der rechten Maustaste im Kontobuch\n"
 "öffnet die Menüpunkte zum \"Geschäftsvorgang\"."
 
 #: intl-scm/guile-strings.c:27
@@ -9193,7 +9263,7 @@ msgid ""
 "the first value, then select '+', '-','*', or '/'.  Type the\n"
 "second value and press Enter to record the calculated amount."
 msgstr ""
-"Wenn Sie Beträge im Kassenbericht eingeben, können Sie das Eingabefeld\n"
+"Wenn Sie Beträge im Kontobuch eingeben, können Sie das Eingabefeld\n"
 "wie einen einfachen Taschenrechner benutzen. Es gibt die Funktionen\n"
 "Addieren, Subtrahieren, Multiplizieren und Dividieren. Tippen Sie\n"
 "einfach einen Wert, gefolgt von \"+\", \"-\", \"*\" oder \"/\", gefolgt von\n"
@@ -9220,7 +9290,7 @@ msgid ""
 "of the parent account, followed by ':' and the first letter(s) of\n"
 "the subaccount (e.g. A:C for Assets:Cash.)"
 msgstr ""
-"Wenn Sie im Kassenbericht die ersten Buchstaben eines Kontennamen\n"
+"Wenn Sie im Kontobuch die ersten Buchstaben eines Kontennamen\n"
 "eingeben, kann GnuCash den Namen anhand Ihrer Kontenliste\n"
 "vervollständigen. Für Unterkonten geben Sie die ersten Buchstaben des\n"
 "Hauptkontos ein, gefolgt von einem ':', gefolgt von den ersten\n"
@@ -9233,7 +9303,7 @@ msgid ""
 "Accounts -> Open Subaccounts from the menu."
 msgstr ""
 "Sie können alle Geschäftsvorgänge von mehreren Unterkonten in einem\n"
-"Kassenbericht ansehen: Wählen Sie im Kontenhierarchie-Fenster das\n"
+"Kontobuch ansehen: Wählen Sie im Kontenhierarchie-Fenster das\n"
 "Hauptkonto und klicken Sie auf den Menüpunkt Konten -> Unterkonten\n"
 "öffnen."
 
@@ -9245,7 +9315,7 @@ msgid ""
 msgstr ""
 "Bei der Datumseingabe können Sie mit '+' und '-' das Datum weiter-\n"
 "oder zurückzählen oder mit ']','}' und '{','[' das Datum monatsweise\n"
-"weiterschalten. Wenn Sie im Kassenbericht Buchungsnummern eingeben,\n"
+"weiterschalten. Wenn Sie im Kontobuch Buchungsnummern eingeben,\n"
 "können Sie ebenfalls mit '+' und '-' die nächstfolgende oder vorige\n"
 "Nummer auswählen."
 
@@ -9256,9 +9326,8 @@ msgid ""
 "move between deposits and withdrawals."
 msgstr ""
 "Im Fenster \"Abgleichen\" können Sie mit der Leertaste Geschäftsvorgänge\n"
-"als \"Abgeglichen\" markieren. Um zwischen Gutschrift und Belastung zu\n"
-"wechseln, können Sie die Tab (die Tabulatortaste) und Umschalt-Tab\n"
-"drücken."
+"als \"Abgeglichen\" markieren. Um zwischen Haben und Soll zu wechseln,\n"
+"können Sie die Tab (die Tabulatortaste) und Umschalt-Tab drücken."
 
 #: intl-scm/guile-strings.c:60
 msgid ""
@@ -9349,7 +9418,7 @@ msgid ""
 "opening a register."
 msgstr ""
 "Doppelklicken auf ein Konto mit Unterkonten zeigt die Unterkonten, anstatt "
-"einen Kassenbericht zu öffnen."
+"ein Kontobuch zu öffnen."
 
 #: intl-scm/guile-strings.c:105
 msgid "Account types to display"
@@ -9675,7 +9744,7 @@ msgstr "Statusleiste"
 
 #: intl-scm/guile-strings.c:319
 msgid "Account Register Window"
-msgstr "Kassenberichts-Fenster"
+msgstr "Kontobuch-Fenster"
 
 #: intl-scm/guile-strings.c:327
 msgid "List of Transactions"
@@ -9755,11 +9824,11 @@ msgstr "Aktienteilungs-Druide"
 
 #: intl-scm/guile-strings.c:385
 msgid "Using the Register to Record Transactions"
-msgstr "Geschäftsvorgänge im Kassenbericht eingeben"
+msgstr "Geschäftsvorgänge im Kontobuch eingeben"
 
 #: intl-scm/guile-strings.c:387
 msgid "Changing the Register View"
-msgstr "Ansicht des Kassenberichts ändern"
+msgstr "Ansicht des Kontobuchs ändern"
 
 #: intl-scm/guile-strings.c:389
 msgid "To Enter a Transaction"
@@ -9767,7 +9836,7 @@ msgstr "Geschäftsvorgang eingeben"
 
 #: intl-scm/guile-strings.c:391
 msgid "Enter Directly in the Register Window"
-msgstr "Direkt im Kassenbericht eingeben"
+msgstr "Direkt im Kontobuch eingeben"
 
 #: intl-scm/guile-strings.c:393
 msgid "Enter in the Transfer Funds Window"
@@ -9899,7 +9968,7 @@ msgstr "International"
 #: intl-scm/guile-strings.c:679 intl-scm/guile-strings.c:685
 #: intl-scm/guile-strings.c:691
 msgid "Register Colors"
-msgstr "Kassenbericht Farben"
+msgstr "Kontobuch Farben"
 
 #: intl-scm/guile-strings.c:459
 msgid "User Info"
@@ -10084,11 +10153,11 @@ msgstr "Aktiviert die Unterstützung der Währung EURO"
 
 #: intl-scm/guile-strings.c:599
 msgid "Default Register Style"
-msgstr "Standardstil Kassenbericht"
+msgstr "Standardstil Kontobuch"
 
 #: intl-scm/guile-strings.c:601
 msgid "Default style for register windows"
-msgstr "Wählen Sie den Standardmodus für die Kassenberichtsfenster"
+msgstr "Wählen Sie den Standardmodus für die Kontobuchfenster"
 
 #: intl-scm/guile-strings.c:603
 msgid "Basic Ledger"
@@ -10131,19 +10200,19 @@ msgstr ""
 
 #: intl-scm/guile-strings.c:635
 msgid "Register font"
-msgstr "Schriftart Kassenbericht"
+msgstr "Schriftart Kontobuch"
 
 #: intl-scm/guile-strings.c:637
 msgid "The font to use in the register"
-msgstr "Die Schriftart, die im Kassenbericht benutzt werden soll"
+msgstr "Die Schriftart, die im Kontobuch benutzt werden soll"
 
 #: intl-scm/guile-strings.c:643
 msgid "Register hint font"
-msgstr "Schriftart Kassenbericht-Hinweise"
+msgstr "Schriftart Kontobuch-Hinweise"
 
 #: intl-scm/guile-strings.c:645
 msgid "The font used to show hints in the register"
-msgstr "Die Schriftart, in der die Hinweise im Kassenbericht angezeigt werden"
+msgstr "Die Schriftart, in der die Hinweise im Kontobuch angezeigt werden"
 
 #: intl-scm/guile-strings.c:651
 msgid "Header color"
@@ -10159,7 +10228,7 @@ msgstr "Primärfarbe"
 
 #: intl-scm/guile-strings.c:659
 msgid "The default background color for register rows"
-msgstr "Standard Hintergrundfarbe für Kassenbericht-Zeilen"
+msgstr "Standard Hintergrundfarbe für Kontobuch-Zeilen"
 
 #: intl-scm/guile-strings.c:663
 msgid "Secondary color"
@@ -10167,7 +10236,7 @@ msgstr "Zweite Farbe"
 
 #: intl-scm/guile-strings.c:665
 msgid "The default secondary background color for register rows"
-msgstr "Zweite Standard Hintergrundfarbe für Kassenbericht-Zeilen"
+msgstr "Zweite Standard Hintergrundfarbe für Kontobuch-Zeilen"
 
 #: intl-scm/guile-strings.c:669
 msgid "Primary active color"
@@ -10175,7 +10244,7 @@ msgstr "Primäre Farbe für aktive"
 
 #: intl-scm/guile-strings.c:671
 msgid "The background color for the current register row"
-msgstr "Hintergrundfarbe für die aktuelle Kassenberichtzeile"
+msgstr "Hintergrundfarbe für die aktuelle Kontobuchzeile"
 
 #: intl-scm/guile-strings.c:675
 msgid "Secondary active color"
@@ -10183,7 +10252,7 @@ msgstr "Zweite aktive Farbe"
 
 #: intl-scm/guile-strings.c:677
 msgid "The secondary background color for the current register row"
-msgstr "Zweite Standard Hintergrundfarbe für die momentane Kassenberichtspalte"
+msgstr "Zweite Standard Hintergrundfarbe für die momentane Kontobuchspalte"
 
 #: intl-scm/guile-strings.c:681
 msgid "Split color"
@@ -10191,7 +10260,7 @@ msgstr "Farbe Buchung"
 
 #: intl-scm/guile-strings.c:683
 msgid "The default background color for split rows in the register"
-msgstr "Normale Hintergrundfarbe für Buchungen im Kassenbericht"
+msgstr "Normale Hintergrundfarbe für Buchungen im Kontobuch"
 
 #: intl-scm/guile-strings.c:687
 msgid "Split active color"
@@ -10199,7 +10268,7 @@ msgstr "Farbe einer aktiven Buchung"
 
 #: intl-scm/guile-strings.c:689
 msgid "The background color for the current split row in the register"
-msgstr "Hintergrundfarbe der aktiven Buchung im Kassenbericht"
+msgstr "Hintergrundfarbe der aktiven Buchung im Kontobuch"
 
 #: intl-scm/guile-strings.c:693
 msgid "Double mode colors alternate with transactions"
@@ -10368,8 +10437,7 @@ msgstr "Buchungsüberschriften aus Rechnungswesen"
 
 #: intl-scm/guile-strings.c:788
 msgid "Only use 'debit' and 'credit' instead of informal synonyms"
-msgstr ""
-"Nur 'Belastung' und 'Gutschrift' anstatt informeller Bezeichnungen benutzen"
+msgstr "Nur 'Soll' und 'Haben' anstatt informeller Bezeichnungen benutzen"
 
 #: intl-scm/guile-strings.c:792
 msgid "Display \"Tip of the Day\""
@@ -10492,11 +10560,11 @@ msgstr ""
 
 #: intl-scm/guile-strings.c:870
 msgid "Template Register Lines"
-msgstr "Zeilen Kassenbericht-Vorlage"
+msgstr "Zeilen Kontobuch-Vorlage"
 
 #: intl-scm/guile-strings.c:872
 msgid "How many lines in the template register?"
-msgstr "Wieviele Zeilen in der Kassenbericht-Vorlage?"
+msgstr "Wieviele Zeilen in der Kontobuch-Vorlage?"
 
 #: intl-scm/guile-strings.c:874 intl-scm/guile-strings.c:880
 #: intl-scm/guile-strings.c:902 intl-scm/guile-strings.c:908
@@ -10601,7 +10669,7 @@ msgstr "Anzahl der Zeilen"
 #: intl-scm/guile-strings.c:930
 msgid "Default number of register rows to display."
 msgstr ""
-"Standardanzahl von Zeilen, die im Kassenbericht eines Kontos angezeigt "
+"Standardanzahl von Zeilen, die im Kontobuch eines Kontos angezeigt "
 "werden sollen."
 
 #: intl-scm/guile-strings.c:934
@@ -12303,11 +12371,11 @@ msgstr "Sortiere nach Abgleich-Datum"
 
 #: intl-scm/guile-strings.c:2270
 msgid "Register Order"
-msgstr "Wie Kassenbericht"
+msgstr "Wie Kontobuch"
 
 #: intl-scm/guile-strings.c:2272
 msgid "Sort as with the register"
-msgstr "Die Sortierung, die im Kassenbericht benutzt wird"
+msgstr "Die Sortierung, die im Kontobuch benutzt wird"
 
 #: intl-scm/guile-strings.c:2274
 msgid "Other Account Name"
@@ -13508,13 +13576,6 @@ msgstr "Folgendes Forderungen-Konto wollen Sie untersuchen"
 #: intl-scm/guile-strings.c:3492 intl-scm/guile-strings.c:3494
 msgid "Receivable Aging"
 msgstr "Entwicklung Forderungen"
-
-#~ msgid ""
-#~ "The current entry has been changed.\n"
-#~ "Would you like to record the change?"
-#~ msgstr ""
-#~ "Der aktuelle Posten wurde verändert.\n"
-#~ "Soll er gespeichert werden?"
 
 #~ msgid "Custom"
 #~ msgstr "Benutzerdefiniert"

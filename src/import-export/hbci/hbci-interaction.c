@@ -281,7 +281,7 @@ static int msgInputPin(const HBCI_User *user,
 
 
 static int msgInsertMediumOrAbort(const HBCI_User *user, 
-				MediumType t, 
+				MediumType mtype, 
 				void *user_data)
 {
   GNCInteractor *data = user_data;
@@ -296,21 +296,51 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
        (HBCI_User_userId (user) ? HBCI_User_userId (user) :
 	_("Unknown")));
     b = HBCI_User_bank (user);
-    if (b != NULL) 
-      /* xgettext:c-format */	    
-      msgstr = g_strdup_printf ( _("Please insert chip card for \n"
-				   "user '%s' at bank '%s'."), 
-				 username, bank_to_str (b));
-    else 
-      /* xgettext:c-format */	    
-      msgstr = g_strdup_printf ( _("Please insert chip card for \n"
-				   "user '%s' at unknown bank."), 
-				 username);
+    switch (mtype) 
+      {
+      case MediumRDHFile:
+      case MediumRDHFileOld:
+	if (b != NULL) 
+	  /* xgettext:c-format */	    
+	  msgstr = g_strdup_printf ( _("Please make sure the key file for \n"
+				       "user '%s' at bank '%s' can be accessed."), 
+				     username, bank_to_str (b));
+	else 
+	  /* xgettext:c-format */	    
+	  msgstr = g_strdup_printf ( _("Please make sure the key file for \n"
+				       "user '%s' at unknown bank can be accessed."), 
+				     username);
+	break;
+      case MediumDDVCard:
+      case MediumRDHCard:
+      default:
+	if (b != NULL) 
+	  /* xgettext:c-format */	    
+	  msgstr = g_strdup_printf ( _("Please insert chip card for \n"
+				       "user '%s' at bank '%s'."), 
+				     username, bank_to_str (b));
+	else 
+	  /* xgettext:c-format */	    
+	  msgstr = g_strdup_printf ( _("Please insert chip card for \n"
+				       "user '%s' at unknown bank."), 
+				     username);
+    }
   }
   else 
-    msgstr = g_strdup ( _("Please insert chip card for \n"
-			  "unknown user at unknown bank."));
-      
+    switch (mtype) 
+      {
+      case MediumRDHFile:
+      case MediumRDHFileOld:
+	msgstr = g_strdup ( _("Please make sure the key file for \n"
+			      "unknown user at unknown bank can be accessed."));
+	break;
+      case MediumDDVCard:
+      case MediumRDHCard:
+      default:
+	msgstr = g_strdup ( _("Please insert chip card for \n"
+			      "unknown user at unknown bank."));
+      }
+    
   retval = gnc_ok_cancel_dialog_parented (data->parent,
 					  GNC_VERIFY_OK, 
 					  msgstr);
@@ -321,7 +351,7 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
 
 
 static int msgInsertCorrectMediumOrAbort(const HBCI_User *user, 
-				       MediumType t, 
+				       MediumType mtype, 
 				       void *user_data)
 {
   GNCInteractor *data = user_data;
@@ -336,21 +366,54 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
        (HBCI_User_userId (user) ? HBCI_User_userId (user) :
 	_("Unknown")));
     b = HBCI_User_bank (user);
-    if (b != NULL) 
-      /* xgettext:c-format */	    
-      msgstr = g_strdup_printf ( _("Please insert the correct chip card for \n"
-				   "user '%s' at bank '%s'."), 
-				 username, bank_to_str (b));
-    else 
-      /* xgettext:c-format */	    
-      msgstr = g_strdup_printf ( _("Please insert the correct chip card for \n"
-				   "user '%s' at unknown bank."), 
-				 username);
+    switch (mtype) 
+      {
+      case MediumRDHFile:
+      case MediumRDHFileOld:
+	if (b != NULL) 
+	  /* xgettext:c-format */	    
+	  msgstr = g_strdup_printf ( _("The key file does not seem to be the correct \n"
+				       "file for user '%s' at bank '%s'. Please make \n"
+				       "sure the correct key file can be accessed."), 
+				     username, bank_to_str (b));
+	else 
+	  /* xgettext:c-format */	    
+	  msgstr = g_strdup_printf ( _("The key file does not seem to be the correct \n"
+				       "file for user '%s' at unknown bank. Please make \n"
+				       "sure the correct key file can be accessed."), 
+				     username);
+	break;
+      case MediumDDVCard:
+      case MediumRDHCard:
+      default:
+	if (b != NULL) 
+	  /* xgettext:c-format */	    
+	  msgstr = g_strdup_printf ( _("Please insert the correct chip card for \n"
+				       "user '%s' at bank '%s'."), 
+				     username, bank_to_str (b));
+	else 
+	  /* xgettext:c-format */	    
+	  msgstr = g_strdup_printf ( _("Please insert the correct chip card for \n"
+				       "user '%s' at unknown bank."), 
+				     username);
+      }
   }
   else 
-    msgstr = g_strdup ( _("Please insert the correct chip card for \n"
-			  "unknown user at unknown bank."));
-      
+    switch (mtype) 
+      {
+      case MediumRDHFile:
+      case MediumRDHFileOld:
+	msgstr = g_strdup ( _("The key file does not seem to be the correct \n"
+			      "file for unknown user at unknown bank. Please make \n"
+			      "sure the correct key file can be accessed."));
+	break;
+      case MediumDDVCard:
+      case MediumRDHCard:
+      default:
+	msgstr = g_strdup ( _("Please insert the correct chip card for \n"
+			      "unknown user at unknown bank."));
+      }
+  
   retval = gnc_ok_cancel_dialog_parented (data->parent,
 					  GNC_VERIFY_OK,
 					  msgstr);
