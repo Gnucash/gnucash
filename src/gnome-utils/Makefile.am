@@ -13,7 +13,8 @@ AM_CFLAGS = \
   ${GUPPI_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GNOME_PRINT_CFLAGS} \
-  ${GNOME_INCLUDEDIR}
+  ${GNOME_INCLUDEDIR} \
+  ${GTKHTML_CFLAGS}
 
 libgncmod_gnome_utils_la_SOURCES = \
   cursors.c \
