@@ -149,19 +149,12 @@ g_date_year(period_end));
 /* =============================================================== */
 
 static void
-ap_changed (GtkWidget *widget,
-                    gpointer arg1,
-                    gpointer user_data)
+ap_changed (GtkWidget *widget, gpointer user_data)
 {
   AcctPeriodInfo *info = user_data;
-  time_t closing_date = 0;
 
+  printf ("something changed info=%p\n", info);
   prepare_remarks (info);
-/*
-  closing_date = gnome_date_edit_get_date (info->closing_date_edit);
-*/
-  
-  printf ("something changed, time=%ld \n", closing_date);
   
 }
 
