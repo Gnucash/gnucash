@@ -1,4 +1,404 @@
+2000-02-26  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-adjust.c (gnc_adjust_update_cb): only update if
+ 	the new string is different from the old. ditto for the reconcile
+	and transfer windows.
+
+2000-02-25  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/pricecell.c (PriceHelp): print out full number for
+ 	help value.
+
+	* src/register/table-allgui.c (makePassive): implement alternative
+ 	passive colors.
+
+	* src/register/splitreg.h (struct _SplitRegisterColors): add color
+ 	for odd rows in single mode, and boolean argument determining
+ 	whether to alterative virtual or physical rows in double mode.
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_check_grab):
+ 	see if we need to release the grab.
+
+	* src/register/splitreg.c (xaccInitSplitRegister): configure the
+	mxfer cell with an ignore string (SPLIT_STR) and a help string
+	explaining multi-line transactions.
+
+	* src/register/gnome/combocell-gnome.c: added help handler and
+ 	ignore string functions.
+
+	* src/register/table-allgui.c (gnc_table_enter_update): don't set
+ 	changed flag if new string is identical.
+
+2000-02-24  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/table-gnome.c (xaccRefreshTableGUI): redo the style
+ 	information so that new colors (and other info) get refreshed.
+
+	* src/register/gnome/gnucash-header.c (gnucash_header_draw): use
+ 	header style color to draw header background.
+
+	* src/gnome/option-util.c: new functions to support color options.
+
+	* src/gnome/dialog-options.c: gui implementation of color options.
+
+	* src/scm/report/hello-world.scm: used the new color option.
+
+	* src/scm/options.scm: added a new color option.
+
+2000-02-23  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/extensions.scm (gnc:new-menu-namer): new object that
+ 	automatically picks accelerator keys for a group of menu items.
+
+2000-02-22  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_delete_cb):
+ 	don't bother with the callback if the ending position of the
+ 	deleted section is <= to the starting position. This can happen.
+
+	* include/messages_i18n.h.in: added menu item strings with
+	underscore accelerators. Changed several gnome files to use
+	these strings.
+
+2000-02-21  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/gnucash-header.c
+ 	(gnucash_header_reconfigure): scroll region width should be the
+ 	style width, not the allocation width.
+
+2000-02-20  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/guile/gfec.c (gfec_catcher): use a guile function for
+ 	printing the error instead of the C interfaces. This removes
+	a dependency on guile 1.3.4.
+
+	* src/scm/c-interface.scm: add function for return an error string.
+	Used by the C-side error catcher in gfec.c.
+
+2000-02-19  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/report/hello-world.scm: added a 'crash the report'
+ 	option for testing the reports code.
+
+	* src/register/gnome/gnucash-header.c (gnucash_header_event):
+ 	modify per changes to pointer_on_resize_line. Allow the user to
+ 	resize by double-clicking anywhere in a column heading.
+	(pointer_on_resize_line): set the column with a pointer argument.
+  	return true if on a resize line, false otherwise.
+	(gnucash_header_init): initialize normal_cursor to NULL, which
+	selects the default gdk cursor.
+
+2000-02-18  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-style.c (gnucash_style_layout_init):
+ 	Make only the description cell a FILL cell.
+
+2000-02-18  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/engine/util.c (gnc_localeconv): Diane Trout's patch to set
+	the default values with a function.
+
+	* src/register/datecell.c (DateMV): validate change values longer
+ 	than a single character. Also, update the date value after a
+ 	non-accelerator change.
+
+	* src/register/pricecell.c (PriceMV): validate change values
+ 	longer than a single character.
+
+	* src/engine/util.c (gnc_localeconv): add in default values for
+	the sign and currency positions if their values are out of range.
+
+	* src/gnome/window-reconcile.c (recnRecalculateBalance): colorize
+	the negative values in the summary frame.
+
+2000-02-17  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-register.c (gnc_register_create_menu_bar):
+ 	added an edit menu with cut/copy/paste.
+	(gnc_register_create_menu_bar): use 'blank' instead of 'new' to
+ 	describe the command to jump to the blank split. Use a new tooltip
+ 	too. Ditto for the popup menu and the toolbar.
+
+	* Makefile.in: reversed order of gnucash linking so gnucash.gnome
+	gets linked last, so it overides the motif version. Also, install
+	the gnucash.desktop entry so gnucash appears in the gnome panel.
+
+	* src/register/splitreg.c: right-align the xfer cells
+
+	* src/register/gnome/gnucash-item-edit.c: handle selections the
+ 	gtk way with the gtk_selection_ routines. Grabbed this stuff from
+ 	gtkeditable and gtkentry.
+
+	* src/register/gnome/gnucash-sheet.c: use the new selection handling
+	code in the item editor to do cutting and pasting.
+
+2000-02-16  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/gnucash-item-edit.c: added code to support
+	real gtk selection handling. Adapted this from the gtk editable
+	widget.
+
+2000-02-15  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/dialog-transfer.c (gnc_xfer_dialog_create): allow the
+ 	user to resize the window
+
+	* src/gnome/window-register.c: save and restore window size
+
+	* src/gnome/window-main.c: save and restore window size
+
+	* src/gnome/dialog-edit.c: save and restore window size
+
+2000-02-14  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/dialog-add.c (accWindow): save and restore window size
+
+	* many files: use the configured account separator
+
+	* src/gnome/dialog-utils.c (gnc_get_account_separator): new function
+	to get the account separator
+
+	* src/scm/prefs.scm: new option for the account separator
+
+2000-02-13  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/splitreg.c (configLayout): swap the xfer and desc
+	cells. Add the debit and credit cells to the transaction cursor
+	so we get totals.
+
+	* src/register/quickfillcell.h: add a GUI-specific initializer.
+	The motif version does nothing. The gnome version add a direct
+	callback to handle auto-completion keystrokes.
+
+	* src/register/table-allgui.c (gnc_table_direct_update): new
+ 	function for passing direct gui input to the table, and then the
+ 	cells.
+
+	* src/register/basiccell.h: added a direct_update callback for
+ 	responding to raw gui input.
+
+	* src/register/gnome/combocell-gnome.c (ComboDirect): add complete
+ 	to char and complete as far as possible functionality.
+
+2000-02-12  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-register.c: add new account menu item
+
+	* src/engine/Transaction.c (xaccTransCommitEdit): always check the
+	split ordering on a commit. Only checking the transaction date won't
+	work, because other fields in the transaction and the split affect
+	the order.
+
+	* src/engine/Account.c (xaccCheckDateOrder): use
+ 	xaccSplitDateOrder, the same routine as xaccAccountInsertSplit to
+ 	do the ordering.
+
+	* src/register/table-allgui.c (gnc_table_modify_update): new
+ 	function, a direct gui callback.
+
+2000-02-11  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report.scm
+ 	((gnc:tr-report-get-first-acc-name split-scm)): Fixed crash when
+ 	it's a lone split, and somebody's not using proper double-entry
+ 	accounting!
+
+	* Doc: Extensive clean-up and documentation of new features,
+ 	including several new images.
+
+2000-02-11  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/splitreg.c (xaccInitSplitRegister): change memo
+ 	cell to be a quickfill cell.
+
+	* src/gnome/window-main.c (gnc_refresh_main_window): refresh all
+	account trees.
+	(gnc_ui_delete_account): remove account from all trees.
+
+	* src/gnome/account-tree.c: added a global list of account trees.
+  	added functions for refreshing all trees and deleting an account
+ 	from all trees.
+
+	* src/register/basiccell.h: (and lots more files) added a cell
+ 	callback for getting the 'help' string of a cell. This uses a
+	default which uses the value of the cell, if its not blank, and
+	a "blank help" otherwise. The blank help string can be set on a
+	per-cell basis.
+
+	The date cell replaces the help callback with one that prints the
+	date out in full, according to the current locale.
+
+	The split register initialization sets a few of the cells with
+	blank help values.
+
+	Finally, the gnome register uses the help strings to set the
+	status of the statusbar.
+
+2000-02-10  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/engine/util.c (loglevel): print warnings and errors in
+	all modules.
+
+	* src/gnome/window-main.c: change the sensitivity of menu and
+ 	toolbar items that need a selected account.
+
+	* src/gnome/dialog-edit.c (editAccWindow): allow dialog to be
+ 	resized
+
+	* src/scm/extensions.scm: add code for a more flexible menu
+ 	definition process under guile. Comment out extensions menu
+	stuff -- it's not complete.
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_button_press_event):
+ 	after moving, get the cursor position again before setting the
+ 	item editor cursor position because the cursor position may have
+ 	changed due to auto-mode rearrangement.
+
+	* src/scm/prefs.scm:comment out locale-based date parsing
+
+	* src/gnome/window-main.c (gnc_main_create_menus): modify the
+ 	names and order of the items per gnome standards.
+
+	* src/scm/options.scm: Only save options that have been changed
+	from their default values.
+
+	* include/messages_i18n.h.in: removed periods from end of tooltips
+	(gnome standard).
+
+2000-02-09  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-reconcile.c (recnFinishCB): rewrote to be more
+ 	like the other top-level windows.
+
+	* src/gnome/dialog-transfer.c (gnc_xfer_dialog): have the amount
+ 	entry grab focus.
+
+2000-02-08  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/options.scm: add a number-range option
+
+	* src/scm/prefs.scm: add an option of number of register rows.
+
+	* src/gnome/option-util.c: add utility functions for number
+	range options.
+
+	* src/gnome/dialog-options.c: implement number range options
+
+	* src/scm/prefs.scm: added a register 'show all transactions'
+ 	option.
+
+	* src/gnome/window-register.c (gnc_register_date_window): lookup
+	guile 'show all' option to determine how to set the date range.
+
+	* src/register/splitreg.c (xaccInitSplitRegister): Set the minimum
+ 	trailing zeros for share quantities to 0. All price cells are now
+ 	monetary values.
+
+	* src/register/pricecell.c: modify to use integer arg for trailing
+ 	zeros. Add function for changing blank_zero option.
+
+	* src/engine/util.c (PrintAmt): change the trailing zeros argument
+	to an integer indicating the minimum number of trailing zeros to
+	print.
+
+	* src/register/gnome/gnucash-item-list.c: handle mouse wheel
+ 	scrolling from the clist.
+
+2000-02-07  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-main.c (gnc_ui_refresh_statusbar): set the
+ 	color of deficit values to red in the main window status bar.
+
+	* src/gnome/account-tree.c (gnc_account_tree_insert_row): only set
+ 	values as red if they are less than but not extremely close to
+ 	zero.
+
+	* src/gnome/window-main.c (mainWindow): separate profit and asset
+	labels in the status bar.
+
+2000-02-07  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/gnome/global-options.c (gnc_options_dialog_help_cb): pops
+	up a help window.
+
+	* src/gnome/dialog-edit.c (gnc_ui_EditAccWindow_help_cb): callback
+	now displays help page instead of placeholder dialog.
+
+	* Docs/En/xacc-accountedit.html: New file explaining account edit
+	dialog.
+
+	* Docs/En/xacc-globalprefs.html: New file explaining preferences.
+
+	* Docs/En/xacc-main.html: Added pointers to new help pages for
+	account-edit and preferences dialog boxes.
+
+	* src/top-level.h: Added new HH_* macros for new help pages for
+	dialog boxes
+
+2000-02-06  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/SplitLedger.c (xaccSRSaveRegEntry): don't refresh if the
+	transfer account hasn't really changed.
+
+	* src/gnome/window-adjust.c (gnc_ui_AdjBWindow_ok_cb): parse
+ 	amount with xaccParseAmount.  When the amount entry goes out of
+ 	focus, reformat the value with separators.
+
+	* src/gnome/dialog-transfer.c: parse amount with xaccParseAmount.
+	When the amount entry goes out of focus, reformat the value with
+	separators.
+
+	* src/gnome/reconcile-list.c (gnc_reconcile_list_fill): print the
+ 	amount with xaccPrintAmount, with separators.
+
+	* src/gnome/window-reconcile.c (startRecnWindow): print the amount
+ 	with separators and parse it with xaccParseAmount. When the amount
+ 	entry goes out of focus, parse it and reformat it.
+
+	* src/register/splitreg.c (xaccInitSplitRegister): set the stock
+ 	register cell options appropriately.
+
+	* src/register/pricecell.c: add functions for setting the precision
+	and trailing zeros option. removed the 'shares' option.
+
+	* src/engine/util.c (xaccSPrintAmountGeneral): add a generalized
+ 	amount printing function.
+
+	* src/gnome/window-register.c (gnc_register_date_window): add a
+ 	button to the date range window for setting the date range when
+ 	the user changes a date without 'enter' or 'double-click'.
+
+	* src/engine/Account.c (xaccAccountGetFullName): moved this function
+	from gnome to here to make it gui independent. Returns a malloc'd
+	string with the fully-qualified name of the account using the given
+	separator char.
+
+2000-02-06  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-header.c
+ 	(gnucash_header_auto_resize_column): Support for auto sizing.
+	(gnucash_header_event): Double clicks on the resize lines will
+ 	auto resize the column to fit the text.
+
+	* src/register/gnome/gnucash-sheet.c (compute_optimal_width): Use
+ 	the style layout to compute a good width for the sheet.
+
+	* src/register/gnome/gnucash-header.c (gnucash_header_draw): Draw
+ 	the big rectangle correctly.
+	(gnucash_header_reconfigure): Set the scroll region and header
+ 	width based on the size of the sheet, not the current style.
+
 2000-02-05  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/splitreg.c (xaccInitSplitRegister): flag the share
+ 	quantities as such.
+	(xaccInitSplitRegister): initialize the physical column to 0.
+
+	* src/register/pricecell.c: get rid of the format string, add an
+ 	option for printing share quantities.
+
+	* src/engine/Session.c (MakeHomeDir): just because ~/.gnucash
+ 	exists doens't mean ~/.gnucash/data exists.
 
 	* src/scm/report/hello-world.scm: renamed from dummy.scm. Added
 	documentation to the source code and additional help text in the
@@ -90,6 +490,12 @@
 
 	* src/scm/bootstrap.scm.in: Used Matt Martin's guile error catching
 	code to print errors from gnc:load.
+
+2000-01-28  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-header.c (pointer_on_resize_line): Fix a
+	problem with the limits.  Now the last column is resizable.
+	(gnucash_header_event): Check for which button is pressed/released.
 
 2000-01-27  Dave Peticolas  <peticola@cs.ucdavis.edu>
 

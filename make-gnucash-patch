@@ -127,4 +127,6 @@ stamp-cat-id
 po/extract-macros.perl
 include/messages_i18n.h
 lib/g-wrap/aclocal.m4
+lib/g-wrap/conf-h.in
+lib/g-wrap/*/Makefile.in
 src/guile/i18n.h

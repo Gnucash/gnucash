@@ -12,7 +12,7 @@
 # Copyright (c) 1999 Linas Vepstas
 
 # hack alert -- this pathname should *NOT* be hard-coded.
-use lib '/usr/lib/gnucash/';
+use lib '/opt/gnucash/lib/gnucash/';
 use Quote;
 use gnucash;
 
