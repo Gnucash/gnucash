@@ -488,9 +488,11 @@ xaccTransSetMemo (Transaction *trans, const char *memo)
 
    /* if there is only one split, then keep memos in sync. */
    if (trans->debit_splits) {
-      if (0x0 == trans->debit_splits[1]) {
-         free (trans->debit_splits[0]->memo);
-         trans->debit_splits[0]->memo = strdup (memo);
+      if (0x0 != trans->debit_splits[0]) {
+         if (0x0 == trans->debit_splits[1]) {
+            free (trans->debit_splits[0]->memo);
+            trans->debit_splits[0]->memo = strdup (memo);
+         }
       }
    }
 }
@@ -503,9 +505,11 @@ xaccTransSetAction (Transaction *trans, const char *actn)
 
    /* if there is only one split, then keep action in sync. */
    if (trans->debit_splits) {
-      if (0x0 == trans->debit_splits[1]) {
-         free (trans->debit_splits[0]->action);
-         trans->debit_splits[0]->action = strdup (actn);
+      if (0x0 != trans->debit_splits[0]) {
+         if (0x0 == trans->debit_splits[1]) {
+            free (trans->debit_splits[0]->action);
+            trans->debit_splits[0]->action = strdup (actn);
+         }
       }
    }
 }
