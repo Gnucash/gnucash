@@ -108,6 +108,7 @@ void    xaccInsertSubAccount( Account *parent, Account *child );
 int     xaccGetNumAccounts (AccountGroup *grp);
 int     xaccGroupGetNumAccounts (AccountGroup *grp);
 int     xaccGroupGetDepth (AccountGroup *grp);
+Account * xaccGroupGetAccount (AccountGroup *, int);
 
 /*
  * The xaccGetAccounts() subroutine returns an array containing 
@@ -184,20 +185,6 @@ double    xaccGroupGetBalance (AccountGroup *);
 
 AccountGroup * xaccGetAccountRoot (Account *);
 
-/* The xaccConsolidateGrpTrans() subroutine scans through
- *    all of the transactions in an account, and compares them.
- *    if any of them are exact duplicates, the duplicates are removed.
- *    duplicates may occur when accounts from multiple sources are 
- *    merged.  Note that this can be a dangerous operation to perform 
- *
- *    Note that this subroutine merely walks the account group
- *    tree, and calls ConsolidateTransacations on each account
- */
-
-void xaccConsolidateGrpTransactions (AccountGroup *);
-
-Account * xaccGroupGetAccount (AccountGroup *, int);
-
 /* The xaccGroupGetParentAccount() subroutine returns the parent
  * account of the group, or NULL.
  */
@@ -224,6 +211,18 @@ char * xaccGroupGetNextFreeCode (AccountGroup *grp, int num_digits);
 char * xaccAccountGetNextChildCode (Account *acc, int num_digits);
 void   xaccGroupAutoCode (AccountGroup *grp, int num_digits);
 void   xaccGroupDepthAutoCode (AccountGroup *grp);
+
+/* The xaccConsolidateGrpTrans() subroutine scans through
+ *    all of the transactions in an account, and compares them.
+ *    if any of them are exact duplicates, the duplicates are removed.
+ *    duplicates may occur when accounts from multiple sources are 
+ *    merged.  Note that this can be a dangerous operation to perform 
+ *
+ *    Note that this subroutine merely walks the account group
+ *    tree, and calls ConsolidateTransacations on each account
+ */
+
+void xaccConsolidateGrpTransactions (AccountGroup *);
 
 #ifndef SWIG
 
