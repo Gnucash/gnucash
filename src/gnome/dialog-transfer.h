@@ -37,7 +37,7 @@ void gnc_xfer_dialog_select_from_account(XferDialog *xferData,
 void gnc_xfer_dialog_select_to_account(XferDialog *xferData,
                                        Account *account);
 
-void gnc_xfer_dialog_set_amount(XferDialog *xferData, double amount);
+void gnc_xfer_dialog_set_amount(XferDialog *xferData, gnc_numeric amount);
 void gnc_xfer_dialog_set_description(XferDialog *xferData,
                                      const char *description);
 

@@ -1682,8 +1682,7 @@ recnFinishCB(GtkWidget *w, gpointer data)
 
     xfer = gnc_xfer_dialog(NULL, recnData->account);
 
-    gnc_xfer_dialog_set_amount(xfer,
-                               gnc_numeric_to_double (gnc_numeric_neg (recnData->new_ending)));
+    gnc_xfer_dialog_set_amount(xfer, gnc_numeric_neg (recnData->new_ending));
 
     account = find_payment_account(recnData->account);
     if (account != NULL)

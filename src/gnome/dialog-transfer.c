@@ -416,7 +416,7 @@ gnc_xfer_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
 {
   XferDialog * xferData = data;
   Account *from, *to, *account;
-  double amount, price, to_amount;
+  gnc_numeric amount, price, to_amount;
   const gnc_commodity * currency;
 
   from = gnc_account_tree_get_current_account(xferData->from);
@@ -429,17 +429,19 @@ gnc_xfer_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
 
   gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit));
 
-  if((from != NULL) && (to != NULL))
+  if ((from != NULL) && (to != NULL))
   {
-    if(!xaccAccountsHaveCommonCurrency(from, to))
+    if (!xaccAccountsHaveCommonCurrency(from, to))
     {
-      amount = gnc_amount_edit_get_damount
+      amount = gnc_amount_edit_get_amount
 	(GNC_AMOUNT_EDIT(xferData->amount_edit));
-      price = gnc_amount_edit_get_damount
+      price = gnc_amount_edit_get_amount
 	(GNC_AMOUNT_EDIT(xferData->price_edit));
-      to_amount = amount / price;
-      gnc_amount_edit_set_damount(GNC_AMOUNT_EDIT(xferData->to_amount_edit),
-                                  to_amount);
+      to_amount = gnc_numeric_div (amount, price,
+                                   xaccAccountGetCurrencySCU (to),
+                                   GNC_RND_ROUND);;
+      gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->to_amount_edit),
+                                 to_amount);
     }
   }
 
@@ -453,8 +455,8 @@ gnc_xfer_price_update_cb(GtkWidget *widget, GdkEventFocus *event,
 {
   XferDialog *xferData = data;
   const gnc_commodity *currency;
+  gnc_numeric amount, price, to_amount;
   Account *account;
-  double amount, price, to_amount;
 
   account = gnc_account_tree_get_current_account(xferData->to);
   if (account == NULL)
@@ -464,11 +466,13 @@ gnc_xfer_price_update_cb(GtkWidget *widget, GdkEventFocus *event,
 
   gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->price_edit));
 
-  amount = gnc_amount_edit_get_damount(GNC_AMOUNT_EDIT(xferData->amount_edit));
-  price = gnc_amount_edit_get_damount(GNC_AMOUNT_EDIT(xferData->price_edit));
-  to_amount = amount / price;
-  gnc_amount_edit_set_damount(GNC_AMOUNT_EDIT(xferData->to_amount_edit),
-                              to_amount);
+  amount = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
+  price = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
+  to_amount = gnc_numeric_div (amount, price,
+                               xaccAccountGetCurrencySCU (account),
+                               GNC_RND_ROUND);
+  gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->to_amount_edit),
+                             to_amount);
 
   return FALSE;
 }
@@ -480,8 +484,8 @@ gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
 {
   XferDialog *xferData = data;
   const gnc_commodity *currency;
+  gnc_numeric amount, price, to_amount;
   Account *account;
-  double amount, price, to_amount;
 
   account = gnc_account_tree_get_current_account(xferData->to);
   if (account == NULL)
@@ -491,11 +495,11 @@ gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
 
   gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit));
 
-  amount = gnc_amount_edit_get_damount(GNC_AMOUNT_EDIT(xferData->amount_edit));
-  to_amount = gnc_amount_edit_get_damount
+  amount = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
+  to_amount = gnc_amount_edit_get_amount
     (GNC_AMOUNT_EDIT(xferData->to_amount_edit));
-  price = amount / to_amount;
-  gnc_amount_edit_set_damount(GNC_AMOUNT_EDIT(xferData->price_edit), price);
+  price = gnc_numeric_div (amount, to_amount, 100000, GNC_RND_ROUND);
+  gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit), price);
 
   return FALSE;
 }
@@ -578,7 +582,7 @@ gnc_xfer_dialog_select_to_account(XferDialog *xferData, Account *account)
  * Return: none                                                     *
 \********************************************************************/
 void
-gnc_xfer_dialog_set_amount(XferDialog *xferData, double amount)
+gnc_xfer_dialog_set_amount(XferDialog *xferData, gnc_numeric amount)
 {
   Account * account;
   const gnc_commodity * currency;
@@ -592,8 +596,7 @@ gnc_xfer_dialog_set_amount(XferDialog *xferData, double amount)
   
   currency = xaccAccountGetCurrency(account);
 
-  gnc_amount_edit_set_damount (GNC_AMOUNT_EDIT (xferData->amount_edit),
-                               amount);
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->amount_edit), amount);
 }
 
 
@@ -621,8 +624,8 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   XferDialog *xferData = data;
   Account *from, *to, *curr;
   const gnc_commodity *from_currency, *to_currency;
+  gnc_numeric amount, to_amount;
   char * string;
-  double amount, to_amount;
   time_t time;
 
   gboolean curr_trans;
@@ -664,16 +667,16 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
   curr_trans = !gnc_commodity_equiv(from_currency, to_currency);
 
-  amount = gnc_amount_edit_get_damount(GNC_AMOUNT_EDIT(xferData->amount_edit));
+  amount = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
 
   time = gnc_date_edit_get_date(GNC_DATE_EDIT(xferData->date_entry));
 
-  if(curr_trans)
+  if (curr_trans)
   {
     if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->price_edit)))
     {
-      if(gtk_toggle_button_get_active
-	 (GTK_TOGGLE_BUTTON(xferData->price_radio)))
+      if (gtk_toggle_button_get_active
+          (GTK_TOGGLE_BUTTON(xferData->price_radio)))
       {
 	gnc_parse_error_dialog (xferData, "price");
 	return;
@@ -682,8 +685,8 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
     if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit)))
     {
-      if(gtk_toggle_button_get_active
-	 (GTK_TOGGLE_BUTTON(xferData->amount_radio)))
+      if (gtk_toggle_button_get_active
+          (GTK_TOGGLE_BUTTON(xferData->amount_radio)))
       {
 	gnc_parse_error_dialog (xferData, "to_amount");
 	return;
@@ -710,7 +713,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
       return;
     }
  
-    to_amount = gnc_amount_edit_get_damount
+    to_amount = gnc_amount_edit_get_amount
       (GNC_AMOUNT_EDIT(xferData->to_amount_edit));
  
     /* from -> curr transaction */
@@ -739,9 +742,9 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     xaccAccountBeginEdit(from);
     xaccAccountInsertSplit(from, from_split);
 
-    DxaccSplitSetShareAmount(from_split, -amount);
-    DxaccSplitSetBaseValue(curr_split, amount, from_currency);
-    DxaccSplitSetBaseValue(curr_split, to_amount, to_currency);
+    xaccSplitSetShareAmount(from_split, gnc_numeric_neg (amount));
+    xaccSplitSetBaseValue(curr_split, amount, from_currency);
+    xaccSplitSetBaseValue(curr_split, to_amount, to_currency);
 
     /* Set the memo fields */
     string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));
@@ -779,9 +782,9 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     xaccAccountBeginEdit(curr);
     xaccAccountInsertSplit(curr, curr_split);
 
-    DxaccSplitSetShareAmount(to_split, to_amount);
-    DxaccSplitSetBaseValue(curr_split, -amount, from_currency);
-    DxaccSplitSetBaseValue(curr_split, -to_amount, to_currency);
+    xaccSplitSetShareAmount(to_split, to_amount);
+    xaccSplitSetBaseValue(curr_split, gnc_numeric_neg(amount), from_currency);
+    xaccSplitSetBaseValue(curr_split, gnc_numeric_neg(to_amount), to_currency);
 
     /* set the memo fields */
     string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));
@@ -815,11 +818,11 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     /* create first split */
     to_split = xaccMallocSplit();
     xaccTransAppendSplit(trans, to_split); 
-    DxaccSplitSetShareAmount(to_split, amount);
+    xaccSplitSetShareAmount(to_split, amount);
 
     /* create second split */
     from_split = xaccMallocSplit();
-    DxaccSplitSetShareAmount(from_split, -amount);
+    xaccSplitSetShareAmount(from_split, gnc_numeric_neg (amount));
     xaccTransAppendSplit(trans, from_split); 
 
     /* set the memo fields */
