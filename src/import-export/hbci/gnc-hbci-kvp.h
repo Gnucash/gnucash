@@ -23,7 +23,6 @@
 #ifndef GNC_HBCI_KVP_H
 #define GNC_HBCI_KVP_H
 
-//#include <libguile.h>
 #include <glib.h>
 #include "kvp_frame.h"
 #include "Account.h"
@@ -69,6 +68,12 @@ char *gnc_hbci_get_book_configfile (GNCBook *b);
 /** Set the configfile string in the GNCBook b. A copy of the string
  * will be stored. The Book will be marked as "dirty". */
 void gnc_hbci_set_book_configfile (GNCBook *b, const char *filename);
+
+/** Returns a non-copied pointer to the GList of kvp_frames which
+ * eventually are the template transactions, stored in the given
+ * book. */
+GList *gnc_hbci_get_book_template_list (GNCBook *b);
+void gnc_hbci_set_book_template_list (GNCBook *b, GList *template_list);
 
 /* lowlevel */
 

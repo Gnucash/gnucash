@@ -44,7 +44,8 @@ gnc_hbci_trans (GtkWidget *parent,
 		GNCInteractor *interactor,
 		const HBCI_Account *h_acc,
 		const HBCI_Customer *customer,
-		GNC_HBCI_Transtype type);
+		GNC_HBCI_Transtype type,
+		GList **templ);
 
 
 

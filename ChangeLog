@@ -1,3 +1,15 @@
+2003-05-28  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-transfer.c, dialog-hbcitrans.c,
+	glade/hbci.glade: Add coarse GUI so that transfer templates are
+	somehow usable.
+
+	* src/import-export/hbci/gnc-hbci-kvp.[hc]: Store the online
+	transfer templates in the book's kvp_frame.
+
+	* src/import-export/hbci/gnc-hbci-trans-templ.[hc]: Add data type
+	for online transfer templates.
+
 2003-05-26  Derek Atkins  <derek@ihtfp.com>
 
 	* src/register/ledger-core/dialog-dup-trans.c: If the "number" is
