@@ -9,6 +9,11 @@
 	* accounts/el_GR/Makefile.am: added new carloan account chart
 	* accounts/el_GR/acctchrt_common.gnucash-xea: updated account chart
 	* accounts/el_GR/acctchrt_carloan.gnucash-xea: new car loan chart
+
+	* src/report/standard-reports/average-balance.scm:
+	  Use the correct columns when printing the Gain column, don't
+	  reuse the same column as profit; we want to report different
+	  values.  Fixes #113096.
 	
 2003-05-21  Derek Atkins  <derek@ihtfp.com>
 
