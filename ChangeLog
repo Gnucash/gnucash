@@ -1,3 +1,15 @@
+2001-03-27  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/average-balance.scm: Major rework: Uses
+	option-utilities.scm. Added basic multi-currency handling. Fixed
+	time interval handling.
+
+	* src/scm/report/income-expense-graph.scm,
+	income-or-expense-pie.scm: Use option-utilities.scm.
+
+	* src/scm/options-utilities.scm: Added date interval multichoice
+	option, report currency option, and plot size option.
+
 2001-03-27  Dave Peticolas  <dave@krondo.com>
 
 	* configure.in: add --enable-etags argument to turn on

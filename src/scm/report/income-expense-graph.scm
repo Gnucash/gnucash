@@ -34,16 +34,8 @@
        options pagename-general
        optname-from-date optname-to-date "a")
 
-      (add-option
-       (gnc:make-multichoice-option
-        pagename-general optname-stepsize
-        "b" (_ "The amount of time between data points") 'MonthDelta
-        (list #(WeekDelta  "Week" "Week")
-	      #(TwoWeekDelta "Two Week" "Two Weeks")
-	      #(MonthDelta "Month" "Month")
-	      #(QuarterDelta "Quarter" "Quarter")
-              #(YearDelta "Year" "Year")
-              )))      
+      (gnc:options-add-interval-choice! 
+       options pagename-general optname-stepsize "b")
 
       (add-option
        (gnc:make-account-list-option
@@ -81,19 +73,10 @@
       (add-option
        (gnc:make-simple-boolean-option
         pagename-display optname-stacked
-        "ba" (_ "Show barchart as stacked?") #t))
+        "ba" (_ "Show barchart as stacked?") #f))
 
-      (add-option
-       (gnc:make-number-range-option
-        pagename-display optname-plot-width 
-        "c" (_ "Width of plot in pixels.") 400
-        100 1000 0 1))
-      
-      (add-option
-       (gnc:make-number-range-option
-        pagename-display optname-plot-height
-        "d" (_ "Height of plot in pixels.") 400
-        100 1000 0 1))
+      (gnc:options-add-plot-size! options pagename-display 
+				  optname-plot-width optname-plot-height "c" 400 400)
 
       (gnc:options-set-default-section options pagename-general)
 

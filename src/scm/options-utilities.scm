@@ -69,6 +69,21 @@
               (car (mktime (localtime (current-time))))))))
     #f 'absolute #f)))
 
+;; A date interval multichoice option.
+(define (gnc:options-add-interval-choice! 
+	 options pagename optname sort-tag)
+  (gnc:register-option 
+   options
+   (gnc:make-multichoice-option
+    pagename optname
+    sort-tag (_ "The amount of time between data points") 'WeekDelta
+    (list (vector 'DayDelta (_ "Day") (_ "Day"))
+	  (vector 'WeekDelta (_ "Week") (_ "Week"))
+	  (vector 'TwoWeekDelta (_ "2Week") (_ "Two Week"))
+	  (vector 'MonthDelta (_ "Month") (_ "Month"))
+	  (vector 'YearDelta (_ "Year") (_ "Year"))
+	  ))))
+
 ;; A multichoice option intended to chose the account level. Different
 ;; from the other functions the help string can still be given. Used
 ;; below.
@@ -150,6 +165,19 @@
      pagename optname
      sort-tag (_ "Group the accounts in main categories?") default?)))
 
+;; To let the user select a currency for the report.
+(define (gnc:options-add-currency!
+	 options pagename name-report-currency sort-tag)
+  (gnc:register-option 
+   options 
+   (gnc:make-currency-option 
+    pagename name-report-currency
+    sort-tag 
+    (_ "Select the currency to display the values of this report in.")
+    (gnc:option-value
+     (gnc:lookup-global-option "International"
+                               "Default Currency")))))
+
 ;; These are common options for the selection of the report's
 ;; currency/commodity.
 (define (gnc:options-add-currency-selection!
@@ -161,13 +189,27 @@
     pagename name-show-foreign
     (string-append sort-tag "a")
     (_ "Display the account's foreign currency amount?") #f))
-    
-  (gnc:register-option 
-   options 
-   (gnc:make-currency-option 
-    pagename name-report-currency
+
+  (gnc:options-add-currency! options pagename name-report-currency 
+			     (string-append sort-tag "b")))
+
+(define (gnc:options-add-plot-size!
+	 options pagename 
+	 name-width name-height sort-tag 
+	 default-width default-height)
+  (gnc:register-option
+   options
+   (gnc:make-number-range-option
+    pagename name-width
+    (string-append sort-tag "a")
+    (_ "Width of plot in pixels.") default-width
+    100 1000 0 1))
+
+  (gnc:register-option
+   options
+   (gnc:make-number-range-option
+    pagename name-height
     (string-append sort-tag "b")
-    (_ "All other currencies will get converted to this currency.")
-    (gnc:option-value
-     (gnc:lookup-global-option "International"
-                               "Default Currency")))))
+    (_ "Height of plot in pixels.") default-height
+    100 1000 0 1)))
+

@@ -13,11 +13,14 @@
 (gnc:depend "report-utilities.scm")
 (gnc:depend "date-utilities.scm")
 
-(let ()
+(let ((pagename-general (N_ "General"))
+      (pagename-display (N_ "Display"))
+      (optname-subacct (N_ "Include Sub-Accounts"))
+      (optname-report-currency (N_ "Report Currency")))
   ;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Options
   ;;;;;;;;;;;;;;;;;;;;;;;;;
-
+  
   (define (options-generator)
     (let* ((options (gnc:new-options))
            ;; register a configuration option for the report
@@ -26,40 +29,54 @@
               (gnc:register-option options new-option))))      
 
       (gnc:options-add-date-interval!
-       options (N_ "General") (N_ "From") (N_ "To") "a")
+       options pagename-general (N_ "From") (N_ "To") "a")
 
       ;; account(s) to do report on
       (register-option
        (gnc:make-account-list-option
-        (N_ "General") (N_ "Accounts")
+        pagename-general (N_ "Accounts")
         "d" (N_ "Do transaction report on this account")
         (lambda ()
           (let ((current-accounts (gnc:get-current-accounts)))
-            (cond ((not (null? current-accounts)) current-accounts)
+	    ;; If some accounts were selected, use those
+            (cond ((not (null? current-accounts)) 
+		   current-accounts)
                   (else
-                   (gnc:group-get-account-list (gnc:get-current-group))))))
+		   ;; otherwise get some accounts -- here as an
+		   ;; example we get the asset and liability stuff
+                   (gnc:filter-accountlist-type
+		    '(asset liability equity) 
+		    ;; or: '(bank cash checking savings stock
+		    ;; mutual-fund money-market)
+		    (gnc:group-get-account-list (gnc:get-current-group)))))))
         #f #t))
 
-      (register-option
-       (gnc:make-multichoice-option
-        (N_ "General") (N_ "Step Size")
-        "b" (N_ "The amount of time between data points") 'WeekDelta
-        (list #(DayDelta "Day" "Day")
-              #(WeekDelta "Week" "Week")
-              #(TwoWeekDelta "2Week" "Two Week")
-              #(MonthDelta "Month" "Month")
-              #(YearDelta "Year" "Year")
-              )))
+      (gnc:options-add-interval-choice! 
+       options pagename-general (N_ "Step Size") "b")
 
       (register-option
        (gnc:make-simple-boolean-option
-        (N_ "General") (N_ "Sub-Accounts")
-        "e" (N_ "Include sub-accounts of all selected accounts") #f))
+        pagename-general optname-subacct
+        "e" (N_ "Include sub-accounts of all selected accounts") #t))
+
+      ;; Report currency
+      (gnc:options-add-currency! 
+       options pagename-general optname-report-currency "f")
+      
+      (register-option
+       (gnc:make-simple-boolean-option
+        pagename-display (N_ "Show table")
+        "a" (N_ "Display a table of the selected data.") #f))
+
+      (register-option
+       (gnc:make-simple-boolean-option
+        pagename-display (N_ "Show plot")
+        "b" (N_ "Display a graph of the selected data.") #t))
 
       (register-option
        (gnc:make-list-option
-        (N_ "Output") (N_ "Plot Type")
-        "a" (N_ "The type of graph to generate") (list 'AvgBalPlot)
+        pagename-display (N_ "Plot Type")
+        "c" (N_ "The type of graph to generate") (list 'AvgBalPlot)
         (list (list->vector
                (list 'AvgBalPlot (N_ "Average") (N_ "Average Balance")))
               (list->vector
@@ -67,28 +84,11 @@
               (list->vector
                (list 'GLPlot (N_ "Gain/Loss") (N_ "Gain And Loss"))))))
 
-      (register-option
-       (gnc:make-number-range-option
-        (N_ "Output") (N_ "Plot Width")
-        "b" (N_ "Width of plot in pixels.") 400
-        100 1000 0 1))
+      (gnc:options-add-plot-size! 
+       options pagename-display (N_ "Plot Width") (N_ "Plot Height") "d" 400 400)
 
-      (register-option
-       (gnc:make-number-range-option
-        (N_ "Output") (N_ "Plot Height")
-        "b" (N_ "Height of plot in pixels.") 400
-        100 1000 0 1))
-
-      (register-option
-       (gnc:make-simple-boolean-option
-        (N_ "Output") (N_ "Show plot")
-        "b" (N_ "Display a graph of the selected data.") #t))
-
-      (register-option
-       (gnc:make-simple-boolean-option
-        (N_ "Output") (N_ "Show table")
-        "b" (N_ "Display a table of the selected data.") #f))
-
+      ;; Set the general page as default option tab
+      (gnc:options-set-default-section options pagename-general)      
       
       options))
 
@@ -104,16 +104,26 @@
   ;; analyze-splits crunches a split list into a set of period
   ;; summaries.  Each summary is a list of (start-date end-date
   ;; avg-bal max-bal min-bal total-in total-out net) if multiple
-  ;; accounts are selected the balance is the sum for all.  we aren't
-  ;; worrying about currency ATM :(
+  ;; accounts are selected the balance is the sum for all.  Each
+  ;; balance in a foreign currency will be converted to a double in
+  ;; the report-currency by means of the collector->double
+  ;; function. 
 
-  (define (analyze-splits splits start-bal start-date end-date interval)
+  ;; FIXME: the exchange rate should change every time interval, of
+  ;; course, but right now we assume the very last exchange rate to be
+  ;; constant over the whole report period. Note that this might get
+  ;; *really* complicated.
+
+  (define (analyze-splits splits start-bal 
+			  start-date end-date interval collector->double)
     (let* ((minmax-accum (gnc:make-stats-collector))
            (stats-accum (gnc:make-stats-collector))
            (gain-loss-accum (gnc:make-drcr-collector))
            (interval-start start-date)
-           (interval-end (incdate start-date interval))
-           (last-balance start-bal)
+	   ;; Note that this (decdate ... SecDelta) stuff is *vital*
+	   ;; to make sure that our intervals are *not overlapping*.
+           (interval-end (decdate (incdate start-date interval) SecDelta))
+           (last-balance (collector->double start-bal))
            (last-balance-time interval-start)
            (data-rows '()))
       
@@ -121,8 +131,7 @@
         (set! data-rows 
               (cons 
                (list (gnc:timepair-to-datestring interval-start)
-                     (gnc:timepair-to-datestring 
-                      (decdate interval-end SecDelta))
+                     (gnc:timepair-to-datestring interval-end)
                      (/ (stats-accum 'total #f)
                         (gnc:timepair-delta interval-start 
                                             interval-end))
@@ -134,6 +143,16 @@
                         (gain-loss-accum 'credits #f)))
                data-rows)))
       
+      ;; Returns a double which is the split value, correctly
+      ;; exchanged to the current report-currency.
+      (define (get-split-value split)
+	(let ((coll (gnc:make-commodity-collector)))
+	  (coll 'add (gnc:account-get-commodity (gnc:split-get-account split))
+		(gnc:split-get-amount split))
+	  ;; FIXME: not as efficient as it would be possible because I
+	  ;; only have the collector->double conversion at hand.
+	  (collector->double coll)))
+      
       ;; initialize the accumulators 
       (minmax-accum 'reset #f)
       (stats-accum 'reset #f)
@@ -141,14 +160,22 @@
 
       (minmax-accum 'add start-bal)
 
+      ;; Now go through all splits. FIXME: This assumes that there is
+      ;; at least one split in each time interval, especially in the
+      ;; first and the last one. I haven't yet thoroughly thought
+      ;; about what happens if that's not the case -- somebody should
+      ;; think this through.
       (for-each 
        (lambda (split)
+	 ;; xtn-date: The date of the current split.
          (let* ((xtn-date 
                  (gnc:transaction-get-date-posted 
                   (gnc:split-get-parent split)))
-                (split-amt (gnc:numeric-to-double 
-                            (gnc:split-get-value split))))
+		;; split-amt: The value of this split. Is a double.
+                (split-amt (get-split-value split)))
 
+	   ;; procedure to be executed if the current split is in the
+	   ;; interval
            (define (split-in-interval)
              (stats-accum 
               'add (* last-balance
@@ -160,6 +187,8 @@
              (minmax-accum 'add last-balance)
              (gain-loss-accum 'add split-amt))
            
+	   ;; procedure to be executed if the current split is not
+	   ;; (yet) in the interval
            (define (split-outside-interval)
              (stats-accum 
               'add (* last-balance
@@ -170,8 +199,8 @@
              
              ;; output a row of info 
              (output-row)
-             (set! interval-start interval-end)
-             (set! interval-end (incdate interval-start interval))
+             (set! interval-start (incdate interval-start interval))
+             (set! interval-end (decdate (incdate interval-start interval) SecDelta))
              
              ;; reset collectors 
              (minmax-accum 'reset #f)
@@ -181,7 +210,7 @@
            ;; is this split in the interval? 
            (let loop ()
              (if (gnc:timepair-le xtn-date interval-end)
-                 ;; transaction is inside interval 
+                 ;; yes, it is inside interval 
                  (split-in-interval)
                  ;; otherwise, loop until it is
                  ;; in the interval.
@@ -208,20 +237,35 @@
             (lambda (sec value)
               (gnc:option-value 
                (gnc:lookup-option (gnc:report-options report-obj) sec value))))
-           (begindate (gnc:date-option-absolute-time 
-                       (opt-val  (N_ "General") (N_ "From"))))
-           (enddate   (gnc:timepair-end-day-time 
-                       (gnc:date-option-absolute-time 
-                        (opt-val  (N_ "General") (N_ "To")))))
-           (stepsize  (eval (opt-val  (N_ "General") (N_ "Step Size"))))
-           (accounts  (opt-val  (N_ "General") (N_ "Accounts")))
-           (dosubs?   (opt-val  (N_ "General") (N_ "Sub-Accounts")))
-           (plot-type (opt-val  (N_ "Output") (N_ "Plot Type")))
-           (show-plot?  (opt-val (N_ "Output") (N_ "Show plot")))
-           (show-table? (opt-val (N_ "Output") (N_ "Show table")))
-           (document  (gnc:make-html-document))
-           (startbal  0.0))
+           (begindate  (gnc:timepair-start-day-time
+			(gnc:date-option-absolute-time 
+			 (opt-val pagename-general (N_ "From")))))
+           (enddate    (gnc:timepair-end-day-time 
+			(gnc:date-option-absolute-time 
+			 (opt-val pagename-general (N_ "To")))))
+           (stepsize   (eval (opt-val pagename-general (N_ "Step Size"))))
+           (accounts   (opt-val pagename-general (N_ "Accounts")))
+           (dosubs?    (opt-val pagename-general optname-subacct))
+	   (report-currency (opt-val pagename-general optname-report-currency))
+           (plot-type  (opt-val pagename-display (N_ "Plot Type")))
+           (show-plot? (opt-val pagename-display (N_ "Show plot")))
+           (show-table? (opt-val pagename-display (N_ "Show table")))
+           (document   (gnc:make-html-document))
+	   (exchange-alist (gnc:make-exchange-alist
+			    report-currency enddate))
+	   (exchange-fn (gnc:make-exchange-function exchange-alist))
+	   (beforebegindate (gnc:timepair-end-day-time 
+			     (gnc:timepair-previous-day begindate)))
+	   ;; startbal will be a commodity-collector
+           (startbal  '()))
       
+      (define (collector->double commodity-collector )
+	(gnc:numeric-to-double
+	 (gnc:gnc-monetary-amount
+	  (gnc:sum-collector-commodity commodity-collector
+				       report-currency 
+				       exchange-fn))))
+
       (gnc:html-document-set-title! document (N_ "Average Balance"))
 
       (if (not (null? accounts))
@@ -245,7 +289,10 @@
                            (set! subaccts 
                                  (append subaccts this-acct-subs)))))
                    accounts)
-                  (set! accounts (append accounts subaccts))))
+		  ;; Beware: delete-duplicates is an O(n^2)
+		  ;; algorithm. More efficient method: sort the list,
+		  ;; then use a linear algorithm.
+                  (set! accounts (delete-duplicates (append accounts subaccts)))))
             
             (gnc:query-add-account-match 
              query (gnc:list->glist accounts) 
@@ -262,24 +309,23 @@
                                           <gnc:Split*>))
             
             ;; find the net starting balance for the set of accounts 
-            (for-each
-             (lambda (acct)
-               (set! startbal 
-                     (+ startbal 
-                        (gnc:account-get-balance-at-date acct begindate 
-                                                         #f))))
-             accounts)
+	    (set! startbal 
+		  (gnc:accounts-get-balance-helper 
+		   accounts 
+		   (lambda (acct) (gnc:account-get-comm-balance-at-date 
+				   acct beforebegindate #f))
+		   gnc:account-reverse-balance?))
             
             ;; and analyze the data 
             (set! data (analyze-splits splits startbal begindate enddate 
-                                       stepsize))
+                                       stepsize collector->double))
             
             ;; make a plot (optionally)... if both plot and table, 
             ;; plot comes first. 
             (if show-plot?
                 (let ((barchart (gnc:make-html-barchart))
-                      (width (opt-val (N_ "Output") (N_ "Plot Width")))
-                      (height (opt-val (N_ "Output") (N_ "Plot Height")))
+                      (width (opt-val pagename-display (N_ "Plot Width")))
+                      (height (opt-val pagename-display (N_ "Plot Height")))
                       (col-labels '())
                       (col-colors '()))
                   (if (memq 'AvgBalPlot plot-type)

@@ -82,17 +82,8 @@
         "c" (N_ "Maximum number of slices in pie") 7
         2 24 0 1))
 
-      (add-option
-       (gnc:make-number-range-option
-        pagename-display optname-plot-width 
-        "d" (N_ "Width of plot in pixels.") 500
-        100 1000 0 1))
-
-      (add-option
-       (gnc:make-number-range-option
-        pagename-display optname-plot-height
-        "e" (N_ "Height of plot in pixels.") 250
-        100 1000 0 1))
+      (gnc:options-add-plot-size! options pagename-display 
+				  optname-plot-width optname-plot-height "d" 500 250)
 
       (gnc:options-set-default-section options pagename-general)      
 
