@@ -215,7 +215,9 @@ gnc_quickfill_get_unique_len_match (QuickFill *qf, int *length)
     count = g_hash_table_size (qf->matches);
 
     if (count != 1)
+    {
       return qf;
+    }
 
     g_hash_table_foreach (qf->matches, unique_len_helper, &qf);
 
