@@ -1,3 +1,8 @@
+2005-01-28  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-ledger/Makefile.am: add explicit
+	  dependency on business-utils.
+
 2005-01-23  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncInvoice.c: Properly accumulate
