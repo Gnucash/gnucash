@@ -61,6 +61,7 @@
 ;; from path.scm
 (export gnc:make-home-dir)
 (export gnc:current-config-auto)
+(export gnc:current-saved-reports)
 
 ;; from command-line.scm
 (export gnc:*config-path*)

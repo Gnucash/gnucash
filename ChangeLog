@@ -1,3 +1,11 @@
+2004-06-18  Derek Atkins  <derek@ihtfp.com>
+
+	* src/scm/paths.scm: create gnc:current-saved-reports, as
+	  the file to store saved reports from cstim.  Autoload the
+	  saved-reports file at startup (after config.user/config.auto
+	  is loaded).	  
+	* src/scm/main.scm: export gnc:current-saved-reports
+
 2004-05-31  Linas Vepstas <linas@linas.org>
 	* src/...:
 	  Backport of CVS-head changes to improve register open 
