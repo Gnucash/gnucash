@@ -1096,7 +1096,7 @@
 	    <wrap>False</wrap>
 	    <value>0</value>
 	    <lower>0</lower>
-	    <upper>100000</upper>
+	    <upper>1000000000</upper>
 	    <step>1</step>
 	    <page>10</page>
 	    <page_size>10</page_size>
