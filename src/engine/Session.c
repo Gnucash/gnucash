@@ -131,7 +131,7 @@ xaccSessionGetFilePath (Session *sess)
 /* ============================================================== */
 
 AccountGroup *
-xaccSessionBegin (Session *sess, char * sid)
+xaccSessionBegin (Session *sess, const char * sid)
 {
    AccountGroup *retval;
 
@@ -165,7 +165,7 @@ xaccSessionBegin (Session *sess, char * sid)
 }
 
 AccountGroup *
-xaccSessionBeginFile (Session *sess, char * filefrag)
+xaccSessionBeginFile (Session *sess, const char * filefrag)
 {
    struct stat statbuf;
    char pathbuf[PATH_MAX];
@@ -331,6 +331,17 @@ xaccSessionDestroy (Session *sess)
    free (sess);
 }
 
+
+/* ============================================================== */
+/* hack alert -- implement this function.
+ * if $HOME/.gnucash/data directory doesn't exist, then create it
+ * this helps us slide by install errors made by naive users. 
+ */
+
+static void 
+MakeHomeDir (void) 
+{}
+
 /* ============================================================== */
 
 /* hack alert -- we should be yanking this out of 
@@ -407,6 +418,9 @@ xaccResolveFilePath (const char * filefrag)
          return (strdup (path));
       }
    }
+
+   /* make sure that the gnucash home dir exists. */
+   MakeHomeDir();
 
    /* OK, we didn't find the file */
    /* Lets try creating a new file in $HOME/.gnucash/data */

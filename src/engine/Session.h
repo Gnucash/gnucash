@@ -149,8 +149,8 @@ void       xaccSessionDestroy (Session *);
  *
  */
 
-AccountGroup * xaccSessionBegin       (Session *, char * sessionid);
-AccountGroup * xaccSessionBeginFile   (Session *, char * filename);
+AccountGroup * xaccSessionBegin       (Session *, const char * sessionid);
+AccountGroup * xaccSessionBeginFile   (Session *, const char * filename);
 int            xaccSessionGetError    (Session *);
 AccountGroup * xaccSessionGetGroup    (Session *);
 void           xaccSessionSetGroup    (Session *, AccountGroup *topgroup);
