@@ -28,6 +28,7 @@
 
 #include <openhbci/interactorcb.h>
 #include <openhbci/progressmonitorcb.h>
+#include <openhbci.h>
 #include "dialog-utils.h"
 #include "druid-utils.h"
 #include "gnc-ui-util.h"
@@ -174,6 +175,19 @@ static void jobStarted(JobProgressType type, int actions, void *user_data)
   case    JOB_SEND_KEYS:
     msg = _("Job: Send Keys");
     break;
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>8)
+    /** Disable keys */
+  case JOB_DISABLE_KEYS:
+    msg = _("Job: Disable Keys");
+    break;
+    /** Change keys */
+  case JOB_CHANGE_KEYS:
+    msg = _("Job: Change Keys");
+    break;
+#else /* OPENHBCI_VERSION > 0.9.8 */
+  default:
+    msg = _("Unknown");
+#endif /* OPENHBCI_VERSION > 0.9.8 */
   }
   g_assert(msg);
     
