@@ -48,6 +48,7 @@ void gncBillTermCommitEdit (GncBillTerm *term);
 GncBillTerm *gncBillTermLookup (QofBook *book, const GUID *guid);
 GncBillTerm *gncBillTermLookupByName (QofBook *book, const char *name);
 GList * gncBillTermGetTerms (QofBook *book);
+KvpFrame* gncBillTermGetSlots (GncBillTerm *term);
 
 const GUID *gncBillTermGetGUID (GncBillTerm *term);
 QofBook *gncBillTermGetBook (GncBillTerm *term);

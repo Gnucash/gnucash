@@ -15,17 +15,20 @@
 #include "qofquerycore.h"
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"
+#include "kvp_frame.h"
 #include "qofbook.h"
+#include "qofclass.h"
 #include "qofid.h"
 #include "qofid-p.h"
+#include "qofinstance.h"
 #include "qofquery.h"
-#include "qofclass.h"
 
 #include "gncBusiness.h"
 #include "gncBillTermP.h"
 
 
 struct _gncBillTerm {
+  QofInstance  inst;
   GUID		guid;
   char *	name;
   char *	desc;
@@ -95,6 +98,7 @@ GncBillTerm * gncBillTermCreate (QofBook *book)
   if (!book) return NULL;
 
   term = g_new0 (GncBillTerm, 1);
+  qof_instance_init(&term->inst);
   term->book = book;
   term->name = CACHE_INSERT ("");
   term->desc = CACHE_INSERT ("");
@@ -123,6 +127,7 @@ static void gncBillTermFree (GncBillTerm *term)
   gnc_engine_generate_event (&term->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
   CACHE_REMOVE (term->name);
   CACHE_REMOVE (term->desc);
+  qof_instance_release(&term->inst);
   remObj (term);
 
   if (!term->do_free)

@@ -45,8 +45,9 @@
 #include "gnc-bill-term-xml-v2.h"
 #include "gnc-engine-util.h"
 
-#include "gncObject.h"
 #include "gncInvoice.h"
+#include "qofinstance.h"
+#include "qofobject.h"
 
 #define _GNC_MOD_NAME	GNC_BILLTERM_MODULE_NAME
 
@@ -100,7 +101,7 @@ maybe_add_numeric (xmlNodePtr ptr, const char *tag, gnc_numeric val)
 static xmlNodePtr
 billterm_dom_tree_create (GncBillTerm *term)
 {
-    xmlNodePtr ret, data;
+    xmlNodePtr ret, data, kvpnode;
 
     ret = xmlNewNode(NULL, gnc_billterm_string);
     xmlSetProp(ret, "version", billterm_version_string);
@@ -115,6 +116,11 @@ billterm_dom_tree_create (GncBillTerm *term)
 				      gncBillTermGetRefcount (term)));
     xmlAddChild(ret, int_to_dom_tree (billterm_invisible_string,
 				      gncBillTermGetInvisible (term)));
+
+    kvpnode = kvp_frame_to_dom_tree (billterm_slots_string,
+                 qof_instance_get_slots (QOF_INSTANCE(term)));
+    if (kvpnode) xmlAddChild (ret, kvpnode);
+
 
     /* We should not be our own child */
     if (gncBillTermGetChild(term) != term)
@@ -407,7 +413,9 @@ billterm_prox_data_handler (xmlNodePtr node, gpointer billterm_pdata)
 static gboolean
 billterm_slots_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-  return TRUE;
+  struct billterm_pdata *pdata = billterm_pdata;
+  return dom_tree_to_kvp_frame_given (node, 
+        qof_instance_get_slots (QOF_INSTANCE(pdata->term)));
 }
 
 static struct dom_tree_handler billterm_handlers_v2[] = {
@@ -504,7 +512,7 @@ static int
 billterm_get_count (GNCBook *book)
 {
   int count = 0;
-  gncObjectForeach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
+  qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
   return count;
 }
 
@@ -524,7 +532,7 @@ xml_add_billterm (gpointer term_p, gpointer out_p)
 static void
 billterm_write (FILE *out, GNCBook *book)
 {
-  gncObjectForeach (_GNC_MOD_NAME, book, xml_add_billterm, (gpointer) out);
+  qof_object_foreach (_GNC_MOD_NAME, book, xml_add_billterm, (gpointer) out);
 }
 
 static gboolean
@@ -682,10 +690,10 @@ billterm_scrub (GNCBook *book)
   GncBillTerm *parent, *term;
   GHashTable *ht = g_hash_table_new(g_direct_hash, g_direct_equal);
 
-  gncObjectForeach (GNC_INVOICE_MODULE_NAME, book, billterm_scrub_invoices, ht);
-  gncObjectForeach (GNC_CUSTOMER_MODULE_NAME, book, billterm_scrub_cust, ht);
-  gncObjectForeach (GNC_VENDOR_MODULE_NAME, book, billterm_scrub_vendor, ht);
-  gncObjectForeach (_GNC_MOD_NAME, book, billterm_scrub_cb, &list);
+  qof_object_foreach (GNC_INVOICE_MODULE_NAME, book, billterm_scrub_invoices, ht);
+  qof_object_foreach (GNC_CUSTOMER_MODULE_NAME, book, billterm_scrub_cust, ht);
+  qof_object_foreach (GNC_VENDOR_MODULE_NAME, book, billterm_scrub_vendor, ht);
+  qof_object_foreach (_GNC_MOD_NAME, book, billterm_scrub_cb, &list);
 
   /* destroy the list of "grandchildren" bill terms */
   for (node = list; node; node = node->next) {
@@ -723,7 +731,7 @@ gnc_billterm_xml_initialize (void)
     billterm_scrub,
   };
 
-  gncObjectRegisterBackend (_GNC_MOD_NAME,
+  qof_object_register_backend (_GNC_MOD_NAME,
 			    GNC_FILE_BACKEND,
 			    &be_data);
 }
