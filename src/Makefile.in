@@ -84,6 +84,6 @@ clean:
 	rm -f *.o *~ *.bak
 
 distclean: clean
-	rm -f $(TARGET) Makefile Makefile.bak config.h
+	rm -f $(TARGET) $(STATIC) Makefile Makefile.bak config.h
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
