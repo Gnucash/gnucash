@@ -1,8 +1,10 @@
-Makefile
-Makefile.in
+*.lo
+*.la
 .scm-links
 .deps
 .libs
+Makefile
+Makefile.in
 gw-report-gnome.scm
 gw-report-gnome.html
 gw-report-gnome.h
