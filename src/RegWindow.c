@@ -2381,7 +2381,7 @@ closeRegWindow( Widget mw, XtPointer cd, XtPointer cb )
   freePopBox (regData->xfrmbox);
   freePopBox (regData->xtobox);
 
-  if (1 == regData ->numAcc) {
+  if (1 >= regData ->numAcc) {
      regData->blackacc[0]->regData = NULL;
   } else {
      regData->blackacc[0]->regLedger = NULL;
