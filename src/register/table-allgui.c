@@ -221,8 +221,10 @@ xaccTableResize (Table * table,
    if (!table) return;
    if ((new_phys_rows < new_virt_rows) ||
        (new_phys_cols < new_virt_cols)) {
-      printf ("Internal Error: xaccTableResize(): the number of "
-         "physical rows must equal or exceed the number of virtual rows \n");
+      FATAL ("xaccTableResize(): the number of physical rows (%d %d)"
+             "must equal or exceed the number of virtual rows (%d %d)\n",
+             new_phys_rows, new_phys_cols,
+             new_virt_rows, new_virt_cols);
       exit (1);
    }
 
@@ -404,6 +406,8 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
    int new_virt_row, new_virt_col;
    CellBlock *curs;
 
+   ENTER("doMoveCursor(): new_phys=(%d %d) do_move_gui=%d\n", 
+       new_phys_row, new_phys_col, do_move_gui);
    /* Change the cell background colors to thier "passive" values.
     * This denotes that the cursor has left this location (which means more or
     * less the same thing as "the current location is no longer being edited.")
@@ -464,6 +468,7 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
             }
          }
       }
+      LEAVE("doMoveCursor(): out of bounds\n");
       return;
    }
 
@@ -535,6 +540,7 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
    }
 
    curs->user_data = table->user_data[new_virt_row][new_virt_col];
+   LEAVE("doMoveCursor(): did move\n");
 }
 
 /* ==================================================== */
@@ -875,13 +881,13 @@ gnc_table_enter_update(Table *table,
   /* OK, if there is a callback for this cell, call it */
   enter = arr->cells[rel_row][rel_col]->enter_cell;
 
-  printf("ENTER: %d %d == (", rel_row, rel_col);
+  PINFO("table: ENTER: %d %d == (", rel_row, rel_col);
 
   if (enter) {
     const char *val;
     char *retval;
 
-    printf("has enter handler");
+    PINFO("has enter handler");
     
     val = table->entries[row][col];
     retval = (char *) enter(arr->cells[rel_row][rel_col], val);
@@ -893,7 +899,7 @@ gnc_table_enter_update(Table *table,
       *new_text = retval;
     }
   }
-  printf(")\n");
+  PINFO(")\n");
   
   /* record this position as the cell that will be
    * traversed out of if a traverse even happens */

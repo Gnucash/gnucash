@@ -423,7 +423,7 @@ configLayout (SplitRegister *reg)
       }
       /* --------------------------------------------------------- */
       default:
-         printf ("Internal Error: configLayout(): "
+         PERR ("configLayout(): "
            "unknown register type %d \n", type);
          break;
    }

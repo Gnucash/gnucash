@@ -35,7 +35,7 @@
 static void qfInsertTextRec( QuickFill *qf, const char * text, int depth );
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_LEDGER;
+static short module = MOD_REGISTER;
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
