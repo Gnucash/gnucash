@@ -1,3 +1,19 @@
+2002-08-10  David Hampton  <hampton@employees.org>
+
+	* src/engine/Account.c (xaccAccountGetDescendants): New function
+	for consolidating logic.
+
+	* src/gnome/reconcile-list.c (gnc_reconcile_list_new): Use new
+	xaccAccountGetDescendants function.
+
+	* src/gnome/window-reconcile.c (recn_set_watches): Notice changes
+	to all transactions in the reconciliation window, not just those
+	transactions that are in the current account.
+
+	* src/gnome-utils/gnc-mdi-utils.c (gnc_mdi_configure_toolbar_cb):
+	Fix the gnc-mdi window to immediately track the toolbar text/icon
+	setting instead of requiring a restart.
+
 2002-08-10  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/hbci-interaction.[hc]: Add code for

@@ -1507,18 +1507,11 @@ find_by_account (gpointer find_data, gpointer user_data)
 }
 
 static void
-recn_set_watches (RecnWindow *recnData)
+recn_set_watches_one_account (gpointer data, gpointer user_data)
 {
-  Account *account;
+  Account *account = (Account *)data;
+  RecnWindow *recnData = (RecnWindow *)user_data;
   GList *node;
-
-  gnc_gui_component_clear_watches (recnData->component_id);
-
-  gnc_gui_component_watch_entity (recnData->component_id,
-                                  &recnData->account,
-                                  GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
-
-  account = recn_get_account (recnData);
 
   for (node = xaccAccountGetSplitList (account); node; node = node->next)
   {
@@ -1542,6 +1535,33 @@ recn_set_watches (RecnWindow *recnData)
         break;
     }
   }
+}
+
+static void
+recn_set_watches (RecnWindow *recnData)
+{
+  gboolean include_children;
+  Account *account;
+  GList *accounts = NULL;
+
+  gnc_gui_component_clear_watches (recnData->component_id);
+
+  gnc_gui_component_watch_entity (recnData->component_id,
+                                  &recnData->account,
+                                  GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+
+  account = recn_get_account (recnData);
+
+  include_children = xaccAccountGetReconcileChildrenStatus(account);
+  if (include_children)
+    accounts = xaccAccountGetDescendants(account);
+
+  /* match the account */
+  accounts = g_list_prepend (accounts, account);
+
+  g_list_foreach(accounts, recn_set_watches_one_account, recnData);
+
+  g_list_free (accounts);
 }
 
 static void

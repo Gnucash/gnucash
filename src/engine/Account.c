@@ -1595,6 +1595,17 @@ xaccAccountGetParentAccount (Account * acc)
   return xaccGroupGetParentAccount(acc->parent);
 }
 
+GList *
+xaccAccountGetDescendants (Account *acc)
+{
+   GList *accounts;
+
+   if (!acc) return NULL;
+   accounts = xaccGroupGetSubAccounts(acc->children);
+   accounts = g_list_copy (accounts);
+   return (accounts);
+}
+
 GNCAccountType
 xaccAccountGetType (Account *acc)
 {

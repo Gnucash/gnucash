@@ -289,6 +289,7 @@ void xaccAccountDeleteOldData (Account *account);
 AccountGroup * xaccAccountGetChildren (Account *account);
 AccountGroup * xaccAccountGetParent (Account *account);
 Account *      xaccAccountGetParentAccount (Account *account);
+GList *        xaccAccountGetDescendants (Account *account);
 
 gnc_numeric     xaccAccountGetBalance (Account *account);
 gnc_numeric     xaccAccountGetClearedBalance (Account *account);

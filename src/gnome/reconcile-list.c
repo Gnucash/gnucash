@@ -117,7 +117,7 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
 {
   GNCReconcileList *list;
   gboolean include_children;
-  GList *accounts;
+  GList *accounts = NULL;
 
   g_return_val_if_fail(account, NULL);
   g_return_val_if_fail((type == RECLIST_DEBIT) ||
@@ -132,19 +132,12 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
 
   xaccQuerySetBook(list->query, gnc_get_current_book ());
 
-  /* match the account */
-  accounts = g_list_prepend (NULL, account);
-
   include_children = xaccAccountGetReconcileChildrenStatus(account);
   if (include_children)
-  {
-    AccountGroup *account_group = xaccAccountGetChildren(account);
-    GList *children = xaccGroupGetSubAccounts(account_group);
+    accounts = xaccAccountGetDescendants(account);
 
-    children = g_list_copy (children);
-
-    accounts = g_list_concat (accounts, children);
-  }
+  /* match the account */
+  accounts = g_list_prepend (accounts, account);
 
   xaccQueryAddAccountMatch (list->query, accounts, GUID_MATCH_ANY, QUERY_AND);
 
