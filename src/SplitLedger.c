@@ -55,6 +55,30 @@
 #define BUFSIZE 1024
 
 /* ======================================================== */
+/* the force_double_entry_awareness flag controls how the 
+ * register behaves if the user failed to specify a transfer-to
+ * account when creting a new split.  What it does is simple,
+ * although it can lead to some confusion to the user.
+ * If this flag is set, then any new split will be put into
+ * exactly the same account as the split immediately above it.
+ * If the spluit immediately above is the leader, then what
+ * happens visually is that it appears as if there are two 
+ * transactions,  one debiting and one crediting this acdunt
+ * by exactly the same amount.  Thus, the user is forced to
+ * deal with this somewhat nutty situation.
+ *
+ * If this flag is *not* set, then the split just sort of 
+ * hangs out, without beloinging to any account. This will 
+ * of course lead to a lkedger that fails to balance.
+ * Bummer, duude !
+ *
+ * hack alert -- this flag should really be made a configurable 
+ * item in some config script.
+ */
+
+static int force_double_entry_awareness = 0;
+
+/* ======================================================== */
 /* this callback gets called when the user clicks on the gui
  * in such a way as to leave the current transaction, and to 
  * go to a new one.  So, save the current transaction.
@@ -301,12 +325,15 @@ printf ("save split is %p \n", split);
          return;
       }
       trans = xaccSplitGetParent (s);
-      acc = xaccSplitGetAccount (s);
 
       split = xaccMallocSplit ();
       xaccTransBeginEdit (trans, 0);   
       xaccTransAppendSplit (trans, split);
-      xaccAccountInsertSplit (acc, split);
+
+      if (force_double_entry_awareness) {
+         acc = xaccSplitGetAccount (s);
+         xaccAccountInsertSplit (acc, split);
+      }
 
       assert (reg->table->current_cursor);
       reg->table->current_cursor->user_data = (void *) split;
@@ -344,41 +371,49 @@ printf ("save split is %p \n", split);
     * XFRM is the straight split, MXFRM is the mirrored split.
     */
    if (MOD_XFRM & changed) {
-      Split *split_to_modify = NULL;
+      Account *old_acc=NULL, *new_acc=NULL;
 
-      split_to_modify = split;
-
-      /* split to modify may be null if its a mutli-split transaction,
-       * and a single-line or two-line display.  Then do nothing */
-      if (split_to_modify) {
-         Account *old_acc=NULL, *new_acc=NULL;
-
-         /* do some reparenting. Insertion into new account will automatically
-          * delete from the old account */
-         old_acc = xaccSplitGetAccount (split_to_modify);
-         new_acc = xaccGetAccountByName (trans, reg->xfrmCell->cell.value);
-         xaccAccountInsertSplit (new_acc, split_to_modify);
+      /* do some reparenting. Insertion into new account will automatically
+       * delete this split from the old account */
+      old_acc = xaccSplitGetAccount (split);
+      new_acc = xaccGetAccountByName (trans, reg->xfrmCell->cell.value);
+      xaccAccountInsertSplit (new_acc, split);
    
-         /* make sure any open windows of the old account get redrawn */
-         xaccAccountDisplayRefresh (old_acc);
-      }
+      /* make sure any open windows of the old account get redrawn */
+      xaccAccountDisplayRefresh (old_acc);
    }
 
    if (MOD_MXFRM & changed) {
-      Split *split_to_modify = NULL;
+      Split *other_split = NULL;
 
-      split_to_modify = xaccGetOtherSplit(split);
+      other_split = xaccGetOtherSplit(split);
 
-      /* split to modify may be null if its a mutli-split transaction,
-       * and a single-line or two-line display.  Then do nothing */
-      if (split_to_modify) {
+      /* other_split may be null for two very different reasons:
+       * (1) the parent transaction has three or more splits in it,
+       *     and so the "other" split is ambiguous, and thus null.
+       * (2) the parent transaction has only this one split as a child.
+       *     and "other" is null because there is no other.
+       *
+       * In the case (2), we want to create the other split, so that 
+       * the user's request to transfer actually woprks out.
+       */
+
+      if (!other_split) {
+         other_split = xaccTransGetSplit (trans, 1);
+         if (!other_split) {
+            other_split = xaccMallocSplit ();
+            xaccTransAppendSplit (trans, other_split);
+         }
+      }
+
+      if (other_split) {
          Account *old_acc=NULL, *new_acc=NULL;
 
          /* do some reparenting. Insertion into new account will automatically
           * delete from the old account */
-         old_acc = xaccSplitGetAccount (split_to_modify);
+         old_acc = xaccSplitGetAccount (other_split);
          new_acc = xaccGetAccountByName (trans, reg->mxfrmCell->cell.value);
-         xaccAccountInsertSplit (new_acc, split_to_modify);
+         xaccAccountInsertSplit (new_acc, other_split);
    
          /* make sure any open windows of the old account get redrawn */
          xaccAccountDisplayRefresh (old_acc);
