@@ -76,12 +76,6 @@ gnc_transaction_set_date(Transaction *t, Timespec ts)
   xaccTransSetDatePostedTS(t, &ts);
 }
 
-char *
-gnc_gettext_helper(const char *string)
-{
-  return strdup(_(string));
-}
-
 SCM
 gnc_timespec2timepair(Timespec t)
 {

@@ -26,3 +26,12 @@ register/register-gnome     Gnome-specific register code, formerly in
 import-export/qif-import    the old qif importer with Gnome druid 
 import-export/qif-io-core   new qif import/export module.  unfinished.
 
+report/report-system        the report infrastructure and HTML handling 
+report/standard-reports     most of the reports that are in gnucash
+report/utility-reports      the multicolumn view, the iframe report, etc. 
+report/locale-specific-reports  reports that should only be loaded in 
+                                certain locales. subdir per locale. 
+report/stylesheets          predefined style sheet templates 
+
+app-utils                   utils for the gnucash app framework (component 
+                            mgr, cmd line processing, gettext stuff, etc)

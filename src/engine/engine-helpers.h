@@ -44,9 +44,6 @@ void gnc_transaction_set_date_entered(Transaction *t, const Timespec d);
 
 void gnc_transaction_set_date(Transaction *t, Timespec ts);
 
-char * gnc_gettext_helper(const char *string);
-
-
 /* Helpers for various types */
 
 SCM      gnc_timespec2timepair(Timespec t);

@@ -42,6 +42,7 @@ INCLUDES = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/guile \
   -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/register/ledger-core \
   -I${top_srcdir}/src/register/register-core \
   ${GLIB_CFLAGS} \

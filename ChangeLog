@@ -1,3 +1,21 @@
+2001-08-16  Bill Gribble  <grib@billgribble.com>
+
+	* move report system into gnc-modules. This required a new
+	module of application framework stuff, src/app-utils.
+
+	* src/report/report-system/: the report-html-generation code
+	and the various report utilities and infrastructure
+
+	* src/report/standard-reports/: non-locale-specific financial
+	reports
+
+	* src/report/utility-reports: non-financial reports
+
+	* src/report/locale-specific: reports that only apply to specific
+	locales. 
+
+	* src/report/stylesheet: report style sheet definitions
+
 2001-08-16  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/engine/FreqSpec.c: Take out day and month name arrays - use 
@@ -7,10 +25,11 @@
 	buttons to obsolete-sx dialog.
 	
 	* src/gnome/dialog-sxsincelast.c: Remove string literals and magic
-	numbers.  (freq_type_to_string) remove.  (_create_transactions_on):
-	catch errors a bit better. (sx_obsolete_row_{un}sel): remove unnecessary
-	warnings.  (sx_obsolete_{un}select_all_clicked): add callbacks for
-	"select all" and "unselect all" buttons.
+	numbers.  (freq_type_to_string) remove.
+	(_create_transactions_on): catch errors a bit
+	better. (sx_obsolete_row_{un}sel): remove unnecessary warnings.
+	(sx_obsolete_{un}select_all_clicked): add callbacks for "select
+	all" and "unselect all" buttons.
 
 2001-08-15  Christian Stimming  <stimming@tuhh.de>
 

@@ -56,6 +56,7 @@
 #include "window-help.h"
 #include "window-reconcile.h"
 #include "window-register.h"
+#include "top-level.h"
 
 
 typedef struct _RegDateWindow RegDateWindow;

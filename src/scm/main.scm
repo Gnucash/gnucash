@@ -51,27 +51,27 @@
   ;; right now we have to statically load all these at startup time.
   ;; Hopefully we can gradually make them autoloading.
   (gnc:module-load "gnucash/engine" 0)
+  (gnc:module-load "gnucash/app-utils" 0)
   (gnc:module-load "gnucash/register/ledger-core" 0)
   (gnc:module-load "gnucash/register/register-core" 0)
   (gnc:module-load "gnucash/register/register-gnome" 0)
   (gnc:module-load "gnucash/import-export/qif-import" 0)
-  
+  (gnc:module-load "gnucash/report/report-system" 0)
+  (gnc:module-load "gnucash/report/standard-reports" 0)
+  (gnc:module-load "gnucash/report/utility-reports" 0)
+
   ;; Now we can load a bunch of files.
   (gnc:depend "config-var.scm")
   (gnc:depend "utilities.scm")
   (gnc:depend "path.scm")
-  (gnc:depend "c-interface.scm")
   (gnc:depend "options.scm")
   (gnc:depend "prefs.scm")
   (gnc:depend "command-line.scm")
-  (gnc:depend "hooks.scm")
   (gnc:depend "doc.scm")
   (gnc:depend "extensions.scm")
   (gnc:depend "text-export.scm")
-  (gnc:depend "report.scm")
   (gnc:depend "main-window.scm")
   (gnc:depend "commodity-import.scm")
-  (gnc:depend "report/report-list.scm")
   (gnc:depend "printing/print-check.scm")
   (gnc:depend "price-quotes.scm")
   (gnc:depend "tip-of-the-day.scm")

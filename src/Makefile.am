@@ -4,8 +4,10 @@ SUBDIRS = \
   gnc-module \
   engine \
   backend \
+  app-utils \
   register \
   import-export \
+  report \
   calculation \
   experimental \
   guile \
@@ -27,7 +29,9 @@ bin_PROGRAMS = gnucash gnucash-make-guids
 # that's fixed.
 gnucash_LDADD = \
   -Lengine -Lengine/.libs \
+  -Lgnc-module -Lgnc-module/.libs \
   gnc-module/libgncmodule.la \
+  app-utils/libgncmod-app-utils.la \
   engine/libgncmod-engine.la \
   engine/libgw-engine.la \
   engine/libgw-glib.la \
@@ -56,10 +60,8 @@ gnucash_LDADD = \
 gnucash_SOURCES = \
   EuroUtils.c \
   FileDialog.c \
-  gnc-component-manager.c \
-  gnc-exp-parser.c \
   gnc-main.c \
-  gnc-ui-util.c
+  gnc-exp-parser.c 
 
 gnucash_make_guids_LDADD = \
   gnc-module/libgncmodule.la \
@@ -79,11 +81,8 @@ noinst_HEADERS = \
   FileDialog.h \
   RecnWindow.h \
   file-history.h \
-  gnc-component-manager.h \
-  gnc-exp-parser.h \
   gnc-ui.h \
   gnc-ui-common.h \
-  gnc-ui-util.h \
   messages.h
 
 EXTRA_DIST = \
@@ -93,6 +92,7 @@ EXTRA_DIST = \
 CFLAGS = @CFLAGS@ ${GNOME_INCLUDEDIR} ${GUILE_INCS}
 
 INCLUDES = \
+  -I./app-utils \
   -I./calculation \
   -I./engine \
   -I./guile \

@@ -138,6 +138,7 @@ INCLUDES = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/calculation \
   -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/g-wrap \
   -I${top_srcdir}/src/guile \

@@ -1,0 +1,26 @@
+#! /bin/sh 
+exec guile -s "$0"
+!#
+
+(debug-enable 'debug)
+(debug-enable 'backtrace)
+
+(debug-set! stack 5000000)
+(debug-set! maxdepth 10000)
+
+(display "  testing report module load ... ")
+(use-modules (ice-9 syncase))
+(use-modules (gnucash gnc-module))
+(gnc:module-system-init)
+
+(if (gnc:module-load "gnucash/report/report-system" 0)
+    (begin 
+      (display "ok\n")
+      (exit 0))
+    (begin 
+      (display "failed\n")
+      (exit -1)))
+
+
+ 
+

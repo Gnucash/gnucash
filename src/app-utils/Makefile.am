@@ -1,0 +1,67 @@
+SUBDIRS = . test
+
+pkglib_LTLIBRARIES = libgncmod-app-utils.la
+
+CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}
+
+INCLUDES = -I${top_srcdir}/src/gnc-module \
+           -I${top_srcdir}/src/engine ${GUILE_INCS} \
+           -I..
+
+libgncmod_app_utils_la_SOURCES = \
+  gfec.c \
+  global-options.c \
+  gnc-component-manager.c \
+  gnc-gettext-util.c \
+  gnc-helpers.c \
+  gncmod-app-utils.c \
+  gnc-ui-util.c \
+  guile-util.c \
+  option-util.c 
+
+noinst_HEADERS = \
+  gnc-component-manager.h \
+  gnc-gettext-util.h \
+  gnc-helpers.h \
+  gnc-ui-util.h \
+  guile-util.h 
+
+libgncmod_app_utils_la_LDFLAGS = -module
+
+libgncmod_app_utils_la_LIBADD = \
+  -L../engine -L../engine/.libs -lgncmod-engine \
+  -L../gnc-module -L../gnc-module/.libs -lgncmodule \
+  ${GUILE_LIBS} ${GLIB_LIBS}
+
+libgw_app_utils_la_SOURCES=gw-app-utils.c
+libgw_app_utils_la_LDFLAGS=-module
+
+gncmoddir=${GNC_SHAREDIR}/guile-modules/gnucash
+gncmod_DATA=app-utils.scm 
+
+gncscmdir=${GNC_SHAREDIR}/scm
+gncscm_DATA=c-interface.scm options.scm hooks.scm date-utilities.scm
+
+gwmoddir=${GNC_SHAREDIR}/guile-modules/g-wrapped
+gwmod_LTLIBRARIES=libgw-app-utils.la
+gwmod_DATA=gw-app-utils-spec.scm
+
+noinst_DATA=.scm-links
+
+.scm-links: 
+	rm -f gnucash g-wrapped
+	ln -sf . gnucash 
+	ln -sf . g-wrapped 
+	touch .scm-links
+
+gw-app-utils.c gw-app-utils.h: .scm-links gw-app-utils-spec.scm
+	FLAVOR=gnome guile -c \
+	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
+	  (set! %load-path (cons \"${PWD}\" %load-path)) \
+	  (set! %load-path (cons \"${top_srcdir}/src/engine\" %load-path)) \
+	  (primitive-load \"./gw-app-utils-spec.scm\") \
+	  (gw:generate-module \"gw-app-utils\")"
+
+BUILT_SOURCES += gw-app-utils.c gw-app-utils.h
+CLEANFILES += gw-app-utils.c gw-app-utils.h gw-app-utils.html \
+              gnucash g-wrapped .scm-links

@@ -56,7 +56,7 @@
 #include "window-help.h"
 #include "window-reconcile.h"
 #include "window-register.h"
-
+#include "top-level.h"
 
 #define WINDOW_RECONCILE_CM_CLASS "window-reconcile"
 

@@ -254,7 +254,6 @@
       "#include <Backend.h>\n"
       "#include <gnc-book.h>\n"
       "#include <gnc-engine-util.h>\n"
-      "#include <gnc-ui-util.h>\n"
       "#include <date.h>\n"
       "#include <engine-helpers.h>\n"
       "#include <gnc-engine.h>\n"
@@ -2320,11 +2319,22 @@ of having a parent transaction with which one is working...")
    '((<gnc:numeric> arg))
    "Convert gnc_numeric to a printable string")
 
-
   (gw:wrap-function
    mod
    'gnc:run-rpc-server
    '<gw:void>
    "gnc_run_rpc_server"
    '()
-   "Run the RPC Server"))
+   "Run the RPC Server") 
+
+  ;; src/engine/date.h
+
+  (gw:wrap-function
+   mod
+   'gnc:timepair-canonical-day-time
+   '<gnc:time-pair>
+   "timespecCanonicalDayTime" '((<gnc:time-pair> tp))
+   "Convert a timepair on a certain day (localtime) to\
+the timepair representing midday on that day"))
+
+

@@ -6,9 +6,6 @@
 ;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(gnc:depend "utilities.scm")
-(gnc:depend "report-utilities.scm")
-
 (define-module (gnucash import-export qif-import))
 (use-modules (g-wrapped gw-runtime))
 (use-modules (gnucash gnc-module))

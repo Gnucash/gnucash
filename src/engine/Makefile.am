@@ -84,7 +84,7 @@ gncmod_DATA=engine.scm
 
 gncscmdir=${GNC_SHAREDIR}/scm
 gncscm_DATA=commodity-table.scm engine-init.scm engine-interface.scm \
-engine-utilities.scm gnc-numeric.scm iso-4217-currencies.scm
+engine-utilities.scm gnc-numeric.scm iso-4217-currencies.scm 
 
 gwmoddir=${GNC_SHAREDIR}/guile-modules/g-wrapped
 gwmod_LTLIBRARIES=libgw-glib.la libgw-engine.la 

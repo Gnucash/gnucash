@@ -620,11 +620,8 @@ AC_OUTPUT(
           po/Makefile
           rpm/Makefile
           src/Makefile
-          src/calculation/Makefile 
-          src/doc/Makefile
-          src/doc/design/Makefile
-          src/engine/Makefile
-          src/engine/test/Makefile
+          src/app-utils/Makefile
+          src/app-utils/test/Makefile
           src/backend/Makefile
           src/backend/file/Makefile
           src/backend/file/test/Makefile
@@ -633,6 +630,11 @@ AC_OUTPUT(
           src/backend/postgres/Makefile
           src/backend/postgres/test/Makefile
           src/backend/rpc/Makefile
+          src/calculation/Makefile 
+          src/doc/Makefile
+          src/doc/design/Makefile
+          src/engine/Makefile
+          src/engine/test/Makefile
           src/experimental/Makefile
           src/experimental/cbb/Makefile
           src/experimental/cbb/cbb-engine/Makefile
@@ -663,10 +665,21 @@ AC_OUTPUT(
           src/register/ledger-core/Makefile
           src/register/register-core/Makefile
           src/register/register-gnome/Makefile
+          src/report/Makefile
+          src/report/report-system/test/Makefile
+          src/report/report-system/Makefile
+          src/report/standard-reports/test/Makefile
+          src/report/standard-reports/Makefile
+          src/report/locale-specific/Makefile
+          src/report/locale-specific/us/Makefile
+          src/report/locale-specific/us/test/Makefile
+          src/report/stylesheets/test/Makefile
+          src/report/stylesheets/Makefile
+          src/report/utility-reports/Makefile
+          src/report/utility-reports/test/Makefile
           src/scm/Makefile
           src/scm/gnumeric/Makefile
           src/scm/printing/Makefile
-          src/scm/report/Makefile
           src/test/Makefile
 
           dnl # non-makefiles

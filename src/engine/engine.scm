@@ -1,11 +1,6 @@
 (define-module (gnucash engine))
 (use-modules (g-wrapped gw-engine))
 
-(load-from-path "gnc-numeric.scm")
-(load-from-path "commodity-table.scm")
-(load-from-path "engine-interface.scm")
-(load-from-path "engine-utilities.scm")
-
 (export GNC-RND-FLOOR)
 (export GNC-RND-CEIL)
 (export GNC-RND-TRUNC)
@@ -103,3 +98,7 @@
 (export trans-splits)
 (export gnc:transaction-scm-onto-transaction)
 
+(load-from-path "gnc-numeric.scm")
+(load-from-path "commodity-table.scm")
+(load-from-path "engine-interface.scm")
+(load-from-path "engine-utilities.scm")

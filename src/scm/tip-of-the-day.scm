@@ -25,7 +25,6 @@
 
 (gnc:depend "config-var.scm")
 (gnc:depend "prefs.scm")
-(gnc:depend "hooks.scm")
 
 (define (non-negative-integer? value)
   (and (integer? value) (>= value 0)))

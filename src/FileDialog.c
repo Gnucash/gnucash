@@ -37,7 +37,7 @@
 #include "gnc-event.h"
 #include "gnc-ui.h"
 #include "messages.h"
-#include "guile/global-options.h"
+#include "global-options.h"
 
 /* FIXME: this is wrong.  This file should not need this include. */
 #include "gnc-book-p.h"
@@ -176,7 +176,7 @@ show_book_error (GNCBackendError io_error, const char *newfile)
       
     case ERR_SQL_DB_TOO_OLD:
       fmt = _("This database is from an older version of GnuCash.\n"
-              "Do you want to upgrade the database "
+              "Do you want to want to upgrade the database"
               "to the current version?");
       if (gnc_verify_dialog (fmt, TRUE)) { uh_oh = FALSE; }
       break;

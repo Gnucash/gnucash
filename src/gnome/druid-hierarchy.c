@@ -39,7 +39,7 @@
 #include "gnc-dir.h"
 #include "io-example-account.h"
 #include "query-user.h"
-
+#include "top-level.h"
 
 static GtkWidget *hierarchy_window = NULL;
 static AccountGroup *our_final_group = NULL;

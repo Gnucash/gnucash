@@ -1,5 +1,5 @@
 
-SUBDIRS = gnumeric printing report
+SUBDIRS = gnumeric printing
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
@@ -10,37 +10,19 @@ gnc_autogen_scm_files = \
   bootstrap.scm
 
 gnc_regular_scm_files = \
-  c-interface.scm \
   command-line.scm \
   commodity-import.scm \
-  commodity-utilities.scm \
   config-var.scm \
-  date-utilities.scm \
   depend.scm \
   doc.scm \
   extensions.scm \
   graph.scm \
   help-topics-index.scm \
-  hooks.scm \
-  html-barchart.scm \
-  html-document.scm \
-  html-piechart.scm \
-  html-scatter.scm \
-  html-style-info.scm \
-  html-style-sheet.scm \
-  html-text.scm \
-  html-table.scm \
-  html-utilities.scm \
   main.scm \
   main-window.scm \
-  options.scm \
-  options-utilities.scm \
   path.scm \
   prefs.scm \
   price-quotes.scm \
-  report.scm \
-  report-html.scm \
-  report-utilities.scm \
   slib-backup.scm \
   startup.scm \
   structure.scm \
@@ -54,6 +36,15 @@ gnc_regular_scm_files = \
   xml-generator.scm
 
 gncscm_DATA = ${gnc_autogen_scm_files} ${gnc_regular_scm_files}
+
+noinst_DATA = .scm-links
+
+.scm-links: 
+	rm -f gnucash
+	ln -sf . gnucash
+	touch .scm-links
+
+CLEANFILES += .scm-links gnucash 
 
 SCM_FILES = ${gncscm_DATA} ${gncscmmod_DATA}
 

@@ -5,7 +5,7 @@ CFLAGS=@CFLAGS@ ${GLIB_CFLAGS}
 
 INCLUDES = -I${top_srcdir}/src/gnc-module ${GUILE_INCS}
 
-libgncmod_qifiocore_la_SOURCES=gnc-qifiocore.c
+libgncmod_qifiocore_la_SOURCES=gncmod-qifiocore.c
 libgncmod_qifiocore_la_LDFLAGS=-module
 
 noinst_DATA=.scm-links

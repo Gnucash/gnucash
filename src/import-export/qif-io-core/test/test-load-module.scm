@@ -3,5 +3,10 @@
 (gnc:module-system-init)
 
 (define (run-test)
-  (gnc:module-load "gnucash/qif-io/core" 0))
-
+  (if (gnc:module-load "gnucash/qif-io/core" 0)
+    (begin 
+      (display "ok\n")
+      (exit 0))
+    (begin 
+      (display "failed\n")
+      (exit -1))))
