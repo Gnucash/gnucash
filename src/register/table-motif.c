@@ -95,18 +95,21 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
    row = cbs->row;
    col = cbs->column;
 
-   /* if we are entering this cell, make sure that we've
+   /* If we are entering this cell, make sure that we've
     * moved the cursor, and that any subsidiary GUI elements
     * properly positioned.  Do this *before* we examine the 
-    * value of the "current cursor".
+    * value of the "current cursor".  Note that this check
+    * could suck up massive cpu, as potentially it may trigger
+    * a redraw of the entire register.
     *
     * Hmmm ... actually, theoretically, this is not neeeded.
-    * before we get to here, we *should* have gone through 
-    * a traverse callback, and, in the traverse callback,
-    * we should have checked (verified) the cursor position,
-    * and moved it to the right location.  So, by the time
-    * we get here, the cursor should be in the right position, 
-    * and the call below should always no-op out.
+    * Before we get to here, we *should* have gone through
+    * a traverse callback the determine which cell to enter,
+    * and then, after the leavecell, the cursor should
+    * have been automagically repositioned.  This, the
+    * call below should always no-op out.  However, if/when
+    * things go berzerk, the call below does at least a partial
+    * butt-save for us, so lets leave it in for now.
     */
    if (XbaeEnterCellReason == cbs->reason) 
    {
@@ -196,6 +199,8 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
       }
       case XbaeLeaveCellReason: {
          leaveCB (mw, cd, cb);
+         wrapVerifyCursorPosition (table, table->reverify_phys_row,
+                                          table->reverify_phys_col);
          break;
       }
       default:
@@ -518,13 +523,18 @@ assert (0);
 
    /* 
 xxxxxxxxxxx 
-hack alert -- this is still broke -- can't really do this until 
-after the leave, since all sorts of cell fix-ups occur
-on the leave ... 
+hack alert -- 
+this may work,. but document it ...
 */
-
-   wrapVerifyCursorPosition (table, cbs->next_row, cbs->next_column);
-   cbs->next_row = table->current_cursor_phys_row;
+   if (table->traverse) {
+      int nr = cbs->next_row;
+      int nc = cbs->next_column;
+      table->reverify_phys_row = nr;
+      table->reverify_phys_col = nc;
+      (table->traverse) (table, &nr, &nc, table->client_data);
+      cbs->next_row = nr;
+      cbs->next_column = nc;
+   }
 
    table->prev_phys_traverse_row = cbs->next_row;
    table->prev_phys_traverse_col = cbs->next_column;

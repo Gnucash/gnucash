@@ -65,6 +65,7 @@ xaccInitTable (Table * table)
    table->current_cursor_phys_col = -1;
 
    table->move_cursor = NULL;
+   table->traverse = NULL;
    table->client_data = NULL;
 
    table->entries = NULL;
@@ -77,6 +78,9 @@ xaccInitTable (Table * table)
    /* invalidate the "previous" traversed cell */
    table->prev_phys_traverse_row = -1;
    table->prev_phys_traverse_col = -1;
+
+   table->reverify_phys_row = -1;
+   table->reverify_phys_col = -1;
 
    /* call the "derived" class constructor */
    TABLE_PRIVATE_DATA_INIT (table);
