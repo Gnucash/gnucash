@@ -482,6 +482,7 @@ readTransaction( int fd, Account *acc, int token )
   int err=0;
   int acc_id;
   Date *date;
+  int dummy_category;
   Transaction *trans = mallocTransaction();
   
   ENTER ("readTransaction");
@@ -531,14 +532,14 @@ readTransaction( int fd, Account *acc, int token )
        }
     }
   
-  err = read( fd, &(trans->catagory), sizeof(int) );
+  /* category is now obsolete */
+  err = read( fd, &(dummy_category), sizeof(int) );
   if( err != sizeof(int) )
     {
     PERR ("Premature end of Transaction at catagory");
     freeTransaction(trans);
     return NULL;
     }
-  XACC_FLIP_INT (trans->catagory);
   
   err = read( fd, &(trans->reconciled), sizeof(char) );
   if( err != sizeof(char) )
@@ -986,7 +987,8 @@ writeTransaction( int fd, Transaction *trans )
   if( -1 == err )
     return err;
   
-  tmp = trans->catagory;
+  /* category is now obsolete */
+  tmp = 0;
   XACC_FLIP_INT (tmp);
   err = write( fd, &tmp, sizeof(int) );
   if( err != sizeof(int) )
