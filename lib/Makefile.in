@@ -24,6 +24,7 @@
 # These three lines are suggested defs for autoconf (see the info pages).
 @SET_MAKE@
 srcdir   = @srcdir@
+top_srcdir = @top_srcdir@
 VPATH    = @srcdir@
 
 ######################################################################
@@ -50,7 +51,7 @@ all:
 
 # This inclusion must come after the first target, and after the
 # definitions of *_SRCS, etc., but before the usage of *_OBJS.
-include ../Makefile.common
+include $(top_srcdir)/Makefile.common
 
 motif:
 	@cd XmHTML-1.1.0;     $(MAKE) default
