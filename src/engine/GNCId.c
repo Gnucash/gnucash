@@ -238,16 +238,6 @@ xaccGUIDNew (GUID *guid, GNCSession *session)
   xaccGUIDNewEntityTable (guid, gnc_session_get_entity_table (session));
 }
 
-GUID
-xaccGUIDNewReturn (GNCSession *session)
-{
-  GUID guid;
-
-  xaccGUIDNew (&guid, session);
-
-  return guid;
-}
-
 const GUID *
 xaccGUIDNULL(void)
 {

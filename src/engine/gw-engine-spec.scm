@@ -310,7 +310,7 @@
    (lambda (client-only?)
      (list
       "#include <glib.h>\n"
-      "#include <GNCIdP.h>\n"
+      "#include <guid.h>\n"
       "#include <Query.h>\n"
       "#include <Backend.h>\n"
       "#include <gnc-session.h>\n"
@@ -518,8 +518,8 @@
    mod
    'gnc:guid-new
    '<gnc:guid-scm>
-   "xaccGUIDNewReturn"
-   '((<gnc:Session*> session))
+   "guid_new_return"
+   '()
    "Return a newly-generated GUID.")
 
   (gw:wrap-function

@@ -411,6 +411,16 @@ guid_new(GUID *guid)
   counter--;
 }
 
+GUID
+guid_new_return(void)
+{
+  GUID guid;
+
+  guid_new (&guid);
+
+  return guid;
+}
+
 /* needs 32 bytes exactly, doesn't print a null char */
 static void
 encode_md5_data(const unsigned char *data, char *buffer)

@@ -71,6 +71,7 @@ void guid_init_only_salt(const void *salt, size_t salt_len);
 /* Generate a new id. If no initialization function has been called,
  * guid_init() will be called before the id is created. */
 void guid_new(GUID *guid);
+GUID guid_new_return(void);
 
 
 /* The guid_to_string() routine returns a null-terminated string 
