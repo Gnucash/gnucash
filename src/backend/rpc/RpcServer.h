@@ -10,8 +10,8 @@
  * Copyright (c) 2001, Derek Atkins
  */
 
-#ifndef __RPC_SERVER_H
-#define __RPC_SERVER_H
+#ifndef RPC_SERVER_H
+#define RPC_SERVER_H
 
 typedef struct _gncrpc_svc GncRpcSvc;
 

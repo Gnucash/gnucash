@@ -28,8 +28,8 @@
   @NOTATION@
  */
 
-#ifndef __GNC_COMMODITY_EDIT_H_
-#define __GNC_COMMODITY_EDIT_H_ 1
+#ifndef GNC_COMMODITY_EDIT_H
+#define GNC_COMMODITY_EDIT_H
 
 #include <gnome.h>
 

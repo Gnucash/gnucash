@@ -27,45 +27,23 @@
 #include <gnome.h>
 #include <guile/gh.h>
 
-typedef struct  {
-  GnomeMDI * mdi;
-  int      component_id;
-  SCM      toolbar_change_callback_id;
-  SCM      mdi_change_callback_id;
-  GList    * children;
-} GNCMainInfo;
+#include "gnc-mdi-utils.h"
 
-typedef struct {
-  GnomeMDIChild   * child;
-  GtkWidget       * contents;
-  GnomeApp        * app;
-
-  GtkWidget       * toolbar;  
-  GnomeUIInfo     * toolbar_info;
-  int             toolbar_size;
-  GnomeUIInfo     * menu_info;
-
-  int             component_id;
-  void            * user_data;
-  char            * title;
-} GNCMainChildInfo;
-
-
-GNCMainInfo   * gnc_main_window_new(void);
-void            gnc_main_window_destroy(GNCMainInfo * wind); 
-gboolean        gnc_main_window_can_save(GNCMainInfo * wind);
-gboolean        gnc_main_window_can_cancel_save (GNCMainInfo *wind);
-void            gnc_main_window_save(GNCMainInfo * wind, char * session);
-void            gnc_main_window_restore(GNCMainInfo * wind,
+GNCMDIInfo    * gnc_main_window_new(void);
+void            gnc_main_window_destroy(GNCMDIInfo * wind); 
+gboolean        gnc_main_window_can_save(GNCMDIInfo * wind);
+gboolean        gnc_main_window_can_cancel_save (GNCMDIInfo *wind);
+void            gnc_main_window_save(GNCMDIInfo * wind, char * session);
+void            gnc_main_window_restore(GNCMDIInfo * wind,
                                         const char * session);
-void            gnc_main_window_create_child_toolbar(GNCMainInfo * mi, 
-                                                     GNCMainChildInfo * child);
-void            gnc_main_window_add_child(GNCMainInfo * main,
-                                          GNCMainChildInfo * child);
-void            gnc_main_window_remove_child(GNCMainInfo * main,
-                                             GNCMainChildInfo * child);
+void            gnc_main_window_create_child_toolbar(GNCMDIInfo * mi, 
+                                                     GNCMDIChildInfo * child);
+void            gnc_main_window_add_child(GNCMDIInfo * main,
+                                          GNCMDIChildInfo * child);
+void            gnc_main_window_remove_child(GNCMDIInfo * main,
+                                             GNCMDIChildInfo * child);
 void            gnc_main_window_child_refresh(gpointer data);
 GnomeMDIChild * gnc_main_window_create_child(const gchar * configstring);
-void            gnc_main_window_close_children(GNCMainInfo * main);
+void            gnc_main_window_close_children(GNCMDIInfo * main);
 
 #endif

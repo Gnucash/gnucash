@@ -10,8 +10,8 @@
  * Copyright (c) 2001, Derek Atkins
  */
 
-#ifndef __RPC_UTILS_H
-#define __RPC_UTILS_H
+#ifndef RPC_UTILS_H
+#define RPC_UTILS_H
 
 #include "gncRpc.h"
 #include "Account.h"

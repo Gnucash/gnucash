@@ -70,7 +70,7 @@
 
 #define WINDOW_MAIN_CM_CLASS "window-main"
 
-static void gnc_main_window_create_menus(GNCMainInfo * maininfo);
+static void gnc_main_window_create_menus(GNCMDIInfo * maininfo);
 
 /********************************************************************
  * gnc_main_window_destroy_cb()
@@ -90,8 +90,8 @@ gnc_main_window_destroy_cb(GtkObject * w, gpointer data) {
 
 static void 
 gnc_main_window_app_destroyed_cb(GnomeApp * app, gpointer user_data) {
-  GNCMainInfo * mainwin = user_data;
-  GNCMainChildInfo * mc = NULL;
+  GNCMDIInfo * mainwin = user_data;
+  GNCMDIChildInfo * mc = NULL;
   GnomeMDI * mdi = mainwin->mdi;
   GtkWidget *toolbar;
   GList * child; 
@@ -125,7 +125,7 @@ gnc_main_window_app_destroyed_cb(GnomeApp * app, gpointer user_data) {
 static void
 gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app, 
                                gpointer data) {
-  GNCMainInfo * mainwin = data;
+  GNCMDIInfo * mainwin = data;
   GtkWidget * summarybar;
   GtkWidget * statusbar;
 
@@ -187,7 +187,7 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
 }
 
 static void
-gnc_main_window_child_set_title (GNCMainChildInfo *childwin)
+gnc_main_window_child_set_title (GNCMDIChildInfo *childwin)
 {
   GNCBook *book;
   const char *filename;
@@ -216,8 +216,8 @@ gnc_main_window_child_set_title (GNCMainChildInfo *childwin)
 static void
 gnc_app_set_title (GnomeApp *app)
 {
-  GNCMainChildInfo *childwin;
-  GNCMainInfo *mainwin;
+  GNCMDIChildInfo *childwin;
+  GNCMDIInfo *mainwin;
   GnomeMDIChild *child;
   GtkWidget *view;
 
@@ -267,7 +267,7 @@ gnc_refresh_main_window_info (void)
 static gboolean
 gnc_main_window_child_remove_cb(GnomeMDI * mdi, GnomeMDIChild * child,
                                 gpointer data) {
-  GNCMainInfo * mainwin = data;
+  GNCMDIInfo * mainwin = data;
 
   return TRUE;
 }
@@ -281,8 +281,8 @@ gnc_main_window_child_remove_cb(GnomeMDI * mdi, GnomeMDIChild * child,
 static void
 gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used, 
                                  gpointer data) {
-  GNCMainInfo      * mainwin = data;
-  GNCMainChildInfo * childwin = NULL;
+  GNCMDIInfo      * mainwin = data;
+  GNCMDIChildInfo * childwin = NULL;
   GnomeUIInfo      * hintinfo;
   GtkWidget        * oldbar;
   GnomeApp         * new_app = NULL; 
@@ -381,8 +381,8 @@ gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used,
 static void
 gnc_main_window_configure_toolbar_cb (gpointer data)
 {
-  GNCMainInfo * mi = data; 
-  GNCMainChildInfo * mc = NULL; 
+  GNCMDIInfo * mi = data; 
+  GNCMDIChildInfo * mc = NULL; 
   GtkToolbarStyle tbstyle = gnc_get_toolbar_style();
   GList * child;
 
@@ -403,7 +403,7 @@ gnc_main_window_configure_toolbar_cb (gpointer data)
 static void
 gnc_main_window_configure_mdi_cb (gpointer data)
 {
-  GNCMainInfo * mi = data; 
+  GNCMDIInfo * mi = data; 
   GnomeMDIMode mode = gnc_get_mdi_mode();
 
   gnome_mdi_set_mode(mi->mdi, mode);
@@ -461,7 +461,7 @@ gnc_main_window_child_save_func(GnomeMDIChild * child, gpointer user_data) {
  ********************************************************************/
 
 static gboolean
-gnc_main_window_has_apps (GNCMainInfo * wind)
+gnc_main_window_has_apps (GNCMDIInfo * wind)
 {
   GList *toplevels;
 
@@ -479,7 +479,7 @@ gnc_main_window_has_apps (GNCMainInfo * wind)
 }
 
 gboolean
-gnc_main_window_can_save (GNCMainInfo * wind)
+gnc_main_window_can_save (GNCMDIInfo * wind)
 {
   if (!wind) return FALSE;
 
@@ -487,7 +487,7 @@ gnc_main_window_can_save (GNCMainInfo * wind)
 }
 
 gboolean
-gnc_main_window_can_cancel_save (GNCMainInfo *wind)
+gnc_main_window_can_cancel_save (GNCMDIInfo *wind)
 {
   if (!wind) return FALSE;
 
@@ -501,7 +501,7 @@ gnc_main_window_can_cancel_save (GNCMainInfo *wind)
  ********************************************************************/
 
 void
-gnc_main_window_save(GNCMainInfo * wind, char * filename) {
+gnc_main_window_save(GNCMDIInfo * wind, char * filename) {
   char * encoded;
   char * session_name;
 
@@ -524,7 +524,7 @@ gnc_main_window_save(GNCMainInfo * wind, char * filename) {
  ********************************************************************/
 
 void
-gnc_main_window_restore(GNCMainInfo * wind, const char * filename)
+gnc_main_window_restore(GNCMDIInfo * wind, const char * filename)
 {
   char * encoded;
   char * session_name;
@@ -558,7 +558,7 @@ gnc_main_window_restore(GNCMainInfo * wind, const char * filename)
 }
 
 void
-gnc_main_window_close_children(GNCMainInfo * wind) {
+gnc_main_window_close_children(GNCMDIInfo * wind) {
   gnome_mdi_remove_all(wind->mdi, FALSE);
 }
 
@@ -567,9 +567,9 @@ gnc_main_window_close_children(GNCMainInfo * wind) {
  * initialize the Gnome MDI system
  ********************************************************************/
 
-GNCMainInfo * 
+GNCMDIInfo * 
 gnc_main_window_new(void) {
-  GNCMainInfo * retval = g_new0(GNCMainInfo, 1);
+  GNCMDIInfo * retval = g_new0(GNCMDIInfo, 1);
 
   retval->mdi = GNOME_MDI(gnome_mdi_new("GnuCash", "GnuCash"));
   retval->component_id = 
@@ -620,7 +620,7 @@ gnc_main_window_new(void) {
  ********************************************************************/
 
 void
-gnc_main_window_add_child(GNCMainInfo * wind, GNCMainChildInfo * child) {
+gnc_main_window_add_child(GNCMDIInfo * wind, GNCMDIChildInfo * child) {
   wind->children = g_list_append(wind->children, child);
 
   if(GNOME_IS_MDI_GENERIC_CHILD(child->child)) {
@@ -636,7 +636,7 @@ gnc_main_window_add_child(GNCMainInfo * wind, GNCMainChildInfo * child) {
  ********************************************************************/
 
 void
-gnc_main_window_remove_child(GNCMainInfo * wind, GNCMainChildInfo * child) {
+gnc_main_window_remove_child(GNCMDIInfo * wind, GNCMDIChildInfo * child) {
   wind->children = g_list_remove(wind->children, child);
 }
 
@@ -646,19 +646,19 @@ gnc_main_window_remove_child(GNCMainInfo * wind, GNCMainChildInfo * child) {
  ********************************************************************/
 
 void
-gnc_main_window_destroy(GNCMainInfo * wind) {
+gnc_main_window_destroy(GNCMDIInfo * wind) {
   g_free(wind);  
 }
 
 
 /********************************************************************
- * gnc_main_window_child_refresh(GNCMainChildInfo * child)
+ * gnc_main_window_child_refresh(GNCMDIChildInfo * child)
  * send an update event to the child 
  ********************************************************************/
 
 void
 gnc_main_window_child_refresh(gpointer data) {
-  GNCMainChildInfo *child = data;
+  GNCMDIChildInfo *child = data;
 
   gnome_mdi_child_set_name(child->child, child->child->name);
   gnome_mdi_update_child(gnc_ui_get_data()->mdi, child->child);
@@ -839,11 +839,11 @@ gnc_main_window_file_shutdown_cb(GtkWidget * widget) {
 
 static void
 gnc_main_window_file_close_cb(GtkWidget * widget, GnomeMDI * mdi) {
-  GNCMainChildInfo * inf;
+  GNCMDIChildInfo * inf;
 
   if (!mdi)
   {
-    GNCMainInfo *main_info;
+    GNCMDIInfo *main_info;
 
     main_info = gnc_ui_get_data ();
     if (!main_info) return;
@@ -974,7 +974,7 @@ gnc_main_window_file_new_account_tree_cb(GtkWidget * w, GnomeMDI * mdi) {
 }
 
 static void
-gnc_main_window_create_menus(GNCMainInfo * maininfo) {
+gnc_main_window_create_menus(GNCMDIInfo * maininfo) {
   static  GnomeUIInfo gnc_file_menu_template[] = 
   {
     GNOMEUIINFO_MENU_NEW_ITEM(N_("New _File"),
@@ -1155,8 +1155,8 @@ gnc_main_window_create_menus(GNCMainInfo * maininfo) {
  ********************************************************************/
 
 void
-gnc_main_window_create_child_toolbar(GNCMainInfo * mi, 
-                                     GNCMainChildInfo * child) {
+gnc_main_window_create_child_toolbar(GNCMDIInfo * mi, 
+                                     GNCMDIChildInfo * child) {
   GnomeUIInfo pre_tb[] = 
   {
     { GNOME_APP_UI_ITEM,

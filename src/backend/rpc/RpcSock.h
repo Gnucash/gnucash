@@ -10,8 +10,8 @@
  * Copyright (c) 2001, Derek Atkins
  */
 
-#ifndef __RPC_SOCK_H
-#define __RPC_SOCK_H
+#ifndef RPC_SOCK_H
+#define RPC_SOCK_H
 
 #include "xprt_thrd.h"
 #include "RpcBackend.h"

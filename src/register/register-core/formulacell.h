@@ -53,8 +53,8 @@
  * Copyright (c) 2001 Joshua Sled <jsled@asynchronous.org>
  **/
  
-#ifndef __FORMULA_CELL_C__
-#define __FORMULA_CELL_C__
+#ifndef FORMULA_CELL_C
+#define FORMULA_CELL_C
 
 #include <time.h>
 

@@ -56,7 +56,6 @@
 #include "gnc-network.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-#include "window-main.h"
 #include "messages.h"
 
 

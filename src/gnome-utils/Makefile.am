@@ -59,6 +59,7 @@ gncinclude_HEADERS = \
   gnc-html-history.h \
   gnc-html-guppi.h \
   gnc-html.h \
+  gnc-mdi-utils.h \
   gnc-menu-extensions.h \
   gtkselect.h \
   print-session.h

@@ -88,7 +88,7 @@ struct GNCAcctTreeWin_p
 static GtkWidget * 
 gnc_acct_tree_view_labeler(GnomeMDIChild * child, GtkWidget * current,
                            gpointer user_data) {
-  GNCMainChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
+  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
   GNCAcctTreeWin   * win = NULL;
   char             * name = NULL;
 
@@ -127,7 +127,7 @@ gnc_acct_tree_view_labeler(GnomeMDIChild * child, GtkWidget * current,
 
 static void
 gnc_acct_tree_view_destroy(GtkObject * obj, gpointer user_data) {
-  GNCMainChildInfo * mc = user_data;
+  GNCMDIChildInfo * mc = user_data;
   GNCAcctTreeWin * w = mc->user_data;
 
   gnc_main_window_remove_child(gnc_ui_get_data(), mc);
@@ -146,8 +146,8 @@ gnc_acct_tree_view_destroy(GtkObject * obj, gpointer user_data) {
 
 static GtkWidget *
 gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data) {
-  GNCMainInfo        * maininfo = user_data;
-  GNCMainChildInfo   * mc = g_new0(GNCMainChildInfo, 1);
+  GNCMDIInfo        * maininfo = user_data;
+  GNCMDIChildInfo   * mc = g_new0(GNCMDIChildInfo, 1);
   GNCAcctTreeWin     * win = gnc_acct_tree_window_new(child->name);
   char               * name;
 
@@ -204,7 +204,7 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data) {
 
 GnomeMDIChild * 
 gnc_acct_tree_window_create_child(const gchar * url) {
-  GNCMainInfo          * maininfo = gnc_ui_get_data();
+  GNCMDIInfo          * maininfo = gnc_ui_get_data();
   GnomeMDIGenericChild * accountchild = 
     gnome_mdi_generic_child_new(url);
   
@@ -225,7 +225,7 @@ gnc_acct_tree_window_create_child(const gchar * url) {
 
 void
 gnc_main_window_open_accounts(gint toplevel) {
-  GNCMainInfo * maininfo = gnc_ui_get_data();
+  GNCMDIInfo * maininfo = gnc_ui_get_data();
   GnomeMDIChild * accountchild = gnc_acct_tree_window_create_child(NULL);
   gnome_mdi_add_child(GNOME_MDI(maininfo->mdi), 
                       GNOME_MDI_CHILD(accountchild));  
@@ -334,7 +334,7 @@ gnc_acct_tree_window_toolbar_delete_account_cb (GtkWidget *widget,
 static void
 gnc_acct_tree_window_menu_open_subs_cb(GtkWidget * widget, 
                                        GnomeMDIChild * child) {
-  GNCMainChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
+  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
   GNCAcctTreeWin   * win = mc->user_data;
   Account          * account = gnc_acct_tree_window_get_current_account(win);
   RegWindow        * regData;
@@ -357,7 +357,7 @@ gnc_acct_tree_window_menu_open_subs_cb(GtkWidget * widget,
 static void
 gnc_acct_tree_window_menu_edit_cb (GtkWidget * widget, 
                                    GnomeMDIChild * child) {
-  GNCMainChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
+  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
   GNCAcctTreeWin   * win = mc->user_data;
   Account        * account = gnc_acct_tree_window_get_current_account(win);
   
@@ -380,7 +380,7 @@ gnc_acct_tree_window_menu_edit_cb (GtkWidget * widget,
 static void
 gnc_acct_tree_window_menu_reconcile_cb(GtkWidget * widget, 
                                        GnomeMDIChild * child) {
-  GNCMainChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
+  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
   GNCAcctTreeWin   * win = mc->user_data;
   Account        * account = gnc_acct_tree_window_get_current_account(win);
   RecnWindow     * recnData;
@@ -401,7 +401,7 @@ gnc_acct_tree_window_menu_reconcile_cb(GtkWidget * widget,
 static void
 gnc_acct_tree_window_menu_transfer_cb (GtkWidget * widget, 
                                        GnomeMDIChild * child) {
-  GNCMainChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
+  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
   GNCAcctTreeWin   * win = mc->user_data;
   Account        * account = gnc_acct_tree_window_get_current_account(win);
 
@@ -411,7 +411,7 @@ gnc_acct_tree_window_menu_transfer_cb (GtkWidget * widget,
 static void
 gnc_acct_tree_window_menu_stock_split_cb (GtkWidget * widget, 
                                           GnomeMDIChild * child) {
-  GNCMainChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
+  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
   GNCAcctTreeWin   * win = mc->user_data;
   Account        * account = gnc_acct_tree_window_get_current_account(win);
 
@@ -421,7 +421,7 @@ gnc_acct_tree_window_menu_stock_split_cb (GtkWidget * widget,
 static void
 gnc_acct_tree_window_menu_add_account_cb (GtkWidget * widget, 
                                           GnomeMDIChild * child) {
-  GNCMainChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
+  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
   GNCAcctTreeWin   * win = mc->user_data;
   Account        * account = gnc_acct_tree_window_get_current_account(win);
   gnc_ui_new_account_window_with_default (NULL, account);
@@ -430,7 +430,7 @@ gnc_acct_tree_window_menu_add_account_cb (GtkWidget * widget,
 static void
 gnc_acct_tree_window_menu_delete_account_cb (GtkWidget *widget, 
                                              GnomeMDIChild * child) {
-  GNCMainChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
+  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
   GNCAcctTreeWin   * win = mc->user_data;
   Account        * account = gnc_acct_tree_window_get_current_account(win);
 
@@ -466,7 +466,7 @@ gnc_acct_tree_window_menu_delete_account_cb (GtkWidget *widget,
 static void
 gnc_acct_tree_window_menu_tax_info_cb (GtkWidget * widget, 
                                        GnomeMDIChild * child) {
-  GNCMainChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
+  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
   GNCAcctTreeWin   * win = mc->user_data;
   Account        * account = gnc_acct_tree_window_get_current_account(win);
   gnc_tax_info_dialog(GTK_WIDGET(mc->app));
@@ -475,7 +475,7 @@ gnc_acct_tree_window_menu_tax_info_cb (GtkWidget * widget,
 static void
 gnc_acct_tree_window_menu_scrub_cb(GtkWidget * widget, 
                                    GnomeMDIChild * child) {
-  GNCMainChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
+  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
   GNCAcctTreeWin   * win = mc->user_data;
   Account        * account = gnc_acct_tree_window_get_current_account(win);
 
@@ -497,7 +497,7 @@ gnc_acct_tree_window_menu_scrub_cb(GtkWidget * widget,
 static void
 gnc_acct_tree_window_menu_scrub_sub_cb(GtkWidget * widget, 
                                        GnomeMDIChild * child) {
-  GNCMainChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
+  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
   GNCAcctTreeWin   * win = mc->user_data;
   Account        * account = gnc_acct_tree_window_get_current_account(win);
   
@@ -532,7 +532,7 @@ gnc_acct_tree_window_menu_scrub_all_cb(GtkWidget * widget,
 static void
 gnc_acct_tree_window_menu_open_cb (GtkWidget *widget, GnomeMDIChild * child)
 {
-  GNCMainChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
+  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
   GNCAcctTreeWin   * win = mc->user_data;
   Account        * account = gnc_acct_tree_window_get_current_account(win);
   RegWindow      * regData;
@@ -704,7 +704,7 @@ static void gnc_acct_tree_window_toolbar_options_cb(GtkWidget * w, gpointer d);
 
 void
 gnc_acct_tree_window_create_toolbar(GNCAcctTreeWin * win, 
-                                    GNCMainChildInfo * child) {
+                                    GNCMDIChildInfo * child) {
   GnomeUIInfo toolbar_template[] = 
   {
     { GNOME_APP_UI_ITEM, 
@@ -769,7 +769,7 @@ gnc_acct_tree_window_create_toolbar(GNCAcctTreeWin * win,
 
 void
 gnc_acct_tree_window_create_menu(GNCAcctTreeWin * main_info,
-                                 GNCMainChildInfo * child) {
+                                 GNCMDIChildInfo * child) {
   GnomeUIInfo scrubmenu[] =
   {
     {

@@ -28,8 +28,8 @@
  * Initial code by James LewisMoss
  */
 
-#ifndef __IO_GNCXML_V2_H__
-#define __IO_GNCXML_V2_H__
+#ifndef IO_GNCXML_V2_H
+#define IO_GNCXML_V2_H
 
 #include <glib.h>
 

@@ -10,8 +10,8 @@
  * Copyright (c) 2001, Derek Atkins
  */
 
-#ifndef __RPC_BACKEND_H
-#define __RPC_BACKEND_H
+#ifndef RPC_BACKEND_H
+#define RPC_BACKEND_H
 
 #include "BackendP.h"
 

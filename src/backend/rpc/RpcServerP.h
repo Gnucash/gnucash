@@ -10,8 +10,8 @@
  * Copyright (c) 2001, Derek Atkins
  */
 
-#ifndef __RPC_SERVERP_H
-#define __RPC_SERVERP_H
+#ifndef RPC_SERVERP_H
+#define RPC_SERVERP_H
 
 #include "xprt_thrd.h"
 

@@ -26,8 +26,8 @@
   @NOTATION@
  */
 
-#ifndef __GNC_AMOUNT_EDIT_H_
-#define __GNC_AMOUNT_EDIT_H_ 
+#ifndef GNC_AMOUNT_EDIT_H
+#define GNC_AMOUNT_EDIT_H 
 
 #include <gnome.h>
 

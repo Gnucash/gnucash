@@ -101,7 +101,7 @@ static void gnc_configure_register_hint_font(void);
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
-static GNCMainInfo * app = NULL;
+static GNCMDIInfo * app = NULL;
 
 static int gnome_is_running = FALSE;
 static int gnome_is_initialized = FALSE;
@@ -131,7 +131,7 @@ gnucash_ui_is_terminating(void)
   return gnome_is_terminating;
 }
 
-GNCMainInfo *
+GNCMDIInfo *
 gnc_ui_get_data (void)
 {
   return app;

@@ -49,7 +49,7 @@
 #define WINDOW_REPORT_CM_CLASS "window-report"
 
 struct _gnc_report_window {
-  GNCMainChildInfo * mc; 
+  GNCMDIChildInfo * mc; 
   GtkWidget    * container;   
 
   /* the report that's currently being shown.  For any option change
@@ -91,7 +91,7 @@ static gint last_height = 0;
 static GtkWidget * 
 gnc_report_window_view_labeler(GnomeMDIChild * child, GtkWidget * current,
                                gpointer user_data) {
-  GNCMainChildInfo  * rwin = gtk_object_get_user_data(GTK_OBJECT(child));
+  GNCMDIChildInfo  * rwin = gtk_object_get_user_data(GTK_OBJECT(child));
   gnc_report_window * report;
   SCM    get_name = gh_eval_str("gnc:report-name");
   char   * name = NULL; 
@@ -127,7 +127,7 @@ gnc_report_window_view_labeler(GnomeMDIChild * child, GtkWidget * current,
 
 static void
 gnc_report_window_view_destroy(GtkObject * obj, gpointer user_data) {
-  GNCMainChildInfo  * mc = user_data;
+  GNCMDIChildInfo  * mc = user_data;
   gnc_report_window * w = mc->user_data;
   gnc_main_window_remove_child(gnc_ui_get_data(), mc);
   g_free(mc->toolbar_info);
@@ -143,8 +143,8 @@ gnc_report_window_view_destroy(GtkObject * obj, gpointer user_data) {
 
 static GtkWidget *
 gnc_report_window_view_new(GnomeMDIChild * child, gpointer user_data) {  
-  GNCMainInfo        * maininfo = user_data;
-  GNCMainChildInfo   * mc = g_new0(GNCMainChildInfo, 1);
+  GNCMDIInfo        * maininfo = user_data;
+  GNCMDIChildInfo    * mc = g_new0(GNCMDIChildInfo, 1);
   gnc_report_window  * win = gnc_report_window_new(mc);
   URLType            type;
   char               * url_location = NULL;
@@ -197,7 +197,7 @@ GnomeMDIChild *
 gnc_report_window_create_child(const gchar * configstring) {
   GnomeMDIGenericChild * reportchild = 
     gnome_mdi_generic_child_new(configstring);
-  GNCMainInfo * maininfo = gnc_ui_get_data();
+  GNCMDIInfo * maininfo = gnc_ui_get_data();
   
   gnome_mdi_generic_child_set_label_func(reportchild, 
                                          gnc_report_window_view_labeler,
@@ -224,7 +224,7 @@ gnc_main_window_open_report(int report_id, gint toplevel) {
 void
 gnc_main_window_open_report_url(const char * url, gint toplevel) {
   GnomeMDIChild * reportchild = gnc_report_window_create_child(url);
-  GNCMainInfo   * maininfo = gnc_ui_get_data();
+  GNCMDIInfo   * maininfo = gnc_ui_get_data();
   
   gnome_mdi_add_child(GNOME_MDI(maininfo->mdi), 
                       GNOME_MDI_CHILD(reportchild));  
@@ -233,7 +233,7 @@ gnc_main_window_open_report_url(const char * url, gint toplevel) {
                                 GNOME_MDI_CHILD(reportchild));
   }
   else {
-    GNCMainChildInfo * childwin;
+    GNCMDIChildInfo * childwin;
 
     gnome_mdi_add_view(GNOME_MDI(maininfo->mdi), 
                        GNOME_MDI_CHILD(reportchild));
@@ -590,7 +590,7 @@ close_handler (gpointer user_data)
  ********************************************************************/
 
 gnc_report_window *
-gnc_report_window_new(GNCMainChildInfo * mc) {
+gnc_report_window_new(GNCMDIChildInfo * mc) {
 
   gnc_report_window * report = g_new0(gnc_report_window, 1);
   GtkObject         * tlo; 
@@ -642,7 +642,7 @@ gnc_report_window_new(GNCMainChildInfo * mc) {
 
 void
 gnc_report_window_create_toolbar(gnc_report_window * win,
-                                 GNCMainChildInfo * child) {
+                                 GNCMDIChildInfo * child) {
   GnomeUIInfo       toolbar_data[] = 
   {
     { GNOME_APP_UI_ITEM,
@@ -724,7 +724,7 @@ gnc_report_window_create_toolbar(gnc_report_window * win,
  ********************************************************************/
 void
 gnc_report_window_create_menu(gnc_report_window * report, 
-                              GNCMainChildInfo * child) {
+                              GNCMDIChildInfo * child) {
   child->menu_info = NULL;
 }
 

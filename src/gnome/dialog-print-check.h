@@ -20,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __DIALOG_PRINT_CHECK_H_
-#define __DIALOG_PRINT_CHECK_H_
+#ifndef DIALOG_PRINT_CHECK_H
+#define DIALOG_PRINT_CHECK_H
 
 #include "config.h"
 

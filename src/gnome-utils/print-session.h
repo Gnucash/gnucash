@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __PRINT_SESSION_H_
-#define __PRINT_SESSION_H_
+#ifndef PRINT_SESSION_H
+#define PRINT_SESSION_H
 
 #include "config.h"
 

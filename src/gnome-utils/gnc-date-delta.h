@@ -28,8 +28,8 @@
   @NOTATION@
  */
 
-#ifndef __GNC_DATE_DELTA_H_
-#define __GNC_DATE_DELTA_H_ 
+#ifndef GNC_DATE_DELTA_H
+#define GNC_DATE_DELTA_H 
 
 #include <gnome.h>
 

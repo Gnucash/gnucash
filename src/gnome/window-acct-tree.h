@@ -32,9 +32,9 @@ GNCAcctTreeWin * gnc_acct_tree_window_new(const gchar * url);
 void             gnc_acct_tree_window_destroy(GNCAcctTreeWin * win);
 GtkWidget      * gnc_acct_tree_window_get_widget(GNCAcctTreeWin * win);
 void             gnc_acct_tree_window_create_menu(GNCAcctTreeWin * win,
-                                                  GNCMainChildInfo * child);
+                                                  GNCMDIChildInfo * child);
 void             gnc_acct_tree_window_create_toolbar(GNCAcctTreeWin * win,
-                                                     GNCMainChildInfo * child);
+                                                     GNCMDIChildInfo * child);
 Account        * gnc_acct_tree_window_get_current_account(GNCAcctTreeWin * w);
 GnomeMDIChild  * gnc_acct_tree_window_create_child(const gchar * url);
 void             gnc_main_window_open_accounts(gint toplevel); 

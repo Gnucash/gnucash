@@ -28,8 +28,8 @@
   @NOTATION@
  */
 
-#ifndef __GNC_CURRENCY_EDIT_H_
-#define __GNC_CURRENCY_EDIT_H_ 1
+#ifndef GNC_CURRENCY_EDIT_H
+#define GNC_CURRENCY_EDIT_H
 
 #include <gnome.h>
 

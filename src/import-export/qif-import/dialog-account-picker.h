@@ -21,15 +21,15 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __DIALOG_ACCOUNT_PICKER_H_
-#define __DIALOG_ACCOUNT_PICKER_H_
+#ifndef DIALOG_ACCOUNT_PICKER_H
+#define DIALOG_ACCOUNT_PICKER_H
 
 #include <guile/gh.h>
+
 #include "druid-qif-import.h"
 
 SCM qif_account_picker_dialog(QIFImportWindow * wind, SCM initial_sel);
 
 typedef struct _accountpickerdialog QIFAccountPickerDialog;
-
 
 #endif

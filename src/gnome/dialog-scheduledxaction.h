@@ -20,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __DIALOG_SCHEDULEDXACTION_H_
-#define __DIALOG_SCHEDULEDXACTION_H_
+#ifndef DIALOG_SCHEDULEDXACTION_H
+#define DIALOG_SCHEDULEDXACTION_H
 
 #include "config.h"
 #include <gnome.h>

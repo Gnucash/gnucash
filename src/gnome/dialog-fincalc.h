@@ -20,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __DIALOG_FINCALC_H_
-#define __DIALOG_FINCALC_H_
+#ifndef DIALOG_FINCALC_H
+#define DIALOG_FINCALC_H
 
 #include "config.h"
 
