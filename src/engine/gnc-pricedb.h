@@ -165,6 +165,7 @@ void gnc_price_set_version(GNCPrice *p, gint32 versn);
    to the GNCPrice, not copies, so don't free these values. */
 GNCPrice *      gnc_price_lookup (const GUID *guid, GNCBook *book);
 const GUID *    gnc_price_get_guid (GNCPrice *p);
+GNCBook *       gnc_price_get_book (GNCPrice *p);
 gnc_commodity * gnc_price_get_commodity(GNCPrice *p);
 gnc_commodity * gnc_price_get_currency(GNCPrice *p);
 Timespec        gnc_price_get_time(GNCPrice *p);

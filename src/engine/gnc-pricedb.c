@@ -387,6 +387,13 @@ gnc_price_get_guid (GNCPrice *p)
   return &p->guid;
 }
 
+GNCBook *
+gnc_price_get_book (GNCPrice *p)
+{
+  if (!p) return NULL;
+  return p->book;
+}
+
 gnc_commodity *
 gnc_price_get_commodity(GNCPrice *p)
 {
