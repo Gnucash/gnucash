@@ -7,7 +7,6 @@
 
 #include "new-user-callbacks.h"
 #include "new-user-interface.h"
-#include "new-user-funs.h"
 
 #include <guile/gh.h>
 
@@ -35,7 +34,7 @@ deleteit(GtkWidget** togetridof)
         return 0;
     }
     gtk_widget_hide(*togetridof);
-    gtk_widget_destroy(*togetridof);
+    gtk_widget_destroy(GTK_WIDGET(*togetridof));
     *togetridof = NULL;
     return 1;
 }

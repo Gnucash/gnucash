@@ -46,7 +46,8 @@ libgncgnome_a_SOURCES = \
   window-report.c \
   new-user-callbacks.c \
   new-user-interface.c \
-  new-user-funs.c
+  new-user-funs.c \
+  glade-support.c
 
 gnomeappdir = ${datadir}/gnome/apps/Applications
 
@@ -78,7 +79,6 @@ noinst_HEADERS = \
   extensions.h \
   glade-cb-gnc-dialogs.h \
   glade-gnc-dialogs.h \
-  glade-support-gnc-dialogs.h \
   gnc-amount-edit.h \
   gnc-commodity-edit.h \
   gnc-currency-edit.h \
@@ -98,13 +98,15 @@ noinst_HEADERS = \
   window-report.h \
   new-user-callbacks.h \
   new-user-interface.h \
-  new-user-funs.h
+  new-user-funs.h \
+  glade-support.h
 
 GLADE_FILES = \
   glade-gnc-dialogs.c \
   glade-cb-gnc-dialogs.h \
   glade-gnc-dialogs.h \
-  glade-support-gnc-dialogs.h
+  glade-support.c \
+  glade-support.h
 
 #${GLADE_FILES}: gnc-dialogs.glade
 #	${GLADE} --write-source ${srcdir}/gnc-dialogs.glade

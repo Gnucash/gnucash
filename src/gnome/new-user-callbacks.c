@@ -8,10 +8,14 @@
 
 #include "new-user-callbacks.h"
 #include "new-user-interface.h"
-#include "glade-support-gnc-dialogs.h"
+#include "gnc-commodity-edit.h"
+#include "glade-support.h"
 #include "new-user-funs.h"
+#include "gnc-ui-util.h"
 
 #include <guile/gh.h>
+
+static int commodEditAdded = 0;
 
 static void
 set_first_startup(int first_startup)
@@ -33,8 +37,6 @@ on_newUserStartPage_next               (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         user_data)
 {
 
-    /* Need to load the account lists here */
-    
     return FALSE;
 }
 
@@ -44,10 +46,6 @@ on_chooseAccountTypesPage_next         (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data)
 {
-    gnc_ui_show_nu_account_list();
-
-    /* need to fill up the account list info here */
-    
     return FALSE;
 }
 
@@ -94,7 +92,10 @@ on_newAccountCancelDialog_OKButton_clicked
 {
     gboolean keepshowing = TRUE;
 
-    /* keepshowing = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GTK_BOX(GTK_DIALOG(GTK_WIDGET(button)->parent)->vbox)->children[1])); */
+    keepshowing = gtk_toggle_button_get_active(
+        GTK_TOGGLE_BUTTON(lookup_widget(
+                              GTK_WIDGET(button),
+                              "newAccountCancelDialog_RunAgainToggle")));
 
     set_first_startup(keepshowing);
     
@@ -104,5 +105,53 @@ on_newAccountCancelDialog_OKButton_clicked
     
     gh_eval_str("(gnc:default-ui-start)");
     gh_eval_str("(gnc:show-main-window)");
+}
+
+
+void
+on_newAccountCurrencyChoosePage_prepare
+                                        (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data)
+{
+    /* need to load currency info here.  In fact drop a
+       gnc-commodity-edit widget here */
+    GtkWidget *commodityWid;
+    GtkWidget *vbox;
+
+    if(!commodEditAdded)
+    {
+        commodEditAdded = 1;
+        commodityWid = gnc_commodity_edit_new();
+        gtk_widget_show(commodityWid);
+        gnc_commodity_edit_set_commodity(GNC_COMMODITY_EDIT(commodityWid),
+                                         gnc_locale_default_currency());
+        
+        vbox = lookup_widget(GTK_WIDGET(gnomedruidpage),
+                             "newAccountCurrencyChooser_vbox");
+        
+        gtk_box_pack_end(GTK_BOX(vbox), commodityWid, 1, 1, 1);
+    }
+    
+}
+
+
+void
+on_chooseAccountTypesPage_prepare      (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data)
+{
+    /* Need to load the account type lists here */
+}
+
+
+void
+on_newUserDruidFinishPage_prepare      (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data)
+{
+    gnc_ui_show_nu_account_list();
+
+    /* need to fill up the account list info here */
 }
 

@@ -12,14 +12,13 @@
   <gettext_support>True</gettext_support>
   <use_widget_names>True</use_widget_names>
   <output_main_file>False</output_main_file>
-  <output_support_files>False</output_support_files>
   <output_build_files>False</output_build_files>
   <main_source_file>new-user-interface.c</main_source_file>
   <main_header_file>new-user-interface.h</main_header_file>
   <handler_source_file>new-user-callbacks.c</handler_source_file>
   <handler_header_file>new-user-callbacks.h</handler_header_file>
-  <support_header_file>glade-support-gnc-dialogs.h</support_header_file>
-  <output_translatable_strings>True</output_translatable_strings>
+  <support_source_file>glade-support.c</support_source_file>
+  <support_header_file>glade-support.h</support_header_file>
   <translatable_strings_file>new-user-translatable.c</translatable_strings_file>
 </project>
 
@@ -64,11 +63,77 @@
 
     <widget>
       <class>GnomeDruidPageStandard</class>
+      <name>newAccountCurrencyChoosePage</name>
+      <signal>
+	<name>prepare</name>
+	<handler>on_newAccountCurrencyChoosePage_prepare</handler>
+	<last_modification_time>Thu, 11 Jan 2001 23:30:52 GMT</last_modification_time>
+      </signal>
+      <title>Choose Currency</title>
+      <title_color>255,255,255</title_color>
+      <background_color>25,25,112</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>newAccountCurrencyChooser_vbox</name>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkVBox</class>
+	  <name>vbox2</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <name>newUserChooseCurrencyDescrip</name>
+	    <sensitive>False</sensitive>
+	    <label>Please choose the currency to use for new accounts.</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>Placeholder</class>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
       <name>chooseAccountTypesPage</name>
       <signal>
 	<name>next</name>
 	<handler>on_chooseAccountTypesPage_next</handler>
 	<last_modification_time>Tue, 09 Jan 2001 18:05:14 GMT</last_modification_time>
+      </signal>
+      <signal>
+	<name>prepare</name>
+	<handler>on_chooseAccountTypesPage_prepare</handler>
+	<last_modification_time>Thu, 11 Jan 2001 23:31:39 GMT</last_modification_time>
       </signal>
       <title>Choose Account Types</title>
       <title_color>255,255,255</title_color>
@@ -241,6 +306,11 @@
 	<handler>on_newUserDruidFinishPage_finish</handler>
 	<last_modification_time>Tue, 09 Jan 2001 18:08:04 GMT</last_modification_time>
       </signal>
+      <signal>
+	<name>prepare</name>
+	<handler>on_newUserDruidFinishPage_prepare</handler>
+	<last_modification_time>Sun, 14 Jan 2001 18:14:22 GMT</last_modification_time>
+      </signal>
       <title>Finish Account Setup</title>
       <text>Please check the window for the new accounts that will be created.
 Press finish if this is OK.</text>
@@ -267,47 +337,89 @@ Press finish if this is OK.</text>
   <auto_shrink>False</auto_shrink>
 
   <widget>
-    <class>GtkScrolledWindow</class>
-    <name>scrolledwindow4</name>
-    <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
-    <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
-    <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-    <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+    <class>GtkVBox</class>
+    <name>vbox3</name>
+    <homogeneous>False</homogeneous>
+    <spacing>0</spacing>
 
     <widget>
-      <class>GtkCTree</class>
-      <name>newAccountlistCTree</name>
-      <sensitive>False</sensitive>
-      <columns>2</columns>
-      <column_widths>114,80</column_widths>
-      <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
-      <show_titles>True</show_titles>
-      <shadow_type>GTK_SHADOW_IN</shadow_type>
+      <class>GtkLabel</class>
+      <name>newAccountLable</name>
+      <label>If you would like the new accounts to have a balance please enter it into the Balance column in the list below.</label>
+      <justify>GTK_JUSTIFY_RIGHT</justify>
+      <wrap>True</wrap>
+      <xalign>0.5</xalign>
+      <yalign>0.5</yalign>
+      <xpad>0</xpad>
+      <ypad>0</ypad>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>False</fill>
+      </child>
+    </widget>
+
+    <widget>
+      <class>GtkScrolledWindow</class>
+      <name>scrolledwindow4</name>
+      <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
+      <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+      <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+      <child>
+	<padding>0</padding>
+	<expand>True</expand>
+	<fill>True</fill>
+      </child>
 
       <widget>
-	<class>GtkLabel</class>
-	<child_name>CTree:title</child_name>
-	<name>newAccountList_AccountName</name>
-	<label>Name</label>
-	<justify>GTK_JUSTIFY_CENTER</justify>
-	<wrap>False</wrap>
-	<xalign>0.5</xalign>
-	<yalign>0.5</yalign>
-	<xpad>0</xpad>
-	<ypad>0</ypad>
-      </widget>
+	<class>GtkCTree</class>
+	<name>newAccountListCTree</name>
+	<can_focus>True</can_focus>
+	<columns>3</columns>
+	<column_widths>80,157,80</column_widths>
+	<selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+	<show_titles>True</show_titles>
+	<shadow_type>GTK_SHADOW_IN</shadow_type>
 
-      <widget>
-	<class>GtkLabel</class>
-	<child_name>CTree:title</child_name>
-	<name>newAccountList_AccountDescription</name>
-	<label>Description</label>
-	<justify>GTK_JUSTIFY_CENTER</justify>
-	<wrap>False</wrap>
-	<xalign>0.5</xalign>
-	<yalign>0.5</yalign>
-	<xpad>0</xpad>
-	<ypad>0</ypad>
+	<widget>
+	  <class>GtkLabel</class>
+	  <child_name>CTree:title</child_name>
+	  <name>newAccountList_NameLable</name>
+	  <label>Name</label>
+	  <justify>GTK_JUSTIFY_CENTER</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	</widget>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <child_name>CTree:title</child_name>
+	  <name>newAccountList_DescriptionLable</name>
+	  <label>Description</label>
+	  <justify>GTK_JUSTIFY_CENTER</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	</widget>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <child_name>CTree:title</child_name>
+	  <name>newAccountList_BalanceLable</name>
+	  <label>Balance</label>
+	  <justify>GTK_JUSTIFY_CENTER</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	</widget>
       </widget>
     </widget>
   </widget>
@@ -381,11 +493,10 @@ Press finish if this is OK.</text>
 
       <widget>
 	<class>GtkLabel</class>
-	<name>newAccountShouldRunAgain</name>
-	<label>Canceling.  Please uncheck if you would not like
-this new user dialog to run again.</label>
-	<justify>GTK_JUSTIFY_CENTER</justify>
-	<wrap>False</wrap>
+	<name>newAccountCancelDialog_ShouldRunAgainLable</name>
+	<label>Canceling.  Please uncheck if you would not like this new user dialog to run again.</label>
+	<justify>GTK_JUSTIFY_FILL</justify>
+	<wrap>True</wrap>
 	<xalign>0.5</xalign>
 	<yalign>0.5</yalign>
 	<xpad>0</xpad>
@@ -399,7 +510,7 @@ this new user dialog to run again.</label>
 
       <widget>
 	<class>GtkCheckButton</class>
-	<name>newAccountRunAgain</name>
+	<name>newAccountCancelDialog_RunAgainToggle</name>
 	<can_focus>True</can_focus>
 	<signal>
 	  <name>toggled</name>

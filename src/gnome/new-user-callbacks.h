@@ -1,5 +1,8 @@
-#include <gnome.h>
+#ifndef _NEW_USER_CALLBACKS_H_
+#define _NEW_USER_CALLBACKS_H_
 
+#include <gnome.h>
+#include <glib.h>
 
 gboolean
 on_newUserStartPage_next               (GnomeDruidPage  *gnomedruidpage,
@@ -27,14 +30,23 @@ on_newAccountRunAgain_toggled          (GtkToggleButton *togglebutton,
 void
 on_newAccountCancelDialog_OKButton_clicked
                                         (GtkButton       *button,
-                                        gpointer         user_data);
+                                         gpointer         user_data);
 
 void
-on_newAccountCancelDialog_ApplyButton_clicked
-                                        (GtkButton       *button,
-                                        gpointer         user_data);
+on_newAccountCurrencyChoosePage_prepare
+                                        (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                         gpointer         user_data);
 
 void
-on_newAccountCancelDialog_CancelButton_clicked
-                                        (GtkButton       *button,
+on_chooseAccountTypesPage_prepare      (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+
+#endif /* _NEW_USER_CALLBACKS_H_ */    
+
+void
+on_newUserDruidFinishPage_prepare      (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
                                         gpointer         user_data);
