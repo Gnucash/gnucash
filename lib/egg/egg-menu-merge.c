@@ -197,7 +197,7 @@ get_child_node(EggMenuMerge *self, GNode *parent,
 		    NODE_INFO(child)->type = node_type;
 		  
 		  /* warn about type mismatch */
-		  if (NODE_INFO(child)->type != EGG_MENU_MERGE_UNDECIDED &&
+		  if (node_type != EGG_MENU_MERGE_UNDECIDED &&
 		      NODE_INFO(child)->type != node_type)
 		    g_warning("node type doesn't match %d (%s is type %d)",
 			      node_type, NODE_INFO(child)->name,
@@ -823,6 +823,10 @@ find_menu_position (GNode *node, GtkWidget **menushell_p, gint *pos_p)
 	  pos = g_list_index(GTK_MENU_SHELL(menushell)->children,
 			     NODE_INFO(parent)->proxy) + 1;
 	  break;
+	case EGG_MENU_MERGE_POPUPS:
+	  menushell = NULL;
+	  pos = 0;
+	  break;
 	default:
 	  g_warning("%s: bad parent node type %d", G_STRLOC,
 		    NODE_INFO(parent)->type);
@@ -1027,8 +1031,9 @@ update_node (EggMenuMerge *self, GNode *node)
 		    menu = gtk_menu_new();
 		    gtk_menu_item_set_submenu(GTK_MENU_ITEM(info->proxy), menu);
 		    gtk_menu_set_accel_group (GTK_MENU (menu), self->accel_group);
-		    gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
-					   info->proxy, pos);
+		    if (menushell)
+		      gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
+					     info->proxy, pos);
 		  }
 	      }
 	    else

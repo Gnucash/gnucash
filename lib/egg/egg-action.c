@@ -570,7 +570,8 @@ disconnect_proxy (EggAction *action, GtkWidget *proxy)
 					G_CALLBACK (egg_action_sync_label),
 					proxy);
 
-  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (proxy), NULL);
+  if (GTK_IS_MENU_ITEM (proxy))
+	gtk_menu_item_set_accel_path (GTK_MENU_ITEM (proxy), NULL);
 
   /* toolbar button specific synchronisers ... */
   g_signal_handlers_disconnect_by_func (action,
@@ -684,7 +685,7 @@ egg_action_connect_proxy (EggAction *action,
 
   if (prev_action)
     {
-      (* EGG_ACTION_GET_CLASS (action)->disconnect_proxy) (action, proxy);  
+      (* EGG_ACTION_GET_CLASS (action)->disconnect_proxy) (prev_action, proxy);  
     }
 
   (* EGG_ACTION_GET_CLASS (action)->connect_proxy) (action, proxy);

@@ -1,3 +1,10 @@
+2003-08-10  David Hampton  <hampton@employees.org>
+
+	* lib/egg/egg-action.c: Fix problem connecting toolbar actions and
+	switching a proxy between actions.
+	
+	* lib/egg/egg-menu-merge.c: Make popup menuns work.
+
 2003-08-08  David Hampton  <hampton@employees.org>
 
 	* lots of files: Sync up at the gnome2-merge-2 tag.
