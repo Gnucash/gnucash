@@ -234,13 +234,10 @@ gnc_dense_cal_class_init (GncDenseCalClass *class)
         gnc_dense_cal_signals[MARKS_LOST_SIGNAL] =
                 gtk_signal_new( MARKS_LOST_SIGNAL_NAME,
                                 GTK_RUN_LAST,
-                                GTK_CLASS_TYPE(object_class),
+                                object_class->type,
                                 GTK_SIGNAL_OFFSET( GncDenseCalClass, marks_lost_cb ),
                                 gtk_signal_default_marshaller, GTK_TYPE_NONE, 0 );
-
-#if 0
         gtk_object_class_add_signals (object_class, gnc_dense_cal_signals, LAST_SIGNAL);
-#endif
 
         object_class->destroy = gnc_dense_cal_destroy;
         widget_class->realize = gnc_dense_cal_realize;
@@ -311,14 +308,13 @@ gnc_dense_cal_init (GncDenseCal *dcal)
         /* Deal with the various label sizes. */
         {
                 gint i;
-                guint maxWidth, maxHeight, maxAscent, maxLBearing;
+                gint maxWidth, maxHeight, maxAscent, maxLBearing;
                 gint lbearing, rbearing, width, ascent, descent;
 
                 dcal->monthLabelFont = gdk_font_load( LABEL_FONT_NAME );
                 g_assert( dcal->monthLabelFont );
 
-                dcal->dayLabelFont = gdk_font_from_description (
-		GTK_WIDGET(dcal)->style->font_desc);
+                dcal->dayLabelFont = GTK_WIDGET(dcal)->style->font;
                 gdk_font_ref( dcal->dayLabelFont );
                 g_assert( dcal->dayLabelFont );
 
@@ -758,7 +754,7 @@ gnc_dense_cal_draw_to_buffer( GncDenseCal *dcal )
                                          gdk_visual_get_system()->depth );
                 black.pixel = gdk_rgb_xpixel_from_rgb(0);
                 for ( i=0; i<12; i++ ) {
-                        gint x,y;
+                        guint x,y;
                         /* these are going to be rotated, so transpose width
                          * and height */
                         dcal->monthLabels[i] =
@@ -1501,7 +1497,8 @@ gnc_dense_cal_mark( GncDenseCal *dcal,
                     guint size, GDate **dateArray,
                     gchar *name, gchar *info )
 {
-        gint i, doc;
+        guint i;
+	gint doc;
         gdc_mark_data *newMark;
         GDate *d;
 
@@ -1551,7 +1548,7 @@ gnc_dense_cal_mark_remove( GncDenseCal *dcal, guint markToRemove )
         gdc_mark_data *gdcmd;
 
         /* Ignore non-realistic marks */
-        if ( markToRemove == -1 ) {
+        if ( (gint)markToRemove == -1 ) {
                 return;
         }
 

@@ -493,7 +493,7 @@ gnc_option_menu_init(GtkWidget * w)
 {
   GtkWidget * menu;
   GtkWidget * active;
-  int i;
+  unsigned int i;
 
   menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(w));
 

@@ -1,3 +1,15 @@
+2003-05-25  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome-utils/gnc-tree-model-example-account.c,
+	src/backend/file/sixtp-dom-parsers.c,
+	src/backend/file/sixtp-utils.c,
+	src/backend/file/test/test-dom-converters1.c,
+	src/backend/file/test/test-string-converters.c,
+	src/calculation/fin.c, src/engine/GNCId.c src/engine/QueryCore.c,
+	src/engine/gnc-engine-util.c src/engine/guid.c,
+	src/engine/test/test-commodities.c, src/network-utils/gnc-gpg.c:
+	Fix signed/unsigned comparison warnings in gcc3.3.
+
 2003-05-22  Jan Arne Petersen  <jpetersen@uni-bonn.de>
 
 	* src/gnome-utils/dialog-account.c:

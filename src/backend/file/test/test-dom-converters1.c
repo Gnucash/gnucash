@@ -201,7 +201,7 @@ test_dom_tree_to_gnc_numeric(void)
         gchar *message = NULL;
 
         message = test_gnc_nums_internal
-          (gnc_numeric_create(18768786810, 100000));
+          (gnc_numeric_create(18768786810LL, 100000));
 
         do_test_args(message == NULL, "gnc_num 18768786810/100000",
                      __FILE__, __LINE__, message);

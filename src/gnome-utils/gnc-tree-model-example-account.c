@@ -265,7 +265,7 @@ gnc_tree_model_example_account_get_iter (GtkTreeModel *tree_model,
 					 GtkTreePath *path)
 {
 	GNCTreeModelExampleAccount *model = GNC_TREE_MODEL_EXAMPLE_ACCOUNT (tree_model);
-	gint i;
+	guint i;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_EXAMPLE_ACCOUNT (model), FALSE);
 	g_return_val_if_fail (gtk_tree_path_get_depth (path) > 0, FALSE);
@@ -427,7 +427,7 @@ gnc_tree_model_example_account_iter_nth_child (GtkTreeModel *tree_model,
 
 	model = GNC_TREE_MODEL_EXAMPLE_ACCOUNT (tree_model);
 
-	g_return_val_if_fail (n >= 0 && n < g_slist_length (model->priv->accounts), FALSE);
+	g_return_val_if_fail (n >= 0 && n < (int)g_slist_length (model->priv->accounts), FALSE);
 
 	iter->stamp = model->stamp;
 	iter->user_data = g_slist_nth (model->priv->accounts, n);
