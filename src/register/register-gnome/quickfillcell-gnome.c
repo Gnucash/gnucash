@@ -35,11 +35,11 @@
 
 
 static gboolean
-QuickFillDirect (BasicCell *bcell,
-                 int *cursor_position,
-                 int *start_selection,
-                 int *end_selection,
-                 void *gui_data)
+gnc_quickfill_cell_direct_update (BasicCell *bcell,
+                                  int *cursor_position,
+                                  int *start_selection,
+                                  int *end_selection,
+                                  void *gui_data)
 {
         QuickFillCell *cell = (QuickFillCell *) bcell;
         GdkEventKey *event = gui_data;
@@ -97,12 +97,12 @@ QuickFillDirect (BasicCell *bcell,
 
 
 void
-xaccQuickFillGUIInit (QuickFillCell *cell)
+gnc_quickfill_cell_gui_init (QuickFillCell *cell)
 {
         if (cell == NULL)
                 return;
 
-        cell->cell.direct_update = QuickFillDirect;
+        cell->cell.direct_update = gnc_quickfill_cell_direct_update;
 }
 
 /*

@@ -60,7 +60,7 @@ gnc_register_init (void)
   gnc_register_add_cell_type (RECN_CELL_TYPE_NAME, gnc_recn_cell_new);
 
   gnc_register_add_cell_type (QUICKFILL_CELL_TYPE_NAME,
-                              xaccMallocQuickFillCell);
+                              gnc_quickfill_cell_new);
 }
 
 void

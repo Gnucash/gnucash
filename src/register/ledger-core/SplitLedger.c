@@ -3715,12 +3715,12 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
     {
       GList *node;
 
-      xaccQuickFillAddCompletion
+      gnc_quickfill_cell_add_completion
         ((QuickFillCell *)
          gnc_table_layout_get_cell (reg->table->layout, DESC_CELL),
          xaccTransGetDescription (trans));
 
-      xaccQuickFillAddCompletion
+      gnc_quickfill_cell_add_completion
         ((QuickFillCell *)
          gnc_table_layout_get_cell (reg->table->layout, NOTES_CELL),
          xaccTransGetNotes (trans));
@@ -3738,7 +3738,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
 
         cell = (QuickFillCell *)
           gnc_table_layout_get_cell (reg->table->layout, MEMO_CELL);
-        xaccQuickFillAddCompletion (cell, xaccSplitGetMemo (s));
+        gnc_quickfill_cell_add_completion (cell, xaccSplitGetMemo (s));
       }
     }
 

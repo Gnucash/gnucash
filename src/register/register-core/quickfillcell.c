@@ -50,24 +50,24 @@
 #include "quickfillcell.h"
 
 
-static void xaccSetQuickFillCellOriginal (QuickFillCell *cell,
-                                          const GdkWChar *original);
+static void gnc_quickfill_cell_set_original (QuickFillCell *cell,
+                                             const GdkWChar *original);
 
 
 static void 
-quick_set (BasicCell *_cell,
-           const char *val) 
+gnc_quickfill_cell_set_value_internal (BasicCell *_cell,
+                                       const char *val) 
 {
    QuickFillCell *cell = (QuickFillCell *) _cell;
-   xaccSetQuickFillCellValue (cell, val);
+   gnc_quickfill_cell_set_value (cell, val);
 }
 
 /* when entering new cell, put cursor at end and select everything */
 static gboolean
-quick_enter (BasicCell *_cell,
-             int *cursor_position,
-             int *start_selection,
-             int *end_selection)
+gnc_quickfill_cell_enter (BasicCell *_cell,
+                          int *cursor_position,
+                          int *start_selection,
+                          int *end_selection)
 {
    QuickFillCell *cell = (QuickFillCell *) _cell;
 
@@ -75,7 +75,7 @@ quick_enter (BasicCell *_cell,
    *start_selection = 0;
    *end_selection = -1;
 
-   xaccSetQuickFillCellOriginal (cell, NULL);
+   gnc_quickfill_cell_set_original (cell, NULL);
 
    return TRUE;
 }
@@ -141,14 +141,14 @@ wcstrncaseequal (const GdkWChar *s1, const GdkWChar *s2, int len)
 }
 
 static void
-quick_modify (BasicCell *_cell,
-              const GdkWChar *change,
-              int change_len,
-              const GdkWChar *newval,
-              int newval_len,
-              int *cursor_position,
-              int *start_selection,
-              int *end_selection)
+gnc_quickfill_cell_modify_verify (BasicCell *_cell,
+                                  const GdkWChar *change,
+                                  int change_len,
+                                  const GdkWChar *newval,
+                                  int newval_len,
+                                  int *cursor_position,
+                                  int *start_selection,
+                                  int *end_selection)
 {
    QuickFillCell *cell = (QuickFillCell *) _cell;
    const char *match_str;
@@ -166,7 +166,7 @@ quick_modify (BasicCell *_cell,
          wcstrncaseequal (cell->original, newval, newval_len))
        cell->original[newval_len] = 0;
      else
-       xaccSetQuickFillCellOriginal(cell, NULL);
+       gnc_quickfill_cell_set_original (cell, NULL);
 
      gnc_basic_cell_set_wcvalue_internal (&cell->cell, newval);
      return;
@@ -176,7 +176,7 @@ quick_modify (BasicCell *_cell,
    if (*cursor_position < _cell->value_len)
    {
      gnc_basic_cell_set_wcvalue_internal (&cell->cell, newval);
-     xaccSetQuickFillCellOriginal(cell, NULL);
+     gnc_quickfill_cell_set_original (cell, NULL);
      return;
    }
 
@@ -232,7 +232,7 @@ quick_modify (BasicCell *_cell,
 /* when leaving cell, make sure that text was put into the qf */
 
 static void
-quick_leave (BasicCell * _cell) 
+gnc_quickfill_cell_leave (BasicCell * _cell) 
 {
    QuickFillCell *cell = (QuickFillCell *) _cell;
 
@@ -240,7 +240,7 @@ quick_leave (BasicCell * _cell)
 }
 
 static void
-quickfill_cell_destroy (BasicCell *bcell)
+gnc_quickfill_cell_destroy (BasicCell *bcell)
 {
   QuickFillCell *cell = (QuickFillCell *) bcell;
 
@@ -257,7 +257,7 @@ quickfill_cell_destroy (BasicCell *bcell)
 }
 
 static void
-xaccInitQuickFillCell (QuickFillCell *cell)
+gnc_quickfill_cell_init (QuickFillCell *cell)
 {
   gnc_basic_cell_init (&(cell->cell));
 
@@ -265,30 +265,30 @@ xaccInitQuickFillCell (QuickFillCell *cell)
   cell->sort = QUICKFILL_LIFO;
   cell->original = NULL;
 
-  cell->cell.destroy = quickfill_cell_destroy;
+  cell->cell.destroy = gnc_quickfill_cell_destroy;
 
-  cell->cell.enter_cell    = quick_enter;
-  cell->cell.modify_verify = quick_modify;
-  cell->cell.leave_cell    = quick_leave;
-  cell->cell.set_value     = quick_set;
+  cell->cell.enter_cell    = gnc_quickfill_cell_enter;
+  cell->cell.modify_verify = gnc_quickfill_cell_modify_verify;
+  cell->cell.leave_cell    = gnc_quickfill_cell_leave;
+  cell->cell.set_value     = gnc_quickfill_cell_set_value_internal;
 
-  xaccQuickFillGUIInit (cell);
+  gnc_quickfill_cell_gui_init (cell);
 }
 
 BasicCell *
-xaccMallocQuickFillCell (void)
+gnc_quickfill_cell_new (void)
 {
   QuickFillCell *cell;
 
   cell = g_new0 (QuickFillCell, 1);
 
-  xaccInitQuickFillCell (cell);
+  gnc_quickfill_cell_init (cell);
 
   return &cell->cell;
 }
 
 void
-xaccSetQuickFillCellValue (QuickFillCell *cell, const char * value)
+gnc_quickfill_cell_set_value (QuickFillCell *cell, const char * value)
 {
   if (cell == NULL)
     return;
@@ -298,7 +298,7 @@ xaccSetQuickFillCellValue (QuickFillCell *cell, const char * value)
 }
 
 void
-xaccSetQuickFillCellSort (QuickFillCell *cell, QuickFillSort sort)
+gnc_quickfill_cell_set_sort (QuickFillCell *cell, QuickFillSort sort)
 {
   if (cell == NULL)
     return;
@@ -307,7 +307,7 @@ xaccSetQuickFillCellSort (QuickFillCell *cell, QuickFillSort sort)
 }
 
 static void
-xaccSetQuickFillCellOriginal (QuickFillCell *cell, const GdkWChar *original)
+gnc_quickfill_cell_set_original (QuickFillCell *cell, const GdkWChar *original)
 {
   if (cell == NULL)
     return;
@@ -321,7 +321,7 @@ xaccSetQuickFillCellOriginal (QuickFillCell *cell, const GdkWChar *original)
 }
 
 void
-xaccQuickFillAddCompletion (QuickFillCell *cell, const char *completion)
+gnc_quickfill_cell_add_completion (QuickFillCell *cell, const char *completion)
 {
   if (cell == NULL)
     return;

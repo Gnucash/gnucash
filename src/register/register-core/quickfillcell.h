@@ -44,8 +44,8 @@
  * Copyright (c) 2000 Dave Peticolas
  */
 
-#ifndef __QUICK_FILL_CELL_C__
-#define __QUICK_FILL_CELL_C__
+#ifndef QUICKFILL_CELL_H
+#define QUICKFILL_CELL_H
 
 #include "basiccell.h"
 #include "QuickFill.h"
@@ -61,19 +61,18 @@ typedef struct _QuickFillCell
   GdkWChar *original;  /* original string entered in original case */
 } QuickFillCell;
 
-BasicCell *      xaccMallocQuickFillCell (void);
+BasicCell *      gnc_quickfill_cell_new (void);
 
-void             xaccSetQuickFillCellValue (QuickFillCell *cell,
-                                            const char *value);
-void             xaccSetQuickFillCellSort (QuickFillCell *cell,
-                                           QuickFillSort sort);
+void             gnc_quickfill_cell_set_value (QuickFillCell *cell,
+                                               const char *value);
 
-void             xaccQuickFillAddCompletion (QuickFillCell *cell,
-                                             const char *completion);
+void             gnc_quickfill_cell_set_sort (QuickFillCell *cell,
+                                              QuickFillSort sort);
+
+void             gnc_quickfill_cell_add_completion (QuickFillCell *cell,
+                                                    const char *completion);
 
 /* GUI-dependent */
-void             xaccQuickFillGUIInit (QuickFillCell *cell);
+void             gnc_quickfill_cell_gui_init (QuickFillCell *cell);
 
-#endif /* __QUICK_FILL_CELL_C__ */
-
-/* --------------- end of file ---------------------- */
+#endif
