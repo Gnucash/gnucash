@@ -35,11 +35,11 @@
 #include "date.h"
 
 
-/* Values for the reconciled field in Transaction: */
-#define CREC 'c'              /* The transaction has been cleared        */
-#define YREC 'y'              /* The transaction has been reconciled     */
-#define FREC 'f'              /* frozen into accounting period           */
-#define NREC 'n'              /* not reconciled or cleared               */
+/* Values for the reconciled field in Splits */
+#define CREC 'c'              /* The Split has been cleared        */
+#define YREC 'y'              /* The Split has been reconciled     */
+#define FREC 'f'              /* frozen into accounting period     */
+#define NREC 'n'              /* not reconciled or cleared         */
 
 /** STRUCTS *********************************************************/
 /* The debit & credit pointers are used to implement a double-entry 
