@@ -307,6 +307,9 @@ AC_SUBST(GNOME_XML_CFLAGS)
 GTKHTML_LIBS=`$GNOME_CONFIG --libs gtkhtml`
 GTKHTML_CFLAGS=`$GNOME_CONFIG --cflags gtkhtml`
 
+AC_CHECK_LIB(gal, main, true,
+  [AC_MSG_ERROR([gal library not found])],
+  `$GNOME_CONFIG --libs gal`)
 
 # check for gtkhtml and enable it via HAVE_LIBGTKHTML
 # if found

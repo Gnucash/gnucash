@@ -1,7 +1,7 @@
 2001-03-04  Dave Peticolas  <dave@krondo.com>
 
 	* configure.in: define a new substitution GNC_PIXMAP_DIR for
-	a pixmap directory.
+	a pixmap directory. check for gal.
 
 	* src/pixmaps/Makefile.am (gncpixmapdir): install in configured
 	pixmap directory
