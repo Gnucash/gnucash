@@ -38,6 +38,7 @@
 #include "druid-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-date.h"
+#include "gnc-file.h"
 #include "gnc-frequency.h"
 #include "gnc-gui-query.h"
 #include "gnc-trace.h"
@@ -429,6 +430,11 @@ ap_close_period (GnomeDruidPage *druidpage,
 
     qof_session_add_book (qof_session_get_current_session(), closed_book);
 
+    /* We must save now; if we don't, and the user bails without saving,
+     * then opening account balances will be incorrect, and this can only
+     * lead to unhappiness. 
+     */
+    gnc_file_save ();
     gnc_resume_gui_refresh ();
   }
 
