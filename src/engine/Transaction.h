@@ -31,10 +31,10 @@
 #include <time.h>
 
 #include "gnc-commodity.h"
+#include "gnc-date.h"
 #include "gnc-engine.h"
 #include "kvp_frame.h"
 #include "GNCId.h"
-#include "date.h"
 
 /** @name Split Reconciled field values
     If you change these

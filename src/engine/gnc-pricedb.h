@@ -24,13 +24,14 @@
 #ifndef GNC_PRICEDB_H
 #define GNC_PRICEDB_H
 
-#include "date.h"
+#include <stdio.h>
+
 #include "gnc-commodity.h"
-#include "gnc-numeric.h"
+#include "gnc-date.h"
 #include "gnc-engine.h"
+#include "gnc-numeric.h"
 #include "guid.h"
 
-#include <stdio.h>
 
 /** @addtogroup Engine
     @{ */
