@@ -761,6 +761,12 @@ xaccAccountGetBalance (Account *acc)
 }
 
 double
+xaccAccountGetClearedBalance (Account *acc)
+{
+   return (acc->cleared_balance);
+}
+
+double
 xaccAccountGetReconciledBalance (Account *acc)
 {
    return (acc->reconciled_balance);

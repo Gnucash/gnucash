@@ -328,7 +328,7 @@ readGroup (int fd, Account *aparent, int token)
 \********************************************************************/
 static Account *
 readAccount( int fd, AccountGroup *grp, int token )
-  {
+{
   int err=0;
   int i;
   int numTrans, accID;
@@ -401,6 +401,7 @@ readAccount( int fd, AccountGroup *grp, int token )
   }
 
   xaccAccountRecomputeBalance (acc);
+
   return acc;
 }
 
@@ -719,7 +720,7 @@ readTransaction( int fd, Account *acc, int token )
         }
      }
   }
-    
+
   return trans;
 }
 

@@ -106,6 +106,7 @@ xaccFreeSplit( Split *split )
   split->damount     = 0.0;
   split->share_price = 1.0;
   split->parent      = NULL;
+  split->acc         = NULL;
 
   _free(split);
 }
@@ -149,6 +150,8 @@ xaccSplitDestroy (Split *split)
    numsplits = 0;
    s = trans->splits[0];
    while (s) {
+/* xxxxxxx */
+printf ("trans %p, %d %p\n", trans, numsplits, s);
       MARK_SPLIT(s);
       if (s == split) ismember = 1;
       numsplits ++;

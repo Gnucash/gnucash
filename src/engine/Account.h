@@ -110,6 +110,7 @@ AccountGroup * xaccAccountGetChildren (Account *);
 AccountGroup * xaccAccountGetParent (Account *);
 
 double         xaccAccountGetBalance (Account *);
+double         xaccAccountGetClearedBalance (Account *);
 double         xaccAccountGetReconciledBalance (Account *);
 Split *        xaccAccountGetSplit (Account *acc, int i);
 Split **       xaccAccountGetSplitList (Account *acc);
