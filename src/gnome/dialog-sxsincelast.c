@@ -131,8 +131,6 @@
 #define READY_TEXT          "Ready to create"
 #define NEEDS_BINDINGS_TEXT "Needs values for variables"
 
-#define OBSOLETE_TEXT  "Obsolete"
-
 static short module = MOD_SX;
 
 /**
@@ -1791,15 +1789,17 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
                                                       andequal_numerics_set,
                                                       &allVarsBound );
                                 rowText[1] = ( allVarsBound
-                                               ? _( READY_TEXT )
-                                               : _( NEEDS_BINDINGS_TEXT ) );
+                                               ? _( "Ready to create" )
+					       /* READY_TEXT */ 
+					       : _( "Needs values for variables" )
+                                               /* NEEDS_BINDINGS_TEXT */ );
                                 break;
                         case IGNORE:
-                                rowText[1] = _( IGNORE_TEXT );
-                                break;
+			    rowText[1] = _( "Ignored" ) /* IGNORE_TEXT */ ;
+			    break;
                         case POSTPONE:
-                                rowText[1] = _( POSTPONE_TEXT );
-                                break;
+			    rowText[1] = _( "Postponed" ) /* POSTPONE_TEXT */ ;
+			    break;
                         default:
                                 g_assert( FALSE );
                         }
@@ -1926,7 +1926,7 @@ add_dead_list_to_gui(GList *removeList, sxSinceLastData *sxsld)
                 xaccFreqSpecGetFreqStr( fs, tmp_str );
                 rowtext[1] = tmp_str->str;
 
-                rowtext[2] = g_strdup( _(OBSOLETE_TEXT) );
+                rowtext[2] = g_strdup( _("Obsolete") );
 
                 gtk_clist_insert( cl, row, rowtext );
                 gtk_clist_set_row_data( cl, row, tdt );

@@ -1925,7 +1925,7 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
         }
 
         if ( instList == NULL ) {
-                g_string_sprintf( nextDate, "not scheduled" );
+                g_string_sprintf( nextDate, _("not scheduled") );
         } else {
                 char tmpBuf[ MAX_DATE_LENGTH+1 ];
                 char dowBuf[ 25 ]; /* <- FIXME: appropriate length? */
