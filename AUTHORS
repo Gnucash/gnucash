@@ -54,6 +54,7 @@ Carol Champagne <carol@gnumatic.com> documentation
 Graham Chapman <grahamc@zeta.org.au> for the xacc-rpts addon package
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
 Albert Chin-A-Young <china@thewrittenword.com> configure.in patch
+Kenneth Christiansen <kenneth@gnome.org> Danish translation
 Jeremey Collins <jcollins@gnucash.org> for GnoMoney & GTK port
 Matthew Condell <mcondell@bbn.com> FreeBSD patch
 Patrick Condron <pcondon@rackspace.com> for webserver and T1 connection.
@@ -79,6 +80,7 @@ Eric Hanchrow <offby1@blarg.net> updated currency documentation
 Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work
 John Hasler <john@dhh.gt.org> engine patch
 Jon Kåre Hellan <hellan@acm.org> misc core dump fixes
+Claus Hindsgaul <claus_h@image.dk> Danish translation
 Miquel Jordana Spanish translation of manual
 Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
 Alexey Kakunin <small@arcadia.spb.ru> quickfill patch for cyrillic
@@ -88,7 +90,6 @@ Sven Kuenzler <sk@xgm.de> for SuSE README file
 Bryan Larsen <blarsen@ada-works.com> guile budget report
 Graham Leggett <minfrin@sharp.fm> for fixing a hang
 Ted Lemon <mellon@andare.fugue.com> for NetBSD port
-Yannick Le Ny <y-le-ny@ifrance.com> pour la traduction en francais 
 Grant Likely <glikely@nortelnetworks.com> gnome and engine patches
 Heath Martin <martinh@pegasus.cc.ucf.edu> gnome patches, major register work
 Matt Martin <mgmartin@abacusnet.net> guile error handling code
@@ -100,8 +101,10 @@ G. Allen Morris III <gam3@ann.softgams.com> for QIF core dump
 James LewisMoss <dres@debian.org> design doc patches
 Steven Murdoch <sjmurdoch@linuxfan.com> gnc-prices fix for London exchange
 Brent Neal <brent@baton.phys.lsu.edu> TIAA-CREF support.
+Johnny Ernst Nielsen <j.e.nielsen@iname.com> Danish translation
 Stefan Nobis <stefan-ml@snobis.de> German translation patch
 Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
+Yannick Le Ny <y-le-ny@ifrance.com> pour la traduction en francais 
 OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
 Gordon Oliver <gordo@pincoya.com> multiple currency status line patch
 Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
@@ -118,6 +121,7 @@ Jan Schrage <jan.schrage@urz.uni-heidelberg.de> documentation patches
 Christopher Seawood <cls@seawood.org> for XbaeMatrix core dump
 Alessandro Seveso <aleseveso@tiscalinet.it> Italian translations
 Mike Simons <msimons@fsimons01.erols.com> misc configure.in patches
+Keld Simonsen <keld@dkuug.dk> Danish translation
 Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
 Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
 Robby Stephenson <robby.stephenson@usa.net> register & file history patches

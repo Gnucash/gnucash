@@ -45,14 +45,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/gnucash
 /usr/share/gnome/help/gnucash
 /usr/share/gnome/apps/Applications/gnucash.desktop
-/usr/share/locale/de/LC_MESSAGES/gnucash.*mo
-/usr/share/locale/en_GB/LC_MESSAGES/gnucash.*mo
-/usr/share/locale/es/LC_MESSAGES/gnucash.*mo
-/usr/share/locale/fr/LC_MESSAGES/gnucash.*mo
-/usr/share/locale/it/LC_MESSAGES/gnucash.*mo
-/usr/share/locale/ja/LC_MESSAGES/gnucash.*mo
-/usr/share/locale/ru/LC_MESSAGES/gnucash.*mo
-/usr/share/locale/sv/LC_MESSAGES/gnucash.*mo
+/usr/share/locale/*/LC_MESSAGES/gnucash.*mo
 /usr/man/*
 %config /etc/gnucash
 %doc AUTHORS COPYING ChangeLog HACKING NEWS README

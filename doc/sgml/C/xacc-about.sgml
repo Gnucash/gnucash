@@ -371,19 +371,30 @@ provide an accurate Profit & Loss statement.
 <PARA>for the xacc-rpts addon package</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><email>georgec@sco.com</email> George Chen</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for MS-Money QIF support</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailtochina@thewrittenword.com">Albert
-      Chin-A-Young</ULINK></GLOSSTERM>
+<GLOSSTERM><email>china@thewrittenword.com</email>Albert
+      Chin-A-Young</GLOSSTERM>
 <GLOSSDEF>
 <PARA>configure.in patch</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
+<GLOSSENTRY>
+<GLOSSTERM><email>kenneth@gnome.org</email>Kenneth
+Christiansen</GLOSSTERM>
+<GLOSSDEF>
+<PARA>Danish translation</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><email>jcollins@gnucash.org</email> Jeremey
       Collins</GLOSSTERM>
@@ -572,6 +583,13 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
+<GLOSSTERM><email>claus_h@image.dk</email>Claus Hindsgaul</GLOSSTERM>
+<GLOSSDEF>
+<PARA>Danish translation</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
+<GLOSSENTRY>
 <GLOSSTERM>Miquel Jordana</GLOSSTERM>
 <GLOSSDEF>
 <PARA>Spanish translation of manual</PARA>
@@ -714,6 +732,14 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
+<GLOSSTERM><email>j.e.nielsen@iname.com</email>Johnny Ernst
+Nielsen</GLOSSTERM>
+<GLOSSDEF>
+<PARA>Danish translation</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
+<GLOSSENTRY>
 <GLOSSTERM><email>stefan-ml@snobis.de</email> Stefan
       Nobis</GLOSSTERM>
 <GLOSSDEF>
@@ -837,6 +863,14 @@ provide an accurate Profit & Loss statement.
 <PARA>misc <FILENAME>configure.in</FILENAME> patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
+<GLOSSENTRY>
+<GLOSSTERM><email>keld@dkuug.dk</email>Keld Simonsen</GLOSSTERM>
+<GLOSSDEF>
+<PARA>Danish translation</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><email>rich@brake.demon.co.uk</email> Richard
       Skelton</GLOSSTERM>
@@ -844,6 +878,7 @@ provide an accurate Profit & Loss statement.
 <PARA>for Solaris cleanup</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><email>spruth@bigfoot.com</email> Henning
       Spruth</GLOSSTERM>
