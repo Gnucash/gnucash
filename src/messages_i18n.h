@@ -437,6 +437,8 @@
 
 
 /* Error messages */
+#define ERROR_IN_AMOUNT            _("You must enter a valid amount.\n\n" \
+                                     "Error: %s.")
 #define PARSER_UNBALANCED_PARENS   _("Unbalanced parenthesis")
 #define PARSER_STACK_OVERFLOW      _("Stack overflow")
 #define PARSER_STACK_UNDERFLOW     _("Stack underflow")

@@ -182,12 +182,17 @@ static void
 make_predefined_vars_helper (gpointer key, gpointer value, gpointer data)
 {
   var_store_ptr *vars_p = data;
+  ParserNum *pnum_old = value;
   var_store_ptr var;
+  ParserNum *pnum;
 
   var = g_new0 (var_store, 1);
 
-  var->variable_name = key;
-  var->value = value;
+  pnum = g_new (ParserNum, 1);
+  *pnum = *pnum_old;
+
+  var->variable_name = g_strdup(key);
+  var->value = pnum;
   var->next_var = *vars_p;
 
   *vars_p = var;
@@ -211,6 +216,9 @@ free_predefined_variables (var_store_ptr vars)
   while (vars != NULL)
   {
     next = vars->next_var;
+
+    g_free(vars->variable_name);
+    vars->variable_name = NULL;
 
     g_free(vars->value);
     vars->value = NULL;

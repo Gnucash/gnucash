@@ -33,7 +33,9 @@
 #include "window-reconcile.h"
 #include "query-user.h"
 #include "account-tree.h"
+#include "gnc-amount-edit.h"
 #include "gnc-dateedit.h"
+#include "gnc-exp-parser.h"
 #include "enriched-messages.h"
 #include "ui-callbacks.h"
 #include "util.h"
@@ -55,7 +57,7 @@ struct _xferDialog
 {
   GtkWidget * dialog;
 
-  GtkWidget * amount_entry;
+  GtkWidget * amount_edit;
   GtkWidget * date_entry;
   GtkWidget * num_entry;
   GtkWidget * description_entry;
@@ -255,7 +257,6 @@ gnc_xfer_dialog_set_amount(XferDialog *xferData, double amount)
 {
   Account *account;
   const char *currency;
-  const char *string;
 
   if (xferData == NULL)
     return;
@@ -266,9 +267,10 @@ gnc_xfer_dialog_set_amount(XferDialog *xferData, double amount)
 
   currency = xaccAccountGetCurrency(account);
 
-  string = xaccPrintAmount(amount, PRTSEP, currency);
+  gnc_amount_edit_set_currency (GNC_AMOUNT_EDIT (xferData->amount_edit),
+                                currency);
 
-  gtk_entry_set_text(GTK_ENTRY(xferData->amount_entry), string);
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->amount_edit), amount);
 }
 
 
@@ -325,9 +327,23 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     return;
   }
 
-  string = gtk_entry_get_text(GTK_ENTRY(xferData->amount_entry));
-  amount = 0.0;
-  xaccParseAmount(string, TRUE, &amount, NULL);
+  if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit)))
+  {
+    const char *error_string;
+    char * error_phrase;
+
+    error_string = gnc_exp_parser_error_string ();
+    if (error_string == NULL)
+      error_string = "";
+
+    error_phrase = g_strdup_printf(ERROR_IN_AMOUNT, error_string);
+
+    gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), error_phrase);
+
+    g_free(error_phrase);
+  }
+
+  amount = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
 
   time = gnc_date_edit_get_date(GNC_DATE_EDIT(xferData->date_entry));
 
@@ -461,19 +477,23 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 
     {
       GtkWidget *amount;
+      GtkWidget *entry;
 
       label = gtk_label_new(AMOUNT_C_STR);
       gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
       gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
-      amount = gtk_entry_new();
+      amount = gnc_amount_edit_new();
+      gnc_amount_edit_set_print_flags (GNC_AMOUNT_EDIT(amount), PRTSEP);
       gtk_box_pack_start(GTK_BOX(hbox), amount, TRUE, TRUE, 0);
-      xferData->amount_entry = amount;
+      xferData->amount_edit = amount;
 
-      gtk_signal_connect(GTK_OBJECT(amount), "focus-out-event",
+      entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (amount));
+
+      gtk_signal_connect(GTK_OBJECT(entry), "focus-out-event",
                          GTK_SIGNAL_FUNC(gnc_xfer_update_cb), xferData);
 
-      gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(amount));
+      gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
     }
 
     {
@@ -579,6 +599,8 @@ XferDialog *
 gnc_xfer_dialog(GtkWidget * parent, Account * initial)
 {
   XferDialog *xferData;
+  GNCAmountEdit *gae;
+  GtkWidget *amount_entry;
 
   xferData = g_new0(XferDialog, 1);
 
@@ -586,7 +608,10 @@ gnc_xfer_dialog(GtkWidget * parent, Account * initial)
 
   xfer_dialogs = g_list_prepend(xfer_dialogs, xferData->dialog);
 
-  gtk_widget_grab_focus(xferData->amount_entry);
+  gae = GNC_AMOUNT_EDIT(xferData->amount_edit);
+  amount_entry = gnc_amount_edit_gtk_entry (gae);
+
+  gtk_widget_grab_focus(amount_entry);
 
   gnc_xfer_dialog_select_from_account(xferData, initial);
   gnc_xfer_dialog_select_to_account(xferData, initial);

@@ -362,7 +362,7 @@ void          xaccSplitSetDocref (Split *, const char *);
  * are "N", "C" and "R"
  */
 void          xaccSplitSetReconcile (Split *split, char reconciled_flag);
-void          xaccSplitSetDateReconciledSecs (Split *split, time_t);
+void          xaccSplitSetDateReconciledSecs (Split *split, time_t time);
 void          xaccSplitSetDateReconciledTS (Split *split, Timespec *ts);
 void          xaccSplitGetDateReconciledTS (Split *split, Timespec *ts);
 
@@ -391,9 +391,9 @@ void          xaccSplitGetDateReconciledTS (Split *split, Timespec *ts);
 
 void         xaccSplitSetSharePriceAndAmount (Split *split, double price,
                                               double amount);
-void         xaccSplitSetShareAmount (Split *split, double);
-void         xaccSplitSetSharePrice (Split *split, double);
-void         xaccSplitSetValue (Split *split, double);
+void         xaccSplitSetShareAmount (Split *split, double amount);
+void         xaccSplitSetSharePrice (Split *split, double price);
+void         xaccSplitSetValue (Split *split, double value);
 void         xaccSplitSetBaseValue (Split *split, double value,
                                     const char * base_currency);
 
