@@ -199,11 +199,13 @@ printf ("SplitDestroy(): trans=%p, %d'th split=%p\n", trans, numsplits, s);
       xaccAccountRecomputeBalance (acc);
 
       s = trans->splits[1];
-      acc = s->acc;
-      MARK_SPLIT (s);
-      xaccAccountRemoveSplit (acc, s);
-      xaccAccountRecomputeBalance (acc);
-      xaccFreeTransaction (trans);
+      if (s) {
+         acc = s->acc;
+         MARK_SPLIT (s);
+         xaccAccountRemoveSplit (acc, s);
+         xaccAccountRecomputeBalance (acc);
+         xaccFreeTransaction (trans);
+      }
    }
 }
 
