@@ -642,7 +642,7 @@ void gnc_file_ofx_import (void)
       DEBUG("Filename found: %s",selected_filename);
 
       /* Create the Generic transaction importer GUI. */
-      gnc_ofx_importer_gui = gnc_gen_trans_list_new(NULL, NULL, FALSE);
+      gnc_ofx_importer_gui = gnc_gen_trans_list_new(NULL, NULL, FALSE, 42);
 
       /* Initialize libofx */
 

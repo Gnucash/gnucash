@@ -1,3 +1,12 @@
+2005-02-21  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-backend.c, import-backend.h,
+	import-main-matcher.h: Revert the change in December about date
+	matching thresholds that broke some OFX import. Now, the hard
+	limit days interval is set by the importing sub-module when
+	creating the dialog. This way, HBCI and OFX can set their
+	different requirements. (Note: QIF does not use this code at all.)
+
 2005-02-20  Neil Williams  <linux@codehelp.co.uk>
 	* src/engine/qof_book_merge.c: Fix double free of the targetList
 	entities that cause xaccGroupGetNumSubAccounts to generate a

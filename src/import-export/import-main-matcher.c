@@ -380,8 +380,9 @@ static void gnc_gen_trans_list_thaw (GNCImportMainMatcher *gui)
 }
 
 GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent, 
-					   const gchar* heading,
-					   gboolean all_from_same_account)
+					      const gchar* heading,
+					      gboolean all_from_same_account,
+					      gint match_date_hardlimit)
 {
   GNCImportMainMatcher *info;
   GladeXML *xml;
@@ -393,6 +394,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
 
   /* Initialize user Settings. */
   info->user_settings = gnc_import_Settings_new ();
+  gnc_import_Settings_set_match_date_hardlimit (info->user_settings, match_date_hardlimit);
 
   /* Initialize the GnomeDialog. */
   xml = gnc_glade_xml_new ("generic-import.glade", "transaction_matcher");

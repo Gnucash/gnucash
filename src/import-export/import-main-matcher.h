@@ -33,25 +33,41 @@
 typedef struct _main_matcher_info GNCImportMainMatcher;
 
 /** Create a new generic transaction dialog window and return it. 
-    @param parent The parent GtkWidget. May be NULL.
-    @param heading The heading label in the Importer window. May be NULL.
-    @param all_from_same_account Set this to TRUE if ALL the transaction 
-    that will be added with gnc_gen_trans_list_add_trans are from the same
-    source account.  This will cause the account column to be hidden.
+ *
+ * @param parent The parent GtkWidget. May be NULL.
+ *
+ * @param heading The heading label in the Importer window. May be NULL.
+ *
+ * @param all_from_same_account Set this to TRUE if ALL the
+ * transaction that will be added with gnc_gen_trans_list_add_trans
+ * are from the same source account.  This will cause the account
+ * column to be hidden.
+ *
+ * @param match_date_hardlimit The number of days that a matching
+ * split may differ from the given transaction before it is discarded
+ * immediately. In other words, any split that is more distant from
+ * the given transaction than this match_date_hardlimit days will be
+ * ignored altogether. For use cases without paper checks (e.g. HBCI),
+ * values like 14 (days) might be appropriate, whereas for use cases
+ * with paper checks (e.g. OFX, QIF), values like 42 (days) seem more
+ * appropriate. 
 */
 GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent, 
 					   const gchar* heading,
-					   gboolean all_from_same_account);
+					   gboolean all_from_same_account,
+					      gint match_date_hardlimit);
 
 /** Deletes the given object. */
 void gnc_gen_trans_list_delete (GNCImportMainMatcher *info);
 
 /** Add a newly imported Transaction to the Transaction Importer.
-    @param gui The Transaction Importer to use.
-    @param trans The Transaction to add.     The must contain at least
-    one split, and this split must have been associated with an account
-    Only the first split will be used for matching.  The 
-    transaction must NOT be commited.
+ *
+ * @param gui The Transaction Importer to use.
+ *
+ * @param trans The Transaction to add.  The must contain at least one
+ * split, and this split must have been associated with an account
+ * Only the first split will be used for matching.  The transaction
+ * must NOT be commited.
  */
 void gnc_gen_trans_list_add_trans(GNCImportMainMatcher *gui, Transaction *trans);
 
