@@ -629,6 +629,7 @@ gboolean
 gnc_session_load_from_xml_file_v2(GNCSession *session)
 {
     GNCBook *book;
+	 AccountGroup *grp;
     Backend *be;
     sixtp_gdv2 *gd;
     sixtp *top_parser;
@@ -713,20 +714,20 @@ gnc_session_load_from_xml_file_v2(GNCSession *session)
     /* Mark the book as saved */
     gnc_book_mark_saved (book);
 
+	 grp = gnc_book_get_group(book);
     /* fix price quote sources */
-    xaccGroupScrubQuoteSources (gnc_book_get_group(book),
-				gnc_book_get_commodity_table(book));
+    xaccGroupScrubQuoteSources (grp, gnc_book_get_commodity_table(book));
 
     /* Fix account and transaction commodities */
-    xaccGroupScrubCommodities (gnc_book_get_group(book));
+    xaccGroupScrubCommodities (grp);
 
     /* Fix split amount/value */
-    xaccGroupScrubSplits (gnc_book_get_group(book));
+    xaccGroupScrubSplits (grp);
 
     /* commit all groups, this completes the BeginEdit started when the
      * account_end_handler finished reading the account.
      */
-    xaccAccountGroupCommitEdit (gnc_book_get_group(book));
+    xaccAccountGroupCommitEdit (grp);
 
     /* destroy the parser */
     sixtp_destroy (top_parser);
@@ -1093,10 +1094,12 @@ gnc_book_write_to_xml_filehandle_v2(GNCBook *book, FILE *out)
 gboolean
 gnc_book_write_accounts_to_xml_filehandle_v2(Backend *be, GNCBook *book, FILE *out)
 {
+    AccountGroup *grp;
     sixtp_gdv2 *gd;
 
     if (!out) return FALSE;
 
+	 grp = gnc_book_get_group(book);
     write_v2_header (out);
 
     write_counts(out,
@@ -1104,14 +1107,14 @@ gnc_book_write_accounts_to_xml_filehandle_v2(Backend *be, GNCBook *book, FILE *o
                  gnc_commodity_table_get_size(
                      gnc_book_get_commodity_table(book)),
                  "account",
-                 1 + xaccGroupGetNumSubAccounts(gnc_book_get_group(book)),
+                 1 + xaccGroupGetNumSubAccounts(grp),
                  NULL);
 
     gd = gnc_sixtp_gdv2_new(book, TRUE, file_rw_feedback, be->percentage);
     gd->counter.commodities_total =
       gnc_commodity_table_get_size(gnc_book_get_commodity_table(book));
     gd->counter.accounts_total = 1 +
-      xaccGroupGetNumSubAccounts(gnc_book_get_group(book));
+      xaccGroupGetNumSubAccounts(grp);
 
     write_commodities(out, book, gd);
 
