@@ -69,7 +69,7 @@
 #ifndef GNC_SESSION_H
 #define GNC_SESSION_H
 
-#include "gnc-book.h"
+#include "Backend.h"
 #include "gnc-engine.h"
 
 /** PROTOTYPES ******************************************************/

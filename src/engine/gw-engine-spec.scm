@@ -1719,7 +1719,7 @@ of having a parent transaction with which one is working...")
    'gnc:transaction-create
    '<gnc:Transaction*>
    "xaccMallocTransaction"
-   '((<gnc:Session*> session>))
+   '((<gnc:Book*> book>))
    "Create a Transaction structure")
 
   (gw:wrap-function
@@ -1727,7 +1727,7 @@ of having a parent transaction with which one is working...")
    'gnc:split-create
    '<gnc:Split*>
    "xaccMallocSplit"
-   '((<gnc:Session*> session>>))
+   '((<gnc:Book*> book>>))
    "Create a Split structure")
 
   (gw:wrap-function
