@@ -1,3 +1,8 @@
+2001-06-15  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/engine/Transaction.c (xaccSplitDateOrder): Fix bug -
+	use split values rather than balances.
+
 2001-06-10  Christian Stimming  <stimming@tuhh.de>
 
 	* de.po: updated German translation.
