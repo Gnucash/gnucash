@@ -305,6 +305,27 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
         has_last_num = TRUE;
       }
     }
+
+    /* set the completion character for the xfer cells */
+    gnc_combo_cell_set_complete_char
+      ((ComboCell *)
+       gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
+       gnc_get_account_separator ());
+    
+    gnc_combo_cell_set_complete_char
+      ((ComboCell *)
+       gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL),
+       gnc_get_account_separator ());
+    
+    /* set the confirmation callback for the reconcile cell */
+    gnc_recn_cell_set_confirm_cb
+      ((RecnCell *)
+       gnc_table_layout_get_cell (reg->table->layout, RECN_CELL),
+       gnc_split_register_recn_cell_confirm, reg);
+    
+    gnc_split_register_load_xfer_cells (reg, default_account);
+    gnc_split_register_load_recn_cells (reg);
+    gnc_split_register_load_type_cells (reg);
   }
 
   table->model->dividing_row = -1;
@@ -391,26 +412,6 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
         gnc_quickfill_cell_add_completion (cell, xaccSplitGetMemo (s));
       }
 
-      /* set the completion character for the xfer cells */
-      gnc_combo_cell_set_complete_char
-        ((ComboCell *)
-         gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
-         gnc_get_account_separator ());
-    
-      gnc_combo_cell_set_complete_char
-        ((ComboCell *)
-         gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL),
-         gnc_get_account_separator ());
-    
-      /* set the confirmation callback for the reconcile cell */
-      gnc_recn_cell_set_confirm_cb
-        ((RecnCell *)
-         gnc_table_layout_get_cell (reg->table->layout, RECN_CELL),
-         gnc_split_register_recn_cell_confirm, reg);
-    
-      gnc_split_register_load_xfer_cells (reg, default_account);
-      gnc_split_register_load_recn_cells (reg);
-      gnc_split_register_load_type_cells (reg);
     }
 
     if (trans == find_trans)
