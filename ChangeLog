@@ -22,6 +22,12 @@
 	  read the value out of the GNCAmountEdit entry when we create
 	  the Query Predicate, because we're not getting the amount_changed
 	  signal.  Fixes #101000.
+
+	* src/business/business-core/gncInvoice.[ch]: create new function
+	  for logic to apply a payment.  Moved logic from dialog-payment.
+	* src/business/business-gnome/dialog-payment.c: move logic to
+	  apply payment to business-core.
+	
 	
 2002-12-30  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/hbci/druid-hbci-initial.c

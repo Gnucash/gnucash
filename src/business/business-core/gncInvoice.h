@@ -78,6 +78,18 @@ gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 			 Timespec *posted_date, Timespec *due_date,
 			 const char *memo);
 
+/*
+ * Apply a payment of "amount" for the owner, between the xfer_account
+ * (bank or other asset) and the posted_account (A/R or A/P).
+ *
+ * XXX: yes, this should be in gncOwner, but all the other logic is
+ * in gncInvoice...
+ */
+Transaction *
+gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
+		      gnc_numeric amount, Timespec date,
+		      const char *memo, const char *num);
+
 
 /* Given a transaction, find and return the Invoice */
 GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn);

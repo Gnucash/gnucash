@@ -843,6 +843,186 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   return txn;
 }
 
+static gboolean
+gnc_lot_match_invoice_owner (GNCLot *lot, gpointer user_data)
+{
+  GncOwner owner_def, *owner, *this_owner = user_data;
+  GncInvoice *invoice;
+
+  /* If this lot is not for this owner, then ignore it */
+  invoice = gncInvoiceGetInvoiceFromLot (lot);
+  if (invoice) {
+    owner = gncInvoiceGetOwner (invoice);
+    owner = gncOwnerGetEndOwner (owner);
+  } else {
+    if (!gncOwnerGetOwnerFromLot (lot, &owner_def))
+      return FALSE;
+    owner = gncOwnerGetEndOwner (&owner_def);
+  }
+
+  return gncOwnerEqual (owner, this_owner);
+}
+
+static gint
+gnc_lot_sort_func (GNCLot *a, GNCLot *b)
+{
+  GncInvoice *ia, *ib;
+  Timespec da, db;
+
+  ia = gncInvoiceGetInvoiceFromLot (a);
+  ib = gncInvoiceGetInvoiceFromLot (b);
+
+  da = gncInvoiceGetDateDue (ia);
+  db = gncInvoiceGetDateDue (ib);
+
+  return timespec_cmp (&da, &db);
+}
+
+/*
+ * Apply a payment of "amount" for the owner, between the xfer_account
+ * (bank or other asset) and the posted_account (A/R or A/P).
+ *
+ * XXX: yes, this should be in gncOwner, but all the other logic is
+ * in gncInvoice...
+ */
+Transaction *
+gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
+		      gnc_numeric amount, Timespec date,
+		      const char *memo, const char *num)
+{
+  GNCBook *book;
+  Transaction *txn;
+  Split *split;
+  GList *lot_list, *fifo = NULL;
+  GNCLot *lot, *prepay_lot = NULL;
+  const char *name;
+  gnc_commodity *commodity;
+  gnc_numeric split_amt;
+  gboolean reverse;
+
+  /* Verify our arguments */
+  if (!owner || !posted_acc || !xfer_acc) return NULL;
+  g_return_val_if_fail (owner->owner.undefined != NULL, NULL);
+
+  /* Compute the ancillary data */
+  book = xaccAccountGetBook (posted_acc);
+  name = gncOwnerGetName (gncOwnerGetEndOwner (owner));
+  commodity = gncOwnerGetCommodity (owner);
+  reverse = (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER);
+
+  txn = xaccMallocTransaction (book);
+  xaccTransBeginEdit (txn);
+
+  /* Set up the transaction */
+  xaccTransSetDescription (txn, name);
+  xaccTransSetNum (txn, num);
+  xaccTransSetCurrency (txn, commodity);
+  xaccTransSetDateEnteredTS (txn, &date);
+  xaccTransSetDatePostedTS (txn, &date);
+  xaccTransSetTxnType (txn, TXN_TYPE_PAYMENT);
+
+  /* The split for the transfer account */
+  split = xaccMallocSplit (book);
+  xaccSplitSetMemo (split, memo);
+  xaccSplitSetBaseValue (split, reverse ? amount :
+			 gnc_numeric_neg (amount), commodity);
+  xaccAccountBeginEdit (posted_acc);
+  xaccAccountInsertSplit (posted_acc, split);
+  xaccAccountCommitEdit (posted_acc);
+  xaccTransAppendSplit (txn, split);
+
+  /* Now, find all "open" lots in the posting account for this
+   * company and apply the payment on a FIFO basis.  Create
+   * a new split for each open lot until the payment is gone.
+   */
+
+  fifo = xaccAccountFindOpenLots (posted_acc, gnc_lot_match_invoice_owner,
+				  owner,
+				  (GCompareFunc)gnc_lot_sort_func);
+
+  xaccAccountBeginEdit (posted_acc);
+
+  /* Now iterate over the fifo until the payment is fully applied
+   * (or all the lots are paid)
+   */
+  for (lot_list = fifo; lot_list; lot_list = lot_list->next) {
+    gnc_numeric balance;
+
+    lot = lot_list->data;
+    balance = gnc_lot_get_balance (lot);
+
+    if (!reverse)
+      balance = gnc_numeric_neg (balance);
+
+    /* If the balance is "negative" then skip this lot.
+     * (just save the pre-payment lot for later)
+     */
+    if (gnc_numeric_negative_p (balance)) {
+      if (prepay_lot) {
+	g_warning ("Multiple pre-payment lots are found.  Skipping.");
+      } else {
+	prepay_lot = lot;
+      }
+      continue;
+    }
+
+    /*
+     * If the amount <= the balance; we're done -- apply the amount.
+     * Otherwise, apply the balance, subtract that from the amount,
+     * and move on to the next one.
+     */
+    if (gnc_numeric_compare (amount, balance) <= 0) {
+      /* amount <= balance */
+      split_amt = amount;
+    } else {
+      /* amount > balance */
+      split_amt = balance;
+    }
+
+    /* reduce the amount by split_amt */
+    amount = gnc_numeric_sub (amount, split_amt, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+
+    /* Create the split for this lot in the post account */
+    split = xaccMallocSplit (book);
+    xaccSplitSetMemo (split, memo);
+    xaccSplitSetAction (split, _("Payment"));
+    xaccSplitSetBaseValue (split, reverse ? gnc_numeric_neg (split_amt) :
+			   split_amt, commodity);
+    xaccAccountInsertSplit (posted_acc, split);
+    xaccTransAppendSplit (txn, split);
+    gnc_lot_add_split (lot, split);
+
+    if (gnc_numeric_zero_p (amount))
+      break;
+  }
+
+  g_list_free (fifo);
+
+  /* If there is still money left here, then create a pre-payment lot */
+  if (gnc_numeric_positive_p (amount)) {
+    if (prepay_lot == NULL) {
+      prepay_lot = gnc_lot_new (book);
+      gncOwnerAttachToLot (owner, prepay_lot);
+    }
+
+    split = xaccMallocSplit (book);
+    xaccSplitSetMemo (split, memo);
+    xaccSplitSetAction (split, _("Payment"));
+    xaccSplitSetBaseValue (split, reverse ? gnc_numeric_neg (amount) :
+			   amount, commodity);
+    xaccAccountInsertSplit (posted_acc, split);
+    xaccTransAppendSplit (txn, split);
+    gnc_lot_add_split (prepay_lot, split);
+  }
+
+  xaccAccountCommitEdit (posted_acc);
+
+  /* Commit this new transaction */
+  xaccTransCommitEdit (txn);
+
+  return txn;    
+}
+
 static gboolean gncInvoiceDateExists (Timespec *date)
 {
   g_return_val_if_fail (date, FALSE);
