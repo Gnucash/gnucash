@@ -258,6 +258,8 @@ void    xaccQueryPrint(Query *q);
 
 void xaccQueryAddAccountMatch(Query * q, GList * accounts,
                               acct_match_t how, QueryOp op);
+void xaccQueryAddAccountGUIDMatch(Query * q, GList * account_guids,
+                                  acct_match_t how, QueryOp op);
 void xaccQueryAddSingleAccountMatch(Query * q, Account * acct, 
                                     QueryOp op);
 

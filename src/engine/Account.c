@@ -2070,7 +2070,6 @@ xaccAccountGetPriceSrc(Account *acc)
 void
 xaccAccountSetQuoteTZ(Account *acc, const char *tz) 
 {
-
   if(!acc) return;
   if(!tz) return;
 
@@ -2080,8 +2079,8 @@ xaccAccountSetQuoteTZ(Account *acc, const char *tz)
 
     if((t == STOCK) || (t == MUTUAL)) {
       kvp_frame_set_slot_nc(acc->kvp_data,
-                           "old-quote-tz",
-                           kvp_value_new_string(tz));
+                            "old-quote-tz",
+                            kvp_value_new_string(tz));
       mark_account (acc);
     }
   }

@@ -664,6 +664,29 @@
      (lambda (x) (list #t x))
      #f #f #f #f)))
 
+
+(define (gnc:make-query-option
+         section
+         name
+         default-value)
+  (let* ((value (if (list? default-value)
+                    default-value
+                    (gnc:query->scm default-value)))
+         (value->string (lambda ()
+                          (string-append "'" (gnc:value->string value)))))
+    (gnc:make-option
+     section name "" 'query #f
+     (lambda () value)
+     (lambda (x) (set! value (if (list? x) x (gnc:query->scm x)))
+             (display value) (newline))
+     (lambda () (if (list? default-value)
+                    default-value
+                    (gnc:query->scm default-value)))
+     (gnc:restore-form-generator value->string)
+     (lambda (x) (list #t x))
+     #f #f #f #f)))
+
+
 ;; Color options store rgba values in a list.
 ;; The option-data is a list, whose first element
 ;; is the range of possible rgba values and whose

@@ -36,6 +36,7 @@
 #include "gnc-numeric.h"
 #include "Account.h"
 #include "BackendP.h"
+#include "GNCId.h"
 #include "Group.h"
 #include "Query.h"
 #include "Transaction.h"
@@ -313,9 +314,9 @@ free_query_term(QueryTerm *qt)
       g_list_free (qt->data.acct.accounts);
       qt->data.acct.accounts = NULL;
 
-      for (node = qt->data.acct.account_guids; node; node = node->next) {
-        g_free (node->data);
-      }
+      for (node = qt->data.acct.account_guids; node; node = node->next)
+        xaccGUIDFree (node->data);
+
       g_list_free (qt->data.acct.account_guids);
       qt->data.acct.account_guids = NULL;
       break;
@@ -353,7 +354,7 @@ copy_query_term(QueryTerm * qt) {
       for (node = nqt->data.acct.account_guids; node; node = node->next)
       {
         GUID *old = node->data;
-        GUID *new = g_new (GUID, 1);
+        GUID *new = xaccGUIDMalloc ();
 
         *new = *old;
         node->data = new;
@@ -901,13 +902,36 @@ account_list_to_guid_list (GList *accounts)
     if (!account)
       continue;
 
-    guid = g_new (GUID, 1);
+    guid = xaccGUIDMalloc ();
     *guid = *xaccAccountGetGUID (account);
 
     guids = g_list_prepend (guids, guid);
   }
 
   return g_list_reverse (guids);
+}
+
+static GList *
+copy_guid_list (GList *guids)
+{
+  GList *new_guids = NULL;
+  GList *node;
+
+  for (node = guids; node; node = node->next)
+  {
+    GUID *guid = node->data;
+    GUID *new_guid;
+
+    if (!guid)
+      continue;
+
+    new_guid = xaccGUIDMalloc ();
+    *new_guid = *guid;
+
+    new_guids = g_list_prepend (new_guids, new_guid);
+  }
+
+  return g_list_reverse (new_guids);
 }
 
 static GList *
@@ -1320,6 +1344,41 @@ xaccQueryAddAccountMatch(Query * q, GList * accounts, acct_match_t how,
   xaccFreeQuery(qr);
 }
 
+/********************************************************************
+ * xaccQueryAddAccountGUIDMatch
+ * Add an account filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddAccountGUIDMatch(Query * q, GList * account_guids,
+                             acct_match_t how, QueryOp op)
+{
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+
+  qt->p                       = & xaccAccountMatchPredicate;
+  qt->data.type               = PD_ACCOUNT;
+  qt->data.base.term_type     = PR_ACCOUNT;
+  qt->data.base.sense         = 1;
+  qt->data.acct.how           = how;
+  qt->data.acct.accounts      = NULL;
+  qt->data.acct.account_guids = copy_guid_list (account_guids);
+
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }        
+  xaccQuerySwapTerms(q, qr);
+
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
 
 /********************************************************************
  * xaccQueryAddSingleAccountMatch

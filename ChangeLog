@@ -1,3 +1,16 @@
+2001-04-20  Dave Peticolas  <dave@krondo.com>
+
+	* src/guile/gnc-helpers.c: remove cruft. work on converting
+	Query objects to and from a scheme representation (unfinished)
+
+	* src/guile/gnc.gwp: wrap more of the Query enums
+
+	* src/engine/Query.c (xaccQueryAddAccountGUIDMatch): new func
+
+	* src/scm/options.scm: add a query option type
+
+	* src/scm/report/report-list.scm: don't bother hiding tax report
+
 2001-04-19  Bill Gribble  <grib@billgribble.com>
 
 	* src/gnome/top-level.c: add call to skeleton "welcome" report 

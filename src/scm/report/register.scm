@@ -234,6 +234,9 @@
       (gnc:register-option gnc:*report-options* new-option))
 
     (gnc:register-reg-option
+     (gnc:make-query-option "__reg" "query-new" #f))
+
+    (gnc:register-reg-option
      (gnc:make-internal-option "__reg" "query" #f))
     (gnc:register-reg-option
      (gnc:make-internal-option "__reg" "journal" #f))
@@ -649,6 +652,7 @@
   (let* ((options (gnc:make-report-options "Register"))
          (invoice-op (gnc:lookup-option options "Invoice" "Make an invoice"))
          (query-op (gnc:lookup-option options "__reg" "query"))
+         (query-new-op (gnc:lookup-option options "__reg" "query-new"))
          (journal-op (gnc:lookup-option options "__reg" "journal"))
          (double-op (gnc:lookup-option options "__reg" "double"))
          (title-op (gnc:lookup-option options "General" "Title"))
@@ -663,6 +667,7 @@
     
     (gnc:option-set-value invoice-op invoice?)
     (gnc:option-set-value query-op query)
+    (gnc:option-set-value query-new-op query)
     (gnc:option-set-value journal-op journal?)
     (gnc:option-set-value double-op double?)
     (gnc:option-set-value title-op title)

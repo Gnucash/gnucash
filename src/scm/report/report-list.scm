@@ -18,12 +18,7 @@
 (gnc:depend "report/portfolio.scm")
 (gnc:depend "report/register.scm")
 (gnc:depend "report/iframe-url.scm") 
-
-(let ((locale (setlocale LC_MESSAGES)))
-  (if (or (equal? locale "C")
-          (equal? locale "en")
-          (equal? locale "en_US"))
-      (gnc:depend "report/taxtxf.scm")))
+(gnc:depend "report/taxtxf.scm")
 (gnc:depend "report/transaction-report.scm")
 
 ;; style sheets 
