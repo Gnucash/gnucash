@@ -75,6 +75,11 @@ TAGS:
         fi
 	${MAKE} TAGS.stamp
 
-.PHONY: TAGS
+else
+
+TAGS:
+	@echo "You must ./configure with --enable-etags to use TAGS."
 
 endif
+
+.PHONY: TAGS
