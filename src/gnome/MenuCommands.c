@@ -1,6 +1,7 @@
 /*-*-gnucash-c-*-****************************************************\
  * MenuCommands.c -- just what it says                              *
  * Copyright (C) 1998 Jeremy Collins                                *
+ * Copyright (C) 1998 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,39 +19,37 @@
  *                                                                  *
 \********************************************************************/
 
-#include "FileIO.h"
-#include "Group.h"
 #include "MenuCommands.h"
-#include "MainWindow.h"
-#include "top-level.h"
-#include "util.h"
+// #incldue "FileDialog.h"
+
+/* hack alert --  the right way to imoplement the missing function
+ * below is to move the file src/motif/FileDialog.c to some
+ * GUI-neutral directory, and dual-compile it for motif and for
+ * gtk.  Then simple invoke gncFileOpen, etc. and Viola, instant
+ * function! We are done!
+ */
 
 void
 file_cmd_open (GtkWidget *widget, gpointer data)
 {
-   // gtk_widget_show ( filebox );
+  // gncFileOpen();
 }
 
 void
 file_cmd_import (GtkWidget *widget, gpointer data)
 {
-   // gtk_widget_show (import_filebox);
+   // gncFileQIFImport();
 }
 
 void
 file_cmd_save(GtkWidget *widget, gpointer data)
 {
-  /* hack alert -- Somehow make sure all in-progress edits get committed! */
-//  if (NULL == datafile) {
-//    fprintf(stderr, "Can't save file.  No open file\n");
-    return;
-//  }
-//  xaccWriteAccountGroup(datafile, topgroup);
-//  xaccAccountGroupMarkSaved(topgroup);
+   // gncFileSave();
 }
 
 void file_cmd_quit (GtkWidget *widget, gpointer data)
 {
+  // gncFileQuit();
   //gnucash_shutdown(NULL, NULL);
   gtk_main_quit();
 }

@@ -117,8 +117,8 @@ gnucash_lowlev_app_main()
 
 int
 gnucash_ui_open_file(const char name[]) {
-  /* FIXME: This should eventually be merged with the FMB_OPEN code in
-     MainWindow.c */
+  /* FIXME: This should really be calling gncFileOpenFile from 
+     FileDialog.c  */
   /* FIXME: This code looks gui-independent to me ...
    *  (nothing in thisroutine depends on motif/gtk/etc.)
    */
@@ -136,7 +136,11 @@ gnucash_ui_open_file(const char name[]) {
      it at any time and have it DTRT.  Code should be stolen from
      MainWindow.c FMB_OPEN.  In fact, that whole callback routine
      should probably be broken up into sub-functions that we can use
-     from the Guile level.  */
+     from the Guile level. 
+In fact, this has lready been done for the motif version,
+and some minor makefile cleaup will allow the same fixes to be used here.
+Take a good look at FileDialog.c for the actual code ... 
+   */
   if( NULL == topgroup )
   {
     topgroup = xaccMallocAccountGroup();   /* the file could not be found */
