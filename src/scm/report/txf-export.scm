@@ -20,12 +20,12 @@
 	#(H256 "Help F1040 \\ Form 1040 - the main tax form" "" 1 #f "")
 	#(N261 "  F1040 \\ Alimony received" "" 1 #f "Alimony receive")
 	#(N257 "  F1040 \\ Other income, misc." "" 1 #f "Other Inc")
+        #(N259 "  F1040 \\ Prizes, awards" "" 1 #f "Prizes, awards")
 	#(N520 "  F1040 \\ RR retirement inc., spouse" "" 1 #f "RR retirement i")
 	#(N519 "  F1040 \\ RR retirement income, self" "" 1 #f "RR retirement i")
 	#(N258 "  F1040 \\ Sick pay or disability pay" "" 1 #f "Sick Pay")
 	#(N483 "  F1040 \\ Social Security inc., spouse" "" 1 #f "Social Security")
 	#(N266 "  F1040 \\ Social Security income, self" "" 1 #f "Social Security")
-	#(N260 "  F1040 \\ State and local tax refunds" "" 1 #t "State and local")
 	#(N269 "  F1040 \\ Taxable fringe benefits" "" 1 #f "Taxable fringe")
 
 	#(H634 "Help F1099-G \\ Form 1099-G - certian Government payments" "" 1 #t "")
