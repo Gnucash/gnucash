@@ -86,20 +86,6 @@
       (cond ((= (length other-splits) 0) "-")
             (else  (caar other-splits)))))
 
-  ;; get transactions date from split - needs to be done indirectly
-  ;; as it's stored in the parent transaction
-
-  (define (gnc:split-get-transaction-date split)
-    (gnc:transaction-get-date-posted (gnc:split-get-parent split)))
-
-  ;; ditto descriptions
-  (define (gnc:split-get-description-from-parent split)
-    (gnc:transaction-get-description (gnc:split-get-parent split)))
-
-  ;; get the account name of a split
-  (define (gnc:split-get-account-name split)  
-    (gnc:account-get-full-name (gnc:split-get-account split)))
-
   ;; builds a list of the account name and values for the other
   ;; splits in a transaction
   (define (gnc:split-get-corresponding-account-name-and-values 

@@ -16,18 +16,12 @@
 (gnc:depend "html-generator.scm")
 (gnc:depend "date-utilities.scm")
 
-;; time values
-					;(define gnc:budget-day 1)
-					;(define gnc:budget-week 2)
-					;(define gnc:budget-month 3)
-					;(define gnc:budget-year 4)
-
 ;; budget types
-					;(define gnc:budget-recurring 1) ; regular, recurring budget expenses
-					; that happen once per period
-					;(define gnc:budget-contingency 2) ; a budget item where you estimate a
-					; value over a long period for
-					; unexpected expenses.
+;(define gnc:budget-recurring 1) ; regular, recurring budget expenses
+; that happen once per period
+;(define gnc:budget-contingency 2) ; a budget item where you estimate a
+; value over a long period for
+; unexpected expenses.
 
 ;; convert a date to a defined fraction
 (define (gnc:date-to-N-fraction caltime type)
@@ -273,7 +267,7 @@
 (define (budget-calculate-expected! budget-line)
   (let ((brep (budget-line-get-report budget-line))
 	(entry (budget-line-get-entry budget-line)))
-					; fixme: contingency type budget entries may have a lower minimum
+    ; fixme: contingency type budget entries may have a lower minimum
     ((record-modifier budget-report-structure 'minimum-expected) brep
      (* (budget-entry-get-amount entry)		    
 	(floor (budget-report-get-num-periods brep))))
@@ -383,20 +377,15 @@
  (lambda (options)
    (let* ((begindate (gnc:lookup-option options "Report Options" "From"))
 	  (enddate (gnc:lookup-option options "Report Options" "To"))
-	  (date-filter-pred (gnc:tr-report-make-filter-predicate
-			     (gnc:option-value begindate) 
-			     (gnc:option-value enddate)))
 	  (begin-date-secs (car (gnc:timepair-canonical-day-time 
-				 (gnc:option-value begindate))))
+                                 (gnc:option-value begindate))))
 	  (end-date-secs (car (gnc:timepair-canonical-day-time
-			       (gnc:option-value enddate))))
+                               (gnc:option-value enddate))))
 	  (budget-list (map 
 			(lambda (entry)
 			  (make-budget-line entry (make-empty-budget-report)))
 			gnc:budget-entries)))
 
-     (gnc:debug "a")
-     
      (let loop ((group (gnc:get-current-group)))
        (if (not (pointer-token-null? group))
 	   (gnc:group-map-accounts
@@ -414,8 +403,6 @@
 		(loop (gnc:account-get-children account))))
 	    group)))
 
-     (gnc:debug "b")
-
      (for-each 
       (lambda (line)
 	(begin
@@ -425,8 +412,6 @@
 	  (budget-calculate-time-remaining! line)
 	  (budget-calculate-num-triggers! line begin-date-secs end-date-secs)))
       budget-list)
-     
-     (gnc:debug "c")
      
      (let ((report-headers '())
 	   (report-procs '()))
