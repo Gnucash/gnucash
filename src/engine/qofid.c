@@ -166,6 +166,15 @@ qof_collection_destroy (QofCollection *col)
 }
 
 /* =============================================================== */
+/* getters */
+
+QofIdType
+qof_collection_get_type (QofCollection *col)
+{
+  return col->e_type;
+}
+
+/* =============================================================== */
 
 static void
 qof_collection_remove_entity (QofEntity *ent)

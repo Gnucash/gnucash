@@ -329,7 +329,6 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
   SplitList *node, *slist;
 
   if (!trans) return;
-  g_return_if_fail (root);
 
   xaccTransScrubSplits (trans);
 

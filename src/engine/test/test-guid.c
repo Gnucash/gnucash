@@ -1,6 +1,7 @@
 
 /* Test file created by Linas Vepstas <linas@linas.org>
  * Try to create duplicate GUID's, which should never happen.
+ *
  * October 2003
  * License: GPL
  */
@@ -13,6 +14,8 @@
 #include "test-engine-stuff.h"
 #include "qofbook.h"
 #include "qofid.h"
+#include "qofid-p.h"
+#include "qofsession.h"
 
 
 
@@ -33,7 +36,7 @@ run_test (void)
   col = qof_book_get_collection (book, "asdf");
   type = qof_collection_get_type (col);
   
-#define NENT 5123
+#define NENT 500123
   eblk = g_new0(QofEntity, NENT);
   for (i=0; i<NENT; i++)
   {

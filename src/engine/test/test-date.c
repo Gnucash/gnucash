@@ -2,7 +2,6 @@
 #include <glib.h>
 #include <time.h>
 
-#include "TransLog.h"
 #include "gnc-date.h"
 #include "gnc-module.h"
 #include "test-stuff.h"

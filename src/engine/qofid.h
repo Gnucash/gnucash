@@ -89,9 +89,11 @@ GUID * qof_entity_get_guid (QofEntity *);
 QofCollection * qof_collection_new (QofIdType type);
 void qof_collection_destroy (QofCollection *col);
 
+/** return the type that the collection stores */
+QofIdType qof_collection_get_type (QofCollection *);
+
 /** Find the entity going only from its guid */
 QofEntity * qof_collection_lookup_entity (QofCollection *, const GUID *);
-
 
 /* Callback type for qof_entity_foreach */
 typedef void (*QofEntityForeachCB) (QofEntity *, gpointer user_data);
