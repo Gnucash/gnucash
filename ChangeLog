@@ -23,6 +23,16 @@
 
 2002-10-27  David Hampton  <hampton@employees.org>
 
+	* src/app-utils/option-util.c
+	(gnc_option_db_section_reset_widgets): New function to reset one
+	section [page] of widgets at at time.
+
+	* src/gnome-utils/dialog-options.c: The cancel button should
+	always be sensitive. The OK button should only be sensitive if
+	changes have been made to an option. #96465
+	(gnc_options_dialog_new): (gnc_options_dialog_append_page): Move
+	the reset button to be per-page instead of global. #90370
+
 	* accounts/fr_FR/*: Frederic Lespez's fixes for the
 	French account templates.
 	

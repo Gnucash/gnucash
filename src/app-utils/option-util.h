@@ -242,6 +242,9 @@ void gncp_option_db_register_option(GNCOptionDBHandle handle,
 void gncp_option_invoke_callback(GNCOptionChangeCallback callback,
                                  gpointer data);
 
+/* Reset all the widgets in one section to their default values */
+void gnc_option_db_section_reset_widgets (GNCOptionSection *section);
+
 /* Reset all the widgets to their default values */
 void gnc_option_db_reset_widgets (GNCOptionDB *odb);
 

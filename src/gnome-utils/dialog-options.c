@@ -88,6 +88,7 @@ typedef enum {
 
 static GNCOptionWinCallback global_help_cb = NULL;
 gpointer global_help_cb_data = NULL;
+static void gnc_options_dialog_reset_cb(GtkWidget * w, gpointer data);
 
 
 static GtkWidget *
@@ -1095,8 +1096,11 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
 {
   GNCOption *option;
   GtkWidget *page_label;
+  GtkWidget *options_box;
   GtkWidget *page_content_box;
+  GtkWidget *reset_button;
   GtkWidget *listitem;
+  GtkWidget *buttonbox;
   gint num_options;
   const char *name;
   gint i, page_count;
@@ -1111,10 +1115,25 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
   page_label = gtk_label_new(_(name));
   gtk_widget_show(page_label);
 
-  page_content_box = gtk_vbox_new(FALSE, 5);
-  gtk_container_set_border_width(GTK_CONTAINER(page_content_box), 5);
-  gtk_widget_show(page_content_box);
-  
+  page_content_box = gtk_vbox_new(FALSE, 2);
+  options_box = gtk_vbox_new(FALSE, 5);
+  gtk_container_set_border_width(GTK_CONTAINER(options_box), 0);
+  gtk_box_pack_start(GTK_BOX(page_content_box), options_box, TRUE, TRUE, 0);
+
+  buttonbox = gtk_hbutton_box_new();
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (buttonbox),
+			     GTK_BUTTONBOX_EDGE);
+  gtk_container_set_border_width(GTK_CONTAINER (buttonbox), 5);
+  gtk_box_pack_end(GTK_BOX(page_content_box), buttonbox, FALSE, FALSE, 0);
+
+  reset_button = gtk_button_new_with_label (_("Defaults"));
+  gtk_signal_connect(GTK_OBJECT(reset_button), "clicked",
+                     GTK_SIGNAL_FUNC(gnc_options_dialog_reset_cb),
+                     propertybox);
+  gtk_object_set_data(GTK_OBJECT(reset_button), "section", section);
+  gtk_box_pack_end(GTK_BOX(buttonbox), reset_button, FALSE, FALSE, 0);
+  gtk_widget_show_all(page_content_box);
+
   gtk_notebook_append_page(GTK_NOTEBOOK(propertybox->notebook), 
                            page_content_box, page_label);
 
@@ -1126,7 +1145,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
   for (i = 0; i < num_options; i++)
   {
     option = gnc_get_option_section_option(section, i);
-    gnc_options_dialog_add_option(page_content_box, option,
+    gnc_options_dialog_add_option(options_box, option,
                                   propertybox->tips);
   }
 
@@ -1296,11 +1315,15 @@ static void
 gnc_options_dialog_reset_cb(GtkWidget * w, gpointer data)
 {
   GNCOptionWin *win = data;
+  GNCOptionSection *section;
+  gpointer val;
 
+  val = gtk_object_get_data(GTK_OBJECT(w), "section");
+  g_return_if_fail (val);
   g_return_if_fail (win);
-  g_return_if_fail (win->option_db);
 
-  gnc_option_db_reset_widgets (win->option_db);
+  section = (GNCOptionSection*)val;
+  gnc_option_db_section_reset_widgets (section);
   gnc_options_dialog_changed_internal (win->container);
 }
 
@@ -1330,7 +1353,7 @@ gnc_options_dialog_new(gboolean make_toplevel, gchar *title)
   GtkWidget * apply_button=NULL;
   GtkWidget * help_button=NULL;
   GtkWidget * cancel_button=NULL;
-  GtkWidget * reset_button=NULL;
+  GtkWidget * separator = NULL;
 
   retval->toplevel = make_toplevel;
 
@@ -1353,7 +1376,7 @@ gnc_options_dialog_new(gboolean make_toplevel, gchar *title)
   buttonbox = gtk_hbutton_box_new ();
 
   gtk_button_box_set_layout (GTK_BUTTON_BOX (buttonbox),
-                             GTK_BUTTONBOX_SPREAD);
+			     GTK_BUTTONBOX_EDGE);
 
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (buttonbox), 
 			      GNOME_PAD);
@@ -1364,7 +1387,7 @@ gnc_options_dialog_new(gboolean make_toplevel, gchar *title)
   help_button  = gnome_stock_button (GNOME_STOCK_BUTTON_HELP);
   ok_button    = gnome_stock_button (GNOME_STOCK_BUTTON_OK);
   cancel_button = gnome_stock_button (GNOME_STOCK_BUTTON_CANCEL);
-  reset_button = gtk_button_new_with_label (_("Defaults"));
+  separator = gtk_hseparator_new();
 
   gtk_widget_set_sensitive (apply_button, FALSE);
   gtk_widget_set_sensitive (ok_button, FALSE);
@@ -1391,19 +1414,14 @@ gnc_options_dialog_new(gboolean make_toplevel, gchar *title)
                      GTK_SIGNAL_FUNC(gnc_options_dialog_cancel_stub_cb),
                      retval);
 
-  gtk_signal_connect(GTK_OBJECT(reset_button), "clicked",
-                     GTK_SIGNAL_FUNC(gnc_options_dialog_reset_cb),
-                     retval);
-
   gtk_signal_connect(GTK_OBJECT(retval->container), "destroy",
                      GTK_SIGNAL_FUNC(gnc_options_dialog_destroy_stub_cb),
                      retval);
 
-  gtk_box_pack_start(GTK_BOX(buttonbox), ok_button, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(buttonbox), help_button, TRUE, TRUE, 0);
   gtk_box_pack_start(GTK_BOX(buttonbox), apply_button, TRUE, TRUE, 0);
   gtk_box_pack_start(GTK_BOX(buttonbox), cancel_button, TRUE, TRUE, 0);
-  gtk_box_pack_start(GTK_BOX(buttonbox), help_button, TRUE, TRUE, 0);
-  gtk_box_pack_start(GTK_BOX(buttonbox), reset_button, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(buttonbox), ok_button, TRUE, TRUE, 0);
 
   retval->page_list = gtk_list_new();
   gtk_signal_connect(GTK_OBJECT(retval->page_list), "select_child",
@@ -1414,7 +1432,8 @@ gnc_options_dialog_new(gboolean make_toplevel, gchar *title)
   gtk_box_pack_start(GTK_BOX(hbox), retval->page_list, TRUE, TRUE, 5);
   gtk_box_pack_start(GTK_BOX(hbox), retval->notebook, TRUE, TRUE, 5);
   gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 5);
-  gtk_box_pack_start(GTK_BOX(vbox), GTK_WIDGET(buttonbox), FALSE, TRUE, 5);
+  gtk_box_pack_start(GTK_BOX(vbox), separator, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox), GTK_WIDGET(buttonbox), FALSE, TRUE, 0);
 
   if(make_toplevel) {
     gtk_container_add(GTK_CONTAINER(retval->container), vbox);

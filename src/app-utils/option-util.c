@@ -1742,6 +1742,41 @@ gnc_option_db_commit(GNCOptionDB *odb)
 
 
 /********************************************************************\
+ * gnc_option_db_section_reset_widgets                              *
+ *   reset all option widgets in one section to their default.      *
+ *   values                                                         *
+ *                                                                  *
+ * Args: odb - option database to reset                             *
+ * Return: nothing                                                  *
+\********************************************************************/
+void
+gnc_option_db_section_reset_widgets (GNCOptionSection *section)
+{
+  GSList *option_node;
+  GNCOption *option;
+
+  g_return_if_fail (section);
+
+  /* Don't reset "invisible" options.
+   * If the section name begins "__" we should not reset
+   */
+  if (section->section_name == NULL ||
+      strncmp (section->section_name, "__", 2) == 0)
+    return;
+
+  for (option_node = section->options;
+       option_node != NULL;
+       option_node = option_node->next)
+  {
+    option = option_node->data;
+
+    gnc_option_set_ui_value (option, TRUE);
+    gnc_option_set_changed (option, TRUE);
+  }
+}
+
+
+/********************************************************************\
  * gnc_option_db_reset_widgets                                      *
  *   reset all option widgets to their default values.              *
  *                                                                  *
@@ -1763,24 +1798,7 @@ gnc_option_db_reset_widgets (GNCOptionDB *odb)
        section_node = section_node->next)
   {
     section = section_node->data;
-
-    /* Don't reset "invisible" options.
-     * If the section name begins "__" we should not reset
-     */
-    if (section->section_name == NULL ||
-	strncmp (section->section_name, "__", 2) == 0)
-      continue;
-
-    for (option_node = section->options;
-	 option_node != NULL;
-	 option_node = option_node->next)
-    {
-      option = option_node->data;
-
-      gnc_option_set_ui_value (option, TRUE);
-      gnc_option_set_changed (option, TRUE);
-
-    }
+    gnc_option_db_section_reset_widgets (section);
   }
 }
 
