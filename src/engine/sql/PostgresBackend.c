@@ -567,6 +567,17 @@ pgendSync (Backend *bend, AccountGroup *grp)
 
    be->version_check = (guint32) time(0);
 
+   /* for the multi-user modes, we allow a save only once,
+    * when the database is created for the first time */
+   if ((MODE_SINGLE_FILE != be->session_mode) &&
+       (MODE_SINGLE_UPDATE != be->session_mode) &&
+       (FALSE == be->freshly_created_db))
+   {
+      LEAVE("no sync");
+      return;
+   }
+   be->freshly_created_db = FALSE;
+
    /* store the account group hierarchy, and then all transactions */
    pgendStoreGroup (be, grp);
    pgendStoreAllTransactions (be, grp);
@@ -668,6 +679,18 @@ pgendSyncPriceDB (Backend *bend, GNCPriceDB *prdb)
    if (!be || !prdb) return;
 
    be->version_check = (guint32) time(0);
+
+   /* for the multi-user modes, we allow a save only once,
+    * when the database is created for the first time */
+   if ((MODE_SINGLE_FILE != be->session_mode) &&
+       (MODE_SINGLE_UPDATE != be->session_mode) &&
+       (FALSE == be->freshly_created_prdb))
+   {
+      LEAVE("no sync");
+      return;
+   }
+   be->freshly_created_prdb = FALSE;
+
    pgendStorePriceDB (be, prdb);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
@@ -1494,6 +1517,8 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
       FINISH_QUERY(be->connection);
       SEND_QUERY (be,sql_functions_str, );
       FINISH_QUERY(be->connection);
+      be->freshly_created_db = TRUE;
+      be->freshly_created_prdb = TRUE;
    }
 #endif
 
@@ -1572,8 +1597,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.price_commit_edit = pgend_price_commit_edit;
             be->be.run_query = pgendRunQuery;
             be->be.price_lookup = pgendPriceLookup;
-            // be->be.sync = pgendSync;
-            be->be.sync = NULL;
+            be->be.sync = pgendSync;
             be->be.sync_price = pgendSyncPriceDB;
             be->be.events_pending = NULL;
             be->be.process_events = NULL;
@@ -1600,8 +1624,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.price_commit_edit = pgend_price_commit_edit;
             be->be.run_query = pgendRunQuery;
             be->be.price_lookup = pgendPriceLookup;
-            // be->be.sync = pgendSync;
-            be->be.sync = NULL;
+            be->be.sync = pgendSync;
             be->be.sync_price = pgendSyncPriceDB;
             be->be.events_pending = pgendEventsPending;
             be->be.process_events = pgendProcessEvents;
@@ -1744,6 +1767,8 @@ pgendInit (PGBackend *be)
    be->dbName = NULL;
    be->username = NULL;
    be->connection = NULL;
+   be->freshly_created_db = FALSE;
+   be->freshly_created_prdb = FALSE;
 
    be->my_pid = 0;
    be->do_account = 0;

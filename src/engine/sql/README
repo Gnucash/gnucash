@@ -306,6 +306,8 @@ operation is probably OK.
    the backend check the datastamp, and if its aged less than 
    15 seconds, skip doing the sql query.)
 
+   DONE --- but we need to detect redundant price queries .. ughh
+
 -- if always in multi-mode, then initial checkpoints not set up.
    They're not needed until there are a lot of transactions in the 
    system.  Need to recompute checkpoints on some periodic basis.
