@@ -196,7 +196,11 @@ gnc_lot_get_balance (GNCLot *lot)
    gnc_numeric baln = zero;
    if (!lot) return zero;
 
-   if (!lot->splits) return zero;
+   if (!lot->splits) 
+   {
+      lot->is_closed = FALSE;
+      return zero;
+   }
 
    /* Sum over splits; because they all belong to same account
     * they will have same denominator. 

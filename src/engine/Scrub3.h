@@ -53,7 +53,7 @@ void xaccScrubSubSplitPrice (Split *split);
 /** The xaccScrubMergeSubSplits() routine will merge together
  *    all of the splits that were at one time split off from this
  *    split, but are no longer needed to be kept separate.  Splits
- *    migt be split up if they need to be divided over multiple
+ *    might be split up if they need to be divided over multiple
  *    lots; they can be merged back together if the lots change.
  *    In particular, two sub-splits may be merged if they are in 
  *    the same lot, or in no lot.  Note that, by definition, all
@@ -62,11 +62,24 @@ void xaccScrubSubSplitPrice (Split *split);
  *    The routine returns TRUE if a merger was performed, else 
  *    it returns FALSE. 
  *
- *  The xaccScrubMergeTxnSubSplits() routine does the same, except 
+ *  The xaccScrubMergeTransSubSplits() routine does the same, except 
  *    that it does it for all of the splits in the transaction.
+ *  The xaccScrubMergeLotSubSplits() routine does the same, except 
+ *    that it does it for all of the splits in the lot.
  */
 gboolean xaccScrubMergeSubSplits (Split *split);
-gboolean xaccScrubMergeTxnSubSplits (Transaction *txn);
+gboolean xaccScrubMergeTransSubSplits (Transaction *txn);
+gboolean xaccScrubMergeLotSubSplits (GNCLot *lot);
+
+/** The xaccScrubLot() routine makes sure that the indicated lot is
+ *    self-consistent and properly balanced, and fixes it if its not.
+ *    This is an important routine to call if the amount of any split
+ *    in the lot is changed.  That's because (obviously) changing 
+ *    split values is gaurenteed to throw off lot balances.
+ *    This routine may end up closing the lot, or at least trying
+ *    to. It will also cause cap gains to be recomputed.
+ */
+void xaccScrubLot (GNCLot *lot);
 
 #endif /* XACC_SCRUB3_H */
 /** @} */

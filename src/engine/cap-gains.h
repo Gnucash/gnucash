@@ -44,6 +44,7 @@
 #define XACC_CAP_GAINS_H
 
 #include "gnc-engine.h"
+#include "gnc-numeric.h"
 
 /** The xaccSplitGetCapGains() method returns the value of 
  *    capital gains (if any) associated with the indicated 
@@ -107,12 +108,13 @@ void xaccAccountSetDefaultGainAccount (Account *acc, Account *gains_acct);
                                                                                 
 Split * xaccSplitGetCapGainsSplit (Split *);
 
-/** The`xaccSplitFIFOAssignToLot() routine will take the indicated
- *  split and assign it to the earliest open lot that it can find.
+/** The`xaccSplitAssign() routine will take the indicated
+ *  split and, if it doesn't already belong to a lot, it will attempt 
+ *  to assign it to an appropriate lot.
  *  If the split already belongs to a Lot, this routine does nothing.
  *  If there are no open Lots, this routine will create a new lot
  *  and place the split into it.  If there's an open lot, and its
- *  big enough to accept the split in it's entrety, then the split
+ *  big enough to accept the split in it's entirety, then the split
  *  will be placed into that lot.  If the split is too big to fit
  *  into the currently open lot, it will be busted up into two 
  *  (or more) pieces, and each placed into a lot accordingly.
@@ -123,12 +125,33 @@ Split * xaccSplitGetCapGainsSplit (Split *);
  *  directory is used to identify the peers. 'gemini'-style kvp's
  *  are used.
  *
- *  Because this routine always uses the earliest open lot, it
- *  implments a "FIFO" First-In First-Out accounting policy.
- *  (Adding new policies is 'easy', read the source luke).
+ *  This routine uses the "FIFOPolicy" callback, and thus 
+ *  implements a "FIFO" First-In First-Out accounting policy.
+ *  This is currently the only implemented policy; adding new
+ *  policies should be 'easy'; read the source luke.
  */
 
-gboolean xaccSplitFIFOAssignToLot (Split *split);
+gboolean xaccSplitAssign (Split *split);
+
+/** The xaccSplitAssignToLot() routine will fit the indicated split
+ *    into the indicated lot, with the goal of closing the lot, or
+ *    at least bringing the lot balance closer to closure.  (A closed
+ *    lot has a balance of zero).  To make this "fit", a variety of
+ *    checks and actions are performed.  First, the lot must be open,
+ *    and the sign of the split amount must be opposite to the sign
+ *    of the lot balance.  The 'opposite-sign' requirement is so that
+ *    inserting the split will cause the size of the lot to decrease.
+ *    If the amount of the split is too small, or is just right to
+ *    close the lot, the split is added, and NULL is returned.  If
+ *    the split is larger than the lot balance, the split will be
+ *    divided into sub-splits, one of which is just right to close
+ *    the lot.   A pointer to the other sub-split will be returned.
+ *
+ *    If the split had to be broken up, kvp markup in the "/lot-split"
+ *    directory is used to identify the peers. 'gemini'-style kvp's
+ *    are used.
+ */
+Split * xaccSplitAssignToLot (Split *split, GNCLot *lot);
 
 /** The xaccSplitComputeCapGains() routine computes the cap gains
  *  or losses for the indicated split.  The gains are placed into
@@ -144,9 +167,13 @@ gboolean xaccSplitFIFOAssignToLot (Split *split);
  *  and must be equal to or smaller, than the 'amount' of the opening
  *  split; its an error otherwise.  If the 'amount' of the split is
  *  less than the opening amount, the gains are pro-rated.
+ *
+ *  The xaccLotComputeCapGains() routine merely invokes the above on
+ *    each split in the lot.
  */
 
 void xaccSplitComputeCapGains(Split *split, Account *gain_acc);
+void xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc);
 
 #endif /* XACC_CAP_GAINS_H */
 /** @} */
