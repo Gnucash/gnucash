@@ -965,6 +965,7 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
 
         /* We don't need to deal with the ledger, as the gncRegWidget will do
          * so for us. */
+
         g_free (sxed->sxGUIDstr);
         sxed->sxGUIDstr = NULL;
 
@@ -1091,7 +1092,7 @@ row_select_handler( GtkCList *clist,
         switch ( event->type ) {
         case GDK_2BUTTON_PRESS:
                 sx = (SchedXaction*)gtk_clist_get_row_data( clist, row );
-                gnc_ui_scheduled_xaction_editor_dialog_create( sxd, sx, 0 );
+                gnc_ui_scheduled_xaction_editor_dialog_create( sxd, sx, FALSE );
                 break;
         default:
                 /* noop */
@@ -1229,9 +1230,9 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                 sxed->markId = -1;
         }
 
-        /* NOTE: this must occur before processing the widget list, above, so
-         * the gpointers stored with the advance_ and remind_opts are
-         * correct. */
+        /* NOTE: this must occur before processing the widget list, defined
+         * above, so the gpointers stored with the advance_ and remind_opts
+         * are correct. */
         gnc_sxed_get_widgets( sxed );
 
         gnc_register_gui_component( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
@@ -1286,7 +1287,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         schedXact_editor_populate( sxed );
 
         gtk_widget_show_all(sxed->dialog);
-        
+
         return sxed;
 }
 
@@ -1586,7 +1587,7 @@ edit_button_clicked( GtkButton *b, gpointer d )
                 /* get the clist row for this listitem */
                 sx = (SchedXaction*)gtk_clist_get_row_data( cl, row );
                 /* get the object UD */
-                sxed = gnc_ui_scheduled_xaction_editor_dialog_create( sxd, sx, 0 );
+                sxed = gnc_ui_scheduled_xaction_editor_dialog_create( sxd, sx, FALSE );
         }
 }
 
@@ -1654,12 +1655,20 @@ delete_button_clicked( GtkButton *b, gpointer d )
                 if ( destroyOpenedResult ) {
                         GList *component;
                         for ( l = beingEditedList; l; l = l->next ) {
+                                SplitRegister *reg;
                                 component = (GList*)l->data;
-                                /* FIXME: We'd like to force the cancellation
-                                 * of ledger/other changes, here. */
-                                editor_cancel_button_clicked( NULL,
-                                                              (SchedXactionEditorDialog*)component->
-                                                              data );
+                                /* We'd like to force the cancellation of
+                                 * ledger/other changes, here. */
+                                reg = gnc_ledger_display_get_split_register(
+                                        ((SchedXactionEditorDialog*)component
+                                         ->data)
+                                        ->ledger );
+                                gnc_split_register_cancel_cursor_trans_changes(
+                                        reg );
+                                editor_cancel_button_clicked(
+                                        NULL,
+                                        (SchedXactionEditorDialog*)component
+                                        ->data );
                                 g_list_free( component );
                         }
                         g_list_free( beingEditedList );
@@ -1788,6 +1797,7 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
         GDate **instArray;
         GList *instList;
         guint gdcMarkTag, oldMarkTag;
+        gboolean createdNextInstDate = FALSE;
 
         sx = (SchedXaction*)data;
         sxd = (SchedXactionDialog*)user_data;
@@ -1815,6 +1825,7 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
                  * calendar range.  Thus, if the generate_instances above
                  * returns nothing, double-check with the SX. */
                 nextInstDate = g_date_new();
+                createdNextInstDate = TRUE;
                 *nextInstDate = xaccSchedXactionGetNextInstance( sx, NULL );
                 if ( g_date_valid( nextInstDate ) ) {
                         instList = g_list_append( instList,
@@ -1854,6 +1865,9 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
                 g_free( instArray );
                 g_list_foreach( instList, _gnc_sxd_free_dates, NULL );
                 g_list_free( instList );
+                if ( createdNextInstDate ) {
+                        g_free( nextInstDate );
+                }
         }
 
         text[0] = xaccSchedXactionGetName( sx );
@@ -1892,18 +1906,6 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
         g_string_free( freqStr,  TRUE );
         g_string_free( nextDate, TRUE );
 }
-
-#if notused
-static
-gncUIWidget
-sxe_ledger_get_parent( GNCLedgerDisplay *ld )
-{
-        SchedXactionEditorDialog *sxed;
-
-        sxed = gnc_ledger_display_get_user_data( ld );
-        return sxed->dialog;
-}
-#endif
 
 /********************************************************************\
  * gnc_register_check_close                                         *

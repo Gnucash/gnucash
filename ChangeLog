@@ -1,10 +1,18 @@
+2002-11-12  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-sxsincelast.c
+	(sxsincelast_tc_row_unsel, sxsincelast_tc_row_sel): Now [again]
+	uses the read-only register to show the relevant template
+	transaction, so the user has context about any variables they're
+	being asked to fill in values for.
+
 2002-11-11  David Hampton  <hampton@employees.org>
 
 	* src/gnome/window-acct-tree.c: Make all the menu callbacks take a
 	pointer to the GNC MDI main data structure instead of a pointer to
 	a GNC MDI Child data structure. #94972
 
-2002-11-11  Joshua Sled  <jsled@phoenix.asynchronous.org>
+2002-11-11  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/window-register.c (regWindowLedger): If we
 	gtk_widget_show_all the correct widget [the window], then it's

@@ -88,6 +88,8 @@ static GtkWidget* add_summary_label( GtkWidget *summarybar,
 static void gnc_toolbar_change_cb( void *data );
 static void gnc_split_reg_determine_read_only( GNCSplitReg *gsr );
 
+static void gnc_split_reg_change_style (GNCSplitReg *gsr, SplitRegisterStyle style);
+
 static GNCPlaceholderType gnc_split_reg_get_placeholder( GNCSplitReg *gsr );
 static gnc_numeric gnc_account_present_balance( Account *account );
 static gncUIWidget gnc_split_reg_get_parent( GNCLedgerDisplay *ledger );
@@ -120,7 +122,6 @@ static void gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data);
 static void gnc_split_reg_refresh_toolbar( GNCSplitReg *gsr );
 
 static void gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger );
-static void gnc_split_reg_contained_ld_destroy( GNCLedgerDisplay *ledger );
 
 gboolean gnc_split_reg_check_close(GNCSplitReg *gsr);
 
@@ -372,9 +373,10 @@ gnc_split_reg_init2( GNCSplitReg *gsr )
   }
 
   gsr_setup_status_widgets( gsr );
-
+  /* ordering is important here... setup_status before create_table */
   gsr_create_table( gsr );
   gsr_setup_table( gsr );
+
 }
 
 static
@@ -486,6 +488,13 @@ gsr_create_toolbar( GNCSplitReg *gsr )
 
 static
 void
+gsr_foobar( GtkWidget *w, gpointer ud )
+{
+  DEBUG( "Happiness is being destroyed" );
+}
+
+static
+void
 gsr_create_table( GNCSplitReg *gsr )
 {
   GtkWidget *register_widget;
@@ -512,6 +521,10 @@ gsr_create_table( GNCSplitReg *gsr )
                       GTK_SIGNAL_FUNC(gsr_redraw_all_cb), gsr);
   gtk_signal_connect (GTK_OBJECT(gsr->reg), "redraw_help",
                       GTK_SIGNAL_FUNC(gsr_emit_help_changed), gsr);
+
+
+  gtk_signal_connect (GTK_OBJECT(gsr->reg), "destroy",
+                      GTK_SIGNAL_FUNC(gsr_foobar), gsr);
 }
 
 static
@@ -776,17 +789,6 @@ gnc_split_reg_refresh_toolbar( GNCSplitReg *gsr )
   gtk_toolbar_set_style( GTK_TOOLBAR(gsr->toolbar), tbstyle );
 }
 
-static
-void
-gnc_split_reg_contained_ld_destroy( GNCLedgerDisplay *ledger )
-{
-  GNCSplitReg *gsr = gnc_ledger_display_get_user_data( ledger );
-  DEBUG( "destroying" );
-  gtk_widget_destroy( GTK_WIDGET(gsr->reg) );
-  DEBUG( "setting user data" );
-  gnc_ledger_display_set_user_data( ledger, NULL );
-}
-
 static void
 gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
 {
@@ -802,6 +804,7 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
       gnc_table_save_state (reg->table);
 
     gtk_widget_hide_all( gsr->window );
+    DEBUG( "destroying" );
     gtk_widget_destroy( gsr->window );
   }
   gnc_ledger_display_set_user_data (ledger, NULL);
@@ -1973,7 +1976,7 @@ gtk_callback_bug_workaround (gpointer argp)
   dialog_args *args = argp;
 
   gnc_warning_dialog_parented(args->gsr->window, args->string);
-  free(args);
+  g_free(args);
   return FALSE;
 }
 
@@ -2113,29 +2116,7 @@ static
 void
 gsr_emit_signal( GNCSplitReg *gsr, const char *sigName )
 {
-  DEBUG( "emitting signal \"%s\"", sigName );
   gtk_signal_emit_by_name( GTK_OBJECT(gsr), sigName, NULL );
-}
-
-void
-gnc_split_reg_set_ledger_display( GNCSplitReg *gsr,
-                                  GNCLedgerDisplay *ld )
-{
-
-  PERR( "Unimplmeneted; this breaks in a nasty way, right now." );
-  return;
-
-  /* FIXME: We're going to leak the old GNCLedgerDisplay and associated
-   * canvas, &c, all over the place.  We're bad people. */
-  gtk_container_remove( GTK_CONTAINER(gsr), GTK_WIDGET( gsr->reg ) );
-  gnc_ledger_display_set_handlers( gsr->ledger,
-                                   gnc_split_reg_contained_ld_destroy,
-                                   gnc_split_reg_get_parent );
-  gnc_ledger_display_close( gsr->ledger );
-  gsr->reg = NULL;
-  gsr->ledger = ld;
-  gsr_create_table( gsr );
-  gsr_setup_table( gsr );
 }
 
 GnucashRegister*

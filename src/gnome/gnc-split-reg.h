@@ -222,12 +222,6 @@ GtkWidget* gnc_split_reg_new( GNCLedgerDisplay *ld,
                               gint disallowCaps );
 
 /**
- * Changes the ledger display being used by the GNCSplitReg.
- **/
-void gnc_split_reg_set_ledger_display( GNCSplitReg *gsr,
-                                        GNCLedgerDisplay *ld );
-
-/**
  * Returns the GnucashRegister in effect for this GNCSplitReg.
  **/
 GnucashRegister *gnc_split_reg_get_register( GNCSplitReg *gsr );

@@ -292,7 +292,6 @@ static void sxsincelast_init( sxSinceLastData *sxsld );
 static void create_autoCreate_ledger( sxSinceLastData *sxsld );
 static void create_created_ledger( sxSinceLastData *sxsld );
 static void create_to_create_ledger( sxSinceLastData *sxsld );
-static gncUIWidget sxsld_ledger_get_parent( GNCLedgerDisplay *ld );
 static void gnc_sxsld_commit_ledgers( sxSinceLastData *sxsld );
 
 static gint sxsincelast_populate( sxSinceLastData *sxsld );
@@ -806,7 +805,7 @@ created_prep( GnomeDruidPage *druid_page,
         guidQuery = xaccMallocQuery();
         xaccQuerySetBook( bookQuery, gnc_get_current_book() );
         /* Create the appropriate query for the Created ledger; go through
-         * the to-create list's instnaces and add all the created Txn
+         * the to-create list's instances and add all the created Txn
          * GUIDs. */
         for ( tctList = sxsld->toCreateList;
               tctList;
@@ -2821,12 +2820,27 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
         /* Setup the query for the to-create register to only show the
          * transaction[s] associated with this lineitem. */
         {
+                AccountGroup *ag;
+                Account *acct;
+                Query *q;
                 gchar *sxGUIDstr;
-                sxGUIDstr = guid_to_string( xaccSchedXactionGetGUID( tci->parentTCT->sx ) );
+                SplitRegister *sr;
 
-                sxsld->to_create_ledger = gnc_ledger_display_template_gl( sxGUIDstr );
-                gnc_split_reg_set_ledger_display( sxsld->to_create_gsr,
-                                                  sxsld->to_create_ledger );
+                q = xaccMallocQuery();
+                xaccQuerySetBook( q, gnc_get_current_book() );
+                ag = gnc_book_get_template_group( gnc_get_current_book() );
+                sxGUIDstr = guid_to_string( xaccSchedXactionGetGUID( tci->parentTCT->sx ) );
+                acct = xaccGetAccountFromName( ag, sxGUIDstr );
+                g_free( sxGUIDstr );
+                g_assert( acct != NULL );
+                xaccQueryAddSingleAccountMatch( q, acct, QUERY_AND );
+          
+                gnc_suspend_gui_refresh();
+                gnc_ledger_display_set_query( sxsld->to_create_ledger, q );
+                sr = gnc_ledger_display_get_split_register( sxsld->to_create_ledger );
+                gnc_split_register_set_template_account( sr, acct );
+                gnc_ledger_display_refresh( sxsld->to_create_ledger );
+                gnc_resume_gui_refresh();
         }
 
         /* Get the count of variables; potentially remove the system-defined
@@ -2961,6 +2975,18 @@ sxsincelast_tc_row_unsel( GtkCTree *ct,
         sxsld->curSelTCI = NULL;
 
         sxsld_set_sensitive_tci_controls( sxsld, FALSE );
+
+        {
+                Query *q;
+                q = xaccMallocQuery();
+                xaccQueryClear( q );
+                gnc_suspend_gui_refresh();
+                gnc_ledger_display_set_query( sxsld->to_create_ledger, q );
+                gnc_ledger_display_refresh( sxsld->to_create_ledger );
+                gnc_resume_gui_refresh();
+        }
+
+
         /* we cleanup the gnc_numerics we allocated in the "destroy" signal
          * handler of the entry [where we attached them] */
 }
@@ -3488,19 +3514,16 @@ create_autoCreate_ledger( sxSinceLastData *sxsld )
         sxsld->ac_ledger = gnc_ledger_display_query( q,
                                                      GENERAL_LEDGER,
                                                      REG_STYLE_LEDGER );
-        gnc_ledger_display_set_handlers( sxsld->ac_ledger,
-                                         NULL,
-                                         sxsld_ledger_get_parent );
-        gnc_ledger_display_set_user_data( sxsld->ac_ledger, (gpointer)sxsld );
         splitreg = gnc_ledger_display_get_split_register( sxsld->ac_ledger );
 
         /* FIXME: Make numRows configurable. */
         sxsld->ac_gsr =
-                gnc_split_reg_new( sxsld->ac_ledger,
-                                   GTK_WINDOW( sxsld->sincelast_window ),
-                                   4,
-                                   (CREATE_TOOLBAR | CREATE_POPUP),
-                                   CAP_SCHEDULE );
+                GNC_SPLIT_REG(
+                        gnc_split_reg_new( sxsld->ac_ledger,
+                                           GTK_WINDOW( sxsld->sincelast_window ),
+                                           4,
+                                           (CREATE_TOOLBAR | CREATE_POPUP),
+                                           CAP_SCHEDULE ) );
 
         vbox = glade_xml_get_widget( sxsld->gxml, AUTO_CREATE_VBOX );
         toolbar = gnc_split_reg_get_toolbar( sxsld->ac_gsr );
@@ -3537,25 +3560,21 @@ create_created_ledger( sxSinceLastData *sxsld )
         sxsld->created_ledger = gnc_ledger_display_query( q,
                                                           GENERAL_LEDGER,
                                                           REG_STYLE_LEDGER );
-        gnc_ledger_display_set_handlers( sxsld->created_ledger,
-                                         NULL,
-                                         sxsld_ledger_get_parent );
-        gnc_ledger_display_set_user_data( sxsld->created_ledger, (gpointer)sxsld );
         splitreg = gnc_ledger_display_get_split_register( sxsld->created_ledger );
         /* FIXME: make numRows configurable? */
         sxsld->created_gsr =
-                gnc_split_reg_new( sxsld->created_ledger,
-                                   GTK_WINDOW( sxsld->sincelast_window ),
-                                   4,
-                                   ( CREATE_TOOLBAR | CREATE_POPUP ),
-                                   CAP_SCHEDULE );
+                GNC_SPLIT_REG( 
+                        gnc_split_reg_new( sxsld->created_ledger,
+                                           GTK_WINDOW( sxsld->sincelast_window ),
+                                           4,
+                                           ( CREATE_TOOLBAR | CREATE_POPUP ),
+                                           CAP_SCHEDULE ) );
 
         vbox = glade_xml_get_widget( sxsld->gxml, CREATED_VBOX );
         toolbar = gnc_split_reg_get_toolbar( sxsld->created_gsr );
 
         gtk_box_pack_start( GTK_BOX(vbox), toolbar, FALSE, FALSE, 2 );
         gtk_box_pack_end( GTK_BOX(vbox), GTK_WIDGET(sxsld->created_gsr), TRUE, TRUE, 2 );
-
 
         /* FIXME: we should do all the happy-fun register stuff... button bar
          * controls ... popups ... */
@@ -3581,23 +3600,19 @@ create_to_create_ledger( sxSinceLastData *sxsld )
         GtkWidget *txn_reg_frame;
         Query *q;
 
+        sxsld->to_create_ledger = gnc_ledger_display_template_gl( NULL );
         q = xaccMallocQuery();
-        sxsld->to_create_ledger = gnc_ledger_display_query( q,
-                                                            GENERAL_LEDGER,
-                                                            REG_STYLE_LEDGER );
-        xaccFreeQuery( q );
-        gnc_ledger_display_set_handlers( sxsld->to_create_ledger,
-                                         NULL,
-                                         sxsld_ledger_get_parent );
-        gnc_ledger_display_set_user_data( sxsld->to_create_ledger, (gpointer)sxsld );
+        xaccQueryClear( q );
+        gnc_ledger_display_set_query( sxsld->to_create_ledger, q );
         splitreg = gnc_ledger_display_get_split_register( sxsld->to_create_ledger );
         /* FIXME: make numRows configurable? */
         sxsld->to_create_gsr =
-                gnc_split_reg_new( sxsld->to_create_ledger,
-                                   GTK_WINDOW( sxsld->sincelast_window ),
-                                   4,
-                                   ( CREATE_TOOLBAR | CREATE_POPUP ),
-                                   ( CAP_READ_ONLY | CAP_SCHEDULE) );
+                GNC_SPLIT_REG( 
+                        gnc_split_reg_new( sxsld->to_create_ledger,
+                                           GTK_WINDOW( sxsld->sincelast_window ),
+                                           4,
+                                           ( CREATE_TOOLBAR | CREATE_POPUP ),
+                                           ( CAP_READ_ONLY | CAP_SCHEDULE) ) );
 
         txn_reg_frame = glade_xml_get_widget( sxsld->gxml, TO_CREATE_TXN_REG_FRAME );
         gtk_container_add( GTK_CONTAINER( txn_reg_frame ),
@@ -3606,9 +3621,7 @@ create_to_create_ledger( sxSinceLastData *sxsld )
 
         /* configure... */
         /* don't use double-line */
-        /* FIXME */
-        gnc_split_register_config( splitreg,
-                                   splitreg->type, splitreg->style,
+        gnc_split_register_config( splitreg, splitreg->type, splitreg->style,
                                    FALSE );
 
         /* don't show present/future divider [by definition, not necessary] */
@@ -3616,16 +3629,6 @@ create_to_create_ledger( sxSinceLastData *sxsld )
 
         /* force a refresh */
         gnc_ledger_display_refresh( sxsld->to_create_ledger );
-}
-
-static
-gncUIWidget
-sxsld_ledger_get_parent( GNCLedgerDisplay *ld )
-{
-        sxSinceLastData *sxsld;
-
-        sxsld = (sxSinceLastData*)gnc_ledger_display_get_user_data( ld );
-        return (gncUIWidget)sxsld->sincelast_window;
 }
 
 static void
