@@ -192,7 +192,7 @@ xaccLedgerDisplaySimple (Account *acc)
       reg_type = CURRENCY_REGISTER;
       break;
     default:
-      PERR ("xaccLedgerDisplaySimple(): unknown account type %d\n", acc_type);
+      PERR ("unknown account type %d\n", acc_type);
       return NULL;
   }
 
@@ -264,7 +264,7 @@ xaccLedgerDisplayAccGroup (Account *acc)
        break;
 
     default:
-      PERR ("xaccLedgerDisplayAccGroup(): unknown account type \n");
+      PERR ("unknown account type \n");
       _free (list);
       return NULL;
   }

@@ -402,7 +402,7 @@ LedgerMoveCursor (Table *table,
   int phys_col_offset;
   int style;
 
-  PINFO ("LedgerMoveCursor(): start callback %d %d \n",
+  PINFO ("start callback %d %d \n",
          new_phys_row, new_phys_col);
 
   /* The transaction we are coming from */
@@ -493,7 +493,7 @@ LedgerMoveCursor (Table *table,
     *p_new_phys_col = new_phys_col;
   }
 
-  PINFO ("LedgerMoveCursor(): after redraw %d %d \n",
+  PINFO ("after redraw %d %d \n",
          new_phys_row, new_phys_col);
 
   reg->cursor_phys_row = new_phys_row;
@@ -523,7 +523,7 @@ LedgerMoveCursor (Table *table,
     *p_new_phys_row = table->current_cursor_phys_row;
     *p_new_phys_col = table->current_cursor_phys_col;
 
-    PINFO ("LedgerMoveCursor(): after dynamic %d %d stored val %d\n",
+    PINFO ("after dynamic %d %d stored val %d\n",
            *p_new_phys_row, *p_new_phys_col, reg->cursor_phys_row);
   }
 }
@@ -676,13 +676,13 @@ xaccSRGetTrans (SplitRegister *reg, int phys_row, int phys_col)
 
   virt_row --;
   if ((0 > virt_row) || (0 > virt_col)) {
-    PERR ("Internal Error: xaccSRGetTrans(): bad row \n");
+    PERR ("bad row \n");
     return NULL;
   }
 
   split = (Split *) reg->table->user_data[virt_row][virt_col];
   if (split == NULL) {
-    PERR ("Internal Error: xaccSRGetTrans(): no parent \n");
+    PERR ("no parent \n");
     return NULL;
   }
 
@@ -720,7 +720,7 @@ xaccSRGetCurrentTrans (SplitRegister *reg)
 
   virt_row --;
   if ((0 > virt_row) || (0 > virt_col)) {
-    PERR ("Internal Error: xaccSRGetCurrentTrans(): bad row \n");
+    PERR ("bad row \n");
     return NULL;
   }
 
@@ -1688,13 +1688,13 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
       reg->table->current_cursor->user_data = (void *) split;
    }
 
-   DEBUG ("xaccSRSaveRegEntry(): updating trans addr=%p\n", trans);
+   DEBUG ("updating trans addr=%p\n", trans);
 
    /* copy the contents from the cursor to the split */
    if (MOD_DATE & changed) {
       /* commit any pending changes */
       xaccCommitDateCell (reg->dateCell);
-      DEBUG ("xaccSRSaveRegEntry(): MOD_DATE DMY= %2d/%2d/%4d \n",
+      DEBUG ("MOD_DATE DMY= %2d/%2d/%4d \n",
                                reg->dateCell->date.tm_mday,
                                reg->dateCell->date.tm_mon+1,
                                reg->dateCell->date.tm_year+1900);
@@ -1705,30 +1705,30 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
    }
 
    if (MOD_NUM & changed) {
-      DEBUG ("xaccSRSaveRegEntry(): MOD_NUM: %s\n", reg->numCell->cell.value);
+      DEBUG ("MOD_NUM: %s\n", reg->numCell->cell.value);
       xaccTransSetNum (trans, reg->numCell->cell.value);
       xaccSetNumCellLastNum(reg->numCell, reg->numCell->cell.value);
    }
 
    if (MOD_DESC & changed) {
-      DEBUG ("xaccSRSaveRegEntry(): MOD_DESC: %s\n",
+      DEBUG ("MOD_DESC: %s\n",
              reg->descCell->cell.value);
       xaccTransSetDescription (trans, reg->descCell->cell.value);
    }
 
    if (MOD_RECN & changed) {
-      DEBUG ("xaccSRSaveRegEntry(): MOD_RECN: %c\n", reg->recnCell->value[0]);
+      DEBUG ("MOD_RECN: %c\n", reg->recnCell->value[0]);
       xaccSplitSetReconcile (split, reg->recnCell->value[0]);
    }
 
    if (MOD_ACTN & changed) {
-      DEBUG ("xaccSRSaveRegEntry(): MOD_ACTN: %s\n",
+      DEBUG ("MOD_ACTN: %s\n",
              reg->actionCell->cell.value);
       xaccSplitSetAction (split, reg->actionCell->cell.value);
    }
 
    if (MOD_MEMO & changed) {
-      DEBUG ("xaccSRSaveRegEntry(): MOD_MEMO: %s\n",
+      DEBUG ("MOD_MEMO: %s\n",
              reg->memoCell->cell.value);
       xaccSplitSetMemo (split, reg->memoCell->cell.value);
    }
@@ -1748,11 +1748,11 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
       char *new_name;
 
       if (MOD_XFRM & changed) {
-        DEBUG ("xaccSRSaveRegEntry(): MOD_XFRM: %s\n",
+        DEBUG ("MOD_XFRM: %s\n",
                reg->xfrmCell->cell.value);
       }
       else {
-        DEBUG ("xaccSRSaveRegEntry(): MOD_XTO: %s\n",
+        DEBUG ("MOD_XTO: %s\n",
                reg->xtoCell->cell.value);
       }
 
@@ -1801,7 +1801,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
    if (MOD_MXFRM & changed) {
       Split *other_split = NULL;
 
-      DEBUG ("xaccSRSaveRegEntry(): MOD_MXFRM: %s\n",
+      DEBUG ("MOD_MXFRM: %s\n",
              reg->mxfrmCell->cell.value);
 
       other_split = xaccGetOtherSplit(split);
@@ -1999,7 +1999,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
          new_amount = -(debit - credit);
       }
 
-      DEBUG ("xaccSRSaveRegEntry(): MOD_AMNT: %f\n", new_amount);
+      DEBUG ("MOD_AMNT: %f\n", new_amount);
 
       if ((EQUITY_REGISTER   == (reg->type & REG_TYPE_MASK)) ||
           (STOCK_REGISTER    == (reg->type & REG_TYPE_MASK)) ||
@@ -2015,7 +2015,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
 
       price = xaccGetPriceCellValue(reg->priceCell);
 
-      DEBUG ("xaccSRSaveRegEntry(): MOD_PRIC: %f\n", price);
+      DEBUG ("MOD_PRIC: %f\n", price);
 
       xaccSplitSetSharePrice (split, price);
    }
@@ -2023,12 +2023,12 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
    if (MOD_VALU & changed) {
       double value = xaccGetPriceCellValue(reg->valueCell);
 
-      DEBUG ("xaccSRSaveRegEntry(): MOD_VALU: %f\n", value);
+      DEBUG ("MOD_VALU: %f\n", value);
 
       xaccSplitSetValue (split, value);
    }
 
-   PINFO ("xaccSRSaveRegEntry(): finished saving split %s of trans %s \n", 
+   PINFO ("finished saving split %s of trans %s \n", 
           xaccSplitGetMemo(split), xaccTransGetDescription(trans));
 
    /* If the modified split is the "blank split", then it is now an
@@ -2536,8 +2536,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    /* make sure that the header is loaded */
    xaccSetCursor (table, reg->header, 0, 0, 0, 0);
 
-   PINFO ("xaccSRLoadRegister(): "
-          "load register of %d phys rows ----------- \n", reg->num_phys_rows);
+   PINFO ("load register of %d phys rows ----------- \n", reg->num_phys_rows);
 
    /* populate the table */
    i=0;
@@ -2558,8 +2557,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
          Transaction *trans;
          gncBoolean do_expand;
 
-         PINFO ("xaccSRLoadRegister(): "
-                "load trans %d at phys row %d \n", i, phys_row);
+         PINFO ("load trans %d at phys row %d \n", i, phys_row);
 
          /* if multi-line, then show all splits. If dynamic then
           * show all splits only if this is the hot split. */
@@ -2599,8 +2597,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
                                  phys_row, 0, vrow, 0);
                   xaccMoveCursor (table, phys_row, 0);
                   xaccSRLoadRegEntry (reg, secondary);
-                  PINFO ("xaccSRLoadRegister(): "
-                         "load split %d at phys row %d addr=%p \n", 
+                  PINFO ("load split %d at phys row %d addr=%p \n", 
                           j, phys_row, secondary);
                   vrow ++;
                   phys_row += reg->split_cursor->numRows; 
@@ -2619,7 +2616,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
          }
       }
       else {
-        PINFO ("xaccSRLoadRegister(): skip trans %d (blank split) \n", i);
+        PINFO ("skip trans %d (blank split) \n", i);
       }
 
       last_split = split;
@@ -2757,7 +2754,7 @@ LoadXferCell (ComboCell *cell,
     secu = xaccAccountGetSecurity (acc);
     if (secu && (0x0 == secu[0])) secu = 0x0;
 
-    DEBUG ("LoadXferCell(): curr=%s secu=%s acct=%s\n", 
+    DEBUG ("curr=%s secu=%s acct=%s\n", 
            curr, secu, xaccAccountGetName (acc));
 
     if ( load_everything || 
