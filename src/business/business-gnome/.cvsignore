@@ -1,5 +1,10 @@
+*.la
+*.lo
+.deps
+.libs
 .scm-links
 Makefile
+Makefile.in
 gw-business-gnome.c
 gw-business-gnome.h
 gw-business-gnome.html
