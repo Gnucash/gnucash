@@ -1,3 +1,12 @@
+2001-07-17  Dave Peticolas  <dave@krondo.com>
+
+	* AUTHORS: credits
+
+	* doc/sgml/C/xacc-about.sgml: credits
+
+	* src/scm/report/transaction.scm: Michael T. Garrison Stuber's
+	transaction report patch.
+
 2001-07-11  Dave Peticolas  <dave@krondo.com>
 
 	* AUTHORS: fix credits
