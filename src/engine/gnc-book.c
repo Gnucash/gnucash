@@ -29,7 +29,7 @@
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * Copyright (c) 1998-2001 Linas Vepstas
+ * Copyright (c) 1998-2001,2003 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2000 Dave Peticolas
  */
 
@@ -65,6 +65,46 @@
 static short module = MOD_IO;
 
 /* ====================================================================== */
+
+static void
+gnc_book_populate (GNCBook *book)
+{
+  gnc_book_set_group (book, xaccMallocAccountGroup(book));
+  book->pricedb = gnc_pricedb_create(book);
+
+  book->sched_xactions = NULL;
+  book->sx_notsaved = FALSE;
+  book->template_group = xaccMallocAccountGroup(book);
+  book->commodity_table = gnc_commodity_table_new ();
+
+  if(book->commodity_table)
+  {
+    if(!gnc_commodity_table_add_default_data(book->commodity_table))
+      PWARN("unable to initialize book's commodity_table");
+  }
+
+}
+
+static void
+gnc_book_depopulate (GNCBook *book)
+{
+  AccountGroup *grp;
+
+  grp = gnc_book_get_group (book);
+  xaccAccountGroupBeginEdit (grp);
+  xaccAccountGroupDestroy (grp);
+
+  gnc_pricedb_destroy (book->pricedb);
+  book->pricedb = NULL;
+
+  gnc_commodity_table_destroy (book->commodity_table);
+  book->commodity_table = NULL;
+
+  /* FIXME: destroy SX data members here, too */
+
+}
+
+/* ====================================================================== */
 /* constructor / destructor */
 
 static void
@@ -78,19 +118,9 @@ gnc_book_init (GNCBook *book)
   xaccStoreEntity(book->entity_table, book, &book->guid, GNC_ID_BOOK);
 
   book->kvp_data = kvp_frame_new ();
-  book->topgroup = xaccMallocAccountGroup(book);
-  book->pricedb = gnc_pricedb_create(book);
-
-  book->sched_xactions = NULL;
-  book->sx_notsaved = FALSE;
-  book->template_group = xaccMallocAccountGroup(book);
-  book->commodity_table = gnc_commodity_table_new ();
-
-  if(book->commodity_table)
-  {
-    if(!gnc_commodity_table_add_default_data(book->commodity_table))
-      PWARN("unable to initialize book's commodity_table");
-  }
+  
+  /* XXX this needs to go away */
+  gnc_book_populate (book);
 
   book->data_tables = g_hash_table_new (g_str_hash, g_str_equal);
 
@@ -126,17 +156,8 @@ gnc_book_destroy (GNCBook *book)
 
   gncObjectBookEnd (book);
 
-  xaccAccountGroupBeginEdit (book->topgroup);
-  xaccAccountGroupDestroy (book->topgroup);
-  book->topgroup = NULL;
-
-  gnc_pricedb_destroy (book->pricedb);
-  book->pricedb = NULL;
-
-  gnc_commodity_table_destroy (book->commodity_table);
-  book->commodity_table = NULL;
-
-  /* FIXME: destroy SX data members here, too */
+  /* XXX this needs to go away */
+  gnc_book_depopulate (book);
 
   xaccRemoveEntity (book->entity_table, &book->guid);
   xaccEntityTableDestroy (book->entity_table);
@@ -175,17 +196,26 @@ gnc_book_get_entity_table (GNCBook *book)
   return book->entity_table;
 }
 
+/* xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
+
+#define GNC_COMMODITY_TABLE "gnc_commodity_table"
 gnc_commodity_table *
 gnc_book_get_commodity_table(GNCBook *book)
 {
   if (!book) return NULL;
+printf ("duude get commoity table\n");
   return book->commodity_table;
+  return gnc_book_get_data (book, GNC_COMMODITY_TABLE);
 }
 
+#define GNC_TOP_GROUP "gnc_top_group"
 AccountGroup * 
 gnc_book_get_group (GNCBook *book)
 {
    if (!book) return NULL;
+printf ("duude get topgrp\n");
+   if (book->topgroup != gnc_book_get_data (book, GNC_TOP_GROUP))
+			  printf ("duuuude major xxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
    return book->topgroup;
 }
 
@@ -193,14 +223,15 @@ GNCPriceDB *
 gnc_book_get_pricedb(GNCBook *book)
 {
   if (!book) return NULL;
+printf ("duude get pricedb\n");
   return book->pricedb;
 }
 
 GList *
 gnc_book_get_schedxactions( GNCBook *book )
 {
-        if ( book == NULL ) return NULL;
-        return book->sched_xactions;
+  if ( book == NULL ) return NULL;
+  return book->sched_xactions;
 }
 
 AccountGroup *
@@ -237,14 +268,15 @@ gnc_book_set_group (GNCBook *book, AccountGroup *grp)
 {
   if (!book) return;
 
-  /* Do not free the old topgroup here unless you also fix
-   * all the other uses of gnc_book_set_group! 
+  /* XXX Do not free the old topgroup here unless you also fix
+   * all the other uses of gnc_book_set_group!  That's because
+	* the account group is not reference-counted, and there's some
+	* chance that we'll leave a dangling pointer somewhere.
    */
 
-  if (book->topgroup == grp)
-    return;
+  if (gnc_book_get_group (book) == grp) return;
 
-  if (grp->book != book)
+  if (grp && grp->book != book)
   {
      PERR ("cannot mix and match books freely!");
      return;
@@ -260,6 +292,7 @@ gnc_book_set_group (GNCBook *book, AccountGroup *grp)
    */
 
   book->topgroup = grp;
+  gnc_book_set_data (book, GNC_TOP_GROUP, grp);
 }
 
 void
@@ -432,13 +465,18 @@ gnc_book_equal (GNCBook *book_1, GNCBook *book_2)
 /* ====================================================================== */
 
 /* Store arbitrary pointers in the GNCBook for data storage extensibility */
-void gnc_book_set_data (GNCBook *book, const char *key, gpointer data)
+/* XXX if data is NULL, should we store a null pointer, or should
+ * we remove the key from the hash table? 
+ */
+void 
+gnc_book_set_data (GNCBook *book, const char *key, gpointer data)
 {
-  if (!book || !key || !data) return;
+  if (!book || !key) return;
   g_hash_table_insert (book->data_tables, (gpointer)key, data);
 }
 
-gpointer gnc_book_get_data (GNCBook *book, const char *key)
+gpointer 
+gnc_book_get_data (GNCBook *book, const char *key)
 {
   if (!book || !key) return NULL;
   return g_hash_table_lookup (book->data_tables, (gpointer)key);
