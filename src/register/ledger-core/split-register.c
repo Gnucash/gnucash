@@ -2233,6 +2233,24 @@ gnc_split_register_config (SplitRegister *reg,
 {
   if (!reg) return;
 
+  /* If shrinking the transaction split, put the cursor on the first row of the trans */
+  if (reg->use_double_line && !use_double_line) {
+    VirtualLocation virt_loc = reg->table->current_cursor_loc;
+    if (gnc_table_find_close_valid_cell (reg->table, &virt_loc, FALSE)) {
+      if (virt_loc.phys_row_offset) {
+	gnc_table_move_vertical_position (reg->table, &virt_loc, -virt_loc.phys_row_offset);
+	gnc_table_move_cursor_gui (reg->table, virt_loc);
+      }
+    } else {
+      /* WTF?  Go to a known safe location. */
+      virt_loc.vcell_loc.virt_row = 1;
+      virt_loc.vcell_loc.virt_col = 0;
+      virt_loc.phys_row_offset = 0;
+      virt_loc.phys_col_offset = 0;
+      gnc_table_move_cursor_gui (reg->table, virt_loc);
+    }
+  }
+
   reg->type = newtype;
 
   if (reg->type >= NUM_SINGLE_REGISTER_TYPES)
