@@ -24,6 +24,33 @@ Postgres Install Instructions
    Note also the user must have 'createuser' permissions in order to 
    lock tables (this is a bug in postgres 6.5 and maybe later ???)
 
+Alternatively, you can install into a brand new database without
+using root privileges. After step 1 above, perform the following:
+
+2) initdb -D ~/gnucash
+   This creates a directory structure and supporting files
+   under ~/gnucash. The gnucash directory is automatically 
+   created. The directories and files are owned by the user
+   running 'initdb' and have only user access; group and
+   other are cleared.
+
+   By default, the user running 'initdb' is setup as the
+   database superuser for the new database.
+
+   You don't have to use the name 'gnucash'; you can choose
+   whatever you want.
+
+3) pg_ctl -D ~/gnucash -o "-p 6543" start
+
+   This starts a postmaster process for the new database
+   listening on port 6543. If your system doesn't already
+   have a postmaster processing running for the system
+   database, you can leave out '-o "-p 6543"' and it will
+   use the default port 5432. You can use any open port.
+
+   By default, the postmaster process will only accept
+   connections from processes on the local host.
+
 
 GnuCash Build Instructions
 --------------------------
