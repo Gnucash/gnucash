@@ -34,6 +34,7 @@ REPLACED BY SPLITLEDGER.C    IT SHOULD BE DELETED BEFORE TOO LONG.
 
 #include "Ledger.h"
 #include "messages.h"
+#include "MultiLedger.h"
 #include "register.h"
 #include "table-allgui.h"
 #include "Transaction.h"
@@ -196,7 +197,7 @@ printf ("finished saving %s \n", xaccTransGetDescription(trans));
 
    /* refresh the register windows *only* if something changed */
    acc = xaccSplitGetAccount (split);
-   accRefresh (acc);
+   xaccAccountDisplayRefresh (acc);
 }
 
 /* ======================================================== */

@@ -22,11 +22,6 @@
  * To implement the above, the register "user_hook" is used
  * to store the blank split with the register window structures.
  *
- *
- * Hack Alert: This code calls the accRefresh routine explicitly.
- * A more elegent way of sending an update even to the windowing
- * code should probably be developed.
- *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
  */
@@ -52,6 +47,7 @@
 
 #include "SplitLedger.h"
 #include "messages.h"
+#include "MultiLedger.h"
 #include "splitreg.h"
 #include "table-allgui.h"
 #include "Transaction.h"
@@ -209,7 +205,7 @@ printf ("save split is %p \n", split);
       xaccAccountInsertSplit (new_acc, split);
 
       /* make sure any open windows of the old account get redrawn */
-      accRefresh (old_acc);
+      xaccAccountDisplayRefresh (old_acc);
    }
 
 
@@ -243,7 +239,7 @@ xaccTransGetDescription(trans));
    split = xaccTransGetSplit (trans, i);
    while (split) {
       acc = xaccSplitGetAccount (split);
-      accRefresh (acc);
+      xaccAccountDisplayRefresh (acc);
       i++;
       split = xaccTransGetSplit (trans, i);
    }
