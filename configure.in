@@ -105,9 +105,41 @@ AC_CHECK_FUNCS(dlerror,,)
 LIBS="$oLIBS"
 AC_SUBST(DL_LIB)
 
+### --------------------------------------------------------------------------
+### MacOS 10.x requires some special handling...
+
 # Some systems (MacOS) require -lintl
 AC_SEARCH_LIBS(gettext, intl, ,[
 	AC_MSG_ERROR([Cannot find gettext -- do you need to build -lintl?])], )
+
+AC_MSG_CHECKING(for darwin)
+case $host_os in
+	rhapsody* | darwin1*)
+		AC_MSG_RESULT([yes, but too old])
+		AC_MSG_ERROR([This platform is not supported, please
+update to latest  darwin])
+		;;
+	darwin*)
+		AC_MSG_RESULT([yes, patching libtool to always build dylibs])
+		mv libtool libtool.old
+		sed -e 's/^deplibs_check_method.*/deplibs_check_method=pass_all/g' \
+			-e 's|^archive_cmds.*|archive_cmds="$CC
+-dynamiclib  \\$allow_undefined_flag -o \\$lib \\$libobjs
+\\$deplibs\\$linker_flags  -install_name \\$rpath/\\$soname
+\\$verstring"|g' \
+			-e
+'s|^library_names_spec.*|library_names_spec="\\$libname\\$release\\$vers
+uffix.dylib \\$libname\\$release\\${major}.dylib \\$libname.dylib"|g' \
+			-e
+'s|^soname_spec.*|soname_spec="\\$libname\\$release\\$major.dylib"|g' \
+			< libtool.old > libtool
+		rm libtool.old
+		;;
+	*)
+		AC_MSG_RESULT(no)
+		;;	
+esac
+
 
 ### --------------------------------------------------------------------------
 ### Guile and g-wrap version checks (should this be something other than
