@@ -110,6 +110,7 @@ lv_show_splits (GNCLotViewer *lv)
 
    if (NULL == lot) return;
 
+gnc_engine_suspend_events();  /* XXX remove when xaccSplitGetCapGains() fixed */
    gtk_clist_freeze (lv->mini_clist);
    gtk_clist_clear (lv->mini_clist);
    split_list = gnc_lot_get_split_list (lot);
@@ -186,6 +187,7 @@ lv_show_splits (GNCLotViewer *lv)
       gtk_clist_set_selectable (lv->mini_clist, row, FALSE);
    }
    gtk_clist_thaw (lv->mini_clist);
+gnc_engine_resume_events();  /* XXX remove when xaccSplitGetCapGains() fixed */
 }
 
 /* ======================================================================== */
@@ -333,7 +335,7 @@ lv_scrub_acc_cb (GtkButton *but, gpointer user_data)
 {
    GNCLotViewer *lv = user_data;
    if (NULL == lv->selected_lot) return; 
-   xaccAccountScrubDoubleBalance (gnc_lot_get_account(lv->selected_lot));
+   xaccAccountScrubLotsBalance (gnc_lot_get_account(lv->selected_lot));
    lv_unset_lot (lv);
    gnc_lot_viewer_fill (lv);
 }
@@ -405,10 +407,13 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
 {
    int row, nlots;
    LotList *lot_list, *node;
+   GNCLot *selected_lot;
+   int selected_row = -1;
 
    lot_list = xaccAccountGetLotList (lv->account);
    nlots = g_list_length (lot_list);
 
+   selected_lot = lv->selected_lot;
    gtk_clist_freeze (lv->lot_clist);
    gtk_clist_clear (lv->lot_clist);
    for (node = lot_list; node; node=node->next)
@@ -462,9 +467,20 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
       /* Self-reference */
       row = gtk_clist_append (lv->lot_clist, row_vals);
       gtk_clist_set_row_data (lv->lot_clist, row, lot);
+      if (lot == selected_lot) selected_row = row;
    }
    gtk_clist_thaw (lv->lot_clist);
 
+   /* re-select the row that the user had previously selected, 
+    * if possible. */
+   if (-1 < selected_row)
+   {
+      gtk_clist_select_row (lv->lot_clist, selected_row, 1);
+   }
+   else
+   {
+      gtk_clist_unselect_all (lv->lot_clist);
+   }
 }
 
 /* ======================================================================== */
@@ -475,6 +491,7 @@ lv_refresh_handler (GHashTable *changes, gpointer user_data)
    GNCLotViewer *lv = user_data;
 printf ("duuude refresh !!\n");
    gnc_lot_viewer_fill (lv);
+   lv_show_splits (lv);
 }
 
 static void
