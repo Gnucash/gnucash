@@ -19,10 +19,10 @@ be created as a shared library for use by other programs.
 * Globally Unique Identifiers::  
 * Key-Value Pair Frames::       
 * Sessions::                    
-* Account Group::               
-* Account::                     
-* Transaction::                 
-* Split::                       
+* Account Groups::              
+* Accounts::                    
+* Transactions::                
+* Splits::                      
 @end menu
 
 
@@ -85,7 +85,7 @@ recursive manner.
 @end table
 
 
-@node Sessions, Account Group, Key-Value Pair Frames, Engine
+@node Sessions, Account Groups, Key-Value Pair Frames, Engine
 @section Sessions
 @tindex Session
 
@@ -113,21 +113,21 @@ of generic URL's, and/or implementation on top of SQL or other
 database/persistant object technology.
 
 
-@node Account Groups, Account, Sessions, Engine
+@node Account Groups, Accounts, Sessions, Engine
 @section Account Groups
 @tindex AccountGroup
 
 
-@node Accounts, Transaction, Account Group, Engine
+@node Accounts, Transactions, Account Groups, Engine
 @section Accounts
 @tindex Account
 
 
-@node Transactions, Split, Account, Engine
+@node Transactions, Splits, Accounts, Engine
 @section Transactions
 @tindex Transaction
 
 
-@node Splits,  , Transaction, Engine
+@node Splits,  , Transactions, Engine
 @section Splits
 @tindex Split

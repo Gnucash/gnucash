@@ -98,10 +98,10 @@ Engine
 * Globally Unique Identifiers::  
 * Key-Value Pair Frames::       
 * Sessions::                    
-* Account Group::               
-* Account::                     
-* Transaction::                 
-* Split::                       
+* Account Groups::              
+* Accounts::                    
+* Transactions::                
+* Splits::                      
 
 Register
 
