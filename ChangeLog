@@ -1,3 +1,8 @@
+2003-05-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/hbci/gnc-hbci-utils.c: you have to declare
+	  your variables before you g_assert() anything.
+
 2003-05-10  Chris Lyttle  <chris@wilddev.net>
 	* configure.in: release 1.8.3
 	* NEWS: release 1.8.3
