@@ -391,7 +391,11 @@
     (if qif-number
         (gnc:transaction-set-xnum gnc-xtn qif-number))
     (if qif-memo
-        (gnc:split-set-memo gnc-near-split qif-memo))
+	(begin
+	  (gnc:split-set-memo gnc-near-split qif-memo)
+	  (if (or (not qif-payee)
+		  (equal? qif-payee ""))
+	      (gnc:transaction-set-description gnc-xtn qif-memo))))
     
     (if (eq? qif-cleared 'cleared)        
         (gnc:split-set-reconcile gnc-near-split #\c))
