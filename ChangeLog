@@ -5,6 +5,8 @@
 	  fails.  This is necessary to find the symbols on on certain *BSD
 	  systems.
 
+	* acinclude.m4: Add mips, mipsel, arm, and m68k for Debian.
+
 2005-02-08  Christian Stimming  <stimming@tuhh.de>
 
 	* po/it.po: Updated Italian translation by Lorenzo Cappelletti
