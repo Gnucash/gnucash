@@ -1,3 +1,19 @@
+2003-10-20  David Hampton  <hampton@employees.org>
+
+	* src/app-file/gnome/gnc-file-dialog.c: Rewrite using the new
+	gtk_dialog_run function.
+
+	* src/gnome/gnc-main-window.c: Fix the code for creating a new
+	window and moving the current notebook tab to it.
+
+	* src/gnome-utils/dialog-options.c: Bug fixes related to use of
+	GtkTextView widget.
+
+	* src/gnome/gnc-main-window.c:
+	* src/gnome/ui/gnc-main-window-ui.xml:
+	* src/scm/main-window.scm:
+	* src/scm/main.scm: Migrate the "File->Properties" menu item to g2.
+
 2003-10-19  David Hampton  <hampton@employees.org>
 
 	* src/engine/gnc-trace.[ch]: Add a new module for HBCI.

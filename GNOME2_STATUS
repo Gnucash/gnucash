@@ -13,14 +13,41 @@ someone wants to turn this into a columnar table with a field for
 names of active developers, that'd be great.
 
 ========================================
-             STATUS / TO DO
    Last sync with HEAD on 2003-09-18
 ========================================
 
-Main Window
+========================================
+              DONE
+========================================
 
-	- report functions missing from menus
-	
+Help
+Financial Calculator
+Commodity Editor
+Reconcile
+Transfer
+View Toolbar
+View Statusbar
+Properties Dialog
+
+========================================
+          MISSING MENU ITEMS
+========================================
+
+Main Window
+  File
+    Import
+      OFX
+  Edit
+    Tax Options - Lots 'o errors
+  Reports
+
+Register Window
+  Reports
+
+========================================
+            General Notes
+========================================
+
 Account Tree: - FUNCTIONAL
 
 	- can open/close multiple account tree windows
@@ -28,23 +55,18 @@ Account Tree: - FUNCTIONAL
 	- select an account and run a command
 	- Some menu/toolbar items functional
 
-	- importing qif produces errors
-
 
 Register Core - MINIMALLY FUNCTIONAL
 
-	- All widgets visible
+	- Can navigate, enter transactions, etc.
 
-	- Popup buttons fon't appear.
 	- Insertion point not shown. (fix gnucash-item-edit.c)
 	- Cannot hilight text with mouse (fix gnucash-item-edit.c)
+	- Popup buttons don't appear. (gnucash-item-edit.c ?)
 
 	- The first time it is used, the account popup immediately
 	  selects the first account. After that it functions normally.
 
-Help - WORKING
-
-Financial Calculator - WORKING
 
 Price Editor - MINIMALLY FUNCTIONAL
 
@@ -54,15 +76,6 @@ Price Editor - MINIMALLY FUNCTIONAL
 	- Remove/Edit doesn't work
 	- Get Quotes works.
 	- Close doesn't work.
-
-Commodity Editor - WORKING
-
-	- Enhance by converting to a tree so types can be
-	expanded/collapsed to find data easier
-
-Reconcile - APPEARS TO WORK
-
-Transfer - APPEARS TO WORK
 
 Stock Split Dialog - Mostly done
 	-Fix up accounts presented on "Cash In Lieu" page.  Always
@@ -74,17 +87,27 @@ Find - MINIMALLY FUNCTIONAL
 	  when you select it, but then you change from "Date" to
 	  something else.
 
-
-View Toolbar/Summarybar/Statusbar - NEEDS WORK
+View Summarybar - Summarybar not ported yet. Where should it go?
+	Wouldn't look good between the toolbar and the notebook tabs.
 
 Business functions - Somewhat Functional
 	- Everything works but the New Invoice/Bill code.  The dialog
 	seems to function properly but then gnucash crashes when the
 	dialog is closed.
 
-HBCI - Needs new http support.
 
 
+IMPORTING
+
+  QIF - importing produces errors
+
+  OFX - ???
+
+  HBCI - Needs new http support.
+
+EXPORTING
+
+  COA - ?
 
 ========================================
               ENHANCEMENTS
@@ -96,6 +119,15 @@ HBCI - Needs new http support.
 	b) Register
 	c) Report
 
-2) Support multiple windows and moving plugin pages between windows.
-Support a preference on whether new plugin pages appear in the same or
-a new window.
+2) Support multiple windows and moving plugin pages between windows. -Done.
+
+2a) Support a preference on whether new plugin pages appear in the same
+	or a new window.
+
+3) Enhance Commodity Editor by converting to a tree so types can be
+	expanded/collapsed to find data easier
+
+4) Make account tree columns clickable. Provide in-place editing where
+	feasable.  E.G. Editing the account code or the account name, but
+	not being able to reparent the account.  (Maybe add DND support for
+	this in the long term?)
