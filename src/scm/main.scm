@@ -77,6 +77,7 @@
 (export gnc:make-new-acct-tree-window)  
 (export gnc:free-acct-tree-window)
 (export gnc:main-window-save-state)
+(export gnc:main-window-save-report)
 
 ;; from printing/print-check.scm
 (export make-print-check-format)
@@ -495,6 +496,15 @@ string and 'directories' must be a list of strings."
     (list gnc:window-name-main gnc:menuname-reports gnc:menuname-utility "")
     (lambda ()
       (gnc:main-window-open-report (gnc:make-welcome-report) #f))))
+
+  ;; The "save current report" entry
+  (gnc:add-extension
+   (gnc:make-menu-item
+    (N_ "_Save all current reports")
+    (N_ "Save all the current report in ~/.gnucash/saved-reports-1.8 so that they are accessible as menu entries in the report menu.")
+    (list gnc:window-name-main "_File" "_Export")
+    (lambda ()
+      (gnc:main-window-save-report))))
 
   (gnc:hook-run-danglers gnc:*startup-hook*)
 
