@@ -45,6 +45,7 @@
 #define HH_QUICKSTART        "xacc-quickstart.html"
 #define HH_RECNWIN           "xacc-recnwin.html"
 #define HH_REGWIN            "xacc-regwin.html"
+#define HH_SXEDITOR          "xacc-sxeditor.html" 
 
 /* Dialog windows ***************************************************/
 

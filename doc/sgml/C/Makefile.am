@@ -55,6 +55,7 @@ GNUCASH_SGML_FILES = \
 	xacc-reports.sgml \
 	xacc-scheme.sgml \
 	xacc-stock-price-report.sgml \
+	xacc-sxeditor.sgml \
 	xacc-tax-report.sgml \
 	xacc-toplevel.sgml \
 	xacc-trans-report.sgml \

@@ -70,6 +70,14 @@
 
       <widget>
 	<class>GtkButton</class>
+	<name>help_button</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_HELP</stock_button>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
 	<name>cancel_button</name>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>

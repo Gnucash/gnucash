@@ -46,6 +46,7 @@
 <!entity xaccreports system "xacc-reports.sgml">
 <!entity xaccrepdev system "xacc-repdev.sgml">
 <!entity xaccstockpricereport system "xacc-stock-price-report.sgml">
+<!entity xaccsxeditor system "xacc-sxeditor.sgml">
 <!entity xacctaxreport system "xacc-tax-report.sgml">
 <!entity xacctoplevel system "xacc-toplevel.sgml">
 <!entity xacctransreport system "xacc-trans-report.sgml">
@@ -116,6 +117,7 @@
 &xaccdochack;
 &xaccscheme;
 &xaccstockpricereport;
+&xaccsxeditor;
 &xaccrepdev;
 &xaccwhatsnew;
 &xaccy2k;

@@ -27,6 +27,8 @@
 #include <locale.h>
 #include <time.h>
 
+#include "gnc-ui.h"
+
 #include "FreqSpec.h"
 #include "SchedXaction.h"
 #include "gnc-book.h"
@@ -35,7 +37,7 @@
 #include "gnucash-sheet.h"
 
 #include "window-register.h"
-
+#include "window-help.h"
 #include "dialog-scheduledxaction.h"
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
@@ -168,6 +170,16 @@ editor_close_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
 {
         /* FIXME: destroy ledger. */
         gnc_close_gui_component_by_data( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed );
+}
+
+
+static
+void
+editor_help_button_clicked(GtkButton *b, SchedXactionEditorDialog *sxed)
+{
+        gnc_help_window *help = gnc_help_window_new();
+	gnc_help_window_show_help(help, HH_SXEDITOR, NULL);
+	return;
 }
 
 static
@@ -473,6 +485,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         } widgets[] = {
                 { "ok_button",      "clicked", editor_ok_button_clicked,    NULL },
                 { "cancel_button",  "clicked", editor_close_button_clicked, NULL },
+		{ "help_button", "clicked", editor_help_button_clicked, NULL}, 
 
                 { "rb_enddate",     "toggled", endgroup_rb_toggled,         (gpointer)END_OPTION },
                 { "rb_num_occur",   "toggled", endgroup_rb_toggled,         (gpointer)NUM_OCCUR_OPTION },

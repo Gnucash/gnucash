@@ -1,3 +1,15 @@
+2001-07-24  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* doc/sgml/C/xacc-sxeditor.sgml: New file.
+
+	* doc/sgml/C/Makefile.am, gnucash.sgml: updates for new file
+
+	* src/gnome/glade/sched-xact.glade: add help button
+
+	* src/gnome/dialog-schedxaction.c: add callback for help button.
+
+	* src/gnome/gnc-ui.h: pointer to help file.
+
 2001-07-22  Dave Peticolas  <dave@krondo.com>
 
 	* src/test/gnc-test-stuff.[ch] (get_random_price): new func.
