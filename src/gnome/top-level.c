@@ -31,7 +31,7 @@
 #include "top-level.h"
 #include "MainWindow.h"
 #include "messages.h"
-#include "Transastion.h"
+#include "Transaction.h"
 #include "util.h"
 #include "xtutil.h"
 
