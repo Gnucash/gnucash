@@ -45,13 +45,59 @@
 #include "sixtp-dom-parsers.h"
 #include "gnc-book-p.h"
 #include "gnc-book.h"
+#include "Group.h"
 
 const gchar *book_version_string = "2.0.0";
 
 /* ids */
 #define gnc_book_string "gnc:book"
-#define book_id_string "act:id"
-#define book_slots_string "act:slots"
+#define book_id_string "book:id"
+#define book_slots_string "book:slots"
+
+
+/* ================================================================ */
+
+#ifdef IMPLEMENT_BOOK_DOM_TREES_LATER
+
+static void
+append_group (xmlNodePtr parent, AccountGroup *grp)
+{
+    GList *list;
+    GList *node;
+
+    list = xaccGroupGetAccountList(grp);
+
+    for (node = list; node; node = node->next) 
+    {
+        xmlNodePtr accnode;
+        AccountGroup *newgrp;
+
+        accnode = gnc_account_dom_tree_create((Account*)(node->data));
+        xmlAddChild (parent, accnode);
+
+        newgrp = xaccAccountGetChildren((Account*)(node->data));
+
+        if (newgrp)
+        {
+            append_group(accnode, newgrp);
+        }
+    }
+}
+
+static gboolean 
+traverse_txns (Transaction *txn, gpointer data)
+{
+    xmlNodePtr node;
+    xmlNodePtr parent = data;
+
+    node = gnc_transaction_dom_tree_create(txn);
+    xmlAddChild (parent, node);
+
+    return TRUE;
+}
+#endif
+
+/* ================================================================ */
 
 xmlNodePtr
 gnc_book_dom_tree_create(GNCBook *book)
@@ -73,10 +119,58 @@ gnc_book_dom_tree_create(GNCBook *book)
         }
     }
 
+#ifdef IMPLEMENT_BOOK_DOM_TREES_LATER
+    /* theoretically, we should be adding all the below to the book
+     * but in fact, there's enough brain damage in the code already 
+     * that we are only going to hand-edit the file at a higher layer.
+     * And that's OK, since its probably a performance boost anyway.
+     */
+    xmlAddChild(ret, gnc_commodity_dom_tree_create (gnc_book_get_commodity_table(book)));
+    xmlAddChild(ret, gnc_pricedb_dom_tree_create (gnc_book_get_pricedb(book)));
+    append_group (ret, gnc_book_get_group(book));
+
+    xaccGroupForEachTransaction (gnc_book_get_group(book),
+                                traverse_txns, ret);
+
+    xmlAddChild(ret, gnc_freqSpec_dom_tree_create (book));
+
+    /* xxx FIXME hack alert how are we going to handle 
+     *  gnc_book_get_template_group handled ???   */
+    xmlAddChild(ret, gnc_schedXaction_dom_tree_create (gnc_book_get_schedxactions(book)));
+
+#endif 
+
     return ret;
 }
 
-/***********************************************************************/
+/* ================================================================ */
+/* same as above, but we write out directly.  Only handle the guid 
+ * and slots, everythign else is handled elsewehere */
+
+void
+write_book_parts(FILE *out, GNCBook *book)
+{
+    xmlNodePtr domnode;
+
+    domnode = guid_to_dom_tree(book_id_string, gnc_book_get_guid(book));
+    xmlElemDump(out, NULL, domnode);
+    fprintf(out, "\n");
+    xmlFreeNode (domnode);
+
+    if(gnc_book_get_slots(book))
+    {
+        xmlNodePtr kvpnode = kvp_frame_to_dom_tree(book_slots_string,
+                                                   gnc_book_get_slots(book));
+        if(kvpnode)
+        {
+            xmlElemDump(out, NULL, kvpnode);
+            fprintf(out, "\n");
+            xmlFreeNode (kvpnode);
+        }
+    }
+}
+
+/* ================================================================ */
 
 static gboolean
 book_id_handler (xmlNodePtr node, gpointer book_pdata)
