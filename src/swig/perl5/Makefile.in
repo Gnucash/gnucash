@@ -33,7 +33,9 @@ INCLPATH = \
 
 # set -Dbool=char because the perl headers need this
 # use -fpic so that we can create loadable module
-CFLAGS   = @CFLAGS@  ${INCLPATH} -Dbool=char -fpic -Wno-unused
+CFLAGS := @CFLAGS@  ${INCLPATH} -Dbool=char -fpic -Wno-unused
+CFLAGS := $(filter-out -Werror,${CFLAGS})
+
 LDFLAGS  = @LDFLAGS@
 
 SWIG_FLAGS := -stat -perl5 \
@@ -95,6 +97,7 @@ gnucash-engine-perl5_wrap.c: gnucash.engine.i
 	${SWIG} ${SWIG_FLAGS} -o $@ $< 
 #	${PERL} -pi -e 's/^void gnucash\(\)/void gnucash_swig_init\(\)/' $@
 TRASH += gnucash-engine-perl5_wrap.c
+TRASH += gnucash.pm gnucash.so
 
 # gnucash-all-guile_wrap.c: gnucash.all.i
 # 	${SWIG} ${SWIG_FLAGS} -o $@ $< 
