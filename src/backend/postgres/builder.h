@@ -41,6 +41,8 @@
 #include "date.h"
 #include "guid.h"
 
+#define SQL_DBL_FMT "%24.18g"
+
 typedef enum {
    SQL_UPDATE = 'm',  /* m == modify */
    SQL_INSERT = 'a',  /* a == add */

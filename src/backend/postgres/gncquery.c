@@ -41,6 +41,7 @@
 #include <glib.h>
 #include <string.h>
 
+#include "builder.h"
 #include "escape.h"
 #include "gnc-engine-util.h"
 #include "gncquery.h"
@@ -479,6 +480,248 @@ sql_sort_need_entry (Query *q)
 }
 
 /* =========================================================== */
+static const char *
+kvp_table_name (kvp_value_t value_t)
+{
+  switch (value_t)
+  {
+    case KVP_TYPE_GINT64:
+      return "gnckvpvalue_int64";
+
+    case KVP_TYPE_DOUBLE:
+      return "gnckvpvalue_dbl";
+
+    case KVP_TYPE_NUMERIC:
+      return "gnckvpvalue_numeric";
+
+    case KVP_TYPE_STRING:
+      return "gnckvpvalue_str";
+
+    case KVP_TYPE_GUID:
+      return "gnckvpvalue_guid";
+
+    default:
+      PWARN ("kvp value not supported");
+      return NULL;
+  }
+}
+
+static char *
+kvp_path_name (GSList *path)
+{
+  GString *s = g_string_new (NULL);
+  char *name;
+
+  for ( ; path; path = path->next)
+  {
+    g_string_append_c (s, '/');
+    g_string_append (s, path->data);
+  }
+
+  name = s->str;
+  g_string_free (s, FALSE);
+
+  return name;
+}
+
+static const char *
+kvp_op_name (kvp_match_t how)
+{
+  switch (how)
+  {
+    case KVP_MATCH_LT:
+      return " < ";
+
+    case KVP_MATCH_LTE:
+      return " <= ";
+
+    case KVP_MATCH_EQ:
+      return " = ";
+
+    case KVP_MATCH_GTE:
+      return " >= ";
+
+    case KVP_MATCH_GT:
+      return " > ";
+
+    default:
+      return NULL;
+  }
+}
+
+static char *
+kvp_left_operand (kvp_value *value)
+{
+  kvp_value_t value_t;
+  const char *kvptable;
+  char *operand;
+
+  g_return_val_if_fail (value, NULL);
+
+  value_t = kvp_value_get_type (value);
+
+  kvptable = kvp_table_name (value_t);
+
+  switch (value_t)
+  {
+    case KVP_TYPE_GINT64:
+    case KVP_TYPE_DOUBLE:
+    case KVP_TYPE_GUID:
+    case KVP_TYPE_STRING:
+      return g_strdup_printf ("%s.data", kvptable);
+
+    case KVP_TYPE_NUMERIC: {
+      gnc_numeric n = kvp_value_get_numeric (value);
+      return g_strdup_printf ("(%lld::int8 * %s.num::int8)",
+                              (long long int) n.denom, kvptable);
+    }
+
+    default:
+      return NULL;
+  }
+}
+
+static char *
+kvp_right_operand (sqlQuery *sq, kvp_value *value)
+{
+  kvp_value_t value_t;
+  const char *kvptable;
+  char *operand;
+
+  g_return_val_if_fail (value, NULL);
+
+  value_t = kvp_value_get_type (value);
+
+  kvptable = kvp_table_name (value_t);
+
+  switch (value_t)
+  {
+    case KVP_TYPE_GINT64:
+      return g_strdup_printf ("%lld",
+                              (long long int) kvp_value_get_gint64 (value));
+
+    case KVP_TYPE_DOUBLE:
+      return g_strdup_printf (SQL_DBL_FMT, kvp_value_get_double (value));
+
+    case KVP_TYPE_GUID: {
+      char *guid = guid_to_string (kvp_value_get_guid (value));
+      char *s = g_strdup_printf ("'%s'", guid);
+      g_free (guid);
+      return s;
+    }
+
+    case KVP_TYPE_STRING: {
+      const char *s = sqlEscapeString (sq->escape,
+                                       kvp_value_get_string (value));
+      return g_strdup_printf ("'%s'", s);
+    }
+
+    case KVP_TYPE_NUMERIC: {
+      gnc_numeric n = kvp_value_get_numeric (value);
+      return g_strdup_printf ("(%lld::int8 * %s.denom::int8)",
+                              (long long int) n.num, kvptable);
+    }
+
+    default:
+      return NULL;
+  }
+}
+
+static void
+add_kvp_clause (sqlQuery *sq, const char *kvptable, const char *entity_table,
+                const char *left, const char *op, const char *right)
+{
+  sq->pq = stpcpy (sq->pq, " ( ");
+
+  sq->pq = stpcpy (sq->pq, "gncPathCache.ipath = ");
+  sq->pq = stpcpy (sq->pq, kvptable);
+  sq->pq = stpcpy (sq->pq, ".ipath");
+
+  sq->pq = stpcpy (sq->pq, " AND ");
+
+  sq->pq = stpcpy (sq->pq, entity_table);
+  sq->pq = stpcpy (sq->pq, ".iguid");
+  sq->pq = stpcpy (sq->pq, " = ");
+  sq->pq = stpcpy (sq->pq, kvptable);
+  sq->pq = stpcpy (sq->pq, ".iguid");
+
+  sq->pq = stpcpy (sq->pq, " AND ");
+
+  sq->pq = stpcpy (sq->pq, left);
+  sq->pq = stpcpy (sq->pq, op);
+  sq->pq = stpcpy (sq->pq, right);
+
+  sq->pq = stpcpy (sq->pq, " ) ");
+}
+
+static void
+sqlQuery_kvp_build (sqlQuery *sq, KVPPredicateData *kpd)
+{
+  kvp_value_t value_t;
+  const char *kvptable;
+  const char *op;
+  GList *list;
+  GList *node;
+  char *right;
+  char *left;
+  char *path;
+
+  g_return_if_fail (sq && kpd && kpd->path && kpd->value);
+
+  if (!(kpd->where & (KVP_MATCH_SPLIT | KVP_MATCH_TRANS | KVP_MATCH_ACCOUNT)))
+    return;
+
+  value_t = kvp_value_get_type (kpd->value);
+
+  if (value_t == KVP_TYPE_GUID && kpd->how != KVP_MATCH_EQ)
+  {
+    PWARN ("guid non-equality comparison not supported");
+    return;
+  }
+
+  kvptable = kvp_table_name (value_t);
+  if (!kvptable)
+    return;
+
+  path = kvp_path_name (kpd->path);
+  op = kvp_op_name (kpd->how);
+  left = kvp_left_operand (kpd->value);
+  right = kvp_right_operand (sq, kpd->value);
+
+  list = NULL;
+  if (kpd->where & KVP_MATCH_SPLIT)
+    list = g_list_prepend (list, "gncEntry");
+  if (kpd->where & KVP_MATCH_TRANS)
+    list = g_list_prepend (list, "gncTransaction");
+  if (kpd->where & KVP_MATCH_ACCOUNT)
+    list = g_list_prepend (list, "gncAccount");
+
+  if (!kpd->sense)
+    sq->pq = stpcpy (sq->pq, "NOT ");
+
+  sq->pq = stpcpy (sq->pq,
+                   " EXISTS ( SELECT true "
+                   "          WHERE ");
+
+  sq->pq = stpcpy (sq->pq, "gncPathCache.path = '");
+  sq->pq = stpcpy (sq->pq, sqlEscapeString (sq->escape, path));
+  sq->pq = stpcpy (sq->pq, "'");
+
+  for (node = list; node; node = node->next)
+  {
+    sq->pq = stpcpy (sq->pq, " AND ");
+    add_kvp_clause (sq, kvptable, node->data, left, op, right);
+  }
+
+  sq->pq = stpcpy (sq->pq, " ) ");
+
+  g_free (path);
+  g_free (left);
+  g_free (right);
+  g_list_free (list);
+}
+
+/* =========================================================== */
 
 const char *
 sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
@@ -486,22 +729,20 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
    GList *il, *jl, *qterms, *andterms;
    QueryTerm *qt;
    PredicateData *pd;
+   GList *tables = NULL;
    int more_or = 0;
    int more_and = 0;
    int max_rows;
-   gboolean need_account = FALSE;
    gboolean need_account_commodity = FALSE;
    gboolean need_trans_commodity = FALSE;
+   gboolean need_account = FALSE;
    gboolean need_entry = FALSE;
    sort_type_t sorter;
 
    if (!sq || !q || !session) return NULL;
 
-   /* determine whther the query will need to reference the account
-    * or commodity tables.  If it doesn't need them, then we can gain
-    * a significant performance improvement by not specifying them.
-    * The exact reason why this affects performance is a bit of a 
-    * mystery to me ... */
+   /* determine whether the query will need to reference certain
+    * tables. */
    qterms = xaccQueryGetTerms (q);
 
    for (il=qterms; il; il=il->next)
@@ -513,6 +754,7 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
       {
          qt = (QueryTerm *)jl->data;
          pd = &qt->data;
+
          switch (pd->base.term_type) 
          {
             case PR_BALANCE:
@@ -521,6 +763,7 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
             case PR_MISC:
             case PR_NUM:
                break;
+
             case PR_ACCOUNT: 
             case PR_ACTION:
             case PR_CLEARED:
@@ -528,40 +771,42 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
             case PR_PRICE: 
                need_entry = TRUE;
                break;
+
             case PR_AMOUNT:
                need_entry = TRUE;
                need_trans_commodity = TRUE;
                break;
+
             case PR_GUID:
-               switch (xaccGUIDType (&pd->guid.guid, session))
+               if (!guid_equal (&pd->guid.guid, xaccGUIDNULL ()))
                {
-                  case GNC_ID_ACCOUNT:
-                     need_account = TRUE;
-                     break;
-                  case GNC_ID_SPLIT:
-                     need_entry = TRUE;
-                     break;
-                  case GNC_ID_NONE:
-                  case GNC_ID_NULL:
-                  case GNC_ID_TRANS:
-                  default:
-                     break;
+                 need_account = TRUE;
+                 need_entry = TRUE;
                }
                break;
+
+            case PR_KVP:
+              if (pd->kvp.where & KVP_MATCH_SPLIT)
+                need_entry = TRUE;
+              if (pd->kvp.where & KVP_MATCH_ACCOUNT)
+                need_account = TRUE;
+              break;
+
             case PR_SHRS: 
                need_entry = TRUE;
                need_account_commodity = TRUE;
                need_account = TRUE;
                break;
+
             default:
                break;
          }
       }
    }
 
-   /* determine whether the requested sort order needs this table */
-   need_account = need_account || sql_sort_need_account (q);
+   /* determine whether the requested sort order needs these tables */
    need_entry = need_entry || sql_sort_need_entry (q);
+   need_account = need_account || sql_sort_need_account (q);
 
    /* reset the buffer pointers */
    sq->pq = sq->q_base;
@@ -573,33 +818,42 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
    sq->pq = sql_sort_distinct (sq->pq, xaccQueryGetSecondarySortOrder(q));
    sq->pq = sql_sort_distinct (sq->pq, xaccQueryGetTertiarySortOrder(q));
 
-   sq->pq = stpcpy(sq->pq, "  FROM gncTransaction");
-
-   /* add additional search tables, as needed for performance */
-   if (need_account)
-   {
-      sq->pq = stpcpy(sq->pq, ", gncAccount");
-   }
+   /* add needed explicit tables. postgres can figure out the rest. */
    if (need_account_commodity)
-   {
-      sq->pq = stpcpy(sq->pq, ", gncCommodity account_com");
-   }
+     tables = g_list_prepend (tables, "gncCommodity account_com");
+
    if (need_trans_commodity)
+     tables = g_list_prepend (tables, "gncCommodity trans_com");
+
+   if (tables)
    {
-      sq->pq = stpcpy(sq->pq, ", gncCommodity trans_com");
+     GList *node;
+
+     sq->pq = stpcpy(sq->pq, " FROM ");
+
+     for (node = tables; node; node = node->next)
+     {
+       sq->pq = stpcpy(sq->pq, node->data);
+       if (node->next)
+         sq->pq = stpcpy(sq->pq, ", ");
+     }
    }
-   if (need_entry)
-   {
-      sq->pq = stpcpy(sq->pq, ", gncEntry");
-   }
+
    sq->pq = stpcpy(sq->pq, " WHERE ");
-   if (need_entry)
+
+   if (need_entry || need_account)
    {
       sq->pq = stpcpy(sq->pq, 
                       " gncEntry.transGuid = gncTransaction.transGuid AND ");
    }
-   sq->pq = stpcpy(sq->pq, "  ( ");
 
+   if (need_account)
+   {
+      sq->pq = stpcpy(sq->pq, 
+                      " gncEntry.accountGuid = gncAccount.accountGuid AND ");
+   }
+
+   sq->pq = stpcpy(sq->pq, "  ( ");
 
    /* qterms is a list of lists: outer list is a set of terms 
     * that must be OR'ed together, inner lists are a set of terms 
@@ -631,6 +885,9 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
          pd = &qt->data;
          switch (pd->base.term_type) 
          {
+            /* FIXME: this doesn't correctly implement ACCT_MATCH_ALL or
+             *        ACCT_MATCH_ANY for account lists with more than one
+             *        account. */
             case PR_ACCOUNT: 
             {
                int got_more = 0;
@@ -722,7 +979,8 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
                if (pd->date.use_start)
                {
                   sq->pq = stpcpy(sq->pq, "gncTransaction.date_posted >= '");
-                  sq->pq = gnc_timespec_to_iso8601_buff (pd->date.start, sq->pq);
+                  sq->pq = gnc_timespec_to_iso8601_buff (pd->date.start,
+                                                         sq->pq);
                   sq->pq = stpcpy(sq->pq, "' ");
                }
                if (pd->date.use_end)
@@ -756,41 +1014,41 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
                PINFO("term is PR_GUID");
                if (0 == pd->guid.sense)
                {
-                  sq->pq = stpcpy (sq->pq, "NOT (");
-               }
-               switch (xaccGUIDType (&pd->guid.guid, session))
-               {
-                  case GNC_ID_NONE:
-                  case GNC_ID_NULL:
-                  default:
-                     sq->pq = stpcpy(sq->pq, "FALSE ");
-                     break;
-              
-                  case GNC_ID_ACCOUNT:
-                     sq->pq = stpcpy(sq->pq, "gncAccount.accountGuid = '");
-                     sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
-                     sq->pq = stpcpy(sq->pq, "' ");
-                     break;
-              
-                  case GNC_ID_TRANS:
-                     sq->pq = stpcpy(sq->pq, "gncTransaction.transGuid = '");
-                     sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
-                     sq->pq = stpcpy(sq->pq, "' ");
-                     break;
-              
-                  case GNC_ID_SPLIT:
-                     sq->pq = stpcpy(sq->pq, "gncEntry.entryGuid = '");
-                     sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
-                     sq->pq = stpcpy(sq->pq, "' ");
-                     break;
+                  sq->pq = stpcpy (sq->pq, "NOT ");
                }
 
-               if (0 == pd->guid.sense)
+               sq->pq = stpcpy (sq->pq, " (");
+
+               if (guid_equal (&pd->guid.guid, xaccGUIDNULL ()))
                {
-                  sq->pq = stpcpy (sq->pq, ") ");
+                 sq->pq = stpcpy(sq->pq, "FALSE ");
                }
+               else
+               {
+                 sq->pq = stpcpy(sq->pq, "gncAccount.accountGuid = '");
+                 sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
+                 sq->pq = stpcpy(sq->pq, "' ");
+                 sq->pq = stpcpy(sq->pq, " OR ");
+
+                 sq->pq = stpcpy(sq->pq, "gncTransaction.transGuid = '");
+                 sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
+                 sq->pq = stpcpy(sq->pq, "' ");
+                 sq->pq = stpcpy(sq->pq, " OR ");
+
+                 sq->pq = stpcpy(sq->pq, "gncEntry.entryGuid = '");
+                 sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
+                 sq->pq = stpcpy(sq->pq, "' ");
+               }
+
+               sq->pq = stpcpy (sq->pq, ") ");
+
                break;
             }
+
+            case PR_KVP:
+              PINFO("term is PR_KVP");
+              sqlQuery_kvp_build (sq, &pd->kvp);
+              break;
 
             case PR_MEMO:
                PINFO("term is PR_MEMO");
@@ -854,7 +1112,6 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
             case PR_SHRS: {
                PINFO("term is PR_SHRS");
                sq->pq = stpcpy(sq->pq, 
-                     "gncEntry.accountGuid = gncAccount.accountGuid AND "
                      "gncAccount.commodity = account_com.commodity AND ");
                AMOUNT_TERM ("gncEntry.amount","account_com");
                break;
@@ -871,7 +1128,7 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
       if (il->data) sq->pq = stpcpy(sq->pq, ")");
    }
 
-   sq->pq = stpcpy(sq->pq, ")");
+   sq->pq = stpcpy(sq->pq, ") ");
 
    /* ---------------------------------------------------- */
    /* implement sorting order as well; bad sorts lead to bad data
@@ -881,25 +1138,28 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
    if (BY_NONE != sorter)
    {
       sq->pq = stpcpy(sq->pq, "ORDER BY ");
-      sq->pq = sql_sort_order (sq->pq, sorter, xaccQueryGetSortPrimaryIncreasing (q));
+      sq->pq = sql_sort_order (sq->pq, sorter,
+                               xaccQueryGetSortPrimaryIncreasing (q));
 
       sorter = xaccQueryGetSecondarySortOrder(q);
       if (BY_NONE != sorter)
       {
          sq->pq = stpcpy(sq->pq, ", ");
-         sq->pq = sql_sort_order (sq->pq, sorter, xaccQueryGetSortSecondaryIncreasing (q));
+         sq->pq = sql_sort_order (sq->pq, sorter,
+                                  xaccQueryGetSortSecondaryIncreasing (q));
 
          sorter = xaccQueryGetTertiarySortOrder(q);
          if (BY_NONE != sorter)
          {   
             sq->pq = stpcpy(sq->pq, ", ");
-            sq->pq = sql_sort_order (sq->pq, sorter, xaccQueryGetSortTertiaryIncreasing (q));
+            sq->pq = sql_sort_order (sq->pq, sorter,
+                                     xaccQueryGetSortTertiaryIncreasing (q));
          }
       }
    }
 
    /* ---------------------------------------------------- */
-   /* limit the query result to a finite numbe of rows */
+   /* limit the query result to a finite number of rows */
    max_rows = xaccQueryGetMaxSplits (q);
    if (0 <= max_rows)
    {
@@ -914,4 +1174,3 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
 
 
 /* ========================== END OF FILE ==================== */
-

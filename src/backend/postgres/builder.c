@@ -258,7 +258,7 @@ void
 sqlBuild_Set_Double (sqlBuilder *b, const char *tag, double flt)
 {
   char buf[120];
-  snprintf (buf, 120, "%24.18g", flt);
+  snprintf (buf, 120, SQL_DBL_FMT, flt);
   sqlBuild_Set_Str (b, tag, buf);
 }
 

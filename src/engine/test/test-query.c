@@ -22,7 +22,7 @@ test_trans_query (Transaction *trans, gpointer data)
   book = gnc_session_get_book (session);
   group = gnc_book_get_group (book);
 
-  q = make_trans_query (trans);
+  q = make_trans_query (trans, ALL_QT);
   xaccQuerySetGroup (q, group);
 
   list = xaccQueryGetTransactions (q, QUERY_MATCH_ANY);

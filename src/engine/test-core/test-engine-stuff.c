@@ -1548,82 +1548,116 @@ trans_query_include_price (gboolean include_price_in)
   include_price = include_price_in;
 }
 
+TestQueryTypes
+get_random_query_type (void)
+{
+  switch (get_random_int_in_range (0, 4))
+  {
+    case 0: return SIMPLE_QT;
+    case 1: return SPLIT_KVP_QT;
+    case 2: return TRANS_KVP_QT;
+    case 3: return ACCOUNT_KVP_QT;
+    case 4: return GUID_QT;
+    default: return SIMPLE_QT;
+  }
+}
+
 Query *
-make_trans_query (Transaction *trans)
+make_trans_query (Transaction *trans, TestQueryTypes query_types)
 {
   Account *a;
   double d;
   Query *q;
   Split *s;
 
+  if (query_types == RANDOM_QT)
+    query_types = get_random_query_type ();
+
   q = xaccMallocQuery ();
 
   s = xaccTransGetSplit (trans, 0);
   a = xaccSplitGetAccount (s);
 
-  xaccQueryAddSingleAccountMatch (q, xaccSplitGetAccount (s), QUERY_AND);
-
-  xaccQueryAddDescriptionMatch (q, xaccTransGetDescription (trans),
-                                TRUE, FALSE, QUERY_AND);
-
-  xaccQueryAddNumberMatch (q, xaccTransGetNum (trans), TRUE, FALSE, QUERY_AND);
-
-  xaccQueryAddActionMatch (q, xaccSplitGetAction (s), TRUE, FALSE, QUERY_AND);
-
-  d = gnc_numeric_to_double (xaccSplitGetValue (s));
-  DxaccQueryAddAmountMatch (q, d, AMT_SGN_MATCH_EITHER,
-                            AMT_MATCH_EXACTLY, QUERY_AND);
-
-  d = gnc_numeric_to_double (xaccSplitGetAmount (s));
-  DxaccQueryAddSharesMatch (q, d, AMT_MATCH_EXACTLY, QUERY_AND);
-
-  if (include_price)
+  if (query_types & SIMPLE_QT)
   {
-    d = gnc_numeric_to_double (xaccSplitGetSharePrice (s));
-    DxaccQueryAddSharePriceMatch (q, d, AMT_MATCH_EXACTLY, QUERY_AND);
-  }
+    xaccQueryAddSingleAccountMatch (q, xaccSplitGetAccount (s), QUERY_AND);
 
-  {
-    Timespec ts;
+    xaccQueryAddDescriptionMatch (q, xaccTransGetDescription (trans),
+                                  TRUE, FALSE, QUERY_AND);
 
-    xaccTransGetDatePostedTS (trans, &ts);
-    xaccQueryAddDateMatchTS (q, TRUE, ts, TRUE, ts, QUERY_AND);
-  }
+    xaccQueryAddNumberMatch (q, xaccTransGetNum (trans),
+                             TRUE, FALSE, QUERY_AND);
 
-  xaccQueryAddMemoMatch (q, xaccSplitGetMemo (s), TRUE, FALSE, QUERY_AND);
+    xaccQueryAddActionMatch (q, xaccSplitGetAction (s),
+                             TRUE, FALSE, QUERY_AND);
 
-  {
-    cleared_match_t how;
+    d = gnc_numeric_to_double (xaccSplitGetValue (s));
+    DxaccQueryAddAmountMatch (q, d, AMT_SGN_MATCH_EITHER,
+                              AMT_MATCH_EXACTLY, QUERY_AND);
 
-    switch (xaccSplitGetReconcile (s))
+    d = gnc_numeric_to_double (xaccSplitGetAmount (s));
+    DxaccQueryAddSharesMatch (q, d, AMT_MATCH_EXACTLY, QUERY_AND);
+
+    if (include_price)
     {
-      case NREC:
-        how = CLEARED_NO;
-        break;
-      case CREC:
-        how = CLEARED_CLEARED;
-        break;
-      case YREC:
-        how = CLEARED_RECONCILED;
-        break;
-      case FREC:
-        how = CLEARED_FROZEN;
-        break;
-      case VREC:
-        how = CLEARED_VOIDED;
-        break;
-      default:
-        failure ("bad reconcile flag");
-        xaccFreeQuery (q);
-        return NULL;
+      d = gnc_numeric_to_double (xaccSplitGetSharePrice (s));
+      DxaccQueryAddSharePriceMatch (q, d, AMT_MATCH_EXACTLY, QUERY_AND);
     }
 
-    xaccQueryAddClearedMatch (q, how, QUERY_AND);
+    {
+      Timespec ts;
+
+      xaccTransGetDatePostedTS (trans, &ts);
+      xaccQueryAddDateMatchTS (q, TRUE, ts, TRUE, ts, QUERY_AND);
+    }
+
+    xaccQueryAddMemoMatch (q, xaccSplitGetMemo (s), TRUE, FALSE, QUERY_AND);
+
+    {
+      cleared_match_t how;
+
+      switch (xaccSplitGetReconcile (s))
+      {
+        case NREC:
+          how = CLEARED_NO;
+          break;
+        case CREC:
+          how = CLEARED_CLEARED;
+          break;
+        case YREC:
+          how = CLEARED_RECONCILED;
+          break;
+        case FREC:
+          how = CLEARED_FROZEN;
+          break;
+        case VREC:
+          how = CLEARED_VOIDED;
+          break;
+        default:
+          failure ("bad reconcile flag");
+          xaccFreeQuery (q);
+          return NULL;
+      }
+
+      xaccQueryAddClearedMatch (q, how, QUERY_AND);
+    }
   }
 
-  add_kvp_query (q, xaccSplitGetSlots (s), KVP_MATCH_SPLIT);
-  add_kvp_query (q, xaccTransGetSlots (trans), KVP_MATCH_TRANS);
-  add_kvp_query (q, xaccAccountGetSlots (a), KVP_MATCH_ACCOUNT);
+  if (query_types & GUID_QT)
+  {
+    xaccQueryAddGUIDMatch (q, xaccSplitGetGUID (s), QUERY_AND);
+    xaccQueryAddGUIDMatch (q, xaccTransGetGUID (trans), QUERY_AND);
+    xaccQueryAddGUIDMatch (q, xaccAccountGetGUID (a), QUERY_AND);
+  }
+
+  if (query_types & SPLIT_KVP_QT)
+    add_kvp_query (q, xaccSplitGetSlots (s), KVP_MATCH_SPLIT);
+
+  if (query_types & TRANS_KVP_QT)
+    add_kvp_query (q, xaccTransGetSlots (trans), KVP_MATCH_TRANS);
+
+  if (query_types & ACCOUNT_KVP_QT)
+    add_kvp_query (q, xaccAccountGetSlots (a), KVP_MATCH_ACCOUNT);
 
   return q;
 }

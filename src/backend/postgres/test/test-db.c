@@ -1,16 +1,19 @@
 #include <glib.h>
 #include <guile/gh.h>
+#include <libpq-fe.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 
 #include "Backend.h"
+#include "PostgresBackend.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-module.h"
-#include "gnc-session.h"
+#include "gnc-session-p.h"
+#include "gncquery.h"
 
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
@@ -407,6 +410,7 @@ test_updates (GNCSession *session, const char *db_name, const char *mode,
 
   gnc_session_destroy (session_2);
   g_free (filename);
+
   return TRUE;
 }
 
@@ -446,6 +450,68 @@ typedef struct
   gint total;
 } QueryTestData;
 
+static Query *
+make_little_trans_query (Transaction *trans)
+{
+  Query *q;
+
+  q = xaccMallocQuery ();
+
+  xaccQueryAddDescriptionMatch (q, xaccTransGetDescription (trans),
+                                TRUE, FALSE, QUERY_AND);
+
+  return q;
+}
+
+static gboolean
+test_raw_query (GNCSession *session, Query *q)
+{
+  const char *sql_query_string;
+  PGresult *result;
+  PGBackend *be;
+  sqlQuery *sq;
+  gboolean ok;
+
+  g_return_val_if_fail (session && q, FALSE);
+
+  be = (PGBackend *) session->backend;
+
+  sq = sqlQuery_new();
+  sql_query_string = sqlQuery_build (sq, q, session);
+
+#if 0
+  fputs (sql_query_string, stderr);
+  fputs ("\n", stderr);
+#endif
+
+  result = PQexec (be->connection, sql_query_string);
+
+  ok = (result && PQresultStatus (result) == PGRES_TUPLES_OK);
+  if (!ok)
+  {
+    failure ("raw query failed");
+  }
+  else
+  {
+    ok = ok && (PQntuples (result) == 1);
+    if (!ok)
+      failure_args ("number returned test",
+                    __FILE__, __LINE__,
+                    "query returned %d tuples",
+                    PQntuples (result));
+  }
+
+  if (ok)
+  {
+    success ("raw query succeeded");
+  }
+
+  PQclear (result);
+  sql_Query_destroy (sq);
+
+  return ok;
+}
+
 static gboolean
 test_trans_query (Transaction *trans, gpointer data)
 {
@@ -483,8 +549,14 @@ test_trans_query (Transaction *trans, gpointer data)
   book = gnc_session_get_book (session);
   group = gnc_book_get_group (book);
 
-  q = make_trans_query (trans);
+  q = make_trans_query (trans, get_random_query_type () | GUID_QT);
   xaccQuerySetGroup (q, group);
+
+  if (!test_raw_query (session, q))
+  {
+    failure ("raw query failed");
+    return FALSE;
+  }
 
   list = xaccQueryGetTransactions (q, QUERY_MATCH_ANY);
   if (g_list_length (list) != 1)

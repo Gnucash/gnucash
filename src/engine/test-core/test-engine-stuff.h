@@ -51,8 +51,20 @@ Transaction* get_random_transaction_with_currency(GNCSession *session,
 gnc_commodity* get_random_commodity(GNCSession *session);
 const char *get_random_commodity_namespace(void);
 
-Query* get_random_query(void);
-Query * make_trans_query (Transaction *trans);
+typedef enum
+{
+  RANDOM_QT      = 0,
+  SIMPLE_QT      = 1 << 0,
+  SPLIT_KVP_QT   = 1 << 1,
+  TRANS_KVP_QT   = 1 << 2,
+  ACCOUNT_KVP_QT = 1 << 3,
+  GUID_QT        = 1 << 4,
+  ALL_QT         = (1 << 8) - 1
+} TestQueryTypes;
+
+Query * get_random_query(void);
+Query * make_trans_query (Transaction *trans, TestQueryTypes query_types);
+TestQueryTypes get_random_query_type (void);
 void trans_query_include_price (gboolean include_amounts);
 
 GNCBook * get_random_book (GNCSession *session);
