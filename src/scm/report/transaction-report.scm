@@ -253,9 +253,9 @@
 	(lambda (split) 
 	  (gnc:transaction-get-date-posted (gnc:split-get-parent split)))
 	(if ascending? 
-	    (lambda (a b) (< (car a) (car b)))
-	    (lambda (a b) (> (car a) (car b))))
-	(lambda (a b) (= (car a) (car b)))
+	    gnc:timepair-later-date
+	    gnc:timepair-earlier-date)
+	gnc:timepair-eq-date
 	#f
 	#f))
 
@@ -264,37 +264,37 @@
 	(lambda (split) 
 	  (gnc:transaction-get-date-posted (gnc:split-get-parent split)))
 	(if ascending? 
-	    (lambda (a b) (< (car a) (car b)))
-	    (lambda (a b) (> (car a) (car b))))
-	(lambda (a b) (= (car a) (car b)))
+	    gnc:timepair-later-date
+	    gnc:timepair-earlier-date)
+	gnc:timepair-eq-date
 	(lambda (a b)
-	  (= (gnc:date-get-month (localtime (car a)))
-	     (gnc:date-get-month (localtime (car b)))))
+	  (= (gnc:timepair-get-month a)
+	     (gnc:timepair-get-month b)))
 	(lambda (date) 
-	  (gnc:date-get-month-string (localtime (car date))))))
+	  (gnc:date-get-month-string (localtime (gnc:timepair->secs date))))))
 
       ((date-yearly)
        (make-report-sort-spec
 	(lambda (split) 
 	  (gnc:transaction-get-date-posted (gnc:split-get-parent split)))
 	(if ascending? 
-	    (lambda (a b) (< (car a) (car b)))
-	    (lambda (a b) (> (car a) (car b))))
-	(lambda (a b) (= (car a) (car b)))
+	    gnc:timepair-later-date
+	    gnc:timepair-earlier-date)
+	gnc:timepair-eq-date
 	(lambda (a b)
-	  (= (gnc:date-get-year (localtime (car a)))
-	     (gnc:date-get-year (localtime (car b)))))
+	  (= (gnc:timepair-get-year a)
+	     (gnc:timepair-get-year b)))
 	(lambda (date) 
-	  (number->string (gnc:date-get-year (localtime (car date)))))))
+	  (number->string (gnc:timepair-get-year date)))))
 
       ((time)
        (make-report-sort-spec
 	(lambda (split) 
 	  (gnc:transaction-get-date-entered (gnc:split-get-parent split)))
 	(if ascending?
-	    (lambda (a b) (< (car a) (car b)))
-	    (lambda (a b) (> (car a) (car b))))
-	(lambda (a b) (and (= (car a) (car b)) (= (cdr a) (cdr b))))
+	    gnc:timepair-later
+	    gnc:timepair-earlier)
+	gnc:timepair-eq
 	#f
 	#f))
 
@@ -377,15 +377,14 @@
 
   ;; returns a predicate that returns true only if a split is
   ;; between early-date and late-date
-  (define (split-report-make-date-filter-predicate begin-date-secs
-                                                   end-date-secs)
+  (define (split-report-make-date-filter-predicate begin-date-tp
+                                                   end-date-tp)
     (lambda (split) 
-      (let ((date 
-	     (car (gnc:timepair-canonical-day-time 
-		   (gnc:transaction-get-date-posted
-		    (gnc:split-get-parent split))))))
-	(and (>= date begin-date-secs)
-	     (<= date end-date-secs)))))
+      (let ((tp
+	     (gnc:transaction-get-date-posted
+	      (gnc:split-get-parent split))))
+	(and (gnc:timepair-ge-date tp begin-date-tp)
+	     (gnc:timepair-le-date tp end-date-tp)))))
 
   ;; register a configuration option for the transaction report
   (define (trep-options-generator)
@@ -600,9 +599,9 @@
 					       "Style"))
            (accounts (gnc:option-value tr-report-account-op))
            (date-filter-pred (split-report-make-date-filter-predicate
-                              (car (gnc:option-value begindate))
-                              (car (gnc:timepair-end-day-time
-                                    (gnc:option-value enddate)))))
+                              (gnc:option-value begindate)
+                              (gnc:timepair-end-day-time
+			       (gnc:option-value enddate))))
 	   (s1 (split-report-get-sort-spec-entry
 		(gnc:option-value tr-report-primary-key-op)
 		(eq? (gnc:option-value tr-report-primary-order-op) 'ascend)

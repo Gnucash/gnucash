@@ -1,3 +1,11 @@
+2000-06-27  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/date-utilities.scm: Added date-granularity timepair comparison
+	functions.
+
+	* src/scm/report/transaction-report.scm: Changed to use date
+	comparison functions in date-utilities.scm
+
 2000-06-26  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/guile/global-options.[ch] (gnc_option_refresh_ui_by_name):
