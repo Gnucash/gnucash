@@ -31,9 +31,9 @@
 
 gchar *clist_titles[] =
 {
-	"Account Name",
-	"Type",
-	"Balance"
+	" Account Name ",
+	" Type ",
+	" Balance "
 };
 
 struct main_window {
@@ -85,14 +85,14 @@ void main_window_init()
 
     /* Initilize ToolTips */
 	
-    /*
+
     tooltip = gtk_tooltips_new ();
-    gtk_tooltips_set_tips (tooltip, toolBar[open], "Open an account.");
-    gtk_tooltips_set_tips (tooltip, toolBar[close], "Create a new account.");
-    gtk_tooltips_set_tips (tooltip, toolBar[button3], "Edit selected account");
-    gtk_tooltips_set_tips (tooltip, toolBar[button4], "Delete selected account"); 
-    gtk_tooltips_set_tips (tooltip, toolBar[exit], "Exit GnoMoney.");  
-    */
+    gtk_tooltips_set_tip (tooltip, toolBar[open], "Open an account.", NULL);
+    gtk_tooltips_set_tip (tooltip, toolBar[close], "Create a new account.", NULL);
+    gtk_tooltips_set_tip (tooltip, toolBar[button3], "Edit selected account", NULL);
+    gtk_tooltips_set_tip (tooltip, toolBar[button4], "Delete selected account", NULL); 
+    gtk_tooltips_set_tip (tooltip, toolBar[exit], "Exit GnoMoney.", NULL);  
+
     
     /* Pack the buttons into the toolbar */ 
     gtk_box_pack_start(GTK_BOX(button_bar), toolBar[0], FALSE, FALSE, 0);
