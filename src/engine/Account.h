@@ -534,7 +534,12 @@ void xaccAccountInsertLot (Account *, GNCLot *);
 void xaccAccountRemoveLot (Account *, GNCLot *);
 
  /** The xaccAccountGetLotList() routine returns a pointer to the GList of
- *    the lots in this account.  The same warnings as above apply. */
+ *    the lots in this account.  
+ * @note This GList is the account's internal 
+ *    data structure: do not delete it when done; treat it as a read-only
+ *    structure.  Note that some routines (such as xaccAccountRemoveLot())
+ *    modify this list directly, and could leave you with a corrupted 
+ *    pointer. */
 LotList*        xaccAccountGetLotList (Account *account);
 
 /** The xaccAccountForEachLot() method will apply the function 'proc'
