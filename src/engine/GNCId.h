@@ -49,17 +49,17 @@
 typedef const char * GNCIdType;
 typedef const char * GNCIdTypeConst;
 
-#define GNC_ID_NONE	        NULL
-#define GNC_ID_ACCOUNT	     "Account"
-#define GNC_ID_BOOK	        "Book"
-#define GNC_ID_FREQSPEC	     "FreqSpec"
-#define GNC_ID_LOT	        "Lot"
-#define GNC_ID_NULL	        "null"
-#define GNC_ID_PRICE	        "Price"
-#define GNC_ID_SPLIT	        "Split"
-#define GNC_ID_SCHEDXACTION  "SchedXaction"
-#define GNC_ID_SESSION	     "Session"
-#define GNC_ID_TRANS	        "Trans"
+#define GNC_ID_NONE           NULL
+#define GNC_ID_ACCOUNT        "Account"
+#define GNC_ID_BOOK           "Book"
+#define GNC_ID_FREQSPEC       "FreqSpec"
+#define GNC_ID_LOT            "Lot"
+#define GNC_ID_NULL           "null"
+#define GNC_ID_PRICE          "Price"
+#define GNC_ID_SPLIT          "Split"
+#define GNC_ID_SCHEDXACTION   "SchedXaction"
+#define GNC_ID_SESSION        "Session"
+#define GNC_ID_TRANS          "Trans"
 
 /* Return the type of an identifier. */
 GNCIdType xaccGUIDType (const GUID * guid, GNCBook *book);

@@ -993,10 +993,10 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
 
       xaccTransBeginEdit (trans);
       xaccSplitSetAccount(split, NULL);
-		if (split->lot)
-		{
-		  gnc_lot_remove_split (split->lot, split);
-		}
+      if (split->lot)
+      {
+        gnc_lot_remove_split (split->lot, split);
+      }
       xaccTransCommitEdit (trans);
 
       mark_account (acc);
@@ -2053,15 +2053,15 @@ xaccAccountTypesCompatible (GNCAccountType parent_type,
     case RECEIVABLE:
     case PAYABLE:
       compatible = ((child_type == BANK)     ||
-		    (child_type == CASH)     ||
-		    (child_type == ASSET)    ||
-		    (child_type == STOCK)    ||
-		    (child_type == MUTUAL)   ||
-		    (child_type == CURRENCY) ||
+                    (child_type == CASH)     ||
+                    (child_type == ASSET)    ||
+                    (child_type == STOCK)    ||
+                    (child_type == MUTUAL)   ||
+                    (child_type == CURRENCY) ||
                     (child_type == CREDIT)   ||
                     (child_type == LIABILITY)||
                     (child_type == RECEIVABLE)||
-		    (child_type == PAYABLE));
+                    (child_type == PAYABLE));
       break;
     case INCOME:
     case EXPENSE:
@@ -2483,7 +2483,7 @@ xaccAccountSetReconcileChildrenStatus(Account *account, gboolean status)
   
   frame = kvp_frame_get_frame (account->kvp_data, "reconcile-info", NULL);
   kvp_frame_set_slot_nc (frame,
-			 "include-children",
+                         "include-children",
                          status ? kvp_value_new_gint64 (status) : NULL);
   account->core_dirty = TRUE;
   xaccAccountCommitEdit (account);

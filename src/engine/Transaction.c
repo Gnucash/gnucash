@@ -75,7 +75,7 @@ const char *void_former_val_str = "void-former-value";
 #define PRICE_SIGFIGS 6
 
 #define ISO_DATELENGTH 30 /* length of an iso 8601 date string.
-			   * not sure, can't be bothered counting :) */
+                           * not sure, can't be bothered counting :) */
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_ENGINE;
@@ -2009,7 +2009,7 @@ xaccSplitDestroy (Split *split)
        xaccTransRemoveSplit (trans, split);
    }
 
-	/* Note: split is removed from lot when its removed from accoount */
+   /* Note: split is removed from lot when its removed from accoount */
    xaccAccountRemoveSplit (xaccSplitGetAccount(split), split);
    xaccAccountRecomputeBalance (xaccSplitGetAccount(split));
 
@@ -2215,18 +2215,18 @@ get_corr_account_split(Split *sa, Split **retval)
       current_value = xaccSplitGetValue(current_split);
       current_value_positive = gnc_numeric_positive_p(current_value);
       if((sa_value_positive && !current_value_positive) || 
-	 (!sa_value_positive && current_value_positive))
+         (!sa_value_positive && current_value_positive))
       {
-	if(seen_different)
-	{
-	  *retval = NULL;
-	  return TRUE;
-	}
-	else
-	{
-	  seen_different = TRUE;
-	  *retval = current_split;
-	}
+        if(seen_different)
+        {
+          *retval = NULL;
+          return TRUE;
+        }
+        else
+        {
+          seen_different = TRUE;
+          *retval = current_split;
+        }
       }
     }
   }
@@ -2942,7 +2942,7 @@ xaccIsPeerSplit (Split *sa, Split *sb)
 
 void
 xaccTransVoid(Transaction *transaction,
-	      const char *reason)
+              const char *reason)
 {
   kvp_frame *frame;
   kvp_value *val;

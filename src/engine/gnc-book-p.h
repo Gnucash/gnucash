@@ -47,7 +47,7 @@ struct gnc_book_struct
   
   /* The entity table associates the GUIDs of all the objects
    * belonging to this book, with their pointers to the respective
-	* objects.  This allows a lookup of objects based on thier guid.
+   * objects.  This allows a lookup of objects based on thier guid.
    */
   GNCEntityTable *entity_table;
 

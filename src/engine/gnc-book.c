@@ -320,8 +320,8 @@ book_sxns_mark_saved(GNCBook *book)
 {
   book->sx_notsaved = FALSE;
   g_list_foreach(gnc_book_get_schedxactions(book),
-		 mark_sx_clean, 
-		 NULL);
+                 mark_sx_clean, 
+                 NULL);
   return;
 }
 
@@ -369,10 +369,10 @@ gnc_book_not_saved(GNCBook *book)
   return(xaccGroupNotSaved(book->topgroup)
          ||
          gnc_pricedb_dirty(book->pricedb)
-	 ||
-	 book_sxlist_notsaved(book)
-	 ||
-	 gncObjectIsDirty (book));
+         ||
+         book_sxlist_notsaved(book)
+         ||
+         gncObjectIsDirty (book));
 }
 
 /* ====================================================================== */
