@@ -1,18 +1,18 @@
 # Greek translation of gnucash.
 # Copyright (C) 2002 Free Software Foundation, Inc.
 # Nikos Charonitakis <frolix68@yahoo.gr>, 2002.
-# 
 # charosn: 490 messages, initial translation.
-#
+# charosn: 136 messages+update some 
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.6\n"
 "POT-Creation-Date: 2002-03-10 15:53-0800\n"
-"PO-Revision-Date: 2002-02-18 13:11+0000\n"
+"PO-Revision-Date: 2002-05-26 20:59+0300\n"
 "Last-Translator: Nikos Charonitakis <frolix68@yahoo.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso8859-7\n"
+"Content-Type: text/plain; charset=iso-8859-7\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/FileDialog.c:62
@@ -64,6 +64,9 @@ msgid ""
 "   %s\n"
 "doesn't seem to exist. Do you want to create it?\n"
 msgstr ""
+"Η βάση δεδομένων\n"
+"    %s\n"
+"φαίνεται να μην υπάρχει.Θέλετε να την δημιουργήσετε;\n"
 
 #: src/FileDialog.c:113
 #, c-format
@@ -98,6 +101,8 @@ msgid ""
 "You do not have permission to access\n"
 "    %s\n"
 msgstr ""
+"Δεν έχετε δικαίωμα πρόσβασης\n"
+"    %s\n"
 
 #: src/FileDialog.c:143
 #, c-format
@@ -111,6 +116,8 @@ msgid ""
 "There was an error reading the file.\n"
 "Do you want to continue?"
 msgstr ""
+"Υπήρξε σφάλμα κατά την ανάγνωση του αρχείου.\n"
+"Θέλετε να συνεχίσετε;"
 
 #: src/FileDialog.c:155
 #, c-format
@@ -132,7 +139,7 @@ msgid ""
 msgstr ""
 "Το αρχείο\n"
 "    %s\n"
-" δεν βρέθεικε"
+" δεν βρέθηκε"
 
 #: src/FileDialog.c:167
 msgid ""
@@ -149,6 +156,8 @@ msgid ""
 "This database is from an older version of GnuCash.\n"
 "Do you want to upgrade the database to the current version?"
 msgstr ""
+"Αυτή η βάση δεδομένων προέρχεται από παλαιότερη έκδοση του Gnucash.\n"
+"Θέλετε να αναβαθμιστεί για την  τρέχουσα έκδοση;"
 
 #: src/FileDialog.c:186
 msgid ""
@@ -226,6 +235,8 @@ msgid ""
 "The account %s does not exist.\n"
 "Would you like to create it?"
 msgstr ""
+"Ο λογαριασμός %s δεν υπάρχει.\n"
+"Θέλετε να τον δημιουργήσετε;"
 
 #: src/SplitLedger.c:1589 src/SplitLedger.c:2034
 #: src/gnome/window-register.c:3123
@@ -400,7 +411,7 @@ msgstr ""
 
 #: src/SplitLedger.c:4109
 msgid "Tot Shares"
-msgstr ""
+msgstr "Συν. Μετοχών"
 
 #: src/SplitLedger.c:4118 src/gnc-ui-util.c:127
 #: src/gnome/glade-gnc-dialogs.c:3708 src/scm/guile-strings.c:160
@@ -533,7 +544,7 @@ msgstr "Όνομα Λογ/σμού"
 
 #: src/gnc-ui-util.c:121 src/scm/report/guile-strings.c:645
 msgid "Account Code"
-msgstr ""
+msgstr "Κωδικός Λογαριασμού"
 
 #: src/gnc-ui-util.c:133 src/scm/guile-strings.c:162
 msgid "Security"
@@ -615,7 +626,7 @@ msgstr ""
 
 #: src/gnome/dialog-account.c:953 src/gnome/dialog-account.c:1096
 msgid "The account must be given a name."
-msgstr ""
+msgstr "Πρέπει να δοθεί ένα όνομα στον λογαριασμό."
 
 #: src/gnome/dialog-account.c:961 src/gnome/dialog-account.c:1147
 msgid "You must select an account type."
@@ -653,7 +664,7 @@ msgstr ""
 
 #: src/gnome/dialog-account.c:1717
 msgid "<No name>"
-msgstr ""
+msgstr "<χωρίς όνομα>"
 
 #: src/gnome/dialog-account.c:1757
 msgid "Edit Account"
@@ -662,7 +673,7 @@ msgstr "Διόρθωση Λογαριασμού"
 #: src/gnome/dialog-account.c:1760
 #, c-format
 msgid "(%d) New Accounts"
-msgstr ""
+msgstr "(%d) Νέοι Λογαριασμοί"
 
 #: src/gnome/dialog-account.c:1771 src/gnome/glade-gnc-dialogs.c:3443
 msgid "New Account"
@@ -670,7 +681,7 @@ msgstr "Νέος Λογαριασμός"
 
 #: src/gnome/dialog-budget.c:242
 msgid "No description"
-msgstr ""
+msgstr "Χωρίς περιγραφή"
 
 #: src/gnome/dialog-column-view.c:242
 msgid "Contents"
@@ -705,7 +716,7 @@ msgstr "Κωδικός"
 
 #: src/gnome/dialog-commodities.c:343 src/gnome/glade-gnc-dialogs.c:7853
 msgid "Fraction"
-msgstr ""
+msgstr "Κλάσμα"
 
 #: src/gnome/dialog-commodity.c:240
 msgid ""
@@ -803,6 +814,8 @@ msgid ""
 "Are you sure you want to delete the\n"
 "current price?"
 msgstr ""
+"Είστε σίγουρος για την διαγραφή της\n"
+"τρέχουσας τιμής;"
 
 #: src/gnome/dialog-price-editor.c:537
 msgid "Remove old prices"
@@ -839,7 +852,7 @@ msgstr ""
 
 #: src/gnome/dialog-totd.c:303
 msgid "Tip of the Day:"
-msgstr "Συμβουλή της Ημέρας:"
+msgstr "Συμβουλή της ημέρας:"
 
 #: src/gnome/dialog-transfer.c:440
 msgid "Show the income and expense accounts"
@@ -858,11 +871,11 @@ msgstr ""
 
 #: src/gnome/dialog-transfer.c:1066
 msgid "You can't transfer from and to the same account!"
-msgstr "Δεν μπορείτε να κάνετε μεταφορά από ένα λογαριασμό στον ευατό του!"
+msgstr "Δεν μπορείτε να κάνετε μεταφορά από ένα λογαριασμό στον εαυτό του!"
 
 #: src/gnome/dialog-transfer.c:1087
 msgid "You must enter an amount to transfer."
-msgstr "Πρέπει να εισάγετε ένα ποσο προς μεταφορά."
+msgstr "Πρέπει να εισάγετε ένα ποσό προς μεταφορά."
 
 #: src/gnome/dialog-transfer.c:1101
 msgid "You must enter a valid price."
@@ -885,7 +898,7 @@ msgstr ""
 
 #: src/gnome/dialog-utils.c:138
 msgid "Use local time"
-msgstr "Χρησημοποίηση τοπικής ώρας"
+msgstr "Χρησιμοποίηση τοπικής ώρας"
 
 #: src/gnome/druid-commodity.c:246
 msgid ""
@@ -899,6 +912,8 @@ msgid ""
 "Enter a descriptive name for the currency or stock, such as \n"
 "\"US Dollar\" or \"Red Hat Stock\""
 msgstr ""
+"Εισάγετε ένα όνομα που να περιγράφει το νόμισμα ή την μετοχή\n"
+"πχ \"ΕΚ Ευρώ\" ή \"Μετοχή ΟΤΕ\""
 
 #: src/gnome/druid-commodity.c:287
 msgid ""
@@ -919,7 +934,8 @@ msgid ""
 msgstr ""
 
 #: src/gnome/druid-commodity.c:401 src/gnome/druid-qif-import.c:1487
-msgid "You must enter an existing national currency or enter a different type."
+msgid ""
+"You must enter an existing national currency or enter a different type."
 msgstr ""
 "Πρέπει να εισάγετε ένα υπάρχον εθνικό νόμισμα ή να ορίσετε ένα καινούργιο."
 
@@ -937,7 +953,7 @@ msgstr "Μετατροπή σε Ευρώ"
 
 #: src/gnome/druid-euro-conv.c:456
 msgid "You don't have any accounts of Euroland currencies."
-msgstr ""
+msgstr "Δεν έχετε λογαριασμούς με νομίσματα της Ευρωζώνης."
 
 #: src/gnome/druid-qif-import.c:490
 msgid "Select QIF File"
@@ -1167,11 +1183,11 @@ msgstr "12/31/00"
 
 #: src/gnome/glade-gnc-dialogs.c:328
 msgid "31/12/2000"
-msgstr ""
+msgstr "31/12/2000"
 
 #: src/gnome/glade-gnc-dialogs.c:331
 msgid "31/12/00"
-msgstr ""
+msgstr "31/12/00"
 
 #: src/gnome/glade-gnc-dialogs.c:339 src/gnome/window-acct-tree.c:744
 #: src/gnome/window-report.c:677
@@ -1207,7 +1223,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:437
 msgid "Units:"
-msgstr "Μονάδες"
+msgstr "Μονάδες:"
 
 #: src/gnome/glade-gnc-dialogs.c:452
 msgid "x"
@@ -1310,7 +1326,7 @@ msgstr ""
 #: src/gnome/glade-gnc-dialogs.c:1227 src/gnome/glade-gnc-dialogs.c:1425
 #: src/gnome/glade-gnc-dialogs.c:1580
 msgid "Regular expression"
-msgstr ""
+msgstr "Κανονική έκφραση"
 
 #: src/gnome/glade-gnc-dialogs.c:1040
 msgid "Find transactions whose Number contains:"
@@ -1339,11 +1355,11 @@ msgstr ""
 #: src/gnome/glade-gnc-dialogs.c:1151 src/gnome/glade-gnc-dialogs.c:1278
 #: src/gnome/glade-gnc-dialogs.c:1348
 msgid "At least"
-msgstr ""
+msgstr "Τουλάχιστον"
 
 #: src/gnome/glade-gnc-dialogs.c:1154
 msgid "At most "
-msgstr ""
+msgstr "Το πολύ"
 
 #: src/gnome/glade-gnc-dialogs.c:1157 src/gnome/glade-gnc-dialogs.c:1284
 #: src/gnome/glade-gnc-dialogs.c:1354
@@ -1376,7 +1392,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1281 src/gnome/glade-gnc-dialogs.c:1351
 msgid "At most"
-msgstr ""
+msgstr "Το πολύ"
 
 #: src/gnome/glade-gnc-dialogs.c:1296
 msgid "shares"
@@ -1448,7 +1464,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1588
 msgid "Tags"
-msgstr ""
+msgstr "Ετικέτες"
 
 #: src/gnome/glade-gnc-dialogs.c:1609
 msgid "Type of search"
@@ -1456,7 +1472,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1624
 msgid "New search"
-msgstr "Νέα εξερέυνηση"
+msgstr "Νέα εξερεύνηση"
 
 #: src/gnome/glade-gnc-dialogs.c:1632
 msgid "Refine current search"
@@ -1492,7 +1508,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1896
 msgid "label773"
-msgstr ""
+msgstr "label773"
 
 #: src/gnome/glade-gnc-dialogs.c:1920 src/gnome/glade-gnc-dialogs.c:7471
 #: src/gnome/glade-gnc-dialogs.c:7869
@@ -1562,7 +1578,7 @@ msgstr "Περίοδος:"
 
 #: src/gnome/glade-gnc-dialogs.c:2106
 msgid "Mechanism:"
-msgstr ""
+msgstr "Μηχανισμός:"
 
 #: src/gnome/glade-gnc-dialogs.c:2115
 msgid "Bill Day:"
@@ -1574,7 +1590,7 @@ msgstr "Περίοδος Χάριτος:"
 
 #: src/gnome/glade-gnc-dialogs.c:2175
 msgid "Nominal"
-msgstr ""
+msgstr "Ονομαστικά αξία"
 
 #: src/gnome/glade-gnc-dialogs.c:2178
 msgid "Bill"
@@ -1594,13 +1610,13 @@ msgstr "Οικονομικό Κομπιουτεράκι"
 
 #: src/gnome/glade-gnc-dialogs.c:2366
 msgid "Payment Periods"
-msgstr ""
+msgstr "Περίοδοι Πληρωμών"
 
 #: src/gnome/glade-gnc-dialogs.c:2375 src/gnome/glade-gnc-dialogs.c:2420
 #: src/gnome/glade-gnc-dialogs.c:2465 src/gnome/glade-gnc-dialogs.c:2510
 #: src/gnome/glade-gnc-dialogs.c:2555
 msgid "Clear"
-msgstr ""
+msgstr "Καθαρισμός"
 
 #: src/gnome/glade-gnc-dialogs.c:2381 src/gnome/glade-gnc-dialogs.c:2426
 #: src/gnome/glade-gnc-dialogs.c:2471 src/gnome/glade-gnc-dialogs.c:2516
@@ -1641,7 +1657,7 @@ msgstr "Πληρωμές:"
 #: src/gnome/glade-gnc-dialogs.c:2639 src/gnome/glade-gnc-dialogs.c:2681
 #: src/gnome/glade-gnc-dialogs.c:2922 src/gnome/glade-gnc-dialogs.c:2964
 msgid "Annual"
-msgstr "Ετήσιος"
+msgstr "Ετήσια"
 
 #: src/gnome/glade-gnc-dialogs.c:2642 src/gnome/glade-gnc-dialogs.c:2684
 #: src/gnome/glade-gnc-dialogs.c:2925 src/gnome/glade-gnc-dialogs.c:2967
@@ -1696,7 +1712,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2723
 msgid "End of Period Payments"
-msgstr ""
+msgstr "Τέλος των Περιοδικών Πληρωμών"
 
 #: src/gnome/glade-gnc-dialogs.c:2732
 msgid "Beginning of Period Payments"
@@ -1752,7 +1768,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:3225
 msgid "Full name:"
-msgstr "Ονοματεπώνυμο:"
+msgstr "Πλήρες όνομα:"
 
 #: src/gnome/glade-gnc-dialogs.c:3233
 msgid "Symbol/abbreviation:"
@@ -1760,7 +1776,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:3249
 msgid "CUSIP or other code:"
-msgstr ""
+msgstr "CUSIP ή άλλος κωδικός:"
 
 #: src/gnome/glade-gnc-dialogs.c:3257
 msgid "Fraction traded:"
@@ -1778,8 +1794,8 @@ msgstr ""
 #: src/gnome/glade-gnc-dialogs.c:3300
 msgid ""
 "Enter the type of commodity. For stocks, this is often an exchange on which "
-"the stock is traded. You can choose an existing type from the list or enter "
-"a new type with the keyboard."
+"the stock is traded. You can choose an existing type from the list or enter a "
+"new type with the keyboard."
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:3308
@@ -1822,7 +1838,7 @@ msgstr "Τύπος λογ/σμού"
 
 #: src/gnome/glade-gnc-dialogs.c:3609
 msgid "label812"
-msgstr ""
+msgstr "label812"
 
 #: src/gnome/glade-gnc-dialogs.c:3616 src/gnome/glade-gnc-dialogs.c:6160
 msgid "Parent Account"
@@ -1915,7 +1931,7 @@ msgstr ""
 #: src/gnome/glade-gnc-dialogs.c:4126 src/scm/guile-strings.c:73
 #: src/scm/guile-strings.c:395
 msgid "QIF Import"
-msgstr ""
+msgstr "Εισαγωγή QIF"
 
 #: src/gnome/glade-gnc-dialogs.c:4147
 msgid "Import QIF files"
@@ -1937,7 +1953,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:4159
 msgid "Select a QIF file to load"
-msgstr ""
+msgstr "Επιλογή ενός αρχείου QIF για άνοιγμα."
 
 #: src/gnome/glade-gnc-dialogs.c:4168
 msgid ""
@@ -1978,6 +1994,8 @@ msgstr ""
 #: src/gnome/glade-gnc-dialogs.c:4247
 msgid "Click \"Back\" to cancel loading this file and choose another."
 msgstr ""
+"Πατήστε \"Πίσω\" για να ακυρώσετε το άνοιγμα αυτού του αρχείου και να "
+"επιλέξετε κάποιο άλλο"
 
 #: src/gnome/glade-gnc-dialogs.c:4263
 msgid "Set the default QIF account name"
@@ -2003,7 +2021,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:4318
 msgid "QIF files you have loaded"
-msgstr ""
+msgstr "Αρχεία QIF που έχετε ανοίξει"
 
 #: src/gnome/glade-gnc-dialogs.c:4327
 msgid "QIF Files"
@@ -2011,7 +2029,7 @@ msgstr "Αρχεία QIF"
 
 #: src/gnome/glade-gnc-dialogs.c:4351
 msgid "label827"
-msgstr ""
+msgstr "label827"
 
 #: src/gnome/glade-gnc-dialogs.c:4358
 msgid ""
@@ -2048,13 +2066,10 @@ msgid ""
 "\n"
 "Note that GnuCash will be creating many accounts that did not exist on your\n"
 "other personal finance program, including a separate account for each stock\n"
-"you own, separate accounts for the brokerage commissions, special \"Equity"
-"\"\n"
-"accounts (subaccounts of Retained Earnings, by default) which are the "
-"source\n"
-"of your opening balances, etc. All of these accounts will appear on the "
-"next \n"
-"page so you can change them if you want to, but it is safe to leave them "
+"you own, separate accounts for the brokerage commissions, special \"Equity\"\n"
+"accounts (subaccounts of Retained Earnings, by default) which are the source\n"
+"of your opening balances, etc. All of these accounts will appear on the next "
+"\npage so you can change them if you want to, but it is safe to leave them "
 "alone.\n"
 msgstr ""
 
@@ -2117,8 +2132,7 @@ msgstr ""
 #: src/gnome/glade-gnc-dialogs.c:4587
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
-"have\n"
-"information about Accounts and Categories which would allow them to be\n"
+"have\ninformation about Accounts and Categories which would allow them to be\n"
 "correctly assigned to GnuCash accounts.  \n"
 "\n"
 "In the following page, you will see the text that appears in the Payee and \n"
@@ -2192,8 +2206,7 @@ msgid ""
 "On the next page, you will be asked to confirm that an existing transaction\n"
 "matches an imported transaction.  Imported transactions are shown on the\n"
 "left side of the page, and possible  matches for the selected left-hand\n"
-"transaction are shown  to the right.  There may be several old "
-"transactions \n"
+"transaction are shown  to the right.  There may be several old transactions \n"
 "that could match an imported transaction; you will be able to select the \n"
 "correct one by clicking in the \"Dup?\" column of the correct transaction.\n"
 "\n"
@@ -2304,7 +2317,7 @@ msgstr "Θέματα"
 
 #: src/gnome/glade-gnc-dialogs.c:5624
 msgid "Search GnuCash Help"
-msgstr ""
+msgstr "Εξερεύνηση της Βοήθειας του Gnucash"
 
 #: src/gnome/glade-gnc-dialogs.c:5639
 msgid "Search Term:"
@@ -2323,7 +2336,7 @@ msgstr "Εύρεση"
 
 #: src/gnome/glade-gnc-dialogs.c:5677
 msgid "Search results"
-msgstr ""
+msgstr "Εξερεύνηση αποτελεσμάτων"
 
 #: src/gnome/glade-gnc-dialogs.c:5811
 msgid "New Style Sheet"
@@ -2399,7 +2412,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:6372
 msgid "label847668"
-msgstr ""
+msgstr "label847668"
 
 #: src/gnome/glade-gnc-dialogs.c:6400
 msgid "Style sheet options"
@@ -2485,7 +2498,7 @@ msgstr "Όνομα και Κωδικός Χρήστη"
 
 #: src/gnome/glade-gnc-dialogs.c:6905
 msgid "Enter your username and password"
-msgstr ""
+msgstr "Εισάγετε το όνομα χρήστη και τον κωδικό πρόσβασης"
 
 #: src/gnome/glade-gnc-dialogs.c:6934
 msgid "Username:"
@@ -2509,11 +2522,11 @@ msgstr "                       "
 
 #: src/gnome/glade-gnc-dialogs.c:7071
 msgid "Add  >>"
-msgstr ""
+msgstr "Προσθήκη  >>"
 
 #: src/gnome/glade-gnc-dialogs.c:7078
 msgid "<< Remove"
-msgstr ""
+msgstr "<< Αφαίρεση"
 
 #: src/gnome/glade-gnc-dialogs.c:7092
 msgid "Move up"
@@ -2525,7 +2538,7 @@ msgstr "Κίνηση κάτω"
 
 #: src/gnome/glade-gnc-dialogs.c:7113
 msgid "Size..."
-msgstr "Μέγεθος"
+msgstr "Μέγεθος..."
 
 #: src/gnome/glade-gnc-dialogs.c:7147 src/gnome/window-register.c:925
 #: src/gnome/window-register.c:1351 src/gnome/window-report.c:113
@@ -2568,7 +2581,7 @@ msgstr ""
 #: src/gnome/glade-gnc-dialogs.c:7453 src/gnome/window-register.c:1289
 #: src/gnome/window-register.c:1290
 msgid "Sort by Date"
-msgstr "Ταξινόνηση βάση ημ/νίας"
+msgstr "Ταξινόμηση βάση ημ/νίας"
 
 #: src/gnome/glade-gnc-dialogs.c:7478 src/gnome/glade-gnc-dialogs.c:7876
 msgid "Add a new price."
@@ -2593,11 +2606,11 @@ msgstr ""
 #: src/gnome/glade-gnc-dialogs.c:7498 src/gnome/glade-gnc-dialogs.c:7887
 #: src/gnome/window-acct-tree.c:733 src/gnome/window-reconcile.c:1354
 msgid "Edit"
-msgstr ""
+msgstr "Επεξεργασία"
 
 #: src/gnome/glade-gnc-dialogs.c:7505
 msgid "Edit the current price."
-msgstr ""
+msgstr "Επεξεργασία της τρέχουσας τιμής."
 
 #: src/gnome/glade-gnc-dialogs.c:7507
 msgid "Get Quotes"
@@ -2649,7 +2662,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:7795
 msgid "Show National Currencies"
-msgstr ""
+msgstr "Εμφάνιση Εθνικών Νομισμάτων"
 
 #: src/gnome/glade-gnc-dialogs.c:7975
 msgid "Euro Conversion Druid"
@@ -2666,16 +2679,23 @@ msgid ""
 "No changes will be made until you press 'Finish' on the last page\n"
 "of this druid."
 msgstr ""
+"Αυτός ο δρυίδης θα σας βοηθήσει να μετρατρέψετε τους υπάρχοντες \n"
+"λογαριασμούς στο Ευρωπαικό νόμισμα Ευρώ (EUR).\n"
+"\n"
+"Στα επόμενα ο όρος 'Νόμισμα ευρωζώνης' θα εννοεί τα νομίσματα\n"
+"που αντικαθιστούνται απο το Ευρώ.\n"
+"\n"
+"Καμμία αλλαγή δεν θα γίνει εως ότου πατήσετε το 'Τέλος'\n"
+"στην τελευταία οθόνη του δρυίδη."
 
 #: src/gnome/glade-gnc-dialogs.c:7987
 msgid "Where to create the Euro accounts?"
-msgstr ""
+msgstr "Που να δημιουργηθούν οι λογαριασμοί Ευρώ;"
 
 #: src/gnome/glade-gnc-dialogs.c:8003
 msgid ""
-"For each of your Euroland accounts, the druid will create a new EUR "
-"account. \n"
-"\n"
+"For each of your Euroland accounts, the druid will create a new EUR account. "
+"\n\n"
 "Please choose the place in your account hierarchy where you would\n"
 "like the EUR accounts to be created."
 msgstr ""
@@ -2696,7 +2716,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:8053
 msgid "How to name the new accounts?"
-msgstr ""
+msgstr "Πώς θα ονομαστούν οι νέοι λογαριασμοί;"
 
 #: src/gnome/glade-gnc-dialogs.c:8068
 msgid ""
@@ -2717,10 +2737,14 @@ msgid ""
 "The name of the newly created Euro account is copied from the\n"
 "old Euroland account."
 msgstr ""
+"Το όνομα για κάθε παλιό λογαριασμό της Ευρωζώνης μετατρέπεται με \n"
+"την επισύναψη του νομισματικού συμβόλου της Ευρωζώνης.\n"
+"Το όνομα του καινούριου λογαριασμού Ευρώ είναι το ίδιο με του\n"
+"παλιού λογαριασμού."
 
 #: src/gnome/glade-gnc-dialogs.c:8112
 msgid "Finish Euro Conversion"
-msgstr ""
+msgstr "Τερματισμός Μετατροπής σε Ευρώ"
 
 #: src/gnome/glade-gnc-dialogs.c:8113
 msgid ""
@@ -2737,6 +2761,19 @@ msgid ""
 "You may also press 'Back' to review your settings, or 'Cancel'\n"
 "to quit without making any changes."
 msgstr ""
+"Εάν ολοκληρώσατε τις ρυθμίσεις μετατροπής Ευρώ,\n"
+"πατήστε 'Τέλος'.\n"
+"\n"
+"Ο δρυίδης θα ακολουθήσει τα επόμενα βήματα:\n"
+"\n"
+"1. Δημιουργία νέων λογαριασμών σύμφωνα με τις επιλογές σας.\n"
+"2. Δημιουργία λογαριασμών ανταλλαγής συναλλάγματος.\n"
+"3. Ανταλλαγή όλων των ποσών απο λογαριασμούς της Ευρωζώνης \n"
+"στους αντίστοιχους λογαριασμούς Ευρώ.\n"
+"\n"
+"Μπορείτε επίσης να πατήσετε 'Πίσω' για να αναθεωρήσετε\n"
+" τις επιλογές σας ή 'Άκυρο' να τερματίσετε τον δρυίδη χωρίς\n"
+" να γίνει  καμμία αλλαγή."
 
 #: src/gnome/glade-support.c:100 src/gnome/glade-support.c:138
 #, c-format
@@ -2779,8 +2816,8 @@ msgstr "Ημερολόγιο"
 
 #: src/gnome/gnc-html.c:875
 msgid ""
-"GnuCash Network is disabled and the link you have clicked requires it.\n"
-"You can enable it in the Network section\n"
+"GnuCash Network is disabled and the link you have clicked requires "
+"it.\nYou can enable it in the Network section\n"
 "of the Preferences dialog."
 msgstr ""
 
@@ -2841,8 +2878,9 @@ msgstr ""
 
 #. get another and check for equality
 #: src/gnome/gnc-network.c:371
+#, fuzzy
 msgid "Verify passphrase:"
-msgstr ""
+msgstr "Επιβεβαίωση συνθηματικής φράσης"
 
 #: src/gnome/gnc-network.c:382
 msgid "Passphrases did not match."
@@ -2863,12 +2901,13 @@ msgid ""
 "Click 'Cancel'  if you do not wish to create any \n"
 "new accounts now."
 msgstr ""
-"Αυτός ο μάγος θα σας βοηθήσει να δημιουργήσετε\n"
-"ένα σετ λογαριασμών για τα περουσιακά σας στοιχεία\n"
+"Αυτός ο δρυίδης θα σας βοηθήσει να δημιουργήσετε\n"
+"ένα σύνολο λογαριασμών για τα περουσιακά σας στοιχεία\n"
+"(όπως λογαριασμοί αποταμίευσης,επενδύσεις)\n"
 "τις υποχρεώσεις σας (όπως δάνεια) και για καθε\n"
 "είδος εσόδων και εξόδων που μπορεί να έχετε\n"
 "\n"
-"Πατήστε Ακύρωση εάν δεν θέλετε να δημιουργείσετε\n"
+"Πατήστε Άκυρο εάν δεν θέλετε να δημιουργήσετε\n"
 "τώρα νέους λογαριασμούς"
 
 #: src/gnome/new-user-interface.c:123
@@ -2893,7 +2932,7 @@ msgstr ""
 
 #: src/gnome/new-user-interface.c:214
 msgid "Account Types"
-msgstr ""
+msgstr "Τύποι Λογαριασμών"
 
 #: src/gnome/new-user-interface.c:263
 msgid "Detailed Description"
@@ -2906,9 +2945,8 @@ msgstr ""
 #: src/gnome/new-user-interface.c:351
 msgid ""
 "If you would like an account to have an opening balance, click on the "
-"account\n"
-"and enter the starting balance in the box on the right. All accounts except "
-"Equity\n"
+"account\nand enter the starting balance in the box on the right. All accounts "
+"except Equity\n"
 "accounts may have an opening balance."
 msgstr ""
 
@@ -2944,11 +2982,11 @@ msgstr "Καλώς ήρθατε στο GnuCash 1.6!"
 
 #: src/gnome/new-user-interface.c:616
 msgid "Create a new set of accounts"
-msgstr ""
+msgstr "Δημιουργία νέου συνόλου λογαριασμών"
 
 #: src/gnome/new-user-interface.c:625
 msgid "Import my QIF files"
-msgstr ""
+msgstr "Εισαγωγή των QIF αρχείων μου"
 
 #: src/gnome/new-user-interface.c:634
 msgid "Open the new user tutorial"
@@ -2956,7 +2994,7 @@ msgstr ""
 
 #: src/gnome/print-session.c:86
 msgid "Print GnuCash Document"
-msgstr ""
+msgstr "Εκτύπωση εγγράφου Gnucash"
 
 #: src/gnome/print-session.c:139
 msgid "Print Preview"
@@ -2978,6 +3016,8 @@ msgid ""
 "To open an account, you must first\n"
 "choose an account to open."
 msgstr ""
+"Για να ανοίξετε ένα λογαριασμό πρέπει πρώτα\n"
+" να επιλέξετε ένα λογαριασμό που θα ανοιχτεί."
 
 #: src/gnome/window-acct-tree.c:289 src/gnome/window-acct-tree.c:382
 msgid ""
@@ -2988,7 +3028,7 @@ msgstr ""
 #: src/gnome/window-acct-tree.c:313 src/gnome/window-acct-tree.c:447
 #, c-format
 msgid "Are you sure you want to delete the %s account?"
-msgstr ""
+msgstr "Είστε σίγουρος ότι θέλετε να διαγράψετε τον λογαριασμό %s ;"
 
 #: src/gnome/window-acct-tree.c:336 src/gnome/window-acct-tree.c:469
 msgid ""
@@ -3006,7 +3046,7 @@ msgstr ""
 
 #: src/gnome/window-acct-tree.c:493 src/gnome/window-acct-tree.c:515
 msgid "You must select an account to check and repair."
-msgstr "Πρέπει να επιλέξετε ενα λογαριασμό για έλεγχο και διόρθωση"
+msgstr "Πρέπει να επιλέξετε ένα λογαριασμό για έλεγχο και διόρθωση"
 
 #: src/gnome/window-acct-tree.c:724 src/gnome/window-acct-tree.c:823
 msgid "Open the selected account"
@@ -3014,7 +3054,7 @@ msgstr ""
 
 #: src/gnome/window-acct-tree.c:734 src/gnome/window-acct-tree.c:839
 msgid "Edit the selected account"
-msgstr ""
+msgstr "Επεξεργασία επιλεγμένου λογαριασμού"
 
 #: src/gnome/window-acct-tree.c:745
 msgid "Edit the account view options"
@@ -3022,7 +3062,7 @@ msgstr ""
 
 #: src/gnome/window-acct-tree.c:755 src/gnome/window-reconcile.c:1347
 msgid "New"
-msgstr ""
+msgstr "Νέος"
 
 #: src/gnome/window-acct-tree.c:756 src/gnome/window-acct-tree.c:873
 #: src/gnome/window-register.c:1457
@@ -3096,7 +3136,7 @@ msgstr "_Μεταφορά"
 #: src/gnome/window-acct-tree.c:856 src/gnome/window-reconcile.c:1181
 #: src/gnome/window-register.c:908 src/gnome/window-register.c:1440
 msgid "Transfer funds from one account to another"
-msgstr ""
+msgstr "Μεταφορά κεφαλαίων από ένα λογαριασμό σε ένα άλλο"
 
 #: src/gnome/window-acct-tree.c:863 src/gnome/window-register.c:1447
 msgid "Stock S_plit..."
@@ -3116,7 +3156,7 @@ msgstr "_Σβήσιμο Λογαριασμού"
 
 #: src/gnome/window-acct-tree.c:887 src/gnome/window-reconcile.c:1189
 msgid "_Check & Repair"
-msgstr ""
+msgstr "_Έλεγχος & Διόρθωση"
 
 #: src/gnome/window-acct-tree.c:892
 msgid "Setup tax information for all income and expense accounts"
@@ -3141,7 +3181,7 @@ msgstr ""
 
 #: src/gnome/window-help.c:608 src/gnome/window-report.c:640
 msgid "Forward"
-msgstr ""
+msgstr "Μπροστά"
 
 #: src/gnome/window-help.c:609 src/gnome/window-report.c:641
 msgid "Move forward one step in the history"
@@ -3149,7 +3189,7 @@ msgstr ""
 
 #: src/gnome/window-help.c:618 src/gnome/window-report.c:649
 msgid "Reload"
-msgstr ""
+msgstr "Ανανέωση"
 
 #: src/gnome/window-help.c:619
 msgid "Reload the current document"
@@ -3174,7 +3214,7 @@ msgstr "Εκτύπωση"
 
 #: src/gnome/window-help.c:647
 msgid "Print Help window"
-msgstr ""
+msgstr "Εκτύπωση παράθυρου Βοήθειας"
 
 #: src/gnome/window-help.c:656 src/gnome/window-main.c:1153
 #: src/gnome/window-register.c:837 src/gnome/window-register.c:1376
@@ -3191,11 +3231,11 @@ msgstr ""
 
 #: src/gnome/window-main.c:746 src/gnome/window-report.c:668
 msgid "Export"
-msgstr ""
+msgstr "Εξαγωγή"
 
 #: src/gnome/window-main.c:755
 msgid "You cannot save to that filename."
-msgstr ""
+msgstr "Δεν μπορείτε να αποθηκεύσετε σε αυτό το όνομα αρχείου "
 
 #: src/gnome/window-main.c:768 src/gnome/window-main.c:794
 msgid "You cannot save to that file."
@@ -3249,7 +3289,7 @@ msgstr ""
 
 #: src/gnome/window-main.c:1007
 msgid "Move to New Window"
-msgstr ""
+msgstr "Μετακίνηση σε Νέο Παράθυρο"
 
 #: src/gnome/window-main.c:1008
 msgid "Open a new top-level GnuCash window for the current view"
@@ -3257,7 +3297,7 @@ msgstr ""
 
 #: src/gnome/window-main.c:1014
 msgid "Close _Window"
-msgstr ""
+msgstr "Κλείσιμο _Παράθυρου"
 
 #: src/gnome/window-main.c:1015 src/gnome/window-main.c:1154
 msgid "Close the current notebook page"
@@ -3301,7 +3341,7 @@ msgstr "Οικονομικό _Κομπιουτεράκι"
 
 #: src/gnome/window-main.c:1065
 msgid "Use the financial calculator"
-msgstr "Χρησημοποίηση της οικονομικής αριθμομηχανής"
+msgstr "Χρησιμοποίηση της οικονομικής αριθμομηχανής"
 
 #: src/gnome/window-main.c:1071
 msgid "_Find Transactions"
@@ -3321,7 +3361,7 @@ msgstr ""
 
 #: src/gnome/window-main.c:1092
 msgid "_Manual"
-msgstr ""
+msgstr "_Εγχειρίδιο"
 
 #: src/gnome/window-main.c:1093
 msgid "Open the GnuCash Manual"
@@ -3341,7 +3381,7 @@ msgstr "_Εργαλεία"
 
 #: src/gnome/window-main.c:1121
 msgid "_Settings"
-msgstr ""
+msgstr "_Ρυθμίσεις"
 
 #: src/gnome/window-main.c:1122
 msgid "_Windows"
@@ -3422,15 +3462,16 @@ msgstr ""
 
 #: src/gnome/window-reconcile.c:1082
 msgid "_Finish"
-msgstr ""
+msgstr "_Τερματισμός"
 
 #: src/gnome/window-reconcile.c:1083 src/gnome/window-reconcile.c:1377
 msgid "Finish the reconciliation of this account"
 msgstr ""
 
 #: src/gnome/window-reconcile.c:1090
+#, fuzzy
 msgid "_Postpone"
-msgstr ""
+msgstr "_Αναβολή"
 
 #: src/gnome/window-reconcile.c:1091
 msgid "Postpone the reconciliation of this account"
@@ -3465,13 +3506,13 @@ msgstr ""
 #: src/gnome/window-reconcile.c:1138 src/gnome/window-reconcile.c:1139
 #: src/gnome/window-register.c:1310 src/gnome/window-register.c:1311
 msgid "Sort by Description"
-msgstr ""
+msgstr "Ταξινόμηση βάση Περιγραφής"
 
 #: src/gnome/window-reconcile.c:1118 src/gnome/window-reconcile.c:1119
 #: src/gnome/window-reconcile.c:1141 src/gnome/window-reconcile.c:1142
 #: src/gnome/window-register.c:1304 src/gnome/window-register.c:1305
 msgid "Sort by Amount"
-msgstr ""
+msgstr "Ταξινόμηση βάση Ποσού"
 
 #: src/gnome/window-reconcile.c:1166 src/gnome/window-reconcile.c:1369
 msgid "Open the account"
@@ -3488,16 +3529,16 @@ msgstr "_Νέος"
 #: src/gnome/window-reconcile.c:1203 src/gnome/window-reconcile.c:1287
 #: src/gnome/window-reconcile.c:1347
 msgid "Add a new transaction to the account"
-msgstr ""
+msgstr "Προσθήκη νέας συναλλαγής στο λογαριασμό"
 
 #: src/gnome/window-reconcile.c:1210 src/gnome/window-reconcile.c:1294
 msgid "_Edit"
-msgstr ""
+msgstr "_Επεξεργασία"
 
 #: src/gnome/window-reconcile.c:1210 src/gnome/window-reconcile.c:1294
 #: src/gnome/window-reconcile.c:1354
 msgid "Edit the current transaction"
-msgstr ""
+msgstr "Επεξεργασία της τρέχουσας συναλλαγής"
 
 #: src/gnome/window-reconcile.c:1217 src/gnome/window-reconcile.c:1301
 #: src/gnome/window-register.c:1485 src/gnome/window-register.c:1675
@@ -3532,7 +3573,7 @@ msgstr "_Συναλλαγή"
 
 #: src/gnome/window-reconcile.c:1377
 msgid "Finish"
-msgstr ""
+msgstr "Τέλος"
 
 #. reconciled balance title/value
 #: src/gnome/window-reconcile.c:1735
@@ -3570,15 +3611,15 @@ msgstr ""
 
 #: src/gnome/window-register.c:734
 msgid "Start date:"
-msgstr ""
+msgstr "Ημ/νία έναρξης:"
 
 #: src/gnome/window-register.c:773
 msgid "Show Latest"
-msgstr ""
+msgstr "Εμφάνιση Τελευταίου"
 
 #: src/gnome/window-register.c:784
 msgid "End date:"
-msgstr ""
+msgstr "Καταληκτική ημ/νία:"
 
 #: src/gnome/window-register.c:810 src/scm/guile-strings.c:49
 msgid "Today"
@@ -3603,7 +3644,7 @@ msgstr ""
 
 #: src/gnome/window-register.c:854
 msgid "Cancel"
-msgstr "Ακύρωση"
+msgstr "Άκυρο"
 
 #: src/gnome/window-register.c:855 src/gnome/window-register.c:1478
 #: src/gnome/window-register.c:1668
@@ -3625,8 +3666,9 @@ msgid "Show all splits in the current transaction"
 msgstr ""
 
 #: src/gnome/window-register.c:888
+#, fuzzy
 msgid "Blank"
-msgstr ""
+msgstr "Κενό"
 
 #: src/gnome/window-register.c:889 src/gnome/window-register.c:1512
 #: src/gnome/window-register.c:1702
@@ -3648,7 +3690,7 @@ msgstr ""
 
 #: src/gnome/window-register.c:935 src/gnome/window-register.c:1368
 msgid "Print a report for this register"
-msgstr ""
+msgstr "Εκτύπωση μιας αναφοράς για αυτό το μητρώο"
 
 #: src/gnome/window-register.c:1033
 msgid "Present:"
@@ -3705,7 +3747,7 @@ msgstr "_Διπλή Γραμμή"
 
 #: src/gnome/window-register.c:1278 src/scm/guile-strings.c:268
 msgid "Show two lines of information for each transaction"
-msgstr ""
+msgstr "Εμφάνιση δύο γραμμών  πληροφόρησης για κάθε συναλλαγή"
 
 #: src/gnome/window-register.c:1292
 msgid "Sort by date of entry"
@@ -3733,7 +3775,7 @@ msgstr "Εμφάνιση _Όλων"
 
 #: src/gnome/window-register.c:1327
 msgid "Show all of the transactions in the account"
-msgstr ""
+msgstr "Εμφάνιση όλων τών συναλλαγών του λογαριασμού"
 
 #: src/gnome/window-register.c:1334
 msgid "Set _Range..."
@@ -3804,7 +3846,7 @@ msgstr ""
 
 #: src/gnome/window-register.c:1511 src/gnome/window-register.c:1701
 msgid "_Blank"
-msgstr ""
+msgstr "_Κενό"
 
 #: src/gnome/window-register.c:1520 src/gnome/window-register.c:1710
 msgid "_Jump"
@@ -3812,7 +3854,7 @@ msgstr ""
 
 #: src/gnome/window-register.c:1530
 msgid "_Check & Repair All"
-msgstr ""
+msgstr "_Έλεγχος & Διόρθωση Όλων"
 
 #: src/gnome/window-register.c:1531
 msgid ""
@@ -3844,15 +3886,15 @@ msgstr ""
 
 #: src/gnome/window-register.c:1581
 msgid "_Register"
-msgstr ""
+msgstr "_Μητρώο"
 
 #: src/gnome/window-register.c:1872
 msgid "General Ledger"
-msgstr ""
+msgstr "Γενικό Καθολικό"
 
 #: src/gnome/window-register.c:1874
 msgid "General Ledger Report"
-msgstr ""
+msgstr "Αναφορά Γενικού Καθολικού"
 
 #: src/gnome/window-register.c:1879
 msgid "Portfolio"
@@ -3878,11 +3920,11 @@ msgstr "Αναφορά Αποτελεσμάτων Αναζήτησης"
 #: src/scm/guile-strings.c:290 src/scm/guile-strings.c:293
 #: src/scm/report/guile-strings.c:525
 msgid "Register"
-msgstr ""
+msgstr "Μητρώο"
 
 #: src/gnome/window-register.c:1895 src/scm/report/guile-strings.c:488
 msgid "Register Report"
-msgstr ""
+msgstr "Αναφορά Μητρώου"
 
 #: src/gnome/window-register.c:2409
 msgid "<No information>"
@@ -3904,8 +3946,8 @@ msgstr ""
 #: src/gnome/window-register.c:2844
 msgid ""
 "Warning: Just deleting all the other splits will make your account "
-"unbalanced. You probably shouldn't do this unless you're going to "
-"immediately add another split to bring the transaction back into balance."
+"unbalanced. You probably shouldn't do this unless you're going to immediately "
+"add another split to bring the transaction back into balance."
 msgstr ""
 
 #: src/gnome/window-register.c:2849
@@ -3943,7 +3985,7 @@ msgstr ""
 
 #: src/gnome/window-register.c:2993
 msgid "(no description)"
-msgstr ""
+msgstr "(χωρίς περιγραφή)"
 
 #: src/gnome/window-register.c:3027
 msgid "You would be deleting a transaction with reconciled splits!"
@@ -3951,7 +3993,7 @@ msgstr ""
 
 #: src/gnome/window-report.c:107
 msgid "(Report not found)"
-msgstr "(Η αναφορά δεν Βρέθηκε) "
+msgstr "(Η αναφορά δεν βρέθηκε) "
 
 #: src/gnome/window-report.c:650
 msgid "Reload the current report"
@@ -3959,7 +4001,7 @@ msgstr ""
 
 #: src/gnome/window-report.c:669
 msgid "Export HTML-formatted report to file"
-msgstr ""
+msgstr "Εξαγωγή της HTML αναφοράς σε αρχείο"
 
 #: src/gnome/window-report.c:678 src/scm/guile-strings.c:131
 #: src/scm/guile-strings.c:134 src/scm/report/guile-strings.c:446
@@ -3969,7 +4011,7 @@ msgstr ""
 
 #: src/gnome/window-report.c:687
 msgid "Print report window"
-msgstr ""
+msgstr "Εκτύπωση παράθυρου αναφοράς"
 
 #: src/guile/gnucash.c:149
 msgid "This is a development version. It may or may not work."
@@ -3978,7 +4020,7 @@ msgstr ""
 #: src/guile/gnucash.c:153
 #, c-format
 msgid "The last stable version was %s."
-msgstr ""
+msgstr "Η προηγούμενη σταθερή έκδοση ήταν η %s."
 
 #: src/guile/gnucash.c:155
 #, c-format
@@ -4171,7 +4213,7 @@ msgstr "Εισαγάγετε μια περιγραφή για την συναλλαγή"
 
 #: src/register/splitreg.c:763
 msgid "Enter notes for the transaction"
-msgstr ""
+msgstr "Εισάγετε σημειώσεις για την συναλλαγή"
 
 #: src/register/splitreg.c:786
 msgid "Enter the type of transaction, or choose one from the list"
@@ -4200,7 +4242,7 @@ msgstr ""
 
 #: src/scm/guile-strings.c:4
 msgid "Enable debugging mode"
-msgstr ""
+msgstr "Ενεργοποιήση κατάστασης αποσφαλμάτωσης"
 
 #: src/scm/guile-strings.c:5
 msgid "Set the logging level from 0 (least) to 6 (most)"
@@ -4336,7 +4378,7 @@ msgstr ""
 
 #: src/scm/guile-strings.c:38
 msgid "The beginning of the previous month"
-msgstr ""
+msgstr "Η αρχή του προηγούμενου μήνα"
 
 #: src/scm/guile-strings.c:39
 msgid "End of previous month"
@@ -4392,7 +4434,7 @@ msgstr "Μία Εβδομάδα Πρίν"
 
 #: src/scm/guile-strings.c:55 src/scm/guile-strings.c:56
 msgid "Three Months Ago"
-msgstr ""
+msgstr "Τρείς Μήνες Πριν"
 
 #: src/scm/guile-strings.c:57 src/scm/guile-strings.c:58
 msgid "Six Months Ago"
@@ -4408,7 +4450,7 @@ msgstr ""
 
 #: src/scm/guile-strings.c:63
 msgid "GnuCash Manual"
-msgstr ""
+msgstr "Εγχειρίδιο Gnucash"
 
 #: src/scm/guile-strings.c:64
 msgid "Getting Started"
@@ -4427,8 +4469,9 @@ msgid "Setting up Accounts"
 msgstr ""
 
 #: src/scm/guile-strings.c:68
+#, fuzzy
 msgid "Importing Data"
-msgstr ""
+msgstr "Εισαγωγή Δεδομένων"
 
 #: src/scm/guile-strings.c:69
 msgid "Basic Setup"
@@ -4515,8 +4558,9 @@ msgid "Check Printing"
 msgstr "Εκτύπωση Επιταγής"
 
 #: src/scm/guile-strings.c:94
+#, fuzzy
 msgid "Capital Gains"
-msgstr ""
+msgstr "Κεφαλαιουχικά Κέρδη"
 
 #: src/scm/guile-strings.c:95 src/scm/guile-strings.c:100
 msgid "Depreciation"
@@ -4577,7 +4621,7 @@ msgstr ""
 
 #: src/scm/guile-strings.c:113
 msgid "Printing"
-msgstr ""
+msgstr "Εκτύπωση"
 
 #: src/scm/guile-strings.c:114
 msgid "More on GnuCash"
@@ -4589,7 +4633,7 @@ msgstr ""
 
 #: src/scm/guile-strings.c:116
 msgid "GNU GPL"
-msgstr ""
+msgstr "ΓΔΑ GNU"
 
 #: src/scm/guile-strings.c:117
 msgid "Report a bug"
@@ -4652,8 +4696,8 @@ msgstr ""
 
 #: src/scm/guile-strings.c:137
 msgid ""
-"If you keep multiple account views open, it may be helpful to give each one "
-"a descriptive name"
+"If you keep multiple account views open, it may be helpful to give each one a "
+"descriptive name"
 msgstr ""
 
 #: src/scm/guile-strings.c:140
@@ -4672,7 +4716,7 @@ msgstr ""
 
 #: src/scm/guile-strings.c:156
 msgid "Account fields to display"
-msgstr ""
+msgstr "Εμφάνιση πεδίων λογαριασμού "
 
 #: src/scm/guile-strings.c:166
 msgid "Can't save window state"
@@ -4708,7 +4752,7 @@ msgstr ""
 
 #: src/scm/guile-strings.c:176
 msgid "Two Week"
-msgstr ""
+msgstr "Δύο εβδομάδες"
 
 #: src/scm/guile-strings.c:177 src/scm/guile-strings.c:178
 msgid "Month"
@@ -4769,7 +4813,7 @@ msgstr ""
 
 #: src/scm/guile-strings.c:197
 msgid "Group the accounts in main categories?"
-msgstr ""
+msgstr "Ομαδοποίηση λογαριασμών σε κύριες κατηγορίες;"
 
 #: src/scm/guile-strings.c:198
 msgid "Select the currency to display the values of this report in."
@@ -4827,7 +4871,7 @@ msgstr ""
 
 #: src/scm/guile-strings.c:211
 msgid "Funds In"
-msgstr ""
+msgstr "Εισροές Κεφαλαίων"
 
 #: src/scm/guile-strings.c:213
 msgid "Receive"
@@ -4850,7 +4894,7 @@ msgstr "Χρέωση"
 
 #: src/scm/guile-strings.c:223
 msgid "Funds Out"
-msgstr ""
+msgstr "Εκροές Κεφαλαίων"
 
 #: src/scm/guile-strings.c:224
 msgid "Withdrawal"
@@ -4923,7 +4967,7 @@ msgstr "Εξ' ορισμού νόμισμα για νέους λογαριασμούς"
 
 #: src/scm/guile-strings.c:252
 msgid "Use 24-hour time format"
-msgstr "Χρησημοποίηση 24 ώρου φορμά "
+msgstr "Χρήση 24-ώρου μορφής "
 
 #: src/scm/guile-strings.c:253
 msgid "Use a 24 hour (instead of a 12 hour) time format."
@@ -4987,7 +5031,7 @@ msgstr ""
 
 #: src/scm/guile-strings.c:279
 msgid "Show Vertical Borders"
-msgstr ""
+msgstr "Εμφάνιση κάθετων πλαισίων"
 
 #: src/scm/guile-strings.c:280
 msgid "By default, show vertical borders on the cells."
@@ -5041,7 +5085,7 @@ msgstr ""
 #: src/scm/guile-strings.c:308 src/scm/guile-strings.c:311
 #: src/scm/guile-strings.c:314 src/scm/guile-strings.c:317
 msgid "Register Colors"
-msgstr ""
+msgstr "Χρώματα Μητρώου"
 
 #: src/scm/guile-strings.c:297
 msgid "Header color"
@@ -5053,15 +5097,15 @@ msgstr ""
 
 #: src/scm/guile-strings.c:300
 msgid "Primary color"
-msgstr ""
+msgstr "Κύριο χρώμα"
 
 #: src/scm/guile-strings.c:301
 msgid "The default background color for register rows"
-msgstr ""
+msgstr "Το προεπιλεγμένο χρώμα παρασκηνίου για της γραμμές του μητρώου"
 
 #: src/scm/guile-strings.c:303
 msgid "Secondary color"
-msgstr ""
+msgstr "Δευτερεύον χρώμα"
 
 #: src/scm/guile-strings.c:304
 msgid "The default secondary background color for register rows"
@@ -5069,7 +5113,7 @@ msgstr ""
 
 #: src/scm/guile-strings.c:306
 msgid "Primary active color"
-msgstr ""
+msgstr "Κύριο ενεργό χρώμα"
 
 #: src/scm/guile-strings.c:307
 msgid "The background color for the current register row"
@@ -5077,7 +5121,7 @@ msgstr ""
 
 #: src/scm/guile-strings.c:309
 msgid "Secondary active color"
-msgstr ""
+msgstr "Δευτερεύον ενεργό χρώμα"
 
 #: src/scm/guile-strings.c:310
 msgid "The secondary background color for the current register row"
@@ -5145,7 +5189,7 @@ msgstr "Διεύθυνση Χρήστη"
 
 #: src/scm/guile-strings.c:331
 msgid "The address of the user. This is used in some reports."
-msgstr ""
+msgstr "Η διεύθηνση του χρήστη.Αυτή χρησιμοποιείται σε κάποιες αναφορές."
 
 #: src/scm/guile-strings.c:332 src/scm/guile-strings.c:335
 #: src/scm/guile-strings.c:344 src/scm/guile-strings.c:355
@@ -5166,19 +5210,22 @@ msgstr "Γενικά"
 
 #: src/scm/guile-strings.c:333
 msgid "Save Window Geometry"
-msgstr "Αποθήκευση Γεωμετρίας Παραθύρου"
+msgstr "Αποθήκευση Γεωμετρίας Παράθυρου"
 
 #: src/scm/guile-strings.c:334
 msgid "Save window sizes and positions."
 msgstr "Αποθήκευση μεγέθους και θέσης παραθύρου."
 
 #: src/scm/guile-strings.c:336
+#, fuzzy
 msgid "Toolbar Buttons"
-msgstr ""
+msgstr "Κουμπιά εργαλειοθήκης"
 
 #: src/scm/guile-strings.c:337
 msgid "Choose whether to display icons, text, or both for toolbar buttons"
 msgstr ""
+"Επιλέξτε αν θα εμφανίζονται εικονίδια,κείμενο ή και τα δύο στα κουμπιά της "
+"εργαλειοθήκης"
 
 #: src/scm/guile-strings.c:338
 msgid "Icons and Text"
@@ -5259,8 +5306,9 @@ msgid "Income:Salary:Taxable"
 msgstr ""
 
 #: src/scm/guile-strings.c:360
+#, fuzzy
 msgid "/ (Slash)"
-msgstr ""
+msgstr "/ (ανάστροφη κάθετος)"
 
 #: src/scm/guile-strings.c:361
 msgid "Income/Salary/Taxable"
@@ -5284,11 +5332,11 @@ msgstr ""
 
 #: src/scm/guile-strings.c:366
 msgid ". (Period)"
-msgstr ""
+msgstr ". (Περίοδος)"
 
 #: src/scm/guile-strings.c:367
 msgid "Income.Salary.Taxable"
-msgstr "Εισόδημα από Μισθό.Φορολογίσιμο"
+msgstr "Εισόδημα από Μισθό.Φορολογήσιμο"
 
 #: src/scm/guile-strings.c:369
 msgid "Reversed-balance account types"
@@ -5362,8 +5410,8 @@ msgstr ""
 
 #: src/scm/guile-strings.c:394
 msgid ""
-"Don't popup the new account list dialog when you choose \"New File\" from "
-"the \"File\" menu"
+"Don't popup the new account list dialog when you choose \"New File\" from the "
+"\"File\" menu"
 msgstr ""
 
 #: src/scm/guile-strings.c:396
@@ -5433,7 +5481,7 @@ msgstr ""
 
 #: src/scm/guile-strings.c:416
 msgid "Enable debugging code."
-msgstr ""
+msgstr "Ενεργοποίηση κώδικα αποσφαλμάτωσης."
 
 #: src/scm/guile-strings.c:417
 msgid "Logging level from 0 (least logging) to 5 (most logging)."
@@ -5502,7 +5550,7 @@ msgstr ""
 
 #: src/scm/guile-strings.c:440
 msgid "_Income & Expense"
-msgstr ""
+msgstr "_Εισόδημα & Δαπάνη"
 
 #: src/scm/guile-strings.c:441
 msgid "_Taxes"
@@ -5572,7 +5620,7 @@ msgstr ""
 #: src/scm/report/guile-strings.c:230 src/scm/report/guile-strings.c:231
 #: src/scm/report/guile-strings.c:380
 msgid "Assets"
-msgstr ""
+msgstr "Ενεργητικό"
 
 #: src/scm/guile-strings.c:464 src/scm/report/guile-strings.c:139
 #: src/scm/report/guile-strings.c:232 src/scm/report/guile-strings.c:233
@@ -5648,6 +5696,9 @@ msgid ""
 "or setting up a chart of accounts, please see the GnuCash online\n"
 "manual."
 msgstr ""
+"Δημιουγήστε νέους λογαριασμούς κάνοντας την επιλογή Νέος στην εργαλειοθήκη "
+"του\n"
+"κύριου παράθυρυ."
 
 #: src/scm/guile-strings.c:492
 msgid ""
@@ -5672,8 +5723,8 @@ msgid ""
 "transaction as it was last entered."
 msgstr ""
 "Η αυτόματη συμπλήρωση κάνει εύκολη την εισαγωγή συνηθισμένων συναλλαγών.  \n"
-"Όταν πληκτρολογήτε τα πρώτα γράμματα της περιγραφής μιας συνηθισμένης \n"
-"συναλλαγής,Το GnuCash αυτόματα θα συμπληρώσει το υπόλοιπο της συναλλαγής \n"
+"Όταν πληκτρολογείτε τα πρώτα γράμματα της περιγραφής μιας συνηθισμένης \n"
+"συναλλαγής,το GnuCash αυτόματα θα συμπληρώσει το υπόλοιπο της συναλλαγής \n"
 "όπως αυτή δόθηκε την τελευταία φορά."
 
 #: src/scm/guile-strings.c:503
@@ -5722,7 +5773,7 @@ msgid ""
 "your GnuCash data file to a floppy or other backup device."
 msgstr ""
 "Θα πρέπει να αποθηκεύετε τα αρχεία σας τακτικά.  Απλά\n"
-"αντιγράψτε το αρχείο δεδομένων σας του GnuCash σε μια δισκέττα ή\n"
+"αντιγράψτε το αρχείο δεδομένων σας του GnuCash σε μια δισκέτα ή\n"
 "σε μια άλλη συσκευή αποθήκευσης."
 
 #: src/scm/guile-strings.c:525
@@ -5732,6 +5783,12 @@ msgid ""
 "button in the register toolbar to let GnuCash create the intermediate\n"
 "transaction. See the GnuCash online manual for details."
 msgstr ""
+"Για να μεταφέρετε κεφάλαια μεταξύ λογαριασμών διαφορετικού "
+"νομίσματος,\nχρειάζεστε ένα ενδιάμεσο λογαριασμό διαπραγμάτευσης "
+"συναλλάγματος.\n"
+"Πατήστε το κουμπί Μεταφορά απο την εργαλειοθήκη του μητρώου ώστε το\n"
+" Gnucash να δημιουργήσει την ενδιάμεση συναλλαγή.\n"
+"Δείτε το Εγχειρίδιο του Gnucash για λεπτομέρειες."
 
 #: src/scm/guile-strings.c:529
 msgid ""
@@ -5740,8 +5797,7 @@ msgid ""
 "To do so, use the \"Multicolumn View\" report."
 msgstr ""
 "Μπορείτε να βλέπετε πολλές αναφορές σε ένα παράθυρο,\n"
-"έτσι έχετε με μιά ματιά όλες τις οικονομικές πληροφορίες\n"
-"που χρειάζεστε.\n"
+"έτσι έχετε με μιά ματιά όλες τις οικονομικές πληροφορίες που χρειάζεστε.\n"
 "Για να το κάνετε, επιλέξτε την αναφορά \"Προβολή Πολλαπλών Στηλών\"."
 
 #: src/scm/guile-strings.c:532
@@ -5808,7 +5864,7 @@ msgstr ""
 
 #: src/scm/qif-import/guile-strings.c:11
 msgid "Unspecified"
-msgstr ""
+msgstr "Ακαθόριστο"
 
 #: src/scm/qif-import/guile-strings.c:12
 msgid "QIF import: Name conflict with another account."
@@ -6003,7 +6059,7 @@ msgstr "Ημ/νία:"
 
 #: src/scm/report/guile-strings.c:94
 msgid "Fancy"
-msgstr ""
+msgstr "Φανταχτερό"
 
 #: src/scm/report/guile-strings.c:95
 msgid "Technicolor"
@@ -6011,7 +6067,7 @@ msgstr ""
 
 #: src/scm/report/guile-strings.c:98
 msgid "Background color for reports."
-msgstr ""
+msgstr "Χρώμα παρασκηνίου των αναφορών."
 
 #: src/scm/report/guile-strings.c:100
 msgid "Background Pixmap"
@@ -6047,7 +6103,7 @@ msgstr "Εμφάνιση Πολλαπλών Στηλών"
 
 #: src/scm/report/guile-strings.c:124 src/scm/report/guile-strings.c:127
 msgid "Welcome to GnuCash 1.6"
-msgstr ""
+msgstr "Καλώς ήρθατε στο Gnucash 1.6"
 
 #: src/scm/report/guile-strings.c:126
 msgid "GnuCash 1.6 has lots of nice features. Here are a few."
@@ -6129,7 +6185,7 @@ msgstr ""
 
 #: src/scm/report/guile-strings.c:146 src/scm/report/guile-strings.c:260
 msgid "Show long account names"
-msgstr ""
+msgstr "Εμφάνιση μεγάλων ονομάτων λογαριασμών"
 
 #: src/scm/report/guile-strings.c:147
 msgid "Show Totals"
@@ -6238,7 +6294,7 @@ msgstr "Περίληψη Λογαριασμού"
 #: src/scm/report/guile-strings.c:178 src/scm/report/guile-strings.c:255
 #: src/scm/report/guile-strings.c:360 src/scm/report/guile-strings.c:424
 msgid "Step Size"
-msgstr ""
+msgstr "Μέγεθος Βήματος"
 
 #: src/scm/report/guile-strings.c:181
 msgid "Include Sub-Accounts"
@@ -6393,7 +6449,7 @@ msgstr ""
 
 #: src/scm/report/guile-strings.c:251
 msgid "Assets Over Time"
-msgstr ""
+msgstr "Ενεργητικό Μέσα στον Χρόνο"
 
 #: src/scm/report/guile-strings.c:252
 msgid "Liabilities Over Time"
@@ -6555,7 +6611,7 @@ msgstr ""
 
 #: src/scm/report/guile-strings.c:318
 msgid "The Good"
-msgstr ""
+msgstr "Ο Καλός"
 
 #: src/scm/report/guile-strings.c:319
 msgid "Good option"
@@ -6563,7 +6619,7 @@ msgstr ""
 
 #: src/scm/report/guile-strings.c:320
 msgid "The Bad"
-msgstr ""
+msgstr "Ο Κακός"
 
 #: src/scm/report/guile-strings.c:321
 msgid "Bad option"
@@ -6571,7 +6627,7 @@ msgstr ""
 
 #: src/scm/report/guile-strings.c:322
 msgid "The Ugly"
-msgstr ""
+msgstr "Ο Άσχημος"
 
 #: src/scm/report/guile-strings.c:323
 msgid "Ugly option"
@@ -6594,8 +6650,8 @@ msgstr ""
 #: src/scm/report/guile-strings.c:328
 #, c-format
 msgid ""
-"This is a sample GnuCash report. See the guile (scheme) source code in %s "
-"for details on writing your own reports, or extending existing reports."
+"This is a sample GnuCash report. See the guile (scheme) source code in %s for "
+"details on writing your own reports, or extending existing reports."
 msgstr ""
 
 #: src/scm/report/guile-strings.c:329
@@ -6635,7 +6691,7 @@ msgstr "Αληθής"
 
 #: src/scm/report/guile-strings.c:336
 msgid "false"
-msgstr ""
+msgstr "Ψευδές"
 
 #: src/scm/report/guile-strings.c:337
 #, c-format
@@ -6727,7 +6783,7 @@ msgstr ""
 
 #: src/scm/report/guile-strings.c:371
 msgid "Show Income and Expenses?"
-msgstr ""
+msgstr "Εμφάνιση Εισοδήματος και Δαπανών;"
 
 #: src/scm/report/guile-strings.c:372
 msgid "Show the Asset and the Liability bars?"
@@ -6844,22 +6900,22 @@ msgstr ""
 
 #: src/scm/report/guile-strings.c:453
 msgid "All Prices equal"
-msgstr ""
+msgstr "Όλες οι τιμές ίσες"
 
 #: src/scm/report/guile-strings.c:454
 msgid ""
-"All the prices found are equal. This would result in a plot with one "
-"straight line. Unfortunately, the plotting tool can't handle that."
+"All the prices found are equal. This would result in a plot with one straight "
+"line. Unfortunately, the plotting tool can't handle that."
 msgstr ""
 
 #: src/scm/report/guile-strings.c:455
 msgid "All Prices at the same date"
-msgstr ""
+msgstr "Όλες οι τιμές την ίδια ημ/νία"
 
 #: src/scm/report/guile-strings.c:456
 msgid ""
-"All the prices found are from the same date. This would result in a plot "
-"with one straight line. Unfortunately, the plotting tool can't handle that."
+"All the prices found are from the same date. This would result in a plot with "
+"one straight line. Unfortunately, the plotting tool can't handle that."
 msgstr ""
 
 #: src/scm/report/guile-strings.c:457
@@ -6910,11 +6966,11 @@ msgstr "Το όνομα του πελάτη που θα μπει στο τιμολόγιο."
 
 #: src/scm/report/guile-strings.c:483
 msgid "Client Address"
-msgstr "Διεύθηνση Πελάτη"
+msgstr "Διεύθυνση Πελάτη"
 
 #: src/scm/report/guile-strings.c:484
 msgid "The address of the client to put on the invoice"
-msgstr "Η διεύθηνση του πελάτη που θα μπεί στο τιμολόγιο"
+msgstr "Η διεύθυνση του πελάτη που θα μπεί στο τιμολόγιο"
 
 #: src/scm/report/guile-strings.c:486
 msgid "Title"
@@ -7016,7 +7072,7 @@ msgstr ""
 
 #: src/scm/report/guile-strings.c:536
 msgid "Apr 1 - May 31"
-msgstr "Απρ 1 - Μαιος 31"
+msgstr "Απρ 1 - Μάιος 31"
 
 #: src/scm/report/guile-strings.c:537
 msgid "3rd Est Tax Quarter"
@@ -7032,7 +7088,7 @@ msgstr ""
 
 #: src/scm/report/guile-strings.c:540
 msgid "Sep 1 - Dec 31"
-msgstr ""
+msgstr "Σεπ 1 - Δεκ 31"
 
 #: src/scm/report/guile-strings.c:541 src/scm/report/guile-strings.c:542
 msgid "Last Year"
@@ -7186,7 +7242,7 @@ msgstr ""
 
 #: src/scm/report/guile-strings.c:582
 msgid "Secondary Key"
-msgstr ""
+msgstr "Δευτερεύον Κλειδί"
 
 #: src/scm/report/guile-strings.c:583
 msgid "Secondary Subtotal"
@@ -7254,7 +7310,7 @@ msgstr ""
 
 #: src/scm/report/guile-strings.c:633
 msgid "Filter Type"
-msgstr ""
+msgstr "Τύπος Φίλτρου"
 
 #: src/scm/report/guile-strings.c:634
 msgid "Filter account"
@@ -7354,7 +7410,7 @@ msgstr ""
 
 #: src/scm/report/guile-strings.c:667
 msgid "Descending"
-msgstr "Φθείνουσα"
+msgstr "Φθίνουσα"
 
 #: src/scm/report/guile-strings.c:668
 msgid "largest to smallest, latest to earliest"
@@ -7406,12 +7462,12 @@ msgstr ""
 
 #: src/scm/report/guile-strings.c:696
 msgid "Display the full account name"
-msgstr ""
+msgstr "Εμφάνιση του πλήρους ονόματος λογαριασμού"
 
 #: src/scm/report/guile-strings.c:698
 msgid ""
-"Display the other account? (if this is a split transaction, this parameter "
-"is guessed)."
+"Display the other account? (if this is a split transaction, this parameter is "
+"guessed)."
 msgstr ""
 
 #: src/scm/report/guile-strings.c:702
