@@ -184,7 +184,7 @@
 	    <class>GtkLabel</class>
 	    <child_name>CTree:title</child_name>
 	    <name>label847713</name>
-	    <label>Online ID</label>
+	    <label>Account ID</label>
 	    <justify>GTK_JUSTIFY_CENTER</justify>
 	    <wrap>False</wrap>
 	    <xalign>0.5</xalign>
