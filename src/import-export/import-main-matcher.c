@@ -387,8 +387,6 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
   GladeXML *xml;
   GtkWidget *heading_label;
   
-  gnc_set_log_level(MOD_IMPORT, GNC_LOG_TRACE);
-
   info = g_new0 (GNCImportMainMatcher, 1);
 
   /* Initialize user Settings. */

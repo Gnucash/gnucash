@@ -304,8 +304,6 @@ Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
 
   ENTER(" ");
 
-gnc_set_log_level(MOD_IMPORT, GNC_LOG_INFO);
-
   /* check to see if the imap is NULL */
   if(!imap)
   {
