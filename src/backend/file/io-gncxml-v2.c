@@ -51,6 +51,7 @@ static short module = MOD_IO;
 
 
 #define GNC_V2_STRING "gnc-v2"
+const gchar *book_version_string;
 
 static void
 run_callback(sixtp_gdv2 *data, const char *type)
@@ -384,7 +385,7 @@ gnc_counter_end_handler(gpointer data_for_children,
     strval = dom_tree_to_text(tree);
     if(!string_to_gint64(strval, &val))
     {
-        PWARN("string_to_gint64 failed with input: %s",
+        PERR ("string_to_gint64 failed with input: %s",
                   strval ? strval : "(null)");
         g_free (strval);
         xmlFree (type);
@@ -414,7 +415,7 @@ gnc_counter_end_handler(gpointer data_for_children,
     }
     else
     {
-        PWARN("Unknown type: %s",
+        PERR("Unknown type: %s",
                   type ? type : "(null)");
         xmlFree (type);
         return FALSE;
@@ -450,6 +451,8 @@ print_counter_data(load_counter data)
 #endif
 
 static const char *BOOK_TAG = "gnc:book";
+static const char *BOOK_ID_TAG = "book:id";
+static const char *BOOK_SLOTS_TAG = "book:slots";
 static const char *ACCOUNT_TAG = "gnc:account";
 static const char *PRICEDB_TAG = "gnc:pricedb";
 static const char *COMMODITY_TAG = "gnc:commodity";
@@ -502,13 +505,13 @@ generic_callback(const char *tag, gpointer globaldata, gpointer data)
     if(safe_strcmp(tag, BOOK_TAG) == 0)
     {
         add_book_local(gd, (GNCBook*)data);
+        book_callback(tag, globaldata, data);
     }
     else
     {
         // PWARN ("importing pre-book-style XML data file");
+        book_callback(tag, globaldata, data);
     }
-// xxx move me ... 
-book_callback(tag, globaldata, data);
     return TRUE;
 }
 
@@ -521,6 +524,7 @@ gnc_session_load_from_xml_file_v2(
     sixtp_gdv2 *gd;
     sixtp *top_parser;
     sixtp *main_parser;
+    sixtp *book_parser;
 
     gd = g_new0(sixtp_gdv2, 1);
 
@@ -544,6 +548,7 @@ gnc_session_load_from_xml_file_v2(
 
     top_parser = sixtp_new();
     main_parser = sixtp_new();
+    book_parser = sixtp_new();
 
     if(!sixtp_add_some_sub_parsers(
         top_parser, TRUE,
@@ -555,6 +560,27 @@ gnc_session_load_from_xml_file_v2(
 
     if(!sixtp_add_some_sub_parsers(
            main_parser, TRUE,
+           COUNT_DATA_TAG, gnc_counter_sixtp_parser_create(),
+           BOOK_TAG, book_parser,
+
+           /* the following are present here only to support 
+            * the older, pre-book format.  Basically, the top-level 
+            * book is implicit. */
+           PRICEDB_TAG, gnc_pricedb_sixtp_parser_create(),
+           COMMODITY_TAG, gnc_commodity_sixtp_parser_create(),
+           ACCOUNT_TAG, gnc_account_sixtp_parser_create(),
+           TRANSACTION_TAG, gnc_transaction_sixtp_parser_create(),
+           SCHEDXACTION_TAG, gnc_schedXaction_sixtp_parser_create(),
+           TEMPLATE_TRANSACTION_TAG, gnc_template_transaction_sixtp_parser_create(),
+           NULL, NULL))
+    {
+        return FALSE;
+    }
+
+    if(!sixtp_add_some_sub_parsers(
+           book_parser, TRUE,
+           BOOK_ID_TAG, gnc_book_id_sixtp_parser_create(),
+           BOOK_SLOTS_TAG, gnc_book_slots_sixtp_parser_create(),
            COUNT_DATA_TAG, gnc_counter_sixtp_parser_create(),
            PRICEDB_TAG, gnc_pricedb_sixtp_parser_create(),
            COMMODITY_TAG, gnc_commodity_sixtp_parser_create(),
@@ -670,6 +696,61 @@ compare_commodity_ids(gconstpointer a, gconstpointer b)
   const gnc_commodity *cb = (const gnc_commodity *) b;
   return(safe_strcmp(gnc_commodity_get_mnemonic(ca),
                      gnc_commodity_get_mnemonic(cb)));
+}
+
+static void write_pricedb (FILE *out, GNCBook *book);
+static void write_transactions (FILE *out, GNCBook *book);
+static void write_template_transaction_data (FILE *out, GNCBook *book);
+static void write_schedXactions(FILE *out, GNCBook *book);
+
+static void
+write_book(FILE *out, GNCBook *book)
+{
+
+#ifdef IMPLEMENT_BOOK_DOM_TREES_LATER
+    /* We can't just blast out the dom tree, because the dom tree
+     * doesn't have the books, transactions, etc underneath it.
+     * But that is just as well, since I think the performance
+     * will be much better if we write out as we go along 
+     */
+    xmlNodePtr node;
+
+    node = gnc_book_dom_tree_create(book);
+
+    if(!node)
+    {
+        return;
+    }
+    
+    xmlElemDump(out, NULL, node);
+    fprintf(out, "\n");
+
+    xmlFreeNode(node);
+#endif
+
+    fprintf( out, "<%s version=\"%s\">\n", BOOK_TAG, book_version_string );
+    write_book_parts (out, book);
+
+    write_counts(out,
+                 "commodity",
+                 gnc_commodity_table_get_size(
+                     gnc_book_get_commodity_table(book)),
+                 "account",
+                 xaccGroupGetNumSubAccounts(gnc_book_get_group(book)),
+                 "transaction",
+                 gnc_book_count_transactions(book),
+                 "schedxaction",
+                 g_list_length( gnc_book_get_schedxactions(book) ),
+                 NULL);
+
+    write_commodities(out, book);
+    write_pricedb(out, book);
+    write_accounts(out, book);
+    write_transactions(out, book);
+    write_template_transaction_data(out, book);
+    write_schedXactions(out, book);
+
+    fprintf( out, "</%s>\n", BOOK_TAG );
 }
 
 void
@@ -828,28 +909,10 @@ gnc_book_write_to_xml_filehandle_v2(GNCBook *book, FILE *out)
     write_v2_header (out);
 
     write_counts(out,
-                 "commodity",
-                 gnc_commodity_table_get_size(
-                     gnc_book_get_commodity_table(book)),
-                 "account",
-                 xaccGroupGetNumSubAccounts(gnc_book_get_group(book)),
-                 "transaction",
-                 gnc_book_count_transactions(book),
-                 "schedxaction",
-                 g_list_length( gnc_book_get_schedxactions(book) ),
+                 "book", 1,
                  NULL);
 
-    write_commodities(out, book);
-
-    write_pricedb(out, book);
-
-    write_accounts(out, book);
-
-    write_transactions(out, book);
-
-    write_template_transaction_data(out, book);
-
-    write_schedXactions(out, book);
+    write_book(out, book);
 
     fprintf(out, "</" GNC_V2_STRING ">\n\n");
     
@@ -861,6 +924,7 @@ gnc_book_write_accounts_to_xml_filehandle_v2(GNCBook *book, FILE *out)
 {
     if (!out) return FALSE;
 
+PWARN ("huhhhh ???? Who is using this thing  ??? \n");
     write_v2_header (out);
 
     write_counts(out,

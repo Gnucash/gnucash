@@ -41,10 +41,12 @@
 #include "gnc-xml.h"
 #include "io-gncxml-gen.h"
 #include "io-gncxml-v2.h"
+#include "io-utils.h"
 
 #include "sixtp-dom-parsers.h"
 #include "gnc-book-p.h"
 #include "gnc-book.h"
+#include "gnc-engine-util.h"
 #include "Group.h"
 
 const gchar *book_version_string = "2.0.0";
@@ -54,6 +56,7 @@ const gchar *book_version_string = "2.0.0";
 #define book_id_string "book:id"
 #define book_slots_string "book:slots"
 
+static short module = MOD_IO;
 
 /* ================================================================ */
 
@@ -246,6 +249,50 @@ gnc_book_end_handler(gpointer data_for_children,
     return book != NULL;
 }
 
+static gboolean
+gnc_book_id_end_handler(gpointer data_for_children,
+                        GSList* data_from_children, GSList* sibling_data,
+                        gpointer parent_data, gpointer global_data,
+                        gpointer *result, const gchar *tag)
+{
+    gboolean successful;
+    xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    gxpf_data *gdata = (gxpf_data*)global_data;
+    GNCBook *book = gdata->bookdata;
+
+    if(parent_data) { return TRUE; }
+    if(!tag) { return TRUE; }
+
+    g_return_val_if_fail(tree, FALSE);
+
+    successful = book_id_handler (tree, book);
+    xmlFreeNode(tree);
+
+    return successful;
+}
+
+static gboolean
+gnc_book_slots_end_handler(gpointer data_for_children,
+                        GSList* data_from_children, GSList* sibling_data,
+                        gpointer parent_data, gpointer global_data,
+                        gpointer *result, const gchar *tag)
+{
+    gboolean successful;
+    xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    gxpf_data *gdata = (gxpf_data*)global_data;
+    GNCBook *book = gdata->bookdata;
+
+    if(parent_data) { return TRUE; }
+    if(!tag) { return TRUE; }
+
+    g_return_val_if_fail(tree, FALSE);
+
+    successful = book_slots_handler (tree, book);
+    xmlFreeNode(tree);
+
+    return successful;
+}
+
 GNCBook*
 dom_tree_to_book (xmlNodePtr node, GNCBook *book)
 {
@@ -255,6 +302,7 @@ dom_tree_to_book (xmlNodePtr node, GNCBook *book)
                                          book);
     if (!successful)
     {
+        PERR ("failed to parse book");
         book = NULL;
     }
 
@@ -266,3 +314,16 @@ gnc_book_sixtp_parser_create(void)
 {
     return sixtp_dom_parser_new(gnc_book_end_handler, NULL, NULL);
 }
+
+sixtp*
+gnc_book_id_sixtp_parser_create(void)
+{
+    return sixtp_dom_parser_new(gnc_book_id_end_handler, NULL, NULL);
+}
+
+sixtp*
+gnc_book_slots_sixtp_parser_create(void)
+{
+    return sixtp_dom_parser_new(gnc_book_slots_end_handler, NULL, NULL);
+}
+
