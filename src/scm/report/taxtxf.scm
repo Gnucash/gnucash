@@ -558,7 +558,8 @@
 			    txf-dups-alist))))
       (if (not (null? dups))
 	  (cons (html-para (html-blue (string-db 'lookup 'txf-dup)))
-		(map html-para (map html-blue dups))))))
+		(map html-para (map html-blue dups)))
+	  '())))
   
   ;; some codes require special handling
   (define (txf-special-split? code)
@@ -897,7 +898,8 @@
 					    (lambda (x)
 					      (if (>= max-level (+ 1 level))
 						  (handle-level-x-account
-						   (+ 1 level) x)))
+						   (+ 1 level) x)
+						  '()))
 					    children)))
 		     
 		     (account-balance (if (or hierarchical?
@@ -1078,7 +1080,7 @@
 	     ""
 	     (map html-para (map html-blue txf-feedback-str-lst)))
 	 (txf-print-dups)
-	 "<table " (if txf-help "border=1 " "") "cellpadding=1>"
+	 "<table " (if txf-help "border=1 " "border=0 ") "cellpadding=1>"
 	 "<caption><b>" report-name "</b></caption>\n"
 	 "<tr>"
 	 "<th>"
@@ -1103,7 +1105,9 @@
 	 output
 	 "</table>\n"
 	 (if (null? (car output))
-	     (string-append "<p><b>" (string-db 'lookup 'no-tax)
+	     (string-append "<p><b>" (string-db 'lookup (if hierarchical?
+							    'no-hierarchical
+							    'no-tax))
 			    "</b></p>\n")
 	     " ")
 	 "</body>"
@@ -1114,13 +1118,14 @@
   (string-db 'store 'account-name "Account Name")
   (string-db 'store 'no-tax "No Tax Related accounts were found. Click \
 \"Parameters\" to set some  with the \"Set/Reset Tax Status:\" parameter.") 
+  (string-db 'store 'no-hierarchical "No accounts were found.") 
   (string-db 'store 'txf-may "Blue items are exportable to a TXF file")
   (string-db 'store 'txf-was "Blue items were exported to file: \"")
   (string-db 'store 'txf-not "Blue items were <b>NOT</b> exported to txf \
 file!")
   (string-db 'store 'sub "(Sub ")
   (string-db 'store 'balance "Total")
-  (string-db 'store 'hierarchical-title "Hierarchical Account Report")
+  (string-db 'store 'hierarchical-title "Hierarchical Accounts Report")
   (string-db 'store 'tax-title "Taxable Income / Deductable Expenses")
   (string-db 'store 'tax-from "Period From: ")
   (string-db 'store 'tax-to "  To: ")
