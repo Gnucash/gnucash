@@ -16,7 +16,6 @@ GNUCASH_SGML_FILES = \
 	xacc-balancesheet.sgml \
 	xacc-chartofaccts.sgml \
 	xacc-commodity.sgml \
-	xacc-common-report-options.sgml \
 	xacc-currencyhandling.sgml \
 	xacc-dateinput.sgml \
 	xacc-depreciation.sgml \
@@ -31,7 +30,6 @@ GNUCASH_SGML_FILES = \
 	xacc-locatingtxns.sgml \
 	xacc-mainwin.sgml \
 	xacc-multicolumn-view-reports.sgml \
-	xacc-net-worth-barchart.sgml \
 	xacc-newacctwin.sgml \
 	xacc-pnl.sgml \
 	xacc-portfolio-report.sgml \
