@@ -88,7 +88,7 @@
 #include "Backend.h"
 #include "gnc-engine.h"
 
-/** PROTOTYPES ******************************************************/
+/* PROTOTYPES ******************************************************/
 
 GNCSession * gnc_session_new (void);
 void         gnc_session_destroy (GNCSession *session);

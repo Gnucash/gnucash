@@ -1,7 +1,4 @@
 /********************************************************************\
- * SchedXaction.h -- Scheduled Transaction                          *
- * Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>          *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -20,13 +17,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
 /**
- * @addtogroup SchedXaction
+ * @addtogroup Engine_SchedXaction
  * @{ */
 /**
  * @file SchedXaction.h
  * @brief Scheduled Transactions public handling routines.
+ * @author Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>
  **/
 
 #ifndef XACC_SCHEDXACTION_H

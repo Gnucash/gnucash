@@ -233,19 +233,30 @@ int          xaccAccountOrder (Account **account_1, Account **account_2);
 
 /** @name Account general setters/getters */
 /** @{ */
+/** Set the account's type */
 void xaccAccountSetType (Account *account, GNCAccountType);
+/** Set the account's name */
 void xaccAccountSetName (Account *account, const char *name);
+/** Set the account's accounting code */
 void xaccAccountSetCode (Account *account, const char *code);
+/** Set the account's description */
 void xaccAccountSetDescription (Account *account, const char *desc);
+/** Set the account's notes */
 void xaccAccountSetNotes (Account *account, const char *notes);
 /** Set the last num field of an Account */
-void           xaccAccountSetLastNum (Account *account, const char *num);
+void xaccAccountSetLastNum (Account *account, const char *num);
 
+/** Set the account's type */
 GNCAccountType xaccAccountGetType (Account *account);
+/** Get the account's name */
 const char *   xaccAccountGetName (Account *account);
+/** Get the account's accounting code */
 const char *   xaccAccountGetCode (Account *account);
+/** Get the account's description */
 const char *   xaccAccountGetDescription (Account *account);
+/** Get the account's notes */
 const char *   xaccAccountGetNotes (Account *account);
+/** Get the last num field of an Account */
 const char *   xaccAccountGetLastNum (Account *account);
 /** @} */
 
@@ -266,21 +277,34 @@ const char *   xaccAccountGetLastNum (Account *account);
  * Split's 'amount' (which is the amount of the Account's commodity
  * involved) into the Transaction's balancing currency. */
 /** @{ */
+
+/** Set the account's commodity */
 void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
+/** Get the account's commodity */
 gnc_commodity * xaccAccountGetCommodity (Account *account);
+/** DOCUMENT ME! */
 int  xaccAccountGetCommoditySCU (Account *account);
+/** DOCUMENT ME! */
 int  xaccAccountGetCommoditySCUi (Account *account);
+/** DOCUMENT ME! */
 void xaccAccountSetCommoditySCU (Account *account, int frac);
+/** DOCUMENT ME! */
 void xaccAccountSetCommoditySCUandFlag (Account *account, int frac);
+/** DOCUMENT ME! */
 void  xaccAccountSetNonStdSCU (Account *account, gboolean flag);
+/** DOCUMENT ME! */
 gboolean  xaccAccountGetNonStdSCU (Account *account);
-
-
-gnc_numeric     xaccAccountGetBalance (Account *account);
-gnc_numeric     xaccAccountGetClearedBalance (Account *account);
-gnc_numeric     xaccAccountGetReconciledBalance (Account *account);
-gnc_numeric     xaccAccountGetBalanceAsOfDate (Account *account, time_t date);
 /**@}*/
+
+/** Get the current balance of the account */
+gnc_numeric     xaccAccountGetBalance (Account *account);
+/** Get the current balance of the account, only including cleared transactions */
+gnc_numeric     xaccAccountGetClearedBalance (Account *account);
+/** Get the current balance of the account, only including reconciled transactions */
+gnc_numeric     xaccAccountGetReconciledBalance (Account *account);
+/** Get the balance of the account as of the date specified */
+gnc_numeric     xaccAccountGetBalanceAsOfDate (Account *account, time_t date);
+
 
 /** @name Account Deprecated currency/security access routines.
  * 
@@ -314,12 +338,19 @@ void xaccAccountDeleteOldData (Account *account);
 
 /** @name Account Children and Parent getters/setters */
 /** @{ */
+
+/** DOCUMENT ME! */
 AccountGroup * xaccAccountGetChildren (Account *account);
+/** DOCUMENT ME! */
 AccountGroup * xaccAccountGetParent (Account *account);
+/** DOCUMENT ME! */
 Account *      xaccAccountGetParentAccount (Account *account);
+/** DOCUMENT ME! */
 GList *        xaccAccountGetDescendants (Account *account);
 
+/** DOCUMENT ME! */
 void            xaccAccountSetReconcileChildrenStatus(Account *account, gboolean status);
+/** DOCUMENT ME! */
 gboolean        xaccAccountGetReconcileChildrenStatus(Account *account);
 /** @} */
 
@@ -348,19 +379,28 @@ LotList * xaccAccountFindOpenLots (Account *acc,
 
 /** @name Account Tax related getters/setters */
 /** @{ */
+
+/** DOCUMENT ME! */
 gboolean        xaccAccountGetTaxRelated (Account *account);
+/** DOCUMENT ME! */
 void            xaccAccountSetTaxRelated (Account *account,
                                           gboolean tax_related);
 
+/** DOCUMENT ME! */
 const char *    xaccAccountGetTaxUSCode (Account *account);
+/** DOCUMENT ME! */
 void            xaccAccountSetTaxUSCode (Account *account, const char *code);
+/** DOCUMENT ME! */
 const char *    xaccAccountGetTaxUSPayerNameSource (Account *account);
+/** DOCUMENT ME! */
 void            xaccAccountSetTaxUSPayerNameSource (Account *account,
                                                     const char *source);
 /** @} */
 
 /** @name Account Placeholder getters/setters */
 /** @{ */
+
+/** DOCUMENT ME! */
 typedef enum 
   {
   PLACEHOLDER_NONE,
@@ -368,9 +408,12 @@ typedef enum
   PLACEHOLDER_CHILD,
   } GNCPlaceholderType;
 
+/** DOCUMENT ME! */
 gboolean        xaccAccountGetPlaceholder (Account *account);
+/** DOCUMENT ME! */
 void            xaccAccountSetPlaceholder (Account *account,
                                            gboolean option);
+/** DOCUMENT ME! */
 GNCPlaceholderType xaccAccountGetDescendantPlaceholder (Account *account);
 /** @} */
 
@@ -416,33 +459,44 @@ void           xaccClearMarkDownGr (AccountGroup *group, short val);
 
 /** @name Account Reconciliation information getters/setters */
 /** @{ */
+/** DOCUMENT ME! */
 gboolean       xaccAccountGetReconcileLastDate (Account *account,
                                                 time_t *last_date);
+/** DOCUMENT ME! */
 void           xaccAccountSetReconcileLastDate (Account *account,
                                                 time_t last_date);
 
+/** DOCUMENT ME! */
 gboolean       xaccAccountGetReconcileLastInterval (Account *account,
 						    int *months, int *days);
+/** DOCUMENT ME! */
 void           xaccAccountSetReconcileLastInterval (Account *account,
 						    int months, int days);
 
+/** DOCUMENT ME! */
 gboolean       xaccAccountGetReconcilePostponeDate (Account *account,
                                                     time_t *postpone_date);
+/** DOCUMENT ME! */
 void           xaccAccountSetReconcilePostponeDate (Account *account,
                                                     time_t postpone_date);
 
+/** DOCUMENT ME! */
 gboolean       xaccAccountGetReconcilePostponeBalance (Account *account,
                                                        gnc_numeric *balance);
+/** DOCUMENT ME! */
 void           xaccAccountSetReconcilePostponeBalance (Account *account,
                                                        gnc_numeric balance);
 
+/** DOCUMENT ME! */
 void           xaccAccountClearReconcilePostpone (Account *account);
 /** @} */
 
 /** @name Account AutoInterest getters/setters
  * @note FIXME: What is this? */
 /** @{ */
+/** DOCUMENT ME! */
 gboolean xaccAccountGetAutoInterestXfer (Account *account, gboolean default_value);
+/** DOCUMENT ME! */
 void     xaccAccountSetAutoInterestXfer (Account *account, gboolean option);
 /** @} */
 
@@ -451,6 +505,10 @@ void     xaccAccountSetAutoInterestXfer (Account *account, gboolean option);
     backend that should be used to retrieve online prices.  See
     price-quotes.scm for more information.*/
 void         xaccAccountSetPriceSrc (Account *account, const char *src);
+/** The xaccAccountSetPriceSrc() and xaccAccountGetPriceSrc() routines
+    are used to get and set a string that identifies the Finance::Quote
+    backend that should be used to retrieve online prices.  See
+    price-quotes.scm for more information.*/
 const char * xaccAccountGetPriceSrc (Account *account);
 
 /**   xaccAccountGetQuoteTZ() and xaccAccountSetQuoteTZ() set the
@@ -467,13 +525,14 @@ void         xaccAccountSetQuoteTZ (Account *account, const char *tz);
 const char * xaccAccountGetQuoteTZ (Account *account);
 
 
-/** Unimplemented */
+/** \warning Unimplemented */
 typedef  gpointer (*SplitCallback)(Split *s, gpointer data);
-/** Unimplemented */
+/** \warning  Unimplemented */
 gpointer xaccAccountForEachSplit(Account *account,
                                  SplitCallback,
                                  gpointer data);
 
+/** Callback prototype */
 typedef  gboolean (*TransactionCallback)(Transaction *t, void *data);
 /** The xaccAccountForEachTransaction() routine will
    traverse all of the transactions in the given account.  Continue

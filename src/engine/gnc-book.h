@@ -1,6 +1,4 @@
 /********************************************************************\
- * gnc-book.h -- dataset access (set of accounting books)           *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -19,16 +17,17 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
+/** @addtogroup Engine
+    @{ */
 /** @file gnc-book.h
- *
+ * @brief dataset access (set of accounting books)
  * Encapsulate all the information about a gnucash dataset.
  * See src/docs/books.txt for implementation overview.
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * Copyright (c) 1998, 1999, 2001 Linas Vepstas <linas@linas.org>
- * Copyright (c) 2000 Dave Peticolas
+ * @author Copyright (c) 1998, 1999, 2001 Linas Vepstas <linas@linas.org>
+ * @author Copyright (c) 2000 Dave Peticolas
  */
 
 #ifndef GNC_BOOK_H
@@ -38,42 +37,49 @@
 #include "gnc-pricedb.h"
 #include "kvp_frame.h"
 
-/** PROTOTYPES ******************************************************/
-
+/** Allocate, initialise and return a new GNCBook.  The new book will
+    contain a newly allocated AccountGroup */
 GNCBook * gnc_book_new (void);
+
+/** End any editing sessions associated with book, and free all memory 
+    associated with it. */
 void      gnc_book_destroy (GNCBook *book);
 
-/** 
- * The gnc_book_get_guid() routine returns the GUID for this book.
- * The gnc_book_get_slots() method will return the kvp data 
- *    for the book 
- *
- * The gnc_book_get_group() returns the top-level group in the book.
- * The gnc_book_get_pricedb() ditto 
- * The gnc_book_get_commodity_table() ditto
- * The gnc_book_get_schedxactions() returns the list of scheduled transactions.
- * The gnc_book_get_template_group() ditto
- */
+/** \return The GUID for the book. */
 const GUID          * gnc_book_get_guid (GNCBook *book);
+
+/** \return The kvp data for the book */
 kvp_frame           * gnc_book_get_slots (GNCBook *book);
+
+/** \return The top-level group in the book.*/
 AccountGroup        * gnc_book_get_group (GNCBook *book);
+
+/** \return The pricedb of the book. */
 GNCPriceDB          * gnc_book_get_pricedb (GNCBook *book);
+
+/** \return The commodity table of the book.  */
 gnc_commodity_table * gnc_book_get_commodity_table(GNCBook *book);
+
+/** \return A GList of the scheduled transactions in the book.  */
 GList               * gnc_book_get_schedxactions( GNCBook *book );
+
+/** \return The template AccountGroup of the book.  */
 AccountGroup        * gnc_book_get_template_group( GNCBook *book );
 
-/** The gnc_book_set_data() and gnc_book_get_data() routines allow
+/** The gnc_book_set_data() allows
  *    arbitrary pointers to structs to be stored in GNCBook.
  *    This is the "prefered" method for extending GNCBook to hold
  *    new data types.
  */
 void gnc_book_set_data (GNCBook *book, const char *key, gpointer data);
+
+/** Retreives arbitrary pointers to structs stored by gnc_book_set_data. */
 gpointer gnc_book_get_data (GNCBook *book, const char *key);
 
+/** DOCUMENT ME! */
 gpointer gnc_book_get_backend (GNCBook *book);
 
-/*
- * The gnc_book_not_saved() subroutine will return TRUE if any 
+/** gnc_book_not_saved() will return TRUE if any 
  *    data in the book hasn't been saved to long-term storage.
  *    (Actually, that's not quite true.  The book doesn't know 
  *    anything about saving.  Its just that whenever data is modified,
@@ -84,15 +90,14 @@ gpointer gnc_book_get_backend (GNCBook *book);
 gboolean gnc_book_not_saved (GNCBook *book);
 
 /** Call this function when you change the book kvp, to make sure the book
- * is marked 'dirty'.
- */
+ * is marked 'dirty'. */
 void gnc_book_kvp_changed (GNCBook *book);
 
 /** The gnc_book_equal() method returns TRUE if the engine data
  * in the two given books is equal. */
 gboolean gnc_book_equal (GNCBook *book_1, GNCBook *book_2);
 
-/** XXX FIXME count_transactions is a utility function, needs 
+/** \warning XXX FIXME gnc_book_count_transactions is a utility function, needs 
  * to be moved to some utility/support file.  */
 guint gnc_book_count_transactions(GNCBook *book);
 
@@ -102,7 +107,11 @@ guint gnc_book_count_transactions(GNCBook *book);
 gint64 gnc_book_get_counter (GNCBook *book, const char *counter_name);
 
 /** Book parameter names */
+/**@{*/ 
 
 #define BOOK_KVP		"kvp"
 
+/**@}*/
+ 
 #endif /* GNC_BOOK_H */
+/** @} */

@@ -1,9 +1,4 @@
 /********************************************************************\
- * date.h -- utility functions to handle the date (adjusting, get   * 
- *           current date, etc.) for GnuCash                        *
- * Copyright (C) 1997 Robin D. Clark (rclark@cs.hmc.edu)            *
- * Copyright (C) 1998, 1999, 2000 Linas Vepstas                     *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -21,19 +16,22 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-
-/* hack alert -- the scan and print routines should probably be moved
- * to somewhere else. The engine really isn't involved with things
- * like printing formats. This is needed mostly by the GUI and so on.
- * If a file-io thing needs date handling, it should do it itself,
- * instead of depending on the routines here. */
-
 /** @addtogroup Date
     @{ */
 /** @file date.h 
-    @brief Date handling routines   
+    @brief Date handling routines  
+    *
+    Utility functions to handle the date (adjusting, get 
+    current date, etc.) 
+
+    \warning HACK ALERT -- the scan and print routines should probably be moved
+    to somewhere else. The engine really isn't involved with things
+    like printing formats. This is needed mostly by the GUI and so on.
+    If a file-io thing needs date handling, it should do it itself,
+    instead of depending on the routines here. 
+    *
     @author Copyright (C) 1997 Robin D. Clark
-    @author Copyright (C) 1999,1999,2000 Linas Vepstas <linas@linas.org>
+    @author Copyright (C) 1998,1999,2000 Linas Vepstas <linas@linas.org>
 */
 
 #ifndef XACC_DATE_H
@@ -64,7 +62,7 @@ typedef enum
 
 /** Datatypes *******************************************************/
 
-/* struct timespec64 is just like timespec except that we use a 64-bit
+/** struct timespec64 is just like timespec except that we use a 64-bit
  * signed int to store the seconds.  This should adequately cover
  * dates in the distant future as well as the distant past, as long as
  * they're not more than a couple dozen times the age of the universe.
@@ -87,53 +85,44 @@ typedef struct timespec64 Timespec;
 
 /** Prototypes ******************************************************/
 
-/* strict equality */
+/** strict equality */
 gboolean timespec_equal(const Timespec *ta, const Timespec *tb);
-/* comparison:  if (ta < tb) -1; else if (ta > tb) 1; else 0; */
+
+/** comparison:  if (ta < tb) -1; else if (ta > tb) 1; else 0; */
 int      timespec_cmp(const Timespec *ta, const Timespec *tb);
 
-/* difference between ta and tb, results are normalised
+/** difference between ta and tb, results are normalised
  * ie tv_sec and tv_nsec of the result have the same size
- * abs(result.tv_nsec) <= 1000000000
- */
-
+ * abs(result.tv_nsec) <= 1000000000 */
 Timespec timespec_diff(const Timespec *ta, const Timespec *tb);
 
-/*
- * absolute value, also normalised
- */
+/** absolute value, also normalised */
 Timespec timespec_abs(const Timespec *t);
 
-/* 
- * convert a timepair on a certain day (localtime) to
- * the timepair representing midday on that day
- */
-
+/** convert a timepair on a certain day (localtime) to
+ * the timepair representing midday on that day */
 Timespec timespecCanonicalDayTime(Timespec t);
 
-/*
- * Get the numerical last date of the month. (28, 29, 30, 31)
- */
+/** Get the numerical last date of the month. (28, 29, 30, 31) */
 int date_get_last_mday(struct tm *tm);
 
-/*
- * Is the mday field the last day of the specified month.
- */
+/** Is the mday field the last day of the specified month.*/
 gboolean date_is_last_mday(struct tm *tm);
 
-/*
- * Add a number of months to a time value and normalize.  Optionally
- * also track the last day of hte month, i.e. 1/31 -> 2/28 -> 3/30.
- */
+/** Add a number of months to a time value and normalize.  Optionally
+ * also track the last day of the month, i.e. 1/31 -> 2/28 -> 3/30. */
 void date_add_months (struct tm *tm, int months, gboolean track_last_day);
 
+/** DOCUMENT ME! */
 DateFormat getDateFormat(void);
+/** DOCUMENT ME! */
 void setDateFormat(DateFormat df);
+/** DOCUMENT ME! */
 const gchar *getDateFormatString(DateFormat df);
+/** DOCUMENT ME! */
 const gchar *getDateTextFormatString(DateFormat df);
 
-/**
- * printDate
+/** printDate
  *    Convert a date as day / month / year integers into a localized string
  *    representation
  *
@@ -148,27 +137,26 @@ const gchar *getDateTextFormatString(DateFormat df);
  * Globals: global dateFormat value
  **/
 void printDate (char * buff, int day, int month, int year);
+
 /** convenience: calls through to printDate. **/
 void printDateSecs (char * buff, time_t secs);
+
 /** Convenience; calls through to printDate. **/
 void printGDate( char *buf, GDate *gd );
 
+/** DOCUMENT ME! */
 char * xaccPrintDateSecs (time_t secs);
+
+/** DOCUMENT ME! */
 const char * gnc_print_date(Timespec ts);
 
-/**
- * Turns a time_t into a Timespec
- **/
+/** Turns a time_t into a Timespec */
 void timespecFromTime_t( Timespec *ts, time_t t );
 
-/**
- * Turns a Timespec into a time_t 
- */
+/** Turns a Timespec into a time_t */
 time_t timespecToTime_t (Timespec ts);
 
-
-/**
- * scanDate
+/** scanDate
  *    Convert a string into  day / month / year integers according to
  *    the current dateFormat value.
  *
@@ -183,8 +171,7 @@ time_t timespecToTime_t (Timespec ts);
  */
 void scanDate (const char *buff, int *day, int *month, int *year);
 
-/**
- * dateSeparator
+/** dateSeparator
  *    Return the field separator for the current date format
  *
  * Args:   none
@@ -195,43 +182,51 @@ void scanDate (const char *buff, int *day, int *month, int *year);
  */
 char dateSeparator(void);
 
+/** DOCUMENT ME! */
 int gnc_date_my_last_mday (int month, int year);
+/** DOCUMENT ME! */
 int gnc_timespec_last_mday (Timespec ts);
+/** DOCUMENT ME! */
 void gnc_timespec2dmy (Timespec ts, int *day, int *month, int *year);
 
-/*
- * hack alert XXX FIXME -- these date routines return incorrect
+/** \warning hack alert XXX FIXME -- these date routines return incorrect
  * values for dates before 1970.  Most of them are good only up 
- * till 2038.  This needs fixing ...
- */
-
+ * till 2038.  This needs fixing ... */
 time_t xaccDMYToSec (int day, int month, int year);
+
+/** \warning hack alert XXX FIXME -- these date routines return incorrect
+ * values for dates before 1970.  Most of them are good only up 
+ * till 2038.  This needs fixing ... */
 time_t xaccScanDateS (const char *buff);
 
-/* Convert a day, month, and year to a Timespec */
+/** Convert a day, month, and year to a Timespec */
 Timespec gnc_dmy2timespec (int day, int month, int year);
 
-/* Same as gnc_dmy2timespec, but last second of the day */
+/** Same as gnc_dmy2timespec, but last second of the day */
 Timespec gnc_dmy2timespec_end (int day, int month, int year);
 
-/* The gnc_iso8601_to_timespec_xxx() routines converts an ISO-8601 style 
+/** The gnc_iso8601_to_timespec_xxx() routines converts an ISO-8601 style 
  *    date/time string to Timespec.
  *    For example: 1998-07-17 11:00:00.68-05 
  *    is 680 milliseconds after 11 o'clock, central daylight time 
- *    The _gmt() routine returns the time in gmt. The _local() routine
- *    returns the local time.
- *
- * The gnc_timespec_to_iso8601_buff() routine prints a Timespec
- *    as an ISO-8601 style string.  The buffer must be long enough
- *    to contain the string.  The string is null-terminated. This
- *    routine returns a pointer to the null terminator (and can 
- *    thus be used in the 'stpcpy' metaphor of string concatenation).
- */
+ *    \return The time in local time.*/
 Timespec gnc_iso8601_to_timespec_local(const char *);
+
+/** The gnc_iso8601_to_timespec_xxx() routines converts an ISO-8601 style 
+ *    date/time string to Timespec.
+ *    For example: 1998-07-17 11:00:00.68-05 
+ *    is 680 milliseconds after 11 o'clock, central daylight time 
+ *    \return The time in gmt. */
 Timespec gnc_iso8601_to_timespec_gmt(const char *);
+
+/** The gnc_timespec_to_iso8601_buff() routine prints a Timespec
+* as an ISO-8601 style string.  The buffer must be long enough
+* to contain the string.  The string is null-terminated. This
+* routine returns a pointer to the null terminator (and can 
+* thus be used in the 'stpcpy' metaphor of string concatenation).*/
 char * gnc_timespec_to_iso8601_buff (Timespec ts, char * buff);
 
-/* The gnc_timezone function returns the number of seconds *west*
+/** The gnc_timezone function returns the number of seconds *west*
  * of UTC represented by the tm argument, adjusted for daylight
  * savings time.
  *
@@ -250,6 +245,7 @@ long int gnc_timezone (struct tm *tm);
  * Given a time value, adjust it to be the beginning or end of that day.
  */
 /** @{ */
+
 /** The gnc_tm_set_day_start() inline routine will set the appropriate
  *  fields in the struct tm to indicate the first second of that day.
  *  This routine assumes that the contents of the data structure is
