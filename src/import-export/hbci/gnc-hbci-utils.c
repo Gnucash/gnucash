@@ -54,6 +54,10 @@ gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
     HBCI_Error_delete (err);
     gnc_warning_dialog_parented 
 	(parent,
+	 /* Translators: Strings from this file are really only needed
+	  * inside Germany (HBCI is not supported anywhere else). You
+	  * may safely ignore strings from the import-export/hbci
+	  * subdirectory in other countries. */
 	 _("Error while loading OpenHBCI config file:\n  %s\n"), errstring);
     free (errstring);
     HBCI_API_delete (api);

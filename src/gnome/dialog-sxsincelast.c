@@ -388,15 +388,18 @@ static gint sxsld_get_future_created_txn_count( sxSinceLastData *sxsld );
 void
 gnc_ui_sxsincelast_guile_wrapper( char *bookfile )
 {
-        const char *no_dialog_but_created_msg =
-                _( "There are no Scheduled Transactions to be entered at this time.\n"
-                   "(%d %s automatically created)" );
-        gint ret;
-        ret = gnc_ui_sxsincelast_dialog_create();
-        if ( ret < 0 ) {
-                gnc_info_dialog( no_dialog_but_created_msg,
-                                 -(ret), -(ret) == 1 ? _("transaction") : _("transactions") );
-        }
+  gint ret;
+  ret = gnc_ui_sxsincelast_dialog_create();
+  if ( ret < 0 ) {
+    gnc_info_dialog
+      (ngettext 
+       ("There are no Scheduled Transactions to be entered at this time.\n"
+	"(%d transaction automatically created)",
+	"There are no Scheduled Transactions to be entered at this time.\n"
+	"(%d transactions automatically created)",
+	-(ret)),
+       -(ret));
+  }
 }
 
 static gboolean

@@ -135,7 +135,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
   time_t current_time; 
   Account *account;
   Account *investment_account;
-  gchar investment_account_text[256] = "";
+  gchar *investment_account_text;
   gnc_commodity *investment_commodity;
   GNCBook *book;
   Transaction *transaction;
@@ -296,22 +296,19 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 								 NULL);
 	      if(investment_commodity!=NULL)
 		{
-		  /* WARNING:  The must NOT be the caracter ':' anywhere in investment_account_text, or the translated strings used to build it */
-		  strncat(investment_account_text,
-			  _("Stock account for security \""),
-			  sizeof(investment_account_text)-strlen(investment_account_text));
-		  strncat(investment_account_text,
-			  data.security_data_ptr->secname,
-			  sizeof(investment_account_text)-strlen(investment_account_text));
-		  strncat(investment_account_text,
-			  _("\""),
-			  sizeof(investment_account_text)-strlen(investment_account_text));
-		  
+		  g_strdup_printf(investment_account_text,
+				  /* This string is a default account
+				     name. It MUST NOT contain the
+				     character ':' anywhere in it or
+				     in any translations.  */
+				  _("Stock account for security \"%s\""),
+				  data.security_data_ptr->secname);
 		  investment_account = gnc_import_select_account(data.unique_id,
 								 1,
 								 investment_account_text, 
 								 investment_commodity,
 								 STOCK);
+		  g_free (investment_account_text);
 		  
 		  if(investment_account!=NULL&&data.unitprice_valid==true&&data.units_valid==true)
 		    {

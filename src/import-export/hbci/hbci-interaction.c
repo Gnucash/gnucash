@@ -138,7 +138,12 @@ static int msgInputPin(const HBCI_User *user,
       if (user != NULL) {
 	bank = HBCI_User_bank (user);
 	if (bank != NULL) {
-	  /* xgettext:c-format */	    
+	  /* Translators: Strings from this file are really only
+	   * needed inside Germany (HBCI is not supported anywhere
+	   * else). You may safely ignore strings from the
+	   * import-export/hbci subdirectory in other countries.
+	   *
+	   * xgettext:c-format */	    
 	  msgstr = g_strdup_printf (_("Please enter and confirm new PIN for \n"
 				      "user '%s' at bank '%s',\n"
 				      "with at least %d characters."),

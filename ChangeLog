@@ -1,3 +1,12 @@
+2002-11-03  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/dialog-sxsincelast.c, src/gnome/window-main.c,
+	src/engine/messages.h: Fix translation of plural forms by
+	introducing ngettext(3).
+
+	* src/import-export/ofx/gnc-ofx-import.c: Fix string translation
+	issues.
+
 2002-11-02  Derek Atkins  <derek@ihtfp.com>
 	* gnc-engine-util.[ch]: add MOD_BUSINESS for logging (eww)
 

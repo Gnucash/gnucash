@@ -836,6 +836,10 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
       HBCI_Customer *cust;
       cust = HBCI_API_customerFactory (newuser, customerid, 
 				       customername ? customername : 
+	   /* Translators: Strings from this file are really only
+	    * needed inside Germany (HBCI is not supported anywhere
+	    * else). You may safely ignore strings from the
+	    * import-export/hbci subdirectory in other countries. */
 				       _("Default Customer"));
       g_assert (cust);
       HBCI_User_addCustomer (newuser, cust, TRUE);

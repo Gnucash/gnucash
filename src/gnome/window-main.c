@@ -659,16 +659,21 @@ gnc_main_window_sched_xaction_slr_cb (GtkWidget *widget, gpointer data)
   
   const char *nothing_to_do_msg =
     _( "There are no Scheduled Transactions to be entered at this time." );
-  const char *no_dialog_but_created_msg =
-    _( "There are no Scheduled Transactions to be entered at this time.\n"
-       "(%d %s automatically created)" );
-  
+
   ret = gnc_ui_sxsincelast_dialog_create();
   if ( ret == 0 ) {
     gnc_info_dialog( nothing_to_do_msg );
   } else if ( ret < 0 ) {
-    gnc_info_dialog( no_dialog_but_created_msg,
-                     -(ret), -(ret) == 1 ? _("transaction") : _("transactions") );
+    gnc_info_dialog
+      (ngettext 
+       /* Translators: %d is the number of transactions. This is a
+	  ngettext(3) message. */
+       ("There are no Scheduled Transactions to be entered at this time.\n"
+	"(%d transaction automatically created)",
+	"There are no Scheduled Transactions to be entered at this time.\n"
+	"(%d transactions automatically created)",
+	-(ret)),
+       -(ret));
   } /* else { this else [>0 means dialog was created] intentionally left
      * blank. } */
 }

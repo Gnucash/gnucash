@@ -51,6 +51,8 @@ char *gnc_qualifier_prefix_noop (const char *s);
 #define _(String)       (String)
 #define Q_(String) gnc_qualifier_prefix_noop(String)
 #define gettext(String) (String)
+#define ngettext(msgid, msgid_plural, n) (((n)==1) ? \
+                                            (msgid) : (msgid_plural))
 
 #endif                                /* End Not HAVE_GETTEXT */
 

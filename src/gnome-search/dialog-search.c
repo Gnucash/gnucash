@@ -855,6 +855,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
   new_item_button = glade_xml_get_widget (xml, "new_item_button");
   {
     char *desc =
+      /* Translators: %s is either "item" or the name of some other item. */
       g_strdup_printf (_("New %s"), type_label ? type_label : _("item"));
     gtk_label_set_text (GTK_LABEL (GTK_BIN (new_item_button)->child), desc);
     g_free (desc);
@@ -1071,11 +1072,12 @@ gnc_search_dialog_test (void)
   static GList *params = NULL;
   static GList *display = NULL;
   static GNCSearchCallbackButton buttons[] = {
-    { N_("View Split"), do_nothing },
-    { N_("New Split"), do_nothing },
-    { N_("Do Something"), do_nothing },
-    { N_("Do Nothing"), do_nothing },
-    { N_("Who Cares?"), do_nothing },
+    /* Don't mark these as translatable since these are only test strings! */ 
+    { ("View Split"), do_nothing },
+    { ("New Split"), do_nothing },
+    { ("Do Something"), do_nothing },
+    { ("Do Nothing"), do_nothing },
+    { ("Who Cares?"), do_nothing },
     { NULL }
   };
 

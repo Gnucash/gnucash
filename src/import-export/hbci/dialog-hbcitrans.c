@@ -137,6 +137,10 @@ gnc_hbci_trans (GtkWidget *parent,
       break;
     case SINGLE_DEBITNOTE:
       gtk_label_set_text (GTK_LABEL (heading_label), 
+			  /* Translators: Strings from this file are really only
+			   * needed inside Germany (HBCI is not supported anywhere
+			   * else). You may safely ignore strings from the
+			   * import-export/hbci subdirectory in other countries. */
 			  _("Enter an Online Direct Debit Note"));
 
       gtk_label_set_text (GTK_LABEL (recp_name_heading),

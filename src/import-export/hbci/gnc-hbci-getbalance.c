@@ -148,7 +148,13 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 	dialogres = gnc_verify_dialog_parented
 	  (parent, 
 	   TRUE,
-	   /* %s is either 'noted balance' or 'booked balance'. %s is the amount. */
+	   /* Translators: Strings from this file are really only
+	    * needed inside Germany (HBCI is not supported anywhere
+	    * else). You may safely ignore strings from the
+	    * import-export/hbci subdirectory in other countries.
+	    *
+	    * %s is either the string 'noted balance' or 'booked
+	    * balance'. %s is the amount. */
 	   _("Result of HBCI job: \n"
 	     "Account %s is %s\n"
 	     "Reconcile account now?"),

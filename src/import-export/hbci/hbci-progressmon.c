@@ -107,6 +107,10 @@ static void jobStarted(JobProgressType type, int actions, void *user_data)
     
   switch(type){
   case JOB_OPENINGDIALOG:
+    /* Translators: Strings from this file are really only needed
+     * inside Germany (HBCI is not supported anywhere else). You may
+     * safely ignore strings from the import-export/hbci subdirectory
+     * in other countries. */
     msg = _("Opening Dialog");
     break;
   case JOB_CLOSINGDIALOG:

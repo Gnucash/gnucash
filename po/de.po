@@ -8,13 +8,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2002-10-29 19:24+0100\n"
-"PO-Revision-Date: 2002-10-29 19:22+0100\n"
+"POT-Creation-Date: 2002-11-03 12:57+0100\n"
+"PO-Revision-Date: 2002-11-03 13:00+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: src/gnome/dialog-fincalc.c:340
 msgid "You must enter values for the other quantities."
@@ -1245,7 +1246,7 @@ msgstr ""
 
 #: src/business/business-gnome/glade/invoice.glade.h:9
 #: src/gnome-utils/window-help.c:651 src/gnome/glade/register.glade.h:8
-#: src/gnome/window-main.c:1020
+#: src/gnome/window-main.c:1025
 msgid "Close"
 msgstr "Schließen"
 
@@ -1374,7 +1375,7 @@ msgstr "Alle Buchungen löschen, außer jene in diesem Konto."
 msgid "Find"
 msgstr "Suche"
 
-#: src/gnome/glade/register.glade.h:36 src/gnome/window-main.c:941
+#: src/gnome/glade/register.glade.h:36 src/gnome/window-main.c:946
 msgid "Find transactions with a search"
 msgstr "Finde Geschäftsvorgänge"
 
@@ -1414,7 +1415,7 @@ msgid "New Account"
 msgstr "Neues Konto"
 
 #: src/business/business-gnome/glade/invoice.glade.h:45
-#: src/gnome/glade/register.glade.h:44 src/gnome/window-main.c:910
+#: src/gnome/glade/register.glade.h:44 src/gnome/window-main.c:915
 msgid "Open a general ledger window"
 msgstr "Hauptbuch-Fenster öffnen"
 
@@ -1496,7 +1497,7 @@ msgid "S_plit Transaction"
 msgstr "Mehrteiliger Vorgang"
 
 #: src/business/business-gnome/glade/invoice.glade.h:52
-#: src/gnome/glade/register.glade.h:61 src/gnome/window-main.c:856
+#: src/gnome/glade/register.glade.h:61 src/gnome/window-main.c:861
 msgid "S_ummary Bar"
 msgstr "_Zusammenfassung"
 
@@ -1652,17 +1653,17 @@ msgid "Transfer funds from one account to another"
 msgstr "Beträge von einem Konto zu einem anderen umbuchen"
 
 #: src/business/business-gnome/glade/invoice.glade.h:60
-#: src/gnome/glade/register.glade.h:91 src/gnome/window-main.c:934
+#: src/gnome/glade/register.glade.h:91 src/gnome/window-main.c:939
 msgid "Use the financial calculator"
 msgstr "Den Finanzrechner benutzen"
 
 #: src/business/business-gnome/glade/invoice.glade.h:61
-#: src/gnome/glade/register.glade.h:92 src/gnome/window-main.c:926
+#: src/gnome/glade/register.glade.h:92 src/gnome/window-main.c:931
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr "Wertpapiere für Depots und Investmentfonds anzeigen und bearbeiten"
 
 #: src/business/business-gnome/glade/invoice.glade.h:64
-#: src/gnome/glade/register.glade.h:93 src/gnome/window-main.c:918
+#: src/gnome/glade/register.glade.h:93 src/gnome/window-main.c:923
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr "Preise für Währungen/Wertpapiere anzeigen und bearbeiten"
 
@@ -1671,7 +1672,7 @@ msgid "_Account Report"
 msgstr "Kontenbericht"
 
 #: src/business/business-gnome/glade/invoice.glade.h:65
-#: src/gnome/glade/register.glade.h:95 src/gnome/window-main.c:991
+#: src/gnome/glade/register.glade.h:95 src/gnome/window-main.c:996
 msgid "_Actions"
 msgstr "A_ktionen"
 
@@ -1746,7 +1747,7 @@ msgid "_Financial Calculator"
 msgstr "Finanzrechner"
 
 #: src/business/business-gnome/glade/invoice.glade.h:77
-#: src/gnome/glade/register.glade.h:109 src/gnome/window-main.c:909
+#: src/gnome/glade/register.glade.h:109 src/gnome/window-main.c:914
 msgid "_General Ledger"
 msgstr "_Hauptbuch"
 
@@ -1770,7 +1771,7 @@ msgid "_Number"
 msgstr "Nummer"
 
 #: src/business/business-gnome/glade/invoice.glade.h:81
-#: src/gnome/glade/register.glade.h:114 src/gnome/window-main.c:917
+#: src/gnome/glade/register.glade.h:114 src/gnome/window-main.c:922
 msgid "_Price Editor"
 msgstr "_Preis-Editor"
 
@@ -1796,7 +1797,7 @@ msgid "_Statement Date"
 msgstr "Datum des Kontoauszugs"
 
 #: src/business/business-gnome/glade/invoice.glade.h:85
-#: src/gnome/glade/register.glade.h:119 src/gnome/window-main.c:863
+#: src/gnome/glade/register.glade.h:119 src/gnome/window-main.c:868
 msgid "_Status Bar"
 msgstr "_Statuszeile"
 
@@ -1814,12 +1815,12 @@ msgid "_Tip Of The Day"
 msgstr "_Tipp des Tages"
 
 #: src/business/business-gnome/glade/invoice.glade.h:88
-#: src/gnome/glade/register.glade.h:123 src/gnome/window-main.c:849
+#: src/gnome/glade/register.glade.h:123 src/gnome/window-main.c:854
 msgid "_Toolbar"
 msgstr "_Werkzeugleiste"
 
 #: src/business/business-gnome/glade/invoice.glade.h:89
-#: src/gnome/glade/register.glade.h:124 src/gnome/window-main.c:992
+#: src/gnome/glade/register.glade.h:124 src/gnome/window-main.c:997
 msgid "_Tools"
 msgstr "_Werkzeuge"
 
@@ -2879,11 +2880,11 @@ msgstr "Quelle:"
 #: src/business/business-gnome/dialog-billterms.c:482
 #: src/engine/FreqSpec.c:951 src/gnome/glade/price.glade.h:30
 #: src/import-export/hbci/druid-hbci-initial.c:683
-#: src/import-export/hbci/druid-hbci-initial.c:1072
+#: src/import-export/hbci/druid-hbci-initial.c:1076
 #: src/import-export/hbci/hbci-interaction.c:133
 #: src/import-export/hbci/hbci-interaction.c:134
-#: src/import-export/hbci/hbci-interaction.c:253
-#: src/import-export/hbci/hbci-interaction.c:293
+#: src/import-export/hbci/hbci-interaction.c:258
+#: src/import-export/hbci/hbci-interaction.c:298
 msgid "Unknown"
 msgstr "Unbekannt"
 
@@ -3103,24 +3104,24 @@ msgstr "Sie müssen einen gültigen Preis angeben."
 msgid "You must enter a valid `to' amount."
 msgstr "Sie müssen einen gültigen Betrag eingeben."
 
-#: src/gnome/dialog-sxsincelast.c:392 src/gnome/window-main.c:663
-#, fuzzy, c-format
+#. Translators: %d is the number of transactions. This is a
+#. ngettext(3) message.
+#: src/gnome/dialog-sxsincelast.c:396 src/gnome/window-main.c:671
+#, c-format
 msgid ""
 "There are no Scheduled Transactions to be entered at this time.\n"
-"(%d %s automatically created)"
-msgstr "Es gibt keine terminierten Buchungen, die erstellt werden sollen."
+"(%d transaction automatically created)"
+msgid_plural ""
+"There are no Scheduled Transactions to be entered at this time.\n"
+"(%d transactions automatically created)"
+msgstr[0] ""
+"Es gibt keine terminierten Buchungen, die erstellt werden sollen.\n"
+"(%d Buchung automatisch erstellt)"
+msgstr[1] ""
+"Es gibt keine terminierten Buchungen, die erstellt werden sollen.\n"
+"(%d Buchungen automatisch erstellt)"
 
-#: src/gnome/dialog-sxsincelast.c:398 src/gnome/window-main.c:671
-#, fuzzy
-msgid "transaction"
-msgstr "Geschäftsvorgang"
-
-#: src/gnome/dialog-sxsincelast.c:398 src/gnome/window-main.c:671
-#, fuzzy
-msgid "transactions"
-msgstr "Buchungen"
-
-#: src/gnome/dialog-sxsincelast.c:1376
+#: src/gnome/dialog-sxsincelast.c:1379
 msgid ""
 "Cancelling the Since-Last-Run dialog will revert all changes.\n"
 "Are you sure you want to lose all Scheduled Transaction changes?"
@@ -3230,10 +3231,8 @@ msgid "Reinitialize"
 msgstr ""
 
 #: src/gnome/window-register.c:2435
-#, fuzzy
 msgid "Are you sure you want to reinitialize this transaction?"
 msgstr ""
-"Sind Sie sicher, dass Sie den aktuellen Geschäftsvorgang löschen wollen?"
 
 #: src/gnome/window-register.c:2438
 msgid ""
@@ -3279,13 +3278,13 @@ msgstr ""
 "Sind Sie sicher, dass Sie den aktuellen Geschäftsvorgang löschen wollen?"
 
 #: src/gnome/window-register.c:2573
-#, fuzzy
 msgid ""
 "You would be deleting a transaction with reconciled splits!\n"
 "This is not a good idea as it will cause your reconciled balance to be off."
 msgstr ""
-"Beachten Sie, daß Sie einen Geschäftsvorgang mit abgeglichenen Buchungen "
-"löschen würden."
+"Beachten Sie, daß Sie einen Geschäftsvorgang mit abgeglichenen\n"
+"Buchungen löschen würden. Dies bedeutet, daß ihr abgeglichener Saldo\n"
+"verändert wird."
 
 #: src/gnome/window-register.c:2688
 #: src/register/ledger-core/gnc-regwidget.c:1960
@@ -3357,14 +3356,12 @@ msgid "Style"
 msgstr "Stil"
 
 #: src/gnome/dialog-scheduledxaction.c:1378
-#, fuzzy
 msgid "Sort"
 msgstr "Sortieren"
 
 #: src/gnome/dialog-scheduledxaction.c:1424
-#, fuzzy
 msgid "(never)"
-msgstr "(kein(e))"
+msgstr "(niemals)"
 
 #: src/gnome/dialog-scheduledxaction.c:1601
 msgid ""
@@ -3377,12 +3374,11 @@ msgid "Delete the selected Scheduled Transactions?"
 msgstr "Ausgewählte terminierte Buchung löschen?"
 
 #: src/gnome/dialog-scheduledxaction.c:1920
-#, fuzzy
 msgid ""
 "The current template transaction has been changed.\n"
 "Would you like to record the changes?"
 msgstr ""
-"Die aktuelle Buchung wurde verändert.\n"
+"Die aktuelle Buchungsvorlage wurde verändert.\n"
 "Soll sie gespeichert werden?"
 
 #: src/gnome/window-main.c:612
@@ -3390,11 +3386,10 @@ msgid "Select \"Exit\" to exit GnuCash."
 msgstr "Klicken Sie \"Schließen\", um Gnucash zu beenden."
 
 #: src/gnome/window-main.c:661
-#, fuzzy
 msgid "There are no Scheduled Transactions to be entered at this time."
-msgstr "Es gibt keine terminierten Buchungen, die erstellt werden sollen."
+msgstr "Es gibt keine terminierten Buchungen, die eingegeben werden sollten."
 
-#: src/gnome/window-main.c:687
+#: src/gnome/window-main.c:692
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!\n"
@@ -3404,166 +3399,165 @@ msgstr ""
 "Die freie Lösung zur Finanzverwaltung.\n"
 "http://www.gnucash.org"
 
-#: src/gnome/window-main.c:769
+#: src/gnome/window-main.c:774
 msgid "Export _Accounts..."
 msgstr "Konten _exportieren..."
 
-#: src/gnome/window-main.c:770
+#: src/gnome/window-main.c:775
 msgid "Export the account hierarchy to a new file"
 msgstr "Die Konten-Hierarchie in eine neue Datei exportieren"
 
-#: src/gnome/window-main.c:780
+#: src/gnome/window-main.c:785
 msgid "_New File"
 msgstr "_Neue Datei"
 
-#: src/gnome/window-main.c:781
+#: src/gnome/window-main.c:786
 msgid "Create a new file"
 msgstr "Eine neue Datei anlegen"
 
-#: src/gnome/window-main.c:785
+#: src/gnome/window-main.c:790
 msgid "New Account _Tree"
 msgstr "Neue Konto-_Hierarchie"
 
-#: src/gnome/window-main.c:786
+#: src/gnome/window-main.c:791
 msgid "Open a new account tree view"
 msgstr "Neue Konto-Hierarchie Ansicht öffnen"
 
-#: src/gnome/window-main.c:794
+#: src/gnome/window-main.c:799
 msgid "Open in a New Window"
 msgstr "In neuem Fenster öffnen"
 
-#: src/gnome/window-main.c:795
+#: src/gnome/window-main.c:800
 msgid "Open a new top-level GnuCash window for the current view"
 msgstr "Ein neues Top-Level GnuCash Fenster für die aktuelle Ansicht öffnen"
 
-#: src/gnome/window-main.c:799
+#: src/gnome/window-main.c:804
 msgid "Open _Recent"
 msgstr "_Zuletzt Geöffnet"
 
-#: src/gnome/window-main.c:805
+#: src/gnome/window-main.c:810
 msgid "_Import"
 msgstr "_Import"
 
-#: src/gnome/window-main.c:807
+#: src/gnome/window-main.c:812
 msgid "_Export"
 msgstr "_Export"
 
-#: src/gnome/window-main.c:829
+#: src/gnome/window-main.c:834
 msgid "Ta_x Options"
 msgstr "Steuerrelevante Optionen"
 
-#: src/gnome/window-main.c:830
+#: src/gnome/window-main.c:835
 msgid "Setup tax information for all income and expense accounts"
 msgstr ""
 "Steuerrelevante Informationen für Ertrags- und Aufwandskonten einrichten"
 
-#: src/gnome/window-main.c:841
+#: src/gnome/window-main.c:846
 msgid "_Refresh"
 msgstr "Aktualisieren"
 
-#: src/gnome/window-main.c:842
+#: src/gnome/window-main.c:847
 msgid "Refresh this window"
 msgstr "Dieses Fenster aktualisieren"
 
-#: src/gnome/window-main.c:850
+#: src/gnome/window-main.c:855
 msgid "Show/hide the toolbar on this window"
 msgstr "Die Werkzeugleiste in diesem Fenster anzeigen/verbergen"
 
-#: src/gnome/window-main.c:857
+#: src/gnome/window-main.c:862
 msgid "Show/hide the summary bar on this window"
 msgstr "Die Zusammenfassungs-Leiste in diesem Fenster anzeigen/verbergen"
 
-#: src/gnome/window-main.c:864
+#: src/gnome/window-main.c:869
 msgid "Show/Hide the status bar on this window"
 msgstr "Die Statusleiste in diesem Fenster anzeigen/verbergen"
 
-#: src/gnome/window-main.c:875
+#: src/gnome/window-main.c:880
 msgid "_Scheduled Transaction Editor"
 msgstr "Terminierte Buchungen Editor"
 
-#: src/gnome/window-main.c:876
+#: src/gnome/window-main.c:881
 msgid "The list of Scheduled Transactions"
 msgstr "Die Liste der terminierten Buchungen"
 
-#: src/gnome/window-main.c:882
+#: src/gnome/window-main.c:887
 msgid "_Since Last Run..."
 msgstr "Seit letztem Aufruf..."
 
-#: src/gnome/window-main.c:883
+#: src/gnome/window-main.c:888
 msgid "Create Scheduled Transactions since the last time run."
 msgstr ""
 "Alle terminierten Buchungen seit dem letzten Aufruf von GnuCash erstellen."
 
-#: src/gnome/window-main.c:890
+#: src/gnome/window-main.c:895
 msgid "_Mortgage & Loan Repayment..."
 msgstr ""
 
-#: src/gnome/window-main.c:891
+#: src/gnome/window-main.c:896
 msgid "Setup scheduled transactions for repayment of a loan"
 msgstr ""
 
-#: src/gnome/window-main.c:901
+#: src/gnome/window-main.c:906
 msgid "_Scheduled Transactions"
 msgstr "Terminierte Buchungen"
 
-#: src/gnome/window-main.c:925
+#: src/gnome/window-main.c:930
 msgid "Commodity _Editor"
 msgstr "Aktien _Editor"
 
-#: src/gnome/window-main.c:933
+#: src/gnome/window-main.c:938
 msgid "Financial _Calculator"
 msgstr "Finanzrechner"
 
-#: src/gnome/window-main.c:940
+#: src/gnome/window-main.c:945
 msgid "_Find Transactions"
 msgstr "Geschäftsvorgänge _finden"
 
-#: src/gnome/window-main.c:953
-#, fuzzy
+#: src/gnome/window-main.c:958
 msgid "Tutorial and Concepts _Guide"
-msgstr "_Kurs und Konzept-Anleitung"
+msgstr "GnuCash-_Kurs und Konzepte"
 
-#: src/gnome/window-main.c:954
+#: src/gnome/window-main.c:959
 msgid "Open the GnuCash Tutorial"
 msgstr "Den GnuCash-Online-Kurs öffnen"
 
-#: src/gnome/window-main.c:961
+#: src/gnome/window-main.c:966
 msgid "_Tips Of The Day"
 msgstr "_Tipp des Tages"
 
-#: src/gnome/window-main.c:962
+#: src/gnome/window-main.c:967
 msgid "View the Tips of the Day"
 msgstr "Anzeigen des \"Tipp des Tages?\""
 
-#: src/gnome/window-main.c:969 src/gnome/window-reconcile.c:1297
+#: src/gnome/window-main.c:974 src/gnome/window-reconcile.c:1297
 msgid "_Help"
 msgstr "_Hilfe"
 
-#: src/gnome/window-main.c:970
+#: src/gnome/window-main.c:975
 msgid "Open the GnuCash Help"
 msgstr "Die GnuCash-Hilfe öffnen"
 
-#: src/gnome/window-main.c:993
+#: src/gnome/window-main.c:998
 msgid "_Windows"
 msgstr "_Fenster"
 
-#: src/app-file/gnc-file.c:706 src/gnome/window-main.c:1010
+#: src/app-file/gnc-file.c:706 src/gnome/window-main.c:1015
 msgid "Save"
 msgstr "Speichern"
 
-#: src/gnome/window-main.c:1011
+#: src/gnome/window-main.c:1016
 msgid "Save the file to disk"
 msgstr "Speichern dieser Datei"
 
-#: src/gnome/window-main.c:1021
+#: src/gnome/window-main.c:1026
 msgid "Close the current notebook page"
 msgstr "Aktuelle Karteikarte schließen."
 
-#: src/gnome/window-main.c:1043
+#: src/gnome/window-main.c:1048
 msgid "Exit"
 msgstr "Beenden"
 
-#: src/gnome/window-main.c:1044
+#: src/gnome/window-main.c:1049
 msgid "Exit GnuCash"
 msgstr "GnuCash verlassen"
 
@@ -3915,10 +3909,9 @@ msgid "Total:"
 msgstr "Betrag:"
 
 #: src/gnome/window-reconcile.c:1062
-#, fuzzy
 msgid "Are you sure you want to delete the selected transaction?"
 msgstr ""
-"Sind Sie sicher, dass Sie den aktuellen Geschäftsvorgang löschen wollen?"
+"Sind Sie sicher, dass Sie den ausgewählten Geschäftsvorgang löschen wollen?"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:505 intl-scm/guile-strings.c:512
@@ -3982,9 +3975,8 @@ msgstr "Aktuellen Geschäftsvorgang bearbeiten"
 #: src/gnome/window-reconcile.c:1285 src/gnome/window-reconcile.c:1357
 #: src/gnome/window-reconcile.c:1417
 #: src/register/ledger-core/gnc-regwidget.c:879
-#, fuzzy
 msgid "Delete the selected transaction"
-msgstr "Ausgewählten Geschäftsvorgang ausschneiden"
+msgstr "Ausgewählten Geschäftsvorgang löschen"
 
 #: src/gnome/window-reconcile.c:1297
 msgid "Open the GnuCash help window"
@@ -4105,9 +4097,8 @@ msgid "Equity"
 msgstr "Eigenkapital"
 
 #: src/app-utils/gnc-exp-parser.c:644
-#, fuzzy
 msgid "Illegal variable in expression."
-msgstr "Regulärer Ausdruck"
+msgstr "Ungültige Variable in Ausdruck."
 
 #: src/app-utils/gnc-exp-parser.c:654
 msgid "Unbalanced parenthesis"
@@ -4142,9 +4133,8 @@ msgid "Numeric error"
 msgstr "Numerischer Fehler"
 
 #: src/gnome-search/search-account.c:163
-#, fuzzy
 msgid "You have not selected any accounts"
-msgstr "Sie haben kein Konto ausgewählt"
+msgstr "Sie haben keine Konten ausgewählt"
 
 #: src/gnome-search/search-account.c:206
 #, fuzzy
@@ -4189,9 +4179,8 @@ msgid "You must select an item from the list"
 msgstr "Sie müssen eine Währung/Aktie auswählen."
 
 #: src/gnome-search/dialog-search.c:290
-#, fuzzy
 msgid "Select"
-msgstr "Auswählen..."
+msgstr "Auswählen"
 
 #: src/gnome-search/dialog-search.c:817
 #, fuzzy
@@ -4206,60 +4195,36 @@ msgstr ""
 msgid "any criteria are met"
 msgstr ""
 
-#: src/gnome-search/dialog-search.c:858
-#, fuzzy, c-format
+#. Translators: %s is either "item" or the name of some other item.
+#: src/gnome-search/dialog-search.c:859
+#, c-format
 msgid "New %s"
-msgstr "Neu"
+msgstr "%s neu"
 
-#: src/gnome-search/dialog-search.c:858
-#, fuzzy
+#: src/gnome-search/dialog-search.c:859
 msgid "item"
-msgstr "Titel"
-
-#: src/gnome-search/dialog-search.c:1074
-#, fuzzy
-msgid "View Split"
-msgstr "Mehrteilig"
-
-#: src/gnome-search/dialog-search.c:1075
-#, fuzzy
-msgid "New Split"
-msgstr "Mehrteilig"
-
-#: src/gnome-search/dialog-search.c:1076
-#, fuzzy
-msgid "Do Something"
-msgstr "Sortieren"
-
-#: src/gnome-search/dialog-search.c:1077
-msgid "Do Nothing"
-msgstr ""
-
-#: src/gnome-search/dialog-search.c:1078
-#, fuzzy
-msgid "Who Cares?"
-msgstr "Anteile"
+msgstr "Eintrag"
 
 #: src/gnome-search/search-string.c:180
-#, fuzzy
 msgid "You need to enter a string value"
-msgstr "Sie müssen einen Betrag angeben."
+msgstr "Sie müssen einen Suchausdruck angeben"
 
 #: src/gnome-search/search-string.c:206
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error in regular expression '%s':\n"
 "%s"
-msgstr "Regulärer Ausdruck"
+msgstr ""
+"Fehler im regulären Ausdruck '%s':\n"
+"%s"
 
 #: src/gnome-search/search-string.c:267
-#, fuzzy
 msgid "contains"
-msgstr "Inhalt"
+msgstr "enthält"
 
 #: src/gnome-search/search-string.c:270
 msgid "does not contain"
-msgstr ""
+msgstr "enthält nicht"
 
 #: src/gnome-search/search-string.c:274
 msgid "matches regex"
@@ -4271,107 +4236,98 @@ msgstr ""
 
 #. Build and connect the toggle button
 #: src/gnome-search/search-string.c:341
-#, fuzzy
 msgid "Case Insensitive?"
-msgstr "Groß-/Kleinschreibung beachten"
+msgstr "Groß-/Kleinschreibung ignorieren?"
 
 #: src/gnome-search/search-date.c:210
 msgid "is before"
-msgstr ""
+msgstr "vor"
 
 #. Force one
 #: src/gnome-search/search-date.c:212
 msgid "is before or on"
-msgstr ""
+msgstr "vor oder am"
 
 #: src/gnome-search/search-date.c:213
 msgid "is on"
-msgstr ""
+msgstr "am"
 
 #: src/gnome-search/search-date.c:214
-#, fuzzy
 msgid "is not on"
-msgstr "Eine Auflistungsoption"
+msgstr "nicht am"
 
 #: src/gnome-search/search-date.c:215
-#, fuzzy
 msgid "is after"
-msgstr "Kassenbericht"
+msgstr "nach"
 
 #: src/gnome-search/search-date.c:216
 msgid "is on or after"
-msgstr ""
+msgstr "nach oder am"
 
 #: src/gnome-search/search-double.c:208 src/gnome-search/search-int64.c:210
 #: src/gnome-search/search-numeric.c:242
 msgid "is less than"
-msgstr ""
+msgstr "weniger als"
 
 #. Force one
 #: src/gnome-search/search-double.c:210 src/gnome-search/search-int64.c:212
 #: src/gnome-search/search-numeric.c:247
 msgid "is less than or equal to"
-msgstr ""
+msgstr "weniger als oder gleich"
 
 #: src/gnome-search/search-double.c:211 src/gnome-search/search-int64.c:213
 #: src/gnome-search/search-numeric.c:250
 msgid "equals"
-msgstr ""
+msgstr "gleich"
 
 #: src/gnome-search/search-double.c:212 src/gnome-search/search-int64.c:214
 #: src/gnome-search/search-numeric.c:253
 msgid "does not equal"
-msgstr ""
+msgstr "nicht gleich"
 
 #: src/gnome-search/search-double.c:213 src/gnome-search/search-int64.c:215
 #: src/gnome-search/search-numeric.c:256
 msgid "is greater than"
-msgstr ""
+msgstr "größer als"
 
 #: src/gnome-search/search-double.c:214 src/gnome-search/search-int64.c:216
 #: src/gnome-search/search-numeric.c:260
 msgid "is greater than or equal to"
-msgstr ""
+msgstr "größer als oder gleich"
 
 #: src/business/business-gnome/search-owner.c:279
 #: src/gnome-search/search-boolean.c:203
 #: src/gnome-search/search-reconciled.c:211
-#, fuzzy
 msgid "is"
-msgstr "Ausschüttung"
+msgstr "ist"
 
 #. Force one
 #: src/business/business-gnome/search-owner.c:281
 #: src/gnome-search/search-boolean.c:205
 #: src/gnome-search/search-reconciled.c:213
-#, fuzzy
 msgid "is not"
-msgstr "Ausschüttung"
+msgstr "ist nicht"
 
 #. Build and connect the toggle
 #: src/gnome-search/search-boolean.c:232
-#, fuzzy
 msgid "set true"
-msgstr "wahr"
+msgstr "auf wahr setzen"
 
 #: src/gnome-search/search.glade.h:1
-#, fuzzy
 msgid " Search "
-msgstr "Suchen"
+msgstr " Suchen "
 
 #: src/gnome-search/search.glade.h:2
 msgid "()"
-msgstr ""
+msgstr "()"
 
 #: src/gnome-search/search.glade.h:6
-#, fuzzy
 msgid "New Item...."
-msgstr "Neu..."
+msgstr "Neuer Eintrag..."
 
 #: src/gnome-search/search.glade.h:9
-#, fuzzy
 msgid "Search Criteria"
-msgstr "Suchausdruck:"
+msgstr "Suchkriterium"
 
 #: src/gnome-search/search.glade.h:10
 msgid "Search for items where"
@@ -4384,42 +4340,40 @@ msgstr "Suchausdruck:"
 
 #: src/gnome-search/search-numeric.c:242
 msgid "less than"
-msgstr ""
+msgstr "kleiner"
 
 #: src/gnome-search/search-numeric.c:246
 msgid "less than or equal to"
-msgstr ""
+msgstr "kleiner oder gleich"
 
 #: src/gnome-search/search-numeric.c:250
 msgid "equal to"
-msgstr ""
+msgstr "gleich"
 
 #: src/gnome-search/search-numeric.c:253
 msgid "not equal to"
-msgstr ""
+msgstr "ungleich"
 
 #: src/gnome-search/search-numeric.c:256
 msgid "greater than"
-msgstr ""
+msgstr "größer"
 
 #: src/gnome-search/search-numeric.c:259
 msgid "greater than or equal to"
-msgstr ""
+msgstr "größer oder gleich"
 
 #: src/gnome-search/search-numeric.c:281
 msgid "has credits or debits"
-msgstr ""
+msgstr "hat Haben oder Soll"
 
 #. Force one
 #: src/gnome-search/search-numeric.c:284
-#, fuzzy
 msgid "has debits"
-msgstr "Belastungen"
+msgstr "hat Soll"
 
 #: src/gnome-search/search-numeric.c:286
-#, fuzzy
 msgid "has credits"
-msgstr "Gutschriften"
+msgstr "hat Haben"
 
 #. Build and connect the toggles
 #: src/gnome-search/search-reconciled.c:253
@@ -5248,22 +5202,27 @@ msgstr "Auswählen..."
 msgid "Unload selected file"
 msgstr "Gewählte Datei wieder entladen"
 
-#: src/import-export/ofx/gnc-ofx-import.c:96
+#: src/import-export/ofx/gnc-ofx-import.c:83
 msgid "Select an OFX/QFX file to process"
 msgstr "Zu verarbeitende OFX/QFX-Datei auswählen"
 
-#: src/import-export/ofx/gnc-ofx-import.c:311
-msgid "A Stock or Mutual Fund account for the following security: \""
-msgstr ""
+#. This string is a default account
+#. name. It MUST NOT contain the
+#. character ':' anywhere in it or
+#. in any translations.
+#: src/import-export/ofx/gnc-ofx-import.c:304
+#, fuzzy, c-format
+msgid "Stock account for security \"%s\""
+msgstr "Bericht über diese Aktiendepots erstellen"
 
-#: src/import-export/ofx/gnc-ofx-import.c:314
-msgid ""
-"\"\n"
-"Warning:  Ofx investment transactions require two accounts."
-msgstr ""
-
-#. %s is either 'noted balance' or 'booked balance'. %s is the amount.
-#: src/import-export/hbci/gnc-hbci-getbalance.c:152
+#. Translators: Strings from this file are really only
+#. * needed inside Germany (HBCI is not supported anywhere
+#. * else). You may safely ignore strings from the
+#. * import-export/hbci subdirectory in other countries.
+#. *
+#. * %s is either the string 'noted balance' or 'booked
+#. * balance'. %s is the amount.
+#: src/import-export/hbci/gnc-hbci-getbalance.c:158
 #, c-format
 msgid ""
 "Result of HBCI job: \n"
@@ -5274,11 +5233,11 @@ msgstr ""
 "%s des Kontos ist %s\n"
 "Konto jetzt abgleichen?"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:155
+#: src/import-export/hbci/gnc-hbci-getbalance.c:161
 msgid "noted balance"
 msgstr "Vorgemerkter Saldo"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:155
+#: src/import-export/hbci/gnc-hbci-getbalance.c:161
 msgid "booked balance"
 msgstr "Gebuchter Saldo"
 
@@ -5819,7 +5778,11 @@ msgstr "irgendwas"
 msgid "www.hbci-kernel.de"
 msgstr "www.hbci-kernel.de"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:57
+#. Translators: Strings from this file are really only needed
+#. * inside Germany (HBCI is not supported anywhere else). You
+#. * may safely ignore strings from the import-export/hbci
+#. * subdirectory in other countries.
+#: src/import-export/hbci/gnc-hbci-utils.c:61
 #, c-format
 msgid ""
 "Error while loading OpenHBCI config file:\n"
@@ -5828,7 +5791,7 @@ msgstr ""
 "Fehler beim Laden der OpenHBCI Konfigurations-Datei:\n"
 "  %s\n"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:220
+#: src/import-export/hbci/gnc-hbci-utils.c:224
 msgid ""
 "The PIN you entered was wrong.\n"
 "Do you want to try again?"
@@ -5836,7 +5799,7 @@ msgstr ""
 "Die eingegebene PIN war falsch.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:229
+#: src/import-export/hbci/gnc-hbci-utils.c:233
 msgid ""
 "The PIN you entered was too short.\n"
 "Do you want to try again?"
@@ -5844,7 +5807,7 @@ msgstr ""
 "Die eingegebene PIN war zu kurz.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:238
+#: src/import-export/hbci/gnc-hbci-utils.c:242
 msgid ""
 "Unfortunately this HBCI job is not supported \n"
 "by your bank or for your account. Aborting."
@@ -5852,11 +5815,15 @@ msgstr ""
 "Dieser HBCI Geschäftsvorfall wird von Ihrer Bank leider nicht\n"
 "unterstützt oder ist Ihnen nicht gestattet. Aktion wird abgebrochen."
 
-#: src/import-export/hbci/druid-hbci-initial.c:839
+#. Translators: Strings from this file are really only
+#. * needed inside Germany (HBCI is not supported anywhere
+#. * else). You may safely ignore strings from the
+#. * import-export/hbci subdirectory in other countries.
+#: src/import-export/hbci/druid-hbci-initial.c:843
 msgid "Default Customer"
 msgstr "Standard-Kunde"
 
-#: src/import-export/hbci/druid-hbci-initial.c:1313
+#: src/import-export/hbci/druid-hbci-initial.c:1317
 msgid ""
 "Since the cryptographic keys of the bank cannot be verified,\n"
 "you should stop contacting this Server Internet Address\n"
@@ -5872,7 +5839,12 @@ msgstr ""
 "diesen fehlerhaften Ini-Brief ausdrucken und Ihrer Bank\n"
 "einreichen. Bitte beenden Sie den HBCI Einrichtungs-Druiden nun."
 
-#: src/import-export/hbci/hbci-interaction.c:142
+#. Translators: Strings from this file are really only
+#. * needed inside Germany (HBCI is not supported anywhere
+#. * else). You may safely ignore strings from the
+#. * import-export/hbci subdirectory in other countries.
+#. *
+#: src/import-export/hbci/hbci-interaction.c:147
 #, c-format
 msgid ""
 "Please enter and confirm new PIN for \n"
@@ -5883,7 +5855,7 @@ msgstr ""
 "Benutzer '%s' der Bank '%s' eingeben\n"
 "und bestätigen. (Mindestens %d Zeichen)"
 
-#: src/import-export/hbci/hbci-interaction.c:151
+#: src/import-export/hbci/hbci-interaction.c:156
 #, c-format
 msgid ""
 "Please enter and confirm a new PIN for \n"
@@ -5894,7 +5866,7 @@ msgstr ""
 "Benutzer '%s' einer unbekannten Bank eingeben\n"
 "und bestätigen. (Mindestens %d Zeichen)"
 
-#: src/import-export/hbci/hbci-interaction.c:158
+#: src/import-export/hbci/hbci-interaction.c:163
 #, c-format
 msgid ""
 "Please enter and confirm a new PIN\n"
@@ -5903,7 +5875,7 @@ msgstr ""
 "Bitte eine neue PIN eingeben und \n"
 "bestätigen. (Mindestens %d Zeichen)"
 
-#: src/import-export/hbci/hbci-interaction.c:179
+#: src/import-export/hbci/hbci-interaction.c:184
 #, c-format
 msgid ""
 "Please enter PIN for \n"
@@ -5913,7 +5885,7 @@ msgstr ""
 "Benutzer '%s' \n"
 "der Bank '%s' eingeben."
 
-#: src/import-export/hbci/hbci-interaction.c:186
+#: src/import-export/hbci/hbci-interaction.c:191
 #, c-format
 msgid ""
 "Please enter PIN for \n"
@@ -5922,7 +5894,7 @@ msgstr ""
 "Bitte die PIN für \n"
 "Benutzer '%s' einer unbekannten Bank eingeben."
 
-#: src/import-export/hbci/hbci-interaction.c:192
+#: src/import-export/hbci/hbci-interaction.c:197
 msgid ""
 "Please enter PIN for \n"
 "unknown user at unknown bank."
@@ -5930,7 +5902,7 @@ msgstr ""
 "Bitte die PIN für unbekannten Benutzer\n"
 "einer unbekannten Bank eingeben."
 
-#: src/import-export/hbci/hbci-interaction.c:209
+#: src/import-export/hbci/hbci-interaction.c:214
 #, c-format
 msgid ""
 "The PIN needs to be at least %d characters \n"
@@ -5939,7 +5911,7 @@ msgstr ""
 "Die PIN muß mindestens %d Zeichen lang \n"
 "sein.  Erneut versuchen?"
 
-#: src/import-export/hbci/hbci-interaction.c:257
+#: src/import-export/hbci/hbci-interaction.c:262
 #, c-format
 msgid ""
 "Please insert chip card for \n"
@@ -5948,7 +5920,7 @@ msgstr ""
 "Bitte die Chipkarte für \n"
 "Benutzer '%s' der Bank '%s' einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:262
+#: src/import-export/hbci/hbci-interaction.c:267
 #, c-format
 msgid ""
 "Please insert chip card for \n"
@@ -5957,7 +5929,7 @@ msgstr ""
 "Bitte die Chipkarte für \n"
 "Benutzer '%s' einer unbekannten Bank einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:267
+#: src/import-export/hbci/hbci-interaction.c:272
 msgid ""
 "Please insert chip card for \n"
 "unknown user at unknown bank."
@@ -5965,7 +5937,7 @@ msgstr ""
 "Bitte die Chipkarte für unbekannten Benutzer \n"
 "einer unbekannten Bank einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:297
+#: src/import-export/hbci/hbci-interaction.c:302
 #, c-format
 msgid ""
 "Please insert the correct chip card for \n"
@@ -5974,7 +5946,7 @@ msgstr ""
 "Bitte die korrekte Chipkarte für \n"
 "Benutzer '%s' der Bank '%s' einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:302
+#: src/import-export/hbci/hbci-interaction.c:307
 #, c-format
 msgid ""
 "Please insert the correct chip card for \n"
@@ -5983,7 +5955,7 @@ msgstr ""
 "Bitte die korrekte Chipkarte für \n"
 "Benutzer '%s' einer unbekannten Bank einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:307
+#: src/import-export/hbci/hbci-interaction.c:312
 msgid ""
 "Please insert the correct chip card for \n"
 "unknown user at unknown bank."
@@ -5991,35 +5963,39 @@ msgstr ""
 "Bitte die korrekte Chipkarte für unbekannten \n"
 "Benutzer einer unbekannten Bank einlegen."
 
-#: src/import-export/hbci/dialog-hbcitrans.c:140
+#. Translators: Strings from this file are really only
+#. * needed inside Germany (HBCI is not supported anywhere
+#. * else). You may safely ignore strings from the
+#. * import-export/hbci subdirectory in other countries.
+#: src/import-export/hbci/dialog-hbcitrans.c:144
 msgid "Enter an Online Direct Debit Note"
 msgstr "Online-Lastschrift eingeben"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:143
+#: src/import-export/hbci/dialog-hbcitrans.c:147
 msgid "Debited Account Owner"
 msgstr "Zahlungspflichtiger"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:145
+#: src/import-export/hbci/dialog-hbcitrans.c:149
 msgid "Debited Account Number"
 msgstr "Konto-Nr. des Zahlungspflichtigen"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:147
+#: src/import-export/hbci/dialog-hbcitrans.c:151
 msgid "Debited Account Bank Code"
 msgstr "BLZ des Zahlungspflichtigen"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:150
+#: src/import-export/hbci/dialog-hbcitrans.c:154
 msgid "Credited Account Owner"
 msgstr "Auftraggeber"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:152
+#: src/import-export/hbci/dialog-hbcitrans.c:156
 msgid "Credited Account Number"
 msgstr "Konto-Nr. des Auftraggebers"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:154
+#: src/import-export/hbci/dialog-hbcitrans.c:158
 msgid "Credited Account Bank Code"
 msgstr "BLZ des Auftraggebers"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:175
+#: src/import-export/hbci/dialog-hbcitrans.c:179
 msgid "(unknown)"
 msgstr "(unbekannt)"
 
@@ -6036,98 +6012,102 @@ msgstr ""
 msgid "Finished"
 msgstr "Fertig"
 
-#: src/import-export/hbci/hbci-progressmon.c:110
+#. Translators: Strings from this file are really only needed
+#. * inside Germany (HBCI is not supported anywhere else). You may
+#. * safely ignore strings from the import-export/hbci subdirectory
+#. * in other countries.
+#: src/import-export/hbci/hbci-progressmon.c:114
 msgid "Opening Dialog"
 msgstr "Eröffne Dialog"
 
-#: src/import-export/hbci/hbci-progressmon.c:113
+#: src/import-export/hbci/hbci-progressmon.c:117
 msgid "Closing Dialog"
 msgstr "Schließe Dialog"
 
-#: src/import-export/hbci/hbci-progressmon.c:117
+#: src/import-export/hbci/hbci-progressmon.c:121
 msgid "Opening Network Connection"
 msgstr "Eröffne Netzwerkverbindung"
 
-#: src/import-export/hbci/hbci-progressmon.c:121
+#: src/import-export/hbci/hbci-progressmon.c:125
 msgid "Closing Network Connection"
 msgstr "Schließe Netzwerkverbindung"
 
 #. Translate those with keeping the leading "Job:", but of course
 #. using a translation for "Job".
-#: src/import-export/hbci/hbci-progressmon.c:127
+#: src/import-export/hbci/hbci-progressmon.c:131
 msgid "Job: Get Balance"
 msgstr "Auftrag: Abfrage Saldo"
 
-#: src/import-export/hbci/hbci-progressmon.c:131
+#: src/import-export/hbci/hbci-progressmon.c:135
 msgid "Job: Get Transactions"
 msgstr "Auftrag: Abfrage Kontoumsätze"
 
-#: src/import-export/hbci/hbci-progressmon.c:135
+#: src/import-export/hbci/hbci-progressmon.c:139
 msgid "Job: New Transfer"
 msgstr "Auftrag: Neue Überweisung"
 
-#: src/import-export/hbci/hbci-progressmon.c:139
+#: src/import-export/hbci/hbci-progressmon.c:143
 msgid "Job: Debit Note"
 msgstr "Auftrag: Neue Lastschrift"
 
-#: src/import-export/hbci/hbci-progressmon.c:143
+#: src/import-export/hbci/hbci-progressmon.c:147
 msgid "Job: Get Standing Orders"
 msgstr "Auftrag: Abfrage Daueraufträge"
 
-#: src/import-export/hbci/hbci-progressmon.c:147
+#: src/import-export/hbci/hbci-progressmon.c:151
 msgid "Job: New Standing Order"
 msgstr "Auftrag: Neuer Dauerauftrag"
 
-#: src/import-export/hbci/hbci-progressmon.c:151
+#: src/import-export/hbci/hbci-progressmon.c:155
 msgid "Job: Delete Standing Order"
 msgstr "Auftrag: Lösche Dauerauftrag"
 
-#: src/import-export/hbci/hbci-progressmon.c:155
+#: src/import-export/hbci/hbci-progressmon.c:159
 msgid "Job: Retrieve Account List"
 msgstr "Auftrag: Abfrage Kontenliste"
 
-#: src/import-export/hbci/hbci-progressmon.c:159
+#: src/import-export/hbci/hbci-progressmon.c:163
 msgid "Job: Get System ID"
 msgstr "Auftrag: Abfrage Systemkennung"
 
-#: src/import-export/hbci/hbci-progressmon.c:163
+#: src/import-export/hbci/hbci-progressmon.c:167
 msgid "Job: Get Keys"
 msgstr "Auftrag: Schlüssel abrufen"
 
-#: src/import-export/hbci/hbci-progressmon.c:167
+#: src/import-export/hbci/hbci-progressmon.c:171
 msgid "Job: Send Keys"
 msgstr "Auftrag: Schlüssel senden"
 
-#: src/import-export/hbci/hbci-progressmon.c:189
-#: src/import-export/hbci/hbci-progressmon.c:249
+#: src/import-export/hbci/hbci-progressmon.c:193
+#: src/import-export/hbci/hbci-progressmon.c:253
 msgid "Done"
 msgstr "Fertig"
 
-#: src/import-export/hbci/hbci-progressmon.c:208
+#: src/import-export/hbci/hbci-progressmon.c:212
 msgid "Sending message"
 msgstr "Nachricht senden"
 
-#: src/import-export/hbci/hbci-progressmon.c:212
+#: src/import-export/hbci/hbci-progressmon.c:216
 msgid "Waiting for response"
 msgstr "Warten auf Antwort"
 
-#: src/import-export/hbci/hbci-progressmon.c:216
+#: src/import-export/hbci/hbci-progressmon.c:220
 msgid "Creating HBCI Job"
 msgstr "HBCI Auftrag erstellen"
 
-#: src/import-export/hbci/hbci-progressmon.c:220
+#: src/import-export/hbci/hbci-progressmon.c:224
 msgid "Contacting Server"
 msgstr "Server kontaktieren"
 
-#: src/import-export/hbci/hbci-progressmon.c:224
+#: src/import-export/hbci/hbci-progressmon.c:228
 msgid "Checking Job result"
 msgstr "Auftragsergebnis prüfen"
 
-#: src/import-export/hbci/hbci-progressmon.c:228
+#: src/import-export/hbci/hbci-progressmon.c:232
 msgid "Updating local system"
 msgstr "Lokales System aktualisieren"
 
-#: src/import-export/hbci/hbci-progressmon.c:232
+#: src/import-export/hbci/hbci-progressmon.c:236
 msgid "Closing connection"
 msgstr "Verbindung schließen"
 
