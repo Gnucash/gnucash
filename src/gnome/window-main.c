@@ -511,9 +511,15 @@ gnc_main_window_child_save_func(GnomeMDIChild * child, gpointer user_data) {
 
 void
 gnc_main_window_save(GNCMainInfo * wind, char * filename) {
-  char * session_name = g_strdup_printf("/GnuCash/MDI : %s",
-                                        gnc_html_encode_string(filename));
-  if(filename) {
+  char * encoded;
+  char * session_name;
+
+  encoded = gnc_html_encode_string(filename);
+  session_name = g_strdup_printf("/GnuCash/MDI : %s",
+                                 encoded ? encoded : "");
+  g_free (encoded);
+
+  if(filename && *filename != '\0') {
     gnome_mdi_save_state(GNOME_MDI(wind->mdi), session_name);
   }
   g_free(session_name);
@@ -527,17 +533,23 @@ gnc_main_window_save(GNCMainInfo * wind, char * filename) {
 
 void
 gnc_main_window_restore(GNCMainInfo * wind, char * filename) {
-  char * session_name = g_strdup_printf("/GnuCash/MDI : %s",
-                                        gnc_html_encode_string(filename));
+  char * encoded;
+  char * session_name;
   gboolean old_format_file;
   GList * old_children = g_list_copy(wind->mdi->children);
   GList * c;
+
+  encoded = gnc_html_encode_string(filename);
+  session_name = g_strdup_printf("/GnuCash/MDI : %s",
+                                 encoded ? encoded : "");
+  g_free (encoded);
 
   old_format_file =
     gnc_commodity_table_has_namespace
     (gnc_engine_commodities (), GNC_COMMODITY_NS_LEGACY);
 
   if(!filename ||
+     *filename == '\0' ||
      old_format_file ||
      !gnome_mdi_restore_state(GNOME_MDI(wind->mdi), session_name,
                               gnc_main_window_create_child) ||
@@ -545,7 +557,7 @@ gnc_main_window_restore(GNCMainInfo * wind, char * filename) {
     gnc_main_window_open_accounts(0);
   }
   g_free(session_name);
-  
+
   for(c = old_children; c ; c = c->next) {
     gnome_mdi_remove_child(wind->mdi, GNOME_MDI_CHILD(c->data), TRUE);
   }
