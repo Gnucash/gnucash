@@ -51,12 +51,7 @@ gnc_kvp_gemini (kvp_frame *kvp_root, const GUID *acct_guid,
 
    /* cwd == 'current working directory' */
    pwd = kvp_frame_get_frame (kvp_root, "gemini");
-   if (!pwd)
-   {
-      pwd = kvp_frame_new();
-      kvp_frame_set_slot_nc (kvp_root, 
-           "gemini", kvp_value_new_frame(pwd));
-   }
+   if (!pwd) return;  /* error: can't ever happen */
 
    /* find, increment, store number of copies */
    v_ncopies = kvp_frame_get_slot (pwd, "ncopies");
