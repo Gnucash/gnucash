@@ -166,6 +166,85 @@ static char * fleche_xpm[] = {
   ".............",
   "@@@@@@@@@@@@@"};
 
+static  GdkPixmap* gen_probability_pixmap(gint score, struct _transmatcherdialog * matcher)
+{
+  GdkPixmap* retval = NULL;
+  gint i, j;
+  const gint height = 15;
+  const gint width_each_bar = 7;
+  gchar * green_bar = ("bggggb ");
+  gchar * yellow_bar = ("byyyyb ");
+  gchar * red_bar = ("brrrrb ");
+  gchar * black_bar = ("bbbbbb ");
+  const gint num_colors = 5;
+  gchar * size_str = g_new0(gchar,255);
+  sprintf(size_str,"%d%s%d%s%d%s",width_each_bar*score/*width*/," ",height," ",num_colors," 1"/*characters per pixel*/);
+  gchar * none_color_str =  g_new0(gchar,255);
+  strcpy(none_color_str,"  c None");
+  gchar * green_color_str =  g_new0(gchar,255);
+  strcpy(green_color_str,"g c green");
+  gchar * yellow_color_str = g_new0(gchar,255);
+  strcpy(yellow_color_str,"y c yellow");
+  gchar * red_color_str = g_new0(gchar,255);
+  strcpy(red_color_str,"r c red");
+  gchar * black_color_str = g_new0(gchar,255);
+  strcpy(black_color_str,"b c black");
+  gchar * xpm[2+num_colors+height];
+  DEBUG("Begin");
+  printf("%s\n",size_str);
+  
+  xpm[0]=size_str;
+  xpm[1]=none_color_str;
+  xpm[2]=green_color_str;
+  xpm[3]=yellow_color_str;
+  xpm[4]=red_color_str; 
+  xpm[5]=black_color_str;
+  
+  for(i=0;i<height;i++)
+    {
+      xpm[num_colors+1+i]= g_new0(char,(width_each_bar*score)+1);
+      for(j=0;j<score;j++)
+	{
+	  if(i==0||i==height-1)
+	    {
+	      strcat(xpm[num_colors+1+i],black_bar);
+	    }
+	  else
+	    {
+	      if (j<=TRANSACTION_ADD_PROBABILITY_THRESHOLD-1)
+		{
+		  strcat(xpm[num_colors+1+i],red_bar);
+		}
+	      else if (j>=TRANSACTION_RECONCILE_PROBABILITY_THRESHOLD-1)
+		{
+		  strcat(xpm[num_colors+1+i],green_bar);
+		}
+	      else
+		{
+		  strcat(xpm[num_colors+1+i],yellow_bar);
+		}
+	    }
+	}
+    }  
+    DEBUG("Test");
+    if(score!=0)
+      {
+	retval =  gdk_pixmap_colormap_create_from_xpm_d    (NULL,
+							    gtk_widget_get_colormap(matcher->transaction_matcher),
+							    NULL,
+							    NULL,
+							    xpm);
+      }
+   for(i=0;i<=num_colors+height;i++)
+    { 
+      /*DEBUG("free_loop i=%d%s%s",i,": ",xpm[i]);*/
+      g_free(xpm[i]);
+    }
+  DEBUG("End");
+
+  return retval;
+}
+
 static Action get_next_action(Action current_action)
 {
   Action retval = INVALID_ACTION;
@@ -243,10 +322,11 @@ static void downloaded_transaction_refresh_gui( struct _transmatcherdialog * mat
 				       transaction_info->clist_text[i]);
     } 
 
-  fleche =  gdk_pixmap_create_from_xpm_d    (NULL,
-					     NULL,
-					     NULL,
-					     fleche_xpm);
+  fleche =  gdk_pixmap_colormap_create_from_xpm_d    (NULL,
+						      gtk_widget_get_colormap(matcher->transaction_matcher),
+						      NULL,
+						      NULL,
+						      fleche_xpm);
   
   gtk_clist_set_pixtext           (matcher->downloaded_clist,
 				   row_number,
@@ -308,6 +388,20 @@ downloaded_transaction_select_cb (GtkCList *clist,
       gtk_clist_set_row_data          (matcher->match_clist,
 				       row_number,
 				       match_info);
+      if(match_info->probability!=0)
+	{
+	  gtk_clist_set_pixtext           (matcher->match_clist,
+					   row_number,
+					   MATCHER_CLIST_CONFIDENCE,
+					   match_info->probability_text,
+					   3,
+					   gen_probability_pixmap(match_info->probability, matcher),
+					   NULL);
+	}
+      
+      gtk_clist_set_row_height        (matcher->match_clist,
+				       0);
+
       if(match_info==matcher->selected_trans_info->selected_match_info)
 	{
 	  gtk_clist_select_row            (matcher->match_clist,
