@@ -1,0 +1,1119 @@
+!Type:Bank
+D01/01/95
+T5,762.36
+CX
+POpening Balance
+L[Compte courant]
+^
+D01/01/95
+CX
+T-405.00
+PCanal Satellite
+LLoisirs:Canal Plus-Câble
+^
+D01/03/95
+CX
+MRetrait distributeur
+T-500.00
+PCash
+LLoisirs:Livres-Journaux
+SLoisirs:Livres-Journaux
+$-68.00
+SLoisirs:Disques-cassettes
+EDisquettes
+$-75.00
+SDivers
+$-357.00
+^
+D01/05/95
+CX
+MAssurance appartement/vie
+T-837.61
+N6351
+PMACIF
+LAssurance:Multi-risques habitation
+^
+D01/08/95
+CX
+T-200.00
+PE.D.F.
+LMaison:Electricité
+^
+D01/10/95
+CX
+MPrime de fin d'année
+T4,000.00
+PEmployeur
+LSalaire:Primes
+^
+D01/10/95
+CX
+T-256.50
+N6352
+PIntermarché
+LAlimentation:Epicerie
+^
+D01/12/95
+CX
+T-3,700.00
+N6353
+PPropriétaire
+LLogement:Loyer
+^
+D01/17/95
+CX
+T-342.25
+PFrance Télécom
+LMaison:Téléphone
+^
+D01/18/95
+CX
+MRetrait distributeur
+T-400.00
+PCash
+LDivers
+^
+D01/22/95
+CX
+MCoupon mensuel 4 zones
+T-395.00
+N6354
+PRATP
+LDéplacements prof.:Frais de transport
+^
+D01/24/95
+CX
+MRetrait distributeur
+T-250.00
+PCash
+LDivers
+^
+D01/25/95
+CX
+T11,351.24
+PEmployeur
+LSalaire:Salaire net
+^
+D01/26/95
+CX
+MEconomies
+T-2,500.00
+L[Livret bleu]
+^
+D02/01/95
+CX
+T-405.00
+PCanal Satellite
+LLoisirs:Canal Plus-Câble
+^
+D02/02/95
+CX
+MRetrait distributeur
+T-500.00
+PCash
+LLoisirs:Cinéma-Théâtre
+SLoisirs:Cinéma-Théâtre
+$-84.00
+SDivers
+$-416.00
+^
+D02/07/95
+CX
+T-327.00
+N6355
+PRestaurant Saint-Paul
+LAlimentation:Restaurant
+^
+D02/10/95
+CX
+M1er tiers
+T-4,158.69
+N6356
+PCentre des Impôts
+LImpôts:Impôts sur le revenu
+^
+D02/12/95
+CX
+T-3,700.00
+N6357
+PPropriétaire
+LLogement:Loyer
+^
+D02/21/95
+CX
+MRetrait distributeur
+T-200.00
+PCash
+LSoins personnels:Coiffeur
+SSoins personnels:Coiffeur
+$-100.00
+SDivers
+$-100.00
+^
+D02/22/95
+CX
+MCoupon mensuel 4 zones
+T-395.00
+N6358
+PRATP
+LDéplacements prof.:Frais de transport
+^
+D02/25/95
+CX
+T11,351.24
+PEmployeur
+LSalaire:Salaire net
+^
+D02/26/95
+CX
+MEconomies
+T-3,000.00
+L[Livret bleu]
+^
+D02/26/95
+CX
+T-181.80
+N6359
+PCarrefour
+LAlimentation
+^
+D02/26/95
+CX
+T-596.00
+N6360
+PSNCF
+LVacances:Voyage
+^
+D02/28/95
+CX
+MRetrait distributeur
+T-200.00
+PCash
+LDivers
+^
+D03/01/95
+CX
+T-405.00
+PCanal Satellite
+LLoisirs:Canal Plus-Câble
+^
+D03/08/95
+CX
+T-200.00
+PE.D.F.
+LMaison:Electricité
+^
+D03/12/95
+CX
+T-3,700.00
+N6361
+PPropriétaire
+LLogement:Loyer
+^
+D03/14/95
+CX
+MRetrait distributeur
+T-500.00
+PCash
+LLoisirs:Livres-Journaux
+SLoisirs:Livres-Journaux
+$-114.00
+SDivers
+$-386.00
+^
+D03/15/95
+CX
+T-209.10
+N6362
+PSenzo Alimentation
+LAlimentation:Epicerie
+^
+D03/17/95
+CX
+T-212.86
+PFrance Télécom
+LMaison:Téléphone
+^
+D03/17/95
+CX
+MPour Hélène...
+T-160.00
+N6363
+PInterflora
+LCadeaux
+^
+D03/21/95
+CX
+MRetrait distributeur
+T-150.00
+PCash
+LDivers
+^
+D03/25/95
+CX
+T10,053.90
+PEmployeur
+LSalaire:Salaire net
+^
+D03/26/95
+CX
+MEconomies
+T-3,000.00
+L[Livret bleu]
+^
+D03/26/95
+CX
+MCoupon mensuel 4 zones
+T-395.00
+N6365
+PRATP
+LDéplacements prof.:Frais de transport
+^
+D03/30/95
+CX
+T-683.35
+N6364
+PCarrefour
+LAlimentation:Epicerie
+SAlimentation:Epicerie
+$-110.20
+SMobilier:Eclairage
+$-45.00
+SHabillement
+$-155.00
+SLoisirs:Disques-cassettes
+$-226.50
+SMobilier:Cuisine-Salle de bains
+$-146.65
+^
+D03/31/95
+CX
+MRetrait distributeur
+T-400.00
+PCash
+LLoisirs:Photographie
+SLoisirs:Photographie
+EFNAC
+$-58.60
+SDivers
+$-341.40
+^
+D04/01/95
+CX
+T-405.00
+PCanal Satellite
+LLoisirs:Canal Plus-Câble
+^
+D04/11/95
+CX
+MRetrait distributeur
+T-500.00
+PCash
+LDivers
+^
+D04/12/95
+CX
+T-3,700.00
+N6366
+PPropriétaire
+LLogement:Loyer
+^
+D04/21/95
+CX
+MCoupon mensuel 4 zones
+T-395.00
+N6367
+PRATP
+LDéplacements prof.:Frais de transport
+^
+D04/23/95
+CX
+MRetrait distributeur
+T-350.00
+PCash
+LSoins personnels:Coiffeur
+SSoins personnels:Coiffeur
+$-100.00
+SLoisirs:Cinéma-Théâtre
+$-86.00
+SDivers
+$-164.00
+^
+D04/25/95
+CX
+T11,351.24
+PEmployeur
+LSalaire:Salaire net
+^
+D04/26/95
+CX
+MEconomies
+T-3,000.00
+L[Livret bleu]
+^
+D05/01/95
+CX
+T-405.00
+PCanal Satellite
+LLoisirs:Canal Plus-Câble
+^
+D05/02/95
+CX
+MRetrait distributeur
+T-500.00
+PCash
+LLoisirs:Livres-Journaux
+SLoisirs:Livres-Journaux
+$-53.00
+SDivers
+$-447.00
+^
+D05/08/95
+CX
+T-200.00
+PE.D.F.
+LMaison:Electricité
+^
+D05/09/95
+CX
+MRetrait distributeur
+T-100.00
+PCash
+LDivers
+^
+D05/11/95
+CX
+M(exceptionnel)
+T-425.00
+N6368
+PGaz de France
+LMaison:Chauffage
+^
+D05/12/95
+CX
+T-3,700.00
+N6369
+PPropriétaire
+LLogement:Loyer
+^
+D05/13/95
+CX
+T-299.50
+N6370
+PIntermarché
+LDivers
+^
+D05/17/95
+CX
+T-403.11
+PFrance Télécom
+LMaison:Téléphone
+^
+D05/18/95
+CX
+MRetrait distributeur
+T-600.00
+PCash
+LDivers
+^
+D05/18/95
+CX
+T-110.00
+N6371
+PLa Bonne Franquette
+LAlimentation:Restaurant
+^
+D05/25/95
+CX
+T11,351.24
+PEmployeur
+LSalaire:Salaire net
+^
+D05/26/95
+CX
+MEconomies
+T-3,000.00
+L[Livret bleu]
+^
+D05/29/95
+CX
+MCoupon mensuel 4 zones
+T-395.00
+N6372
+PRATP
+LDéplacements prof.:Frais de transport
+^
+D05/30/95
+CX
+MRetrait distributeur
+T-500.00
+PCash
+LDivers
+^
+D06/01/95
+CX
+T-405.00
+PCanal Satellite
+LLoisirs:Canal Plus-Câble
+^
+D06/02/95
+CX
+T-142.00
+N6373
+PFNAC
+LLoisirs:Livres-Journaux
+^
+D06/06/95
+CX
+MRetrait distributeur
+T-500.00
+PCash
+LAlimentation:Epicerie
+SAlimentation:Epicerie
+$-84.55
+SDivers
+$-415.45
+^
+D06/10/95
+CX
+M2ème tiers
+T-4,158.69
+N6375
+PCentre des Impôts
+LImpôts:Impôts sur le revenu
+^
+D06/10/95
+CX
+M(exceptionnel)
+T-165.00
+N6376
+PGaz de France
+LMaison:Chauffage
+^
+D06/11/95
+CX
+MRetrait distributeur
+T-300.00
+PCash
+LDivers
+^
+D06/12/95
+CX
+T-3,700.00
+N6378
+PPropriétaire
+LLogement:Loyer
+^
+D06/20/95
+CX
+MCrêperie
+T-150.00
+PCash
+LAlimentation:Restaurant
+^
+D06/20/95
+CX
+MCoupon mensuel 4 zones
+T-395.00
+N6380
+PRATP
+LDéplacements prof.:Frais de transport
+^
+D06/21/95
+CX
+MNouvelles enceintes
+T-1,849.00
+N6379
+PNasa Electronics
+LMobilier:Electro-ménager
+^
+D06/25/95
+CX
+T11,351.24
+PEmployeur
+LSalaire:Salaire net
+^
+D06/26/95
+CX
+MEconomies
+T-3,000.00
+L[Livret bleu]
+^
+D07/01/95
+CX
+T-405.00
+PCanal Satellite
+LLoisirs:Canal Plus-Câble
+^
+D07/04/95
+CX
+MRetrait distributeur
+T-300.00
+PCash
+LDivers
+^
+D07/07/95
+CX
+MCarte UGC 10 places
+T-380.00
+N6381
+PU.G.C.
+LLoisirs:Cinéma-Théâtre
+^
+D07/08/95
+CX
+T-200.00
+PE.D.F.
+LMaison:Electricité
+^
+D07/12/95
+CX
+T-3,700.00
+N6382
+PPropriétaire
+LLogement:Loyer
+^
+D07/13/95
+CX
+M(exceptionnel)
+T-165.00
+N6383
+PGaz de France
+LMaison:Chauffage
+^
+D07/17/95
+CX
+T-359.77
+PFrance Télécom
+LMaison:Téléphone
+^
+D07/18/95
+CX
+MRetrait distributeur
+T-600.00
+PCash
+LAlimentation:Epicerie
+SAlimentation:Epicerie
+$-134.65
+SDivers
+$-465.35
+^
+D07/21/95
+CX
+MCoupon mensuel 4 zones
+T-395.00
+N6384
+PRATP
+LDéplacements prof.:Frais de transport
+^
+D07/25/95
+CX
+T11,351.24
+PEmployeur
+LSalaire:Salaire net
+^
+D07/25/95
+CX
+MSoirée entre amis
+T-250.00
+PCash
+LLoisirs:Equipement
+^
+D07/26/95
+CX
+MEconomies
+T-2,500.00
+L[Livret bleu]
+^
+D08/01/95
+CX
+T-4,213.14
+PCrédit Mutuel
+LAutomobile:Crédit auto
+SAutomobile:Crédit auto
+ECapital
+$-4,063.87
+SFrais financiers:Autres frais
+EIntérêts
+$-149.27
+^
+D08/01/95
+CX
+T-405.00
+PCanal Satellite
+LLoisirs:Canal Plus-Câble
+^
+D08/03/95
+CX
+MRetrait distributeur
+T-500.00
+PCash
+LAutomobile:Essence
+SAutomobile:Essence
+$-150.00
+SDivers
+$-350.00
+^
+D08/07/95
+CX
+MJusqu'au 01/07/96
+T-461.90
+N6353
+PMACIF
+LAssurance:Automobile
+^
+D08/09/95
+CX
+MRetrait distributeur
+T-100.00
+PCash
+LDivers
+^
+D08/12/95
+CX
+T-3,700.00
+N6385
+PPropriétaire
+LLogement:Loyer
+^
+D08/13/95
+CX
+T-849.00
+N6386
+PC & A
+LHabillement
+SHabillement
+Ejeans
+$-199.00
+SHabillement
+Echaussures
+$-259.00
+SHabillement
+E2 chemises
+$-280.00
+SHabillement
+E2 teeshirts
+$-98.00
+SHabillement
+Ecirage
+$-13.00
+^
+D08/18/95
+CX
+MRetrait distributeur
+T-450.00
+PCash
+LLoisirs:Livres-Journaux
+SLoisirs:Livres-Journaux
+$-68.00
+SDivers
+$-382.00
+^
+D08/22/95
+CX
+MCoupon mensuel 4 zones
+T-395.00
+N6387
+PRATP
+LDéplacements prof.:Frais de transport
+^
+D08/25/95
+CX
+T11,351.24
+PEmployeur
+LSalaire:Salaire net
+^
+D08/25/95
+CX
+MRetrait distributeur
+T-300.00
+PCash
+LSoins personnels:Coiffeur
+SSoins personnels:Coiffeur
+$-100.00
+SSanté:Ordonnances
+$-185.00
+SSanté:Dentiste
+$-15.00
+^
+D08/30/95
+CX
+MRetrait distributeur
+T-200.00
+PCash
+LAlimentation:Epicerie
+^
+D09/01/95
+CX
+T-4,213.14
+PCrédit Mutuel
+LAutomobile:Crédit auto
+SAutomobile:Crédit auto
+ECapital
+$-4,084.86
+SFrais financiers:Autres frais
+EIntérêts
+$-128.28
+^
+D09/01/95
+CX
+T-405.00
+PCanal Satellite
+LLoisirs:Canal Plus-Câble
+^
+D09/08/95
+CX
+T-200.00
+PE.D.F.
+LMaison:Electricité
+^
+D09/08/95
+CX
+MRetrait distributeur
+T-500.00
+PCash
+LAutomobile:Essence
+SAutomobile:Essence
+$-100.00
+SDivers
+$-400.00
+^
+D09/12/95
+CX
+T-3,700.00
+N6388
+PPropriétaire
+LLogement:Loyer
+^
+D09/17/95
+CX
+T-342.00
+PFrance Télécom
+LMaison:Téléphone
+^
+D09/17/95
+CX
+MRetrait distributeur
+T-500.00
+PCash
+LDivers
+^
+D09/22/95
+CX
+MRetrait distributeur
+T-200.00
+PCash
+LDivers
+^
+D09/25/95
+CX
+T11,351.24
+PEmployeur
+LSalaire:Salaire net
+^
+D09/26/95
+CX
+MCoupon mensuel 4 zones
+T-395.00
+N6389
+PRATP
+LDéplacements prof.:Frais de transport
+^
+D09/29/95
+CX
+MRetrait distributeur
+T-400.00
+PCash
+LDivers
+^
+D10/01/95
+CX
+T-4,213.14
+PCrédit Mutuel
+LAutomobile:Crédit auto
+SAutomobile:Crédit auto
+ECapital
+$-4,105.97
+SFrais financiers:Autres frais
+EIntérêts
+$-107.17
+^
+D10/01/95
+CX
+T-405.00
+PCanal Satellite
+LLoisirs:Canal Plus-Câble
+^
+D10/03/95
+CX
+MRetrait distributeur
+T-350.00
+PCash
+LDivers:Fournitures diverses
+SDivers:Fournitures diverses
+$-175.00
+SAutomobile:Essence
+$-175.00
+^
+D10/10/95
+CX
+MRetrait distributeur
+T-250.00
+PCash
+LLoisirs:Cinéma-Théâtre
+SLoisirs:Cinéma-Théâtre
+$-42.00
+SDivers
+$-208.00
+^
+D10/12/95
+CX
+T-3,700.00
+N6390
+PPropriétaire
+LLogement:Loyer
+^
+D10/15/95
+CX
+MDernier tiers
+T-4,430.04
+N6391
+PCentre des Impôts
+LImpôts:Impôts sur le revenu
+^
+D10/18/95
+CX
+MRetrait distributeur
+T-500.00
+PCash
+LSoins personnels
+SSoins personnels
+$-100.00
+SDivers
+$-400.00
+^
+D10/24/95
+CX
+MCoupon mensuel 4 zones
+T-395.00
+N6392
+PRATP
+LDéplacements prof.:Frais de transport
+^
+D10/25/95
+CX
+T11,351.24
+PEmployeur
+LSalaire:Salaire net
+^
+D10/26/95
+CX
+MRetrait distributeur
+T-300.00
+PCash
+LLoisirs:Livres-Journaux
+SLoisirs:Livres-Journaux
+$-82.00
+SDivers
+$-218.00
+^
+D10/31/95
+CX
+MRetrait distributeur
+T-150.00
+PCash
+LAlimentation:Restaurant
+^
+D11/01/95
+CX
+T-4,213.14
+PCrédit Mutuel
+LAutomobile:Crédit auto
+SAutomobile:Crédit auto
+ECapital
+$-4,127.18
+SFrais financiers:Autres frais
+EIntérêts
+$-85.96
+^
+D11/01/95
+CX
+T-405.00
+PCanal Satellite
+LLoisirs:Canal Plus-Câble
+^
+D11/06/95
+CX
+MRetrait distributeur
+T-500.00
+PCash
+LCadeaux
+SCadeaux
+EAnniversaire Hélène
+$-400.00
+SAutomobile:Essence
+$-100.00
+^
+D11/08/95
+CX
+T-200.00
+PE.D.F.
+LMaison:Electricité
+^
+D11/12/95
+CX
+MPour équilibrage
+T4,500.00
+L[Livret bleu]
+^
+D11/12/95
+CX
+T-3,700.00
+N6393
+PPropriétaire
+LLogement:Loyer
+^
+D11/14/95
+CX
+MRetrait distributeur
+T-100.00
+PCash
+LDivers
+^
+D11/16/95
+CX
+MCadeaux de Noël juniors
+T-875.00
+N6394
+PToys'R'Us
+LCadeaux
+^
+D11/17/95
+CX
+T-505.25
+PFrance Télécom
+LMaison:Téléphone
+^
+D11/20/95
+CX
+MDollars pour vacances à Redmond
+T-1,500.00
+PCrédit Mutuel
+LVacances:Devises
+^
+D11/21/95
+CX
+MRetrait distributeur
+T-150.00
+PCash
+LDivers
+^
+D11/22/95
+CX
+MCoupon mensuel 4 zones
+T-395.00
+N6395
+PRATP
+LDéplacements prof.:Frais de transport
+^
+D11/25/95
+CX
+T11,351.24
+PEmployeur
+LSalaire:Salaire net
+^
+D11/28/95
+CX
+MRetrait distributeur
+T-500.00
+PCash
+LDivers
+^
+D12/01/95
+CX
+T-4,213.14
+PCrédit Mutuel
+LAutomobile:Crédit auto
+SAutomobile:Crédit auto
+ECapital
+$-4,148.51
+SFrais financiers:Autres frais
+EIntérêts
+$-64.63
+^
+D12/01/95
+CX
+T-405.00
+PCanal Satellite
+LLoisirs:Canal Plus-Câble
+^
+D12/04/95
+CX
+T-258.75
+N6396
+PC & A
+LAlimentation:Epicerie
+SAlimentation:Epicerie
+$-158.75
+SLoisirs:Livres-Journaux
+$-100.00
+^
+D12/05/95
+CX
+MRetrait distributeur
+T-400.00
+PCash
+LDivers
+^
+D12/12/95
+CX
+T-3,700.00
+N6397
+PPropriétaire
+LLogement:Loyer
+^
+D12/15/95
+CX
+MRetrait distributeur
+T-500.00
+PCash
+LDivers
+^
+D12/20/95
+CX
+MCoupon mensuel 4 zones
+T-395.00
+N6398
+PRATP
+LDéplacements prof.:Frais de transport
+^
+D12/23/95
+CX
+MRetrait distributeur
+T-250.00
+PCash
+LAutomobile:Essence
+SAutomobile:Essence
+$-120.00
+SDivers
+$-130.00
+^
+D12/25/95
+CX
+T11,351.24
+PEmployeur
+LSalaire:Salaire net
+^
+D12/26/95
+CX
+MEconomies
+T-3,500.00
+L[Livret bleu]
+^
+D12/31/95
+CX
+MAgios pour découvert du 15/10 au 24/10
+T-97.63
+PCrédit Mutuel
+LFrais bancaires:Personnels
+^

@@ -1,0 +1,1899 @@
+!Type:Bank
+D12/03/95
+T4,706.57
+CX
+POpening Balance
+L[New Bank]
+^
+D12/03/95
+T1,004.81
+PBoss1
+LWS
+^
+D12/03/95
+T-525.00
+N106
+PLandlord
+LBills:Rent
+^
+D12/05/95
+T-539.60
+N107
+PInsurance
+LInsurance:A
+^
+D12/08/95
+T1,267.88
+PSchool
+LWS
+^
+D12/08/95
+T-56.83
+N108
+PPacific Bell
+LBills:Telephone
+^
+D12/08/95
+T-751.27
+N109
+PW Bank
+LCredit Card
+^
+D12/09/95
+T600.00
+PBoss1
+LWS
+^
+D12/11/95
+T-5,000.00
+N110
+PF Visa
+LCredit Card
+^
+D12/20/95
+T1,065.94
+PC Master Card
+LOther Income:Credit balance
+^
+D12/22/95
+T-80.00
+PCash
+^
+D12/27/95
+T-9.89
+N111
+PB's Supermarket
+LFood
+^
+D12/27/95
+T-86.00
+N112
+PCourt
+LMiscellaneous
+^
+D12/27/95
+T-39.00
+N113
+PAAA
+LA:M
+^
+D12/31/95
+T-52.55
+N114
+PBN
+LCredit Card
+^
+D12/31/95
+T-78.04
+N115
+PGas Co.
+LBills:Natural Gas
+^
+D01/01/96
+T1,058.65
+PBoss1
+LWS
+^
+D01/01/96
+T-525.00
+N116
+PLandlord
+LBills:Rent
+^
+D01/05/96
+T-100.00
+PCash
+^
+D01/06/96
+T600.00
+PBoss1
+LWS
+^
+D01/10/96
+T1,269.61
+PSchool
+LWS
+^
+D01/13/96
+T-8.20
+N117
+PMCL
+LLeisure:Photo
+^
+D01/23/96
+MFrom other checking account
+T500.00
+PCash
+^
+D01/23/96
+T-60.00
+PCash
+^
+D01/23/96
+T-44.56
+N118
+PC Master Card
+LCredit Card
+^
+D01/23/96
+T-31.36
+N119
+PDC
+LCredit Card
+^
+D01/23/96
+T-95.31
+N120
+PPacific Bell
+LBills:Telephone
+^
+D01/23/96
+T-1,162.84
+N121
+PW Bank
+LCredit Card
+^
+D01/26/96
+T-500.00
+N122
+PXM
+^
+D01/27/96
+T-100.00
+PCash
+^
+D01/28/96
+T-55.95
+N123
+PGas Co.
+LBills:Natural Gas
+^
+D01/30/96
+T-100.00
+PCash
+^
+D02/01/96
+T-525.00
+N126
+PLandlord
+LBills:Rent
+^
+D02/03/96
+T-24.89
+N124
+PDBC
+LBills
+^
+D02/07/96
+T-46.53
+PPower Co.
+LBills:Electricity
+^
+D02/07/96
+T-500.00
+N125
+PLJ
+^
+D02/07/96
+T-12.60
+N127
+PM&W Trading Co.
+^
+D02/07/96
+T-50.61
+N128
+PPacific Bell
+LBills:Telephone
+^
+D02/07/96
+T-7.00
+N129
+PAG
+^
+D02/09/96
+T1,269.61
+PSchool
+LWS
+^
+D02/09/96
+T-200.00
+PCash
+^
+D02/10/96
+T-2.40
+N130
+PB's Supermarket
+LFood
+^
+D02/11/96
+T-98.70
+N131
+PC Master Card
+LCredit Card
+^
+D02/11/96
+T-365.78
+N132
+PW Visa Gold
+^
+D02/14/96
+T-36.88
+N133
+PAUC
+LCredit Card
+^
+D02/19/96
+T100.82
+PC Master Card
+LCredit Card
+^
+D02/19/96
+T-60.00
+PCash
+^
+D02/21/96
+T-3.98
+N134
+PHCA
+LClothing
+^
+D02/27/96
+T-23.14
+PPower Co.
+LBills:Electricity
+^
+D03/02/96
+T-525.00
+N135
+PLandlord
+LBills:Rent
+^
+D03/09/96
+T1,269.61
+PSchool
+LWS
+^
+D03/09/96
+T-236.19
+N136
+PToy's R Us Visa Gold
+LCredit Card
+^
+D03/09/96
+T-18.75
+N137
+PGas Co.
+LBills:Natural Gas
+^
+D03/09/96
+T-53.79
+N138
+PDC
+LCredit Card
+^
+D03/09/96
+T-49.51
+N139
+PPacific Bell
+LBills:Telephone
+^
+D03/09/96
+T-300.23
+N140
+PW Visa Gold
+LCredit Card
+^
+D03/09/96
+T-278.96
+N141
+PC Master Card
+LCredit Card
+^
+D03/12/96
+T285.45
+PC
+^
+D03/24/96
+T-100.00
+PCash
+^
+D03/24/96
+T-10.10
+N142
+PB's Supermarket
+LFood:Groceries
+^
+D03/27/96
+T154.31
+PBB
+LMisc
+^
+D03/27/96
+T-22.72
+N143
+PNB
+LCredit Card
+^
+D04/01/96
+T-525.00
+N144
+PLandlord
+LBills:Rent
+^
+D04/08/96
+T-19.28
+PPower Co.
+LBills:Electricity
+^
+D04/10/96
+T577.87
+PBB
+LMisc
+^
+D04/10/96
+T1,269.61
+PSchool
+LWS
+^
+D04/10/96
+T-23.09
+N145
+PGas Co.
+LBills:Natural Gas
+^
+D04/10/96
+T-22.74
+N146
+PPacific Bell
+LBills:Telephone
+^
+D04/10/96
+T-350.50
+N147
+PC Master Card
+LCredit Card
+^
+D04/10/96
+T-22.02
+N148
+PToy's R Us Visa Gold
+LCredit Card
+^
+D05/01/96
+T-19.78
+PPower Co.
+LBills:Electricity
+^
+D05/01/96
+T-525.00
+N149
+PLandlord
+LBills:Rent
+^
+D05/01/96
+T-608.49
+N150
+PBN
+LCredit Card
+^
+D05/02/96
+T-41.70
+N151
+PLDPC Co.
+LBills:Telephone
+^
+D05/09/96
+T-29.38
+N152
+PPC
+^
+D05/10/96
+T1,269.61
+PSchool
+LWS
+^
+D05/17/96
+T17.00
+PGas Co.
+LReimbursement
+^
+D05/19/96
+T-265.00
+N153
+PDW
+LA
+^
+D05/19/96
+T-56.07
+N154
+PPacific Bell
+LBills:Telephone
+^
+D05/19/96
+T-774.04
+N155
+PNB
+LCredit Card
+^
+D05/20/96
+T-12.99
+N156
+PPC
+^
+D05/28/96
+T582.80
+PBoss1
+LReimbursement
+^
+D05/31/96
+T-10.00
+N157
+PDr. Lin
+LHealthcare
+^
+D06/02/96
+T1,985.87
+PBoss1
+LWS
+^
+D06/02/96
+T-100.00
+PCash
+^
+D06/02/96
+T-525.00
+N158
+PLandlord
+LBills:Rent
+^
+D06/02/96
+T-58.39
+N159
+PBN
+LCredit Card
+^
+D06/06/96
+T-42.72
+N160
+PLDPC Co.
+LBills:Telephone
+^
+D06/06/96
+T-48.25
+N161
+PPacific Bell
+LBills:Telephone
+^
+D06/07/96
+T-537.00
+N162
+PInsurance Co.
+LInsurance:A
+^
+D06/10/96
+T1,269.61
+PSchool
+LWS
+^
+D06/10/96
+T-25.36
+PPower Co.
+LBills:Electricity
+^
+D06/10/96
+T-533.80
+N163
+PW Visa Gold
+LCredit Card
+^
+D06/10/96
+T-25.65
+N164
+PDC
+LCredit Card
+^
+D06/11/96
+T-71.16
+N165
+PC Master Card
+LCredit Card
+^
+D06/13/96
+T-1,682.24
+N166
+PNB
+LCredit Card
+^
+D06/28/96
+T-100.00
+PCash
+^
+D07/01/96
+T-525.00
+N167
+PLandlord
+LBills:Rent
+^
+D07/08/96
+T-12.22
+PPower Co.
+LBills:Electricity
+^
+D07/08/96
+T-10.00
+N168
+PToy's R Us Visa Gold
+LCredit Card
+^
+D07/16/96
+T-325.66
+N169
+PNB
+LCredit Card
+^
+D07/16/96
+T-45.77
+N170
+PPacific Bell
+LBills:Telephone
+^
+D07/16/96
+T-29.97
+N171
+PTime
+LEducation
+^
+D07/16/96
+T-401.65
+N173
+PC Master Card
+LCredit Card
+^
+D07/16/96
+T-44.00
+N174
+PCity
+LA
+^
+D07/16/96
+T-28.00
+N175
+PCity
+LA
+^
+D07/18/96
+T1,269.63
+PSchool
+LWS
+^
+D08/01/96
+T-525.00
+N176
+PLandlord
+LBills:Rent
+^
+D08/06/96
+T-20.40
+PPower Co.
+LBills:Electricity
+^
+D08/08/96
+T-42.73
+N177
+PPacific Bell
+LBills:Telephone
+^
+D08/09/96
+T1,269.61
+PSchool
+LWS
+^
+D08/09/96
+T324.20
+PBoss1
+LReimbursement
+^
+D08/13/96
+T-100.00
+PCash
+^
+D08/19/96
+T-208.00
+N178
+PC
+^
+D08/19/96
+T-138.90
+N179
+PAUC
+LCredit Card
+^
+D08/19/96
+T-459.29
+N180
+PNB
+LCredit Card
+^
+D09/01/96
+T-525.00
+N181
+PLandlord
+LBills:Rent
+^
+D09/01/96
+T-26.71
+N182
+PToy's R Us Visa Gold
+LCredit Card
+^
+D09/01/96
+T-22.00
+N183
+PCity
+LA
+^
+D09/01/96
+T-24.66
+N184
+PLDPC Co.
+LBills:Telephone
+^
+D09/03/96
+T-20.00
+N185
+PSchool C.
+^
+D09/03/96
+T-165.00
+N186
+PPasadena Municipal Court
+^
+D09/04/96
+T-25.27
+PPower Co.
+LBills:Electricity
+^
+D09/10/96
+T1,269.61
+PSchool
+LWS
+^
+D09/15/96
+T-76.34
+N187
+PPC
+^
+D09/16/96
+T-469.31
+N188
+PNB
+LCredit Card
+^
+D09/16/96
+T-436.69
+N189
+PC Master Card
+LCredit Card
+^
+D09/16/96
+T-45.01
+N190
+PPacific Bell
+LBills:Telephone
+^
+D09/23/96
+T-127.52
+N191
+PSchool
+LMiscellaneous:Student account
+^
+D09/26/96
+T-203.90
+N192
+PKee Wah Bakery
+^
+D09/26/96
+T-19.60
+N193
+PKee Wah Bakery
+^
+D09/29/96
+T203.90
+PHu Hua
+LReimbursement
+^
+D09/29/96
+T19.40
+PBoss1
+LReimbursement
+^
+D09/29/96
+T34.00
+PP.C.C.
+LRefund
+^
+D09/29/96
+T-100.00
+PCash
+^
+D10/01/96
+T-525.00
+N194
+PLandlord
+LBills:Rent
+^
+D10/02/96
+T1,985.87
+PBoss1
+LWS
+^
+D10/04/96
+T-16.69
+PPower Co.
+LBills:Electricity
+^
+D10/07/96
+T-16.95
+N195
+PPacific Bell
+LBills:Telephone
+^
+D10/07/96
+T-47.67
+N196
+PPacific Bell
+LBills:Telephone
+^
+D10/07/96
+T-65.39
+N197
+PLDPC
+LBills:Telephone
+^
+D10/10/96
+T1,316.59
+PSchool
+LWS
+^
+D10/21/96
+T2,000.00
+L[Cathy Bank]
+^
+D10/21/96
+T-3,902.48
+N198
+PC Master Card
+LCredit Card
+^
+D10/21/96
+T-933.32
+N199
+PNB
+LCredit Card
+^
+D10/21/96
+T-54.39
+N200
+PPC
+LCredit Card
+^
+D10/22/96
+T102.74
+PC
+LDividend
+^
+D10/27/96
+T-64.29
+N201
+PToy's R Us Visa Gold
+LCredit Card
+^
+D10/31/96
+T3,670.26
+PBoss1
+LReimbursement
+^
+D10/31/96
+T-40.00
+PCash
+^
+D10/31/96
+T1,985.87
+PBoss1
+LWS
+^
+D11/01/96
+T-525.00
+N202
+PLandlord
+LBills:Rent
+^
+D11/06/96
+T-36.94
+N203
+PLDPC
+LBills:Telephone
+^
+D11/06/96
+T-22.40
+N204
+PPacific Bell
+LBills:Telephone
+^
+D11/10/96
+T1,316.59
+PSchool
+LWS
+^
+D11/12/96
+T48.71
+PWJ
+LRefund
+^
+D11/12/96
+T-24.58
+N205
+PPacific Bell
+LBills:Telephone
+^
+D11/14/96
+T-2,937.57
+N206
+PC Master Card
+LCredit Card
+^
+D11/14/96
+T-2,242.62
+N207
+PNB
+LCredit Card
+^
+D11/18/96
+T74.25
+PBoss1
+LReimbursement
+^
+D11/18/96
+T-80.00
+PCash
+^
+D11/18/96
+T-380.18
+N209
+PLJ
+LLeisure
+^
+D11/25/96
+T-22.60
+N210
+PAUC
+LCredit Card
+^
+D11/25/96
+T-51.00
+N211
+PLJ
+LLeisure
+^
+D11/25/96
+T-225.64
+N212
+PPC
+LCredit Card
+^
+D11/27/96
+T1,090.69
+PBoss1
+LReimbursement
+^
+D12/03/96
+T72.60
+PBoss1
+LReimbursement
+^
+D12/03/96
+T-525.00
+N213
+PLandlord
+LBills:Rent
+^
+D12/05/96
+T1,985.87
+PBoss1
+LWS
+^
+D12/05/96
+T-424.00
+N214
+PInsurance
+LInsurance:A
+^
+D12/05/96
+T-352.65
+N215
+PBN
+LCredit Card
+^
+D12/07/96
+T-57.94
+N216
+PPacific Bell
+LBills:Telephone
+^
+D12/10/96
+T1,316.59
+PSchool
+LWS
+^
+D12/10/96
+T-1,676.47
+N217
+PC
+LCredit Card
+^
+D12/10/96
+T-68.46
+N218
+PW Bank
+LCredit Card
+^
+D12/10/96
+T-25.43
+N219
+PPacific Bell
+LBills:Telephone
+^
+D12/13/96
+T281.97
+PBoss1
+LReimbursement
+^
+D12/15/96
+T2,000.00
+PWei yan Shi
+LReimbursement:Camcorder
+^
+D12/16/96
+T4,000.00
+L[Cathy Bank]
+^
+D12/16/96
+T1,000.00
+PWei yan Shi
+LReimbursement:Camcorder
+^
+D12/16/96
+T-2,000.00
+N220
+POppenheimerFunds
+^
+D12/16/96
+T-2,000.00
+N221
+POppenheimerFunds
+^
+D12/16/96
+T-410.47
+N222
+PNB
+LCredit Card
+^
+D12/20/96
+T-40.00
+PCash
+^
+D12/31/96
+T-100.00
+PCash
+^
+D12/31/96
+T-1.00
+PATM Charge
+^
+D12/31/96
+T-525.00
+N223
+PLandlord
+LBills:Rent
+^
+D01/02/97
+T200.00
+PCash
+^
+D01/02/97
+T230.50
+PLJ
+^
+D01/02/97
+T1,985.87
+PBoss1
+LWS
+^
+D01/04/97
+T-40.00
+N224
+PMellon Bank
+LA:Membership
+^
+D01/04/97
+T-112.24
+N225
+PLDPC
+LBills:Telephone
+^
+D01/07/97
+T-11.58
+PPower Co.
+LBills:Electricity
+^
+D01/10/97
+T1,318.73
+PSchool
+LWS
+^
+D01/10/97
+T-315.35
+N226
+PW Bank
+LCredit Card
+^
+D01/10/97
+T-17.07
+N227
+PPacific Bell
+LBills:Telephone
+^
+D01/10/97
+T-16.26
+N228
+PPacific Bell
+LBills:Telephone
+^
+D01/13/97
+T-6,803.27
+N229
+PC
+LCredit Card
+^
+D01/13/97
+T-23.11
+N230
+PP.C.C.
+^
+D01/13/97
+T-12.00
+N231
+PDWV
+LA
+^
+D01/20/97
+T170.96
+PC Master Card
+LCredit Card
+^
+D01/20/97
+T130.17
+PBoss1
+LReimbursement
+^
+D01/20/97
+T-74.98
+N232
+PPC
+^
+D01/23/97
+T1,500.00
+L[Cathy Bank]
+^
+D01/25/97
+T-1,510.53
+N233
+PNB
+LCredit Card
+^
+D01/31/97
+T-525.00
+N234
+PLandlord
+LBills:Rent
+^
+D02/06/97
+T-3.35
+N235
+PLDPC
+LBills:Telephone
+^
+D02/06/97
+T-302.32
+N236
+PBN
+LCredit Card
+^
+D02/06/97
+T-33.91
+N237
+^
+D02/06/97
+T-77.22
+N238
+^
+D02/07/97
+T-21.43
+PPower Co.
+LBills:Electricity
+^
+D02/10/97
+T1,318.73
+PSchool
+LWS
+^
+D02/11/97
+T1,996.03
+PBoss1
+LWS
+^
+D02/11/97
+T800.00
+PCash
+^
+D02/11/97
+T-300.00
+N239
+PCAF
+LA:W
+^
+D02/11/97
+T-50.00
+N240
+PCity
+LA
+^
+D02/12/97
+T-61.50
+PCash
+^
+D02/12/97
+T-1.50
+PCash
+LBank Charges
+^
+D02/19/97
+T-16.10
+N241
+PPacific Bell
+LBills:Telephone
+^
+D02/19/97
+T-604.86
+N242
+PNB
+LCredit Card
+^
+D02/19/97
+T-621.41
+N243
+PC Master Card
+LCredit Card
+^
+D02/19/97
+T-215.83
+N244
+PPC
+LCredit Card
+^
+D02/19/97
+T-3.50
+N245
+PAUC
+LCredit Card
+^
+D02/19/97
+T-4.48
+N246
+PHCA
+LClothing
+^
+D02/27/97
+T2,500.00
+L[School Credit]
+^
+D02/27/97
+T1,256.08
+PBoss1
+LReimbursement
+^
+D02/27/97
+T-2,617.54
+N247
+PW Bank
+LCredit Card
+^
+D02/27/97
+T-1,500.00
+N249
+PSiphon
+^
+D03/02/97
+T1,996.03
+PBoss1
+LWS
+^
+D03/02/97
+T0.00
+N248
+PVoid
+^
+D03/02/97
+T-525.00
+N250
+PLandlord
+LBills:Rent
+^
+D03/04/97
+T-2.00
+PCoast Federal Bank
+LBank Charges
+^
+D03/10/97
+T1,318.73
+PSchool
+LWS
+^
+D03/12/97
+T-6.76
+N251
+PImage Check
+^
+D03/13/97
+T-4.64
+N252
+P1HR Photo
+^
+D03/14/97
+T-20.62
+PPower Co.
+LBills:Electricity
+^
+D03/14/97
+T-12.27
+N253
+PHCA
+LClothing
+^
+D03/14/97
+T-976.09
+N254
+PNB
+LCredit Card
+^
+D03/14/97
+T-13.87
+N255
+PLDPC
+LBills:Telephone
+^
+D03/14/97
+T-16.45
+N256
+PPacific Bell
+LBills:Telephone
+^
+D03/14/97
+T-762.69
+N257
+PC
+LCredit Card
+^
+D03/14/97
+T-37.65
+N258
+PMA
+LCredit Card
+^
+D03/14/97
+T-108.56
+N259
+PPacific Bell
+LBills:Telephone
+^
+D03/14/97
+T-89.87
+N260
+PFTB
+LTD
+^
+D03/18/97
+T-40.00
+N261
+PDr
+LHealthcare
+^
+D03/31/97
+T-239.47
+N262
+PPC
+LCredit Card
+^
+D03/31/97
+T-4.80
+N263
+PLDPC
+LBills:Telephone
+^
+D03/31/97
+T-525.00
+N264
+PLandlord
+LBills:Rent
+^
+D04/07/97
+T-45.30
+N265
+PHMH
+LHealthcare
+^
+D04/07/97
+T-46.91
+N266
+PPacific Bell
+LBills:Telephone
+^
+D04/07/97
+T-22.00
+N267
+PCity
+LA
+^
+D04/10/97
+T-19.87
+PPower Co.
+LBills:Electricity
+^
+D04/10/97
+T1,318.73
+PSchool
+LWS
+^
+D04/21/97
+T178.81
+PU.S. Treasure
+LTax Refund
+^
+D04/21/97
+T-627.34
+N268
+PC Master Card
+LCredit Card
+^
+D04/21/97
+T-16.45
+N269
+PPacific Bell
+LBills:Telephone
+^
+D04/21/97
+T-21.31
+N270
+PPC
+LCredit Card
+^
+D04/21/97
+T-827.09
+N271
+PNB
+LCredit Card
+^
+D04/21/97
+T-36.00
+N272
+PAN
+LBills:Telephone
+^
+D04/25/97
+T-60.32
+N273
+PTime
+LEducation
+^
+D05/01/97
+T-236.00
+N275
+PDWV
+LA
+^
+D05/01/97
+T-525.00
+N276
+PLandlord
+LBills:Rent
+^
+D05/01/97
+T-70.26
+N277
+PWJ
+^
+D05/07/97
+T5,000.00
+PBoss1
+LWS
+^
+D05/07/97
+T-18.79
+PPower Co.
+LBills:Electricity
+^
+D05/10/97
+T1,318.73
+PSchool
+LWS
+^
+D05/13/97
+T-147.00
+N278
+PC
+LCredit Card
+^
+D05/13/97
+T-629.79
+N279
+PNB
+LCredit Card
+^
+D05/13/97
+T-60.09
+N280
+PPacific Bell
+LBills:Telephone
+^
+D05/13/97
+T-53.18
+N281
+PLDPC
+LBills:Telephone
+^
+D05/20/97
+T-58.44
+N283
+PMA
+LCredit Card
+^
+D05/20/97
+T-72.00
+N284
+PBoss1
+^
+D05/29/97
+T-525.00
+N282
+PLandlord
+LBills:Rent
+^
+D06/02/97
+T100.00
+PLDPC Co.
+^
+D06/02/97
+T16.57
+PAN
+^
+D06/02/97
+T-5.57
+N285
+PLDPC
+LBills:Telephone
+^
+D06/02/97
+T-44.62
+N286
+PPC
+LCredit Card
+^
+D06/05/97
+T795.80
+PBoss1
+LReimbursement
+^
+D06/05/97
+T1,996.03
+PBoss1
+LWS
+^
+D06/05/97
+T400.00
+PBoss1
+LReimbursement
+^
+D06/09/97
+T-18.98
+PPower Co.
+LBills:Electricity
+^
+D06/10/97
+T1,318.73
+PSchool
+LWS
+^
+D06/11/97
+T-58.97
+PPC
+^
+D06/13/97
+T-501.00
+N287
+PInsurance
+LInsurance:A
+^
+D06/14/97
+T-2,000.00
+PCash
+^
+D06/14/97
+T-1,600.40
+N288
+PNB
+LCredit Card
+^
+D06/14/97
+T-16.45
+N289
+PPacific Bell
+LBills:Telephone
+^
+D06/14/97
+T-197.07
+N290
+PC Master Card
+LCredit Card
+^
+D06/24/97
+T76.50
+PSchool
+LReimbursement
+^
+D06/24/97
+T-242.57
+N291
+PMC
+LClothing
+^
+D06/24/97
+T-42.03
+N292
+PPC
+^
+D06/24/97
+T-30.20
+N293
+PHMH
+LHealthcare
+^
+D06/24/97
+T-525.00
+N294
+PLandlord
+LBills:Rent
+^
+D07/02/97
+T-23.69
+PPower Co.
+LBills:Electricity
+^
+D07/02/97
+T-18.24
+N295
+PLDPC
+LBills:Telephone
+^
+D07/03/97
+T-64.03
+N296
+PPacific Bell
+LBills:Telephone
+^
+D07/10/97
+T1,318.73
+PSchool
+LWS
+^
+D07/14/97
+T-433.43
+N297
+PNB
+LCredit Card
+^
+D07/14/97
+T-780.50
+N298
+PC Master Card
+LCredit Card
+^
+D07/14/97
+T-16.57
+N299
+PPacific Bell
+LBills:Telephone
+^
+D07/28/97
+T-750.00
+N300
+PSL
+LMiscellaneous
+^
+D07/28/97
+T-525.00
+N301
+PLandlord
+LBills:Rent
+^
+D07/31/97
+T-19.01
+PPower Co.
+^
+D07/31/97
+T100.00
+PLDPC
+LMisc
+^
+D07/31/97
+T-3.24
+N302
+PLDPC
+LBills:Telephone
+^
+D08/02/97
+T-85.00
+PGov
+^
+D08/03/97
+T-325.75
+N303
+PPacific Bell
+LBills:Telephone
+^
+D08/04/97
+T-16.45
+N304
+PPacific Bell
+LBills:Telephone
+^
+D08/04/97
+T-35.30
+N305
+PCommunity Hospital
+LHealthcare
+^
+D08/10/97
+T1,318.73
+PSchool
+LWS
+^
+D08/14/97
+T47.00
+PCollege
+LRefund
+^
+D08/14/97
+T-1,131.91
+N306
+PC
+LCredit Card
+^
+D08/15/97
+T-17.76
+PPower Co.
+^
+D08/15/97
+T-586.42
+N307
+PSchool
+^
+D08/15/97
+T-104.83
+N309
+PSchool
+^
+D09/03/97
+T-57.28
+N310
+PRobo
+LBills:Telephone
+^
+D09/06/97
+T2,426.53
+PBoss2
+LWS
+^
+D09/06/97
+MDeposit + 1st, last months' ren
+T-2,000.00
+N311
+PLandlord
+LBills:Rent
+^
+D09/08/97
+Mairfare
+T-380.00
+N312
+PTravel
+^
+D09/25/97
+MOct.
+T-367.47
+N314
+PLandlord
+LBills:Rent
+^
+D09/28/97
+T-286.48
+N313
+PC
+LCredit Card
+^
+D10/03/97
+T926.89
+PBoss2
+LWS
+^
+D10/06/97
+T-22.47
+N315
+PPower Co.
+LBills:Electricity
+^
+D10/06/97
+MParking
+T-20.00
+N316
+PCity of 
+LA:T
+^
+D10/17/97
+T926.90
+PBoss2
+LWS
+^
+D10/17/97
+T-1,227.23
+N317
+PC
+LCredit Card
+^
+D10/26/97
+T-77.30
+N318
+PPacific Bell
+LBills:Telephone
+^
+D10/26/97
+T-117.00
+N319
+PCO
+LCredit Card
+^
+D10/26/97
+M25%
+T-71.50
+N320
+PInsurance Co.
+LA:Insurance
+^
+D10/26/97
+T-1,000.00
+N321
+PLandlord
+LBills:Rent
+^
+D10/31/97
+T926.90
+PBoss2
+LWS
+^
+D11/01/97
+T-1.59
+N322
+PAUC
+LCredit Card
+^
+D11/01/97
+T-45.24
+N323
+PPower Co.
+LBills:Electricity
+^
+D11/05/97
+T-90.23
+N324
+PRobo
+LBills:Telephone
+^
+D11/14/97
+T926.90
+PBoss2
+LWS
+^
+D11/14/97
+T-1,707.33
+N326
+PC
+LCredit Card
+^
+D11/14/97
+T-50.00
+N327
+PAPSR
+^
+D11/25/97
+T-116.00
+N325
+PCO
+LCredit Card
+^
+D11/25/97
+T-227.98
+N328
+PPacific Bell
+LBills:Telephone
+^
+D11/25/97
+MDec.
+T-716.12
+N329
+PLandlord
+LBills:Rent
+^
+D11/26/97
+T926.89
+PBoss2
+LWS
+^
+D11/26/97
+T-202.00
+N330
+PTravel
+^
+D11/27/97
+T112.05
+PC
+LOther Income
+^
+D11/27/97
+T89.40
+PInsurance
+LRefund
+^
+D12/11/97
+T-36.47
+PPower Co.
+LBills:Electricity
+^
+D12/11/97
+T-304.76
+N331
+PRobo
+LBills:Telephone
+^
+D12/12/97
+T926.90
+PBoss2
+LWS
+^

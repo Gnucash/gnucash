@@ -1,0 +1,75 @@
+!Type:Bank
+D10/11/97
+T-6.19
+N277
+PAT&T/063
+LTelephone
+MPhone Bill - September
+^
+D10/11/97
+T-98.05
+N278
+PBofA
+LTextbooks
+STextbooks
+EFall 1997 - Huntley
+$-53.30
+SHousehold
+EWal-Mart
+$-44.75
+MVISA - September
+^
+D7/12/97
+T-513.43
+N331
+PSally Wood
+LCredit Card
+MVISA Bill - June
+^
+D9/20/97
+T-40.00
+NATM
+PWithdrawal
+LPersonal Cash
+MClaremont
+^
+D9/30/97
+T-13.99
+N276
+PTCI
+LEntertainment
+MCable - August
+^
+D11/24/97
+T-15.00
+N283
+PWest Dorm
+LGifts
+MDorm T-Shirts
+^
+D10/27/97
+T-10.00
+N279
+PScripps College
+LClothing
+MOrchestra T-Shirt
+^
+D6/23/97
+T-4.35
+N323
+PEurest Dining
+LDining-Out
+^
+D9/29/97
+T193.42
+NATM
+PDeposit
+LSalary
+SSalary
+EAE paycheck
+$143.00
+SReimbursements
+EHMC Orientation -97
+$50.42
+MAE paycheck + reimbursement for Orientation
+^

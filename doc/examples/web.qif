@@ -1,0 +1,43 @@
+!Type:Bank
+D03/25/099Share Withdrawal
+T-99.99
+C*
+PShare Withdrawal
+M
+^
+D03/24/099Point of Sale Transaction
+T-99.99
+C*
+PPoint of Sale Transaction
+M   TGI FRIDAYS #1859      SCOTTSDALE   AZUS
+^
+D03/22/099Check Number:   200
+T-99.99
+C*
+PCheck Number:   200
+M
+^
+D03/21/099Point of Sale Transaction  ABCO
+T-99.99
+C*
+PPoint of Sale Transaction  ABCO
+MFOODS #425 4101 N. 28TH STREET    PHOENIX
+^
+D03/20/099Point of Sale Transaction  FRY'S
+T-99.99
+C*
+PPoint of Sale Transaction  FRY'S
+MFOOD STOR 7770 E. MCDOWELL       SCOTTSDALE
+^
+D03/19/099Direct Deposit
+T99.99
+C*
+PDirect Deposit
+M                ADMINISTAFF COMP
+^
+D03/18/099Check Number:   203
+T-99.99
+C*
+PCheck Number:   203
+M
+^
