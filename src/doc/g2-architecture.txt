@@ -147,3 +147,14 @@ be used to decide whether or not the user can select an account in the
 view.  It is used in the new account dialog, for instance, to limit
 the accounts the user may select for the opening balance to an account
 that has the same currency as the account being created.
+
+
+
+
+References
+----------
+http://developer.gnome.org/dotplan/porting/index.html
+
+http://developer.gnome.org/doc/API/2.0/glib/index.html
+http://developer.gnome.org/doc/API/2.0/gobject/index.html
+http://developer.gnome.org/doc/API/2.0/gtk/index.html
