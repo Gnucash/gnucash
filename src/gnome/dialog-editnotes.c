@@ -117,6 +117,7 @@ editNotesWindow (Account *acc)
   EditNotesWindow *enw;
   GtkWidget *text1;
   gchar     *title = NOTES_STR;
+  gchar     *notes;
 
   FETCH_FROM_LIST (EditNotesWindow, editNotesList, acc, account, enw);
 
@@ -132,11 +133,13 @@ editNotesWindow (Account *acc)
   gtk_container_add (GTK_CONTAINER (GNOME_DIALOG(enw->dialog)->vbox), text1);
   gtk_text_set_editable (GTK_TEXT (text1), TRUE);
 
+  notes = xaccAccountGetNotes (acc);
+
   gtk_text_insert( GTK_TEXT(text1),
                    NULL,
                    NULL,
                    NULL,
-                   xaccAccountGetNotes (acc),
+                   notes,
                    -1 );
 
   gnome_dialog_button_connect (GNOME_DIALOG (enw->dialog), 0,

@@ -46,6 +46,7 @@ struct _accwindow
   GnomeDialog 	*dialog;
 
   AccountGroup	*parentAccount;
+  Account       *newAccount;
   gint		 type;
 };
 
@@ -258,7 +259,9 @@ gnc_ui_accWindow_tree_fill (GtkTree *tree, AccountGroup *accts)
 static void
 gnc_ui_accWindow_cancelled_callback( GtkWidget *ignore, gpointer data )
 {
-  AccWindow  *accData = data;
+  AccWindow  *accData = (AccWindow *)data;
+
+  if(accData->newAccount) xaccFreeAccount (accData->newAccount);  
   
   gnome_dialog_close( GNOME_DIALOG(accData->dialog));
   g_free(accData);
@@ -300,7 +303,9 @@ gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
     return;
     }
   
-  account = xaccMallocAccount();
+  account = accData->newAccount;
+  
+  accData->newAccount = NULL;
             
   xaccAccountBeginEdit (account, 0);
  
@@ -372,10 +377,8 @@ accWindow (AccountGroup *grp)
   GtkWidget *entrySecurity;
   GtkWidget *hbox7;
   GtkWidget *frameListTypes;
-  GtkWidget *frameList;
   GtkWidget *listOfTypes;
   GtkWidget *frameParentAccount;
-  GtkWidget *frameParent;
   GtkWidget *scrolledWindow1;
   GtkWidget *scrolledWindow2;
   GtkWidget *tree1;
@@ -384,6 +387,9 @@ accWindow (AccountGroup *grp)
   accData = (AccWindow *)g_malloc(sizeof(AccWindow));
 
   accData->parentAccount = grp;
+  accData->newAccount    = xaccMallocAccount();
+  
+  xaccAccountSetNotes(accData->newAccount, "");
 
   accData->dialog = GNOME_DIALOG( gnome_dialog_new ( title, 
                                   NOTES_STR,
@@ -513,29 +519,14 @@ accWindow (AccountGroup *grp)
   gtk_widget_show (frameListTypes);
   gtk_box_pack_start (GTK_BOX (hbox7), frameListTypes, TRUE, TRUE, 0);
 
-  frameList = gtk_frame_new (NULL);
-  gtk_object_set_data (GTK_OBJECT (accData->dialog), "frameList", frameList);
-  gtk_widget_show (frameList);
-  gtk_container_add (GTK_CONTAINER (frameListTypes), frameList);
-  gtk_container_border_width (GTK_CONTAINER (frameList), 5);
-  gtk_frame_set_shadow_type (GTK_FRAME (frameList), GTK_SHADOW_IN);
-
   listOfTypes = gtk_list_new ();
   gtk_object_set_data (GTK_OBJECT (accData->dialog), "listOfTypes", listOfTypes);
   gtk_widget_show (listOfTypes);
-//  gtk_container_add (GTK_CONTAINER (frameList), listOfTypes);
 
   frameParentAccount = gtk_frame_new ("Parent Account");
   gtk_object_set_data (GTK_OBJECT (accData->dialog), "frameParentAccount", frameParentAccount);
   gtk_widget_show (frameParentAccount);
   gtk_box_pack_start (GTK_BOX (hbox7), frameParentAccount, TRUE, TRUE, 0);
-
-  frameParent = gtk_frame_new (NULL);
-  gtk_object_set_data (GTK_OBJECT (accData->dialog), "frameParent", frameParent);
-  gtk_widget_show (frameParent);
-  gtk_container_add (GTK_CONTAINER (frameParentAccount), frameParent);
-  gtk_container_border_width (GTK_CONTAINER (frameParent), 5);
-  gtk_frame_set_shadow_type (GTK_FRAME (frameParent), GTK_SHADOW_IN);
 
   tree1 = gtk_tree_new ();
   gtk_object_set_data (GTK_OBJECT (accData->dialog), "tree1", tree1);
@@ -551,8 +542,10 @@ accWindow (AccountGroup *grp)
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_widget_show (scrolledWindow2);
 
-  gtk_container_add( GTK_CONTAINER( frameList   ), scrolledWindow2);
-  gtk_container_add( GTK_CONTAINER( frameParent ), scrolledWindow1 );
+  gtk_container_add(GTK_CONTAINER(frameListTypes), scrolledWindow2);
+  gtk_container_border_width (GTK_CONTAINER (scrolledWindow2), 5);
+  gtk_container_add(GTK_CONTAINER(frameParentAccount), scrolledWindow1);
+  gtk_container_border_width (GTK_CONTAINER (scrolledWindow1), 5);
   gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolledWindow1), 
                                         GTK_WIDGET(tree1));
   gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolledWindow2), 
@@ -600,7 +593,7 @@ accWindow (AccountGroup *grp)
 
   gnome_dialog_button_connect (GNOME_DIALOG (accData->dialog), 0,
                                GTK_SIGNAL_FUNC (gnc_ui_editnotes_callback), 
-                               accData->parentAccount);          
+                               accData->newAccount);          
    
   gnome_dialog_button_connect (GNOME_DIALOG (accData->dialog), 1,
                                GTK_SIGNAL_FUNC (gnc_ui_accWindow_create_callback), 

@@ -1,7 +1,8 @@
 /********************************************************************\
  * MainWindow.c -- the main window, and associated helper functions * 
  *                 and callback functions for xacc (X-Accountant)   *
- * Copyright (C) 1998 Jeremy Collins				    *
+ * Copyright (C) 1998,1999 Jeremy Collins	                    *
+ * Copyright (C) 1998      Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -145,7 +146,7 @@ GnomeUIInfo toolbar[] =
     NULL, 
     NULL,
     GNOME_APP_PIXMAP_STOCK, 
-    GNOME_STOCK_PIXMAP_OPEN, 0, 0, NULL
+    GNOME_STOCK_PIXMAP_OPEN, 'o', (GDK_CONTROL_MASK), NULL
   },
   { GNOME_APP_UI_ITEM,
     N_("Save"), 
@@ -154,7 +155,7 @@ GnomeUIInfo toolbar[] =
     NULL, 
     NULL,
     GNOME_APP_PIXMAP_STOCK, 
-    GNOME_STOCK_PIXMAP_SAVE, 0, 0, NULL
+    GNOME_STOCK_PIXMAP_SAVE, 's', (GDK_CONTROL_MASK), NULL
   },
   { GNOME_APP_UI_ITEM,
     N_("Import"), 
@@ -163,7 +164,7 @@ GnomeUIInfo toolbar[] =
     NULL, 
     NULL,
     GNOME_APP_PIXMAP_STOCK, 
-    GNOME_STOCK_PIXMAP_CONVERT, 0, 0, NULL
+    GNOME_STOCK_PIXMAP_CONVERT, 'i', (GDK_CONTROL_MASK), NULL
   },
   GNOMEUIINFO_SEPARATOR,
   { GNOME_APP_UI_ITEM, 
@@ -173,7 +174,7 @@ GnomeUIInfo toolbar[] =
     NULL,
     NULL,
     GNOME_APP_PIXMAP_STOCK,
-    GNOME_STOCK_PIXMAP_OPEN, 0, 0, NULL 
+    GNOME_STOCK_PIXMAP_OPEN, 'v', (GDK_CONTROL_MASK), NULL 
   },
   { GNOME_APP_UI_ITEM,
     N_("Edit"), 
@@ -182,7 +183,7 @@ GnomeUIInfo toolbar[] =
     NULL,
     NULL,
     GNOME_APP_PIXMAP_STOCK,
-    GNOME_STOCK_PIXMAP_PROPERTIES, 0, 0, NULL
+    GNOME_STOCK_PIXMAP_PROPERTIES, 'e', (GDK_CONTROL_MASK), NULL
   },
   GNOMEUIINFO_SEPARATOR,
   { GNOME_APP_UI_ITEM,
@@ -192,7 +193,7 @@ GnomeUIInfo toolbar[] =
     NULL,
     NULL,
     GNOME_APP_PIXMAP_STOCK,
-    GNOME_STOCK_PIXMAP_ADD, 0, 0, NULL
+    GNOME_STOCK_PIXMAP_ADD, 'a', (GDK_CONTROL_MASK), NULL
   },
   { GNOME_APP_UI_ITEM,
     N_("Remove"), 
@@ -201,7 +202,7 @@ GnomeUIInfo toolbar[] =
     NULL,
     NULL,
     GNOME_APP_PIXMAP_STOCK,
-    GNOME_STOCK_PIXMAP_REMOVE, 0, 0, NULL
+    GNOME_STOCK_PIXMAP_REMOVE, 'r', (GDK_CONTROL_MASK), NULL
   },
   GNOMEUIINFO_SEPARATOR,
   { GNOME_APP_UI_ITEM,
@@ -211,55 +212,29 @@ GnomeUIInfo toolbar[] =
     NULL,
     NULL,
     GNOME_APP_PIXMAP_STOCK,
-    GNOME_STOCK_PIXMAP_QUIT, 0, 0, NULL
+    GNOME_STOCK_PIXMAP_QUIT, 'q', (GDK_CONTROL_MASK), NULL
   },
   GNOMEUIINFO_END
 };
 
-static void
-acct_tree_open_selected(GtkWidget *child) {  
-  Account *acct = gtk_object_get_user_data(GTK_OBJECT(child));
-  fprintf(stderr, "calling regWindowSimple(%p)\n", acct);
-  regWindowSimple(acct);
+static gint
+acct_ctree_select(GtkWidget *widget, GtkCTreeNode *row, gint column) 
+{
+  Account *account;
+  
+  account = (Account *)gtk_ctree_node_get_row_data(GTK_CTREE(widget), GTK_CTREE_NODE(row));
+  gtk_object_set_data(GTK_OBJECT(app), "selected_account", account);
+  
+  return TRUE;
 }
 
 static gint
-acct_tree_select(GtkWidget *widget, GdkEventButton *event, GtkWidget *child) 
+acct_ctree_unselect(GtkWidget *widget, GtkCTreeNode *row, gint column)
 {
-  /* Catch a double or single click */
-  if (GTK_IS_TREE_ITEM(widget) &&
-     (event->type==GDK_2BUTTON_PRESS ||
-      event->type==GDK_3BUTTON_PRESS) ) 
-  {
-    acct_tree_open_selected(child);         
-  }
-
-  return FALSE;
-
+  gtk_object_set_data(GTK_OBJECT(app), "selected_account", NULL);
+  
+  return TRUE; 
 }
-
-//static void
-//acct_ctree_open_selected(GtkWidget *child) {  
-//  Account *acct = gtk_ctree_node_get_row_data(GTK_CTREE(child));
-//  fprintf(stderr, "calling regWindowSimple(%p)\n", acct);
-//  regWindowSimple(acct);
-//}
-
-static gint
-acct_ctree_select(GtkWidget *widget, GdkEventButton *event, GtkWidget *child) 
-{
-  /* Catch a double or single click */
-  if (GTK_IS_CTREE(widget) &&
-     (event->type==GDK_2BUTTON_PRESS ||
-      event->type==GDK_3BUTTON_PRESS) ) 
-  {
-    //acct_tree_open_selected(child);         
-  }
-
-  return FALSE;
-
-}
-
 
 void
 refreshMainWindow()
@@ -350,7 +325,7 @@ gnc_ui_acct_ctree_fill(GtkCTree *ctree, GtkCTreeNode *parent, AccountGroup *acct
     Account      *acc = xaccGroupGetAccount(accts, currentAccount);
     AccountGroup *hasChildren;
     gchar         buf[BUFSIZE];
-//    GtkWidget    *popup;
+    GtkWidget    *popup;
         
     sprintf(buf, "%s%.2f", CURRENCY_SYMBOL, xaccAccountGetBalance(acc));
     
@@ -366,17 +341,21 @@ gnc_ui_acct_ctree_fill(GtkCTree *ctree, GtkCTreeNode *parent, AccountGroup *acct
     /* represents.                                           */
     gtk_ctree_node_set_row_data(GTK_CTREE(ctree), sibling, acc);
     
-//    popup = gnome_popup_menu_new(accountsmenu);
-//    gnome_popup_menu_attach (GTK_WIDGET(popup), GTK_WIDGET(treeItem), NULL);
-    
-    /* Connect the signal to the button press event */
-    gtk_signal_connect (GTK_OBJECT (ctree), 
-                        "button_press_event",
+    popup = gnome_popup_menu_new(accountsmenu);
+    gnome_popup_menu_attach (GTK_WIDGET(popup), GTK_WIDGET(ctree), NULL);
+
+    gtk_ctree_toggle_expansion(GTK_CTREE(ctree), GTK_CTREE_NODE(sibling));
+
+    /* Connect the signal to the tree_select_row event */
+    gtk_signal_connect (GTK_OBJECT(ctree), 
+                        "tree_select_row",
                         GTK_SIGNAL_FUNC(acct_ctree_select), 
-                        GTK_WIDGET(ctree));
-    
-    /* Show the new tree item */
-//    gtk_widget_show(GTK_WIDGET(treeItem));
+                        NULL);
+
+    gtk_signal_connect (GTK_OBJECT(ctree), 
+                        "tree_unselect_row",
+                        GTK_SIGNAL_FUNC(acct_ctree_unselect), 
+                        NULL);                        
     
     /* Check to see if this account has any children. If it
      * does then we need to build a subtree and fill it 
@@ -392,75 +371,6 @@ gnc_ui_acct_ctree_fill(GtkCTree *ctree, GtkCTreeNode *parent, AccountGroup *acct
   				       
 }
 
-
-/********************************************************************\
- * acct_tree_fill                                                   *
- *   fills the tree with accounts, name ($balance)                  *
- *                                                                  *
- * Args:   item      - top level of tree                            *
- *         accts     - the account group to use in filling tree     *
- *         subtree   - whether this is the toplevel, or a subtree   *
- * Returns: nothing                                                 *
-\********************************************************************/
-void
-gnc_ui_acct_tree_fill(GtkTree *tree, AccountGroup *accts) 
-{
-  GtkWidget *treeItem;
-  GtkWidget *subtree;
-  gint       totalAccounts = xaccGroupGetNumAccounts(accts);
-  gint       currentAccount;
-
-  /* Add each account to the tree */  
-  for ( currentAccount = 0;
-        currentAccount < totalAccounts;
-        currentAccount++ )
-  {
-    Account      *acc = xaccGroupGetAccount(accts, currentAccount);
-    AccountGroup *hasChildren;
-    GtkWidget    *popup;
-        
-    /* Create a new tree item for this account */
-    treeItem = gtk_tree_item_new_with_label(xaccAccountGetName(acc));
-    
-    /* Set the user_data for the tree item to the account it */
-    /* represents.                                           */
-    gtk_object_set_user_data(GTK_OBJECT(treeItem), acc);
-    
-    /* Now append this tree item to the tree */
-    gtk_tree_append(GTK_TREE(tree), GTK_WIDGET(treeItem));
-
-    popup = gnome_popup_menu_new(accountsmenu);
-    gnome_popup_menu_attach (GTK_WIDGET(popup), GTK_WIDGET(treeItem), NULL);
-    
-    /* Connect the signal to the button press event */
-    gtk_signal_connect (GTK_OBJECT (treeItem), 
-                        "button_press_event",
-                        GTK_SIGNAL_FUNC(acct_tree_select), 
-                        GTK_WIDGET(treeItem));
-    
-    /* Show the new tree item */
-    gtk_widget_show(GTK_WIDGET(treeItem));
-    
-    /* Check to see if this account has any children. If it
-     * does then we need to build a subtree and fill it 
-     */
-    hasChildren = xaccAccountGetChildren(acc); 
-     
-    if(hasChildren)
-    {
-      /* Create the subtree */
-      subtree = gtk_tree_new();
-    
-      /* Append this new subtree to the current tree item */
-      gtk_tree_item_set_subtree(GTK_TREE_ITEM(treeItem), GTK_WIDGET(subtree));
-      
-      /* Call gnc_ui_accWindow_tree_fill to fill this new subtree */
-      gnc_ui_acct_tree_fill(GTK_TREE(subtree), hasChildren );  
-            
-    }
-  }
-}
-
 /********************************************************************\
  * refresh_tree                                                     *
  *   refreshes the main window                                      *
@@ -471,18 +381,24 @@ gnc_ui_acct_tree_fill(GtkTree *tree, AccountGroup *accts)
 void
 gnc_ui_refresh_tree() 
 {
-  GtkTree   *accountTree;
-  GList     *list;
-
-  accountTree = gtk_object_get_data(GTK_OBJECT(app), "accountTree");
-
-  /* Make sure we are at the top of the tree */
-  list = GTK_TREE(GTK_TREE_ROOT_TREE(accountTree))->children;
-
-  gtk_tree_remove_items(GTK_TREE_ROOT_TREE(accountTree), list);
+  GtkCTree     *ctree;
+  GtkCTreeNode *parent;
+  AccountGroup *accts;
   
-  /* Refill Tree with fresh data */
-  gnc_ui_acct_tree_fill(accountTree, xaccSessionGetGroup(current_session));
+  parent = gtk_object_get_data(GTK_OBJECT(app), "ctree_parent");
+  ctree  = gtk_object_get_data(GTK_OBJECT(app), "ctree");
+  
+  accts  = xaccSessionGetGroup(current_session);
+  
+  gtk_ctree_remove_node(ctree, parent);
+
+  free(parent);
+  
+  parent = NULL;
+  
+  gnc_ui_acct_ctree_fill(ctree, parent, accts);
+  gtk_clist_columns_autosize(GTK_CLIST(ctree));  
+ 
 }
 
 /* Standard Gnome About Dialog, need I say more? */
@@ -497,7 +413,7 @@ gnc_ui_about_cb (GtkWidget *widget, gpointer data)
           "Linas Vepstas",
           "Jeremy Collins",
           "Rob Browning",
-          "For more see http://www.gnucash.org/developers.html",
+          "For more see http://www.gnucash.org/",
           NULL
           };
 
@@ -530,24 +446,17 @@ static void
 gnc_ui_add_account ( GtkWidget *widget, gpointer data )
 {
   GtkWidget *toplevel;
-  GtkWidget *tree;
-  GList *selection;
+  Account   *account;
   
   toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  tree     = gtk_object_get_data(GTK_OBJECT(app), "accountTree");
+  account  = gtk_object_get_data(GTK_OBJECT(app), "selected_account");
 
   /* FIXME: Right now this really is not doing anything        */
   /*        The new account dialog should use this information */  
   /*        to set the parent account...                       */
-  selection = GTK_TREE_SELECTION ( tree );
-  if ( selection )
+  if (account)
   {
-    if ( selection->data != NULL )
-    {
-      Account *acc = gtk_object_get_user_data(GTK_OBJECT(selection->data));
-      accWindow( (AccountGroup *) acc);
-    }
-   
+    accWindow((AccountGroup *)account);
   }
   else
   {
@@ -565,7 +474,7 @@ gnc_ui_delete_account_finish_cb ( GtkWidget *widget, gpointer data )
   xaccRemoveAccount ( account );
   xaccFreeAccount ( account );
 
-  gnc_ui_refresh_tree ();  
+  refreshMainWindow();  
   
 }
 
@@ -573,35 +482,29 @@ static void
 gnc_ui_delete_account_cb ( GtkWidget *widget, gpointer data )
 {
   GtkWidget *toplevel;
-  GtkWidget *tree;
-  GList *selection;
+  Account   *account;
   
   toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  tree     = gtk_object_get_data(GTK_OBJECT(app), "accountTree");
+  account  = gtk_object_get_data(GTK_OBJECT(app), "selected_account");
   
-  selection = GTK_TREE_SELECTION ( tree );
-  if ( selection )
+
+  if (account)
   {
-    if ( selection->data != NULL )
-    {
-      Account *acc = gtk_object_get_user_data(GTK_OBJECT(selection->data));
-      GtkWidget *msgbox;
+    GtkWidget *msgbox;
       
-      msgbox = gnome_message_box_new ( " Are you sure you want to delete this account. ",
+     msgbox = gnome_message_box_new ( " Are you sure you want to delete this account. ",
                                        GNOME_MESSAGE_BOX_WARNING, 
                                        GNOME_STOCK_BUTTON_OK,
                                        GNOME_STOCK_BUTTON_CANCEL, NULL );
-      gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 0,
-                                   GTK_SIGNAL_FUNC (gnc_ui_delete_account_finish_cb), 
-                                   acc);
-      gtk_widget_show ( msgbox );
-    }
+     gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 0,
+                                  GTK_SIGNAL_FUNC (gnc_ui_delete_account_finish_cb), 
+                                  account);
+     gtk_widget_show ( msgbox );
   }
   else
   {
     GtkWidget *msgbox;
-    msgbox = gnome_message_box_new ( " You must select an account to delete. ",
-                                     GNOME_MESSAGE_BOX_ERROR, "Ok", NULL );
+    msgbox = gnome_message_box_new(ACC_DEL_MSG, GNOME_MESSAGE_BOX_ERROR, "Ok", NULL);
     gtk_widget_show ( msgbox );    
   }
 }
@@ -609,22 +512,16 @@ gnc_ui_delete_account_cb ( GtkWidget *widget, gpointer data )
 static void
 gnc_ui_mainWindow_toolbar_open ( GtkWidget *widget, gpointer data )
 {
+  Account   *account;
   GtkWidget *toplevel;
-  GtkWidget *tree;
-  GList *selection;
   
   toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  tree     = gtk_object_get_data(GTK_OBJECT(app), "accountTree");
+  account  = gtk_object_get_data(GTK_OBJECT(app), "selected_account");
   
-  selection = GTK_TREE_SELECTION ( tree );
-  if ( selection )
+  if(account)
   {
-    if ( selection->data != NULL )
-    {
-      Account *acc = gtk_object_get_user_data(GTK_OBJECT(selection->data));
-      fprintf(stderr, "calling regWindowSimple(%p)\n", acct);
-      regWindowSimple ( acc );
-    }
+   fprintf(stderr, "calling regWindowSimple(%p)\n", account);
+   regWindowSimple ( account );
   }
   else
   {
@@ -639,35 +536,22 @@ static void
 gnc_ui_mainWindow_toolbar_edit ( GtkWidget *widget, gpointer data )
 {
   GtkWidget *toplevel;
-  GtkWidget *tree;
-  GList     *selection;
+  Account   *account;
   
   toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  tree     = gtk_object_get_data(GTK_OBJECT(app), "accountTree");
+  account  = gtk_object_get_data(GTK_OBJECT(app), "selected_account");
   
-  selection = GTK_TREE_SELECTION ( tree );
-  if ( selection )
+  if (account)
   {
-    if ( selection->data != NULL )
-    {
-      Account *acc = gtk_object_get_user_data(GTK_OBJECT(selection->data));
-      editAccWindow( acc );
-    }
+    editAccWindow( account );
   }
   else
   {
     GtkWidget *msgbox;
-    msgbox = gnome_message_box_new ( " You must select an account to edit first. ",
-                                     GNOME_MESSAGE_BOX_ERROR, "Ok", NULL );
+    msgbox = gnome_message_box_new(ACC_EDIT_MSG, GNOME_MESSAGE_BOX_ERROR, "Ok", NULL);
     gtk_widget_show ( msgbox );    
   }  
 }
-
-
-//static void
-//quit_menu_item_helper() {
-//  gnc_shutdown(0);
-//}
 
 static void
 gnc_ui_options_cb ( GtkWidget *widget, gpointer data ) {
@@ -676,80 +560,53 @@ gnc_ui_options_cb ( GtkWidget *widget, gpointer data ) {
 
 void
 mainWindow() {
-  GtkTree      *accountTree;
   GtkWidget    *scrolled_win;
   GtkWidget    *main_vbox;
   GtkWidget    *statusbar;
   GtkWidget    *ctree;
-  GtkWidget    *notebook;
-  GtkWidget    *label;
+  GtkCTreeNode *parent = NULL;
   AccountGroup *accts = xaccSessionGetGroup(current_session);
-  gchar        *ctitles[] = 
-               { 
-                    "Name",
-                    "Description",
-                    "Balance"
-               };
-
-  accountTree = GTK_TREE(gtk_tree_new());
-
-  gtk_object_set_data (GTK_OBJECT(app), "accountTree",  accountTree);
+  gchar        *ctitles[] = {ACC_NAME_STR, DESC_STR, BALN_STR};
 
   /* Create ctree */
-  
   ctree = gtk_ctree_new_with_titles(3, 0, ctitles);
 
   gtk_object_set_data(GTK_OBJECT(app), "ctree", ctree);
+  gtk_object_set_data(GTK_OBJECT(app), "ctree_parent", parent);
 
   gnome_app_create_toolbar(GNOME_APP(app), toolbar);
   gnome_app_create_menus  (GNOME_APP(app), mainmenu);
 
-  /* Cram accounts into the tree widget */
-  gnc_ui_acct_tree_fill(GTK_TREE(accountTree), accts);
-  gnc_ui_acct_ctree_fill(GTK_CTREE(ctree), NULL, accts);
+  /* Cram accounts into the ctree widget & make sure the columns are sized correctly */
+  gnc_ui_acct_ctree_fill(GTK_CTREE(ctree), parent, accts);
+  gtk_clist_columns_autosize(GTK_CLIST(ctree));
+  gtk_clist_set_shadow_type (GTK_CLIST(ctree), GTK_SHADOW_NONE);
 
   /* Create main vbox */
-  main_vbox = gtk_vbox_new( FALSE, 1 );
-  gtk_container_border_width( GTK_CONTAINER( main_vbox ), 2 );
+  main_vbox = gtk_vbox_new( FALSE, 0 );
+  gtk_container_border_width( GTK_CONTAINER( main_vbox ), 0);
   gnome_app_set_contents ( GNOME_APP ( app ), main_vbox );
 
   /* create scrolled window */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
-				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+				  GTK_POLICY_AUTOMATIC, 
+				  GTK_POLICY_AUTOMATIC);
   gtk_widget_show (scrolled_win);
 
-//  gtk_box_pack_start( GTK_BOX(main_vbox), scrolled_win, TRUE, TRUE, 0 );
-  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_win), GTK_WIDGET(accountTree));
+  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_win), GTK_WIDGET(ctree));
+  gtk_container_border_width(GTK_CONTAINER(scrolled_win), 0);
 
-  notebook = gtk_notebook_new();
+  gtk_box_pack_start(GTK_BOX(main_vbox), scrolled_win, TRUE, TRUE, 0);
 
-  gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), GTK_POS_LEFT);
-  
-  label = gtk_label_new("tree widget");
-  gtk_notebook_append_page(GTK_NOTEBOOK(notebook), scrolled_win, label);
-  gtk_widget_show(label);
-  
-  label = gtk_label_new("ctree widget");
-  gtk_notebook_append_page(GTK_NOTEBOOK(notebook), ctree, label);
-  gtk_widget_show(label);
-  
-  gtk_box_pack_start(GTK_BOX(main_vbox), notebook, TRUE, TRUE, 0);
-  gtk_widget_show(notebook);
-
+  /* create statusbar and pack it into the main_vbox */
   statusbar = gtk_statusbar_new ();
   gtk_object_set_data (GTK_OBJECT (app), "statusbar", statusbar);
   gtk_widget_show (statusbar);
   gtk_box_pack_start (GTK_BOX (main_vbox), statusbar, FALSE, FALSE, 0); 
 
-  gtk_widget_show(GTK_WIDGET(accountTree));
-
   gtk_widget_set_usize ( GTK_WIDGET(app), 500, 400 );		      
-
-
-  gtk_signal_connect_after (GTK_OBJECT (ctree), "button_press_event",
-		            GTK_SIGNAL_FUNC (acct_ctree_select), NULL);
-
+  
   /* Show everything now that it is created */
 
   gtk_widget_show(main_vbox);
