@@ -9,6 +9,7 @@
 #include <string.h>
 
 #include "Backend.h"
+#include "Group.h"
 #include "TransLog.h"
 #include "gnc-session.h"
 #include "gnc-engine.h"
