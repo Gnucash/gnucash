@@ -1,4 +1,4 @@
-# -*- text; reStructuredText -*-
+# -*- reStructuredText -*-
 
 This is a ad-hoc list of list of what works and doesn't work in the g2
 port of gnucash.  The plan is to finish porting those parts of gnucash
@@ -67,9 +67,20 @@ Stock Split Dialog
             General Notes
 ========================================
 
+- General
+
+  - Window size/position not being saved or used.
+
+  - Weird pango_layout_set_text "string not UTF-8" issues reported by Neil Williams:
+    
+    - http://lists.gnucash.org/pipermail/gnucash-devel/2005-March/012797.html
+
+    - http://lists.gnucash.org/pipermail/gnucash-devel/2005-March/012824.html
+
 - Main Window
 
-  - Initially-loaded file name not in window title.
+  - Initially-loaded file name not in window title; subsequent file-loads
+    correct set window-title text correctly.
 
   - Summary Bar
 
@@ -77,6 +88,11 @@ Stock Split Dialog
       respond to button-pressing.
 
     - View > Summary Bar (toggle) menu option has no effect.
+
+  - File Menu
+
+    - The "Open Recent" menu only has the first entry; the rest of the lines
+      appear blank.
 
   - [low-priority] New registers should open in new top-level windows.
 
@@ -174,10 +190,6 @@ Stock Split Dialog
   - Probably more TODO but these are the main points.
 
 - Preferences
-
-  - General
-
-    - Window size/position not being saved or used.
 
   - Business
 
