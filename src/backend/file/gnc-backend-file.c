@@ -1,5 +1,7 @@
 /*********************************************************************
- * gnc-backend-file.c
+ * gnc-backend-file.c: load and save data to files
+ *
+ *
  *********************************************************************/
 
 #include <fcntl.h>
@@ -51,8 +53,9 @@ typedef enum
     GNC_BOOK_XML2_FILE,
 } GNCBookFileType;
 
+static void gnc_file_be_load_from_file(Backend *, GNCBook *);
+
 static gboolean gnc_file_be_get_file_lock (FileBackend *be);
-static gboolean gnc_file_be_load_from_file(FileBackend *be);
 static gboolean gnc_file_be_write_to_file(FileBackend *be,
                                           gboolean make_backup);
 
@@ -110,27 +113,6 @@ file_session_begin(Backend *be_start, GNCSession *session, const char *book_id,
     return;
 }
 
-static gboolean
-file_load_file(Backend *be)
-{
-    if(!gnc_file_be_load_from_file((FileBackend*)be))
-    {
-        xaccBackendSetError(be, ERR_BACKEND_MISC);
-        g_free(((FileBackend*)be)->lockfile);
-        ((FileBackend*)be)->lockfile = NULL;
-        return FALSE;
-    }
-    return TRUE;
-}
-
-static void
-file_book_load (Backend *be)
-{
-    if (!file_load_file(be))
-    {
-      PERR("file_load_file returned FALSE");
-    }
-}
 
 static void
 file_session_end(Backend *be_start)
@@ -181,7 +163,7 @@ gnc_backend_new(void)
     xaccInitBackend(be);
     
     be->session_begin = file_session_begin;
-    be->book_load = file_book_load;
+    be->book_load = gnc_file_be_load_from_file;
     be->price_load = NULL;
     be->session_end = file_session_end;
     be->destroy_backend = file_destroy_backend;
@@ -353,51 +335,42 @@ gnc_file_be_determine_file_type(const char *path)
    it's not NULL.  This function does not manage file locks in any
    way. */
 
-static gboolean
-happy_or_push_error(Backend *be, gboolean errret, GNCBackendError errcode)
+static void
+gnc_file_be_load_from_file (Backend *bend, GNCBook *book)
 {
-    if(errret) {
-        return TRUE;
-    } else {
-        xaccBackendSetError(be, errcode);
-        return FALSE;
-    }
-}
+    GNCBackendError error = ERR_BACKEND_NO_ERR;
+    gboolean rc;
+    FileBackend *be = (FileBackend *) bend;
 
-static gboolean
-gnc_file_be_load_from_file(FileBackend *be)
-{
     switch (gnc_file_be_determine_file_type(be->fullpath))
     {
     case GNC_BOOK_XML2_FILE:
-        return happy_or_push_error((Backend*)be,
-                                   gnc_session_load_from_xml_file_v2
-                                   (be->session, NULL),
-                                   ERR_BACKEND_MISC);
-    case GNC_BOOK_XML1_FILE:
-        return happy_or_push_error((Backend*)be,
-                                   gnc_session_load_from_xml_file(be->session),
-                                   ERR_BACKEND_MISC);
-    case GNC_BOOK_BIN_FILE:
-    {
-        /* presume it's an old-style binary file */
-        GNCBackendError error;
+        rc = gnc_session_load_from_xml_file_v2 (be->session, NULL);
+        if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
+        break;
 
+    case GNC_BOOK_XML1_FILE:
+        rc = gnc_session_load_from_xml_file (be->session);
+        if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
+        break;
+
+    case GNC_BOOK_BIN_FILE:
+        /* presume it's an old-style binary file */
         gnc_session_load_from_binfile(be->session);
         error = gnc_get_binfile_io_error();
+        break;
 
-        if(error == ERR_BACKEND_NO_ERR) {
-            return TRUE;
-        } else {
-            xaccBackendSetError((Backend*)be, error);
-            return FALSE;
-        }
-    }
     default:
         PWARN("File not any known type");
-        xaccBackendSetError((Backend*)be, ERR_FILEIO_UNKNOWN_FILE_TYPE);
-        return FALSE;
+        error = ERR_FILEIO_UNKNOWN_FILE_TYPE;
         break;
+    }
+
+    if(error != ERR_BACKEND_NO_ERR) 
+    {
+        xaccBackendSetError(bend, error);
+        g_free(be->lockfile);
+        be->lockfile = NULL;
     }
 }
 
@@ -476,7 +449,7 @@ gnc_int_link_or_make_backup(FileBackend *be, const char *orig, const char *bkup)
 
         if(!err_ret)
         {
-            xaccBackendSetError((Backend*)be, ERR_BACKEND_MISC);
+            xaccBackendSetError((Backend*)be, ERR_FILEIO_BACKUP_ERROR);
             PWARN ("unable to make file backup from %s to %s: %s", 
                     orig, bkup, strerror(errno) ? strerror(errno) : ""); 
             return FALSE;
