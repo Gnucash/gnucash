@@ -1,3 +1,24 @@
+2002-12-01  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome-utils/gnc-account-sel.c
+	(gnc_account_sel_set_new_account_ability): Change the
+	gnc-account-sel's "New..." account button to expand but not fill
+	it's allocation.
+
+	* src/gnome/druid-loan.c (ld_pay_prep, ld_pay_save_current): Add
+	the ability to independently specify the source/from account of a
+	payment; fixes Bug#99467.
+	(ld_pay_prep, ld_pay_save_current): Add some insensitive widgets
+	to show the escrow account; fixes Bug#99476.
+
+	* src/gnome/druid-loan.c (ld_calc_upd_rem_payments): Get the
+	currently-typed value for doing the recalculation, not what the
+	gtk_spin_button reports.
+	(gnc_ui_sx_loan_druid_create): Recalc the remaining months when
+	the period-size OptionMenu changes.
+	(ld_pay_prep): Handle better the act of setting up the payment
+	page for both the Spec-FromAcct and Through-Escrow options.
+
 2002-12-02  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/window-main.c,

@@ -152,13 +152,11 @@ gnc_account_sel_init (GNCAccountSel *gas)
                             GTK_SIGNAL_FUNC( gas_destroy ),
                             gas );
 
-
 #if 0 /* completion not implemented. */
         gtk_signal_connect( GTK_OBJECT(gas->combo->entry), "changed",
                             GTK_SIGNAL_FUNC( gnc_account_sel_changed ),
                             gas );
 #endif /* 0 -- completion not implemented. */
-
 
         /* Get the accounts, place into combo list */
         gas_populate_list( gas );
@@ -358,20 +356,20 @@ gnc_account_sel_key_press(GtkWidget *widget, GdkEventKey *event)
 GtkWidget *
 gnc_account_sel_new (void)
 {
-  GNCAccountSel *gas;
+        GNCAccountSel *gas;
 
-  gas = gtk_type_new (gnc_account_sel_get_type ());
+        gas = gtk_type_new (gnc_account_sel_get_type ());
 
-  return GTK_WIDGET (gas);
+        return GTK_WIDGET (gas);
 }
 
 GtkWidget *
 gnc_account_sel_gtk_entry (GNCAccountSel *gas)
 {
-  g_return_val_if_fail(gas != NULL, NULL);
-  g_return_val_if_fail(GNC_IS_ACCOUNT_SEL(gas), NULL);
+        g_return_val_if_fail(gas != NULL, NULL);
+        g_return_val_if_fail(GNC_IS_ACCOUNT_SEL(gas), NULL);
 
-  return (GtkWidget *)gas->combo->entry;
+        return (GtkWidget *)gas->combo->entry;
 }
 
 void
@@ -465,7 +463,7 @@ gnc_account_sel_set_new_account_ability( GNCAccountSel *gas,
                             GTK_SIGNAL_FUNC( gas_new_account_click ),
                             gas );
         gtk_box_pack_start( GTK_BOX(gas), gas->newAccountButton,
-                            FALSE, FALSE, 2 );
+                            TRUE, FALSE, 2 );
 }
 
 void

@@ -4433,7 +4433,7 @@ the created Scheduled Transactions directly.</text>
 	  <widget>
 	    <class>GtkLabel</class>
 	    <name>label847895</name>
-	    <label>Loan Amount:</label>
+	    <label>Amount:</label>
 	    <justify>GTK_JUSTIFY_RIGHT</justify>
 	    <wrap>False</wrap>
 	    <xalign>1</xalign>
@@ -4913,7 +4913,7 @@ years
 	<child>
 	  <padding>0</padding>
 	  <expand>True</expand>
-	  <fill>False</fill>
+	  <fill>True</fill>
 	</child>
 
 	<widget>
@@ -5092,7 +5092,7 @@ years
 	    <name>alignment13</name>
 	    <xalign>0</xalign>
 	    <yalign>0.5</yalign>
-	    <xscale>0.25</xscale>
+	    <xscale>1</xscale>
 	    <yscale>1</yscale>
 	    <child>
 	      <left_attach>1</left_attach>
@@ -5125,7 +5125,7 @@ years
 	    <name>alignment14</name>
 	    <xalign>0</xalign>
 	    <yalign>0.5</yalign>
-	    <xscale>0.25</xscale>
+	    <xscale>1</xscale>
 	    <yscale>1</yscale>
 	    <child>
 	      <left_attach>1</left_attach>
@@ -5158,7 +5158,7 @@ years
 	    <name>alignment15</name>
 	    <xalign>0</xalign>
 	    <yalign>0.5</yalign>
-	    <xscale>0.25</xscale>
+	    <xscale>0.75</xscale>
 	    <yscale>1</yscale>
 	    <child>
 	      <left_attach>1</left_attach>
@@ -5193,7 +5193,7 @@ Escrow
 	    <xalign>0.5</xalign>
 	    <yalign>0.5</yalign>
 	    <xscale>0.5</xscale>
-	    <yscale>0.75</yscale>
+	    <yscale>0.9</yscale>
 	    <child>
 	      <left_attach>0</left_attach>
 	      <right_attach>4</right_attach>
@@ -5265,7 +5265,7 @@ Escrow
 	      <class>GtkTable</class>
 	      <name>pay_table</name>
 	      <border_width>5</border_width>
-	      <rows>3</rows>
+	      <rows>6</rows>
 	      <columns>4</columns>
 	      <homogeneous>False</homogeneous>
 	      <row_spacing>5</row_spacing>
@@ -5273,7 +5273,7 @@ Escrow
 	      <child>
 		<padding>0</padding>
 		<expand>False</expand>
-		<fill>False</fill>
+		<fill>True</fill>
 	      </child>
 
 	      <widget>
@@ -5304,7 +5304,7 @@ Escrow
 
 	      <widget>
 		<class>GtkLabel</class>
-		<name>label847917</name>
+		<name>pay_from_account_label</name>
 		<label>Payment From:</label>
 		<justify>GTK_JUSTIFY_CENTER</justify>
 		<wrap>False</wrap>
@@ -5315,8 +5315,8 @@ Escrow
 		<child>
 		  <left_attach>0</left_attach>
 		  <right_attach>1</right_attach>
-		  <top_attach>2</top_attach>
-		  <bottom_attach>3</bottom_attach>
+		  <top_attach>4</top_attach>
+		  <bottom_attach>5</bottom_attach>
 		  <xpad>0</xpad>
 		  <ypad>0</ypad>
 		  <xexpand>False</xexpand>
@@ -5356,8 +5356,8 @@ Escrow
 
 	      <widget>
 		<class>GtkLabel</class>
-		<name>label847962</name>
-		<label>Payment To:</label>
+		<name>pay_escrow_to_label</name>
+		<label>Payment To (Escrow):</label>
 		<justify>GTK_JUSTIFY_RIGHT</justify>
 		<wrap>False</wrap>
 		<xalign>1</xalign>
@@ -5367,8 +5367,8 @@ Escrow
 		<child>
 		  <left_attach>2</left_attach>
 		  <right_attach>3</right_attach>
-		  <top_attach>2</top_attach>
-		  <bottom_attach>3</bottom_attach>
+		  <top_attach>4</top_attach>
+		  <bottom_attach>5</bottom_attach>
 		  <xpad>0</xpad>
 		  <ypad>0</ypad>
 		  <xexpand>False</xexpand>
@@ -5385,7 +5385,7 @@ Escrow
 		<name>alignment16</name>
 		<xalign>0</xalign>
 		<yalign>0.5</yalign>
-		<xscale>0.5</xscale>
+		<xscale>1</xscale>
 		<yscale>1</yscale>
 		<child>
 		  <left_attach>1</left_attach>
@@ -5418,7 +5418,7 @@ Escrow
 		<name>alignment17</name>
 		<xalign>0</xalign>
 		<yalign>0.5</yalign>
-		<xscale>0.5</xscale>
+		<xscale>1</xscale>
 		<yscale>1</yscale>
 		<child>
 		  <left_attach>1</left_attach>
@@ -5451,6 +5451,104 @@ Escrow
 		    <text></text>
 		  </widget>
 		</widget>
+	      </widget>
+
+	      <widget>
+		<class>GtkLabel</class>
+		<name>pay_escrow_from_label</name>
+		<label>Payment From (Escrow):</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>1</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<child>
+		  <left_attach>0</left_attach>
+		  <right_attach>1</right_attach>
+		  <top_attach>5</top_attach>
+		  <bottom_attach>6</bottom_attach>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		  <xexpand>False</xexpand>
+		  <yexpand>False</yexpand>
+		  <xshrink>False</xshrink>
+		  <yshrink>False</yshrink>
+		  <xfill>True</xfill>
+		  <yfill>False</yfill>
+		</child>
+	      </widget>
+
+	      <widget>
+		<class>GtkLabel</class>
+		<name>label847975</name>
+		<label>Payment To:</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>1</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<child>
+		  <left_attach>2</left_attach>
+		  <right_attach>3</right_attach>
+		  <top_attach>5</top_attach>
+		  <bottom_attach>6</bottom_attach>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		  <xexpand>False</xexpand>
+		  <yexpand>False</yexpand>
+		  <xshrink>False</xshrink>
+		  <yshrink>False</yshrink>
+		  <xfill>True</xfill>
+		  <yfill>False</yfill>
+		</child>
+	      </widget>
+
+	      <widget>
+		<class>GtkCheckButton</class>
+		<name>pay_specify_source</name>
+		<can_focus>True</can_focus>
+		<label>Specify Source Account</label>
+		<active>False</active>
+		<draw_indicator>True</draw_indicator>
+		<child>
+		  <left_attach>1</left_attach>
+		  <right_attach>4</right_attach>
+		  <top_attach>3</top_attach>
+		  <bottom_attach>4</bottom_attach>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		  <xexpand>False</xexpand>
+		  <yexpand>False</yexpand>
+		  <xshrink>False</xshrink>
+		  <yshrink>False</yshrink>
+		  <xfill>True</xfill>
+		  <yfill>False</yfill>
+		</child>
+	      </widget>
+
+	      <widget>
+		<class>GtkCheckButton</class>
+		<name>pay_use_escrow</name>
+		<can_focus>True</can_focus>
+		<label>Use Escrow Account</label>
+		<active>False</active>
+		<draw_indicator>True</draw_indicator>
+		<child>
+		  <left_attach>1</left_attach>
+		  <right_attach>4</right_attach>
+		  <top_attach>2</top_attach>
+		  <bottom_attach>3</bottom_attach>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		  <xexpand>False</xexpand>
+		  <yexpand>False</yexpand>
+		  <xshrink>False</xshrink>
+		  <yshrink>False</yshrink>
+		  <xfill>True</xfill>
+		  <yfill>False</yfill>
+		</child>
 	      </widget>
 	    </widget>
 
