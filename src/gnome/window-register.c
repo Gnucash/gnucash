@@ -30,8 +30,8 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <g-wrap-runtime-guile.h>
 #include <time.h>
+#include <g-wrap-wct.h>
 
 #include "AccWindow.h"
 #include "Scrub.h"
