@@ -809,11 +809,8 @@ xaccDupeTransaction (Transaction *t)
     node->data = xaccDupeSplit (node->data);
   }
 
-  trans->date_entered.tv_sec  = t->date_entered.tv_sec;
-  trans->date_entered.tv_nsec = t->date_entered.tv_nsec;
-
-  trans->date_posted.tv_sec  = t->date_posted.tv_sec;
-  trans->date_posted.tv_nsec = t->date_posted.tv_nsec;
+  trans->date_entered = t->date_entered;
+  trans->date_posted = t->date_posted;
 
   trans->version = t->version;
   trans->editlevel = 0;
@@ -1672,7 +1669,8 @@ xaccTransRollbackEdit (Transaction *trans)
 
    /* If the transaction had been deleted before the rollback,
     * the guid would have been unlisted. Restore that */
-   xaccStoreEntity(trans->book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
+   xaccStoreEntity(trans->book->entity_table, trans,
+                   &trans->guid, GNC_ID_TRANS);
 
    trans->common_currency = orig->common_currency;
 
@@ -1690,11 +1688,8 @@ xaccTransRollbackEdit (Transaction *trans)
      trans->kvp_data = kvp_frame_new ();
    orig->kvp_data = kvp_frame_new ();
 
-   trans->date_entered.tv_sec  = orig->date_entered.tv_sec;
-   trans->date_entered.tv_nsec = orig->date_entered.tv_nsec;
-
-   trans->date_posted.tv_sec  = orig->date_posted.tv_sec;
-   trans->date_posted.tv_nsec = orig->date_posted.tv_nsec;
+   trans->date_entered = orig->date_entered;
+   trans->date_posted = orig->date_posted;
 
    /* OK, we also have to restore the state of the splits.  Of course,
     * we could brute-force our way through this, and just clobber all of the
@@ -1749,8 +1744,7 @@ xaccTransRollbackEdit (Transaction *trans)
          s->amount      = so->amount;
          s->value       = so->value;
 
-         s->date_reconciled.tv_sec  = so->date_reconciled.tv_sec;
-         s->date_reconciled.tv_nsec = so->date_reconciled.tv_nsec;
+         s->date_reconciled = so->date_reconciled;
 
          /* do NOT check date order until all of the other fields 
           * have been properly restored */
@@ -1776,6 +1770,10 @@ xaccTransRollbackEdit (Transaction *trans)
    {
       GList *node;
 
+      /* prevent the transaction from being messed with
+       * while we make the changes. */
+      trans->editlevel++;
+
       /* In this loop, we tuck the fixed-up splits back into 
        * orig array, for temp safekeeping. */
       for (i = 0, node = trans->splits ;
@@ -1797,16 +1795,12 @@ xaccTransRollbackEdit (Transaction *trans)
          Split *s = node->data;
          Account *acc = xaccSplitGetAccount(s);
 
-         trans->editlevel++;
-
          mark_split (s);
          xaccAccountRemoveSplit (acc, s);
          xaccAccountRecomputeBalance (acc);
          gen_event (s);
          xaccRemoveEntity(s->book->entity_table, &s->guid);
          xaccFreeSplit (s);
-
-         trans->editlevel--;
       }
 
       g_list_free (trans->splits);
@@ -1829,6 +1823,8 @@ xaccTransRollbackEdit (Transaction *trans)
          xaccAccountRecomputeBalance (account);
          gen_event (s);
       }
+
+      trans->editlevel--;
    }
 
    /* Now that the engine copy is back to its original version,

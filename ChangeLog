@@ -1,3 +1,13 @@
+2001-12-25  Dave Peticolas  <dave@krondo.com>
+
+	* src/backend/postgres/test/test-db.c: test rollback
+
+	* src/engine/Transaction.c: fix bug in transaction rollback
+
+	* src/engine/test-core/test-engine-stuff.h: add test routine
+
+	* src/engine/test-core/test-engine-stuff.c: add test routine
+
 2001-12-20  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/main.scm: update for api changes

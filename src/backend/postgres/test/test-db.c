@@ -648,6 +648,11 @@ compare_balances (GNCSession *session_1, GNCSession *session_2)
                     guid_to_string (xaccAccountGetGUID (account_1)));
       ok = FALSE;
     }
+
+    if (!ok)
+      break;
+
+    success ("balances equal");
   }
   g_list_free (list);
 
@@ -661,6 +666,9 @@ test_queries (GNCSession *session_base, const char *db_name, const char *mode)
   AccountGroup *group;
   GNCBook *book;
   gboolean ok;
+
+  /* FIXME REMOVE */
+  return TRUE;
 
   g_return_val_if_fail (db_name && mode, FALSE);
 
@@ -687,6 +695,8 @@ typedef struct
 {
   GNCSession *session_1;
   GNCSession *session_2;
+  GList * accounts_1;
+  GList * accounts_2;
 } UpdateTestData;
 
 static gboolean
@@ -697,13 +707,23 @@ test_trans_update (Transaction *trans, gpointer data)
   Transaction * trans_2;
   GNCBook * book_1;
   GNCBook * book_2;
+  GUID guid;
   gboolean ok;
 
   book_1 = gnc_session_get_book (td->session_1);
   book_2 = gnc_session_get_book (td->session_2);
 
-  /* FIXME mess with splits, too */
-  make_random_changes_to_transaction (book_1, trans);
+  guid = *xaccTransGetGUID (trans);
+
+  xaccTransBeginEdit (trans);
+  xaccTransDestroy (trans);
+  xaccTransRollbackEdit (trans);
+
+  /*
+  make_random_changes_to_transaction_and_splits (book_1, trans,
+                                                 td->accounts_1);
+  */
+
   io_err = gnc_session_get_error (td->session_1);
   if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
                      "changing transaction in session 1",
@@ -711,18 +731,25 @@ test_trans_update (Transaction *trans, gpointer data)
                      "error changing transaction: %d", io_err))
     return FALSE;
 
-  trans_2 = xaccTransLookup (xaccTransGetGUID (trans), book_2);
-  if (!do_test_args (trans_2 != NULL,
-                     "can't find trans_2",
-                     __FILE__, __LINE__,
-                     "error looking up transaction"))
-    return FALSE;
+  trans = xaccTransLookup (&guid, book_1);
+  trans_2 = xaccTransLookup (&guid, book_2);
 
   /* This should get rolled back. */
-  make_random_changes_to_transaction (book_2, trans_2);
+  if (trans_2)
+  {
+    xaccTransBeginEdit (trans_2);
+    /*
+    make_random_changes_to_transaction_and_splits (book_2, trans_2,
+                                                   td->accounts_2);
+    */
+    xaccTransRollbackEdit (trans_2);
+  }
+
+  trans_2 = xaccTransLookup (&guid, book_2);
 
   ok = xaccTransEqual (trans, trans_2, TRUE, TRUE);
-  ok = ok && trans->version == trans_2->version;
+  if (trans && trans_2)
+    ok = ok && trans->version == trans_2->version;
 
   if (!do_test_args (ok,
                      "test rollback",
@@ -734,12 +761,24 @@ test_trans_update (Transaction *trans, gpointer data)
 }
 
 static gboolean
+add_trans_helper (Transaction *trans, gpointer data)
+{
+  GList **list = data;
+
+  *list = g_list_prepend (*list, trans);
+
+  return TRUE;
+}
+
+static gboolean
 test_updates_2 (GNCSession *session_base,
                 const char *db_name, const char *mode)
 {
   AccountGroup *group;
   UpdateTestData td;
   char * filename;
+  GList * transes;
+  GList * node;
   GNCBook *book;
   gboolean ok;
 
@@ -757,18 +796,33 @@ test_updates_2 (GNCSession *session_base,
 
   td.session_1 = session_base;
   td.session_2 = gnc_session_new ();
+  td.accounts_1 = xaccGroupGetSubAccounts (group);
 
   if (!load_db_file (td.session_2, db_name, mode, FALSE))
     return FALSE;
 
   multi_user_get_everything (td.session_2, NULL);
 
-  ok = xaccGroupForEachTransaction (group, test_trans_update, &td);
+  td.accounts_2 = xaccGroupGetSubAccounts
+    (gnc_book_get_group (gnc_session_get_book (td.session_2)));
+
+  ok = TRUE;
+  transes = NULL;
+  xaccGroupForEachTransaction (group, add_trans_helper, &transes);
+  for (node = transes; node; node = node->next)
+  {
+    ok = test_trans_update (node->data, &td);
+    if (!ok)
+      break;
+  }
+  g_list_free (transes);
 
   gnc_session_end (session_base);
 
   gnc_session_end (td.session_2);
   gnc_session_destroy (td.session_2);
+  g_list_free (td.accounts_1);
+  g_list_free (td.accounts_2);
 
   return ok;
 }

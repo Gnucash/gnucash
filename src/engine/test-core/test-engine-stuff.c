@@ -602,12 +602,18 @@ typedef struct
   GUID guid;
 } TransInfo;
 
-static void
-change_trans_helper (GNCBook *book, Transaction *trans, GList *accounts)
+void
+make_random_changes_to_transaction_and_splits (GNCBook *book,
+                                               Transaction *trans,
+                                               GList *accounts)
 {
   GList *splits;
   GList *node;
   Split *split;
+
+  g_return_if_fail (book);
+  g_return_if_fail (trans);
+  g_return_if_fail (accounts);
 
   xaccTransBeginEdit (trans);
 
@@ -745,7 +751,7 @@ make_random_changes_to_group (GNCBook *book, AccountGroup *group)
     if (!trans)
       continue;
 
-    change_trans_helper (book, trans, accounts);
+    make_random_changes_to_transaction_and_splits (book, trans, accounts);
   }
 
   for (node = transes; node; node = node->next)

@@ -81,6 +81,9 @@ void make_random_changes_to_pricedb (GNCBook *book, GNCPriceDB *pdb);
 void make_random_changes_to_split (Split *split);
 void make_random_changes_to_transaction (GNCBook *book,
                                          Transaction *trans);
+void make_random_changes_to_transaction_and_splits (GNCBook *book,
+                                                    Transaction *trans,
+                                                    GList *accounts);
 void make_random_changes_to_account (GNCBook *book, Account *account);
 void make_random_changes_to_group (GNCBook *book, AccountGroup *group);
 void make_random_changes_to_book (GNCBook *book);
