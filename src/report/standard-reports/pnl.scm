@@ -83,7 +83,8 @@
      (lambda ()
        (filter 
         gnc:account-is-inc-exp?
-        (gnc:group-get-account-list (gnc:get-current-group)))))
+        (gnc:group-get-account-list (gnc:get-current-group))))
+     #t)
 
     ;; with or without grouping
     (gnc:options-add-group-accounts!      

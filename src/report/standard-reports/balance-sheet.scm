@@ -101,7 +101,8 @@
        (gnc:filter-accountlist-type 
         '(bank cash credit asset liability stock mutual-fund currency
                payable receivable equity income expense)
-        (gnc:group-get-subaccounts (gnc:get-current-group)))))
+        (gnc:group-get-subaccounts (gnc:get-current-group))))
+     #t)
     
     ;; what to show about non-leaf accounts
     (gnc:register-option 

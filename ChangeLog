@@ -4,6 +4,16 @@
 
 	* Nathan Neulinger's patch to gnc-split-reg.[ch] to implement
 	  a summary-bar "Projected minimum balance".  Somewhat fixes #102440.
+
+	* src/report/report-system/options-utilities.scm:
+	* src/report/standard-reports/account-summary.scm:
+	* src/report/standard-reports/balance-sheet.scm:
+	* src/report/standard-reports/cash-flow.scm:
+	* src/report/standard-reports/pnl.scm:
+	  change the api to gnc:options-add-account-selection! to allow
+	  the caller to set the default choice on "use-subaccounts", and
+	  change the cash-flow report to default to 'no'.  This will make
+	  sure that "Assets:A/P" is not included (since it shouldn't be).
 	
 2003-01-29  Matthew Vanecek <mevanecek@yahoo.com>
 	

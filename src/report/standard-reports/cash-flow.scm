@@ -92,7 +92,8 @@
      (lambda ()
        (gnc:filter-accountlist-type 
         '(bank cash asset stock mutual-fund)
-        (gnc:group-get-subaccounts (gnc:get-current-group)))))
+        (gnc:group-get-subaccounts (gnc:get-current-group))))
+     #f)
     
     ;; Set the general page as default option tab
     (gnc:options-set-default-section options gnc:pagename-general)      

@@ -89,7 +89,8 @@
        (let ((current-accounts '()))
          (cond ((not (null? current-accounts)) current-accounts)
                (else
-                (gnc:group-get-account-list (gnc:get-current-group)))))))
+                (gnc:group-get-account-list (gnc:get-current-group))))))
+     #t)
     
     ;; with or without grouping
     (gnc:options-add-group-accounts!      

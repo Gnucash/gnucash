@@ -140,7 +140,7 @@
 (define (gnc:options-add-account-selection! 
 	 options pagename 
 	 name-display-depth name-show-subaccounts name-accounts
-	 sort-tag default-depth default-accounts)
+	 sort-tag default-depth default-accounts default-show-subaccounts)
   (gnc:options-add-account-levels!
    options pagename name-display-depth 
    (string-append sort-tag "a")
@@ -153,7 +153,7 @@
     pagename name-show-subaccounts
     (string-append sort-tag "b")
     (N_ "Override account-selection and show sub-accounts of all selected accounts?") 
-    #t))
+    default-show-subaccounts))
 
   ;; Semantics of the account selection, as used in the
   ;; gnc:html-build-acct-table: An account shows up if ( the
