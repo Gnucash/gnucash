@@ -33,18 +33,11 @@
 #include "GroupP.h"
 #include "TransactionP.h"
 #include "util.h"
-
-#ifndef FALSE
-#define FALSE 0
-#endif
-
-#ifndef TRUE
-#define TRUE 1
-#endif
+#include "gnc-common.h"
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
- * can't pretend too!  These functions perform actions on the       *
+ * can't pretend to!  These functions perform actions on the       *
  * AccountGroup data structure, in order to encapsulate the         *
  * knowledge of the internals of the AccountGroup in one file.      *
 \********************************************************************/
@@ -54,7 +47,7 @@
 void
 xaccInitializeAccountGroup (AccountGroup *grp)
   {
-  grp->saved       = TRUE;
+  grp->saved       = GNC_T;
   
   grp->parent      = NULL;
   grp->numAcc      = 0;
@@ -96,7 +89,7 @@ xaccFreeAccountGroup( AccountGroup *grp )
   grp->numAcc      = 0;
   grp->account     = NULL;
   grp->balance     = 0.0;
-
+  
   _free(grp);
 }
 
@@ -108,7 +101,7 @@ xaccAccountGroupMarkSaved (AccountGroup *grp)
    int i;
 
    if (!grp) return;
-   grp->saved = TRUE;
+   grp->saved = GNC_T;
 
    for (i=0; i<grp->numAcc; i++) {
       xaccAccountGroupMarkSaved (grp->account[i]->children); 
@@ -124,7 +117,7 @@ xaccAccountGroupNotSaved (AccountGroup *grp)
    int i;
 
    if (!grp) return 0;
-   if (FALSE == grp->saved) return 1;
+   if (GNC_F == grp->saved) return 1;
 
    for (i=0; i<grp->numAcc; i++) {
       not_saved = xaccAccountGroupNotSaved (grp->account[i]->children); 
@@ -345,7 +338,7 @@ xaccRemoveGroup (AccountGroup *grp)
    grp = acc -> parent;
    if (!grp) return;
 
-   grp->saved = FALSE;
+   grp->saved = GNC_F;
 }
 
 /********************************************************************\
@@ -378,7 +371,7 @@ xaccRemoveAccount (Account *acc)
    nacc --;
    arr[nacc] = NULL;
    grp->numAcc = nacc;
-   grp->saved = FALSE;
+   grp->saved = GNC_F;
 
    /* if this was the last account in a group, delete
     * the group as well (unless its a root group) */
@@ -432,7 +425,7 @@ xaccGroupInsertAccount( AccountGroup *grp, Account *acc )
     if (grp == acc->parent) ralo = 0;
     xaccRemoveAccount (acc);
   }
-  grp->saved = FALSE;
+  grp->saved = GNC_F;
 
   /* set back-pointer to the accounts parent */
   acc->parent = grp;
@@ -791,6 +784,105 @@ xaccGroupGetDepth (AccountGroup *grp)
 
    maxdepth++;
    return maxdepth;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccGroupBeginStagedTransactionTraversals (AccountGroup *grp) 
+{
+  unsigned int numAcc;
+  unsigned int i;
+  
+  if (!grp) return;
+  
+  numAcc = grp->numAcc;
+  for(i = 0; i < numAcc; i++) {
+    unsigned int n = 0;
+    Account *acc;
+    Split *s = NULL;
+    acc = xaccGroupGetAccount(grp, i);
+    
+    if(!acc) return;
+    
+    /* recursively do sub-accounts */
+    xaccGroupBeginStagedTransactionTraversals(acc->children);
+    
+    s = acc->splits[0];
+    while (s) {
+      Transaction *trans = s->parent;
+      trans->marker = 0;
+      n++;
+      s = acc->splits[n];
+    }
+  }
+}
+
+int
+xaccAccountStagedTransactionTraversal (Account *acc,
+                        unsigned int stage,
+                        int (*callback)(Transaction *t, void *cb_data),
+                        void *cb_data) 
+{
+  unsigned int n = 0;
+  Split *s = NULL;
+  
+  if(!acc) return;
+  
+  s = acc->splits[0];
+  if (callback) {
+    int retval;
+    while (s) {
+      Transaction *trans = s->parent;
+      if (trans && (trans->marker < stage)) {
+        trans->marker = stage;
+        retval = callback(trans, cb_data);
+        if (retval) return retval;
+      }
+      n++;
+      s = acc->splits[n];
+    }
+  } else {
+    while (s) {
+      Transaction *trans = s->parent;
+      if (trans && (trans->marker < stage)) {
+        trans->marker = stage;
+      }
+      n++;
+      s = acc->splits[n];
+    }
+  }
+  return 0;
+}
+
+
+int
+xaccGroupStagedTransactionTraversal(AccountGroup *grp,
+                                    unsigned int stage,
+                                    int (*callback)(Transaction *t, void *cb_data),
+                                    void *cb_data) 
+{
+  unsigned int numAcc;
+  unsigned int i;
+  
+  if (!grp) return;
+  
+  numAcc = grp->numAcc;
+  for(i = 0; i < numAcc; i++) {
+    int retval;
+    int n = 0;
+    Account *acc;
+    acc = xaccGroupGetAccount(grp, i);
+    
+    /* recursively do sub-accounts */
+    retval = xaccGroupStagedTransactionTraversal 
+               (acc->children, stage, callback, cb_data);
+    if (retval) return retval;
+    retval = xaccAccountStagedTransactionTraversal (acc, stage, callback, cb_data);
+    if (retval) return retval;
+  }
+  return 0;
 }
 
 /****************** END OF FILE *************************************/

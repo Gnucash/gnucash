@@ -1298,45 +1298,6 @@ readDMYDate( int fd, int token )
  ********************** SAVE DATA ***********************************
 \********************************************************************/
 
-static void
-xaccResetWriteFlags (AccountGroup *grp) 
-{
-   int i, numAcc;
-   if (!grp) return;
-
-  /* Zero out the write flag on all of the 
-   * transactions.  The write_flag is used to determine
-   * if a given transaction has already been written 
-   * out to the file.  This flag is necessary, since 
-   * double-entry transactions appear in two accounts,
-   * while they should be written only once to the file.
-   * The write_flag is used ONLY by the routines in this
-   * module.
-   */
-  numAcc = grp ->numAcc;
-  for( i=0; i<numAcc; i++ ) {
-    int n=0;
-    Account *acc;
-    Split *s = NULL;
-    acc = xaccGroupGetAccount (grp,i) ;
-
-    /* recursively do sub-accounts */
-    xaccResetWriteFlags (acc->children);
-    
-    /* zip over all accounts */
-    s = acc->splits[0];
-    n=0;
-    while (s) {
-      Transaction *trans;
-      trans = s->parent;
-      if (trans) trans -> write_flag = 0;
-      n++;
-      s = acc->splits[n];
-    }
-  }
-
-}
-
 /********************************************************************\
  * xaccWriteAccountGroupFile                                        * 
  * writes account date to two files: the current file, and a        *
@@ -1453,16 +1414,16 @@ xaccWriteAccountGroup (int fd, AccountGroup *grp )
     return 0;
   }
 
-  /* OK, now zero out the write flag on all of the 
+  /* OK, now zero out the write flag on all of the
    * transactions.  The write_flag is used to determine
-   * if a given transaction has already been written 
-   * out to the file.  This flag is necessary, since 
+   * if a given transaction has already been written
+   * out to the file.  This flag is necessary, since
    * double-entry transactions appear in two accounts,
    * while they should be written only once to the file.
    * The write_flag is used ONLY by the routines in this
    * module.
    */
-  xaccResetWriteFlags (grp);
+  xaccGroupBeginStagedTransactionTraversals(grp);
 
   for( i=0; i<grp->numAcc; i++ )
     {
@@ -1517,6 +1478,21 @@ writeGroup (int fd, AccountGroup *grp )
  *         acc  - the account data to save                          * 
  * Return: -1 on failure                                            * 
 \********************************************************************/
+
+static int
+increment_int(Transaction *t, void *data) 
+  {
+  int val = *((int *) data);
+  *((int *) data) = val + 1;
+  return 0;
+  }
+
+static int
+_write_transaction_wrapper_(Transaction *t, void *data)
+  {
+  return (-1 == writeTransaction(*((int *) data), t));
+  }
+
 static int
 writeAccount( int fd, Account *acc )
   {
@@ -1602,23 +1578,17 @@ writeAccount( int fd, Account *acc )
   /* figure out numTrans -- it will be less than the total
    * number of transactions in this account, because some 
    * of the double entry transactions will already have been 
-   * written.  write_flag values are:
+   * written.
+   * marker flag values are:
    * 0 == uncounted, unwritten
    * 1 == counted, unwritten
    * 2 == written
    */
+
+  /* Use a marker of 1 for counting numUnwrittenTrans */
   numUnwrittenTrans = 0;
-  i=0;
-  s = acc->splits[i];
-  while (s) {
-    trans = s->parent;
-    if (0 == trans->write_flag) {
-       numUnwrittenTrans ++;
-       trans->write_flag = 1;
-    }
-    i++;
-    s = acc->splits[i];
-  }
+  xaccAccountStagedTransactionTraversal(acc, 1,
+                                        increment_int, &numUnwrittenTrans);
   
   ntrans = numUnwrittenTrans;
   XACC_FLIP_INT (ntrans);
@@ -1627,16 +1597,10 @@ writeAccount( int fd, Account *acc )
     return -1;
   
   DEBUG ("writeAccount(): will write %d trans\n", numUnwrittenTrans);
-  i=0;
-  s = acc->splits[i];
-  while (s) {
-    trans = s->parent;
-    if (1 == trans->write_flag) {
-       err = writeTransaction( fd, trans );
-       if (-1 == err) return err;
-    }
-    i++;
-    s = acc->splits[i];
+
+  if(!xaccAccountStagedTransactionTraversal(acc, 2,
+                                            _write_transaction_wrapper_, &fd)) {
+    return -1;
   }
 
   if (acc->children) {
@@ -1673,12 +1637,6 @@ writeTransaction( int fd, Transaction *trans )
   Timespec ts;
 
   ENTER ("writeTransaction");
-  /* If we've already written this transaction, don't write 
-   * it again.  That is, prevent double-entry transactions 
-   * from being written twice 
-   */
-  if (2 == trans->write_flag) return 4;
-  trans->write_flag = 2;
   
   err = writeString( fd, xaccTransGetNum (trans) );
   if( -1 == err ) return err;
@@ -1892,14 +1850,4 @@ writeTSDate( int fd, Timespec *ts)
   return err;
   }
 
-/********************************************************************/
-/*
-  Local Variables:
-  tab-width: 2
-  indent-tabs-mode: nil
-  mode: c
-  c-indentation-style: gnu
-  eval: (c-set-offset 'block-open '-)
-  End:
-*/
 /*********************** END OF FILE *********************************/

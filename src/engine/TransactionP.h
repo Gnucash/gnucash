@@ -148,7 +148,13 @@ struct _transaction
 
   Split   **splits;          /* list of splits, null terminated           */
 
-  char    write_flag;        /* used only during file IO                  */
+  /* marker is used to track the progress of transaction traversals. 
+   * 0 is never a legitimate marker value, so we can tell is we hit a
+   * new transaction in the middle of a traversal.  All each new
+   * traversal cares about is whether or not the marker stored in a
+   * transaction is the same as or different than the one
+   * corresponding to the current traversal. */
+  unsigned char  marker;      
 
   /* the "open" flag indicates if the transaction has been 
    * opened for editing. */
