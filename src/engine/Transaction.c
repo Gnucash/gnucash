@@ -1456,14 +1456,16 @@ xaccTransCommitEdit (Transaction *trans)
          /* if the backend puked, then we must roll-back 
           * at this point, and let the user know that we failed.
           */
-        /* XXX hack alert -- finish this */
-        PWARN("Another user has modified the transaction\n"
-              "\tPlease refresh your browser and try again.\n"
+        /* XXX hack alert -- turn this into a gui dialog */
+        PWARN("Another user has modified this transaction\n"
+              "\tjust a moment ago.  Please look at thier changes,\n"
+              "\t and try again, if needed.\n"
               "\t(This dialog should be a gui dialog and \n"
               "\tshould check for errors)\n"
               "\t rc=%d\n", rc);
         /* hack alert -- we should check for i/o errors from 
-         * the backend too ... 
+         * the backend too ... since an i/o error is not a true 
+         * rollback.  what to do ...
          */
         trans->editlevel++;
         xaccTransRollbackEdit (trans);
