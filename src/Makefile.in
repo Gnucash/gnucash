@@ -34,7 +34,7 @@ CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH}
 ######################################################################
 # See Makefile.common for information about these variables.
 COMMON_SRCS   := Ledger.c SplitLedger.c
-CLEAN_SUBDIRS := engine gnome motif register qt
+CLEAN_SUBDIRS := engine gnome motif register guile qt
 ######################################################################
 
 all: default
@@ -53,7 +53,8 @@ motif: ${MOTIF_OBJS}
 gnome: ${GNOME_OBJS}
 	@cd engine;            $(MAKE) default
 	@cd register;          $(MAKE) gnome
-	@cd gnome;               $(MAKE) gnome
+	@cd guile;             $(MAKE) default
+	@cd gnome;             $(MAKE) gnome
 
 qt: $(QT_OBJS)
 	@cd engine;	       $(MAKE) default

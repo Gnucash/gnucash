@@ -31,7 +31,8 @@ includedir=@includedir@
 
 
 CC       = @CC@
-INCLPATH = -I.. -I../.. -I../engine -I../register -I@srcdir@/../../include \
+INCLPATH = -I.. -I../.. -I../engine -I../register -I../guile \
+           -I@srcdir@/../../include \
            -I$(includedir) -I$(prefix)/lib/gnome-libs/include
  
 
@@ -39,22 +40,20 @@ CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH}
 LDFLAGS  = @LDFLAGS@
 LIBS     = -L$(prefix)/lib @LIBS@ @X_PRE_LIBS@ @X_LIBS@ \
            $(shell gtk-config --libs) @X_EXTRA_LIBS@ -lgnomeui -lgnome \
-           -lgnomesupport -lintl -lgdk_imlib -ltiff
+           -lgnomesupport -lgdk_imlib -ltiff \
+           -ldl -lguile -lqthreads -lguile -lreadline
 
 
 TARGET   = ../../xacc.gtk.bin
 STATIC   = ../../xacc-static.gtk.bin
 
-OTHER_OBJS := ../obj/gnome/*.o ../engine/obj/*.o ../register/obj/gnome/*.o
+OTHER_OBJS := ../obj/gnome/*.o ../engine/obj/*.o ../register/obj/gnome/*.o \
+              ../guile/obj/*.o
 
 ######################################################################
 # See Makefile.common for information about these variables.
 GNOME_SRCS := main.c MainWindow.c MenuBar.c RegWindow.c Add_Dialog.c xtutil.c \
               RecnWindow.c
-#        AccWindow.c AccountMenu.c AdjBWindow.c    \
-#        BuildMenu.c Destroy.c FileBox.c HelpWindow.c  \
-#        RecnWindow.c RegWindow.c Reports.c TextBox.c  \
-#        XferWindow.c date.c xtutil.c
 ######################################################################
 
 default: $(TARGET)

@@ -1,4 +1,4 @@
-/********************************************************************\
+/*-*-gnucash-c-*-****************************************************\
  * main.c -- main for xacc (X-Accountant)                           *
  * Copyright (C) 1997 Robin D. Clark                                *
  *                                                                  *
@@ -24,8 +24,11 @@
 
 #include <config.h>
 #include <gnome.h>
+#include <gnucash.h>
 
 #include <stdlib.h>
+#include <assert.h>
+#include <guile/gh.h> /* This will go away once "datafile" is handled better. */
 
 #include "config.h"
 #include "main.h"
@@ -222,8 +225,9 @@ foreach_split_in_group(AccountGroup *g, void (*f)(Split *)) {
 
 
 /********************************************************************\
- * main                                                             *
- *  the entry point for the program... sets up the top level widget * 
+ * gnome_main                                                       *
+ *  called after the guile engine is up and running                 *
+ *  sets up the top level widget                                    * 
  *  and calls the mainWindow() function which creates the main      * 
  *  window.                                                         * 
  *                                                                  * 
@@ -233,22 +237,18 @@ foreach_split_in_group(AccountGroup *g, void (*f)(Split *)) {
  * Global: topgroup - the data from the datafile                    *
  *         datafile - the name of the user's datafile               *
 \********************************************************************/
-int 
-main( int argc, char *argv[] )
-{   
-  // gtk_init ( &argc, &argv );
-
-  if(argc > 1) {
-    /* Gnome is a pain about this if we don't handle it first
-       We need real arg parsing here later */
-    datafile = argv[1];
-    argc--;
-    argv++;
+static int
+gnome_main(int argc, char *argv[])
+{
+  SCM datafile_scm = gh_lookup("gnucash:datafile-tmp_");
+  if(datafile_scm != SCM_BOOL_F)
+  {
+    datafile = gh_scm2newstr(datafile_scm, NULL);
   }
- 
-  gnome_init ("GnuCash", NULL, argc, argv,
-              0, NULL);
 
+  /* argc and argv have been cleared by guile at this point */
+  gnome_init("GnuCash", NULL, argc, argv, 0, &argc);
+  
   prepare_app(); 
 
   {
@@ -330,6 +330,26 @@ main( int argc, char *argv[] )
   gtk_main();
 
   return 0;
+}
+
+/********************************************************************\
+ * main                                                             *
+ *  the entry point for the program                                 *
+ *  call gnucash_main to startup guile and then run gnome_main      *
+ *  and calls the mainWindow() function which creates the main      * 
+ *  window.                                                         * 
+ *                                                                  * 
+ * Args:   argc, the number of command line arguments, and argv,    * 
+ *         the array of command line args                           * 
+\********************************************************************/
+int 
+main( int argc, char *argv[] )
+{
+  gnucash_main(argc, argv, gnome_main);
+  /* This will never return. */
+
+  assert(0);  /* Just to be anal */
+  return 0;   /* Just to shut gcc up. */
 }
 
 void
