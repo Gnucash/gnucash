@@ -43,6 +43,7 @@
 #include "gnc-ui-util.h"
 #include "messages.h"
 
+#define MNEMONIC_MAXLEN 10
 
 static void gnc_currency_edit_init         (GNCCurrencyEdit      *gce);
 static void gnc_currency_edit_class_init   (GNCCurrencyEditClass *class);
@@ -126,8 +127,7 @@ add_item(GNCCurrencyEdit *gce, gnc_commodity *commodity)
 
         gtk_widget_show_all(item);
 
-        gtk_combo_set_item_string(GTK_COMBO(gce), GTK_ITEM (item),
-                                  gnc_commodity_get_mnemonic (commodity));
+	gtk_combo_set_item_string(GTK_COMBO(gce), GTK_ITEM (item), string);
 
         gtk_container_add(GTK_CONTAINER(GTK_COMBO(gce)->list), item);
 }
@@ -194,7 +194,7 @@ gnc_currency_edit_set_currency (GNCCurrencyEdit *gce,
         g_return_if_fail(currency != NULL);
 
         gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(gce)->entry),
-                           gnc_commodity_get_mnemonic (currency));
+                           gnc_commodity_get_printname (currency));
 }
 
 /**
@@ -206,16 +206,22 @@ gnc_currency_edit_set_currency (GNCCurrencyEdit *gce,
 gnc_commodity *
 gnc_currency_edit_get_currency (GNCCurrencyEdit *gce)
 {
-        const char *mnemonic;
+	gnc_commodity *commodity;
+        char *mnemonic, *name;
 
         g_return_val_if_fail(gce != NULL, NULL);
         g_return_val_if_fail(GNC_IS_CURRENCY_EDIT(gce), NULL);
 
-        mnemonic = gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(gce)->entry));
+        mnemonic = g_strdup(gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(gce)->entry)));
 
-        return gnc_commodity_table_lookup (gnc_get_current_commodities (),
-                                           GNC_COMMODITY_NS_ISO,
-                                           mnemonic);
+	name = index(mnemonic, ' ');
+	if (name != NULL)
+		*name = '\0';
+        commodity = gnc_commodity_table_lookup (gnc_get_current_commodities (),
+						GNC_COMMODITY_NS_ISO,
+						mnemonic);
+	g_free(mnemonic);
+	return commodity;
 }
 
 /*
