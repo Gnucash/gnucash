@@ -64,6 +64,7 @@ const gchar *entry_version_string = "2.0.0";
 #define entry_dateentered_string "entry:entered"
 #define entry_description_string "entry:description"
 #define entry_action_string "entry:action"
+#define entry_notes_string "entry:notes"
 #define entry_qty_string "entry:qty"
 #define entry_price_string "entry:price"
 #define entry_discount_string "entry:discount"
@@ -115,6 +116,7 @@ entry_dom_tree_create (GncEntry *entry)
     maybe_add_string (ret, entry_description_string,
 		      gncEntryGetDescription (entry));
     maybe_add_string (ret, entry_action_string, gncEntryGetAction (entry));
+    maybe_add_string (ret, entry_notes_string, gncEntryGetNotes (entry));
 
     maybe_add_numeric (ret, entry_qty_string, gncEntryGetQuantity (entry));
     maybe_add_numeric (ret, entry_price_string, gncEntryGetPrice (entry));
@@ -248,6 +250,14 @@ entry_action_handler (xmlNodePtr node, gpointer entry_pdata)
     struct entry_pdata *pdata = entry_pdata;
 
     return set_string(node, pdata->entry, gncEntrySetAction);
+}
+
+static gboolean
+entry_notes_handler (xmlNodePtr node, gpointer entry_pdata)
+{
+    struct entry_pdata *pdata = entry_pdata;
+
+    return set_string(node, pdata->entry, gncEntrySetNotes);
 }
 
 static gboolean
@@ -406,6 +416,7 @@ static struct dom_tree_handler entry_handlers_v2[] = {
     { entry_dateentered_string, entry_dateentered_handler, 1, 0 },
     { entry_description_string, entry_description_handler, 0, 0 },
     { entry_action_string, entry_action_handler, 0, 0 },
+    { entry_notes_string, entry_notes_handler, 0, 0 },
     { entry_qty_string, entry_qty_handler, 0, 0 },
     { entry_price_string, entry_price_handler, 0, 0 },
     { entry_discount_string, entry_discount_handler, 0, 0 },

@@ -43,6 +43,7 @@ void gncEntrySetDate (GncEntry *entry, Timespec date);
 void gncEntrySetDateEntered (GncEntry *entry, Timespec date);
 void gncEntrySetDescription (GncEntry *entry, const char *desc);
 void gncEntrySetAction (GncEntry *entry, const char *action);
+void gncEntrySetNotes (GncEntry *entry, const char *notes);
 void gncEntrySetQuantity (GncEntry *entry, gnc_numeric quantity);
 void gncEntrySetPrice (GncEntry *entry, gnc_numeric price);
 void gncEntrySetDiscount (GncEntry *entry, gnc_numeric discount);
@@ -62,6 +63,7 @@ Timespec gncEntryGetDate (GncEntry *entry);
 Timespec gncEntryGetDateEntered (GncEntry *entry);
 const char * gncEntryGetDescription (GncEntry *entry);
 const char * gncEntryGetAction (GncEntry *entry);
+const char * gncEntryGetNotes (GncEntry *notes);
 gnc_numeric gncEntryGetQuantity (GncEntry *entry);
 gnc_numeric gncEntryGetPrice (GncEntry *entry);
 gnc_numeric gncEntryGetDiscount (GncEntry *entry);
@@ -115,6 +117,7 @@ int gncEntryCompare (GncEntry *a, GncEntry *b);
 #define ENTRY_DATE	"date"
 #define ENTRY_DESC	"desc"
 #define ENTRY_ACTION	"action"
+#define ENTRY_NOTES	"notes"
 #define ENTRY_QTY	"qty"
 #define ENTRY_PRICE	"price"
 

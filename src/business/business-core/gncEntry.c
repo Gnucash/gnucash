@@ -30,6 +30,7 @@ struct _gncEntry {
   Timespec	date_entered;
   char *	desc;
   char *	action;
+  char *	notes;
   gnc_numeric 	quantity;
   gnc_numeric 	price;
   gnc_numeric 	discount;
@@ -96,6 +97,7 @@ GncEntry *gncEntryCreate (GNCBook *book)
 
   entry->desc = CACHE_INSERT ("");
   entry->action = CACHE_INSERT ("");
+  entry->notes = CACHE_INSERT ("");
 
   {
     gnc_numeric zero = gnc_numeric_zero ();
@@ -125,6 +127,7 @@ void gncEntryDestroy (GncEntry *entry)
 
   CACHE_REMOVE (entry->desc);
   CACHE_REMOVE (entry->action);
+  CACHE_REMOVE (entry->notes);
   if (entry->tax_values)
     gncAccountValueDestroy (entry->tax_values);
   remObj (entry);
@@ -169,6 +172,13 @@ void gncEntrySetAction (GncEntry *entry, const char *action)
 {
   if (!entry || !action) return;
   SET_STR (entry->action, action);
+  mark_entry (entry);
+}
+
+void gncEntrySetNotes (GncEntry *entry, const char *notes)
+{
+  if (!entry || !notes) return;
+  SET_STR (entry->notes, notes);
   mark_entry (entry);
 }
 
@@ -284,6 +294,7 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest)
   dest->date_entered		= src->date_entered; /* ??? */
   gncEntrySetDescription (dest, src->desc);
   gncEntrySetAction (dest, src->action);
+  gncEntrySetNotes (dest, src->notes);
   dest->quantity		= src->quantity;
   dest->price			= src->price;
   dest->discount		= src->discount;
@@ -342,6 +353,12 @@ const char * gncEntryGetAction (GncEntry *entry)
 {
   if (!entry) return NULL;
   return entry->action;
+}
+
+const char * gncEntryGetNotes (GncEntry *entry)
+{
+  if (!entry) return NULL;
+  return entry->notes;
 }
 
 gnc_numeric gncEntryGetQuantity (GncEntry *entry)
@@ -804,6 +821,7 @@ gboolean gncEntryRegister (void)
     { ENTRY_DATE, QUERYCORE_DATE, (QueryAccess)gncEntryGetDate },
     { ENTRY_DESC, QUERYCORE_STRING, (QueryAccess)gncEntryGetDescription },
     { ENTRY_ACTION, QUERYCORE_STRING, (QueryAccess)gncEntryGetAction },
+    { ENTRY_NOTES, QUERYCORE_STRING, (QueryAccess)gncEntryGetNotes },
     { ENTRY_QTY, QUERYCORE_NUMERIC, (QueryAccess)gncEntryGetQuantity },
     { ENTRY_PRICE, QUERYCORE_NUMERIC, (QueryAccess)gncEntryGetPrice },
     { ENTRY_INVOICE, GNC_INVOICE_MODULE_NAME, (QueryAccess)gncEntryGetInvoice },
