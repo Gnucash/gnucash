@@ -4,5 +4,6 @@ Makefile.in
 .libs
 test-load-engine
 test-commodities
+test-freq-spec
 test-resolve-file-path
 test-split-vs-account

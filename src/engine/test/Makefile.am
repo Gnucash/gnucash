@@ -19,6 +19,7 @@ TESTS = \
   test-load-engine \
   test-create-account \
   test-commodities \
+  test-freq-spec \
   test-resolve-file-path \
   test-split-vs-account
 
@@ -30,14 +31,7 @@ TESTS_ENVIRONMENT = \
 
 bin_PROGRAMS = \
   test-commodities \
+  test-freq-spec \
   test-load-engine \
   test-resolve-file-path \
   test-split-vs-account
-
-test_load_engine_SOURCES = test-load-engine.c
-
-test_commodities_SOURCES = test-commodities.c
-
-test_resolve_file_path_SOURCES = test-resolve-file-path.c
-
-test_split_vs_account_SOURCES = test-split-vs-account.c

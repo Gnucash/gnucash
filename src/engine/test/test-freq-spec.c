@@ -12,8 +12,10 @@
 
 #include "test-stuff.h"
 #include "FreqSpec.h"
+#include "GNCIdP.h"
 
-void test_once()
+static void
+test_once (void)
 {
 	FreqSpec *fs;
 	guint32 i, start_julian;
@@ -38,7 +40,8 @@ void test_once()
 	xaccFreqSpecFree(fs);
 }
 
-void test_daily()
+static void
+test_daily (void)
 {
 	guint32 interval, i, start_julian, j;
 	FreqSpec *fs;
@@ -85,7 +88,8 @@ void test_daily()
 	xaccFreqSpecFree(fs);
 }
 
-void test_weekly()
+static void
+test_weekly (void)
 {
 	guint32 interval, i, start_julian, weekday, j;
 	FreqSpec *fs;
@@ -144,7 +148,8 @@ void test_weekly()
 	xaccFreqSpecFree(fs);
 }
 
-void test_monthly()
+static void
+test_monthly (void)
 {
 	guint32 interval, i, start_julian, monthday, month, j, day_of_year;
 	FreqSpec *fs;
@@ -216,7 +221,8 @@ void test_monthly()
 	xaccFreqSpecFree(fs);
 }
 
-void test_month_relative()
+static void
+test_month_relative (void)
 {
 	guint32 interval, i, start_julian, monthday, month, j, day_of_year;
 	FreqSpec *fs;
@@ -330,7 +336,8 @@ void test_month_relative()
 	xaccFreqSpecFree(fs);
 }
 
-void test_composite()
+static void
+test_composite (void)
 {
 	guint32 interval, i, start_julian, monthday, month, j, day_of_year;
 	FreqSpec *fs, *fs2;
@@ -517,6 +524,7 @@ main( int argc, char* argv[] )
 #if 0
 	set_success_print(TRUE);
 #endif
+        xaccGUIDInit();
 
 	test_once();
 
