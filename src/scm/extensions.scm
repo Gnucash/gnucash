@@ -18,6 +18,11 @@
                                   (gnc:error-message-dialog
                                    "Some error didn't occur.")))
 
+  (gnc:extensions-menu-add-item "QIF Import"
+                                "Import QIF hint"
+                                (lambda () 
+				  (gnc:extensions-qif-import win)))
+
   (gnc:extensions-menu-add-item
    "Test verify dialog"
    "Test verify dialog hint"

@@ -99,7 +99,8 @@
 
 (define (gnc:main-win-export-data-as-text win) 
   (let ((account-group #f)
-        (session (gnc:main-window-get-session win)))
+;        (session (gnc:main-window-get-session win)))
+        (session (gnc:main-window-get-session)))
     
     (if session (set! account-group (gnc:session-get-group session)))
     
