@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8\n"
-"POT-Creation-Date: 2003-08-12 21:30+0200\n"
+"POT-Creation-Date: 2003-08-18 23:25+0200\n"
 "PO-Revision-Date: 2003-08-18 22:55+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
@@ -3205,7 +3205,9 @@ msgstr "Sortiere nach Nummer"
 
 #: src/gnome/glade/register.glade.h:80
 msgid "Sort by the statement date (unreconciled items last)"
-msgstr "Nach Datum des Abgleichens/Kontoauszugs sortieren (nicht abgeglichene Einträge zuletzt)"
+msgstr ""
+"Nach Datum des Abgleichens/Kontoauszugs sortieren (nicht abgeglichene "
+"Einträge zuletzt)"
 
 #: src/gnome/glade/register.glade.h:82
 msgid "St_yle"
@@ -9381,7 +9383,7 @@ msgstr "Aktualisieren Ihrer Gnucash Konten"
 msgid "(Full account ID: "
 msgstr "(Komplette Kontonummer: "
 
-#: src/import-export/import-backend.c:831
+#: src/import-export/import-backend.c:841
 msgid "Auto-Balance split"
 msgstr "Automatische Ausgleichsbuchung"
 

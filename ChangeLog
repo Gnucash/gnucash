@@ -1,3 +1,8 @@
+2003-08-18  Christian Stimming  <stimming@tuhh.de>
+
+	* po/*.po: msgmerge all translations, as requested, to speed up
+	compilation time significantly.
+
 2003-08-17  Chris Lyttle  <chris@wilddev.net>
 
 	* configure.in: Release 1.8.5

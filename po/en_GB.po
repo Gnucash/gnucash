@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8.5pre1\n"
-"POT-Creation-Date: 2003-08-05 21:12+0200\n"
+"POT-Creation-Date: 2003-08-18 23:25+0200\n"
 "PO-Revision-Date: 2003-08-16 23:11+0100\n"
 "Last-Translator: Nigel Titley <nigel@titley.com>\n"
 "Language-Team: English (British) <en_gb@li.org>\n"
@@ -219,12 +219,14 @@ msgstr ""
 
 #: src/app-file/gnc-file.c:215
 msgid ""
-"The SQL database is in use by other users, and the upgrade cannot be performed until they logoff.\n"
+"The SQL database is in use by other users, and the upgrade cannot be "
+"performed until they logoff.\n"
 "If there are currently no other users, consult the \n"
 "documentation to learn how to clear out dangling login\n"
 "sessions."
 msgstr ""
-"The SQL database is in use by other users, and the upgrade cannot be performed until they logoff.\n"
+"The SQL database is in use by other users, and the upgrade cannot be "
+"performed until they logoff.\n"
 "If there are currently no other users, consult the \n"
 "documentation to learn how to clear out dangling login\n"
 "sessions."
@@ -731,8 +733,14 @@ msgid "Terms"
 msgstr "Terms"
 
 #: src/business/business-gnome/glade/billterms.glade.h:29
-msgid "The cutoff day for applying bills to the next month.  After the cutoff, bills are applied to the following month.  Negative values count backwards from the end of the month."
-msgstr "The cutoff day for applying bills to the next month.  After the cutoff, bills are applied to the following month.  Negative values count backwards from the end of the month."
+msgid ""
+"The cutoff day for applying bills to the next month.  After the cutoff, "
+"bills are applied to the following month.  Negative values count backwards "
+"from the end of the month."
+msgstr ""
+"The cutoff day for applying bills to the next month.  After the cutoff, "
+"bills are applied to the following month.  Negative values count backwards "
+"from the end of the month."
 
 #: src/business/business-gnome/glade/billterms.glade.h:30
 msgid "The day of the month bills are due"
@@ -755,8 +763,12 @@ msgid "The last day of the month for the early payment discount."
 msgstr "The last day of the month for the early payment discount."
 
 #: src/business/business-gnome/glade/billterms.glade.h:35
-msgid "The number of days after the post date during which a discount will be applied for early payment."
-msgstr "The number of days after the post date during which a discount will be applied for early payment."
+msgid ""
+"The number of days after the post date during which a discount will be "
+"applied for early payment."
+msgstr ""
+"The number of days after the post date during which a discount will be "
+"applied for early payment."
 
 #: src/business/business-gnome/glade/billterms.glade.h:36
 msgid "The number of days to pay the bill after the post date."
@@ -917,8 +929,12 @@ msgid "Terms: "
 msgstr "Terms: "
 
 #: src/business/business-gnome/glade/customer.glade.h:27
-msgid "The customer ID number.  If left blank a reasonable number will be chosen for you"
-msgstr "The customer ID number.  If left blank a reasonable number will be chosen for you"
+msgid ""
+"The customer ID number.  If left blank a reasonable number will be chosen "
+"for you"
+msgstr ""
+"The customer ID number.  If left blank a reasonable number will be chosen "
+"for you"
 
 #: src/business/business-gnome/glade/customer.glade.h:28
 msgid "What Tax Table should be applied to this customer?"
@@ -1013,8 +1029,12 @@ msgid "Payment Address"
 msgstr "Payment Address"
 
 #: src/business/business-gnome/glade/employee.glade.h:21
-msgid "The employee ID number.  If left blank a reasonable number will be chosen for you"
-msgstr "The employee ID number.  If left blank a reasonable number will be chosen for you"
+msgid ""
+"The employee ID number.  If left blank a reasonable number will be chosen "
+"for you"
+msgstr ""
+"The employee ID number.  If left blank a reasonable number will be chosen "
+"for you"
 
 #: src/business/business-gnome/glade/employee.glade.h:22
 msgid "Username: "
@@ -1270,8 +1290,12 @@ msgid "Sort by the date of entry"
 msgstr "Sort by the date of entry"
 
 #: src/business/business-gnome/glade/invoice.glade.h:61
-msgid "The invoice ID number.  If left blank a reasonable number will be chosen for you"
-msgstr "The invoice ID number.  If left blank a reasonable number will be chosen for you"
+msgid ""
+"The invoice ID number.  If left blank a reasonable number will be chosen for "
+"you"
+msgstr ""
+"The invoice ID number.  If left blank a reasonable number will be chosen for "
+"you"
 
 #: src/business/business-gnome/glade/invoice.glade.h:62
 msgid "Unpost"
@@ -1450,8 +1474,10 @@ msgid "Owner Information"
 msgstr "Owner Information"
 
 #: src/business/business-gnome/glade/job.glade.h:10
-msgid "The job ID number.  If left blank a reasonable number will be chosen for you"
-msgstr "The job ID number.  If left blank a reasonable number will be chosen for you"
+msgid ""
+"The job ID number.  If left blank a reasonable number will be chosen for you"
+msgstr ""
+"The job ID number.  If left blank a reasonable number will be chosen for you"
 
 #: src/business/business-gnome/glade/order.glade.h:4
 msgid "Close Order"
@@ -1501,8 +1527,12 @@ msgid "Reference"
 msgstr "Reference"
 
 #: src/business/business-gnome/glade/order.glade.h:16
-msgid "The order ID number.  If left blank a reasonable number will be chosen for you"
-msgstr "The order ID number.  If left blank a reasonable number will be chosen for you"
+msgid ""
+"The order ID number.  If left blank a reasonable number will be chosen for "
+"you"
+msgstr ""
+"The order ID number.  If left blank a reasonable number will be chosen for "
+"you"
 
 #. src/business/business-gnome/business-gnome.scm
 #: src/business/business-gnome/glade/vendor.glade.h:12
@@ -1520,8 +1550,12 @@ msgid "Tax Table:"
 msgstr "Tax Table:"
 
 #: src/business/business-gnome/glade/vendor.glade.h:21
-msgid "The vendor ID number.  If left blank a reasonable number will be chosen for you"
-msgstr "The vendor ID number.  If left blank a reasonable number will be chosen for you"
+msgid ""
+"The vendor ID number.  If left blank a reasonable number will be chosen for "
+"you"
+msgstr ""
+"The vendor ID number.  If left blank a reasonable number will be chosen for "
+"you"
 
 #. src/business/business-reports/owner-report.scm
 #: src/business/business-gnome/glade/vendor.glade.h:22
@@ -1666,10 +1700,12 @@ msgstr "Are you sure you want to delete \"%s\"?"
 #: src/business/business-gnome/dialog-customer.c:234
 msgid ""
 "You must enter a company name.\n"
-"If this customer is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
+"If this customer is an individual (and not a company) you should set the "
+"\"company name\" and \"contact name\" the same."
 msgstr ""
 "You must enter a company name.\n"
-"If this customer is an individual (and not a company) you should set the \"company name\" and \"contact name\" to be the same."
+"If this customer is an individual (and not a company) you should set the "
+"\"company name\" and \"contact name\" to be the same."
 
 #: src/business/business-gnome/dialog-customer.c:245
 msgid "You must enter a billing address."
@@ -1830,8 +1866,10 @@ msgid "Are you sure you want to delete the selected entry?"
 msgstr "Are you sure you want to delete the selected entry?"
 
 #: src/business/business-gnome/dialog-invoice.c:448
-msgid "This entry is attached to an order and will be deleted from that as well!"
-msgstr "This entry is attached to an order and will be deleted from that as well!"
+msgid ""
+"This entry is attached to an order and will be deleted from that as well!"
+msgstr ""
+"This entry is attached to an order and will be deleted from that as well!"
 
 #: src/business/business-gnome/dialog-invoice.c:555
 msgid "The Invoice must have at least one Entry."
@@ -1862,8 +1900,12 @@ msgstr "Post to Account"
 
 #. make sure the user REALLY wants to do this!
 #: src/business/business-gnome/dialog-invoice.c:619
-msgid "Unposting this Invoice will delete the posted transaction.  Are you sure you want to unpost it?"
-msgstr "Unposting this Invoice will delete the posted transaction.  Are you sure you want to unpost it?"
+msgid ""
+"Unposting this Invoice will delete the posted transaction.  Are you sure you "
+"want to unpost it?"
+msgstr ""
+"Unposting this Invoice will delete the posted transaction.  Are you sure you "
+"want to unpost it?"
 
 #: src/business/business-gnome/dialog-invoice.c:954
 #: src/gnome/window-reconcile.c:1013
@@ -2069,8 +2111,12 @@ msgid "Closed"
 msgstr "Closed"
 
 #: src/business/business-gnome/dialog-payment.c:88
-msgid "You must enter the amount of the payment.  The payment amount must be greater than zero."
-msgstr "You must enter the amount of the payment.  The payment amount must be greater than zero."
+msgid ""
+"You must enter the amount of the payment.  The payment amount must be "
+"greater than zero."
+msgstr ""
+"You must enter the amount of the payment.  The payment amount must be "
+"greater than zero."
 
 #: src/business/business-gnome/dialog-payment.c:97
 msgid "You must select a company for payment processing."
@@ -2092,10 +2138,12 @@ msgstr "Your selected post account, %s, does not exist"
 #: src/business/business-gnome/dialog-vendor.c:172
 msgid ""
 "You must enter a company name.\n"
-"If this vendor is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
+"If this vendor is an individual (and not a company) you should set the "
+"\"company name\" and \"contact name\" the same."
 msgstr ""
 "You must enter a company name.\n"
-"If this vendor is an individual (and not a company) you should set the \"company name\" and \"contact name\" to be the same."
+"If this vendor is an individual (and not a company) you should set the "
+"\"company name\" and \"contact name\" to be the same."
 
 #: src/business/business-gnome/dialog-vendor.c:183
 msgid "You must enter a payment address."
@@ -2427,8 +2475,10 @@ msgid "Billable?"
 msgstr "Billable?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:515
-msgid "Enter the income/expense account for the Entry, or choose one from the list"
-msgstr "Enter the income/expense account for the Entry, or choose one from the list"
+msgid ""
+"Enter the income/expense account for the Entry, or choose one from the list"
+msgstr ""
+"Enter the income/expense account for the Entry, or choose one from the list"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:528
 msgid "Enter the type of Entry"
@@ -2869,8 +2919,10 @@ msgid "Copy the selected transaction"
 msgstr "Copy the selected transaction"
 
 #: src/gnome/glade/register.glade.h:10
-msgid "Create a Scheduled Transaction with the current transaction as a template"
-msgstr "Create a Scheduled Transaction with the current transaction as a template"
+msgid ""
+"Create a Scheduled Transaction with the current transaction as a template"
+msgstr ""
+"Create a Scheduled Transaction with the current transaction as a template"
 
 #: src/gnome/glade/register.glade.h:11 src/gnome/window-acct-tree.c:879
 #: src/gnome/window-acct-tree.c:1015 src/gnome/window-acct-tree.c:1276
@@ -3088,8 +3140,10 @@ msgstr "Show transactions on one or two lines"
 
 #. src/app-utils/prefs.scm
 #: src/gnome/glade/register.glade.h:69 intl-scm/guile-strings.c:1013
-msgid "Show transactions on one or two lines and expand the current transaction"
-msgstr "Show transactions on one or two lines and expand the current transaction"
+msgid ""
+"Show transactions on one or two lines and expand the current transaction"
+msgstr ""
+"Show transactions on one or two lines and expand the current transaction"
 
 #. src/app-utils/prefs.scm
 #: src/gnome/glade/register.glade.h:70 intl-scm/guile-strings.c:1023
@@ -3436,12 +3490,16 @@ msgstr "Get Online Quotes"
 
 #: src/gnome/glade/account.glade.h:30
 msgid ""
-"If you would like an account to have an opening balance, click on the account\n"
-"and enter the starting balance in the box on the right. All accounts except Equity\n"
+"If you would like an account to have an opening balance, click on the "
+"account\n"
+"and enter the starting balance in the box on the right. All accounts except "
+"Equity\n"
 "and placeholder accounts may have an opening balance."
 msgstr ""
-"If you would like an account to have an opening balance, click on the account\n"
-"and enter the starting balance in the box on the right. All accounts except Equity\n"
+"If you would like an account to have an opening balance, click on the "
+"account\n"
+"and enter the starting balance in the box on the right. All accounts except "
+"Equity\n"
 "and placeholder accounts may have an opening balance."
 
 #: src/gnome/glade/account.glade.h:34
@@ -3537,8 +3595,14 @@ msgid "The source for price quotes:"
 msgstr "The source for price quotes:"
 
 #: src/gnome/glade/account.glade.h:60
-msgid "This account is present solely as a placeholder in the hierarchy.  Transactions may not be posted to this account, only to sub-accounts of this account."
-msgstr "This account is present solely as a placeholder in the hierarchy.  Transactions may not be posted to this account, only to sub-accounts of this account."
+msgid ""
+"This account is present solely as a placeholder in the hierarchy.  "
+"Transactions may not be posted to this account, only to sub-accounts of this "
+"account."
+msgstr ""
+"This account is present solely as a placeholder in the hierarchy.  "
+"Transactions may not be posted to this account, only to sub-accounts of this "
+"account."
 
 #: src/gnome/glade/account.glade.h:61
 msgid ""
@@ -3779,8 +3843,12 @@ msgid "Topics"
 msgstr "Topics"
 
 #: src/gnome/glade/help.glade.h:9
-msgid "Type a single term into the box and hit 'search'. At the moment, this search engine does not support complex searches, just single words."
-msgstr "Type a single term into the box and hit 'search'. At the moment, this search engine does not support complex searches, just single words."
+msgid ""
+"Type a single term into the box and hit 'search'. At the moment, this search "
+"engine does not support complex searches, just single words."
+msgstr ""
+"Type a single term into the box and hit 'search'. At the moment, this search "
+"engine does not support complex searches, just single words."
 
 #: src/gnome/glade/newuser.glade.h:1
 msgid "Canceling"
@@ -3804,8 +3872,11 @@ msgid "Run dialog for new user again?"
 msgstr "Run dialogue for new user again?"
 
 #: src/gnome/glade/newuser.glade.h:6
-msgid "Uncheck if you do not want this dialog to run if you start GnuCash up again. "
-msgstr "Uncheck if you do not want this dialogue to run if you start GnuCash up again."
+msgid ""
+"Uncheck if you do not want this dialog to run if you start GnuCash up again. "
+msgstr ""
+"Uncheck if you do not want this dialogue to run if you start GnuCash up "
+"again."
 
 #: src/gnome/glade/newuser.glade.h:7
 msgid "Welcome to GnuCash!"
@@ -4842,13 +4913,19 @@ msgstr "Cash In Lieu"
 
 #: src/gnome/glade/stocks.glade.h:8
 msgid ""
-"Enter the date and the number of shares you gained or lost from the stock split or merger.\n"
-"For stock mergers (negative splits) use a negative value for the share distribution.\n"
-"You can also enter a description of the transaction, or accept the default one."
+"Enter the date and the number of shares you gained or lost from the stock "
+"split or merger.\n"
+"For stock mergers (negative splits) use a negative value for the share "
+"distribution.\n"
+"You can also enter a description of the transaction, or accept the default "
+"one."
 msgstr ""
-"Enter the date and the number of shares you gained or lost from the stock split or merger.\n"
-"For stock mergers (negative splits) use a negative value for the share distribution.\n"
-"You can also enter a description of the transaction, or accept the default one."
+"Enter the date and the number of shares you gained or lost from the stock "
+"split or merger.\n"
+"For stock mergers (negative splits) use a negative value for the share "
+"distribution.\n"
+"You can also enter a description of the transaction, or accept the default "
+"one."
 
 #: src/gnome/glade/stocks.glade.h:11
 msgid ""
@@ -4881,8 +4958,10 @@ msgid "New Price:"
 msgstr "New Price:"
 
 #: src/gnome/glade/stocks.glade.h:21
-msgid "Select the account for which you want to record a stock split or merger."
-msgstr "Select the account for which you want to record a stock split or merger."
+msgid ""
+"Select the account for which you want to record a stock split or merger."
+msgstr ""
+"Select the account for which you want to record a stock split or merger."
 
 #: src/gnome/glade/stocks.glade.h:22
 msgid "Share Distribution:"
@@ -5103,8 +5182,12 @@ msgstr "There must be some number of occurrences."
 
 #: src/gnome/dialog-scheduledxaction.c:873
 #, c-format
-msgid "The number of remaining occurrences (%d) is greater than the number of total occurrences (%d)."
-msgstr "The number of remaining occurrences (%d) is greater than the number of total occurrences (%d)."
+msgid ""
+"The number of remaining occurrences (%d) is greater than the number of total "
+"occurrences (%d)."
+msgstr ""
+"The number of remaining occurrences (%d) is greater than the number of total "
+"occurrences (%d)."
 
 #: src/gnome/dialog-scheduledxaction.c:907
 msgid ""
@@ -5500,8 +5583,12 @@ msgstr "This account contains read-only transactions.  You may not delete %s."
 
 #: src/gnome/window-acct-tree.c:447
 #, c-format
-msgid "One (or more) children of this account contains read-only transactions.  You may not delete %s."
-msgstr "One (or more) children of this account contains read-only transactions.  You may not delete %s."
+msgid ""
+"One (or more) children of this account contains read-only transactions.  You "
+"may not delete %s."
+msgstr ""
+"One (or more) children of this account contains read-only transactions.  You "
+"may not delete %s."
 
 #: src/gnome/window-acct-tree.c:498
 msgid ""
@@ -5547,24 +5634,36 @@ msgid "Check & Repair A_ccount"
 msgstr "Check & Repair A_ccount"
 
 #: src/gnome/window-acct-tree.c:912 src/gnome/window-reconcile.c:1293
-msgid "Check for and repair unbalanced transactions and orphan splits in this account"
-msgstr "Check for and repair unbalanced transactions and orphan splits in this account"
+msgid ""
+"Check for and repair unbalanced transactions and orphan splits in this "
+"account"
+msgstr ""
+"Check for and repair unbalanced transactions and orphan splits in this "
+"account"
 
 #: src/gnome/window-acct-tree.c:920
 msgid "Check & Repair Su_baccounts"
 msgstr "Check & Repair Su_baccounts"
 
 #: src/gnome/window-acct-tree.c:921
-msgid "Check for and repair unbalanced transactions and orphan splits in this account and its subaccounts"
-msgstr "Check for and repair unbalanced transactions and orphan splits in this account and its subaccounts"
+msgid ""
+"Check for and repair unbalanced transactions and orphan splits in this "
+"account and its subaccounts"
+msgstr ""
+"Check for and repair unbalanced transactions and orphan splits in this "
+"account and its subaccounts"
 
 #: src/gnome/window-acct-tree.c:929
 msgid "Check & Repair A_ll"
 msgstr "Check & Repair A_ll"
 
 #: src/gnome/window-acct-tree.c:930
-msgid "Check for and repair unbalanced transactions and orphan splits in all accounts"
-msgstr "Check for and repair unbalanced transactions and orphan splits in all accounts"
+msgid ""
+"Check for and repair unbalanced transactions and orphan splits in all "
+"accounts"
+msgstr ""
+"Check for and repair unbalanced transactions and orphan splits in all "
+"accounts"
 
 #: src/gnome/window-acct-tree.c:964
 msgid "Open Account"
@@ -5861,8 +5960,10 @@ msgid "_Reconcile Information..."
 msgstr "_Reconcile Information..."
 
 #: src/gnome/window-reconcile.c:1231
-msgid "Change the reconcile information including statement date and ending balance."
-msgstr "Change the reconcile information including statement date and ending balance."
+msgid ""
+"Change the reconcile information including statement date and ending balance."
+msgstr ""
+"Change the reconcile information including statement date and ending balance."
 
 #: src/gnome/window-reconcile.c:1240
 msgid "_Finish"
@@ -6053,8 +6154,12 @@ msgstr ""
 "This is not a good idea as it will cause your reconciled balance to be wrong."
 
 #: src/gnome/gnc-split-reg.c:1145
-msgid "This is the split anchoring this transaction to the register. You may not delete it from this register window."
-msgstr "This is the split anchoring this transaction to the register. You may not delete it from this register window."
+msgid ""
+"This is the split anchoring this transaction to the register. You may not "
+"delete it from this register window."
+msgstr ""
+"This is the split anchoring this transaction to the register. You may not "
+"delete it from this register window."
 
 #: src/gnome/gnc-split-reg.c:1158
 msgid "(no memo)"
@@ -6347,8 +6452,10 @@ msgid "Add results to current search"
 msgstr "Add results to current search"
 
 #: src/gnome-search/search.glade.h:4
-msgid "Choose whether to search all your data or only that marked as \"active\""
-msgstr "Choose whether to search all your data or only that marked as \"active\""
+msgid ""
+"Choose whether to search all your data or only that marked as \"active\""
+msgstr ""
+"Choose whether to search all your data or only that marked as \"active\""
 
 #: src/gnome-search/search.glade.h:5
 msgid "Delete results from current search"
@@ -6424,24 +6531,40 @@ msgid "Currency/security:"
 msgstr "Currency/security:"
 
 #: src/gnome-utils/commodity.glade.h:4
-msgid "Enter a unique code used to identify the commodity. Or, you may safely leave this field blank."
-msgstr "Enter a unique code used to identify the commodity. Or, you may safely leave this field blank."
+msgid ""
+"Enter a unique code used to identify the commodity. Or, you may safely leave "
+"this field blank."
+msgstr ""
+"Enter a unique code used to identify the commodity. Or, you may safely leave "
+"this field blank."
 
 #: src/gnome-utils/commodity.glade.h:5
 msgid "Enter the full name of the commodity. Example: US Dollars"
 msgstr "Enter the full name of the commodity. Example: GB Pounds"
 
 #: src/gnome-utils/commodity.glade.h:6
-msgid "Enter the smallest fraction of the commodity which can be traded. For stocks which can only be traded in whole numbers, enter 1."
-msgstr "Enter the smallest fraction of the commodity which can be traded. For stocks which can only be traded in whole numbers, enter 1."
+msgid ""
+"Enter the smallest fraction of the commodity which can be traded. For stocks "
+"which can only be traded in whole numbers, enter 1."
+msgstr ""
+"Enter the smallest fraction of the commodity which can be traded. For stocks "
+"which can only be traded in whole numbers, enter 1."
 
 #: src/gnome-utils/commodity.glade.h:7
-msgid "Enter the ticker symbol or currency code for the commodity. Example: USD"
-msgstr "Enter the ticker symbol or currency code for the commodity. Example: GBP"
+msgid ""
+"Enter the ticker symbol or currency code for the commodity. Example: USD"
+msgstr ""
+"Enter the ticker symbol or currency code for the commodity. Example: GBP"
 
 #: src/gnome-utils/commodity.glade.h:8
-msgid "Enter the type of commodity. For stocks, this is often an exchange on which the stock is traded. You can choose an existing type from the list or enter a new type with the keyboard."
-msgstr "Enter the type of commodity. For stocks, this is often an exchange on which the stock is traded. You can choose an existing type from the list or enter a new type with the keyboard."
+msgid ""
+"Enter the type of commodity. For stocks, this is often an exchange on which "
+"the stock is traded. You can choose an existing type from the list or enter "
+"a new type with the keyboard."
+msgstr ""
+"Enter the type of commodity. For stocks, this is often an exchange on which "
+"the stock is traded. You can choose an existing type from the list or enter "
+"a new type with the keyboard."
 
 #: src/gnome-utils/commodity.glade.h:9
 msgid "Fraction traded:"
@@ -6934,8 +7057,12 @@ msgstr ""
 "does not allow transactions.\n"
 
 #: src/gnome-utils/dialog-transfer.c:1365
-msgid "You can't transfer from a non-currency account.  Try reversing the \"from\" and \"to\" accounts and making the \"amount\" negative."
-msgstr "You can't transfer from a non-currency account.  Try reversing the \"from\" and \"to\" accounts and making the \"amount\" negative."
+msgid ""
+"You can't transfer from a non-currency account.  Try reversing the \"from\" "
+"and \"to\" accounts and making the \"amount\" negative."
+msgstr ""
+"You can't transfer from a non-currency account.  Try reversing the \"from\" "
+"and \"to\" accounts and making the \"amount\" negative."
 
 #: src/gnome-utils/dialog-transfer.c:1388
 msgid "You must enter an amount to transfer."
@@ -7046,27 +7173,36 @@ msgstr ""
 #: src/import-export/binary-import/druid-commodity.c:425
 #: src/import-export/qif-import/druid-qif-import.c:1416
 msgid "You must enter an existing national currency or enter a different type."
-msgstr "You must enter an existing national currency or enter a different type."
+msgstr ""
+"You must enter an existing national currency or enter a different type."
 
 #: src/import-export/generic-import.glade.h:1
 msgid ""
 "-Red transactions require your intervention or they will NOT be imported.\n"
-"-Yellow transactions probably require your intervention or they will be imported unbalanced.\n"
-"-Green transactions will be imported balanced (you may still want to double check the match or destination account).\n"
+"-Yellow transactions probably require your intervention or they will be "
+"imported unbalanced.\n"
+"-Green transactions will be imported balanced (you may still want to double "
+"check the match or destination account).\n"
 "\n"
 "-Select \"A\" to Add the transaction as new\n"
 "-Select \"R\" to Reconcile a matching transaction\n"
 "-Select neither to Skip (The transaction won't be imported at all)\n"
-"-\"Select Import Action\" allows you to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required)."
+"-\"Select Import Action\" allows you to change the matching transaction to "
+"reconcile, or the destination account of the auto-balance split (if "
+"required)."
 msgstr ""
 "-Red transactions require your intervention or they will NOT be imported.\n"
-"-Yellow transactions probably require your intervention or they will be imported unbalanced.\n"
-"-Green transactions will be imported balanced (you may still want to double check the match or destination account).\n"
+"-Yellow transactions probably require your intervention or they will be "
+"imported unbalanced.\n"
+"-Green transactions will be imported balanced (you may still want to double "
+"check the match or destination account).\n"
 "\n"
 "-Select \"A\" to Add the transaction as new\n"
 "-Select \"R\" to Reconcile a matching transaction\n"
 "-Select neither to Skip (The transaction won't be imported at all)\n"
-"-\"Select Import Action\" allows you to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required)."
+"-\"Select Import Action\" allows you to change the matching transaction to "
+"reconcile, or the destination account of the auto-balance split (if "
+"required)."
 
 #: src/import-export/generic-import.glade.h:9
 msgid "A"
@@ -7090,18 +7226,26 @@ msgstr "EDIT"
 
 #: src/import-export/generic-import.glade.h:18
 msgid ""
-"For a new transaction, click on the \"Other Account\" entry to choose the other (destination) account of this transaction.\n"
-"For a transaction that is a duplicate of an existing one, click on the \"Other Account\" or \"Description\" entry to \n"
+"For a new transaction, click on the \"Other Account\" entry to choose the "
+"other (destination) account of this transaction.\n"
+"For a transaction that is a duplicate of an existing one, click on the "
+"\"Other Account\" or \"Description\" entry to \n"
 "check whether GnuCash chose the right existing transaction.\n"
-"To switch transactions between both states, click on the checkmark in the \"New\" column.\n"
-"When all new transactions have the correct destination account and all duplicates are matched with the right existing transaction, \n"
+"To switch transactions between both states, click on the checkmark in the "
+"\"New\" column.\n"
+"When all new transactions have the correct destination account and all "
+"duplicates are matched with the right existing transaction, \n"
 "click \"Ok\"."
 msgstr ""
-"For a new transaction, click on the \"Other Account\" entry to choose the other (destination) account of this transaction.\n"
-"For a transaction that is a duplicate of an existing one, click on the \"Other Account\" or \"Description\" entry to \n"
+"For a new transaction, click on the \"Other Account\" entry to choose the "
+"other (destination) account of this transaction.\n"
+"For a transaction that is a duplicate of an existing one, click on the "
+"\"Other Account\" or \"Description\" entry to \n"
 "check whether GnuCash chose the right existing transaction.\n"
-"To switch transactions between both states, click on the checkmark in the \"New\" column.\n"
-"When all new transactions have the correct destination account and all duplicates are matched with the right existing transaction, \n"
+"To switch transactions between both states, click on the checkmark in the "
+"\"New\" column.\n"
+"When all new transactions have the correct destination account and all "
+"duplicates are matched with the right existing transaction, \n"
 "click \"Ok\"."
 
 #: src/import-export/generic-import.glade.h:24
@@ -7215,10 +7359,12 @@ msgstr "Choose file for secret key"
 
 #: src/import-export/hbci/glade/hbci.glade.h:21
 msgid ""
-"Click on the line of a HBCI account name if you want to match it to a GnuCash account.\n"
+"Click on the line of a HBCI account name if you want to match it to a "
+"GnuCash account.\n"
 "Click \"Next\" when all desired accounts are matching."
 msgstr ""
-"Click on the line of a HBCI account name if you want to match it to a GnuCash account.\n"
+"Click on the line of a HBCI account name if you want to match it to a "
+"GnuCash account.\n"
 "Click \"Next\" when all desired accounts are matching."
 
 #: src/import-export/hbci/glade/hbci.glade.h:23
@@ -7282,8 +7428,12 @@ msgid "Enter date:"
 msgstr "Enter date:"
 
 #: src/import-export/hbci/glade/hbci.glade.h:38
-msgid "Enter the IDs given from your bank here. Please make sure the spelling is correct. "
-msgstr "Enter the IDs given from your bank here. Please make sure the spelling is correct. "
+msgid ""
+"Enter the IDs given from your bank here. Please make sure the spelling is "
+"correct. "
+msgstr ""
+"Enter the IDs given from your bank here. Please make sure the spelling is "
+"correct. "
 
 #: src/import-export/hbci/glade/hbci.glade.h:39
 msgid "Execute Later (unimpl.)"
@@ -7345,39 +7495,53 @@ msgstr "HBCI account name"
 
 #: src/import-export/hbci/glade/hbci.glade.h:51
 msgid ""
-"If you already have a key file, please choose it here and make sure the User ID and\n"
+"If you already have a key file, please choose it here and make sure the User "
+"ID and\n"
 "Customer ID match the ones when you created that key file earlier. \n"
-"If you do not have one yet, choose a filename, and a key file will be created there. Make\n"
+"If you do not have one yet, choose a filename, and a key file will be "
+"created there. Make\n"
 "sure to remember the exact User ID and Customer ID specified now."
 msgstr ""
-"If you already have a key file, please choose it here and make sure the User ID and\n"
+"If you already have a key file, please choose it here and make sure the User "
+"ID and\n"
 "Customer ID match the ones when you created that key file earlier. \n"
-"If you do not have one yet, choose a filename, and a key file will be created there. Make\n"
+"If you do not have one yet, choose a filename, and a key file will be "
+"created there. Make\n"
 "sure to remember the exact User ID and Customer ID specified now."
 
 #: src/import-export/hbci/glade/hbci.glade.h:55
 msgid ""
 "If you already have an OpenHBCI configuration file (e.g. from 'aqmoney'), \n"
-"please select it here. GnuCash will continue to use your existing configuration.\n"
+"please select it here. GnuCash will continue to use your existing "
+"configuration.\n"
 "\n"
-"If you do not yet have an OpenHBCI configuration file, please specify a file name here. \n"
-"A new OpenHBCI configuration file with that name will be created when this HBCI \n"
+"If you do not yet have an OpenHBCI configuration file, please specify a file "
+"name here. \n"
+"A new OpenHBCI configuration file with that name will be created when this "
+"HBCI \n"
 "Setup finishes."
 msgstr ""
 "If you already have an OpenHBCI configuration file (e.g. from 'aqmoney'), \n"
-"please select it here. GnuCash will continue to use your existing configuration.\n"
+"please select it here. GnuCash will continue to use your existing "
+"configuration.\n"
 "\n"
-"If you do not yet have an OpenHBCI configuration file, please specify a file name here. \n"
-"A new OpenHBCI configuration file with that name will be created when this HBCI \n"
+"If you do not yet have an OpenHBCI configuration file, please specify a file "
+"name here. \n"
+"A new OpenHBCI configuration file with that name will be created when this "
+"HBCI \n"
 "Setup finishes."
 
 #: src/import-export/hbci/glade/hbci.glade.h:61
 msgid ""
-"If you have a Chip Card but are not sure about the exact User ID and Customer ID, you can \n"
-"use the tool 'hbcicard' from the libchipcard package to read these numbers from the Chip Card."
+"If you have a Chip Card but are not sure about the exact User ID and "
+"Customer ID, you can \n"
+"use the tool 'hbcicard' from the libchipcard package to read these numbers "
+"from the Chip Card."
 msgstr ""
-"If you have a Chip Card but are not sure about the exact User ID and Customer ID, you can \n"
-"use the tool 'hbcicard' from the libchipcard package to read these numbers from the Chip Card."
+"If you have a Chip Card but are not sure about the exact User ID and "
+"Customer ID, you can \n"
+"use the tool 'hbcicard' from the libchipcard package to read these numbers "
+"from the Chip Card."
 
 #: src/import-export/hbci/glade/hbci.glade.h:63
 msgid "If your bank did not specify a Customer ID, enter the User ID here."
@@ -7529,7 +7693,8 @@ msgstr ""
 
 #: src/import-export/hbci/glade/hbci.glade.h:118
 msgid ""
-"Now you need to sign your (the User's) Ini-Letter and send it to your bank. \n"
+"Now you need to sign your (the User's) Ini-Letter and send it to your "
+"bank. \n"
 "\n"
 "The initial HBCI setup is now finished.\n"
 "\n"
@@ -7539,7 +7704,8 @@ msgid ""
 "\n"
 "Press 'Finish' now."
 msgstr ""
-"Now you need to sign your (the User's) Ini-Letter and send it to your bank. \n"
+"Now you need to sign your (the User's) Ini-Letter and send it to your "
+"bank. \n"
 "\n"
 "The initial HBCI setup is now finished.\n"
 "\n"
@@ -7626,7 +7792,8 @@ msgid ""
 "* The bank code of your bank\n"
 "* The user ID that identifies you to your bank\n"
 "* The Internet address of your bank's HBCI server\n"
-"* Information about the cryptographic public key of your bank (\"Ini-Letter\").\n"
+"* Information about the cryptographic public key of your bank (\"Ini-Letter"
+"\").\n"
 "\n"
 "This information will be needed in the following. Press 'Next' now.\n"
 "\n"
@@ -7647,7 +7814,8 @@ msgstr ""
 "* The bank code of your bank\n"
 "* The user ID that identifies you to your bank\n"
 "* The Internet address of your bank's HBCI server\n"
-"* Information about the cryptographic public key of your bank (\"Ini-Letter\").\n"
+"* Information about the cryptographic public key of your bank (\"Ini-Letter"
+"\").\n"
 "\n"
 "This information will be needed in the following. Press 'Next' now.\n"
 "\n"
@@ -8586,14 +8754,16 @@ msgstr "OFX import complete"
 #: src/import-export/ofx/ofx.glade.h:23
 #: src/import-export/qif-import/qif.glade.h:104
 msgid ""
-"Please select a file to load. When you click \"Next\", the file will be loaded\n"
+"Please select a file to load. When you click \"Next\", the file will be "
+"loaded\n"
 "and analyzed. You may need to answer some questions about the account(s)\n"
 "in the file.\n"
 "\n"
 "You will have the opportunity to load as many files as you wish, so don't \n"
 "worry if your data is in multiple files. \n"
 msgstr ""
-"Please select a file to load. When you click \"Next\", the file will be loaded\n"
+"Please select a file to load. When you click \"Next\", the file will be "
+"loaded\n"
 "and analyzed. You may need to answer some questions about the account(s)\n"
 "in the file.\n"
 "\n"
@@ -8677,8 +8847,12 @@ msgid "You must enter an account name."
 msgstr "You must enter an account name."
 
 #: src/import-export/qif-import/druid-qif-import.c:1185
-msgid "An error occurred while importing QIF transactions into GnuCash. Your accounts are unchanged."
-msgstr "An error occurred while importing QIF transactions into GnuCash. Your accounts are unchanged."
+msgid ""
+"An error occurred while importing QIF transactions into GnuCash. Your "
+"accounts are unchanged."
+msgstr ""
+"An error occurred while importing QIF transactions into GnuCash. Your "
+"accounts are unchanged."
 
 #: src/import-export/qif-import/druid-qif-import.c:1232
 #: src/import-export/qif-import/druid-qif-import.c:1679
@@ -8711,8 +8885,12 @@ msgid "Enter the full name of the commodity, such as \"Red Hat Stock\""
 msgstr "Enter the full name of the commodity, such as \"Red Hat Stock\""
 
 #: src/import-export/qif-import/druid-qif-import.c:1609
-msgid "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for the name."
-msgstr "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for the name."
+msgid ""
+"Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for "
+"the name."
+msgstr ""
+"Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for "
+"the name."
 
 #: src/import-export/qif-import/druid-qif-import.c:1630
 msgid "Click \"Next\" to accept the information and move on."
@@ -8789,8 +8967,12 @@ msgstr ""
 "mutual funds in the imported data."
 
 #: src/import-export/qif-import/qif.glade.h:24
-msgid "Click \"Next\" to enter information about the currency used in your QIF files."
-msgstr "Click \"Next\" to enter information about the currency used in your QIF files."
+msgid ""
+"Click \"Next\" to enter information about the currency used in your QIF "
+"files."
+msgstr ""
+"Click \"Next\" to enter information about the currency used in your QIF "
+"files."
 
 #: src/import-export/qif-import/qif.glade.h:27
 msgid "Dup?"
@@ -8827,38 +9009,46 @@ msgstr ""
 #: src/import-export/qif-import/qif.glade.h:40
 msgid ""
 "GnuCash uses separate Income and Expense accounts rather than categories\n"
-"to classify your transactions. Each of the categories in your QIF file will be \n"
+"to classify your transactions. Each of the categories in your QIF file will "
+"be \n"
 "converted to a GnuCash account. \n"
 "\n"
-"On the next page, you will have an opportunity to look at the suggested matches\n"
+"On the next page, you will have an opportunity to look at the suggested "
+"matches\n"
 "between QIF categories and GnuCash accounts. You may change matches \n"
 "that you do not like by clicking on the line containing the category name.\n"
 "\n"
-"If you change your mind later, you can reorganize the account structure safely\n"
+"If you change your mind later, you can reorganize the account structure "
+"safely\n"
 "within GnuCash."
 msgstr ""
 "GnuCash uses separate Income and Expense accounts rather than categories\n"
-"to classify your transactions. Each of the categories in your QIF file will be \n"
+"to classify your transactions. Each of the categories in your QIF file will "
+"be \n"
 "converted to a GnuCash account. \n"
 "\n"
-"On the next page, you will have an opportunity to look at the suggested matches\n"
+"On the next page, you will have an opportunity to look at the suggested "
+"matches\n"
 "between QIF categories and GnuCash accounts. You may change matches \n"
 "that you do not like by clicking on the line containing the category name.\n"
 "\n"
-"If you change your mind later, you can reorganize the account structure safely\n"
+"If you change your mind later, you can reorganize the account structure "
+"safely\n"
 "within GnuCash."
 
 #: src/import-export/qif-import/qif.glade.h:50
 msgid ""
 "If you are importing a QIF file downloaded from a bank or other financial\n"
-"institution, some of the information in the QIF file may duplicate information\n"
+"institution, some of the information in the QIF file may duplicate "
+"information\n"
 "already in your GnuCash accounts.  GnuCash will try to detect duplicates \n"
 "of existing transactions.  \n"
 "\n"
 "On the next page, you will be asked to confirm that an existing transaction\n"
 "matches an imported transaction.  Imported transactions are shown on the\n"
 "left side of the page, and possible  matches for the selected left-hand\n"
-"transaction are shown  to the right.  There may be several old transactions \n"
+"transaction are shown  to the right.  There may be several old "
+"transactions \n"
 "that could match an imported transaction; you will be able to select the \n"
 "correct one by clicking in the \"Dup?\" column of the correct transaction.\n"
 "\n"
@@ -8868,14 +9058,16 @@ msgid ""
 "Click \"Next\" to find duplicate transactions. "
 msgstr ""
 "If you are importing a QIF file downloaded from a bank or other financial\n"
-"institution, some of the information in the QIF file may duplicate information\n"
+"institution, some of the information in the QIF file may duplicate "
+"information\n"
 "already in your GnuCash accounts.  GnuCash will try to detect duplicates \n"
 "of existing transactions.  \n"
 "\n"
 "On the next page, you will be asked to confirm that an existing transaction\n"
 "matches an imported transaction.  Imported transactions are shown on the\n"
 "left side of the page, and possible  matches for the selected left-hand\n"
-"transaction are shown  to the right.  There may be several old transactions \n"
+"transaction are shown  to the right.  There may be several old "
+"transactions \n"
 "that could match an imported transaction; you will be able to select the \n"
 "correct one by clicking in the \"Dup?\" column of the correct transaction.\n"
 "\n"
@@ -8903,7 +9095,8 @@ msgid ""
 "exchange or listing that it is found on (NASDAQ, NYSE, US Mutual Funds, \n"
 "etc), a full name, and an abbreviation.\n"
 "\n"
-"Check to see if there is an existing Type that is appropriate; if not, you can\n"
+"Check to see if there is an existing Type that is appropriate; if not, you "
+"can\n"
 "enter a new Type name by hand in the box. Make sure that the abbreviation\n"
 "you enter matches the ticker symbol used for the commodity on the exchange\n"
 "or listing for its type."
@@ -8917,7 +9110,8 @@ msgstr ""
 "exchange or listing that it is found on (NASDAQ, NYSE, US Mutual Funds, \n"
 "etc), a full name, and an abbreviation.\n"
 "\n"
-"Check to see if there is an existing Type that is appropriate; if not, you can\n"
+"Check to see if there is an existing Type that is appropriate; if not, you "
+"can\n"
 "enter a new Type name by hand in the box. Make sure that the abbreviation\n"
 "you enter matches the ticker symbol used for the commodity on the exchange\n"
 "or listing for its type."
@@ -8944,33 +9138,47 @@ msgstr "Match payees/memos to GnuCash accounts"
 
 #: src/import-export/qif-import/qif.glade.h:89
 msgid ""
-"On the next page, the accounts in your QIF files and any stocks or mutual funds\n"
+"On the next page, the accounts in your QIF files and any stocks or mutual "
+"funds\n"
 "you own will be matched with GnuCash accounts. If a GnuCash account already\n"
-"exists with the same name, or a similar name and compatible type, that account\n"
-"will be used as a match; otherwise, GnuCash will create a new account with the\n"
+"exists with the same name, or a similar name and compatible type, that "
+"account\n"
+"will be used as a match; otherwise, GnuCash will create a new account with "
+"the\n"
 "same name and type as the QIF account. If you do not like the suggested\n"
 "GnuCash account, click to change it.\n"
 "\n"
 "Note that GnuCash will be creating many accounts that did not exist on your\n"
 "other personal finance program, including a separate account for each stock\n"
-"you own, separate accounts for the brokerage commissions, special \"Equity\"\n"
-"accounts (subaccounts of Retained Earnings, by default) which are the source\n"
-"of your opening balances, etc. All of these accounts will appear on the next \n"
-"page so you can change them if you want to, but it is safe to leave them alone.\n"
+"you own, separate accounts for the brokerage commissions, special \"Equity"
+"\"\n"
+"accounts (subaccounts of Retained Earnings, by default) which are the "
+"source\n"
+"of your opening balances, etc. All of these accounts will appear on the "
+"next \n"
+"page so you can change them if you want to, but it is safe to leave them "
+"alone.\n"
 msgstr ""
-"On the next page, the accounts in your QIF files and any stocks or mutual funds\n"
+"On the next page, the accounts in your QIF files and any stocks or mutual "
+"funds\n"
 "you own will be matched with GnuCash accounts. If a GnuCash account already\n"
-"exists with the same name, or a similar name and compatible type, that account\n"
-"will be used as a match; otherwise, GnuCash will create a new account with the\n"
+"exists with the same name, or a similar name and compatible type, that "
+"account\n"
+"will be used as a match; otherwise, GnuCash will create a new account with "
+"the\n"
 "same name and type as the QIF account. If you do not like the suggested\n"
 "GnuCash account, click to change it.\n"
 "\n"
 "Note that GnuCash will be creating many accounts that did not exist on your\n"
 "other personal finance program, including a separate account for each stock\n"
-"you own, separate accounts for the brokerage commissions, special \"Equity\"\n"
-"accounts (subaccounts of Retained Earnings, by default) which are the source\n"
-"of your opening balances, etc. All of these accounts will appear on the next \n"
-"page so you can change them if you want to, but it is safe to leave them alone.\n"
+"you own, separate accounts for the brokerage commissions, special \"Equity"
+"\"\n"
+"accounts (subaccounts of Retained Earnings, by default) which are the "
+"source\n"
+"of your opening balances, etc. All of these accounts will appear on the "
+"next \n"
+"page so you can change them if you want to, but it is safe to leave them "
+"alone.\n"
 
 #: src/import-export/qif-import/qif.glade.h:103
 msgid "Payees and memos"
@@ -9002,7 +9210,8 @@ msgstr "QIF category name"
 
 #: src/import-export/qif-import/qif.glade.h:117
 msgid ""
-"QIF files downloaded from banks and other financial institutions may not have\n"
+"QIF files downloaded from banks and other financial institutions may not "
+"have\n"
 "information about Accounts and Categories which would allow them to be\n"
 "correctly assigned to GnuCash accounts.  \n"
 "\n"
@@ -9012,7 +9221,8 @@ msgid ""
 "If you select a different account, it will be remembered for future QIF \n"
 "files. "
 msgstr ""
-"QIF files downloaded from banks and other financial institutions may not have\n"
+"QIF files downloaded from banks and other financial institutions may not "
+"have\n"
 "information about Accounts and Categories which would allow them to be\n"
 "correctly assigned to GnuCash accounts.  \n"
 "\n"
@@ -9110,17 +9320,19 @@ msgstr "Update your GnuCash accounts"
 msgid "(Full account ID: "
 msgstr "(Full account ID: "
 
-#: src/import-export/import-backend.c:831
+#: src/import-export/import-backend.c:841
 msgid "Auto-Balance split"
 msgstr "Auto-Balance split"
 
 #: src/import-export/import-commodity-matcher.c:121
 msgid ""
 "Please select a commodity to match the following exchange code.\n"
-"Please note that the exchange code of the commodity you select will be overwritten.\n"
+"Please note that the exchange code of the commodity you select will be "
+"overwritten.\n"
 msgstr ""
 "Please select a commodity to match the following exchange code.\n"
-"Please note that the exchange code of the commodity you select will be overwritten.\n"
+"Please note that the exchange code of the commodity you select will be "
+"overwritten.\n"
 
 #: src/import-export/import-main-matcher.c:258
 msgid "Destination account for the auto-balance split."
@@ -9191,8 +9403,10 @@ msgid "Adjust other account split total"
 msgstr "Adjust other account split total"
 
 #: src/register/ledger-core/split-register-control.c:1060
-msgid "You need to expand the transaction in order to modify its exchange rates."
-msgstr "You need to expand the transaction in order to modify its exchange rates."
+msgid ""
+"You need to expand the transaction in order to modify its exchange rates."
+msgstr ""
+"You need to expand the transaction in order to modify its exchange rates."
 
 #: src/register/ledger-core/split-register-control.c:1533
 msgid ""
@@ -9326,12 +9540,16 @@ msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "Enter the account to transfer from, or choose one from the list"
 
 #: src/register/ledger-core/split-register-model.c:1255
-msgid "This transaction has multiple splits; press the Split button to see them all"
-msgstr "This transaction has multiple splits; press the Split button to see them all"
+msgid ""
+"This transaction has multiple splits; press the Split button to see them all"
+msgstr ""
+"This transaction has multiple splits; press the Split button to see them all"
 
 #: src/register/ledger-core/split-register-model.c:1258
-msgid "This transaction is a stock split; press the Split button to see details"
-msgstr "This transaction is a stock split; press the Split button to see details"
+msgid ""
+"This transaction is a stock split; press the Split button to see details"
+msgstr ""
+"This transaction is a stock split; press the Split button to see details"
 
 #: src/register/ledger-core/split-register-model.c:1697
 msgid ""
@@ -9504,8 +9722,10 @@ msgstr "-- Stock Split --"
 #. src/app-utils/prefs.scm
 #: src/register/register-gnome/gnucash-style.c:813
 #: intl-scm/guile-strings.c:1043
-msgid "register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
-msgstr "register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
+msgid ""
+"register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
+msgstr ""
+"register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
 
 #. src/app-utils/prefs.scm
 #: src/register/register-gnome/gnucash-style.c:819
@@ -9920,8 +10140,12 @@ msgstr ""
 
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:93
-msgid "If you keep multiple account views open, it may be helpful to give each one a descriptive name"
-msgstr "If you keep multiple account views open, it may be helpful to give each one a descriptive name"
+msgid ""
+"If you keep multiple account views open, it may be helpful to give each one "
+"a descriptive name"
+msgstr ""
+"If you keep multiple account views open, it may be helpful to give each one "
+"a descriptive name"
 
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:99
@@ -9930,8 +10154,12 @@ msgstr "Double click expands parent accounts"
 
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:101
-msgid "Double clicking on an account with children expands the account instead of opening a register."
-msgstr "Double clicking on an account with children expands the account instead of opening a register."
+msgid ""
+"Double clicking on an account with children expands the account instead of "
+"opening a register."
+msgstr ""
+"Double clicking on an account with children expands the account instead of "
+"opening a register."
 
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:105
@@ -10033,7 +10261,8 @@ msgstr "Report bugs and other problems to gnucash-devel@gnucash.org.\n"
 #. src/scm/main.scm
 #: intl-scm/guile-strings.c:183
 msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
-msgstr "You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
+msgstr ""
+"You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
 
 #. src/scm/main.scm
 #: intl-scm/guile-strings.c:185
@@ -10122,18 +10351,40 @@ msgstr "Logging level from 0 (least logging) to 5 (most logging)."
 
 #. src/scm/command-line.scm
 #: intl-scm/guile-strings.c:221
-msgid "List of directories to search when looking for config files. Each element must be a string representing a directory or a symbol where 'default expands to the default path, and 'current expands to the current value of the path."
-msgstr "List of directories to search when looking for config files. Each element must be a string representing a directory or a symbol where 'default expands to the default path, and 'current expands to the current value of the path."
+msgid ""
+"List of directories to search when looking for config files. Each element "
+"must be a string representing a directory or a symbol where 'default expands "
+"to the default path, and 'current expands to the current value of the path."
+msgstr ""
+"List of directories to search when looking for config files. Each element "
+"must be a string representing a directory or a symbol where 'default expands "
+"to the default path, and 'current expands to the current value of the path."
 
 #. src/scm/command-line.scm
 #: intl-scm/guile-strings.c:223
-msgid "List of directories to search when looking for shared data files. Each element must be a string representing a directory or a symbol where 'default expands to the default path, and 'current expands to the current value of the path."
-msgstr "List of directories to search when looking for shared data files. Each element must be a string representing a directory or a symbol where 'default expands to the default path, and 'current expands to the current value of the path."
+msgid ""
+"List of directories to search when looking for shared data files. Each "
+"element must be a string representing a directory or a symbol where 'default "
+"expands to the default path, and 'current expands to the current value of "
+"the path."
+msgstr ""
+"List of directories to search when looking for shared data files. Each "
+"element must be a string representing a directory or a symbol where 'default "
+"expands to the default path, and 'current expands to the current value of "
+"the path."
 
 #. src/scm/command-line.scm
 #: intl-scm/guile-strings.c:225
-msgid "A list of directories (strings) indicating where to look for html and parsed-html files. Each element must be a string representing a directory or a symbol where 'default expands to the default path, and 'current expands to the current value of the path."
-msgstr "A list of directories (strings) indicating where to look for html and parsed-html files. Each element must be a string representing a directory or a symbol where 'default expands to the default path, and 'current expands to the current value of the path."
+msgid ""
+"A list of directories (strings) indicating where to look for html and parsed-"
+"html files. Each element must be a string representing a directory or a "
+"symbol where 'default expands to the default path, and 'current expands to "
+"the current value of the path."
+msgstr ""
+"A list of directories (strings) indicating where to look for html and parsed-"
+"html files. Each element must be a string representing a directory or a "
+"symbol where 'default expands to the default path, and 'current expands to "
+"the current value of the path."
 
 #. src/scm/command-line.scm
 #: intl-scm/guile-strings.c:227
@@ -11535,8 +11786,12 @@ msgstr "'Enter' moves to blank transaction"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1029
-msgid "If selected, move to the blank transaction after the user presses 'Enter'. Otherwise, move down one row."
-msgstr "If selected, move to the blank transaction after the user presses 'Enter'. Otherwise, move down one row."
+msgid ""
+"If selected, move to the blank transaction after the user presses 'Enter'. "
+"Otherwise, move down one row."
+msgstr ""
+"If selected, move to the blank transaction after the user presses 'Enter'. "
+"Otherwise, move down one row."
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1033
@@ -11545,8 +11800,10 @@ msgstr "Confirm before changing reconciled"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1035
-msgid "If selected, use a dialog to confirm a change to a reconciled transaction."
-msgstr "If selected, use a dialogue to confirm a change to a reconciled transaction."
+msgid ""
+"If selected, use a dialog to confirm a change to a reconciled transaction."
+msgstr ""
+"If selected, use a dialogue to confirm a change to a reconciled transaction."
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1039
@@ -11645,8 +11902,12 @@ msgstr "Double mode colours alternate with transactions"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1099
-msgid "Alternate the primary and secondary colors with each transaction, not each row"
-msgstr "Alternate the primary and secondary colours with each transaction, not each row"
+msgid ""
+"Alternate the primary and secondary colors with each transaction, not each "
+"row"
+msgstr ""
+"Alternate the primary and secondary colours with each transaction, not each "
+"row"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1103
@@ -11656,11 +11917,15 @@ msgstr "Automatic interest transfer"
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1105
 msgid ""
-"Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment.\n"
-"Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts."
+"Prior to reconciling an account which charges or pays interest, prompt the "
+"user to enter a transaction for the interest charge or payment.\n"
+"Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, "
+"and Liability accounts."
 msgstr ""
-"Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment.\n"
-"Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts."
+"Prior to reconciling an account which charges or pays interest, prompt the "
+"user to enter a transaction for the interest charge or payment.\n"
+"Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, "
+"and Liability accounts."
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1110
@@ -11669,8 +11934,12 @@ msgstr "Automatic credit card payments"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1112
-msgid "After reconciling a credit card statement, prompt the user to enter a credit card payment"
-msgstr "After reconciling a credit card statement, prompt the user to enter a credit card payment"
+msgid ""
+"After reconciling a credit card statement, prompt the user to enter a credit "
+"card payment"
+msgstr ""
+"After reconciling a credit card statement, prompt the user to enter a credit "
+"card payment"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1116
@@ -11854,8 +12123,12 @@ msgstr "Automatic Decimal Point"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1210
-msgid "Automatically insert a decimal point into values that are entered without one."
-msgstr "Automatically insert a decimal point into values that are entered without one."
+msgid ""
+"Automatically insert a decimal point into values that are entered without "
+"one."
+msgstr ""
+"Automatically insert a decimal point into values that are entered without "
+"one."
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1214
@@ -11874,8 +12147,12 @@ msgstr "No account list setup on new file"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1222
-msgid "Don't popup the new account list dialog when you choose \"New File\" from the \"File\" menu"
-msgstr "Don't popup the new account list dialog when you choose \"New File\" from the \"File\" menu"
+msgid ""
+"Don't popup the new account list dialog when you choose \"New File\" from "
+"the \"File\" menu"
+msgstr ""
+"Don't popup the new account list dialog when you choose \"New File\" from "
+"the \"File\" menu"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1226
@@ -11924,8 +12201,10 @@ msgstr "Auto-Create new Scheduled Transactions by default"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1252
-msgid "Should new Scheduled Transactions have the 'Auto Create' flag set by default?"
-msgstr "Should new Scheduled Transactions have the 'Auto Create' flag set by default?"
+msgid ""
+"Should new Scheduled Transactions have the 'Auto Create' flag set by default?"
+msgstr ""
+"Should new Scheduled Transactions have the 'Auto Create' flag set by default?"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1256
@@ -11934,8 +12213,12 @@ msgstr "Notify on new, auto-created Scheduled Transactions"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1258
-msgid "Should new Scheduled Transactions with the 'AutoCreate' flag set also be set to notify?"
-msgstr "Should new Scheduled Transactions with the 'AutoCreate' flag set also be set to notify?"
+msgid ""
+"Should new Scheduled Transactions with the 'AutoCreate' flag set also be set "
+"to notify?"
+msgstr ""
+"Should new Scheduled Transactions with the 'AutoCreate' flag set also be set "
+"to notify?"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1262
@@ -11945,7 +12228,8 @@ msgstr "Default number of days in advance to create"
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1264
 msgid "Default number of days in advance to create new Scheduled Transactions."
-msgstr "Default number of days in advance to create new Scheduled Transactions."
+msgstr ""
+"Default number of days in advance to create new Scheduled Transactions."
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1268
@@ -11954,8 +12238,10 @@ msgstr "Default number of days in advance to remind"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1270
-msgid "Default number of days in advance to remind on new Scheduled Transactions."
-msgstr "Default number of days in advance to remind on new Scheduled Transactions."
+msgid ""
+"Default number of days in advance to remind on new Scheduled Transactions."
+msgstr ""
+"Default number of days in advance to remind on new Scheduled Transactions."
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1274
@@ -12003,8 +12289,10 @@ msgstr "Notebook"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1292
-msgid "New windows are created as notebook tabs in the current top-level window"
-msgstr "New windows are created as notebook tabs in the current top-level window"
+msgid ""
+"New windows are created as notebook tabs in the current top-level window"
+msgstr ""
+"New windows are created as notebook tabs in the current top-level window"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1294 intl-scm/guile-strings.c:1700
@@ -12023,8 +12311,10 @@ msgstr "Single window"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1300
-msgid "One window is used for all displays (select contents through Window menu)"
-msgstr "One window is used for all displays (select contents through Window menu)"
+msgid ""
+"One window is used for all displays (select contents through Window menu)"
+msgstr ""
+"One window is used for all displays (select contents through Window menu)"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1302
@@ -12094,7 +12384,8 @@ msgstr "New Search Limit"
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1340
 msgid "Default to 'new search' if fewer than this number of items is returned."
-msgstr "Default to 'new search' if fewer than this number of items is returned."
+msgstr ""
+"Default to 'new search' if fewer than this number of items is returned."
 
 #. src/app-utils/date-utilities.scm
 #: intl-scm/guile-strings.c:1342
@@ -12590,8 +12881,10 @@ msgstr "Show accounts to this depth, overriding any other option."
 
 #. src/report/report-system/options-utilities.scm
 #: intl-scm/guile-strings.c:1714
-msgid "Override account-selection and show sub-accounts of all selected accounts?"
-msgstr "Override account-selection and show sub-accounts of all selected accounts?"
+msgid ""
+"Override account-selection and show sub-accounts of all selected accounts?"
+msgstr ""
+"Override account-selection and show sub-accounts of all selected accounts?"
 
 #. src/report/report-system/options-utilities.scm
 #: intl-scm/guile-strings.c:1716
@@ -12910,8 +13203,12 @@ msgstr "No data"
 
 #. src/report/report-system/html-utilities.scm
 #: intl-scm/guile-strings.c:1872
-msgid "The selected accounts contain no data/transactions (or only zeroes) for the selected time period"
-msgstr "The selected accounts contain no data/transactions (or only zeroes) for the selected time period"
+msgid ""
+"The selected accounts contain no data/transactions (or only zeroes) for the "
+"selected time period"
+msgstr ""
+"The selected accounts contain no data/transactions (or only zeroes) for the "
+"selected time period"
 
 #. src/report/report-system/html-style-sheet.scm
 #: intl-scm/guile-strings.c:1876
@@ -13186,19 +13483,33 @@ msgstr "Crash the report"
 
 #. src/report/utility-reports/hello-world.scm
 #: intl-scm/guile-strings.c:2028
-msgid "This is for testing. Your reports probably shouldn't have an option like this."
-msgstr "This is for testing. Your reports probably shouldn't have an option like this."
+msgid ""
+"This is for testing. Your reports probably shouldn't have an option like "
+"this."
+msgstr ""
+"This is for testing. Your reports probably shouldn't have an option like "
+"this."
 
 #. src/report/utility-reports/hello-world.scm
 #: intl-scm/guile-strings.c:2032
-msgid "This is a sample GnuCash report. See the guile (scheme) source code in the scm/report directory for details on writing your own reports, or extending existing reports."
-msgstr "This is a sample GnuCash report. See the guile (scheme) source code in the scm/report directory for details on writing your own reports, or extending existing reports."
+msgid ""
+"This is a sample GnuCash report. See the guile (scheme) source code in the "
+"scm/report directory for details on writing your own reports, or extending "
+"existing reports."
+msgstr ""
+"This is a sample GnuCash report. See the guile (scheme) source code in the "
+"scm/report directory for details on writing your own reports, or extending "
+"existing reports."
 
 #. src/report/utility-reports/hello-world.scm
 #: intl-scm/guile-strings.c:2034
 #, c-format
-msgid "For help on writing reports, or to contribute your brand new, totally cool report, consult the mailing list %s."
-msgstr "For help on writing reports, or to contribute your brand new, totally cool report, consult the mailing list %s."
+msgid ""
+"For help on writing reports, or to contribute your brand new, totally cool "
+"report, consult the mailing list %s."
+msgstr ""
+"For help on writing reports, or to contribute your brand new, totally cool "
+"report, consult the mailing list %s."
 
 #. src/report/utility-reports/hello-world.scm
 #: intl-scm/guile-strings.c:2036
@@ -13460,8 +13771,12 @@ msgstr "All Prices equal"
 
 #. src/report/standard-reports/price-scatter.scm
 #: intl-scm/guile-strings.c:2152
-msgid "All the prices found are equal. This would result in a plot with one straight line. Unfortunately, the plotting tool can't handle that."
-msgstr "All the prices found are equal. This would result in a plot with one straight line. Unfortunately, the plotting tool can't handle that."
+msgid ""
+"All the prices found are equal. This would result in a plot with one "
+"straight line. Unfortunately, the plotting tool can't handle that."
+msgstr ""
+"All the prices found are equal. This would result in a plot with one "
+"straight line. Unfortunately, the plotting tool can't handle that."
 
 #. src/report/standard-reports/price-scatter.scm
 #: intl-scm/guile-strings.c:2154
@@ -13470,8 +13785,12 @@ msgstr "All Prices at the same date"
 
 #. src/report/standard-reports/price-scatter.scm
 #: intl-scm/guile-strings.c:2156
-msgid "All the prices found are from the same date. This would result in a plot with one straight line. Unfortunately, the plotting tool can't handle that."
-msgstr "All the prices found are from the same date. This would result in a plot with one straight line. Unfortunately, the plotting tool can't handle that."
+msgid ""
+"All the prices found are from the same date. This would result in a plot "
+"with one straight line. Unfortunately, the plotting tool can't handle that."
+msgstr ""
+"All the prices found are from the same date. This would result in a plot "
+"with one straight line. Unfortunately, the plotting tool can't handle that."
 
 #. src/report/standard-reports/price-scatter.scm
 #: intl-scm/guile-strings.c:2158
@@ -13480,13 +13799,21 @@ msgstr "Only one price"
 
 #. src/report/standard-reports/price-scatter.scm
 #: intl-scm/guile-strings.c:2160
-msgid "There was only one single price found for the selected commodities in the selected time period. This doesn't give a useful plot."
-msgstr "There was only one single price found for the selected commodities in the selected time period. This doesn't give a useful plot."
+msgid ""
+"There was only one single price found for the selected commodities in the "
+"selected time period. This doesn't give a useful plot."
+msgstr ""
+"There was only one single price found for the selected commodities in the "
+"selected time period. This doesn't give a useful plot."
 
 #. src/report/standard-reports/price-scatter.scm
 #: intl-scm/guile-strings.c:2164
-msgid "There is no price information available for the selected commodities in the selected time period."
-msgstr "There is no price information available for the selected commodities in the selected time period."
+msgid ""
+"There is no price information available for the selected commodities in the "
+"selected time period."
+msgstr ""
+"There is no price information available for the selected commodities in the "
+"selected time period."
 
 #. src/report/standard-reports/price-scatter.scm
 #: intl-scm/guile-strings.c:2166
@@ -13495,8 +13822,12 @@ msgstr "Identical commodities"
 
 #. src/report/standard-reports/price-scatter.scm
 #: intl-scm/guile-strings.c:2168
-msgid "Your selected commodity and the currency of the report are identical. It doesn't make sense to show prices for identical commodities."
-msgstr "Your selected commodity and the currency of the report are identical. It doesn't make sense to show prices for identical commodities."
+msgid ""
+"Your selected commodity and the currency of the report are identical. It "
+"doesn't make sense to show prices for identical commodities."
+msgstr ""
+"Your selected commodity and the currency of the report are identical. It "
+"doesn't make sense to show prices for identical commodities."
 
 #. src/report/standard-reports/price-scatter.scm
 #: intl-scm/guile-strings.c:2172
@@ -14310,8 +14641,12 @@ msgstr "Display the account code"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2826
-msgid "Display the other account name? (if this is a split transaction, this parameter is guessed)."
-msgstr "Display the other account name? (if this is a split transaction, this parameter is guessed)."
+msgid ""
+"Display the other account name? (if this is a split transaction, this "
+"parameter is guessed)."
+msgstr ""
+"Display the other account name? (if this is a split transaction, this "
+"parameter is guessed)."
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2834
@@ -14397,8 +14732,12 @@ msgstr "Reverse amount display for Income and Expense Accounts"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2882
-msgid "Reverse amount display for Liability, Payable, Equity, Credit Card, and Income accounts"
-msgstr "Reverse amount display for Liability, Payable, Equity, Credit Card, and Income accounts"
+msgid ""
+"Reverse amount display for Liability, Payable, Equity, Credit Card, and "
+"Income accounts"
+msgstr ""
+"Reverse amount display for Liability, Payable, Equity, Credit Card, and "
+"Income accounts"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2884
@@ -14433,8 +14772,12 @@ msgstr "No matching transactions found"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2916
-msgid "No transactions were found that match the given time interval and account selection."
-msgstr "No transactions were found that match the given time interval and account selection."
+msgid ""
+"No transactions were found that match the given time interval and account "
+"selection."
+msgstr ""
+"No transactions were found that match the given time interval and account "
+"selection."
 
 #. src/report/standard-reports/register.scm
 #: intl-scm/guile-strings.c:2942
@@ -14826,8 +15169,12 @@ msgstr "Print all Parent account names"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: intl-scm/guile-strings.c:3332
-msgid "WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF codes with payer sources may be repeated."
-msgstr "WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF codes with payer sources may be repeated."
+msgid ""
+"WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF "
+"codes with payer sources may be repeated."
+msgstr ""
+"WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF "
+"codes with payer sources may be repeated."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: intl-scm/guile-strings.c:3338
@@ -14847,8 +15194,12 @@ msgstr "Blue items are exportable to a .TXF file."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: intl-scm/guile-strings.c:3344
-msgid "No Tax Related accounts were found.  Go to the Edit->Tax Options dialog to set up tax-related accounts."
-msgstr "No Tax Related accounts were found.  Go to the Edit->Tax Options dialog to set up tax-related accounts."
+msgid ""
+"No Tax Related accounts were found.  Go to the Edit->Tax Options dialog to "
+"set up tax-related accounts."
+msgstr ""
+"No Tax Related accounts were found.  Go to the Edit->Tax Options dialog to "
+"set up tax-related accounts."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: intl-scm/guile-strings.c:3346
@@ -14988,8 +15339,12 @@ msgstr "Match display threshold"
 
 #. src/import-export/generic-import.scm
 #: intl-scm/guile-strings.c:3450
-msgid "The minimum score a potential match must have to be displayed in the match list."
-msgstr "The minimum score a potential match must have to be displayed in the match list."
+msgid ""
+"The minimum score a potential match must have to be displayed in the match "
+"list."
+msgstr ""
+"The minimum score a potential match must have to be displayed in the match "
+"list."
 
 #. src/import-export/generic-import.scm
 #: intl-scm/guile-strings.c:3454
@@ -14998,8 +15353,14 @@ msgstr "Auto-ADD threshold"
 
 #. src/import-export/generic-import.scm
 #: intl-scm/guile-strings.c:3456
-msgid "A transaction whose best match's score is in the red zone (above the display threshold but below or equal to the Auto-ADD threshold) will be ADDed by default."
-msgstr "A transaction whose best match's score is in the red zone (above the display threshold but below or equal to the Auto-ADD threshold) will be ADDed by default."
+msgid ""
+"A transaction whose best match's score is in the red zone (above the display "
+"threshold but below or equal to the Auto-ADD threshold) will be ADDed by "
+"default."
+msgstr ""
+"A transaction whose best match's score is in the red zone (above the display "
+"threshold but below or equal to the Auto-ADD threshold) will be ADDed by "
+"default."
 
 #. src/import-export/generic-import.scm
 #: intl-scm/guile-strings.c:3460
@@ -15008,8 +15369,12 @@ msgstr "Auto-CLEAR threshold"
 
 #. src/import-export/generic-import.scm
 #: intl-scm/guile-strings.c:3462
-msgid "A transaction whose best match's score is in the green zone (above or equal to the Auto-CLEAR threshold) will be CLEARed by default."
-msgstr "A transaction whose best match's score is in the green zone (above or equal to the Auto-CLEAR threshold) will be CLEARed by default."
+msgid ""
+"A transaction whose best match's score is in the green zone (above or equal "
+"to the Auto-CLEAR threshold) will be CLEARed by default."
+msgstr ""
+"A transaction whose best match's score is in the green zone (above or equal "
+"to the Auto-CLEAR threshold) will be CLEARed by default."
 
 #. src/import-export/generic-import.scm
 #: intl-scm/guile-strings.c:3466
@@ -15018,8 +15383,24 @@ msgstr "Commercial Cash Machine fees threshold"
 
 #. src/import-export/generic-import.scm
 #: intl-scm/guile-strings.c:3468
-msgid "In some places commercial ATMs (not belonging to a financial institution) are installed in places like convienience store.  These ATM add its fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees.  For example, you withdraw 100$, and you are charged 101,50$ plus Interac fees.  If you manually entered that 100$, the amounts won't match.  You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match."
-msgstr "In some places commercial cash machines (not belonging to a financial institution) are installed in places like convenience stores.  These machines add their fee directly to the amount instead of it showing up as a separate transaction or in your monthly bank charges.  For example, you withdraw £100, and you are charged £101.50.  If you manually entered that £100, the amounts won't match.  You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match."
+msgid ""
+"In some places commercial ATMs (not belonging to a financial institution) "
+"are installed in places like convienience store.  These ATM add its fee "
+"directly to the amount instead of showing up as a separate transaction or in "
+"your monthly banking fees.  For example, you withdraw 100$, and you are "
+"charged 101,50$ plus Interac fees.  If you manually entered that 100$, the "
+"amounts won't match.  You should set this to whatever is the maximum such "
+"fee in your area (in units of your local currency), so the transaction will "
+"be recognised as a match."
+msgstr ""
+"In some places commercial cash machines (not belonging to a financial "
+"institution) are installed in places like convenience stores.  These "
+"machines add their fee directly to the amount instead of it showing up as a "
+"separate transaction or in your monthly bank charges.  For example, you "
+"withdraw £100, and you are charged £101.50.  If you manually entered that "
+"£100, the amounts won't match.  You should set this to whatever is the "
+"maximum such fee in your area (in units of your local currency), so the "
+"transaction will be recognised as a match."
 
 #. src/gnome-utils/gnc-menu-extensions.scm
 #: intl-scm/guile-strings.c:3470
@@ -15523,8 +15904,12 @@ msgstr "Show Multi-currency Totals?"
 #. src/business/business-reports/aging.scm
 #: intl-scm/guile-strings.c:3924
 #, c-format
-msgid "Transactions relating to company  %d contain more than one currency.  This report is not designed to cope with this possibility."
-msgstr "Transactions relating to company  %d contain more than one currency.  This report is not designed to cope with this possibility."
+msgid ""
+"Transactions relating to company  %d contain more than one currency.  This "
+"report is not designed to cope with this possibility."
+msgstr ""
+"Transactions relating to company  %d contain more than one currency.  This "
+"report is not designed to cope with this possibility."
 
 #. src/business/business-reports/aging.scm
 #: intl-scm/guile-strings.c:3926
@@ -15583,8 +15968,12 @@ msgstr "£999,999.99 -> £0, Z->A"
 
 #. src/business/business-reports/aging.scm
 #: intl-scm/guile-strings.c:3950
-msgid "Show multi-currency totals.  If not selected, convert all totals to report currency"
-msgstr "Show multi-currency totals.  If not selected, convert all totals to report currency"
+msgid ""
+"Show multi-currency totals.  If not selected, convert all totals to report "
+"currency"
+msgstr ""
+"Show multi-currency totals.  If not selected, convert all totals to report "
+"currency"
 
 #. src/business/business-reports/invoice.scm
 #: intl-scm/guile-strings.c:4114
