@@ -55,24 +55,43 @@
 
 #include "basiccell.h"
 
-typedef struct _CellBlock {
+struct _CellBlock {
 
   short numRows;
   short numCols;
 
   BasicCell ***cells;  /* row-col array */
+  /* the above array of pointers has dimensions of numRows*numCols.
+   * It is autonmatically created and managed by the routines below.
+   * It contains pointers to the cell handlers that are a part of
+   * this "block".
+   */
 
   short     **right_traverse_r;
   short     **right_traverse_c;
+  /* the above arrays have dimension of numRows*numCols.
+   * the are automatically created and managed by the routines below.
+   * The control the tab-traversal order through this cell block.
+   * If the cell (i,j) has input-focus, then hitting the tab key
+   * on the keyboard will take input-focus to cell (inext,jnext), where
+   * inext = right_traverse_r[i][j] and jnext = right_traverse_c[i][j].
+   *
+   * Note that left-traversing arrays could be defined (for when
+   * shift-tab is hit), but we haven't (yet) done so.
+   */
 
   void * user_data;
+  /* above is a pointer to anything the programmer-user of this struct
+   * wants it to be.  Handy for stuff.
+   */
 
   /* private, cached utility data */
   short         *widths;        /* column widths */
   unsigned char *alignments;    /* column text alignments */
 
-} CellBlock;
+};
 
+typedef struct _CellBlock CellBlock;
 
 CellBlock * xaccMallocCellBlock (int numrows, int numcols);
 void        xaccInitCellBlock (CellBlock *, int numrows, int numcols);
