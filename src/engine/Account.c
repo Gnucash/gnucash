@@ -264,12 +264,12 @@ xaccFreeAccount (Account *acc)
 
   if (acc->children) 
   {
-    PERR (" xinstead of calling xaccFreeAccount(), please call \n"
+    PERR (" instead of calling xaccFreeAccount(), please call \n"
           " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
-  
-     /* First, recursively free children */
-     xaccFreeAccountGroup (acc->children);
-     acc->children = NULL;
+
+    /* First, recursively free children */
+    xaccFreeAccountGroup (acc->children);
+    acc->children = NULL;
   }
 
   /* Next, clean up the splits */

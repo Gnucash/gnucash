@@ -238,9 +238,18 @@ xaccFreeAccountGroup (AccountGroup *grp)
     while (grp->accounts->next)
     {
       account = grp->accounts->next->data;
+
+      /* FIXME: this and the same code below is kind of hacky.
+       *        actually, all this code seems to assume that
+       *        the account edit levels are all 1. */
+      if (account->editlevel == 0)
+        xaccAccountBeginEdit (account);
+
       xaccAccountDestroy (account);
     }
     account = grp->accounts->data;
+    if (account->editlevel == 0)
+      xaccAccountBeginEdit (account);
     xaccAccountDestroy (account);
 
     if (!root_grp) return;

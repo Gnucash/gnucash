@@ -709,7 +709,7 @@ make_random_changes_to_group (GNCBook *book, AccountGroup *group)
   /* Add a new account */
   new_account = get_random_account (book);
 
-  if (get_random_boolean ())
+  if (get_random_boolean () || !accounts)
     xaccGroupInsertAccount (group, new_account);
   else
   {
@@ -784,6 +784,7 @@ make_random_changes_to_group (GNCBook *book, AccountGroup *group)
   accounts = xaccGroupGetSubAccounts (group);
 
   /* move some accounts around */
+  if (accounts && (g_list_length (accounts) > 1))
   {
     int i = get_random_int_in_range (1, 4);
 

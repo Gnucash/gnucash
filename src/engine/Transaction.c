@@ -161,6 +161,7 @@ xaccDupeSplit (Split *s)
   split->book = s->book;
 
   split->parent = s->parent;
+  split->acc = s->acc;
 
   split->memo = g_cache_insert (gnc_engine_get_string_cache(), s->memo);
   split->action = g_cache_insert (gnc_engine_get_string_cache(), s->action);
