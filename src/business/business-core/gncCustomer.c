@@ -13,6 +13,7 @@
 #include "gnc-engine-util.h"
 #include "GNCIdP.h"
 #include "gnc-book-p.h"
+#include "gnc-commodity.h"
 #include "gnc-numeric.h"
 #include "gncObject.h"
 #include "QueryObject.h"

@@ -11,8 +11,9 @@
 
 #include "guid.h"
 #include "messages.h"
-#include "gnc-engine-util.h"
 #include "gnc-book-p.h"
+#include "gnc-commodity.h"
+#include "gnc-engine-util.h"
 #include "GNCIdP.h"
 #include "gncObject.h"
 #include "QueryObject.h"
