@@ -845,6 +845,9 @@ qif_txn_end_acct(QifContext ctx)
 
   txn_needs_acct = (ctx->parse_flags & QIF_F_TXN_NEEDS_ACCT);
 
+  /* Invert the list so we're working in the right order */
+  ctx->parse_state = g_list_reverse(ctx->parse_state);
+
   for (node = ctx->parse_state; node; node = node->next) {
     txn = node->data;
 
@@ -852,7 +855,7 @@ qif_txn_end_acct(QifContext ctx)
     if (txn_needs_acct && ctx->opening_bal_acct && !txn->from_acct)
       txn->from_acct = ctx->opening_bal_acct;
 
-    /* merge the txn into the context */
+    /* merge the txn into the context (prepends to the list) */
     qif_object_list_insert(ctx, (QifObject)txn);
   }
 

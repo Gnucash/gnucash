@@ -117,7 +117,7 @@ qif_make_record(QifContext ctx, char *buf, size_t bufsiz, gboolean *found_bangty
 }
 
 /* read a qif file and parse it, line by line
- * return FALSE on fatal error, TRUE otherwise
+ * return QIF_E_OK on success or some other QIF Error.
  */
 static QifError
 qif_read_file(QifContext ctx, FILE *f)
@@ -171,6 +171,9 @@ qif_read_file(QifContext ctx, FILE *f)
   /* Make sure to run any end processor */
   if (err == QIF_E_OK && ctx->handler && ctx->handler->end)
     err = ctx->handler->end(ctx);
+
+  if (err == QIF_E_OK)
+    qif_object_list_reverse(ctx, QIF_O_TXN);
 
   return err;
 }

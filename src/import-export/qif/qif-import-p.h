@@ -64,6 +64,7 @@ void qif_object_map_destroy(QifContext ctx);
 GList * qif_object_map_get(QifContext ctx, const char *type);
 
 /* Object Lists */
+void qif_object_list_reverse(QifContext ctx, const char *type);
 gint qif_object_list_count(QifContext ctx, const char *type);
 void qif_object_list_foreach(QifContext ctx, const char *type,
 			     GFunc func, gpointer arg);

@@ -87,13 +87,6 @@ qif_context_get_foo_helper(QifContext ctx, GFunc get_helper)
 }
 
 static void
-qif_split_accts_helper(QifSplit split, GHashTable *ht)
-{
-  if (split->cat.obj && split->cat_is_acct)
-    g_hash_table_insert(ht, split->cat.acct, split->cat.acct);
-}
-
-static void
 qif_get_accts_helper(gpointer obj, gpointer htp)
 {
   QifTxn txn = obj;
@@ -104,17 +97,12 @@ qif_get_accts_helper(gpointer obj, gpointer htp)
   if (txn->from_acct)
     g_hash_table_insert(ht, txn->from_acct, txn->from_acct);
 
-  if (txn->invst_info && txn->invst_info->far_cat.obj &&
-      txn->invst_info->far_cat_is_acct)
-    g_hash_table_insert(ht, txn->invst_info->far_cat.acct,
-			txn->invst_info->far_cat.acct);
-
-  if (txn->default_split)
-    qif_split_accts_helper(txn->default_split, ht);
+  /* The default_split is using the from_acct, so we can ignore it */
 
   for (node = txn->splits; node; node = node->next) {
     split = node->data;
-    qif_split_accts_helper(split, ht);
+    if (split->cat.obj && split->cat_is_acct)
+      g_hash_table_insert(ht, split->cat.acct, split->cat.acct);
   }
 }
 
@@ -125,13 +113,6 @@ qif_context_get_accounts(QifContext ctx)
 }
 
 static void
-qif_split_cats_helper(QifSplit split, GHashTable *ht)
-{
-  if (split->cat.obj && !split->cat_is_acct)
-    g_hash_table_insert(ht, split->cat.cat, split->cat.cat);
-}
-
-static void
 qif_get_cats_helper(gpointer obj, gpointer htp)
 {
   QifTxn txn = obj;
@@ -139,17 +120,12 @@ qif_get_cats_helper(gpointer obj, gpointer htp)
   GHashTable *ht = htp;
   GList *node;
 
-  if (txn->invst_info && txn->invst_info->far_cat.obj &&
-      !txn->invst_info->far_cat_is_acct)
-    g_hash_table_insert(ht, txn->invst_info->far_cat.cat,
-			txn->invst_info->far_cat.cat);
-
-  if (txn->default_split)
-    qif_split_cats_helper(txn->default_split, ht);
+  /* default_split uses from_acct, so no categories */
 
   for (node = txn->splits; node; node = node->next) {
     split = node->data;
-    qif_split_cats_helper(split, ht);
+    if (split->cat.obj && !split->cat_is_acct)
+      g_hash_table_insert(ht, split->cat.cat, split->cat.cat);
   }
 }
 
@@ -310,6 +286,20 @@ void qif_object_map_destroy(QifContext ctx)
 /*
  * Insert and remove a QifObject from the Object Lists in this Qif Context
  */
+
+void
+qif_object_list_reverse(QifContext ctx, const char *type)
+{
+  GList *list;
+
+  g_return_if_fail(ctx);
+  g_return_if_fail(ctx->object_lists);
+  g_return_if_fail(type);
+
+  list = qif_object_list_get(ctx, type);
+  list = g_list_reverse(list);
+  g_hash_table_insert(ctx->object_lists, (gpointer)type, list);
+}
 
 gint
 qif_object_list_count(QifContext ctx, const char *type)
