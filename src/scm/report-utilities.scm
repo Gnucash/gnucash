@@ -351,7 +351,7 @@
     
     (set! splits (gnc:glist->list 
                   (gnc:query-get-splits query) 
-                  <gw:wt-Split*>))
+                  <gnc:Split*>))
     (if (and splits (not (null? splits)))
         (set! balance (gnc:numeric-to-double 
                        (gnc:split-get-balance (car splits))))

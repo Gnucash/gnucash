@@ -361,7 +361,7 @@ gnc_ui_show_main_window(void)
   {
     SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
     SCM hook = gh_eval_str("gnc:*main-window-opened-hook*");
-    SCM window = gw_wcp_assimilate_ptr(app, gh_lookup("<gw:wt-gncUIWidget>"));
+    SCM window = gw_wcp_assimilate_ptr(app, gh_lookup("<gnc:UIWidget>"));
     gh_call2(run_danglers, hook, window); 
   }
   return 0;

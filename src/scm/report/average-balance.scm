@@ -284,7 +284,7 @@
             
             ;; get the query results 
             (set! splits (gnc:glist->list (gnc:query-get-splits query)
-                                          <gw:wt-Split*>))
+                                          <gnc:Split*>))
             
             ;; find the net starting balance for the set of accounts 
             (for-each

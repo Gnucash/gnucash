@@ -1169,9 +1169,10 @@ reconciliation states for a Split are:
 
 @end table
 
-In addition to the above, Splits contain a Memo field, an Action field,
-and a key-value pair frame. The Memo and Action fields are for arbitrary
-user input.
+In addition to the above, Splits contain a Memo field, an Action
+field, and a key-value pair frame. The Memo and Action fields are for
+arbitrary user input.  See src/engine/kvp_frame.txt for the names of
+keys that have already been reserved for use in the frame.
 
 
 @menu

@@ -1,3 +1,49 @@
+2001-01-15  Rob Browning  <rlb@cs.utexas.edu>
+
+	* configure.in (G_WRAP_LINK_ARGS): require g-wrap 1.1.5.  This
+	should fix a number of problems, including guile 1.3.4
+	compatibility (g-wrap was using the *_NEWSMOB macros which guile
+	1.3.4 doesn't have), and maybe even Dave's ugly memory issues.
+
+	* src/scm/report/average-balance.scm: new g-wrap fix.
+	Essentially all of these g-wrap fixes are to accomodate the new
+	type names and visible bindings for g-wrapped non-native types.
+	Where we had <gw:wct-void*> we now have <gw:void*>.  This naming
+	convention has been applied unilaterally, even for native types,
+	so we now have <gw:int>.  Further, types that are gnucash types
+	appear as <gnc:Account*>, and types that are glib appear as
+	<glib:GList*>, etc.  Finally, in cases where the name of the type
+	is already prefixed with gnc, the prefix is not doubled, so we
+	have gncSomeThing -> <gnc:SomeThing> and gnc-commodity* ->
+	<gnc:commodity*>.
+
+	* src/scm/report-utilities.scm
+	(gnc:account-get-balance-at-date): new g-wrap fix.
+
+	* src/guile/option-util.c
+	(gnc_option_db_register_change_callback): new g-wrap fix.
+
+	* src/guile/guile-util.c
+	(gnc_copy_split): new g-wrap fix.
+	(gnc_copy_split_scm_onto_split): new g-wrap fix.
+	(gnc_copy_trans): new g-wrap fix.
+	(gnc_copy_trans_scm_onto_trans_swap_accounts): new g-wrap fix.
+	(gnc_glist_account_ptr_to_scm_internal): new g-wrap fix.
+	(gnc_scm_to_commodity): new g-wrap fix.
+	(gnc_commodity_to_scm): new g-wrap fix.
+	(gnc_glist_commodity_ptr_to_scm): new g-wrap fix.
+
+	* src/guile/gnucash.c.in (gnucash_main_helper): new g-wrap fix.
+
+	* src/guile/gnc.gwp: major rework (mostly s///) for new g-wrap.
+
+	* src/guile/gnc-helpers.c (gnc_scm_traversal_adapter): new g-wrap fix.
+
+	* src/gnome/top-level.c (gnc_ui_show_main_window): new g-wrap fix.
+
+	* src/doc/design/engine.texinfo (Splits): mention location of
+	kvp_frame.txt -- the reserved key list.
+
 2001-01-12  Bill Gribble  <grib@billgribble.com>
 
 	* doc/html/C/account-tree-demo.html: add a simple demo of
