@@ -38,18 +38,26 @@
 (define *gnc:_reports_* (make-hash-table 23))
 (define *gnc:_report-next-serial_* 0)
 
+(define gnc:menuname-asset-liability
+  (N_ "_Assets & Liabilities"))
+(define gnc:menuname-income-expense
+  (N_ "_Income & Expense"))
+(define gnc:menuname-taxes
+  (N_ "_Taxes"))
+
 (define (gnc:report-menu-setup)
   ;; since this menu gets added to every child window, we say it 
   ;; comes after the "_File" menu. 
-  (define menu (gnc:make-menu "New _Report" 
+  (define menu (gnc:make-menu (N_ "New _Report")
                               (list "_File" "New _Account Tree")))
   (define menu-namer (gnc:new-menu-namer))
-  (define tax-menu (gnc:make-menu (N_ "_Taxes") 
+  (define tax-menu (gnc:make-menu gnc:menuname-taxes
                                   (list "_File" "New _Report" "")))
   (define income-expense-menu
-    (gnc:make-menu (N_ "_Income & Expense") (list "_File" "New _Report" "")))
+    (gnc:make-menu gnc:menuname-income-expense
+                   (list "_File" "New _Report" "")))
   (define asset-liability-menu
-    (gnc:make-menu (N_ "_Assets & Liabilities") 
+    (gnc:make-menu gnc:menuname-asset-liability
                    (list "_File" "New _Report" "")))
   (define menu-hash (make-hash-table 23))
 
@@ -60,20 +68,20 @@
               (menu-name (gnc:report-menu-name report))
               (menu-tip (gnc:report-menu-tip report))
               (item #f))
-          
+
           (if (not menu-path)
               (set! menu-path '(""))
               (set! menu-path
                     (append menu-path '(""))))
-          
+
           (set! menu-path (append (list "_File" "New _Report") menu-path))
-          
+
           (if menu-name (set! name menu-name))
-          
+
           (if (not menu-tip)
               (set! menu-tip
                     (sprintf #f (_ "Display the %s report") name)))
-          
+
           (set! item
                 (gnc:make-menu-item
                  ((menu-namer 'add-name) name)
@@ -99,7 +107,7 @@
   (gnc:add-extension tax-menu)
   (gnc:add-extension income-expense-menu)
   (gnc:add-extension asset-liability-menu)
-  
+
   ;; push reports (new items added on top of menu)
   (hash-for-each add-report-menu-item *gnc:_report-templates_*))
 

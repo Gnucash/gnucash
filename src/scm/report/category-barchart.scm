@@ -380,8 +380,8 @@
       'version 1
       'name (car l)
       'menu-path (if (cadddr l)
-		     (list "_Income & Expense")
-		     (list "_Assets & Liabilities"))
+		     (list gnc:menuname-income-expense)
+		     (list gnc:menuname-asset-liability))
       'options-generator (lambda () (options-generator (cadr l)))
       'renderer (lambda (report-obj)
 		  (category-barchart-renderer report-obj 

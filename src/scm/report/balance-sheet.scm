@@ -312,6 +312,6 @@
   (gnc:define-report 
    'version 1
    'name (N_ "Balance Sheet")
-   'menu-path (list "_Assets & Liabilities")
+   'menu-path (list gnc:menuname-asset-liability)
    'options-generator balance-sheet-options-generator
    'renderer balance-sheet-renderer))
