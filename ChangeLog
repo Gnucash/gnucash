@@ -1,3 +1,8 @@
+2001-07-06  Dave Peticolas  <dave@krondo.com>
+
+	* src/test/gnc-test-stuff.c (get_random_boolean): new func.
+	(get_random_query): new func.
+
 2001-07-06  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/transaction.scm: Add new sort option "register
