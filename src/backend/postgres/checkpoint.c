@@ -446,6 +446,13 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
    chk.date_end = as_of_date;
 
    com = xaccAccountGetCommodity(acc);
+   if (!com)
+   {
+     PERR ("account %s has no commodity",
+           guid_to_string (xaccAccountGetGUID (acc)));
+     return;
+   }
+
    chk.commodity = gnc_commodity_get_unique_name(com);
    chk.account_guid = xaccAccountGetGUID (acc);
    chk.balance = 0;

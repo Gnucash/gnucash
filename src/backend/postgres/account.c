@@ -384,10 +384,10 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
       pbuff = be->buff;
       pbuff[0] = 0;
       pbuff = stpcpy (pbuff,
-            "SELECT * FROM gncAccount WHERE accountGuid='");
+                      "SELECT * FROM gncAccount WHERE accountGuid='");
       pbuff = guid_to_string_buff(acct_guid, pbuff);
       pbuff = stpcpy (pbuff, "';");
-   
+
       SEND_QUERY (be,be->buff, 0);
       pgendGetResults (be, get_account_cb, pgendGetTopGroup (be));
 

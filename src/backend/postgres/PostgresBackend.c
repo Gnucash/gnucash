@@ -500,26 +500,30 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
       char *p;
       AcctEarliest * ae = (AcctEarliest *) anode->data;
       pgendAccountGetBalance (be, ae->acct, ae->ts);
-   
+
       /* n.b. date_posted compare must be strictly greater than, since the 
        * GetBalance goes to less-then-or-equal-to because of the BETWEEN
        * that appears in the gncSubTotalBalance sql function. */
       p = be->buff; *p = 0;
-      p = stpcpy (p, "SELECT DISTINCT gncTransaction.* from gncEntry, gncTransaction WHERE "
-                     "   gncEntry.transGuid = gncTransaction.transGuid AND gncEntry.accountGuid='");
+      p = stpcpy (p,
+                  "SELECT DISTINCT gncTransaction.* "
+                  "FROM gncEntry, gncTransaction WHERE "
+                  "gncEntry.transGuid = gncTransaction.transGuid AND "
+                  "gncEntry.accountGuid='");
       p = guid_to_string_buff(xaccAccountGetGUID(ae->acct), p);
       p = stpcpy (p, "' AND gncTransaction.date_posted > '");
       p = gnc_timespec_to_iso8601_buff (ae->ts, p);
       p = stpcpy (p, "';");
-     
+
       pgendFillOutToCheckpoint (be, be->buff);
-      
+
       g_free (ae);
       nact ++;
    }
    g_list_free(acct_list);
 
-   REPORT_CLOCK (9, "done w/ fillout at call %d, handled %d accounts", call_count, nact);
+   REPORT_CLOCK (9, "done w/ fillout at call %d, handled %d accounts",
+                 call_count, nact);
    LEAVE (" ");
 }
 

@@ -488,11 +488,6 @@ test_raw_query (GNCSession *session, Query *q)
   sq = sqlQuery_new();
   sql_query_string = sqlQuery_build (sq, q, gnc_session_get_book(session));
 
-#if 0
-  fputs (sql_query_string, stderr);
-  fputs ("\n", stderr);
-#endif
-
   result = PQexec (be->connection, sql_query_string);
 
   ok = (result && PQresultStatus (result) == PGRES_TUPLES_OK);
@@ -852,7 +847,7 @@ test_updates_2 (GNCSession *session_base,
 #if 0
   {
     Account * account = get_random_account (td.book_1);
-    Account * child = get_random_account (td.book_1);
+    Account * child = NULL; /* get_random_account (td.book_1); */
     Transaction * trans = get_random_transaction (td.book_1);
     Query * q = xaccMallocQuery ();
     int count = 0;
@@ -869,12 +864,12 @@ test_updates_2 (GNCSession *session_base,
     {
       Split * split = node->data;
 
-      xaccAccountInsertSplit (child, split);
+      xaccAccountInsertSplit (account, split);
       count++;
     }
     xaccTransCommitEdit (trans);
 
-    xaccQueryAddGUIDMatch (q, xaccAccountGetGUID (child),
+    xaccQueryAddGUIDMatch (q, xaccAccountGetGUID (account),
                            GNC_ID_ACCOUNT, QUERY_AND);
 
     xaccQuerySetGroup (q, td.group_2);
@@ -882,6 +877,21 @@ test_updates_2 (GNCSession *session_base,
     ok = (g_list_length (xaccQueryGetSplits (q)) == count);
 
     xaccFreeQuery (q);
+
+    if (ok)
+    {
+      Transaction * trans_2;
+      Account * account_2;
+      Account * child_2;
+
+      trans_2 = xaccTransLookup (xaccTransGetGUID (trans), td.book_2);
+      account_2 = xaccAccountLookup (xaccAccountGetGUID (account), td.book_2);
+      child_2 = xaccAccountLookup (xaccAccountGetGUID (child), td.book_2);
+
+      ok = ok && xaccTransEqual (trans, trans_2, TRUE, TRUE);
+      ok = ok && xaccAccountEqual (account, account_2, TRUE);
+      ok = ok && xaccAccountEqual (child, child_2, TRUE);
+    }
 
     if (!do_test_args (ok,
                        "test new account",

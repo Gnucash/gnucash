@@ -44,6 +44,7 @@
 #include "TransactionP.h"
  
 #include "PostgresBackend.h"
+#include "account.h"
 #include "checkpoint.h"
 #include "kvp-sql.h"
 #include "price.h"
@@ -409,16 +410,23 @@ pgendStoreAllTransactions (PGBackend *be, AccountGroup *grp)
  *    probably be fixed.
  */
 
+typedef struct
+{
+  Split * split;
+  GUID account_guid;
+  gint64 amount;
+} SplitResolveInfo;
+
 void 
 pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
 {
    char *pbuff;
    int i, j, nrows;
    PGresult *result;
-   int save_state = 1;
    const GUID *trans_guid;
    Account *acc, *previous_acc=NULL;
    GList *node, *db_splits=NULL, *engine_splits, *delete_splits=NULL;
+   GList *unresolved_splits = NULL;
    gnc_commodity *currency = NULL;
    gint64 trans_frac = 0;
 
@@ -430,7 +438,7 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
    pbuff = be->buff;
    pbuff[0] = 0;
    pbuff = stpcpy (pbuff, 
-         "SELECT * FROM gncEntry WHERE transGuid='");
+                   "SELECT * FROM gncEntry WHERE transGuid='");
    pbuff = guid_to_string_buff(trans_guid, pbuff);
    pbuff = stpcpy (pbuff, "';");
 
@@ -444,7 +452,7 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
          jrows = PQntuples (result);
          nrows += jrows;
          PINFO ("query result %d has %d rows and %d cols",
-            i, nrows, ncols);
+                i, nrows, ncols);
 
          for (j=0; j<jrows; j++)
          {
@@ -481,52 +489,62 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
             guid = nullguid;  /* just in case the read fails ... */
             string_to_guid (DB_GET_VAL("accountGUID",j), &guid);
             acc = xaccAccountLookup (&guid, be->book);
+
             if (!acc)
             {
-               PERR ("account not found, will delete this split\n"
-                     "\t(split with  guid=%s\n" 
-                     "\twants an acct with guid=%s)\n", 
-                     DB_GET_VAL("entryGUID",j),
-                     DB_GET_VAL("accountGUID",j)
-                     );
-               xaccSplitDestroy (s);
+              SplitResolveInfo *sri = g_new0 (SplitResolveInfo, 1);
+
+              sri->split = s;
+              sri->account_guid = guid;
+              sri->amount = strtoll (DB_GET_VAL("amount", j), NULL, 0);
+
+              unresolved_splits = g_list_prepend (unresolved_splits, sri);
             }
-            else
+
+            xaccTransAppendSplit (trans, s);
+
+            if (acc)
             {
-               gnc_commodity *modity;
-               gint64 acct_frac;
+              int save_state;
 
-               xaccTransAppendSplit (trans, s);
+              if (acc != previous_acc)
+              {
+                xaccAccountCommitEdit (previous_acc);
+                xaccAccountBeginEdit (acc);
+                previous_acc = acc;
+              }
 
-               if (acc != previous_acc)
-               {
-                  xaccAccountCommitEdit (previous_acc);
-                  xaccAccountBeginEdit (acc);
-                  previous_acc = acc;
-               }
-               if (acc->parent) save_state = acc->parent->saved;
-               xaccAccountInsertSplit(acc, s);
-               if (acc->parent) acc->parent->saved = save_state;
+              if (acc->parent)
+                save_state = acc->parent->saved;
+              else
+                save_state = 1;
 
-               /* Ummm, we really need to set the amount & value after
-                * the split has been inserted into the account.  This
-                * is because the amount/value setting routines require
-                * SCU settings from the account to work correctly.
-                */
-               num = strtoll (DB_GET_VAL("value", j), NULL, 0);
-               value = gnc_numeric_create (num, trans_frac);
-               xaccSplitSetValue (s, value);
+              xaccAccountInsertSplit(acc, s);
 
-               num = strtoll (DB_GET_VAL("amount", j), NULL, 0);
-               modity = xaccAccountGetCommodity (acc);
-               acct_frac = gnc_commodity_get_fraction (modity);
-               amount = gnc_numeric_create (num, acct_frac);
-               xaccSplitSetAmount (s, amount);
-
-               /* finally tally them up; we use this below to 
-                * clean out deleted splits */
-               db_splits = g_list_prepend (db_splits, s);
+              if (acc->parent)
+                acc->parent->saved = save_state;
             }
+
+            /* It's ok to set value without an account, since
+             * the fraction depends on the transaction and not
+             * the account. */
+            num = strtoll (DB_GET_VAL("value", j), NULL, 0);
+            value = gnc_numeric_create (num, trans_frac);
+            xaccSplitSetValue (s, value);
+
+            if (acc)
+            {
+              int acct_frac;
+
+              num = strtoll (DB_GET_VAL("amount", j), NULL, 0);
+              acct_frac = xaccAccountGetCommoditySCU (acc);
+              amount = gnc_numeric_create (num, acct_frac);
+              xaccSplitSetAmount (s, amount);
+            }
+
+            /* finally tally them up; we use this below to 
+             * clean out deleted splits */
+            db_splits = g_list_prepend (db_splits, s);
          }
       }
       i++;
@@ -535,6 +553,65 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
 
    /* close out dangling edit session */
    xaccAccountCommitEdit (previous_acc);
+
+   /* resolve any splits that didn't have accounts */
+   for (node = unresolved_splits; node; node = node->next)
+   {
+     SplitResolveInfo * sri = node->data;
+     Account * account;
+
+     /* account could have been pulled in by a previous
+      * iteration of this loop. */
+     account = xaccAccountLookup (&sri->account_guid, be->book);
+
+     if (!account)
+     {
+       pgendCopyAccountToEngine (be, &sri->account_guid);
+       account = xaccAccountLookup (&sri->account_guid, be->book);
+     }
+
+     if (account)
+     {
+       gnc_numeric amount;
+       int save_state;
+       int acct_frac;
+
+       if (account->parent)
+         save_state = account->parent->saved;
+       else
+         save_state = 1;
+
+       xaccAccountBeginEdit (account);
+       xaccAccountInsertSplit (account, sri->split);
+       xaccAccountCommitEdit (account);
+
+       if (account->parent)
+         account->parent->saved = save_state;
+
+       acct_frac = xaccAccountGetCommoditySCU (account);
+       amount = gnc_numeric_create (sri->amount, acct_frac);
+       xaccSplitSetAmount (sri->split, amount);
+     }
+     else
+     {
+       PERR ("account not found, will delete this split\n"
+             "\t(split with  guid=%s\n" 
+             "\twants an acct with guid=%s)\n", 
+             guid_to_string(xaccSplitGetGUID (sri->split)),
+             guid_to_string(&sri->account_guid));
+
+       /* Remove the split from the list */
+       db_splits = g_list_remove (db_splits, sri->split);
+
+       xaccSplitDestroy (sri->split);
+     }
+
+     g_free (sri);
+     node->data = NULL;
+   }
+
+   g_list_free (unresolved_splits);
+   unresolved_splits = NULL;
 
    /* ------------------------------------------------- */
    /* destroy any splits that the engine has that the DB didn't */
