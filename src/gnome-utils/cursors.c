@@ -123,18 +123,18 @@ gnc_unset_busy_cursor (GtkWidget *w)
     gnc_ui_set_cursor (w->window, GNC_CURSOR_NORMAL, FALSE);
   else
   {
-    GList *node;
+    GList *containerstop, *node;
 
-    for (node = gtk_window_list_toplevels (); node; node = node->next)
+    for (containerstop = node = gtk_window_list_toplevels (); node; node = node->next)
     {
       w = GTK_WIDGET (node->data);
 
-      if (!w || !w->window)
+      if (!w || !GTK_IS_WIDGET (w) || GTK_WIDGET_NO_WINDOW(w))
         continue;
 
       gnc_ui_set_cursor (w->window, GNC_CURSOR_NORMAL, FALSE);
-      g_list_free (node);
     }
+    g_list_free (containerstop);
   }
 }
 
