@@ -279,26 +279,23 @@
                (slist '()))
       (if (pointer-token-null? split)
           (reverse slist)
-          (begin
-            (loop (+ index 1) 
-                  (gnc:ith-split split-array (+ index 1))
-                  (cons split slist))))))
+          (loop (+ index 1) 
+                (gnc:ith-split split-array (+ index 1))
+                (cons split slist)))))
 
   ;; Pull a scheme list of accounts (including subaccounts) from group grp
   (define (gnc:group-get-account-list grp)
     (if (pointer-token-null? grp)
         '()
-        (let ((account-list '())
-              (account-array (gnc:get-accounts grp)))
+        (let ((account-array (gnc:get-accounts grp)))
           (let loop ((index 0)
-                     (account (gnc:account-nth-account account-array 0)))
+                     (account (gnc:account-nth-account account-array 0))
+                     (account-list '()))
             (if (pointer-token-null? account)
                 (reverse account-list)
-                (begin
-                  (set! account-list (cons account account-list))
-                  (loop (+ index 1)
-                        (gnc:account-nth-account account-array
-                                                 (+ index 1)))))))))
+                (loop (+ index 1)
+                      (gnc:account-nth-account account-array (+ index 1))
+                      (cons account account-list)))))))
 
   (define (accumvects x y)
     (cond 
