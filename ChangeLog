@@ -1,3 +1,11 @@
+2003-01-28  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in -- fix the PG test to deal properly with non-standard
+	  locations.  In particular, AC_CHECK_HEADERS() uses CPPFLAGS, not
+	  CFLAGS.
+	* src/backend/postgres/Makefile.am: use PGSQL_CFLAGS and PGSQL_LIBS
+	* src/backend/postgres/test/Makefile.am: use PGSQL_CFLAGS
+
 2003-01-28  Christian Stimming  <stimming@tuhh.de>
 
 	* po/it.po: Updated Italian translation by Lorenzo Cappelletti

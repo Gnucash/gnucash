@@ -4,7 +4,7 @@ pkglib_LTLIBRARIES = libgncmod-backend-postgres.la
 
 libgncmod_backend_postgres_la_LDFLAGS = -module 
 
-libgncmod_backend_postgres_la_LIBADD  =  -lpq  \
+libgncmod_backend_postgres_la_LIBADD  =  ${PGSQL_LIBS} -lpq  \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${GLIB_LIBS}
 
@@ -96,6 +96,7 @@ AM_CFLAGS = \
 	-I../.. -I${srcdir}/../.. \
 	-I../../engine -I${srcdir}/../../engine \
 	-I../../gnc-module -I${srcdir}/../../gnc-module \
+	${PGSQL_CFLAGS} \
 	${GLIB_CFLAGS}
 
 $(M4_SRC): table.m4

@@ -390,9 +390,11 @@ AC_ARG_ENABLE( sql,
 
       PGSQL_CFLAGS=`${PG_CONFIG} --includedir`
       if test "x$PGSQL_CFLAGS" != x; then
-         CFLAGS="${CFLAGS} -I${PGSQL_CFLAGS}"
+	PGSQL_CFLAGS="-I${PGSQL_CFLAGS}"
       fi
 
+      saved_CPPFLAGS="${CPPFLAGS}"
+      CPPFLAGS="${CPPFLAGS} ${PGSQL_CFLAGS}"
       AC_CHECK_HEADERS(pgsql/libpq-fe.h postgresql/libpq-fe.h libpq-fe.h)
       if test "x$ac_cv_header_pgsql_libpq_fe_h$ac_cv_header_postgresql_libpq_fe_h$ac_cv_header_libpq_fe_h" = xnonono; then
          AC_MSG_ERROR([Cannot find PostgreSQL headers; won't build sql backend]) 
@@ -414,16 +416,15 @@ AC_ARG_ENABLE( sql,
           done
 	fi
         
-	AS_SCRUB_INCLUDE(CFLAGS)
-
-        saved_LIBS="$LIBS"
+	AS_SCRUB_INCLUDE(PGSQL_CFLAGS)
 
         PGSQL_LIBS=`${PG_CONFIG} --libdir`
         if test "x$PGSQL_LIBS" != x; then
-           LIBS="-L${PGSQL_LIBS} -lpq $LIBS"
-        else
-           LIBS="-lpq $LIBS"
+	  PGSQL_LIBS="-L${PGSQL_LIBS}"
         fi
+
+        saved_LIBS="$LIBS"
+ 	LIBS="${PGSQL_LIBS} -lpq $LIBS"
         AC_MSG_CHECKING(for libpq)
         AC_TRY_LINK(
           [
@@ -442,10 +443,13 @@ AC_ARG_ENABLE( sql,
         )
         LIBS="$saved_LIBS"
       fi
+      CPPFLAGS="$saved_CPPFLAGS"
     fi
   ]
 )
 
+AC_SUBST(PGSQL_CFLAGS)
+AC_SUBST(PGSQL_LIBS)
 AC_SUBST(SQL_DIR)
 
 
