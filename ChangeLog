@@ -1,9 +1,31 @@
+2003-02-15  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif-import/qif-file.scm:
+	  - No need to use the 'negative' field anymore
+	  - Save the default split, even if we've got a split transaction.
+	    It will be useful later to make sure we have a properly balanced
+	    transaction and everything has the "right sign"
+	* src/import-export/qif-import/qif-objects.scm:
+	  - remove the 'negative' field of a split
+	  - add a 'default-split' field of a transaction
+	  - change the split-amounts and set-split-amounts! functions
+	    the split-amounts will also return the default-split, if it
+	    exists.  set-split-amounts! will figure out if we need to
+	    reverse the splits by seeing if the amounts add up to 0 and
+	    coping appropriately..  This is to fix a bug where SOME programs
+	    make splits positive, and some make them negative.  This should
+	    deal properly in both cases, so it's a better fix for #105139.
+
 2003-02-14  Benoit Grégoire  <bock@step.polymtl.ca>
 
 	* src/import-export/import-backend.c: 
 	-Remove unused code.
-	-Fix "destination account written to the matchmap even when autoselected" bug.
-	-Disable destination account matching by memo, until bayesian filtering is implemented.  It's currently unlikely to help, and causes false positives since very often the type of the transaction is stored there.
+	-Fix "destination account written to the matchmap even when
+	 autoselected" bug.
+	-Disable destination account matching by memo, until bayesian
+	 filtering is implemented.  It's currently unlikely to help, and
+	 causes false positives since very often the type of the
+	 transaction is stored there.
 
 2003-02-14  Christian Stimming  <stimming@tuhh.de>
 
