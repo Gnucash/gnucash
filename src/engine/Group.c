@@ -698,8 +698,6 @@ xaccMergeAccounts (AccountGroup *grp)
                } else {
                   xaccConcatGroups (ga, gb);
                   acc_b->children = NULL;
-                  /* XXX why is the below commented out ??? */
-                  /* xaccFreeAccountGroup (gb);  XXX  ??? */
                }
             }
 
