@@ -79,6 +79,11 @@ typedef enum
  * the glib.h g_error(), etc functions. That way, we would have
  * unified logging mechanism, instead of having some messages
  * work one way, and other a different way ... 
+ *
+ * FIXME: the if test should not be a subroutine call, it should
+ * not use that many CPU cycles.  These logging functions are supposed
+ * to be lightweight.  Who changed this ??? Why ??? 
+ *
  */
 gboolean gnc_should_log (gncModuleType module, gncLogLevel log_level);
 void gnc_log (gncModuleType module, gncLogLevel log_level,
@@ -171,6 +176,8 @@ void gnc_set_log_level(gncModuleType module, gncLogLevel level);
 /* Set the logging level for all modules. */
 void gnc_set_log_level_global(gncLogLevel level);
 
+/* Pipe log output to pipe or file */
+void gnc_set_logfile (FILE *outfile);
 
 /** Macros *****************************************************/
 #define EPS  (1.0e-6)

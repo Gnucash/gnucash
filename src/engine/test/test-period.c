@@ -14,6 +14,7 @@
 #include "Period.h"
 #include "gnc-book.h"
 #include "gnc-book-p.h"
+#include "gnc-engine-util.h"
 #include "gnc-module.h"
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
@@ -107,6 +108,9 @@ run_test (void)
   tsmiddle = tsfirst;
   tsmiddle.tv_sec = (tsfirst.tv_sec + tslast.tv_sec)/2;
 
+  // stdout is broken with guile for some reason
+  // gnc_set_logfile (stdout);
+  // gnc_set_log_level_global (GNC_LOG_INFO);
   closedbook = gnc_book_close_period (openbook, tsmiddle, 
                   NULL, "this is opening balance dude");
 

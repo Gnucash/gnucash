@@ -137,6 +137,9 @@ xaccCloneAccountSimple(const Account *from, GNCBook *book)
 {
     Account *ret;
 
+    if (!from || !book) return NULL;
+    ENTER (" ");
+
     ret = g_new (Account, 1);
     g_return_val_if_fail (ret, NULL);
 
@@ -157,6 +160,7 @@ xaccCloneAccountSimple(const Account *from, GNCBook *book)
 
     xaccAccountCommitEdit (ret);
 
+    LEAVE (" ");
     return ret;
 }
 
@@ -165,6 +169,9 @@ xaccCloneAccount (const Account *from, GNCBook *book)
 {
     time_t now;
     Account *ret;
+
+    if (!from || !book) return NULL;
+    ENTER (" ");
 
     ret = g_new (Account, 1);
     g_return_val_if_fail (ret, NULL);
@@ -191,6 +198,7 @@ xaccCloneAccount (const Account *from, GNCBook *book)
 
     xaccAccountCommitEdit (ret);
 
+    LEAVE (" ");
     return ret;
 }
 
@@ -203,6 +211,7 @@ xaccAccountLookupTwin (Account *acc,  GNCBook *book)
    int i, ncopies = 0;
 
    if (!acc || !book) return NULL;
+   ENTER (" ");
 
    v_ncopies = kvp_frame_get_slot_path (acc->kvp_data, "gemini", "ncopies");
    if (!v_ncopies) return NULL;
@@ -234,6 +243,7 @@ xaccAccountLookupTwin (Account *acc,  GNCBook *book)
          return twin;
       }
    }
+   LEAVE (" ");
    return NULL;
 }
 

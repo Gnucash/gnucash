@@ -765,6 +765,7 @@ xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
    if (!to || !from) return;
    if (!from->accounts || !to->book) return;
 
+   ENTER (" ");
    for (node = from->accounts; node; node=node->next)
    {
       Account *to_acc, *from_acc = node->data;
@@ -793,6 +794,7 @@ xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
          xaccAccountGroupBeginEdit (to_acc->children);
       }
    }
+   LEAVE (" ");
 }
 
 /********************************************************************\

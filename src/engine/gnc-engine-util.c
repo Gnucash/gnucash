@@ -65,6 +65,7 @@ static gncLogLevel loglevel[MOD_LAST + 1] =
   GNC_LOG_DEBUG,        /* SX */
 };
 
+static FILE *fout = NULL;
 
 /* Set the logging level of the given module. */
 void
@@ -84,6 +85,12 @@ gnc_set_log_level_global(gncLogLevel level)
 
   for (module = 0; module <= MOD_LAST; module++)
     loglevel[module] = level;
+}
+
+void
+gnc_set_logfile (FILE *outfile)
+{
+   fout = outfile;
 }
 
 /* prettify() cleans up subroutine names. AIX/xlC has the habit of
@@ -138,17 +145,19 @@ gnc_log (gncModuleType module, gncLogLevel log_level, const char *prefix,
   if (!gnc_should_log (module, log_level))
     return;
 
-  fprintf (stderr, "%s: %s: ",
+  if (!fout) fout = stderr;
+
+  fprintf (fout, "%s: %s: ",
            prefix ? prefix : "(null)",
            prettify (function_name));
 
   va_start (ap, format);
 
-  vfprintf (stderr, format, ap);
+  vfprintf (fout, format, ap);
 
   va_end (ap);
 
-  fprintf (stderr, "\n");
+  fprintf (fout, "\n");
 }
 
 
@@ -173,16 +182,16 @@ gnc_start_clock (int clockno, gncModuleType module, gncLogLevel log_level,
   if ((0>clockno) || (NUM_CLOCKS <= clockno)) return;
   gettimeofday (&gnc_clock[clockno], &tz);
 
-  fprintf (stderr, "Clock %d Start: %s: ",
+  fprintf (fout, "Clock %d Start: %s: ",
            clockno, prettify (function_name));
 
   va_start (ap, format);
 
-  vfprintf (stderr, format, ap);
+  vfprintf (fout, format, ap);
 
   va_end (ap);
 
-  fprintf (stderr, "\n");
+  fprintf (fout, "\n");
 }
 
 void
@@ -205,16 +214,16 @@ gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
   now.tv_sec -= gnc_clock[clockno].tv_sec;
   now.tv_usec -= gnc_clock[clockno].tv_usec;
 
-  fprintf (stderr, "Clock %d Elapsed: %ld.%06ld  %s: ",
+  fprintf (fout, "Clock %d Elapsed: %ld.%06ld  %s: ",
            clockno, now.tv_sec, now.tv_usec, prettify (function_name));
 
   va_start (ap, format);
 
-  vfprintf (stderr, format, ap);
+  vfprintf (fout, format, ap);
 
   va_end (ap);
 
-  fprintf (stderr, "\n");
+  fprintf (fout, "\n");
 }
 
 /********************************************************************\

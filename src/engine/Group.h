@@ -180,7 +180,7 @@ AccountGroup * xaccAccountGetRoot (Account *account);
 Account * xaccGroupGetParentAccount (AccountGroup *group);
 
 /* The xaccGroupMapAccounts() routine will traverse the account 
-      group, returning a list of accounts.  If teh callback
+      group, returning a list of accounts.  If the callback
       returns null for a given item, it won't show up in
       the result list.  You should free the returned list when
       you are done with it.
