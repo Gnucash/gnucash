@@ -248,7 +248,7 @@ xaccScrubSubSplitPrice (Split *split, int maxmult, int maxamtscu)
       Split *s = node->data;
       Transaction *txn = s->parent;
       gnc_numeric dst_amt, dst_val, target_val;
-      gnc_numeric delta;
+      gnc_numeric frac, delta;
       int scu;
 
       /* Skip the reference split */
@@ -258,9 +258,9 @@ xaccScrubSubSplitPrice (Split *split, int maxmult, int maxamtscu)
 
       dst_amt = xaccSplitGetAmount (s);
       dst_val = xaccSplitGetValue (s);
-      target_val = gnc_numeric_mul (dst_amt, src_val,
+      frac = gnc_numeric_div (dst_amt, src_amt, 
                         GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-      target_val = gnc_numeric_div (target_val, src_amt,
+      target_val = gnc_numeric_mul (frac, src_val,
                         scu, GNC_HOW_DENOM_EXACT|GNC_HOW_RND_ROUND);
       if (gnc_numeric_check (target_val))
       {
