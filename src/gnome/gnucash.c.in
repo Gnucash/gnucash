@@ -34,6 +34,7 @@
 
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
+#include "gw-gnc.h"
 #include "gnucash.h"
 #include "i18n.h"
 #include "messages.h"
@@ -190,5 +191,24 @@ gnc_get_global_argv (void)
 {
   return gargv;
 }
+
+/* ============================================================== */
+/* TEMP stuff for gnucash script migration. */
+
+void
+gnc_sh_setup(void)
+{
+  guile_is_initialized = TRUE;
+  gargc = 0;
+
+#ifdef HAVE_GETTEXT
+  bindtextdomain (TEXT_DOMAIN, LOCALE_DIR);
+  textdomain (TEXT_DOMAIN);
+#endif
+
+  /* It seems we need this so guile can find the locale. */
+  setlocale(LC_ALL, "");
+}
+
 
 /* ==================== END OF FILE ============================== */
