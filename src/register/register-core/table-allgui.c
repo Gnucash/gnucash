@@ -144,7 +144,7 @@ gnc_table_destroy (Table * table)
   g_free (table);
 }
 
-gboolean
+int
 gnc_table_current_cursor_changed (Table *table,
                                   gboolean include_conditional)
 {
