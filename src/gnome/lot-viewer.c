@@ -51,7 +51,7 @@
 #include "gnc-lot.h"
 #include "kvp_frame.h"
 #include "messages.h"
-#include "Scrub2.h"
+#include "Scrub3.h"
 #include "Transaction.h"
 
 #include "dialog-utils.h"
@@ -112,7 +112,7 @@ lv_show_splits (GNCLotViewer *lv)
 
    if (NULL == lot) return;
 
-gnc_engine_suspend_events();  /* XXX remove when xaccSplitGetCapGains() fixed */
+/* gnc_engine_suspend_events();  XXX remove when xaccSplitGetCapGains() fixed */
    gtk_clist_freeze (lv->mini_clist);
    gtk_clist_clear (lv->mini_clist);
    split_list = gnc_lot_get_split_list (lot);
@@ -189,7 +189,7 @@ gnc_engine_suspend_events();  /* XXX remove when xaccSplitGetCapGains() fixed */
       gtk_clist_set_selectable (lv->mini_clist, row, FALSE);
    }
    gtk_clist_thaw (lv->mini_clist);
-gnc_engine_resume_events();  /* XXX remove when xaccSplitGetCapGains() fixed */
+/* gnc_engine_resume_events();  XXX remove when xaccSplitGetCapGains() fixed */
 }
 
 /* ======================================================================== */
@@ -325,7 +325,7 @@ lv_scrub_lot_cb (GtkButton *but, gpointer user_data)
 {
    GNCLotViewer *lv = user_data;
    if (NULL == lv->selected_lot) return; 
-   xaccLotScrubDoubleBalance (lv->selected_lot);
+   xaccScrubLot (lv->selected_lot);
    gnc_lot_viewer_fill (lv);
    lv_show_splits (lv);
 }
@@ -337,7 +337,7 @@ static void
 lv_scrub_acc_cb (GtkButton *but, gpointer user_data)
 {
    GNCLotViewer *lv = user_data;
-   xaccAccountScrubLotsBalance (lv->account);
+   xaccAccountScrubLots (lv->account);
    gnc_lot_viewer_fill (lv);
    lv_show_splits (lv);
 }
@@ -407,13 +407,12 @@ get_realized_gains (GNCLot *lot, gnc_commodity *currency)
 static void
 gnc_lot_viewer_fill (GNCLotViewer *lv)
 {
-   int row, nlots;
+   int row;
    LotList *lot_list, *node;
    GNCLot *selected_lot;
    int selected_row = -1;
 
    lot_list = xaccAccountGetLotList (lv->account);
-   nlots = g_list_length (lot_list);
 
    selected_lot = lv->selected_lot;
    gtk_clist_freeze (lv->lot_clist);
@@ -523,6 +522,7 @@ lv_window_destroy_cb (GtkObject *object, gpointer user_data)
 {
    GNCLotViewer *lv = user_data;
    gnc_close_gui_component_by_data (LOT_VIEWER_CM_CLASS, lv);
+   gnc_unregister_gui_component_by_data (LOT_VIEWER_CM_CLASS, lv);
    g_free (lv);
 }
                                                                                 
