@@ -614,6 +614,8 @@ xaccCreateTable (Table *table, GtkWidget * parent)
       }
       gtk_clist_thaw(GTK_CLIST(reg));
     }
+    gtk_clist_set_policy(GTK_CLIST(reg),
+                         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     
     gtk_clist_freeze(GTK_CLIST(reg));
     for(i = num_header_rows; i < table->num_phys_rows; i++) {
@@ -712,7 +714,7 @@ void
 xaccRefreshTableGUI (Table * table)
 {
   CellBlock *curs;
-  GtkWidget * reg;
+  GtkCList * reg;
   int num_header_rows = 0;
   int i, j;
   
@@ -722,7 +724,7 @@ xaccRefreshTableGUI (Table * table)
   /* The 0'th row of the handlers is defined as the header */
   curs = table->handlers[0][0];
   num_header_rows = curs->numRows;
-  reg = table->table_widget;
+  reg = GTK_CLIST(table->table_widget);
 
   printf (" refresh numphysrows=%d numphyscols=%d \n",
           table->num_phys_rows, table->num_phys_cols);
@@ -733,20 +735,24 @@ xaccRefreshTableGUI (Table * table)
             table->entries[i][3]);
   }
 
-  gtk_clist_freeze(GTK_CLIST(reg));
+  gtk_clist_freeze(reg);
 
-  while(GTK_CLIST(reg)->rows < (table->num_phys_rows - num_header_rows)) {
-    gtk_clist_append(GTK_CLIST(reg), NULL);
+  /* Adjust table to have the right number of rows */
+  while(reg->rows < (table->num_phys_rows - num_header_rows)) {
+    gtk_clist_append(reg, NULL);
+  }
+  while(reg->rows > (table->num_phys_rows - num_header_rows)) {
+    gtk_clist_remove(reg, 0);
   }
 
   for(i = num_header_rows; i < table->num_phys_rows; i++)
   {
     for(j = 0; j < table->num_phys_cols; j++) {
-      gtk_clist_set_text(GTK_CLIST(reg), i - num_header_rows, j,
-                         table->entries[i][j]);
+      gtk_clist_set_text(reg, i - num_header_rows, j, table->entries[i][j]);
     }
   }
-  gtk_clist_thaw(GTK_CLIST(reg)); 
+
+  gtk_clist_thaw(reg); 
 }
 
 /* ================== end of file ======================= */

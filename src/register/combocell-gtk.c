@@ -97,12 +97,18 @@ void xaccInitComboCell (ComboCell *cell)
 static
 void destroyCombo (BasicCell *bcell)
 {
-  ComboCell *cell;
+  ComboCell *cell = (ComboCell *) bcell;
+  PopBox *box = (PopBox *) (cell->cell.gui_private);
   
-  cell = (ComboCell *) bcell;
-  
-  if (!(cell->cell.realize)) {
-    PopBox *box = (PopBox *) (cell->cell.gui_private);
+  /* HACK: I had to put the three extra tests in the guard so that
+     we don't get a segfault on register window closes.  I haven't checked
+     to be sure this is exactly the right thing to do, but it works.
+
+     Actually, almost all of the combobox (and table-gtk for that
+     matter) code is an ugly hack that should go away when we have a
+     real table widget... */
+
+  if (!(cell->cell.realize) && box && box->table && box->table->entry_frame) {
     gtk_container_remove(GTK_CONTAINER(box->table->entry_frame),
                          GTK_WIDGET(box->combobox));
     gtk_container_add(GTK_CONTAINER(box->table->entry_frame),
