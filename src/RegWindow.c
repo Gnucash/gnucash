@@ -1473,14 +1473,16 @@ regSaveTransaction( RegWindow *regData, int position )
         break;
     }
 
-    { 
-    char *pay, *dep;
-    xaccGetDisplayAmountStrings (regData, themount, trans, &pay, &dep);
-    XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, pay );
-    XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, dep );
-    XtFree (pay);
-    XtFree (dep);
-    }
+    /* not needed -- the regRefresh will redraw all --
+     * { 
+     * char *pay, *dep;
+     * xaccGetDisplayAmountStrings (regData, themount, trans, &pay, &dep);
+     * XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, pay );
+     * XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, dep );
+     * XtFree (pay);
+     * XtFree (dep);
+     * }
+     */
   }
 
   /* ignore MOD_PRIC for non-stock accounts */
@@ -1499,8 +1501,10 @@ regSaveTransaction( RegWindow *regData, int position )
     sscanf( price, "%f", &val );
     trans->share_price = val;
     
-    sprintf( buf, "%.2f ", trans->share_price );
-    XbaeMatrixSetCell( regData->reg, row+PRCC_CELL_R, PRCC_CELL_C, buf );
+    /* not needed -- the regRefresh will redraw all --
+     * sprintf( buf, "%.2f ", trans->share_price );
+     * XbaeMatrixSetCell( regData->reg, row+PRCC_CELL_R, PRCC_CELL_C, buf );
+     */ 
     }
   
   /* If this is a new transaction, and the user did not 
