@@ -94,18 +94,21 @@
   (define menu (gnc:make-menu gnc:menuname-reports
 			      (list gnc:window-name-main "_Actions")))
   (define menu-namer (gnc:new-menu-namer))
-  (define tax-menu (gnc:make-menu gnc:menuname-taxes
-                                  (list gnc:window-name-main
-					gnc:menuname-reports "")))
-  (define income-expense-menu
-    (gnc:make-menu gnc:menuname-income-expense
-                   (list gnc:window-name-main gnc:menuname-reports "")))
   (define asset-liability-menu
     (gnc:make-menu gnc:menuname-asset-liability
+                   (list gnc:window-name-main gnc:menuname-reports "")))
+  (define income-expense-menu
+    (gnc:make-menu gnc:menuname-income-expense
                    (list gnc:window-name-main gnc:menuname-reports "")))
   (define utility-menu
     (gnc:make-menu gnc:menuname-utility
                    (list gnc:window-name-main gnc:menuname-reports "")))
+  (define custom-menu
+    (gnc:make-menu gnc:menuname-custom
+                   (list gnc:window-name-main gnc:menuname-reports "")))
+  (define tax-menu 
+    (gnc:make-menu gnc:menuname-taxes
+		   (list gnc:window-name-main gnc:menuname-reports "")))
 
   (gnc:add-extension menu)
 
@@ -113,6 +116,7 @@
   (gnc:add-extension income-expense-menu)
   (gnc:add-extension asset-liability-menu)
   (gnc:add-extension utility-menu)
+  (gnc:add-extension custom-menu)
 
   ;; run report-hook danglers
   (gnc:hook-run-danglers gnc:*report-hook*)
