@@ -31,6 +31,11 @@
 	* src/business/business-gnome/glade/date-close.glade:
 	  Fix the glade settings so resizing the window will properly
 	  resize the widgets.  Fixes #107586.
+
+	* src/business/business-core/business-core.scm:
+	  When building the "name + address" string, check if the
+	  company name and contact name are the same and, if so,
+	  only print one of them.  Fixes #109753.
 	
 2003-04-01  Christian Stimming  <stimming@tuhh.de>
 
