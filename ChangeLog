@@ -1,3 +1,17 @@
+2001-03-25  Dave Peticolas  <dave@krondo.com>
+
+	* src/test/test-exp-parser.c (test_parser): add / 0 test
+
+	* src/scm/report/txf-export.scm: fix bugs
+
+	* src/gnome/gnc-dialogs.glade: work on tax info dialog
+
+	* src/gnome/dialog-tax-info.c: more work
+
+	* src/engine/sixtp.c (gnc_is_our_xml_file): don't use
+	g_return_if_fail for not finding a file -- avoid ** CRITICAL **
+	warning.
+
 2001-03-24  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/gnc-pricedb-xml-v1.c (pricedb_v2_end_handler): fix bug

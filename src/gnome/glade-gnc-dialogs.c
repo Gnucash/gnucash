@@ -5702,6 +5702,10 @@ create_Tax_Information_Dialog (void)
   GtkWidget *account_frame;
   GtkWidget *vbox96;
   GtkWidget *account_scroll;
+  GtkWidget *hbox97;
+  GSList *tax_info_account_type_group = NULL;
+  GtkWidget *income_radio;
+  GtkWidget *expense_radio;
   GtkWidget *select_subaccounts_button;
   GtkWidget *unselect_subaccounts_button;
   GtkWidget *frame40;
@@ -5762,6 +5766,30 @@ create_Tax_Information_Dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox96), account_scroll, TRUE, TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (account_scroll), 3);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (account_scroll), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+
+  hbox97 = gtk_hbox_new (TRUE, 0);
+  gtk_widget_ref (hbox97);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "hbox97", hbox97,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox97);
+  gtk_box_pack_start (GTK_BOX (vbox96), hbox97, FALSE, FALSE, 2);
+
+  income_radio = gtk_radio_button_new_with_label (tax_info_account_type_group, _("Income"));
+  tax_info_account_type_group = gtk_radio_button_group (GTK_RADIO_BUTTON (income_radio));
+  gtk_widget_ref (income_radio);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "income_radio", income_radio,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (income_radio);
+  gtk_box_pack_start (GTK_BOX (hbox97), income_radio, FALSE, FALSE, 0);
+
+  expense_radio = gtk_radio_button_new_with_label (tax_info_account_type_group, _("Expense"));
+  tax_info_account_type_group = gtk_radio_button_group (GTK_RADIO_BUTTON (expense_radio));
+  gtk_widget_ref (expense_radio);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "expense_radio", expense_radio,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (expense_radio);
+  gtk_box_pack_start (GTK_BOX (hbox97), expense_radio, FALSE, FALSE, 0);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (expense_radio), TRUE);
 
   select_subaccounts_button = gtk_button_new_with_label (_("Select Subaccounts"));
   gtk_widget_ref (select_subaccounts_button);

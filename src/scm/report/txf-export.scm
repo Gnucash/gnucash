@@ -18,7 +18,10 @@
 (define (gnc:txf-get-multiple categories code)
   (gnc:txf-get-code-info categories code 4))
 (define (gnc:txf-get-help categories code)
-  (cdr (assv txf-help-strings code)))
+  (let ((pair (assv code txf-help-strings)))
+    (if pair
+        (cdr pair)
+        "No help available.")))
 
 (define (gnc:txf-get-codes categories)
   (map car categories))
@@ -26,7 +29,7 @@
 ;;;; Private
 
 (define (gnc:txf-get-code-info categories code index)
-  (vector-ref index (cdr (assv categories code))))
+  (vector-ref (cdr (assv code categories)) index))
 
 (define txf-help-categories
   (list

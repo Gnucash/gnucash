@@ -8550,6 +8550,48 @@ words.
 	  </widget>
 
 	  <widget>
+	    <class>GtkHBox</class>
+	    <name>hbox97</name>
+	    <homogeneous>True</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>2</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkRadioButton</class>
+	      <name>income_radio</name>
+	      <can_focus>True</can_focus>
+	      <label>Income</label>
+	      <active>False</active>
+	      <draw_indicator>True</draw_indicator>
+	      <group>tax_info_account_type</group>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkRadioButton</class>
+	      <name>expense_radio</name>
+	      <can_focus>True</can_focus>
+	      <label>Expense</label>
+	      <active>True</active>
+	      <draw_indicator>True</draw_indicator>
+	      <group>tax_info_account_type</group>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+	  </widget>
+
+	  <widget>
 	    <class>GtkButton</class>
 	    <name>select_subaccounts_button</name>
 	    <border_width>3</border_width>

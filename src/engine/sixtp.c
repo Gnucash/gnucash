@@ -750,7 +750,8 @@ gnc_is_our_xml_file(const char *filename, const char *first_tag)
   g_return_val_if_fail(first_tag, FALSE);
   
   f = fopen(filename, "r");
-  g_return_val_if_fail(f, FALSE);
+  if (f == NULL)
+    return FALSE;
 
   tag_compare = g_strdup_printf("<%s>", first_tag);
   
