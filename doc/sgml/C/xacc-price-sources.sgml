@@ -15,7 +15,7 @@ any time by selecting the account in an account window, and chosing
 section called "Price Quote Source".
 </PARA>
 
-<para>To enable automatic price updates, do the following:
+<para>To enable automatic price updates, do the following:</para>
 
 <ITEMIZEDLIST>
   <LISTITEM>
@@ -84,9 +84,11 @@ TIMEZONE SETTING???)
 	      </para></listitem>
 	</ITEMIZEDLIST>
 
+<note>
 <para>Instructions for updating prices are found in the documentation
 on the <link linkend="xacc-price-editor">price editor</link>.
 </para>
+</note>
 
 
     <TABLE>

@@ -888,19 +888,19 @@ gnc_account_print_info_helper(Account *account, gboolean use_symbol,
 }
 
 GNCPrintAmountInfo
-gnc_account_quantity_print_info (Account *account, gboolean use_symbol)
-{
-    return gnc_account_print_info_helper(account, use_symbol,
-                                         xaccAccountGetCommodity,
-                                         xaccAccountGetCommoditySCU);
-}
-
-GNCPrintAmountInfo
 gnc_account_value_print_info (Account *account, gboolean use_symbol)
 {
     return gnc_account_print_info_helper(account, use_symbol,
                                          xaccAccountGetCurrency,
                                          xaccAccountGetCurrencySCU);
+}
+
+GNCPrintAmountInfo
+gnc_account_print_info (Account *account, gboolean use_symbol)
+{
+    return gnc_account_print_info_helper(account, use_symbol,
+                                         xaccAccountGetCommodity,
+                                         xaccAccountGetCommoditySCU);
 }
 
 GNCPrintAmountInfo
@@ -913,8 +913,7 @@ gnc_split_quantity_print_info (Split *split, gboolean use_symbol)
     return info;
   }
 
-  return gnc_account_quantity_print_info (xaccSplitGetAccount (split),
-                                          use_symbol);
+  return gnc_account_print_info (xaccSplitGetAccount (split), use_symbol);
 }
 
 GNCPrintAmountInfo

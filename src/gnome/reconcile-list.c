@@ -667,12 +667,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
   account_type = xaccAccountGetType (list->account);
   strings[5] = NULL;
 
-  if ((account_type == STOCK) ||
-      (account_type == MUTUAL) ||
-      (account_type == CURRENCY))
-    print_info = gnc_account_quantity_print_info (list->account, FALSE);
-  else
-    print_info = gnc_account_value_print_info (list->account, FALSE);
+  print_info = gnc_account_print_info (list->account, FALSE);
 
   for (splits = xaccQueryGetSplits (list->query); splits; splits=splits->next)
   {

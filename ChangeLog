@@ -1,3 +1,23 @@
+2001-07-05  Dave Peticolas  <dave@krondo.com>
+
+	* doc/sgml/C/xacc-common-report-options.sgml: fix my fix
+
+	* doc/sgml/C/xacc-price-sources.sgml: fix warnings
+
+	* src/guile/gnc.gwp: wrap new func
+
+	* src/gnome/druid-stock-split.c: use new func
+
+	* src/gnome/window-register.c: use new func
+
+	* src/gnome/window-reconcile.c: use new func
+
+	* src/gnome/reconcile-list.c: use new func
+
+	* src/gnc-ui-util.c (gnc_account_print_info): new func. this
+	replaces 'quantity' and 'value' print info for the currency-
+	in-transaction switch. Delete the 'quantity' version.
+
 2001-07-04  Dave Peticolas  <dave@krondo.com>
 
 	* AUTHORS: credits
@@ -44,7 +64,8 @@
 
 2001-07-03  Dave Peticolas  <dave@krondo.com>
 
-	* src/scm/report/register.scm: add exported functions and needed modules
+	* src/scm/report/register.scm: add exported functions and needed
+	modules
 
 	* AUTHORS: credits
 

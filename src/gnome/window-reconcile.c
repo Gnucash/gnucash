@@ -236,16 +236,8 @@ recnRecalculateBalance (RecnWindow *recnData)
   reverse_balance = gnc_reverse_balance(account);
 
   /* update the starting balance */
-  if (recnData->use_shares)
-  {
-    starting = xaccAccountGetShareReconciledBalance(account);
-    print_info = gnc_account_quantity_print_info (account, TRUE);
-  }
-  else
-  {
-    starting = xaccAccountGetReconciledBalance(account);
-    print_info = gnc_account_value_print_info (account, TRUE);
-  }
+  starting = xaccAccountGetShareReconciledBalance(account);
+  print_info = gnc_account_print_info (account, TRUE);
 
   if (reverse_balance)
     starting = gnc_numeric_neg (starting);
@@ -593,16 +585,8 @@ startRecnWindow(GtkWidget *parent, Account *account,
   auto_interest_xfer_option =
      gnc_recn_interest_xfer_get_auto_interest_xfer_allowed( account );
 
-  if( data.use_shares )
-  {
-    ending = xaccAccountGetShareReconciledBalance(account);
-    print_info = gnc_account_quantity_print_info (account, TRUE);
-  }
-  else
-  {
-    ending = xaccAccountGetReconciledBalance(account);
-    print_info = gnc_account_value_print_info (account, TRUE);
-  }
+  ending = xaccAccountGetShareReconciledBalance(account);
+  print_info = gnc_account_print_info (account, TRUE);
 
   if (gnc_reverse_balance(account))
   {

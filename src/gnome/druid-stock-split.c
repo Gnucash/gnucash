@@ -115,7 +115,7 @@ fill_account_list (StockSplitInfo *info, Account *account)
 
     security = xaccAccountGetSecurity (account);
 
-    print_info = gnc_account_quantity_print_info (account, FALSE);
+    print_info = gnc_account_print_info (account, FALSE);
 
     strings[0] = xaccAccountGetFullName (account,
                                          gnc_get_account_separator ());
@@ -176,7 +176,7 @@ refresh_details_page (StockSplitInfo *info)
 
   g_return_if_fail (account != NULL);
 
-  print_info = gnc_account_quantity_print_info (account, FALSE);
+  print_info = gnc_account_print_info (account, FALSE);
 
   gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (info->distribution_edit),
                                   print_info);

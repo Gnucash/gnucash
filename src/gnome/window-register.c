@@ -2368,7 +2368,7 @@ gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 
   if (regData->shares_label != NULL)
   {
-    print_info = gnc_account_quantity_print_info (leader, TRUE);
+    print_info = gnc_account_print_info (leader, TRUE);
 
     amount = xaccAccountGetShareBalance (leader);
     if (reverse)
