@@ -315,7 +315,8 @@
     (define (quotable-account? a)
       (let ((type (gw:enum-<gnc:AccountType>-val->sym (gnc:account-get-type a)
                                                       #f))
-	    (src (gnc:account-get-price-src a)))
+	    (src (gnc:account-get-price-src a))
+	    (balance (not (gnc:numeric-zero-p (gnc:account-get-balance a)))))
 
         (if (not type) (set! type '()))
         (if (symbol? type) (set! type (list type)))
