@@ -49,8 +49,7 @@ endif
 # Have to use wildcard here otherwise filters below won't get the expanded
 # text to work on...
 OTHER_OBJS += $(wildcard @top_srcdir@/src/obj/gnome/*.o)
-OTHER_OBJS += $(wildcard @top_srcdir@/src/engine/obj/*.o)
-OTHER_OBJS += $(wildcard @top_srcdir@/src/engine/obj/guid/*.o)
+OTHER_OBJS += $(wildcard @top_srcdir@/src/libengine.a)
 OTHER_OBJS += $(wildcard @top_srcdir@/src/register/obj/gnome/*.o)
 OTHER_OBJS += $(wildcard @top_srcdir@/src/reports/obj/*.o) 
 OTHER_OBJS += $(wildcard @top_srcdir@/src/guile/obj/*.o)
