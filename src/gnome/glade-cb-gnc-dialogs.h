@@ -144,29 +144,3 @@ gnc_ui_select_date_dialog_ok_cb        (GtkButton       *button,
 void
 gnc_ui_select_date_dialog_cancel_cb    (GtkButton       *button,
                                         gpointer         user_data);
-
-void
-on_Budget_Dialog_destroy               (GtkObject       *object,
-                                        gpointer         user_data);
-
-void
-on_budget_cancel_button_clicked        (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-on_budget_entry_tree_tree_select_row   (GtkCTree        *ctree,
-                                        GList           *node,
-                                        gint             column,
-                                        gpointer         user_data);
-
-void
-on_budget_entry_tree_tree_unselect_row (GtkCTree        *ctree,
-                                        GList           *node,
-                                        gint             column,
-                                        gpointer         user_data);
-
-void
-on_budget_entry_tree_scroll_vertical   (GtkCList        *clist,
-                                        GtkScrollType    scroll_type,
-                                        gfloat           position,
-                                        gpointer         user_data);
