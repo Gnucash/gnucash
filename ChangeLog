@@ -1,3 +1,9 @@
+2003-07-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/gnc-account-tree.c: add "(Report)" strings
+	  to the various columns displayed in the report currency.
+	  Partial fix for #118695.
+
 2003-07-30  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* src/scm/help-topics-index.scm: Commit Jon Lapham's doc changes.
