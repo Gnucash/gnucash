@@ -368,7 +368,7 @@ msgstr "Descripción"
 #: src/SplitLedger.c:4027 src/gnome/reconcile-list.c:151
 #: src/register/splitreg.c:96
 msgid "Reconciled:R"
-msgstr "Cuadrado:R"
+msgstr ""
 
 #: src/SplitLedger.c:4030 src/SplitLedger.c:4103
 #, fuzzy
@@ -587,19 +587,19 @@ msgstr "Información de Transferencia"
 
 #: src/gnc-ui-util.c:365
 msgid "not cleared:n"
-msgstr "no limpiado:n"
+msgstr ""
 
 #: src/gnc-ui-util.c:366
 msgid "cleared:c"
-msgstr "limpiado:c"
+msgstr "cleared:l"
 
 #: src/gnc-ui-util.c:367
 msgid "reconciled:y"
-msgstr "re-cuadrado:y"
+msgstr ""
 
 #: src/gnc-ui-util.c:368
 msgid "frozen:f"
-msgstr "congelado:f"
+msgstr "frozen:c"
 
 #: src/gnc-ui-util.c:383
 msgid "(none)"

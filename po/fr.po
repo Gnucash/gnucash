@@ -410,7 +410,7 @@ msgstr "Description"
 #: src/SplitLedger.c:4027 src/gnome/reconcile-list.c:151
 #: src/register/splitreg.c:96
 msgid "Reconciled:R"
-msgstr "Rapproché:R"
+msgstr "Reconciled:R"
 
 # messages-i18n.c:191
 #: src/SplitLedger.c:4030 src/SplitLedger.c:4103
@@ -669,21 +669,21 @@ msgstr "Informations du transfert"
 
 #: src/gnc-ui-util.c:365
 msgid "not cleared:n"
-msgstr "pas pointé:n"
+msgstr ""
 
 # messages-i18n.c:260
 #: src/gnc-ui-util.c:366
 msgid "cleared:c"
-msgstr "pointé:c"
+msgstr "cleared:p"
 
 # messages-i18n.c:322
 #: src/gnc-ui-util.c:367
 msgid "reconciled:y"
-msgstr "rapproché:y"
+msgstr ""
 
 #: src/gnc-ui-util.c:368
 msgid "frozen:f"
-msgstr "gelé:f"
+msgstr "frozen:g"
 
 # messages-i18n.c:305 src/gnome/print-session.c:108
 # src/gnome/print-session.c:197
@@ -4413,9 +4413,8 @@ msgstr "Pointé:"
 
 # messages-i18n.c:322
 #: src/gnome/window-register.c:1035
-#, fuzzy
 msgid "Reconciled:"
-msgstr "Rapproché:R"
+msgstr "Rapproché:"
 
 # po/guile_strings.txt:266
 #: src/gnome/window-register.c:1039
