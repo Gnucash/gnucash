@@ -9,6 +9,7 @@ test-freq-spec
 test-group-vs-book
 test-object
 test-period
+test-print-queries
 test-query
 test-querynew
 test-resolve-file-path

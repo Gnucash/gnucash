@@ -3,5 +3,7 @@ Makefile.in
 test-exp-parser
 test-link-module
 test-print-parse-amount
+test-print-queries
+test-scm-query-string
 .deps
 .libs
