@@ -12,21 +12,21 @@ top_srcdir="@-GNC_SRCDIR-@"
 top_builddir="@-GNC_BUILDDIR-@"
 G_WRAP_MODULE_DIR="@-G_WRAP_MODULE_DIR-@"
 
-if test "${GNC_CONFIG_DIR}"x = x
+if test "${GNC_CONFIG_PATH}"x = x
 then
-  GNC_CONFIG_DIR="${top_srcdir}/src/scm"
-  export GNC_CONFIG_DIR
+  GNC_CONFIG_PATH="(\"${top_srcdir}/src/scm\")"
+  export GNC_CONFIG_PATH
 fi
 
-if test "${GNC_SHARE_DIR}"x = x
+if test "${GNC_SHARE_PATH}"x = x
 then
-  GNC_SHARE_DIR="${top_srcdir}/src/scm"
-  export GNC_SHARE_DIR
+  GNC_SHARE_PATH="(\"${top_srcdir}/src/scm\")"
+  export GNC_SHARE_PATH
 fi
 
 if test "${GNC_DOC_PATH}"x = x
 then
-  GNC_DOC_PATH="(${top_srcdir}/src/scm)"
+  GNC_DOC_PATH="(\"${top_srcdir}/src/scm\")"
   export GNC_DOC_PATH
 fi
 
@@ -47,6 +47,7 @@ eval `@-GNC_SRCDIR-@/src/gnc-test-env \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/engine/test-core \
   --gnc-module-dir ${top_builddir}/src/report/stylesheets \
+  --gnc-module-dir ${top_builddir}/src/report/report-gnome \
   --gnc-module-dir ${top_builddir}/src/report/report-system \
   --gnc-module-dir ${top_builddir}/src/report/utility-reports \
   --gnc-module-dir ${top_builddir}/src/report/standard-reports \
