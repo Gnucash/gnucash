@@ -19,6 +19,7 @@ libgncgnome_a_SOURCES = \
   dialog-tax-info.c \
   dialog-totd.c \
   dialog-transfer.c \
+  dialog-userpass.c \
   dialog-utils.c \
   druid-commodity.c \
   druid-qif-import.c \

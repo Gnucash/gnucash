@@ -1,3 +1,8 @@
+2001-02-27  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-userpass.c: add a dialog for username/password
+	entry
+
 2001-02-26  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/gnc-engine-util.h: don't evaluate debug macro

@@ -90,6 +90,19 @@ gboolean gnc_dup_trans_dialog (GtkWidget * parent, time_t *date_p,
 void     gnc_tax_info_dialog (GtkWidget * parent);
 void     gnc_stock_split_dialog (Account * initial);
 
+/* Open a dialog asking for username and password. The heading and
+ * either 'initial_*' arguments may be NULL. If the dialog returns
+ * TRUE, the user pressed OK and the entered strings are stored in the
+ * output variables. They should be g_freed when no longer needed. If
+ * the dialog returns FALSE, the user pressed CANCEL and NULL was
+ * stored in username and password. */
+gboolean gnc_get_username_password (GtkWidget *parent,
+                                    const char *heading,
+                                    const char *initial_username,
+                                    const char *initial_password,
+                                    char **username,
+                                    char **password);
+
 
 /* Managing the GUI Windows *****************************************/
 
