@@ -69,6 +69,7 @@
 
 /** Static Globals *******************************************************/
 static GList *active_windows = NULL;
+static GList *installed_pages = NULL;
 
 /** Declarations *********************************************************/
 static void gnc_main_window_class_init (GncMainWindowClass *klass);
@@ -300,21 +301,34 @@ void
 gnc_main_window_open_page (GncMainWindow *window,
 			   GncPluginPage *page)
 {
-	GtkWidget *child;
 	GtkWidget *label_box;
 	GtkWidget *label;
 	const gchar *icon;
 	GtkWidget *image;
 	GtkNotebook *notebook;
+	GList *item;
+	gint page_num;
 
-	if ((window == NULL) && active_windows)
-	  window = active_windows->data;
-	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
+	if (window)
+	  g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
 
+	item = g_list_find (installed_pages, page);
+	if (item) {
+	  window = GNC_MAIN_WINDOW (page->window);
+	  notebook = GTK_NOTEBOOK (window->priv->notebook);
+	  page_num = gtk_notebook_page_num(notebook, page->notebook_page);
+	  gtk_notebook_set_current_page (notebook, page_num);
+	  gtk_window_present(GTK_WINDOW(window));
+	  return;
+	}
+	
+	if ((window == NULL) && active_windows)
+	  window = active_windows->data;
 	page->window = GTK_WIDGET(window);
-	child = gnc_plugin_page_create_widget (page);
-	g_object_set_data (G_OBJECT (child), "page-plugin", page);
+	page->notebook_page = gnc_plugin_page_create_widget (page);
+	g_object_set_data (G_OBJECT (page->notebook_page),
+			   PLUGIN_PAGE_LABEL, page);
 
 	icon = GNC_PLUGIN_PAGE_GET_CLASS(page)->tab_icon;
 	label = gtk_label_new (page->tab_name);
@@ -333,28 +347,23 @@ gnc_main_window_open_page (GncMainWindow *window,
 	}
 	
 	notebook = GTK_NOTEBOOK (window->priv->notebook);
-	gtk_notebook_append_page (notebook, child, label_box);
+	gtk_notebook_append_page (notebook, page->notebook_page, label_box);
 	gnc_plugin_page_inserted (page);
 	gtk_notebook_set_current_page (notebook, -1);
+
+	installed_pages = g_list_append (installed_pages, page);
 }
 
 void
 gnc_main_window_close_page (GncMainWindow *window,
 			    GncPluginPage *page)
 {
-	gboolean found = FALSE;
-	guint i;
-	GtkWidget *child;
+	GtkNotebook *notebook;
+	gint page_num;
 
-	for (i = 0; i < gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)); i++) {
-		child = gtk_notebook_get_nth_page (GTK_NOTEBOOK (window->priv->notebook), i);
-		if (g_object_get_data (G_OBJECT (child), "page-plugin") == page) {
-			found = TRUE;
-			break;
-		}
-	}
+	installed_pages = g_list_remove (installed_pages, page);
 
-	if (!found)
+	if (!page->notebook_page)
 		return;
 
 	if (window->priv->current_page == page) {
@@ -364,7 +373,10 @@ gnc_main_window_close_page (GncMainWindow *window,
 		window->priv->current_page = NULL;
 	}
 
-	gtk_notebook_remove_page (GTK_NOTEBOOK (window->priv->notebook), i);
+	notebook = GTK_NOTEBOOK (window->priv->notebook);
+	page_num =  gtk_notebook_page_num(notebook, page->notebook_page);
+	gtk_notebook_remove_page (notebook, page_num);
+	installed_pages = g_list_remove (installed_pages, page);
 
 	gnc_plugin_page_removed (page);
 
@@ -476,7 +488,8 @@ gnc_main_window_init (GncMainWindow *window)
 {
 	window->priv = g_new0 (GncMainWindowPrivate, 1);
 
-	window->priv->merged_actions_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+	window->priv->merged_actions_table =
+	  g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
 	gnc_main_window_setup_window (window);
 }
@@ -626,7 +639,7 @@ gnc_main_window_switch_page_internal (GtkNotebook *notebook,
 	}
 
 	child = gtk_notebook_get_nth_page (notebook, pos);
-	page = g_object_get_data (G_OBJECT (child), "page-plugin");
+	page = g_object_get_data (G_OBJECT (child), PLUGIN_PAGE_LABEL);
 
 	window->priv->current_page = page;
 

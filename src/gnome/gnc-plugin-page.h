@@ -43,10 +43,12 @@ G_BEGIN_DECLS
 typedef struct GncPluginPage {
 	GObject parent;
 
+	GtkWidget *window;
+	GtkWidget *notebook_page;
+
 	gchar *title;
 	gchar *tab_name;
 	gchar *uri;
-	GtkWidget *window;
 } GncPluginPage;
 
 typedef struct {
