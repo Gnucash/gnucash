@@ -495,7 +495,8 @@ gnc_book_begin (GNCBook *book, const char * book_id,
   /* -------------------------------------------------- */
   if ((!strncmp(book_id, "http://", 7)) ||
       (!strncmp(book_id, "https://", 8)) ||
-      (!strncmp(book_id, "postgres://", 11)))
+      (!strncmp(book_id, "postgres://", 11)) ||
+      (!strncmp(book_id, "rpc://", 6)))
   {
     char *p, *filefrag;
 
@@ -570,6 +571,45 @@ gnc_book_begin (GNCBook *book, const char * book_id,
       }
 
       book->backend = (*pg_new) ();
+    } else
+    if (!strncmp(book_id, "rpc://", 6))
+    {
+      char * dll_err;
+      void * dll_handle;
+      Backend * (*rpc_new)(void);
+ 
+      /* open and resolve all symbols now (we don't want mystery 
+       * failure later) */
+      dll_handle = dlopen ("libgnc_rpc.so", RTLD_NOW);
+      if (! dll_handle) 
+      {
+        dll_err = dlerror();
+        PWARN (" can't load library: %s\n", dll_err);
+        g_free(book->fullpath);
+        book->fullpath = NULL;
+        g_free(book->book_id);
+        book->book_id = NULL;
+        gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND);
+        return FALSE;
+      }
+
+      /* For the rpc backend, do the equivalent of 
+       * the statically loaded
+       * book->backend = pgendNew (); */
+      rpc_new = dlsym (dll_handle, "rpcendNew");
+      dll_err = dlerror();
+      if (dll_err) 
+      {
+        PWARN (" can't find symbol: %s\n", dll_err);
+        g_free(book->fullpath);
+        book->fullpath = NULL;
+        g_free(book->book_id);
+        book->book_id = NULL;
+        gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND);
+        return FALSE;
+      }
+
+      book->backend = (*rpc_new) ();
     }
 
     /* if there's a begin method, call that. */
@@ -651,7 +691,8 @@ gnc_book_load (GNCBook *book)
   }
   else if ((strncmp(book->book_id, "http://", 7) == 0) ||
            (strncmp(book->book_id, "https://", 8) == 0) ||
-           (strncmp(book->book_id, "postgres://", 11) == 0))
+           (strncmp(book->book_id, "postgres://", 11) == 0) ||
+	   (strncmp(book->book_id, "rpc://", 6)) == 0)
   {
     /* This code should be sufficient to initialize *any* backend,
      * whether http, postgres, or anything else that might come along.
@@ -1058,7 +1099,8 @@ xaccResolveURL (const char * pathfrag)
 
   if (!strncmp (pathfrag, "http://", 7)      ||
       !strncmp (pathfrag, "https://", 8)     ||
-      !strncmp (pathfrag, "postgres://", 11) ) 
+      !strncmp (pathfrag, "postgres://", 11) ||
+      !strncmp (pathfrag, "rpc://", 6))
   {
     return g_strdup(pathfrag);
   }
@@ -1068,4 +1110,37 @@ xaccResolveURL (const char * pathfrag)
   }
 
   return (xaccResolveFilePath (pathfrag));
+}
+
+
+void
+gnc_run_rpc_server (void)
+{
+  char * dll_err;
+  void * dll_handle;
+  int (*rpc_run)(short);
+  int ret;
+ 
+  /* open and resolve all symbols now (we don't want mystery 
+   * failure later) */
+  dll_handle = dlopen ("libgnc_rpc.so", RTLD_NOW);
+  if (! dll_handle) 
+  {
+    dll_err = dlerror();
+    PWARN (" can't load library: %s\n", dll_err);
+    return;
+  }
+  
+  rpc_run = dlsym (dll_handle, "rpc_server_run");
+  dll_err = dlerror();
+  if (dll_err) 
+  {
+    dll_err = dlerror();
+    PWARN (" can't find symbol: %s\n", dll_err);
+    return;
+  }
+  
+  ret = (*rpc_run)(0);
+
+  /* XXX How do we force an exit? */
 }

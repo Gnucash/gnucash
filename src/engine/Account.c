@@ -823,9 +823,9 @@ xaccAccountRecomputeBalance (Account * acc)
         price_xfer(last_split, share_reconciled_balance);
     } 
     else {
-      acc -> balance = gnc_numeric_zero();
-      acc -> cleared_balance = gnc_numeric_zero();
-      acc -> reconciled_balance = gnc_numeric_zero();
+      acc -> balance = dbalance;
+      acc -> cleared_balance = dcleared_balance;
+      acc -> reconciled_balance = dreconciled_balance;
     }
   } else {
     acc -> share_balance = dbalance;

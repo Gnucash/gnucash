@@ -1,3 +1,34 @@
+2001-03-19  Derek Atkins  <warlord@MIT.EDU>
+
+	* src/engine/rpc/*: Gnucash RPC Subsystem (Backend and Server).
+	  Still considered experimental.  Note that the RPC protocol may
+	  change over time causing client/server incompatibilities between
+	  various versions of client and server.
+
+	* configure.in: Add option to --enable-rpc.  Hook in RPC Subsystem
+	
+	* src/engine/Account.c: Fix for initial balance on
+	  stock/etc. accounts.  In particular, don't set to zero if there
+	  are no splits.
+
+	* src/engine/Backend.h: New RPC errors
+	
+	* src/engine/Query.{c,h}: Add function to obtain the internal
+	  Query Predicate functions (for use in rebuilding Queries from
+	  the RPC subsystem)
+	
+	* src/engine/Transaction.c: Be sure to call the backend in
+	  xaccTransRollbackEdit()
+
+	* src/engine/gnc-book.{c,h}: Added gnc_run_rpc_server() function.
+		Added hooks to call RPC Backend
+
+	* src/guile/gnc.gwp: added gnc_rpc_server() and new RPC Backend errors
+
+	* src/scm/command-line.scm: added --rpc-server optio
+
+	* src/engine/Makefile.am: Added RPC subdir
+
 2001-03-19  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/gnc-dir.h.in: move to src/gnome. fix for make dist

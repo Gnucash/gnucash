@@ -211,7 +211,14 @@
          'boolean
          gnc:load-system-config-if-needed
          #f
-         (N_ "Load the system configuation"))))
+         (N_ "Load the system configuation"))
+
+   (list "rpc-server"
+	 'boolean
+	 (lambda (val)
+	   (if val (gnc:run-rpc-server)))
+	 #f
+	 (N_ "Run the RPC Server"))))
 
 (define (gnc:cmd-line-get-boolean-arg args)
   ;; --arg         means #t

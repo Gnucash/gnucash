@@ -51,6 +51,19 @@ typedef enum {
   ERR_SQL_CORRUPT_DB,          /* data in db is corrupt */
   ERR_SQL_MISSING_DATA,        /* database doesn't contain expected data */
 
+  /* RPC errors */
+  ERR_RPC_BAD_URL,		/* Can't parse url */
+  ERR_RPC_HOST_UNK,		/* Host unknown */
+  ERR_RPC_CANT_CONNECT,		/* bad hostname/port/dbname/etc. */
+  ERR_RPC_CANT_BIND,		/* can't bind to address */
+  ERR_RPC_CANT_ACCEPT,		/* can't accept connection */
+  ERR_RPC_NO_CONNECTION,	/* no connection to server */
+  ERR_RPC_CONNECTION_LOST,	/* Lost connection to server */
+  ERR_RPC_BAD_VERSION,		/* RPC Version Mismatch */
+  ERR_RPC_SERVER_STATE,		/* Invalid/bad server state */
+  ERR_RPC_FAILED,		/* Operation failed */
+  ERR_RPC_NOT_ADDED,		/* object not added */
+
 } GNCBackendError;
 /* NOTE: if you modify GNCBackendError, please update src/scm/gnc.gwp */
 

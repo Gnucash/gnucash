@@ -191,4 +191,7 @@ gboolean gnc_book_process_events (GNCBook *book);
 char * xaccResolveFilePath (const char * filefrag);
 char * xaccResolveURL (const char * pathfrag);
 
+/* Run the RPC Server */
+void gnc_run_rpc_server (void);
+
 #endif /* __GNC_BOOK_H__ */

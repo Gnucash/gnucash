@@ -1201,6 +1201,57 @@ xaccQueryGetTransactions (Query * q, query_run_t runtype) {
 }
 
 
+Predicate
+xaccQueryGetPredicate (pr_type_t term_type)
+{
+  Predicate p = NULL;
+
+  /* the predicates are only known in the local 
+   * address space, which is why we have to set them 
+   * from the abstract type here. 
+   */
+  switch (term_type) 
+  {
+    case PR_ACCOUNT:
+      p = & xaccAccountMatchPredicate;
+      break;
+    case PR_ACTION:
+      p = & xaccActionMatchPredicate;
+      break;
+    case PR_AMOUNT:
+      p = & xaccAmountMatchPredicate;
+      break;
+    case PR_BALANCE:
+      p = & xaccBalanceMatchPredicate;
+      break;
+    case PR_CLEARED:
+      p = & xaccClearedMatchPredicate;
+      break;
+    case PR_DATE:
+      p = & xaccDateMatchPredicate;
+      break;
+    case PR_DESC:
+      p = & xaccDescriptionMatchPredicate;
+      break;
+    case PR_MEMO:
+      p = & xaccMemoMatchPredicate;
+      break;
+    case PR_NUM:
+      p = & xaccNumberMatchPredicate;
+      break;
+    case PR_PRICE:
+      p = & xaccSharePriceMatchPredicate;
+      break;
+    case PR_SHRS:
+      p = & xaccSharesMatchPredicate;
+      break;
+    case PR_MISC:
+      PERR ("misc term must not appear");
+      break;
+  }
+  return p;
+}
+
 /********************************************************************
  * xaccQueryAddPredicate
  * Add a predicate an existing query. 
@@ -1216,50 +1267,7 @@ xaccQueryAddPredicate (Query * q,
   Query     * qr;
 
   qt->data   = *pred;
-
-  /* the predicates are only known in the local 
-   * address space, which is why we have to set them 
-   * from the abstract type here. 
-   */
-  switch (pred->base.term_type) 
-  {
-    case PR_ACCOUNT:
-      qt->p = & xaccAccountMatchPredicate;
-      break;
-    case PR_ACTION:
-      qt->p = & xaccActionMatchPredicate;
-      break;
-    case PR_AMOUNT:
-      qt->p = & xaccAmountMatchPredicate;
-      break;
-    case PR_BALANCE:
-      qt->p = & xaccBalanceMatchPredicate;
-      break;
-    case PR_CLEARED:
-      qt->p = & xaccClearedMatchPredicate;
-      break;
-    case PR_DATE:
-      qt->p = & xaccDateMatchPredicate;
-      break;
-    case PR_DESC:
-      qt->p = & xaccDescriptionMatchPredicate;
-      break;
-    case PR_MEMO:
-      qt->p = & xaccMemoMatchPredicate;
-      break;
-    case PR_NUM:
-      qt->p = & xaccNumberMatchPredicate;
-      break;
-    case PR_PRICE:
-      qt->p = & xaccSharePriceMatchPredicate;
-      break;
-    case PR_SHRS:
-      qt->p = & xaccSharesMatchPredicate;
-      break;
-    case PR_MISC:
-      PERR ("misc term must not appear");
-      break;
-  }
+  qt->p = xaccQueryGetPredicate (qt->data.base.term_type);
   
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);

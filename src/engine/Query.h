@@ -306,4 +306,7 @@ time_t xaccQueryGetEarliestDateFound(Query * q);
 time_t xaccQueryGetLatestDateFound(Query * q);
 
 
+/* This is useful for network systems */
+Predicate xaccQueryGetPredicate (pr_type_t term_type);
+
 #endif

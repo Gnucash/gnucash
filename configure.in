@@ -173,6 +173,15 @@ AC_SUBST(SQL_DIR)
 
 
 ### --------------------------------------------------------------------------
+### RPC
+AC_ARG_ENABLE( rpc,
+  [  --enable-rpc                 compile with rpc support],
+       RPC_DIR=rpc)
+
+AC_SUBST(RPC_DIR)
+
+
+### --------------------------------------------------------------------------
 ### i18n
 AC_ARG_WITH( locale-dir, 
   [  --with-locale-dir=PATH       specify where to look for locale-specific information],
@@ -545,6 +554,7 @@ AC_OUTPUT(
           src/doc/design/Makefile
           src/engine/Makefile
           src/engine/sql/Makefile
+	  src/engine/rpc/Makefile
           src/experimental/Makefile
           src/experimental/cbb/Makefile
           src/experimental/cbb/cbb-engine/Makefile

@@ -1476,6 +1476,7 @@ xaccTransCommitEdit (Transaction *trans)
 void
 xaccTransRollbackEdit (Transaction *trans)
 {
+   Backend *be;
    Transaction *orig;
    int force_it=0, mismatch=0;
    int i;
@@ -1636,6 +1637,17 @@ xaccTransRollbackEdit (Transaction *trans)
          xaccAccountInsertSplit (account, s);
          xaccAccountRecomputeBalance (account);
          mark_split (s);
+      }
+   }
+
+   be = xaccTransactionGetBackend (trans);
+   if (be && be->trans_rollback_edit) 
+   {
+      int rc = 0;
+      rc = (be->trans_rollback_edit) (be, trans);
+
+      if (rc) {
+	PERR ("Rollback Failed.  Ouch!");
       }
    }
 

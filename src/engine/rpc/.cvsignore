@@ -1,0 +1,4 @@
+gncRpc.h
+gncRpc_clnt.c
+gncRpc_xdr.c
+gncRpc_svc.c
