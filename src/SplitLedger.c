@@ -728,8 +728,7 @@ xaccSRShowTrans (SplitRegister *reg,
   VirtualCellLocation end_loc;
   int v_row;
 
-  start_loc = reg->table->current_cursor_loc.vcell_loc;
-  end_loc = reg->table->current_cursor_loc.vcell_loc;
+  end_loc = start_loc;
 
   for (v_row = end_loc.virt_row + 1;
        v_row < reg->table->num_virt_rows; v_row++)
