@@ -286,11 +286,13 @@ xaccAccountInsertSplit ( Account *acc, Split *split )
    * be acceptable. This means either the currency or the security
    * of the new account must be 'in common' with the currencies used
    * in the transaction. */
+#if 0
   if (xaccTransCountSplits(split->parent) > 1) {
     if (!xaccTransIsCommonCurrency(split->parent, acc->currency) &&
         !xaccTransIsCommonCurrency(split->parent, acc->security))
       return;
   }
+#endif
 
   CHECK (acc);
 
