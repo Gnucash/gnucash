@@ -44,6 +44,7 @@
 #include "date.h"
 #include "main.h"
 #include "MainWindow.h"
+#include "Ledger.h"
 #include "LedgerUtils.h"
 #include "PopBox.h"
 #include "QuickFill.h"
@@ -79,6 +80,7 @@ typedef struct _RegWindow {
   short type;                 /* register display type, usually equal to *
                                * account type                            */
 
+  BasicRegister *ledger;
 } RegWindow;
 
 
@@ -425,7 +427,12 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
    * The main register window itself                                *
   \******************************************************************/
 
-  sprintf( buf, "reg" );
+  strcpy (buf, "reg");
+  strcat(buf,accRes[regData->type]);
+
+  regData->ledger = xaccMallocBasicRegister ();
+  reg = xaccCreateTable (regData->ledger->table, frame, buf);
+  
   regData->reg     = reg;
     
   XtManageChild (reg);
