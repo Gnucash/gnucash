@@ -103,6 +103,7 @@ bin_SCRIPTS = gnucash-run-script gnucash-make-guids
 gnucash-run-script: gnucash-run-script.in
 	rm -f $@.tmp
 	sed < $@.in > $@.tmp \
+	    -e 's:@-GUILE-@:${GUILE}:' \
 	    -e 's:@-GNC_GUILE_MODULE_DIR-@:${GNC_SHAREDIR}/guile-modules:' \
             -e 's:@-GNC_LIB_INSTALLDIR-@:${libdir}:' \
             -e 's:@-GNC_PKGLIB_INSTALLDIR-@:${pkglibdir}:' \

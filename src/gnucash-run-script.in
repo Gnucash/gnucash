@@ -1,11 +1,17 @@
 #!/bin/sh
 
-export GNC_MODULE_PATH="@-GNC_LIB_INSTALLDIR-@:@-GNC_PKGLIB_INSTALLDIR-@"
-export GUILE_LOAD_PATH="@-G_WRAP_MODULE_DIR-@:@-GNC_GUILE_MODULE_DIR-@:@-GNC_SCM_INSTALL_DIR-@"
+export GNC_MODULE_PATH="${GNC_MODULE_PATH}:@-GNC_LIB_INSTALLDIR-@:@-GNC_PKGLIB_INSTALLDIR-@"
+export GUILE_LOAD_PATH="${GUILE_LOAD_PATH}:@-G_WRAP_MODULE_DIR-@:@-GNC_GUILE_MODULE_DIR-@:@-GNC_SCM_INSTALL_DIR-@"
 export LTDL_LIBRARY_PATH="${LTDL_LIBRARY_PATH}:${GNC_MODULE_PATH}"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${GNC_MODULE_PATH}"
 
-exec guile -s "$0" "$@"
+GUILE="@-GUILE-@"
+if test "${GNC_GUILE}"x != x; then
+  GUILE="${GNC_GUILE}"
+fi
+export GUILE
+
+exec ${GUILE} -s "$0" "$@"
 !#
 
 (if (null? (cdr (program-arguments)))
@@ -13,7 +19,9 @@ exec guile -s "$0" "$@"
                           (car (program-arguments))
                           " script [arg ...]")))
 
-(apply execlp "guile" "guile" "--debug" "-s" (cdr (program-arguments)))
+(define guile (getenv "GUILE"))
+
+(apply execlp guile guile "--debug" "-s" (cdr (program-arguments)))
 
 ;; Local Variables:
 ;; mode: scheme
