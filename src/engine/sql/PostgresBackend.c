@@ -1298,6 +1298,27 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
 /*                PRICE  STUFF                                   */
 /* ============================================================= */
 /* ============================================================= */
+/* store just one price */
+
+static void
+pgendStorePriceNoLock (PGBackend *be, GNCPrice *pr)
+{
+   gnc_commodity *modity;
+
+   /* make sure that we've stored the commodity 
+    * and currency before we store the price.
+    */
+   modity = gnc_price_get_commodity (pr);
+   pgendPutOneCommodityOnly (be, modity);
+
+   modity = gnc_price_get_currency (pr);
+   pgendPutOneCommodityOnly (be, modity);
+
+   pgendPutOnePriceOnly (be, pr);
+}
+
+/* ============================================================= */
+/* store entire price database */
 
 static gboolean 
 foreach_price_cb (GNCPrice *pr, gpointer bend)
@@ -1336,6 +1357,7 @@ commodity_mark_cb (gnc_commodity *cm, gpointer user_data)
    gnc_commodity_set_mark (cm, (gint16) v);
    return TRUE;
 }
+
 
 static void
 pgendStorePriceDBNoLock (PGBackend *be, GNCPriceDB *prdb)
@@ -1640,10 +1662,26 @@ pgend_trans_commit_edit (Backend * bend,
 static int
 pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
 {
+   char * bufp;
    PGBackend *be = (PGBackend *)bend;
 
    ENTER ("be=%p, price=%p", be, pr);
-PERR ("not implemented");
+   if (!be || !pr) return 1;  /* hack alert hardcode literal */
+
+   /* lock it up so that we query and store atomically */
+   bufp = "BEGIN;\n"
+          "LOCK TABLE gncPrice IN EXCLUSIVE MODE;\n";
+   SEND_QUERY (be,bufp, 555);
+   FINISH_QUERY(be->connection);
+
+   /* hack alert -- we should check a version number, to make
+    * sure we aren't clobbering something newer in the database */
+   pgendStorePriceNoLock (be, pr);
+
+   bufp = "COMMIT;";
+   SEND_QUERY (be,bufp,333);
+   FINISH_QUERY(be->connection);
+
    LEAVE ("commited");
    return 0;
 }
@@ -1819,9 +1857,6 @@ pgendSyncPriceDB (Backend *bend, GNCPriceDB *prdb)
  *    The use of this routine/this mode is 'depricated'.
  *    Its handy for testing, sanity-checking, and as a failsafe,
  *    but its use shouldn't be encouraged.
- *
- * XXX hack alert -- database consistency depends on commodities 
- * having been stored with the pgendSyncSingleFile() routine.  
  */
 
 static void
@@ -2377,12 +2412,82 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
       g_free (be->hostname);
       be->hostname = NULL;
    }
-/* hack alert -- we should connect to template1 first, and look for an
-entry in the system table pgdatabase i.e. SELECT datname FROM
-pg_database; this should tell us if it exists already, or if it needs to
-be created. 
-*/
 
+#ifdef NEW_LOGIN
+/* not fully implemented */
+   /* Login algorithm.  First, we connect to a default, existing
+    * database.  (Hopefully it allows any username and password
+    * to connect.  We have a problem we don't know how to recover 
+    * from if we can't connect to this.)  We then query pg_database 
+    * to see if the desired dabase exists.  (We have a problem if 
+    * the dbadmin has set permissions to prevent this query.) 
+    * If the user-named db exists, then we connect to it, otherwise
+    * we create it before connecting.
+    */
+   be->connection = PQsetdbLogin (be->hostname,
+                                  be->portno,
+                                  pg_options, /* trace/debug options */
+                                  pg_tty, /* file or tty for debug output */
+                                  "template1",
+                                  be->username,  /* login */
+                                  password);  /* pwd */
+
+   /* check the connection status */
+   if (CONNECTION_BAD == PQstatus(be->connection))
+   {
+      PWARN("Can't connect to default database 'template1':\n"
+           "\t%s", 
+           PQerrorMessage(be->connection));
+      PQfinish (be->connection);
+
+      /* Well, maybe the user-requested database exists, and we 
+       * can connect to that ... */
+      be->connection = PQsetdbLogin (be->hostname, 
+                                     be->portno,
+                                     pg_options, /* trace/debug options */
+                                     pg_tty, /* file or tty for debug output */
+                                     be->dbName, 
+                                     be->username,  /* login */
+                                     password);  /* pwd */
+
+      /* check the connection status */
+      if (CONNECTION_BAD == PQstatus(be->connection))
+      {
+         PWARN("Connection to database '%s' failed:\n"
+               "\t%s", 
+               be->dbName ? be->dbName : "(null)",
+               PQerrorMessage(be->connection));
+   
+         PQfinish (be->connection);
+         be->connection = NULL;
+   
+         /* OK, this part is convoluted.
+          * I wish that postgres returned usable error codes. 
+          * Alas, it does not, so we just bomb out.
+          */
+         xaccBackendSetError (&be->be, ERR_BACKEND_CANT_CONNECT);
+         return;
+      }
+   } else {
+
+      /* if we are here, then we're connected to 'template1'.
+       * Look for entry in the system table pgdatabase i.e. 
+       * SELECT datname FROM pg_database; this should tell us 
+       * if it exists already, or if it needs to be created. 
+       */
+
+      PERR ("not implemented");
+
+   }
+
+#else
+   /* Old login algorithm.  We try to connect to the database that
+    * the user requested.  If it fails, we get a fatal message from
+    * postgres. (Porblem: we don't really know why there was a fatal
+    * error, there may be many reasons.  This is the fundamental 
+    * problem with this approach.)  If the connect failed, then we
+    * create teh database, and try again.
+    */
    be->connection = PQsetdbLogin (be->hostname, 
                                   be->portno,
                                   pg_options, /* trace/debug options */
@@ -2485,6 +2590,7 @@ be created.
       SEND_QUERY (be,table_create_str, );
       FINISH_QUERY(be->connection);
    }
+#endif
 
    /* free url only after login completed */
    g_free(url);
