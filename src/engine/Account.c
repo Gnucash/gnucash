@@ -777,17 +777,16 @@ xaccAccountSetGUID (Account *account, const GUID *guid)
 Account *
 xaccAccountLookup (const GUID *guid, QofBook *book)
 {
+  QofCollection *col;
   if (!guid || !book) return NULL;
-  return qof_entity_lookup (qof_book_get_entity_table (book),
-                           guid, GNC_ID_ACCOUNT);
+  col = qof_book_get_collection (book, GNC_ID_ACCOUNT);
+  return (Account *) qof_collection_lookup_entity (col, guid);
 }
 
 Account *
 xaccAccountLookupDirect (GUID guid, QofBook *book)
 {
-  if (!book) return NULL;
-  return qof_entity_lookup (qof_book_get_entity_table (book),
-                           &guid, GNC_ID_ACCOUNT);
+  return xaccAccountLookup (&guid, book);
 }
 
 /********************************************************************\
@@ -2905,13 +2904,13 @@ xaccAccountFindTransByDesc(Account *account, const char *description)
 static void
 account_foreach (QofBook *book, QofEntityForeachCB cb, gpointer ud)
 {
-  QofEntityTable *et;
+  QofCollection *col;
 
   g_return_if_fail (book);
   g_return_if_fail (cb);
 
-  et = qof_book_get_entity_table (book);
-  qof_entity_foreach (et, GNC_ID_ACCOUNT, cb, ud);
+  col = qof_book_get_collection (book, GNC_ID_ACCOUNT);
+  qof_collection_foreach (col, cb, ud);
 }
 
 static QofObject account_object_def = {
