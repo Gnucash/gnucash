@@ -239,7 +239,7 @@ option like this.")
           
           ;; document will be the HTML document that we return.
           (document (gnc:make-html-document)))
-      
+
       ;; Crash if asked to.
       (if crash-val (string-length #f)) ;; string-length needs a string
       
@@ -367,7 +367,7 @@ new, totally cool report, consult the mailing list ")
           (gnc:html-markup-p 
            (_ "The number option is ")
            (gnc:html-markup-b (number->string num-val))  ".")
-          
+
           ;; Here we print the value of the number option formatted as
           ;; currency. When printing currency values, you should use
           ;; the function (gnc:amount->string), which is defined in
@@ -378,14 +378,14 @@ new, totally cool report, consult the mailing list ")
            (_ "The number option formatted as currency is ")
            (gnc:html-markup-b
             (gnc:amount->string num-val (gnc:default-print-info #f))))))
-        
+
         ;; you can add as many objects as you want.  Here's another 
         ;; one.  We'll make a single-column table of the selected list 
         ;; options just for grins. 
         (gnc:html-document-add-object!
          document
          (gnc:make-html-text
-          (gnc:html-markup-p "Items you selected:")))
+          (gnc:html-markup-p (_ "Items you selected:"))))
 
         (if (not (null? list-val))
             (let ((table (gnc:make-html-table)))
