@@ -169,22 +169,15 @@ gnc_book_populate (GNCBook *book)
 static void
 gnc_book_depopulate (GNCBook *book)
 {
-  AccountGroup *grp;
-  gnc_commodity_table *ct;
-
   /* unhook the top-level group */
-  grp = xaccGetAccountGroup (book);
-  xaccAccountGroupBeginEdit (grp);
-  xaccAccountGroupDestroy (grp);
   xaccSetAccountGroup (book, NULL);
 
   /* unhook the prices */
   gnc_pricedb_set_db (book, NULL);
 
-  ct = gnc_commodity_table_get_table (book);
-  gnc_commodity_table_destroy (ct);
   gnc_commodity_table_set_table (book, NULL);
 
+  gnc_book_set_template_group (book, NULL);
   /* FIXME: destroy SX data members here, too */
 }
 

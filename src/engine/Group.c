@@ -106,16 +106,8 @@ xaccSetAccountGroup (GNCBook *book, AccountGroup *grp)
 
   gnc_book_set_data (book, GNC_TOP_GROUP, grp);
 
-  /* XXX Do not free the old topgroup here unless you also fix
-   * all the other uses of xaccSetAccountGroup()!  That's because
-   * the account group is not reference-counted, and there's some
-   * chance that we'll leave a dangling pointer somewhere.
-   */
-
-  /*
-   xaccAccountGroupBeginEdit (old_grp);
-   xaccAccountGroupDestroy (old_grp);
-   */
+  xaccAccountGroupBeginEdit (old_grp);
+  xaccAccountGroupDestroy (old_grp);
 }
 
 /********************************************************************\

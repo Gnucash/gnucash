@@ -803,6 +803,7 @@ gnc_book_get_template_group( GNCBook *book )
 void
 gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup)
 {
+  AccountGroup *old_grp;
   if (!book) return;
 
   if (templateGroup && templateGroup->book != book)
@@ -811,6 +812,12 @@ gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup)
      return;
   }
 
+  old_grp = gnc_book_get_template_group (book);
+  if (old_grp == templateGroup) return;
+
   gnc_book_set_data (book, GNC_TEMPLATE_GROUP, templateGroup);
+
+  xaccAccountGroupBeginEdit (old_grp);
+  xaccAccountGroupDestroy (old_grp);
 }
 
