@@ -186,7 +186,7 @@ the account instead of opening a register.") #f))
 	 (dead-reports '()))
     (if conf-file-name 
         (try-load conf-file-name))
-    (gnc:mdi-restore (gnc:mdi-get-current) book-url)))
+    ));;(gnc:mdi-restore (gnc:mdi-get-current) book-url)))
 
 
 (gnc:hook-remove-dangler gnc:*book-opened-hook* 
