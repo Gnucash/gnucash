@@ -1,8 +1,9 @@
-DIST_SUBDIRS = test
+SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-ledger-core.la
 
 libgncmod_ledger_core_la_SOURCES = \
+  dialog-dup-trans.c \
   gnc-ledger-display.c \
   gncmod-ledger-core.c \
   split-register.c \
@@ -24,14 +25,18 @@ noinst_HEADERS = \
 
 libgncmod_ledger_core_la_LDFLAGS = -module
 libgncmod_ledger_core_la_LIBADD = \
+  ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_srcdir}/src/app-utils/libgncmod-app-utils.la \
   ${top_srcdir}/src/register/register-core/libgncmod-register-core.la \
-  ${top_srcdir}/src/gnome/libgncgnome.la 
+  ${top_srcdir}/src/register/register-gnome/libgncmod-register-gnome.la \
+  ${top_srcdir}/src/dialog-account/libdialog-account.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/register/register-core \
   ${GUILE_INCS} \
   ${GNOME_INCLUDEDIR} \
