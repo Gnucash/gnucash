@@ -695,4 +695,32 @@ xaccAccountGetNotes (Account *acc)
    return (acc->notes);
 }
 
+double
+xaccAccountGetBalance (Account *acc)
+{
+   return (acc->balance);
+}
+
+double
+xaccAccountGetReconciledBalance (Account *acc)
+{
+   return (acc->reconciled_balance);
+}
+
+Split *
+xaccAccountGetSplit (Account *acc, int i)
+{
+   if (!acc) return NULL;
+   if (!(acc->splits)) return NULL;
+
+   return (acc->splits[i]);
+}
+
+Split **
+xaccAccountGetSplitList (Account *acc)
+{
+   if (!acc) return NULL;
+   return (acc->splits);
+}
+
 /*************************** END OF FILE **************************** */

@@ -119,6 +119,12 @@ char *         xaccAccountGetNotes (Account *);
 AccountGroup * xaccAccountGetChildren (Account *);
 AccountGroup * xaccAccountGetParent (Account *);
 
+double         xaccAccountGetBalance (Account *);
+double         xaccAccountGetReconciledBalance (Account *);
+Split *        xaccAccountGetSplit (Account *acc, int i);
+Split **       xaccAccountGetSplitList (Account *acc);
+
+
 /** GLOBALS *********************************************************/
 
 extern int next_free_unique_account_id;
