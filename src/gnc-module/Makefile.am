@@ -49,7 +49,7 @@ gw-gnc-module.scm gw-gnc-module.c gw-gnc-module.h: gw-gnc-module-spec.scm
 	FLAVOR=gnome guile -c \
 	  "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (primitive-load \"./gw-gnc-module-spec.scm\") \
-	  (gw:generate-module \"gw-gnc-module\")"
+	  (gw:generate-wrapset \"gw-gnc-module\")"
 
 BUILT_SOURCES = gw-gnc-module.scm gw-gnc-module.h gw-gnc-module.c
 CLEANFILES = gw-gnc-module.scm gw-gnc-module.h gw-gnc-module.c gw-gnc-module.html g-wrapped \
