@@ -1,3 +1,14 @@
+2001-05-01  Conrad Canterford <conrad@mail.watersprite.com.au>
+
+        * make-gnucash-patch.in: add --file option to allow single file
+	patches to be made.
+
+	* README.patches (new file): Moved patch instructions from README
+	file into this new file, and added detailed descriptions of all
+	the options for make-gnucash-patch.
+
+        * README: see above
+
 2001-05-01  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/report/stylesheet-plain.scm: fix i18n bugs

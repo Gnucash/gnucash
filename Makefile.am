@@ -13,7 +13,8 @@ doc_DATA = \
   HACKING \
   INSTALL \
   NEWS \
-  README
+  README \
+  README.patches
 
 # All the other files that go in the distribution tarfile that aren't
 # included some other way...
@@ -30,6 +31,7 @@ EXTRA_DIST = \
   .cvsignore \
   ChangeLog.1 \
   HACKING \
+  README.patches \
   gnucash.lsm \
   make-gnucash-patch.in \
   po/.cvsignore \

@@ -55,5 +55,5 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/pixmaps/gnucash
 /usr/man/*
 %config /etc/gnucash
-%doc AUTHORS COPYING ChangeLog ChangeLog.1 HACKING NEWS README
+%doc AUTHORS COPYING ChangeLog ChangeLog.1 HACKING NEWS README README.patches
 %doc doc/README.german doc/README.francais doc/guile-hackers.txt
