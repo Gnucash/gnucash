@@ -613,8 +613,8 @@ move_quote_source (Account *account, gpointer data)
 void
 xaccGroupScrubQuoteSources (AccountGroup *group, gnc_commodity_table *table)
 {
-  ENTER(" ");
   gboolean new_style = FALSE;
+  ENTER(" ");
 
   if (!group || !table) {
     LEAVE("Oops")
