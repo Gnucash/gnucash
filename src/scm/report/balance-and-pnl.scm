@@ -168,7 +168,7 @@
 
   (define (render-level-2-account 
 	   level-2-account l2-currency-collector 
-	   balance-currency exchange-alist row-aligner)
+	   balance-currency exchange-alist show-fcur? row-aligner)
     (let ((account-name (string-append NBSP NBSP NBSP NBSP 
                                        (gnc:account-get-full-name
                                         level-2-account)))
@@ -189,22 +189,25 @@
 	      (if (gnc:commodity-equiv? currency balance-currency)
 		  (list NBSP
                         (gnc:amount->string
-                         value (gnc:commodity-print-info balance-currency #f)))
+                         value (gnc:commodity-print-info 
+				balance-currency show-fcur?)))
 		  (list (gnc:amount->string
-			 value (gnc:commodity-print-info currency #f))
+			 value (gnc:commodity-print-info 
+				currency show-fcur?))
 			(gnc:amount->string
 			 (* value
 			    (let ((pair (assoc currency exchange-alist)))
 			      (if (not pair)
                                   default-exchange-rate
                                   (cadr pair))))
-			 (gnc:commodity-print-info balance-currency #f))))
+			 (gnc:commodity-print-info 
+			  balance-currency show-fcur?))))
 	      (list NBSP NBSP)))))
 	#f))))
 
   (define (render-level-1-account 
 	   l1-account l1-currency-collector 
-	   balance-currency exchange-alist row-aligner)
+	   balance-currency exchange-alist show-fcur? row-aligner)
     (let ((account-name (gnc:account-get-full-name l1-account))
           (type-name (gnc:account-get-type-string
                       (gnc:account-get-type l1-account))))
@@ -223,16 +226,19 @@
 	      (if (gnc:commodity-equiv? currency balance-currency)
 		  (list NBSP 
 			(gnc:amount->string
-			 value (gnc:commodity-print-info balance-currency #f)))
+			 value (gnc:commodity-print-info 
+				balance-currency show-fcur?)))
 		  (list (gnc:amount->string
-			 value (gnc:commodity-print-info currency #f))
+			 value (gnc:commodity-print-info 
+				currency show-fcur?))
 			(gnc:amount->string
 			 (* value
 			    (let ((pair (assoc currency exchange-alist)))
 			      (if (not pair)
                                   default-exchange-rate
                                   (cadr pair))))
-			 (gnc:commodity-print-info balance-currency #f))))))))
+			 (gnc:commodity-print-info 
+			  balance-currency show-fcur?))))))))
 	#f))))
 
   (define (render-total l0-currency-collector 
@@ -263,7 +269,7 @@
 		      (list 
 		       NBSP NBSP NBSP NBSP
 		       (gnc:amount->string
-			value (gnc:commodity-print-info currency #f))
+			value (gnc:commodity-print-info currency show-fcur?))
 		       NBSP))
 		     '()))))
 	 #f)
@@ -271,7 +277,7 @@
 	 (list account-name NBSP NBSP NBSP NBSP 
 	       (gnc:amount->string
                 exchanged-total
-                (gnc:commodity-print-info balance-currency #f))))))))
+                (gnc:commodity-print-info balance-currency show-fcur?))))))))
   
   (define blank-line
     (html-table-row '()))
@@ -393,7 +399,7 @@
                 (let ((level-1-output
                        (render-level-1-account 
 			account l1-collector report-currency 
-			exchange-alist report-row-align)))
+			exchange-alist show-fcur? report-row-align)))
                   (l1-collector 'reset #f #f)
                   (l2-collector 'reset #f #f)
                   (if (null? childrens-output)
@@ -438,7 +444,7 @@
 	      (handle-collector-merging l2-collector 'merge balance)
               (render-level-2-account 
 	       account balance report-currency exchange-alist
-	       report-row-align)))))
+	       show-fcur? report-row-align)))))
 
     (let
 	((current-group (gnc:get-current-group))
@@ -449,14 +455,22 @@
       (l0-collector 'reset #f #f)
       (l1-collector 'reset #f #f)
       (l2-collector 'reset #f #f)
+
+      ;; Enhance the report name such that it includes the date
+      ;; interval and the report's currency, if it makes sense.
       (set! report-name 
-	    (if from-option 
-		(list report-name " "
-		      (strftime "%x" (localtime (car from-value))) 
-		      " to " 
-		      (strftime "%x" (localtime (car to-value))))
-		(list report-name " "
-		      (strftime "%x" (localtime (car to-value))))))
+	    (append 
+	     (list report-name " ")
+	     (if from-option 
+		 (list (strftime "%x" (localtime (car from-value))) 
+		       " to ")
+		 '())
+	     (list (strftime "%x" (localtime (car to-value))))
+	     (if show-fcur?
+		 '()
+		 (list " (" 
+		       (gnc:commodity-get-mnemonic report-currency)
+		       ")"))))
       
       (if (not (pointer-token-null? current-group))
 	  (set! output
@@ -482,8 +496,9 @@
            "<body bgcolor=#fffde6>"
            "<body bgcolor=#f6ffdb>")
 
+       "<h1>" report-name "</h1>"
+
        "<table cellpadding=0>"
-       "<caption><b>" report-name "</b></caption>"
        "<tr>"
        "<th>" (string-db 'lookup 'account-name) "</th>"
        (if show-type? (string-append "<th align=center>" 
