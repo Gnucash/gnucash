@@ -27,7 +27,7 @@
 #ifndef __XACC_CONFIG_H__
 #define __XACC_CONFIG_H__
 
-/* Are we bigendian */
+/* Are we bigendian -- needed for reading binary file format */
 /* #undef  WORDS_BIGENDIAN */     
 
 /* Do some memory debugging stuff */
@@ -51,11 +51,14 @@
 #define HAVE_PNG 1             
 #define HAVE_JPEG 1            
 
+/* The XmHTML widget requires XPM to be installed */
 #if HAVE_XPM
 /* #undef  USE_HTMLW */   
 #define USE_XMHTML           1
 #else
-#define USE_HTMLW            1
+/* NCSA Mosaic htmlw widget is no longer distributed with xacc,
+ * due to license restrictions, and overall broken-ness */
+/* #define USE_HTMLW            1 */
 /* #undef USE_XMHTML */  
 #endif
 

@@ -15,15 +15,15 @@ that work with Xbae become available, and become easy to build & use.
 XbaeMatrix:  
   -- modified to support cell widgets
   -- modified to support cursor position
+  -- variety of assorted bug fixes
   -- modified by deleting examples, other non-essential stuff.
 
 libhtmlw:
-  -- modified by deleting examples, other non-essential stuff.
-  -- will probably be eliminated; will use XmHTML instead, if  
-     things work out.
+  -- eliminated due to license restrictions and overall brokenness.
+     Use XmHTML instead.
 
 ComboBox:
-  -- assorted bug fixes
+  -- variety of assorted bug fixes & enhancements.
   -- modified by deleting examples, other non-essential stuff.
 
 XmHTML:

@@ -33,15 +33,19 @@ INCLPATH = -I/usr/include \
            -I./../include \
            -I./../lib/ComboBox-1.33 \
            -I./../lib/XmHTML-1.1.0/src \
-           -I./../lib/Xbae-4.6.2-linas \
-           -I./../lib/libhtmlw 
+           -I./../lib/Xbae-4.6.2-linas 
+
+# libhtmlw eliminated due to license restrictions 
+# and general brokenness
+#           -I./../lib/libhtmlw 
+
 CFLAGS   = -O2 -DCELL_WIDGETS=1
 LFLAGS   = -O2
 LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
 LIBPATH  = -L/lib -L/usr/lib -L/usr/X11R6/lib/.
 TARGET   = ../xacc
 
-LIBHTMLW = ../lib/libhtmlw/libhtmlw.a
+# LIBHTMLW = ../lib/libhtmlw/libhtmlw.a
 LIBXMHTML= ../lib/XmHTML-1.1.0/src/libXmHTML.a
 LIBXBAE  = ../lib/Xbae-4.6.2-linas/libXbae.a
 LIBCOMBO = ../lib/ComboBox-1.33/libComboBox.a

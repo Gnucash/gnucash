@@ -65,5 +65,10 @@ AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage,
 AC_SUBST(LIBS)
 
 AC_CONFIG_HEADER(config.h)
-AC_OUTPUT(Makefile src/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/libhtmlw/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile)
+#
+# elminate libhtmlw due to license restrictions
+# and general broken-ness
 
+# AC_OUTPUT(Makefile src/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/libhtmlw/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile)
+
+AC_OUTPUT(Makefile src/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile)

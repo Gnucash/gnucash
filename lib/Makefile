@@ -41,27 +41,32 @@ srcdir = .
 
 default:
 	@cd XmHTML-1.1.0;     $(MAKE) default
-	@cd libhtmlw;         $(MAKE) default
 	@cd ComboBox-1.33;    $(MAKE) default
 	@cd Xbae-4.6.2-linas; $(MAKE) default
 
+# libhtmlw no longer distributed with xacc, 
+# due to license restrictions and overall brokenness
+#	@cd libhtmlw;         $(MAKE) default
+
 depend:
 	@cd XmHTML-1.1.0;     $(MAKE) depend
-	@cd libhtmlw;         $(MAKE) depend
 	@cd ComboBox-1.33;    $(MAKE) depend
 	@cd Xbae-4.6.2-linas; $(MAKE) depend
 
+#	@cd libhtmlw;         $(MAKE) depend
+
 clean:
 	@cd XmHTML-1.1.0;     $(MAKE) clean
-	@cd libhtmlw;         $(MAKE) clean
 	@cd ComboBox-1.33;    $(MAKE) clean
 	@cd Xbae-4.6.2-linas; $(MAKE) clean
+
+#	@cd libhtmlw;         $(MAKE) clean
 
 distclean: clean
 	rm -f *~ *.o *.bak Makefile
 	@cd XmHTML-1.1.0;     $(MAKE) distclean
-	@cd libhtmlw;         $(MAKE) distclean
 	@cd ComboBox-1.33;    $(MAKE) distclean
 	@cd Xbae-4.6.2-linas; $(MAKE) distclean
 
+#	@cd libhtmlw;         $(MAKE) distclean
 
