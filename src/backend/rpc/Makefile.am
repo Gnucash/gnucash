@@ -2,7 +2,7 @@
 #  Created By:	Derek Atkins <warlord@MIT.EDU>
 
 # The GNC RPC Backend
-lib_LTLIBRARIES = libgncmod-backend-rpc.la
+pkglib_LTLIBRARIES = libgncmod-backend-rpc.la
 
 libgncmod_backend_rpc_la_SOURCES = \
   gncmod-backend-rpc.c \
