@@ -1462,6 +1462,21 @@ xaccTransSetDateSecs (Transaction *trans, time_t secs)
 }
 
 void
+xaccTransSetDateSecsL (Transaction *trans, long long secs)
+{
+   if (!trans) return;
+   CHECK_OPEN (trans);
+   DEBUGCMD ({ 
+      time_t sicko = secs;
+      PINFO ("xaccTransSetDateSecsL(): addr=%p set date to %Lu %s \n",
+              trans, secs, ctime (&sicko));
+   })
+
+   trans->date_posted.tv_sec = secs;
+   trans->date_posted.tv_nsec = 0;
+}
+
+void
 xaccTransSetDateEnteredSecs (Transaction *trans, time_t secs)
 {
    if (!trans) return;
@@ -1657,6 +1672,13 @@ xaccTransGetDocref (Transaction *trans)
 
 time_t
 xaccTransGetDate (Transaction *trans)
+{
+   if (!trans) return 0;
+   return (trans->date_posted.tv_sec);
+}
+
+long long 
+xaccTransGetDateL (Transaction *trans)
 {
    if (!trans) return 0;
    return (trans->date_posted.tv_sec);

@@ -204,6 +204,7 @@ char *        xaccTransGetNum (Transaction *);
 char *        xaccTransGetDescription (Transaction *);
 char *        xaccTransGetDocref (Transaction *);
 time_t        xaccTransGetDate (Transaction *);
+long long     xaccTransGetDateL (Transaction *);
 void          xaccTransGetDateTS (Transaction *, Timespec *);
 void          xaccTransGetDateEnteredTS (Transaction *, Timespec *);
 
