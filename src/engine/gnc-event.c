@@ -57,6 +57,7 @@ gnc_engine_register_event_handler (GNCEngineEventHandler handler,
   gint handler_id;
   GList *node;
 
+  ENTER ("(handler=%p, data=%p)", handler, user_data);
   /* sanity check */
   if (!handler)
   {
@@ -82,7 +83,7 @@ gnc_engine_register_event_handler (GNCEngineEventHandler handler,
     node = node->next;
   }
 
-  /* found one, add the handler */
+  /* Found one, add the handler */
   hi = g_new0 (HandlerInfo, 1);
 
   hi->handler = handler;
@@ -91,9 +92,10 @@ gnc_engine_register_event_handler (GNCEngineEventHandler handler,
 
   handlers = g_list_prepend (handlers, hi);
 
-  /* update id for next registration */
+  /* Update id for next registration */
   next_handler_id = handler_id + 1;
 
+  LEAVE ("(handler=%p, data=%p) handler_id=%d", handler, user_data, handler_id);
   return handler_id;
 }
 
@@ -102,6 +104,7 @@ gnc_engine_unregister_event_handler (gint handler_id)
 {
   GList *node;
 
+  ENTER ("(handler_id=%d)", handler_id);
   for (node = handlers; node; node = node->next)
   {
     HandlerInfo *hi = node->data;
@@ -109,11 +112,10 @@ gnc_engine_unregister_event_handler (gint handler_id)
     if (hi->handler_id != handler_id)
       continue;
 
-    /* found it */
-
-    /* take out of list */
+    /* Found it, take out of list */ 
     handlers = g_list_remove_link (handlers, node);
 
+    LEAVE ("(handler_id=%d) handler=%p data=%p", handler_id, hi->handler, hi->user_data);
     /* safety */
     hi->handler = NULL;
 
@@ -176,6 +178,7 @@ gnc_engine_generate_event_internal (const GUID *entity, QofIdType type,
   {
     HandlerInfo *hi = node->data;
 
+    PINFO ("id=%d node=%p hi=%p han=%p\n", hi->handler_id, node, hi, hi->handler);
     if (hi->handler)
       hi->handler ((GUID *)entity, type, event_type, hi->user_data);
   }
@@ -203,3 +206,5 @@ gnc_engine_generate_event (const GUID *entity, QofIdType type,
 
   gnc_engine_generate_event_internal (entity, type, event_type);
 }
+
+/* =========================== END OF FILE ======================= */
