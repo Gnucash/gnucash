@@ -72,7 +72,7 @@ struct _QofObject
    *  NULL if the object type doesn't provide a way of creating new 
    *  instances. 
    */
-  gpointer            (*new)(QofBook *);
+  gpointer            (*create)(QofBook *);
 
   /** book_begin is called from within the Book routines to create
    * module-specific hooks in a book whenever a book is created.

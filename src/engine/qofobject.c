@@ -51,8 +51,8 @@ qof_object_new_instance (QofIdTypeConst type_name, QofBook *book)
   obj = qof_object_lookup (type_name);
   if (!obj) return NULL;
 
-  if (obj->new) 
-    return (obj->new (book));
+  if (obj->create) 
+    return (obj->create (book));
 
   return NULL;
 }

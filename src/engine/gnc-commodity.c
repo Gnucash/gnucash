@@ -1598,13 +1598,14 @@ static QofObject commodity_table_object_def =
   interface_version: QOF_OBJECT_VERSION,
   e_type:            GNC_ID_COMMODITY_TABLE,
   type_label:        "CommodityTable",
-  new:               NULL,
+  create:            NULL,
   book_begin:        commodity_table_book_begin,
   book_end:          commodity_table_book_end,
   is_dirty:          NULL,
   mark_clean:        NULL,
   foreach:           NULL,
   printable:         NULL,
+  version_cmp:       NULL,
 };
 
 gboolean 

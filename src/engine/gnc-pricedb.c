@@ -2057,13 +2057,14 @@ static QofObject pricedb_object_def =
   interface_version: QOF_OBJECT_VERSION,
   e_type:            GNC_ID_PRICE,
   type_label:        "Price",
-  new:               NULL,
+  create:            NULL,
   book_begin:        pricedb_book_begin,
   book_end:          pricedb_book_end,
   is_dirty:          pricedb_is_dirty,
   mark_clean:        pricedb_mark_clean,
   foreach:           pricedb_foreach,
   printable:         pricedb_printable,
+  version_cmp:       NULL,
 };
 
 gboolean 

@@ -2836,13 +2836,14 @@ static QofObject account_object_def = {
   interface_version:     QOF_OBJECT_VERSION,
   e_type:                GNC_ID_ACCOUNT,
   type_label:            "Account",
-  new:                   NULL,
+  create:                NULL,
   book_begin:            NULL,
   book_end:              NULL,
   is_dirty:              NULL,
   mark_clean:            NULL,
   foreach:               qof_collection_foreach,
-  printable:             (const char* (*)(gpointer)) xaccAccountGetName
+  printable:             (const char* (*)(gpointer)) xaccAccountGetName,
+  version_cmp:           (int (*)(gpointer,gpointer)) qof_instance_version_cmp,
 };
 
 gboolean xaccAccountRegister (void)

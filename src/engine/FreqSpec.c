@@ -88,8 +88,8 @@
 #include "gnc-date.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
-#include "messages.h"
 #include "gnc-trace.h"
+#include "messages.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofid-p.h"
@@ -181,8 +181,8 @@ xaccFreqSpecInit( FreqSpec *fs, QofBook *book )
    g_return_if_fail( fs );
    g_return_if_fail (book);
 
-   col = qof_book_get_collection (book, GNC_ID_FREQSPEC);
-   qof_entity_init (&fs->entity, GNC_ID_FREQSPEC, col);
+   col = qof_book_get_collection (book, QOF_ID_FREQSPEC);
+   qof_entity_init (&fs->entity, QOF_ID_FREQSPEC, col);
 
    fs->type = INVALID;
    fs->uift = UIFREQ_ONCE;

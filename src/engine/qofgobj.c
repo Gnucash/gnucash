@@ -296,13 +296,14 @@ qof_gobject_register (QofType e_type, GObjectClass *obclass)
   /* We could let the user specify a "nick" here, but
    * the actual class name seems reasonable, e.g. for debugging. */
   class_def->type_label = G_OBJECT_CLASS_NAME (obclass);
-  class_def->new = NULL;
+  class_def->create = NULL;
   class_def->book_begin = NULL;
   class_def->book_end = NULL;
   class_def->is_dirty = NULL;
   class_def->mark_clean = NULL;
   class_def->foreach = qof_gobject_foreach;
   class_def->printable = NULL;
+  class_def->version_cmp = NULL;
  
   qof_object_register (class_def);
 }

@@ -17,7 +17,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup Engine
+/** @addtogroup QOF
     @{ */
 /** @addtogroup FreqSpec Specifying Recurring Dates (Periods)
     @{ */
@@ -34,7 +34,7 @@
 
 #include <glib.h>
 
-#include "gnc-engine.h"
+#include "qofid.h"
 #include "guid.h"
 #include "qofbook.h"
 

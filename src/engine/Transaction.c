@@ -3204,13 +3204,14 @@ static QofObject split_object_def = {
   interface_version:       QOF_OBJECT_VERSION,
   e_type:                  GNC_ID_SPLIT,
   type_label:              "Split",
-  new:                     NULL,
+  create:                  NULL,
   book_begin:              NULL,
   book_end:                NULL,
   is_dirty:                NULL,
   mark_clean:              NULL,
   foreach:                 qof_collection_foreach,
-  printable:               (const char* (*)(gpointer)) xaccSplitGetMemo
+  printable:               (const char* (*)(gpointer)) xaccSplitGetMemo,
+  version_cmp:             NULL,
 };
 
 static gpointer 
@@ -3299,13 +3300,14 @@ static QofObject trans_object_def = {
   interface_version:   QOF_OBJECT_VERSION,
   e_type:              GNC_ID_TRANS,
   type_label:          "Transaction",
-  new:                 NULL,
+  create:              NULL,
   book_begin:          NULL,
   book_end:            NULL,
   is_dirty:            NULL,
   mark_clean:          NULL,
   foreach:             qof_collection_foreach,
-  printable:           (const char* (*)(gpointer)) xaccTransGetDescription
+  printable:           (const char* (*)(gpointer)) xaccTransGetDescription,
+  version_cmp:         (int (*)(gpointer,gpointer)) qof_instance_version_cmp,
 };
 
 static gboolean

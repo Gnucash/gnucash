@@ -30,13 +30,14 @@
 /** @file qofinstance.h 
  *  @brief Object instance holds common fields that most gnucash objects use.
  * 
- *  @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
+ *  @author Copyright (C) 2003,2004 Linas Vepstas <linas@linas.org>
  */
 
 #ifndef QOF_INSTANCE_H
 #define QOF_INSTANCE_H
 
 #include "guid.h"
+#include "gnc-date.h"
 #include "kvp_frame.h"
 #include "qofbook.h"
 #include "qofid.h"
@@ -61,10 +62,26 @@ QofBook * qof_instance_get_book (QofInstance *);
 /** Return the GUID of this instance */
 const GUID * qof_instance_get_guid (QofInstance *);
 
-/** return the pointer to the kvp_data */
+/** Return the pointer to the kvp_data */
 KvpFrame* qof_instance_get_slots (QofInstance *);
 
-/** return value of is_dirty flag */
+/** Return the last time this instance was modified.  If QofInstances
+ *  are used with the QofObject storage backends, then the instance
+ *  update times are reserved for use by the backend, for managing
+ *  multi-user updates.  Non-backend code should not set the update 
+ *  times. 
+ */
+Timespec qof_instance_get_last_update (QofInstance *inst);
+
+/** Compare two instances, based on thier last update times. 
+ *  Returns a negative, zero or positive value, respectively, 
+ *  if 'left' is earlier, same as or later than 'right'.  
+ *  Accepts NULL pointers, NULL's are by definition earlier
+ *  than any value.
+ */
+int qof_instance_version_cmp (QofInstance *left, QofInstance *right);
+
+/** Return value of is_dirty flag */
 gboolean qof_instance_is_dirty (QofInstance *);
 
 /** Pair things up.  This routine inserts a kvp value into each instance
