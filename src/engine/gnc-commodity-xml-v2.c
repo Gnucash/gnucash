@@ -32,25 +32,29 @@ gnc_commodity_dom_tree_create(const gnc_commodity *com)
 
     xmlSetProp(ret, "version", commodity_version_string);
     
-    xmlNewChild(ret, NULL, "cmdty:space", gnc_commodity_get_namespace(com));
-    xmlNewChild(ret, NULL, "cmdty:id", gnc_commodity_get_mnemonic(com));
+    xmlAddChild(ret, text_to_dom_tree("cmdty:space",
+                                      gnc_commodity_get_namespace(com)));
+    xmlAddChild(ret, text_to_dom_tree("cmdty:id",
+                                      gnc_commodity_get_mnemonic(com)));
 
     if(gnc_commodity_get_fullname(com))
     {
-        xmlNewChild(ret, NULL, "cmdty:name", gnc_commodity_get_fullname(com));
+        xmlAddChild(ret, text_to_dom_tree("cmdty:name",
+                                          gnc_commodity_get_fullname(com)));
     }
 
     if(gnc_commodity_get_exchange_code(com) &&
        strlen(gnc_commodity_get_exchange_code(com)) > 0)
     {
-        xmlNewChild(ret, NULL, "cmdty:xcode",
-                    gnc_commodity_get_exchange_code(com));
+        xmlAddChild(ret, text_to_dom_tree(
+                        "cmdty:xcode",
+                        gnc_commodity_get_exchange_code(com)));
     }
     
     {
         gchar *text;
         text = g_strdup_printf("%d", gnc_commodity_get_fraction(com));
-        xmlNewChild(ret, NULL, "cmdty:fraction", text);
+        xmlAddChild(ret, text_to_dom_tree("cmdty:fraction", text));
         g_free(text);
     }
 
@@ -72,19 +76,6 @@ struct com_char_handler com_handlers[] = {
     { "cmdty:xcode", gnc_commodity_set_exchange_code },
     { 0, 0 }
 };
-
-static gboolean
-string_to_integer(const char *content, gint64 *to)
-{
-    if(sscanf(content, "%lld", to) == 1)
-    {
-        return TRUE;
-    }
-    else
-    {
-        return FALSE;
-    }
-}
 
 static void
 set_commodity_value(xmlNodePtr node, gnc_commodity* com)

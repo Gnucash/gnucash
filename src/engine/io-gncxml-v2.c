@@ -5,8 +5,10 @@
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 
+#include "sixtp-dom-parsers.h"
 #include "io-gncxml-v2.h"
 #include "sixtp.h"
+#include "sixtp-parsers.h"
 #include "gnc-xml.h"
 #include "gnc-book-p.h"
 
@@ -102,10 +104,76 @@ add_pricedb_local(sixtp_gdv2 *data, GNCPriceDB *db)
     return TRUE;
 }
 
+static gboolean
+gnc_counter_end_handler(gpointer data_for_children,
+                        GSList* data_from_children, GSList* sibling_data,
+                        gpointer parent_data, gpointer global_data,
+                        gpointer *result, const gchar *tag)
+{
+    char *strval;
+    gint64 val;
+    char *type;
+    xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    sixtp_gdv2 *gdata = (sixtp_gdv2*)global_data;
+    
+    if(parent_data)
+    {
+        return TRUE;
+    }
+
+    /* OK.  For some messed up reason this is getting called again with a
+       NULL tag.  So we ignore those cases */
+    if(!tag)
+    {
+        return TRUE;
+    }
+    
+    g_return_val_if_fail(tree, FALSE);
+
+    type = xmlGetProp(tree, "cd:type");
+    strval = dom_tree_to_text(tree);
+    if(!string_to_integer(strval, &val))
+    {
+        g_warning("string_to_integer failed with input: %s", strval);
+        return FALSE;
+    }
+    
+    if(safe_strcmp(type, "transaction") == 0)
+    {
+        gdata->counter.transactions_total = val;
+    }
+    else if(safe_strcmp(type, "account") == 0)
+    {
+        gdata->counter.accounts_total = val;
+    }
+    else if(safe_strcmp(type, "commodity") == 0)
+    {
+        gdata->counter.commodities_total = val;
+    }
+    else
+    {
+        g_warning("Unknown type: %s", type);
+        return FALSE;
+    }
+    
+    return TRUE;
+}
+
 static sixtp*
 gnc_counter_sixtp_parser_create(void)
 {
-    return NULL;
+     return sixtp_dom_parser_new(gnc_counter_end_handler, NULL, NULL);
+}
+
+static void
+print_counter_data(struct _load_counter_struct data)
+{
+    printf("Transactions: Total: %d, Loaded: %d\n",
+           data.transactions_total, data.transactions_loaded);
+    printf("Accounts: Total: %d, Loaded: %d\n",
+           data.accounts_total, data.accounts_loaded);
+    printf("Commodities: Total: %d, Loaded: %d\n",
+           data.commodities_total, data.commodities_loaded);
 }
 
 gboolean
@@ -141,7 +209,7 @@ gnc_book_load_from_xml_file_v2(GNCBook *book)
     {
         return FALSE;
     }
-
+    
     if(!sixtp_parse_file(parser, gnc_book_get_file_path(book),
                          NULL, &gd, &parse_result))
     {
@@ -152,6 +220,9 @@ gnc_book_load_from_xml_file_v2(GNCBook *book)
     {
     }
     
+    /* DEBUG */
+    print_counter_data(gd.counter);
+
     return TRUE;
 }
 
@@ -270,23 +341,37 @@ write_pricedb(FILE *out, GNCBook *book)
 }
 
 static void
-write_accounts(FILE *out, GNCBook *book)
+write_account_group(FILE *out, AccountGroup *grp)
 {
     GList *list;
     GList *node;
 
-    list = xaccGroupGetAccountList (gnc_book_get_group(book));
+    list = xaccGroupGetAccountList(grp);
 
     for (node = list; node; node = node->next) {
         xmlNodePtr accnode;
-
+        AccountGroup *newgrp;
+        
         accnode = gnc_account_dom_tree_create((Account*)(node->data));
 
         xmlElemDump(out, NULL, accnode);
         fprintf(out, "\n");
 
         xmlFreeNode(accnode);
+
+        newgrp = xaccAccountGetChildren((Account*)(node->data));
+
+        if(grp)
+        {
+            write_account_group(out, newgrp);
+        }
     }
+}
+
+static void
+write_accounts(FILE *out, GNCBook *book)
+{
+    write_account_group(out, gnc_book_get_group(book));
 }
 
 static gboolean
@@ -325,7 +410,9 @@ gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename)
                  gnc_commodity_table_get_size(
                      gnc_book_get_commodity_table(book)),
                  "account",
-                 xaccGroupGetNumAccounts(gnc_book_get_group(book)),
+                 xaccGroupGetNumSubAccounts(gnc_book_get_group(book)),
+                 "transaction",
+                 gnc_book_count_transactions(book),
                  NULL);
 
     write_commodities(out, book);

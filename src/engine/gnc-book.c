@@ -174,6 +174,22 @@ gnc_book_set_group (GNCBook *book, AccountGroup *grp)
    book->topgroup = grp;
 }
 
+static int
+counter_thunk(Transaction *t, void *data)
+{
+    (*((guint*)data))++;
+    return 0;
+}
+
+guint
+gnc_book_count_transactions(GNCBook *book)
+{
+    guint count = 0;
+    xaccGroupForEachTransaction(gnc_book_get_group(book),
+                                counter_thunk, (void*)&count);
+    return count;
+}
+
 /* ---------------------------------------------------------------------- */
 
 GNCPriceDB *

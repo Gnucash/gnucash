@@ -42,12 +42,13 @@ gnc_account_dom_tree_create(Account *act)
     ret = xmlNewNode(NULL, gnc_account_string);
     xmlSetProp(ret, "version", account_version_string);
 
-    xmlNewChild(ret, NULL, act_name_string, xaccAccountGetName(act));
+    xmlAddChild(ret, text_to_dom_tree(act_name_string, xaccAccountGetName(act)));
     
     xmlAddChild(ret, guid_to_dom_tree(act_id_string, xaccAccountGetGUID(act)));
     
-    xmlNewChild(ret, NULL, act_type_string,
-                xaccAccountTypeEnumAsString(xaccAccountGetType(act)));
+    xmlAddChild(ret, text_to_dom_tree(
+                    act_type_string,
+                    xaccAccountTypeEnumAsString(xaccAccountGetType(act))));
 
     xmlAddChild(ret, commodity_ref_to_dom_tree(act_currency_string,
                                             xaccAccountGetCurrency(act)));
@@ -55,14 +56,15 @@ gnc_account_dom_tree_create(Account *act)
     if(xaccAccountGetCode(act) &&
         strlen(xaccAccountGetCode(act)) > 0)
     {
-        xmlNewChild(ret, NULL, act_code_string, xaccAccountGetCode(act));
+        xmlAddChild(ret, text_to_dom_tree(act_code_string,
+                                          xaccAccountGetCode(act)));
     }
 
     if(xaccAccountGetDescription(act) &&
        strlen(xaccAccountGetDescription(act)) > 0)
     {
-        xmlNewChild(ret, NULL, act_description_string,
-                    xaccAccountGetDescription(act));
+        xmlAddChild(ret, text_to_dom_tree(act_description_string,
+                                          xaccAccountGetDescription(act)));
     }
        
     if(xaccAccountGetSecurity(act))

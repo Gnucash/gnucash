@@ -1,3 +1,44 @@
+2001-03-13  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/io-gncxml-v2.c (gnc_counter_end_handler): complete
+	func. 
+	(print_counter_data): new func.
+	(gnc_book_load_from_xml_file_v2): call above func at end of
+	parse. 
+
+	* src/engine/sixtp-dom-parsers.c (string_to_integer): move here
+	from gnc-commodity-xml-v2.c
+
+	* src/engine/io-gncxml-v2.c (gnc_book_write_to_xml_file_v2): add
+	transaction number output.
+
+	* src/engine/Group.c (xaccGroupForEachTransaction): actually make
+	this work.
+	(xaccGroupVisitUnvisitedTransactions): actually make this work.
+	Don't get accounts from group.  We already are looking at all of
+	them by xaccGroupGetSubAccounts.
+	(xaccGroupVisitUnvisitedTransactions_thunk): new func for
+	xaccAccountForEachTransaction call.
+
+	* src/test/test-string-converters.c (test_string_converters): add
+	func to test some more difficult strings (including xml special
+	characters)
+
+	* src/engine/gnc-account-xml-v2.c (gnc_account_dom_tree_create):
+	convert to use text_to_dom_tree.
+
+	* src/engine/gnc-commodity-xml-v2.c
+	(gnc_commodity_dom_tree_create): convert to use text_to_dom_tree.
+
+	* src/engine/gnc-book.c (gnc_book_count_transactions): new func.
+
+	* src/engine/io-gncxml-v2.c: (write_account_group)new func.
+	extract out stuff from write_accounts.  Forgot to traverse down
+	accounts so a bunch of the accounts weren't being written.
+	(write_accounts): now just call the write_account_group func.
+	(gnc_book_write_to_xml_file_v2): use xaccGroupNumSubAccounts to
+	get the number of accounts.
+
 2001-03-13  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/sixtp-utils.c (gnc_timegm): new func. define as

@@ -121,6 +121,8 @@ GNCBackendError gnc_book_pop_error (GNCBook *book);
 AccountGroup *gnc_book_get_group (GNCBook *book);
 GNCPriceDB   *gnc_book_get_pricedb (GNCBook *book);
 
+guint gnc_book_count_transactions(GNCBook *book);
+
 /*
  * gnc_book_get_commodity_table returns the commodity table associated with
  * the BOOK.  At the moment this just returns the global commodity table,

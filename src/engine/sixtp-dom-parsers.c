@@ -723,3 +723,16 @@ dom_tree_generic_parse(xmlNodePtr node, struct dom_tree_handler *handlers,
 
     return successful;
 }
+
+gboolean
+string_to_integer(const char *content, gint64 *to)
+{
+    if(sscanf(content, "%lld", to) == 1)
+    {
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
+}

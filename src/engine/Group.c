@@ -1187,6 +1187,32 @@ xaccGroupStagedTransactionTraversal (AccountGroup *grp,
 /********************************************************************\
 \********************************************************************/
 
+struct group_visit_data
+{
+    gboolean (*proc)(Transaction *t, void *data);
+    void *up_data;
+    GHashTable *visit_table;
+};
+
+static gboolean
+xaccGroupVisitUnvisitedTransactions_thunk(Transaction *trn,
+                                          void *data)
+{
+    gpointer test_trn;
+    struct group_visit_data *grdata = (struct group_visit_data*)data;
+
+    test_trn = g_hash_table_lookup(grdata->visit_table, trn);
+
+    if(!test_trn)
+    {
+        g_hash_table_insert(grdata->visit_table, trn, "");
+
+        grdata->proc(trn, grdata->up_data);
+    }
+
+    return TRUE;
+}
+
 gboolean
 xaccGroupVisitUnvisitedTransactions (AccountGroup *g,
                                      gboolean (*proc)(Transaction *t,
@@ -1197,19 +1223,24 @@ xaccGroupVisitUnvisitedTransactions (AccountGroup *g,
   gboolean keep_going = TRUE;
   GList *list;
   GList *node;
-
+  struct group_visit_data grdata;
+  
   if (!g) return(FALSE);
   if (!proc) return(FALSE);
   if (!visited_txns) return(FALSE);
 
   list = xaccGroupGetSubAccounts (g);
 
+  grdata.proc = proc;
+  grdata.up_data = data;
+  grdata.visit_table = visited_txns;
+  
   for (node = list; node && keep_going; node = node->next)
   {
     Account *account = node->data;
-
-    keep_going = xaccAccountVisitUnvisitedTransactions (account, proc,
-                                                        data, visited_txns);
+    
+    keep_going = xaccAccountForEachTransaction(
+        account, xaccGroupVisitUnvisitedTransactions_thunk, (void*)&grdata);
   }
 
   g_list_free (list);
