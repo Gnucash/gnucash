@@ -345,16 +345,20 @@ AC_SUBST(GNC_SCM_INSTALL_DIR)
 AC_SUBST(GNC_SHAREDIR)
 AC_SUBST(GNC_LIBEXECDIR)
 
-# Enable error-on-warning by default -- I'm tired of fixing other
-# people's missing #includes, etc.
+## Enable error-on-warning by default -- I'm tired of fixing other
+## people's missing #includes, etc.
+
+# Disable error-on-warning by default again because this seriously
+# breaks quite a number of configure tests (due to, like, 'warning:
+# unused variable some_variable') -- cstim, 02/02/2003
 AC_ARG_ENABLE(error-on-warning,
   [  --enable-error-on-warning    treat compile warnings as errors],
   [case "${enableval}" in
      yes) CFLAGS="${CFLAGS} -Werror" ;;
      no)  ;;
      *) AC_MSG_ERROR(bad value ${enableval} for --enable-error-on-warning) ;;
-   esac],
-  [  CFLAGS="${CFLAGS} -Werror" ])
+   esac])
+#, [  CFLAGS="${CFLAGS} -Werror" ])
 
 AC_ARG_ENABLE( debug,
   [  --enable-debug               compile with debugging flags set],

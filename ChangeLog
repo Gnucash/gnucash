@@ -1,6 +1,11 @@
 2003-02-02  Christian Stimming  <stimming@tuhh.de>
 
-	* configure.in: Fix libofx test.
+	* configure.in: Disable error-on-warning by default because this
+	seriously breaks quite a number of configure tests. May be enabled
+	again for the development branch, but definitely not for
+	end-users.
+	
+	* configure.in: Fix libofx test. 
 
 	* src/import-export/hbci/gnc-hbci-utils.c, po/de.po: Recognize
 	even more error codes from OpenHBCI. Yes, I know this breaks
