@@ -52,6 +52,20 @@
 #include "qofobject.h"
 #include "qofqueryobject.h"
 
+/*
+ * Design notes on event-generation: transaction-modified-events 
+ * should not be generated until transacation commit or rollback 
+ * time.  They should not be generated as each field is tweaked. 
+ * This for two reasons:
+ * 1) Most editing events make multiple changes to a trnasaction,
+ *    which would generate a flurry of (needless) events, if they
+ *    weren't saved up till the commit.
+ * 2) Technically, its incorrect to use transaction data 
+ *    until the transaction is commited.  The GUI element that
+ *    is changing the data can look at it, but all of the rest
+ *    of the GUI should ignore the data until its commited.
+ */
+
 /* 
  * The "force_double_entry" flag determines how 
  * the splits in a transaction will be balanced. 
@@ -591,18 +605,24 @@ G_INLINE_FUNC void gen_event (Split *split);
 G_INLINE_FUNC void gen_event (Split *split)
 {
   Account *account = split->acc;
-  Transaction *trans;
+  Transaction *trans = split->parent;
+  GNCLot *lot = split->lot;
 
   if (account)
   {
-     xaccGroupMarkNotSaved (account->parent);
-     gnc_engine_generate_event (&account->guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
+    xaccGroupMarkNotSaved (account->parent);
+    gnc_engine_generate_event (&account->guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
   }
 
-  trans = split->parent;
   if (trans)
   {
     gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_MODIFY);
+  }
+
+  if (lot)
+  {
+    /* A change of value/amnt affects gains displat, etc. */
+    gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_MODIFY);
   }
 }
 
@@ -613,9 +633,19 @@ G_INLINE_FUNC void gen_event_trans (Transaction *trans)
 
   for (node = trans->splits; node; node = node->next)
   {
-    Account *account = ((Split *) (node->data)) -> acc;
+    Split *s = node->data;
+    Account *account = s->acc;
+    GNCLot *lot = s->lot;
     if (account)
+    {
       xaccGroupMarkNotSaved (account->parent);
+      gnc_engine_generate_event (&account->guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
+    }
+    if (lot)
+    {
+      /* A change of transaction date might affect opening date of lot */
+      gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_MODIFY);
+    }
   }
 
   gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_MODIFY);
@@ -683,7 +713,7 @@ xaccSplitSetSlots_nc(Split *s, KvpFrame *frm)
 
   s->kvp_data = frm;
 
-  gen_event (s);
+  /* gen_event (s);  No! only in TransCommit() ! */
 }
 
 /********************************************************************\
@@ -702,7 +732,7 @@ DxaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
 
   SET_GAINS_VDIRTY(s);
   mark_split (s);
-  gen_event (s);
+  /* gen_event (s);  No! only in TransCommit() ! */
 }
 
 void 
@@ -718,7 +748,7 @@ xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price,
 
   SET_GAINS_VDIRTY(s);
   mark_split (s);
-  gen_event (s);
+  /* gen_event (s);  No! only in TransCommit() ! */
 }
 
 void 
@@ -741,7 +771,7 @@ xaccSplitSetSharePrice (Split *s, gnc_numeric price)
 
   SET_GAINS_VDIRTY(s);
   mark_split (s);
-  gen_event (s);
+  /* gen_event (s);  No! only in TransCommit() ! */
 }
 
 void 
@@ -769,7 +799,7 @@ DxaccSplitSetShareAmount (Split *s, double damt)
 
   SET_GAINS_VDIRTY(s);
   mark_split (s);
-  gen_event (s);
+  /* gen_event (s);  No! only in TransCommit() ! */
 }
 
 void 
@@ -785,7 +815,7 @@ DxaccSplitSetAmount (Split *s, double damt)
 
   SET_GAINS_VDIRTY(s);
   mark_split (s);
-  gen_event (s);
+  /* gen_event (s);  No! only in TransCommit() ! */
 }
 
 void 
@@ -798,7 +828,7 @@ xaccSplitSetAmount (Split *s, gnc_numeric amt)
 
   SET_GAINS_VDIRTY(s);
   mark_split (s);
-  gen_event (s);
+  /* gen_event (s);  No! only in TransCommit() ! */
 }
 
 void 
@@ -832,7 +862,7 @@ DxaccSplitSetValue (Split *s, double damt)
 
   SET_GAINS_VDIRTY(s);
   mark_split (s);
-  gen_event (s);
+  /* gen_event (s);  No! only in TransCommit() ! */
 }
 
 void 
@@ -845,7 +875,7 @@ xaccSplitSetValue (Split *s, gnc_numeric amt)
 
   SET_GAINS_VDIRTY(s);
   mark_split (s);
-  gen_event (s);
+  /* gen_event (s);  No! only in TransCommit() ! */
 }
 
 /********************************************************************\
@@ -1323,7 +1353,7 @@ xaccTransSetSlots_nc (Transaction *t, KvpFrame *frm)
 
   t->kvp_data = frm;
 
-  gen_event_trans (t);
+  /* gen_event_trans (t);  No! only in TransCommit() ! */
 }
 
 /********************************************************************\
@@ -1416,7 +1446,7 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
       s->amount = value;
     }
     mark_split (s);
-    gen_event (s);
+    /* gen_event (s);  No! only in TransCommit() ! */
     return;
   }
 
@@ -1454,7 +1484,7 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
   }
 
   mark_split (s);
-  gen_event (s);
+  /* gen_event (s);  No! only in TransCommit() ! */
 }
 
 gnc_numeric
@@ -1772,7 +1802,7 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
   }
 
   mark_trans (trans);
-  gen_event_trans (trans);
+  /* gen_event_trans (trans);  No! only in TransCommit() ! */
 }
 
 /********************************************************************\
@@ -1806,6 +1836,78 @@ xaccTransBeginEdit (Transaction *trans)
     */
    trans->orig = xaccDupeTransaction (trans);
 }
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccTransDestroy (Transaction *trans)
+{
+  if (!trans) return;
+  check_open (trans);
+
+  if (xaccTransWarnReadOnly (trans)) return;
+
+  trans->do_free = TRUE;
+}
+
+static void
+destroy_gains (Transaction *trans)
+{
+  SplitList *node;
+  for (node = trans->splits; node; node = node->next)
+  {
+    Split *s = node->data;
+    if (GAINS_STATUS_UNKNOWN == s->gains) DetermineGainStatus(s);
+    if (s->gains_split && (GAINS_STATUS_GAINS & s->gains_split->gains))
+    {
+      Transaction *t = s->gains_split->parent;
+      xaccTransBeginEdit (t);
+      xaccTransDestroy (t);
+      xaccTransCommitEdit (t);
+      s->gains_split = NULL;
+    }
+  }
+}
+
+static void
+do_destroy (Transaction *trans)
+{
+  SplitList *node;
+
+  /* If there are capital-gains transactions associated with this, 
+   * they need to be destroyed too.  */
+  destroy_gains (trans);
+
+  /* Make a log in the journal before destruction.  */
+  xaccTransWriteLog (trans, 'D');
+
+  gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_DESTROY);
+
+  for (node = trans->splits; node; node = node->next)
+  {
+    Split *split = node->data;
+
+    mark_split (split);
+    xaccAccountRemoveSplit (split->acc, split);
+    xaccAccountRecomputeBalance (split->acc);
+    gen_event (split);
+    qof_entity_remove(split->book->entity_table, &split->guid);
+    xaccFreeSplit (split);
+
+    node->data = NULL;
+  }
+
+  g_list_free (trans->splits);
+  trans->splits = NULL;
+
+  qof_entity_remove(trans->book->entity_table, &trans->guid);
+
+  /* The actual free is done with the commit call, else its rolled back */
+}
+
+/********************************************************************\
+\********************************************************************/
 
 void
 xaccTransCommitEdit (Transaction *trans)
@@ -1922,12 +2024,10 @@ xaccTransCommitEdit (Transaction *trans)
    }
 
    /* ------------------------------------------------- */
-   if (!trans->splits || trans->do_free)
+   if (trans->do_free || !trans->splits)
    {
       PINFO ("delete trans at addr=%p", trans);
-      /* Make a log in the journal before destruction.  */
-      xaccTransWriteLog (trans, 'D');
-      qof_entity_remove(trans->book->entity_table, &trans->guid);
+      do_destroy (trans);
       xaccFreeTransaction (trans);
       return;
    }
@@ -1949,6 +2049,7 @@ xaccTransCommitEdit (Transaction *trans)
    /* Put back to zero. */
    trans->editlevel--;
 
+   gen_event_trans (trans);
    LEAVE ("trans addr=%p\n", trans);
 }
 
@@ -2156,6 +2257,7 @@ xaccTransRollbackEdit (Transaction *trans)
           * out about it until this user tried to edit it.
           */
          xaccTransDestroy (trans);
+         do_destroy (trans);
          xaccFreeTransaction (trans);
 
          /* push error back onto the stack */
@@ -2223,48 +2325,6 @@ xaccTransWarnReadOnly (const Transaction *trans)
     return TRUE;
   }
   return FALSE;
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void
-xaccTransDestroy (Transaction *trans)
-{
-  GList *node;
-
-  if (!trans) return;
-  check_open (trans);
-
-  if (xaccTransWarnReadOnly (trans))
-    return;
-
-  trans->do_free = TRUE;
-  xaccTransWriteLog (trans, 'D');
-
-  gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_DESTROY);
-
-  for (node = trans->splits; node; node = node->next)
-  {
-    Split *split = node->data;
-
-    mark_split (split);
-    xaccAccountRemoveSplit (split->acc, split);
-    xaccAccountRecomputeBalance (split->acc);
-    gen_event (split);
-    qof_entity_remove(split->book->entity_table, &split->guid);
-    xaccFreeSplit (split);
-
-    node->data = NULL;
-  }
-
-  g_list_free (trans->splits);
-  trans->splits = NULL;
-
-  qof_entity_remove(trans->book->entity_table, &trans->guid);
-
-  /* the actual free is done with the commit call, else its rolled back */
-  /* xaccFreeTransaction (trans);  don't do this here ... */
 }
 
 /********************************************************************\
@@ -2686,7 +2746,7 @@ xaccTransSetDateInternal(Transaction *trans, Timespec *dadate, Timespec val)
     
     *dadate = val;
     mark_trans(trans);
-    gen_event_trans (trans);
+    /* gen_event_trans (trans);  No! only in TransCommit() ! */
 
    /* Because the date has changed, we need to make sure that each of
     * the splits is properly ordered in each of their accounts. We
@@ -2791,7 +2851,7 @@ xaccTransSetNum (Transaction *trans, const char *xnum)
    tmp = g_cache_insert(gnc_engine_get_string_cache(), (gpointer) xnum);
    g_cache_remove(gnc_engine_get_string_cache(), trans->num);
    trans->num = tmp;
-   gen_event_trans (trans);
+   /* gen_event_trans (trans);  No! only in TransCommit() ! */
 }
 
 void
@@ -2804,7 +2864,7 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
    tmp = g_cache_insert(gnc_engine_get_string_cache(), (gpointer) desc);
    g_cache_remove(gnc_engine_get_string_cache(), trans->description);
    trans->description = tmp;
-   gen_event_trans (trans);
+   /* gen_event_trans (trans);  No! only in TransCommit() ! */
 }
 
 void
@@ -2814,7 +2874,7 @@ xaccTransSetNotes (Transaction *trans, const char *notes)
   check_open (trans);
 
   kvp_frame_set_str (trans->kvp_data, trans_notes_str, notes);
-  gen_event_trans (trans);
+  /* gen_event_trans (trans);  No! only in TransCommit() ! */
 }
 
 /********************************************************************\
@@ -3074,7 +3134,7 @@ xaccSplitSetMemo (Split *split, const char *memo)
    tmp = g_cache_insert(gnc_engine_get_string_cache(), (gpointer) memo);
    g_cache_remove(gnc_engine_get_string_cache(), split->memo);
    split->memo = tmp;
-   gen_event (split);
+   /* gen_event (split);  No! only in TransCommit() ! */
 }
 
 void
@@ -3087,7 +3147,7 @@ xaccSplitSetAction (Split *split, const char *actn)
    tmp = g_cache_insert(gnc_engine_get_string_cache(), (gpointer) actn);
    g_cache_remove(gnc_engine_get_string_cache(), split->action);
    split->action = tmp;
-   gen_event (split);
+   /* gen_event (split);  No! only in TransCommit() ! */
 }
 
 void
@@ -3116,7 +3176,7 @@ xaccSplitSetReconcile (Split *split, char recn)
      split->reconciled = recn;
      mark_split (split);
      xaccAccountRecomputeBalance (account);
-     gen_event (split);
+     /* gen_event (split);  No! only in TransCommit() ! */
    }
 }
 
@@ -3128,7 +3188,7 @@ xaccSplitSetDateReconciledSecs (Split *split, time_t secs)
 
    split->date_reconciled.tv_sec = secs;
    split->date_reconciled.tv_nsec = 0;
-   gen_event (split);
+   /* gen_event (split);  No! only in TransCommit() ! */
 }
 
 void
@@ -3138,7 +3198,7 @@ xaccSplitSetDateReconciledTS (Split *split, Timespec *ts)
    check_open (split->parent);
 
    split->date_reconciled = *ts;
-   gen_event (split);
+   /* gen_event (split);  No! only in TransCommit() ! */
 }
 
 void
@@ -3288,7 +3348,7 @@ xaccSplitMakeStockSplit(Split *s)
   s->value = gnc_numeric_zero();
   kvp_frame_set_str(s->kvp_data, "split-type", "stock-split");
   mark_split(s);
-  gen_event (s);
+  /* gen_event (s);  No! only in TransCommit() ! */
 }
 
 
@@ -3577,7 +3637,6 @@ xaccTransReverse (Transaction *trans)
 
   g_return_if_fail(trans);
 
-  gnc_engine_suspend_events();
   xaccTransBeginEdit(trans);
 
   /* Reverse the values on each split. Clear per-split info. */
@@ -3593,8 +3652,6 @@ xaccTransReverse (Transaction *trans)
   }
 
   xaccTransCommitEdit(trans);
-
-  gnc_engine_resume_events();
 }
 
 /********************************************************************\
