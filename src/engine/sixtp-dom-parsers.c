@@ -183,7 +183,10 @@ string_to_binary(const gchar *str,  void **v, guint64 *data_len)
   guint64 str_len;
   guchar *data;
   int i, j;
-  
+
+  g_return_val_if_fail(v != NULL, FALSE);
+  g_return_val_if_fail(data_len != NULL, FALSE);
+
   str_len = strlen(str);
 
   /* Since no whitespace is allowed and hex encoding is 2 text chars
@@ -193,14 +196,12 @@ string_to_binary(const gchar *str,  void **v, guint64 *data_len)
       return(FALSE);
   *data_len = str_len / 2;
   data = g_new0(guchar, *data_len);
-  
-  g_return_val_if_fail(*v, FALSE);
 
   for(j = 0, i = 0; i < str_len; i += 2, j++)
   {
       gchar tmpstr[3];
       long int converted;
-      
+
       tmpstr[0] = str[i];
       tmpstr[1] = str[i + 1];
       tmpstr[2] = '\0';
@@ -211,7 +212,7 @@ string_to_binary(const gchar *str,  void **v, guint64 *data_len)
   }
 
   *v = data;
-  
+
   return(TRUE);
 }
 
