@@ -99,25 +99,26 @@
 
 #include "config.h"
 
+#include <glib.h>
+#include <guile/gh.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include <glib.h>
-#include <guile/gh.h>
 
 #include "Account.h"
-#include "gnc-ui.h"
-#include "SplitLedger.h"
-#include "MultiLedger.h"
 #include "FileDialog.h"
+#include "MultiLedger.h"
 #include "Refresh.h"
-#include "splitreg.h"
-#include "table-allgui.h"
-#include "guile-util.h"
+#include "Scrub.h"
+#include "SplitLedger.h"
 #include "global-options.h"
-#include "messages.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui-util.h"
+#include "gnc-ui.h"
+#include "guile-util.h"
+#include "messages.h"
+#include "splitreg.h"
+#include "table-allgui.h"
 
 
 typedef struct _SRInfo SRInfo;
@@ -799,7 +800,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
 
   /* commit the contents of the cursor into the database */
   saved = xaccSRSaveRegEntry (reg, old_trans != new_trans);
-  if ((pending_trans != NULL) &&
+  if ((pending_trans != NULL)      &&
       (pending_trans == old_trans) &&
       (old_trans != new_trans))
   {
@@ -968,8 +969,8 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       if (auto_trans == NULL)
         return;
 
-      xaccTransBeginEdit(trans, FALSE);
-      gnc_copy_trans_onto_trans(auto_trans, trans, FALSE, FALSE);
+      xaccTransBeginEdit (trans, TRUE);
+      gnc_copy_trans_onto_trans (auto_trans, trans, FALSE, FALSE);
 
       if (info->default_source_account != NULL)
       {
@@ -2468,7 +2469,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
    if (pending_trans != trans) {
      if (xaccTransIsOpen (pending_trans))
        xaccTransCommitEdit (pending_trans);
-     xaccTransBeginEdit (trans, FALSE);
+     xaccTransBeginEdit (trans, TRUE);
      pending_trans = trans;
      info->pending_trans_guid = *xaccTransGetGUID(trans);
    }
@@ -2537,6 +2538,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
     * transaction to NULL. */
    if (do_commit)
    {
+     xaccTransScrubImbalance (trans);
      xaccTransCommitEdit (trans);
      if (pending_trans == trans)
      {
@@ -3419,10 +3421,18 @@ xaccSRGetBGColorHandler (VirtualLocation virt_loc, gpointer user_data)
         reg_colors.secondary_bg_color;
 
     case CURSOR_TYPE_SPLIT:
-      if (is_current)
-        return reg_colors.split_active_bg_color;
+      {
+        Split *split = sr_get_split (reg, virt_loc.vcell_loc);
+        Transaction *trans = xaccSplitGetParent (split);
 
-      return reg_colors.split_bg_color;
+        if (split && (split == xaccTransGetBalanceSplit (trans)))
+          return 0xffff00;
+
+        if (is_current)
+          return reg_colors.split_active_bg_color;
+
+        return reg_colors.split_bg_color;
+      }
 
     default:
       PWARN("Unexpected cursor type: %d\n", vcell->cellblock->cursor_type);

@@ -141,19 +141,19 @@ struct _transaction
    * It is intended to store a short id number, typically the check number,
    * deposit number, invoice number or other tracking number.
    */
-  char  * num;  
+  char * num;  
 
   /* The description field is an arbitrary user-assigned value. 
    * It is meant to be a short descriptive phrase.
    */
-  char  * description;        
+  char * description;        
 
   /* kvp_data is a key-value pair database for storing simple 
    * "extra" information in splits, transactions, and accounts. 
    * it's NULL until accessed. */
   kvp_frame * kvp_data;
 
-  GList *splits; /* list of splits */
+  GList * splits; /* list of splits */
 
   /* marker is used to track the progress of transaction traversals. 
    * 0 is never a legitimate marker value, so we can tell is we hit
@@ -184,58 +184,20 @@ void xaccTransSetGUID (Transaction *trans, GUID *guid);
  * call this on an existing split! */
 void xaccSplitSetGUID (Split *split, GUID *guid);
 
-/* The xaccFreeTransaction() method simply frees all memory associated
- * with the transaction.  It does not perform any consistency checks 
- * to verify that such freeing can be safely done. (e.g. id does
- * not check to see if any of the member splits are referenced
- * by an account.
- */
-void  xaccFreeTransaction (Transaction *trans);
-
 /* The xaccFreeSplit() method simply frees all memory associated
  * with the split.  It does not verify that the split isn't
  * referenced in some account.  If the split is referenced by an 
  * account, then calling this method will leave the system in an 
  * inconsistent state.
  */
-void  xaccFreeSplit   (Split *split);    /* frees memory */
+void  xaccFreeSplit (Split *split);    /* frees memory */
 
-
-/*
- * The xaccSplitRebalance() routine is an important routine for
- * maintaining and ensuring that double-entries balance properly.
- * This routine forces the sum-total of the values of all the
- * splits in a transaction to total up to exactly zero.
- *
- * It is worthwhile to understand the algorithm that this routine
- * uses to achieve balance.  It goes like this:
- * If the indicated split is a destination split (i.e. is not
- * the first split), then the total value of the destination 
- * splits is computed, and the value of the source split (ie.
- * the first split) is adjusted to be minus this amount.
- * (the share price of the source split is not changed).
- * If the indicated split is the source split, then the value
- * of the very first destination split is adjusted so that
- * the balance is zero. If there is not destination split,
- * one of two outcomes are possible, depending on whether
- * "forced_double_entry" is enabled or disabled.
- * (1) if forced-double-entry is disabled, the fact that
- *     the destination is missing is ignored.
- * (2) if force-double-entry is enabled, then a destination
- *     split that exactly mirrors the source split is created,
- *     and credited to the same account as the source split.
- *     Hopefully, the user will notice this, and reparent the
- *     destination split properly.
- */
-
-void xaccSplitRebalance (Split *split);
+/* compute the value of a list of splits in the given currency,
+ * excluding the skip_me split. */
+gnc_numeric xaccSplitsComputeValue (GList *splits, Split * skip_me,
+                                    const gnc_commodity * base_currency);
 
 /* Set the balance split of a transaction. */
 void xaccTransSetBalanceSplit (Transaction *trans, Split *split);
-
-/* FIXME: this is probably wrong, but it'll have to wait until Bill
-   returns.  It's *ONLY* for file IO.  Don't use these elsewhere. */
-void xaccSplitSetValueDirectly(Split *split, gnc_numeric value);
-void xaccSplitSetQuantityDirectly(Split *split, gnc_numeric quantity);
 
 #endif /* __XACC_TRANSACTION_P_H__ */

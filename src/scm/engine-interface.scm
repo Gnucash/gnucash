@@ -243,7 +243,7 @@
 
         ;; open the transaction for editing
         (if (not (gnc:transaction-is-open trans))
-            (gnc:transaction-begin-edit trans 1))
+            (gnc:transaction-begin-edit trans #t))
 
         ;; copy in the transaction values
         (let ((description (gnc:transaction-scm-get-description trans-scm))
@@ -271,10 +271,10 @@
                      (new-guid  (assoc-ref guid-mapping old-guid)))
                 (if (not new-guid)
                     (set! new-guid old-guid))
-                (gnc:transaction-append-split trans new-split)
                 (gnc:split-scm-set-account-guid split-scm new-guid)
                 (gnc:split-scm-onto-split split-scm new-split)
                 (gnc:split-scm-set-account-guid split-scm old-guid)
+                (gnc:transaction-append-split trans new-split)
                 (loop (cdr split-scms)))))
 
         ;; close the transaction

@@ -69,15 +69,12 @@ int force_double_entry = 0;
 /* arbitrary price per share increment FIXME */
 #define PRICE_DENOM 1000000
 
-/********************************************************************\
- * Because I can't use C++ for this project, doesn't mean that I    *
- * can't pretend too!  These functions perform actions on the       *
- * Transaction data structure, in order to encapsulate the          *
- * knowledge of the internals of the Transaction in one file.       *
-\********************************************************************/
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_ENGINE;
+
+/* Prototypes *******************************************************/
+static void xaccSplitRebalance (Split *split);
 
 
 /********************************************************************\
@@ -629,7 +626,7 @@ xaccCloneTransaction (Transaction *t)
 /********************************************************************\
 \********************************************************************/
 
-void
+static void
 xaccFreeTransaction (Transaction *trans)
 {
   GList *node;
@@ -907,9 +904,9 @@ xaccSplitGetBaseValue (Split *s, const gnc_commodity * base_currency)
 /********************************************************************\
 \********************************************************************/
 
-static gnc_numeric
-ComputeValue (GList *splits, Split * skip_me, 
-              const gnc_commodity * base_currency)
+gnc_numeric
+xaccSplitsComputeValue (GList *splits, Split * skip_me,
+                        const gnc_commodity * base_currency)
 {
   GList *node;
   gnc_numeric value;
@@ -974,7 +971,7 @@ gnc_numeric
 xaccTransGetImbalance (Transaction * trans)
 {
   const gnc_commodity * currency = xaccTransFindCommonCurrency (trans);
-  gnc_numeric imbal = ComputeValue (trans->splits, NULL, currency);
+  gnc_numeric imbal = xaccSplitsComputeValue (trans->splits, NULL, currency);
   return imbal;
 }
 
@@ -1242,7 +1239,7 @@ xaccSplitRebalance (Split *split)
     s = g_list_nth_data (trans->splits, 1);
     if (s) {
       /* the new value of the destination split will be the result.  */
-      value = ComputeValue (trans->splits, s, base_currency);
+      value = xaccSplitsComputeValue (trans->splits, s, base_currency);
 
       /* what do we do if the value is different in the denominator
        * than the one for the account? */
@@ -1296,7 +1293,7 @@ xaccSplitRebalance (Split *split)
      */
 
     s = trans->splits->data;
-    value = ComputeValue (trans->splits, s, base_currency);
+    value = xaccSplitsComputeValue (trans->splits, s, base_currency);
 
     /* KLUDGE -- bg */
     xaccSplitSetBaseValue (s, 
