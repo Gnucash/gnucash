@@ -82,11 +82,15 @@ developing over time"))
 (define optname-plot-height (N_ "Plot Height"))
 (define optname-sort-method (N_ "Sort Method"))
 
-(define (options-generator account-types)
+(define (options-generator account-types reverse-balance?)
   (let* ((options (gnc:new-options)) 
          (add-option 
           (lambda (new-option)
             (gnc:register-option options new-option))))
+
+    ;; save off the reverse-balance option
+    (add-option
+     (gnc:make-internal-option "__report" "reverse-balance?" reverse-balance?))
 
     ;; General tab
     (gnc:options-add-date-interval!
@@ -200,6 +204,7 @@ developing over time"))
         (height (get-option gnc:pagename-display optname-plot-height))
         (width (get-option gnc:pagename-display optname-plot-width))
 	(sort-method (get-option gnc:pagename-display optname-sort-method))
+	(reverse-balance? (get-option "__report" "reverse-balance?"))
         
 	(work-done 0)
 	(work-to-do 0)
@@ -265,7 +270,7 @@ developing over time"))
           ;; double, exchanged into the report-currency by the above
           ;; conversion function, and possibly with reversed sign.
           (define (get-balance account date-list-entry subacct?)
-            ((if (gnc:account-reverse-balance? account)
+            ((if (reverse-balance? account)
                  - +)
              (if do-intervals?
                  (collector->double
@@ -531,29 +536,30 @@ developing over time"))
 
 (for-each 
  (lambda (l)
-   (gnc:define-report
-    'version 1
-    'name (car l)
-    'menu-path (if (caddr l)
-                   (list gnc:menuname-income-expense)
-                   (list gnc:menuname-asset-liability))
-    'menu-name (cadddr l)
-    'menu-tip (car (cddddr l))
-    'options-generator (lambda () (options-generator (cadr l)))
-    'renderer (lambda (report-obj)
-                (category-barchart-renderer report-obj 
-                                            (car l) 
-                                            (cadr l)
-                                            (caddr l)))))
+   (let ((tip-and-rev (cddddr l)))
+     (gnc:define-report
+      'version 1
+      'name (car l)
+      'menu-path (if (caddr l)
+		     (list gnc:menuname-income-expense)
+		     (list gnc:menuname-asset-liability))
+      'menu-name (cadddr l)
+      'menu-tip (car tip-and-rev)
+      'options-generator (lambda () (options-generator (cadr l) (cadr tip-and-rev)))
+      'renderer (lambda (report-obj)
+		  (category-barchart-renderer report-obj 
+					      (car l) 
+					      (cadr l)
+					      (caddr l))))))
  (list 
   ;; reportname, account-types, do-intervals?, 
   ;; menu-reportname, menu-tip
-  (list reportname-income '(income) #t menuname-income menutip-income)
-  (list reportname-expense '(expense) #t menuname-expense menutip-expense)
+  (list reportname-income '(income) #t menuname-income menutip-income (lambda (x) #t))
+  (list reportname-expense '(expense) #t menuname-expense menutip-expense (lambda (x) #f))
   (list reportname-assets 
         '(asset bank cash checking savings money-market receivable
                 stock mutual-fund currency)
-        #f menuname-assets menutip-assets)
+        #f menuname-assets menutip-assets (lambda (x) #f))
   (list reportname-liabilities 
         '(liability payable credit credit-line)
-        #f menuname-liabilities menutip-liabilities)))
+        #f menuname-liabilities menutip-liabilities (lambda (x) #t))))
