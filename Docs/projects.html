@@ -285,7 +285,9 @@ immediately, independent of the major goals.
     to be "split" between several accounts.  To implement a split,
     the best direction might be to have each transaction be a pointer
     to a set of splits, with each split having it's own distinct
-    debited/credited account, memo field and currency value.
+    credited account, memo field and currency value.  Suggestion is to
+    leave the debited account pointer in the main transaction, and have one
+    credited account pointer in each of the splits.
     <p>
 
 </dl>
