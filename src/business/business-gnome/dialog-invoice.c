@@ -1552,7 +1552,6 @@ gnc_invoice_update_window (InvoiceWindow *iw)
     const char *string;
     Timespec ts, ts_zero = {0,0};
     Account *acct;
-    gnc_numeric amount;
     gint pos = 0;
 
     gtk_entry_set_text (GTK_ENTRY (iw->id_entry), gncInvoiceGetID (invoice));
@@ -1579,10 +1578,6 @@ gnc_invoice_update_window (InvoiceWindow *iw)
     /* fill in the terms menu */
     iw->terms = gncInvoiceGetTerms (invoice);
     gnc_ui_billterms_optionmenu (iw->terms_menu, iw->book, TRUE, &iw->terms);
-
-    /* fill in the to_charge amount */
-    amount = gncInvoiceGetToChargeAmount (invoice);
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (iw->to_charge_edit), amount);
 
     /*
      * Next, figure out if we've been posted, and if so set the
@@ -1613,6 +1608,14 @@ gnc_invoice_update_window (InvoiceWindow *iw)
 
   if (iw->dialog_type == NEW_INVOICE || iw->dialog_type == MOD_INVOICE)
     return;
+
+  /* Fill in the to_charge amount (only in VIEW/EDIT modes) */
+  {
+    gnc_numeric amount;
+
+    amount = gncInvoiceGetToChargeAmount (invoice);
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (iw->to_charge_edit), amount);
+  }
 
   /* Hide/show the appropriate widgets based on our posted/paid state */
 
