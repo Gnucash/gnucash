@@ -16,9 +16,9 @@
   (primitive-load boot-file))
 
 ;; Automatically generated defaults...
-(define gnc:_config-dir-default_ "/usr/local/opt/gnucash/etc")
-(define gnc:_share-dir-default_ "/usr/local/opt/gnucash/share")
-(define gnc:_doc-dir-default_ "/usr/local/opt/gnucash/doc")
+(define gnc:_config-dir-default_ "NONE/etc/gnucash")
+(define gnc:_share-dir-default_ "NONE/share/gnucash")
+(define gnc:_doc-dir-default_ "NONE/doc/gnucash")
 
 (define gnc:*command-line-files* #f)
 
