@@ -1,3 +1,8 @@
+2001-09-05  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/register/ledger-core/split-register-model-save.c
+	(gnc_split_register_save_template_cells): Add missing comma.
+
 2001-09-05  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/register/ledger-core/split-register-model-save.c: replace kvp-frame

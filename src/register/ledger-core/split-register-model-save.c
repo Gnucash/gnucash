@@ -421,7 +421,7 @@ gnc_split_register_save_template_cells (gpointer save_data,
     kvp_frame_set_slot_path( kvpf,
 			     kvp_value_new_string( sharesStr ),
 			     GNC_SX_ID,
-			     GNC_SX_SHARES
+			     GNC_SX_SHARES,
                              NULL);
 
     DEBUG( "kvp_frame  after: %s\n", kvp_frame_to_string( kvpf ) );
