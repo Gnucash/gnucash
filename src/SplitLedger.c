@@ -392,6 +392,8 @@ printf ("save split is %p \n", split);
 
    /* copy the contents from the cursor to the split */
    if (MOD_DATE & changed) 
+      /* commit any pending changes */
+      xaccCommitDateCell (reg->dateCell);
       xaccTransSetDate (trans, reg->dateCell->date.tm_mday,
                                reg->dateCell->date.tm_mon+1,
                                reg->dateCell->date.tm_year+1900);
