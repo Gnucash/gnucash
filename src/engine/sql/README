@@ -11,6 +11,8 @@ usable.
 Postgres Install Instructions
 -----------------------------
 1) Install PostgresSQL server, client and devel packages.
+   (Both the 6.x and the 7.x versions of Postgres should work).
+
 2) if installed from redhat, then running /etc/rc.d/init.d/postgresql 
    will setup and initialize basic Postgres first-time setup & config.
 3) as root, 'su - postgres' then run 'createuser' to add your user id
