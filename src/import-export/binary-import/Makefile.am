@@ -65,10 +65,13 @@ EXTRA_DIST = \
   ${glade_DATA}
 
 .scm-links: 
-	rm -f gnucash g-wrapped
+	rm -f import-export gnucash g-wrapped
+	ln -sf . import-export
 	ln -sf . gnucash 
 	ln -sf . g-wrapped 
 	touch .scm-links
+CLEANFILES = import-export gnucash g-wrapped .scm-links
+
 
 gw-binary-import.scm gw-binary-import.c gw-binary-import.h: .scm-links gw-binary-import-spec.scm
 	FLAVOR=gnome guile -c \
@@ -78,5 +81,4 @@ gw-binary-import.scm gw-binary-import.c gw-binary-import.h: .scm-links gw-binary
 	  (gw:generate-module \"gw-binary-import\")"
 
 BUILT_SOURCES = gw-binary-import.scm gw-binary-import.c gw-binary-import.h
-CLEANFILES = gw-binary-import.scm gw-binary-import.c gw-binary-import.h gw-binary-import.html \
-              gnucash g-wrapped .scm-links
+CLEANFILES += gw-binary-import.scm gw-binary-import.c gw-binary-import.h gw-binary-import.html
