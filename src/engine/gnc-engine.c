@@ -44,6 +44,7 @@ gnc_engine_init(int argc, char ** argv) {
   gnc_engine_init_hook_t hook;
   GList                  * cur;
 
+  if (1 == engine_is_initialized) return;
   engine_is_initialized = 1;
 
   /* initialize the string cache */
