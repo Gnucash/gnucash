@@ -275,6 +275,8 @@ sixtp_stack_frame_destroy(sixtp_stack_frame *sf) {
   }
   g_slist_free(sf->data_from_children);
   sf->data_from_children = NULL;
+
+  g_free(sf);
 }
 
 static GSList*
@@ -1002,16 +1004,21 @@ concatenate_child_result_chars(GSList *data_from_children) {
 
   /* child data lists are in reverse chron order */
   data_from_children = g_slist_reverse(g_slist_copy(data_from_children));
-  
+
   for(lp = data_from_children; lp; lp = lp->next) {
     sixtp_child_result *cr = (sixtp_child_result *) lp->data;
     if(cr->type != SIXTP_CHILD_RESULT_CHARS) {
+      g_slist_free (data_from_children);
       g_free(name);
       return(NULL);
     } else {
-      name = g_strconcat(name, (gchar *) cr->data, NULL);
+      char *temp;
+      temp = g_strconcat(name, (gchar *) cr->data, NULL);
+      g_free (name);
+      name = temp;
     }
   }
+  g_slist_free (data_from_children);
   return(name);
 }
 
@@ -1758,7 +1765,7 @@ kvp_frame_slot_end_handler(gpointer data_for_children,
 
   if(key_node_count != 1) return(FALSE);
 
-  value_cr->should_cleanup = FALSE;
+  value_cr->should_cleanup = TRUE;
   kvp_frame_set_slot(f, (char *) key, (kvp_value *) value_cr->data);
   return(TRUE);
 }
@@ -3084,7 +3091,7 @@ generic_gnc_numeric_end_handler(gpointer data_for_children,
   txt = concatenate_child_result_chars(data_from_children);
 
   if(txt) {
-    gnc_numeric *num = g_new(gnc_numeric, 1);
+    num = g_new(gnc_numeric, 1);
     if(num) {
       if(string_to_gnc_numeric(txt, num)) {
         ok = TRUE;
@@ -3093,8 +3100,8 @@ generic_gnc_numeric_end_handler(gpointer data_for_children,
     }
   }
 
-  if(txt) g_free(txt);
-  if(!ok && num) g_free(num);
+  g_free(txt);
+  if(!ok) g_free(num);
 
   return(ok);
 }
