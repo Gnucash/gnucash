@@ -26,7 +26,7 @@
  * Implement accounting periods, using design described in 
  * src/doc/books.txt
  *
- * CAUTION: Not yet finished.
+ * CAUTION: probably buggy.
  *
  * HISTORY:
  * Created by Linas Vepstas November 2001
@@ -327,7 +327,10 @@ lot_list_preen_open_lots (LotList *lot_list)
       if (lot_has_open_trans_tree (lot))
       {
          lot_list = g_list_remove_link (lot_list, lnode);
-         g_list_free_1 (lnode);
+         /* XXX freeing this node somehow leads to glib g_list
+          * memory corruption which later takes down the system. 
+          * I don't see why.  */
+         /* g_list_free_1 (lnode); */
       }
       lnode = lnext;
    }
@@ -347,7 +350,10 @@ trans_list_preen_open_lots (TransList *trans_list)
       if (trans_has_open_lot_tree (trans))
       {
          trans_list = g_list_remove_link (trans_list, tnode);
-         g_list_free_1 (tnode);
+         /* XXX freeing this node somehow leads to glib g_list
+          * memory corruption which later takes down the system. 
+          * I don't see why.  */
+         /* g_list_free_1 (tnode); */
       }
       tnode = tnext;
    }
