@@ -588,6 +588,7 @@ static gpointer
 move_quote_source (Account *account, gpointer data)
 {
   gnc_commodity *com;
+  gnc_quote_source *quote_source;
   gboolean new_style = GPOINTER_TO_INT(data);
   const char *source, *tz;
 
@@ -604,7 +605,10 @@ move_quote_source (Account *account, gpointer data)
     PINFO("to %8s from %s", gnc_commodity_get_mnemonic(com),
 	  xaccAccountGetName(account));
     gnc_commodity_set_quote_flag(com, TRUE);
-    gnc_commodity_set_quote_source(com, source);
+    quote_source = gnc_quote_source_lookup_by_internal(source);
+    if (!quote_source)
+      quote_source = gnc_quote_source_add_new(source, FALSE);
+    gnc_commodity_set_quote_source(com, quote_source);
     gnc_commodity_set_quote_tz(com, tz);
   }
 

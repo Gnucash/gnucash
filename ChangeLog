@@ -1,3 +1,32 @@
+2003-07-01  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/gnc-ui-util.[ch]:
+	* src/app-utils/gw-app-utils-spec.scm:
+	* src/engine/gnc-commodity.[ch]:
+	* src/engine/gw-engine-spec.scm:
+	Move Finance::Quote related information to live with the rest of
+	the commodity related code.
+
+	* src/engine/gnc-engine.h:
+	* src/engine/gnc-commodity.[ch]: Convert the price quote source
+	data into an object of its own.  Eliminate the old "internal" name
+	in favor of the F::Q name.  Dynamically find and add new quote
+	sources when the user runs gnucash.
+
+	* src/backend/file/gnc-account-xml-v2.c:
+	* src/backend/file/gnc-commodity-xml-v2.c:
+	* src/engine/Scrub.c: Ensure backwards compatability of the XML file.
+
+	* src/app-utils/gnc-helpers.c: Update for changes in accessing
+	quote source information.
+	
+	* src/gnome-utils/commodity.glade:
+	* src/gnome-utils/dialog-commodity.c: Reorganize the dialog for
+	selection price quote information.
+
+	* src/scm/price-quotes.scm: Print debugging info when getting
+	stock quotes if gnucash is run with the --debug flag.
+
 2003-06-30  Derek Atkins  <derek@ihtfp.com>
 
 	* macros/acx_pthread.m4: macro to find the pthread library for

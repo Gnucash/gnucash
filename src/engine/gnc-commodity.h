@@ -64,6 +64,155 @@
 #define GNC_COMMODITY_NS_ASX    "ASX"
 
 
+/** @name Commodity Quote Source functions */
+/** @{ */
+
+/** The quote source type enum account types are used to determine how
+ *  the transaction data in the account is displayed.  These values
+ *  can be safely changed from one release to the next.
+ */
+typedef enum
+{
+  SOURCE_SINGLE = 0,	/**< This quote source pulls from a single
+			 *   specific web site.  For example, the
+			 *   yahoo_australia source only pulls from
+			 *   the yahoo web site. */
+  SOURCE_MULTI,		/**< This quote source may pull from multiple
+			 *   web sites.  For example, the australia
+			 *   source may pull from ASX, yahoo, etc. */
+  SOURCE_UNKNOWN,	/**< This is a locally installed quote source
+			 *   that gnucash knows nothing about. May
+			 *   pull from single or multiple
+			 *   locations. */
+  SOURCE_MAX,
+  SOURCE_CURRENCY = SOURCE_MAX, /**< The special currency quote source. */
+} QuoteSourceType;
+
+/** This function indicates whether or not the Finance::Quote module
+ *  is installed on a users computer.  This includes any other related
+ *  modules that gnucash need to process F::Q information.
+ *
+ *  @return TRUE is F::Q is installed properly.
+ */
+gboolean gnc_quote_source_fq_installed (void);
+
+/** Update gnucash internal tables based on what Finance::Quote
+ *  sources are installed.  Sources that have been explicitly coded
+ *  into gnucash are marked sensitive/insensitive based upon whether
+ *  they are present. New sources that gnucash doesn't know about are
+ *  added to its internal tables.
+ *
+ *  @param sources_list A list of strings containing the source names
+ *  as they are known to F::Q.
+ */
+void gnc_quote_source_set_fq_installed (GList *sources_list);
+
+/** Return the number of entries for a given type of quote source.
+ *
+ *  @param type The quote source type whose count should be returned.
+ *
+ *  @return The number of entries for this type of quote source.
+ */
+gint gnc_quote_source_num_entries(QuoteSourceType type);
+
+/** Create a new quote source. This is called by the F::Q startup code
+ *  or the XML parsing code to add new entries to the list of
+ *  available quote sources.
+ *
+ *  @param name The internal name for this new quote source.
+ *
+ *  @param supported TRUE is this quote source is supported by F::Q.
+ *  Should only be set by the F::Q startup routine.
+ *
+ *  @return A pointer to the newly created quote source.
+ */
+gnc_quote_source *gnc_quote_source_add_new(const char * name, gboolean supported);
+
+/** Given the internal (gnucash or F::Q) name of a quote source, find
+ *  the data structure identified by this name.
+ *
+ *  @param internal_name The name of this quote source.
+ *
+ *  @return A pointer to the price quote source that has the specified
+ *  internal name.
+ */
+gnc_quote_source *gnc_quote_source_lookup_by_internal(const char * internal_name);
+
+/** Given the type/index of a quote source, find the data structure
+ *  identified by this pair.
+ *
+ *  @param type The type of this quote source.
+ *
+ *  @param index The index of this quote source within its type.
+ *
+ *  @return A pointer to the price quote source that has the specified
+ *  type/index.
+ */
+gnc_quote_source *gnc_quote_source_lookup_by_ti(QuoteSourceType type, gint i);
+
+/** Given a gnc_quote_source data structure, return the flag that
+ *  indicates whether this particular quote source is supported by
+ *  the user's F::Q installation.
+ *
+ *  @param source The quote source in question.
+ *
+ *  @return TRUE if the user's computer supports this quote source.
+ */
+gboolean gnc_quote_source_get_supported (gnc_quote_source *source);
+
+/** Given a gnc_quote_source data structure, return the type of this
+ *  particular quote source. (SINGLE, MULTI, UNKNOWN)
+ *
+ *  @param source The quote source in question.
+ *
+ *  @return The type of this quote source.
+ */
+QuoteSourceType gnc_quote_source_get_type (gnc_quote_source *source);
+
+/** Given a gnc_quote_source data structure, return the index of this
+ *  particular quote source within its type.
+ *
+ *  @param source The quote source in question.
+ *
+ *  @return The index of this quote source in its type.
+ */
+gint gnc_quote_source_get_index (gnc_quote_source *source);
+
+/** Given a gnc_quote_source data structure, return the user friendly
+ *  name of this quote source.  E.G. "Yahoo Australia" or "Australia
+ *  (Yahoo, ASX, ...)"
+ *
+ *  @param source The quote source in question.
+ *
+ *  @return The user friendly name.
+ */
+const char *gnc_quote_source_get_user_name (gnc_quote_source *source);
+
+/** Given a gnc_quote_source data structure, return the internal name
+ *  of this quote source.  This is the name used by both gnucash and
+ *  by Finance::Quote.  E.G. "yahoo_australia" or "australia"
+ *
+ *  @param source The quote source in question.
+ *
+ *  @return The internal name.
+ */
+const char *gnc_quote_source_get_internal_name (gnc_quote_source *source);
+
+/** Given a gnc_quote_source data structure, return the internal name
+ *  of this quote source.  This is the name used by both gnucash and
+ *  by Finance::Quote.  E.G. "yahoo_australia" or "australia"
+ *
+ *  @note This routine should only be used for backward compatability
+ *  with the existing XML files.  The rest of the code should use the
+ *  gnc_quote_source_lookup_by_internal() routine.
+ *
+ *  @param source The quote source in question.
+ *
+ *  @return The internal name.
+ */
+const char *gnc_quote_source_get_old_internal_name (gnc_quote_source *source);
+/** @} */
+
 
 /** @name Commodity Creation */
 /** @{ */
@@ -235,7 +384,8 @@ gboolean    gnc_commodity_get_quote_flag(const gnc_commodity *cm);
  *  This string is owned by the engine and should not be freed by the
  *  caller.
  */
-const char* gnc_commodity_get_quote_source(const gnc_commodity *cm);
+gnc_quote_source* gnc_commodity_get_quote_source(const gnc_commodity *cm);
+gnc_quote_source* gnc_commodity_get_default_quote_source(const gnc_commodity *cm);
 
 /** Retrieve the automatic price quote timezone for the specified
  *  commodity.  This will be a pointer to a null terminated string of
@@ -351,7 +501,7 @@ void  gnc_commodity_set_quote_flag(gnc_commodity *cm, const gboolean flag);
  *  This string belongs to the caller and will be duplicated by the
  *  engine.
  */
-void  gnc_commodity_set_quote_source(gnc_commodity *cm, const char *src);
+void  gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src);
 
 /** Set the automatic price quote timezone for the specified
  *  commodity.  This should be a pointer to a null terminated string

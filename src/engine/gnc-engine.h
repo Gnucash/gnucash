@@ -135,6 +135,8 @@ typedef struct gnc_commodity_s       gnc_commodity;
 /** @brief A gnc_commodity_table is a database of commodity info. */
 typedef struct gnc_commodity_table_s gnc_commodity_table;
 
+typedef struct gnc_quote_source_s    gnc_quote_source;
+
 /**
  * A GNCLot implements the fundamental conceptual idea behind
  * invoices, inventory lots, and stock market investment lots.  

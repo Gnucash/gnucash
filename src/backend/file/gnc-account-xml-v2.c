@@ -126,6 +126,7 @@ gnc_account_dom_tree_create(Account *act, gboolean exporting)
 	   * to fall back to the production code. */
 	  xmlNodePtr slot_node, val_node;
 	  gnc_commodity *com;
+	  gnc_quote_source *source;
 	  const gchar *tz;
 
 	  com = xaccAccountGetCommodity(act);
@@ -137,8 +138,10 @@ gnc_account_dom_tree_create(Account *act, gboolean exporting)
 
 	    slot_node = xmlNewChild(kvpnode, NULL, "slot", NULL);
 	    xmlNewTextChild(slot_node, NULL, "slot:key", "old-price-source");
+
+	    source = gnc_commodity_get_quote_source(com);
 	    val_node = xmlNewTextChild(slot_node, NULL, "slot:value",
-				       gnc_commodity_get_quote_source(com));
+				       gnc_quote_source_get_old_internal_name(source));
 	    xmlSetProp(val_node, "type", "string");
 
 	    tz = gnc_commodity_get_quote_tz(com);

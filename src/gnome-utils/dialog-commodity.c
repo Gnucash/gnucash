@@ -72,7 +72,8 @@ struct commodity_window {
   GtkWidget * fraction_spinbutton;
   GtkWidget * get_quote_check;
   GtkWidget * source_label;
-  GtkWidget * source_menu;
+  GtkWidget * source_button[SOURCE_MAX];
+  GtkWidget * source_menu[SOURCE_MAX];
   GtkWidget * quote_tz_label;
   GtkWidget * quote_tz_menu;
   GtkWidget * ok_button;
@@ -101,7 +102,7 @@ void gnc_ui_select_commodity_namespace_changed_cb(GtkEditable * entry,
 void gnc_ui_commodity_changed_cb(GtkWidget * dummy, gpointer user_data);
 void gnc_ui_commodity_ok_cb(GtkButton * button, gpointer user_data);
 void gnc_ui_commodity_help_cb(GtkButton * button, gpointer user_data);
-void gnc_ui_commodity_quote_cb(GtkWidget *w, gpointer data);
+void gnc_ui_commodity_quote_info_cb(GtkWidget *w, gpointer data);
 
 
 /********************************************************************
@@ -509,21 +510,31 @@ gnc_ui_namespace_picker_ns (GtkWidget *combobox)
 /********************************************************************/
 
 void
-gnc_ui_commodity_quote_cb (GtkWidget *w, gpointer data)
+gnc_ui_commodity_quote_info_cb (GtkWidget *w, gpointer data)
 {
   CommodityWindow *cw = data;
-  gboolean get_quote, allow_src;
+  gboolean get_quote, allow_src, active;
   const char *text;
+  gint i;
 
+  ENTER(" ");
   get_quote = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w));
 
   text = gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(cw->namespace_combo)->entry));
   allow_src = !gnc_commodity_namespace_is_iso(text);
   gtk_widget_set_sensitive(cw->source_label, get_quote && allow_src);
-  gtk_widget_set_sensitive(cw->source_menu, get_quote && allow_src);
+
+  for (i = SOURCE_SINGLE; i < SOURCE_MAX; i++) {
+    if (!cw->source_button[i])
+      continue;
+    active =
+      gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cw->source_button[i]));
+    gtk_widget_set_sensitive(cw->source_button[i], get_quote && allow_src);
+    gtk_widget_set_sensitive(cw->source_menu[i], get_quote && allow_src && active);
+  }
   gtk_widget_set_sensitive(cw->quote_tz_label, get_quote);
   gtk_widget_set_sensitive(cw->quote_tz_menu, get_quote);
-
+  LEAVE(" ");
 }
 
 void
@@ -559,20 +570,25 @@ gnc_ui_commodity_changed_cb(GtkWidget * dummy, gpointer user_data)
  * Returns: the menu                                                *
  \*******************************************************************/
 static GtkWidget *
-gnc_ui_source_menu_create(void)
+gnc_ui_source_menu_create(QuoteSourceType type)
 {
-  gint i;
+  gint i, max;
   GtkMenu   *menu;
   GtkWidget *item;
   GtkWidget *omenu;
+  gnc_quote_source *source;
 
   menu = GTK_MENU(gtk_menu_new());
   gtk_widget_show(GTK_WIDGET(menu));
 
-  for (i = 0; i < NUM_SOURCES; i++)
+  max = gnc_quote_source_num_entries(type);
+  for (i = 0; i < max; i++)
   {
-    item = gtk_menu_item_new_with_label(gnc_price_source_enum2name(i));
-    gtk_widget_set_sensitive(item, gnc_price_source_sensitive(i));
+    source = gnc_quote_source_lookup_by_ti(type, i);
+    if (source == NULL)
+      break;
+    item = gtk_menu_item_new_with_label(gnc_quote_source_get_user_name(source));
+    gtk_widget_set_sensitive(item, gnc_quote_source_get_supported(source));
     gtk_widget_show(item);
     gtk_menu_append(menu, item);
   }
@@ -675,6 +691,7 @@ gnc_ui_new_commodity_dialog(const char * selected_namespace,
   CommodityWindow * retval = g_new0(CommodityWindow, 1);
   GtkWidget *help_button;
   GtkWidget *box;
+  GtkWidget *menu;
   GladeXML *xml;
   gboolean include_iso;
 
@@ -706,13 +723,31 @@ gnc_ui_new_commodity_dialog(const char * selected_namespace,
   retval->ok_button = glade_xml_get_widget (xml, "ok_button");
   retval->get_quote_check = glade_xml_get_widget (xml, "get_quote_check");
   retval->source_label = glade_xml_get_widget (xml, "source_label");
+  retval->source_button[SOURCE_SINGLE] = glade_xml_get_widget (xml, "single_source_button");
+  retval->source_button[SOURCE_MULTI] = glade_xml_get_widget (xml, "multi_source_button");
   retval->quote_tz_label = glade_xml_get_widget (xml, "quote_tz_label");
 
 
   /* Build custom widgets */
-  box = glade_xml_get_widget (xml, "source_box");
-  retval->source_menu = gnc_ui_source_menu_create();
-  gtk_box_pack_start(GTK_BOX(box), retval->source_menu, TRUE, TRUE, 0);
+  box = glade_xml_get_widget (xml, "single_source_box");
+  menu = gnc_ui_source_menu_create(SOURCE_SINGLE);
+  retval->source_menu[SOURCE_SINGLE] = menu;
+  gtk_box_pack_start(GTK_BOX(box), menu, TRUE, TRUE, 0);
+
+  box = glade_xml_get_widget (xml, "multi_source_box");
+  menu = gnc_ui_source_menu_create(SOURCE_MULTI);
+  retval->source_menu[SOURCE_MULTI] = menu;
+  gtk_box_pack_start(GTK_BOX(box), menu, TRUE, TRUE, 0);
+
+  if (gnc_quote_source_num_entries(SOURCE_UNKNOWN)) {
+    retval->source_button[SOURCE_UNKNOWN] =
+      glade_xml_get_widget (xml, "unknown_source_button");
+    box = glade_xml_get_widget (xml, "unknown_source_box");
+    menu = gnc_ui_source_menu_create(SOURCE_UNKNOWN);
+    retval->source_menu[SOURCE_UNKNOWN] = menu;
+    gtk_box_pack_start(GTK_BOX(box), menu, TRUE, TRUE, 0);
+  }
+
   box = glade_xml_get_widget (xml, "quote_tz_box");
   retval->quote_tz_menu = gnc_ui_quote_tz_menu_create();
   gtk_box_pack_start(GTK_BOX(box), retval->quote_tz_menu, TRUE, TRUE, 0);
@@ -727,7 +762,7 @@ gnc_ui_new_commodity_dialog(const char * selected_namespace,
   }
 
   /* Are price quotes supported */
-  if (gnc_price_source_have_fq()) {
+  if (gnc_quote_source_fq_installed()) {
     gtk_widget_destroy(glade_xml_get_widget (xml, "finance_quote_warning"));
   } else {
     gtk_widget_set_sensitive(glade_xml_get_widget (xml, "price_quote_frame"),
@@ -765,20 +800,28 @@ static void
 gnc_ui_commodity_update_quote_info(CommodityWindow *win,
 				   gnc_commodity *commodity)
 {
+  gnc_quote_source *source;
+  QuoteSourceType type;
   gboolean has_quote_src;
-  const char *quote_src, *quote_tz;
+  const char *quote_tz;
   int pos = 0;
 
   ENTER(" ");
   has_quote_src = gnc_commodity_get_quote_flag (commodity);
-  quote_src = gnc_commodity_get_quote_source (commodity);
+  source = gnc_commodity_get_quote_source (commodity);
+  if (source == NULL)
+    source = gnc_commodity_get_default_quote_source (commodity);
   quote_tz = gnc_commodity_get_quote_tz (commodity);
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (win->get_quote_check),
 				has_quote_src);
-  if (!gnc_commodity_is_iso(commodity))
-    gtk_option_menu_set_history (GTK_OPTION_MENU (win->source_menu),
-				 gnc_price_source_internal2enum (quote_src));
+  if (!gnc_commodity_is_iso(commodity)) {
+    type = gnc_quote_source_get_type(source);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(win->source_button[type]), TRUE);
+    gtk_option_menu_set_history (GTK_OPTION_MENU (win->source_menu[type]),
+				 gnc_quote_source_get_index(source));
+  }
+
   if (quote_tz) {
     pos = gnc_find_timezone_menu_position(quote_tz);
     if(pos == 0) {
@@ -825,13 +868,11 @@ gnc_ui_common_commodity_modal(gnc_commodity *commodity,
 				    mnemonic, code, fraction);
 
   /* Update stock quote info based on existing commodity */
-  if (commodity) {
-    gnc_ui_commodity_update_quote_info(win, commodity);
-    win->edit_commodity = commodity;
-  }
+  gnc_ui_commodity_update_quote_info(win, commodity);
+  win->edit_commodity = commodity;
 
   /* Update stock quote sensitivities based on check box */
-  gnc_ui_commodity_quote_cb(win->get_quote_check, win);
+  gnc_ui_commodity_quote_info_cb(win->get_quote_check, win);
 
   /* Run the dialog, handling the terminal conditions. */
   done = FALSE;
@@ -928,7 +969,8 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
                        gpointer user_data)
 {
   CommodityWindow * w = user_data;
-
+  gnc_quote_source *source;
+  QuoteSourceType type;
   const char * fullname  = gtk_entry_get_text(GTK_ENTRY(w->fullname_entry));
   const char * namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
   const char * mnemonic  = gtk_entry_get_text(GTK_ENTRY(w->mnemonic_entry));
@@ -989,9 +1031,13 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
     gnc_commodity_set_quote_flag (c, gtk_toggle_button_get_active
 				  (GTK_TOGGLE_BUTTON (w->get_quote_check)));
 
-    selection = gnc_option_menu_get_active (w->source_menu);
-    string = gnc_price_source_enum2internal (selection);
-    gnc_commodity_set_quote_source(c, string);
+    for (type = SOURCE_SINGLE; type < SOURCE_MAX; type++) {
+      if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w->source_button[type])))
+	break;
+    }
+    selection = gnc_option_menu_get_active (w->source_menu[type]);
+    source = gnc_quote_source_lookup_by_ti (type, selection);
+    gnc_commodity_set_quote_source(c, source);
 
     selection = gnc_option_menu_get_active (w->quote_tz_menu);
     string = gnc_timezone_menu_position_to_string(selection);

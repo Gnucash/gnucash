@@ -2484,3 +2484,11 @@ the timepair representing midday on that day")
  "gnc_engine_resume_events"
  '()
  "Resume engine event generation.") 
+
+(gw:wrap-function
+ ws
+ 'gnc:quote-source-set-fq-installed
+ '<gw:void>
+ "gnc_quote_source_set_fq_installed"
+ '(((gw:glist-of (<gw:mchars> callee-owned) callee-owned) choices))
+ "Takes a list of installed Finance::Quote souces and records it internally.")

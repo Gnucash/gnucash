@@ -26,6 +26,7 @@
 
 #include "config.h"
 
+#include <ctype.h>
 #include <limits.h>
 #include <string.h>
 #include <stdio.h>
@@ -57,7 +58,7 @@ struct gnc_commodity_s
   gint16    mark;           /* user-defined mark, handy for traversals */
 
   gboolean  quote_flag;	    /* user wants price quotes */
-  char    * quote_source;   /* current/old source of quotes */
+  gnc_quote_source * quote_source;   /* current/old source of quotes */
   char    * quote_tz;
 };
 
@@ -80,7 +81,353 @@ struct gnc_new_iso_code {
 };
 #define GNC_NEW_ISO_CODES \
         (sizeof(gnc_new_iso_codes) / sizeof(struct gnc_new_iso_code))
+
+static gboolean fq_is_installed = FALSE;
+
+struct gnc_quote_source_s {
+  gboolean supported;
+  QuoteSourceType type;
+  gint index;
+  char *user_name;		/* User friendly name */
+  char *old_internal_name;	/* Name used internally (deprecated) */
+  char *internal_name;		/* Name used internally and by finance::quote. */
+};
+
+static gnc_quote_source currency_quote_source =
+  { TRUE, 0, 0, "CURRENCY", "currency", "currency" };
+
+static gnc_quote_source single_quote_sources[] = {
+  { FALSE, 0, 0, "AEX", "AEX", "aex" },
+  { FALSE, 0, 0, "ASX", "ASX", "asx" },
+  { FALSE, 0, 0, "DWS", "DWS", "dwsfunds" },
+  { FALSE, 0, 0, "Fidelity Direct", "FIDELITY_DIRECT", "fidelity_direct" },
+  { FALSE, 0, 0, "Motley Fool", "FOOL", "fool" },
+  { FALSE, 0, 0, "Fund Library", "FUNDLIBRARY", "fundlibrary" },
+  { FALSE, 0, 0, "TD Waterhouse Canada", "TDWATERHOUSE", "tdwaterhouse" },
+  { FALSE, 0, 0, "TIAA-CREF", "TIAACREF", "tiaacref" },
+  { FALSE, 0, 0, "T. Rowe Price", "TRPRICE_DIRECT", "troweprice_direct" },
+  { FALSE, 0, 0, "Trustnet", "TRUSTNET", "trustnet" },
+  { FALSE, 0, 0, "Union Investments", "UNIONFUNDS", "unionfunds" },
+  { FALSE, 0, 0, "Vanguard", "VANGUARD", "vanguard" },
+  { FALSE, 0, 0, "VWD", "VWD", "vwd" },
+  { FALSE, 0, 0, "Yahoo", "YAHOO", "yahoo" },
+  { FALSE, 0, 0, "Yahoo Asia", "YAHOO_ASIA", "yahoo_asia" },
+  { FALSE, 0, 0, "Yahoo Australia", "YAHOO_AUSTRALIA", "yahoo_australia" },
+  { FALSE, 0, 0, "Yahoo Europe", "YAHOO_EUROPE", "yahoo_europe" },
+  { FALSE, 0, 0, "Zuerich Investments", "ZIFUNDS", "zifunds" },
+};
+static gnc_quote_source multiple_quote_sources[] = {
+  { FALSE, 0, 0, "Asia (Yahoo, ...)", "ASIA", "asia" },
+  { FALSE, 0, 0, "Australia (ASX, Yahoo, ...)", "AUSTRALIA", "australia" },
+  { FALSE, 0, 0, "Canada (Yahoo, ...)", "CANADA", "canada" },
+  { FALSE, 0, 0, "Canada Mutual (Fund Library, ...)", "CANADAMUTUAL", "canadamutual" },
+  { FALSE, 0, 0, "Dutch (AEX, ...)", "DUTCH", "dutch" },
+  { FALSE, 0, 0, "Europe (Yahoo, ...)", "EUROPE", "europe" },
+  { FALSE, 0, 0, "Fidelity (Fidelity, ...)", "FIDELITY", "fidelity" },
+  { FALSE, 0, 0, "Nasdaq (Yahoo, ...)", "NASDAQ", "nasdaq" },
+  { FALSE, 0, 0, "NYSE (Yahoo, ...)", "NYSE", "nyse" },
+  { FALSE, 0, 0, "T. Rowe Price", "TRPRICE", "troweprice" },
+  { FALSE, 0, 0, "U.K. Unit Trusts", "UKUNITTRUSTS", "uk_unit_trusts" },
+  { FALSE, 0, 0, "USA (Yahoo, Fool ...)", "USA", "usa" },
+};
+
+static const int num_single_quote_sources =
+	sizeof(single_quote_sources) / sizeof(gnc_quote_source);
+static const int num_multiple_quote_sources =
+	sizeof(multiple_quote_sources) / sizeof(gnc_quote_source);
+static GList *new_quote_sources = NULL;
+
+
+/********************************************************************
+ * gnc_quote_source_fq_installed
+ *
+ * This function indicates whether or not the Finance::Quote module
+ * is installed on a users computer.
+ ********************************************************************/
+gboolean
+gnc_quote_source_fq_installed (void)
+{
+  return fq_is_installed;
+}
+
+/********************************************************************
+ * gnc_quote_source_num_entries
+ *
+ * Return the number of entries for a given type of price source.
+ ********************************************************************/
+gint gnc_quote_source_num_entries(QuoteSourceType type)
+{
+  if  (type == SOURCE_CURRENCY)
+    return 1;
   
+  if  (type == SOURCE_SINGLE)
+    return num_single_quote_sources;
+  
+  if (type == SOURCE_MULTI)
+    return num_multiple_quote_sources;
+
+  return g_list_length(new_quote_sources);
+}
+
+/********************************************************************
+ * gnc_quote_source_init_tables
+ *
+ * Update the type/index values for prices sources.
+ ********************************************************************/
+static void
+gnc_quote_source_init_tables (void)
+{
+  gint i;
+
+  for (i = 0; i < num_single_quote_sources; i++) {
+    single_quote_sources[i].type = SOURCE_SINGLE;
+    single_quote_sources[i].index = i;
+  }
+
+  for (i = 0; i < num_multiple_quote_sources; i++) {
+    multiple_quote_sources[i].type = SOURCE_MULTI;
+    multiple_quote_sources[i].index = i;
+  }
+
+  currency_quote_source.type = SOURCE_CURRENCY;
+  currency_quote_source.index = 0;
+}
+
+
+/********************************************************************
+ * gnc_quote_source_add_new
+ *
+ * Add a new price source. Called when unknown source names are found
+ * either in the F::Q installation (a newly available source) or in
+ * the user's data file (a source that has vanished but needs to be
+ * tracked.)
+ ********************************************************************/
+gnc_quote_source *
+gnc_quote_source_add_new (const char *source_name, gboolean supported)
+{
+  gnc_quote_source *new_source;
+
+  DEBUG("Creating new source %s", source_name);
+  new_source = malloc(sizeof(gnc_quote_source));
+  new_source->supported = supported;
+  new_source->type = SOURCE_UNKNOWN;
+  new_source->index = g_list_length(new_quote_sources);
+
+  /* This name can be changed if/when support for this price source is
+   * integrated into gnucash. */
+  new_source->user_name = strdup(source_name);
+
+  /* This name is permanent and must be kept the same if/when support
+   * for this price source is integrated into gnucash (i.e. for a
+   * nice user name). */
+  new_source->old_internal_name = strdup(source_name);
+  new_source->internal_name = strdup(source_name);
+  new_quote_sources = g_list_append(new_quote_sources, new_source);
+  return new_source;
+}
+
+/********************************************************************
+ * gnc_quote_source_lookup_by_xxx
+ *
+ * Lookup a price source data structure based upon various criteria.
+ ********************************************************************/
+gnc_quote_source *
+gnc_quote_source_lookup_by_ti (QuoteSourceType type, gint index)
+{
+  gnc_quote_source *source;
+  GList *node;
+
+  ENTER("type/index is %d/%d", type, index);
+  switch (type) {
+   case SOURCE_CURRENCY:
+    LEAVE("found %s", currency_quote_source.user_name);
+    return &currency_quote_source;
+    break;
+
+   case SOURCE_SINGLE:
+    if (index < num_single_quote_sources) {
+      LEAVE("found %s", single_quote_sources[index].user_name);
+      return &single_quote_sources[index];
+    }
+    break;
+
+   case SOURCE_MULTI:
+    if (index < num_multiple_quote_sources) {
+      LEAVE("found %s", multiple_quote_sources[index].user_name);
+      return &multiple_quote_sources[index];
+    }
+    break;
+
+   case SOURCE_UNKNOWN:
+   default:
+    node = g_list_nth(new_quote_sources, index);
+    if (node) {
+      source = node->data;
+      LEAVE("found %s", source->user_name);
+      return source;
+    }
+  }
+
+  LEAVE("not found");
+  return NULL;
+}
+
+gnc_quote_source *
+gnc_quote_source_lookup_by_internal(const char * name)
+{
+  gnc_quote_source *source;
+  GList *node;
+  gint i;
+
+  if ((name == NULL) || (safe_strcmp(name, "") == 0)) {
+    return NULL;
+  }
+
+  if (safe_strcmp(name, currency_quote_source.internal_name) == 0)
+    return &currency_quote_source;
+  if (safe_strcmp(name, currency_quote_source.old_internal_name) == 0)
+    return &currency_quote_source;
+
+  for (i = 0; i < num_single_quote_sources; i++) {
+    if (safe_strcmp(name, single_quote_sources[i].internal_name) == 0)
+      return &single_quote_sources[i];
+    if (safe_strcmp(name, single_quote_sources[i].old_internal_name) == 0)
+      return &single_quote_sources[i];
+  }
+
+  for (i = 0; i < num_multiple_quote_sources; i++) {
+    if (safe_strcmp(name, multiple_quote_sources[i].internal_name) == 0)
+      return &multiple_quote_sources[i];
+    if (safe_strcmp(name, multiple_quote_sources[i].old_internal_name) == 0)
+      return &multiple_quote_sources[i];
+  }
+
+  for (i = 0, node = new_quote_sources; node; node = node->next, i++) {
+    source = node->data;
+    if (safe_strcmp(name, source->internal_name) == 0)
+      return source;
+    if (safe_strcmp(name, source->old_internal_name) == 0)
+      return source;
+  }
+
+  LEAVE("Unknown source %s", name);
+  return NULL;
+}
+
+/********************************************************************
+ * gnc_quote_source_get_xxx
+ *
+ * Accessor functions - get functions only. There are no set functions.
+ ********************************************************************/
+QuoteSourceType
+gnc_quote_source_get_type (gnc_quote_source *source)
+{
+  ENTER("%p", source);
+  if (!source) {
+    LEAVE("bad source");
+    return SOURCE_SINGLE;
+  }
+
+  DEBUG("type is %d",source->type);
+  return source->type;
+}
+
+gint
+gnc_quote_source_get_index (gnc_quote_source *source)
+{
+  ENTER("%p", source);
+  if (!source) {
+    LEAVE("bad source");
+    return 0;
+  }
+
+  DEBUG("index is %d", source->index);
+  return source->index;
+}
+
+gboolean
+gnc_quote_source_get_supported (gnc_quote_source *source)
+{
+  ENTER("%p", source);
+  if (!source) {
+    LEAVE("bad source");
+    return FALSE;
+  }
+
+  DEBUG("%ssupported", source && source->supported ? "" : "not ");
+  return source->supported;
+}
+
+const char *
+gnc_quote_source_get_user_name (gnc_quote_source *source)
+{
+  ENTER("%p", source);
+  if (!source) {
+    LEAVE("bad source");
+    return NULL;
+  }
+  LEAVE("user name %s", source->user_name);
+  return source->user_name;
+}
+
+const char *
+gnc_quote_source_get_old_internal_name (gnc_quote_source *source)
+{
+  ENTER("%p", source);
+  if (!source) {
+    LEAVE("bad source");
+    return NULL;
+  }
+  LEAVE("old internal name %s", source->old_internal_name);
+  return source->old_internal_name;
+}
+
+const char *
+gnc_quote_source_get_internal_name (gnc_quote_source *source)
+{
+  ENTER("%p", source);
+  if (!source) {
+    LEAVE("bad source");
+    return NULL;
+  }
+  LEAVE("internal name %s", source->internal_name);
+  return source->internal_name;
+}
+
+/********************************************************************
+ * gnc_quote_source_set_fq_installed
+ *
+ * Update gnucash internal tables on what Finance::Quote sources are
+ * installed.
+ ********************************************************************/
+void
+gnc_quote_source_set_fq_installed (GList *sources_list)
+{
+  gnc_quote_source *source;
+  char *source_name;
+  GList *node;
+
+  ENTER(" ");
+  fq_is_installed = TRUE;
+
+  if (!sources_list)
+    return;
+
+  for (node = sources_list; node; node = node->next) {
+    source_name = node->data;
+
+    source = gnc_quote_source_lookup_by_internal(source_name);
+    if (source != NULL) {
+      DEBUG("Found source %s: %s", source_name, source->user_name);
+      source->supported = TRUE;
+      continue;
+    }
+
+    gnc_quote_source_add_new(source_name, TRUE);
+  }
+  LEAVE(" ");
+}
+
 /********************************************************************
  * gnc_commodity_new
  ********************************************************************/
@@ -148,7 +495,6 @@ gnc_commodity_destroy(gnc_commodity * cm)
   cm->mnemonic = NULL;
 
   /* Set through accessor functions */
-  g_free(cm->quote_source);
   cm->quote_source = NULL;
 
   g_free(cm->quote_tz);
@@ -274,13 +620,22 @@ gnc_commodity_get_quote_flag(const gnc_commodity *cm)
  * gnc_commodity_get_quote_source
  ********************************************************************/
 
-const char*
+gnc_quote_source*
 gnc_commodity_get_quote_source(const gnc_commodity *cm)
 {
   if(!cm) return NULL;
   if (!cm->quote_source && gnc_commodity_is_iso(cm))
-    return "CURRENCY";
+    return &currency_quote_source;
   return cm->quote_source;
+}
+
+gnc_quote_source*
+gnc_commodity_get_default_quote_source(const gnc_commodity *cm)
+{
+  if (cm && gnc_commodity_is_iso(cm))
+    return &currency_quote_source;
+  /* Should make this a user option at some point. */
+  return gnc_quote_source_lookup_by_internal("yahoo");
 }
 
 /********************************************************************
@@ -400,18 +755,12 @@ gnc_commodity_set_quote_flag(gnc_commodity *cm, const gboolean flag)
  ********************************************************************/
 
 void
-gnc_commodity_set_quote_source(gnc_commodity *cm, const char *src)
+gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src)
 {
-  ENTER ("(cm=%p, src=%s)", cm, src);
+  ENTER ("(cm=%p, src=%p(%s))", cm, src, src ? src->internal_name : "unknown");
 
   if(!cm) return;
-  if (cm->quote_source) {
-    g_free(cm->quote_source);
-    cm->quote_source = NULL;
-  }
-
-  if (src && *src)
-    cm->quote_source = g_strdup(src);
+  cm->quote_source = src;
   LEAVE(" ");
 }
 
@@ -864,7 +1213,8 @@ get_quotables_helper1(gpointer key, gpointer value, gpointer data)
   gnc_commodity *comm = value; 
   GList ** l = data;
 
-  if (!comm->quote_flag)
+  if (!comm->quote_flag ||
+      !comm->quote_source || !comm->quote_source->supported)
     return;
   *l = g_list_prepend(*l, value);
 }
@@ -874,7 +1224,8 @@ get_quotables_helper2 (gnc_commodity *comm, gpointer data)
 {
   GList ** l = data;
 
-  if (!comm->quote_flag)
+  if (!comm->quote_flag ||
+      !comm->quote_source || !comm->quote_source->supported)
     return TRUE;
   *l = g_list_prepend(*l, comm);
   return TRUE;
@@ -1140,6 +1491,7 @@ static QofObject commodity_table_object_def =
 gboolean 
 gnc_commodity_table_register (void)
 {
+  gnc_quote_source_init_tables();
   return qof_object_register (&commodity_table_object_def);
 }
 
