@@ -248,8 +248,8 @@
   (let ((childinfo  (gnc:html-document-fetch-markup-style doc markup)))
     ;; now generate the end tag
     (let ((tag   (gnc:html-markup-style-info-tag childinfo))
-          (closing-font-tag? 
-	   (gnc:html-markup-style-info-closing-font-tag? childinfo)))
+          (closing-font-tag
+	   (gnc:html-markup-style-info-closing-font-tag childinfo)))
       ;; "" tags mean "show no tag"; #f tags means use default.
       (cond ((not tag)
              (set! tag markup))
@@ -257,7 +257,7 @@
              (set! tag #f)))
       (let* ((retval '())
              (push (lambda (l) (set! retval (cons l retval)))))
-        (if closing-font-tag?
+        (if closing-font-tag
             (push "</font>\n"))
         (if tag 
             (begin 

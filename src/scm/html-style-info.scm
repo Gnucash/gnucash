@@ -99,8 +99,8 @@
                    style (car value) (cadr value)))
 	      (begin 
 		(if (memq field '(font-size font-face font-color))
-		    (gnc:html-markup-style-set-closing-font-tag 
-		     style 
+		    (gnc:html-markup-style-info-set-closing-font-tag!
+		     style
 		     (not (eq? value #f))))
 		(let ((modifier 
                      (record-modifier <html-markup-style-info> field)))
@@ -155,7 +155,7 @@
     (gnc:html-markup-style-info-set-closing-font-tag! record (not (eq? value #f)))
     (gnc:html-markup-style-info-set-font-color-internal! record value)))
 
-(define gnc:html-markup-style-info-closing-font-tag?
+(define gnc:html-markup-style-info-closing-font-tag
   (record-accessor <html-markup-style-info> 'closing-font-tag?))
 (define gnc:html-markup-style-info-set-closing-font-tag!
   (record-modifier <html-markup-style-info> 'closing-font-tag?))
@@ -178,7 +178,7 @@
                  (face-1 (gnc:html-markup-style-info-font-face s1))
                  (size-1 (gnc:html-markup-style-info-font-size s1))
                  (color-1 (gnc:html-markup-style-info-font-color s1))
-		 (closing-font-tag?-1 
+		 (closing-font-tag-1 
 		  (gnc:html-markup-style-info-closing-font-tag s1)))
             (gnc:make-html-markup-style-info-internal 
              ;; tag 
@@ -204,7 +204,7 @@
              (if color-1 color-1 
                  (gnc:html-markup-style-info-font-color s2))
 	     ;; closing font tag
-	     (or closting-font-tag?-1 
+	     (or closing-font-tag-1 
 		 (gnc:html-markup-style-info-closing-font-tag s2))
              ;; inheritable (get this always from child)
              (gnc:html-markup-style-info-inheritable? s1))))))
