@@ -595,11 +595,9 @@ write_schedXactions( FILE *out, GNCBook *book )
 }
 
 gboolean
-gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename)
+gnc_book_write_to_xml_filehandle_v2(GNCBook *book, FILE *out)
 {
-    FILE *out;
-
-    out = fopen(filename, "w");
+    if (!out) return FALSE;
 
     fprintf(out, "<?xml version=\"1.0\"?>\n");
     fprintf(out, "<" GNC_V2_STRING ">\n");
@@ -629,6 +627,18 @@ gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename)
     write_schedXactions(out, book);
 
     fprintf(out, "</" GNC_V2_STRING ">\n\n");
+    
+    return TRUE;
+}
+
+gboolean
+gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename)
+{
+    FILE *out;
+
+    out = fopen(filename, "w");
+    gnc_book_write_to_xml_filehandle_v2 (book, out);
+
     write_emacs_trailer(out);
 
     if(fclose(out) != 0)

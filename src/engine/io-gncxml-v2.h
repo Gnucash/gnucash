@@ -87,6 +87,7 @@ gboolean gnc_book_load_from_xml_file_v2(
     void (*countcallback)(const char *type, load_counter count));
 
 /* write all account info to a file */
+gboolean gnc_book_write_to_xml_filehandle_v2(GNCBook *book, FILE *fh);
 gboolean gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename);
 
 /* The is_gncxml_file() routine checks to see if the first few 
