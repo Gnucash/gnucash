@@ -35,7 +35,7 @@
 
 #define DECIMAL_PT  '.'
 
-#define VERY_SMALL (1.0e-30)
+#define VERY_SMALL (1.0e-20)
 
 static void PriceSetValue (BasicCell *, const char *);
 
@@ -107,9 +107,9 @@ xaccInitPriceCell (PriceCell *cell)
 {
    xaccInitBasicCell( &(cell->cell));
    cell->amount = 0.0;
-   cell->blank_zero = 0;
+   cell->blank_zero = 1;
 
-   SET ( &(cell->cell), "0.0");
+   SET ( &(cell->cell), "");
 
    cell->cell.modify_verify = PriceMV;
    cell->cell.set_value = PriceSetValue;
@@ -171,6 +171,9 @@ void xaccSetDebCredCellValue (PriceCell * deb,
    deb->amount = -amt;
    cred->amount = amt;
 
+   deb->cell.fg_color = 0xff0000;
+   cred->cell.fg_color = 0x0;
+
    if (cred->blank_zero && (VERY_SMALL > amt) && ((-VERY_SMALL) < amt)) {
       SET ( &(cred->cell), "");
       SET ( &(deb->cell), "");
@@ -179,12 +182,10 @@ void xaccSetDebCredCellValue (PriceCell * deb,
       sprintf (buff, "%.2f", amt);
       SET ( &(cred->cell), buff);
       SET ( &(deb->cell), "");
-      cred->cell.fg_color = 0x0;
    } else {
       sprintf (buff, "%.2f", -amt);
       SET ( &(cred->cell), "");
       SET ( &(deb->cell), buff);
-      deb->cell.fg_color = 0xff0000;
    }
 }
 
