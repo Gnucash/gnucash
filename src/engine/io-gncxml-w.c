@@ -871,15 +871,17 @@ xml_add_account_restorers(xmlNodePtr p, AccountGroup *g) {
 /* XXX hack alert not all predicates currently implemented */
 
 static gboolean
-xml_add_qterm_restorer(xmlNodePtr p, QueryTerm *qt) 
+xml_add_qterm_restorer(xmlNodePtr qxml, QueryTerm *qt) 
 {
   int rc;
+  xmlNodePtr p = NULL;
 
   g_return_val_if_fail(p, FALSE);
   g_return_val_if_fail(qt, FALSE);
 
   switch (qt->data.type) {
     case PD_DATE:
+       p = xmlNewTextChild(qxml, NULL, "date-pred", NULL);  
        xml_add_gint32(p, "use-start", qt->data.date.use_start);
        xml_add_gint32(p, "use-end", qt->data.date.use_end);
        if (qt->data.date.use_start) {
@@ -893,34 +895,41 @@ xml_add_qterm_restorer(xmlNodePtr p, QueryTerm *qt)
        break;
 
     case PD_AMOUNT:
+       p = xmlNewTextChild(qxml, NULL, "amount-pred", NULL);  
        PERR ("unimplemented");
        break;
 
     case PD_ACCOUNT: 
+       p = xmlNewTextChild(qxml, NULL, "account-pred", NULL);  
        PERR ("unimplemented");
        break;
 
     case PD_STRING:
+       p = xmlNewTextChild(qxml, NULL, "string-pred", NULL);  
        xml_add_gint32(p, "case-sens", qt->data.str.case_sens);
        xml_add_gint32(p, "use-regexp", qt->data.str.use_regexp);
        xml_add_str(p, "matchstring", qt->data.str.matchstring, TRUE);
        break;
 
     case PD_CLEARED:
+       p = xmlNewTextChild(qxml, NULL, "cleared-pred", NULL);  
        PERR ("unimplemented");
        break;
 
     case PD_BALANCE:
+       p = xmlNewTextChild(qxml, NULL, "balance-pred", NULL);  
        PERR ("unimplemented");
        break;
 
     case PD_MISC:
+       p = xmlNewTextChild(qxml, NULL, "misc-pred", NULL);  
        PERR ("unimplemented");
        break;
 
-
     default:
   }
+
+  if (!p) return (FALSE);
 
   rc = xml_add_gint32(p, "sense", qt->sense);
   if (!rc) return(FALSE);
@@ -983,7 +992,7 @@ static xmlDocPtr
 gncxml_new_query_doc (Query *q)
 {
   xmlDocPtr doc;
-  xmlNodePtr query_terms;
+  xmlNodePtr query_server;
   xmlNodePtr tmpnode;
   
   doc = xmlNewDoc("1.0");
@@ -996,15 +1005,15 @@ gncxml_new_query_doc (Query *q)
     return 0x0;
   }
 
-  query_terms = xmlNewTextChild(doc->xmlRootNode, NULL, "query-terms", NULL);
-  if(!query_terms) {
+  query_server = xmlNewTextChild(doc->xmlRootNode, NULL, "query-server", NULL);
+  if(!query_server) {
     PERR ("couldn't creat query terms");
     xmlFreeDoc(doc);
     return 0x0;
   }
 
-  if(!xml_add_query_restorers(query_terms, q)) {
-    PERR ("couldn't write query terms");
+  if(!xml_add_query_restorers(query_server, q)) {
+    PERR ("couldn't write query server");
     xmlFreeDoc(doc);
     return 0x0;
   }
