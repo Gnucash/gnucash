@@ -570,7 +570,7 @@ remove_old_clicked (GtkWidget *widget, gpointer data)
     GList *node;
     Timespec ts;
 
-    ts.tv_sec = gnc_date_edit_get_date (date);
+    ts.tv_sec = gnc_date_edit_get_date (GNC_DATE_EDIT (date));
     ts.tv_nsec = 0;
 
     for (node = pdb_dialog->prices; node; node = node->next)
@@ -585,7 +585,7 @@ remove_old_clicked (GtkWidget *widget, gpointer data)
     gnc_gui_refresh_all ();
   }
 
-  gtk_object_unref (date);
+  gtk_object_unref (GTK_OBJECT (date));
 }
 
 static void
