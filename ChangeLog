@@ -1,5 +1,8 @@
 2003-08-10  Derek Atkins  <derek@ihtfp.com>
 
+	* src/backend/file/sixtp.c: Add code to read XML files with real
+	  namespace declarations.  (see bug #88078)
+
 	* src/*/Makefile.am: Make sure we define PWD, as not all shells
 	  define it properly.  Fixes #119114.
 
