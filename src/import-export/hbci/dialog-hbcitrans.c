@@ -46,6 +46,7 @@ gnc_hbci_trans (GtkWidget *parent,
   HBCI_Transaction *trans = NULL;
   gint result;
   const HBCI_Bank *bank;
+  gboolean successful;
   
   g_assert (api);
   g_assert (h_acc);
@@ -189,100 +190,116 @@ gnc_hbci_trans (GtkWidget *parent,
        from the boxes. */
     gnome_dialog_close_hides (GNOME_DIALOG (dialog), TRUE);
 
-    gtk_widget_show_all (GTK_WIDGET (dialog)); 
+    /* Repeat until HBCI action was successful or user pressed cancel */
+    do {
 
-    result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
-    /* printf("hbci_trans: result button was %d.\n", result); */
-    
-    /* Was cancel pressed or dialog closed? */
-    if ((result != 0) && (result != 1)) {
-      gtk_widget_destroy (GTK_WIDGET (dialog));
-      return NULL;
-    }
-      
-    /* Fill in the user-entered values */
-    trans = HBCI_Transaction_new();
+      gtk_widget_show_all (dialog); 
 
-    HBCI_Transaction_setOurCountryCode (trans, HBCI_Bank_countryCode (bank));
-    HBCI_Transaction_setOurBankCode (trans, HBCI_Bank_bankCode (bank));
-    HBCI_Transaction_setOurAccountId (trans, HBCI_Account_accountId (h_acc));
-    HBCI_Transaction_setOurSuffix (trans, HBCI_Account_accountSuffix (h_acc));
-
-    HBCI_Transaction_setOtherCountryCode (trans, 280);
-    HBCI_Transaction_setOtherBankCode 
-      (trans, gtk_entry_get_text (GTK_ENTRY (recp_bankcode_entry)));
-    /* printf("Got otherBankCode %s.\n",
-       HBCI_Transaction_otherBankCode (trans)); */
-    HBCI_Transaction_setOtherAccountId
-      (trans, gtk_entry_get_text (GTK_ENTRY (recp_account_entry)));
-    /* printf("Got otherAccountId %s.\n",
-       HBCI_Transaction_otherAccountId (trans)); */
-    HBCI_Transaction_addOtherName
-      (trans, gtk_entry_get_text (GTK_ENTRY (recp_name_entry)));
-    
-    HBCI_Transaction_addDescription
-      (trans, gtk_entry_get_text (GTK_ENTRY (purpose_entry)));
-    HBCI_Transaction_addDescription
-      (trans, gtk_entry_get_text (GTK_ENTRY (purpose_cont_entry)));
-    
-    HBCI_Transaction_setValue 
-      (trans, HBCI_Value_new_double 
-       (gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT (amount_edit)), "EUR"));
-    /* FIXME: Replace "EUR" by account-dependent string here. */
-    /*printf("dialog-hbcitrans: Got value as %s .\n", 
-      HBCI_Value_toReadableString (HBCI_Transaction_value (trans)));*/
-    if (HBCI_Value_getValue (HBCI_Transaction_value (trans)) == 0.0) {
-      printf("dialog-hbcitrans: Oops, value is zero. Cancelling HBCI job.\n");
-      gtk_widget_destroy (GTK_WIDGET (dialog));
-      HBCI_Transaction_delete (trans);
-      return NULL;
-    }
-
-    {
-      /* Create a Do-Transaction (Transfer) job. */
-      HBCI_OutboxJobTransfer *transfer_job;
-      HBCI_OutboxJobDebitNote *debit_job;
-      HBCI_OutboxJob *job = NULL;
-    
-      switch (trans_type) {
-      case SINGLE_DEBITNOTE:
-	debit_job =
-	  HBCI_OutboxJobDebitNote_new (customer, (HBCI_Account *)h_acc, trans);
-	job = HBCI_OutboxJobDebitNote_OutboxJob (debit_job);
-	break;
-      case SINGLE_TRANSFER:
-	transfer_job = 
-	  HBCI_OutboxJobTransfer_new (customer, (HBCI_Account *)h_acc, trans);
-	job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
-	break;
-      default:
-	printf("dialog-hbcitrans: Oops, unknown GNC_HBCI_Transtype %d.\n",
-	       trans_type);
-	transfer_job = 
-	  HBCI_OutboxJobTransfer_new (customer, (HBCI_Account *)h_acc, trans);
-	job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
+      result = gnome_dialog_run (GNOME_DIALOG (dialog));
+      gtk_widget_hide_all (dialog);
+      /*result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));*/
+      /* printf("hbci_trans: result button was %d.\n", result); */
+	
+      /* Was cancel pressed or dialog closed? 0 == execute now, 1 ==
+	 scheduled for later execution (currently unimplemented) */
+      if ((result != 0) && (result != 1)) {
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+	return NULL;
+      }
+	
+      /* Fill in the user-entered values */
+      trans = HBCI_Transaction_new();
+	
+      HBCI_Transaction_setOurCountryCode (trans, HBCI_Bank_countryCode (bank));
+      HBCI_Transaction_setOurBankCode (trans, HBCI_Bank_bankCode (bank));
+      HBCI_Transaction_setOurAccountId (trans, HBCI_Account_accountId (h_acc));
+      HBCI_Transaction_setOurSuffix (trans, HBCI_Account_accountSuffix (h_acc));
+	
+      HBCI_Transaction_setOtherCountryCode (trans, 280);
+      HBCI_Transaction_setOtherBankCode 
+	(trans, gtk_entry_get_text (GTK_ENTRY (recp_bankcode_entry)));
+      /* printf("Got otherBankCode %s.\n",
+	 HBCI_Transaction_otherBankCode (trans)); */
+      HBCI_Transaction_setOtherAccountId
+	(trans, gtk_entry_get_text (GTK_ENTRY (recp_account_entry)));
+      /* printf("Got otherAccountId %s.\n",
+	 HBCI_Transaction_otherAccountId (trans)); */
+      HBCI_Transaction_addOtherName
+	(trans, gtk_entry_get_text (GTK_ENTRY (recp_name_entry)));
+	
+      HBCI_Transaction_addDescription
+	(trans, gtk_entry_get_text (GTK_ENTRY (purpose_entry)));
+      HBCI_Transaction_addDescription
+	(trans, gtk_entry_get_text (GTK_ENTRY (purpose_cont_entry)));
+	
+      HBCI_Transaction_setValue 
+	(trans, HBCI_Value_new_double 
+	 (gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT (amount_edit)), "EUR"));
+      /* FIXME: Replace "EUR" by account-dependent string here. */
+      /*printf("dialog-hbcitrans: Got value as %s .\n", 
+	HBCI_Value_toReadableString (HBCI_Transaction_value (trans)));*/
+      if (HBCI_Value_getValue (HBCI_Transaction_value (trans)) == 0.0) {
+	printf("dialog-hbcitrans: Oops, value is zero. Cancelling HBCI job.\n");
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+	HBCI_Transaction_delete (trans);
+	return NULL;
       }
 
-      g_assert (job);
-      HBCI_API_addJob (api, job);
-
-      if (result == 0) {
-
-	/* If the user pressed "execute now", then execute this job now. */
-	if (!gnc_hbci_api_execute (parent, api, job, interactor)) {
-
-	  /* HBCI_API_executeOutbox failed. */
-	  gtk_widget_destroy (GTK_WIDGET (dialog));
-	  HBCI_Transaction_delete (trans);
-	  HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
-	  return NULL;
+      {
+	/* Create a Do-Transaction (Transfer) job. */
+	HBCI_OutboxJobTransfer *transfer_job;
+	HBCI_OutboxJobDebitNote *debit_job;
+	HBCI_OutboxJob *job = NULL;
+    
+	switch (trans_type) {
+	case SINGLE_DEBITNOTE:
+	  debit_job =
+	    HBCI_OutboxJobDebitNote_new (customer, (HBCI_Account *)h_acc, trans);
+	  job = HBCI_OutboxJobDebitNote_OutboxJob (debit_job);
+	  break;
+	case SINGLE_TRANSFER:
+	  transfer_job = 
+	    HBCI_OutboxJobTransfer_new (customer, (HBCI_Account *)h_acc, trans);
+	  job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
+	  break;
+	default:
+	  printf("dialog-hbcitrans: Oops, unknown GNC_HBCI_Transtype %d.\n",
+		 trans_type);
+	  transfer_job = 
+	    HBCI_OutboxJobTransfer_new (customer, (HBCI_Account *)h_acc, trans);
+	  job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
 	}
 
-      }
-      
-    }
+	HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
 
-  }
+	g_assert (job);
+	HBCI_API_addJob (api, job);
+
+	if (result == 0) {
+
+	  /* If the user pressed "execute now", then execute this job now. */
+	  successful = gnc_hbci_api_execute (parent, api, job, interactor);
+
+	  /*printf("dialog-hbcitrans: Ok, result of api_execute was %d.\n", 
+	    successful);*/
+	  
+	  if (!successful) {
+	    /* HBCI_API_executeOutbox failed. */
+	    HBCI_Transaction_delete (trans);
+	    HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
+	  }
+	} /* result == 0 */
+	else {
+	  /* huh? Only result == 0 should be possible. Simply ignore
+	     this case. */
+	  break;
+	} /* result == 0 */
+	  
+      } /* Create a do-transaction (transfer) job */
+	
+    } while (!successful);
+    
+  } /* GtkWidget declarations/definitions */
   
   HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
   gtk_widget_destroy (GTK_WIDGET (dialog));
