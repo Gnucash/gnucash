@@ -1,11 +1,5 @@
 SUBDIRS = . test
 
-# FIXME: this ought to be a configure option
-LIBOFX_PREFIX = /usr/local
-
-LIBOFX_LIBS = -L${LIBOFX_PREFIX}/lib -lofx -lstdc++
-LIBOFX_CFLAGS = -I${LIBOFX_PREFIX}/include
-
 pkglib_LTLIBRARIES=libgncmod-ofx.la
 
 libgncmod_ofx_la_SOURCES = \
