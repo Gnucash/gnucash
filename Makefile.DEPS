@@ -82,7 +82,7 @@ donotuseme: ;
 	@echo "*************************************************************"
 	@if test x$(PAUSE) = xtrue; then \
 		echo -n "Pausing" ; \
-		i=0; while test $$i -lt 60; do \
+		i=0; while test $$i -lt 5; do \
 			echo -n . ; \
 			sleep 1 ; \
 			let "i=$$i+1" ; \

@@ -1,3 +1,7 @@
+2003-11-17  Derek Atkins  <derek@ihtfp.com>
+
+	* Makefile.DEPS: change timeout from 60 to 5 seconds.  Fixes #120207
+
 2003-11-17  Chris Lyttle  <chris@wilddev.net>
 
 	* configure.in: Release 1.8.8
