@@ -209,7 +209,7 @@ the account instead of opening a register.") #f))
 			      (gnc:book-kvp-changed book))
 			    
 			    (gnc:kvp-option-dialog gnc:id-book
-						   slots "Book Options"
+						   slots (_ "Book Options")
 						   changed_cb)))))
   (gnc:add-extension (gnc:make-separator (list "Main" "_File" "_Print")))
 )

@@ -1114,7 +1114,8 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
     if (ptr != SCM_BOOL_F) {
       title = gh_scm2newstr(ptr, NULL);
     }
-    prm->win         = gnc_options_dialog_new(TRUE, title);
+    /* Don't forget to translate the window title */
+    prm->win         = gnc_options_dialog_new(TRUE, _(title));
     
     if (title) {
       free(title);
