@@ -388,12 +388,16 @@ sub vanguard {
           # print "found $fid $url\n";
        }
     }
+
+    # if no symbols matched, return empty-handed.
     if ($url eq  $VANGUARD_QUERY_URL) { return undef; }
 
+    # ask for a special report with these symbols in them
     $url .="COLS=COL1%2C3&COLS=COL4&COLS=COL5&COLS=COL11%2C12&ACTION=Accept";
     $ua = LWP::UserAgent->new;
     $reply = $ua->request(GET $url)->content;
 
+    # now build the second url which will actually contain the data
     undef $url;
     foreach (split('\n',$reply)) {
        if (/FileName=V(.*)\.txt/) {
@@ -401,16 +405,29 @@ sub vanguard {
            last;
        }
     }
-    print "second url is $url\n";
+    # print "second url is $url\n";
     $reply = $ua->request(GET $url)->content;
 
+    # parse the data, stick it into the array the user will get
     foreach (split('\n',$reply)) {
        @q = split (/,/);
-       ($sym = $q[0]) =~ s/\W//;
-       $aa {$sym, "exchange"} = "Vanguard";  # Fidelity
-       if (! $q[1]) last;     # error if comma sepoaration didn't work
-       ($aa {$sym, "nav"} = $q[1]) =~ s/\S//;
-       ($aa {$sym, "date"} = $q[2]) =~ s/\S//;
+       ($sym = $q[0]) =~ s/\W//g;
+       $aa {$sym, "exchange"} = "Vanguard";  # Vanguard
+       if (! $q[1]) { last; }     # error if comma separation didn't work
+       ($aa {$sym, "nav"} = $q[1]) =~ s/\s//g;
+       ($aa {$sym, "date"} = $q[2]) =~ s/\s//g;
+
+       # look up a name for the ticker symbol
+       undef ($fid);
+       for ($i=2; $i<=$#vanguard_ids; $i+=3) {
+          if ($vanguard_ids[$i] =~ $sym) {
+             $fid = $vanguard_ids[$i-1];
+             last;
+          }
+       }
+       if ($fid) {
+          $aa {$sym, "name"} = $fid;
+       }
     }
     return %aa;
 }
