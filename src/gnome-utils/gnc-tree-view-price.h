@@ -22,7 +22,7 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup Engine
+/** @addtogroup GUI
     @{ */
 /** @file gnc-tree-view-price.h
     @brief GtkTreeView implementation for gnucash price tree.

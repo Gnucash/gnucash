@@ -22,10 +22,12 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup gnome-util
+/** @addtogroup GUI
+ *     @{ */
+/** @addtogroup Budget_Tree Tree model for budget objects
  *     @{ */
 /** @file gnc-budget-tree-model.h
- *  @breif Definition of the tree model for budget objects.
+ *  @brief Definition of the tree model for budget objects.
  *  @author Created by Darin Willits 09 sep 2003 
  *  @author Copyright (c) 09 sep 2003 Darin Willits <darin@willits.ca>
  *
@@ -89,3 +91,6 @@ GncBudgetCategory* gnc_budget_tree_model_get_category(GncBudgetTreeModel* model,
 
 G_END_DECLS
 #endif // __GNC_BUDGET_TREE_MODEL_H__
+
+/** @} */
+/** @} */

@@ -22,7 +22,7 @@
 \********************************************************************/
 
 /** @file gnc-budget-book.c
- *  @breif Implementation of the book/budget linkage.
+ *  @brief Implementation of the book/budget linkage.
  *  @author Created by Darin Willits 04 sep 2003 
  *  @author Copyright (c) 2003 Darin Willits <darin@willits.ca>
  *

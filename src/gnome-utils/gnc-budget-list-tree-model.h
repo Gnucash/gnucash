@@ -22,10 +22,12 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup engine
+/** @addtogroup GUI
+ *     @{ */
+/** @addtogroup Budget_Tree
  *     @{ */
 /** @file gnc-budget-list-tree-model.h
- *  @breif The tree model which represents the internal list of Budget
+ *  @brief The tree model which represents the internal list of Budget
  *  objects.
  *  @author Created by Darin Willits 09 feb 2004 
  *  @author Copyright (c) 09 feb 2004 Darin Willits <darin@willits.ca>
@@ -85,3 +87,6 @@ G_END_DECLS
 
 
 #endif // __GNC_BUDGET_LIST_TREE_MODEL_H__
+
+/** @} */
+/** @} */

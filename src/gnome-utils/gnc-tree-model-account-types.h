@@ -22,6 +22,14 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
+/** @addtogroup GUI
+ *     @{ */
+/** @file gnc-tree-model-account-types.h
+ *  @brief GtkTreeModel implementation to display account types in a GtkTreeView.
+ *  @author Copyright (C) 2003 Jan Arne Petersen
+ *  @author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ *
+ */
 
 #ifndef __GNC_TREE_MODEL_ACCOUNT_TYPES_H
 #define __GNC_TREE_MODEL_ACCOUNT_TYPES_H
@@ -73,3 +81,5 @@ void		gnc_tree_model_account_types_set_selected (GncTreeModelAccountTypes *model
 G_END_DECLS
 
 #endif /* __GNC_TREE_MODEL_ACCOUNT_H */
+
+/** @} */

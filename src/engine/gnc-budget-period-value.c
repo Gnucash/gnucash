@@ -22,10 +22,12 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup engine
+/** @addtogroup Engine
+ *     @{ */
+/** @addtogroup Budget
  *     @{ */
 /** @file gnc-budget-period-value.c
- *  @breif Implementation of the budget-period-value structure.
+ *  @brief Implementation of the budget-period-value structure.
  *  @author Created by Darin Willits 16 sep 2003 
  *  @author Copyright (c) 16 sep 2003 Darin Willits <darin@willits.ca>
  *
@@ -80,6 +82,6 @@ gnc_numeric gnc_budget_period_value_get_value(GncBudgetPeriodValue* periodValue)
 }
 
 
+/** @} */
 
-
-
+/** @} */

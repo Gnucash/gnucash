@@ -23,7 +23,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
-/** @addtogroup Engine
+/** @addtogroup GUI
     @{ */
 /** @file gnc-tree-model-commodity.h
     @brief GtkTreeModel implementation for gnucash commodities.

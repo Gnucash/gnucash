@@ -23,8 +23,10 @@
 
 /** @addtogroup Engine
  *     @{ */
+ /** @addtogroup Budget
+ *     @{ */
 /** @file gnc-budget-book.h
- *  @breif Linkage between budgets and books.
+ *  @brief Linkage between budgets and books.
  *  @author Created by Darin Willits 04 sep 2003 
  *  @author Copyright (c) 04 sep 2003 Darin Willits <darin@willits.ca>
  *
@@ -58,3 +60,6 @@ void gnc_book_add_budget(QofBook* book, GncBudget* budget);
 void gnc_book_delete_budget(QofBook* book, GncBudget* budget);
 
 #endif // __BUDGETBOOK_H__
+
+/** @} */
+/** @} */

@@ -23,8 +23,10 @@
 
 /** @addtogroup Engine
  *     @{ */
+/** @addtogroup Budget
+ *     @{ */
 /** @file gnc-budget-p.h
- *  @breif Private structure definition for the budget object.
+ *  @brief Private structure definition for the budget object.
  *  @author Created by Darin Willits 04 sep 2003 
  *  @author Copyright (c) 04 Darin Willits <darin@willits.ca>
  *
@@ -65,3 +67,6 @@ struct gncp_budget{
 
 
 #endif // __GNC_BUDGET_P_H__
+
+/** @} */
+/** @} */

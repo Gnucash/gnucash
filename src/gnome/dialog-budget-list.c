@@ -22,10 +22,12 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup gui
+/** @addtogroup GUI
+ *     @{ */
+/** @addtogroup Budget_GUI
  *     @{ */
 /** @file dialog-budget-list.c
- *  @breif Implementation of the budget list dialog.
+ *  @brief Implementation of the budget list dialog.
  *  @author Created by Darin Willits 08 sep 2003 
  *  @author Copyright (c) 08 sep 2003 Darin Willits <darin@willits.ca>
  *
@@ -241,3 +243,6 @@ void gnc_budget_list_dialog_create(void)
     
     gtk_widget_show_all(dlg->wnd);
 }
+
+/** @} */
+/** @} */

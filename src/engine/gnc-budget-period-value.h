@@ -22,10 +22,12 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup engine
+/** @addtogroup Engine
+ *     @{ */
+/** @addtogroup Budget
  *     @{ */
 /** @file gnc-budget-period-value.h
- *  @breif Public interface for the budget period value structure.
+ *  @brief Public interface for the budget period value structure.
  *  @author Created by Darin Willits 16 sep 2003 
  *  @author Copyright (c) 16 sep 2003 Darin Willits <darin@willits.ca>
  *
@@ -61,5 +63,7 @@ void gnc_budget_period_value_set_value_double(GncBudgetPeriodValue* periodValue,
  */
 gnc_numeric gnc_budget_period_value_get_value(GncBudgetPeriodValue* periodValue);
 
-
 #endif // __BUDGET_PERIOD_VALUE_H__
+
+/** @} */
+/** @} */

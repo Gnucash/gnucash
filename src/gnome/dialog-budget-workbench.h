@@ -22,10 +22,12 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup gnome
+/** @addtogroup GUI
+ *     @{ */
+/** @addtogroup Budget_GUI
  *     @{ */
 /** @file dialog-budget-workbench.h
- *  @breif Definition of the budget workbench dialog interface.
+ *  @brief Definition of the budget workbench dialog interface.
  *  @author Created by Darin Willits 14 sep 2003 
  *  @author Copyright (c) 14 sep 2003 Darin Willits <darin@willits.ca>
  *
@@ -41,3 +43,6 @@
 void gnc_budget_workbench_dialog_create(GncBudget* budget);
 
 #endif // __DIALOG_BUDGET_WORKBENCH_H__
+
+/** @} */
+/** @} */

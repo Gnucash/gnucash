@@ -22,10 +22,12 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup gui
+/** @addtogroup GUI
+ *     @{ */
+/** @addtogroup Budget_GUI
  *     @{ */
 /** @file druid-budget-create.h
- *  @breif Public interface for the budget creation druid.
+ *  @brief Public interface for the budget creation druid.
  *  @author Created by Darin Willits 08 sep 2003 
  *  @author Copyright (c) 08 sep 2003 Darin Willits <darin@willits.ca>
  *
@@ -42,3 +44,6 @@ void gnc_budget_druid_create(GtkTreeModel* treeModel);
 
 
 #endif // __DRUID_BUDGET_CREATE_H__
+
+/** @} */
+/** @} */

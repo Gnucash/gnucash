@@ -22,10 +22,12 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup gui
+/** @addtogroup GUI
+ *     @{ */
+/** @addtogroup Budget_GUI
  *     @{ */
 /** @file dialog-budget-list.h
- *  @breif Dialog to show the list of available budgets to the user.
+ *  @brief Dialog to show the list of available budgets to the user.
  *  @author Created by Darin Willits 08 sep 2003 
  *  @author Copyright (c) 08 sep 2003 Darin Willits <darin@willits.ca>
  *
@@ -41,3 +43,6 @@ void gnc_budget_list_dialog_create(void);
 
 void add_budget_to_model( gpointer data, gpointer user_data );
 #endif // __DIALOG_BUDGET_LIST_H__
+
+/** @} */
+/** @} */

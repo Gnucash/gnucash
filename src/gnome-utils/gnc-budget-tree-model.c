@@ -22,10 +22,12 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup gnome-util
+/** @addtogroup GUI
+ *     @{ */
+/** @addtogroup Budget_Tree
  *     @{ */
 /** @file gnc-budget-tree-model.c
- *  @breif Implementation of the budget tree model.
+ *  @brief Implementation of the budget tree model.
  *  @author Created by Darin Willits 09 sep 2003 
  *  @author Copyright (c) 09 sep 2003 Darin Willits <darin@willits.ca>
  *
@@ -724,3 +726,6 @@ GncBudgetCategory* gnc_budget_tree_model_get_category(GncBudgetTreeModel* model,
     printf("Category Selected: %s\n", gnc_budget_category_get_name(iter->user_data));
 	return (GncBudgetCategory *) iter->user_data;    
 }
+
+/** @} */
+/** @} */

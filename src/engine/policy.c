@@ -20,7 +20,7 @@
 \********************************************************************/
 
 /** @file policy.c
- *  @breif Implement FIFO Accounting Policy.
+ *  @brief Implement FIFO Accounting Policy.
  *  @author Created by Linas Vepstas August 2003
  *  @author Copyright (c) 2003,2004 Linas Vepstas <linas@linas.org>
  *

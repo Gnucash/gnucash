@@ -22,10 +22,12 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup engine
+/** @addtogroup Engine
+ *     @{ */
+/** @addtogroup Budget
  *     @{ */
 /** @file gnc-budget-period-value-p.h
- *  @breif Private structure definition of the budget period value 
+ *  @brief Private structure definition of the budget period value 
  *          structure.
  *  @author Created by Darin Willits 16 sep 2003 
  *  @author Copyright (c) 16 sep 2003 Darin Willits <darin@willits.ca>
@@ -50,3 +52,6 @@ struct gncp_budget_period_value{
 
 
 #endif // __GNC_BUDGET_PERIOD_VALUE_P_H__
+
+/** @} */
+/** @} */

@@ -22,7 +22,7 @@
 \********************************************************************/
 
 /** @file gnc-budget.c
- *  @breif Implementation of the top level budgeting API's.
+ *  @brief Implementation of the top level budgeting API's.
  *  @author Created by Darin Willits 04 sep 2003 
  *  @author Copyright (c) 2003 Darin Willits <darin@willits.ca>
  *
@@ -510,4 +510,3 @@ GncBudget* gnc_budget_lookup (const GUID *guid, QofBook *book)
     col = qof_book_get_collection (book, GNC_ID_BUDGET);
     return (GncBudget*)qof_collection_lookup_entity (col, guid);
 }
-

@@ -23,8 +23,10 @@
 
 /** @addtogroup Engine
  *     @{ */
+/** @addtogroup Budget
+ *     @{ */
 /** @file gnc-budget-book-p.h
- *  @breif Private functions for budget/book linkage.
+ *  @brief Private functions for budget/book linkage.
  *  @author Created by Darin Willits 04 sep 2003 
  *  @author Copyright (c) 04 sep 2003 Darin Willits <darin@willits.ca>
  *
@@ -51,3 +53,6 @@ void gnc_book_set_budgets( QofBook *book, GList *newList );
 gboolean gnc_budget_register (void);
 
 #endif // __BUDGETBOOK_P_H__
+
+/** @} */
+/** @} */

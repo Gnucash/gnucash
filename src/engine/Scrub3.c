@@ -20,7 +20,7 @@
 \********************************************************************/
 
 /** @file Scrub3.c
- *  @breif Constrain Cap Gains to Track Sources of Gains
+ *  @brief Constrain Cap Gains to Track Sources of Gains
  *  @author Created by Linas Vepstas Sept 2003
  *  @author Copyright (c) 2003,2004 Linas Vepstas <linas@linas.org>
  *

@@ -20,7 +20,7 @@
 \********************************************************************/
 
 /** @file Scrub2.c
- *  @breif Utilities to Convert Stock Accounts to use Lots
+ *  @brief Utilities to Convert Stock Accounts to use Lots
  *  @author Created by Linas Vepstas March 2003
  *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
  *

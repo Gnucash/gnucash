@@ -22,10 +22,12 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup gnome
+/** @addtogroup GUI
  *     @{ */
-/** @file dialog-budget-category.h
- *  @breif Definition of the public interface of the budget category dialog.
+/** @addtogroup Budget_GUI Budget dialogs
+ *     @{ */
+ /** @file dialog-budget-category.h
+ *  @brief Definition of the public interface of the budget category dialog.
  *  @author Created by Darin Willits 10 sep 2003 
  *  @author Copyright (c) 10 sep 2003 Darin Willits <darin@willits.ca>
  *
@@ -45,3 +47,6 @@ void gnc_budget_category_dialog_create(GncBudget* budget, GncBudgetCategory* cat
  */
 void gnc_budget_category_new_dialog_create(GncBudget* budget);
 #endif // __DIALOG_BUDGET_CATEGORY_H__
+
+/** @} */
+/** @} */

@@ -22,10 +22,12 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup engine
+/** @addtogroup Engine
+ *     @{ */
+/** @addtogroup Budget
  *     @{ */
 /** @file gnc-budget-period.c
- *  @breif Implementation of the budget period interface.
+ *  @brief Implementation of the budget period interface.
  *  @author Created by Darin Willits 16 sep 2003 
  *  @author Copyright (c) 16 sep 2003 Darin Willits <darin@willits.ca>
  *
@@ -84,4 +86,5 @@ GDate* gnc_budget_period_get_end_date(GncBudgetPeriod* period)
     return &period->end_date;
 }
 
-
+/** @} */
+/** @} */

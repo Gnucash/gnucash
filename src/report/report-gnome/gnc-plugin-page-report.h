@@ -22,7 +22,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  **/
   
-/** @addtogroup UI
+/** @addtogroup GUI
     @{ */
 /** @file gnc-plugin-page-report.h 
     @brief  Report page.

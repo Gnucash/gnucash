@@ -22,10 +22,12 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup engine
+/** @addtogroup Engine
+ *     @{ */
+/** @addtogroup Budget
  *     @{ */
 /** @file gnc-budget-period.h
- *  @breif Public interface for the budget period structure.
+ *  @brief Public interface for the budget period structure.
  *  @author Created by Darin Willits 16 sep 2003 
  *  @author Copyright (c) 16 sep 2003 Darin Willits <darin@willits.ca>
  *
@@ -65,3 +67,6 @@ GDate* gnc_budget_period_get_end_date(GncBudgetPeriod* period);
 
 
 #endif // __BUDGET_PERIOD_H__
+
+/** @} */
+/** @} */

@@ -22,7 +22,7 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup Utils
+/** @addtogroup GUI
     @{ */
 /** @file gnc-gnome-utils.h
     @brief Gnome specific utility functions.

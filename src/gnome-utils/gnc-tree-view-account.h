@@ -22,7 +22,7 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup Engine
+/** @addtogroup GUI
     @{ */
 /** @file gnc-tree-view-account.h
     @brief GtkTreeView implementation for gnucash account tree.

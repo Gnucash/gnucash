@@ -22,10 +22,12 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup gnome-util
+/** @addtogroup GUI
+ *     @{ */
+/** @addtogroup Budget_Tree
  *     @{ */
 /** @file gnc-budget-list-tree-model.c
- *  @breif Implementation of the Budget List Tree model.
+ *  @brief Implementation of the Budget List Tree model.
  *  @author Created by Darin Willits 09 feb 2004 
  *  @author Copyright (c) 09 feb 2004 Darin Willits <darin@willits.ca>
  *
@@ -570,3 +572,5 @@ void gnc_budget_list_tree_model_event_handler (GUID *entity, QofIdType type,
     
 }
 
+/** @} */
+/** @} */

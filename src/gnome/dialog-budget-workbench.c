@@ -22,10 +22,12 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup gnome
+/** @addtogroup GUI
+ *     @{ */
+/** @addtogroup Budget_GUI
  *     @{ */
 /** @file dialog-budget-workbench.c
- *  @breif Implmentation of the budget workbench dialog.
+ *  @brief Implmentation of the budget workbench dialog.
  *  @author Created by Darin Willits 14 sep 2003 
  *  @author Copyright (c) 14 sep 2003 Darin Willits <darin@willits.ca>
  *
@@ -595,3 +597,6 @@ void gnc_budget_workbench_dialog_create(GncBudget* budget)
     printf("Showing Workbench dialog: Budget: %p\n", bench->budget);
     gtk_widget_show_all(bench->wnd);
 }
+
+/** @} */
+/** @} */

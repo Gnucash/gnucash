@@ -23,8 +23,10 @@
 
 /** @addtogroup Engine
  *     @{ */
+/** @addtogroup Budget
+ *     @{ */
 /** @file gnc-budget-cat-p.h
- *  @breif Definition of the private budget category structure.
+ *  @brief Definition of the private budget category structure.
  *  @author Created by Darin Willits 05 sep 2003 
  *  @author Copyright (c) 05 sep 2003 Darin Willits <darin@willits.ca>
  *
@@ -65,3 +67,6 @@ struct gncp_budget_category{
 
 
 #endif // __BUDGET_CAT_P_H__
+
+/** @} */
+/** @} */

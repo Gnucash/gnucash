@@ -22,7 +22,7 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup Engine
+/** @addtogroup GUI
     @{ */
 /** @file gnc-tree-view-commodity.h
     @brief GtkTreeView implementation for gnucash commodity tree.

@@ -22,7 +22,7 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup Engine
+/** @addtogroup GUI
     @{ */
 /** @file gnc-tree-view-common.h
     @brief common utilities for manipulating a GtkTreeView within gnucash  

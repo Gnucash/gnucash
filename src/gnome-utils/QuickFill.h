@@ -28,7 +28,7 @@
 #include <gdk/gdk.h>
 #include <glib.h>
 
-/** @addtogroup QuickFill
+/** @addtogroup QuickFill Quick Fill: auto-complete typed user input.  
    QuickFill is meant to be used by the GUI to auto-complete 
    (e.g. tab-complete) typed user input.  
    Quickfill is implemented as a heirarchical tree 
@@ -45,7 +45,7 @@
    @{
   
    @file QuickFill.h
-   @breif Quickfill is used to auto-complete typed user entries.
+   @brief Quickfill is used to auto-complete typed user entries.
    @author Copyright (C) 1997 Robin D. Clark
    @author Copyright (C) 1998,2004 Linas Vepstas <linas@linas.org>
    @author Copyright (C) 2000 Dave Peticolas

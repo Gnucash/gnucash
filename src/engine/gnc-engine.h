@@ -137,7 +137,7 @@ typedef struct gnc_commodity_namespace_s gnc_commodity_namespace;
 /** @brief A gnc_commodity_table is a database of commodity info. */
 typedef struct gnc_commodity_table_s gnc_commodity_table;
 
-/** @breif Identifies that something sold at one time was bought at another.
+/** @brief Identifies that something sold at one time was bought at another.
  * A GNCLot provides a way of tracking physical items as they are 
  * bought and sold in different transactions.  By identifying 
  * the individual, underlying physical objects, it provides the
@@ -148,7 +148,7 @@ typedef struct gnc_commodity_table_s gnc_commodity_table;
  */
 typedef struct gnc_lot_struct        GNCLot;
 
-/** @breif Price of commodity on a given date.
+/** @brief Price of commodity on a given date.
  * A GNCPrice encapsulates price information: the cost of a commodity
  * expressed as a currency, on a given date.  It also holds info about 
  * the provenance of the price: where it came from, its general validity.

@@ -1,3 +1,61 @@
+2005-02-28  Neil Williams  <linux@codehelp.co.uk>
+	
+	* ./src/app-utils/gnc-ui-util.h:
+	* ./src/doc/doxygen_main_page.c:
+	* ./src/engine/Scrub2.c:
+	* ./src/engine/Scrub3.c:
+	* ./src/engine/cap-gains.c:
+	* ./src/engine/gnc-budget-book-p.h:
+	* ./src/engine/gnc-budget-book.c:
+	* ./src/engine/gnc-budget-book.h:
+	* ./src/engine/gnc-budget-cat-p.h:
+	* ./src/engine/gnc-budget-cat.c:
+	* ./src/engine/gnc-budget-cat.h:
+	* ./src/engine/gnc-budget-p.h:
+	* ./src/engine/gnc-budget-period-p.h:
+	* ./src/engine/gnc-budget-period-value-p.h:
+	* ./src/engine/gnc-budget-period-value.c:
+	* ./src/engine/gnc-budget-period-value.h:
+	* ./src/engine/gnc-budget-period.c:
+	* ./src/engine/gnc-budget-period.h:
+	* ./src/engine/gnc-budget.c:
+	* ./src/engine/gnc-budget.h:
+	* ./src/engine/gnc-engine.h:
+	* ./src/engine/gnc-filepath-utils.c:
+	* ./src/engine/gnc-filepath-utils.h:
+	* ./src/engine/policy-p.h:
+	* ./src/engine/policy.c:
+	* ./src/gnome-utils/QuickFill.h:
+	* ./src/gnome-utils/account-quickfill.h:
+	* ./src/gnome-utils/dialog-commodity.c:
+	* ./src/gnome-utils/dialog-commodity.h:
+	* ./src/gnome-utils/gnc-budget-list-tree-model.c:
+	* ./src/gnome-utils/gnc-budget-list-tree-model.h:
+	* ./src/gnome-utils/gnc-budget-tree-model.c:
+	* ./src/gnome-utils/gnc-budget-tree-model.h:
+	* ./src/gnome-utils/gnc-gnome-utils.h:
+	* ./src/gnome-utils/gnc-tree-model-account-types.h:
+	* ./src/gnome-utils/gnc-tree-model-account.h:
+	* ./src/gnome-utils/gnc-tree-model-commodity.h:
+	* ./src/gnome-utils/gnc-tree-model-price.h:
+	* ./src/gnome-utils/gnc-tree-view-account.h:
+	* ./src/gnome-utils/gnc-tree-view-commodity.h:
+	* ./src/gnome-utils/gnc-tree-view-common.h:
+	* ./src/gnome-utils/gnc-tree-view-price.h:
+	* ./src/gnome/dialog-budget-category.c:
+	* ./src/gnome/dialog-budget-category.h:
+	* ./src/gnome/dialog-budget-list.c:
+	* ./src/gnome/dialog-budget-list.h:
+	* ./src/gnome/dialog-budget-workbench.c:
+	* ./src/gnome/dialog-budget-workbench.h:
+	* ./src/gnome/druid-budget-create.c:
+	* ./src/gnome/druid-budget-create.h:
+	* ./src/gnome/gnc-budget-gui.h:
+	* ./src/gnome/gnc-plugin-page-account-tree.h:
+	* ./src/gnome/gnc-plugin-page-register.h:
+	* ./src/report/report-gnome/gnc-plugin-page-report.h:
+	Doxygen tag updates.
+
 2005-02-23  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/gw-gnc-spec.scm: Expose

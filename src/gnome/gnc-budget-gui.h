@@ -21,10 +21,12 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup gui
+/** @addtogroup GUI
+ *     @{ */
+/** @addtogroup Budget_GUI
  *     @{ */
 /** @file gnc-budget-gui.h
- *  @breif Common defines used by the budgeting gui components.
+ *  @brief Common defines used by the budgeting gui components.
  *  @author Created by Darin Willits 08 sep 2003 
  *  @author Copyright (c) 08 sep 2003 Darin Willits <darin@willits.ca>
  *
@@ -36,3 +38,6 @@
 #define GNC_BUDGET_GUI_FILE    "budget.glade"
 
 #endif // __GNC_BUDGET_H__
+
+/** @} */
+/** @} */

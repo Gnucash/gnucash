@@ -21,7 +21,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-/** @addtogroup UI
+/** @addtogroup GUI
     @{ */
 /** @file dialog-commodity.c
     @brief "select" and "new" commodity windows
@@ -1129,3 +1129,5 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
   LEAVE(" ");
   return TRUE;
 }
+
+/** @} */

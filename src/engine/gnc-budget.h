@@ -24,17 +24,19 @@
 
 /** @addtogroup Engine
  *     @{ */
+/** @addtogroup Budget Budget objects
+ * A budget object contains a list of budget_categories each of 
+ * which define an individual budgetable item.  When a budget is first
+ * created these catagories will be initialized based on the existing 
+ * account hierarchy.
+ *     @{ */
 /** @file gnc-budget.h
- *  @breif Public interface for budget objects.
+ *  @brief Public interface for budget objects.
  *  @author Created by Darin Willits 04 sep 2003 
  *  @author Copyright (c) 04 Darin Willits <darin@willits.ca>
  *
  * This file contains the public methods to interact with a budgeting
- * object. A budget object contains a list of budget_categories each of 
- * which define an individual budgetable item.  When a budget is first
- * created these catagories will be initialized based on the existing 
- * account hierarchy.
- *
+ * object. 
  * This is pre-alpha code right now.  User beware.
  */
 
@@ -185,3 +187,6 @@ GList* gnc_budget_get_period_list(GncBudget* budget);
 GncBudget* gnc_budget_lookup (const GUID *guid, QofBook *book);
 
 #endif // __BUDGET_H__
+
+/** @} */
+/** @} */

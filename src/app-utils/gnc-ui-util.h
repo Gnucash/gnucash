@@ -20,7 +20,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-/** @addtogroup UI
+/** @addtogroup GUI
     @{ */
 /** @file gnc-ui-util.h 
     @brief  utility functions for the GnuCash UI

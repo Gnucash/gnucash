@@ -23,8 +23,10 @@
 
 /** @addtogroup Engine
  *     @{ */
+/** @addtogroup Budget
+ *     @{ */
 /** @file gnc-budget-cat.h
- *  @breif Public interface of the budget category structure.
+ *  @brief Public interface of the budget category structure.
  *  @author Created by Darin Willits 05 sep 2003 
  *  @author Copyright (c) 05 sep 2003 Darin Willits <darin@willits.ca>
  *
@@ -185,3 +187,6 @@ void gnc_budget_category_set_period_value_by_index(GncBudgetCategory* category, 
 double gnc_budget_category_sum_child_values_by_index(GncBudgetCategory* category, gint index);
 
 #endif // __BUDGET_CAT_H__
+
+/** @} */
+/** @} */

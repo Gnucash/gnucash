@@ -23,8 +23,10 @@
 
 /** @addtogroup Engine
  *     @{ */
+/** @addtogroup Budget
+ *     @{ */
 /** @file gnc-budget-cat.c
- *  @breif Implementation of the budget category methods.
+ *  @brief Implementation of the budget category methods.
  *  @author Created by Darin Willits 05 sep 2003 
  *  @author Copyright (c) 05 sep 2003 Darin Willits <darin@willits.ca>
  *
@@ -565,3 +567,6 @@ double gnc_budget_category_sum_child_values_by_index(GncBudgetCategory* category
     
     return sum;
 }
+
+/** @} */
+/** @} */

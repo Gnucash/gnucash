@@ -21,7 +21,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-/** @addtogroup UI
+/** @addtogroup GUI
     @{ */
 /** @file dialog-commodity.h
     @brief "select" and "new" commodity windows
