@@ -183,7 +183,7 @@ gnc_split_register_save_recn_cell (BasicCell * bcell,
 {
   SRSaveData *sd = save_data;
   SplitRegister *reg = user_data;
-  RecnCell *cell = (RecnCell *) cell;
+  RecnCell *cell = (RecnCell *) bcell;
 
   g_return_if_fail (gnc_basic_cell_has_name (bcell, RECN_CELL));
 
@@ -308,7 +308,7 @@ gnc_split_register_save_shares_cell (BasicCell * bcell,
 {
   SRSaveData *sd = save_data;
   SplitRegister *reg = user_data;
-  PriceCell *cell = (PriceCell *) cell;
+  PriceCell *cell = (PriceCell *) bcell;
   gnc_numeric amount;
 
   g_return_if_fail (gnc_basic_cell_has_name (bcell, SHRS_CELL));
@@ -329,7 +329,7 @@ gnc_split_register_save_price_cell (BasicCell * bcell,
 {
   SRSaveData *sd = save_data;
   SplitRegister *reg = user_data;
-  PriceCell *cell = (PriceCell *) cell;
+  PriceCell *cell = (PriceCell *) bcell;
   gnc_numeric price;
 
   g_return_if_fail (gnc_basic_cell_has_name (bcell, PRIC_CELL));
@@ -621,14 +621,6 @@ gnc_template_register_model_add_save_handlers (TableModel *model)
   gnc_table_model_set_save_handler (model,
                                     gnc_template_register_save_unexpected_cell,
                                     DDUE_CELL);
-
-  gnc_table_model_set_save_handler (model,
-                                    gnc_template_register_save_unexpected_cell,
-                                    NUM_CELL);
-
-  gnc_table_model_set_save_handler (model,
-                                    gnc_template_register_save_unexpected_cell,
-                                    DESC_CELL);
 
   gnc_table_model_set_save_handler (model,
                                     gnc_template_register_save_xfrm_cell,
