@@ -26,6 +26,7 @@ libgncmod_business_core_la_SOURCES = \
 noinst_HEADERS = \
   gncAddress.h \
   gncBusiness.h \
+  gncBusinessP.h \
   gncCustomer.h \
   gncCustomerP.h \
   gncEmployee.h \
