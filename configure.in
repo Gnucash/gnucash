@@ -47,6 +47,11 @@ AC_CHECK_FUNCS(stpcpy memcpy)
 
 AM_PATH_GLIB
 
+if test ${no_glib}x = yesx
+then
+  AC_MSG_ERROR([Cannot find glib.])
+fi
+
 GNOME_INIT
 
 GNOME_COMPILE_WARNINGS
