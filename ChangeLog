@@ -1,3 +1,8 @@
+2003-03-03  Chris Lyttle  <chris@wilddev.net>
+
+	* configure.in: change to 1.8.1.5 version
+	* src/quotes/Makefile.am: add dump-finance-quote to EXTRA_DIST
+
 2003-03-03  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/business-core.scm: don't export
