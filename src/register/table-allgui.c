@@ -924,6 +924,7 @@ gnc_table_leave_update(Table *table, int row, int col,
   const int rel_col = table->locators[row][col]->phys_col_offset;
   const char * (*leave) (BasicCell *, const char *);
   char *newval = NULL;
+  const char *retval = NULL;
   
   PINFO("table: leave -- proposed (%d %d) rel(%d %d) \"%s\"\n",
         row, col, rel_row, rel_col, callback_text);
@@ -931,7 +932,6 @@ gnc_table_leave_update(Table *table, int row, int col,
   /* OK, if there is a callback for this cell, call it */
   leave = arr->cells[rel_row][rel_col]->leave_cell;
   if (leave) {
-    const char * retval;
     retval = leave(arr->cells[rel_row][rel_col], callback_text);
     
     /* leave() might return null, or it might return a pointer to
@@ -967,6 +967,8 @@ gnc_table_leave_update(Table *table, int row, int col,
   wrapVerifyCursorPosition (table,
                             table->reverify_phys_row,
                             table->reverify_phys_col);
+
+  return retval;
 }
 
 /* ==================================================== */
