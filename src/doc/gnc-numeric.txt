@@ -69,7 +69,7 @@ Possible rounding instructions are:
                     integers. 
   GNC_RND_NEVER   : never round at all, and signal an error if there is a
                     fractional result in a computation. 
-                    
+
 The denominator type specifies how to compute a denominator if
 GNC_DENOM_AUTO is specified as the 'denom'.  Valid denominator types
 are:
@@ -116,20 +116,20 @@ GNC_DENOM_AUTO as 'denom' and GNC_DENOM_FIXED | GNC_RND_NEVER as
 
    See 'Standard arguments' for a description of the 'denom' and 'how'
    arguments to each arithmetic function.
-   
-   gnc_numeric gnc_numeric_add(gnc_numeric b, gnc_numeric b,
+
+   gnc_numeric gnc_numeric_add(gnc_numeric a, gnc_numeric b,
                                gint64 denom, gint how);
      Add.
 
-   gnc_numeric gnc_numeric_sub(gnc_numeric b, gnc_numeric b,
+   gnc_numeric gnc_numeric_sub(gnc_numeric a, gnc_numeric b,
                                gint64 denom, gint how);
      Subtract.
 
-   gnc_numeric gnc_numeric_mul(gnc_numeric b, gnc_numeric b,
+   gnc_numeric gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
                                gint64 denom, gint how);
      Multiply.
 
-   gnc_numeric gnc_numeric_div(gnc_numeric b, gnc_numeric b,
+   gnc_numeric gnc_numeric_div(gnc_numeric a, gnc_numeric b,
                                gint64 denom, gint how);
      Divide.
 
@@ -174,7 +174,7 @@ GNC_DENOM_AUTO as 'denom' and GNC_DENOM_FIXED | GNC_RND_NEVER as
       Returns +1 if a>b, -1 if b>a, 0 if a == b.
 
     Equality predicates: 
-    
+
     int gnc_numeric_eq(gnc_numeric a, gnc_numeric b);
       Returns 1 if numerator(a) == numerator(b) &&
       denominator(a) == denominator(b), 0 else.
@@ -209,12 +209,12 @@ GNC_DENOM_AUTO as 'denom' and GNC_DENOM_FIXED | GNC_RND_NEVER as
 
 7. Floating point conversion
 
-   double_to_gnc_numeric(double arg, gint64 denom, gint how);
+   gnc_numeric double_to_gnc_numeric(double arg, gint64 denom, gint how);
       Convert a floating-point number to a gnc_numeric.  'denom'
       and 'how' are used as in arithmetic, but GNC_DENOM_AUTO is 
       not recognized.    
 
-   gnc_numeric_to_double(gnc_numeric arg);
+   double gnc_numeric_to_double(gnc_numeric arg);
 
 8. Error handling 
 
@@ -275,6 +275,3 @@ main(int argc, char ** argv) {
   }
   exit(0);
 }
-  
-  
-
