@@ -12,22 +12,26 @@
   ;; answer, which button is the default is undefined, but the result
   ;; is the same either way, and why would be doing that anyhow?
   ;;
-  ;; This function returns #t for yes (or OK), #f for no, or 'cancel.
+  ;; This function returns 'yes for yes (or OK), 'no for no, or 'cancel.
+  ;; If there was an unrecoverable error, this function returns #f.
   ;;
   ;; NOTE: This function does not return until the dialog is closed.")
   
   (let* ((default (case default-answer
                     ((yes) 1)
                     ((ok) 1)
-                    ((no) 0)
-                    ((cancel) -1)))
+                    ((no) 2)
+                    ((cancel) 3)))
          (result
           (gnc:_query-dialog-lowlev_
            message default yes-button? ok-button? no-button? cancel-button?)))
-    (case result
-      ((1) #t)
-      ((0) #f)
-      ((-1) 'cancel))))
+    (cond
+     ((< result 0) #f) 
+     (else
+      (case result
+        ((1) 'yes)
+        ((2) 'no)
+        ((3) 'cancel))))))
 
 (define (gnc:message-dialog message)
   (let ((result (gnc:query-dialog message 'ok #f #t #f #f)))

@@ -1,0 +1,34 @@
+-*-text-*-
+
+This file is intended to contain information for those interested in
+working on the GNOME bits of GnuCash.
+
+Memory Management (care with reference counting):
+-------------------------------------------------
+
+I was unsure about when you're supposed to _unref widgets, etc., and
+getting this right is critical to avoiding memory leaks on the one
+hand and dangling pointers on the other.  So I asked on the gtk list,
+and here was the result:
+
+On 16 Aug 1999, Rob Browning wrote:
+> 
+> I've been poking around the gtk web site and in the docs for
+> information on when you're supposed to call gtk_widget_unref.  I want
+> to make sure I'm handling this right so I don't introduce memory
+> leaks, but so far I haven't found anything describing the rules.
+> Actually I'd like to know what the guidelines are for all the *_unref
+> functions...
+> 
+
+Read gtk+/docs/refcounting.txt (or something like that).
+
+Also I think some babble about object finalization at
+http://pobox.com/~hp/gnome-app-devel.html (follow link to sample
+chapters) might be helpful.
+
+Basically you have to unref a widget you never use, but if you put it
+in a container the container "assumes" the initial refcount of 1 and
+the widget will be deleted along with the container.
+
+Havoc

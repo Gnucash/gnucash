@@ -1,0 +1,28 @@
+1999-08-25  Rob Browning  <rlb@cs.utexas.edu>
+
+	* Add ./README.gnome-hackers.
+
+	* Add ./README.guile-hackers.
+
+	* Add this file (./ChangeLog).  I'm planning to add change
+	information here, and I invite others to do the same.  For those
+	that use emacs, 'C-x 4 a' adds a new entry.  If people don't like
+	this idea, we can drop it.
+
+	* Add new scheme function gnc:choose-item-from-list-dialog.  There
+	is C side code, but it's only meant to be called from scheme.
+	This function is quite flexible in handles selections.  Eventually
+	we might want to generalize this even more, but there are some GC
+	issues to consider.  See src/gnome/query-user.c and gnc.gwp for
+	details, and see src/scm/extensions.scm for an example usage.
+
+	* IMPORTANT: queryBox signature has changed.  See the docs in
+	src/gnome/query-user.c and in gnc.gwp for details.
+
+	* Remove queryBox stubs from Motif side.  Motif doesn't support it
+	(yet), and with gnc.gwp conditional inclusion we can just ignore
+	it on the motif side.
+
+	* Add function (current-gnc-compile-flavor) to gnc.gwp so that we
+	can have conditional blocks.  Possible return values are 'gnome
+	and 'motif.
