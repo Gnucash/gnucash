@@ -553,11 +553,9 @@
 
     (gnc:query-set-book query (gnc:get-current-book))
 
-    (set! splits (gnc:glist->list
-                  (if journal?
-                      (gnc:query-get-splits-unique-trans query)
-                      (gnc:query-get-splits query))
-                  <gnc:Split*>))
+    (set! splits (if journal?
+                     (gnc:query-get-splits-unique-trans query)
+                     (gnc:query-get-splits query)))
 
     (set! table (make-split-table splits
                                   (gnc:report-options report-obj)
