@@ -31,7 +31,7 @@
 #include "gnc-book-p.h"
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
-#define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
+#define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (gpointer)(str));
 
 /** #defines ********************************************************/
 #define GNCID_DEBUG 0
