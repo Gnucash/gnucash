@@ -442,6 +442,7 @@ Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
 Tyson Dowd   <tyson@tyse.net> for config/make patches & debian maint.
 Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
 Bob Drzyzgula <bob@mostly.com> for budgeting design notes
+Jan-Uwe Finck <ju_finck@mail.netwave.de> for German message translation
 Ron Forrester <rjf@aracnet.com> for gnome patches
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
