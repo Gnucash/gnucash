@@ -22,7 +22,9 @@
 
 #include "MainWindow.h"
 #include "MenuBar.h"
+#include "Dialogs.h"
 #include "messages.h"
+#include "version.h"
 #include "RegWindow.h"
 
 #include "main.h"
@@ -84,30 +86,6 @@ cram_accts_into_tree(GtkTree *maintree, AccountGroup *accts) {
                       NULL);
 }
 
-/* Function: 	add_account				
- * Arguments:	AccountGroup *accts <- AccountGroup to add account to.
- * Description:	Opens a dialog box and excepts input for adding
- *		a new account.  
- *
- * Stuff:  	A lot of work still needs to be done on the layout
- *		of this dialog.  Also, a structure needs to be 
- *		defined that will hold all info from the dialog that
- *		will be passed to the callback function of the "OK"
- * 		button.
- *
- *		Also the box2, box3, box4 should be renamed to be
- *		more descriptive of what their for.  I even get 
- *		confused and I wrote it! hehe =)
- *	
- * TODO:	A little routine to make a glist out of all of the parent
- *		accounts.  This will be used for the combo box selection.
- */
-static void
-add_account ( AccountGroup *accts )
-{
-  g_print ( "Add Account Button clicked\n" );  
-}
-
 void
 main_window_init(AccountGroup *accts)
 {
@@ -140,8 +118,8 @@ main_window_init(AccountGroup *accts)
     {"<Main>/File/Save as", NULL, NULL, NULL},
     {"<Main>/File/<separator>", NULL, NULL, NULL},
     {"<Main>/File/Quit", "<control>Q", file_cmd_quit, NULL },
-    {"<Main>/Options/General..", "<control>A", NULL, NULL},
-    {"<Main>/Help/Help", NULL, NULL, NULL},
+    {"<Main>/Options/Preferences..", "<control>A", options_cb, NULL},
+    {"<Main>/Help/Help", NULL, help_cb, NULL},
     {"<Main>/Help/<separator>", NULL, NULL, NULL},
     {"<Main>/Help/About..", NULL, about_cb, NULL}
   };
@@ -328,7 +306,7 @@ about_cb (GtkWidget *widget, void *data)
           NULL
           };
 
-  about = gnome_about_new ( "GnuCash", "1.1.9",
+  about = gnome_about_new ( "GnuCash", VERSION,
                             "(C) 1998 The GnuCash Project",
                             authors,
                             "GnuCash: The GNU way to manage your money!",
@@ -336,6 +314,84 @@ about_cb (GtkWidget *widget, void *data)
   gtk_widget_show (about);
 
 }                          
+
+/* Help system callback */
+void
+help_cb ( GtkWidget *widget, void *data )
+{
+  /* We need some config menus to setup were the docs are located */
+  /* for now I just set it to be $HOME/xacc-docs/                 */
+  
+  gchar *docs_path = "xacc-docs/xacc-main.html";
+  
+  docs_path = gnome_util_prepend_user_home( docs_path );
+
+  gnome_help_goto( NULL, docs_path );
+
+  g_free( docs_path );
+
+}
+
+/* Some dialog stubs to be worked on */
+/* We might want to move these to there own file =\ */
+
+void
+file_new_cb ( GtkWidget *widget, void *data )
+{
+
+}
+
+/* Options dialog... this should house all of the config options     */
+/* like where the docs reside, and whatever else is deemed necessary */
+void
+options_cb ( GtkWidget *widget, void *data )
+{
+  GnomePropertyBox *box;
+  GtkWidget *w, *label, *box2;
+
+  box = GNOME_PROPERTY_BOX(gnome_property_box_new());
+  w = gtk_button_new_with_label("Click me (Page #1)");
+
+  box2 = gtk_vbox_new ( FALSE, 1 );
+  gtk_box_pack_start(GTK_BOX(box2), w, FALSE, FALSE, 0);    
+  
+  gtk_widget_show ( box2 );
+  
+  gtk_widget_show(w);
+  label = gtk_label_new("Config Box 1");
+  gtk_widget_show(label);
+  
+  gnome_property_box_append_page(box, box2, label);
+  w = gtk_button_new_with_label("Click me (Page #2)");
+  gtk_widget_show(w);
+  
+  label = gtk_label_new("Config Box 2");
+  gtk_widget_show(label);
+  
+  gnome_property_box_append_page(box, w, label);
+  
+  gtk_widget_set_usize ( box, 500, 400 );
+  gtk_widget_set_usize ( box2, 225, 225 ); 
+  
+  gtk_widget_show(GTK_WIDGET(box));
+}
+
+void
+add_account ( AccountGroup *acct )
+{
+  GtkWidget *add_dialog;
+  
+  add_dialog = create_add_account_dialog();
+  
+  /* Callbacks */
+  
+//  gtk_signal_connect (GTK_OBJECT (add_dialog->Ok), "clicked",
+//		      GTK_SIGNAL_FUNC (add_account_finish), accts);
+  
+  g_print ("New Account\n");
+}
+
+
 
 /********************* END OF FILE **********************************/
 

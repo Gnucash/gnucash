@@ -37,6 +37,10 @@ void refreshMainWindow( void );
 void main_window_init(AccountGroup *);
 void xaccMainWindowAddAccount ( GtkWidget * );
 void about_cb (GtkWidget *widget, void *data);
+void help_cb (GtkWidget *, void *);
+void file_new_cb (GtkWidget *, void *);
+void options_cb (GtkWidget *, void *);
+void add_account ( AccountGroup * );
 
 /** GLOBALS *********************************************************/
 enum {
