@@ -326,6 +326,7 @@ gnc_create_newUserDialog (void)
   GtkWidget *balance_edit;
   GtkWidget *dialog;
   GtkWidget *druid;
+  GtkWidget *clist;
   GtkWidget *box;
   GHashTable *hash;
 
@@ -341,6 +342,9 @@ gnc_create_newUserDialog (void)
   gtk_signal_connect (GTK_OBJECT (balance_edit), "amount_changed",
                       GTK_SIGNAL_FUNC(on_finalAccountBalanceEdit_changed),
                       NULL);
+
+  clist = lookup_widget (dialog, "newAccountTypesList");
+  gtk_clist_column_titles_passive (GTK_CLIST (clist));
 
   box = lookup_widget (dialog, "startBalanceBox");
   gtk_box_pack_start (GTK_BOX (box), balance_edit, TRUE, TRUE, 0);

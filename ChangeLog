@@ -1,5 +1,8 @@
 2001-06-08  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/new-user-funs.c (gnc_create_newUserDialog): make clist
+	column titles passive
+
 	* src/gnome/new-user-callbacks.c
 	(on_chooseAccountTypesPage_prepare): use pointer<->int conversion
 	macros
@@ -7,6 +10,8 @@
 	(on_newAccountTypesList_unselect_row): fix bug
 	(on_newAccountTypesList_select_row): fix bug
 	(add_each_gea_to_clist): fix mem leak
+	(on_newAccountCurrencyChoosePage_prepare): use pointer<->int
+	conversion macros
 
 	* src/SplitLedger.c (xaccSRGetEntryHandler): handle reconcile
 	cell string as appropriate for translate flag.

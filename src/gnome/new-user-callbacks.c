@@ -164,25 +164,25 @@ on_newAccountCurrencyChoosePage_prepare (GnomeDruidPage  *gnomedruidpage,
                                          gpointer         arg1,
                                          gpointer         user_data)
 {
-    if(!(int)gtk_object_get_data(GTK_OBJECT(gnc_get_new_user_dialog()),
-                                 "commod_added"))
+    if(!GPOINTER_TO_INT (gtk_object_get_data
+                         (GTK_OBJECT(gnc_get_new_user_dialog()),
+                          "commod_added")))
     {
         gtk_object_set_data (GTK_OBJECT(gnc_get_new_user_dialog()),
-                             "commod_added", (void*)1);
-        
+                             "commod_added", GINT_TO_POINTER(1));
+
         gtk_box_pack_start(
             GTK_BOX(lookup_widget(GTK_WIDGET(gnomedruidpage),
                                   "newAccountCurrencyChooser_vbox")),
             GTK_WIDGET(gnc_get_new_user_commodity_editor()), FALSE, FALSE, 0);
     }
-    
 }
 
 static void
 add_each_gea_to_clist(gpointer data, gpointer user_data)
 {
     GncExampleAccount *gea = (GncExampleAccount*)data;
-    GtkCList *clist = (GtkCList*)user_data;
+    GtkCList *clist = GTK_CLIST (user_data);
     gchar *rowdata[2];
     int row = 0;
 
