@@ -132,8 +132,8 @@ sr_add_transaction (SplitRegister *reg,
 }
 
 void
-xaccSRLoadRegister (SplitRegister *reg, GList * slist,
-                    Account *default_account)
+gnc_split_register_load (SplitRegister *reg, GList * slist,
+                         Account *default_account)
 {
   SRInfo *info = gnc_split_register_get_info (reg);
   Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
@@ -225,7 +225,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   /* If the current cursor has changed we save the values for later
    * possible restoration. */
   if (gnc_table_current_cursor_changed (table, TRUE) &&
-      (find_split == xaccSRGetCurrentSplit (reg)))
+      (find_split == gnc_split_register_get_current_split (reg)))
   {
     cursor_buffer = gnc_cursor_buffer_new ();
     gnc_table_save_current_cursor (table, cursor_buffer);
@@ -450,7 +450,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
       gnc_table_move_cursor_gui (table, save_loc);
       new_split_row = save_loc.vcell_loc.virt_row;
 
-      if (find_split == xaccSRGetCurrentSplit (reg))
+      if (find_split == gnc_split_register_get_current_split (reg))
         gnc_table_restore_current_cursor (table, cursor_buffer);
     }
 
@@ -471,7 +471,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
 
   /* Set up the hint transaction, split, transaction split, and column. */
   info->cursor_hint_trans = gnc_split_register_get_current_trans (reg);
-  info->cursor_hint_split = xaccSRGetCurrentSplit (reg);
+  info->cursor_hint_split = gnc_split_register_get_current_split (reg);
   info->cursor_hint_trans_split =
     gnc_split_register_get_current_trans_split (reg, NULL);
   info->cursor_hint_cursor_class =
@@ -482,7 +482,8 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   info->first_pass = FALSE;
   info->reg_loaded = TRUE;
 
-  gnc_split_register_set_cell_fractions (reg, xaccSRGetCurrentSplit (reg));
+  gnc_split_register_set_cell_fractions
+    (reg, gnc_split_register_get_current_split (reg));
 
   gnc_table_refresh_gui (table, TRUE);
 
@@ -508,7 +509,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   /* enable callback for cursor user-driven moves */
   gnc_table_control_allow_move (table->control, TRUE);
 
-  xaccSRLoadXferCells (reg, default_account);
+  gnc_split_register_load_xfer_cells (reg, default_account);
 }
 
 static void
@@ -544,7 +545,7 @@ gnc_load_xfer_cell (ComboCell * cell, AccountGroup * grp)
 }
 
 void
-xaccSRLoadXferCells (SplitRegister *reg, Account *base_account)
+gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
 {
   AccountGroup *group;
   ComboCell *cell;

@@ -179,143 +179,121 @@ void gnc_split_register_set_data (SplitRegister *reg, gpointer user_data,
 /* Returns the transaction which is the parent of the current split. */
 Transaction * gnc_split_register_get_current_trans (SplitRegister *reg);
 
-/* The xaccSRGetCurrentSplit() method returns the split at which 
- *    the cursor is currently located. */
-Split * xaccSRGetCurrentSplit (SplitRegister *reg);
+/* Returns the split at which the cursor is currently located. */
+Split * gnc_split_register_get_current_split (SplitRegister *reg);
 
-/* The xaccSRGetBlankSplit() method returns the blank split or
- *    NULL if there is none. */
-Split * xaccSRGetBlankSplit (SplitRegister *reg);
+/* Returns the blank split or NULL if there is none. */
+Split * gnc_split_register_get_blank_split (SplitRegister *reg);
 
-/* The xaccSRGetSplitVirtLoc() method searches the split register
- *    for the given split. If found, it returns TRUE and vcell_loc
- *    is set to the location of the split. Otherwise, the method
- *    returns FALSE. */
-gboolean xaccSRGetSplitVirtLoc (SplitRegister *reg, Split *split,
-                                VirtualCellLocation *vcell_loc);
+/*  Searches the split register for the given split. If found, it
+ *    returns TRUE and vcell_loc is set to the location of the
+ *    split. Otherwise, returns FALSE. */
+gboolean
+gnc_split_register_get_split_virt_loc (SplitRegister *reg, Split *split,
+                                       VirtualCellLocation *vcell_loc);
 
-/* The xaccSRGetSplitAmountVirtLoc() method searches the split
- *    register for the given split. If found, it returns TRUE and
- *    virt_loc is set to the location of either the debit or credit
- *    column in the split, whichever one is non-blank. Otherwise,
- *    the method returns FALSE. */
-gboolean xaccSRGetSplitAmountVirtLoc (SplitRegister *reg, Split *split,
-                                      VirtualLocation *virt_loc);
+/* Searches the split register for the given split. If found, it
+ *    returns TRUE and virt_loc is set to the location of either the
+ *    debit or credit column in the split, whichever one is
+ *    non-blank. Otherwise, returns FALSE. */
+gboolean
+gnc_split_register_get_split_amount_virt_loc (SplitRegister *reg, Split *split,
+                                              VirtualLocation *virt_loc);
 
-/* The xaccSRDuplicateCurrent() method duplicates either the current
- *    transaction or the current split depending on the register mode
- *    and cursor position. Returns the split just created, or the
- *    'main' split of the transaction just created, or NULL if
- *    nothing happened. */
-Split * xaccSRDuplicateCurrent (SplitRegister *reg);
+/* Duplicates either the current transaction or the current split
+ *    depending on the register mode and cursor position. Returns the
+ *    split just created, or the 'main' split of the transaction just
+ *    created, or NULL if nothing happened. */
+Split * gnc_split_register_duplicate_current (SplitRegister *reg);
 
-/* The xaccSRCopyCurrent() method makes a copy of the current entity,
- *    either a split or a transaction, so that it can be pasted later. */
-void    xaccSRCopyCurrent  (SplitRegister *reg);
+/* Makes a copy of the current entity, either a split or a
+ *    transaction, so that it can be pasted later. */
+void gnc_split_register_copy_current (SplitRegister *reg);
 
-/* The xaccSRCutCurrent() method is equivalent to copying the current
- *    entity and the deleting it with the approriate delete method. */
-void    xaccSRCutCurrent   (SplitRegister *reg);
+/* Equivalent to copying the current entity and the deleting it with
+ *    the approriate delete method. */
+void gnc_split_register_cut_current (SplitRegister *reg);
 
-/* The xaccSRPasteCurrent() method pastes a previous copied entity
- *    onto the current entity, but only if the copied entity and the
- *    current entity are of the same type. */
-void    xaccSRPasteCurrent (SplitRegister *reg);
+/* Pastes a previous copied entity onto the current entity, but only
+ *    if the copied and current entity have the same type. */
+void gnc_split_register_paste_current (SplitRegister *reg);
 
-/* The xaccSRDeleteCurrentSplit() method deletes the split associated
- *    with the current cursor, if both are non-NULL. If successful, all
- *    affected account windows are refreshed. Deleting the blank split
- *    just clears the cursor values. */
-void    xaccSRDeleteCurrentSplit (SplitRegister *reg);
+/* Deletes the split associated with the current cursor, if both are
+ *    non-NULL. Deleting the blank split just clears cursor values. */
+void gnc_split_register_delete_current_split (SplitRegister *reg);
 
-/* The xaccSRDeleteCurrentTrans() method deletes the transaction
- *    associated with the current cursor, if both are non-NULL.
- *    If successful, all affected account windows are refreshed. */
-void    xaccSRDeleteCurrentTrans (SplitRegister *reg);
+/* Deletes the transaction associated with the current cursor, if both
+ *    are non-NULL. */
+void gnc_split_register_delete_current_trans (SplitRegister *reg);
 
-/* The xaccSREmptyCurrentTrans() method deletes the non-transaction
- *    splits associated wih the current cursor, if both are non-NULL.
- *    If successful, all affected account windows are refreshed. */
-void    xaccSREmptyCurrentTrans  (SplitRegister *reg);
+/* Deletes the non-transaction splits associated wih the current
+ *    cursor, if both are non-NULL. */
+void gnc_split_register_emtpy_current_trans  (SplitRegister *reg);
 
-/* The xaccSRCancelCursorSplitChanges() method cancels any changes made
- *    to the current cursor, reloads the cursor from the engine, reloads
- *    the table from the cursor, and updates the GUI. The change flags
- *    are cleared. */
-void    xaccSRCancelCursorSplitChanges (SplitRegister *reg);
+/* Cancels any changes made to the current cursor, reloads the cursor
+ *    from the engine, reloads the table from the cursor, and updates
+ *    the GUI. The change flags are cleared. */
+void gnc_split_register_cancel_cursor_split_changes (SplitRegister *reg);
 
-/* The xaccSRCancelCursorTransChanges() method cancels any changes made
- *    to the current pending transaction, reloads the table from the engine,
- *    and updates the GUI. The change flags are cleared. */
-void    xaccSRCancelCursorTransChanges (SplitRegister *reg);
+/* Cancels any changes made to the current pending transaction,
+ *    reloads the table from the engine, and updates the GUI. The
+ *    change flags are cleared. */
+void gnc_split_register_cancel_cursor_trans_changes (SplitRegister *reg);
 
-/* The xaccSRLoadRegister() subroutine will copy transaction
- *    information from a list of splits to the rows of the
- *    register GUI.  The third argument, default_source_acc,
- *    will be used to initialize the source account of a new,
- *    blank split appended to the tail end of the register.
- *    This "blank split" is the place where the user can 
- *    edit info to create new tranasactions. */
-void    xaccSRLoadRegister (SplitRegister *reg, GList * slist,
-                            Account *default_source_acc);
+/* Copy transaction information from a list of splits to the rows of
+ *    the register GUI.  The third argument, default_source_acc, will
+ *    be used to initialize the source account of a new, blank split
+ *    appended to the tail end of the register.  This "blank split" is
+ *    the place where the user can edit info to create new
+ *    transactions. */
+void gnc_split_register_load (SplitRegister *reg, GList * split_list,
+                              Account *default_source_acc);
 
-/* The xaccSRSaveRegEntry() method will copy the contents 
- *    from the cursor to a split.  The split/transaction
- *    that is updated is the one associated with the current 
- *    cursor (register entry) position. If the do_commit flag
- *    is set, the transaction will also be committed. If it is
- *    the blank transaction, and the do_commit flag is set,
- *    a refresh will result in a new blank transaction.
- *    The method returns TRUE if something was changed. */
-gboolean xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit);
-gboolean xaccSRTemplateSaveRegEntry (SplitRegister *reg,
-				     gboolean do_commit);
+/* Copy the contents of the current cursor to a split. The split and
+ *    transaction that are updated are the ones associated with the
+ *    current cursor (register entry) position. If the do_commit flag
+ *    is set, the transaction will also be committed. If it is the
+ *    blank transaction, and the do_commit flag is set, a refresh will
+ *    result in a new blank transaction.  The method returns TRUE if
+ *    something was changed. */
+gboolean gnc_split_register_save (SplitRegister *reg, gboolean do_commit);
 
-/* The xaccSRRedrawReg() method should be called soon 
- *    after the xaccSRSaveRegEntry() method.  It checks the 
- *    change flag for the current entry/split, and if it
- *    has been modified, it causes a redraw of any register
- *    window that could be affected.  That is, it causes 
- *    a redraw of any window showing this split, or any
- *    other split that belongs to this same tansaction. */
-void     xaccSRRedrawReg (SplitRegister *reg);
+/* Causes a redraw of the register window associated with reg. */
+void gnc_split_register_redraw (SplitRegister *reg);
 
-/* The xaccSRHasPendingChanges() method returns TRUE if the register
- *    has changed cells that have not been committed. */
-gboolean xaccSRHasPendingChanges (SplitRegister *reg);
+/* Returns TRUE if the register has changed cells. */
+gboolean gnc_split_register_changed (SplitRegister *reg);
 
 /* If TRUE, visually indicate the demarcation between splits with post
  * dates prior to the present, and after. This will only make sense if
  * the splits are ordered primarily by post date. */
-void     xaccSRShowPresentDivider (SplitRegister *reg, gboolean show_present);
+void gnc_split_register_show_present_divider (SplitRegister *reg,
+                                              gboolean show_present);
 
 /* Set the colors used by SplitRegisters */
-void     xaccSetSplitRegisterColors (SplitRegisterColors reg_colors);
+void gnc_split_register_set_colors (SplitRegisterColors reg_colors);
 
 /* If use_red is TRUE, negative amounts will be printed in red. */
-void     xaccSetSplitRegisterColorizeNegative (gboolean use_red);
+void gnc_split_register_colorize_negative (gboolean use_red);
 
 /* Expand the current transaction if it is collapsed. */
-void     xaccSRExpandCurrentTrans (SplitRegister *reg, gboolean expand);
+void gnc_split_register_expand_current_trans (SplitRegister *reg,
+                                              gboolean expand);
 
 /* Return TRUE if current trans is expanded and style is REG_STYLE_LEDGER. */
-gboolean xaccSRCurrentTransExpanded (SplitRegister *reg);
+gboolean gnc_split_register_current_trans_expanded (SplitRegister *reg);
 
 /* Return the debit and credit strings used in the register. */
-const char * xaccSRGetDebitString (SplitRegister *reg);
-const char * xaccSRGetCreditString (SplitRegister *reg);
+const char * gnc_split_register_get_debit_string (SplitRegister *reg);
+const char * gnc_split_register_get_credit_string (SplitRegister *reg);
 
-/* Private functions, for MultiLedger.c only */
-gboolean xaccSRFullRefreshOK (SplitRegister *reg);
-void     xaccSRLoadXferCells (SplitRegister *reg, Account *base_account);
+/* Private functions */
+gboolean gnc_split_register_full_refresh_ok (SplitRegister *reg);
+void     gnc_split_register_load_xfer_cells (SplitRegister *reg,
+                                             Account *base_account);
 
-CellIOFlags  xaccSRTemplateGetIOFlagsHandler (VirtualLocation virt_loc,
-					      gpointer user_data);
-gboolean     xaccSRTemplateConfirmHandler (VirtualLocation virt_loc,
-					   gpointer user_data);
-
-void gnc_copy_trans_onto_trans(Transaction *from, Transaction *to,
-			       gboolean use_cut_semantics,
-			       gboolean do_commit);
+void gnc_copy_trans_onto_trans (Transaction *from, Transaction *to,
+                                gboolean use_cut_semantics,
+                                gboolean do_commit);
 
 #endif

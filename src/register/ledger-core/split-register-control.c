@@ -203,7 +203,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
          new_virt_loc.vcell_loc.virt_col);
 
   /* The transaction we are coming from */
-  old_split = xaccSRGetCurrentSplit (reg);
+  old_split = gnc_split_register_get_current_split (reg);
   old_trans = gnc_split_register_get_current_trans (reg);
   old_trans_split =
     gnc_split_register_get_current_trans_split (reg, &old_trans_split_loc);
@@ -251,7 +251,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
   gnc_suspend_gui_refresh ();
 
   /* commit the contents of the cursor into the database */
-  saved = xaccSRSaveRegEntry (reg, old_trans != new_trans);
+  saved = gnc_split_register_save (reg, old_trans != new_trans);
   if ((pending_trans != NULL)      &&
       (pending_trans == old_trans) &&
       (old_trans != new_trans))
@@ -305,7 +305,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     VirtualCellLocation vcell_loc;
 
     if (!info->reg_loaded)
-      xaccSRRedrawReg (reg);
+      gnc_split_register_redraw (reg);
 
     /* if the split we were going to is still in the register,
      * then it may have moved. Find out where it is now. */
@@ -560,7 +560,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
   if (dir != GNC_TABLE_TRAVERSE_RIGHT)
     return FALSE;
 
-  split = xaccSRGetCurrentSplit (reg);
+  split = gnc_split_register_get_current_split (reg);
   trans = gnc_split_register_get_current_trans (reg);
   if (trans == NULL)
     return FALSE;
@@ -849,7 +849,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
   info->exact_traversal = (dir == GNC_TABLE_TRAVERSE_POINTER);
 
-  split = xaccSRGetCurrentSplit (reg);
+  split = gnc_split_register_get_current_split (reg);
   trans = gnc_split_register_get_current_trans (reg);
   if (trans == NULL)
     return FALSE;
@@ -1064,7 +1064,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
         new_class = gnc_split_register_get_cursor_class (reg,
                                                          virt_loc.vcell_loc);
 
-        xaccSRCancelCursorTransChanges (reg);
+        gnc_split_register_cancel_cursor_trans_changes (reg);
 
         if (gnc_split_register_find_split (reg, new_trans, trans_split,
                                            new_split, new_class, &vcell_loc))

@@ -249,7 +249,7 @@ gnc_register_jump_to_split(RegWindow *regData, Split *split)
 
   reg = xaccLedgerDisplayGetSR (regData->ledger);
 
-  if (xaccSRGetSplitVirtLoc(reg, split, &vcell_loc))
+  if (gnc_split_register_get_split_virt_loc(reg, split, &vcell_loc))
     gnucash_register_goto_virt_cell(regData->reg, vcell_loc);
 }
 
@@ -280,8 +280,8 @@ gnc_register_jump_to_split_amount(RegWindow *regData, Split *split)
 
   reg = xaccLedgerDisplayGetSR (regData->ledger);
 
-  if (xaccSRGetSplitAmountVirtLoc(reg, split, &virt_loc))
-    gnucash_register_goto_virt_loc(regData->reg, virt_loc);
+  if (gnc_split_register_get_split_amount_virt_loc (reg, split, &virt_loc))
+    gnucash_register_goto_virt_loc (regData->reg, virt_loc);
 }
 
 
@@ -393,7 +393,7 @@ gnc_register_sort (RegWindow *regData, sort_type_t sort_code)
 
   reg = xaccLedgerDisplayGetSR (regData->ledger);
 
-  xaccSRShowPresentDivider (reg, show_present_divider);
+  gnc_split_register_show_present_divider (reg, show_present_divider);
 
   regData->sort_type = sort_code;
 
@@ -1079,11 +1079,11 @@ gnc_register_jump_to_blank (RegWindow *regData)
   VirtualCellLocation vcell_loc;
   Split *blank;
 
-  blank = xaccSRGetBlankSplit (reg);
+  blank = gnc_split_register_get_blank_split (reg);
   if (blank == NULL)
     return;
 
-  if (xaccSRGetSplitVirtLoc (reg, blank, &vcell_loc))
+  if (gnc_split_register_get_split_virt_loc (reg, blank, &vcell_loc))
     gnucash_register_goto_virt_cell (regData->reg, vcell_loc);
 }
 
@@ -1102,7 +1102,7 @@ expand_trans_check_cb (GtkWidget *widget, gpointer data)
 
   expand = GTK_CHECK_MENU_ITEM (widget)->active;
 
-  xaccSRExpandCurrentTrans (reg, expand);
+  gnc_split_register_expand_current_trans (reg, expand);
 }
 
 static void
@@ -1116,7 +1116,7 @@ expand_trans_cb (GtkWidget *widget, gpointer data)
 
   expand = GTK_TOGGLE_BUTTON (widget)->active;
 
-  xaccSRExpandCurrentTrans (reg, expand);
+  gnc_split_register_expand_current_trans (reg, expand);
 }
 
 static void
@@ -1127,8 +1127,8 @@ new_trans_cb (GtkWidget *widget, gpointer data)
 
   reg = xaccLedgerDisplayGetSR (regData->ledger);
 
-  if (xaccSRSaveRegEntry (reg, TRUE))
-    xaccSRRedrawReg (reg);
+  if (gnc_split_register_save (reg, TRUE))
+    gnc_split_register_redraw (reg);
 
   gnc_register_jump_to_blank (regData);
 }
@@ -1144,7 +1144,7 @@ jump_cb(GtkWidget *widget, gpointer data)
 
   reg = xaccLedgerDisplayGetSR (regData->ledger);
 
-  split = xaccSRGetCurrentSplit (reg);
+  split = gnc_split_register_get_current_split (reg);
   if (split == NULL)
     return;
 
@@ -1180,7 +1180,7 @@ print_check_cb(GtkWidget * widget, gpointer data)
 {
   RegWindow     * reg_data = data;
   SplitRegister * reg      = xaccLedgerDisplayGetSR (reg_data->ledger);
-  Split         * split    = xaccSRGetCurrentSplit(reg);
+  Split         * split    = gnc_split_register_get_current_split(reg);
   Transaction   * trans    = xaccSplitGetParent(split);
 
   const char    * payee;
@@ -1763,13 +1763,13 @@ gnc_register_record (RegWindow *regData)
 
   trans = gnc_split_register_get_current_trans (reg);
 
-  if (!xaccSRSaveRegEntry (reg, TRUE))
+  if (!gnc_split_register_save (reg, TRUE))
     return;
 
   if (trans != NULL)
     gnc_register_include_date (regData, xaccTransGetDate(trans));
 
-  xaccSRRedrawReg (reg);
+  gnc_split_register_redraw (reg);
 }
 
 static gboolean
@@ -1816,12 +1816,12 @@ gnc_register_enter (RegWindow *regData, gboolean next_transaction)
     {
       Split *blank_split;
 
-      blank_split = xaccSRGetBlankSplit(sr);
+      blank_split = gnc_split_register_get_blank_split(sr);
       if (blank_split != NULL)
       {
         Split *current_split;
 
-        current_split = xaccSRGetCurrentSplit(sr);
+        current_split = gnc_split_register_get_current_split(sr);
 
         if (blank_split == current_split)
           goto_blank = TRUE;
@@ -1833,7 +1833,7 @@ gnc_register_enter (RegWindow *regData, gboolean next_transaction)
   gnc_register_record (regData);
 
   if (!goto_blank && next_transaction)
-    xaccSRExpandCurrentTrans (sr, FALSE);
+    gnc_split_register_expand_current_trans (sr, FALSE);
 
   /* Now move. */
   if (goto_blank)
@@ -2247,7 +2247,7 @@ regWindowLedger (xaccLedgerDisplay *ledger)
 
   gtk_widget_show_all (register_window);
 
-  xaccSRShowPresentDivider (reg, TRUE);
+  gnc_split_register_show_present_divider (reg, TRUE);
 
   xaccLedgerDisplayRefresh (ledger);
   gnc_reg_refresh_toolbar (regData);
@@ -2490,7 +2490,7 @@ gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 
     reg = xaccLedgerDisplayGetSR (regData->ledger);
 
-    expand = xaccSRCurrentTransExpanded (reg);
+    expand = gnc_split_register_current_trans_expanded (reg);
 
     gtk_signal_handler_block_by_data
       (GTK_OBJECT (regData->split_button), regData);
@@ -2663,7 +2663,7 @@ cutTransCB (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  xaccSRCutCurrent (xaccLedgerDisplayGetSR (regData->ledger));
+  gnc_split_register_cut_current (xaccLedgerDisplayGetSR (regData->ledger));
 }
 
 
@@ -2679,7 +2679,7 @@ copyTransCB(GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  xaccSRCopyCurrent (xaccLedgerDisplayGetSR (regData->ledger));
+  gnc_split_register_copy_current (xaccLedgerDisplayGetSR (regData->ledger));
 }
 
 
@@ -2695,7 +2695,7 @@ pasteTransCB (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  xaccSRPasteCurrent (xaccLedgerDisplayGetSR (regData->ledger));
+  gnc_split_register_paste_current (xaccLedgerDisplayGetSR (regData->ledger));
 }
 
 
@@ -3004,10 +3004,10 @@ deleteCB(GtkWidget *widget, gpointer data)
   reg = xaccLedgerDisplayGetSR (regData->ledger);
 
   /* get the current split based on cursor position */
-  split = xaccSRGetCurrentSplit(reg);
+  split = gnc_split_register_get_current_split(reg);
   if (split == NULL)
   {
-    xaccSRCancelCursorSplitChanges(reg);
+    gnc_split_register_cancel_cursor_split_changes (reg);
     return;
   }
 
@@ -3017,11 +3017,11 @@ deleteCB(GtkWidget *widget, gpointer data)
 
   /* Deleting the blank split just cancels */
   {
-    Split *blank_split = xaccSRGetBlankSplit (reg);
+    Split *blank_split = gnc_split_register_get_blank_split (reg);
 
     if (split == blank_split)
     {
-      xaccSRCancelCursorTransChanges (reg);
+      gnc_split_register_cancel_cursor_trans_changes (reg);
       return;
     }
   }
@@ -3065,7 +3065,7 @@ deleteCB(GtkWidget *widget, gpointer data)
     if (!result)
       return;
 
-    xaccSRDeleteCurrentSplit (reg);
+    gnc_split_register_delete_current_split (reg);
     return;
   }
 
@@ -3093,7 +3093,7 @@ deleteCB(GtkWidget *widget, gpointer data)
     if (!result)
       return;
 
-    xaccSRDeleteCurrentTrans (reg);
+    gnc_split_register_delete_current_trans (reg);
     return;
   }
 
@@ -3112,13 +3112,13 @@ deleteCB(GtkWidget *widget, gpointer data)
 
     if (del_type == DELETE_TRANS)
     {
-      xaccSRDeleteCurrentTrans (reg);
+      gnc_split_register_delete_current_trans (reg);
       return;
     }
 
     if (del_type == DELETE_SPLITS)
     {
-      xaccSREmptyCurrentTrans (reg);
+      gnc_split_register_emtpy_current_trans (reg);
       return;
     }
   }
@@ -3136,7 +3136,8 @@ static void duplicateCB(GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  xaccSRDuplicateCurrent (xaccLedgerDisplayGetSR (regData->ledger));
+  gnc_split_register_duplicate_current
+    (xaccLedgerDisplayGetSR (regData->ledger));
 }
 
 
@@ -3170,7 +3171,8 @@ cancelCB(GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  xaccSRCancelCursorTransChanges (xaccLedgerDisplayGetSR (regData->ledger));
+  gnc_split_register_cancel_cursor_trans_changes
+    (xaccLedgerDisplayGetSR (regData->ledger));
 }
 
 
@@ -3188,7 +3190,7 @@ gnc_register_check_close(RegWindow *regData)
 
   reg = xaccLedgerDisplayGetSR (regData->ledger);
 
-  pending_changes = xaccSRHasPendingChanges (reg);
+  pending_changes = gnc_split_register_changed (reg);
   if (pending_changes)
   {
     const char *message = _("The current transaction has been changed.\n"
@@ -3196,7 +3198,7 @@ gnc_register_check_close(RegWindow *regData)
     if (gnc_verify_dialog_parented(regData->window, message, TRUE))
       recordCB(regData->window, regData);
     else
-      xaccSRCancelCursorTransChanges (reg);
+      gnc_split_register_cancel_cursor_trans_changes (reg);
   }
 }
 
@@ -3230,10 +3232,10 @@ report_helper (RegWindow *regData, SCM func, Query *query)
 
   args = SCM_EOL;
 
-  arg = gh_str02scm (xaccSRGetCreditString (reg));
+  arg = gh_str02scm (gnc_split_register_get_credit_string (reg));
   args = gh_cons (arg, args);
 
-  arg = gh_str02scm (xaccSRGetDebitString (reg));
+  arg = gh_str02scm (gnc_split_register_get_debit_string (reg));
   args = gh_cons (arg, args);
 
   str = gnc_reg_get_name (regData, FALSE);
@@ -3320,7 +3322,7 @@ invoiceTransCB (GtkWidget *widget, gpointer data)
 
   reg = xaccLedgerDisplayGetSR (regData->ledger);
 
-  split = xaccSRGetCurrentSplit (reg);
+  split = gnc_split_register_get_current_split (reg);
   if (!split)
     return;
 

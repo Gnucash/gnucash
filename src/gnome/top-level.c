@@ -662,7 +662,7 @@ gnc_configure_register_colors (void)
                               "Double mode colors alternate with transactions",
                               FALSE);
 
-  xaccSetSplitRegisterColors (reg_colors);
+  gnc_split_register_set_colors (reg_colors);
 }
 
 
@@ -764,7 +764,7 @@ gnc_configure_negative_color(void)
                                       "Display negative amounts in red",
                                       TRUE);
 
-  xaccSetSplitRegisterColorizeNegative (use_red);
+  gnc_split_register_colorize_negative (use_red);
 }
 
 

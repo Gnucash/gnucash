@@ -176,7 +176,7 @@ gnc_split_register_get_debit_label (VirtualLocation virt_loc,
 {
   SplitRegister *reg = user_data;
 
-  return xaccSRGetDebitString (reg);
+  return gnc_split_register_get_debit_string (reg);
 }
 
 static const char *
@@ -185,7 +185,7 @@ gnc_split_register_get_credit_label (VirtualLocation virt_loc,
 {
   SplitRegister *reg = user_data;
 
-  return xaccSRGetCreditString (reg);
+  return gnc_split_register_get_credit_string (reg);
 }
 
 static const char *
@@ -223,7 +223,7 @@ gnc_split_register_get_tcredit_label (VirtualLocation virt_loc,
     return info->tcredit_str;
 
   {
-    const char *string = xaccSRGetCreditString (reg);
+    const char *string = gnc_split_register_get_credit_string (reg);
 
     if (string)
       info->tcredit_str = g_strdup_printf (_("Tot %s"), string);
@@ -248,7 +248,7 @@ gnc_split_register_get_tdebit_label (VirtualLocation virt_loc,
     return info->tdebit_str;
 
   {
-    const char *string = xaccSRGetDebitString (reg);
+    const char *string = gnc_split_register_get_debit_string (reg);
     if (string)
       info->tdebit_str = g_strdup_printf (_("Tot %s"), string);
   }
@@ -1572,13 +1572,13 @@ gnc_template_register_model_new (void)
 }
 
 void
-xaccSetSplitRegisterColorizeNegative (gboolean use_red)
+gnc_split_register_colorize_negative (gboolean use_red)
 {
   use_red_for_negative = use_red;
 }
 
 void
-xaccSetSplitRegisterColors (SplitRegisterColors reg_colors_new)
+gnc_split_register_set_colors (SplitRegisterColors reg_colors_new)
 {
   reg_colors = reg_colors_new;
 }

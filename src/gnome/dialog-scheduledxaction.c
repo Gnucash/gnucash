@@ -713,7 +713,7 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
                                 splitreg->type, splitreg->style,
                                 FALSE );
         /* don't show present/future divider [by definition, not necessary] */
-        xaccSRShowPresentDivider( splitreg, FALSE );
+        gnc_split_register_show_present_divider( splitreg, FALSE );
 
         /* force a refresh */
         xaccLedgerDisplayRefresh( sxed->ledger );
@@ -811,7 +811,7 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
                 splitList = xaccSchedXactionGetSplits( sxed->sx );
                 if ( splitList != NULL ) {
                         splitReg = xaccLedgerDisplayGetSR( sxed->ledger );
-                        xaccSRLoadRegister(splitReg, splitList, NULL );
+                        gnc_split_register_load(splitReg, splitList, NULL );
                 } /* otherwise, use the existing stuff. */
         }
 }
@@ -1079,7 +1079,7 @@ sxed_reg_recordCB( GtkWidget *w, gpointer d )
 
         reg = xaccLedgerDisplayGetSR( sxed->ledger );
         trans = gnc_split_register_get_current_trans( reg );
-        if ( !xaccSRSaveRegEntry( reg, TRUE ) )
+        if ( !gnc_split_register_save( reg, TRUE ) )
                 return;
 
 #if 0
@@ -1087,14 +1087,14 @@ sxed_reg_recordCB( GtkWidget *w, gpointer d )
                 gnc_register_include_date( reg, xaccTransGetDate(trans) );
 #endif /* 0 */
 
-        xaccSRRedrawReg( reg );
+        gnc_split_register_redraw( reg );
 }
 
 static
 void
 sxed_reg_cancelCB( GtkWidget *w, gpointer d )
 {
-        xaccSRCancelCursorTransChanges(
+        gnc_split_register_cancel_cursor_trans_changes(
                 xaccLedgerDisplayGetSR( ((SchedXactionEditorDialog *)d)->ledger ) );
 }
 
@@ -1220,10 +1220,10 @@ sxed_reg_deleteCB( GtkWidget *w, gpointer d )
   reg = xaccLedgerDisplayGetSR (sxed->ledger);
 
   /* get the current split based on cursor position */
-  split = xaccSRGetCurrentSplit(reg);
+  split = gnc_split_register_get_current_split (reg);
   if (split == NULL)
   {
-    xaccSRCancelCursorSplitChanges(reg);
+    gnc_split_register_cancel_cursor_split_changes (reg);
     return;
   }
 
@@ -1233,11 +1233,11 @@ sxed_reg_deleteCB( GtkWidget *w, gpointer d )
 
   /* Deleting the blank split just cancels */
   {
-    Split *blank_split = xaccSRGetBlankSplit (reg);
+    Split *blank_split = gnc_split_register_get_blank_split (reg);
 
     if (split == blank_split)
     {
-      xaccSRCancelCursorTransChanges (reg);
+      gnc_split_register_cancel_cursor_trans_changes (reg);
       return;
     }
   }
@@ -1262,7 +1262,7 @@ sxed_reg_deleteCB( GtkWidget *w, gpointer d )
     if (!result)
       return;
 
-    xaccSRDeleteCurrentSplit (reg);
+    gnc_split_register_delete_current_split (reg);
     return;
   }
 
@@ -1280,7 +1280,7 @@ sxed_reg_deleteCB( GtkWidget *w, gpointer d )
     if (!result)
       return;
 
-    xaccSRDeleteCurrentTrans (reg);
+    gnc_split_register_delete_current_trans (reg);
     return;
   }
 
@@ -1298,24 +1298,23 @@ sxed_reg_deleteCB( GtkWidget *w, gpointer d )
 
     if (del_type == DELETE_TRANS)
     {
-      xaccSRDeleteCurrentTrans (reg);
+      gnc_split_register_delete_current_trans (reg);
       return;
     }
 
     if (del_type == DELETE_SPLITS)
     {
-      xaccSREmptyCurrentTrans (reg);
+      gnc_split_register_emtpy_current_trans (reg);
       return;
     }
   }
-
 }
 
 static
 void
 sxed_reg_duplicateCB( GtkWidget *w, gpointer d )
 {
-        xaccSRDuplicateCurrent (
+        gnc_split_register_duplicate_current (
                 xaccLedgerDisplayGetSR (
                         ((SchedXactionEditorDialog*)d)->ledger));
 }
@@ -1327,8 +1326,9 @@ sxed_reg_expand_trans_checkCB( GtkWidget *w, gpointer d )
           SchedXactionEditorDialog *sxed = d;
           SplitRegister *reg;
 
-          xaccSRExpandCurrentTrans (xaccLedgerDisplayGetSR (sxed->ledger),
-                                    GTK_CHECK_MENU_ITEM (w)->active );
+          gnc_split_register_expand_current_trans
+            (xaccLedgerDisplayGetSR (sxed->ledger),
+             GTK_CHECK_MENU_ITEM (w)->active );
 }
 
 static
@@ -1339,12 +1339,12 @@ refactor_jump_to_blank( xaccLedgerDisplay *ledger,
           SplitRegister *reg = xaccLedgerDisplayGetSR (ledger);
           VirtualCellLocation vcell_loc;
           Split *blank;
-          
-          blank = xaccSRGetBlankSplit (reg);
+
+          blank = gnc_split_register_get_blank_split (reg);
           if (blank == NULL)
                   return;
-          
-          if (xaccSRGetSplitVirtLoc (reg, blank, &vcell_loc))
+
+          if (gnc_split_register_get_split_virt_loc (reg, blank, &vcell_loc))
                   gnucash_register_goto_virt_cell (gncReg, vcell_loc);
 }
 
@@ -1357,8 +1357,8 @@ sxed_reg_new_transCB( GtkWidget *w, gpointer d )
         
         reg = xaccLedgerDisplayGetSR (sxed->ledger);
         
-        if (xaccSRSaveRegEntry (reg, TRUE))
-                xaccSRRedrawReg (reg);
+        if (gnc_split_register_save (reg, TRUE))
+                gnc_split_register_redraw (reg);
         
         refactor_jump_to_blank( sxed->ledger, sxed->reg );
 }

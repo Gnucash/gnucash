@@ -796,15 +796,15 @@ xaccLedgerDisplayRefreshInternal (xaccLedgerDisplay *ld, GList *splits)
   if (!ld || ld->loading)
     return;
 
-  if (!xaccSRFullRefreshOK (ld->reg))
+  if (!gnc_split_register_full_refresh_ok (ld->reg))
   {
-    xaccSRLoadXferCells (ld->reg, xaccLedgerDisplayLeader (ld));
+    gnc_split_register_load_xfer_cells (ld->reg, xaccLedgerDisplayLeader (ld));
     return;
   }
 
   ld->loading = TRUE;
 
-  xaccSRLoadRegister (ld->reg, splits, xaccLedgerDisplayLeader (ld));
+  gnc_split_register_load (ld->reg, splits, xaccLedgerDisplayLeader (ld));
 
   ld->loading = FALSE;
 }
