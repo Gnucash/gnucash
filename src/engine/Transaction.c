@@ -1992,6 +1992,14 @@ xaccTransGetSplit (Transaction *trans, int i)
    return g_list_nth_data (trans->splits, i);
 }
 
+GList *
+xaccTransGetSplitList (Transaction *trans)
+{
+  if (!trans) return NULL;
+
+  return trans->splits;
+}
+
 const char *
 xaccTransGetNum (Transaction *trans)
 {

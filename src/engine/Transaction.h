@@ -203,6 +203,10 @@ void          xaccSplitDestroy (Split *split);
  */
 Split *       xaccTransGetSplit (Transaction *trans, int i);
 
+/* The xaccTransGetSplitList() method returns a GList of the splits
+ * in a transaction. This list must not be modified. */
+GList *       xaccTransGetSplitList (Transaction *trans);
+
 /* These routines return the Num (or ID field), the description, 
  * and the date field.
  */

@@ -261,23 +261,19 @@ gnc_register_jump_to_split_amount(RegWindow *regData, Split *split)
 static SplitRegisterStyle
 gnc_get_default_register_style()
 {
-  SplitRegisterStyle new_style = REG_SINGLE_LINE;
+  SplitRegisterStyle new_style = REG_STYLE_LEDGER;
   char *style_string;
 
   style_string = gnc_lookup_multichoice_option("Register", 
                                                "Default Register Mode",
-                                               "single_line");
+                                               "ledger");
 
-  if (safe_strcmp(style_string, "single_line") == 0)
-    new_style = REG_SINGLE_LINE;
-  else if (safe_strcmp(style_string, "double_line") == 0)
-    new_style = REG_DOUBLE_LINE;
-  else if (safe_strcmp(style_string, "multi_line") == 0)
-    new_style = REG_MULTI_LINE;
-  else if (safe_strcmp(style_string, "auto_single") == 0)
-    new_style = REG_SINGLE_DYNAMIC;
-  else if (safe_strcmp(style_string, "auto_double") == 0)
-    new_style = REG_DOUBLE_DYNAMIC;
+  if (safe_strcmp(style_string, "ledger") == 0)
+    new_style = REG_STYLE_LEDGER;
+  else if (safe_strcmp(style_string, "auto_ledger") == 0)
+    new_style = REG_STYLE_AUTO_LEDGER;
+  else if (safe_strcmp(style_string, "journal") == 0)
+    new_style = REG_STYLE_JOURNAL;
 
   if (style_string != NULL)
     free(style_string);
@@ -294,52 +290,53 @@ gnc_register_change_style(RegWindow *regData, SplitRegisterStyle style)
   if (style == reg->style)
     return;
 
-  xaccConfigSplitRegister(reg, reg->type, style);
+  xaccConfigSplitRegister(reg, reg->type, style, reg->use_double_line);
 
   regData->ledger->dirty = 1;
   xaccLedgerDisplayRefresh(regData->ledger);
 }
 
 static void
-gnc_register_style_single_cb(GtkWidget *w, gpointer data)
+gnc_register_style_ledger_cb(GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnc_register_change_style(regData, REG_SINGLE_LINE);
+  gnc_register_change_style(regData, REG_STYLE_LEDGER);
 }
 
 static void
-gnc_register_style_double_cb(GtkWidget *w, gpointer data)
+gnc_register_style_auto_ledger_cb(GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnc_register_change_style(regData, REG_DOUBLE_LINE);
+  gnc_register_change_style(regData, REG_STYLE_AUTO_LEDGER);
 }
 
 static void
-gnc_register_style_multi_cb(GtkWidget *w, gpointer data)
+gnc_register_style_journal_cb(GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnc_register_change_style(regData, REG_MULTI_LINE);
+  gnc_register_change_style(regData, REG_STYLE_JOURNAL);
 }
 
 static void
-gnc_register_style_auto_single_cb(GtkWidget *w, gpointer data)
+gnc_register_double_line_cb (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
+  SplitRegister *reg = regData->ledger->ledger;
+  gboolean use_double_line;
 
-  gnc_register_change_style(regData, REG_SINGLE_DYNAMIC);
+  use_double_line = GTK_CHECK_MENU_ITEM(w)->active;
+
+  if (use_double_line == reg->use_double_line)
+    return;
+
+  xaccConfigSplitRegister(reg, reg->type, reg->style, use_double_line);
+
+  regData->ledger->dirty = 1;
+  xaccLedgerDisplayRefresh(regData->ledger);
 }
-
-static void
-gnc_register_style_auto_double_cb(GtkWidget *w, gpointer data)
-{
-  RegWindow *regData = data;
-
-  gnc_register_change_style(regData, REG_DOUBLE_DYNAMIC);
-}
-
 
 static void
 gnc_register_sort(RegWindow *regData, sort_type_t sort_code)
@@ -350,7 +347,7 @@ gnc_register_sort(RegWindow *regData, sort_type_t sort_code)
   if (regData->sort_type == sort_code)
     return;
 
-  switch(sort_code)
+  switch (sort_code)
   {
     case BY_STANDARD:
       xaccQuerySetSortOrder(query, BY_STANDARD, BY_NONE, BY_NONE);
@@ -1100,31 +1097,28 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
 
   static GnomeUIInfo style_list[] =
   {
-    GNOMEUIINFO_RADIOITEM_DATA(N_("Single Line"),
-                               N_("Show transactions on single lines"),
-                               gnc_register_style_single_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(N_("Double Line"),
-                               N_("Show transactions on two lines with "
-                                  "more information"),
-                               gnc_register_style_double_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(N_("Multi Line"),
-                               N_("Show transactions on multiple lines with "
-                                  "one line for each split"),
-                               gnc_register_style_multi_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(N_("Auto Single"),
-                               N_("Single line mode with a multi-line cursor"),
-                               gnc_register_style_auto_single_cb,
-                               NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(N_("Auto Double"),
-                               N_("Double line mode with a multi-line cursor"),
-                               gnc_register_style_auto_double_cb,
-                               NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Ledger"),
+                               N_("Show transactions on one or two lines"),
+                               gnc_register_style_ledger_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Auto Ledger"),
+                               N_("Show transactions on one or two lines and "
+                                  "expand the current transaction"),
+                               gnc_register_style_auto_ledger_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Journal"),
+                               N_("Show expanded transactions with all "
+                                  "splits"),
+                               gnc_register_style_journal_cb, NULL, NULL),
     GNOMEUIINFO_END
   };
 
   static GnomeUIInfo style_menu[] =
   {
     GNOMEUIINFO_RADIOLIST(style_list),
+    GNOMEUIINFO_SEPARATOR,
+    GNOMEUIINFO_TOGGLEITEM(N_("Double Line"),
+                           N_("Show two lines of information for each "
+                              "transaction"),
+                           gnc_register_double_line_cb, NULL),
     GNOMEUIINFO_END
   };
 
@@ -1396,20 +1390,14 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     switch (gnc_get_default_register_style())
     {
       default:
-      case REG_SINGLE_LINE:
+      case REG_STYLE_LEDGER:
         index = 0;
         break;
-      case REG_DOUBLE_LINE:
+      case REG_STYLE_AUTO_LEDGER:
         index = 1;
         break;
-      case REG_MULTI_LINE:
+      case REG_STYLE_JOURNAL:
         index = 2;
-        break;
-      case REG_SINGLE_DYNAMIC:
-        index = 3;
-        break;
-      case REG_DOUBLE_DYNAMIC:
-        index = 4;
         break;
     }
 
@@ -1515,7 +1503,7 @@ gnc_register_record_cb(GnucashRegister *reg, gpointer data)
     SplitRegister *sr = regData->ledger->ledger;
     SplitRegisterStyle style = sr->style;
 
-    if ((style == REG_SINGLE_LINE) || (style == REG_DOUBLE_LINE))
+    if (style == REG_STYLE_LEDGER)
     {
       Split *blank_split;
 
@@ -1748,9 +1736,18 @@ regWindowLedger(xaccLedgerDisplay *ledger)
                                   popup, regData);
   }
 
-  /* be sure to initialize the gui elements associated with the cursor */
-  xaccConfigSplitRegister(ledger->ledger, ledger->type,
-                          gnc_get_default_register_style());
+  {
+    gboolean use_double_line;
+
+    use_double_line = gnc_lookup_boolean_option("Register",
+                                                "Double Line Mode",
+                                                FALSE);
+
+    /* be sure to initialize the gui elements associated with the cursor */
+    xaccConfigSplitRegister(ledger->ledger, ledger->type,
+                            gnc_get_default_register_style(),
+                            use_double_line);
+  }
 
   /* Allow grow, allow shrink, auto-shrink */
   gtk_window_set_policy(GTK_WINDOW(register_window), TRUE, TRUE, TRUE);
@@ -2400,8 +2397,7 @@ deleteCB(GtkWidget *widget, gpointer data)
 
   /* On a transaction cursor with 2 or fewer splits in single or double
    * mode, we just delete the whole transaction, kerblooie */
-  if ((xaccTransCountSplits(trans) <= 2) &&
-      ((style == REG_SINGLE_LINE) || (style == REG_DOUBLE_LINE)))
+  if ((xaccTransCountSplits(trans) <= 2) && (style == REG_STYLE_LEDGER))
   {
     const char *message = _("Are you sure you want to delete the current "
                             "transaction?");

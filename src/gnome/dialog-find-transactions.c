@@ -500,7 +500,7 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
     new_ledger = TRUE;
     ftd->ledger = xaccLedgerDisplayGeneral(NULL, NULL,
                                            SEARCH_LEDGER,
-                                           REG_SINGLE_LINE);
+                                           REG_STYLE_JOURNAL);
     xaccFreeQuery(ftd->ledger->query);
   }
 

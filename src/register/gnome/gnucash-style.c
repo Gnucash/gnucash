@@ -50,13 +50,14 @@ style_get_key (SheetBlockStyle *style)
 {
         switch (style->cursor_type) {
         case CURSOR_TYPE_HEADER:
-        case CURSOR_TYPE_SINGLE:
-        case CURSOR_TYPE_TRANS:
+        case CURSOR_TYPE_SINGLE_LEDGER:
+        case CURSOR_TYPE_SINGLE_JOURNAL:
         case CURSOR_TYPE_SPLIT:
                 return "singles";
                 break;
 
-        case CURSOR_TYPE_DOUBLE:
+        case CURSOR_TYPE_DOUBLE_LEDGER:
+        case CURSOR_TYPE_DOUBLE_JOURNAL:
                 return "doubles";
                 break;
 

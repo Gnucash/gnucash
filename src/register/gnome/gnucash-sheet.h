@@ -168,8 +168,7 @@ void gnucash_sheet_compute_visible_range (GnucashSheet *sheet);
 void gnucash_sheet_make_cell_visible (GnucashSheet *sheet,
                                       VirtualLocation virt_loc);
 
-void gnucash_sheet_set_cursor (GnucashSheet *sheet, CellBlock *cursor,
-                               CursorType cursor_type);
+void gnucash_sheet_set_cursor (GnucashSheet *sheet, CellBlock *cursor);
 
 void gnucash_sheet_update_adjustments (GnucashSheet *sheet);
 

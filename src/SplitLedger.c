@@ -297,7 +297,7 @@ xaccSRGetParent(SplitRegister *reg)
   if (info->get_parent == NULL)
     return NULL;
 
-  return (info->get_parent)(info->user_data);
+  return info->get_parent(info->user_data);
 }
 
 void
@@ -307,7 +307,7 @@ xaccSRSetData(SplitRegister *reg, void *user_data,
 {
   SRInfo *info = xaccSRGetInfo(reg);
 
-  assert(reg != NULL);
+  g_return_if_fail (reg != NULL);
 
   info->user_data = user_data;
   info->get_parent = get_parent;
@@ -689,6 +689,26 @@ sr_set_cell_fractions (SplitRegister *reg, Split *split)
   }
 }
 
+static CellBlock *
+sr_get_lead_cursor (SplitRegister *reg)
+{
+  switch (reg->style)
+  {
+    case REG_STYLE_LEDGER:
+    case REG_STYLE_AUTO_LEDGER:
+      return reg->use_double_line ?
+        reg->cursor_ledger_double : reg->cursor_ledger_single;
+
+    case REG_STYLE_JOURNAL:
+      return reg->use_double_line ?
+        reg->cursor_journal_double : reg->cursor_journal_single;
+  }
+
+  PWARN ("bad register style");
+
+  return NULL;
+}
+
 /* ======================================================== */
 /* This callback gets called when the user clicks on the gui
  * in such a way as to leave the current virtual cursor, and 
@@ -723,6 +743,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
   Split *new_trans_split;
   Split *new_split;
   CursorClass new_class;
+  gboolean do_refresh;
   gboolean saved;
 
   PINFO ("start callback %d %d \n",
@@ -753,6 +774,8 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
     new_trans_split = info->cursor_hint_trans_split;
     new_class = info->cursor_hint_cursor_class;
   }
+
+  info->hint_set_by_traverse = FALSE;
 
   /* commit the contents of the cursor into the database */
   saved = xaccSRSaveRegEntry (reg, old_trans != new_trans);
@@ -813,28 +836,42 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
 
   /* in the mult-line and dynamic modes, we need to hide the old
    * and show the new. */
-  if (((REG_SINGLE_DYNAMIC == reg->style) ||
-       (REG_DOUBLE_DYNAMIC == reg->style) ||
-       (REG_MULTI_LINE     == reg->style)) &&
+  if (((REG_STYLE_AUTO_LEDGER == reg->style) ||
+       (REG_STYLE_JOURNAL     == reg->style)) &&
       (old_trans_split != new_trans_split))
   {
-    xaccSRSetTransVisible (reg, old_trans_split_loc, FALSE,
-                           REG_MULTI_LINE == reg->style);
+    VirtualCellLocation vc_loc;
 
-    xaccSRSetTransVisible (reg, new_virt_loc.vcell_loc, TRUE,
-                           REG_MULTI_LINE == reg->style);
+    vc_loc = old_trans_split_loc;
+    gnc_table_set_virt_cell_cursor (table, vc_loc,
+                                    sr_get_lead_cursor (reg));
+    xaccSRSetTransVisible (reg, vc_loc, FALSE,
+                           reg->style == REG_STYLE_JOURNAL);
 
-    gnc_table_refresh_gui (reg->table);
+    xaccSRGetTransSplit (reg, new_virt_loc.vcell_loc, &vc_loc);
+    gnc_table_set_virt_cell_cursor (table, vc_loc,
+                                    reg->use_double_line ?
+                                    reg->cursor_journal_double :
+                                    reg->cursor_journal_single);
+    xaccSRSetTransVisible (reg, vc_loc, TRUE,
+                           reg->style == REG_STYLE_JOURNAL);
+
+    gnc_table_find_close_valid_cell (table, p_new_virt_loc, FALSE);
+
+    do_refresh = TRUE;
   }
+  else
+    do_refresh = FALSE;
 
   info->cursor_hint_trans = new_trans;
   info->cursor_hint_split = new_split;
   info->cursor_hint_trans_split = new_trans_split;
   info->cursor_hint_cursor_class = new_class;
 
-  info->hint_set_by_traverse = FALSE;
-
   sr_set_cell_fractions (reg, new_split);
+
+  if (do_refresh)
+    gnc_table_refresh_gui (reg->table);
 }
 
 /* This function determines if auto-completion is appropriate and,
@@ -1380,7 +1417,6 @@ xaccSRGetSplitVirtLoc (SplitRegister *reg, Split *split,
   Table *table;
   int v_row;
   int v_col;
-  Split *s;
 
   if ((reg == NULL) || (split == NULL))
     return FALSE;
@@ -1394,8 +1430,17 @@ xaccSRGetSplitVirtLoc (SplitRegister *reg, Split *split,
     for (v_col = 0; v_col < table->num_virt_cols; v_col++)
     {
       VirtualCellLocation vc_loc = { v_row, v_col };
+      VirtualCell *vcell;
+      Split *s;
 
-      s = sr_get_split (reg, vc_loc);
+      vcell = gnc_table_get_virtual_cell (table, vc_loc);
+      if (vcell == NULL)
+        continue;
+
+      if (!vcell->visible)
+        continue;
+
+      s = xaccSplitLookup (vcell->vcell_data);
 
       if (s == split)
       {
@@ -3197,8 +3242,8 @@ xaccSRGetBGColorHandler (VirtualLocation virt_loc, gpointer user_data)
     case CURSOR_TYPE_HEADER:
       return reg_colors.header_bg_color;
 
-    case CURSOR_TYPE_TRANS:
-    case CURSOR_TYPE_SINGLE:
+    case CURSOR_TYPE_SINGLE_JOURNAL:
+    case CURSOR_TYPE_SINGLE_LEDGER:
       if (is_current)
         return vcell->start_primary_color ?
           reg_colors.primary_active_bg_color :
@@ -3207,7 +3252,8 @@ xaccSRGetBGColorHandler (VirtualLocation virt_loc, gpointer user_data)
       return vcell->start_primary_color ?
         reg_colors.primary_bg_color : reg_colors.secondary_bg_color;
 
-    case CURSOR_TYPE_DOUBLE:
+    case CURSOR_TYPE_DOUBLE_LEDGER:
+    case CURSOR_TYPE_DOUBLE_JOURNAL:
       if (is_current)
       {
         if (reg_colors.double_alternate_virt)
@@ -3250,6 +3296,7 @@ sr_add_transaction (SplitRegister *reg,
                     CellBlock *lead_cursor,
                     gboolean visible_splits,
                     gboolean start_primary_color,
+                    gboolean add_blank,
                     Split *find_split,
                     CursorClass find_class,
                     int *new_split_row,
@@ -3262,13 +3309,13 @@ sr_add_transaction (SplitRegister *reg,
                     CellBlock *lead_cursor,
                     gboolean visible_splits,
                     gboolean start_primary_color,
+                    gboolean add_blank,
                     Split *find_split,
                     CursorClass find_class,
                     int *new_split_row,
                     VirtualCellLocation *vcell_loc)
 {
-  Split *secondary;
-  int i = 0;
+  GList *node;
 
   if (split == find_split)
     *new_split_row = vcell_loc->virt_row;
@@ -3277,25 +3324,24 @@ sr_add_transaction (SplitRegister *reg,
                        TRUE, start_primary_color, *vcell_loc);
   vcell_loc->virt_row++;
 
-  do
+  for (node = xaccTransGetSplitList (trans); node; node = node->next)
   {
-    secondary = xaccTransGetSplit (trans, i++);
-    if (secondary == NULL)
-      break;
+    Split *secondary = node->data;
 
-    if (secondary != split)
-    {
-      if (secondary == find_split && find_class == CURSOR_CLASS_SPLIT)
-        *new_split_row = vcell_loc->virt_row;
+    if (secondary == find_split && find_class == CURSOR_CLASS_SPLIT)
+      *new_split_row = vcell_loc->virt_row;
 
-      gnc_table_set_vcell (reg->table, reg->split_cursor,
-                           xaccSplitGetGUID (secondary),
-                           visible_splits, TRUE, *vcell_loc);
-      vcell_loc->virt_row++;
-    }
-  } while (TRUE);
+    gnc_table_set_vcell (reg->table, reg->cursor_split,
+                         xaccSplitGetGUID (secondary),
+                         visible_splits, TRUE, *vcell_loc);
+    vcell_loc->virt_row++;
+  }
 
-  gnc_table_set_vcell (reg->table, reg->split_cursor,
+  if (!add_blank)
+    return;
+
+  /* Add blank transaction split */
+  gnc_table_set_vcell (reg->table, reg->cursor_split,
                        xaccSplitGetGUID (NULL), FALSE, TRUE, *vcell_loc);
   vcell_loc->virt_row++;
 }
@@ -3357,17 +3403,10 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 
   table = reg->table;
 
-  multi_line = (REG_MULTI_LINE == reg->style);
-  dynamic    = ((REG_SINGLE_DYNAMIC == reg->style) ||
-                (REG_DOUBLE_DYNAMIC == reg->style));
+  multi_line = (reg->style == REG_STYLE_JOURNAL);
+  dynamic    = (reg->style == REG_STYLE_AUTO_LEDGER);
 
-  if ((REG_SINGLE_LINE    == reg->style) ||
-      (REG_SINGLE_DYNAMIC == reg->style))
-    lead_cursor = reg->single_cursor;
-  else if (REG_MULTI_LINE == reg->style)
-    lead_cursor = reg->trans_cursor;
-  else
-    lead_cursor = reg->double_cursor;
+  lead_cursor = sr_get_lead_cursor (reg);
 
   /* figure out where we are going to. */
   find_trans = info->cursor_hint_trans;
@@ -3407,7 +3446,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
   /* make sure that the header is loaded */
   vcell_loc.virt_row = 0;
   vcell_loc.virt_col = 0;
-  gnc_table_set_vcell (table, reg->header, NULL, TRUE, TRUE, vcell_loc);
+  gnc_table_set_vcell (table, reg->cursor_header, NULL, TRUE, TRUE, vcell_loc);
   vcell_loc.virt_row++;
 
   /* get the current time and reset the dividing row */
@@ -3476,7 +3515,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       new_trans_split_row = vcell_loc.virt_row;
 
     sr_add_transaction (reg, trans, split, lead_cursor, multi_line,
-                        start_primary_color, find_split, find_class,
+                        start_primary_color, TRUE, find_split, find_class,
                         &new_split_row, &vcell_loc);
 
     if (!multi_line)
@@ -3496,8 +3535,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
     new_trans_split_row = vcell_loc.virt_row;
 
   sr_add_transaction (reg, trans, split, lead_cursor, multi_line,
-                      start_primary_color, find_split, find_class,
-                      &new_split_row, &vcell_loc);
+                      start_primary_color, info->blank_split_edited,
+                      find_split, find_class, &new_split_row, &vcell_loc);
 
   /* resize the table to the sizes we just counted above */
   /* num_virt_cols is always one. */
@@ -3520,7 +3559,11 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
     trans_split = xaccSRGetTransSplit (reg, save_loc.vcell_loc,
                                        &trans_split_loc.vcell_loc);
     if (dynamic || multi_line)
+    {
+      gnc_table_set_virt_cell_cursor (table, trans_split_loc.vcell_loc,
+                                      reg->cursor_journal_single);
       xaccSRSetTransVisible (reg, trans_split_loc.vcell_loc, TRUE, multi_line);
+    }
     else
       save_loc = trans_split_loc;
 

@@ -68,15 +68,15 @@ static guint register_signals[LAST_SIGNAL];
 
 
 void
-gnucash_sheet_set_cursor (GnucashSheet *sheet, CellBlock *cursor,
-                          CursorType cursor_type)
+gnucash_sheet_set_cursor (GnucashSheet *sheet, CellBlock *cursor)
 {
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET (sheet));
-        g_return_if_fail (cursor_type >= 0);
-        g_return_if_fail (cursor_type < NUM_CURSOR_TYPES);
+        g_return_if_fail (cursor != NULL);
+        g_return_if_fail (cursor->cursor_type >= 0);
+        g_return_if_fail (cursor->cursor_type < NUM_CURSOR_TYPES);
 
-        sheet->cursors[cursor_type] = cursor;
+        sheet->cursors[cursor->cursor_type] = cursor;
 }
 
 void

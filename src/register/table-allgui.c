@@ -865,11 +865,9 @@ gnc_table_enter_update(Table *table,
 
 /* ==================================================== */
 
-const char *
-gnc_table_leave_update(Table *table,
-                       VirtualLocation virt_loc)
+void
+gnc_table_leave_update(Table *table, VirtualLocation virt_loc)
 {
-  const char *retval;
   gboolean changed = FALSE;
   CellLeaveFunc leave;
   CellBlockCell *cb_cell;
@@ -893,6 +891,9 @@ gnc_table_leave_update(Table *table,
 
   /* OK, if there is a callback for this cell, call it */
   cb_cell = gnc_cellblock_get_cell (cb, cell_row, cell_col);
+  if (!cb_cell || !cb_cell->cell)
+    return;
+
   cell = cb_cell->cell;
   leave = cell->leave_cell;
 
@@ -912,15 +913,6 @@ gnc_table_leave_update(Table *table,
 
     g_free (old_value);
   }
-
-  if (changed)
-    retval = cell->value;
-  else
-    retval = NULL;
-
-  LEAVE("return %s\n", retval);
-
-  return retval;
 }
 
 /* ==================================================== */

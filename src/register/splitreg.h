@@ -52,26 +52,26 @@
 #include "recncell.h"
 #include "table-allgui.h"
 
-/* defined register types */
-/* "registers" are single-account display windows.
+/* defined register types.
+ * "registers" are single-account display windows.
  * "ledgers" are multiple-account display windows */
 typedef enum
 {
-  BANK_REGISTER       =  1,
-  CASH_REGISTER       =  2,
-  ASSET_REGISTER      =  3,
-  CREDIT_REGISTER     =  4,
-  LIABILITY_REGISTER  =  5,
-  INCOME_REGISTER     =  6,
-  EXPENSE_REGISTER    =  7,
-  EQUITY_REGISTER     =  8,
-  STOCK_REGISTER      =  9,
-  CURRENCY_REGISTER   = 10,
+  BANK_REGISTER,
+  CASH_REGISTER,
+  ASSET_REGISTER,
+  CREDIT_REGISTER,
+  LIABILITY_REGISTER,
+  INCOME_REGISTER,
+  EXPENSE_REGISTER,
+  EQUITY_REGISTER,
+  STOCK_REGISTER,
+  CURRENCY_REGISTER,
 
-  GENERAL_LEDGER      = 11,
-  INCOME_LEDGER       = 12,
-  PORTFOLIO_LEDGER    = 13,
-  SEARCH_LEDGER       = 14
+  GENERAL_LEDGER,
+  INCOME_LEDGER,
+  PORTFOLIO_LEDGER,
+  SEARCH_LEDGER
 } SplitRegisterType;
 
 /* These values are used to identify the cells in the register. */
@@ -93,10 +93,7 @@ typedef enum
   DEBT_CELL,
   PRIC_CELL,
   SHRS_CELL,
-
-  /* MXFRM is the "mirrored" transfer-from account */
-  MXFRM_CELL,
-
+  MXFRM_CELL, /* MXFRM is the "mirrored" transfer-from account */
   CELL_TYPE_COUNT
 } CellType;
 
@@ -112,11 +109,9 @@ typedef enum
  */
 typedef enum
 {
-  REG_SINGLE_LINE    = 1,
-  REG_DOUBLE_LINE    = 2,
-  REG_MULTI_LINE     = 3,
-  REG_SINGLE_DYNAMIC = 4,
-  REG_DOUBLE_DYNAMIC = 5
+  REG_STYLE_LEDGER,
+  REG_STYLE_AUTO_LEDGER,
+  REG_STYLE_JOURNAL
 } SplitRegisterStyle;
 
 /* modified flags -- indicate which cell values have been modified by user */
@@ -125,7 +120,6 @@ typedef enum
 #define MOD_NUM    0x0002
 #define MOD_DESC   0x0004
 #define MOD_RECN   0x0008
-
 #define MOD_ACTN   0x0010
 #define MOD_XFRM   0x0020
 #define MOD_MXFRM  0x0040
@@ -134,8 +128,7 @@ typedef enum
 #define MOD_AMNT   0x0200
 #define MOD_PRIC   0x0400
 #define MOD_SHRS   0x0800
-#define MOD_NEW    0x1000
-#define MOD_ALL    0x1fff
+#define MOD_ALL    0xffff
 
 /* Types of cursors */
 typedef enum
@@ -150,9 +143,10 @@ typedef enum
 {
   CURSOR_TYPE_NONE = -1,
   CURSOR_TYPE_HEADER,
-  CURSOR_TYPE_SINGLE,
-  CURSOR_TYPE_DOUBLE,
-  CURSOR_TYPE_TRANS,
+  CURSOR_TYPE_SINGLE_LEDGER,
+  CURSOR_TYPE_DOUBLE_LEDGER,
+  CURSOR_TYPE_SINGLE_JOURNAL,
+  CURSOR_TYPE_DOUBLE_JOURNAL,
   CURSOR_TYPE_SPLIT,
   NUM_CURSOR_TYPES
 } CursorType;
@@ -167,12 +161,15 @@ struct _SplitRegister
   /* the table itself that implements the underlying GUI. */
   Table         * table;
 
-  /* the cursors that define the currently edited row */
-  CellBlock     * single_cursor;
-  CellBlock     * double_cursor;
-  CellBlock     * trans_cursor;
-  CellBlock     * split_cursor;
-  CellBlock     * header;
+  /* the cursors that define the register structure */
+  CellBlock     * cursor_header;
+  CellBlock     * cursor_ledger_single;
+  CellBlock     * cursor_ledger_double;
+  CellBlock     * cursor_journal_single;
+  CellBlock     * cursor_journal_double;
+  CellBlock     * cursor_split;
+
+  BasicCell     * nullCell;
 
   DateCell      * dateCell;
   NumCell       * numCell;
@@ -180,24 +177,24 @@ struct _SplitRegister
   RecnCell      * recnCell;   /* main transaction line reconcile */
   PriceCell     * shrbalnCell;
   PriceCell     * balanceCell;
-  BasicCell     * nullCell;
-
   ComboCell     * actionCell;
   ComboCell     * xfrmCell;
-  ComboCell     * mxfrmCell;
   ComboCell     * xtoCell;
   QuickFillCell * memoCell;
   PriceCell     * creditCell;
   PriceCell     * debitCell;
   PriceCell     * priceCell;
   PriceCell     * sharesCell;
+  ComboCell     * mxfrmCell;
 
   SplitRegisterType type;
   SplitRegisterStyle style;
+  gboolean use_double_line;
 
   /* some private data; outsiders should not access this */
 
   BasicCell *header_cells[CELL_TYPE_COUNT];
+  BasicCell *cells[CELL_TYPE_COUNT];
 
   /* user_data allows users of this object to hang
    * private data onto it */
@@ -217,6 +214,7 @@ void            xaccSplitRegisterSetCreditStringGetter(SRStringGetter getter);
 SplitRegister *
 xaccMallocSplitRegister (SplitRegisterType type,
                          SplitRegisterStyle style,
+                         gboolean use_double_line,
                          TableGetEntryHandler entry_handler,
                          TableGetFGColorHandler fg_color_handler,
                          TableGetBGColorHandler bg_color_handler,
@@ -226,7 +224,8 @@ xaccMallocSplitRegister (SplitRegisterType type,
 
 void            xaccConfigSplitRegister (SplitRegister *reg,
                                          SplitRegisterType type,
-                                         SplitRegisterStyle style);
+                                         SplitRegisterStyle style,
+                                         gboolean use_double_line);
 
 void            xaccDestroySplitRegister (SplitRegister *reg);
 

@@ -125,15 +125,12 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
 
         /* config the cell-block styles */
 
-        gnucash_sheet_set_cursor (sheet, sr->header, CURSOR_TYPE_HEADER);
-        gnucash_sheet_set_cursor (sheet, sr->single_cursor,
-                                  CURSOR_TYPE_SINGLE);
-        gnucash_sheet_set_cursor (sheet, sr->double_cursor,
-                                  CURSOR_TYPE_DOUBLE);
-        gnucash_sheet_set_cursor (sheet, sr->trans_cursor,
-                                  CURSOR_TYPE_TRANS);
-        gnucash_sheet_set_cursor (sheet, sr->split_cursor,
-                                  CURSOR_TYPE_SPLIT);
+        gnucash_sheet_set_cursor (sheet, sr->cursor_header);
+        gnucash_sheet_set_cursor (sheet, sr->cursor_ledger_single);
+        gnucash_sheet_set_cursor (sheet, sr->cursor_ledger_double);
+        gnucash_sheet_set_cursor (sheet, sr->cursor_journal_single);
+        gnucash_sheet_set_cursor (sheet, sr->cursor_journal_double);
+        gnucash_sheet_set_cursor (sheet, sr->cursor_split);
 
         for (i = 0; i < CELL_TYPE_COUNT; i++)
                 header_widths[i] = -1;
@@ -156,7 +153,7 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
                 name = gh_scm2newstr(gh_car (assoc), NULL);
                 ctype = xaccSplitRegisterGetCellTypeFromName (name);
                 if (name)
-                        free((void *)name);
+                        free(name);
 
                 if (ctype == NO_CELL)
                         continue;

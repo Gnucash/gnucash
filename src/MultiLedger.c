@@ -145,7 +145,7 @@ xaccLedgerDisplaySimple (Account *account)
       return NULL;
   }
 
-  return xaccLedgerDisplayGeneral (account, NULL, reg_type, REG_SINGLE_LINE);
+  return xaccLedgerDisplayGeneral (account, NULL, reg_type, REG_STYLE_LEDGER);
 }
 
 static GList *
@@ -236,7 +236,7 @@ xaccLedgerDisplayAccGroup (Account *account)
   }
 
   ledger_display = xaccLedgerDisplayGeneral (account, accounts, ledger_type,
-                                             REG_SINGLE_LINE);
+                                             REG_STYLE_LEDGER);
 
   g_list_free (accounts);
 
@@ -406,7 +406,7 @@ xaccLedgerDisplayGeneral (Account *lead_account, GList *accounts,
 
   /* xaccMallocSplitRegister will malloc & initialize the register,
    * but will not do the gui init */
-  regData->ledger = xaccMallocSplitRegister (type, style,
+  regData->ledger = xaccMallocSplitRegister (type, style, FALSE,
                                              xaccSRGetEntryHandler,
                                              xaccSRGetFGColorHandler,
                                              xaccSRGetBGColorHandler,
