@@ -38,6 +38,7 @@ void GNCInteractor_hide(GNCInteractor *i);
 void GNCInteractor_delete(GNCInteractor *i);
 void GNCInteractor_erasePIN(GNCInteractor *i);
 void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent);
+gboolean GNCInteractor_get_cache_valid(const GNCInteractor *i);
 void GNCInteractor_set_cache_valid(GNCInteractor *i, gboolean value);
 GtkWidget *GNCInteractor_parent(GNCInteractor *i);
 void GNCInteractor_add_log_text (GNCInteractor *i, const char *msg);

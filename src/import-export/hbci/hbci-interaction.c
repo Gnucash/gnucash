@@ -57,7 +57,6 @@ GNCInteractor *gnc_AB_BANKING_interactors (AB_BANKING *api, GtkWidget *parent)
   data->gnc_iconv_handler = iconv_open("ISO8859-1", "UTF-8");
   g_assert(data->gnc_iconv_handler != (iconv_t)(-1));
   data->keepAlive = TRUE;
-  data->cache_valid = FALSE;
   data->cache_pin = 
     gnc_lookup_boolean_option(PREF_TAB_ONLINE_BANKING,
 			      "HBCI Remember PIN in memory",
@@ -147,6 +146,7 @@ void GNCInteractor_show_nodelete(GNCInteractor *i)
 
   /* Make sure the cache_pin option is up to date. */
   if (cache_pin != i->cache_pin) {
+    /* AB_Banking_SetEnablePinCaching (ab, cache_pin); */
     i->cache_pin = cache_pin;
     if (cache_pin == FALSE)
       GNCInteractor_erasePIN (i);
@@ -172,20 +172,21 @@ void GNCInteractor_hide(GNCInteractor *i)
 			  (GTK_TOGGLE_BUTTON (i->close_checkbutton)));
 }
 
+gboolean GNCInteractor_get_cache_valid(const GNCInteractor *i)
+{
+  g_assert(i);
+  return i->cache_pin;
+}
 void GNCInteractor_set_cache_valid(GNCInteractor *i, gboolean value)
 {
   g_assert(i);
-  i->cache_valid = value;
+  /* Nothing to be done right now. */
 }
 
 void GNCInteractor_erasePIN(GNCInteractor *i)
 {
   g_assert(i);
-  if (i->pw != NULL)
-    g_free (memset (i->pw, 0, strlen (i->pw)));
-  i->pw = NULL;
-  i->cache_valid = FALSE;
-  /* i->user = NULL; */
+  /* Nothing to be done right now. */
 }
 void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent)
 {
@@ -323,21 +324,12 @@ static int inputBoxCB(AB_BANKING *ab,
 					      &passwd);
     }
     else {
-      if (data->cache_valid && text && data->cache_text &&
-	  (strcmp(text, data->cache_text)==0)) {
-	/* Cached user matches, so use cached PIN. */
-	/*printf("Got the cached PIN for user %s.\n", HBCI_User_userId (user));*/
-	strcpy(resultbuffer, data->pw);
-	return 0;
-      }
-      else {
-	retval = gnc_hbci_get_password (data->parent,
-					title,
-					text,
-					NULL,
-					&passwd,
-					hideInput);
-      } /* user == data->user */
+      retval = gnc_hbci_get_password (data->parent,
+				      title,
+				      text,
+				      NULL,
+				      &passwd,
+				      hideInput);
     } /* newPin */
     
     if (!retval)
@@ -359,17 +351,7 @@ static int inputBoxCB(AB_BANKING *ab,
     else {
       g_assert (maxLen > strlen(resultbuffer));
       strcpy(resultbuffer, passwd);
-      /* Watch out: If we only compare the user string, then don't
-	 cache this if a TAN is asked for. */
-      if (text && data->cache_pin && !(strstr(text, "TAN"))) {
-	/*printf("Cached the PIN for user %s.\n", HBCI_User_userId (user));*/
-	data->cache_text= g_strdup(text);
-	if (data->pw)
-	  g_free (memset (data->pw, 0, strlen (data->pw)));
-	data->pw = passwd;
-      }
-      else 
-	g_free (memset (passwd, 0, strlen (passwd)));
+      g_free (memset (passwd, 0, strlen (passwd)));
       g_free(title);
       g_free(text);
       return 0;
@@ -381,6 +363,77 @@ static int inputBoxCB(AB_BANKING *ab,
   g_free(text);
   return 1;
 }
+
+/* **************************************** 
+ */
+
+
+static int getTanCB(AB_BANKING *ab,
+		    const char *token,
+		    const char *utf8title,
+		    const char *utf8text,
+		    char *resultbuffer,
+		    int minsize,
+		    int maxLen)
+{
+  GNCInteractor *data;
+  char *passwd = NULL;
+  int retval = 0;
+  gchar *title, *text;
+
+  g_assert(ab);
+  data = AB_Banking_GetUserData(ab);
+  g_assert(data);
+  g_assert(maxLen > minsize);
+
+  text = gnc_hbci_utf8ToLatin1(data, utf8text);
+  title = gnc_hbci_utf8ToLatin1(data, utf8title);
+
+  while (TRUE) {
+
+    retval = gnc_hbci_get_password (data->parent,
+				    title,
+				    text,
+				    NULL,
+				    &passwd,
+				    FALSE);
+
+    if (!retval)
+      break;
+    
+    if (strlen(passwd) < (unsigned int)minsize) {
+      gboolean retval;
+      char *msg = 
+	g_strdup_printf (  _("This TAN needs to be at least %d characters \n"
+			     "long. Do you want to try again?"),
+			   minsize);
+      retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
+					   TRUE,
+					   msg);
+      g_free (msg);
+      if (!retval)
+	break;
+    }
+    else {
+      g_assert (maxLen > strlen(resultbuffer));
+      strcpy(resultbuffer, passwd);
+
+      g_free (memset (passwd, 0, strlen (passwd)));
+      g_free(title);
+      g_free(text);
+      return 0;
+    }
+  }
+  
+  /* User wanted to abort. */
+  g_free(title);
+  g_free(text);
+  return 1;
+}
+
+
+/* ************************************************************ 
+ */
 
 static int keepAlive(void *user_data)
 {
@@ -401,13 +454,9 @@ static void destr(void *bp, void *user_data)
   if (data == NULL)
     return;
 
-  if (data->pw) {
-    memset (data->pw, 0, strlen(data->pw));
-    g_free (data->pw);
-    data->pw = NULL;
-  }
   GNCInteractor_delete (data);
 }
+
 
 /* ************************************************************ 
  */
@@ -515,6 +564,7 @@ static int messageBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
   g_free(b3text);
   return result+1;
 }
+
 
 /* ************************************************************ 
  */
@@ -726,6 +776,9 @@ gnc_hbci_add_callbacks(AB_BANKING *ab, GNCInteractor *data)
   AB_Banking_SetProgressAdvanceFn(ab, progressAdvanceCB);
   AB_Banking_SetProgressLogFn(ab, progressLogCB);
   AB_Banking_SetProgressEndFn(ab, progressEndCB);
+
+  /* AB_Banking_SetGetPinFn(ab,); */
+  AB_Banking_SetGetTanFn(ab, getTanCB);
 
   AB_Banking_SetUserData(ab, data);
 

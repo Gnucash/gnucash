@@ -70,11 +70,6 @@ struct _inter_data
 
   /* Flag on Whether the PIN should be cached. */
   gboolean cache_pin;
-  /* The cached PIN and the HBCI_User it's cached for. */
-  char *pw;
-  char *cache_text;
-  /* Whether this PIN is really valid or not. */
-  gboolean cache_valid;
 
   /* Dialogs */
   int showbox_id;
