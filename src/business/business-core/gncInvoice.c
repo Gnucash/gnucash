@@ -44,6 +44,8 @@ struct _gncInvoice {
   Timespec 	date_opened;
   Timespec 	date_posted;
 
+  gnc_numeric	to_charge_amount;
+
   gnc_commodity * currency;
 
   Account * 	posted_acc;
@@ -108,6 +110,8 @@ GncInvoice *gncInvoiceCreate (GNCBook *book)
 
   invoice->billto.type = GNC_OWNER_CUSTOMER;
   invoice->active = TRUE;
+
+  invoice->to_charge_amount = gnc_numeric_zero();
 
   xaccGUIDNew (&invoice->guid, book);
   addObj (invoice);
@@ -252,6 +256,16 @@ void gncInvoiceSetBillTo (GncInvoice *invoice, GncOwner *billto)
 
   gncInvoiceBeginEdit (invoice);
   gncOwnerCopy (billto, &invoice->billto);
+  mark_invoice (invoice);
+  gncInvoiceCommitEdit (invoice);
+}
+
+void gncInvoiceSetToChargeAmount (GncInvoice *invoice, gnc_numeric amount)
+{
+  if (!invoice) return;
+  if (gnc_numeric_equal (invoice->to_charge_amount, amount)) return;
+  gncInvoiceBeginEdit (invoice);
+  invoice->to_charge_amount = amount;
   mark_invoice (invoice);
   gncInvoiceCommitEdit (invoice);
 }
@@ -451,6 +465,38 @@ gnc_numeric gncInvoiceGetTotal (GncInvoice *invoice)
   return total;
 }
 
+gnc_numeric gncInvoiceGetTotalOf (GncInvoice *invoice, GncEntryPaymentType type)
+{
+  GList *node;
+  gnc_numeric total = gnc_numeric_zero();
+  gboolean reverse;
+
+  if (!invoice) return total;
+
+  reverse = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
+
+  for (node = gncInvoiceGetEntries(invoice); node; node = node->next) {
+    GncEntry *entry = node->data;
+    gnc_numeric value, tax;
+
+    if (gncEntryGetBillPayment (entry) != type)
+      continue;
+
+    gncEntryGetValue (entry, reverse, &value, NULL, &tax, NULL);
+    
+    if (gnc_numeric_check (value) == GNC_ERROR_OK)
+      total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+    else
+      g_warning ("bad value in our entry");
+
+    if (gnc_numeric_check (value) == GNC_ERROR_OK)
+      total = gnc_numeric_add (total, tax, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+    else
+      g_warning ("bad tax-value in our entry");
+  }
+  return total;
+}
+
 const char * gncInvoiceGetType (GncInvoice *invoice)
 {
   if (!invoice) return NULL;
@@ -501,6 +547,12 @@ gboolean gncInvoiceGetActive (GncInvoice *invoice)
 {
   if (!invoice) return FALSE;
   return invoice->active;
+}
+
+gnc_numeric gncInvoiceGetToChargeAmount (GncInvoice *invoice)
+{
+  if (!invoice) return gnc_numeric_zero();
+  return invoice->to_charge_amount;
 }
 
 GList * gncInvoiceGetEntries (GncInvoice *invoice)
@@ -801,6 +853,27 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccAccountInsertSplit (acc_val->account, split);
     xaccAccountCommitEdit (acc_val->account);
     xaccTransAppendSplit (txn, split);
+  }
+
+  /* If there is a ccard account, we may have an additional "to_card" payment.
+   * we should make that now..
+   */
+  if (ccard_acct && !gnc_numeric_zero_p (invoice->to_charge_amount)) {
+    Split *split = xaccMallocSplit (invoice->book);
+
+    /* Set memo.  action? */
+    xaccSplitSetMemo (split, _("Extra to Charge Card"));
+    
+    xaccSplitSetBaseValue (split, (reverse ? invoice->to_charge_amount :
+				   gnc_numeric_neg(invoice->to_charge_amount)),
+			   invoice->currency);
+    xaccAccountBeginEdit (ccard_acct);
+    xaccAccountInsertSplit (ccard_acct, split);
+    xaccAccountCommitEdit (ccard_acct);
+    xaccTransAppendSplit (txn, split);
+
+    total = gnc_numeric_sub (total, invoice->to_charge_amount,
+			     GNC_DENOM_AUTO, GNC_DENOM_LCD);
   }
 
   /* Now create the Posted split (which is negative -- it's a credit) */

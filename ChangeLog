@@ -1,3 +1,20 @@
+2003-04-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncEntry.h:  Move the definitions
+	  of PaymentType and DiscountHow higher earlier in the file
+	  to prevent problems of circular dependencies.
+	* src/business/business-core/gncInvoice.[ch]:
+	  - Add the storage of the to_charge_amount.
+	  - Add GetTotalOf() to find the total of Cash and Charge amounts
+	  - Use the to_charge_amount when posting an invoice
+	* src/business/business-core/dialog-invoice.c:
+	  - add a to_charge_amount for Exp. Vouchers
+	  - add a "Total Cash" and "Total Charge" summary
+	* src/business/business-gnome/glade/invoice.glade:
+	  - add the to_charge_amount frame and labels.
+	* src/busines/business-core/file/gnc-invoice-xml-v2.c: Add support
+	  for the to-charge amount.
+
 2003-04-01  Christian Stimming  <stimming@tuhh.de>
 
 	* src/report/report-system/options-utilities.scm: Fix missing i18n

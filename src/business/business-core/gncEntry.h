@@ -9,6 +9,17 @@
 
 typedef struct _gncEntry GncEntry;
 
+typedef enum {
+  GNC_PAYMENT_CASH = 1,
+  GNC_PAYMENT_CARD
+} GncEntryPaymentType;
+
+typedef enum {
+  GNC_DISC_PRETAX = 1,
+  GNC_DISC_SAMETIME,
+  GNC_DISC_POSTTAX
+} GncDiscountHow;
+
 #include "date.h"
 #include "gnc-book.h"
 #include "gncTaxTable.h"
@@ -16,7 +27,6 @@ typedef struct _gncEntry GncEntry;
 #include "gncInvoice.h"
 
 #define GNC_ENTRY_MODULE_NAME "gncEntry"
-
 
 /* How to apply the discount and taxes.  There are three distinct ways to
  * apply them:
@@ -26,16 +36,6 @@ typedef struct _gncEntry GncEntry;
  * SAMETIME	pretax		pretax
  * POSTTAX	pretax+tax	pretax
  */
-typedef enum {
-  GNC_DISC_PRETAX = 1,
-  GNC_DISC_SAMETIME,
-  GNC_DISC_POSTTAX
-} GncDiscountHow;
-
-typedef enum {
-  GNC_PAYMENT_CASH = 1,
-  GNC_PAYMENT_CARD
-} GncEntryPaymentType;
 
 const char * gncEntryDiscountHowToString (GncDiscountHow how);
 gboolean gncEntryDiscountStringToHow (const char *str, GncDiscountHow *how);
