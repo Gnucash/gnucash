@@ -125,6 +125,10 @@ xaccTransWriteLog (Transaction *trans)
 /********************************************************************\
 \********************************************************************/
 
+#if 0
+/* open_memstream seems to give various distros fits
+ * this code is not currently used ...  so its ifdef out
+ */
 
 char *
 xaccSplitAsString(Split *split, const char prefix[]) {
@@ -213,6 +217,8 @@ xaccTransAsString(Transaction *txn, const char prefix[]) {
 
   return(result);
 }
+
+#endif
 
 /************************ END OF ************************************\
 \************************* FILE *************************************/
