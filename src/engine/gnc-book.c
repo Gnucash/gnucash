@@ -62,26 +62,203 @@
 #include "gnc-pricedb-p.h"
 #include "gncObjectP.h"
 
-static short module = MOD_IO;
+static short module = MOD_ENGINE;
+
+/* ====================================================================== */
+
+#define GNC_COMMODITY_TABLE "gnc_commodity_table"
+gnc_commodity_table *
+gnc_book_get_commodity_table(GNCBook *book)
+{
+  if (!book) return NULL;
+printf ("duude get commodity table\n");
+  return gnc_book_get_data (book, GNC_COMMODITY_TABLE);
+}
+
+static void
+gnc_book_set_commodity_table(GNCBook *book, gnc_commodity_table *ct)
+{
+  if (!book) return;
+  gnc_book_set_data (book, GNC_COMMODITY_TABLE, ct);
+}
+
+/* ====================================================================== */
+
+#define GNC_TOP_GROUP "gnc_top_group"
+AccountGroup * 
+gnc_book_get_group (GNCBook *book)
+{
+   if (!book) return NULL;
+printf ("duude get topgrp\n");
+	return gnc_book_get_data (book, GNC_TOP_GROUP);
+}
+
+void
+gnc_book_set_group (GNCBook *book, AccountGroup *grp)
+{
+  if (!book) return;
+
+  /* XXX Do not free the old topgroup here unless you also fix
+   * all the other uses of gnc_book_set_group!  That's because
+	* the account group is not reference-counted, and there's some
+	* chance that we'll leave a dangling pointer somewhere.
+   */
+
+  if (gnc_book_get_group (book) == grp) return;
+
+  if (grp && grp->book != book)
+  {
+     PERR ("cannot mix and match books freely!");
+     return;
+  }
+
+  gnc_book_set_data (book, GNC_TOP_GROUP, grp);
+}
+
+/* ====================================================================== */
+
+#define GNC_PRICEDB "gnc_pricedb"
+GNCPriceDB *
+gnc_book_get_pricedb(GNCBook *book)
+{
+  if (!book) return NULL;
+printf ("duude get pricedb\n");
+  return gnc_book_get_data (book, GNC_PRICEDB);
+}
+
+void
+gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db)
+{
+  if(!book) return;
+  gnc_book_set_data (book, GNC_PRICEDB, db);
+  if (db) db->book = book;
+}
+
+/* ====================================================================== */
+
+#define GNC_SCHEDXACTIONS "gnc_schedxactions"
+GList *
+gnc_book_get_schedxactions( GNCBook *book )
+{
+  if ( book == NULL ) return NULL;
+  return book->sched_xactions;
+}
+
+void
+gnc_book_set_schedxactions( GNCBook *book, GList *newList )
+{
+  if ( book == NULL ) return;
+
+  book->sched_xactions = newList;
+  book->sx_notsaved = TRUE;
+}
+
+/* ====================================================================== */
+
+AccountGroup *
+gnc_book_get_template_group( GNCBook *book )
+{
+  if (!book) return NULL;
+  return book->template_group;
+}
+
+void
+gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup)
+{
+  if (!book) return;
+
+  if (book->template_group == templateGroup)
+    return;
+
+  if (templateGroup->book != book)
+  {
+     PERR ("cannot mix and match books freely!");
+     return;
+  }
+
+  book->template_group = templateGroup;
+}
+
+/* ====================================================================== */
+/* dirty flag stuff */
+
+static void
+mark_sx_clean(gpointer data, gpointer user_data)
+{
+  SchedXaction *sx = (SchedXaction *) data;
+  xaccSchedXactionSetDirtyness(sx, FALSE);
+  return;
+}
+
+static void
+book_sxns_mark_saved(GNCBook *book)
+{
+  book->sx_notsaved = FALSE;
+  g_list_foreach(gnc_book_get_schedxactions(book),
+                 mark_sx_clean, 
+                 NULL);
+  return;
+}
+
+static gboolean
+book_sxlist_notsaved(GNCBook *book)
+{
+  GList *sxlist;
+  SchedXaction *sx;
+  if(book->sx_notsaved
+     ||
+     xaccGroupNotSaved(book->template_group)) return TRUE;
+ 
+  for(sxlist = book->sched_xactions;
+      sxlist != NULL;
+      sxlist = g_list_next(sxlist))
+  {
+    sx = (SchedXaction *) (sxlist->data);
+    if (xaccSchedXactionIsDirty( sx ))
+      return TRUE;
+  }
+
+  return FALSE;
+}
+  
+void
+gnc_book_mark_saved(GNCBook *book)
+{
+  if (!book) return;
+
+  book->dirty = FALSE;
+
+  xaccGroupMarkSaved(gnc_book_get_group(book));
+  gnc_pricedb_mark_clean(gnc_book_get_pricedb(book));
+
+  xaccGroupMarkSaved(gnc_book_get_template_group(book));
+  book_sxns_mark_saved(book);
+
+  /* Mark everything as clean */
+  gncObjectMarkClean (book);
+}
 
 /* ====================================================================== */
 
 static void
 gnc_book_populate (GNCBook *book)
 {
+  gnc_commodity_table *ct;
+  
+  ct = gnc_commodity_table_new ();
+  if(!gnc_commodity_table_add_default_data(ct))
+  {
+    PWARN("unable to initialize book's commodity_table");
+  }
+  gnc_book_set_commodity_table (book, ct);
+  
   gnc_book_set_group (book, xaccMallocAccountGroup(book));
-  book->pricedb = gnc_pricedb_create(book);
+  
+  gnc_book_set_pricedb (book, gnc_pricedb_create(book));
 
   book->sched_xactions = NULL;
   book->sx_notsaved = FALSE;
   book->template_group = xaccMallocAccountGroup(book);
-  book->commodity_table = gnc_commodity_table_new ();
-
-  if(book->commodity_table)
-  {
-    if(!gnc_commodity_table_add_default_data(book->commodity_table))
-      PWARN("unable to initialize book's commodity_table");
-  }
 
 }
 
@@ -89,19 +266,41 @@ static void
 gnc_book_depopulate (GNCBook *book)
 {
   AccountGroup *grp;
+  gnc_commodity_table *ct;
+  GNCPriceDB *db;
 
   grp = gnc_book_get_group (book);
   xaccAccountGroupBeginEdit (grp);
   xaccAccountGroupDestroy (grp);
+  gnc_book_set_group (book, NULL);
 
-  gnc_pricedb_destroy (book->pricedb);
-  book->pricedb = NULL;
+  db = gnc_book_get_pricedb (book);
+  gnc_pricedb_destroy (db);
+  gnc_book_set_pricedb (book, NULL);
 
-  gnc_commodity_table_destroy (book->commodity_table);
-  book->commodity_table = NULL;
+  ct = gnc_book_get_commodity_table (book);
+  gnc_commodity_table_destroy (ct);
+  gnc_book_set_commodity_table (book, NULL);
 
   /* FIXME: destroy SX data members here, too */
+}
 
+/* ====================================================================== */
+
+gboolean
+gnc_book_not_saved(GNCBook *book)
+{
+  if (!book) return FALSE;
+
+  return(book->dirty
+         ||
+         xaccGroupNotSaved(gnc_book_get_group(book))
+         ||
+         gnc_pricedb_dirty(gnc_book_get_pricedb(book))
+         ||
+         book_sxlist_notsaved(book)
+         ||
+         gncObjectIsDirty (book));
 }
 
 /* ====================================================================== */
@@ -196,61 +395,6 @@ gnc_book_get_entity_table (GNCBook *book)
   return book->entity_table;
 }
 
-/* xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
-
-#define GNC_COMMODITY_TABLE "gnc_commodity_table"
-gnc_commodity_table *
-gnc_book_get_commodity_table(GNCBook *book)
-{
-  if (!book) return NULL;
-printf ("duude get commoity table\n");
-  return book->commodity_table;
-  return gnc_book_get_data (book, GNC_COMMODITY_TABLE);
-}
-
-#if 0
-void
-gnc_book_set_commodity_table(GNCBook *book, gnc_commodity_table *ct)
-{
-  if (!book) return NULL;
-  return book->commodity_table;
-  return gnc_book_get_data (book, GNC_COMMODITY_TABLE);
-}
-#endif
-
-#define GNC_TOP_GROUP "gnc_top_group"
-AccountGroup * 
-gnc_book_get_group (GNCBook *book)
-{
-   if (!book) return NULL;
-printf ("duude get topgrp\n");
-   if (book->topgroup != gnc_book_get_data (book, GNC_TOP_GROUP))
-			  printf ("duuuude major xxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
-   return book->topgroup;
-}
-
-GNCPriceDB *
-gnc_book_get_pricedb(GNCBook *book)
-{
-  if (!book) return NULL;
-printf ("duude get pricedb\n");
-  return book->pricedb;
-}
-
-GList *
-gnc_book_get_schedxactions( GNCBook *book )
-{
-  if ( book == NULL ) return NULL;
-  return book->sched_xactions;
-}
-
-AccountGroup *
-gnc_book_get_template_group( GNCBook *book )
-{
-  if (!book) return NULL;
-  return book->template_group;
-}
-
 Backend * 
 xaccGNCBookGetBackend (GNCBook *book)
 {
@@ -274,38 +418,6 @@ gnc_book_set_guid (GNCBook *book, GUID uid)
 }
 
 void
-gnc_book_set_group (GNCBook *book, AccountGroup *grp)
-{
-  if (!book) return;
-
-  /* XXX Do not free the old topgroup here unless you also fix
-   * all the other uses of gnc_book_set_group!  That's because
-	* the account group is not reference-counted, and there's some
-	* chance that we'll leave a dangling pointer somewhere.
-   */
-
-  if (gnc_book_get_group (book) == grp) return;
-
-  if (grp && grp->book != book)
-  {
-     PERR ("cannot mix and match books freely!");
-     return;
-  }
-  /* Note: code that used to be here to set/reset the book
-   * a group belonged to was removed, mostly because it 
-   * was wrong: You can't just change the book a group
-   * belongs to without also dealing with the entity
-   * tables.  The previous code would have allowed entity
-   * tables to reside in one book, while the groups were 
-   * in another.  Note: please remove this comment sometime 
-   * after gnucash-1.8 goes out.
-   */
-
-  book->topgroup = grp;
-  gnc_book_set_data (book, GNC_TOP_GROUP, grp);
-}
-
-void
 gnc_book_set_backend (GNCBook *book, Backend *be)
 {
   if (!book) return;
@@ -319,117 +431,6 @@ gpointer gnc_book_get_backend (GNCBook *book)
   return (gpointer)book->backend;
 }
 
-
-void
-gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db)
-{
-  if(!book) return;
-  book->pricedb = db;
-  if (db) db->book = book;
-}
-
-/* ====================================================================== */
-
-void
-gnc_book_set_schedxactions( GNCBook *book, GList *newList )
-{
-  if ( book == NULL ) return;
-
-  book->sched_xactions = newList;
-  book->sx_notsaved = TRUE;
-}
-
-void
-gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup)
-{
-  if (!book) return;
-
-  if (book->template_group == templateGroup)
-    return;
-
-  if (templateGroup->book != book)
-  {
-     PERR ("cannot mix and match books freely!");
-     return;
-  }
-
-  book->template_group = templateGroup;
-}
-
-/* ====================================================================== */
-/* dirty flag stuff */
-
-static void
-mark_sx_clean(gpointer data, gpointer user_data)
-{
-  SchedXaction *sx = (SchedXaction *) data;
-  xaccSchedXactionSetDirtyness(sx, FALSE);
-  return;
-}
-
-static void
-book_sxns_mark_saved(GNCBook *book)
-{
-  book->sx_notsaved = FALSE;
-  g_list_foreach(gnc_book_get_schedxactions(book),
-                 mark_sx_clean, 
-                 NULL);
-  return;
-}
-
-static gboolean
-book_sxlist_notsaved(GNCBook *book)
-{
-  GList *sxlist;
-  SchedXaction *sx;
-  if(book->sx_notsaved
-     ||
-     xaccGroupNotSaved(book->template_group)) return TRUE;
- 
-  for(sxlist = book->sched_xactions;
-      sxlist != NULL;
-      sxlist = g_list_next(sxlist))
-  {
-    sx = (SchedXaction *) (sxlist->data);
-    if (xaccSchedXactionIsDirty( sx ))
-      return TRUE;
-  }
-
-  return FALSE;
-}
-  
-void
-gnc_book_mark_saved(GNCBook *book)
-{
-  if (!book) return;
-
-  book->dirty = FALSE;
-
-  xaccGroupMarkSaved(gnc_book_get_group(book));
-  gnc_pricedb_mark_clean(gnc_book_get_pricedb(book));
-
-  xaccGroupMarkSaved(gnc_book_get_template_group(book));
-  book_sxns_mark_saved(book);
-
-  /* Mark everything as clean */
-  gncObjectMarkClean (book);
-}
-
-gboolean
-gnc_book_not_saved(GNCBook *book)
-{
-  if (!book) return FALSE;
-
-  return(book->dirty
-	 ||
-	 xaccGroupNotSaved(book->topgroup)
-         ||
-         gnc_pricedb_dirty(book->pricedb)
-         ||
-         book_sxlist_notsaved(book)
-         ||
-         gncObjectIsDirty (book));
-}
 
 void gnc_book_kvp_changed (GNCBook *book)
 {

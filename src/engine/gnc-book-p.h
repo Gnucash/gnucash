@@ -53,8 +53,6 @@ struct gnc_book_struct
   GNCEntityTable *entity_table;
 
   /* Pointers to top-level data structures. */
-  AccountGroup *topgroup;
-  GNCPriceDB *pricedb;
 
   GList *sched_xactions;
   AccountGroup *template_group;
