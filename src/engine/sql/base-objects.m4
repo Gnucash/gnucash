@@ -24,3 +24,7 @@ put_one_only(modity)
 put_one_only(split)
 put_one_only(transaction)
 put_one_only(price)
+
+compare_version(account)
+compare_version(transaction)
+compare_version(price)

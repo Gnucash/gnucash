@@ -200,6 +200,15 @@ pgendGetResults (PGBackend *be,
    return data;
 }
 
+/* ============================================================= */
+/* version number callback for pgendGetResults */
+
+static gpointer
+get_version_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   if (-1 != (int) data || 0 != j) return (gpointer) -1;
+   return ((gpointer) atoi(DB_GET_VAL ("version", 0)));
+}
 
 /* ============================================================= */
 /* include the auto-generated code */
@@ -231,30 +240,6 @@ static const char *table_drop_str =
  * number if the sql version is newer.  It returns zero if the 
  * two are equal.
  */
-
-static gpointer
-acc_version_cb (PGBackend *be, PGresult *result, int j, gpointer data)
-{
-   if (-1 != (int) data || 0 != j) return (gpointer) -1;
-   return ((gpointer) atoi(DB_GET_VAL ("version", 0)));
-}
-
-static int
-pgendAccountCompareVersion (PGBackend *be, Account *acct)
-{
-   char *p;
-   int sql_version = 0;
-
-   p = be->buff; *p = 0;
-   p = stpcpy (p, "SELECT version FROM gncAccount WHERE accountGuid ='");
-   p = guid_to_string_buff (&(acct->guid), p);
-   p = stpcpy (p, "';");
-   SEND_QUERY (be,be->buff, -1);
-   sql_version = (int) pgendGetResults (be, acc_version_cb, (gpointer) -1);
-
-   if (-1 == sql_version) return -1;
-   return (sql_version - xaccAccountGetVersion (acct));
-}
 
 /* ============================================================= */
 /* the pgendStoreAccount() routine stores an account to the 
@@ -600,39 +585,6 @@ is_trans_empty (Transaction *trans)
 }
 
 /* ============================================================= */
-/* The pgendTransCompareVersion() routine compares the version 
- * number of the transaction in the engine and the sql database. It 
- * returns a negative number if the sql version is older (or the 
- * acount is not present in the sql db). It returns a positive 
- * number if the sql version is newer.  It returns zero if the 
- * two are equal.
- */
-
-static gpointer
-trans_version_cb (PGBackend *be, PGresult *result, int j, gpointer data)
-{
-   if (-1 != (int) data || 0 != j) return (gpointer) -1;
-   return ((gpointer) atoi(DB_GET_VAL ("version", 0)));
-}
-
-static int
-pgendTransCompareVersion (PGBackend *be, Transaction *trans)
-{
-   char *p;
-   int sql_version = 0;
-
-   p = be->buff; *p = 0;
-   p = stpcpy (p, "SELECT version FROM gncTransaction WHERE transGuid ='");
-   p = guid_to_string_buff (&(trans->guid), p);
-   p = stpcpy (p, "';");
-   SEND_QUERY (be,be->buff, -1);
-   sql_version = (int) pgendGetResults (be, trans_version_cb, (gpointer) -1);
-
-   if (-1 == sql_version) return -1;
-   return (sql_version - xaccTransGetVersion (trans));
-}
-
-/* ============================================================= */
 /* The pgendStoreTransactionNoLock() routine traverses the transaction 
  * structure and stores/updates it in the database.  If checks the 
  * transaction splits as well, updating those.  If the database
@@ -677,7 +629,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
    /* don't update the database if the database is newer ... */
    if (do_check_version)
    {
-      if (0 < pgendTransCompareVersion (be, trans)) return;
+      if (0 < pgendTransactionCompareVersion (be, trans)) return;
    }
    trans->version ++;  /* be sure to update the version !! */
 
@@ -1364,9 +1316,16 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
 /* store just one price */
 
 static void
-pgendStorePriceNoLock (PGBackend *be, GNCPrice *pr)
+pgendStorePriceNoLock (PGBackend *be, GNCPrice *pr,
+                        gboolean do_check_version)
 {
    gnc_commodity *modity;
+
+   if (do_check_version)
+   {
+     if (0 < pgendPriceCompareVersion (be, pr)) return;
+   }
+   pr->version ++;  /* be sure to update the version !! */
 
    /* make sure that we've stored the commodity 
     * and currency before we store the price.
@@ -1777,7 +1736,7 @@ pgend_trans_commit_edit (Backend * bend,
       }
       }
 #else
-      if (0 < pgendTransCompareVersion (be, oldtrans)) rollback ++;
+      if (0 < pgendTransactionCompareVersion (be, oldtrans)) rollback ++;
 #endif
    
       if (rollback) {
@@ -1841,8 +1800,26 @@ pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
    SEND_QUERY (be,bufp, 555);
    FINISH_QUERY(be->connection);
 
-   /* hack alert -- we should check a version number, to make
-    * sure we aren't clobbering something newer in the database */
+   /* check to see that the engine version is equal or newer than 
+    * whats in the database.  It its not, then some other user has 
+    * made changes, and we must roll back. */
+   if (0 < pgendPriceCompareVersion (be, pr))
+   {
+      pr->do_free = FALSE;
+      bufp = "ROLLBACK;";
+      SEND_QUERY (be,bufp,444);
+      FINISH_QUERY(be->connection);
+
+      /* hack alert -- we should restore the price data from the 
+       * sql back end at this point ! !!! */
+      PWARN(" price data in engine is newer\n"
+            " price must be rolled back.  This function\n"
+            " is not completely implemented !! \n");
+      LEAVE ("rolled back");
+      return 445;
+   }
+   pr->version ++;   /* be sure to update the version !! */
+
    if (pr->do_free) 
    {
       bufp = be->buff; 
@@ -1855,7 +1832,7 @@ pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
    }
    else 
    { 
-      pgendStorePriceNoLock (be, pr);
+      pgendStorePriceNoLock (be, pr, FALSE);
    }
 
    bufp = "COMMIT;";
