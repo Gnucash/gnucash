@@ -243,7 +243,7 @@ the transactions in this lot are also closed, then the lot may be moved
 to the closed book (and all of the other associated lots must then 
 also be moved).
 
-The above is implemented but untested in Period.c ... 
+The above is implemented in Period.c.
 
 Implementation Notes:
 ---------------------
@@ -379,7 +379,7 @@ Open Issues / ToDo
    Book closing, as currently implemented in the GUI, is driven entirely
    by the date-posted.  There is no (planned) interface to allow you to
    exclude some certain transactions from a particular closing (although
-   it would be 'easy' to add this: right be fore I close a book, I have a
+   it would be 'easy' to add this: right before I close a book, I have a
    list of transactions which can be added to/removed from).
 
 *) add 13-period support to FreqSpec and the FreqSpec widget.  

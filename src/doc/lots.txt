@@ -1,7 +1,7 @@
 
                            Lots
                            ====
-                  Implementation Proposal
+             Architecture & Implementation Overview
 
                Linas Vepstas <linas@linas.org>
                   Last Revised January 2003
@@ -170,12 +170,11 @@ its own.
 
 Closing of Books
 ================
-A few words on lots and the closing of books.  Without implementing
-lots in the GnuCash engine, there is really no way of correctly 
-implementing book closing.  That is because some reports, such as
-the capital-gains report, need to know not only the account balance,
-but also the purchase dates.  Lots provide the natural mechanism for 
-storing this information.  
+A few words on lots and the closing of books.  Without lots, there 
+is really no way of correctly implementing book closing.  That is
+because some reports, such as the capital-gains report, need to know 
+not only the account balance, but also the purchase dates.  Lots 
+provide the natural mechanism for storing this information.  
 
 When a book is closed, any open lots must be moved into/kept with
 the open book.  Since the splits in a lot belong to transactions,
@@ -185,10 +184,15 @@ is considered closed when its balance is zero; when a book is closed,
 all of the lots that were closed stay with that book.  That is,
 closed lots are not propagated forward into the currently open book.
 
+Actually, its slightly more subtle than that. Not only must open
+lots stay with the open book, but so must all transactions that
+have splits that participate in teh open lot, and, by extension,
+all closed lots that participate in these 'open transations', 
+ad infinitum.
 
 
-The "Double Balance" Proposal
-=============================
+The "Double Balance" Requirment
+===============================
 The following is a proposal for how to handle both realized
 and unrealized gains/losses by means of "adjusting transactions."
 It works for simple cases, but has issues for more complex cases.
@@ -419,6 +423,8 @@ Status
  o Scrub routines to automatically take old gnucash datasets and
    transition them to double-balanced lots have been implemented.
    These implement a FIFO accounting policy (April 2003)
+ o Closed/Open lots are handled correctly during book closing.
+   See src/engine/Period.c (August 2003)
 
 XXX need to add a lot id, have it auto-gened by the scrubber.
 
