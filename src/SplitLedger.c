@@ -4465,6 +4465,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   SplitRegisterBuffer *reg_buffer;
   GHashTable *trans_table = NULL;
   CellBlock *lead_cursor;
+  Transaction *blank_trans;
   Transaction *find_trans;
   Transaction *trans;
   CursorClass find_class;
@@ -4510,6 +4511,8 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
 
     gnc_resume_gui_refresh ();
   }
+
+  blank_trans = xaccSplitGetParent (blank_split);
 
   info->default_account = *xaccAccountGetGUID (default_account);
 
@@ -4623,8 +4626,12 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
 
     if (multi_line)
     {
+      if (trans == blank_trans)
+        continue;
+
       if (g_hash_table_lookup (trans_table, trans))
         continue;
+
       g_hash_table_insert (trans_table, trans, trans);
     }
 
