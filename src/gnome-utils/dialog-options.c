@@ -31,7 +31,7 @@
 #include "glib-helpers.h"
 #include "global-options.h"
 #include "gnc-account-sel.h"
-#include "gnc-account-tree.h"
+#include "gnc-tree-view-account.h"
 #include "gnc-commodity-edit.h"
 #include "gnc-general-select.h"
 #include "gnc-currency-edit.h"
@@ -95,7 +95,6 @@ gpointer global_help_cb_data = NULL;
 void gnc_options_dialog_response_cb(GtkDialog *dialog, gint response, GNCOptionWin *window);
 static void gnc_options_dialog_reset_cb(GtkWidget * w, gpointer data);
 void gnc_options_dialog_list_select_cb(GtkWidget * list, GtkWidget * item, gpointer data);
-void gnc_options_ui_initialize (void);
 
 
 static void
@@ -630,19 +629,23 @@ gnc_option_create_radiobutton_widget(char *name, GNCOption *option)
 }
 
 static void
-gnc_option_account_cb(GNCAccountTree *tree, Account * account, gpointer data)
+gnc_option_account_cb(GtkTreeSelection *selection, gpointer data)
 {
   GNCOption *option = data;
 
-  gnc_option_changed_widget_cb(GTK_WIDGET(tree), option);
+  gnc_option_changed_widget_cb(GTK_WIDGET(selection), option);
 }
 
 static void
 gnc_option_account_select_all_cb(GtkWidget *widget, gpointer data)
 {
   GNCOption *option = data;
+  GncTreeViewAccount *tree_view;
+  GtkTreeSelection *selection;
 
-  gtk_clist_select_all(GTK_CLIST(gnc_option_get_widget (option)));
+  tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_widget (option));
+  selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
+  gtk_tree_selection_select_all(selection);
   gnc_option_changed_widget_cb(widget, option);
 }
 
@@ -650,8 +653,12 @@ static void
 gnc_option_account_clear_all_cb(GtkWidget *widget, gpointer data)
 {
   GNCOption *option = data;
+  GncTreeViewAccount *tree_view;
+  GtkTreeSelection *selection;
 
-  gtk_clist_unselect_all(GTK_CLIST(gnc_option_get_widget (option)));
+  tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_widget (option));
+  selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
+  gtk_tree_selection_unselect_all(selection);
   gnc_option_changed_widget_cb(widget, option);
 }
 
@@ -667,7 +674,9 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
   GtkWidget *vbox;
   GtkWidget *bbox;
   GList *acct_type_list;
+  GtkTreeSelection *selection;
 
+  printf("*** In function %s\n", __FUNCTION__);
   multiple_selection = gnc_option_multiple_selection(option);
   acct_type_list = gnc_option_get_account_type_list(option);
 
@@ -676,21 +685,20 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
   vbox = gtk_vbox_new(FALSE, 0);
   gtk_container_add(GTK_CONTAINER(frame), vbox);
 
-  tree = gnc_account_tree_new();
-  gtk_clist_column_titles_hide(GTK_CLIST(tree));
-  gnc_account_tree_hide_all_but_name(GNC_ACCOUNT_TREE(tree));
-  gnc_account_tree_refresh(GNC_ACCOUNT_TREE(tree));
+  tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
+  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(tree), FALSE);
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree));
   if (multiple_selection)
-    gtk_clist_set_selection_mode(GTK_CLIST(tree), GTK_SELECTION_MULTIPLE);
-  else 
-    gtk_clist_set_selection_mode(GTK_CLIST(tree), GTK_SELECTION_BROWSE);
+    gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+  else
+    gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 
   if (acct_type_list) {
     GList *node;
     AccountViewInfo avi;
     int i;
 
-    gnc_account_tree_get_view_info (GNC_ACCOUNT_TREE (tree), &avi);
+    gnc_tree_view_account_get_view_info (GNC_TREE_VIEW_ACCOUNT (tree), &avi);
 
     for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
       avi.include_type[i] = FALSE;
@@ -700,7 +708,7 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
       avi.include_type[type] = TRUE;
     }
 
-    gnc_account_tree_set_view_info (GNC_ACCOUNT_TREE (tree), &avi);
+    gnc_tree_view_account_set_view_info (GNC_TREE_VIEW_ACCOUNT (tree), &avi);
     g_list_free (acct_type_list);    
   }
 
@@ -1151,7 +1159,6 @@ gnc_options_dialog_response_cb(GtkDialog *dialog, gint response, GNCOptionWin *w
 
    case GTK_RESPONSE_OK:
    case GTK_RESPONSE_APPLY:
-    if (response == GTK_RESPONSE_APPLY)
     if (window->apply_cb)
       window->apply_cb (window, window->apply_cb_data);
     gnc_options_dialog_changed_internal (window->dialog, FALSE);
@@ -1660,6 +1667,7 @@ gnc_option_set_ui_widget_account_list (GNCOption *option, GtkBox *page_box,
 				  GtkWidget **enclosing, gboolean *packed)
 {
   GtkWidget *value;
+  GtkTreeSelection *selection;
 
   *enclosing = gnc_option_create_account_widget(option, name);
   value = gnc_option_get_widget (option);
@@ -1673,13 +1681,12 @@ gnc_option_set_ui_widget_account_list (GNCOption *option, GtkBox *page_box,
 
   gnc_option_set_ui_value(option, FALSE);
 
-  g_signal_connect(G_OBJECT(value), "select_account",
+  selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(value));
+  g_signal_connect(G_OBJECT(value), "changed",
 		   G_CALLBACK(gnc_option_account_cb), option);
-  g_signal_connect(G_OBJECT(value), "unselect_account",
-		     G_CALLBACK(gnc_option_account_cb), option);
 
-  gtk_clist_set_row_height(GTK_CLIST(value), 0);
-  gtk_widget_set_usize(value, 0, GTK_CLIST(value)->row_height * 10);
+  //  gtk_clist_set_row_height(GTK_CLIST(value), 0);
+  //  gtk_widget_set_usize(value, 0, GTK_CLIST(value)->row_height * 10);
   gtk_widget_show_all(*enclosing);
   return value;
 }
@@ -2188,8 +2195,8 @@ gnc_option_set_ui_value_account_list (GNCOption *option, gboolean use_default,
 
   list = gnc_scm_list_to_glist(value);
 
-  gtk_clist_unselect_all(GTK_CLIST(widget));
-  gnc_account_tree_select_accounts(GNC_ACCOUNT_TREE(widget), list, TRUE);
+  gnc_tree_view_account_set_selected_accounts (GNC_TREE_VIEW_ACCOUNT(widget),
+					       list, TRUE);
 
   g_list_free(list);
   return FALSE;
@@ -2522,12 +2529,12 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
 static SCM
 gnc_option_get_ui_value_account_list (GNCOption *option, GtkWidget *widget)
 {
-  GNCAccountTree *tree;
+  GncTreeViewAccount *tree;
   GList *list;
   SCM result;
 
-  tree = GNC_ACCOUNT_TREE(widget);
-  list = gnc_account_tree_get_current_accounts(tree);
+  tree = GNC_TREE_VIEW_ACCOUNT(widget);
+  list = gnc_tree_view_account_get_selected_accounts (tree);
 
   /* handover list */
   result = gnc_glist_to_scm_list(list, scm_c_eval_string("<gnc:Account*>"));

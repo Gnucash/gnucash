@@ -48,7 +48,6 @@
 
 
 #define DRUID_STOCK_SPLIT_CM_CLASS "druid-stock-split"
-#define NEW 1
 
 /** structures *********************************************************/
 typedef struct
@@ -319,7 +318,6 @@ gnc_stock_split_druid_cash_prepare (GnomeDruidPage *druidpage,
   StockSplitInfo *info = user_data;
   GtkTreeSelection *selection;
 
-#ifdef NEW
   gtk_tree_view_expand_all (GTK_TREE_VIEW(info->income_tree));
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(info->income_tree));
   gtk_tree_selection_unselect_all (selection);
@@ -327,15 +325,6 @@ gnc_stock_split_druid_cash_prepare (GnomeDruidPage *druidpage,
   gtk_tree_view_expand_all (GTK_TREE_VIEW(info->asset_tree));
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(info->asset_tree));
   gtk_tree_selection_unselect_all (selection);
-#else
-  gnc_account_tree_refresh (GNC_ACCOUNT_TREE (info->income_tree));
-  gnc_account_tree_expand_all (GNC_ACCOUNT_TREE (info->income_tree));
-  gtk_clist_select_row (GTK_CLIST (info->income_tree), 0, 0);
-
-  gnc_account_tree_refresh (GNC_ACCOUNT_TREE (info->asset_tree));
-  gnc_account_tree_expand_all (GNC_ACCOUNT_TREE (info->asset_tree));
-  gtk_clist_select_row (GTK_CLIST (info->asset_tree), 0, 0);
-#endif
 
   gtk_widget_grab_focus(info->cash_edit);
 }
@@ -369,13 +358,7 @@ gnc_stock_split_druid_cash_next (GnomeDruidPage *druidpage,
   {
     Account *account;
 
-#ifdef NEW
-    if (!gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->income_tree), &account))
-      account = NULL;
-#else
-    account = gnc_account_tree_get_current_account
-      (GNC_ACCOUNT_TREE (info->income_tree));
-#endif
+    account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->income_tree));
     if (!account)
     {
       const char *message = _("You must select an income account\n"
@@ -384,13 +367,7 @@ gnc_stock_split_druid_cash_next (GnomeDruidPage *druidpage,
       return TRUE;
     }
 
-#ifdef NEW
-    if (!gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->asset_tree), &account))
-      account = NULL;
-#else
-    account = gnc_account_tree_get_current_account
-      (GNC_ACCOUNT_TREE (info->asset_tree));
-#endif
+    account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->asset_tree));
     if (!account)
     {
       const char *message = _("You must select an asset account\n"
@@ -498,13 +475,7 @@ gnc_stock_split_druid_finish (GnomeDruidPage *druidpage,
     memo = gtk_entry_get_text (GTK_ENTRY (info->memo_entry));
 
     /* asset split */
-#ifdef NEW
-    if (!gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->asset_tree), &account))
-      account = NULL;
-#else
-    account = gnc_account_tree_get_current_account
-      (GNC_ACCOUNT_TREE (info->asset_tree));
-#endif
+    account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->asset_tree));
 
     split = xaccMallocSplit (gnc_get_current_book ());
 
@@ -522,13 +493,7 @@ gnc_stock_split_druid_finish (GnomeDruidPage *druidpage,
 
 
     /* income split */
-#ifdef NEW
-    if (!gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->income_tree), &account))
-      account = NULL;
-#else
-    account = gnc_account_tree_get_current_account
-      (GNC_ACCOUNT_TREE (info->income_tree));
-#endif
+    account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->income_tree));
 
     split = xaccMallocSplit (gnc_get_current_book ());
 
@@ -573,11 +538,15 @@ gnc_stock_split_druid_view_filter_income (GtkTreeModel *model,
   GNCAccountType type;
 
   account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), iter);
+#ifdef DEBUG
+  printf("Enter %s: model %p, iter %p, data %p, account %p (%s)\n", __FUNCTION__,
+	model, iter, data, account, xaccAccountGetName (account));
+#endif
 
   type = xaccAccountGetType(account);
-  printf("Iter for %s, type is %d, returns %s\n",
-	 xaccAccountGetName (account), type,
-	 (type == INCOME) ? "TRUE" : "FALSE");
+#ifdef DEBUG
+  printf("Leave %s: %s filter\n", __FUNCTION__, type == INCOME ? "passed" : "failed");
+#endif
   return (type == INCOME);
 }
 
@@ -590,7 +559,15 @@ gnc_stock_split_druid_view_filter_asset (GtkTreeModel *model,
     GNCAccountType type;
 
   account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), iter);
+#ifdef DEBUG
+  printf("Enter %s: model %p, iter %p, data %p, account %p (%s)\n", __FUNCTION__,
+	model, iter, data, account, xaccAccountGetName (account));
+#endif
   type = xaccAccountGetType(account);
+#ifdef DEBUG
+  printf("Leave %s: %s filter\n",  __FUNCTION__,
+	 (type == BANK) || (type == CASH) || (type == ASSET) ? "passed" : "failed");
+#endif
   return ((type == BANK) || (type == CASH) || (type == ASSET));
 }
 
@@ -674,27 +651,12 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     info->memo_entry = glade_xml_get_widget (xml, "memo_entry");
 
     /* income tree */
-#ifdef NEW
-    tree = GTK_WIDGET(gnc_tree_view_account_new_filterable ());
+    tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
     info->income_tree = tree;
     gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree),
 				      gnc_stock_split_druid_view_filter_income,
-				      NULL /* user data */,
-				      NULL /* destroy callback */);
-#else
-    tree = gnc_account_tree_new ();
-    info->income_tree = tree;
-    gtk_clist_column_titles_hide (GTK_CLIST (tree));
-    gtk_clist_set_selection_mode (GTK_CLIST (tree), GTK_SELECTION_BROWSE);
-    gnc_account_tree_hide_all_but_name (GNC_ACCOUNT_TREE (tree));
-
-    gnc_account_tree_get_view_info (GNC_ACCOUNT_TREE (tree), &view_info);
-
-    for (type = 0; type < NUM_ACCOUNT_TYPES; type++)
-      view_info.include_type[type] = (type == INCOME);
-
-    gnc_account_tree_set_view_info (GNC_ACCOUNT_TREE (tree), &view_info);
-#endif
+				      NULL, /* user data */
+				      NULL  /* destroy callback */);
 
     gtk_widget_show (tree);
 
@@ -703,28 +665,12 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 
 
     /* asset tree */
-#ifdef NEW
-    tree = GTK_WIDGET(gnc_tree_view_account_new_filterable ());
+    tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
     info->asset_tree = tree;
     gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree),
 				      gnc_stock_split_druid_view_filter_asset,
 				      NULL /* user data */,
 				      NULL /* destroy callback */);
-#else
-    tree = gnc_account_tree_new ();
-    info->asset_tree = tree;
-    gtk_clist_column_titles_hide (GTK_CLIST (tree));
-    gtk_clist_set_selection_mode (GTK_CLIST (tree), GTK_SELECTION_BROWSE);
-    gnc_account_tree_hide_all_but_name (GNC_ACCOUNT_TREE (tree));
-
-    gnc_account_tree_get_view_info (GNC_ACCOUNT_TREE (tree), &view_info);
-
-    for (type = 0; type < NUM_ACCOUNT_TYPES; type++)
-      view_info.include_type[type] =
-        (type == BANK) || (type == CASH) || (type == ASSET);
-
-    gnc_account_tree_set_view_info (GNC_ACCOUNT_TREE (tree), &view_info);
-#endif
 
     gtk_widget_show (tree);
 

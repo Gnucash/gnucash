@@ -28,7 +28,6 @@
 
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
-#include "eggtreemodelfilter.h"
 #include "global-options.h"
 #include "gnc-amount-edit.h"
 #include "gnc-book.h"
@@ -40,6 +39,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-pricedb.h"
 #include "gnc-tree-model-account.h"
+#include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "messages.h"
 #include "Transaction.h"
@@ -205,9 +205,7 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
 static void
 gnc_xfer_dialog_toggle_cb(GtkToggleButton *button, gpointer data)
 {
-  EggTreeModelFilter *model = EGG_TREE_MODEL_FILTER (data);
-
-  egg_tree_model_filter_refilter (model);
+  gnc_tree_view_account_refilter (GNC_TREE_VIEW_ACCOUNT (data));
 }
 
 static void
@@ -409,6 +407,7 @@ gnc_xfer_dialog_show_inc_exp_visible_cb (GtkTreeModel *tree_model,
 {
   GncTreeModelAccount *model;
   GtkCheckButton *show_button;
+  GNCAccountType type;
   Account *account;
 
   g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
@@ -422,8 +421,8 @@ gnc_xfer_dialog_show_inc_exp_visible_cb (GtkTreeModel *tree_model,
   }
 
   account = gnc_tree_model_account_get_account (model, iter);
-
-  return xaccAccountGetType (account) != INCOME && xaccAccountGetType (account) != EXPENSE; 
+  type = xaccAccountGetType(account);
+  return ((type != INCOME) && (type != EXPENSE)); 
 }
 
 static void
@@ -431,46 +430,36 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
 			       XferDirection direction)
 {
   GtkTreeView *tree_view;
-  GtkTreeModel *account_model, *filter_model;
   const char *show_inc_exp_message = _("Show the income and expense accounts");
-  GtkWidget *scroll_win;
+  GtkWidget *scroll_win, *box;
   GtkCheckButton *button;
   GtkTreeSelection *selection;
-  GtkCellRenderer *renderer;
-  GtkTreeViewColumn *column;
 
-  tree_view = GTK_TREE_VIEW (gnc_glade_lookup_widget (xferData->dialog,
-				(direction == XFER_DIALOG_TO) ? "to_tree_view" : "from_tree_view"));
+  box = gnc_glade_lookup_widget (xferData->dialog,
+				(direction == XFER_DIALOG_TO) ? "to_tree_box" : "from_tree_box");
   button = GTK_CHECK_BUTTON (gnc_glade_lookup_widget (xferData->dialog,
 				(direction == XFER_DIALOG_TO) ? "to_show_button" : "from_show_button"));
   scroll_win = gnc_glade_lookup_widget (xferData->dialog,
 				(direction == XFER_DIALOG_TO) ? "to_window" : "from_window");
 
-  account_model = gnc_tree_model_account_new (gnc_book_get_group (gnc_get_current_book ()));
-  filter_model = egg_tree_model_filter_new (account_model, NULL);
-  egg_tree_model_filter_set_visible_func (EGG_TREE_MODEL_FILTER (filter_model),
-					  gnc_xfer_dialog_show_inc_exp_visible_cb,
-					  button, NULL);
-
-  gtk_tree_view_set_model (tree_view, filter_model);
-  g_object_unref (account_model);
-  g_object_unref (filter_model);
+  tree_view = GTK_TREE_VIEW(gnc_tree_view_account_new(FALSE));
+  gtk_container_add(GTK_CONTAINER(box), GTK_WIDGET(tree_view));
+  gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree_view),
+				    gnc_xfer_dialog_show_inc_exp_visible_cb,
+				    button, /* user data */
+				    NULL    /* destroy callback */);
+ /* Have to force the filter once. Alt is to show income/expense by default. */
+  gnc_tree_view_account_refilter (GNC_TREE_VIEW_ACCOUNT (tree_view));
+  gtk_widget_show(GTK_WIDGET(tree_view));
 
   selection = gtk_tree_view_get_selection (tree_view);
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
-
-  renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("Account Name"),
-						     renderer,
-						     "text", GNC_TREE_MODEL_ACCOUNT_COL_NAME,
-						     NULL);
-  gtk_tree_view_append_column (tree_view, column);
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
   gtk_tooltips_set_tip (xferData->tips, GTK_WIDGET (button), show_inc_exp_message, NULL);
 
   g_signal_connect (G_OBJECT (button), "toggled",
-		    G_CALLBACK (gnc_xfer_dialog_toggle_cb), filter_model);
+		    G_CALLBACK (gnc_xfer_dialog_toggle_cb), tree_view);
 
   if (direction == XFER_DIALOG_TO) {
     xferData->to_tree_view = tree_view;
@@ -2013,12 +2002,6 @@ gnc_transfer_dialog_get_selected_account (XferDialog *dialog,
 					  XferDirection direction)
 {
   GtkTreeView *tree_view;
-  GtkTreeSelection *selection;
-  GtkTreeModel *model;
-  EggTreeModelFilter *filter_model;
-  GncTreeModelAccount *account_model;
-  GtkTreeIter filter_iter;
-  GtkTreeIter account_iter;
   Account *account;
 
   switch (direction) {
@@ -2033,17 +2016,7 @@ gnc_transfer_dialog_get_selected_account (XferDialog *dialog,
     return NULL;
   }
 
-  selection = gtk_tree_view_get_selection (tree_view);
-  if (!gtk_tree_selection_get_selected (selection, &model, &filter_iter))
-    return NULL;
-
-  filter_model = EGG_TREE_MODEL_FILTER (model);
-  account_model = GNC_TREE_MODEL_ACCOUNT (egg_tree_model_filter_get_model (filter_model));
-
-  egg_tree_model_filter_convert_iter_to_child_iter (filter_model, &account_iter, &filter_iter);
-
-  account = gnc_tree_model_account_get_account (account_model, &account_iter);
-
+  account = gnc_tree_view_account_get_selected_account  (GNC_TREE_VIEW_ACCOUNT (tree_view));
   return account;
 }
 
@@ -2054,13 +2027,7 @@ gnc_transfer_dialog_set_selected_account (XferDialog *dialog,
 {
   GtkTreeView *tree_view;
   GtkCheckButton *show_button;
-  GtkTreeSelection *selection;
-  EggTreeModelFilter *filter_model;
-  GncTreeModelAccount *account_model;
-  GtkTreeIter filter_iter;
-  GtkTreeIter account_iter;
   GNCAccountType type;
-  GtkTreePath *path;
 
   if (account == NULL)
     return;
@@ -2083,20 +2050,8 @@ gnc_transfer_dialog_set_selected_account (XferDialog *dialog,
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (show_button),
 				(type == EXPENSE) || (type == INCOME));
 
-  selection = gtk_tree_view_get_selection (tree_view);
-
-  filter_model = EGG_TREE_MODEL_FILTER (gtk_tree_view_get_model (tree_view));
-  account_model = GNC_TREE_MODEL_ACCOUNT (egg_tree_model_filter_get_model (filter_model));
-
-  gnc_tree_model_account_get_iter_from_account (account_model, account, &account_iter);
-
-  egg_tree_model_filter_convert_child_iter_to_iter (filter_model, &filter_iter, &account_iter);
-
-  path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter_model), &filter_iter);
-  gtk_tree_view_expand_to_path (tree_view, path);
-  gtk_tree_path_free (path);
-
-  gtk_tree_selection_select_iter (selection, &filter_iter);
+  gnc_tree_view_account_set_selected_account (GNC_TREE_VIEW_ACCOUNT (tree_view),
+					      account);
 }
 
 

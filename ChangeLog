@@ -1,3 +1,44 @@
+2003-09-06  David Hampton  <hampton@employees.org>
+
+	* lib/egg/eggtreemodelfilter.c: Couple of bug fixes related to
+	using a virtual root.
+
+	* configure.in:
+	* src/engine/guid.c: Convert from pthreads to glib2 threads.
+
+	* src/gnome-utils/misc-gnome-utils.c: Remove conditional g1/g2
+	compilation.
+
+	* src/engine/Group.c:
+	* src/engine/gnc-event.[ch]: Add ADD/REMOVE events for updating
+	the account tree model.
+	
+	* src/gnome-search/search-*.c:
+	* src/gnome-search/gnc-general-search.c: Convert from gtk_object
+	style object initialization to g_object style initialization.
+
+	* src/gnome-search/dialog-search.c: Convert from a GnomeDialog to
+	a GtkDialog.
+
+	* src/gnome/gnc-plugin-page-account-tree.c: Add back menu
+	sensitivity bases on whether an account is selected.
+
+	* src/gnome-utils/gnc-tree-model-account.[ch]:
+	* src/gnome-utils/gnc-tree-view-account.[ch]: Rework/clean the
+	code.  Add features needed by the code that embeds a
+	gnc-tree-view-account into a window.  I.E. Filters, pseudo
+	top-level account, etc.  Add documentation.
+
+	* src/business/business-gnome/dialog-payment.c:
+	* src/business/dialog-tax-table/dialog-tax-table.c:
+	* src/gnome-search/search-account.c:
+	* src/gnome/dialog-tax-info.c:
+	* src/gnome-utils/dialog-account.c:
+	* src/gnome-utils/dialog-options.c:
+	* src/gnome-utils/dialog-transfer.c:
+	* src/gnome-utils/transfer.glade:
+	Convert to the new gtktreeview based account tree code.
+
 2003-09-01  David Hampton  <hampton@employees.org>
 
 	* configure.in:

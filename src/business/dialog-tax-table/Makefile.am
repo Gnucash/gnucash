@@ -7,6 +7,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/business/business-core \
+  -I${top_srcdir}/lib/egg \
   ${GNOME_PRINT_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \

@@ -16,7 +16,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h"
 #include "gnc-amount-edit.h"
-#include "gnc-account-tree.h"
+#include "gnc-tree-view-account.h"
 #include "gnc-numeric.h"
 
 #include "gncTaxTable.h"
@@ -102,8 +102,7 @@ new_tax_table_ok_cb (GtkWidget *widget, gpointer data)
   }							   
 
   /* verify the account */
-  acc =
-    gnc_account_tree_get_current_account (GNC_ACCOUNT_TREE (ntt->acct_tree));
+  acc = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(ntt->acct_tree));
   if (acc == NULL) {
     message = _("You must choose a Tax Account.");
     gnc_error_dialog (ntt->dialog, message);
@@ -245,11 +244,9 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
   gtk_box_pack_start (GTK_BOX (box), widget, TRUE, TRUE, 0);
 
   box = glade_xml_get_widget (xml, "acct_window");
-  ntt->acct_tree = widget = gnc_account_tree_new ();
-  gtk_clist_column_titles_hide (GTK_CLIST (widget));
-  gnc_account_tree_hide_all_but_name (GNC_ACCOUNT_TREE (widget));
-  gtk_container_add (GTK_CONTAINER (box), widget);
-  gnc_account_tree_refresh(GNC_ACCOUNT_TREE(ntt->acct_tree));
+  ntt->acct_tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
+  gtk_container_add (GTK_CONTAINER (box), ntt->acct_tree);
+  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(ntt->acct_tree), FALSE);
 
   /* Make 'enter' do the right thing */
   gtk_entry_set_activates_default(GTK_ENTRY (gnc_amount_edit_gtk_entry
@@ -260,8 +257,8 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
   if (entry) {
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (ntt->amount_entry),
 				gncTaxTableEntryGetAmount (entry));
-    gnc_account_tree_select_account (GNC_ACCOUNT_TREE (ntt->acct_tree),
-				     gncTaxTableEntryGetAccount (entry), TRUE);
+    gnc_tree_view_account_set_selected_account (GNC_TREE_VIEW_ACCOUNT (ntt->acct_tree),
+						gncTaxTableEntryGetAccount (entry));
   }
 
   /* Set our modality */

@@ -17,7 +17,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-date-edit.h"
 #include "gnc-amount-edit.h"
-#include "gnc-account-tree.h"
+#include "gnc-tree-view-account.h"
 #include "Transaction.h"
 #include "Account.h"
 #include "gnc-numeric.h"
@@ -100,7 +100,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
   }
 
   /* Verify the user has selected a transfer account */
-  acc = gnc_account_tree_get_current_account (GNC_ACCOUNT_TREE(pw->acct_tree));
+  acc = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(pw->acct_tree));
   if (!acc) {
     text = _("You must select a transfer account from the account tree.");
     gnc_error_dialog (pw->dialog, text);
@@ -168,12 +168,12 @@ gnc_payment_window_destroy_cb (GtkWidget *widget, gpointer data)
 
 /* Select the list of accounts to show in the tree */
 static void
-gnc_payment_set_account_types (GNCAccountTree *tree)
+gnc_payment_set_account_types (GncTreeViewAccount *tree)
 {
   AccountViewInfo avi;
   int i;
 
-  gnc_account_tree_get_view_info (tree, &avi);
+  gnc_tree_view_account_get_view_info (tree, &avi);
 
   for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
     switch (i) {
@@ -189,7 +189,7 @@ gnc_payment_set_account_types (GNCAccountTree *tree)
       break;
     }
 
-  gnc_account_tree_set_view_info (tree, &avi);
+  gnc_tree_view_account_set_view_info (tree, &avi);
 }
 
 static gboolean
@@ -259,12 +259,10 @@ new_payment_window (GncOwner *owner, GNCBook *book, gnc_numeric initial_payment)
   gtk_box_pack_start (GTK_BOX (box), pw->date_edit, TRUE, TRUE, 0);
 
   box = glade_xml_get_widget (xml, "acct_window");
-  pw->acct_tree = gnc_account_tree_new ();
+  pw->acct_tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
   gtk_container_add (GTK_CONTAINER (box), pw->acct_tree);
-
-  gtk_clist_column_titles_hide(GTK_CLIST(pw->acct_tree));
-  gnc_account_tree_hide_all_but_name(GNC_ACCOUNT_TREE(pw->acct_tree));
-  gnc_payment_set_account_types (GNC_ACCOUNT_TREE (pw->acct_tree));
+  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(pw->acct_tree), FALSE);
+  gnc_payment_set_account_types (GNC_TREE_VIEW_ACCOUNT (pw->acct_tree));
 
   /* Connect the dialog buttons */
   gnome_dialog_button_connect (GNOME_DIALOG (pw->dialog), 0,
@@ -290,7 +288,6 @@ new_payment_window (GncOwner *owner, GNCBook *book, gnc_numeric initial_payment)
 				       GNC_EVENT_DESTROY);
 
   /* Fill in the post_combo and account_tree widgets */
-  gnc_account_tree_refresh(GNC_ACCOUNT_TREE(pw->acct_tree));
   gnc_fill_account_select_combo (pw->post_combo, pw->book, pw->acct_types);
 
   /* Show it all */
