@@ -31,6 +31,7 @@
       (optname-report-currency (N_ "Report's currency"))
 
       (optname-price-commodity (N_ "Price of Commodity"))
+      (optname-price-source (N_ "Price Source"))
 
       ;;      (optname-accounts (N_ "Accounts"))
 
@@ -59,17 +60,17 @@
       (gnc:options-add-interval-choice! 
        options gnc:pagename-general optname-stepsize "b" 'MonthDelta)
 
-;      (add-option
-;       (gnc:make-account-list-option
-;	gnc:pagename-accounts optname-accounts
-;	"c"
-;	(N_ "Report on these accounts, if chosen account level allows.")
-;	(lambda ()
-;	  (gnc:group-get-subaccounts (gnc:get-current-group)))
-;	(lambda (accounts)
-;	  (list #t
-;		accounts))
-;	#t))
+					;      (add-option
+					;       (gnc:make-account-list-option
+					;	gnc:pagename-accounts optname-accounts
+					;	"c"
+					;	(N_ "Report on these accounts, if chosen account level allows.")
+					;	(lambda ()
+					;	  (gnc:group-get-subaccounts (gnc:get-current-group)))
+					;	(lambda (accounts)
+					;	  (list #t
+					;		accounts))
+					;	#t))
 
       (gnc:options-add-currency! 
        options gnc:pagename-general optname-report-currency "d")
@@ -81,11 +82,27 @@
 	(N_ "Calculate the price of this commodity.")
 	(gnc:locale-default-currency)))
       
+      (add-option
+       (gnc:make-multichoice-option
+	gnc:pagename-general optname-price-source
+	"f" (N_ "The source of price information") 
+	'actual-transactions
+	(list (vector 'weighted-average 
+		      (N_ "Weighted Average")
+		      (N_ "The weighted average all currency transactions of the past"))
+	      (vector 'actual-transactions
+		      (N_ "Actual Transactions")
+		      (N_ "The actual price of currency transactions in the past"))
+	      ;;(vector 'pricedb-nearest
+	      ;;      (N_ "Pricedb: Nearest in time")
+	      ;;    (N_ "The price recorded nearest in time to the report date"))
+	      )))
+
       
       (gnc:options-add-plot-size! 
        options gnc:pagename-display 
        optname-plot-width optname-plot-height "c" 500 400)
-
+      
       (gnc:options-add-marker-choice!
        options gnc:pagename-display 
        optname-marker "a" 'filledsquare)
@@ -126,7 +143,7 @@
                            (op-value gnc:pagename-general 
 				     optname-from-date))))
 	   (interval (op-value gnc:pagename-general optname-stepsize))
-;	   (accounts (op-value gnc:pagename-accounts optname-accounts))
+	   ;; (accounts (op-value gnc:pagename-accounts optname-accounts))
 
 	   (height (op-value gnc:pagename-display optname-plot-height))
 	   (width (op-value gnc:pagename-display optname-plot-width))
@@ -140,6 +157,8 @@
                                       optname-report-currency))
 	   (price-commodity (op-value gnc:pagename-general 
 				      optname-price-commodity))
+	   (price-source (op-value gnc:pagename-general
+				   optname-price-source))
 
 	   (dates-list (gnc:make-date-list
 			(gnc:timepair-end-day-time from-date-tp) 
@@ -151,6 +170,7 @@
 	   (currency-accounts 
 	    (filter gnc:account-has-shares? (gnc:group-get-subaccounts
 					     (gnc:get-current-group))))
+	   ;; some bogus data
 	   (data '((1.0 1.0) (1.1 1.2) (1.2 1.4) (1.3 1.6) 
 		   (2.0 1.0) (2.1 1.2) (2.2 1.4) (2.3 1.6))))
       
@@ -193,70 +213,78 @@
 	     ;; go into commodity-utilities.scm or even start a new file.
 	     (set!
 	      data
-	      ;; go through all splits; convert all splits into a
-	      ;; price. 
-	      (map
-	       (lambda (a)
-		 (let* ((transaction-comm (gnc:transaction-get-commodity 
-					   (gnc:split-get-parent a)))
-			(account-comm (gnc:account-get-commodity 
-				       (gnc:split-get-account a)))
-			(share-amount (gnc:split-get-share-amount a))
-			(value-amount (gnc:split-get-value a))
-			(transaction-date (gnc:transaction-get-date-posted
-					   (gnc:split-get-parent a)))
-			(foreignlist
-			 (if (gnc:commodity-equiv? transaction-comm 
-						   price-commodity)
-			     (list account-comm
-				   (gnc:numeric-neg share-amount)
-				   (gnc:numeric-neg value-amount))
-			     (list transaction-comm
-				   value-amount
-				   share-amount))))
-		   
-;		   (warn "render-scatterplot: value " 
-;			 (commodity-numeric->string
-;			  (first foreignlist) (second foreignlist))
-;			 " bought shares "
-;			 (commodity-numeric->string
-;			  price-commodity (third foreignlist)))
-		   
-		   (list
-		    transaction-date
-		    (if (not (gnc:commodity-equiv? (first foreignlist) 
-						   report-currency))
-			(begin
-			  (warn "render-scatterplot: " 
-				"Sorry, currency exchange not yet implemented:"
-				(commodity-numeric->string
-				 (first foreignlist) (second foreignlist))
-				" (buying "
-				(commodity-numeric->string
-				 price-commodity (third foreignlist))
-				") =? "
-				(commodity-numeric->string
-				 report-currency (gnc:numeric-zero)))
-			  (gnc:numeric-zero))
-			(gnc:numeric-div 
-			 (second foreignlist)
-			 (third foreignlist)
-			 GNC-DENOM-AUTO 
-			 (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND))))))
-	       ;; Get all the interesting splits
-	       (gnc:get-match-commodity-splits 
-		currency-accounts 
-		to-date-tp price-commodity))))
+	      (case price-source
+		('actual-transactions
+		 ;; go through all splits; convert all splits into a
+		 ;; price. 
+		 (map
+		  (lambda (a)
+		    (let* ((transaction-comm (gnc:transaction-get-commodity 
+					      (gnc:split-get-parent a)))
+			   (account-comm (gnc:account-get-commodity 
+					  (gnc:split-get-account a)))
+			   (share-amount (gnc:split-get-share-amount a))
+			   (value-amount (gnc:split-get-value a))
+			   (transaction-date (gnc:transaction-get-date-posted
+					      (gnc:split-get-parent a)))
+			   (foreignlist
+			    (if (gnc:commodity-equiv? transaction-comm 
+						      price-commodity)
+				(list account-comm
+				      (gnc:numeric-neg share-amount)
+				      (gnc:numeric-neg value-amount))
+				(list transaction-comm
+				      value-amount
+				      share-amount))))
+		      
+		      ;;(warn "render-scatterplot: value " 
+		      ;;    (commodity-numeric->string
+		      ;;   (first foreignlist) (second foreignlist))
+		      ;; " bought shares "
+		      ;;(commodity-numeric->string
+		      ;; price-commodity (third foreignlist)))
+		      
+		      (list
+		       transaction-date
+		       (if (not (gnc:commodity-equiv? (first foreignlist) 
+						      report-currency))
+			   (begin
+			     (warn "render-scatterplot: " 
+				   "Sorry, currency exchange not yet implemented:"
+				   (commodity-numeric->string
+				    (first foreignlist) (second foreignlist))
+				   " (buying "
+				   (commodity-numeric->string
+				    price-commodity (third foreignlist))
+				   ") =? "
+				   (commodity-numeric->string
+				    report-currency (gnc:numeric-zero)))
+			     (gnc:numeric-zero))
+			   (gnc:numeric-div 
+			    (second foreignlist)
+			    (third foreignlist)
+			    GNC-DENOM-AUTO 
+			    (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND))))))
+		  ;; Get all the interesting splits
+		  (gnc:get-match-commodity-splits 
+		   currency-accounts 
+		   to-date-tp price-commodity)))
+		('weighted-average
+		 (gnc:get-commodity-totalaverage-prices
+		  currency-accounts to-date-tp 
+		  price-commodity report-currency))
+		)))
 
 	 (set! data (filter
-		     (lambda (x) (gnc:timepair-lt from-date-tp (first x)))
+		     (lambda (x) 
+		       (gnc:timepair-lt from-date-tp (first x)))
 		     data))
-
+	 
 	 ;; some output
-;	 (warn (map (lambda (x) (list
-;				 (gnc:timepair-to-datestring (car x))
-;				 (gnc:numeric-to-double (second x))))
-;		    data))
+	 ;;(warn (map (lambda (x) (list
+	 ;;		     (gnc:timepair-to-datestring (car x))
+	 ;;	     (gnc:numeric-to-double (second x))))
+	 ;;data))
 
 	 ;; convert the gnc:numeric's to doubles
 	 (set! data (map (lambda (x) 
@@ -287,7 +315,7 @@
       
       (gnc:html-scatter-set-data! 
        chart data)
-
+      
       (gnc:html-document-add-object! document chart) 
       
       (gnc:html-document-add-object! 
@@ -296,11 +324,8 @@
 	(gnc:html-markup-p 
 	 "This report calculates the 'prices of commodity' transactions \
 versus the 'report commodity'. (I.e. it won't work if there's another \
-commodity involved in between.) The prices shown are the actual values, \
-i.e. there is no averaging at all. This scaling of the x-axis looks so \
-weird that \
-we should rather throw it out before 1.6 is released, I guess (cstim).")))
-
+commodity involved in between.) cstim.")))
+      
       document))
 
   ;; Here we define the actual report
@@ -310,4 +335,3 @@ we should rather throw it out before 1.6 is released, I guess (cstim).")))
    ;;'menu-path (list gnc:menuname-asset-liability)
    'options-generator options-generator
    'renderer renderer))
-

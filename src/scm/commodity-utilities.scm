@@ -83,6 +83,82 @@
   (gnc:get-match-commodity-splits currency-accounts end-date-tp #f))
 
 
+;; Create a list of all prices of 'price-commodity' measured in the
+;; currency 'report-currency'. The prices are taken from all splits in
+;; 'currency-accounts' up until the date 'end-date-tp'. Returns a list
+;; of lists. Each element-list looks like (time price), where 'time'
+;; is the timepair when the 'price' was valid.
+(define (gnc:get-commodity-totalaverage-prices
+	 currency-accounts end-date-tp price-commodity report-currency)
+  (let ((total-foreign (gnc:numeric-zero))
+	(total-domestic (gnc:numeric-zero)))
+    (map-in-order
+     (lambda (a)
+       (let* ((transaction-comm (gnc:transaction-get-commodity 
+				 (gnc:split-get-parent a)))
+	      (account-comm (gnc:account-get-commodity 
+			     (gnc:split-get-account a)))
+	      (share-amount (gnc:numeric-abs
+			     (gnc:split-get-share-amount a)))
+	      (value-amount (gnc:numeric-abs
+			     (gnc:split-get-value a)))
+	      (transaction-date (gnc:transaction-get-date-posted
+				 (gnc:split-get-parent a)))
+	      (foreignlist
+	       (if (gnc:commodity-equiv? transaction-comm 
+					 price-commodity)
+		   (list account-comm
+			 share-amount value-amount)
+		   (list transaction-comm
+			 value-amount share-amount))))
+	 
+;	 (warn "render-scatterplot: value " 
+;	       (commodity-numeric->string
+;		(first foreignlist) (second foreignlist))
+;	       " bought shares "
+;	       (commodity-numeric->string
+;		price-commodity (third foreignlist)))
+	 
+	 (list
+	  transaction-date
+	  (if (not (gnc:commodity-equiv? (first foreignlist) 
+					 report-currency))
+	      (begin
+		(warn "totalaverage-prices: " 
+		      "Sorry, currency exchange not yet implemented:"
+		      (commodity-numeric->string
+		       (first foreignlist) (second foreignlist))
+		      " (buying "
+		      (commodity-numeric->string
+		       price-commodity (third foreignlist))
+		      ") =? "
+		      (commodity-numeric->string
+		       report-currency (gnc:numeric-zero)))
+		(gnc:numeric-zero))
+	      (begin
+		(set! total-foreign (gnc:numeric-add-fixed 
+				     total-foreign (third foreignlist)))
+		(set! total-domestic (gnc:numeric-add-fixed 
+				      total-domestic (second foreignlist)))
+		(gnc:numeric-div 
+		 total-domestic
+		 total-foreign
+		 GNC-DENOM-AUTO 
+		 (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)))))))
+     ;; Get all the interesting splits, and sort them according to the
+     ;; date.
+     (sort 
+      (gnc:get-match-commodity-splits 
+       currency-accounts 
+       end-date-tp price-commodity)
+      (lambda (a b)
+	(gnc:timepair-lt
+	 (gnc:transaction-get-date-posted
+	  (gnc:split-get-parent a))
+	 (gnc:transaction-get-date-posted
+	  (gnc:split-get-parent b)))))
+     )))
+  
 ;; Go through all toplevel non-report-commodity balances in sumlist
 ;; and add them to report-commodity, if possible. This function takes
 ;; a sumlist (described below) and returns an alist similar to one

@@ -1,3 +1,13 @@
+2001-05-09  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/price-scatter.scm: Added new option: get weighted
+	average prices from the past, not only the instant prices.
+
+	* src/scm/commodity-utilities.scm
+	(gnc:get-commodity-totalaverage-prices): Added
+	function. Eventually this could be an extension/alternative to
+	prices from the pricedb.
+
 2001-05-09  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/net-barchart.scm: check for empty data
