@@ -3,6 +3,9 @@
 	* src/report/standard-reports/transaction.scm: make sure we have
 	  the right number of arguments for all renderers.  Fixes #114641.
 
+	* src/gnome-utils/gnc-date-format.c: ignore empty "custom" formats.
+	* src/gnome-utils/gnc-query-list.c: add a test for NULL.
+
 2003-06-08  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/*.c: Remove old unused code.

@@ -344,7 +344,10 @@ gnc_date_format_set_custom (GNCDateFormat *gdf, const char *format)
   g_return_if_fail(gdf);
   g_return_if_fail(GNC_IS_DATE_FORMAT(gdf));
 
-  gtk_entry_set_text(GTK_ENTRY(gdf->priv->custom_entry), format ? format : "");
+  if (format == NULL || *format == '\0')
+    return;
+
+  gtk_entry_set_text(GTK_ENTRY(gdf->priv->custom_entry), format);
   gnc_date_format_compute_format(gdf);
 }
 

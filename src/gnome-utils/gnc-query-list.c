@@ -205,6 +205,7 @@ static void
 gnc_query_list_refresh_handler (GHashTable *changes, gpointer user_data)
 {
   GNCQueryList *list = (GNCQueryList *)user_data;
+  g_return_if_fail (list);
   g_return_if_fail (IS_GNC_QUERY_LIST(list));
 
   gnc_query_list_refresh (list);
