@@ -170,6 +170,12 @@ access).
    table to see if the database already exists.
 
 -- distinguish between 'save' and 'save-as' in gnc-book & backend.
+   If user hits 'save' in the single-user or multi-user mode, it 
+   should be a no-op (since the saves have already occured).  Only 
+   a 'save-as' requires a from-scratch sync.
+
+-- add version number to the DB, so that new sql db's can be 
+   auto-upgraded if table schema change.
 
 -- clear up end/destroy semantics.  After book_end is called,
    its not possible to start a new session, since there are
