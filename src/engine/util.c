@@ -205,14 +205,15 @@ PrtAmtComma (char * buf, double val, int prec)
    return (buf-start);
 }
 
-char * 
-xaccPrintAmount (double val, short shrs) 
+int
+xaccSPrintAmount (char * bufp, double val, short shrs) 
 {
-   static char buf[BUFSIZE];
-   char *bufp = buf;
+   char * orig_bufp = bufp;
+
+   if (!bufp) return 0;
 
    if (0.0 > val) {
-      buf[0] = '-';
+      bufp[0] = '-';
       bufp ++;
       val = -val;
    }
@@ -224,7 +225,8 @@ xaccPrintAmount (double val, short shrs)
          bufp += sprintf( bufp, "%.3f", val );
       }
       if (shrs & PRTSYM) {
-         strcpy (bufp, " shrs");
+         /* stpcpy returns pointer to end of string, not like strcpy */
+         bufp = stpcpy (bufp, " shrs");
       }
    } else {
 
@@ -232,13 +234,25 @@ xaccPrintAmount (double val, short shrs)
          bufp += sprintf( bufp, "%s ", CURRENCY_SYMBOL);
       }
       if (shrs & PRTSEP) {
-         PrtAmtComma (bufp, val, 2);
+         bufp += PrtAmtComma (bufp, val, 2);
       } else {
-         sprintf( bufp, "%.2f", val );
+         bufp += sprintf( bufp, "%.2f", val );
       }
    }
 
-   /* its OK to reurn buf, since we declared it static */
+   /* return length of printed string */
+   return (bufp-orig_bufp);
+}
+
+char * 
+xaccPrintAmount (double val, short shrs) 
+{
+   /* hack alert -- this is not thread safe ... */
+   static char buf[BUFSIZE];
+
+   xaccSPrintAmount (buf, val, shrs);
+
+   /* its OK to return buf, since we declared it static */
    return buf;
 }
 

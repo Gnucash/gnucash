@@ -1,7 +1,8 @@
 /********************************************************************\
- * util.h -- utility functions that are used everywhere else for    *
- *           xacc (X-Accountant)                                    *
+ * util.h -- utility functions that are used everywhere for         *
+ *           gnucash (ex-xacc (X-Accountant))                       *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1998, 1999 Linas Vepstas                           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -146,8 +147,15 @@ char * ultostr (unsigned long val, int base);
  * 4-7 as above, but comma separated
  *
  * shrs must be bitwise-OR of PRTSYM, PRTSHR and PRTSEP
+ *
+ * The xaccPrintAmount() routine returns a pointer to a statically
+ *    allocated buffer, and is therefore not thread-safe.
+ *
+ * The xaccSPrintAmount() routine accepts a pointer to the buffer to be
+ *    printed to.  It returns the length of the printed string.
  */
 char * xaccPrintAmount (double val, short shrs);
+int xaccSPrintAmount (char *buf, double val, short shrs);
 
 /********************************************************************\
  * xaccParseUSAmount                                                * 
