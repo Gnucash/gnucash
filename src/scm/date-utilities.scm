@@ -19,8 +19,9 @@
 ;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
+(use-modules (srfi srfi-19))
+
 (gnc:support "date-utilities.scm")
-(gnc:depend "srfi/srfi-19.scm")
 
 (define gnc:reldate-list '())
 

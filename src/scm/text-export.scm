@@ -17,11 +17,12 @@
 ;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
+(use-modules (srfi srfi-1))
+
 (gnc:support "text-export.scm")
 
 (require 'pretty-print)
 (gnc:depend "engine-utilities.scm")
-(gnc:depend "srfi-1.scm")
 
 ;; TODO
 ;;

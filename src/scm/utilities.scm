@@ -110,20 +110,20 @@ string and 'directories' must be a list of strings."
   (filter values lst))
 
 (define (flatten tree)
-  ;; This is ugly, but efficient -- leaves nothing pending on the
-  ;; stack, and doesn't build intermediate results that it throws
-  ;; away.
-  (define result '())
-  (define (flatten-sub-tree tree)
-    (cond
-     ((null? tree) #t)
-     ((list? tree)
-      (flatten-sub-tree (car tree))
-      (flatten-sub-tree (cdr tree)))
-     (else
-      (set! result (cons tree result)))))
-  (flatten-sub-tree tree)
-  (reverse! result))
+  ;; This leaves nothing pending on the stack, and doesn't build
+  ;; intermediate results that it throws away.
+  (define (flatten-element elt)
+    (if (list? elt)
+        (flatten-a-list elt)
+        (set! result (cons elt result))))
+  (define (flatten-a-list lst)
+    (for-each flatten-element lst))
+  
+  (if (list? tree)
+      (begin
+        (flatten-a-list tree)
+        (reverse! result))
+      tree))
 
 (define (striptrailingwhitespace line)
   (substring line 0 (let loop ((pos (- (string-length line) 1)))

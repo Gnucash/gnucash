@@ -15,6 +15,11 @@
 ;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
+;; Load the srfis (eventually, we should see where these are needed
+;; and only have the use-modules statements in those files).
+(use-modules (srfi srfi-1))
+(use-modules (srfi srfi-8))
+
 ;; A list of things to do when in batch mode after the initial
 ;; startup.  List items may be strings, in wich case they're read and
 ;; evaluated or procedures, in which case they're just executed.
@@ -27,11 +32,6 @@
       (gnc:shutdown 1))
 
   (gnc:setup-debugging)
-
-  ;; Load the srfis
-  (gnc:load "srfi/srfi-8.guile.scm")
-  (gnc:load "srfi/srfi-1.unclear.scm")
-  (gnc:load "srfi/srfi-1.r5rs.scm")
 
   ;; Now we can load a bunch of files.
   (gnc:depend "doc.scm")

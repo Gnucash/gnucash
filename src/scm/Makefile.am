@@ -1,5 +1,5 @@
 
-SUBDIRS = gnumeric printing qif-import report srfi
+SUBDIRS = gnumeric printing qif-import report
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}
 
