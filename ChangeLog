@@ -1,3 +1,9 @@
+2004-04-05  Derek Atkins  <derek@ihtfp.com>
+
+	* macros/autogen.sh: make sure we always have intl and po Makefiles
+	  in the configure script.  Sometimes it was ripped out without being
+	  replaced.  Reported by twunder.
+
 2004-04-01  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/dialog-scheduledxaction.c: Move variable declaration
