@@ -1,13 +1,21 @@
 <?xml version="1.0"?>
+<!-- $Id$
+     Italian translation for GnuCash
+     Copyright (C) 1998-2003 Free Software Foundation, Inc.
+     Lorenzo Cappelletti <lorenzo.cappelletti@email.com>, 2003.
+
+     Thanks to:
+     Luca Rota <lrota@freemail.it>.
+  -->
 <gnc-account-example>
     <gnc-act:title>
-      Entrate cognuge
+      Entrate coniuge
     </gnc-act:title>
     <gnc-act:short-description>
-     Conti per tener traccia separatamente delle entrate del cognuge
+     Conti per tener traccia separatamente delle entrate del coniuge
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Selezionare questo insieme di conti se il cognuge lavora (stipendio ed imposte del cognuge).
+    Selezionare questo insieme di conti se il coniuge lavora (stipendio ed imposte del coniuge).
   </gnc-act:long-description>
 <gnc:account version="2.0.0">
   <act:name>Entrate</act:name>
@@ -20,14 +28,14 @@
   <act:description>Entrate</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Stipendio (cognuge)</act:name>
+  <act:name>Stipendio (coniuge)</act:name>
   <act:id type="new">7c4495ff132d100b0aa339ce683200dd</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Stipendio del cognuge</act:description>
+  <act:description>Stipendio del coniuge</act:description>
   <act:parent type="new">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -41,14 +49,14 @@
   <act:description>Uscite</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Imposte (cognuge)</act:name>
+  <act:name>Imposte (coniuge)</act:name>
   <act:id type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Imposte del cognuge</act:description>
+  <act:description>Imposte del coniuge</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -59,7 +67,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Statale</act:description>
+  <act:description>Statale (IRPEF, IRPEG, etc.)</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

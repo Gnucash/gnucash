@@ -1,4 +1,12 @@
 <?xml version="1.0"?>
+<!-- $Id$
+     Italian translation for GnuCash
+     Copyright (C) 1998-2003 Free Software Foundation, Inc.
+     Lorenzo Cappelletti <lorenzo.cappelletti@email.com>, 2003.
+
+     Thanks to:
+     Luca Rota <lrota@freemail.it>.
+  -->
 <gnc-account-example>
     <gnc-act:title>
       Conti comuni
@@ -54,14 +62,14 @@
   <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Contanti portafogli</act:name>
+  <act:name>Liquidità</act:name>
   <act:id type="new">07b454b9dd6f68c4b613c5f1ef76f884</act:id>
   <act:type>CASH</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Contanti nel portafogli</act:description>
+  <act:description>Liquidità</act:description>
   <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -96,14 +104,14 @@
   <act:description>Entrate</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Bonus</act:name>
+  <act:name>Entrate extra</act:name>
   <act:id type="new">59b72cd943a2ca6f077748bba9a942cd</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Bonus</act:description>
+  <act:description>Entrate extra</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -125,7 +133,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Entrate interessi</act:description>
+  <act:description>Entrate per interessi</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -212,7 +220,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Auto</act:description>
+  <act:description>Automobile</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -289,7 +297,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>TV</act:description>
+  <act:description>Canone, Pay TV, etc.</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -326,14 +334,14 @@
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Cene</act:name>
+  <act:name>Ristoranti</act:name>
   <act:id type="new">0a59a3347e4ff02b862de41ef59d7351</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Cene</act:description>
+  <act:description>Ristoranti, cene, etc.</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -432,18 +440,18 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Assicurazione auto</act:description>
+  <act:description>Assicurazione automobile</act:description>
   <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Assicurazione salute</act:name>
+  <act:name>Assicurazione medica</act:name>
   <act:id type="new">d80613194a52340c9e5eb62e853c72cf</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Assicurazione sulla salute</act:description>
+  <act:description>Assicurazione medica</act:description>
   <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -491,14 +499,14 @@
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Servizi online</act:name>
+  <act:name>Servizi Internet</act:name>
   <act:id type="new">2170a1a631cc3b6fc32813fa49a12f77</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Servizi online</act:description>
+  <act:description>Servizi Internet</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -564,7 +572,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Statali</act:description>
+  <act:description>Statali (IRPEF, IRPEG, etc.)</act:description>
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -634,14 +642,14 @@
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Immondizie</act:name>
+  <act:name>Rifiuti</act:name>
   <act:id type="new">2d0315d7b2f8f11a8a8b32d805bca6eb</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Raccolta immondizie</act:description>
+  <act:description>Raccolta rifiuti</act:description>
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

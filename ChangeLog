@@ -1,3 +1,8 @@
+2003-07-26  Christian Stimming  <stimming@tuhh.de>
+
+	* accounts/it/*: Updates to the Italian account templates by
+	Lorenzo Cappelletti <lorenzo.cappelletti@email.it>
+
 2003-07-23  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/gnc-book.c: be sure to delete the book's KVP when we
