@@ -74,14 +74,14 @@ void     xaccGroupMarkNotSaved (AccountGroup *grp);
 void     xaccGroupMarkDoFree (AccountGroup *grp);
 
 /*
- * The xaccRemoveAccount() subroutine will remove the indicated
+ * The xaccGroupRemoveAccount() subroutine will remove the indicated
  *    account from its parent account group. It will NOT free the
  *    associated memory or otherwise alter the account: the account
  *    can now be reparented to a new location.
  *    Note, however, that it will mark the old parents as having 
  *    been modified.
  *
- * The xaccRemoveGroup() subroutine will remove the indicated
+ * The xaccAccountRemoveGroup() subroutine will remove the indicated
  *    account group from its parent account. It will NOT free the
  *    associated memory or otherwise alter the account group: the 
  *    account group can now be reparented to a new location.
@@ -89,8 +89,8 @@ void     xaccGroupMarkDoFree (AccountGroup *grp);
  *    been modified.
  */
 
-void    xaccRemoveAccount (Account *account);
-void    xaccRemoveGroup (AccountGroup *group);
+void    xaccGroupRemoveAccount (AccountGroup *grp, Account *account);
+void    xaccAccountRemoveGroup (Account *acc);
 void    xaccGroupInsertAccount (AccountGroup *grp, Account *acc);
 void    xaccAccountInsertSubAccount (Account *parent, Account *child);
 

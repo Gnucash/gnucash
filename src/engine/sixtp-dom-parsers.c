@@ -409,7 +409,11 @@ dom_tree_to_text(xmlNodePtr tree)
   gchar *temp;
 
   g_return_val_if_fail(tree, NULL);
-  g_return_val_if_fail(tree->xmlChildrenNode, NULL);
+  /* no nodes means it's an empty string text */
+  if(!tree->xmlChildrenNode)
+  {
+      return g_strdup("");
+  }
 
   result = g_strdup("");
   

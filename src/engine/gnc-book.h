@@ -115,6 +115,7 @@ gboolean gnc_book_load (GNCBook *book);
  *    See Backend.h for a listing of returned errors.
  */
 GNCBackendError gnc_book_get_error (GNCBook *book);
+const char * gnc_book_get_error_message(GNCBook *book);
 GNCBackendError gnc_book_pop_error (GNCBook *book);
 
 
@@ -190,6 +191,18 @@ gboolean gnc_book_process_events (GNCBook *book);
  */
 char * xaccResolveFilePath (const char * filefrag);
 char * xaccResolveURL (const char * pathfrag);
+
+/*
+ * Determine the load file type
+ */
+typedef enum 
+{
+    GNC_BOOK_NOT_OURS,
+    GNC_BOOK_BIN_FILE,
+    GNC_BOOK_XML1_FILE,
+    GNC_BOOK_XML2_FILE,
+} GNCBookFileType;
+GNCBookFileType gnc_book_determine_file_type(GNCBook *book);
 
 /* Run the RPC Server */
 void gnc_run_rpc_server (void);

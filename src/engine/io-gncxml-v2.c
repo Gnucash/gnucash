@@ -15,6 +15,15 @@
 #include "Group.h"
 
 static void
+run_callback(sixtp_gdv2 *data, const char *type)
+{
+    if(data->countCallback)
+    {
+        data->countCallback(type, data->counter);
+    }
+}
+
+static void
 clear_up_account_commodity(
     GNCBook *book, Account *act, gnc_commodity * (*getter) (Account *account),
     void (*setter) (Account *account, gnc_commodity *comm))
@@ -58,6 +67,8 @@ add_account_local(sixtp_gdv2 *data, Account *act)
         xaccGroupInsertAccount(gnc_book_get_group(data->book), act);
     }
     data->counter.accounts_loaded++;
+    run_callback(data, "account");
+    
     return FALSE;
 }
 
@@ -66,6 +77,7 @@ add_commodity_local(sixtp_gdv2 *data, gnc_commodity *com)
 {
     gnc_commodity_table_insert(gnc_book_get_commodity_table(data->book), com);
     data->counter.commodities_loaded++;
+    run_callback(data, "commodities");
     return TRUE;
 }
 
@@ -83,17 +95,14 @@ add_transaction_local(sixtp_gdv2 *data, Transaction *trn)
     }
 
     data->counter.transactions_loaded++;
+    run_callback(data, "transaction");
+    
     return TRUE;
 }
 
 static gboolean
 add_pricedb_local(sixtp_gdv2 *data, GNCPriceDB *db)
 {
-    if(!db)
-    {
-        db = gnc_pricedb_create();
-    }
-
     if(gnc_book_get_pricedb(data->book))
     {
         gnc_pricedb_destroy(gnc_book_get_pricedb(data->book));
@@ -166,7 +175,7 @@ gnc_counter_sixtp_parser_create(void)
 }
 
 static void
-print_counter_data(struct _load_counter_struct data)
+print_counter_data(load_counter data)
 {
     printf("Transactions: Total: %d, Loaded: %d\n",
            data.transactions_total, data.transactions_loaded);
@@ -177,14 +186,25 @@ print_counter_data(struct _load_counter_struct data)
 }
 
 gboolean
-gnc_book_load_from_xml_file_v2(GNCBook *book)
+gnc_book_load_from_xml_file_v2(
+    GNCBook *book,
+    void (*countcallback)(const char *type, load_counter count))
 {
     sixtp_gdv2 gd;
-    sixtp *parser;
+    sixtp *top_parser;
+    sixtp *main_parser;
     gpointer parse_result = NULL;
-    
+
     gd.book = book;
-    
+    gd.counter.accounts_loaded = 0;
+    gd.counter.accounts_total = 0;
+    gd.counter.commodities_loaded = 0;
+    gd.counter.commodities_total = 0;
+    gd.counter.transactions_loaded = 0;
+    gd.counter.transactions_total = 0;
+    gd.counter.prices_loaded = 0;
+    gd.counter.prices_total = 0;
+
     {
         AccountGroup *g = gnc_book_get_group(book);
         if(g) xaccFreeAccountGroup(g);
@@ -195,25 +215,35 @@ gnc_book_load_from_xml_file_v2(GNCBook *book)
     gd.addCommodityFunc = add_commodity_local;
     gd.addTransactionFunc = add_transaction_local;
     gd.addPriceDBFunc = add_pricedb_local;
+    gd.countCallback = countcallback;
     
-    parser = sixtp_new();
-
+    top_parser = sixtp_new();
+    main_parser = sixtp_new();
+    
     if(!sixtp_add_some_sub_parsers(
-           parser, TRUE,
+        top_parser, TRUE,
+        "gnc-v2", main_parser,
+        NULL, NULL))
+    {
+        return FALSE;
+    }
+    
+    if(!sixtp_add_some_sub_parsers(
+           main_parser, TRUE,
            "gnc:count-data", gnc_counter_sixtp_parser_create(),
            "gnc:pricedb", gnc_pricedb_sixtp_parser_create(),
            "gnc:commodity", gnc_commodity_sixtp_parser_create(),
-           "gnc:accout", gnc_account_sixtp_parser_create(),
-           "gnc:transactions", gnc_transaction_sixtp_parser_create(),
+           "gnc:account", gnc_account_sixtp_parser_create(),
+           "gnc:transaction", gnc_transaction_sixtp_parser_create(),
            NULL, NULL))
     {
         return FALSE;
     }
     
-    if(!sixtp_parse_file(parser, gnc_book_get_file_path(book),
+    if(!sixtp_parse_file(top_parser, gnc_book_get_file_path(book),
                          NULL, &gd, &parse_result))
     {
-        sixtp_destroy(parser);
+        sixtp_destroy(top_parser);
         return FALSE;
     }
     else
@@ -432,98 +462,9 @@ gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename)
 }
 
 /***********************************************************************/
-
-static gboolean
-eat_whitespace(char **cursor)
-{
-    while(**cursor && isspace(**cursor))
-    {
-        *cursor++;
-    }
-
-    if(**cursor == '\0')
-    {
-        return FALSE;
-    }
-    else
-    {
-        return TRUE;
-    }
-}
-
-static gboolean
-search_for(char marker, char **cursor)
-{
-    while(**cursor && **cursor != marker)
-    {
-        *cursor++;
-    }
-
-    if(**cursor == '\0')
-    {
-        return FALSE;
-    }
-    else
-    {
-        return TRUE;
-    }
-}
-
 gboolean
 gnc_is_xml_data_file_v2(const gchar *name)
 {
-  FILE *f = NULL;
-  char first_chunk[256];
-  char* cursor = NULL;
-  ssize_t num_read;
-
-  g_return_val_if_fail(name, FALSE);
-
-  f = fopen(name, "r");
-  g_return_val_if_fail(f, FALSE);
-
-  num_read = fread(first_chunk, sizeof(char), sizeof(first_chunk) - 1, f);
-  fclose(f);
-
-  if(num_read == 0) 
-  {
-      return FALSE;
-  }
-  
-  first_chunk[num_read] = '\0';
-  
-  cursor = first_chunk;
-
-  if(!eat_whitespace(&cursor))
-  {
-      return FALSE;
-  }
-  
-  if(strncmp(cursor, "<?xml", 5) == 0) 
-  {
-      if(!search_for('>', &cursor))
-      {
-          return FALSE;
-      }
-
-      if(!eat_whitespace(&cursor))
-      {
-          return FALSE;
-      }
-
-      if(strncmp(cursor, "<gnc-v2", 7) == 0)
-      {
-          return TRUE;
-      }
-      else
-      {
-          return FALSE;
-      }
-  }
-  else
-  {
-      return FALSE;
-  }
-  return FALSE;
+    return gnc_is_our_xml_file(name, "gnc-v2");
 }
 

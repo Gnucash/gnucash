@@ -24,7 +24,8 @@
 #include "config.h"
 
 #include <glib.h>
-
+#include <string.h>
+#include <ctype.h>
 #include <stdarg.h>
 
 #include "sixtp.h"
@@ -696,4 +697,104 @@ sixtp_parse_buffer(sixtp *sixtp,
         sixtp_context_destroy(ctxt);
         return FALSE;
     }
+}
+
+/***********************************************************************/
+static gboolean
+eat_whitespace(char **cursor)
+{
+    while(**cursor && isspace(**cursor))
+    {
+        (*cursor)++;
+    }
+
+    if(**cursor == '\0')
+    {
+        return FALSE;
+    }
+    else
+    {
+        return TRUE;
+    }
+}
+
+static gboolean
+search_for(char marker, char **cursor)
+{
+    while(**cursor && **cursor != marker)
+    {
+        (*cursor)++;
+    }
+
+    if(**cursor == '\0')
+    {
+        return FALSE;
+    }
+    else
+    {
+        (*cursor)++;
+        return TRUE;
+    }
+}
+
+gboolean
+gnc_is_our_xml_file(const char *filename, const char *first_tag)
+{
+  FILE *f = NULL;
+  char first_chunk[256];
+  char* cursor = NULL;
+  ssize_t num_read;
+  char *tag_compare;
+  
+  g_return_val_if_fail(filename, FALSE);
+  g_return_val_if_fail(first_tag, FALSE);
+  
+  f = fopen(filename, "r");
+  g_return_val_if_fail(f, FALSE);
+
+  tag_compare = g_strdup_printf("<%s>", first_tag);
+  
+  num_read = fread(first_chunk, sizeof(char), sizeof(first_chunk) - 1, f);
+  fclose(f);
+
+  if(num_read == 0) 
+  {
+      return FALSE;
+  }
+  
+  first_chunk[num_read] = '\0';
+  
+  cursor = first_chunk;
+
+  if(!eat_whitespace(&cursor))
+  {
+      return FALSE;
+  }
+  
+  if(strncmp(cursor, "<?xml", 5) == 0) 
+  {
+      if(!search_for('>', &cursor))
+      {
+          return FALSE;
+      }
+
+      if(!eat_whitespace(&cursor))
+      {
+          return FALSE;
+      }
+
+      if(strncmp(cursor, tag_compare, strlen(tag_compare)) == 0)
+      {
+          return TRUE;
+      }
+      else
+      {
+          return FALSE;
+      }
+  }
+  else
+  {
+      return FALSE;
+  }
+  return FALSE;
 }

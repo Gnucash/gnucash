@@ -176,11 +176,15 @@ account_parent_handler (xmlNodePtr node, gpointer act)
     Account *parent;
     GUID *gid = dom_tree_to_guid(node);
 
+    g_return_val_if_fail(gid, FALSE);
+    
     parent = xaccAccountLookup(gid);
 
+    g_return_val_if_fail(parent, FALSE);
+    
     xaccAccountInsertSubAccount(parent, (Account*)act);
 
-    xaccGUIDFree(gid);
+    /* xaccGUIDFree(gid); */
     return TRUE;
 }
 
@@ -201,8 +205,8 @@ static struct dom_tree_handler account_handlers_v2[] = {
     { "act:id", account_id_handler, 1, 0 },
     { "act:type", account_type_handler, 1, 0 },
     { "act:currency", account_currency_handler, 1, 0 },
-    { "act:code", account_code_handler, 1, 0 },
-    { "act:description", account_description_handler, 1, 0},
+    { "act:code", account_code_handler, 0, 0 },
+    { "act:description", account_description_handler, 0, 0},
     { "act:security", account_security_handler, 0, 0 },
     { "act:slots", account_slots_handler, 0, 0 },
     { "act:parent", account_parent_handler, 0, 0 },

@@ -351,32 +351,7 @@ gnc_book_load_from_xml_file(GNCBook *book)
 gboolean
 gnc_is_xml_data_file(const gchar *filename) 
 {
-  FILE *f = NULL;
-  char first_chunk[256];
-  const char* cursor = NULL;
-  ssize_t num_read;
-  gboolean result = FALSE;
-
-  g_return_val_if_fail(filename, result);
-
-  f = fopen(filename, "r");
-  if (!f)
-    return result;
-
-  num_read = fread(first_chunk, sizeof(char), sizeof(first_chunk) - 1, f);
-  if(num_read == 0) goto cleanup_and_exit;
-  first_chunk[num_read] = '\0';
-
-  cursor = first_chunk;
-  while(*cursor && isspace(*cursor)) cursor++;
-  
-  if(cursor && strncmp(cursor, "<?xml", 5) == 0) {
-    result = TRUE;
-  }
-
- cleanup_and_exit:
-  if(f) fclose(f);
-  return(result);
+    return gnc_is_our_xml_file(filename, "gnc");
 }
 
 /* ================================================================== */

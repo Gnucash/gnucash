@@ -194,5 +194,7 @@ sixtp* sixtp_add_some_sub_parsers(sixtp *tochange, gboolean cleanup, ...);
 gboolean sixtp_add_sub_parser(sixtp *parser, const gchar* tag,
                               sixtp *sub_parser);
 
+gboolean gnc_is_our_xml_file(const char *filename, const char *first_tag);
+
 
 #endif /* _SIXTP_H_ */

@@ -528,17 +528,15 @@ xaccGetPeerAccountFromFullName (Account *acc, const char * name,
 \********************************************************************/
 
 void
-xaccRemoveGroup (AccountGroup *grp)
+xaccAccountRemoveGroup (Account *acc)
 {
-  Account *acc;
-
-  if (!grp) return;
-
-  acc = grp->parent;
+  AccountGroup *grp;
 
   /* if this group has no parent, it must be the topgroup */
   if (!acc) return;
 
+  grp = acc->children;
+  
   acc->children = NULL;
 
   /* make sure that the parent of the group is marked 
@@ -555,18 +553,14 @@ xaccRemoveGroup (AccountGroup *grp)
 \********************************************************************/
 
 void
-xaccRemoveAccount (Account *acc)
+xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
 {
-  AccountGroup *grp;
-
   if (!acc) return;
-
-  grp = acc->parent;
-  acc->parent = NULL;
-
   /* this routine might be called on accounts which 
    * are not yet parented. */
   if (!grp) return;
+
+  acc->parent = NULL;
 
   grp->accounts = g_list_remove (grp->accounts, acc);
 
@@ -576,7 +570,7 @@ xaccRemoveAccount (Account *acc)
    * the group as well (unless its a root group) */
   if ((grp->accounts == NULL) && (grp->parent))
   {
-    xaccRemoveGroup (grp);
+    xaccAccountRemoveGroup (grp->parent);
     xaccFreeAccountGroup (grp);
   }
 
@@ -636,7 +630,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
   else
   {
     if (acc->parent)
-      xaccRemoveAccount (acc);
+      xaccGroupRemoveAccount (acc->parent, acc);
 
     /* set back-pointer to the account's parent */
     acc->parent = grp;

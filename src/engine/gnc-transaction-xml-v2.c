@@ -69,10 +69,14 @@ split_to_dom_tree(const gchar *tag, Split *spl)
     ret = xmlNewNode(NULL, tag);
 
     xmlAddChild(ret, guid_to_dom_tree("split:id", xaccSplitGetGUID(spl)));
-
-    if(xaccSplitGetMemo(spl))
+    
     {
-        xmlNewTextChild(ret, NULL, "split:memo", xaccSplitGetMemo(spl));
+        const char *memo = xaccSplitGetMemo(spl);
+        
+        if(memo && safe_strcmp(memo, "") != 0)
+        {
+            xmlNewTextChild(ret, NULL, "split:memo", memo);
+        }
     }
     
     {
@@ -433,7 +437,7 @@ struct dom_tree_handler trn_dom_handlers[] =
     { "trn:date-posted", trn_date_posted_handler, 1, 0 },
     { "trn:date-entered", trn_date_entered_handler, 1, 0 },
     { "trn:description", trn_description_handler, 0, 0 },
-    { "trn:slots", trn_slots_handler, 1, 0 },
+    { "trn:slots", trn_slots_handler, 0, 0 },
     { "trn:splits", trn_splits_handler, 1, 0 },
     { NULL, NULL, 0, 0 },
 };

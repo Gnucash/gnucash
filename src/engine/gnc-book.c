@@ -55,7 +55,7 @@
 #include "DateUtils.h"
 #include "io-gncxml.h"
 #include "io-gncbin.h"
-
+#include "io-gncxml-v2.h"
 
 #include "gnc-book.h"
 #include "gnc-book-p.h"
@@ -81,7 +81,8 @@ struct _gnc_book
    * global vars. This may be a temp fix if we decide to integrate
    * FileIO errors into GNCBook errors. */
   GNCBackendError last_err;
-
+  char *error_message;
+    
   /* ---------------------------------------------------- */
   /* the following struct members apply only for file-io */
   /* the fully-resolved path to the file */
@@ -104,12 +105,18 @@ static void
 gnc_book_clear_error (GNCBook *book)
 {
   book->last_err = ERR_BACKEND_NO_ERR;
+  if(book->error_message)
+  {
+      g_free(book->error_message);
+      book->error_message = NULL;
+  }
 }
 
 static void
-gnc_book_push_error (GNCBook *book, GNCBackendError err)
+gnc_book_push_error (GNCBook *book, GNCBackendError err, char *message)
 {
   book->last_err = err;
+  book->error_message = message;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -121,13 +128,27 @@ gnc_book_get_error (GNCBook * book)
   return book->last_err;
 }
 
+static const char *
+get_default_error_message(GNCBackendError err)
+{
+    return "";
+}
+
+const char *
+gnc_book_get_error_message(GNCBook *book)
+{
+    if(!book) return "";
+    if(!book->error_message) return get_default_error_message(book->last_err);
+    return book->error_message;
+}
+
 GNCBackendError
 gnc_book_pop_error (GNCBook * book)
 {
   GNCBackendError err;
   if (!book) return ERR_BACKEND_NO_BACKEND;
   err = book->last_err;
-  book->last_err = ERR_BACKEND_NO_ERR;
+  gnc_book_clear_error(book);
   return err;
 }
 
@@ -262,7 +283,7 @@ gnc_book_get_file_lock (GNCBook *book)
   if (!rc)
   {
     /* oops .. file is all locked up  .. */
-    gnc_book_push_error (book, ERR_BACKEND_LOCKED);
+    gnc_book_push_error (book, ERR_BACKEND_LOCKED, NULL);
     return FALSE;
   }
 
@@ -270,7 +291,7 @@ gnc_book_get_file_lock (GNCBook *book)
   if (book->lockfd < 0)
   {
     /* oops .. file is all locked up  .. */
-    gnc_book_push_error (book, ERR_BACKEND_LOCKED);
+    gnc_book_push_error (book, ERR_BACKEND_LOCKED, NULL);
     return FALSE;
   }
 
@@ -298,7 +319,7 @@ gnc_book_get_file_lock (GNCBook *book)
   if (rc)
   {
     /* oops .. stat failed!  This can't happen! */
-    gnc_book_push_error (book, ERR_BACKEND_LOCKED);
+    gnc_book_push_error (book, ERR_BACKEND_LOCKED, NULL);
     unlink (pathbuf);
     close (book->lockfd);
     unlink (book->lockfile);
@@ -308,7 +329,7 @@ gnc_book_get_file_lock (GNCBook *book)
   if (statbuf.st_nlink != 2)
   {
     /* oops .. stat failed!  This can't happen! */
-    gnc_book_push_error (book, ERR_BACKEND_LOCKED);
+    gnc_book_push_error (book, ERR_BACKEND_LOCKED, NULL);
     unlink (pathbuf);
     close (book->lockfd);
     unlink (book->lockfile);
@@ -322,6 +343,20 @@ gnc_book_get_file_lock (GNCBook *book)
 
 /* ---------------------------------------------------------------------- */
 
+GNCBookFileType
+gnc_book_determine_file_type(GNCBook *book)
+{
+    const gchar *name = gnc_book_get_file_path(book);
+    if(gnc_is_xml_data_file_v2(name)) {
+        return GNC_BOOK_XML2_FILE;
+    } else if(gnc_is_xml_data_file(name)) {
+        return GNC_BOOK_XML1_FILE;
+    } else {
+        return GNC_BOOK_BIN_FILE;
+    }
+}
+
+
 /* Load financial data from a file into the book, automtically
    detecting the format of the file, if possible.  Return FALSE on
    error, and set the error parameter to indicate what went wrong if
@@ -329,19 +364,34 @@ gnc_book_get_file_lock (GNCBook *book)
    way. */
 
 static gboolean
+happy_or_push_error(GNCBook *book, gboolean errret, GNCBackendError errcode)
+{
+    if(errret) {
+        return TRUE;
+    } else {
+        gnc_book_push_error(book, errcode, NULL);
+        return FALSE;
+    }
+}
+
+static gboolean
 gnc_book_load_from_file(GNCBook *book)
 {
   const gchar *name = gnc_book_get_file_path(book);
   if(!name) return FALSE;
 
-  if(gnc_is_xml_data_file(name)) {
-    if(gnc_book_load_from_xml_file(book)) {
-      return TRUE;
-    } else {
-      gnc_book_push_error(book, ERR_BACKEND_MISC);
-      return FALSE;
-    }
-  } else {
+  switch (gnc_book_determine_file_type(book))
+  {
+  case GNC_BOOK_XML2_FILE:
+      return happy_or_push_error(book,
+                                 gnc_book_load_from_xml_file_v2(book, NULL),
+                                 ERR_BACKEND_MISC);
+  case GNC_BOOK_XML1_FILE:
+      return happy_or_push_error(book,
+                                 gnc_book_load_from_xml_file(book),
+                                 ERR_BACKEND_MISC);
+  case GNC_BOOK_BIN_FILE:
+  {
     /* presume it's an old-style binary file */
     GNCBackendError error;
 
@@ -351,13 +401,16 @@ gnc_book_load_from_file(GNCBook *book)
     if(error == ERR_BACKEND_NO_ERR) {
       return TRUE;
     } else {
-      gnc_book_push_error(book, error);
+      gnc_book_push_error(book, error, NULL);
       return FALSE;
     }
   }
-  /* Should never get here */
-  gnc_book_push_error(book, ERR_BACKEND_MISC);
-  return FALSE;
+  default:
+      g_warning("File not any known type");
+      gnc_book_push_error(book, ERR_FILEIO_UNKNOWN_FILE_TYPE, NULL);
+      return FALSE;
+      break;
+  }
 }
 
 /* ---------------------------------------------------------------------- */
@@ -379,7 +432,7 @@ gnc_book_write_to_file(GNCBook *book,
   const gchar *datafile = gnc_book_get_file_path(book);
 
   if(!gnc_book_write_to_xml_file(book, datafile)) {
-    gnc_book_push_error(book, ERR_BACKEND_MISC);
+    gnc_book_push_error(book, ERR_BACKEND_MISC, NULL);
     return FALSE;
   }
 
@@ -407,13 +460,13 @@ gnc_book_write_to_file(GNCBook *book,
       free (backup);
       return TRUE;
     } else {
-      gnc_book_push_error(book, ERR_BACKEND_MISC);
+      gnc_book_push_error(book, ERR_BACKEND_MISC, NULL);
       free (backup);
       return FALSE;
     }
   }
   /* Should never get here */
-  gnc_book_push_error(book, ERR_BACKEND_MISC);
+  gnc_book_push_error(book, ERR_BACKEND_MISC, NULL);
   return FALSE;
 }
 
@@ -430,7 +483,7 @@ gnc_book_begin_file (GNCBook *book, const char * filefrag,
   book->fullpath = xaccResolveFilePath (filefrag);
   if (!book->fullpath)
   {
-    gnc_book_push_error (book, ERR_FILEIO_FILE_NOT_FOUND);
+    gnc_book_push_error (book, ERR_FILEIO_FILE_NOT_FOUND, NULL);
     return FALSE;    /* ouch */
   }
 
@@ -445,7 +498,7 @@ gnc_book_begin_file (GNCBook *book, const char * filefrag,
 
   if (!ignore_lock && !gnc_book_get_file_lock (book))
   {
-    gnc_book_push_error (book, ERR_BACKEND_LOCKED);
+    gnc_book_push_error (book, ERR_BACKEND_LOCKED, NULL);
     g_free (book->book_id);  book->book_id = NULL;
     g_free (book->fullpath); book->fullpath = NULL;
     g_free (book->lockfile); book->lockfile = NULL;
@@ -473,14 +526,14 @@ gnc_book_begin (GNCBook *book, const char * book_id,
   /* check to see if this session is already open */
   if (book->book_id)
   {
-    gnc_book_push_error (book, ERR_BACKEND_LOCKED);
+    gnc_book_push_error (book, ERR_BACKEND_LOCKED, NULL);
     return FALSE;
   }
 
   /* seriously invalid */
   if (!book_id)
   {
-    gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND);
+    gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND, NULL);
     return FALSE;
   }
 
@@ -519,7 +572,7 @@ gnc_book_begin (GNCBook *book, const char * book_id,
     g_free (filefrag);
     if (!book->fullpath)
     {
-      gnc_book_push_error (book, ERR_FILEIO_FILE_NOT_FOUND);
+      gnc_book_push_error (book, ERR_FILEIO_FILE_NOT_FOUND, NULL);
       return FALSE;    /* ouch */
     }
     PINFO ("filepath=%s\n", book->fullpath);
@@ -550,7 +603,7 @@ gnc_book_begin (GNCBook *book, const char * book_id,
         book->fullpath = NULL;
         g_free(book->book_id);
         book->book_id = NULL;
-        gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND);
+        gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND, NULL);
         return FALSE;
       }
 
@@ -566,7 +619,7 @@ gnc_book_begin (GNCBook *book, const char * book_id,
         book->fullpath = NULL;
         g_free(book->book_id);
         book->book_id = NULL;
-        gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND);
+        gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND, NULL);
         return FALSE;
       }
 
@@ -589,7 +642,7 @@ gnc_book_begin (GNCBook *book, const char * book_id,
         book->fullpath = NULL;
         g_free(book->book_id);
         book->book_id = NULL;
-        gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND);
+        gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND, NULL);
         return FALSE;
       }
 
@@ -605,7 +658,7 @@ gnc_book_begin (GNCBook *book, const char * book_id,
         book->fullpath = NULL;
         g_free(book->book_id);
         book->book_id = NULL;
-        gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND);
+        gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND, NULL);
         return FALSE;
       }
 
@@ -627,7 +680,7 @@ gnc_book_begin (GNCBook *book, const char * book_id,
         book->fullpath = NULL;
         g_free(book->book_id);
         book->book_id = NULL;
-        gnc_book_push_error (book, err);
+        gnc_book_push_error (book, err, NULL);
         return FALSE;
       }
     }
@@ -659,7 +712,7 @@ gnc_book_load (GNCBook *book)
 
     if (!book->lockfile)
     {
-      gnc_book_push_error (book, ERR_BACKEND_LOCKED);
+      gnc_book_push_error (book, ERR_BACKEND_LOCKED, NULL);
       return FALSE;
     }
       
@@ -723,7 +776,7 @@ gnc_book_load (GNCBook *book)
 
        xaccGroupSetBackend (book->topgroup, be);
 
-       gnc_book_push_error(book, xaccBackendGetError(be));
+       gnc_book_push_error(book, xaccBackendGetError(be), NULL);
        xaccLogEnable();
     }
 
@@ -732,7 +785,7 @@ gnc_book_load (GNCBook *book)
   }
   else
   {
-    gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND);
+    gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND, NULL);
     return FALSE;
   }  
 }
@@ -792,7 +845,7 @@ gnc_book_save (GNCBook *book)
     err = xaccBackendGetError(be);
     
     if (ERR_BACKEND_NO_ERR != err) {
-      gnc_book_push_error (book, err);
+      gnc_book_push_error (book, err, NULL);
       
       /* we close the backend here ... isn't this a bit harsh ??? */
       if (be->book_end) {
@@ -808,13 +861,13 @@ gnc_book_save (GNCBook *book)
 
   if (!book->fullpath)
   {
-    gnc_book_push_error (book, ERR_BACKEND_MISC);
+    gnc_book_push_error (book, ERR_BACKEND_MISC, NULL);
     return;
   }
 
   if (book->topgroup) {
     if(!gnc_book_write_to_file(book, TRUE)) {
-      gnc_book_push_error (book, ERR_BACKEND_MISC);
+      gnc_book_push_error (book, ERR_BACKEND_MISC, NULL);
     }
   }
   LEAVE(" ");

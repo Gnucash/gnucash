@@ -49,6 +49,71 @@
 	* src/gnome/window-register.c: add arguments to report window
 	for title & debit/credit strings
 
+2001-03-21  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/Account.c (xaccAccountInsertSplit): add test to not
+	remove if the account is the same.
+	(xaccAccountInsertSplit): add check to see if the split already
+	exists in the account.
+
+	* src/test/test-xml2-is-file.c (main): use simple_success_test.
+
+	* src/test/test-xml-transaction.c (test_add_transaction):
+	cleanup. use simple_success_test.
+
+	* src/test/test-xml-commodity.c (test_add_commodity): use
+	simple_success_test.
+
+	* src/test/test-xml-account.c (test_add_account): use
+	simple_success_test.
+
+	* src/test/test-string-converters.c (test_string_converters): use
+	success_with_error_args. 
+
+	* src/test/test-kvp-frames.c (test_kvp_copy_compare): use
+	simple_success_test.
+
+	* src/test/test-dom-converters1.c
+	(test_dom_tree_to_commodity_ref): user simple_success_test
+
+	* src/test/test-load-xml2.c (main): use success_test_with_error_args
+
+	* src/test/test-stuff.c (get_random_string_in_array): new func to
+	get a random string from a string array.
+	(get_random_commodity): move func here from test-xml-commodity.c
+	(success_test_with_error_args): new func.
+	(vfailure_args): new func. make failure_args call this.
+	(vsuccess_args): new func. make success_args call this.
+
+	* src/engine/io-gncxml-v2.c (gnc_book_load_from_xml_file_v2): zero
+	out totals as well.
+
+	* src/engine/gnc-book.c (gnc_book_push_error): add new parameter
+	the message string.
+	(gnc_book_push_error): Change everything to use it (adding NULL
+	everywhere) 
+	(get_default_error_message): new func to return a message based on
+	type of error.
+	(gnc_book_get_error_message): new func to return error message.
+	(gnc_book_pop_error): change to use clear error so the freeing
+	behavior of the error message doesn't have to be copied.
+	(gnc_book_clear_error): free the error message.
+
+	* src/engine/io-gncxml-v2.c (gnc_is_xml_data_file_v2): use new
+	func from sixtp.h
+
+	* src/engine/sixtp.c (gnc_is_our_xml_file): extract out v2 xml is
+	ours test code and create new func.
+	(search_for): move here from io-gncxml-v2.c
+	(eat_whitespace): likewise.
+
+	* src/engine/io-gncxml-v2.c (gnc_book_load_from_xml_file_v2): set
+	count totals to 0.
+
+	* src/gnome/cursors.c (set_cursor_helper): add NULL test for
+	window.  I think this is a timing thing found by not having the
+	window come up quickly enough.
+
 2001-03-20  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/income-expense-graph.scm,
@@ -93,6 +158,51 @@
 	* src/scm/report/income-or-expense-pie.scm: work on display
 
 	* src/scm/html-utilities.scm: add function for assigning colors
+
+2001-03-20  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/Group.c (xaccGroupRemoveAccount): rename function
+	from xaccRemoveAccount and add Group parameter to make it fit with
+	the rest better.
+	(xaccAccountRemoveGroup): rename function from xaccRemoveGroup to
+	better fit naming conventions and add Account parameter.  Actually
+	make the parameter just an Account.
+
+	* src/test/test-xml2-is-file.c (main): same as below.
+
+	* src/test/test-xml-transaction.c (main): same as below.
+
+	* src/test/test-split-vs-account.c (main): same as below.
+
+	* src/test/test-string-converters.c (main): add print_test_stats
+	call. 
+
+	* src/test/Makefile.am (STUFF): remove test-dom-parser1 because
+	it's not automated.
+
+	* src/test/test-dom-converters1.c (main): same as below.
+
+	* src/test/test-date-converting.c (main): add print_test_stats
+	call.
+
+	* src/test/test-stuff.c (print_stats): new func.
+	(success_args): print success only if set.
+	(success_args): increment successes.
+	(failure_args): increment failures.
+
+	* src/engine/gnc-transaction-xml-v2.c (split_to_dom_tree): don't
+	add a memo field with an empty string as the value.
+
+	* src/engine/sixtp-dom-parsers.c (dom_tree_to_text): don't return
+	NULL if no children.  This just means there is no text and we
+	should return a strduped "".
+
+	* src/engine/gnc-transaction-xml-v2.c (trn_dom_handlers): make
+	slots not required transaction item.
+
+	* src/engine/gnc-account-xml-v2.c: make code and description not
+	necessary. 
+	(account_parent_handler): Add tests for NULL data.
 
 2001-03-19  Dave Peticolas  <dave@krondo.com>
 
@@ -321,6 +431,13 @@
 	* src/engine/Query.c: handle NULL pointers, add api to get list
 	of splits with unique transactions
 
+2001-03-15  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/gnc-book.c (gnc_book_load_from_file): add xml v2
+	loading.  Make use new funcs (below)
+	(happy_or_push_error): new func.
+	(gnc_book_determine_file_type): new func.
+	
 2001-03-14  Dave Peticolas  <dave@krondo.com>
 
 	* rpm/gnucash.spec.in: simplify
@@ -349,6 +466,14 @@
 	request dialog parent
 
 	* doc/sgml/C/xacc-dochack.sgml: remove and fix broken links
+
+2001-03-14  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/io-gncxml-v2.c (gnc_book_load_from_xml_file_v2): Add
+	counter callback.
+	(add_account_local): add call to countCallback
+	(add_commodity_local): same
+	(add_transaction_local): same.
 
 2001-03-13  Dave Peticolas  <dave@krondo.com>
 
@@ -383,6 +508,11 @@
 	* macros/: update m4 files
 
 2001-03-13  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/test/test-stuff.c (get_random_string): sometimes generate
+	empty strings and NULL (10% each).
+	(get_random_string): and 10% of the time generate a larger string.
+	(get_random_character): Generate better characters.
 
 	* src/engine/io-gncxml-v2.c (gnc_counter_end_handler): complete
 	func. 

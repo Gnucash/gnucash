@@ -35,7 +35,8 @@ typedef enum {
   ERR_FILEIO_FILE_NOT_FOUND, /* not found / no such file */
   ERR_FILEIO_FILE_TOO_NEW,   /* file version newer than what we can read */
   ERR_FILEIO_FILE_TOO_OLD,   /* file version so old we can't read it */
-
+  ERR_FILEIO_UNKNOWN_FILE_TYPE,
+  
   /* network errors */
   ERR_NETIO_NO_CONNECTION,      /* network failure, can't connect to server */
   ERR_NETIO_SHORT_READ,         /* not enough bytes received */

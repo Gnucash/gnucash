@@ -280,6 +280,9 @@ xaccStoreEntity(void * entity, const GUID * guid, GNCIdType entity_type)
   e_node->entity = entity;
 
   new_guid = xaccGUIDMalloc();
+
+  if(!new_guid) return;
+  
   *new_guid = *guid;
 
   g_hash_table_insert(entity_table, new_guid, e_node);

@@ -277,6 +277,16 @@ pricedb_v2_end_handler(
     GNCPriceDB *db = (GNCPriceDB*)result;
     sixtp_gdv2* globaldata = (sixtp_gdv2*)global_data;
 
+    if(parent_data)
+    {
+        return TRUE;
+    }
+
+    if(!tag)
+    {
+        return TRUE;
+    }
+    
     globaldata->addPriceDBFunc(globaldata, db);
 
     return TRUE;

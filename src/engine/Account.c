@@ -336,7 +336,7 @@ xaccAccountCommitEdit (Account *acc)
   /* final stages of freeing the account */
   if (acc->do_free)
   {
-    xaccRemoveAccount(acc);
+    xaccGroupRemoveAccount(acc->parent, acc);
     xaccFreeAccount(acc);
   }
 }
@@ -642,22 +642,27 @@ xaccAccountInsertSplit (Account *acc, Split *split)
      * first.  We don't want to ever leave the system in an inconsistent
      * state.  Note that it might belong to the current account if we're
      * just using this call to re-order.  */
-  if (xaccSplitGetAccount(split))
+  if (xaccSplitGetAccount(split) &&
+      xaccSplitGetAccount(split) != acc)
       xaccAccountRemoveSplit (xaccSplitGetAccount(split), split);
   xaccSplitSetAccount(split, acc);
 
-  if (acc->editlevel == 1)
+  if(g_list_index(acc->splits, split) == -1)
   {
-      acc->splits = g_list_insert_sorted(acc->splits, split, split_sort_func);
-      acc->sort_dirty = FALSE;
+      if (acc->editlevel == 1)
+      {
+          acc->splits = g_list_insert_sorted(acc->splits, split,
+                                             split_sort_func);
+          acc->sort_dirty = FALSE;
+      }
+      else
+          acc->splits = g_list_prepend(acc->splits, split);
+
+      mark_account (acc);
+      if (split->parent)
+          gnc_engine_generate_event (&split->parent->guid, GNC_EVENT_MODIFY);
   }
-  else
-      acc->splits = g_list_prepend(acc->splits, split);
-
-  mark_account (acc);
-  if (split->parent)
-      gnc_engine_generate_event (&split->parent->guid, GNC_EVENT_MODIFY);
-
+  
   xaccAccountCommitEdit(acc);
 }
 

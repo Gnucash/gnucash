@@ -43,6 +43,7 @@ struct sixtp_global_data_v2_struct
     char *tag;
 
     load_counter counter;
+    void (*countCallback)(const char *type, load_counter counter);
     
     gboolean (*addAccountFunc)(struct sixtp_global_data_v2_struct *data,
                                Account *act);
@@ -57,7 +58,9 @@ struct sixtp_global_data_v2_struct
 typedef struct sixtp_global_data_v2_struct sixtp_gdv2;
 
 /* read in an account group from a file */
-gboolean gnc_book_load_from_xml_file_v2(GNCBook *book);
+gboolean gnc_book_load_from_xml_file_v2(
+    GNCBook *book,
+    void (*countcallback)(const char *type, load_counter count));
 
 /* write all account info to a file */
 gboolean gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename);

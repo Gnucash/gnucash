@@ -116,6 +116,12 @@ show_book_error (GNCBackendError io_error, const char *newfile)
       if (gnc_verify_dialog (fmt, TRUE)) { uh_oh = FALSE; }
       break;
 
+    case ERR_FILEIO_UNKNOWN_FILE_TYPE:
+      fmt = _("Unknown file type");
+      buf = g_strdup_printf (fmt, newfile);
+      gnc_error_dialog(buf);
+      break;
+      
     case ERR_SQL_BAD_LOCATION:
       fmt = _("Can't parse the database URL\n   %s\n");
       buf = g_strdup_printf (fmt, newfile);
