@@ -67,15 +67,21 @@ http://www.cs.hmc.edu/~rclark/xacc
 
 Running:
 --------
-The binary-only distribution includes two files: 'xacc' and
-'xacc-static'. The former requires a Motif shared library;
+The binary-only distribution includes two binary files: 'xacc.bin'
+and 'xacc-static.bin'. The former requires a Motif shared library;
 the latter has Motif statically linked in.  If you have Motif,
 then just run xacc.  If you do not have Motif, then copy 
-'xacc-static' to 'xacc'.
+'xacc-static.bin' to 'xacc.bin'.
 
 Access to the on-line help documentation requires the that
 the environment variable XACC_HELP be set to the 'Docs'
-directory.  For example, for csh/tcsh, 
+directory.  The 'xacc' shell script sets this variable to
+the configured directory before running the main program,
+so you don't have to set this by hand.
+
+If you want to override the path to the Docs directory:
+
+For csh/tcsh
 
 % setenv XACC_HELP /usr/local/share/xacc/Docs
 

@@ -6,8 +6,24 @@ http://www.cs.hmc.edu/~rclark/xacc/download/xacc-1.0b11-linux-i386-bin.tar.gz
 
 Copyright:
 
-X-Accountant is GPL, see /usr/doc/copyright for a copy of the GNU GPL
-license.
+	Copyright (C) 1997 Robin D. Clark
+	Copyright (C) 1997 Linas Vepstas
+
+	This program is free software; you can redistribute it and/or 
+	modify it under the terms of the GNU General Public License as
+	published by the Free Software Foundation; either version 2 of
+	the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of 
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public
+	License along with this program; if not, write to the Free
+	Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+
+See /usr/doc/copyright for a copy of the GNU GPL license.
 
 The source package includes the Motif widget ComboBox-1.33, which is GPL:
 
@@ -49,7 +65,7 @@ XbaeMatrix, which is available under a BSD-like license:
 	DAMAGES RELATING TO THE INFORMATION.
 
 The source package includes a modified version of the Motif widget
-XbaeMatrix, which is available under a BSD-like license:
+XmHTML, which is available under the GNU GPL:
 
 	This is a public BETA release of XmHTML, a Motif Widget capable of
 	rendering HTML3.2 conforming documents.
@@ -69,4 +85,30 @@ XbaeMatrix, which is available under a BSD-like license:
 	You should have received a copy of the GNU Library General Public
 	License along with this library; if not, write to the Free
 	Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+The source package includes a modified version of the Motif widget
+ComboBox, which is available under the GNU GPL:
+
+	(c) 1993, 1994, 1995 Harald Albrecht
+	Institut fuer Geometrie und Praktische Mathematik
+	RWTH Aachen, Germany
+	albrecht@igpm.rwth-aachen.de
+
+	(c) 1997 Linas Vepstas
+	linas@linas.org
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License as
+	published by the Free Software Foundation; either version 2 of the
+	License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program (see the file COPYING for more details);
+	if not, write to the Free Software Foundation, Inc., 675 Mass Ave, 
+	Cambridge, MA 02139, USA.
 

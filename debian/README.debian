@@ -2,8 +2,6 @@ xacc for DEBIAN
 ----------------------
 
 The documentation is installed in /usr/doc/xacc.
-I've replaced "xacc" with a shell script which sets XACC_HELP
-and then runs the binary "xacc.bin", so you don't need to set
-XACC_HELP.
+The sample data files are in /usr/doc/xacc/samples.
 
 Tyson Dowd <trd@cs.mu.oz.au>, Fri, 19 Dec 1997 00:55:55 +1100

@@ -1,4 +1,0 @@
-#!/bin/sh
-XACC_HELP=${XACC_HELP:-/usr/share/xacc/Docs}
-export XACC_HELP
-exec xacc.bin $@
