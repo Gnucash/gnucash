@@ -1,0 +1,227 @@
+
+############## WARNING ######################
+********** ALPHA DEVELOPMENT RELEASE ********
+
+THIS IS VERSION 1.1, WHICH IS AN ALPHA RELEASE,
+AND VERY, VERY BROKEN.  IT IS FOR DEVELOPERS ONLY!!
+
+IF YOU WANT TO USE XACC, USE VERSION 1.0 INSTEAD!!
+##############################################
+
+
+X-Accountant
+------------
+
+xacc ist ein Programm zur Verwaltung persönlicher Finanzen mit einem
+ähnlichen Konzept wie Quicken(TM). Obwohl einige Spezialfunktionen von
+Quicken noch fehlen, sind die Basisfunktionen implementiert. Einige
+Funktionen sind:
+
+  - Verwaltung mehrerer Konten.
+  - Für jedes Konto wird sowohl der aktuelle Stand als
+    auch der Stand nicht bestätigter Buchungen gehalten.
+  - Ein einfaches Benutzerinterface: wer einen Kontoauszug
+    versteht, kann xacc verwenden.
+  - QuickFill: wenn ein Beschreibungstext für eine Buchung
+    mit einem vorangehenden Text identisch ist, kann er
+    mit <TAB> automatisch komplettiert werden (z.B. für
+    regelmäßige Buchungen wie das Gehalt).
+  - Handhabung von Aktien- und Fondsportfolios: der 
+    aktuelle Stand kann einzeln (eine Aktie = ein Konto)
+    oder als Portfolio (alle Aktien = ein Konto)
+    verwaltet werden.
+  - Import von Dateien im Quicken Interchange Format 
+    (QIF).
+
+
+Erweiterte Funktionen
+---------------------
+
+X-Accountant verfügt über erweiterte Funktionen, wie man sie nicht in
+einfacheren Programmem findet:
+
+  - Unterkonten: Ein Hauptkonto kann über eine hierarchische 
+    Struktur von detaillierteren Unterkonten verfügen. So 
+    können ähnliche Kontentypen (z.B. Kasse, Giro, Aktien)
+    zu einem Hauptkonto (z.B. Haben)  zusammengefaßt werden.
+  - Doppelte Buchführung: Jede Buchung kann in zwei Konten
+    auftreten: ein Konto wird mit dem Betrag belastet, auf
+    das zweite wird derselbe Betrag gutgeschrieben. Mit
+    doppelter Buchführung werden bei Modifikation einer
+    Buchung alle aktive Fenster und beide betroffenen
+    Konten aktualisiert. 
+  - Kategorien von Einnahme/Ausgabe-Konten.
+    Zusammen mit der Doppelten Buchführung können sie
+    die Kontenübersicht und die Gewinn/Verlutrechung
+    automatisieren. Z.B. können Guthabenzinsen, Dividenden
+    und Gehaltszahlungen mittels doppelter Buchführung
+    sowohl als Einzahlung auf das Bankkonto als auch als
+    Einkommen für das entsprechende, dem Bankkonto 
+    untergeordnete Einkommenskonto gebucht werden. In 
+    gleicher Weise können Forderungen von der Kreditkarte
+    simultan im Kreditkartenkonto als auch im entsprechenden
+    Unterkonto für Ausgaben gebucht werden.
+  - Hauptbuch: mehrere Konten können gemeinsam in einer
+    einzigen Buchungsliste angezeigt werden. So können
+    z.B. Tippfehler in allen Buchungen bereinigt werden,
+    oder es können alle Aktienstände gemeinsam dargestellt
+    werden.
+
+Home Page:
+----------
+http://www.cs.hmc.edu/~rclark/xacc
+
+
+Wichtig:
+--------
+
+Mit lesstif Version 0.82 wurden zahlreiche Programmabstürze
+gemeldet. Diese treten mit Version 0.81 und mit RedHat Motif nicht
+auf. Bei Problemen sollte zuerst die statisch mit Motif gelinkte
+Version verwendet werden (siehe unten).
+
+
+Ausführen von xacc:
+-------------------
+
+Die Binärdistribution beinhaltet zwei Dateien: 'xacc.bin' und
+'xacc-static.bin'. Erstere benötigt eine (kommerziell erhältliche)
+Laufzeitbibliothek für Motif; die zweite ist statisch mit Motif
+gelinkt. Wenn Sie Motif installiert haben, starten sie einfach xacc;
+wenn nicht müssen sie erst 'xacc-static.bin' auf 'xacc.bin' kopieren.
+
+Für die xacc-Dokumentation muß die Environment-Variable XACC_HELP auf
+das 'Docs'-Unterverzeichnis zeigen. Das 'xacc' Shell-Skript setzt
+diese Variable auf den vorkonfigurierten Wert, sodaß sie nicht von
+Hand gesetzt werden muß.
+
+Ändern des vorkonfigurierten Wertes für das 'Docs'-Verzeichnis:
+
+Mit csh/tcsh-Shells:
+
+% setenv XACC_HELP /usr/local/share/xacc/Docs
+
+Mit bash/bsh/ksh/sh-Shells:
+
+% set XACC_HELP=/usr/local/share/xacc/Docs
+% export XACC_HELP
+
+Von der Kommandozeile wird das Programm mit 'xacc' oder 'xacc
+<dateiname>' gestartet, wobei '<dateiname>' eine xacc-Kontodatei
+ist. Beispieldateien befinden sich im Unterverzeichnis 'data'. Dateien
+mit der Endung '.dat' können mit dem Menüeintrag 'Datei Öffnen'
+geladen werden, Dateien mit der Endug '.qif' sind im Quicken Import
+Format und werden mit dem Menüeintrag 'QIF Importieren' geladen.
+
+
+Übersetzung und Installation
+----------------------------
+
+Diese Schritte sind nur für die Sourcedistribution erforderlich, nicht
+für die Binärdistribution.
+
+Normalerweise wird xacc wie folgt übersetzt und installiert:
+
+  # ./configure
+  # make depend
+  # make
+  # make install
+
+Alternativ kann das Programm auch in einem separaten Verzeichnis
+übersetzt werden, z.B. um Testversionen oder für unterschiedliche
+Rechnerplattformen zu übersetzen:
+
+  # mkdir BUILD
+  # mkdir BUILD/debug
+  # cd BUILD/debug
+  # ../../configure --enable-debug
+  # make depend
+  # make
+  # make install
+
+
+*********************** Rest of document not updated yet ******************
+
+Quick translation table for financial terms:
+
+English				German
+account				Konto
+reconcile an account		Konto ausgleichen
+stock				Aktien
+mutual funds			Aktienfonds (?)
+assets				Haben/Aktiva (?)
+debits				Verbindlichkeiten/Soll/Passiva (?)
+double entry			doppelte Buchführung
+general ledger			Hauptbuch
+
+
+
+Status:
+-------
+As of version 1.0.16:
+
+xacc is known to work in the following configs:
+Linux 2.0.x           -- Intel  w/ RedHat Motif
+Slackware 3.4         -- Intel  w/ Mootif (OSF Motif 2.0.1)
+Linux 2.0.x           -- Intel  w/ Lesstif v0.81
+SGI IRIX              -- 
+IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
+Unixware 7            -- Intel
+SCO OpenServer 5.0.4  -- Intel
+
+See http://linas.org/linux/xacc for precompiled binaries for these platforms
+
+xacc seems to be having problems with:
+Solaris -- Sparc  -- won't compile due to va-args in XmHTML
+Linux 2.0.x -- Intel w/ Lesstif v0.82
+
+Download Sites:
+---------------
+All of the precompiled binaries & the latest source versions can be found
+at http://linas.org/linux/xacc  However, it is recommended that the master
+sites for each particular binary be used instead, for two reasons:
+1) bandwidth
+2) OS-specific info & support
+
+IBM AIX 4.1.5 
+      -- SMIT-installable images 
+      http://www.bull.de/pub/
+      see also http://www-frec.bull.com/
+
+SCO OpenServer 5.0.4 
+      http://www.sco.com/skunkware/osr5/x11/apps/xacc/VOLS.tar
+
+Unixware 7
+      -- use pkgadd to install
+      http://www.sco.com/skunkware/uw7/x11/apps/xacc/xacc.pkg.gz
+
+SGI Irix
+      -- in SGI install format
+      -- warning, this is a very down-level version
+      http://linas.org/linux/xacc/xacc-1.0b7-sgi-irix.inst.tar
+
+Linux Debian
+      -- use debian tools to install
+      http://linas.org/linux/xacc/xacc_1.0.15-1_i386.deb
+
+That's all folks!
+
+Main Developers:
+----------------
+Robin Clark <rclark@hmc.edu> for original xacc
+Linas Vepstas <linas@lins.org> for extensive enhancements
+
+Fixes & Patches:
+----------------
+George Chen <georgec@sco.com> for MS-Money QIF's & fixes
+Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
+Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
+Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
+Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
+Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
+Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
+Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
+Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
+Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
+... and I am sure that I have missed many others ...
+
