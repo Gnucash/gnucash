@@ -67,17 +67,23 @@ gnc_hbci_get_password (GtkWidget *parent,
 
   gtk_widget_grab_focus (password_entry);
 
+  /* Hide on close instead of destroy since we still need the values
+     from the boxes. */
+  gnome_dialog_close_hides (GNOME_DIALOG (dialog), TRUE);
+
   result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
 
   if (result == 0)
   {
     *password = gtk_editable_get_chars (GTK_EDITABLE (password_entry), 0, -1);
 
+    gtk_widget_destroy (GTK_WIDGET (dialog));
     return TRUE;
   }
 
   *password = NULL;
 
+  gtk_widget_destroy (GTK_WIDGET (dialog));
   return FALSE;
 }
 
@@ -120,6 +126,10 @@ gnc_hbci_get_initial_password (GtkWidget *parent,
 
   gtk_widget_grab_focus (password_entry);
 
+  /* Hide on close instead of destroy since we still need the values
+     from the boxes. */
+  gnome_dialog_close_hides (GNOME_DIALOG (dialog), TRUE);
+
   while (TRUE) {
     result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
     
@@ -132,6 +142,7 @@ gnc_hbci_get_initial_password (GtkWidget *parent,
 	if (strcmp (pw, confirm) == 0) {
 	  *password = pw;
 	  g_free (confirm);
+	  gtk_widget_destroy (GTK_WIDGET (dialog));
 	  return TRUE;
 	}
 	g_free (pw);
@@ -149,5 +160,6 @@ gnc_hbci_get_initial_password (GtkWidget *parent,
       break;
   }
   *password = NULL;
+  gtk_widget_destroy (GTK_WIDGET (dialog));
   return FALSE;
 }
