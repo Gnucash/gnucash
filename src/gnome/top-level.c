@@ -386,7 +386,7 @@ gnc_configure_account_separator_cb(void *data)
 }
 
 /* gnc_configure_account_separator
- *    sets the accoutn separator to the
+ *    sets the account separator to the
  *    current value on the scheme side
  *
  * Args: Nothing

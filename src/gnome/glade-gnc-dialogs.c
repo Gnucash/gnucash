@@ -2668,6 +2668,12 @@ create_Budget_Dialog (void)
 {
   GtkWidget *Budget_Dialog;
   GtkWidget *dialog_vbox9;
+  GtkWidget *frame24;
+  GtkWidget *hbox45;
+  GtkWidget *vbox59;
+  GtkWidget *label785;
+  GtkWidget *vbox60;
+  GtkWidget *budget_name_entry;
   GtkWidget *hbox40;
   GtkWidget *frame21;
   GtkWidget *vbox58;
@@ -2684,7 +2690,7 @@ create_Budget_Dialog (void)
   GtkWidget *up_button;
   GtkWidget *down_button;
   GtkWidget *vbox52;
-  GtkWidget *frame22;
+  GtkWidget *entry_frame;
   GtkWidget *hbox34;
   GtkWidget *vbox54;
   GtkWidget *label774;
@@ -2696,7 +2702,7 @@ create_Budget_Dialog (void)
   GtkWidget *entry_type_menu_menu;
   GtkWidget *glade_menuitem;
   GtkWidget *match_button;
-  GtkWidget *frame23;
+  GtkWidget *subentry_frame;
   GtkWidget *hbox35;
   GtkWidget *vbox56;
   GtkWidget *label777;
@@ -2729,14 +2735,61 @@ create_Budget_Dialog (void)
   gtk_object_set_data (GTK_OBJECT (Budget_Dialog), "dialog_vbox9", dialog_vbox9);
   gtk_widget_show (dialog_vbox9);
 
+  frame24 = gtk_frame_new (_("Budget"));
+  gtk_widget_ref (frame24);
+  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "frame24", frame24,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame24);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox9), frame24, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame24), 3);
+
+  hbox45 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox45);
+  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "hbox45", hbox45,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox45);
+  gtk_container_add (GTK_CONTAINER (frame24), hbox45);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox45), 3);
+
+  vbox59 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox59);
+  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "vbox59", vbox59,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox59);
+  gtk_box_pack_start (GTK_BOX (hbox45), vbox59, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox59), 3);
+
+  label785 = gtk_label_new (_("Name:"));
+  gtk_widget_ref (label785);
+  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "label785", label785,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label785);
+  gtk_box_pack_start (GTK_BOX (vbox59), label785, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label785), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label785), 1, 0.5);
+
+  vbox60 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox60);
+  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "vbox60", vbox60,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox60);
+  gtk_box_pack_start (GTK_BOX (hbox45), vbox60, TRUE, TRUE, 0);
+
+  budget_name_entry = gtk_entry_new ();
+  gtk_widget_ref (budget_name_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "budget_name_entry", budget_name_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (budget_name_entry);
+  gtk_box_pack_start (GTK_BOX (vbox60), budget_name_entry, TRUE, TRUE, 0);
+
   hbox40 = gtk_hbox_new (FALSE, 0);
   gtk_widget_ref (hbox40);
   gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "hbox40", hbox40,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (hbox40);
-  gtk_box_pack_start (GTK_BOX (dialog_vbox9), hbox40, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox9), hbox40, TRUE, TRUE, 0);
 
-  frame21 = gtk_frame_new (_("Budget"));
+  frame21 = gtk_frame_new (_("Budget Entries"));
   gtk_widget_ref (frame21);
   gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "frame21", frame21,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -2781,6 +2834,7 @@ create_Budget_Dialog (void)
   gtk_widget_show (entry_tree);
   gtk_container_add (GTK_CONTAINER (scrolledwindow6), entry_tree);
   gtk_clist_set_column_width (GTK_CLIST (entry_tree), 0, 80);
+  gtk_clist_set_selection_mode (GTK_CLIST (entry_tree), GTK_SELECTION_BROWSE);
   gtk_clist_column_titles_hide (GTK_CLIST (entry_tree));
 
   label773 = gtk_label_new (_("label773"));
@@ -2851,20 +2905,20 @@ create_Budget_Dialog (void)
   gtk_widget_show (vbox52);
   gtk_box_pack_start (GTK_BOX (hbox40), vbox52, FALSE, FALSE, 0);
 
-  frame22 = gtk_frame_new (_("Entry"));
-  gtk_widget_ref (frame22);
-  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "frame22", frame22,
+  entry_frame = gtk_frame_new (_("Entry"));
+  gtk_widget_ref (entry_frame);
+  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "entry_frame", entry_frame,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (frame22);
-  gtk_box_pack_start (GTK_BOX (vbox52), frame22, FALSE, FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (frame22), 3);
+  gtk_widget_show (entry_frame);
+  gtk_box_pack_start (GTK_BOX (vbox52), entry_frame, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (entry_frame), 3);
 
   hbox34 = gtk_hbox_new (FALSE, 0);
   gtk_widget_ref (hbox34);
   gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "hbox34", hbox34,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (hbox34);
-  gtk_container_add (GTK_CONTAINER (frame22), hbox34);
+  gtk_container_add (GTK_CONTAINER (entry_frame), hbox34);
   gtk_container_set_border_width (GTK_CONTAINER (hbox34), 3);
 
   vbox54 = gtk_vbox_new (TRUE, 0);
@@ -2938,20 +2992,20 @@ create_Budget_Dialog (void)
   gtk_widget_show (match_button);
   gtk_box_pack_start (GTK_BOX (vbox55), match_button, TRUE, TRUE, 0);
 
-  frame23 = gtk_frame_new (_("Sub-entry"));
-  gtk_widget_ref (frame23);
-  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "frame23", frame23,
+  subentry_frame = gtk_frame_new (_("Subentry"));
+  gtk_widget_ref (subentry_frame);
+  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "subentry_frame", subentry_frame,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (frame23);
-  gtk_box_pack_start (GTK_BOX (vbox52), frame23, FALSE, FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (frame23), 3);
+  gtk_widget_show (subentry_frame);
+  gtk_box_pack_start (GTK_BOX (vbox52), subentry_frame, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (subentry_frame), 3);
 
   hbox35 = gtk_hbox_new (FALSE, 0);
   gtk_widget_ref (hbox35);
   gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "hbox35", hbox35,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (hbox35);
-  gtk_container_add (GTK_CONTAINER (frame23), hbox35);
+  gtk_container_add (GTK_CONTAINER (subentry_frame), hbox35);
   gtk_container_set_border_width (GTK_CONTAINER (hbox35), 3);
 
   vbox56 = gtk_vbox_new (TRUE, 0);
@@ -3133,6 +3187,15 @@ create_Budget_Dialog (void)
 
   gtk_signal_connect (GTK_OBJECT (Budget_Dialog), "destroy",
                       GTK_SIGNAL_FUNC (on_Budget_Dialog_destroy),
+                      Budget_Dialog);
+  gtk_signal_connect (GTK_OBJECT (entry_tree), "tree_select_row",
+                      GTK_SIGNAL_FUNC (on_budget_entry_tree_tree_select_row),
+                      Budget_Dialog);
+  gtk_signal_connect (GTK_OBJECT (entry_tree), "tree_unselect_row",
+                      GTK_SIGNAL_FUNC (on_budget_entry_tree_tree_unselect_row),
+                      Budget_Dialog);
+  gtk_signal_connect (GTK_OBJECT (cancel_button), "clicked",
+                      GTK_SIGNAL_FUNC (on_budget_cancel_button_clicked),
                       Budget_Dialog);
 
   return Budget_Dialog;

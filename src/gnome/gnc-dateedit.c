@@ -2,14 +2,12 @@
  * Copyright (C) 1997, 1998, 1999, 2000 Free Software Foundation
  * All rights reserved.
  *
- * This file is part of the Gnome Library.
- *
- * The Gnome Library is free software; you can redistribute it and/or
+ * Gnucash is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
  * as published by the Free Software Foundation; either version 2 of the
  * License, or (at your option) any later version.
  *
- * The Gnome Library is distributed in the hope that it will be useful,
+ * Gnucash is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
@@ -346,7 +344,7 @@ gnc_date_edit_class_init (GNCDateEditClass *class)
 	object_class = (GtkObjectClass*) class;
 
 	parent_class = gtk_type_class (gtk_hbox_get_type ());
-	
+
 	date_edit_signals [TIME_CHANGED] =
 		gtk_signal_new ("time_changed",
 				GTK_RUN_FIRST, object_class->type, 
@@ -354,7 +352,7 @@ gnc_date_edit_class_init (GNCDateEditClass *class)
                                                    time_changed),
 				gtk_signal_default_marshaller,
                                 GTK_TYPE_NONE, 0);
-	
+
 	date_edit_signals [DATE_CHANGED] =
 		gtk_signal_new ("date_changed",
 				GTK_RUN_FIRST, object_class->type, 

@@ -1,3 +1,14 @@
+2000-04-25  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/engine/guid/guid.c (guid_init): add hostname and domainname
+ 	to the mix.
+
+	* src/engine/AccInfo.c (xaccAccountTypesCompatible): relax the
+ 	restrictions on account types. Go to three groups: asset &
+ 	liability, income & expense, equity.
+
+	* src/engine/FileIO.c: no need to free NULL pointers.
+
 2000-04-24  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/scm/report/average-balance.scm: the min and max columns

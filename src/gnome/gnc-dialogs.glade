@@ -4071,6 +4071,12 @@ Exactly
 	<name>cancel_button</name>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
+	<signal>
+	  <name>clicked</name>
+	  <handler>on_budget_cancel_button_clicked</handler>
+	  <data>Budget_Dialog</data>
+	  <last_modification_time>Wed, 26 Apr 2000 07:30:13 GMT</last_modification_time>
+	</signal>
 	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
       </widget>
 
@@ -4084,10 +4090,12 @@ Exactly
     </widget>
 
     <widget>
-      <class>GtkHBox</class>
-      <name>hbox40</name>
-      <homogeneous>False</homogeneous>
-      <spacing>0</spacing>
+      <class>GtkFrame</class>
+      <name>frame24</name>
+      <border_width>3</border_width>
+      <label>Budget</label>
+      <label_xalign>0</label_xalign>
+      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
       <child>
 	<padding>0</padding>
 	<expand>False</expand>
@@ -4095,11 +4103,88 @@ Exactly
       </child>
 
       <widget>
+	<class>GtkHBox</class>
+	<name>hbox45</name>
+	<border_width>3</border_width>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+
+	<widget>
+	  <class>GtkVBox</class>
+	  <name>vbox59</name>
+	  <border_width>3</border_width>
+	  <homogeneous>True</homogeneous>
+	  <spacing>0</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <name>label785</name>
+	    <label>Name:</label>
+	    <justify>GTK_JUSTIFY_RIGHT</justify>
+	    <wrap>False</wrap>
+	    <xalign>1</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkVBox</class>
+	  <name>vbox60</name>
+	  <homogeneous>True</homogeneous>
+	  <spacing>0</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkEntry</class>
+	    <name>budget_name_entry</name>
+	    <can_focus>True</can_focus>
+	    <editable>True</editable>
+	    <text_visible>True</text_visible>
+	    <text_max_length>0</text_max_length>
+	    <text></text>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GtkHBox</class>
+      <name>hbox40</name>
+      <homogeneous>False</homogeneous>
+      <spacing>0</spacing>
+      <child>
+	<padding>0</padding>
+	<expand>True</expand>
+	<fill>True</fill>
+      </child>
+
+      <widget>
 	<class>GtkFrame</class>
 	<child_name>GnomeDock:contents</child_name>
 	<name>frame21</name>
 	<border_width>3</border_width>
-	<label>Budget</label>
+	<label>Budget Entries</label>
 	<label_xalign>0</label_xalign>
 	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	<child>
@@ -4144,9 +4229,21 @@ Exactly
 		  <class>GtkCTree</class>
 		  <name>entry_tree</name>
 		  <can_focus>True</can_focus>
+		  <signal>
+		    <name>tree_select_row</name>
+		    <handler>on_budget_entry_tree_tree_select_row</handler>
+		    <data>Budget_Dialog</data>
+		    <last_modification_time>Thu, 27 Apr 2000 03:28:06 GMT</last_modification_time>
+		  </signal>
+		  <signal>
+		    <name>tree_unselect_row</name>
+		    <handler>on_budget_entry_tree_tree_unselect_row</handler>
+		    <data>Budget_Dialog</data>
+		    <last_modification_time>Thu, 27 Apr 2000 03:28:17 GMT</last_modification_time>
+		  </signal>
 		  <columns>1</columns>
 		  <column_widths>80</column_widths>
-		  <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+		  <selection_mode>GTK_SELECTION_BROWSE</selection_mode>
 		  <show_titles>False</show_titles>
 		  <shadow_type>GTK_SHADOW_IN</shadow_type>
 
@@ -4263,7 +4360,7 @@ Exactly
 
 	<widget>
 	  <class>GtkFrame</class>
-	  <name>frame22</name>
+	  <name>entry_frame</name>
 	  <border_width>3</border_width>
 	  <label>Entry</label>
 	  <label_xalign>0</label_xalign>
@@ -4403,9 +4500,9 @@ No Total
 
 	<widget>
 	  <class>GtkFrame</class>
-	  <name>frame23</name>
+	  <name>subentry_frame</name>
 	  <border_width>3</border_width>
-	  <label>Sub-entry</label>
+	  <label>Subentry</label>
 	  <label_xalign>0</label_xalign>
 	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	  <child>
