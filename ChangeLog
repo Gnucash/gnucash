@@ -1,3 +1,8 @@
+2002-11-18  Benoit Grégoire  <bock@step.polymtl.ca>
+	* src/import-export/Transaction-matcher.c: Remove constant length 
+	strings and replace with moving pointers.  I wish _("string") 
+	could be used as a could initializer like "string" can...
+
 2002-11-17  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-sxsincelast.c: 

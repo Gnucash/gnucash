@@ -84,13 +84,19 @@ struct _transmatcherdialog {
   GtkCList * downloaded_clist;
   GtkCList * match_clist;
   struct _transactioninfo * selected_trans_info;
+
+  char * action_add_text;
+  char * action_reconcile_text;       
+  char * action_replace_text;       
+  char * action_ignore_text;
 };
 
 struct _transactioninfo
 {
+
   Transaction * trans;
   Split * first_split;
-  char action_text[10];
+  const char * action_text;
   char date_text[20];
   char amount_text[20];
   char balance_text[20];
@@ -320,13 +326,13 @@ static void downloaded_transaction_refresh_gui( struct _transmatcherdialog * mat
 					    transaction_info);
   switch(transaction_info->action)
     {
-    case ADD: strncpy(transaction_info->action_text,_("ADD"),sizeof(transaction_info->action_text));
+    case ADD: transaction_info->action_text = matcher->action_add_text;
       break;
-    case RECONCILE: strncpy(transaction_info->action_text,_("RECONCILE"),sizeof(transaction_info->action_text));
+    case RECONCILE: transaction_info->action_text= matcher->action_reconcile_text;
       break;
-    case REPLACE: strncpy(transaction_info->action_text,_("REPLACE"),sizeof(transaction_info->action_text));
+    case REPLACE:transaction_info->action_text=matcher->action_replace_text;
       break;
-    case IGNORE: strncpy(transaction_info->action_text,_("IGNORE"),sizeof(transaction_info->action_text));
+    case IGNORE: transaction_info->action_text=matcher->action_ignore_text;
       break;
     default:
       PERR("Unknown action");
@@ -610,6 +616,10 @@ on_matcher_cancel_clicked (GtkButton *button,
   gtk_clist_clear(matcher->downloaded_clist);
   matcher->initialised=FALSE;
   gtk_widget_destroy(matcher->transaction_matcher);
+  g_free (matcher->action_add_text);
+  g_free (matcher->action_reconcile_text);
+  g_free (matcher->action_replace_text);    
+  g_free (matcher->action_ignore_text);
 }
 
 static void 
@@ -691,6 +701,11 @@ init_matcher_gui(struct _transmatcherdialog * matcher)
   matcher->transaction_matcher = glade_xml_get_widget (xml, "transaction_matcher");
   matcher->downloaded_clist = (GtkCList *)glade_xml_get_widget (xml, "downloaded_clist");
   matcher->match_clist =  (GtkCList *)glade_xml_get_widget (xml, "match_clist");
+
+  matcher->action_add_text = g_strdup(_("ADD"));
+  matcher->action_reconcile_text =  g_strdup(_("RECONCILE"));       
+  matcher->action_replace_text =  g_strdup(_("REPLACE"));       
+  matcher->action_ignore_text =  g_strdup(_("IGNORE"));
 
   gtk_widget_show(matcher->transaction_matcher);  
   matcher->initialised=TRUE;  
