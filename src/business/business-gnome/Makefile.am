@@ -8,13 +8,14 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/business/business-core \
-  ${GUILE_INCS} \
   ${GNOME_PRINT_CFLAGS} \
   ${GNOME_INCLUDEDIR} \
   ${GLADE_CFLAGS} \
   ${GTKHTML_CFLAGS} \
-  ${G_WRAP_COMPILE_ARGS} \
+  ${GDK_PIXBUF_CFLAGS} \
   ${GLIB_CFLAGS} \
+  ${G_WRAP_COMPILE_ARGS} \
+  ${GUILE_INCS} \
   -I${top_srcdir}/src/register/ledger-core \
   -I${top_srcdir}/src/register/register-core
 
