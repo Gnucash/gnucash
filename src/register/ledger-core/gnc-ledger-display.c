@@ -29,6 +29,7 @@
 #include "Group.h"
 #include "Query.h"
 #include "QueryCore.h"
+#include "QueryNew.h"
 #include "SX-book.h"
 #include "Transaction.h"
 #include "global-options.h"
