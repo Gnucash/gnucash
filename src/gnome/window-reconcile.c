@@ -65,6 +65,9 @@ struct _RecnWindow
   time_t statement_date;    /* The statement date                   */
   gboolean use_shares;      /* Use share balances                   */
 
+  sort_type_t debit_sort;   /* Sorting style of the debit list      */
+  sort_type_t credit_sort;  /* Sorting style of the credit list     */
+
   GtkWidget *window;        /* The reconcile window                 */
 
   GtkWidget *toolbar;       /* Toolbar widget                       */
@@ -813,11 +816,21 @@ gnc_reconcile_sort(RecnWindow *recnData, GNCReconcileListType list_type,
                    sort_type_t sort_code)
 {
   GNCReconcileList *list;
+  sort_type_t *old_type_p;
 
   if (list_type == RECLIST_DEBIT)
+  {
     list = GNC_RECONCILE_LIST(recnData->debit);
+    old_type_p = &recnData->debit_sort;
+  }
   else
+  {
     list = GNC_RECONCILE_LIST(recnData->credit);
+    old_type_p = &recnData->credit_sort;
+  }
+
+  if (sort_code == *old_type_p)
+    return;
 
   switch(sort_code)
   {
@@ -835,6 +848,8 @@ gnc_reconcile_sort(RecnWindow *recnData, GNCReconcileListType list_type,
       gnc_reconcile_list_set_sort_order(list, BY_DESC);
       break;
   }
+
+  *old_type_p = sort_code;
 
   gnc_reconcile_list_refresh(GNC_RECONCILE_LIST(recnData->debit));
   gnc_reconcile_list_refresh(GNC_RECONCILE_LIST(recnData->credit));
@@ -1275,6 +1290,8 @@ recnWindow(GtkWidget *parent, Account *account)
   recnData->statement_date = statement_date;
   recnData->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   recnData->delete_refresh = FALSE;
+  recnData->debit_sort = BY_STANDARD;
+  recnData->credit_sort = BY_STANDARD;
 
   gnc_recn_set_window_name(recnData);
 

@@ -90,6 +90,8 @@ struct _RegWindow
 
   GnucashRegister *reg;
 
+  sort_type_t sort_type;
+
   RegDateWindow *date_window;
 
   /* Do we close the ledger when the window closes? */
@@ -265,6 +267,9 @@ gnc_register_change_style(RegWindow *regData, SplitRegisterStyle style)
 {
   SplitRegister *reg = regData->ledger->ledger;
 
+  if (style == reg->style)
+    return;
+
   xaccConfigSplitRegister(reg, reg->type, style);
 
   regData->ledger->dirty = 1;
@@ -317,6 +322,9 @@ gnc_register_sort(RegWindow *regData, sort_type_t sort_code)
 {
   Query *query = regData->ledger->query;
 
+  if (regData->sort_type == sort_code)
+    return;
+
   switch(sort_code)
   {
     case BY_STANDARD:
@@ -347,6 +355,8 @@ gnc_register_sort(RegWindow *regData, sort_type_t sort_code)
     default:
       assert(0); /* we should never be here */
   }
+
+  regData->sort_type = sort_code;
 
   regData->ledger->dirty = 1;
   xaccLedgerDisplayRefresh(regData->ledger);
@@ -1551,7 +1561,7 @@ regWindowLedger(xaccLedgerDisplay *ledger)
   GtkWidget *table_frame;
   GtkWidget *statusbar;
 
-  regData = (RegWindow *) (ledger->gui_hook);
+  regData = ledger->gui_hook;
   if (regData != NULL)
     return regData;
 
@@ -1574,6 +1584,7 @@ regWindowLedger(xaccLedgerDisplay *ledger)
   regData->ledger = ledger;
   regData->close_ledger = GNC_T;
   regData->window = register_window;
+  regData->sort_type = BY_STANDARD;
 
   gnc_reg_set_window_name(regData);
 
