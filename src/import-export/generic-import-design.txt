@@ -10,8 +10,11 @@ The Online System specific, in addition to any steps necessary for obtaining and
 -Identifying and if necessary creating the source account:  The account is identified using the account number for ofx and HBCI, and the account description for qif, if available.  The account number or identifier is stored in a kvp_string with key account_online_id.  The online system can use and format this frame however it sees fit, but it must be a kvp_string.  A function:
 const char * gnc_import_get_acc_online_id(Account * account)
 is provided for searching.  If no account is found with a matching online_id, the function:
-Account * gnc_import_select_account(char * account_online_id_value)
-must be called.  The user can then select an existing account from a list (the current account_online_id are displayed alongside the accounts), or create a new one.  The account_online_id is then stored in the selected or created account's kvp_frame. 
+Account * gnc_import_select_account(char * account_online_id_value,
+				    char * account_human_description,
+				    gnc_commodity * new_account_default_commodity,
+				    GNCAccountType new_account_default_type);
+must be called (the last 3 parameters are optionnal).  The user can then select an existing account from a list, or create a new one.  The account_online_id is then stored in the selected or created account's kvp_frame. 
 
 -Creating transaction and adding the source split (associated with the source account, possibly created above), and filling it with as much information as it has as it's disposal (much info is available for ofx, little for qif).  If a unique transaction id is available from the online system, is is stored in the splits kvp_frame, using key  transaction_online_id.  No transaction matching is done at this stage.
 

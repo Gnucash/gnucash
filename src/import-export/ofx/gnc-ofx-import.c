@@ -108,7 +108,7 @@ int ofx_proc_transaction(struct OfxTransactionData data)
   gnc_numeric gnc_amount;
   
   if(data.account_id_valid==true){
-    account = gnc_import_select_account(data.account_id);
+     account = gnc_import_select_account(data.account_id, NULL, NULL, NO_TYPE);
     if(account!=NULL)
       {
 	book = xaccAccountGetBook(account);
@@ -193,7 +193,6 @@ int ofx_proc_transaction(struct OfxTransactionData data)
 	  notes=g_strdup_printf("%s%s%s",tmp,"|Trans type:", dest_string);
 	  g_free(tmp);
 	}
-	printf("Label ok\n");
 	if(data.memo_valid==true){
 	  tmp=notes;
 	  notes=g_strdup_printf("%s%s%s",tmp, "|Memo:", data.memo);
@@ -221,10 +220,12 @@ int ofx_proc_transaction(struct OfxTransactionData data)
 	  notes=g_strdup_printf("%s%s%s",tmp,"|Payee ID:", data.payee_id);
 	  g_free(tmp);
 	}
-	/*Add PAYEE and ADRESS here once supported by libofx*/
+
+	printf("WRITEME: Gnucash ofx_proc_transaction():Add PAYEE and ADRESS here once supported by libofx!\n");
+
 	/* Ideally, gnucash should process the corrected transactions */
 	if(data.fi_id_corrected_valid==true){
-	  printf("WRITEME: Gnucash ofx_proc_transaction(): This transaction corrected a previous transaction, but we created a new one instead!\n");
+	  printf("WRITEME: Gnucash ofx_proc_transaction(): WARNING: This transaction corrected a previous transaction, but we created a new one instead!\n");
 	  tmp=notes;
 	  notes=g_strdup_printf("%s%s%s%s",tmp,"|This corrects transaction #",data.fi_id_corrected,"but Gnucash didn't process the correction!");
 	  g_free(tmp);
@@ -267,7 +268,8 @@ int ofx_proc_account(struct OfxAccountData data)
 
   if(data.account_id_valid==true){
     //printf("ofx_proc_account() Now calling gnc_import_select_account()\n");
-    selected_account = gnc_import_select_account(data.account_id);
+    printf("WRITEME:  ofx_proc_account() Fill in the account type, default name, currency, etc.  \n"); 
+    selected_account = gnc_import_select_account(data.account_id, NULL, NULL, NO_TYPE);
   }
   else
     {

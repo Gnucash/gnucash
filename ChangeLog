@@ -1,3 +1,9 @@
+2002-08-01  Christian Stimming  <stimming@tuhh.de>
+
+	* src/AccWindow.h, dialog-account/dialog-account.c,
+	import-export/generic-import-design.*,
+	import-export/ofx/gnc-ofx-import.c: Patch by Benoit Gregoire.
+
 2002-07-29  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c: Added some initial

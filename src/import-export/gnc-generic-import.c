@@ -57,6 +57,10 @@ struct _accountpickerdialog {
   GtkWidget       * treeview;
   AccountGroup * acct_group;
   Account * selected_acct;
+  gchar * account_human_description;
+  gnc_commodity * new_account_default_commodity;
+  GNCAccountType new_account_default_type;
+
 };
 
  /* static gint
@@ -138,18 +142,26 @@ build_acct_tree(struct _accountpickerdialog * picker) {
 static void
 gnc_ui_generic_account_picker_new_cb(GtkButton * w, gpointer user_data) {
   struct _accountpickerdialog * picker = user_data;  
+  GList * valid_types = NULL;
+
   // printf(" gnc_ui_generic_account_picker_new_cb():Start\n");  
-  printf("WRITEME: gnc_ui_generic_account_picker_new_cb() Write a more flexible function in dialog-account.c and AccWindow.h to fill in defaults\n");
-  picker->selected_acct = gnc_ui_new_accounts_from_name_window_with_types("New OFX account", NULL);
-  printf("WRITEME: gnc_ui_generic_account_picker_new_cb() Here we should check if account type is compatible, currency matches, etc.\n");
+  
+  if(picker->new_account_default_type!=NO_TYPE)
+    {
+      valid_types = g_list_prepend( valid_types, &(picker->new_account_default_type));
+    }
+  picker->selected_acct = gnc_ui_new_accounts_from_name_with_defaults ( picker->account_human_description,
+									valid_types,
+									picker->new_account_default_commodity,
+									picker->selected_acct);
   build_acct_tree(picker);
 }
 
 static void
 gnc_ui_generic_account_picker_select_cb(GtkCTree   * tree,
-                                    GtkCTreeNode  * node,
-                                    gint column,
-                                    gpointer  user_data) {
+					GtkCTreeNode  * node,
+					gint column,
+					gpointer  user_data) {
   struct _accountpickerdialog * picker = user_data;
   //printf("gnc_ui_generic_account_picker_select_cb()\n");
   gtk_ctree_node_get_row_data(tree, node);
@@ -188,18 +200,28 @@ static gpointer test_acct_online_id_match(Account *acct, gpointer param_online_i
     }
 }
 
-Account * gnc_import_select_account(char * account_online_id_value)
+Account * gnc_import_select_account(char * account_online_id_value,
+				    char * account_human_description,
+				    gnc_commodity * new_account_default_commodity,
+				    GNCAccountType new_account_default_type)
 {
   struct _accountpickerdialog * picker = g_new0(struct _accountpickerdialog, 1);
+  const int ACCOUNT_DESCRIPTION_MAX_SIZE = 255;
   gint ui_retval;
   Account * retval = NULL;
   GladeXML *xml;
   GtkWidget * online_id_label;
+  gchar account_description_text[ACCOUNT_DESCRIPTION_MAX_SIZE];
+
   picker->acct_group = gnc_get_current_group();
   if(picker->acct_group == NULL)
     {
       printf("WARNING:gnc_import_select_account(): The account group is NULL\n");
     }
+  picker->account_human_description =  account_human_description;
+  picker->new_account_default_commodity = new_account_default_commodity;
+  picker->new_account_default_type = new_account_default_type;
+
   //printf("gnc_import_select_account(): Looking for account with online_id: %s%s", account_online_id_value ,"\n");
   retval = xaccGroupForEachAccount(picker->acct_group,
 				   test_acct_online_id_match,
@@ -225,8 +247,17 @@ Account * gnc_import_select_account(char * account_online_id_value)
       online_id_label = glade_xml_get_widget (xml, "online_id_label");
       
       //printf("gnc_import_select_account(): Fin get widget\n");
-      gtk_label_set_text((GtkLabel*)online_id_label, account_online_id_value);
 
+      if(account_human_description!=NULL)
+	{
+	   strncat(account_description_text, account_human_description, ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
+	   strncat(account_description_text, "\n", ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
+	}
+      strncat(account_description_text, "(Account ID: ", ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
+      strncat(account_description_text, account_online_id_value, ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
+      strncat(account_description_text, ")", ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
+
+      gtk_label_set_text((GtkLabel*)online_id_label, account_description_text);
       build_acct_tree(picker);
 
       ui_retval = gnome_dialog_run_and_close(GNOME_DIALOG(picker->dialog));  
@@ -238,7 +269,8 @@ Account * gnc_import_select_account(char * account_online_id_value)
       else {
 	retval=NULL;
       }
-    }      
+    }     
+  printf("WRITEME: gnc_import_select_account() Here we should check if account type is compatible, currency matches, etc.\n"); 
   g_free(picker);
 //  printf("gnc_import_select_account(): Return value: %p%s%s%s",retval,", account name:",xaccAccountGetName(retval),"\n");
   return retval;

@@ -45,6 +45,15 @@ Account * gnc_ui_new_accounts_from_name_window (const char *name);
 /* Note that the caller owns the valid_types list */
 Account * gnc_ui_new_accounts_from_name_window_with_types (const char *name,
 							   GList *valid_types);
+/* Notes:
+   -the caller owns the valid_types list
+   -the parent parameter has priority over the eventual account path in the name
+   -all parameters can be NULL
+*/
+Account * gnc_ui_new_accounts_from_name_with_defaults (const char *name,
+						       GList *valid_types,
+						       gnc_commodity * default_commodity,
+						       Account * parent);
 
 void gnc_ui_set_default_new_account_currency (const char *currency);
 
