@@ -54,6 +54,24 @@
 	   "This setting is inherited by new customers and vendors"))
   #f))
 
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  gnc:*business-label* (N_ "Notify Bills Due?")
+  "g" (N_ "Whether to display the list of Bills Due at startup.")
+  #t))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  gnc:*business-label* (N_ "Bills Due Days")
+  "h" (N_ "How many days in the future to warn about Bills coming due.")
+    7.0 ;; default
+    1.0 ;; lower bound
+  180.0 ;; upper bound
+    0.0 ;; number of decimals
+    1.0 ;; step size
+  ))
+
+
 (define (book-options-generator options)
   (define (reg-option new-option)
     (gnc:register-option options new-option))

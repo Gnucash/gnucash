@@ -26,6 +26,17 @@
 
 	* src/gnome-utils/gnc-gui-query.c -- fix gnc_info_dialog() to deal
 	  properly in the case that it's called before the UI is up.
+
+	* src/app-utils/hooks.scm -- create a new 'post-ui-startup' hook
+	* src/app-utils/app-utils.scm -- export the 'post-ui-startup' hook
+	* src/scm/main.scm -- run the post-ui-startup hook after the UI
+	  is up but before we run the ui-event-loop
+	* src/business/business-utils/business-prefs.scm -- create two
+	  new global preferences: "Notify Bills Due?" and "Bills Due Days"
+	* src/business/business-gnome/business-gnome.scm -- create a dialog
+	  are runtime (and via a new menu item) that displays all the bills
+	  that are due withing "Bills Due Days" days from now.  It's ugly,
+	  but it's functional.  Fixes #102439.
 	
 2003-01-18  Derek Atkins  <derek@ihtfp.com>
 

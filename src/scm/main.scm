@@ -623,6 +623,7 @@ string and 'directories' must be a list of strings."
             (begin
 	      (gnc:load-account-file)
 	      (gnc:destroy-splash-screen)))
+	(gnc:hook-run-danglers gnc:*ui-post-startup-hook*)
         (gnc:start-ui-event-loop)
         (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:gui-finish))
 

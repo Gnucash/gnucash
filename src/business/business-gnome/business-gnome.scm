@@ -19,6 +19,104 @@
 (define new-label (N_ "New"))
 (define find-label (N_ "Find"))
 
+(define ui-started #f)
+
+(define (remind-bills-due session)
+  (define (option-value name)
+    (gnc:option-value (gnc:lookup-global-option gnc:*business-label* name)))
+
+  (define (get-payables book)
+    (let* ((group (gnc:book-get-group book))
+	   (acct-list (gnc:group-get-subaccounts group))
+	   (accts '()))
+      (for-each
+       (lambda (acct)
+	 (let ((account-type (gw:enum-<gnc:AccountType>-val->sym
+			      (gnc:account-get-type acct) #f)))
+	   (if (eq? account-type 'payable)
+	       (set! accts (cons acct accts)))))
+       acct-list)
+      accts))
+
+  (define (make-query book accts)
+    (let ((q (gnc:malloc-query)))
+      (gnc:query-add-account-match q accts 'guid-match-any 'query-and)
+      (gnc:query-set-book q book)
+      q))
+
+  (define (get-open-lots query)
+    (let ((all-lots (gnc:query-get-lots query 'query-txn-match-any))
+	  (open-lots '()))
+      (for-each
+       (lambda (lot)
+	 (if (not (gnc:lot-closed? lot))
+	     (set! open-lots (cons lot open-lots))))
+       all-lots)
+      open-lots))
+
+  (define (compute-date today days)
+    (if (= days 0)
+	today
+	(compute-date (incdate today DayDelta) (1- days))))
+
+  (let ((check-bills? (option-value "Notify Bills Due?")))
+    (if (and ui-started session check-bills?)
+	(let* ((book (gnc:session-get-book session))
+	       (payables-accounts (get-payables book))
+	       (query (make-query book payables-accounts))
+	       (open-lots (get-open-lots query))
+	       (days (option-value "Bills Due Days"))
+	       (compare-date (compute-date (gnc:get-today) days))
+	       (bills '()))
+
+	  ;; free up the space we don't need right now...
+	  (gnc:free-query query)
+
+	  ;; compute the bills that are soon to be (or over-) due
+	  (for-each
+	   (lambda (lot)
+	     (let* ((invoice (gnc:invoice-get-invoice-from-lot lot))
+		    (due-date (gnc:invoice-get-date-due invoice)))
+	       ;; true if compare-date is later than due-date
+	       (if (and invoice (gnc:timepair-later due-date compare-date))
+		   (set! bills (cons invoice bills)))))
+	   open-lots)
+			
+	  ;; If we've got bills, then compute the message to display
+	  (if (not (null? bills))
+	      (let ((message
+		     (string-append
+		      (if (> (length bills) 1)
+			  (_ "The following bills are due:")
+			  (_ "The following bill is due:"))
+		      "\n\n"
+		      (_ "Due Date") "        "
+		      (_ "Company") "             "
+		      (_ "Amount") "\n")))
+
+		(for-each
+		 (lambda (bill)
+		   (let* ((due-date (gnc:invoice-get-date-due bill))
+			  (owner (gnc:invoice-get-owner bill))
+			  (lot (gnc:invoice-get-posted-lot bill))
+			  (print-info (gnc:default-print-info #t)))
+
+		     (set! message
+			   (string-append
+			    message
+			    (gnc:print-date due-date)
+			    "      "
+			    (gnc:owner-get-name owner)
+			    "      "
+			    (gnc:amount->string
+			     (gnc:numeric-abs (gnc:lot-get-balance lot))
+			     print-info)
+			    "\n"))))
+		 bills)
+
+		(gnc:info-dialog message)))))))
+
+
 (define (add-customer-items)
   (let ((last-cust (gnc:owner-create))
 	(cust (N_ "Customers")))
@@ -183,6 +281,13 @@
 
   ;;(gnc:add-extension find)
   ;;(gnc:add-extension new)
+
+  (gnc:add-extension
+   (gnc:make-menu-item (N_ "Bills Due Reminder")
+		       (N_ "View the quick report of bills coming due soon.")
+		       (list main-window top-level "")
+		       (lambda ()
+			 (remind-bills-due (gnc:get-current-session)))))
 
   (gnc:add-extension
    (gnc:make-menu-item (N_ "Billing Terms")
@@ -382,6 +487,15 @@
   (add-employee-extensions)
 )
 
+(define (business-book-opened session)
+  (remind-bills-due session))
+
+(define (business-ui-started)
+  (set! ui-started #t)
+  (remind-bills-due (gnc:get-current-session)))
+
 (gnc:hook-add-dangler gnc:*report-hook* business-report-function)
 (gnc:hook-add-dangler gnc:*ui-startup-hook* add-business-items)
+(gnc:hook-add-dangler gnc:*ui-post-startup-hook* business-ui-started)
+;(gnc:hook-add-dangler gnc:*book-opened-hook* business-book-opened)
 (gnc:hook-add-dangler gnc:*add-extension-hook* add-business-test)

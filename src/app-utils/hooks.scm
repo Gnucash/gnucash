@@ -88,6 +88,11 @@
    'ui-startup-hook
    "Functions to run when the ui comes up.  Hook args: ()"))
 
+(define gnc:*ui-post-startup-hook*
+  (gnc:hook-define
+   'ui-post-startup-hook
+   "Functions to run after the ui comes up.  Hook args: ()"))
+
 (define gnc:*ui-shutdown-hook*
   (gnc:hook-define 
    'ui-shutdown-hook
