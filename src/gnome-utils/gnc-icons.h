@@ -12,6 +12,7 @@ G_BEGIN_DECLS
 #define GNC_STOCK_ACCOUNT "gnc-account"
 #define GNC_STOCK_DELETE_ACCOUNT "gnc-delete-account"
 #define GNC_STOCK_EDIT_ACCOUNT "gnc-edit-account"
+#define GNC_STOCK_NEW_ACCOUNT "gnc-new-account"
 #define GNC_STOCK_OPEN_ACCOUNT "gnc-open-account"
 
 void gnc_load_stock_icons (void);

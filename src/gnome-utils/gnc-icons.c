@@ -67,6 +67,8 @@ gnc_load_stock_icons (void)
 				 "delete-account.png", "delete-account-16.png");
 	gnc_add_stock_icon_pair (factory, GNC_STOCK_EDIT_ACCOUNT,
 				 "edit-account.png", "edit-account-16.png");
+	gnc_add_stock_icon_pair (factory, GNC_STOCK_NEW_ACCOUNT,
+				 "new-account.png", "new-account-16.png");
 	gnc_add_stock_icon_pair (factory, GNC_STOCK_OPEN_ACCOUNT,
 				 "open-account.png", "open-account-16.png");
 	gtk_icon_factory_add_default (factory);

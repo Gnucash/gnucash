@@ -112,7 +112,7 @@ static EggActionGroupEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "FakeToplevel", "", NULL, NULL, NULL, NULL, NULL },
 
 	/* File menu */
-	{ "FileNewAccountAction", N_("New Account..."), GTK_STOCK_ADD, NULL,
+	{ "FileNewAccountAction", N_("New Account..."), GNC_STOCK_NEW_ACCOUNT, NULL,
 	  N_("Create a new Account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_new_account), NULL },
 	{ "FileOpenAccountAction", N_("Open Account"), GNC_STOCK_OPEN_ACCOUNT, "<control>o",
