@@ -10,7 +10,7 @@ EXTRA_DIST = \
   .cvsignore \
   Quote_example.pl \
   gnc-prices.in \
-  price-qupte-helper.in \
+  price-quote-helper.in \
   value_portfolio
 
 ## We borrow guile's convention and use @-...-@ as the substitution
