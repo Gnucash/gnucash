@@ -38,13 +38,13 @@
             (tm:mon (gnc:timepair->date tp-b)))))
   
   (define (split-same-month-p a b)
-    (let ((tp-a (gnc:transaction-get-date-entered (gnc:split-get-parent a)))
-	  (tp-b (gnc:transaction-get-date-entered (gnc:split-get-parent b))))
+    (let ((tp-a (gnc:transaction-get-date-posted (gnc:split-get-parent a)))
+	  (tp-b (gnc:transaction-get-date-posted (gnc:split-get-parent b))))
 	  (timepair-same-month tp-a tp-b)))
     
   (define (split-same-year-p a b)
-    (let ((tp-a (gnc:transaction-get-date-entered (gnc:split-get-parent a)))
-	  (tp-b (gnc:transaction-get-date-entered (gnc:split-get-parent b))))
+    (let ((tp-a (gnc:transaction-get-date-posted (gnc:split-get-parent a)))
+	  (tp-b (gnc:transaction-get-date-posted (gnc:split-get-parent b))))
       (timepair-same-year tp-a tp-b)))
   
   (define (set-last-row-style! table tag . rest)
@@ -858,10 +858,12 @@ and Income accounts")))))
 
     (let ((document (gnc:make-html-document))
 	  (c_accounts (opt-val "General" "Account"))
-	  (begindate (gnc:date-option-absolute-time
-                      (opt-val "General" "From")))
-	  (enddate (gnc:date-option-absolute-time
-                    (opt-val "General" "To")))
+	  (begindate (gnc:timepair-start-day-time
+		      (gnc:date-option-absolute-time
+		       (opt-val "General" "From"))))
+	  (enddate (gnc:timepair-end-day-time
+		    (gnc:date-option-absolute-time
+		     (opt-val "General" "To"))))
 	  (primary-key (opt-val "Sorting" "Primary Key"))
 	  (primary-order (opt-val "Sorting" "Primary Sort Order"))
 	  (secondary-key (opt-val "Sorting" "Secondary Key"))
