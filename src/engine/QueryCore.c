@@ -6,6 +6,8 @@
 
 #include "config.h"
 
+#include <glib.h>
+
 #include "gnc-engine-util.h"
 #include "QueryCoreP.h"
 #include "QueryNew.h"

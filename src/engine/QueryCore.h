@@ -7,11 +7,11 @@
 #ifndef GNC_QUERYCORE_H
 #define GNC_QUERYCORE_H
 
+#include <glib.h>
+
 #include "gnc-numeric.h"
 #include "date.h"
 #include "kvp_frame.h"
-
-#include <glib.h>
 
 typedef struct query_pred_data *QueryPredData_t;
 
