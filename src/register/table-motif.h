@@ -100,5 +100,5 @@ void        xaccRefreshTableGUI (Table *);
  */
 void        xaccRefreshCursorGUI (Table *);
 
-#endif __XACC_TABLE_MOTIF_H__
+#endif /* __XACC_TABLE_MOTIF_H__ */
 /* ================== end of file ======================= */

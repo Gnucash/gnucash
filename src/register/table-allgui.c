@@ -462,7 +462,7 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
    if (new_phys_col >= table->num_phys_cols) return;
 
    /* ok, we now have a valid position.  Find the new cursor to use,
-    * and initialize it's cells */
+    * and initialize its cells */
    curs = table->handlers[new_virt_row][new_virt_col];
    table->current_cursor = curs;
 
@@ -633,7 +633,7 @@ xaccRefreshHeader (Table *table)
 /* verifyCursorPosition checks the location of the cursor 
  * with respect to a row/column position, and repositions 
  * the cursor if necessary.  This includes saving any uncomited
- * data in the old cursor, and then moving the cursor and it's
+ * data in the old cursor, and then moving the cursor and its
  * GUI.
  */
 

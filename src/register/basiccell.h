@@ -36,7 +36,7 @@
  *
  * MEMBERS:
  * The input_output member controls how the cell accepts 
- *   input, and whether it displays it's value.  It is a 
+ *   input, and whether it displays its value.  It is a 
  *   a flag of OR-ed together values. Flag bits include:
  *
  *     XACC_CELL_ALLOW_INPUT  accept keyboard & mouse

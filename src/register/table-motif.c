@@ -642,7 +642,7 @@ xaccCreateTable (Table *table, Widget parent, char * name)
 /* if any of the cells have GUI specific components that need 
  * initialization, initialize them now. The realize() callback
  * on the cursor cell is how we inform the cell handler that 
- * now is the time to initialize it's GUI.  */
+ * now is the time to initialize its GUI.  */
 
 void
 xaccCreateCursor (Table *table, CellBlock *curs) 
