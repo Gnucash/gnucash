@@ -42,25 +42,24 @@ be created as a shared library for use by other programs.
 @section Introduction
 
 Splits (@pxref{Splits}), or "Ledger Entries" are the fundamental
-accounting units. Each Split consists of a quantity (number of dollar
-bills, number of shares, etc.), the value of that quantity expressed in
-a (possibly) different currency than the quantity, a Memo, a pointer to
+accounting units. Each Split consists of an amount (number of dollar
+bills, number of shares, etc.), the value of that amount expressed in
+a (possibly) different currency than the amount, a Memo, a pointer to
 the parent Transaction, a pointer to the debited Account, a reconciled
 flag and timestamp, an "Action" field, and a key-value frame which can
 store arbitrary data (@pxref{Key-Value Pair Frames}).
 
 Transactions (@pxref{Transactions}) embody the notion of "double entry"
-accounting. A Transaction consists of a date, a description, a number, a
-list of one or more Splits, and a key-value frame. When double-entry
-rules are enforced, the total value of the splits is zero. Note that if
-there is just one split, its value must be zero for double-entry
-accounting; this used to be used for storing prices, but with the advent
-of the Price DB, this is no longer the case. If there are two splits,
+accounting. A Transaction consists of a date, a description, an ID number, a
+list of one or more Splits, and a key-value frame. The transaction
+also specifies the currency with which all of the splits will be
+valued.  When double-entry rules are enforced, the total value of 
+the splits are zero.  If there are only two splits,
 then the value of one must be positive, the other negative: this denotes
 that one account is debited, and another is credited by an equal
-amount. Positive Split values are 'debits' and negative Split values are
-'credits'. Ensuring the Splits to 'add up' to zero causes a double-entry
-accounting system to always balance.
+amount.   By forcing the value of the splits to always 'add up' to
+zero, we can gaurentee that the balances of the accounts are always
+correctly balanced.
 
 The engine does not enforce double-entry accounting, but provides an API
 to enable user-code to find unbalanced transactions and 'repair' them so
@@ -85,13 +84,10 @@ to an Account, then the Account must point to the Split, and vice-versa.
 A Split can belong to at most one Account. Besides merely containing a
 list of Splits, the Account structure also give the Account a name, a
 code number, description and notes fields, a key-value frame, a pointer
-to the currency that is used for all splits in this account, and a
-pointer to the "security" used for all splits in this account. The
-"security" can be the name of a stock (e.g. "IBM", "McDonald's"), or
-another currency (e.g. "USD", "GBP").  The security is used during
-Transaction balancing to enable trading between accounts denominated in
-different currencies, or to, for example, move stocks from one Account
-to another.
+to the commodity that is used for all splits in this account. The
+commodity can be the name of anything traded and tradable: a stock
+(e.g. "IBM", "McDonald's"), a currency (e.g. "USD", "GBP"), or
+anything added to the commodity table.
 
 Accounts can be arranged in a hierarchical tree. The nodes of the tree
 are called "Account Groups" (@pxref{Account Groups}). By accounting
