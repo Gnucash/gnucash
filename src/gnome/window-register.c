@@ -144,8 +144,7 @@ static void recordCB(GtkWidget *w, gpointer data);
 static void cancelCB(GtkWidget *w, gpointer data);
 static void closeCB(GtkWidget *w, gpointer data);
 static void reportCB(GtkWidget *w, gpointer data);
-static void invoiceCB(GtkWidget *w, gpointer data);
-static void invoiceTransCB(GtkWidget *w, gpointer data);
+static void reportTransCB(GtkWidget *w, gpointer data);
 static void printReportCB(GtkWidget *w, gpointer data);
 static void dateCB(GtkWidget *w, gpointer data);
 static void expand_trans_cb(GtkWidget *widget, gpointer data);
@@ -1361,14 +1360,6 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     },
     {
       GNOME_APP_UI_ITEM,
-      N_("Invoice"),
-      N_("Open an invoice report window for this register"),
-      invoiceCB, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
       N_("Print"),
       N_("Print a report for this register"),
       printReportCB, NULL, NULL,
@@ -1559,9 +1550,9 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      N_("Invoice"),
-      N_("Open an invoice report window for this transaction"),
-      invoiceTransCB, NULL, NULL,
+      N_("Report"),
+      N_("Open a register report window for this transaction"),
+      reportTransCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
@@ -3216,7 +3207,7 @@ closeCB (GtkWidget *widget, gpointer data)
 }
 
 static int
-report_helper (RegWindow *regData, gboolean invoice, Query *query)
+report_helper (RegWindow *regData, Query *query)
 {
   SplitRegister *reg = gnc_ledger_display_get_split_register (regData->ledger);
   char *str;
@@ -3259,7 +3250,7 @@ report_helper (RegWindow *regData, gboolean invoice, Query *query)
   args = gh_cons (arg, args);
   g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
 
-  arg = gh_bool2scm (invoice);
+  arg = gh_bool2scm (FALSE);
   args = gh_cons (arg, args);
 
   func = gh_eval_str ("gnc:register-report-create");
@@ -3284,38 +3275,20 @@ reportCB (GtkWidget *widget, gpointer data)
   RegWindow *regData = data;
   int id;
 
-  id = report_helper (regData, FALSE, NULL);
+  id = report_helper (regData, NULL);
   if (id >= 0)
     reportWindow (id);
 }
 
 /********************************************************************\
- * invoiceCB                                                        *
+ * reportTransCB                                                   *
  *                                                                  *
  * Args:   widget - the widget that called us                       *
  *         data - regData - the data struct for this register       *
  * Return: none                                                     *
 \********************************************************************/
 static void
-invoiceCB (GtkWidget *widget, gpointer data)
-{
-  RegWindow *regData = data;
-  int id;
-
-  id = report_helper (regData, TRUE, NULL);
-  if (id >= 0)
-    reportWindow (id);
-}
-
-/********************************************************************\
- * invoiceTransCB                                                   *
- *                                                                  *
- * Args:   widget - the widget that called us                       *
- *         data - regData - the data struct for this register       *
- * Return: none                                                     *
-\********************************************************************/
-static void
-invoiceTransCB (GtkWidget *widget, gpointer data)
+reportTransCB (GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
   SplitRegister *reg;
@@ -3336,7 +3309,7 @@ invoiceTransCB (GtkWidget *widget, gpointer data)
   xaccQueryAddGUIDMatch (query, xaccSplitGetGUID (split),
                          GNC_ID_SPLIT, QUERY_AND);
 
-  id = report_helper (regData, TRUE, query);
+  id = report_helper (regData, query);
   if (id >= 0)
     reportWindow (id);
 }
@@ -3354,7 +3327,7 @@ printReportCB (GtkWidget *widget, gpointer data)
   RegWindow *regData = data;
   int id;
 
-  id = report_helper (regData, FALSE, NULL);
+  id = report_helper (regData, NULL);
   if (id >= 0)
     gnc_print_report (id);
 }
