@@ -1,3 +1,8 @@
+2003-04-14  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/hbci-interaction.c: Fix some user
+	messages where chip cards were confused with key files.
+
 2003-04-12  Herbert Thoma  <herbie@hthoma.de>
 
         * src/backend/file/sixtp-dom-parsers.c
