@@ -83,6 +83,13 @@ qof_instance_get_slots (QofInstance *inst)
   return inst->kvp_data;
 }
 
+gboolean
+qof_instance_is_dirty (QofInstance *inst)
+{
+  if (!inst) return FALSE;
+  return inst->dirty;
+}
+
 /* ========================================================== */
 
 void

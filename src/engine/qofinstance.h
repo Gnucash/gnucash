@@ -87,6 +87,9 @@ const GUID * qof_instance_get_guid (QofInstance *);
 /** return the pointer to the kvp_data */
 KvpFrame* qof_instance_get_slots (QofInstance *);
 
+/** return value of is_dirty flag */
+gboolean qof_instance_is_dirty (QofInstance *);
+
 /** pair things up. Currently, this routine only inserts a
  * pair of guid-pointers pointing to each other.  it
  * doesn't copy any data.
