@@ -13,20 +13,20 @@
   <act:name>Despesas</act:name>
   <act:id type="new">9a2b4520f113372f4e576f5b6dc129c6</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Despesas</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Seguro</act:name>
   <act:id type="new">b79b231807a98cd562c46cf0454e9f25</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Seguro</act:description>
   <act:parent type="new">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
 </gnc:account>
@@ -34,10 +34,10 @@
   <act:name>Seguro de Arrendamento</act:name>
   <act:id type="new">a4c93c964b8322d534e35b7054cbda4d</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Seguro de Arrendamento</act:description>
   <act:parent type="new">b79b231807a98cd562c46cf0454e9f25</act:parent>
 </gnc:account>
@@ -45,10 +45,10 @@
   <act:name>Renda</act:name>
   <act:id type="new">c1638a9a48d4d0e1b17d99219a18f34b</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Renda</act:description>
   <act:parent type="new">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
 </gnc:account>

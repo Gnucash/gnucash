@@ -13,20 +13,20 @@
   <act:name>Activos</act:name>
   <act:id type="new">e67ef2c52a4eaf3b9d37d317848a5812</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Activos</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Investimentos</act:name>
   <act:id type="new">64cf99f6bafe0a539a5941ea713bdfcd</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Investimentos</act:description>
   <act:parent type="new">e67ef2c52a4eaf3b9d37d317848a5812</act:parent>
 </gnc:account>
@@ -34,10 +34,10 @@
   <act:name>Reforma</act:name>
   <act:id type="new">4173f3047238f4b5595b11d6161b2f48</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Reforma</act:description>
   <act:slots>
     <slot>
@@ -51,10 +51,10 @@
   <act:name>Obrigação</act:name>
   <act:id type="new">9053199c1da747555d12272f48c719fd</act:id>
   <act:type>STOCK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Obrigação</act:description>
   <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>
 </gnc:account>
@@ -62,10 +62,10 @@
   <act:name>Acção</act:name>
   <act:id type="new">9bf53e9580991e323b297999fddff988</act:id>
   <act:type>STOCK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Acção</act:description>
   <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>
 </gnc:account>
@@ -73,10 +73,10 @@
   <act:name>Índice de Mercado</act:name>
   <act:id type="new">2326b032fe4e8f434159310fccf17091</act:id>
   <act:type>MUTUAL</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Índice de Mercado</act:description>
   <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>
 </gnc:account>
@@ -84,10 +84,10 @@
   <act:name>Fundo de Investimento</act:name>
   <act:id type="new">a62d804729117e74a6c880cecb818b56</act:id>
   <act:type>MUTUAL</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Fundo de Investimento</act:description>
   <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>
 </gnc:account>

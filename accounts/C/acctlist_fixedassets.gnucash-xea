@@ -11,30 +11,30 @@
   <act:name>House</act:name>
   <act:id type="guid">b7baffa7ae86e9e3471f65ecf7e898e0</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>House</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Other Asset</act:name>
   <act:id type="guid">939effb3e3dba6e80e22d8291916f4dd</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Other Asset</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Vehicle</act:name>
   <act:id type="guid">400fa3023e51a54305046c00a2c3cfb9</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Vehicle</act:description>
 </gnc:account>
 </gnc-account-example>

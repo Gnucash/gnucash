@@ -11,30 +11,30 @@
   <act:name>Other Loan</act:name>
   <act:id type="guid">90f49685a7ff7a186b0571b5550cd586</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Other Loan</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Interest</act:name>
   <act:id type="guid">db3ce3c909949a1da026cb2f8336f945</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Interest</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Other Interest</act:name>
   <act:id type="guid">fa0d3202fbba65ac3ac92edbbeb7098c</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Other Interest</act:description>
   <act:parent type="guid">db3ce3c909949a1da026cb2f8336f945</act:parent>
 </gnc:account>

@@ -591,7 +591,7 @@ gnc_split_get_value_denom (Split *split)
 }
 
 static int
-gnc_split_get_quantity_denom (Split *split)
+gnc_split_get_amount_denom (Split *split)
 {
   int denom;
 
@@ -2783,7 +2783,7 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
   {
     gnc_numeric shares = xaccGetPriceCellValue(reg->sharesCell);
 
-    gnc_split_scm_set_quantity (split_scm, shares);
+    gnc_split_scm_set_amount (split_scm, shares);
   }
 
   if ((MOD_AMNT | MOD_PRIC | MOD_SHRS) & changed)
@@ -2792,8 +2792,8 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
     {
       gnc_numeric num;
 
-      num = gnc_split_scm_get_quantity (split_scm);
-      gnc_split_scm_set_quantity (other_split_scm, gnc_numeric_neg (num));
+      num = gnc_split_scm_get_amount (split_scm);
+      gnc_split_scm_set_amount (other_split_scm, gnc_numeric_neg (num));
 
       num = gnc_split_scm_get_value (split_scm);
       gnc_split_scm_set_value (other_split_scm, gnc_numeric_neg (num));
@@ -3140,7 +3140,7 @@ sr_split_auto_calc (SplitRegister *reg, Split *split, guint32 changed)
   if (recalc_shares)
     if (!gnc_numeric_zero_p (price))
     {
-      denom = gnc_split_get_quantity_denom (split);
+      denom = gnc_split_get_amount_denom (split);
 
       amount = gnc_numeric_div (value, price, denom, GNC_RND_ROUND);
 
@@ -3939,7 +3939,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, gboolean translate,
           balance = get_trans_total_balance (reg, trans);
 
         return xaccPrintAmount (balance,
-                                gnc_split_quantity_print_info (split, FALSE));
+                                gnc_split_amount_print_info (split, FALSE));
       }
       break;
 
@@ -4046,7 +4046,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, gboolean translate,
           return "";
 
         return xaccPrintAmount (shares,
-                                gnc_split_quantity_print_info (split, FALSE));
+                                gnc_split_amount_print_info (split, FALSE));
       }
       break;
 
@@ -4104,7 +4104,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, gboolean translate,
         total = get_trans_total_shares (reg, trans);
 
         return xaccPrintAmount (total,
-                                gnc_split_quantity_print_info (split, FALSE));
+                                gnc_split_amount_print_info (split, FALSE));
       }
       break;
 

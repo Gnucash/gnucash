@@ -11,10 +11,10 @@
   <act:name>Retirement</act:name>
   <act:id type="guid">c590a9e1eb345ced982cf86e755db8ec</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Retirement</act:description>
   <act:slots>
     <slot>
@@ -27,10 +27,10 @@
   <act:name>Bond</act:name>
   <act:id type="guid">b87d164410e80db00777f94a7be9d38e</act:id>
   <act:type>STOCK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Bond</act:description>
   <act:parent type="guid">c590a9e1eb345ced982cf86e755db8ec</act:parent>
 </gnc:account>
@@ -38,10 +38,10 @@
   <act:name>Stock</act:name>
   <act:id type="guid">a3fb341f9fc58086ddc258e656a5b663</act:id>
   <act:type>STOCK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Stock</act:description>
   <act:parent type="guid">c590a9e1eb345ced982cf86e755db8ec</act:parent>
 </gnc:account>
@@ -49,10 +49,10 @@
   <act:name>Market Index</act:name>
   <act:id type="guid">a01284db52ceea5f2fe12bc1a4b54b5b</act:id>
   <act:type>MUTUAL</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Market Index</act:description>
   <act:parent type="guid">c590a9e1eb345ced982cf86e755db8ec</act:parent>
 </gnc:account>
@@ -60,10 +60,10 @@
   <act:name>Mutual Fund</act:name>
   <act:id type="guid">8abfd5528bb7d1f84d1f4f06d17f274c</act:id>
   <act:type>MUTUAL</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Mutual Fund</act:description>
   <act:parent type="guid">c590a9e1eb345ced982cf86e755db8ec</act:parent>
 </gnc:account>

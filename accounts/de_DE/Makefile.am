@@ -6,7 +6,6 @@ account_DATA = \
   acctchrt_autoloan.gnucash-xea \
   acctchrt_brokerage.gnucash-xea \
   acctchrt_common.gnucash-xea \
-  acctchrt_currency.gnucash-xea \
   acctchrt_houseown.gnucash-xea \
   acctchrt_investment.gnucash-xea \
   acctchrt_kids.gnucash-xea \

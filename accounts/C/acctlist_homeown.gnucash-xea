@@ -11,30 +11,30 @@
   <act:name>Home Repair</act:name>
   <act:id type="guid">a2a85849ba534678e1970ec49515e6fa</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Home Repair</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Insurance</act:name>
   <act:id type="guid">900dfe72555fdc3cbf6019c5a4603279</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Insurance</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Home Insurance</act:name>
   <act:id type="guid">dc00b72b5d10aebe6b1665499a0cfddb</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Home Insurance</act:description>
   <act:parent type="guid">900dfe72555fdc3cbf6019c5a4603279</act:parent>
 </gnc:account>
@@ -42,20 +42,20 @@
   <act:name>Taxes</act:name>
   <act:id type="guid">9c154b2a736879d3fe5ba128f7a62169</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Taxes</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Property Tax</act:name>
   <act:id type="guid">40cbf9afed3e15e241e52f9e59a2cfd1</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Property Tax</act:description>
   <act:parent type="guid">9c154b2a736879d3fe5ba128f7a62169</act:parent>
 </gnc:account>

@@ -11,30 +11,30 @@
   <act:name>Education Loan</act:name>
   <act:id type="guid">d1065cfd075a21911c5bf039bc0e452e</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Education Loan</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Interest</act:name>
   <act:id type="guid">b62a1a4aec662956bbd2edf340524768</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Interest</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Education Loan Interest</act:name>
   <act:id type="guid">142ae0d9e7964c7ebb981ba7f2aa5a19</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Education Loan Interest</act:description>
   <act:parent type="guid">b62a1a4aec662956bbd2edf340524768</act:parent>
 </gnc:account>

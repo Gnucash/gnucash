@@ -7,7 +7,6 @@ account_DATA = \
   acctchrt_cdmoneymkt.gnucash-xea \
   acctchrt_childcare.gnucash-xea \
   acctchrt_common.gnucash-xea \
-  acctchrt_currency.gnucash-xea \
   acctchrt_eduloan.gnucash-xea \
   acctchrt_fixedassets.gnucash-xea \
   acctchrt_homeloan.gnucash-xea \

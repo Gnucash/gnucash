@@ -13,20 +13,20 @@
   <act:name>Passivo</act:name>
   <act:id type="new">4e7e8e39487ad4aba0b62c2232c577c5</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Passivo</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Empréstimos</act:name>
   <act:id type="new">c3219e37044b0531d66a7b64433b026d</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Empréstimos</act:description>
   <act:parent type="new">4e7e8e39487ad4aba0b62c2232c577c5</act:parent>
 </gnc:account>
@@ -34,10 +34,10 @@
   <act:name>Empréstimo para Educação</act:name>
   <act:id type="new">ddeba367199bd025e00420a19d6f9ae4</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Empréstimo para Educação</act:description>
   <act:parent type="new">c3219e37044b0531d66a7b64433b026d</act:parent>
 </gnc:account>
@@ -45,20 +45,20 @@
   <act:name>Despesas</act:name>
   <act:id type="new">fdbf47b39f70e8818f325eee7931039a</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Despesas</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Juros</act:name>
   <act:id type="new">1cfcd30ea97b954ffb550ab87d561033</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Juros</act:description>
   <act:parent type="new">fdbf47b39f70e8818f325eee7931039a</act:parent>
 </gnc:account>
@@ -66,10 +66,10 @@
   <act:name>Juros do Empréstimo para Educação</act:name>
   <act:id type="new">04e3d970dc60d3920f40b93fce8924a2</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Juros do Empréstimo para Educação</act:description>
   <act:parent type="new">1cfcd30ea97b954ffb550ab87d561033</act:parent>
 </gnc:account>

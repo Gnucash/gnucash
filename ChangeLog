@@ -1,5 +1,17 @@
 2001-07-12  Dave Peticolas  <dave@krondo.com>
 
+	* accounts/*/*: currency->commodity
+
+	* src/scm/engine-interface.scm: quantity->amount
+
+	* src/guile/guile-util.[ch]: quantity->amount
+
+	* src/guile/gnc.gwp: quantity->amount
+
+	* src/SplitLedger.c: quantity->amount
+
+	* src/gnc-ui-util.[ch]: quantity->amount
+
 	* src/scm/report/transaction.scm: remove old api
 
 	* src/scm/report-utilities.scm: remove old api

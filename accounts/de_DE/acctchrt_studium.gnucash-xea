@@ -13,20 +13,20 @@
   <act:name>Einkommen</act:name>
   <act:id type="new">724c2a1128e49b0b28304d372b19f5a1</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Einkommen</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>BAF&#246;G</act:name>
   <act:id type="new">a3f10cc287e9fb80272dd9bc4c86d090</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>BAF&#246;G-Leistungen</act:description>
   <act:parent type="new">724c2a1128e49b0b28304d372b19f5a1</act:parent>
 </gnc:account>
@@ -34,20 +34,20 @@
   <act:name>Ausgaben</act:name>
   <act:id type="new">bc39f4d37eb75353f4f971e80b9d2818</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Ausgaben</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bildung</act:name>
   <act:id type="new">5416a78a11e81e963990cd6a398e5022</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Bildung</act:description>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
@@ -55,10 +55,10 @@
   <act:name>Studiengeb&#252;hren</act:name>
   <act:id type="new">df59b64631384ab3ae44e022170e0d47</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Studiengeb&#252;hren</act:description>
   <act:parent type="new">5416a78a11e81e963990cd6a398e5022</act:parent>
 </gnc:account>

@@ -24,7 +24,7 @@
   (make-record-type
    "gnc:split-structure"
    '(split-guid account-guid transaction-guid memo action
-                reconcile-state reconciled-date quantity value)))
+                reconcile-state reconciled-date amount value)))
 
 ;; constructor
 (define gnc:make-split-scm
@@ -56,8 +56,8 @@
 (define gnc:split-scm-get-reconciled-date
   (record-accessor gnc:split-structure 'reconciled-date))
 
-(define gnc:split-scm-get-quantity
-  (record-accessor gnc:split-structure 'quantity))
+(define gnc:split-scm-get-amount
+  (record-accessor gnc:split-structure 'amount))
 
 (define gnc:split-scm-get-value
   (record-accessor gnc:split-structure 'value))
@@ -84,8 +84,8 @@
 (define gnc:split-scm-set-reconciled-date
   (record-modifier gnc:split-structure 'reconciled-date))
 
-(define gnc:split-scm-set-quantity
-  (record-modifier gnc:split-structure 'quantity))
+(define gnc:split-scm-set-amount
+  (record-modifier gnc:split-structure 'amount))
 
 (define gnc:split-scm-set-value
   (record-modifier gnc:split-structure 'value))
@@ -116,11 +116,11 @@
       (begin
         (let ((memo     (gnc:split-scm-get-memo split-scm))
               (action   (gnc:split-scm-get-action split-scm))
-              (quantity (gnc:split-scm-get-quantity split-scm))
+              (amount   (gnc:split-scm-get-amount split-scm))
               (value    (gnc:split-scm-get-value split-scm)))
           (if memo     (gnc:split-set-memo split memo))
           (if action   (gnc:split-set-action split action))
-          (if quantity (gnc:split-set-amount split quantity))
+          (if amount   (gnc:split-set-amount split amount))
           (if value    (gnc:split-set-value split value)))
         (let ((account (gnc:account-lookup
                         (gnc:split-scm-get-account-guid split-scm))))

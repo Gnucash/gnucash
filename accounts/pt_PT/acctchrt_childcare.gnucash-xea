@@ -13,20 +13,20 @@
   <act:name>Despesas</act:name>
   <act:id type="new">ee8238ee2c2ce590160761df09b99b72</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Despesas</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Cuidados Infantís</act:name>
   <act:id type="new">8999739a6bfc46088a3ea5ec45e5f8a4</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Cuidados Infantís</act:description>
   <act:parent type="new">ee8238ee2c2ce590160761df09b99b72</act:parent>
 </gnc:account>

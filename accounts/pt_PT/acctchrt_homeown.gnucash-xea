@@ -13,20 +13,20 @@
   <act:name>Despesas</act:name>
   <act:id type="new">84732f5fdd27b6463d75bf958e3a4b06</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Despesas</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Reparações na Casa</act:name>
   <act:id type="new">fa27de57090e107fa99fe1db53790f23</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Reparações na Casa</act:description>
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
 </gnc:account>
@@ -34,10 +34,10 @@
   <act:name>Seguro</act:name>
   <act:id type="new">4677fe36914ebcf23758f3bf20686b4a</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Seguro</act:description>
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
 </gnc:account>
@@ -45,10 +45,10 @@
   <act:name>Seguro da Casa</act:name>
   <act:id type="new">3b5909f31bda0e0f76149fd600e0cb1d</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Seguro da Casa</act:description>
   <act:parent type="new">4677fe36914ebcf23758f3bf20686b4a</act:parent>
 </gnc:account>
@@ -56,10 +56,10 @@
   <act:name>Impostos</act:name>
   <act:id type="new">a931b8ffe2917ff9a069333623da96ca</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Impostos</act:description>
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
 </gnc:account>
@@ -67,10 +67,10 @@
   <act:name>Contribuição Autárquica</act:name>
   <act:id type="new">3994b8f5a6a8b2a0a48126fa955e03f7</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Contribuição Autárquica</act:description>
   <act:parent type="new">a931b8ffe2917ff9a069333623da96ca</act:parent>
 </gnc:account>

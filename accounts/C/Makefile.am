@@ -7,7 +7,6 @@ account_DATA = \
   acctchrt_cdmoneymkt.gnucash-xea \
   acctchrt_childcare.gnucash-xea \
   acctchrt_common.gnucash-xea \
-  acctchrt_currency.gnucash-xea \
   acctchrt_eduloan.gnucash-xea \
   acctchrt_fixedassets.gnucash-xea \
   acctchrt_homeloan.gnucash-xea \
@@ -25,7 +24,6 @@ EXTRA_DIST = \
   acctlist_cdmoneymkt.gnucash-xea \
   acctlist_childcare.gnucash-xea \
   acctlist_common.gnucash-xea \
-  acctlist_currency.gnucash-xea \
   acctlist_eduloan.gnucash-xea \
   acctlist_fixedassets.gnucash-xea \
   acctlist_full.gnucash-xea \

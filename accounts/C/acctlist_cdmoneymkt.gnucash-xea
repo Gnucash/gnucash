@@ -11,40 +11,40 @@
   <act:name>Bank CD</act:name>
   <act:id type="new">a2e2f8fd2396ad134fa3721767f56a4a</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Bank CD</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Money Market</act:name>
   <act:id type="new">1c220d832ee37e660837a3753f221079</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Money Market</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>CD Interest</act:name>
   <act:id type="new">a78ff890768703e6d88ea01366a93eff</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>CD Interest</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Money Market Interest</act:name>
   <act:id type="new">88986ef5fbe8e1b9ffda8485fe8c0f93</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Money Market Interest</act:description>
 </gnc:account>
 </gnc-account-example>

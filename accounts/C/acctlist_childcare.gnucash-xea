@@ -10,10 +10,10 @@
   <act:name>Childcare</act:name>
   <act:id type="new">f37587dab73433d30ce6fa1a2c0ee53d</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Childcare</act:description>
 </gnc:account>
 </gnc-account-example>

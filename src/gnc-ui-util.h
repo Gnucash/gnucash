@@ -172,8 +172,8 @@ GNCPrintAmountInfo gnc_commodity_print_info (const gnc_commodity *commodity,
 GNCPrintAmountInfo gnc_account_print_info (Account *account,
                                            gboolean use_symbol);
 
-GNCPrintAmountInfo gnc_split_quantity_print_info (Split *split,
-                                                  gboolean use_symbol);
+GNCPrintAmountInfo gnc_split_amount_print_info (Split *split,
+                                                gboolean use_symbol);
 GNCPrintAmountInfo gnc_split_value_print_info (Split *split,
                                                gboolean use_symbol);
 

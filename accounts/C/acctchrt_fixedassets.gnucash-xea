@@ -13,20 +13,20 @@
   <act:name>Assets</act:name>
   <act:id type="new">64b6276c060185131cecbd1ac6218440</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Assets</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fixed Assets</act:name>
   <act:id type="new">9b171f77000bf68dd1ebbaf58336656d</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Fixed Assets</act:description>
   <act:parent type="new">64b6276c060185131cecbd1ac6218440</act:parent>
 </gnc:account>
@@ -34,10 +34,10 @@
   <act:name>House</act:name>
   <act:id type="new">9205ad6b6482903e5a696602d491c8f5</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>House</act:description>
   <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
 </gnc:account>
@@ -45,10 +45,10 @@
   <act:name>Other Asset</act:name>
   <act:id type="new">ad3b239297277c9ef3840c0433cecb18</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Other Asset</act:description>
   <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
 </gnc:account>
@@ -56,10 +56,10 @@
   <act:name>Vehicle</act:name>
   <act:id type="new">5913089ffc36df6f0a5d96a5d7a444c0</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Vehicle</act:description>
   <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
 </gnc:account>

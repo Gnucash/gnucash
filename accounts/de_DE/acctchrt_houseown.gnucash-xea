@@ -13,20 +13,20 @@
   <act:name>Aktiva</act:name>
   <act:id type="new">8f1b9e7e37e9a76c2289ef4fe9adcdd9</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Aktiva</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sachanlagen</act:name>
   <act:id type="new">f7b3424631deed453984e6f5c5569669</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Sachanlagen</act:description>
   <act:parent type="new">8f1b9e7e37e9a76c2289ef4fe9adcdd9</act:parent>
 </gnc:account>
@@ -34,10 +34,10 @@
   <act:name>Haus</act:name>
   <act:id type="new">db569b17596d96e049d04d6e272ee49b</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Haus</act:description>
   <act:parent type="new">f7b3424631deed453984e6f5c5569669</act:parent>
 </gnc:account>
@@ -45,20 +45,20 @@
   <act:name>Passiva</act:name>
   <act:id type="new">60d5e7e410dc5fdf91cf2ecbb5b7245c</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Passiva</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kredite</act:name>
   <act:id type="new">13df44e66790069c74d563946aa0394e</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Kredite</act:description>
   <act:parent type="new">60d5e7e410dc5fdf91cf2ecbb5b7245c</act:parent>
 </gnc:account>
@@ -66,10 +66,10 @@
   <act:name>Bausparvertrag</act:name>
   <act:id type="new">98a42f23d7d77f9f18560564e00f7fac</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Bausparvertrag</act:description>
   <act:parent type="new">13df44e66790069c74d563946aa0394e</act:parent>
 </gnc:account>
@@ -77,20 +77,20 @@
   <act:name>Ausgaben</act:name>
   <act:id type="new">bc39f4d37eb75353f4f971e80b9d2818</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Ausgaben</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Versicherungen</act:name>
   <act:id type="new">b0dbf43ea99f54e0a9f94a535b10941b</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Versicherungen</act:description>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
@@ -98,10 +98,10 @@
   <act:name>Hausrat</act:name>
   <act:id type="new">07ecd30d56a099b4ebb15d681707dba1</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Hausratsversicherung</act:description>
   <act:parent type="new">b0dbf43ea99f54e0a9f94a535b10941b</act:parent>
 </gnc:account>
@@ -109,10 +109,10 @@
   <act:name>Wohnen</act:name>
   <act:id type="new">b413c76bf6939070b97f7fed1c4fd367</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Ausgaben f&#252;r Wohnung/Haus</act:description>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
@@ -120,10 +120,10 @@
   <act:name>Bausparvertrag</act:name>
   <act:id type="new">1964ebe7c2ce437561ff2f68142ac8d1</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Zahlungen f&#252;r Bausparvertrag</act:description>
   <act:parent type="new">b413c76bf6939070b97f7fed1c4fd367</act:parent>
 </gnc:account>
@@ -131,10 +131,10 @@
   <act:name>Grundsteuer</act:name>
   <act:id type="new">4c2b07ea60df558765af050ee8254dc1</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Grundsteuer</act:description>
   <act:parent type="new">b413c76bf6939070b97f7fed1c4fd367</act:parent>
 </gnc:account>
@@ -142,10 +142,10 @@
   <act:name>Reparaturen</act:name>
   <act:id type="new">ca150a9224f729a01d8b0236412c85ea</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Reparaturen</act:description>
   <act:parent type="new">b413c76bf6939070b97f7fed1c4fd367</act:parent>
 </gnc:account>

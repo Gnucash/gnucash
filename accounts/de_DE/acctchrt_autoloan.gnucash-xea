@@ -13,20 +13,20 @@
   <act:name>Passiva</act:name>
   <act:id type="new">60d5e7e410dc5fdf91cf2ecbb5b7245c</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Passiva</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kredite</act:name>
   <act:id type="new">13df44e66790069c74d563946aa0394e</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Kredite</act:description>
   <act:parent type="new">60d5e7e410dc5fdf91cf2ecbb5b7245c</act:parent>
 </gnc:account>
@@ -34,10 +34,10 @@
   <act:name>Auto</act:name>
   <act:id type="new">552d8f7e89cae99bc7804269d87e88a3</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Kredit f&#252;r Autokauf</act:description>
   <act:parent type="new">13df44e66790069c74d563946aa0394e</act:parent>
 </gnc:account>
@@ -45,20 +45,20 @@
   <act:name>Ausgaben</act:name>
   <act:id type="new">bc39f4d37eb75353f4f971e80b9d2818</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Ausgaben</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fahrtkosten</act:name>
   <act:id type="new">d4aa7c28431fc2bb69a289bc62c952f1</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Fahrtkosten</act:description>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
@@ -66,10 +66,10 @@
   <act:name>Auto</act:name>
   <act:id type="new">8fc4ba994d32d90d7a9a9112ee37f3f6</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Auto</act:description>
   <act:parent type="new">d4aa7c28431fc2bb69a289bc62c952f1</act:parent>
 </gnc:account>
@@ -77,10 +77,10 @@
   <act:name>Kreditzinsen</act:name>
   <act:id type="new">2d0981266884e7169aabc90b4199b788</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Kreditzinsen f&#252;r Autokauf</act:description>
   <act:parent type="new">8fc4ba994d32d90d7a9a9112ee37f3f6</act:parent>
 </gnc:account>

@@ -11,30 +11,30 @@
   <act:name>Mortgage Loan</act:name>
   <act:id type="guid">b3f97c81a91eabbd7ff647a980c788e8</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Mortgage Loan</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Interest</act:name>
   <act:id type="guid">92d78493399e05c800764dd576fb46e2</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Interest</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Mortgage Interest</act:name>
   <act:id type="guid">e948e72a223cb0293ae5a27b2d35b324</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Mortgage Interest</act:description>
   <act:parent type="guid">92d78493399e05c800764dd576fb46e2</act:parent>
 </gnc:account>
