@@ -20,9 +20,12 @@ case $1 in
   stop)
     $PG_CTL stop
     ;;
+  status)
+    $PG_CTL status
+    ;;
   connect)
     $PG_CTL status | grep "not running" && $PG_CTL start && sleep 1
-    psql -p 7777 gnc_test
+    psql -p 7777 $2
     ;;
   *)
     echo "Bad command: $1"
