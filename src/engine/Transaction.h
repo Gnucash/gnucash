@@ -116,12 +116,11 @@ Splits plus the value of all of its sub-Accounts.
 #define TXN_TYPE_PAYMENT 'P'  /**< Transaction is a payment  */
 /**@}*/
 
-/***************************************************************
- * Transaction
- */
+/* --------------------------------------------------------------- */
+/* Transactions */
 
 /** @name Transaction creation and editing */
-/**@{*/
+/** @{ */
 /** 
  The xaccMallocTransaction() will malloc memory and initialize it.
  Once created, it is usually unsafe to merely "free" this memory;
@@ -213,11 +212,11 @@ Transaction * xaccTransLookup (const GUID *guid, QofBook *book);
  */
 guint gnc_book_count_transactions(QofBook *book);
 
-/**@}*/
+/** @} */
 
 
 /** @name Transaction general getters/setters */
-/**@{*/
+/** @{ */
 
 /** Sorts the splits in a transaction, putting the debits first,
  *  followed by the credits.
