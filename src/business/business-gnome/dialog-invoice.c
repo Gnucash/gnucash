@@ -65,10 +65,18 @@ struct _invoice_window {
   GtkWidget *	toolbar_dock;
   GtkWidget *	toolbar;
   GtkWidget *	statusbar;
+
+  /* Toolbar Widgets */
   GtkWidget *	edit_button;
+  GtkWidget *	enter_button;
+  GtkWidget *	cancel_button;
+  GtkWidget *	delete_button;
+  GtkWidget *	duplicate_button;
+  GtkWidget *	blank_button;
   GtkWidget *	print_button;
   GtkWidget *	post_button;
 
+  /* Data Widgets */
   GtkWidget *	id_entry;
   GtkWidget *	notes_text;
   GtkWidget *	opened_date;
@@ -572,6 +580,11 @@ gnc_invoice_window_create_toolbar (InvoiceWindow *iw)
   iw->toolbar = toolbar;
 
   iw->edit_button = toolbar_info[1].widget;
+  iw->enter_button = toolbar_info[3].widget;
+  iw->cancel_button = toolbar_info[4].widget;
+  iw->delete_button = toolbar_info[5].widget;
+  iw->duplicate_button = toolbar_info[7].widget;
+  iw->blank_button = toolbar_info[8].widget;
   iw->print_button = toolbar_info[10].widget;
   iw->post_button = toolbar_info[11].widget;
 
@@ -1048,10 +1061,6 @@ gnc_invoice_update_window (InvoiceWindow *iw)
       hide = glade_xml_get_widget (iw->xml, "hide4");
       gtk_widget_hide_all (hide);
 
-      /* Hide the edit and post buttons */
-      gtk_widget_hide_all (iw->post_button);
-      gtk_widget_hide_all (iw->edit_button);
-
     } else {			/* ! posted */
       hide = glade_xml_get_widget (iw->xml, "posted_label");
       gtk_widget_hide_all (hide);
@@ -1065,11 +1074,17 @@ gnc_invoice_update_window (InvoiceWindow *iw)
       gtk_widget_hide_all (hide);
       hide = glade_xml_get_widget (iw->xml, "hide2");
       gtk_widget_hide_all (hide);
-
-      /* Hide the print button */
-      gtk_widget_hide_all (iw->print_button);
     }
   }
+
+  gtk_widget_set_sensitive (iw->edit_button, !is_posted);
+  gtk_widget_set_sensitive (iw->enter_button, !is_posted);
+  gtk_widget_set_sensitive (iw->cancel_button, !is_posted);
+  gtk_widget_set_sensitive (iw->delete_button, !is_posted);
+  gtk_widget_set_sensitive (iw->duplicate_button, !is_posted);
+  gtk_widget_set_sensitive (iw->blank_button, !is_posted);
+  gtk_widget_set_sensitive (iw->print_button, is_posted);
+  gtk_widget_set_sensitive (iw->post_button, !is_posted);
 
   if (is_posted) {
     //    GtkWidget *hide;
@@ -1301,6 +1316,9 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   }
 
   gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
+
+  /* Show the dialog */
+  gtk_widget_show_all (iw->dialog);
 
   /* Now fill in a lot of the pieces and display properly */
   gnc_invoice_update_window (iw);
