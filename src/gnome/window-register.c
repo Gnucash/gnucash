@@ -88,6 +88,7 @@ static void startRecnCB(GtkWidget *w, gpointer data);
 static void deleteCB(GtkWidget *w, gpointer data);
 static void recordCB(GtkWidget *w, gpointer data);
 static void cancelCB(GtkWidget *w, gpointer data);
+static void closeCB(GtkWidget *w, gpointer data);
 
 #if 0
 static void startAdjBCB( GtkWidget * mw, XtPointer cd, XtPointer cb );
@@ -143,7 +144,6 @@ delete_event(GtkWidget *widget, gpointer data) {
   
   /* Change TRUE to FALSE and the main window will be destroyed with
    * a "delete_event". */
-  
   closeRegWindow(widget, data);
   return (FALSE);
 }
@@ -243,8 +243,11 @@ regWindowLedger(xaccLedgerDisplay *ledger) {
   char *windowname;
   GtkWidget *register_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   GtkWidget *register_vbox = gtk_vbox_new(FALSE, 0);
-  GtkWidget *table_frame = gtk_frame_new(NULL);
 
+  GtkWidget *table_frame = gtk_frame_new(NULL);
+#if 0
+  GtkWidget *table_frame = gtk_layout_new(NULL, NULL);
+#endif
   /* Menu creation */
 
   regData = (RegWindow *) (ledger->gui_hook);
@@ -425,6 +428,15 @@ regWindowLedger(xaccLedgerDisplay *ledger) {
                             NULL,
                             GTK_SIGNAL_FUNC(startRecnCB),
                             (gpointer) regData);
+
+     gtk_toolbar_append_item(GTK_TOOLBAR(toolbar),
+                             "Close",
+                             "Close the register.",
+                             "Close the register.",
+                             NULL,
+                             GTK_SIGNAL_FUNC(closeCB),
+                             (gpointer) regData);
+
     
     gtk_box_pack_start(GTK_BOX(controls_hbox), toolbar, FALSE, FALSE, 0); 
     gtk_box_pack_end(GTK_BOX(controls_hbox), style_menu, FALSE, FALSE, 0); 
@@ -437,7 +449,6 @@ regWindowLedger(xaccLedgerDisplay *ledger) {
     gtk_widget_show(handle_box);
   }
 
-  gtk_container_add(GTK_CONTAINER(table_frame),     register_vbox);
   gtk_container_add(GTK_CONTAINER(register_window), register_vbox);
 
   gtk_widget_show(table_frame);  
@@ -611,11 +622,11 @@ static void
 deleteCB(GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = (RegWindow *) data;
-  Split * split;
+  Split * split, *s;
   Transaction *trans;
   char buf[BUFSIZE];
   int i, num_splits;
-  Account **affected_accounts;
+  Account *acc, **affected_accounts;
   
   /* get the current split based on cursor position */
   split = xaccSRGetCurrentSplit (regData->ledger->ledger);
@@ -632,18 +643,24 @@ deleteCB(GtkWidget *widget, gpointer data)
    * thier register windows after the deletion.
    */
   num_splits = xaccTransCountSplits (trans);
-  affected_accounts = (Account **) malloc (num_splits * sizeof (Account *));
+  g_message("%s:%d", G_GNUC_PRETTY_FUNCTION, num_splits);
+  affected_accounts = (Account **) malloc ((num_splits+1) * sizeof (Account *));
   for (i=0; i<num_splits; i++) 
   {
-    split = xaccTransGetSplit (trans, i);
-    affected_accounts[i] = xaccSplitGetAccount (split);
+    s = xaccTransGetSplit (trans, i);
+    affected_accounts[i] = xaccSplitGetAccount (s);
   }
-
+  affected_accounts[num_splits] = NULL;
+  
+  acc = xaccSplitGetAccount (split);
+  xaccAccountBeginEdit (acc, 1);
+  xaccTransBeginEdit (trans, 1);
   xaccSplitDestroy (split);
-
+  xaccTransCommitEdit (trans);
+  xaccAccountCommitEdit (acc);
   xaccAccListDisplayRefresh (affected_accounts);
-
   free (affected_accounts);
+  refreshMainWindow ();
 }
 
 /********************************************************************\
@@ -664,6 +681,21 @@ cancelCB( GtkWidget *w, gpointer data)
   split = xaccSRGetCurrentSplit (regData->ledger->ledger);
   xaccSRLoadRegEntry (regData->ledger->ledger, split);
   xaccRefreshTableGUI (regData->ledger->ledger->table);
+}
+
+
+/********************************************************************\
+ * closeCB                                                         *
+ *                                                                  *
+ * Args:   widget - the widget that called us                           *
+ *         data - regData - the data struct for this register         *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+closeCB( GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData = (RegWindow *) data;
+  gtk_widget_destroy (gtk_widget_get_toplevel (regData->dialog));
 }
 
 /********************************************************************\

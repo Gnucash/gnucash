@@ -29,8 +29,15 @@
 
 #include "messages.h"
 #include "top-level.h"
+#include "cursors.h"
 #include "ui-callbacks.h"
 #include "util.h"
+
+GncCursorDef gnc_cursors[GNC_CURSOR_LAST] = {
+        {  NULL, GDK_ARROW },
+        {  NULL, GDK_WATCH },
+};
+
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
@@ -172,6 +179,31 @@ destroyShellCB( Widget w, XtPointer cd, XtPointer cb )
   }
 #endif
 
+
+void
+gnc_ui_init_cursors (void)
+{
+        int i;
+        for (i = 0; i < GNC_CURSOR_LAST; i++)
+                gnc_cursors[i].cursor  = gdk_cursor_new( gnc_cursors[i].type);
+}
+
+void
+gnc_ui_shutdown_cursors(void)
+{
+        int i;
+        for (i = 0; i < GNC_CURSOR_LAST; i++)
+                gdk_cursor_destroy (gnc_cursors[i].cursor);
+}
+
+void
+gnc_ui_set_cursor (GdkWindow *win, int type)
+{
+        if ( -1 < type  && type < GNC_CURSOR_LAST)
+                if (win)
+                        gdk_window_set_cursor (win, gnc_cursors[type].cursor);
+}
+
 /********************************************************************\
  * setBusyCursor                                                    * 
  *   sets the cursor to the busy watch                              * 
@@ -182,20 +214,10 @@ destroyShellCB( Widget w, XtPointer cd, XtPointer cb )
 void 
 setBusyCursor(GtkWidget *w)
 {
-  PERR("Unimplemented: setBusyCursor\n");
 
-#if 0
-  if( realized )
-  {
-    static Cursor watch = 0;
+  if (w)
+          gnc_ui_set_cursor(w->window, GNC_CURSOR_BUSY);
     
-    if( watch == 0 )
-      watch = XCreateFontCursor(XtDisplay(w),XC_watch);
-    
-    XDefineCursor(XtDisplay(w),XtWindow(w),watch);
-    XmUpdateDisplay(w);
-  }
-#endif
 }
 
 /********************************************************************\
@@ -208,15 +230,10 @@ setBusyCursor(GtkWidget *w)
 void 
 unsetBusyCursor(GtkWidget *w)
 {
-  PERR("Unimplemented: unsetBusyCursor\n");
   
-# if 0
-  if( realized )
-  {
-    XUndefineCursor(XtDisplay(w),XtWindow(w));
-    XmUpdateDisplay(w);
-  }
-# endif
+  if (w)
+    gnc_ui_set_cursor(w->window, GNC_CURSOR_NORMAL);
+
 }
 
 

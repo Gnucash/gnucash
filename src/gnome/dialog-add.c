@@ -144,7 +144,6 @@ gnc_ui_accWindow_list_fill ( GtkWidget *listOfTypes )
     gtk_object_set_data(GTK_OBJECT(list_item), "accType", (gpointer)i);
     gtk_widget_show(list_item);
   }
-  
   /* the last selected account will become selected again */
   gtk_list_select_item(GTK_LIST(listOfTypes), 
                        _accWindow_last_used_account_type);
@@ -168,8 +167,10 @@ gnc_ui_accWindow_tree_select ( GtkWidget *widget, GtkWidget *child,
   GList       *children;
   GtkListItem *listItem;
   int        accountType, parentAccType;
+
   AccWindow   *accData;
-  
+  gint clicked;
+	
   /* Find accData so we can set the account type */
   toplevel    = gtk_widget_get_toplevel(GTK_WIDGET(widget));
   listOfTypes = gtk_object_get_data(GTK_OBJECT(toplevel), "listOfTypes");
@@ -204,7 +205,7 @@ gnc_ui_accWindow_tree_select ( GtkWidget *widget, GtkWidget *child,
       }
       return;
     }
-    
+
     parentAccType = xaccAccountGetType(accData->parentAccount);
     /* set the alowable account types for this parent, the relation
        is taken from xacc */
@@ -371,7 +372,7 @@ gnc_ui_accWindow_tree_fill (GtkTree *tree, AccountGroup *accts,
   {
     Account      *acc = xaccGroupGetAccount(accts, currentAccount);
     AccountGroup *hasChildren;
-    
+
     if(acc == selectedOne)
       myRetVal = currentAccount;
     
@@ -541,8 +542,8 @@ gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
                                          accData->parentAccount);
   newRow    = gtk_ctree_insert_node (ctree, parentRow, newRow, text, 0,
                                      NULL, NULL, NULL, NULL, /* PIXMAP INFO */
-                                     TRUE, TRUE);
-  
+                                     FALSE, TRUE);
+
   gtk_ctree_node_set_row_data(GTK_CTREE(ctree), newRow, account);
 
   /* FIXME: Maybe
@@ -552,6 +553,43 @@ gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
 
   gnome_dialog_close(GNOME_DIALOG(gtk_widget_get_toplevel(dialog)));
 }
+
+/********************************************************************\
+ * gnc_ui_accWindow_tree_expand
+ *   expands the accounts tree to the node containing the 
+ *   given account
+ *                                                                  * 
+ * Args:           tree - the tree to check for the account
+ *                    account - the account to check for 
+ * Return:  the GtkTreeItem containing the account, or NULL if not
+ *                      found
+\********************************************************************/
+GtkTreeItem *
+gnc_ui_accWindow_tree_expand (GtkTree *tree, Account *account)
+{
+	GList *l;
+
+	
+	if (!tree)
+		return NULL;
+	
+	for (l = tree->children; l; l=l->next) {
+		GtkTreeItem *item = l->data;
+		if ( account == gtk_object_get_user_data (GTK_OBJECT(item)))
+		  return item;
+
+		if (item->subtree) {
+			GtkTreeItem *subitem;
+			subitem = gnc_ui_accWindow_tree_expand(GTK_TREE(item->subtree), account);
+			if (subitem){
+				gtk_tree_item_expand(item);
+				return subitem;
+			}
+		}
+	}
+	return NULL;
+}
+
 
 /********************************************************************\
  * accWindow                                                        *
@@ -569,11 +607,12 @@ accWindow (AccountGroup *grp)
   gchar     *title      = SETUP_ACCT_STR;
 
   accData = (AccWindow *)g_malloc(sizeof(AccWindow));
-  
   accData->parentAccount = (Account*)grp;
   
+
   /* if no account group specified, assume top-level group */
   if (!grp) grp = gncGetCurrentGroup();
+
   accData->parentAccount = (Account*)grp;
   accData->newAccount    = xaccMallocAccount();
   accData->type          = _accWindow_last_used_account_type;
@@ -587,7 +626,7 @@ accWindow (AccountGroup *grp)
 
   /* Add accData to the dialogs object data so we can get it from anywhere later */
   gtk_object_set_data (GTK_OBJECT (accData->dialog), "accData", accData );
-  
+
   vbox = GNOME_DIALOG (accData->dialog)->vbox;
   gtk_widget_show (vbox);
   
@@ -633,7 +672,7 @@ accWindow (AccountGroup *grp)
     gtk_table_attach_defaults(GTK_TABLE(accInfoTable), aWidget,
                               1, 2, 1, 2);
     
-    aWidget = gtk_label_new("Curency:");
+    aWidget = gtk_label_new("Currency:");
     gtk_widget_show(aWidget);
     gtk_misc_set_alignment (GTK_MISC (aWidget), 0.95, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(accInfoTable), aWidget,
@@ -789,8 +828,18 @@ accWindow (AccountGroup *grp)
                      
 
   gtk_widget_show(GTK_WIDGET(accData->dialog));  
+
   return accData;
 }
+
+
+/*  This is a no-op for the gnome code */
+void
+xaccDestroyEditNotesWindow (Account *acc)
+{
+  return;
+}
+
 
 
 /********************** END OF FILE *********************************\

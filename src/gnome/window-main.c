@@ -295,6 +295,39 @@ GnomeUIInfo toolbar[] =
   GNOMEUIINFO_END
 };
 
+
+static gint
+ctree_button_press(GtkWidget *widget, GdkEventButton *event)
+{
+	GtkCTree *ctree = GTK_CTREE(widget);
+	GtkCList *clist = GTK_CLIST(widget);
+	GtkCTreeNode *node;
+	Account *account, *old_acct;
+	gint x, y, row, column;
+	
+	if (event->window == clist->clist_window) {
+		x = event->x;
+		y = event->y;
+
+		if (!gtk_clist_get_selection_info(clist, x, y, &row, &column))
+			return FALSE;
+
+		node = gtk_ctree_node_nth (ctree, row);
+		account = gtk_ctree_node_get_row_data(ctree, node);
+
+		
+		if (event->type == GDK_2BUTTON_PRESS) {
+			/* so the the button_release will leave it selected */
+			gtk_ctree_unselect (ctree, node);
+           /* this will stop the node from being collapsed/expanded */
+			gtk_signal_emit_stop_by_name (GTK_OBJECT(widget), "button_press_event");
+			regWindowSimple ( account );
+			return TRUE;
+		}
+  }
+	return FALSE;
+}
+
 static gint
 acct_ctree_select(GtkWidget *widget, GtkCTreeNode *row, gint column) 
 {
@@ -411,7 +444,6 @@ gnc_ui_acct_ctree_fill(GtkCTree *ctree, GtkCTreeNode *parent, AccountGroup *acct
     gchar         buf[BUFSIZE];
     GtkWidget    *popup;
     double        dbalance = 0.0;
-        
 
     /* fill in the balance column */
     dbalance = xaccAccountGetBalance (acc);
@@ -432,11 +464,11 @@ gnc_ui_acct_ctree_fill(GtkCTree *ctree, GtkCTreeNode *parent, AccountGroup *acct
 
     text[0] = xaccAccountGetName(acc);
     text[1] = xaccAccountGetDescription(acc);
-    text[2] = buf;
+    text[2] = xaccPrintAmount (dbalance, PRTSYM | PRTSEP);
     
     sibling = gtk_ctree_insert_node (ctree, parent, sibling, text, 0,
                                      NULL, NULL, NULL, NULL,
-				     FALSE, FALSE);
+                                     FALSE, FALSE);
 				           
     /* Set the user_data for the tree item to the account it */
     /* represents.                                           */
@@ -447,16 +479,6 @@ gnc_ui_acct_ctree_fill(GtkCTree *ctree, GtkCTreeNode *parent, AccountGroup *acct
 
 //    gtk_ctree_toggle_expansion(GTK_CTREE(ctree), GTK_CTREE_NODE(sibling));
 
-    /* Connect the signal to the tree_select_row event */
-    gtk_signal_connect (GTK_OBJECT(ctree), 
-                        "tree_select_row",
-                        GTK_SIGNAL_FUNC(acct_ctree_select), 
-                        NULL);
-
-    gtk_signal_connect (GTK_OBJECT(ctree), 
-                        "tree_unselect_row",
-                        GTK_SIGNAL_FUNC(acct_ctree_unselect), 
-                        NULL);                        
     
     /* If this account has children,
      * then we need to build a subtree and fill it 
@@ -470,6 +492,35 @@ gnc_ui_acct_ctree_fill(GtkCTree *ctree, GtkCTreeNode *parent, AccountGroup *acct
   				       
 }
 
+ 
+static void
+tree_set_row_text (GtkCTree *ctree, GtkCTreeNode *node, gpointer data)
+{
+       Account *acc = (Account *)gtk_ctree_node_get_row_data(ctree, node);
+         AccountGroup *hasChildren = xaccAccountGetChildren(acc);
+         int acc_type = xaccAccountGetType (acc);
+         double balance;
+         gchar *text[3];
+         int i;
+ 
+         hasChildren = xaccAccountGetChildren(acc);
+ 
+         balance = xaccAccountGetBalance(acc) + xaccGroupGetBalance(hasChildren);
+         
+         if ((EXPENSE == acc_type) || (INCOME == acc_type))
+                 balance = -balance;
+         
+         text[0] = xaccAccountGetName(acc);
+         text[1] = xaccAccountGetDescription(acc);
+         text[2] = xaccPrintAmount (balance, PRTSYM | PRTSEP);
+ 
+         for (i=0; i<3; i++)
+                 gtk_ctree_node_set_text (ctree, node, i, text[i]);
+}
+ 
+ 
+
+
 /********************************************************************\
  * refresh_tree                                                     *
  *   refreshes the main window                                      *
@@ -482,21 +533,14 @@ gnc_ui_refresh_tree()
 {
   GtkCTree     *ctree;
   GtkCTreeNode *parent;
-  AccountGroup *accts;
   
   parent = gtk_object_get_data(GTK_OBJECT(app), "ctree_parent");
   ctree  = gtk_object_get_data(GTK_OBJECT(app), "ctree");
-  
-  accts  = gncGetCurrentGroup();
-  
-  gtk_ctree_remove_node(ctree, parent);
 
-  free(parent);
-  
-  parent = NULL;
-  
   gtk_clist_freeze(GTK_CLIST(ctree));
-  gnc_ui_acct_ctree_fill(ctree, parent, accts);
+   
+  gtk_ctree_pre_recursive(ctree, parent, (GtkCTreeFunc)tree_set_row_text, NULL);
+
   gtk_clist_thaw(GTK_CLIST(ctree));
   gtk_clist_columns_autosize(GTK_CLIST(ctree));  
  
@@ -712,6 +756,22 @@ mainWindow() {
   /* Create ctree */
   ctree = gtk_ctree_new_with_titles(3, 0, ctitles);
 
+  gtk_signal_connect (GTK_OBJECT(ctree),
+                      "button_press_event",
+                      GTK_SIGNAL_FUNC(ctree_button_press),
+                      NULL);
+
+    /* Connect the signal to the tree_select_row event */
+    gtk_signal_connect (GTK_OBJECT(ctree), 
+                        "tree_select_row",
+                        GTK_SIGNAL_FUNC(acct_ctree_select), 
+                        NULL);
+
+    gtk_signal_connect (GTK_OBJECT(ctree), 
+                        "tree_unselect_row",
+                        GTK_SIGNAL_FUNC(acct_ctree_unselect), 
+                        NULL);                        
+
   gtk_object_set_data(GTK_OBJECT(app), "ctree", ctree);
   gtk_object_set_data(GTK_OBJECT(app), "ctree_parent", parent);
 
@@ -779,7 +839,7 @@ gnc_ui_shutdown (GtkWidget *widget, gpointer *data)
   Local Variables:
   tab-width: 2
   indent-tabs-mode: nil
-  mode: c-mode
+  mode: c
   c-indentation-style: gnu
   eval: (c-set-offset 'block-open '-)
   End:
