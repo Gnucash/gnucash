@@ -14,6 +14,7 @@
 #include "Group.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "Transaction.h"
 #include "TransactionP.h"
 
 #include "test-engine-stuff.h"
