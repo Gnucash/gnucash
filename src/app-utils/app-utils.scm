@@ -3,7 +3,7 @@
 (use-modules (g-wrapped gw-app-utils))
 (use-modules (g-wrapped gw-runtime))
 (use-modules (srfi srfi-1))
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/engine" 0)
@@ -241,13 +241,6 @@
 (export simple-obj-from-list)
 (export make-simple-obj)
 
-;; utilities
-(export hash-fold)
-(export item-list->hash!)
-(export string-split)
-(export string-join)
-(export gnc:backtrace-if-exception)
-
 (load-from-path "c-interface.scm")
 (load-from-path "config-var.scm")
 (load-from-path "options.scm")
@@ -255,7 +248,6 @@
 (load-from-path "prefs.scm")
 (load-from-path "date-utilities.scm")
 (load-from-path "simple-obj.scm")
-(load-from-path "utilities.scm")
 
 (gnc:hook-add-dangler gnc:*startup-hook*
                       (lambda ()
