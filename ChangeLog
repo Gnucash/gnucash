@@ -1,3 +1,7 @@
+2001-07-04  Bill Gribble  <grib@billgribble.com>
+
+	* backport QIF import fixes from 1.7 tree
+
 2001-07-04  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/depend.scm: disable load time output

@@ -64,15 +64,15 @@ gnc_ui_select_commodity_cancel_cb      (GtkButton       *button,
                                         gpointer         user_data);
 
 void
-gnc_ui_new_commodity_ok_cb             (GtkButton       *button,
+gnc_ui_commodity_ok_cb                 (GtkButton       *button,
                                         gpointer         user_data);
 
 void
-gnc_ui_new_commodity_cancel_cb         (GtkButton       *button,
+gnc_ui_commodity_cancel_cb             (GtkButton       *button,
                                         gpointer         user_data);
 
 void
-gnc_ui_new_commodity_help_cb           (GtkButton       *button,
+gnc_ui_commodity_help_cb               (GtkButton       *button,
                                         gpointer         user_data);
 
 gboolean
@@ -114,12 +114,12 @@ gnc_ui_qif_import_date_format_next_cb  (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         user_data);
 
 gboolean
-gnc_ui_qif_import_default_acct_next_cb (GnomeDruidPage  *gnomedruidpage,
+gnc_ui_qif_import_default_acct_back_cb (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data);
 
 gboolean
-gnc_ui_qif_import_default_acct_back_cb (GnomeDruidPage  *gnomedruidpage,
+gnc_ui_qif_import_default_acct_next_cb (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data);
 
@@ -246,28 +246,4 @@ gnc_edit_column_view_move_down_cb      (GtkButton       *button,
 
 void
 gnc_column_view_edit_size_cb           (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_new_commodity_ok_cb             (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_new_commodity_cancel_cb         (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_new_commodity_help_cb           (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_commodity_ok_cb                 (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_commodity_cancel_cb             (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_commodity_help_cb               (GtkButton       *button,
                                         gpointer         user_data);

@@ -939,10 +939,14 @@ gnc_ui_qif_import_default_acct_back_cb(GnomeDruidPage * page,
   scm_protect_object(wind->imported_files);
   
   scm_unprotect_object(wind->selected_file);
-  wind->imported_files = SCM_BOOL_F;
+  wind->selected_file = SCM_BOOL_F;
   scm_protect_object(wind->selected_file);
-  
-  return FALSE;
+
+  gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                       get_named_page(wind, "load_file_page"));
+  gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
+                                    TRUE, TRUE, TRUE); 
+  return TRUE;  
 }
 
 
