@@ -968,8 +968,8 @@ print_check_cb(GtkWidget * widget, gpointer data)
                        gh_str02scm(memo)));
   }
 #else
-  gnc_info_dialog_parented(reg_data->dialog,
-                           _"You need to install the gnome-print library.");
+  gnc_info_dialog_parented(GTK_WINDOW(reg_data->window),
+                           _("You need to install the gnome-print library."));
 #endif
 }
 

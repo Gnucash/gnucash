@@ -17,15 +17,16 @@
 
 (define (qif-import:find-or-make-acct gnc-name gnc-acct-hash 
                                       gnc-type qif-info acct-group)
-  (let ((existing-account (hash-ref gnc-acct-hash gnc-name))
-        (same-gnc-account (gnc:get-account-from-full-name acct-group
-                                                          gnc-name 
-                                                          #\:))
-        (check-full-name #f)
-        (make-new-acct #f)
-        (default-currency 
-          (gnc:option-value 
-           (gnc:lookup-global-option "International" "Default Currency"))))
+  (let* ((separator (string-ref (gnc:account-separator-char) 0))
+         (existing-account (hash-ref gnc-acct-hash gnc-name))
+         (same-gnc-account (gnc:get-account-from-full-name acct-group
+                                                           gnc-name 
+                                                           separator))
+         (check-full-name #f)
+         (make-new-acct #f)
+         (default-currency 
+           (gnc:option-value 
+            (gnc:lookup-global-option "International" "Default Currency"))))
     
     (if (or (pointer-token-null? same-gnc-account) 
             (and (not (pointer-token-null? same-gnc-account))
@@ -45,11 +46,11 @@
               (parent-name #f)
               (acct-name #f)
               (last-colon #f))
-          (set! last-colon (string-rindex gnc-name #\:))
-
+          (set! last-colon (string-rindex gnc-name separator))
+          
           (gnc:init-account new-acct)
           (gnc:account-begin-edit new-acct 1)
-
+          
           ;; if this is a copy of an existing gnc account, 
           ;; copy the account properties 
           (if (not make-new-acct)

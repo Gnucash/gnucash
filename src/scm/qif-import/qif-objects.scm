@@ -324,8 +324,12 @@
     (if (or (string? (qif-xtn:share-price self))
             (string? (qif-xtn:num-shares self))
             (string? (qif-xtn:adjustment self)))
-        (set! reparse-ok #f))
-
+        (begin 
+          (display "qif-import: failed to reparse stock info")
+          (newline)
+          (set! reparse-ok 
+                (list #f "Could not autodetect radix format."))))
+    
     ;; reparse the amount of each split 
     (for-each 
      (lambda (split)
@@ -334,8 +338,11 @@
             split 
             (qif-file:parse-value qif-file (qif-split:amount split))))
        (if (string? (qif-split:amount split))
-           (set! reparse-ok #f)))
-     
+           (begin
+             (display "qif-import: failed to reparse value")
+             (write (qif-split:amount split)) (newline)
+             (set! reparse-ok 
+                   (list #f "Could not autodetect radix format.")))))
      (qif-xtn:splits self))
     
     ;; reparse the date 
@@ -344,8 +351,11 @@
                            (qif-file:parse-date qif-file 
                                                 (qif-xtn:date self))))
     (if (string? (qif-xtn:date self))
-        (set! reparse-ok #f))
-
+        (begin 
+          (display "qif-import: failed to reparse date")
+          (write (qif-xtn:date self)) (newline)
+          (set! reparse-ok 
+                (list #f "Could not autodetect date format."))))
     reparse-ok))
 
 (define (qif-xtn:print self)
@@ -403,7 +413,7 @@
        self (qif-file:parse-value file (qif-acct:limit self))))
   (if (or (string? (qif-acct:limit self))
           (string? (qif-acct:type self)))
-      #f
+      (list #f "Could not autodetect radix for fields in Account record")
       #t))
 
 
@@ -518,7 +528,8 @@
 
   (if (or (string? (qif-cat:tax-rate self))
           (string? (qif-cat:budget-amt self)))
-      #f #t))
+      (list #f "Could not autodetect radix for fields in Category record")
+      #t))
 
 
 (define (qif-file:add-xtn! self xtn)

@@ -55,6 +55,9 @@
 /* Use the new XmHTML widdget instead of the old htmlw widget */
 #define  HAVE_LIBXMHTML 1
 
+/* use gnomeprint if it's available */
+#undef HAVE_LIBGNOMEPRINT
+
 /* misc image and compression libs needed by html widget */
 #undef HAVE_ZLIB               
 #undef HAVE_PNG             

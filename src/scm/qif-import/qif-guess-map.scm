@@ -53,7 +53,9 @@
              (let* ((name (gnc:account-get-name child-acct))
                     (fullname 
                      (if (string? root-name)
-                         (string-append root-name ":" name)
+                         (string-append root-name 
+                                        (gnc:account-separator-char)
+                                        name)
                          name)))
                (set! names 
                      (append (cons (list name fullname child-acct)

@@ -25,7 +25,13 @@
                                                   "/scm/qif-import")
                                    (gnc:config-var-value-get gnc:*load-path*)))
 
+  (gnc:config-var-value-set! gnc:*load-path* #f
+                             (cons (string-append gnc:_share-dir-default_ 
+                                                  "/scm/printing")
+                                   (gnc:config-var-value-get gnc:*load-path*)))
+
   (gnc:depend "qif-import.scm")
+  (gnc:depend "print-check.scm")
 
   ;; Load the system configs
   (if (not (gnc:load-system-config-if-needed))

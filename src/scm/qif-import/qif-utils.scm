@@ -39,9 +39,16 @@
 
 (define (string-remove-char str char)
   (let ((rexpstr 
-         (if (not (eq? char #\.))
-             (make-string 1 char)
-             "\\.")))
+         (case char  
+           ((#\.) "\\.")
+           ((#\^) "\\^")
+           ((#\$) "\\$")
+           ((#\*) "\\*")
+           ((#\+) "\\+")
+           ((#\\) "\\\\")
+           ((#\?) "\\?")
+           (else 
+             (make-string 1 char)))))
     (regexp-substitute/global #f rexpstr str 'pre 'post)))
 
 (define (string-char-count str char)

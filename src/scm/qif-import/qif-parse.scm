@@ -1,4 +1,4 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;  qif-parse.scm
 ;;;  routines to parse values and dates in QIF files. 
 ;;;
@@ -199,11 +199,13 @@
         (display "qif-import: Substituting 1/1/2999 for date.") (newline)
         (set! date-string "1/1/2999")))
 
+  (set! date-string (string-remove-trailing-space date-string))
+
   (let ((date-parts '())
         (numeric-date-parts '())
         (retval date-string)
         (match 
-         (string-match "([0-9]+) *[-/.'] *([0-9]+) *[-/.'] *([0-9]+)"
+         (string-match "^ *([0-9]+) *[-/.'] *([0-9]+) *[-/.'] *([0-9]+) *$"
                        date-string)))
     (if match
         (set! date-parts (list (match:substring match 1)
@@ -223,7 +225,7 @@
      ((not (eq? 3 (length date-parts)))
       (begin 
         (display "qif-file:parse-date : can't interpret date ")
-        (display date-string) (newline)))
+        (display date-string) (display " ") (write date-parts)(newline)))
      
      ;; if the format is unknown, don't try to fully interpret the 
      ;; number, just look for a good guess or an inconsistency with 
@@ -254,7 +256,7 @@
               (qif-file:set-guessed-date-format! self 'inconsistent))))
        
        ;; current guess is y/d/m (is this really possible?)
-       ((eq? (qif-file:guessed-date-format self) 'y-m-d)
+       ((eq? (qif-file:guessed-date-format self) 'y-d-m)
         (let ((d (cadr numeric-date-parts))
               (m (caddr numeric-date-parts)))
           (if (or (not (number? m)) (not (number? d)) (> m 12) (> d 31))
@@ -357,11 +359,11 @@
 
 (define decimal-radix-regexp
   (make-regexp 
-   "^-?[0-9]+$|^-?[0-9]?[0-9]?[0-9]?(,[0-9][0-9][0-9])*(\\.[0-9]*)?$"))
+   "^\\$?-?\\$?[0-9]+$|^\\$?-?\\$?[0-9]?[0-9]?[0-9]?(,[0-9][0-9][0-9])*(\\.[0-9]*)?$"))
 
 (define comma-radix-regexp
   (make-regexp 
-   "^-?[0-9]+$|^-?[0-9]?[0-9]?[0-9]?(\\.[0-9][0-9][0-9])*(,[0-9]*)?$"))
+   "^\\$?-?\\$?[0-9]+$|^\\$?-?\\$?[0-9]?[0-9]?[0-9]?(\\.[0-9][0-9][0-9])*(,[0-9]*)?$"))
 
 (define (value-is-decimal-radix? value)
   (if (regexp-exec decimal-radix-regexp value)
@@ -371,19 +373,35 @@
   (if (regexp-exec comma-radix-regexp value)
       #t #f))
 
-
 (define (qif-file:parse-value/decimal self value-string)
-  (+ 0.0 
-     (with-input-from-string (string-remove-char value-string #\,)
-       (lambda () (read)))))
-
+  (set! value-string (string-remove-trailing-space value-string))
+  (if (value-is-decimal-radix? value-string)
+      (let ((read-val
+             (with-input-from-string 
+                 (string-remove-char 
+                  (string-remove-char value-string #\,)
+                  #\$)
+               (lambda () (read)))))
+        (if (number? read-val)
+            (+ 0.0 read-val)
+            #f))
+      #f))
 
 (define (qif-file:parse-value/comma self value-string)
-  (+ 0.0 
-     (with-input-from-string 
-         (string-replace-char! (string-remove-char value-string #\.) 
-                               #\, #\.)
-       (lambda () (read)))))
+  (set! value-string (string-remove-trailing-space value-string))
+  (if (value-is-comma-radix? value-string)
+      (let ((read-val
+             (with-input-from-string 
+                 (string-remove-char 
+                  (string-replace-char! 
+                   (string-remove-char value-string #\.)
+                   #\, #\.)
+                  #\$)
+               (lambda () (read)))))
+        (if (number? read-val)
+            (+ 0.0 read-val)
+            #f))
+      #f))
 
 (define (qif-file:parse-value self value-string)
   (if (or (not (string? value-string))
