@@ -373,8 +373,6 @@ gnc_numeric   xaccSplitGetValue (Split * split);
 
 Account *     xaccSplitGetAccount (Split *split);
 const GUID *  xaccSplitGetAccountGUID(Split *split);
-void          xaccSplitSetAccount(Split *s, Account *act);
-void          xaccSplitSetAccountGUID(Split *s, GUID id);
 
 /* split types: normal stock-split */
 const char *xaccSplitGetType(const Split *s);

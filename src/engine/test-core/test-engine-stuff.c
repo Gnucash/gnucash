@@ -14,6 +14,8 @@
 #include "Group.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "TransactionP.h"
+
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 
@@ -908,6 +910,11 @@ get_random_split(GNCBook *book, gnc_numeric num)
     
     {
         GUID *ranguid = get_random_guid();
+
+        /* ???????? this is not enough to insert the split into an account!!
+         * you need to do a 'xaccAccountInsertSplit' to do that !!! 
+         * does ths code actually work ????
+         */
         xaccSplitSetAccountGUID(ret, *ranguid);
         g_free(ranguid);
     }
@@ -1456,6 +1463,11 @@ get_random_book (void)
   GNCBook *book;
 
   book = gnc_book_new ();
+
+  /* XXX fixme -- gnc_book_set_group is a private engine function, 
+   * it should not be invoked in ordinary test cases.  Its should 
+   * be more like make_random_pricedb below... */
+  gnc_book_set_group (book, get_random_group (book));
 
   make_random_group (book, gnc_book_get_group (book));
   make_random_pricedb (book, gnc_book_get_pricedb (book));

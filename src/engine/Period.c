@@ -59,13 +59,23 @@ reparent (Transaction *trans, GNCBook *book)
 {
    GList *node;
 
+   xaccTransBeginEdit (trans);
+
    for (node = trans->splits; node; node = node->next)
    {
       Account *twin;
       Split *s = node->data;
 
       twin = xaccAccountLookupTwin (s->acc, book);
+      xaccSplitSetAccount
    }
+
+   xaccRemoveEntity(trans->book->entity_table, &trans->guid);
+
+   xaccStoreEntity(book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
+   trans->book = book;
+   xaccTransCommitEdit (trans);
+
 }
 
 /* ================================================================ */

@@ -4,7 +4,7 @@
 
 #include "GNCIdP.h"
 
-#include "Account.h"
+#include "AccountP.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"
@@ -64,41 +64,35 @@ run_test (void)
         return;
     }
 
-    xaccSplitSetAccount(spl, act1);
+    xaccAccountInsertSplit(act1, spl);
 
     if(act1 != xaccSplitGetAccount(spl))
     {
-        failure("xaccSplitSetAccount is broken");
+        failure("xaccAccountInsertSplit is broken");
         return;
     }
 
     if(!guid_equal(xaccAccountGetGUID(act1), xaccSplitGetAccountGUID(spl)))
     {
         failure("xaccSplitGetAccountGUID "
-                "after xaccSplitSetAccount failed");
+                "after xaccAccountInsertSplit failed");
         return;
     }
 
-    xaccSplitSetAccountGUID(spl, *xaccAccountGetGUID(act2));
-
-    if(act2 != xaccSplitGetAccount(spl))
-    {
-        failure("xaccSplitSetAccountGUID is broken");
-        return;
-    }
-
-    xaccSplitSetAccount(spl, NULL);
+    /* this is weird -- we are testing an engine private function.
+     * is this really what is intended here ??? */
+    xaccAccountRemoveSplit (act1, spl);
 
     if(xaccSplitGetAccount(spl))
     {
-        failure_args("xaccSplitSetAccount(NULL)", 
+        failure_args("xaccAccountRemoveSplit()", 
 		     __FILE__, __LINE__, "account not NULL");
         return;
     }
 
     if(!is_null_guid(xaccSplitGetAccountGUID(spl)))
     {
-        failure_args("xaccSplitSetAccount(NULL)", 
+        failure_args("xaccAccountRemoveSplit()", 
 		     __FILE__, __LINE__, "account guid not NULL");
         return;
     }

@@ -27,10 +27,10 @@ transaction_set_splits_to_accounts(Transaction *tr, Account *a1, Account *a2)
 
   split  = xaccTransGetSplit(tr, 0);
   
-  xaccSplitSetAccount(split, a1);
+  xaccAccountInsertSplit(a1, split);
 
   split = xaccTransGetSplit(tr, 1);
-  xaccSplitSetAccount(split, a2);
+  xaccAccountInsertSplit(a2, split);
   return;
 }
 
