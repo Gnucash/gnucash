@@ -13,6 +13,7 @@ libgnc_postgres_la_SOURCES = \
   events.c \
   gncquery.c \
   kvp-sql.c \
+  price.c \
   txn.c
 
 noinst_HEADERS = \
@@ -23,6 +24,7 @@ noinst_HEADERS = \
   events.h \
   gncquery.h \
   kvp-sql.h \
+  price.h \
   putil.h \
   txn.h
 
