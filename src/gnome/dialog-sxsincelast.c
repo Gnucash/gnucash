@@ -47,6 +47,7 @@
 #include "dialog-utils.h"
 #include "finvar.h"
 #include "gnc-book.h"
+#include "gnc-book-p.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-exp-parser.h"
