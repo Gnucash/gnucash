@@ -1,3 +1,10 @@
+2003-03-10  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/gnc-account-sel.c:
+	  If the nameList == NULL then add a blank line, to make sure
+	  the selector list is really empty, rather than defaulting to all of
+	  the accounts in the tree if there are none matching.
+	
 2003-03-09  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncEmployee.[ch]: added APIs to
