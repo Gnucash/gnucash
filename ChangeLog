@@ -1,3 +1,8 @@
+2002-07-21  Christian Stimming  <stimming@tuhh.de>
+
+	* po/fr.po: Fixed for French translation by James A. Treacy
+	<treacy@debian.org>
+
 2002-07-15  Christian Stimming  <stimming@tuhh.de>
 
 	* po/it.po: Updated Italian translation by Lorenzo Cappelletti

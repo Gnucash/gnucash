@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.6\n"
 "POT-Creation-Date: 2002-03-10 15:53-0800\n"
-"PO-Revision-Date: 2002-02-07 02:14GMT\n"
+"PO-Revision-Date: 2002-07-21 23:44+0200\n"
 "Last-Translator: Jérôme SAUTRET <jerome@sautret.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -964,7 +964,7 @@ msgstr "Tout sélectionner"
 #: src/gnome/dialog-options.c:1102 src/gnome/dialog-options.c:1248
 #: src/gnome/new-user-interface.c:247
 msgid "Clear All"
-msgstr "Tout pointer"
+msgstr "Tout désélectionner"
 
 # messages-i18n.c:210
 #: src/gnome/dialog-options.c:1110 src/gnome/dialog-options.c:1255
@@ -3227,7 +3227,7 @@ msgstr "Supprimer les cours antérieurs à une date donnée"
 #: src/gnome/glade-gnc-dialogs.c:7498 src/gnome/glade-gnc-dialogs.c:7887
 #: src/gnome/window-acct-tree.c:733 src/gnome/window-reconcile.c:1354
 msgid "Edit"
-msgstr "Afficher"
+msgstr "Éditer"
 
 # messages-i18n.c:105
 #: src/gnome/glade-gnc-dialogs.c:7505
@@ -3764,7 +3764,7 @@ msgstr "Ouvrir le compte sélectionné"
 # messages-i18n.c:80
 #: src/gnome/window-acct-tree.c:734 src/gnome/window-acct-tree.c:839
 msgid "Edit the selected account"
-msgstr "Afficher le compte sélectionné"
+msgstr "Éditer le compte sélectionné"
 
 # po/guile_strings.txt:127
 #: src/gnome/window-acct-tree.c:745
