@@ -1,3 +1,14 @@
+2001-06-13  James LewisMoss  <jimdres@mindspring.com>
+
+	* configure.in (CFLAGS): add test-files makefiles to list.
+
+	* src/test/Makefile.am: add SUBDIRS test-files.
+
+	* src/test/test-load-xml2.c (main): add test for file ending so we
+	don't get the Makefiles
+
+	* doc/sgml/de_DE/Makefile.am: remove empty SUBDIRS setting.
+
 2001-06-13  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/glade/stocks.glade: new file for old stock split druid
