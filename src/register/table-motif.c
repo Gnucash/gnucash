@@ -771,7 +771,8 @@ xaccRefreshTableGUI (Table * table)
 {int i;
 printf (" refresh numphysrows=%d numphyscols=%d \n",  table->num_phys_rows,table->num_phys_cols);
 for (i=0; i<table->num_phys_rows; i++) {
-printf ("cell %d color: 0x%x act:%s descr: %s \n", i, table->bg_colors[i][3], table->entries[i][2],
+printf ("cell %d\tcolor: 0x%x\tact:%s\tdescr: %s \n", i, 
+table->bg_colors[i][3], table->entries[i][2],
 table->entries[i][3]);
 }}
 
