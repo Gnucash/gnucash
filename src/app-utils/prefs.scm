@@ -506,6 +506,17 @@ without one.")
   (N_ "General") (N_ "No account list setup on new file")
   "j" (N_ "Don't popup the new account list dialog when you choose \"New File\" from the \"File\" menu") #f))
 
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  (N_ "General") (N_ "Days to retain log files")
+  "k" (N_ "Delete old log/backup files after this many days (0 = never).")
+    0.0 ;; default
+    0.0 ;; lower bound
+    99999.0 ;; upper bound
+    0.0 ;; number of decimals used for this range calculation
+    1.0 ;; step size
+  ))
+
 ;; QIF Import options. 
 
 (gnc:register-configuration-option

@@ -1,3 +1,14 @@
+2002-05-03  David Hampton  <hampton@employees.org>
+
+	* src/gnome/top-level.c:
+	* src/app-utils/prefs.scm: Add new preference for the number of
+	days to keep old log and xac files.
+
+	* src/backend/file/gnc-backend-file.c: New routines to get/set
+	number of days to retain old files.  New routine to delete all old
+	'LCK' files, and all old 'xac' and 'log' files older than the
+	user specified number of days.
+
 2002-04-27  David Hampton  <hampton@employees.org>
 
 	* src/engine/Account.[c,h]: New routines to get/save last

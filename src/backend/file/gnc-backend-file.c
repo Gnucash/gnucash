@@ -4,6 +4,10 @@
  *
  *********************************************************************/
 
+#define _GNU_SOURCE
+#define __EXTENSIONS__
+
+#include <stdio.h>
 #include <fcntl.h>
 #include <limits.h>
 #include <sys/stat.h>
@@ -11,6 +15,8 @@
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
+#include <dirent.h>
+#include <time.h>
 
 #include "Backend.h"
 #include "BackendP.h"
@@ -35,6 +41,7 @@ struct FileBackend_struct
 {
     Backend be;
 
+    char *dirname;
     char *fullpath;
     char *lockfile;
     char *linkfile;
@@ -53,18 +60,32 @@ typedef enum
     GNC_BOOK_XML2_FILE,
 } GNCBookFileType;
 
+static int file_retention_days = 0;
+
 static void gnc_file_be_load_from_file(Backend *, GNCBook *);
 
 static gboolean gnc_file_be_get_file_lock (FileBackend *be);
 static gboolean gnc_file_be_write_to_file(FileBackend *be,
                                           gboolean make_backup);
+static void gnc_file_be_remove_old_files(FileBackend *be);
+
+void
+gnc_file_be_set_retention_days (int days)
+{
+    file_retention_days = days;
+}
+
+int
+gnc_file_be_get_retention_days (void)
+{
+    return file_retention_days;
+}
 
 static void
 file_session_begin(Backend *be_start, GNCSession *session, const char *book_id,
                    gboolean ignore_lock, gboolean create_if_nonexistent)
 {
     FileBackend* be;
-    char *dirname;
     char *p;
 
     ENTER (" ");
@@ -75,26 +96,25 @@ file_session_begin(Backend *be_start, GNCSession *session, const char *book_id,
 
     /* Make sure the directory is there */
 
-    dirname = g_strdup (gnc_session_get_file_path (session));
-    be->fullpath = g_strdup (dirname);
-    p = strrchr (dirname, '/');
-    if (p && p != dirname)
+    be->dirname = g_strdup (gnc_session_get_file_path (session));
+    be->fullpath = g_strdup (be->dirname);
+    p = strrchr (be->dirname, '/');
+    if (p && p != be->dirname)
     {
         struct stat statbuf;
         int rc;
 
         *p = '\0';
 
-        rc = stat (dirname, &statbuf);
+        rc = stat (be->dirname, &statbuf);
         if (rc != 0 || !S_ISDIR(statbuf.st_mode))
         {
             xaccBackendSetError (be_start, ERR_FILEIO_FILE_NOT_FOUND);
             g_free (be->fullpath); be->fullpath = NULL;
-            g_free (dirname);
+            g_free (be->dirname); be->dirname = NULL;
             return;
         }
     }
-    g_free (dirname);
 
     /* ---------------------------------------------------- */
     /* We should now have a fully resolved path name.
@@ -130,6 +150,9 @@ file_session_end(Backend *be_start)
     if (be->lockfile)
         unlink (be->lockfile);
 
+    g_free (be->dirname);
+    be->dirname = NULL;
+
     g_free (be->fullpath);
     be->fullpath = NULL;
 
@@ -150,6 +173,7 @@ static void
 file_sync_all(Backend* be, GNCBook *book)
 {
     gnc_file_be_write_to_file((FileBackend*)be, TRUE);
+    gnc_file_be_remove_old_files((FileBackend*)be);
 }
 
 Backend *
@@ -191,6 +215,7 @@ gnc_backend_new(void)
 
     be->sync_all = file_sync_all;
 
+    fbe->dirname = NULL;
     fbe->fullpath = NULL;
     fbe->lockfile = NULL;
     fbe->linkfile = NULL;
@@ -506,6 +531,79 @@ gnc_file_be_backup_file(FileBackend *be)
     return bkup_ret;
 }
 
+static int
+gnc_file_be_select_files (const struct dirent *d)
+{
+    int len = strlen(d->d_name) - 4;
+
+    if (len <= 0)
+        return(0);
+  
+    return((strcmp(d->d_name + len, ".LNK") == 0) ||
+	   (strcmp(d->d_name + len, ".xac") == 0) ||
+	   (strcmp(d->d_name + len, ".log") == 0));
+}
+
+static void
+gnc_file_be_remove_old_files(FileBackend *be)
+{
+    struct dirent **dent;
+    struct stat lockstatbuf, statbuf;
+    int pathlen, n;
+    time_t now;
+
+    if (stat (be->lockfile, &lockstatbuf) != 0)
+        return;
+    pathlen = strlen(be->fullpath);
+
+    /*
+     * Clean up any lockfiles from prior crashes, and clean up old
+     * data and log files.  Scandir will do a fist pass on the
+     * filenames and cull the directory down to just files with the
+     * appropriate extensions.  Pity you can't pass user data into
+     * scandir...
+     */
+    n = scandir(be->dirname, &dent, gnc_file_be_select_files, alphasort);
+    if (n <= 0)
+        return;
+
+    now = time(NULL);
+    while(n--) {
+        char *name = g_strconcat(be->dirname, "/", dent[n]->d_name, NULL);
+        int len = strlen(name) - 4;
+
+        /* Is this file associated with the current data file */
+        if (strncmp(name, be->fullpath, pathlen) == 0) {
+
+            if ((strcmp(name + len, ".LNK") == 0) &&
+		/* Is a lock file. Skip the active lock file */
+                (strcmp(name, be->linkfile) != 0) &&
+                /* Only delete lock files older than the active one */
+                (stat(name, &statbuf) == 0) &&
+                (statbuf.st_mtime <lockstatbuf.st_mtime)) {
+	            unlink(name);
+            } else if (file_retention_days != 0) {
+	        time_t file_time;
+	        struct tm file_tm;
+	        int days;
+
+                /* Is the backup file old enough to delete */
+                memset(&file_tm, 0, sizeof(file_tm));
+                strptime(name+pathlen+1, "%Y%m%d%H%M%S", &file_tm);
+                file_time = mktime(&file_tm);
+                days = (int)(difftime(now, file_time) / 86400);
+                if (days > file_retention_days) {
+                    unlink(name);
+                }
+            }
+        }
+        g_free(name);
+        free(dent[n]);
+    }
+    free(dent);
+}
+
+    
 static gboolean
 gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
 {

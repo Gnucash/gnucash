@@ -33,6 +33,7 @@
 
 #include "AccWindow.h"
 #include "TransLog.h"
+#include "backend/gnc-backend-api.h"
 #include "combocell.h"
 #include "date.h"
 #include "dialog-commodity.h"
@@ -82,6 +83,8 @@ static void gnc_configure_auto_decimal_cb(gpointer);
 static void gnc_configure_auto_decimal(void);
 static void gnc_configure_auto_decimal_places_cb(gpointer);
 static void gnc_configure_auto_decimal_places(void);
+static void gnc_configure_file_be_retention_days_cb(gpointer);
+static void gnc_configure_file_be_retention_days(void);
 static void gnc_configure_register_font_cb(gpointer);
 static void gnc_configure_register_font(void);
 static void gnc_configure_register_hint_font_cb(gpointer);
@@ -104,6 +107,7 @@ static SCM auto_raise_callback_id = SCM_UNDEFINED;
 static SCM negative_color_callback_id = SCM_UNDEFINED;
 static SCM auto_decimal_callback_id = SCM_UNDEFINED;
 static SCM auto_decimal_places_callback_id = SCM_UNDEFINED;
+static SCM log_retention_days_callback_id = SCM_UNDEFINED;
 static SCM register_font_callback_id = SCM_UNDEFINED;
 static SCM register_hint_font_callback_id = SCM_UNDEFINED;
 
@@ -301,6 +305,12 @@ gnc_gui_init (SCM command_line)
       gnc_register_option_change_callback(gnc_configure_auto_decimal_places_cb,
                                           NULL, "General",
                                           "Auto Decimal Places");
+
+    gnc_configure_file_be_retention_days();
+    log_retention_days_callback_id = 
+      gnc_register_option_change_callback(gnc_configure_file_be_retention_days_cb,
+                                          NULL, "General",
+                                          "Days to retain log files");
 
     gnc_configure_register_font();
     register_font_callback_id =
@@ -766,6 +776,35 @@ gnc_configure_auto_decimal_places (void)
    gnc_set_auto_decimal_places
      (gnc_lookup_number_option("General",
                                "Auto Decimal Places", 2));
+}
+
+
+/* gnc_configure_file_be_retention_days_cb
+ *     Callback called when options change -
+ *     sets auto decimal places option.
+ * 
+ *  Args: Nothing
+ *  Returns: Nothing
+ */
+static void
+gnc_configure_file_be_retention_days_cb (gpointer not_used)
+{
+  gnc_configure_file_be_retention_days ();
+}
+
+/* gnc_configure_file_be_retention_days
+ *     Pass the global value for the auto decimal places range to the engine.
+ * 
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_file_be_retention_days (void)
+{
+  gnc_file_be_set_retention_days
+    (gnc_lookup_number_option("General",
+			      "Days to retain log files", 0));
+
 }
 
 
