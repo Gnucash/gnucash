@@ -1,6 +1,131 @@
 Version history:
 ------- -------
 
+ 1.8.5  - 17 Aug 2003
+ 	 o Add IS_PAID column and the ability to search for paid/not-paid
+	   invoices.
+	 o Add HBCI online transfer templates and make usable
+	 o Fix a bug where if you unpost an invoice and don't bring the
+	   TaxTables up to date, the total value shown in the register is
+	   different depending on whether the cursor is on the current line
+	   or not.
+	 o Don't constantly resize the invoice window every time we update
+	   ourselves.
+	 o Updated Italian, Brazilian Portugese, German, Czech, Dutch and
+	   British English translation.
+	 o Add Subtotal and Tax labels in the summary bar to print the
+	   Invoice's total amounts.
+	 o Change the log format to use GUID instead of C pointers, use
+	   ISO8601 instead of proprietary form and log the Notes field.
+	 o Port new log replay module from HEAD.
+	 o Re-enable reversed legend in stacked barcharts. Needs Guppi 0.40.4
+	   a.k.a. Guppi CVS, though, to actually work.
+	 o Update the Polish Zloty for its new ISO currency code.
+	 o Add ability to sort by Action and Notes.
+	 o Fix the vendor window title to use the company name, not the
+	   contact name. Change the message when the company name is left blank.
+	 o Create a new "date format" widget to let the user choose a date
+	   format (and see the results of what the date would look like).
+	 o Add "Deluxe Personal Check" type. Add support for printing to
+	   "deluxe" personal checks.  This prints the check "sideways" on a
+	   US-Letter configuration.
+	 o Backport the QueryList widget and associated usage (this allows
+	   more places to have sortable column displays for query results)
+	 o Improve HBCI error handling. Add more user feedback functions.
+	 o Add support for KtoBlzCheck, a small checking package for
+	   destination account numbers for German banks. Very small, very useful
+	   http://sourceforge.net/projects/ktoblzcheck
+	 o TRANSLATION_HOWTO: Added, by Jon Lapham
+	 o Add API to the plugin modules to allow post-processing (scrubbing)
+	   of the book after it is loaded from XML.  This allows a plug-in to
+	   post-process the complete book.
+	 o Create a scrub function to clear up bogus tax tables due to a bug
+	   which could cause tax tables to get created ad-nausium if you post
+	   and then unpost an invoice.
+	 o Create a scrub function to clear up bogus bill terms due to a bug
+	   which could cause bill terms to get created due to post/unpost of
+	   invoices.
+	 o Enable the exchange-rate dialog on "search ledger" registers.
+	 o Raise the import window after choosing a file.
+	 o Change dialog statements to allow for embedded percent signs in the
+	   messages.  In other words, don't allow user input into the format
+	   string of a printf.
+	 o Change how the billterms option menu is used so it will change
+	   properly if you change the invoice's owner.
+	 o Don't use gnc:reverse-account-balance? to determine whether to
+	   reverse the balance -- base it purely on the report type.
+	 o Fix gncBillTermCopy() so it PROPERLY copies the bill term.
+	 o Tolerate some HBCI banks failure of the GetSystemId-job.
+	 o Don't allow selection of directory for save file.
+	 o Add fancy-invoice report, to show what else is possible.  It's not
+	   really useful per se, but it is another example for users.  To be
+	   useful it requires some custom editing.
+	 o Limit the commodity choices based upon the current account type.
+	 o Add a new argument to the dialog creation functions to specify what
+	   types of commodities should be presented.Also tweak the title of the
+	   dialog based upon this argument.  Remove the "new" button when the
+	   dialog is limited strictly to currencies.
+	 o Show the running balance column by default in the register report.
+	 o Annotate the window title to indicate whether a register is for a
+	   single account or it includes all subaccounts.
+	 o Change the register close dialog to include a cancel option.
+	 o Don't close the register if the user cancelled.
+	 o If the user has manually entered an amount, then stop automatically
+	   updated the amount when the date is changed.
+	 o Refactor many HBCI functions to eventually enable queued processing
+	   of several HBCI jobs.
+	 o Add a "retained earnings" item under equity, and change the title
+	   to include the start date (Balance Sheet report).
+	 o Don't print the "handling-request" messages when getting stock
+	   quotes.
+	 o Display selected pixmap when opening an options window.
+	 o Fix 'Save As' so it can write to non-existing files.
+	 o New data file should have same uid/gids original file.
+	 o Added Italian account templates by Lorenzo Cappelletti
+	 o Change HBCI online transfer action so that first the gnucash
+	   Transaction is created and only after that the HBCI connection is
+	   started. Necessary for later implementation of offline queueing and
+	   multi-job execution.
+	 o Clarify the part of the HBCI setup about potentially adding HBCI
+	   accounts manually.
+	 o Add a couple of extra checks to prevent crashing if the commodity
+	   attached to a price quote has disappeared.
+	 o Provide a new warning message before deletion if a commodity has
+	   any price quotes.  If the user deletes the commodity anyway, removed
+	   any quotes are based on the commodity
+	 o Enhance the get prices routine to handle a request with a NULL
+	   currency.
+	 o Fix a crash where removing items in the wrong order could cause
+	   "Bad Things" to happen
+	 o Sort the bills before displaying them, so they appear in a
+	   consistent order (by date due).
+	 o Fix a bunch more rounding errors, and add more precision to the
+	   price.
+	 o Change the description and action of Invoice and Payement
+	   Transactions/Splits, to make it easier to print a check off the
+	   posted transactions.
+	 o Add Debit and Credit totals to Register report.
+	 o Differentiate between "file is already locked" and "we can't create
+	   the lockfile" so we can let the user know.
+	 o Fix the message to be more appropriate when we hit a READONLY
+	   error.
+	 o Various Postgres backend fixes
+	 o Add button for manual adding of HBCI accounts. Requires latest
+	   OpenHBCI 0.9.13
+	 o Add saving of the HBCI_API so that bank's status changes will now
+	   be remembered immediately.
+	 o Add "(Report)" strings to the various columns displayed in the
+	   report currency.
+	 o Set the date-entered on invoice transactions to "now" instead of
+	   the post date.  Thi lets us know when an invoice was actually posted,
+	   or a payment was actually made.
+	 o Support "gain/loss" balancing splits on stocks
+	 o Apply patch to fix a number of off-by-one bugs in the loan druid.
+	 o Adapted to latest gnucash-docs changes, by Jon Lapham
+	 o Add code to read XML files with real namespace declarations.
+	 o Make sure we define PWD, as not all shells define it properly.
+	 o Workaround for multi-currency importing bug.
+	 
  1.8.4  - 25 May 2003
  	 o Fix transfer dialog to nothang if OK button is clicked w/o filling
 	   in dialog properly.
