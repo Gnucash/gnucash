@@ -340,7 +340,7 @@ commodities_set_min_widths (CommoditiesDialog *cd)
   gint i;
 
   if (style != NULL)
-    font = style->font;
+    font = gdk_font_from_description(style->font_desc);
 
   if (font != NULL)
     for (i = 0; i < 5; i++)

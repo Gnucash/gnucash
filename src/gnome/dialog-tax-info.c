@@ -678,7 +678,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
       GdkFont *font = NULL;
 
       if (style != NULL)
-        font = style->font;
+        font = gdk_font_from_description (style->font_desc);
 
       if (font)
         gtk_widget_set_usize (text, 0, (font->ascent + font->descent) * 5 + 6);

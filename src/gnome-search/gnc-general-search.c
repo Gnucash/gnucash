@@ -132,7 +132,7 @@ gnc_general_search_class_init (GNCGeneralSearchClass *klass)
 	general_search_signals[SELECTION_CHANGED] =
 		gtk_signal_new("changed",
 			       GTK_RUN_FIRST,
-			       object_class->g_type,
+			       GTK_CLASS_TYPE(object_class),
 			       GTK_SIGNAL_OFFSET(GNCGeneralSearchClass,
 						 changed),
 			       gtk_marshal_NONE__NONE,

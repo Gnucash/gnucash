@@ -105,7 +105,7 @@ gnc_date_delta_class_init (GNCDateDeltaClass *class)
 
   date_delta_signals [VALUE_CHANGED] =
     gtk_signal_new ("value_changed",
-                    GTK_RUN_FIRST, object_class->g_type, 
+                    GTK_RUN_FIRST, GTK_CLASS_TYPE(object_class), 
                     GTK_SIGNAL_OFFSET (GNCDateDeltaClass,
                                        value_changed),
                     gtk_signal_default_marshaller,
@@ -113,7 +113,7 @@ gnc_date_delta_class_init (GNCDateDeltaClass *class)
 
   date_delta_signals [UNITS_CHANGED] =
     gtk_signal_new ("units_changed",
-                    GTK_RUN_FIRST, object_class->g_type, 
+                    GTK_RUN_FIRST, GTK_CLASS_TYPE(object_class), 
                     GTK_SIGNAL_OFFSET (GNCDateDeltaClass,
                                        units_changed),
                     gtk_signal_default_marshaller,

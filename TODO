@@ -25,7 +25,14 @@ gnucash-gnome2-dev	Gnome2 port
 
 	Build	Problems to solve before running gnucash the first time
 	  Delete declare of gnc_html_register_object_handler	(FIXME)
-	  Delete typedef of GncHTMLObjectCB			(FIXME)	
+	  Delete typedef of GncHTMLObjectCB			(FIXME)
+
+	Replace deprecated functions 
+		In batch 15, replace deprecated druid functions
+		Make a table mapping deprecated functions in gdkfont.h to their 
+		Pango replacements.
+		Replace all deprecated functions in gdkfont.h
+		Replace deprecated GnomeMDI functions by gdknotebook functions.
 	
 	Run	Problems which affect running gnucash
 		Is deprecated gtk_object_class_add_signals handled correctly?

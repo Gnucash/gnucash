@@ -43,6 +43,7 @@
 #include "guile-util.h"
 #include "messages.h"
 #include "option-util.h"
+#include "gdk/gdkfont.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
@@ -2026,8 +2027,8 @@ gnc_option_set_ui_widget_number_range (GNCOption *option, GtkBox *page_box,
 
       string = g_strnfill(num_digits, '8');
       
-      width = gdk_text_measure(gdk_font_from_description(style->font_desc), 
-                               string, num_digits);
+      width = gdk_text_measure(gdk_font_from_description (style->font_desc), 
+                 string, num_digits);
 
       /* sync with gtkspinbutton.c. why doesn't it do this itself? */
       width += 11 + (2 * style->xthickness);

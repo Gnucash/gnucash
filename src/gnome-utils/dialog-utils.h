@@ -74,24 +74,9 @@ GtkWidget * gnc_build_option_menu (GNCOptionInfo *option_info,
  \*******************************************************************/
 GtkWidget * gnc_get_pixmap (const char *name);
 
-/********************************************************************\
- * Returns a GdkImlibImage object given a pixmap filename           *
- *                                                                  *
- * Args: Filename of pixmap file                                    *
- * Returns: GdkImlibImage or NULL if there was a problem            *
- \*******************************************************************/
 
-#if 0
-GdkImlibImage * gnc_get_gdk_imlib_image (const char *name);
 GnomeMDIMode    gnc_get_mdi_mode(void);
-#else
-/*  3/9/03 Bypass: Disable functions not used in QuickFill
-*** XXX: FIXME: Warning:  Fix for Gnome2                            */
-#endif
-
 GtkToolbarStyle gnc_get_toolbar_style (void);
-
-
 void gnc_get_deficit_color (GdkColor *color);
 void gnc_set_label_color (GtkWidget *label, gnc_numeric value);
 

@@ -281,13 +281,13 @@ draw_on_canvas(GtkWidget *canvas, char *hint)
     "fill_color","white",
     NULL);
 
-  hint_item = gnome_canvas_item_new(
+   hint_item = gnome_canvas_item_new(
     gnome_canvas_root(GNOME_CANVAS(canvas)),
     gnome_canvas_text_get_type(),
     "x",(double)237.5,
     "y",(double)125.0,
     "fill_color","black",
-    "font_gdk",canvas->style->font,
+    "font_gdk",gdk_font_from_description (canvas->style->font_desc),
     "clip_width",(double)325.0,
     "clip_height",(double)150.0,
     "clip",TRUE,

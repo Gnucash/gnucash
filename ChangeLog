@@ -1,9 +1,106 @@
+
+2003-05-12 TomF changes for gnucash-gnome2-dev, 14th batch
+	* TODO: Added items for conversion to Pango,
+	  druid, GnomeMDI
+	* src/gnome-utils/dialog-utils.c:
+	  Change fontdesc to font_desc
+	  glade_xml_new (fname, root, NULL): Use NULL for default domain.
+	* src/gnome-utils/dialog-utils.h:
+	  Enable gnc_get_mdi_mode
+
+	  In the following, use GTK_CLASS_TYPE macro
+	* src/gnome/gnc-split-reg.c: 
+	* src/gnome/mainwindow-account-tree.c
+	* src/gnome/reconcile-list.c:
+	* src/gnome-search/gnc-general-search.c
+	* src/gnome-utils/gnc-account-tree.c
+	* src/gnome-utils/gnc-date-delta.c
+	* src/gnome-utils/gnc-date-edit.c
+	* src/gnome-utils/gnc-frequency.c
+	* src/gnome-utils/gnc-general-select.c
+	* src/register/register-gnome/gnucash-date-picker
+	* src/register/register-gnome/gnucash-item-list
+	* src/register/register-gnome/gnucash-sheet.c
+
+	  In the following, use the 2.0 compatability function 
+	  gdk_font_from_description instead of the 2.2 compatability function 
+	  gdk_font_from_description_for_display to correct error in 13th batch.
+	  Replace deprecated:
+    	  gtk_editable_claim_selection( GTK_EDITABLE by
+	  gtk_old_editable_claim_selection( GTK_OLD_EDITABLE
+	* src/gnome-utils/dialog-transfer.c:
+	* src/gnome-utils/dialog-utils.c:
+	* src/register/register-gnome/gnucash-item-edit.c:
+	* src/gnome-utils/gnc-dense-cal.c:
+	* src/gnome-utils/dialog-options.c:
+	* src/gnome/reconcile-list.c:
+	* src/gnome/dialog-totd.c:
+	* src/gnome/dialog-tax-info.c:
+	* src/gnome/dialog-price-edit-db.c:
+	* src/gnome/dialog-commodities.c:
+
 2003-05-02  Christian Stimming  <stimming@tuhh.de>
-
+ 
 	* configure.in: Add pkg-config test for libgnomeui-2.0.
-
 	* src/import-export/hbci/*.c: Port hbci import module to Gnome2,
 	sourcecode compiles now. Copy changes from HEAD branch.
+
+2003-05-02 TomF changes for gnucash-gnome2-dev, 13th batch
+	* src/gnome-utils/dialog-options.c:
+	  Replace deprecated gdk_font_from_description by 
+	  gdk_font_from_description_for_display
+	  #include <gdk/gdk.h>
+
+
+	  In the following:
+	  Replace x->font by gdk_font_from_description_for_display(
+		gdk_display_get_default(),x->font_desc)
+	  to account for style field restructure.
+	* src/gnome-utils/dialog-utils.c:
+	* src/register/register-gnome/gnucash-item-edit.c:
+	* src/gnome-utils/gnc-dense-cal.c:
+	* src/gnome-utils/dialog-transfer.c:
+	* src/gnome-utils/dialog-options.c:
+	* src/gnome/reconcile-list.c:
+	* src/gnome/dialog-totd.c:
+	* src/gnome/dialog-tax-info.c:
+	* src/gnome/dialog-price-edit-db.c:
+	* src/gnome/dialog-commodities.c:
+
+
+	  In the following:
+	  Replace object_class->g_type by GTK_CLASS_TYPE(object_class) 
+	  to use macro instead of inherited field reference.
+	* src/gnome/gnc-split-reg.c:                      
+	* src/gnome/gnc-split-reg.c:                    
+	* src/gnome/mainwindow-account-tree.c:		   
+	* src/gnome/mainwindow-account-tree.c:
+	* src/gnome/mainwindow-account-tree.c:
+	* src/gnome/reconcile-list.c:
+	* src/gnome/reconcile-list.c:
+	* src/gnome-search/gnc-general-search.c:
+	* src/gnome-utils/gnc-account-tree.c:
+	* src/gnome-utils/gnc-account-tree.c:
+	* src/gnome-utils/gnc-date-delta.c: 
+	* src/gnome-utils/gnc-date-delta.c: 
+	* src/gnome-utils/gnc-date-edit.c: 
+	* src/gnome-utils/gnc-date-edit.c: 
+	* src/gnome-utils/gnc-dense-cal.c:
+	* src/gnome-utils/gnc-frequency.c:
+	* src/gnome-utils/gnc-general-select.c:  
+	* src/register/register-gnome/gnucash-date-picker.c:
+	* src/register/register-gnome/gnucash-date-picker.c: 
+	* src/register/register-gnome/gnucash-item-list.c:
+	* src/register/register-gnome/gnucash-item-list.c:
+	* src/register/register-gnome/gnucash-item-list.c:
+	* src/register/register-gnome/gnucash-item-list.c:
+	* src/register/register-gnome/gnucash-sheet.c:  
+	* src/register/register-gnome/gnucash-sheet.c: 
+	* src/register/register-gnome/gnucash-sheet.c:   
+
+
+
+	  
 
 2003-04-29 TomF changes for gnucash-gnome2-dev, 12th batch
 	* src/gnome-utils/gnc-date-edit.c:gnc_date_edit_class_init:
@@ -118,7 +215,7 @@
 	* src/gnome/window-main.c,
 	* src/gnome-utils/gnc-mdi-utils.c,
 	* src/app-file/gnome/gnc-file-history.c:
-         Replace calls of deprecated gtk_container_get_toplevels by
+          Replace calls of deprecated gtk_container_get_toplevels by
 	  gtk_window_list_toplevels
 	  
 	* src/gnome-utils/dialog-options.c:

@@ -234,7 +234,7 @@ gnc_dense_cal_class_init (GncDenseCalClass *class)
         gnc_dense_cal_signals[MARKS_LOST_SIGNAL] =
                 gtk_signal_new( MARKS_LOST_SIGNAL_NAME,
                                 GTK_RUN_LAST,
-                                object_class->g_type,
+                                GTK_CLASS_TYPE(object_class),
                                 GTK_SIGNAL_OFFSET( GncDenseCalClass, marks_lost_cb ),
                                 gtk_signal_default_marshaller, GTK_TYPE_NONE, 0 );
 
@@ -317,7 +317,8 @@ gnc_dense_cal_init (GncDenseCal *dcal)
                 dcal->monthLabelFont = gdk_font_load( LABEL_FONT_NAME );
                 g_assert( dcal->monthLabelFont );
 
-                dcal->dayLabelFont = GTK_WIDGET(dcal)->style->font;
+                dcal->dayLabelFont = gdk_font_from_description (
+		GTK_WIDGET(dcal)->style->font_desc);
                 gdk_font_ref( dcal->dayLabelFont );
                 g_assert( dcal->dayLabelFont );
 

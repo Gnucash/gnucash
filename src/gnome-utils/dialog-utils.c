@@ -264,31 +264,6 @@ gnc_get_pixmap (const char *name)
   return pixmap;
 }
 
-
-/********************************************************************\
- * gnc_get_imlib_image                                              *
- *   returns a GdkImlibImage object given a pixmap filename         *
- *                                                                  *
- * Args: none                                                       *
- * Returns: GnomePixmap widget or NULL if there was a problem       *
- \*******************************************************************/
-GdkImlibImage *
-gnc_get_gdk_imlib_image (const char *name)
-{
-  GdkImlibImage *image;
-
-  char *fullname;
-
-  g_return_val_if_fail (name != NULL, NULL);
-
-  fullname = g_strconcat (GNC_PIXMAP_DIR, "/", name, NULL);
-  image = gdk_imlib_load_image (fullname);
-  g_free (fullname);
-
-  return image;
-}
-
-
 /********************************************************************\
  * gnc_get_toolbar_style                                            *
  *   returns the current toolbar style for gnucash toolbars         *
@@ -844,13 +819,15 @@ check_realize (GtkWidget *widget, gpointer user_data)
   GList *list;
   GList *node;
   GdkGC *gc;
+  GdkFont *font;
 
   if (check_info->mask)
     return;
 
   style = gtk_widget_get_style (widget);
+  font = gdk_font_from_description(style->font_desc);
 
-  font_height = style->font->ascent + style->font->descent;
+  font_height = font->ascent + font->descent;
   check_size = (font_height > 0) ? font_height - 3 : 9;
 
   check_info->mask = gdk_pixmap_new (NULL, check_size, check_size, 1);
@@ -1034,7 +1011,7 @@ gnc_clist_columns_autosize (GtkCList *list)
   if (!style)
     return;
 
-  font = style->font;
+  font = gdk_font_from_description (style->font_desc);
   if (!font)
     return;
 
@@ -1080,7 +1057,7 @@ gnc_glade_xml_new (const char *filename, const char *root)
 
   fname = g_strconcat (GNC_GLADE_DIR, "/", filename, NULL);
 
-  xml = glade_xml_new (fname, root);
+  xml = glade_xml_new (fname, root, NULL);
 
   g_free (fname);
 

@@ -285,7 +285,7 @@ gnc_split_reg_class_init( GNCSplitRegClass *class )
     gnc_split_reg_signals[ signals[i].s ] =
       gtk_signal_new( signals[i].signal_name,
                       GTK_RUN_LAST,
-                      object_class->g_type, signals[i].defaultOffset,
+                      GTK_CLASS_TYPE(object_class), signals[i].defaultOffset,
                       gtk_signal_default_marshaller, GTK_TYPE_NONE, 0 );
   }
   /* Setup the non-default-marshalled signals; 'i' is still valid, here. */
@@ -293,7 +293,7 @@ gnc_split_reg_class_init( GNCSplitRegClass *class )
   gnc_split_reg_signals[ INCLUDE_DATE_SIGNAL ] =
     gtk_signal_new( "include-date",
                     GTK_RUN_LAST,
-                    object_class->g_type,
+                    GTK_CLASS_TYPE(object_class),
                     signals[i++].defaultOffset,
                     gtk_marshal_NONE__INT, /* time_t == int */
                     GTK_TYPE_NONE, 1, GTK_TYPE_INT );

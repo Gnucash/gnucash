@@ -126,14 +126,14 @@ gnc_frequency_get_type()
 static void
 gnc_frequency_class_init( GNCFrequencyClass *klass )
 {
-        GtkObjectClass *objectClass;
+        GtkObjectClass *object_class;
 
 
         objectClass = (GtkObjectClass*)klass;
         gnc_frequency_signals[GNCFREQ_CHANGED] =
                 gtk_signal_new( "changed",
                                 GTK_RUN_FIRST,
-                                objectClass->g_type,
+                                GTK_CLASS_TYPE(object_class),
                                 GTK_SIGNAL_OFFSET( GNCFrequencyClass, changed ),
                                 gtk_signal_default_marshaller, GTK_TYPE_NONE, 0 );
 

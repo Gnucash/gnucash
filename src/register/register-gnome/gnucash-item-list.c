@@ -257,7 +257,7 @@ gnc_item_list_class_init(GNCItemListClass *item_list_class)
 	gnc_item_list_signals[SELECT_ITEM] =
 		gtk_signal_new("select_item",
 			       GTK_RUN_LAST,
-			       object_class->g_type,
+			       GTK_CLASS_TYPE(object_class),
 			       GTK_SIGNAL_OFFSET(GNCItemListClass,
 						 select_item),
 			       gtk_marshal_NONE__POINTER,
@@ -267,7 +267,7 @@ gnc_item_list_class_init(GNCItemListClass *item_list_class)
 	gnc_item_list_signals[CHANGE_ITEM] =
 		gtk_signal_new("change_item",
 			       GTK_RUN_LAST,
-			       object_class->g_type,
+			       GTK_CLASS_TYPE(object_class),
 			       GTK_SIGNAL_OFFSET(GNCItemListClass,
 						 change_item),
 			       gtk_marshal_NONE__POINTER,
@@ -277,7 +277,7 @@ gnc_item_list_class_init(GNCItemListClass *item_list_class)
 	gnc_item_list_signals[ACTIVATE_ITEM] =
 		gtk_signal_new("activate_item",
 			       GTK_RUN_LAST,
-			       object_class->g_type,
+			       GTK_CLASS_TYPE(object_class),
 			       GTK_SIGNAL_OFFSET(GNCItemListClass,
 						 activate_item),
 			       gtk_marshal_NONE__POINTER,
@@ -287,7 +287,7 @@ gnc_item_list_class_init(GNCItemListClass *item_list_class)
 	gnc_item_list_signals[KEY_PRESS_EVENT] =
 		gtk_signal_new ("key_press_event",
 				GTK_RUN_LAST,
-				object_class->g_type,
+				GTK_CLASS_TYPE(object_class),
 				GTK_SIGNAL_OFFSET(GNCItemListClass,
 						  key_press_event),
 				gtk_marshal_NONE__POINTER,

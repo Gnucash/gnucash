@@ -511,7 +511,8 @@ item_edit_realize (GnomeCanvasItem *item)
                 sheet_widget = GTK_WIDGET (item_edit->sheet);
 
                 if (sheet_widget->style &&
-                    sheet_widget->style->font->type != GDK_FONT_FONTSET)
+                    gdk_font_from_description (sheet_widget->style->font_desc)
+			->type != GDK_FONT_FONTSET)
                         supported_style &= ~GDK_IM_PREEDIT_POSITION;
 
                 attr->style = style = gdk_im_decide_style (supported_style);
@@ -536,8 +537,9 @@ item_edit_realize (GnomeCanvasItem *item)
                 {
                         case GDK_IM_PREEDIT_POSITION:
                                 if (sheet_widget->style &&
-                                    sheet_widget->style->font->type !=
-                                    GDK_FONT_FONTSET)
+                                    gdk_font_from_description (
+					sheet_widget->style->font_desc)
+					->type != GDK_FONT_FONTSET)
                                 {
                                         g_warning ("over-the-spot style "
                                                    "requires fontset");
@@ -556,7 +558,8 @@ item_edit_realize (GnomeCanvasItem *item)
                                 attr->preedit_area.width = width;
                                 attr->preedit_area.height = height;
                                 attr->preedit_fontset =
-                                        sheet_widget->style->font;
+                                        gdk_font_from_description (
+					sheet_widget->style->font_desc);
 
                                 break;
                 }

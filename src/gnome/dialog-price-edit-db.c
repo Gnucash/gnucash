@@ -505,7 +505,7 @@ prices_set_min_widths (PricesDialog *pdb_dialog)
   gint i;
 
   if (style != NULL)
-    font = style->font;
+    font = gdk_font_from_description (style->font_desc);
 
   if (font != NULL)
     for (i = 0; i < 6; i++)

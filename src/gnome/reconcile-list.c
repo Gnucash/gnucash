@@ -249,7 +249,7 @@ gnc_reconcile_list_init (GNCReconcileList *list)
     gint width;
     gint i;
 
-    font = style->font;
+    font = gdk_font_from_description (style->font_desc);
     if (font != NULL)
     {
       for (i = 0; i < list->num_columns; i++)
@@ -283,7 +283,7 @@ gnc_reconcile_list_class_init (GNCReconcileListClass *klass)
   reconcile_list_signals[TOGGLE_RECONCILED] =
     gtk_signal_new("toggle_reconciled",
 		   GTK_RUN_FIRST,
-		   object_class->g_type,
+		   GTK_CLASS_TYPE(object_class),
 		   GTK_SIGNAL_OFFSET(GNCReconcileListClass,
 				     toggle_reconciled),
 		   gtk_marshal_NONE__POINTER,
@@ -293,7 +293,7 @@ gnc_reconcile_list_class_init (GNCReconcileListClass *klass)
   reconcile_list_signals[DOUBLE_CLICK_SPLIT] =
     gtk_signal_new("double_click_split",
 		   GTK_RUN_FIRST,
-		   object_class->g_type,
+		   GTK_CLASS_TYPE(object_class),
 		   GTK_SIGNAL_OFFSET(GNCReconcileListClass,
 				     double_click_split),
 		   gtk_marshal_NONE__POINTER,

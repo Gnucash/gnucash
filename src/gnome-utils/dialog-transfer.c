@@ -43,7 +43,6 @@
 #include "Transaction.h"
 #include "Account.h"
 
-
 #define DIALOG_TRANSFER_CM_CLASS "dialog-transfer"
 
 #define PRECISION 100000
@@ -424,12 +423,12 @@ gnc_xfer_dialog_fill_tree_frame(XferDialog *xferData,
   gtk_container_add(GTK_CONTAINER(scroll_win), tree);
 
   {
-    GtkStyle *st = gtk_widget_get_style(tree);
+    GtkStyle *style = gtk_widget_get_style(tree);
     GdkFont *font = NULL;
     gint height;
 
-    if (st != NULL)
-      font = st->font;
+    if (style != NULL)
+      font = gdk_font_from_description(style->font_desc);
 
     if (font != NULL)
     {
@@ -670,7 +669,7 @@ gnc_xfer_description_insert_cb(GtkEntry *entry,
 
     /* This doesn't seem to fix the selection problems, why? */
     gtk_entry_select_region( entry, 0, 0 );
-    gtk_editable_claim_selection( GTK_EDITABLE(entry),
+    gtk_old_editable_claim_selection( GTK_OLD_EDITABLE(entry),
                                   FALSE,
                                   GDK_CURRENT_TIME );
 
@@ -696,8 +695,8 @@ common_post_quickfill_handler(guint32 time, XferDialog *xferData )
 {
   GtkEntry *entry = GTK_ENTRY(xferData->description_entry);
   gint current_pos   = gtk_editable_get_position( GTK_EDITABLE(entry) );
-  gint current_start = GTK_EDITABLE(entry)->selection_start_pos;
-  gint current_end   = GTK_EDITABLE(entry)->selection_end_pos;
+  gint current_start = GTK_OLD_EDITABLE(entry)->selection_start_pos;
+  gint current_end   = GTK_OLD_EDITABLE(entry)->selection_end_pos;
   gboolean did_something = FALSE;   /* was the selection or position changed? */
 
   if( current_pos != xferData->desc_cursor_position )
@@ -713,7 +712,7 @@ common_post_quickfill_handler(guint32 time, XferDialog *xferData )
   {
     gtk_entry_select_region( entry, xferData->desc_start_selection,
                                     xferData->desc_end_selection );
-    gtk_editable_claim_selection( GTK_EDITABLE(entry), TRUE, time );
+    gtk_old_editable_claim_selection( GTK_OLD_EDITABLE(entry), TRUE, time );
     did_something = TRUE;
   }
 
@@ -774,7 +773,7 @@ gnc_xfer_description_key_press_cb( GtkEntry *entry,
          * field.  Unselect the current field, though.
          */
         gtk_entry_select_region( GTK_ENTRY(xferData->description_entry), 0, 0 );
-        gtk_editable_claim_selection( GTK_EDITABLE(xferData->description_entry),
+        gtk_old_editable_claim_selection( GTK_OLD_EDITABLE(xferData->description_entry),
                                       FALSE, event->time );
       }
       break;
