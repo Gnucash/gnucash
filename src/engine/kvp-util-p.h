@@ -75,6 +75,13 @@ void gnc_kvp_gemini (KvpFrame *kvp_root, time_t secs,
                      const char *first_name, ...);
 
 
+/** The gnc_kvp_bag_merge() routine will move the bag contents from
+ *    the 'kvp_from', to the 'into' bag.  It will then delete the 
+ *    'from' bag from the kvp tree.
+ */
+void gnc_kvp_bag_merge (KvpFrame *kvp_into, const char *intopath, 
+                        KvpFrame *kvp_from, const char *frompath);
+
 /** The gnc_kvp_bag_find_by_guid() routine examines the bag pointed
  *    located at root.  It looks for a frame in that bag that has the
  *    guid value of "desired_guid" filed under the key name "guid_name".
