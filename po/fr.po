@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5.X\n"
 "POT-Creation-Date: 2000-09-24 23:55-0700\n"
-"PO-Revision-Date: 2000-08-13 11:15+0100\n"
+"PO-Revision-Date: 2000-10-07 19:15+0100\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: FRENCH  <FR@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1203,35 +1203,36 @@ msgid ""
 "You must enter a valid amount.\n"
 "\n"
 "Error: %s."
-msgstr "Vous devez choisir un compte parent valide."
+msgstr ""
+"Vous devez entrer un montant valide.\n"
+"\n"
+"Erreur: %s."
 
 #: messages-i18n.c:202
 msgid "Unbalanced parenthesis"
-msgstr ""
+msgstr "Proposition irraisonnable"
 
 # po/guile_strings.txt:15
 #: messages-i18n.c:203
-#, fuzzy
 msgid "Stack overflow"
-msgstr "Portefeuille d'actions"
+msgstr "Débordement de pile"
 
 # po/guile_strings.txt:15
 #: messages-i18n.c:204
-#, fuzzy
 msgid "Stack underflow"
-msgstr "Portefeuille d'actions"
+msgstr "Non débordement de pile"
 
 #: messages-i18n.c:205
 msgid "Undefined character"
-msgstr ""
+msgstr "Caractère non défini"
 
 #: messages-i18n.c:206
 msgid "Not a variable"
-msgstr ""
+msgstr "Pas une variable"
 
 #: messages-i18n.c:207
 msgid "Out of memory"
-msgstr ""
+msgstr "Dépassement de mémoire"
 
 # messages-i18n.c:164
 #: messages-i18n.c:208
@@ -1334,7 +1335,7 @@ msgstr "Calculatrice financière"
 
 #: messages-i18n.c:228
 msgid "FIN_CALC_STR_N"
-msgstr ""
+msgstr "FIN_CALC_STR_N"
 
 # messages-i18n.c:182
 #: messages-i18n.c:229
@@ -2322,11 +2323,11 @@ msgstr "Oui"
 # messages-i18n.c:260
 #: messages-i18n.c:427
 msgid "cleared:c"
-msgstr "pointé:p"
+msgstr "pointé:c"
 
 #: messages-i18n.c:428
 msgid "frozen:f"
-msgstr "gelé:g"
+msgstr "gelé:f"
 
 #: messages-i18n.c:429
 msgid "not cleared:n"
@@ -2340,35 +2341,33 @@ msgstr "Rapproché:R"
 # messages-i18n.c:322
 #: messages-i18n.c:431
 msgid "reconciled:y"
-msgstr "rapproché:o"
+msgstr "rapproché:y"
 
 # src/gnome/glade-gnc-dialogs.c:1264
 #: messages-i18n.c:432
-#, fuzzy
 msgid "sample:12/12/2000"
-msgstr "12/31/2000"
+msgstr "exemple:12/31/2000"
 
 #: messages-i18n.c:433
 msgid "sample:99999"
-msgstr ""
+msgstr "exemple:99999"
 
 #: messages-i18n.c:434
 msgid "sample:Expenses:Automobile:Gasoline"
-msgstr ""
+msgstr "exemple:Dépenses:Automobile:Essence"
 
 # messages-i18n.c:123
 #: messages-i18n.c:435
-#, fuzzy
 msgid "sample:Description of a transaction"
-msgstr "Entrez une description pour la transaction"
+msgstr "exemple:Description d'une transaction"
 
 #: messages-i18n.c:436
 msgid "sample:Memo field sample text string"
-msgstr ""
+msgstr "exemple:Chaine texte d'exemple d'un champ mémo"
 
 #: messages-i18n.c:437
 msgid "sample:999,999.000"
-msgstr ""
+msgstr "exemple:999,999.000"
 
 # po/guile_strings.txt:1
 #: po/guile_strings.txt:1
@@ -2455,11 +2454,11 @@ msgstr "En-têtes"
 
 #: po/guile_strings.txt:23
 msgid "One Month Ago"
-msgstr ""
+msgstr "Il ya 1 mois"
 
 #: po/guile_strings.txt:25
 msgid "End of the Previous Year"
-msgstr ""
+msgstr "Fin de l'année précédente"
 
 # po/guile_strings.txt:20
 #: po/guile_strings.txt:26
@@ -2521,9 +2520,8 @@ msgstr "Arrière-plan actif en mode double"
 
 # po/guile_strings.txt:247
 #: po/guile_strings.txt:38
-#, fuzzy
 msgid "Relative Date Option"
-msgstr "Options d'heure et de date"
+msgstr "Option de date relative"
 
 # po/guile_strings.txt:30
 #: po/guile_strings.txt:39
@@ -2531,15 +2529,13 @@ msgid "This is a string option"
 msgstr "C'est une option de chaine"
 
 #: po/guile_strings.txt:40
-#, fuzzy
 msgid "The beginning of the previous month"
-msgstr "Début de la période des paiements"
+msgstr "Le début du mois précédent"
 
 # src/gnome/glade-gnc-dialogs.c:300
 #: po/guile_strings.txt:41
-#, fuzzy
 msgid "Locale"
-msgstr "Charger un fichier"
+msgstr "Locale"
 
 # po/guile_strings.txt:31
 #: po/guile_strings.txt:42
@@ -2564,7 +2560,7 @@ msgstr "Trier par date"
 
 #: po/guile_strings.txt:47
 msgid "Start of previous month"
-msgstr ""
+msgstr "Début du mois précédent"
 
 # po/guile_strings.txt:38
 #: po/guile_strings.txt:48
@@ -2584,7 +2580,7 @@ msgstr "Pertes et gains"
 
 #: po/guile_strings.txt:51
 msgid "The start of the latest quarterly accounting period"
-msgstr ""
+msgstr "Le début de la dernière période comptable trimestrielle"
 
 # po/guile_strings.txt:41
 #: po/guile_strings.txt:52
@@ -2593,13 +2589,15 @@ msgstr "Le double clic développe les comptes parents"
 
 #: po/guile_strings.txt:53
 msgid "The start of the previous financial year/accounting period"
-msgstr ""
+msgstr "Le début de la précédente période comptable/année financière"
 
 #: po/guile_strings.txt:54
 msgid ""
 "If selected, move to the blank transaction after the user presses 'Enter'. "
 "Otherwise, move down one row."
 msgstr ""
+"Si sélectionné, allez à la transaction vierge après que l'utilisateur appuie sur 'Entrer'."
+"Autrement,descendez d'une ligne." 
 
 # po/guile_strings.txt:43
 #: po/guile_strings.txt:55
@@ -2612,9 +2610,8 @@ msgid "Income-Salary-Taxable"
 msgstr "Revenus-Salaire-Imposable"
 
 #: po/guile_strings.txt:57
-#, fuzzy
 msgid "End of previous month"
-msgstr "Fin de la période des paiements"
+msgstr "Fin du mois précédent"
 
 # po/guile_strings.txt:45
 #: po/guile_strings.txt:59
@@ -2711,7 +2708,7 @@ msgstr "Gain"
 
 #: po/guile_strings.txt:83
 msgid "Current Financial Year Start"
-msgstr ""
+msgstr "Début de l'année financière actuelle"
 
 # po/guile_strings.txt:65
 #: po/guile_strings.txt:84
@@ -2720,9 +2717,8 @@ msgstr "Bonjour encore"
 
 # messages-i18n.c:200
 #: po/guile_strings.txt:85
-#, fuzzy
 msgid "Previous Year Start"
-msgstr "Précédent solde"
+msgstr "Début de l'année précédente"
 
 # po/guile_strings.txt:66
 #: po/guile_strings.txt:86
@@ -2736,9 +2732,9 @@ msgstr "Montrer les bordures verticales"
 
 # po/guile_strings.txt:34
 #: po/guile_strings.txt:88
-#, fuzzy, c-format
+#, c-format
 msgid "The relative date option is %s."
-msgstr "L'option de date est %s."
+msgstr "L'option de date relative est %s."
 
 # po/guile_strings.txt:68
 #: po/guile_strings.txt:89
@@ -2756,9 +2752,8 @@ msgstr "Affiche 1 ligne"
 
 # po/guile_strings.txt:190
 #: po/guile_strings.txt:92
-#, fuzzy
 msgid "This is a combination date option"
-msgstr "C'est une option de date"
+msgstr "C'est une option de combinaison de date"
 
 # po/guile_strings.txt:70
 #: po/guile_strings.txt:93
@@ -2809,9 +2804,8 @@ msgid "The font used to show hints in the register"
 msgstr "La police utilisé pour montrer les conseils dans le registre"
 
 #: po/guile_strings.txt:103
-#, fuzzy
 msgid "Auto Decimal Places"
-msgstr "Point décimal automatique"
+msgstr "Fonction décimale auto"
 
 # po/guile_strings.txt:282
 #: po/guile_strings.txt:104
@@ -2835,9 +2829,8 @@ msgstr "Trier par numéro de chèques/transaction"
 
 # po/guile_strings.txt:107
 #: po/guile_strings.txt:108
-#, fuzzy
 msgid "Start of current quarter"
-msgstr "Début de la période du rapport"
+msgstr "Début du trimestre actuel"
 
 # po/guile_strings.txt:82
 #: po/guile_strings.txt:109
@@ -2966,9 +2959,8 @@ msgstr "Faire un rapport de transaction sur ces comptes"
 
 # po/guile_strings.txt:184
 #: po/guile_strings.txt:135
-#, fuzzy
 msgid "Six Months Ago"
-msgstr "Mois"
+msgstr "Il y a 6 mois"
 
 # po/guile_strings.txt:233
 #: po/guile_strings.txt:136
@@ -2997,7 +2989,7 @@ msgstr "Début de la période du rapport"
 
 #: po/guile_strings.txt:145
 msgid "How many automatic decimal places will be filled in."
-msgstr ""
+msgstr "Combien de fonctions décimales auto rempliront le formulaire"
 
 # po/guile_strings.txt:108
 #: po/guile_strings.txt:146
@@ -3038,7 +3030,7 @@ msgstr "Arrière-plan de la répartition en mode multi par défaut"
 
 #: po/guile_strings.txt:154
 msgid "Previous Financial Year Start"
-msgstr ""
+msgstr "Début de l'année financière précédente"
 
 # po/guile_strings.txt:113
 #: po/guile_strings.txt:156
@@ -3046,18 +3038,17 @@ msgid "Week"
 msgstr "Semaine"
 
 # po/guile_strings.txt:115
-#: po/guile_strings.txt:157
+#: po/guile_string s.txt:157
 msgid "Crash the report"
 msgstr "Stopper le rapport"
 
 #: po/guile_strings.txt:158
 msgid "Start of this month"
-msgstr ""
+msgstr "Début de ce mois"
 
 #: po/guile_strings.txt:159
-#, fuzzy
 msgid "Beginning of the previous calendar year"
-msgstr "Début de la période des paiements"
+msgstr "Début de la précédente année calendaire"
 
 # po/guile_strings.txt:117
 #: po/guile_strings.txt:161
@@ -3105,7 +3096,7 @@ msgstr "Fin"
 
 #: po/guile_strings.txt:170
 msgid "The start of the previous quarterly accounting period"
-msgstr ""
+msgstr "Le début de la période comptable trimestrielle précédente"
 
 # po/guile_strings.txt:123
 #: po/guile_strings.txt:171
@@ -3169,15 +3160,13 @@ msgstr "Texte uniquement"
 
 # po/guile_strings.txt:107
 #: po/guile_strings.txt:185
-#, fuzzy
 msgid "Start of previous quarter"
-msgstr "Début de la période du rapport"
+msgstr "Début du trimestre précédent"
 
 # messages-i18n.c:200
 #: po/guile_strings.txt:186
-#, fuzzy
 msgid "Previous Year End"
-msgstr "Précédent solde"
+msgstr "Fin de l'année précédente"
 
 # po/guile_strings.txt:135
 #: po/guile_strings.txt:188
@@ -3225,9 +3214,8 @@ msgstr "Option laide"
 
 # po/guile_strings.txt:166
 #: po/guile_strings.txt:196
-#, fuzzy
 msgid "End of previous quarter"
-msgstr "Fin de la période du rapport"
+msgstr "Fin du trimestre précédent"
 
 # po/guile_strings.txt:141
 #: po/guile_strings.txt:197
@@ -3236,9 +3224,8 @@ msgstr "Comment aller vous faire votre budget?"
 
 # po/guile_strings.txt:247
 #: po/guile_strings.txt:198
-#, fuzzy
 msgid "Combo Date Option"
-msgstr "Options d'heure et de date"
+msgstr "Combinaison d'option de date"
 
 # po/guile_strings.txt:142
 #: po/guile_strings.txt:199
@@ -3247,7 +3234,7 @@ msgstr "Sauvegarder les chaines traduisibles"
 
 #: po/guile_strings.txt:200
 msgid "Start of the current month"
-msgstr ""
+msgstr "Début du mois actuel"
 
 # po/guile_strings.txt:143
 #: po/guile_strings.txt:201
@@ -3343,13 +3330,12 @@ msgid "General"
 msgstr "Général"
 
 #: po/guile_strings.txt:223
-#, fuzzy
 msgid ""
 "Automatically insert a decimal point into values that are entered without "
 "one."
 msgstr ""
 "Insérer automatiquement un point décimal dans les valeurs qui sont entrées "
-"sans.Exemple: '2000' est changé en '20.00'."
+"sans."
 
 # po/guile_strings.txt:163
 #: po/guile_strings.txt:226
@@ -3389,7 +3375,7 @@ msgstr "Rapport de transaction"
 
 #: po/guile_strings.txt:234
 msgid "One Week Ago"
-msgstr ""
+msgstr "Il y a 1 semaine"
 
 # po/guile_strings.txt:171
 #: po/guile_strings.txt:236
@@ -3464,7 +3450,7 @@ msgstr "Mois"
 
 #: po/guile_strings.txt:255
 msgid "Current Year Start"
-msgstr ""
+msgstr "Début de l'année actuelle"
 
 # po/guile_strings.txt:185
 #: po/guile_strings.txt:256
@@ -3555,9 +3541,8 @@ msgstr "Fonds dans"
 
 # po/guile_strings.txt:166
 #: po/guile_strings.txt:273
-#, fuzzy
 msgid "End of previous quarterly accounting period"
-msgstr "Fin de la période du rapport"
+msgstr "Fin de la période comptable trimestrielle précédente"
 
 # messages-i18n.c:324 po/guile_strings.txt:181
 #: po/guile_strings.txt:274
@@ -3678,7 +3663,7 @@ msgstr "Uniquement une option de date"
 
 #: po/guile_strings.txt:302
 msgid "Start of the current financial year/accounting period"
-msgstr ""
+msgstr "Début de la période comptable/année financière actuelle"
 
 # po/guile_strings.txt:215
 #: po/guile_strings.txt:303
@@ -3819,7 +3804,7 @@ msgstr "C'est une option de date avec heure"
 
 #: po/guile_strings.txt:329
 msgid "End of the previous Financial year/Accounting Period"
-msgstr ""
+msgstr "Fin de la précédente année financière/période comptable"
 
 # po/guile_strings.txt:237
 #: po/guile_strings.txt:330
@@ -3852,9 +3837,8 @@ msgstr "Nombre de lignes du registre par défaut à afficher"
 
 # po/guile_strings.txt:18
 #: po/guile_strings.txt:336
-#, fuzzy
 msgid "The current date"
-msgstr "L'heure actuelle est %s."
+msgstr "La date actuelle"
 
 # po/guile_strings.txt:242
 #: po/guile_strings.txt:337
@@ -3873,9 +3857,9 @@ msgstr "Exporter les données comme texte (Danger: Non terminé)"
 
 # po/guile_strings.txt:34
 #: po/guile_strings.txt:340
-#, fuzzy, c-format
+#, c-format
 msgid "The combination date option is %s."
-msgstr "L'option de date est %s."
+msgstr "La combinaison de l'option de date est %s."
 
 # po/guile_strings.txt:245
 #: po/guile_strings.txt:341
@@ -3937,13 +3921,12 @@ msgstr "\\ (Backslash)"
 
 #: po/guile_strings.txt:354
 msgid "Last day of previous month"
-msgstr ""
+msgstr "Dernier jour du mois précédent"
 
 # messages-i18n.c:200
 #: po/guile_strings.txt:355
-#, fuzzy
 msgid "End Previous Financial Year"
-msgstr "Précédent solde"
+msgstr "Fin de l'année financière précédente"
 
 # po/guile_strings.txt:256
 #: po/guile_strings.txt:356
@@ -3957,7 +3940,7 @@ msgstr "Aide pour la troisième option"
 
 #: po/guile_strings.txt:358
 msgid "Default system locale format"
-msgstr ""
+msgstr "Format du système des locales par défaut"
 
 # po/guile_strings.txt:258
 #: po/guile_strings.txt:359
@@ -3970,7 +3953,7 @@ msgstr "Limite inférieure"
 
 #: po/guile_strings.txt:362
 msgid "One Year Ago"
-msgstr ""
+msgstr "Il y a 1 an"
 
 # po/guile_strings.txt:261
 #: po/guile_strings.txt:363
@@ -3984,9 +3967,8 @@ msgstr "C'est une option de liste de compte"
 
 # po/guile_strings.txt:190
 #: po/guile_strings.txt:366
-#, fuzzy
 msgid "This is a relative date option"
-msgstr "C'est une option de date"
+msgstr "C'est une option de date relative"
 
 # po/guile_strings.txt:263
 #: po/guile_strings.txt:367
@@ -4005,7 +3987,7 @@ msgstr "Pertes/Profits"
 
 #: po/guile_strings.txt:370
 msgid "Start of the current calendar year"
-msgstr ""
+msgstr "Début de l'année calendaire actuelle"
 
 # po/guile_strings.txt:266
 #: po/guile_strings.txt:371 src/gnome/glade-gnc-dialogs.c:2268
@@ -4093,7 +4075,7 @@ msgstr "Trier par date et sous-total chaque mois"
 
 #: po/guile_strings.txt:389
 msgid "Three Months Ago"
-msgstr ""
+msgstr "Il y a 3 mois"
 
 # po/guile_strings.txt:283
 #: po/guile_strings.txt:390
@@ -4727,12 +4709,12 @@ msgstr "Pas pointé (n)"
 # messages-i18n.c:260
 #: src/gnome/glade-gnc-dialogs.c:2435
 msgid "Cleared (c)"
-msgstr "Pointé (p)"
+msgstr "Pointé (c)"
 
 # messages-i18n.c:322
 #: src/gnome/glade-gnc-dialogs.c:2442
 msgid "Reconciled (y)"
-msgstr "Rapprocher (o)"
+msgstr "Rapprocher (y)"
 
 #: src/gnome/glade-gnc-dialogs.c:2470
 msgid "Type of search"
@@ -5037,23 +5019,21 @@ msgstr "Vous devez dabord sélectionner une imprimante."
 
 # messages-i18n.c:47
 #: src/SplitLedger.c:1850
-#, fuzzy
 msgid ""
 "You are about to overwrite an existing split.\n"
 "Are you sure you want to do that?"
 msgstr ""
-"Le compte n'est pas équilibré.\n"
-"Etes-vous sûr de vouloir terminer?"
+"Vous êtes sur le point d'écraser une répartition existante.\n"
+"Etes-vous sûr de vouloir faire celà?"
 
 # messages-i18n.c:48
 #: src/SplitLedger.c:1880
-#, fuzzy
 msgid ""
 "You are about to overwrite an existing transaction.\n"
 "Are you sure you want to do that?"
 msgstr ""
-"Vous avez fait des changements dans cette fenêtre de rapprochement.\n"
-"Etes-vous sûr de vouloir annuler?"
+"Vous êtes sur le point d'écraser une transaction existante.\n"
+"Etes-vous sûr de vouloir faire celà?"
 
 #~ msgid "Display N-1 lines"
 #~ msgstr "Affiche N-1 lignes"
