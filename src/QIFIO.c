@@ -21,12 +21,6 @@
  *   Author: Linas Vepstas                                          *
  * Internet: linas@linas.org                                        *
  *                                                                  *
- * NOTE: This software is *very alpha*, and is likely to core       *
- * dump on unexpected file formats, or otheriwse mangle and         *
- * loose data.  It sort-of works for the one QIF file its been      *
- * tested on ... The contents of this file are not well designed,   *
- * it is just a quick hack ...  a lot more qork is required.        *
- *                                                                  *
  * NOTE: the readxxxx/writexxxx functions changed the current       *
  *       position in the file, and so the order which these         *
  *       functions are called in important                          *
@@ -636,7 +630,7 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
    tmp = strchr (qifline, '\n');
    if(tmp) *tmp = 0x0;
 
-   /* hack alert -- search for colons in name, do an algorithm
+   /* hack alert -- should search for colons in name, do an algorithm
     * similar to Xfer routine above  */
    /* see if the account exists */
    rootgrp = xaccGetRootGroupOfAcct (acc);
@@ -698,7 +692,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
    trans -> share_price= 1.0;   /* share_price is double */
    trans -> reconciled = NREC;  /* reconciled is byte */
    /* other possible values ... */
-   /* trans->reconciled = YREC;  trans->reconciled = CREC; */
+   /* trans->reconciled = YREC, CREC, FREC; */
 
    trans -> date.year = 1970;   /* int */
    trans -> date.month = 1;     /* int */
@@ -719,6 +713,14 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
    /* scan for transaction date, description, type */
    while (qifline) {
+     /* C == Cleared / Reconciled */
+     if ('C' == qifline [0]) {  
+         /* Quicken uses C* and Cx, while MS Money uses CX.
+          * I don't know what * and x are supposed to differentiate 
+          */
+        trans->reconciled = CREC;
+     } else 
+
      /* D == date */
      if ('D' == qifline [0]) {  
          xaccParseQIFDate (&(trans->date), &qifline[1]);
