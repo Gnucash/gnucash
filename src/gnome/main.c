@@ -33,15 +33,16 @@
 #include "Group.h"
 #include "util.h"
 #include "MainWindow.h"
+#include "messages.h"
 
 /** PROTOTYPES ******************************************************/
 
 /** GLOBALS *********************************************************/
-char        *datafile = NULL;
+
 char        *helpPath = NULL;
 GtkWidget   *toplevel;
 GtkWidget   *filebox;
-
+char        *datafile = NULL;
 GtkWidget   *app;
 
 
@@ -79,13 +80,36 @@ file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
     topgroup = xaccMallocAccountGroup(); 
   } 
 
+  xaccAccountGroupMarkSaved(topgroup);
   main_window_init(topgroup);
 }
 
 void
 gnucash_shutdown (GtkWidget *widget, gpointer *data)
 {
-  gtk_main_quit ();
+  if ( xaccAccountGroupNotSaved(topgroup) )
+  {
+    GtkWidget *msgbox;
+    msgbox = gnome_message_box_new ( FMB_SAVE_MSG,
+                                     GNOME_MESSAGE_BOX_ERROR, 
+                                     GNOME_STOCK_BUTTON_OK,
+                                     GNOME_STOCK_BUTTON_CANCEL, NULL );
+    gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 0,
+                                 GTK_SIGNAL_FUNC (file_cmd_save), 
+                                 NULL);
+    gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 0,
+                                 GTK_SIGNAL_FUNC (file_cmd_quit), 
+                                 NULL);                                 
+    gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 1,
+                                 GTK_SIGNAL_FUNC (file_cmd_quit), 
+                                 NULL);                                                    
+    gtk_widget_show ( msgbox );   
+  }
+  else
+  {
+    gtk_main_quit ();
+  }
+
 }
 
 void
@@ -108,6 +132,7 @@ file_cmd_save(GtkWidget *widget, gpointer data)
 
 void file_cmd_quit (GtkWidget *widget, gpointer data)
 {
+  //gnucash_shutdown(NULL, NULL);
   gtk_main_quit();
 }
 
@@ -225,6 +250,7 @@ main( int argc, char *argv[] )
       topgroup = xaccMallocAccountGroup(); 
     }
     /* Create main window */
+    xaccAccountGroupMarkSaved(topgroup);
     main_window_init(topgroup);
   } else {
     /* Filebox code here */

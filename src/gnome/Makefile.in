@@ -32,7 +32,7 @@ INCLPATH = -I.. -I../.. -I../engine -I../register -I@srcdir@/../../include
 
 CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH}
 LDFLAGS  = @LDFLAGS@
-LIBS     = @LIBS@ @X_PRE_LIBS@ @X_LIBS@ $(shell gtk-config --libs) \
+LIBS     = -lgif @LIBS@ @X_PRE_LIBS@ @X_LIBS@ $(shell gtk-config --libs) \
            @X_EXTRA_LIBS@ -lgnomeui -lgnome -lgnomesupport -lgdk_imlib -ltiff -ldl
 
 TARGET   = ../../xacc.gtk.bin
@@ -42,7 +42,7 @@ OTHER_OBJS := ../obj/gnome/*.o ../engine/obj/*.o ../register/obj/gnome/*.o
 
 ######################################################################
 # See Makefile.common for information about these variables.
-GNOME_SRCS := main.c MainWindow.c MenuBar.c RegWindow.c Dialogs.c xtutil.c \
+GNOME_SRCS := main.c MainWindow.c MenuBar.c RegWindow.c Add_Dialog.c xtutil.c \
               RecnWindow.c
 #        AccWindow.c AccountMenu.c AdjBWindow.c    \
 #        BuildMenu.c Destroy.c FileBox.c HelpWindow.c  \

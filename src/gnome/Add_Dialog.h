@@ -23,59 +23,41 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __MAINWINDOW_H__
-#define __MAINWINDOW_H__
+#ifndef __ADD_DIALOG_H__
+#define __ADD_DIALOG_H__
 
-#include <gtk/gtk.h>
 #include "Group.h"
 #include "Account.h"
-#include "config.h"
+#include "main.h"
+#include "MainWindow.h"
 
-/** STRUCTURES ******************************************************/
-struct _main_window 
+struct _add_account_dialog 
 {
-  GtkWidget 	*maintree;
-  GtkWidget     *root_item;
+  GnomeDialog 	*dialog;
+  GtkWidget 	*main_vbox;
+  GtkWidget 	*box2;
+  GtkWidget	*box3;
+  GtkWidget	*box4;
+  GtkWidget 	*frame;
+  
+  GSList 	*group;
+
+  GtkWidget 	*label;
+  GtkWidget 	*textbox_name;
+  GtkWidget	*textbox_description;
+
+  GtkWidget	*separator;
+
+  Account	*parent_account;
+  gint		*type;
+
 };
 
-typedef struct _main_window main_window;
+typedef struct _add_account_dialog add_account_dialog;
 
-/** PROTOTYPES ******************************************************/
-void refreshMainWindow( void );
-void main_window_init(AccountGroup *);
-void xaccMainWindowAddAccount ( GtkWidget * );
-void refresh_tree ( void );
-void acct_tree_fill ( GtkWidget *, AccountGroup *, int );
-
-/** GLOBALS *********************************************************/
-enum {
-  FMB_NEW,
-  FMB_OPEN,
-  FMB_IMPORT,
-  FMB_SAVE,
-  FMB_SAVEAS,
-  FMB_QUIT,
-};
-enum {
-  AMB_NEW,
-  AMB_OPEN,
-  AMB_LEDGER,
-  AMB_EDIT,
-  AMB_DEL,
-  AMB_TRNS,
-  AMB_RPRT,
-  AMB_SHOW,
-  AMB_CAT,
-};
-enum {
-  HMB_ABOUT,
-  HMB_ACC,
-  HMB_REGWIN,
-  HMB_RECNWIN,
-  HMB_ADJBWIN,
-  HMB_MAIN,
-  HMB_LIC,
-};
+void 			create_add_account_dialog ( AccountGroup * );
+add_account_dialog 	*add_account_dialog_init ( void );
+void	 		add_account_dialog_destroy ( GtkWidget *, GnomeDialog * );
 
 #endif
 

@@ -120,7 +120,7 @@ recnRefresh(Account *acc)
         GtkWidget *check_button = gtk_check_button_new_with_label(item_str);
 
         gtk_signal_connect(GTK_OBJECT(check_button), "toggled",
-                           recnCB, (gpointer) recnData);
+                           (GtkSignalFunc)recnCB, (gpointer) recnData);
 
         gtk_container_add(GTK_CONTAINER(list_item), check_button);
         gtk_widget_show(list_item);
@@ -381,7 +381,7 @@ startRecnWindow(GtkWidget *parent, Account *acc, double *diff)
         }
       }
     }
-    gnome_dialog_close(dialog);
+    gnome_dialog_close(GNOME_DIALOG(dialog));
   }
   fprintf(stderr, "Returning result: %d\n", result);
   return result;
@@ -527,7 +527,7 @@ xaccDestroyRecnWindow(Account *acc)
   
   FIND_IN_LIST(RecnWindow, recnList, acc, acc, recnData);
   if(!recnData) return;
-  gnome_dialog_close(recnData->dialog);
+  gnome_dialog_close(GNOME_DIALOG(recnData->dialog));
 }
 
 
@@ -590,7 +590,7 @@ recnOkCB(GtkWidget *w, gpointer data)
   /* refresh the register window */
   accRefresh(recnData->acc);
   
-  gnome_dialog_close(recnData->dialog);
+  gnome_dialog_close(GNOME_DIALOG(recnData->dialog));
 
 }
 
@@ -599,7 +599,7 @@ recnCancelCB(GtkWidget *w, gpointer data)
 {
   RecnWindow  *recnData = (RecnWindow *) data;
   fprintf(stderr, "X\n");
-  gnome_dialog_close(recnData->dialog);
+  gnome_dialog_close(GNOME_DIALOG(recnData->dialog));
   fprintf(stderr, "Y\n");
 }
 
