@@ -44,5 +44,5 @@ AM_CFLAGS = \
 
 EXTRA_DIST = \
   test-load-module \
-  db-control.sh
-
+  db-control.sh \
+  run-tests.sh
