@@ -38,4 +38,4 @@ int pgendDBVersionIsCurrent (PGBackend *be);
 
 void pgendUpgradeDB (PGBackend *be);
 
-#endif PGEND_UPGRADE_H
+#endif /* PGEND_UPGRADE_H */

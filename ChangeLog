@@ -1,3 +1,11 @@
+2001-08-06  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/sql/upgrade.h: fix warning
+
+	* src/engine/gnc-pricedb.[ch] (gnc_price_equal): new func
+
+	* src/engine/FreqSpec.c: add comment
+
 2001-08-05  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/window-register.c: move close button to left

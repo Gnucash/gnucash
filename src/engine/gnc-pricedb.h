@@ -172,6 +172,8 @@ const char *    gnc_price_get_type(GNCPrice *p);
 gnc_numeric     gnc_price_get_value(GNCPrice *p);
 gint32          gnc_price_get_version(GNCPrice *p);
 
+gboolean        gnc_price_equal (GNCPrice *p1, GNCPrice *p2);
+
 /**********************************************************************
   GNCPrice lists:
 

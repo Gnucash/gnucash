@@ -428,6 +428,44 @@ gnc_price_get_version(GNCPrice *p)
   return (p->version);
 }
 
+gboolean
+gnc_price_equal (GNCPrice *p1, GNCPrice *p2)
+{
+  Timespec ts1;
+  Timespec ts2;
+
+  if (p1 == p2) return TRUE;
+  if (!p1 || !p2) return FALSE;
+
+  if (!gnc_commodity_equiv (gnc_price_get_commodity (p1),
+                            gnc_price_get_commodity (p2)))
+    return FALSE;
+
+  if (!gnc_commodity_equiv (gnc_price_get_currency (p1),
+                            gnc_price_get_currency (p2)))
+    return FALSE;
+
+  ts1 = gnc_price_get_time (p1);
+  ts2 = gnc_price_get_time (p2);
+
+  if (!timespec_equal (&ts1, &ts2))
+    return FALSE;
+
+  if (!safe_strcmp (gnc_price_get_source (p1),
+                    gnc_price_get_source (p2)))
+    return FALSE;
+
+  if (!safe_strcmp (gnc_price_get_type (p1),
+                    gnc_price_get_type (p2)))
+    return FALSE;
+
+  if (!gnc_numeric_eq (gnc_price_get_value (p1),
+                       gnc_price_get_value (p2)))
+    return FALSE;
+
+  return TRUE;
+}
+
 /* ==================================================================== */
 /* price list manipulation functions */
 

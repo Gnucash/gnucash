@@ -124,7 +124,10 @@ struct monthDesc {
 /* This stuff is going to need i18n.
  * wouldn't it be simpler to use the system
  * date conversion functions?
- * glib already knows about this. */
+ * glib already knows about this.
+ * *libc* already knows about this
+ * and the month names below. Both
+ * of these should go away! */
 static char *weekDayNames[] = {
         "Sunday",
         "Monday",
