@@ -295,8 +295,6 @@ add_multiple_book_support (PGBackend *be)
  
    p = "LOCK TABLE gncAccount IN ACCESS EXCLUSIVE MODE;\n"
        "LOCK TABLE gncAccountTrail IN ACCESS EXCLUSIVE MODE;\n"
-       "LOCK TABLE gncCommodity IN ACCESS EXCLUSIVE MODE;\n"
-       "LOCK TABLE gncCommodityTrail IN ACCESS EXCLUSIVE MODE;\n"
        "LOCK TABLE gncPrice IN ACCESS EXCLUSIVE MODE;\n"
        "LOCK TABLE gncPriceTrail IN ACCESS EXCLUSIVE MODE;\n"
        "LOCK TABLE gncVersion IN ACCESS EXCLUSIVE MODE;\n"
@@ -326,8 +324,6 @@ add_multiple_book_support (PGBackend *be)
  
    p = "ALTER TABLE gncAccount ADD COLUMN bookGuid CHAR(32) NOT NULL;\n"
        "ALTER TABLE gncAccountTrail ADD COLUMN bookGuid CHAR(32) NOT NULL;\n"
-       "ALTER TABLE gncCommodity ADD COLUMN bookGuid CHAR(32) NOT NULL;\n"
-       "ALTER TABLE gncCommodityTrail ADD COLUMN bookGuid CHAR(32) NOT NULL;\n"
        "ALTER TABLE gncPrice ADD COLUMN bookGuid CHAR(32) NOT NULL;\n"
        "ALTER TABLE gncPriceTrail ADD COLUMN bookGuid CHAR(32) NOT NULL;\n";
    SEND_QUERY (be,p, );
@@ -352,17 +348,6 @@ add_multiple_book_support (PGBackend *be)
    p = stpcpy (p, "';\n");
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
-
-   p = buff;
-   p = stpcpy (p, "UPDATE gncCommodity SET bookGuid = '");
-   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
-   p = stpcpy (p, "';\n");
-   p = stpcpy (p, "UPDATE gncCommodityTrail SET bookGuid = '");
-   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
-   p = stpcpy (p, "';\n");
-   SEND_QUERY (be,buff, );
-   FINISH_QUERY(be->connection);
-
 
    p = buff;
    p = stpcpy (p, "INSERT INTO gncBook (bookGuid, book_open, version, iguid) "

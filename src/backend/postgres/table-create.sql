@@ -41,8 +41,7 @@ CREATE TABLE gncCommodity (
 	namespace	TEXT NOT NULL,
 	mnemonic	TEXT NOT NULL,
 	code		TEXT,
-	fraction	INT DEFAULT '100',
-	bookGuid	CHAR(32) NOT NULL
+	fraction	INT DEFAULT '100'
 );
 
 CREATE TABLE gncBook (
