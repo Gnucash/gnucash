@@ -239,11 +239,12 @@ multi-user mode is fundamentally broken unless they are fixed.
    as to what this is about.  For the first pass, this is not a 
    serious issue; its a 'nice to have' thing.
 
--- add versioning support for price db.  We should add version numbers 
-   to the prices, and check version numbers when updating prices.
+-- bug: price editing from price edit gui only causes price to be deleted,
+   the new price is not stored ...
 
 -- implement account rollback (i.e. if other user has modified the
    account, we need to do something to merge their work into ours...)
+   ditto for prices ...
 
 -- transaction rollback is 'incorrect'; sort of ?? since we should
    roll back to what's in the db, and not the old stored transaction ...
