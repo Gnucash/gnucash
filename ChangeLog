@@ -1,3 +1,11 @@
+2004-05-31  Linas Vepstas <linas@linas.org>
+	* src/...:
+	  Backport of CVS-head changes to improve register open 
+	  performance when working with large account trees 
+	  (>500 accounts).  The new code caches the quickfill 
+	  tree so that it is shared by all register windows.
+	  Fixes bug http://bugzilla.gnome.org/show_bug.cgi?id=120028
+
 2004-05-24  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-reports/transaction.cm: applied Vasil's
