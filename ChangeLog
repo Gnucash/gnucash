@@ -1,5 +1,7 @@
 2000-06-28  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/dialog-options.c: implement font options.
+
 	* src/scm/prefs.scm: add options for the register fonts.
 
 	* src/gnome/top-level.c: configure the register fonts from
