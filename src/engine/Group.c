@@ -828,7 +828,7 @@ xaccAccountStagedTransactionTraversal (Account *acc,
   unsigned int n = 0;
   Split *s = NULL;
   
-  if(!acc) return;
+  if(!acc) return 0;
   
   s = acc->splits[0];
   if (callback) {
@@ -866,7 +866,7 @@ xaccGroupStagedTransactionTraversal(AccountGroup *grp,
   unsigned int numAcc;
   unsigned int i;
   
-  if (!grp) return;
+  if (!grp) return 0;
   
   numAcc = grp->numAcc;
   for(i = 0; i < numAcc; i++) {
