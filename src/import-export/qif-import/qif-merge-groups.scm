@@ -74,10 +74,10 @@
                              (gnc:split-get-account split)) separator)
                  'query-and)
                 
-                ;; we want the amount for the split to match the amount
+                ;; we want the value for the split to match the value
                 ;; the old-group split.  We should really check for
                 ;; fuzziness.
-                (d-gnc:query-add-amount-match 
+                (d-gnc:query-add-value-match 
                  sq (gnc:numeric-to-double (gnc:split-get-value split))
                  'amt-sgn-match-either 'amt-match-exactly
                  'query-and)

@@ -805,7 +805,7 @@ sqlQuery_build (sqlQuery *sq, Query *q)
                need_entry = TRUE;
                break;
 
-            case PR_AMOUNT:
+            case PR_VALUE:
                need_entry = TRUE;
                need_trans_commodity = TRUE;
                break;
@@ -1001,15 +1001,6 @@ sqlQuery_build (sqlQuery *sq, Query *q)
                STRING_TERM ("gncEntry.action");
                break;
 
-            case PR_AMOUNT:
-            {
-               PINFO("term is PR_AMOUNT");
-               sq->pq = stpcpy(sq->pq, 
-                     "gncTransaction.currency = trans_com.commodity AND ");
-               AMOUNT_TERM ("gncEntry.value","trans_com");
-               break;
-            }
-
             case PR_BALANCE:
             {
                PINFO("term is PR_BALANCE");
@@ -1201,6 +1192,15 @@ sqlQuery_build (sqlQuery *sq, Query *q)
                sq->pq = stpcpy(sq->pq, 
                      "gncAccount.commodity = account_com.commodity AND ");
                AMOUNT_TERM ("gncEntry.amount","account_com");
+               break;
+            }
+
+            case PR_VALUE:
+            {
+               PINFO("term is PR_VALUE");
+               sq->pq = stpcpy(sq->pq, 
+                     "gncTransaction.currency = trans_com.commodity AND ");
+               AMOUNT_TERM ("gncEntry.value","trans_com");
                break;
             }
 
