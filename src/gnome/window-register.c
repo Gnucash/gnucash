@@ -47,7 +47,6 @@
 #include "query-user.h"
 #include "enriched-messages.h"
 #include "table-gnome.h"
-#include "table-html.h"
 #include "gnucash-sheet.h"
 #include "global-options.h"
 #include "dialog-find-transactions.h"
