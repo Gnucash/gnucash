@@ -1,4 +1,16 @@
+2000-05-20  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-reconcile.c: add menus to change the sort order
+	of the debits and credits list.
+
+	* src/engine/Query.c: allow the sort order to be set as increasing
+	or decreasing.
+
 2000-05-19  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/gnucash-style.c (gnucash_style_init): use
+	default style's font. Unfortunately, there doesn't seem to be a
+	way to get a default italic font, so use the regular one for now.
 
 	* src/gnome/reconcile-list.c: use Queries to get the splits so
 	we can do sorting. Add an api call to change the sort order.

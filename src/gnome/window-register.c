@@ -105,7 +105,7 @@ static int last_stock_width = 0;
 
 
 /** PROTOTYPES ******************************************************/
-RegWindow *regWindowLedger(xaccLedgerDisplay *ledger);
+RegWindow * regWindowLedger(xaccLedgerDisplay *ledger);
 static void regRefresh(xaccLedgerDisplay *ledger);
 static void gnc_reg_refresh_toolbar(RegWindow *regData);
 static void regDestroy(xaccLedgerDisplay *ledger);
@@ -322,7 +322,7 @@ gnc_register_style_auto_double_cb(GtkWidget *w, gpointer data)
 
 
 static void
-gnc_register_sort(RegWindow *regData, int sort_code)
+gnc_register_sort(RegWindow *regData, sort_type_t sort_code)
 {
   Query *query = regData->ledger->query;
 

@@ -1515,8 +1515,12 @@ gnucash_style_unref (SheetBlockStyle *style)
 void
 gnucash_style_init (void)
 {
-        gnucash_default_font = gdk_font_load (DEFAULT_FONT);
-        gnucash_italic_font = gdk_font_load (ITALIC_FONT);
+        GtkStyle *style;
+
+        style = gtk_widget_get_default_style();
+
+        gnucash_default_font = style->font;
+        gnucash_italic_font = style->font;
 
         g_assert (gnucash_default_font);
         g_assert (gnucash_italic_font);

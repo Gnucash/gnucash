@@ -103,6 +103,8 @@ xaccInitQuery(Query * q, QueryTerm * initial_term) {
   q->primary_sort = BY_STANDARD;
   q->secondary_sort = BY_NONE;
   q->tertiary_sort = BY_NONE;
+
+  q->sort_increasing = GNC_T;
 }
 
 
@@ -606,24 +608,31 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) {
 
 static int
 split_sort_func(gconstpointer a, gconstpointer b) {
-  int retval; 
+  int retval;
+  int multiplier;
 
   assert(split_sort_query);
+
+  if (split_sort_query->sort_increasing)
+    multiplier = 1;
+  else
+    multiplier = -1;
 
   retval = split_cmp_func(split_sort_query->primary_sort, a, b);
   if((retval == 0) && 
      (split_sort_query->secondary_sort != BY_NONE)) {
     retval = split_cmp_func(split_sort_query->secondary_sort, a, b);
     if((retval == 0) &&
-       (split_sort_query->tertiary_sort != BY_NONE)) {       
-      return split_cmp_func(split_sort_query->tertiary_sort, a, b);
+       (split_sort_query->tertiary_sort != BY_NONE)) {
+      retval = split_cmp_func(split_sort_query->tertiary_sort, a, b);
+      return retval * multiplier;
     }
     else {
-      return retval;
+      return retval * multiplier;
     }
   }
   else {
-    return retval;
+    return retval * multiplier;
   }
 }
 
@@ -1759,6 +1768,14 @@ xaccQuerySetSortOrder(Query * q, sort_type_t primary,
   q->changed = 1;
 }
 
+/*******************************************************************
+ *  xaccQuerySetSortIncreasing
+ *******************************************************************/
+void
+xaccQuerySetSortIncreasing(Query * q, gncBoolean increasing)
+{
+  q->sort_increasing = increasing;
+}
 
 /*******************************************************************
  *  xaccQuerySetMaxSplits

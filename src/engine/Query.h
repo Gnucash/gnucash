@@ -75,13 +75,14 @@ typedef struct {
   /* terms is a list of the OR-terms in a sum-of-products 
    * logical expression. */
   GList *  terms;  
-  
+
   /* sorting and chopping is independent of the search filter */
   sort_type_t primary_sort;
   sort_type_t secondary_sort;
   sort_type_t tertiary_sort;
+  gncBoolean  sort_increasing;
   int         max_splits;
-  
+
   /* cache the results so we don't have to run the whole search 
    * again until it's really necessary */
   int      changed;
@@ -231,6 +232,7 @@ int  xaccSharesMatchPredicate(Split * s, PredicateData * pd);
 
 void xaccQuerySetSortOrder(Query * q, sort_type_t primary, 
                            sort_type_t secondary, sort_type_t tertiary);
+void xaccQuerySetSortIncreasing(Query * q, gncBoolean increasing);
 void xaccQuerySetMaxSplits(Query * q, int n);
 
 

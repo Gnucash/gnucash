@@ -87,6 +87,12 @@ struct _RecnWindow
   GtkWidget *edit_item;     /* Edit transaction menu item           */
   GtkWidget *delete_item;   /* Delete transaction menu item         */
 
+  GtkWidget *sort_debits_formal;    /* Sort debits menu formal      */
+  GtkWidget *sort_credits_formal;   /* Sort credits menu formal     */
+
+  GtkWidget *sort_debits_informal;  /* Sort debits menu informal    */
+  GtkWidget *sort_credits_informal; /* Sort credits menu informal   */
+
   GtkWidget *edit_popup;    /* Edit transaction popup menu item     */
   GtkWidget *delete_popup;  /* Delete transaction popup menu item   */
 
@@ -96,6 +102,7 @@ struct _RecnWindow
 
   gboolean delete_refresh;  /* do a refresh upon a window deletion  */
 };
+
 
 /** PROTOTYPES ******************************************************/
 static double recnRecalculateBalance( RecnWindow *recnData );
@@ -108,14 +115,15 @@ static void   gnc_reconcile_window_set_sensitivity(RecnWindow *recnData);
 static char * gnc_recn_make_window_name(Account *account);
 static void   gnc_recn_set_window_name(RecnWindow *recnData);
 
-/** GLOBALS *********************************************************/
 
+/** GLOBALS *********************************************************/
 static RecnWindow **recnList = NULL;
 
-/* This static indicates the debugging module that this .o belongs to.  */
+/* This static indicates the debugging module that this .o belongs to. */
 static short module = MOD_GUI;
 
-/********************************************************************/
+
+/** IMPLEMENTATIONS *************************************************/
 
 
 /********************************************************************\
@@ -467,7 +475,7 @@ gnc_reconcile_window_focus_cb(GtkWidget *widget, GdkEventFocus *event,
 }
 
 static void
-gnc_reconcile_window_set_frame_titles(RecnWindow *recnData)
+gnc_reconcile_window_set_titles(RecnWindow *recnData)
 {
   gboolean formal;
   gchar *title;
@@ -494,12 +502,27 @@ gnc_reconcile_window_set_frame_titles(RecnWindow *recnData)
 
   if (!formal)
     g_free(title);
+
+  if (formal)
+  {
+    gtk_widget_show(recnData->sort_debits_formal);
+    gtk_widget_show(recnData->sort_credits_formal);
+    gtk_widget_hide(recnData->sort_debits_informal);
+    gtk_widget_hide(recnData->sort_credits_informal);
+  }
+  else
+  {
+    gtk_widget_hide(recnData->sort_debits_formal);
+    gtk_widget_hide(recnData->sort_credits_formal);
+    gtk_widget_show(recnData->sort_debits_informal);
+    gtk_widget_show(recnData->sort_credits_informal);
+  }
 }
 
 static void
-set_frame_titles_cb(void *data)
+set_titles_cb(void *data)
 {
-  gnc_reconcile_window_set_frame_titles(data);
+  gnc_reconcile_window_set_titles(data);
 }
 
 static GtkWidget *
@@ -782,6 +805,102 @@ gnc_recn_open_cb(GtkWidget *widget, gpointer data)
   gnc_register_raise(regData);
 }
 
+static void
+gnc_reconcile_sort(RecnWindow *recnData, GNCReconcileListType list_type,
+                   sort_type_t sort_code)
+{
+  GNCReconcileList *list;
+
+  if (list_type == RECLIST_DEBIT)
+    list = GNC_RECONCILE_LIST(recnData->debit);
+  else
+    list = GNC_RECONCILE_LIST(recnData->credit);
+
+  switch(sort_code)
+  {
+    default:
+    case BY_STANDARD:
+      gnc_reconcile_list_set_sort_order(list, BY_STANDARD);
+      break;
+    case BY_NUM:
+      gnc_reconcile_list_set_sort_order(list, BY_NUM);
+      break;
+    case BY_AMOUNT:
+      gnc_reconcile_list_set_sort_order(list, BY_AMOUNT);
+      break;
+    case BY_DESC:
+      gnc_reconcile_list_set_sort_order(list, BY_DESC);
+      break;
+  }
+
+  gnc_reconcile_list_refresh(GNC_RECONCILE_LIST(recnData->debit));
+  gnc_reconcile_list_refresh(GNC_RECONCILE_LIST(recnData->credit));
+}
+
+static void
+sort_debit_standard_cb(GtkWidget *w, gpointer data)
+{
+  RecnWindow *recnData = data;
+
+  gnc_reconcile_sort(recnData, RECLIST_DEBIT, BY_STANDARD);
+}
+
+static void
+sort_debit_num_cb(GtkWidget *w, gpointer data)
+{
+  RecnWindow *recnData = data;
+
+  gnc_reconcile_sort(recnData, RECLIST_DEBIT, BY_NUM);
+}
+
+static void
+sort_debit_desc_cb(GtkWidget *w, gpointer data)
+{
+  RecnWindow *recnData = data;
+
+  gnc_reconcile_sort(recnData, RECLIST_DEBIT, BY_DESC);
+}
+
+static void
+sort_debit_amount_cb(GtkWidget *w, gpointer data)
+{
+  RecnWindow *recnData = data;
+
+  gnc_reconcile_sort(recnData, RECLIST_DEBIT, BY_AMOUNT);
+}
+
+static void
+sort_credit_standard_cb(GtkWidget *w, gpointer data)
+{
+  RecnWindow *recnData = data;
+
+  gnc_reconcile_sort(recnData, RECLIST_CREDIT, BY_STANDARD);
+}
+
+static void
+sort_credit_num_cb(GtkWidget *w, gpointer data)
+{
+  RecnWindow *recnData = data;
+
+  gnc_reconcile_sort(recnData, RECLIST_CREDIT, BY_NUM);
+}
+
+static void
+sort_credit_desc_cb(GtkWidget *w, gpointer data)
+{
+  RecnWindow *recnData = data;
+
+  gnc_reconcile_sort(recnData, RECLIST_CREDIT, BY_DESC);
+}
+
+static void
+sort_credit_amount_cb(GtkWidget *w, gpointer data)
+{
+  RecnWindow *recnData = data;
+
+  gnc_reconcile_sort(recnData, RECLIST_CREDIT, BY_AMOUNT);
+}
+
 static GtkWidget *
 gnc_recn_create_menu_bar(RecnWindow *recnData, GtkWidget *statusbar)
 {
@@ -812,6 +931,53 @@ gnc_recn_create_menu_bar(RecnWindow *recnData, GtkWidget *statusbar)
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
+    GNOMEUIINFO_END
+  };
+
+  static GnomeUIInfo sort_debit_list[] =
+  {
+    GNOMEUIINFO_RADIOITEM_DATA(STANDARD_ORDER_STR_N, TOOLTIP_STANDARD_ORD_N,
+                               sort_debit_standard_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_NUM_STR_N, TOOLTIP_SORT_BY_NUM_N,
+                               sort_debit_num_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_DESC_STR_N, TOOLTIP_SORT_BY_DESC_N,
+                               sort_debit_desc_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_AMNT_STR_N, TOOLTIP_SORT_BY_AMNT_N,
+                               sort_debit_amount_cb, NULL, NULL),
+    GNOMEUIINFO_END
+  };
+
+  static GnomeUIInfo sort_debit_menu[] =
+  {
+    GNOMEUIINFO_RADIOLIST(sort_debit_list),
+    GNOMEUIINFO_END
+  };
+
+  static GnomeUIInfo sort_credit_list[] =
+  {
+    GNOMEUIINFO_RADIOITEM_DATA(STANDARD_ORDER_STR_N, TOOLTIP_STANDARD_ORD_N,
+                               sort_credit_standard_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_NUM_STR_N, TOOLTIP_SORT_BY_NUM_N,
+                               sort_credit_num_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_DESC_STR_N, TOOLTIP_SORT_BY_DESC_N,
+                               sort_credit_desc_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_AMNT_STR_N, TOOLTIP_SORT_BY_AMNT_N,
+                               sort_credit_amount_cb, NULL, NULL),
+    GNOMEUIINFO_END
+  };
+
+  static GnomeUIInfo sort_credit_menu[] =
+  {
+    GNOMEUIINFO_RADIOLIST(sort_credit_list),
+    GNOMEUIINFO_END
+  };
+
+  static GnomeUIInfo sort_menu[] =
+  {
+    GNOMEUIINFO_SUBTREE(DEBITS_STR_N, sort_debit_menu),
+    GNOMEUIINFO_SUBTREE(CREDITS_STR_N, sort_credit_menu),
+    GNOMEUIINFO_SUBTREE(NULL, sort_debit_menu),
+    GNOMEUIINFO_SUBTREE(NULL, sort_credit_menu),
     GNOMEUIINFO_END
   };
 
@@ -898,6 +1064,7 @@ gnc_recn_create_menu_bar(RecnWindow *recnData, GtkWidget *statusbar)
   static GnomeUIInfo reconcile_window_menu[] =
   {
     GNOMEUIINFO_SUBTREE(RECONCILE_MENU_STR_N, reconcile_menu),
+    GNOMEUIINFO_SUBTREE(SORT_ORDER_MENU_STR_N, sort_menu),
     GNOMEUIINFO_SUBTREE(ACCOUNT_MENU_STR_N, account_menu),
     GNOMEUIINFO_SUBTREE(TRANSACTION_MENU_STR_N, transaction_menu),
     GNOMEUIINFO_MENU_HELP_TREE(help_menu),
@@ -905,6 +1072,9 @@ gnc_recn_create_menu_bar(RecnWindow *recnData, GtkWidget *statusbar)
   };
 
   gnc_fill_menu_with_data(reconcile_window_menu, recnData);
+
+  sort_menu[2].label = gnc_get_debit_string(NO_TYPE);
+  sort_menu[3].label = gnc_get_credit_string(NO_TYPE);
 
   menubar = gtk_menu_bar_new();
 
@@ -919,6 +1089,14 @@ gnc_recn_create_menu_bar(RecnWindow *recnData, GtkWidget *statusbar)
 
   recnData->edit_item = transaction_menu[1].widget;
   recnData->delete_item = transaction_menu[2].widget;
+
+  recnData->sort_debits_formal = sort_menu[0].widget;
+  recnData->sort_credits_formal = sort_menu[1].widget;
+  recnData->sort_debits_informal = sort_menu[2].widget;
+  recnData->sort_credits_informal = sort_menu[3].widget;
+
+  g_free(sort_menu[2].label);
+  g_free(sort_menu[3].label);
 
   return menubar;
 }
@@ -1157,12 +1335,6 @@ recnWindow(GtkWidget *parent, Account *account)
       (account, RECLIST_CREDIT, recnData,
        &recnData->credit, &recnData->total_credit);
 
-    gnc_reconcile_window_set_frame_titles(recnData);
-
-    recnData->title_change_cb_id =
-      gnc_register_option_change_callback(set_frame_titles_cb, recnData,
-                                          "General", "Use accounting labels");
-
     popup = gnc_recn_create_popup_menu(recnData);
     gnome_popup_menu_attach(popup, recnData->debit, recnData);
     gnome_popup_menu_attach(popup, recnData->credit, recnData);
@@ -1267,6 +1439,12 @@ recnWindow(GtkWidget *parent, Account *account)
   gtk_window_set_policy(GTK_WINDOW(recnData->window), TRUE, TRUE, TRUE);
 
   gtk_widget_show_all(recnData->window);
+
+  gnc_reconcile_window_set_titles(recnData);
+
+  recnData->title_change_cb_id =
+    gnc_register_option_change_callback(set_titles_cb, recnData,
+                                        "General", "Use accounting labels");
 
   recnRecalculateBalance(recnData);
 
