@@ -1,6 +1,6 @@
 /*
  * gncEntryLedgerControl.c -- Control for GncEntry ledger
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001,2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -210,6 +210,13 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
 
   } while (FALSE);
 
+  /* 
+   * XXX: Note well that there is no verification that the Entry has
+   * an account or taxaccount, which could cause trouble come invoice
+   * time.  Should we check that here?  Note that we only need an
+   * account or taxaccount if there is a value or tax.  E.g., if the
+   * tax is zero, then we don't need a taxaccount.
+   */
 
   /* See if we are tabbing off the end of the very last line */
   do
@@ -285,17 +292,57 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
     return FALSE;
   }
 
+  /*
+   * XXX  GNCENTRY_INVOICE_EDIT processing to be added:
+   * 1) check if the qty field changed.
+   * 2) if so, check if this entry is part of an order.
+   * 3) if so, ask if they want to change the entry or
+   *    split the entry into two parts.
+   */
+
   /* Ok, we are changing entries and the current entry has
    * changed. See what the user wants to do. */
   {
     const char *message;
 
-    message = _("The current entry has been changed.\n"
-                "Would you like to record it?");
+    switch (ledger->type) {
+    case GNCENTRY_INVOICE_ENTRY:
+      {
+	char inv_value;
+	char only_inv_changed;
+
+	inv_value = gnc_entry_ledger_get_inv (ledger, ENTRY_INV_CELL);
+	only_inv_changed = 0; /* XXX */
+
+	if (inv_value == 'X' && only_inv_changed) {
+	  /* If the only change is that the 'inv' entry was clicked
+	   * "on", then just accept the change it without question.
+	   */
+	  result = GNC_VERIFY_YES;
+	  goto dontask;
+	}
+      }
+      /* Ok, something else has changed -- we should ask the user */
+
+      if (gncEntryGetOrder (entry) != NULL) {
+	message = _("The current entry has been changed.\n"
+		    "However, this entry is part of an existing order\n"
+		    "Would you like to record the change and\n"
+		    "effectively change your order?");
+	break;
+      }
+      /* FALLTHROUGH */
+    default:
+      message = _("The current entry has been changed.\n"
+		  "Would you like to record the change?");
+      break;
+    }
 
     result = gnc_verify_cancel_dialog_parented (ledger->parent,
 						message, GNC_VERIFY_YES);
   }
+
+dontask:
 
   switch (result)
   {
@@ -374,7 +421,18 @@ gboolean gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
   gnc_suspend_gui_refresh ();
 
   if (entry == blank_entry)
-    gncOrderAddEntry (ledger->order, blank_entry);
+    switch (ledger->type) {
+    case GNCENTRY_ORDER_ENTRY:
+      gncOrderAddEntry (ledger->order, blank_entry);
+      break;
+    case GNCENTRY_INVOICE_ENTRY:
+      /* Anything entered on an invoice entry must be part of the invoice! */
+      gncInvoiceAddEntry (ledger->invoice, blank_entry);
+      break;
+    default:
+      /* Nothing to do for viewers */
+      break;
+    }
 
   gnc_table_save_cells (ledger->table, entry);
 

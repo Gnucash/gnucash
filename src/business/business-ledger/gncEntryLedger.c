@@ -44,6 +44,20 @@ Account * gnc_entry_ledger_get_account (GncEntryLedger *ledger,
 				     gnc_get_account_separator ());
 }
 
+char gnc_entry_ledger_get_inv (GncEntryLedger *ledger, const char * cell_name)
+{
+  const char *value;
+
+  if (!gnc_table_layout_get_cell_changed (ledger->table->layout, cell_name,
+					  TRUE))
+    return '\0';
+
+  value = gnc_table_layout_get_cell_value (ledger->table->layout, cell_name);
+  if (value)
+    return *value;
+  return '\0';
+}
+
 gint gnc_entry_ledger_get_type (GncEntryLedger *ledger, const char * cell_name)
 {
   const char *typeval;
@@ -182,12 +196,12 @@ GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type)
     vloc.phys_col_offset = 0;
 
     cursor = gnc_table_layout_get_cursor (ledger->table->layout, "cursor");
-
+      
     gnc_table_set_vcell (ledger->table, cursor, NULL, TRUE, TRUE, vloc.vcell_loc);
 
     if (gnc_table_find_close_valid_cell (ledger->table, &vloc, FALSE))
       gnc_table_move_cursor (ledger->table, vloc);
-      else
+    else
     {
       g_warning ("Can't find valid initial location");
     }

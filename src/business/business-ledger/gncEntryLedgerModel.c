@@ -1,6 +1,6 @@
 /*
  * gncEntryLedgerModel.c -- Model for GncEntry ledger
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001,2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -16,6 +16,7 @@
 
 #include "datecell.h"
 #include "pricecell.h"
+#include "recncell.h"
 
 #include "gncEntryLedgerP.h"
 #include "gncEntryLedgerModel.h"
@@ -87,6 +88,16 @@ static const char * get_taxtype_label (VirtualLocation virt_loc, gpointer data)
 static const char * get_tax_label (VirtualLocation virt_loc, gpointer data)
 {
   return _("Tax");
+}
+
+static const char * get_inv_label (VirtualLocation virt_loc, gpointer data)
+{
+  return _("I?");
+}
+
+static const char * get_value_label (VirtualLocation virt_loc, gpointer data)
+{
+  return _("Value");
 }
 
 /* GET_ENTRY */
@@ -281,6 +292,50 @@ static const char * get_tax_entry (VirtualLocation virt_loc,
   return xaccPrintAmount (tax, gnc_default_price_print_info ());
 }
 
+static const char * get_inv_entry (VirtualLocation virt_loc,
+				    gboolean translate,
+				    gboolean *conditionally_changed,
+				    gpointer user_data)
+{
+  GncEntryLedger *ledger = user_data;
+  GncEntry *entry;
+  static char s[2] = { ' ', '\0' };
+
+  entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
+  if (gncEntryGetInvoice (entry) != NULL)
+    s[0] = 'X';
+
+  /* XXX: what if this entry doesn't belong to this invoice?
+   * Or, better question, what if this is the blank_entry on
+   * an invoice page?  For the latter, don't worry about it;
+   * it will be added automatically during the Save operation
+   */
+
+  return s;
+}
+
+static const char * get_value_entry (VirtualLocation virt_loc,
+                                      gboolean translate,
+                                      gboolean *conditionally_changed,
+                                      gpointer user_data)
+{
+  GncEntryLedger *ledger = user_data;
+  gnc_numeric value;
+  GncEntry *entry;
+
+  entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
+
+  if (entry == gncEntryLookup (ledger->book, &(ledger->blank_entry_guid)))
+    return NULL;
+
+  gncEntryGetValue (entry, &value, NULL);
+
+  if (gnc_numeric_zero_p (value))
+    return NULL;
+
+  return xaccPrintAmount (value, gnc_default_price_print_info ());
+}
+
 /* GET_HELP */
 
 static char * get_acct_help (VirtualLocation virt_loc, gpointer user_data)
@@ -436,18 +491,103 @@ static char * get_tax_help (VirtualLocation virt_loc, gpointer user_data)
   return g_strdup (help);
 }
 
+static char * get_inv_help (VirtualLocation virt_loc, gpointer user_data)
+{
+  GncEntryLedger *ledger = user_data;
+  const char *help;
+
+  help = gnc_table_get_entry (ledger->table, virt_loc);
+  if (!help || *help == '\0')
+    switch (ledger->type) {
+    case GNCENTRY_ORDER_ENTRY:
+    case GNCENTRY_ORDER_VIEWER:
+      help = _("Is this entry Invoiced?");
+      break;
+    case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_INVOICE_VIEWER:
+      help = _("Include this entry on this invoice?");
+      break;
+    default:
+      help = _("Unknown EntryLedger Type");
+    }
+
+  return g_strdup (help);
+}
+
+static char * get_value_help (VirtualLocation virt_loc, gpointer user_data)
+{
+  GncEntryLedger *ledger = user_data;
+  const char *help;
+
+  help = gnc_table_get_entry (ledger->table, virt_loc);
+  if (!help || *help == '\0')
+    help = _("The value of this entry ");
+
+  return g_strdup (help);
+}
+
 /* GET_IO_FLAGS */
 
 static CellIOFlags get_standard_io_flags (VirtualLocation virt_loc,
 					  gpointer user_data)
 {
-  return XACC_CELL_ALLOW_ALL;
+  GncEntryLedger *ledger = user_data;
+  switch (ledger->type) {
+  case GNCENTRY_ORDER_VIEWER:
+  case GNCENTRY_INVOICE_VIEWER:
+    /* Viewers are always immutable */
+
+    /* XXX: This is a problem... */
+    return XACC_CELL_ALLOW_SHADOW;
+
+  case GNCENTRY_ORDER_ENTRY:
+    {
+      GncEntry *entry =
+	gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
+
+      /*
+       * If the type is an order_entry and the entry was invoiced,
+       * make the entry immutable
+       */
+      if (gncEntryGetInvoice (entry) != NULL)
+	return XACC_CELL_ALLOW_SHADOW;
+    }
+    /* FALLTHROUGH */
+  default:
+    return XACC_CELL_ALLOW_ALL;
+  }
 }
 
 static CellIOFlags get_typecell_io_flags (VirtualLocation virt_loc,
 					  gpointer user_data)
 {
-  return XACC_CELL_ALLOW_ALL | XACC_CELL_ALLOW_EXACT_ONLY;
+  CellIOFlags retval = get_standard_io_flags (virt_loc, user_data);
+
+  if (retval & XACC_CELL_ALLOW_ALL)
+    retval |= XACC_CELL_ALLOW_EXACT_ONLY;
+
+  return retval;
+}
+
+static CellIOFlags get_inv_io_flags (VirtualLocation virt_loc,
+				     gpointer user_data)
+{
+  GncEntryLedger *ledger = user_data;
+
+  switch (ledger->type) {
+  case GNCENTRY_ORDER_ENTRY:
+  case GNCENTRY_ORDER_VIEWER:
+  case GNCENTRY_INVOICE_VIEWER:
+    return XACC_CELL_ALLOW_SHADOW;
+  default:
+    return XACC_CELL_ALLOW_ALL | XACC_CELL_ALLOW_EXACT_ONLY;
+  }
+}
+
+static CellIOFlags get_value_io_flags (VirtualLocation virt_loc,
+				       gpointer user_data)
+{
+  return XACC_CELL_ALLOW_SHADOW;
 }
 
 /* GET BG_COLORS */
@@ -618,6 +758,29 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
     amount = gnc_price_cell_get_value (cell);
     gncEntrySetTax (entry, amount);
   }
+
+  {
+    char inv_value;
+
+    inv_value = gnc_entry_ledger_get_inv (ledger, ENTRY_INV_CELL);
+
+    if (inv_value != '\0') {
+      /* It's changed.  Note that this should only be changed in
+       * INVOICE_ENTRY.  But we don't check here (should we)?
+       */
+
+      if (inv_value == 'X') {
+	/* Add this to the invoice (if it's not already attached) */
+	if (gncEntryGetInvoice (entry) == NULL)
+	  gncInvoiceAddEntry (ledger->invoice, entry);
+
+      } else {
+	/* Remove from the invoice iff we're attached to an order */
+	if (gncEntryGetOrder (entry) != NULL)
+	  gncInvoiceRemoveEntry (ledger->invoice, entry);
+      }
+    }
+  }
 }
 
 /* Set Cell Handlers */
@@ -641,7 +804,9 @@ static void gnc_entry_ledger_model_new_handlers (TableModel *model)
     { ENTRY_QTY_CELL, get_qty_entry, get_qty_label, get_qty_help,  get_standard_io_flags },
     { ENTRY_TAXACC_CELL, get_taxacc_entry, get_taxacc_label, get_taxacc_help,  get_standard_io_flags },
     { ENTRY_TAXTYPE_CELL, get_taxtype_entry, get_taxtype_label, get_taxtype_help,  get_typecell_io_flags },
-    { ENTRY_TAX_CELL, get_tax_entry, get_tax_label, get_tax_help,  get_standard_io_flags }
+    { ENTRY_TAX_CELL, get_tax_entry, get_tax_label, get_tax_help,  get_standard_io_flags },
+    { ENTRY_INV_CELL, get_inv_entry, get_inv_label, get_inv_help, get_inv_io_flags },
+    { ENTRY_VALUE_CELL, get_value_entry, get_value_label, get_value_help, get_value_io_flags },
   };
   int i;
 

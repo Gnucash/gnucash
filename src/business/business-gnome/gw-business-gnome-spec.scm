@@ -146,7 +146,7 @@
    'gnc:order-new
    '<gnc:GncOrder*>
    "gnc_order_new"
-   '((<gnc:UIWidget> parent) (<gnc:Book*> book))
+   '((<gnc:UIWidget> parent) (<gnc:GncOwner*> owner) (<gnc:Book*> book))
    "Dialog: create a new GncOrder.  Parent may be NULL.")
 
   (gw:wrap-function

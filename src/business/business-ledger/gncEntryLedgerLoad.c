@@ -1,6 +1,6 @@
 /*
  * gncEntryLedgerLoad.c -- a Ledger widget for entering GncEntry objects
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001,2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -64,6 +64,21 @@ static void load_discount_type_cells (GncEntryLedger *ledger)
   gnc_recn_cell_set_valid_flags (cell, "0123", '0');
   gnc_recn_cell_set_flag_order (cell, "0123");
   gnc_recn_cell_set_string_getter (cell, gnc_entry_ledger_type_string_getter);
+}
+
+static void load_inv_type_cells (GncEntryLedger *ledger)
+{
+  RecnCell *cell;
+
+  if (!ledger) return;
+
+  cell = (RecnCell *)
+    gnc_table_layout_get_cell (ledger->table->layout, ENTRY_INV_CELL);
+
+  if (!cell) return;
+
+  gnc_recn_cell_set_valid_flags (cell, " X", ' ');
+  gnc_recn_cell_set_flag_order (cell, " X");
 }
 
 static void load_xfer_cell (ComboCell * cell, AccountGroup * grp)
@@ -130,14 +145,23 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
   /* Load up cells */
   load_discount_type_cells (ledger);
   load_tax_type_cells (ledger);
+  load_inv_type_cells (ledger);
   load_xfer_type_cells (ledger);
 
   blank_entry = gncEntryLookup (ledger->book, &(ledger->blank_entry_guid));
 
   if (blank_entry == NULL) {
-    blank_entry = gncEntryCreate (ledger->book);
-    gncEntrySetDate (blank_entry, &ledger->last_date_entered);
-    ledger->blank_entry_guid = *gncEntryGetGUID (blank_entry);
+    switch (ledger->type) {
+    case GNCENTRY_ORDER_ENTRY:
+    case GNCENTRY_INVOICE_ENTRY:
+      blank_entry = gncEntryCreate (ledger->book);
+      gncEntrySetDate (blank_entry, &ledger->last_date_entered);
+      ledger->blank_entry_guid = *gncEntryGetGUID (blank_entry);
+      break;
+    default:
+      ledger->blank_entry_guid = *xaccGUIDNULL ();
+      break;
+    }
     ledger->blank_entry_edited = FALSE;
   }
 
@@ -209,9 +233,11 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
   }
 
   /* Add the blank entry at the end. */
-  gnc_table_set_vcell (table, cursor, gncEntryGetGUID (blank_entry),
-		       TRUE, start_primary_color, vcell_loc);
-  vcell_loc.virt_row++;
+  if (blank_entry) {
+    gnc_table_set_vcell (table, cursor, gncEntryGetGUID (blank_entry),
+			 TRUE, start_primary_color, vcell_loc);
+    vcell_loc.virt_row++;
+  }
 
   /* Resize the table */
   gnc_table_set_size (table, vcell_loc.virt_row, 1);

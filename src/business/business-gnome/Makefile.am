@@ -26,6 +26,7 @@ libgncmod_business_gnome_la_SOURCES = \
   business-chooser.c \
   business-utils.c \
   dialog-customer.c \
+  dialog-date-close.c \
   dialog-employee.c \
   dialog-job.c \
   dialog-job-select.c \
@@ -36,6 +37,7 @@ noinst_HEADERS = \
   business-chooser.h \
   business-utils.h \
   dialog-customer.h \
+  dialog-date-close.h \
   dialog-employee.h \
   dialog-job.h \
   dialog-job-select.h \
@@ -68,6 +70,7 @@ gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
   business-chooser.glade \
   customer.glade \
+  date-close.glade \
   employee.glade \
   job.glade \
   order.glade \

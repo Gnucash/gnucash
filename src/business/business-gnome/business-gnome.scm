@@ -17,6 +17,9 @@
           (gnc:business-create-book gnc:extensions-temp-book)
           gnc:extensions-temp-book)))
 
+  (define gnc:extensions-last-order #f)
+  (define gnc:extensions-owner #f)
+
   (define new-job-item
     (gnc:make-menu-item (N_ "Test New Job Dialog")
 			(N_ "Test New Job Dialog")
@@ -70,8 +73,19 @@
 			(N_ "Test New Order Dialog")
 			(list "Extensions" "")
 			(lambda ()
-			  (gnc:order-new #f (gnc:extensions-get-book)))))
+			  (set! gnc:extensions-last-order
+				(gnc:order-new #f gnc:extensions-owner
+					       (gnc:extensions-get-book))))))
 
+  (define edit-order-item
+    (gnc:make-menu-item (N_ "Test Edit/View Order Dialog")
+			(N_ "Test Edit/View Order Dialog")
+			(list "Extensions" "")
+			(lambda ()
+			  (gnc:order-edit #f gnc:extensions-last-order))))
+
+
+  (gnc:add-extension edit-order-item)
   (gnc:add-extension new-order-item)
   (gnc:add-extension select-employee-item)
   (gnc:add-extension new-employee-item)

@@ -1,6 +1,6 @@
 /*
  * dialog-order.h -- Dialog(s) for Order search and entry
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001,2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -9,7 +9,7 @@
 #define GNC_DIALOG_ORDER_H_
 
 /* Functions to create and edit orders */
-GncOrder * gnc_order_new (GtkWidget *parent, GNCBook *book);
+GncOrder * gnc_order_new (GtkWidget *parent, GncOwner *owner, GNCBook *book);
 void gnc_order_edit (GtkWidget *parent, GncOrder *order);
 
 /* Callbacks to select a order that match the necessary functions

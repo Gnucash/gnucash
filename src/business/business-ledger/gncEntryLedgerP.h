@@ -23,6 +23,7 @@ struct GncEntryLedger_s {
   GNCBook *	book;
   Table *	table;
   GncOrder *	order;
+  GncInvoice *	invoice;
   GncEntryLedgerType type;
 };
 
@@ -30,7 +31,9 @@ GncEntry * gnc_entry_ledger_get_entry (GncEntryLedger *ledger,
 				       VirtualCellLocation vcell_loc);
 Account * gnc_entry_ledger_get_account (GncEntryLedger *ledger,
 					const char * cell_name);
+
 gint gnc_entry_ledger_get_type (GncEntryLedger *ledger, const char * cell_name);
+char gnc_entry_ledger_get_inv (GncEntryLedger *ledger, const char * cell_name);
 
 const char * gnc_entry_ledger_type_string_getter (char flag);
 

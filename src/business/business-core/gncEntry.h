@@ -1,6 +1,6 @@
 /*
  * gncEntry.h -- the Core Business Entry Interface
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001,2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -68,6 +68,10 @@ const char * gncEntryGetDiscountTypeStr (gint type);
  */
 void gncEntryGetValue (GncEntry *entry, gnc_numeric *value,
 		       gnc_numeric *tax_value);
+void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
+			   gnc_numeric tax, gint tax_type,
+			   gnc_numeric discount, gint discount_type,
+			   gnc_numeric *value, gnc_numeric *tax_value);
 
 gint gncEntryGetTypeFromStr (const char *type);
 

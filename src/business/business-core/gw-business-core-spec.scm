@@ -34,6 +34,7 @@
       "#include <gncInvoice.h>\n"
       "#include <gncJob.h>\n"
       "#include <gncOrder.h>\n"
+      "#include <gncOwner.h>\n"
       "#include <gncVendor.h>\n")))
 
   (gw:wrapset-add-cs-initializers!
@@ -53,6 +54,7 @@
   (gw:wrap-as-wct ws '<gnc:GncInvoice*> "GncInvoice*" "const GncInvoice*")
   (gw:wrap-as-wct ws '<gnc:GncJob*> "GncJob*" "const GncJob*")
   (gw:wrap-as-wct ws '<gnc:GncOrder*> "GncOrder*" "const GncOrder*")
+  (gw:wrap-as-wct ws '<gnc:GncOwner*> "GncOwner*" "const GncOwner*")
   (gw:wrap-as-wct ws '<gnc:GncVendor*> "GncVendor*" "const GncVendor*")
 
   ;;
@@ -80,6 +82,8 @@
   ;; gncJob.h
 
   ;; gncOrder.h
+
+  ;; gncOwner.h
 
   ;; gncVendor.h
 

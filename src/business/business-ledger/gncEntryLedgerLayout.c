@@ -1,6 +1,6 @@
 /*
  * gncEntryLedgerLayout.c -- Layout for GncEntry ledger
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001,2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -73,6 +73,10 @@ static void gnc_entry_ledger_layout_add_cells (GncEntryLedger *ledger,
     { ENTRY_TAXTYPE_CELL, RECN_CELL_TYPE_NAME, N_("sample:TT")+7,
       CELL_ALIGN_RIGHT, FALSE, FALSE },
     { ENTRY_DISTYPE_CELL, RECN_CELL_TYPE_NAME, N_("sample(DT):+%")+11,
+      CELL_ALIGN_RIGHT, FALSE, FALSE },
+    { ENTRY_INV_CELL, RECN_CELL_TYPE_NAME, N_("sample:X")+7,
+      CELL_ALIGN_RIGHT, FALSE, FALSE },
+    { ENTRY_VALUE_CELL, PRICE_CELL_TYPE_NAME, N_("sample:999,999.00")+7,
       CELL_ALIGN_RIGHT, FALSE, FALSE }
   };
   int i;
@@ -90,9 +94,11 @@ static void gnc_entry_ledger_layout_add_cursors (GncEntryLedger *ledger,
   int num_cols;
 
   switch (ledger->type) {
-  case GNCENTRY_LEDGER:
-  case GNCENTRY_CHOOSER:
-    num_cols = 11;		/* ??? */
+  case GNCENTRY_ORDER_ENTRY:
+  case GNCENTRY_ORDER_VIEWER:
+  case GNCENTRY_INVOICE_ENTRY:
+  case GNCENTRY_INVOICE_VIEWER:
+    num_cols = 13;
     break;
   default:
     g_assert (FALSE);
@@ -114,10 +120,13 @@ static void gnc_entry_ledger_set_cells (GncEntryLedger *ledger,
   int x = 0;
 
   switch (ledger->type) {
-  case GNCENTRY_LEDGER:
-  case GNCENTRY_CHOOSER:
-    curs = gnc_table_layout_get_cursor (layout, "cursor");
+  case GNCENTRY_ORDER_ENTRY:
+  case GNCENTRY_ORDER_VIEWER:
+  case GNCENTRY_INVOICE_ENTRY:
+  case GNCENTRY_INVOICE_VIEWER:
 
+    curs = gnc_table_layout_get_cursor (layout, "cursor");
+    gnc_table_layout_set_cell (layout, curs, ENTRY_INV_CELL, 0, x++);
     gnc_table_layout_set_cell (layout, curs, ENTRY_DATE_CELL, 0, x++);
     gnc_table_layout_set_cell (layout, curs, ENTRY_DESC_CELL, 0, x++);
     gnc_table_layout_set_cell (layout, curs, ENTRY_ACTN_CELL, 0, x++);
@@ -129,6 +138,7 @@ static void gnc_entry_ledger_set_cells (GncEntryLedger *ledger,
     gnc_table_layout_set_cell (layout, curs, ENTRY_TAXTYPE_CELL, 0, x++);
     gnc_table_layout_set_cell (layout, curs, ENTRY_TAX_CELL, 0, x++);
     gnc_table_layout_set_cell (layout, curs, ENTRY_TAXACC_CELL, 0, x++);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_VALUE_CELL, 0, x++);
 
     break;
 

@@ -13,8 +13,10 @@
 #include "table-allgui.h"
 
 typedef enum {
-  GNCENTRY_LEDGER,
-  GNCENTRY_CHOOSER,
+  GNCENTRY_ORDER_ENTRY,
+  GNCENTRY_ORDER_VIEWER,
+  GNCENTRY_INVOICE_ENTRY,
+  GNCENTRY_INVOICE_VIEWER,
   GNCENTRY_NUM_REGISTER_TYPES
 } GncEntryLedgerType;
 
@@ -40,6 +42,9 @@ typedef struct entry_ledger_colors
 #define ENTRY_TAXACC_CELL	"tax-account"
 #define ENTRY_TAXTYPE_CELL	"tax-type"
 #define ENTRY_TAX_CELL		"tax"
+
+#define ENTRY_INV_CELL		"invoiced-p"
+#define ENTRY_VALUE_CELL	"line-value"
 
 typedef struct GncEntryLedger_s GncEntryLedger;
 
