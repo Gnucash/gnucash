@@ -1,5 +1,16 @@
 2001-05-21  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/new-user-callbacks.c: use gncp_new_user_finish
+
+	* src/gnome/new-user-funs.c: finish new user choices dialog.
+	(gncp_new_user_finish): new func
+
+	* src/scm/main.scm: use new 'new user' call
+
+	* src/guile/gnc.gwp: change new user api
+
+	* src/guile/gnucash.h: change new user api
+
 	* doc/sgml/C/xacc-balancesheet.sgml: fix warning
 
 2001-05-20  Dave Peticolas  <dave@krondo.com>

@@ -26,13 +26,16 @@
 #include <guile/gh.h>
 #include <stdio.h>
 
+#include "druid-qif-import.h"
 #include "new-user-callbacks.h"
 #include "new-user-interface.h"
 #include "new-user-funs.h"
 #include "glade-support.h"
 #include "gnc-amount-edit.h"
 #include "gnc-currency-edit.h"
+#include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "window-help.h"
 
 #include "Group.h"
 #include "io-example-account.h"
@@ -350,3 +353,58 @@ gnc_ui_delete_nu_cancel_dialog(void)
     return deleteit(&cancelDialog);
 }
 
+void
+gnc_ui_show_new_user_choice_window(void)
+{
+  GtkWidget *dialog;
+  GtkWidget *new_accounts_button;
+  GtkWidget *import_qif_button;
+  GtkWidget *tutorial_button;
+  gint result;
+
+  dialog = create_newUserChoiceWindow ();
+
+  gnome_dialog_close_hides (GNOME_DIALOG (dialog), TRUE);
+
+  new_accounts_button = lookup_widget (dialog, "new_accounts_button");
+  import_qif_button = lookup_widget (dialog, "import_qif_button");
+  tutorial_button = lookup_widget (dialog, "tutorial_button");
+
+  result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
+  if (result != 0)
+  {
+    gnc_ui_show_nu_cancel_dialog();
+    gtk_widget_destroy (dialog);
+    gncp_new_user_finish ();
+    return;
+  }
+
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (new_accounts_button)))
+  {
+    gnc_ui_show_new_user_window ();
+    gtk_widget_destroy (dialog);
+    return;
+  }
+
+  if (gtk_toggle_button_get_active
+      (GTK_TOGGLE_BUTTON (import_qif_button)))
+  {
+    gnc_ui_qif_import_druid_make ();
+  }
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tutorial_button)))
+  {
+    /* FIXME: change to tutorial */
+    helpWindow (NULL, NULL, HH_ABOUT);
+  }
+
+  gncp_new_user_finish ();
+  gtk_widget_destroy (dialog);
+}
+
+void
+gncp_new_user_finish (void)
+{
+  gh_eval_str("(gnc:default-ui-start)");
+  gh_eval_str("(gnc:show-main-window)");
+  gh_eval_str("(gnc:hook-run-danglers gnc:*book-opened-hook* #f)");
+}

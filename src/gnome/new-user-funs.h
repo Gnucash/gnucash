@@ -32,7 +32,7 @@
 int gnc_ui_show_new_user_window(void);
 int gnc_ui_delete_new_user_window(void);
 
-int gnc_ui_show_new_user_choice_window(void);
+void gnc_ui_show_new_user_choice_window(void);
 
 int gnc_ui_show_nu_cancel_dialog(void);
 int gnc_ui_delete_nu_cancel_dialog(void);
@@ -52,5 +52,6 @@ void gnc_new_user_unblock_amount_changed (void);
 
 /* private */
 void on_finalAccountBalanceEdit_changed (GNCAmountEdit *gae);
+void gncp_new_user_finish (void);
 
 #endif /* NEW_USER_FUNS_H */

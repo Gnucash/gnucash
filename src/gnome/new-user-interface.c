@@ -551,9 +551,9 @@ create_newUserChoiceWindow (void)
   GtkWidget *frame4;
   GtkWidget *vbox6;
   GSList *new_user_group_group = NULL;
-  GtkWidget *radiobutton1;
-  GtkWidget *radiobutton2;
-  GtkWidget *radiobutton3;
+  GtkWidget *new_accounts_button;
+  GtkWidget *import_qif_button;
+  GtkWidget *tutorial_button;
   GtkWidget *dialog_action_area2;
   GtkWidget *button1;
   GtkWidget *button3;
@@ -585,32 +585,32 @@ create_newUserChoiceWindow (void)
   gtk_container_add (GTK_CONTAINER (frame4), vbox6);
   gtk_container_set_border_width (GTK_CONTAINER (vbox6), 3);
 
-  radiobutton1 = gtk_radio_button_new_with_label (new_user_group_group, _("Create a new set of accounts"));
-  new_user_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton1));
-  gtk_widget_set_name (radiobutton1, "radiobutton1");
-  gtk_widget_ref (radiobutton1);
-  gtk_object_set_data_full (GTK_OBJECT (newUserChoiceWindow), "radiobutton1", radiobutton1,
+  new_accounts_button = gtk_radio_button_new_with_label (new_user_group_group, _("Create a new set of accounts"));
+  new_user_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (new_accounts_button));
+  gtk_widget_set_name (new_accounts_button, "new_accounts_button");
+  gtk_widget_ref (new_accounts_button);
+  gtk_object_set_data_full (GTK_OBJECT (newUserChoiceWindow), "new_accounts_button", new_accounts_button,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (radiobutton1);
-  gtk_box_pack_start (GTK_BOX (vbox6), radiobutton1, FALSE, FALSE, 0);
+  gtk_widget_show (new_accounts_button);
+  gtk_box_pack_start (GTK_BOX (vbox6), new_accounts_button, FALSE, FALSE, 0);
 
-  radiobutton2 = gtk_radio_button_new_with_label (new_user_group_group, _("Import my QIF files"));
-  new_user_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton2));
-  gtk_widget_set_name (radiobutton2, "radiobutton2");
-  gtk_widget_ref (radiobutton2);
-  gtk_object_set_data_full (GTK_OBJECT (newUserChoiceWindow), "radiobutton2", radiobutton2,
+  import_qif_button = gtk_radio_button_new_with_label (new_user_group_group, _("Import my QIF files"));
+  new_user_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (import_qif_button));
+  gtk_widget_set_name (import_qif_button, "import_qif_button");
+  gtk_widget_ref (import_qif_button);
+  gtk_object_set_data_full (GTK_OBJECT (newUserChoiceWindow), "import_qif_button", import_qif_button,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (radiobutton2);
-  gtk_box_pack_start (GTK_BOX (vbox6), radiobutton2, FALSE, FALSE, 0);
+  gtk_widget_show (import_qif_button);
+  gtk_box_pack_start (GTK_BOX (vbox6), import_qif_button, FALSE, FALSE, 0);
 
-  radiobutton3 = gtk_radio_button_new_with_label (new_user_group_group, _("Open the new user tutorial"));
-  new_user_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton3));
-  gtk_widget_set_name (radiobutton3, "radiobutton3");
-  gtk_widget_ref (radiobutton3);
-  gtk_object_set_data_full (GTK_OBJECT (newUserChoiceWindow), "radiobutton3", radiobutton3,
+  tutorial_button = gtk_radio_button_new_with_label (new_user_group_group, _("Open the new user tutorial"));
+  new_user_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (tutorial_button));
+  gtk_widget_set_name (tutorial_button, "tutorial_button");
+  gtk_widget_ref (tutorial_button);
+  gtk_object_set_data_full (GTK_OBJECT (newUserChoiceWindow), "tutorial_button", tutorial_button,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (radiobutton3);
-  gtk_box_pack_start (GTK_BOX (vbox6), radiobutton3, FALSE, FALSE, 0);
+  gtk_widget_show (tutorial_button);
+  gtk_box_pack_start (GTK_BOX (vbox6), tutorial_button, FALSE, FALSE, 0);
 
   dialog_action_area2 = GNOME_DIALOG (newUserChoiceWindow)->action_area;
   gtk_widget_set_name (dialog_action_area2, "dialog_action_area2");

@@ -163,7 +163,7 @@
                       (gnc:lookup-global-option "__new_user" "first_startup")))
                     1))
             (begin
-              (gnc:show-new-user-window)
+              (gnc:show-new-user-choice-window)
               (gnc:start-ui-event-loop))
             (begin
               (gnc:load-account-file)

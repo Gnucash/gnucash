@@ -743,7 +743,7 @@ will appear If you choose New File in the File menu unless you have set the
 
 	<widget>
 	  <class>GtkRadioButton</class>
-	  <name>radiobutton1</name>
+	  <name>new_accounts_button</name>
 	  <can_focus>True</can_focus>
 	  <label>Create a new set of accounts</label>
 	  <active>False</active>
@@ -758,7 +758,7 @@ will appear If you choose New File in the File menu unless you have set the
 
 	<widget>
 	  <class>GtkRadioButton</class>
-	  <name>radiobutton2</name>
+	  <name>import_qif_button</name>
 	  <can_focus>True</can_focus>
 	  <label>Import my QIF files</label>
 	  <active>False</active>
@@ -773,7 +773,7 @@ will appear If you choose New File in the File menu unless you have set the
 
 	<widget>
 	  <class>GtkRadioButton</class>
-	  <name>radiobutton3</name>
+	  <name>tutorial_button</name>
 	  <can_focus>True</can_focus>
 	  <label>Open the new user tutorial</label>
 	  <active>False</active>

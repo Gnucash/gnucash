@@ -110,9 +110,7 @@ on_newUserDruidFinishPage_finish       (GnomeDruidPage  *gnomedruidpage,
 
     gnc_ui_delete_new_user_window();
 
-    gh_eval_str("(gnc:default-ui-start)");
-    gh_eval_str("(gnc:show-main-window)");
-    gh_eval_str("(gnc:hook-run-danglers gnc:*book-opened-hook* #f)");
+    gncp_new_user_finish();
 
     set_first_startup(0);
 
@@ -150,10 +148,8 @@ on_newAccountCancelDialog_OKButton_clicked
     
     gnc_ui_delete_new_user_window();
     gnc_ui_delete_nu_cancel_dialog();
-    
-    gh_eval_str("(gnc:default-ui-start)");
-    gh_eval_str("(gnc:show-main-window)");
-    gh_eval_str("(gnc:hook-run-danglers gnc:*book-opened-hook* #f)");
+
+    gncp_new_user_finish();
 }
 
 void
@@ -650,4 +646,3 @@ on_finalAccountDruidPage_next          (GnomeDruidPage  *gnomedruidpage,
 
   return FALSE;
 }
-
