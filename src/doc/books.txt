@@ -26,6 +26,9 @@ Use the idea of 'books' to prevent file bloat.  Must have access to
 historical data.  Must be able to create bar-charts, graphs, reports
 of multi-year data (i.e. create reports spanning multiple books).
 
+Status
+------
+The beginings of an implementation can be found in src/engine/Period.c
 
 Possible Solutions
 ------------------
@@ -115,9 +118,9 @@ validated/forced in the engine).  Opening balances are handled just as
 in plan 'F'.   User can only view data in closed books, and not change 
 it.  
 
-If we allow books to be reopened re-opened, then the 'starting balance' 
-equity transfers must be deleted.   We can save 're-opening' for some
-future day.
+If we allow books to be re-opened, then the 'starting balance' equity 
+transfers must be deleted.   We can save 're-opening' for some future 
+day.
 
 The 'starting balance equity transfers' must have a kvp pair in them: 
 '/book/closing-balance-of-account-guid=0xdeadbeef'.
