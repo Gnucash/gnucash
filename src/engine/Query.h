@@ -65,7 +65,10 @@ void  xaccQuerySetMaxSplits (Query *, int);
  *    that are within this date range. The arguments "earliest"
  *    and "latest" are seconds before or since 00:00:00 Jan 1 1970.
  */
-void xaccQuerySetDateRange (Query *, long long earliest, long long latest);
+void xaccQuerySetDateRange (Query *, time_t earliest, time_t latest);
+#ifndef SWIG  /* swig chokes on long long */
+void xaccQuerySetDateRangeL (Query *, long long earliest, long long latest);
+#endif
 
 /* The xaccQuerySetSortOrder() method sets the sort order that
  *    should be used on the splits.  The three arguments should 

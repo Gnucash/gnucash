@@ -204,7 +204,16 @@ xaccQuerySetMaxSplits (Query *q, int max)
 /* ================================================== */
 
 void  
-xaccQuerySetDateRange (Query *q, long long early, long long late)
+xaccQuerySetDateRange (Query *q, time_t early, time_t late)
+{
+   if (!q) return;
+   q->changed = 1; 
+   q->earliest.tv_sec = early;
+   q->latest.tv_sec = late;
+}
+
+void  
+xaccQuerySetDateRangeL (Query *q, long long early, long long late)
 {
    if (!q) return;
    q->changed = 1; 
