@@ -33,7 +33,7 @@ static GSList *history_list = NULL;
 static gint num_menu_entries = -1;
 
 static void
-__gnc_history_config_write()
+__gnc_history_config_write(void)
 {
   int max_files, i = 0;
   char *key;
@@ -62,7 +62,7 @@ __gnc_history_config_write()
 }
 
 static void
-__gnc_history_get_list()
+__gnc_history_get_list(void)
 {
   int max_files, i;
   char *key, *filename;
@@ -179,8 +179,13 @@ gnc_history_update_menu(GnomeApp * app)
   if (!gnome_app_find_menu_pos (menushell, GNOME_MENU_FILE_PATH, &pos))
     return;
 
+  path = g_strdup_printf("%s%s", GNOME_MENU_FILE_PATH, "New _Report");
+
+  if (!gnome_app_find_menu_pos (menushell, path, &pos))
+    return;
+
   gnome_app_remove_menu_range(app, GNOME_MENU_FILE_PATH,
-                              7, 1 + num_menu_entries);
+                              pos, 1 + num_menu_entries);
 
   if(history_list == NULL)
     __gnc_history_get_list();
@@ -194,7 +199,8 @@ gnc_history_update_menu(GnomeApp * app)
 
   menu->type = GNOME_APP_UI_SEPARATOR;
 
-  for(i = 1; i <= n; i++) {
+  for(i = 1; i <= n; i++)
+  {
     (menu+i)->type = GNOME_APP_UI_ITEM;
 
     /* get the file name */
@@ -232,13 +238,12 @@ gnc_history_update_menu(GnomeApp * app)
   }
   (menu+i)->type = GNOME_APP_UI_ENDOFINFO;
 
-  path = g_strdup_printf("%s%s", GNOME_MENU_FILE_PATH, "Import QIF...");
   gnome_app_insert_menus(GNOME_APP(app), path, menu);
   num_menu_entries = n;
-  g_free(path);
 
-  for(i = 1; i <= n; i++)
-    g_free( (menu+i)->label );
+  for (i = 1; i <= n; i++)
+    g_free((menu+i)->label);
 
   g_free(menu);
+  g_free(path);
 }
