@@ -9574,7 +9574,7 @@ msgstr "Bericht ausdrucken"
 
 #: src/report/report-gnome/window-report.c:916
 msgid "Save report"
-msgstr "Bericht speichern"
+msgstr "Ber.speichrn"
 
 #: src/report/report-gnome/window-report.c:917
 msgid ""
