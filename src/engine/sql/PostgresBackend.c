@@ -41,6 +41,7 @@
 
 #include <ctype.h>
 #include <glib.h>
+#include <netdb.h>
 #include <pwd.h>
 #include <stdio.h>  
 #include <string.h>  
@@ -102,10 +103,25 @@ pgendGetHostname (PGBackend *be)
    *p = 0;
    if (0 == gethostname (p, QBUFSIZE/3)) 
    {
-      p += strlen (p);
-      p = stpcpy (p, ".");
+      extern int h_errno;
+      struct hostent *hent;
+
+      hent = gethostbyname (be->buff);
+      if (hent) 
+      {
+         strcpy (be->buff, hent->h_name);
+      }
+      else
+      {
+         PERR ("can't get domainname: %s", hstrerror(h_errno));
+      }
+   } 
+   else
+   {
+      *p = 0;
+      PERR ("can't get hostname");
    }
-   getdomainname (p, QBUFSIZE/3);
+
    return be->buff;
 }
 
