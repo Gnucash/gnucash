@@ -378,7 +378,7 @@ gnc_network_make_keypair_check(gpointer data) {
         return TRUE;
       }
       else {
-        gnc_error_dialog(_("Passphrases did not match."));
+        gnc_error_dialog(NULL, _("Passphrases did not match."));
         gnc_network_make_keypair_handler(mk->html, mk->eb, data);
         gnc_network_free_make_keypair_info(mk);
         return FALSE;
