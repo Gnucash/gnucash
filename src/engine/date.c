@@ -31,7 +31,12 @@
 #include "config.h"
 
 #include <ctype.h>
+
+
+#ifdef HAVE_LANGINFO_D_FMT
 #include <langinfo.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -228,7 +233,19 @@ printDate (char * buff, int day, int month, int year)
         tm_str.tm_sec = 0;
         tm_str.tm_isdst = -1;
 
-        strftime (buff, MAX_DATE_LENGTH, nl_langinfo (D_FMT), &tm_str);
+/* 
+ *  FreeBSD doesn't have nl_langinfo (or any other way of 
+ *  doing this in a locale-specific manner, AFAICT), so
+ *  we default to something unambigious
+ */
+        strftime (buff, MAX_DATE_LENGTH, 
+
+#ifdef HAVE_LANGINFO_D_FMT
+		  nl_langinfo (D_FMT), 
+#else 
+		  "%Y-%m-%d", 
+#endif		  
+		  &tm_str);
       }
       break;
 

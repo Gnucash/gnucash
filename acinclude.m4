@@ -262,3 +262,18 @@ int main ()
 AC_DEFUN([LIBGUPPI_CHECK], [
 	AM_PATH_LIBGUPPI(0.35.1,,[AC_MSG_ERROR(libguppi not found)])
 ])
+
+AC_DEFUN([LANGINFO_D_FMT_CHECK],
+[
+  AC_CACHE_CHECK([for nl_langinfo and D_FMT], am_cv_langinfo_dfmt,
+    [AC_TRY_LINK([#include <langinfo.h>],
+      [char* cs = nl_langinfo(D_FMT);],
+      am_cv_langinfo_dfmt=yes,
+      am_cv_langinfo_dfmt=no)
+    ])
+  if test $am_cv_langinfo_dfmt = yes; then
+    AC_DEFINE(HAVE_LANGINFO_D_FMT, 1,
+      [Define if you have <langinfo.h> and nl_langinfo(D_FMT).])
+  fi
+])
+

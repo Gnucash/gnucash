@@ -1,3 +1,16 @@
+2001-05-30  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/engine/date.c (printDate): Workaround for
+	missing nl_langinfo.
+
+	* src/engine/Query.c: moved sys/types.h before
+	regex.h.
+
+	* acinclude.m4 (HAVE_LANGINFO_D_FMT): add check
+	for working nl_langinfo(D_FMT).
+
+	* configure.in: use check for nl_langinfo(D_FMT).
+
 2001-05-29  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/gnome/dialog-options.{ch} (gnc_options_dialog_new):

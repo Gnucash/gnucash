@@ -221,6 +221,8 @@ AC_ARG_WITH( locale-dir,
 
 AC_SUBST(LOCALE_DIR)
 
+dnl check for nl_langinfo(D_FMT) which is missing on FreeBSD
+LANGINFO_D_FMT_CHECK
 
 ### --------------------------------------------------------------------------
 ### help files
