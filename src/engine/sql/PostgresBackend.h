@@ -10,6 +10,9 @@
  */
 
 
+#ifndef __POSTGRES_BACKEND_H__
+#define __POSTGRES_BACKEND_H__
+
 #include <pgsql/libpq-fe.h>
 #include "BackendP.h"
 
@@ -82,3 +85,32 @@ typedef struct _checkpoint {
    gint64 reconciled_balance;
 } Checkpoint;
 
+/* -------------------------------------------------------- */
+/* the following prototypes belong in a 'checkpoint.h' file */
+
+void pgendGroupRecomputeAllCheckpoints (PGBackend *be, AccountGroup *grp);
+void pgendGroupGetAllCheckpoints (PGBackend *be, AccountGroup*grp);
+
+/* -------------------------------------------------------- */
+/* the following protypes belong in a 'autogen.h' file */
+
+void pgendStoreOneAccountOnly (PGBackend *be, Account *ptr, 
+                                 sqlBuild_QType update);
+
+void pgendStoreOneCheckpointOnly (PGBackend *be, Checkpoint *ptr, 
+                                 sqlBuild_QType update);
+
+void pgendStoreOneCommodityOnly (PGBackend *be, gnc_commodity *ptr, 
+                                 sqlBuild_QType update);
+
+void pgendStoreOneSessionOnly (PGBackend *be, void *ptr, 
+                                 sqlBuild_QType update);
+
+void pgendStoreOneSplitOnly (PGBackend *be, Split *ptr, 
+                                 sqlBuild_QType update);
+
+void pgendStoreOneTransactionOnly (PGBackend *be, Transaction *ptr, 
+                                 sqlBuild_QType update);
+
+
+#endif /* __POSTGRES_BACKEND_H__ */

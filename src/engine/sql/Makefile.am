@@ -2,9 +2,12 @@
 # Build the postgres backend as its own loadable shared object.
 
 lib_LTLIBRARIES = libgnc_postgres.la
+libgnc_postgres_la_LDFLAGS = -version-info 5:2:5
+
 
 libgnc_postgres_la_SOURCES = \
   builder.c \
+  checkpoint.c \
   gncquery.c \
   PostgresBackend.c 
 

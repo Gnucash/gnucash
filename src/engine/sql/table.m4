@@ -41,7 +41,7 @@ define(`split', `gncEntry, Split, Split,
 define(`transaction', `gncTransaction, Transaction, Transaction,
        num,            , char *,   xaccTransGetNum(ptr),
        description,    , char *,   xaccTransGetDescription(ptr),
-       currency,       , char *,   gnc_commodity_get_unique_name(xaccTransGetCurrency(ptr)),
+       currency,       , commod,   gnc_commodity_get_unique_name(xaccTransGetCurrency(ptr)),
        date_entered,   , now,      "NOW",
        date_posted,    , Timespec, xaccTransRetDatePostedTS(ptr),
        transGUID,   KEY, GUID *,   xaccTransGetGUID(ptr),
@@ -97,6 +97,7 @@ define(`sql_setter', `ifelse($2, `KEY',
                              $2,     ,
                      `ifelse($1, `char *',   sqlBuild_Set_Str,
                              $1, `now',      sqlBuild_Set_Str,
+                             $1, `commod',   sqlBuild_Set_Str,
                              $1, `int32',    sqlBuild_Set_Int32,
                              $1, `int64',    sqlBuild_Set_Int64,
                              $1, `GUID *',   sqlBuild_Set_GUID,
@@ -114,12 +115,15 @@ define(`set_fields', `set_fields_r(firstrec($@))')
 
 /* -------- */
 /* macros to compare a query result */
+/* the commod type behaves just like a string, except it 
+ * has its one compre function.  */
 
 define(`cmp_value', `ifelse($1, `char *',   COMP_STR,
                             $1, `now',      COMP_NOW,
                             $1, `int32',    COMP_INT32,
                             $1, `int64',    COMP_INT64,
                             $1, `GUID *',   COMP_GUID,
+                            $1, `commod',   COMP_COMMODITY,
                             $1, `Timespec', COMP_DATE,
                             $1, `char',     COMP_CHAR)')
 
@@ -143,7 +147,7 @@ define(`store_one_only',
  * It just pokes the data in 
  */
 
-static void 
+void 
 pgendStoreOne`'func_name($@)`'Only (PGBackend *be,
                      xacc_type($@) *ptr,
                      sqlBuild_QType update)

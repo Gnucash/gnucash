@@ -7,7 +7,7 @@ problems.
 
 
 
-postgres install instructions
+Postgres Install Instructions
 -----------------------------
 1) Install postgresql server, client and devel packages.
 2) if installed from redhat, then running /etc/rc.d/init.d/postgresql 
@@ -17,6 +17,32 @@ postgres install instructions
     have a GUI to ask for your password yet)
 5) as yourself (i.e. your unix login), run 'createdb gnucash'
    
+
+GnuCash Build Instructions
+--------------------------
+Same as usual, but you want to specify the flag '--enable-sql' i.e. 
+./configure --enable-sql
+and then 'make'.
+
+
+
+How To Use This Thing
+---------------------
+a) Open your favorite datafile in the usual fashion.
+b) Click on 'Save As'
+c) enter the following URL instead of a filename in the file picker:
+    postgres://localhost/some-name-you-pick
+
+The above steps will copy your data into that database.  You can 
+then restart gnucash (or keep working) and type in the same URL
+in the file open dialogs.  Or try it on the commandline:
+
+/usr/local/bin/gnucash postgres://localhost/whatever
+
+Note that you *must* use 'localhost' for your hostname, and 
+not some other hostname.  This is because anything else requires
+an sql username & password, and we don't have the gui dialogs for 
+that yet.
 
 
 
@@ -34,10 +60,13 @@ Core bugs/features that still need work:
 -- bug: group sync doesn't pull in newer data from the db ...
    (related to the 'save as' above)
 
--- allow user to enter URL in GUI dialog
+-- allow user to enter URL in GUI dialog, get GUI to remember the URL 
 
 -- Implement GUI to ask user for username/password to log onto the
    server. 
+
+-- fix the annoying postgres:,,localhost,asdf file syntax: needs
+   mods to gnc-book to keep it happy about lock files & such.
 
 
 To Be Done, Part II
@@ -47,10 +76,11 @@ This list only affects the multi-user and advanced/optional features.
 -- implement account commit edit (actually, the check&rollback part)
    (need to check the account version number beofer the commit happens)
 
--- fix excessive use of account commit by engine
+-- use version numbers for accounts, commodities, splits & transactions,
+   as this will provide a far more efficient 'compare' for 
+   user changes.
+
 -- provide support for more query types in gncquery.c
--- optimize for quantity of SQL traffic -- there's a lot of it,
-   much of it probably un-needed.
 
 -- Implement logging history in the SQL server.  i.e. save the old
    copies of stuff in log tables.  Make the username part of the 
