@@ -246,8 +246,6 @@ gnc_report_clock_total (int clockno,
                         gncModuleType module, gncLogLevel log_level,
                         const char *function_name, const char *format, ...)
 {
-  struct timezone tz;
-  struct timeval now;
   va_list ap;
 
   if ((0>clockno) || (NUM_CLOCKS <= clockno)) return;
