@@ -369,6 +369,7 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
 
    /* -------------------------------- */   
    table = xaccMallocTable ();
+   xaccSetTableSize (table, header->numRows, header->numCols, 1, 1);
    xaccSetCursor (table, header, 0, 0, 0, 0);
    reg->table = table;
 }

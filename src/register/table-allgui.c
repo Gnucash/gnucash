@@ -89,6 +89,7 @@
    } else {								\
       type ***old_entries;						\
 									\
+      /* if we are here, there are more new than old rows */		\
       if (old_cols >= new_cols) {					\
 									\
          /* new table has fewer columns. */ 				\

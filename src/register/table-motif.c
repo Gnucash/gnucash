@@ -68,10 +68,10 @@ xaccInitTable (Table * table)
    table->table_widget = 0;
    table->next_tab_group = 0;
 
-   table->num_phys_rows = 0;
-   table->num_phys_cols = 0;
-   table->num_virt_rows = 0;
-   table->num_virt_cols = 0;
+   table->num_phys_rows = -1;
+   table->num_phys_cols = -1;
+   table->num_virt_rows = -1;
+   table->num_virt_cols = -1;
 
    table->current_cursor = NULL;
    table->current_cursor_virt_row = -1;
