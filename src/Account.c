@@ -242,7 +242,12 @@ removeTransaction( Account *acc, int num )
 void
 xaccRemoveTransaction( Account *acc, Transaction *trans)
 {
-  int i = getNumOfTransaction (acc, trans);
+  int i;
+
+  if (!acc) return;
+  if (!trans) return;
+
+  i = getNumOfTransaction (acc, trans);
   if (0 <= i) {
     removeTransaction (acc, i);
   }

@@ -34,6 +34,7 @@
 \********************************************************************/
 
 #include <fcntl.h>
+#include <string.h>
 #include <Xm/Xm.h>
 
 #include "Account.h"
@@ -273,12 +274,14 @@ double xaccParseQIFAmount (char * str)
  * Return: first new line after end of transaction                  * 
 \********************************************************************/
 
-char * xaccReadQIFTransaction (int fd, Transaction *trans)
+char * xaccReadQIFTransaction (int fd, Account *acc)
 {
+   Transaction *trans;
    char * qifline;
    int isneg = 0;
 
-   if (!trans) return NULL;
+   if (!acc) return NULL;
+   trans = (Transaction *)_malloc(sizeof(Transaction));
 
    trans -> num = 0x0;          /* string */ 
    trans -> description = 0x0;  /* string */
@@ -300,7 +303,12 @@ char * xaccReadQIFTransaction (int fd, Transaction *trans)
   
    qifline = xaccReadQIFLine (fd);
 
-   if (!qifline) return NULL;
+   if (!qifline) {
+      xaccRemoveTransaction ((Account *) trans->debit, trans);
+      xaccRemoveTransaction ((Account *) trans->credit, trans);
+      freeTransaction (trans);
+      return NULL;
+   }
    if ('!' == qifline [0]) return qifline;
 
    /* scan for transaction date, description, type */
@@ -333,7 +341,38 @@ char * xaccReadQIFTransaction (int fd, Transaction *trans)
          /* hack alert */
      } else 
      if ('L' == qifline [0]) {   /* L == name of acount from which transfer occured */
-         /* hack alert */
+         Account *xfer_acc;
+         AccountGroup *rootgrp;
+         char * tmp;
+
+         /* remove square brackets from name, remove carriage return ... */
+         qifline = &qifline[1];
+         if ('[' == qifline[0]) {
+            qifline = &qifline[1];
+            tmp = strchr (qifline, ']');
+            if (tmp) *tmp = 0x0;
+         }
+         tmp = strchr (qifline, '\r');
+         if(tmp) *tmp = 0x0;
+         tmp = strchr (qifline, '\n');
+         if(tmp) *tmp = 0x0;
+
+         /* see if the account exists */
+         rootgrp = xaccGetRootGroupOfAcct (acc);
+         xfer_acc = xaccGetAccountFromName (rootgrp, qifline);
+
+         /* if not, create it */
+         if (!xfer_acc) {
+            xfer_acc = mallocAccount ();
+            xfer_acc->accountName = XtNewString (qifline);
+            xfer_acc->type = BANK;
+            insertAccount (rootgrp, xfer_acc);
+         }
+
+         /* now, insert the transaction into the transfer account */
+         trans->debit = (struct _account *) xfer_acc;
+         insertTransaction (xfer_acc, trans);
+
      } else 
      if ('$' == qifline [0]) {   /* $ == dollar amount -- always preceeded by 'L' */
          /* hack alert */
@@ -350,10 +389,19 @@ char * xaccReadQIFTransaction (int fd, Transaction *trans)
      qifline = xaccReadQIFLine (fd);
    }
 
+   if ('!' == qifline[0]) {
+      xaccRemoveTransaction ((Account *) trans->debit, trans);
+      xaccRemoveTransaction ((Account *) trans->credit, trans);
+      freeTransaction (trans);
+   }
+
    XACC_PREP_NULL_STRING (trans->num);
    XACC_PREP_NULL_STRING (trans->memo);
    XACC_PREP_NULL_STRING (trans->description);
    XACC_PREP_NULL_STRING (trans->action);
+
+   trans->credit = (struct _account *) acc;
+   insertTransaction( acc, trans );
 
    return qifline;
 }
@@ -365,26 +413,12 @@ char * xaccReadQIFTransaction (int fd, Transaction *trans)
 
 char * xaccReadQIFTransList (int fd, Account *acc)
 {
-   Transaction *trans;
    char * qifline;
 
    if (!acc) return 0x0;
-
    do { 
-      trans = (Transaction *)_malloc(sizeof(Transaction));
-      qifline = xaccReadQIFTransaction (fd, trans);
-      if (!qifline) {  /* free up malloced data if the read bombed. */
-         _free (trans);
-         break;
-      }
-      if ('!' == qifline[0]) {
-         _free (trans);
-         break;
-      }
-
-      insertTransaction( acc, trans );
+      qifline = xaccReadQIFTransaction (fd, acc);
    } while (qifline);
-
    return qifline;
 }
 
