@@ -108,6 +108,11 @@ static QIFDruidPage * make_qif_druid_page(gnc_commodity * comm);
 static void update_file_page(QIFImportWindow * win);
 static void update_accounts_page(QIFImportWindow * win);
 static void update_categories_page(QIFImportWindow * win);
+static void update_memo_page(QIFImportWindow * win);
+
+static void update_account_picker_page(QIFImportWindow * wind,
+				       SCM make_display, GtkWidget *list,
+				       SCM map_info, SCM * display_info);
 
 static GdkColor std_bg_color = { 0, 39835, 49087, 40092 };
 static GdkColor std_logo_bg_color = { 0, 65535, 65535, 65535 };
@@ -912,16 +917,18 @@ gnc_ui_qif_import_default_acct_back_cb(GnomeDruidPage * page,
 
 
 /****************************************************************
- * update_accounts_page 
- * Ask the Scheme side to guess some account translations , then show
- * the account name and suggested translation in the Accounts page
- * clist.
+ * update_account_picker_page 
+ * Generic function to update an account_picker page.  This
+ * generalizes the code shared whenever any QIF -> GNC mapper is
+ * updating it's CLIST.  It asks the Scheme side to guess some account
+ * translations and then shows the account name and suggested
+ * translation in the Accounts page clist (acount picker list).
  ****************************************************************/
 
 static void
-update_accounts_page(QIFImportWindow * wind) {
+update_account_picker_page(QIFImportWindow * wind, SCM make_display,
+			   GtkWidget *list, SCM map_info, SCM * display_info) {
 
-  SCM  make_account_display = gh_eval_str("qif-dialog:make-account-display");
   SCM  get_qif_name         = gh_eval_str("qif-map-entry:qif-name");
   SCM  get_gnc_name         = gh_eval_str("qif-map-entry:gnc-name");
   SCM  get_new              = gh_eval_str("qif-map-entry:new-acct?");
@@ -931,27 +938,27 @@ update_accounts_page(QIFImportWindow * wind) {
   int  row;
 
   /* get the old selection row */
-  sel_row = (GTK_CLIST(wind->acct_list))->focus_row;
+  sel_row = (GTK_CLIST(list))->focus_row;
 
   /* now get the list of strings to display in the clist widget */
-  accts_left = gh_call3(make_account_display,
+  accts_left = gh_call3(make_display,
                         wind->imported_files,
-                        wind->acct_map_info, 
+                        map_info, 
                         wind->gnc_acct_info);
 
-  scm_unprotect_object(wind->acct_display_info);
-  wind->acct_display_info = accts_left;  
-  scm_protect_object(wind->acct_display_info);
+  scm_unprotect_object(*display_info);
+  *display_info = accts_left;  
+  scm_protect_object(*display_info);
   
-  gtk_clist_column_titles_passive (GTK_CLIST(wind->acct_list));
+  gtk_clist_column_titles_passive (GTK_CLIST(list));
 
   /* clear the list */
-  gtk_clist_clear(GTK_CLIST(wind->acct_list));
+  gtk_clist_clear(GTK_CLIST(list));
 
   /* update the text in the boxes */
-  gtk_clist_freeze(GTK_CLIST(wind->acct_list));
+  gtk_clist_freeze(GTK_CLIST(list));
 
-  gtk_clist_set_column_justification(GTK_CLIST(wind->acct_list),
+  gtk_clist_set_column_justification(GTK_CLIST(list),
                                      2,
                                      GTK_JUSTIFY_CENTER);
 
@@ -963,9 +970,9 @@ update_accounts_page(QIFImportWindow * wind) {
     row_text[1] = gh_scm2newstr(gh_call1(get_gnc_name, gh_car(accts_left)),
                                 NULL);
     
-    row = gtk_clist_append(GTK_CLIST(wind->acct_list), row_text);
+    row = gtk_clist_append(GTK_CLIST(list), row_text);
 
-    gnc_clist_set_check (GTK_CLIST(wind->acct_list), row, 2,
+    gnc_clist_set_check (GTK_CLIST(list), row, 2,
                          gh_call1(get_new, gh_car(accts_left)) == SCM_BOOL_T);
 
     accts_left = gh_cdr(accts_left);
@@ -974,154 +981,79 @@ update_accounts_page(QIFImportWindow * wind) {
     free(row_text[1]);
   }
 
-  gtk_clist_thaw(GTK_CLIST(wind->acct_list));
+  gtk_clist_thaw(GTK_CLIST(list));
 
   /* move to the old selected row */
-  (GTK_CLIST(wind->acct_list))->focus_row = sel_row;
-  gtk_clist_moveto(GTK_CLIST(wind->acct_list), sel_row, 0, 0.0, 0.0);
+  (GTK_CLIST(list))->focus_row = sel_row;
+  gtk_clist_moveto(GTK_CLIST(list), sel_row, 0, 0.0, 0.0);
 }
 
 
 /****************************************************************
+ * update_accounts_page 
+ * update the QIF account -> GNC Account picker
+ ****************************************************************/
+
+static void
+update_accounts_page(QIFImportWindow * wind) {
+
+  SCM  make_account_display = gh_eval_str("qif-dialog:make-account-display");
+
+  update_account_picker_page (wind, make_account_display, wind->acct_list,
+			      wind->acct_map_info, &(wind->acct_display_info));
+}
+
+/****************************************************************
  * update_categories_page 
- * Ask the Scheme side to guess some account translations , then show
- * the category name and suggested translation in the Accounts page
- * clist.
+ * update the QIF category -> GNC Account picker
  ****************************************************************/
 
 static void
 update_categories_page(QIFImportWindow * wind) {
   SCM  make_category_display = gh_eval_str("qif-dialog:make-category-display");
-  SCM  get_qif_name         = gh_eval_str("qif-map-entry:qif-name");
-  SCM  get_gnc_name         = gh_eval_str("qif-map-entry:gnc-name");
-  SCM  get_new              = gh_eval_str("qif-map-entry:new-acct?");
-  SCM  cats_left;
-  int  sel_row=0;
-  char * row_text[3];
-  int  row;
 
-  /* get the old selection row */
-  sel_row = (GTK_CLIST(wind->cat_list))->focus_row;
-
-  /* now get the list of strings to display in the clist widget */
-  cats_left = gh_call3(make_category_display, 
-                       wind->imported_files,
-                       wind->cat_map_info, 
-                       wind->gnc_acct_info);
-  
-  scm_unprotect_object(wind->cat_display_info);
-  wind->cat_display_info = cats_left;  
-  scm_protect_object(wind->cat_display_info);
-  
-  gtk_clist_column_titles_passive (GTK_CLIST(wind->cat_list));
-
-  /* clear the list */
-  gtk_clist_clear(GTK_CLIST(wind->cat_list));
-
-  /* update the text in the boxes */
-  gtk_clist_freeze(GTK_CLIST(wind->cat_list));
-
-  gtk_clist_set_column_justification(GTK_CLIST(wind->cat_list),
-                                     2,
-                                     GTK_JUSTIFY_CENTER);
-
-  row_text[2] = "";
-
-  while(!gh_null_p(cats_left)) {
-    row_text[0] = gh_scm2newstr(gh_call1(get_qif_name, gh_car(cats_left)),
-                                NULL);
-    row_text[1] = gh_scm2newstr(gh_call1(get_gnc_name, gh_car(cats_left)),
-                                NULL);
-    
-    row = gtk_clist_append(GTK_CLIST(wind->cat_list), row_text);
-
-    gnc_clist_set_check (GTK_CLIST(wind->cat_list), row, 2,
-                         gh_call1(get_new, gh_car(cats_left)) == SCM_BOOL_T);
-
-    cats_left = gh_cdr(cats_left);
-
-    free (row_text[0]);
-    free (row_text[1]);
-  }
-
-  gtk_clist_thaw(GTK_CLIST(wind->cat_list));
-
-  /* move to the old selected row */
-  (GTK_CLIST(wind->cat_list))->focus_row = sel_row;
-  gtk_clist_moveto(GTK_CLIST(wind->cat_list), sel_row, 0, 0.0, 0.0);
+  update_account_picker_page (wind, make_category_display, wind->cat_list,
+			      wind->cat_map_info, &(wind->cat_display_info));
 }
-
 
 /****************************************************************
  * update_memo_page 
- * Ask the Scheme side to guess some account translations , then show
- * the category name and suggested translation in the Accounts page
- * clist.
+ * update the QIF memo -> GNC Account picker
  ****************************************************************/
 
 static void
 update_memo_page(QIFImportWindow * wind) {
   SCM  make_memo_display = gh_eval_str("qif-dialog:make-memo-display");
-  SCM  get_qif_name         = gh_eval_str("qif-map-entry:qif-name");
-  SCM  get_gnc_name         = gh_eval_str("qif-map-entry:gnc-name");
-  SCM  get_new              = gh_eval_str("qif-map-entry:new-acct?");
-  SCM  memos_left;
-  int  sel_row=0;
-  char * row_text[3];
-  int  row;
 
-  /* get the old selection row */
-  sel_row = (GTK_CLIST(wind->cat_list))->focus_row;
-
-  /* now get the list of strings to display in the clist widget */
-  memos_left = gh_call3(make_memo_display, 
-                        wind->imported_files,
-                        wind->memo_map_info, 
-                        wind->gnc_acct_info);
-  
-  scm_unprotect_object(wind->memo_display_info);
-  wind->memo_display_info = memos_left;  
-  scm_protect_object(wind->memo_display_info);
-  
-  gtk_clist_column_titles_passive (GTK_CLIST(wind->memo_list));
-
-  /* clear the list */
-  gtk_clist_clear(GTK_CLIST(wind->memo_list));
-
-  /* update the text in the boxes */
-  gtk_clist_freeze(GTK_CLIST(wind->memo_list));
-
-  gtk_clist_set_column_justification(GTK_CLIST(wind->memo_list),
-                                     2,
-                                     GTK_JUSTIFY_CENTER);
-
-  row_text[2] = "";
-
-  while(!gh_null_p(memos_left)) {
-    row_text[0] = gh_scm2newstr(gh_call1(get_qif_name, gh_car(memos_left)),
-                                NULL);
-    row_text[1] = gh_scm2newstr(gh_call1(get_gnc_name, gh_car(memos_left)),
-                                NULL);
-    
-    row = gtk_clist_append(GTK_CLIST(wind->memo_list), row_text);
-
-    gnc_clist_set_check (GTK_CLIST(wind->memo_list), row, 2,
-                         gh_call1(get_new, gh_car(memos_left)) == SCM_BOOL_T);
-
-    memos_left = gh_cdr(memos_left);
-
-    free (row_text[0]);
-    free (row_text[1]);
-  }
-
-  gtk_clist_thaw(GTK_CLIST(wind->memo_list));
-
-  /* move to the old selected row */
-  (GTK_CLIST(wind->memo_list))->focus_row = sel_row;
-  gtk_clist_moveto(GTK_CLIST(wind->memo_list), sel_row, 0, 0.0, 0.0);
+  update_account_picker_page (wind, make_memo_display, wind->memo_list,
+			      wind->memo_map_info, &(wind->memo_display_info));
 }
 
+/********************************************************************
+ * select_line
+ * generic function to process the selection when a user tries to edit
+ * an account mapping in one of the "map QIF * to GNC" pages.  This
+ * calls out to the account picker, and then then updates the
+ * appropriate data structures.  Finally, it will call the update_page
+ * function.
+ ********************************************************************/
+static void
+select_line (QIFImportWindow *wind, gint row, SCM display_info, SCM map_info,
+	     void (*update_page)(QIFImportWindow *)) {
+  SCM   get_name = gh_eval_str("qif-map-entry:qif-name");
+  SCM   selected_acct;
+  
+  /* find the <qif-map-entry> corresponding to the selected row */
+  selected_acct = gh_list_ref(display_info, gh_int2scm(row));
+  
+  /* call the account picker to update it */
+  selected_acct = qif_account_picker_dialog(wind, selected_acct);
 
+  scm_hash_set_x(map_info, gh_call1(get_name, selected_acct), selected_acct);
+
+  /* update display */
+  update_page(wind);
+}
 
 /********************************************************************
  * gnc_ui_qif_import_account_line_select_cb
@@ -1135,25 +1067,10 @@ gnc_ui_qif_import_account_line_select_cb(GtkCList * clist, gint row,
                                          gpointer user_data) {
   QIFImportWindow * wind = 
     gtk_object_get_data(GTK_OBJECT(user_data), "qif_window_struct");
-  SCM   get_name = gh_eval_str("qif-map-entry:qif-name");
-  SCM   selected_acct;
-  
-  
-  /* find the <qif-map-entry> corresponding to the selected row */
-  selected_acct = gh_list_ref(wind->acct_display_info, gh_int2scm(row));
-  
-  /* call the account picker to update it */
-  selected_acct = qif_account_picker_dialog(wind, selected_acct);
 
-  scm_hash_set_x(wind->acct_map_info, 
-                 gh_call1(get_name, selected_acct),
-                 selected_acct);
-
-  /* update display */
-  update_accounts_page(wind);
+  select_line (wind, row, wind->acct_display_info, wind->acct_map_info,
+	       update_accounts_page);
 }
-
-
 
 /********************************************************************
  * gnc_ui_qif_import_category_line_select_cb
@@ -1167,23 +1084,10 @@ gnc_ui_qif_import_category_line_select_cb(GtkCList * clist, gint row,
                                           gpointer user_data) {
   QIFImportWindow * wind = 
     gtk_object_get_data(GTK_OBJECT(user_data), "qif_window_struct");
-  SCM   get_name = gh_eval_str("qif-map-entry:qif-name");
-  SCM   selected_acct;
   
-  /* find the <qif-map-entry> corresponding to the selected row */
-  selected_acct = gh_list_ref(wind->cat_display_info, gh_int2scm(row));
-  
-  /* call the account picker to update it */
-  selected_acct = qif_account_picker_dialog(wind, selected_acct);
-
-  scm_hash_set_x(wind->cat_map_info, 
-                 gh_call1(get_name, selected_acct),
-                 selected_acct);
-  
-  /* update display */
-  update_categories_page(wind);
+  select_line (wind, row, wind->cat_display_info, wind->cat_map_info,
+	       update_categories_page);
 }
-
 
 /********************************************************************
  *  gnc_ui_qif_import_memo_line_select_cb
@@ -1197,21 +1101,9 @@ gnc_ui_qif_import_memo_line_select_cb(GtkCList * clist, gint row,
                                       gpointer user_data) {
   QIFImportWindow * wind = 
     gtk_object_get_data(GTK_OBJECT(user_data), "qif_window_struct");
-  SCM   get_name = gh_eval_str("qif-map-entry:qif-name");
-  SCM   selected_acct;
-  
-  /* find the <qif-map-entry> corresponding to the selected row */
-  selected_acct = gh_list_ref(wind->memo_display_info, gh_int2scm(row));
-  
-  /* call the account picker to update it */
-  selected_acct = qif_account_picker_dialog(wind, selected_acct);
-  
-  scm_hash_set_x(wind->memo_map_info, 
-                 gh_call1(get_name, selected_acct),
-                 selected_acct);
-  
-  /* update display */
-  update_memo_page(wind);
+
+  select_line (wind, row, wind->memo_display_info, wind->memo_map_info,
+	       update_memo_page);
 }
 
 
