@@ -687,16 +687,20 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
                 PWARN("unable to chmod filename %s: %s",
                         datafile ? datafile : "(null)", 
                         strerror(errno) ? strerror(errno) : ""); 
+#if VFAT_DOESNT_SUCK
                 g_free(tmp_name);
                 return FALSE;
+#endif
             }
             if(chown(tmp_name, statbuf.st_uid, statbuf.st_gid) != 0)
             {
                 PWARN("unable to chown filename %s: %s",
                         datafile ? datafile : "(null)", 
                         strerror(errno) ? strerror(errno) : ""); 
+#if VFAT_DOESNT_SUCK
                 g_free(tmp_name);
                 return FALSE;
+#endif
             }
         }
         if(unlink(datafile) != 0 && errno != ENOENT)

@@ -10,6 +10,13 @@
 	  user.
 	Fixes #117665
 
+	* src/backend/file/gnc-backend-file.c: don't make the chmod() and
+	  chown() functions fatal errors.  Warn the user if they fail, but
+	  don't fail to save.  In the long run we need some way to pop up
+	  warning messages from a backend, but until then we'll have to
+	  stick with PWARN() and hope users see the console.
+	Fixes #118258
+
 2003-07-26  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* src/import-export/import-account-matcher.c: Fix bug #105293
