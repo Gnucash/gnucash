@@ -1084,9 +1084,9 @@ gnc_acct_tree_window_new(const gchar * url)  {
      * gnc-acct-tree:id=17 .  We want to get the number out,
      * then look up the options in the global DB. */
     type = gnc_html_parse_url(NULL, url, &location, &label);
-    if((type == URL_TYPE_ACCTTREE) &&
-       location && (strlen(location) > 3) && 
-       !strncmp("id=", location, 3)) {
+    if (!safe_strcmp (type, URL_TYPE_ACCTTREE) &&
+	location && (strlen(location) > 3) && 
+	!strncmp("id=", location, 3)) {
       sscanf(location+3, "%d", &options_id);
       temp = gh_call1(find_options, gh_int2scm(options_id));
 

@@ -28,19 +28,23 @@
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 
-typedef enum { URL_TYPE_FILE, URL_TYPE_JUMP, 
-               URL_TYPE_HTTP, URL_TYPE_FTP, 
-               URL_TYPE_SECURE, 
-               URL_TYPE_REGISTER,   /* for gnucash register popups */
-               URL_TYPE_ACCTTREE,   /* for account tree windows */
-               URL_TYPE_REPORT,     /* for gnucash report popups */
-               URL_TYPE_OPTIONS,    /* for editing report options */ 
-               URL_TYPE_SCHEME,     /* for scheme code evaluation */
-               URL_TYPE_HELP,       /* for a gnucash help window */
-               URL_TYPE_XMLDATA,    /* links to gnucash XML data files */ 
-               URL_TYPE_ACTION,     /* for special SUBMIT actions */ 
-               URL_TYPE_PRICE,      /* for price editor popups */
-               URL_TYPE_OTHER } URLType;
+typedef char * URLType;
+
+#define URL_TYPE_FILE	"file"
+#define URL_TYPE_JUMP	"jump"
+#define URL_TYPE_HTTP	"http"
+#define URL_TYPE_FTP	"ftp"
+#define URL_TYPE_SECURE	"secure"
+#define URL_TYPE_REGISTER	"register"   /* for gnucash register popups */
+#define URL_TYPE_ACCTTREE	"accttree"   /* for account tree windows */
+#define URL_TYPE_REPORT	"report"     /* for gnucash report popups */
+#define URL_TYPE_OPTIONS	"options"    /* for editing report options */ 
+#define URL_TYPE_SCHEME	"scheme"     /* for scheme code evaluation */
+#define URL_TYPE_HELP	"help"       /* for a gnucash help window */
+#define URL_TYPE_XMLDATA	"xmldata"    /* links to gnucash XML data files */ 
+#define URL_TYPE_ACTION	"action"     /* for special SUBMIT actions */ 
+#define URL_TYPE_PRICE	"price"      /* for price editor popups */
+#define URL_TYPE_OTHER	"other"
 
 #include "gnc-html-history.h"
 
@@ -101,6 +105,14 @@ void          gnc_html_cancel(gnc_html * html);
 
 char  * gnc_build_url (URLType type, const gchar * location,
                        const gchar * label);
+
+/* Register a new URLType.
+ * returns TRUE if succesful, FALSE if type already exists.
+ *
+ * protocol should be an empty string if there is no corresponding protocol.
+ * if protocol is NULL, this function returns FALSE.
+ */
+gboolean      gnc_html_register_urltype (URLType type, const char *protocol);
 
 /* object handlers deal with <object classid="foo"> objects in HTML.
  * the handlers are looked up at object load time. */
@@ -164,5 +176,8 @@ void gnc_html_set_button_cb(gnc_html * html, GncHTMLButtonCB button_cb,
 
 GtkWidget   * gnc_html_get_container_widget(gnc_html * html);
 GtkWidget   * gnc_html_get_html_widget(gnc_html * html); 
+
+/* Initialize the html subsystem */
+void gnc_html_initialize (void);
 
 #endif

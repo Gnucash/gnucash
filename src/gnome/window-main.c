@@ -45,6 +45,7 @@
 #include "gfec.h"
 #include "global-options.h"
 #include "gnc-engine.h"
+#include "gnc-engine-util.h"
 #include "gnc-file-dialog.h"
 #include "gnc-file-history.h"
 #include "gnc-file-history-gnome.h"
@@ -225,16 +226,13 @@ gnc_main_window_create_child(const gchar * configstring)
   g_free(location);
   g_free(label);
 
-  switch(type) {
-  case URL_TYPE_REPORT:
+  if (!safe_strcmp (type, URL_TYPE_REPORT)) {
     child = gnc_report_window_create_child(configstring);
-    break;
-    
-  case URL_TYPE_ACCTTREE:
+
+  } else if (!safe_strcmp (type, URL_TYPE_ACCTTREE)) {
     child = gnc_acct_tree_window_create_child(configstring);
-    break;
-    
-  default:
+
+  } else {
     child = NULL;
   }
 

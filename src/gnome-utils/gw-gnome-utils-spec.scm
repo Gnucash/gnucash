@@ -62,6 +62,27 @@
 
   (gw:wrap-as-wct ws '<gnc:UIWidget> "gncUIWidget" "const gncUIWidget")
   (gw:wrap-as-wct ws '<gnc:mdi-info*> "GNCMDIInfo*" "const GNCMDIInfo*")
+  (gw:wrap-as-wct ws '<gnc:url-type> "URLType" "const URLType")
+
+  ;;
+  ;; URLTypes
+  ;;
+  (gw:wrap-value ws 'gnc:url-type-file '<gnc:url-type> "URL_TYPE_FILE")
+  (gw:wrap-value ws 'gnc:url-type-jump '<gnc:url-type> "URL_TYPE_JUMP")
+  (gw:wrap-value ws 'gnc:url-type-http '<gnc:url-type> "URL_TYPE_HTTP")
+  (gw:wrap-value ws 'gnc:url-type-ftp '<gnc:url-type> "URL_TYPE_FTP")
+  (gw:wrap-value ws 'gnc:url-type-secure '<gnc:url-type> "URL_TYPE_SECURE")
+  (gw:wrap-value ws 'gnc:url-type-register '<gnc:url-type> "URL_TYPE_REGISTER")
+  (gw:wrap-value ws 'gnc:url-type-accttree '<gnc:url-type> "URL_TYPE_ACCTTREE")
+  (gw:wrap-value ws 'gnc:url-type-report '<gnc:url-type> "URL_TYPE_REPORT")
+  (gw:wrap-value ws 'gnc:url-type-options '<gnc:url-type> "URL_TYPE_OPTIONS")
+  (gw:wrap-value ws 'gnc:url-type-scheme '<gnc:url-type> "URL_TYPE_SCHEME")
+  (gw:wrap-value ws 'gnc:url-type-help '<gnc:url-type> "URL_TYPE_HELP")
+  (gw:wrap-value ws 'gnc:url-type-xmldata '<gnc:url-type> "URL_TYPE_XMLDATA")
+  (gw:wrap-value ws 'gnc:url-type-action '<gnc:url-type> "URL_TYPE_ACTION")
+  (gw:wrap-value ws 'gnc:url-type-price '<gnc:url-type> "URL_TYPE_PRICE")
+  (gw:wrap-value ws 'gnc:url-type-other '<gnc:url-type> "URL_TYPE_OTHER")
+
 
   (gw:wrap-function
    ws
@@ -190,12 +211,6 @@
    '((<gw:scm> extension))
    "Add a menu extension.")
 
-  (gw:wrap-function 
-   ws
-   'gnc:html-encode-string 
-   '(<gw:gchars> caller-owned)
-   "gnc_html_encode_string" '(((<gw:mchars> caller-owned const) bookname)))
-
   (gw:wrap-function
    ws
    'gnc:choose-radio-option-dialog-parented
@@ -208,6 +223,28 @@
      ((gw:glist-of (<gw:mchars> callee-owned) callee-owned) choices))
    "Show a dialog offering different mutually exclusive choices
 in a radio list.")
+
+  ;;
+  ;; gnc-html.h
+  ;;
+
+  (gw:wrap-function 
+   ws
+   'gnc:html-encode-string 
+   '(<gw:gchars> caller-owned)
+   "gnc_html_encode_string"
+   '(((<gw:mchars> caller-owned const) bookname)))
+
+  (gw:wrap-function
+   ws
+   'gnc:html-build-url
+   '(<gw:gchars> caller-owned)
+   "gnc_build_url"
+   '((<gnc:url-type> url-type) ((<gw:mchars> caller-owned const) location)
+     ((<gw:mchars> caller-owned const) label))
+   "Build a GNC URL based on the URL Type and location.  The label may
+be left empty")
+
 
   ;; gnc-amount-edit.h
   (gw:wrap-as-wct ws

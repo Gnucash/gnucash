@@ -86,6 +86,10 @@ struct gnc_html_struct {
 /* indicates the debugging module that this .o belongs to.  */
 static short module = MOD_HTML;
 
+/* hashes for URLType -> protocol and protocol -> URLType */
+static GHashTable * gnc_html_type_to_proto_hash = NULL;
+static GHashTable * gnc_html_proto_to_type_hash = NULL;
+
 /* hashes an HTML <object classid="ID"> classid to a handler function */
 static GHashTable * gnc_html_object_handlers = NULL;
 
@@ -130,6 +134,27 @@ extract_machine_name(const gchar * path) {
   return machine;
 }
 
+
+/* Register the URLType if it doesn't already exist.
+ * Returns TRUE if successful, FALSE if the type already exists.
+ */
+gboolean
+gnc_html_register_urltype (URLType type, const char *protocol)
+{
+  if (!gnc_html_type_to_proto_hash) {
+    gnc_html_type_to_proto_hash = g_hash_table_new (g_str_hash, g_str_equal);
+    gnc_html_proto_to_type_hash = g_hash_table_new (g_str_hash, g_str_equal);
+  }
+  if (!protocol) return FALSE;
+  if (g_hash_table_lookup (gnc_html_type_to_proto_hash, type))
+    return FALSE;
+
+  g_hash_table_insert (gnc_html_type_to_proto_hash, type, (gpointer)protocol);
+  if (*protocol)
+    g_hash_table_insert (gnc_html_proto_to_type_hash, (gpointer)protocol, type);
+
+  return TRUE;
+}
 
 /********************************************************************
  * gnc_html_parse_url
@@ -176,43 +201,8 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
   regfree(&compiled);
 
   if(found_protocol) {
-    if(!strcmp(protocol, "file")) {
-      retval = URL_TYPE_FILE;
-    }
-    else if(!strcmp(protocol, "http")) {
-      retval = URL_TYPE_HTTP;
-    }
-    else if(!strcmp(protocol, "ftp")) {
-      retval = URL_TYPE_FTP;
-    }
-    else if(!strcmp(protocol, "https")) {
-      retval = URL_TYPE_SECURE;
-    }
-    else if(!strcmp(protocol, "gnc-action")) {
-      retval = URL_TYPE_ACTION;
-    }
-    else if(!strcmp(protocol, "gnc-register")) {
-      retval = URL_TYPE_REGISTER;
-    } 
-    else if(!strcmp(protocol, "gnc-acct-tree")) {
-      retval = URL_TYPE_ACCTTREE;
-    }
-    else if(!strcmp(protocol, "gnc-report")) {
-      retval = URL_TYPE_REPORT;
-    }
-    else if(!strcmp(protocol, "gnc-options")) {
-      retval = URL_TYPE_OPTIONS;
-    }
-    else if(!strcmp(protocol, "gnc-scm")) {
-      retval = URL_TYPE_SCHEME;
-    }
-    else if(!strcmp(protocol, "gnc-help")) {
-      retval = URL_TYPE_HELP;
-    }
-    else if(!strcmp(protocol, "gnc-price")) {
-      retval = URL_TYPE_PRICE;
-    } 
-    else {
+    retval = g_hash_table_lookup (gnc_html_proto_to_type_hash, protocol);
+    if (!retval) {
       PWARN("unhandled URL type for '%s'", url ? url : "(null)");
       retval = URL_TYPE_OTHER;
     }
@@ -231,8 +221,7 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
   
   g_free(protocol);
  
-  switch(retval) {
-  case URL_TYPE_FILE:    
+  if (!safe_strcmp (retval, URL_TYPE_FILE)) {
     if(!found_protocol && path && html && html->base_location) {
       if(path[0] == '/') {
         *url_location = g_strdup(path);
@@ -246,15 +235,14 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
       *url_location = g_strdup(path);
       g_free(path);
     }
-    break;
-    
-  case URL_TYPE_JUMP:
+
+  } else if (!safe_strcmp (retval, URL_TYPE_JUMP)) {
     *url_location = NULL;
     g_free(path);
-    break;
 
-  case URL_TYPE_OTHER:
-  default:
+  } else {
+    /* case URL_TYPE_OTHER: */
+
     if(!found_protocol && path && html && html->base_location) {
       if(path[0] == '/') {
         *url_location = 
@@ -270,7 +258,6 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
       *url_location = g_strdup(path);
       g_free(path);
     }
-    break;
   }
   
   *url_label = label;
@@ -292,10 +279,10 @@ extract_base_name(URLType type, const gchar * path) {
   regcomp(&compiled_m, machine_rexp, REG_EXTENDED);
   regcomp(&compiled_p, path_rexp, REG_EXTENDED);
 
-  switch(type) {
-  case URL_TYPE_HTTP:
-  case URL_TYPE_SECURE:
-  case URL_TYPE_FTP:
+  if (!safe_strcmp (type, URL_TYPE_HTTP) ||
+      !safe_strcmp (type, URL_TYPE_SECURE) ||
+      !safe_strcmp (type, URL_TYPE_FTP)) {
+
     /* step 1: split the machine name away from the path
      * components */
     if(!regexec(&compiled_m, path, 4, match, 0)) {
@@ -310,8 +297,8 @@ extract_base_name(URLType type, const gchar * path) {
                              match[2].rm_eo - match[2].rm_so);
       }
     }  
-    break;
-  default:
+
+  } else {
     location = g_strdup(path);
   }
   /* step 2: split up the path into prefix and file components */ 
@@ -353,22 +340,51 @@ extract_base_name(URLType type, const gchar * path) {
   return basename;
 }
 
-static char * url_type_names[] = {
-  "file:", "", "http:", "ftp:", "https:", 
-  "gnc-register:", "gnc-acct-tree:", "gnc-report:", "gnc-options:", "gnc-scm:",
-  "gnc-help:", "gnc-xml:", "gnc-action:", "gnc-price:", ""
-};
+void
+gnc_html_initialize (void)
+{
+  int i;
+  static struct {
+    URLType	type;
+    char *	protocol;
+  } types[] = {
+    { URL_TYPE_FILE, "file" },
+    { URL_TYPE_JUMP, "" },
+    { URL_TYPE_HTTP, "http" },
+    { URL_TYPE_FTP, "ftp" },
+    { URL_TYPE_SECURE, "https" },
+    { URL_TYPE_REGISTER, "gnc-register" },
+    { URL_TYPE_ACCTTREE, "gnc-acct-tree" },
+    { URL_TYPE_REPORT, "gnc-report" },
+    { URL_TYPE_OPTIONS, "gnc-options" },
+    { URL_TYPE_SCHEME, "gnc-scm" },
+    { URL_TYPE_HELP, "gnc-help" },
+    { URL_TYPE_XMLDATA, "gnc-xml" },
+    { URL_TYPE_ACTION, "gnc-action" },
+    { URL_TYPE_PRICE, "gnc-price" },
+    { URL_TYPE_OTHER, "" },
+    { NULL, NULL }};
+
+  for (i = 0; types[i].type; i++)
+    gnc_html_register_urltype (types[i].type, types[i].protocol);
+}
 
 
 char  *
 gnc_build_url (URLType type, const gchar * location, const gchar * label) {
+  char * type_name;
+
+  type_name = g_hash_table_lookup (gnc_html_type_to_proto_hash, type);
+  if (!type_name)
+    type_name = "";
+
   if(label) {
-    return g_strdup_printf("%s%s#%s", url_type_names[type], 
+    return g_strdup_printf("%s%s%s#%s", type_name, (*type_name ? ":" : ""),
                            (location ? location : ""),
                            label ? label : "");
   }
   else {
-    return g_strdup_printf("%s%s", url_type_names[type], 
+    return g_strdup_printf("%s%s%s", type_name, (*type_name ? ":" : ""),
                            (location ? location : ""));
   }
 }
@@ -525,7 +541,7 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
   if (gnc_html_stream_handlers) {
     GncHTMLStreamCB stream_handler;
 
-    stream_handler = g_hash_table_lookup (gnc_html_stream_handlers, &type);
+    stream_handler = g_hash_table_lookup (gnc_html_stream_handlers, type);
     if (stream_handler) {
       gboolean ok = stream_handler (location, &fdata);
 
@@ -550,39 +566,42 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
     }
   }
 
-  switch(type) {
-  case URL_TYPE_SECURE:
-    if(!https_allowed()) {
-      gnc_error_dialog(_("Secure HTTP access is disabled.\n"
-                         "You can enable it in the Network section of\n"
-                         "the Preferences dialog."));
-      break;
+  do {
+    if (!safe_strcmp (type, URL_TYPE_SECURE) ||
+	!safe_strcmp (type, URL_TYPE_HTTP)) {
+
+      if (!safe_strcmp (type, URL_TYPE_SECURE)) {
+	if(!https_allowed()) {
+	  gnc_error_dialog(_("Secure HTTP access is disabled.\n"
+			     "You can enable it in the Network section of\n"
+			     "the Preferences dialog."));
+	  break;
+	}
+      }
+
+      if(!http_allowed()) {
+	gnc_error_dialog(_("Network HTTP access is disabled.\n"
+			   "You can enable it in the Network section of\n"
+			   "the Preferences dialog."));
+      } else {
+	char *fullurl;
+      
+	fullurl = gnc_build_url(type, location, label);
+	gnc_html_start_request(html, fullurl, handle);
+      }
+
+    } else {
+      PWARN("load_to_stream for inappropriate type\n"
+	    "\turl = '%s#%s'\n",
+	    location ? location : "(null)",
+	    label ? label : "(null)");
+      fdata = _(error_404);
+      gtk_html_write(GTK_HTML(html->html), handle, fdata, strlen (fdata));
+      gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_ERROR);
     }
 
-  case URL_TYPE_HTTP:
-    if(!http_allowed()) {
-      gnc_error_dialog(_("Network HTTP access is disabled.\n"
-                         "You can enable it in the Network section of\n"
-                         "the Preferences dialog."));
-    }
-    else {
-      char *fullurl;
+  } while (FALSE);
 
-      fullurl = gnc_build_url(type, location, label);
-      gnc_html_start_request(html, fullurl, handle);
-    }
-    break;
-
-  default:
-    PWARN("load_to_stream for inappropriate type\n"
-          "\turl = '%s#%s'\n",
-          location ? location : "(null)",
-          label ? label : "(null)");
-    fdata = _(error_404);
-    gtk_html_write(GTK_HTML(html->html), handle, fdata, strlen (fdata));
-    gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_ERROR);
-    break;
-  }
 }
 
 
@@ -815,7 +834,7 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
 
   type = gnc_html_parse_url(gnchtml, action, &location, &label);
   
-  if(type == URL_TYPE_ACTION) {
+  if(!safe_strcmp (type, URL_TYPE_ACTION)) {
     if(gnc_network_allowed()) {
       if(gnc_html_action_handlers) {
         action_parts = g_strsplit(location, "?", 2);
@@ -921,7 +940,7 @@ gnc_html_show_url(gnc_html * html, URLType type,
   }
 
   if (gnc_html_url_handlers)
-    url_handler = g_hash_table_lookup (gnc_html_url_handlers, &type);
+    url_handler = g_hash_table_lookup (gnc_html_url_handlers, type);
   else
     url_handler = NULL;
 
@@ -987,55 +1006,57 @@ gnc_html_show_url(gnc_html * html, URLType type,
     return;
   }
 
-  switch(type) {
-  case URL_TYPE_SCHEME:
+  if (!safe_strcmp (type, URL_TYPE_SCHEME)) {
     gnc_html_open_scm(html, location, label, new_window);
-    break;
 
-  case URL_TYPE_JUMP:
+  } else if (!safe_strcmp (type, URL_TYPE_JUMP)) {
     gtk_html_jump_to_anchor(GTK_HTML(html->html), label);
-    break;
 
-  case URL_TYPE_SECURE:
-    if(!https_allowed()) {
-      gnc_error_dialog(_("Secure HTTP access is disabled.\n"
-                         "You can enable it in the Network section of\n"
-                         "the Preferences dialog."));
-      break;
-    }
+  } else if (!safe_strcmp (type, URL_TYPE_SECURE) ||
+	     !safe_strcmp (type, URL_TYPE_HTTP) ||
+	     !safe_strcmp (type, URL_TYPE_FILE)) {
 
-  case URL_TYPE_HTTP:
-    if(!http_allowed()) {
-      gnc_error_dialog(_("Network HTTP access is disabled.\n"
-                         "You can enable it in the Network section of\n"
-                         "the Preferences dialog."));
-      break;
-    }
+    do {
+      if (!safe_strcmp (type, URL_TYPE_SECURE)) {
+	if(!https_allowed()) {
+	  gnc_error_dialog(_("Secure HTTP access is disabled.\n"
+			     "You can enable it in the Network section of\n"
+			     "the Preferences dialog."));
+	  break;
+	}
+      }
 
-  case URL_TYPE_FILE:
-    html->base_type     = type;
-    
-    if(html->base_location) g_free(html->base_location);
-    html->base_location = extract_base_name(type, location);
+      if (safe_strcmp (type, URL_TYPE_FILE)) {
+	if(!http_allowed()) {
+	  gnc_error_dialog(_("Network HTTP access is disabled.\n"
+			     "You can enable it in the Network section of\n"
+			     "the Preferences dialog."));
+	  break;
+	}
+      }
 
-    /* FIXME : handle new_window = 1 */
-    gnc_html_history_append(html->history,
-                            gnc_html_history_node_new(type, location, label));
-    handle = gtk_html_begin(GTK_HTML(html->html));
-    gnc_html_load_to_stream(html, handle, type, location, label);
-    break;
+      html->base_type     = type;
+      
+      if(html->base_location) g_free(html->base_location);
+      html->base_location = extract_base_name(type, location);
 
-  case URL_TYPE_ACTION:
+      /* FIXME : handle new_window = 1 */
+      gnc_html_history_append(html->history,
+			      gnc_html_history_node_new(type, location, label));
+      handle = gtk_html_begin(GTK_HTML(html->html));
+      gnc_html_load_to_stream(html, handle, type, location, label);
+
+    } while (FALSE);
+
+  } else if (!safe_strcmp (type, URL_TYPE_ACTION)) {
     gnc_html_history_append(html->history,
                             gnc_html_history_node_new(type, location, label));
     gnc_html_submit_cb(GTK_HTML(html->html), "get", 
                        gnc_build_url(type, location, label), NULL,
                        (gpointer)html);
-    break;
 
-  default:
-    PERR ("URLType %d not supported.", type);
-    break;
+  } else {
+    PERR ("URLType %s not supported.", type);
   }
 
   if(html->load_cb) {
@@ -1319,75 +1340,45 @@ gnc_html_unregister_action_handler(const char * actionid) {
 void
 gnc_html_register_stream_handler(URLType url_type, GncHTMLStreamCB hand)
 {
-  URLType *key;
-
-  g_return_if_fail (url_type >= 0);
+  g_return_if_fail (url_type != NULL && *url_type != '\0');
 
   if(!gnc_html_stream_handlers) {
-    gnc_html_stream_handlers = g_hash_table_new(g_int_hash, g_int_equal);
+    gnc_html_stream_handlers = g_hash_table_new(g_str_hash, g_str_equal);
   }
 
   gnc_html_unregister_stream_handler (url_type);
   if (!hand)
     return;
 
-  key = g_new (URLType, 1);
-  *key = url_type;
-
-  g_hash_table_insert (gnc_html_stream_handlers, key, hand);
+  g_hash_table_insert (gnc_html_stream_handlers, url_type, hand);
 }
 
 void
 gnc_html_unregister_stream_handler(URLType url_type)
 {
-  gpointer keyptr;
-  gpointer valptr;
-
-  if (!g_hash_table_lookup_extended(gnc_html_stream_handlers,
-                                    &url_type, 
-                                    &keyptr, 
-                                    &valptr))
-    return;
-
-  g_hash_table_remove (gnc_html_stream_handlers, &url_type);
-  g_free (keyptr);
+  g_hash_table_remove (gnc_html_stream_handlers, url_type);
 }
 
 void
 gnc_html_register_url_handler (URLType url_type, GncHTMLUrlCB hand)
 {
-  URLType *key;
-
-  g_return_if_fail (url_type >= 0);
+  g_return_if_fail (url_type != NULL && *url_type != '\0');
 
   if(!gnc_html_url_handlers) {
-    gnc_html_url_handlers = g_hash_table_new (g_int_hash, g_int_equal);
+    gnc_html_url_handlers = g_hash_table_new (g_str_hash, g_str_equal);
   }
 
   gnc_html_unregister_url_handler (url_type);
   if (!hand)
     return;
 
-  key = g_new (URLType, 1);
-  *key = url_type;
-
-  g_hash_table_insert (gnc_html_url_handlers, key, hand);
+  g_hash_table_insert (gnc_html_url_handlers, url_type, hand);
 }
 
 void
 gnc_html_unregister_url_handler (URLType url_type)
 {
-  gpointer keyptr;
-  gpointer valptr;
-
-  if (!g_hash_table_lookup_extended (gnc_html_url_handlers,
-                                     &url_type, 
-                                     &keyptr, 
-                                     &valptr))
-    return;
-
-  g_hash_table_remove (gnc_html_url_handlers, &url_type);
-  g_free (keyptr);
+  g_hash_table_remove (gnc_html_url_handlers, url_type);
 }
 
 /********************************************************************

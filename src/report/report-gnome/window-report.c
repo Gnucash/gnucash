@@ -264,13 +264,10 @@ gnc_main_window_open_report_url(const char * url, gint toplevel) {
 
 static int
 gnc_report_window_check_urltype(URLType t) {
-  switch (t) {
-  case URL_TYPE_REPORT:
+  if (!safe_strcmp (t, URL_TYPE_REPORT)) {
     return TRUE;
-    break;
-  default:
+  } else {
     return FALSE;
-    break;
   }
 }
 
@@ -601,11 +598,13 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
   /* we get this callback if a new report is requested to be loaded OR
    * if any URL is clicked.  If an options URL is clicked, we want to
    * know about it */
-  if((type == URL_TYPE_REPORT) && location && (strlen(location) > 3) && 
+  if(!safe_strcmp (type, URL_TYPE_REPORT) && 
+     location && (strlen(location) > 3) && 
      !strncmp("id=", location, 3)) {
     sscanf(location+3, "%d", &report_id);
   }
-  else if((type == URL_TYPE_OPTIONS) && location && (strlen(location) > 10) &&
+  else if(!safe_strcmp( type, URL_TYPE_OPTIONS)
+	  && location && (strlen(location) > 10) &&
           !strncmp("report-id=", location, 10)) {
     sscanf(location+10, "%d", &report_id);
     inst_report = gh_call1(find_report, gh_int2scm(report_id));
@@ -709,7 +708,7 @@ gnc_report_window_history_destroy_cb(gnc_html_history_node * node,
   }
   
   if(node && 
-     (node->type == URL_TYPE_REPORT) && 
+     !safe_strcmp (node->type, URL_TYPE_REPORT) && 
      !strncmp("id=", node->location, 3)) {
     sscanf(node->location+3, "%d", &report_id);
     /*    printf("unreffing report %d and children\n", report_id);

@@ -1,3 +1,9 @@
+2002-07-01  Derek Atkins   <derek@ihtfp.com>
+
+	* gnc-html: convert URLType from enum to char*
+	* gw-gnome-utils-spec: wrap URLType type, #defines, and gnc_build_url()
+	* get the rest of the C code to use URLTypes properly
+
 2002-06-29  David Hampton  <hampton@employees.org>
 
 	* configure.in:

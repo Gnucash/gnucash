@@ -105,14 +105,13 @@ static gint last_height = 0;
 
 static int
 gnc_help_window_check_urltype(URLType t) {
-  switch (t) {
-  case URL_TYPE_FILE:
-  case URL_TYPE_HELP:
-  case URL_TYPE_HTTP:
-  case URL_TYPE_SECURE:
+  if (!safe_strcmp (t, URL_TYPE_FILE) ||
+      !safe_strcmp (t, URL_TYPE_HELP) ||
+      !safe_strcmp (t, URL_TYPE_HTTP) ||
+      !safe_strcmp (t, URL_TYPE_SECURE)) {
     return TRUE;
-    break;
-  default:
+
+  } else {
     return FALSE;
   }
 }
