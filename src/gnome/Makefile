@@ -28,12 +28,12 @@
 srcdir   = .
 
 CC       = gcc
-INCLPATH = -I.. -I../.. -I../engine -I../register -I./../../include 
+INCLPATH = -I.. -I../.. -I../engine -I../register -I./../../include
 
 CFLAGS   =  -O2 -Wall -g -Wall  -I/usr/X11R6/include ${INCLPATH}
 LDFLAGS  =  -g -Wall
 LIBS     = -lpng -ljpeg -lz -lm  -lSM -lICE -lXpm  -L/usr/X11R6/lib $(shell gtk-config --libs) \
-            -lgnomeui -lgnome -lgnomesupport
+            -lgnomeui -lgnome -lgnomesupport -lgdk_imlib -ltiff -ldl
 
 TARGET   = ../../xacc.gtk.bin
 STATIC   = ../../xacc-static.gtk.bin
@@ -42,7 +42,7 @@ OTHER_OBJS := ../obj/gnome/*.o ../engine/obj/*.o ../register/obj/gnome/*.o
 
 ######################################################################
 # See Makefile.common for information about these variables.
-GNOME_SRCS := main.c MainWindow.c MenuBar.c RegWindow.c
+GNOME_SRCS := main.c MainWindow.c MenuBar.c RegWindow.c Dialogs.c
 #        AccWindow.c AccountMenu.c AdjBWindow.c    \
 #        BuildMenu.c Destroy.c FileBox.c HelpWindow.c  \
 #        RecnWindow.c RegWindow.c Reports.c TextBox.c  \

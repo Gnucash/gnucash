@@ -470,6 +470,7 @@ regWindowLedger(Account *lead_acc, Account **acclist, int ledger_type)
 
   regData->dialog = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   
+
   gtk_window_set_title(GTK_WINDOW(regData->dialog), windowname);
   
   /* when the window is given the "delete_event" signal (this is given
@@ -486,6 +487,9 @@ regWindowLedger(Account *lead_acc, Account **acclist, int ledger_type)
   gtk_signal_connect (GTK_OBJECT (regData->dialog), "destroy",
                       GTK_SIGNAL_FUNC (destroy), (gpointer) regData);
 
+
+
+#if 0
   /* Create a PanedWindow Manager for the dialog box... the paned 
    * window is the parent of the two forms which comprise the two
    * areas of the dialog box */
@@ -495,7 +499,6 @@ regWindowLedger(Account *lead_acc, Account **acclist, int ledger_type)
    * group.  Put is another way: it is REALLY annoying to have to
    * put the mouse in the cell being edited. */
 
-#if 0
   pane = XtVaCreateWidget( "pane", 
                            xmPanedWindowWidgetClass, regData->dialog,
                            XmNsashWidth,     1,
@@ -1051,8 +1054,8 @@ cancelCB( GtkWidget * mw, XtPointer cd, XtPointer cb )
   Local Variables:
   tab-width: 2
   indent-tabs-mode: nil
-  mode: c-mode
+  mode: c
   c-indentation-style: gnu
-  eval: (c-set-offset 'block-open '-)
+  eval: (c-set-offset 'substatement-open 0)
   End:
 */

@@ -61,8 +61,8 @@ gchar *accRes[] ={
   "equity"
 };
 
-
-void file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
+void
+file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
 {
   datafile = gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs));
 
@@ -82,14 +82,28 @@ void file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
   main_window_init(topgroup);
 }
 
-void gnucash_shutdown (GtkWidget *widget, gpointer *data)
+void
+gnucash_shutdown (GtkWidget *widget, gpointer *data)
 {
   gtk_main_quit ();
 }
 
-void file_cmd_open (GtkWidget *widget, gpointer data)
+void
+file_cmd_open (GtkWidget *widget, gpointer data)
 {
   g_print ( "Menu Command: file open\n" );
+}
+
+void
+file_cmd_save(GtkWidget *widget, gpointer data)
+{
+  /* hack alert -- Somehow make sure all in-progress edits get committed! */
+  if (NULL == datafile) {
+    fprintf(stderr, "Can't save file.  No open file\n");
+    return;
+  }
+  xaccWriteAccountGroup(datafile, topgroup);
+  xaccAccountGroupMarkSaved(topgroup);
 }
 
 void file_cmd_quit (GtkWidget *widget, gpointer data)
@@ -113,6 +127,14 @@ int
 main( int argc, char *argv[] )
 {   
  // gtk_init ( &argc, &argv );
+
+  if(argc > 1) {
+    /* Gnome is a pain about this if we don't handle it first
+       We need real arg parsing here later */
+    datafile = argv[1];
+    argc--;
+    argv++;
+  }
  
   gnome_init ("GnuCash", NULL, argc, argv,
               0, NULL);
@@ -130,55 +152,6 @@ main( int argc, char *argv[] )
   }
 
   filebox = gtk_file_selection_new ( "Open..." );
-  
-  /* read in the filename (should be the first arg after all
-   * the X11 stuff */
-  if( argc > 1 )
-  {
-    datafile = argv[1];
-
-    if( datafile != NULL ) 
-    {
-   
-      /* load the accounts data from datafile*/
-      topgroup = xaccReadAccountGroup (datafile); 
-
-      if ( topgroup == NULL )
-      {
-      	GtkWidget *dialog;
-      	GtkWidget *button;
-      	GtkWidget *label;
-      	
-      	dialog = gtk_dialog_new ();
-      	
-      	button = gtk_button_new_with_label ( "Ok" );
-        gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area), button,
-                            TRUE, TRUE, 0);
-        gtk_widget_show ( button );
-
-        label = gtk_label_new (" \nInvalid filename \nNew file started.\n ");
-        gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, TRUE,
-                            TRUE, 0);
-        gtk_widget_show ( label );
-        gtk_widget_show ( dialog );
-        
-	topgroup = xaccMallocAccountGroup(); 
-      }
-    }
-    /* Create main window */
-    main_window_init(topgroup);
-  }
-  else
-  {
-    /* Filebox code here */
-    gtk_widget_show ( filebox );
-  }
-  
-  /* Check to see if this is a valid datafile */
-  if ( datafile != NULL )
-    topgroup = xaccReadAccountGroup (datafile);   
-  
-  
   /* Callbacks for File Box and Stuff */
   
   gtk_signal_connect (GTK_OBJECT (filebox), "delete_event",
@@ -192,8 +165,41 @@ main( int argc, char *argv[] )
   /* Connect the cancel_button to also kill the app */
   gtk_signal_connect_object ( GTK_OBJECT (GTK_FILE_SELECTION (filebox)->cancel_button),
                               "clicked", (GtkSignalFunc) gtk_exit, NULL );
-  
 
+  /* read in the filename (should be the first arg after all
+   * the X11 stuff */
+  if( datafile != NULL ) {
+    
+    /* load the accounts data from datafile*/
+    topgroup = xaccReadAccountGroup (datafile); 
+    
+    if ( topgroup == NULL )
+    {
+      GtkWidget *dialog;
+      GtkWidget *button;
+      GtkWidget *label;
+      
+      dialog = gtk_dialog_new ();
+      
+      button = gtk_button_new_with_label ( "Ok" );
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area), button,
+                          TRUE, TRUE, 0);
+      gtk_widget_show ( button );
+      
+      label = gtk_label_new (" \nInvalid filename \nNew file started.\n ");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, TRUE,
+                          TRUE, 0);
+      gtk_widget_show ( label );
+      gtk_widget_show ( dialog );
+      
+      topgroup = xaccMallocAccountGroup(); 
+    }
+    /* Create main window */
+    main_window_init(topgroup);
+  } else {
+    /* Filebox code here */
+    gtk_widget_show ( filebox );
+  }
   
   /* Enter event loop */
   gtk_main();

@@ -28,7 +28,7 @@ srcdir   = @srcdir@
 VPATH    = @srcdir@
 
 CC       = @CC@
-INCLPATH = -I.. -I../.. -I../engine -I../register -I@srcdir@/../../include -I/usr/lib/gnome-libs/include
+INCLPATH = -I.. -I../.. -I../engine -I../register -I@srcdir@/../../include
 
 CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH}
 LDFLAGS  = @LDFLAGS@

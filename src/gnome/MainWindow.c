@@ -114,7 +114,7 @@ main_window_init(AccountGroup *accts)
   {
     {"<Main>/File/New", "<control>N", NULL, NULL},
     {"<Main>/File/Open", "<control>O", file_cmd_open, NULL},
-    {"<Main>/File/Save", "<control>S", NULL, NULL},
+    {"<Main>/File/Save", "<control>S", file_cmd_save, NULL},
     {"<Main>/File/Save as", NULL, NULL, NULL},
     {"<Main>/File/<separator>", NULL, NULL, NULL},
     {"<Main>/File/Quit", "<control>Q", file_cmd_quit, NULL },
