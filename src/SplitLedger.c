@@ -476,31 +476,6 @@ gnc_find_split_in_account_by_memo(Account *account, const char *memo,
   return NULL;
 }
 
-/* This routine is for finding a matching transaction in an account by
- * matching on the description field. This routine is used for auto-filling
- * in registers with a default leading account. The dest_trans is a
- * transaction used for currency checking. */
-static Transaction *
-gnc_find_trans_in_account_by_desc(Account *account, const char *description)
-{
-  GList *slp;
-
-  if (account == NULL) return NULL;
-
-  for (slp = g_list_last (xaccAccountGetSplitList (account));
-       slp;
-       slp = slp->prev)
-  {
-    Split *split = slp->data;
-    Transaction *trans = xaccSplitGetParent(split);
-
-    if (safe_strcmp (description, xaccTransGetDescription (trans)) == 0)
-      return trans;
-  }
-
-  return NULL;
-}
-
 static Split *
 gnc_find_split_in_reg_by_memo (SplitRegister *reg, const char *memo,
                                Transaction *dest_tran, gboolean unit_price)
@@ -1240,7 +1215,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       {
         Account *account = sr_get_default_account (reg);
 
-        auto_trans = gnc_find_trans_in_account_by_desc(account, desc);
+        auto_trans = xaccAccountFindTransByDesc(account, desc);
       }
       else
         auto_trans = gnc_find_trans_in_reg_by_desc(reg, desc);

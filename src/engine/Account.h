@@ -397,4 +397,10 @@ xaccAccountVisitUnvisitedTransactions(Account *account,
                                       void *data,
                                       GHashTable *visited_txns);
 
+/* Returns a pointer to the transaction, not a copy. */
+Transaction *
+xaccAccountFindTransByDesc(Account *account, const char *description);
+Split *
+xaccAccountFindSplitByDesc(Account *account, const char *description);
+
 #endif /* __XACC_ACCOUNT_H__ */

@@ -1,3 +1,14 @@
+2001-05-13  Kevin Finn  <kevinfinn@mediaone.net>
+
+	* src/SplitLedger.c, src/engine/Account.c, src/engine/Account.h:
+	moved function gnc_find_trans_in_account_by_desc from SR to become
+	new functions xaccAccountFindTransByDesc and
+	xaccAccountFindSplitByDesc so they could be used outside of the
+	register code.
+
+	* src/gnome/dialog-transfer.c: Added quickfill/autocomplete
+	functionality to the transfer dialog, based on the Description.
+
 2001-05-13  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/window-main.c: write commodities with accounts

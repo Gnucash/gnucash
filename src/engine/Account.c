@@ -863,6 +863,7 @@ xaccAccountRecomputeBalance (Account * acc)
     acc -> reconciled_balance = dreconciled_balance;
   }
 
+
   acc->balance_dirty = FALSE;
   return;
 }
@@ -2264,6 +2265,69 @@ xaccAccountForEachTransaction(Account *acc,
   /* cleanup */
   if(visited_txns) g_hash_table_destroy(visited_txns);  
   return(result);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+/* The caller of this function can get back one or both of the
+ * matching split and transaction pointers, depending on whether
+ * a valid pointer to the location to store those pointers is
+ * passed.
+ */
+static void
+finder_help_function(Account *account,
+                     const char *description,
+                     Split **split,
+                     Transaction **trans )
+{
+  GList *slp;
+
+  if (account == NULL) return NULL;
+
+  for (slp = g_list_last (xaccAccountGetSplitList (account));
+       slp;
+       slp = slp->prev)
+  {
+    Split *lsplit = slp->data;
+    Transaction *ltrans = xaccSplitGetParent(lsplit);
+
+    if (safe_strcmp (description, xaccTransGetDescription (ltrans)) == 0)
+    {
+      if( split ) *split = lsplit;
+      if( trans ) *trans = ltrans;
+      return;
+    }
+  }
+
+  if( split ) *split = NULL;
+  if( trans ) *trans = NULL;
+}
+
+Split *
+xaccAccountFindSplitByDesc(Account *account, const char *description)
+{
+  Split *split;
+
+  /* Get the split which has a transaction matching the description. */
+  finder_help_function(account, description, &split, NULL );
+
+  return( split );
+}
+
+/* This routine is for finding a matching transaction in an account by
+ * matching on the description field. This routine is used for auto-filling
+ * in registers with a default leading account. The dest_trans is a
+ * transaction used for currency checking. */
+Transaction *
+xaccAccountFindTransByDesc(Account *account, const char *description)
+{
+  Transaction *trans;
+
+  /* Get the transation matching the description. */
+  finder_help_function(account, description, NULL, &trans );
+
+  return( trans );
 }
 
 /********************************************************************\
