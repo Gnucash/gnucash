@@ -123,21 +123,21 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
         else if(safe_strcmp(mark->name, "split:value") == 0)
         {
             gnc_numeric *num = dom_tree_to_gnc_numeric(mark);
-	    gnc_numeric val = xaccSplitGetValue(spl);
+            gnc_numeric val = xaccSplitGetValue(spl);
 
             if(!gnc_numeric_equal(*num, val))
             {
                 g_free(num);
                 return g_strdup_printf ("values differ: %lld/%lld v %lld/%lld",
-					(*num).num, (*num).denom,
-					val.num, val.denom);
+                                        (*num).num, (*num).denom,
+                                        val.num, val.denom);
             }
             g_free(num);
         }
         else if(safe_strcmp(mark->name, "split:quantity") == 0)
         {
             gnc_numeric *num = dom_tree_to_gnc_numeric(mark);
-	    gnc_numeric val = xaccSplitGetAmount(spl);
+            gnc_numeric val = xaccSplitGetAmount(spl);
 
             if (!gnc_numeric_equal(*num, val)) {
               return g_strdup_printf( "quantities differ under _equal: %lld/%lld v %lld/%lld",
@@ -148,8 +148,8 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
             {
                 g_free(num);
                 return g_strdup_printf ("quantities differ: %lld/%lld v %lld/%lld",
-					(*num).num, (*num).denom,
-					val.num, val.denom);
+                                        (*num).num, (*num).denom,
+                                        val.num, val.denom);
             }
             g_free(num);
         }
@@ -191,7 +191,7 @@ equals_node_val_vs_splits(xmlNodePtr node, const Transaction *trn)
             return "no matching split found";
         }
 
-	msg = equals_node_val_vs_split_internal(spl_node, spl_mark);
+        msg = equals_node_val_vs_split_internal(spl_node, spl_mark);
         if(msg != NULL)
         {
             return msg;
@@ -276,10 +276,10 @@ node_and_transaction_equal(xmlNodePtr node, Transaction *trn)
         }
         else if(safe_strcmp(mark->name, "trn:splits") == 0)
         {
-	    char *msg = equals_node_val_vs_splits (mark, trn);
+            char *msg = equals_node_val_vs_splits (mark, trn);
             if(msg != NULL)
             {
-	        return msg;
+                return msg;
             }
         }
         else
@@ -319,9 +319,9 @@ test_add_transaction(const char *tag, gpointer globaldata, gpointer data)
     xaccTransCommitEdit (trans);
 
     if (!do_test_args(xaccTransEqual(gdata->trn, trans, TRUE, TRUE, TRUE, FALSE),
-		      "gnc_transaction_sixtp_parser_create",
-		      __FILE__, __LINE__,
-		      "%d", gdata->value))
+                      "gnc_transaction_sixtp_parser_create",
+                      __FILE__, __LINE__,
+                      "%d", gdata->value))
       return FALSE;
 
     gdata->new_trn = trans;
@@ -346,7 +346,7 @@ test_transaction(void)
         ran_trn = get_random_transaction(book);
 
         {
-	  /* xaccAccountInsertSplit can reorder the splits. */
+          /* xaccAccountInsertSplit can reorder the splits. */
           GList * list = g_list_copy(xaccTransGetSplitList (ran_trn));
           GList * node = list;
           for ( ; node; node = node->next)
@@ -359,7 +359,7 @@ test_transaction(void)
             xaccAccountInsertSplit (a, s);
             xaccAccountCommitEdit (a);
           }
-	  g_list_free(list);
+          g_list_free(list);
         }
 
         com = xaccTransGetCurrency (ran_trn);
@@ -428,7 +428,7 @@ test_transaction(void)
                                    (gpointer)&data, book))
             {
                 failure_args("gnc_xml_parse_file returned FALSE", 
-			     __FILE__, __LINE__, "%d", i);
+                             __FILE__, __LINE__, "%d", i);
             }
             else
               really_get_rid_of_transaction (data.new_trn);

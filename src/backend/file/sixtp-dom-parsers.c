@@ -189,15 +189,14 @@ dom_tree_to_guid_kvp_value(xmlNodePtr node)
 kvp_value*
 dom_tree_to_timespec_kvp_value (xmlNodePtr node)
 {
-  Timespec * ts;
+  Timespec ts;
   kvp_value * ret = NULL;
 
   ts = dom_tree_to_timespec (node);
-  if (ts)
-    ret = kvp_value_new_timespec (*ts);
-
-  g_free (ts);
-    
+  if (ts.tv_sec || ts.tv_nsec)
+  {
+    ret = kvp_value_new_timespec (ts);
+  }
   return ret;
 }
 
@@ -493,18 +492,16 @@ dom_tree_to_gnc_numeric(xmlNodePtr node)
     }
 }
 
-static Timespec*
-timespec_failure(Timespec *would_have_been)
+static inline Timespec
+timespec_failure(Timespec ts)
 {
-    if(would_have_been)
-    {
-        g_free(would_have_been);
-    }
-    return NULL;
+    ts.tv_sec = 0;
+    ts.tv_nsec = 0;
+    return ts;
 }
 
 
-Timespec*
+Timespec
 dom_tree_to_timespec(xmlNodePtr node)
 {
   /* Turn something like this
@@ -518,15 +515,14 @@ dom_tree_to_timespec(xmlNodePtr node)
      undefined.  The XML is valid if it has at least one of <s> or <ns>
      and no more than one of each.  Order is irrelevant. */
 
-  Timespec *ret;
+  Timespec ret;
   gboolean seen_s = FALSE;
   gboolean seen_ns = FALSE;
   xmlNodePtr n;
 
-  ret = g_new(Timespec, 1);
   
-  ret->tv_sec = 0;
-  ret->tv_nsec = 0;
+  ret.tv_sec = 0;
+  ret.tv_nsec = 0;
   for(n = node->xmlChildrenNode; n; n = n->next) {
     switch(n->type) {
     case XML_COMMENT_NODE:
@@ -546,7 +542,7 @@ dom_tree_to_timespec(xmlNodePtr node)
               return timespec_failure(ret);
           }
           
-          if(!string_to_timespec_secs(content, ret)) {
+          if(!string_to_timespec_secs(content, &ret)) {
               g_free(content);
               return timespec_failure(ret);
           }
@@ -567,7 +563,7 @@ dom_tree_to_timespec(xmlNodePtr node)
               return timespec_failure(ret);
           }
           
-          if(!string_to_timespec_nsecs(content, ret)) {
+          if(!string_to_timespec_nsecs(content, &ret)) {
               g_free(content);
               return timespec_failure(ret);
           }
@@ -732,7 +728,7 @@ dom_tree_to_commodity_ref(xmlNodePtr node, QofBook *book)
 
     daref = dom_tree_to_commodity_ref_no_engine(node, book);
 
-    table = gnc_book_get_commodity_table (book);
+    table = gnc_commodity_table_get_table (book);
 
     g_return_val_if_fail (table != NULL, NULL);
 
@@ -750,7 +746,7 @@ dom_tree_to_commodity_ref(xmlNodePtr node, QofBook *book)
 /***********************************************************************/
 /* generic parser */
 
-static void
+static inline void
 dom_tree_handlers_reset(struct dom_tree_handler *handlers)
 {
     for(;handlers->tag != NULL; handlers++)
@@ -759,7 +755,7 @@ dom_tree_handlers_reset(struct dom_tree_handler *handlers)
     }
 }
 
-static gboolean
+static inline gboolean
 dom_tree_handlers_all_gotten_p(struct dom_tree_handler *handlers)
 {
     gboolean ret = TRUE;
@@ -776,7 +772,7 @@ dom_tree_handlers_all_gotten_p(struct dom_tree_handler *handlers)
 }
 
 
-static gboolean
+static inline gboolean
 gnc_xml_set_data(const gchar* tag, xmlNodePtr node, gpointer item,
                  struct dom_tree_handler *handlers)
 {

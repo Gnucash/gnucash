@@ -215,7 +215,7 @@ test_add_account(const char *tag, gpointer globaldata, gpointer data)
     do_test_args(xaccAccountEqual((Account*)data, (Account*)(gdata->act),
                                   TRUE),
                         "gnc_account_sixtp_parser_create", 
-		 __FILE__, __LINE__, "%d", gdata->value );
+                 __FILE__, __LINE__, "%d", gdata->value );
 
     return TRUE;
 }

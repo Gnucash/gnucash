@@ -191,7 +191,7 @@ struct account_pdata
   QofBook *book;
 };
 
-static gboolean
+static inline gboolean
 set_string(xmlNodePtr node, Account* act,
            void (*func)(Account *act, const gchar *txt))
 {

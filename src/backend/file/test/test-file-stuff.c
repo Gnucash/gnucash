@@ -242,15 +242,15 @@ equals_node_val_vs_kvp_frame(xmlNodePtr node, const kvp_frame *frm)
 gboolean
 equals_node_val_vs_date(xmlNodePtr node, const Timespec tm)
 {
-    Timespec *tm_test = dom_tree_to_timespec(node);
+    Timespec tm_test = dom_tree_to_timespec(node);
 
-    if(tm_test->tv_sec == tm.tv_sec && tm_test->tv_nsec == tm.tv_nsec)
+    if(tm_test.tv_sec == tm.tv_sec && tm_test.tv_nsec == tm.tv_nsec)
     {
         return TRUE;
     }
     else
     {
-        return TRUE;
+        return FALSE;
     }
 }
 

@@ -130,8 +130,8 @@ test_add_commodity(const char *tag, gpointer globaldata, gpointer data)
     com_data *gdata = (com_data*)globaldata;
     
     do_test_args(gnc_commodity_equiv((gnc_commodity*)data, gdata->com),
-	    "gnc_commodity_sixtp_parser_create",
-	    __FILE__, __LINE__, "%d", gdata->value );
+            "gnc_commodity_sixtp_parser_create",
+            __FILE__, __LINE__, "%d", gdata->value );
     gnc_commodity_destroy((gnc_commodity*)data);
     
     return TRUE;
@@ -155,7 +155,7 @@ test_generation(void)
         test_node = gnc_commodity_dom_tree_create(ran_com);
         if(!test_node)
         {
-	    failure_args("commodity_xml", __FILE__, __LINE__,
+            failure_args("commodity_xml", __FILE__, __LINE__,
                          "gnc_commodity_dom_tree_create returned NULL");
             gnc_commodity_destroy(ran_com);
             continue;
@@ -197,7 +197,7 @@ test_generation(void)
                                    (gpointer)&data, book))
             {
                 failure_args("gnc_xml_parse_file returned FALSE",  
-			     __FILE__, __LINE__, "%d", i);
+                             __FILE__, __LINE__, "%d", i);
             }
 
             /* no handling of circular data structures.  We'll do that later */
