@@ -1,4 +1,8 @@
 
+docdir = ${GNC_DOC_INSTALL_DIR}
+doc_DATA = \
+  gnucash.engine_wrap.doc
+
 perlsharedir = ${GNC_SHAREDIR}/perl
 perlshare_DATA = gnucash.pm
 
@@ -35,7 +39,6 @@ libgncswig_la_LIBADD = \
   ${top_srcdir}/src/engine/FileIO.lo \
   ${top_srcdir}/src/engine/GNCId.lo \
   ${top_srcdir}/src/engine/Group.lo \
-  ${top_srcdir}/src/engine/LedgerUtils.lo \
   ${top_srcdir}/src/engine/Query.lo \
   ${top_srcdir}/src/engine/Queue.lo \
   ${top_srcdir}/src/engine/Scrub.lo \
@@ -55,7 +58,6 @@ SWIG_INPUT_HDRS := \
   ${top_srcdir}/src/engine/FileIO.h \
   ${top_srcdir}/src/engine/GNCId.h \
   ${top_srcdir}/src/engine/Group.h \
-  ${top_srcdir}/src/engine/LedgerUtils.h \
   ${top_srcdir}/src/engine/Query.h \
   ${top_srcdir}/src/engine/Queue.h \
   ${top_srcdir}/src/engine/Scrub.h \
@@ -82,7 +84,7 @@ install-data-local: libgncswig.la
 uninstall-local:
 	rm -f ${DESTDIR}${perllibdir}/gnucash.so
 
-gnucash.engine.i: ${SWIG_INPUT_HDRS}  perl5_swig_annotations.i
+gnucash.engine.i: ${SWIG_INPUT_HDRS} perl5_swig_annotations.i
 	@echo Making $@.
 	@echo "%module gnucash" > $@
 	@echo "%include perl5_swig_annotations.i" >> $@
@@ -97,11 +99,11 @@ gnucash.engine.i: ${SWIG_INPUT_HDRS}  perl5_swig_annotations.i
           echo "%include `basename $$file`" >> $@; \
 	done
 
-CLEANFILES += gnucash.engine.i gnucash.engine_wrap.doc
+CLEANFILES += gnucash.engine.i
 
-gnucash-engine-perl5_wrap_int.c: gnucash.engine.i
+gnucash.engine_wrap.doc gnucash-engine-perl5_wrap_int.c: gnucash.engine.i
 	${SWIG} -perl5 -I.. -I${top_srcdir}/src/engine -o $@ $< 
-CLEANFILES += gnucash-engine-perl5_wrap_int.c
+CLEANFILES += gnucash.engine_wrap.doc gnucash-engine-perl5_wrap_int.c
 
 gnucash-engine-perl5_wrap.c: gnucash-swig-defines.c \
                              gnucash-engine-perl5_wrap_int.c
