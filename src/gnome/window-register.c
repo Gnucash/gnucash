@@ -39,6 +39,7 @@
 #include "dialog-find-transactions.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
+#include "druid-stock-split.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"

@@ -596,6 +596,12 @@ gnc_main_window_fincalc_cb(GtkWidget *widget, gpointer data)
   gnc_ui_fincalc_dialog_create();
 }
 
+static void
+gnc_main_window_books_druid_cb(GtkWidget *widget, gpointer data)
+{
+	printf ("hello world\n");
+}
+
 void
 gnc_main_window_gl_cb(GtkWidget *widget, gpointer data)
 {
@@ -894,6 +900,14 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
   {
     GNOMEUIINFO_SUBTREE( N_("_Scheduled Transactions"),
                          gnc_sched_xaction_tools_submenu_template ),
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Close Books (Experimental/Borken)"),
+      N_("Configure accounting periods"),
+      gnc_main_window_books_druid_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
     GNOMEUIINFO_END
   };
   static GnomeUIInfo gnc_tools_menu_template[] =

@@ -36,6 +36,7 @@
 #include "dialog-options.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
+#include "druid-stock-split.h"
 #include "global-options.h"
 #include "gnc-account-tree.h"
 #include "gnc-book.h"
