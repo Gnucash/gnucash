@@ -1,3 +1,8 @@
+2000-05-18  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report-2.scm: Fixed *some* of the
+	bugs with two-column balance displays.
+
 2000-05-17  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/gnome/window-reconcile.c (gnc_recn_create_tool_bar): add a

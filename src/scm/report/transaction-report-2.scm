@@ -144,16 +144,50 @@
 	(lambda (value) 
 	  (html-right-cell (html-ital (html-currency value)))))
        #f)
+      
+      (if
+        (eq? (gnc:option-value
+ 	(gnc:lookup-option options "Display" "Amount")) 'double)
+        (make-report-spec
+ 	(string-db 'lookup 'debit-string)
+ 	(lambda (split)
+	  (max 0 (gnc:split-get-value split)))
+ 	(lambda (value)
+ 	  (cond ((> value 0.0) (html-right-cell (html-currency value)))
+	  (else (html-right-cell (html-ital (html-string " "))))))
+;	(lambda (value)
+; 	  (if (> value 0) (html-right-cell (html-currency value)))
+;	  (html-right-cell (html-ital (html-string " "))))  
+ 	+ ; total-proc
+ 	(lambda (value)
+ 	  (html-right-cell (html-strong (html-currency value))))
+ 	(lambda (value)
+ 	  (html-right-cell (html-strong (html-currency value))))
+ 	#t ; first-last-preference
+ 	(lambda (split)
+ 	  (map gnc:split-get-value (gnc:split-get-other-splits split)))
+ ;	(lambda (value)
+; 	  (if (> value 0) (html-right-cell (html-ital (html-currency value)))
+; 	      (html-right-cell (html-ital (html-string " ")))))
+	(lambda (value)
+ 	  (cond ((> value 0.0) (html-right-cell (html-ital(html-currency value))))
+	  (else (html-right-cell (html-ital (html-string " ")))))))
+        #f)
 
       (if
         (eq? (gnc:option-value
   	(gnc:lookup-option options "Display" "Amount")) 'double)
         (make-report-spec
 	 (string-db 'lookup 'credit-string)
-	 (lambda (split) (max 0 (gnc:split-get-value split)))
+	 (lambda (split)
+	   (max  0 (- (gnc:split-get-value split))))
+;	 (lambda (value) (html-right-cell (html-currency value)))
  	(lambda (value)
- 	  (if (> value 0) (html-right-cell (html-currency value))
- 	      (html-right-cell (html-string " "))))
+;	  (display value)
+;	  (display (> value 0.0))
+;	  (display "\n")
+ 	  (cond ((> value 0.0) (html-right-cell (html-currency value)))
+	  (else (html-right-cell (html-ital (html-string " "))))))
  	+ ; total-proc
  	(lambda (value)
  	  (html-right-cell (html-strong (html-currency value))))	
@@ -163,32 +197,11 @@
  	(lambda (split)
  	  (map gnc:split-get-value (gnc:split-get-other-splits split)))
  	(lambda (value)
- 	  (if (> value 0) (html-right-cell (html-ital (html-currency value)))
- 	      (html-right-cell (html-ital (html-string " "))))))
+ 	  (cond  ((< value 0) (html-right-cell (html-ital (html-currency (- value)))))
+ 	      (else (html-right-cell (html-ital (html-string " ")))))))
         #f)
 
-       (if
-        (eq? (gnc:option-value
- 	(gnc:lookup-option options "Display" "Amount")) 'double)
-        (make-report-spec
- 	(string-db 'lookup 'debit-string)
- 	(lambda (split) (max 0 (- (gnc:split-get-value split))))
- 	(lambda (value)
- 	  (if (> value 0) (html-right-cell (html-currency value))
- 	      (html-right-cell (html-string " "))))
- 	+ ; total-proc
- 	(lambda (value)
- 	  (html-right-cell (html-strong (html-currency value))))
- 	(lambda (value)
- 	  (html-right-cell (html-strong (html-currency value))))
- 	#t ; first-last-preference
- 	(lambda (split)
- 	  (map gnc:split-get-value (gnc:split-get-other-splits split)))
- 	(lambda (value)
- 	  (if (> value 0) (html-right-cell (html-ital (html-currency value)))
- 	      (html-right-cell (html-ital (html-string " "))))))
-        #f)
-
+       
        (if 
        (eq? (gnc:option-value
 	(gnc:lookup-option options "Display" "Amount")) 'double)
