@@ -204,6 +204,8 @@ versions of required packages.
 Running
 -------
 
+FIXME: THIS SECTION IS OBSOLETE NOW.
+
 For GnuCash invocation details, see the manpage in doc/gnucash.1.
 You can also run gnucash --help for the command line options.
 
