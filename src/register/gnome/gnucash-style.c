@@ -748,8 +748,6 @@ gnucash_style_set_register_font_name(const char *name)
                 gnucash_register_font = NULL;
         }
 
-        g_warning (register_font_name);
-
         if (register_font_name != NULL)
                 gnucash_register_font = gdk_fontset_load(register_font_name);
 
