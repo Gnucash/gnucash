@@ -6,7 +6,10 @@
 
 	* configure.in: fix some AC_DEFINE macros
 	* macros/autogen.sh: a bit more work on the version searches.
-	
+
+	* acconfig.h: remove duplicate entries (for use with more recent autoheader)
+	* configure.in: supply AC_PROG_CXX to fix the automake-1.7 problem
+
 2003-05-07  Derek Atkins  <derek@ihtfp.com>
 
 	* macros/autogen.sh: require autoconf >= 2.53 and automake >= 1.5
