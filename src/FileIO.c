@@ -206,25 +206,21 @@ readData( char *datafile )
   
   /* If this is an old file, ask the user if the file
    * should be updated */
-  if( VERSION > token )
-    {
-    char msg[BUFSIZE];
-    sprintf( (char *)&msg, FILE_TOO_OLD_MSG );
-    if( !verifyBox( toplevel, msg ) )
+  if( VERSION > token ) {
+    if( !verifyBox( toplevel, FILE_TOO_OLD_MSG ) ) {
       close(fd);
       return NULL;
     }
+  }
   
   /* If this is a newer file than we know how to deal
    * with, warn the user */
-  if( VERSION < token )
-    {
-    char msg[BUFSIZE];
-    sprintf( (char *)&msg, FILE_TOO_NEW_MSG );
-    if( !verifyBox( toplevel, msg ) )
+  if( VERSION < token ) {
+    if( !verifyBox( toplevel, FILE_TOO_NEW_MSG ) ) {
       close(fd);
       return NULL;
     }
+  }
   
   holder = mallocAccountGroup();
   grp = readGroup (fd, NULL, token);
@@ -247,9 +243,10 @@ readData( char *datafile )
     }
   } else {
     freeAccountGroup (holder);
+    holder = NULL;
   }
 
-  maingrp = 0x0;
+  maingrp = NULL;
 
   close(fd);
   return grp;
@@ -270,6 +267,8 @@ readGroup (int fd, Account *parent, int token)
   int  i;
   AccountGroup *grp = mallocAccountGroup();
   
+  ENTER ("readGroup");
+
   if (NULL == parent) {
     maingrp = grp;
   }
@@ -328,15 +327,7 @@ readAccount( int fd, AccountGroup *grp, int token )
     err = read( fd, &accID, sizeof(int) );
     if( err != sizeof(int) ) { return NULL; }
     XACC_FLIP_INT (accID);
-
     acc = locateAccount (accID);
-
-    /* normalize the account numbers -- positive-definite.
-     * That is, the unique id must never decrease,
-     * nor must it overalp any existing account id */
-    if (next_free_unique_account_id <= accID) {
-      next_free_unique_account_id = accID+1;
-    }
   } else {
     acc = mallocAccount();
     insertAccount (holder, acc);
@@ -413,7 +404,6 @@ static Account *
 locateAccount (int acc_id) 
 {
    Account * acc;
-
    /* negative account ids denote no account */
    if (0 > acc_id) return NULL;   
 
@@ -430,6 +420,14 @@ locateAccount (int acc_id)
    acc = mallocAccount ();
    acc->id = acc_id;
    insertAccount (holder, acc);
+
+   /* normalize the account numbers -- positive-definite.
+    * That is, the unique id must never decrease,
+    * nor must it overalp any existing account id */
+   if (next_free_unique_account_id <= acc_id) {
+      next_free_unique_account_id = acc_id+1;
+   }
+
    return acc;
 }
  

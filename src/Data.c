@@ -165,7 +165,7 @@ xaccGetAccountFromID ( AccountGroup *root, int acc_id )
   int i;
 
   if (NULL == root) return NULL;
-  if (-1 >= acc_id) return NULL;
+  if (0 > acc_id) return NULL;
 
   /* first, look for accounts hanging off the root */
   for (i=0; i<root->numAcc; i++) {
@@ -308,7 +308,7 @@ removeAccount( AccountGroup *grp, int num )
       else
         {
         acc = oldAcc[j];
-        j--;
+        i--;
         }
       }
     
@@ -339,14 +339,19 @@ xaccRemoveAccount (Account *acc)
    grp->saved = False;
     
    grp->numAcc--;
-   grp->account = (Account **)_malloc((grp->numAcc)*sizeof(Account *));
-    
-   for( i=0,j=0; i<grp->numAcc; i++,j++ ) {
-      if( acc != grp->account[i] ) {
-         grp->account[i] = oldAcc[j];
-      } else {
-         j--;
+
+   if (0 < grp->numAcc) {
+      grp->account = (Account **)_malloc((grp->numAcc)*sizeof(Account *));
+       
+      for( i=0,j=0; i<grp->numAcc; i++,j++ ) {
+         if( acc != oldAcc[j] ) {
+            grp->account[i] = oldAcc[j];
+         } else {
+            i--;
+         }
       }
+   } else {
+      grp->account = NULL;
    }
     
    _free(oldAcc);
@@ -391,13 +396,16 @@ insertAccount( AccountGroup *grp, Account *acc )
   
   grp->numAcc++;
   grp->account = (Account **)_malloc((grp->numAcc)*sizeof(Account *));
-  
-  for( i=0; i<(grp->numAcc-1); i++ )
-    grp->account[i] = oldAcc[i];
-  
+
+  if (1 < grp->numAcc) {
+    for( i=0; i<(grp->numAcc-1); i++ ) {
+      grp->account[i] = oldAcc[i];
+    }
+    _free(oldAcc);
+  } else {
+    i = 0;
+  }
   grp->account[i] = acc;
-  
-  _free(oldAcc);
 
   return i;
   }
