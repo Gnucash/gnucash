@@ -504,7 +504,7 @@ totals to report currency")
 	(begin
 	  (setup-query query account report-date)
 	  ;; get the appropriate splits
-	  (let ((splits (gnc:glist->list (gnc:query-get-splits query) <gnc:Split*>)))
+	  (let ((splits (gnc:query-get-splits query)))
 ;	    (gnc:debug "splits" splits)
 
 	    ;; build the table
