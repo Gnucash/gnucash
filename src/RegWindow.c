@@ -595,8 +595,7 @@ closeRegWindow( Widget mw, XtPointer cd, XtPointer cb )
   RegWindow *regData = (RegWindow *)cd;
   
   /* Save any unsaved changes */
-  /* hack alert */
-  /* regSaveTransaction( regData, regData->currEntry ); */
+  xaccSaveRegEntry (regData->ledger);
   
   regData->blackacc[0]->regData = NULL;
   regData->blackacc[0]->regLedger = NULL;
@@ -669,13 +668,11 @@ startRecnCB( Widget mw, XtPointer cd, XtPointer cb )
 \********************************************************************/
 static void
 recordCB( Widget mw, XtPointer cd, XtPointer cb )
-  {
+{
   RegWindow *regData = (RegWindow *)cd;
   
-  /* hack alert */
-  /* regSaveTransaction( regData, regData->currEntry ); */
-  regData->changed = MOD_NONE;
-  }
+  xaccSaveRegEntry (regData->ledger);
+}
 
 /********************************************************************\
  * deleteCB                                                         *
@@ -731,8 +728,13 @@ deleteCB( Widget mw, XtPointer cd, XtPointer cb )
 \********************************************************************/
 static void
 cancelCB( Widget mw, XtPointer cd, XtPointer cb )
-  {
-  RegWindow *regData = (RegWindow *)cd;
-  }
+{
+   RegWindow *regData = (RegWindow *)cd;
+   Split * split;
+
+  /* when cancelling edits, reload the cursor from the transaction */
+  split = xaccGetCurrentSplit (regData->ledger);
+  xaccLoadRegEntry (regData->ledger, split);
+}
 
 /************************** END OF FILE *************************/

@@ -14,22 +14,76 @@
 
 /* ======================================================== */
 
-void 
-xaccCommitEdits (BasicRegister *reg)
+Split * xaccGetCurrentSplit (BasicRegister *reg)
 {
    CellBlock *cursor;
    Split *split;
+
+   /* get the handle to the current split and transaction */
+   cursor = reg->table->cursor;
+   split = (Split *) cursor->user_data;
+
+   return split;
+}
+
+/* ======================================================== */
+
+void 
+xaccSaveRegEntry (BasicRegister *reg)
+{
+   Split *split;
    Transaction *trans;
 
-   cursor = reg->table->cursor;
-
-   split = (Split *) cursor->user_data;
+   /* get the handle to the current split and transaction */
+   split = xaccGetCurrentSplit (reg);
    if (!split) return;
-
    trans = (Transaction *) (split->parent);
    
-   if (trans->num) free (trans->num);
-   trans->num = strdup (reg->numCell->value);
+   /* copy the contents from the cursor to the split */
+   xaccTransSetDate (trans, reg->dateCell->date.tm_mday,
+                            reg->dateCell->date.tm_mon+1,
+                            reg->dateCell->date.tm_year+1900);
+
+   xaccTransSetNum (trans, reg->numCell->value);
+   xaccTransSetDescription (trans, reg->descCell->cell.value);
+   xaccSplitSetMemo (split, reg->memoCell->value);
+   xaccSplitSetAction (split, reg->actionCell->cell.value);
+   xaccSplitSetReconcile (split, reg->recnCell->value[0]);
+}
+
+/* ======================================================== */
+
+void
+xaccLoadRegEntry (BasicRegister *reg, Split *split)
+{
+   Transaction *trans;
+   char buff[2];
+
+   if (!split) return;
+   trans = (Transaction *) (split->parent);
+
+   xaccSetDateCellValue (reg->dateCell, trans->date.day, 
+                                        trans->date.month,
+                                        trans->date.year);
+
+   xaccSetBasicCellValue (reg->numCell, trans->num);
+   xaccSetBasicCellValue (&(reg->actionCell->cell), split->action);
+   xaccSetQuickFillCellValue (reg->descCell, trans->description);
+   xaccSetBasicCellValue (reg->memoCell, split->memo);
+
+   buff[0] = split->reconciled;
+   buff[1] = 0x0;
+   xaccSetBasicCellValue (reg->recnCell, buff);
+
+   xaccSetDebCredCellValue (reg->debitCell, 
+                            reg->creditCell, split->damount);
+
+   xaccSetAmountCellValue (reg->balanceCell, split->balance);
+
+   reg->table->cursor->user_data = (void *) split;
+
+   /* copy cursor contents into the table */
+   xaccCommitCursor (reg->table);
 }
 
 /* ======================================================== */
@@ -55,34 +109,8 @@ xaccLoadRegister (BasicRegister *reg, Split **slist)
    split = slist[0]; 
    while (split) {
 
-      trans = (Transaction *) (split->parent);
-
       xaccMoveCursor (table, i, 0);
-
-      sprintf (buff, "%2d/%2d/%4d", trans->date.day, 
-                                    trans->date.month,
-                                    trans->date.year);
-
-      xaccSetBasicCellValue (reg->dateCell, buff);
-
-      xaccSetBasicCellValue (reg->numCell, trans->num);
-      xaccSetBasicCellValue (&(reg->actionCell->cell), split->action);
-      xaccSetQuickFillCellValue (reg->descCell, trans->description);
-      xaccSetBasicCellValue (reg->memoCell, split->memo);
-
-      buff[0] = split->reconciled;
-      buff[1] = 0x0;
-      xaccSetBasicCellValue (reg->recnCell, buff);
-
-      xaccSetDebCredCellValue (reg->debitCell, 
-                               reg->creditCell, split->damount);
-
-      xaccSetAmountCellValue (reg->balanceCell, split->balance);
-
-      table->cursor->user_data = (void *) split;
-
-      /* copy cursor contents into the table */
-      xaccCommitCursor (table);
+      xaccLoadRegEntry (reg, split);
 
       i++;
       split = slist[i];

@@ -461,7 +461,22 @@ xaccCountTransactions (Transaction **tarray)
 \********************************************************************/
 
 void
-xaccTransSetDescription  (Transaction *trans, char *desc)
+xaccTransSetDate (Transaction *trans, int day, int mon, int year)
+{
+   trans->date.year = year;
+   trans->date.month = mon;
+   trans->date.day = day;
+}
+
+void
+xaccTransSetNum (Transaction *trans, char *xnum)
+{
+   if (trans->num) free (trans->num);
+   trans->num = strdup (xnum);
+}
+
+void
+xaccTransSetDescription (Transaction *trans, char *desc)
 {
    if (trans->description) free (trans->description);
    trans->description = strdup (desc);

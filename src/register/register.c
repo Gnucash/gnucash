@@ -109,10 +109,9 @@ void xaccInitBasicRegister (BasicRegister *reg)
    curs = xaccMallocCellBlock (2, MAX_COLS);
    reg->cursor = curs;
    
-   cell = (BasicCell *) xaccMallocDateCell();
-   cell->width = 9;
-   xaccAddCell (curs, cell, DATE_CELL_R, DATE_CELL_C);
-   reg->dateCell = cell;
+   reg->dateCell = xaccMallocDateCell();
+   reg->dateCell->cell.width = 9;
+   xaccAddCell (curs, &(reg->dateCell->cell), DATE_CELL_R, DATE_CELL_C);
    
    cell = xaccMallocTextCell();
    cell->width = 7;

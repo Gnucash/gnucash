@@ -34,7 +34,7 @@ PriceMV (struct _BasicCell *_cell,
    }
 
    /* hack alert - should parse the float pt value  */
-   xaccSetBaicCellValue (cell, newval);
+   xaccSetBasicCellValue (cell, newval);
    return newval; 
 }
 

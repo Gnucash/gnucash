@@ -19,7 +19,7 @@ typedef struct _BasicRegister {
    Table         * table;
    CellBlock     * cursor;
    CellBlock     * header;
-   BasicCell     * dateCell;
+   DateCell      * dateCell;
    BasicCell     * numCell;
    ComboCell     * actionCell;
    ComboCell     * xfrmCell;
