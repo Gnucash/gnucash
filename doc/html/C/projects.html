@@ -891,7 +891,8 @@
             50-100 hints-of-the-day: short (2-4 sentance)
             hints/tips on how to use gnucash. Every time the user
             starts gnucash, an new hint shows up ...
-            <b>Status:</b> Hint infrastructure complete.  Need to add
+            <b>Status:</b> Hint infrastructure complete (RGM, version
+            1.4.0).  Need to add
             hints  (only 6 are currently available).
             </p>
           </li>
@@ -901,6 +902,14 @@
             effect of themes on the register window needs to be
             reviewed.  Some themese look flakey in the main account
             window, might be a gtk bug ???</p>
+          </li>
+
+          <li>
+            <p><b>Static Currency Exchange Table</b> 
+            Keep a (semi-)static exchange-rate table. (possibly updated
+            via net).  The table is used to auto-fill currency
+            exchanges.
+            </p>
           </li>
 
           <li>
@@ -918,7 +927,8 @@
             Expense", "Bank Interest Income", and "Employment
             Income". The user should be able to select a default
             set of accounts, and have those created
-            automatically.</p>
+            automatically.  Most likely a wizard would pilot the user
+            through this.</p>
 
             <p>To actually implement this, it might be best to
             simply create a file with these in them, and load that
@@ -941,26 +951,12 @@
           </li>
 
           <li>
-            <p><b>Cut-n-paste</b> Cut-n-paste of whole transactions
-            in the regsiter window... <b>Status:</b>Dave... Done. (in
-            1.4.0)</p>
-          </li>
-
-          <li>
             <p><b>Bank name in combo-box pull-down</b> When user
             enters a new bank name, should be presented with a
             combo-box listing other bank-account names ... (note
             this may require implementation of engine callbacks so
             that relevent code can be informed when there are new
             bank names?)</p>
-          </li>
-
-          <li>
-            <p><b>Currency Selection Popup</b> Currency field
-            should get preplaced by menu of long-hand currency
-            names, three-letter ISO abbreviations, and symbols.
-            User should be able to add new currency types. Should
-            also keep a static exchange-rate table.</p>
           </li>
 
           <li>
@@ -978,16 +974,6 @@
           <li>
             <p><b>Register View</b> Allow user to view only
             non-reconciled transactions ...</p>
-          </li>
-
-          <li>
-            <p><b>Autocompletion</b> Quickfill should also
-            auto-complete amount, memo fields.</p>
-          </li>
-
-          <li>
-            <p><b>Autoincrement</b> Check numbers should
-            auto-increment.</p>
           </li>
 
           <li>
@@ -1017,20 +1003,6 @@
           </li>
 
           <li>
-            <p><b>Navigation</b> Menu navigation using the keyboard
-            should be possible. Although menu mnemonics exist, they
-            seem to be broken. ???</p>
-
-            <p>Similarly, tab-key navigation should be possible.
-            Currently, it is possible to use the tab key to
-            navigate from field to field in the register window, to
-            user arrow keys to navigate menus, and quick-fill to
-            automatically complete fields. However, it is not
-            possible to tab over to the "Commit" button. It should
-            be.</p>
-          </li>
-
-          <li>
             <p><b>Folder Tabs</b> Currently, Income/Expense
             accounts can be shown or hidden by selecting from a
             menu. It would be nice to be able to examine different
@@ -1039,26 +1011,84 @@
             folder.</p>
           </li>
 
+        </ul>
+
+      The following have been completed, but possibly not fully
+      documented:
+        <ul>
+          <li>
+            <p><b>Currency Selection Popup</b> Currency field
+            should get preplaced by menu of long-hand currency
+            names, three-letter ISO 4217 abbreviations, and symbols.
+            User should be able to hand-enter non-IS4217 currencies.
+            <b>Status:</b>
+            Done in 1.4.0
+            </p>
+            </p>
+          </li>
+
+          <li>
+            <p><b>Cut-n-paste</b> Cut-n-paste of whole transactions
+            in the regsiter window... <b>Status:</b> Done. (by Dave 
+            Peticolas, in 1.4.0)</p>
+          </li>
+
+          <li>
+            <p><b>Autocompletion</b> Quickfill should also
+            auto-complete amount, memo fields. 
+            <b>Status:</b>
+            Done in 1.4.0, Dave Peticolas
+            </p>
+          </li>
+
+          <li>
+            <p><b>Autoincrement</b> Check numbers should
+            auto-increment.  Hit + key in check number field
+            (same keystroke as in quicken).
+	    <b>Status:</b>
+	    Done in 1.4.0, Dave Peticolas
+	    </p>
+          </li>
+
+          <li>
+            <p><b>Navigation</b> Menu navigation using the keyboard
+            should be possible. Hit the Alt-F to get file menu, 
+            hit Alt-FS to save.
+
+            Similarly, tab-key navigation in the register 
+            should be possible.
+            <b>Status:</b>
+            Done (in 1.3.x ?, Dave & all, partly inherited via gtk
+            widget set.).
+            </p>
+          </li>
+
           <li>
             <p><b>Fly-Over Help</b> When the user pauses the mouse
             over a button, "fly-over" pop-up help windows should
-            appear.</p>
+            appear.
+            <b>Status:</b>
+            Done (in 1.3.x, inherited via gnome/gtk widget set).
+            </p>
           </li>
 
           <li>
             <p><b>Grayed-out Form Help</b> Create grayed out
             entries in the ledger, titled "Memo", "Description",
             etc, helping users understand what should be typed into
-            each field. <b>Status:</b> Done, as of version
+            each field. <b>Status:</b> Done (by Dave?), as of version
             1.3.2(?)</p>
           </li>
 
           <li>
-            <p><b><a href="http://www.emacs.org">emacs,</a> vi,
-            motif, KDE, gnome Key Bindings for Text Fields</b> Make
-            sure that text fields can handle the vi and emacs key
-            bindings, so that <em>e.g.</em> emacs-style ctrl-a,
-            ctrl-k does the right thing.</p>
+            <p><b>Key Bindings for Editing Text Fields</b>.  The input fields
+            use the gtk text widget, which provides key bindings that
+            are similar to the netsccape/emacs key bindings.
+            This allows <em>e.g.</em> emacs-style ctrl-a,
+            ctrl-k to do the right thing. 
+            <b>Status:</b>
+            Done (in 1.3.x, inherited via
+            gnome/gtk text widget).</p>
           </li>
         </ul>
       </dd>
@@ -1189,6 +1219,8 @@
         <ul>
           <li>Bill Gribble has built a prototype based on the
               gnome-print. Waiting for gnome-print to mature ...</li>
+          <li>Need a sample check/sample transaction to print out
+              sot that user can test printer.
           <li>MICR Fonts are available & brought to mailing list.
         </ul>
 
