@@ -404,10 +404,9 @@
     (define gnc:*transaction-report-options* (gnc:new-options))
     (define (gnc:register-trep-option new-option)
       (gnc:register-option gnc:*transaction-report-options* new-option))
+
     ;; from date
     ;; hack alert - could somebody set this to an appropriate date?
-    (display "Got here 1")
-
     (gnc:register-trep-option
      (gnc:make-date-option
       "Report Options" "From"
@@ -421,9 +420,10 @@
           (set-tm:mon bdtime 0)
           (let ((time (car (mktime bdtime))))
             (cons 'absolute (cons time 0)))))
-      #f 'absolute #f))    
-    (display "Got here 1a")
+      #f 'absolute #f))   
+
     ;; to-date
+
     (gnc:register-trep-option
      (gnc:make-date-option
       "Report Options" "To"
@@ -447,7 +447,6 @@
                 (else ()))))
       #f #t))
 
-    (display "got here 2")
     (gnc:register-trep-option
      (gnc:make-multichoice-option
       "Report Options" "Style"
@@ -522,7 +521,7 @@
 	(list
 	 #(ascend "Ascending" "smallest to largest, earliest to latest")
 	 #(descend "Descending" "largest to smallest, latest to earliest"))))
-       (display "Got here 3")
+
       (gnc:register-trep-option
        (gnc:make-multichoice-option
 	"Sorting" "Secondary Key"
@@ -540,6 +539,7 @@
 	 #(ascend "Ascending" "smallest to largest, earliest to latest")
 	 #(descend "Descending" "largest to smallest, latest to earliest")))))
     
+  
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
       "Display" "Date"
@@ -573,7 +573,8 @@
     (gnc:register-trep-option
      (gnc:make-multichoice-option
       "Display" "Amount"
-      "i" "Display the amount?" 
+      "i" "Display the amount?"  
+
       'single
       (list #(none "None" "No amount display")
 	    #(single "Single" "Single Column Display")
@@ -581,8 +582,8 @@
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "Display" "Headers"
-      "j" "Display the headers?" #t))
+      "Display" "Headers" "j" "Display the headers?" #t))
+ 
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
@@ -591,15 +592,13 @@
 
     (gnc:options-set-default-section gnc:*transaction-report-options*
                                      "Report Options")
-    (display "tr-report-options =")
-    (display gnc:*transaction-report-options*)
-    (display "\n")
+
     gnc:*transaction-report-options*)
 
 
   (define (gnc:trep-renderer options)
-    (let* ((begindate (gnc:date-option-absolute-time (gnc:lookup-option options "Report Options" "From")))
-           (enddate (gnc:date-option-absolute-time (gnc:lookup-option options "Report Options" "To")))
+    (let* ((begindate (gnc:date-option-absolute-time (gnc:option-value (gnc:lookup-option options "Report Options" "From"))))
+           (enddate (gnc:date-option-absolute-time (gnc:option-value (gnc:lookup-option options "Report Options" "To"))))
            (tr-report-account-op (gnc:lookup-option
                                   options "Report Options" "Account"))
            (tr-report-primary-key-op (gnc:lookup-option options
@@ -612,23 +611,23 @@
                                                           "Sorting"
                                                           "Secondary Key"))
            (tr-report-secondary-order-op
-            (gnc:lookup-option options "Sorting" "Secondary Sort Order"))
+(gnc:lookup-option options "Sorting" "Secondary Sort Order"))
 	   (tr-report-style-op (gnc:lookup-option options 
 					       "Report Options"
 					       "Style"))
            (accounts (gnc:option-value tr-report-account-op))
-           (date-filter-pred (split-report-make-date-filter-predicate
-                              (gnc:option-value begindate)
-                              (gnc:timepair-end-day-time
-			       (gnc:option-value enddate))))
+           (date-filter-pred (split-report-make-date-filter-predicate 
+                               begindate 
+                               (gnc:timepair-end-day-time
+			       enddate)))
 	   (s1 (split-report-get-sort-spec-entry
 		(gnc:option-value tr-report-primary-key-op)
 		(eq? (gnc:option-value tr-report-primary-order-op) 'ascend)
-		(gnc:option-value begindate)))
+		begindate))
 	   (s2 (split-report-get-sort-spec-entry
 		(gnc:option-value tr-report-secondary-key-op)
 		(eq? (gnc:option-value tr-report-secondary-order-op) 'ascend)
-		(gnc:option-value begindate)))
+		begindate))
 	   (s2b (if s2 (list s2) '()))
 	   (sort-specs (if s1 (cons s1 s2b) s2b))
 	   (split-list

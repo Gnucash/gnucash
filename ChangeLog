@@ -1,3 +1,11 @@
+2000-08-31  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/balance-and-pnl.scm: Bug fixes for new date options.
+
+	* src/scm/report/transaction-report.scm: Bug fixes for new date options.
+
+	* src/scm/report/budget-report.scm: Bug fixes for new date options.
+
 2000-08-30  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/hello-world.scm: A couple of new functions to test the relative

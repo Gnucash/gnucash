@@ -47,7 +47,7 @@
           (set-tm:min bdtime 59)
           (set-tm:hour bdtime 23)
           (let ((time (car (mktime bdtime))))
-            (cons 'absolute(cons time 0)))))
+            (cons 'absolute (cons time 0)))))
       #f 'absolute #f))
     gnc:*balsht-report-options*)
 
@@ -68,8 +68,8 @@
           (set-tm:mday bdtime 1)
           (set-tm:mon bdtime 0)
           (let ((time (car (mktime bdtime))))
-            (cons time 0))))
-      #f)) 
+            (cons 'absolute (cons time 0)))))
+      #f 'absolute #f)) 
 
     (gnc:register-pnl-option
      (gnc:make-date-option

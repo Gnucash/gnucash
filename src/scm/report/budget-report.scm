@@ -744,16 +744,16 @@
 	(set-tm:mday bdtime 1)
 	(set-tm:mon bdtime 0)
 	(let ((time (car (mktime bdtime))))
-	  (cons time 0))))
-    #f))
+	  (cons 'absolute (cons time 0)))))
+    #f 'absolute #f))
 
   ;; to-date
   (gnc:register-budget-report-option
    (gnc:make-date-option
     "Report Options" "To"
     "b" "Report end date"
-    (lambda () (cons (current-time) 0))
-    #f))
+    (lambda () (cons 'absolute (cons (current-time) 0)))
+    #f 'absolute #f))
 
   ;; view
   (gnc:register-budget-report-option
@@ -1133,9 +1133,9 @@
   (let* ((begindate (gnc:lookup-option options "Report Options" "From"))
          (enddate (gnc:lookup-option options "Report Options" "To"))
          (begin-date-secs (car (gnc:timepair-canonical-day-time 
-                                (gnc:option-value begindate))))
+                                (gnc:date-option-absolute-time (gnc:option-value begindate)))))
          (end-date-secs (car (gnc:timepair-canonical-day-time
-                              (gnc:option-value enddate))))
+                              (gnc:date-option-absolute-time (gnc:option-value enddate)))))
          (budget-hash (make-hash-table 313))
          (budget-list
 	   (map
