@@ -29,14 +29,14 @@
 
 #include "Account.h"
 #include "AccountP.h"
+#include "date.h"
+#include "GNCIdP.h"
 #include "Group.h"
 #include "GroupP.h"
-#include "date.h"
 #include "messages.h"
 #include "Queue.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "GNCIdP.h"
 #include "util.h"
 
 /* The unsafe_ops flag allows certain unsafe manipulations to be 
@@ -67,6 +67,7 @@ static short module = MOD_ENGINE;
 
 /********************************************************************\
 \********************************************************************/
+
 void
 xaccInitAccount (Account * acc)
 {
@@ -101,6 +102,9 @@ xaccInitAccount (Account * acc)
   acc->changed     = 0;
   acc->open        = 0;
   acc->mark        = 0;
+
+  xaccGUIDNew(&acc->guid);
+  xaccStoreEntity(acc, &acc->guid, GNC_ID_ACCOUNT);
 }
 
 /********************************************************************\
@@ -110,13 +114,7 @@ Account *
 xaccMallocAccount( void )
 {
   Account *acc = (Account *)_malloc(sizeof(Account));
-
   xaccInitAccount (acc);
-
-  xaccGUIDNew(&acc->guid);
-
-  xaccStoreEntity(acc, &acc->guid, GNC_ID_ACCOUNT);
-
   return acc;
 }
 
@@ -220,6 +218,7 @@ xaccAccountCommitEdit (Account *acc)
 
 /********************************************************************\
 \********************************************************************/
+
 const GUID *
 xaccAccountGetGUID (Account *account)
 {
@@ -231,7 +230,9 @@ xaccAccountGetGUID (Account *account)
 
 /********************************************************************\
 \********************************************************************/
-void xaccAccountSetGUID (Account *account, GUID *guid)
+
+void 
+xaccAccountSetGUID (Account *account, GUID *guid)
 {
   if (!account || !guid) return;
 
@@ -244,6 +245,7 @@ void xaccAccountSetGUID (Account *account, GUID *guid)
 
 /********************************************************************\
 \********************************************************************/
+
 Account *
 xaccAccountLookup (const GUID *guid)
 {
