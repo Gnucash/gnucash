@@ -16,3 +16,8 @@ into the interpreter.
 Building perl5 will result in a perl module.  For an example of how to
 use it, see ../cbb/cbb-to-xacc.
 
+----------------------
+TBD:
+-- create a makefile.in
+-- modify configure to check perl paths
+-- modify root dir makefile to build this subdir

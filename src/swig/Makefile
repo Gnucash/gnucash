@@ -44,7 +44,7 @@ guile/xacc-guile_wrap.c: xacc.i ${SWIG_HDRS}
 	swig -I../engine -guile -o $@ $< 
 
 guile/xacc-guile: guile/xacc-guile.o guile/xacc-guile_wrap.o $(LIBENG) 
-	${CC} $^ ${LIBENG} -lguile -lreadline -lm -o $@
+	${CC} $^  -lguile -lreadline -lm -o $@
 CLEANFILES += guile/xacc-guile
 
 ##### Perl5
