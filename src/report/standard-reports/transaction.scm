@@ -1137,6 +1137,39 @@ Credit Card, and Income accounts")))))
   (define (get-other-account-names account-list)
     ( map (lambda (acct)  (gnc:account-get-full-name acct)) account-list))
 
+  (define (is-filter-member split account-list splits-ok?)
+    (let ((fullname (gnc:split-get-corr-account-full-name split)))
+
+      (if (string=? fullname (_ "-- Split Transaction --"))
+	  ;; Yep, this is a split transaction.
+
+	  (if splits-ok?
+	      (let* ((txn (gnc:split-get-parent split))
+		     (splits (gnc:transaction-get-splits txn)))
+
+		;; Walk through the list of splits.
+		;; if we reach the end, return #f
+		;; if the 'this' != 'split' and the split->account is a member
+		;; of the account-list, then return #t, else recurse
+		(define (is-member splits)
+		  (if (null? splits)
+		      #f
+		      (let* ((this (car splits))
+			     (rest (cdr splits))
+			     (acct (gnc:split-get-account this)))
+			(if (and (not (eq? this split))
+				 (member acct account-list))
+			    #t
+			    (is-member rest)))))
+
+		(is-member splits))
+	      #f)
+
+	  ;; Nope, this is a regular transaction
+	  (member fullname (get-other-account-names account-list))
+	  )))
+
+
   (gnc:report-starting reportname)
   (let ((document (gnc:make-html-document))
 	(c_account_1 (opt-val gnc:pagename-accounts "Report Accounts"))
@@ -1200,7 +1233,7 @@ Credit Card, and Income accounts")))))
 	      (begin
 		;;(gnc:warn "Including Filter Accounts")
 		(set! splits (filter (lambda (split) 
-				       (member (gnc:split-get-corr-account-full-name split) (get-other-account-names c_account_2)))
+				       (is-filter-member split c_account_2 #t))
 				     splits))
 		)
 	      )
@@ -1209,7 +1242,7 @@ Credit Card, and Income accounts")))))
 	      (begin
 		;;(gnc:warn "Excluding Filter Accounts")
 		(set! splits (filter (lambda (split) 
-				       (not (member (gnc:split-get-corr-account-full-name split) (get-other-account-names c_account_2))))
+				       (not (is-filter-member split c_account_2 #t)))
 				     splits))
 		)
 	      )
