@@ -63,17 +63,17 @@ typedef struct gncp_SchedXaction {
         GDate                last_date;
 
         GDate                start_date;
-        // if end_date is invalid, then no end.
+        /* if end_date is invalid, then no end. */
         GDate                end_date;
 
-        // if num_occurances_total == 0, then no limit
+        /* if num_occurances_total == 0, then no limit */
         gint                num_occurances_total;
-        // reminaing occurances are as-of the 'last_date'.
+       /* reminaing occurances are as-of the 'last_date'. */
         gint                num_occurances_remain;
 
-        // If true, confirmation is required.
-        // If false, then this can be created when due without
-        // intervention.
+        /* If true, confirmation is required.
+           If false, then this can be created when due without
+           intervention. */
         gboolean        manual;
 
         GList                *templateSplits;
@@ -146,7 +146,7 @@ void xaccSchedXactionClearXactions( SchedXaction *sx );
 void xaccSchedXactionAddXaction( SchedXaction *sx,
                                  Transaction *t );
 #error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#endif // 0
+#endif /* 0 */
 
 kvp_frame *xaccSchedXactionGetSlots( SchedXaction *sx );
 /**

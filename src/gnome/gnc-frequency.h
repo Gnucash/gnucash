@@ -86,4 +86,4 @@ void gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDa
 
 END_GNOME_DECLS
 
-#endif // !defined( GNC_FREQUENCY_H )
+#endif /* !defined( GNC_FREQUENCY_H ) */

@@ -21,8 +21,11 @@
  *                                                                  *
 \********************************************************************/
 
+#include "config.h"
+
 #include <time.h>
 #include <glib.h>
+
 #include "gnc-engine-util.h"
 #include "gnc-frequency.h"
 #include "dialog-utils.h"
@@ -41,22 +44,22 @@ static gint gnc_frequency_signals[LAST_SIGNAL] = { 0 };
 
 /** Private Prototypes ********************/
 
-void update_cal( GNCFrequency *gf, GtkCalendar *cal );
-void mark_calendar( GtkCalendar *cal, FreqSpec *fs );
-void update_appropriate_cal( GNCFrequency *gf );
+static void update_cal( GNCFrequency *gf, GtkCalendar *cal );
+static void mark_calendar( GtkCalendar *cal, FreqSpec *fs );
+static void update_appropriate_cal( GNCFrequency *gf );
 
 static void gnc_frequency_class_init( GNCFrequencyClass *klass );
 
-void free_resources( GtkObject *o, gpointer d );
+static void free_resources( GtkObject *o, gpointer d );
 
-void freq_option_value_changed( GtkMenuShell *b, gpointer d );
-void start_date_changed( GnomeDateEdit *gde, gpointer d );
+static void freq_option_value_changed( GtkMenuShell *b, gpointer d );
+static void start_date_changed( GnomeDateEdit *gde, gpointer d );
 
-void spin_changed_helper( GtkAdjustment *adj, gpointer d );
+static void spin_changed_helper( GtkAdjustment *adj, gpointer d );
 
-void monthly_sel_changed( GtkButton *b, gpointer d );
-void semimonthly_sel_changed( GtkButton *b, gpointer d );
-void yearly_sel_changed( GtkButton *b, gpointer d );
+static void monthly_sel_changed( GtkButton *b, gpointer d );
+static void semimonthly_sel_changed( GtkButton *b, gpointer d );
+static void yearly_sel_changed( GtkButton *b, gpointer d );
 
 
 /** Static Inits ********************/
@@ -189,31 +192,31 @@ gnc_frequency_init( GNCFrequency *gf )
   gf->vb = vb;
   gtk_container_add( GTK_CONTAINER(&gf->widget), GTK_WIDGET(gf->vb) );
 
-  // connect to the destroy signal for cleanup
+  /* connect to the destroy signal for cleanup */
   gtk_signal_connect( GTK_OBJECT(gf->vb), "destroy",
                       GTK_SIGNAL_FUNC(free_resources), gf );
 
-  // intially fix the calendars.
+  /* intially fix the calendars. */
   for ( j=0; cals[j] != NULL; j++ ) {
     o = glade_xml_get_widget( gf->gxml, cals[j] );
     gtk_calendar_select_day( GTK_CALENDAR(o), 0 );
   }
 
-  // initialize the option menus
+  /* initialize the option menus */
   for ( i=0; optionMenus[i].name != NULL; i++ ) {
     o = glade_xml_get_widget( gf->gxml, optionMenus[i].name );
     gnc_option_menu_init( GTK_WIDGET(o) );
     if ( optionMenus[i].fn != NULL ) {
       o = gtk_option_menu_get_menu(GTK_OPTION_MENU(o));
-      // FIXME: having the user-data be a struct of a
-      // calendar name and the GNCFrequency would allow a
-      // single callback fn...
+      /* FIXME: having the user-data be a struct of a
+         calendar name and the GNCFrequency would allow a
+         single callback fn */
       gtk_signal_connect( GTK_OBJECT(o), "selection-done",
                           GTK_SIGNAL_FUNC(optionMenus[i].fn), gf );
     }
   }
 
-  // initialize the spin buttons
+  /* initialize the spin buttons */
   for ( i=0; spinVals[i].name != NULL; i++ ) {
     o = glade_xml_get_widget( gf->gxml,
                               spinVals[i].name );
@@ -226,7 +229,7 @@ gnc_frequency_init( GNCFrequency *gf )
 
   gtk_widget_show_all( GTK_WIDGET(&gf->widget) );
 
-  // respond to start date changes
+  /* respond to start date changes */
   gtk_signal_connect( GTK_OBJECT(gf->startDate), "date_changed",
                       GTK_SIGNAL_FUNC(start_date_changed), gf );
 
@@ -284,11 +287,11 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs )
   case UIFREQ_NONE:
     break;
   case UIFREQ_ONCE:
-    // set the date
+    /* set the date */
 
 #if 0
     tmpTT = fs->specData.dateAnchor[0];
-#endif // 0
+#endif /* 0 */
     tmpTT = 0;
     if ( tmpTT == 0 ) {
       tmpTT = time(NULL);
@@ -302,19 +305,19 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs )
                              tmpTm->tm_mday );
     break;
   case UIFREQ_DAILY:
-    // set the mult
+    /* set the mult */
     o = glade_xml_get_widget( gf->gxml, "daily_spin" );
 #if 0
     gtk_spin_button_set_value( GTK_SPIN_BUTTON( o ),
                                fs->specData.dateAnchor[0] );
-#endif // 0
+#endif /* 0 */
     
     o = glade_xml_get_widget( gf->gxml, "daily_cal" );
     update_cal( gf, GTK_CALENDAR(o) );
     break;
   case UIFREQ_DAILY_MF:
-    // FIXME
-    // set the mult
+    /* FIXME */
+    /* set the mult */
     break;
   case UIFREQ_WEEKLY:
     tmpInt = -1;
@@ -324,11 +327,11 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs )
       if ( tmpInt == -1 ) {
 #if 0
         tmpInt = subFS->specData.dateAnchor[0];
-#endif // 0
+#endif /* 0 */
       }
 #if 0
       str = CHECKBOX_NAMES[subFS->specData.dateAnchor[1]];
-#endif // 0
+#endif /* 0 */
       str = "Monday";
       o = glade_xml_get_widget( gf->gxml, str );
       gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(o), TRUE );
@@ -339,96 +342,96 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs )
     update_cal( gf, GTK_CALENDAR(o) );
     break;
   case UIFREQ_BI_WEEKLY:
-    // set the initial date...?
+    /* set the initial date...? */
     break;
   case UIFREQ_SEMI_MONTHLY:
     list = xaccFreqSpecCompositeGet( fs );
-    // mult
+    /* mult */
     o = glade_xml_get_widget( gf->gxml, "semimonthly_spin" );
     subFS = (FreqSpec*)(g_list_nth( list, 0 )->data);
 #if 0
     gtk_spin_button_set_value( GTK_SPIN_BUTTON(o),
                                subFS->specData.dateAnchor[0] );
-#endif // 0
-    // first date
+#endif /* 0 */
+    /* first date */
     o = glade_xml_get_widget( gf->gxml, "semimonthly_first" );
 #if 0
     gtk_option_menu_set_history( GTK_OPTION_MENU(o),
                                  subFS->specData.dateAnchor[1]-1 );
-#endif // 0
-    // second date
+#endif /* 0 */
+    /* second date */
     subFS = (FreqSpec*)(g_list_nth( list, 1 )->data);
     o = glade_xml_get_widget( gf->gxml, "semimonthly_second" );
 #if 0
     gtk_option_menu_set_history( GTK_OPTION_MENU(o),
                                  subFS->specData.dateAnchor[1]-1 );
-#endif // 0
+#endif /* 0 */
 
     o = glade_xml_get_widget( gf->gxml, "semimonthly_cal" );
     update_cal( gf, GTK_CALENDAR(o) );
     break;
   case UIFREQ_MONTHLY:
-    // set the mult
+    /* set the mult */
     o = glade_xml_get_widget( gf->gxml, "monthly_spin" );
     
 #if 0
     gtk_spin_button_set_value( GTK_SPIN_BUTTON(o),
                                fs->specData.dateAnchor[0] );
-#endif // 0
+#endif /* 0 */
     o = glade_xml_get_widget( gf->gxml, "monthly_day" );
 #if 0
     gtk_option_menu_set_history( GTK_OPTION_MENU(o),
                                  fs->specData.dateAnchor[1]-1 );
-#endif // 0
-    // set the day-of-month
+#endif /* 0 */
+    /* set the day-of-month */
     update_cal( gf, GTK_CALENDAR(o) );
     break;
   case UIFREQ_QUARTERLY:
     o = glade_xml_get_widget( gf->gxml, "quarterly_occur" );
-    // FIXME: based off the start date?
+    /* FIXME: based off the start date? */
     o = glade_xml_get_widget( gf->gxml, "quarterly_day" );
 #if 0
     gtk_option_menu_set_history( GTK_OPTION_MENU(o),
                                  fs->specData.dateAnchor[1]-1 );
-#endif // 0
+#endif /* 0 */
     break;
   case UIFREQ_TRI_ANUALLY:
     o = glade_xml_get_widget( gf->gxml, "triyearly_occur" );
-    // FIXME: based off the start date
+    /* FIXME: based off the start date */
     o = glade_xml_get_widget( gf->gxml, "triyearly_day" );
 #if 0
     gtk_option_menu_set_history( GTK_OPTION_MENU(o),
                                  fs->specData.dateAnchor[1]-1 );
-#endif // 0
+#endif /* 0 */
     break;
   case UIFREQ_SEMI_YEARLY:
     o = glade_xml_get_widget( gf->gxml, "semiyearly_occur" );
-    // FIXME: based off the start date...
+    /* FIXME: based off the start date */
     o = glade_xml_get_widget( gf->gxml, "semiyearly_day" );
 #if 0
     gtk_option_menu_set_history( GTK_OPTION_MENU(o),
                                  fs->specData.dateAnchor[1]-1 );
-#endif // 0
+#endif /* 0 */
     break;
   case UIFREQ_YEARLY:
-    // set the mult
+    /* set the mult */
     o = glade_xml_get_widget( gf->gxml, "yearly_spin" );
 #if 0
     gtk_spin_button_set_value( GTK_SPIN_BUTTON(o),
                                fs->specData.dateAnchor[0]/12 );
-#endif // 0
-    // month: wrongly done, natch.
+#endif /* 0 */
+    /* month: wrongly done, natch. */
     o = glade_xml_get_widget( gf->gxml, "yearly_month" );
 #if 0
     gtk_option_menu_set_history( GTK_OPTION_MENU(o),
                                  fs->specData.dateAnchor[2]-1 );
-#endif // 0
-    // mday
+#endif /* 0 */
+    /* mday */
     o = glade_xml_get_widget( gf->gxml, "yearly_day" );
 #if 0
     gtk_option_menu_set_history( GTK_OPTION_MENU(o),
                                  fs->specData.dateAnchor[1]-1 );
-#endif // 0
+#endif /* 0 */
     break;
   default:
     PERR( "unknown ui freq type [%d, %s]\n", __LINE__, __FILE__ );
@@ -453,9 +456,9 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
   GDate    *gd2;
   time_t    tmpTimeT;
 
-  // get the current tab
+  /* get the current tab */
   page = gtk_notebook_get_current_page( gf->nb );
-  // save into UIFreqSpec
+  /* save into UIFreqSpec */
   uift = PAGES[page].uiFTVal;
 
   tmpTimeT = gnome_date_edit_get_date( gf->startDate );
@@ -465,10 +468,10 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
     *outStartDate = *gd;
   }
 
-  // based on value, parse widget values into FreqSpec
+  /* based on value, parse widget values into FreqSpec */
   switch ( uift ) {
   case UIFREQ_NONE:
-    // hmmm... shouldn't really be allowed.
+    /* hmmm... shouldn't really be allowed. */
     break;
   case UIFREQ_ONCE:
     xaccFreqSpecSetOnceDate( fs, gd );
@@ -477,31 +480,31 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
     break;
   case UIFREQ_DAILY:
     o = glade_xml_get_widget( gf->gxml, "daily_spin" );
-    // FIXME: initial date should be set correctly.
+    /* FIXME: initial date should be set correctly. */
     xaccFreqSpecSetDaily( fs, gd, 
                           gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON(o) ) );
     xaccFreqSpecSetUIType( fs, uift );
     g_date_free( gd );
     break;
   case UIFREQ_DAILY_MF:
-    //xaccFreqSpecSetTypes( fs, COMPOSITE, uift );
+    /* xaccFreqSpecSetTypes( fs, COMPOSITE, uift ); */
     xaccFreqSpecSetComposite( fs );
     xaccFreqSpecSetUIType( fs, uift );
     gd2 = g_date_new();
     o = glade_xml_get_widget( gf->gxml, "dailymf_spin" );
     tmpInt = gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON(o) );
-    // Okay.  Assume that the calendar is upgraded to
-    // support selecting weeks, returning the Sunday selected.
+    /* Okay.  Assume that the calendar is upgraded to
+       support selecting weeks, returning the Sunday selected. */
 
-    // Normalize to sunday.
+    /* Normalize to sunday. */
     tmpTm = g_new0( struct tm, 1 );
     g_date_to_struct_tm( gd, tmpTm );
-    // month-day += (week-day - current-week-day ) % 7
-    // week-day <- 0
+    /* month-day += (week-day - current-week-day ) % 7
+       week-day <- 0 */
     tmpTm->tm_mday -= ( tmpTm->tm_wday ) % 7;
     g_date_set_time( gd, mktime( tmpTm ) );
 
-    // 1 == "mon", 5 == "fri"
+    /* 1 == "mon", 5 == "fri" */
     for ( i=1; i<6; i++ ) {
       *gd2 = *gd; 
       g_date_add_days( gd2, i );
@@ -514,30 +517,31 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
     g_free( tmpTm );
     break;
   case UIFREQ_WEEKLY:
-    //xaccFreqSpecSetTypes( fs, COMPOSITE, uift );
+    /* xaccFreqSpecSetTypes( fs, COMPOSITE, uift ); */
     xaccFreqSpecSetComposite( fs );
     o = glade_xml_get_widget( gf->gxml, "weekly_spin" );
     tmpInt = gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON(o) );
 
-    // assume we have a good calendar that allows week selection.
+    /* assume we have a good calendar that allows week selection. */
     
-    // for-now hack: normalize to Sunday.
+    /* for-now hack: normalize to Sunday. */
     tmpTm = g_new0( struct tm, 1 );
     g_date_to_struct_tm( gd, tmpTm );
     tmpTm->tm_mday -= tmpTm->tm_wday % 7;
     g_date_set_time( gd, mktime( tmpTm ) );
 
-    // now, go through the check boxes and add composites based on that date.
+    /* now, go through the check boxes and add composites based on
+       that date. */
     for ( i=0; CHECKBOX_NAMES[i]!=NULL; i++ ) {
       str = CHECKBOX_NAMES[i];
       o = glade_xml_get_widget( gf->gxml, str );
       if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(o) ) ) {
         tmpFS = xaccFreqSpecMalloc();
-        // struct-copy is expected to work, here
-        // [wish we didn't have to know about the GDate implementation...]
+        /* struct-copy is expected to work, here
+           [wish we didn't have to know about the GDate implementation...] */
         gd2 = g_date_new();
         *gd2 = *gd;
-        // Add 'i' days off of Sunday...
+        /* Add 'i' days off of Sunday */
         g_date_add_days( gd2, i );
         xaccFreqSpecSetWeekly( tmpFS, gd2, tmpInt );
         g_date_free( gd2 );
@@ -554,9 +558,9 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
     g_date_free( gd );
     break;
   case UIFREQ_SEMI_MONTHLY:
-    // FIXME: this is b0rken date calculation for mday>28
+    /* FIXME: this is b0rken date calculation for mday>28 */
 
-    //xaccFreqSpecSetTypes( fs, COMPOSITE, uift );
+    /* xaccFreqSpecSetTypes( fs, COMPOSITE, uift ); */
     xaccFreqSpecSetComposite( fs );
     xaccFreqSpecSetUIType( fs, uift );
     
@@ -569,10 +573,10 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
     tmpTm = g_new0( struct tm, 1 );
     g_date_to_struct_tm( gd, tmpTm );
     if ( day >= tmpTm->tm_mday ) {
-      // next month
+      /* next month */
       tmpTm->tm_mon += 1;
     }
-    // else, this month
+    /* else, this month */
     tmpTm->tm_mday = day;
     g_date_set_time( gd, mktime( tmpTm ) );
     xaccFreqSpecSetMonthly( tmpFS, gd, tmpInt );
@@ -589,10 +593,10 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
     tmpTm = g_new0( struct tm, 1 );
     g_date_to_struct_tm( gd, tmpTm );
     if ( day >= tmpTm->tm_mday ) {
-      // next month
+      /* next month */
       tmpTm->tm_mon += 1;
     }
-    // else, this month
+    /* else, this month */
     tmpTm->tm_mday = day;
     g_date_set_time( gd, mktime( tmpTm ) );
     xaccFreqSpecSetMonthly( tmpFS, gd, tmpInt );
@@ -602,7 +606,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
 
     break;
   case UIFREQ_MONTHLY:
-    //xaccFreqSpecSetTypes( fs, MONTHLY, uift );
+    /* xaccFreqSpecSetTypes( fs, MONTHLY, uift ); */
     o = glade_xml_get_widget( gf->gxml, "monthly_spin" );
     tmpInt = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(o));
     tmpTm = g_new0( struct tm, 1 );
@@ -619,35 +623,35 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
     g_date_free( gd );
     break;
   case UIFREQ_QUARTERLY:
-    //xaccFreqSpecSetTypes( fs, MONTHLY, uift );
+    /* xaccFreqSpecSetTypes( fs, MONTHLY, uift ); */
 
-    //o = glade_xml_get_widget( gf->gxml, "quarterly_day" );
-    //tmpInt = gnc_option_menu_get_active( GTK_WIDGET(o) );
+    /* o = glade_xml_get_widget( gf->gxml, "quarterly_day" ); */
+    /* tmpInt = gnc_option_menu_get_active( GTK_WIDGET(o) ); */
     xaccFreqSpecSetMonthly( fs, gd, 3 );
     xaccFreqSpecSetUIType( fs, uift );
     g_date_free( gd );
     
     break;
   case UIFREQ_TRI_ANUALLY:
-    //xaccFreqSpecSetTypes( fs, MONTHLY, uift );
-    //o = glade_xml_get_widget( gf->gxml, "triyearly_day" );
-    //tmpInt = gnc_option_menu_get_active( GTK_WIDGET(o) );
+    /* xaccFreqSpecSetTypes( fs, MONTHLY, uift ); */
+    /* o = glade_xml_get_widget( gf->gxml, "triyearly_day" ); */
+    /* tmpInt = gnc_option_menu_get_active( GTK_WIDGET(o) ); */
     xaccFreqSpecSetMonthly( fs, gd, 4 );
     xaccFreqSpecSetUIType( fs, uift );
     g_date_free( gd );
     break;
   case UIFREQ_SEMI_YEARLY:
-    //xaccFreqSpecSetTypes( fs, MONTHLY, uift );
-    //o = glade_xml_get_widget( gf->gxml, "semiyearly_day" );
-    //tmpInt = gnc_option_menu_get_active( GTK_WIDGET(o) );
+    /* xaccFreqSpecSetTypes( fs, MONTHLY, uift ); */
+    /* o = glade_xml_get_widget( gf->gxml, "semiyearly_day" ); */
+    /* tmpInt = gnc_option_menu_get_active( GTK_WIDGET(o) ); */
     xaccFreqSpecSetMonthly( fs, gd, 6 );
     xaccFreqSpecSetUIType( fs, uift );
     g_date_free( gd );
     break;
   case UIFREQ_YEARLY:
-    //xaccFreqSpecSetTypes( fs, MONTHLY, uift );
-    // get the multiplier
-    // monthly:12*mult,start date + mday
+    /* xaccFreqSpecSetTypes( fs, MONTHLY, uift ); */
+    /*  get the multiplier */
+    /* monthly:12*mult,start date + mday */
     o = glade_xml_get_widget( gf->gxml, "yearly_spin" );
     tmpInt = gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON(o) );
     xaccFreqSpecSetMonthly( fs, gd, tmpInt * 12 );
@@ -661,7 +665,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
   }
 }
 
-void
+static void
 mark_calendar( GtkCalendar *cal, FreqSpec *fs )
 {
   GDate    *gdNow;
@@ -699,7 +703,7 @@ mark_calendar( GtkCalendar *cal, FreqSpec *fs )
   g_date_free( gdNext );
 }
 
-void
+static void
 update_cal( GNCFrequency *gf, GtkCalendar *cal )
 {
   FreqSpec  *fs;
@@ -709,7 +713,7 @@ update_cal( GNCFrequency *gf, GtkCalendar *cal )
   xaccFreqSpecFree( fs );
 }
 
-void
+static void
 update_appropriate_cal( GNCFrequency *gf )
 {
   GtkWidget  *o;
@@ -718,9 +722,9 @@ update_appropriate_cal( GNCFrequency *gf )
 
   o = NULL;
   page = gtk_notebook_get_current_page( gf->nb );
-  // save into UIFreqSpec
+  /* save into UIFreqSpec */
   uift = PAGES[page].uiFTVal;
-  // based on value, parse widget values into FreqSpec
+  /* based on value, parse widget values into FreqSpec */
   switch ( uift ) {
   case UIFREQ_NONE:
   case UIFREQ_DAILY:
@@ -753,7 +757,7 @@ update_appropriate_cal( GNCFrequency *gf )
     update_cal( gf, GTK_CALENDAR(o) );
 }
 
-void 
+static void 
 free_resources( GtkObject *o, gpointer d )
 {
   GNCFrequency *gf = (GNCFrequency*)d;
@@ -763,13 +767,13 @@ free_resources( GtkObject *o, gpointer d )
                                             "GNCFrequency widget" ) );
 }
 
-void
+static void
 spin_changed_helper( GtkAdjustment *adj, gpointer d )
 {
   update_appropriate_cal( (GNCFrequency*)d );
 }
 
-void
+static void
 daily_spin_value_changed( GtkAdjustment *adj, gpointer d )
 {
   GtkCalendar  *cal;
@@ -779,7 +783,7 @@ daily_spin_value_changed( GtkAdjustment *adj, gpointer d )
   update_cal( d, cal );
 }
 
-void
+static void
 dailymf_spin_value_changed( GtkAdjustment *adj, gpointer d )
 {
   GtkCalendar  *cal;
@@ -789,7 +793,7 @@ dailymf_spin_value_changed( GtkAdjustment *adj, gpointer d )
   update_cal( d, cal );
 }
 
-void
+static void
 weekly_spin_value_changed( GtkAdjustment *adj, gpointer d )
 {
   GtkCalendar  *cal;
@@ -800,7 +804,7 @@ weekly_spin_value_changed( GtkAdjustment *adj, gpointer d )
   update_cal( d, cal );
 }
 
-void
+static void
 monthly_sel_changed( GtkButton *b, gpointer d )
 {
   GNCFrequency  *gf;
@@ -831,21 +835,21 @@ monthly_sel_changed( GtkButton *b, gpointer d )
 
 }
 
-void
+static void
 monthly_spin_value_changed( GtkAdjustment *adj, gpointer d )
 {
   update_appropriate_cal( (GNCFrequency*)d );
-  //monthly_sel_changed( NULL, d );
+  /* monthly_sel_changed( NULL, d ); */
 }
 
-void
+static void
 semimonthly_spin_value_changed( GtkAdjustment *adj, gpointer d )
 {
   update_appropriate_cal( (GNCFrequency*)d );
-  //semimonthly_sel_changed( NULL, d );
+  /* semimonthly_sel_changed( NULL, d ); */
 }
 
-void
+static void
 semimonthly_sel_changed( GtkButton *b, gpointer d )
 {
   GNCFrequency  *gf;
@@ -878,7 +882,7 @@ semimonthly_sel_changed( GtkButton *b, gpointer d )
   update_appropriate_cal( gf );
 }
 
-void
+static void
 yearly_sel_changed( GtkButton *b, gpointer d )
 {
   GNCFrequency  *gf;
@@ -897,9 +901,9 @@ yearly_sel_changed( GtkButton *b, gpointer d )
   o = glade_xml_get_widget( gf->gxml, "yearly_day" );
   tmptm->tm_mday = gnc_option_menu_get_active( GTK_WIDGET(o) )+1;
 
-  // correct for
-  // option_menu_selected_day > min(31,correct_days_in_month)
-  // problem
+  /* correct for
+     option_menu_selected_day > min(31,correct_days_in_month)
+     problem */
   while ( ! g_date_valid_dmy( tmptm->tm_mday,
                               tmptm->tm_mon+1,
                               tmptm->tm_year+1900 ) ) {
@@ -922,7 +926,7 @@ freq_option_value_changed( GtkMenuShell *b, gpointer d )
   gtk_notebook_set_page( ((GNCFrequency*)d)->nb, optIdx );
 }
 
-void
+static void
 year_range_menu_helper( GtkWidget *dayOptMenu,
                         GtkWidget *occurOptMenu,
                         gint monthsInRange,
@@ -936,7 +940,7 @@ year_range_menu_helper( GtkWidget *dayOptMenu,
                                tmpTm->tm_mday - 1 );
 }
 
-void
+static void
 start_date_changed( GnomeDateEdit *gde, gpointer d )
 {
   GNCFrequency  *gf;
@@ -951,10 +955,11 @@ start_date_changed( GnomeDateEdit *gde, gpointer d )
 
   dateFromGDE = gnome_date_edit_get_date( gde );
 
-  // FIXME: update...
-  // X monthly: day of month
-  // X semi-monthly: lowest day
-  // {quarterly, tri-yearly, semi-yearly, X yearly}: day of month
+  /* FIXME: update...
+     X monthly: day of month
+     X semi-monthly: lowest day
+     {quarterly, tri-yearly, semi-yearly, X yearly}: day of month
+  */
 
   page = gtk_notebook_get_current_page( gf->nb );
   uift = PAGES[page].uiFTVal;
@@ -969,8 +974,8 @@ start_date_changed( GnomeDateEdit *gde, gpointer d )
                                  (tmpTm->tm_mday-1) );
     break;
   case UIFREQ_SEMI_MONTHLY:
-    // if first < second, update first
-    // else, update second.
+    /* if first < second, update first
+       else, update second. */
     o = glade_xml_get_widget( gf->gxml, "semimonthly_first" );
     tmpint = gnc_option_menu_get_active( GTK_WIDGET(o) )+1;
     o = glade_xml_get_widget( gf->gxml, "semimonthly_second" );

@@ -78,15 +78,15 @@ xaccSchedXactionInit( SchedXaction *sx, GNCBook *book )
         sx->manual = FALSE;
 
         sx->templateSplits = NULL;
-        // create a new template account for our splits...
+        /* create a new template account for our splits */
         acct = xaccMallocAccount();
         name = guid_to_string( &sx->guid );
         xaccAccountSetName( acct, name );
         xaccAccountSetCurrency( acct,
                                 gnc_commodity_new( "template", "template", "template", "template", 1 ) );
-        // FIXME: g_free?
-        // FIXME: leaks
-        // g_free( name );
+        /* FIXME: g_free?
+           FIXME: leaks
+           g_free( name ); */
         xaccAccountSetType( acct, BANK );
         ag = gnc_book_get_template_group( book );
         xaccGroupInsertAccount( ag, acct );
@@ -109,7 +109,7 @@ xaccSchedXactionFree( SchedXaction *sx )
                 g_free( sx->name );
         g_free( sx );
 
-        // FIXME: clean up our template account...
+        /* FIXME: clean up our template account */
 }
 
 void
@@ -184,8 +184,8 @@ xaccSchedXactionSetEndDate( SchedXaction *sx, GDate *newEnd )
 {
         if ( g_date_valid( newEnd ) ) {
                 if ( g_date_compare( newEnd, &sx->start_date ) < 0 ) {
-                        // FIXME:error
-                        // error( "New end date before start date" );
+                        /* FIXME:error
+                           error( "New end date before start date" ); */
                 }
         }
         sx->end_date = *newEnd;
@@ -234,8 +234,8 @@ xaccSchedXactionSetRemOccur( SchedXaction *sx,
 {
         /* FIXME This condition can be tightened up */
         if ( numRemain > sx->num_occurances_total ) {
-                // FIXME:error
-                // error( "more remaining occurances than total" );
+                /* FIXME:error
+                   error( "more remaining occurances than total" ); */
         }
         sx->num_occurances_remain = numRemain;
 }

@@ -1,3 +1,11 @@
+2001-06-19  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/gnc-numeric.c: use C comments.
+
+	* src/engine/SchedXaction.[ch]: use C comments.
+
+	* src/gnome/gnc-frequency.[ch]: use C comments. fix warnings
+
 2001-06-19  Bill Gribble  <grib@billgribble.com>
 
 	* src/scm/qif-import/qif-parse.scm: convert to gnc-numeric when 

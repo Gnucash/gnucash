@@ -903,7 +903,7 @@ gnc_numeric_create(gint64 num, gint64 denom) {
 gnc_numeric
 gnc_numeric_error(int error_code) {
   if(abs(error_code) < 5) {
-    //    PERR("%s", _numeric_error_strings[ - error_code]);
+    /*    PERR("%s", _numeric_error_strings[ - error_code]); */
   }
   return gnc_numeric_create(error_code, 0LL);
 }
