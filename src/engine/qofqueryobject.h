@@ -28,7 +28,6 @@
 #ifndef QOF_QUERYOBJECT_H
 #define QOF_QUERYOBJECT_H
 
-// #include "qofquery.h"
 #include "qofid.h"
 
 #define QOF_TYPE_STRING    "string"
@@ -62,12 +61,12 @@ typedef gpointer (*QofAccessFunc)(gpointer);
  *    object or it can be a core data type.
  * -- param_getgcn is the function to actually obtain the parameter
  */
-typedef struct _QofQueryObject 
+typedef struct _QofParam 
 {
   const char       * param_name;
   QofType            param_type;
   QofAccessFunc      param_getfcn;
-} QofQueryObject;
+} QofParam;
 
 /** This function is the default sort function for a particular object type */
 typedef int (*QofSortFunc)(gpointer, gpointer);
@@ -80,7 +79,7 @@ typedef int (*QofSortFunc)(gpointer, gpointer);
  */
 void qof_query_object_register (QofIdTypeConst obj_name,
 			     QofSortFunc default_sort_fcn,
-			     const QofQueryObject *params);
+			     const QofParam *params);
 
 /** An example:
  *
@@ -90,7 +89,7 @@ void qof_query_object_register (QofIdTypeConst obj_name,
  * #define MY_QUERY_OBJ_ACCOUNT "account"
  * #define MY_QUERY_OBJ_TRANS	"trans"
  *
- * static QofQueryObject myQueryObjectParams[] = {
+ * static QofParam myParams[] = {
  * { MY_QUERY_OBJ_MEMO, QOF_TYPE_STRING, myMemoGetter },
  * { MY_QUERY_OBJ_VALUE, QOF_TYPE_NUMERIC, myValueGetter },
  * { MY_QUERY_OBJ_DATE, QOF_TYPE_DATE, myDateGetter },
@@ -99,15 +98,15 @@ void qof_query_object_register (QofIdTypeConst obj_name,
  * NULL };
  *
  * qof_query_object_register ("myObjectName", myQueryObjectCompare,
- *				    &myQueryObjectParams);
+ *				    &myParams);
  */
 
 /** Return the core datatype of the specified object's parameter */
 QofType qof_query_object_parameter_type (QofIdTypeConst obj_name,
 					   const char *param_name);
 
-/** Return the registered Object Definition for the requested parameter */
-const QofQueryObject * qof_query_object_get_parameter (QofIdTypeConst obj_name,
+/** Return the registered Parameter Definition for the requested parameter */
+const QofParam * qof_query_object_get_parameter (QofIdTypeConst obj_name,
 						   const char *parameter);
 
 /** Return the object's parameter getter function */

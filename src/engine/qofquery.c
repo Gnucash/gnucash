@@ -429,9 +429,9 @@ check_object (QofQuery *q, gpointer object)
  * returns NULL if the first parameter is bad (and final is unchanged).
  */
 static GSList * compile_params (GSList *param_list, QofIdType start_obj,
-                                QofQueryObject const **final)
+                                QofParam const **final)
 {
-  const QofQueryObject *objDef = NULL;
+  const QofParam *objDef = NULL;
   GSList *fcns = NULL;
 
   ENTER ("param_list=%p id=%s", param_list, start_obj);
@@ -464,7 +464,7 @@ static GSList * compile_params (GSList *param_list, QofIdType start_obj,
 static void 
 compile_sort (QofQuerySort *sort, QofIdType obj)
 {
-  const QofQueryObject *resObj = NULL;
+  const QofParam *resObj = NULL;
 
   ENTER ("sort=%p id=%s params=%p", sort, obj, sort->param_list);
   sort->use_default = FALSE;
@@ -511,7 +511,7 @@ static void compile_terms (QofQuery *q)
   for (or_ptr = q->terms; or_ptr; or_ptr = or_ptr->next) {
     for (and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next) {
       QofQueryTerm *qt = and_ptr->data;
-      const QofQueryObject *resObj = NULL;
+      const QofParam *resObj = NULL;
       
       g_slist_free (qt->param_fcns);
       qt->param_fcns = NULL;

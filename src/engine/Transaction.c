@@ -3432,7 +3432,7 @@ static gpointer no_op (gpointer obj)
 
 gboolean xaccSplitRegister (void)
 {
-  static const QofQueryObject params[] = {
+  static const QofParam params[] = {
     { SPLIT_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccSplitGetSlots },
     { SPLIT_DATE_RECONCILED, QOF_TYPE_DATE,
       (QofAccessFunc)xaccSplitRetDateReconciledTS },
@@ -3513,7 +3513,7 @@ trans_is_balanced_p (const Transaction *txn)
 
 gboolean xaccTransRegister (void)
 {
-  static QofQueryObject params[] = {
+  static QofParam params[] = {
     { TRANS_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccTransGetSlots },
     { TRANS_NUM, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNum },
     { TRANS_DESCRIPTION, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetDescription },

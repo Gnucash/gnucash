@@ -2151,7 +2151,7 @@ static QofObject pricedb_object_def =
 gboolean 
 gnc_pricedb_register (void)
 {
-  static QofQueryObject params[] = {
+  static QofParam params[] = {
     { PRICE_COMMODITY, GNC_ID_COMMODITY, (QofAccessFunc)gnc_price_get_commodity },
     { PRICE_CURRENCY, GNC_ID_COMMODITY, (QofAccessFunc)gnc_price_get_currency },
     { PRICE_DATE, QOF_TYPE_DATE, (QofAccessFunc)gnc_price_get_time },

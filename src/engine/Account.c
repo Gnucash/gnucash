@@ -3007,7 +3007,7 @@ static QofObject account_object_def = {
 
 gboolean xaccAccountRegister (void)
 {
-  static QofQueryObject params[] = {
+  static QofParam params[] = {
     { ACCOUNT_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccAccountGetSlots },
     { ACCOUNT_NAME_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetName },
     { ACCOUNT_CODE_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetCode },

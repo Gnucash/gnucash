@@ -1,8 +1,8 @@
 
 #include "qofqueryobject.h"
 
-		#define query_object_def _QofQueryObject
-		#define QueryObjectDef QofQueryObject
+		#define query_object_def _QofParam
+		#define QueryObjectDef QofParam
 		#define QuerySort QofSortFunc
 
 		#define gncQueryObjectRegister qof_query_object_register

@@ -31,12 +31,12 @@ static int test_core_param (gpointer a)
 
 static void test_query_object (void)
 {
-  static QofQueryObject params[] = {
+  static QofParam params[] = {
     { TEST_PARAM, TEST_CORE, (QofAccessFunc)test_core_param },
     { NULL },
   };
 
-  fprintf (stderr, "\tTesting the QueryObject interface. \n"
+  fprintf (stderr, "\tTesting the qof_query_object interface. \n"
 	   "\tYou may see some \"** CRITICAL **\" messages, which you can safely ignore\n");
 
   qof_query_object_register (TEST_MODULE_NAME, (QofSortFunc)test_sort, params);
@@ -44,13 +44,13 @@ static void test_query_object (void)
   do_test (qof_query_object_get_parameter (TEST_MODULE_NAME, TEST_PARAM)
 	   == &params[0], "qof_query_object_get_parameter");
   do_test (qof_query_object_get_parameter (NULL, NULL) == NULL,
-	   "gncQueryObjectGetParamter (NULL, NULL)");
+	   "qof_query_object_get_parameter (NULL, NULL)");
   do_test (qof_query_object_get_parameter (TEST_MODULE_NAME, NULL) == NULL,
-	   "gncQueryObjectGetParamter (TEST_MODULE_NAME, NULL)");
+	   "qof_query_object_get_parameter (TEST_MODULE_NAME, NULL)");
   do_test (qof_query_object_get_parameter (TEST_MODULE_NAME, BAD_PARAM) == NULL,
-	   "gncQueryObjectGetParamter (TEST_MODULE_NAME, BAD_PARAM)");
+	   "qof_query_object_get_parameter (TEST_MODULE_NAME, BAD_PARAM)");
   do_test (qof_query_object_get_parameter (NULL, TEST_PARAM) == NULL,
-	   "gncQueryObjectGetParamter (NULL, TEST_PARAM)");
+	   "qof_query_object_get_parameter (NULL, TEST_PARAM)");
 
   do_test (qof_query_object_get_parameter_getter (TEST_MODULE_NAME, TEST_PARAM)
 	   == (QofAccessFunc)test_core_param,

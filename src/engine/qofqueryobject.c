@@ -47,7 +47,7 @@ static gboolean clear_table (gpointer key, gpointer value, gpointer user_data)
 
 void qof_query_object_register (QofIdTypeConst obj_name,
 			     QofSortFunc default_sort_function,
-			     const QofQueryObject *params)
+			     const QofParam *params)
 {
   int i;
 
@@ -93,7 +93,7 @@ void qof_query_object_shutdown (void)
 }
 
 
-const QofQueryObject * qof_query_object_get_parameter (QofIdTypeConst obj_name,
+const QofParam * qof_query_object_get_parameter (QofIdTypeConst obj_name,
 						   const char *parameter)
 {
   GHashTable *ht;
@@ -112,14 +112,14 @@ const QofQueryObject * qof_query_object_get_parameter (QofIdTypeConst obj_name,
 QofAccessFunc qof_query_object_get_parameter_getter (QofIdTypeConst obj_name,
 					      const char *parameter)
 {
-  const QofQueryObject *obj;
+  const QofParam *prm;
 
   g_return_val_if_fail (obj_name, NULL);
   g_return_val_if_fail (parameter, NULL);
 
-  obj = qof_query_object_get_parameter (obj_name, parameter);
-  if (obj)
-    return obj->param_getfcn;
+  prm = qof_query_object_get_parameter (obj_name, parameter);
+  if (prm)
+    return prm->param_getfcn;
 
   return NULL;
 }
@@ -127,14 +127,14 @@ QofAccessFunc qof_query_object_get_parameter_getter (QofIdTypeConst obj_name,
 QofType qof_query_object_parameter_type (QofIdTypeConst obj_name,
 					   const char *param_name)
 {
-  const QofQueryObject *obj;
+  const QofParam *prm;
 
   if (!obj_name || !param_name) return NULL;
 
-  obj = qof_query_object_get_parameter (obj_name, param_name);
-  if (!obj) return NULL;
+  prm = qof_query_object_get_parameter (obj_name, param_name);
+  if (!prm) return NULL;
 
-  return (obj->param_type);
+  return (prm->param_type);
 }
 
 QofSortFunc 
