@@ -44,7 +44,13 @@ all: default
 # definitions of *_SRCS, etc., but before the usage of *_OBJS.
 include ../../Makefile.common
 
-default: ${OBJS}
+default: ../libengine.a
+
+
+../libengine.a: ${OBJS}
+	ar vru libengine.a ${OBJS}
+	cp -p libengine.a ..
+
 
 .PHONY: all default
 
