@@ -17,6 +17,15 @@
 	  stick with PWARN() and hope users see the console.
 	Fixes #118258
 
+	* src/app-file/gnc-file.c: fix the message to be more appropriate
+	  when we hit a READONLY error.
+	* src/backend/file/gnc-backend-file.c: return ERR_BACKEND_READONLY
+	  on save if the XML write fails and the unlink() fails with
+	  ENOENT, EPERM, EROFS, or EACCES.
+	* src/engine/qofsession.c: don't call end_session just because
+	  there's an error.
+	Fixes #117657
+
 2003-07-26  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* src/import-export/import-account-matcher.c: Fix bug #105293

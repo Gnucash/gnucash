@@ -142,13 +142,11 @@ show_session_error (QofBackendError io_error, const char *newfile)
       break;
 
     case ERR_BACKEND_READONLY:
-      fmt = _("WARNING!!!  GnuCash could not obtain the lock for\n"
+      fmt = _("GnuCash could not write to\n"
               "   %s.\n"
               "That database may be on a read-only file system,\n"
-	      "or you may not have write permission for the directory.\n"
-	      "If you proceed you may not be able to save any changes.\n"
-              "\nAre you sure want to proceed with opening the database?");
-      if (gnc_verify_dialog (TRUE, fmt, newfile)) { uh_oh = FALSE; }
+	      "or you may not have write permission for the directory.\n");
+      gnc_error_dialog (fmt, newfile);
       break;
 
     case ERR_BACKEND_DATA_CORRUPT:

@@ -652,6 +652,7 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
     QofBook *book;
     struct stat statbuf;
     int rc;
+    QofBackendError be_err;
 
     book = qof_session_get_book (be->session);
 
@@ -733,7 +734,17 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
     {
         if(unlink(tmp_name) != 0)
         {
-            qof_backend_set_error((QofBackend*)be, ERR_BACKEND_MISC);
+	    switch (errno) {
+	    case ENOENT:	/* tmp_name doesn't exist?  Assume "RO" error */
+	    case EACCES:
+	    case EPERM:
+	    case EROFS:
+	      be_err = ERR_BACKEND_READONLY;
+	      break;
+	    default:
+	      be_err = ERR_BACKEND_MISC;
+	    }
+            qof_backend_set_error((QofBackend*)be, be_err);
             PWARN("unable to unlink temp_filename %s: %s", 
                    tmp_name ? tmp_name : "(null)", 
                    strerror(errno) ? strerror(errno) : ""); 
