@@ -8,6 +8,8 @@
 	  in the configure script.  Sometimes it was ripped out without being
 	  replaced.  Reported by twunder.
 
+	* src/engine/test/.cvsignore: ignore test-link in CVS.
+
 2004-04-01  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/dialog-scheduledxaction.c: Move variable declaration
