@@ -9,12 +9,6 @@ the docs or change the menu entry name.
 
 Hmm. verify that this is still broken!?!
 
-12) all messages should be moved out so that translation to foreign
-    languages would be possible.
-    -- long messages now in include/main.h, short words are not.
-    -- see alpah version 1.1, which has completed work on separating 
-       messages
-
 13) transfer window should allow share prices to be entered;
     but these should grey out when dealing with ordinary bank accounts.
 
@@ -46,7 +40,7 @@ Hmm. verify that this is still broken!?!
 
 29) add short-cut menu-icon bar
 
-30) add icons for minimuzation
+30) add icons for minimization
 
 31) move resources out of main.c into a resource file.
     This requires fixing install first.
@@ -64,19 +58,11 @@ Hmm. verify that this is still broken!?!
 
 36) business features, for tracking inventory, costing jobs, etc.
 
-37) clean distinction between the data view (the register window)
-    and the data (Account.h, Transaction.h) so that data can be feteched
-    from multi-user SQL database instead of simple flat files.
-
-38) Find, if it exists, some ANSI/ISO/POSIX/whatever standard for 
-    fincancial software, and code to that.  That in heory makes it more
-    interoperable with other possible projects.
-
 39) create Java version of RegWindow, so that accounts&transactions could
     be deleivered by a web server, and the actual data viewed/modified
     with regwindow.
 
-40) add check-priniting ability.
+40) add check-printing ability.
 
 41) add short-cut button-bar, like quicken/lotus
 
@@ -95,9 +81,6 @@ Hmm. verify that this is still broken!?!
 52) add sql interfaces. Use optimistic record modification policies,
     to avoid record locking. Something that is CVS, as opposed to 
     RCS, in style & philosophy.
-
-55) core dump when picking deleted account in the transfer
-    pull-down.
 
 56) mnemonics don't work in the menus
 
@@ -155,6 +138,13 @@ Fixed.
 11) stock portfolio should indicate total $ amount of transaction
 fixed.
 
+12) all messages should be moved out so that translation to foreign
+    languages would be possible.
+    -- long messages now in include/main.h, short words are not.
+    -- see alpha version 1.1, which has completed work on separating 
+       messages, to include/messages.h
+    Done January 1998
+
 14) Allow transfers of funds to be done in-line
 fixed.
 
@@ -167,6 +157,19 @@ fixed. changed XmNnavigation
 19) verify that tabbing works for mutual funds and for ledgers
 fixed.
 
+37) clean distinction between the data view (the register window)
+    and the data (Account.h, Transaction.h) so that data can be feteched
+    from multi-user SQL database instead of simple flat files.
+    Done, January 1998, in version 1.1.  Engine has been striped of all
+    gui elements.
+
+38) Find, if it exists, some ANSI/ISO/POSIX/whatever standard for 
+    fincancial software, and code to that.  That in theory makes it more
+    interoperable with other possible projects.
+    Done, February 1998. Found the "open financial exchange" docs
+    which is an intuit/microsoft/checkfree proposal.  No other
+    financial standards seem to exist. The ofx dtd's are included
+    in version 1.1
 
 46) fix traversal for ledger windows
 fixed.
@@ -188,4 +191,8 @@ Fixed in 1.0.17
 54) core dump when deleting an account with open windows
 Hack-fixed in 1.0.17 by allowing a memory leak to occur.
 Non-memory-leak requires major redesign, and is in version 1.1
+
+55) core dump when picking deleted account in the transfer
+    pull-down.
+Feb 98 fixed
 
