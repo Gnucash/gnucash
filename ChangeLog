@@ -1,5 +1,10 @@
 2003-01-02  Derek Atkins  <derek@ihtfp.com>
 
+	* src/business/business-core/gncInvoice.c: need a non-const string
+	* src/engine/test/Makefile.am: add test-link, make libgw-engine
+	  depend on libgncmod-engine
+	* src/engine/test/test-link.c: add a source-file to test-link
+	
 	* src/engine/test-core/test-engine-stuff.c: don't test double
 	  KVPs, on the theory that they will soon be deprecated.
 	Fixes #127315

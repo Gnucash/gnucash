@@ -750,7 +750,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   GList *splitinfo = NULL;
   gnc_numeric total;
   gboolean reverse;
-  const char *name, *type, *lot_title;
+  const char *name, *type;
+  char *lot_title;
   Account *ccard_acct = NULL;
   GncOwner *owner;
 
