@@ -25,7 +25,7 @@
 ;; open-output-string
 ;; get-output-string
 ;;
-p;; I attempted to minimize non-public procedures and constants,
+;; I attempted to minimize non-public procedures and constants,
 ;; but the following remain:
 ;;
 ;; JDN-1900-01-01
