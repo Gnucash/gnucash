@@ -632,5 +632,5 @@ gboolean gncCustomerRegister (void)
 
 gint64 gncCustomerNextID (QofBook *book)
 {
-  return gnc_book_get_counter (book, _GNC_MOD_NAME);
+  return qof_book_get_counter (book, _GNC_MOD_NAME);
 }

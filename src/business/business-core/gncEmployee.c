@@ -32,12 +32,12 @@
 
 #include "guid.h"
 #include "messages.h"
-#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"
 
+#include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
 #include "qofid-p.h"
@@ -415,5 +415,5 @@ gboolean gncEmployeeRegister (void)
 
 gint64 gncEmployeeNextID (QofBook *book)
 {
-  return gnc_book_get_counter (book, _GNC_MOD_NAME);
+  return qof_book_get_counter (book, _GNC_MOD_NAME);
 }

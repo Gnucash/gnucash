@@ -36,6 +36,9 @@ typedef struct _gncInvoice GncInvoice;
 #include "gncOwner.h"
 #include "gnc-lot.h"
 
+#include "qofid.h"
+#include "qofinstance.h"
+
 #define GNC_INVOICE_MODULE_NAME "gncInvoice"
 
 /* Create/Destroy Functions */

@@ -32,6 +32,7 @@ typedef struct _gncEmployee GncEmployee;
 
 #include "qofbook.h"
 #include "qofid.h"
+
 #include "gncAddress.h"
 #include "Account.h"
 

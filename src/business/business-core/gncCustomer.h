@@ -31,6 +31,7 @@
 typedef struct _gncCustomer GncCustomer;
 
 #include "qofbook.h"
+#include "qofid.h"
 #include "qofinstance.h"
 #include "gncAddress.h"
 #include "gncBillTerm.h"

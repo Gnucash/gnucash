@@ -7,10 +7,10 @@
 #define GNC_OWNER_XML_V2_H
 
 #include "gncOwner.h"
-#include "gnc-book.h"
+#include "qofbook.h"
 
 gboolean   gnc_dom_tree_to_owner (xmlNodePtr node, GncOwner *owner,
-				  GNCBook *book);
+				  QofBook *book);
 xmlNodePtr gnc_owner_to_dom_tree (const char *tag, GncOwner *addr);
 
 #endif /* GNC_OWNER_XML_V2_H */

@@ -30,9 +30,10 @@
 
 typedef struct _gncOrder GncOrder;
 
-#include "gnc-book.h"
 #include "gncEntry.h"
 #include "gncOwner.h"
+#include "qofbook.h"
+#include "qofinstance.h"
 
 #define GNC_ORDER_MODULE_NAME "gncOrder"
 

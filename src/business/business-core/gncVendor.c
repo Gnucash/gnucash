@@ -181,13 +181,6 @@ void gncVendorSetNotes (GncVendor *vendor, const char *notes)
   gncVendorCommitEdit (vendor);
 }
 
-void gncVendorSetGUID (GncVendor *vendor, const GUID *guid)
-{
-  if (!vendor || !guid) return;
-
-  qof_entity_set_guid(&vendor->inst.entity, guid);
-}
-
 void gncVendorSetTerms (GncVendor *vendor, GncBillTerm *terms)
 {
   if (!vendor) return;
@@ -492,5 +485,5 @@ gboolean gncVendorRegister (void)
 
 gint64 gncVendorNextID (QofBook *book)
 {
-  return gnc_book_get_counter (book, _GNC_MOD_NAME);
+  return qof_book_get_counter (book, _GNC_MOD_NAME);
 }

@@ -4,7 +4,7 @@
 #include "guid.h"
 #include "gnc-module.h"
 #include "gnc-engine-util.h"
-#include "gncObject.h"
+#include "qofobject.h"
 
 #include "gncJob.h"
 #include "gncJobP.h"
@@ -13,25 +13,25 @@
 static int count = 0;
 
 static void
-test_string_fcn (GNCBook *book, const char *message,
+test_string_fcn (QofBook *book, const char *message,
 		 void (*set) (GncJob *, const char *str),
 		 const char * (*get)(GncJob *));
 
 #if 0
 static void
-test_numeric_fcn (GNCBook *book, const char *message,
+test_numeric_fcn (QofBook *book, const char *message,
 		  void (*set) (GncJob *, gnc_numeric),
 		  gnc_numeric (*get)(GncJob *));
 #endif
 
 static void
-test_bool_fcn (GNCBook *book, const char *message,
+test_bool_fcn (QofBook *book, const char *message,
 		  void (*set) (GncJob *, gboolean),
 		  gboolean (*get) (GncJob *));
 
 #if 0
 static void
-test_gint_fcn (GNCBook *book, const char *message,
+test_gint_fcn (QofBook *book, const char *message,
 	       void (*set) (GncJob *, gint),
 	       gint (*get) (GncJob *));
 #endif
@@ -39,10 +39,10 @@ test_gint_fcn (GNCBook *book, const char *message,
 static void
 test_job (void)
 {
-  GNCBook *book;
+  QofBook *book;
   GncJob *job;
 
-  book = gnc_book_new ();
+  book = qof_book_new ();
 
   /* Test creation/destruction */
   {
@@ -92,7 +92,7 @@ test_job (void)
     const char *res;
 
     gncJobSetName (job, str);
-    res = gncObjectPrintable (GNC_JOB_MODULE_NAME, job);
+    res = qof_object_printable (GNC_JOB_MODULE_NAME, job);
     do_test (res != NULL, "Printable NULL?");
     do_test (safe_strcmp (str, res) == 0, "Printable equals");
   }    
@@ -122,7 +122,7 @@ test_job (void)
 }
 
 static void
-test_string_fcn (GNCBook *book, const char *message,
+test_string_fcn (QofBook *book, const char *message,
 		 void (*set) (GncJob *, const char *str),
 		 const char * (*get)(GncJob *))
 {
@@ -141,7 +141,7 @@ test_string_fcn (GNCBook *book, const char *message,
 
 #if 0
 static void
-test_numeric_fcn (GNCBook *book, const char *message,
+test_numeric_fcn (QofBook *book, const char *message,
 		  void (*set) (GncJob *, gnc_numeric),
 		  gnc_numeric (*get)(GncJob *))
 {
@@ -160,7 +160,7 @@ test_numeric_fcn (GNCBook *book, const char *message,
 #endif
 
 static void
-test_bool_fcn (GNCBook *book, const char *message,
+test_bool_fcn (QofBook *book, const char *message,
 	       void (*set) (GncJob *, gboolean),
 	       gboolean (*get) (GncJob *))
 {
@@ -181,7 +181,7 @@ test_bool_fcn (GNCBook *book, const char *message,
 
 #if 0
 static void
-test_gint_fcn (GNCBook *book, const char *message,
+test_gint_fcn (QofBook *book, const char *message,
 	       void (*set) (GncJob *, gint),
 	       gint (*get) (GncJob *))
 {
