@@ -1,5 +1,12 @@
 Version history:
 ------- -------
+ 1.5.1  - 18 September 2000
+         o new Spanish translation
+         o new Russion translation
+         o improved qif importing
+         o updated documentation
+         o lots of bug fixes
+
  1.5.0  - 9 July 2000
          o switch to gtkhtml widget
          o updated French translations
