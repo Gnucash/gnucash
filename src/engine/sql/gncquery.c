@@ -81,7 +81,8 @@ sql_Query_destroy (sqlQuery *sq)
 }
 
 /* =========================================================== */
-/* Note that postgres supports both case-sensitive and 
+/* Macro for PD_STRING query types
+ * Note that postgres supports both case-sensitive and 
  * case-insensitve string searches, and it also supports 
  * regex!  yahooo! 
  */
@@ -109,6 +110,55 @@ sql_Query_destroy (sqlQuery *sq)
 }
 
 /* =========================================================== */
+/* Macro for PD_AMOUNT type terms.  The logic used here in the
+ * SQL exactly matches that used in the Query.c code.  If
+ * that code is incorrect or has changed, then the code below is 
+ * broken as well. 
+ */
+
+#define AMOUNT_TERM(fieldname)					\
+{								\
+   if (0 == pd->amount.sense)					\
+   {								\
+      sq->pq = stpcpy (sq->pq, "NOT (");			\
+   }								\
+   switch(pd->amount.amt_sgn) 					\
+   {								\
+      case AMT_SGN_MATCH_CREDIT:				\
+         sq->pq = stpcpy(sq->pq, fieldname " <= 0 AND "); 	\
+         break;							\
+      case AMT_SGN_MATCH_DEBIT:					\
+         sq->pq = stpcpy(sq->pq, fieldname " >= 0 AND "); 	\
+         break;							\
+      default:							\
+         break;							\
+   }								\
+   switch(pd->amount.how) 					\
+   {								\
+      case AMT_MATCH_ATLEAST:					\
+         sq->pq = stpcpy(sq->pq, 				\
+            "abs(" fieldname ") >= gncCommodity.fraction * float8"); \
+         sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); \
+         break;							\
+      case AMT_MATCH_ATMOST:					\
+         sq->pq = stpcpy(sq->pq, 				\
+            "abs(" fieldname ") <= gncCommodity.fraction * float8"); \
+         sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); \
+         break;							\
+      case AMT_MATCH_EXACTLY:					\
+         sq->pq = stpcpy(sq->pq, 				\
+            "abs(abs(" fieldname ") - gncCommodity.fraction * float8"); \
+         sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); \
+         sq->pq = stpcpy(sq->pq, ") < 1");			\
+         break;							\
+   }								\
+   if (0 == pd->amount.sense)					\
+   {								\
+      sq->pq = stpcpy (sq->pq, ") ");				\
+   }								\
+}
+
+/* =========================================================== */
 
 const char *
 sqlQuery_build (sqlQuery*sq, Query *q)
@@ -125,7 +175,8 @@ sqlQuery_build (sqlQuery*sq, Query *q)
    /* reset the buffer pointers */
    sq->pq = sq->q_base;
    sq->pq = stpcpy(sq->pq, 
-               "SELECT gncEntry.transGuid FROM gncEntry, gncTransaction "
+               "SELECT gncEntry.transGuid "
+               "  FROM gncEntry, gncTransaction, gncAccount, gncCommodity "
                "  WHERE gncEntry.transGuid = gncTransaction.transGuid AND ( ");
 
    qterms = xaccQueryGetTerms (q);
@@ -192,7 +243,9 @@ sqlQuery_build (sqlQuery*sq, Query *q)
             case PR_AMOUNT:
             {
                PINFO("term is PR_AMOUNT");
-               PERR ("not implemented");
+               sq->pq = stpcpy(sq->pq, 
+                     "gncTransaction.currency = gncCommodity.commodity AND ");
+               AMOUNT_TERM ("gncEntry.value");
                break;
             }
 
@@ -259,18 +312,61 @@ sqlQuery_build (sqlQuery*sq, Query *q)
                STRING_TERM ("gncTransaction.num");
                break;
 
-            case PR_PRICE:
+            case PR_PRICE: {
                PINFO("term is PR_PRICE");
-               PERR ("not implemented");
-               break;
 
-            case PR_SHRS:
-               PINFO("term is PR_SHRS");
-               PERR ("not implemented");
+               if (0 == pd->amount.sense)
+               {
+                  sq->pq = stpcpy (sq->pq, "NOT (");
+               }
+               switch(pd->amount.amt_sgn) 
+               {
+                  case AMT_SGN_MATCH_CREDIT:
+                     sq->pq = stpcpy(sq->pq, "gncEntry.value / gncEntry.amount <= 0 AND "); 
+                     break;
+                  case AMT_SGN_MATCH_DEBIT:
+                     sq->pq = stpcpy(sq->pq, "gncEntry.value / gncEntry.amount >= 0 AND "); 
+                     break;
+                  default:
+                     break;
+               }
+               switch(pd->amount.how) 
+               {
+                  case AMT_MATCH_ATLEAST:
+                     sq->pq = stpcpy(sq->pq, 
+                        "gncHelperPrVal(gncEntry) >= gncHelperPrAmt(gncEntry) * float8"); 
+                     sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); 
+                     break;
+                  case AMT_MATCH_ATMOST:
+                     sq->pq = stpcpy(sq->pq, 
+                        "gncHelperPrVal(gncEntry) <= gncHelperPrAmt(gncEntry) * float8"); 
+                     sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); 
+                     break;
+                  case AMT_MATCH_EXACTLY:
+                     sq->pq = stpcpy(sq->pq, 
+                        "abs(gncHelperPrVal(gncEntry) -  gncHelperPrAmt(gncEntry) * float8"); 
+                     sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); 
+                     sq->pq = stpcpy(sq->pq, ") < 1");
+                     break;
+               }
+               if (0 == pd->amount.sense)
+               {
+                  sq->pq = stpcpy (sq->pq, ") ");
+               }
                break;
+            }
+
+            case PR_SHRS: {
+               PINFO("term is PR_SHRS");
+               sq->pq = stpcpy(sq->pq, 
+                     "gncEntry.accountGuid = gncAccount.accountGuid AND "
+                     "gncAccount.commodity = gncCommodity.commodity AND ");
+               AMOUNT_TERM ("gncEntry.amount");
+               break;
+            }
 
             default:
-               PERR ("unkown query term type");
+               PERR ("unkown query term type %d", pd->base.term_type);
          }
       }
 
