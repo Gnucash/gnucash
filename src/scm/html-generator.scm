@@ -8,7 +8,7 @@
    '("<TR>")
    items
    '("</TR>")))
-   
+
 (define (html-table-row-guess header? strong? items)
   (html-table-row-manual
    (map
@@ -32,11 +32,11 @@
     (if (< amount 0)
 	(string-append
 	 "color=#ff0000>("
-	 (sprintf #f "%.2f" (- amount))
+	 (gnc:amount->string (- amount) #f #t #f)
 	 ")")
 	(string-append
 	 ">&nbsp;"
-	 (sprintf #f "%.2f" amount)
+	 (gnc:amount->string amount #f #t #f)
 	 "&nbsp;"))
     "</font>")))
 
@@ -88,6 +88,19 @@
 (define (html-cell-attributes value attributes)
   (string-append "<TD " attributes ">" value "</TD>"))
 
+(define (html-start-document-title title)
+  (list 
+   "<HTML>"
+   "<HEAD>"
+   "<TITLE>" title "</TITLE>"
+   "</HEAD>"
+   "<BODY bgcolor=#99ccff>"))
+
+(define (html-start-document-color color)
+  (list 
+   "<HTML>"
+   "<BODY bgcolor=" color ">"))
+
 (define (html-start-document)
   (list 
    "<HTML>"
@@ -124,7 +137,7 @@
 
 ; Create a column entry
 (define (html-table-col val)
-  (sprintf #f "<TD align=right> %s </TD>" (tostring val)))
+  (string-append "<TD align=right>" (tostring val) "</TD>"))
 
 ; Create an html table row from a list of entries
 (define (html-table-row lst)
@@ -144,10 +157,11 @@
    (html-table-footer)))
 
 (define (html-table-headcol val)
-  (sprintf #f "<TH justify=center> %s </TH>" (tostring val)))
+  (string-append "<TH justify=center>" (tostring val) "</TH>"))
 
 (define (html-table-header vec)
-   (apply string-append "<TABLE cellspacing=10 rules=\"rows\">\n" (map html-table-headcol vec)))
+   (apply string-append "<TABLE cellspacing=10 rules=\"rows\">\n"
+          (map html-table-headcol vec)))
 
 (define (html-table-footer)
    (sprintf #f "</TABLE>"))

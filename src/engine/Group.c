@@ -910,25 +910,81 @@ xaccGroupGetDepth (AccountGroup *grp)
 \********************************************************************/
 
 void
+xaccSplitsBeginStagedTransactionTraversals (Split **splits)
+{
+  Transaction *trans;
+  Split *split;
+
+  if (splits == NULL) return;
+
+  for (split = *splits; split != NULL; split++) {
+    trans = split->parent;
+    if (trans != NULL)
+      trans->marker = 0;
+  }
+}
+
+void
+xaccAccountBeginStagedTransactionTraversals (Account *account)
+{
+  if (account == NULL) return;
+
+  xaccSplitsBeginStagedTransactionTraversals(account->splits);
+}
+
+void
+xaccAccountsBeginStagedTransactionTraversals (Account **accounts)
+{
+  Account *account;
+
+  if (accounts == NULL) return;
+
+  for (account = *accounts; account != NULL; account++)
+    xaccAccountBeginStagedTransactionTraversals(account);
+}
+
+gncBoolean
+xaccTransactionTraverse(Transaction *trans, int stage)
+{
+  if (trans == NULL) return GNC_F;
+
+  if (trans->marker < stage)
+  {
+    trans->marker = stage;
+    return GNC_T;
+  }
+
+  return GNC_F;
+}
+
+gncBoolean
+xaccSplitTransactionTraverse(Split *split, int stage)
+{
+  if (split == NULL) return GNC_F;
+
+  return xaccTransactionTraverse(split->parent, stage);
+}
+
+void
 xaccGroupBeginStagedTransactionTraversals (AccountGroup *grp) 
 {
   unsigned int numAcc;
   unsigned int i;
-  
+
   if (!grp) return;
-  
+
   numAcc = grp->numAcc;
   for(i = 0; i < numAcc; i++) {
     unsigned int n = 0;
     Account *acc;
     Split *s = NULL;
     acc = xaccGroupGetAccount(grp, i);
-    
-    if(!acc) return;
-    
+
+    if (!acc) return;
+
     /* recursively do sub-accounts */
     xaccGroupBeginStagedTransactionTraversals(acc->children);
-    
+
     s = acc->splits[0];
     while (s) {
       Transaction *trans = s->parent;
@@ -941,15 +997,16 @@ xaccGroupBeginStagedTransactionTraversals (AccountGroup *grp)
 
 int
 xaccAccountStagedTransactionTraversal (Account *acc,
-                        unsigned int stage,
-                        int (*callback)(Transaction *t, void *cb_data),
-                        void *cb_data) 
+                                       unsigned int stage,
+                                       int (*callback)(Transaction *t,
+                                                       void *cb_data),
+                                       void *cb_data)
 {
   unsigned int n = 0;
   Split *s = NULL;
-  
-  if(!acc) return 0;
-  
+
+  if (!acc) return 0;
+
   s = acc->splits[0];
   if (callback) {
     int retval;
@@ -973,34 +1030,39 @@ xaccAccountStagedTransactionTraversal (Account *acc,
       s = acc->splits[n];
     }
   }
+
   return 0;
 }
-
 
 int
 xaccGroupStagedTransactionTraversal(AccountGroup *grp,
                                     unsigned int stage,
-                                    int (*callback)(Transaction *t, void *cb_data),
-                                    void *cb_data) 
+                                    int (*callback)(Transaction *t,
+                                                    void *cb_data),
+                                    void *cb_data)
 {
   unsigned int numAcc;
   unsigned int i;
-  
+
   if (!grp) return 0;
-  
+
   numAcc = grp->numAcc;
   for(i = 0; i < numAcc; i++) {
     int retval;
     Account *acc;
+
     acc = xaccGroupGetAccount(grp, i);
-    
+
     /* recursively do sub-accounts */
-    retval = xaccGroupStagedTransactionTraversal 
-               (acc->children, stage, callback, cb_data);
+    retval = xaccGroupStagedTransactionTraversal (acc->children, stage,
+                                                  callback, cb_data);
     if (retval) return retval;
-    retval = xaccAccountStagedTransactionTraversal (acc, stage, callback, cb_data);
+
+    retval = xaccAccountStagedTransactionTraversal (acc, stage,
+                                                    callback, cb_data);
     if (retval) return retval;
   }
+
   return 0;
 }
 

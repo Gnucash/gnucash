@@ -1,160 +1,121 @@
-
 (gnc:support "report/folio.scm")
+(gnc:depend "report-utilities.scm")
+(gnc:depend "html-generator.scm")
 
-;; I haven't finished converting this yet...
+(let ()
 
-;(gnc:define-report
- ;; version
-; 1
- ;; Menu name
-; "Folio"
- ;; Options Generator
-; #f
- ;; Rendering thunk.  See report.scm for details.
-; (lambda (options)
-;   (list
-;    "<html>"
-;    "<head>"
-;    "<title>Portfolio Valuation</title>"
-;    "</head>"
+  (define string-db (gnc:make-string-database))
 
-;    "<body bgcolor=#ccccff>"
-;    "This page shows the valuation of your stock/mutual fund portfolio."
-;    "<br>"
-;    "You can create custom reports by editing the file"
-;    "<tt>Reports/report-folio.phtml</tt>"
-;    "<p>"
+  (define (folio-options-generator)
 
-    ;; currency symbol that is printed is a dollar sign, for now
-    ;; currency amounts get printed with two decimal places
-    
-    ;; require ...
-    ;; hack alert -- need a require here, since the folowing routine(s)
-    ;; are identical to those in gnc-price script.
-    ;; --------------------------------------------------
-    ;; @account_list = &account_flatlist ($account_group);
-    ;; This rouine accepts a pointer to a group, returns
-    ;; a flat list of all of the children in the group.
+    (define gnc:*folio-report-options* (gnc:new-options))
+    (define (gnc:register-folio-option new-option)
+      (gnc:register-option gnc:*folio-report-options* new-option)) 
 
-;sub account_flatlist
-;{
-;   local ($grp) = $_[0];
-;   local ($naccts) = gnucash::xaccGroupGetNumAccounts ($grp);
-;   local ($n);
-;   local (@acctlist, @childlist);
-;   local ($children);
+    (gnc:register-folio-option
+     (gnc:make-date-option
+      "Portfolio Options" "At"
+      "a" "Calculate stock portfolio value at this date"
+      (lambda ()
+        (let ((bdtime (localtime (current-time))))
+          (set-tm:sec bdtime 59)
+          (set-tm:min bdtime 59)
+          (set-tm:hour bdtime 23)
+          (let ((time (car (mktime bdtime))))
+            (cons time 0))))
+      #f))
 
-;   foreach $n (0..$naccts-1) {
-;      $acct = gnucash::xaccGroupGetAccount ($grp, $n);
-;      push (@acctlist, $acct);
-;      $children = gnucash::xaccAccountGetChildren ($acct);
-;      if ($children) {
-;         @childlist = &account_flatlist ($children);
-;         push (@acctlist, @childlist);
-;      }
-;   }
+    gnc:*folio-report-options*)
 
-;   return (@acctlist);
-;}
+  (define (titles)
+    (map (lambda (key) (string-db 'lookup key))
+         '(name ticker shares recent value cost profit-loss)))
 
-;; --------------------------------------------------
-;; $split = &get_last_split ($account);
-;; returns the most recent split in the account.
+  (define (gnc:account-get-last-split account)
+    (let ((num-splits (gnc:account-get-split-count account)))
+      (gnc:account-get-split account (if (> num-splits 0)
+                                         (- num-splits 1)
+                                         0))))
 
-;sub get_last_split
-;{
-;   local ($acct)  = $_[0];
-;   local ($query, $splitlist, $split);
+  (define (report-rows)
 
-;   $query = gnucash::xaccMallocQuery();
-;   gnucash::xaccQueryAddAccount ($query, $acct);
-;   gnucash::xaccQuerySetMaxSplits ($query, 1);
-;   $splitlist = gnucash::xaccQueryGetSplits ($query);
+    (define total-value (make-stats-collector))
+    (define total-cost (make-stats-collector))
 
-;   $split = gnucash::IthSplit ($splitlist, 0);
-;}
+    (define blank-row
+      (list "&nbsp" "&nbsp" "&nbsp" "&nbsp" "&nbsp" "&nbsp" "&nbsp"))
 
-;; --------------------------------------------------
+    (define (report-row account)
+      (let ((last-split (gnc:account-get-last-split account)))
+        (let ((shares (gnc:split-get-share-balance last-split))
+              (price (gnc:split-get-share-price last-split))
+              (balance (gnc:split-get-balance last-split))
+              (cost (gnc:split-get-cost-basis last-split)))
 
-;; get a flat list of all the accounts ...
-;@acclist = &account_flatlist ($topgroup);
+          (total-value 'add balance)
+          (total-cost 'add cost)
 
-;; get the most recent price date ..
-;$latest = -1.0e20;
-;$earliest = 1.0e20;
-;foreach $acct (@acclist) 
-;{
-;   $accntype = &gnucash::xaccAccountGetType($acct);
-;   if (($accntype == $gnucash::STOCK) || 
-;       ($accntype == $gnucash::MUTUAL)) {
-;      $split = &get_last_split ($acct);
-;      $trans = gnucash::xaccSplitGetParent ($split);
-;      $secs = gnucash::xaccTransGetDate ($trans);
-;      if ($latest < $secs) { $latest = $secs; }
-;      if ($earliest > $secs) { $earliest = $secs; }
-;   }
-;}
+          (list
+           (gnc:account-get-name account)
+           (gnc:account-get-security account)
+           (gnc:amount->string shares #f #t #t)
+           (gnc:amount->string price #f #t #f)
+           (gnc:amount->string balance #f #t #f)
+           (gnc:amount->string cost #f #t #f)
+           (gnc:amount->string (- balance cost) #f #t #f)))))
 
-;$ldayte = gnucash::xaccPrintDateSecs ($latest);
-;$edayte = gnucash::xaccPrintDateSecs ($earliest);
+    (define (net-row)
+      (let ((value (total-value 'total #f))
+            (cost (total-cost 'total #f)))
+        (list (html-strong (string-db 'lookup 'net))
+              "&nbsp" "&nbsp" "&nbsp"
+              (gnc:amount->string value #f #t #f)
+              (gnc:amount->string cost #f #t #f)
+              (gnc:amount->string (- value cost) #f #t #f))))
 
+    (define (report-rows-main)
+      (gnc:group-map-accounts
+       (lambda (account)
+         (let ((type (gnc:account-type->symbol
+                      (gnc:account-get-type account))))
+           (if (member type '(STOCK MUTUAL))
+               (report-row account)
+               #f)))
+       (gnc:get-current-group)))
 
-;<table cellpadding=1>
-;<caption><b>Stock Portfolio Valuation</b>
-;<br>Earliest Price <:= $edayte :> &nbsp; &nbsp; Latest Price <:= $ldayte :>
-;</caption>
-;<tr>
-;<th>Name
-;<th>Ticker
-;<th align=center>Shares
-;<th align=center>Recent Price
-;<th align=center>Value
-;<th align=center>Cost
-;<th align=center>Profit/Loss
+    (define (collapse list collapsed)
+      (cond ((null? list) collapsed)
+            (else (collapse (cdr list)
+                            (if (car list)
+                                (cons (car list) collapsed)
+                                collapsed)))))
 
-;$totvalue = 0;
-;$totcost = 0;
+    (let ((main-rows (collapse (report-rows-main) '())))
+      (reverse (cons (net-row)
+                     (cons blank-row main-rows)))))
 
-;foreach $acct (@acclist) 
-;{
+  (define (folio-renderer options)
+    (list
+     (html-start-document-title (string-db 'lookup 'title))
+     (html-table (titles) (report-rows))
+     (html-end-document)))
 
-;   $accntype = &gnucash::xaccAccountGetType($acct);
-;   if (($accntype == $gnucash::STOCK) || 
-;       ($accntype == $gnucash::MUTUAL)) {
+  (string-db 'store 'title "Stock Portfolio Valuation")
+  (string-db 'store 'name "Name")
+  (string-db 'store 'ticker "Ticker")
+  (string-db 'store 'shares "Shares")
+  (string-db 'store 'recent "Recent Price")
+  (string-db 'store 'value "Value")
+  (string-db 'store 'cost "Cost")
+  (string-db 'store 'profit-loss "Profit/Loss")
+  (string-db 'store 'net "Net")
 
-;      $accname = &gnucash::xaccAccountGetName($acct);
-;      $ticker = &gnucash::xaccAccountGetSecurity ($acct);
-;      $accbaln = &gnucash::xaccAccountGetBalance($acct);
-
-;      $split = &get_last_split ($acct);
-;      $price = gnucash::xaccSplitGetSharePrice ($split);
-;      $shares = gnucash::xaccSplitGetShareBalance ($split);
-;      $value = gnucash::xaccSplitGetBalance ($split);
-;      $cost = gnucash::xaccSplitGetCostBasis ($split);
-;      $profit = $accbaln - $cost;
-
-;      $totvalue += $value;
-;      $totcost += $cost;
-
-;      print "<tr><td>$accname";
-;      print "<td>$ticker";
-;      printf "<td align=right nowrap>%10.3f", $shares;
-;      printf "<td align=right nowrap>\$%10.2f\n", $price;
-;      printf "<td align=right nowrap>\$%10.2f\n", $value;
-;      printf "<td align=right nowrap>\$%10.2f\n", $cost;
-;      printf "<td align=right nowrap>\$%10.2f\n", $profit;
-;   }
-;}
-
-;print "<tr><td>&nbsp;<td>&nbsp;<td>&nbsp;\n";   ;; blank line
-;print "<td>&nbsp;<td>&nbsp;<td>&nbsp;\n";   ;; blank line
-
-;print "<tr><td><b>Net</b><td>&nbsp;";
-;print "<td>&nbsp;<td>&nbsp;";
-;printf "<td align=right nowrap>&nbsp;&nbsp;<u>\$%10.2f</u> \n", $totvalue;
-;printf "<td align=right nowrap>&nbsp;&nbsp;<u>\$%10.2f</u> \n", $totcost;
-;printf "<td align=right nowrap>&nbsp;&nbsp;<u>\$%10.2f</u> \n", $totvalue-$totcost;
-
-;</table>
-;</body>
-;</html>
+  (gnc:define-report
+   ;; version
+   1
+   ;; Menu name
+   "Stock Portfolio"
+   ;; Options Generator
+   #f
+   ;; Renderer
+   folio-renderer))

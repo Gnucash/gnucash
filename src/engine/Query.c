@@ -47,7 +47,8 @@ static short module = MOD_ENGINE;
 
 /* ================================================== */
 
-struct _Query {
+struct _Query
+{
    Account ** acc_list;
 
    /* maximum number of splits to return */
@@ -147,7 +148,8 @@ xaccQuerySetAccounts (Query *q, Account **list)
    /* copy in the account list */
    i=0; acc = list[0];
    while (acc) {
-      i++;  acc = list[i];
+      i++;
+      acc = list[i];
    }  
 
    q->acc_list = (Account **) _malloc ( (i+1) * sizeof (Account *));
@@ -155,7 +157,8 @@ xaccQuerySetAccounts (Query *q, Account **list)
    i=0; acc = list[0];
    while (acc) {
       q->acc_list[i] = acc;
-      i++;  acc = list[i];
+      i++;
+      acc = list[i];
    }  
    q->acc_list[i] = NULL;
 }
@@ -761,7 +764,7 @@ xaccQueryGetSplits (Query *q)
    q->latest_found.tv_sec = 0;
    q->latest_found.tv_nsec = 0; 
 
-   slist =  q->split_list;
+   slist = q->split_list;
    i=0; s=slist[0];
    while (s) {
       if (q->earliest_found.tv_sec > s->parent->date_posted.tv_sec) {
@@ -772,8 +775,9 @@ xaccQueryGetSplits (Query *q)
       }
       i++; s=slist[i];
    }
+
    LEAVE ("xaccQueryGetSplits(): returning  %d splits\n", nret);
-   
+
    return q->split_list;
 }
 

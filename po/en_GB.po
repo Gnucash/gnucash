@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.3.0\n"
-"POT-Creation-Date: 2000-03-27 00:01-0800\n"
+"POT-Creation-Date: 2000-03-29 03:34-0800\n"
 "PO-Revision-Date: 2000-03-06 11:20+0000\n"
 "Last-Translator: David Woodhouse <dwmw2@infradead.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -389,7 +389,7 @@ msgstr ""
 msgid "Delete the current transaction"
 msgstr "Double mode colours alternate with transactions"
 
-#: messages-i18n.c:78 po/guile_strings.txt:119
+#: messages-i18n.c:78 po/guile_strings.txt:124
 msgid "Show transactions on two lines with more information"
 msgstr ""
 
@@ -535,7 +535,7 @@ msgstr ""
 msgid "Show all of the transactions in the account"
 msgstr ""
 
-#: messages-i18n.c:114 po/guile_strings.txt:123
+#: messages-i18n.c:114 po/guile_strings.txt:128
 msgid "Show transactions on single lines"
 msgstr ""
 
@@ -740,7 +740,7 @@ msgstr ""
 msgid "Account Code"
 msgstr ""
 
-#: messages-i18n.c:165 po/guile_strings.txt:6
+#: messages-i18n.c:165 po/guile_strings.txt:7
 msgid "Account Name"
 msgstr ""
 
@@ -752,11 +752,11 @@ msgstr ""
 msgid "Adjust Balance"
 msgstr ""
 
-#: messages-i18n.c:168 po/guile_strings.txt:251
+#: messages-i18n.c:168 po/guile_strings.txt:259
 msgid "Auto Double"
 msgstr ""
 
-#: messages-i18n.c:169 po/guile_strings.txt:57
+#: messages-i18n.c:169 po/guile_strings.txt:62
 msgid "Auto Single"
 msgstr ""
 
@@ -788,7 +788,7 @@ msgstr ""
 msgid "Delete Transaction"
 msgstr ""
 
-#: messages-i18n.c:177 po/guile_strings.txt:16
+#: messages-i18n.c:177 po/guile_strings.txt:19
 msgid "Double Line"
 msgstr ""
 
@@ -832,11 +832,11 @@ msgstr ""
 msgid "Money Market"
 msgstr ""
 
-#: messages-i18n.c:188 po/guile_strings.txt:47
+#: messages-i18n.c:188 po/guile_strings.txt:51
 msgid "Multi Line"
 msgstr ""
 
-#: messages-i18n.c:189 po/guile_strings.txt:3
+#: messages-i18n.c:189 po/guile_strings.txt:4
 msgid "Mutual Fund"
 msgstr ""
 
@@ -961,7 +961,7 @@ msgstr ""
 msgid "Show Latest"
 msgstr ""
 
-#: messages-i18n.c:220 po/guile_strings.txt:156
+#: messages-i18n.c:220 po/guile_strings.txt:162
 msgid "Single Line"
 msgstr ""
 
@@ -1025,7 +1025,7 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: messages-i18n.c:236 po/guile_strings.txt:52
+#: messages-i18n.c:236 po/guile_strings.txt:56
 msgid "Account"
 msgstr ""
 
@@ -1050,7 +1050,7 @@ msgstr ""
 msgid "Activities"
 msgstr ""
 
-#: messages-i18n.c:242 po/guile_strings.txt:46
+#: messages-i18n.c:242 po/guile_strings.txt:50
 msgid "Amount"
 msgstr ""
 
@@ -1062,7 +1062,7 @@ msgstr ""
 msgid "Phone"
 msgstr ""
 
-#: messages-i18n.c:245 po/guile_strings.txt:141
+#: messages-i18n.c:245 po/guile_strings.txt:146
 #: src/gnome/glade-gnc-dialogs.c:626
 msgid "Asset"
 msgstr ""
@@ -1079,11 +1079,11 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: messages-i18n.c:249 po/guile_strings.txt:11
+#: messages-i18n.c:249 po/guile_strings.txt:12
 msgid "Balance"
 msgstr ""
 
-#: messages-i18n.c:250 po/guile_strings.txt:89
+#: messages-i18n.c:250 po/guile_strings.txt:94
 #: src/gnome/glade-gnc-dialogs.c:620
 msgid "Bank"
 msgstr ""
@@ -1104,7 +1104,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: messages-i18n.c:255 po/guile_strings.txt:111
+#: messages-i18n.c:255 po/guile_strings.txt:116
 #: src/gnome/glade-gnc-dialogs.c:623
 msgid "Cash"
 msgstr ""
@@ -1141,7 +1141,7 @@ msgstr ""
 msgid "Create"
 msgstr ""
 
-#: messages-i18n.c:264 po/guile_strings.txt:204
+#: messages-i18n.c:264 po/guile_strings.txt:211
 #: src/gnome/glade-gnc-dialogs.c:629
 msgid "Credit"
 msgstr ""
@@ -1150,16 +1150,16 @@ msgstr ""
 msgid "Credits"
 msgstr ""
 
-#: messages-i18n.c:266 po/guile_strings.txt:107
+#: messages-i18n.c:266 po/guile_strings.txt:112
 #: src/gnome/glade-gnc-dialogs.c:641
 msgid "Currency"
 msgstr ""
 
-#: messages-i18n.c:267 po/guile_strings.txt:5
+#: messages-i18n.c:267 po/guile_strings.txt:6
 msgid "Date"
 msgstr ""
 
-#: messages-i18n.c:268 po/guile_strings.txt:29
+#: messages-i18n.c:268 po/guile_strings.txt:32
 msgid "Debit"
 msgstr ""
 
@@ -1187,7 +1187,7 @@ msgstr ""
 msgid "Depreciation"
 msgstr ""
 
-#: messages-i18n.c:275 po/guile_strings.txt:124
+#: messages-i18n.c:275 po/guile_strings.txt:129
 msgid "Description"
 msgstr ""
 
@@ -1215,7 +1215,7 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: messages-i18n.c:282 po/guile_strings.txt:7
+#: messages-i18n.c:282 po/guile_strings.txt:8
 #: src/gnome/glade-gnc-dialogs.c:650
 msgid "Equity"
 msgstr ""
@@ -1224,7 +1224,7 @@ msgstr ""
 msgid "Exit"
 msgstr ""
 
-#: messages-i18n.c:284 po/guile_strings.txt:264
+#: messages-i18n.c:284 po/guile_strings.txt:274
 #: src/gnome/glade-gnc-dialogs.c:647
 msgid "Expense"
 msgstr ""
@@ -1233,7 +1233,7 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: messages-i18n.c:286 po/guile_strings.txt:290
+#: messages-i18n.c:286 po/guile_strings.txt:300
 msgid "Extensions"
 msgstr ""
 
@@ -1249,7 +1249,7 @@ msgstr ""
 msgid "Forward"
 msgstr ""
 
-#: messages-i18n.c:290 po/guile_strings.txt:101
+#: messages-i18n.c:290 po/guile_strings.txt:106
 msgid "From"
 msgstr ""
 
@@ -1265,7 +1265,7 @@ msgstr ""
 msgid "Import"
 msgstr ""
 
-#: messages-i18n.c:294 po/guile_strings.txt:198
+#: messages-i18n.c:294 po/guile_strings.txt:205
 #: src/gnome/glade-gnc-dialogs.c:644
 msgid "Income"
 msgstr ""
@@ -1282,7 +1282,7 @@ msgstr ""
 msgid "Jump"
 msgstr ""
 
-#: messages-i18n.c:298 po/guile_strings.txt:159
+#: messages-i18n.c:298 po/guile_strings.txt:165
 #: src/gnome/glade-gnc-dialogs.c:632
 msgid "Liability"
 msgstr ""
@@ -1299,7 +1299,7 @@ msgstr ""
 msgid "LTCG"
 msgstr ""
 
-#: messages-i18n.c:302 po/guile_strings.txt:23
+#: messages-i18n.c:302 po/guile_strings.txt:26
 msgid "Memo"
 msgstr ""
 
@@ -1311,15 +1311,16 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: messages-i18n.c:305
+#: messages-i18n.c:305 src/gnome/print-session.c:108
+#: src/gnome/print-session.c:197
 msgid "(none)"
 msgstr ""
 
-#: messages-i18n.c:306 po/guile_strings.txt:170
+#: messages-i18n.c:306 po/guile_strings.txt:176
 msgid "Notes"
 msgstr ""
 
-#: messages-i18n.c:307 po/guile_strings.txt:143
+#: messages-i18n.c:307 po/guile_strings.txt:148
 msgid "Num"
 msgstr ""
 
@@ -1359,7 +1360,7 @@ msgstr ""
 msgid "Price"
 msgstr ""
 
-#: messages-i18n.c:317 src/gnome/glade-gnc-dialogs.c:978
+#: messages-i18n.c:317 src/gnome/glade-gnc-dialogs.c:971
 msgid "Print"
 msgstr ""
 
@@ -1387,11 +1388,11 @@ msgstr ""
 msgid "Record"
 msgstr ""
 
-#: messages-i18n.c:324 po/guile_strings.txt:175
+#: messages-i18n.c:324 po/guile_strings.txt:181
 msgid "Register"
 msgstr ""
 
-#: messages-i18n.c:325 po/guile_strings.txt:169
+#: messages-i18n.c:325 po/guile_strings.txt:175
 msgid "Report"
 msgstr ""
 
@@ -1411,7 +1412,7 @@ msgstr ""
 msgid "Scrub"
 msgstr ""
 
-#: messages-i18n.c:330 po/guile_strings.txt:155
+#: messages-i18n.c:330 po/guile_strings.txt:161
 msgid "Security"
 msgstr ""
 
@@ -1443,7 +1444,7 @@ msgstr ""
 msgid "STCG"
 msgstr ""
 
-#: messages-i18n.c:338 po/guile_strings.txt:288
+#: messages-i18n.c:338 po/guile_strings.txt:298
 #: src/gnome/glade-gnc-dialogs.c:635
 msgid "Stock"
 msgstr ""
@@ -1460,7 +1461,7 @@ msgstr ""
 msgid "Teller"
 msgstr ""
 
-#: messages-i18n.c:342 po/guile_strings.txt:244
+#: messages-i18n.c:342 po/guile_strings.txt:252
 msgid "To"
 msgstr ""
 
@@ -1472,7 +1473,7 @@ msgstr ""
 msgid "Total"
 msgstr ""
 
-#: messages-i18n.c:345 po/guile_strings.txt:246
+#: messages-i18n.c:345 po/guile_strings.txt:254
 #: src/gnome/glade-gnc-dialogs.c:354 src/gnome/glade-gnc-dialogs.c:408
 msgid "Type"
 msgstr ""
@@ -1485,7 +1486,7 @@ msgstr ""
 msgid "Transfer"
 msgstr ""
 
-#: messages-i18n.c:348
+#: messages-i18n.c:348 po/guile_strings.txt:57
 msgid "Value"
 msgstr ""
 
@@ -1513,71 +1514,83 @@ msgstr ""
 msgid "Second Option"
 msgstr ""
 
-#: po/guile_strings.txt:4
+#: po/guile_strings.txt:3
+msgid "Cost"
+msgstr ""
+
+#: po/guile_strings.txt:5
 msgid "Status"
 msgstr ""
 
-#: po/guile_strings.txt:8
+#: po/guile_strings.txt:9
 msgid "Account Separator"
 msgstr ""
 
-#: po/guile_strings.txt:9
+#: po/guile_strings.txt:10
 msgid ""
 "The default background color for splits in multi-line mode and the auto modes"
 msgstr ""
 "The default background colour for splits in multi-line mode and the auto "
 "modes"
 
-#: po/guile_strings.txt:10
+#: po/guile_strings.txt:11
 msgid "Auto-Raise Lists"
 msgstr ""
 
-#: po/guile_strings.txt:12
+#: po/guile_strings.txt:13
 msgid "Secondary Sort Order"
 msgstr ""
 
-#: po/guile_strings.txt:13
-msgid "The types of accounts for which balances are sign-reversed"
-msgstr ""
-
 #: po/guile_strings.txt:14
-msgid "The Good"
+msgid "Stock Portfolio Valuation"
 msgstr ""
 
 #: po/guile_strings.txt:15
+msgid "Stock Portfolio"
+msgstr ""
+
+#: po/guile_strings.txt:16
+msgid "The types of accounts for which balances are sign-reversed"
+msgstr ""
+
+#: po/guile_strings.txt:17
+msgid "The Good"
+msgstr ""
+
+#: po/guile_strings.txt:18
 #, c-format
 msgid "The current time is %s."
 msgstr ""
 
-#: po/guile_strings.txt:17
+#: po/guile_strings.txt:20
 msgid "Use a 24 hour (instead of a 12 hour) time format."
 msgstr ""
 
-#: po/guile_strings.txt:18
+#: po/guile_strings.txt:21
 msgid "Income:Salary:Taxable"
 msgstr ""
 
-#: po/guile_strings.txt:19
+#: po/guile_strings.txt:22
 msgid "Type of budget report"
 msgstr ""
 
-#: po/guile_strings.txt:20
+#: po/guile_strings.txt:23
 msgid "reg_win_width"
 msgstr ""
 
-#: po/guile_strings.txt:21
+#: po/guile_strings.txt:24
 msgid "Balancing"
 msgstr ""
 
-#: po/guile_strings.txt:22
+#: po/guile_strings.txt:25
 msgid "Time"
 msgstr ""
 
-#: po/guile_strings.txt:24
+#: po/guile_strings.txt:27
 msgid "International"
 msgstr ""
 
-#: po/guile_strings.txt:25
+#: po/guile_strings.txt:28
 msgid ""
 "The background color for an active split in multi-line mode and the auto "
 "modes"
@@ -1585,392 +1598,396 @@ msgstr ""
 "The background colour for an active split in multi-line mode and the auto "
 "modes"
 
-#: po/guile_strings.txt:26
+#: po/guile_strings.txt:29
 msgid "Double mode active background"
 msgstr ""
 
-#: po/guile_strings.txt:27
+#: po/guile_strings.txt:30
 msgid "This is a string option"
 msgstr ""
 
-#: po/guile_strings.txt:28
+#: po/guile_strings.txt:31
 msgid "Main Window"
 msgstr ""
 
-#: po/guile_strings.txt:30
+#: po/guile_strings.txt:33
 msgid "_Account Transactions"
 msgstr ""
 
-#: po/guile_strings.txt:31
+#: po/guile_strings.txt:34
 #, c-format
 msgid "The date option is %s."
 msgstr ""
 
-#: po/guile_strings.txt:32
+#: po/guile_strings.txt:35
 msgid "Account Transactions"
 msgstr ""
 
-#: po/guile_strings.txt:33
+#: po/guile_strings.txt:36
 msgid "UK"
 msgstr ""
 
-#: po/guile_strings.txt:34
+#: po/guile_strings.txt:37
 msgid "Sort by date"
 msgstr ""
 
-#: po/guile_strings.txt:35
+#: po/guile_strings.txt:38
 #, c-format
 msgid "Report for %s and all subaccounts."
 msgstr ""
 
-#: po/guile_strings.txt:36
+#: po/guile_strings.txt:39
 msgid "Account types to display"
 msgstr ""
 
-#: po/guile_strings.txt:37
+#: po/guile_strings.txt:40
 msgid "Gain And Loss"
 msgstr ""
 
-#: po/guile_strings.txt:38
+#: po/guile_strings.txt:41
 msgid "Double click expands parent accounts"
 msgstr ""
 
-#: po/guile_strings.txt:39
+#: po/guile_strings.txt:42
 msgid "main_win_height"
 msgstr ""
 
-#: po/guile_strings.txt:40
+#: po/guile_strings.txt:43
 msgid "Boolean Option"
 msgstr ""
 
-#: po/guile_strings.txt:41
+#: po/guile_strings.txt:44
 msgid "Income-Salary-Taxable"
 msgstr ""
 
-#: po/guile_strings.txt:42
+#: po/guile_strings.txt:45
+msgid "_Stock Portfolio"
+msgstr ""
+
+#: po/guile_strings.txt:46
 msgid "Testing"
 msgstr ""
 
-#: po/guile_strings.txt:43
+#: po/guile_strings.txt:47
 msgid "US-style: mm/dd/yyyy"
 msgstr ""
 
-#: po/guile_strings.txt:44
+#: po/guile_strings.txt:48
 msgid "You have not selected an account."
 msgstr ""
 
-#: po/guile_strings.txt:45
+#: po/guile_strings.txt:49
 msgid "By default, show every transaction in an account."
 msgstr ""
 
-#: po/guile_strings.txt:48
+#: po/guile_strings.txt:52
 msgid "View"
 msgstr ""
 
-#: po/guile_strings.txt:49
+#: po/guile_strings.txt:53
 msgid "The default background color for odd rows in double mode"
 msgstr "The default background colour for odd rows in double mode"
 
-#: po/guile_strings.txt:50
+#: po/guile_strings.txt:54
 msgid "UK-style dd/mm/yyyy"
 msgstr ""
 
-#: po/guile_strings.txt:51
+#: po/guile_strings.txt:55
 msgid "Show all columns"
 msgstr ""
 
-#: po/guile_strings.txt:53
+#: po/guile_strings.txt:58
 msgid "Header background"
 msgstr ""
 
-#: po/guile_strings.txt:54
+#: po/guile_strings.txt:59
 msgid "Sorting"
 msgstr ""
 
-#: po/guile_strings.txt:55
+#: po/guile_strings.txt:60
 msgid "Show icons only"
 msgstr ""
 
-#: po/guile_strings.txt:56
+#: po/guile_strings.txt:61
 msgid "The default background color for odd rows in single mode"
 msgstr "The default background colour for odd rows in single mode"
 
-#: po/guile_strings.txt:58
+#: po/guile_strings.txt:63
 msgid "Display the Hello, World report."
 msgstr ""
 
-#: po/guile_strings.txt:59
+#: po/guile_strings.txt:64
 msgid "Gain"
 msgstr ""
 
-#: po/guile_strings.txt:60
+#: po/guile_strings.txt:65
 msgid "Hello Again"
 msgstr ""
 
-#: po/guile_strings.txt:61
+#: po/guile_strings.txt:66
 msgid "This page shows your profits and losses."
 msgstr ""
 
-#: po/guile_strings.txt:62
+#: po/guile_strings.txt:67
 msgid "Show Vertical Borders"
 msgstr ""
 
-#: po/guile_strings.txt:63
+#: po/guile_strings.txt:68
 msgid "This is a boolean option."
 msgstr ""
 
-#: po/guile_strings.txt:64
+#: po/guile_strings.txt:69
 msgid "_Profit and Loss"
 msgstr ""
 
-#: po/guile_strings.txt:65
+#: po/guile_strings.txt:70
 msgid "Background Color"
 msgstr "Background Colour"
 
-#: po/guile_strings.txt:66
+#: po/guile_strings.txt:71
 #, c-format
 msgid "The number option formatted as currency is %s."
 msgstr ""
 
-#: po/guile_strings.txt:67
+#: po/guile_strings.txt:72
 msgid "Income/Salary/Taxable"
 msgstr ""
 
-#: po/guile_strings.txt:68
+#: po/guile_strings.txt:73
 msgid "There are no selected accounts in the account list option."
 msgstr ""
 
-#: po/guile_strings.txt:69
+#: po/guile_strings.txt:74
 msgid "This page shows your net worth."
 msgstr ""
 
-#: po/guile_strings.txt:70
+#: po/guile_strings.txt:75
 msgid "_Budget"
 msgstr ""
 
-#: po/guile_strings.txt:71
+#: po/guile_strings.txt:76
 msgid "Continental Europe: dd.mm.yyyy"
 msgstr ""
 
-#: po/guile_strings.txt:72
+#: po/guile_strings.txt:77
 msgid "account_edit_win_height"
 msgstr ""
 
-#: po/guile_strings.txt:73
+#: po/guile_strings.txt:78
 msgid "Import QIF File - Scripted in Guile."
 msgstr ""
 
-#: po/guile_strings.txt:74
+#: po/guile_strings.txt:79
 msgid "Category"
 msgstr ""
 
-#: po/guile_strings.txt:75
+#: po/guile_strings.txt:80
 msgid "Show Horizontal Borders"
 msgstr ""
 
-#: po/guile_strings.txt:76
+#: po/guile_strings.txt:81
 msgid "Sort by check/transaction number"
 msgstr "Sort by cheque/transaction number"
 
-#: po/guile_strings.txt:77
+#: po/guile_strings.txt:82
 msgid "The background color for the active transaction in double mode"
 msgstr "The background colour for the active transaction in double mode"
 
-#: po/guile_strings.txt:78
+#: po/guile_strings.txt:83
 msgid "Register Colors"
 msgstr "Register Colours"
 
-#: po/guile_strings.txt:79
+#: po/guile_strings.txt:84
 #, c-format
 msgid "The boolean option is %s."
 msgstr ""
 
-#: po/guile_strings.txt:80
+#: po/guile_strings.txt:85
 msgid "Multi mode default transaction background"
 msgstr ""
 
-#: po/guile_strings.txt:81
+#: po/guile_strings.txt:86
 msgid ""
 "Double clicking on an account with children expands the account instead of "
 "opening a register."
 msgstr ""
 
-#: po/guile_strings.txt:82
+#: po/guile_strings.txt:87
 msgid "The background color for the active transaction in single mode"
 msgstr "The background colour for the active transaction in single mode"
 
-#: po/guile_strings.txt:83
+#: po/guile_strings.txt:88
 msgid "Loss"
 msgstr ""
 
-#: po/guile_strings.txt:84
+#: po/guile_strings.txt:89
 msgid "Credit Accounts"
 msgstr ""
 
-#: po/guile_strings.txt:85
+#: po/guile_strings.txt:90
 msgid "Sort by description"
 msgstr ""
 
-#: po/guile_strings.txt:86
+#: po/guile_strings.txt:91
 msgid "largest to smallest, latest to earliest"
 msgstr ""
 
-#: po/guile_strings.txt:87
+#: po/guile_strings.txt:92
 msgid "Secondary Key"
 msgstr ""
 
-#: po/guile_strings.txt:88
+#: po/guile_strings.txt:93
 msgid "Save window sizes and positions."
 msgstr ""
 
-#: po/guile_strings.txt:90
+#: po/guile_strings.txt:95
 msgid "Number Option"
 msgstr ""
 
-#: po/guile_strings.txt:91
+#: po/guile_strings.txt:96
 msgid "There are no accounts to report on."
 msgstr ""
 
-#: po/guile_strings.txt:92
+#: po/guile_strings.txt:97
 #, c-format
 msgid "Report for %s."
 msgstr ""
 
-#: po/guile_strings.txt:93
+#: po/guile_strings.txt:98
 msgid "Reverse Income and Expense Accounts"
 msgstr ""
 
-#: po/guile_strings.txt:94
+#: po/guile_strings.txt:99
 msgid "Europe"
 msgstr ""
 
-#: po/guile_strings.txt:95
+#: po/guile_strings.txt:100
 msgid "Add in sub-accounts of each selected"
 msgstr ""
 
-#: po/guile_strings.txt:96
+#: po/guile_strings.txt:101
 msgid "Day"
 msgstr ""
 
-#: po/guile_strings.txt:97
+#: po/guile_strings.txt:102
 msgid ""
 "This is for testing. Your reports probably shouldn't have an option like "
 "this."
 msgstr ""
 
-#: po/guile_strings.txt:98
+#: po/guile_strings.txt:103
 msgid "The items selected in the list option are:"
 msgstr ""
 
-#: po/guile_strings.txt:99
+#: po/guile_strings.txt:104
 msgid "Average"
 msgstr ""
 
-#: po/guile_strings.txt:100
+#: po/guile_strings.txt:105
 msgid "A_ccount Balance Tracker"
 msgstr ""
 
-#: po/guile_strings.txt:102
+#: po/guile_strings.txt:107
 msgid "Start of reporting period"
 msgstr ""
 
-#: po/guile_strings.txt:103
+#: po/guile_strings.txt:108
 msgid "Sort by EXACT entry time"
 msgstr ""
 
-#: po/guile_strings.txt:104
+#: po/guile_strings.txt:109
 msgid "account_add_win_width"
 msgstr ""
 
-#: po/guile_strings.txt:105
+#: po/guile_strings.txt:110
 msgid "Full"
 msgstr ""
 
-#: po/guile_strings.txt:106
+#: po/guile_strings.txt:111
 msgid "Multi mode default split background"
 msgstr ""
 
-#: po/guile_strings.txt:108
+#: po/guile_strings.txt:113
 msgid "Week"
 msgstr ""
 
-#: po/guile_strings.txt:109
+#: po/guile_strings.txt:114
 msgid "Get number at each one of these"
 msgstr ""
 
-#: po/guile_strings.txt:110
+#: po/guile_strings.txt:115
 msgid "Crash the report"
 msgstr ""
 
-#: po/guile_strings.txt:112
+#: po/guile_strings.txt:117
 msgid "Step Size"
 msgstr ""
 
-#: po/guile_strings.txt:113
+#: po/guile_strings.txt:118
 msgid "Hello, World!"
 msgstr ""
 
-#: po/guile_strings.txt:114
+#: po/guile_strings.txt:119
 msgid "ISO"
 msgstr ""
 
-#: po/guile_strings.txt:115
+#: po/guile_strings.txt:120
 msgid "A report useful for balancing the budget"
 msgstr ""
 
-#: po/guile_strings.txt:116
+#: po/guile_strings.txt:121
 msgid "Date Format Display"
 msgstr ""
 
-#: po/guile_strings.txt:117
+#: po/guile_strings.txt:122
 msgid "Ending"
 msgstr ""
 
-#: po/guile_strings.txt:118
+#: po/guile_strings.txt:123
 msgid "Reversed-balance account types"
 msgstr ""
 
-#: po/guile_strings.txt:120
+#: po/guile_strings.txt:125
 msgid "Account fields to display"
 msgstr ""
 
-#: po/guile_strings.txt:121
+#: po/guile_strings.txt:126
 msgid "Account Balance Tracker"
 msgstr ""
 
-#: po/guile_strings.txt:122
+#: po/guile_strings.txt:127
 msgid "Report Options"
 msgstr ""
 
-#: po/guile_strings.txt:125
+#: po/guile_strings.txt:130
 msgid "Calculate balance sheet up to this date"
 msgstr ""
 
-#: po/guile_strings.txt:126
+#: po/guile_strings.txt:131
 msgid "Alternate the even and odd colors with each transaction, not each row"
 msgstr "Alternate the even and odd colours with each transaction, not each row"
 
-#: po/guile_strings.txt:127
+#: po/guile_strings.txt:132
 msgid "Gain/Loss"
 msgstr ""
 
-#: po/guile_strings.txt:128
+#: po/guile_strings.txt:133
 msgid "Transfer from/to"
 msgstr ""
 
-#: po/guile_strings.txt:129
+#: po/guile_strings.txt:134
 msgid "Text only"
 msgstr ""
 
-#: po/guile_strings.txt:130
+#: po/guile_strings.txt:135
 msgid "Toolbar Buttons"
 msgstr ""
 
-#: po/guile_strings.txt:131
+#: po/guile_strings.txt:136
 msgid "Report Items from this date"
 msgstr ""
 
-#: po/guile_strings.txt:132
+#: po/guile_strings.txt:137
 msgid ""
 "The default background color for transactions in multi-line mode and the "
 "auto modes"
@@ -1978,556 +1995,576 @@ msgstr ""
 "The default background colour for transactions in multi-line mode and the "
 "auto modes"
 
-#: po/guile_strings.txt:133
+#: po/guile_strings.txt:138
 msgid "Fourth Options"
 msgstr ""
 
-#: po/guile_strings.txt:134
+#: po/guile_strings.txt:139
 msgid "Sort by this criterion first"
 msgstr ""
 
-#: po/guile_strings.txt:135
+#: po/guile_strings.txt:140
 msgid "Ugly option"
 msgstr ""
 
-#: po/guile_strings.txt:136
+#: po/guile_strings.txt:141
 msgid "How are you doing on your budget?"
 msgstr ""
 
-#: po/guile_strings.txt:137
+#: po/guile_strings.txt:142
 msgid "Save Translatable Strings"
 msgstr ""
 
-#: po/guile_strings.txt:138
+#: po/guile_strings.txt:143
 msgid "Save strings that need to be translated"
 msgstr ""
 
-#: po/guile_strings.txt:139
+#: po/guile_strings.txt:144
 msgid "Number of Rows"
 msgstr ""
 
-#: po/guile_strings.txt:140
+#: po/guile_strings.txt:145
 msgid "/ (Slash)"
 msgstr ""
 
-#: po/guile_strings.txt:142
+#: po/guile_strings.txt:147
 msgid "Use 24-hour time format"
 msgstr ""
 
-#: po/guile_strings.txt:144
+#: po/guile_strings.txt:149
 msgid "Date Format"
 msgstr ""
 
-#: po/guile_strings.txt:145
+#: po/guile_strings.txt:150
 msgid "A list option"
 msgstr ""
 
-#: po/guile_strings.txt:146
+#: po/guile_strings.txt:151
 msgid "ISO Standard: yyyy-mm-dd"
 msgstr ""
 
-#: po/guile_strings.txt:147
+#: po/guile_strings.txt:152
 msgid "Default Currency"
 msgstr ""
 
-#: po/guile_strings.txt:148
+#: po/guile_strings.txt:153
 msgid "Do transaction report on this account"
 msgstr ""
 
-#: po/guile_strings.txt:149
+#: po/guile_strings.txt:154
+msgid "Recent Price"
+msgstr ""
+
+#: po/guile_strings.txt:155
 msgid "Net Inflow"
 msgstr ""
 
-#: po/guile_strings.txt:150
+#: po/guile_strings.txt:156
 msgid "Single mode default even row background"
 msgstr ""
 
-#: po/guile_strings.txt:151
-msgid "Double mode default even row background"
-msgstr ""
-
-#: po/guile_strings.txt:152
-#, c-format
-msgid "The multi-choice option is %s."
-msgstr ""
-
-#: po/guile_strings.txt:153
-msgid "Double mode colors alternate with transactions"
-msgstr "Double mode colours alternate with transactions"
-
-#: po/guile_strings.txt:154
-msgid "General"
-msgstr ""
-
 #: po/guile_strings.txt:157
-msgid "Sub-Accounts"
+msgid "Double mode default even row background"
 msgstr ""
 
 #: po/guile_strings.txt:158
 #, c-format
-msgid "The date and time option is %s."
+msgid "The multi-choice option is %s."
 msgstr ""
+
+#: po/guile_strings.txt:159
+msgid "Double mode colors alternate with transactions"
+msgstr "Double mode colours alternate with transactions"
 
 #: po/guile_strings.txt:160
-msgid "End of reporting period"
-msgstr ""
-
-#: po/guile_strings.txt:161
-msgid "Don't reverse any accounts"
-msgstr ""
-
-#: po/guile_strings.txt:162
-msgid "Good option"
+msgid "General"
 msgstr ""
 
 #: po/guile_strings.txt:163
-msgid "US"
+msgid "Sub-Accounts"
 msgstr ""
 
 #: po/guile_strings.txt:164
-msgid "account_edit_win_width"
-msgstr ""
-
-#: po/guile_strings.txt:165
-msgid "Ba_lance sheet"
+#, c-format
+msgid "The date and time option is %s."
 msgstr ""
 
 #: po/guile_strings.txt:166
-msgid "Help for first option"
+msgid "End of reporting period"
 msgstr ""
 
 #: po/guile_strings.txt:167
-msgid "Number"
+msgid "Don't reverse any accounts"
 msgstr ""
 
 #: po/guile_strings.txt:168
-msgid "Show both icons and text"
+msgid "Good option"
+msgstr ""
+
+#: po/guile_strings.txt:169
+msgid "US"
+msgstr ""
+
+#: po/guile_strings.txt:170
+msgid "account_edit_win_width"
 msgstr ""
 
 #: po/guile_strings.txt:171
+msgid "Ba_lance sheet"
+msgstr ""
+
+#: po/guile_strings.txt:172
+msgid "Help for first option"
+msgstr ""
+
+#: po/guile_strings.txt:173
+msgid "Number"
+msgstr ""
+
+#: po/guile_strings.txt:174
+msgid "Show both icons and text"
+msgstr ""
+
+#: po/guile_strings.txt:177
 #, c-format
 msgid "The number option is %s."
 msgstr ""
 
-#: po/guile_strings.txt:172
+#: po/guile_strings.txt:178
 #, c-format
 msgid "The string option is %s."
 msgstr ""
 
-#: po/guile_strings.txt:173
+#: po/guile_strings.txt:179
 msgid "_Reports"
 msgstr ""
 
-#: po/guile_strings.txt:174
+#: po/guile_strings.txt:180
 msgid "Single mode active background"
 msgstr ""
 
-#: po/guile_strings.txt:176
+#: po/guile_strings.txt:182
 msgid "Year"
 msgstr ""
 
-#: po/guile_strings.txt:177
+#: po/guile_strings.txt:183
 msgid "Profit and Loss"
 msgstr ""
 
-#: po/guile_strings.txt:178
+#: po/guile_strings.txt:184
 msgid "Month"
 msgstr ""
 
-#: po/guile_strings.txt:179
+#: po/guile_strings.txt:185
 msgid "Multi mode active transaction background"
 msgstr ""
 
-#: po/guile_strings.txt:180
+#: po/guile_strings.txt:186
 msgid ". (Period)"
 msgstr ""
 
-#: po/guile_strings.txt:181
+#: po/guile_strings.txt:187
 msgid "Primary Sort Order"
 msgstr ""
 
-#: po/guile_strings.txt:182
-msgid "Descending"
-msgstr ""
-
-#: po/guile_strings.txt:183
-msgid "This is a date option"
-msgstr ""
-
-#: po/guile_strings.txt:184
-msgid "Two Week"
-msgstr ""
-
-#: po/guile_strings.txt:185
-msgid "Save Window Geometry"
-msgstr ""
-
-#: po/guile_strings.txt:186
-msgid "Income\\Salary\\Taxable"
-msgstr ""
-
-#: po/guile_strings.txt:187
-msgid "Code"
-msgstr ""
-
 #: po/guile_strings.txt:188
-msgid "Balance sheet"
+msgid "Name"
 msgstr ""
 
 #: po/guile_strings.txt:189
-msgid "Export data as text."
+msgid "Descending"
 msgstr ""
 
 #: po/guile_strings.txt:190
-msgid "Balance Sheet"
+msgid "This is a date option"
 msgstr ""
 
 #: po/guile_strings.txt:191
-msgid "- (Dash)"
+msgid "Two Week"
 msgstr ""
 
 #: po/guile_strings.txt:192
-msgid "Order of primary sorting"
+msgid "Save Window Geometry"
 msgstr ""
 
 #: po/guile_strings.txt:193
-msgid "Default Currency For New Accounts"
+msgid "Income\\Salary\\Taxable"
 msgstr ""
 
 #: po/guile_strings.txt:194
-msgid "Sort by this criterion second"
+msgid "Code"
 msgstr ""
 
 #: po/guile_strings.txt:195
-msgid "true"
+msgid "Balance sheet"
 msgstr ""
 
 #: po/guile_strings.txt:196
-msgid "Period Ending"
+msgid "Export data as text."
 msgstr ""
 
 #: po/guile_strings.txt:197
-msgid "Income.Salary.Taxable"
+msgid "Balance Sheet"
+msgstr ""
+
+#: po/guile_strings.txt:198
+msgid "- (Dash)"
 msgstr ""
 
 #: po/guile_strings.txt:199
-msgid "The Ugly"
+msgid "Order of primary sorting"
 msgstr ""
 
 #: po/guile_strings.txt:200
-msgid "Max"
+msgid "Default Currency For New Accounts"
 msgstr ""
 
 #: po/guile_strings.txt:201
-msgid "By default, show horizontal borders on the cells."
+msgid "Sort by this criterion second"
 msgstr ""
 
 #: po/guile_strings.txt:202
-msgid ": (Colon)"
+msgid "true"
 msgstr ""
 
 #: po/guile_strings.txt:203
-msgid "By default, show vertical borders on the cells."
+msgid "Period Ending"
 msgstr ""
 
-#: po/guile_strings.txt:205
-msgid "Ascending"
+#: po/guile_strings.txt:204
+msgid "Income.Salary.Taxable"
 msgstr ""
 
 #: po/guile_strings.txt:206
-msgid "The Bad"
+msgid "The Ugly"
 msgstr ""
 
 #: po/guile_strings.txt:207
-msgid "Just a Date Option"
+msgid "Max"
 msgstr ""
 
 #: po/guile_strings.txt:208
-msgid "The accounts selected in the account list option are:"
+msgid "By default, show horizontal borders on the cells."
 msgstr ""
 
 #: po/guile_strings.txt:209
+msgid ": (Colon)"
+msgstr ""
+
+#: po/guile_strings.txt:210
+msgid "By default, show vertical borders on the cells."
+msgstr ""
+
+#: po/guile_strings.txt:212
+msgid "Ascending"
+msgstr ""
+
+#: po/guile_strings.txt:213
+msgid "The Bad"
+msgstr ""
+
+#: po/guile_strings.txt:214
+msgid "Just a Date Option"
+msgstr ""
+
+#: po/guile_strings.txt:215
+msgid "The accounts selected in the account list option are:"
+msgstr ""
+
+#: po/guile_strings.txt:216
 #, c-format
 msgid ""
 "This is a sample GnuCash report. See the guile (scheme) source code in %s "
 "for details on writing your own reports, or extending existing reports."
 msgstr ""
 
-#: po/guile_strings.txt:210
+#: po/guile_strings.txt:217
 msgid "The default background color for even rows in single mode"
 msgstr "The default background colour for even rows in single mode"
 
-#: po/guile_strings.txt:211
+#: po/guile_strings.txt:218
 msgid "The default background color for even rows in double mode"
 msgstr "The default background colour for even rows in double mode"
 
-#: po/guile_strings.txt:212
+#: po/guile_strings.txt:219
 msgid "Display the Budget report."
 msgstr ""
 
-#: po/guile_strings.txt:213
+#: po/guile_strings.txt:220
 msgid "_Hello, World"
 msgstr ""
 
-#: po/guile_strings.txt:214
+#: po/guile_strings.txt:221
 msgid "First Option"
 msgstr ""
 
-#: po/guile_strings.txt:215
+#: po/guile_strings.txt:222
 msgid "Double line mode with multi-line cursor"
 msgstr ""
 
-#: po/guile_strings.txt:216
+#: po/guile_strings.txt:223
 msgid "Single line mode with multi-line cursor"
 msgstr ""
 
-#: po/guile_strings.txt:217
+#: po/guile_strings.txt:224
+msgid "Display the Stock Portfolio report."
+msgstr ""
+
+#: po/guile_strings.txt:225
 msgid ""
 "Show transactions on multiple lines with one line for each split in the "
 "transaction"
 msgstr ""
 
-#: po/guile_strings.txt:218
+#: po/guile_strings.txt:226
 msgid "account_add_win_height"
 msgstr ""
 
-#: po/guile_strings.txt:219
+#: po/guile_strings.txt:227
 msgid "Plot Type"
 msgstr ""
 
-#: po/guile_strings.txt:220
+#: po/guile_strings.txt:228
 msgid "Budget"
 msgstr ""
 
-#: po/guile_strings.txt:221
+#: po/guile_strings.txt:229
 msgid "Choose whether to display icons, text, or both for toolbar buttons"
 msgstr ""
 
-#: po/guile_strings.txt:222
+#: po/guile_strings.txt:230
 msgid "Show text only"
 msgstr ""
 
-#: po/guile_strings.txt:223
+#: po/guile_strings.txt:231
 msgid "Icons and Text"
 msgstr ""
 
-#: po/guile_strings.txt:224
+#: po/guile_strings.txt:232
 msgid "Automatically raise the list of accounts or actions during input."
 msgstr ""
 
-#: po/guile_strings.txt:225
+#: po/guile_strings.txt:233
 msgid "Sort by account transferred from/to's name"
 msgstr ""
 
-#: po/guile_strings.txt:226
+#: po/guile_strings.txt:234
 msgid "Net Gain"
 msgstr ""
 
-#: po/guile_strings.txt:227
+#: po/guile_strings.txt:235
 msgid "The fourth option rules!"
 msgstr ""
 
-#: po/guile_strings.txt:228
+#: po/guile_strings.txt:236
 msgid "This is a date option with time"
 msgstr ""
 
-#: po/guile_strings.txt:229
+#: po/guile_strings.txt:237
 msgid "The header background color"
 msgstr "The header background colour"
 
-#: po/guile_strings.txt:230
+#: po/guile_strings.txt:238
 msgid "Sort by memo"
 msgstr ""
 
-#: po/guile_strings.txt:231
+#: po/guile_strings.txt:239
 msgid "Third Option"
 msgstr ""
 
-#: po/guile_strings.txt:232
+#: po/guile_strings.txt:240
 msgid "Choose the default mode for register windows"
 msgstr ""
 
-#: po/guile_strings.txt:233
+#: po/guile_strings.txt:241
 msgid "Default number of register rows to display."
 msgstr ""
 
-#: po/guile_strings.txt:234
+#: po/guile_strings.txt:242
 msgid "Report end date"
 msgstr ""
 
-#: po/guile_strings.txt:235
+#: po/guile_strings.txt:243
 msgid "None"
 msgstr ""
 
-#: po/guile_strings.txt:236
+#: po/guile_strings.txt:244
 msgid "Export data as text (Danger: Unfinished)"
 msgstr ""
 
-#: po/guile_strings.txt:237
+#: po/guile_strings.txt:245
 msgid "Primary Key"
 msgstr ""
 
-#: po/guile_strings.txt:238
-msgid "Time and Date Option"
-msgstr ""
-
-#: po/guile_strings.txt:239
-msgid "Single mode default odd row background"
-msgstr ""
-
-#: po/guile_strings.txt:240
-msgid "Double mode default odd row background"
-msgstr ""
-
-#: po/guile_strings.txt:241
-msgid "The character used to separate fully-qualified account names"
-msgstr ""
-
-#: po/guile_strings.txt:242
-msgid "__gui"
-msgstr ""
-
-#: po/guile_strings.txt:243
-msgid "Report start date"
-msgstr ""
-
-#: po/guile_strings.txt:245
-msgid "smallest to largest, earliest to latest"
+#: po/guile_strings.txt:246
+msgid "Ticker"
 msgstr ""
 
 #: po/guile_strings.txt:247
-msgid "\\ (Backslash)"
+msgid "Time and Date Option"
 msgstr ""
 
 #: po/guile_strings.txt:248
-msgid "Icons only"
+msgid "Single mode default odd row background"
 msgstr ""
 
 #: po/guile_strings.txt:249
-msgid "Help for third option"
+msgid "Double mode default odd row background"
 msgstr ""
 
 #: po/guile_strings.txt:250
-msgid "Default Register Mode"
+msgid "The character used to separate fully-qualified account names"
 msgstr ""
 
-#: po/guile_strings.txt:252
-msgid "main_win_width"
+#: po/guile_strings.txt:251
+msgid "Report start date"
 msgstr ""
 
 #: po/guile_strings.txt:253
-msgid "Sort by amount"
-msgstr ""
-
-#: po/guile_strings.txt:254
-msgid "This is an account list option"
+msgid "smallest to largest, earliest to latest"
 msgstr ""
 
 #: po/guile_strings.txt:255
-msgid "Average Balance"
+msgid "\\ (Backslash)"
 msgstr ""
 
 #: po/guile_strings.txt:256
-msgid "Totals"
+msgid "Icons only"
 msgstr ""
 
 #: po/guile_strings.txt:257
-msgid "Show All Transactions"
+msgid "Help for third option"
 msgstr ""
 
 #: po/guile_strings.txt:258
-msgid "Display the Profit and Loss report."
-msgstr ""
-
-#: po/guile_strings.txt:259
-msgid "Display the Account Balance Tracker report."
+msgid "Default Register Mode"
 msgstr ""
 
 #: po/guile_strings.txt:260
-msgid "2Week"
+msgid "main_win_width"
 msgstr ""
 
 #: po/guile_strings.txt:261
-msgid "Nothing"
+msgid "Sort by amount"
 msgstr ""
 
 #: po/guile_strings.txt:262
-msgid "You have selected no values in the list option."
+msgid "This is an account list option"
 msgstr ""
 
 #: po/guile_strings.txt:263
-msgid "false"
+msgid "Average Balance"
+msgstr ""
+
+#: po/guile_strings.txt:264
+msgid "Totals"
 msgstr ""
 
 #: po/guile_strings.txt:265
-msgid "An account list option"
+msgid "Profit/Loss"
 msgstr ""
 
 #: po/guile_strings.txt:266
-msgid "Multi Choice Option"
+msgid "Shares"
 msgstr ""
 
 #: po/guile_strings.txt:267
-msgid "This is a color option"
-msgstr "This is a colour option"
+msgid "Show All Transactions"
+msgstr ""
 
 #: po/guile_strings.txt:268
-msgid "QIF File Import (Danger: Unfinished)"
+msgid "Display the Profit and Loss report."
 msgstr ""
 
 #: po/guile_strings.txt:269
-msgid "Make No Plot"
+msgid "Display the Account Balance Tracker report."
 msgstr ""
 
 #: po/guile_strings.txt:270
-msgid "Bad option"
+msgid "2Week"
 msgstr ""
 
 #: po/guile_strings.txt:271
-msgid "Display the Balance sheet report."
+msgid "Nothing"
 msgstr ""
 
 #: po/guile_strings.txt:272
-msgid "Display the Account Transactions report."
+msgid "You have selected no values in the list option."
 msgstr ""
 
 #: po/guile_strings.txt:273
-msgid "Net"
-msgstr ""
-
-#: po/guile_strings.txt:274
-msgid "Have a nice day!"
+msgid "false"
 msgstr ""
 
 #: po/guile_strings.txt:275
-msgid "This is a list option"
+msgid "An account list option"
 msgstr ""
 
 #: po/guile_strings.txt:276
-msgid "Min"
+msgid "Multi Choice Option"
 msgstr ""
 
 #: po/guile_strings.txt:277
-msgid "Order of Secondary sorting"
-msgstr ""
+msgid "This is a color option"
+msgstr "This is a colour option"
 
 #: po/guile_strings.txt:278
-msgid "Help for second option"
+msgid "QIF File Import (Danger: Unfinished)"
 msgstr ""
 
 #: po/guile_strings.txt:279
-msgid "reg_stock_win_width"
+msgid "Make No Plot"
 msgstr ""
 
 #: po/guile_strings.txt:280
-msgid "Report items up to and including this date"
+msgid "Bad option"
 msgstr ""
 
 #: po/guile_strings.txt:281
-msgid "Beginning"
+msgid "Display the Balance sheet report."
 msgstr ""
 
 #: po/guile_strings.txt:282
+msgid "Display the Account Transactions report."
+msgstr ""
+
+#: po/guile_strings.txt:283
+msgid "Net"
+msgstr ""
+
+#: po/guile_strings.txt:284
+msgid "Have a nice day!"
+msgstr ""
+
+#: po/guile_strings.txt:285
+msgid "This is a list option"
+msgstr ""
+
+#: po/guile_strings.txt:286
+msgid "Min"
+msgstr ""
+
+#: po/guile_strings.txt:287
+msgid "Order of Secondary sorting"
+msgstr ""
+
+#: po/guile_strings.txt:288
+msgid "Help for second option"
+msgstr ""
+
+#: po/guile_strings.txt:289
+msgid "reg_stock_win_width"
+msgstr ""
+
+#: po/guile_strings.txt:290
+msgid "Report items up to and including this date"
+msgstr ""
+
+#: po/guile_strings.txt:291
+msgid "Beginning"
+msgstr ""
+
+#: po/guile_strings.txt:292
 #, c-format
 msgid ""
 "For help on writing reports, or to contribute your brand new, totally cool "
@@ -2535,7 +2572,7 @@ msgid ""
 "list, see %s."
 msgstr ""
 
-#: po/guile_strings.txt:283
+#: po/guile_strings.txt:293
 msgid ""
 "The background color for an active transaction in multi-line mode and the "
 "auto modes"
@@ -2543,28 +2580,28 @@ msgstr ""
 "The background colour for an active transaction in multi-line mode and the "
 "auto modes"
 
-#: po/guile_strings.txt:284
+#: po/guile_strings.txt:294
 msgid "This is a multi choice option."
 msgstr ""
 
-#: po/guile_strings.txt:285
+#: po/guile_strings.txt:295
 msgid "Income & Expense"
 msgstr ""
 
-#: po/guile_strings.txt:286
+#: po/guile_strings.txt:296
 msgid "Hello, World"
 msgstr ""
 
-#: po/guile_strings.txt:287
+#: po/guile_strings.txt:297
 msgid "Reverse Credit Card, Liability, Equity, and Income Accounts"
 msgstr ""
 
-#: po/guile_strings.txt:289
+#: po/guile_strings.txt:299
 #, fuzzy
 msgid "This is a number option."
 msgstr "This is a colour option"
 
-#: po/guile_strings.txt:291
+#: po/guile_strings.txt:301
 msgid "Multi mode active split background"
 msgstr ""
 
@@ -2572,29 +2609,33 @@ msgstr ""
 msgid "All Accounts"
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:229
+#: src/gnome/dialog-qif-import.c:221
 msgid "Select QIF File"
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:318
+#: src/gnome/dialog-qif-import.c:310
 msgid "You must specify a file to load."
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:322
+#: src/gnome/dialog-qif-import.c:314
 msgid "You must specify a currency."
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:336 src/gnome/dialog-qif-import.c:672
-#: src/gnome/dialog-qif-import.c:774 src/gnome/dialog-qif-import.c:872
+#: src/gnome/dialog-qif-import.c:328 src/gnome/dialog-qif-import.c:664
+#: src/gnome/dialog-qif-import.c:766 src/gnome/dialog-qif-import.c:864
 msgid "QIF File scheme code not loaded properly."
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:359
+#: src/gnome/dialog-qif-import.c:351
 msgid "QIF File already loaded. Reload with current settings?"
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:802 src/gnome/dialog-qif-import.c:900
+#: src/gnome/dialog-qif-import.c:794 src/gnome/dialog-qif-import.c:892
 msgid "Something is very wrong with QIF Importing."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:74
+msgid "Import QIF Files"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:96
@@ -2621,7 +2662,8 @@ msgstr ""
 msgid "Radix format:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:191
+#: src/gnome/glade-gnc-dialogs.c:191 src/gnome/glade-gnc-dialogs.c:1194
+#: src/gnome/glade-gnc-dialogs.c:1364
 msgid "Date format:"
 msgstr ""
 
@@ -2693,6 +2735,10 @@ msgstr ""
 msgid "Categories"
 msgstr ""
 
+#: src/gnome/glade-gnc-dialogs.c:506
+msgid "Select Account"
+msgstr ""
+
 #: src/gnome/glade-gnc-dialogs.c:564
 msgid "Selected account:"
 msgstr ""
@@ -2709,52 +2755,175 @@ msgstr ""
 msgid "Mutual"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:786
-msgid "Print Dialog"
+#: src/gnome/glade-gnc-dialogs.c:700
+msgid "Print Preview"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:794
+#: src/gnome/glade-gnc-dialogs.c:786
 #, fuzzy
 msgid "Print Setup"
 msgstr "Cheque"
 
-#: src/gnome/glade-gnc-dialogs.c:815
+#: src/gnome/glade-gnc-dialogs.c:808
 #, fuzzy
 msgid "Printer:"
 msgstr "Cheque"
 
-#: src/gnome/glade-gnc-dialogs.c:823
+#: src/gnome/glade-gnc-dialogs.c:816
 msgid "Paper size:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:831
+#: src/gnome/glade-gnc-dialogs.c:824
 msgid "Pages to print:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:876
+#: src/gnome/glade-gnc-dialogs.c:869
 msgid "All"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:884
+#: src/gnome/glade-gnc-dialogs.c:877
 msgid "Selected"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:906
+#: src/gnome/glade-gnc-dialogs.c:899
 msgid "From:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:921
+#: src/gnome/glade-gnc-dialogs.c:914
 msgid "To:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:943 src/gnome/glade-gnc-dialogs.c:950
+#: src/gnome/glade-gnc-dialogs.c:936 src/gnome/glade-gnc-dialogs.c:943
 msgid "Select..."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:986
+#: src/gnome/glade-gnc-dialogs.c:979
 msgid "Preview"
 msgstr ""
 
-#: src/gnome/print-session.c:220
+#: src/gnome/glade-gnc-dialogs.c:1036
+msgid "Select Paper Size"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1149
+#, fuzzy
+msgid "Print Check"
+msgstr "Cheque"
+
+#: src/gnome/glade-gnc-dialogs.c:1178
+msgid "Check format:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1186 src/gnome/glade-gnc-dialogs.c:1356
+#, fuzzy
+msgid "Check position:"
+msgstr "Chequeing"
+
+#: src/gnome/glade-gnc-dialogs.c:1216
+msgid "Quicken/QuickBooks (tm)"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1219 src/gnome/glade-gnc-dialogs.c:1240
+#: src/gnome/glade-gnc-dialogs.c:1276
+msgid "Custom"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1231
+msgid "Top"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1234
+msgid "Middle"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1237
+msgid "Bottom"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1252
+msgid "December  31, 2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1255
+msgid "31 December, 2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1258
+msgid "Dec 31, 2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1261
+msgid "31 Dec, 2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1264
+msgid "12/31/2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1267
+msgid "12/31/00"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1270
+msgid "31/12/2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1273
+msgid "31/12/00"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1281
+msgid "Custom check parameters"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1316
+msgid "Payee:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1324
+msgid "Date:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1332
+msgid "Amount (words):"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1340
+msgid "Amount (numbers):"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1348
+msgid "Memo:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1372
+msgid "Units:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1387
+msgid "x"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1457
+msgid "Inches"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1460
+msgid "Centimeters"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1463
+msgid "Millimeters"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1466
+msgid "Points"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1478
+msgid "y"
+msgstr ""
+
+#: src/gnome/print-session.c:230
 msgid "You must select a printer first."
 msgstr ""

@@ -953,18 +953,10 @@ print_check_cb(GtkWidget * widget, gpointer data)
     date   = xaccTransGetDate(trans);
     memo   = xaccSplitGetMemo(split);
 
-    timestruct = localtime(&date);
-    if(!timestruct) {
-      g_warning("print_check_cb: error in date translation\n");
-      return;
-    }
-
-    strftime(datestring, sizeof(datestring), "%B %d, %Y", timestruct);
-
     gh_apply(print_check,
              SCM_LIST4(gh_str02scm(payee),
                        gh_double2scm(fabs(amount)),
-                       gh_str02scm(datestring),
+                       gh_ulong2scm(date),
                        gh_str02scm(memo)));
   }
 #else

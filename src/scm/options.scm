@@ -574,11 +574,20 @@
                (close port)))))
 
 (define (gnc:options-register-translatable-strings options)
+  (define (external-name? name)
+    (cond ((not (string? name)) #f)
+          ((< (string-length name) 2) #t)
+          ((not (eq? (string-ref name 0) #\_)) #t)
+          ((not (eq? (string-ref name 1) #\_)) #t)
+          (else #f)))
+
   (gnc:options-for-each-general
    (lambda (section hash)
-     (gnc:register-translatable-strings section))
+     (if (external-name? section)
+         (gnc:register-translatable-strings section)))
    (lambda (option)
-     (gnc:register-translatable-strings (gnc:option-name option))
+     (if (external-name? (gnc:option-name option))
+         (gnc:register-translatable-strings (gnc:option-name option)))
      (gnc:register-translatable-strings (gnc:option-documentation option))
      (let ((getter (gnc:option-strings-getter option)))
        (if getter

@@ -217,13 +217,14 @@ void   xaccGroupDepthAutoCode (AccountGroup *grp);
 
 /*
  * The following functions provide support for "staged traversals"
- * over all of the transactions in and account or group.  The idea
+ * over all of the transactions in an account or group.  The idea
  * is to be able to perform a sequence of traversals ("stages"),
  * and perform an operation on each transaction exactly once 
  * for that stage.  
+ *
  * Only transactions whose current "stage" is less than the
- * stage of the current traversal will be affected, and they will be
- * "brought up" to the current stage when they are processed.
+ * stage of the current traversal will be affected, and they will
+ * be "brought up" to the current stage when they are processed.
  *
  * For example, you could perform a stage 1 traversal of all the
  * transactions in an account, and then perform a stage 1 traversal of
@@ -237,25 +238,52 @@ void   xaccGroupDepthAutoCode (AccountGroup *grp);
  * of 2, then all the transactions in the second account would have 
  * been processed.
  *
- * Traversal can be aborted by having the callback function return a
- * non-zero value.  The traversal is aborted immediately, and the 
+ * Traversal can be aborted by having the callback function return
+ * a non-zero value.  The traversal is aborted immediately, and the 
  * non-zero value is returned.  Note that an aborted traversal can 
  * be restarted; no information is lost due to an abort.
  *
  * The initial impetus for this particular approach came from
- * generalizing a mark/sweep practice that was already being used in
- * FileIO.c.
+ * generalizing a mark/sweep practice that was already being
+ * used in FileIO.c.
  *
  * Note that currently, there is a hard limit of 256 stages, which
  * can be changed by enlarging "marker" in the transaction struct.
  * */
 
 /* xaccGroupBeginStagedTransactionTraversals() resets the traversal
- *    marker inside each of all the transactions in the group so that a
- *    new sequence of staged traversals can begin. 
+ *    marker inside each of all the transactions in the group so that
+ *    a new sequence of staged traversals can begin.
+ *
+ * xaccSplitsBeginStagedTransactionTraversals() resets the traversal
+ *    marker for each transaction which is a parent of one of the
+ *    splits in the list.
+ *
+ * xaccAccountBeginStagedTransactionTraversals() resets the traversal
+ *    marker for each transaction which is a parent of one of the
+ *    splits in the account.
+ *
+ * xaccAccountsBeginStagedTransactionTraversals() resets the traversal
+ *    marker for each transaction which is a parent of one of the
+ *    splits in any of the accounts in the list.
  */
 
 void xaccGroupBeginStagedTransactionTraversals(AccountGroup *grp);
+void xaccSplitsBeginStagedTransactionTraversals(Split **splits);
+void xaccAccountBeginStagedTransactionTraversals(Account *account);
+void xaccAccountsBeginStagedTransactionTraversals (Account **accounts);
+
+/* xaccTransactionTraverse() checks the stage of the given transaction.
+ *    If the transaction hasn't reached the given stage, the transaction
+ *    is updated to that stage and the function returns GNC_T. Otherwise
+ *    no change is made and the function returns GNC_F.
+ *
+ * xaccSplitTransactionTraverse() behaves as above using the parent of
+ *    the given split.
+ */
+
+gncBoolean xaccTransactionTraverse(Transaction *trans, int stage);
+gncBoolean xaccSplitTransactionTraverse(Split *split, int stage);
 
 /* xaccGroupStagedTransactionTraversal() calls thunk on each
  *    transaction in the group whose current marker is less than the
@@ -265,8 +293,8 @@ void xaccGroupBeginStagedTransactionTraversals(AccountGroup *grp);
  *    or the non-zero value returned by thunk().  This
  *    API does not handle handle recursive traversals.
  *
- *    Currently the result of adding or removing transactions during a
- *    traversal is undefined, so don't do that.
+ *    Currently the result of adding or removing transactions during
+ *    a traversal is undefined, so don't do that.
  */
 
 int 
@@ -283,13 +311,14 @@ xaccGroupStagedTransactionTraversal(AccountGroup *grp,
  *    or the non-zero value returned by thunk().
  *    This API does not handle handle recursive traversals.
  *
- *    Currently the result of adding or removing transactions during a
- *    traversal is undefined, so don't do that. 
+ *    Currently the result of adding or removing transactions during
+ *    a traversal is undefined, so don't do that. 
  */
 
 int xaccAccountStagedTransactionTraversal(Account *a,
                                           unsigned int stage,
-                                          int (*thunk)(Transaction *t, void *data),
+                                          int (*thunk)(Transaction *t,
+                                                       void *data),
                                           void *data);
 
 #endif

@@ -57,20 +57,27 @@ typedef struct {
   PrintSession      * session;
 } PrintDialog;
 
+typedef struct {
+  GtkWidget         * toplevel;
+  GtkWidget         * papersel;
+  GtkWidget         * entry;
+  PrintSession      * session;
+} PaperDialog;
+
 #else 
 
 /* type stubs for g-wrap */
 typedef int PrintSession;
 typedef int PrintPreviewDialog;
 typedef int PrintDialog;
-
+typedef int PaperDialog;
 #endif
 
 /* paper selector dialog */
 void gnc_ui_paper_dialog_cancel_cb(GtkWidget * widg, gpointer user_data);
 void gnc_ui_paper_dialog_ok_cb(GtkWidget * widg, gpointer user_data);
-char * gnc_ui_paper_dialog_new_modal();
-
+PaperDialog * gnc_ui_paper_dialog_create(PrintSession * ps, GtkWidget * entry);
+void gnc_ui_paper_dialog_destroy(PaperDialog * psd);
 
 /* print preview dialog stuff */
 PrintPreviewDialog * gnc_ui_print_preview_create(PrintSession * ps);

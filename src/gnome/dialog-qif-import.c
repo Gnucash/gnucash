@@ -43,6 +43,8 @@
 #include "query-user.h"
 #include "util.h"
 
+#define _QIF_IMPORT_NUM_RADIX_FORMATS 3
+#define _QIF_IMPORT_NUM_DATE_FORMATS 5
 
 struct _qifimportwindow
 {
@@ -123,9 +125,6 @@ gnc_ui_qif_import_dialog_make()
   retval->cat_list = 
     gtk_object_get_data(GTK_OBJECT(retval->dialog), "category_page_list");
   
-  
-
-
 
   gtk_object_set_data(GTK_OBJECT(retval->dialog),
                       "qif_window_struct", retval);
@@ -155,7 +154,7 @@ gnc_ui_qif_import_dialog_make()
    * index number for each menu item */
   menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(retval->radix_picker));
 
-  for(i = 0; i < 3; i++) {
+  for(i = 0; i < _QIF_IMPORT_NUM_RADIX_FORMATS; i++) {
     gtk_option_menu_set_history(GTK_OPTION_MENU(retval->radix_picker), i);
     active = gtk_menu_get_active(GTK_MENU(menu));
     gtk_object_set_data(GTK_OBJECT(active), "option_index",
@@ -166,7 +165,7 @@ gnc_ui_qif_import_dialog_make()
 
   menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(retval->date_picker));
 
-  for(i = 0; i < 5; i++) {
+  for(i = 0; i < _QIF_IMPORT_NUM_DATE_FORMATS; i++) {
     gtk_option_menu_set_history(GTK_OPTION_MENU(retval->date_picker), i);
     active = gtk_menu_get_active(GTK_MENU(menu));
     gtk_object_set_data(GTK_OBJECT(active), 
@@ -175,15 +174,8 @@ gnc_ui_qif_import_dialog_make()
   }
   gtk_option_menu_set_history(GTK_OPTION_MENU(retval->date_picker), 0);
   
-  gtk_widget_show(retval->dialog);
-
-  if (retval->dialog->window == NULL) {
-    free(retval);
-    return NULL;
-  }
-
-  gdk_window_raise(retval->dialog->window);
-
+  gtk_widget_show_all(retval->dialog);
+  
   return retval;
 }
 

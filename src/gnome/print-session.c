@@ -24,6 +24,9 @@
 #include <stdio.h>
 #include <gnome.h>
 
+#include "top-level.h"
+#include "window-help.h"
+#include "messages_i18n.h"
 #include "print-session.h"
 #include "ui-callbacks.h"
 
@@ -65,8 +68,11 @@ gnc_ui_print_preview_OK_cb(GtkWidget * widget, gpointer user_data) {
 
 void
 gnc_ui_print_preview_destroy(PrintPreviewDialog * ppd) {
-  gtk_widget_destroy(ppd->toplevel);
-  gtk_object_unref(GTK_OBJECT(ppd->pc));
+  gnome_dialog_close(GNOME_DIALOG(ppd->toplevel));
+
+  /* gtk_object_unref(GTK_OBJECT(ppd->toplevel)); */
+  gtk_object_unref(GTK_OBJECT(ppd->pc)); 
+  
   ppd->session = NULL;
   g_free(ppd);
 }
@@ -99,55 +105,65 @@ gnc_ui_print_dialog_create(PrintSession * ps) {
     }
   }
   else {
-    printer_string = "(none)";
+    printer_string = _("(none)");
   }
 
   gtk_entry_set_text(GTK_ENTRY(pcd->paper_entry), ps->paper);
   gtk_entry_set_text(GTK_ENTRY(pcd->printer_entry), printer_string);
   gtk_widget_show_all(pcd->toplevel);
-  
+
   return pcd;
 }
 
 void
 gnc_ui_paper_dialog_cancel_cb(GtkWidget * widg, gpointer user_data) {
-  gtk_object_set_data(GTK_OBJECT(user_data), "quit-cause",
-                      GINT_TO_POINTER(0));
-  gtk_main_quit();
+  PaperDialog * psd  = gtk_object_get_data(GTK_OBJECT(user_data),
+                                           "paper_struct");
+  gnc_ui_paper_dialog_destroy(psd);
 }
 
 void
 gnc_ui_paper_dialog_ok_cb(GtkWidget * widg, gpointer user_data) {
-  gtk_object_set_data(GTK_OBJECT(user_data), "quit-cause",
-                      GINT_TO_POINTER(1));
-  gtk_main_quit();  
+  PaperDialog * psd  = gtk_object_get_data(GTK_OBJECT(user_data),
+                                           "paper_struct");
+  char * newpaper = g_strdup(gnome_paper_selector_get_name
+                             (GNOME_PAPER_SELECTOR(psd->papersel)));
+  gtk_entry_set_text(GTK_ENTRY(psd->entry), newpaper);
+  psd->session->paper = newpaper;
+  gnc_ui_paper_dialog_destroy(psd);
+  
 }
 
 
-char *
-gnc_ui_paper_dialog_new_modal() {
-  GtkWidget * dialog = create_Paper_Size_Selector_Dialog();
-  GtkWidget * papersel = gtk_object_get_data(GTK_OBJECT(dialog),
-                                             "paperselector1");
-  char * newpaper = NULL;
-  
-  gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
-  gtk_widget_show_all(dialog);
-  gtk_main();
+PaperDialog *
+gnc_ui_paper_dialog_create(PrintSession * session, GtkWidget * entry) {
+  PaperDialog * psd = g_new0(PaperDialog, 1);
 
-  if(GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(dialog), "quit-cause"))) {
-    newpaper = g_strdup(gnome_paper_selector_get_name
-                        (GNOME_PAPER_SELECTOR(papersel)));
-  }
-  gtk_widget_destroy(dialog);
+  psd->toplevel = create_Paper_Size_Selector_Dialog();
+  psd->papersel = gtk_object_get_data(GTK_OBJECT(psd->toplevel),
+                                      "paperselector1");
+  psd->session  = session;
+  psd->entry    = entry;
 
-  return newpaper;
+  gtk_widget_ref(psd->entry);
+  gtk_object_set_data(GTK_OBJECT(psd->toplevel),
+                      "paper_struct", psd);
+  gtk_widget_show_all(psd->toplevel);
+  return psd;
+}
+
+
+void
+gnc_ui_paper_dialog_destroy(PaperDialog * psd) {
+  gnome_dialog_close(GNOME_DIALOG(psd->toplevel));
+  gtk_widget_unref(psd->entry);
+  g_free(psd);
 }
 
 
 void
 gnc_ui_print_dialog_destroy(PrintDialog * pcd) {
-  gtk_widget_destroy(pcd->toplevel);
+  gnome_dialog_close(GNOME_DIALOG(pcd->toplevel));
   gnc_print_session_destroy(pcd->session);
   g_free(pcd);
 }
@@ -178,9 +194,9 @@ gnc_ui_print_dialog_select_printer_cb(GtkWidget * widget, gpointer user_data) {
         }
       }
       else {
-        printer_string = "(none)";
+        printer_string = _("(none)");
       }
-      
+
       gtk_entry_set_text(GTK_ENTRY(pcd->printer_entry), printer_string);
     }
   }
@@ -189,16 +205,10 @@ gnc_ui_print_dialog_select_printer_cb(GtkWidget * widget, gpointer user_data) {
 void
 gnc_ui_print_dialog_select_paper_cb(GtkWidget * widget, gpointer user_data) {
   PrintDialog * pcd;
-  char        * paper;
 
   if(user_data) {
     pcd = gtk_object_get_data(GTK_OBJECT(user_data), "print_struct");    
-    paper = 
-      gnc_ui_paper_dialog_new_modal();
-    if(paper) {
-      pcd->session->paper = paper;
-      gtk_entry_set_text(GTK_ENTRY(pcd->paper_entry), pcd->session->paper);
-    }
+    gnc_ui_paper_dialog_create(pcd->session, pcd->paper_entry);
   }
 }
 
@@ -234,6 +244,13 @@ gnc_ui_print_dialog_cancel_cb(GtkWidget * widget, gpointer user_data) {
     gnc_ui_print_dialog_destroy(pcd);
   }
 }
+
+void
+gnc_ui_print_dialog_help_cb(GtkButton * button, 
+                                    gpointer user_data) {
+  helpWindow(NULL, HELP_STR, HH_PRINT);
+}
+
 
 PrintSession * 
 gnc_print_session_create() {
@@ -313,6 +330,7 @@ PrintDialog * gnc_ui_print_dialog_create(PrintSession * ps) {
 
 void gnc_ui_print_dialog_destroy(PrintDialog * pcd) { } 
 
+void gnc_ui_print_dialog_help_cb(GtkWidget * widget, gpointer user_data) { } 
 void gnc_ui_print_dialog_select_printer_cb(GtkWidget * widget, 
                                            gpointer user_data) { } 
 void gnc_ui_print_dialog_select_paper_cb(GtkWidget * widget, 

@@ -200,7 +200,7 @@
   ;; Here's a helper function for making some of the paragraphs below.
   (define (make-para key . values)
     (let ((args (append (list #f (string-db 'lookup key)) values)))
-      (string-append "<p>" (apply sprintf args) "</p>")))
+      (html-para (apply sprintf args))))
 
 
   ;; This is the rendering function. It accepts a database of options
@@ -243,8 +243,7 @@
         ;; the other reports for details. Note that you can used nested
         ;; lists here, as well as arbitrary functions.
         (list
-         "<html>"
-         "<body bgcolor=" (gnc:color-option->html color-op) ">"
+         (html-start-document-color (gnc:color-option->html color-op))
 
          ;; Here we get the title using the string database and 'lookup.
          "<h2>" (string-db 'lookup 'title) "</h2>"
@@ -292,8 +291,7 @@
 
          (make-para 'nice-day)
 
-         "</body>"
-         "</html>"))))
+         (html-end-document)))))
 
 
   ;; Now we store the actual strings we are going to use and

@@ -1,3 +1,9 @@
+2000-03-29  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/engine/Group.c: added some new transaction traversal code
+
+	* src/scm/report/folio.scm: implement the old eperl report
+
 2000-03-28  Robert Graham Merkel  <rgmerk@mira.net>
 
  	* man/gnc-prices.1: new file.  Man page for gnc-prices. Somebody
