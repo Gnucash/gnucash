@@ -955,12 +955,19 @@ void
 xaccTransBeginEdit (Transaction *trans, int defer)
 {
    char open;
+   Backend *be;
 
    assert (trans);
    open = trans->open;
    trans->open = BEGIN_EDIT;
    if (defer) trans->open |= DEFER_REBALANCE;
    if (open & BEGIN_EDIT) return;
+
+   /* See if there's a backend.  If there is, invoke it. */
+   be = xaccTransactionGetBackend (trans);
+   if (be && be->trans_begin_edit) {
+      (be->trans_begin_edit) (be, trans, defer);
+   }
 
    xaccOpenLog ();
    xaccTransWriteLog (trans, 'B');
@@ -974,7 +981,7 @@ xaccTransBeginEdit (Transaction *trans, int defer)
 void
 xaccTransCommitEdit (Transaction *trans)
 {
-   int i;
+   int i, rc;
    Split *split;
    Account *acc;
    Backend *be;
@@ -1033,6 +1040,26 @@ xaccTransCommitEdit (Transaction *trans)
    trans->open &= ~DEFER_REBALANCE;
    xaccTransRebalance (trans);
 
+   /* ------------------------------------------------- */
+   /* OK, at this point, we are done making sure that 
+    * we've got a validly constructed transaction.
+    * Next, we send it off to the back-end, to see if the
+    * back-end will accept it.
+    */
+
+   /* See if there's a backend.  If there is, invoke it. */
+   be = xaccTransactionGetBackend (trans);
+   if (be && be->trans_commit_edit) {
+      rc = (be->trans_commit_edit) (be, trans, trans->orig);
+   }
+
+   if (rc) {
+      /* if the backend puked, then we must roll-back 
+       * at this point, and let the user know that we failed.
+       */
+   }
+
+   /* ------------------------------------------------- */
    /* Make sure all associated splits are in proper order
     * in their accounts. */
    i=0;
@@ -1061,12 +1088,6 @@ xaccTransCommitEdit (Transaction *trans)
     * so we don't need it any more.  */
    xaccFreeTransaction (trans->orig);
    trans->orig = NULL;
-
-   /* see if there's a backend.  If there is, invoke it */
-   be = xaccTransactionGetBackend (trans);
-   if (be) {
-      (be->trans_commit_edit) (be, trans);
-   }
 
    LEAVE ("trans addr=%p\n", trans);
 }

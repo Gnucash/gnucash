@@ -20,6 +20,15 @@
 
 typedef struct _backend Backend;
 
+/*
+ * trans_commit_edit() takes two transaction arguments:
+ * the first is the proposed new transaction; the second is the
+ * 'original' transaction. The second argument is here for 
+ * convencience; it had better be substantially equivalent to
+ * the argument for the trans_begin_edit() callback.  (It doesn't
+ * have to be identical, it can be a clone).
+ */
+
 struct _backend 
 {
   AccountGroup * (*session_begin) (Session *, const char * sessionid);
@@ -27,7 +36,7 @@ struct _backend
   int (*account_begin_edit) (Backend *, Account *, int defer);
   int (*account_commit_edit) (Backend *, Account *);
   int (*trans_begin_edit) (Backend *, Transaction *, int defer);
-  int (*trans_commit_edit) (Backend *, Transaction *);
+  int (*trans_commit_edit) (Backend *, Transaction *new, Transaction *orig);
   int (*trans_rollback_edit) (Backend *, Transaction *);
 };
 
