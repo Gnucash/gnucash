@@ -92,15 +92,11 @@ xaccGetAccountGroup (GNCBook *book)
 void
 xaccSetAccountGroup (GNCBook *book, AccountGroup *grp)
 {
+  AccountGroup *old_grp;
   if (!book) return;
 
-  /* XXX Do not free the old topgroup here unless you also fix
-   * all the other uses of gnc_book_set_group!  That's because
-	* the account group is not reference-counted, and there's some
-	* chance that we'll leave a dangling pointer somewhere.
-   */
-
-  if (gnc_book_get_group (book) == grp) return;
+  old_grp = xaccGetAccountGroup (grp);
+  if (old_grp == grp) return;
 
   if (grp && grp->book != book)
   {
@@ -109,6 +105,14 @@ xaccSetAccountGroup (GNCBook *book, AccountGroup *grp)
   }
 
   gnc_book_set_data (book, GNC_TOP_GROUP, grp);
+
+  /* XXX Do not free the old topgroup here unless you also fix
+   * all the other uses of xaccSetAccountGroup()!  That's because
+	* the account group is not reference-counted, and there's some
+	* chance that we'll leave a dangling pointer somewhere.
+   */
+
+  /* xaccAccountGroupDestroy (old_grp); */
 }
 
 /********************************************************************\
