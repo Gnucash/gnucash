@@ -363,6 +363,7 @@
     (gw:enum-add-value! wt "GNC_ID_TRANS" 'gnc-id-trans)
     (gw:enum-add-value! wt "GNC_ID_SPLIT" 'gnc-id-split)
     (gw:enum-add-value! wt "GNC_ID_PRICE" 'gnc-id-price)
+    (gw:enum-add-value! wt "GNC_ID_BOOK" 'gnc-id-book)
     (gw:enum-add-value! wt "GNC_ID_SCHEDXACTION" 'gnc-id-sched-xaction)
     (gw:enum-add-value! wt "GNC_ID_FREQSPEC" 'gnc-id-freq-spec))
 
