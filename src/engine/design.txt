@@ -1,6 +1,9 @@
 
 Accounting Engine
 -----------------
+This document reviews the operation of, and various design points 
+pertinent to the GnuCash accounting engine.  The latest version
+of this document can be found in the engine source-code directory.
 
 Quick Overview
 --------------
