@@ -1,5 +1,14 @@
-2002-1-6  Benoit Grégoire  <bock@step.polymtl.ca>
-	* src/import-export/import-backend.c: Fixed the date heuristics modifications, which had an unfortunate interaction with old debugging code, causing the score to be reversed, and making the matcher mostly unusable.
+2003-01-11  David Hampton  <hampton@employees.org>
+
+	* src/engine/gnc-commodity.c: Convert from the old to new symbols
+	for Russian Roubles (RUB -> RUR). #102705
+
+2002-01-11  Benoit Grégoire  <bock@step.polymtl.ca>
+
+	* src/import-export/import-backend.c: Fixed the date heuristics
+	  modifications, which had an unfortunate interaction with old
+	  debugging code, causing the score to be reversed, and making the
+	  matcher mostly unusable.
 	
 2003-01-09  Derek Atkins  <derek@ihtfp.com>
 

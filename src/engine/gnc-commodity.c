@@ -450,6 +450,12 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
   nsp = g_hash_table_lookup(table->table, (gpointer)namespace);
 
   if(nsp) {
+    /*
+     * The symbol for Russing Roubles was changed. Need to support the
+     * old symbol to be backward compatible.
+     */
+    if (strcmp(mnemonic, "RUB") == 0)
+      mnemonic = "RUR";
     return g_hash_table_lookup(nsp->table, (gpointer)mnemonic);
   }
   else {
