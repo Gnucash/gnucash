@@ -41,6 +41,7 @@ static xaccLedgerDisplay **regList = NULL;     /* single-account registers */
 static xaccLedgerDisplay **ledgerList = NULL;  /* multiple-account registers */
 static xaccLedgerDisplay **fullList = NULL;    /* all registers */
 
+static short module = MOD_LEDGER;
 
 /********************************************************************\
  * Ledger utilities                                                 *
@@ -185,7 +186,7 @@ xaccLedgerDisplaySimple (Account *acc)
       reg_type = CURRENCY_REGISTER;
       break;
     default:
-      PERR (" xaccLedgerDisplaySimple(): unknown account type\n");
+      PERR ("xaccLedgerDisplaySimple(): unknown account type %d\n", acc_type);
       return NULL;
   }
 
@@ -257,7 +258,7 @@ xaccLedgerDisplayAccGroup (Account *acc)
        break;
 
     default:
-      PERR (" xaccLedgerDisplayAccGroup(): unknown account type \n");
+      PERR ("xaccLedgerDisplayAccGroup(): unknown account type \n");
       _free (list);
       return NULL;
   }
