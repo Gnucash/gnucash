@@ -178,35 +178,136 @@ find_nearest_equity_acct (Account *acc)
 /* traverse all accounts, get account balances */
 
 static void
-add_closing_balances (AccountGroup *closed_grp, GNCBook *open_book)
+add_closing_balances (AccountGroup *closed_grp, 
+                      GNCBook *open_book,
+                      GNCBook *closed_book,
+                      Timespec *post_date, Timespec *date_entered, 
+                      const char *desc)
 {
    AccountList *acc_list, *node;
+
+   if (!closed_grp) return;
 
    /* walk accounts in closed book */
    acc_list = xaccGroupGetAccountList (closed_grp);
    for (node=acc_list; node; node=node->next)
    {
+      kvp_frame *cwd;
+      kvp_value *vvv;
+      Account *twin;
+      AccountGroup *childs;
       Account * candidate = (Account *) node->data;
       GNCAccountType tip = xaccAccountGetType (candidate);
 
-      if (EQUITY == tip)
+      /* find the peer account of this account in the open book  */
+      twin = xaccAccountLookupTwin (candidate, open_book);
+
+      /* -------------------------------- */
+      /* add KVP to open account, indicating the progenitor
+       * of this account. */
+      xaccAccountBeginEdit (twin);
+      cwd = xaccAccountGetSlots (twin);
+      cwd = kvp_frame_get_frame_slash (cwd, "/book/");
+
+      vvv = kvp_value_new_guid (xaccAccountGetGUID (candidate));
+      kvp_frame_set_slot_nc (cwd, "prev-acct", vvv);
+      
+      vvv = kvp_value_new_guid (&closed_book->guid);
+      kvp_frame_set_slot_nc (cwd, "prev-book", vvv);
+      
+      xaccAccountCommitEdit (twin);
+
+      /* -------------------------------- */
+      /* add KVP to closed account, indicating where 
+       * the next book is. */
+      xaccAccountBeginEdit (candidate);
+      cwd = xaccAccountGetSlots (candidate);
+      cwd = kvp_frame_get_frame_slash (cwd, "/book/");
+
+      vvv = kvp_value_new_guid (&open_book->guid);
+      kvp_frame_set_slot_nc (cwd, "next-book", vvv);
+      
+      vvv = kvp_value_new_guid (xaccAccountGetGUID (twin));
+      kvp_frame_set_slot_nc (cwd, "next-acct", vvv);
+
+      /* -------------------------------- */
+      /* We need to carry a balance on any account that is not
+       * and income or expense or equity account */
+      if ((INCOME != tip) && (EXPENSE != tip) && (EQUITY != tip)) 
       {
+         Split *se, *st;
+         Transaction *trans;
+         Account *equity;
+         gnc_numeric baln;
+
+         baln = xaccAccountGetBalance (candidate);
+
+         /* find the equity account into which we'll poke the 
+          * balancing transaction */
+         equity = find_nearest_equity_acct (twin);
+
+         /* -------------------------------- */
+         /* create the balancing transaction */
+         trans = xaccMallocTransaction (open_book);
+         xaccTransBeginEdit (trans);
+         st = xaccMallocSplit(open_book);
+         xaccAccountInsertSplit (twin, st);
+         
+         se = xaccMallocSplit(open_book);
+         xaccAccountInsertSplit (equity, se);
+
+         xaccSplitSetValue (st, baln);
+         xaccSplitSetValue (se, gnc_numeric_neg(baln));
+
+         xaccTransSetDatePostedTS (trans, post_date);
+         xaccTransSetDateEnteredTS (trans, date_entered);
+         xaccTransSetDescription (trans, desc);
+
+         /* add KVP data showing where the balancing 
+          * transaction came from */
+         cwd = xaccTransGetSlots (trans);
+         cwd = kvp_frame_get_frame_slash (cwd, "/book/");
+
+         vvv = kvp_value_new_guid (&closed_book->guid);
+         kvp_frame_set_slot_nc (cwd, "closed-book", vvv);
+         
+         vvv = kvp_value_new_guid (xaccAccountGetGUID(candidate));
+         kvp_frame_set_slot_nc (cwd, "closed-acct", vvv);
+         
+         xaccTransCommitEdit (trans);
+
+         /* -------------------------------- */
+         /* add KVP to closed account, indicating where the
+          * balance was carried forward to. */
+         xaccAccountBeginEdit (candidate);
+         cwd = xaccAccountGetSlots (candidate);
+         cwd = kvp_frame_get_frame_slash (cwd, "/book/");
+
+         vvv = kvp_value_new_guid (xaccTransGetGUID(trans));
+         kvp_frame_set_slot_nc (cwd, "balancing-trans", vvv);
+         xaccAccountCommitEdit (candidate);
+      }
+
+      /* we left an open dangling above ... */
+      xaccAccountCommitEdit (candidate);
+
+
+      /* recurse down to the children */
+      childs = xaccAccountGetChildren(candidate);
+      if (childs) 
+      {
+         add_closing_balances (childs, open_book, closed_book,
+                          post_date, date_entered, desc);
       }
    }
-
-#if 0
-   for each
-
-   
-
-#endif
 }
 
 /* ================================================================ */
 /* split a book into two by date */
 
 GNCBook * 
-gnc_book_calve_period (GNCBook *existing_book, Timespec calve_date)
+gnc_book_calve_period (GNCBook *existing_book, Timespec calve_date,
+                       const char * memo)
 {
    Query *query;
    GNCBook *partition_book;
@@ -247,6 +348,11 @@ gnc_book_calve_period (GNCBook *existing_book, Timespec calve_date)
    vvv = kvp_value_new_guid (&partition_book->guid);
    kvp_frame_set_slot_nc (exist_cwd, "prev-book", vvv);
 
+   /* add in transactions to equity accounts that will
+    * hold the colsing balances */
+   add_closing_balances (gnc_book_get_group(partition_book), 
+                        existing_book, partition_book,
+                        &calve_date, &ts, memo);
    return partition_book;
 }
 

@@ -26,30 +26,49 @@
  *    book into two books, returning a newly created book with 
  *    the older transactions placed in it. 
  *
+ * The 'memo' is used as the description in the transaction that 
+ * creates the opening balances for the accounts.  Typically,
+ * it should be _("Opening Balance")
+ *
 -- Make an equity transfer so that we can carry forward the balances.
+   the equity account is created if not found.   only the peers and 
+   immediate parents of an account is searchd for the qeuity account.
+
 -- hack alert -- should not allow closed books to have unreconciled
    transactions ???
 -- It will use the following kvp entries in /book/:
 
-Implemented in book:
-/book/start-date        earliest date in this book.
+Implemented in the closed book:
 /book/end-date          latest date in this book. must not change ...
 /book/close-date        date on which book was closed.
-/book/next-book         guid of next book
-/book/prev-book         guid of previous book
+/book/next-book         guid of next book (the still-open book)
 
-Mot imlemented (yet):
-/book/closing-balance-of-account-guid
+Implemented in still-open book:
+/book/start-date        earliest date in this book.
+/book/prev-book         guid of previous book (the closed book)
+
+Implemented in the balancing transaction:
+/book/closed-acct  guid of account whose balance was brought forward
+/book/closed-book  guid of book whose balance was brought forward
+
+Implemented in the closed account:
+/book/balancing-trans  GUID of equity-balancing transaction.
+/book/next-book     GUID of equity-balancing book.
+/book/next-acct     GUID of twin of this account in the open book.
+
+Implemented in the still-open account:
+/book/prev-acct         GUID of twin of this account in the closed book.
+/book/prev-book         guid of previous book (the closed book)
+
+Not imlemented (yet), these should go into book:
 /book/name=some-user-supplied-name
 /book/notes=user-supplied-descriptive-comments
 /book/accounting-period=enum {none, week, month, quarter, trimester, year}
 
-To go into account:
-/book/balancing-trans  GUID of equity-balancing transaction.
 
 
  */
-GNCBook * gnc_book_calve_period (GNCBook *, Timespec);
+GNCBook * gnc_book_calve_period (GNCBook *, Timespec, const char *memo);
 
 /* The gnc_book_partition() uses the result of the indicated query
  *    to partition an existing book into two parts.  It returns 
