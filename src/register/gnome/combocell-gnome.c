@@ -306,6 +306,14 @@ destroyCombo (BasicCell *bcell)
 
 /* =============================================== */
 
+static void
+menustring_free(gpointer string, gpointer user_data)
+{
+        g_free(string);
+}
+
+/* =============================================== */
+
 void xaccDestroyComboCell (ComboCell *cell)
 {
 	PopBox *box = (PopBox *) cell->cell.gui_private;
@@ -313,8 +321,9 @@ void xaccDestroyComboCell (ComboCell *cell)
 	destroyCombo(&(cell->cell));
 
 	if (box != NULL) {
-		g_list_foreach(box->menustrings, (GFunc) g_free, NULL);
+		g_list_foreach(box->menustrings, menustring_free, NULL);
 		g_list_free(box->menustrings);
+                box->menustrings = NULL;
 
                 xaccFreeQuickFill(box->qf);
                 box->qf = NULL;
@@ -348,7 +357,7 @@ xaccClearComboCellMenu (ComboCell * cell)
         if (box->menustrings == NULL)
                 return;
 
-        g_list_foreach(box->menustrings, (GFunc) g_free, NULL);
+        g_list_foreach(box->menustrings, menustring_free, NULL);
         g_list_free(box->menustrings);
         box->menustrings = NULL;
 
