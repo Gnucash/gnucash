@@ -152,7 +152,7 @@ gnc_kvp_bag_remove_frame (KvpFrame *root, const char *path, KvpFrame *fr)
     {
       listhead = g_list_remove_link (listhead, node);
       g_list_free_1 (node);
-      kvp_value_replace_glist_nc (va, listhead);
+      kvp_value_replace_glist_nc (arr, listhead);
       kvp_value_replace_frame_nc (va, NULL);
       kvp_value_delete (va);
       return;
