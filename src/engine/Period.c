@@ -45,6 +45,8 @@ The sched xactions are not copied ...
  */
 GNCBook * gnc_book_partition (GNCBook *, Query *);
 
+void xaccBookInsertTrans (GNCBook *book, Transaction *trans);
+
 #endif XACC_PERIOD_H
 
 #include "gnc-book-p.h"
@@ -53,9 +55,12 @@ GNCBook * gnc_book_partition (GNCBook *, Query *);
 
 
 /* ================================================================ */
+/* reparent transaction to new book, and do it so backends 
+ * handle it correctly.
+*/
 
-static void
-reparent (Transaction *trans, GNCBook *book)
+void
+xaccBookInsertTrans (GNCBook *book, Transaction *trans)
 {
    Transaction *newtrans;
    GList *node;
@@ -93,7 +98,6 @@ reparent (Transaction *trans, GNCBook *book)
       /* force to null, so remove doesn't occur */
       xaccSplitSetAccount (s, NULL);  
       xaccAccountInsertSplit (twin, s);
-      xaccAccountRecomputeBalance (twin); /* XXX is this really needed ??? */
       twin->balance_dirty = TRUE;
       twin->sort_dirty = TRUE;
    }
@@ -130,6 +134,8 @@ gnc_book_partition (GNCBook *existing_book, Query *query)
       GList *tnode;
       Split *s = snode->data;
       Transaction *trans = s->parent;
+
+      xaccBookInsertTrans (partition_book, trans);
 
    }
    xaccAccountGroupCommitEdit (existing_book->topgroup);
