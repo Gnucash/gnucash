@@ -1,4 +1,14 @@
+2001-06-10  Christian Stimming  <stimming@tuhh.de>
+
+	* de.po: updated German translation.
+	
+	* configure.in, doc/sgml/Makefile.am, doc/sgml/de_DE/*: Added
+	German translation of a few manual pages, including a Whats-New
+	table for the translated words.
+
 2001-06-10  Dave Peticolas  <dave@krondo.com>
+
+	* doc/sgml/C/xacc-print.sgml: fix docs
 
 	* src/engine/gnc-engine-util.c: change debug levels to warning
 

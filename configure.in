@@ -593,6 +593,7 @@ AC_OUTPUT(
           doc/sgml/Makefile
           doc/sgml/C/Makefile
           doc/sgml/C/image/Makefile
+          doc/sgml/de_DE/Makefile
           doc/sgml/es/Makefile
           doc/sgml/pt_PT/Makefile
           doc-tools/Makefile

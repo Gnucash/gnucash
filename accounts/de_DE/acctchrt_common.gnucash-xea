@@ -688,25 +688,14 @@
   <act:parent type="new">e5f75b06803605449a4a5b389b6f4553</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ausgleichskonto</act:name>
-  <act:id type="new">320d3cf62b418db6281c3cd8ec2e95c7</act:id>
-  <act:type>EQUITY</act:type>
-  <act:currency>
-    <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Ausgleichskonto (Eigenkapital)</act:description>
-</gnc:account>
-<gnc:account version="2.0.0">
-  <act:name>Anfangsbest&#228;nde</act:name>
+  <act:name>Anfangsbestand</act:name>
   <act:id type="new">d37d06edcff07a6f8fbef25dc114cfe4</act:id>
   <act:type>EQUITY</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
-  <act:description>Anfangsbest&#228;nde</act:description>
-  <act:parent type="new">320d3cf62b418db6281c3cd8ec2e95c7</act:parent>
+  <act:description>Anfangsbestand</act:description>
 </gnc:account>
 </gnc-account-example>
 

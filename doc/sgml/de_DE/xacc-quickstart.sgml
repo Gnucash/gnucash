@@ -7,30 +7,35 @@
     
       <sect1>
 	<title>
-	  Welcome
+	  Willkommen
 	</title>
 	
-	<para>Hi there!  Welcome to GnuCash 1.6, an easy-to-use,
-	  powerful, and reliable personal finance program.  This virtually
-	  all-new version has an extensive list of features, and if you
-	  want to know everything GnuCash can do, check the 
-	  <link linkend="xacc-features">features section</link> of this manual.
-	  However, if you're like us and impatient to get some work done,
-	  that can wait until later.</para>
+	<para>Willkommen zu GnuCash 1.6, ein einfaches benutzbarer,
+	leistungsfähiger und verläßlicher perönlicher
+	Finanzmanager. Diese rundum neue Version besitzt eine ganze
+	Reihe neuer Funktionen, die in der <link
+	linkend="xacc-features">Funktionenübersicht</link> aufgeführt
+	sind. Für den ungeduldigen Anwender gibt es im folgenden eine
+	Schnelleinführung.</para>
 
-	<para>
-	  As much as is possible, GnuCash is designed to be intuitive to
-	  use.  Despite that, getting the most out of GnuCash requires 
-	  understanding a couple of simple ideas used throughout the
-	  program, and used throughout the rest of this manual.
-	  Therefore, we highly recommend that you spend a few minutes
-	  reading this manual page.  
-	</para>
+	<para>GnuCash ist so konzipiert, daß die Anwendung so intuitiv
+	wie möglich sein soll. Nichtsdestotrotz ist, um den vollen
+	Funktionsumfang zu genießen, ein gewisses Verständnis von
+	einigen Konzepten der Buchführung vonnöten. Daher empfehlen
+	wir sehr, einige Minuten auf die folgende Einführung zu
+	verwenden.</para>
+
+        <para>Leider ist die deutsche Übersetzung erst teilweise
+        vollendet -- das Programm selber wurde sorgfältig dem
+        deutschen Sprachraum angepasst, aber das Benutzerhandbuch
+        liegt bisher nur in Englisch vor. Bis das Handbuch von
+        weiteren Freiwilligen übersetzt wird, können die weiteren
+        Seiten leider nur auf Englisch geboten werden. </para>
       </sect1>
       
       <sect1 id="xacc-remedial-accounting">
 	<title>
-	  Remedial Accounting 101
+	  Remedial Accounting 101 (englisch)
 	</title>
 	
 	<para>
@@ -85,7 +90,7 @@
       
       <sect1 id="xacc-new-account-tree">
 	<title>
-	  Setting up accounts from scratch
+	  Setting up accounts from scratch (englisch)
 	</title>
 
 	<para>
@@ -124,7 +129,7 @@
 
       <sect1 id="xacc-data-from-existing">
 	<title>
-	  Importing data from other personal finance programs
+	  Importing data from other personal finance programs (englisch)
 	</title>
 	
 	<para>
@@ -160,7 +165,7 @@
 
       <sect1>
 	<title>
-	  Starting to use GnuCash
+	  Starting to use GnuCash (englisch)
 	</title>
 	<para>
 	  Once the druid has done it's thing, you'll end up 

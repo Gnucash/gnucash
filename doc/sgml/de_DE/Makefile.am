@@ -1,4 +1,4 @@
-SUBDIRS = image
+SUBDIRS = 
 
 gnucash_helpdir = $(GNC_HELPDIR)/de_DE
 

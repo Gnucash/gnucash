@@ -8,7 +8,6 @@
 <!entity xaccaccounthier system "../C/xacc-account-hierarchy-creator.sgml">
 <!entity xaccacctypes system "../C/xacc-acctypes.sgml">
 <!entity xaccnewacctwin system "../C/xacc-newacctwin.sgml">
-<!entity xaccadjbalwin system "../C/xacc-adjbalwin.sgml">
 <!entity xaccassetbarcharts system "../C/xacc-asset-liability-barcharts.sgml">
 <!entity xaccassetpiecharts system "../C/xacc-asset-liability-piecharts.sgml">
 <!entity xaccapar system "../C/xacc-apar.sgml">
@@ -74,7 +73,6 @@
 &xaccassetbarcharts;
 &xaccassetpiecharts;
 &xaccnewacctwin;
-&xaccadjbalwin;
 &xaccapar;
 &xaccdepreciation;
 &xaccbalancereport;

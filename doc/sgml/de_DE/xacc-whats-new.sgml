@@ -17,6 +17,28 @@
       jeder Teil des Programms hat sich verändert und eine ganze Reihe
       von neuen Funktionen sind hinzugekommen.
     </para>
+
+<sect2>
+<title>
+Komplett überarbeitete deutsche Übersetzung
+</title>
+<para>
+Die deutsche Übersetzung des Programms wurde komplett
+überarbeitet. Viele Worte wurden den Standards des Rechnungswesens
+angepasst. Eine Übersicht der geänderten Worte finden Sie in der
+Tabelle <link linkend="xacc-de-translation">Änderungen im deutschen
+Wortschatz</link>.
+</para>
+
+<para>Leider ist die deutsche Übersetzung erst teilweise vollendet --
+das Programm selber wurde sorgfältig dem deutschen Sprachraum
+angepasst, aber das Benutzerhandbuch liegt bisher nur in Englisch
+vor. Bis das Handbuch von weiteren Freiwilligen übersetzt wurde,
+können die weiteren Seiten leider nur auf Englisch geboten
+werden.</para>
+</sect2>
+
+
     <sect2>
       <title>
 	Neues Dateiformat
@@ -58,7 +80,7 @@
     
     <sect2>
       <title>
-	Neue Benutzeroberfläche
+	Neue Benutzeroberfläche (englisch)
       </title>
       <para>The interface has been massively revamped to make it 
 	faster and easier to use.</para>
@@ -95,7 +117,7 @@
     
     <sect2>
       <title>
-	Reports
+	Neue Berichte (englisch)
       </title>
       <para>The reporting architecture has changed radically for
 	this release - and so reports are now more informative,
@@ -161,7 +183,7 @@
     
     <sect2>
       <title>
-	Graphs
+	Diagramme (englisch)
       </title>
       
       <para>
@@ -179,7 +201,7 @@
 
     <sect2>
       <title>
-	The Online World
+	Online-Abruf (englisch)
       </title>
       
       <para>GnuCash can get price quotes online, with the 
@@ -208,7 +230,7 @@
     
     <sect2>
       <title>
-	A taste of the Future
+	Wie es weitergeht  (englisch)
       </title>
       
       <para>GnuCash now supports using Postgres as a backend
@@ -250,6 +272,45 @@
       </para>
     </sect2>
   </sect1>
+
+<sect1 id="xacc-de-translation">
+<title>Änderungen im deutschen Wortschatz</title>
+
+<para>
+<table>
+<title>Deutsche Worte</title>
+<tgroup cols="3">
+<thead>
+<row>
+<entry>Bisher</entry>
+<entry>Englisch</entry>
+<entry>Neu</entry>
+</row>
+</thead>
+<tbody>
+<row><entry>Register</entry>	<entry>register</entry>	<entry>Kassenbericht</entry></row>
+<row><entry>Buchung</entry>	<entry>transaction</entry>	<entry>Geschäftsvorgang</entry></row>
+<row><entry>Split</entry>	<entry>split</entry>	<entry>Buchung</entry></row>
+<row><entry>Abgestimmt</entry>	<entry>transaction state: cleared</entry>	<entry>Bestätigt</entry></row>
+<row><entry>Ausgeglichen</entry>	<entry>transaction state: reconciled</entry>	<entry>Abgeglichen</entry></row>
+
+<row><entry></entry></row>
+<row><entry>Anlagevermögen</entry>	<entry>account type: Asset</entry>	<entry>Aktiva</entry></row>
+<row><entry>Ausgabe</entry>	<entry>account type: Expense</entry>	<entry>Aufwand</entry></row>
+<row><entry>Einnahme</entry>	<entry>account type: Income</entry>	<entry>Ertrag</entry></row>
+<row><entry>Haben </entry>	<entry>Credit (column in register)</entry>	<entry>Gutschrift</entry></row>
+<row><entry>Soll </entry>	<entry>Debit (column in register)</entry>	<entry>Belastung</entry></row>
+<row><entry>Verbindlichkeiten</entry>	<entry>account type: Liability</entry>	<entry>Passiva</entry></row>
+
+<row><entry></entry></row>
+<row><entry>Eröffnungssaldo</entry>	<entry>opening balance</entry>	<entry>Anfangsbestand</entry></row>
+<row><entry>Einnahmen-/Ausgabenrechnung</entry>	<entry>Profit & Loss</entry>	<entry>Gewinn- und Verlustrechnung</entry></row>
+</tbody>
+</tgroup>
+</table>
+</para>
+</sect1>
+
 </article>
 <!-- Local variables: -->
 <!-- sgml-parent-document: "gnucash.sgml" -->
