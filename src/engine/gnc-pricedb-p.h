@@ -27,6 +27,7 @@
 
 #include <glib.h>
 
+#include "Backend.h"
 #include "GNCIdP.h"
 #include "gnc-book.h"
 #include "gnc-engine.h"
