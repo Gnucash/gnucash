@@ -469,6 +469,14 @@ code of its account")
 
 (gw:wrap-function
  ws
+ 'gnc:split-get-lot
+ '<gnc:Lot*>
+ "xaccSplitGetLot"
+ '((<gnc:Split*> s))
+ "Return the LOT of Split s.")
+
+(gw:wrap-function
+ ws
  'gnc:transaction-get-guid
  '<gnc:guid-scm>
  "xaccTransReturnGUID"
