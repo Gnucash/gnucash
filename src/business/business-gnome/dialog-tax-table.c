@@ -536,6 +536,13 @@ tax_table_delete_entry_cb (GtkButton *button, TaxTableWindow *ttw)
   if (!ttw->current_table || !ttw->current_entry)
     return;
 
+  if (g_list_length (gncTaxTableGetEntries (ttw->current_table)) <= 1) {
+    char *message = _("You cannot remove the last entry from the tax table.\n"
+		      "Try deleting the tax table if you want to do that.");
+    gnc_error_dialog_parented (GTK_WINDOW (ttw->dialog), message);
+    return;
+  }
+
   if (gnc_verify_dialog_parented (ttw->dialog, FALSE,
 			  _("Are you sure you want to delete this entry?"))) {
     /* Ok, let's remove it */
