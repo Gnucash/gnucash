@@ -1,4 +1,15 @@
+2001-11-12  Rob Browning  <rlb@defaultvalue.org>
+
+	* src/report/standard-reports/test/Makefile.am: use gnc-test-env.
+
+	* configure.in: set execute bit on gnc-test-env.
+
+	* src/gnc-test-env: new script.
+
 2001-11-09  Rob Browning  <rlb@defaultvalue.org>
+
+	* src/gnc-module/test/Makefile.am (TESTS_ENVIRONMENT): add missing
+	components in GUILE_LOAD_PATH.
 
 	* src/gnome-utils/test/Makefile.am
 	(INCLUDES): typo - GUILE_INCS not GUILE_CFLAGS.
