@@ -3,8 +3,6 @@ echo "  test-scm-init: testing Scheme-only module system init. ";
 exec guile -s $0 "$@"
 !#
 
-(set! %load-path (cons ".." %load-path)) 
-(set! %load-path (cons "/usr/local/g-wrap/share/guile" %load-path)) 
 (use-modules (gnucash gnc-module))
 (gnc:module-system-init)
 
