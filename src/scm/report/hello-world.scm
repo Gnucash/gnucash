@@ -208,7 +208,6 @@ option like this.")
   ;; to the function is one created by the options-generator function
   ;; defined above.
   (define (hello-world-renderer report-obj)
-    
     ;; These are some helper functions for looking up option values.
     (define (get-op section name)
       (gnc:lookup-option (gnc:report-options report-obj) section name))
@@ -320,7 +319,6 @@ for details on writing your own reports, \
 or extending existing reports.")
             (gnc:html-markup-tt 
              gnc:_share-dir-default_ "/gnucash/scm/report")))
-
           (gnc:html-markup-p
            (gnc:html-markup/format
             (_ "For help on writing reports, or to contribute your brand \
@@ -473,3 +471,4 @@ new, totally cool report, consult the mailing list %s.")
    
    ;; The rendering function defined above.
    'renderer hello-world-renderer))
+

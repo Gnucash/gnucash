@@ -1,219 +1,200 @@
+<article id="xacc-apar">
+<artheader>
+<title>Accounts Payable/Accounts Receivable</title>
+</artheader>
+<sect1 id="xacc-ap-ar">
+<title>Accounts Payable and Accounts Receivable</title>
 
-<ARTICLE ID="XACC-APAR">
-<ARTHEADER>
-<TITLE>Accounts Payable/Accounts Receivable</TITLE>
-</ARTHEADER>
-<SECT1 ID="XACC-AP-AR">
-<TITLE>Accounts Payable and Accounts Receivable</TITLE>
-<PARA>A/R (Accounts Receivable) and A/P (Accounts Payable) are
-    used by businesses to record sales
-    for which they are not immediately paid, or to record bills that
-    they have received, but might not pay until later.
-    These types of accounts are used primarily when you've got a
-    lot of bills and receipts flowing in and out, and don't want to
-    lose track of them just because you don't pay/get paid right
-    away.
-    For most home users, A/R and A/P are too complicated
-    and confusing to be worth the effort.
+<para>A/R (Accounts Receivable) and A/P (Accounts Payable) are used by
+businesses to record sales for which they are not immediately paid, or
+to record bills that they have received, but might not pay until
+later.  These types of accounts are used primarily when you've got a
+lot of bills and receipts flowing in and out, and don't want to lose
+track of them just because you don't pay/get paid right away.  
+</para>
+<para> For most home users, A/R and A/P will add so much complexity
+that they are not worth the effort.  
+</para>
+</sect1>
+    
+<sect1 id="xacc-ardef">
+<title> Accounts Receivable</title> 
 
-    </PARA>
-</SECT1>
-<SECT1 ID="XACC-ARDEF">
-<TITLE> Accounts Receivable</TITLE>
-<PARA>Let's assume that instead of requiring
-    customers to pay <EMPHASIS>instantly,</EMPHASIS> in cash, 
-    you issue
-    them an invoice, and give them 30 days to pay the bills. (After
-    30 days, we can start charging interest and sending out
-    harassing letters :-)).
-    When we make a sale, the two accounts affected are 
-    <EMPHASIS>Sales</EMPHASIS> (an income account) and 
-    <EMPHASIS>Accounts Receivable.</EMPHASIS>
-    Accounts Receivable is an asset, but it's not "liquid," as you
-    can't readily sell it, and it's certainly not cash.
-    When the customer pays the bill, 
-    you transfer the amount from A/R to Cash.
-    This is done in two steps because you have decided
-    to do your accounting on an accrual basis and not on a
-    cash basis.  This is because most of your transactions are not solely
-    based on cash changing hands, but rather based on 
-    <EMPHASIS>establishing obligations.</EMPHASIS>
-    </PARA>
+<para>Let's assume that instead of requiring customers to pay
+<emphasis>instantly,</emphasis> in cash, you issue them an invoice,
+and give them 30 days to pay the bills. (After 30 days, we start
+charging interest and sending out harassing letters :-)).  When we
+make a sale, the two accounts affected are <emphasis>Sales</emphasis>
+(an income account) and <emphasis>Accounts Receivable.</emphasis>
+Accounts Receivable is an asset, but it's not "liquid," as you can't
+readily sell it, and it's certainly not cash.  When the customer pays
+the bill, you transfer the amount from A/R to Cash.  This is done in
+two steps because you have decided to do your accounting on an accrual
+basis and not on a cash basis.  This is because most of your
+transactions are not solely based on cash changing hands, but rather
+based on <emphasis>establishing obligations.</emphasis> </para>
 
-<PARA>In more sophisticated operations, there may be a much more
-    complex sequence of documents generated and tracked:
+<para>In more sophisticated operations, there may be a much more
+complex sequence of documents generated and tracked:
 
-    <ITEMIZEDLIST>
-<LISTITEM>
-<PARA>A customer sends in a <EMPHASIS>Purchase Order</EMPHASIS>,
-      which authorizes a purchase.
+    <itemizedlist>
 
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>A <EMPHASIS>Work Order</EMPHASIS> to schedule production of
+<listitem><para>A customer sends in a <emphasis>Purchase
+Order</emphasis>, which authorizes a purchase.  </para>
+</listitem>
+
+<listitem>
+<para>A <emphasis>Work Order</emphasis> to schedule production of
       whatever the customer is buying.
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>A <EMPHASIS>Shipping Notice</EMPHASIS> is issued, to ship to goods to
-      the customer.
+      </para>
+</listitem>
 
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Once shipped, an <EMPHASIS>Invoice</EMPHASIS> is issued, representing
-      the <EMPHASIS>request to pay</EMPHASIS>.
-    </PARA>
-</LISTITEM>
-</ITEMIZEDLIST>
+<listitem> <para>A <emphasis>Shipping Notice</emphasis> is issued, to
+ship to goods to the customer.  </para> </listitem>
 
-    </PARA>
-<PARA>Sales are reported as soon as they occur.
-    Unfortunately, you may wind up selling some product to
-    no-good shady operators that you didn't know were shady, and
-    thus may get stuck with some "bad debts."
-    In order to determine which parts of Accounts Receivable
-    appear to be most at risk, it is typical to arrange A/R based on
-    the "ages" of the debts, commonly segmenting it into several
-    aging periods, of payments outstanding 0-30 days, those that
-    outstanding 31-60 days, 61-90 days, and then those that are
-    <EMPHASIS>way overdue.</EMPHASIS>
-    At some point, it may become clear that a customer is never
-    going to pay what they owe, and we have to write it off as a
-    <EMPHASIS>Bad Debt.</EMPHASIS>
-    At that point, it is typical to record an entry thus:
+<listitem>
+<para>Once shipped, an <emphasis>Invoice</emphasis> is issued,
+representing the <emphasis>request to pay</emphasis>.
+    </para>
+</listitem>
+</itemizedlist>
 
-    <TABLE>
-<TITLE>Bad Debt Expense Example</TITLE>
-<TGROUP COLS="3">
-<THEAD>
-<ROW>
-<ENTRY>Account</ENTRY>
-<ENTRY>DR</ENTRY>
-<ENTRY>CR</ENTRY>
-</ROW>
-</THEAD>
-<TBODY>
-<ROW>
-<ENTRY>Bad Debt Expense</ENTRY>
-<ENTRY>$10,000</ENTRY>
-<ENTRY>        </ENTRY>
-</ROW>
-<ROW>
-<ENTRY>        </ENTRY>
-</ROW>
-<ROW>
-<ENTRY>Accounts Receivable</ENTRY>
-<ENTRY>        </ENTRY>
-<ENTRY>$10,000</ENTRY>
-</ROW>
-</TBODY>
-</TGROUP>
-</TABLE>
+    </para>
 
-    </PARA>
-<PARA>You could have reduced <EMPHASIS>Sales Income</EMPHASIS> instead, but
-    companies tend to prefer to specifically track the amount that
-    they're losing to bad customers.
+<para>Sales are reported as soon as they occur.  Unfortunately, you
+may wind up selling some product to no-good shady operators that you
+didn't know were shady, and thus may get stuck with some "bad debts."
+In order to determine which parts of Accounts Receivable appear to be
+most at risk, it is typical to arrange A/R based on the "ages" of the
+debts, commonly segmenting it into several aging periods, of payments
+outstanding 0-30 days, those that outstanding 31-60 days, 61-90 days,
+and then those that are <emphasis>way overdue.</emphasis> At some
+point, it may become clear that a customer is never going to pay what
+they owe, and we have to write it off as a <emphasis>Bad
+Debt.</emphasis> At that point, it is typical to record an entry thus:
 
-    </PARA>
-<PARA><EMPHASIS>Warning: <EMPHASIS>Advanced Accounting Concept.</EMPHASIS> 
-    Bad Debt is
-    an example of a "contra-account." That doesn't refer to 
-    <EMPHASIS>amounts paid to Nicaraguan rebels,</EMPHASIS> 
-    but rather the notion
-    that the account is an income account that is expected to hold
-    a balance opposite to what is normally expected, to be
-    counteract the balance in another income account. 
-    <LINK LINKEND="XACC-DEPRECIATION">Accumulated Depreciation,</LINK> used to
-    diminish the value of an asset over time, is another example of
-    a contra-account.</EMPHASIS>
+<table>
+<title>Bad Debt Expense Example</title>
+<tgroup cols="3">
+<thead>
+<row>
+<entry>Account</entry>
+<entry>DR</entry>
+<entry>CR</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>Bad Debt Expense</entry>
+<entry>$10,000</entry>
+<entry>        </entry>
+</row>
+<row>
+<entry>        </entry>
+</row>
+<row>
+<entry>Accounts Receivable</entry>
+<entry>        </entry>
+<entry>$10,000</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
 
-    </PARA>
-</SECT1>
-<SECT1 ID="XACC-AR">
-<TITLE> Accounts Payable</TITLE>
-<PARA>To see how Accounts Payable work, reverse the scenario for
-    Accounts Receivable; switch customer with supplier.
+    </para>
 
-    <ITEMIZEDLIST>
-<LISTITEM>
-<PARA>If you buy materials "on account," accrual accounting
+<para>You could have reduced <emphasis>Sales Income</emphasis>
+instead, but companies tend to prefer to specifically track the amount
+that they're losing to bad customers.  </para>
+
+<para><emphasis>Warning: <emphasis>Advanced Accounting
+Concept.</emphasis> Bad Debt is an example of a "contra-account." That
+doesn't refer to <emphasis>amounts paid to Nicaraguan
+rebels,</emphasis> but rather the notion that the account is an income
+account that is expected to hold a balance opposite to what is
+normally expected, to be counteract the balance in another income
+account.  <link linkend="xacc-depreciation">Accumulated
+Depreciation,</link> used to diminish the value of an asset over time,
+is another example of a contra-account.</emphasis> </para>
+
+</sect1>
+<sect1 id="xacc-ar">
+<title> Accounts Payable</title>
+
+<para>To see how Accounts Payable work, reverse the scenario for
+Accounts Receivable: switch customer with supplier.
+
+<itemizedlist>
+<listitem>
+<para>If you buy materials "on account," accrual accounting
       requires that you record the expense
       immediately.  Rather than reducing cash, put the
-      "credit" into the <EMPHASIS>Accounts Payable</EMPHASIS> account.
+      "credit" into the <emphasis>Accounts Payable</emphasis> account.
 
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Three weeks later, the invoice comes in. You issue a
-      payment, <EMPHASIS>debiting A/P and crediting Cash.</EMPHASIS>
-      
-      
-    </PARA>
-</LISTITEM>
-</ITEMIZEDLIST>
+      </para>
+</listitem>
 
-    </PARA>
-</SECT1>
-<SECT1 ID="XACC-PREPAIDEXPENSES">
-<TITLE> Prepaid Expenses</TITLE>
-<PARA>    </PARA>
-<PARA>The same techniques are also used for pre-paid expenses.
-    If you have to pay out down six months of rent in advance,
-    that is treated as an "accrued asset."
+<listitem><para>Three weeks later, the invoice comes in. You issue a
+payment, <emphasis>debiting A/P and crediting Cash.</emphasis> </para>
+</listitem>
 
-    <ITEMIZEDLIST>
-<LISTITEM>
-<PARA> At the time of payment, you <EMPHASIS>debit</EMPHASIS> 
-        <EMPHASIS>Prepaid Rent</EMPHASIS> for the amount paid,
-        which is a <EMPHASIS>credit</EMPHASIS> to
-        <EMPHASIS>Cash.</EMPHASIS> 
-        This puts an unfortunate dent in the Cash account,
-        but it <EMPHASIS>does</EMPHASIS> show on the books as an asset, and there
-        are no more payments to make for the next six months.
-      
+</itemizedlist>
 
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Each month, the balance in <EMPHASIS>Prepaid Rent</EMPHASIS> goes
-      down by <EMPHASIS>debiting</EMPHASIS> 
-      <EMPHASIS>Rent Expense</EMPHASIS> and <EMPHASIS>crediting</EMPHASIS>
-      <EMPHASIS>Prepaid Rent</EMPHASIS>.
-    </PARA>
-</LISTITEM>
-</ITEMIZEDLIST>
+    </para>
+</sect1>
+<sect1 id="xacc-prepaidexpenses">
+<title> Prepaid Expenses</title>
 
-    </PARA>
-<PARA>Similarly, companies collect payroll taxes on behalf of
-    employees, and keep them in a special bank account.
+<para>The same sorts of techniques are also used for pre-paid
+expenses.  If you have to pay out down six months of rent in advance,
+that is treated as an "accrued asset."
 
-    <ITEMIZEDLIST>
-<LISTITEM>
-<PARA><EMPHASIS>That</EMPHASIS> money is not the company's, so there is a
-      <EMPHASIS>debit</EMPHASIS> to the <EMPHASIS>Cash</EMPHASIS> account on one side, and a
-      <EMPHASIS>Credit</EMPHASIS> to an Accrued Liability, namely, <EMPHASIS>Payroll
-      Taxes Payable</EMPHASIS>, on the other side.
+<itemizedlist>
 
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>When the comp[any sends its quarterly payroll tax check to 
-      the Government,
-      <EMPHASIS>Payroll Taxes Payable</EMPHASIS>
-      drops, as does the balance in the <EMPHASIS>Checking Account</EMPHASIS>.
-      
-      
-    </PARA>
-</LISTITEM>
-</ITEMIZEDLIST>
+<listitem> <para> At the time of payment, you
+<emphasis>debit</emphasis> <emphasis>Prepaid Rent</emphasis> for the
+amount paid, which is a <emphasis>credit</emphasis> to
+<emphasis>Cash.</emphasis> This puts an unfortunate dent in the Cash
+account, but it <emphasis>does</emphasis> show on the books as an
+asset, and there are no more payments to make for the next six months.
+</para>
+
+</listitem>
+<listitem>
+<para>Each month, the balance in <emphasis>Prepaid Rent</emphasis> goes
+      down by <emphasis>debiting</emphasis> 
+      <emphasis>Rent Expense</emphasis> and <emphasis>crediting</emphasis>
+      <emphasis>Prepaid Rent</emphasis>.
+    </para>
+</listitem>
+</itemizedlist>
+
+    </para>
+
+<para>Similarly, companies collect payroll taxes on behalf of
+employees, and track them in a special account.
+
+<itemizedlist>
+
+<listitem>
+<para><emphasis>That</emphasis> money is not the company's, so there
+is a <emphasis>debit</emphasis> to the <emphasis>Cash</emphasis>
+account on one side, and a <emphasis>Credit</emphasis> to an Accrued
+Liability, namely, <emphasis>Payroll Taxes Payable</emphasis>, on the
+other side.  </para>
+</listitem>
+
+<listitem> <para>When the company sends its quarterly payroll tax
+check to the Government, <emphasis>Payroll Taxes Payable</emphasis>
+drops, as does the balance in the <emphasis> Checking Account
+</emphasis>.  </para></listitem>
+
+</itemizedlist>
 
 
-</PARA>
-</SECT1>
-</ARTICLE>
+</para>
+</sect1>
+</article>
 
 <!-- Local variables: -->
 <!-- sgml-parent-document: "gnucash.sgml" -->

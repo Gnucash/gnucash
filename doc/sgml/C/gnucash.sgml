@@ -30,12 +30,14 @@
 <!entity xaccregwin system "xacc-regwin.sgml">
 <!entity xaccregwinkbd system "xacc-regwin-kbd.sgml">
 <!entity xaccreports system "xacc-reports.sgml">
+<!entity xaccrepdev system "xacc-repdev.sgml">
 <!entity xaccticker system "xacc-ticker.sgml">
 <!entity xacctaxreport system "xacc-tax-report.sgml">
 <!entity xacctransreport system "xacc-trans-report.sgml">
 <!entity xacctxfexportanomalies system "xacc-txf-export-anomalies.sgml">
 <!entity xacctxfexportreport system "xacc-txf-export-report.sgml">
 <!entity xaccdochack system "xacc-dochack.sgml">
+<!entity xaccscheme system "xacc-scheme.sgml">
 <!entity xaccy2k system "xacc-y2k.sgml">
 <!entity xaccgpl system "xacc-gpl.sgml">
 <!entity bofamym system "bofa-mym.sgml">
@@ -81,6 +83,8 @@
 &xacctxfexportanomalies;
 &xacctxfexportreport;
 &xaccdochack;
+&xaccscheme;
+&xaccrepdev;
 &xaccy2k;
 &xaccgpl;
 &bofamym;

@@ -58,7 +58,6 @@
 
   (define (accsum-options-generator)
     (let* ((options (gnc:new-options)))
-      
       ;; date at which to report balance
       (gnc:options-add-report-date!
        options pagename-general optname-date "a")

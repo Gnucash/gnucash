@@ -1,0 +1,453 @@
+<article id="xacc-repdev">
+<artheader>
+<title>Report Development</title>
+<author>
+<firstname>Christopher</firstname>
+<surname>Browne</surname>
+</author>
+</artheader>
+
+<sect1 id="xacc-reportdev"> <title>Report Development</title>
+
+<para> <application>GnuCash</application> reports are generated in a
+manner that is quite reminiscent of web <ulink
+url="http://hoohoo.ncsa.uiuc.edu/cgi/"> CGI </ulink>; it involves:
+
+<itemizedlist>
+
+<listitem><para> Writing programs that generate "option dialogs."
+</para>
+
+<para> Unlike the CGI approach, <application>GnuCash</application>
+options wind up directly generating GNOME widgets, and do not use HTML
+FORM tagging.  The similarities are nonetheless quite conspicuous as
+the options systems both involve:
+
+<itemizedlist>
+
+<listitem><para> Building a property list that describes options and
+default values;</para></listitem>
+
+<listitem><para> Submitting that property list for user
+input;</para></listitem>
+
+<listitem><para> Returning another property list containing the user's
+input.</para></listitem>
+
+</itemizedlist></para></listitem>
+
+<listitem><para> Writing programs that pull data from the application,
+based on the option property list, and then generate HTML
+output.</para>
+
+<para> Many web applications produce HTML of questionable integrity
+since the developer generates HTML in the slap-happy manner of just
+printing out strings that might contain any sort of "pseudo-tagged"
+data.  In contrast, <application>GnuCash</application> uses an
+HTML-oriented record structure which makes it harder to build
+<emphasis> bad </emphasis> HTML than it is to build valid
+HTML. </para></listitem>
+
+</itemizedlist></para>
+
+<para> This presentation will assume that the reader is already
+generally familiar with Scheme, particularly with the following
+concepts:
+
+<itemizedlist>
+<listitem><para> Binding values and functions using
+<function>define</function></para>
+<para> As with:
+<screen>
+(define *value-x* 25)
+(define *value-y* 30)
+(define *string-a* "Here's a string!")
+(define *string-b* "A string with embedded quote \" ")
+(define (add-1 x)
+  (+ x 1))
+</screen></para>
+</listitem>
+<listitem><para> Defining local bindings using
+<function id="let">let</function> and <function>let</function>
+</para>
+<screen>
+> (define let-to-hide-stuff
+  (lambda (x y z)
+    (let ((x 25);; Local binding of x inside the let
+	  (w 11))
+      (display "Inside let, x is:") (display x) (newline)
+      (display "And w only exists inside the let as ") (display w)
+      (newline)
+      (display "Add x, y, z, w inside let:")
+      (display (+ x y z w)) (newline))
+    (display "Now, outside the let:") (newline)
+    (display "x is:") (display x) (newline)
+    (display "y is:") (display y) (newline)
+    (display "z is:") (display z) (newline)
+    (display "w is:") (display w) (newline)))
+> (let-to-hide-stuff 10 20 30)
+> (let-to-hide-stuff 10 20 30)
+Inside let, x is:25
+And w only exists inside the let as 11
+Add x, y, z, w inside let:86
+Now, outside the let:
+x is:10
+y is:20
+z is:30
+reference to undefined identifier: w
+w is:> 
+</screen>
+	   
+</listitem>
+<listitem><para> Defining lists using <function>list</function></para>
+<para> As with:
+<screen>
+> (list 1 2 3 "four" 'five)
+(1 2 3 "four" five)
+> '(1 2 3 "four" five)
+(1 2 3 "four" five)
+</screen></para>
+</listitem>
+<listitem><para> Representing anonymous functions using
+<function>lambda</function></para>
+
+<para> The <function>add-1</function> function shown earlier is
+<emphasis>actually</emphasis> defined thus:
+<screen>
+(define add-1 
+  (lambda (x) (+ x 1)))
+</screen></para>
+</listitem>
+<listitem><para> The <function>if</function> control structure</para>
+</listitem>
+
+<listitem><para> Using <function>map</function> to apply a function to all the
+members of a list, producing another list, as with:
+
+<screen>
+> (map (lambda (x) (+ x 1)) '(1 2 3 4))
+(2 3 4 5)
+</screen>
+or
+<screen>
+> (map  (lambda (s n) (string-append s ":" (number->string n)))
+     '("one" "two" "three" "four") '(1 2 3 4))
+("one:1" "two:2" "three:3" "four:4")
+</screen></para></listitem>
+
+</itemizedlist></para>
+
+<para> If the meanings of some of these are not too clear, see the
+references in the section on <link linkend="xacc-schemedocs"> Scheme
+Documentation, </link> and try running code such as the above using
+Guile.</para>
+
+<sect2> <title>Report Overview</title>
+
+<para> A GnuCash report is added to the system using the function
+<function>gnc:define-report</function>, to which one passes the
+following parameters:
+
+<itemizedlist>
+<listitem><para> <structfield>version</structfield></para>
+
+<para> This is a version number; not presently used to do anything
+particularly clever.</para></listitem>
+
+<listitem><para> <structfield>name</structfield></para>
+
+<para> This is a <emphasis>not-translated</emphasis> name for the
+report that is notably used to provide the name that will be added to
+the <application>GnuCash</application> reporting
+menu.</para></listitem>
+
+<listitem><para> <link linkend="options-generator"> <structfield>
+options-generator </structfield> </link>
+</para>
+
+<para> This argument is a function which takes no parameters, and
+generates a set of options that will be used to display a dialog that
+the user can use to select values for the report's parameters.</para>
+
+<para> This will typically include things like date ranges and lists
+of accounts, to determine what data should be selected for the report,
+as well as other controls that determine how the data will be
+rendered. </para>
+</listitem>
+
+<listitem><para> <link linkend="renderer">
+<structfield>renderer</structfield>
+</link>
+</para>
+
+<para> The "renderer" does the work of generating the report.  It
+accepts a "database" of options, as generated by the <structfield>
+options-generator </structfield>, pulls the corresponding data from
+the <application>GnuCash</application> engine, and generates, as
+output, an object of type <sgmltag> html-document </sgmltag>, which is
+what the <application>GnuCash</application> report engine knows how to
+display.</para></listitem>
+
+</itemizedlist></para>
+
+<para> A trivial example might look like the following:
+
+<informalexample>
+<screen> 
+(let ()
+  (define (options-generator)
+     (let ((options (gnc:new-options)))  ;;; Create new option list
+          options))       ;;; Return it
+  (define (renderer options)
+    (let ((document (gnc:make-html-document)))
+       document))      ;;; Generates an empty document
+  (gnc:define-report
+   'version 1
+   'name (N_ "Trivial Example")
+   'options-generator options-generator
+   'renderer renderer))
+</screen> 
+</informalexample></para>
+
+<para> Note that reports are typically defined inside a <link linkend="let"> <function> let </function> </link> environment; the "work
+functions" will thereby all be invisible to code outside the
+<function> let </function> environment, which means you won't need to
+worry about coming up with unique function names.  Only the report
+name forcibly needs to be unique. </para>
+
+<para> So long as each report is similarly wrapped in a <function> let
+</function> environment, you could call <emphasis> all </emphasis> of
+the "rendering" functions <function> rendition </function> without
+causing any conflicts.</para>
+</sect2>
+
+<sect2 id="options-generator"> <title>The options-generator
+function</title>
+
+<para> The options generator introduces a number of additional
+functions that are used to set up option dialogs.
+
+<screen> 
+(define (options-generator)
+  (let ((option-set (gnc:new-options)))  <co id="newopts">
+ (gnc:options-add-report-date!  <co id="optdate">
+  option-set pagename-general "End Date" "a")
+ (gnc:options-add-date-interval!  <co id="optdaterng">
+  option-set pagename-general "From" "To" "a")
+ (gnc:options-add-interval-choice!  <co id="optint">
+  option-set pagename-general 
+  "Step Size" "b" 'YearDelta)
+ (gnc:options-add-account-levels! <co id="optacl">
+  option-set pagename-general
+  "Show Accounts down to Level" "c" 2)
+ (gnc:options-add-account-selection! <co id="optacc">
+  option-set pagename-general "Account Display Depth"
+  "Always show subaccounts" "Accounts" "a" 3 
+  *LIST-OF-INCOME-AND-EXPENSE-ACCOUNTS* 
+ options))       
+</screen>
+<calloutlist>
+
+<callout arearefs="newopts"> <para>
+<function>gnc:new-options</function> creates a new, empty set of
+options.  This has to be run first; the later functions need to have
+an option set to refer to.</para> </callout>
+
+<callout arearefs="optdate"> <para>
+<function>gnc:options-add-report-date!</function> adds a selection
+option that indicates a single date, generally used as the end
+date.</para> </callout>
+
+<callout arearefs="optdaterng"> <para>
+<function>gnc:options-add-date-interval!</function> adds in a
+selection option that allows specifying a range of
+dates.</para></callout>
+
+<callout arearefs="optint"> <para>
+<function>gnc:options-add-interval-choice!</function> adds a selection
+option that allows choosing between various time intervals, including
+days, weeks, two-week periods, months, and years.</para></callout>
+
+<callout arearefs="optacl"> <para> <function>
+gnc:options-add-account-levels!</function> adds an option indicating
+how deep a set of account levels should be shown.</para></callout>
+
+<callout arearefs="optacc"> <para> <function>
+gnc:options-add-account-selection!</function> allows selecting a set
+of accounts.</para> <para> Note that the last argument is a list of
+accounts from which to select, which means <link linkend="filtacc">
+filtering a list of relevant accounts, </link> at some point.</para>
+</callout> </calloutlist></para>
+
+<para> There are also additional option functions:
+
+<itemizedlist>
+
+<listitem><para> <function>gnc:options-add-currency!</function> to
+select a currency;</para></listitem>
+
+<listitem><para> <function>gnc:options-add-plot-size!</function> to
+control how a graphical plot should be sized.</para></listitem>
+</itemizedlist></para>
+
+<para> Underlying these are the following base "option generator"
+functions defined in <filename>options-utilities.scm</filename> that
+may be used to create new kinds of options:
+
+<itemizedlist>
+<listitem><para> <function>gnc:register-option</function></para></listitem>
+<listitem><para> <function>gnc:make-date-option</function></para></listitem>
+<listitem><para> <function>gnc:make-multichoice-option</function></para></listitem>
+<listitem><para> <function>gnc:make-simple-boolean-option</function></para></listitem>
+<listitem><para> <function>gnc:make-account-list-option</function></para></listitem>
+<listitem><para> <function>gnc:make-currency-option</function></para></listitem>
+<listitem><para> <function>gnc:make-number-range-option</function></para></listitem>
+</itemizedlist></para></sect2>
+
+<sect2 id="accessing-data"> <title>Accessing GnuCash Data</title>
+
+<para> There are several forms of data that you may wish to access:
+</para>
+<itemizedlist>
+<listitem><para> <link linkend="filtacc"> Accounting Info </link></para></listitem>
+<listitem><para> <link linkend="stockprices"> Stock Prices </link></para></listitem>
+<listitem><para> <link linkend="accoption"> Reading Option Data </link></para></listitem>
+</itemizedlist>
+
+<sect3 id="filtacc"> <title> Accessing Engine Data </title>
+
+<para> The functions used to access the various forms of accounting
+data may be found in the file <filename> src/g-wrap/gnc.html
+</filename>. </para>
+
+<note> <para> Need some examples here... </para> </note></sect3>
+
+<sect3 id="accoption"> <title>Accessing Option Data</title>
+
+<para> Functions <function>gnc:lookup-option</function>,
+<function>gnc:report-options</function>, and
+<function>gnc:option-value</function> are the crucial functions you
+are likely to use from <filename> src/scm/options.scm
+</filename></para>
+
+<para> Exerpted from <filename> src/scm/report/hello-world.scm
+</filename> is the following:
+
+<screen>
+;; First, build some helper functions for looking up option values.
+(define (get-op section name)
+  (gnc:lookup-option (gnc:report-options report-obj) section name))
+    
+(define (op-value section name)
+  (gnc:option-value (get-op section name)))
+    
+;; The next thing we do is make local variables for all the specific
+;; options in the set of options given to the function. 
+(let 
+    ((bool-val     (op-value "Hello, World!" "Boolean Option"))
+     (mult-val     (op-value "Hello, World!" "Multi Choice Option"))
+     (string-val   (op-value "Hello, World!" "String Option"))
+     (date-val     (gnc:date-option-absolute-time
+		    (op-value "Hello, World!" "Just a Date Option")))
+     (date2-val    (gnc:date-option-absolute-time
+		    (op-value "Hello, World!" "Time and Date Option")))
+     (rel-date-val (gnc:date-option-absolute-time
+		    (op-value "Hello, World!" "Relative Date Option")))
+     (combo-date-val (gnc:date-option-absolute-time
+		      (op-value "Hello, World!" "Combo Date Option")))
+     (num-val      (op-value "Hello, World!" "Number Option"))
+     (bg-color-op  (get-op   "Hello, World!" "Background Color"))
+     (txt-color-op (get-op   "Hello, World!" "Text Color"))
+     (accounts     (op-value "Hello Again"   "An account list option"))
+     (list-val     (op-value "Hello Again"   "A list option"))
+     (crash-val    (op-value "Testing"       "Crash the report")))
+  (now-do-stuff-with-options))</screen>
+</para></sect3>
+
+<sect3 id="stockprices"> <title> Stock Prices </title>
+
+<warning>
+<para> The stock price database is under construction, so it is a bit
+early to get specific about this...</para> </warning></sect3></sect2>
+
+<sect2 id="html-generation"> <title>HTML Generation functions</title>
+
+<para> Reports are generated as a tree of <link linkend="guile"> Guile
+</link> records, rooted by an &lt;html-document&gt; record, which
+consists of style information, a title, and a list of
+&lt;html-object&gt records that consist of a rendition function and a
+further list of objects.</para>
+
+<para> We might generate a simple report thus:
+<screen>
+(define (build-simple-document)
+  (let* ((document (gnc:make-html-document))
+	 ;;; Here are a couple of helper functions
+	 (addfpara (lambda (obj)
+		    (gnc:html-document-add-object!
+		     document
+		     (gnc:make-html-text         
+		      (gnc:html-markup-p obj)))))
+	 (addpara (lambda (text)
+		    (addfpara 
+		     (gnc:html-markup/format text)))))
+       ;;; Set the title
+    (gnc:html-document-set-title! document (_ "Simple List of Values"))
+    ;;; Add in a paragraph of text
+    (addpara 
+     (_ "This is a simple report, starting with a paragraph of text"))
+    (addpara
+     (_ "Next, we calculate random values, adding them to a balance."))
+    (let loop
+	((balance 0))
+      (if (< balance 500)
+	  (let ((newamt (- (random 500 200))))  ;;; Random number
+	    (addfpara 
+	       (gnc:html-markup/format 
+		(_ "Another random adjustment of %s yields %s")
+		(gnc:html-markup-tt (number->string newamt))
+		(gnc:html-markup-b (number->string balance))))
+	      (loop (+ balance newamt)))))
+    document))  ;;; Finally, return the document
+</screen>
+</para>
+
+</sect2> 
+
+<sect2 id="renderer"> <title>The rendition function</title>
+
+<para> The rendition function is where the functions from the
+preceding sections all come together.
+
+<itemizedlist>
+
+<listitem><para> It takes, as input, a "database" of options generated
+once the user adds their input to the dialog produced by the <link linkend="options-generator"> options-generator
+</link>.</para></listitem>
+
+<listitem><para> It uses those options to control how it <link linkend="accessing-data"> accesses GnuCash data </link> </para>
+</listitem>
+
+<listitem><para> Finally, from that data, it <link linkend="html-generation"> generates a "database" of HTML
+output. </link></para></listitem> </itemizedlist></para>
+
+<para> The rendition function provides, as its return value, the
+"database of HTML," which <application>GnuCash</application> then
+displays in an HTML viewer.
+
+<informalexample>
+<screen> 
+(define (renderer options)
+  (let ((document (gnc:make-html-document)))
+ document))      ;;; Generates an empty document
+</screen>
+</informalexample></para></sect2>
+<sect2> <title>For More Information</title>
+
+<para> If you need more information, or have developed a new report
+that may be of use to others, please contact the GnuCash development
+mailing list at <email> gnucash-devel@gnucash.org </email>. </para>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: --></sect2></sect1></article>
