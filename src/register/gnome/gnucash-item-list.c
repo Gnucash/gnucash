@@ -69,7 +69,7 @@ gnc_item_list_append(GNCItemList *item_list, char *string)
 
 
 void
-gnc_item_list_select(GNCItemList *item_list, char *string)
+gnc_item_list_select(GNCItemList *item_list, const char *string)
 {
 	GtkVisibility visibility;
 	gint row = 0;
@@ -89,7 +89,10 @@ gnc_item_list_select(GNCItemList *item_list, char *string)
 			continue;
 		}
 
+                gtk_clist_freeze(item_list->clist);
+                item_list->clist->focus_row = row;
 		gtk_clist_select_row(item_list->clist, row, 0);
+                gtk_clist_thaw(item_list->clist);
 
 		visibility = gtk_clist_row_is_visible(item_list->clist, row);
 		if (visibility == GTK_VISIBILITY_NONE)
@@ -97,6 +100,16 @@ gnc_item_list_select(GNCItemList *item_list, char *string)
 
 		return;
 	}
+}
+
+
+void
+gnc_item_list_sort(GNCItemList *item_list)
+{
+        g_return_if_fail(item_list != NULL);
+	g_return_if_fail(IS_GNC_ITEM_LIST(item_list));
+
+        gtk_clist_sort(item_list->clist);
 }
 
 
@@ -137,6 +150,13 @@ gnc_item_list_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	GNCItemList *item_list = GNC_ITEM_LIST(data);
 
         switch (event->keyval) {
+                case GDK_space:
+                        if (event->state & GDK_CONTROL_MASK)
+                        {
+                                event->state &= ~GDK_CONTROL_MASK;
+                                return FALSE;
+                        }
+                        break;
 		case GDK_Page_Up:
 		case GDK_Page_Down:
 		case GDK_Up:
@@ -261,7 +281,7 @@ gnc_item_list_new(GnomeCanvasGroup *parent)
         item = gnome_canvas_item_new(parent, gnc_item_list_get_type(),
 				     "widget", hbox,
 				     "size_pixels", TRUE,
-				     "x", -10000.0,                                     
+				     "x", -10000.0,
 				     NULL);
 
         item_list = GNC_ITEM_LIST(item);

@@ -44,7 +44,10 @@
 /* ================================================ */
 
 static const char * 
-ToggleRecn (BasicCell *_cell, const char *cur_val)
+ToggleRecn (BasicCell *_cell, const char *cur_val,
+            int *cursor_position,
+            int *start_selection,
+            int *end_selection)
 {
    BasicCell *cell = (BasicCell *) _cell;
    char buff[2];

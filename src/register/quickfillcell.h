@@ -42,11 +42,15 @@
 #include "basiccell.h"
 #include "QuickFill.h"
 
-typedef struct _QuickFillCell {
+typedef struct _QuickFillCell
+{
    BasicCell cell;
    QuickFill *qfRoot;       /* root of quickfill-tree 
                              * handled by this cell */
    QuickFill *qf;           /* current position in tree */
+
+   QuickFillSort sort;      /* determines order of strings matched.
+                             * default is QUICKFILL_LIFO. */
 } QuickFillCell;
 
 /* installs a callback to handle price recording */
@@ -55,6 +59,7 @@ void             xaccInitQuickFillCell (QuickFillCell *);
 void             xaccDestroyQuickFillCell (QuickFillCell *);
 
 void             xaccSetQuickFillCellValue (QuickFillCell *, const char *);
+void             xaccSetQuickFillSort (QuickFillCell *, QuickFillSort);
 
 #endif /* __XACC_FILL_CELL_C__ */
 

@@ -68,11 +68,10 @@ gint gnucash_grid_find_block_origin_by_pixel (GnucashGrid *grid,
                                               gint *virt_row, gint *virt_col,
                                               gint *o_x, gint *o_y);
 
-gint gnucash_grid_find_cell_origin_by_pixel (GnucashGrid *grid,
-                                             gint x, gint y,
-                                             int *virt_row, int *virt_col,
-                                             int *cell_row, int *cell_col,
-                                             int *o_x, int *o_y);
+gint gnucash_grid_find_cell_by_pixel (GnucashGrid *grid,
+                                      gint x, gint y,
+                                      int *virt_row, int *virt_col,
+                                      int *cell_row, int *cell_col);
 
 
 #endif /* GNUCASH_GRID_H */

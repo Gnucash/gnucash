@@ -40,10 +40,11 @@
 #define __XACC_COMBO_CELL_H__
 
 #include "basiccell.h"
+#include "gnc-common.h"
 
 typedef struct _ComboCell {
-   BasicCell cell;
-   char **   menuitems;         /* not used in the gnome version */
+   BasicCell  cell;
+   char **    menuitems;    /* not used in the gnome version */
 } ComboCell;
 
 ComboCell *  xaccMallocComboCell (void);
@@ -54,6 +55,11 @@ void         xaccSetComboCellValue (ComboCell *, const char *);
 
 void         xaccClearComboCellMenu (ComboCell *);
 void         xaccAddComboCellMenuItem (ComboCell *, char * menustr);
+
+/* Only functional in Gnome, right now. Determines whether
+ * the cell will accept strings not in the menu. Defaults
+ * to strict, i.e., only menu items are accepted. */
+void         xaccComboCellSetStrict (ComboCell *, gncBoolean);
 
 #endif /* __XACC_COMBO_CELL_H__ */
 

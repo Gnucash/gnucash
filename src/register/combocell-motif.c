@@ -38,7 +38,7 @@
 #include "util.h"
 
 /* Some GUI-private date that is inappropriate for 
- * the public interface.  In this impelmentation, 
+ * the public interface.  In this implementation, 
  * it holds XtMotif data that we need.
  */
 
@@ -56,7 +56,10 @@ static void realizeCombo (BasicCell *bcell, void *w, int width);
 static void moveCombo (BasicCell *bcell, int phys_row, int phys_col);
 static void destroyCombo (BasicCell *bcell);
 
-static const char * enterCombo (BasicCell *bcell, const char *value);
+static const char * enterCombo (BasicCell *bcell, const char *value,
+                                int *cursor_position,
+                                int *start_selection,
+                                int *end_selection);
 static const char * leaveCombo (BasicCell *bcell, const char *value);
 
 #define SET(cell,str) { 			\
@@ -394,7 +397,10 @@ void moveCombo (BasicCell *bcell, int phys_row, int phys_col)
 /* =============================================== */
 
 static
-const char * enterCombo (BasicCell *bcell, const char *value)
+const char * enterCombo (BasicCell *bcell, const char *value,
+                         int *cursor_position,
+                         int *start_selection,
+                         int *end_selection)
 {
    int phys_row, phys_col;
    String choice;
@@ -569,6 +575,12 @@ static void dropDownCB (Widget w, XtPointer cd, XtPointer cb )
       }
    }
 #endif /* USE_COMPLEX_TRAVERSAL_LOGIC */
+}
+
+/* =============================================== */
+
+void xaccComboCellSetStrict (ComboCell *cell, gncBoolean strict)
+{
 }
 
 /* =============== end of file =================== */

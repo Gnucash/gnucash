@@ -110,6 +110,7 @@ static short module = MOD_REGISTER;
 #define SHRS_CELL_FORMAT   "%0.4f"
 #define DEBIT_CELL_FORMAT  "%0.4f"
 #define CREDIT_CELL_FORMAT "%0.4f"
+#define PRICE_CELL_FORMAT  "%0.4f"
 
 
 /* ============================================== */
@@ -922,6 +923,9 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    xaccSetPriceCellFormat (reg->shrsCell, SHRS_CELL_FORMAT);
    xaccSetPriceCellMonetary (reg->shrsCell, GNC_F);
 
+   /* The action cell should accept strings not in the list */
+   xaccComboCellSetStrict (reg->actionCell, GNC_F);
+
    /* number format for share quantities in stock ledgers */
    switch (type & REG_TYPE_MASK) {
       case STOCK_REGISTER:
@@ -929,8 +933,14 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
       case CURRENCY_REGISTER:
          xaccSetPriceCellFormat (reg->debitCell, DEBIT_CELL_FORMAT);
          xaccSetPriceCellFormat (reg->creditCell, CREDIT_CELL_FORMAT);
+         xaccSetPriceCellFormat (reg->ndebitCell, DEBIT_CELL_FORMAT);
+         xaccSetPriceCellFormat (reg->ncreditCell, CREDIT_CELL_FORMAT);
+         xaccSetPriceCellFormat (reg->priceCell, DEBIT_CELL_FORMAT);
          xaccSetPriceCellMonetary (reg->debitCell, GNC_F);
          xaccSetPriceCellMonetary (reg->creditCell, GNC_F);
+         xaccSetPriceCellMonetary (reg->ndebitCell, GNC_F);
+         xaccSetPriceCellMonetary (reg->ncreditCell, GNC_F);
+         xaccSetPriceCellMonetary (reg->priceCell, GNC_F);
          break;
       default:
          break;

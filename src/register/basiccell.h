@@ -71,6 +71,11 @@
  *    If a string is returned, the string must be as the result 
  *    of a malloc.
  *
+ *    The callback is also passed pointers to the cursor position
+ *    and the start and end of the highlited region. If the callback
+ *    returns NULL, it may also change these values and the GUI will
+ *    update appropriately.
+ *
  * The leave_cell() callback is called when the user exits
  *    a cell.  This can be by tabbing or arrow-keying away 
  *    from it, or by using the mouse to specify a different 
@@ -87,12 +92,25 @@
  *    so that ctrl-alt-etc modifier keys are pre-processed in 
  *    the usual X11 fashion).
  *    
- *    The three arguments passed in are :
+ *    The arguments passed in are :
  *    "old", the string prior to user's attempted modification,
  *    "add", the string the user is attemptiong to add
  *           (will be null if text is being deleted).
  *    "new", the string that would result is user's changes
  *           are accepted.
+ *    "cursor_position", the position of the editing cursor
+ *                       in the text. This may be modified by
+ *                       the callback, in which case the GUI
+ *                       will reflect the change. Set to -1
+ *                       to make the cursor go to the end of
+ *                       the text.
+ *    "start_selection", the starting character of the highlited
+ *                       selection.
+ *    "end_selection",   the index immediately after the last
+ *                       character in the selection. Set both
+ *                       start and end to 0 for no selection.
+ *                       Set the end to -1 to make the selection
+ *                       go to the end of the text.
  *    It must return a string, or void if it rejects the change.
  *    The returned string will be used to update the cell value.
  *
@@ -192,12 +210,17 @@ struct _BasicCell {
 
   /* cell-editing callbacks */
   const char * (*enter_cell)    (BasicCell *,
-                                 const char * current);
+                                 const char * current,
+                                 int *cursor_position,
+                                 int *start_selection,
+                                 int *end_selection);
   const char * (*modify_verify) (BasicCell *,
                                  const char *old_value, 
                                  const char *add_str, 
                                  const char *new_value,
-                                 int *cursor_position); 
+                                 int *cursor_position,
+                                 int *start_selection,
+                                 int *end_selection);
   const char * (*leave_cell)    (BasicCell *,
                                  const char * current);
 

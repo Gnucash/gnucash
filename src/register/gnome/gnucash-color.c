@@ -147,7 +147,7 @@ gnucash_color_init (void)
         gdk_color_black (colormap, &gn_black);
 
         gnucash_color_alloc_name ("gray60", &gn_light_gray);
-        gnucash_color_alloc_name ("gray20", &gn_dark_gray);
+        gnucash_color_alloc_name ("gray40", &gn_dark_gray);
         gnucash_color_alloc_name ("red",   &gn_red);
 
         if (!color_hash_table)

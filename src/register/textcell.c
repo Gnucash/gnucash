@@ -39,7 +39,9 @@ TextMV (struct _BasicCell *_cell,
         const char *oldval, 
         const char *change, 
         const char *newval,
-        int *cursor_position)
+        int *cursor_position,
+        int *start_selection,
+        int *end_selection)
 {
    BasicCell *cell = (BasicCell *) _cell;
 

@@ -58,6 +58,22 @@ static char * xaccPriceCellPrintValue (PriceCell *cell);
 #define PRTBUF 40
 
 /* ================================================ */
+
+static const char * 
+PriceEnter (BasicCell *_cell,
+            const char *val,
+            int *cursor_position,
+            int *start_selection,
+            int *end_selection)
+{
+  *cursor_position = -1;
+  *start_selection = 0;
+  *end_selection   = -1;
+
+  return val;
+}
+
+/* ================================================ */
 /* This callback only allows numbers with a single
  * decimal point in them */
 
@@ -66,7 +82,9 @@ PriceMV (BasicCell *_cell,
          const char * oldval, 
          const char *change, 
          const char *newval,
-         int *cursor_position)
+         int *cursor_position,
+         int *start_selection,
+         int *end_selection)
 {
    PriceCell *cell = (PriceCell *) _cell;
    struct lconv *lc = gnc_localeconv();
@@ -142,6 +160,7 @@ xaccInitPriceCell (PriceCell *cell)
    SET ( &(cell->cell), "");
 
    cell->cell.use_fg_color = 1;
+   cell->cell.enter_cell = PriceEnter;
    cell->cell.modify_verify = PriceMV;
    cell->cell.leave_cell = PriceLeave;
    cell->cell.set_value = PriceSetValue;

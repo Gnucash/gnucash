@@ -52,13 +52,13 @@ gnucash_cursor_get_pixel_coords (GnucashCursor *cursor, gint *x, gint *y,
         *y += gnucash_sheet_row_get_distance (sheet, sheet->top_block,
 					      item_cursor->row)
                 + sheet->top_block_offset;
-        *x = gnucash_sheet_col_get_distance (sheet, sheet->left_block,
+        *x = gnucash_sheet_col_get_distance (sheet, item_cursor->row, sheet->left_block,
 					      item_cursor->col)
                 + sheet->left_block_offset;
 
         *h = gnucash_sheet_row_get_distance (sheet, item_cursor->row,
 					     item_cursor->row + 1);
-        *w = gnucash_sheet_col_get_distance (sheet, item_cursor->col,
+        *w = gnucash_sheet_col_get_distance (sheet, item_cursor->row, item_cursor->col,
 					     item_cursor->col + 1);
 }
 
@@ -330,7 +330,6 @@ gnucash_cursor_set (GnucashCursor *cursor, gint block_row, gint block_col,
         gnome_canvas_item_set (GNOME_CANVAS_ITEM(sheet->header_item),
                                "GnucashHeader::cursor_type",
                                cursor->style->cursor_type,
-                               "GnucashHeader::cursor_row", cell_row,
                                NULL);
 
         gnucash_cursor_request_redraw (cursor);

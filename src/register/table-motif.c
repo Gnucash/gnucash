@@ -164,9 +164,11 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb) {
    const int row = cbs->row;
    const int col = cbs->column;
    const char *new_text;
+   int cursor_pos, start, end; /* currently not used */
 
    ENTER ("enterCB()\n");
-   new_text = gnc_table_enter_update(table, row, col);
+   new_text = gnc_table_enter_update(table, row, col,
+                                     &cursor_pos, &start, &end);
    
    if(new_text) {
       DEBUG ("enterCB new text = %s\n", new_text);
@@ -218,9 +220,13 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
    strcat (newval, &oldval[(cbs->verify->endPos)]);
 
    {
-     int cursor_position = 0; /* Unused at present. */
+     /* These are unused at present. */
+     int cursor_position = 0;
+     int start_sel = 0;
+     int end_sel = 0;
+
      retval = gnc_table_modify_update(table, row, col, oldval, change, newval,
-                                      &cursor_position);
+                                      &cursor_position, &start_sel, &end_sel);
    }
 
    if (retval && (retval != newval)) {

@@ -16,12 +16,18 @@
 
 /*
  *  configure the cursor styles
- *
  */
+
+#include "config.h"
 
 #include "gnucash-style.h"
 #include "gnucash-sheet.h"
+#include "gnucash-grid.h"
 #include "gnucash-color.h"
+#include "messages.h"
+
+#include "date.h"
+
 
 #define DEFAULT_FONT "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
 #define ITALIC_FONT "-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*"
@@ -29,6 +35,8 @@
 GdkFont *gnucash_default_font = NULL;
 GdkFont *gnucash_italic_font = NULL;
 
+
+/*  layout info flags */
 #define CHARS_FIXED   (1 << 0)  /* We use this to set the cell width */
 #define PIXELS_FIXED  (1 << 1)  /* We use this as the cell width */
 #define RIGHT_ALIGNED (1 << 2)  /* Right align with a specified cell */
@@ -45,10 +53,42 @@ GdkFont *gnucash_italic_font = NULL;
 #define SAME_SIZE     (1 << 11) /* Make the cell the same size
                                    as a specified cell */
 
+/* User mutable flags */
+#define RESIZABLE (1 << 0)  /* User can resize */
+#define MOVABLE (1 << 1)   /* User can move */
 
 struct   _CellLayoutInfo
 {
+        unsigned int **flags;
+        unsigned int **user_flags;  /* For user mutable flags */
+        
+        int **chars_width;
+        int **pixels_width;
+        int **chars_min;
+        int **pixels_min;
+        int **chars_max;
+        int **pixels_max;
+        short **left_align_r;   /* the alignment cells */
+        short **left_align_c;
+        short **right_align_r;   
+        short **right_align_c;
+        short **size_r;         /*  same size as this cell */
+        short **size_c;
+        char ***string;
+
+        double **cell_perc;   /* for the cell layout; percentage of
+                                 space this cell takes on its row */
+
+        int refcount;
+        int nrows;
+        int ncols;
+};
+
+typedef struct 
+{
         unsigned int flags;
+        unsigned int user_flags;  /* For user mutable flags */
+        
         int chars_width;
         int pixels_width;
         int chars_min;
@@ -62,42 +102,162 @@ struct   _CellLayoutInfo
         short size_r;         /*  same size as this cell */
         short size_c;
         char *string;
-};
+} CellLayoutData;
 
+static char *
+style_get_key (SheetBlockStyle *style)
+{
+        switch (style->cursor_type) {
+        case GNUCASH_CURSOR_HEADER:
+        case GNUCASH_CURSOR_SINGLE:
+        case GNUCASH_CURSOR_TRANS:
+        case GNUCASH_CURSOR_SPLIT:
+                return "singles";
+                break;
 
-#define SET_CELL_PERC(r, n) {  \
-        for (i=0; i<r; i++)   \
-           for (j=0; j<n; j++) \
-        style->cell_perc[i][j] = perc[i][j];  \
+        case GNUCASH_CURSOR_DOUBLE:
+                return "doubles";
+                break;
+        }
+
+        g_warning("style_get_key: bad cursor type\n");
+        return NULL;
 }
 
 
-#define SET_CELL_DATA(r, n) {  \
+static CellLayoutInfo *
+style_layout_info_new (SheetBlockStyle *style)
+{
+        CellLayoutInfo *li;
+        int i;
+
+        li = g_new0 (CellLayoutInfo, 1);
+        li->nrows = style->nrows;
+        li->ncols = style->ncols;
+
+        li->flags = g_new0(unsigned int *, style->nrows);
+        li->user_flags = g_new0(unsigned int *, style->nrows);        
+        li->chars_width = g_new0(int *, style->nrows);
+        li->pixels_width = g_new0(int *, style->nrows);        
+        li->chars_min = g_new0(int *, style->nrows);
+        li->pixels_min = g_new0(int *, style->nrows);
+        li->chars_max = g_new0(int *, style->nrows);
+        li->pixels_max = g_new0(int *, style->nrows);
+        li->left_align_r = g_new0(short *, style->nrows);
+        li->left_align_c = g_new0(short *, style->nrows);
+        li->right_align_r = g_new0(short *, style->nrows);
+        li->right_align_c = g_new0(short *, style->nrows);
+        li->size_r = g_new0(short *, style->nrows);
+        li->size_c = g_new0(short *, style->nrows);
+        li->string = g_new0 (char **, style->nrows);
+        li->cell_perc = g_new0(double *, style->nrows);
+
+        for (i = 0; i < style->nrows; i++) {
+                li->flags[i] = g_new0(unsigned int, style->ncols);
+                li->user_flags[i] = g_new0(unsigned int, style->ncols);
+                li->chars_width[i] = g_new0(int, style->ncols);
+                li->pixels_width[i] = g_new0(int, style->ncols);        
+                li->chars_min[i] = g_new0(int, style->ncols);
+                li->pixels_min[i] = g_new0(int, style->ncols);
+                li->chars_max[i] = g_new0(int, style->ncols);
+                li->pixels_max[i] = g_new0(int, style->ncols);
+                li->left_align_r[i] = g_new0(short, style->ncols);
+                li->left_align_c[i] = g_new0(short, style->ncols);
+                li->right_align_r[i] = g_new0(short, style->ncols);
+                li->right_align_c[i] = g_new0(short, style->ncols);
+                li->size_r[i] = g_new0(short, style->ncols);
+                li->size_c[i] = g_new0(short, style->ncols);
+                li->string[i] = g_new0 (char *, style->ncols);
+                li->cell_perc[i] = g_new0(double, style->ncols);
+        }
+
+        return li;
+}
+
+static void
+style_layout_info_destroy (CellLayoutInfo *li)
+{
+        int i, j;
+
+        for (i = 0; i < li->nrows; i++) {
+                
+                for (j = 0; j < li->ncols; j++) {
+                        if (li->string[i][j])
+                                g_free (li->string[i][j]);
+                }
+
+                g_free(li->flags[i]);
+                g_free(li->user_flags[i]);
+                g_free(li->chars_width[i]);
+                g_free(li->pixels_width[i]);
+                g_free(li->chars_min[i]);
+                g_free(li->pixels_min[i]);
+                g_free(li->chars_max[i]);
+                g_free(li->pixels_max[i]);
+                g_free(li->left_align_r[i]);
+                g_free(li->left_align_c[i]);
+                g_free(li->right_align_r[i]);
+                g_free(li->right_align_c[i]);
+                g_free(li->size_r[i]);
+                g_free(li->size_c[i]);
+                g_free(li->string[i]);
+                g_free(li->cell_perc[i]);
+        }
+
+        g_free(li->flags);
+        g_free(li->user_flags);        
+        g_free(li->chars_width);
+        g_free(li->pixels_width);
+        g_free(li->chars_min);
+        g_free(li->pixels_min);
+        g_free(li->chars_max);
+        g_free(li->pixels_max);
+        g_free(li->left_align_r);
+        g_free(li->left_align_c);
+        g_free(li->right_align_r);
+        g_free(li->right_align_c);
+        g_free(li->size_r);
+        g_free(li->size_c);
+        g_free(li->string);
+        g_free(li->cell_perc);
+
+        g_free(li);
+}
+
+
+#define SET_CELL_LAYOUT_DATA(r, n) {  \
         for (i=0; i<r; i++)   \
            for (j=0; j<n; j++) {\
-        style->cell_perc[i][j] = perc[i][j];  \
-        style->layout_info[i][j].flags = li[i][j].flags; \
-        style->layout_info[i][j].chars_width = li[i][j].chars_width;\
-        style->layout_info[i][j].pixels_width = li[i][j].pixels_width;\
-        style->layout_info[i][j].chars_min = li[i][j].chars_min;\
-        style->layout_info[i][j].pixels_min = li[i][j].pixels_min;\
-        style->layout_info[i][j].chars_max = li[i][j].chars_max;\
-        style->layout_info[i][j].pixels_max = li[i][j].pixels_max;\
-        style->layout_info[i][j].right_align_r = li[i][j].right_align_r;\
-        style->layout_info[i][j].right_align_c = li[i][j].right_align_c;\
-        style->layout_info[i][j].left_align_r = li[i][j].left_align_r;\
-        style->layout_info[i][j].left_align_c = li[i][j].left_align_c; \
-        style->layout_info[i][j].size_r  = li[i][j].size_r;  \
-        style->layout_info[i][j].size_c  = li[i][j].size_c;  \
-        style->layout_info[i][j].string = g_strdup(li[i][j].string); \
+        layout_info->cell_perc[i][j] = perc[i][j];  \
+        layout_info->flags[i][j] = ld[i][j].flags; \
+        layout_info->user_flags[i][j] = ld[i][j].user_flags; \
+        layout_info->chars_width[i][j] = ld[i][j].chars_width;\
+        layout_info->pixels_width[i][j] = ld[i][j].pixels_width;\
+        layout_info->chars_min[i][j] = ld[i][j].chars_min;\
+        layout_info->pixels_min[i][j] = ld[i][j].pixels_min;\
+        layout_info->chars_max[i][j] = ld[i][j].chars_max;\
+        layout_info->pixels_max[i][j] = ld[i][j].pixels_max;\
+        layout_info->right_align_r[i][j] = ld[i][j].right_align_r;\
+        layout_info->right_align_c[i][j] = ld[i][j].right_align_c;\
+        layout_info->left_align_r[i][j] = ld[i][j].left_align_r;\
+        layout_info->left_align_c[i][j] = ld[i][j].left_align_c; \
+        layout_info->size_r[i][j]  = ld[i][j].size_r;  \
+        layout_info->size_c[i][j]  = ld[i][j].size_c;  \
+        layout_info->string[i][j] = g_strdup(ld[i][j].string); \
       } \
 }
+
 
 /* FIXME:  read this from a config file */
 /* keep this in sync with splitreg.c */
 void
-gnucash_style_layout_init (SheetBlockStyle *style)
+gnucash_style_layout_init (GnucashSheet *sheet, SheetBlockStyle *style)
 {
+        CellLayoutInfo *layout_info;
+        char date_str[128];
+
+        printDate(date_str, 29, 12, 2000);
+        strcat(date_str, "0");
 
         switch (style->reg_type) {
         case BANK_REGISTER:
@@ -113,90 +273,77 @@ gnucash_style_layout_init (SheetBlockStyle *style)
                 switch (style->cursor_type) {
                 case GNUCASH_CURSOR_HEADER:
                 case GNUCASH_CURSOR_SINGLE:
+                case GNUCASH_CURSOR_TRANS:
+                case GNUCASH_CURSOR_SPLIT:
                         {
                                 int i, j;
                                 double perc[1][8] = {{0.10, 0.07, 0.15, 0.30, 0.02, 0.12, 0.12, 0.12}};
-                                CellLayoutInfo li[1][8] =
-                                {{{STRING_FIXED, 0, 0,0,0,0,0,0,0,0,0, 0, 0, " 88/88/8888"},
-                                  {CHARS_MIN | CHARS_MAX, 0, 0, 3, 0, 5,0,0,0,0,0, 0, 0, NULL},
-                                  {STRING_MIN | CHARS_MAX | FILL, 0, 0, 0 ,0, 10 ,0,0,0,0,0, 0, 0, "Transfer From"},
-                                  {CHARS_MIN | FILL, 0, 0,20,0,0,0,0,0,0,0, 0,0, NULL},
-                                  {STRING_FIXED, 1, 0,0,0,0,0,0,0,0,0, 0, 0, "R"},
-                                  {CHARS_MIN | CHARS_MAX | FILL, 0, 0, 9,0, 10,0,0,0,0,0, 0, 0, NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
+                                CellLayoutData ld[1][8] =
+                                {{{STRING_FIXED, RESIZABLE, 0, 0,0,0,0,0,0,0,0,0, 0, 0, date_str},
+                                  {CHARS_MIN | CHARS_MAX,  RESIZABLE, 0, 0, 3, 0, 5,0,0,0,0,0, 0, 0, NULL},
+                                  {STRING_MIN | FILL,  RESIZABLE, 0, 0, 0 ,0, 10 ,0,0,0,0,0, 0, 0, XFRM_STR},
+                                  {CHARS_MIN | FILL,  RESIZABLE, 0, 0,20,0,0,0,0,0,0,0, 0,0, NULL},
+                                  {STRING_FIXED,  0, 1, 0,0,0,0,0,0,0,0,0, 0, 0, "R"},
+                                  {CHARS_MIN | CHARS_MAX | FILL,  RESIZABLE, 0, 0, 9,0, 10,0,0,0,0,0, 0, 0, NULL},
+                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL},
+                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
                                 }};
-                                
-                                SET_CELL_DATA (1, 8);
+
+                                layout_info = g_hash_table_lookup (sheet->layout_info_hash_table, style_get_key (style));
+
+                                if (!layout_info) {
+                                        layout_info = style_layout_info_new (style);
+
+                                        SET_CELL_LAYOUT_DATA (1, 8);
+
+                                        g_hash_table_insert (sheet->layout_info_hash_table, style_get_key (style), layout_info);
+                                }
+
+                                style->layout_info = layout_info;
+                                layout_info->refcount++;
                         }
                         
-                        break;
+                break;
                 case GNUCASH_CURSOR_DOUBLE:
                         {
                                 int i, j;
                                 double perc[2][8] = {{0.10, 0.07, 0.15, 0.30, 0.02, 0.12, 0.12, 0.12},
                                                      {0.10, 0.07, 0.15, 0.68, 0.0, 0.0, 0.0, 0.0}};
-                                CellLayoutInfo li[2][8] =
-                                {{{STRING_FIXED, 0, 0,0,0,0,0,0,0,0,0, 0, 0, " 88/88/8888"},
-                                  {CHARS_MIN | CHARS_MAX, 0, 0, 3, 0, 5,0,0,0,0,0, 0, 0, NULL},
-                                  {STRING_MIN | CHARS_MAX | FILL, 0, 0, 0 ,0, 10 ,0,0,0,0,0, 0, 0, "Transfer From"},
-                                  {CHARS_MIN | FILL, 0, 0,20,0,0,0,0,0,0,0, 0,0, NULL},
-                                  {STRING_FIXED, 1, 0,0,0,0,0,0,0,0,0, 0, 0, "R"},
-                                  {CHARS_MIN | CHARS_MAX | FILL, 0, 0, 9,0, 10,0,0,0,0,0, 0, 0, NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL}},
-                                  {{LEFT_ALIGNED|RIGHT_ALIGNED, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {LEFT_ALIGNED|RIGHT_ALIGNED, 0, 0, 0,0,0,0,0,1,0,1, 0,0, NULL},
-                                   {LEFT_ALIGNED|RIGHT_ALIGNED, 0, 0, 0,0,0,0,0,2,0,2, 0,0, NULL},
-                                   {LEFT_ALIGNED|RIGHT_ALIGNED, 0, 0, 0,0,0,0,0,3,0,7, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
+                                CellLayoutData ld[2][8] =
+                                {{{STRING_FIXED,  RESIZABLE, 0, 0,0,0,0,0,0,0,0,0, 0, 0, date_str},
+                                  {CHARS_MIN | CHARS_MAX,  RESIZABLE, 0, 0, 3, 0, 5,0,0,0,0,0, 0, 0, NULL},
+                                  {STRING_MIN | FILL,  RESIZABLE, 0, 0, 0 ,0,0 ,0,0,0,0,0, 0, 0, XFRM_STR},
+                                  {CHARS_MIN | FILL,  RESIZABLE, 0, 0,20,0,0,0,0,0,0,0, 0,0, NULL},
+                                  {STRING_FIXED,  0, 1, 0,0,0,0,0,0,0,0,0, 0, 0, "R"},
+                                  {CHARS_MIN | CHARS_MAX | FILL,  RESIZABLE, 0, 0, 9,0, 10,0,0,0,0,0, 0, 0, NULL},
+                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL},
+                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL}},
+                                  {{LEFT_ALIGNED|RIGHT_ALIGNED,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
+                                   {LEFT_ALIGNED|RIGHT_ALIGNED,  RESIZABLE, 0, 0, 0,0,0,0,0,1,0,1, 0,0, NULL},
+                                   {LEFT_ALIGNED|RIGHT_ALIGNED,  RESIZABLE, 0, 0, 0,0,0,0,0,2,0,2, 0,0, NULL},
+                                   {LEFT_ALIGNED|RIGHT_ALIGNED,  RESIZABLE, 0, 0, 0,0,0,0,0,3,0,7, 0,0, NULL},
+                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
+                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
+                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
+                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
                                 }};
-                                
-                                SET_CELL_DATA (2, 8);
-                        }
-                        
-                        break;
-                case GNUCASH_CURSOR_TRANS:
-                        {
-                                int i, j;
-                                double perc[1][8] = {{0.10, 0.07, 0.15, 0.30, 0.02, 0.12, 0.12, 0.12}};
-                                CellLayoutInfo li[1][8] =
-                                {{{STRING_FIXED, 0, 0,0,0,0,0,0,0,0,0, 0, 0, " 88/88/8888"},
-                                  {CHARS_MIN | CHARS_MAX, 0, 0, 3, 0, 5,0,0,0,0,0, 0, 0, NULL},
-                                  {STRING_MIN | CHARS_MAX | FILL, 0, 0, 0 ,0, 10 ,0,0,0,0,0, 0, 0, "Transfer From"},
-                                  {CHARS_MIN | FILL, 0, 0,20,0,0,0,0,0,0,0, 0,0, NULL},
-                                  {STRING_FIXED, 1, 0,0,0,0,0,0,0,0,0, 0, 0, "R"},
-                                  {CHARS_MIN | CHARS_MAX | FILL, 0, 0, 9,0, 10,0,0,0,0,0, 0, 0, NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                }};
-                                        
-                                SET_CELL_DATA (1, 8);
+
+                                layout_info = g_hash_table_lookup (sheet->layout_info_hash_table, style_get_key (style));
+
+                                if (!layout_info) {
+                                        layout_info = style_layout_info_new (style);
+
+                                        SET_CELL_LAYOUT_DATA (2, 8);
+
+                                        g_hash_table_insert (sheet->layout_info_hash_table, style_get_key (style), layout_info);
+                                }
+
+                                style->layout_info = layout_info;
+                                layout_info->refcount++;
                         }
 
                         break;
-                case GNUCASH_CURSOR_SPLIT:
-                        {
-                                int i, j;
-                                double perc[1][8] = {{0.10, 0.07, 0.15, 0.30, 0.02, 0.12, 0.12, 0.12}};
-                                CellLayoutInfo li[1][8] =
-                                {{{STRING_FIXED, 0, 0,0,0,0,0,0,0,0,0, 0, 0, " 88/88/8888"},
-                                  {CHARS_MIN | CHARS_MAX, 0, 0, 3, 0, 5,0,0,0,0,0, 0, 0, NULL},
-                                  {STRING_MIN | CHARS_MAX | FILL, 0, 0, 0 ,0, 10 ,0,0,0,0,0, 0, 0, "Transfer From"},
-                                  {CHARS_MIN | FILL, 0, 0,20,0,0,0,0,0,0,0, 0,0, NULL},
-                                  {STRING_FIXED, 1, 0,0,0,0,0,0,0,0,0, 0, 0, "R"},
-                                  {CHARS_MIN | CHARS_MAX | FILL, 0, 0, 9,0, 10,0,0,0,0,0, 0, 0, NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                }};
-                                
-                                SET_CELL_DATA (1, 8);
-                        }
-                        
-                        break;
+
                 default:
                         break;
                 }
@@ -208,104 +355,86 @@ gnucash_style_layout_init (SheetBlockStyle *style)
                 {
                 case GNUCASH_CURSOR_HEADER:
                 case GNUCASH_CURSOR_SINGLE:
-                        {
+                case GNUCASH_CURSOR_TRANS:
+                case GNUCASH_CURSOR_SPLIT:
+                {
                                 int i, j;
                                 double perc[1][11] = {{0.09, 0.06, 0.11, 0.23, 0.01, 0.10, 0.10, 0.07, 0.07, 0.07, 0.09}};
-                                CellLayoutInfo li[1][11] =
-                                {{{STRING_FIXED, 0, 0,0,0,0,0,0,0,0,0, 0, 0, " 88/88/8888"},
-                                  {CHARS_MIN | CHARS_MAX, 0, 0, 3, 0, 5,0,0,0,0,0, 0, 0, NULL},
-                                  {STRING_MIN | CHARS_MAX | FILL, 0, 0, 0 ,0, 10 ,0,0,0,0,0, 0, 0, "Transfer From"},
-                                  {CHARS_MIN | FILL, 0, 0,20,0,0,0,0,0,0,0, 0,0, NULL},
-                                  {STRING_FIXED, 1, 0,0,0,0,0,0,0,0,0, 0, 0, "R"},
-                                  {CHARS_MIN | CHARS_MAX | FILL, 0, 0, 9,0, 10,0,0,0,0,0, 0, 0, NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},                                  
+                                CellLayoutData ld[1][11] =
+                                {{{STRING_FIXED,  RESIZABLE, 0, 0,0,0,0,0,0,0,0,0, 0, 0, date_str},
+                                  {CHARS_MIN | CHARS_MAX,  RESIZABLE, 0, 0, 3, 0, 5,0,0,0,0,0, 0, 0, NULL},
+                                  {STRING_MIN | FILL,  RESIZABLE, 0, 0, 0 ,0, 0 ,0,0,0,0,0, 0, 0, XFRM_STR},
+                                  {CHARS_MIN | FILL,  RESIZABLE, 0, 0,20,0,0,0,0,0,0,0, 0,0, NULL},
+                                  {STRING_FIXED,  0, 1, 0,0,0,0,0,0,0,0,0, 0, 0, "R"},
+                                  {CHARS_MIN | CHARS_MAX | FILL,  RESIZABLE, 0, 0, 9,0, 10,0,0,0,0,0, 0, 0, NULL},
+                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL},
+                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
+                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
+                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
+                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},                                  
                                 }};
-                                
-                                SET_CELL_DATA (1, 11);
-                        }
 
-                        break;
-                case GNUCASH_CURSOR_DOUBLE:
+                                layout_info = g_hash_table_lookup (sheet->layout_info_hash_table, style_get_key (style));
+
+                                if (!layout_info) {
+                                        layout_info = style_layout_info_new (style);
+
+                                        SET_CELL_LAYOUT_DATA (1, 11);
+
+                                        g_hash_table_insert (sheet->layout_info_hash_table, style_get_key (style), layout_info);
+                                }
+
+                                style->layout_info = layout_info;
+                                layout_info->refcount++;
+
+                }
+                
+                break;
+                
+                case GNUCASH_CURSOR_DOUBLE:                        
                         {
                                 int i, j;
                                 double perc[2][11] = {{0.09, 0.06, 0.11, 0.23, 0.01, 0.10, 0.10, 0.07, 0.07, 0.07, 0.09},
                                 {0.0, 0.15, 0.11, 0.74, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
-                                CellLayoutInfo li[2][11] =
-                                {{{STRING_FIXED, 0, 0,0,0,0,0,0,0,0,0, 0, 0, " 88/88/8888"},
-                                  {CHARS_MIN | CHARS_MAX, 0, 0, 3, 0, 5,0,0,0,0,0, 0, 0, NULL},
-                                  {STRING_MIN | CHARS_MAX | FILL, 0, 0, 0 ,0, 10 ,0,0,0,0,0, 0, 0, "Transfer From"},
-                                  {CHARS_MIN | FILL, 0, 0,20,0,0,0,0,0,0,0, 0,0, NULL},
-                                  {STRING_FIXED, 1, 0,0,0,0,0,0,0,0,0, 0, 0, "R"},
-                                  {CHARS_MIN | CHARS_MAX | FILL, 0, 0, 9,0, 10,0,0,0,0,0, 0, 0, NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL}},                                  
-                                  {{LEFT_ALIGNED|RIGHT_ALIGNED, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {LEFT_ALIGNED|RIGHT_ALIGNED, 0, 0, 0,0,0,0,0,1,0,1, 0,0, NULL},
-                                   {LEFT_ALIGNED|RIGHT_ALIGNED, 0, 0, 0,0,0,0,0,2,0,2, 0,0, NULL},
-                                   {LEFT_ALIGNED|RIGHT_ALIGNED, 0, 0, 0,0,0,0,0,3,0,10, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
+                                CellLayoutData ld[2][11] =
+                                {{{STRING_FIXED,  RESIZABLE, 0, 0,0,0,0,0,0,0,0,0, 0, 0, date_str},
+                                  {CHARS_MIN | CHARS_MAX,  RESIZABLE, 0, 0, 3, 0, 5,0,0,0,0,0, 0, 0, NULL},
+                                  {STRING_MIN | FILL,  RESIZABLE, 0, 0, 0 ,0, 0 ,0,0,0,0,0, 0, 0, XFRM_STR},
+                                  {CHARS_MIN | FILL,  RESIZABLE, 0, 0,20,0,0,0,0,0,0,0, 0,0, NULL},
+                                  {STRING_FIXED,  0, 1, 0,0,0,0,0,0,0,0,0, 0, 0, "R"},
+                                  {CHARS_MIN | CHARS_MAX | FILL,  RESIZABLE, 0, 0, 9,0, 10,0,0,0,0,0, 0, 0, NULL},
+                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL},
+                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
+                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
+                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
+                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL}},                                  
+                                  {{LEFT_ALIGNED|RIGHT_ALIGNED,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
+                                   {LEFT_ALIGNED|RIGHT_ALIGNED,  RESIZABLE, 0, 0, 0,0,0,0,0,1,0,1, 0,0, NULL},
+                                   {LEFT_ALIGNED|RIGHT_ALIGNED,  RESIZABLE, 0, 0, 0,0,0,0,0,2,0,2, 0,0, NULL},
+                                   {LEFT_ALIGNED|RIGHT_ALIGNED,  RESIZABLE, 0, 0, 0,0,0,0,0,3,0,10, 0,0, NULL},
+                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
+                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
+                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
+                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
+                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
+                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
+                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
                                 }};
 
-                                SET_CELL_DATA (2, 11);
-                        }
+                                layout_info = g_hash_table_lookup (sheet->layout_info_hash_table, style_get_key (style));
 
-                        break;
-                case GNUCASH_CURSOR_TRANS:
-                        {
-                                int i, j;
-                                double perc[1][11] = {{0.09, 0.06, 0.11, 0.23, 0.01, 0.10, 0.10, 0.07, 0.07, 0.07, 0.09}};
-                                CellLayoutInfo li[1][11] =
-                                {{{STRING_FIXED, 0, 0,0,0,0,0,0,0,0,0, 0, 0, " 88/88/8888"},
-                                  {CHARS_MIN | CHARS_MAX, 0, 0, 3, 0, 5,0,0,0,0,0, 0, 0, NULL},
-                                  {STRING_MIN | CHARS_MAX | FILL, 0, 0, 0 ,0, 10 ,0,0,0,0,0, 0, 0, "Transfer From"},
-                                  {CHARS_MIN | FILL, 0, 0,20,0,0,0,0,0,0,0, 0,0, NULL},
-                                  {STRING_FIXED, 1, 0,0,0,0,0,0,0,0,0, 0, 0, "R"},
-                                  {CHARS_MIN | CHARS_MAX | FILL, 0, 0, 9,0, 10,0,0,0,0,0, 0, 0, NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},                                  
-                                }};
-                                
-                                SET_CELL_DATA (1, 11);
+                                if (!layout_info) {
+                                        layout_info = style_layout_info_new (style);
+
+                                        SET_CELL_LAYOUT_DATA (2, 11);
+
+                                        g_hash_table_insert (sheet->layout_info_hash_table, style_get_key (style), layout_info);
+                                }
+
+                                style->layout_info = layout_info;
+                                layout_info->refcount++;
                         }
                         
-                        break;
-                case GNUCASH_CURSOR_SPLIT:
-                        {
-                                int i, j;
-                                double perc[1][11] = {{0.0, 0.15, 0.11, 0.24, 0.0, 0.10, 0.10, 0.36, 0.0, 0.0, 0.0}};
-                                CellLayoutInfo li[1][11] =
-                                {{{STRING_FIXED, 0, 0,0,0,0,0,0,0,0,0, 0, 0, " 88/88/8888"},
-                                  {CHARS_MIN | CHARS_MAX, 0, 0, 3, 0, 5,0,0,0,0,0, 0, 0, NULL},
-                                  {STRING_MIN | CHARS_MAX | FILL, 0, 0, 0 ,0, 10 ,0,0,0,0,0, 0, 0, "Transfer From"},
-                                  {CHARS_MIN | FILL, 0, 0,20,0,0,0,0,0,0,0, 0,0, NULL},
-                                  {STRING_FIXED, 1, 0,0,0,0,0,0,0,0,0, 0, 0, "R"},
-                                  {CHARS_MIN | CHARS_MAX | FILL, 0, 0, 9,0, 10,0,0,0,0,0, 0, 0, NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                  {SAME_SIZE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},                                  
-                                }};
-                                
-                                SET_CELL_DATA (1, 11);
-                        }
-
                         break;
                 }
         default:
@@ -313,17 +442,82 @@ gnucash_style_layout_init (SheetBlockStyle *style)
         }
 }
 
+static CellDimensions *
+style_dimensions_new (SheetBlockStyle *style)
+{
+        CellDimensions *dimensions;
+        int i;
+
+        dimensions = g_new0 (CellDimensions, 1);
+        dimensions->nrows = style->nrows;
+        dimensions->ncols = style->ncols;
+
+        dimensions->pixel_heights = g_new0 (gint *, style->nrows);
+        dimensions->pixel_widths = g_new0 (gint *, style->nrows);
+        dimensions->origin_x = g_new0 (gint *, style->nrows);
+        dimensions->origin_y = g_new0 (gint *, style->nrows);        
+
+        for (i=0; i < style->nrows; i++) {
+                dimensions->pixel_heights[i] = g_new0 (gint, style->ncols);
+                dimensions->pixel_widths[i] = g_new0 (gint, style->ncols);
+                dimensions->origin_x[i] = g_new0 (gint, style->ncols);
+                dimensions->origin_y[i] = g_new0 (gint, style->ncols);        
+        }
+
+        return dimensions;
+}
+
+void
+style_dimensions_destroy (CellDimensions *dimensions)
+{
+        int i;
+
+        for (i=0; i < dimensions->nrows; i++) {
+                g_free(dimensions->pixel_heights[i]);
+                g_free(dimensions->pixel_widths[i]);
+                g_free(dimensions->origin_x[i]);
+                g_free(dimensions->origin_y[i]);
+        }
+        
+        g_free(dimensions->pixel_heights);
+        g_free(dimensions->pixel_widths);
+        g_free(dimensions->origin_x);
+        g_free(dimensions->origin_y);
+
+        g_free(dimensions);
+}
+
+
+static void
+gnucash_style_dimensions_init (GnucashSheet *sheet, SheetBlockStyle *style)
+{
+        CellDimensions *dimensions;
+
+        dimensions = g_hash_table_lookup (sheet->dimensions_hash_table, style_get_key (style));
+
+
+        if (!dimensions) {
+                dimensions = style_dimensions_new (style);
+                g_hash_table_insert (sheet->dimensions_hash_table, style_get_key (style), dimensions);
+        }
+        
+        dimensions->refcount++;
+
+        style->dimensions = dimensions;
+}
+
+
 static int
-compute_row_width (SheetBlockStyle *style, int row, int col1, int col2)
+compute_row_width (CellDimensions *dimensions, int row, int col1, int col2)
 {
         int j;
         int width = 0;
 
         col1 = MAX(0, col1);
-        col2 = MIN(col2, style->ncols-1);
+        col2 = MIN(col2, dimensions->ncols-1);
 
         for (j = col1; j <= col2; j++)
-                width += style->pixel_widths[row][j];
+                width += dimensions->pixel_widths[row][j];
 
         return width;
 }
@@ -334,21 +528,25 @@ compute_row_width (SheetBlockStyle *style, int row, int col1, int col2)
  *   width allocation of the sheet
  */
 static void
-set_dimensions_pass_one (GnucashSheet *sheet, SheetBlockStyle *style, int row)
+set_dimensions_pass_one (GnucashSheet *sheet, CellLayoutInfo *layout_info,
+                         CellDimensions *dimensions, int row)
 {
         int i = row, j;
+        GdkFont *font = GNUCASH_GRID(sheet->grid)->normal_font;
+
+        g_return_if_fail (font != NULL);
         
-        for (j = 0; j < style->ncols; j++) {
-                        style->pixel_widths[i][j] = style->cell_perc[i][j] * style->width + 0.5;
-                        style->pixel_heights[i][j] =
-                                style->fonts[i][j]->ascent +
-                                style->fonts[i][j]->descent +
+        for (j = 0; j < layout_info->ncols; j++) {
+                        dimensions->pixel_widths[i][j] = layout_info->cell_perc[i][j] * dimensions->width + 0.5;
+                        dimensions->pixel_heights[i][j] =
+                                font->ascent + font->descent +
                                 2*CELL_VPADDING;
                 }
-                style->height += style->pixel_heights[i][0];
+                dimensions->height += dimensions->pixel_heights[i][0];
 }
 
-#define C_WIDTH gdk_string_measure (style->fonts[i][j], "X")
+/*  Attempt to convert character width to pixels */
+#define C_WIDTH gdk_string_measure (GNUCASH_GRID(sheet->grid)->normal_font, "X")
 
 
 /* Now we add/subtract what's required to/from individual cells,
@@ -357,72 +555,74 @@ set_dimensions_pass_one (GnucashSheet *sheet, SheetBlockStyle *style, int row)
  *  At the end we set all SAME_SIZE cells.
  */
 static void
-set_dimensions_pass_two (GnucashSheet *sheet, SheetBlockStyle *style, int row)
+set_dimensions_pass_two (GnucashSheet *sheet, CellLayoutInfo *layout_info,
+                         CellDimensions *dimensions, int row)
 {
         int i = row, j;
         unsigned int flags;
+        GdkFont *font = GNUCASH_GRID(sheet->grid)->normal_font;
 
-        for (j = 0; j < style->ncols; j++) {
-                flags = style->layout_info[i][j].flags;
+        for (j = 0; j < layout_info->ncols; j++) {
+                flags = layout_info->flags[i][j];
 
                 if  (flags & CHARS_FIXED) {
-                        style->pixel_widths[i][j] =
-                                style->layout_info[i][j].chars_width * C_WIDTH + 2*CELL_HPADDING;
-                        style->layout_info[i][j].pixels_width = style->pixel_widths[i][j];
-                        style->layout_info[i][j].flags |= PIXELS_FIXED;
+                        dimensions->pixel_widths[i][j] =
+                                layout_info->chars_width[i][j] * C_WIDTH + 2*CELL_HPADDING;
+                        layout_info->pixels_width[i][j] = dimensions->pixel_widths[i][j];
+                        layout_info->flags[i][j] |= PIXELS_FIXED;
                 }
                 else if (flags & PIXELS_FIXED) {
-                        style->pixel_widths[i][j] = style->layout_info[i][j].pixels_width;
+                        dimensions->pixel_widths[i][j] = layout_info->pixels_width[i][j];
                 }
-                else if ((flags & STRING_FIXED) && style->layout_info[i][j].string){
-                        style->pixel_widths[i][j] =
-                                gdk_string_measure (style->fonts[i][j], style->layout_info[i][j].string) + 2*CELL_HPADDING;
-                        style->layout_info[i][j].pixels_width = style->pixel_widths[i][j];
-                        style->layout_info[i][j].flags |= PIXELS_FIXED;
+                else if ((flags & STRING_FIXED) && layout_info->string[i][j]){
+                        dimensions->pixel_widths[i][j] =
+                                gdk_string_measure (font, layout_info->string[i][j]) + 2*CELL_HPADDING;
+                        layout_info->pixels_width[i][j] = dimensions->pixel_widths[i][j];
+                        layout_info->flags[i][j] |= PIXELS_FIXED;
                 }
 
 
                 if (flags & CHARS_MIN) {
-                        style->layout_info[i][j].pixels_min =
-                                style->layout_info[i][j].chars_min * C_WIDTH+ 2*CELL_HPADDING;
-                        style->layout_info[i][j].flags |= PIXELS_MIN;                        
+                        layout_info->pixels_min[i][j] =
+                                layout_info->chars_min[i][j] * C_WIDTH+ 2*CELL_HPADDING;
+                        layout_info->flags[i][j] |= PIXELS_MIN;                        
 
-                        style->pixel_widths[i][j] =
-                                MAX (style->layout_info[i][j].pixels_min, style->pixel_widths[i][j]);
+                        dimensions->pixel_widths[i][j] =
+                                MAX (layout_info->pixels_min[i][j], dimensions->pixel_widths[i][j]);
                 }
                 else if (flags & PIXELS_MIN) {
-                        style->pixel_widths[i][j] =
-                                MAX (style->layout_info[i][j].pixels_min, style->pixel_widths[i][j]);
+                        dimensions->pixel_widths[i][j] =
+                                MAX (layout_info->pixels_min[i][j], dimensions->pixel_widths[i][j]);
                 }
-                else if ((flags & STRING_MIN) &&  style->layout_info[i][j].string) {
-                        style->layout_info[i][j].pixels_min =
-                                gdk_string_measure (style->fonts[i][j], style->layout_info[i][j].string)+ 2*CELL_HPADDING;
+                else if ((flags & STRING_MIN) &&  layout_info->string[i][j]) {
+                        layout_info->pixels_min[i][j] =
+                                gdk_string_measure (font, layout_info->string[i][j])+ 2*CELL_HPADDING;
 
-                        style->layout_info[i][j].flags |= PIXELS_MIN;                        
-                        style->pixel_widths[i][j] =
-                                MAX (style->layout_info[i][j].pixels_min, style->pixel_widths[i][j]);
+                        layout_info->flags[i][j] |= PIXELS_MIN;                        
+                        dimensions->pixel_widths[i][j] =
+                                MAX (layout_info->pixels_min[i][j], dimensions->pixel_widths[i][j]);
                 }
 
 
                 if (flags & CHARS_MAX) {
-                        style->layout_info[i][j].pixels_max =
-                                style->layout_info[i][j].chars_max * C_WIDTH+ 2*CELL_HPADDING;
-                        style->layout_info[i][j].flags |= PIXELS_MAX;                        
+                        layout_info->pixels_max[i][j] =
+                                layout_info->chars_max[i][j] * C_WIDTH+ 2*CELL_HPADDING;
+                        layout_info->flags[i][j] |= PIXELS_MAX;                        
 
-                        style->pixel_widths[i][j] =
-                                MIN (style->layout_info[i][j].pixels_max, style->pixel_widths[i][j]);
+                        dimensions->pixel_widths[i][j] =
+                                MIN (layout_info->pixels_max[i][j], dimensions->pixel_widths[i][j]);
                 }
                 else if (flags & PIXELS_MAX) {
-                        style->pixel_widths[i][j] =
-                                MIN (style->layout_info[i][j].pixels_max, style->pixel_widths[i][j]);
+                        dimensions->pixel_widths[i][j] =
+                                MIN (layout_info->pixels_max[i][j], dimensions->pixel_widths[i][j]);
                 }
         }
 
-        for (j = 0; j < style->ncols; j++)
-                if (style->layout_info[i][j].flags & SAME_SIZE) {
-                        int r = style->layout_info[i][j].size_r;
-                        int c = style->layout_info[i][j].size_c;
-                        style->pixel_widths[i][j] = style->pixel_widths[r][c];
+        for (j = 0; j < layout_info->ncols; j++)
+                if (layout_info->flags[i][j] & SAME_SIZE) {
+                        int r = layout_info->size_r[i][j];
+                        int c = layout_info->size_c[i][j];
+                        dimensions->pixel_widths[i][j] = dimensions->pixel_widths[r][c];
                 }
 }
 
@@ -433,7 +633,8 @@ set_dimensions_pass_two (GnucashSheet *sheet, SheetBlockStyle *style, int row)
  *  cell at all, just stick it in the largest cell.
  */
 static void
-set_dimensions_plan_b (GnucashSheet *sheet, SheetBlockStyle *style,
+set_dimensions_plan_b (GnucashSheet *sheet, CellLayoutInfo *layout_info,
+                       CellDimensions *dimensions,
                        int row, int space)
 {
         int i = row, j;
@@ -442,24 +643,24 @@ set_dimensions_plan_b (GnucashSheet *sheet, SheetBlockStyle *style,
         int col = 0;
         int w = 0;
 
-        for (j = 0; j < style->ncols; j++) {
+        for (j = 0; j < layout_info->ncols; j++) {
 
-                if (style->layout_info[i][j].flags & FILL)
-                        if (fill_w < style->pixel_widths[i][j]) {
+                if (layout_info->flags[i][j] & FILL)
+                        if (fill_w < dimensions->pixel_widths[i][j]) {
                                 fill_col = j;
-                                fill_w = style->pixel_widths[i][j];
+                                fill_w = dimensions->pixel_widths[i][j];
                         }
 
-                if (w < style->pixel_widths[i][j]) {
+                if (w < dimensions->pixel_widths[i][j]) {
                         col = j;
-                        w = style->pixel_widths[i][j];
+                        w = dimensions->pixel_widths[i][j];
                 }
         }
 
         if (fill_col > -1)
-                style->pixel_widths[i][fill_col] -= space;
+                dimensions->pixel_widths[i][fill_col] -= space;
         else
-                style->pixel_widths[i][col] -= space;
+                dimensions->pixel_widths[i][col] -= space;
 }
 
 
@@ -471,31 +672,32 @@ set_dimensions_plan_b (GnucashSheet *sheet, SheetBlockStyle *style,
  *
  */
 static void
-set_dimensions_pass_three (GnucashSheet *sheet, SheetBlockStyle *style,
+set_dimensions_pass_three (GnucashSheet *sheet, CellLayoutInfo *layout_info,
+                           CellDimensions *dimensions,
                            int row, int ideal_width)
 {
         int i = row, j;
-        int space = compute_row_width (style, row, 0, style->ncols-1) - ideal_width;
+        int space = compute_row_width (dimensions, row, 0, dimensions->ncols-1) - ideal_width;
         int cellspace;
         int nfills;
 
         int *adjustments;
         int *done;
 
-        adjustments = g_new0 (int, style->ncols);
-        done = g_new0 (int, style->ncols);
+        adjustments = g_new0 (int, layout_info->ncols);
+        done = g_new0 (int, layout_info->ncols);
 
         while (space != 0) {
 
                 nfills = 0;
                 /* count the number of fill cells we have left to work with */
-                for (j = 0; j < style->ncols; j++) {
-                        if ( (style->layout_info[i][j].flags & FILL) && !done[j])
+                for (j = 0; j < layout_info->ncols; j++) {
+                        if ( (layout_info->flags[i][j] & FILL) && !done[j])
                                 nfills++;
-                        else if (style->layout_info[i][j].flags & SAME_SIZE) {
-                                int r = style->layout_info[i][j].size_r;
-                                int c = style->layout_info[i][j].size_c;
-                                if ((style->layout_info[r][c].flags & FILL) && !done[c])
+                        else if (layout_info->flags[i][j] & SAME_SIZE) {
+                                int c = layout_info->size_c[i][j];
+                                if ((layout_info->flags[i][j] & FILL) &&
+                                    !done[c])
                                         nfills++;
                         }
                 }
@@ -507,7 +709,7 @@ set_dimensions_pass_three (GnucashSheet *sheet, SheetBlockStyle *style,
 
                 /* We take care of small amounts of space in a special case */
                 if ( (space < 0 ? -1 : 1)*space < nfills) {
-                        set_dimensions_plan_b (sheet, style, row, space);
+                        set_dimensions_plan_b (sheet, layout_info, dimensions, row, space);
                         break;
                 }
 
@@ -516,12 +718,12 @@ set_dimensions_pass_three (GnucashSheet *sheet, SheetBlockStyle *style,
                 cellspace = space/nfills;
 
                 /*  loop through again and do the best we can */
-                for (j = 0; j < style->ncols; j++)
-                        if ((style->layout_info[i][j].flags & FILL) && !done[j]) {
+                for (j = 0; j < layout_info->ncols; j++)
+                        if ((layout_info->flags[i][j] & FILL) && !done[j]) {
                                 if (cellspace > 0) {
-                                        if (style->layout_info[i][j].flags & PIXELS_MIN) {
-                                                int allowed = style->pixel_widths[i][j]
-                                                        - style->layout_info[i][j].pixels_min;
+                                        if (layout_info->flags[i][j] & PIXELS_MIN) {
+                                                int allowed = dimensions->pixel_widths[i][j]
+                                                        - layout_info->pixels_min[i][j];
                                                 adjustments[j] = MIN (allowed, cellspace);
                                                 done[j] = (allowed < cellspace);
                                         }
@@ -529,9 +731,9 @@ set_dimensions_pass_three (GnucashSheet *sheet, SheetBlockStyle *style,
                                         space -= adjustments[j];
                                 }
                                 else {
-                                        if (style->layout_info[i][j].flags & PIXELS_MAX) {
-                                                int allowed = style->pixel_widths[i][j]
-                                                        - style->layout_info[i][j].pixels_min;
+                                        if (layout_info->flags[i][j] & PIXELS_MAX) {
+                                                int allowed = dimensions->pixel_widths[i][j]
+                                                        - layout_info->pixels_min[i][j];
                                                 adjustments[j] =  MAX (allowed, cellspace);
                                                 done[j] = (allowed >cellspace);
                                         }
@@ -541,17 +743,16 @@ set_dimensions_pass_three (GnucashSheet *sheet, SheetBlockStyle *style,
                         }
 
                 /* adjust everything, including SAME_SIZE cells */
-                for (j = 0; j < style->ncols; j++) {
-                        if (style->layout_info[i][j].flags & SAME_SIZE) {
-                                int r = style->layout_info[i][j].size_r;
-                                int c = style->layout_info[i][j].size_c;
-                                style->pixel_widths[i][j] -= adjustments[c];
+                for (j = 0; j < layout_info->ncols; j++) {
+                        if (layout_info->flags[i][j] & SAME_SIZE) {
+                                int c = layout_info->size_c[i][j];
+                                dimensions->pixel_widths[i][j] -= adjustments[c];
                                 space -= adjustments[c];
                         }
-                        style->pixel_widths[i][j] -= adjustments[j];
+                        dimensions->pixel_widths[i][j] -= adjustments[j];
                 }
 
-                for (j = 0; j < style->ncols; j++)
+                for (j = 0; j < layout_info->ncols; j++)
                         adjustments[j] = 0;
         }
 
@@ -560,31 +761,128 @@ set_dimensions_pass_three (GnucashSheet *sheet, SheetBlockStyle *style,
         g_free (done);
 }
 
-
+/*
+ *  This is for rows below the first one.  Only the FIXED and ALIGNED flags
+ *   are allowed
+ */
 static void
-set_dimensions_aligned (GnucashSheet *sheet, SheetBlockStyle *style, int row)
+set_dimensions_pass_four(GnucashSheet *sheet, CellLayoutInfo *layout_info,
+                         CellDimensions *dimensions, int row)
 {
         int i = row, j;
         int c1, c2;
         int r;
         
-        for (j = 0; j < style->ncols; j++) {
+        for (j = 0; j < layout_info->ncols; j++) {
 
-                if (!(style->layout_info[i][j].flags & (LEFT_ALIGNED | RIGHT_ALIGNED))) {
-                        style->layout_info[i][j].pixels_max = 0;
-                        style->layout_info[i][j].flags |= PIXELS_FIXED;
-                        style->pixel_widths[i][j] = 0;
+                if (!(layout_info->flags[i][j] & (LEFT_ALIGNED | RIGHT_ALIGNED | PIXELS_FIXED))) {
+                        layout_info->pixels_max[i][j] = 0;
+                        layout_info->flags[i][j] |= PIXELS_FIXED;
+                        dimensions->pixel_widths[i][j] = 0;
                 }
                 else {
-                        r = style->layout_info[i][j].right_align_r;
-                        c1 = style->layout_info[i][j].left_align_c;
-                        c2 = style->layout_info[i][j].right_align_c;                
+                        r = layout_info->right_align_r[i][j];
+                        c1 = layout_info->left_align_c[i][j];
+                        c2 = layout_info->right_align_c[i][j];                
 
-                        style->layout_info[i][j].pixels_width = compute_row_width (style, r, c1, c2);
-                        style->layout_info[i][j].flags |= PIXELS_FIXED;
-                        style->pixel_widths[i][j] = style->layout_info[i][j].pixels_width;
+                        layout_info->pixels_width[i][j] = compute_row_width (dimensions, r, c1, c2);
+                        layout_info->flags[i][j] |= PIXELS_FIXED;
+                        dimensions->pixel_widths[i][j] = layout_info->pixels_width[i][j];
                 }
         }
+}
+
+gint
+gnucash_style_default_width(GnucashSheet *sheet, SheetBlockStyle *style)
+{
+        CellLayoutInfo *layout_info;
+        CellDimensions *dimensions;
+
+        layout_info = style->layout_info;
+        dimensions = style->dimensions;
+
+        set_dimensions_pass_one(sheet, layout_info, dimensions, 0);
+        set_dimensions_pass_two(sheet, layout_info, dimensions, 0);
+
+        return compute_row_width(dimensions, 0, 0, layout_info->ncols);
+}
+
+static void
+compute_cell_origins_x (CellDimensions *dimensions, int row)
+{
+        int x = 0;
+        int j;
+
+        for (j = 0; j < dimensions->ncols; j++) {
+                dimensions->origin_x[row][j] = x;
+                x += dimensions->pixel_widths[row][j];
+        }
+}
+
+static void
+compute_cell_origins_y (CellDimensions *dimensions)
+{
+        int y = 0;
+        int i, j;
+
+        for (i = 0; i < dimensions->nrows; i++) {
+                for (j = 0; j < dimensions->ncols; j++)
+                        dimensions->origin_y[i][j] = y;
+                y += dimensions->pixel_heights[i][0];
+        }
+}
+
+static void
+style_recompute_layout_dimensions (GnucashSheet *sheet, CellLayoutInfo *layout_info, CellDimensions *dimensions)
+{
+        int i;
+        int ideal_width;
+
+        dimensions->height = 0;
+        dimensions->width = GTK_WIDGET (sheet)->allocation.width;
+        ideal_width = dimensions->width;
+
+        /* First set the top rows */
+        set_dimensions_pass_one (sheet, layout_info, dimensions, 0);
+        set_dimensions_pass_two (sheet, layout_info, dimensions, 0);
+        set_dimensions_pass_three (sheet, layout_info, dimensions, 0, ideal_width);
+
+        /* style->dimensions->width is fixed now */
+        dimensions->width = compute_row_width (dimensions, 0, 0, dimensions->ncols-1);
+        compute_cell_origins_x (dimensions, 0);
+
+        /*  For now, let's treat the other rows as ALIGNED_ cells only */
+        for (i = 1; i < layout_info->nrows; i++) {
+                set_dimensions_pass_one (sheet, layout_info, dimensions, i);
+                set_dimensions_pass_four (sheet, layout_info, dimensions, i);
+                compute_cell_origins_x (dimensions, i);                
+        }
+
+        compute_cell_origins_y (dimensions);
+}
+
+
+
+static void
+sheet_recompute_style_dimensions_internal (gpointer _key, gpointer _layout_info, gpointer _data)
+{
+        gchar *key = _key;
+        CellLayoutInfo *layout_info = _layout_info;
+        GnucashSheet *sheet = _data;
+
+        style_recompute_layout_dimensions (sheet, layout_info,
+                                           g_hash_table_lookup (sheet->dimensions_hash_table, key));
+}
+
+
+static void
+gnucash_sheet_recompute_style_dimensions (GnucashSheet *sheet)
+{
+        g_return_if_fail (sheet != NULL);
+        g_return_if_fail (GNUCASH_IS_SHEET (sheet));
+
+        g_hash_table_foreach (sheet->layout_info_hash_table,
+                              sheet_recompute_style_dimensions_internal, sheet);
 }
 
 
@@ -592,35 +890,81 @@ void
 gnucash_sheet_style_set_dimensions (GnucashSheet *sheet,
 				    SheetBlockStyle *style)
 {
-        int i;
-        int ideal_width;
-        
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET (sheet));
         g_return_if_fail (style != NULL);
 
-        style->height = 0;
-        style->width = GTK_WIDGET (sheet)->allocation.width;
-        ideal_width = style->width;
+        style_recompute_layout_dimensions (sheet, style->layout_info, style->dimensions);
+}
 
-        /* First set the top rows */
-        set_dimensions_pass_one (sheet, style, 0);
-        set_dimensions_pass_two (sheet, style, 0);
-        set_dimensions_pass_three (sheet, style, 0, ideal_width);
+gint
+gnucash_style_col_is_resizable (SheetBlockStyle *style, int col)
+{
+        if (col < 0 || col >= style->ncols)
+                return FALSE;
 
-        /* style->width is fixed now */
-        style->width = compute_row_width (style, 0, 0, style->ncols-1);
+        return (style->layout_info->user_flags[0][col] & RESIZABLE);
+}
+                                
+/*
+ * Set width of a specified cell and set the PIXEL_FIXED flag.  If
+ *  same_size is TRUE, also set the width of any
+ *  SAME_SIZE cell which references this one.  Otherwise those
+ *  cells are set to PIXELS_FIXED with their current width.
+ */
+void
+gnucash_sheet_style_set_col_width (GnucashSheet *sheet, SheetBlockStyle *style,
+                                   int col, int width, int same_size)
+{
+        int i, j;        
+        g_return_if_fail (sheet != NULL);
+        g_return_if_fail (GNUCASH_IS_SHEET(sheet));
+        g_return_if_fail (style != NULL);
+        g_return_if_fail (col >= 0);
+        g_return_if_fail (col < style->ncols);
 
-        /*  For now, let's treat the other rows as ALIGNED_ cells only */
-        for (i = 1; i < style->nrows; i++) {
-                set_dimensions_pass_one (sheet, style, i);
-                set_dimensions_aligned (sheet, style, i);
+        if (width >= 0) {
+
+#if 0
+                if (style->dimensions->pixel_widths[0][col] > width) {
+                        style->layout_info->pixels_max[0][col] = width;
+                        style->layout_info->flags[0][col] = PIXELS_MAX;
+                }
+                else {
+                        style->layout_info->pixels_min[0][col] = width;
+                        style->layout_info->flags[0][col] = PIXELS_MIN;
+                }
+#endif
+                style->layout_info->flags[0][col] = PIXELS_FIXED;                
+                style->layout_info->pixels_width[0][col] = width;
+                style->dimensions->pixel_widths[0][col] = width;
+
+                for (i = 0; i < style->nrows; i++) {
+                        for (j = 0; j < style->ncols; j++) {
+                                if ((style->layout_info->flags[i][j] & SAME_SIZE)
+                                    && (style->layout_info->size_r[i][j] == 0)
+                                    && (style->layout_info->size_c[i][j] == col)) {
+                                        if (same_size)
+                                                style->dimensions->pixel_widths[i][j] = width;
+                                        else
+                                                style->layout_info->flags[i][j] = PIXELS_FIXED;
+                                }
+                        }
+                }
+
+                style->dimensions->width = compute_row_width (style->dimensions, 0, 0, style->ncols - 1);
+                compute_cell_origins_x (style->dimensions, 0);
+
+                for (i = 1; i < style->nrows; i++)
+                        set_dimensions_pass_four (sheet, style->layout_info, style->dimensions, i);
         }
 }
 
 
+
+
 void
-gnucash_sheet_style_destroy (SheetBlockStyle *style)
+gnucash_sheet_style_destroy (GnucashSheet *sheet, SheetBlockStyle *style)
 {
         gint i, j;
         
@@ -628,31 +972,35 @@ gnucash_sheet_style_destroy (SheetBlockStyle *style)
 
         for ( i = 0; i < style->nrows; i++) {
                 g_free(style->widths[i]);
-                g_free(style->pixel_heights[i]);
-                g_free(style->pixel_widths[i]);
-                for (j = 0; j < style->ncols; j++)
-                        g_free (style->layout_info[i][j].string);
-                g_free(style->layout_info[i]);
                 g_free(style->alignments[i]);
                 g_free(style->fonts[i]);
                 g_free(style->active_bg_color[i]);
                 g_free(style->inactive_bg_color[i]);
-                g_free(style->cell_perc[i]);
                 for (j = 0; j < style->ncols; j++)
                         g_free (style->labels[i][j]);
                 g_free (style->labels[i]);
         }
 
         g_free(style->widths);
-        g_free(style->pixel_heights);
-        g_free(style->pixel_widths);
-        g_free(style->layout_info);
         g_free(style->alignments);
         g_free(style->fonts);
         g_free(style->active_bg_color);
         g_free(style->inactive_bg_color);
-        g_free(style->cell_perc);
         g_free(style->labels);
+
+        style->layout_info->refcount--;
+
+        if (style->layout_info->refcount == 0) {
+                g_hash_table_remove (sheet->layout_info_hash_table, style_get_key (style));
+                style_layout_info_destroy (style->layout_info);
+        }
+
+        style->dimensions->refcount--;
+
+        if (style->dimensions->refcount == 0) {
+                g_hash_table_remove (sheet->dimensions_hash_table, style_get_key (style));
+                style_dimensions_destroy (style->dimensions);
+        }
 
         g_free (style);
 }
@@ -670,6 +1018,7 @@ gnucash_sheet_style_compile (GnucashSheet *sheet, CellBlock *cellblock,
         g_return_val_if_fail (GNUCASH_IS_SHEET (sheet), NULL);
         g_return_val_if_fail (cellblock != NULL, NULL);
 
+
         sr = (SplitRegister *)sheet->split_register;
 
         style  = g_new0(SheetBlockStyle, 1);
@@ -681,31 +1030,21 @@ gnucash_sheet_style_compile (GnucashSheet *sheet, CellBlock *cellblock,
         style->ncols = cellblock->numCols;
 
         style->widths = g_new0(gint *, cellblock->numRows);
-        style->pixel_heights = g_new0(gint *, cellblock->numRows);
-        style->pixel_widths = g_new0 (gint *, cellblock->numRows);
-        style->layout_info = g_new0 (CellLayoutInfo *, cellblock->numRows);
         style->alignments = g_new0 (GtkJustification *, cellblock->numRows);
         style->fonts = g_new0 (GdkFont **, cellblock->numRows);
         style->active_bg_color = g_new0 (GdkColor **, cellblock->numRows);
         style->inactive_bg_color = g_new0 (GdkColor **, cellblock->numRows);
-        style->cell_perc = g_new0 (double *, cellblock->numRows);
         style->labels = g_new0 (char **, cellblock->numRows);
         
         for ( i = 0; i < style->nrows; i++) {
                 style->widths[i] = g_new0(gint, style->ncols);
-                style->pixel_heights[i] = g_new0(gint , style->ncols);
-                style->pixel_widths[i] = g_new0 (gint, style->ncols);
-                style->layout_info[i] = g_new0 (CellLayoutInfo, style->ncols);
                 style->alignments[i] = g_new0 (GtkJustification, style->ncols);
                 style->fonts[i] = g_new0 (GdkFont *, style->ncols);
                 style->active_bg_color[i] = g_new0 (GdkColor *, style->ncols);
                 style->inactive_bg_color[i] = g_new0(GdkColor *, style->ncols);
-                style->cell_perc[i] = g_new0 (double, style->ncols);
                 style->labels[i] = g_new0 (char *, style->ncols);
         }
 
-        gnucash_style_layout_init (style);
-        
         for (i = 0; i < style->nrows; i++)
                 for (j = 0; j < style->ncols; j++) {
                         gint type = cellblock->cell_types[i][j];
@@ -713,7 +1052,7 @@ gnucash_sheet_style_compile (GnucashSheet *sheet, CellBlock *cellblock,
                         
                         style->widths[i][j] = cellblock->widths[j];
 
-                        style->fonts[i][j] = gnucash_default_font;
+                        style->fonts[i][j] = NULL;
                         style->header_font = gnucash_default_font;
 
                         if (type > -1)
@@ -742,9 +1081,10 @@ gnucash_sheet_style_compile (GnucashSheet *sheet, CellBlock *cellblock,
                                 break;
                         }
                 }
-                        
-        gnucash_sheet_style_set_dimensions (sheet, style);
 
+        gnucash_style_layout_init (sheet, style);
+        gnucash_style_dimensions_init (sheet, style);
+        gnucash_sheet_style_set_dimensions (sheet, style);
         return style;
 }
 
@@ -763,15 +1103,15 @@ gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
         
         *y = 0;
         for (i = 0; i < cell_row; i++)
-                *y += style->pixel_heights[i][0];
+                *y += style->dimensions->pixel_heights[i][0];
 
-        *h = style->pixel_heights [cell_row][0];
+        *h = style->dimensions->pixel_heights [cell_row][0];
 
         *x = 0;
         for (i = 0; i < cell_col; i++)
-                *x += style->pixel_widths[cell_row][i];
+                *x += style->dimensions->pixel_widths[cell_row][i];
 
-        *w = style->pixel_widths [cell_row][cell_col];
+        *w = style->dimensions->pixel_widths [cell_row][cell_col];
 }
 
 

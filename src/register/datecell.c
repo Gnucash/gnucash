@@ -124,7 +124,10 @@ xaccValidateDate (struct tm *date, int recur)
 /* ================================================ */
 
 static const char * 
-DateEnter (BasicCell *_cell, const char * curr)
+DateEnter (BasicCell *_cell, const char * curr,
+           int *cursor_position,
+           int *start_selection,
+           int *end_selection)
 {
    DateCell *cell = (DateCell *) _cell;
 
@@ -142,7 +145,9 @@ DateMV (BasicCell *_cell,
         const char *oldval, 
         const char *change, 
         const char *newval,
-        int *cursor_position)
+        int *cursor_position,
+        int *start_selection,
+        int *end_selection)
 {
    DateCell *cell = (DateCell *) _cell;
    struct tm *date;

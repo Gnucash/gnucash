@@ -352,14 +352,21 @@ xaccRefreshCursorGUI (Table * table, gncBoolean do_scroll);
  * map an editing widget onto this cell, and allow user input. If 
  * it returns non-null, then the returned value will be used as the 
  * new cell value, and an editor for the cell will not be mapped
- * (viz, the user will be prevented from updating the cell)
+ * (viz, the user will be prevented from updating the cell).
+ * The function is also passed pointers to the current cursor
+ * position, start selection position, and end selection position.
+ * If the function returns NULL, then it may change any of those
+ * values and the mapped editing widget will be modified accordingly.
  *
  * Note: since this is an internal-use-only routine, if you do not 
  * like this semantic, cut&paste this code and change it to suit you. 
  * However, don't just change it, because it will break functional code.
  */
 const char *
-gnc_table_enter_update(Table *table, int row, int col);
+gnc_table_enter_update(Table *table, int row, int col,
+                       int *cursor_position,
+                       int *start_selection,
+                       int *end_selection);
 
 const char *
 gnc_table_leave_update(Table *table, int row, int col,
@@ -370,7 +377,10 @@ gnc_table_modify_update(Table *table, int row, int col,
                         const char *oldval,
                         const char *change,
                         char *newval,
-                        int *cursor_position);
+                        int *cursor_position,
+                        int *start_selection,
+                        int *end_selection);
+
 gncBoolean
 gnc_table_traverse_update(Table *table, int row, int col,
                           gncTableTraversalDir dir,

@@ -47,7 +47,13 @@
  * when the end of the descriptions string is reached.
  */
 
-#define QFNUM 27     /* 26+1 letters in the alphabet */
+#define QFNUM 129     /* 128 characters + 1 */
+
+typedef enum
+{
+  QUICKFILL_LIFO,
+  QUICKFILL_ALPHA
+} QuickFillSort;
 
 typedef struct _quickfill {
   char * text;                     /* the first matching text string     */
@@ -59,7 +65,8 @@ typedef struct _quickfill {
 QuickFill *xaccMallocQuickFill( void );
 void       xaccFreeQuickFill( QuickFill *qf );
 QuickFill *xaccGetQuickFill( QuickFill *qf, char c );
-void       xaccQFInsertText( QuickFill *qf, const char *text );
+QuickFill *xaccGetQuickFillStr( QuickFill *qf, const char *str );
+void       xaccQFInsertText( QuickFill *qf, const char *text, QuickFillSort );
 
 /** GLOBALS *********************************************************/
 

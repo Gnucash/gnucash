@@ -25,6 +25,7 @@
 #include <gnome.h>
 #include "gnucash-item-edit.h"
 #include "gnucash-style.h"
+#include "util.h"
 
 
 static GnomeCanvasItemClass *item_edit_parent_class;
@@ -34,9 +35,11 @@ struct _TextDrawInfo
 {
         char *text_1;
         char *text_2;
+        char *text_3;
 
         int len_1;
         int len_2;
+        int len_3;
 
         GdkFont *font;
 
@@ -46,8 +49,12 @@ struct _TextDrawInfo
         GdkColor *fg_color;
         GdkColor *bg_color;
 
+        GdkColor *fg_color2;
+        GdkColor *bg_color2;
+
         int text_x1;
         int text_x2;
+        int text_x3;
         int text_y;
 
         int cursor_x;
@@ -78,16 +85,15 @@ item_edit_get_pixel_coords (ItemEdit *item_edit, int *x, int *y,
 			    int *w, int *h)
 {
         GnucashSheet *sheet = item_edit->sheet;
-        int xd, yd;
+        int xd, yd, save;
 
         gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet), NULL, &yd);
+        save = yd;
 
-        xd = gnucash_sheet_col_get_distance(sheet, sheet->left_block,
-					     item_edit->virt_col)
-                + sheet->left_block_offset;
-        yd += gnucash_sheet_row_get_distance (sheet, sheet->top_block,
-					      item_edit->virt_row)
-                + sheet->top_block_offset;
+        gnucash_sheet_block_pixel_origin (sheet,
+                                          item_edit->virt_row,
+                                          item_edit->virt_col,
+                                          &xd, &yd);
 
         gnucash_sheet_style_get_cell_pixel_rel_coords (item_edit->style,
 						       item_edit->cell_row,
@@ -105,30 +111,51 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         GtkJustification align;
         SheetBlockStyle *style;
         GtkEditable *editable;
-        int text_len, total_len, first_part_len;
+        int text_len, total_width;
+        int pre_cursor_width;
+        int width_1, width_2;
         int xd, yd, wd, hd, dx, dy;
-        int toggle_space;
+        int start_pos, end_pos;
+        int toggle_space, cursor_pos;
         int xoffset;
 
         style = item_edit->style;
-        info->font = style->fonts[item_edit->cell_row][item_edit->cell_col];
+
+        if (style->fonts[item_edit->cell_row][item_edit->cell_col])
+                info->font = style->fonts[item_edit->cell_row][item_edit->cell_col];
+        else
+                info->font = GNUCASH_GRID(item_edit->sheet->grid)->normal_font;
 
         info->bg_color = style->active_bg_color[item_edit->cell_row]
                                                [item_edit->cell_col];
         info->fg_color = &gn_black;
 
-        info->text_1 = gtk_entry_get_text (GTK_ENTRY (item_edit->editor));
-        text_len = strlen (info->text_1);
+        info->bg_color2 = &gn_dark_gray;
+        info->fg_color2 = &gn_white;
 
-        editable = GTK_EDITABLE (item_edit->editor);
-        info->len_1 = gtk_editable_get_position(editable);
-        info->len_2 = text_len - info->len_1;
+        editable = GTK_EDITABLE(item_edit->editor);
+        cursor_pos = editable->current_pos;
+        start_pos = MIN(editable->selection_start_pos,
+                        editable->selection_end_pos);
+        end_pos = MAX(editable->selection_start_pos,
+                      editable->selection_end_pos);
 
-        info->text_2 = info->text_1 + info->len_1;
+        info->text_1 = gtk_entry_get_text(GTK_ENTRY (item_edit->editor));
+        info->len_1  = start_pos;
+        text_len     = strlen(info->text_1);
 
-        total_len = gdk_text_measure (info->font, info->text_1, text_len);
-        first_part_len = gdk_text_width (info->font, info->text_1,
-                                         info->len_1);
+        info->text_2 = &info->text_1[start_pos];
+        info->len_2  = end_pos - start_pos;
+
+        info->text_3 = &info->text_1[end_pos];
+        info->len_3  = text_len - end_pos;
+
+        total_width = gdk_text_measure (info->font, info->text_1, text_len);
+        pre_cursor_width = gdk_text_width (info->font, info->text_1,
+                                           cursor_pos);
+
+        width_1 = gdk_text_width (info->font, info->text_1, info->len_1);
+        width_2 = gdk_text_width (info->font, info->text_2, info->len_2);
 
         item_edit_get_pixel_coords (item_edit, &xd, &yd, &wd, &hd);
 
@@ -154,7 +181,7 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         switch (align) {
                 case GTK_JUSTIFY_RIGHT:
                         xoffset = info->text_rect.width -
-                                  (2*CELL_HPADDING + total_len);
+                                  (2*CELL_HPADDING + total_width);
                         if (xoffset > 0)
                                 break;
                 default:
@@ -163,16 +190,17 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
                 case GTK_JUSTIFY_CENTER:
                         xoffset = MIN (CELL_HPADDING,
                                        info->text_rect.width -
-                                       (2*CELL_HPADDING + first_part_len));
+                                       (2*CELL_HPADDING + pre_cursor_width));
                         break;
         }
 
         info->text_x1 = dx + xoffset;
-        info->text_x2 = info->text_x1 + first_part_len;
-        info->text_y = dy + hd - CELL_VPADDING;
+        info->text_x2 = info->text_x1 + width_1;
+        info->text_x3 = info->text_x2 + width_2;
+        info->text_y = dy + hd - MAX(CELL_VPADDING, info->font->descent + 4);
 
-        info->cursor_x = info->text_x2;
-        info->cursor_y1 = dy + CELL_VPADDING;
+        info->cursor_x = info->text_x1 + pre_cursor_width;
+        info->cursor_y1 = info->text_y - info->font->ascent;
         info->cursor_y2 = info->text_y + info->font->descent;
 }
 
@@ -197,21 +225,40 @@ item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                             info.bg_rect.width, info.bg_rect.height);
 
         /* Draw the foreground text and cursor */
-        gdk_gc_set_foreground (item_edit->gc, info.fg_color);
-
         gdk_gc_set_clip_rectangle (item_edit->gc, &info.text_rect);
 
-        gdk_draw_text (drawable, info.font, item_edit->gc,
-                       info.text_x1, info.text_y,
-                       info.text_1, info.len_1);
+        /* Draw the highlited region */
+        if (info.len_2 > 0)
+        {
+                gdk_gc_set_foreground (item_edit->gc, info.bg_color2);
+                gdk_draw_rectangle (drawable, item_edit->gc, TRUE,
+                                    info.text_x2,
+                                    info.text_y - info.font->ascent,
+                                    info.text_x3 - info.text_x2,
+                                    info.font->ascent + info.font->descent);
 
-        gdk_draw_line (drawable, item_edit->gc,
-                       info.cursor_x, info.cursor_y1,
-                       info.cursor_x, info.cursor_y2);
+                gdk_gc_set_foreground (item_edit->gc, info.fg_color2);
+                gdk_draw_text (drawable, info.font, item_edit->gc,
+                               info.text_x2, info.text_y,
+                               info.text_2, info.len_2);
+        }
 
-        gdk_draw_text (drawable, info.font, item_edit->gc,
-                       info.text_x2, info.text_y,
-                       info.text_2, info.len_2);
+        gdk_gc_set_foreground (item_edit->gc, info.fg_color);
+
+        if (info.len_1 > 0)
+                gdk_draw_text (drawable, info.font, item_edit->gc,
+                               info.text_x1, info.text_y,
+                               info.text_1, info.len_1);
+
+        if (info.len_3 > 0)
+                gdk_draw_text (drawable, info.font, item_edit->gc,
+                               info.text_x3, info.text_y,
+                               info.text_3, info.len_3);
+
+        if (info.len_2 == 0)
+                gdk_draw_line (drawable, item_edit->gc,
+                               info.cursor_x, info.cursor_y1,
+                               info.cursor_x, info.cursor_y2);
 
         gdk_gc_set_clip_rectangle (item_edit->gc, NULL);
 }
@@ -222,7 +269,7 @@ item_edit_point (GnomeCanvasItem *item, double c_x, double c_y, int cx, int cy,
                  GnomeCanvasItem **actual_item)
 {
         int x, y, w, h;
- 
+
         item_edit_get_pixel_coords (ITEM_EDIT (item), &x, &y, &w, &h);
 
         *actual_item = NULL;
@@ -246,19 +293,12 @@ item_edit_update (GnomeCanvasItem *item, double *affine, ArtSVP *clip_path,
 		  int flags)
 {
         ItemEdit *item_edit = ITEM_EDIT (item);
-        GnucashSheet *sheet = item_edit->sheet;
-	GtkAnchorType list_anchor;
         gint x, y, w, h;
-	gint toggle_x, toggle_y, toggle_width, toggle_height;
-	gint list_x, list_y, list_height, view_height;
-	gint y_offset;
+        gint toggle_x, toggle_y, toggle_width, toggle_height;
 
         if (GNOME_CANVAS_ITEM_CLASS (item_edit_parent_class)->update)
                 (*GNOME_CANVAS_ITEM_CLASS(item_edit_parent_class)->update)
 			(item, affine, clip_path, flags);
-
-        view_height = GTK_WIDGET(sheet)->allocation.height;
-        gnome_canvas_get_scroll_offsets(GNOME_CANVAS(sheet), NULL, &y_offset);
 
         item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
 
@@ -275,28 +315,14 @@ item_edit_update (GnomeCanvasItem *item, double *affine, ArtSVP *clip_path,
 	toggle_x = x + w - (toggle_width + 3);
 	toggle_y = y + 5;
 
-    item_edit->combo_toggle.toggle_offset = toggle_width + 3;
+        item_edit->combo_toggle.toggle_offset = toggle_width + 3;
 
 	item_edit_show_combo_toggle(item_edit, toggle_x, toggle_y,
 				    toggle_width, toggle_height,
 				    GTK_ANCHOR_NW);
 
-	if (!item_edit->show_list)
-		return;
-
-	list_x = x;
-	list_y = y + h;
-	list_height = h * 6;
-
-	if ((list_y - y_offset) + list_height > view_height) {
-		list_y = y;
-		list_anchor = GTK_ANCHOR_SW;
-	}
-	else
-		list_anchor = GTK_ANCHOR_NW;
-
-	item_edit_show_list(item_edit, list_x, list_y,
-			    list_height, list_anchor);
+	if (item_edit->show_list)
+                item_edit_show_list(item_edit);
 }
 
 
@@ -336,6 +362,7 @@ item_edit_init (ItemEdit *item_edit)
         item_edit->sheet = NULL;
 	item_edit->parent = NULL;
 	item_edit->editor = NULL;
+        item_edit->clipboard = NULL;
 
 	item_edit->combo_toggle.combo_button = NULL;
 	item_edit->combo_toggle.combo_button_item = NULL;
@@ -378,12 +405,17 @@ static void
 item_edit_destroy (GtkObject *object)
 {
         ItemEdit *item_edit = ITEM_EDIT (object);
+        GtkObject *edit_obj = GTK_OBJECT(item_edit->editor);
 
-        gtk_signal_disconnect (GTK_OBJECT (item_edit->editor),
-			       item_edit->signal);
+        if (item_edit->clipboard != NULL)
+                g_free(item_edit->clipboard);
+        item_edit->clipboard = NULL;
 
-        gtk_signal_disconnect (GTK_OBJECT (item_edit->editor),
-			       item_edit->signal2);
+        if (!GTK_OBJECT_DESTROYED(edit_obj))
+        {
+                gtk_signal_disconnect(edit_obj, item_edit->signal);
+                gtk_signal_disconnect(edit_obj, item_edit->signal2);
+        }
 
         gdk_gc_destroy (item_edit->gc);
 
@@ -393,25 +425,32 @@ item_edit_destroy (GtkObject *object)
 
 
 gboolean
-item_edit_set_cursor_pos (ItemEdit *item_edit, int x, int y,
-                          gboolean changed_cells)
+item_edit_set_cursor_pos (ItemEdit *item_edit, int p_row, int p_col, int x,
+                          gboolean changed_cells, gboolean extend_selection)
 {
         GtkEditable *editable;
         TextDrawInfo info;
+        Table *table;
         gint pos;
         gint pos_x;
         gint o_x, o_y;
         gint virt_row, virt_col, cell_row, cell_col;
+        SheetBlockStyle *style;
         char *text;
 
         g_return_val_if_fail (IS_ITEM_EDIT(item_edit), FALSE);
 
-        gnucash_grid_find_cell_origin_by_pixel
-                (GNUCASH_GRID(item_edit->sheet->grid),
-                 x, y,
-                 &virt_row, &virt_col,
-                 &cell_row, &cell_col,
-                 &o_x, &o_y);
+        table = item_edit->sheet->table;
+
+	virt_row = table->locators[p_row][p_col]->virt_row;
+	virt_col = table->locators[p_row][p_col]->virt_col;
+	cell_row = table->locators[p_row][p_col]->phys_row_offset;
+	cell_col = table->locators[p_row][p_col]->phys_col_offset;
+
+        style = gnucash_sheet_get_style (item_edit->sheet, virt_row, 0);
+
+        o_x = style->dimensions->origin_x[cell_row][cell_col];
+        o_y = style->dimensions->origin_y[cell_row][cell_col];
 
         if ( (virt_row != item_edit->virt_row) ||
              (virt_col != item_edit->virt_col) ||
@@ -455,7 +494,33 @@ item_edit_set_cursor_pos (ItemEdit *item_edit, int x, int y,
                 text--;
         }
 
+        if (extend_selection)
+        {
+                gint current_pos, start_sel, end_sel;
+
+                current_pos = editable->current_pos;
+                start_sel = MIN(editable->selection_start_pos,
+                                editable->selection_end_pos);
+                end_sel = MAX(editable->selection_start_pos,
+                              editable->selection_end_pos);
+
+                if (start_sel == end_sel)
+                {
+                        start_sel = current_pos;
+                        end_sel = pos;
+                }
+                else if (current_pos == start_sel)
+                        start_sel = pos;
+                else
+                        end_sel = pos;
+
+                gtk_editable_select_region(editable, start_sel, end_sel);
+        }
+        else
+                gtk_editable_select_region(editable, 0, 0);
+
         gtk_editable_set_position (editable, pos);
+
         queue_sync (item_edit);
 
         return TRUE;
@@ -520,6 +585,92 @@ item_edit_configure (ItemEdit *item_edit)
 
 
 static void
+item_edit_cut_copy_clipboard (ItemEdit *item_edit, gboolean cut)
+{
+        GtkEditable *editable;
+        gint start_sel, end_sel;
+        gchar *clip;
+
+        g_return_if_fail(item_edit != NULL);
+        g_return_if_fail(IS_ITEM_EDIT(item_edit));
+
+        editable = GTK_EDITABLE (item_edit->editor);
+
+        start_sel = MIN(editable->selection_start_pos,
+                        editable->selection_end_pos);
+        end_sel = MAX(editable->selection_start_pos,
+                      editable->selection_end_pos);
+
+        if (start_sel == end_sel)
+                return;
+
+        if (item_edit->clipboard != NULL)
+                g_free(item_edit->clipboard);
+
+        clip = gtk_editable_get_chars(editable, start_sel, end_sel);
+        item_edit->clipboard = clip;
+
+        if (!cut)
+                return;
+
+        gtk_editable_delete_text(editable, start_sel, end_sel);
+        gtk_editable_select_region(editable, 0, 0);
+        gtk_editable_set_position(editable, start_sel);
+}
+
+
+void
+item_edit_cut_clipboard (ItemEdit *item_edit)
+{
+        item_edit_cut_copy_clipboard(item_edit, TRUE);
+}
+
+
+void
+item_edit_copy_clipboard (ItemEdit *item_edit)
+{
+        item_edit_cut_copy_clipboard(item_edit, FALSE);
+}
+
+
+void
+item_edit_paste_clipboard (ItemEdit *item_edit)
+{
+        GtkEditable *editable;
+        gint start_sel, end_sel;
+        gint current_pos;
+        gchar *clip;
+
+        g_return_if_fail(item_edit != NULL);
+        g_return_if_fail(IS_ITEM_EDIT(item_edit));
+
+        if ((item_edit->clipboard == NULL) ||
+            (item_edit->clipboard[0] == 0))
+                return;
+
+        editable = GTK_EDITABLE (item_edit->editor);
+
+        current_pos = editable->current_pos;
+        start_sel = MIN(editable->selection_start_pos,
+                        editable->selection_end_pos);
+        end_sel = MAX(editable->selection_start_pos,
+                      editable->selection_end_pos);
+
+        if (start_sel != end_sel)
+        {
+                gtk_editable_delete_text(editable, start_sel, end_sel);
+                current_pos = start_sel;
+        }
+
+        clip = item_edit->clipboard;
+        gtk_editable_insert_text(editable, clip, strlen(clip), &current_pos);
+
+        gtk_editable_select_region(editable, 0, 0);
+        gtk_editable_set_position(editable, current_pos);
+}
+
+
+static void
 item_edit_show_combo_toggle (ItemEdit *item_edit, gint x, gint y,
 			     gint width, gint height, GtkAnchorType anchor)
 {
@@ -572,7 +723,37 @@ item_edit_combo_toggled (GtkToggleButton *button, gpointer data)
         if (!item_edit->show_list)
                 item_edit_hide_list(item_edit);
 
-	item_edit_configure (item_edit);
+	item_edit_configure(item_edit);
+}
+
+
+static void
+block_toggle_signals(ItemEdit *item_edit)
+{
+        GtkObject *obj;
+
+        if (!item_edit->combo_toggle.signals_connected)
+                return;
+
+        obj = GTK_OBJECT(item_edit->combo_toggle.combo_button);
+
+        gtk_signal_handler_block(obj, item_edit->combo_toggle.toggle_signal);
+        gtk_signal_handler_block(obj, item_edit->combo_toggle.key_press_signal);
+}
+
+
+static void
+unblock_toggle_signals(ItemEdit *item_edit)
+{
+        GtkObject *obj;
+
+        if (!item_edit->combo_toggle.signals_connected)
+                return;
+
+        obj = GTK_OBJECT(item_edit->combo_toggle.combo_button);
+
+        gtk_signal_handler_unblock(obj, item_edit->combo_toggle.toggle_signal);
+        gtk_signal_handler_unblock(obj, item_edit->combo_toggle.key_press_signal);
 }
 
 
@@ -762,27 +943,67 @@ item_edit_new (GnomeCanvasGroup *parent, GnucashSheet *sheet, GtkWidget *entry)
 GNCItemList *
 item_edit_new_list (ItemEdit *item_edit)
 {
+        GNCItemList *item_list;
+
 	g_return_val_if_fail(IS_ITEM_EDIT(item_edit), NULL);
 
-	return GNC_ITEM_LIST(gnc_item_list_new(item_edit->parent));
+        item_list = GNC_ITEM_LIST(gnc_item_list_new(item_edit->parent));
+
+	return item_list;
 }
 
 
 void
-item_edit_show_list (ItemEdit *item_edit, gint x, gint y,
-		     gint height, GtkAnchorType anchor)
+item_edit_show_list (ItemEdit *item_edit)
 {
+        GtkToggleButton *toggle;
+        GtkAnchorType list_anchor;
+        GnucashSheet *sheet;
+        gint x, y, w, h;
+        gint y_offset;
+        gint list_x, list_y;
+        gint list_height;
+        gint view_height;
+
+        g_return_if_fail(item_edit != NULL);
 	g_return_if_fail(IS_ITEM_EDIT(item_edit));
 
-	if (item_edit->item_list == NULL)
-		return;
+        if ((item_edit->item_list == NULL) || !item_edit->is_combo)
+                return;
+
+        sheet = item_edit->sheet;
+        view_height = GTK_WIDGET(sheet)->allocation.height;
+        gnome_canvas_get_scroll_offsets(GNOME_CANVAS(sheet), NULL, &y_offset);
+        item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
+
+	list_x = x;
+	list_y = y + h;
+	list_height = h * 6;
+
+	if ((list_y - y_offset) + list_height > view_height) {
+		list_y = y;
+		list_anchor = GTK_ANCHOR_SW;
+	}
+	else
+		list_anchor = GTK_ANCHOR_NW;
 
 	gnome_canvas_item_set(GNOME_CANVAS_ITEM(item_edit->item_list),
-			      "x", (gdouble) x,
-			      "y", (gdouble) y,
-			      "height", (gdouble) height,
-			      "anchor", anchor,
+			      "x", (gdouble) list_x,
+			      "y", (gdouble) list_y,
+			      "height", (gdouble) list_height,
+			      "anchor", list_anchor,
 			      NULL);
+
+        toggle = item_edit->combo_toggle.combo_button;
+
+        if (!gtk_toggle_button_get_active(toggle))
+        {
+                block_toggle_signals(item_edit);
+
+                gtk_toggle_button_set_active(toggle, TRUE);
+
+                unblock_toggle_signals(item_edit);
+        }
 
 	gtk_arrow_set(item_edit->combo_toggle.arrow,
                       GTK_ARROW_UP, GTK_SHADOW_OUT);
@@ -794,6 +1015,7 @@ item_edit_show_list (ItemEdit *item_edit, gint x, gint y,
 void
 item_edit_hide_list (ItemEdit *item_edit)
 {
+        g_return_if_fail(item_edit != NULL);
 	g_return_if_fail(IS_ITEM_EDIT(item_edit));
 
 	if (item_edit->item_list == NULL)

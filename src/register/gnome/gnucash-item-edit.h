@@ -58,6 +58,8 @@ typedef struct
         /* The editor whose status we reflect on the sheet */
         GtkWidget  *editor;
 
+        gchar *clipboard;
+
         guint signal;  /* the signal we connect */
         guint signal2; /* the other signal we connect */
 
@@ -90,14 +92,18 @@ GNCItemList * item_edit_new_list (ItemEdit *item_edit);
 
 void item_edit_set_list (ItemEdit *item_edit, GNCItemList *item_list);
 
-void item_edit_show_list (ItemEdit *item_edit, gint x, gint y,
-			  gint heigth, GtkAnchorType anchor);
+void item_edit_show_list (ItemEdit *item_edit);
 
 void item_edit_hide_list (ItemEdit *item_edit);
 
-gboolean item_edit_set_cursor_pos (ItemEdit *item_edit, int x, int y,
-                                   gboolean changed_cells);
+gboolean item_edit_set_cursor_pos (ItemEdit *item_edit,
+                                   int p_row, int p_col, int x,
+                                   gboolean changed_cells,
+                                   gboolean extend_selection);
 
+void item_edit_cut_clipboard (ItemEdit *item_edit);
+void item_edit_copy_clipboard (ItemEdit *item_edit);
+void item_edit_paste_clipboard (ItemEdit *item_edit);
 
 typedef struct {
         GnomeCanvasItemClass parent_class;

@@ -25,10 +25,19 @@
 void gnucash_style_init (void);
 
 void gnucash_sheet_style_init(void);
+
+gint gnucash_style_col_is_resizable (SheetBlockStyle *style, int col);
+
+void gnucash_sheet_style_set_col_width (GnucashSheet *sheet,
+                                        SheetBlockStyle *style,
+                                        int col, int width, int same_size);
+
+gint gnucash_style_default_width(GnucashSheet *sheet, SheetBlockStyle *style);
+
 void gnucash_sheet_style_set_dimensions (GnucashSheet *sheet,
 					 SheetBlockStyle *style);
 
-void gnucash_sheet_style_destroy (SheetBlockStyle *style);
+void gnucash_sheet_style_destroy (GnucashSheet *sheet, SheetBlockStyle *style);
 
 SheetBlockStyle * gnucash_sheet_style_compile (GnucashSheet *sheet,
 					       CellBlock *cellblock,

@@ -898,7 +898,8 @@ gnc_register_cell_valid(Table *table, int row, int col, gncBoolean exact_cell)
 */
 
 const char *
-gnc_table_enter_update(Table *table, int row, int col)
+gnc_table_enter_update(Table *table, int row, int col, int *cursor_position,
+                       int *start_selection, int *end_selection)
 {
   /* If text should be changed, then new_text will be set to non-null
      on return */
@@ -907,9 +908,9 @@ gnc_table_enter_update(Table *table, int row, int col)
   const int rel_row = table->locators[row][col]->phys_row_offset;
   const int rel_col = table->locators[row][col]->phys_col_offset;
   char *retval = NULL;
-  
-  const char * (*enter) (BasicCell *, const char *);
-  
+
+  const char * (*enter) (BasicCell *, const char *, int *, int *, int *);
+
   ENTER("gnc_table_enter_update(): "
         "enter %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
          row, col, rel_row, rel_col, 
@@ -921,10 +922,12 @@ gnc_table_enter_update(Table *table, int row, int col)
   if (enter) {
     const char *val;
 
-    DEBUG("gnc_table_enter_update(): %d %d has enter handler\n", rel_row, rel_col);
-    
+    DEBUG("gnc_table_enter_update(): %d %d has enter handler\n",
+          rel_row, rel_col);
+
     val = table->entries[row][col];
-    retval = (char *) enter(arr->cells[rel_row][rel_col], val);
+    retval = (char *) enter(arr->cells[rel_row][rel_col], val,
+                            cursor_position, start_selection, end_selection);
 
     /* enter() might return null, or it might return a pointer to
      * val, or it might return a new pointer (to newly malloc memory). 
@@ -939,7 +942,7 @@ gnc_table_enter_update(Table *table, int row, int col)
        retval = NULL;
     }
   }
-  
+
   /* record this position as the cell that will be
    * traversed out of if a traverse even happens */
   table->prev_phys_traverse_row = row;
@@ -1017,27 +1020,32 @@ const char *
 gnc_table_modify_update(Table *table, int row, int col,
                         const char *oldval,
                         const char *change,
-                        char *newval, int *cursor_position) 
+                        char *newval,
+                        int *cursor_position,
+                        int *start_selection,
+                        int *end_selection)
 {
   /* returned result should not be touched by the caller */
   /* NULL return value means the edit was rejected */
 
   CellBlock *arr = table->current_cursor;
-  
+
   /* compute the cell location */
   const int rel_row = table->locators[row][col]->phys_row_offset;
   const int rel_col = table->locators[row][col]->phys_col_offset;
 
   const char * (*mv) (BasicCell *,
-                      const char *, const char *, const char *, int *);
+                      const char *, const char *, const char *,
+                      int *, int *, int *);
   const char *retval = NULL;
   ENTER ("gnc_table_modify_update()\n");
-  
+
   /* OK, if there is a callback for this cell, call it */
   mv = arr->cells[rel_row][rel_col]->modify_verify;
   if (mv) {
     retval = (*mv) (arr->cells[rel_row][rel_col],
-                    oldval, change, newval, cursor_position);
+                    oldval, change, newval,
+                    cursor_position, start_selection, end_selection);
 
     /* if the callback returned a non-null value, allow the edit */
     if (retval) {
@@ -1107,7 +1115,6 @@ gnc_table_traverse_update(Table *table, int row, int col,
                           int *dest_row,
                           int *dest_col) 
 {
-  gncBoolean exit_register = GNC_F;
   CellBlock *arr = table->current_cursor;
 
   ENTER("gnc_table_traverse_update(): proposed (%d %d) -> (%d %d)\n",
@@ -1150,13 +1157,9 @@ gnc_table_traverse_update(Table *table, int row, int col,
         if (dir == GNC_TABLE_TRAVERSE_RIGHT) {
           *dest_row = row - rel_row + arr->right_traverse_r[rel_row][rel_col];
           *dest_col = col - rel_col + arr->right_traverse_c[rel_row][rel_col];
-          exit_register = ((rel_row == arr->right_exit_r) &&
-                           (rel_col == arr->right_exit_c));
         } else {
           *dest_row = row - rel_row + arr->left_traverse_r[rel_row][rel_col];
           *dest_col = col - rel_col + arr->left_traverse_c[rel_row][rel_col];
-          exit_register = ((rel_row == arr->left_exit_r) &&
-                           (rel_col == arr->left_exit_c));    
         }
       }
 
@@ -1228,8 +1231,10 @@ gnc_table_traverse_update(Table *table, int row, int col,
   table->prev_phys_traverse_row = *dest_row;
   table->prev_phys_traverse_col = *dest_col;
 
-  LEAVE("gnc_table_traverse_update(): dest_row = %d, dest_col = %d, exit_register=%d\n", *dest_row, *dest_col, exit_register);
-  return(exit_register);
+  LEAVE("gnc_table_traverse_update(): dest_row = %d, dest_col = %d\n",
+        *dest_row, *dest_col);
+
+  return GNC_F;
 }
 
 /* ================== end of file ======================= */

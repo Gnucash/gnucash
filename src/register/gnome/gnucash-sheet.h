@@ -58,6 +58,26 @@ typedef enum {
 
 typedef struct _CellLayoutInfo CellLayoutInfo;
 
+typedef struct 
+{
+        /* totals, in pixels */
+        gint height;
+        gint width;
+
+        /* per cell parameters */
+        
+        gint **pixel_heights;    /* in pixels, may be zero if
+                                    row/column not displayed */
+        gint **pixel_widths;
+
+        gint **origin_x;   /* the origin of the cell */
+        gint **origin_y;
+
+        gint nrows, ncols;
+        gint refcount;
+        
+} CellDimensions;
+
 typedef struct
 {
         gint nrows;
@@ -66,32 +86,23 @@ typedef struct
         gint reg_type;
         gint cursor_type;
 
-        /* totals, in pixels */
-        gint height;
-        gint width;
-
-        /* per cell parameters */
+        /* this one comes from the cellblock */
         gint **widths;              /* in characters */
-        
-        gint **pixel_heights;    /* in pixels, may be zero if
-                                    row/column not displayed */
-        gint **pixel_widths;
 
-        CellLayoutInfo **layout_info;
+        CellLayoutInfo *layout_info;
+        CellDimensions *dimensions;
 
         gchar ***labels;              /* for the header */
         GdkFont *header_font;          
         
         GtkJustification **alignments;
 
+        /* per cell fonts;  if NULL, use the grid normal font */
         GdkFont ***fonts;
-
 
         GdkColor ***active_bg_color;
         GdkColor ***inactive_bg_color;
 
-        double **cell_perc;   /* for the cell layout; percentage of
-                                 space this cell takes on its row */
 
         gint refcount;
 } SheetBlockStyle;
@@ -117,10 +128,10 @@ typedef struct
 
 
 typedef struct {
-        GnomeCanvas   canvas;
+        GnomeCanvas canvas;
 
         Table *table;
-        void *split_register;
+        SplitRegister *split_register;
 
         GtkWidget *reg;
 
@@ -133,10 +144,12 @@ typedef struct {
 
         SheetBlockStyle *cursor_style[GNUCASH_CURSOR_LAST];
 
+        /* some style information associated to a sheet */
+        GHashTable *layout_info_hash_table;
+        GHashTable *dimensions_hash_table;
+
         GHashTable *blocks;
 
-        gint edit_type;  /* what is the current editor? */
-        
         GnomeCanvasItem *item_editor;
         GtkWidget *entry;   
 
@@ -147,7 +160,11 @@ typedef struct {
         gint top_block_offset; 
         gint left_block_offset;
 
+        gint default_width;
+        gint default_height;
+
         gint width;  /* the width in pixels of the sheet */
+        gint height;
 
         gint alignment;
 
@@ -157,6 +174,7 @@ typedef struct {
         guint delete_signal;
         guint changed_signal;
 
+        gint smooth_scroll;
         GtkAdjustment *hadj, *vadj;
 } GnucashSheet;
 
@@ -189,7 +207,7 @@ void gnucash_sheet_set_top_block (GnucashSheet *sheet, int new_top_block,
 SheetBlock *gnucash_sheet_get_block (GnucashSheet *sheet, gint vrow,
 				     gint vcol);
 
-gint gnucash_sheet_col_get_distance(GnucashSheet *sheet, int col_a, int col_b);
+gint gnucash_sheet_col_get_distance(GnucashSheet *sheet, int v_row, int col_a, int col_b);
 
 gint gnucash_sheet_row_get_distance (GnucashSheet *sheet, int row_a,
 				     int row_b);
@@ -218,9 +236,14 @@ void gnucash_sheet_set_cursor_bounds (GnucashSheet *sheet,
 
 void gnucash_sheet_compute_visible_range (GnucashSheet *sheet);
 
+void gnucash_sheet_block_pixel_origin (GnucashSheet *sheet,
+                                       gint vrow, gint vcol,
+                                       gint *x, gint *y);
+
 void gnucash_sheet_make_cell_visible (GnucashSheet *sheet,
 				      gint virt_row, gint virt_col,
 				      gint cell_row, gint cell_col);
+void gnucash_sheet_update_adjustments (GnucashSheet *sheet);
 
 void gnucash_register_goto_virt_row_col (GnucashRegister *reg,
                                          int v_row, int v_col);
