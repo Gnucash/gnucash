@@ -933,3 +933,129 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 break;
         }
 }
+
+int
+int_cmp( int a, int b )
+{
+        if ( a < b )
+                return -1;
+        if ( a == b )
+                return 0;
+        return 1;
+}
+
+/**
+ * Returns the "min" FreqSpec sub-element of a composite FreqSpec.
+ **/
+static
+FreqSpec*
+_gnc_freq_spec_get_min( FreqSpec *fs )
+{
+        FreqSpec *toRet, *tmpFS;
+        GList *l;
+
+        g_assert( xaccFreqSpecGetType(fs) == COMPOSITE );
+        toRet = NULL;
+        for ( l = xaccFreqSpecCompositeGet(fs);
+              l;
+              l = l->next ) {
+                tmpFS = (FreqSpec*)l->data;
+
+                if ( toRet == NULL ) {
+                        toRet = tmpFS;
+                        continue;
+                }
+
+                if ( gnc_freq_spec_compare( toRet, tmpFS ) > 0 ) {
+                        toRet = tmpFS;
+                }
+        }
+        return toRet;
+}
+
+int
+gnc_freq_spec_compare( FreqSpec *a, FreqSpec *b )
+{
+        FreqType fta, ftb;
+        int tmpInt;
+
+        if ( ! (a && b) ) {
+                return 0;
+        } else if ( !a && b ) {
+                return 1;
+        } else if ( a && !b ) {
+                return -1;
+        } /* else { this else intentionally left blank; both-valid code is
+           * below. } */
+
+        fta = xaccFreqSpecGetType( a );
+        ftb = xaccFreqSpecGetType( b );
+
+        if ( fta == COMPOSITE ) {
+                a = _gnc_freq_spec_get_min( a );
+                fta = xaccFreqSpecGetType( a );
+        }
+        if ( ftb == COMPOSITE ) {
+                b = _gnc_freq_spec_get_min( b );
+                ftb = xaccFreqSpecGetType( b );
+        }
+
+        if ( fta < ftb ) {
+                return -1;
+        } else if ( fta > ftb ) {
+                return 1;
+        } /* else { this else intentionally left blank; '='-case code is
+           * below. */
+
+        switch ( fta /* == ftb */ ) {
+        case INVALID:
+                return 0;
+                break;
+        case ONCE:
+                return g_date_compare( &a->s.once.date,
+                                       &b->s.once.date );
+                break;
+        case DAILY:
+                tmpInt = int_cmp( a->s.daily.interval_days,
+                                  b->s.daily.interval_days );
+                if ( tmpInt != 0 ) {
+                        return tmpInt;
+                }
+                return int_cmp( a->s.daily.offset_from_epoch,
+                                b->s.daily.offset_from_epoch );
+                break;
+        case WEEKLY:
+                tmpInt = int_cmp( a->s.weekly.interval_weeks,
+                                  b->s.weekly.interval_weeks );
+                if ( tmpInt != 0 ) {
+                        return tmpInt;
+                }
+                return int_cmp( a->s.weekly.offset_from_epoch,
+                                b->s.weekly.offset_from_epoch );
+                break;
+        case MONTHLY:
+                tmpInt = int_cmp( a->s.monthly.interval_months,
+                                  b->s.monthly.interval_months );
+                if ( tmpInt != 0 ) {
+                        return tmpInt;
+                }
+                return int_cmp( a->s.monthly.day_of_month, 
+                                b->s.monthly.day_of_month );
+                break;
+        case MONTH_RELATIVE:
+                DEBUG( "MONTH-RELATIVE dates not supported." );
+                g_assert( FALSE );
+                break;
+        case COMPOSITE:
+                /* We shouldn't see a composite after doing the
+                 * composite-reduction above. */
+                DEBUG( "This code should not be reached." );
+                g_assert( FALSE );
+                break;
+        default:
+                DEBUG( "Unknown freqspec type %d", fta );
+                g_assert( FALSE );
+                break;
+        }
+        return 0;
+}

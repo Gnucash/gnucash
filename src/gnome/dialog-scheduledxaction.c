@@ -94,6 +94,9 @@ struct _SchedXactionDialog
         GladeXML    *gxml;
         GncDenseCal *gdcal;
         GHashTable  *sxData;
+
+        gint        currentSortCol;
+        GtkSortType currentSortType;
 };
 
 struct _SchedXactionEditorDialog
@@ -150,6 +153,19 @@ static void edit_button_clicked( GtkButton *b, gpointer d );
 static void delete_button_clicked( GtkButton *b, gpointer d );
 static void close_button_clicked( GtkButton *b, gpointer d );
 static void gnc_sxl_record_size( SchedXactionDialog *sxd );
+static void gnc_sxd_row_click_handler( GtkCList *clist,
+                                       gint col,
+                                       gpointer ud );
+static void gnc_sxd_set_sort_compare( GtkCList *cl, gint col );
+static gint gnc_sxd_clist_compare_sx_name( GtkCList *cl,
+                                           gconstpointer a,
+                                           gconstpointer b );
+static gint gnc_sxd_clist_compare_sx_freq( GtkCList *cl,
+                                           gconstpointer a,
+                                           gconstpointer b );
+static gint gnc_sxd_clist_compare_sx_next_occur( GtkCList *cl,
+                                                 gconstpointer a,
+                                                 gconstpointer b );
 
 static void gnc_sxed_record_size( SchedXactionEditorDialog *sxed );
 static void gnc_sxed_get_widgets( SchedXactionEditorDialog *sxed );
@@ -977,6 +993,18 @@ gnc_ui_scheduled_xaction_dialog_create(void)
         gtk_signal_connect( GTK_OBJECT(button), "clicked",
                             GTK_SIGNAL_FUNC(close_button_clicked), sxd );
 
+        w = glade_xml_get_widget( sxd->gxml, SX_LIST );
+        gtk_signal_connect(GTK_OBJECT(w), "select-row",
+                           GTK_SIGNAL_FUNC(row_select_handler), sxd );
+        gtk_signal_connect( GTK_OBJECT(w), "click-column",
+                            GTK_SIGNAL_FUNC(gnc_sxd_row_click_handler), sxd );
+
+        /* Default to sorting by ascending next-instance date. */
+        sxd->currentSortCol = 2;
+        sxd->currentSortType = GTK_SORT_ASCENDING;
+        gnc_sxd_set_sort_compare( GTK_CLIST(w), sxd->currentSortCol );
+        gtk_clist_set_auto_sort( GTK_CLIST(w), TRUE );
+
         {
                 int width, height;
 
@@ -1071,8 +1099,6 @@ schedXact_populate( SchedXactionDialog *sxd )
         for ( i=0; i<3; i++ ) {
                 gtk_clist_set_column_auto_resize( sx_clist, i, TRUE );
         }
-        gtk_signal_connect(GTK_OBJECT(sx_clist), "select-row",
-                           GTK_SIGNAL_FUNC(row_select_handler), sxd );
 }
 
 static gboolean
@@ -1141,7 +1167,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         } widgets[] = {
                 { "ok_button",      "clicked", editor_ok_button_clicked,     NULL },
                 { "cancel_button",  "clicked", editor_cancel_button_clicked, NULL },
-		{ "help_button",    "clicked", editor_help_button_clicked,   NULL}, 
+                { "help_button",    "clicked", editor_help_button_clicked,   NULL},
 
                 { "rb_noend",       "toggled", endgroup_rb_toggled,          GINT_TO_POINTER(END_NEVER_OPTION) },
                 { "rb_enddate",     "toggled", endgroup_rb_toggled,          GINT_TO_POINTER(END_DATE_OPTION) },
@@ -1689,21 +1715,11 @@ generate_instances( SchedXaction *sx,
         seqStateData = NULL;
 }
 
-/**
- * In this version, we're just updating the clist so the column data is
- * correct.  We already have valid hash table and dense-cal mappings.
- **/
 static
 void
-update_clist( gpointer data, gpointer user_data )
+_gnc_sxd_free_dates( gpointer data, gpointer user_data )
 {
-        SchedXaction *sx;
-        SchedXactionDialog *sxd;
-
-        sx = (SchedXaction*)data;
-        sxd = (SchedXactionDialog*)user_data;
-
-        
+        g_date_free( (GDate*)data );
 }
 
 static
@@ -1742,6 +1758,22 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
         generate_instances( sx, calEndDate, &instList );
         g_date_free( calEndDate );
 
+        /* FIXME: cleanup the date memory, here... */
+        if ( instList == NULL ) {
+                /* This was a bug [#90326]; while we do want to generate
+                 * instances within the visible calendar range, we also want
+                 * to generate the first, next SX instance regardless of the
+                 * calendar range.  Thus, if the generate_instances above
+                 * returns nothing, double-check with the SX.
+                 */
+                nextInstDate = g_date_new();
+                *nextInstDate = xaccSchedXactionGetNextInstance( sx, NULL );
+                if ( g_date_valid( nextInstDate ) ) {
+                        instList = g_list_append( instList,
+                                                  (gpointer)nextInstDate );
+                }
+        }
+
         if ( instList == NULL ) {
                 g_string_sprintf( nextDate, "not scheduled" );
         } else {
@@ -1771,6 +1803,7 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
                                                  xaccSchedXactionGetName(sx),
                                                  freqDesc->str );
                 g_string_free( freqDesc, TRUE );
+                g_list_foreach( instList, _gnc_sxd_free_dates, NULL );
                 g_list_free( instList );
                 g_free( instArray );
         }
@@ -1804,6 +1837,7 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
                         gtk_clist_set_text( clist, row, i, text[i] );
                 }
         }
+        gtk_clist_sort( clist );
         gtk_clist_thaw( clist );
         g_hash_table_insert( sxd->sxData, (gpointer)sx, (gpointer)gdcMarkTag );
 
@@ -1892,4 +1926,138 @@ editor_component_sx_equality( gpointer find_data,
 {
         return ( (SchedXaction*)find_data
                  == ((SchedXactionEditorDialog*)user_data)->sx );
+}
+
+static
+void
+gnc_sxd_row_click_handler( GtkCList *clist,
+                           gint col,
+                           gpointer ud )
+{
+        SchedXactionDialog *sxd = (SchedXactionDialog*)ud;
+
+        if ( col == sxd->currentSortCol ) {
+                g_assert( sxd->currentSortType == GTK_SORT_ASCENDING
+                          || sxd->currentSortType == GTK_SORT_DESCENDING );
+                switch ( sxd->currentSortType ) {
+                case GTK_SORT_ASCENDING:
+                        sxd->currentSortType = GTK_SORT_DESCENDING;
+                        break;
+                case GTK_SORT_DESCENDING:
+                        sxd->currentSortType = GTK_SORT_ASCENDING;
+                        break;
+                default:
+                        PERR( "Unknown current sort type %d", sxd->currentSortType );
+                }
+                /* By defn, the current sort_compare method is correct. */
+                gtk_clist_set_sort_column( clist, col );
+                gtk_clist_set_sort_type( clist, sxd->currentSortType );
+                gtk_clist_sort( clist );
+                return;
+        }
+
+        sxd->currentSortCol = col;
+        gnc_sxd_set_sort_compare( clist, sxd->currentSortCol );
+        sxd->currentSortType = GTK_SORT_ASCENDING;
+        gtk_clist_set_sort_column( clist, sxd->currentSortCol );
+        gtk_clist_set_sort_type( clist, sxd->currentSortType );
+        gtk_clist_sort( clist );
+}
+
+static
+gint
+gnc_sxd_clist_compare_sx_name( GtkCList *cl, gconstpointer a, gconstpointer b )
+{
+        SchedXaction *sxa, *sxb;
+
+        sxa = (SchedXaction*)(((GtkCListRow*)a)->data);
+        sxb = (SchedXaction*)(((GtkCListRow*)b)->data);
+        g_assert( sxa || sxb );
+        if ( !sxa ) {
+                return 1;
+        }
+        if ( !sxb ) {
+                return -1;
+        }
+        return strcmp( xaccSchedXactionGetName( sxa ),
+                       xaccSchedXactionGetName( sxb ) );
+}
+
+static
+gint
+gnc_sxd_clist_compare_sx_freq( GtkCList *cl, gconstpointer a, gconstpointer b )
+{
+        SchedXaction *sxa, *sxb;
+
+        g_assert( a || b );
+        if ( !a ) return 1;
+        if ( !b ) return -1;
+        sxa = (SchedXaction*)((GtkCListRow*)a)->data;
+        sxb = (SchedXaction*)((GtkCListRow*)b)->data;
+        g_assert( sxa || sxb );
+        if ( !sxa ) return 1;
+        if ( !sxb ) return -1;
+        return gnc_freq_spec_compare( xaccSchedXactionGetFreqSpec( sxa ),
+                                      xaccSchedXactionGetFreqSpec( sxb ) );
+}
+
+static
+gint
+gnc_sxd_clist_compare_sx_next_occur( GtkCList *cl,
+                                     gconstpointer a,
+                                     gconstpointer b )
+{
+        SchedXaction *sxa, *sxb;
+        GDate gda, gdb;
+
+        sxa = (SchedXaction*)((GtkCListRow*)a)->data;
+        sxb = (SchedXaction*)((GtkCListRow*)b)->data;
+
+        g_assert( sxa || sxb );
+        if ( !sxa ) {
+                return 1;
+        }
+        if ( !sxb ) {
+                return -1;
+        }
+        g_assert( sxa && sxb );
+
+        gda = xaccSchedXactionGetNextInstance( sxa, NULL );
+        gdb = xaccSchedXactionGetNextInstance( sxb, NULL );
+
+        if ( ! ( g_date_valid(&gda) && g_date_valid(&gdb) ) ) {
+                return 0;
+        }
+        if ( !g_date_valid(&gda) ) {
+                return 1;
+        }
+        if ( !g_date_valid(&gdb) ) {
+                return -1;
+        }
+        return g_date_compare( &gda, &gdb );
+}
+
+
+static
+void
+gnc_sxd_set_sort_compare( GtkCList *cl, gint col )
+{
+        switch ( col ) {
+        case 0: /* SX name */
+                gtk_clist_set_compare_func( cl, NULL );
+                gtk_clist_set_compare_func( cl, gnc_sxd_clist_compare_sx_name );
+                break;
+        case 1: /* SX frequency */
+                gtk_clist_set_compare_func( cl, NULL );
+                gtk_clist_set_compare_func( cl, gnc_sxd_clist_compare_sx_freq );
+                break;
+        case 2: /* next-occur date */
+                gtk_clist_set_compare_func( cl, NULL );
+                gtk_clist_set_compare_func(
+                        cl, gnc_sxd_clist_compare_sx_next_occur );
+                break;
+        default: /* ?? */
+                DEBUG( "invalid column value %d", col );
+                g_assert( FALSE );
+        }
 }

@@ -206,4 +206,11 @@ void xaccFreqSpecGetNextInstance( FreqSpec *fs,
                                   const GDate* in_date,
                                   GDate* out_date );
 
+/**
+ * qsort-style comparison of FreqSpecs.
+ * More frequently-occuring FreqSpecs are sorted before less-frequent FreqSpecs.
+ * FIXME: What to do for composites?
+ **/
+int gnc_freq_spec_compare( FreqSpec *a, FreqSpec *b );
+
 #endif /* XACC_FREQSPEC_H */
