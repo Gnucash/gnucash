@@ -30,6 +30,7 @@
 #include "messages.h"
 
 #include <g-wrap-runtime-guile.h>
+#include <libguile/version.h>
 
 /* This static indicates the debugging module this .o belongs to.  */
 static short module = MOD_GUILE;
@@ -292,34 +293,66 @@ gnc_guile_call1_to_vector(SCM func, SCM arg)
 
 
 /********************************************************************\
- * gnc_depend                                                       *
- *   ensure the given scm file has been loaded, or return FALSE     *
- *   if it cannot be loaded for any reason.                         *
- *                                                                  *
- * Args: scm_file - the file to load if it hasn't been already      *
- * Returns: true if the file has been loaded, false otherwise       *
+  gnc_scm_lookup                    
+
+    returns the SCM binding associated with the given symbol function,
+    or SCM_UNDEFINED if it couldn't be retrieved.
+
+    Don't use this to get hold of symbols that are considered private
+    to a given module unless the C code you're writing is considered
+    part of that module.
+
+  Args: 
+
+    module - where to lookup the symbol, something like "ice-9 debug"
+    symbol - what to look up.
+
+  Returns: value bound to the symbol, if any.
 \********************************************************************/
-gboolean
-gnc_depend(const char *scm_file)
+
+#if 0
+
+  ************ NOT TESTED YET **************
+
+SCM
+gnc_scm_lookup(const char *module, const char *symbol)
 {
-  static SCM depend_func = SCM_UNDEFINED;
-  SCM arg;
+#if defined(SCM_GUILE_MAJOR_VERSION) && \
+    (SCM_GUILE_MAJOR_VERSION > 0) && (SCM_GUILE_MINOR_VERSION > 4)
+  
+  SCM scm_module = scm_c_resolve_module(module);
+  SCM value = scm_c_module_lookup(scm_module, symbol);
+  return value;
+#else
+  
+  gchar *in_guard_str;
+  gchar *thunk_str;
+  SCM in_guard;
+  SCM thunk;
+  SCM out_guard;
+  SCM result;
 
-  if (scm_file == NULL)
-    return FALSE;
+  in_guard_str =
+    g_strdup_printf("(lambda () (set-current-module (resolve-module (%s))))",
+                    module);
 
-  if (depend_func == SCM_UNDEFINED)
-    depend_func = gh_eval_str("gnc:depend");
+  thunk_str = g_strdup_printf("(lambda () (eval '%s))", symbol);
 
-  if (!gh_procedure_p(depend_func))
-    return FALSE;
+  in_guard = gh_eval_str(in_guard_str);
+  thunk = gh_eval_str(thunk_str);
+  out_guard = gh_eval_str("(let ((cm (current-module)))
+                             (lambda () (set-current-module cm)))");
 
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */ 
-  arg = gh_str02scm((char *) scm_file);
+  result = scm_dynamic_wind(in_guard, thunk, out_guard);
 
-  return gh_scm2bool(gh_call1(depend_func, arg));
+  g_free(in_guard_str);
+  g_free(thunk_str);
+
+  return result;
+#endif
 }
 
+#endif
 
 /********************************************************************\
  * gnc_copy_split                                                   *
