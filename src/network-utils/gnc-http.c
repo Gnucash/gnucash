@@ -38,6 +38,7 @@
 #include <ghttp.h>
 #include <glib.h>
 #include <gtk/gtkmain.h>
+#include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -190,6 +191,7 @@ gnc_http_start_request(gnc_http * http, const gchar * uri,
                        GncHTTPRequestCB cb, gpointer user_data) {
   
   struct request_info * info = g_new0(struct request_info, 1);
+  const gchar *oldlocale;
   
   info->request = ghttp_request_new();
   info->uri  = g_strdup (uri);
@@ -208,7 +210,9 @@ gnc_http_start_request(gnc_http * http, const gchar * uri,
   ghttp_set_sync(info->request, ghttp_async);
   ghttp_set_type(info->request, ghttp_type_get);
   ghttp_prepare(info->request);
+  oldlocale = setlocale(LC_NUMERIC, "C");
   ghttp_process(info->request);
+  setlocale(LC_NUMERIC, oldlocale);
 
   http->requests = g_list_append(http->requests, info);
   
