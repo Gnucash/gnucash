@@ -6,9 +6,9 @@
 <SECT1>
 <TITLE> Account Types</TITLE>
 <PARA></PARA>
-<PARA> GnuCash supports a number of different account types.  You should
-always choose the type that is appropriate for what you want to
-record.  If you're not sure, the explanations below should help you
+<PARA> GnuCash supports a number of different account types.  
+Always choose the type that is appropriate for what you want to
+record.  If you're not sure, the following explanations should help you
 decide.
 
     <GLOSSLIST>
@@ -23,38 +23,32 @@ decide.
 <GLOSSENTRY>
 <GLOSSTERM><EMPHASIS>Bank</EMPHASIS></GLOSSTERM>
 <GLOSSDEF>
-<PARA>The <EMPHASIS>Bank</EMPHASIS> account type denotes a savings or
-      checking account held at a bank or other financial
+<PARA>The <EMPHASIS>Bank</EMPHASIS> account type denotes savings or
+      checking accounts held at a bank or other financial
       institution.
-      Such accounts sometimes bear interest.
+      Some of these accounts may bear interest.
+      This is also the appropriate account type for check (debit) cards,
+      which directly withdraw payments from a checking account.
       </PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><EMPHASIS>Credit</EMPHASIS></GLOSSTERM>
+<GLOSSTERM><EMPHASIS>Credit Card</EMPHASIS></GLOSSTERM>
 <GLOSSDEF>
-<PARA>The <EMPHASIS> Credit</EMPHASIS> card account is used to denote credit
-      card accounts, whether involving floating lines of credit as
-      with VISA, MasterCard, or Discover, as well as others like
-      American Express that do <EMPHASIS> not</EMPHASIS> permit you to maintain
-      continuing balances.</PARA>
-<PARA>The introduction of <ULINK URL="http://www.visa.com/pd/debit/checkcard.html"> Check
-      Cards</ULINK> where payments are withdrawn directly from a
-      checking account makes the selection less clear; it is
-      probably more appropriate to treat a "Check Card" as a <EMPHASIS>      Bank</EMPHASIS> account, as it does withdraw amounts directly from
-      such an account, not really involving any granting of
-      credit.
-      Note the ambiguity of AMEX and Check Cards.  This shows that
-      deciding where to put accounts is not an exact science.
-      </PARA>
+<PARA>The <EMPHASIS>Credit Card</EMPHASIS>account type is used 
+      to denote credit
+      card accounts, both for cards that allow floating lines of 
+      credit (e.g. VISA, MasterCard, or Discover) 
+      and with cards that do not permit continueing balances
+      (e.g.  American Express)
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
 <GLOSSTERM><EMPHASIS>Asset, Liability</EMPHASIS></GLOSSTERM>
 <GLOSSDEF>
 <PARA><EMPHASIS>Asset</EMPHASIS> and <EMPHASIS>Liability</EMPHASIS> accounts are used for
-      tracking things that are of value, but that are not so
-      directly translated into <EMPHASIS>cash</EMPHASIS>.
+      tracking things that are of value, but that are not
+      directly translatable into <EMPHASIS>cash</EMPHASIS>.
       For instance, you might collect the costs of purchasing a
       house into an asset account entitled <EMPHASIS>My
       House</EMPHASIS>, or the
@@ -82,10 +76,11 @@ decide.
 <GLOSSDEF>
 <PARA>Securities that you invest in are a form of asset that
       are normally acquired with the express purpose of receiving
-      income either in the form of dividends, interest, or <LINK LINKEND="APPR"> Capital Gains.</LINK> There are a
-      multitude of securities markets around the world, and
-      securities that are widely enough traded can have pretty
-      concrete values that may be analyzed on a day-to-day
+      income either in the form of dividends, interest, or 
+      <LINK LINKEND="APPR"> Capital Gains.</LINK> There are 
+      securities markets around the world, and
+      widely traded securities with fairly
+      concrete values may be analyzed on a day-to-day
       basis.</PARA>
 <PARA>
         Stock and Mutual Fund accounts are typically tracked in
@@ -103,7 +98,7 @@ decide.
 </LISTITEM>
 </ITEMIZEDLIST>
       </PARA>
-<PARA>  In order to get <EMPHASIS> useful</EMPHASIS> information out of the
+<PARA>  In order to get <EMPHASIS>useful</EMPHASIS> information out of the
         register, it is necessary to have multiple "views" on the
         data so that you may assess such things as: 
 
@@ -123,17 +118,17 @@ decide.
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><EMPHASIS><LINK LINKEND="XACC-INCOMEEXPENSE"> Income,
+<GLOSSTERM><EMPHASIS><LINK LINKEND="XACC-INCOMEEXPENSE">Income,
       Expense</LINK></EMPHASIS></GLOSSTERM>
 <GLOSSDEF>
-<PARA><EMPHASIS> Income</EMPHASIS> and <EMPHASIS>Expense</EMPHASIS> account types are used to
-      record income and expenses.
+<PARA><EMPHASIS> Income</EMPHASIS> and <EMPHASIS>Expense</EMPHASIS> 
+     account types are used to record income and expenses.
      For example, if you deposit a paycheck in your bank account, you
-should mark it as a transfer from an 'income' account type.  
+should mark it as a transfer from an 'income' account.  
 Marking income in this way helps balance the books: the change in your
-net worth in the course of a few ekks, a few months, or a year, should
-exactly equal your income (minus expenses) for the same period.  </PARA>
-The value stored in the bank account contributes to your 'net worth';
+net worth in the course of a few weeks, a few months, or a year, should
+exactly equal your income (minus expenses) for the same period.  
+The value stored in the bank account contributes to your 'net worth',
 whereas the income contributes to your 'profits'.
 
 </PARA>
@@ -153,10 +148,10 @@ should be marked as a transfer from an account of type 'equity'.
 Alternately, if you close and reopen all your books at the end of every
 quarter/year, the 'equity' will be your net-worth at the begining of the 
 period: it equal all assets minus all liabilities.  
-As time goes  by, you will have both income and expenses. 
+As time passes, you will have income and expenses. 
 At the end of the year, your net
 worth will be the equity at the begining of the year, plus all income
-minus all expense.  This value will become, of course, the equity for
+minus all expense.  This value then becomes the equity for
 the next accounting period.
       </PARA>
 </GLOSSDEF>
