@@ -4241,6 +4241,13 @@ Exactly
 		    <data>Budget_Dialog</data>
 		    <last_modification_time>Thu, 27 Apr 2000 03:28:17 GMT</last_modification_time>
 		  </signal>
+		  <signal>
+		    <name>scroll_vertical</name>
+		    <handler>on_budget_entry_tree_scroll_vertical</handler>
+		    <after>True</after>
+		    <data>Budget_Dialog</data>
+		    <last_modification_time>Thu, 27 Apr 2000 09:01:40 GMT</last_modification_time>
+		  </signal>
 		  <columns>1</columns>
 		  <column_widths>80</column_widths>
 		  <selection_mode>GTK_SELECTION_BROWSE</selection_mode>

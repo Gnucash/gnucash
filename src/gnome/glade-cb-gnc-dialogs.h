@@ -164,3 +164,9 @@ on_budget_entry_tree_tree_unselect_row (GtkCTree        *ctree,
                                         GList           *node,
                                         gint             column,
                                         gpointer         user_data);
+
+void
+on_budget_entry_tree_scroll_vertical   (GtkCList        *clist,
+                                        GtkScrollType    scroll_type,
+                                        gfloat           position,
+                                        gpointer         user_data);

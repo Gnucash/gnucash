@@ -3194,6 +3194,9 @@ create_Budget_Dialog (void)
   gtk_signal_connect (GTK_OBJECT (entry_tree), "tree_unselect_row",
                       GTK_SIGNAL_FUNC (on_budget_entry_tree_tree_unselect_row),
                       Budget_Dialog);
+  gtk_signal_connect_after (GTK_OBJECT (entry_tree), "scroll_vertical",
+                            GTK_SIGNAL_FUNC (on_budget_entry_tree_scroll_vertical),
+                            Budget_Dialog);
   gtk_signal_connect (GTK_OBJECT (cancel_button), "clicked",
                       GTK_SIGNAL_FUNC (on_budget_cancel_button_clicked),
                       Budget_Dialog);

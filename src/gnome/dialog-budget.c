@@ -27,6 +27,7 @@
 #include "gnc-datedelta.h"
 #include "guile-util.h"
 #include "messages.h"
+#include "util.h"
 
 
 struct _BudgetDialog
@@ -93,9 +94,35 @@ static struct
   SCM entry_subentries;
 
   SCM subentry_description;
+  SCM subentry_amount;
+  SCM subentry_period;
+  SCM subentry_period_type;
+  SCM subentry_mechanism;
+
+  SCM bill_get_start;
+  SCM bill_get_end;
+
 } getters;
 
+static struct
+{
+  SCM is_bill_mechanism;
+  SCM is_recurring_mechanism;
+  SCM is_contingency_mechanism;
+  SCM is_nominal_mechanism;
+} preds;
+
+typedef enum
+{
+  MECHANISM_NOMINAL,
+  MECHANISM_BILL,
+  MECHANISM_RECURRING,
+  MECHANISM_CONTINGENCY,
+  MECHANISM_NONE
+} MechanismType;
+
 static gboolean getters_initialized = FALSE;
+static gboolean preds_initialized = FALSE;
 
 
 static void
@@ -110,10 +137,57 @@ initialize_getters()
 
   getters.subentry_description =
     gh_eval_str("budget-subentry-get-description");
+  getters.subentry_amount = gh_eval_str("budget-subentry-get-amount");
+  getters.subentry_period = gh_eval_str("budget-subentry-get-period");
+  getters.subentry_period_type =
+    gh_eval_str("budget-subentry-get-period-type");
+  getters.subentry_mechanism = gh_eval_str("budget-subentry-get-mechanism");
+
+  getters.bill_get_start = gh_eval_str("budget-bill-get-window-start-day");
+  getters.bill_get_end   = gh_eval_str("budget-bill-get-window-end-day");
 
   getters_initialized = TRUE;
 }
 
+static void
+initialize_preds()
+{
+  if (preds_initialized)
+    return;
+
+  preds.is_bill_mechanism = gh_eval_str("budget-bill-pred");
+  preds.is_recurring_mechanism = gh_eval_str("budget-recurring-pred");
+  preds.is_contingency_mechanism = gh_eval_str("budget-contingency-pred");
+  preds.is_nominal_mechanism = gh_eval_str("budget-nominal-pred");
+
+  preds_initialized = TRUE;
+}
+
+static MechanismType
+mechanism_type(SCM mechanism)
+{
+  SCM result;
+
+  result = gh_call1(preds.is_nominal_mechanism, mechanism);
+  if (gh_scm2bool(result))
+    return MECHANISM_NOMINAL;
+
+  result = gh_call1(preds.is_contingency_mechanism, mechanism);
+  if (gh_scm2bool(result))
+    return MECHANISM_CONTINGENCY;
+
+  result = gh_call1(preds.is_recurring_mechanism, mechanism);
+  if (gh_scm2bool(result))
+    return MECHANISM_RECURRING;
+
+  result = gh_call1(preds.is_bill_mechanism, mechanism);
+  if (gh_scm2bool(result))
+    return MECHANISM_BILL;
+
+  g_warning("mechanism_type: bad mechanism");
+
+  return MECHANISM_NONE;
+}
 
 static void
 destroy_subentry(gpointer data)
@@ -140,7 +214,7 @@ destroy_entry(gpointer data)
 }
 
 static char *
-SCM_to_description(SCM value)
+SCM_to_description(SCM value, gboolean no_blank)
 {
   if (gh_string_p(value))
   {
@@ -159,7 +233,10 @@ SCM_to_description(SCM value)
     }
   }
 
-  return g_strconcat("<", NO_DESC_STR, ">", NULL);
+  if (no_blank)
+    return g_strconcat("<", NO_DESC_STR, ">", NULL);
+  else
+    return g_strdup("");
 }
 
 static void
@@ -175,13 +252,117 @@ load_entry(BudgetDialog *bd)
     SCM value;
 
     value = gh_call1(getters.entry_description, entry);
-    string = SCM_to_description(value);
+    string = SCM_to_description(value, FALSE);
     gtk_entry_set_text(GTK_ENTRY(bd->entry_description_entry), string);
     g_free(string);
 
     value = gh_call1(getters.entry_action, entry);
     gtk_option_menu_set_history(GTK_OPTION_MENU(bd->entry_type_menu),
                                 gh_scm2bool(value) ? 0 : 1);
+  }
+  else
+  {
+  }
+}
+
+static GNCDateDeltaUnits
+period_units(SCM period_type)
+{
+  GNCDateDeltaUnits units;
+  char *string;
+
+  if (!gh_symbol_p(period_type))
+    return GNC_DATE_DELTA_DAYS;
+
+  string = gh_symbol2newstr(period_type, NULL);
+
+  if (safe_strcmp(string, "gnc:budget-day") == 0)
+    units = GNC_DATE_DELTA_DAYS;
+  else if (safe_strcmp(string, "gnc:budget-week") == 0)
+    units = GNC_DATE_DELTA_WEEKS;
+  else if (safe_strcmp(string, "gnc:budget-month") == 0)
+    units = GNC_DATE_DELTA_MONTHS;
+  else if (safe_strcmp(string, "gnc:budget-year") == 0)
+    units = GNC_DATE_DELTA_YEARS;
+  else
+  {
+    g_warning("period_units: bad period type");
+    units = GNC_DATE_DELTA_DAYS;
+  }
+
+  if (string != NULL)
+    free(string);
+
+  return units;
+}
+
+static void
+allow_mechanism_edits(BudgetDialog *bd, gboolean allow)
+{
+  GtkWidget *box;
+
+  box = gtk_object_get_data(GTK_OBJECT(bd->dialog), "bill_day_box");
+  gtk_widget_set_sensitive(box, allow);
+
+  box = gtk_object_get_data(GTK_OBJECT(bd->dialog), "grace_box");
+  gtk_widget_set_sensitive(box, allow);
+}
+
+static void
+load_subentry(BudgetDialog *bd)
+{
+  char *string;
+  SCM subentry;
+
+  subentry = bd->current_subentry;
+
+  if (subentry != SCM_UNDEFINED)
+  {
+    GNCDateDeltaUnits units;
+    MechanismType mech_type;
+    double amount;
+    int period;
+    SCM mechanism;
+    SCM value;
+
+    value = gh_call1(getters.subentry_description, subentry);
+    string = SCM_to_description(value, FALSE);
+    gtk_entry_set_text(GTK_ENTRY(bd->sub_description_entry), string);
+    g_free(string);
+
+    value = gh_call1(getters.subentry_amount, subentry);
+    amount = gh_scm2double(value);
+    string = xaccPrintAmount(amount, PRTSEP, NULL);
+    gtk_entry_set_text(GTK_ENTRY(bd->sub_amount_entry), string);
+
+    value = gh_call1(getters.subentry_period, subentry);
+    period = gh_scm2int(value);
+    gnc_date_delta_set_value(GNC_DATE_DELTA(bd->sub_period_delta), period);
+
+    value = gh_call1(getters.subentry_period_type, subentry);
+    units = period_units(value);
+    gnc_date_delta_set_units(GNC_DATE_DELTA(bd->sub_period_delta), units);
+
+    mechanism = gh_call1(getters.subentry_mechanism, subentry);
+    mech_type = mechanism_type(mechanism);
+    gtk_option_menu_set_history(GTK_OPTION_MENU(bd->sub_mechanism_menu),
+                                mech_type);
+    switch (mech_type)
+    {
+      case MECHANISM_BILL:
+        value = gh_call1(getters.bill_get_start, mechanism);
+        period = gh_scm2int(value);
+        gnc_date_delta_set_value(GNC_DATE_DELTA(bd->sub_grace_delta), period);
+
+        allow_mechanism_edits(bd, TRUE);
+        break;
+      default:
+        allow_mechanism_edits(bd, FALSE);
+        break;
+    }
+  }
+  else
+  {
   }
 }
 
@@ -205,7 +386,7 @@ fill_subentries(GtkCTree *ctree, GtkCTreeNode *entry_node, SCM entry)
     subentries = gh_cdr(subentries);
 
     value = gh_call1(getters.subentry_description, subentry);
-    text[0] = SCM_to_description(value);
+    text[0] = SCM_to_description(value, TRUE);
 
     node = gtk_ctree_insert_node(ctree, entry_node, NULL, text, 0,
                                  NULL, NULL, NULL, NULL, TRUE, FALSE);
@@ -246,7 +427,7 @@ fill_entry_tree(GtkWidget *entry_tree, SCM budget)
     budget = gh_cdr(budget);
 
     value = gh_call1(getters.entry_description, entry);
-    text[0] = SCM_to_description(value);
+    text[0] = SCM_to_description(value, TRUE);
 
     node = gtk_ctree_insert_node(ctree, NULL, NULL, text, 0, NULL,
                                  NULL, NULL, NULL, FALSE, FALSE);
@@ -300,27 +481,18 @@ allow_edits(BudgetDialog *bd, gboolean allow_edits)
 }
 
 void
-on_budget_entry_tree_tree_select_row   (GtkCTree        *ctree,
-                                        GList           *node,
-                                        gint             column,
-                                        gpointer         user_data)
+select_node (BudgetDialog *bd, GtkCTreeNode *node)
 {
-  GtkObject *obj = GTK_OBJECT(user_data);
   GtkCTreeRow *row;
+  GtkCTree *ctree;
 
   BudgetSubEntry *bse;
-  BudgetDialog *bd;
   BudgetEntry *be;
   BudgetItem *bi;
 
-  if (column < 0)
-    return;
+  ctree = GTK_CTREE(bd->entry_tree);
 
   row = GTK_CTREE_ROW(node);
-
-  bd = gtk_object_get_data(obj, "budget_dialog_structure");
-  if (bd == NULL)
-    return;
 
   bd->current_entry    = SCM_UNDEFINED;
   bd->current_subentry = SCM_UNDEFINED;
@@ -365,7 +537,29 @@ on_budget_entry_tree_tree_select_row   (GtkCTree        *ctree,
       break;
   }
 
+  allow_edits(bd, ((bd->current_entry != SCM_UNDEFINED) ||
+                   (bd->current_subentry != SCM_UNDEFINED)));
   load_entry(bd);
+  load_subentry(bd);
+}
+
+void
+on_budget_entry_tree_tree_select_row   (GtkCTree        *ctree,
+                                        GList           *node,
+                                        gint             column,
+                                        gpointer         user_data)
+{
+  GtkObject *obj = GTK_OBJECT(user_data);
+  BudgetDialog *bd;
+
+  if (column < 0)
+    return;
+
+  bd = gtk_object_get_data(obj, "budget_dialog_structure");
+  if (bd == NULL)
+    return;
+
+  select_node(bd, GTK_CTREE_NODE(node));
 }
 
 void
@@ -386,6 +580,42 @@ on_budget_entry_tree_tree_unselect_row (GtkCTree        *ctree,
 
   bd->current_entry    = SCM_UNDEFINED;
   bd->current_subentry = SCM_UNDEFINED;
+
+  allow_edits(bd, FALSE);
+  load_entry(bd);
+  load_subentry(bd);
+}
+
+void
+on_budget_entry_tree_scroll_vertical   (GtkCList        *clist,
+                                        GtkScrollType    scroll_type,
+                                        gfloat           position,
+                                        gpointer         user_data)
+{
+  GtkObject *obj = GTK_OBJECT(user_data);
+  GtkCTreeNode *node;
+  BudgetDialog *bd;
+  int row;
+
+  bd = gtk_object_get_data(obj, "budget_dialog_structure");
+  if (bd == NULL)
+    return;
+
+  row = GTK_CLIST(bd->entry_tree)->focus_row;
+  if (row < 0)
+  {
+    allow_edits(bd, FALSE);
+    return;
+  }
+
+  node = gtk_ctree_node_nth(GTK_CTREE(bd->entry_tree), row);
+  if (node == NULL)
+  {
+    allow_edits(bd, FALSE);
+    return;
+  }
+
+  select_node(bd, node);
 }
 
 BudgetDialog *
@@ -398,6 +628,7 @@ gnc_ui_budget_dialog_create(SCM budget, SCM apply_func)
   GtkWidget *box;
 
   initialize_getters();
+  initialize_preds();
 
   bd = g_new0(BudgetDialog, 1);
 

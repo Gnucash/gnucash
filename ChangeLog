@@ -1,3 +1,8 @@
+2000-04-27  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-main.c (gnc_ui_refresh_statusbar): use ASSET
+	type to determine sign reversal for assets quantity.
+
 2000-04-25  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/engine/guid/guid.c (guid_init): add hostname and domainname
