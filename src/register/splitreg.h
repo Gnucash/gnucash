@@ -264,7 +264,7 @@ void            xaccSetSplitRegisterColors (SplitRegisterColors reg_colors);
 void            xaccSplitRegisterConfigColors (SplitRegister *reg);
 
 /* returns non-zero value if updates have been made to data */
-unsigned int    xaccSplitRegisterGetChangeFlag (SplitRegister *reg);
+guint32         xaccSplitRegisterGetChangeFlag (SplitRegister *reg);
 
 /* Clears all change flags in the register. Does not alter values */
 void            xaccSplitRegisterClearChangeFlag (SplitRegister *reg);

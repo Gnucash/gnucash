@@ -62,7 +62,12 @@
  *     XACC_CELL_ALLOW_INPUT  accept keyboard & mouse
  *       input from the user. 
  *     XACC_CELL_ALLOW_SHADOW copy ("shadow") the contents
- *       of register cells.   
+ *       of register cells.
+ *     XACC_CELL_ALLOW_EXACT_ONLY the cell may only be
+ *       entered by 'exact' selection, i.e., not by
+ *       indirect selection by, for example, tabbing.
+ *       Currently, the only exact method of entering
+ *       a cell is via the mouse pointer.
  *
  *   If ALLOW_INPUT is not set, the cell is supposed to
  *   to only display values, but not accept user input. If
@@ -209,17 +214,17 @@ struct _BasicCell {
   /* hack alert -- may want to redesign color to use named color strings. */
   guint32 bg_color;       /* background color, ARGB format */
   guint32 fg_color;       /* forground (text) color ARGB format */
-  short use_fg_color;     /* if 0, above is ignored */
-  short use_bg_color;     /* if 0, above is ignored */
+  gboolean use_fg_color;  /* if 0, above is ignored */
+  gboolean use_bg_color;  /* if 0, above is ignored */
 
   /* hack alert -- add support for e.g. bold fonts !?!?! italic fonts ?? */
 
   /* ==================================================== */
   char * value;          /* current value */
   char *blank_help;      /* help when value is blank */
-  unsigned int changed;  /* 2^32-1 if value modified */
+  guint32 changed;       /* 2^32-1 if value modified */
 
-  char   input_output;    /* zero if output-only */
+  char input_output;     /* zero if output-only */
 
   /* "virtual", overloaded set-value method */
   void         (*set_value)     (BasicCell *,

@@ -1264,11 +1264,10 @@ xaccDestroySplitRegister (SplitRegister *reg)
 
 /* ============================================== */
 
-unsigned int
+guint32
 xaccSplitRegisterGetChangeFlag (SplitRegister *reg)
 {
-
-   unsigned int changed = 0;
+   guint32 changed = 0;
 
    /* be careful to use bitwise ands and ors to assemble bit flag */
    changed |= MOD_DATE  & reg->dateCell->cell.changed;

@@ -807,9 +807,9 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
   CursorType cursor_type;
-  unsigned int changed;
   CellType cell_type;
   Transaction *trans;
+  guint32 changed;
   double amount;
   Split *split;
   int new_row;
@@ -1046,8 +1046,8 @@ LedgerTraverse (Table *table,
   int phys_row = *p_new_phys_row;
   int phys_col = *p_new_phys_col;
   int virt_row, virt_col;
-  unsigned int changed;
   GNCVerifyResult result;
+  guint32 changed;
   Split *split;
 
   info->exact_traversal = (dir == GNC_TABLE_TRAVERSE_POINTER);
@@ -1520,10 +1520,10 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
   SRInfo *info = xaccSRGetInfo(reg);
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   CursorType cursor_type;
-  unsigned int changed;
   Transaction *trans;
   Split *return_split;
   Split *trans_split;
+  guint32 changed;
   Split *split;
 
   split = xaccSRGetCurrentSplit(reg);
@@ -1645,8 +1645,8 @@ xaccSRCopyCurrent (SplitRegister *reg)
   SRInfo *info = xaccSRGetInfo(reg);
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   CursorType cursor_type;
-  unsigned int changed;
   Transaction *trans;
+  guint32 changed;
   Split *split;
   SCM new_item;
 
@@ -1734,8 +1734,8 @@ xaccSRCutCurrent (SplitRegister *reg)
   SRInfo *info = xaccSRGetInfo(reg);
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   CursorType cursor_type;
-  unsigned int changed;
   Transaction *trans;
+  guint32 changed;
   Split *split;
 
   split = xaccSRGetCurrentSplit(reg);
@@ -2075,7 +2075,7 @@ void
 xaccSRCancelCursorSplitChanges (SplitRegister *reg)
 {
   Split * split;
-  unsigned int changed;
+  guint32 changed;
   int row = reg->table->current_cursor_phys_row;
   int col = reg->table->current_cursor_phys_col;
 
@@ -2159,7 +2159,7 @@ static gncBoolean
 xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm)
 {
   Transaction *trans;
-  unsigned int changed;
+  guint32 changed;
 
   /* use the changed flag to avoid heavy-weight updates
    * of the split & transaction fields. This will help
@@ -2321,8 +2321,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, gncBoolean do_commit)
    Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
    Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
    Transaction *blank_trans = xaccSplitGetParent(blank_split);
-   unsigned int changed;
    Transaction *trans;
+   guint32 changed;
    Split *split;
 
    /* get the handle to the current split and transaction */
@@ -2462,7 +2462,7 @@ static GList *
 xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 {
   GList *refresh_accounts = NULL;
-  unsigned int changed;
+  guint32 changed;
 
   changed = xaccSplitRegisterGetChangeFlag (reg);
 
@@ -3299,7 +3299,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 
    SplitRegisterType type;
    SplitRegisterStyle style;
-   unsigned int changed;
+   guint32 changed;
    int save_phys_col;
    int phys_row;
    int vrow;
@@ -3688,7 +3688,7 @@ xaccSRHasPendingChanges (SplitRegister *reg)
 {
   SRInfo *info = xaccSRGetInfo(reg);
   Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
-  unsigned int changed;
+  guint32 changed;
   
   if (reg == NULL)
     return GNC_F;
