@@ -48,10 +48,6 @@ enum {
   NUM_ACCOUNT_TYPES = 10
 };
 
-/* the english-language names here should match 
- * the enumerated types above */
-extern char *account_type_name[];
-
 /** PROTOTYPES ******************************************************/
 
 Account     *xaccMallocAccount( void );
