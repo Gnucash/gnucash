@@ -96,7 +96,13 @@ void gnc_clist_columns_autosize (GtkCList *list);
 
 GladeXML * gnc_glade_xml_new (const char *filename, const char *root);
 GtkWidget * gnc_glade_lookup_widget (GtkWidget *widget, const char *name);
-
+void gnc_glade_autoconnect_full_func(const gchar *handler_name,
+				     GtkObject *signal_object,
+				     const gchar *signal_name,
+				     const gchar *signal_data,
+				     GtkObject *connect_object,
+				     gboolean after,
+				     gpointer user_data);
 
 /* Multibyte/wide char string helper functions. */
 

@@ -28,4 +28,13 @@
 
 GNCMDIInfo * gnc_main_window_new (void);
 
+/*
+ * Functions used as callbacks from multiple dialogs.
+ */
+void gnc_main_window_about_cb (GtkWidget *widget, gpointer data);
+void gnc_main_window_file_save_cb(GtkWidget * widget, gpointer data);
+void gnc_main_window_file_save_as_cb(GtkWidget * widget, gpointer data);
+void gnc_main_window_totd_cb (GtkWidget *widget, gpointer data);
+void gnc_main_window_help_cb (GtkWidget *widget, gpointer data);
+
 #endif

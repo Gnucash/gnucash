@@ -504,14 +504,14 @@ gnc_main_window_file_open_cb(GtkWidget * widget, gpointer data)
   gnc_refresh_main_window_info ();
 }
 
-static void
+void
 gnc_main_window_file_save_cb(GtkWidget * widget, gpointer data)
 {
   gnc_file_save ();
   gnc_refresh_main_window_info ();
 }
 
-static void
+void
 gnc_main_window_file_save_as_cb(GtkWidget * widget, gpointer data)
 {
   gnc_file_save_as ();
@@ -729,7 +729,7 @@ gnc_main_window_sched_xaction_slr_cb (GtkWidget *widget, gpointer data) {
   }
 }
 
-static void
+void
 gnc_main_window_about_cb (GtkWidget *widget, gpointer data)
 {
   GtkWidget *about;
@@ -763,7 +763,7 @@ gnc_main_window_commodities_cb(GtkWidget *widget, gpointer data) {
 }
 
 
-static void
+void
 gnc_main_window_totd_cb (GtkWidget *widget, gpointer data)
 
 {
@@ -771,13 +771,13 @@ gnc_main_window_totd_cb (GtkWidget *widget, gpointer data)
   return;
 }
 
-static void
+void
 gnc_main_window_help_cb (GtkWidget *widget, gpointer data)
 {
   helpWindow(NULL, NULL, HH_MAIN);
 }
 
-static void
+void
 gnc_main_window_exit_cb (GtkWidget *widget, gpointer data)
 {
   gnc_shutdown(0);

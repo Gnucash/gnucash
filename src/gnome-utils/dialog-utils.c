@@ -26,6 +26,7 @@
 
 #include <glade/glade.h>
 #include <gnome.h>
+#include <gmodule.h>
 
 #include "dialog-utils.h"
 #include "global-options.h"
@@ -1041,6 +1042,48 @@ gnc_glade_lookup_widget (GtkWidget *widget, const char *name)
 
   return glade_xml_get_widget (xml, name);
 }
+
+/*
+ * The following function is built from a couple of glade functions.
+ */
+GModule *allsymbols = NULL;
+
+void
+gnc_glade_autoconnect_full_func(const gchar *handler_name,
+				GtkObject *signal_object,
+				const gchar *signal_name,
+				const gchar *signal_data,
+				GtkObject *other_object,
+				gboolean signal_after,
+				gpointer user_data)
+{
+  GtkSignalFunc func;
+
+  if (allsymbols == NULL) {
+    /* get a handle on the main executable -- use this to find symbols */
+    allsymbols = g_module_open(NULL, 0);
+  }
+
+  if (!g_module_symbol(allsymbols, handler_name, (gpointer *)&func)) {
+    g_warning("could not find signal handler '%s'.", handler_name);
+    return;
+  }
+
+  if (other_object) {
+    if (signal_after)
+      gtk_signal_connect_object_after(signal_object, signal_name, func,
+				      other_object);
+    else
+      gtk_signal_connect_object(signal_object, signal_name, func,
+				other_object);
+  } else {
+    if (signal_after)
+      gtk_signal_connect_after(signal_object, signal_name, func, user_data);
+    else
+      gtk_signal_connect(signal_object, signal_name, func, user_data);
+  }
+}
+
 
 gint
 gnc_mbstowcs (GdkWChar **dest_p, const char *src)

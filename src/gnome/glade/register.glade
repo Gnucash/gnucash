@@ -17,6 +17,1405 @@
 </project>
 
 <widget>
+  <class>GnomeApp</class>
+  <name>Check Register</name>
+  <visible>False</visible>
+  <signal>
+    <name>destroy</name>
+    <handler>gnc_register_destroy_cb</handler>
+    <last_modification_time>Sat, 15 Jun 2002 22:04:14 GMT</last_modification_time>
+  </signal>
+  <signal>
+    <name>delete_event</name>
+    <handler>gnc_register_delete_cb</handler>
+    <last_modification_time>Sat, 15 Jun 2002 22:04:40 GMT</last_modification_time>
+  </signal>
+  <signal>
+    <name>size_allocate</name>
+    <handler>gnc_register_size_allocate</handler>
+    <last_modification_time>Sun, 16 Jun 2002 00:13:44 GMT</last_modification_time>
+  </signal>
+  <title>Check Register</title>
+  <type>GTK_WINDOW_TOPLEVEL</type>
+  <position>GTK_WIN_POS_NONE</position>
+  <modal>False</modal>
+  <allow_shrink>True</allow_shrink>
+  <allow_grow>True</allow_grow>
+  <auto_shrink>True</auto_shrink>
+  <enable_layout_config>True</enable_layout_config>
+
+  <widget>
+    <class>GnomeDock</class>
+    <child_name>GnomeApp:dock</child_name>
+    <name>dock</name>
+    <allow_floating>True</allow_floating>
+    <child>
+      <padding>0</padding>
+      <expand>True</expand>
+      <fill>True</fill>
+    </child>
+
+    <widget>
+      <class>GnomeDockItem</class>
+      <name>menu_dock</name>
+      <border_width>2</border_width>
+      <placement>GNOME_DOCK_TOP</placement>
+      <band>0</band>
+      <position>0</position>
+      <offset>0</offset>
+      <locked>False</locked>
+      <exclusive>True</exclusive>
+      <never_floating>False</never_floating>
+      <never_vertical>True</never_vertical>
+      <never_horizontal>False</never_horizontal>
+      <shadow_type>GTK_SHADOW_OUT</shadow_type>
+
+      <widget>
+	<class>GtkMenuBar</class>
+	<name>menubar1</name>
+	<shadow_type>GTK_SHADOW_NONE</shadow_type>
+
+	<widget>
+	  <class>GtkMenuItem</class>
+	  <name>menu_file</name>
+	  <stock_item>GNOMEUIINFO_MENU_FILE_TREE</stock_item>
+
+	  <widget>
+	    <class>GtkMenu</class>
+	    <name>menu_file_menu</name>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_new_account</name>
+	      <tooltip>Create a new account</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_new_account_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 05:41:11 GMT</last_modification_time>
+	      </signal>
+	      <label>New Account</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>separator10</name>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_save</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_main_window_file_save_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 17:35:28 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_SAVE_ITEM</stock_item>
+	    </widget>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_saveas</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_main_window_file_save_as_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 17:35:28 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_SAVE_AS_ITEM</stock_item>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>separator12</name>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_print</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_print_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:07:26 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_PRINT_ITEM</stock_item>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_print_check</name>
+	      <tooltip>Print a check using a standard format</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_print_check_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:03:51 GMT</last_modification_time>
+	      </signal>
+	      <label>Print _Check</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>separator1</name>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_close</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_close_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 01:59:32 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_CLOSE_ITEM</stock_item>
+	    </widget>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_exit</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_main_window_exit_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 05:55:04 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_EXIT_ITEM</stock_item>
+	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkMenuItem</class>
+	  <name>menu_edit</name>
+	  <stock_item>GNOMEUIINFO_MENU_EDIT_TREE</stock_item>
+
+	  <widget>
+	    <class>GtkMenu</class>
+	    <name>menu_edit_menu</name>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_cut</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_cut_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 17:35:28 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_CUT_ITEM</stock_item>
+	    </widget>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_copy</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_copy_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 17:35:28 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_COPY_ITEM</stock_item>
+	    </widget>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_paste</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_paste_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 17:35:28 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_PASTE_ITEM</stock_item>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>separator13</name>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_edit_account</name>
+	      <tooltip>Edit the main account for this register</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_edit_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 05:42:08 GMT</last_modification_time>
+	      </signal>
+	      <label>_Edit Account</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>separator11</name>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_cut_trans</name>
+	      <tooltip>Cut the selected transaction</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_cut_trans_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 05:28:33 GMT</last_modification_time>
+	      </signal>
+	      <label>Cut Transaction</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_copy_trans</name>
+	      <tooltip>Copy the selected transaction</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_copy_trans_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 05:28:33 GMT</last_modification_time>
+	      </signal>
+	      <label>Copy Transaction</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_paste_trans</name>
+	      <tooltip>Paste the transaction from the clipboard</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_paste_trans_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 05:28:33 GMT</last_modification_time>
+	      </signal>
+	      <label>Paste Transaction</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_find</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_ui_find_transactions_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 05:28:33 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_FIND_ITEM</stock_item>
+	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkMenuItem</class>
+	  <name>menu_view</name>
+	  <stock_item>GNOMEUIINFO_MENU_VIEW_TREE</stock_item>
+
+	  <widget>
+	    <class>GtkMenu</class>
+	    <name>menu_view_menu</name>
+
+	    <widget>
+	      <class>GtkCheckMenuItem</class>
+	      <name>menu_toolbar</name>
+	      <tooltip>Display the toolbar</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_toolbar_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 05:55:04 GMT</last_modification_time>
+	      </signal>
+	      <label>_Toolbar</label>
+	      <active>True</active>
+	      <always_show_toggle>True</always_show_toggle>
+	    </widget>
+
+	    <widget>
+	      <class>GtkCheckMenuItem</class>
+	      <name>menu_summary_bar</name>
+	      <tooltip>Display the Summary Bar</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_summarybar_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:03:51 GMT</last_modification_time>
+	      </signal>
+	      <label>S_ummary Bar</label>
+	      <active>True</active>
+	      <always_show_toggle>True</always_show_toggle>
+	    </widget>
+
+	    <widget>
+	      <class>GtkCheckMenuItem</class>
+	      <name>menu_status_bar</name>
+	      <tooltip>Display the Status Bar</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_statusbar_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:03:51 GMT</last_modification_time>
+	      </signal>
+	      <label>_Status Bar</label>
+	      <active>True</active>
+	      <always_show_toggle>True</always_show_toggle>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>separator4</name>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_date_range</name>
+	      <label>Date _Range</label>
+	      <right_justify>False</right_justify>
+
+	      <widget>
+		<class>GtkMenu</class>
+		<name>menu_date_range_menu</name>
+
+		<widget>
+		  <class>GtkMenuItem</class>
+		  <name>menu_date_show_all</name>
+		  <tooltip>Show all of the transactions in the account</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_register_date_show_all_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:15:39 GMT</last_modification_time>
+		  </signal>
+		  <label>Show _All</label>
+		  <right_justify>False</right_justify>
+		</widget>
+
+		<widget>
+		  <class>GtkMenuItem</class>
+		  <name>menu_date_set_range</name>
+		  <tooltip>Set the date range of this register</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_register_date_range_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:15:39 GMT</last_modification_time>
+		  </signal>
+		  <label>Set _Range...</label>
+		  <right_justify>False</right_justify>
+		</widget>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_sort_order</name>
+	      <label>Sort _Order</label>
+	      <right_justify>False</right_justify>
+
+	      <widget>
+		<class>GtkMenu</class>
+		<name>menu_sort_order_menu</name>
+
+		<widget>
+		  <class>GtkRadioMenuItem</class>
+		  <name>menu_sort_standard</name>
+		  <tooltip>Keep normal account order</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_register_sort_standard_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
+		  </signal>
+		  <label>_Standard</label>
+		  <active>False</active>
+		  <always_show_toggle>True</always_show_toggle>
+		  <group>sort</group>
+		</widget>
+
+		<widget>
+		  <class>GtkMenuItem</class>
+		  <name>separator5</name>
+		  <right_justify>False</right_justify>
+		</widget>
+
+		<widget>
+		  <class>GtkRadioMenuItem</class>
+		  <name>menu_sort_date</name>
+		  <tooltip>Sort by Date</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_register_sort_date_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
+		  </signal>
+		  <label>_Date</label>
+		  <active>False</active>
+		  <always_show_toggle>True</always_show_toggle>
+		  <group>sort</group>
+		</widget>
+
+		<widget>
+		  <class>GtkRadioMenuItem</class>
+		  <name>menu_sort_date_of_entry</name>
+		  <tooltip>Sort by the date of entry</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_register_sort_date_entered_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
+		  </signal>
+		  <label>Date of _Entry</label>
+		  <active>False</active>
+		  <always_show_toggle>True</always_show_toggle>
+		  <group>sort</group>
+		</widget>
+
+		<widget>
+		  <class>GtkRadioMenuItem</class>
+		  <name>menu_sort_statement_date</name>
+		  <tooltip>Sort by the statement date (unreconciled items last)</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_register_sort_date_reconciled_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
+		  </signal>
+		  <label>_Statement Date</label>
+		  <active>False</active>
+		  <always_show_toggle>True</always_show_toggle>
+		  <group>sort</group>
+		</widget>
+
+		<widget>
+		  <class>GtkRadioMenuItem</class>
+		  <name>menu_sort_number</name>
+		  <tooltip>Sort by Number</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_register_sort_num_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
+		  </signal>
+		  <label>_Number</label>
+		  <active>False</active>
+		  <always_show_toggle>True</always_show_toggle>
+		  <group>sort</group>
+		</widget>
+
+		<widget>
+		  <class>GtkRadioMenuItem</class>
+		  <name>menu_sort_amount</name>
+		  <tooltip>Sort by Amount</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_register_sort_amount_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
+		  </signal>
+		  <label>_Amount</label>
+		  <active>False</active>
+		  <always_show_toggle>True</always_show_toggle>
+		  <group>sort</group>
+		</widget>
+
+		<widget>
+		  <class>GtkRadioMenuItem</class>
+		  <name>menu_sort_memo</name>
+		  <tooltip>Sort by Memo</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_register_sort_memo_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
+		  </signal>
+		  <label>_Memo</label>
+		  <active>False</active>
+		  <always_show_toggle>True</always_show_toggle>
+		  <group>sort</group>
+		</widget>
+
+		<widget>
+		  <class>GtkRadioMenuItem</class>
+		  <name>menu_sort_description</name>
+		  <tooltip>Sort by Description</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_register_sort_desc_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
+		  </signal>
+		  <label>Descri_ption</label>
+		  <active>True</active>
+		  <always_show_toggle>True</always_show_toggle>
+		  <group>sort</group>
+		</widget>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>style</name>
+	      <label>St_yle</label>
+	      <right_justify>False</right_justify>
+
+	      <widget>
+		<class>GtkMenu</class>
+		<name>style_menu</name>
+
+		<widget>
+		  <class>GtkRadioMenuItem</class>
+		  <name>menu_style_basic_ledger</name>
+		  <tooltip>Show transactions on one or two lines</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_register_style_ledger_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:11:59 GMT</last_modification_time>
+		  </signal>
+		  <label>_Basic Ledger</label>
+		  <active>False</active>
+		  <always_show_toggle>True</always_show_toggle>
+		  <group>ledger</group>
+		</widget>
+
+		<widget>
+		  <class>GtkRadioMenuItem</class>
+		  <name>menu_style_auto_split_ledger</name>
+		  <tooltip>Show transactions on one or two lines and expand the current transaction</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_register_style_auto_ledger_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:11:59 GMT</last_modification_time>
+		  </signal>
+		  <label>_Auto-Split Ledger</label>
+		  <active>False</active>
+		  <always_show_toggle>True</always_show_toggle>
+		  <group>ledger</group>
+		</widget>
+
+		<widget>
+		  <class>GtkRadioMenuItem</class>
+		  <name>menu_style_transaction_journal</name>
+		  <tooltip>Show expanded transactions with all splits</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_register_style_journal_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:11:59 GMT</last_modification_time>
+		  </signal>
+		  <label>_Transaction Journal</label>
+		  <active>True</active>
+		  <always_show_toggle>True</always_show_toggle>
+		  <group>ledger</group>
+		</widget>
+
+		<widget>
+		  <class>GtkMenuItem</class>
+		  <name>separator6</name>
+		  <right_justify>False</right_justify>
+		</widget>
+
+		<widget>
+		  <class>GtkCheckMenuItem</class>
+		  <name>menu_style_double_line</name>
+		  <tooltip>Show two lines of information for each transaction</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_register_double_line_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:11:59 GMT</last_modification_time>
+		  </signal>
+		  <label>_Double Line</label>
+		  <active>False</active>
+		  <always_show_toggle>True</always_show_toggle>
+		</widget>
+	      </widget>
+	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkMenuItem</class>
+	  <name>menu_actions</name>
+	  <label>_Actions</label>
+	  <right_justify>False</right_justify>
+
+	  <widget>
+	    <class>GtkMenu</class>
+	    <name>menu_actions_menu</name>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_transfer</name>
+	      <tooltip>Transfer funds from one account to another</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_xfer_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 05:38:43 GMT</last_modification_time>
+	      </signal>
+	      <label>_Transfer...</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_reconcile</name>
+	      <tooltip>Reconcile the main account for this register</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_start_recn_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:15:14 GMT</last_modification_time>
+	      </signal>
+	      <label>_Reconcile...</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_stock_split</name>
+	      <tooltip>Record a stock split or a stock merger</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_stock_split_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:15:14 GMT</last_modification_time>
+	      </signal>
+	      <label>_Stock Split...</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>separator7</name>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_enter</name>
+	      <tooltip>Record the current transaction</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_record_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 02:01:51 GMT</last_modification_time>
+	      </signal>
+	      <label>_Enter</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_cancel</name>
+	      <tooltip>Cancel the current transaction</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_cancel_trans_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:10:40 GMT</last_modification_time>
+	      </signal>
+	      <label>_Cancel</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_delete</name>
+	      <tooltip>Delete the current transaction</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_delete_trans_cb</handler>
+		<last_modification_time>Tue, 18 Jun 2002 07:59:59 GMT</last_modification_time>
+	      </signal>
+	      <label>_Delete</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_blank</name>
+	      <tooltip>Move to the blank transaction at the bottom of the register</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_new_trans_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:13:45 GMT</last_modification_time>
+	      </signal>
+	      <label>_Blank</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>separator8</name>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_duplicate</name>
+	      <tooltip>Make a copy of the current transaction</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_duplicate_trans_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 00:14:37 GMT</last_modification_time>
+	      </signal>
+	      <label>Dup_licate Transaction...</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkCheckMenuItem</class>
+	      <name>menu_splits</name>
+	      <tooltip>Show all splits in the current transaction</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_expand_trans_menu_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 23:02:33 GMT</last_modification_time>
+	      </signal>
+	      <label>S_plit Transaction</label>
+	      <active>False</active>
+	      <always_show_toggle>True</always_show_toggle>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_schedule</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_recur_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:39:42 GMT</last_modification_time>
+	      </signal>
+	      <label>Schedule...</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_jump</name>
+	      <tooltip>Jump to the corresponding transaction in the other account</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_jump_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:13:45 GMT</last_modification_time>
+	      </signal>
+	      <label>_Jump</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>separator14</name>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>check_&amp;_repair1</name>
+	      <label>Chec_k &amp; Repair</label>
+	      <right_justify>False</right_justify>
+
+	      <widget>
+		<class>GtkMenu</class>
+		<name>check_&amp;_repair1_menu</name>
+
+		<widget>
+		  <class>GtkMenuItem</class>
+		  <name>menu_repair_all</name>
+		  <tooltip>Check for and repair unbalanced transactions and orphan splits in all transactions of this account</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_register_scrub_all_cb</handler>
+		    <last_modification_time>Sun, 16 Jun 2002 17:19:33 GMT</last_modification_time>
+		  </signal>
+		  <label>_All transactions</label>
+		  <right_justify>False</right_justify>
+		</widget>
+
+		<widget>
+		  <class>GtkMenuItem</class>
+		  <name>menu_repair_one</name>
+		  <tooltip>Check for and repair unbalanced transactions and orphan splits in this transaction</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_register_scrub_current_cb</handler>
+		    <last_modification_time>Sun, 16 Jun 2002 17:19:33 GMT</last_modification_time>
+		  </signal>
+		  <label>_This transaction</label>
+		  <right_justify>False</right_justify>
+		</widget>
+	      </widget>
+	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkMenuItem</class>
+	  <name>menu_reports</name>
+	  <label>_Reports</label>
+	  <right_justify>False</right_justify>
+
+	  <widget>
+	    <class>GtkMenu</class>
+	    <name>menu_reports_menu</name>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_report_account</name>
+	      <tooltip>Open a register report window for this transaction</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_report_account_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 17:31:17 GMT</last_modification_time>
+	      </signal>
+	      <label>_Account Report</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_report_trans</name>
+	      <tooltip>Open a register report window for this transaction</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_report_trans_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 17:31:17 GMT</last_modification_time>
+	      </signal>
+	      <label>_Transaction Report</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkMenuItem</class>
+	  <name>menu_tools</name>
+	  <label>_Tools</label>
+	  <right_justify>False</right_justify>
+
+	  <widget>
+	    <class>GtkMenu</class>
+	    <name>menu_tools_menu</name>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_general_ledger</name>
+	      <tooltip>Open a general ledger window</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_gl_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:22:56 GMT</last_modification_time>
+	      </signal>
+	      <label>_General Ledger</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_price_editor</name>
+	      <tooltip>View and edit the prices for stocks and mutual funds</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_prices_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:22:56 GMT</last_modification_time>
+	      </signal>
+	      <label>_Price Editor</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_commodity_editor</name>
+	      <tooltip>View and edit the commodities for stocks and mutual funds</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_commodities_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:22:56 GMT</last_modification_time>
+	      </signal>
+	      <label>_Commodity Editor</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_fincalc</name>
+	      <tooltip>Use the financial calculator</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_fincalc_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:22:56 GMT</last_modification_time>
+	      </signal>
+	      <label>_Financial Calculator</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkMenuItem</class>
+	  <name>menu_help</name>
+	  <stock_item>GNOMEUIINFO_MENU_HELP_TREE</stock_item>
+
+	  <widget>
+	    <class>GtkMenu</class>
+	    <name>menu_help_menu</name>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_manual</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_main_window_help_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 01:57:06 GMT</last_modification_time>
+	      </signal>
+	      <label>_Gnucash Users Manual</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_totd</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_main_window_totd_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 01:57:06 GMT</last_modification_time>
+	      </signal>
+	      <label>_Tip Of The Day</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>separator9</name>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_about</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_main_window_about_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 01:12:45 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_ABOUT_ITEM</stock_item>
+	    </widget>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDockItem</class>
+      <name>toolbar_dock</name>
+      <border_width>2</border_width>
+      <placement>GNOME_DOCK_TOP</placement>
+      <band>1</band>
+      <position>0</position>
+      <offset>0</offset>
+      <locked>False</locked>
+      <exclusive>True</exclusive>
+      <never_floating>False</never_floating>
+      <never_vertical>False</never_vertical>
+      <never_horizontal>False</never_horizontal>
+      <shadow_type>GTK_SHADOW_OUT</shadow_type>
+
+      <widget>
+	<class>GtkToolbar</class>
+	<name>toolbar</name>
+	<border_width>2</border_width>
+	<orientation>GTK_ORIENTATION_HORIZONTAL</orientation>
+	<type>GTK_TOOLBAR_BOTH</type>
+	<space_size>10</space_size>
+	<space_style>GTK_TOOLBAR_SPACE_LINE</space_style>
+	<relief>GTK_RELIEF_NONE</relief>
+	<tooltips>True</tooltips>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>toolbar_close</name>
+	  <tooltip>Close this register window</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_register_close_cb</handler>
+	    <last_modification_time>Sun, 16 Jun 2002 00:11:38 GMT</last_modification_time>
+	  </signal>
+	  <label>Close</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_CLOSE</stock_pixmap>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>toolbar_enter</name>
+	  <tooltip>Record the current transaction</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_register_record_cb</handler>
+	    <last_modification_time>Wed, 12 Jun 2002 02:02:11 GMT</last_modification_time>
+	  </signal>
+	  <label>Enter</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_ADD</stock_pixmap>
+	  <child>
+	    <new_group>True</new_group>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>toolbar_cancel</name>
+	  <tooltip>Cancel the current transaction</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_register_cancel_trans_cb</handler>
+	    <last_modification_time>Sun, 16 Jun 2002 00:12:49 GMT</last_modification_time>
+	  </signal>
+	  <label>Cancel</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_UNDELETE</stock_pixmap>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>toolbar_delete</name>
+	  <tooltip>Delete the current transaction</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_register_delete_trans_cb</handler>
+	    <last_modification_time>Tue, 18 Jun 2002 07:59:46 GMT</last_modification_time>
+	  </signal>
+	  <label>Delete</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_TRASH</stock_pixmap>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>toolbar_duplicate</name>
+	  <tooltip>Make a copy of the current transaction</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_register_duplicate_trans_cb</handler>
+	    <last_modification_time>Sun, 16 Jun 2002 00:09:03 GMT</last_modification_time>
+	  </signal>
+	  <label>Duplicate</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_COPY</stock_pixmap>
+	  <child>
+	    <new_group>True</new_group>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>toolbar_schedule</name>
+	  <tooltip>Create a scheduled transaction using the current one as a template</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_register_recur_cb</handler>
+	    <last_modification_time>Sun, 16 Jun 2002 00:08:53 GMT</last_modification_time>
+	  </signal>
+	  <label>Schedule</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_LINE_IN</stock_pixmap>
+	</widget>
+
+	<widget>
+	  <class>GtkToggleButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>toolbar_split</name>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_register_expand_trans_toolbar_cb</handler>
+	    <last_modification_time>Sun, 16 Jun 2002 23:02:08 GMT</last_modification_time>
+	  </signal>
+	  <label>Split</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_BOOK_OPEN</stock_pixmap>
+	  <active>False</active>
+	  <child>
+	    <new_group>True</new_group>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>toolbar_blank</name>
+	  <tooltip>Move to the blank transaction at the bottom of the register</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_register_new_trans_cb</handler>
+	    <last_modification_time>Sun, 16 Jun 2002 00:09:31 GMT</last_modification_time>
+	  </signal>
+	  <label>Blank</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_NEW</stock_pixmap>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>toolbar_jump</name>
+	  <tooltip>Jump to the corresponding transaction in the other account</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_register_jump_cb</handler>
+	    <last_modification_time>Sun, 16 Jun 2002 00:09:46 GMT</last_modification_time>
+	  </signal>
+	  <label>Jump</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_JUMP_TO</stock_pixmap>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>toolbar_xfer</name>
+	  <tooltip>Transfer funds from one account to another</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_register_xfer_cb</handler>
+	    <last_modification_time>Sun, 16 Jun 2002 00:10:03 GMT</last_modification_time>
+	  </signal>
+	  <label>Transfer</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_CONVERT</stock_pixmap>
+	  <child>
+	    <new_group>True</new_group>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>toolbar_find</name>
+	  <tooltip>Find transactions with a search</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_ui_find_transactions_cb</handler>
+	    <last_modification_time>Sun, 16 Jun 2002 00:10:19 GMT</last_modification_time>
+	  </signal>
+	  <label>Find</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_SEARCH</stock_pixmap>
+	  <child>
+	    <new_group>True</new_group>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>toolbar_report</name>
+	  <tooltip>Open a report window for this register</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_register_report_account_cb</handler>
+	    <last_modification_time>Sun, 16 Jun 2002 00:10:38 GMT</last_modification_time>
+	  </signal>
+	  <label>Report</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_BOOK_GREEN</stock_pixmap>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>toolbar_print</name>
+	  <tooltip>Print a report for this register</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_register_print_cb</handler>
+	    <last_modification_time>Sun, 16 Jun 2002 00:10:58 GMT</last_modification_time>
+	  </signal>
+	  <label>Print</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_PRINT</stock_pixmap>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDockItem</class>
+      <name>summarybar_dock</name>
+      <border_width>2</border_width>
+      <placement>GNOME_DOCK_TOP</placement>
+      <band>2</band>
+      <position>0</position>
+      <offset>0</offset>
+      <locked>False</locked>
+      <exclusive>True</exclusive>
+      <never_floating>False</never_floating>
+      <never_vertical>False</never_vertical>
+      <never_horizontal>False</never_horizontal>
+      <shadow_type>GTK_SHADOW_OUT</shadow_type>
+
+      <widget>
+	<class>Placeholder</class>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GtkFrame</class>
+      <child_name>GnomeDock:contents</child_name>
+      <name>table_frame</name>
+      <label_xalign>0</label_xalign>
+      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+
+      <widget>
+	<class>Placeholder</class>
+      </widget>
+    </widget>
+  </widget>
+
+  <widget>
+    <class>GnomeAppBar</class>
+    <child_name>GnomeApp:appbar</child_name>
+    <name>appbar</name>
+    <has_progress>False</has_progress>
+    <has_status>True</has_status>
+    <child>
+      <padding>0</padding>
+      <expand>True</expand>
+      <fill>True</fill>
+    </child>
+  </widget>
+</widget>
+
+<widget>
+  <class>GtkMenu</class>
+  <name>Check Register Popup Menu</name>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>popup_transfer</name>
+    <tooltip>Transfer funds from one account to another</tooltip>
+    <signal>
+      <name>activate</name>
+      <handler>gnc_register_xfer_cb</handler>
+      <last_modification_time>Wed, 12 Jun 2002 05:38:43 GMT</last_modification_time>
+    </signal>
+    <label>_Transfer...</label>
+    <right_justify>False</right_justify>
+  </widget>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>popup_reconcile</name>
+    <tooltip>Reconcile the main account for this register</tooltip>
+    <signal>
+      <name>activate</name>
+      <handler>gnc_register_start_recn_cb</handler>
+      <last_modification_time>Wed, 12 Jun 2002 06:15:14 GMT</last_modification_time>
+    </signal>
+    <label>_Reconcile...</label>
+    <right_justify>False</right_justify>
+  </widget>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>popup_stock_split</name>
+    <tooltip>Record a stock split or a stock merger</tooltip>
+    <signal>
+      <name>activate</name>
+      <handler>gnc_register_stock_split_cb</handler>
+      <last_modification_time>Wed, 12 Jun 2002 06:15:14 GMT</last_modification_time>
+    </signal>
+    <label>_Stock Split...</label>
+    <right_justify>False</right_justify>
+  </widget>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>popup_separator1</name>
+    <right_justify>False</right_justify>
+  </widget>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>popup_enter</name>
+    <tooltip>Record the current transaction</tooltip>
+    <signal>
+      <name>activate</name>
+      <handler>gnc_register_record_trans_cb</handler>
+      <last_modification_time>Sat, 15 Jun 2002 07:55:17 GMT</last_modification_time>
+    </signal>
+    <label>_Enter</label>
+    <right_justify>False</right_justify>
+  </widget>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>popup_cancel</name>
+    <tooltip>Cancel the current transaction</tooltip>
+    <signal>
+      <name>activate</name>
+      <handler>gnc_register_cancel_trans_cb</handler>
+      <last_modification_time>Wed, 12 Jun 2002 06:10:40 GMT</last_modification_time>
+    </signal>
+    <label>_Cancel</label>
+    <right_justify>False</right_justify>
+  </widget>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>popup_delete</name>
+    <tooltip>Delete the current transaction</tooltip>
+    <signal>
+      <name>activate</name>
+      <handler>gnc_register_delete_trans_cb</handler>
+      <last_modification_time>Sat, 15 Jun 2002 20:29:44 GMT</last_modification_time>
+    </signal>
+    <label>_Delete</label>
+    <right_justify>False</right_justify>
+  </widget>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>popup_blank</name>
+    <tooltip>Move to the blank transaction at the bottom of the register</tooltip>
+    <signal>
+      <name>activate</name>
+      <handler>gnc_register_new_trans_cb</handler>
+      <last_modification_time>Wed, 12 Jun 2002 06:13:45 GMT</last_modification_time>
+    </signal>
+    <label>_Blank</label>
+    <right_justify>False</right_justify>
+  </widget>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>popup_separator2</name>
+    <right_justify>False</right_justify>
+  </widget>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>popup_duplicate</name>
+    <tooltip>Make a copy of the current transaction</tooltip>
+    <signal>
+      <name>activate</name>
+      <handler>gnc_register_duplicate_trans_cb</handler>
+      <last_modification_time>Sat, 15 Jun 2002 07:55:17 GMT</last_modification_time>
+    </signal>
+    <label>Dup_licate Transaction...</label>
+    <right_justify>False</right_justify>
+  </widget>
+
+  <widget>
+    <class>GtkCheckMenuItem</class>
+    <name>popup_splits</name>
+    <tooltip>Show all splits in the current transaction</tooltip>
+    <signal>
+      <name>activate</name>
+      <handler>gnc_register_expand_trans_menu_cb</handler>
+      <last_modification_time>Wed, 12 Jun 2002 06:13:45 GMT</last_modification_time>
+    </signal>
+    <label>S_plit Transaction</label>
+    <active>False</active>
+    <always_show_toggle>True</always_show_toggle>
+  </widget>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>popup_schedule</name>
+    <signal>
+      <name>activate</name>
+      <handler>gnc_register_recur_cb</handler>
+      <last_modification_time>Wed, 12 Jun 2002 06:39:42 GMT</last_modification_time>
+    </signal>
+    <label>Schedule...</label>
+    <right_justify>False</right_justify>
+  </widget>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>popup_jump</name>
+    <tooltip>Jump to the corresponding transaction in the other account</tooltip>
+    <signal>
+      <name>activate</name>
+      <handler>gnc_register_jump_cb</handler>
+      <last_modification_time>Wed, 12 Jun 2002 06:13:45 GMT</last_modification_time>
+    </signal>
+    <label>_Jump</label>
+    <right_justify>False</right_justify>
+  </widget>
+</widget>
+
+<widget>
   <class>GnomeDialog</class>
   <name>Duplicate Transaction Dialog</name>
   <title>Duplicate Transaction</title>
@@ -189,6 +1588,426 @@
 	      <fill>False</fill>
 	    </child>
 	  </widget>
+	</widget>
+      </widget>
+    </widget>
+  </widget>
+</widget>
+
+<widget>
+  <class>GnomeDialog</class>
+  <name>Date Range</name>
+  <visible>False</visible>
+  <title>Register date ranges</title>
+  <type>GTK_WINDOW_DIALOG</type>
+  <position>GTK_WIN_POS_NONE</position>
+  <modal>False</modal>
+  <allow_shrink>False</allow_shrink>
+  <allow_grow>True</allow_grow>
+  <auto_shrink>False</auto_shrink>
+  <auto_close>True</auto_close>
+  <hide_on_close>True</hide_on_close>
+
+  <widget>
+    <class>GtkVBox</class>
+    <child_name>GnomeDialog:vbox</child_name>
+    <name>vbox42</name>
+    <homogeneous>False</homogeneous>
+    <spacing>8</spacing>
+    <child>
+      <padding>4</padding>
+      <expand>True</expand>
+      <fill>True</fill>
+    </child>
+
+    <widget>
+      <class>GtkHButtonBox</class>
+      <child_name>GnomeDialog:action_area</child_name>
+      <name>dialog-action_area16</name>
+      <layout_style>GTK_BUTTONBOX_END</layout_style>
+      <spacing>8</spacing>
+      <child_min_width>85</child_min_width>
+      <child_min_height>27</child_min_height>
+      <child_ipad_x>7</child_ipad_x>
+      <child_ipad_y>0</child_ipad_y>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>True</fill>
+	<pack>GTK_PACK_END</pack>
+      </child>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>button80</name>
+	<can_default>True</can_default>
+	<has_default>True</has_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_CLOSE</stock_button>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GtkVBox</class>
+      <name>vbox96</name>
+      <border_width>5</border_width>
+      <homogeneous>False</homogeneous>
+      <spacing>0</spacing>
+      <child>
+	<padding>0</padding>
+	<expand>True</expand>
+	<fill>True</fill>
+      </child>
+
+      <widget>
+	<class>GtkFrame</class>
+	<name>main_frame</name>
+	<border_width>5</border_width>
+	<label_xalign>0</label_xalign>
+	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkVBox</class>
+	  <name>vbox97</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
+
+	  <widget>
+	    <class>GtkRadioButton</class>
+	    <name>start_earliest</name>
+	    <can_focus>True</can_focus>
+	    <signal>
+	      <name>toggled</name>
+	      <handler>gnc_register_date_toggle_cb</handler>
+	      <last_modification_time>Sun, 16 Jun 2002 23:55:04 GMT</last_modification_time>
+	    </signal>
+	    <label>Show Earliest</label>
+	    <active>True</active>
+	    <draw_indicator>True</draw_indicator>
+	    <group>start</group>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkHBox</class>
+	    <name>hbox85</name>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkRadioButton</class>
+	      <name>start_date</name>
+	      <can_focus>True</can_focus>
+	      <signal>
+		<name>toggled</name>
+		<handler>gnc_register_date_toggle_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 23:54:45 GMT</last_modification_time>
+	      </signal>
+	      <label>Start date:</label>
+	      <active>False</active>
+	      <draw_indicator>True</draw_indicator>
+	      <group>start</group>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkHBox</class>
+	      <name>start_date_entry</name>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
+	      <child>
+		<padding>0</padding>
+		<expand>True</expand>
+		<fill>True</fill>
+	      </child>
+
+	      <widget>
+		<class>Placeholder</class>
+	      </widget>
+	    </widget>
+	  </widget>
+
+	  <widget>
+	    <class>GtkHSeparator</class>
+	    <name>hseparator1</name>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkRadioButton</class>
+	    <name>end_latest</name>
+	    <can_focus>True</can_focus>
+	    <signal>
+	      <name>toggled</name>
+	      <handler>gnc_register_date_toggle_cb</handler>
+	      <last_modification_time>Sun, 16 Jun 2002 23:54:23 GMT</last_modification_time>
+	    </signal>
+	    <label>Show Latest</label>
+	    <active>True</active>
+	    <draw_indicator>True</draw_indicator>
+	    <group>end</group>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkHBox</class>
+	    <name>hbox86</name>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkRadioButton</class>
+	      <name>end_date</name>
+	      <can_focus>True</can_focus>
+	      <signal>
+		<name>toggled</name>
+		<handler>gnc_register_date_toggle_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 23:53:30 GMT</last_modification_time>
+	      </signal>
+	      <label>End date:</label>
+	      <active>False</active>
+	      <draw_indicator>True</draw_indicator>
+	      <group>end</group>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkHBox</class>
+	      <name>end_date_entry</name>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
+	      <child>
+		<padding>0</padding>
+		<expand>True</expand>
+		<fill>True</fill>
+	      </child>
+
+	      <widget>
+		<class>Placeholder</class>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkButton</class>
+	      <name>today</name>
+	      <sensitive>False</sensitive>
+	      <can_focus>True</can_focus>
+	      <signal>
+		<name>clicked</name>
+		<handler>gnc_register_today_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 23:56:10 GMT</last_modification_time>
+	      </signal>
+	      <label>Today</label>
+	      <relief>GTK_RELIEF_NORMAL</relief>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+	  </widget>
+	</widget>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>set_range</name>
+	<sensitive>False</sensitive>
+	<can_focus>True</can_focus>
+	<signal>
+	  <name>clicked</name>
+	  <handler>gnc_register_date_cb</handler>
+	  <last_modification_time>Sun, 16 Jun 2002 23:56:38 GMT</last_modification_time>
+	</signal>
+	<label>Set Date Range</label>
+	<relief>GTK_RELIEF_NORMAL</relief>
+	<child>
+	  <padding>0</padding>
+	  <expand>False</expand>
+	  <fill>False</fill>
+	</child>
+      </widget>
+    </widget>
+  </widget>
+</widget>
+
+<widget>
+  <class>GnomeDialog</class>
+  <name>Delete Transaction</name>
+  <title>Delete Transaction</title>
+  <type>GTK_WINDOW_TOPLEVEL</type>
+  <position>GTK_WIN_POS_NONE</position>
+  <modal>True</modal>
+  <allow_shrink>False</allow_shrink>
+  <allow_grow>False</allow_grow>
+  <auto_shrink>False</auto_shrink>
+  <auto_close>False</auto_close>
+  <hide_on_close>True</hide_on_close>
+
+  <widget>
+    <class>GtkVBox</class>
+    <child_name>GnomeDialog:vbox</child_name>
+    <name>dialog-vbox</name>
+    <homogeneous>False</homogeneous>
+    <spacing>8</spacing>
+    <child>
+      <padding>4</padding>
+      <expand>True</expand>
+      <fill>True</fill>
+    </child>
+
+    <widget>
+      <class>GtkHButtonBox</class>
+      <child_name>GnomeDialog:action_area</child_name>
+      <name>dialog-action_area17</name>
+      <layout_style>GTK_BUTTONBOX_END</layout_style>
+      <spacing>8</spacing>
+      <child_min_width>85</child_min_width>
+      <child_min_height>27</child_min_height>
+      <child_ipad_x>7</child_ipad_x>
+      <child_ipad_y>0</child_ipad_y>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>True</fill>
+	<pack>GTK_PACK_END</pack>
+      </child>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>button81</name>
+	<can_default>True</can_default>
+	<has_default>True</has_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>button83</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GtkVBox</class>
+      <name>main_vbox</name>
+      <border_width>5</border_width>
+      <homogeneous>False</homogeneous>
+      <spacing>0</spacing>
+      <child>
+	<padding>0</padding>
+	<expand>True</expand>
+	<fill>True</fill>
+      </child>
+
+      <widget>
+	<class>GtkFrame</class>
+	<name>frame43</name>
+	<border_width>5</border_width>
+	<label_xalign>0</label_xalign>
+	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkVBox</class>
+	  <name>vbox99</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
+
+	  <widget>
+	    <class>GtkRadioButton</class>
+	    <name>delete_all</name>
+	    <can_focus>True</can_focus>
+	    <label>Delete the whole transaction</label>
+	    <active>True</active>
+	    <draw_indicator>True</draw_indicator>
+	    <group>group</group>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkRadioButton</class>
+	    <name>delete_other</name>
+	    <can_focus>True</can_focus>
+	    <label>Delete all the other splits</label>
+	    <active>False</active>
+	    <draw_indicator>True</draw_indicator>
+	    <group>group</group>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+	</widget>
+      </widget>
+
+      <widget>
+	<class>GtkScrolledWindow</class>
+	<name>scrolledwindow1</name>
+	<hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
+	<vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
+	<hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	<vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+	<child>
+	  <padding>0</padding>
+	  <expand>False</expand>
+	  <fill>False</fill>
+	</child>
+
+	<widget>
+	  <class>GtkText</class>
+	  <name>text</name>
+	  <width>226</width>
+	  <height>198</height>
+	  <editable>False</editable>
+	  <text></text>
 	</widget>
       </widget>
     </widget>

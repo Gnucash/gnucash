@@ -1,3 +1,15 @@
+2002-06-18  David Hampton  <hampton@employees.org>
+
+	* src/gnome/window-main.c: Make a couple of functions globally
+	visible.
+	
+	* src/gnome/window-register.c:
+	* src/gnome/glade/register.glade: Reorganize the menus in the
+	register window.  Convert the register window over to a glade
+	based window using glade_xml_signal_autoconnect.  Rename a bunch
+	of short named function to the form gnc_register_xxx to insure
+	uniqueness.
+	
 2002-06-16  Derek Atkins   <derek@ihtfp.com>
 
 	* Refactor a lot of the business code.  Move the tax-table dialog
