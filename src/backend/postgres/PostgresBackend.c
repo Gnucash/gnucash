@@ -339,6 +339,7 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_entered",j));
    xaccTransSetDateEnteredTS (trans, &ts);
    xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
+   trans->idata = atoi(DB_GET_VAL("iguid",j));
 
    currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), be->session);
    xaccTransSetCurrency (trans, currency);
@@ -384,12 +385,11 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
    for (node=xaction_list; node; node=node->next)
    {
       Transaction *trans = (Transaction *) node->data;
-      GList *engine_splits, *snode;
+
       pgendCopySplitsToEngine (be, trans);
-      xaccTransCommitEdit (trans);
    }
 
-#if 0
+#if 1
 /* hack alert !! deal with kvp later -- huge sucking sound ! */
    /* restore any kvp data associated with the transaction and splits */
    for (node=xaction_list; node; node=node->next)
@@ -397,13 +397,13 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
       Transaction *trans = (Transaction *) node->data;
       GList *engine_splits, *snode;
 
-      trans->kvp_data = pgendKVPFetch (be, &(trans->guid), trans->kvp_data);
+      trans->kvp_data = pgendKVPFetch (be, trans->idata, trans->kvp_data);
    
       engine_splits = xaccTransGetSplitList(trans);
       for (snode = engine_splits; snode; snode=snode->next)
       {
          Split *s = snode->data;
-         s->kvp_data = pgendKVPFetch (be, &(s->guid), s->kvp_data);
+         s->kvp_data = pgendKVPFetch (be, s->idata, s->kvp_data);
       }
 
       xaccTransCommitEdit (trans);
