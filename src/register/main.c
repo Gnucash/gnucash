@@ -6,12 +6,48 @@
 #include "FileIO.h"
 #include "register.h"
 
+#define BUFSIZE 1024
+
 void
-xaccLoadRegister (BasicRegister *reg, Account *acc)
+xaccLoadRegister (BasicRegister *reg, Split **slist)
 {
+   int i;
+   Split *split;
+   Transaction *trans;
+   char buff[BUFSIZE];
 
-printf ("its %s \n", acc->accountName);
+   i=0;
+   split = slist[0]; 
+   while (split) {
 
+      trans = (Transaction *) (split->parent);
+
+      xaccMoveCursor (reg->table, i, 0);
+
+      sprintf (buff, "%2d/%2d/%4d", trans->date.day, 
+                                    trans->date.month,
+                                    trans->date.year);
+
+      xaccSetBasicCellValue (reg->dateCell, buff);
+
+      xaccSetBasicCellValue (reg->numCell, trans->num);
+      xaccSetBasicCellValue (reg->descCell, trans->description);
+      xaccSetBasicCellValue (reg->memoCell, split->memo);
+
+      buff[0] = split->reconciled;
+      buff[1] = 0x0;
+      xaccSetBasicCellValue (reg->recnCell, buff);
+
+      xaccCommitEdits (reg->table);
+/*
+      reg->PriceCell
+*/
+      i++;
+      split = slist[i];
+   }
+/*
+   xaccRefreshTable (reg->table);
+*/
 }
 
 /* ================================= */
@@ -42,7 +78,7 @@ main (int argc, char *argv[]) {
 
   reg = xaccMallocBasicRegister ();
 
-  xaccLoadRegister (reg, grp->account[0]);
+  xaccLoadRegister (reg, grp->account[0]->splits);
 
   xaccCreateTable (reg->table, actionform, "yodudue");
 

@@ -17,7 +17,6 @@ typedef struct _CellBlock {
   short         *widths;        /* column widths */
   unsigned char *alignments;    /* column text alignments */
 
-  struct _Table *table;         /* back-pointer to table */
 } CellBlock;
 
 

@@ -56,16 +56,26 @@ xaccInitTable (Table * table, int tile_rows, int tile_cols)
       num_header_rows = table->header->numRows;
       num_phys_rows += table->header->numRows;
    }
+
+   table->tile_height = 0;
+   table->tile_width = 0;
    if (table->cursor) {
+      table->tile_height = table->cursor->numRows;
+      table->tile_width = table->cursor->numCols;
       num_phys_rows += tile_rows * table->cursor->numRows;
       num_phys_cols  = tile_cols * table->cursor->numCols;
+      
    }
    table->num_phys_rows = num_phys_rows;
    table->num_phys_cols = num_phys_cols;
    table->num_header_rows = num_header_rows;
 
-   table->num_tile_rows = tile_rows;
-   table->num_tile_cols = tile_cols;
+   table->num_rows = tile_rows;
+   table->num_cols = tile_cols;
+
+   /* set the cursor location */
+   table->current_cursor_row = 0;
+   table->current_cursor_col = 0;
 
    /* create an empty table */
    if (0 == num_phys_rows) {
@@ -91,15 +101,42 @@ void
 xaccSetCursor (Table *table, CellBlock *curs)
 {
    table->cursor = curs;
-
-   /* set back-pointer to table */
-   curs->table = (struct _Table *) table;
 }
 
 /* ==================================================== */
 
-void xaccSetTableValue (Table *table, char * val)
+void xaccMoveCursor (Table *table, int virt_row, int virt_col)
 {
+   if ((0 > virt_row) || (0 > virt_col)) return;
+   if (virt_row >= table->num_rows) return;
+   if (virt_col >= table->num_cols) return;
+   table->current_cursor_row = virt_row;
+   table->current_cursor_col = virt_col;
+}
+
+/* ==================================================== */
+
+void xaccCommitEdits (Table *table)
+{
+   int i,j;
+   int iphys,jphys;
+   BasicCell *cell;
+
+   for (i=0; i<table->tile_height; i++) {
+      iphys = i + table->current_cursor_row * table->tile_height;
+      iphys += table->num_header_rows;
+      for (j=0; j<table->tile_width; j++) {
+         
+         cell = table->cursor->cells[i][j];
+         if (cell) {
+            jphys = j + table->current_cursor_col * table->tile_width;
+            if (table->entries[iphys][jphys]) {
+               free (table->entries[iphys][jphys]);
+            }
+            table->entries[iphys][jphys] = strdup (cell->value);
+         }
+      }
+   }
 }
 
 /* ==================================================== */
@@ -469,7 +506,9 @@ xaccCreateTable (Table *table, Widget parent, char * name)
    if (!table) return 0;
 
    /* make sure that the table is consistent */
-   xaccInitTable (table, table->num_tile_rows, table->num_tile_cols);
+/* hack alert -- remove for now, since may be inited? 
+   xaccInitTable (table, table->num_rows, table->num_cols);
+*/
 
    /* if a header exists, get alignments, widths from there */
    alignments = NULL;

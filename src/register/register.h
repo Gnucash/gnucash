@@ -18,11 +18,14 @@ typedef struct _BasicRegister {
    CellBlock   * cursor;
    CellBlock   * header;
    BasicCell  * dateCell;
+   BasicCell  * numCell;
+   BasicCell  * xferCell;
    BasicCell  * descCell;
    BasicCell  * memoCell;
    BasicCell  * recnCell;
    PriceCell   * creditCell;
    PriceCell   * debitCell;
+   PriceCell   * balanceCell;
 
 } BasicRegister;
 

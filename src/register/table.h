@@ -13,17 +13,32 @@
 
 typedef struct _Table {
 
-  int num_tile_rows;
-  int num_tile_cols;
+  /* num rows and cols are the number of times the 
+   * cursor can tile the table in the vertical and 
+   * horizontal directions */
+  int num_rows;
+  int num_cols;
 
   CellBlock *header;
   CellBlock *cursor;
 
+  int current_cursor_row;
+  int current_cursor_col;
+
   char ***entries;
 
+  /* protected data -- vital for the implementation, 
+   * but not something we want to generally expose */
   Widget reg;          /* the XbaeMatrix */
 
   /* private data, caches, etc. */
+  /* This is black-box stuff that no user of this class 
+   * should ever want to access */
+
+  /* the "tile size" is the number of rows & 
+   * cols in the cursor */
+  int tile_width;
+  int tile_height;
 
   /* the "physical" rows/cols are equal to
    * the size of the tile times the number 
@@ -47,10 +62,14 @@ void        xaccDestroyTable (Table *);
 /* redraw the table */
 void        xaccRefreshTable (Table *);
 
-/* add a cell to the array */
+/* Make the indicated cell block be the cursor for this table */
 void        xaccSetCursor (Table *, CellBlock *);
 
-void        xaccSetTableValue (Table *, char *);
+/* move the cursor to the indicated location. */
+void        xaccMoveCursor (Table *, int virt_row, int virt_col);
+
+/* copy text in the cursor cells to the table */
+void        xaccCommitEdits (Table *);
 
 #endif __XACC_TABLE_H__
 /* ================== end of file ======================= */
