@@ -1,2 +1,74 @@
 @node Reports, Data Type Index, Register, Top
 @chapter Reports
+
+To define a report, your report must have 
+
+@code{(gnc:support <your_report_name>)}
+
+and should have
+
+@code{(gnc:depend "report-utilities.scm")}
+
+as well as
+
+@code{(gnc:depend "html-generator.scm")}
+ 
+if you wish to use the html table generation facilities.
+
+To autoload your report, you should add the line @code{(gnc:depend
+<your_report_name>)} to the file @file{src/scm/report/report-list.scm}.
+
+@code{(gnc:depend "date-utilities.scm")}
+
+has lots of date-manipulation functions you'll almost certainly need.
+
+To define a report, you call @code{(gnc:define-report)}. This function
+can accept a variable number of arguments, but at the moment four
+distinct arguments are recognised, as in like the following from
+the transaction report:
+
+@example
+  (gnc:define-report
+   'version 1
+   'name (string-db 'lookup 'title)
+   'options-generator trep-options-generator
+   'renderer gnc:trep-renderer)
+@end example
+
+@table @code
+
+@item 'version
+This is the version number of the report, which is currently ignored.
+
+@item 'name
+This is self-explanatory.
+
+@item 'renderer
+This is a function that takes one argument - a set of options that use
+the options API. It returns a list, which either contains strings, or
+lists which only contain strings or lists of the same type.  When
+flattened and concatenated these strings should form the HTML of the
+report.
+
+@item 'options-generator
+This should be a function that takes no arguments and returns an options
+structure with the options for the report.  The options interface is
+currently not fully documented, but should be.
+
+@end table
+
+To generate the HTML, you can write your own HTML generation code, or
+use the functions in html-generator.scm. These are already quite well
+documented in the source code itself. To use the HTML generation code,
+you build a structure containing a list of report columns, and for each
+column write functions that, given a report entry, generate the text for
+the cell, as well as column headers and column totals. This interface
+is quite likely to change.
+
+At the moment, the only tools for collecting summary information are
+@code{gnc:account-get-balance-interval} and
+@code{gnc:group-get-balance-interval}. As we start to calculate more
+sophisticated summary statistics (particularly for stock and investment
+tracking), we will add to these. Extracting data from accounts is also
+done directly ATM, but we shall soon use the Query API to do this. The
+Query API therefore needs some user-level documentation as well.
