@@ -299,7 +299,7 @@ gncFileQIFImport (void)
   int io_error, uh_oh = 0;
   AccountGroup *newgrp;
   
-  newfile = fileBox( OPEN_STR, "*.qif");
+  newfile = fileBox(IMPORT_QIF_STR, "*.qif");
   if (!newfile) return;
   
   /* load the accounts from the file the user specified */
