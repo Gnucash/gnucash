@@ -290,7 +290,7 @@ void xaccQueryAddMemoMatch(Query * q, const char * matchstring,
                            int case_sens, int use_regexp, QueryOp op);
 void xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QueryOp op);
 void xaccQueryAddBalanceMatch(Query * q, balance_match_t how, QueryOp op);
-void xaccQueryAddGUIDMatch(Query * q, GUID *guid, QueryOp op);
+void xaccQueryAddGUIDMatch(Query * q, const GUID *guid, QueryOp op);
 void xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
                            QueryOp op);
 

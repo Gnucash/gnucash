@@ -1,5 +1,8 @@
 2001-04-03  Dave Peticolas  <dave@krondo.com>
 
+	* src/register/gnome/gnucash-sheet.c: move cursor before showing
+	popup menu
+
 	* src/gnome/window-register.c: add a Transaction->Invoice item
 
 	* src/engine/Query.c: add GUID predicate

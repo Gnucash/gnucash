@@ -160,6 +160,20 @@ gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet, gboolean do_scroll)
 
 
 static void
+gnucash_sheet_set_popup (GnucashSheet *sheet, GtkWidget *popup, gpointer data)
+{
+        if (popup)
+                gtk_widget_ref (popup);
+
+        if (sheet->popup)
+                gtk_widget_unref (sheet->popup);
+
+        sheet->popup = popup;
+        sheet->popup_data = data;
+}
+
+
+static void
 gnucash_sheet_hide_editing_cursor (GnucashSheet *sheet)
 {
         if (sheet->item_editor == NULL)
@@ -1160,6 +1174,8 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
         Table *table;
         gboolean abort_move;
+        gboolean button_1;
+        gboolean do_popup;
 
         g_return_val_if_fail(widget != NULL, TRUE);
         g_return_val_if_fail(GNUCASH_IS_SHEET(widget), TRUE);
@@ -1172,13 +1188,19 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                 return FALSE;
 
         sheet->button = event->button;
+        if (sheet->button == 3)
+                sheet->button = 0;
 
         if (!GTK_WIDGET_HAS_FOCUS(widget))
                 gtk_widget_grab_focus(widget);
 
+        button_1 = FALSE;
+        do_popup = FALSE;
+
         switch (event->button)
         {
                 case 1:
+                        button_1 = TRUE;
                         break;
                 case 2:
                         if (event->type != GDK_BUTTON_PRESS)
@@ -1187,7 +1209,8 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                                                 event->time);
                         return TRUE;
                 case 3:
-                        return FALSE;
+                        do_popup = (sheet->popup != NULL);
+                        break;
                 case 4:
                 case 5:
                         gnucash_sheet_scroll_event(sheet, event);
@@ -1212,7 +1235,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         if (vcell == NULL)
                 return TRUE;
 
-        if (virt_loc_equal (new_virt_loc, cur_virt_loc) &&
+        if (virt_loc_equal (new_virt_loc, cur_virt_loc) && button_1 &&
             (event->type == GDK_2BUTTON_PRESS))
         {
                 item_edit_set_cursor_pos (ITEM_EDIT(sheet->item_editor),
@@ -1230,10 +1253,13 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         if (event->type != GDK_BUTTON_PRESS)
                 return FALSE;
 
-        gtk_grab_add(widget);
-        sheet->grabbed = TRUE;
-
-        item_edit_set_has_selection(ITEM_EDIT(sheet->item_editor), TRUE);
+        if (button_1)
+        {
+                gtk_grab_add(widget);
+                sheet->grabbed = TRUE;
+                item_edit_set_has_selection 
+                        (ITEM_EDIT(sheet->item_editor), TRUE);
+        }
 
         if (virt_loc_equal (new_virt_loc, cur_virt_loc) && sheet->editing)
         {
@@ -1242,6 +1268,11 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                 item_edit_set_cursor_pos (ITEM_EDIT(sheet->item_editor),
                                           cur_virt_loc, x, FALSE,
                                           extend_selection);
+
+                if (do_popup)
+                        gnome_popup_menu_do_popup_modal
+                                (sheet->popup, NULL, NULL, event,
+                                 sheet->popup_data);
 
                 return TRUE;
         }
@@ -1252,19 +1283,25 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                                                 GNC_TABLE_TRAVERSE_POINTER,
                                                 &new_virt_loc);
 
-        gnucash_sheet_check_grab (sheet);
+        if (button_1)
+                gnucash_sheet_check_grab (sheet);
 
         if (abort_move)
 		return TRUE;
 
         changed_cells = gnucash_sheet_cursor_move (sheet, new_virt_loc);
 
-        gnucash_sheet_check_grab (sheet);
+        if (button_1)
+                gnucash_sheet_check_grab (sheet);
 
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &new_virt_loc);
 
         item_edit_set_cursor_pos (ITEM_EDIT(sheet->item_editor),
                                   new_virt_loc, x, changed_cells, FALSE);
+
+        if (do_popup)
+                gnome_popup_menu_do_popup_modal
+                        (sheet->popup, NULL, NULL, event, sheet->popup_data);
 
         return TRUE;
 }
@@ -2069,6 +2106,7 @@ gnucash_sheet_init (GnucashSheet *sheet)
 
         sheet->input_cancelled = FALSE;
 
+        sheet->popup = NULL;
         sheet->num_virt_rows = 0;
         sheet->num_virt_cols = 0;
         sheet->item_editor = NULL;
@@ -2248,7 +2286,7 @@ gnucash_register_attach_popup (GnucashRegister *reg,
         g_return_if_fail (GTK_IS_WIDGET(popup));
         g_return_if_fail (reg->sheet != NULL);
 
-        gnome_popup_menu_attach (popup, reg->sheet, data);
+        gnucash_sheet_set_popup (GNUCASH_SHEET (reg->sheet), popup, data);
 }
 
 

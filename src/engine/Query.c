@@ -1872,7 +1872,7 @@ xaccQueryAddBalanceMatch(Query * q, balance_match_t how, QueryOp op)
  ********************************************************************/
 
 void
-xaccQueryAddGUIDMatch(Query * q, GUID *guid, QueryOp op)
+xaccQueryAddGUIDMatch(Query * q, const GUID *guid, QueryOp op)
 {
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);

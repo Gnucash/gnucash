@@ -62,6 +62,9 @@ typedef struct
 
         GtkWidget *window;
 
+        GtkWidget *popup;
+        gpointer popup_data;
+
         Table *table;
 
         GtkWidget *reg;
