@@ -85,13 +85,15 @@ my $help;
 my $zip = 1;     # defaults to on
 my $diffname = undef;
 my $ignorename = undef;
-my $filename = undef;
+my @filename = ();
+my $manifest = undef;
 
 $result = GetOptions("old=s" => \$old, "new=s" => \$new, 
             "prefix=s" => \$gnc_home, "help" => \$help,
-            "file=s" => \$filename, "ask!" => \$::ask_description,
+            "file=s" => \@filename, "ask!" => \$::ask_description,
             "diff=s" => \$diffname, "uuencode!" => \$::should_uuencode,
-            "zip!" => \$zip, "ignore=s" => \$ignorename);
+            "zip!" => \$zip, "ignore=s" => \$ignorename,
+            "manifest=s" => \$manifest);
 
 if ($help or $result == 0) {
   printf "Help information\n\n";
@@ -101,6 +103,7 @@ if ($help or $result == 0) {
   printf "--prefex \"homedir\" Full path of parent directory\n";
   printf "--diff \"diffname\"  Output name for diff file\n";
   printf "--file \"filename\"  Make patch for filename ONLY\n";
+  printf "--manifest \"file\"  Use file as a manifest file\n";
   printf "--ignore \"igname\"  File containing file matches to ignore\n";
   printf "--(no)uuencode     Enable or disable uuencoded output\n";
   printf "                   (Defaults to enabled)\n";
@@ -111,19 +114,23 @@ if ($help or $result == 0) {
   printf "and of course:\n";
   printf "--help             Displays this text\n";
   printf "\nAll options can be abbreviated to their shortest unique\n";
-  printf "  form: --o, --ne, --p, --d, --f, --i, --u/--nou, --z/--noz, \n";
-  printf "        --a/--noa, and --h\n";
+  printf "  form: --o, --ne, --p, --d, --f, --m, --i, --u/--nou,\n";
+  printf "        --z/--noz, --a/--noa, and --h\n";
   printf "\n";
   exit 1;
 }
 
 # if explicit filename given, build required MANIFEST file
 
-if (defined($filename)) {
+@filename = split(/,/,join(',',@filename));
+
+if (@filename) {
   open (FN, ">$gnc_home/tmp.MANIFEST") or die "Couldn't create MANIFEST file";
   printf (FN "# Temporary manifest file for make-gnucash-patch -f option\n");
   printf (FN "\n");
-  printf (FN "%s\n", $filename);
+  foreach my $part (@filename) {
+    printf (FN "%s\n", $part);
+  }
   close (FN);
 }
 
@@ -155,8 +162,11 @@ if (not $::ask_description) {
 
 # If -f options given, use generated manifest file
 # otherwise, add exclusions and proceed as normal
-if (defined($filename)) {
+if (@filename) {
   push(@args, '-manifest', "$gnc_home/tmp.MANIFEST");
+}
+elsif (defined($manifest)) {
+  push(@args, '-manifest', "$manifest");
 }
 else {
   # Add in the exclude patterns from the __DATA__ section

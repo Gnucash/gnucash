@@ -1,3 +1,11 @@
+ 2001-05-04  Conrad Canterford <conrad@mail.watersprite.com.au>
+
+	* make-gnucash-patch.in: add --manifest option (allow use of a
+	manifest file. Also, change --file option to allow multiple files.
+	Fix bug in previous change.
+
+	* README.patches: Updated to reflect new capabilities.
+
 2001-05-03  Dave Peticolas  <dave@krondo.com>
 
 	* doc/sgml/*/xacc-hierarchical-report.sgml: remove file

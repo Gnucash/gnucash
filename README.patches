@@ -1,5 +1,5 @@
 ############################################################
-          Gnucash 1.5.x README file.
+          Gnucash 1.5.x README.patches file.
 
 NOTE: THIS IS A DEVELOPMENT RELEASE!!! THIS VERSION HAS NOT
 BEEN TESTED PROPERLY AND MAY DO ABSOLUTELY ANYTHING!  
@@ -123,7 +123,7 @@ USERS GUIDE
  The general format for using make-gnucash-patch is:
       ./make-gnucash-patch <options>
 
- where valid options are:
+ where valid options are (in arbitrary order):
  --help, --h          Display a short help message explaining available
                       options.
 
@@ -160,9 +160,18 @@ USERS GUIDE
 
  --file "filename"   Generate a patch for ONLY this file. The path within
                      the CVS tree must be specified (eg. src/MultiLedger.c) or 
-                     the file cannot be matched. You *CANNOT* use this option
-                     with wildcards or partial matches.
+                     the file cannot be matched. You can specify multiple files
+                     by seperating them by commas. You can also include this
+                     option multiple times.
+                     You *CANNOT* use this option with wildcards, regexps, or
+                     partial matches.
                      Defaults to:  none.
+                     See Also: --manifest
+
+ --manifest "file"   Use "file" as a manifest file (file that contains a list
+                     of all files to be compared in the making of the diff).
+                     Manifest files must contain one filename per line. Lines 
+                     starting with # are ignored.
 
 --ignore "igname"    Name of the file in the parent directory which contains
                      regular expressions matching files which are to be excluded
