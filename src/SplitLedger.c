@@ -242,7 +242,6 @@ printf ("save split is %p \n", split);
    if (MOD_AMNT & changed) {
       double new_amount;
       new_amount = (reg->creditCell->amount) - (reg->debitCell->amount);
-      new_amount = -new_amount;
       if ((EQUITY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
           (STOCK_REGISTER  == (reg->type & REG_TYPE_MASK)) ||
           (PORTFOLIO       == (reg->type & REG_TYPE_MASK))) 
@@ -258,7 +257,7 @@ printf ("save split is %p \n", split);
    }
 
    if (MOD_VALU & changed) {
-      xaccSplitSetValue (split, -(reg->valueCell->amount));
+      xaccSplitSetValue (split, (reg->valueCell->amount));
    }
 
    xaccTransCommitEdit (trans);
