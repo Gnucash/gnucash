@@ -1,3 +1,7 @@
+2001-12-08  Dave Peticolas  <dave@krondo.com>
+
+	* Makefile.am (Repository): clean .scm-links
+
 2001-11-28  Rob Browning  <rlb@defaultvalue.org>
 
 	* .cvsignore: add .scm-links

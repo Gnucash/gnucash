@@ -10,5 +10,4 @@ noinst_DATA = .scm-links
 	rm -f www
 	ln -sf . www
 	touch .scm-links
-CLEANFILES = www
-
+CLEANFILES = www .scm-links
