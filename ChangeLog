@@ -1,5 +1,7 @@
 2001-05-25  Christian Stimming  <stimming@tuhh.de>
 
+	* po/no.po: Kjartan Maraas' Norwegian updated translation.
+
 	* src/gnome/gnc-html-guppi.c (gnc_has_guppi_version): generalized
 	this function for arbitrary Guppi versions. Tried to enable
 	barchart axis-labels for CVS Guppi but this gives nothing but
