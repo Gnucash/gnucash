@@ -715,9 +715,9 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
          split -> damount = 0.0;      /* amount is double */
          split -> share_price= 1.0;   /* share_price is double */
          split -> reconciled = NREC;  /* reconciled is byte */
-         split -> debit = (struct _account *) xaccGetXferQIFAccount (acc, qifline);
+         split -> acc = (struct _account *) xaccGetXferQIFAccount (acc, qifline);
 
-         xaccInsertSplit (trans, split);
+         xaccAppendSplit (trans, split);
 
          /* hack alert -- we should insert this split into 
           * the split account, and remove the L field */

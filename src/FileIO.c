@@ -488,7 +488,7 @@ readTransaction( int fd, Account *acc, int token )
 
   /* create a transaction structure with at least one split */
   trans = mallocTransaction();
-  split = mallocSplit();
+  split = xaccMallocSplit();
   xaccAppendSplit (trans, split);
   
   ENTER ("readTransaction");
@@ -650,7 +650,7 @@ readTransaction( int fd, Account *acc, int token )
     XACC_FLIP_INT (acc_id);
     INFO_2 ("readTransaction(): debit %d\n", acc_id);
     peer_acc = locateAccount (acc_id);
-    split -> debit = (struct _account *) peer_acc;
+    split -> acc = (struct _account *) peer_acc;
 
     /* insert the transaction into both the debit and 
      * the credit accounts; next, the debit ... */

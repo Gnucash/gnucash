@@ -118,7 +118,7 @@ freeAccount( Account *acc )
   s = acc->splits[0];
   while (s) {
     struct _account * _acc = (struct _account *) acc; 
-    if (_acc == s->debit) s->debit = NULL;
+    if (_acc == s->acc) s->acc = NULL;
     i++;
     s = acc->splits[i];
   }
@@ -395,7 +395,7 @@ xaccInsertSplit ( Account *acc, Split *split )
   /* mark the data file as needing to be saved: */
   if( acc->parent != NULL ) acc->parent->saved = False;
 
-  split->debit = (struct _account *) acc;
+  split->acc = (struct _account *) acc;
     
   oldsplits = acc->splits;
   acc->numSplits ++;

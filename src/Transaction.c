@@ -46,7 +46,7 @@ xaccInitSplit( Split * split )
   {
   
   /* fill in some sane defaults */
-  split->debit       = NULL;
+  split->acc         = NULL;
   split->parent      = NULL;
   
   split->memo        = XtNewString("");
@@ -77,7 +77,7 @@ xaccFreeSplit( Split *split )
 
   /* free a split only if it is not claimed
    * by any accounts. */
-  if (split->debit) return;
+  if (split->acc) return;
 
   xaccRemoveSplit (split);
 
@@ -131,8 +131,10 @@ initTransaction( Transaction * trans )
   trans->memo        = XtNewString("");
   trans->action      = XtNewString("");
 
-  trans->splits      = (Split **) _malloc (sizeof (Split *));
-  trans->splits[0]   = NULL;
+  trans->debit_splits    = (Split **) _malloc (sizeof (Split *));
+  trans->debit_splits[0] = NULL;
+
+  xaccInitSplit ( &(trans->credit_split));
 
   trans->reconciled  = NREC;
   trans->damount     = 0.0;
@@ -175,10 +177,10 @@ freeTransaction( Transaction *trans )
 /*
 hack alert -- don't do this until splits are fully
 implemented and tested.
-  if (NULL != trans->splits[0]) return;
+  if (NULL != trans->debit_splits[0]) return;
 */
 
-  _free (trans->splits);
+  _free (trans->debit_splits);
   XtFree(trans->num);
   XtFree(trans->description);
   XtFree(trans->memo);
@@ -218,15 +220,15 @@ xaccAppendSplit (Transaction *trans, Split *split)
    if (!split) return;
    
    split->parent = (struct _transaction *) trans;
-   num = xaccCountSplits (trans->splits);
+   num = xaccCountSplits (trans->debit_splits);
 
-   oldarray = trans->splits;
-   trans->splits = (Split **) _malloc ((num+2)*sizeof(Split *));
+   oldarray = trans->debit_splits;
+   trans->debit_splits = (Split **) _malloc ((num+2)*sizeof(Split *));
    for (i=0; i<num; i++) {
-      (trans->splits)[i] = oldarray[i];
+      (trans->debit_splits)[i] = oldarray[i];
    }
-   trans->splits[num] = split;
-   trans->splits[num+1] = NULL;
+   trans->debit_splits[num] = split;
+   trans->debit_splits[num+1] = NULL;
 
    if (oldarray) _free (oldarray);
 }
@@ -247,15 +249,15 @@ xaccRemoveSplit (Split *split)
 
    if (!trans) return;
 
-   s = trans->splits[0];
+   s = trans->debit_splits[0];
    while (s) {
-     trans->splits[i] = trans->splits[n];
+     trans->debit_splits[i] = trans->debit_splits[n];
      if (split == s) { i--; }
      i++;
      n++;
-     s = trans->splits[n];
+     s = trans->debit_splits[n];
    }
-   trans->splits[i] = NULL;
+   trans->debit_splits[i] = NULL;
 
    /* hack alert -- we should also remove it from the account */
 }
