@@ -1,5 +1,57 @@
 Version history:
 ------- -------
+
+ 1.7.7  - 05 January 2003
+ 	 o Welcome to Release Canidate 2
+	 o Give the user better feedback on exactly what the exchange rate
+	   means.
+	 o Better handling of corrupt XML data files.  Print better error
+	   messages for unknown tags, or mismatched start/end tags.
+	 o When checking for gtkhtml-1.1, make the lack of pkg-config a fatal
+	   error. Also check for pkgconfig
+	 o Updated translations, po/de.po, 
+	 o Fix HBCI reparent warnings. Make the PIN dialog a bit nicer.
+	 o Fixes to Postgresql backend.
+	 o Changed the "ALTER TABLE table ADD COLUMN..." statements to conform
+	   to the current Postgres implementation (and SQL 92) standard by
+	   putting the DEFAULT modifier in a separate ALTER statement.  This was
+	   reported by Christopher B. Browne.
+	 o Implement unpost function in invoices.
+	 o Correctly open a help window when the initial URL contains a label
+	   component to it.
+	 o Make the reconciliation window respect the 'include subaccount'
+	   flag any time it opens a register.  Consolidate logic for opening a
+	   new register. Enhance the reconciliation start window to update the
+	   ending value when this flag is changed.
+	 o If the amount is monetary, map the keypad decimal key to the
+	   correct decimal character for the locale.
+	 o Fix malformed URLs for bringing up a report options window.
+	 o Add new option for specifying sort critera for piecharts and
+	   barcharts.
+	 o The report title should change when the report name field is
+	   changed in the options.
+	 o Add a smart function for going "back" from the "load a file" page.
+	   If there are any files loaded it returns to the "loaded files" page
+	   instead of the initial druid page.
+	 o Add support for i18n of price source strings.
+	 o Add icons to gtk only windows.
+	 o Search on NOTES add code to prevent searching on template-txn
+	   accounts so SXes don't show up in find results.
+	 o Create a 'file compression' option and pass the data into the
+	   backend. This is an option in the preferences.
+	 o Provide a simple checkbook set of accounts
+	 o When editing an exchange rate, always change the _VALUE_ of the
+	   split, not the amount.  This has the affect of keeping the visible
+	   number the same and changing the "other" account.
+	 o Add a set of business accounts to the account setup
+	 o Give a much higher importance to the date heuristics in the OFX
+	   import. 
+	 o Disable skipping transactions which already have an online id
+	   during matching, untill a fix for the "transfer between two accounts"
+	   bug is properly fixed.
+	 o Large set of fixes to the build system by John H. Pierce
+	   <john@killterm.org>
+
  1.7.6  - 22 December 2002
  	 o Welcome to Release Candidate 1
 	 o Put the build date into the about box for development versions

@@ -1,3 +1,8 @@
+2003-01-05  Chris Lyttle  <chris@wilddev.net>
+
+	* configure.in: release 1.7.7
+	* NEWS: release 1.7.7
+
 2003-01-05  John H. Pierce <john@killterm.org>
     * Makefile.am: Added rule for libtool rebuilding.
 
