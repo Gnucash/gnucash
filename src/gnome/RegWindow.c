@@ -355,9 +355,16 @@ regWindowLedger( xaccLedgerDisplay *ledger)
   /* complete GUI initialization */
   {
     AccountGroup *grp;
+    Account * base_acc;
     grp = xaccGetAccountRoot (ledger->leader);
-    if (!grp) grp = xaccGetAccountRoot (ledger->displayed_accounts[0]);
-    xaccLoadXferCell (ledger->ledger->xfrmCell, grp);
+    base_acc = ledger->leader;
+
+    if (!grp) {
+      grp = xaccGetAccountRoot (ledger->displayed_accounts[0]);
+      base_acc = ledger->displayed_accounts[0];
+    }
+    xaccLoadXferCell (ledger->ledger->xfrmCell, grp, base_acc);
+    xaccLoadXferCell (ledger->ledger->mxfrmCell, grp, base_acc);
     /* xaccLoadXferCell (ledger->ledger->xtoCell, grp);  */
   }
 
