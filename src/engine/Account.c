@@ -23,6 +23,7 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
+#include <assert.h>
 #include <string.h>
 
 #include "config.h"
@@ -205,8 +206,10 @@ xaccGetAccountID (Account *acc)
 
 #define CHECK(acc) {					\
    if (0 == acc->open) {				\
-      printf ("Error: Account not open for editing\n");	\
-      return;						\
+      /* not today, soem day in the future ... */	\
+      /* printf ("Error: Account not open for editing\n"); */	\
+      /* assert (0); */					\
+      /* return; */					\
    }							\
 }
 
