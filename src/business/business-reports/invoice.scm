@@ -688,17 +688,17 @@
 
 (gnc:define-report
  'version 1
- 'name (N_ "Print Invoice")
+ 'name (N_ "Printable Invoice")
  'menu-path (list gnc:menuname-business-reports)
  'options-generator options-generator
  'renderer reg-renderer
  'in-menu? #t)
 
 (define (gnc:invoice-report-create-internal invoice)
-  (let* ((options (gnc:make-report-options (N_ "Print Invoice")))
+  (let* ((options (gnc:make-report-options (N_ "Printable Invoice")))
          (invoice-op (gnc:lookup-option options invoice-page invoice-name)))
 
     (gnc:option-set-value invoice-op invoice)
-    (gnc:make-report (N_ "Print Invoice") options)))
+    (gnc:make-report (N_ "Printable Invoice") options)))
 
 (export gnc:invoice-report-create-internal)
