@@ -1,3 +1,8 @@
+2001-05-12  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/main-window.scm: create .gnucash if it doesn't exist 
+	when saving a book config file.
+
 2001-05-11  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/Account.c (xaccCloneAccountSimple): use
