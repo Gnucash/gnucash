@@ -62,7 +62,7 @@ cells must implement. A BasicCell contains the following data members.
 @item char *value
 The 'value' of the cell stored as a character string.
 
-@item char input_output
+@item guint8 input_output
 This is a bit field used for storing flag values. The following flag
 values are defined.
 
@@ -110,13 +110,13 @@ A boolean value indicating whether to use the @code{bg_color}
 @section Cellblocks
 
 A @dfn{Cellblock} is an array of active cells. The cells are laid out in
-rows and columns order. The cellblock serves as a convenient container
-for organizing active cells in an array. It provides several functions.
+rows and columns. The cellblock serves as a convenient container for
+organizing active cells in an array. It provides several functions.
 First, it defines a tab-group (group of cells that can be traversed by
-hitting the tab-key).  More importantly, through the mechanism of
-Cursors (defined below), it allows a group of cells to be treated as a
-single transactional entity. That is, the cursor/cellblock allows all
-edits to a groups of cells to be simultaneously committed or rejected by
+hitting the tab-key). More importantly, through the mechanism of Cursors
+(defined below), it allows a group of cells to be treated as a single
+transactional entity. That is, the cursor/cellblock allows all edits to
+a groups of cells to be simultaneously committed or rejected by
 underlying engines. This makes it appropriate for use as a GUI for
 transaction-processing applications with two-phase commit requirements.
 
