@@ -12,20 +12,33 @@
 (let ()
  (define string-db (gnc:make-string-database))
 
+ (define (gnc:split-get-sign-adjusted-value split)
+   (let ((acc (gnc:split-get-account split))
+	 (unsigned-value (gnc:split-get-value split)))
+     (gnc:debug "Adjusting value" unsigned-value (gnc:account-reverse-balance? acc))     
+     (if (gnc:account-reverse-balance? acc)
+	 (- unsigned-value)
+	 unsigned-value)))
+
  (define (make-account-subheading acc-name from-date)
    (let* ((separator (string-ref (gnc:account-separator-char) 0))
-          (balance-at-start (gnc:account-get-balance-at-date
-                             (gnc:get-account-from-full-name
-                              (gnc:get-current-group)
-                              acc-name
-                              separator)
+	  (acc (gnc:get-account-from-full-name
+		(gnc:get-current-group)
+		acc-name
+		separator))
+          (unsigned-balance (gnc:account-get-balance-at-date
+                             acc
 			     from-date
-			     #f)))
+			     #f))
+	  (signed-balance (if (gnc:account-reverse-balance? acc)
+			      (- unsigned-balance)
+			      unsigned-balance)))
+			  
      (string-append acc-name
 		    " ("
 		    (string-db 'lookup 'open-bal-string) 
 		    " "
-		    (gnc:amount->formatted-string balance-at-start #f)
+		    (gnc:amount->formatted-string signed-balance #f)
 		    ")"
 		    )))
 
@@ -147,7 +160,7 @@
 	(gnc:lookup-option options "Display" "Amount")) 'single)
        (make-report-spec
 	(string-db 'lookup 'amount-string)
-	gnc:split-get-value
+	gnc:split-get-sign-adjusted-value
 	(lambda (value) (html-right-cell (html-currency value)))
 	+ ; total-proc
 	(lambda (value) 
@@ -156,7 +169,7 @@
 	  (html-right-cell (html-strong (html-currency value))))
 	#t ; first-last-preference
 	(lambda (split)
-	  (map gnc:split-get-value (gnc:split-get-other-splits split)))
+	  (map gnc:split-get-sign-adjusted-value (gnc:split-get-other-splits split)))
 	(lambda (value) 
 	  (html-right-cell (html-ital (html-currency value)))))
        #f)
@@ -167,7 +180,7 @@
         (make-report-spec
  	(string-db 'lookup 'debit-string)
  	(lambda (split)
-	  (max 0 (gnc:split-get-value split)))
+	  (max 0 (gnc:split-get-sign-adjusted-value split)))
  	(lambda (value)
  	  (cond ((> value 0.0) (html-right-cell (html-currency value)))
 	  (else (html-right-cell (html-ital (html-string " "))))))
@@ -181,7 +194,7 @@
  	  (html-right-cell (html-strong (html-currency value))))
  	#t ; first-last-preference
  	(lambda (split)
- 	  (map gnc:split-get-value (gnc:split-get-other-splits split)))
+ 	  (map gnc:split-get-sign-adjusted-value (gnc:split-get-other-splits split)))
  ;	(lambda (value)
 ; 	  (if (> value 0) (html-right-cell (html-ital (html-currency value)))
 ; 	      (html-right-cell (html-ital (html-string " ")))))
@@ -196,7 +209,7 @@
         (make-report-spec
 	 (string-db 'lookup 'credit-string)
 	 (lambda (split)
-	   (max  0 (- (gnc:split-get-value split))))
+	   (max  0 (- (gnc:split-get-sign-adjusted-value split))))
 ;	 (lambda (value) (html-right-cell (html-currency value)))
  	(lambda (value)
 ;	  (display value)
@@ -211,7 +224,7 @@
  	  (html-right-cell (html-strong (html-currency value))))
  	#t ; first-last-preference
  	(lambda (split)
- 	  (map gnc:split-get-value (gnc:split-get-other-splits split)))
+ 	  (map gnc:split-get-sign-adjusted-value (gnc:split-get-other-splits split)))
  	(lambda (value)
  	  (cond  ((< value 0) (html-right-cell (html-ital (html-currency (- value)))))
  	      (else (html-right-cell (html-ital (html-string " ")))))))
@@ -223,7 +236,7 @@
 	(gnc:lookup-option options "Display" "Amount")) 'double)
        (make-report-spec
 	(string-db 'lookup 'total-string)
-	gnc:split-get-value
+	gnc:split-get-sign-adjusted-value
 	;(lambda (value) (html-right-cell (html-currency value)))
 	;(lambda (value) (html-right-cell (html-string "hello")))
 	#f
@@ -352,7 +365,7 @@
 
       ((amount)
        (make-report-sort-spec
-	gnc:split-get-value
+	gnc:split-get-sign-adjusted-value
 	(if ascending? < >)
 	=
 	#f
@@ -620,7 +633,7 @@
 		(make-split-list account date-filter-pred))
 	      accounts)))
 	   (split-report-specs (make-split-report-spec options)))
-
+   
       (list
        (html-start-document-title (string-db 'lookup 'title) #f)
        (html-start-table)
