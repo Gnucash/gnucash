@@ -496,7 +496,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	{	
 	  /* An exact match of description gives a +2 */
 	  prob = prob+2;
-	  DEBUG("heuristics:  probability + 2 (memo)");
+	  /* DEBUG("heuristics:  probability + 2 (memo)"); */
 	}
       else if((strncmp(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)),
 		       xaccSplitGetMemo(split),
@@ -639,9 +639,12 @@ gnc_import_process_trans_clist (GtkCList *clist,
 	      (gnc_import_TransInfo_get_trans (trans_info), split);
 	    xaccAccountInsertSplit
 	      (gnc_import_TransInfo_get_destacc (trans_info), split);
-	    xaccSplitSetValue
-	      (split, gnc_numeric_neg(xaccSplitGetValue 
-				      (gnc_import_TransInfo_get_fsplit (trans_info))));
+	    xaccSplitSetBaseValue
+	      (split, 
+	       gnc_numeric_neg(xaccSplitGetValue 
+			       (gnc_import_TransInfo_get_fsplit (trans_info))),
+	       xaccTransGetCurrency 
+	       (gnc_import_TransInfo_get_trans (trans_info)));
 	    xaccSplitSetMemo (split, _("Auto-Balance split"));
 
 	    /* Store the mapping to the other account in the MatchMap. */

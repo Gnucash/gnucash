@@ -1,3 +1,9 @@
+2002-12-08  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-backend.c: Fix zero amount in the
+	'other' split of an imported transaction by now using
+	SplitSetBaseValue.
+
 2002-12-08  David Hampton  <hampton@employees.org>
 
 	* src/gnome/glade/register.glade: Make the register's "Set Date
