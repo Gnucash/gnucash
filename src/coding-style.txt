@@ -1,0 +1,30 @@
+
+      Coding Style Conventions
+      ------------------------
+
+I have a headache at the moment, which is probably the ideal state of mind to 
+be in when approaching such discussions.   My personal experience is that no 
+single style will satisfy everyone, and the discussions will resume no matter 
+how often they are put to bed.
+
+So here is the law:
+
+1) when modifying a file, the style convention in that file must be
+   followed.
+
+2) when creating a new file, the style of the existing files must be
+   followed.
+
+3) when creating eleven or more new files, you can invent your own coding
+   style.   (As of this writing, this means that only Robin Clark, Robb 
+   Browning, Jeremy Collins & Linas Vepstas get to pick a style).  
+   I.E. when creating about 10% or more new code.
+
+4) I won't accept diffs that consist of (gratuitous) stylistic changes.
+   I get to decide what "gratuitous" means.
+
+5) I don't care about emacs control strings.  I don't use emacs.  See
+   rule 3 for additional info.
+
+-- Linas Vepstas
+17 August 1998
