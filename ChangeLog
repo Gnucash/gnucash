@@ -2,6 +2,14 @@
 
 	* src/calculation/Makefile.am: need to add GUILE_INCS
 
+	* src/engine/Makefile.am: add ${INTLLIBS} for gettext() et al on
+	  platforms that don't have it in libc
+
+	* src/backend/file/io-gncbin-r.c: don't need to define functions
+	  that are never used, so move the #ifdef around.  Fixes # 105124
+
+	* rpm/gnucash.in: don't call autoconf
+	
 2003-02-02  Chris Lyttle  <chris@wilddev.net>
 
 	* configure.in: change to 1.9.0 version
