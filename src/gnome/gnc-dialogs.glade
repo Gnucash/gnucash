@@ -6345,12 +6345,12 @@ Click &quot;Back&quot; to review your currency selections.</text>
 Interchange Format) files written by Quicken/Quickbooks,
 MS Money, Moneydance, and many other programs. 
 
-The import  process has several steps.  Nothing will be done 
-to your  Gnucash accounts until you click &quot;Finish&quot; at the end
-of the process. 
+The import process has several steps. Your GnuCash
+accounts will not be changed until you click &quot;Finish&quot;
+at the end of the process. 
 
-Click &quot;Next&quot; to start loading your QIF data, or &quot;Cancel&quot; to 
-abort the process. </text>
+Click &quot;Next&quot; to start loading your QIF data, or &quot;Cancel&quot;
+to abort the process. </text>
       <title_color>255,255,255</title_color>
       <text_color>0,0,0</text_color>
       <background_color>153,191,153</background_color>
@@ -6387,13 +6387,12 @@ abort the process. </text>
 	<widget>
 	  <class>GtkLabel</class>
 	  <name>label822</name>
-	  <label>Please select a file to load.  When you click &quot;Next&quot;, the file will
-be loaded into a temporary area for analysis and you may be asked
-to answer some questions about the account(s) that are in it.
+	  <label>Please select a file to load. When you click &quot;Next&quot;, the file will
+be loaded into a staging area and analyzed. You may need
+to answer some questions about the account(s) in the file.
 
-Files can contain single or multiple accounts; you will have the 
-opportunity to load as many files as you wish, so don't worry if 
-all your data isn't in just one file. 
+You will have the opportunity to load as many files as you wish,
+so don't worry if your data is in multiple files. 
 </label>
 	  <justify>GTK_JUSTIFY_LEFT</justify>
 	  <wrap>False</wrap>
@@ -6510,10 +6509,10 @@ all your data isn't in just one file.
 	  <class>GtkLabel</class>
 	  <name>label823</name>
 	  <label>The QIF file that you just loaded appears to contain 
-transactions for just one account, but the file does not have a 
-name for that account.  
+transactions for just one account, but the file does not have
+a name for that account.  
 
-Please enter a name for the account.  If the file was exported 
+Please enter a name for the account. If the file was exported 
 from another accounting program and you are importing multiple
 files, it is important to use the same name that was used in 
 that program.
@@ -6750,19 +6749,18 @@ of the QIF import process. </label>
 	  <class>GtkLabel</class>
 	  <name>label830</name>
 	  <label>On the next page, the accounts in your QIF files and any stocks or mutual funds
-you own will be matched with Gnucash accounts.  If an account already exists
-with the same or a similar name and compatible type, it will be used; otherwise, 
-the default behavior will be to create a new account with the same name and 
-type as the QIF account.  If you do not like the suggested Gnucash account, 
-click to change it.
+you own will be matched with Gnucash accounts. If a GnuCash account already
+exists with the same name, or a similar name and compatible type, that account
+will be used as a match; otherwise, GnuCash will create a new account with the
+same name and type as the QIF account. If you do not like the suggested
+Gnucash account, click to change it.
 
 Note that Gnucash will be creating many accounts that did not exist on your
 other personal finance program, including a separate account for each stock
 you own, separate accounts for the brokerage commissions, special &quot;Equity&quot;
 accounts (subaccounts of Retained Earnings, by default) which are the source
-of your opening balances, etc.  All of these accounts will appear on the next 
-page so that you can change the defaults if you want to, but it is safe to leave
-them alone.  Do not be alarmed.
+of your opening balances, etc. All of these accounts will appear on the next 
+page so you can change them if you want to, but it is safe to leave them alone.
 </label>
 	  <justify>GTK_JUSTIFY_LEFT</justify>
 	  <wrap>False</wrap>
@@ -6788,7 +6786,7 @@ them alone.  Do not be alarmed.
 	<data>QIF_Import_Druid</data>
 	<last_modification_time>Thu, 31 Aug 2000 14:19:54 GMT</last_modification_time>
       </signal>
-      <title>Map QIF accounts to Gnucash accounts</title>
+      <title>Match QIF accounts with Gnucash accounts</title>
       <title_color>255,255,255</title_color>
       <background_color>153,191,153</background_color>
       <logo_background_color>255,255,255</logo_background_color>
@@ -6878,7 +6876,7 @@ them alone.  Do not be alarmed.
 	<widget>
 	  <class>GtkLabel</class>
 	  <name>label828</name>
-	  <label>Click &quot;Next&quot; to check mappings for QIF categories. </label>
+	  <label>Click &quot;Next&quot; to check matchings for QIF categories. </label>
 	  <justify>GTK_JUSTIFY_CENTER</justify>
 	  <wrap>False</wrap>
 	  <xalign>0.5</xalign>
@@ -6917,14 +6915,14 @@ them alone.  Do not be alarmed.
 	<widget>
 	  <class>GtkLabel</class>
 	  <name>label840</name>
-	  <label>Gnucash uses separate Income and Expense accounts rather than  Categories to 
-classify your transactions.  Each of the categories in your QIF file will be 
-converted to a Gnucash account.  On the next page, you will have an opportunity
-to look at the suggested matching of QIF category to Gnucash account and 
-change it if you do not like the suggested default. 
+	  <label>Gnucash uses separate Income and Expense accounts rather than categories
+to classify your transactions. Each of the categories in your QIF file will be 
+converted to a Gnucash account. On the next page, you will have an opportunity
+to look at the suggested matchings between QIF categories and Gnucash accounts. 
+You may change the matchings if you do not like the suggested ones. 
 
 If you change your mind later, you can reorganize the account structure safely
-on your own. </label>
+within GnuCash.</label>
 	  <justify>GTK_JUSTIFY_LEFT</justify>
 	  <wrap>False</wrap>
 	  <xalign>0.5</xalign>
@@ -6955,7 +6953,7 @@ on your own. </label>
 	<data>QIF_Import_Druid</data>
 	<last_modification_time>Tue, 05 Sep 2000 17:18:38 GMT</last_modification_time>
       </signal>
-      <title>Map QIF categories to Gnucash accounts</title>
+      <title>Match QIF categories with Gnucash accounts</title>
       <title_color>255,255,255</title_color>
       <background_color>154,191,154</background_color>
       <logo_background_color>255,255,255</logo_background_color>
@@ -7091,8 +7089,8 @@ on your own. </label>
 	  <class>GtkLabel</class>
 	  <name>label831</name>
 	  <label>The QIF importer cannot currently handle multi-currency QIF 
-files.  All the accounts in the QIF file(s) you are importing must
-be denominated in the same currency.  This limitation should be
+files. All the accounts in the QIF file(s) you are importing must
+be denominated in the same currency. This limitation should be
 removed soon.
 
 Enter the currency to use for transactions imported from your
@@ -7196,10 +7194,10 @@ Each stock, mutual fund, or other commodity must have a type, which is the
 exchange or listing that it is found on (NASDAQ, NYSE, US Mutual Funds, 
 etc), a full name, and an abbreviation.
 
-Check to see if there is an existing Type in the picker that is appropriate; if 
-not, you can enter a new Type name by hand in the box.  Make sure that the
-abbreviation you enter matches the ticker  symbol used for the commodity 
-on the exchange or listing for its type.  
+Check to see if there is an existing Type that is appropriate; if not, you can
+enter a new Type name by hand in the box. Make sure that the abbreviation
+you enter matches the ticker symbol used for the commodity on the exchange
+or listing for its type.  
 </label>
 	  <justify>GTK_JUSTIFY_LEFT</justify>
 	  <wrap>False</wrap>
@@ -7226,13 +7224,12 @@ on the exchange or listing for its type.
 	<last_modification_time>Wed, 30 Aug 2000 15:07:20 GMT</last_modification_time>
       </signal>
       <title>Update your Gnucash accounts</title>
-      <text>Click &quot;Finish&quot; to import data from the staging area and
-update your Gnucash accounts.  The account and category
-mapping information you have entered will be saved and will
-be the default the next time you use the QIF import 
-facility. 
+      <text>Click &quot;Finish&quot; to import data from the staging area and update
+your Gnucash accounts. The account and category matching
+information you have entered will be saved and used for
+defaults the next time you use the QIF import  facility. 
 
-Click &quot;Back&quot; to review your account and category mappings,
+Click &quot;Back&quot; to review your account and category matchings,
 to change currency and security settings for new accounts, 
 or to add more files to the staging area.
 

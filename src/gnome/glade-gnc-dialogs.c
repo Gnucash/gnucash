@@ -4416,7 +4416,7 @@ create_QIF_Import_Druid (void)
   gnome_druid_page_start_set_logo_bg_color (GNOME_DRUID_PAGE_START (druidpagestart1), &druidpagestart1_logo_bg_color);
   gnome_druid_page_start_set_title_color (GNOME_DRUID_PAGE_START (druidpagestart1), &druidpagestart1_title_color);
   gnome_druid_page_start_set_title (GNOME_DRUID_PAGE_START (druidpagestart1), _("Import QIF files"));
-  gnome_druid_page_start_set_text (GNOME_DRUID_PAGE_START (druidpagestart1), _("Gnucash can import financial data from QIF (Quicken \nInterchange Format) files written by Quicken/Quickbooks,\nMS Money, Moneydance, and many other programs. \n\nThe import  process has several steps.  Nothing will be done \nto your  Gnucash accounts until you click \"Finish\" at the end\nof the process. \n\nClick \"Next\" to start loading your QIF data, or \"Cancel\" to \nabort the process. "));
+  gnome_druid_page_start_set_text (GNOME_DRUID_PAGE_START (druidpagestart1), _("Gnucash can import financial data from QIF (Quicken \nInterchange Format) files written by Quicken/Quickbooks,\nMS Money, Moneydance, and many other programs. \n\nThe import process has several steps. Your GnuCash\naccounts will not be changed until you click \"Finish\"\nat the end of the process. \n\nClick \"Next\" to start loading your QIF data, or \"Cancel\"\nto abort the process. "));
 
   load_file_page = gnome_druid_page_standard_new_with_vals ("", NULL);
   gtk_widget_ref (load_file_page);
@@ -4435,7 +4435,7 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox8);
 
-  label822 = gtk_label_new (_("Please select a file to load.  When you click \"Next\", the file will\nbe loaded into a temporary area for analysis and you may be asked\nto answer some questions about the account(s) that are in it.\n\nFiles can contain single or multiple accounts; you will have the \nopportunity to load as many files as you wish, so don't worry if \nall your data isn't in just one file. \n"));
+  label822 = gtk_label_new (_("Please select a file to load. When you click \"Next\", the file will\nbe loaded into a staging area and analyzed. You may need\nto answer some questions about the account(s) in the file.\n\nYou will have the opportunity to load as many files as you wish,\nso don't worry if your data is in multiple files. \n"));
   gtk_widget_ref (label822);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label822", label822,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -4490,7 +4490,7 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox9);
 
-  label823 = gtk_label_new (_("The QIF file that you just loaded appears to contain \ntransactions for just one account, but the file does not have a \nname for that account.  \n\nPlease enter a name for the account.  If the file was exported \nfrom another accounting program and you are importing multiple\nfiles, it is important to use the same name that was used in \nthat program.\n"));
+  label823 = gtk_label_new (_("The QIF file that you just loaded appears to contain \ntransactions for just one account, but the file does not have\na name for that account.  \n\nPlease enter a name for the account. If the file was exported \nfrom another accounting program and you are importing multiple\nfiles, it is important to use the same name that was used in \nthat program.\n"));
   gtk_widget_ref (label823);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label823", label823,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -4613,7 +4613,7 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox13);
 
-  label830 = gtk_label_new (_("On the next page, the accounts in your QIF files and any stocks or mutual funds\nyou own will be matched with Gnucash accounts.  If an account already exists\nwith the same or a similar name and compatible type, it will be used; otherwise, \nthe default behavior will be to create a new account with the same name and \ntype as the QIF account.  If you do not like the suggested Gnucash account, \nclick to change it.\n\nNote that Gnucash will be creating many accounts that did not exist on your\nother personal finance program, including a separate account for each stock\nyou own, separate accounts for the brokerage commissions, special \"Equity\"\naccounts (subaccounts of Retained Earnings, by default) which are the source\nof your opening balances, etc.  All of these accounts will appear on the next \npage so that you can change the defaults if you want to, but it is safe to leave\nthem alone.  Do not be alarmed.\n"));
+  label830 = gtk_label_new (_("On the next page, the accounts in your QIF files and any stocks or mutual funds\nyou own will be matched with Gnucash accounts. If a GnuCash account already\nexists with the same name, or a similar name and compatible type, that account\nwill be used as a match; otherwise, GnuCash will create a new account with the\nsame name and type as the QIF account. If you do not like the suggested\nGnucash account, click to change it.\n\nNote that Gnucash will be creating many accounts that did not exist on your\nother personal finance program, including a separate account for each stock\nyou own, separate accounts for the brokerage commissions, special \"Equity\"\naccounts (subaccounts of Retained Earnings, by default) which are the source\nof your opening balances, etc. All of these accounts will appear on the next \npage so you can change them if you want to, but it is safe to leave them alone.\n"));
   gtk_widget_ref (label830);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label830", label830,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -4630,7 +4630,7 @@ create_QIF_Import_Druid (void)
   gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (druidpagestandard3), &druidpagestandard3_bg_color);
   gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (druidpagestandard3), &druidpagestandard3_logo_bg_color);
   gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (druidpagestandard3), &druidpagestandard3_title_color);
-  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (druidpagestandard3), _("Map QIF accounts to Gnucash accounts"));
+  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (druidpagestandard3), _("Match QIF accounts with Gnucash accounts"));
 
   druid_vbox3 = GNOME_DRUID_PAGE_STANDARD (druidpagestandard3)->vbox;
   gtk_widget_ref (druid_vbox3);
@@ -4678,7 +4678,7 @@ create_QIF_Import_Druid (void)
   gtk_widget_show (label836);
   gtk_clist_set_column_widget (GTK_CLIST (account_page_list), 2, label836);
 
-  label828 = gtk_label_new (_("Click \"Next\" to check mappings for QIF categories. "));
+  label828 = gtk_label_new (_("Click \"Next\" to check matchings for QIF categories. "));
   gtk_widget_ref (label828);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label828", label828,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -4702,7 +4702,7 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox18);
 
-  label840 = gtk_label_new (_("Gnucash uses separate Income and Expense accounts rather than  Categories to \nclassify your transactions.  Each of the categories in your QIF file will be \nconverted to a Gnucash account.  On the next page, you will have an opportunity\nto look at the suggested matching of QIF category to Gnucash account and \nchange it if you do not like the suggested default. \n\nIf you change your mind later, you can reorganize the account structure safely\non your own. "));
+  label840 = gtk_label_new (_("Gnucash uses separate Income and Expense accounts rather than categories\nto classify your transactions. Each of the categories in your QIF file will be \nconverted to a Gnucash account. On the next page, you will have an opportunity\nto look at the suggested matchings between QIF categories and Gnucash accounts. \nYou may change the matchings if you do not like the suggested ones. \n\nIf you change your mind later, you can reorganize the account structure safely\nwithin GnuCash."));
   gtk_widget_ref (label840);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label840", label840,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -4719,7 +4719,7 @@ create_QIF_Import_Druid (void)
   gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (druidpagestandard4), &druidpagestandard4_bg_color);
   gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (druidpagestandard4), &druidpagestandard4_logo_bg_color);
   gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (druidpagestandard4), &druidpagestandard4_title_color);
-  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (druidpagestandard4), _("Map QIF categories to Gnucash accounts"));
+  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (druidpagestandard4), _("Match QIF categories with Gnucash accounts"));
 
   druid_vbox4 = GNOME_DRUID_PAGE_STANDARD (druidpagestandard4)->vbox;
   gtk_widget_ref (druid_vbox4);
@@ -4791,7 +4791,7 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox16);
 
-  label831 = gtk_label_new (_("The QIF importer cannot currently handle multi-currency QIF \nfiles.  All the accounts in the QIF file(s) you are importing must\nbe denominated in the same currency.  This limitation should be\nremoved soon.\n\nEnter the currency to use for transactions imported from your\nQIF files:"));
+  label831 = gtk_label_new (_("The QIF importer cannot currently handle multi-currency QIF \nfiles. All the accounts in the QIF file(s) you are importing must\nbe denominated in the same currency. This limitation should be\nremoved soon.\n\nEnter the currency to use for transactions imported from your\nQIF files:"));
   gtk_widget_ref (label831);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label831", label831,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -4837,7 +4837,7 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox17);
 
-  label833 = gtk_label_new (_("In the next pages, you will be asked to provide information about stocks, \nmutual funds, and other tradable commodities that appear in the QIF file(s)\nyou are importing.  Gnucash requires more information about tradable \ncommodities than the QIF format can represent. \n\nEach stock, mutual fund, or other commodity must have a type, which is the \nexchange or listing that it is found on (NASDAQ, NYSE, US Mutual Funds, \netc), a full name, and an abbreviation.\n\nCheck to see if there is an existing Type in the picker that is appropriate; if \nnot, you can enter a new Type name by hand in the box.  Make sure that the\nabbreviation you enter matches the ticker  symbol used for the commodity \non the exchange or listing for its type.  \n"));
+  label833 = gtk_label_new (_("In the next pages, you will be asked to provide information about stocks, \nmutual funds, and other tradable commodities that appear in the QIF file(s)\nyou are importing.  Gnucash requires more information about tradable \ncommodities than the QIF format can represent. \n\nEach stock, mutual fund, or other commodity must have a type, which is the \nexchange or listing that it is found on (NASDAQ, NYSE, US Mutual Funds, \netc), a full name, and an abbreviation.\n\nCheck to see if there is an existing Type that is appropriate; if not, you can\nenter a new Type name by hand in the box. Make sure that the abbreviation\nyou enter matches the ticker symbol used for the commodity on the exchange\nor listing for its type.  \n"));
   gtk_widget_ref (label833);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label833", label833,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -4857,7 +4857,7 @@ create_QIF_Import_Druid (void)
   gnome_druid_page_finish_set_title_color (GNOME_DRUID_PAGE_FINISH (end_page), &end_page_title_color);
   gnome_druid_page_finish_set_text_color (GNOME_DRUID_PAGE_FINISH (end_page), &end_page_text_color);
   gnome_druid_page_finish_set_title (GNOME_DRUID_PAGE_FINISH (end_page), _("Update your Gnucash accounts"));
-  gnome_druid_page_finish_set_text (GNOME_DRUID_PAGE_FINISH (end_page), _("Click \"Finish\" to import data from the staging area and\nupdate your Gnucash accounts.  The account and category\nmapping information you have entered will be saved and will\nbe the default the next time you use the QIF import \nfacility. \n\nClick \"Back\" to review your account and category mappings,\nto change currency and security settings for new accounts, \nor to add more files to the staging area.\n\nClick \"Cancel\" to abort the QIF import process."));
+  gnome_druid_page_finish_set_text (GNOME_DRUID_PAGE_FINISH (end_page), _("Click \"Finish\" to import data from the staging area and update\nyour Gnucash accounts. The account and category matching\ninformation you have entered will be saved and used for\ndefaults the next time you use the QIF import  facility. \n\nClick \"Back\" to review your account and category matchings,\nto change currency and security settings for new accounts, \nor to add more files to the staging area.\n\nClick \"Cancel\" to abort the QIF import process."));
 
   gtk_signal_connect (GTK_OBJECT (qif_import_druid), "cancel",
                       GTK_SIGNAL_FUNC (gnc_ui_qif_import_cancel_cb),
