@@ -473,7 +473,6 @@ Account *     xaccSplitGetAccount (Split *split);
  */
 
 int  xaccTransOrder     (Transaction *ta, Transaction *tb);
-int  xaccSplitOrder     (Split *sa, Split *sb);
 int  xaccSplitDateOrder (Split *sa, Split *sb);
 
 /********************************************************************\
