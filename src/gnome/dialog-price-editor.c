@@ -702,6 +702,14 @@ date_changed_cb (GNCDateEdit *gde, gpointer data)
 }
 
 static void
+date_entry_changed_cb (GtkWidget *w, gpointer data)
+{
+  PricesDialog *pdb_dialog = data;
+
+  gnc_prices_set_changed (pdb_dialog, TRUE);
+}
+
+static void
 type_menu_changed (GtkButton *button, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
@@ -800,6 +808,8 @@ gnc_price_dialog_create (PricesDialog *pdb_dialog)
   box = lookup_widget (price_dialog, "currency_box");
 
   w = gnc_currency_edit_new ();
+  gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT (w),
+                                  gnc_default_currency ());
   pdb_dialog->currency_edit = w;
   gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
   gtk_widget_show (w);
@@ -816,6 +826,9 @@ gnc_price_dialog_create (PricesDialog *pdb_dialog)
 
   gtk_signal_connect (GTK_OBJECT (w), "date_changed",
                       GTK_SIGNAL_FUNC (date_changed_cb), pdb_dialog);
+
+  gtk_signal_connect (GTK_OBJECT (GNC_DATE_EDIT (w)->date_entry), "changed",
+                      GTK_SIGNAL_FUNC (date_entry_changed_cb), pdb_dialog);
 
   w = lookup_widget (price_dialog, "source_entry");
   pdb_dialog->source_entry = w;
