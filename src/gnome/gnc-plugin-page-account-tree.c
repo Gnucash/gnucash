@@ -17,15 +17,20 @@
 #include "Scrub.h"
 #include "Transaction.h"
 #include "dialog-account.h"
+#include "dialog-options.h"
 #include "dialog-transfer.h"
+#include "global-options.h"
 #include "gnc-book.h"
 #include "gnc-component-manager.h"
+#include "gnc-html.h"
 #include "gnc-icons.h"
 #include "gnc-plugin-account-tree.h"
 #include "gnc-split-reg.h"
 #include "gnc-tree-model-account.h"
+#include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "option-util.h"
 #include "window-reconcile.h"
 #include "window-register.h"
 
@@ -70,6 +75,9 @@ static void gnc_plugin_page_account_tree_cmd_stock_split (EggAction *action, Gnc
 static void gnc_plugin_page_account_tree_cmd_scrub (EggAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub_sub (EggAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub_all (EggAction *action, GncPluginPageAccountTree *page);
+
+
+static void gnc_plugin_page_acct_tree_options_new(GncPluginPageAccountTreePrivate *priv);
 
 static EggActionGroupEntry gnc_plugin_page_account_tree_actions [] = {
 	/* Toplevel */
@@ -129,9 +137,20 @@ struct GncPluginPageAccountTreePrivate
 
 	GtkWidget *widget;
 	GtkTreeView *tree_view;
+
+	SCM         euro_change_callback_id;
+	SCM         name_change_callback_id;
+
+	GNCOptionDB * odb;
+	SCM         options; 
+	int         options_id;
+	GNCOptionWin * editor_dialog;
+
+	GtkWidget *options_db;
 };
 
 static GObjectClass *parent_class = NULL;
+
 
 GType
 gnc_plugin_page_account_tree_get_type (void)
@@ -224,13 +243,32 @@ gnc_plugin_page_account_tree_init_short_names (EggActionGroup *action_group)
 }
 
 static void
+gnc_euro_change (gpointer data)
+{
+  /* gnc_acct_tree_window_configure (data); */
+  gnc_gui_refresh_all ();
+}
+
+static void
+gnc_plugin_page_acct_tree_view_refresh (gpointer data)
+{
+  //  gnc_mdi_child_refresh (data);
+}
+
+static void
 gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 {
 	EggActionGroup *action_group;
+	GncPluginPageAccountTreePrivate *priv;
 	gint i;
+	const gchar *url = NULL;
+	int options_id;
+	SCM find_options;
+	SCM temp;
+	URLType type;
 
 	ENTER("page %p", plugin_page);
-	plugin_page->priv = g_new0 (GncPluginPageAccountTreePrivate, 1);
+	priv = plugin_page->priv = g_new0 (GncPluginPageAccountTreePrivate, 1);
 
 	/* Create menu and toolbar information */
 	for (i = 0; i < gnc_plugin_page_account_tree_n_actions; i++) {
@@ -238,10 +276,64 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 	}
 
 	action_group = egg_action_group_new ("GncPluginPageAccountTreeActions");
-	plugin_page->priv->action_group = action_group;
-	egg_action_group_add_actions (action_group, gnc_plugin_page_account_tree_actions,
+	priv->action_group = action_group;
+	egg_action_group_add_actions (action_group,
+				      gnc_plugin_page_account_tree_actions,
 				      gnc_plugin_page_account_tree_n_actions);
 	gnc_plugin_page_account_tree_init_short_names (action_group);
+
+	
+	/* get the options and the window ID */ 
+	priv->options = SCM_BOOL_F;
+	scm_protect_object(priv->options);
+	priv->editor_dialog = NULL;
+
+	if(!url) {
+	  gnc_plugin_page_acct_tree_options_new(priv);
+	} else {
+	  char * location = NULL;
+	  char * label = NULL;
+
+	  /* if an URL is specified, it should look like 
+	   * gnc-acct-tree:id=17 .  We want to get the number out,
+	   * then look up the options in the global DB. */
+	  type = gnc_html_parse_url(NULL, url, &location, &label);
+	  if (!safe_strcmp (type, URL_TYPE_ACCTTREE) &&
+	      location && (strlen(location) > 3) && 
+	      !strncmp("id=", location, 3)) {
+	    sscanf(location+3, "%d", &options_id);
+	    find_options = scm_c_eval_string("gnc:find-acct-tree-window-options");
+	    temp = scm_call_1(find_options, scm_int2num(options_id));
+
+	    if(temp != SCM_BOOL_F) {
+	      scm_unprotect_object(priv->options);
+	      priv->options = temp;
+	      scm_protect_object(priv->options);
+	      priv->options_id = options_id;
+	    } else {
+	      gnc_plugin_page_acct_tree_options_new(priv);
+	    }
+	  } else {
+	    gnc_plugin_page_acct_tree_options_new(priv);
+	  }
+
+	  g_free (location);
+	  g_free (label);
+	}
+
+	priv->odb     = gnc_option_db_new(priv->options);
+
+	priv->euro_change_callback_id =
+	  gnc_register_option_change_callback(gnc_euro_change, priv,
+					      "International",
+					      "Enable EURO support");
+	priv->name_change_callback_id = 
+	  gnc_option_db_register_change_callback(priv->odb, 
+						 gnc_plugin_page_acct_tree_view_refresh,
+						 priv, 
+						 N_("Account Tree"),
+						 N_("Name of account view"));
+	scm_protect_object(priv->name_change_callback_id);
 
 	LEAVE("page %p, priv %p, action group %p",
 	      plugin_page, plugin_page->priv, plugin_page->priv->action_group);
@@ -250,13 +342,33 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 static void
 gnc_plugin_page_account_tree_finalize (GObject *object)
 {
-	GncPluginPageAccountTree *model = GNC_PLUGIN_PAGE_ACCOUNT_TREE (object);
+	GncPluginPageAccountTree *model;
+	GncPluginPageAccountTreePrivate *priv;
+	SCM  free_tree;
 
 	ENTER("object %p", object);
+	model = GNC_PLUGIN_PAGE_ACCOUNT_TREE (object);
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (model));
-	g_return_if_fail (model->priv != NULL);
+	priv = model->priv;
+	g_return_if_fail (priv != NULL);
 
-	g_free (model->priv);
+	/* Options stuff */
+	gnc_unregister_option_change_callback_id(priv->euro_change_callback_id);
+
+	if (priv->editor_dialog) {
+	  gnc_options_dialog_destroy(priv->editor_dialog);
+	  priv->editor_dialog = NULL;
+	}
+  
+	gnc_option_db_destroy(priv->odb);
+
+	free_tree = scm_c_eval_string("gnc:free-acct-tree-window");
+	scm_call_1(free_tree, scm_int2num(priv->options_id));
+	priv->options_id = 0;
+
+	scm_unprotect_object(priv->options);
+
+	g_free (priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 	LEAVE(" ");
@@ -302,9 +414,6 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 {
 	GncPluginPageAccountTree *page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
 	GtkWidget *scrolled_window;
-	GtkTreeModel *model;
-	GtkCellRenderer *renderer;
-	GtkTreeViewColumn *column;
 
 	ENTER("page %p", plugin_page);
 	if (page->priv->widget == NULL) {
@@ -318,36 +427,11 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 		gtk_box_pack_start (GTK_BOX (page->priv->widget), scrolled_window,
 				    TRUE, TRUE, 0);
 
-		model = gnc_tree_model_account_new (gnc_book_get_group (gnc_get_current_book ()));
-
-		page->priv->tree_view = GTK_TREE_VIEW (gtk_tree_view_new ());
+		page->priv->tree_view = gnc_tree_view_account_new();
+		g_signal_connect (G_OBJECT (page->priv->tree_view), "button-press-event",
+				  G_CALLBACK (gnc_plugin_page_account_tree_button_press_cb), page);
 		gtk_widget_show (GTK_WIDGET (page->priv->tree_view));
 		gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(page->priv->tree_view));
-		
-		g_signal_connect (G_OBJECT (page->priv->tree_view), "button-press-event",
-      				 G_CALLBACK (gnc_plugin_page_account_tree_button_press_cb), page);
-		gtk_tree_view_set_model (page->priv->tree_view, model);
-		g_object_unref (model);
-
-		column = gtk_tree_view_column_new ();
-		gtk_tree_view_column_set_title (column, _("Account Name"));
-		renderer = gtk_cell_renderer_pixbuf_new ();
-		g_object_set (renderer, "stock-id", GNC_STOCK_ACCOUNT, NULL);
-		gtk_tree_view_column_pack_start (column, renderer, FALSE);
-		renderer = gtk_cell_renderer_text_new ();
-		gtk_tree_view_column_pack_start (column, renderer, FALSE);
-		gtk_tree_view_column_add_attribute (column,
-						    renderer,
-						    "text", GNC_TREE_MODEL_ACCOUNT_COL_NAME);
-		gtk_tree_view_append_column (page->priv->tree_view, column);
-		gtk_tree_view_set_expander_column (page->priv->tree_view, column);
-
-		renderer = gtk_cell_renderer_text_new ();
-		column = gtk_tree_view_column_new_with_attributes (_("Description"),
-								   renderer,
-								   "text", GNC_TREE_MODEL_ACCOUNT_COL_DESCRIPTION,
-								   NULL);
-		gtk_tree_view_append_column (page->priv->tree_view, column);
 	}
 
 	LEAVE("widget = %p", page->priv->widget);
@@ -612,9 +696,108 @@ gnc_plugin_page_account_tree_cmd_delete_account (EggAction *action, GncPluginPag
 	g_free (name);
 }
 
+/******************************/
+/*       Options Dialog       */
+/******************************/
+
+static void
+gnc_plugin_page_account_tree_configure (GncPluginPageAccountTreePrivate *priv)
+{
+  GtkTreeView *tree_view;
+  GSList *list;
+
+  ENTER(" ");
+  tree_view = priv->tree_view;
+  list = gnc_option_db_lookup_list_option(priv->odb, 
+                                          "Account Tree",
+                                          "Account fields to display",
+                                          NULL);
+  gnc_tree_view_account_configure_columns (GNC_TREE_VIEW_ACCOUNT(tree_view), list);
+  gnc_free_list_option_value (list);
+  LEAVE(" ");
+}
+
+static void
+gnc_plugin_page_account_tree_options_apply_cb (GNCOptionWin * propertybox,
+					       gpointer user_data)
+{
+  GncPluginPageAccountTreePrivate *priv = user_data;
+  if(!priv)
+    return;
+
+  ENTER(" ");
+  gnc_option_db_commit(priv->odb);
+  gnc_plugin_page_account_tree_configure (priv);
+  LEAVE(" ");
+}
+
+static void
+gnc_plugin_page_account_tree_options_help_cb (GNCOptionWin * propertybox,
+					      gpointer user_data)
+{
+  GtkWidget *dialog;
+
+  dialog = gtk_message_dialog_new (NULL,
+				   GTK_DIALOG_DESTROY_WITH_PARENT,
+				   GTK_MESSAGE_INFO,
+				   GTK_BUTTONS_OK,
+				   "Set the account tree options you want using this dialog.");
+
+  gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
+}
+
+static void
+gnc_plugin_page_account_tree_options_close_cb (GNCOptionWin * propertybox,
+					       gpointer user_data)
+{
+  GncPluginPageAccountTreePrivate *priv = user_data;
+  if(!priv)
+    return;
+
+  gnc_options_dialog_destroy(priv->editor_dialog);
+  priv->editor_dialog = NULL;
+}
+
+static void
+gnc_plugin_page_acct_tree_options_new (GncPluginPageAccountTreePrivate *priv)
+{
+  SCM func, opts_and_id;
+
+  scm_unprotect_object(priv->options);
+  func = scm_c_eval_string("gnc:make-new-acct-tree-window");
+  opts_and_id = scm_call_0(func);
+  priv->options = SCM_CAR(opts_and_id);
+  scm_protect_object(priv->options);
+  priv->options_id = scm_num2int(SCM_CDR(opts_and_id), SCM_ARG1, __FUNCTION__);
+}
+
+/*********************/
+
 static void
 gnc_plugin_page_account_tree_cmd_view_options (EggAction *action, GncPluginPageAccountTree *page)
 {
+  GncPluginPageAccountTreePrivate *priv;
+
+  g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
+  priv = page->priv;
+
+  if (!priv->editor_dialog) {
+    priv->editor_dialog = gnc_options_dialog_new(_("Account Tree Options"));
+    gnc_build_options_dialog_contents(priv->editor_dialog, 
+				      priv->odb);
+    
+    gnc_options_dialog_set_apply_cb(priv->editor_dialog, 
+				    gnc_plugin_page_account_tree_options_apply_cb,
+				    priv);
+    gnc_options_dialog_set_help_cb(priv->editor_dialog, 
+				   gnc_plugin_page_account_tree_options_help_cb,
+				   priv);
+    gnc_options_dialog_set_close_cb(priv->editor_dialog, 
+				    gnc_plugin_page_account_tree_options_close_cb,
+				    priv);
+  }
+  gtk_window_present(GTK_WINDOW(gnc_options_dialog_widget(priv->editor_dialog)));
 }
 
 static void
