@@ -477,10 +477,10 @@
       </tr>
 
       <tr>
-        <td><a href="#ext">Extension Language Support</a></td>
+        <td><a href="#architecture">Architecture Review</a></td>
 
-        <td>Medium</td>
-        <td>RLB</td>
+        <td>Small</td>
+        <td>RLB, Dave</td>
       </tr>
 
       <tr>
@@ -623,7 +623,7 @@
       </tr>
 
       <tr>
-        <td><a href="#engine">Enhanced Engine, Financial
+        <td><a href="#engine">Enriched Engine, Financial
         Objects</a></td>
 
         <td>Large</td>
@@ -772,83 +772,76 @@
 
         <ul>
           <li>A general reporting infrastrucutre was implemented in
-          Perl, in the form of html-embedded perl (ePerl). However,
-          this reporting mechanism was abondoned in part because
-          ongoing build and install problems related to eperl and
-          swig. Also, since eperl didn't poarticipate in the
-          interpreter even loop, the report generator had to runn
-          as a separate process, reading data via pipes. This was
-          uglier than some folks liked.</li>
+              Perl, in the form of html-embedded perl (ePerl). However,
+              this reporting mechanism was abondoned in part because
+              ongoing build and install problems related to eperl and
+              swig. Also, since eperl didn't poarticipate in the
+              interpreter even loop, the report generator had to runn
+              as a separate process, reading data via pipes. This was
+              uglier than some folks liked.</li>
 
           <li>A general reporting infrastructure has been <a href=
-          "xacc-reports.html#NEWREP">implemented in Scheme</a>.
-          Currently, there are simple reports for Profit/Loss,
-          Balance Sheet, and portfolio valuation.</li>
+              "xacc-reports.html#NEWREP">implemented in Scheme</a>.
+              Currently, there are simple reports for Profit/Loss,
+              Balance Sheet, and portfolio valuation.</li>
 
           <li>Reports are currently displayed with the gtk-xmhtml
-          widget but are being ported to the gtk-html widget. The
-          gtkhtml widget should provide printing abilities through
-          gnome-print (right ????).</li>
+              widget but are being ported to the gtk-html widget. The
+              gtkhtml widget should provide printing abilities through
+              gnome-print (right ????).</li>
 
           <li>There is currently no way (no longer any way??) to
-          generate reports from the command line ...</li>
+              generate reports from the command line ...</li>
 
           <li>A list of 'required reports' is needed. Then these
-          need to be implemented.</li>
+              need to be implemented.
+          </li>
 
-          <li>Heavy discussion by matt martin, Robert Merkel
-          ...</li>
-          
+          <li>Heavy discussion by matt martin, Robert Merkel ...
+          </li>
+
           <li>The following technologies were rejected/unused mostly
-        because they were too complex, didn't hang together technologies:
-        <a href= "http://www.oasis-open.org/cover/">SGML</a> and <a href=
-        "http://www.oasis-open.org/cover/xml.html">Extensible
-        Markup Language - XML.</a> In the long run, these are
-        preferable to HTML, since <a href=
-        "http://www.jclark.com/dsssl/">DSSSL</a> tools such as <a
-        href="http://www.jclark.com/jade/">Jade (James DSSSL
-        Engine)</a> can be used to convert to RTF, Postscript, etc.
-        Add to this the consideration that XML is the basis for the
-        <a href="http://www.w3.org/DOM/">Document Object Model</a>,
-        which is being integrated into many web-based applications,
-        and we can see that XML is an increasingly significant
-        format as we look to the future.
+              because they were too complex, didn't hang together technologies:
+              <a href= "http://www.oasis-open.org/cover/">SGML</a> and <a href=
+              "http://www.oasis-open.org/cover/xml.html">Extensible
+              Markup Language - XML.</a> In the long run, these are
+              preferable to HTML, since <a href=
+              "http://www.jclark.com/dsssl/">DSSSL</a> tools such as <a
+              href="http://www.jclark.com/jade/">Jade (James DSSSL
+              Engine)</a> can be used to convert to RTF, Postscript, etc.
+              Add to this the consideration that XML is the basis for the
+              <a href="http://www.w3.org/DOM/">Document Object Model</a>,
+              which is being integrated into many web-based applications,
+              and we can see that XML is an increasingly significant
+              format as we look to the future.
         </li>
 
         </ul>
-        <br>
-        <br>
       </dd>
 
       <dt><a name="graphs"><b>Graphs</b></a></dt>
 
       <dd>
-        <p>Graph portfolio value vs. cost</p>
-
-        <p>Graphs, charts, etc. too ...</p>
-
-        <p>Asset allocation pie chart.</p>
-
-        <p>The following graph packages are candidates: <a href=
-        "http://www.gnome.org/guppi/">GUPPI</a>, plotutils,
-        gnumeric/graph code. The gnumeric/graphcode is already
-        bonobo-ified.</p>
-
-        <p>If gnumeric and gnucash are to use a common graph
-        solution, the following are gnumeric requirements: --
-        interactive plot editing -- each segment attributes totally
-        settable/controllable -- drag/move callbacks when segments
-        are click-draged.</p>
-
-        <p>Graphs should be printable to printer.</p>
+        <p>Provide support for graphs, charts, etc., such as:
+           Asset allocation pie chart, portfolio value vs. cost,
+           ROI.  Graphs should be printable to printer.
+           Graph generation should be fully integrated with reporting,
+           both for data collection via queries, and for displayed
+           output.
+        </p>
         <p><b>Status:</b></p>
-
         <ul>
-          <li>Evaluate different graphing packages, including <a
-          href="http://www.gnome.org/guppi/">GUPPI</a></li>
+          <li>Different graphing packageswere evaluagted, 
+              <a href="http://www.gnome.org/guppi/">GUPPI</a>.
+              Guppi was chosen.  Considered & rejected were
+              plotutils, gnumeric graphing code (Miguel says 
+              they'll replace gnumeric code with guppi.)
+              Miguel's/Gnumeric requirements were:
+              interactive plot editing -- each segment attributes 
+              totally settable/controllable -- drag/move callbacks 
+              when segments are click-draged.
+          </li>
         </ul>
-        <br>
-        <br>
       </dd>
 
       <dt><a name="ledger"><b>Simplified Ledger</b></a></dt>
@@ -1150,14 +1143,68 @@
 
         <ul>
           <li>Permanently lock some transactions as non-editable.
-          This should be straight-forward by using the <tt>
-          reconciled</tt> field to indicate a <tt>locked</tt>
-          value, and not allowing the GUI to edit locked
-          records.</li>
-
+              This should be straight-forward by using the <tt>
+              reconciled</tt> field to indicate a <tt>locked</tt>
+              value, and not allowing the GUI to edit locked
+              records.
+          </li>
           <li>Transfer the Income minus Expense for the book period
-          to an equity account, so that each new period starts with
-          zero income/expense balances.</li>
+              to an equity account, so that each new period starts with
+              zero income/expense balances.
+          </li>
+          <li>A mechanism to purge really old transactions from the
+              database.
+          </li>
+          <li>Extensions to querying and reporting infrastructure ...
+              The query changes might be painful ...
+          </li>
+          <li>
+              A user should be allowed to 'delete' an account <em>
+              only</em> if it has no transactions in the currently
+              open book. 
+              Of course, it's not deleted from the old books.
+              From this last, we conclude that every chart of
+              accounts should have a begining and ending date (that
+              match the book period), and the file format needs to
+              support multiple charts ...
+          </li>
+          <li>Memorized Transactions ... Currently, transaction
+              autocompletion works by autocompleting with the last 
+              'similar' transaction.  This ability will get trashed 
+              when books for the old year get closed, because there 
+              won't be 'similar' transactions.
+          </li>
+        </ul>
+
+        <p><b>Status:</b>
+        <ul>
+          <li>A mini-design doc exists in
+              src/engine/future.txt</li>
+        </ul>
+        </p>
+      </dd>
+
+      <dt><a name="check"><b>Check Printing</b></a></dt>
+
+      <dd>
+        Create a check-printing ability. Includ MICR (Magnetic Ink,
+        Computer Readable) check printing abilities.
+        <a href="http://dir.yahoo.com/business_and_economy/shopping_and_services/financial_services/banking/checks/">
+        Yahoo Check Printing</a> provides a list of vendors & printers.
+
+        <p><b>Status:</b></p>
+
+        <ul>
+          <li>Bill Gribble has built a prototype based on the
+              gnome-print. Waiting for gnome-print to mature ...</li>
+          <li>Need a sample check/sample transaction to print out
+              sot that user can test printer.
+          <li>MICR Fonts are available & brought to mailing list.
+        </ul>
+
+        <br>
+        <br>
+      </dd>
 
       <dt><a name="wizards"><b>Wizards</b></a></dt>
 
@@ -1192,69 +1239,6 @@
           </li>
         </ul>
 
-      </dd>
-
-          <li>A mechanism to purge really old transactions from the
-          database.</li>
-
-          <li>Extensions to reporting infrastructure ...</li>
-
-          <li>
-            A user should be allowed to 'delete' an account <em>
-            only</em> if it has no transactions in the currently
-            open book. 
-
-            <p>Of course, it's not deleted from the old books.</p>
-
-            <p>From this last, we conclude that every chart of
-            accounts should have a begining and ending date (that
-            match the book period), and the file format needs to
-            support multiple charts ...</p>
-          </li>
-          <li>Memorized Transactions ... Currently, transaction
-              autocompletion works by autocompleting with the last 
-              'similar' transaction.  This ability will get trashed 
-              when books for the old year get closed, because there 
-              won't be 'similar' transactions.
-          </li>
-        </ul>
-        <br>
-        <br>
-         
-
-        <p><b>Status:</b></p>
-
-        <ul>
-          <li>A mini-design doc exists in
-          src/engine/future.txt</li>
-        </ul>
-        <br>
-        <br>
-      </dd>
-
-      <dd><a name="check"></a></dd>
-
-      <dt><b>Check Printing</b></dt>
-
-      <dd>
-        Create a check-printing ability. Includ MICR (Magnetic Ink,
-        Computer Readable) check printing abilities.
-        <a href="http://dir.yahoo.com/business_and_economy/shopping_and_services/financial_services/banking/checks/">
-        Yahoo Check Printing</a> provides a list of vendors & printers.
-
-        <p><b>Status:</b></p>
-
-        <ul>
-          <li>Bill Gribble has built a prototype based on the
-              gnome-print. Waiting for gnome-print to mature ...</li>
-          <li>Need a sample check/sample transaction to print out
-              sot that user can test printer.
-          <li>MICR Fonts are available & brought to mailing list.
-        </ul>
-
-        <br>
-        <br>
-      </dd>
 
       <dt><a name="userpref"><b>User Preferences, Session Management</b></a></dt>
 
@@ -1299,8 +1283,7 @@
         <br>
       </dd>
 
-      <dt><a name="ext"><b>Extension Language Support</b></a></dt>
-
+      <dt><a name="architecture"><b>Architecture Review</b></a></dt>
       <dd>
         The application is wired together partly with C, partly
         with Scheme. The architecture of the wiring and how scheme
@@ -1308,9 +1291,8 @@
         created so that additional extensions may be added in a
         straightforward manner. 
 
-        <p>The overall architecture is envisioned thus:</p>
-
-        <p>All code, including the transaction engine, the file I/O
+        <p>The overall architecture is envisioned thus:
+        All code, including the transaction engine, the file I/O
         routines, the menus, and the ledger, will be abstracted
         into compact modules that can function independently of
         each other. At the highest level, there will be a
@@ -1329,14 +1311,20 @@
         <p><b>Status:</b></p>
 
         <ul>
-          <li>Scheme/Guile is the central extension language.</li>
-
-          <li>Optional interfaces to the data engine can be
-          generated using <a href=
-          "http://starship.skyport.net/crew/beazley/swig.html">
-          SWIG</a>.</li>
-
-          <li>Rob Browning is the reigning expert.</li>
+          <li>
+            Scheme/Guile is the central extension language.  Guile
+            interfaces auto-generated using g-wrap.
+          </li>
+          <li>
+            Optional interfaces to the data engine (for, e.g.
+            perl) can be generated using 
+            <a href= "http://starship.skyport.net/crew/beazley/swig.html">
+            SWIG</a>.
+          </li>
+          <li>
+            Dave to collacte & edit architecture documents. 
+            RLB to provide diagrams.
+          </li>
         </ul>
         <br>
         <br>
@@ -1471,11 +1459,19 @@
         <p><b>Status:</b></p>
 
         <ul>
-          <li>Quicken import is implemented and mostly works. 
-          (Bill Gribble, Done, in version 1.4.0)</li>
-
-          <li>Work needs to be done for recurring transactions, etc.</li>
-
+          <li>
+            Quicken import is implemented and mostly works. 
+            (Bill Gribble, Done, in version 1.4.0)
+          </li>
+          <li>
+            Need a QIF Import wizard (there are several non-intuitive
+            steps that need to be performed during import.  
+            A dialogue wizard seems like the best idea to carry 
+            through this process.
+          </li>
+          <li>
+            Work needs to be done for recurring transactions, etc.
+          </li>
           <li>
             QIF processing, as used for on-line banking, is <em>
             not</em> implemented. That is, staged import isn't
@@ -1586,8 +1582,9 @@
       <dt><a name="install"><b>Install</b></a></dt>
 
       <dd>
-        Install on Redhat, Caldera, Corel, SuSE, FreeBSD, TurboLinux,
-        etc.
+          Install on Redhat, Caldera, Corel, SuSE, FreeBSD, TurboLinux,
+          etc.  Possibly use a 'configure'-like way of dealing with
+          install inconsitencies.
         <p></p>
       </dd>
 
@@ -1612,9 +1609,16 @@
            Implement the 'correct' way of handling this when user
            is working in multiple currencies on a regular basis.
         </p>
+        <p>
+           <a href="http://www.cloanto.com/specs/seriff.html">SERIFF</a>
+           Simple Exchange Rate Information File Format.  Completely
+           *.ini-centric in layout and design, but otherwise seemingly
+           quite complete. 
+        </p>
 
         <p>
-        <b>Status:</b> Need to rethink wether the one-shot exchanges
+        <b>Status:</b> 
+           Need to rethink wether the one-shot exchanges
            should in fact be recorded full-fledged in the engine.
            Also: EURO support is currently hacked in: the EURO is treated as
            a 'special' currency. Virtually all the euro code can be fully
@@ -1668,17 +1672,13 @@
           always. It will not be possible to disable this and move
           to single-entry.</li>
         </ul>
-        <br>
-        <br>
       </dd>
 
-      <dt><a name="401K"><b>401(k), RSP</b></a></dt>
+      <dt><a name="401K"><b>401(k), Retirement Savings Plans</b></a></dt>
 
       <dd>
-        401K, 403, IRA, Roth IRA, SEP, Keogh ... "Retirement Savigs
-        Plans" 
-
-        <p>Retirement Savings Plans often do not put a high
+        401K, 403, IRA, Roth IRA, SEP, Keogh ... 
+        Retirement Savings Plans often do not put a high
         priority on tracking costs, as the tax implication is that
         amounts are taxable upon withdrawal, meaning that there is
         little necessity to track capital gains. (huh??)</p>
@@ -1780,17 +1780,12 @@ next due date mm/dd/yy
 
           <li>memo text</li>
         </ul>
-        <br>
-        <br>
-         
 
-        <p><b>Status:</b></p>
-
+        <p><b>Status:</b>
         <ul>
           <li>Not Started.</li>
         </ul>
-        <br>
-        <br>
+        </p>
       </dd>
 
       <dt><a name="tech"><b>Technical Stock Analysis</b></a></dt>
@@ -1979,6 +1974,29 @@ etc ...
           <p></p>
       </dd>
 
+      <dt><a name="logging"><b>Logging, Crash Recovery</b></a></dt>
+
+      <dd>
+        Logging serves two purposes: (1) return the system to the state
+        it was in on some earlier date.  (2) recover from a crash.
+        Probably need two distinct mechanisms to support this.  The
+        mechanisms are (A) backup copies. These can be compactly handled
+        via RCS (actually, deltax) for storage.  (B) Logging.  Write
+        out to disk each & every change made.
+        </p>
+        <p><b>Status:</b>
+        <ul>
+          <li>Crude transaction logging/auditing in place; should
+          be suitable for error/crash recovery but has not been
+          "tried by fire."</li>
+
+          <li>Backup files automatically created and
+          time-stamped.</li>
+        </p>
+
+        
+      </dd>
+
       <dt><a name="engine"><b>Enriched Engine, Financial Objects</b></a></dt>
 
       <dd>
@@ -2017,55 +2035,31 @@ etc ...
 
         <ul>
           <li><b>Locks</b> When splits are implemented, and the
-          parent transaction has been marked as cleared, the record
+          parent transaction has been marked as cleared/reconciled, 
+          the record
           should be locked, so that further modifications to the
           amount can't be performed (or at least, a warning is
           generated to prevent accidental garbaging up of old
           transactions).</li>
-
-          <li>
-            <b>Books</b> Ability to close a book at the end of the
-            fiscal year, thus indicating that nobody is permitted
-            to "mess around" with that old data. 
-            In a business environment, the auditors may have
-            "signed off" on the validity of the data; at that
-            point, the ability to modify audited data should be
-            <em>very</em> tightly controlled, or even outright
-            forbidden.
-          </li>
         </ul>
 
         <p><b>Current Status:</b></p>
 
         <ul>
-          <li>The basic engine has been detangled from the GUI
-          elements, as of version gnucash-1.1.4.</li>
-
-          <li>Binary file I/O mostly detangled into a separate
-          module.</li>
-
-          <li>Crude transaction logging/auditing in place; should
-          be suitable for error/crash recovery but has not been
-          "tried by fire."</li>
-
-          <li>Backup files automatically created and
-          time-stamped.</li>
-
           <li>
             <tt>BeginEdit()/RollbackEdit()/CommitEdit()</tt>
             routines mostly in place, 
-            These "Transaction processing constructs" should
+            these "Transaction processing constructs" should
             simplify creation of an SQL back end, or some other
-            more sophisticated database engine.
+            more sophisticated transactional server.
           </li>
 
           <li>Multiple currency support is present but still pretty
               "raw."</li>
 
-          <li>Query engine is minimal/sparse in capabilities.</li>
+          <li>Query engine has been broadly extended (Bill Gribble).
+              Documentation for Query Engine??</li>
 
-          <li>Linas &lt;linas@linas.org&gt; is maintaining the
-              engine code.</li>
         </ul>
         <p></p>
       </dd>
@@ -2300,6 +2294,12 @@ Password:
       <li><a href="http://www.linuxlinks.com/Software/Financial/">
       Financial Applications for Linx</a>
 
+      <li>
+        <a href="http://www.cloanto.com/specs/seriff.html">SERIFF</a>
+        Simple Exchange Rate Information File Format.  Completely
+        *.ini-centric in layout and design, but otherwise seemingly
+        quite complete. 
+      </li>
       <li><a href="http://www.pathcom.com/~sstratos/">gstalker</a>
       gtk/gnome stock grapher.</li>
 
@@ -2388,14 +2388,13 @@ Password:
       <li><a href="http://www.integrion.com/">Integrion</a>, a
       16-bank + IBM consortium aimed at building up on-line banking
       infrastructure. Mostly aimed at mainframes, middleware, high
-      transaction volumes and data integrity.<br>
-      <br>
+      transaction volumes and data integrity.
       </li>
 
       <li><a href="http://www.sun.com/980224/javapos/">Java Point
       of Sale</a> interfaces.</li>
 
-      <li><a href="ftp.gnu.org:/pub/gnu/plotutils/">Gnu
+      <li><a href="ftp://ftp.gnu.org/pub/gnu/plotutils/">Gnu
       Plotutils</a> needed for building the graphing portions of
       the code.</li>
 
@@ -2416,10 +2415,8 @@ Password:
       Works</a></li>
 
       <li><a href="http://www.penguincomputing.com/antarctic.html">
-      Antarctic Project Server</a></li>
-
-      <li><a href="http://www.im.lcs.mit.edu/~magnus/ml/">Maxwell's
-      Lemur -- a GTK based table widget</a></li>
+          Antarctic Project Server</a>
+      </li>
 
       <li><a href="http://www.ispras.ru/~knizhnik/gigabase.html">
       GigaBASE</a> embeddabale SQL database.</li>
@@ -2432,28 +2429,36 @@ Password:
     only. 
 
     <ul>
-      <li><a href="http://www3.hmc.edu/~rclark/xacc/">X-Accountant
-      Home Page</a> - this was the original site for
-      the GPL'ed accounting package that eventually evolved into
-      GnuCash. Robin Clark wrote the first version while at school
-      at Harvey Mudd College.</li>
-
-      <li>The original <a href=
-      "http://www.dnaco.net/~bcooper/watermark/index.html">
-      WaterMark</a> Gnome/KDE personal finance project page.
-      Watermark and GnoMoney were proposed about the same time, and
-      there was talk of joining forces with X-Accountant.</li>
-
-      <li><a href="http://www.telly.org/freemoney/">FreeMoney</a>
-      Linux small-business accounting s/w.  A proposal to build a 
-      business package back by SQL.</li>
+      <li>
+        <a href="http://www3.hmc.edu/~rclark/xacc/">X-Accountant
+        Home Page</a> - this was the original site for
+        the GPL'ed accounting package that eventually evolved into
+        GnuCash. Robin Clark wrote the first version while at school
+        at Harvey Mudd College.
+      </li>
+      <li>
+        The original <a href=
+        "http://www.dnaco.net/~bcooper/watermark/index.html">
+        WaterMark</a> Gnome/KDE personal finance project page.
+        Watermark and GnoMoney were proposed about the same time, and
+        there was talk of joining forces with X-Accountant.
+      </li>
+      <li>
+        <a href="http://www.im.lcs.mit.edu/~magnus/ml/">Maxwell's
+        Lemur -- a GTK based table widget</a> -- work discontinued
+        because gnumeric was much cooler.
+      </li>
+      <li>
+        <a href="http://www.telly.org/freemoney/">FreeMoney</a>
+        Linux small-business accounting s/w.  A proposal to build a 
+        business package backed by SQL.
+      </li>
     </ul>
     <hr>
-    Draft version 0.38 -- June 2000 
-    Linas Vepstas <a href="mailto:linas@linas.org">
-    linas@linas.org</a><br>
-    updates by Christopher Browne <a href=
-    "mailto:cbbrowne@ntlug.org">cbbrowne@ntlug.org</a><br>
+    Draft version 0.40 -- August 2000 
+    Linas Vepstas 
+    <a href="mailto:linas@linas.org">linas@linas.org</a>
+    <br>
   </body>
 </html>
 
