@@ -37,6 +37,6 @@ EXTRA_DIST = \
 guile-strings.c: ${SCM_FILES}
 	rm -f guile-strings.c
 	guile -s ../xgettext.scm ${SCM_FILES}
-CLEANFILES += guile-strings.c
+CLEANFILES = guile-strings.c
 
 all-local: guile-strings.c

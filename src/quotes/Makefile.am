@@ -23,7 +23,7 @@ finance-quote-helper: finance-quote-helper.in
             -e 's:@-PERLINCL-@:${PERLINCL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
-CLEANFILES += finance-quote-helper
+CLEANFILES = finance-quote-helper
 
 update-finance-quote: update-finance-quote.in
 	rm -f $@.tmp

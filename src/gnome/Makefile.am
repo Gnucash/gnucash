@@ -175,7 +175,7 @@ gnc-dir.h: gnc-dir.h.in
 	    -e 's:@-GNC_PIXMAP_DIR-@:${GNC_PIXMAP_DIR}:g' \
 	    -e 's:@-GNC_ACCOUNTS_DIR-@:${GNC_ACCOUNTS_DIR}:g'
 	mv $@.tmp $@
-BUILT_SOURCES += gnc-dir.h
+BUILT_SOURCES = gnc-dir.h
 
 # We have to do this because otherwise automake insists on putting
 # these files into the dist tarfile.  If there's a a better way,
