@@ -551,7 +551,7 @@ xaccGroupInsertAccount( AccountGroup *grp, Account *acc )
   int i,nacc;
   Account **arr;
   int ralo = 1;
-  
+
   if (NULL == grp) return;
   if (NULL == acc) return;
 
@@ -566,7 +566,7 @@ xaccGroupInsertAccount( AccountGroup *grp, Account *acc )
   }
   grp->saved = GNC_F;
 
-  /* set back-pointer to the accounts parent */
+  /* set back-pointer to the account's parent */
   acc->parent = grp;
 
   nacc = grp->numAcc;

@@ -343,19 +343,15 @@ static void
 gnc_ui_accWindow_create_account(Account * account, Account * parent,
 				gint type, AccountFieldStrings * strings)
 {
+  xaccAccountBeginEdit(parent, 0);
   xaccAccountBeginEdit(account, 0);
-
-  if (parent != NULL)
-    xaccInsertSubAccount (parent, account);
-  else
-    xaccGroupInsertAccount(gncGetCurrentGroup(), account);
 
   xaccAccountSetType (account, type);
 
   gnc_ui_install_field_strings(account, strings, TRUE);
 
   { /* make a default transaction */
-    Transaction  *trans = xaccMallocTransaction();
+    Transaction *trans = xaccMallocTransaction();
  
     xaccTransBeginEdit(trans, 1);
     xaccTransSetDateToday (trans);
@@ -365,7 +361,13 @@ gnc_ui_accWindow_create_account(Account * account, Account * parent,
     xaccAccountInsertSplit (account, xaccTransGetSplit (trans, 0) );
   }
 
+  if (parent != NULL)
+    xaccInsertSubAccount (parent, account);
+  else
+    xaccGroupInsertAccount(gncGetCurrentGroup(), account);
+
   xaccAccountCommitEdit (account);
+  xaccAccountCommitEdit (parent);
 
   gnc_account_tree_insert_account(gnc_get_current_account_tree(), account);
 

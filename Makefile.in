@@ -41,6 +41,8 @@ default:
 	@echo "qt              kde/qt version (unfinished)"
 	@echo "qt-static       kde/qt statically linked version (unfinished)"
 	@echo " "
+	@echo "The motif and qt versions do not compile!"
+	@echo " "
 
 # This inclusion must come after the first target, and after the
 # definitions of *_SRCS, etc., but before the usage of *_OBJS.
