@@ -1,16 +1,12 @@
 SUBDIRS = glade
 
-lib_LTLIBRARIES = libgncguile.la libgncgnome.la libgw-gnc.la 
+lib_LTLIBRARIES = libgncgnome.la libgw-gnc.la 
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-gnc-spec.scm gw-gnc.scm
 
-libgncguile_la_SOURCES = gnucash.c
-libgncguile_la_LIBADD = ${GLIB_LIBS}
-libgncguile_la_LDFLAGS = -module 
-
 libgncgnome_la_LDFLAGS = -module
-libgncgnome_la_LIBADD = ./libgncguile.la \
+libgncgnome_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/app-file/libgncmod-app-file.la \
   ${top_builddir}/src/backend/file/libgncmod-backend-file.la \
@@ -20,8 +16,10 @@ libgncgnome_la_LIBADD = ./libgncguile.la \
   ${GUILE_LIBS} ${GNOME_LIBDIR} ${GNOMEUI_LIBS} ${GLIB_LIBS}
 
 libgw_gnc_la_SOURCES = gw-gnc.c
-libgw_gnc_la_LIBADD = ${G_WRAP_LINK_ARGS} ${GLIB_LIBS}
-libgw_gnc_la_LDFLAGS = -module -L. -L.libs -lgncgnome -lgncguile
+libgw_gnc_la_LDFLAGS = -module \
+  -L. -L.libs -lgncgnome \
+  ${G_WRAP_LINK_ARGS} ${GLIB_LIBS}
+libgw_gnc_la_LIBADD =
 
 libgncgnome_la_SOURCES = \
   argv-list-converters.c \
@@ -84,9 +82,7 @@ noinst_HEADERS = \
   druid-hierarchy.h \
   gnc-network.h \
   gnc-splash.h \
-  gnucash.h \
   gw-gnc.h \
-  i18n.h \
   mainwindow-account-tree.h \
   reconcile-list.h \
   tip-of-the-day.h \
@@ -100,11 +96,9 @@ noinst_HEADERS = \
 
 EXTRA_DIST = \
   .cvsignore \
-  gnucash.c.in \
   gnucash.desktop.in \
   gnucash.keys.in \
-  gnucash.mime \
-  i18n.h.in 
+  gnucash.mime
 
 
 AM_CFLAGS = \
@@ -169,37 +163,3 @@ gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: gw-gnc-spec.scm .scm-links
            (gw:generate-module \"gw-gnc\")"
 BUILT_SOURCES = gw-gnc.scm gw-gnc.h gw-gnc.c
 CLEANFILES = gw-gnc.scm gw-gnc.h gw-gnc.c 
-
-## We borrow guile's convention and use @-...-@ as the substitution
-## brackets here, instead of the usual @...@.  This prevents autoconf
-## from substituting the values directly into the left-hand sides of
-## the sed substitutions.
-gnucash.c: gnucash.c.in i18n.h
-	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
-            -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:g' \
-            -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:g'
-	mv $@.tmp $@
-BUILT_SOURCES += gnucash.c
-# Make it go away on a make clean, not just a make distclean.
-CLEANFILES = gnucash.c
-
-i18n.h: i18n.h.in
-	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
-            -e 's:@-PACKAGE-@:${PACKAGE}:g' \
-            -e 's:@-LOCALE_DIR-@:${LOCALE_DIR}:g'
-	mv $@.tmp $@
-# This has to be in BUILT_SOURCES because other files depend on it,
-# but it's never a target itself.
-BUILT_SOURCES += i18n.h
-
-
-# Uncomment this if we still need it.  I'm not sure that we do...
-
-## We have to do this because otherwise automake insists on putting
-## these files into the dist tarfile.  If there's a a better way,
-## by all means, let us know...
-#dist-hook:
-#	rm ${distdir}/gnucash.c
-#	rm ${distdir}/i18n.h
