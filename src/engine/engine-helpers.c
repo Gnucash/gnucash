@@ -1,6 +1,6 @@
 /********************************************************************\
  * engine-helpers.c -- gnucash g-wrap helper functions              *
- * Copyright (C) 2000 Linas Vepstas                                 *
+ * Copyright (C) 2000 Linas Vepstas <linas@linas.org>               *
  * Copyright (C) 2001 Linux Developers Group, Inc.                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -33,10 +33,10 @@
 #include "Group.h"
 #include "QueryNewP.h"
 #include "QueryCoreP.h"
-#include "date.h"
 #include "engine-helpers.h"
 #include "glib-helpers.h"
 #include "gnc-book.h"
+#include "gnc-date.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-numeric.h"
