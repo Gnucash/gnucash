@@ -27,7 +27,6 @@
 #include <glib.h>
 #include <limits.h>
 #include <locale.h>
-#include <math.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -405,8 +404,8 @@ gnc_integral_print_info (void)
 static int
 PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
 {
-  int num_whole_digits;
   struct lconv *lc = gnc_localeconv();
+  int num_whole_digits;
   char temp_buf[64];
   gnc_numeric whole;
 
