@@ -27,6 +27,7 @@
 #include <glib.h>
 #include <limits.h>
 #include <locale.h>
+#include <math.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -1240,6 +1241,8 @@ gnc_default_print_info (gboolean use_symbol)
   info.use_separators = 1;
   info.use_locale = 1;
   info.monetary = 1;
+  info.force_fit = 0;
+  info.round = 0;
 
   got_it = TRUE;
 
@@ -1299,6 +1302,8 @@ gnc_commodity_print_info (const gnc_commodity *commodity,
   info.use_symbol = use_symbol ? 1 : 0;
   info.use_locale = is_iso ? 1 : 0;
   info.monetary = 1;
+  info.force_fit = 0;
+  info.round = 0;
 
   return info;
 }
@@ -1336,6 +1341,8 @@ gnc_account_print_info_helper(Account *account, gboolean use_symbol,
   info.use_symbol = use_symbol ? 1 : 0;
   info.use_locale = is_iso ? 1 : 0;
   info.monetary = 1;
+  info.force_fit = 0;
+  info.round = 0;
 
   return info;
 }
@@ -1387,6 +1394,8 @@ gnc_default_print_info_helper (int decplaces)
     info.use_symbol = 0;
     info.use_locale = 1;
     info.monetary = 1;
+    info.force_fit = 0;
+    info.round = 0;
 
     return info;
 }
@@ -1403,6 +1412,19 @@ gnc_default_share_print_info (void)
       got_it = TRUE;
   }
 
+  return info;
+}
+
+GNCPrintAmountInfo
+gnc_share_print_info_places (int decplaces)
+{
+  GNCPrintAmountInfo info;
+
+  info = gnc_default_share_print_info ();
+  info.max_decimal_places = decplaces;
+  info.min_decimal_places = decplaces;
+  info.force_fit = 1;
+  info.round = 1;
   return info;
 }
 
@@ -1443,7 +1465,8 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   struct lconv *lc = gnc_localeconv();
   int num_whole_digits;
   char temp_buf[64];
-  gnc_numeric whole;
+  gnc_numeric whole, rounding;
+  int min_dp, max_dp;
 
   g_return_val_if_fail (info != NULL, 0);
 
@@ -1454,8 +1477,26 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     return 0;
   }
 
+  /* Force at least auto_decimal_places zeros */
+  if (auto_decimal_enabled) {
+    min_dp = MAX(auto_decimal_places, info->min_decimal_places);
+    max_dp = MAX(auto_decimal_places, info->max_decimal_places);
+  } else {
+    min_dp = info->min_decimal_places;
+    max_dp = info->max_decimal_places;
+  }
+  if (!info->force_fit)
+    max_dp = 99;
+
   /* print the absolute value */
   val = gnc_numeric_abs (val);
+
+  /* rounding? */
+  if (info->round) {
+    rounding.num = 5;
+    rounding.denom = pow(10, max_dp + 1);
+    val = gnc_numeric_add(val, rounding, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+  }
 
   /* calculate the integer part and the remainder */
   whole = gnc_numeric_create (val.num / val.denom, 1);
@@ -1553,12 +1594,12 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   {
     guint8 num_decimal_places = 0;
     char *temp_ptr = temp_buf;
-    int min_dp, max_dp;
 
     *temp_ptr++ = info->monetary ?
       lc->mon_decimal_point[0] : lc->decimal_point[0];
 
-    while (!gnc_numeric_zero_p (val) && val.denom != 1)
+    while (!gnc_numeric_zero_p (val) && (val.denom != 1) &&
+	   (num_decimal_places < max_dp))
     {
       gint64 digit;
 
@@ -1570,15 +1611,6 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
       num_decimal_places++;
 
       val.num = val.num - (digit * val.denom);
-    }
-
-    /* Force at least auto_decimal_places zeros */
-    if (auto_decimal_enabled) {
-      min_dp = MAX(auto_decimal_places, info->min_decimal_places);
-      max_dp = MAX(auto_decimal_places, info->max_decimal_places);
-    } else {
-      min_dp = info->min_decimal_places;
-      max_dp = info->max_decimal_places;
     }
 
     while (num_decimal_places < min_dp)

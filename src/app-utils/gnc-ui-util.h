@@ -215,6 +215,8 @@ typedef struct _GNCPrintAmountInfo
   unsigned int use_symbol : 1;     /* Print currency symbol */
   unsigned int use_locale : 1;     /* Use locale for some positioning */
   unsigned int monetary : 1;       /* Is a monetary quantity */
+  unsigned int force_fit : 1;      /* Don't print more than max_dp places */
+  unsigned int round : 1;          /* Round at max_dp instead of truncating */
 } GNCPrintAmountInfo;
 
 
@@ -231,6 +233,7 @@ GNCPrintAmountInfo gnc_split_amount_print_info (Split *split,
 GNCPrintAmountInfo gnc_split_value_print_info (Split *split,
                                                gboolean use_symbol);
 
+GNCPrintAmountInfo gnc_share_print_info_places (int decplaces);
 GNCPrintAmountInfo gnc_default_share_print_info (void);
 GNCPrintAmountInfo gnc_default_price_print_info (void);
 

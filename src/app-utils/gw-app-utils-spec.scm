@@ -360,6 +360,14 @@ determines formatting details.")
 
   (gw:wrap-function
    ws
+   'gnc:share-print-info-places
+   '<gnc:print-amount-info-scm>
+   "gnc_share_print_info_places"
+   '((<gw:int> decplaces))
+   "Return a print info for printing share quantities to 'n' places.")
+
+  (gw:wrap-function
+   ws
    'gnc:default-share-print-info
    '<gnc:print-amount-info-scm>
    "gnc_default_share_print_info"

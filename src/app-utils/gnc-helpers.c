@@ -40,6 +40,8 @@ gnc_printinfo2scm(GNCPrintAmountInfo info)
 {
   SCM info_scm = SCM_EOL;
 
+  info_scm = gh_cons (gh_bool2scm (info.round), info_scm);
+  info_scm = gh_cons (gh_bool2scm (info.force_fit), info_scm);
   info_scm = gh_cons (gh_bool2scm (info.monetary), info_scm);
   info_scm = gh_cons (gh_bool2scm (info.use_locale), info_scm);
   info_scm = gh_cons (gh_bool2scm (info.use_symbol), info_scm);
@@ -81,6 +83,12 @@ gnc_scm2printinfo(SCM info_scm)
 
   info_scm = gh_cdr (info_scm);
   info.monetary = gh_scm2bool (gh_car (info_scm));
+
+  info_scm = gh_cdr (info_scm);
+  info.force_fit = gh_scm2bool (gh_car (info_scm));
+
+  info_scm = gh_cdr (info_scm);
+  info.round = gh_scm2bool (gh_car (info_scm));
 
   return info;
 }
