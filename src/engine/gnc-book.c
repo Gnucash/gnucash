@@ -90,9 +90,6 @@ gnc_book_init (GNCBook *book)
    * architecture flaw.  */
   book->commodity_table = gnc_engine_commodity_table_new ();
 
-  xaccGroupSetBook (book->topgroup, book);
-  xaccGroupSetBook (book->template_group, book);
-
   book->data_tables = g_hash_table_new (g_str_hash, g_str_equal);
 }
 
