@@ -11,6 +11,7 @@ typedef struct _gncEmployee GncEmployee;
 
 #include "gnc-book.h"
 #include "gncAddress.h"
+#include "Account.h"
 
 #define GNC_EMPLOYEE_MODULE_NAME "gncEmployee"
 
@@ -29,6 +30,7 @@ void gncEmployeeSetWorkday (GncEmployee *employee, gnc_numeric workday);
 void gncEmployeeSetRate (GncEmployee *employee, gnc_numeric rate);
 void gncEmployeeSetCurrency (GncEmployee *employee, gnc_commodity * currency);
 void gncEmployeeSetActive (GncEmployee *employee, gboolean active);
+void gncEmployeeSetCCard (GncEmployee *employee, Account* ccard_acc);
 
 /* Get Functions */
 
@@ -43,6 +45,7 @@ gnc_numeric gncEmployeeGetWorkday (GncEmployee *employee);
 gnc_numeric gncEmployeeGetRate (GncEmployee *employee);
 gnc_commodity * gncEmployeeGetCurrency (GncEmployee *employee);
 gboolean gncEmployeeGetActive (GncEmployee *employee);
+Account * gncEmployeeGetCCard (GncEmployee *employee);
 
 GncEmployee * gncEmployeeLookup (GNCBook *book, const GUID *guid);
 gboolean gncEmployeeIsDirty (GncEmployee *employee);
