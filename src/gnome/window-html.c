@@ -29,6 +29,7 @@
 #include "top-level.h"
 
 #include "window-html.h"
+#include "messages.h"
 #include "File.h"
 #include "util.h"
 
@@ -40,33 +41,118 @@ static short module = MOD_HTML;
  * hack alert -- these are gui-independent, and should be moved     *
  *               to a central location                              *
 \********************************************************************/
+
+struct _HTMLData
+{
+  char *title;
+
+  GnomeUIInfo *user_buttons;
+  int num_user_buttons;
+
+  HTMLUserData user_data;
+  HTMLDestroyUserDataFunc destroy;
+};
+
 typedef struct _HTMLHistoryNode HTMLHistoryNode;
 struct _HTMLHistoryNode
 {
   HTMLHistoryNode *next;
   HTMLHistoryNode *last;
 
-  HTMLHistoryData history_data;
+  HTMLData *data;
 };
 
 typedef struct _HTMLHistory HTMLHistory;
 struct _HTMLHistory
 {
   HTMLHistoryNode *current_node;
-  HTMLHistoryDestroyDataFunc destroy;
 };
 
 
+/********************************************************************\
+ * gnc_html_data_new                                                *
+ *   construct a new html data structure                            *
+ *                                                                  *
+ * Args:   title            - the title of the html window          *
+ *         user_data        - html user data, whatever you like     *
+ *         destroy          - function to destroy user data, or NULL*
+ *         user_buttons     - new buttons for the toolbar           *
+ *         num_user_buttons - number of new buttons                 *
+ * Return: html data structure                                      *
+\********************************************************************/
+HTMLData *
+gnc_html_data_new(const char *title, HTMLUserData user_data,
+                  HTMLDestroyUserDataFunc destroy,
+                  GnomeUIInfo *user_buttons,
+                  int num_user_buttons)
+{
+  HTMLData *data;
+
+  data = malloc(sizeof(HTMLData));
+  assert(data != NULL);
+
+  if (title != NULL)
+  {
+    data->title = strdup(title);
+    assert(title != NULL);
+  }
+  else
+    data->title = NULL;
+
+  if (num_user_buttons == 0)
+    data->user_buttons = NULL;
+  else
+  {
+    int i;
+
+    data->user_buttons = calloc(num_user_buttons, sizeof(GnomeUIInfo));
+    assert(data->user_buttons != NULL);
+
+    for (i = 0; i < num_user_buttons; i++)
+      data->user_buttons[i] = user_buttons[i];
+  }
+
+  data->num_user_buttons = num_user_buttons;
+
+  data->user_data = user_data;
+  data->destroy = destroy;
+
+  return data;
+}
+
+static void
+html_data_destroy(HTMLData *data)
+{
+  if (data == NULL)
+    return;
+
+  if (data->title != NULL)
+    free(data->title);
+  data->title = NULL;
+
+  if (data->user_buttons != NULL)
+    free(data->user_buttons);
+  data->user_buttons = NULL;
+  data->num_user_buttons = 0;
+
+  if ((data->destroy != NULL) &&
+      (data->user_data != NULL))
+    (data->destroy)(data->user_data);
+
+  data->destroy = NULL;
+
+  free(data);
+}
 
 static HTMLHistoryNode *
-history_node_new(const HTMLHistoryData history_data)
+history_node_new(HTMLData *data)
 {
   HTMLHistoryNode *new;
 
   new = malloc(sizeof(HTMLHistoryNode));
   assert(new != NULL);
 
-  new->history_data = history_data;
+  new->data = data;
   new->last = NULL;
   new->next = NULL;
 
@@ -77,14 +163,14 @@ history_node_new(const HTMLHistoryData history_data)
  * is the first element in the history. If not last element
  * in history, all next pages are deleted */
 static gncBoolean
-historyInsert(HTMLHistory *history, const HTMLHistoryData history_data)
+historyInsert(HTMLHistory *history, HTMLData *data)
 {
   HTMLHistoryNode *new;
   HTMLHistoryNode *temp;
 
   assert(history != NULL);
 
-  new = history_node_new(history_data);
+  new = history_node_new(data);
 
   if (history->current_node == NULL)
   {
@@ -97,8 +183,8 @@ historyInsert(HTMLHistory *history, const HTMLHistoryData history_data)
   while(temp != NULL)
   {
     history->current_node->next = temp->next;
-    if (temp->history_data != NULL)
-      (history->destroy)(temp->history_data);
+    html_data_destroy(temp->data);
+    temp->data = NULL;
     free(temp);
 
     temp = history->current_node->next;
@@ -112,7 +198,7 @@ historyInsert(HTMLHistory *history, const HTMLHistoryData history_data)
 }
 
 /* Move forward in history, and return current history data */
-static HTMLHistoryData
+static HTMLData *
 historyFwd(HTMLHistory *history)
 {
   if (history == NULL)
@@ -123,11 +209,11 @@ historyFwd(HTMLHistory *history)
   if (history->current_node->next != NULL)
     history->current_node = history->current_node->next;
 
-  return history->current_node->history_data;
+  return history->current_node->data;
 }
 
 /* Move back in history, and return current history data */
-static HTMLHistoryData
+static HTMLData *
 historyBack(HTMLHistory *history)
 {
   if (history == NULL)
@@ -138,10 +224,10 @@ historyBack(HTMLHistory *history)
   if (history->current_node->last != NULL)
     history->current_node = history->current_node->last;
 
-  return history->current_node->history_data;
+  return history->current_node->data;
 }
 
-/* Remove all entries from history: */
+/* Remove all entries from history */
 static void
 historyClear(HTMLHistory *history)
 {
@@ -160,19 +246,19 @@ historyClear(HTMLHistory *history)
     HTMLHistoryNode *temp = history->current_node->next;
 
     history->current_node->next = temp->next;
-    if (temp->history_data != NULL)
-      (history->destroy)(temp->history_data);
+    html_data_destroy(temp->data);
+    temp->data = NULL;
     free(temp);
   }
-  
+
   /* delete current page: */
-  if (history->current_node->history_data != NULL)
-    (history->destroy)(history->current_node->history_data);
+  html_data_destroy(history->current_node->data);
+  history->current_node->data = NULL;
   free(history->current_node);
   history->current_node = NULL;
 }
 
-static HTMLHistoryData
+static HTMLData *
 historyData(HTMLHistory *history)
 {
   if (history == NULL)
@@ -180,11 +266,23 @@ historyData(HTMLHistory *history)
   if (history->current_node == NULL)
     return NULL;
 
-  return history->current_node->history_data;
+  return history->current_node->data;
+}
+
+static HTMLUserData
+historyUserData(HTMLHistory *history)
+{
+  HTMLData *data;
+
+  data = historyData(history);
+  if (data == NULL)
+    return NULL;
+
+  return data->user_data;
 }
 
 static HTMLHistory *
-historyNew(HTMLHistoryDestroyDataFunc destroy)
+historyNew()
 {
   HTMLHistory *history;
 
@@ -192,7 +290,6 @@ historyNew(HTMLHistoryDestroyDataFunc destroy)
   assert(history != NULL);
 
   history->current_node = NULL;
-  history->destroy = destroy;
 
   return history;
 }
@@ -220,6 +317,8 @@ struct _HTMLWindow
   GtkWidget *forward;
   GtkWidget *back;
 
+  GtkWidget *toolbar;
+
   HTMLHistory *history;
 
   HTMLAnchorCB anchor_cb;
@@ -246,19 +345,19 @@ static void htmlSetButtonStates(HTMLWindow *hw);
 
 
 /********************************************************************\
- * gnc_html_window_history_data                                     *
- *   return the current history data for the window                 *
+ * gnc_html_window_user_data                                        *
+ *   return the current user data for the window                    *
  *                                                                  *
  * Args: none                                                       *
- * Return: history data for the window                              * 
+ * Return: user data for the window                                 *
 \********************************************************************/
-HTMLHistoryData
-gnc_html_window_history_data(HTMLWindow *hw)
+HTMLUserData
+gnc_html_window_user_data(HTMLWindow *hw)
 {
   if (hw == NULL)
     return NULL;
 
-  return historyData(hw->history);
+  return historyUserData(hw->history);
 }
 
 
@@ -266,18 +365,18 @@ gnc_html_window_history_data(HTMLWindow *hw)
  * gnc_html_window_new                                              *
  *   g_malloc and initialize HTMLWindow structure                   *
  *                                                                  *
- * Args: none                                                       *
+ * Args: anchor_cb - callback for new html pages                    *
+ *       jump_cb   - callback for html text                         *
  * Return: g_malloc'd initialized HTMLWindow structure              * 
 \********************************************************************/
 HTMLWindow *
-gnc_html_window_new(HTMLHistoryDestroyDataFunc destroy,
-                    HTMLAnchorCB anchor_cb, HTMLJumpCB jump_cb)
+gnc_html_window_new(HTMLAnchorCB anchor_cb, HTMLJumpCB jump_cb)
 {
   HTMLWindow *hw;
 
   hw = g_new0(HTMLWindow, 1);
 
-  hw->history = historyNew(destroy);
+  hw->history = historyNew();
 
   hw->anchor_cb = anchor_cb;
   hw->jump_cb = jump_cb;
@@ -309,20 +408,20 @@ gnc_html_window_destroy(HTMLWindow *hw)
 }
 
 
-static GtkWidget *
-create_html_toolbar(HTMLWindow *hw, GnomeUIInfo *user_buttons,
-                    gint num_buttons)
+static void
+gnc_html_window_fill_toolbar(HTMLWindow *hw)
 {
   GnomeUIInfo *toolbar_info;
-  GtkWidget *toolbar;
   gint num_start, num_end;
+  GList *children, *node;
+  HTMLData *data;
   gint i;
 
   GnomeUIInfo toolbar_start[] = 
   {
     { GNOME_APP_UI_ITEM,
-      "Back", 
-      "Move back one step in the history.",
+      BACK_STR,
+      TOOLTIP_HTML_BACK,
       htmlBackCB, hw,
       NULL,
       GNOME_APP_PIXMAP_STOCK, 
@@ -330,8 +429,8 @@ create_html_toolbar(HTMLWindow *hw, GnomeUIInfo *user_buttons,
       0, 0, NULL
     },
     { GNOME_APP_UI_ITEM,
-      "Forward", 
-      "Move forward one step in the history.",
+      FORWARD_STR,
+      TOOLTIP_HTML_FORW,
       htmlFwdCB, hw,
       NULL,
       GNOME_APP_PIXMAP_STOCK, 
@@ -343,8 +442,8 @@ create_html_toolbar(HTMLWindow *hw, GnomeUIInfo *user_buttons,
   GnomeUIInfo toolbar_end[] = 
   {
     { GNOME_APP_UI_ITEM,
-      "Close", 
-      "Close this HTML window.",
+      CLOSE_STR,
+      TOOLTIP_CLOSE_HTML,
       closeHtmlWinCB, hw,
       NULL,
       GNOME_APP_PIXMAP_STOCK, 
@@ -354,30 +453,42 @@ create_html_toolbar(HTMLWindow *hw, GnomeUIInfo *user_buttons,
     GNOMEUIINFO_END
   };
 
+  data = historyData(hw->history);
+  if (data == NULL)
+    return;
+
+  if (hw->toolbar == NULL)
+    return;
+
+  node = children = gtk_container_children(GTK_CONTAINER(hw->toolbar));
+  while (node != NULL)
+  {
+    gtk_container_remove(GTK_CONTAINER(hw->toolbar), GTK_WIDGET(node->data));
+    node = node->next;
+  }
+  g_list_free(children);
+
   num_start = sizeof(toolbar_start) / sizeof(GnomeUIInfo);
   num_end = sizeof(toolbar_end) / sizeof(GnomeUIInfo);
 
-  toolbar_info = g_new0(GnomeUIInfo, num_start + num_buttons + num_end);
+  toolbar_info = g_new0(GnomeUIInfo,
+                        num_start + data->num_user_buttons + num_end);
 
   for (i = 0; i < num_start; i++)
     toolbar_info[i] = toolbar_start[i];
 
-  for (i = 0; i < num_buttons; i++)
-    toolbar_info[i + num_start] = user_buttons[i];
+  for (i = 0; i < data->num_user_buttons; i++)
+    toolbar_info[i + num_start] = data->user_buttons[i];
 
   for (i = 0; i < num_end; i++)
-    toolbar_info[i + num_start + num_buttons] = toolbar_end[i];
+    toolbar_info[i + num_start + data->num_user_buttons] = toolbar_end[i];
 
-  toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
-
-  gnome_app_fill_toolbar(GTK_TOOLBAR(toolbar), toolbar_info, NULL);
+  gnome_app_fill_toolbar(GTK_TOOLBAR(hw->toolbar), toolbar_info, NULL);
 
   hw->back = toolbar_info[0].widget;
   hw->forward = toolbar_info[1].widget;
 
   g_free(toolbar_info);
-
-  return toolbar;
 }
 
 
@@ -387,23 +498,19 @@ create_html_toolbar(HTMLWindow *hw, GnomeUIInfo *user_buttons,
  *                                                                  *
  * Args:   parent   - the parent widget                             *
  *         hwp      - the htmlwindow structure pointer              *
- *         title    - the title of the window                       *
- *         history_data - the history data                          *
- *         new_buttons  - array of buttons to add to icon bar       *
+ *         data     - the data for the window                       *
+ *         user_buttons - array of buttons to add to icon bar       *
  *         num_buttons  - number of buttons in list                 *
  * Return: none                                                     * 
 \********************************************************************/
 void
-htmlWindow(GtkWidget  * parent, 
-           HTMLWindow ** hwp,
-           const char * const title,
-           HTMLHistoryData history_data,
-           GnomeUIInfo *user_buttons,
-           gint num_buttons)
+htmlWindow(GtkWidget   *parent, 
+           HTMLWindow **hwp,
+           HTMLData    *data)
 {
   HTMLWindow *hw = *hwp;
 
-  historyInsert(hw->history, history_data); 
+  historyInsert(hw->history, data); 
 
   /* If the help window is already created, just load the new
    * page into the existing widget and raise the window. */
@@ -429,7 +536,6 @@ htmlWindow(GtkWidget  * parent,
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     hw->window = window;
-    gtk_window_set_title(GTK_WINDOW (window), title);
     gtk_window_set_policy(GTK_WINDOW (window), TRUE, TRUE, FALSE);
     gtk_window_set_default_size(GTK_WINDOW(window), 675, 400);
 
@@ -438,9 +544,10 @@ htmlWindow(GtkWidget  * parent,
 
     dock_item = gnome_dock_item_new("toolbar", GNOME_DOCK_ITEM_BEH_EXCLUSIVE);
 
-    toolbar = create_html_toolbar(hw, user_buttons, num_buttons);
+    toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
     gtk_container_set_border_width(GTK_CONTAINER(toolbar), 2);
     gtk_container_add(GTK_CONTAINER(dock_item), toolbar);
+    hw->toolbar = toolbar;
 
     gnome_dock_add_item (GNOME_DOCK(dock), GNOME_DOCK_ITEM(dock_item),
                          GNOME_DOCK_TOP, 0, 0, 0, TRUE);
@@ -505,46 +612,56 @@ htmlSetButtonStates(HTMLWindow *hw)
  * Return: none                                                     * 
 \********************************************************************/
 static gboolean
-htmlKeyCB( GtkWidget *widget, GdkEventKey *event, gpointer data )
+htmlKeyCB(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
   HTMLWindow *hw = (HTMLWindow *) data;
   GtkXmHTML *html = GTK_XMHTML(hw->htmlwidget);
-  GtkAdjustment *adj;
-  gfloat value;
+  GtkAdjustment *vadj, *hadj;
+  gfloat v_value, h_value;
 
   if (html->vsba == NULL)
     return FALSE;
 
-  adj = GTK_ADJUSTMENT(html->vsba);
+  vadj = GTK_ADJUSTMENT(html->vsba);
+  hadj = GTK_ADJUSTMENT(html->hsba);
 
-  value = adj->value;
+  v_value = vadj->value;
+  h_value = hadj->value;
 
   switch (event->keyval)
   {
+    case GDK_KP_Left:
+    case GDK_Left:
+      h_value -= hadj->step_increment;
+      break;
+    case GDK_KP_Right:
+    case GDK_Right:
+      h_value += hadj->step_increment;
+      break;
     case GDK_KP_Up:
     case GDK_Up:
-      value -= adj->step_increment;
+      v_value -= vadj->step_increment;
       break;
     case GDK_KP_Down:
     case GDK_Down:
-      value += adj->step_increment;
+      v_value += vadj->step_increment;
       break;
     case GDK_KP_Page_Up:
     case GDK_Page_Up:
-      value -= adj->page_increment;
+      v_value -= vadj->page_increment;
       break;
     case GDK_KP_Page_Down:
     case GDK_Page_Down:
     case GDK_space:
-      value += adj->page_increment;
+      v_value += vadj->page_increment;
       break;
     case GDK_KP_Home:
     case GDK_Home:
-      value = adj->lower;
+      v_value = vadj->lower;
       break;
     case GDK_KP_End:
     case GDK_End:
-      value = adj->upper;
+      v_value = vadj->upper;
       break;
     case GDK_Escape:
       gtk_widget_destroy(hw->window);
@@ -553,9 +670,11 @@ htmlKeyCB( GtkWidget *widget, GdkEventKey *event, gpointer data )
       return FALSE;
   }
 
-  value = CLAMP(value, adj->lower, adj->upper - adj->page_size);
+  v_value = CLAMP(v_value, vadj->lower, vadj->upper - vadj->page_size);
+  h_value = CLAMP(h_value, hadj->lower, hadj->upper - hadj->page_size);
 
-  gtk_adjustment_set_value(adj, value);
+  gtk_adjustment_set_value(vadj, v_value);
+  gtk_adjustment_set_value(hadj, h_value);
 
   return TRUE;
 }
@@ -573,9 +692,8 @@ static void
 htmlBackCB(GtkWidget *widget, gpointer data)
 {
   HTMLWindow *hw = (HTMLWindow *) data;
-  HTMLHistoryData history_data;
 
-  history_data = historyBack(hw->history);
+  historyBack(hw->history);
  
   gnc_html_load(hw);
 
@@ -595,9 +713,8 @@ static void
 htmlFwdCB(GtkWidget *widget, gpointer data)
 {
   HTMLWindow *hw = (HTMLWindow *) data;
-  HTMLHistoryData history_data;
 
-  history_data = historyFwd(hw->history);
+  historyFwd(hw->history);
 
   gnc_html_load(hw);
 
@@ -660,7 +777,7 @@ htmlAnchorCB(GtkWidget *widget, XmHTMLAnchorCallbackStruct *acbs,
              gpointer data)
 {
   HTMLWindow *hw = (HTMLWindow *) data;
-  HTMLHistoryData history_data;
+  HTMLData *html_data;
 
   if (acbs->reason != XmCR_ACTIVATE) return;
 
@@ -675,11 +792,11 @@ htmlAnchorCB(GtkWidget *widget, XmHTMLAnchorCallbackStruct *acbs,
       if (hw->anchor_cb == NULL)
         return;
 
-      history_data = (hw->anchor_cb)(acbs, historyData(hw->history));
-      if (history_data == NULL)
+      html_data = (hw->anchor_cb)(acbs, historyUserData(hw->history));
+      if (html_data == NULL)
         return;
 
-      historyInsert(hw->history, history_data);
+      historyInsert(hw->history, html_data);
       gnc_html_load(hw);
       break;
   }
@@ -691,13 +808,13 @@ htmlAnchorCB(GtkWidget *widget, XmHTMLAnchorCallbackStruct *acbs,
 /********************************************************************\
  * gnc_html_load - load the current location into the html window   *
  *                                                                  * 
- * Args:   hw           - the html window structure                 *
+ * Args:   hw - the html window structure                           *
  * Return: none                                                     * 
 \********************************************************************/
 void
 gnc_html_load(HTMLWindow *hw)
 {
-  HTMLHistoryData history_data;
+  HTMLData *data;
   char *label = NULL;
   char *text = NULL;
 
@@ -706,9 +823,12 @@ gnc_html_load(HTMLWindow *hw)
   if (hw->jump_cb == NULL)
     return;
 
-  history_data = historyData(hw->history);
+  data = historyData(hw->history);
 
-  (hw->jump_cb)(history_data, &text, &label);
+  gtk_window_set_title(GTK_WINDOW(hw->window), data->title);
+  gnc_html_window_fill_toolbar(hw);
+
+  (hw->jump_cb)(data->user_data, &text, &label);
 
   if (text == NULL)
     return;

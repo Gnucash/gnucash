@@ -1,0 +1,95 @@
+How to install gnucash-1.2.5 on SuSE-6.3
+========================================
+(written 2000-01-07 by Peter Pointner <peter@wuzel.m.isar.de>)
+
+Notes:
+
+- This is only one way to get GnuCash running on SuSE 6.3. I did test
+  that, but there might be errors anyway, and of course you do all at
+  your own risk. If you find errors, you might report them to the
+  gnucash mailing list (gnucash-devel@gnucash.org)
+
+- This is definitely for SuSE 6.3 (Intel). Earlier SuSE distributions
+  lack some required packages. Later SuSE distributions didn't exist
+  at the time of writing.
+
+Let's go:
+
+* Make sure you have a running system, including X. For my tests I
+  started with a default installation and removed some packages to
+  save diskspace.
+
+* Install the following packages:
+  + from series d
+       eperl  guile  nana  swig  xmhtml  xmhtmld
+    and optionally
+       autoconf  automake  libtool
+    (You must install libtool if you have autoconf/automake
+    installed!) 
+  + from series x
+       xdevel
+  + from series xdev
+       lesstiff  lesstifd
+
+* Download slib from
+    ftp://ftp.gnu.org/pub/gnu/jacal/slib2c7.zip
+  and install it by unpacking it to /usr/share/guile (this will
+  create a sub-directory slib):
+    cd /usr/share/guile
+    su root -c "unzip -L /tmp/slib2c7"
+
+* Download GnuCash from
+    http://www.gnucash.org/pub/gnucash/sources/stable/gnucash-1.2.5.tar.gz
+  and unpack it
+    tar xzf gnucash-1.2.5.tar.gz
+
+* Now apply the patch at the end of this file. The first hunk will
+  make the file selection box work with lesstiff-0.89.1, the version
+  which comes with SuSE 6.3. It should not hurt with other versions.
+      The second hunk changes a hardcoded path to match the default
+  installation prefix. This change stops gnucash from crashing when
+  showing a report. You can apply this patch by something like
+    cd gnucash-1.2.5
+    patch -p1 < ../README-SuSE-6.3
+ 
+* Configure, build and install gnucash. Installation must probably be
+  done as root, the files go to various places in /usr/local.
+
+    cd gnucash-1.2.5
+    ./configure
+    make
+    su root -c "make install"
+
+
+=================== patch follows ========================
+
+diff -ru gnucash-1.2.5/src/motif/FileBox.c gnucash-1.2.5.patched/src/motif/File
+Box.c
+--- gnucash-1.2.5/src/motif/FileBox.c	Mon Oct 18 06:18:29 1999
++++ gnucash-1.2.5.patched/src/motif/FileBox.c	Fri Jan  7 22:25:17 2000
+@@ -208,8 +208,10 @@
+   {
+   char **fileName = (char **)cd;
+   ENTER("closeBoxCB");
+-  *fileName = NULL;
+-  done = True;
++  if (! done) {
++    *fileName = NULL;
++    done = True;
++  }
+   LEAVE("closeBoxCB");
+   }
+ 
+diff -ru gnucash-1.2.5/src/reports/Sheet.c gnucash-1.2.5.patched/src/reports/Sh
+eet.c
+--- gnucash-1.2.5/src/reports/Sheet.c	Tue Jul  6 08:44:52 1999
++++ gnucash-1.2.5.patched/src/reports/Sheet.c	Fri Jan  7 22:40:35 2000
+@@ -235,7 +235,7 @@
+    }
+ 
+    /* hack afreakin lert -- this path should not be hard-coded ... */
+-   fullpath = strdup ("/usr/lib/gnucash/");
++   fullpath = strdup ("/usr/local/lib/gnucash/");
+    
+    fprintf (to_perl,
+        "<: \n"

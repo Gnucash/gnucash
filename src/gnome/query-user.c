@@ -17,13 +17,18 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-#include <gnome.h>
- 
 #include "top-level.h"
 
+#include <gnome.h>
+ 
+#include "ui-callbacks.h"
 #include "messages.h"
 #include "query-user.h"
 #include "util.h"
+
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_GUI;
 
 
 /********************************************************************
@@ -199,6 +204,66 @@ gnc_foundation_query_dialog(const gchar *title,
   return query_dialog;
 }
 
+/********************************************************************\
+ * gnc_verify_cancel_dialog                                         *
+ *   display a message, and asks the user to press "Yes", "No", or  *
+ *   "Cancel"
+ *                                                                  *
+ * NOTE: This function does not return until the dialog is closed   *
+ *                                                                  *
+ * Args:   message - the message to display                         *
+ *         default - the button that will be the default            *
+ * Return: the result the user selected                             *
+\********************************************************************/
+GNCVerifyResult
+gnc_verify_cancel_dialog_parented(GtkWidget *parent, const char *message,
+                                  GNCVerifyResult default_result)
+{
+  GtkWidget *verify_box = NULL;
+  gint default_button;
+  gint result;
+  
+  verify_box = gnome_message_box_new(message,
+				     GNOME_MESSAGE_BOX_QUESTION,
+				     GNOME_STOCK_BUTTON_YES,
+				     GNOME_STOCK_BUTTON_NO,
+                                     GNOME_STOCK_BUTTON_CANCEL,
+				     NULL);
+
+  switch (default_result)
+  {
+    case GNC_VERIFY_YES:
+      default_button = 0;
+      break;
+    case GNC_VERIFY_NO:
+      default_button = 1;
+      break;
+    case GNC_VERIFY_CANCEL:
+      default_button = 2;
+      break;
+    default:
+      PWARN("gnc_verify_cancel_dialog: bad default button\n");
+      default_button = 0;
+      break;
+  }
+
+  gnome_dialog_set_default(GNOME_DIALOG(verify_box), default_button);
+  if (parent != NULL)
+    gnome_dialog_set_parent(GNOME_DIALOG(verify_box), GTK_WINDOW(parent));
+
+  result = gnome_dialog_run_and_close(GNOME_DIALOG(verify_box));
+
+  switch (result)
+  {
+    case 0:
+      return GNC_VERIFY_YES;
+    case 1:
+      return GNC_VERIFY_NO;
+    case 2:
+    default:
+      return GNC_VERIFY_CANCEL;
+  }
+}
 
 /********************************************************************\
  * gnc_verify_dialog                                                *
@@ -209,7 +274,7 @@ gnc_foundation_query_dialog(const gchar *title,
  * Args:   message - the message to display                         *
  *         yes_is_default - If true, "Yes" is default,              *
  *                          "No" is the default button.             *
- * Return: none                                                     *
+ * Return: true for "Yes", false for "No"                           *
 \********************************************************************/
 gncBoolean
 gnc_verify_dialog(const char *message, gncBoolean yes_is_default)
@@ -228,7 +293,7 @@ gnc_verify_dialog(const char *message, gncBoolean yes_is_default)
  *         message - the message to display                         *
  *         yes_is_default - If true, "Yes" is default,              *
  *                          "No" is the default button.             *
- * Return: none                                                     *
+ * Return: true for "Yes", false for "No"                           *
 \********************************************************************/
 gncBoolean
 gnc_verify_dialog_parented(GtkWindow *parent, const char *message,

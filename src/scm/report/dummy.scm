@@ -32,9 +32,40 @@
       "Page Two" "String Option"
       "b" "This is a string option" "Hello, World.")))
 
+  (define dateop
+    (gnc:register-dummy-option
+     (gnc:make-date-option
+      "Time and Date" "Just a Date Option"
+      "a" "This is a date option"
+      (lambda () (cons (current-time) 0))
+      #f)))
+
+  (define dateop2
+    (gnc:register-dummy-option
+     (gnc:make-date-option
+      "Time and Date" "Time and Date Option"
+      "a" "This is a date option with time"
+      (lambda () (cons (current-time) 0))
+      #t)))
+
+  (define account-list-op
+    (gnc:register-dummy-option
+     (gnc:make-account-list-option
+      "Page One" "An account list option"
+      "b" "This is an account list option"
+      (lambda () (gnc:get-current-accounts))
+      #f #t)))
+
   (define (op-value op)
     (let ((getter (gnc:option-getter op)))
       (getter)))
+
+  (define (account-list)
+    (let* ((accounts (op-value account-list-op))
+           (names (map gnc:account-get-name accounts)))
+      (list "<ul>"
+            (map (lambda (name) (list "<li>" name "</li>")) names)
+            "</ul>")))
 
   (gnc:define-report
    ;; version
@@ -45,16 +76,26 @@
    gnc:*dummy-options*
    ;; Rendering thunk. See report.scm for details.
    (lambda (options)
-     (list
-      "<html>"
-      "<body bgcolor=#99ccff>"
-      "The current time is " (strftime "%c" (localtime (current-time))) "."
-      "<br>"
-      "The boolean op is " (if (op-value boolop) "true." "false.")
-      "<br>"
-      "The multi op is " (symbol->string (op-value multop))
-      "<br>"
-      "The string op is " (op-value strop)
-      "</body>"
-      "</html>")))
+     (let ((time-string (strftime "%c" (localtime (current-time))))
+           (date-string (strftime "%x" (localtime (car (op-value dateop)))))
+           (date-string2 (strftime "%c" (localtime (car (op-value dateop2))))))
+       (list
+        "<html>"
+        "<body bgcolor=#99ccff>"
+        "The current time is " time-string "."
+        "<br>"
+        "The boolean op is " (if (op-value boolop) "true." "false.")
+        "<br>"
+        "The multi op is " (symbol->string (op-value multop))
+        "<br>"
+        "The string op is " (op-value strop)
+        "<br>"
+        "The date op is " date-string
+        "<br>"
+        "The date and time op is " date-string2
+        "<br>"
+        "The accounts are:"
+        (account-list)
+        "</body>"
+        "</html>"))))
   )

@@ -30,31 +30,33 @@
 
 
 typedef struct _HTMLWindow HTMLWindow;
-typedef void * HTMLHistoryData;
+typedef struct _HTMLData HTMLData;
+typedef void * HTMLUserData;
 
-typedef void (*HTMLHistoryDestroyDataFunc)(HTMLHistoryData);
+typedef void (*HTMLDestroyUserDataFunc)(HTMLUserData);
 
-typedef HTMLHistoryData (*HTMLAnchorCB)(XmHTMLAnchorCallbackStruct *acbs,
-                                        HTMLHistoryData history_data);
+typedef HTMLData* (*HTMLAnchorCB)(XmHTMLAnchorCallbackStruct *acbs,
+                                  HTMLUserData user_data);
 
-typedef void (*HTMLJumpCB)(HTMLHistoryData history_data,
+typedef void (*HTMLJumpCB)(HTMLUserData user_data,
                            char **text, char **label);
 
 
-HTMLHistoryData gnc_html_window_history_data(HTMLWindow *hw);
+HTMLUserData gnc_html_window_user_data(HTMLWindow *hw);
 
-HTMLWindow * gnc_html_window_new(HTMLHistoryDestroyDataFunc destroy,
-                                 HTMLAnchorCB anchor_cb, HTMLJumpCB jump_cb);
+HTMLWindow * gnc_html_window_new(HTMLAnchorCB anchor_cb, HTMLJumpCB jump_cb);
 
 
 void         gnc_html_window_destroy(HTMLWindow *hw);
 
-void htmlWindow(GtkWidget  * parent,
-                HTMLWindow ** hwp,
-                const char * const title,
-                HTMLHistoryData history_data,
-                GnomeUIInfo *user_buttons,
-                gint num_buttons);
+HTMLData * gnc_html_data_new(const char *title, HTMLUserData user_data,
+                             HTMLDestroyUserDataFunc destroy,
+                             GnomeUIInfo *user_buttons,
+                             int num_user_buttons);
+
+void htmlWindow(GtkWidget   *parent,
+                HTMLWindow **hwp,
+                HTMLData    *data);
 
 void gnc_html_load(HTMLWindow *hw);
 

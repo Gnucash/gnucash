@@ -28,7 +28,20 @@
 
 #include <gnc-common.h>
 
+typedef enum
+{
+  GNC_VERIFY_NO,
+  GNC_VERIFY_YES,
+  GNC_VERIFY_CANCEL
+} GNCVerifyResult;
+
+
 void gnc_refresh_main_window( void );
+
+GNCVerifyResult
+gnc_verify_cancel_dialog_parented(gncUIWidget parent,
+                                  const char *message,
+                                  GNCVerifyResult default_result);
 
 gncBoolean gnc_verify_dialog( const char *message,
 			      gncBoolean yes_is_default );

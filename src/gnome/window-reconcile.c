@@ -23,10 +23,11 @@
 \********************************************************************/
 
 #define _GNU_SOURCE
-#include <stdio.h>
-#include <gnome.h>
 
 #include "top-level.h"
+
+#include <stdio.h>
+#include <gnome.h>
 
 #include "date.h"
 #include "MultiLedger.h"
@@ -39,7 +40,7 @@
 #include "Refresh.h"
 #include "query-user.h"
 #include "window-help.h"
-#include "messages.h"
+#include "enriched-messages.h"
 #include "util.h"
 
 
@@ -173,7 +174,7 @@ recnRecalculateBalance(RecnWindow *recnData)
  *         diff    - returns the amount from ending balance field   *
  * Return: True, if the user presses "Ok", else False               *
 \********************************************************************/
-gboolean
+static gboolean
 startRecnWindow(GtkWidget *parent, Account *account, double *diff)
 {
   GtkWidget *dialog, *end_value;
@@ -266,8 +267,7 @@ startRecnWindow(GtkWidget *parent, Account *account, double *diff)
       }
       else
       {
-        gnc_error_dialog_parented(GTK_WINDOW(parent),
-                                  "Ending balance must be a number.");
+        gnc_error_dialog_parented(GTK_WINDOW(parent), BALANCE_NUM_MSG);
         continue;
       }
     }
@@ -443,11 +443,10 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
     return;
 
   {
-    gchar * buf = "Are you sure you want to delete the current transaction?";
     gboolean result;
 
     result = gnc_verify_dialog_parented(GTK_WINDOW(recnData->dialog),
-                                        buf, GNC_F);
+                                        TRANS_DEL2_MSG, GNC_F);
 
     if (!result)
       return;
@@ -599,35 +598,41 @@ recnWindow(GtkWidget *parent, Account *account)
       bbox = gtk_hbutton_box_new();
       gtk_box_pack_start(GTK_BOX(hbox), bbox, FALSE, FALSE, 0);
 
-      button = gtk_button_new_with_label("New");
+      button = gtk_button_new_with_label(NEW_STR);
       gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-      gnc_set_tooltip(button, "Add a new transaction to the account");
+      gnc_set_tooltip(button, TOOLTIP_NEW_TRANS);
       gtk_signal_connect(GTK_OBJECT(button), "clicked",
                          GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_new_cb),
                          recnData);
 
-      button = gtk_button_new_with_label("Edit");
+      button = gtk_button_new_with_label(EDIT_STR);
       recnData->edit_button = button;
       gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-      gnc_set_tooltip(button, "Edit the current transaction");
+      gnc_set_tooltip(button, TOOLTIP_EDIT_TRANS);
       gtk_signal_connect(GTK_OBJECT(button), "clicked",
                          GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_edit_cb),
                          recnData);
  
-      button = gtk_button_new_with_label("Delete");
+      button = gtk_button_new_with_label(DELETE_STR);
       recnData->delete_button = button;
       gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-      gnc_set_tooltip(button, "Delete the current transaction");
+      gnc_set_tooltip(button, TOOLTIP_DEL_TRANS);
       gtk_signal_connect(GTK_OBJECT(button), "clicked",
                          GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_delete_cb),
                          recnData);
 
-      button = gtk_button_new_with_label("Edit Info...");
-      gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-      gnc_set_tooltip(button, "Adjust the ending balance");
-      gtk_signal_connect(GTK_OBJECT(button), "clicked",
-                         GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_change_cb),
-                         recnData);
+      {
+        gchar *s = g_strconcat(END_BALN_STR, "...", NULL);
+
+        button = gtk_button_new_with_label(s);
+        gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+        gnc_set_tooltip(button, TOOLTIP_ADJUST_END);
+        gtk_signal_connect(GTK_OBJECT(button), "clicked",
+                           GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_change_cb),
+                           recnData);
+
+        g_free(s);
+      }
 
       /* frame to hold totals */
       frame = gtk_frame_new(NULL);
@@ -785,9 +790,7 @@ recnOkCB(GtkWidget *w, gpointer data)
 
   if (!DEQ(recnRecalculateBalance(recnData), 0.0))
     if (!gnc_verify_dialog_parented(GTK_WINDOW(recnData->dialog),
-                                    "The account is not balanced.\n" \
-                                    "Are you sure you want to finish?",
-                                    GNC_F))
+                                    RECN_BALN_WARN, GNC_F))
       return;
 
   gnc_reconcile_list_commit(GNC_RECONCILE_LIST(recnData->credit));

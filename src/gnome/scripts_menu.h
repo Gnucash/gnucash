@@ -20,7 +20,6 @@
 #ifndef __SCRIPTS_MENU_H__
 #define __SCRIPTS_MENU_H__
 
-#include <gnome.h>
 #include <guile/gh.h>
 
 void gnc_extensions_menu_add_item(char *name, char *hint, SCM script);

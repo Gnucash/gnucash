@@ -71,6 +71,7 @@ struct _xaccLedgerDisplay {
   void *gui_hook;                /* GUI-specific state                      */
   void (*redraw) (xaccLedgerDisplay *); /* redraw callback                  */
   void (*destroy) (xaccLedgerDisplay *); /* destroy callback                */
+  gncUIWidget (*get_parent) (xaccLedgerDisplay *); /* get parent widget     */
 };
 
 
@@ -132,12 +133,9 @@ int         ledgerIsMember (xaccLedgerDisplay *reg, Account * acc);
  */
 void        xaccLedgerDisplayClose (xaccLedgerDisplay *);
 
-/********************************************************************\
- * sort of a quick hack involving the layout of the register.
-\********************************************************************/
-
-void        xaccRegisterCountHack (SplitRegister *splitreg);
-
+/*
+ * close all ledger windows containing this account.
+ */
 void        xaccDestroyLedgerDisplay (Account *acc);
 
 #endif /* __MULTI_LEDGER_H__ */

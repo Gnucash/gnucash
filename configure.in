@@ -22,6 +22,12 @@
 ### commands depend on them):
 
 AC_INIT(src/guile/gnucash.h.in)
+
+AM_INIT_AUTOMAKE(gnucash,1.3.1)
+
+dnl Set of available languages.
+ALL_LINGUAS="fr de"
+
 AC_PROG_INSTALL
 AC_PROG_RANLIB
 
@@ -52,7 +58,9 @@ AC_ARG_ENABLE( color,
 
 AC_ARG_WITH( opt-style-install,
   [  --with-opt-style-install   install everything in subdirs of --prefix],
-  OPT_STYLE_INSTALL=1,
+  OPT_STYLE_INSTALL=1
+  CPPFLAGS="$CPPFLAGS -I$prefix/include"
+  CFLAGS="$CLFAGS -L$prefix/lib",
   OPT_STYLE_INSTALL=0)
 AC_SUBST(OPT_STYLE_INSTALL)
 
@@ -68,6 +76,26 @@ AC_ARG_ENABLE( warnings,
        CFLAGS="${CFLAGS} -g -Wall -ansi -pedantic -Wwrite-strings -Wid-clash-31 -Wpointer-arith -Wcast-qual -Wcast-align -Wtraditional -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Wshadow -Woverloaded-virtual -Winline -felide-constructors -fnonnull-objects"
        LDFLAGS="${LDFLAGS} -g -Wall"
        AC_DEFINE(DEBUG_MEMORY,1) AC_DEFINE(USE_DEBUG,1) )
+
+### --------------------------------------------------------------------------
+## qt-version of gnucash
+# The qt version of gnucash is far from doing anything usefull, so most people
+# don't care about it. Those who want to play with it, must specify --enable-qt
+
+AC_ARG_ENABLE(qt,
+              [  --enable-qt               enable building of the Qt version of gnucash],
+              GNC_QT_ENABLED=yes)
+
+if test x"$GNC_QT_ENABLED" = xyes; then
+  QT_TARGET="qt.real"
+  QT_STATIC_TARGET="qt.static.real"
+else
+  QT_TARGET="qt.disable"
+  QT_STATIC_TARGET="qt.disable"
+fi
+
+AC_SUBST(QT_TARGET)
+AC_SUBST(QT_STATIC_TARGET)
 
 ### --------------------------------------------------------------------------
 ### Programs
@@ -98,7 +126,7 @@ AC_SUBST(PERL)
 # I'm reasonably sure it's correct.
 # PERLINCL="/usr/lib/perl5/i386-linux/5.00404"
 #
-PERLINCL=`perl -MConfig -e 'print $Config{"archlibexp"}'`
+PERLINCL=`$PERL -MConfig -e 'print $Config{"archlibexp"}'`
 AC_ARG_WITH( perl-includes, 
        [  --with-perl-includes=DIR    specify where to look for perl includes],
        PERLINCL="$with_perl_includes" )
@@ -272,7 +300,7 @@ AC_SUBST(XMHTML_INC)
 ## If there's a better way to tackle this please let me know!
 
 OLDCPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS `$GNOME_CONFIG_BIN --cflags glib`"
+CPPFLAGS="$CPPFLAGS `$GNOME_CONFIG_BIN --cflags gnome`"
 
 
 # gnome targets if all goes well
@@ -308,7 +336,6 @@ LDFLAGS="$OLDLDFLAGS"
 # XXX - should we export these here or later in the configure script?
 AC_SUBST(GNOME_TARGET)
 AC_SUBST(GNOME_STATIC_TARGET)
-
 
 ### --------------------------------------------------------------------------
 ## Nana
@@ -495,6 +522,19 @@ AC_SUBST(GNC_RUNTIME_CONFIGDIR)
 ABSOLUTE_TOP_SRCDIR=`pwd`
 AC_SUBST(ABSOLUTE_TOP_SRCDIR)
 
+### Begin i18n
+
+AC_ARG_WITH( locale-dir, 
+  [  --with-locale-dir=PATH       specify where to look for locale-specific information],
+  LOCALE_DIR="$with_locale_dir",
+  LOCALE_DIR="$prefix/share/locale")
+AC_SUBST(LOCALE_DIR)
+
+AC_CHECK_HEADER(locale.h, ac_cv_header_locale_h=yes, ac_cv_header_locale_h=no)
+AC_CAN_USE_GNU_GETTEXT
+
+### End   i18n
+
 AC_CONFIG_HEADER(config.h)
 
 AC_OUTPUT(Makefile
@@ -502,6 +542,7 @@ AC_OUTPUT(Makefile
           src/Makefile
           src/engine/Makefile
           src/guile/Makefile
+          src/guile/i18n.h
           src/scm/Makefile
           src/g-wrap/Makefile
           src/gnome/Makefile
@@ -513,6 +554,9 @@ AC_OUTPUT(Makefile
 	  src/reports/pathconfig.h
           src/swig/Makefile
           src/swig/perl5/Makefile
+	  po/Makefile.in
+	  po/extract-macros.perl
+	  include/messages_i18n.h
           lib/Makefile
           lib/Xbae-4.6.2-linas/Makefile
           lib/Xbae-4.6.2-linas/src/Makefile
@@ -522,4 +566,4 @@ chmod +x gnucash
 
 ${MAKE-make} -f Makefile.config.finish prefix=${prefix} \
                            GNC_SHAREDIR=${GNC_SHAREDIR} \
-                          GNC_CONFIGDIR=${GNC_SHAREDIR} 
+                          GNC_CONFIGDIR=${GNC_SHAREDIR}

@@ -17,11 +17,17 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include <time.h>
+#include <g-wrap.h>
+
 #include "top-level.h"
 
 #include "guile-util.h"
 #include "option-util.h"
 #include "dialog-options.h"
+#include "gnc-helpers.h"
+#include "gnc.h"
+#include "window-main.h"
 #include "ui-callbacks.h"
 #include "util.h"
 
@@ -63,7 +69,7 @@ struct _Getters
   SCM setter;
   SCM default_getter;
   SCM value_validator;
-  SCM permissible_values;
+  SCM option_data;
 };
 
 
@@ -181,7 +187,7 @@ gnc_option_db_destroy(GNCOptionDB *odb)
       option = option_node->data;
 
       /* Should we check return value? */
-      gnc_unregister_c_side_scheme_ptr(option->guile_option_id);
+      gnc_unregister_c_side_scheme_ptr_id(option->guile_option_id);
 
       option_node = option_node->next;
     }
@@ -280,8 +286,7 @@ initialize_getters()
     gh_eval_str("gnc:option-default-getter");
   getters.value_validator =
     gh_eval_str("gnc:option-value-validator");
-  getters.permissible_values =
-    gh_eval_str("gnc:option-permissible-values");
+  getters.option_data = gh_eval_str("gnc:option-data");
     
   getters_initialized = TRUE;
 }
@@ -447,7 +452,7 @@ gnc_option_value_validator(GNCOption *option)
 
 
 /********************************************************************\
- * gnc_option_value_num_permissible_values                          *
+ * gnc_option_num_permissible_values                                *
  *   returns the number of permissible values in the option, or     *
  *   -1 if there are no values available.                           *
  *                                                                  *
@@ -455,15 +460,13 @@ gnc_option_value_validator(GNCOption *option)
  * Returns: number of permissible options or -1                     *
 \********************************************************************/
 int
-gnc_option_value_num_permissible_values(GNCOption *option)
+gnc_option_num_permissible_values(GNCOption *option)
 {
   SCM values;
 
   initialize_getters();
 
-  values = gnc_guile_call1_to_list(getters.permissible_values,
-                                   option->guile_option);
-
+  values = gnc_guile_call1_to_list(getters.option_data, option->guile_option);
   if (values == SCM_UNDEFINED)
     return -1;
 
@@ -472,7 +475,7 @@ gnc_option_value_num_permissible_values(GNCOption *option)
 
 
 /********************************************************************\
- * gnc_option_value_permissible_value_index                         *
+ * gnc_option_permissible_value_index                               *
  *   returns the index of the permissible value matching the        *
  *   provided value, or -1 if it couldn't be found                  *
  *                                                                  *
@@ -481,7 +484,7 @@ gnc_option_value_num_permissible_values(GNCOption *option)
  * Returns: index of permissible value, or -1                       *
 \********************************************************************/
 int
-gnc_option_value_permissible_value_index(GNCOption *option, SCM search_value)
+gnc_option_permissible_value_index(GNCOption *option, SCM search_value)
 {
   SCM values, vector, value;
   int num_values, i;
@@ -491,9 +494,7 @@ gnc_option_value_permissible_value_index(GNCOption *option, SCM search_value)
 
   initialize_getters();
 
-  values = gnc_guile_call1_to_list(getters.permissible_values,
-                                   option->guile_option);
-
+  values = gnc_guile_call1_to_list(getters.option_data, option->guile_option);
   if (values == SCM_UNDEFINED)
     return -1;
 
@@ -516,7 +517,7 @@ gnc_option_value_permissible_value_index(GNCOption *option, SCM search_value)
 
 
 /********************************************************************\
- * gnc_option_value_permissible_value                               *
+ * gnc_option_permissible_value                                     *
  *   returns the SCM handle to the indexth permissible value in the *
  *   option, or SCM_UNDEFINED if the index was out of range or      *
  *   there was some other problem.                                  *
@@ -526,7 +527,7 @@ gnc_option_value_permissible_value_index(GNCOption *option, SCM search_value)
  * Returns: SCM handle to option value or SCM_UNDEFINED             *
 \********************************************************************/
 SCM
-gnc_option_value_permissible_value(GNCOption *option, int index)
+gnc_option_permissible_value(GNCOption *option, int index)
 {
   SCM values, vector, value;
 
@@ -535,9 +536,7 @@ gnc_option_value_permissible_value(GNCOption *option, int index)
 
   initialize_getters();
 
-  values = gnc_guile_call1_to_list(getters.permissible_values,
-                                   option->guile_option);
-
+  values = gnc_guile_call1_to_list(getters.option_data, option->guile_option);
   if (values == SCM_UNDEFINED)
     return SCM_UNDEFINED;
 
@@ -557,7 +556,7 @@ gnc_option_value_permissible_value(GNCOption *option, int index)
 
 
 /********************************************************************\
- * gnc_option_value_permissible_value_name                          *
+ * gnc_option_permissible_value_name                                *
  *   returns the malloc'd name of the indexth permissible value in  *
  *   the option, or NULL if the index was out of range or there are *
  *   no values available.                                           *
@@ -567,7 +566,7 @@ gnc_option_value_permissible_value(GNCOption *option, int index)
  * Returns: malloc'd name of permissible value or NULL              *
 \********************************************************************/
 char *
-gnc_option_value_permissible_value_name(GNCOption *option, int index)
+gnc_option_permissible_value_name(GNCOption *option, int index)
 {
   SCM values, vector, name;
 
@@ -576,9 +575,7 @@ gnc_option_value_permissible_value_name(GNCOption *option, int index)
 
   initialize_getters();
 
-  values = gnc_guile_call1_to_list(getters.permissible_values,
-                                   option->guile_option);
-
+  values = gnc_guile_call1_to_list(getters.option_data, option->guile_option);
   if (values == SCM_UNDEFINED)
     return NULL;
 
@@ -598,7 +595,7 @@ gnc_option_value_permissible_value_name(GNCOption *option, int index)
 
 
 /********************************************************************\
- * gnc_option_value_permissible_value_description                   *
+ * gnc_option_permissible_value_description                         *
  *   returns the malloc'd description of the indexth permissible    *
  *   value in the option, or NULL if the index was out of range or  *
  *   there are no values available.                                 *
@@ -608,7 +605,7 @@ gnc_option_value_permissible_value_name(GNCOption *option, int index)
  * Returns: malloc'd description of permissible value or NULL       *
 \********************************************************************/
 char *
-gnc_option_value_permissible_value_description(GNCOption *option, int index)
+gnc_option_permissible_value_description(GNCOption *option, int index)
 {
   SCM values, vector, help;
 
@@ -617,9 +614,7 @@ gnc_option_value_permissible_value_description(GNCOption *option, int index)
 
   initialize_getters();
 
-  values = gnc_guile_call1_to_list(getters.permissible_values,
-                                   option->guile_option);
-
+  values = gnc_guile_call1_to_list(getters.option_data, option->guile_option);
   if (values == SCM_UNDEFINED)
     return NULL;
 
@@ -635,6 +630,48 @@ gnc_option_value_permissible_value_description(GNCOption *option, int index)
     return NULL;
 
   return gh_scm2newstr(help, NULL);
+}
+
+
+/********************************************************************\
+ * gnc_option_show_time                                             *
+ *   returns true if the gui should display the time as well as     *
+ *   the date for this option. Only use this for date options.      *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ * Returns: true if time should be shown                            *
+\********************************************************************/
+gboolean
+gnc_option_show_time(GNCOption *option)
+{
+  SCM value;
+
+  initialize_getters();
+
+  value = gh_call1(getters.option_data, option->guile_option);
+
+  return !gh_scm2bool(gh_not(value));
+}
+
+
+/********************************************************************\
+ * gnc_option_multiple_selection                                    *
+ *   returns true if the gui should allow multiple selection of     *
+ *   accounts. Only use this for account options.                   *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ * Returns: true if multiple selection allowed                      *
+\********************************************************************/
+gboolean
+gnc_option_multiple_selection(GNCOption *option)
+{
+  SCM value;
+
+  initialize_getters();
+
+  value = gh_call1(getters.option_data, option->guile_option);
+
+  return !gh_scm2bool(gh_not(value));
 }
 
 
@@ -950,6 +987,9 @@ gnc_commit_option(GNCOption *option)
 
   /* Validate the ui's value */
   value = gnc_option_get_ui_value(option);
+  if (value == SCM_UNDEFINED)
+    return;
+
   validator = gnc_option_value_validator(option);
 
   result = gh_call1(validator, value);
@@ -1171,4 +1211,150 @@ gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb, char *section,
     return NULL;
 
   return strdup(default_value);
+}
+
+
+/********************************************************************\
+ * gnc_option_db_lookup_date_option                                 *
+ *   looks up a date option. If present, returns its value in the   *
+ *   set_value argument provided, otherwise copies the default_value*
+ *   argument (if non-NULL) to the set_value argument. If the       *
+ *   default_value argument is NULL, copies the current date to     *
+ *   set_value. Whatever value is stored in set_value is return     *
+ *   as an approximate (no nanoseconds) time_t value. set_value     *
+ *   may be NULL, in which case only the return value can be used.  *
+ *                                                                  *
+ * Args: odb       - option database to search in                   *
+ *       section   - section name of option                         *
+ *       name      - name of option                                 *
+ *       set_value - location to store option value                 *
+ *       default   - default value if not found                     *
+ * Return: time_t approximation of set_value                        *
+\********************************************************************/
+time_t
+gnc_option_db_lookup_date_option(GNCOptionDB *odb, char *section, char *name,
+                                 Timespec *set_value, Timespec *default_value)
+{
+  GNCOption *option;
+  Timespec temp;
+  SCM getter;
+  SCM value;
+
+  if (set_value == NULL)
+    set_value = &temp;
+
+  option = gnc_option_db_get_option_by_name(odb, section, name);
+
+  if (option != NULL)
+  {
+    getter = gnc_option_getter(option);
+    if (getter != SCM_UNDEFINED)
+    {
+      value = gh_call0(getter);
+      if (gnc_timepair_p(value))
+        *set_value = gnc_timepair2timespec(value);
+    }
+  }
+  else
+  {
+    if (default_value == NULL)
+    {
+      set_value->tv_sec = time(NULL);
+      set_value->tv_nsec = 0;
+    }
+    else
+      *set_value = *default_value;
+  }
+
+  return set_value->tv_sec;
+}
+
+
+/********************************************************************\
+ * gnc_account_list_to_scm                                          *
+ *   Turn a list of accounts into an SCM.                           *
+ *                                                                  *
+ * Args: account_list - list of accounts to SCMify                  *
+ * Return: SCM list of accounts                                     *
+\********************************************************************/
+SCM
+gnc_account_list_to_scm(GList *account_list)
+{
+  SCM list;
+  Account *account;
+  POINTER_TOKEN pt;
+  SCM scm_account;
+
+  list = gh_eval_str("()");
+  while (account_list != NULL)
+  {
+    account = account_list->data;
+
+    pt = make_POINTER_TOKEN("Account*", account);
+    scm_account = POINTER_TOKEN_to_SCM(pt);
+
+    list = gh_cons(scm_account, list);
+
+    account_list = account_list->next;
+  }
+
+  return list;
+}
+
+
+/********************************************************************\
+ * gnc_scm_to_account_list                                          *
+ *   Turn an SCM into a g_malloc's account list                     *
+ *                                                                  *
+ * Args: scm_list - SCM list of accounts                            *
+ * Return: GList of accounts                                        *
+\********************************************************************/
+GList *
+gnc_scm_to_account_list(SCM scm_list)
+{
+  POINTER_TOKEN pt;
+  GList *account_list = NULL;
+  Account *account;
+  SCM scm_pt;
+
+  if (!gh_list_p(scm_list))
+    return NULL;
+
+  while (!gh_null_p(scm_list))
+  {
+    scm_pt = gh_car(scm_list);
+    if (is_a_POINTER_TOKEN(scm_pt) == SCM_BOOL_T)
+    {
+      pt = (POINTER_TOKEN) gh_cdr(scm_pt);
+      account = pt->pdata;
+      account_list = g_list_prepend(account_list, account);
+    }
+
+    scm_list = gh_cdr(scm_list);
+  }
+
+  return account_list;
+}
+
+
+/********************************************************************\
+ * gnc_get_current_accounts                                         *
+ *   Return an SCMified list of the current accounts                *
+ *                                                                  *
+ * Args: none                                                       *
+ * Return: SCM list of current accounts                             *
+\********************************************************************/
+SCM
+_gnc_get_current_accounts()
+{
+  GList *list;
+  SCM scm_list;
+
+  list = gnc_get_current_accounts();
+
+  scm_list = gnc_account_list_to_scm(list);
+
+  g_list_free(list);
+
+  return scm_list;
 }

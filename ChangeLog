@@ -1,3 +1,146 @@
+2000-01-09  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/prefs.scm: modified the account list option so
+	that it returns the default-getter value until explicitly
+	set.
+
+2000-01-09  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report.scm: Added a pile of stuff,
+	should now produce a HTML formatted report containing basic info.
+	Unfortunately, crashes gtk-xmhtml at this stage.
+
+2000-01-08  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/bootstrap.scm.in: Added a check for slib.
+
+2000-01-07  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* make-gnucash-patch: changed aclocal.m4 to lib/g-wrap/aclocal.m4
+ 	in the exclude list, so people can patch the main aclocal.m4 file.
+
+2000-01-07  Jan Schrage <jan.schrage@urz.uni-heidelberg.de>
+
+	* configure.in: for --opt-style-install add $prefix/include
+	and $prefix/lib to $CPPFLAGS and $CFLAGS respectively to fix
+	broken check for nana.
+
+2000-01-06  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* various and sundry: apply Laurent P{'e}lecq's i18n with gettext
+ 	patch. Move raw strings from gnome code into message database.
+
+	* src/gnome/window-report.c: modify for changes to window-html.
+	Make sure properties dialog callback only changes the window if
+	we are on that page.
+
+	* src/gnome/window-help.c: modify for the changes to window-html
+
+	* src/gnome/window-html.c: enhance window. Titles and buttons
+	are now associated with each history item, not the whole window.
+
+	* src/gnome/dialog-options.c: added support for account list
+	guile options.
+
+2000-01-05  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/option-util.c: new functions for sending and receiving
+ 	lists of accounts to guile.
+
+	* src/gnome/account-tree.c: modified this widget so that
+	it keeps track of a list of selected accounts. Normal mode
+	is still single selection.
+
+2000-01-04  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/dialog-add.c (gnc_ui_accWindow_list_select_cb):
+ 	prevent user from selecting illegal account types.
+
+2000-01-02  Peter Pointner  <peter@wuzel.m.isar.de>
+
+	* configure.in: disable qt build by default. --enable-qt enables it.
+
+	* Makefile.in: new targets qt.static and qt.disable
+
+	* make-gnucash-patch: exclude *.moc
+
+	* src/g-wrap/gnc.gwp (current-gnc-compile-flavor): add flavor qt.static
+
+	* src/qt/* and src/register/*-qt.*: assorted changes to make the
+	  qt version compile. 
+
+2000-01-02  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-register.c: redid this window. Put style, sort
+ 	order, and date range into menu bar. Put toolbar under menu.
+	Added status bar at bottom.
+
+	* src/register/table-allgui.c (xaccVerifyCursorPosition): return
+ 	boolean indicating whether cursor was repositioned.
+	(wrapVerifyCursorPosition): use return value from above in
+ 	deciding whether to refresh UI.
+
+	* src/SplitLedger.c (xaccSRCancelCursorSplitChanges): move off of
+ 	an EXACT_ONLY cell, if on one.
+
+2000-01-01  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/splitreg.h: uses ints, not shorts for values.
+
+	* src/SplitLedger.c (xaccSRLoadRegister): use the function below
+ 	to find the cell where to land on.
+	(xaccSRLoadRegister): fix a bug with auto mode to single/double
+ 	mode transition.
+
+	* src/register/table-allgui.c (gnc_table_find_valid_cell_horiz):
+	new function. Find a valid cell in the row, starting at the
+	given coordinates and fanning out.
+
+	* src/register/basiccell.h: add a new kind of io_flag.
+	XACC_CELL_ALLOW_EXACT_ONLY means a cell can only be entered
+	when the user specifically indicates that cell. Right now,
+	this means only a mouse pointer clicked on that cell. This
+	is used to prevent the reconcile cell from acting strangely.
+
+	* src/register/table-allgui.c (gnc_table_traverse_update): do left
+ 	traversals a little better.
+
+	* src/gnome/window-html.c (htmlKeyCB): handle keyboard horizontal
+ 	scrolling.
+
+1999-12-31  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* Code cleanup with -Wall. Deleted unused variables. Added missing
+ 	#include's and missing function declarations.
+
+	* src/engine/QIFIO.c (FavorDateType): Christopher Browne's QIF
+ 	import patch.
+
+	* configure.in: Albert Chin-A-Young's patch to configure.in for
+ 	perl config.
+
+	* src/MultiLedger.c: nix xaccRegisterCountHack.
+	It is no longer needed.
+
+	* Docs/En/xacc-about.html: added contributors.
+
+	* make-gnucash-patch: new script. Make a patch for submission.
+
+	* README: added contributors. Added sections on gnucash
+	development and submitting patches.
+
+1999-12-30  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/SplitLedger.c (xaccSRGetCurrentTrans): Fix error messages.
+
+1999-12-29  Peter Pointner  <peter@wuzel.m.isar.de>
+
+	* src/motif/FileBox.c (closeBoxCB): reset fileName only if !done.
+	  This fixes the FileBox problems with lesstiff 0.89.1, at least
+	  for me.
+
+	* configure.in: change CPPFLAGS used to search for gtk-xmhtml  
+
 1999-12-26  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/gnome/window-report.c (reportWindow): Add a properties

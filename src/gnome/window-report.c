@@ -24,15 +24,16 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#include <gnome.h>
+#include "top-level.h"
 
-#include "config.h"
+#include <gnome.h>
 
 #include "window-report.h"
 #include "window-html.h"
 #include "option-util.h"
 #include "guile-util.h"
 #include "dialog-options.h"
+#include "messages.h"
 #include "util.h"
 
 static short module = MOD_HTML; 
@@ -50,73 +51,83 @@ struct _ReportData
   GtkWidget *option_dialog;
 
   SCM rendering_thunk;
+  SCM rendering_thunk_id;
+
   SCM guile_options;
+  SCM guile_options_id;
 };
 
 
 static ReportData *
 report_data_new()
 {
-  ReportData *rd;
+  ReportData *report_data;
   
-  rd = g_new0(ReportData, 1);
+  report_data = g_new0(ReportData, 1);
 
-  rd->guile_options = SCM_UNDEFINED;
-  rd->rendering_thunk = SCM_UNDEFINED;
+  report_data->guile_options = SCM_UNDEFINED;
+  report_data->guile_options_id = SCM_UNDEFINED;
 
-  return rd;
+  report_data->rendering_thunk = SCM_UNDEFINED;
+  report_data->rendering_thunk_id = SCM_UNDEFINED;
+
+  return report_data;
 }
 
 static void
-report_data_destroy(HTMLHistoryData history_data)
+report_data_destroy(HTMLUserData user_data)
 {
-  ReportData *rd = history_data;
+  ReportData *report_data = user_data;
 
-  g_free(rd->text);
-  rd->text = NULL;
+  g_free(report_data->text);
+  report_data->text = NULL;
 
-  gnc_option_db_destroy(rd->odb);
-  rd->odb = NULL;
+  gnc_option_db_destroy(report_data->odb);
+  report_data->odb = NULL;
 
-  if (rd->option_dialog != NULL)
-    gtk_widget_destroy(rd->option_dialog);
-  rd->option_dialog = NULL;
+  if (report_data->option_dialog != NULL)
+    gtk_widget_destroy(report_data->option_dialog);
+  report_data->option_dialog = NULL;
 
-  if (rd->guile_options != SCM_UNDEFINED)
-    gnc_unregister_c_side_scheme_ptr(rd->guile_options);
-  rd->guile_options = SCM_UNDEFINED;
+  if (report_data->guile_options_id != SCM_UNDEFINED)
+    gnc_unregister_c_side_scheme_ptr_id(report_data->guile_options_id);
+  report_data->guile_options = SCM_UNDEFINED;
+  report_data->guile_options_id = SCM_UNDEFINED;
 
-  if (rd->rendering_thunk != SCM_UNDEFINED)
-    gnc_unregister_c_side_scheme_ptr(rd->rendering_thunk);
-  rd->rendering_thunk = SCM_UNDEFINED;
+  if (report_data->rendering_thunk_id != SCM_UNDEFINED)
+    gnc_unregister_c_side_scheme_ptr_id(report_data->rendering_thunk_id);
+  report_data->rendering_thunk = SCM_UNDEFINED;
+  report_data->rendering_thunk_id = SCM_UNDEFINED;
 
-  g_free(rd);
+  g_free(report_data);
 }
 
 static void
-report_data_set_text(ReportData *rd, const gchar *text)
+report_data_set_text(ReportData *report_data, const gchar *text)
 {
-  g_free(rd->text);
-  rd->text = g_strdup(text);
+  g_free(report_data->text);
+  report_data->text = g_strdup(text);
 }
 
 static void
-report_data_set_rendering_thunk(ReportData *rd, const SCM rendering_thunk)
+report_data_set_rendering_thunk(ReportData *report_data,
+                                const SCM rendering_thunk)
 {
-  if (rd->rendering_thunk != SCM_UNDEFINED)
-    gnc_unregister_c_side_scheme_ptr(rd->rendering_thunk);
+  if (report_data->rendering_thunk_id != SCM_UNDEFINED)
+    gnc_unregister_c_side_scheme_ptr_id(report_data->rendering_thunk_id);
 
-  rd->rendering_thunk = rendering_thunk;
+  report_data->rendering_thunk = rendering_thunk;
+  report_data->rendering_thunk_id = gnc_register_c_side_scheme_ptr(rendering_thunk);
 }
 
 static void
 gnc_options_dialog_apply_cb(GnomePropertyBox *propertybox,
 			    gint arg1, gpointer user_data)
 {
-  ReportData *rd = user_data;
+  ReportData *report_data = user_data;
 
   if (arg1 == -1)
-    gnc_option_db_commit(rd->odb);
+    gnc_option_db_commit(report_data->odb);
 }
 
 static void
@@ -128,52 +139,55 @@ gnc_options_dialog_help_cb(GnomePropertyBox *propertybox,
 
 
 static void
-report_data_set_guile_options(ReportData *rd, const SCM guile_options)
+report_data_set_guile_options(ReportData *report_data, const SCM guile_options)
 {
   GnomePropertyBox *prop_box;
 
-  if (rd->guile_options != SCM_UNDEFINED)
+  if (report_data->guile_options_id != SCM_UNDEFINED)
   {
-    gnc_unregister_c_side_scheme_ptr(rd->guile_options);
-    gnc_option_db_destroy(rd->odb);
+    gnc_unregister_c_side_scheme_ptr_id(report_data->guile_options_id);
+    gnc_option_db_destroy(report_data->odb);
   }
 
-  if (rd->option_dialog != NULL)
-    gtk_widget_destroy(rd->option_dialog);
+  if (report_data->option_dialog != NULL)
+    gtk_widget_destroy(report_data->option_dialog);
 
   if (gh_scm2bool(gh_not(guile_options)))
   {
-    rd->guile_options = SCM_UNDEFINED;
-    rd->option_dialog = NULL;
+    report_data->guile_options = SCM_UNDEFINED;
+    report_data->option_dialog = NULL;
     return;
   }
 
-  rd->guile_options = guile_options;
-  gnc_register_c_side_scheme_ptr(guile_options);
+  report_data->guile_options = guile_options;
+  report_data->guile_options_id =
+    gnc_register_c_side_scheme_ptr(guile_options);
 
-  rd->odb = gnc_option_db_new();
+  report_data->odb = gnc_option_db_new();
 
-  gnc_option_db_init(rd->odb, guile_options);
+  gnc_option_db_init(report_data->odb, guile_options);
 
-  rd->option_dialog = gnome_property_box_new();
-  gnome_dialog_close_hides(GNOME_DIALOG(rd->option_dialog), TRUE);
+  report_data->option_dialog = gnome_property_box_new();
+  gnome_dialog_close_hides(GNOME_DIALOG(report_data->option_dialog), TRUE);
 
-  prop_box = GNOME_PROPERTY_BOX(rd->option_dialog);
-  gnc_build_options_dialog_contents(prop_box, rd->odb);
+  prop_box = GNOME_PROPERTY_BOX(report_data->option_dialog);
+  gnc_build_options_dialog_contents(prop_box, report_data->odb);
 
-  gnc_option_db_clean(rd->odb);
+  gnc_option_db_clean(report_data->odb);
 
-  gtk_signal_connect(GTK_OBJECT(rd->option_dialog), "apply",
-                     GTK_SIGNAL_FUNC(gnc_options_dialog_apply_cb), rd);
+  gtk_signal_connect(GTK_OBJECT(report_data->option_dialog), "apply",
+                     GTK_SIGNAL_FUNC(gnc_options_dialog_apply_cb),
+                     report_data);
 
-  gtk_signal_connect(GTK_OBJECT(rd->option_dialog), "help",
-                     GTK_SIGNAL_FUNC(gnc_options_dialog_help_cb), rd);
+  gtk_signal_connect(GTK_OBJECT(report_data->option_dialog), "help",
+                     GTK_SIGNAL_FUNC(gnc_options_dialog_help_cb),
+                     report_data);
 }
 
 
-static HTMLHistoryData
+static HTMLData *
 reportAnchorCB(XmHTMLAnchorCallbackStruct *acbs,
-               HTMLHistoryData history_data)
+               HTMLUserData user_data)
 {
   switch(acbs->url_type)
   {
@@ -201,25 +215,25 @@ reportAnchorCB(XmHTMLAnchorCallbackStruct *acbs,
 }
 
 static void
-reportJumpCB(HTMLHistoryData history_data, char **set_text, char **set_label)
+reportJumpCB(HTMLUserData user_data, char **set_text, char **set_label)
 {
-  ReportData *rd = (ReportData *) history_data;
+  ReportData *report_data = user_data;
   char *text;
   SCM text_scm;
 
   *set_text = NULL;
   *set_label = NULL;
 
-  if (rd->text != NULL)
+  if (report_data->text != NULL)
   {
-    *set_text = rd->text;
+    *set_text = report_data->text;
     return;
   }
 
-  if (!gh_procedure_p(rd->rendering_thunk))
+  if (!gh_procedure_p(report_data->rendering_thunk))
     return;
 
-  text_scm = gh_call0(rd->rendering_thunk);
+  text_scm = gh_call0(report_data->rendering_thunk);
 
   if (!gh_string_p(text_scm))
     return;
@@ -228,41 +242,42 @@ reportJumpCB(HTMLHistoryData history_data, char **set_text, char **set_label)
   if (text == NULL)
     return;
 
-  report_data_set_text(rd, text);
+  report_data_set_text(report_data, text);
   free(text);
 
-  *set_text = rd->text;
+  *set_text = report_data->text;
 }
 
 
 static void
 gnc_report_options_changed_cb(gpointer data)
 {
-  HTMLWindow *hw = data;
-  HTMLHistoryData hd;
-  ReportData *rd;
+  ReportData *report_data = data;
+  ReportData *real_data;
 
-  hd = gnc_html_window_history_data(hw);
-  if (hd == NULL)
+  if (report_data == NULL)
     return;
 
-  rd = (ReportData *) hd;
-  report_data_set_text(rd, NULL);
+  report_data_set_text(report_data, NULL);
 
-  gnc_html_load(hw);
+  real_data = gnc_html_window_user_data(reportwindow);
+  if (report_data != real_data)
+    return;
+
+  gnc_html_load(reportwindow);
 }
 
 
 static void
 gnc_report_properties_cb(GtkWidget *widget, gpointer data)
 {
-  ReportData *rd = data;
+  ReportData *report_data = data;
 
-  if (rd->option_dialog == NULL)
+  if (report_data->option_dialog == NULL)
     return;
 
-  gtk_widget_show_all(rd->option_dialog);
-  gdk_window_raise(GTK_WIDGET(rd->option_dialog)->window);
+  gtk_widget_show_all(report_data->option_dialog);
+  gdk_window_raise(GTK_WIDGET(report_data->option_dialog)->window);
 }
 
 
@@ -277,37 +292,38 @@ gnc_report_properties_cb(GtkWidget *widget, gpointer data)
 void
 reportWindow(const char *title, SCM rendering_thunk, SCM guile_options)
 {
-  ReportData *rd;
+  ReportData *report_data;
+  HTMLData *html_data;
 
   if (reportwindow == NULL)
-    reportwindow = gnc_html_window_new(report_data_destroy, reportAnchorCB,
-                                       reportJumpCB);
+    reportwindow = gnc_html_window_new(reportAnchorCB, reportJumpCB);
 
-  rd = report_data_new();
-  report_data_set_rendering_thunk(rd, rendering_thunk);
-  report_data_set_guile_options(rd, guile_options);
+  report_data = report_data_new();
+  report_data_set_rendering_thunk(report_data, rendering_thunk);
+  report_data_set_guile_options(report_data, guile_options);
 
-  if (rd->odb != NULL)
-    gnc_option_db_register_change_callback(rd->odb,
+  if (report_data->odb != NULL)
+    gnc_option_db_register_change_callback(report_data->odb,
                                            gnc_report_options_changed_cb,
-                                           reportwindow);
+                                           report_data);
 
-  if (rd->option_dialog != NULL)
+  if (report_data->option_dialog != NULL)
   {
     gchar *prop_title;
 
-    prop_title = g_strconcat(title, " (Parameters)", NULL);
-    gtk_window_set_title(GTK_WINDOW(rd->option_dialog), prop_title);
+    prop_title = g_strconcat(title, " (", PARAMETERS_STR, ")", NULL);
+    gtk_window_set_title(GTK_WINDOW(report_data->option_dialog), prop_title);
     g_free(prop_title);
   }
 
+  if (report_data->option_dialog != NULL)
   {
     GnomeUIInfo user_buttons[] =
     {
       { GNOME_APP_UI_ITEM,
-        "Properties", 
-        "Set the properties for this report.",
-        gnc_report_properties_cb, rd,
+        PARAMETERS_STR,
+        TOOLTIP_REPORT_PARM,
+        gnc_report_properties_cb, report_data,
         NULL,
         GNOME_APP_PIXMAP_STOCK, 
         GNOME_STOCK_PIXMAP_PROPERTIES,
@@ -317,8 +333,15 @@ reportWindow(const char *title, SCM rendering_thunk, SCM guile_options)
 
     gint num_buttons = sizeof(user_buttons) / sizeof(GnomeUIInfo);
 
-    htmlWindow(NULL, &reportwindow, title, rd, user_buttons, num_buttons);
+    html_data = gnc_html_data_new(title, report_data,
+                                  report_data_destroy,
+                                  user_buttons, num_buttons);
   }
+  else
+    html_data = gnc_html_data_new(title, report_data,
+                                  report_data_destroy, NULL, 0);
+
+  htmlWindow(NULL, &reportwindow, html_data);
 }
 
 

@@ -103,7 +103,3 @@ dist:
 # Get dependencies (if existent).
 
 -include $(shell if [ -e obj ]; then find obj -name "*.d"; fi) ""
-
-# Local Variables:
-# tab-width: 2
-# End:

@@ -25,12 +25,6 @@
 #ifndef __WINDOW_RECONCILE_H__
 #define __WINDOW_RECONCILE_H__
 
-#include <gtk/gtk.h>
-
-#include "config.h"
-
-#include "top-level.h"
-
 
 /** GLOBALS *********************************************************/
 

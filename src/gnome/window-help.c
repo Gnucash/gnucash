@@ -24,9 +24,9 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#include <gnome.h>
+#include <top-level.h>
 
-#include "config.h"
+#include <gnome.h>
 
 #include "window-help.h"
 #include "window-html.h"
@@ -44,6 +44,7 @@ typedef struct _HelpData HelpData;
 struct _HelpData
 {
   gchar *htmlfile;
+  gchar *title;
   gchar *label;
   gchar *text;
 };
@@ -52,64 +53,82 @@ struct _HelpData
 static HelpData *
 help_data_new()
 {
-  HelpData *hd;
+  HelpData *help_data;
   
-  hd = g_new0(HelpData, 1);
+  help_data = g_new0(HelpData, 1);
 
-  return hd;
+  return help_data;
 }
 
 static void
-help_data_destroy(HTMLHistoryData history_data)
+help_data_destroy(HTMLUserData history_data)
 {
-  HelpData *hd = history_data;
+  HelpData *help_data = history_data;
 
-  g_free(hd->htmlfile);
-  hd->htmlfile = NULL;
+  g_free(help_data->htmlfile);
+  help_data->htmlfile = NULL;
 
-  g_free(hd->label);
-  hd->label = NULL;
+  g_free(help_data->title);
+  help_data->title = NULL;
 
-  g_free(hd->text);
-  hd->text = NULL;
+  g_free(help_data->label);
+  help_data->label = NULL;
 
-  g_free(hd);
+  g_free(help_data->text);
+  help_data->text = NULL;
+
+  g_free(help_data);
 }
 
 static void
-help_data_set_file(HelpData *hd, const gchar *htmlfile)
+help_data_set_file(HelpData *help_data, const gchar *htmlfile)
 {
-  g_free(hd->htmlfile);
-  hd->htmlfile = g_strdup(htmlfile);
+  g_free(help_data->htmlfile);
+  help_data->htmlfile = g_strdup(htmlfile);
 }
 
 static void
-help_data_set_label(HelpData *hd, const gchar *label)
+help_data_set_title(HelpData *help_data, const gchar *title)
 {
-  g_free(hd->label);
-  hd->label = g_strdup(label);
+  g_free(help_data->title);
+  help_data->title = g_strdup(title);
 }
 
 static void
-help_data_set_text(HelpData *hd, const gchar *text)
+help_data_set_label(HelpData *help_data, const gchar *label)
 {
-  g_free(hd->text);
-  hd->text = g_strdup(text);
+  g_free(help_data->label);
+  help_data->label = g_strdup(label);
+}
+
+static void
+help_data_set_text(HelpData *help_data, const gchar *text)
+{
+  g_free(help_data->text);
+  help_data->text = g_strdup(text);
 }
 
 
-static HTMLHistoryData
-helpAnchorCB(XmHTMLAnchorCallbackStruct *acbs, HTMLHistoryData history_data)
+static HTMLData *
+helpAnchorCB(XmHTMLAnchorCallbackStruct *acbs, HTMLUserData user_data)
 {
-  HelpData *hd;
+  HelpData *user = user_data;
+  HTMLData *html_data;
+  HelpData *help_data;
 
   switch(acbs->url_type)
   {
     /* a local file with a possible jump to label */
     case ANCHOR_FILE_LOCAL:
-      hd = help_data_new();
-      help_data_set_file(hd, acbs->href);
-      return hd;
+      help_data = help_data_new();
+      help_data_set_file(help_data, acbs->href);
+      help_data_set_title(help_data, user->title);
+
+      html_data = gnc_html_data_new(user->title, help_data,
+                                    help_data_destroy,
+                                    NULL, 0);
+
+      return html_data;
 
     /* other types are unsupported, but it would be fun if they were ... */
     case ANCHOR_FTP:
@@ -131,51 +150,51 @@ helpAnchorCB(XmHTMLAnchorCallbackStruct *acbs, HTMLHistoryData history_data)
 }
 
 static void
-helpJumpCB(HTMLHistoryData history_data, char **set_text, char **set_label)
+helpJumpCB(HTMLUserData user_data, char **set_text, char **set_label)
 {
-  HelpData *hd = (HelpData *) history_data;
+  HelpData *help_data = user_data;
   char *text = NULL;
   char *label = NULL;
 
   *set_text = NULL;
   *set_label = NULL;
 
-  if (hd->text != NULL)
+  if (help_data->text != NULL)
   {
-    *set_text = hd->text;
-    *set_label = hd->label;
+    *set_text = help_data->text;
+    *set_label = help_data->label;
     return;
   }
 
-  if (hd->htmlfile == NULL)
+  if (help_data->htmlfile == NULL)
     return;
 
   /* see if this anchor contains a jump */
-  label = strpbrk(hd->htmlfile, "#?");
+  label = strpbrk(help_data->htmlfile, "#?");
   if (label != NULL)
   {
-    help_data_set_label(hd, label);
+    help_data_set_label(help_data, label);
 
     /* truncate # from name */
-    hd->htmlfile[label - hd->htmlfile] = 0x0;
+    help_data->htmlfile[label - help_data->htmlfile] = 0x0;
   }
 
   /* see if the anchor is an "active gnucash page" */
-  if (strstr(hd->htmlfile, ".phtml"))
-    text = gncReport(hd->htmlfile);
+  if (strstr(help_data->htmlfile, ".phtml"))
+    text = gncReport(help_data->htmlfile);
 
   /* if text to display wasn't specified, use the truncated name to read */
   if (text == NULL)
-    text = gncReadFile(hd->htmlfile);
+    text = gncReadFile(help_data->htmlfile);
 
   if (text != NULL)
   {
-    help_data_set_text(hd, text);
+    help_data_set_text(help_data, text);
     free(text);
   }
 
-  *set_text = hd->text;
-  *set_label = hd->label;
+  *set_text = help_data->text;
+  *set_label = help_data->label;
 }
 
 
@@ -191,16 +210,19 @@ helpJumpCB(HTMLHistoryData history_data, char **set_text, char **set_label)
 void
 helpWindow(GtkWidget *parent, const char *title, const char *htmlfile)
 {
-  HelpData *hd;
+  HTMLData *html_data;
+  HelpData *help_data;
 
   if (helpwindow == NULL)
-    helpwindow = gnc_html_window_new(help_data_destroy, helpAnchorCB,
-                                     helpJumpCB);
- 
-  hd = help_data_new();
-  help_data_set_file(hd, htmlfile);
+    helpwindow = gnc_html_window_new(helpAnchorCB, helpJumpCB);
 
-  htmlWindow(parent, &helpwindow, title, hd, NULL, 0);
+  help_data = help_data_new();
+  help_data_set_file(help_data, htmlfile);
+  help_data_set_title(help_data, title);
+
+  html_data = gnc_html_data_new(title, help_data, help_data_destroy, NULL, 0);
+
+  htmlWindow(parent, &helpwindow, html_data);
 }
 
 

@@ -19,11 +19,11 @@
  *                                                                  *
 \********************************************************************/
 
+#include "top-level.h"
+
 #include <stdlib.h>
 #include <guile/gh.h>
 #include <gnome.h>
-
-#include "top-level.h"
 
 #include "window-main.h"
 #include "global-options.h"

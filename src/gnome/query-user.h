@@ -1,7 +1,6 @@
 #ifndef __QUERY_USER_H__
 #define __QUERY_USER_H__
 
-#include "gnc-common.h"
 #include <guile/gh.h>
 
 enum

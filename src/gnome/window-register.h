@@ -20,8 +20,6 @@
 #ifndef __WINDOW_REGISTER_H__
 #define __WINDOW_REGISTER_H__
 
-#include "top-level.h"
-
 void gnc_register_raise(RegWindow *regData);
 void gnc_register_jump_to_blank(RegWindow *regData);
 void gnc_register_jump_to_split(RegWindow *regData, Split *split);

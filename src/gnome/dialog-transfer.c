@@ -17,11 +17,12 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-#include <gnome.h>
-
 #include "top-level.h"
 
+#include <gnome.h>
+
 #include "dialog-transfer.h"
+#include "dialog-utils.h"
 #include "MultiLedger.h"
 #include "FileDialog.h"
 #include "Refresh.h"
@@ -110,9 +111,10 @@ gnc_xfer_dialog_create_tree_frame(Account *initial, gchar *title,
     }
   }
 
-  button = gtk_check_button_new_with_label("Show Categories");
+  button = gtk_check_button_new_with_label(SHOW_CATEGORIES_STR);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), is_category);
   gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
+  gnc_set_tooltip(button, SHOW_CAT_MSG);
 
   gtk_signal_connect(GTK_OBJECT(button), "toggled",
 		     GTK_SIGNAL_FUNC(gnc_xfer_dialog_toggle_cb),
@@ -151,7 +153,7 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
   {
     GtkWidget *frame, *vbox, *hbox, *label;
 
-    frame = gtk_frame_new(_("Transfer Information"));
+    frame = gtk_frame_new(XFER_INFO);
     gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
 
     gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(dialog)->vbox),
@@ -316,17 +318,14 @@ gnc_xfer_dialog(GtkWidget * parent, Account * initial)
 
     if (!xaccAccountsHaveCommonCurrency(from, to))
     {
-      gnc_error_dialog_parented(GTK_WINDOW(dialog),
-                                "You cannot transfer between those accounts." \
-                                "\nThey do not have a common currency.");
+      gnc_error_dialog_parented(GTK_WINDOW(dialog), XFER_CURR_MSG);
       continue;
     }
 
     string = gtk_entry_get_text(GTK_ENTRY(xferData.amount_entry));
     if (sscanf(string, "%lf", &amount) != 1)
     {
-      gnc_error_dialog_parented(GTK_WINDOW(dialog),
-                                "The amount must be a number.");
+      gnc_error_dialog_parented(GTK_WINDOW(dialog), AMOUNT_NUM_MSG);
       continue;
     }
 

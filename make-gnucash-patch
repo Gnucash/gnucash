@@ -1,0 +1,129 @@
+#!/usr/bin/perl
+#
+# This perl script is used to make a patch for your GnuCash
+# development work. All patches should be submitted to the
+# mailing list gnucash-patches@gnucash.org. For more info
+# consult the README.
+#
+# This script requires the programs 'makepatch', 'gzip',
+# 'diff', and 'uuencode'.
+#
+# Author: Dave Peticolas <peticola@cs.ucdavis.edu>
+
+
+###########################################################
+# This section must be configured for your own setup.     #
+###########################################################
+
+# The directory with the original gnucash sources
+my $old = 'gnucash.pristine';
+
+# The directory where you do your development
+my $new = 'gnucash';
+
+# The directory where the above two directories reside
+my $gnc_home = '/usr/src/misc/gnc';
+
+
+###########################################################
+# This section should not need to be modified.            #
+###########################################################
+
+# Switch to the home directory
+chdir $gnc_home or die "Can't cd!\n";
+
+# Erase the old files
+unlink('gnc.diff', 'gnucash.diff.gz', 'gnucash.diff.gz.uue');
+
+# Start out with our basic makepatch arguments
+my @args = ('-diff', 'diff -u', '-exclude-vc');
+
+# Add in the exclude patterns from the __DATA__ section
+foreach my $pat (<DATA>) {
+  chomp($pat);
+  push(@args, '-exclude', $pat) if $pat;
+}
+
+# Add the from and to directories for makepatch
+push(@args, $old, $new);
+
+# Invoke makepatch with standard out redirected to 'gnucash.diff'
+open(OLDOUT, ">&STDOUT");
+open(STDOUT, "> gnucash.diff") || die "Can't redirect stdout";
+system('makepatch', @args);
+close(STDOUT);
+open(STDOUT, ">&OLDOUT");
+
+# Make a copy of the ascii diff in 'gnc.diff'
+system('cp gnucash.diff gnc.diff');
+
+# Compress the patch
+system('gzip -9vf gnucash.diff');
+
+# UU encode the compressed patch
+# 'gnucash.diff.gz.uue' is the file you send.
+system('uuencode gnucash.diff.gz gnucash.diff.gz > gnucash.diff.gz.uue');
+
+exit(0);
+
+__DATA__
+
+obj
+g-wrap-install
+Makefile
+Makefile.init
+config.cache
+config.log
+config.status
+config.h
+*.tar.gz
+*.log
+*.bin
+*.patch
+*.diff
+*.diffs
+xacc
+*.xac.*.xac
+errs*
+.#*
+TAGS
+#*#
+libtool
+conf.h
+stamp-h
+configure
+.deps
+.libs
+*.i
+gnucash.pm
+gnucash-engine-perl5_wrap.c
+g-wrap-guile
+libgwrapguile.la
+gnc-autogen.h
+src/g-wrap/gnc.c
+src/g-wrap/gnc.h
+src/g-wrap/gnc.html
+src/guile/gnucash.h
+src/scm/bootstrap.scm
+src/swig/perl5/gnucash.engine_wrap.doc
+g-wrap.info
+lib/g-wrap/Makefile.in
+lib/g-wrap/rscheme/g-wrap-rs
+src/quotes/gnc-prices
+gtksheet*
+*.wrap
+*.orig
+*.rej
+src/reports/pathconfig.h
+*.moc
+*.gmo
+*.mo
+po/Makefile.in
+POTFILES
+cat-id-tbl.c
+gnucash.pot
+po/pseudo-source.c
+stamp-cat-id
+po/extract-macros.perl
+include/messages_i18n.h
+lib/g-wrap/aclocal.m4

@@ -30,9 +30,9 @@
 
 #define _GNU_SOURCE
 
-#include <gnome.h>
-
 #include "top-level.h"
+
+#include <gnome.h>
 
 #include "MultiLedger.h"
 #include "LedgerUtils.h"
@@ -47,7 +47,7 @@
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "query-user.h"
-#include "messages.h"
+#include "enriched-messages.h"
 #include "table-gnome.h"
 #include "table-html.h"
 #include "gnucash-sheet.h"
@@ -55,20 +55,13 @@
 #include "util.h"
 
 
-/** STRUCTS *********************************************************/
-
-typedef struct _StyleData StyleData;
-struct _StyleData
+typedef struct _RegDateWindow RegDateWindow;
+struct _RegDateWindow
 {
-  RegWindow *regData;
-  int style_code;
-};
+  GtkWidget * window;
 
-typedef struct _SortData SortData;
-struct _SortData
-{
-  RegWindow *regData;
-  int sort_code;
+  GtkWidget * start_date;
+  GtkWidget * end_date;
 };
 
 /* The RegWindow struct contains info needed by an instance of an open 
@@ -85,13 +78,9 @@ struct _RegWindow
   GtkWidget * balance_label;
   GtkWidget * cleared_label;
 
-  GtkWidget * start_date;
-  GtkWidget * end_date;
-
-  StyleData * style_cb_data;
-  SortData  * sort_cb_data;
-
   GnucashRegister *reg;
+
+  RegDateWindow *date_window;
 
   /* Do we close the ledger when the window closes? */
   gncBoolean close_ledger;
@@ -119,6 +108,9 @@ static void deleteCB(GtkWidget *w, gpointer data);
 static void recordCB(GtkWidget *w, gpointer data);
 static void cancelCB(GtkWidget *w, gpointer data);
 static void closeCB(GtkWidget *w, gpointer data);
+static void dateCB(GtkWidget *w, gpointer data);
+static void new_trans_cb(GtkWidget *widget, gpointer data);
+static void jump_cb(GtkWidget *widget, gpointer data);
 
 static gboolean gnc_register_include_date(RegWindow *regData, time_t date);
 
@@ -246,89 +238,67 @@ gnc_register_get_default_type(SplitRegister *reg)
 
 
 static void
-ledger_change_style_cb(GtkWidget *w, gint index, gpointer data)
+gnc_register_change_style(RegWindow *regData, int style_code)
 {
-  StyleData *style_data = (StyleData *) data;
-  xaccLedgerDisplay *ld = style_data->regData->ledger;
-  SplitRegister *reg = ld->ledger;
+  SplitRegister *reg = regData->ledger->ledger;
   int type = reg->type;
 
   type &= ~REG_STYLE_MASK;
-  type |=  style_data->style_code;
-  
+  type |=  style_code;
+
   xaccConfigSplitRegister(reg, type);
 
-  ld->dirty = 1;
-  xaccLedgerDisplayRefresh(ld);
+  regData->ledger->dirty = 1;
+  xaccLedgerDisplayRefresh(regData->ledger);
 }
 
-static GtkWidget *
-gnc_build_ledger_style_menu(RegWindow *regData)
+static void
+gnc_register_style_single_cb(GtkWidget *w, gpointer data)
 {
-  GtkWidget *omenu;
-  gint num_items;
-  int style;
-  gint i;
+  RegWindow *regData = data;
 
-  static StyleData style_data[] =
-  {
-    { NULL, REG_SINGLE_LINE },
-    { NULL, REG_DOUBLE_LINE },
-    { NULL, REG_MULTI_LINE },
-    { NULL, REG_SINGLE_DYNAMIC },
-    { NULL, REG_DOUBLE_DYNAMIC }
-  };
+  gnc_register_change_style(regData, REG_SINGLE_LINE);
+}
 
-  static GNCOptionInfo style_items[] =
-  {
-    { "Single Line", "Show transactions on single lines",
-      ledger_change_style_cb, NULL },
-    { "Double Line", "Show transactions on two lines with more information",
-      ledger_change_style_cb, NULL },
-    { "Multi Line",  "Show transactions on multiple lines with one line "
-                     "for each split in the transaction",
-      ledger_change_style_cb, NULL },
-    { "Auto Single", "Single line mode with multi-line cursor",
-      ledger_change_style_cb, NULL },
-    { "Auto Double", "Double line mode with multi-line cursor",
-      ledger_change_style_cb, NULL }
-  };
+static void
+gnc_register_style_double_cb(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
 
-  num_items = sizeof(style_items) / sizeof(GNCOptionInfo);
+  gnc_register_change_style(regData, REG_DOUBLE_LINE);
+}
 
-  regData->style_cb_data = g_new0(StyleData, num_items);
+static void
+gnc_register_style_multi_cb(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
 
-  for (i = 0; i < num_items; i++)
-  {
-    regData->style_cb_data[i].regData = regData;
-    regData->style_cb_data[i].style_code = style_data[i].style_code;
+  gnc_register_change_style(regData, REG_MULTI_LINE);
+}
 
-    style_items[i].user_data = &regData->style_cb_data[i];
-  }
+static void
+gnc_register_style_auto_single_cb(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
 
-  omenu = gnc_build_option_menu(style_items, num_items);
+  gnc_register_change_style(regData, REG_SINGLE_DYNAMIC);
+}
 
-  style = gnc_register_get_default_type(regData->ledger->ledger);
-  style &= REG_STYLE_MASK;
+static void
+gnc_register_style_auto_double_cb(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
 
-  for (i = 0; i < num_items; i++)
-    if (style == regData->style_cb_data[i].style_code)
-    {
-      gtk_option_menu_set_history(GTK_OPTION_MENU(omenu), i);
-      break;
-    }
-
-  return omenu;
+  gnc_register_change_style(regData, REG_DOUBLE_DYNAMIC);
 }
 
 
 static void
-gnc_ledger_sort_cb(GtkWidget *w, gint index, gpointer data)
+gnc_register_sort(RegWindow *regData, int sort_code)
 {
-  SortData *sortData = (SortData *) data;
-  Query *query = sortData->regData->ledger->query;
+  Query *query = regData->ledger->query;
 
-  switch(sortData->sort_code)
+  switch(sort_code)
   {
     case BY_STANDARD:
       xaccQuerySetSortOrder(query, BY_STANDARD, BY_NONE, BY_NONE);
@@ -352,55 +322,56 @@ gnc_ledger_sort_cb(GtkWidget *w, gint index, gpointer data)
       assert(0); /* we should never be here */
   }
 
-  sortData->regData->ledger->dirty = 1;
-  xaccLedgerDisplayRefresh(sortData->regData->ledger);
+  regData->ledger->dirty = 1;
+  xaccLedgerDisplayRefresh(regData->ledger);
 }
 
-static GtkWidget *
-gnc_build_ledger_sort_order_menu(RegWindow *regData)
+static void
+gnc_register_sort_standard_cb(GtkWidget *w, gpointer data)
 {
-  gint num_items;
-  gint i;
+  RegWindow *regData = data;
 
-  static SortData sort_data[] =
-  {
-    { NULL, BY_STANDARD },
-    { NULL, BY_DATE },
-    { NULL, BY_NUM },
-    { NULL, BY_AMOUNT },
-    { NULL, BY_MEMO },
-    { NULL, BY_DESC }
-  };
+  gnc_register_sort(regData, BY_STANDARD);
+}
 
-  static GNCOptionInfo sort_items[] =
-  {
-    { "Standard order", "Keep normal account order",
-      gnc_ledger_sort_cb, NULL },
-    { "Sort by date", "Sort by date, then num, then amount",
-      gnc_ledger_sort_cb, NULL },
-    { "Sort by num", "Sort by num, then date, then amount",
-      gnc_ledger_sort_cb, NULL },
-    { "Sort by amount", "Sort by amount, then date, then num",
-      gnc_ledger_sort_cb, NULL },
-    { "Sort by memo", "Sort by memo, then date, then num",
-      gnc_ledger_sort_cb, NULL },
-    { "Sort by description", "Sort by description, then date, then num",
-      gnc_ledger_sort_cb, NULL }
-  };
+static void
+gnc_register_sort_date_cb(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
 
-  num_items = sizeof(sort_items) / sizeof(GNCOptionInfo);
+  gnc_register_sort(regData, BY_DATE);
+}
 
-  regData->sort_cb_data = g_new0(SortData, num_items);
+static void
+gnc_register_sort_num_cb(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
 
-  for (i = 0; i < num_items; i++)
-  {
-    regData->sort_cb_data[i].regData = regData;
-    regData->sort_cb_data[i].sort_code = sort_data[i].sort_code;
+  gnc_register_sort(regData, BY_NUM);
+}
 
-    sort_items[i].user_data = &regData->sort_cb_data[i];
-  }
+static void
+gnc_register_sort_amount_cb(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
 
-  return gnc_build_option_menu(sort_items, num_items);
+  gnc_register_sort(regData, BY_AMOUNT);
+}
+
+static void
+gnc_register_sort_memo_cb(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
+
+  gnc_register_sort(regData, BY_MEMO);
+}
+
+static void
+gnc_register_sort_desc_cb(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
+
+  gnc_register_sort(regData, BY_DESC);
 }
 
 static time_t
@@ -438,11 +409,20 @@ gnc_register_max_day_time(time_t time_val)
 static void
 gnc_register_set_date_range(RegWindow *regData)
 {
+  RegDateWindow *regDateData;
   time_t start;
   time_t end;
 
-  start = gnome_date_edit_get_date(GNOME_DATE_EDIT(regData->start_date));
-  end   = gnome_date_edit_get_date(GNOME_DATE_EDIT(regData->end_date));
+  assert(regData != NULL);
+  assert(regData->ledger != NULL);
+  assert(regData->ledger->query != NULL);
+
+  regDateData = regData->date_window;
+  if (regDateData == NULL)
+    return;
+
+  start = gnome_date_edit_get_date(GNOME_DATE_EDIT(regDateData->start_date));
+  end   = gnome_date_edit_get_date(GNOME_DATE_EDIT(regDateData->end_date));
 
   start = gnc_register_min_day_time(start);
   end   = gnc_register_max_day_time(end);
@@ -455,10 +435,6 @@ gnc_register_date_cb(GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = (RegWindow *) data;
 
-  assert(regData != NULL);
-  assert(regData->ledger != NULL);
-  assert(regData->ledger->query != NULL);
-
   gnc_register_set_date_range(regData);
 
   regData->ledger->dirty = 1;
@@ -469,172 +445,236 @@ static void
 gnc_register_today_cb(GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = (RegWindow *) data;
+  RegDateWindow *regDateData;
 
   assert(regData != NULL);
 
-  gnome_date_edit_set_time(GNOME_DATE_EDIT(regData->end_date), time(NULL));
+  regDateData = regData->date_window;
+  gnome_date_edit_set_time(GNOME_DATE_EDIT(regDateData->end_date), time(NULL));
 
   gnc_register_date_cb(widget, regData);
+}
+
+static void
+gnc_register_show_date_window(RegWindow *regData)
+{
+  RegDateWindow *regDateData;
+
+  if (regData == NULL)
+    return;
+
+  regDateData = regData->date_window;
+  if (regDateData == NULL)
+    return;
+
+  if (regDateData->window == NULL)
+    return;
+
+  gtk_widget_show_all(regDateData->window);
+  gdk_window_raise(GTK_WIDGET(regDateData->window)->window);
+}
+
+static RegDateWindow *
+gnc_register_date_window(RegWindow *regData)
+{
+  RegDateWindow *regDateData;
+  GtkWidget *dialog;
+  GtkWidget *frame;
+  GtkWidget *dvbox;
+
+  regDateData = g_new0(RegDateWindow, 1);
+  regData->date_window = regDateData;
+
+  dialog = gnome_dialog_new(REG_DATE_RANGES_STR,
+                            GNOME_STOCK_BUTTON_CLOSE,
+                            NULL);
+
+  regDateData->window = dialog;
+  dvbox = GNOME_DIALOG(dialog)->vbox;
+
+  gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
+  gnome_dialog_set_close(GNOME_DIALOG(dialog), TRUE);
+  gnome_dialog_close_hides(GNOME_DIALOG(dialog), TRUE);
+  gnome_dialog_set_parent(GNOME_DIALOG(dialog), GTK_WINDOW(regData->window));
+
+  frame = gtk_frame_new(NULL);
+  gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
+  gtk_box_pack_start(GTK_BOX(dvbox), frame, FALSE, FALSE, 0);
+
+  {
+    GtkWidget *calendar;
+    GtkWidget *button;
+    GtkWidget *entry;
+    GtkWidget *date;
+    GtkWidget *label;
+    GtkWidget *hbox;
+    GtkWidget *vbox;
+    time_t time_val;
+
+    hbox = gtk_hbox_new(FALSE, 2);
+    gtk_container_set_border_width(GTK_CONTAINER(hbox), 5);
+    gtk_container_add(GTK_CONTAINER(frame), hbox);
+
+    vbox = gtk_vbox_new(TRUE, 2);
+    gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
+
+    label = gtk_label_new(START_DATE_C_STR);
+    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+    gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
+    label = gtk_label_new(END_DATE_C_STR);
+    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+    gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
+
+
+    vbox = gtk_vbox_new(TRUE, 2);
+    gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
+
+    date = gnome_date_edit_new(time(NULL), FALSE, FALSE);
+    gtk_box_pack_start(GTK_BOX(vbox), date, FALSE, FALSE, 0);
+    calendar = GNOME_DATE_EDIT(date)->calendar;
+    gtk_signal_connect(GTK_OBJECT(calendar), "day_selected_double_click",
+		       GTK_SIGNAL_FUNC(gnc_register_date_cb), regData);
+    entry = GNOME_DATE_EDIT(date)->date_entry;
+    gtk_signal_connect(GTK_OBJECT(entry), "activate",
+		       GTK_SIGNAL_FUNC(gnc_register_date_cb), regData);
+    regDateData->start_date = date;
+
+    time_val = xaccQueryGetEarliestDateFound(regData->ledger->query);
+    if (time_val < time(NULL))
+      gnome_date_edit_set_time(GNOME_DATE_EDIT(date), time_val);
+
+    date = gnome_date_edit_new(time(NULL), FALSE, FALSE);
+    gtk_box_pack_start(GTK_BOX(vbox), date, FALSE, FALSE, 0);
+    calendar = GNOME_DATE_EDIT(date)->calendar;
+    gtk_signal_connect(GTK_OBJECT(calendar), "day_selected_double_click",
+		       GTK_SIGNAL_FUNC(gnc_register_date_cb), regData);
+    entry = GNOME_DATE_EDIT(date)->date_entry;
+    gtk_signal_connect(GTK_OBJECT(entry), "activate",
+		       GTK_SIGNAL_FUNC(gnc_register_date_cb), regData);
+    regDateData->end_date = date;
+
+
+    vbox = gtk_vbox_new(TRUE, 2);
+    gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
+
+    label = gtk_label_new("");
+    gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
+    button = gtk_button_new_with_label(TODAY_STR);
+    gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
+    gtk_signal_connect(GTK_OBJECT(button), "clicked",
+		       GTK_SIGNAL_FUNC(gnc_register_today_cb), regData);
+  }
+
+  return regDateData;
 }
 
 static GtkWidget *
 gnc_register_create_tool_bar(RegWindow *regData)
 {
-  GtkWidget *hbox;
-
-  hbox = gtk_hbox_new(FALSE, 5);
-
-  /* Transaction Buttons */
+  GtkWidget *toolbar;
+  GnomeUIInfo toolbar_info[] =
   {
-    GtkWidget *toolbar;
-    GnomeUIInfo toolbar_info[] =
     {
-      {
-        GNOME_APP_UI_ITEM,
-        "Record", "Record the current transaction",
-        recordCB, regData, NULL,
-        GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_ADD,
-        0, 0, NULL
-      },
-      {
-        GNOME_APP_UI_ITEM,
-        "Cancel", "Cancel the current transaction",
-        cancelCB, regData, NULL,
-        GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_UNDO,
-        0, 0, NULL
-      },
-      {
-        GNOME_APP_UI_ITEM,
-        "Delete", "Delete the current transaction",
-        deleteCB, regData, NULL,
-        GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_TRASH,
-        0, 0, NULL
-      },
-      GNOMEUIINFO_END
-    };
+      GNOME_APP_UI_ITEM,
+      RECORD_STR, TOOLTIP_RECORD,
+      recordCB, regData, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_ADD,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      CANCEL_STR, TOOLTIP_CANCEL_TRANS,
+      cancelCB, regData, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_UNDELETE,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      DELETE_STR, TOOLTIP_DEL_TRANS,
+      deleteCB, regData, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_TRASH,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      NEW_STR, TOOLTIP_NEW_TRANS,
+      new_trans_cb, regData, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_NEW,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      JUMP_STR, TOOLTIP_JUMP_TRANS,
+      jump_cb, regData, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_JUMP_TO,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      TRANSFER_STR, TOOLTIP_TRANSFER,
+      xferCB, regData, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_CONVERT,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      CLOSE_STR, TOOLTIP_CLOSE_REG,
+      closeCB, regData, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_CLOSE,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_END
+  };
 
-    toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+  toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
 
-    gnome_app_fill_toolbar(GTK_TOOLBAR(toolbar), toolbar_info, NULL);
+  gnome_app_fill_toolbar(GTK_TOOLBAR(toolbar), toolbar_info, NULL);
 
-    gtk_box_pack_start(GTK_BOX(hbox), toolbar, FALSE, FALSE, 0);
+  regData->toolbar = toolbar;
 
-    regData->toolbar = toolbar;
-  }
+  return toolbar;
+}
 
-  {
-    GtkWidget *frame;
-    GtkWidget *balance_hbox;
-    GtkWidget *vbox;
-    GtkWidget *label;
 
-    frame = gtk_frame_new(NULL);
-    gtk_box_pack_end(GTK_BOX(hbox), frame, FALSE, FALSE, 0);
+static GtkWidget *
+gnc_register_create_status_bar(RegWindow *regData)
+{
+  GtkWidget *statusbar;
+  GtkWidget *hbox;
+  GtkWidget *label;
 
-    balance_hbox = gtk_hbox_new(FALSE, 2);
-    gtk_container_set_border_width(GTK_CONTAINER(balance_hbox), 4);
-    gtk_container_add(GTK_CONTAINER(frame), balance_hbox);
+  statusbar = gnome_appbar_new(GNC_F, /* no progress bar */
+			       GNC_T, /* has status area */
+			       GNOME_PREFERENCES_USER);
 
-    vbox = gtk_vbox_new(TRUE, 2);
-    gtk_box_pack_start(GTK_BOX(balance_hbox), vbox, FALSE, FALSE, 0);
-    label = gtk_label_new(BALN_C_STR);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
-    gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
-    label = gtk_label_new(CLEARED_C_STR);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
-    gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
+  hbox = gtk_hbox_new(FALSE, 2);
+  gtk_box_pack_end(GTK_BOX(statusbar), hbox, FALSE, FALSE, 5);
 
-    vbox = gtk_vbox_new(TRUE, 2);
-    gtk_box_pack_start(GTK_BOX(balance_hbox), vbox, FALSE, FALSE, 0);
-    label = gtk_label_new("");
-    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
-    regData->balance_label = label;
-    gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
-    label = gtk_label_new("");
-    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
-    regData->cleared_label = label;
-    gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
-  }
+  label = gtk_label_new(CLEARED_C_STR);
+  gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
-  {
-    GtkWidget *vbox;
+  label = gtk_label_new("");
+  gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+  regData->cleared_label = label;
+  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
-    vbox = gtk_vbox_new(TRUE, 0);
-    gtk_box_pack_end(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
+  hbox = gtk_hbox_new(FALSE, 2);
+  gtk_box_pack_end(GTK_BOX(statusbar), hbox, FALSE, FALSE, 5);
 
-    /* Style popup */
-    gtk_box_pack_start(GTK_BOX(vbox),
-		       gnc_build_ledger_style_menu(regData),
-		       FALSE, FALSE, 0);
+  label = gtk_label_new(BALN_C_STR);
+  gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
-    /* Sort popup */
-    gtk_box_pack_start(GTK_BOX(vbox),
-		       gnc_build_ledger_sort_order_menu(regData),
-		       FALSE, FALSE, 0);
-  }
+  label = gtk_label_new("");
+  gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+  regData->balance_label = label;
+  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
-  {
-    GtkWidget *calendar;
-    GtkWidget *entry;
-    GtkWidget *date;
-    GtkWidget *label;
-    GtkWidget *hbox_date;
-    GtkWidget *vbox;
-    GtkWidget *button;
-    time_t time_val;
-
-    hbox_date = gtk_hbox_new(FALSE, 2);
-    gtk_box_pack_end(GTK_BOX(hbox), hbox_date, FALSE, FALSE, 0);
-
-    vbox = gtk_vbox_new(TRUE, 2);
-    gtk_box_pack_start(GTK_BOX(hbox_date), vbox, FALSE, FALSE, 0);
-    label = gtk_label_new("Start date:");
-    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
-    gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
-    label = gtk_label_new("End date:");
-    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
-    gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
-
-    vbox = gtk_vbox_new(TRUE, 2);
-    gtk_box_pack_start(GTK_BOX(hbox_date), vbox, FALSE, FALSE, 0);
-
-    date = gnome_date_edit_new(time(NULL), FALSE, FALSE);
-    gtk_box_pack_start(GTK_BOX(vbox), date, FALSE, FALSE, 0);
-    calendar = GNOME_DATE_EDIT(date)->calendar;
-    gtk_signal_connect(GTK_OBJECT(calendar), "day_selected_double_click",
-		       GTK_SIGNAL_FUNC(gnc_register_date_cb), regData);
-    entry = GNOME_DATE_EDIT(date)->date_entry;
-    gtk_signal_connect(GTK_OBJECT(entry), "activate",
-		       GTK_SIGNAL_FUNC(gnc_register_date_cb), regData);
-    regData->start_date = date;
-
-    date = gnome_date_edit_new(time(NULL), FALSE, FALSE);
-    gtk_box_pack_start(GTK_BOX(vbox), date, FALSE, FALSE, 0);
-    calendar = GNOME_DATE_EDIT(date)->calendar;
-    gtk_signal_connect(GTK_OBJECT(calendar), "day_selected_double_click",
-		       GTK_SIGNAL_FUNC(gnc_register_date_cb), regData);
-    entry = GNOME_DATE_EDIT(date)->date_entry;
-    gtk_signal_connect(GTK_OBJECT(entry), "activate",
-		       GTK_SIGNAL_FUNC(gnc_register_date_cb), regData);
-    regData->end_date = date;
-
-    vbox = gtk_vbox_new(TRUE, 2);
-    gtk_box_pack_start(GTK_BOX(hbox_date), vbox, FALSE, FALSE, 0);
-    label = gtk_label_new("");
-    gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
-    button = gtk_button_new_with_label("Today");
-    gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-		       GTK_SIGNAL_FUNC(gnc_register_today_cb), regData);
-
-    time_val = xaccQueryGetEarliestDateFound(regData->ledger->query);
-    if (time_val < time(NULL))
-      gnome_date_edit_set_time(GNOME_DATE_EDIT(regData->start_date), time_val);
-
-    gnc_register_set_date_range(regData);
-  }
-
-  return hbox;
+  return statusbar;
 }
 
 
@@ -715,37 +755,105 @@ gnc_register_scrub_cb(GtkWidget *widget, gpointer data)
 }
 
 static GtkWidget *
-gnc_register_create_menu_bar(RegWindow *regData)
+gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
 {
   GtkWidget *menubar;
   GtkAccelGroup *accel_group;
+
+  GnomeUIInfo style_list[] =
+  {
+    GNOMEUIINFO_RADIOITEM_DATA(SINGLE_LINE_STR, TOOLTIP_SINGLE_LINE,
+                               gnc_register_style_single_cb, regData, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(DOUBLE_LINE_STR, TOOLTIP_DOUBLE_LINE,
+                               gnc_register_style_double_cb, regData, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(MULTI_LINE_STR, TOOLTIP_MULTI_LINE,
+                               gnc_register_style_multi_cb, regData, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(AUTO_SINGLE_STR, TOOLTIP_AUTO_SINGLE,
+                               gnc_register_style_auto_single_cb,
+                               regData, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(AUTO_DOUBLE_STR, TOOLTIP_AUTO_DOUBLE,
+                               gnc_register_style_auto_double_cb,
+                               regData, NULL),
+    GNOMEUIINFO_END
+  };
+
+  GnomeUIInfo style_menu[] =
+  {
+    GNOMEUIINFO_RADIOLIST(style_list),
+    GNOMEUIINFO_END
+  };
+
+  GnomeUIInfo sort_list[] =
+  {
+    GNOMEUIINFO_RADIOITEM_DATA(STANDARD_ORDER_STR, TOOLTIP_STANDARD_ORD,
+                               gnc_register_sort_standard_cb, regData, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_DATE_STR, TOOLTIP_SORT_BY_DATE,
+                               gnc_register_sort_date_cb, regData, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_NUM_STR, TOOLTIP_SORT_BY_NUM,
+                               gnc_register_sort_num_cb, regData, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_AMNT_STR, TOOLTIP_SORT_BY_AMNT,
+                               gnc_register_sort_amount_cb, regData, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_MEMO_STR, TOOLTIP_SORT_BY_MEMO,
+                               gnc_register_sort_memo_cb, regData, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_DESC_STR, TOOLTIP_SORT_BY_DESC,
+                               gnc_register_sort_desc_cb, regData, NULL),
+    GNOMEUIINFO_END
+  };
+
+  GnomeUIInfo sort_menu[] =
+  {
+    GNOMEUIINFO_RADIOLIST(sort_list),
+    GNOMEUIINFO_END
+  };
+
+  GnomeUIInfo register_menu[] =
+  {
+    GNOMEUIINFO_SUBTREE(STYLE_STR, style_menu),
+    GNOMEUIINFO_SUBTREE(SORT_ORDER_STR, sort_menu),
+    {
+      GNOME_APP_UI_ITEM,
+      DATE_RANGE_E_STR, TOOLTIP_DATE_RANGE,
+      dateCB, regData, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      CLOSE_STR, TOOLTIP_CLOSE_REG,
+      closeCB, regData, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_END
+  };
 
   GnomeUIInfo account_menu[] =
   {
     {
       GNOME_APP_UI_ITEM,
-      "_Edit Info...", "Edit account information",
+      EDIT_ACCT_E_STR, TOOLTIP_EDIT_REG,
       editCB, regData, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      "Re_concile...", "Reconcile this account",
+      RECONCILE_E_STR, TOOLTIP_RECN_REG,
       startRecnCB, regData, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      "_Transfer...", "Transfer funds from one account to another",
+      TRANSFER_E_STR, TOOLTIP_TRANSFER,
       xferCB, regData, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      "Adjust _Balance...", "Adjust the balance of the account",
+      ADJ_BALN_STR, TOOLTIP_ADJUST_REG,
       startAdjBCB, regData, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -753,16 +861,8 @@ gnc_register_create_menu_bar(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      N_("_Scrub"), N_("Scrub the account and its subaccounts clean"),
+      SCRUB_STR, TOOLTIP_SCRUB_REG,
       gnc_register_scrub_cb, regData, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      "_Close", "Close this register window",
-      closeCB, regData, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
@@ -773,21 +873,21 @@ gnc_register_create_menu_bar(RegWindow *regData)
   {
     {
       GNOME_APP_UI_ITEM,
-      "_Record", "Record the current transaction",
+      RECORD_STR, TOOLTIP_RECORD,
       recordCB, regData, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      "_Cancel", "Cancel the current edit",
+      CANCEL_STR, TOOLTIP_CANCEL_TRANS,
       cancelCB, regData, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      "_Delete", "Delete the current transaction",
+      DELETE_STR, TOOLTIP_DEL_TRANS,
       deleteCB, regData, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -795,15 +895,14 @@ gnc_register_create_menu_bar(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      "_New", "Edit the new new transaction",
+      NEW_STR, TOOLTIP_NEW_TRANS,
       new_trans_cb, regData, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      "_Jump", "Jump to the corresponding transaction in "
-               "the other account",
+      JUMP_STR, TOOLTIP_JUMP_TRANS,
       jump_cb, regData, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -815,7 +914,7 @@ gnc_register_create_menu_bar(RegWindow *regData)
   {
     {
       GNOME_APP_UI_ITEM,
-      N_("_Help..."), N_("Gnucash Help."),
+      HELP_E_STR, TOOLTIP_HELP,
       helpCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -825,8 +924,9 @@ gnc_register_create_menu_bar(RegWindow *regData)
 
   GnomeUIInfo register_window_menu[] =
   {
-    GNOMEUIINFO_SUBTREE("_Account", account_menu),
-    GNOMEUIINFO_SUBTREE("_Transaction", transaction_menu),
+    GNOMEUIINFO_SUBTREE(REGISTER_STR, register_menu),
+    GNOMEUIINFO_SUBTREE(ACCOUNT_STR, account_menu),
+    GNOMEUIINFO_SUBTREE(TRANSACTION_STR, transaction_menu),
     GNOMEUIINFO_MENU_HELP_TREE(help_menu),
     GNOMEUIINFO_END
   };
@@ -838,6 +938,9 @@ gnc_register_create_menu_bar(RegWindow *regData)
 
   gnome_app_fill_menu(GTK_MENU_SHELL(menubar), register_window_menu,
   		      accel_group, TRUE, 0);
+
+  gnome_app_install_appbar_menu_hints(GNOME_APPBAR(statusbar),
+                                      register_window_menu);
 
   return menubar;
 }
@@ -852,21 +955,21 @@ gnc_register_create_popup_menu(RegWindow *regData)
   {
     {
       GNOME_APP_UI_ITEM,
-      "_Record", "Record the current transaction",
+      RECORD_STR, TOOLTIP_RECORD,
       recordCB, regData, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      "_Cancel", "Cancel the current edit",
+      CANCEL_STR, TOOLTIP_CANCEL_TRANS,
       cancelCB, regData, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      "_Delete", "Delete the current transaction",
+      DELETE_STR, TOOLTIP_DEL_TRANS,
       deleteCB, regData, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -874,15 +977,14 @@ gnc_register_create_popup_menu(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      "_New", "Edit the new new transaction",
+      NEW_STR, TOOLTIP_NEW_TRANS,
       new_trans_cb, regData, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      "_Jump", "Jump to the corresponding transaction in "
-               "the other account",
+      JUMP_STR, TOOLTIP_JUMP_TRANS,
       jump_cb, regData, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -914,6 +1016,21 @@ gnc_register_destroy_cb(GtkWidget *widget, gpointer data)
   closeRegWindow(widget, regData);
 }
 
+static gncUIWidget
+gnc_register_get_parent(xaccLedgerDisplay *ledger)
+{
+  RegWindow *regData;
+
+  if (ledger == NULL)
+    return NULL;
+
+  regData = ledger->gui_hook;
+  if (regData == NULL)
+    return NULL;
+
+  return regData->window;
+}
+
 /********************************************************************\
  * regWindowLedger                                                  *
  *   opens up a ledger window for the account list                  *
@@ -925,9 +1042,11 @@ RegWindow *
 regWindowLedger(xaccLedgerDisplay *ledger)
 {
   RegWindow *regData = NULL;
+  GtkWidget *vbox;
   GtkWidget *register_window;
   GtkWidget *register_dock;
   GtkWidget *table_frame;
+  GtkWidget *statusbar;
 
   xaccQuerySetMaxSplits(ledger->query, INT_MAX);
   xaccQuerySetSortOrder(ledger->query, BY_STANDARD, BY_NONE, BY_NONE);
@@ -941,54 +1060,64 @@ regWindowLedger(xaccLedgerDisplay *ledger)
   ledger->gui_hook = (void *) regData;
   ledger->redraw = regRefresh;
   ledger->destroy = regDestroy;
+  ledger->get_parent = gnc_register_get_parent;
 
   register_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+
+  vbox = gtk_vbox_new(FALSE, 0);
+  gtk_container_add(GTK_CONTAINER(register_window), vbox);
+
   register_dock = gnome_dock_new();
-  gtk_container_add(GTK_CONTAINER(register_window), register_dock);
+  gtk_box_pack_start(GTK_BOX(vbox), register_dock, TRUE, TRUE, 0);
 
   regData->ledger = ledger;
   regData->close_ledger = GNC_T;
   regData->window = register_window;
-  regData->sort_cb_data = NULL;
-  regData->style_cb_data = NULL;
 
   { /* pick a window name */
-    char *windowname;
+    gchar *windowname;
 
     if (ledger->leader)
     {
-      char * acc_name = gnc_ui_get_account_full_name(ledger->leader, ":");
+      gchar * acc_name = gnc_ui_get_account_full_name(ledger->leader, ":");
+      gchar * reg_name;
 
       switch (ledger->type)
       {
 	case GENERAL_LEDGER:
 	case INCOME_LEDGER:
-	  asprintf(&windowname, "%s General Ledger", acc_name);
+          reg_name = GENERAL_LEDGER_STR;
 	  break;
 	case PORTFOLIO:
-	  asprintf(&windowname, "%s Portfolio", acc_name);
+          reg_name = PORTFOLIO_STR;
 	  break;
 	default:
-	  asprintf(&windowname, "%s Register", acc_name);
+          reg_name = REGISTER_STR;
 	  break;
       }
+
+      windowname = g_strconcat(acc_name, " ", reg_name, NULL);
 
       g_free(acc_name);
     }
     else
-      asprintf(&windowname, "%s", "General Ledger");
-
-    assert(windowname != NULL);
+      windowname = g_strdup(GENERAL_LEDGER_STR);
 
     gtk_window_set_title(GTK_WINDOW(register_window), windowname);
 
-    free(windowname);
+    g_free(windowname);
   }
 
   /* Invoked when window is being destroyed. */
   gtk_signal_connect(GTK_OBJECT(regData->window), "destroy",
 		     GTK_SIGNAL_FUNC (gnc_register_destroy_cb),
 		     (gpointer) regData);
+
+  regData->date_window = gnc_register_date_window(regData);
+  gnc_register_set_date_range(regData);
+
+  statusbar = gnc_register_create_status_bar(regData);
+  gtk_box_pack_start(GTK_BOX(vbox), statusbar, FALSE, FALSE, 0);
 
   /* The menu bar */
   {
@@ -997,12 +1126,27 @@ regWindowLedger(xaccLedgerDisplay *ledger)
 
     dock_item = gnome_dock_item_new("menu", GNOME_DOCK_ITEM_BEH_EXCLUSIVE);
 
-    menubar = gnc_register_create_menu_bar(regData);
+    menubar = gnc_register_create_menu_bar(regData, statusbar);
     gtk_container_set_border_width(GTK_CONTAINER(menubar), 2);
     gtk_container_add(GTK_CONTAINER(dock_item), menubar);
 
     gnome_dock_add_item (GNOME_DOCK(register_dock), GNOME_DOCK_ITEM(dock_item),
                          GNOME_DOCK_TOP, 0, 0, 0, TRUE);
+  }
+
+  /* The tool bar */
+  {
+    GtkWidget *dock_item;
+    GtkWidget *toolbar;
+
+    dock_item = gnome_dock_item_new("toolbar", GNOME_DOCK_ITEM_BEH_EXCLUSIVE);
+
+    toolbar = gnc_register_create_tool_bar(regData);
+    gtk_container_set_border_width(GTK_CONTAINER(toolbar), 2);
+    gtk_container_add(GTK_CONTAINER(dock_item), toolbar);
+
+    gnome_dock_add_item (GNOME_DOCK(register_dock), GNOME_DOCK_ITEM(dock_item),
+                         GNOME_DOCK_TOP, 1, 0, 0, TRUE);
   }
 
   /* The CreateTable will do the actual gui init, returning a widget */
@@ -1026,21 +1170,6 @@ regWindowLedger(xaccLedgerDisplay *ledger)
     popup = gnc_register_create_popup_menu(regData);
     gnucash_register_attach_popup(GNUCASH_REGISTER(register_widget),
                                   popup, regData);
-  }
-
-  /* The tool bar */
-  {
-    GtkWidget *dock_item;
-    GtkWidget *toolbar;
-
-    dock_item = gnome_dock_item_new("menu", GNOME_DOCK_ITEM_BEH_EXCLUSIVE);
-
-    toolbar = gnc_register_create_tool_bar(regData);
-    gtk_container_set_border_width(GTK_CONTAINER(toolbar), 2);
-    gtk_container_add(GTK_CONTAINER(dock_item), toolbar);
-
-    gnome_dock_add_item (GNOME_DOCK(register_dock), GNOME_DOCK_ITEM(dock_item),
-                         GNOME_DOCK_BOTTOM, 1, 0, 0, TRUE);
   }
 
   /* be sure to initialize the gui elements associated with the cursor */
@@ -1140,16 +1269,13 @@ closeRegWindow(GtkWidget * widget, RegWindow *regData)
   if (regData->close_ledger)
     xaccLedgerDisplayClose(regData->ledger);
 
-  if (regData->style_cb_data != NULL)
+  if (regData->date_window != NULL)
   {
-    g_free(regData->style_cb_data);
-    regData->style_cb_data = NULL;
-  }
+    if (regData->date_window->window != NULL)
+      gtk_widget_destroy(regData->date_window->window);
 
-  if (regData->sort_cb_data != NULL)
-  {
-    g_free(regData->sort_cb_data);
-    regData->sort_cb_data = NULL;
+    g_free(regData->date_window);
+    regData->date_window = NULL;
   }
 
   free(regData);
@@ -1250,21 +1376,24 @@ startRecnCB(GtkWidget * w, gpointer data)
 static gboolean
 gnc_register_include_date(RegWindow *regData, time_t date)
 {
+  RegDateWindow *regDateData;
   time_t start, end;
   gboolean changed = FALSE;
 
-  start = gnome_date_edit_get_date(GNOME_DATE_EDIT(regData->start_date));
-  end   = gnome_date_edit_get_date(GNOME_DATE_EDIT(regData->end_date));
+  regDateData = regData->date_window;
+
+  start = gnome_date_edit_get_date(GNOME_DATE_EDIT(regDateData->start_date));
+  end   = gnome_date_edit_get_date(GNOME_DATE_EDIT(regDateData->end_date));
 
   if (date < start)
   {
-    gnome_date_edit_set_time(GNOME_DATE_EDIT(regData->start_date), date);
+    gnome_date_edit_set_time(GNOME_DATE_EDIT(regDateData->start_date), date);
     changed = TRUE;
   }
 
   if (date > end)
   {
-    gnome_date_edit_set_time(GNOME_DATE_EDIT(regData->end_date), date);
+    gnome_date_edit_set_time(GNOME_DATE_EDIT(regDateData->end_date), date);
     changed = TRUE;
   }
 
@@ -1348,19 +1477,10 @@ gnc_transaction_delete_query(GtkWindow *parent)
   gint       pos = 0;
   gint       result;
 
-  gchar *whole = "Delete the whole transaction";
-  gchar *splits = "Delete all the splits";
-  gchar *usual =
-    "This selection will delete the whole transaction. "
-    "This is what you usually want.";
+  gchar *usual = DEL_USUAL_MSG;
+  gchar *warn  = DEL_WARN_MSG;
 
-  gchar *warn =
-    "Warning: Just deleting all the splits will make your "
-    "account unbalanced. You probably shouldn't do this unless "
-    "you're going to immediately add another split to bring things "
-    "back into balance.";
-
-  dialog = gnome_dialog_new("Delete Transaction",
+  dialog = gnome_dialog_new(DEL_TRANS_STR,
                             GNOME_STOCK_BUTTON_OK,
                             GNOME_STOCK_BUTTON_CANCEL,
                             NULL);
@@ -1380,7 +1500,7 @@ gnc_transaction_delete_query(GtkWindow *parent)
 
   text = gtk_text_new(NULL, NULL);
 
-  trans_button = gtk_radio_button_new_with_label(NULL, whole);
+  trans_button = gtk_radio_button_new_with_label(NULL, DEL_TRANS_MSG);
   gtk_object_set_user_data(GTK_OBJECT(trans_button), text);
   gtk_box_pack_start(GTK_BOX(vbox), trans_button, TRUE, TRUE, 0);
 
@@ -1388,7 +1508,7 @@ gnc_transaction_delete_query(GtkWindow *parent)
                      GTK_SIGNAL_FUNC(gnc_transaction_delete_toggle_cb), usual);
 
   group = gtk_radio_button_group(GTK_RADIO_BUTTON(trans_button));
-  splits_button = gtk_radio_button_new_with_label(group, splits);
+  splits_button = gtk_radio_button_new_with_label(group, DEL_SPLITS_MSG);
   gtk_object_set_user_data(GTK_OBJECT(splits_button), text);
   gtk_box_pack_start(GTK_BOX(vbox), splits_button, TRUE, TRUE, 0);
 
@@ -1493,10 +1613,8 @@ deleteCB(GtkWidget *widget, gpointer data)
   if ((xaccTransCountSplits(trans) <= 2) &&
       ((style == REG_SINGLE_LINE) || (style == REG_DOUBLE_LINE)))
   {
-    buf = "Are you sure you want to delete the current transaction?";
-
     result = gnc_verify_dialog_parented(GTK_WINDOW(regData->window),
-                                        buf, GNC_F);
+                                        TRANS_DEL2_MSG, GNC_F);
 
     if (!result)
       return;
@@ -1562,9 +1680,7 @@ gnc_register_check_close(RegWindow *regData)
   if (changed)
   {
     if (gnc_verify_dialog_parented
-        (GTK_WINDOW(regData->window),
-         "The current transaction has been changed.\n"
-         "Would you like to record it?", GNC_T))
+        (GTK_WINDOW(regData->window), TRANS_CHANGED_MSG, GNC_T))
       recordCB(regData->window, regData);
     else
       xaccSRCancelCursorSplitChanges(regData->ledger->ledger);
@@ -1588,6 +1704,20 @@ closeCB(GtkWidget *widget, gpointer data)
   gtk_widget_destroy(regData->window);
 }
 
+/********************************************************************\
+ * dateCB                                                           *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data - regData - the data struct for this register       *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+dateCB(GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData = (RegWindow *) data;
+
+  gnc_register_show_date_window(regData);
+}
 
 /********************************************************************\
  * helpCB                                                           *

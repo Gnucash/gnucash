@@ -64,12 +64,7 @@
 	 ;; on success, and (#f "failure-message") on failure. If #t,
 	 ;; the supplied value will be used by the gui to set the option.
          value-validator
-	 ;; permissible-values (multichoice options only)
-         ;; a list of vectors giving the value, a name,
-         ;; and description of the permissible values.
-         ;; Values are unevaluated Scheme symbols, names and
-         ;; descriptions are strings which are used by the GUI.
-	 permissible-values)
+	 option-data)
   (vector section
           name
           sort-tag
@@ -80,7 +75,7 @@
           default-getter
           generate-restore-form
           value-validator
-	  permissible-values))
+	  option-data))
 
 (define (gnc:make-string-option
 	 section
@@ -94,8 +89,9 @@
                      (lambda (x) (set! option x))
                      (lambda () default-value)
                      #f
-                     (lambda (x) (cond ((string? x)(list #t x))
-                                       (else (list #f #f))))
+                     (lambda (x)
+                       (cond ((string? x)(list #t x))
+                             (else (list #f "string-option: not a string"))))
                      #f )))
 
 (define (gnc:make-simple-boolean-option
@@ -110,36 +106,105 @@
                      (lambda (x) (set! option x))
                      (lambda () default-value)
                      #f
-                     (lambda (x) (list #t x))
+                     (lambda (x)
+                       (if (boolean? x)
+                           (list #t x)
+                           (list #f "boolean-option: not a boolean")))
                      #f )))
 
-(define (gnc:make-multichoice-option
-	section
-	name
-	sort-tag
-	documentation-string
-	default-value
-	ok-values)
-   (let ((option default-value))
-     (define (multichoice-legal val p-vals)
-       (cond ((null? p-vals) #f)
-             ((eq? val (vector-ref (car p-vals) 0)) #t)
-             (else multichoice-legal (cdr p-vals))))
 
-     (gnc:make-option
-      section name sort-tag 'multichoice documentation-string
-      (lambda () option)
-      (lambda (x)
-        (if (multichoice-legal x ok-values)
-            (set! option x)
-            (gnc:error "Illegal Multichoice option set")))
-      (lambda () default-value)
-      #f
-      (lambda (x)
-        (if (multichoice-legal x ok-values)
-            (list #t x)
-            (list #f #f)))
-      ok-values)))
+;; date options use the option-data as a boolean value. If true,
+;; the gui should allow the time to be entered as well.
+(define (gnc:make-date-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-getter
+         show-time)
+  (let ((option (default-getter)))
+
+    (define (date-legal date)
+      (and (pair? date) (exact? (car date)) (exact? (cdr date))))
+
+    (gnc:make-option section name sort-tag 'date documentation-string
+                     (lambda () option)
+                     (lambda (date)
+                       (if (date-legal date)
+                           (set! option date)
+                           (gnc:error "Illegal date value set")))
+                     default-getter
+                     #f
+                     (lambda (date)
+                       (if (date-legal date)
+                           (list #t date)
+                           (list #f "date-option: illegal date")))
+                     show-time )))
+
+;; account-list options use the option-data as a boolean value.  If
+;; true, the gui should allow the user to select multiple accounts.
+;; values are always a list of accounts.
+(define (gnc:make-account-list-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-getter
+         value-validator
+         multiple-selection)
+  (let ((option (default-getter))
+        (option-set #f)
+        (validator
+         (if (not value-validator)
+             (lambda (account-list) (list #t account-list))
+             value-validator)))
+    (gnc:make-option
+     section name sort-tag 'account-list documentation-string
+     (lambda () (if option-set option (default-getter)))
+     (lambda (account-list)
+       (let* ((result (validator account-list))
+              (valid (car result))
+              (value (cadr result)))
+         (if valid
+             (begin
+               (set! option value)
+               (set! option-set #t))
+             (gnc:error "Illegal account list value set"))))
+     default-getter
+     #f
+     validator
+     multiple-selection )))
+
+;; multichoice options use the option-data as a list of vectors.
+;; Each vector contains a permissible value (scheme symbol) and
+;; a description string.
+(define (gnc:make-multichoice-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-value
+         ok-values)
+  (let ((option default-value))
+    (define (multichoice-legal val p-vals)
+      (cond ((null? p-vals) #f)
+            ((eq? val (vector-ref (car p-vals) 0)) #t)
+            (else multichoice-legal (cdr p-vals))))
+
+    (gnc:make-option
+     section name sort-tag 'multichoice documentation-string
+     (lambda () option)
+     (lambda (x)
+       (if (multichoice-legal x ok-values)
+           (set! option x)
+           (gnc:error "Illegal Multichoice option set")))
+     (lambda () default-value)
+     #f
+     (lambda (x)
+       (if (multichoice-legal x ok-values)
+           (list #t x)
+           (list #f "multichoice-option: illegal choice")))
+     ok-values)))
 
 (define (gnc:option-section option)
   (vector-ref option 0))
@@ -161,7 +226,7 @@
   (vector-ref option 8))
 (define (gnc:option-value-validator option)
   (vector-ref option 9))
-(define (gnc:option-permissible-values option)
+(define (gnc:option-data option)
   (vector-ref option 10))
 
 (define (gnc:register-option options new-option)
@@ -307,6 +372,11 @@
  (gnc:make-string-option
   "International" "Default Currency"
   "b" "Default Currency For New Accounts" "USD"))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "International" "Use 24-hour time format"
+  "c" "Use a 24 hour (instead of a 12 hour) time format." #f))
 
 (gnc:register-configuration-option
  (gnc:make-multichoice-option

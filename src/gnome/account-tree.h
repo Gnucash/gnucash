@@ -59,7 +59,8 @@ struct _GNCAccountTree
   GtkStyle *deficit_style;
 
   Account *root_account;
-  Account *current_account;
+
+  GList   *current_accounts;
 
   gboolean ignore_unselect;
 };
@@ -97,6 +98,10 @@ gboolean gnc_account_tree_select_account (GNCAccountTree *tree,
 					  Account *account,
                                           gboolean show_account);
 
+gboolean gnc_account_tree_select_accounts(GNCAccountTree *tree,
+                                          GList          *account_list,
+                                          gboolean        show_last);
+
 void gnc_account_tree_insert_account (GNCAccountTree *tree,
 				      Account *account);
 
@@ -108,6 +113,7 @@ void gnc_account_tree_show_categories (GNCAccountTree *tree);
 void gnc_account_tree_hide_categories (GNCAccountTree *tree);
 
 Account * gnc_account_tree_get_current_account (GNCAccountTree *tree);
+GList *   gnc_account_tree_get_current_accounts (GNCAccountTree *tree);
 
 void gnc_account_tree_hide_all_but_name (GNCAccountTree *tree);
 

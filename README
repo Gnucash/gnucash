@@ -4,7 +4,7 @@
 The version 1.3.x series of GnuCash are experimental development
 releases.  They may or may not work. Use at your own risk.
 
-The last stable, production version was gnucash-1.2.0
+The last stable, production version was gnucash-1.2.5
 The next stable, production version will be gnucash-1.4.x 
 
 ##############################################
@@ -90,6 +90,7 @@ ftp://ftp.ultra.net/pub/eugene/RPMS/i386/
 Development versions:
 http://linas.org/linux/gnucash/
 
+
 Running:
 --------
 Only the Motif version of GnuCash is currently functional.  The Gnome version
@@ -122,7 +123,7 @@ Motif or Lesstif  --
            Lesstif 0.86.9  works ... but some menus come out 2 pixels high.(?)
            Lesstif 0.87.0: broken (missing symbols for XmeDrawShadows, etc.)
            Lesstif 0.88.1  works
-           Lesstif 0.89.0  broken (FileSelectionDialog in src/motif/FileBox.c broken)
+           Lesstif 0.89.0  works?
 
 XmHTML  -- Provides HTML display capabilities. Used for Help Dialogues, Reports.
            Require version 1.1.4 or later
@@ -136,6 +137,8 @@ XmHTML  -- Provides HTML display capabilities. Used for Help Dialogues, Reports.
            will get a "undefined symbol XmeDrawShadows" error.  There are several
            solutions; the simplest is probably to download the XmHTML source
            package and compile it yourself.
+
+slib    -- scheme libraries for guile.  Need version slib2c6 or later.
 
 libpng  -- portable network graphics library. Any version.
 libjpeg -- JPEG image handling library. Any version.
@@ -164,7 +167,6 @@ perl-HTML/HTML-Parser-2.20
            http://linas.org/linux/gnucash (last resort)
            or sources at
            http://www.cpan.org/CPAN.html
-
 
 
 Invocation:
@@ -211,6 +213,7 @@ at http://www.zeta.org.au/~grahamc/xacc_rpts.html.
 
 A tool to cleanup & import Quicken files can be found at (insert the url
 here).
+
 
 Building & Installing:
 ----------------------
@@ -377,6 +380,86 @@ tree do a
 cvs -z3 -Pd :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rxacc-12-patch gnucash
 
 
+Developing GnuCash
+------------------
+Before you start developing GnuCash, you should do the following:
+
+1. Read the file src/coding-style.txt to learn about the coding-styles
+   used in the GnuCash source code.
+
+2. Several of the directories under src contain files called design.txt
+   which explain many aspects of GnuCash's design. Read those.
+
+3. Go to the gnucash website and skim the archives of the gnucash
+   development mailing list.
+
+4. Join the GnuCash development mailing list. See the gnucash website
+   for details on how to do this.
+
+
+Submitting a Patch
+------------------
+Once you have done some work that you would like to submit, you need
+to send a patch. There is a perl script called make-gnucash-patch
+provided with the distribution that you can use to create the
+patch. Here is how to use that perl script.
+
+First, set up your development directories as follows:
+
+< GnuCash home development directory >
+    |
+    |---- < directory containing original GnuCash sources >
+    |
+    |---- < directory containing your modified GnuCash sources >
+
+A concrete example of those directories might be:
+
+/home/me/gnucash
+    |
+    |---- /home/me/gnucash/gnucash.pristine (original sources)
+    |
+    |---- /home/me/gnucash/gnucash.mywork (original sources + my edits)
+
+Copy the make-gnucash-patch script to the home development directory
+(/home/me/gnucash above). Now edit three variables at the top of that
+file to reflect the names of your directories. Given the names above,
+you would use
+
+my $old = 'gnucash.pristine';
+my $new = 'gnucash.mywork';
+my $gnc_home = '/home/me/gnucash';
+
+Now run the script. Note that this script requires the programs
+'makepatch', 'gzip', 'diff', and 'uuencode' (and, of course, 'perl')
+to run. 
+
+When you run the script, three files will be generated:
+
+  gnc.diff - This file is an ascii text file containing the differences
+             between the original sources and your edits. At the bottom
+             of this file is a list of the files which were added,
+             changed, or deleted.
+
+             Please examine this file (especially the list at the bottom)
+             to make sure that all of your changes (and no other changes)
+             are present in the file.
+
+             Do not submit this file!
+
+  gnucash.diff.gz - This is a gzipped version of the above file.
+
+                    Do not submit this file!
+
+  gnucash.diff.gz.uue - This is a uuencoded (ascii-encoded) version
+                        of the above file.
+
+                        This is the file you submit.
+
+Send gnucash.diff.gz.uue to gnucash-patches@gnucash.org
+
+Thanks in advance for your contribution!
+
+
 Main Developers:
 ----------------
 Robin Clark <rclark@hmc.edu> wrote the original X-Accountant in Motif 
@@ -414,6 +497,7 @@ Per Bojsen <bojsen@worldnet.att.net> several core dump fixes
 Christopher B. Browne <cbbrowne@hex.net> for perl, scheme scripts
 Graham Chapman <grahamc@zeta.org.au> for the xacc-rpts addon package
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
+Albert Chin-A-Young <china@thewrittenword.com> configure.in patch
 Jeremey Collins <jcollins@gnucash.org> for GnoMoney & GTK port
 Patrick Condron <pcondon@rackspace.com> for webserver and T1 connection.
 Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
@@ -433,22 +517,26 @@ Sven Kuenzler <sk@xgm.de> for SuSE README file
 Graham Leggett <minfrin@sharp.fm> for fixing a hang
 Ted Lemon <mellon@andare.fugue.com> for NetBSD port
 Yannick Le Ny <y-le-ny@ifrance.com> pour la traduction en francais 
-Heath Martin <martinh@pegasus.cc.ucf.edu> for extensive gtk fixes
+Grant Likely <glikely@nortelnetworks.com> gnome and engine patches
+Heath Martin <martinh@pegasus.cc.ucf.edu> gnome and register patches
+Robert Graham Merkel <rgmerk@mira.net> reporting, gnome, and config patches.
 Tim Mooney <mooney@dogbert.cc.ndsu.NoDak.edu> port to alpha-dec-osf4.0f
 G. Allen Morris III  <gam3@ann.softgams.com> for QIF core dump 
 Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
 OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
 Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
 Dave Peticolas <peticola@morpheus.cs.ucdavis.edu> extensive intelligent patches
+Laurent P{'e}lecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext
 Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
 Peter Pointner <peter@wuzel.m.isar.de> QIF import fixes, Qt patches
 Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
 Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
+Jan Schrage <jan.schrage@urz.uni-heidelberg.de> documentation patches
 Christopher Seawood <cls@seawood.org> for XbaeMatrix core dump
 Mike Simons <msimons@fsimons01.erols.com> misc configure.in patches
 Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
 Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
+Rob Walker <rob@valinux.com> guile and register patches
 Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU> QIF import fixes; MYM import
 
 ... and I am sure that I have missed many others ...
-

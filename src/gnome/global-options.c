@@ -17,6 +17,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include "top-level.h"
+
 #include <gnome.h>
 
 #include "global-options.h"
@@ -25,13 +27,15 @@
 #include "option-util.h"
 #include "query-user.h"
 #include "guile-util.h"
+#include "messages.h"
 #include "util.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
 static GNCOptionDB *global_options = NULL;
-static SCM guile_global_options = SCM_UNDEFINED;
+static SCM guile_global_options    = SCM_UNDEFINED;
+static SCM guile_global_options_id = SCM_UNDEFINED;
 
 
 /********************************************************************\
@@ -71,8 +75,10 @@ gnc_options_shutdown()
   gnc_option_db_destroy(global_options);
   global_options = NULL;
 
-  gnc_unregister_c_side_scheme_ptr(guile_global_options);
+  if (guile_global_options_id != SCM_UNDEFINED)
+    gnc_unregister_c_side_scheme_ptr_id(guile_global_options_id);
   guile_global_options = SCM_UNDEFINED;
+  guile_global_options_id = SCM_UNDEFINED;
 }
 
 
@@ -209,7 +215,7 @@ void
 _gnc_register_global_options(SCM options)
 {
   guile_global_options = options;
-  gnc_register_c_side_scheme_ptr(options);
+  guile_global_options_id = gnc_register_c_side_scheme_ptr(options);
 }
 
 
@@ -257,7 +263,7 @@ gnc_show_options_dialog()
     gnc_build_options_dialog_contents(options_dialog, global_options);
     gnc_option_db_clean(global_options);
 
-    gtk_window_set_title(GTK_WINDOW(options_dialog), "GnuCash Preferences");
+    gtk_window_set_title(GTK_WINDOW(options_dialog), GNC_PREFS);
 
     gtk_signal_connect(GTK_OBJECT(options_dialog), "apply",
 		       GTK_SIGNAL_FUNC(gnc_options_dialog_apply_cb),

@@ -20,11 +20,10 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include "top-level.h"
+
 #include <gnome.h>
 
-#include "config.h"
-
-#include "top-level.h"
 #include "gnucash.h"
 #include "messages.h"
 #include "AccWindow.h"
@@ -103,9 +102,9 @@ gnc_account_tree_new_with_root(Account * root)
 static void
 gnc_account_tree_init(GNCAccountTree *tree)
 {
-  tree->root_account    = NULL;
-  tree->current_account = NULL;
-  tree->ignore_unselect = GNC_F;
+  tree->root_account     = NULL;
+  tree->current_accounts = NULL;
+  tree->ignore_unselect  = GNC_F;
 
   gnc_init_account_view_info(&tree->avi);
 
@@ -269,14 +268,17 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
 {
   GtkCList      *clist = GTK_CLIST(tree);
   GHashTable    *expanded_accounts;
+  GList         *current_accounts;
   GtkAdjustment *adjustment;
-  gfloat        save_value = 0.0;
+  gfloat         save_value = 0.0;
 
   adjustment = gtk_clist_get_vadjustment(GTK_CLIST(tree));
   if (adjustment != NULL)
     save_value = adjustment->value;
 
   expanded_accounts = gnc_account_tree_save_expanded(tree);
+  current_accounts = tree->current_accounts;
+  tree->current_accounts = NULL;
 
   gtk_clist_freeze(clist);
 
@@ -291,8 +293,7 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
 
   gnc_account_tree_update_column_visibility(tree);
 
-  if (!gnc_account_tree_select_account(tree, tree->current_account, FALSE))
-    tree->current_account = NULL;
+  gnc_account_tree_select_accounts(tree, current_accounts, FALSE);
 
   if (adjustment != NULL)
   {
@@ -304,6 +305,7 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
   gtk_clist_thaw(clist);
 
   g_hash_table_destroy(expanded_accounts);
+  g_list_free(current_accounts);
 }
 
 
@@ -347,12 +349,13 @@ gnc_account_tree_get_view_info(GNCAccountTree *tree, AccountViewInfo *info)
 
 /********************************************************************\
  * gnc_account_tree_select_account                                  *
- *   select an account in the tree and possibly expands and scrolls *
- *   the tree to ensure it is visible                               *
+ *   select an account in the tree and expands the tree to make     *
+ *   sure it could be visible. It may also scroll the tree to       *
+ *   ensure it is visible                                           *
  *                                                                  *
  * Args: tree    - tree to be modified                              *
  *       account - account to be selected                           *
- *       show    - if true, expand and show the tree                *
+ *       show    - if true, scroll the tree                         *
  * Returns: true if the account was found                           *
 \********************************************************************/
 gboolean
@@ -373,9 +376,6 @@ gnc_account_tree_select_account(GNCAccountTree *tree,
   /* Select it */
   gtk_ctree_select(ctree, node);
 
-  if (!show)
-    return TRUE;
-
   /* Expand all the parents */
   row = GTK_CTREE_ROW(node);
   while ((n = row->parent) != NULL)
@@ -384,11 +384,52 @@ gnc_account_tree_select_account(GNCAccountTree *tree,
     row = GTK_CTREE_ROW(n);
   }
 
+  if (!show)
+    return TRUE;
+
   /* Make sure it's visible */
   if (gtk_ctree_node_is_visible(ctree, node) != GTK_VISIBILITY_FULL)
     gtk_ctree_node_moveto(ctree, node, 0, 0.5, 0.0);
 
   return TRUE;
+}
+
+
+/********************************************************************\
+ * gnc_account_tree_select_accounts                                 *
+ *   select a list of accounts in the tree, expanding the parents   *
+ *   of each one. If 'show' is true, the last one is made visible.  *
+ *                                                                  *
+ * Args: tree         - tree to be modified                         *
+ *       account_list - list of accounts to be selected             *
+ *       show         - determines if last account is made visible  *
+ * Returns: true if the last account was found in the list          *
+\********************************************************************/
+gboolean
+gnc_account_tree_select_accounts(GNCAccountTree *tree,
+                                 GList          *account_list,
+                                 gboolean        show_last)
+{
+  Account *account;
+  gboolean real_show;
+  gboolean result = FALSE;
+
+  gtk_clist_freeze(GTK_CLIST(tree));
+
+  while (account_list != NULL)
+  {
+    account = account_list->data;
+
+    real_show = (account_list->next == NULL) ? show_last : FALSE;
+
+    result = gnc_account_tree_select_account(tree, account, real_show);
+
+    account_list = account_list->next;
+  }
+
+  gtk_clist_thaw(GTK_CLIST(tree));
+
+  return result;
 }
 
 
@@ -495,7 +536,7 @@ gnc_account_tree_update_column_visibility(GNCAccountTree *tree)
 
 /********************************************************************\
  * gnc_account_tree_get_current_account                             *
- *   returns the current account selected, or NULL if none          *
+ *   returns the first account selected, or NULL if none            *
  *                                                                  *
  * Args: tree - tree to get current account from                    *
  * Returns: current account                                         *
@@ -503,7 +544,30 @@ gnc_account_tree_update_column_visibility(GNCAccountTree *tree)
 Account *
 gnc_account_tree_get_current_account (GNCAccountTree *tree)
 {
-  return tree->current_account;
+  if (tree == NULL)
+    return NULL;
+
+  if (tree->current_accounts == NULL)
+    return NULL;
+
+  return tree->current_accounts->data;
+}
+
+
+/********************************************************************\
+ * gnc_account_tree_get_current_accounts                            *
+ *   returns a g_malloc'd GList of the selected accounts            *
+ *                                                                  *
+ * Args: tree - tree to get current accounts from                   *
+ * Returns: GList of selected accounts                              *
+\********************************************************************/
+GList *
+gnc_account_tree_get_current_accounts (GNCAccountTree *tree)
+{
+  if (tree == NULL)
+    return NULL;
+
+  return g_list_copy(tree->current_accounts);
 }
 
 
@@ -557,13 +621,14 @@ gnc_account_tree_set_view_info_real(GNCAccountTree *tree)
 static gint
 gnc_account_tree_key_press(GtkWidget *widget, GdkEventKey *event)
 {
-  GNCAccountTree *account_tree = GNC_ACCOUNT_TREE(widget);
+  GNCAccountTree *tree = GNC_ACCOUNT_TREE(widget);
+  Account *account = gnc_account_tree_get_current_account(tree);
 
-  if ((event->keyval == GDK_Return) && (account_tree->current_account != NULL))
+  if ((event->keyval == GDK_Return) && (account != NULL))
   {
-    gtk_signal_emit(GTK_OBJECT(account_tree),
+    gtk_signal_emit(GTK_OBJECT(tree),
                     account_tree_signals[ACTIVATE_ACCOUNT],
-                    account_tree->current_account);
+                    account);
 
     return TRUE;
   }
@@ -601,7 +666,7 @@ gnc_account_tree_button_press(GtkWidget *widget,
 
       gtk_signal_emit(GTK_OBJECT(widget),
 		      account_tree_signals[ACTIVATE_ACCOUNT],
-		      account);
+                      account);
 
       return TRUE;
     }
@@ -619,15 +684,19 @@ gnc_account_tree_select_row(GtkCTree *ctree,
 			    gint column)
 {
   GNCAccountTree *tree = GNC_ACCOUNT_TREE(ctree);
+  Account *account;
+  GList *node;
 
   tree->ignore_unselect = GNC_F;
 
-  tree->current_account = gtk_ctree_node_get_row_data(ctree,
-						      GTK_CTREE_NODE(row));
+  account = gtk_ctree_node_get_row_data(ctree, GTK_CTREE_NODE(row));
+  node = g_list_find(tree->current_accounts, account);
+  if (node == NULL)
+    tree->current_accounts = g_list_prepend(tree->current_accounts, account);
 
   gtk_signal_emit(GTK_OBJECT(ctree),
 		  account_tree_signals[SELECT_ACCOUNT],
-		  tree->current_account);
+		  account);
 
   GTK_CTREE_CLASS(parent_class)->tree_select_row(ctree, row, column);
 }
@@ -639,6 +708,7 @@ gnc_account_tree_unselect_row(GtkCTree *ctree,
 {
   GNCAccountTree *tree = GNC_ACCOUNT_TREE(ctree);
   Account *account;
+  GList *node;
 
   if (tree->ignore_unselect)
   {
@@ -648,8 +718,14 @@ gnc_account_tree_unselect_row(GtkCTree *ctree,
 
   account = gtk_ctree_node_get_row_data(ctree, GTK_CTREE_NODE(row));
 
-  if (account == tree->current_account)
-    tree->current_account = NULL;
+  node = g_list_find(tree->current_accounts, account);
+  while (node != NULL)
+  {
+    tree->current_accounts = g_list_remove_link(tree->current_accounts, node);
+    g_list_free_1(node);
+
+    node = g_list_find(tree->current_accounts, account);
+  }
 
   gtk_signal_emit(GTK_OBJECT(ctree),
 		  account_tree_signals[UNSELECT_ACCOUNT],
@@ -751,6 +827,9 @@ gnc_account_tree_destroy(GtkObject *object)
     gtk_style_unref(tree->deficit_style);
     tree->deficit_style = NULL;
   }
+
+  g_list_free(tree->current_accounts);
+  tree->current_accounts = NULL;
 
   if (GTK_OBJECT_CLASS(parent_class)->destroy)
     (* GTK_OBJECT_CLASS(parent_class)->destroy) (object);

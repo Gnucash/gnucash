@@ -23,10 +23,10 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
+#include "top-level.h"
+
 #include <gnome.h>
 #include <time.h>
-
-#include "top-level.h"
 
 #include "ui-callbacks.h"
 #include "MultiLedger.h"
@@ -95,8 +95,7 @@ gnc_ui_AdjBWindow_ok_cb(GtkWidget * widget, gpointer data)
 
   if(sscanf(string, "%lf", &new_balance) != 1)
   {
-    gnc_error_dialog_parented(GTK_WINDOW(adjBData->dialog),
-                              "Balance must be a number.");
+    gnc_error_dialog_parented(GTK_WINDOW(adjBData->dialog), BALANCE_NUM_MSG);
     return;
   }
 

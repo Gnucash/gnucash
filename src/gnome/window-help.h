@@ -25,10 +25,6 @@
 #ifndef __WINDOW_HELP_H__
 #define __WINDOW_HELP_H__
 
-#include <gnome.h>
-
-#include "config.h"
-
 
 /** PROTOTYPES ******************************************************/
 

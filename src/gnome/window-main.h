@@ -26,7 +26,10 @@
 /** PROTOTYPES ******************************************************/
 
 void mainWindow(void);
+
 GNCAccountTree * gnc_get_current_account_tree();
+
 Account * gnc_get_current_account();
+GList *   gnc_get_current_accounts();
 
 #endif

@@ -41,6 +41,7 @@ default:
 	@echo "gnome           gnome/gtk version"
 	@echo "gnome-static    gnome/gtk statically linked version"
 	@echo "qt              kde/qt version"
+	@echo "qt-static       kde/qt statically linked version"
 	@echo " "
 
 # This inclusion must come after the first target, and after the
@@ -50,6 +51,7 @@ include @top_srcdir@/Makefile.common
 # Aliases
 motif-static: motif.static
 gnome-static: gnome.static
+qt-static: qt.static
 
 build-flavor: config.status
 	@cd lib;    $(MAKE) ${FLAVOR}
@@ -82,7 +84,22 @@ gnome.disable:
 	false
 
 qt:
+	${MAKE} @QT_TARGET@
+
+qt.static:
+	${MAKE} @QT_STATIC_TARGET@
+
+qt.real:
 	${MAKE} FLAVOR=qt build-flavor
+
+qt.static.real:
+	${MAKE} FLAVOR=qt.static build-flavor
+
+#QT_TARGET if qt build disabled by configure
+
+qt.disable:
+	echo "Qt build disabled by configure. Try configure --enable-qt"
+	false
 
 depend:
 	@echo make depend is now superfluous.
@@ -98,12 +115,13 @@ config.status: configure
 		exit 1; \
 	fi
 
-CLEAN_SUBDIRS += lib src
+CLEAN_SUBDIRS += lib src po
 TRASH += TAGS *~ *.o *.bak
 
 DIST_TRASH += Makefile *~ *.o *.bak share/scm gnucash.bin
 DIST_TRASH += gnucash.motif gnucash.motif.static
-DIST_TRASH += gnucash.gnome gnucash.gnome.static gnucash.qt gnucash-shell
+DIST_TRASH += gnucash.gnome gnucash.gnome.static
+DIST_TRASH += gnucash.qt gnucash.qt.static gnucash-shell
 DIST_TRASH += config.cache config.log config.status config.h
 
 tagsfiles := $(shell find . -name "*.[ch]" -print)
@@ -120,6 +138,8 @@ install:
 
   # Put these in the opposite order of precedence.  Final bin/gnucash link will
   # point to the last one that exists...
+	-[ -e gnucash.qt.static ] && \
+     ${MAKE} FLAVOR=qt.static GNC_BINDIR=${GNC_BINDIR} install-bin
 	-[ -e gnucash.qt ] && ${MAKE} FLAVOR=qt GNC_BINDIR=${GNC_BINDIR} install-bin
 	-[ -e gnucash.gnome.static ] && \
      ${MAKE} FLAVOR=gnome.static GNC_BINDIR=${GNC_BINDIR} install-bin
@@ -134,7 +154,8 @@ install:
     -e ${GNC_BINDIR}/gnucash.motif.static -o \
     -e ${GNC_BINDIR}/gnucash.gnome -o \
     -e ${GNC_BINDIR}/gnucash.gnome.static -o \
-    -e ${GNC_BINDIR}/gnucash.qt \
+    -e ${GNC_BINDIR}/gnucash.qt -o \
+    -e ${GNC_BINDIR}/gnucash.qt.static \
   ]
 	$(INSTALL) src/quotes/gnc-prices ${GNC_BINDIR}
 
@@ -202,6 +223,8 @@ install:
 
 	$(INSTALL_DATA) etc/conf* ${GNC_SHAREDIR}
 
+	$(MAKE) -C po install
+
 #  # Config directory
 #	@mkdir -p ${GNC_CONFIGDIR}
 #
@@ -218,5 +241,5 @@ install:
 #  done
 
 .PHONY: default install-private install
-.PHONY: motif motif-static motif.static gnome gnome-static gnome.static qt
+.PHONY: motif motif-static motif.static gnome gnome-static gnome.static qt qt.static
 .PHONY: depend dist clean distclean

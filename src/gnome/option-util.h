@@ -65,12 +65,13 @@ SCM    gnc_option_getter(GNCOption *option);
 SCM    gnc_option_setter(GNCOption *option);
 SCM    gnc_option_default_getter(GNCOption *option);
 SCM    gnc_option_value_validator(GNCOption *option);
-int    gnc_option_value_num_permissible_values(GNCOption *option);
-int    gnc_option_value_permissible_value_index(GNCOption *option, SCM value);
-SCM    gnc_option_value_permissible_value(GNCOption *option, int index);
-char * gnc_option_value_permissible_value_name(GNCOption *option, int index);
-char * gnc_option_value_permissible_value_description(GNCOption *option,
-                                                      int index);
+int    gnc_option_num_permissible_values(GNCOption *option);
+int    gnc_option_permissible_value_index(GNCOption *option, SCM value);
+SCM    gnc_option_permissible_value(GNCOption *option, int index);
+char * gnc_option_permissible_value_name(GNCOption *option, int index);
+char * gnc_option_permissible_value_description(GNCOption *option, int index);
+gboolean gnc_option_show_time(GNCOption *option);
+gboolean gnc_option_multiple_selection(GNCOption *option);
 
 guint gnc_option_db_num_sections(GNCOptionDB *odb);
 
@@ -108,5 +109,11 @@ char * gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
 void _gnc_option_db_register_option(GNCOptionDBHandle handle,
                                     SCM guile_option);
 
+/* These should be in src/guile or src/g-wrap, but they use glib */
+
+SCM     gnc_account_list_to_scm(GList *account_list);
+GList * gnc_scm_to_account_list(SCM scm_list);
+
+SCM _gnc_get_current_accounts();
 
 #endif /* __OPTION_UTIL_H__ */

@@ -17,6 +17,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include <gnome.h>
+
 #include "scripts_menu.h"
 
 #include "top-level.h"

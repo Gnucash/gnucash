@@ -28,9 +28,9 @@
  * -- tooltips for the widgets in the window
  */
 
-#include <gnome.h>
-
 #include "top-level.h"
+
+#include <gnome.h>
 
 #include "AccWindow.h"
 #include "MainWindow.h"
@@ -87,6 +87,12 @@ gnc_ui_accWindow_list_select_cb(GtkCList * type_list, gint row, gint column,
 
   if(accData == NULL)
     return;
+
+  if (!gtk_clist_get_selectable(type_list, row))
+  {
+    gtk_clist_unselect_row(type_list, row, 0);
+    return;
+  }
 
   accData->type = row;
 
@@ -164,7 +170,7 @@ gnc_ui_accWindow_list_box_create(AccWindow * accData)
 {
   GtkWidget *frame, *hbox;
 
-  frame = gtk_frame_new("Type of Account");
+  frame = gtk_frame_new(ACC_TYPE_STR);
   gtk_widget_show(frame);
 
   hbox = gtk_hbox_new(TRUE, 0);
@@ -177,8 +183,9 @@ gnc_ui_accWindow_list_box_create(AccWindow * accData)
   gtk_container_border_width(GTK_CONTAINER(accData->type_list), 3);
   gtk_widget_show(GTK_WIDGET(accData->type_list));
 
-
   gnc_ui_accWindow_list_fill(accData->type_list);
+
+  gtk_clist_columns_autosize(GTK_CLIST(accData->type_list));
 
   gtk_signal_connect(GTK_OBJECT(accData->type_list), "select-row",
 		     GTK_SIGNAL_FUNC(gnc_ui_accWindow_list_select_cb),
@@ -263,7 +270,7 @@ gnc_ui_accWindow_tree_select(GNCAccountTree *tree,
 
     parentAccType = xaccAccountGetType(account);
 
-    /* set the alowable account types for this parent */
+    /* set the allowable account types for this parent */
     for (type = 0; type < NUM_ACCOUNT_TYPES; type++)
     {
       compatible = xaccAccountTypesCompatible(parentAccType, type);
@@ -300,7 +307,6 @@ gnc_ui_accWindow_account_tree_box_create(AccWindow * accData)
   gtk_clist_column_titles_hide(GTK_CLIST(accountTree));
   gnc_account_tree_hide_all_but_name(GNC_ACCOUNT_TREE(accountTree));
   gnc_account_tree_refresh(GNC_ACCOUNT_TREE(accountTree));
-  gtk_widget_show(accountTree);
 
   accData->tree = GNC_ACCOUNT_TREE(accountTree);
 
@@ -315,7 +321,7 @@ gnc_ui_accWindow_account_tree_box_create(AccWindow * accData)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollWin),
 				  GTK_POLICY_AUTOMATIC, 
 				  GTK_POLICY_AUTOMATIC);
-    
+
   gtk_container_add(GTK_CONTAINER(frame), scrollWin);
   gtk_container_border_width (GTK_CONTAINER (scrollWin), 5);
   gtk_container_add(GTK_CONTAINER(scrollWin), accountTree);
@@ -403,6 +409,9 @@ gnc_accWindow_create(AccWindow *accData)
   /* don't close on buttons */
   gnome_dialog_set_close(GNOME_DIALOG(dialog), FALSE);
 
+  /* allow grow and shrink, no auto-shrink */
+  gtk_window_set_policy(GTK_WINDOW(dialog), TRUE, TRUE, FALSE);
+
   /* Account field edit box */
   widget = gnc_ui_account_field_box_create(&accData->edit_info, FALSE);
   gtk_box_pack_start(GTK_BOX(vbox), widget, FALSE, TRUE, 0);
@@ -444,8 +453,6 @@ gnc_accWindow_create(AccWindow *accData)
   widget = gnc_ui_notes_frame_create(&accData->edit_info.notes_entry);
   gtk_box_pack_start(GTK_BOX(vbox), widget, FALSE, FALSE, 0);
 
-  gtk_widget_show_all(dialog);
-
   gnc_account_tree_select_account(accData->tree, accData->parentAccount, TRUE);
 
   return dialog;
@@ -462,18 +469,19 @@ gnc_accWindow_create(AccWindow *accData)
 AccWindow *
 accWindow (AccountGroup *this_is_not_used) 
 {
-  gint result;
   AccWindow *accData = g_new0(AccWindow, 1);
-  GtkWidget *dialog;
   AccountFieldStrings strings;
+  GtkWidget *dialog;
+  gint result;
 
   accData->parentAccount = gnc_get_current_account();
   accData->newAccount    = xaccMallocAccount();
   accData->type          = _accWindow_last_used_account_type;
 
-  xaccAccountSetName(accData->newAccount, "New top level account");
+  xaccAccountSetName(accData->newAccount, NEW_TOP_ACCT_STR);
 
   dialog = gnc_accWindow_create(accData);
+  gtk_widget_show_all(dialog);
 
   while (1)
   {
@@ -490,8 +498,7 @@ accWindow (AccountGroup *this_is_not_used)
     /* check for valid name */
     if (safe_strcmp(strings.name, "") == 0)
     {
-      gnc_error_dialog_parented(GTK_WINDOW(dialog),
-                                "You must enter a valid account name.");
+      gnc_error_dialog_parented(GTK_WINDOW(dialog), ACC_NO_NAME_MSG);
       gnc_ui_free_field_strings(&strings);
       continue;
     }
@@ -499,8 +506,7 @@ accWindow (AccountGroup *this_is_not_used)
     /* check for valid type */
     if (accData->type == BAD_TYPE)
     {
-      gnc_error_dialog_parented(GTK_WINDOW(dialog),
-                                "You must select an account type.");
+      gnc_error_dialog_parented(GTK_WINDOW(dialog), ACC_TYPE_MSG);
       gnc_ui_free_field_strings(&strings);
       continue;
     }

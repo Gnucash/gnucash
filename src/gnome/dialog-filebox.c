@@ -23,11 +23,10 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#include <gnome.h>
-
 #include "top-level.h"
 
-#include "config.h"
+#include <gnome.h>
+
 #include "FileBox.h"
 #include "messages.h"
 #include "util.h"

@@ -23,10 +23,11 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
+#include "config.h"
+
 #include <gnome.h>
 
 #include "ui-callbacks.h"
-
 #include "cursors.h"
 
 

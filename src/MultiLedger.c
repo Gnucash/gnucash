@@ -54,7 +54,7 @@ static short module = MOD_LEDGER;
  * present a rather natural place for the locks to be placed.       *
 \********************************************************************/
 
-int 
+static int 
 ledgerListCount (xaccLedgerDisplay **list)
 {
    int n = 0;
@@ -65,7 +65,7 @@ ledgerListCount (xaccLedgerDisplay **list)
 
 /* ------------------------------------------------------ */
 
-xaccLedgerDisplay ** 
+static xaccLedgerDisplay ** 
 ledgerListAdd (xaccLedgerDisplay **oldlist, xaccLedgerDisplay *addreg)
 {
    xaccLedgerDisplay **newlist;
@@ -95,7 +95,7 @@ ledgerListAdd (xaccLedgerDisplay **oldlist, xaccLedgerDisplay *addreg)
 
 /* ------------------------------------------------------ */
 
-void
+static void
 ledgerListRemove (xaccLedgerDisplay **list, xaccLedgerDisplay *delreg)
 {
    int n, i;
@@ -273,6 +273,20 @@ xaccLedgerDisplayAccGroup (Account *acc)
   return retval;
   }
 
+static gncUIWidget
+xaccLedgerDisplayParent(void *user_data)
+{
+  xaccLedgerDisplay *regData = user_data;
+
+  if (regData == NULL)
+    return NULL;
+
+  if (regData->get_parent == NULL)
+    return NULL;
+
+  return (regData->get_parent)(regData);
+}
+
 /********************************************************************\
  * xaccLedgerDisplayLedger                                          *
  *   opens up a ledger window for a list of accounts                *
@@ -325,6 +339,7 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
   regData->leader = lead_acc;
   regData->redraw = NULL;
   regData->destroy = NULL;
+  regData->get_parent = NULL;
   regData->gui_hook = NULL;
   regData->dirty = 0;
   regData->balance = 0.0;
@@ -358,6 +373,8 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
    * but will not do the gui init */
   regData->ledger = xaccMallocSplitRegister (ledger_type);
 
+  xaccSRSetData(regData->ledger, regData, xaccLedgerDisplayParent);
+
   regData->dirty = 1;
   xaccLedgerDisplayRefresh (regData);
   
@@ -384,8 +401,8 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
     * new splits and get them into the system.
     */
    xaccSRLoadRegister (regData->ledger, 
-                     xaccQueryGetSplits (regData->query),
-                     regData->leader);
+                       xaccQueryGetSplits (regData->query),
+                       regData->leader);
 
 
   /* hack alert -- this computation of totals is incorrect 
@@ -456,31 +473,6 @@ xaccRegisterRefresh (SplitRegister *splitreg)
       if (splitreg == regData->ledger) {
         regData->dirty = 1;
         xaccLedgerDisplayRefresh (regData);
-        return;
-      }
-      n++; regData = fullList[n];
-   }
-}
-
-/********************************************************************\
- * sort of a quick hack involving the layout of the register.
-\********************************************************************/
-
-void 
-xaccRegisterCountHack (SplitRegister *splitreg)
-{
-   xaccLedgerDisplay *regData;
-   int n;
-
-   if (!fullList) return;
-
-   /* find the ledger which contains this register */
-   n = 0; regData = fullList[n];
-   while (regData) {
-      if (splitreg == regData->ledger) {
-        xaccSRCountRows (splitreg, 
-			 xaccQueryGetSplits (regData->query),
-			 regData->leader);      
         return;
       }
       n++; regData = fullList[n];

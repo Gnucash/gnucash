@@ -19,11 +19,10 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include "top-level.h"
+
 #include <gnome.h>
 
-#include "config.h"
-
-#include "top-level.h"
 #include "gnucash.h"
 #include "messages.h"
 #include "reconcile-listP.h"
@@ -90,7 +89,7 @@ static void
 gnc_reconcile_list_init(GNCReconcileList *list)
 {
   GtkCList *clist = GTK_CLIST(list);
-  static gchar * titles[] =
+  gchar * titles[] =
     {
       DATE_STR,
       NUM_STR,

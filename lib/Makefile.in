@@ -75,7 +75,7 @@ motif motif.static: g-wrap-install
 
 gnome gnome.static: g-wrap-install
 
-qt: g-wrap-install
+qt qt.static: g-wrap-install
 
 
-.PHONY: all gnome gnome.static motif motif.static qt dist
+.PHONY: all gnome gnome.static motif motif.static qt qt.static dist

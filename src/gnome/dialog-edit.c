@@ -24,11 +24,10 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
+#include "top-level.h"
 
 #include <gnome.h>
 #include <stdio.h>
-
-#include "top-level.h"
 
 #include "AccWindow.h"
 #include "MainWindow.h"
@@ -93,7 +92,7 @@ gnc_ui_EditAccWindow_ok_cb(GtkWidget * widget,
   /* check for valid name */
   if (safe_strcmp(strings.name, "") == 0)
   {
-    gnc_error_dialog("You must enter a valid account name.");
+    gnc_error_dialog(ACC_NO_NAME_MSG);
     gnc_ui_free_field_strings(&strings);
     return;
   }

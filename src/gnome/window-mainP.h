@@ -25,10 +25,6 @@
 #ifndef __WINDOW_MAINP_H__
 #define __WINDOW_MAINP_H__
 
-#include <gnome.h>
-
-#include "top-level.h"
-
 
 /** PROTOTYPES ******************************************************/
 static void gnc_ui_refresh_statusbar(void);

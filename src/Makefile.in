@@ -70,13 +70,13 @@ gnome gnome.static: ${GNOME_OBJS}
 	@cd guile;             $(MAKE) default
 	@cd gnome;             $(MAKE) $@
 
-qt: $(QT_OBJS)
+qt qt.static: $(QT_OBJS)
 	@cd engine;            $(MAKE) default
 	@cd register;          $(MAKE) qt
 	@cd reports;           $(MAKE) default
 	@cd g-wrap;            $(MAKE) qt
 	@cd swig;              $(MAKE) qt
 	@cd guile;             $(MAKE) default 	
-	@cd qt;                $(MAKE) qt
+	@cd qt;                $(MAKE) $@
 
-.PHONY: default qt gnome gnome.static motif motif.static all
+.PHONY: default qt qt.static gnome gnome.static motif motif.static all

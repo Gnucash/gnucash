@@ -42,7 +42,7 @@ gnc_ui_notes_frame_create(GtkEditable **notes_entry)
 {
   GtkWidget *frame, *text, *table, *vscr;
     
-  frame = gtk_frame_new("Notes");
+  frame = gtk_frame_new(NOTES_STR);
   gtk_container_border_width(GTK_CONTAINER(frame), 5);
   gtk_widget_show(frame);
 
@@ -109,7 +109,7 @@ gnc_ui_account_field_box_create(AccountEditInfo * info,
 {
   GtkWidget *frame, *vbox, *hbox, *widget;
     
-  frame = gtk_frame_new("Account Info");
+  frame = gtk_frame_new(ACC_INFO_STR);
   gtk_container_border_width(GTK_CONTAINER(frame), 5);
   gtk_widget_show(frame);
     
@@ -188,7 +188,7 @@ gnc_get_source_name(gint source)
   switch (source)
   {
     case SOURCE_NONE :
-      return "None";
+      return NONE_STR;
     case SOURCE_YAHOO :
       return "Yahoo";
     case SOURCE_FIDELITY :
@@ -296,7 +296,7 @@ gnc_ui_account_source_box_create(AccountEditInfo * info)
 {
   GtkWidget *frame, *hbox, *widget, *omenu;
 
-  frame = gtk_frame_new("Quote Source");
+  frame = gtk_frame_new(QUOTE_SRC_STR);
   gtk_container_border_width(GTK_CONTAINER(frame), 5);
   gtk_widget_show(frame);
 
@@ -304,7 +304,7 @@ gnc_ui_account_source_box_create(AccountEditInfo * info)
   gtk_container_border_width(GTK_CONTAINER(hbox), 5);
   gtk_widget_show(hbox);
 
-  widget = gtk_label_new("Source for stock quotes:");
+  widget = gtk_label_new(QUOTE_SRC_MSG);
   gtk_misc_set_alignment (GTK_MISC(widget), 0.95, 0.5);
   gtk_widget_show(widget);
 

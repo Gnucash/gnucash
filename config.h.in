@@ -26,6 +26,10 @@
 #ifndef __XACC_CONFIG_H__
 #define __XACC_CONFIG_H__
 
+/* Package name and version number */
+#undef PACKAGE
+#undef VERSION
+
 /* Are we bigendian -- needed for reading binary file format */
 #undef  WORDS_BIGENDIAN     
 
@@ -64,5 +68,24 @@
 
 /* Configure found the function malloc_usable_size */
 #define  HAVE_MALLOC_USABLE_SIZE  
+
+/*** Begin i18n ***/
+
+/* internationalization with gettext */ 
+#undef HAVE_GETTEXT
+
+/* internationalization with catgets */ 
+#undef HAVE_CATGETS
+
+/* locale.h contains LC_MESSAGES */ 
+#undef HAVE_LC_MESSAGES
+
+/* specific locale directory */ 
+#undef HAVE_LOCALE_DIR
+
+/* defined if NLS is available */
+#undef ENABLE_NLS
+
+/*** End i18n ***/
 
 #endif
