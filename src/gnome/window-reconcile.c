@@ -116,9 +116,11 @@ typedef struct _startRecnWindowData
 
   GtkWidget     *startRecnWindow; /* the startRecnWindow dialog              */
   GtkWidget     *xfer_button;     /* the dialog's interest transfer button   */
+  GtkWidget     *date_value;      /* the dialog's ending date field          */
   GNCAmountEdit *end_value;       /* the dialog's ending balance amount edit */
 
   XferDialog    *xferData;        /* the interest xfer dialog (if it exists) */
+  gboolean       include_children;
 
   time_t         date;            /* the interest xfer reconcile date        */
 } startRecnWindowData;
@@ -319,7 +321,8 @@ gnc_start_recn_date_changed (GtkWidget *widget, startRecnWindowData *data)
   new_date = gnc_date_edit_get_date_end (gde);
 
   /* get the balance for the account as of the new date */
-  new_balance = xaccAccountGetBalanceAsOfDate (data->account, new_date);
+  new_balance = gnc_ui_account_get_balance_as_of_date (data->account, new_date,
+						       data->include_children);
 
   /* use the correct sign */
   if (gnc_reverse_balance (data->account))
@@ -328,6 +331,16 @@ gnc_start_recn_date_changed (GtkWidget *widget, startRecnWindowData *data)
   /* update the amount edit with the amount */
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value),
                               new_balance);
+}
+
+static void
+gnc_start_recn_children_changed (GtkWidget *widget, startRecnWindowData *data)
+{
+  data->include_children =
+    gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+  /* Force an update of the ending balance */
+  gnc_start_recn_date_changed (data->date_value, data);
 }
 
 /* For a given account, determine if an auto interest xfer dialog should be
@@ -594,7 +607,8 @@ gnc_save_reconcile_interval(Account *account, time_t statement_date)
 \********************************************************************/
 static gboolean
 startRecnWindow(GtkWidget *parent, Account *account,
-                gnc_numeric *new_ending, time_t *statement_date)
+                gnc_numeric *new_ending, time_t *statement_date,
+		gboolean enable_subaccount)
 {
   GtkWidget *dialog, *end_value, *date_value, *include_children_button;
   startRecnWindowData data = { NULL };
@@ -603,7 +617,6 @@ startRecnWindow(GtkWidget *parent, Account *account,
   gnc_numeric ending;
   char *title;
   int result;
-  gboolean include_children;
 
   /* Initialize the data structure that will be used for several callbacks
    * throughout this file with the relevant info.  Some initialization is
@@ -619,10 +632,10 @@ startRecnWindow(GtkWidget *parent, Account *account,
   auto_interest_xfer_option =
      gnc_recn_interest_xfer_get_auto_interest_xfer_allowed( account );
 
-  include_children = xaccAccountGetReconcileChildrenStatus(account);
+  data.include_children = xaccAccountGetReconcileChildrenStatus(account);
 
   ending = gnc_ui_account_get_reconciled_balance(account,
-                                                 include_children);
+                                                 data.include_children);
   print_info = gnc_account_print_info (account, TRUE);
 
   /*
@@ -666,9 +679,13 @@ startRecnWindow(GtkWidget *parent, Account *account,
     include_children_button =
       gtk_check_button_new_with_label(_("Include Subaccounts"));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(include_children_button),
-                                 include_children);
+                                 data.include_children);
+    gtk_widget_set_sensitive(include_children_button, enable_subaccount);
+    gtk_signal_connect ( GTK_OBJECT (include_children_button), "toggled",
+          GTK_SIGNAL_FUNC (gnc_start_recn_children_changed), (gpointer) &data );
 
     date_value = gnc_date_edit_new(*statement_date, FALSE, FALSE);
+    data.date_value = date_value;
 
     end_value = gnc_amount_edit_new ();
     data.end_value = GNC_AMOUNT_EDIT(end_value);
@@ -765,8 +782,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
       if (gnc_reverse_balance(account))
         *new_ending = gnc_numeric_neg (*new_ending);
 
-      xaccAccountSetReconcileChildrenStatus
-        (account, GTK_TOGGLE_BUTTON(include_children_button)->active);
+      xaccAccountSetReconcileChildrenStatus(account, data.include_children);
 
       gnc_save_reconcile_interval(account, *statement_date);
     }
@@ -815,6 +831,24 @@ gnc_reconcile_window_list_cb(GNCReconcileList *list, Split *split,
   recnRecalculateBalance(recnData);
 }
 
+static GNCSplitReg *
+gnc_reconcile_window_open_register(RecnWindow *recnData)
+{
+  Account *account = recn_get_account (recnData);
+  GNCSplitReg *gsr;
+
+  if (!account)
+    return(NULL);
+
+  if (xaccAccountGetReconcileChildrenStatus (account)) {
+    gsr = regWindowAccGroup (account);
+  } else {
+    gsr = regWindowSimple (account);
+  }
+  gnc_split_reg_raise( gsr );
+  return gsr;
+}
+
 static void
 gnc_reconcile_window_double_click_cb(GNCReconcileList *list, Split *split,
                                      gpointer data)
@@ -826,11 +860,9 @@ gnc_reconcile_window_double_click_cb(GNCReconcileList *list, Split *split,
   if (split == NULL)
     return;
 
-  gsr = regWindowSimple (recn_get_account (recnData));
+  gsr = gnc_reconcile_window_open_register(recnData);
   if (gsr == NULL)
     return;
-
-  gnc_split_reg_raise( gsr );
   gnc_split_reg_jump_to_split( gsr, split );
 }
 
@@ -1026,7 +1058,8 @@ gnc_ui_reconcile_window_change_cb(GtkButton *button, gpointer data)
 
   if (gnc_reverse_balance (account))
     new_ending = gnc_numeric_neg (new_ending);
-  if (startRecnWindow(recnData->window, account, &new_ending, &statement_date))
+  if (startRecnWindow (recnData->window, account, &new_ending, &statement_date,
+		       FALSE))
   {
     recnData->new_ending = new_ending;
     recnData->statement_date = statement_date;
@@ -1040,11 +1073,9 @@ gnc_ui_reconcile_window_new_cb(GtkButton *button, gpointer data)
   RecnWindow *recnData = data;
   GNCSplitReg *gsr;
 
-  gsr = regWindowSimple (recn_get_account (recnData));
+  gsr = gnc_reconcile_window_open_register(recnData);
   if (gsr == NULL)
     return;
-
-  gnc_split_reg_raise( gsr );
   gnc_split_reg_jump_to_blank( gsr );
 }
 
@@ -1094,11 +1125,9 @@ gnc_ui_reconcile_window_edit_cb(GtkButton *button, gpointer data)
   if (split == NULL)
     return;
 
-  gsr = regWindowSimple (recn_get_account (recnData));
+  gsr = gnc_reconcile_window_open_register(recnData);
   if (gsr == NULL)
     return;
-
-  gnc_split_reg_raise( gsr );
   gnc_split_reg_jump_to_split_amount( gsr, split );
 }
 
@@ -1174,14 +1203,8 @@ static void
 gnc_recn_open_cb(GtkWidget *widget, gpointer data)
 {
   RecnWindow *recnData = data;
-  Account *account = recn_get_account (recnData);
-  GNCSplitReg *gsr;
 
-  if (!account)
-    return;
-
-  gsr = regWindowSimple (account);
-  gnc_split_reg_raise( gsr );
+  gnc_reconcile_window_open_register(recnData);
 }
 
 static GtkWidget *
@@ -1637,7 +1660,7 @@ recnWindow (GtkWidget *parent, Account *account)
 
   /* Popup a little window to prompt the user to enter the
    * ending balance for his/her bank statement */
-  if (!startRecnWindow (parent, account, &new_ending, &statement_date))
+  if (!startRecnWindow (parent, account, &new_ending, &statement_date, TRUE))
     return NULL;
 
   return recnWindowWithBalance (parent, account, new_ending, statement_date);

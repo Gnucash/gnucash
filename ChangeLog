@@ -1,3 +1,15 @@
+2003-01-01  David Hampton  <hampton@employees.org>
+
+	* src/gnome/window-reconcile.c: Make the reconciliation window
+	respect the 'include subaccount' flag any time it opens a
+	register.  Consolidate logic for opening a new register. Enhance
+	the reconciliation start window to update the ending value when
+	this flag is changed. #101150
+
+	* src/gnome-utils/gnc-amount-edit.c (gnc_amount_edit_key_press):
+	If the amount is monetary, map the keypad decimal key to the
+	correct decimal character for the locale. #101957
+
 2003-01-01  Derek Atkins  <derek@ihtfp.com>
 
 	* src/register/ledger-core/split-register-control.c: invert the
