@@ -191,6 +191,7 @@ gnc_numeric
 gnc_numeric_add(gnc_numeric a, gnc_numeric b, 
                 gint64 denom, gint how) {
   gnc_numeric sum;
+  gint64 lcd;
   
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
     return gnc_numeric_error(GNC_ERROR_ARG);
@@ -228,8 +229,12 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
     sum.denom = a.denom;
   }
   else {
-    sum.num   = a.num*b.denom + b.num*a.denom;
-    sum.denom = a.denom*b.denom;
+    /* ok, convert to the lcd and compute from there... */
+    lcd = gnc_numeric_lcd(a,b);
+    sum.num   = a.num*(lcd/a.denom) + b.num*(lcd/b.denom);
+    sum.denom = lcd;
+    //    sum.num = a.num*b.denom + b.num*a.denom;
+    //    sum.denom = a.denom*b.denom;
   }
   
   if((denom == GNC_DENOM_AUTO) &&
@@ -261,6 +266,7 @@ gnc_numeric
 gnc_numeric_sub(gnc_numeric a, gnc_numeric b, 
                 gint64 denom, gint how) {
   gnc_numeric diff;
+  gint64 lcd;
 
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
     return gnc_numeric_error(GNC_ERROR_ARG);
@@ -298,8 +304,12 @@ gnc_numeric_sub(gnc_numeric a, gnc_numeric b,
     diff.denom = a.denom;
   }
   else {
-    diff.num   = a.num*b.denom - b.num*a.denom;
-    diff.denom = a.denom*b.denom;
+    /* ok, convert to the lcd and compute from there... */
+    lcd = gnc_numeric_lcd(a,b);
+    diff.num   = a.num*(lcd/a.denom) - b.num*(lcd/b.denom);
+    diff.denom = lcd;
+    //    diff.num   = a.num*b.denom - b.num*a.denom;
+    //    diff.denom = a.denom*b.denom;
   }
   
   if((denom == GNC_DENOM_AUTO) &&
@@ -387,6 +397,7 @@ gnc_numeric
 gnc_numeric_div(gnc_numeric a, gnc_numeric b, 
                 gint64 denom, gint how) {
   gnc_numeric quotient;
+  gint64 lcd;
 
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
     return gnc_numeric_error(GNC_ERROR_ARG);
@@ -421,8 +432,12 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
     quotient.denom = b.num;
   }
   else {
-    quotient.num   = a.num*b.denom;
-    quotient.denom = a.denom*b.num;
+    /* ok, convert to the lcd and compute from there... */ 
+    lcd = gnc_numeric_lcd(a,b);
+    quotient.num   = a.num*(lcd/a.denom);
+    quotient.denom = b.num*(lcd/b.denom);
+    //    quotient.num   = a.num*b.denom;
+    //    quotient.denom = a.denom*b.num;
   }
   
   if(quotient.denom < 0) {

@@ -1,3 +1,13 @@
+2003-01-19  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/gnc-numeric.c -- be more intelligent when operating
+	  on numbers of different denominators.  In particular, convert
+	  both numbers to the lcd and then operate on them, instead of
+	  assuming that a "cross-multiply" is safe.
+	* src/app-utils/test/test-print-parse-amount.c -- add more tests for
+	  PrintAmountInternal by checking force_fit and round.  Excercises
+	  a bug (fixed in this patch) where cross-multiplies were NOT safe.
+
 2003-01-18  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncTaxTable.[ch]: add functions to

@@ -40,8 +40,6 @@ test_num (gnc_numeric n)
   print_info.min_decimal_places = 0;
   print_info.use_locale = 1;
   print_info.use_symbol = 0;
-  print_info.force_fit = 0;
-  print_info.round = 0;
 
   for (i = 1, fraction = 10; i < 9; i++, fraction *= 10)
   {
@@ -50,15 +48,27 @@ test_num (gnc_numeric n)
     print_info.use_separators = 1;
     print_info.monetary = 1;
     print_info.max_decimal_places = i;
+    print_info.force_fit = 0;
+    print_info.round = 0;
 
     n1 = gnc_numeric_convert (n, fraction, GNC_RND_ROUND);
 
     test_num_print_info (n1, print_info);
-
+	
     print_info.monetary = 0;
     test_num_print_info (n1, print_info);
 
     print_info.use_separators = 0;
+    test_num_print_info (n1, print_info);
+
+    print_info.round = 1;
+    test_num_print_info (n1, print_info);
+
+    print_info.round = 0;
+    print_info.force_fit = 1;
+    test_num_print_info (n1, print_info);
+
+    print_info.round = 1;
     test_num_print_info (n1, print_info);
   }
 }
