@@ -32,6 +32,7 @@
 (define-module (gnucash report transaction))
 
 (use-modules (ice-9 slib))
+(require 'printf)
 (require 'record)
 
 (define-macro (addto! alist element)

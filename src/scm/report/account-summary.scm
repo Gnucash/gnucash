@@ -31,6 +31,8 @@
 
 (define-module (gnucash report account-summary))
 
+(use-modules (srfi srfi-1))
+
 ;; account summary report
 ;; prints a table of account information with clickable 
 ;; links to open the corresponding register window.

@@ -27,6 +27,9 @@
 (gnc:depend "date-utilities.scm")
 
 (define-module (gnucash report category-barchart))
+(use-modules (srfi srfi-1))
+(use-modules (ice-9 slib))
+(require 'printf)
 
 ;; The option names are defined here to 1. save typing and 2. avoid
 ;; spelling errors. The *reportnames* are defined here (and not only

@@ -463,8 +463,6 @@
   (false-if-exception 
    (let* ((error #f)
           (all-ok #f)
-          (start-time #f)
-          (end-time #f)
           (set-error 
            (lambda (e) 
              (if (not error)
@@ -478,11 +476,10 @@
                   (lambda (elt)
                     (display elt))
                   lst))))))
-     (set! start-time (gettimeofday))
      (and 
       ;; fields of categories. 
       (check-and-parse-field 
-       qif-cat:tax-class qif-cat:set-tax-class! 
+       qif-cat:tax-class qif-cat:set-tax-class! gnc:numeric-equal
        qif-parse:check-number-format '(decimal comma)
        qif-parse:parse-number/format (qif-file:cats self)
        qif-parse:print-number
@@ -490,7 +487,7 @@
        set-error)
       
       (check-and-parse-field 
-       qif-cat:budget-amt qif-cat:set-budget-amt! 
+       qif-cat:budget-amt qif-cat:set-budget-amt! gnc:numeric-equal
        qif-parse:check-number-format '(decimal comma) 
        qif-parse:parse-number/format (qif-file:cats self)
        qif-parse:print-number
@@ -499,7 +496,7 @@
       
       ;; fields of accounts 
       (check-and-parse-field 
-       qif-acct:limit qif-acct:set-limit! 
+       qif-acct:limit qif-acct:set-limit! gnc:numeric-equal
        qif-parse:check-number-format '(decimal comma) 
        qif-parse:parse-number/format (qif-file:accounts self)
        qif-parse:print-number
@@ -507,7 +504,7 @@
        set-error)
       
       (check-and-parse-field 
-       qif-acct:budget qif-acct:set-budget! 
+       qif-acct:budget qif-acct:set-budget! gnc:numeric-equal
        qif-parse:check-number-format '(decimal comma) 
        qif-parse:parse-number/format (qif-file:accounts self)
        qif-parse:print-number
@@ -521,7 +518,7 @@
 
       ;; fields of transactions 
       (check-and-parse-field 
-       qif-xtn:date qif-xtn:set-date! 
+       qif-xtn:date qif-xtn:set-date! equal?
        qif-parse:check-date-format '(m-d-y d-m-y y-m-d y-d-m) 
        qif-parse:parse-date/format 
        (qif-file:xtns self)
@@ -538,7 +535,7 @@
        qif-parse:parse-action-field (qif-file:xtns self) set-error)
       
       (check-and-parse-field 
-       qif-xtn:share-price qif-xtn:set-share-price!
+       qif-xtn:share-price qif-xtn:set-share-price! gnc:numeric-equal
        qif-parse:check-number-format '(decimal comma) 
        qif-parse:parse-number/format (qif-file:xtns self)
        qif-parse:print-number
@@ -546,7 +543,7 @@
        set-error)
       
       (check-and-parse-field 
-       qif-xtn:num-shares qif-xtn:set-num-shares!
+       qif-xtn:num-shares qif-xtn:set-num-shares! gnc:numeric-equal
        qif-parse:check-number-format '(decimal comma) 
        qif-parse:parse-number/format (qif-file:xtns self)
        qif-parse:print-number
@@ -554,7 +551,7 @@
        set-error)
       
       (check-and-parse-field 
-       qif-xtn:commission qif-xtn:set-commission!
+       qif-xtn:commission qif-xtn:set-commission! gnc:numeric-equal
        qif-parse:check-number-format '(decimal comma) 
        qif-parse:parse-number/format (qif-file:xtns self)
        qif-parse:print-number
@@ -564,7 +561,7 @@
       ;; this one's a little tricky... it checks and sets all the 
       ;; split amounts for the transaction together.     
       (check-and-parse-field 
-       qif-xtn:split-amounts qif-xtn:set-split-amounts!
+       qif-xtn:split-amounts qif-xtn:set-split-amounts! gnc:numeric-equal
        qif-parse:check-number-formats '(decimal comma) 
        qif-parse:parse-numbers/format (qif-file:xtns self)
        qif-parse:print-numbers
@@ -575,7 +572,6 @@
         (set! all-ok #t)
         #t))
      
-     (set! end-time (gettimeofday))
      (cond (error
             (cons all-ok error))
            (#t #t)))))
@@ -606,7 +602,7 @@
 ;;  types. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (check-and-parse-field getter setter checker 
+(define (check-and-parse-field getter setter equiv-thunk checker 
                                formats parser objects printer 
                                on-error errormsg)
   ;; first find the right format for the field
@@ -649,8 +645,8 @@
       ;; just ignore the format ambiguity.  Otherwise, it's really an
       ;; error.  ATM since there's no way to correct the error let's 
       ;; just leave it be.
-      (if (or (all-formats-equivalent? getter parser formats objects printer 
-                                       errormsg)      
+      (if (or (all-formats-equivalent? getter parser equiv-thunk formats 
+                                       objects printer errormsg)      
               (eq? on-error 'guess-on-ambiguity))
           (set! format (car formats))
           (begin 
@@ -687,7 +683,7 @@
 ;; "1000 2000 3000 4000" could be interpreted as decimal or comma
 ;; radix, but who cares?  The values will be the same).
 
-(define (all-formats-equivalent? getter parser formats objects 
+(define (all-formats-equivalent? getter parser equiv-thunk formats objects 
                                  printer errormsg)
   (let ((all-ok #t))
     (let obj-loop ((objlist objects))
@@ -699,7 +695,7 @@
               (for-each 
                (lambda (fmt)
                  (let ((this-parsed (parser unparsed fmt)))
-                   (if (not (equal? parsed this-parsed))
+                   (if (not (equiv-thunk parsed this-parsed))
                        (begin 
                          (set! all-ok #f) 
                          (errormsg 

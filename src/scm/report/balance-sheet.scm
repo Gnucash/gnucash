@@ -30,9 +30,11 @@
 
 (define-module (gnucash report balance-sheet))
 
+(use-modules (ice-9 slib))
+(require 'printf)
+
 ;; first define all option's names so that they are properly defined
 ;; in *one* place.
-
 (define optname-to-date (N_ "To"))
 
 (define optname-display-depth (N_ "Account Display Depth"))

@@ -36,6 +36,10 @@
 
 (define-module (gnucash report taxtxf))
 
+(use-modules (srfi srfi-1))
+(use-modules (ice-9 slib))
+(require 'printf)
+
 (define (make-level-collector num-levels)
   (let ((level-collector (make-vector num-levels)))
     (do ((i 0 (+ i 1)))

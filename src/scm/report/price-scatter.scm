@@ -27,6 +27,10 @@
 
 (define-module (gnucash report price-scatter))
 
+(use-modules (srfi srfi-1))
+(use-modules (ice-9 slib))
+(require 'printf)
+
 (define optname-from-date (N_ "From"))
 (define optname-to-date (N_ "To"))
 (define optname-stepsize (N_ "Step Size"))

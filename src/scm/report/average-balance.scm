@@ -13,6 +13,8 @@
 (gnc:depend "date-utilities.scm")
 
 (define-module (gnucash report average-balance))
+(use-modules (srfi srfi-1))
+(use-modules (ice-9 slib))
 
 (define optname-from-date (N_ "From"))
 (define optname-to-date (N_ "To"))

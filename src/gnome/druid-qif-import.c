@@ -473,9 +473,10 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     else {
       /* call the field parser */
       parse_return = gh_call1(qif_file_parse, gh_car(imported_files));
-
-      /* warning means the date format is ambiguous. Set up the 
-       * format selector page. */
+      
+      /* warning means the date format is ambiguous. Set up the format
+       * selector page.  FIXME: this can return warnings for things
+       * other than date format ambiguities. */
       if(gh_list_p(parse_return) && 
          (gh_car(parse_return) == SCM_BOOL_T)) {
         date_formats   = gh_cadr(parse_return);

@@ -1,3 +1,17 @@
+2001-06-19  Bill Gribble  <grib@billgribble.com>
+
+	* src/scm/qif-import/qif-parse.scm: convert to gnc-numeric when 
+	parsing, using string length as the precision
+
+	* src/scm/qif-import/qif-to-gnc.scm: use gnc-numeric 
+	math routines where necessary
+	 
+	* src/scm/qif-import/qif-file.scm: pass an equality test 
+	predicate to check-and-parse-fields
+
+	* src/scm/report/*: fix module reports to use-modules on 
+	srfi-1 and slib where needed. 
+	
 2001-06-19  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-nextrun.h: add guards

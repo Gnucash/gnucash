@@ -26,6 +26,10 @@
 
 (define-module (gnucash report portfolio))
 
+(use-modules (srfi srfi-1))
+(use-modules (ice-9 slib))
+(require 'printf)
+
 (define optname-price-source (N_ "Price Source"))
 
 (define (options-generator)

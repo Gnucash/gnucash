@@ -29,6 +29,10 @@
 
 (define-module (gnucash report account-piecharts))
 
+(use-modules (srfi srfi-1))
+(use-modules (ice-9 slib))
+(require 'printf)
+
 (define menuname-income (N_ "Income Piechart"))
 (define menuname-expense (N_ "Expense Piechart"))
 (define menuname-assets (N_ "Asset Piechart"))

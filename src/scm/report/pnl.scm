@@ -27,6 +27,10 @@
 
 (define-module (gnucash report pnl))
 
+(use-modules (srfi srfi-1))
+(use-modules (ice-9 slib))
+(require 'printf)
+
 ;; Profit and loss report. Actually, people in finances might want
 ;; something different under this name, but they are welcomed to
 ;; contribute their changes :-)
