@@ -327,6 +327,10 @@ AC_CHECK_LIB(ghttp, ghttp_request_new,
              AC_MSG_ERROR([Cannot find ghttp.  See the README for more info.]),
              $GHTTP_LIBS)
 
+AC_CHECK_LIB(ghttp, ghttp_enable_ssl,
+             AC_DEFINE(HAVE_OPENSSL),
+	     AC_MSG_WARN([ghttp does not have SSL support.]),
+	     $GHTTP_LIBS)
 
 AC_SUBST(GTKHTML_LIBS)
 AC_SUBST(GTKHTML_CFLAGS)

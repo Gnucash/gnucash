@@ -672,13 +672,19 @@
                        (begin 
                          (set! all-ok #f) 
                          (errormsg 
-                          (list "Parse ambiguity : between formats "
+                          (with-output-to-string 
+                            (lambda ()
+                              (for-each 
+                               (lambda (elt)
+                                 (display elt))
+                               (list 
+                                "Parse ambiguity : between formats "
                                 formats "\nValue " unparsed " could be "
                                 (printer parsed) " or " 
                                 (printer this-parsed)
                                 "\nand no evidence exists to distinguish." 
                                 "\nUsing " (printer parsed) ". "
-                                "\nSee help for more info."))))))
+                                "\nSee help for more info.")))))))))
                (cdr formats))))
         (if (and all-ok (not (null? (cdr objlist))))
             (obj-loop (cdr objlist)))))

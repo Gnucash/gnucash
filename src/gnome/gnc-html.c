@@ -24,8 +24,22 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
+
+#ifdef HAVE_OPENSSL
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+#include <openssl/crypto.h>
+#include <openssl/x509.h>
+#include <openssl/pem.h>
+#include <ghttp_ssl.h>
+#endif
+
+#include <ghttp.h>
 #include <gtkhtml/gtkhtml.h>
 #include <gtkhtml/gtkhtml-embedded.h>
 #ifdef USE_GUPPI
@@ -34,7 +48,6 @@
 #include <gnome.h>
 #include <regex.h>
 #include <glib.h>
-#include <ghttp.h>
 #include <guile/gh.h>
 
 #include "Account.h"
@@ -413,6 +426,18 @@ ghttp_check_callback(gpointer data) {
   }
 }
 
+
+#ifdef HAVE_OPENSSL
+static int
+gnc_html_certificate_check_cb(ghttp_request * req, X509 * cert, 
+                              void * user_data) {
+  printf("gnc-html: checking SSL certificate...\n");
+  X509_print_fp(stdout, cert);
+  printf(" ... done\n");
+  return TRUE;
+}
+#endif
+
 static void 
 gnc_html_start_request(gnc_html * html, gchar * uri, GtkHTMLStream * handle) {
   
@@ -421,6 +446,12 @@ gnc_html_start_request(gnc_html * html, gchar * uri, GtkHTMLStream * handle) {
   info->request = ghttp_request_new();
   info->handle  = handle;
   info->uri  = g_strdup (uri);
+#ifdef HAVE_OPENSSL
+  ghttp_enable_ssl(info->request);
+  ghttp_set_ssl_certificate_callback(info->request, 
+                                     gnc_html_certificate_check_cb, 
+                                     (void *)html);
+#endif
   ghttp_set_uri(info->request, uri);
   ghttp_set_header(info->request, http_hdr_User_Agent, 
                    "gnucash/1.5 (Financial Browser for Linux; http://gnucash.org)");

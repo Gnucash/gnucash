@@ -69,6 +69,7 @@
 #undef HAVE_LIBGTKHTML
 
 #undef HAVE_LIBGHTTP
+#undef HAVE_OPENSSL
 
 /* misc image and compression libs needed by html widget */
 #undef HAVE_ZLIB               

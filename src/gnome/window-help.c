@@ -218,7 +218,12 @@ gnc_help_window_reload_button_cb(GtkWidget * w, gpointer data) {
 
 static void
 goto_string_cb(char * string, gpointer data) {
-  strncpy(data, string, 250);
+  if(string) {
+    strncpy(data, string, 250);
+  }
+  else if(data) {
+    *(char *)data = 0;
+  }
 }
 
 static int
