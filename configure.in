@@ -438,13 +438,9 @@ AC_ARG_WITH( openhbci-prefix,
   [  --with-openhbci-prefix=PFX   Prefix where OpenHBCI is installed],
   HBCI_PREFIX="$with_openhbci_prefix",
   HBCI_PREFIX="\${prefix}")
-AC_ARG_WITH( openhbci-cfgfile,
-  [  --with-openhbci-cfgfile=FILE Configuration file of OpenHBCI],
-  HBCI_CFGFILE="\\\"$with_openhbci_cfgfile\\\"",
-  HBCI_CFGFILE="\\\"${HOME}/.openhbci/openhbci.conf\\\"")
 
 HBCI_LIBS="-L${HBCI_PREFIX}/lib -lopenhbci"
-HBCI_CFLAGS="-I${HBCI_PREFIX}/include -DHBCI_CFGFILE=${HBCI_CFGFILE}"
+HBCI_CFLAGS="-I${HBCI_PREFIX}/include -DHAS_OPENHBCI"
 AC_SUBST(HBCI_LIBS)
 AC_SUBST(HBCI_CFLAGS)
 AC_SUBST(HBCI_DIR)

@@ -119,3 +119,68 @@ gnc_hbci_get_hbci_acc (const HBCI_API *api, Account *gnc_acc)
   } /* bankcode */
   return NULL;
 }
+
+
+static void *
+print_list_int_cb (int value, void *user_data)
+{
+  printf("%d, ", value);
+  return NULL;
+}
+static void 
+print_list_int (const list_int *list)
+{
+  g_assert(list);
+  list_int_foreach (list, &print_list_int_cb, NULL);
+  printf ("\n");
+}
+static void *
+get_resultcode_error_cb (int value, void *user_data)
+{
+  if (value >= 9000)
+    return (void*) value;
+  else
+    return NULL;
+}
+static int
+get_resultcode_error (const list_int *list)
+{
+  g_assert (list);
+  return (int) list_int_foreach (list, &get_resultcode_error_cb, NULL);
+}
+
+void 
+gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job)
+{
+  list_int *list;
+  const char *msg;
+  int cause;
+  
+  g_assert (job);
+/*   if (HBCI_OutboxJob_status (job) != HBCI_JOB_STATUS_DONE) */
+/*     return; */
+/*   if (HBCI_OutboxJob_result (job) != HBCI_JOB_RESULT_FAILED) */
+/*     return; */
+  printf("OutboxJob failed. resultcodes were: \n");
+  list = HBCI_OutboxJob_resultCodes (job);
+  print_list_int (list);
+  cause = get_resultcode_error (list);
+  switch (cause) {
+  case 9310:
+    msg = "Schluessel noch nicht hinterlegt";
+    break;
+  case 9320:
+    msg = "Schluessel noch nicht freigeschaltet";
+    break;
+  case 9330:
+    msg = "Schluessel gesperrt";
+    break;
+  case 9340:
+    msg = "Schluessel falsch";
+    break;
+  default:
+    msg = "Unknown";
+  }
+  printf("Probable cause of error was: code %d, msg: %s\n", cause, msg);
+  list_int_delete (list);
+}

@@ -340,70 +340,6 @@ to_hexstring_hash (const char *str)
  ***************************************************************/
 
 
-static void *
-print_list_int_cb (int value, void *user_data)
-{
-  printf("%d, ", value);
-  return NULL;
-}
-static void 
-print_list_int (const list_int *list)
-{
-  g_assert(list);
-  list_int_foreach (list, &print_list_int_cb, NULL);
-  printf ("\n");
-}
-static void *
-get_resultcode_error_cb (int value, void *user_data)
-{
-  if (value >= 9000)
-    return (void*) value;
-  else
-    return NULL;
-}
-static int
-get_resultcode_error (const list_int *list)
-{
-  g_assert (list);
-  return (int) list_int_foreach (list, &get_resultcode_error_cb, NULL);
-}
-
-static void 
-debug_outboxjob (HBCI_OutboxJob *job, HBCIInitialInfo *info)
-{
-  list_int *list;
-  const char *msg;
-  int cause;
-  
-  g_assert (info);
-  g_assert (job);
-/*   if (HBCI_OutboxJob_status (job) != HBCI_JOB_STATUS_DONE) */
-/*     return; */
-/*   if (HBCI_OutboxJob_result (job) != HBCI_JOB_RESULT_FAILED) */
-/*     return; */
-  printf("OutboxJob failed. resultcodes were: \n");
-  list = HBCI_OutboxJob_resultCodes (job);
-  print_list_int (list);
-  cause = get_resultcode_error (list);
-  switch (cause) {
-  case 9310:
-    msg = "Schluessel noch nicht hinterlegt";
-    break;
-  case 9320:
-    msg = "Schluessel noch nicht freigeschaltet";
-    break;
-  case 9330:
-    msg = "Schluessel gesperrt";
-    break;
-  case 9340:
-    msg = "Schluessel falsch";
-    break;
-  default:
-    msg = "Unknown";
-  }
-  printf("Probable cause of error was: code %d, msg: %s\n", cause, msg);
-  list_int_delete (list);
-}
 
 
 static const HBCI_Bank *
@@ -976,7 +912,7 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
 					(HBCI_API_Hbci (info->api)), errstr);
       g_free (errstr);
       HBCI_Error_delete (err);
-      debug_outboxjob (job, info);
+      gnc_hbci_debug_outboxjob (job);
       return FALSE;
     }
     HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);
@@ -1109,7 +1045,7 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
       HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor (HBCI_API_Hbci (info->api)), errstr);
       g_free (errstr);
       HBCI_Error_delete (err);
-      debug_outboxjob (job, info);
+      gnc_hbci_debug_outboxjob (job);
       return FALSE;
     }
     HBCI_Error_delete (err);
@@ -1253,7 +1189,7 @@ on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
       HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor (HBCI_API_Hbci (info->api)), errstr);
       g_free (errstr);
       HBCI_Error_delete (err);
-      debug_outboxjob (job, info);
+      gnc_hbci_debug_outboxjob (job);
       return FALSE;
     }
     HBCI_Error_delete (err);

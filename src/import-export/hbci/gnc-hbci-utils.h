@@ -79,4 +79,10 @@ const HBCI_Account *
 gnc_hbci_get_hbci_acc (const HBCI_API *api, Account *gnc_acc);
 
 
+/* Make a lot of debugging messages about this outboxjob.  */
+void 
+gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job);
+
+
+
 #endif

@@ -8,6 +8,8 @@ libgncmod_hbci_la_SOURCES = \
   dialog-pass.c \
   gnc-hbci-kvp.c \
   gnc-hbci-utils.c \
+  gnc-hbci-cb.c \
+  gnc-hbci-actions.c \
   hbci-interaction.c \
   hbci-progressmon.c \
   hbci-account-picker.c \
@@ -21,6 +23,7 @@ libgncmod_hbci_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
+  ${top_builddir}/src/gnome/libgncgnome.la \
   ${GLADE_LIBS} \
   ${GLIB_LIBS} \
   ${GNOMEUI_LIBS} \
