@@ -80,7 +80,6 @@
 #  define PAY_TXN_PART_RB    "pay_txn_part_rb"
 #  define PAY_UNIQ_FREQ_RB   "pay_uniq_freq_rb"
 #  define PAY_FREQ_CONTAINER "pay_freq_align"
-#define PG_FINISH "finish_pg"
 
 #define OPT_VBOX_SPACING 2
 
@@ -273,15 +272,16 @@ static void     ld_opts_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static gboolean ld_rep_next ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static void     ld_rep_prep ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static gboolean ld_rep_back ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
+static void     ld_rep_fin  ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static gboolean ld_pay_next ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static void     ld_pay_prep ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static gboolean ld_pay_back ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
-static void     ld_fin_prep ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
-static gboolean ld_fin_back ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
-static void     ld_fin_fin  ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
+static void     ld_pay_fin  ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
+
+static void ld_create_sxes( LoanDruidData *ldd );
 
 struct LoanDruidData_*
-gnc_ui_sx_loan_druid_create()
+gnc_ui_sx_loan_druid_create(void)
 {
         int i;
         LoanDruidData *ldd;
@@ -506,9 +506,8 @@ gnc_ui_sx_loan_druid_create()
                 } DRUID_HANDLERS[] = {
                         { PG_INFO,      ld_info_save, ld_info_prep, ld_info_save, NULL },
                         { PG_OPTS,      ld_opts_tran, ld_opts_prep, ld_opts_tran, NULL },
-                        { PG_REPAYMENT, ld_rep_next,  ld_rep_prep,  ld_rep_back },
-                        { PG_PAYMENT,   ld_pay_next,  ld_pay_prep,  ld_pay_back,  NULL },
-                        { PG_FINISH,    NULL,         ld_fin_prep,  ld_fin_back,  ld_fin_fin },
+                        { PG_REPAYMENT, ld_rep_next,  ld_rep_prep,  ld_rep_back,  ld_rep_fin },
+                        { PG_PAYMENT,   ld_pay_next,  ld_pay_prep,  ld_pay_back,  ld_pay_fin },
                         { NULL }
                 };
 
@@ -1027,24 +1026,7 @@ ld_rep_next( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                 return TRUE;
         }
 
-        if ( (ldd->currentIdx < 0)
-             || (ldd->currentIdx >= ldd->ld.repayOptCount)
-             || !ldd->ld.repayOpts[ldd->currentIdx]->enabled ) {
-                int i;
-                for ( i=0;
-                      (i < ldd->ld.repayOptCount)
-                      && !ldd->ld.repayOpts[i]->enabled;
-                      i++ )
-                        ;
-                if ( i == ldd->ld.repayOptCount ) {
-                        /* transition to final page. */
-                        GtkWidget *pg;
-                        pg = glade_xml_get_widget( ldd->gxml, PG_FINISH );
-                        gnome_druid_set_page( ldd->druid, GNOME_DRUID_PAGE(pg) );
-                        return TRUE;
-                }
-                ldd->currentIdx = i;
-        }
+        ldd->currentIdx++;
         return FALSE;
 }
 
@@ -1096,7 +1078,25 @@ ld_rep_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         gnc_frequency_setup( ldd->repGncFreq,
                              ldd->ld.repFreq,
                              ldd->ld.repStartDate );
-                                   
+
+        {
+                int i;
+                gboolean haveRepayOpts = FALSE;
+                /* no repayment options selected */
+                for ( i=0; i<ldd->ld.repayOptCount && !haveRepayOpts; i++ ) {
+                        haveRepayOpts |= ldd->ld.repayOpts[i]->enabled;
+                }
+                gnome_druid_set_show_finish( ldd->druid, !haveRepayOpts );
+        }
+}
+
+static
+void
+ld_rep_fin( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
+{
+        LoanDruidData *ldd = (LoanDruidData*)ud;
+        ld_rep_save( ldd );
+        ld_create_sxes( ldd );
 }
 
 static
@@ -1136,6 +1136,17 @@ ld_pay_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         if ( uniq ) {
                 gnc_frequency_setup( ldd->payGncFreq,
                                      rod->fs, rod->startDate );
+        }
+
+        {
+                gboolean haveMoreRepayOpts = FALSE;
+                int i = 0;
+                for ( i = ldd->currentIdx + 1;
+                      (i < ldd->ld.repayOptCount) && !haveMoreRepayOpts;
+                      i++ ) {
+                        haveMoreRepayOpts |= ldd->ld.repayOpts[i]->enabled;
+                }
+                gnome_druid_set_show_finish( ldd->druid, !haveMoreRepayOpts );
         }
 
         g_string_free( str, TRUE );
@@ -1267,31 +1278,15 @@ ld_pay_back( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 }
 
 static
-gboolean
-ld_fin_back ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
+void
+ld_pay_fin( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 {
-        LoanDruidData *ldd;
-
-        ldd = (LoanDruidData*)ud;
-        if ( (ldd->currentIdx < 0)
-             || (ldd->currentIdx >= ldd->ld.repayOptCount)
-             || !ldd->ld.repayOpts[ldd->currentIdx]->enabled ) {
-                int i;
-                for ( i=ldd->ld.repayOptCount-1;
-                      (i > -1)
-                      && !ldd->ld.repayOpts[i]->enabled;
-                      i-- )
-                        ;
-                if ( i == -1 ) {
-                        /* transition to Repayment page. */
-                        GtkWidget *pg;
-                        pg = glade_xml_get_widget( ldd->gxml, PG_REPAYMENT );
-                        gnome_druid_set_page( ldd->druid, GNOME_DRUID_PAGE(pg) );
-                        return TRUE;
-                }
-                ldd->currentIdx = i;
+        LoanDruidData *ldd = (LoanDruidData*)ud;
+        if ( ld_pay_save_current( ldd ) ) {
+                /* FIXME?: Error? */
+                return;
         }
-        return FALSE;
+        ld_create_sxes( ldd );
 }
 
 static
@@ -1330,30 +1325,18 @@ ld_pay_freq_toggle( GtkToggleButton *tb, gpointer ud )
 
 static
 void
-ld_fin_prep ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
-{
-        /* FIXME? */
-}
-
-static
-void
-ld_free_ttsi( gpointer data, gpointer ud )
-{
-        gnc_ttsplitinfo_free( (TTSplitInfo*)data );
-}
-
-static
-void
 ld_gnc_ttinfo_free( gpointer data, gpointer ud )
 {
         gnc_ttinfo_free( (TTInfo*)data );
 }
 
+/**
+ * Actually does the work of creating the SXes from the LoanDruidData.
+ **/
 static
 void
-ld_fin_fin  ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
+ld_create_sxes( LoanDruidData *ldd )
 {
-        LoanDruidData *ldd;
         int i;
         TTInfo *tti;
         TTSplitInfo *ttsi;
@@ -1365,8 +1348,6 @@ ld_fin_fin  ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         GString *repAssetsDebitFormula, *tmpGS;
         GList *sxList;
 
-        ldd = (LoanDruidData*)ud;
-        
         /* Create a string for the Asset-account debit, which we will build
          * up in the processing of the LoanData and Options. */
         repAssetsDebitFormula = g_string_sized_new( 64 );
@@ -1485,7 +1466,7 @@ ld_fin_fin  ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                         GList *ttList;
 
                         ttList = NULL;
-                        /* Create new SX with given FreqSpec */
+                       /* Create new SX with given FreqSpec */
                         ttList = g_list_append( ttList, tti );
 
                         tmpSX = xaccSchedXactionMalloc( gnc_get_current_book() );
@@ -1494,7 +1475,6 @@ ld_fin_fin  ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                         xaccSchedXactionSetFreqSpec( tmpSX, rod->fs );
                         xaccSchedXactionSetStartDate( tmpSX, rod->startDate );
                         xaccSchedXactionSetLastOccurDate( tmpSX, rod->startDate );
-                        /* FIXME ... what are these values? */
                         xaccSchedXactionSetNumOccur( tmpSX, ldd->ld.numPer );
                         xaccSchedXactionSetRemOccur( tmpSX, ldd->ld.numPerRemain );
                         xaccSchedXactionSetTemplateTrans( tmpSX, ttList,

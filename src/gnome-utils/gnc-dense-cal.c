@@ -27,6 +27,7 @@
 #include <time.h>
 #include <string.h>
 #include <gtk/gtk.h>
+#include <gnome.h>
 #include "gnc-dense-cal.h"
 
 /* For PERR, only... */
@@ -800,6 +801,7 @@ gnc_dense_cal_expose( GtkWidget *widget,
                 /* draw the day labels */
                 maxWidth = gdk_string_width( dcal->monthLabelFont, "88" );
                 if ( dcal->x_scale > maxWidth ) {
+                        /* FIXME: i18n */
                         static const gchar *dayLabels[7] = {
                                 "Su", "M", "Tu", "W", "Th", "F", "Sa"
                         };
@@ -898,7 +900,7 @@ populate_hover_window( GncDenseCal *dcal, gint doc )
                 gtk_clist_clear( cl );
                 for ( l = dcal->marks[doc]; l; l = l->next ) {
                         gdcmd = (gdc_mark_data*)l->data;
-                        rowText[0] = gdcmd->name;
+                        rowText[0] = ( gdcmd->name ? gdcmd->name : _("(unnamed)") );
                         rowText[1] = gdcmd->info;
                         gtk_clist_insert( cl, row++, rowText );
                 }
@@ -1389,19 +1391,16 @@ gnc_dense_cal_mark( GncDenseCal *dcal,
                 return -1;
         }
 
-        if ( name == NULL
-             || strlen(name) == 0 ) {
-                PERR( "name must be reasonable\n" );
-                return -1;
-        }
-
         newMark = g_new0( gdc_mark_data, 1 );
-        newMark->name     = g_strdup(name);
-        newMark->info     = NULL;
+        newMark->name = NULL;
+        if ( name ) {
+                newMark->name = g_strdup(name);
+        }
+        newMark->info = NULL;
         if ( info ) {
                 newMark->info = g_strdup(info);
         }
-        newMark->tag      = dcal->lastMarkTag++;
+        newMark->tag = dcal->lastMarkTag++;
         newMark->ourMarks = NULL;
 
         for ( i=0; i<size; i++ ) {
@@ -1420,6 +1419,7 @@ gnc_dense_cal_mark( GncDenseCal *dcal,
                                                    GINT_TO_POINTER(doc) );
         }
         dcal->markData = g_list_append( dcal->markData, (gpointer)newMark );
+        gtk_widget_queue_draw( GTK_WIDGET( dcal ) );
         return newMark->tag;
 }
 
@@ -1457,4 +1457,5 @@ gnc_dense_cal_mark_remove( GncDenseCal *dcal, guint markToRemove )
         g_list_free( gdcmd->ourMarks );
         dcal->markData = g_list_remove( dcal->markData, gdcmd );
         g_free( gdcmd );
+        gtk_widget_queue_draw( GTK_WIDGET(dcal) );
 }

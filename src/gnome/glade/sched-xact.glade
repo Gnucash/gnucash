@@ -5550,17 +5550,61 @@ Escrow
 	</widget>
       </widget>
     </widget>
+  </widget>
+</widget>
+
+<widget>
+  <class>GtkMenu</class>
+  <name>Since Last Run popup</name>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>creation_state</name>
+    <label>Creation State</label>
+    <right_justify>False</right_justify>
 
     <widget>
-      <class>GnomeDruidPageFinish</class>
-      <name>finish_pg</name>
-      <title>Review</title>
-      <text>We're about to do the following...</text>
-      <background_color>25,25,112</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
-      <textbox_color>255,255,255</textbox_color>
-      <text_color>0,0,0</text_color>
-      <title_color>255,255,255</title_color>
+      <class>GtkMenu</class>
+      <name>creation_state_menu</name>
+
+      <widget>
+	<class>GtkPixmapMenuItem</class>
+	<name>ignore</name>
+	<signal>
+	  <name>activate</name>
+	  <handler>on_ignore_activate</handler>
+	  <last_modification_time>Fri, 23 Aug 2002 22:16:45 GMT</last_modification_time>
+	</signal>
+	<label>Ignore</label>
+	<right_justify>False</right_justify>
+	<stock_icon>GNOME_STOCK_MENU_STOP</stock_icon>
+      </widget>
+
+      <widget>
+	<class>GtkPixmapMenuItem</class>
+	<name>postpone</name>
+	<signal>
+	  <name>activate</name>
+	  <handler>on_postpone_activate</handler>
+	  <last_modification_time>Fri, 23 Aug 2002 22:16:45 GMT</last_modification_time>
+	</signal>
+	<label>Postpone</label>
+	<right_justify>False</right_justify>
+	<stock_icon>GNOME_STOCK_MENU_TIMER_STOP</stock_icon>
+      </widget>
+
+      <widget>
+	<class>GtkPixmapMenuItem</class>
+	<name>create</name>
+	<signal>
+	  <name>activate</name>
+	  <handler>on_create_activate</handler>
+	  <last_modification_time>Fri, 23 Aug 2002 22:16:45 GMT</last_modification_time>
+	</signal>
+	<label>Create</label>
+	<right_justify>False</right_justify>
+	<stock_icon>GNOME_STOCK_MENU_TIMER</stock_icon>
+      </widget>
     </widget>
   </widget>
 </widget>

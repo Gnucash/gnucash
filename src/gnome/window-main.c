@@ -868,7 +868,7 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
     },
     GNOMEUIINFO_SEPARATOR,
     { GNOME_APP_UI_ITEM,
-      N_( "_Mortgage/Loan Repayment Setup" ),
+      N_( "_Mortgage & Loan Repayment..." ),
       N_( "Setup scheduled transactions for repayment of a loan" ),
       gnc_main_window_sx_loan_druid_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,

@@ -894,6 +894,8 @@ year_range_sels_changed( GNCFrequency *gf,
         tmpTm->tm_mon += occur - (tmpTm->tm_mon % monthsInRange);
         tmpTT = mktime( tmpTm );
         gnome_date_edit_set_time( gf->startDate, tmpTT );
+
+        gtk_signal_emit_by_name( GTK_OBJECT(gf), "changed", NULL );
 }
 
 static void
@@ -925,6 +927,7 @@ yearly_sel_changed( GtkButton *b, gpointer d )
 
         tmptt = mktime( tmptm );
         gnome_date_edit_set_time( gf->startDate, tmptt );
+
         gtk_signal_emit_by_name( GTK_OBJECT(gf), "changed", NULL );
 }
 

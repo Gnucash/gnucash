@@ -206,12 +206,6 @@ static void gnc_sxed_freq_changed( GNCFrequency *gf, gpointer ud );
 static void sxed_excal_update_adapt( GtkObject *o, gpointer ud );
 static void gnc_sxed_update_cal( SchedXactionEditorDialog *sxed );
 
-/* ledger standard-handlers */
-static gncUIWidget sxe_ledger_get_parent( GNCLedgerDisplay *ld );
-
-static void sxed_reg_recordCB( GtkWidget *w, gpointer d );
-static void sxed_reg_cancelCB( GtkWidget *w, gpointer d );
-
 static void gnc_sxed_reg_check_close(SchedXactionEditorDialog *sxed);
 
 static gboolean editor_component_sx_equality( gpointer find_data,
@@ -684,6 +678,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                                 _( "Please name the Scheduled Transaction." );
                         gnc_error_dialog_parented( GTK_WINDOW(sxed->dialog),
                                                    sx_has_no_name_msg );
+                        g_free( name );
                         return FALSE;
                         
                 }
@@ -702,7 +697,6 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                                                          data );
                         nameExists |= ( g_strcasecmp(name, existingName) == 0 );
                 }
-                g_free( name );
                 if ( nameHasChanged && nameExists ) {
                         const char *sx_has_existing_name_msg =
                                 _( "A Scheduled Transaction with the "
@@ -712,9 +706,11 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                         if ( ! gnc_verify_dialog_parented( sxed->dialog, FALSE,
                                                            sx_has_existing_name_msg,
 							   name) ) {
+                                g_free( name );
                                 return FALSE;
                         }
                 }
+                g_free( name );
         }
 
         {
@@ -1907,44 +1903,6 @@ sxe_ledger_get_parent( GNCLedgerDisplay *ld )
         return sxed->dialog;
 }
 
-static
-void
-sxed_reg_recordCB( GtkWidget *w, gpointer d )
-{
-        SchedXactionEditorDialog *sxed = (SchedXactionEditorDialog*)d;
-        SplitRegister *reg;
-        Transaction *trans;
-
-        reg = gnc_ledger_display_get_split_register( sxed->ledger );
-        trans = gnc_split_register_get_current_trans( reg );
-        if ( !gnc_split_register_save( reg, TRUE ) )
-                return;
-
-        gnc_split_register_redraw( reg );
-}
-
-static
-void
-sxed_reg_cancelCB( GtkWidget *w, gpointer d )
-{
-        gnc_split_register_cancel_cursor_trans_changes(
-                gnc_ledger_display_get_split_register
-                ( ((SchedXactionEditorDialog *)d)->ledger ) );
-}
-
-/* FIXME */
-static void
-refactor_transaction_delete_toggle_cb(GtkToggleButton *button, gpointer data)
-{
-  GtkWidget *text = gtk_object_get_user_data(GTK_OBJECT(button));
-  gchar *s = data;
-  gint pos = 0;
-
-  gtk_editable_delete_text(GTK_EDITABLE(text), 0, -1);
-  gtk_editable_insert_text(GTK_EDITABLE(text), s, strlen(s), &pos);
-}
-
-
 /********************************************************************\
  * gnc_register_check_close                                         *
  *                                                                  *
@@ -1956,20 +1914,26 @@ gnc_sxed_reg_check_close(SchedXactionEditorDialog *sxed)
 {
         gboolean pending_changes;
         SplitRegister *reg;
-
+        const char *message =
+                _("The current template transaction "
+                  "has been changed.\n"
+                  "Would you like to record the changes?");
+        
         reg = gnc_ledger_display_get_split_register (sxed->ledger);
-
         pending_changes = gnc_split_register_changed (reg);
-        if (pending_changes) {
-                const char *message =
-                        _("The current template transaction "
-                          "has been changed.\n"
-                          "Would you like to record the changes?");
-                if (gnc_verify_dialog_parented(sxed->dialog, TRUE, message)) {
-                        sxed_reg_recordCB(sxed->dialog, sxed);
-                } else {
-                        gnc_split_register_cancel_cursor_trans_changes (reg);
-                }
+        if (!pending_changes) {
+                return;
+        }
+
+        if (gnc_verify_dialog_parented(sxed->dialog, TRUE, message)) {
+                Transaction *trans;
+                trans = gnc_split_register_get_current_trans( reg );
+                if ( !gnc_split_register_save( reg, TRUE ) )
+                        return;
+                
+                gnc_split_register_redraw( reg );
+        } else {
+                gnc_split_register_cancel_cursor_trans_changes (reg);
         }
 }
 
@@ -2174,6 +2138,7 @@ gnc_sxed_update_cal( SchedXactionEditorDialog *sxed )
 
                 lastInst = xaccSchedXactionGetLastOccurDate( sxed->sx );
                 if ( g_date_valid( lastInst )
+                     && g_date_valid( &d )
                      && g_date_compare( lastInst, &d ) <= 0 ) {
                         d = *lastInst;
                 }
@@ -2212,6 +2177,10 @@ gnc_sxed_update_cal( SchedXactionEditorDialog *sxed )
                 GString *info;
 
                 name = gtk_editable_get_chars( sxed->nameEntry, 0, -1 );
+                if ( strlen( name ) == 0 ) {
+                        g_free(name);
+                        name = NULL;
+                }
                 info = g_string_sized_new( 16 );
                 xaccFreqSpecGetFreqStr( fs, info );
                 sxed->markId = gnc_dense_cal_mark( sxed->example_cal, i,

@@ -21,4 +21,4 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-struct LoanDruidData_* gnc_ui_sx_loan_druid_create();
+struct LoanDruidData_* gnc_ui_sx_loan_druid_create(void);

@@ -1,3 +1,30 @@
+2002-10-21  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_update_cal): Check
+	validatity of date before subsequent processing; fixes Bug#96467.
+
+	* src/gnome-utils/gnc-dense-cal.c
+	(gnc_dense_cal_mark)
+	(gnc_dense_cal_mark_remove): Queue a re-draw when marks are added
+	or removed; fixes Bug#96468.
+
+	* src/gnome-utils/gnc-frequency.c (year_range_sels_changed): Emit
+	"changed" signal when the year-range selections change; fixes
+	Bug#96470.
+
+	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_check_consistent):
+	Free the name str after we've used it [conrad-found, unfiled bug].
+
+	* src/gnome-utils/gnc-dense-cal.c (populate_hover_window): Now
+	more tolerant of mark sets without names.
+
+	* src/gnome/druid-loan.c:
+	* src/gnome/dialog-scheduledxaction.c: Cleaned up compilation
+	warnings so -Werror can go back on soon.
+
+	* src/gnome/window-main.c (gnc_main_window_create_menus): Reworded
+	MenuItem for loan-repayment druid as per Chris' suggestion.
+
 2002-10-21  Derek Atkins  <derek@ihtfp.com>
 	* app-utils/options.scm -- fix (find-first-account) to search subaccounts
 
