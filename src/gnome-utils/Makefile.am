@@ -58,6 +58,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-tree-model-example-account.c \
   gnc-tree-model-price.c \
   gnc-tree-model-selection.c \
+  gnc-tree-view-account.c \
   gncmod-gnome-utils.c \
   gtkselect.c \
   misc-gnome-utils.c \
@@ -103,6 +104,7 @@ gncinclude_HEADERS = \
   gnc-tree-model-example-account.h \
   gnc-tree-model-price.h \
   gnc-tree-model-selection.h \
+  gnc-tree-view-account.h \
   gtkselect.h \
   misc-gnome-utils.h \
   print-session.h \
@@ -153,6 +155,7 @@ glade_DATA = \
   dialog-query-list.glade \
   exchange-dialog.glade \
   gnc-date-format.glade \
+  preferences.glade \
   transfer.glade
 
 EXTRA_DIST = \

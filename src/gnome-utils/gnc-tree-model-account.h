@@ -22,15 +22,38 @@ G_BEGIN_DECLS
 #define GNC_TREE_MODEL_ACCOUNT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_MODEL_ACCOUNT, GncTreeModelAccountClass))
 
 typedef enum {
-	GNC_TREE_MODEL_ACCOUNT_COL_TYPE,
-	GNC_TREE_MODEL_ACCOUNT_COL_TYPE_PIXBUF,
 	GNC_TREE_MODEL_ACCOUNT_COL_NAME,
+	GNC_TREE_MODEL_ACCOUNT_COL_TYPE,
+	GNC_TREE_MODEL_ACCOUNT_COL_COMMODITY,	
 	GNC_TREE_MODEL_ACCOUNT_COL_CODE,
 	GNC_TREE_MODEL_ACCOUNT_COL_DESCRIPTION,
+	GNC_TREE_MODEL_ACCOUNT_COL_PRESENT,
+	GNC_TREE_MODEL_ACCOUNT_COL_PRESENT_REPORT,
+	GNC_TREE_MODEL_ACCOUNT_COL_BALANCE,
+	GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_REPORT,
+	GNC_TREE_MODEL_ACCOUNT_COL_CLEARED,
+	GNC_TREE_MODEL_ACCOUNT_COL_CLEARED_REPORT,
+	GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED,
+	GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED_REPORT,
+	GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN,
+	GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN_REPORT,
+	GNC_TREE_MODEL_ACCOUNT_COL_TOTAL,
+	GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_REPORT,
 	GNC_TREE_MODEL_ACCOUNT_COL_NOTES,
+	GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO,
+
 	GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM,
 	GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER,
-	GNC_TREE_MODEL_ACCOUNT_COL_COMMODITY,	
+
+	/* internal hidden columns */
+	GNC_TREE_MODEL_ACCOUNT_COL_ALIGN_RIGHT,
+	GNC_TREE_MODEL_ACCOUNT_COL_COLOR_PRESENT,
+	GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE,
+	GNC_TREE_MODEL_ACCOUNT_COL_COLOR_CLEARED,
+	GNC_TREE_MODEL_ACCOUNT_COL_COLOR_RECONCILED,
+	GNC_TREE_MODEL_ACCOUNT_COL_COLOR_FUTURE_MIN,
+	GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL,
+
 	GNC_TREE_MODEL_ACCOUNT_NUM_COLUMNS
 } GncTreeModelAccountColumn;
 
@@ -38,7 +61,7 @@ typedef enum {
 typedef struct GncTreeModelAccountPrivate GncTreeModelAccountPrivate;
 
 typedef struct {
-	GObject parent;
+	GtkObject parent;
 
 	GncTreeModelAccountPrivate *priv;
 
@@ -46,7 +69,7 @@ typedef struct {
 } GncTreeModelAccount;
 
 typedef struct {
-	GObjectClass parent;
+	GtkObjectClass parent;
 } GncTreeModelAccountClass;
 
 /* function prototypes */
@@ -63,6 +86,8 @@ void          gnc_tree_model_account_set_toplevel          (GncTreeModelAccount 
                                                             Account *toplevel);
 Account      *gnc_tree_model_account_get_toplevel          (GncTreeModelAccount *model);
 
+GtkTreePath  *gnc_tree_model_account_get_path_from_account (GncTreeModelAccount *model,
+                                                            Account *account);
 void          gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
                                                             Account *account,
                                                             GtkTreeIter *iter);
