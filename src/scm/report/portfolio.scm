@@ -157,16 +157,8 @@
 			      (gnc:get-commoditylist-totalavg-prices
 			       commodity-list currency to-date)))
 			 (lambda (foreign domestic date) 
-			   (let ((plist 
-				  (assoc-ref pricealist foreign)))
-			     (if (and plist (not (null? plist)))
-				 (let ((price
-					(gnc:pricelist-price-find-nearest
-					 plist date)))
-				   (if price
-				       price
-				       (gnc:numeric-zero)))
-				 (gnc:numeric-zero))))))
+			   (gnc:pricealist-lookup-nearest-in-time
+			    pricealist foreign date))))
 		      ('pricedb-latest 
 		       (lambda (foreign domestic date) 
 			 (let ((price

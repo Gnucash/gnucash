@@ -1,3 +1,9 @@
+2001-05-15  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/commodity-utilities.scm, report/portfolio.scm: major
+	code cleanup. (gnc:pricealist-lookup-nearest-in-time) code moved
+	from report/portfolio.scm to commodity-utilities.scm.
+
 2001-05-14  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/category-barchart.scm: fix bug.
