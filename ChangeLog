@@ -1,5 +1,9 @@
 2000-06-21  Dave Peticolas  <dave@krondo.com>
 
+	* src/optional/swig/Makefile.am (gnucash-engine-perl5_wrap.c):
+	remove the -stat argument, it's no longer support in later swig
+	versions.
+
 	* src/register/Makefile.am: don't compile table-html.c, it is
 	not needed for linking.
 
