@@ -57,20 +57,22 @@ typedef struct _transaction   Transaction;
 
 /** PROTOTYPES ******************************************************/
 /*
- * The xaccTransSetDate() method will modify the date of the 
- *    transaction.  It will also make sure that the transaction
- *    is stored in proper date order in the accounts.
- */
+ * The xaccMallocTransaction() will malloc memory and initilize it.
+ *    Once created, it is usually unsafe to merely "free" this memory;
+ *    the xaccTransDestroy() method should be called.
+ *
+ * The xaccInitTransaction() method will initialize the indicated memory 
+ *    area.  Handy for on-stack trasnactions.
+ */ 
+Transaction * xaccMallocTransaction (void); 
+void          xaccInitTransaction (Transaction *);
 
-Transaction * xaccMallocTransaction (void);       /* mallocs and inits */
-void          xaccInitTransaction (Transaction *);/* clears a trans struct */
-
-/* The xaccTransactionDestroy() method will remove all 
+/* The xaccTransDestroy() method will remove all 
  *    of the splits from each of thier accounts, free the memory
  *    associated with them.  This routine must be followed by either
  *    an xaccTransCommitEdit(), in which case the transaction 
  *    memory will be freed, or by xaccTransRollbackEdit(), in which 
- *    case nothing at all is freed, and averything is put back into 
+ *    case nothing at all is freed, and everything is put back into 
  *    original order.
  */
 void          xaccTransDestroy (Transaction *);
@@ -101,12 +103,26 @@ void          xaccTransBeginEdit (Transaction *, int defer);
 void          xaccTransCommitEdit (Transaction *);
 void          xaccTransRollbackEdit (Transaction *);
 
+/*
+ * The xaccTransSetDateSecs() method will modify the posted date 
+ *    of the transaction.  (Footnote: this shouldn't matter to a user,
+ *    but anyone modifying the engine should understand that when
+ *    xaccTransCommitEdit() is called, the date order of each of the 
+ *    component splits will be checked, and will be resotred in 
+ *    ascending date order.)
+ *
+ * The xaccTransSetDate() method does the same thing as 
+ *    xaccTransSetDateSecs(), but takes a convenient day-month-year format.
+ *
+ * The xaccTransSetDateToday() method does the same thing as 
+ *    xaccTransSetDateSecs(), but sets the date to the current system
+ *    date/time.
+ */
 void          xaccTransSetDate (Transaction *, int day, int mon, int year);
 void          xaccTransSetDateSecs (Transaction *, time_t);
-
-/* set the transaction date to the current system time. */
 void          xaccTransSetDateToday (Transaction *);
 
+/* set the Num and Description fields ... */
 void          xaccTransSetNum (Transaction *, const char *);
 void          xaccTransSetDescription (Transaction *, const char *);
 
@@ -308,20 +324,20 @@ int xaccCountTransactions (Transaction **tarray);
 int xaccCountSplits (Split **sarray);
 
 /* 
- * convenience routine that is essentially identical to 
- * xaccGetPeerrAccountFromName, except that it accepts the handy
- * transaction as root.
+ * The xaccGetAccountByName() is a convenience routine that 
+ *    is essentially identical to xaccGetPeerAccountFromName(),
+ *    except that it accepts the handy transaction as root.
  */
 Account * xaccGetAccountByName (Transaction *, const char *);
 
 /* 
- * The GetOtherSplit() is a convenience routine that returns
+ * The xaccGetOtherSplit() is a convenience routine that returns
  *    the other of a pair of splits.  If there are more than two 
  *    splits, it returns NULL.
  */
 Split * xaccGetOtherSplit (Split *);
 
-/* The IsPeerSplit() is a convenience routine that returns
+/* The xaccIsPeerSplit() is a convenience routine that returns
  *    a non-zero value if the two splits share a common 
  *    parent transaction, else it returns zero.
  */
