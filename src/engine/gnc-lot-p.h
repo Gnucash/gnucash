@@ -44,8 +44,7 @@
 
 struct gnc_lot_struct
 {
-  /* Unique guid for this lot */
-  GUID guid;
+  QofEntity entity;     /* Unique guid for this lot */
 
   /* Book that this lot belongs to */
   QofBook *book;  

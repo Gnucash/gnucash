@@ -1043,7 +1043,7 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
 
       mark_account (acc);
       if (split->parent)
-        gnc_engine_generate_event (&split->parent->guid, GNC_ID_TRANS, GNC_EVENT_MODIFY);
+        gnc_engine_gen_event (&split->parent->inst.entity, GNC_EVENT_MODIFY);
     }
   }
   xaccAccountCommitEdit(acc);

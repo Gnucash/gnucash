@@ -36,8 +36,7 @@
 struct gnc_price_s
 {
   /* 'public' data fields */
-  GUID    guid;                  /* globally unique price id */
-  QofBook *book;                 /* book to which this price belongs to */
+  QofInstance inst;              /* globally unique object identifier */
 
   GNCPriceDB *db;
   gnc_commodity *commodity;
@@ -50,11 +49,7 @@ struct gnc_price_s
   guint32  version_check;        /* data aging timestamp */
 
   /* 'private' object management fields */
-  QofEntityTable *entity_table;  /* table in which price is stored */
   guint32  refcount;             /* garbage collection reference count */
-  gint32   editlevel;            /* nesting level of begin/end edit calls */
-  gboolean not_saved;            /* price edit saved flag */
-  gboolean do_free;              /* price is going to be destroyed soon */
 };
 
 

@@ -56,6 +56,7 @@
 #include "qofbackend.h"
 #include "qofbook.h"
 #include "qofid.h"
+#include "qofinstance.h"
 
 
 /** STRUCTS *********************************************************/
@@ -90,7 +91,7 @@
 
 struct split_s
 {
-  GUID guid;  /* globally unique id */
+  QofEntity entity;          /* globally unique id */
 
   QofBook *book;             /* The enitity table where this split is stored. */
 
@@ -160,12 +161,7 @@ struct split_s
 
 struct transaction_s
 {
-  /* guid is a globally unique identifier which can be used to
-   * reference the transaction.
-   */
-  GUID guid;
-
-  QofBook *book;         /* The entity_table where the transaction is stored */
+  QofInstance inst;     /* glbally unique id */
 
   Timespec date_entered;     /* date register entry was made              */
   Timespec date_posted;      /* date transaction was posted at bank       */
@@ -180,12 +176,6 @@ struct transaction_s
    * It is meant to be a short descriptive phrase.
    */
   char * description;        
-
-  /* kvp_data is a key-value pair database for storing simple 
-   * "extra" information in splits, transactions, and accounts. 
-   * it's NULL until accessed. */
-  KvpFrame * kvp_data;
-
 
   /* The common_currency field is the balancing common currency for
    * all the splits in the transaction.  Alternate, better(?) name: 
@@ -206,9 +196,6 @@ struct transaction_s
    * a transaction is the same as or different than the one
    * corresponding to the current traversal. */
   unsigned char  marker;      
-
-  gint32 editlevel; /* nestcount of begin/end edit calls */
-  gboolean do_free; /* transaction in process of being destroyed */
 
   /* The orig pointer points at a copy of the original transaction,
    * before editing was started.  This orig copy is used to rollback 

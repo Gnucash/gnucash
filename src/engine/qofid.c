@@ -170,6 +170,7 @@ void
 qof_collection_insert_entity (QofCollection *col, QofEntity *ent)
 {
   if (guid_equal(&ent->guid, guid_null())) return;
+  g_return_if_fail (col->e_type == ent->e_type);
   qof_collection_remove_entity (ent);
   g_hash_table_insert (col->hash_of_entities, &ent->guid, ent);
   ent->collection = col;
