@@ -390,11 +390,24 @@ regRefresh( RegWindow *regData )
       newData[row+ACTN_CELL_R][ACTN_CELL_C]   = XtNewString(buf);
 
       /* ----------------------------------- */
-      /* display depends on account type */
-  {
-      Account *main_acc;
-      /* hack alert xxxxxxxxxxxxxxx broken for gen ledger */
-      main_acc = regData->blackacc[0];
+      /* display of amounts depends on account type */
+      /* For-single-account displays, positive and negative 
+       * quantities are sorted into "payment" and "deposit"
+       * columns. The value in each column is always positive.
+       *
+       * For a general ledger display, the sign is preserved,
+       * and the two columns are interpreted as "debit" and 
+       * "credit" columns.
+       *
+       * Note also, that for single accounts, the amount
+       * is fetched based on the account, since this may 
+       * introduce and extra minus sign, depending on whether
+       * the account is being debited instead of credited.
+       *
+       * For general ledger entries, we can fetch the amount
+       * directly: we already know which accounts should be 
+       * debited and credited.
+       */
       switch (regData->type) {
         case BANK:
         case CASH:
@@ -403,35 +416,63 @@ regRefresh( RegWindow *regData )
         case LIABILITY:
         case INCOME:
         case EXPENSE:
-        case EQUITY:
+        case EQUITY: {
+          Account *main_acc = regData->blackacc[0];
           themount = xaccGetAmount (main_acc, trans);
           if( 0.0 > themount ) {
             sprintf( buf, "%.2f ", -themount );
+            newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString(buf);
+            newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
           } else {
             sprintf( buf, "%.2f ", themount );
+            newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
+            newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString(buf);
           }
+        }  
           break;
+
         case STOCK:
-        case MUTUAL:
+        case MUTUAL: {
+          Account *main_acc = regData->blackacc[0];
           themount = xaccGetShareAmount (main_acc, trans);
           if( 0.0 > themount ) {
             sprintf( buf, "%.3f ", -themount );
+            newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString(buf);
+            newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
           } else {
             sprintf( buf, "%.3f ", themount );
+            newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
+            newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString(buf);
           }
+        }  
+          break;
+
+        case GEN_LEDGER: {
+           Account * acc;
+           int show;
+           themount = trans->damount;
+           sprintf( buf, "%.2f ", themount );
+
+           acc = (Account *) (trans->debit);
+           show = xaccIsAccountInList (acc, regData->blackacc);
+           if (show) {
+              newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString(buf);
+           } else {
+              newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
+           }
+
+           acc = (Account *) (trans->credit);
+           show = xaccIsAccountInList (acc, regData->blackacc);
+           if (show) {
+              newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString(buf);
+           } else {
+              newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
+           }
+        }  
           break;
         default:
           fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", 
                   regData->type);
-      }
-}
-
-      if( 0.0 > themount ) {
-        newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString(buf);
-        newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
-      } else {
-        newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
-        newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString(buf);
       }
       
       /* ----------------------------------- */
@@ -847,38 +888,114 @@ regSaveTransaction( RegWindow *regData, int position )
     {
     String amount;
     float val=0.0;  /* must be float for sscanf to work */
-    double themount = 0.0;
-    /* hack alert xxxxxxxxxx this is incorrect for ledger */
-    Account *main_acc = regData->blackacc[0];
+    double debit_amount = 0.0;
+    double credit_amount = 0.0;
 
     DEBUG("MOD_AMNT\n");
-    /* ...and the amounts */
-    amount = XbaeMatrixGetCell(regData->reg,row+DEP_CELL_R,DEP_CELL_C);
-    sscanf( amount, "%f", &val );
-    themount = val;
-    
+
     val = 0.0;
     amount = XbaeMatrixGetCell(regData->reg,row+PAY_CELL_R,PAY_CELL_C); 
     sscanf( amount, "%f", &val );
-    themount -= val;
-    
-    xaccSetShareAmount (main_acc, trans, themount);
+    debit_amount = val;
 
-    /* Reset so there is only one field filled */
-    if( 0.0 > themount )
-      {
-      /* hack alert -- should keep 3 digits for share amounts */
-      sprintf( buf, "%.2f ", -themount );
-      XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, buf );
-      XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, "" );
+    val = 0.0;
+    amount = XbaeMatrixGetCell(regData->reg,row+DEP_CELL_R,DEP_CELL_C);
+    sscanf( amount, "%f", &val );
+    credit_amount = val;
+    
+    switch (regData->type) {
+      case BANK:
+      case CASH:
+      case ASSET:
+      case CREDIT:
+      case LIABILITY:
+      case INCOME:
+      case EXPENSE:
+      case EQUITY: {
+        double themount = credit_amount - debit_amount;
+        Account *main_acc = regData->blackacc[0];
+        xaccSetShareAmount (main_acc, trans, themount);
+
+        /* Reset so there is only one field filled */
+        if( 0.0 > themount )
+          {
+          sprintf( buf, "%.2f ", -themount );
+          XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, buf );
+          XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, "" );
+          }
+        else
+          {
+          sprintf( buf, "%.2f ", themount );
+          XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, "" );
+          XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, buf );
+          }
+        }
+        break;
+
+      case STOCK:
+      case MUTUAL: {
+        double themount = credit_amount - debit_amount;
+        Account *main_acc = regData->blackacc[0];
+        xaccSetShareAmount (main_acc, trans, themount);
+
+        /* Reset so there is only one field filled */
+        if( 0.0 > themount )
+          {
+          sprintf( buf, "%.3f ", -themount );
+          XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, buf );
+          XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, "" );
+          }
+        else
+          {
+          sprintf( buf, "%.3f ", themount );
+          XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, "" );
+          XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, buf );
+          }
+        }
+        break;
+
+      case GEN_LEDGER: {
+        Account *acc;
+        double themount = 0.0;
+        int show_debit, show_credit;
+
+        acc = (Account *) (trans->debit);
+        show_debit = xaccIsAccountInList (acc, regData->blackacc);
+        acc = (Account *) (trans->credit);
+        show_credit = xaccIsAccountInList (acc, regData->blackacc);
+
+        if (show_debit && show_credit) {
+           /* try to figure out which entry the user changed ! */
+           if (DEQ (debit_amount, trans->damount)) themount = credit_amount;
+           if (DEQ (credit_amount, trans->damount)) themount = debit_amount;
+        } else
+        if (show_debit) {
+           themount = debit_amount;
+        } else
+        if (show_credit) {
+           themount = credit_amount;
+        }
+        trans->damount = themount;
+
+        sprintf( buf, "%.2f ", themount );
+        if (show_debit) {
+          XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, buf );
+        } else {
+          XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, "" );
+        }
+
+        if (show_credit) {
+          XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, buf );
+        } else {
+          XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, "" );
+        }
       }
-    else
-      {
-      sprintf( buf, "%.2f ", themount );
-      XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, "" );
-      XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, buf );
-      }
+        break;
+
+      default:
+        break;
     }
+  }
 
   /* ignore MOD_PRIC for non-stock accounts */
   if( (regData->changed & MOD_PRIC) &&
@@ -1279,7 +1396,8 @@ regWindowLedger( Widget parent, Account **acclist )
         break;
 
       case GEN_LEDGER:
-        regData->cellRowLocation [XTO_CELL_ID]  = 2;
+        regData->cellRowLocation [XTO_CELL_ID]  = 1;
+        regData->cellRowLocation [DEP_CELL_ID]  = 1;  /* shift credit down */
         break;
 
       default:
@@ -1396,8 +1514,8 @@ regWindowLedger( Widget parent, Account **acclist )
         regData -> columnLabels[0][DEP_CELL_C] = "Receive";
         break;
       case ASSET:
-        regData -> columnLabels[0][PAY_CELL_C] = "Decrease";
-        regData -> columnLabels[0][DEP_CELL_C] = "Increase";
+        regData -> columnLabels[0][PAY_CELL_C] = "Depreciation";
+        regData -> columnLabels[0][DEP_CELL_C] = "Appreciation";
         break;
       case CREDIT:
         regData -> columnLabels[0][PAY_CELL_C] = "Charge";
@@ -1423,6 +1541,10 @@ regWindowLedger( Widget parent, Account **acclist )
       case MUTUAL:
         regData -> columnLabels[0][PAY_CELL_C] = "Sold";
         regData -> columnLabels[0][DEP_CELL_C] = "Bought";
+        break;
+      case GEN_LEDGER:
+        regData -> columnLabels[0][PAY_CELL_C] = "Debit";
+        regData -> columnLabels[0][DEP_CELL_C] = "Credit";
         break;
       }
     

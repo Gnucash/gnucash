@@ -22,6 +22,8 @@
 #include "Transaction.h"
 #include "util.h"
 
+/* ------------------------------------------------------ */
+
 int accListCount (Account **list)
 {
    Account *acc;
@@ -36,6 +38,8 @@ int accListCount (Account **list)
    return nacc;
 }   
    
+/* ------------------------------------------------------ */
+
 Account ** accListCopy (Account **list)
 {
    Account **newlist;
@@ -53,6 +57,8 @@ Account ** accListCopy (Account **list)
    return newlist;
 }
 
+/* ------------------------------------------------------ */
+/* sort the transactions in date order */
 Transaction ** accListGetSortedTrans (Account **list)
 {
    Account *acc;

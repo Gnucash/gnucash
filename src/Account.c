@@ -154,6 +154,7 @@ xaccGetAccountID (Account *acc)
 
 /********************************************************************\
 \********************************************************************/
+
 Transaction *
 getTransaction( Account *acc, int num )
   {
@@ -167,6 +168,7 @@ getTransaction( Account *acc, int num )
 
 /********************************************************************\
 \********************************************************************/
+
 int
 getNumOfTransaction( Account *acc, Transaction *trans )
   {
@@ -179,6 +181,7 @@ getNumOfTransaction( Account *acc, Transaction *trans )
 
 /********************************************************************\
 \********************************************************************/
+
 Transaction *
 removeTransaction( Account *acc, int num )
 {
@@ -239,6 +242,7 @@ xaccRemoveTransaction( Account *acc, Transaction *trans)
 
 /********************************************************************\
 \********************************************************************/
+
 int
 insertTransaction( Account *acc, Transaction *trans )
   {
@@ -333,6 +337,7 @@ insertTransaction( Account *acc, Transaction *trans )
 
 /********************************************************************\
 \********************************************************************/
+
 Account *
 xaccGetOtherAccount( Account *acc, Transaction *trans )
 {
@@ -506,6 +511,7 @@ double xaccGetShareBalance (Account *acc, Transaction *trans)
  * Args:   account -- the account for which to recompute balances   *
  * Return: void                                                     *
 \********************************************************************/
+
 void
 xaccRecomputeBalance( Account * acc )
 {
@@ -587,6 +593,7 @@ xaccRecomputeBalance( Account * acc )
  *
  * Return: int -- non-zero if out of order                          *
 \********************************************************************/
+
 int
 xaccCheckDateOrder (Account * acc, Transaction *trans )
 {
@@ -634,6 +641,7 @@ xaccCheckDateOrder (Account * acc, Transaction *trans )
  * Args:   trans -- the transaction to check                        *
  * Return: int -- non-zero if out of order                          *
 \********************************************************************/
+
 int
 xaccCheckDateOrderDE (Transaction *trans )
 {
@@ -651,4 +659,25 @@ xaccCheckDateOrderDE (Transaction *trans )
   return 0;
 }
 
-/*************************** end of file **************************** */
+/********************************************************************\
+\********************************************************************/
+
+int
+xaccIsAccountInList (Account * acc, Account **list)
+{
+   Account * chk;
+   int nacc = 0;
+   int nappearances = 0;
+   if (!acc) return 0;
+   if (!list) return 0;
+
+   chk = list[0];
+   while (chk) {
+      if (acc == chk) nappearances ++;
+      nacc++;
+      chk = list[nacc];
+   }
+   return nappearances;
+}
+
+/*************************** END OF FILE **************************** */
