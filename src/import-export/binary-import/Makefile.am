@@ -78,7 +78,7 @@ gw-binary-import.scm gw-binary-import.c gw-binary-import.h: .scm-links gw-binary
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (set! %load-path (cons \"${PWD}\" %load-path)) \
 	  (primitive-load \"./gw-binary-import-spec.scm\") \
-	  (gw:generate-module \"gw-binary-import\")"
+	  (gw:generate-wrapset \"gw-binary-import\")"
 
 BUILT_SOURCES = gw-binary-import.scm gw-binary-import.c gw-binary-import.h
 CLEANFILES += gw-binary-import.scm gw-binary-import.c gw-binary-import.h gw-binary-import.html
