@@ -1,5 +1,8 @@
 2001-11-21  Rob Browning  <rlb@defaultvalue.org>
 
+	* README: add a note to the Running section indicating that it's
+	obsolete.  We'll need to update this soon.
+
 	* src/scm/startup-design.txt: some updates -- needs overhaul.
 
 	* src/bin/guile.in: trivial guile override wrapper.
