@@ -1,3 +1,11 @@
+2000-06-12  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-transfer.c: don't use 'Categories', it's a
+	confusing term.
+
+	* src/SplitLedger.c (LedgerAutoCompletion): open transaction
+	without deferring rebalancing.
+
 2000-06-09  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/transaction-report.scm (): commented out

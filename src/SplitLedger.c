@@ -871,6 +871,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       if (auto_trans == NULL)
         return;
 
+      xaccTransBeginEdit(trans, GNC_F);
       gnc_copy_trans_onto_trans(auto_trans, trans, GNC_F);
 
       if (info->default_source_account != NULL)
@@ -2175,8 +2176,8 @@ xaccSRRedrawRegEntry (SplitRegister *reg)
 }
 
 /* ======================================================== */
-/* Copy from the register object to scheme.
- * This needs to be in sync with xaccSRSaveRegEntry. */
+/* Copy from the register object to scheme. This needs to be
+ * in sync with xaccSRSaveRegEntry and xaccSRSaveChangedCells. */
 
 static gncBoolean
 xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm)
@@ -2345,6 +2346,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, gncBoolean do_commit)
    SRInfo *info = xaccSRGetInfo(reg);
    Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
    Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
+   Transaction *blank_trans = xaccSplitGetParent(blank_split);
    unsigned int changed;
    Transaction *trans;
    Split *split;
@@ -2361,12 +2363,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, gncBoolean do_commit)
    changed = xaccSplitRegisterGetChangeFlag (reg);
    if (!changed)
    {
-     Transaction *blank_trans;
-
      if (!do_commit)
        return GNC_F;
-
-     blank_trans = xaccSplitGetParent(blank_split);
 
      if (trans == blank_trans)
      {
@@ -2401,13 +2399,13 @@ xaccSRSaveRegEntry (SplitRegister *reg, gncBoolean do_commit)
    if (pending_trans != trans) {
      if (xaccTransIsOpen (pending_trans))
        xaccTransCommitEdit (pending_trans);
-     xaccTransBeginEdit (trans, 0);
+     xaccTransBeginEdit (trans, GNC_F);
      pending_trans = trans;
      info->pending_trans_guid = *xaccTransGetGUID(trans);
    }
 
    /* If we are committing the blank split, add it to the account now */
-   if (xaccTransGetSplit(trans, 0) == blank_split)
+   if (trans == blank_trans)
    {
      xaccAccountInsertSplit (info->default_source_account, blank_split);
      xaccTransSetDateEnteredSecs(trans, time(NULL));
@@ -2429,7 +2427,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, gncBoolean do_commit)
         xaccAccountInsertSplit (info->default_source_account, split);
 
       assert (reg->table->current_cursor);
-      reg->table->current_cursor->user_data = (void *) split;
+      reg->table->current_cursor->user_data = split;
 
       trans_split = xaccSRGetCurrentTransSplit (reg);
       if ((info->cursor_hint_trans == trans) &&
@@ -2449,8 +2447,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, gncBoolean do_commit)
     * official part of the account. Set the blank split to NULL, so
     * we can be sure of getting a new split. Also, save the date for
     * the new blank split. */
-   split = xaccTransGetSplit (trans, 0);
-   if (split == blank_split)
+   if (trans == blank_trans)
    {
      if (do_commit)
      {
