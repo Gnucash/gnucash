@@ -34,11 +34,6 @@
 
 #include "gnc-numeric.h"
 
-/* TODO 
- * - use longer intermediate values to make operations
- *   64-bit-overflow-proof 
- */
-
 /* static short module = MOD_ENGINE; */
 
 /* =============================================================== */
@@ -365,8 +360,8 @@ static const char * _numeric_error_strings[] =
   "No error",
   "Argument is not a valid number",
   "Intermediate result overflow",
-  "Argument denominators differ in GNC_DENOM_FIXED operation",
-  "Remainder part in GNC_RND_NEVER operation"
+  "Argument denominators differ in GNC_HOW_DENOM_FIXED operation",
+  "Remainder part in GNC_HOW_RND_NEVER operation"
 };
 #endif
 
@@ -606,7 +601,7 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
   }
 
   if((denom == GNC_DENOM_AUTO) && 
-     (how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_FIXED) 
+     (how & GNC_NUMERIC_DENOM_MASK) == GNC_HOW_DENOM_FIXED) 
   {
     if(a.denom == b.denom) {
       denom = a.denom;
@@ -668,7 +663,7 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
   }
   
   if((denom == GNC_DENOM_AUTO) &&
-     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_LCD)) 
+     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_HOW_DENOM_LCD)) 
   {
     denom = gnc_numeric_lcd(a, b);
     how   = how & GNC_NUMERIC_RND_MASK;
@@ -711,7 +706,7 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
   }
 
   if((denom == GNC_DENOM_AUTO) && 
-     (how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_FIXED) {
+     (how & GNC_NUMERIC_DENOM_MASK) == GNC_HOW_DENOM_FIXED) {
     if(a.denom == b.denom) {
       denom = a.denom;
     }
@@ -758,7 +753,7 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
 #endif
   
   if((denom == GNC_DENOM_AUTO) &&
-     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_LCD)) 
+     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_HOW_DENOM_LCD)) 
   {
     denom = gnc_numeric_lcd(a, b);
     how   = how & GNC_NUMERIC_RND_MASK;
@@ -785,7 +780,7 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
   }
 
   if((denom == GNC_DENOM_AUTO) && 
-     (how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_FIXED) 
+     (how & GNC_NUMERIC_DENOM_MASK) == GNC_HOW_DENOM_FIXED) 
   {
     if(a.denom == b.denom) 
     {
@@ -880,7 +875,7 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
   }
   
   if((denom == GNC_DENOM_AUTO) &&
-     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_LCD)) 
+     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_HOW_DENOM_LCD)) 
   {
     denom = gnc_numeric_lcd(a, b);
     how   = how & GNC_NUMERIC_RND_MASK;
@@ -942,17 +937,17 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
     switch(how & GNC_NUMERIC_DENOM_MASK) 
     {
     default:
-    case GNC_DENOM_LCD:   /* LCD is meaningless with AUTO in here */
-    case GNC_DENOM_EXACT:
+    case GNC_HOW_DENOM_LCD:   /* LCD is meaningless with AUTO in here */
+    case GNC_HOW_DENOM_EXACT:
       return in;
       break;
       
-    case GNC_DENOM_REDUCE:
+    case GNC_HOW_DENOM_REDUCE:
       /* reduce the input to a relatively-prime fraction */
       return gnc_numeric_reduce(in);
       break;
       
-    case GNC_DENOM_FIXED:
+    case GNC_HOW_DENOM_FIXED:
       if(in.denom != denom) {
         return gnc_numeric_error(GNC_ERROR_DENOM_DIFF);
       }
@@ -961,7 +956,7 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
       }
       break;
       
-    case GNC_DENOM_SIGFIG:
+    case GNC_HOW_DENOM_SIGFIG:
       ratio    = fabs(gnc_numeric_to_double(in));
       if(ratio < 10e-20) {
         logratio = 0;
@@ -971,7 +966,7 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
         logratio = ((logratio > 0.0) ? 
                     (floor(logratio)+1.0) : (ceil(logratio)));
       }
-      sigfigs  = GNC_NUMERIC_GET_SIGFIGS(how);
+      sigfigs  = GNC_HOW_GET_SIGFIGS(how);
 
       if(sigfigs-logratio >= 0) {
         denom    = (gint64)(pow(10, sigfigs-logratio));
@@ -980,7 +975,7 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
         denom    = -((gint64)(pow(10, logratio-sigfigs)));
       }
       
-      how = how & ~GNC_DENOM_SIGFIG & ~GNC_NUMERIC_SIGFIGS_MASK;
+      how = how & ~GNC_HOW_DENOM_SIGFIG & ~GNC_NUMERIC_SIGFIGS_MASK;
       break;
 
     }
@@ -1030,26 +1025,26 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
   if(remainder > 0) 
   {
     switch(how) {
-    case GNC_RND_FLOOR:
+    case GNC_HOW_RND_FLOOR:
       if(sign < 0) {
         out.num = out.num + 1;
       }
       break;
       
-    case GNC_RND_CEIL:
+    case GNC_HOW_RND_CEIL:
       if(sign > 0) {
         out.num = out.num + 1;
       }
       break;
       
-    case GNC_RND_TRUNC:
+    case GNC_HOW_RND_TRUNC:
       break;
 
-    case GNC_RND_PROMOTE:
+    case GNC_HOW_RND_PROMOTE:
       out.num = out.num + 1;
       break;
       
-    case GNC_RND_ROUND_HALF_DOWN:
+    case GNC_HOW_RND_ROUND_HALF_DOWN:
       if(denom_neg) {
         if((2 * remainder) > in.denom*denom) {
           out.num = out.num + 1;
@@ -1060,7 +1055,7 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
       }
       break;
       
-    case GNC_RND_ROUND_HALF_UP:
+    case GNC_HOW_RND_ROUND_HALF_UP:
       if(denom_neg) {
         if((2 * remainder) >= in.denom*denom) {
           out.num = out.num + 1;
@@ -1071,7 +1066,7 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
       }
       break;
       
-    case GNC_RND_ROUND:
+    case GNC_HOW_RND_ROUND:
       if(denom_neg) {
         if((2 * remainder) > in.denom*denom) {
           out.num = out.num + 1;
@@ -1094,7 +1089,7 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
       }    
       break;
       
-    case GNC_RND_NEVER:
+    case GNC_HOW_RND_NEVER:
       return gnc_numeric_error(GNC_ERROR_REMAINDER);
       break;
     }
@@ -1108,7 +1103,7 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
 
 /********************************************************************
  ** reduce a fraction by GCF elimination.  This is NOT done as a
- *  part of the arithmetic API unless GNC_DENOM_REDUCE is specified 
+ *  part of the arithmetic API unless GNC_HOW_DENOM_REDUCE is specified 
  *  as the output denominator.
  ********************************************************************/
 
@@ -1154,7 +1149,8 @@ double_to_gnc_numeric(double in, gint64 denom, gint how)
   double logval; 
   double sigfigs;
 
-  if((denom == GNC_DENOM_AUTO) && (how & GNC_DENOM_SIGFIG)) {
+  if((denom == GNC_DENOM_AUTO) && (how & GNC_HOW_DENOM_SIGFIG)) 
+  {
     if(fabs(in) < 10e-20) {
       logval = 0;
     }
@@ -1163,7 +1159,7 @@ double_to_gnc_numeric(double in, gint64 denom, gint how)
       logval   = ((logval > 0.0) ? 
                   (floor(logval)+1.0) : (ceil(logval)));
     }
-    sigfigs  = GNC_NUMERIC_GET_SIGFIGS(how);
+    sigfigs  = GNC_HOW_GET_SIGFIGS(how);
     if(sigfigs-logval >= 0) {
       denom    = (gint64)(pow(10, sigfigs-logval));
     }
@@ -1171,7 +1167,7 @@ double_to_gnc_numeric(double in, gint64 denom, gint how)
       denom    = -((gint64)(pow(10, logval-sigfigs)));
     }
 
-    how =  how & ~GNC_DENOM_SIGFIG & ~GNC_NUMERIC_SIGFIGS_MASK;
+    how =  how & ~GNC_HOW_DENOM_SIGFIG & ~GNC_NUMERIC_SIGFIGS_MASK;
   }
 
   int_part  = (gint64)(floor(fabs(in)));
@@ -1181,24 +1177,24 @@ double_to_gnc_numeric(double in, gint64 denom, gint how)
   frac_part = frac_part * (double)denom;
 
   switch(how & GNC_NUMERIC_RND_MASK) {
-  case GNC_RND_FLOOR:
+  case GNC_HOW_RND_FLOOR:
     frac_int = (gint64)floor(frac_part);
     break;
 
-  case GNC_RND_CEIL:
+  case GNC_HOW_RND_CEIL:
     frac_int = (gint64)ceil(frac_part);
     break;
 
-  case GNC_RND_TRUNC:
+  case GNC_HOW_RND_TRUNC:
     frac_int = (gint64)frac_part;
     break;
     
-  case GNC_RND_ROUND:
-  case GNC_RND_ROUND_HALF_UP:
+  case GNC_HOW_RND_ROUND:
+  case GNC_HOW_RND_ROUND_HALF_UP:
     frac_int = (gint64)rint(frac_part);
     break;
 
-  case GNC_RND_NEVER:
+  case GNC_HOW_RND_NEVER:
     frac_int = (gint64)floor(frac_part);
     if(frac_part != (double) frac_int) {
       /* signal an error */
@@ -1226,21 +1222,6 @@ gnc_numeric_to_double(gnc_numeric in)
   }
 }
 
-
-/********************************************************************
- *  gnc_numeric_create
- ********************************************************************/
-
-gnc_numeric
-gnc_numeric_create(gint64 num, gint64 denom) 
-{
-  gnc_numeric out;
-  out.num = num;
-  out.denom = denom;
-  return out;
-}
-
-
 /********************************************************************
  *  gnc_numeric_error
  ********************************************************************/
@@ -1249,39 +1230,6 @@ gnc_numeric
 gnc_numeric_error(GNCNumericErrorCode error_code) 
 {
   return gnc_numeric_create(error_code, 0LL);
-}
-
-
-/********************************************************************
- *  gnc_numeric_zero
- ********************************************************************/
-
-gnc_numeric
-gnc_numeric_zero(void) 
-{
-  return gnc_numeric_create(0LL, 1LL);
-}
-
-
-/********************************************************************
- *  gnc_numeric_num
- ********************************************************************/
-
-gint64
-gnc_numeric_num(gnc_numeric a) 
-{
-  return a.num;
-}
-
-
-/********************************************************************
- *  gnc_numeric_denom
- ********************************************************************/
-
-gint64
-gnc_numeric_denom(gnc_numeric a) 
-{
-  return a.denom;
 }
 
 
@@ -1297,9 +1245,9 @@ gnc_numeric_add_with_error(gnc_numeric a, gnc_numeric b,
 
   gnc_numeric sum   = gnc_numeric_add(a, b, denom, how);
   gnc_numeric exact = gnc_numeric_add(a, b, GNC_DENOM_AUTO, 
-                                      GNC_DENOM_REDUCE);
+                                      GNC_HOW_DENOM_REDUCE);
   gnc_numeric err   = gnc_numeric_sub(sum, exact, GNC_DENOM_AUTO,
-                                      GNC_DENOM_REDUCE);
+                                      GNC_HOW_DENOM_REDUCE);
 
   if(error) {
     *error = err;
@@ -1318,9 +1266,9 @@ gnc_numeric_sub_with_error(gnc_numeric a, gnc_numeric b,
 {
   gnc_numeric diff  = gnc_numeric_sub(a, b, denom, how);
   gnc_numeric exact = gnc_numeric_sub(a, b, GNC_DENOM_AUTO,
-                                      GNC_DENOM_REDUCE);
+                                      GNC_HOW_DENOM_REDUCE);
   gnc_numeric err   = gnc_numeric_sub(diff, exact, GNC_DENOM_AUTO, 
-                                      GNC_DENOM_REDUCE);
+                                      GNC_HOW_DENOM_REDUCE);
   if(error) {
     *error = err;
   }
@@ -1339,9 +1287,9 @@ gnc_numeric_mul_with_error(gnc_numeric a, gnc_numeric b,
 {
   gnc_numeric prod  = gnc_numeric_mul(a, b, denom, how);
   gnc_numeric exact = gnc_numeric_mul(a, b, GNC_DENOM_AUTO,
-                                      GNC_DENOM_REDUCE);
+                                      GNC_HOW_DENOM_REDUCE);
   gnc_numeric err   = gnc_numeric_sub(prod, exact, GNC_DENOM_AUTO,
-                                      GNC_DENOM_REDUCE);
+                                      GNC_HOW_DENOM_REDUCE);
   if(error) {
     *error = err;
   }
@@ -1360,9 +1308,9 @@ gnc_numeric_div_with_error(gnc_numeric a, gnc_numeric b,
 {
   gnc_numeric quot  = gnc_numeric_div(a, b, denom, how);
   gnc_numeric exact = gnc_numeric_div(a, b, GNC_DENOM_AUTO, 
-                                      GNC_DENOM_REDUCE);
+                                      GNC_HOW_DENOM_REDUCE);
   gnc_numeric err   = gnc_numeric_sub(quot, exact, 
-                                      GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+                                      GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
   if(error) {
     *error = err;
   }
@@ -1444,25 +1392,25 @@ main(int argc, char ** argv)
   
   gnc_numeric err;
 
-  c = gnc_numeric_add_with_error(a, b, 100, GNC_RND_ROUND, &err);
+  c = gnc_numeric_add_with_error(a, b, 100, GNC_HOW_RND_ROUND, &err);
   printf("add 100ths/error : %s + %s = %s + (error) %s\n\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
          gnc_numeric_print(c),
          gnc_numeric_print(err));
   
-  c = gnc_numeric_sub_with_error(a, b, 100, GNC_RND_FLOOR, &err);
+  c = gnc_numeric_sub_with_error(a, b, 100, GNC_HOW_RND_FLOOR, &err);
   printf("sub 100ths/error : %s - %s = %s + (error) %s\n\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
          gnc_numeric_print(c),
          gnc_numeric_print(err));
   
-  c = gnc_numeric_mul_with_error(a, b, 100, GNC_RND_ROUND, &err);
+  c = gnc_numeric_mul_with_error(a, b, 100, GNC_HOW_RND_ROUND, &err);
   printf("mul 100ths/error : %s * %s = %s + (error) %s\n\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
          gnc_numeric_print(c),
          gnc_numeric_print(err));
   
-  c = gnc_numeric_div_with_error(a, b, 100, GNC_RND_ROUND, &err);
+  c = gnc_numeric_div_with_error(a, b, 100, GNC_HOW_RND_ROUND, &err);
   printf("div 100ths/error : %s / %s = %s + (error) %s\n\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
          gnc_numeric_print(c),
@@ -1470,11 +1418,11 @@ main(int argc, char ** argv)
   
   printf("multiply (EXACT): %s * %s = %s\n",
 	 gnc_numeric_print(a), gnc_numeric_print(b),
-	 gnc_numeric_print(gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT)));
+	 gnc_numeric_print(gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT)));
 
   printf("multiply (REDUCE): %s * %s = %s\n",
 	 gnc_numeric_print(a), gnc_numeric_print(b),
-	 gnc_numeric_print(gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_REDUCE)));
+	 gnc_numeric_print(gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE)));
 
 
   return 0;
