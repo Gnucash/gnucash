@@ -119,11 +119,13 @@ get_earliest_in_book (QofBook *book)
 {
   QofQuery *q;
   GSList *p1, *p2;
+  GList *res;
   time_t earliest;
 
   q = qof_query_create_for(GNC_ID_SPLIT);
   qof_query_set_max_results(q, 5);
 
+  /* Sort by transaction date */
   p1 = g_slist_prepend (NULL, TRANS_DATE_POSTED);
   p1 = g_slist_prepend (p1, SPLIT_TRANS);
   p2 = g_slist_prepend (NULL, QUERY_DEFAULT_SORT);
@@ -131,8 +133,12 @@ get_earliest_in_book (QofBook *book)
 
   qof_query_set_sort_increasing (q, TRUE, TRUE, TRUE);
 
+  /* Run the query, find the earliest transaction date */
+  res = qof_query_run (q);
+printf ("duude results=%p\n", res);
   earliest = xaccQueryGetEarliestDateFound (q);
 
+  qof_query_destroy (q);
   return earliest;
 }
 
@@ -162,17 +168,19 @@ printf ("the earliest is %ld %s\n", info->earliest, ctime (&info->earliest));
 
   info->period_menu = GNC_FREQUENCY (
           gnc_frequency_new (info->period, info->start_date));
+
+  /* Change the text so that its more mainingful for this druid */
+  gnc_frequency_set_frequency_label_text(info->period_menu, _("Period:"));
+  gnc_frequency_set_startdate_label_text(info->period_menu, _("Closing Date:"));
+
+  /* Reparent to the correct location */
   w = glade_xml_get_widget (xml, "period box");
   gtk_box_pack_start (GTK_BOX (w), GTK_WIDGET (info->period_menu),
          TRUE, TRUE, 0);
-printf ("postbox\n");
 
-  // info->closing_date_edit = 
-  //      GNOME_DATE_EDIT (glade_xml_get_widget (xml, "closing date edit"));
   info->earliest_date = 
         GTK_LABEL (glade_xml_get_widget (xml, "earliest trans label"));
 
-// "closing date box"
 
   /* generic finished/close/abort signals */
   gtk_signal_connect (GTK_OBJECT (info->window), "destroy",
@@ -185,15 +193,9 @@ printf ("postbox\n");
   gtk_signal_connect (GTK_OBJECT (page), "finish",
                       GTK_SIGNAL_FUNC (ap_finish), info);
 
-printf ("presig\n");
   /* User changes the accouting period or date signals */
   gtk_signal_connect (GTK_OBJECT (info->period_menu), "changed",
                       GTK_SIGNAL_FUNC (ap_changed), info);
-printf ("postsig\n");
-/*
-  gtk_signal_connect (GTK_OBJECT (info->closing_date_edit), "date_changed",
-                      GTK_SIGNAL_FUNC (ap_changed), info);
-*/
 }
 
 
