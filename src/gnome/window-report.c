@@ -362,7 +362,10 @@ static void
 gnc_report_window_set_back_button(gnc_report_window * win, int enabled) {
   GnomeApp    * app = win->mc->app;
   GnomeUIInfo * info;
- 
+
+  /* the code below is broken, so just return */
+  return;
+
   if(app) {
     info = gnome_mdi_get_child_menu_info(app);
     if(info) gtk_widget_set_sensitive(info[0].widget, enabled);
@@ -373,7 +376,10 @@ static void
 gnc_report_window_set_fwd_button(gnc_report_window * win, int enabled) {
   GnomeApp    * app = win->mc->app;
   GnomeUIInfo * info;
- 
+
+  /* the code below is broken, so just return */
+  return;
+
   if(app) {
     info = gnome_mdi_get_child_menu_info(app);
     if(info) gtk_widget_set_sensitive(info[1].widget, enabled);
