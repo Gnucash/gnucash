@@ -577,17 +577,14 @@ gnc_reconcile_list_recompute_widths (GNCReconcileList *list, gint allocated)
       desc_width = width;
   }
 
-  /* Did the list use its full allocation? */
+  /* Did the list use its full allocation? 
+   *
+   * Add/subtract any underage/overage to/from the description column
+   */
   if (allocated <= 1)
     allocated = list->prev_allocation;
-  if (allocated <= 0)
-    return;
   list->prev_allocation = allocated;
   excess = allocated - total_width - VSCROLLBAR_SLOP;
-  if (excess <= 0)
-    return;
-
-  /* Add any extra allocation to the description column */
   gtk_clist_set_column_width (clist, 2, desc_width + excess);
 }
 
@@ -968,10 +965,13 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
   {
     gnc_numeric amount;
     Timespec ts;
+    const gchar *trans_num;
     char recn;
-    int row;
+    int row, len;
 
     split = splits->data;
+    trans = xaccSplitGetParent (split);
+    trans_num = xaccTransGetNum (trans);
 
     recn = xaccSplitGetReconcile(split);
     if ((recn != NREC) && (recn != CREC))
@@ -979,17 +979,25 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
 
     amount = xaccSplitGetAmount (split);
 
-    if (gnc_numeric_negative_p (amount) && list->list_type == RECLIST_DEBIT)
-      continue;
-    if (!gnc_numeric_negative_p (amount) && list->list_type == RECLIST_CREDIT)
-      continue;
-
-    trans = xaccSplitGetParent (split);
+    if (gnc_numeric_negative_p (amount)) {
+      if (list->list_type == RECLIST_DEBIT) {
+	continue;
+      }
+    } else if (gnc_numeric_positive_p (amount)) {
+      if (list->list_type == RECLIST_CREDIT) {
+	continue;
+      }
+    } else {
+      len = trans_num ? strlen(trans_num) : 0;
+      if ((len  && (list->list_type == RECLIST_DEBIT)) ||
+	  (!len && (list->list_type == RECLIST_CREDIT)))
+	continue;
+    }
 
     xaccTransGetDatePostedTS (trans, &ts);
 
     strings[0] = gnc_print_date (ts);
-    strings[1] = xaccTransGetNum (trans);
+    strings[1] = trans_num;
     strings[2] = xaccTransGetDescription (trans);
     strings[3] = xaccPrintAmount (gnc_numeric_abs (amount), print_info);
     strings[4] = "";

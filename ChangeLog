@@ -11,6 +11,15 @@
 
 	* src/gnome-utils/dialog-utils.h: Added many comments for docs.
 
+2002-11-22  David Hampton  <hampton@employees.org>
+
+	* src/gnome/reconcile-list.c
+	(gnc_reconcile_list_recompute_widths): Always make the contents of
+	the reconciliation window fit within the allocated space.
+	(gnc_reconcile_list_fill): For a split with a zero value, if the
+	number field is non-null then assume this split is for a check and
+	force it the credit list.
+
 2002-11-22  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome-utils/dialog-account-pick.[hc]: Move the account
