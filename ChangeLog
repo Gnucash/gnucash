@@ -1,7 +1,18 @@
+2003-02-02  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-utils.c, po/de.po: Recognize
+	even more error codes from OpenHBCI. Yes, I know this breaks
+	string freeze -- but these strings *really* *only* apply to German
+	users, so I just fixed the translation myself.
+
 2003-02-01  Benoit Grégoire  <bock@step.polymtl.ca>
 
-	* src/import-export/import-utilities.c: Build on Nigel's patch.  This hopefully permanently closes http://bugzilla.gnome.org/show_bug.cgi?id=101705.
-	* src/import-export/Makefile.am:  No longuer compile Christian's old matcher.
+	* src/import-export/import-utilities.c: Build on Nigel's patch.
+	This hopefully permanently closes
+	http://bugzilla.gnome.org/show_bug.cgi?id=101705.
+	
+	* src/import-export/Makefile.am: No longuer compile Christian's
+	old matcher.
 
 2003-02-01  Christian Stimming  <stimming@tuhh.de>
 

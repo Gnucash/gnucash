@@ -25,8 +25,8 @@
 
 #include <gnome.h>
 #include <errno.h>
-#include <openhbci/error.h>
 #include <openhbci.h>
+#include <openhbci/error.h>
 
 #include "gnc-ui.h"
 #include "gnc-hbci-kvp.h"
@@ -260,6 +260,29 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
 				       TRUE,
 				       _("The PIN you entered was wrong.\n"
 					 "Do you want to try again?"));
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>5)
+  case HBCI_ERROR_CODE_PIN_WRONG_0:
+    GNCInteractor_erasePIN (inter);
+    return gnc_verify_dialog_parented (parent,
+				       TRUE,
+				       _("The PIN you entered was wrong.\n"
+					 "ATTENTION: You have zero further wrong retries left!\n"
+					 "Do you want to try again?"));
+  case HBCI_ERROR_CODE_PIN_WRONG_1:
+    GNCInteractor_erasePIN (inter);
+    return gnc_verify_dialog_parented (parent,
+				       TRUE,
+				       _("The PIN you entered was wrong.\n"
+					 "You have one further wrong retry left.\n"
+					 "Do you want to try again?"));
+  case HBCI_ERROR_CODE_PIN_WRONG_2:
+    GNCInteractor_erasePIN (inter);
+    return gnc_verify_dialog_parented (parent,
+				       TRUE,
+				       _("The PIN you entered was wrong.\n"
+					 "You have two further wrong retries left.\n"
+					 "Do you want to try again?"));
+#endif
   case HBCI_ERROR_CODE_PIN_ABORTED:
     /*     printf("gnc_hbci_error_feedback: PIN dialog was aborted.\n"); */
     return FALSE;
@@ -269,9 +292,25 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
 				       TRUE,
 				       _("The PIN you entered was too short.\n"
 					 "Do you want to try again?"));
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>5)
+  case HBCI_ERROR_CODE_CARD_DESTROYED:
+    GNCInteractor_hide (inter);
+    gnc_error_dialog_parented
+      (GTK_WINDOW (parent),
+       _("Unfortunately you entered a wrong PIN for too many times.\n"
+	 "Your chip card is therefore destroyed. Aborting."));
+    return FALSE;
+#endif
   case HBCI_ERROR_CODE_FILE_NOT_FOUND:
     /*     printf("gnc_hbci_error_feedback: File not found error.\n"); */
     return FALSE;
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>5)
+  case HBCI_ERROR_CODE_NO_CARD:
+    return gnc_verify_dialog_parented (parent,
+				       TRUE,
+				       _("No chip card has been found in the chip card reader.\n"
+					 "Do you want to try again?"));
+#endif
   case HBCI_ERROR_CODE_JOB_NOT_SUPPORTED:
     GNCInteractor_hide (inter);
     gnc_error_dialog_parented 

@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2003-01-30 23:35+0100\n"
-"PO-Revision-Date: 2003-02-01 23:09+0100\n"
+"POT-Creation-Date: 2003-02-02 10:33+0100\n"
+"PO-Revision-Date: 2003-02-02 10:37+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -361,7 +361,7 @@ msgstr "-- Verschiedene Kurs-Herkunft --"
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:142 intl-scm/guile-strings.c:3075
 #: intl-scm/guile-strings.c:3123 src/app-utils/gnc-ui-util.c:301
-#: src/business/business-gnome/dialog-invoice.c:2113
+#: src/business/business-gnome/dialog-invoice.c:2141
 #: src/gnome/dialog-commodities.c:331 src/gnome/dialog-price-edit-db.c:499
 #: src/gnome/glade/account.glade.h:72 src/gnome/glade/commodities.glade.h:12
 #: src/gnome/glade/price.glade.h:28
@@ -614,7 +614,7 @@ msgstr "Buchungstext"
 #: intl-scm/guile-strings.c:2093 intl-scm/guile-strings.c:2135
 #: intl-scm/guile-strings.c:2311 intl-scm/guile-strings.c:2417
 #: intl-scm/guile-strings.c:2453 intl-scm/guile-strings.c:3117
-#: src/business/business-gnome/dialog-invoice.c:2119
+#: src/business/business-gnome/dialog-invoice.c:2147
 #: src/business/business-gnome/dialog-order.c:866
 #: src/business/business-gnome/glade/payment.glade.h:5
 #: src/gnome/reconcile-list.c:200
@@ -1049,8 +1049,8 @@ msgstr "Benutzername: "
 
 #. src/business/business-reports/invoice.scm
 #: intl-scm/guile-strings.c:3321
-#: src/business/business-gnome/dialog-invoice.c:2091
-#: src/business/business-gnome/dialog-invoice.c:2108
+#: src/business/business-gnome/dialog-invoice.c:2119
+#: src/business/business-gnome/dialog-invoice.c:2136
 #: src/business/business-gnome/dialog-job.c:532
 #: src/business/business-gnome/dialog-job.c:542
 #: src/business/business-gnome/dialog-order.c:857
@@ -1095,14 +1095,14 @@ msgstr "Eine neue Rechnung anlegen"
 msgid "Customer: "
 msgstr "Kunde: "
 
-#: src/business/business-gnome/dialog-invoice.c:2097
+#: src/business/business-gnome/dialog-invoice.c:2125
 #: src/business/business-gnome/dialog-order.c:847
 #: src/business/business-gnome/glade/invoice.glade.h:15
 #: src/business/business-gnome/glade/order.glade.h:6
 msgid "Date Opened"
 msgstr "Eröffnungsdatum"
 
-#: src/business/business-gnome/dialog-invoice.c:2093
+#: src/business/business-gnome/dialog-invoice.c:2121
 #: src/business/business-gnome/glade/invoice.glade.h:16
 msgid "Date Posted"
 msgstr "Buchungsdatum"
@@ -1165,7 +1165,7 @@ msgstr "Geben Sie eine Zahlung für den Mandanten dieser Rechnung ein"
 msgid "Invoice Entries"
 msgstr "Rechnungseinträge"
 
-#: src/business/business-gnome/dialog-invoice.c:2102
+#: src/business/business-gnome/dialog-invoice.c:2130
 #: src/business/business-gnome/glade/invoice.glade.h:32
 msgid "Invoice ID"
 msgstr "Rechnungsnummer"
@@ -1207,7 +1207,7 @@ msgstr "Neues Konto"
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2925 intl-scm/guile-strings.c:2927
-#: src/business/business-gnome/dialog-invoice.c:1574
+#: src/business/business-gnome/dialog-invoice.c:1602
 #: src/business/business-gnome/glade/invoice.glade.h:41
 msgid "New Invoice"
 msgstr "Neue Rechnung"
@@ -1731,7 +1731,7 @@ msgstr "Rechnungen des Kunden"
 #: intl-scm/guile-strings.c:2941 intl-scm/guile-strings.c:2943
 #: intl-scm/guile-strings.c:2971 intl-scm/guile-strings.c:2973
 #: src/business/business-gnome/dialog-customer.c:797
-#: src/business/business-gnome/dialog-invoice.c:2079
+#: src/business/business-gnome/dialog-invoice.c:2107
 #: src/business/business-gnome/dialog-job.c:520
 msgid "Process Payment"
 msgstr "Zahlung verarbeiten"
@@ -1766,7 +1766,7 @@ msgstr "Kontaktadresse"
 #: intl-scm/guile-strings.c:2911 intl-scm/guile-strings.c:3067
 #: intl-scm/guile-strings.c:3203
 #: src/business/business-gnome/dialog-customer.c:820
-#: src/business/business-gnome/dialog-invoice.c:2110
+#: src/business/business-gnome/dialog-invoice.c:2138
 #: src/business/business-gnome/dialog-job.c:544
 #: src/business/business-gnome/dialog-order.c:859
 #: src/business/business-gnome/dialog-vendor.c:677
@@ -1834,120 +1834,120 @@ msgstr "Benutzername"
 #. * label in the frame and means
 #. * e.g. customer i.e. the company being
 #. * invoiced.
-#: src/business/business-gnome/dialog-invoice.c:271
+#: src/business/business-gnome/dialog-invoice.c:274
 #: src/business/business-gnome/dialog-order.c:142
 msgid "You need to supply Billing Information."
 msgstr "Sie müssen Rechnungsdaten eingeben."
 
-#: src/business/business-gnome/dialog-invoice.c:425
+#: src/business/business-gnome/dialog-invoice.c:428
 msgid "Are you sure you want to delete the selected entry?"
 msgstr "Sind Sie sicher, dass Sie den gewählten Posten löschen möchten?"
 
-#: src/business/business-gnome/dialog-invoice.c:427
+#: src/business/business-gnome/dialog-invoice.c:430
 msgid ""
 "This entry is attached to an order and will be deleted from that as well!"
 msgstr ""
 "Dieser Posten ist mit einer Bestellung verbunden und würde dadurch auch von "
 "der Bestellung gelöscht."
 
-#: src/business/business-gnome/dialog-invoice.c:534
+#: src/business/business-gnome/dialog-invoice.c:537
 msgid "The Invoice must have at least one Entry."
 msgstr "Die Rechnung muß mindestens einen Posten enthalten."
 
 #. Ok, we can post this invoice.  Ask for verification, set the due date,
 #. * post date, and posted account
 #.
-#: src/business/business-gnome/dialog-invoice.c:541
+#: src/business/business-gnome/dialog-invoice.c:544
 msgid "Do you really want to post the invoice?"
 msgstr "Wollen Sie diese Rechnung wirklich buchen?"
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2909 intl-scm/guile-strings.c:3071
 #: intl-scm/guile-strings.c:3111 intl-scm/guile-strings.c:3365
-#: src/business/business-gnome/dialog-invoice.c:542
+#: src/business/business-gnome/dialog-invoice.c:545
 #: src/register/ledger-core/split-register-model.c:123
 msgid "Due Date"
 msgstr "Fälligkeitsdatum"
 
-#: src/business/business-gnome/dialog-invoice.c:543
+#: src/business/business-gnome/dialog-invoice.c:546
 msgid "Post Date"
 msgstr "Buchungsdatum"
 
-#: src/business/business-gnome/dialog-invoice.c:544
+#: src/business/business-gnome/dialog-invoice.c:547
 msgid "Post to Account"
 msgstr "Buchen nach Konto"
 
 #. make sure the user REALLY wants to do this!
-#: src/business/business-gnome/dialog-invoice.c:598
+#: src/business/business-gnome/dialog-invoice.c:601
 msgid ""
 "Unposting this Invoice will delete the posted transaction.  Are you sure you "
 "want to unpost it?"
 msgstr "Wollen Sie wirklich die bestehende Buchung zu dieser Rechnung löschen?"
 
-#: src/business/business-gnome/dialog-invoice.c:885
+#: src/business/business-gnome/dialog-invoice.c:913
 #: src/gnome/window-reconcile.c:1004
 msgid "Total:"
 msgstr "Betrag:"
 
 #: src/business/business-gnome/business-gnome-utils.c:46
 #: src/business/business-gnome/business-options-gnome.c:291
-#: src/business/business-gnome/dialog-invoice.c:1049
-#: src/business/business-gnome/dialog-invoice.c:1121
+#: src/business/business-gnome/dialog-invoice.c:1077
+#: src/business/business-gnome/dialog-invoice.c:1149
 #: src/gnome-utils/gnc-general-select.c:185
 #: src/import-export/ofx/ofx.glade.h:30
 #: src/import-export/qif-import/qif.glade.h:130
 msgid "Select..."
 msgstr "Auswählen..."
 
-#: src/business/business-gnome/dialog-invoice.c:1578
+#: src/business/business-gnome/dialog-invoice.c:1606
 msgid "Edit Invoice"
 msgstr "Rechnung bearbeiten"
 
-#: src/business/business-gnome/dialog-invoice.c:1581
+#: src/business/business-gnome/dialog-invoice.c:1609
 msgid "View Invoice"
 msgstr "Rechnung anzeigen"
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2955 intl-scm/guile-strings.c:2957
-#: src/business/business-gnome/dialog-invoice.c:1589
+#: src/business/business-gnome/dialog-invoice.c:1617
 msgid "New Bill"
 msgstr "Neue Rechnung"
 
-#: src/business/business-gnome/dialog-invoice.c:1593
+#: src/business/business-gnome/dialog-invoice.c:1621
 msgid "Edit Bill"
 msgstr "Rechnung bearbeiten"
 
-#: src/business/business-gnome/dialog-invoice.c:1596
+#: src/business/business-gnome/dialog-invoice.c:1624
 msgid "View Bill"
 msgstr "Rechnung anzeigen"
 
-#: src/business/business-gnome/dialog-invoice.c:2078
+#: src/business/business-gnome/dialog-invoice.c:2106
 msgid "View/Edit Invoice"
 msgstr "Rechnung anzeigen/bearbeiten"
 
-#: src/business/business-gnome/dialog-invoice.c:2087
+#: src/business/business-gnome/dialog-invoice.c:2115
 msgid "Invoice Owner"
 msgstr "Rechnungsmandant"
 
 #. src/business/business-reports/invoice.scm
 #: intl-scm/guile-strings.c:3327
-#: src/business/business-gnome/dialog-invoice.c:2089
+#: src/business/business-gnome/dialog-invoice.c:2117
 msgid "Invoice Notes"
 msgstr "Bemerkungen Rechnung"
 
-#: src/business/business-gnome/dialog-invoice.c:2095
+#: src/business/business-gnome/dialog-invoice.c:2123
 msgid "Is Posted?"
 msgstr "Ist Gebucht?"
 
-#: src/business/business-gnome/dialog-invoice.c:2099
+#: src/business/business-gnome/dialog-invoice.c:2127
 msgid "Company Name "
 msgstr "Firmenname "
 
-#: src/business/business-gnome/dialog-invoice.c:2115
+#: src/business/business-gnome/dialog-invoice.c:2143
 msgid "Posted"
 msgstr "Gebucht"
 
-#: src/business/business-gnome/dialog-invoice.c:2117
+#: src/business/business-gnome/dialog-invoice.c:2145
 #: src/business/business-gnome/dialog-order.c:864
 msgid "Opened"
 msgstr "Geöffnet"
@@ -2566,8 +2566,8 @@ msgstr ""
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:112 intl-scm/guile-strings.c:1377
 #: src/engine/Account.c:2252 src/import-export/hbci/glade/hbci.glade.h:12
-#: src/import-export/hbci/gnc-hbci-utils.c:420
-#: src/import-export/hbci/gnc-hbci-utils.c:424
+#: src/import-export/hbci/gnc-hbci-utils.c:459
+#: src/import-export/hbci/gnc-hbci-utils.c:463
 msgid "Bank"
 msgstr "Bank"
 
@@ -3278,8 +3278,8 @@ msgstr "1/1000000"
 #: intl-scm/guile-strings.c:3065 src/gnome-utils/dialog-account.c:708
 #: src/gnome/glade/account.glade.h:8 src/gnome/glade/stocks.glade.h:1
 #: src/import-export/generic-import.glade.h:10
-#: src/import-export/hbci/gnc-hbci-utils.c:419
-#: src/import-export/hbci/gnc-hbci-utils.c:423
+#: src/import-export/hbci/gnc-hbci-utils.c:458
+#: src/import-export/hbci/gnc-hbci-utils.c:462
 #: src/import-export/qif-import/qif.glade.h:1
 #: src/register/ledger-core/split-register-model.c:191
 msgid "Account"
@@ -7038,7 +7038,7 @@ msgstr ""
 "der Währung oder Aktie angeben."
 
 #: src/import-export/binary-import/druid-commodity.c:425
-#: src/import-export/qif-import/druid-qif-import.c:1397
+#: src/import-export/qif-import/druid-qif-import.c:1413
 msgid "You must enter an existing national currency or enter a different type."
 msgstr ""
 "Sie müssen entweder eine existierende Währung angeben oder einen anderen Typ "
@@ -7811,7 +7811,37 @@ msgstr ""
 "Die eingegebene PIN war falsch.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:270
+#: src/import-export/hbci/gnc-hbci-utils.c:268
+msgid ""
+"The PIN you entered was wrong.\n"
+"ATTENTION: You have zero further wrong retries left!\n"
+"Do you want to try again?"
+msgstr ""
+"Die eingegebene PIN war falsch.\n"
+"VORSICHT: Es ist kein weiterer Fehlversuch möglich!\n"
+"Möchten Sie erneut versuchen?"
+
+#: src/import-export/hbci/gnc-hbci-utils.c:275
+msgid ""
+"The PIN you entered was wrong.\n"
+"You have one further wrong retry left.\n"
+"Do you want to try again?"
+msgstr ""
+"Die eingegebene PIN war falsch.\n"
+"Es ist genau ein weiterer Fehlversuch möglich.\n"
+"Möchten Sie erneut versuchen?"
+
+#: src/import-export/hbci/gnc-hbci-utils.c:282
+msgid ""
+"The PIN you entered was wrong.\n"
+"You have two further wrong retries left.\n"
+"Do you want to try again?"
+msgstr ""
+"Die eingegebene PIN war falsch.\n"
+"Es sind zwei weitere Fehlversuche möglich.\n"
+"Möchten Sie erneut versuchen?"
+
+#: src/import-export/hbci/gnc-hbci-utils.c:293
 msgid ""
 "The PIN you entered was too short.\n"
 "Do you want to try again?"
@@ -7819,7 +7849,23 @@ msgstr ""
 "Die eingegebene PIN war zu kurz.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:279
+#: src/import-export/hbci/gnc-hbci-utils.c:300
+msgid ""
+"Unfortunately you entered a wrong PIN for too many times.\n"
+"Your chip card is therefore destroyed. Aborting."
+msgstr ""
+"Sie haben zu oft eine falsche PIN eingegeben. Ihre Chipkarte ist\n"
+"damit leider unbrauchbar geworden. Aktion wird abgebrochen."
+
+#: src/import-export/hbci/gnc-hbci-utils.c:311
+msgid ""
+"No chip card has been found in the chip card reader.\n"
+"Do you want to try again?"
+msgstr ""
+"Im Kartenleser wurde keine Chipkarte erkannt.\n"
+"Möchten Sie erneut versuchen?"
+
+#: src/import-export/hbci/gnc-hbci-utils.c:318
 msgid ""
 "Unfortunately this HBCI job is not supported \n"
 "by your bank or for your account. Aborting."
@@ -7827,7 +7873,7 @@ msgstr ""
 "Dieser HBCI Geschäftsvorfall wird von Ihrer Bank leider nicht\n"
 "unterstützt oder ist Ihnen nicht gestattet. Aktion wird abgebrochen."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:287
+#: src/import-export/hbci/gnc-hbci-utils.c:326
 msgid ""
 "The server of your bank refused the HBCI connection.\n"
 "Please try again later. Aborting."
@@ -7839,7 +7885,7 @@ msgstr ""
 #: intl-scm/guile-strings.c:2831 intl-scm/guile-strings.c:2853
 #: src/import-export/gnc-gen-transaction.c:354
 #: src/import-export/gnc-gen-transaction.c:379
-#: src/import-export/hbci/gnc-hbci-utils.c:392
+#: src/import-export/hbci/gnc-hbci-utils.c:431
 msgid "Unspecified"
 msgstr "Nicht spezifiziert"
 
@@ -7881,7 +7927,9 @@ msgstr "Online Aktionen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:450 intl-scm/guile-strings.c:833
-#: intl-scm/guile-strings.c:2799 src/import-export/hbci/hbci-interaction.c:41
+#: intl-scm/guile-strings.c:2799 intl-scm/guile-strings.c:2873
+#: intl-scm/guile-strings.c:2879 intl-scm/guile-strings.c:2885
+#: intl-scm/guile-strings.c:2891 src/import-export/hbci/hbci-interaction.c:41
 msgid "Online Banking & Importing"
 msgstr "Online Banking & Import"
 
@@ -8344,11 +8392,11 @@ msgstr "Bitte geben Sie einen Namen für das Konto ein"
 msgid "Select QIF File"
 msgstr "QIF-Datei auswählen"
 
-#: src/import-export/qif-import/druid-qif-import.c:448
+#: src/import-export/qif-import/druid-qif-import.c:449
 msgid "Please select a file to load.\n"
 msgstr "Sie müssen eine Datei angeben, die geladen werden soll\n"
 
-#: src/import-export/qif-import/druid-qif-import.c:454
+#: src/import-export/qif-import/druid-qif-import.c:455
 msgid ""
 "File not found or read permission denied.\n"
 "Please select another file."
@@ -8356,7 +8404,7 @@ msgstr ""
 "Datei nicht gefunden oder Zugriffsberechtigung liegt nicht vor. \n"
 "Bitte wählen Sie eine andere Datei."
 
-#: src/import-export/qif-import/druid-qif-import.c:466
+#: src/import-export/qif-import/druid-qif-import.c:467
 msgid ""
 "That QIF file is already loaded.\n"
 "Please select another file."
@@ -8364,7 +8412,7 @@ msgstr ""
 "Diese QIF Datei ist bereits geladen.\n"
 "Bitte wählen Sie eine andere."
 
-#: src/import-export/qif-import/druid-qif-import.c:493
+#: src/import-export/qif-import/druid-qif-import.c:494
 #, c-format
 msgid ""
 "QIF file load warning:\n"
@@ -8373,22 +8421,22 @@ msgstr ""
 "Warnung beim Laden der QIF Datei\n"
 "%s"
 
-#: src/import-export/qif-import/druid-qif-import.c:501
+#: src/import-export/qif-import/druid-qif-import.c:502
 msgid "An error occurred while loading the QIF file."
 msgstr "Beim Laden der QIF Datei ist ein Fehler aufgetreten."
 
-#: src/import-export/qif-import/druid-qif-import.c:510
+#: src/import-export/qif-import/druid-qif-import.c:511
 #, c-format
 msgid ""
 "QIF file load failed:\n"
 "%s"
 msgstr "Fehler beim Laden der Qif-Datei:%s"
 
-#: src/import-export/qif-import/druid-qif-import.c:554
+#: src/import-export/qif-import/druid-qif-import.c:570
 msgid "An error occurred while parsing the QIF file."
 msgstr "Beim Verarbeiten der QIF Datei ist ein Fehler aufgetreten."
 
-#: src/import-export/qif-import/druid-qif-import.c:565
+#: src/import-export/qif-import/druid-qif-import.c:581
 #, c-format
 msgid ""
 "QIF file parse failed:\n"
@@ -8397,11 +8445,11 @@ msgstr ""
 "QIF-Datei Analyse fehlerhaft:\n"
 "%s"
 
-#: src/import-export/qif-import/druid-qif-import.c:806
+#: src/import-export/qif-import/druid-qif-import.c:822
 msgid "You must enter an account name."
 msgstr "Sie müssen einen Kontonamen eingeben."
 
-#: src/import-export/qif-import/druid-qif-import.c:1166
+#: src/import-export/qif-import/druid-qif-import.c:1182
 msgid ""
 "An error occurred while importing QIF transactions into GnuCash. Your "
 "accounts are unchanged."
@@ -8409,37 +8457,37 @@ msgstr ""
 "Es ist ein Fehler während des QIF Imports aufgetreten. Ihre Konten wurden "
 "nicht geändert."
 
-#: src/import-export/qif-import/druid-qif-import.c:1213
-#: src/import-export/qif-import/druid-qif-import.c:1660
+#: src/import-export/qif-import/druid-qif-import.c:1229
+#: src/import-export/qif-import/druid-qif-import.c:1676
 msgid "(split)"
 msgstr "(Buchung)"
 
-#: src/import-export/qif-import/druid-qif-import.c:1378
+#: src/import-export/qif-import/druid-qif-import.c:1394
 msgid "You must enter a Type for the commodity."
 msgstr "Sie müssen einen Typ für die Währung/Aktie angeben."
 
-#: src/import-export/qif-import/druid-qif-import.c:1383
+#: src/import-export/qif-import/druid-qif-import.c:1399
 msgid "You must enter a name for the commodity."
 msgstr "Sie müssen einen Namen für die Währung/Aktie angeben."
 
-#: src/import-export/qif-import/druid-qif-import.c:1388
+#: src/import-export/qif-import/druid-qif-import.c:1404
 msgid "You must enter an abbreviation for the commodity."
 msgstr "Sie müssen eine Abkürzung für die Währung/Aktie angeben."
 
-#: src/import-export/qif-import/druid-qif-import.c:1532
+#: src/import-export/qif-import/druid-qif-import.c:1548
 #, c-format
 msgid "Enter information about \"%s\""
 msgstr "Informationen über \"%s\""
 
-#: src/import-export/qif-import/druid-qif-import.c:1544
+#: src/import-export/qif-import/druid-qif-import.c:1560
 msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
 msgstr "Wählen Sie das Börsenplatzkürzel für die Aktie (NASDAQ, NYSE, etc)."
 
-#: src/import-export/qif-import/druid-qif-import.c:1568
+#: src/import-export/qif-import/druid-qif-import.c:1584
 msgid "Enter the full name of the commodity, such as \"Red Hat Stock\""
 msgstr "Geben Sie den vollen Namen der Aktie an, z.B. \"Deutsche Telekom\""
 
-#: src/import-export/qif-import/druid-qif-import.c:1590
+#: src/import-export/qif-import/druid-qif-import.c:1606
 msgid ""
 "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for "
 "the name."
@@ -8447,16 +8495,16 @@ msgstr ""
 "Geben Sie das Tickersymbol (z.B. \"DTE\") der Aktie oder eine andere "
 "eindeutige Abkürzung an."
 
-#: src/import-export/qif-import/druid-qif-import.c:1611
+#: src/import-export/qif-import/druid-qif-import.c:1627
 msgid "Click \"Next\" to accept the information and move on."
 msgstr ""
 "Wenn Sie fertig gelesen haben, klicken Sie bitte \"Weiter\", um fortzufahren."
 
-#: src/import-export/qif-import/druid-qif-import.c:2033
+#: src/import-export/qif-import/druid-qif-import.c:2049
 msgid "Import _QIF..."
 msgstr "_QIF-Datei importieren..."
 
-#: src/import-export/qif-import/druid-qif-import.c:2034
+#: src/import-export/qif-import/druid-qif-import.c:2050
 msgid "Import a Quicken QIF file"
 msgstr "Importieren einer Quicken QIF-Datei"
 
@@ -14084,12 +14132,6 @@ msgid "Finding duplicate transactions..."
 msgstr "Duplizierte Buchungen finden..."
 
 #. src/import-export/generic-import.scm
-#: intl-scm/guile-strings.c:2873 intl-scm/guile-strings.c:2879
-#: intl-scm/guile-strings.c:2885 intl-scm/guile-strings.c:2891
-msgid "Transaction Matcher"
-msgstr "Zuordnung Allgemeiner Import"
-
-#. src/import-export/generic-import.scm
 #: intl-scm/guile-strings.c:2875
 msgid "Match display threshold"
 msgstr "Entscheidungsschwelle für Anzeige in Zuordnung"
@@ -14151,7 +14193,11 @@ msgid ""
 "amounts won't match.  You should set this to whatever is the maximum such "
 "fee in your area (in units of your local currency), so the transaction will "
 "be recognised as a match."
-msgstr "Bei manchen importierten Buchungen kommt eine zusätzliche Auszahlungsgebühr auf, die Ihnen eventuell vorher nicht bekannt war. Um trotzdem die existierende Buchung richtig zuzuordnen, können Sie hier die Höhe für solche zusätzlichen Auszahlungsgebühren in Ihrer lokalen Währung angeben."
+msgstr ""
+"Bei manchen importierten Buchungen kommt eine zusätzliche Auszahlungsgebühr "
+"auf, die Ihnen eventuell vorher nicht bekannt war. Um trotzdem die "
+"existierende Buchung richtig zuzuordnen, können Sie hier die Höhe für solche "
+"zusätzlichen Auszahlungsgebühren in Ihrer lokalen Währung angeben."
 
 #. src/gnome-utils/gnc-menu-extensions.scm
 #: intl-scm/guile-strings.c:2897
@@ -14733,6 +14779,9 @@ msgstr "Folgendes Forderungen-Konto wollen Sie untersuchen"
 #: intl-scm/guile-strings.c:3385 intl-scm/guile-strings.c:3387
 msgid "Receivable Aging"
 msgstr "Entwicklung Forderungen"
+
+#~ msgid "Transaction Matcher"
+#~ msgstr "Zuordnung Allgemeiner Import"
 
 #~ msgid "Tax Value"
 #~ msgstr "Steueranteil"
