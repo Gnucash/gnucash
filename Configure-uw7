@@ -1,4 +1,6 @@
 #!/bin/sh
+#
+# configure scriptlet for SCO UnixWare release 7
 
 CC="gcc -I/usr/local/include -L/usr/local/lib"
 INSTALL="/usr/local/bin/install -c"
