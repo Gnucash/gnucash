@@ -41,7 +41,7 @@
 ;;; append-map append-map! map! pair-for-each filter-map map-in-order
 ;;; filter  partition  remove
 ;;; filter! partition! remove! 
-;;; find find-tail any every list-index
+;;; find find-tail any every list-index-pred
 ;;; take-while drop-while take-while!
 ;;; span break span! break!
 ;;; delete delete!
@@ -1293,7 +1293,7 @@
     (filter! (lambda (elt) (not (= key (car elt)))) alist)))
 
 
-;;; find find-tail take-while drop-while span break any every list-index
+;;; find find-tail take-while drop-while span break any every list-index-pred
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (find pred list)
@@ -1406,8 +1406,8 @@
 		(pred head)	; Last PRED app is tail call.
 		(and (pred head) (lp (car tail) (cdr tail))))))))
 
-(define (list-index pred lis1 . lists)
-  (srfi-1:check-arg procedure? pred list-index)
+(define (list-index-pred pred lis1 . lists)
+  (srfi-1:check-arg procedure? pred list-index-pred)
   (if (pair? lists)
 
       ;; N-ary case

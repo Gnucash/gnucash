@@ -1,5 +1,6 @@
 (require 'hash-table)
 
+(require 'record)
 (gnc:support "report.scm")
 
 ;; We use a hash to store the report info so that whenever a report is

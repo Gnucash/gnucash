@@ -1,5 +1,9 @@
 2000-04-09  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* src/scm/srfi/srfi-1.r5rs.scm: renamed 'list-index' to
+ 	'list-index-pred'. guile-1.3.4 defines a list-index with
+	different api and semantics.
+
 	* configure.in: make gnucash.spec configured
 
 	* rpm/gnucash.spec.in: new file, same as old gnucash.spec, but
