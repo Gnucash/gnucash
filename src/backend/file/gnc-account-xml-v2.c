@@ -59,21 +59,27 @@ const gchar *account_version_string = "2.0.0";
 #define act_type_string "act:type"
 #define act_commodity_string "act:commodity"
 #define act_commodity_scu_string "act:commodity-scu"
-#define act_currency_string "act:currency"
-#define act_currency_scu_string "act:currency-scu"
 #define act_code_string "act:code"
 #define act_description_string "act:description"
-#define act_security_string "act:security"
-#define act_security_scu_string "act:security-scu"
 #define act_slots_string "act:slots"
 #define act_parent_string "act:parent"
+#define act_lots_string "act:lots"
+/* The currency and security strings should not appear in newer
+ * xml files (anything post-gnucash-1.6) */
+#define act_currency_string "act:currency"
+#define act_currency_scu_string "act:currency-scu"
+#define act_security_string "act:security"
+#define act_security_scu_string "act:security-scu"
 
 xmlNodePtr
 gnc_account_dom_tree_create(Account *act)
 {
     const char *str;
-	 kvp_frame *kf;
+    kvp_frame *kf;
     xmlNodePtr ret;
+    xmlNodePtr toaddto;
+    GList *n;
+
 
     ret = xmlNewNode(NULL, gnc_account_string);
     xmlSetProp(ret, "version", account_version_string);
@@ -93,13 +99,13 @@ gnc_account_dom_tree_create(Account *act)
     xmlAddChild(ret, int_to_dom_tree(act_commodity_scu_string,
                                      xaccAccountGetCommoditySCU(act)));
     
-	 str = xaccAccountGetCode(act);
+    str = xaccAccountGetCode(act);
     if (str && strlen(str) > 0)
     {
         xmlAddChild(ret, text_to_dom_tree(act_code_string, str));
     }
 
-	 str = xaccAccountGetDescription(act);
+    str = xaccAccountGetDescription(act);
     if (str && strlen(str) > 0)
     {
         xmlAddChild(ret, text_to_dom_tree(act_description_string, str));
@@ -120,6 +126,14 @@ gnc_account_dom_tree_create(Account *act)
         xmlAddChild(ret, guid_to_dom_tree(
                      act_parent_string,
                      xaccAccountGetGUID(xaccAccountGetParentAccount(act))));
+    }
+
+    toaddto = xmlNewChild(ret, NULL, act_lots_string, NULL);
+
+    for (n=xaccAccountGetLotList(act); n; n=n->next)
+    {
+       GNCLot * lot =n->data;
+       xmlAddChild(toaddto, gnc_lot_dom_tree_create(lot));
     }
     
     return ret;
@@ -209,8 +223,12 @@ account_commodity_scu_handler (xmlNodePtr node, gpointer act_pdata)
     return TRUE;
 }
 
+/* ============================================================== */
+/* The following depricated routines are here only to service 
+ * older XML files. */
+
 static gboolean
-account_currency_handler (xmlNodePtr node, gpointer act_pdata)
+depricated_account_currency_handler (xmlNodePtr node, gpointer act_pdata)
 {
     struct account_pdata *pdata = act_pdata;
     gnc_commodity *ref;
@@ -222,7 +240,7 @@ account_currency_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 static gboolean
-account_currency_scu_handler (xmlNodePtr node, gpointer act_pdata)
+depricated_account_currency_scu_handler (xmlNodePtr node, gpointer act_pdata)
 {
     struct account_pdata *pdata = act_pdata;
     gint64 val;
@@ -234,7 +252,7 @@ account_currency_scu_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 static gboolean
-account_security_handler (xmlNodePtr node, gpointer act_pdata)
+depricated_account_security_handler (xmlNodePtr node, gpointer act_pdata)
 {
     struct account_pdata *pdata = act_pdata;
     gnc_commodity *ref;
@@ -246,7 +264,7 @@ account_security_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 static gboolean
-account_security_scu_handler (xmlNodePtr node, gpointer act_pdata)
+depricated_account_security_scu_handler (xmlNodePtr node, gpointer act_pdata)
 {
     struct account_pdata *pdata = act_pdata;
     gint64 val;
@@ -256,6 +274,8 @@ account_security_scu_handler (xmlNodePtr node, gpointer act_pdata)
 
     return TRUE;
 }
+
+/* ============================================================== */
 
 static gboolean
 account_slots_handler (xmlNodePtr node, gpointer act_pdata)
@@ -311,20 +331,55 @@ account_description_handler(xmlNodePtr node, gpointer act_pdata)
     return set_string(node, pdata->account, xaccAccountSetDescription);
 }
 
+static gboolean
+account_lots_handler(xmlNodePtr node, gpointer act_pdata)
+{
+    struct account_pdata *pdata = act_pdata;
+    xmlNodePtr mark;
+
+    g_return_val_if_fail(node, FALSE);
+    g_return_val_if_fail(node->xmlChildrenNode, FALSE);
+
+    for(mark = node->xmlChildrenNode; mark; mark = mark->next)
+    {
+        GNCLot *lot;
+        
+        if(safe_strcmp("text", mark->name) == 0)
+          continue;
+
+        lot = dom_tree_to_lot(mark, pdata->book);
+
+        if(lot)
+        {
+            xaccAccountInsertLot (pdata->account, lot);
+        }
+        else
+        {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
 static struct dom_tree_handler account_handlers_v2[] = {
     { act_name_string, account_name_handler, 1, 0 },
     { act_id_string, account_id_handler, 1, 0 },
     { act_type_string, account_type_handler, 1, 0 },
     { act_commodity_string, account_commodity_handler, 0, 0 },
     { act_commodity_scu_string, account_commodity_scu_handler, 0, 0 },
-    { act_currency_string, account_currency_handler, 0, 0 },
-    { act_currency_scu_string, account_currency_scu_handler, 0, 0 },
     { act_code_string, account_code_handler, 0, 0 },
     { act_description_string, account_description_handler, 0, 0},
-    { act_security_string, account_security_handler, 0, 0 },
-    { act_security_scu_string, account_security_scu_handler, 0, 0 },
     { act_slots_string, account_slots_handler, 0, 0 },
     { act_parent_string, account_parent_handler, 0, 0 },
+    { act_lots_string, account_lots_handler, 0, 0 },
+    
+    /* These should not appear in  newer xml files; only in old
+     * (circa gnucash-1.6) xml files. We maintain them for backward 
+     * compatibility. */
+    { act_currency_string, depricated_account_currency_handler, 0, 0 },
+    { act_currency_scu_string, depricated_account_currency_scu_handler, 0, 0 },
+    { act_security_string, depricated_account_security_handler, 0, 0 },
+    { act_security_scu_string, depricated_account_security_scu_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 
@@ -405,3 +460,5 @@ gnc_account_sixtp_parser_create(void)
 {
     return sixtp_dom_parser_new(gnc_account_end_handler, NULL, NULL);
 }
+
+/* ======================  END OF FILE ===================*/

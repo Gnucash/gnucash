@@ -1,6 +1,7 @@
 /********************************************************************
  * gnc-transactions-xml-v2.c -- xml routines for transactions       *
  * Copyright (C) 2001 Rob Browning                                  *
+ * Copyright (C) 2002 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -44,6 +45,8 @@
 #include "AccountP.h"
 #include "Transaction.h"
 #include "TransactionP.h"
+#include "gnc-lot.h"
+#include "gnc-lot-p.h"
 
 const gchar *transaction_version_string = "2.0.0";
 
@@ -106,19 +109,27 @@ split_to_dom_tree(const gchar *tag, Split *spl)
     add_gnc_num(ret, "split:quantity", xaccSplitGetAmount(spl));
 
     {
-      Account * account = xaccSplitGetAccount (spl);
+       Account * account = xaccSplitGetAccount (spl);
 
-      xmlAddChild (ret, guid_to_dom_tree("split:account",
+       xmlAddChild (ret, guid_to_dom_tree("split:account",
                                          xaccAccountGetGUID (account)));
     }
-
     {
-        xmlNodePtr kvpnode = kvp_frame_to_dom_tree("split:slots",
-                                                   xaccSplitGetSlots(spl));
-        if(kvpnode)
-        {
-            xmlAddChild(ret, kvpnode);
-        }
+       GNCLot * lot = xaccSplitGetLot (spl);
+
+       if (lot)
+       {
+          xmlAddChild (ret, guid_to_dom_tree("split:lot",
+                                         gnc_lot_get_guid(lot)));
+       }
+    }
+    {
+       xmlNodePtr kvpnode = kvp_frame_to_dom_tree("split:slots",
+                                                  xaccSplitGetSlots(spl));
+       if(kvpnode)
+       {
+           xmlAddChild(ret, kvpnode);
+       }
     }
     
     return ret;
@@ -127,16 +138,15 @@ split_to_dom_tree(const gchar *tag, Split *spl)
 static void
 add_trans_splits(xmlNodePtr node, Transaction *trn)
 {
-    Split *mark;
-    int i;
+    GList *n;
     xmlNodePtr toaddto;
 
     toaddto = xmlNewChild(node, NULL, "trn:splits", NULL);
     
-    for(i = 0, mark = xaccTransGetSplit(trn, i); mark;
-        i++, mark = xaccTransGetSplit(trn, i))
+    for (n=xaccTransGetSplitList(trn); n; n=n->next)
     {
-        xmlAddChild(toaddto, split_to_dom_tree("trn:split", mark));
+        Split *s = n->data;
+        xmlAddChild(toaddto, split_to_dom_tree("trn:split", s));
     }
 }
 
@@ -320,6 +330,30 @@ spl_account_handler(xmlNodePtr node, gpointer data)
 }
 
 static gboolean
+spl_lot_handler(xmlNodePtr node, gpointer data)
+{
+    struct split_pdata *pdata = data;
+    GUID *id = dom_tree_to_guid(node);
+    GNCLot *lot;
+
+    if (!id) return FALSE;
+
+    lot = gnc_lot_lookup (id, pdata->book);
+    if (!lot && gnc_transaction_xml_v2_testing &&
+        !guid_equal (id, xaccGUIDNULL ()))
+    {
+      lot = gnc_lot_new (pdata->book);
+      gnc_lot_set_guid (lot, *id);
+    }
+
+    gnc_lot_add_split (lot, pdata->split);
+
+    g_free(id);
+
+    return TRUE;
+}
+
+static gboolean
 spl_slots_handler(xmlNodePtr node, gpointer data)
 {
     struct split_pdata *pdata = data;
@@ -342,6 +376,7 @@ struct dom_tree_handler spl_dom_handlers[] =
     { "split:value", spl_value_handler, 1, 0 },
     { "split:quantity", spl_quantity_handler, 1, 0 },
     { "split:account", spl_account_handler, 1, 0 },
+    { "split:lot", spl_lot_handler, 0, 0 },
     { "split:slots", spl_slots_handler, 0, 0 },
     { NULL, NULL, 0, 0 },
 };
@@ -583,7 +618,7 @@ Transaction *
 dom_tree_to_transaction( xmlNodePtr node, GNCBook *book )
 {
     Transaction *trn;
-    gboolean	successful;
+    gboolean successful;
     struct trans_pdata pdata;
 
     g_return_val_if_fail(node, NULL);
@@ -606,7 +641,7 @@ dom_tree_to_transaction( xmlNodePtr node, GNCBook *book )
         xaccTransBeginEdit(trn);
         xaccTransDestroy(trn);
         xaccTransCommitEdit(trn);
-	trn = NULL;
+        trn = NULL;
     }
 
     return trn;

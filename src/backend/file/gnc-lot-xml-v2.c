@@ -60,14 +60,14 @@ xmlNodePtr
 gnc_lot_dom_tree_create(GNCLot *lot)
 {
     xmlNodePtr ret;
-	 kvp_frame *kf;
+    kvp_frame *kf;
 
     ret = xmlNewNode(NULL, gnc_lot_string);
     xmlSetProp(ret, "version", lot_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(lot_id_string, gnc_lot_get_guid(lot)));
 
-	 kf = gnc_lot_get_slots (lot);
+    kf = gnc_lot_get_slots (lot);
     if (kf)
     {
         xmlNodePtr kvpnode = kvp_frame_to_dom_tree(lot_slots_string, kf);
