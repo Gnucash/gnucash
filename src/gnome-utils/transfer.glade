@@ -353,7 +353,7 @@
 	      <property name="spacing">0</property>
 
 	      <child>
-		<widget class="GtkFrame" id="transferfrom-frame">
+		<widget class="GtkFrame" id="left_trans_frame">
 		  <property name="border_width">3</property>
 		  <property name="visible">True</property>
 		  <property name="label_xalign">0</property>
@@ -368,7 +368,7 @@
 		      <property name="spacing">6</property>
 
 		      <child>
-			<widget class="GtkScrolledWindow" id="from_window">
+			<widget class="GtkScrolledWindow" id="left_trans_window">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -382,7 +382,7 @@
 			      <property name="shadow_type">GTK_SHADOW_IN</property>
 
 			      <child>
-				<widget class="GtkHBox" id="from_tree_box">
+				<widget class="GtkHBox" id="left_tree_box">
 				  <property name="visible">True</property>
 				  <property name="homogeneous">False</property>
 				  <property name="spacing">0</property>
@@ -431,7 +431,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkLabel" id="from_currency_label">
+			    <widget class="GtkLabel" id="left_currency_label">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes"> </property>
 			      <property name="use_underline">False</property>
@@ -459,7 +459,7 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkCheckButton" id="from_show_button">
+			<widget class="GtkCheckButton" id="left_show_button">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">Show Income/Expense</property>
@@ -505,7 +505,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkFrame" id="transferto-frame">
+		<widget class="GtkFrame" id="right_trans_frame">
 		  <property name="border_width">3</property>
 		  <property name="visible">True</property>
 		  <property name="label_xalign">0</property>
@@ -520,7 +520,7 @@
 		      <property name="spacing">6</property>
 
 		      <child>
-			<widget class="GtkScrolledWindow" id="to_window">
+			<widget class="GtkScrolledWindow" id="right_trans_window">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -534,7 +534,7 @@
 			      <property name="shadow_type">GTK_SHADOW_IN</property>
 
 			      <child>
-				<widget class="GtkHBox" id="to_tree_box">
+				<widget class="GtkHBox" id="right_tree_box">
 				  <property name="visible">True</property>
 				  <property name="homogeneous">False</property>
 				  <property name="spacing">0</property>
@@ -583,7 +583,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkLabel" id="to_currency_label">
+			    <widget class="GtkLabel" id="right_currency_label">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes"> </property>
 			      <property name="use_underline">False</property>
@@ -611,7 +611,7 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkCheckButton" id="to_show_button">
+			<widget class="GtkCheckButton" id="right_show_button">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">Show Income/Expense</property>
@@ -744,7 +744,7 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkHBox" id="to_amount_hbox">
+		    <widget class="GtkHBox" id="right_amount_hbox">
 		      <property name="visible">True</property>
 		      <property name="homogeneous">False</property>
 		      <property name="spacing">0</property>

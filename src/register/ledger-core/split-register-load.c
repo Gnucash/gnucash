@@ -174,7 +174,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   /* make sure we have a blank split */
   if (blank_split == NULL)
   {
-    Transaction *trans;
+    Transaction *new_trans;
     gnc_commodity * currency = NULL;
 
     /* Determine the proper currency to use for this transaction.
@@ -193,14 +193,14 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
     gnc_suspend_gui_refresh ();
 
-    trans = xaccMallocTransaction (gnc_get_current_book ());
+    new_trans = xaccMallocTransaction (gnc_get_current_book ());
 
-    xaccTransBeginEdit (trans);
-    xaccTransSetCurrency (trans, currency ? currency : gnc_default_currency ());
-    xaccTransSetDateSecs (trans, info->last_date_entered);
+    xaccTransBeginEdit (new_trans);
+    xaccTransSetCurrency (new_trans, currency ? currency : gnc_default_currency ());
+    xaccTransSetDateSecs (new_trans, info->last_date_entered);
     blank_split = xaccMallocSplit (gnc_get_current_book ());
-    xaccTransAppendSplit (trans, blank_split);
-    xaccTransCommitEdit (trans);
+    xaccTransAppendSplit (new_trans, blank_split);
+    xaccTransCommitEdit (new_trans);
 
     info->blank_split_guid = *xaccSplitGetGUID (blank_split);
     info->blank_split_edited = FALSE;

@@ -38,17 +38,16 @@
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-html.h"
-#include "import-account-matcher.h"
+//#include "import-account-matcher.h"
+#include "gnc-component-manager.h"
 
-#include <openhbci/api.h>
-#include <openhbci/outboxjobs.h>
-#include <openhbci/outboxjobkeys.h>
-#include <openhbci/mediumrdhbase.h>
+#include <openhbci2/api.h>
+#include <openhbci2/outboxjob.h>
+#include <openhbci2/mediumrdhbase.h>
 
-#include <openhbci.h>
-#ifndef OPENHBCI_VERSION_BUILD
-#  define OPENHBCI_VERSION_BUILD 0
-#endif
+#include <openhbci2.h>
+
+#define DEFAULT_HBCI_VERSION 201
 
 typedef enum _infostate {
   INI_ADD_BANK,
@@ -116,6 +115,8 @@ struct _hbciinitialinfo
 
   /* OpenHBCI stuff */
   HBCI_API *api;
+  HBCI_Outbox *outbox;
+  GList *hbci_accountlist;
   GNCInteractor *interactor;
 
   /* account match: row_number (int) -> hbci_account */
@@ -155,10 +156,15 @@ static void
 reset_initial_info (HBCIInitialInfo *info)
 {
   if (info == NULL) return;
-  
+
   if (info->api != NULL) 
     gnc_hbci_api_delete (info->api);
   info->api = NULL;
+
+  if (info->outbox != NULL)
+    HBCI_Outbox_delete(info->outbox);
+  info->outbox = NULL;
+
   info->newcustomer = NULL;
   info->newbank = NULL;
   
@@ -171,6 +177,9 @@ reset_initial_info (HBCIInitialInfo *info)
   if (info->gnc_hash != NULL)
     g_hash_table_destroy (info->gnc_hash);
   info->gnc_hash = NULL;
+
+  list_HBCI_Account_delete(info->hbci_accountlist);
+  info->hbci_accountlist = NULL;
 }
 
 static void
@@ -180,9 +189,12 @@ delete_initial_druid (HBCIInitialInfo *info)
 
   reset_initial_info (info);
   
+  if (info->interactor)
+    GNCInteractor_delete(info->interactor);
+
   if (info->window != NULL) 
     gtk_widget_destroy (info->window);
-    
+
   g_free (info);
 }
 
@@ -191,7 +203,7 @@ delete_initial_druid (HBCIInitialInfo *info)
  * update_accountlist widget
  */
 static gpointer
-update_accountlist_acc_cb (const HBCI_Account *hacc, gpointer user_data)
+update_accountlist_acc_cb (gnc_HBCI_Account *hacc, gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
   gchar *row_text[3];
@@ -203,12 +215,7 @@ update_accountlist_acc_cb (const HBCI_Account *hacc, gpointer user_data)
   g_assert(info);
   row_text[2] = "";
   
-  row_text[0] = 
-    /* Translators: Strings are 1. Account code, 2. Bank name, 3. Bank code. */
-    g_strdup_printf(_("%s at %s (code %s)"),
-		    HBCI_Account_accountId (hacc),
-		    HBCI_Bank_name (HBCI_Account_bank (hacc)),
-		    HBCI_Bank_bankCode (HBCI_Account_bank (hacc)));
+  row_text[0] = gnc_HBCI_Account_longname(hacc);
 		
   /* Get corresponding gnucash account */
   gacc = g_hash_table_lookup (info->gnc_hash, hacc);
@@ -230,18 +237,9 @@ update_accountlist_acc_cb (const HBCI_Account *hacc, gpointer user_data)
   /* Store the row_number -> hbci_account hash reference. */
   row_key = g_new(gint, 1);
   *row_key = row;
-  g_hash_table_insert (info->hbci_hash, row_key, (HBCI_Account*)hacc);
+  g_hash_table_insert (info->hbci_hash, row_key, (gnc_HBCI_Account*)hacc);
 
   return NULL;
-}
-static gpointer
-update_accountlist_bank_cb (const HBCI_Bank *bank, gpointer user_data)
-{
-  g_assert(bank);
-
-  return list_HBCI_Account_foreach (HBCI_Bank_accounts (bank),
-				    &update_accountlist_acc_cb,
-				    user_data);
 }
 
 /* Update the account list GtkCList widget */
@@ -272,13 +270,13 @@ update_accountlist (HBCIInitialInfo *info)
   info->hbci_hash = g_hash_table_new (&g_int_hash, &g_int_equal);
   g_hash_table_freeze (info->hbci_hash);
   
-  /* Go through all HBCI banks */
-  list_HBCI_Bank_foreach (banklist, 
-			  &update_accountlist_bank_cb,
-			  info);
+  /* Go through all HBCI accounts */
+  list_HBCI_Account_foreach (info->hbci_accountlist,
+			     update_accountlist_acc_cb,
+			     info);
 
-  /*printf("HBCI hash has %d entries.\n", g_hash_table_size(info->hbci_hash));*/
-  /*printf("GNC hash has %d entries.\n", g_hash_table_size(info->gnc_hash));*/
+  //printf("update_accountlist: HBCI hash has %d entries.\n", g_hash_table_size(info->hbci_hash));
+  //printf("update_accountlist: GNC hash has %d entries.\n", g_hash_table_size(info->gnc_hash));
   
   g_hash_table_thaw (info->hbci_hash);
   gtk_clist_thaw (GTK_CLIST (info->accountlist));
@@ -430,7 +428,8 @@ static void hbciversion_unselect_row (GtkCList *clist,
 }
 
 static gboolean 
-choose_hbciversion_dialog (GtkWindow *parent, HBCI_Bank *bank)
+choose_hbciversion_dialog (GtkWindow *parent, HBCI_Bank *bank,
+			   HBCIInitialInfo *info)
 {
   int retval = -1;
   int selected_row = 0;
@@ -484,11 +483,33 @@ choose_hbciversion_dialog (GtkWindow *parent, HBCI_Bank *bank)
 			 (GTK_CLIST (version_clist), selected_row));
       if (newversion != initial_selection) 
 	{
+	  HBCI_OutboxJob *job;
+
+	  gtk_widget_destroy (dialog);
 	  /*fprintf (stderr, "Setting new HBCI version %d\n", newversion); */
 	  HBCI_Bank_setHbciVersion (bank, newversion);
-	  HBCI_Bank_setBPDVersion (bank, 0);
-	  gtk_widget_destroy (dialog);
+	  /*HBCI_Bank_setBPDVersion (bank, 0);*/
+	  job = HBCI_OutboxJob_new("JobUpdateBankInfo", 
+				   (HBCI_Customer*)info->newcustomer, "");
+	  HBCI_Outbox_addJob(info->outbox, job);
+	  
+	  {
+	    HBCI_Job *jjob = HBCI_OutboxJob_Job(job);
+	    /* copied from aqmoney-tng/src/libaqmoney/adminjobs.cpp
+	       JobUpdateBankInfo */
+	    HBCI_Job_setIntProperty(jjob, "open/ident/country", 
+				    HBCI_Bank_country(bank));
+	    HBCI_Job_setProperty(jjob, "open/ident/bankcode", 
+				 HBCI_Bank_bankCode(bank));
+	    HBCI_Job_setIntProperty(jjob, "open/prepare/bpdversion",0);
+	    HBCI_Job_setIntProperty(jjob, "open/prepare/updversion",0);
+	  }
+	  
 	  gnome_ok_dialog_parented 
+	    /* Translators: Strings from this file are really only
+	     * needed inside Germany (HBCI is not supported anywhere
+	     * else). You may safely ignore strings from the
+	     * import-export/hbci subdirectory in other countries. */
 	    (_("You have changed the HBCI version. GnuCash will now need to \n"
 	       "update various system parameters, including the account list.\n"
 	       "Press 'Ok' now to proceed to updating the system and the account list."), parent);
@@ -519,7 +540,7 @@ static void gnc_hbci_addaccount(HBCIInitialInfo *info,
 {
   HBCI_Bank *bank;
   const HBCI_User *user;
-  HBCI_Account *acc;
+  gnc_HBCI_Account *acc;
 
   GtkWidget *dlg;
   char *prompt;
@@ -532,7 +553,8 @@ static void gnc_hbci_addaccount(HBCIInitialInfo *info,
 
   /* Ask for new account id by opening a request_dialog -- a druid
      page would be better from GUI design, but I'm too lazy. */
-  prompt = g_strdup_printf(_("Enter account id for new account \nat bank %s (bank code %s):"), 
+  prompt = g_strdup_printf(_("Enter account id for new account \n"
+			     "at bank %s (bank code %s):"), 
 			   HBCI_Bank_name (bank), HBCI_Bank_bankCode (bank));
   
   dlg = gnome_request_dialog(FALSE, prompt, "", 20,
@@ -541,8 +563,12 @@ static void gnc_hbci_addaccount(HBCIInitialInfo *info,
   
   if ((retval == 0) && accnr && (strlen(accnr) > 0)) {
     
+    /* Search for existing duplicate */
+    acc = list_HBCI_Account_find(info->hbci_accountlist, 
+				 bank, HBCI_Bank_bankCode (bank), accnr);
+
     /* Check if such an account already exists */
-    if ( HBCI_Bank_findAccount (bank, accnr) )
+    if (acc)
       {
 	/* Yes, then don't create it again */
 	gnc_error_dialog
@@ -551,15 +577,9 @@ static void gnc_hbci_addaccount(HBCIInitialInfo *info,
       }
     else
       {
-	/* No, then create it now */
-	acc = HBCI_API_accountFactory(bank, accnr, "");
-	/* Add it to the bank, and the bank will also own the newly
-	   created object. */
-	HBCI_Bank_addAccount(bank, acc, TRUE);
-	/* and add the given customer as first authorized
-	   customer. This needs more work in case there are different
-	   customers here.  */
-	HBCI_Account_addAuthorizedCustomer(acc, cust);
+	/* No, then create it and add it to our internal list. */
+	acc = gnc_HBCI_Account_new (bank, HBCI_Bank_bankCode (bank), accnr);
+	info->hbci_accountlist = g_list_append(info->hbci_accountlist, acc);
 
 	/* Don't forget to update the account list, otherwise the new
 	   accounts won't show up. */
@@ -572,6 +592,7 @@ static void gnc_hbci_addaccount(HBCIInitialInfo *info,
     g_free (accnr);
 }
 /* -------------------------------------- */
+
 
 
 /*************************************************************
@@ -594,30 +615,48 @@ on_finish (GnomeDruidPage *gnomedruidpage,
 	   gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
+  gboolean successful = TRUE;
   g_assert (info);
 
-
   if (info->configfile) {
+    //printf("on_finish: Got configfile %s, but the book has %s.\n", info->configfile, gnc_hbci_get_book_configfile (gnc_get_current_book ()));
     if (!gnc_hbci_get_book_configfile (gnc_get_current_book ()) ||
 	(strcmp(info->configfile, 
-		gnc_hbci_get_book_configfile (gnc_get_current_book ())) != 0)) 
+		gnc_hbci_get_book_configfile (gnc_get_current_book ())) != 0)) {
       /* Name of configfile has changed */
       gnc_hbci_set_book_configfile (gnc_get_current_book (), info->configfile);
+      if ((gnc_hbci_get_book_configfile (gnc_get_current_book ()) == 0) ||
+	  strcmp(info->configfile, 
+		 gnc_hbci_get_book_configfile (gnc_get_current_book ())) != 0) 
+	printf("on_finish: OOOPS: I just setted the book_configfile to %s, but the book now still has %s.\n", info->configfile, gnc_hbci_get_book_configfile (gnc_get_current_book ()));
+    }
   }
   
   {
     HBCI_Error *err;
+    //printf("on_finish: trying to save openhbci data to file %s.\n", gnc_hbci_get_book_configfile (gnc_get_current_book ()));
+    
     err = gnc_hbci_api_save (info->api);
+    //printf("on_finish: finished saving openhbci data to file.\n");
+
     if (err != NULL) {
-      if (!HBCI_Error_isOk (err)) 
+      if (!HBCI_Error_isOk (err)) {
+	successful = FALSE;
 	printf("on_finish: Error at saving OpenHBCI data: %s.\n",
 	       HBCI_Error_message (err));
+      }
       HBCI_Error_delete (err);
     }
   }
   
-  if (info->gnc_hash)
+  if (successful && info->gnc_hash)
     accounts_save_kvp (info->gnc_hash);
+  if (successful && info->hbci_accountlist)
+    {
+      GList *kvplist = 
+	gnc_HBCI_Account_kvp_glist_from_glist(info->hbci_accountlist);
+      gnc_hbci_set_book_account_list (gnc_get_current_book (), kvplist);
+    }
   
   delete_initial_druid(info);
 }
@@ -642,7 +681,7 @@ on_configfile_next (GnomeDruidPage *gnomedruidpage,
   /* file doesn't need to be created here since OpenHBCI will create
      it automatically.*/
 
-  if (!gnc_test_dir_exist_error (info->window, filename)) {
+  if (!gnc_test_dir_exist_error (GTK_WINDOW (info->window), filename)) {
     g_free (filename);
     return TRUE;
   }
@@ -656,13 +695,15 @@ on_configfile_next (GnomeDruidPage *gnomedruidpage,
       /* Create new HBCI_API object, loading its data from filename */
       info->api = gnc_hbci_api_new (filename, TRUE, 
 				    GTK_WIDGET (info->window), 
-				    &(info->interactor));
+				    &(info->interactor),
+				    &(info->hbci_accountlist));
     }
     else if (info->api == NULL)
       /* Create new HBCI_API object, loading its data from filename */
       info->api = gnc_hbci_api_new (filename, TRUE, 
 				    GTK_WIDGET (info->window), 
-				    &(info->interactor));
+				    &(info->interactor),
+				    &(info->hbci_accountlist));
 
     api = info->api;
     g_free (filename);
@@ -679,7 +720,9 @@ on_configfile_next (GnomeDruidPage *gnomedruidpage,
 				TRUE);
     }
 
-
+  /* Together with the api, create a new outbox queue */
+  info->outbox = HBCI_Outbox_new();
+  
   /* Get HBCI bank and account list */
   {
     const list_HBCI_Bank *banklist;
@@ -704,7 +747,8 @@ on_configfile_next (GnomeDruidPage *gnomedruidpage,
       return TRUE;
     }
     
-    if (HBCI_API_totalAccounts(api) == 0) {
+    if (g_list_length(gnc_hbci_get_book_account_list
+		      (gnc_get_current_book ())) == 0) {
       /* still no accounts? go to account update page*/
       info->state = INI_UPDATE_ACCOUNTS;
       info->newcustomer = choose_customer (info);
@@ -767,9 +811,26 @@ on_bankpage_next (GnomeDruidPage  *gnomedruidpage,
   bank = HBCI_API_findBank(info->api, countrycode, bankcode);
   if (bank == NULL) {
     /*printf("on_bankpage_next: Creating bank with code %s.\n", bankcode);*/
-    bank = HBCI_API_bankFactory (info->api, countrycode, bankcode, ipaddr);
+    bank = HBCI_API_bankFactory (info->api, countrycode, bankcode, ipaddr,
+				 "");
     {
       HBCI_Error *err;
+      HBCI_Transporter *tr;
+      HBCI_MessageEngine *me;
+
+      me = HBCI_API_engineFactory(info->api, 
+				  countrycode,
+				  bankcode,
+				  DEFAULT_HBCI_VERSION,
+				  "msgxml");
+      tr = HBCI_API_transporterFactory(info->api,
+				       ipaddr,
+				       "3000" /* DEFAULT_PORT */,
+				       500 /*AQMONEY_DEFAULT_CONN_TIMEOUT*/,
+				       "xptcp");
+      HBCI_Bank_setMessageEngine(bank, me, TRUE);
+      HBCI_Bank_setTransporter(bank, tr, TRUE);
+
       err = HBCI_API_addBank (info->api, bank, TRUE);
       if (err != NULL) {
 	printf("on_bankpage_next-CRITICAL: Error at addBank: %s.\n",
@@ -777,6 +838,7 @@ on_bankpage_next (GnomeDruidPage  *gnomedruidpage,
 	HBCI_Error_delete (err);
 	return TRUE;
       }
+
     }
   } 
   /*else {
@@ -919,7 +981,8 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
 	g_free (mediumname);
 	return TRUE;
       }
-      if (!gnc_test_dir_exist_error (info->window, mediumname)) {
+      if (!gnc_test_dir_exist_error (GTK_WINDOW (info->window), 
+				     mediumname)) {
 	g_free (mediumname);
 	return TRUE;
       }
@@ -936,7 +999,7 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
     medium = HBCI_API_createNewMedium (api, 
 				       mediumtype,
 				       FALSE,
-				       HBCI_Bank_countryCode (bank),
+				       280,
 				       HBCI_Bank_bankCode (bank),
 				       userid, 
 				       mediumname, &err);
@@ -949,8 +1012,8 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
       return TRUE;
     }
     
-    newuser = HBCI_API_userFactory (bank, medium, TRUE, userid);
-    HBCI_User_setUserName (newuser, username);
+    newuser = HBCI_API_userFactory (bank, medium, TRUE, userid, username);
+    /*HBCI_User_setUserName (newuser, username);*/
     /*printf("on_userid_next: Created user with userid %s.\n", userid);*/
     g_assert(newuser);
     err = HBCI_Bank_addUser (bank, newuser, TRUE);
@@ -977,13 +1040,7 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
 
     {
       HBCI_Customer *cust;
-      cust = HBCI_API_customerFactory (newuser, customerid, 
-				       customername ? customername : 
-	   /* Translators: Strings from this file are really only
-	    * needed inside Germany (HBCI is not supported anywhere
-	    * else). You may safely ignore strings from the
-	    * import-export/hbci subdirectory in other countries. */
-				       _("Default Customer"));
+      cust = HBCI_API_customerFactory (newuser, customerid, customername);
       g_assert (cust);
       HBCI_User_addCustomer (newuser, cust, TRUE);
       info->newcustomer = cust;
@@ -1032,8 +1089,12 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
 		     gpointer         user_data)
 {
   HBCIInitialInfo *info = user_data;
+  const HBCI_Customer *customer = NULL;
+  const HBCI_User *user = NULL;
+  const HBCI_Medium *medium = NULL;
+  const HBCI_Bank *bank = NULL;
   g_assert(info);
-
+  
   /* of course we need to know for which customer we do this */
   if (info->newcustomer == NULL) 
     info->newcustomer = choose_customer (info);
@@ -1041,36 +1102,146 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
   if (info->newcustomer == NULL) 
     return FALSE;
 
+  customer = info->newcustomer;
+  user = HBCI_Customer_user(customer);
+  bank = HBCI_User_bank(user);
+  medium = HBCI_User_medium(user);
+  
   {
-    /* Execute a Synchronize job, then a GetAccounts job. */
     HBCI_OutboxJob *job;
+      
+    /* Execute a Synchronize job, then a GetAccounts job. */
+    if (HBCI_Medium_securityMode(medium) == 
+	HBCI_SECURITY_RDH) {
+      /* Only do this sync job if this is a rdh medium. */
+      if ((strlen(HBCI_User_systemId(user)) == 0) ||
+	  (strcmp(HBCI_User_systemId(user), "0") == 0)) {
+	/* Only do this sync job if we don't have a systemId yet (not
+	   sure whether this is a good idea though */
+	job = HBCI_OutboxJob_new("JobSync", 
+				 (HBCI_Customer *)customer, "");
+	HBCI_Outbox_addJob (info->outbox, job);
+      
+	{
+	  HBCI_Job *jjob = HBCI_OutboxJob_Job(job);
+	  HBCI_Job_setIntProperty
+	    (jjob, "open/ident/country", HBCI_Bank_country(bank));
+	  HBCI_Job_setProperty
+	    (jjob, "open/ident/bankcode", HBCI_Bank_bankCode(bank));
+	  HBCI_Job_setProperty
+	    (jjob, "open/ident/customerid", HBCI_Customer_custId(customer));
 
-    job = HBCI_OutboxJobGetSystemId_OutboxJob 
-      (HBCI_OutboxJobGetSystemId_new (info->api,
-				      (HBCI_Customer *)info->newcustomer));
-    HBCI_API_addJob (info->api, job);
+	  /* for getting a system id */
+	  HBCI_Job_setIntProperty(jjob, "open/sync/mode",0);
+	  HBCI_Job_setProperty(jjob, "open/ident/systemid", "0");
+	}
 
-    /* Execute Outbox. */
-    if (!gnc_hbci_api_execute (info->window, info->api, 
-			       job, info->interactor)) {
-      /* HBCI_API_executeOutbox failed. */
-      /*return FALSE;*/
-      /* -- it seems to be no problem if this fails ?! */
-    }
+	/* Execute Outbox. */
+	if (!gnc_hbci_api_execute (info->window, info->api, info->outbox, 
+				   job, info->interactor)) {
+	  /* HBCI_API_executeOutbox failed. */
+	  GWEN_DB_NODE *rsp = HBCI_Outbox_response(info->outbox);
+	  printf("on_accountinfo_next: oops, executeOutbox of JobSync failed.\n");
 
+	  printf("on_accountinfo_next: Complete HBCI_Outbox response:\n");
+	  GWEN_DB_Dump(rsp, stdout, 1);
+	  GWEN_DB_Group_free(rsp);
+
+	  rsp = HBCI_Job_responseData(HBCI_OutboxJob_Job(job));
+	  printf("on_accountinfo_next: Complete HBCI_Job response:\n");
+	  if (rsp) 
+	    GWEN_DB_Dump(rsp, stderr, 1);
+	  /*return FALSE;*/
+	  /* -- it seems to be no problem if this fails ?! */
+	}
+
+	/* Now process the response of the JobSync */
+	{
+	  const char *sysid = 
+	    HBCI_Job_getProperty(HBCI_OutboxJob_Job(job), 
+				 "response/syncresponse/systemid", "");
+	  g_assert(sysid);
+
+	  if (strlen(sysid) > 0) {
+	    HBCI_User_setSystemId((HBCI_User*) user, sysid);
+	    printf("on_accountinfo_next: Ok. Got sysid '%s'.\n", sysid);
+	  }
+	  else {
+	    /* Got no sysid. */
+	    GWEN_DB_NODE *rsp = HBCI_Outbox_response(info->outbox);
+	    printf("on_accountinfo_next: oops, got no sysid.\n");
+	
+	    printf("on_accountinfo_next: Complete HBCI_Outbox response:\n");
+	    GWEN_DB_Dump(rsp, stdout, 1);
+	    GWEN_DB_Group_free(rsp);
+
+	    rsp = HBCI_Job_responseData(HBCI_OutboxJob_Job(job));
+	    printf("on_accountinfo_next: Complete HBCI_Job response:\n");
+	    if (rsp) 
+	      GWEN_DB_Dump(rsp, stderr, 1);
+	    return FALSE;
+	  }
+	}
+      } /* if strlen(systemid)==0 */
+    } /* if securityMode == RDH */
+    
+  
     /* Now the GetAccounts job. */
-    job = HBCI_OutboxJobGetAccounts_OutboxJob 
-      (HBCI_OutboxJobGetAccounts_new ((HBCI_Customer *)info->newcustomer));
-    HBCI_API_addJob (info->api, job);
+    job = HBCI_OutboxJob_new("JobGetAccounts", 
+			     (HBCI_Customer *)customer, "");
+    HBCI_Outbox_addJob (info->outbox, job);
+    
+    {
+      HBCI_Job *jjob = HBCI_OutboxJob_Job(job);
+      HBCI_Job_setIntProperty
+	(jjob, "open/ident/country", HBCI_Bank_country(bank));
+      HBCI_Job_setProperty
+	(jjob, "open/ident/bankcode", HBCI_Bank_bankCode(bank));
+      HBCI_Job_setProperty
+	(jjob, "open/ident/customerid", HBCI_Customer_custId(customer));
+      HBCI_Job_setIntProperty(jjob, "open/prepare/updversion",0);
+
+      if (HBCI_Medium_securityMode(medium) == 
+	  HBCI_SECURITY_RDH) {
+	/* Only set this for RDH medium */
+	char *mediumid = HBCI_Medium_mediumId((HBCI_Medium *)medium);
+	g_assert(mediumid);
+	if (strlen(mediumid)==0)
+	  HBCI_Job_setProperty(jjob, "open/ident/systemId", "0");
+	else
+	  HBCI_Job_setProperty(jjob, "open/ident/systemId", mediumid);
+	free(mediumid);
+      }
+    }
+    
 
     /* Execute Outbox. */
-    if (!gnc_hbci_api_execute (info->window, info->api, 
+    if (!gnc_hbci_api_execute (info->window, info->api, info->outbox, 
 			       job, info->interactor)) {
       /* HBCI_API_executeOutbox failed. */
+      GWEN_DB_NODE *rsp = HBCI_Outbox_response(info->outbox);
+      printf("on_accountinfo_next: oops, executeOutbox of JobGetAccounts failed.\n");
+
+      printf("on_accountinfo_next: Complete HBCI_Outbox response:\n");
+      GWEN_DB_Dump(rsp, stdout, 1);
+      GWEN_DB_Group_free(rsp);
+
+      rsp = HBCI_Job_responseData(HBCI_OutboxJob_Job(job));
+      printf("on_accountinfo_next: Complete HBCI_Job response:\n");
+      if (rsp) 
+	GWEN_DB_Dump(rsp, stderr, 1);
+
+      /* And clean everything up */
+      HBCI_Outbox_removeByStatus (info->outbox, HBCI_JOB_STATUS_NONE);
       return FALSE;
     }
 
-    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_NONE);
+    /* Now evaluate the GetAccounts job. */
+    info->hbci_accountlist =
+      gnc_processOutboxResponse(info->api, info->outbox, info->hbci_accountlist);
+    
+    /* And clean everything up */
+    HBCI_Outbox_removeByStatus (info->outbox, HBCI_JOB_STATUS_NONE);
   }
   
   return FALSE;
@@ -1120,15 +1291,30 @@ on_accountlist_select_row (GtkCList *clist, gint row,
 			   gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
-  HBCI_Account *hbci_acc;
+  gnc_HBCI_Account *hbci_acc;
   Account *gnc_acc, *old_value;
+  gchar *longname;
+  gnc_commodity *currency = NULL;
   
   hbci_acc = g_hash_table_lookup (info->hbci_hash, &row);
   if (hbci_acc) {
     old_value = g_hash_table_lookup (info->gnc_hash, hbci_acc);
 
-    gnc_acc = gnc_import_select_account(NULL, FALSE, NULL, NULL, NO_TYPE,
+    /*printf("on_accountlist_select_row: Selected hbci_acc id %s; old_value %p \n",
+	   gnc_HBCI_Account_accountId(hbci_acc),
+	   old_value);*/
+
+    longname = gnc_HBCI_Account_longname(hbci_acc);
+    if (gnc_HBCI_Account_currency(hbci_acc) && 
+	(strlen(gnc_HBCI_Account_currency(hbci_acc)) > 0)) {
+      currency = gnc_commodity_table_lookup 
+	(gnc_book_get_commodity_table (gnc_get_current_book ()), 
+	 GNC_COMMODITY_NS_ISO, gnc_HBCI_Account_currency(hbci_acc));
+    }
+
+    gnc_acc = gnc_import_select_account(NULL, TRUE, longname, currency, BANK,
 					old_value, NULL);
+    g_free(longname);
 
     if (gnc_acc) {
       if (old_value) 
@@ -1171,32 +1357,82 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
 			  gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
+  const HBCI_Customer *customer = NULL;
+  const HBCI_User *user = NULL;
+  const HBCI_Bank *bank = NULL;
   g_assert(info);
 
   if (info->newcustomer == NULL) 
     return FALSE;
 
+  customer = info->newcustomer;
+  user = HBCI_Customer_user(customer);
+  bank = HBCI_User_bank(user);
+  
   if (info->gotkeysforCustomer == NULL) {
     /* Execute a GetKey job. */
     HBCI_OutboxJob *job;
     
-    job = HBCI_OutboxJobGetKeys_OutboxJob 
-      (HBCI_OutboxJobGetKeys_new (info->api, info->newcustomer));
-    HBCI_API_addJob (info->api, job);
+    job = HBCI_OutboxJob_new("JobGetKeys", (HBCI_Customer*)customer, "");
+    
+    {
+      HBCI_Job *jjob = HBCI_OutboxJob_Job(job);
+      /* Copied from libaqmoney's JobGetKeys::JobGetKeys(Pointer<Customer> c) */
+      HBCI_Job_setIntProperty(jjob, "open/ident/country", HBCI_Bank_country(bank));
+      HBCI_Job_setProperty(jjob, "open/ident/bankcode", HBCI_Bank_bankCode(bank));
+      HBCI_Job_setProperty(jjob, "open/ident/customerId", "9999999999");
+      HBCI_Job_setProperty(jjob, "open/ident/systemId", "0");
+
+      HBCI_Job_setIntProperty(jjob, "open/signkey/key/country", 
+			      HBCI_Bank_country(bank));
+      HBCI_Job_setProperty(jjob, "open/signkey/key/bankcode", 
+			   HBCI_Bank_bankCode(bank));
+      /*HBCI_Job_setProperty(jjob, "open/signkey/key/userid", "9999999999");*/
+
+      HBCI_Job_setIntProperty(jjob, "open/cryptkey/key/country", 
+			      HBCI_Bank_country(bank));
+      HBCI_Job_setProperty(jjob, "open/cryptkey/key/bankcode", 
+			   HBCI_Bank_bankCode(bank));
+      /*HBCI_Job_setProperty(jjob, "open/cryptkey/key/userid", "9999999999");*/
+    }
+    HBCI_Outbox_addJob (info->outbox, job);
 
     /* Execute Outbox. */
-    if (!gnc_hbci_api_execute (info->window, info->api, 
+    if (!gnc_hbci_api_execute (info->window, info->api, info->outbox, 
 			       job, info->interactor)) {
       /* HBCI_API_executeOutbox failed. */
+      GWEN_DB_NODE *rsp = HBCI_Outbox_response(info->outbox);
+      printf("on_iniletter_info_next: oops, executeOutbox failed.\n");
+
+      printf("Complete HBCI_Outbox response:\n");
+      GWEN_DB_Dump(rsp, stdout, 1);
+      GWEN_DB_Group_free(rsp);
+
+      rsp = HBCI_Job_responseData(HBCI_OutboxJob_Job(job));
+      printf("Complete HBCI_Job response:\n");
+      if (rsp) 
+	GWEN_DB_Dump(rsp, stderr, 1);
+
+      /* And clean everything up */
+      HBCI_Outbox_removeByStatus (info->outbox, HBCI_JOB_STATUS_NONE);
       return FALSE;
     }
 
-    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_NONE);
-    info->gotkeysforCustomer = info->newcustomer;
+    /* Get keys from Job; store them in the customer's medium @§%&! */
+    if (!gnc_hbci_evaluate_GetKeys(info->outbox, job,
+				   (HBCI_Customer *)customer)) {
+      return FALSE;
+    }
+    
+    HBCI_Outbox_removeByStatus (info->outbox, HBCI_JOB_STATUS_NONE);
+    info->gotkeysforCustomer = customer;
 
   }
-  else if (info->gotkeysforCustomer != info->newcustomer) {
+  else if (info->gotkeysforCustomer != customer) {
     printf("on_iniletter_info_next: Oops, already got keys for another customer. Not yet implemented.\n");
+
+    /* And clean everything up */
+    HBCI_Outbox_removeByStatus (info->outbox, HBCI_JOB_STATUS_NONE);
     return TRUE;
   }
 
@@ -1205,7 +1441,6 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
     char *res;
     const HBCI_Medium *med;
     const HBCI_MediumRDHBase *medr;
-    const HBCI_Bank *bank;
     gboolean use_cryptkey;
     char *tmp, *hash, *exponent, *modulus;
     const char *bankcode, *bankname, *bankip;
@@ -1213,15 +1448,12 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
     time_t now = time(NULL);
     char *time_now = ctime(&now);
 
-    bank = HBCI_User_bank (HBCI_Customer_user 
-			   ((HBCI_Customer *)info->newcustomer));
     bankcode = HBCI_Bank_bankCode (bank);
     bankname = HBCI_Bank_name (bank);
     bankname = (strlen (bankname) > 0 ? bankname : _("Unknown"));
     bankip = HBCI_Bank_addr (bank);    
 
-    med = HBCI_User_medium (HBCI_Customer_user
-			    ((HBCI_Customer *)info->newcustomer));
+    med = HBCI_User_medium (user);
     medr = HBCI_Medium_MediumRDHBase ((HBCI_Medium *)med);
     g_assert (medr);
 
@@ -1267,6 +1499,7 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
     g_free (hash);
     
     gnc_html_show_data (info->server_html, res, strlen(res));
+    gnc_html_reload (info->server_html);
     
     g_free (res);
   }
@@ -1312,18 +1545,88 @@ on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
     /* Execute a SendKey job. */
     HBCI_OutboxJob *job;
     
-    job = HBCI_OutboxJobSendKeys_OutboxJob 
-      (HBCI_OutboxJobSendKeys_new (info->api, info->newcustomer));
-    HBCI_API_addJob (info->api, job);
+    job = HBCI_OutboxJob_new("JobSendKeys", 
+			     (HBCI_Customer*)info->newcustomer, "");
 
-    /* Execute Outbox. */
-    if (!gnc_hbci_api_execute (info->window, info->api, 
-			       job, info->interactor)) {
-      /* HBCI_API_executeOutbox failed. */
-      return FALSE;
+    {
+      HBCI_Job *jjob = HBCI_OutboxJob_Job(job);
+      const HBCI_Customer *customer = info->newcustomer;
+      const HBCI_User *user = HBCI_Customer_user(customer);
+      const HBCI_Bank *bank = HBCI_User_bank(user);
+      const HBCI_Medium *med = HBCI_User_medium (user);
+      const HBCI_MediumRDHBase *medr = HBCI_Medium_MediumRDHBase ((HBCI_Medium*)med);
+      const HBCI_RSAKey *signkey = HBCI_MediumRDHBase_userPubSignKey(medr);
+      const HBCI_RSAKey *cryptkey = HBCI_MediumRDHBase_userPubCryptKey(medr);
+#define MY_MAXBUF_SIZE 1024
+      unsigned tmp_bufsize = MY_MAXBUF_SIZE;
+      unsigned tmp_actual;
+      char tmp[MY_MAXBUF_SIZE];
+      g_assert (medr);
+      /* Copied from libaqmoney's JobSendKeys::JobSendKeys(Pointer<Customer> c) */
+
+      // prepare identification
+      HBCI_Job_setProperty(jjob, "open/ident/systemid", "0");
+      HBCI_Job_setIntProperty(jjob, "open/ident/country", HBCI_Bank_country(bank));
+      HBCI_Job_setProperty(jjob, "open/ident/bankcode", HBCI_Bank_bankCode(bank));
+      HBCI_Job_setProperty(jjob, "open/ident/customerid", HBCI_Customer_custId(customer));
+
+      // prepare sign key
+      HBCI_Job_setProperty(jjob, "open/signkey/keyname/bankCode", HBCI_Bank_bankCode(bank));
+      HBCI_Job_setProperty(jjob, "open/signkey/keyname/userid", HBCI_User_userId(user));
+      HBCI_Job_setIntProperty(jjob, "open/signkey/keyname/keynum", HBCI_RSAKey_number(signkey));
+      HBCI_Job_setIntProperty(jjob, "open/signkey/keyname/keyversion", HBCI_RSAKey_version(signkey));
+      tmp_actual = HBCI_RSAKey_getModulusData(signkey, tmp, tmp_bufsize);
+      HBCI_Job_setBinProperty(jjob, "open/signkey/key/modulus", tmp, tmp_actual);
+      tmp_actual = HBCI_RSAKey_getExpData(signkey, tmp, tmp_bufsize);
+      HBCI_Job_setBinProperty(jjob, "open/signkey/key/exponent", tmp, tmp_actual);
+
+      // prepare crypt key
+      HBCI_Job_setProperty(jjob, "open/cryptkey/keyname/bankCode", HBCI_Bank_bankCode(bank));
+      HBCI_Job_setProperty(jjob, "open/cryptkey/keyname/userid", HBCI_User_userId(user));
+      HBCI_Job_setIntProperty(jjob, "open/cryptkey/keyname/keynum", HBCI_RSAKey_number(cryptkey));
+      HBCI_Job_setIntProperty(jjob, "open/cryptkey/keyname/keyversion", HBCI_RSAKey_version(cryptkey));
+      tmp_actual = HBCI_RSAKey_getModulusData(cryptkey, tmp, tmp_bufsize);
+      HBCI_Job_setBinProperty(jjob, "open/cryptkey/key/modulus", tmp, tmp_actual);
+      tmp_actual = HBCI_RSAKey_getExpData(cryptkey, tmp, tmp_bufsize);
+      HBCI_Job_setBinProperty(jjob, "open/cryptkey/key/exponent", tmp, tmp_actual);
     }
 
-    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_NONE);
+    HBCI_Outbox_addJob (info->outbox, job);
+
+    /* Execute Outbox. */
+    if (!gnc_hbci_api_execute (info->window, info->api, info->outbox, 
+			       job, info->interactor)) {
+      /* HBCI_API_executeOutbox failed. */
+      GWEN_DB_NODE *rsp = HBCI_Outbox_response(info->outbox);
+      printf("on_iniletter_userinfo_next: Oops, api_execute failed.\n");
+      printf("on_iniletter_userinfo_next: Complete HBCI_Outbox response:\n");
+      GWEN_DB_Dump(rsp, stdout, 1);
+      GWEN_DB_Group_free(rsp);
+
+      rsp = HBCI_Job_responseData(HBCI_OutboxJob_Job(job));
+      printf("on_iniletter_userinfo_next: Complete HBCI_Job response:\n");
+      if (rsp) 
+	GWEN_DB_Dump(rsp, stderr, 1);
+
+      /* And clean everything up */
+      HBCI_Outbox_removeByStatus (info->outbox, HBCI_JOB_STATUS_NONE);
+      return FALSE;
+    }
+    
+    {
+      GWEN_DB_NODE *rsp = HBCI_Outbox_response(info->outbox);
+      printf("on_iniletter_userinfo_next: Complete HBCI_Outbox response:\n");
+      GWEN_DB_Dump(rsp, stdout, 1);
+      GWEN_DB_Group_free(rsp);
+
+      rsp = HBCI_Job_responseData(HBCI_OutboxJob_Job(job));
+      printf("on_iniletter_userinfo_next: Complete HBCI_Job response:\n");
+      if (rsp) 
+	GWEN_DB_Dump(rsp, stderr, 1);
+    }
+    
+
+    HBCI_Outbox_removeByStatus (info->outbox, HBCI_JOB_STATUS_NONE);
   }
   else {
     printf("on_iniletter_userinfo_next: Oops, already got keys for another customer. Not yet implemented.\n");
@@ -1378,7 +1681,7 @@ on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
 "<p>&nbsp;</p>\n"
 "<hr>\n"
 "Ort, Datum, Unterschrift</body></html>",
-			  HBCI_User_userName (user),
+			  HBCI_User_name (user),
 			  time_now,
 			  HBCI_User_userId (user),
 			  keynumber, keyversion,
@@ -1390,6 +1693,7 @@ on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
     g_free (hash);
   }
   gnc_html_show_data (info->user_html, res, strlen(res));
+  gnc_html_reload (info->user_html);
 
   g_free (res);
 
@@ -1456,7 +1760,8 @@ on_button_clicked (GtkButton *button,
     if (choose_hbciversion_dialog 
 	(GTK_WINDOW (info->window),
 	 (HBCI_Bank *) 
-	 HBCI_User_bank (HBCI_Customer_user (info->newcustomer))))
+	 HBCI_User_bank (HBCI_Customer_user (info->newcustomer)),
+	 info))
       gnome_druid_set_page (GNOME_DRUID (info->druid), 
 			    GNOME_DRUID_PAGE (info->accountinfopage));
   } else if (strcmp (name, "updatelist_button") == 0) {
@@ -1506,6 +1811,7 @@ void gnc_hbci_initial_druid (void)
   GtkWidget *page;
   
   info = g_new0 (HBCIInitialInfo, 1);
+  info->hbci_accountlist = NULL;
   
   xml = gnc_glade_xml_new ("hbci.glade", "HBCI Init Druid");
 
@@ -1519,6 +1825,7 @@ void gnc_hbci_initial_druid (void)
   glade_xml_signal_connect_data (xml, "on_cancel", 
 				 GTK_SIGNAL_FUNC (on_cancel), info);
   
+
   {
     /* Page with config file entry widget */
     page = glade_xml_get_widget(xml, "configfile_page");

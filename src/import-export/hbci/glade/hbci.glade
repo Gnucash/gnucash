@@ -1540,7 +1540,8 @@ before this whole druid has finished.</property>
 		      <child>
 			<widget class="GtkLabel" id="label8477411">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Do these values match the values on your paper Ini-Letter?</property>
+			  <property name="label" translatable="yes">Do these values match the values on your paper Ini-Letter?
+(If you cannot see anything, press the 'Print' button.)</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_CENTER</property>
@@ -1747,7 +1748,8 @@ connection in the HBCI connection window.</property>
 		  <child>
 		    <widget class="GtkLabel" id="label8477345">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">This is the Ini-Letter of you, the user. Please print out a paper copy 
+		      <property name="label" translatable="yes">This is the Ini-Letter of you, the user. (If you cannot see anything, please 
+press the 'Print' button.)  Please print out a paper copy 
 by pressing 'Print'. Then press 'Next'.</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">False</property>

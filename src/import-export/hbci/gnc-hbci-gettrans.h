@@ -24,11 +24,8 @@
 #define GNC_HBCI_GETTRANS_H
 
 #include <gnome.h>
-#include <openhbci/outboxaccjobs.h>
-#include <openhbci/transaction.h>
-
+#include <openhbci2/outboxjob.h>
 #include "Account.h"
-#include "import-main-matcher.h"
 
 /** Start a GetTrans job. */
 void
@@ -39,13 +36,8 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc);
 gboolean
 gnc_hbci_gettrans_final(GtkWidget *parent, 
 			Account *gnc_acc, 
-			const HBCI_OutboxJobGetTransactions *trans_job,
+			const HBCI_OutboxJob *trans_job,
 			gboolean run_until_done);
 
-/** Import HBCI transaction into gnucash account using importer_generic
- */
-void gnc_hbci_trans_import(const HBCI_Transaction *h_trans,
-		GNCImportMainMatcher *importer_generic,
-		Account *gnc_acc);
 
 #endif /* GNC_HBCI_GETTRANS_H */

@@ -25,14 +25,13 @@
 
 #include <gnome.h>
 
-#include <openhbci/api.h>
-#include <openhbci/account.h>
-#include <openhbci/customer.h>
-#include <openhbci/transaction.h>
-#include <openhbci/outboxaccjobs.h>
+#include <openhbci2/api.h>
+#include <openhbci2/customer.h>
+#include <openhbci2/transaction.h>
+#include <openhbci2/outboxjob.h>
 
 #include "Account.h"
-#include "hbci-interaction.h"
+#include "gnc-hbci-utils.h"
 
 /** The dialog data structure. */
 typedef struct _trans_data HBCITransDialog;
@@ -47,7 +46,7 @@ typedef enum GNC_HBCI_Transtype {
 gnc_hbci_trans (GtkWidget *parent,
 		HBCI_API *api,
 		GNCInteractor *interactor,
-		const HBCI_Account *h_acc,
+		const gnc_HBCI_Account *h_acc,
 		const HBCI_Customer *customer,
 		Account *gnc_acc,
 		GNC_HBCI_Transtype type,
@@ -57,7 +56,7 @@ gnc_hbci_trans (GtkWidget *parent,
  * specified by the arguments, and return a pointer to it. */
 HBCITransDialog *
 gnc_hbci_dialog_new (GtkWidget *parent,
-		     const HBCI_Account *h_acc,
+		     const gnc_HBCI_Account *h_acc,
 		     const HBCI_Customer *customer,
 		     Account *gnc_acc,
 		     GNC_HBCI_Transtype trans_type,
@@ -81,11 +80,12 @@ void gnc_hbci_dialog_show(HBCITransDialog *td);
 
 
 int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td, 
-				 const HBCI_Account *h_acc);
+				 const gnc_HBCI_Account *h_acc);
 HBCI_OutboxJob *
 gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, HBCI_API *api,
+			      HBCI_Outbox *outbox,
 			      const HBCI_Customer *customer, 
-			      HBCI_Account *h_acc, 
+			      gnc_HBCI_Account *h_acc, 
 			      GNC_HBCI_Transtype trans_type);
 /** Callback function for gnc_xfer_dialog_set_txn_cb(). The user_data
  * has to be a pointer to a HBCITransDialog structure.  */
@@ -96,6 +96,7 @@ void gnc_hbci_dialog_xfer_cb(Transaction *trans, gpointer user_data);
  * enter this job again.  */
 gboolean 
 gnc_hbci_trans_dialog_execute(HBCITransDialog *td, HBCI_API *api, 
+			      HBCI_Outbox *outbox,
 			      HBCI_OutboxJob *job, GNCInteractor *interactor);
 
 

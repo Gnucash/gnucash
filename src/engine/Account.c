@@ -2411,8 +2411,9 @@ xaccAccountSetReconcileLastInterval (Account *account, int months, int days)
 
   xaccAccountBeginEdit (account);
 
-  frame = kvp_frame_get_frame (account->inst.kvp_data, 
+  frame = kvp_frame_get_frame_slash (account->inst.kvp_data, 
          "/reconcile-info/last-interval");
+  g_assert(frame);
 
   kvp_frame_set_gint64 (frame, "months", months);
   kvp_frame_set_gint64 (frame, "days", days);

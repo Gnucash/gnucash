@@ -21,12 +21,14 @@
 \********************************************************************/
 
 #include "gnc-hbci-kvp.h"
+#include <stdio.h>
 
 #define HBCI_KEY "hbci"
 #define HBCI_ACCOUNT_ID "account-id"
 #define HBCI_BANK_CODE "bank-code"
 #define HBCI_COUNTRY_CODE "country-code"
 #define HBCI_TRANS_RETRIEVAL "trans-retrieval"
+#define HBCI_ACCOUNTS "hbci-accounts"
 
 /* Account */
 char *gnc_hbci_get_account_accountid (Account *a)
@@ -119,13 +121,32 @@ void gnc_hbci_set_book_template_list (GNCBook *b, GList *template_list)
   qof_book_kvp_changed (b);
 }
 
+GList *gnc_hbci_get_book_account_list (GNCBook *b)
+{
+  kvp_frame *frame = gnc_hbci_get_book_kvp (b);
+  kvp_value *value = kvp_frame_get_slot (frame, HBCI_ACCOUNTS);
+  return kvp_value_get_glist (value);
+}
+void gnc_hbci_set_book_account_list (GNCBook *b, GList *account_list)
+{
+  kvp_frame *frame = gnc_hbci_get_book_kvp (b);
+  kvp_value *value = kvp_value_new_glist_nc (account_list);
+  kvp_frame_set_slot_nc (frame, HBCI_ACCOUNTS, value);
+  qof_book_kvp_changed (b);
+}
+
 
 /* lowlevel */
 /* getters  for kvp frame in book */
 kvp_frame *gnc_hbci_get_book_kvp (GNCBook *b)
 {
-  kvp_frame *toplevel = gnc_book_get_slots (b);
-  return kvp_frame_get_frame (toplevel, HBCI_KEY);
+  kvp_frame *toplevel = qof_book_get_slots (b);
+  kvp_frame *result = kvp_frame_get_frame (toplevel, HBCI_KEY);
+  if (!result) {
+      result = kvp_frame_new();
+      kvp_frame_add_frame_nc (toplevel, HBCI_KEY, result);
+  }
+  return result;
 }
 
 
@@ -134,5 +155,10 @@ kvp_frame *gnc_hbci_get_book_kvp (GNCBook *b)
 kvp_frame *gnc_hbci_get_account_kvp (Account *a)
 {
   kvp_frame *toplevel = xaccAccountGetSlots (a);
-  return kvp_frame_get_frame (toplevel, HBCI_KEY);
+  kvp_frame *result = kvp_frame_get_frame (toplevel, HBCI_KEY);
+  if (!result) {
+      result = kvp_frame_new();
+      kvp_frame_add_frame_nc (toplevel, HBCI_KEY, result);
+  }
+  return result;
 }

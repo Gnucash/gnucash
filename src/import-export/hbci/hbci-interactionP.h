@@ -24,8 +24,7 @@
 #ifndef HBCI_INTERACTIONP_H
 #define HBCI_INTERACTIONP_H
 
-#include <openhbci/interactor.h>
-#include <openhbci/progressmonitor.h>
+#include <openhbci2/interactor.h>
 #include <gnome.h>
 
 
@@ -83,14 +82,7 @@ struct _inter_data
 
 void delete_GNCInteractor (GNCInteractor *data);
 
-HBCI_ProgressMonitor *
-gnc_hbci_new_pmonitor(GNCInteractor *data);
-
 HBCI_Interactor *
 gnc_hbci_new_interactor(GNCInteractor *data);
-
-void add_log_text (GNCInteractor *data, const char *msg);
-
-
 
 #endif

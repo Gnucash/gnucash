@@ -837,7 +837,8 @@ gnc_import_process_trans_clist (GtkCList *clist,
 	      xaccSplitSetValue (split, v);
 	      xaccSplitSetAmount (split, v);
 	    }
-	    xaccSplitSetMemo (split, _("Auto-Balance split"));
+	    /*xaccSplitSetMemo (split, _("Auto-Balance split"));
+	      -- disabled due to popular request */
 	  }
 	  
 	  xaccSplitSetReconcile(gnc_import_TransInfo_get_fsplit (trans_info), CREC);
