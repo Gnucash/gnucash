@@ -7,9 +7,7 @@
 <SURNAME>Gribble</SURNAME>
 </AUTHOR>
 </ARTHEADER>
-<SECT1 ID="QIF">
-<TITLE> Importing Quicken data into GnuCash</TITLE>
-<SECT2 ID="OVERVIEW">
+<sect1 ID="OVERVIEW">
 <TITLE>Overview</TITLE>
 <PARA>    </PARA>
 <PARA>Quicken is one of the best-selling programs in the history of
@@ -101,8 +99,8 @@ once you learn to do the former, the latter should be a piece of cake.
       
 
 </PARA>
-</SECT2>
-<SECT2 ID="INTRO">
+</sect1>
+<sect1 ID="INTRO">
 <TITLE>Introduction to the QIF file</TITLE>
 <PARA>    
     </PARA>
@@ -235,7 +233,7 @@ your new balance is a whopping $0.00).  In the <LINK LINKEND="DIALOG-ACCOUNTS">A
 of what we do with them.
 
       </PARA>
-<SECT3>
+<sect2>
 <TITLE>Multi-account Quicken exports</TITLE>
 <PARA>Quicken and some other programs who use QIF as an export format
 know how to put the history of multiple accounts into a single QIF
@@ -252,9 +250,9 @@ aren't likely to get any transactions in the default account other
 than those that are supposed to be there.
 
       <ANCHOR ID="HOW-TO-QIF"></PARA>
-</SECT3>
-</SECT2>
-<SECT2>
+</sect2>
+</sect1>
+<sect1>
 <TITLE>How to use the QIF Import dialog</TITLE>
 <PARA>    </PARA>
 <PARA>The "Quick Start" guide: To load your files, click the "Select ..."
@@ -336,8 +334,8 @@ slower CPUs.  You only have to do a large import like that a few
 times, fortunately, so I'm not too worried about it.
 
       <ANCHOR ID="DIALOG-FILES"></PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>The "Files" Tab</TITLE>
 <PARA>    
     </PARA>
@@ -370,8 +368,8 @@ will get guessed correctly (i.e. save the account "My Bank Account" as
 My-Bank-Account.qif or My_Bank_Account.qif).
 
 <ANCHOR ID="DIALOG-ACCOUNTS"></PARA>
-</SECT2>
-<SECT2 ID="DIALOG-CATEGORIES">
+</sect1>
+<sect1 ID="DIALOG-CATEGORIES">
 <TITLE>The "Accounts" and "Categories" Tabs</TITLE>
 <PARA>    </PARA>
 <PARA>Each line in the Accounts tab display represents a mapping from
@@ -442,8 +440,8 @@ display containing the offensive mapping.  You will see the
 to change it.
 
 <ANCHOR ID="DIALOG-PICKER"></PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>The Account Picker</TITLE>
 <PARA>    </PARA>
 <PARA>This account picker is sort of broken.  The idea is that you
@@ -459,8 +457,8 @@ of a Bank account, for example).  Don't do that.  I'll fix it Real
 Soon.
 
 <ANCHOR ID="OK-BUTTON"></PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>The "OK" Button</TITLE>
 <PARA>    </PARA>
 <PARA>Everything really happens when you hit the "OK" button, so it
@@ -490,11 +488,11 @@ tree with the new account tree.
 </ITEMIZEDLIST>
 
 <ANCHOR ID="MOREHINTS"></PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>More hints</TITLE>
 <PARA>    <ANCHOR ID="OPENING-BALANCE"></PARA>
-<SECT3>
+<sect2>
 <TITLE>Opening Balance</TITLE>
 <PARA>If your Quicken files have "Opening Balance" records, you will
 see an account called "Opening Balance" in the Accounts tab.
@@ -507,8 +505,8 @@ exactly understand this but it seems reasonable, and it's the default
 for accounts called "Opening Balance".
 
     <ANCHOR ID="EMPTY-CATEGORY"></PARA>
-</SECT3>
-<SECT3>
+</sect2>
+<sect2>
 <TITLE>Empty category</TITLE>
 <PARA>In the Categories display, you may notice a blank QIF Category
 entry.  Quicken transactions are not required to have a Category, but
@@ -522,8 +520,8 @@ account; let me know if there's a good explanation for how it should
 be.
 
     <ANCHOR ID="DIVIDEND-CATEGORY"></PARA>
-</SECT3>
-<SECT3>
+</sect2>
+<sect2>
 <TITLE>Dividend category</TITLE>
 <PARA>Quicken stock transactions have a recognizable pattern for
 dividend payments.  If the importer can definitely tell that a
@@ -533,8 +531,8 @@ present in the Quicken file, so it's being manufactured out of
 nowhere.
 
       <ANCHOR ID="FUND-FAMILIES"></PARA>
-</SECT3>
-<SECT3>
+</sect2>
+<sect2>
 <TITLE>Fund families</TITLE>
 <PARA>Quicken has the abstraction of a single account representing a
 "fund family" for the purpose of allowing smooth transfers between the
@@ -549,8 +547,8 @@ between two accounts in the family.  Hopefully I'll fix this at some
 point if someone tells me how it's supposed to work.
       
       <ANCHOR ID="BROKERAGE-ACCOUNTS"></PARA>
-</SECT3>
-<SECT3>
+</sect2>
+<sect2>
 <TITLE>Brokerage accounts</TITLE>
 <PARA>Brokerage accounts are really confusing to me.  Basically, my
 thinking is that the brokerage account itself should probably be a
@@ -563,9 +561,8 @@ Description field for the transaction).  If you have a better idea,
 let me know.
     
   </PARA>
-</SECT3>
-</SECT2>
-</SECT1>
+</sect2>
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->
