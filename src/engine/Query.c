@@ -268,16 +268,31 @@ xaccQuerySwapTerms(Query * q1, Query * q2) {
 
 /********************************************************************
  * xaccQueryHasTerms
- * returns the number of terms in the query, which is generally
+ * returns the number of 'OR' terms in the query, which is generally
  * used as a truth test.
  ********************************************************************/
 
 int
-xaccQueryHasTerms(Query * q) {
+xaccQueryHasTerms(Query * q) 
+{
   if (!q)
     return 0;
 
   return g_list_length(q->terms);    
+}
+
+int
+xaccQueryNumTerms(Query * q) 
+{
+  GList *o;
+  int n=0;
+  if (!q)
+    return 0;
+
+  for(o=q->terms; o; o=o->next) {
+     n += g_list_length(o->data);    
+  }
+  return n;
 }
 
 GList *

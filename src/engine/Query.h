@@ -242,10 +242,16 @@ Query       * xaccQueryInvert(Query * q1);
 Query       * xaccQueryMerge(Query * q1, Query * q2, QueryOp op);
 void          xaccQueryClear(Query * q);
 
+/* The xaccQueryHasTerms() routine returns the number of 'OR' terms in the query.
+ * The xaccQueryNumTerms() routine returns the total number of terms in the query.
+ */
+
 void          xaccQueryPurgeTerms(Query * q, pd_type_t type);
 int           xaccQueryHasTerms(Query * q);
 gboolean      xaccQueryHasTermType(Query * q, pd_type_t type);
 GList       * xaccQueryGetTerms(Query * q);
+int           xaccQueryNumTerms(Query * q); 
+
 
 /* after the query has been set up, call this to run the query */
 GList       * xaccQueryGetSplits(Query * q);
