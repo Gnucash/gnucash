@@ -34,7 +34,12 @@ typedef struct _Table {
   int current_cursor_row;
   int current_cursor_col;
 
+  /* string values for each cell, 
+   * of dimension num_phys_rows * num_phys_cols */
   char ***entries;
+
+  /* user hooks, of dimension num_rows * num_cols */
+  void ***user_data;
 
   /* protected data -- vital for the implementation, 
    * but not something we want to generally expose */
@@ -82,8 +87,8 @@ void        xaccNextTabGroup (Table *, Widget);
 
 void        xaccDestroyTable (Table *);
 
-/* redraw the table */
-void        xaccRefreshTable (Table *);
+/* redraw the table GUI */
+void        xaccRefreshTableGUI (Table *);
 
 /* Make the indicated cell block be the cursor for this table */
 void        xaccSetCursor (Table *, CellBlock *);

@@ -11,6 +11,7 @@ CellBlock * xaccMallocCellBlock (int numrows, int numcols)
    arr->numRows = 0;
    arr->numCols = 0;
 
+   arr->user_data = NULL;
    arr->cells = NULL;
    arr->right_traverse_r = NULL;
    arr->right_traverse_c = NULL;

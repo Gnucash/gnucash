@@ -47,7 +47,9 @@ typedef struct _CellBlock {
   short     **right_traverse_r;
   short     **right_traverse_c;
 
-  /* private, utility cahced data */
+  void * user_data;
+
+  /* private, cached utility data */
   short         *widths;        /* column widths */
   unsigned char *alignments;    /* column text alignments */
 
