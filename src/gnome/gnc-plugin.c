@@ -26,6 +26,16 @@
 
 #include "gnc-plugin.h"
 
+static gpointer parent_class = NULL;
+
+static void gnc_plugin_class_init (GncPluginClass *klass);
+static void gnc_plugin_init       (GncPlugin *plugin_page);
+static void gnc_plugin_finalize   (GObject *object);
+
+struct  GncPluginPrivate {
+	gpointer dummy;
+};
+
 GType
 gnc_plugin_get_type (void)
 {
@@ -33,35 +43,80 @@ gnc_plugin_get_type (void)
 
 	if (gnc_plugin_type == 0) {
 		static const GTypeInfo our_info = {
-			sizeof (GncPluginIface),
-			NULL,
-			NULL,
-			NULL,
-			NULL,
-			NULL,
-			0,
-			0,
-			NULL
+			sizeof (GncPluginClass),
+			NULL,		/* base_init */
+			NULL,		/* base_finalize */
+			(GClassInitFunc) gnc_plugin_class_init,
+			NULL,		/* class_finalize */
+			NULL,		/* class_data */
+			sizeof (GncPlugin),
+			0,		/* n_preallocs */
+			(GInstanceInitFunc) gnc_plugin_init,
 		};
 
-		gnc_plugin_type = g_type_register_static (G_TYPE_INTERFACE,
+		gnc_plugin_type = g_type_register_static (G_TYPE_OBJECT,
 							  "GncPlugin",
 							   &our_info, 0);
-		g_type_interface_add_prerequisite (gnc_plugin_type, G_TYPE_OBJECT);
 	}
 
 	return gnc_plugin_type;
 }
+
+static void
+gnc_plugin_class_init (GncPluginClass *klass)
+{
+	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+	parent_class = g_type_class_peek_parent (klass);
+	gobject_class->finalize = gnc_plugin_finalize;
+}
+
+static void
+gnc_plugin_init (GncPlugin *plugin_page)
+{
+	GncPluginPrivate *priv;
+
+	priv = plugin_page->priv = g_new0 (GncPluginPrivate, 1);
+
+	plugin_page->window      = NULL;
+}
+
+static void
+gnc_plugin_finalize (GObject *object)
+{
+	GncPlugin *plugin;
+
+	g_return_if_fail (GNC_IS_PLUGIN (object));
+
+	plugin = GNC_PLUGIN (object);
+	g_return_if_fail (plugin->priv != NULL);
+
+	g_free (plugin->priv);
+
+	G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
 
 void
 gnc_plugin_add_to_window (GncPlugin *plugin,
 			  GncMainWindow *window,
 			  GQuark type)
 {
-	g_return_if_fail (GNC_IS_PLUGIN (plugin));
-	g_return_if_fail (GNC_PLUGIN_GET_IFACE (plugin)->add_to_window != NULL);
+	GncPluginClass *class;
 
-	GNC_PLUGIN_GET_IFACE (plugin)->add_to_window (plugin, window, type);
+	g_return_if_fail (GNC_IS_PLUGIN (plugin));
+
+	class = GNC_PLUGIN_GET_CLASS (plugin);
+	plugin->window = window;
+	if (class->actions_name) {
+	  gnc_main_window_merge_actions (window, class->actions_name,
+					 class->actions, class->n_actions,
+					 class->ui_filename, plugin);
+	}
+
+	if (GNC_PLUGIN_GET_CLASS (plugin)->add_to_window) {
+	  GNC_PLUGIN_GET_CLASS (plugin)->add_to_window (plugin, window, type);
+	}
 }
 
 void
@@ -69,19 +124,19 @@ gnc_plugin_remove_from_window (GncPlugin *plugin,
 			       GncMainWindow *window,
 			       GQuark type)
 {
+	GncPluginClass *class;
+
 	g_return_if_fail (GNC_IS_PLUGIN (plugin));
-	g_return_if_fail (GNC_PLUGIN_GET_IFACE (plugin)->remove_from_window != NULL);
 
-	GNC_PLUGIN_GET_IFACE (plugin)->remove_from_window (plugin, window, type);
-}
+	class = GNC_PLUGIN_GET_CLASS (plugin);
+	if (GNC_PLUGIN_GET_CLASS (plugin)->remove_from_window) {
+	  GNC_PLUGIN_GET_CLASS (plugin)->remove_from_window (plugin, window, type);
+	}
 
-const gchar *
-gnc_plugin_get_name (GncPlugin *plugin)
-{
-	g_return_val_if_fail (GNC_IS_PLUGIN (plugin), NULL);
-	g_return_val_if_fail (GNC_PLUGIN_GET_IFACE (plugin)->get_name != NULL, NULL);
-
-	return GNC_PLUGIN_GET_IFACE (plugin)->get_name (plugin);
+	if (class->actions_name) {
+	  gnc_main_window_unmerge_actions (window, class->actions_name);
+	}
+	plugin->window = NULL;
 }
 
 GncPluginPage *
@@ -90,12 +145,12 @@ gnc_plugin_create_page (GncPlugin *plugin,
 {
 	g_return_val_if_fail (GNC_IS_PLUGIN (plugin), NULL);
 
-	if (!GNC_PLUGIN_GET_IFACE (plugin)->create_page)
+	if (!GNC_PLUGIN_GET_CLASS (plugin)->create_page)
 	  return NULL;
-	return GNC_PLUGIN_GET_IFACE (plugin)->create_page (plugin, uri);
+	return GNC_PLUGIN_GET_CLASS (plugin)->create_page (plugin, uri);
 }
 
-/*
+#if 0
 static void
 gnc_plugin_base_init (gpointer klass)
 {
@@ -124,4 +179,4 @@ gnc_plugin_base_init (gpointer klass)
 							 EGG_TYPE_MENU_MERGE);
 	}
 }
-*/
+#endif

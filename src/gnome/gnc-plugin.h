@@ -31,25 +31,38 @@
 G_BEGIN_DECLS
 
 /* type macros */
-#define GNC_TYPE_PLUGIN          (gnc_plugin_get_type ())
-#define GNC_PLUGIN(o)            (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_PLUGIN, GncPlugin))
-#define GNC_IS_PLUGIN(o)         (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_PLUGIN))
-#define GNC_PLUGIN_GET_IFACE(o)  (G_TYPE_INSTANCE_GET_INTERFACE ((o), GNC_TYPE_PLUGIN, GncPluginIface))
+#define GNC_TYPE_PLUGIN            (gnc_plugin_get_type ())
+#define GNC_PLUGIN(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_PLUGIN, GncPlugin))
+#define GNC_PLUGIN_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_PLUGIN, GncPluginClass))
+#define GNC_IS_PLUGIN(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_PLUGIN))
+#define GNC_IS_PLUGIN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN))
+#define GNC_PLUGIN_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_PLUGIN, GncPluginClass))
 
 /* typedefs & structures */
-typedef struct GncPlugin GncPlugin; /* dummy typedef */
+typedef struct GncPluginPrivate GncPluginPrivate;
 
 typedef struct {
-	GTypeInterface parent;
+	GObject parent;
+	GncPluginPrivate *priv;
 
+	GncMainWindow *window;
+} GncPlugin;
+
+typedef struct {
+	GObjectClass parent;
+	const gchar *plugin_name;
+
+	const gchar *actions_name;
+	EggActionEntry *actions;
+	guint n_actions; 
+	const gchar *ui_filename;
+ 
 	/* Virtual Table */
 	void (* add_to_window) (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 	void (* remove_from_window) (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 
-	const gchar *(* get_name) (GncPlugin *plugin);
-
 	GncPluginPage *(* create_page) (GncPlugin *plugin, const gchar *uri);
-} GncPluginIface;
+} GncPluginClass;
 
 /* function prototypes */
 GType                 gnc_plugin_get_type        (void);
@@ -60,8 +73,6 @@ void                  gnc_plugin_add_to_window   (GncPlugin *plugin,
 void                  gnc_plugin_remove_from_window (GncPlugin *plugin,
 					             GncMainWindow *window,
 					             GQuark type);
-
-G_CONST_RETURN gchar *gnc_plugin_get_name        (GncPlugin *plugin);
 
 GncPluginPage        *gnc_plugin_create_page     (GncPlugin *plugin,
 						  const gchar *uri);

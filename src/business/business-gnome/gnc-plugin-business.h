@@ -45,13 +45,13 @@ G_BEGIN_DECLS
 typedef struct GncPluginBusinessPrivate GncPluginBusinessPrivate;
 
 typedef struct {
-	GObject parent;
+	GncPlugin parent;
 
 	GncPluginBusinessPrivate *priv;
 } GncPluginBusiness;
 
 typedef struct {
-	GObjectClass parent;
+	GncPluginClass parent;
 } GncPluginBusinessClass;
 
 /* function prototypes */

@@ -103,7 +103,8 @@ gnc_plugin_manager_add_plugin (GncPluginManager *manager,
 	g_object_ref (plugin);
 
 	manager->priv->plugins = g_list_append (manager->priv->plugins, plugin);
-	g_hash_table_insert (manager->priv->plugins_table, g_strdup( gnc_plugin_get_name (plugin)),
+	g_hash_table_insert (manager->priv->plugins_table,
+			     g_strdup( GNC_PLUGIN_GET_CLASS(plugin)->plugin_name ),
 			     plugin);
 
 	g_signal_emit (G_OBJECT (manager), signals[PLUGIN_ADDED], 0, plugin);
@@ -124,7 +125,8 @@ gnc_plugin_manager_remove_plugin (GncPluginManager *manager,
 		return;
 
 	manager->priv->plugins = g_list_remove (manager->priv->plugins, plugin);
-	g_hash_table_remove (manager->priv->plugins_table, gnc_plugin_get_name (plugin));
+	g_hash_table_remove (manager->priv->plugins_table,
+			     GNC_PLUGIN_GET_CLASS(plugin)->plugin_name);
 
 	g_signal_emit (G_OBJECT (manager), signals[PLUGIN_REMOVED], 0, plugin);
 

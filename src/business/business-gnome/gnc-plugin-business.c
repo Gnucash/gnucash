@@ -45,12 +45,6 @@
 static void gnc_plugin_business_class_init (GncPluginBusinessClass *klass);
 static void gnc_plugin_business_init (GncPluginBusiness *plugin);
 static void gnc_plugin_business_finalize (GObject *object);
-static void gnc_plugin_business_plugin_init (GncPluginIface *iface);
-
-/* plugin window interface */
-static void gnc_plugin_business_add_to_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
-static void gnc_plugin_business_remove_from_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
-static const gchar *gnc_plugin_business_get_name (GncPlugin *plugin);
 
 /* Command callbacks */
 static void gnc_plugin_business_cmd_customer_new_customer    (EggAction *action,
@@ -102,8 +96,10 @@ static void gnc_plugin_business_cmd_bills_due_reminder (EggAction *action,
 							GncMainWindowActionData *data);
 
 
+#define PLUGIN_ACTIONS_NAME "gnc-plugin-business-actions"
+#define PLUGIN_UI_FILENAME  "gnc-plugin-business-ui.xml"
 
-static EggActionEntry gnc_plugin_business_actions [] = 
+static EggActionEntry gnc_plugin_actions [] = 
 {
 	/* Toplevel */
 	{ "BusinessAction", N_("_Business"), NULL, NULL, NULL, NULL },
@@ -185,7 +181,8 @@ static EggActionEntry gnc_plugin_business_actions [] =
 	  N_("Open the Bills Due Reminder dialog"),
 	  G_CALLBACK (gnc_plugin_business_cmd_bills_due_reminder) },
 };
-static guint gnc_plugin_business_n_actions = G_N_ELEMENTS (gnc_plugin_business_actions);
+static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
+
 
 struct GncPluginBusinessPrivate
 {
@@ -204,29 +201,19 @@ gnc_plugin_business_get_type (void)
 	if (gnc_plugin_business_type == 0) {
 		static const GTypeInfo our_info = {
 			sizeof (GncPluginBusinessClass),
-			NULL,
-			NULL,
+			NULL,		/* base_init */
+			NULL,		/* base_finalize */
 			(GClassInitFunc) gnc_plugin_business_class_init,
-			NULL,
-			NULL,
+			NULL,		/* class_finalize */
+			NULL,		/* class_data */
 			sizeof (GncPluginBusiness),
-			0,
+			0,		/* n_preallocs */
 			(GInstanceInitFunc) gnc_plugin_business_init
 		};
 		
-		static const GInterfaceInfo plugin_info = {
-			(GInterfaceInitFunc) gnc_plugin_business_plugin_init,
-			NULL,
-			NULL
-		};
-
-		gnc_plugin_business_type = g_type_register_static (G_TYPE_OBJECT,
-								       "GncPluginBusiness",
-								       &our_info, 0);
-
-		g_type_add_interface_static (gnc_plugin_business_type,
-					     GNC_TYPE_PLUGIN,
-					     &plugin_info);
+		gnc_plugin_business_type = g_type_register_static (GNC_TYPE_PLUGIN,
+								   "GncPluginBusiness",
+								   &our_info, 0);
 	}
 
 	return gnc_plugin_business_type;
@@ -247,10 +234,20 @@ static void
 gnc_plugin_business_class_init (GncPluginBusinessClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = gnc_plugin_business_finalize;
+
+	/* plugin info */
+	plugin_class->plugin_name  = GNC_PLUGIN_BUSINESS_NAME;
+
+	/* widget addition/removal */
+	plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
+	plugin_class->actions      = gnc_plugin_actions;
+	plugin_class->n_actions    = gnc_plugin_n_actions;
+	plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
 }
 
 static void
@@ -274,56 +271,25 @@ gnc_plugin_business_init (GncPluginBusiness *plugin)
 static void
 gnc_plugin_business_finalize (GObject *object)
 {
-	GncPluginBusiness *model = GNC_PLUGIN_BUSINESS (object);
+	GncPluginBusiness *plugin;
 
-	g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (model));
-	g_return_if_fail (model->priv != NULL);
+	g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (object));
 
-	g_free (model->priv);
+	plugin = GNC_PLUGIN_BUSINESS (object);
+	g_return_if_fail (plugin->priv != NULL);
+
+	g_free (plugin->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-static void
-gnc_plugin_business_plugin_init (GncPluginIface *iface)
-{
-	iface->add_to_window      = gnc_plugin_business_add_to_window;
-	iface->remove_from_window = gnc_plugin_business_remove_from_window;
-	iface->get_name           = gnc_plugin_business_get_name;
-	iface->create_page        = NULL;
-}
+/************************************************************
+ *              Plugin Function Implementation              *
+ ************************************************************/
 
-static void
-gnc_plugin_business_add_to_window (GncPlugin *plugin,
-				       GncMainWindow *window,
-				       GQuark type)
-{
-	g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (plugin));
-	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
-
-	gnc_main_window_merge_actions (window, "gnc-plugin-business-actions",
-			               gnc_plugin_business_actions, gnc_plugin_business_n_actions,
-				       "gnc-plugin-business-ui.xml", plugin);
-}
-	
-static void
-gnc_plugin_business_remove_from_window (GncPlugin *plugin,
-					    GncMainWindow *window,
-					    GQuark type)
-{
-	g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (plugin));
-	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
-
-	gnc_main_window_unmerge_actions (window, "gnc-plugin-business-actions");
-}
-
-static const gchar *
-gnc_plugin_business_get_name (GncPlugin *plugin)
-{
-	return GNC_PLUGIN_BUSINESS_NAME;
-}
-
-/* Command callbacks */
+/************************************************************
+ *                    Command Callbacks                     *
+ ************************************************************/
 
 static void
 gnc_plugin_business_cmd_customer_new_customer (EggAction *action,

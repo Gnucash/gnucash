@@ -1,3 +1,28 @@
+2003-10-11  David Hampton  <hampton@employees.org>
+
+	* src/business/business-gnome/gnc-plugin-business.[ch]:
+	* src/gnome/gnc-plugin-account-tree.[ch]:
+	* src/gnome/gnc-plugin-manager.c:
+	* src/gnome/gnc-plugin-register.[ch]:
+	* src/gnome/gnc-plugin.[ch]:
+	* src/import-export/qif-import/gnc-plugin-qif-import.[ch]: Derive
+	the GncPlugin widget from a GObject instead of a GInterface.
+	Collapse common functions into the base GncPlugin class.
+
+2003-10-10  David Hampton  <hampton@employees.org>
+
+	* src/gnome/gnc-plugin-page.[ch]: Support a list of books
+	referenced by each page.
+
+	* src/gnome/gnc-main-window.c: Track installed pages on a
+	per-window basis.  Require all installed pages to specify what
+	books they reference.  Add an event handler to close pages when
+	books are deleted.
+	
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-plugin-page-register.c: Specify books in use by
+	the page.
+
 2003-10-09  David Hampton  <hampton@employees.org>
 
 	* src/engine/FreqSpec.c:
