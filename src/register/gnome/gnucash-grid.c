@@ -27,6 +27,8 @@
  *     Heath Martin <martinh@pegasus.cc.ucf.edu>
  */
 
+#include "config.h"
+
 #include "gnucash-sheet.h"
 #include "gnucash-grid.h"
 #include "gnucash-color.h"
