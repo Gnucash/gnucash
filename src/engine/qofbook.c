@@ -236,6 +236,35 @@ qof_book_get_collection (QofBook *book, QofIdType entity_type)
   return col;
 }
 
+struct _iterate {
+  QofCollectionForeachCB  fn;
+  gpointer                data;
+};
+
+static void 
+foreach_cb (gpointer key, gpointer item, gpointer arg)
+{
+  struct _iterate *iter = arg;
+  QofCollection *col = item;
+
+  iter->fn (col, iter->data);
+}
+
+void 
+qof_book_foreach_collection (QofBook *book, 
+                             QofCollectionForeachCB cb, gpointer user_data)
+{
+  struct _iterate iter;
+
+  g_return_if_fail (book);
+  g_return_if_fail (cb);
+
+  iter.fn = cb;
+  iter.data = user_data;
+
+  g_hash_table_foreach (book->hash_of_collections, foreach_cb, &iter);
+}
+
 /* ====================================================================== */
 
 gint64

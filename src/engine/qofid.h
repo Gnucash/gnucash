@@ -95,9 +95,10 @@ QofIdType qof_collection_get_type (QofCollection *);
 /** Find the entity going only from its guid */
 QofEntity * qof_collection_lookup_entity (QofCollection *, const GUID *);
 
-/* Callback type for qof_entity_foreach */
+/** Callback type for qof_entity_foreach */
 typedef void (*QofEntityForeachCB) (QofEntity *, gpointer user_data);
 
+/** Call the callback for each entity in the collection. */
 void qof_collection_foreach (QofCollection *, 
                        QofEntityForeachCB, gpointer user_data);
 

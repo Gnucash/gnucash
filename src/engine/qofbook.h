@@ -59,8 +59,12 @@ QofBook * qof_book_new (void);
     associated with it. */
 void      qof_book_destroy (QofBook *book);
 
-/** \return The Entity table for the book. */
+/** \return The table of entities of the given type. */
 QofCollection  * qof_book_get_collection (QofBook *, QofIdType);
+
+/** Invoke the indicated callback on each collection in the book. */
+typedef void (*QofCollectionForeachCB) (QofCollection *, gpointer user_data);
+void qof_book_foreach_collection (QofBook *, QofCollectionForeachCB, gpointer);
 
 /** \return The kvp data for the book */
 KvpFrame   * qof_book_get_slots (QofBook *book);
@@ -77,6 +81,7 @@ gpointer qof_book_get_data (QofBook *book, const char *key);
 
 /** DOCUMENT ME! */
 QofBackend *qof_book_get_backend (QofBook *book);
+
 void qof_book_set_backend (QofBook *book, QofBackend *);
 
 /** qof_book_not_saved() will return TRUE if any 
