@@ -563,7 +563,8 @@
     ;; end, we may remove more than one split from splits-left with
     ;; each call to mark-some-splits.  
     (if (not (null? splits-left))
-        (if (not (qif-split:mark (car splits-left)))
+        (if (and (not (qif-split:mark (car splits-left)))
+                 (qif-split:category-is-account? (car splits-left)))
             (set! splits-left 
                   (qif-import:mark-some-splits 
                    splits-left xtn candidate-xtns))
