@@ -91,7 +91,7 @@
 	 (gnc:filter-accountlist-type 
 	  '(bank cash credit asset liability stock mutual-fund currency
             equity income expense)
-	  (gnc:group-get-account-list (gnc:get-current-group)))))
+	  (gnc:group-get-subaccounts (gnc:get-current-group)))))
 
       ;; with or without grouping
 ;      (gnc:options-add-group-accounts!      
