@@ -2,13 +2,13 @@
 exec gnucash-env guile -e main -s "$0" "$@"
 !#
 
-(use-modules (gnucash bootstrap))
+(use-modules (gnucash main))
 
 (define (main args)
   ;; UGLY HACK -- FIXME -- code should be rewritten to not need this.
   ;; In particular, we should be using gnc_scm_lookup where we're using
   ;; gh_lookup or gh_eval_str now.
-  (set-current-module (resolve-module '(gnucash bootstrap)))
+  (set-current-module (resolve-module '(gnucash main)))
   (gnc:main))
 
 ;; Local Variables:
