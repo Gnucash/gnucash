@@ -37,7 +37,8 @@ void             gnc_acct_tree_window_create_toolbar(GNCAcctTreeWin * win,
                                                      GNCMDIChildInfo * child);
 Account        * gnc_acct_tree_window_get_current_account(GNCAcctTreeWin * w);
 GnomeMDIChild  * gnc_acct_tree_window_create_child(const gchar * url);
-void             gnc_main_window_open_accounts(gint toplevel); 
+void             gnc_main_window_open_accounts(gboolean toplevel); 
 SCM              gnc_acct_tree_window_get_options(GNCAcctTreeWin * win);
 int              gnc_acct_tree_window_get_id(GNCAcctTreeWin * win);
+
 #endif

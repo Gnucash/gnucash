@@ -27,20 +27,36 @@
 #include <gnome.h>
 #include <guile/gh.h>
 
+typedef struct gnc_mdi_child_info GNCMDIChildInfo;
+
 typedef void (*GNCShutdownFunc) (int exit_status);
+typedef gboolean (*GNCMDICanRestoreCB) (const char * filename);
+typedef GnomeMDIChild * (*GNCMDIRestoreCB) (const char *config_string);
 
 typedef struct
 {
   GnomeMDI * mdi;
+
+  char     * app_name;
   char     * title;
+
+  GnomeUIInfo *toolbar_prefix;
+  GnomeUIInfo *toolbar_suffix;
+
   int      component_id;
+
   SCM      toolbar_change_callback_id;
   SCM      mdi_change_callback_id;
+
   GList    * children;
+
   GNCShutdownFunc shutdown;
+
+  GNCMDICanRestoreCB can_restore_cb;
+  GNCMDIRestoreCB restore_cb;
 } GNCMDIInfo;
 
-typedef struct
+struct gnc_mdi_child_info
 {
   GnomeMDIChild   * child;
   GNCMDIInfo      * gnc_mdi;
@@ -49,17 +65,21 @@ typedef struct
 
   GtkWidget       * toolbar;  
   GnomeUIInfo     * toolbar_info;
-  int             toolbar_size;
   GnomeUIInfo     * menu_info;
 
   int             component_id;
   void            * user_data;
   char            * title;
-} GNCMDIChildInfo;
+};
 
 
-GNCMDIInfo * gnc_mdi_new (const char *app_name, const char *title,
-                          GNCShutdownFunc shutdown);
+GNCMDIInfo * gnc_mdi_new (const char *app_name,
+                          const char *title,
+                          GnomeUIInfo *toolbar_prefix,
+                          GnomeUIInfo *toolbar_suffix,
+                          GNCShutdownFunc shutdown,
+                          GNCMDICanRestoreCB can_restore_cb,
+                          GNCMDIRestoreCB restore_cb);
 void gnc_mdi_destroy (GNCMDIInfo * gnc_mdi);
 
 void gnc_mdi_add_child (GNCMDIInfo * wind, GNCMDIChildInfo * child);
@@ -70,5 +90,10 @@ GNCMDIInfo * gnc_mdi_get_current (void);
 gboolean gnc_mdi_has_apps (void);
 
 void gnc_app_set_title (GnomeApp *app);
+
+void gnc_mdi_save (GNCMDIInfo * gnc_mdi, char * filename);
+void gnc_mdi_restore (GNCMDIInfo * gnc_mdi, const char * filename);
+
+void gnc_mdi_create_child_toolbar (GNCMDIInfo * mi, GNCMDIChildInfo * child);
 
 #endif

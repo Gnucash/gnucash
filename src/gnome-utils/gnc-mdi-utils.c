@@ -26,6 +26,8 @@
 #include <gnome.h>
 
 #include "dialog-utils.h"
+#include "global-options.h"
+#include "gnc-html.h"
 #include "gnc-mdi-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
@@ -260,9 +262,105 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * not_used,
   }
 }
 
+static void
+gnc_mdi_configure_toolbar_cb (gpointer data)
+{
+  GNCMDIInfo * mi = data; 
+  GtkToolbarStyle tbstyle;
+  GList * child;
+
+  tbstyle = gnc_get_toolbar_style ();
+
+  for (child = mi->children; child; child = child->next)
+  {
+    GNCMDIChildInfo * mc = child->data;
+
+    if (mc && mc->toolbar)
+      gtk_toolbar_set_style (GTK_TOOLBAR(mc->toolbar), tbstyle);
+  }
+}
+
+static void
+gnc_mdi_configure_mdi_cb (gpointer data)
+{
+  GNCMDIInfo * mi = data; 
+
+  gnome_mdi_set_mode (mi->mdi, gnc_get_mdi_mode ());
+}
+
+static int
+gnc_ui_info_size (GnomeUIInfo *ui_info)
+{
+  int size;
+
+  if (!ui_info) return 0;
+
+  for (size = 0; ui_info[size].type != GNOME_APP_UI_ENDOFINFO; size++)
+    ;
+
+  return size;
+}
+
+static GnomeUIInfo *
+gnc_ui_info_concat (GnomeUIInfo *first_info, ...)
+{
+  GnomeUIInfo end = GNOMEUIINFO_END;
+  GnomeUIInfo *ui_info;
+  GnomeUIInfo *next_info;
+  va_list ap;
+  int index;
+
+  va_start (ap, first_info);
+
+  next_info = first_info;
+  index = 0;
+
+  while (TRUE)
+  {
+    index += gnc_ui_info_size (next_info);
+
+    next_info = va_arg (ap, GnomeUIInfo *);
+    if (!next_info)
+      break;
+  }
+
+  ui_info = g_new0 (GnomeUIInfo, index + 1);
+
+  va_end (ap);
+
+  va_start (ap, first_info);
+
+  next_info = first_info;
+  index = 0;
+
+  while (TRUE)
+  {
+    int i, len;
+
+    len = gnc_ui_info_size (next_info);
+    for (i = 0; i < len; i++, index++)
+      ui_info[index] = next_info[i];
+
+    next_info = va_arg (ap, GnomeUIInfo *);
+    if (!next_info)
+      break;
+  }
+
+  ui_info[index] = end;
+
+  va_end (ap);
+
+  return ui_info;
+}
+
 GNCMDIInfo *
-gnc_mdi_new (const char *app_name, const char *title,
-             GNCShutdownFunc shutdown)
+gnc_mdi_new (const char *app_name,
+             const char *title,
+             GnomeUIInfo *toolbar_prefix,
+             GnomeUIInfo *toolbar_suffix,
+             GNCShutdownFunc shutdown,
+             GNCMDICanRestoreCB can_restore_cb,
+             GNCMDIRestoreCB restore_cb)
 {
   GNCMDIInfo * gnc_mdi;
 
@@ -271,11 +369,18 @@ gnc_mdi_new (const char *app_name, const char *title,
 
   g_return_val_if_fail (app_name != NULL, NULL);
   g_return_val_if_fail (title != NULL, NULL);
+  g_return_val_if_fail (can_restore_cb != NULL, NULL);
+  g_return_val_if_fail (restore_cb != NULL, NULL);
 
   gnc_mdi = g_new0 (GNCMDIInfo, 1);
 
-  gnc_mdi->shutdown = shutdown;
+  gnc_mdi->app_name = g_strdup (app_name);
   gnc_mdi->title = g_strdup (title);
+  gnc_mdi->toolbar_prefix = gnc_ui_info_concat (toolbar_prefix, NULL);
+  gnc_mdi->toolbar_suffix = gnc_ui_info_concat (toolbar_suffix, NULL);
+  gnc_mdi->shutdown = shutdown;
+  gnc_mdi->can_restore_cb = can_restore_cb;
+  gnc_mdi->restore_cb = restore_cb;
 
   gnc_mdi->mdi = GNOME_MDI (gnome_mdi_new (app_name, title));
 
@@ -290,6 +395,18 @@ gnc_mdi_new (const char *app_name, const char *title,
   gtk_signal_connect (GTK_OBJECT(gnc_mdi->mdi), "child_changed",
                       GTK_SIGNAL_FUNC(gnc_mdi_child_changed_cb),
                       gnc_mdi);
+
+  gnc_mdi->toolbar_change_callback_id =
+    gnc_register_option_change_callback (gnc_mdi_configure_toolbar_cb, 
+                                         gnc_mdi,
+                                         "General", "Toolbar Buttons");
+
+  gnc_mdi->mdi_change_callback_id =
+    gnc_register_option_change_callback (gnc_mdi_configure_mdi_cb, 
+                                         gnc_mdi,
+                                         "General", "Application MDI mode");
+
+  gnome_mdi_set_mode (gnc_mdi->mdi, gnc_get_mdi_mode ());
 
   gnc_mdi_current = gnc_mdi;
 
@@ -411,4 +528,84 @@ gnc_mdi_destroy (GNCMDIInfo * gnc_mdi)
 
   if (gnc_mdi->mdi)
     gtk_object_destroy (GTK_OBJECT (gnc_mdi->mdi));
+}
+
+void
+gnc_mdi_save (GNCMDIInfo * gnc_mdi, char * filename)
+{
+  char * encoded;
+  char * session_name;
+
+  if (!gnc_mdi)
+    return;
+
+  encoded = gnc_html_encode_string (filename);
+  session_name = g_strdup_printf ("/%s/MDI : %s",
+                                  gnc_mdi->app_name,
+                                  encoded ? encoded : "");
+  g_free (encoded);
+
+  if (filename && *filename != '\0')
+    gnome_mdi_save_state (GNOME_MDI (gnc_mdi->mdi), session_name);
+
+  g_free (session_name);
+}
+
+void
+gnc_mdi_restore (GNCMDIInfo * gnc_mdi, const char * filename)
+{
+  char * encoded;
+  char * session_name;
+  GList * old_children;
+  GList * c;
+
+  old_children = g_list_copy (gnc_mdi->mdi->children);
+  encoded = gnc_html_encode_string (filename);
+  session_name = g_strdup_printf ("/%s/MDI : %s",
+                                  gnc_mdi->app_name,
+                                  encoded ? encoded : "");
+  g_free (encoded);
+
+  if (!filename ||
+      *filename == '\0' ||
+      !gnc_mdi->can_restore_cb (filename))
+    gnc_mdi->restore_cb (NULL);
+  else if (!gnome_mdi_restore_state (GNOME_MDI(gnc_mdi->mdi),
+                                     session_name, gnc_mdi->restore_cb) ||
+           gnc_mdi->mdi->children == NULL)
+    gnc_mdi->restore_cb (NULL);
+
+  g_free (session_name);
+
+  for (c = old_children; c ; c = c->next)
+    gnome_mdi_remove_child (gnc_mdi->mdi, GNOME_MDI_CHILD(c->data), TRUE);
+
+  g_list_free (old_children);
+}
+
+void
+gnc_mdi_create_child_toolbar (GNCMDIInfo * mi, GNCMDIChildInfo * child)
+{
+  GnomeUIInfo end = GNOMEUIINFO_END;
+  GnomeUIInfo * tbinfo;
+  GnomeUIInfo * cur;
+  GtkToolbar  * tb;
+
+  g_return_if_fail (mi != NULL);
+  g_return_if_fail (child != NULL);
+
+  tbinfo = gnc_ui_info_concat (mi->toolbar_prefix,
+                               child->toolbar_info,
+                               mi->toolbar_suffix,
+                               NULL);
+
+  g_free (child->toolbar_info);
+  child->toolbar_info = tbinfo;
+
+  tb = GTK_TOOLBAR (gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL,
+                                     GTK_TOOLBAR_BOTH));
+
+  child->toolbar = GTK_WIDGET (tb);
+
+  gnome_app_fill_toolbar (tb, tbinfo, NULL);
 }

@@ -71,6 +71,8 @@
 #define WINDOW_MAIN_CM_CLASS "window-main"
 
 static void gnc_main_window_create_menus(GNCMDIInfo * maininfo);
+static GnomeUIInfo * gnc_main_window_toolbar_prefix (void);
+static GnomeUIInfo * gnc_main_window_toolbar_suffix (void);
 
 
 /********************************************************************
@@ -152,48 +154,12 @@ gnc_refresh_main_window_info (void)
 
 
 /********************************************************************
- * gnc_main_window_configure_toolbar_cb
- * called when the toolbar button style changes 
- ********************************************************************/
-
-static void
-gnc_main_window_configure_toolbar_cb (gpointer data)
-{
-  GNCMDIInfo * mi = data; 
-  GNCMDIChildInfo * mc = NULL; 
-  GtkToolbarStyle tbstyle = gnc_get_toolbar_style();
-  GList * child;
-
-  for(child = mi->children; child; child = child->next) {
-    mc = child->data;
-    if(mc && mc->toolbar) {
-      gtk_toolbar_set_style(GTK_TOOLBAR(mc->toolbar), tbstyle);
-    }
-  }
-}
-
-
-/********************************************************************
- * gnc_main_window_configure_mdi_cb
- * called when the MDI mode option is changed
- ********************************************************************/
-
-static void
-gnc_main_window_configure_mdi_cb (gpointer data)
-{
-  GNCMDIInfo * mi = data; 
-  GnomeMDIMode mode = gnc_get_mdi_mode();
-
-  gnome_mdi_set_mode(mi->mdi, mode);
-}
-
-/********************************************************************
  * gnc_main_window_create_child()
  * open an MDI child given a config string (URL).  This is used at 
  * MDI session restore time 
  ********************************************************************/
 
-GnomeMDIChild * 
+static GnomeMDIChild * 
 gnc_main_window_create_child(const gchar * configstring) {
   GnomeMDIChild *child;
   URLType type;
@@ -201,7 +167,10 @@ gnc_main_window_create_child(const gchar * configstring) {
   char * label;
 
   if (!configstring)
+  {
+    gnc_main_window_open_accounts (FALSE);
     return NULL;
+  }
 
   type = gnc_html_parse_url(NULL, configstring, &location, &label);
   g_free(location);
@@ -243,74 +212,11 @@ gnc_main_window_can_cancel_save (GNCMDIInfo *wind)
   return gnc_mdi_has_apps ();
 }
 
-/********************************************************************
- * gnc_main_window_save()
- * save the status of the MDI session
- ********************************************************************/
-
-void
-gnc_main_window_save(GNCMDIInfo * wind, char * filename) {
-  char * encoded;
-  char * session_name;
-
-  if (!wind)
-    return;
-
-  encoded = gnc_html_encode_string(filename);
-  session_name = g_strdup_printf("/GnuCash/MDI : %s",
-                                 encoded ? encoded : "");
-  g_free (encoded);
-
-  if(filename && *filename != '\0') {
-    gnome_mdi_save_state(GNOME_MDI(wind->mdi), session_name);
-  }
-
-  g_free(session_name);
-}
-
-
-/********************************************************************
- * gnc_main_window_restore()
- * save the status of the MDI session
- ********************************************************************/
-
-void
-gnc_main_window_restore(GNCMDIInfo * wind, const char * filename)
+static gboolean
+gnc_main_window_can_restore_cb (const char * filename)
 {
-  char * encoded;
-  char * session_name;
-  gboolean old_format_file;
-  GList * old_children = g_list_copy(wind->mdi->children);
-  GList * c;
-
-  encoded = gnc_html_encode_string(filename);
-  session_name = g_strdup_printf("/GnuCash/MDI : %s",
-                                 encoded ? encoded : "");
-  g_free (encoded);
-
-  old_format_file =
-    gnc_commodity_table_has_namespace
-    (gnc_engine_commodities (), GNC_COMMODITY_NS_LEGACY);
-
-  if(!filename ||
-     *filename == '\0' ||
-     old_format_file ||
-     !gnome_mdi_restore_state(GNOME_MDI(wind->mdi), session_name,
-                              gnc_main_window_create_child) ||
-     wind->mdi->children == NULL) {
-    gnc_main_window_open_accounts(0);
-  }
-  g_free(session_name);
-
-  for(c = old_children; c ; c = c->next) {
-    gnome_mdi_remove_child(wind->mdi, GNOME_MDI_CHILD(c->data), TRUE);
-  }
-  g_list_free(old_children);
-}
-
-void
-gnc_main_window_close_children(GNCMDIInfo * wind) {
-  gnome_mdi_remove_all(wind->mdi, FALSE);
+  return !gnc_commodity_table_has_namespace (gnc_engine_commodities (),
+                                             GNC_COMMODITY_NS_LEGACY);
 }
 
 /********************************************************************
@@ -319,10 +225,17 @@ gnc_main_window_close_children(GNCMDIInfo * wind) {
  ********************************************************************/
 
 GNCMDIInfo * 
-gnc_main_window_new(void) {
+gnc_main_window_new (void)
+{
   GNCMDIInfo * retval;
 
-  retval = gnc_mdi_new ("GnuCash", "GnuCash", gnc_shutdown);
+  retval = gnc_mdi_new ("GnuCash", "GnuCash",
+                        gnc_main_window_toolbar_prefix (),
+                        gnc_main_window_toolbar_suffix (),
+                        gnc_shutdown,
+                        gnc_main_window_can_restore_cb,
+                        gnc_main_window_create_child);
+
   g_return_val_if_fail (retval != NULL, NULL);
 
   retval->component_id = 
@@ -332,25 +245,13 @@ gnc_main_window_new(void) {
   /* these menu and toolbar options are the ones that are always 
    * available */ 
   gnc_main_window_create_menus (retval);
-  
+
   /* set up the position where the child menus/toolbars will be 
    * inserted  */
   gnome_mdi_set_child_menu_path(GNOME_MDI(retval->mdi),
                                 "_Tools");
   gnome_mdi_set_child_list_path(GNOME_MDI(retval->mdi),
                                 "_Windows/");
-
-  retval->toolbar_change_callback_id =
-    gnc_register_option_change_callback(gnc_main_window_configure_toolbar_cb, 
-                                        retval,
-                                        "General", "Toolbar Buttons");
-
-  retval->mdi_change_callback_id =
-    gnc_register_option_change_callback(gnc_main_window_configure_mdi_cb, 
-                                        retval,
-                                        "General", "Application MDI mode");
-
-  gnome_mdi_set_mode(retval->mdi, gnc_get_mdi_mode ());
 
   /* handle top-level signals */
   gtk_signal_connect(GTK_OBJECT(retval->mdi), "app_created",
@@ -367,23 +268,38 @@ gnc_main_window_new(void) {
  ********************************************************************/
 
 static void
-gnc_main_window_options_cb(GtkWidget *widget, gpointer data) {
+gnc_main_window_options_cb(GtkWidget *widget, gpointer data)
+{
   gnc_show_options_dialog();
 }
 
 static void
-gnc_main_window_file_new_file_cb(GtkWidget * widget) {
+gnc_main_window_file_new_file_cb(GtkWidget * widget, gpointer data)
+{
   gnc_file_new ();
   gnc_refresh_main_window_info ();
 }
 
 static void
-gnc_main_window_file_new_window_cb(GtkWidget * widget, GnomeMDI * mdi) {
-  if(mdi->active_child && mdi->active_view) {
-    if(!strcmp(mdi->active_child->name, _("Accounts"))) {
-      gnc_main_window_open_accounts(TRUE);
+gnc_main_window_file_new_window_cb(GtkWidget * widget, gpointer data)
+{
+  GNCMDIInfo *main_info;
+  GnomeMDI *mdi;
+
+  main_info = gnc_mdi_get_current ();
+  if (!main_info) return;
+
+  mdi = main_info->mdi;
+  if (!mdi) return;
+
+  if (mdi->active_child && mdi->active_view)
+  {
+    if (!strcmp(mdi->active_child->name, _("Accounts")))
+    {
+      gnc_main_window_open_accounts (TRUE);
     }
-    else {
+    else
+    {
       GnomeMDIChild * child = mdi->active_child;
       gnome_mdi_remove_view(mdi, mdi->active_view, FALSE);
       gnome_mdi_add_toplevel_view(mdi, child);
@@ -392,30 +308,35 @@ gnc_main_window_file_new_window_cb(GtkWidget * widget, GnomeMDI * mdi) {
 }
 
 static void
-gnc_main_window_file_open_cb(GtkWidget * widget) {
+gnc_main_window_file_open_cb(GtkWidget * widget, gpointer data)
+{
   gnc_file_open ();
   gnc_refresh_main_window_info ();
 }
 
 static void
-gnc_main_window_file_save_cb(GtkWidget * widget) {
+gnc_main_window_file_save_cb(GtkWidget * widget, gpointer data)
+{
   gnc_file_save ();
   gnc_refresh_main_window_info ();
 }
 
 static void
-gnc_main_window_file_save_as_cb(GtkWidget * widget) {
+gnc_main_window_file_save_as_cb(GtkWidget * widget, gpointer data)
+{
   gnc_file_save_as ();
   gnc_refresh_main_window_info ();
 }
 
 static void
-gnc_main_window_file_import_cb(GtkWidget * widget) {
+gnc_main_window_file_import_cb(GtkWidget * widget, gpointer data)
+{
   gnc_file_qif_import ();
 }
 
 static void
-gnc_main_window_file_export_cb(GtkWidget * widget) {
+gnc_main_window_file_export_cb(GtkWidget * widget, gpointer data)
+{
   const char *filename;
   struct stat statbuf;
   gboolean ok;
@@ -522,40 +443,45 @@ gnc_main_window_file_export_cb(GtkWidget * widget) {
 }
 
 static void
-gnc_main_window_file_shutdown_cb(GtkWidget * widget) {
-  gnc_shutdown(0);
+gnc_main_window_file_shutdown_cb(GtkWidget * widget, gpointer data)
+{
+  gnc_shutdown (0);
 }
 
 static void
-gnc_main_window_file_close_cb(GtkWidget * widget, GnomeMDI * mdi) {
-  GNCMDIChildInfo * inf;
+gnc_main_window_file_close_cb(GtkWidget * widget, gpointer data)
+{
+  GNCMDIInfo *main_info;
+  GnomeMDI *mdi;
 
-  if (!mdi)
+  main_info = gnc_mdi_get_current ();
+  if (!main_info) return;
+
+  mdi = main_info->mdi;
+  if (!mdi) return;
+
+  if (mdi->active_child)
   {
-    GNCMDIInfo *main_info;
+    GNCMDIChildInfo * inf;
 
-    main_info = gnc_mdi_get_current ();
-    if (!main_info) return;
-
-    mdi = main_info->mdi;
-    if (!mdi) return;
-  }
-
-  if(mdi->active_child) {
     inf = gtk_object_get_user_data(GTK_OBJECT(mdi->active_child));
-    if(inf->toolbar) {
-      gtk_widget_destroy(GTK_WIDGET(inf->toolbar)->parent);
+    if (inf->toolbar)
+    {
+      gtk_widget_destroy (GTK_WIDGET(inf->toolbar)->parent);
       inf->toolbar = NULL;
     }
-    gnome_mdi_remove_child(mdi, mdi->active_child, FALSE);
+
+    gnome_mdi_remove_child (mdi, mdi->active_child, FALSE);
   }  
-  else {
-    gnc_warning_dialog(_("Select \"Exit\" to exit GnuCash."));
+  else
+  {
+    gnc_warning_dialog (_("Select \"Exit\" to exit GnuCash."));
   }
 }
 
 static void
-gnc_main_window_fincalc_cb(GtkWidget *widget, gpointer data) {
+gnc_main_window_fincalc_cb(GtkWidget *widget, gpointer data)
+{
   gnc_ui_fincalc_dialog_create();
 }
 
@@ -566,9 +492,9 @@ gnc_ui_mainWindow_scheduled_xaction_cb(GtkWidget *widget, gpointer data)
 }
 
 static void
-gnc_ui_mainWindow_nextrun_cb( GtkWidget *widget, gpointer d )
+gnc_ui_mainWindow_nextrun_cb (GtkWidget *widget, gpointer data)
 {
-	gnc_ui_nextrun_dialog_create();
+  gnc_ui_nextrun_dialog_create();
 }
 
 static void
@@ -658,13 +584,15 @@ gnc_main_window_exit_cb (GtkWidget *widget, gpointer data)
 }
 
 static void
-gnc_main_window_file_new_account_tree_cb(GtkWidget * w, GnomeMDI * mdi) {
+gnc_main_window_file_new_account_tree_cb(GtkWidget * w, gpointer data)
+{
   gnc_main_window_open_accounts(FALSE);
 }
 
 static void
-gnc_main_window_create_menus(GNCMDIInfo * maininfo) {
-  static  GnomeUIInfo gnc_file_menu_template[] = 
+gnc_main_window_create_menus(GNCMDIInfo * maininfo)
+{
+  static GnomeUIInfo gnc_file_menu_template[] = 
   {
     GNOMEUIINFO_MENU_NEW_ITEM(N_("New _File"),
                               N_("Create a new file"),
@@ -716,7 +644,7 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo) {
     GNOMEUIINFO_END
   };
   
-  static  GnomeUIInfo gnc_settings_menu_template[] =
+  static GnomeUIInfo gnc_settings_menu_template[] =
   {
     {
       GNOME_APP_UI_ITEM,
@@ -729,7 +657,7 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo) {
     GNOMEUIINFO_END
   };
   
-  static  GnomeUIInfo gnc_tools_menu_template[] =
+  static GnomeUIInfo gnc_tools_menu_template[] =
   {
     {
       GNOME_APP_UI_ITEM,
@@ -787,7 +715,7 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo) {
     GNOMEUIINFO_END
   };
   
-  static  GnomeUIInfo gnc_help_menu_template[] =
+  static GnomeUIInfo gnc_help_menu_template[] =
   {
     {
       GNOME_APP_UI_ITEM,
@@ -837,16 +765,10 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo) {
   gnc_file_history_add_after ("New _Account Tree");
 }
 
-/********************************************************************
- * create_child_toolbar 
- * add the "stock" components to the child's components and return a
- * catenated toolbar.
- ********************************************************************/
-
-void
-gnc_main_window_create_child_toolbar(GNCMDIInfo * mi, 
-                                     GNCMDIChildInfo * child) {
-  GnomeUIInfo pre_tb[] = 
+static GnomeUIInfo *
+gnc_main_window_toolbar_prefix (void)
+{
+  static GnomeUIInfo prefix[] = 
   {
     { GNOME_APP_UI_ITEM,
       N_("Save"),
@@ -868,10 +790,17 @@ gnc_main_window_create_child_toolbar(GNCMDIInfo * mi,
       GNOME_STOCK_PIXMAP_CLOSE,
       0, 0, NULL
     },
-    GNOMEUIINFO_SEPARATOR
+    GNOMEUIINFO_SEPARATOR,
+    GNOMEUIINFO_END
   };
 
-  GnomeUIInfo post_tb[] = 
+  return prefix;
+}
+
+static GnomeUIInfo *
+gnc_main_window_toolbar_suffix (void)
+{
+  static GnomeUIInfo suffix[] = 
   {
     GNOMEUIINFO_SEPARATOR,
     { GNOME_APP_UI_ITEM,
@@ -886,32 +815,6 @@ gnc_main_window_create_child_toolbar(GNCMDIInfo * mi,
     },
     GNOMEUIINFO_END
   };
-  GnomeUIInfo end = GNOMEUIINFO_END;
-  GnomeUIInfo * tbinfo;
-  GnomeUIInfo * cur;
-  GtkToolbar  * tb = GTK_TOOLBAR(gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, 
-                                                 GTK_TOOLBAR_BOTH));
-  tbinfo = g_new0(GnomeUIInfo, 
-                  (sizeof(pre_tb) + sizeof(post_tb)) / sizeof(GnomeUIInfo)
-                  + child->toolbar_size - 1);
-  
-  /* splice the pre, post, and child segments together */
-  cur = tbinfo; 
-  memcpy(cur, pre_tb, sizeof(pre_tb));
-  cur += sizeof(pre_tb)/sizeof(GnomeUIInfo);
-  memcpy(cur, child->toolbar_info, 
-         (child->toolbar_size - 1)*sizeof(GnomeUIInfo));
-  cur += child->toolbar_size - 1;
-  memcpy(cur, post_tb, sizeof(post_tb));
 
-  child->toolbar      = GTK_WIDGET(tb);
-
-  g_free(child->toolbar_info);
-
-  child->toolbar_info = tbinfo;
-  child->toolbar_size = 
-    (sizeof(pre_tb) + sizeof(post_tb)) / sizeof(GnomeUIInfo) + 
-    child->toolbar_size;
-  
-  gnome_app_fill_toolbar(tb, tbinfo, NULL);
+  return suffix;
 }

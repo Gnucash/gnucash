@@ -24,21 +24,12 @@
 #ifndef WINDOW_MAIN_H
 #define WINDOW_MAIN_H
 
-#include <gnome.h>
-#include <guile/gh.h>
+#include <glib.h>
 
 #include "gnc-mdi-utils.h"
 
-GNCMDIInfo    * gnc_main_window_new(void);
-void            gnc_main_window_destroy(GNCMDIInfo * wind); 
-gboolean        gnc_main_window_can_save(GNCMDIInfo * wind);
+GNCMDIInfo    * gnc_main_window_new (void);
+gboolean        gnc_main_window_can_save (GNCMDIInfo * wind);
 gboolean        gnc_main_window_can_cancel_save (GNCMDIInfo *wind);
-void            gnc_main_window_save(GNCMDIInfo * wind, char * session);
-void            gnc_main_window_restore(GNCMDIInfo * wind,
-                                        const char * session);
-void            gnc_main_window_create_child_toolbar(GNCMDIInfo * mi, 
-                                                     GNCMDIChildInfo * child);
-GnomeMDIChild * gnc_main_window_create_child(const gchar * configstring);
-void            gnc_main_window_close_children(GNCMDIInfo * main);
 
 #endif

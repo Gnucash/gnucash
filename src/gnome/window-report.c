@@ -176,7 +176,7 @@ gnc_report_window_view_new(GnomeMDIChild * child, gpointer user_data) {
   
   gnc_report_window_create_menu(win, mc); 
   gnc_report_window_create_toolbar(win, mc);
-  gnc_main_window_create_child_toolbar(maininfo, mc);
+  gnc_mdi_create_child_toolbar(maininfo, mc);
   
   if(mc->menu_info) {
     gnome_mdi_child_set_menu_template(child, mc->menu_info);  
@@ -719,9 +719,7 @@ gnc_report_window_create_toolbar(gnc_report_window * win,
     GNOMEUIINFO_END
   };
   
-  child->toolbar_info = 
-    g_memdup(toolbar_data, sizeof(toolbar_data));
-  child->toolbar_size = sizeof(toolbar_data) / sizeof(GnomeUIInfo); 
+  child->toolbar_info = g_memdup (toolbar_data, sizeof(toolbar_data));
 }
 
 

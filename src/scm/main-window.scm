@@ -142,14 +142,14 @@ the account instead of opening a register.") #f))
                      (display 
                       (gnc:report-generate-restore-forms v))))
                #t *gnc:_reports_*)
-              
+
               (hash-fold 
                (lambda (k v p)
                  (display (gnc:acct-tree-generate-restore-forms v k)) #t)
                #t gnc:*acct-tree-options*)
 
               (force-output)))
-          (gnc:main-window-save (gnc:mdi-get-current) book-url)))))
+          (gnc:mdi-save (gnc:mdi-get-current) book-url)))))
 
 (define (gnc:main-window-book-close-handler book-url)
     (gnc:main-window-save-state book-url)
@@ -182,7 +182,7 @@ the account instead of opening a register.") #f))
         (dead-reports '()))
     (if conf-file-name 
         (try-load conf-file-name))
-    (gnc:main-window-restore (gnc:mdi-get-current) book-url)))
+    (gnc:mdi-restore (gnc:mdi-get-current) book-url)))
 
 (gnc:hook-add-dangler gnc:*book-opened-hook* 
                       gnc:main-window-book-open-handler)

@@ -188,7 +188,7 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data) {
 
   gnc_acct_tree_window_create_menu(win, mc);
   gnc_acct_tree_window_create_toolbar(win, mc);
-  gnc_main_window_create_child_toolbar(maininfo, mc);
+  gnc_mdi_create_child_toolbar(maininfo, mc);
 
   gnc_mainwin_account_tree_attach_popup
     (GNC_MAINWIN_ACCOUNT_TREE (win->account_tree),
@@ -230,7 +230,7 @@ gnc_acct_tree_window_create_child(const gchar * url) {
  ********************************************************************/
 
 void
-gnc_main_window_open_accounts(gint toplevel) {
+gnc_main_window_open_accounts(gboolean toplevel) {
   GNCMDIInfo * maininfo = gnc_mdi_get_current ();
   GnomeMDIChild * accountchild = gnc_acct_tree_window_create_child(NULL);
   gnome_mdi_add_child(GNOME_MDI(maininfo->mdi), 
@@ -767,10 +767,8 @@ gnc_acct_tree_window_create_toolbar(GNCAcctTreeWin * win,
     },
     GNOMEUIINFO_END
   };
-  
-  child->toolbar_info = 
-    g_memdup(toolbar_template, sizeof(toolbar_template));
-  child->toolbar_size = sizeof(toolbar_template) / sizeof(GnomeUIInfo);
+
+  child->toolbar_info = g_memdup (toolbar_template, sizeof(toolbar_template));
 }
 
 void
