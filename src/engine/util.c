@@ -29,6 +29,7 @@
 #include <math.h>
 #include <string.h>
 #include <locale.h>
+#include <limits.h>
 #include <ctype.h>
 
 /* #include <glib.h> */
@@ -254,7 +255,7 @@ gnc_lconv_set(char **p_value, char *default_value)
 static void
 gnc_lconv_set_char(char *p_value, char default_value)
 {
-  if ((p_value != NULL) && (*p_value == 127))
+  if ((p_value != NULL) && (*p_value == CHAR_MAX))
     *p_value = default_value;
 }
 
