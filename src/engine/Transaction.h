@@ -292,6 +292,13 @@ Timespec      xaccSplitRetDateReconciledTS (Split *split);
  * invoking any of them will cause other splits in the transaction
  * to be modified so that the net value of the transaction is zero. 
  *
+ * IMPORTANT: The split should be parented by an account before
+ * any of these routines are invoked!  This is because the actual
+ * setting of amounts/values requires SCU settings from the account.
+ * If these are not available, then amounts/values will be set to 
+ * -1/0, which is an invalid value.  I beleive this order dependency
+ * is a bug, but I'm too lazy to find, fix & test at the moment ... 
+ *
  * The xaccSplitSetAmount() (formerly xaccSplitSetShareAmount) method
  *     sets the amount in the account's commodity that the split
  *     should have.
