@@ -58,7 +58,9 @@ struct _Locator {
 
 typedef struct _Locator Locator;
 
-typedef struct _Table {
+typedef struct _Table Table;
+
+struct _Table {
 
   /* The number of "physical" rows/cols is the number
    * of displayed one-line gui rows/cols in the table.
@@ -81,7 +83,7 @@ typedef struct _Table {
 
   /* callback that is called when the cursor is moved */
   /* hack alert -- this should be a callback list, actually */
-  void (*move_cursor) (struct _Table *, void *client_data);
+  void (*move_cursor) (Table *, void *client_data);
   void * client_data;
 
   /* string values for each cell, 
@@ -118,7 +120,7 @@ typedef struct _Table {
   Widget table_widget;          /* the XbaeMatrix */
   Widget next_tab_group;        /* where to traverse in the end */
 
-} Table;
+};
 
 
 Table     * xaccMallocTable (void);

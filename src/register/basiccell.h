@@ -153,7 +153,7 @@ struct _BasicCell {
                                  const char *old, 
                                  const char *add, 
                                  const char *new); 
-  const char * (*leave_cell)    (struct _BasicCell *,
+  const char * (*leave_cell)    (BasicCell *,
                                  const char * current);
 
   /* private, GUI-specific callbacks */
