@@ -294,7 +294,7 @@
 	(if ascending?
 	    (lambda (a b) (< (car a) (car b)))
 	    (lambda (a b) (> (car a) (car b))))
-	(lambda (a b) (and (= (car a) (car b)) (= (cadr a) (cadr b))))
+	(lambda (a b) (and (= (car a) (car b)) (= (cdr a) (cdr b))))
 	#f
 	#f))
 
