@@ -20,8 +20,17 @@
 (define (gnc:find-doc-file file)
   (gnc:find-in-directories file (gnc:config-var-value-get gnc:*doc-path*)))
 
+(define (remove-i18n-macros input)
+  (cond ((null? input) input)
+        ((list? input)
+         (cond ((eq? (car input) 'N_) (cadr input))
+               (else (cons (remove-i18n-macros (car input))
+                           (remove-i18n-macros (cdr input))))))
+        (else input)))
+
 (define (gnc:load-help-topics fname) 
   (with-input-from-file
       (gnc:find-in-directories fname
                                (gnc:config-var-value-get gnc:*load-path*))
-    (lambda () (read))))
+    (lambda () (remove-i18n-macros (read)))))
+

@@ -1,0 +1,50 @@
+<ARTICLE ID="XACC-COMMODITY">
+
+<ARTHEADER>
+<TITLE>Creating a "commodity"</TITLE>
+</ARTHEADER>
+
+<PARA>Gnucash represents national currencies, stocks, mutual funds,
+and all other tradable commodities using a unified framework.  In
+this dialog, you will specify the properties of a new commodity. 
+</PARA>
+
+<para>The <emphasis>full name</emphasis> of the commodity is a recognizable
+name such as "US Dollars" or "IBM Common Stock". </para>
+
+<para>The <emphasis>symbol or abbreviation</emphasis> for the commodity is the
+ticker symbol (for stocks), ISO currency symbol (for national
+currencies), or other unique abbreviation for the commodity.  If the
+commodity is traded on any public exchange, it is important to use the
+same identifier used on that exchange. </para>
+
+<para>The <emphasis>type</emphasis> of a commodity is the grouping or
+namespace in which it exists.  For example, national currencies are of
+the ISO4217 type.  ISO-4217 is an international standard which defines
+unique three-letter symbols for each currency.  Other types include
+AMEX, NYSE, NASDAQ, and EUREX for stocks traded on those exchanges,
+and FUND for mutual funds.  If your commodity is not of one of these
+types, you can create a new type by typing it in the box.</para>
+
+<para>The commodity's <emphasis>code</emphasis> is any numeric or alphanumeric
+code that is used to identify the commodity.  The CUSIP code, for
+example, is a unique identifying numeric string that is associated
+with every stock, bond, mutual fund, and most kinds of tradable
+options, futures, and commodities.  This code is not required.</para>
+
+<para>The <emphasis>fraction traded</emphasis> is the smallest tradable unit
+of the commodity, expressed as a fraction of a single nominal unit.
+For US Dollars, for example, the fraction traded is "1/100", because
+bank balances and currency are counted to 1/100 of a dollar. This
+value is used as a default accounting resolution for accounts
+denominated in the security, but can be overridden if a particular
+account's books need to be kept to a different resolution.  For
+example, stock ownership may be reckoned to 1/1000 of a share by some
+brokerage houses, though actual transactions in the stock are in
+integer numbers of shares (the fractional share ownership is an "on
+paper" accounting trick of the brokerage house).</para>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

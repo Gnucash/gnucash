@@ -1,0 +1,45 @@
+<ARTICLE ID="XACC-Y2K">
+
+<ARTHEADER>
+<TITLE>GnuCash Y2K Readiness</TITLE>
+</ARTHEADER>
+
+<PARA>GnuCash versions 1.1.25 and later store all dates as seconds and
+nanoseconds, where the seconds are stored in a 64-bit signed
+integer. This should suffice to store dates into both the distant past
+as well as the distant future, so long as they fall not
+<EMPHASIS>too</EMPHASIS> many orders of magnitude outside
+cosmologists' estimations of the age of the universe.  </PARA>
+
+<PARA>The file format for version 1.1.25 and later stores dates in the
+above-described fashion.  </PARA>
+
+<PARA>Some internal routines use the <FUNCTION>time_t</FUNCTION> type
+to express seconds. Note that on most OSes, this is a 32-bit quantity,
+and is thus limited to the Unix epoch, roughly December 1901 thru Jan
+2038. It is reasonable to expect that <FUNCTION>time_t</FUNCTION> will
+migrate to the use of 64 bit values by that time.  </PARA>
+
+<PARA>Backup and log files are time-stamped using the standard Unix
+<FUNCTION>ctime()</FUNCTION> routine, which takes a
+<FUNCTION>time_t</FUNCTION> argument. Thus, the backup and log
+mechanism may experience trouble in 2038, assuming your present Unix
+continues to be in service at that time without any remediation.
+</PARA>
+
+<PARA>Note that GnuCash also correctly recognizes February 29th, 2000
+as a "leap day," another of the "critical Y2K dates."  </PARA>
+
+<PARA>This is all highly suggestive that GnuCash should cope
+reasonably well with the transition to the new millennium, whether you
+consider that takes place in 2000 or in 2001...  </PARA>
+
+<PARA>Y2K issues are described in more detail at <ULINK URL=
+"http://www.ntlug.org/~cbbrowne/linuxy2k.html">Linux and Year
+2000.</ULINK> </PARA>
+
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

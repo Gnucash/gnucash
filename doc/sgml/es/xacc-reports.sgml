@@ -1,0 +1,160 @@
+<ARTICLE ID="XACC-REPORTS">
+<ARTHEADER>
+<TITLE>Reports</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Reports</TITLE>
+<PARA>A variety of financial reports can be selected on the
+    "Reports" menu:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-BALANCESHEET">Balance Sheet:</LINK>shows
+      Assets, Liabilities and Equity.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-PNL">Profit And Loss State:</LINK>shows
+      Income and expenses over a selectable period.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-TRANS-REPORT">Transaction
+      Report</LINK>shows transactions in an account, presented in a
+      variety of ways.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-PORTFOLIO-REPORT">Stock Portfolio</LINK>
+      provides a quick summary of your stocks, their current value,
+      and profits made.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-TAX-REPORT">Tax Report:</LINK>
+      shows tax related Income and Expenses.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-TXF-EXPORT-REPORT">TXF Export Report:</LINK>
+      exports a .TXF file that can be imported to TaxCut or TurboTax.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-HIERARCHICAL-REPORT">Hierarchical Report:</LINK>
+      shows accounts in a Hierarchical fashion.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><APPLICATION>Balance Tracker</APPLICATION> 
+      tracks the balance of one or more accounts over time, and
+      supports graphical output (if you have <APPLICATION>gnuplot</APPLICATION>
+      installed).
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+</SECT1>
+<SECT1 ID="XACC-REPORTWINDOW">
+<TITLE> The Report Window</TITLE>
+<PARA>    Once you select a report, a report window will appear: 
+
+    </PARA>
+<PARA><INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/reportwin.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT>
+
+    </PARA>
+<PARA>The report is displayed in a resizable, scrollable window.
+    To control the report, you can use the toolbar buttons at the
+    top of the window:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><EMPHASIS>Back</EMPHASIS> and <EMPHASIS>Forward</EMPHASIS> allow you to view the
+      previous contents of the window, just like a web browser
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        <EMPHASIS>Parameters</EMPHASIS> pops up a dialog box allowing you to
+        change the information presented in the report: 
+
+        </PARA>
+<PARA><INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/report-option.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT>
+
+        </PARA>
+<PARA>See the help for the individual reports for details of
+        options available.
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><ANCHOR ID="EXPORT"><EMPHASIS>Export</EMPHASIS> allows you to export the
+      contents of the report as a HTML file for later viewing or
+      printing.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Close</EMPHASIS> closes the report window.
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+</SECT1>
+
+<SECT1 ID="XACC-CUSTOMREPORTS">
+<TITLE> Constructing custom reports</TITLE>
+
+<PARA> It is possible to write your own reports to meet your own
+needs, if you can program a little. You will need to know Scheme (a
+LISP-like programming language), and it is an excellent idea to have a
+copy of the <application>GnuCash</application> source code available.
+</PARA>
+
+<PARA>The reporting interface is presently undocumented, but you can
+get a good idea of how it works by examining the file <filename>
+src/scm/report/hello-world.scm </filename> in the
+<application>GnuCash</application> source distribution.
+</PARA>
+
+<PARA>You will also need to access data from the "engine" to get
+information for your report. This is performed by a set of Scheme
+wrapper functions that are documented in the file<filename>
+src/g-wrap/gnc.html</filename>. You may wish to examine some of the
+other reports in <filename> src/scm/report </filename> for an
+indication of how they are used.
+</PARA>
+
+<PARA>At present, reports are produced by internally creating HTML and
+rendering this with a HTML widget. (Future versions of GnuCash will
+hopefully support a more flexible system).  </PARA>
+
+<PARA>If you need more information, or have developed a new report
+that may be of use to others, please contact the GnuCash development
+mailing list at <email> gnucash-devel@gnucash.org </email>.
+
+</PARA>
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

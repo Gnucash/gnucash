@@ -1,0 +1,77 @@
+<ARTICLE ID="XACC-REGWIN-KBD">
+
+<ARTHEADER>
+<TITLE>Register Keyboard Shortcuts</TITLE>
+</ARTHEADER>
+
+<PARA>    The following keys can be used to move around in the register:
+    <EMPHASIS>Please check that I didn't miss any</EMPHASIS> 
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><KEYCAP>Right Arrow, Left Arrow</KEYCAP>move left and right
+      within one field
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Home</KEYCAP> move to the left of the field
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>End</KEYCAP> move to the right of the field
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>TAB</KEYCAP> move to the next field
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Shift + TAB</KEYCAP> move to the previous field
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Enter, Down Arrow</KEYCAP> move to the next transaction
+      (if necessary, a new blank transaction will be created)
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Up Arrow</KEYCAP> move to the previous transaction
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Page Up</KEYCAP> move up one screenful
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Page Down</KEYCAP> move down one screenful
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Shift + Page Up</KEYCAP>Go to the first transaction
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Shift + Page Down</KEYCAP>Go to the blank (last)
+      transaction
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+
+</PARA>
+
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

@@ -1,0 +1,176 @@
+<article id="xacc-dochack">
+<artheader>
+<title> Tratando la Documentación de GnuCash </title>
+<author>
+<firstname>Christopher</firstname>
+<surname>Browne</surname>
+</author>
+</artheader>
+
+<sect1 id="xacc-docbook">
+
+<title> Acerca de DocBook </title>
+
+<para> La documentación de GnuCash ha sido modificada para utilizar
+SGML, y, en particular, la DTD DocBook.  </para>
+
+<PARA> DocBook es una DTD diseñada para documentos técnicos
+como manuales de programas de ordenador. El número de utilidades
+para ayudar a procesar material basado en DocBook está creciendo.
+
+<ITEMIZEDLIST>
+
+<LISTITEM>
+<PARA> <ULINK URL="http://docbook.org/tdg/html/docbook.html"> DocBook:
+La Guía Definitiva (online)</ULINK>
+
+</PARA>
+</LISTITEM>
+
+<LISTITEM> <PARA> <ULINK URL=
+"http://www.oasis-open.com/davenport/dbdoc/">Referencia para el
+DTD DocBook </ULINK> </PARA> </LISTITEM>
+
+<LISTITEM> <PARA><ULINK URL=
+"http://www.oasis-open.org/docbook/documentation/index.html"> DocBook
+- Documentación</ULINK></PARA> </LISTITEM>
+
+<LISTITEM>
+<PARA><ULINK URL="http://www.oasis-open.org/docbook/">DocBook -
+DocBook</ULINK></PARA>
+</LISTITEM>
+
+<LISTITEM>
+<PARA> <ULINK URL="http://fallout.campusview.indiana.edu/~jfieber/docbook/doc/over/index.html"> Introducción a
+DocBook </ULINK> </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> <ULINK URL="http://fallout.campusview.indiana.edu/~jfieber/docbook/doc/user/index.html"> Guía de usuario de
+DocBook </ULINK> </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> <ULINK URL="http://fallout.campusview.indiana.edu/~jfieber/docbook/doc/ref/index.html"> Guía de Referencia de
+DocBook </ULINK> </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> <ULINK URL="http://fallout.campusview.indiana.edu/~jfieber/docbook/doc/maint/index.html">Guía de Customizaciones de
+DocBook </ULINK> </PARA>
+</LISTITEM>
+<LISTITEM ID="MODULARDOCBOOK">
+<PARA> <ULINK URL="http://nwalsh.com/docbook/dsssl/index.html"> Las
+hojas de estilo modulares de DocBook </ULINK> </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><ULINK URL="http://nwalsh.com/docbook/edbsyn/"> La
+Página de inicio de nwalsh.com - Sinopsis extensa de DocBook </ULINK>
+
+</PARA>
+<PARA> Añadir marcas ("tags") para DocBook para soportar lenguajes
+orientados a objetos como Java, C++, y IDL, incluyendo nuevas entidades
+como clases, campos, métodos, excepciones, y mucho más...
+
+</PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> <ULINK URL="http://nwalsh.com/docbook/qr/quickref.htm"> Referencia rápida V3.0 de
+DocBook </ULINK> </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> <ULINK URL="http://nis-www.lanl.gov/~rosalia/mydocs/docbook-intro.html"> Trabaje con DocBook </ULINK></PARA>
+<PARA> Este documento explica como uno puede utilizar DTD DocBook para
+escribir documentos, incluyendo información para utilizar tablas, e
+insertar listados de programación. </PARA>
+<PARA> Pronto se documentará el proceso de insertar gráficos, y más
+información de "interés".</PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><ULINK URL="http://lwn.net/2000/features/DocBook/">Explorando SGML DocBook </ULINK>
+
+</PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> <ULINK URL="http://itrc.uwaterloo.ca/~papresco/SgmlTools/demo.html"> Demo DocBook
+SGMLTOOLS </ULINK> </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> <ULINK URL="http://nwalsh.com/docbook/nutshell.html">DocBook en Nutshell </ULINK></PARA>
+
+</LISTITEM>
+
+<LISTITEM> <PARA><ULINK URL=
+"http://www.dfwuug.org/newsletters/2000/newsletter_0003.html"> Mi
+revisión de DocBook: La Guía Definitiva </ULINK> según
+DFW Unix User's Group
+
+</PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><ULINK URL="http://www.freebsd.org/%7enik/primer/index.html"> Documentación FreeBSD -
+Projecto "Primer" para Nuevos Colaboradores (SGMLTools)</ULINK> </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><ULINK URL="http://www.sslug.dk/%7epto/docbook.html">Introducción a SGMLTOOLS y DOCBOOK</ULINK></PARA>
+</LISTITEM>
+</ITEMIZEDLIST> </PARA>
+
+</sect1>
+
+<sect1 id="xacc-docbookuse">
+<title>El Conjunto de Documentación GnuCash</title>
+
+<para> La documentación e GnuCash es manejada como un LIBRO, compuesta
+por una serie de "ARTÍCULOS" en DocBook. </para>
+
+<PARA> El documento principal es <filename>gnucash.sgml</filename>, que
+contiene solamente la secuencia de archivos que ha de consultar para
+crear el cuerpo del documento, cada archivo representa una parte de
+los ARTÍCULOs. </PARA>
+
+<para> Observe que los nombres de archivos para generar archivos HTML
+son generados de tres formas:</para>
+
+<itemizedlist>
+
+<listitem><para> El identificador ID para cada ARTICLE define
+un archivo;</para></listitem>
+
+<listitem><para> El identificador ID para cada SECT1 define un 
+archivo, excepto si es el primer SECT1 de un ARTICLE;</para></listitem>
+
+<listitem><para> Si crea un nuevo ARTICLE o SECT1 sin un ID, los
+archivos se generarán con nombres como <filename>t1234.html</filename>,
+ <filename>x892.html</filename>, y parecidos. Parecen nombre aleatorios. </para>
+
+<PARA> Esto es una mala costumbre; asegúrese que asigna un ID a los
+ARTICLE or SECT1. </para>
+</listitem>
+
+</itemizedlist>
+
+<para> El estilo es controlado por el documento DSSSL,
+<filename>mysheet.dsl</filename>, utilizando las convenciones de
+documentación de <link linkend="MODSTYLE"> Las hojas de estilo
+Modulares de  DocBook</link></para>
+
+<para> Los componentes que necesitan ser instalado para que la orden
+<command>jade -ioutput.html -d mysheet.dsl -t sgml
+gnucash.sgml</command> funcione incluye:
+
+<itemizedlist>
+
+<listitem><para> <ULINK URL="http://www.jclark.com/jade/">Jade
+</ULINK> o <ULINK URL= "http://www.netfolder.com/DSSSL/index.html">
+DSSSL/OpenJade </ULINK></para></listitem>
+
+<listitem><para> The DocBook 3.1 DTD, disponible desde <ULINK URL=
+"http://docbook.org"> DocBook.org </ULINK></para></listitem>
+
+<listitem><para> Norman Walsh's <ULINK id="MODSTYLE" URL=
+"http://nwalsh.com/docbook/dsssl/index.html"> Hojas de Estilo Modular
+de DocBook </ULINK></para></listitem>
+
+</itemizedlist>
+</para>
+</sect1>
+
+</article>

@@ -474,7 +474,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email>jufi@nerdnet.de</email> Jan-Uwe
+<GLOSSTERM><email>ju_finck@mail.netwave.de</email> Jan-Uwe
       Finck</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for German message translation</PARA>
@@ -546,26 +546,17 @@ provide an accurate Profit & Loss statement.
 <PARA>for fixing miscellaneous core dumps and lockups.</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
-
 <GLOSSENTRY>
 <GLOSSTERM><email>john@dhh.gt.org</email> John Hasler</GLOSSTERM>
 <GLOSSDEF>
 <PARA>engine patch</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
-
 <GLOSSENTRY>
 <GLOSSTERM><email>hellan@acm.org</email> Jon K&aring;re
       Hellan</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for fixing miscellaneous core dumps and lockups.</PARA>
-</GLOSSDEF>
-</GLOSSENTRY>
-
-<GLOSSENTRY>
-<GLOSSTERM>Miquel Jordana</GLOSSTERM>
-<GLOSSDEF>
-<PARA>Spanish translation of manual</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 

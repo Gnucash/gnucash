@@ -279,12 +279,13 @@ topics_add_children(SCM topics, GtkCTree * tree, GtkCTreeNode * parent,
   SCM          this_topic;
   SCM          subtopics;
   GtkCTreeNode * node; 
+  char         * topic_str;
   char         * ctopics[1];
   char         * curl = NULL;
   gboolean     leafnode;
 
   if(!gh_list_p(topics)) return;
-  
+
   for(; !gh_null_p(topics); topics = gh_cdr(topics)) {
     this_topic = gh_car(topics);
 
@@ -297,7 +298,8 @@ topics_add_children(SCM topics, GtkCTree * tree, GtkCTreeNode * parent,
       subtopics = SCM_BOOL_F;
     }
 
-    ctopics[0] = gh_scm2newstr(gh_car(this_topic), NULL);
+    topic_str  = gh_scm2newstr(gh_car(this_topic), NULL);
+    ctopics[0] = _(topic_str);
 
     if(!gh_null_p(gh_cdr(this_topic))) {
       curl = gh_scm2newstr(gh_cadr(this_topic), NULL);
@@ -315,11 +317,11 @@ topics_add_children(SCM topics, GtkCTree * tree, GtkCTreeNode * parent,
                                  ctopics, 1,
                                  NULL, NULL, NULL, NULL,
                                  leafnode, FALSE);
-    
+
     gtk_ctree_node_set_row_data_full(GTK_CTREE(tree), 
                                      GTK_CTREE_NODE(node), curl,
                                      free_url_cb);
-    free(ctopics[0]);
+    free(topic_str);
     if(gh_list_p(subtopics)) {
       topics_add_children(subtopics, tree, node, help);
     }

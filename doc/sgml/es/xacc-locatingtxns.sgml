@@ -1,0 +1,267 @@
+
+<ARTICLE ID="XACC-LOCATINGTXNS">
+<ARTHEADER>
+<TITLE>Encontrar transacciones con el diálogo de "Buscar Transacciones"</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Encontrar transacciones con el diálogo de "Buscar Transacciones"</TITLE>
+<PARA>    </PARA>
+<SECT2>
+<TITLE>Bill Gribble &lt;grib@billgribble.com&gt;</TITLE>
+<ANCHOR ID="FINDOVERVIEW">
+</SECT2>
+<SECT2>
+<TITLE>Introducción</TITLE>
+<PARA>    
+    </PARA>
+<PARA>El diálogo de Buscar Transacciones le permite buscar las
+transacciones que cumplan las condiciones que especifique, incluyendo:
+<ITEMIZEDLIST>
+<LISTITEM>
+<PARA> Cuenta(s) afectadas por la transacción, </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> Valor de la transacción,</PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> Fecha </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> Campo Memo</PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> Descripción de la Transacción</PARA>
+</LISTITEM>
+</ITEMIZEDLIST></PARA>
+<PARA> etc.  
+
+<ITEMIZEDLIST>
+<LISTITEM>
+<PARA> Puede abrir el diálogo de <EMPHASIS> Buscar Transacciones </EMPHASIS>
+apretando en el botón "Buscar" de la ventana principal de GnuCash o
+en la ventana de visualizar asientos.
+
+</PARA>
+<PARA> Los resultados de su búsqueda se mostrarán en una ventana
+similar a las que se utilizar para ver sus cuentas, con el título
+"Resultado de la búsqueda".
+
+    </PARA>
+<PARA>Apretando el botón "Buscar" otra vez en la ventana de Resultado
+de la Búsqueda le permite añadir condiciones adicionales a la consulta
+cuyos resultados son mostrados en la ventana. </PARA>
+<PARA> Combinando múltiples búsquedas, puede construir consultas
+bastante sofisticadas para mostrar exactamente el subconjunto de
+sus transacciones que desee ver.</PARA>
+</LISTITEM>
+</ITEMIZEDLIST>      
+    <ANCHOR ID="HOW-TO-FIND"></PARA>
+</SECT2>
+<SECT2>
+<TITLE>Como utilizar el diálogo de Buscar Transacciones</TITLE>
+<PARA>    </PARA>
+<PARA>El diálogo de Buscar Transacciones tiene dos partes principales.
+
+<ITEMIZEDLIST>
+<LISTITEM>
+<PARA> La parte superior del diálogo es un bloc de notas con
+pestañas que le permiten especificar las condiciones de su
+búsqueda. </PARA>
+
+<PARA> Véase <LINK LINKEND="SETUP">Haciendo una
+búsqueda</LINK> para los detalles de cada tipo de búsqueda. 
+
+</PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>La parte inferior del diálogo es un selector el cuál le
+permite especificar como combinar los resultados de la búsqueda
+con los de las búsquedas previas.</PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>Si accede ala diálogo de Buscar Transacciones apretando en
+el botón Buscar de la ventana principal de GnuCash o de la ventana
+de visualizar los asientos de una cuenta normal, la única opción
+disponible será "Nueva Búsqueda". En cambio, si selecciona Buscar
+desde la ventana de Resultado de la Búsqueda las otras opciones
+estarán disponibles: veáse <LINK LINKEND="MODIFY">Modificar su búsqueda</LINK>
+para más detalles.
+
+    </PARA>
+<PARA>Las consultas más sencillas se pueden hacer directamente
+con una sola llamada al diálogo de Buscar Transacciones. El diálogo
+tiene nueve pestañas, cada una de ellas representa un campo particular
+de la transacción (o parte) que puede condicionar. Si especifica
+condiciones en múltiples campos (por ejemplo, seleccionando uno o
+más cuentas en la pestaña Cuentas e introduciendo un rango de fechas
+en la pestaña Fecha), la transacción debe cumplir todas las condiciones
+especificadas para ser mostrada.
+
+    </PARA>
+<PARA>Si las consultas simples no son suficientemente específicas,
+puede combinarlas apretando el botón Buscar en la ventana de
+Resultado de la búsqueda y seleccionando cualquier "Tipo de Búsqueda"
+excepto "Nueva Consulta".
+
+      <ANCHOR ID="SETUP"></PARA>
+</SECT2>
+<SECT2>
+<TITLE>Haciendo una búsqueda</TITLE>
+<PARA>    </PARA>
+<PARA>Puede buscar transacciones por cualquiera de todos los
+criterios siguientes. Cada uno tiene una pestaña en el diálogo
+donde puede introducir el valor(es) posibles y el método de
+comparación
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA> Cuentas afectadas por la transacción
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> Fecha en tuvo lugar la transacción
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> El texto en el campo Descripción
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> El texto en el campo Número
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> Total de partes de la transacción
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> El texto en el campo Memo
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> Número de participaciones en una transacción de acciones
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> Precio de la participación en una transacción de acciones
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> Texto en el campo Acción
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>Si especifica múltiples condiciones en su búsqueda, todas
+las condiciones se deben cumplir para que la transacción se muestre.
+
+    <ANCHOR ID="ACCOUNTSEARCH"></PARA>
+<SECT3>
+<TITLE>Búsqueda por Cuentas</TITLE>
+<PARA>En la pestaña de Cuentas, seleccione cualesquiera de las cuentas
+que le interese y entonces escoja si la transacción afecta a
+Cualquiera, Todas, o Ninguna de estas cuentas para que se muestre.
+      
+    </PARA>
+<PARA>si selecciona "Todas" las cuentas como método en la parte
+superior de la pestaña, las únicas transacciones que se mostrarán
+son aquellas que afecten todas las cuentas seleccionadas. </PARA>
+<PARA> Por ejemplo, si selecciona <EMPHASIS>Mi Cuenta de Cheques</EMPHASIS>
+y <EMPHASIS> Mi Cuenta VISA</EMPHASIS> y entonces escoge <EMPHASIS>Todas</EMPHASIS>,
+solamente transferencias de Cheques a Visa serán mostradas.
+
+    </PARA>
+<PARA>Si selecciona "Cualquiera" como método, las transacciones
+afectadas por cualquier cuenta seleccionada serán mostradas. Por
+ejemplo, si selecciona "Mi Cuenta de Cheques" y "Mi Cuenta VISA" y
+después escoge "Cualquiera"m su cuenta entera de cheques y su Cuenta
+entera de VISA serán mostradas juntas en la ventana de Resultado de
+la Búsqueda.
+      
+    </PARA>
+</SECT3>
+<SECT3 ID="DATE">
+<TITLE>Búsquedas por Fechas</TITLE>
+<PARA>En la pestaña Fecha, puede especificar un margen de fechas para
+las transacciones que desea buscar. Los campos año, mes, y día están
+en el orden que especificó en
+<GUIMENU> Configuración:Internacional:Formato Fecha</GUIMENU>.
+
+    </PARA>
+<PARA>Si quiere encontrar cualquier transacción anterior a cierta fecha,
+especifique la fecha en el segundo grupo de campos para introducir la
+fecha e introduzca una fecha muy anterior (distante en el pasado) en el
+primer grupo de campos. La fecha por defecto es el 1 de Enero de 1900,
+que suele ser suficientemente antigua para la mayoría de operaciones. </PARA>
+<PARA>De igual forma, si quiere encontrar cualquier transacción realizada
+después de una fecha determinada, ponga la fecha en el primer grupo de
+campos y una fecha posterior a su última transacción (futuro) en el
+segundo grupo de campos.
+
+      <ANCHOR ID="AMOUNT"></PARA>
+</SECT3>
+<SECT3>
+<TITLE>Búsqueda por Cantidades</TITLE>
+<PARA>Las condiciones en las pestañas Cantidad, Participaciones (Acciones),
+y Precio le permiten buscar cantidades particulares en varios
+de los campos de la transacción. Se debe introducir la cantidad
+(en el campo de entrada) y el tipo de comparación (con el menú de
+opciones a la izquierda del campo de entrada). La cantidad en el
+campo de entrada es siempre positivo.
+
+    </PARA>
+<PARA>Para la pestaña Cantidad, necesita indicar si está interesado
+en débitos, créditos, o en ambos.
+
+      <ANCHOR ID="STRING"></PARA>
+</SECT3>
+<SECT3>
+<TITLE>Búsquedas por textos</TITLE>
+<PARA>En las pestañas Descripción, Número, Memo y Acción, puede
+especificar un texto que se compara con los respectivos campos
+de las partes y transacciones.  <ITEMIZEDLIST>
+<LISTITEM>
+<PARA> Por defecto, la comparación utilizada es
+buscar el texto dentro ("substring") del campo sin tener en
+cuenta Mayúsculas/Minúsculas ("case-insensitive"). </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> Si activa la opción "Diferenciar May/Min" (Case sensitive),
+el texto buscado dentro del campo diferencia Mayúsculas de Minúsculas.  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Si se activa la opción "Expresión Regular", la comparación
+interpreta que el texto entrado es una expresión POSIX extendida;
+respetando la opción "Diferenciar May/Min".</PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+    <ANCHOR ID="MODIFY"></PARA>
+</SECT3>
+</SECT2>
+<SECT2>
+<TITLE>Modificar la búsqueda</TITLE>
+<PARA>    </PARA>
+<PARA>Apretando el botón "Buscar" dentro de la ventana de
+Resultado de la Búsqueda le permite modificar o reemplazar las
+condiciones de búsqueda utilizados en esa ventana.
+La funcionamiento de la búsqueda es el mismo, pero tiene
+nuevas opciones para como utilizar los resultados de la búsqueda.
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><EMPHASIS>Nueva Búsqueda.</EMPHASIS> Si selecciona "Nueva Búsqueda",
+la búsqueda actual será reemplazada por la que especifique,
+y los resultados se mostrarán en la ventana de Resultado de
+la Búsqueda existente.
+
+</PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+  </PARA>
+</SECT2>
+</SECT1>
+</ARTICLE>

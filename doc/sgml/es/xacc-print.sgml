@@ -1,0 +1,20 @@
+<ARTICLE ID="XACC-PRINT">
+
+<ARTHEADER>
+<TITLE>Impresión</TITLE>
+</ARTHEADER>
+
+<PARA>Por el momento, el único tipo de impresión directa soportado
+    por GnuCash es <LINK LINKEND="XACC-PRINT-CHECK">impresión de
+    verificaciones</LINK>. Otros tipos de impresiones se añadirán en
+    la versión 1.5.
+
+    </PARA>
+
+<PARA><LINK LINKEND="XACC-REPORTS">Los listados</LINK> también pueden ser <LINK
+LINKEND="EXPORT">exportados como archivos HTML</LINK>.
+
+
+</PARA>
+
+</ARTICLE>

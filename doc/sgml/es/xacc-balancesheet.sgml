@@ -1,0 +1,24 @@
+
+<ARTICLE ID="XACC-BALANCESHEET">
+<ARTHEADER>
+<TITLE>Hoja de Balance</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Hoja de Balance</TITLE>
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/report-baln.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+<PARA>Este listado acumula sus asientos, capital, y "equidades".
+
+    </PARA>
+<PARA>Puede seleccionar la fecha para la cual se calculará la
+    hoja del balance utilizando el botón "preferencias" de la barra
+    de herramientas. El valor por defecto es "hoy".
+
+</PARA>
+</SECT1>
+</ARTICLE>

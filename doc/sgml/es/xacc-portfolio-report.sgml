@@ -1,0 +1,24 @@
+
+<ARTICLE ID="XACC-PORTFOLIO-REPORT">
+<ARTHEADER>
+<TITLE>Listado del portafolio de Existencias</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Listado del portafolio de Existencias</TITLE>
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/report-folio.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+<PARA>Este listado totaliza el valor de las existencias
+    en su portafolio actual.
+
+    </PARA>
+<PARA>No hay actualmente opciones para este listado.
+
+
+</PARA>
+</SECT1>
+</ARTICLE>

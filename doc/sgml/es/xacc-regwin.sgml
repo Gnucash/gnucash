@@ -1,0 +1,267 @@
+<ARTICLE ID="XACC-REGWIN">
+
+<ARTHEADER>
+<TITLE>The Register Window</TITLE>
+</ARTHEADER>
+
+<SECT1>
+<TITLE>The Register Window</TITLE>
+<MEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/regwin-single.png">
+</IMAGEOBJECT>
+</MEDIAOBJECT> 
+
+<PARA>This is the "Register" or the "Ledger" window. Transactions
+    are entered here.
+    To enter a new transaction, just type into the last blank
+    transaction. You can use
+    the <LINK LINKEND="DATE">Date Accelerator keys</LINK> to
+    quickly enter dates. Use the mouse or the
+    <LINK LINKEND="XACC-REGWIN-KBD">Register Keyboard Shortcuts</LINK>to move
+    between fields, and press the <KEYCAP>Enter</KEYCAP> key or click
+    <GUIBUTTON>record</GUIBUTTON> on the toolbar to record
+    the transaction:
+
+    </PARA>
+    <MEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/regwin-single2.png">
+</IMAGEOBJECT>
+</MEDIAOBJECT> 
+<PARA>Notice how a the transaction has been recorded and a new,
+    blank transaction has been created.
+
+    </PARA>
+<PARA>You can edit existing transactions in a similar manner.
+    GnuCash will prompt you to confirm any changes you make.
+
+    </PARA>
+<PARA>After you have entered a few transactions, GnuCash will try
+    to guess some or all of the remaining details of a transaction
+    when you type into the <GUILABEL>Description</GUILABEL> field. If GnuCash has
+    guessed wrong, simply type over or delete the incorrect
+    information and replace it with the correct information.
+
+    </PARA>
+</SECT1>
+<SECT1 ID="XACC-MANTXN">
+<TITLE>Manipulating Transactions</TITLE>
+<PARA>You can manipulate transactions with the toolbar buttons or the
+    <GUIMENU>Transaction</GUIMENU> menu:
+
+    </PARA>
+<VARIABLELIST>
+<VARLISTENTRY><TERM><GUIBUTTON>Delete</GUIBUTTON></TERM>
+<LISTITEM><PARA> You can delete a transaction or an
+      individual split.
+
+      </PARA>
+</LISTITEM>
+</VARLISTENTRY>
+<VARLISTENTRY><TERM><GUIBUTTON>Cancel</GUIBUTTON></TERM>
+<LISTITEM><PARA> This undoes any changes you have made to
+      the transaction you are currently entering or changing.
+
+      </PARA>
+</LISTITEM>
+</VARLISTENTRY>
+<VARLISTENTRY><TERM><GUIBUTTON>New</GUIBUTTON></TERM>
+<LISTITEM><PARA> This moves the cursor to the last line of the
+      register where new transactions are entered.
+
+      </PARA>
+</LISTITEM>
+</VARLISTENTRY>
+<VARLISTENTRY><TERM><GUIBUTTON>Jump</GUIBUTTON></TERM>
+<LISTITEM><PARA> When you have selected an existing transaction or split, this
+      takes you to the corresponding register entry in the other account
+      that is involved in the transaction or split.
+
+      </PARA>
+</LISTITEM>
+</VARLISTENTRY>
+<VARLISTENTRY><TERM><GUIBUTTON>Transfer</GUIBUTTON></TERM>
+<LISTITEM><PARA>This is an alternative way to enter a
+      transaction. You can do a transfer between any two accounts
+      without opening up other registers.
+
+      </PARA>
+</LISTITEM>
+</VARLISTENTRY>
+<VARLISTENTRY><TERM><GUIBUTTON>Close</GUIBUTTON></TERM>
+<LISTITEM><PARA>Closes this register.
+    </PARA>
+</LISTITEM>
+</VARLISTENTRY>
+</VARIABLELIST>
+
+</SECT1>
+<SECT1 ID="XACC-VIEWTXN">
+<TITLE> Viewing Transactions</TITLE>
+<PARA>The register can show transactions in a variety of different
+    ways, controlled by entries on the <GUIMENU>Register</GUIMENU> menu.
+
+    </PARA>
+<PARA>The register can display transactions in several different
+    styles:
+
+    </PARA>
+    <VARIABLELIST>
+<VARLISTENTRY><TERM><GUIMENUITEM>single-line</GUIMENUITEM> mode</TERM>
+<LISTITEM><PARA>Transactions are displayed on a single line.
+
+      </PARA>
+</LISTITEM>
+</VARLISTENTRY>
+<VARLISTENTRY><TERM><GUIMENUITEM>double-line</GUIMENUITEM> mode</TERM>
+<LISTITEM><PARA>Transactions are displayed over
+      two lines, with more information about each transaction
+      shown.
+
+      </PARA>
+</LISTITEM>
+</VARLISTENTRY>
+<VARLISTENTRY><TERM><GUIMENUITEM>multi-line</GUIMENUITEM> mode</TERM>
+<LISTITEM><PARA>Transactions are displayed over
+      multiple lines, allowing the display of multiple entries.
+      This allows you to enter multi-split transactions (for
+      instance, when you pay multiple bills with one check).
+
+      </PARA>
+</LISTITEM>
+</VARLISTENTRY>
+<VARLISTENTRY><TERM><GUIMENUITEM>auto-single</GUIMENUITEM> and
+      <GUIMENUITEM>auto-double</GUIMENUITEM> modes</TERM>
+<LISTITEM><PARA>Like single
+      and double-line modes, except that the currently-edited
+      transaction is displayed in multi-line form. This is a very
+      convenient way of entering multi-account transactions.
+    </PARA>
+</LISTITEM>
+</VARLISTENTRY>
+</VARIABLELIST>
+
+<PARA>To change the display style, to go the <GUIMENU>Register</GUIMENU>
+    menu and select a style from the <GUISUBMENU>Style</GUISUBMENU> submenu.
+
+    </PARA>
+<PARA>Existing transactions are normally displayed in date order,
+    but this can also be changed with the <GUIMENU>Register</GUIMENU>
+    menu's <GUISUBMENU>Sort Order</GUISUBMENU> submenu. You can also
+    select a date rate from which transactions will be displayed
+    with <GUISUBMENU>Date Range</GUISUBMENU>.
+
+    </PARA>
+</SECT1>
+<SECT1 ID="XACC-RECONCILIATION">
+<TITLE> Reconciliation</TITLE>
+<PARA>Transactions are typically checked against bank statements -
+    a process known as "reconciliation". GnuCash keeps track of the
+    reconciliation status of each transaction.
+
+    </PARA>
+<PARA>The reconciliation status of a transaction is shown by the
+    reconciliation (<GUILABEL>R</GUILABEL>) field. '<LITERAL>y</LITERAL>'
+    indicates that a transaction has been reconciled,
+    '<LITERAL>n</LITERAL>' indicates that it has not, and
+    '<LITERAL>c</LITERAL>' indicates that it has been cleared, but not
+    reconciled.  You can toggle
+    the reconciliation status between '<LITERAL>n</LITERAL>' and '<LITERAL>c</LITERAL>' by clicking in the
+    (<GUILABEL>R</GUILABEL>) field; you can set it to '<LITERAL>y</LITERAL>' by using the <LINK
+    LINKEND=XACC-RECNWIN>Reconciliation Window</LINK>. 
+
+    </PARA>
+<PARA>At the bottom of the account window, there are two running
+    totals: '<GUILABEL>Balance</GUILABEL>', and
+    '<GUILABEL>Cleared</GUILABEL>'. '<GUILABEL>Cleared</GUILABEL>' should
+    correspond to how much money the bank thinks you have in your
+    account, while '<GUILABEL>Balance</GUILABEL>' includes outstanding
+    transactions.
+
+    </PARA>
+<PARA>Reconciliation can be done in the 
+      <LINK LINKEND="XACC-RECNWIN">Reconciliation Window</LINK>
+
+    </PARA>
+</SECT1>
+<SECT1 ID="XACC-STKPTLO">
+<TITLE> Stock Portfolios</TITLE>
+<PARA>You can do stock transactions either from a single-stock
+    window, or from a portfolio-view window, shown below.
+
+    </PARA>
+<MEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/foliowin.png">
+</IMAGEOBJECT>
+</MEDIAOBJECT>
+     <MEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/foliowin-single.png">
+</IMAGEOBJECT>
+</MEDIAOBJECT>
+
+<PARA>The portfolio ledger can seem a bit daunting at first
+    sight.  If you have trouble understanding it, then you may wish to 
+    create an account for each stock you wish to track.
+    </PARA>
+
+<PARA>Some important points to remember about the portfolio
+    window:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>It shows <EMPHASIS>all</EMPHASIS> stocks in your portfolio, not just
+      one.  The share amounts shown are for each particular
+      stock.
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Note that it uses a two line display. 
+      Debited accounts and debited amounts are on the upper
+      line, and credited amounts and accounts are on the lower line.
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>If you buy or sell a stock with money from the brokerage
+      account, the total balance will not change, since the value
+      of the stock equals the amount of money exchanged.
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>If you buy or sell a stock with money from the brokerage
+      account, the value of the transaction will appear twice, once
+      in red, and once in black. If shares are purchased, the
+      amount of money debited from the brokerage account will be in
+      red, and the value of the shares in black. If shares are
+      sold, then value of the shares is in red, and the money
+      credited to the brokerage account in black.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>If you are having trouble indicating a share
+      purchase/sale in the portfolio ledger, then make sure that
+      <GUILABEL>Transfer From</GUILABEL> and 
+      <GUILABEL>Transfer To</GUILABEL> accounts are in
+      the right order. A transfer from a stock account is always
+      interpreted as a sale, even if you entered the data as a
+      purchase. The vice-versa is also true.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Eventually, an alternative simpler portfolio ledger
+      window may be provided.
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+</PARA>
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

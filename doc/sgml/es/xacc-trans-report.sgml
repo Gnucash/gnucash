@@ -1,0 +1,143 @@
+<ARTICLE ID="XACC-TRANS-REPORT">
+
+<ARTHEADER>
+<TITLE>Transaction Report</TITLE>
+</ARTHEADER>
+
+<PARA>Transaction reports list details for transactions in a
+    specified account over a specified period, in a convenient
+    format for viewing and exporting.
+
+    </PARA>
+<PARA>Options specifiable for this report include:
+    
+    <ITEMIZEDLIST>
+
+<LISTITEM><PARA> <EMPHASIS>Display:</EMPHASIS>Select fields to display
+in the report. The choices include:
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><EMPHASIS>Date</EMPHASIS>
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Number</EMPHASIS>
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Description</EMPHASIS>
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Memo</EMPHASIS>
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Account</EMPHASIS>
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Other Account</EMPHASIS>
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Amount</EMPHASIS> - note that you can choose a
+          single-column or two-column amount display. Two column
+          displays credits and debits in separate columns.
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Column Headers</EMPHASIS> - labels naming the fields
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Totals</EMPHASIS> - numeric fields will be totalled.
+        </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        <EMPHASIS>Report Options:</EMPHASIS> This is for general report options,
+        including: 
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><EMPHASIS>Date To and Date From:</EMPHASIS> the date range for the
+          report to cover.
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Account:</EMPHASIS> the account(s) to do the report
+          on.
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Style:</EMPHASIS> Choose from either single-line (in
+          which all transactions will be displayed on a single
+          line), or multi-line (on which each split of a
+          transaction is displayed on a separate line).
+        </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        <EMPHASIS>Sorting:</EMPHASIS>
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><EMPHASIS>Primary Sort Key:</EMPHASIS> the field to sort on
+          first.
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Primary Sort Order:</EMPHASIS> the order in which to
+          sort. "Ascending" specifies smallest/largest,
+          alphabetical ordering, earliest-&gt;latest, or smallest
+          amounts first. Descending produces the opposite
+          effects.
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Secondary Sort Key:</EMPHASIS> the field to sort on if
+          the primary sort keys are equal
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Secondary Sort Order:</EMPHASIS> the ordering on which to
+          sort the secondary key.
+        </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+
+</PARA>
+
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

@@ -1,0 +1,643 @@
+<ARTICLE ID="XACC-CHARTOFACCTS">
+<ARTHEADER>
+<TITLE>Gráfico de Cuentas y Cuentas Numeradas</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Gráfico de Cuentas</TITLE>
+<PARA>    </PARA>
+<PARA>Normalmente las cuentas se agrupan como un árbol, en formato
+    jerárquico.
+
+    </PARA>
+<PARA>La rama principal representa la categoría o grupo, mientras
+    que las ramas secundarias del árbol expresan las cuentas
+    bancarias individuales o categorías de gastos.
+
+    </PARA>
+<PARA>Cuando un sumario (en forma de listado) se requiere, normalmente
+    sólo la rama principal se muestra en el listado, en lugar de las
+    cuentas individuales. Por ejemplo, un gráfico de cuentas podría
+    ser como el siguiente:
+<LITERAL REMAP="TT"><MSGTEXT>
+<LITERALLAYOUT>        300             Gastos
+         |
+         +--310         Gastos de la Vivienda
+         |   |
+         |   +--311     Cerveza
+         |   |
+         |   +--312     Cable
+         |
+         +--320         Gastos del Negocio
+         |   |
+         |   +--321     Disquetes de 8 pulgadas
+         |   |
+         :   :</LITERALLAYOUT>
+</MSGTEXT></LITERAL>
+
+    </PARA>
+<PARA>Observe que las cuentas no solamente tienen nombres; tiene también
+    <EMPHASIS>    códigos,</EMPHASIS> para proporcionar una <EMPHASIS>ordenación.</EMPHASIS>
+    Cuando se generar un listado, la <ANCHOR ID="SORTORDER">ordenación
+    se determina por la numeración.
+
+    </PARA>
+<PARA>Una jerarquía acurada generalmente tiene las cuentas "detalle"
+    con número que no acaban con cero, cuando los nodos padres
+    incrementan los ceros al final. Por ejemplo, las cuentas de
+    "caja" se pueden ordenar de forma lógica como:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>        Asientos: <SCREEN>100</SCREEN> 
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>            Caja: <SCREEN>110</SCREEN> 
+
+            <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Caja en cheques: <SCREEN>111</SCREEN>
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Caja en caja fuerte: <SCREEN>112</SCREEN>
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Caja en el dormitorio: <SCREEN>113</SCREEN>
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Caja de gastos pequeños: <SCREEN>114</SCREEN>
+            </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+          
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>            Asientos de Cuentas Bancarias <SCREEN>120</SCREEN> 
+
+            <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Cuenta Corriente <SCREEN>121</SCREEN>
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Cuenta Fija <SCREEN>122</SCREEN>
+            </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+          
+        </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+        </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+        </PARA>
+<PARA>Cuando <LINK LINKEND="XACC-NEWACCTWIN">crea una nueva cuenta</LINK>,
+        GnuCash le ofrece lo que supone un valor apropiado del
+        número de cuenta; que puede cambiar libremente. GnuCash
+        no comprueba la duplicación de los números de cuentas, de
+        todas formas le sugerimos que no la duplique. Los códigos
+        de cuentas son tratados con números de base 36 (números + letras),
+        por lo que si no le bastan los números, puede utilizar letras,
+        de <KEYSYM>a</KEYSYM> a <KEYSYM>z</KEYSYM>.</PARA>
+</SECT1>
+<SECT1 ID="XACC-SAMPLECHART">
+<TITLE> Ejemplo de Gráfico de Cuentas</TITLE>
+<PARA>Un gráfico de cuentas "típico" se muestra a continuación. Cada
+        cuenta es de un <LINK LINKEND="XACC-ACCTYPES">Tipo de Cuentas</LINK>.
+        Este ejemplo es una combinación de negocio típico y cuentas
+        personales.
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>            Asientos 
+
+            <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>                Caja en mano 
+
+                <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Cuenta Corriente
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Cuenta de mercado de valores
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Certificado de Depósito
+                </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+              
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>                Asientos Fijos 
+
+                <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Mobiliario
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Ordenadores
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Joyería, Collecionables
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Herramientas, Maquinaria
+                </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+              
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>                Inversiones 
+
+                <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Existencias
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Bonos
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Fondos Mutuales
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Terreno en propiedad
+                </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+              
+            </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+          
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>            Capital
+
+            <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>                Impuestos
+
+                <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Impuestos gubernamentales (Sociedades)
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Seguridad Social
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Médicos
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>FUTA
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Impuesto sobre beneficios
+                </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+              
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>                Cuentas Pagables
+
+                <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>MasterCard
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Visa
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>American Express
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Diner's Club
+                </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+              
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>                Inversiones
+
+                <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Tesoro público
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Préstamo escuela
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Dinero prestado al tío Harry
+                </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+              
+            </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+          
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>            Equidad
+
+            <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Ganancias retenidas
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Ganancias del presente año
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Ajustes del histórico
+            </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+          
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>            Entradas 
+
+            <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>                  Intereses
+
+                <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Intereses de la cuenta del banco
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Certificado de depósito
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Intereses de los bonos
+                </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+              
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>                Dividendos
+
+                <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Existencias
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Capital Mutual
+                </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+              
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>                Consultoría
+
+                <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Diseño ABC
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Informática PQR
+                </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+              
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>                Salarios
+
+                <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Trabajo diario
+                </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+              
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>                Comisiones
+
+                <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>"Royalties"
+                </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+              
+            </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+          
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>            Gastos
+
+            <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>                Alquiler y Servicios
+
+                <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Alquiler
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Gastos del alquiler antiguo
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Electricidad
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Gas
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Teléfono
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Internet
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Cable Televisión
+                </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+              
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>                Gastos de la oficina
+
+                <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Cuentas
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Legal
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Software
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Comisión de letras
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Comisión del banco
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Comisión de las tarjetas de crédito
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Toner, Papel, Clips
+                </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+              
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>                Gastos del Coche 
+
+                <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Gasolina
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Seguro
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Reparación
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Alquiler
+                </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+              
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>                Impuestos
+
+                <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Seguridad Social
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Desempleo
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Penalizaciones
+                </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+              
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>                Salarios
+
+                <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Consultoría
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Salarios
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Seguro médico
+                </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+              
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>                Viajes
+
+                <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Avión
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Hotel
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Comidas
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Coche
+                </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+              
+
+              </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>                Marketing 
+
+                <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Publicidad
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Presentaciones
+
+                  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Lanzamiento
+                </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+              
+            </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+          
+        </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+
+
+</PARA>
+</SECT1>
+</ARTICLE>
+<!--  LocalWords:  Computers
+ -->

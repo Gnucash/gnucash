@@ -1,0 +1,241 @@
+<ARTICLE ID="XACC-INCOMEEXPENSE">
+
+<ARTHEADER>
+<TITLE>Utilizar Cuentas de Cobro/Gastos</TITLE>
+</ARTHEADER>
+
+<SECT1>
+<TITLE> ¿Qué son Cobros y Gastos?</TITLE>
+
+<PARA>Las palabras "Cobro" y "Gasto" son realmente simples;
+    todo el mundo <EMPHASIS>piensa</EMPHASIS> que sabe lo que significa.
+    <EMPHASIS>El dinero que tengo es cobro, el dinero que gasto es
+    gasto</EMPHASIS>, ¿verdad? Correcto. De todos modos, hay matices.
+    El tiempo que realiza el cobro es a menudo diferente de cuando
+    realmente tiene el dinero: para facilitar el registrado de estos
+    tipos de transacciones, se inventaron los conceptos de "cuenta
+    pagable" y "cuenta recibible". Apriete en el acceso para ir allí.
+    Esta sección trata de los registrados más básicos de cobros y
+    gastos.
+</PARA>
+</SECT1>
+
+<SECT1 ID="XACC-RECORDING-INCOMEEXPENSE">
+<TITLE> Registrar Cobros y Gastos</TITLE>
+
+<PARA>En un sistema de doble entrada, se deben crear dos clases 
+    de cuentas: algunas del tipo "Cobro" y otras del tipo "Gasto."
+    (Suelen haber muchas más clases diferentes de gastos que de
+    cobros.)
+    Cobros como salario, pagos, intereses del banco y dividendos
+    de acciones son entonces registrados como transferencias de
+    una cuenta de cobro a una cuenta de banco (o, en general, como
+    asiento). De forma parecida, los gastos son registrados como
+    transferencias de un cuenta de crédito (o, en general, una
+    cuenta de capital).
+
+    </PARA>
+<PARA>Otra forma de describir los requerimientos para la
+    "doble entrada" es cuando recibe un cobro, ocurren dos cosas:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Recibe una suma de <EMPHASIS>dinero,</EMPHASIS> y debe
+      registrar esa operación en su cuenta de banco.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Recibe un cobro, y debe registrar esa operación en una
+      cuenta de cobro.
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>Cuando, por ejemplo, el salario es depositado en una cuenta
+    de banco, la cuenta de banco es crédito, y la cuenta de cobro es
+    debido, por lo tanto:
+
+    <TABLE>
+<TITLE>Asentamientos para el Salario</TITLE>
+<TGROUP COLS="3">
+<THEAD>
+<ROW>
+<ENTRY>Cuenta</ENTRY>
+<ENTRY>Debido</ENTRY>
+<ENTRY>Crédito</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>Cuenta de Cheque</ENTRY>
+<ENTRY>1,600.00</ENTRY>
+<ENTRY>        </ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Salario</ENTRY>
+<ENTRY>        </ENTRY>
+<ENTRY>1,600.00</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+    </PARA>
+<PARA>Esto puede ser fácilmente extendido a un gran número de
+    elementos "separados", por lo que:
+
+    <TABLE>
+<TITLE>Cheque de pago más complejo</TITLE>
+<TGROUP COLS="3">
+<THEAD>
+<ROW>
+<ENTRY>Cuenta</ENTRY>
+<ENTRY>Debido</ENTRY>
+<ENTRY>Crédito</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>Cuenta de Cheque</ENTRY>
+<ENTRY>1,300.00</ENTRY>
+<ENTRY>        </ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Impuestos sobre el Salario</ENTRY>
+<ENTRY>200.00</ENTRY>
+<ENTRY>        </ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Plan de Salud</ENTRY>
+<ENTRY>100.00</ENTRY>
+<ENTRY>        </ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Salario</ENTRY>
+<ENTRY>        </ENTRY>
+<ENTRY>1,600.00</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+    </PARA>
+<PARA>Puede haber muchos más que dos entradas en una transacción, pero
+    el total de la suma de Debido, $1,600.00, todavía es igual al
+    total de la suma de Crédito, $1,600.00.
+
+    </PARA>
+<PARA>Si, como con <EMPHASIS>GnuCash,</EMPHASIS> sólo se trabaja con una
+    columna, por lo tanto <EMPHASIS>debido</EMPHASIS> se representa por
+    valores positivos, y <EMPHASIS>crédito</EMPHASIS> se representa por
+    valores negativos, las cuentas de cobros/gastos siguen un camino
+    nada intuitivo y encuentra los cobros como valores <EMPHASIS>negativos</EMPHASIS>.
+    Que <EMPHASIS>parece</EMPHASIS> contrario a lo que se intuye, pero
+    es realmente necesario para <LINK LINKEND="IDENTITY">   preservar la
+    identidad de la doble entrada.</LINK>
+
+    </PARA>
+<PARA>Otro camino es que las cuentas de cobros y gastos son especiales
+    por lo que sus totales no aparecen directamente en las hojas
+    de balance. Una hoja de balance muestra el "Capital Neto":
+    suma de todos los asientos menos todo que se posee.
+
+    </PARA>
+<PARA>Cobros y gastos no son ni asientos ni capital, y por lo
+    tanto no aparecen en la hoja de balance. Lo que aparece en
+    la hoja de balance es su efecto en la <EMPHASIS>equidad.</EMPHASIS>
+
+    </PARA>
+<PARA>Hay un listado separado, lista de "Beneficios y Pérdidas" (B&amp;P),
+    para analizar los cobros y los gastos. El total de beneficio
+    (o de pérdida) se calcula como el total de los cobros menos el
+    total de los gastos. En perfecta simétrica, como los asientos y
+    lo que se posee no son cobros o gastos, <EMPHASIS>ésos</EMPHASIS>
+    correspondientemente no aparecen en un estado de (B&amp;P).
+
+    </PARA>
+<PARA>Aunque estas cuentas puedan ser algo "especiales", no
+    necesitar hacer nada particularmente especial para utilizar
+    las cuentas de cobros y gastos. GnuCash coge los valores
+    automáticamente, por lo que si registra debidamente las
+    operaciones de las transacciones en su cuenta de banco o
+    de crédito, en el otro lado de la transacción, cuentas de
+    cobro o gasto, debe aparecer correctamente.
+
+    </PARA>
+<PARA>Cuando las cosas son "extrañas" y necesita un conocimiento
+    más profundo de ésto, es cuando las cantidades son
+    transferidas entre cuentas de cobro/gasto. (Las <EMPHASIS>causas</EMPHASIS>
+    para estas transferencias tienden a ser peculiares, por lo
+    que esto es una situación extraña.)
+
+    </PARA>
+<PARA>Las palabras "Cobro" y "Gasto" son realmente simples;
+    todo el mundo <EMPHASIS>piensa</EMPHASIS> que sabe lo que significa.
+    <EMPHASIS>El dinero que tengo es cobro, el dinero que gasto es
+    gasto</EMPHASIS>, ¿verdad? Si, pero solo en un sentido muy
+    básico. Esto puede ser suficiente cuando se realiza contabilidad
+    personal, pero para un negocio, las cosas son más complicadas.
+    Cobros y gastos se pueden reconocer como ocurridas en un momento
+    que es distinto del momento que el dinero es movido a o desde
+    las cuentas de banco del negocio.
+
+    </PARA>
+<PARA>Por ejemplo, las compañías normalmente realizan cobros
+    <EMPHASIS>cuando la venta se realiza.</EMPHASIS> Por ejemplo,
+    esto puede significar que reconoce una venta de $10,000
+    <EMPHASIS>en el momento que usted y su cliente cierran
+    el trato.</EMPHASIS> Aunque el dinero no ha sido pagado, la
+    venta se debe poner en otro lugar. Debe <EMPHASIS>añadir</EMPHASIS>
+    la venta en el momento del cierre del trato. Para hacer el
+    asiento de la transacción añada la venta de $10,000 a las
+    <EMPHASIS>Cuentas Recibibles</EMPHASIS> en lugar de añadir
+    algo en caja.
+    </PARA>
+<PARA>
+    <EMPHASIS>Conocimiento para expertos:</EMPHASIS> Cuando se 
+    reconoce una venta y como esta registrada se rige no
+    solamente por los principios de la contabilidad aceptada,
+    sino también por las leyes locales y nacionales. En los
+    Estados Unidos, las prácticas contables aceptadas están
+    determinadas por la organización FASB (Federal Accounting
+    Standards Board).
+</PARA>
+<PARA>
+(Para encontrar más información sobre eso,
+apriete en la página a/r/ y a/p/).
+</PARA>
+
+</SECT1>
+<SECT1 ID="XACC-INCEXPUSE">
+<TITLE> Utilizar cuentas de Cobro/Gasto</TITLE>
+<PARA>Para utilizar una cuenta de cobro/gasto, simplemente cree
+    una desde el diálogo de "Nueva Cuenta", y entonces
+    asegúrese de transferir los cobros y gastos en ella como
+    registro de pagos, intereses, etc..
+
+    </PARA>
+<PARA>No debe tener dudas de querer crear un gran número de cuentas
+    de cobro y de gasto; puede ser beneficioso mirar en
+    <LINK LINKEND="XACC-SAMPLECHART">Cuadro de Ejemplo de Cuentas</LINK> por ideas.
+
+    </PARA>
+<PARA>Esta partición de cobros y gastos se ha comprobado particularmente
+    útil para los norteamericanos cuando se acerca <EMPHASIS>el periodo
+    de pagar impuestos</EMPHASIS>.
+
+    </PARA>
+</SECT1>
+<SECT1 ID="XACC-TERMSOTHER">
+<TITLE> Uso de terminología en otros programas</TITLE>
+<PARA>    </PARA>
+<PARA>Si ha utilizado otros programas de contabilidad personal,
+    vigilen <LINK LINKEND="XACC-QUICKENCATS">Se llaman con frecuencia
+    "Categorías."</LINK>
+
+
+</PARA>
+</SECT1>
+</ARTICLE>
