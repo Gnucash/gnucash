@@ -1,3 +1,28 @@
+2003-05-22  Jan Arne Petersen  <jpetersen@uni-bonn.de>
+
+	* src/gnome-utils/dialog-account.c:
+	Fix 'Notes' TextView.
+	Fix selection of parent/base accounts.
+	(gnc_account_to_ui),
+	(gnc_ui_to_account), (gnc_account_window_create),
+	(gnc_ui_new_account_window_internal), (gnc_ui_edit_account_window):
+	* src/gnome-utils/gnc-tree-model-account.c:
+	Fix virtual toplevel-account.
+	Add notification for account changes.
+	(gnc_tree_model_account_class_init), (gnc_tree_model_account_init),
+	(gnc_tree_model_account_dispose), (gnc_tree_model_account_new),
+	(gnc_tree_model_account_set_toplevel),
+	(gnc_tree_model_account_get_iter),
+	(gnc_tree_model_account_iter_next),
+	(gnc_tree_model_account_iter_n_children),
+	(gnc_tree_model_account_iter_nth_child),
+	(gnc_tree_model_account_iter_parent), (account_row_inserted),
+	(gnc_tree_model_account_refresh_handler),
+	(gnc_tree_model_account_refresh):
+	* src/gnome/druid-hierarchy.c:
+	Disable test example accounts.
+	(account_types_tree_view_prepare):
+
 2003-05-20  Jan Arne Petersen  <jpetersen@uni-bonn.de>
 
 	* src/gnome-utils/Makefile.am:

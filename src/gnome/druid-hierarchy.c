@@ -88,17 +88,6 @@ get_balance_editor (void)
   return g_object_get_data (G_OBJECT (hierarchy_window), "balance_editor");
 }
 
-/*
-static GtkToggleButton *
-get_placeholder_checkbox (void)
-{
-  if (!hierarchy_window) return NULL;
-
-  return GTK_TOGGLE_BUTTON(gnc_glade_lookup_widget(GTK_WIDGET(hierarchy_window),
-						   "placeholder"));
-}
-*/
-
 static GtkWidget *
 get_currency_editor(void)
 {
@@ -332,6 +321,7 @@ gnc_get_ea_locale_dir(const char *top_dir)
     return ret;
 }
 
+#if 0
 /* GNOME 2 Port (TESTCODE) */
 static GSList *
 get_example_account_list (void)
@@ -418,6 +408,7 @@ get_example_account_list (void)
 
 	return list;
 }
+#endif
 
 static void
 account_types_selected_toggled (GtkCellRendererToggle *cell,
@@ -451,11 +442,11 @@ account_types_tree_view_prepare (void)
 	GncExampleAccount *gea;
 
         /* GNOME 2 port (There seem to be a xml bug, so create a TestAccount) */
-	list = get_example_account_list ();
-	/*
+	/* list = get_example_account_list ();*/
+
  	list = gnc_load_example_account_list (gnc_get_current_book (),
 					      locale_dir);
-	*/
+
 	g_free (locale_dir);
 
 	/* Prepare the account_types GtkTreeView with a model and with some columns */

@@ -77,7 +77,7 @@ struct _AccountWindow
   GtkWidget * name_entry;
   GtkWidget * description_entry;
   GtkWidget * code_entry;
-  GtkWidget * notes_text;
+  GtkTextBuffer * notes_text_buffer;
 
   GtkWidget * commodity_edit;
   GtkWidget * account_scu;
@@ -162,7 +162,7 @@ gnc_account_to_ui(AccountWindow *aw)
   gnc_commodity * commodity;
   const char *string;
   gboolean tax_related, placeholder, nonstd_scu;
-  gint pos = 0, index;
+  gint index;
 
   if (!account)
     return;
@@ -195,9 +195,7 @@ gnc_account_to_ui(AccountWindow *aw)
   string = xaccAccountGetNotes (account);
   if (string == NULL) string = "";
 
-  gtk_editable_delete_text (GTK_EDITABLE (aw->notes_text), 0, -1);
-  gtk_editable_insert_text (GTK_EDITABLE (aw->notes_text), string,
-                            strlen(string), &pos);
+  gtk_text_buffer_set_text (aw->notes_text_buffer, string, strlen(string));
 
   tax_related = xaccAccountGetTaxRelated (account);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->tax_related_button),
@@ -310,6 +308,7 @@ gnc_ui_to_account(AccountWindow *aw)
   GtkTreeSelection *selection;
   GtkTreeModel *model;
   GtkTreeIter iter;
+  GtkTextIter start, end;
 
   if (!account)
     return;
@@ -396,7 +395,9 @@ gnc_ui_to_account(AccountWindow *aw)
     }
   }
 
-  string = gtk_editable_get_chars (GTK_EDITABLE(aw->notes_text), 0, -1);
+  gtk_text_buffer_get_start_iter (aw->notes_text_buffer, &start);
+  gtk_text_buffer_get_end_iter (aw->notes_text_buffer, &end);
+  string = gtk_text_buffer_get_text (aw->notes_text_buffer, &start, &end, FALSE);
   old_string = xaccAccountGetNotes (account);
   if (safe_strcmp (string, old_string) != 0)
     xaccAccountSetNotes (account, string);
@@ -1526,7 +1527,7 @@ gnc_account_window_create(AccountWindow *aw)
 
   aw->description_entry = glade_xml_get_widget (xml, "description_entry");
   aw->code_entry =        glade_xml_get_widget (xml, "code_entry");
-  aw->notes_text =        glade_xml_get_widget (xml, "notes_text");
+  aw->notes_text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (glade_xml_get_widget (xml, "notes_text")));
 
   /* GNOME 2 Port (Not avaiable in GNOME 2)
   gtk_dialog_editable_enters(awd, GTK_EDITABLE(aw->name_entry));
@@ -1795,6 +1796,9 @@ gnc_ui_new_account_window_internal (Account *base_account,
   gnc_commodity *commodity;
   AccountWindow *aw;
   Account *account;
+  GNCTreeModelAccount *model;
+  GtkTreeSelection *selection;
+  GtkTreeIter iter;
 
   aw = g_new0 (AccountWindow, 1);
 
@@ -1840,8 +1844,11 @@ gnc_ui_new_account_window_internal (Account *base_account,
 
   gtk_widget_show (aw->dialog);
 
-/*  gnc_account_tree_select_account (GNC_ACCOUNT_TREE(aw->parent_tree),
-                                   base_account, TRUE);*/
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (aw->parent_tree));
+  model = GNC_TREE_MODEL_ACCOUNT (gtk_tree_view_get_model (GTK_TREE_VIEW (aw->parent_tree)));
+  gnc_tree_model_account_get_iter_from_account (model, base_account, &iter);
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (aw->parent_tree));
+  gtk_tree_selection_select_iter (selection, &iter);
 
   gnc_window_adjust_for_screen (GTK_WINDOW(aw->dialog));
 
@@ -2052,6 +2059,9 @@ gnc_ui_edit_account_window(Account *account)
 {
   AccountWindow * aw;
   Account *parent;
+  GNCTreeModelAccount *model;
+  GtkTreeSelection *selection;
+  GtkTreeIter iter;
 
   if (account == NULL)
     return NULL;
@@ -2080,8 +2090,12 @@ gnc_ui_edit_account_window(Account *account)
   parent = xaccAccountGetParentAccount (account);
   if (parent == NULL)
     parent = aw->top_level_account;
-/*  gnc_account_tree_select_account(GNC_ACCOUNT_TREE(aw->parent_tree),
-                                  parent, TRUE);*/
+
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (aw->parent_tree));
+  model = GNC_TREE_MODEL_ACCOUNT (gtk_tree_view_get_model (GTK_TREE_VIEW (aw->parent_tree)));
+  gnc_tree_model_account_get_iter_from_account (model, parent, &iter);
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (aw->parent_tree));
+  gtk_tree_selection_select_iter (selection, &iter);
 
   gnc_account_window_set_name (aw);
 
