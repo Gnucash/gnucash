@@ -23,6 +23,7 @@ static GncObject_t bus_obj = {
   TEST_MODULE_DESC,
   NULL,				/* create */
   NULL,				/* destroy */
+  NULL,                         /* is dirty */
   foreach,
   printable,
 };
