@@ -350,16 +350,18 @@ gnc_ui_accWindow_create_account(Account * account, Account * parent,
 
   gnc_ui_install_field_strings(account, strings, TRUE);
 
+#if 0
   { /* make a default transaction */
     Transaction *trans = xaccMallocTransaction();
- 
+
     xaccTransBeginEdit(trans, 1);
     xaccTransSetDateToday (trans);
     xaccTransSetDescription (trans, OPEN_BALN_STR);
     xaccTransCommitEdit(trans);
-            
+
     xaccAccountInsertSplit (account, xaccTransGetSplit (trans, 0) );
   }
+#endif
 
   if (parent != NULL)
     xaccInsertSubAccount (parent, account);
