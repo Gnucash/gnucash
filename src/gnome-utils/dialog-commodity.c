@@ -447,8 +447,6 @@ gnc_ui_update_namespace_picker(GtkWidget * combobox,
      if (node) {
        namespaces = g_list_remove_link (namespaces, node);
        g_list_free_1 (node);
-     } else {
-       node->data = "CURRENCY";
      }
 
      if (gnc_commodity_namespace_is_iso (init_string))
