@@ -1295,9 +1295,10 @@ xaccGroupMapAccounts (AccountGroup *grp,
 }
 
 gpointer
-xaccGroupForEachAccountDeeply (AccountGroup *grp,
-                               gpointer (*thunk)(Account *a, gpointer data),
-                               gpointer data)
+xaccGroupForEachAccount (AccountGroup *grp,
+                         gpointer (*thunk)(Account *a, gpointer data),
+                         gpointer data,
+                         gboolean deeply)
 {
   GList *node;
 
@@ -1312,7 +1313,9 @@ xaccGroupForEachAccountDeeply (AccountGroup *grp,
     if (result)
       return(result);
 
-    result = xaccGroupForEachAccountDeeply (account->children, thunk, data);
+    if(deeply)
+        result = xaccGroupForEachAccount (account->children,
+                                          thunk, data, TRUE);
 
     if (result)
       return(result);

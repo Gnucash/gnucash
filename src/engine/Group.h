@@ -211,10 +211,11 @@ GSList *xaccGroupMapAccounts(AccountGroup *grp,
                              gpointer (*thunk)(Account *a, gpointer data),
                              gpointer data);
 
-gpointer xaccGroupForEachAccountDeeply(AccountGroup *grp,
-                                       gpointer (*thunk)(Account *a,
-                                                         gpointer data),
-                                       gpointer data);
+gpointer xaccGroupForEachAccount (AccountGroup *grp,
+                                  gpointer (*thunk) (Account *a,
+                                                     gpointer data),
+                                  gpointer data,
+                                  gboolean deeply);
 
 gboolean xaccGroupEqual(AccountGroup *a, AccountGroup *b,
                         gboolean check_guids);
