@@ -65,6 +65,6 @@ EXTRA_DIST = \
   test-create-account.scm
 
 clean:
-	rm translog.*
+	rm -f translog.*
 
 distclean-local: clean
