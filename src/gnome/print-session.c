@@ -27,7 +27,6 @@
 #include <gnome.h>
 #include <stdio.h>
 
-#include "glade-cb-gnc-dialogs.h"
 #include "gnc-ui.h"
 #include "messages.h"
 #include "print-session.h"

@@ -4,6 +4,11 @@
  * DO NOT compile it as part of your application.
  */
 
+gchar *s = N_("Select Account");
+gchar *s = N_("Select or add a GnuCash account");
+gchar *s = N_("Account");
+gchar *s = N_("New?");
+gchar *s = N_("New Account (child of selected) ...");
 gchar *s = N_("QIF Import");
 gchar *s = N_("Import QIF files");
 gchar *s = N_("GnuCash can import financial data from QIF (Quicken \n"

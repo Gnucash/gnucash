@@ -28,8 +28,6 @@
 #include "FileDialog.h"
 #include "dialog-commodity.h"
 #include "dialog-utils.h"
-#include "glade-gnc-dialogs.h"
-#include "glade-support.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"

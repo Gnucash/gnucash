@@ -34,7 +34,6 @@
 
 #include "dialog-options.h"
 #include "dialog-utils.h"
-#include "glade-gnc-dialogs.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-html-history.h"

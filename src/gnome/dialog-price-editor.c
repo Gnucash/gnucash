@@ -29,8 +29,6 @@
 
 #include "FileDialog.h"
 #include "dialog-utils.h"
-#include "glade-gnc-dialogs.h"
-#include "glade-support.h"
 #include "global-options.h"
 #include "gnc-amount-edit.h"
 #include "gnc-commodity-edit.h"

@@ -30,7 +30,6 @@ libgncgnome_a_SOURCES = \
   druid-utils.c \
   extensions.c \
   file-history.c \
-  glade-gnc-dialogs.c \
   glade-support.c \
   gnc-amount-edit.c \
   gnc-commodity-edit.c \
@@ -89,8 +88,6 @@ noinst_HEADERS = \
   druid-qif-import.h \
   druid-utils.h \
   extensions.h \
-  glade-cb-gnc-dialogs.h \
-  glade-gnc-dialogs.h \
   glade-support.h \
   gnc-amount-edit.h \
   gnc-commodity-edit.h \
@@ -123,18 +120,11 @@ noinst_HEADERS = \
   window-report.h
 
 GLADE_FILES = \
-  glade-gnc-dialogs.c \
-  glade-cb-gnc-dialogs.h \
-  glade-gnc-dialogs.h \
   glade-support.c \
   glade-support.h
 
-#${GLADE_FILES}: gnc-dialogs.glade
-#	${GLADE} --write-source ${srcdir}/gnc-dialogs.glade
-
 EXTRA_DIST = \
   .cvsignore \
-  gnc-dialogs.glade \
   gnc-dir.h.in \
   gnucash.desktop \
   gnucash.keys.in \

@@ -30,8 +30,6 @@
 #include "dialog-account-picker.h"
 #include "dialog-utils.h"
 #include "druid-qif-import.h"
-#include "glade-cb-gnc-dialogs.h"
-#include "glade-gnc-dialogs.h"
 #include "gnc-ui-util.h"
 #include "query-user.h"
 
@@ -151,11 +149,9 @@ new_child_string_cb(char * string, gpointer data) {
   }
 }
 
-void
+static void
 gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data) {
-  QIFAccountPickerDialog * wind = 
-    gtk_object_get_data(GTK_OBJECT(user_data),
-                        "account_picker_struct");
+  QIFAccountPickerDialog * wind = user_data;
   SCM name_setter = gh_eval_str("qif-map-entry:set-gnc-name!");
   char name[251] = "";
   char sep[2] = " ";
@@ -192,9 +188,7 @@ gnc_ui_qif_account_picker_select_cb(GtkCTree   * tree,
                                     GtkCTreeNode  * node,
                                     gint column,
                                     gpointer  user_data) {
-  QIFAccountPickerDialog * wind = 
-    gtk_object_get_data(GTK_OBJECT(user_data),
-                        "account_picker_struct");
+  QIFAccountPickerDialog * wind = user_data;
   SCM name_setter = gh_eval_str("qif-map-entry:set-gnc-name!");
 
   g_free(wind->selected_name);
@@ -210,9 +204,8 @@ gnc_ui_qif_account_picker_unselect_cb(GtkCTree   * tree,
                                       GtkCTreeNode  * node,
                                       gint column,
                                       gpointer  user_data) {
-  QIFAccountPickerDialog * wind = 
-    gtk_object_get_data(GTK_OBJECT(user_data),
-                        "account_picker_struct");
+  QIFAccountPickerDialog * wind = user_data;
+
   g_free(wind->selected_name);
   wind->selected_name = NULL;
 }
@@ -220,10 +213,8 @@ gnc_ui_qif_account_picker_unselect_cb(GtkCTree   * tree,
 
 static int
 gnc_ui_qif_account_picker_map_cb(GtkWidget * w, gpointer user_data) {
-  QIFAccountPickerDialog * wind = 
-    gtk_object_get_data(GTK_OBJECT(user_data),
-                        "account_picker_struct");
-  
+  QIFAccountPickerDialog * wind = user_data;
+
   /* update the tree display with all the existing accounts plus all
    * the ones the QIF importer thinks it will be creating.  this will
    * also select the map_entry line. */
@@ -247,11 +238,18 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry) {
   SCM saved_entry  = gh_call1(save_entry, map_entry);
   int retval = -1;
   char * scmname;
+  GladeXML *xml;
+
   wind = g_new0(QIFAccountPickerDialog, 1);
 
-  wind->dialog     = create_QIF_Import_Account_Picker();
-  wind->treeview   = 
-    gtk_object_get_data(GTK_OBJECT(wind->dialog), "account_tree");
+  xml = gnc_glade_xml_new ("qif.glade", "QIF Import Account Picker");
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_account_picker_new_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_qif_account_picker_new_cb), wind);
+
+  wind->dialog     = glade_xml_get_widget (xml, "QIF Import Account Picker");
+  wind->treeview   = glade_xml_get_widget (xml, "account_tree");
   wind->qif_wind   = qif_wind;
 
   wind->map_entry  = map_entry;
@@ -262,20 +260,17 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry) {
 
   scm_protect_object(wind->map_entry);
 
-  gtk_object_set_data(GTK_OBJECT(wind->dialog), "account_picker_struct",
-                      wind);
-
   gtk_signal_connect(GTK_OBJECT(wind->treeview), "tree_select_row",
                      GTK_SIGNAL_FUNC(gnc_ui_qif_account_picker_select_cb),
-                     wind->dialog);
+                     wind);
 
   gtk_signal_connect(GTK_OBJECT(wind->treeview), "tree_unselect_row",
                      GTK_SIGNAL_FUNC(gnc_ui_qif_account_picker_unselect_cb),
-                     wind->dialog);
+                     wind);
 
   gtk_signal_connect_after(GTK_OBJECT(wind->dialog), "map",
                            GTK_SIGNAL_FUNC(gnc_ui_qif_account_picker_map_cb),
-                           wind->dialog);
+                           wind);
   
   /* this is to get the checkmarks set up right.. it will get called 
    * again after the window is mapped. */
@@ -294,4 +289,3 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry) {
     return saved_entry;
   }
 }
-
