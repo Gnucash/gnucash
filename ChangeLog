@@ -1,5 +1,14 @@
 2001-06-17  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/date-utilities.scm: use gnc:print-date instead of
+	strftime
+
+	* src/scm/report/hello-world.scm: fix docs
+
+	* src/scm/report/transaction-report.scm: fix date printing
+
+	* src/scm/report/register.scm: remove cruft
+
 	* src/register/gnome/gnucash-style.c (gnucash_font_load): new func
 	If gdk_fontset_load doesn't work, try gdk_font_load.
 	(gnucash_style_set_register_font_name): use gnucash_font_load
