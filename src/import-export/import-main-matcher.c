@@ -837,6 +837,7 @@ static void automatch_clist_transactions(GNCImportMainMatcher *info, GtkCList *c
   int row;
   GNCImportTransInfo *trans_info;
   
+  gtk_clist_freeze(clist);	/* prevent a lot of visual updates at once */
   for(row = starting_row+1; row < clist->rows; row++)
     {
       trans_info = gtk_clist_get_row_data(clist, row);
@@ -847,6 +848,7 @@ static void automatch_clist_transactions(GNCImportMainMatcher *info, GtkCList *c
 	  refresh_clist_row(info, row, trans_info);
 	}
     }
+  gtk_clist_thaw(clist);	/* let all the updates be shown */
 }
 
 /** @} */

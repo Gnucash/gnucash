@@ -11,6 +11,9 @@
 
 	* po/POTFILES.in: fox for the search-param.c move
 
+	* src/import-export/import-main-matcher.c: freeze/thaw the clist
+	  around the iterator to ease the visual affects.
+	
 2003-02-09  Chris Lyttle  <chris@wilddev.net>
 
 	* rpm/gnucash.spec.in: fix info file not found.
