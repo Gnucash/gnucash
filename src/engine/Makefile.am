@@ -20,6 +20,7 @@ libgncengine_la_SOURCES = \
   TransLog.c \
   date.c \
   GNCId.c \
+  gnc-account-xml-v2.c \
   guid.c \
   io-gncbin-r.c \
   io-gncxml-r.c \
@@ -33,6 +34,8 @@ libgncengine_la_SOURCES = \
   gnc-engine-util.c \
   gnc-event.c \
   gnc-numeric.c \
+  sixtp-dom-generators.c \
+  sixtp-dom-parsers.c \
   sixtp-kvp-parser.c \
   sixtp-stack.c \
   sixtp-utils.c \
@@ -80,6 +83,8 @@ noinst_HEADERS = \
   gnc-event-p.h \
   gnc-numeric.h \
   gnc-xml-helper.h \
+  sixtp-dom-generators.h \
+  sixtp-dom-parsers.h \
   sixtp-parsers.h \
   sixtp-writers.h \
   sixtp-stack.h \

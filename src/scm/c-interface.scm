@@ -17,6 +17,8 @@
 
 (require 'hash-table)
 
+(use-modules (ice-9 syncase))
+
 (define (gnc:error->string tag args)
   (define (write-error port)
     (if (and (list? args) (not (null? args)))
@@ -41,7 +43,9 @@
 (define gnc:gettext gnc:gettext-helper)
 (define gnc:_ gnc:gettext)
 (define _ gnc:gettext)
-(define (N_ x) x)
+(define-syntax N_
+  (syntax-rules ()
+                ((_ x) x)))
 
 
 ;; This database can be used to store and retrieve translatable

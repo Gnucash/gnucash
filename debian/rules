@@ -19,7 +19,7 @@ configure: configure.in
 Makefile: Makefile.in configure
 	dh_testdir
 	$(checkdir)
-	./configure --prefix=/usr \
+	./autogen.sh --prefix=/usr \
 		--sysconfdir=/etc \
 		--infodir=/usr/share/info \
 		--mandir=/usr/share/man
@@ -29,7 +29,7 @@ build-stamp: Makefile
 	dh_testdir
 	$(checkdir)
 	make 
-	touch build-stamp
+#	touch build-stamp
 
 clean:
 	dh_testdir

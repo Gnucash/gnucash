@@ -59,8 +59,8 @@ static gboolean dom_chars_handler(
 {
     if(length > 0 && !is_whitespace(text, length))
     {
-        gchar *stuff = g_strndup(text, length);
-        xmlNodeSetContent((xmlNodePtr)parent_data, stuff);
+        /* gchar *stuff = g_strndup(text, length); */
+        xmlNodeSetContentLen((xmlNodePtr)parent_data, text, length);
     }
     return TRUE;
         
