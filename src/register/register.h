@@ -82,7 +82,7 @@
 #define MOD_NEW   0x800
 #define MOD_ALL   0xfff
 
-#define NUM_CELLS 20
+#define NUM_CELLS 25
 
 typedef struct _BasicRegister BasicRegister;
 

@@ -63,6 +63,11 @@
 #define INCOME_LEDGER       10
 #define PORTFOLIO           11
 
+#define REG_TYPE_MASK       0xff
+#define REG_SHOW_TDETAIL    0x100
+#define REG_SHOW_RECS       0x200
+
+
 /* modified flags -- indicate how values have been modified */
 #define MOD_NONE  0x000
 #define MOD_DATE  0x001
@@ -79,7 +84,10 @@
 #define MOD_NEW   0x800
 #define MOD_ALL   0xfff
 
-#define NUM_CELLS 20
+/* The value of NUM_CELLS should be larger than the number of 
+ * cells defined in the structure below!
+ */
+#define NUM_CELLS 25
 
 typedef struct _SplitRegister SplitRegister;
 
@@ -92,25 +100,31 @@ struct _SplitRegister {
    CellBlock     * split_cursor;
    CellBlock     * header;
 
-   /* the individual cells, by function */
-
+   /* transaction cells */
+   /* these are handled only by the transaction cursor */
    DateCell      * dateCell;
    BasicCell     * numCell;
    QuickFillCell * descCell;
    BasicCell     * recnCell;   /* main transaction line reconcile */
-   BasicCell     * recsCell;   /* subsidiary split reconcile */
-   PriceCell     * creditCell;
-   PriceCell     * debitCell;
+   PriceCell     * creditTransCell;
+   PriceCell     * debitTransCell;
+   PriceCell     * priceTransCell;
+   PriceCell     * valueTransCell;
    PriceCell     * shrsCell;
-   PriceCell     * priceCell;
-   PriceCell     * valueCell;
-   BasicCell     * memoCell;
+   PriceCell     * balanceCell;
+   BasicCell     * nullTransCell;
+
+   /* split cells */
+   /* these are hndled only by the split cursor */
    ComboCell     * actionCell;
    ComboCell     * xfrmCell;
    ComboCell     * xtoCell;
-   PriceCell     * balanceCell;
-
-   BasicCell     * nullTransCell;
+   BasicCell     * memoCell;
+   BasicCell     * recsCell;   /* subsidiary split reconcile */
+   PriceCell     * creditCell;
+   PriceCell     * debitCell;
+   PriceCell     * priceCell;
+   PriceCell     * valueCell;
    BasicCell     * nullSplitCell;
 
    /* the type of the register, must be one of the enumerated types
