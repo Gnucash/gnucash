@@ -12,6 +12,8 @@
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 
+#include "dialog-options.h"
+
 /* version of the gnc module system interface we require */
 int libgncmod_gnome_utils_LTX_gnc_module_system_interface = 0;
 
@@ -63,6 +65,10 @@ libgncmod_gnome_utils_LTX_gnc_module_init(int refcount) {
   /* publish g-wrapped bindings */
   lmod("(g-wrapped gw-gnome-utils)");
   lmod("(gnucash gnome-utils)");
+  
+  /* Initialize the options-ui database */
+  if (refcount == 0)
+    gnc_options_ui_initialize ();
 
   return TRUE;
 }

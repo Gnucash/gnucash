@@ -1,3 +1,12 @@
+2002-05-26  Derek Atkins   <derek@ihtfp.com>
+
+	* src/gnome-util/dialog-options.[ch]: Create an option-type
+	database so that modules can define new option-types and plug them
+	into Gnucash.  Break apart the existing "if type == blah; else if
+	type == blah blah..." code and use the new options-type database.
+	New options require the implementation of three functions,
+	set_widget(), set_value(), and get_value().
+	
 2002-05-24  Derek Atkins   <derek@ihtfp.com>
 
 	* src/engine/GNCId.c: Implement xaccForeachEntity() as a which
