@@ -8,6 +8,7 @@
 #include "sixtp.h"
 #include "sixtp-utils.h"
 #include "sixtp-parsers.h"
+#include "sixtp-utils.h"
 
 #include "sixtp-dom-parsers.h"
 #include "AccountP.h"
@@ -55,14 +56,23 @@ account_type_handler (xmlNodePtr node, Account* act)
 static gboolean
 account_currency_handler (xmlNodePtr node, Account* act)
 {
-    xaccAccountSetCurrency(act, dom_tree_to_gnc_commodity(node));
+    gnc_commodity *ref;
+
+    ref = dom_tree_to_commodity_ref(node);
+    xaccAccountSetCurrency(
+        act, associate_commodity_ref_with_engine_commodity(ref));
+    gnc_commodity_destroy(ref);
     return TRUE;
 }
 
 static gboolean
 account_security_handler (xmlNodePtr node, Account* act)
 {
-    xaccAccountSetCurrency(act, dom_tree_to_gnc_commodity(node));
+    gnc_commodity *ref;
+    ref = dom_tree_to_commodity_ref(node);
+    xaccAccountSetSecurity(
+        act, associate_commodity_ref_with_engine_commodity(ref));
+    gnc_commodity_destroy(ref);
     return TRUE;
 }
 

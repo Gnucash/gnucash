@@ -2,10 +2,10 @@
 <!ENTITY % id-type "(guid, new)">
 <!ENTITY % default-id-type "guid">
 
-<!ELEMENT cmd:space (#PCDATA)>
-<!ELEMENT cmd:id (#PCDATA)>
+<!ELEMENT cmdty:space (#PCDATA)>
+<!ELEMENT cmdty:id (#PCDATA)>
 
-<!ENTITY % commodity-type "(cmd:space, cmd:id)">
+<!ENTITY % commodity-type "(cmdty:space, cmdty:id)">
 
 <!-- need to replace the etc here -->
 <!ENTITY % slot-types "(string | integer | double | etc)">
@@ -20,7 +20,7 @@
 
 <!ENTITY % slot-type "(slot+)">
 
-<!ELEMENT date (#PCDATA)>
-<!ELEMENT ns (#PCDATA)>
+<!ELEMENT ts:date (#PCDATA)>
+<!ELEMENT ts:ns (#PCDATA)>
 
-<!ENTITY % date-type "(date, ns?)">
+<!ENTITY % date-type "(ts:date, ts:ns?)">

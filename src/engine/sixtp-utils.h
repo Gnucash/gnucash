@@ -4,12 +4,16 @@
 
 #include "date.h"
 
+#include "sixtp.h"
+
 typedef struct {
   Timespec ts;
   guint s_block_count;
   guint ns_block_count;
 } TimespecParseInfo;
 
+#define TIMESPEC_TIME_FORMAT  "%Y-%m-%d %H:%M:%S %z"
+#define TIMESPEC_PARSE_TIME_FORMAT  "%Y-%m-%d %H:%M:%S"
 
 gboolean isspace_str(const gchar *str, int nomorethan);
 

@@ -3,6 +3,7 @@ Section: utils
 Priority: extra
 Maintainer: John Goerzen <jgoerzen@complete.org>
 Standards-Version: 3.1.0.0
+Build-Depends: libguppi-dev, libguile-dev, libgtkhtml-dev, libxml-dev, libart-dev, libgnome-dev, libgwrapguile-dev, libglib1.2-dev
 
 Package: gnucash
 Architecture: any

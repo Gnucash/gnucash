@@ -1,3 +1,41 @@
+2001-02-14  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/test/test-date-converting.c (Repository): Tests to make sure
+	date <-> string converting strings work.
+
+	* src/test/test-dom-converters1.c (Repository): Add tests for rest
+	of converters.
+
+	* src/test/Makefile.am (Repository): add new test.  Make "make
+	check" work here.
+
+	* src/engine/sixtp-xml-write-utils.c (Repository): use date format
+	strings from sixtp-utils.h
+
+	* src/engine/sixtp-utils.h (Repository): add date format strings.
+	#include sixtp.h
+
+	* src/engine/sixtp-utils.c (Repository): Use define as timespec
+	date format string.
+
+	* src/engine/sixtp-dom-parsers.c (Repository): Add funcs from
+	Rob.  make consistent.  Fix a few bugs.  Make
+	dom_tree_to_commodity_ref testable by adding new func
+	"associate_commodity_ref_with_engine_commodity" to do final
+	association with engine commodity table.
+
+	* src/engine/sixtp-dom-generators.c (Repository): Fix to_guid to
+	be generic.  Oops.  Add rest of funcs to to foo_to_dom_tree to
+	match funcs in sixtp_dom_parsers.
+
+	* src/engine/gnc-numeric.c (Repository): Comment out unused var.
+
+	* src/engine/gnc-account-xml-v2.c (Repository): change to use
+	dom_tree_to_commodity_ref. 
+
+	* src/doc/xml/types.dtd: Change cmd: to cmdty: and add ts: to the
+	timespec tags.
+
 2001-02-14  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/date.c: use nl_langinfo (D_FMT) instead of %x for

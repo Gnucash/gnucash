@@ -10,6 +10,7 @@
 
 #include "gnc-xml-helper.h"
 #include "sixtp-xml-write-utils.h"
+#include "sixtp-utils.h"
 
 #include "gnc-numeric.h"
 #include "gnc-engine-util.h"
@@ -225,7 +226,7 @@ xml_add_editable_timespec(xmlNodePtr p,
   if(!localtime_r(&tmp_timet, &parsed_time)) return(FALSE);
 
   num_written = strftime(secs_str, sizeof(secs_str),
-                         "%Y-%m-%d %H:%M:%S %z",
+                         TIMESPEC_TIME_FORMAT,
                          &parsed_time);
   if(num_written == 0) return(FALSE);
   

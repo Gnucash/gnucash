@@ -343,7 +343,7 @@ string_to_timespec_secs(const gchar *str, Timespec *ts) {
   /* If you change this, make sure you also change the output code, if
      necessary. */
   /*fprintf(stderr, "parsing (%s)\n", str);*/
-  strpos = strptime(str, "%Y-%m-%d %H:%M:%S", &parsed_time);
+  strpos = strptime(str, TIMESPEC_PARSE_TIME_FORMAT, &parsed_time);
 
   g_return_val_if_fail(strpos, FALSE);
 

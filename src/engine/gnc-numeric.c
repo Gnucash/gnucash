@@ -37,7 +37,7 @@
  *   64-bit-overflow-proof 
  */
 
-static short module = MOD_ENGINE;
+/* static short module = MOD_ENGINE; */
 
 static const char * _numeric_error_strings[] = 
 {
