@@ -71,9 +71,13 @@ wrapVerifyCursorPosition (Table *table, int row, int col)
    /* VerifyCursor will do all sorts of gui-independent machinations */
    xaccVerifyCursorPosition (table, row, col);
 
-   /* make sure *both* the old and the new cursor rows get redrawn */
-   xaccRefreshCursorGUI (table);  
-   doRefreshCursorGUI (table, save_curs, save_phys_row, save_phys_col);
+   if ((save_phys_row != table->current_cursor_phys_row) ||
+       (save_phys_col != table->current_cursor_phys_col))
+   {
+      /* make sure *both* the old and the new cursor rows get redrawn */
+      xaccRefreshCursorGUI (table);  
+      doRefreshCursorGUI (table, save_curs, save_phys_row, save_phys_col);
+   }
 }
 
 /* ==================================================== */
@@ -198,6 +202,11 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
          break;
       }
       case XbaeLeaveCellReason: {
+         /* Do leaveCB first, so that the cell handler can do whatever
+          * it needs to do to commit values into its cell handler. 
+          * Then do the verify, which in general asumes that cell handlers
+          * are up to date (i.e. the leave has been processed.)
+          */
          leaveCB (mw, cd, cb);
          wrapVerifyCursorPosition (table, table->reverify_phys_row,
                                           table->reverify_phys_col);
