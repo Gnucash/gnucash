@@ -515,7 +515,7 @@ gnc_ui_commodity_quote_cb (GtkWidget *w, gpointer data)
   get_quote = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w));
 
   text = gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(cw->namespace_combo)->entry));
-  allow_src = gnc_commodity_namespace_is_iso(text);
+  allow_src = !gnc_commodity_namespace_is_iso(text);
   gtk_widget_set_sensitive(cw->source_label, get_quote && allow_src);
   gtk_widget_set_sensitive(cw->source_menu, get_quote && allow_src);
   gtk_widget_set_sensitive(cw->quote_tz_label, get_quote);
