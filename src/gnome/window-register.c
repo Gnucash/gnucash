@@ -2311,8 +2311,7 @@ deleteCB(GtkWidget *widget, gpointer data)
     buf = g_strdup_printf(TRANS_DEL_MSG, xaccSplitGetMemo(split),
                           xaccTransGetDescription(trans));
 
-    result = gnc_verify_dialog_parented(GTK_WINDOW(regData->window),
-                                        buf, GNC_F);
+    result = gnc_verify_dialog_parented(regData->window, buf, GNC_F);
 
     g_free(buf);
 
@@ -2330,7 +2329,7 @@ deleteCB(GtkWidget *widget, gpointer data)
   if ((xaccTransCountSplits(trans) <= 2) &&
       ((style == REG_SINGLE_LINE) || (style == REG_DOUBLE_LINE)))
   {
-    result = gnc_verify_dialog_parented(GTK_WINDOW(regData->window),
+    result = gnc_verify_dialog_parented(regData->window,
                                         TRANS_DEL2_MSG, GNC_F);
 
     if (!result)
