@@ -1454,59 +1454,55 @@
       Quotes</b></a></dt>
 
       <dd>
-        Add ability to download stock quotes, other price quotes. 
-
-        <p>Add ability to download historical prices as well.
+        Add ability to obtain stock, mutual fund, and currency trading
+        data from news agencies, web pages.  
+        Add ability to download historical prices as well.
         (<em>e.g.</em> get 5-year history of mutual fund
-        performance vs. djia).</p>
+        performance vs. djia).
 
         <p>Right now, stock prices are stored along with everything
-        else, in the main database, in the transaction table.</p>
-
-        <p>This leads to several aesthetic quandries.</p>
+        else, in the main database, in the transaction table.
+        This leads to several aesthetic quandries.</p>
 
         <ul>
           <li>It bulks up the database with 'less-than critical'
-          information.</li>
+          information. That's bad.  We need an alternate storage
+          mechanism.</li>
 
-          <li>Basically, transactions are either 'critical' vix
-          record the movement of money, or are non-critical viz
+          <li>Currently, the transactions stored in the engine 
+          are either 'critical' <em>viz.</em>,
+          record the movement of money, or are non-critical <em>viz.</em>
           record things retreivable from the historical record,
-          <em>e.g.</em> prices.</li>
-
-          <li>Shouldn't storage for prices be moved to somewhere
-          else?</li>
-
-          <li>Hmmm ... what about storage for valatility, shares
-          traded, etc?</li>
-
-          <li>Does indeed sound like an alternate storage method
-          would be useful.</li>
-
-          <li>What about GUI implications?</li>
+          <em>e.g.</em> prices.
+          This alone is a good reason to ask that price &amp; other
+          non-critical financial data be stored in a separate location.
+          Add to this the idea that we should probably store other
+          'technical' stock data, such as share volume, high/low/close,
+          daily volatility, etc.
+          </li>
         </ul>
 
         <p><b>Status:</b></p>
 
         <ul>
-          <li>Can obtain stock quotes from Yahoo (NYSE), Fidelity
+          <li>Quotes.pm can obtain stock quotes from Yahoo (NYSE), Fidelity
           Investments, T.Rowe Price, and do automated update of
           GnuCash data files (with the <tt>gnc-price</tt> perl
           script). Need to add more data sources. See <tt>
           src/quotes/Quote.pm</tt> and <tt>
-          src/quotes/gnc-price</tt> for details.</li>
+          src/quotes/gnc-prices</tt> for details.</li>
 
-          <li>Quote.pm is now a separate development project at
-          source-forge.</li>
+          <li>
+          <a href="http://sourceforge.net/project/?group_id=4232">
+          Quote.pm</a> is now a separate development project at
+          SourceForge. 
+          </li>
 
           <li>Need to integrate with GUI. Right now, this is a
-          stand-alone perl script run from <tt>crontab.</tt> This
-          will be done by writing scheme wrappers for the module
-          (???)</li>
-
-          <li>RLB has integrated with GUI, using scheme.  Done in
-          version 1.4.0.   Does this mean gnc-prices is dead, or is it
-          --batch ??
+          stand-alone perl script run from <tt>crontab.</tt> RLB
+          has written scheme wrappers for the module. Its ready now, but
+          not checked into cvs.  Will be in 1.5.
+          </li>
         </ul>
         <br>
         <br>
@@ -2166,6 +2162,9 @@ Password:
 
       <li><a href="http://www.daveware.com/linuxrapid.html">
       Xrapid</a> stock technical analysis.</li>
+
+      <li><a href="http://getquote.giammy.com/">GetQuote</a> is a
+      command-line toll for getting stock quotes. Implemented in C.</li>
 
       <li><a href="http://sourceforge.net/project/?group_id=3522">
       Accountant</a> project at sourcforge aims to create a generic
