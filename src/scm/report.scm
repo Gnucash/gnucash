@@ -20,10 +20,10 @@
 (require 'record)
 (gnc:support "report.scm")
 
-;; We use a hash to store the report info so that whenever a report is
-;; requested, we'll look up the action to take dynamically.  That
-;; makes it easier for us to allow changing the report definitions on
-;; the fly later, and it should have no appreciable performance
+;; We use a hash to store the report info so that whenever a report
+;; is requested, we'll look up the action to take dynamically. That
+;; makes it easier for us to allow changing the report definitions
+;; on the fly later, and it should have no appreciable performance
 ;; effect.
 
 (define *gnc:_report-info_* (make-hash-table 23))
@@ -52,15 +52,14 @@
         (lambda (item) (display-report-list-item item port))
         lines))))
 
-  (define (call-report renderer options)
-    (let ((lines (renderer options)))
-      (report-output->string lines)))
-
   (let ((report (hash-ref *gnc:_report-info_* report-name)))
-    (if (not report)
-        #f
-        (let ((renderer (gnc:report-renderer report)))
-          (call-report renderer options)))))
+    (if report
+        (let* ((renderer (gnc:report-renderer report))
+               (lines    (renderer options))
+               (output   (report-output->string lines)))
+          (display output) (newline)
+          output)
+        #f)))
 
 (define (gnc:report-menu-setup win)
 

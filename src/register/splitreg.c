@@ -191,19 +191,21 @@ configLabels (SplitRegister *reg)
   if (debit_getter != NULL)
   {
     string = debit_getter(type);
-
-    LABEL (DEBT, string);
-
-    free(string);
+    if (string != NULL)
+    {
+      LABEL (DEBT, string);
+      free(string);
+    }
   }
 
   if (credit_getter != NULL)
   {
     string = credit_getter(type);
-
-    LABEL (CRED, string);
-
-    free(string);
+    if (string != NULL)
+    {
+      LABEL (CRED, string);
+      free(string);
+    }
   }
 
   /* copy debit, dredit strings to ndebit, ncredit cells */
@@ -1068,8 +1070,8 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    /* the desc cell */
    xaccSetBasicCellBlankHelp (&reg->descCell->cell, DESC_CELL_HELP);
 
-   /* balance cell does not accept input; its display only.  */
-   /* however, we *do* want it to shadow the true cell contents when 
+   /* The balance cell does not accept input; it's for display only.
+    * however, we *do* want it to shadow the true cell contents when 
     * the cursor is repositioned.  Othewise, it will just display 
     * whatever previous bogus value it contained.
     */

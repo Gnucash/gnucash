@@ -1,5 +1,11 @@
 2000-06-05  Dave Peticolas  <dave@krondo.com>
 
+	* src/guile/guile-util.c (gnc_get_debit_string): make sure to
+	return a malloc'd string.
+
+	* src/register/splitreg.c (configLabels): check for NULL strings
+	from the label getters.
+
 	* src/gnome/window-register.c (gnc_register_date_window): if 'show
 	all transactions' is not set in the preferences, limit it to
 	30. Temporary fix for 1.4, this should be configurable.
