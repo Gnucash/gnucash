@@ -43,26 +43,26 @@ struct main_window {
 /* This should most likely be rewritting to use a Tree, not a Clist so
    we can represent the heirarchical account structure */
 static void
-cram_accts_into_clist(GtkCList *list, AccountGroup *accts) {
+cram_accts_into_tree(GtkTree *maintree, AccountGroup *accts) {
   int count = xaccGetNumAccounts(accts);
   int i;
   
-  for(i=0; i<count; i++) {
+  for(i=0; i<count; i++) 
+  {
     Account *acc = xaccGroupGetAccount(accts, i);
     
     gchar *rowstrs[3]; 
-    gint new_row;
-    
+
+    GtkWidget *tree_item;
+
     rowstrs[0] = xaccAccountGetName (acc);
     rowstrs[1] = xaccAccountGetDescription (acc);
     rowstrs[2] = xaccAccountGetNotes (acc);
-    
-    new_row = gtk_clist_append(GTK_CLIST(list), rowstrs); 
 
-    /* Set the row to point to the actual account so we can reach it
-    trivially when the user selects the row.  (Should we use
-    gtk_*_data_full and have a destroy notify?) */
-    gtk_clist_set_row_data(GTK_CLIST(list), new_row, acc); 
+    tree_item = gtk_tree_item_new_with_label( rowstrs[0] );
+
+    gtk_tree_append(GTK_TREE(maintree), tree_item ); 
+    gtk_widget_show ( tree_item );
   }
 }
 
@@ -71,17 +71,16 @@ main_window_init(AccountGroup *accts)
 {
 
   GtkWidget *window;
+  GtkWidget *scrolled_win;
   GtkWidget *toolBar[5];
-    
   GtkTooltips *tooltip; 
-
   GtkWidget *main_vbox;
+  GtkWidget *treebox;
   GtkWidget *button_bar;
-    
   GtkWidget *menubar;
-
+  GtkWidget *maintree;
   GtkWidget *clist;
-
+  
   GtkAcceleratorTable *accel;
 
   /* this is the GtkMenuEntry structure used to create new menus.  The
@@ -98,7 +97,7 @@ main_window_init(AccountGroup *accts)
     {"<Main>/File/Save", "<control>S", NULL, NULL},
     {"<Main>/File/Save as", NULL, NULL, NULL},
     {"<Main>/File/<separator>", NULL, NULL, NULL},
-    {"<Main>/File/Quit", "<control>Q", gtk_main_quit, "OK, I'll quit"},
+    {"<Main>/File/Quit", "<control>Q", gtk_main_quit, NULL },
     {"<Main>/Options/General..", "<control>A", NULL, NULL},
     {"<Main>/Help/About..", NULL, NULL, NULL}
   };
@@ -108,21 +107,27 @@ main_window_init(AccountGroup *accts)
 
   MenuBar *main_menu_bar;
 
-  clist = gtk_clist_new_with_titles(3, clist_titles);    
+  maintree = gtk_tree_new ( );
 
-  /* Fix the column widths */
-  gtk_clist_set_column_width ( GTK_CLIST(clist), 1, 85 );
-  gtk_clist_set_column_width ( GTK_CLIST(clist), 0, 85 );
 
-  cram_accts_into_clist(GTK_CLIST(clist), accts);
+  /* Cram accounts into the tree widget */
+  cram_accts_into_tree(GTK_TREE(maintree), accts);
 
+  /* Create main window */
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title(GTK_WINDOW(window), "GnoMoney");
 
+  /* Create main vbox */
   main_vbox = gtk_vbox_new(FALSE, 1);
-  gtk_container_border_width(GTK_CONTAINER(main_vbox), 1);
+  gtk_container_border_width(GTK_CONTAINER(main_vbox), 2);
   gtk_container_add(GTK_CONTAINER(window), main_vbox);
   
+  /* create scrolled window */
+  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
+				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_widget_show (scrolled_win);
+
   {
     MenuBarGroup *mbg = menuBarGroupCreate();
     main_menu_bar = menuBarCreate(mbg, "<Main>");
@@ -135,7 +140,7 @@ main_window_init(AccountGroup *accts)
 #if 0
 
   {
-    /* Here's how to use the new MenBar stuff to create multiple menu
+    /* Here's how to use the new MenuBar stuff to create multiple menu
        bars */
 
     GtkWidget *test_win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -176,8 +181,10 @@ main_window_init(AccountGroup *accts)
 
   gtk_window_add_accelerator_table(GTK_WINDOW(window), accel);
   gtk_box_pack_start(GTK_BOX(main_vbox), menubar, FALSE, TRUE, 0);     
+  gtk_box_pack_start (GTK_BOX (main_vbox), scrolled_win, TRUE, TRUE, 0);
+  gtk_container_add(GTK_CONTAINER(scrolled_win), maintree);
   gtk_widget_show(menubar);
-   
+
   /* create a bunch of buttons */
     
   button_bar = gtk_hbox_new(FALSE, 1);
@@ -185,7 +192,6 @@ main_window_init(AccountGroup *accts)
   toolBar[1] = gtk_button_new_with_label ( NEW_STR );
   toolBar[2] = gtk_button_new_with_label ( EDIT_STR );
   toolBar[3] = gtk_button_new_with_label ( DELETE_STR );
-  toolBar[4] = gtk_button_new_with_label (" Exit ");
 
   /* Initilize ToolTips */
 	
@@ -195,7 +201,7 @@ main_window_init(AccountGroup *accts)
   gtk_tooltips_set_tip (tooltip, toolBar[close], TOOLTIP_NEW , NULL);
   gtk_tooltips_set_tip (tooltip, toolBar[button3], TOOLTIP_EDIT, NULL);
   gtk_tooltips_set_tip (tooltip, toolBar[button4], TOOLTIP_DELETE, NULL); 
-  gtk_tooltips_set_tip (tooltip, toolBar[exit], TOOLTIP_EDIT, NULL);  
+
 
     
   /* Pack the buttons into the toolbar */ 
@@ -203,21 +209,17 @@ main_window_init(AccountGroup *accts)
   gtk_box_pack_start(GTK_BOX(button_bar), toolBar[1], FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(button_bar), toolBar[2], FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(button_bar), toolBar[3], FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(button_bar), toolBar[4], FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(main_vbox), clist, FALSE, FALSE, 1);
   gtk_box_pack_start(GTK_BOX(main_vbox), button_bar, FALSE, TRUE, 1);
-    
+
     
   gtk_widget_show(toolBar[open]);
   gtk_widget_show(toolBar[close]);
   gtk_widget_show(toolBar[button3]);
   gtk_widget_show(toolBar[button4]);
-  gtk_widget_show(toolBar[exit]);
   gtk_widget_show(button_bar);
-  gtk_widget_show(clist);
+  gtk_widget_show(maintree);
 
-  gtk_widget_set_usize (window, 400, 400 );
-  gtk_widget_set_usize ( clist, 400, 300 );
+  gtk_widget_set_usize ( window, 400, 400 );
     
   /* Setup some callbacks */
 	
