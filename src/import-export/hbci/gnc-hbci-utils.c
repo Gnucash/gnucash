@@ -401,7 +401,7 @@ gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
 
   if (gnc_lookup_boolean_option("_+Advanced", 
 				"HBCI Verbose Debug Messages", FALSE))
-    HBCI_Hbci_setDebugLevel (3);
+    HBCI_Hbci_setDebugLevel (4);
   else
     HBCI_Hbci_setDebugLevel (0);
 
@@ -425,12 +425,17 @@ gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
     return FALSE;
   }
 
-  HBCI_Error_delete (err);
-  if (resultcode <= 20) 
+  if (resultcode <= 20) {
+    HBCI_Error_delete (err);
     return TRUE;
+  }
   else {
+    printf("gnc_hbci_api_execute: Some message at executeQueue: %s",
+	   HBCI_Error_message (err));
+    HBCI_Error_delete (err);
     GNCInteractor_show_nodelete (inter);
-    return FALSE;
+    return TRUE; /* <- This used to be a FALSE but this was probably
+		  * as wrong as it could get. @§%$! */
   }
 }
 
