@@ -89,6 +89,8 @@ Engine
 Globally Unique Identifiers
 
 * When to use GUIDs::           
+* GUID Types::                  
+* The GUID Generator::          
 
 Key-Value Pair Frames
 

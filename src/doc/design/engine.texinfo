@@ -151,12 +151,100 @@ GUIDs can be efficiently encoded in a string representation.
 
 @menu
 * When to use GUIDs::           
+* GUID Types::                  
+* The GUID Generator::          
 @end menu
 
-@node When to use GUIDs,  , Globally Unique Identifiers, Globally Unique Identifiers
+@node When to use GUIDs, GUID Types, Globally Unique Identifiers, Globally Unique Identifiers
 @subsection When to use GUIDs
 @cindex When to use GUIDs
 
+Although GUIDs are very flexible, the engine structures like Accounts
+will probably continue to use C pointers for the forseeable future,
+since they are much faster (and in certain respects more convenient)
+than using GUIDs. In general, however, it is much safer to use GUIDs.
+In particular, you should consider using GUIDs if any of the following
+is true:
+
+@itemize
+
+@item
+You need to save a reference to an engine structure in a file.
+
+@item
+You need to save a reference to an engine structure that could
+be deleted in between accesses to the saved reference.
+
+@end itemize
+
+
+@node GUID Types, The GUID Generator, When to use GUIDs, Globally Unique Identifiers
+@subsection GUID Types
+@tindex GNCIdType
+
+The GUIDs in GnuCash are typed using the enum @code{GNCIdType}.
+Possible values and their meanings for GUID types are:
+
+@table @code
+
+@item GNC_ID_NONE
+The GUID does not currently refer to a GnuCash entity, though it
+could refer to one in the future.
+
+@item GNC_ID_NULL
+The GUID does not, and never will, refer to a GnuCash entity.
+
+@item GNC_ID_ACCOUNT
+The GUID refers to an Account (@pxref{Accounts}).
+
+@item GNC_ID_TRANS
+The GUID refers to a Transation (@pxref{Transactions}).
+
+@item GNC_ID_SPLIT
+The GUID refers to a Split (@pxref{Splits}).
+
+@end table
+
+@deftypefun GNCIdType xaccGUIDType (const GUID * @var{guid})
+Return the type associated with @var{guid}.
+@end deftypefun
+
+@deftypefun {const GUID *} xaccGUIDNull (void)
+Return a GUID which is guaranteed to always have type @code{GNC_ID_NULL}.
+@end deftypefun
+
+
+@c @node Manipulating GUIDs
+@c @subsection Manipulating GUIDs
+
+
+@node The GUID Generator,  , GUID Types, Globally Unique Identifiers
+@subsection The GUID Generator
+@cindex The GUID Generator
+
+GUIDs are created by the GUID generator. The API for this generator is
+low-level and should not be used by user-code.
+
+@deftypefun void guid_init (void)
+Initialize the GUID generator with a variety of random sources including
+common system files and /dev/random.
+@end deftypefun
+
+@deftypefun void guid_init_with_salt (const void * @var{salt}, size_t @var{salt_len})
+Initialize the GUID generator with guid_init() and with the given
+sequence of arbitrary binary data.
+@end deftypefun
+
+@deftypefun void guid_init_only_salt (const void * @var{salt}, size_t @var{salt_len})
+Initialize the GUID generator using only the given sequence of arbitrary
+binary data. This provides a way to reliably obtain a given sequence of
+GUIDs.
+@end deftypefun
+
+@deftypefun void guid_new (GUID * @var{guid})
+Create a new GUID and store it in @var{guid}. This is a low-level function!
+GnuCash code should use @code{xaccGUIDNew}.
+@end deftypefun
 
 
 @node Key-Value Pair Frames, Splits, Globally Unique Identifiers, Engine
