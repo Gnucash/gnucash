@@ -4,7 +4,9 @@ pkglib_LTLIBRARIES = libgncmod-hbci.la
 
 libgncmod_hbci_la_SOURCES = \
   gncmod-hbci.c \
-  druid-hbci-initial.c
+  druid-hbci-initial.c \
+  druid-hbci-final.c \
+  gnc-hbci-kvp.c
 
 noinst_HEADERS = 
 
@@ -15,9 +17,8 @@ libgncmod_hbci_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
   ${GLIB_LIBS} \
-  ${GNOMEUI_LIBS} 
-
-#  -L/home/chs/lib/unstable/lib -lopenhbci 
+  ${GNOMEUI_LIBS} \
+  ${HBCI_LIBS}
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}/hbci
 
@@ -38,9 +39,8 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/import-export \
   ${GNOME_INCLUDEDIR} \
   ${GLADE_CFLAGS} \
-  ${GLIB_CFLAGS} 
-
-#  -I/home/chs/lib/unstable/include
+  ${GLIB_CFLAGS} \
+  ${HBCI_CFLAGS}
 
 #gladedir = $(GNC_GLADE_DIR)
 #glade_DATA = 

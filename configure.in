@@ -418,16 +418,28 @@ AC_SUBST(RPC_DIR)
 ### --------------------------------------------------------------------------
 ### OFX
 AC_ARG_ENABLE( ofx,
-  [  --enable-ofx                 compile with ofx support],
+  [  --enable-ofx                 compile with ofx support (needs LibOFX)],
        OFX_DIR=ofx)
 
 AC_SUBST(OFX_DIR)
 ### --------------------------------------------------------------------------
 ### HBCI
 AC_ARG_ENABLE( hbci,
-  [  --enable-hbci                 compile with HBCI support],
+  [  --enable-hbci                compile with HBCI support (needs OpenHBCI)],
        HBCI_DIR=hbci)
+AC_ARG_WITH( openhbci-prefix,
+  [  --with-openhbci-prefix=PFX   Prefix where OpenHBCI is installed],
+  HBCI_PREFIX="$with_openhbci_prefix",
+  HBCI_PREFIX="\${prefix}")
+AC_ARG_WITH( openhbci-cfgfile,
+  [  --with-openhbci-cfgfile=FILE Configuration file of OpenHBCI],
+  HBCI_CFGFILE="\\\"$with_openhbci_cfgfile\\\"",
+  HBCI_CFGFILE="\\\"${HOME}/.openhbci/openhbci.conf\\\"")
 
+HBCI_LIBS="-L${HBCI_PREFIX}/lib -lopenhbci"
+HBCI_CFLAGS="-I${HBCI_PREFIX}/include -DHBCI_CFGFILE=${HBCI_CFGFILE}"
+AC_SUBST(HBCI_LIBS)
+AC_SUBST(HBCI_CFLAGS)
 AC_SUBST(HBCI_DIR)
 ### --------------------------------------------------------------------------
 ### i18n
@@ -576,7 +588,7 @@ AC_CHECK_LIB(popt, poptStrippedArgv,, [AC_MSG_ERROR([
 ### --------------------------------------------------------------------------
 
 AC_ARG_ENABLE(gui, 
-  [  --enable-gui   build the GNOME GUI components of Gnucash],
+  [  --enable-gui                  build the GNOME GUI components of Gnucash],
   [case "${enableval}" in
      yes) gnc_build_gui=true ;;
      no)  gnc_build_gui=false ;;

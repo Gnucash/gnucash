@@ -15,13 +15,13 @@
 		       (N_ "Initial HBCI Setup")
 		       (list "_Tools" "HBCI" "")
 		       (lambda ()
-			 (gnc:hbci-initial-setup)))))
-  ;;(gnc:add-extension
-  ;; (gnc:make-menu-item (N_ "Finish HBCI Setup")
-  ;;	       (N_ "Finish HBCI Setup")
-  ;;	       (list "Tools" "HBCI" "")
-  ;;	       (lambda ()
-  ;;		 (gnc:hbci-finish-setup)))))
+			 (gnc:hbci-initial-setup))))
+  (gnc:add-extension
+   (gnc:make-menu-item (N_ "Final HBCI Setup")
+		       (N_ "Finish the HBCI Setup")
+		       (list "_Tools" "HBCI" "")
+		       (lambda ()
+			 (gnc:hbci-finish-setup)))))
 
 (gnc:hook-add-dangler gnc:*ui-startup-hook* add-hbci-menu-items)
 

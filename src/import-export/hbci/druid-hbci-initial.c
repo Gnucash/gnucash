@@ -41,6 +41,7 @@
 /* #include "gnc-ui-util.h" */
 /* #include "io-example-account.h" */
 /* #include "top-level.h" */
+#include <openhbci/hbciapi.h>
 
 typedef struct 
 {
@@ -52,21 +53,62 @@ typedef struct
   GtkWidget *countrycode;
   GtkWidget *ipaddr;
   GtkWidget *port;
+
   /* user info page */
   GtkWidget *userid;
+  GtkWidget *userpage;
+    
   /* medium page */
   GtkWidget *mediumrdh;
   GtkWidget *mediumpath;
   GtkWidget *mediumddv;
+
   /* iniletter server */
   GtkWidget *server_text;
+
   /* iniletter user */
   GtkWidget *user_text;
+
+  /* OpenHBCI stuff */
+  HBCI_API *api;
+
 } HBCIInitialInfo;
 //static AccountGroup *our_final_group = NULL;
 
 
+static void
+delete_initial_druid (HBCIInitialInfo *info)
+{
+  if (info == NULL) return;
+  if (info->window == NULL) return;
   
+  gtk_widget_destroy (info->window);
+  info->window = NULL;
+
+  if (info->api == NULL) return;
+  HBCI_API_delete(info->api);
+  info->api = NULL;
+}
+
+static void
+on_cancel (GnomeDruid *gnomedruid,
+	   gpointer user_data)
+{
+  HBCIInitialInfo *info = user_data;
+  
+  delete_initial_druid(info);
+}
+
+static void
+on_finish (GnomeDruidPage *gnomedruidpage,
+	   gpointer arg1,
+	   gpointer user_data)
+{
+  HBCIInitialInfo *info = user_data;
+
+  delete_initial_druid(info);
+}
+
 
 static gboolean
 on_userid_next (GnomeDruidPage  *gnomedruidpage,
@@ -78,7 +120,13 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
   int countrycode;
   const char *ipaddr, *port;
   const char *userid;
-
+  HBCI_API *api;
+  HBCI_Error *err;
+  const char *cfgfile = HBCI_CFGFILE;
+  char *errstring;
+  HBCI_Bank *bank;
+  HBCI_User *user;
+    
   bankcode = gtk_entry_get_text (GTK_ENTRY (info->bankcode));
   countrycode = atoi (gtk_entry_get_text (GTK_ENTRY (info->countrycode)));
   
@@ -87,6 +135,38 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
   
   userid = gtk_entry_get_text (GTK_ENTRY (info->userid));
 
+  printf("Got bankcode %s and userid %s.\n", bankcode, userid);
+  api = HBCI_API_new(FALSE, TRUE);
+  err = HBCI_API_loadEnvironment(api, cfgfile);
+  if (!HBCI_Error_isOk(err)) {
+    errstring = HBCI_Error_errorString(err);
+    fprintf(stderr,"At on_userid_next, loadEnvironment: ERROR: %s\n",
+	    errstring);
+    free(errstring);
+    HBCI_API_delete(api);
+    info->api = NULL;
+    return FALSE;
+  }
+  
+  bank = HBCI_API_findBank(api, countrycode, bankcode);
+  if (bank == NULL) {
+    printf("No bank found.\n");
+    HBCI_API_delete(api);
+    info->api = NULL;
+    return FALSE;
+  }
+  printf("Found bank, name %s.\n", HBCI_Bank_name(bank));
+    
+  user = HBCI_Bank_findUser(bank, userid);
+  if (user == NULL) {
+    printf("No user found.\n");
+    HBCI_API_delete(api);
+    info->api = NULL;
+    return FALSE;
+  }
+  printf("Found user, name %s.\n", HBCI_User_userName(user));
+    
+  info->api = api;
   return FALSE;
 }
 
@@ -150,6 +230,11 @@ void gnc_hbci_initial_druid (void)
   info->druid = glade_xml_get_widget (xml, "hbci_init_druid");
   gnc_druid_set_colors (GNOME_DRUID (info->druid));
   
+  glade_xml_signal_connect_data (xml, "on_finish", 
+				 GTK_SIGNAL_FUNC (on_finish), info);
+  glade_xml_signal_connect_data (xml, "on_cancel", 
+				 GTK_SIGNAL_FUNC (on_cancel), info);
+  
   {
     info->bankcode = glade_xml_get_widget(xml, "bank_code_entry");
     info->countrycode = glade_xml_get_widget(xml, "country_code_entry");
@@ -159,6 +244,7 @@ void gnc_hbci_initial_druid (void)
   {
     info->userid = glade_xml_get_widget(xml, "user_id_entry");
     page = glade_xml_get_widget(xml, "user_page");
+    info->userpage = page;
     gtk_signal_connect (GTK_OBJECT (page), "next", 
 			GTK_SIGNAL_FUNC (on_userid_next), info);
   }
@@ -182,7 +268,7 @@ void gnc_hbci_initial_druid (void)
     gtk_signal_connect (GTK_OBJECT (page), "next", 
 			GTK_SIGNAL_FUNC (on_iniletter_user_next), info);
   }
-  
+
 
   //gtk_signal_connect (GTK_OBJECT(dialog), "destroy",
   //                   GTK_SIGNAL_FUNC(gnc_hierarchy_destroy_cb), NULL);

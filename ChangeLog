@@ -1,3 +1,14 @@
+2002-07-29  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c: Added some initial
+	OpenHBCI code. Still no network connectivity or data changing,
+	though.
+
+	* src/import-export/hbci/gnc-hbci-kvp.[hc]: Added kvp_frame
+	handling for HBCI-related data.
+
+	* configure.in: Added option --with-openhbci-prefix.
+
 2002-07-28  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/main.scm: Add module-load for HBCI.

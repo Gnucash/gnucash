@@ -13,6 +13,7 @@
 #include "gnc-module-api.h"
 
 #include "druid-hbci-initial.h"
+#include "druid-hbci-final.h"
 
 /* version of the gnc module system interface we require */
 int gnc_module_system_interface = 0;
@@ -41,8 +42,9 @@ gnc_module_description(void) {
 
 
 int
-gnc_module_init(int refcount) {
-  printf("Started gncmod-hbci.c.\n");
+gnc_module_init(int refcount) 
+{
+  //printf("Started gncmod-hbci.c.\n");
   /* load the engine (we depend on it) */
   if(!gnc_module_load("gnucash/engine", 0)) {
     return FALSE;
@@ -63,11 +65,13 @@ gnc_module_init(int refcount) {
   /* load the HBCI Scheme code */
   gh_eval_str("(load-from-path \"hbci/hbci.scm\")");
 
-  printf("Load the HBCI initial druid\n");
+  //printf("Load the HBCI initial druid\n");
   gh_new_procedure("gnc:hbci-initial-setup", 
 		   scm_hbci_initial_druid, 0, 0, 0);
+  gh_new_procedure("gnc:hbci-finish-setup", 
+		   scm_hbci_final_druid, 0, 0, 0);
   
-  printf("Been in gncmod-hbci.c.\n");
+  //printf("Been in gncmod-hbci.c.\n");
   
   return TRUE;
 }
