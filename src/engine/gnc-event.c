@@ -41,7 +41,7 @@ typedef struct
 
 /** Static Variables ************************************************/
 static guint  suspend_counter = 0;
-static gint   next_handler_id = 0;
+static gint   next_handler_id = 1;
 static GList *handlers = NULL;
 
 /* This static indicates the debugging module that this .o belongs to.  */

@@ -64,7 +64,7 @@ typedef struct
 
 /** Static Variables ************************************************/
 static guint  suspend_counter = 0;
-static gint   next_component_id = 0;
+static gint   next_component_id = 1;
 static GList *components = NULL;
 
 static ComponentEventInfo changes = { NULL, NULL, FALSE };
