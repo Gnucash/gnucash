@@ -11,7 +11,7 @@ document that contains financial data.  An OFX document would look
 vaguely like this:
 
 <transaction>
-   <date>July 17, 1998</date>
+   <date>March 10, 1998</date>
    <amount>$300.00</amount>
    <description>Buy new microwave oven</description>
 </transaction>
@@ -50,11 +50,31 @@ Are there any packages that can
 (b) parse the incoming text document, and build the corresponding 
     C/C++ linked-lists/trees in memory?
 
-I am hitting up the MICO mailing list since at least step (a) is 
-somewhat similar to parsing a corba IDL file and spitting out C++.
+---------------------------------------------------------------
 
-Comments?
+More specifically, given the DTD
 
+<!ELEMENT transaction - - (date, amount, description) >
+<!ELEMENT date        - - %datetype >
+<!ELEMENT amount      - - %numerictype >
+<!ELEMENT description - - %stringtype >
+
+I want something that will read this, and *automatically* spit out the
+following ascii stream:
+
+class Transaction {
+    time_t date;
+    double amount;
+    char * description;
+};
+
+---------------------------------------------------------------
+James Clark's SGML/Parser (SP)  http://www.jclark.com/sp/index.htm
+Jade
+
+dssslist@mulberrytech.com
+
+--------------------------------------------------------------
 --linas
 
 10 March 1998
