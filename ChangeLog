@@ -1,5 +1,8 @@
 2003-01-22  David Hampton  <hampton@employees.org>
 
+	* src/bin/gnucash: Tell guile 1.6 not to bitch about deprecated
+	functions.
+
 	* src/quotes/dump-finance-quote: Add new script that dumps all the
 	data returned by F::Q for a stock.  It also indicates which data
 	field gnucash requires, which are optional, etc.
