@@ -121,12 +121,29 @@ on_newUserDruidFinishPage_finish       (GnomeDruidPage  *gnomedruidpage,
     }
 }
 
+static void
+cancel_everything_out(void)
+{
+    delete_our_final_group();
+    
+    gnc_ui_delete_new_user_window();
+    gnc_ui_delete_nu_cancel_dialog();
+
+    gncp_new_user_finish();
+}
 
 void
 on_accountChooseDruidPage_cancel       (GnomeDruid      *gnomedruid,
                                         gpointer         user_data)
 {
-    gnc_ui_show_nu_cancel_dialog();
+    if(gnc_new_user_dialog_is_new_user())
+    {
+        gnc_ui_show_nu_cancel_dialog();
+    }
+    else
+    {
+        cancel_everything_out();
+    }
 }
 
 
@@ -141,15 +158,9 @@ on_newAccountCancelDialog_OKButton_clicked
         GTK_TOGGLE_BUTTON(lookup_widget(
                               GTK_WIDGET(button),
                               "newAccountCancelDialog_RunAgainToggle")));
-
     set_first_startup(keepshowing);
 
-    delete_our_final_group();
-    
-    gnc_ui_delete_new_user_window();
-    gnc_ui_delete_nu_cancel_dialog();
-
-    gncp_new_user_finish();
+    cancel_everything_out();
 }
 
 void
@@ -260,21 +271,17 @@ on_newAccountTypesList_select_row      (GtkCList        *clist,
                                         GdkEvent        *event,
                                         gpointer         user_data)
 {
-    GtkText *datext =
-    GTK_TEXT(gnc_new_user_get_widget("newAccountTypesDescription"));
+    GtkLabel *datext =
+    GTK_LABEL(gnc_new_user_get_widget("newAccountTypesDescription"));
     GtkTree *datree =
     GTK_TREE(gnc_new_user_get_widget("newAccountListTree"));
     GncExampleAccount *gea =
     (GncExampleAccount*)gtk_clist_get_row_data(clist, row);
 
-    gtk_text_freeze(datext);
-    gtk_text_set_point(datext, 0);
-    gtk_text_forward_delete(datext, gtk_text_get_length(datext));
     if(gea->long_description != NULL)
     {
-        gtk_text_insert(datext, NULL, NULL, NULL, gea->long_description, -1);
+        gtk_label_set_text(datext, gea->long_description);
     }
-    gtk_text_thaw(datext);
 
     gtk_tree_clear_items(datree, 0, g_list_length (datree->children) - 1);
     add_to_tree(datree, gea->group);
@@ -288,15 +295,12 @@ on_newAccountTypesList_unselect_row    (GtkCList        *clist,
                                         GdkEvent        *event,
                                         gpointer         user_data)
 {
-    GtkText *datext =
-    GTK_TEXT(gnc_new_user_get_widget("newAccountTypesDescription"));
+    GtkLabel *datext =
+    GTK_LABEL(gnc_new_user_get_widget("newAccountTypesDescription"));
     GtkTree *datree =
     GTK_TREE(gnc_new_user_get_widget("newAccountListTree"));
 
-    gtk_text_freeze(datext);
-    gtk_text_set_point(datext, 0);
-    gtk_text_forward_delete(datext, gtk_text_get_length(datext));
-    gtk_text_thaw(datext);
+    gtk_label_set_text(datext, "");
 
     gtk_tree_clear_items(datree, 0, g_list_length (datree->children) - 1);
 }
