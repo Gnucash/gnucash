@@ -9,7 +9,7 @@ EXTRA_DIST = \
   Quote_example.pl \
   finance-quote-helper.in \
   gnc-prices \
-  update-finance-quote \
+  update-finance-quote.in \
   value_portfolio
 
 ## We borrow guile's convention and use @-...-@ as the substitution
