@@ -41,6 +41,7 @@ libgncmod_engine_la_SOURCES = \
   kvp-util.c \
   md5.c \
   messages.c \
+  policy.c \
   qofbackend.c \
   qofbook.c \
   qofid.c \
@@ -93,6 +94,7 @@ gncinclude_HEADERS = \
   kvp-scm.h \
   kvp-util.h \
   messages.h \
+  policy.h \
   qof.h \
   qofbackend.h \
   qofbook.h \
@@ -121,6 +123,7 @@ noinst_HEADERS = \
   md5.h \
   gw-engine.h \
   gw-kvp.h \
+  policy-p.h \
   qofbackend-p.h \
   qofbook-p.h \
   qofid-p.h \

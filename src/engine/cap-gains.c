@@ -79,6 +79,8 @@ ToDo List:
 #include "gnc-trace.h"
 #include "kvp-util-p.h"
 #include "messages.h"
+#include "policy.h"
+#include "policy-p.h"
 #include "qofid-p.h"
 
 static short module = MOD_LOT;
@@ -476,12 +478,9 @@ MakeDefaultLot (Account *acc)
  * a callback, we can 'easily' add other accounting policies.
  * Currently, we only implement the FIFO policy.
  */
-typedef GNCLot * (*AccountingPolicy) (Account *, 
-                                      Split *, 
-                                      gpointer user_data);
 static gboolean
 PolicyAssignSplit (Split *split, 
-                  AccountingPolicy policy, gpointer user_data)
+                  AccountingPolicyGetLot policy, gpointer user_data)
 {
    Account *acc;
    gboolean splits_split_up = FALSE;
@@ -505,7 +504,7 @@ PolicyAssignSplit (Split *split,
   {
      PINFO ("have split amount=%s", gnc_numeric_to_string (split->amount));
      split->gains |= GAINS_STATUS_VDIRTY;
-     lot = policy (acc, split, user_data);
+     lot = policy (split, user_data);
      if (!lot)
      {
         lot = MakeDefaultLot (acc);
@@ -518,12 +517,6 @@ PolicyAssignSplit (Split *split,
 
    LEAVE ("split_up=%d", splits_split_up);
    return splits_split_up;
-}
-
-static GNCLot * 
-FIFOPolicy (Account *acc, Split *split, gpointer user_data)
-{
-   return xaccAccountFindEarliestOpenLot (acc, split->amount);
 }
 
 gboolean
@@ -558,32 +551,6 @@ xaccSplitGetCapGainsSplit (Split *split)
 }
 
 /* ============================================================== */
-/* The FIFOPolicy routines try to encapsulate the FIFO-specific
- * parts of the cap-gains routine, and can eb replaced by something
- * else for other policies (e.g. LIFO)
- */
-
-static void
-FIFOPolicyGetLotOpening (GNCLot *lot,
-        gnc_numeric *ret_amount, gnc_numeric *ret_value,
-        gnc_commodity **ret_currency,
-        void * user_data)
-{
-   Split *opening_split;
-   opening_split = gnc_lot_get_earliest_split(lot);
-
-   if (ret_amount) *ret_amount = opening_split->amount;
-   if (ret_value) *ret_value = opening_split->value;
-   if (ret_currency) *ret_currency = opening_split->parent->common_currency;
-}
-
-static gboolean
-FIFOPolicyIsOpeningSplit (GNCLot *lot, Split *split)
-{
-   Split *opening_split;
-   opening_split = gnc_lot_get_earliest_split(lot);
-   return (split == opening_split);
-}
 
 void
 xaccSplitComputeCapGains(Split *split, Account *gain_acc)
