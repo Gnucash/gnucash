@@ -477,7 +477,6 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    Table * table;
    CellBlock *header;
    int phys_r, phys_c;
-   int i;
 
    reg->user_hook = NULL;
    reg->destroy = NULL;
