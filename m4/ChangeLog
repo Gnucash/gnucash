@@ -1,0 +1,14 @@
+2002-05-13  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* codeset.m4: New file, from gettext-0.11.1.
+	* gettext.m4: New file, from gettext-0.11.1.
+	* glibc21.m4: New file, from gettext-0.11.1.
+	* iconv.m4: New file, from gettext-0.11.1.
+	* isc-posix.m4: New file, from gettext-0.11.1.
+	* lcmessage.m4: New file, from gettext-0.11.1.
+	* lib-ld.m4: New file, from gettext-0.11.1.
+	* lib-link.m4: New file, from gettext-0.11.1.
+	* lib-prefix.m4: New file, from gettext-0.11.1.
+	* progtest.m4: New file, from gettext-0.11.1.
+	* Makefile.am: New file.
+
