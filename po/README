@@ -8,6 +8,14 @@ sources using 'make'. Don't run xgettext by hand, because many of the
 translatable strings in GnuCash are taken from scheme files and will
 be missed.
 
+
+gnc-glossary.txt contains a glossary of the financial terms used
+inside GnuCash. To achieve a decent consistency in terminology within
+GnuCash, it is recommended to translate it and to use it during the
+translation process. The file format is a tab-delimited ASCII table
+with each table cell enclosed in double quotation marks (").
+
+
 GnuCash .pot files contain some strings of the form:
 
 sample:<some text>
@@ -25,3 +33,5 @@ displayed, but only used to estimate widths.
 
 Dave Peticolas
 April 02, 2001
+
+Christian Stimming, May 24, 2001

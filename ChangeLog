@@ -1,5 +1,7 @@
 2001-05-24  Christian Stimming  <stimming@tuhh.de>
 
+	* po/gnc-glossary.txt: added file for all our translators.
+
 	* src/scm/report/average-balance.scm: made strings more
 	consistent.
 
