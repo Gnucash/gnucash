@@ -1,0 +1,194 @@
+/**-*- c -*-*********************************************************\
+ * gnucash.c -- gnucash startup functions                           *
+ * (C) 1998 Rob Browning <rlb@cs.utexas.edu>                        *
+ * (C) 1999-2000 Linas Vepstas <linas@linas.org>                    *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
+#define _GNU_SOURCE
+
+#include "config.h"
+
+#include <locale.h>
+#include <glib.h>
+#include <guile/gh.h>
+#include <stdio.h>
+#include <string.h>
+
+#include "gnc-engine-util.h"
+#include "gnc-engine.h"
+#include "gnucash.h"
+#include "i18n.h"
+#include "messages.h"
+
+static int guile_is_initialized = FALSE;
+static int gargc;
+static char **gargv;
+
+/* This static indicates the debugging module this .o belongs to.  */
+static short module = MOD_GUILE;
+
+
+#define GNC_BOOTSTRAP_MODDIR "@-GNC_SHAREDIR-@/guile-modules"
+#define GNC_BOOTSTRAP_SCMDIR "@-GNC_SHAREDIR-@/scm"
+#define G_WRAP_MODULE_DIR "@-G_WRAP_MODULE_DIR-@"
+
+#define GNC_BOOTSTRAP_SCM "@-GNC_SHAREDIR-@/guile-modules/gnucash/bootstrap.scm"
+
+/* ============================================================== */
+
+void
+gnc_gw_init(void)
+{
+  gh_eval_str("(set! %load-path (cons \"" G_WRAP_MODULE_DIR "\" %load-path))");
+  gh_eval_str("(set! %load-path (cons \"" GNC_BOOTSTRAP_MODDIR 
+	      "\" %load-path))");
+  gh_eval_str("(set! %load-path (cons \"" GNC_BOOTSTRAP_SCMDIR 
+	      "\" %load-path))");
+}
+
+static void 
+gnucash_main_helper (int argc, char *argv[])
+{
+  char *bootstrap_scm = getenv("GNC_BOOTSTRAP_SCM");
+  char *run_as_shell = getenv("GNC_RUN_AS_SHELL");
+
+  guile_is_initialized = TRUE;
+
+  gnc_gw_init ();
+
+  if(!bootstrap_scm) {
+    char *string;
+
+    string = g_strdup_printf("%s=%s", "GNC_BOOTSTRAP_SCM", GNC_BOOTSTRAP_SCM);
+    if (string == NULL) {
+      FATAL("out of memory");
+      exit(1);
+    }
+
+    if(putenv(string) != 0) {
+      FATAL("putenv(%s) failed. Aborting.\n", string);
+      exit(1);
+    }
+
+    bootstrap_scm = GNC_BOOTSTRAP_SCM;
+
+    g_free(string);
+  }
+
+  PINFO("bootstrap file is %s\n", bootstrap_scm);
+
+  /* Load the bootstrap file. */
+  if(gh_eval_file(bootstrap_scm) == SCM_BOOL_F) {
+    FATAL("(load %s) failed\n", bootstrap_scm);
+    exit(1);
+  }
+
+
+
+  if(run_as_shell) {
+    int scm_argc = argc + 1;
+    char **scm_argv = g_malloc(scm_argc * sizeof(char *));
+
+    scm_argv[0] = (char *) argv[0];
+
+    /* Add the "--" to keep gh_repl from interpreting the gnucash args */
+    scm_argv[1] = "--";
+
+    memcpy(&(scm_argv[2]), &(argv[1]), (argc - 1) * sizeof(char *));
+
+    gh_repl(scm_argc, scm_argv);
+  }
+  else {
+    /* run gnc:main. */
+
+    SCM func = gh_eval_str("gnc:main");
+    if(gh_procedure_p(func)) {
+      gh_call0(func);
+    } else {
+      FATAL("(gnc:main) doesn't exist.  Aborting.\n");
+      exit(1);
+    }
+  }
+
+  exit(0);
+}
+
+/* ============================================================== */
+
+void
+gnc_shutdown (int exit_status)
+{
+  if (guile_is_initialized)
+  {
+    /* This should be gh_lookup, but that appears to be broken */
+    SCM scm_shutdown = gh_eval_str("gnc:shutdown");
+
+    if(gh_procedure_p(scm_shutdown))
+    {
+      SCM scm_exit_code = gh_long2scm(exit_status);
+
+      gh_call1(scm_shutdown, scm_exit_code);
+
+      return;
+    }
+  }
+
+  /* Either guile is not running, or for some reason we
+     can't find gnc:shutdown. Either way, just exit. */
+  exit(exit_status);
+}
+
+/* ============================================================== */
+
+int
+gnc_main (int argc, char *argv[])
+{
+  gargc = argc;
+  gargv = argv;
+
+#ifdef HAVE_GETTEXT
+  bindtextdomain (TEXT_DOMAIN, LOCALE_DIR);
+  textdomain (TEXT_DOMAIN);
+#endif
+
+  /* It seems we need this so guile can find the locale. */
+  setlocale(LC_ALL, "");
+
+  gh_enter(argc, argv, gnucash_main_helper);
+  /* This will never return. */
+
+  g_assert_not_reached (); /* Just to be anal */
+  return 0;   /* Just to shut gcc up. */
+}
+
+int
+gnc_get_global_argc (void)
+{
+  return gargc;
+}
+
+char **
+gnc_get_global_argv (void)
+{
+  return gargv;
+}
+
+/* ==================== END OF FILE ============================== */
