@@ -124,26 +124,21 @@ xaccFreeAccount( Account *acc )
   if (acc->security) free (acc->security);
   
   /* any split pointing at this account needs to be unmarked */
-  i=0;
-  s = acc->splits[0];
-  while (s) {
-    s->acc = NULL;
-    i++;
+  for (i=0; i<acc->numSplits; i++) {
     s = acc->splits[i];
+    s->acc = NULL;
   }
 
   /* search for orphaned transactions, and delete them */
-  i=0;
-  s = acc->splits[0];
-  while (s) {
-    xaccSplitDestroy (s);
-    i++;
+  for (i=0; i<acc->numSplits; i++) {
     s = acc->splits[i];
+    xaccSplitDestroy (s);
   }
 
   /* free up array of split pointers */
   _free (acc->splits);
   acc->splits = NULL;
+  acc->numSplits = 0;
   
   /* zero out values, just in case stray 
    * pointers are pointing here. */
