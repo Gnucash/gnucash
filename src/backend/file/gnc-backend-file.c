@@ -124,7 +124,7 @@ file_load_file(Backend *be)
 }
 
 static void
-file_book_load (Backend *be, GNCBook *book)
+file_book_load (Backend *be, GNCSession *session)
 {
     if (!file_load_file(be))
     {

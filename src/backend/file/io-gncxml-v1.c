@@ -39,6 +39,7 @@
 #include "Scrub.h"
 #include "Transaction.h"
 #include "TransactionP.h"
+#include "TransLog.h"
 #include "gnc-pricedb.h"
 #include "gnc-engine-util.h"
 #include "gnc-book-p.h"
