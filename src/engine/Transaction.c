@@ -1637,6 +1637,34 @@ xaccTransCommitEdit (Transaction *trans)
    /* ------------------------------------------------- */
    /* OK, at this point, we are done making sure that 
     * we've got a validly constructed transaction.
+    *
+    * Next, sort the splits
+    */
+   {
+     GList *node, *new_list = NULL;
+
+     /* first debits */
+     for (node = trans->splits; node; node = node->next) {
+	 split = node->data;
+	 if (gnc_numeric_negative_p (xaccSplitGetValue (split)))
+	   continue;
+	 new_list = g_list_append(new_list, split);
+     }
+
+    /* then credits */
+     for (node = trans->splits; node; node = node->next) {
+	 split = node->data;
+	 if (!gnc_numeric_negative_p (xaccSplitGetValue (split)))
+	   continue;
+	 new_list = g_list_append(new_list, split);
+     }
+
+     /* install newly sorted list */
+     g_list_free(trans->splits);
+     trans->splits = new_list;
+   }
+
+   /*
     * Next, we send it off to the back-end, to see if the
     * back-end will accept it.
     */

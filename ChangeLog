@@ -6,6 +6,16 @@
 
 2002-11-12  David Hampton  <hampton@employees.org>
 
+	* src/register/ledger-core/split-register-load.c
+	(gnc_split_register_add_transaction): Don't sort transaction
+	splits here. This function gets called every time you switch
+	splits, and so can reorder them just when you least expect
+	it. #92156
+
+	* src/engine/Transaction.c (xaccTransCommitEdit): Sort transaction
+	splits when the user has finished making changes to the
+	transaction. #92156
+
 	* src/register/ledger-core/split-register-control.c
 	(gnc_split_register_traverse): Move the checking for non-existent
 	and placeholder accounts to a separate function, and call that new

@@ -83,7 +83,6 @@ gnc_split_register_add_transaction (SplitRegister *reg,
                                     CellBlock *split_cursor,
                                     gboolean visible_splits,
                                     gboolean start_primary_color,
-                                    gboolean sort_splits,
                                     gboolean add_blank,
                                     Transaction *find_trans,
                                     Split *find_split,
@@ -100,43 +99,6 @@ gnc_split_register_add_transaction (SplitRegister *reg,
                        TRUE, start_primary_color, *vcell_loc);
   vcell_loc->virt_row++;
 
-  if (sort_splits)
-  {
-    /* first debits */
-    for (node = xaccTransGetSplitList (trans); node; node = node->next)
-    {
-      Split *secondary = node->data;
-
-      if (gnc_numeric_negative_p (xaccSplitGetValue (secondary)))
-        continue;
-
-      if (secondary == find_split && find_class == CURSOR_CLASS_SPLIT)
-        *new_split_row = vcell_loc->virt_row;
-
-      gnc_table_set_vcell (reg->table, split_cursor,
-                           xaccSplitGetGUID (secondary),
-                           visible_splits, TRUE, *vcell_loc);
-      vcell_loc->virt_row++;
-    }
-
-    /* then credits */
-    for (node = xaccTransGetSplitList (trans); node; node = node->next)
-    {
-      Split *secondary = node->data;
-
-      if (!gnc_numeric_negative_p (xaccSplitGetValue (secondary)))
-        continue;
-
-      if (secondary == find_split && find_class == CURSOR_CLASS_SPLIT)
-        *new_split_row = vcell_loc->virt_row;
-
-      gnc_table_set_vcell (reg->table, split_cursor,
-                           xaccSplitGetGUID (secondary),
-                           visible_splits, TRUE, *vcell_loc);
-      vcell_loc->virt_row++;
-    }
-  }
-  else
   {
     for (node = xaccTransGetSplitList (trans); node; node = node->next)
     {
@@ -409,7 +371,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     gnc_split_register_add_transaction (reg, trans, split,
                                         lead_cursor, split_cursor,
                                         multi_line, start_primary_color,
-                                        TRUE, TRUE,
+                                        TRUE,
                                         find_trans, find_split, find_class,
                                         &new_split_row, &vcell_loc);
 
@@ -446,7 +408,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
   gnc_split_register_add_transaction (reg, trans, split,
                                       lead_cursor, split_cursor,
-                                      multi_line, start_primary_color, FALSE,
+                                      multi_line, start_primary_color,
                                       info->blank_split_edited, find_trans,
                                       find_split, find_class, &new_split_row,
                                       &vcell_loc);
