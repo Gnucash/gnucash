@@ -33,7 +33,8 @@ typedef struct
 {
         GnomeCanvasWidget canvas_widget;
 
-        GtkCList *clist; /* Contains the list items */
+        GtkCList *clist;  /* Contains the list items */
+        GtkWidget *frame; /* frame around everything */
 } GNCItemList;
 
 

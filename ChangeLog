@@ -1,5 +1,10 @@
 2001-04-12  Dave Peticolas  <dave@krondo.com>
 
+	* src/register/gnome/gnucash-item-list.c: same as below
+
+	* src/register/gnome/combocell-gnome.c (popup_post_show): fix for
+	making the scrollbars appear under gtk+ 1.2.9.
+
 	* src/gnome/dialog-commodity.c: add api to edit commodities
 
 	* src/gnome/dialog-commodities.c: allow commodities to be edited
