@@ -4,8 +4,7 @@
 <TITLE>Printing Checks</TITLE>
 </ARTHEADER>
 <SECT1>
-<TITLE> Printing Checks</TITLE>
-<PARA>    </PARA>
+<TITLE>Printing Checks</TITLE>
 <PARA>You may print a GnuCash transaction as a check by selecting
     "Print Check" from the Transaction menu in a register display
     window.
@@ -14,7 +13,9 @@
 <PARA>In the Print Check dialog, select the style of check form
     that you wish to use, the position of the check on the page,
     and the format for printing the date on the check. Clicking
-    <GUIMENU>OK</GUIMENU> will take you to the <LINK LINKEND="XACC-PRINT">    GnuCash Printing</LINK> dialog, which will allow you to preview
+    <GUIMENU>OK</GUIMENU> will take you to the 
+    <LINK LINKEND="XACC-PRINT">GnuCash Printing</LINK> dialog, 
+    which will allow you to preview
     the check, select a printer and paper size, and start the print
     job.
 
@@ -22,22 +23,21 @@
 <SECT2>
 <TITLE>Check format</TITLE>
 <PARA>    </PARA>
-<PARA>In order to print a check, it is necessary to know where the
+<PARA>In order to print a check, you must know where the
     pre-printed lines and boxes are on the check form. There are
     two widely-used standard check formats: Quicken/QuickBooks (tm)
     compatible, and Microsoft Money (tm) compatible.
-
-    </PARA>
-<PARA>By default, the check format is <APPLICATION>Quicken/QuickBooks</APPLICATION>,
+    By default, the check format is 
+    <APPLICATION>Quicken/QuickBooks</APPLICATION>,
     which prints to any Quicken-compatible check forms.
 
     </PARA>
 </SECT2>
 <SECT2>
 <TITLE>Custom Check Format</TITLE>
-<PARA>    </PARA>
 <PARA>If you wish to print to a type of check form that is not in
-    the <GUIMENU>Check Format</GUIMENU> option menu, select <GUIMENU>Custom</GUIMENU>
+    the <GUIMENU>Check Format</GUIMENU> option menu, select 
+    <GUIMENU>Custom</GUIMENU>
     in the format menu and enter the positions of the various check
     fields in the entry boxes below.
 
@@ -61,7 +61,6 @@
 </SECT2>
 <SECT2>
 <TITLE>Check position</TITLE>
-<PARA>    </PARA>
 <PARA>Printable check forms are available in several styles. In
     general, each printable sheet is divided into three sections,
     and each section can be either a check or a stub. The Check
@@ -75,7 +74,6 @@
 </SECT2>
 <SECT2>
 <TITLE>Custom check position</TITLE>
-<PARA>    </PARA>
 <PARA>If the preset check positions do not work correctly for your
     check forms, you may choose <GUIMENU>Custom</GUIMENU> from the Check
     Position option menu and enter a position for the check in the
@@ -84,19 +82,15 @@
     page to the lower left-hand corner of the check. The units of
     this measurement are those selected in the "Units" option
     menu.
-
     </PARA>
 </SECT2>
 <SECT2>
 <TITLE>Date format</TITLE>
-<PARA>    </PARA>
 <PARA>Select your preferred date format from the picker. The
     picker shows examples using the date of December 31,
     2000 for all formats, but your date will be substituted
     when printing.
-
-    </PARA>
-<PARA>The <SCREEN>MM/DD/</SCREEN> and <SCREEN>DD/MM/</SCREEN> formats are
+    The <SCREEN>MM/DD/</SCREEN> and <SCREEN>DD/MM/</SCREEN> formats are
     available, but they are strongly discouraged since they cannot
     always be distinguished from each other. Please use a format
     with a full or abbreviated month name instead of a number.
@@ -105,7 +99,6 @@
 </SECT2>
 <SECT2>
 <TITLE>Custom date format</TITLE>
-<PARA>    </PARA>
 <PARA>If you wish to use another date format besides those
     available in the picker, select <GUIMENU>Custom</GUIMENU> and enter a
     date-formatting string in the <GUIMENU>Date Format</GUIMENU> entry in the

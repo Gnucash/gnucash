@@ -10,16 +10,14 @@
 
 <PARA>GnuCash provides a somewhat rudimentary automated stock quote
 gathering system.
-</PARA>
-
-<PARA>If a GnuCash <LINK LINKEND="STOCKACCT">stock account</LINK> is
+If a GnuCash <LINK LINKEND="STOCKACCT">stock account</LINK> is
 suitably configured, and the host computer is connected to the
 Internet, the program <APPLICATION>gnc-prices</APPLICATION> may be
 used to load stock and mutual fund price quotes from various web sites
 directly into GnuCash.
 </PARA>
 
-<PARA>To make use of this facility, the following must be done:
+<PARA>This is what you do:
 
 <ITEMIZEDLIST>
   <LISTITEM>
@@ -68,8 +66,9 @@ directly into GnuCash.
 </LISTITEM>
 <LISTITEM>
 <PARA>Quotes from <EMPHASIS>Yahoo</EMPHASIS>, <EMPHASIS>Fidelity
-          Investments</EMPHASIS>, <EMPHASIS>T. Rowe Price</EMPHASIS> and the <EMPHASIS>Vanguard
-          Group</EMPHASIS> should be in US Dollars (USD).
+      Investments</EMPHASIS>, <EMPHASIS>T. Rowe Price</EMPHASIS> 
+      and the <EMPHASIS>Vanguard
+      Group</EMPHASIS> should be in US Dollars (USD).
         </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
@@ -79,8 +78,7 @@ directly into GnuCash.
 </ITEMIZEDLIST>
 
     <TABLE>
-<TITLE>        Code list for European markets
-      </TITLE>
+<TITLE>Code List for European Markets</TITLE>
 <TGROUP COLS="2">
 <THEAD>
 <ROW>
@@ -174,8 +172,7 @@ directly into GnuCash.
 </TABLE>
 
     <TABLE>
-<TITLE>        Pseudo-symbols that can be used for TIAA-CREF quotes.
-      </TITLE>
+<TITLE>Pseudo-symbols that can be used for TIAA-CREF quotes</TITLE>
 <TGROUP COLS="2">
 <THEAD>
 <ROW>
@@ -232,9 +229,10 @@ directly into GnuCash.
 </TGROUP>
 </TABLE>
 
-    </PARA>
+</PARA>
+
 <PARA>A sample image is shown below:
-     <INLINEMEDIAOBJECT>
+<INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
 <IMAGEDATA FILEREF="image/ticker-a.png">
 </IMAGEOBJECT>
@@ -261,8 +259,7 @@ directly into GnuCash.
     will update the accounts at most once with the most recent
     trading days price data.
 
-    </PARA>
-<PARA>Thus, if <APPLICATION>gnc-prices</APPLICATION> is run on Friday, Saturday,
+    Thus, if <APPLICATION>gnc-prices</APPLICATION> is run on Friday, Saturday,
     Sunday and Monday, only two price entries will be made: one
     containing Friday's data, and one containing Monday's data,
     since the Saturday and Sunday runs will only retrieve the
