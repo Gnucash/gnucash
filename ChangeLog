@@ -4,6 +4,9 @@
 	  0..255 instead of -128..127.  Force a "signed char" to make sure
 	  we get the latter interpretation.
 
+	* src/app-utils/gnc-ui-utils.c: Don't round unless force_fit is true.
+	  Fixes Debian Bug #179802.
+
 2003-02-04  Benoit Grégoire  <bock@step.polymtl.ca>
 
 	* src/import-export/import-backend.c: Add heuristic for duplicate matching by check number.  

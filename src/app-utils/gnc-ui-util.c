@@ -1504,6 +1504,9 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     return 0;
   }
 
+  /* print the absolute value */
+  val = gnc_numeric_abs (val);
+
   /* Force at least auto_decimal_places zeros */
   if (auto_decimal_enabled) {
     min_dp = MAX(auto_decimal_places, info->min_decimal_places);
@@ -1512,15 +1515,15 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     min_dp = info->min_decimal_places;
     max_dp = info->max_decimal_places;
   }
+
+  /* Don to limit the number of decimal places _UNLESS_ force_fit is
+   * true. */
   if (!info->force_fit)
     max_dp = 99;
 
-  /* print the absolute value */
-  val = gnc_numeric_abs (val);
-
-  /* rounding? */
-  if (info->round) {
-    rounding.num = 5;
+  /* rounding? -- can only ROUND if force_fit is also true */
+  if (info->round && info->force_fit) {
+    rounding.num = 5; /* Limit the denom to 10^13 ~= 2^44, leaving max at ~524288 */
     rounding.denom = pow(10, max_dp + 1);
     val = gnc_numeric_add(val, rounding, GNC_DENOM_AUTO, GNC_DENOM_LCD);
   }
