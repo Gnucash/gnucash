@@ -40,6 +40,108 @@
 
 /* static short module = MOD_ENGINE; */
 
+/* =============================================================== */
+/* Quick-n-dirty 128-bit math lib */
+
+typedef struct {
+  gint64 hi;
+  guint64 lo;
+} gncint128;
+
+static inline gncint128
+mult (gint64 a, gint64 b)
+{
+  gncint128 prod;
+  short aneg=0, bneg=0;
+
+  if (0>a)
+  {
+    aneg = 1;
+    a = -a;
+  }
+
+  if (0>b)
+  {
+    bneg = 1;
+    b = -b;
+  }
+
+  guint64 a1 = a >> 32;
+  guint64 a0 = a - (a1<<32);
+
+  guint64 b1 = b >> 32;
+  guint64 b0 = b - (b1<<32);
+
+  guint64 d = a0*b0;
+  guint64 d1 = d >> 32;
+  guint64 d0 = d - (d1<<32);
+
+  guint64 e = a0*b1;
+  guint64 e1 = e >> 32;
+  guint64 e0 = e - (e1<<32);
+
+  guint64 f = a1*b0;
+  guint64 f1 = f >> 32;
+  guint64 f0 = f - (f1<<32);
+
+  guint64 g = a1*b1;
+  guint64 g1 = g >> 32;
+  guint64 g0 = g - (g1<<32);
+
+  guint64 sum = d1+e0+f0;
+  guint64 carry = 0;
+  /* Can't say 1<<32 cause cpp will goof it up; 1ULL<<32 might work */
+  guint64 roll = 1<<30;
+  roll <<= 2;
+
+  guint64 pmax = roll-1;
+  while (pmax < sum)
+  {
+    sum -= roll;
+    carry ++;
+  }
+
+  prod.lo = d0 + (sum<<32);
+  prod.hi = carry + e1 + f1 + g0 + (g1<<32);
+
+  if (aneg) prod.hi = -prod.hi;
+  if (bneg) prod.hi = -prod.hi;
+
+  return prod;
+}
+
+#ifdef TEST_128_BIT_MULT
+void pr (gint64 a, gint64 b)
+{
+   gncint128 prod = mult (a,b);
+   printf ("%lld * %lld = %lld %llu (0x%llx %llx)\n", a,b, prod.hi, prod.lo, prod.hi, prod.lo);
+}
+
+main ()
+{
+  pr (2,2);
+
+  gint64 x = 1<<30;
+  x <<= 2;
+
+  pr (x,x);
+  pr (x+1,x);
+  pr (x+1,x+1);
+
+  pr (x,-x);
+  pr (-x,-x);
+  pr (x-1,x);
+  pr (x-1,x-1);
+  pr (x-2,x-2);
+
+  x <<= 1;
+  pr (x,x);
+  pr (x,-x);
+}
+#endif /* TEST_128_BIT_MULT */
+
+/* =============================================================== */
+
 #if 0
 static const char * _numeric_error_strings[] = 
 {
@@ -53,6 +155,7 @@ static const char * _numeric_error_strings[] =
 
 static gint64 gnc_numeric_lcd(gnc_numeric a, gnc_numeric b);
 
+/* =============================================================== */
 /* This function is small, simple, and used everywhere below, 
  * lets try to inline it.
  */
