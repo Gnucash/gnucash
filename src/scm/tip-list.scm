@@ -63,7 +63,7 @@ number. You can use '+' and '-' to increment and decrement
 dates as well.")
 
  (N_ "You should back up your files regularly.  Just copy
-the GnuCash .xac file to a floppy or other backup device.")
+your GnuCash data file to a floppy or other backup device.")
 
  (N_ "To transfer funds between accounts with different currencies,
 you may need an intermediate currency trading account.

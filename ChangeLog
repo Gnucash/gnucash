@@ -1,5 +1,7 @@
 2001-05-13  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/tip-list.scm: fix tip
+
 	* src/engine/Account.c (finder_help_function): fix warning
 
 2001-05-13  Kevin Finn  <kevinfinn@mediaone.net>
