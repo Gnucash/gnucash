@@ -225,9 +225,8 @@ install:
 
 	$(MAKE) -C po install
 
-	-[ $(GNOME_CONFIG_BIN)x != x ] && \
-	  $(INSTALL_DATA) gnucash.desktop \
-	    $(shell $(GNOME_CONFIG_BIN) --datadir)/gnome/apps/Applications
+	-[ -d $(datadir)/gnome/apps/Applications ] && \
+	  $(INSTALL_DATA) gnucash.desktop $(datadir)/gnome/apps/Applications
 
 #  # Config directory
 #	@mkdir -p ${GNC_CONFIGDIR}
