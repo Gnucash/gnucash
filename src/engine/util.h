@@ -171,6 +171,31 @@ double xaccParseUSAmount (const char * str);
 
 
 /** TEMPLATES ******************************************************/
+/* 
+ * There are several ideas going on in here.
+ *  -- if an account is already being edited, and user clicks on "open", it
+ *     should raise that dialog to the top or de-iconize it instead of 
+ *     creating a new window. 
+ *
+ * -- association between windows and accounts is many-to-one & one-to-many.
+ *    e.g.  if a "general ledger" dialog is open, then it might be displaying 
+ *    four accounts all at once. Thus, an account may be visible in its 
+ *    "main" dialog (of which there is only one), and possibly many "general 
+ *    ledger" windows.
+ *
+ * -- I don't remember, but I think I might also use these to manage redraws
+ *    when some entry is updated, and it is visible in multiple windows. 
+ *    (again, visible in the account main window, and possibly some general 
+ *    ledger windows).
+ *
+ * -- If user deletes an account, then any open windows associated with this
+ *    account are auto-closed (and other windows possibly updated).
+ *
+ * -- the macros associate an xaccAccount struct with a gui-specific struct
+ *    which contains things like widgets and other pieces the GUI needs 
+ *    to "remember" about that dialog.
+ */
+
 
 #define FIND_IN_LIST(Type,list,id,member,found) 	\
 {							\
