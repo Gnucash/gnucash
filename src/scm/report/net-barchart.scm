@@ -90,7 +90,7 @@
         "a" 
 	(if inc-exp? 
 	    (N_ "Show Income and Expenses?")
-	    (N_ "Show the Asset and the Liability/Equity bars?"))
+	    (N_ "Show the Asset and the Liability bars?"))
 	#t))
 
       (add-option
@@ -216,9 +216,7 @@
 	    (collector-fn 
 	     (if inc-exp?
 		 accounts
-		 (append
-		  (assoc-ref classified-accounts 'liability)
-		  (assoc-ref classified-accounts 'equity)))
+                 (assoc-ref classified-accounts 'liability))
 	     dates-list #f))
 	   (net-collector-list
             (map collector-combine assets-collector-list
@@ -276,7 +274,7 @@
 	      (if show-sep?
 		  (if inc-exp?
 		      (list (_ "Income") (_ "Expense"))
-		      (list (_ "Assets") (_ "Liabilities/Equity")))
+		      (list (_ "Assets") (_ "Liabilities")))
 		  '())
 	      (if show-net?
 		  (if inc-exp?
@@ -309,7 +307,7 @@
 		  (gnc:make-report-anchor
 		   (if inc-exp?
 		       "Expense Over Time"
-		       "Liabilities/Equity Over Time")
+		       "Liabilities Over Time")
 		   report-obj
 		   (list 
 		    (list gnc:pagename-display
@@ -318,7 +316,7 @@
 			  gnc:optname-reportname
 			  (if inc-exp?
 			      (_ "Expense Chart")
-			      (_ "Liability/Equity Chart"))))))))
+			      (_ "Liability Chart"))))))))
 	    (gnc:html-barchart-set-button-1-bar-urls! 
 	     chart urls)
 	    (gnc:html-barchart-set-button-1-legend-urls! 

@@ -46,7 +46,7 @@ developing over time"))
       (menutip-assets 
        (N_ "Shows a barchart with the Assets developing over time"))
       (menutip-liabilities 
-       (N_ "Shows a barchart with the Liability and Equity balance \
+       (N_ "Shows a barchart with the Liabilities \
 developing over time"))
 
       ;; The names here are used 1. for internal identification, 2. as
@@ -55,7 +55,7 @@ developing over time"))
       (reportname-income (N_ "Income Over Time"))
       (reportname-expense (N_ "Expense Over Time"))
       (reportname-assets (N_ "Assets Over Time"))
-      (reportname-liabilities (N_ "Liabilities/Equity Over Time"))
+      (reportname-liabilities (N_ "Liabilities Over Time"))
 
       ;; Option names
       (optname-from-date (N_ "From"))
@@ -477,5 +477,5 @@ the global Preference \"Display Tip of the Day\".")))))
 		  stock mutual-fund currency)
 	  #f menuname-assets menutip-assets)
     (list reportname-liabilities 
-	  '(liability credit credit-line equity)
+	  '(liability credit credit-line)
 	  #f menuname-liabilities menutip-liabilities))))

@@ -41,7 +41,7 @@
       (menutip-assets 
        (N_ "Shows a piechart with the Assets balance at a given time"))
       (menutip-liabilities 
-       (N_ "Shows a piechart with the Liabilities and Equity \
+       (N_ "Shows a piechart with the Liabilities \
 balance at a given time"))
 
       ;; The names here are used 1. for internal identification, 2. as
@@ -50,7 +50,7 @@ balance at a given time"))
       (reportname-income (N_ "Income Accounts"))
       (reportname-expense (N_ "Expense Accounts"))
       (reportname-assets (N_ "Assets"))
-      (reportname-liabilities (N_ "Liabilities/Equity"))
+      (reportname-liabilities (N_ "Liabilities"))
 
       (optname-from-date (N_ "From"))
       (optname-to-date (N_ "To"))
@@ -417,5 +417,5 @@ the global Preference \"Display Tip of the Day\".")))))
 		  stock mutual-fund currency)
 	  #f menuname-assets menutip-assets)
     (list reportname-liabilities 
-	  '(liability credit credit-line equity)
+	  '(liability credit credit-line)
 	  #f menuname-liabilities menutip-liabilities))))

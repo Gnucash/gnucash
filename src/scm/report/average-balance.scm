@@ -44,7 +44,7 @@
 		   ;; otherwise get some accounts -- here as an
 		   ;; example we get the asset and liability stuff
                    (gnc:filter-accountlist-type
-		    '(bank cash credit asset liability equity) 
+		    '(bank cash credit asset liability) 
 		    ;; or: '(bank cash checking savings stock
 		    ;; mutual-fund money-market)
 		    (gnc:group-get-account-list (gnc:get-current-group)))))))

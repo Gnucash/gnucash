@@ -1,5 +1,14 @@
 2001-05-02  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/report/net-barchart.scm: same as below
+
+	* src/scm/report/category-barchart.scm: same as below
+
+	* src/scm/report/average-balance.scm: same as below
+
+	* src/scm/report/account-piecharts.scm: don't combine liabilities
+	& equity together.
+
 	* src/gnome/dialog-column-view.c: work on gui
 
 	* src/gnome/dialog-utils.c (gnc_clist_columns_autosize): new func
