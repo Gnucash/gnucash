@@ -27,6 +27,7 @@
 
 #include "config.h"
 
+#include <stdlib.h>
 #include <string.h>
 
 #include <glib.h>
@@ -295,6 +296,8 @@ gnc_book_load_from_xml_file(GNCBook *book)
   sixtp *top_level_pr;
   GNCParseStatus global_parse_status;
   const gchar *filename;
+  char *put_str;
+  char *old_tz;
 
   g_return_val_if_fail(book, FALSE);
 
@@ -304,12 +307,20 @@ gnc_book_load_from_xml_file(GNCBook *book)
   top_level_pr = gncxml_setup_for_read (&global_parse_status);
   g_return_val_if_fail(top_level_pr, FALSE);
 
+  old_tz = g_strdup (getenv ("TZ"));
+  putenv ("TZ=UTC");
+
   parse_ok = sixtp_parse_file(top_level_pr,
                               filename,
                               NULL,
                               &global_parse_status,
                               &parse_result);
-  
+
+  put_str = g_strdup_printf ("TZ=%s", old_tz ? old_tz : "");
+  putenv (put_str);
+  g_free (put_str);
+  g_free (old_tz);
+
   sixtp_destroy(top_level_pr);
 
   if(parse_ok) {

@@ -1,5 +1,10 @@
 2001-03-12  Dave Peticolas  <dave@krondo.com>
 
+	* src/engine/io-gncxml-r.c (gnc_book_load_from_xml_file): use
+	TZ=UTC while parsing xml.
+
+	* src/engine/sixtp-utils.c: adjust for timezone offset manually
+
 	* src/scm/html-table.scm ((gnc:make-html-table-header-cell/markup
 	markup . objects)): new func
 

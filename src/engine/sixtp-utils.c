@@ -364,6 +364,7 @@ string_to_timespec_secs(const gchar *str, Timespec *ts) {
   struct tm parsed_time;
   const gchar *strpos;
   time_t parsed_secs;
+  long int gmtoff;
 
   memset(&parsed_time, 0, sizeof(struct tm));
 
@@ -396,16 +397,19 @@ string_to_timespec_secs(const gchar *str, Timespec *ts) {
     if((sign != '+') && (sign != '-')) return(FALSE);
     if(!isspace_str(strpos + num_read, -1)) return(FALSE);
 
-    parsed_time.tm_gmtoff = (h1 * 10 + h2) * 60 * 60;
-    parsed_time.tm_gmtoff += (m1 * 10 + m2) * 60;
-    if(sign == '-') parsed_time.tm_gmtoff = - parsed_time.tm_gmtoff;
+    gmtoff = (h1 * 10 + h2) * 60 * 60;
+    gmtoff += (m1 * 10 + m2) * 60;
+    if(sign == '-') gmtoff = - gmtoff;
+
     parsed_time.tm_isdst = -1;
   }
 
   parsed_secs = mktime(&parsed_time);
-  
+
   if(parsed_secs == (time_t) -1) return(FALSE);
-  
+
+  parsed_secs -= gmtoff;
+
   ts->tv_sec = parsed_secs;
 
   return(TRUE);
