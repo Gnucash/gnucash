@@ -59,6 +59,7 @@ GtkWidget * gnc_get_pixmap (const char *name);
 GdkImlibImage * gnc_get_gdk_imlib_image (const char *name);
 
 GtkToolbarStyle gnc_get_toolbar_style (void);
+GnomeMDIMode    gnc_get_mdi_mode(void);
 
 void gnc_get_deficit_color (GdkColor *color);
 void gnc_set_label_color (GtkWidget *label, gnc_numeric value);

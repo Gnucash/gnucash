@@ -98,20 +98,23 @@ gnc_report_window_view_labeler(GnomeMDIChild * child, GtkWidget * current,
     else {
       name = strdup(_("(Report not found)"));
     }
+    g_free(rwin->title);
+    rwin->title = g_strdup(name);    
   }
   else {
     name = strdup(_("Report"));
   }
+
   if(current == NULL) {
-    GtkWidget * label = gtk_label_new(name);
+    current = gtk_label_new(name);    
     free(name);
-    return label;
   }
   else {
     gtk_label_set_text(GTK_LABEL(current), name);
     free(name);
-    return current;
   }
+  gtk_label_set_justify(GTK_LABEL(current), GTK_JUSTIFY_LEFT);
+  return current;
 }
 
 static void
@@ -122,6 +125,7 @@ gnc_report_window_view_destroy(GtkObject * obj, gpointer user_data) {
 
   g_free(mc->toolbar_info);
   g_free(mc->menu_info);
+  g_free(mc->title);
   g_free(mc);
 }
 
@@ -141,8 +145,10 @@ gnc_report_window_view_new(GnomeMDIChild * child, gpointer user_data) {
 
   mc->contents     = gnc_report_window_get_container(win);
   mc->app          = NULL;
+  mc->toolbar      = NULL;
   mc->user_data    = win;
   mc->child        = child; 
+  mc->title        = g_strdup("Report");
 
   gnc_main_window_add_child(maininfo, mc);
 
@@ -153,6 +159,10 @@ gnc_report_window_view_new(GnomeMDIChild * child, gpointer user_data) {
                     type, url_location, url_label, 0);
   
   gtk_object_set_user_data(GTK_OBJECT(child), mc);
+  
+  /* make sure menu entry and label get refreshed */
+  gnome_mdi_child_set_name(child, child->name);
+
   gtk_signal_connect(GTK_OBJECT(child), "destroy", 
                      gnc_report_window_view_destroy, mc);
   

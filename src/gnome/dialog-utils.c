@@ -24,6 +24,8 @@
 
 #include "config.h"
 
+#include <gnome.h>
+
 #include "account-tree.h"
 #include "dialog-utils.h"
 #include "global-options.h"
@@ -316,6 +318,33 @@ gnc_get_toolbar_style(void)
     free(style_string);
 
   return tbstyle;
+}
+
+/********************************************************************
+ * gnc_get_mdi_mode                                                 *
+ * returns the current Gnome MDI mode preference                    *
+ ********************************************************************/
+GnomeMDIMode 
+gnc_get_mdi_mode(void) {
+  GnomeMDIMode mode = GNOME_MDI_DEFAULT_MODE;
+  char * mode_string = gnc_lookup_multichoice_option("General",
+                                                     "Application MDI mode",
+                                                     "");
+  if(!safe_strcmp(mode_string, "mdi-notebook")) {
+    mode = GNOME_MDI_NOTEBOOK;
+  }
+  else if(!safe_strcmp(mode_string, "mdi-toplevel")) {
+    mode = GNOME_MDI_TOPLEVEL;    
+  }
+  else if(!safe_strcmp(mode_string, "mdi-modal")) {
+    mode = GNOME_MDI_MODAL;    
+  }
+  else if(!safe_strcmp(mode_string, "mdi-default")) {
+    mode = GNOME_MDI_DEFAULT_MODE;    
+  }
+
+  if(mode_string) free(mode_string);
+  return mode;
 }
 
 

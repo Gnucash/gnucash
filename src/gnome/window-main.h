@@ -28,9 +28,11 @@
 #include <guile/gh.h>
 
 typedef struct  {
-  GnomeMDI * mdi;
+  GnomeMDI      * mdi;
+  GnomeMDIChild * last_active;
   int      component_id;
   SCM      toolbar_change_callback_id;
+  SCM      mdi_change_callback_id;
   GList    * children;
 } GNCMainInfo;
 
@@ -46,6 +48,7 @@ typedef struct {
 
   int             component_id;
   void            * user_data;
+  char            * title;
 } GNCMainChildInfo;
 
 

@@ -91,33 +91,41 @@ struct GNCAcctTreeWin_p
 
 /********************************************************************
  * acct_labeler
- * fixme: we need to be able to dynamically select account tab names 
  ********************************************************************/
 
 static GtkWidget * 
 gnc_acct_tree_view_labeler(GnomeMDIChild * child, GtkWidget * current,
                            gpointer user_data) {
   GNCMainChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
-  GNCAcctTreeWin   * win = mc->user_data;
+  GNCAcctTreeWin   * win = NULL;
   char             * name = NULL;
   
-  if(win) {
-    name = gnc_option_db_lookup_string_option(win->odb, 
-                                              "Account Tree", 
-                                              "Name of account view",
-                                              NULL);
+  if(mc) {
+    win = mc->user_data;
+    if(win) {
+      name = gnc_option_db_lookup_string_option(win->odb, 
+                                                "Account Tree", 
+                                                "Name of account view",
+                                                NULL);
+    }
+    else {
+      name = strdup("Accounts");
+    }
+    g_free(mc->title);
+    mc->title = g_strdup(name);
   }
   else {
     name = strdup("Accounts");
   }
   
   if(current == NULL) {    
-    return gtk_label_new(name);
+    current = gtk_label_new(name); 
   }
   else {
     gtk_label_set_text(GTK_LABEL(current), name);
-    return current;
   }
+  gtk_label_set_justify(GTK_LABEL(current), GTK_JUSTIFY_LEFT);
+  return current;
 }
 
 
@@ -130,6 +138,7 @@ gnc_acct_tree_view_destroy(GtkObject * obj, gpointer user_data) {
   gnc_acct_tree_window_destroy(w);
   g_free(mc->toolbar_info);
   g_free(mc->menu_info);
+  g_free(mc->title);
   g_free(mc);
 }
 
@@ -148,15 +157,19 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data) {
   mc->contents     = gnc_acct_tree_window_get_widget(win);
   mc->child        = child;
   mc->app          = NULL;
+  mc->toolbar      = NULL;
   mc->component_id = gnc_register_gui_component(WINDOW_ACCT_TREE_CM_CLASS,
                                                 NULL, NULL, mc);
   mc->user_data    = win;
-
-  /* set the child name that will get used to save app state */ 
-  mc->child->name = g_strdup_printf("gnc-acct-tree:id=%d", 
-                                    win->options_id);
+  mc->title        = g_strdup("Accounts");
 
   gtk_object_set_user_data(GTK_OBJECT(child), mc);
+
+  /* set the child name that will get used to save app state */ 
+  gnome_mdi_child_set_name(mc->child, 
+                           g_strdup_printf("gnc-acct-tree:id=%d", 
+                                           win->options_id));
+
   gtk_signal_connect(GTK_OBJECT(child), "destroy", 
                      gnc_acct_tree_view_destroy, mc);
 

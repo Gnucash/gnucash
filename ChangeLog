@@ -1,3 +1,12 @@
+2001-04-13  Bill Gribble  <grib@billgribble.com>
+
+	* Bug fixes and a couple of new features for MDI stuff.  
+
+	* src/scm/prefs.scm: new option to set MDI mode (prefs/general)
+
+	* src/gnome/{window-acct-tree.c,window-report.c,window-main.c}:
+	bug fixes to handle runtime MDI mode changes.  
+	
 2001-04-13  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/report/*: update several reports to use
