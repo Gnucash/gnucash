@@ -389,7 +389,7 @@ gnc_book_begin (GNCBook *book, const char * book_id,
   
   /* check to see if this is a type we know how to handle */
   if (!g_strncasecmp(book_id, "file:", 5) ||
-      *book_id == '/')
+      *book->fullpath == '/')
   {
     gnc_book_load_backend(book, "file" ); 
   }
