@@ -32,7 +32,7 @@ CFLAGS   =  -O2 -Wall -g -Wall ${INCLPATH}
 
 ######################################################################
 # See Makefile.common for information about these variables.
-COMMON_SRCS   := Ledger.c
+COMMON_SRCS   := Ledger.c SplitLedger.c
 CLEAN_SUBDIRS := engine gnome motif register
 ######################################################################
 
