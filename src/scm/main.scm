@@ -99,6 +99,14 @@
   (gnc:debug "UI Shutdown hook.")
   (gnc:file-quit))
 
+(define (gnc:load-account-file)
+  (let ((ok (not (gnc:config-var-value-get gnc:*arg-no-file*)))
+        (file (if (pair? gnc:*command-line-remaining*)
+                  (car gnc:*command-line-remaining*)
+                  (gnc:history-get-last))))
+    (if (and ok (string? file))
+        (gnc:ui-open-file file))))
+
 (define (gnc:main)
 
   ;; Now the fun begins.
@@ -118,12 +126,8 @@
 
   (if (null? gnc:*batch-mode-things-to-do*)
       ;; We're not in batch mode; we can go ahead and do the normal thing.
-      (let ((ok (not (gnc:config-var-value-get gnc:*arg-no-file*)))
-            (file (if (pair? gnc:*command-line-files*)
-                      (car gnc:*command-line-files*)
-                      (gnc:history-get-last))))
-        (if (and ok (string? file))
-            (gnc:ui-open-file file))
+      (begin
+        ;; (gnc:load-account-file)
         (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:ui-finish)
         (gnc:ui-main)
         (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:ui-finish))

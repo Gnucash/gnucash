@@ -27,6 +27,7 @@
 #include <gnome.h>
 #include <gtkhtml/gtkhtml.h>
 #include <guile/gh.h>
+#include <popt.h>
 #include <stdlib.h>
 
 #include "AccWindow.h"
@@ -38,6 +39,7 @@
 #include "Refresh.h"
 #include "SplitLedger.h"
 #include "TransLog.h"
+#include "argv-list-converters.h"
 #include "combocell.h"
 #include "date.h"
 #include "dialog-account.h"
@@ -134,6 +136,23 @@ gnc_get_ui_data(void)
   return app;
 }
 
+static const char* gnc_scheme_remaining_var = "gnc:*command-line-remaining*";
+
+static char**
+gnc_get_remaining_argv(int prelen, const char **prependargv)
+{
+    SCM rem = gh_lookup(gnc_scheme_remaining_var);
+    return gnc_scheme_list_to_nulltermcharpp(prelen, prependargv, rem);
+}
+
+static void
+gnc_set_remaining_argv(int len, const char **rest)
+{
+    SCM toput = gnc_argvarr_to_scheme_list(len, rest);
+    gh_define(gnc_scheme_remaining_var, toput);
+}
+
+             
 /* ============================================================== */
 
 /* These gnucash_ui_init and gnucash_ui functions are just hacks to get
@@ -141,11 +160,19 @@ gnc_get_ui_data(void)
    what they should do soon, and expect that the open/select functions
    will be merged with the code in FMB_OPEN in MainWindow.c */
 
+static const char *default_argv[] = {"gnucash", 0};
+
+static const struct poptOption nullPoptTable[] = {
+  { NULL, 0, 0, NULL, 0 }
+};
+
 int
 gnucash_ui_init(void)
 {
-  int fake_argc = 1;
-  char *fake_argv[] = {"gnucash"};
+  int restargc;
+  char **restargv;
+  char **restargv2;
+  poptContext returnedPoptContext;
 
   ENTER ("\n");
 
@@ -153,8 +180,26 @@ gnucash_ui_init(void)
      specific args... */
   if (!gnome_is_initialized)
   {
-    gnome_init("GnuCash", NULL, fake_argc, fake_argv);
+    restargv = gnc_get_remaining_argv(1, default_argv);
+    if(restargv == NULL)
+    {
+      restargv = g_new(char*, 2);
+      restargv[0] = g_strdup(default_argv[0]);
+      restargv[1] = NULL;
+    }
+
+    restargc = argv_length(restargv);
+ 
+    gnome_init_with_popt_table("GnuCash", NULL, restargc, restargv,
+                               nullPoptTable, 0, &returnedPoptContext);
     gnome_is_initialized = TRUE;
+
+    restargv2 = (char**)poptGetArgs(returnedPoptContext);
+    gnc_set_remaining_argv(argv_length(restargv2), (const char**)restargv2);
+    gh_eval_str("(gnc:load-account-file)");
+
+    /* this must come after using the poptGetArgs return value */
+    gnc_free_argv(restargv);
 
     gnc_component_manager_init ();
 
@@ -208,13 +253,13 @@ gnucash_ui_init(void)
     auto_decimal_callback_id =
       gnc_register_option_change_callback(gnc_configure_auto_decimal_cb,
                                           NULL, "General",
-                                         "Automatic Decimal Point");
+                                          "Automatic Decimal Point");
 
     gnc_configure_auto_decimal_places();
     auto_decimal_places_callback_id = 
-       gnc_register_option_change_callback(gnc_configure_auto_decimal_places_cb,
-                                           NULL, "General",
-                                           "Auto Decimal Places");
+      gnc_register_option_change_callback(gnc_configure_auto_decimal_places_cb,
+                                          NULL, "General",
+                                          "Auto Decimal Places");
 
     gnc_configure_register_font();
     register_font_callback_id =

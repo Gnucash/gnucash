@@ -17,8 +17,71 @@
 
 ;; also "-c"
 
-(define gnc:*command-line-files* #f)
+(define gnc:*command-line-remaining* #f)
 
+;;(use-modules (ice-9 getopt-long))
+
+;;(define (gnc:is-boolean-arg? arg)
+;;  (if (or (string=? arg "true") (string=? arg "false")) #t #f))
+
+;;(define (gnc:is-integer-arg? arg)
+;;  (if (string->number arg) #t #f))
+
+;;(define (gnc:convert-arg-to-boolean arg)
+;;  (if (string=? arg "true")
+;;      #t
+;;      (if (string=? arg "false")
+;;          #f
+;;          'abort)))
+
+;;(define (gnc:convert-arg-to-integer arg)
+;;  (let ((value (string->number arg)))
+;;    (if (and (not value) (not (exact? value)))
+;;        'abort
+;;        value)))
+
+;;(define (gnc:convert-arg-defs-to-opt-args arg-defs)
+;;  (letrec ((return '())
+;;           (decide-single-char
+;;            (let ((single-char-cache '()))
+;;              (lambda (name)
+;;                (let ((possible (string-ref name 0)))
+;;                  (if (eq? (assv possible single-char-cache) #f)
+;;                      (begin
+;;                       (set! single-char-cache (acons possible #t
+;;                                                      single-char-cache))
+;;                       possible)
+;;                      #f)))))
+;;           (create-arg-list
+;;            (lambda (name-sym value pred sc)
+;;              (let ((ret `(,name-sym (value ,value))))
+;;                (if (not (eq? pred #f))
+;;                    (set! ret (append ret (cons 'predicate pred))))
+;;                (if (not (eq? sc #f))
+;;                    (set! ret (append ret (cons 'single-char sc))))
+;;                ret)))
+;;           (helper
+;;            (lambda (arg-defs ret)
+;;              (if (not (pair? arg-defs))
+;;                  ret
+;;                  (helper
+;;                   (cdr arg-defs)
+;;                   (cons
+;;                    (let* ((one-arg (car arg-defs))
+;;                           (arg-name (car one-arg))
+;;                           (arg-sym (string->symbol arg-name))
+;;                           (arg-oc (decide-single-char arg-name)))
+;;                      (case (cadr one-arg)
+;;                        ((boolean) (create-arg-list arg-sym 'optional
+;;                                                    gnc:is-boolean-arg?
+;;                                                    arg-oc))
+;;                        ((integer) (create-arg-list arg-sym #t
+;;                                                    gnc:is-integer-arg?
+;;                                                    arg-oc))
+;;                        ((string) (create-arg-list arg-sym #t #f arg-oc))))
+;;                    ret))))))
+;;    (helper arg-defs return)))
+  
 (define gnc:*arg-defs*
   (list
    
@@ -150,11 +213,41 @@
 (define (gnc:prefs-show-usage)
   (display "usage: gnucash [ option ... ] [ datafile ]") (newline))
 
+;;(define (gnc:handle-command-line-args)
+;;  (letrec ((internal
+;;            (lambda ()
+;;              (getopt-long (program-arguments)
+;;                           (gnc:convert-arg-defs-to-opt-args gnc:*arg-defs*))))
+;;           (arg-handler
+;;            (lambda (args)
+;;              (if (pair? args)
+;;                  (begin
+;;                   (let ((one-arg (car args)))
+;;                     (if (eq? (car one-arg) '())
+;;                         (set! gnc:*command-line-remaining* (cdr one-arg))
+;;                         (let* ((arg-name (symbol->string (car one-arg)))
+;;                                (arg-stuff (assoc-ref gnc:*arg-defs* arg-name)))
+;;                           (case (car arg-stuff)
+;;                             ((string)
+;;                              ((cdr arg-stuff) (cdr one-arg)))
+;;                             ((integer)
+;;                              ((cdr arg-stuff) (gnc:convert-arg-to-integer
+;;                                                (cdr one-arg))))
+;;                             ((boolean)
+;;                              ((cdr arg-stuff) (gnc:convert-arg-to-boolean
+;;                                                (cdr one-arg))))))))
+;;                   (arg-handler (cdr args)))))))
+;;    (display "Converted") (newline)
+;;    (display (gnc:convert-arg-defs-to-opt-args gnc:*arg-defs*)) (newline)
+;;    (flush-all-ports)
+;;    (arg-handler (internal)))
+;;  #t)
+    
 
 (define (gnc:handle-command-line-args)
   (gnc:debug "handling command line arguments" (program-arguments))
   
-  (let ((files-to-open '())
+  (let ((remaining-arguments '())
         (result #t))
     
     (do ((rest (cdr (program-arguments))) ; initial cdr skips argv[0]
@@ -172,7 +265,7 @@
           (begin
             (gnc:debug "non-option " item ", assuming file")
             (set! rest (cdr rest))
-            (set! files-to-open (cons item files-to-open)))
+            (set! remaining-arguments (cons item remaining-arguments)))
           
           (if (string=? "--" item)
               ;; ignore --
@@ -188,6 +281,8 @@
                       ;;(set! quit? #t))
                       (display "Ignoring unused option ")(display arg-string)
                       (newline)
+                      (set! remaining-arguments
+                            (cons item remaining-arguments))
 		      (set! rest (cdr rest)))
                     
                     (let* ((arg-type (car arg-def))
@@ -210,8 +305,8 @@
                             ((cdr arg-def) parsed-value) 
                             (set! rest remaining-args)))))))))
     (if result
-        (gnc:debug "files to open: " files-to-open))
+        (gnc:debug "files to open: " remaining-arguments))
     
-    (set! gnc:*command-line-files* files-to-open)
+    (set! gnc:*command-line-remaining* remaining-arguments)
     
     result))
