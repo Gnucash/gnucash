@@ -185,7 +185,7 @@ libgncmod_backend_file_LTX_gnc_backend_new(void)
     FileBackend *fbe;
     Backend *be;
     
-    fbe = g_new(FileBackend, 1);
+    fbe = g_new0(FileBackend, 1);
     be = (Backend*)fbe;
     xaccInitBackend(be);
     
