@@ -455,11 +455,25 @@ customer_sixtp_parser_create(void)
   return sixtp_dom_parser_new(gnc_customer_end_handler, NULL, NULL);
 }
 
+static gboolean
+customer_should_be_saved (GncCustomer *customer)
+{
+  const char *id;
+
+  /* make sure this is a valid customer before we save it -- should have an ID */
+  id = gncCustomerGetID (customer);
+  if (id == NULL || *id == '\0')
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 do_count (gpointer cust_p, gpointer count_p)
 {
   int *count = count_p;
-  (*count)++;
+  if (customer_should_be_saved (cust_p))
+    (*count)++;
 }
 
 static int
@@ -476,6 +490,9 @@ xml_add_customer (gpointer cust_p, gpointer out_p)
   xmlNodePtr node;
   GncCustomer *cust = cust_p;
   FILE *out = out_p;
+
+  if (!customer_should_be_saved (cust_p))
+    return;
 
   node = customer_dom_tree_create (cust);
   xmlElemDump(out, NULL, node);

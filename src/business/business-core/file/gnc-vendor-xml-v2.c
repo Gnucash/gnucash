@@ -399,11 +399,25 @@ vendor_sixtp_parser_create(void)
   return sixtp_dom_parser_new(gnc_vendor_end_handler, NULL, NULL);
 }
 
+static gboolean
+vendor_should_be_saved (GncVendor *vendor)
+{
+  const char *id;
+
+  /* make sure this is a valid vendor before we save it -- should have an ID */
+  id = gncVendorGetID (vendor);
+  if (id == NULL || *id == '\0')
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 do_count (gpointer vendor_p, gpointer count_p)
 {
   int *count = count_p;
-  (*count)++;
+  if (vendor_should_be_saved (vendor_p))
+    (*count)++;
 }
 
 static int
@@ -420,6 +434,9 @@ xml_add_vendor (gpointer vendor_p, gpointer out_p)
   xmlNodePtr node;
   GncVendor *vendor = vendor_p;
   FILE *out = out_p;
+
+  if (!vendor_should_be_saved (vendor))
+    return;
 
   node = vendor_dom_tree_create (vendor);
   xmlElemDump(out, NULL, node);

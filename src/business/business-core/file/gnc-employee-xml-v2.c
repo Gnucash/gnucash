@@ -341,11 +341,25 @@ employee_sixtp_parser_create(void)
   return sixtp_dom_parser_new(gnc_employee_end_handler, NULL, NULL);
 }
 
+static gboolean
+employee_should_be_saved (GncEmployee *employee)
+{
+  const char *id;
+
+  /* make sure this is a valid employee before we save it -- should have an ID */
+  id = gncEmployeeGetID (employee);
+  if (id == NULL || *id == '\0')
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 do_count (gpointer employee_p, gpointer count_p)
 {
   int *count = count_p;
-  (*count)++;
+  if (employee_should_be_saved (employee_p))
+    (*count)++;
 }
 
 static int
@@ -362,6 +376,9 @@ xml_add_employee (gpointer employee_p, gpointer out_p)
   xmlNodePtr node;
   GncEmployee *employee = employee_p;
   FILE *out = out_p;
+
+  if (!employee_should_be_saved (employee))
+    return;
 
   node = employee_dom_tree_create (employee);
   xmlElemDump(out, NULL, node);

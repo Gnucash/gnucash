@@ -275,11 +275,25 @@ job_sixtp_parser_create(void)
   return sixtp_dom_parser_new(gnc_job_end_handler, NULL, NULL);
 }
 
+static gboolean
+job_should_be_saved (GncJob *job)
+{
+  const char *id;
+
+  /* make sure this is a valid job before we save it -- should have an ID */
+  id = gncJobGetID (job);
+  if (id == NULL || *id == '\0')
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 do_count (gpointer job_p, gpointer count_p)
 {
   int *count = count_p;
-  (*count)++;
+  if (job_should_be_saved (job_p))
+    (*count)++;
 }
 
 static int
@@ -296,6 +310,9 @@ xml_add_job (gpointer job_p, gpointer out_p)
   xmlNodePtr node;
   GncJob *job = job_p;
   FILE *out = out_p;
+
+  if (!job_should_be_saved (job))
+    return;
 
   node = job_dom_tree_create (job);
   xmlElemDump(out, NULL, node);

@@ -313,11 +313,25 @@ order_sixtp_parser_create(void)
   return sixtp_dom_parser_new(gnc_order_end_handler, NULL, NULL);
 }
 
+static gboolean
+order_should_be_saved (GncOrder *order)
+{
+  const char *id;
+
+  /* make sure this is a valid order before we save it -- should have an ID */
+  id = gncOrderGetID (order);
+  if (id == NULL || *id == '\0')
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 do_count (gpointer order_p, gpointer count_p)
 {
   int *count = count_p;
-  (*count)++;
+  if (order_should_be_saved (order_p))
+    (*count)++;
 }
 
 static int
@@ -334,6 +348,9 @@ xml_add_order (gpointer order_p, gpointer out_p)
   xmlNodePtr node;
   GncOrder *order = order_p;
   FILE *out = out_p;
+
+  if (!order_should_be_saved (order))
+    return;
 
   node = order_dom_tree_create (order);
   xmlElemDump(out, NULL, node);

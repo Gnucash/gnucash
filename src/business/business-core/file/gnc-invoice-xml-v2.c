@@ -470,11 +470,25 @@ invoice_sixtp_parser_create(void)
   return sixtp_dom_parser_new(gnc_invoice_end_handler, NULL, NULL);
 }
 
+static gboolean
+invoice_should_be_saved (GncInvoice *invoice)
+{
+  const char *id;
+
+  /* make sure this is a valid invoice before we save it -- should have an ID */
+  id = gncInvoiceGetID (invoice);
+  if (id == NULL || *id == '\0')
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 do_count (gpointer invoice_p, gpointer count_p)
 {
   int *count = count_p;
-  (*count)++;
+  if (invoice_should_be_saved (invoice_p))
+    (*count)++;
 }
 
 static int
@@ -491,6 +505,9 @@ xml_add_invoice (gpointer invoice_p, gpointer out_p)
   xmlNodePtr node;
   GncInvoice *invoice = invoice_p;
   FILE *out = out_p;
+
+  if (!invoice_should_be_saved (invoice))
+    return;
 
   node = invoice_dom_tree_create (invoice);
   xmlElemDump(out, NULL, node);
