@@ -41,8 +41,8 @@ typedef gboolean (*sixtp_start_handler)(GSList* sibling_data,
                                         gpointer global_data,
                                         gpointer *data_for_children,
                                         gpointer *result,
-
-                                        const gchar *tag);
+                                        const gchar *tag,
+                                        gchar **attrs);
 
 typedef gboolean (*sixtp_before_child_handler)(gpointer data_for_children,
                                                GSList* data_from_children,
@@ -50,7 +50,6 @@ typedef gboolean (*sixtp_before_child_handler)(gpointer data_for_children,
                                                gpointer parent_data,
                                                gpointer global_data,
                                                gpointer *result,
-                                               
                                                const gchar *tag,
                                                const gchar *child_tag);
 
@@ -60,7 +59,6 @@ typedef gboolean (*sixtp_after_child_handler)(gpointer data_for_children,
                                               gpointer parent_data,
                                               gpointer global_data,
                                               gpointer *result,
-                                              
                                               const gchar *tag,
                                               const gchar *child_tag,
                                               sixtp_child_result *child_result);
@@ -71,14 +69,12 @@ typedef gboolean (*sixtp_end_handler)(gpointer data_for_children,
                                       gpointer parent_data,
                                       gpointer global_data,
                                       gpointer *result,
-
                                       const gchar *tag);
 
 typedef gboolean (*sixtp_characters_handler)(GSList *sibling_data,
                                              gpointer parent_data,
                                              gpointer global_data,
                                              gpointer *result,
-
                                              const char *text,
                                              int length);
 
@@ -152,7 +148,6 @@ void sixtp_sax_end_handler(void *user_data, const xmlChar *name);
 sixtp* sixtp_new(void);
 
 void sixtp_destroy(sixtp *sp);
-void sixtp_destroy_node(sixtp *sp, GHashTable *corpses);
 
 void sixtp_set_start(sixtp *parser, sixtp_start_handler start_handler);
 void sixtp_set_before_child(sixtp *parser, sixtp_before_child_handler handler);

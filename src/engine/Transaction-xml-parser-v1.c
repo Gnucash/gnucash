@@ -42,12 +42,9 @@
  */
 
 static gboolean
-transaction_start_handler(GSList* sibling_data,
-                          gpointer parent_data,
-                          gpointer global_data,
-                          gpointer *data_for_children,
-                          gpointer *result,
-                          const gchar *tag)
+transaction_start_handler(GSList* sibling_data, gpointer parent_data,
+                          gpointer global_data, gpointer *data_for_children,
+                          gpointer *result, const gchar *tag, gchar **attrs)
 {
   /* pass the parent data down to the children */
   *data_for_children = parent_data;
@@ -89,12 +86,9 @@ transaction_start_handler(GSList* sibling_data,
  */
 
 static gboolean
-txn_restore_start_handler(GSList* sibling_data,
-                          gpointer parent_data,
-                          gpointer global_data,
-                          gpointer *data_for_children,
-                          gpointer *result,
-                          const gchar *tag)
+txn_restore_start_handler(GSList* sibling_data, gpointer parent_data,
+                          gpointer global_data, gpointer *data_for_children,
+                          gpointer *result, const gchar *tag, gchar **attrs)
 {
   Transaction *trans = xaccMallocTransaction();
   g_return_val_if_fail(trans, FALSE);
@@ -392,12 +386,10 @@ txn_rest_date_entered_end_handler(gpointer data_for_children,
  */
 
 static gboolean
-txn_restore_split_start_handler(GSList* sibling_data,
-                          gpointer parent_data,
-                          gpointer global_data,
-                          gpointer *data_for_children,
-                          gpointer *result,
-                          const gchar *tag)
+txn_restore_split_start_handler(GSList* sibling_data, gpointer parent_data,
+                                gpointer global_data,
+                                gpointer *data_for_children, gpointer *result,
+                                const gchar *tag, gchar **attrs)
 {
   Split *s = xaccMallocSplit();
   g_return_val_if_fail(s, FALSE);

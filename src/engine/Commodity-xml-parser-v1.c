@@ -10,6 +10,28 @@
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 
+/****************************************************************************/
+/* Commodity restorer.
+
+   Right now we just check to see that fields aren't duplicated.  If
+   fields don't show up, then we just use "".
+
+   We also check to see that we get a <fraction>.  If not, it's an
+   error.
+
+   Example:   
+     <commodity>
+       <restore>
+         <space>NASDAQ</space>
+         <id>XYZZY</id>
+         <name>Grue Enterprises</name>
+         <xcode>XXX</xcode>
+         <fraction>100</fraction>
+       </restore>
+     </commodity>
+
+ */
+
 /* ==================================================================== */
 
 /*********************************/
@@ -45,12 +67,10 @@ typedef struct {
 } CommodityParseInfo;
 
 static gboolean
-commodity_restore_start_handler(GSList* sibling_data,
-                          gpointer parent_data,
-                          gpointer global_data,
-                          gpointer *data_for_children,
-                          gpointer *result,
-                          const gchar *tag)
+commodity_restore_start_handler(GSList* sibling_data, gpointer parent_data,
+                                gpointer global_data,
+                                gpointer *data_for_children, gpointer *result,
+                                const gchar *tag, gchar **attrs)
 {
   CommodityParseInfo *cpi = (CommodityParseInfo *) g_new0(CommodityParseInfo, 1);
 
@@ -238,12 +258,10 @@ typedef struct {
 } CommodityLookupParseInfo;
 
 static gboolean
-generic_gnc_commodity_lookup_start_handler(GSList* sibling_data,
-                          gpointer parent_data,
-                          gpointer global_data,
-                          gpointer *data_for_children,
-                          gpointer *result,
-                          const gchar *tag)
+generic_gnc_commodity_lookup_start_handler(
+    GSList* sibling_data, gpointer parent_data, gpointer global_data,
+    gpointer *data_for_children, gpointer *result, const gchar *tag,
+    gchar **attrs)
 {
   CommodityLookupParseInfo *cpi = g_new0(CommodityLookupParseInfo, 1);
   g_return_val_if_fail(cpi, FALSE);

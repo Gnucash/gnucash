@@ -600,12 +600,9 @@ kvp_frame_slot_parser_new(sixtp *kvp_frame_parser) {
  */
 
 static gboolean
-kvp_frame_start_handler(GSList* sibling_data,
-                          gpointer parent_data,
-                          gpointer global_data,
-                          gpointer *data_for_children,
-                          gpointer *result,
-                          const gchar *tag)
+kvp_frame_start_handler(GSList* sibling_data, gpointer parent_data,
+                        gpointer global_data, gpointer *data_for_children,
+                        gpointer *result, const gchar *tag, gchar **attrs)
 {
   kvp_frame *f = kvp_frame_new();
   g_return_val_if_fail(f, FALSE);

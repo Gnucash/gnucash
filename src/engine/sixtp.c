@@ -6,6 +6,7 @@
 
 static short module = MOD_IO;
 
+/************************************************************************/
 gboolean
 is_child_result_from_node_named(sixtp_child_result *cr, const char *tag) {
   return((cr->type == SIXTP_CHILD_RESULT_NODE)
@@ -33,6 +34,64 @@ sixtp_child_result_print(sixtp_child_result *cr, FILE *f) {
   fprintf(f, "((tag %s) (data %p))", cr->tag, cr->data);
 }
 
+/************************************************************************/
+
+
+void
+sixtp_set_start(sixtp *parser, sixtp_start_handler start_handler) {
+  parser->start_handler = start_handler;
+}
+
+void
+sixtp_set_before_child(sixtp *parser, sixtp_before_child_handler handler) {
+  parser->before_child = handler;
+}
+
+void
+sixtp_set_after_child(sixtp *parser, sixtp_after_child_handler handler) {
+  parser->after_child = handler;
+}
+
+void
+sixtp_set_end(sixtp *parser, sixtp_end_handler end_handler) {
+  parser->end_handler = end_handler;
+}
+
+void
+sixtp_set_chars(sixtp *parser, sixtp_characters_handler char_handler) {
+  parser->characters_handler = char_handler;
+}
+
+void
+sixtp_set_cleanup_result(sixtp *parser,
+                         sixtp_result_handler handler) {
+  parser->cleanup_result = handler;
+}
+
+void
+sixtp_set_cleanup_chars(sixtp *parser,
+                        sixtp_result_handler handler) {
+  parser->cleanup_chars = handler;
+}
+
+void
+sixtp_set_fail(sixtp *parser,
+               sixtp_fail_handler handler) {
+  parser->fail_handler = handler;
+}
+
+void
+sixtp_set_result_fail(sixtp *parser,
+                      sixtp_result_handler handler) {
+  parser->result_fail_handler = handler;
+}
+
+void
+sixtp_set_chars_fail(sixtp *parser,
+                     sixtp_result_handler handler) {
+  parser->chars_fail_handler = handler;
+}
+
 sixtp *
 sixtp_new(void) {
   sixtp *s = g_new0(sixtp, 1);
@@ -46,6 +105,98 @@ sixtp_new(void) {
   }
   return(s);
 }
+
+sixtp*
+sixtp_new_full(sixtp_start_handler starter,
+               sixtp_before_child_handler cdbeforer,
+               sixtp_after_child_handler chafterer,
+               sixtp_end_handler ender,
+               sixtp_characters_handler charer,
+               sixtp_fail_handler failer,
+               sixtp_result_handler cleanresulter,
+               sixtp_result_handler cleancharer,
+               sixtp_result_handler resultfailer,
+               sixtp_result_handler charsfailer)
+{
+    sixtp *ret = sixtp_new();
+    g_return_val_if_fail(ret, NULL);
+    
+    sixtp_set_start(ret, starter);
+    sixtp_set_before_child(ret, cdbeforer);
+    sixtp_set_after_child(ret, chafterer);
+    sixtp_set_end(ret, ender);
+    sixtp_set_chars(ret, charer);
+    sixtp_set_fail(ret, failer);
+    sixtp_set_cleanup_result(ret, cleanresulter);
+    sixtp_set_cleanup_chars(ret, cleancharer);
+    sixtp_set_result_fail(ret, resultfailer);
+    sixtp_set_chars_fail(ret, charsfailer);
+
+    return ret;
+}
+    
+static void sixtp_destroy_child(gpointer key, gpointer value,
+                                gpointer user_data);
+
+static void
+sixtp_destroy_node(sixtp *sp, GHashTable *corpses) {
+  g_return_if_fail(sp);
+  g_return_if_fail(corpses);
+  g_hash_table_foreach(sp->children, sixtp_destroy_child, corpses);
+  g_hash_table_destroy(sp->children);
+  g_free(sp);
+}
+
+static void
+sixtp_destroy_child(gpointer key, gpointer value, gpointer user_data) {
+  GHashTable *corpses = (GHashTable *) user_data;
+  sixtp *child = (sixtp *) value;
+  gpointer lookup_key;
+  gpointer lookup_value;
+
+  PINFO ("Killing sixtp child under key <%s>", (char *) key); 
+  g_free(key);
+
+  if(!corpses) {
+    PERR("no corpses in sixtp_destroy_child <%s>\n", (char *) key);
+    return;
+  }
+  if(!child) {
+    PERR("no child in sixtp_destroy_child <%s>\n", (char *) key);
+    return;
+  }
+
+  if(!g_hash_table_lookup_extended(corpses, (gconstpointer) child,
+                                   &lookup_key, &lookup_value)) {
+    /* haven't killed this one yet. */
+    g_hash_table_insert(corpses, child, (gpointer) 1);
+    sixtp_destroy_node(child, corpses);
+  }
+}
+
+void
+sixtp_destroy(sixtp *sp) {
+  GHashTable *corpses;
+  g_return_if_fail(sp);
+  corpses = g_hash_table_new(g_direct_hash, g_direct_equal);
+  sixtp_destroy_node(sp, corpses);
+  g_hash_table_destroy(corpses);
+}
+
+
+/***********************************************************************/
+
+gboolean
+sixtp_add_sub_parser(sixtp *parser, const gchar* tag, sixtp *sub_parser) {
+  g_return_val_if_fail(parser, FALSE);
+  g_return_val_if_fail(tag, FALSE);
+  g_return_val_if_fail(sub_parser, FALSE);
+
+  g_hash_table_insert(parser->children, g_strdup(tag), (gpointer) sub_parser);
+  return(TRUE);
+}
+
+/************************************************************************/
 
 void
 sixtp_sax_start_handler(void *user_data,
@@ -123,7 +274,8 @@ sixtp_sax_start_handler(void *user_data,
                                  pdata->global_data,
                                  &new_frame->data_for_children,
                                  &new_frame->frame_data,
-                                 next_parser_tag);
+                                 next_parser_tag,
+                                 (gchar**)attrs);
   }
 }
 
@@ -251,115 +403,4 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name) {
                                          end_tag,
                                          child_result_data);
   }
-}
-
-void
-sixtp_destroy(sixtp *sp) {
-  GHashTable *corpses;
-  g_return_if_fail(sp);
-  corpses = g_hash_table_new(g_direct_hash, g_direct_equal);
-  sixtp_destroy_node(sp, corpses);
-  g_hash_table_destroy(corpses);
-}
-
-void
-sixtp_set_start(sixtp *parser, sixtp_start_handler start_handler) {
-  parser->start_handler = start_handler;
-}
-
-void
-sixtp_set_before_child(sixtp *parser, sixtp_before_child_handler handler) {
-  parser->before_child = handler;
-}
-
-void
-sixtp_set_after_child(sixtp *parser, sixtp_after_child_handler handler) {
-  parser->after_child = handler;
-}
-
-void
-sixtp_set_end(sixtp *parser, sixtp_end_handler end_handler) {
-  parser->end_handler = end_handler;
-}
-
-void
-sixtp_set_chars(sixtp *parser, sixtp_characters_handler char_handler) {
-  parser->characters_handler = char_handler;
-}
-
-void
-sixtp_set_cleanup_result(sixtp *parser,
-                         sixtp_result_handler handler) {
-  parser->cleanup_result = handler;
-}
-
-void
-sixtp_set_cleanup_chars(sixtp *parser,
-                        sixtp_result_handler handler) {
-  parser->cleanup_chars = handler;
-}
-
-void
-sixtp_set_fail(sixtp *parser,
-               sixtp_fail_handler handler) {
-  parser->fail_handler = handler;
-}
-
-void
-sixtp_set_result_fail(sixtp *parser,
-                      sixtp_result_handler handler) {
-  parser->result_fail_handler = handler;
-}
-
-void
-sixtp_set_chars_fail(sixtp *parser,
-                     sixtp_result_handler handler) {
-  parser->chars_fail_handler = handler;
-}
-
-static void
-sixtp_destroy_child(gpointer key, gpointer value, gpointer user_data) {
-  GHashTable *corpses = (GHashTable *) user_data;
-  sixtp *child = (sixtp *) value;
-  gpointer lookup_key;
-  gpointer lookup_value;
-
-  PINFO ("Killing sixtp child under key <%s>", (char *) key); 
-  g_free(key);
-
-  if(!corpses) {
-    PERR("no corpses in sixtp_destroy_child <%s>\n", (char *) key);
-    return;
-  }
-  if(!child) {
-    PERR("no child in sixtp_destroy_child <%s>\n", (char *) key);
-    return;
-  }
-
-  if(!g_hash_table_lookup_extended(corpses, (gconstpointer) child,
-                                   &lookup_key, &lookup_value)) {
-    /* haven't killed this one yet. */
-    g_hash_table_insert(corpses, child, (gpointer) 1);
-    sixtp_destroy_node(child, corpses);
-  }
-}
-
-void
-sixtp_destroy_node(sixtp *sp, GHashTable *corpses) {
-  g_return_if_fail(sp);
-  g_return_if_fail(corpses);
-  g_hash_table_foreach(sp->children, sixtp_destroy_child, corpses);
-  g_hash_table_destroy(sp->children);
-  g_free(sp);
-}
-
-
-gboolean
-sixtp_add_sub_parser(sixtp *parser, const gchar* tag, sixtp *sub_parser) {
-  g_return_val_if_fail(parser, FALSE);
-  g_return_val_if_fail(tag, FALSE);
-  g_return_val_if_fail(sub_parser, FALSE);
-
-  g_hash_table_insert(parser->children, g_strdup(tag), (gpointer) sub_parser);
-  return(TRUE);
 }

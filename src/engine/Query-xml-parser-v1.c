@@ -35,11 +35,12 @@
 
 static gboolean
 query_server_start_handler(GSList* sibling_data,
-                          gpointer parent_data,
-                          gpointer global_data,
-                          gpointer *data_for_children,
-                          gpointer *result,
-                          const gchar *tag)
+                           gpointer parent_data,
+                           gpointer global_data,
+                           gpointer *data_for_children,
+                           gpointer *result,
+                           const gchar *tag,
+                           gchar **attrs)
 {
   return(TRUE);
 }
@@ -87,12 +88,9 @@ query_server_end_handler(gpointer data_for_children,
  */
 
 static gboolean
-query_start_handler(GSList* sibling_data,
-                          gpointer parent_data,
-                          gpointer global_data,
-                          gpointer *data_for_children,
-                          gpointer *result,
-                          const gchar *tag)
+query_start_handler(GSList* sibling_data, gpointer parent_data,
+                    gpointer global_data, gpointer *data_for_children,
+                    gpointer *result, const gchar *tag, gchar **attrs)
 {
   return(TRUE);
 }
@@ -140,12 +138,9 @@ query_end_handler(gpointer data_for_children,
  */
 
 static gboolean
-query_restore_start_handler(GSList* sibling_data,
-                          gpointer parent_data,
-                          gpointer global_data,
-                          gpointer *data_for_children,
-                          gpointer *result,
-                          const gchar *tag)
+query_restore_start_handler(GSList* sibling_data, gpointer parent_data,
+                            gpointer global_data, gpointer *data_for_children,
+                            gpointer *result, const gchar *tag, gchar **attrs)
 {
   Query *q;
   q = xaccMallocQuery();
@@ -237,12 +232,9 @@ query_restore_fail_handler(gpointer data_for_children,
  */
 
 static gboolean
-query_and_start_handler(GSList* sibling_data,
-                          gpointer parent_data,
-                          gpointer global_data,
-                          gpointer *data_for_children,
-                          gpointer *result,
-                          const gchar *tag)
+query_and_start_handler(GSList* sibling_data, gpointer parent_data,
+                        gpointer global_data, gpointer *data_for_children,
+                        gpointer *result, const gchar *tag, gchar **attrs)
 {
   Query *q;
 
@@ -346,12 +338,11 @@ qrestore_genericpred_end_handler(gpointer data_for_children,
  */
 
 static gboolean
-qrestore_datepred_start_handler(GSList* sibling_data,
-                          gpointer parent_data,
-                          gpointer global_data,
-                          gpointer *data_for_children,
-                          gpointer *result,
-                          const gchar *tag)
+qrestore_datepred_start_handler(GSList* sibling_data, gpointer parent_data,
+                                gpointer global_data,
+                                gpointer *data_for_children,
+                                gpointer *result, const gchar *tag,
+                                gchar **attrs)
 {
   DatePredicateData *dp = g_new (DatePredicateData, 1);
   g_return_val_if_fail(dp, FALSE);

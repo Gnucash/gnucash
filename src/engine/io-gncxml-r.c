@@ -103,10 +103,9 @@ sixtp_handle_catastrophe(sixtp_sax_data *sax_data) {
 
   while(*stack) {
     sixtp_stack_frame *current_frame = (sixtp_stack_frame *) (*stack)->data;
-    sixtp_fail_handler fail_handler = current_frame->parser->fail_handler;
 
     /* cleanup the current frame */
-    if(fail_handler) {
+    if(current_frame->parser->fail_handler) {
       GSList *sibling_data;
       gpointer parent_data;
 
@@ -121,19 +120,21 @@ sixtp_handle_catastrophe(sixtp_sax_data *sax_data) {
         sibling_data = parent_frame->data_from_children;
       }
 
-      fail_handler(current_frame->data_for_children,
-                   current_frame->data_from_children,
-                   sibling_data,
-                   parent_data,
-                   sax_data->global_data,
-                   &current_frame->frame_data,
-                   current_frame->tag);
+      current_frame->parser->fail_handler(current_frame->data_for_children,
+                                          current_frame->data_from_children,
+                                          sibling_data,
+                                          parent_data,
+                                          sax_data->global_data,
+                                          &current_frame->frame_data,
+                                          current_frame->tag);
     }
 
     /* now cleanup any children's results */
     for(lp = current_frame->data_from_children; lp; lp = lp->next) {
       sixtp_child_result *cresult = (sixtp_child_result *) lp->data;
-      if(cresult->fail_handler) cresult->fail_handler(cresult);
+      if(cresult->fail_handler) {
+          cresult->fail_handler(cresult);
+      }
     }
 
     *stack = sixtp_pop_and_destroy_frame(*stack);
@@ -180,7 +181,7 @@ sixtp_setup_parser (sixtp *sixtp,
                            sax_data->global_data,
                            &top_frame->data_for_children,
                            &top_frame->frame_data,
-                           NULL);
+                           NULL, NULL);
   }
   
   if(!sax_data->parsing_ok)  {
@@ -344,45 +345,7 @@ typedef struct {
 } GNCParseStatus;
 
 
-
-/****************************************************************************/
-/* Commodity restorer.
-
-   Right now we just check to see that fields aren't duplicated.  If
-   fields don't show up, then we just use "".
-
-   We also check to see that we get a <fraction>.  If not, it's an
-   error.
-
-   Example:   
-     <commodity>
-       <restore>
-         <space>NASDAQ</space>
-         <id>XYZZY</id>
-         <name>Grue Enterprises</name>
-         <xcode>XXX</xcode>
-         <fraction>100</fraction>
-       </restore>
-     </commodity>
-
- */
-
-/**************/
-/* <commodity>
- *
- * Does nothing.
-*/
-
-
-/* ==================================================================== */
-
-
-
 /* ================================================================= */
-/* ================================================================= */
-/* ================================================================= */
-/* ================================================================= */
-/****************************************************************************/
 /* <version> (lineage <gnc>)
    
    Fancy and strange - look for an integer version number.  If we get

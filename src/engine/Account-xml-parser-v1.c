@@ -43,11 +43,12 @@
 
 static gboolean
 account_start_handler(GSList* sibling_data,
-                          gpointer parent_data,
-                          gpointer global_data,
-                          gpointer *data_for_children,
-                          gpointer *result,
-                          const gchar *tag)
+                      gpointer parent_data,
+                      gpointer global_data,
+                      gpointer *data_for_children,
+                      gpointer *result,
+                      const gchar *tag,
+                      gchar **attrs)
 {
   /* pass the parent data down to the children */
   *data_for_children = parent_data;
@@ -77,11 +78,12 @@ account_start_handler(GSList* sibling_data,
 
 static gboolean
 account_restore_start_handler(GSList* sibling_data,
-                          gpointer parent_data,
-                          gpointer global_data,
-                          gpointer *data_for_children,
-                          gpointer *result,
-                          const gchar *tag)
+                              gpointer parent_data,
+                              gpointer global_data,
+                              gpointer *data_for_children,
+                              gpointer *result,
+                              const gchar *tag,
+                              gchar **attrs)
 {
   Account *acc = xaccMallocAccount();
   

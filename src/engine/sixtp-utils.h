@@ -65,7 +65,7 @@ gboolean generic_timespec_start_handler(GSList* sibling_data,
                                         gpointer global_data,
                                         gpointer *data_for_children,
                                         gpointer *result,
-                                        const gchar *tag);
+                                        const gchar *tag, gchar **attrs);
 
 gboolean timespec_parse_ok(TimespecParseInfo *info);
 
