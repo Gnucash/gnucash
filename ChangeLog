@@ -1,3 +1,7 @@
+2003-02-12  Derek Atkins  <derek@ihtfp.com>
+
+	* applied Matthew Vanecek's patch to postgres/kvp-sql.c
+
 2003-02-10  Herbert Thoma  <herbie@hthoma.de>
 
 	* src/app-utils/gnc-ui-util.c:
