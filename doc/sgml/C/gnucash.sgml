@@ -4,8 +4,8 @@
 <!entity xaccacctypes system "xacc-acctypes.sgml">
 <!entity xaccnewacctwin system "xacc-newacctwin.sgml">
 <!entity xaccadjbalwin system "xacc-adjbalwin.sgml">
-<!entity xaccassetbarcharts "xacc-asset-liability-barcharts.sgml">
-<!entity xaccassetpiecharts "xacc-asset-liability-piecharts.sgml">
+<!entity xaccassetbarcharts system "xacc-asset-liability-barcharts.sgml">
+<!entity xaccassetpiecharts system "xacc-asset-liability-piecharts.sgml">
 <!entity xaccapar system "xacc-apar.sgml">
 <!entity xacccommodity system "xacc-commodity.sgml">
 <!entity xacccommonreportoptions system "xacc-common-report-options.sgml">
@@ -70,10 +70,12 @@
 &xaccdoubleentry;
 &xacceuro;
 &xaccdateinput;
+&xaccgnomemdi;
 &xaccincomeexpense;
 &xaccincomeexpensebarcharts;
 &xaccincomeexpensepiecharts;
 &xacclocatingtxns;
+&xaccmulticolumnviewreports;
 &xaccpreferences;
 &xaccchartofaccts;
 &xaccuserdocs;
