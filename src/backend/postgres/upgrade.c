@@ -26,6 +26,8 @@
 #include "config.h"
 
 #include <libpq-fe.h> 
+#include <stdlib.h>  
+#include <glib.h>
 
 #include "PostgresBackend.h"
 #include "messages.h"
@@ -221,6 +223,7 @@ put_iguid_in_tables (PGBackend *be)
        " (1,1,1,'End Put iGUID in Main Tables');";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
+   
    execQuery(be, "COMMIT");
 }
 
@@ -274,6 +277,7 @@ add_kvp_timespec_tables (PGBackend *be)
   char *p;
 
   execQuery(be, "BEGIN");
+  
   p = "LOCK TABLE gncVersion IN ACCESS EXCLUSIVE MODE;\n "
       "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
       " (1,3,0,'Start Add kvp_timespec tables');";
@@ -299,6 +303,7 @@ add_kvp_timespec_tables (PGBackend *be)
       " (1,3,1,'End Add kvp_timespec tables');";
   SEND_QUERY (be,p, );
   FINISH_QUERY(be->connection);
+  
   execQuery(be, "COMMIT");
 }
 
@@ -307,10 +312,12 @@ add_kvp_timespec_tables (PGBackend *be)
 static void
 add_multiple_book_support (PGBackend *be)
 {
-   char buff[4000];
-   char *p;
- 
+   gchar *buff;
+   gchar *p;
+   const gchar *guid;
+   
    execQuery(be, "BEGIN");
+   
    p = "LOCK TABLE gncAccount IN ACCESS EXCLUSIVE MODE;\n"
        "LOCK TABLE gncAccountTrail IN ACCESS EXCLUSIVE MODE;\n"
        "LOCK TABLE gncPrice IN ACCESS EXCLUSIVE MODE;\n"
@@ -340,45 +347,47 @@ add_multiple_book_support (PGBackend *be)
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
  
-   p = "ALTER TABLE gncAccount ADD COLUMN bookGuid CHAR(32) NOT NULL;\n"
-       "ALTER TABLE gncAccountTrail ADD COLUMN bookGuid CHAR(32) NOT NULL;\n"
-       "ALTER TABLE gncPrice ADD COLUMN bookGuid CHAR(32) NOT NULL;\n"
-       "ALTER TABLE gncPriceTrail ADD COLUMN bookGuid CHAR(32) NOT NULL;\n";
+   p = "ALTER TABLE gncAccount ADD COLUMN bookGuid CHAR(32);\n"
+       "ALTER TABLE gncAccountTrail ADD COLUMN bookGuid CHAR(32);\n"
+       "ALTER TABLE gncPrice ADD COLUMN bookGuid CHAR(32);\n"
+       "ALTER TABLE gncPriceTrail ADD COLUMN bookGuid CHAR(32);\n";
+   
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
- 
-   p = buff;
-   p = stpcpy (p, "UPDATE gncAccount SET bookGuid = '");
-   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
-   p = stpcpy (p, "';\n");
-   p = stpcpy (p, "UPDATE gncAccountTrail SET bookGuid = '");
-   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
-   p = stpcpy (p, "';\n");
+
+   guid = guid_to_string(gnc_book_get_guid(pgendGetBook(be)));
+   PINFO("guid = %s", guid);
+
+   buff = g_strdup_printf("UPDATE gncAccount SET bookGuid = '%s';\n"
+                          "UPDATE gncAccountTrail SET bookGuid = '%s';\n"
+                          "UPDATE gncPrice SET bookGuid = '%s';\n"
+                          "UPDATE gncPriceTrail SET bookGuid = '%s';\n",
+                          guid, guid, guid, guid);
+                          
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
 
-   p = buff;
-   p = stpcpy (p, "UPDATE gncPrice SET bookGuid = '");
-   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
-   p = stpcpy (p, "';\n");
-   p = stpcpy (p, "UPDATE gncPriceTrail SET bookGuid = '");
-   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
-   p = stpcpy (p, "';\n");
+   g_free(buff);
+
+   buff = g_strdup_printf("INSERT INTO gncBook (bookGuid, book_open, version, iguid) "
+                          "VALUES ('%s', 'y', 1, 0);", guid);
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
 
-   p = buff;
-   p = stpcpy (p, "INSERT INTO gncBook (bookGuid, book_open, version, iguid) "
-                  "VALUES ('");
-   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
-   p = stpcpy (p, "', 'y', 1, 0);");
-   SEND_QUERY (be,buff, );
+   g_free(buff);
+
+   p = "ALTER TABLE gncAccount ALTER COLUMN bookGuid SET NOT NULL;\n"
+       "ALTER TABLE gncAccountTrail ALTER COLUMN bookGuid SET NOT NULL;\n"
+       "ALTER TABLE gncPrice ALTER COLUMN bookGuid SET NOT NULL;\n"
+       "ALTER TABLE gncPriceTrail ALTER COLUMN bookGuid SET NOT NULL;\n";
+   SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
    p = "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
        " (1,4,1,'End Add multiple book support');";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
+
    execQuery(be, "COMMIT");
 }
 
