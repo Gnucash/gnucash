@@ -33,22 +33,19 @@ AC_C_BIGENDIAN
 
 # *******************************************
 # check for UI libs:
-LIBS="-lXmu -lXext -lX11 -lSM -lICE"
-#AC_CHECK_LIB(SM, ???)
-#AC_CHECK_LIB(ICE, ???)
-AC_CHECK_LIB(Xt, XtVaCreateWidget,
-	LIBS="-lXt $LIBS",
-	AC_MSG_ERROR(Must have libXt) )
-AC_CHECK_LIB(Xm, XmCreateMainWindow,
-	LIBS="-lXm $LIBS",
-	AC_MSG_ERROR(Must have libXm) )
-AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage,
-	AC_DEFINE(HAVE_XPM,1) LIBS="-lXpm $LIBS",
-	AC_DEFINE(HAVE_XPM,0) )
 AC_PATH_X
+AC_PATH_XTRA
 AC_SUBST(x_includes)
 AC_SUBST(x_libraries)
+LIBS="-lXm -lXmu -lXt -lXext $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
+AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage,
+        AC_DEFINE(HAVE_XPM,1) LIBS="-lXpm $LIBS",
+        AC_DEFINE(HAVE_XPM,0) )
 AC_SUBST(LIBS)
 
 AC_CONFIG_HEADER(config.h)
-AC_OUTPUT(Makefile src/Makefile lib/Makefile lib/libhtmlw/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile)
+AC_OUTPUT(Makefile src/Makefile lib/Makefile lib/libhtmlw/Makefile
+lib/Xbae-4.6.
+2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile
+lib/ComboBox-1.33/Makefile)
+

@@ -27,6 +27,7 @@ Normally, to build and install xacc, all you have to do is:
 
   # ./configure
   # make
+  # make depend
   # make install
 
 You can also build xacc in a seperate directory, which is
