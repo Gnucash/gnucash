@@ -29,6 +29,7 @@ struct _gncOrder {
   GUID		guid;
   char *	id;
   char *	notes;
+  char *	printname;
   GncOwner	owner;
   GList *	entries;
   Timespec 	opened;
@@ -85,6 +86,8 @@ void gncOrderDestroy (GncOrder *order)
   CACHE_REMOVE (order->id);
   CACHE_REMOVE (order->notes);
   remObj (order);
+
+  if (order->printname) g_free (order->printname);
 
   g_free (order);
 }
@@ -335,6 +338,21 @@ static void _gncOrderForeach (GNCBook *book, foreachObjectCB cb,
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
+static const char * _gncOrderPrintable (GncOrder *order)
+{
+  g_return_val_if_fail (order, NULL);
+
+  if (order->dirty || order->printname == NULL) {
+    if (order->printname) g_free (order->printname);
+
+    order->printname =
+      g_strdup_printf ("%s%s", order->id,
+		       gncOrderIsClosed (order) ? _(" (closed)") : "");
+  }
+
+  return order->printname;
+}
+
 static GncObject_t gncOrderDesc = {
   GNC_OBJECT_VERSION,
   _GNC_MOD_NAME,
@@ -342,7 +360,7 @@ static GncObject_t gncOrderDesc = {
   _gncOrderCreate,
   _gncOrderDestroy,
   _gncOrderForeach,
-  NULL				/* printable */
+  _gncOrderPrintable,
 };
 
 gboolean gncOrderRegister (void)

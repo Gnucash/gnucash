@@ -32,6 +32,7 @@ struct _gncInvoice {
   char *	id;
   char *	notes;
   char *	terms;
+  char *	printname;
   GList * 	entries;
   GncOwner	owner;
   Timespec 	date_opened;
@@ -99,6 +100,8 @@ void gncInvoiceDestroy (GncInvoice *invoice)
   CACHE_REMOVE (invoice->notes);
   g_list_free (invoice->entries);
   remObj (invoice);
+
+  if (invoice->printname) g_free (invoice->printname);
 
   g_free (invoice);
 }
@@ -709,6 +712,22 @@ static void _gncInvoiceForeach (GNCBook *book, foreachObjectCB cb,
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
+static const char * _gncInvoicePrintable (GncInvoice *invoice)
+{
+  g_return_val_if_fail (invoice, NULL);
+
+  if (invoice->dirty || invoice->printname == NULL) {
+    if (invoice->printname) g_free (invoice->printname);
+
+    invoice->printname =
+      g_strdup_printf ("%s%s%s", invoice->id,
+		       gncInvoiceIsPosted (invoice) ? _(" (closed)") : "",
+		       gncInvoiceIsPaid (invoice) ? _(" (paid)") : "");
+  }
+
+  return invoice->printname;
+}
+
 static GncObject_t gncInvoiceDesc = {
   GNC_OBJECT_VERSION,
   _GNC_MOD_NAME,
@@ -716,7 +735,7 @@ static GncObject_t gncInvoiceDesc = {
   _gncInvoiceCreate,
   _gncInvoiceDestroy,
   _gncInvoiceForeach,
-  NULL				/* printable */
+  _gncInvoicePrintable,
 };
 
 gboolean gncInvoiceRegister (void)

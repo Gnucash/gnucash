@@ -64,15 +64,7 @@
 	<name>button1</name>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
-	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
-      </widget>
-
-      <widget>
-	<class>GtkButton</class>
-	<name>cancel_button</name>
-	<can_default>True</can_default>
-	<can_focus>True</can_focus>
-	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
+	<stock_button>GNOME_STOCK_BUTTON_CLOSE</stock_button>
       </widget>
 
       <widget>
@@ -873,7 +865,19 @@
 	    </child>
 
 	    <widget>
-	      <class>Placeholder</class>
+	      <class>GtkHBox</class>
+	      <name>owner_hbox</name>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
+	      <child>
+		<padding>0</padding>
+		<expand>True</expand>
+		<fill>True</fill>
+	      </child>
+
+	      <widget>
+		<class>Placeholder</class>
+	      </widget>
 	    </widget>
 
 	    <widget>
@@ -998,11 +1002,6 @@
       <name>vbox1</name>
       <homogeneous>False</homogeneous>
       <spacing>0</spacing>
-      <child>
-	<padding>0</padding>
-	<expand>False</expand>
-	<fill>False</fill>
-      </child>
 
       <widget>
 	<class>GtkHBox</class>

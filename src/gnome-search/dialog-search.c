@@ -85,6 +85,9 @@ gnc_search_dialog_result_clicked (GtkButton *button, GNCSearchWindow *sw)
 
   if (!res)
     gnc_search_dialog_destroy (sw);
+
+  /* Update the display */
+  gnc_search_dialog_display_results (sw);
 }
 
 static void
@@ -330,8 +333,20 @@ search_new_item_cb (GtkButton *button, GNCSearchWindow *sw)
     sw->selected_item = res;
     if (!retval)
       gnc_search_dialog_destroy (sw);
-    //    else
-    //      gnc_search_dialog_display_results (sw);
+
+    else {
+      if (!sw->q) {
+	if (!sw->start_q) {
+	  sw->start_q = gncQueryNew ();
+	  gncQuerySetBook (sw->start_q, gnc_get_current_book ());
+	}
+	sw->q = gncQueryCopy (sw->start_q);
+      }
+
+      /* XXX: add an "object match" so this object shows up??? */
+
+      gnc_search_dialog_display_results (sw);
+    }
   }
 }
 
