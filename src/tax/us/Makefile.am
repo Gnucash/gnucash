@@ -23,4 +23,8 @@ gncscmmod_DATA = us.scm
 gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = txf.scm txf-help.scm 
 
+EXTRA_DIST = \
+  ${gncscmmod_DATA} \
+  ${gncscm_DATA}
+
 CLEANFILES += gnucash tax

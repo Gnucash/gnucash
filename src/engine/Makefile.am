@@ -41,6 +41,7 @@ noinst_HEADERS = \
   BackendP.h \
   DateUtils.h \
   FreqSpec.h \
+  FreqSpecP.h \
   GNCId.h \
   GNCIdP.h \
   Group.h \

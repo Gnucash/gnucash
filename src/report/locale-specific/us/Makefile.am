@@ -25,4 +25,8 @@ gncscmmod_DATA = us.scm
 gncscmothermoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
 gncscmothermod_DATA = taxtxf.scm 
 
+EXTRA_DIST = \
+  ${gncscmmod_DATA} \
+  ${gncscmothermod_DATA}
+
 CLEANFILES += gnucash report locale-specific us

@@ -1,15 +1,17 @@
-SUBDIRS=. test
+SUBDIRS = . test
 
-pkglib_LTLIBRARIES=libgncmod-report-system.la
+pkglib_LTLIBRARIES = libgncmod-report-system.la
 
-libgncmod_report_system_la_SOURCES=gncmod-report-system.c 
-libgncmod_report_system_la_LDFLAGS=-module
+libgncmod_report_system_la_SOURCES = gncmod-report-system.c 
+libgncmod_report_system_la_LDFLAGS = -module
 libgncmod_report_system_la_LIBADD = \
   -L../../gnc-module -L../../gnc-module/.libs -lgncmodule \
   ${GLIB_LIBS} ${GUILE_LIBS} 
 
 
-INCLUDES=-I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS}
+INCLUDES = \
+  -I${top_srcdir}/src/gnc-module \
+  ${GLIB_CFLAGS}
 
 .scm-links:
 	rm -f gnucash report
@@ -17,13 +19,13 @@ INCLUDES=-I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS}
 	ln -sf . report 
 	touch .scm-links
 
-gncscmmoddir=${GNC_SHAREDIR}/guile-modules/gnucash/report/
-gncscmmod_DATA=report-system.scm
+gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
+gncscmmod_DATA = report-system.scm
 
-noinst_DATA=.scm-links
+noinst_DATA = .scm-links
 
-gncscmdir=${GNC_SHAREDIR}/scm
-gncscm_DATA=\
+gncscmdir = ${GNC_SHAREDIR}/scm
+gncscm_DATA = \
      commodity-utilities.scm  \
      html-barchart.scm \
      html-document.scm \
@@ -37,6 +39,8 @@ gncscm_DATA=\
      options-utilities.scm \
      report-utilities.scm \
      report.scm 
+
+EXTRA_DIST = ${gncscmmod_DATA} ${gncscm_DATA}
 
 CLEANFILES += gnucash report .scm-links
 
