@@ -36,6 +36,12 @@ Please put the keys in alphabetical order.
 
 --------------------------------------------------------------------------
 
+Name: from-sched-xaction
+Type: GUID
+Entities: Transaction
+Use: Identifies that the Transaction was created from a ScheduledTransaction,
+     and stores the GUID of that SX.
+
 Name: last-num
 Type: string
 Entities: Account
@@ -172,14 +178,6 @@ Type: string
 Entities: Split associated with a SchedXaction
 Use: Formula for the debit.  Either the credit or the 
 debit formula must be empty.
-
-
-
-Name: from-sched-xaction
-Type: GUID
-Entities: Transaction
-Use: Identifies that the Transaction was created from a ScheduledTransaction,
-     and stores the GUID of that SX.
 
 Name: user-keys
 Type: frame
