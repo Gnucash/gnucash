@@ -39,6 +39,7 @@ GNUCASH_SGML_FILES = \
 	xacc-tax-report.sgml \
 	xacc-ticker.sgml \
 	xacc-trans-report.sgml \
+	xacc-txf-categories.sgml \
 	xacc-txf-export-anomalies.sgml \
 	xacc-txf-export.sgml \
         xacc-userdocs.sgml \
