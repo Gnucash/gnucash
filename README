@@ -543,20 +543,15 @@ Submitting a Patch:
     make sure that all of your changes (and no other changes) are
     present in the file.
 
-    Do not submit this file!
+    If the patch is relatively small, send this file as an attachment
+    to gnucash-patches@gnucash.org and you are done. Otherwise,
+    continue.
 
   gnucash.diff.gz: This is a gzipped version of the above file.
-    Do not submit this file!
+    If you want to send the patch as an attachment, send this
+    file to gnucash-patches@gnucash.org. Otherwise, continue.
 
   gnucash.diff.gz.uue: This is a uuencoded (ascii-encoded) version of
-    the above file.
-
-    This is the file you submit.
-
-  Send gnucash.diff.gz.uue to gnucash-patches@gnucash.org
+    the above file. Send this file to gnucash-patches@gnucash.org.
 
   Thanks in advance for your contribution!
-
-Local Variables:
-mode: text
-End:
