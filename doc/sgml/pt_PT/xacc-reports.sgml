@@ -151,12 +151,12 @@ como funciona examinando o ficheiro <filename>src/scm/report/hello-world.scm
 </filename> na árvore de código do <application>GnuCash</application>.
 </para>
 
-<para>Também terá de aceder a dados do "motor" para obter informação 
-para o seu relatório. Isto é conseguido através de um conjunto de funções 
-de envolvimento (wrapper) Scheme que se encontram documentadas no ficheiro 
-<filename>src/g-wrap/gnc.html</filename>. Poderá desejar examinar alguns dos 
-outros relatórios em <filename> src/scm/report </filename> para uma indicação 
-de como as funções são utilizadas.
+<para>Também terá de aceder a dados do "motor" para obter informação para o 
+seu relatório. Isto é conseguido através de um conjunto de funções de envolvimento 
+(wrapper) <link linkend="scheme"> Scheme </link> que se encontram documentadas 
+no ficheiro <filename>src/g-wrap/gnc.html</filename>. Poderá desejar examinar 
+alguns dos outros relatórios em <filename> src/scm/report </filename> para uma 
+indicação de como as funções são utilizadas.
 </para>
 
 <para>De momento, os relatórios são produzidos chamando uma API que gera HTML, 

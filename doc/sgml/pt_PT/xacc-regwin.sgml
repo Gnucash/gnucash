@@ -90,7 +90,7 @@
      <screeninfo>Registo de Contas - Registo com Parcelas Automáticas</screeninfo>
       <mediaobject>
    <imageobject>
-            <imagedata fileref="image/autosplitledger" srccredit="wilddev">
+            <imagedata fileref="image/autosplitledger.png" srccredit="wilddev">
          </imageobject>
       </mediaobject>
     </screenshot>
@@ -111,7 +111,7 @@
      <screeninfo>O Registo de Contas - Diário de Transacções</screeninfo>
       <mediaobject>
         <imageobject>
-         <imagedata fileref="image/transactionjrnl" srccredit="wilddev">
+         <imagedata fileref="image/transactionjrnl.png" srccredit="wilddev">
         </imageobject>
        </mediaobject>
     </screenshot>
