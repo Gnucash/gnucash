@@ -77,6 +77,8 @@ const gchar *entry_version_string = "2.0.0";
 #define entry_order_string "entry:order"
 #define entry_invoice_string "entry:invoice"
 #define entry_bill_string "entry:bill"
+#define entry_billable_string "entry:billable"
+#define entry_billto_string "entry:billto"
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -155,9 +157,16 @@ entry_dom_tree_create (GncEntry *entry)
 					  gncInvoiceGetGUID (invoice)));
 
     invoice = gncEntryGetBill (entry);
-    if (invoice)
+    if (invoice) {
+      GncOwner *owner;
       xmlAddChild (ret, guid_to_dom_tree (entry_bill_string,
 					  gncInvoiceGetGUID (invoice)));
+      xmlAddChild(ret, int_to_dom_tree(entry_billable_string,
+				       gncEntryGetBillable (entry)));
+      owner = gncEntryGetBillTo (entry);
+      if (owner && owner->type != GNC_OWNER_NONE)
+	xmlAddChild (ret, gnc_owner_to_dom_tree (entry_billto_string, owner));
+    }
 
     return ret;
 }
@@ -204,6 +213,18 @@ set_numeric(xmlNodePtr node, GncEntry* entry,
   func(entry, *num);
   g_free(num);
   return TRUE;
+}
+
+static gboolean
+set_boolean(xmlNodePtr node, GncEntry* entry,
+	    void (*func)(GncEntry *entry, gboolean val))
+{
+    gint64 val;
+
+    if (!dom_tree_to_integer(node, &val))
+      return FALSE;
+    func (entry, (gboolean)val);
+    return TRUE;
 }
 
 static gboolean
@@ -353,24 +374,14 @@ static gboolean
 entry_taxable_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
-    gint64 val;
-
-    dom_tree_to_integer(node, &val);
-    gncEntrySetTaxable(pdata->entry, (gint)val);
-
-    return TRUE;
+    return set_boolean (node, pdata->entry, gncEntrySetTaxable);
 }
 
 static gboolean
 entry_taxincluded_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
-    gint64 val;
-
-    dom_tree_to_integer(node, &val);
-    gncEntrySetTaxIncluded(pdata->entry, (gint)val);
-
-    return TRUE;
+    return set_boolean (node, pdata->entry, gncEntrySetTaxIncluded);
 }
 
 static gboolean
@@ -457,6 +468,27 @@ entry_bill_handler (xmlNodePtr node, gpointer entry_pdata)
     return TRUE;
 }
 
+static gboolean
+entry_billable_handler (xmlNodePtr node, gpointer entry_pdata)
+{
+    struct entry_pdata *pdata = entry_pdata;
+    return set_boolean (node, pdata->entry, gncEntrySetBillable);
+}
+
+static gboolean
+entry_billto_handler (xmlNodePtr node, gpointer entry_pdata)
+{
+  struct entry_pdata *pdata = entry_pdata;
+  GncOwner billto;
+  gboolean ret;
+
+  ret = gnc_dom_tree_to_owner (node, &billto, pdata->book);
+  if (ret)
+    gncEntrySetBillTo (pdata->entry, &billto);
+
+  return ret;
+}
+
 static struct dom_tree_handler entry_handlers_v2[] = {
     { entry_guid_string, entry_guid_handler, 1, 0 },
     { entry_date_string, entry_date_handler, 1, 0 },
@@ -476,6 +508,8 @@ static struct dom_tree_handler entry_handlers_v2[] = {
     { entry_order_string, entry_order_handler, 0, 0 },
     { entry_invoice_string, entry_invoice_handler, 0, 0 },
     { entry_bill_string, entry_bill_handler, 0, 0 },
+    { entry_billable_string, entry_billable_handler, 0, 0 },
+    { entry_billto_string, entry_billto_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 

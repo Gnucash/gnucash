@@ -181,6 +181,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
   load_inv_type_cells (ledger, ENTRY_INV_CELL, FALSE);
   load_inv_type_cells (ledger, ENTRY_TAXABLE_CELL, TRUE);
   load_inv_type_cells (ledger, ENTRY_TAXINCLUDED_CELL, FALSE);
+  load_inv_type_cells (ledger, ENTRY_BILLABLE_CELL, FALSE);
   gnc_entry_ledger_load_xfer_cells (ledger);
 
   blank_entry = gnc_entry_ledger_get_blank_entry (ledger);

@@ -55,6 +55,8 @@ void gncEntrySetDiscountHow (GncEntry *entry, GncDiscountHow how);
 void gncEntrySetTaxable (GncEntry *entry, gboolean taxable);
 void gncEntrySetTaxIncluded (GncEntry *entry, gboolean tax_included);
 void gncEntrySetTaxTable (GncEntry *entry, GncTaxTable *table);
+void gncEntrySetBillable (GncEntry *entry, gboolean billable);
+void gncEntrySetBillTo (GncEntry *entry, GncOwner *billto);
 
 void gncEntrySetAccount (GncEntry *entry, Account *acc);
 
@@ -75,6 +77,8 @@ GncDiscountHow gncEntryGetDiscountHow (GncEntry *entry);
 gboolean gncEntryGetTaxable (GncEntry *entry);
 gboolean gncEntryGetTaxIncluded (GncEntry *entry);
 GncTaxTable * gncEntryGetTaxTable (GncEntry *entry);
+gboolean gncEntryGetBillable (GncEntry *entry);
+GncOwner *gncEntryGetBillTo (GncEntry *entry);
 
 void gncEntryCopy (const GncEntry *src, GncEntry *dest);
 
@@ -125,6 +129,8 @@ int gncEntryCompare (GncEntry *a, GncEntry *b);
 #define ENTRY_NOTES	"notes"
 #define ENTRY_QTY	"qty"
 #define ENTRY_PRICE	"price"
+#define ENTRY_BILLABLE	"billable?"
+#define ENTRY_BILLTO	"bill-to"
 
 #define ENTRY_ORDER	"order"
 #define ENTRY_INVOICE	"invoice"

@@ -108,6 +108,11 @@ static const char * get_taxval_label (VirtualLocation virt_loc, gpointer data)
   return _("Tax");
 }
 
+static const char * get_billable_label (VirtualLocation virt_loc, gpointer data)
+{
+  return _("Billable?");
+}
+
 /* GET_ENTRY */
 
 static const char * get_acct_entry (VirtualLocation virt_loc,
@@ -429,6 +434,24 @@ static const char * get_taxval_entry (VirtualLocation virt_loc,
   return xaccPrintAmount (value, gnc_default_print_info (TRUE));
 }
 
+static const char * get_billable_entry (VirtualLocation virt_loc,
+					gboolean translate,
+					gboolean *conditionally_changed,
+					gpointer user_data)
+{
+  GncEntryLedger *ledger = user_data;
+  GncEntry *entry;
+  static char s[2] = { ' ', '\0' };
+
+  entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
+  if (gncEntryGetBillable (entry))
+    s[0] = 'X';
+  else
+    s[0] = ' ';
+
+  return s;
+}
+
 /* GET_HELP */
 
 static char * get_acct_help (VirtualLocation virt_loc, gpointer user_data)
@@ -663,6 +686,15 @@ static char * get_taxval_help (VirtualLocation virt_loc, gpointer user_data)
   return g_strdup (help);
 }
 
+static char * get_billable_help (VirtualLocation virt_loc, gpointer user_data)
+{
+  const char *help;
+
+  help = _("Is this entry billable to a customer or job?");
+
+  return g_strdup (help);
+}
+
 /* GET_IO_FLAGS */
 
 static CellIOFlags get_standard_io_flags (VirtualLocation virt_loc,
@@ -702,14 +734,10 @@ static CellIOFlags get_inv_io_flags (VirtualLocation virt_loc,
   GncEntryLedger *ledger = user_data;
 
   switch (ledger->type) {
-  case GNCENTRY_ORDER_ENTRY:
-  case GNCENTRY_ORDER_VIEWER:
-  case GNCENTRY_INVOICE_VIEWER:
-  case GNCENTRY_BILL_ENTRY:
-  case GNCENTRY_BILL_VIEWER:
-    return XACC_CELL_ALLOW_SHADOW;
-  default:
+  case GNCENTRY_INVOICE_ENTRY:
     return XACC_CELL_ALLOW_ALL | XACC_CELL_ALLOW_EXACT_ONLY;
+  default:
+    return XACC_CELL_ALLOW_SHADOW;
   }
 }
 
@@ -910,6 +938,14 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
     gncEntrySetTaxIncluded (entry, taxincluded);
   }
 
+  if (gnc_table_layout_get_cell_changed (ledger->table->layout,
+					 ENTRY_BILLABLE_CELL, TRUE)) {
+    gboolean billable;
+
+    billable = gnc_entry_ledger_get_checkmark (ledger, ENTRY_BILLABLE_CELL);
+    gncEntrySetBillable (entry, billable);
+  }
+
   if (ledger->type == GNCENTRY_INVOICE_ENTRY) {
     char inv_value;
 
@@ -962,6 +998,7 @@ static void gnc_entry_ledger_model_new_handlers (TableModel *model,
     { ENTRY_INV_CELL, get_inv_entry, get_inv_label, get_inv_help, get_inv_io_flags },
     { ENTRY_VALUE_CELL, get_value_entry, get_value_label, get_value_help, get_value_io_flags },
     { ENTRY_TAXVAL_CELL, get_taxval_entry, get_taxval_label, get_taxval_help, get_value_io_flags },
+    { ENTRY_BILLABLE_CELL, get_billable_entry, get_billable_label, get_billable_help, get_typecell_io_flags },
   };
   int i;
 

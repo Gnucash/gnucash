@@ -42,6 +42,9 @@ struct _gncEntry {
   gboolean	taxincluded;
   GncTaxTable *	tax_table;
 
+  gboolean	billable;
+  GncOwner	billto;
+
   GncOrder *	order;
   GncInvoice *	invoice;
   GncInvoice *	bill;
@@ -144,6 +147,7 @@ GncEntry *gncEntryCreate (GNCBook *book)
   entry->taxable = TRUE;
   entry->dirty = FALSE;
   entry->values_dirty = TRUE;
+  entry->billto.type = GNC_OWNER_NONE;
 
   xaccGUIDNew (&entry->guid, book);
   addObj (entry);
@@ -335,6 +339,24 @@ void gncEntrySetDiscountHow (GncEntry *entry, GncDiscountHow how)
   mark_entry (entry);
 }
 
+void gncEntrySetBillable (GncEntry *entry, gboolean billable)
+{
+  if (!entry) return;
+  if (entry->billable == billable) return;
+
+  entry->billable = billable;
+  mark_entry (entry);
+}
+
+void gncEntrySetBillTo (GncEntry *entry, GncOwner *billto)
+{
+  if (!entry || !billto) return;
+  if (gncOwnerEqual (&entry->billto, billto)) return;
+
+  gncOwnerCopy (billto, &entry->billto);
+  mark_entry (entry);
+}
+
 void gncEntrySetDirty (GncEntry *entry, gboolean dirty)
 {
   if (!entry) return;
@@ -357,6 +379,8 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest)
   dest->account			= src->account;
   dest->taxable			= src->taxable;
   dest->taxincluded		= src->taxincluded;
+  dest->billable		= src->billable;
+  dest->billto			= src->billto;
 
   if (src->tax_table)
     gncEntrySetTaxTable (dest, src->tax_table);
@@ -489,6 +513,18 @@ GncTaxTable * gncEntryGetTaxTable (GncEntry *entry)
 {
   if (!entry) return NULL;
   return entry->tax_table;
+}
+
+gboolean gncEntryGetBillable (GncEntry *entry)
+{
+  if (!entry) return FALSE;
+  return entry->billable;
+}
+
+GncOwner * gncEntryGetBillTo (GncEntry *entry)
+{
+  if (!entry) return NULL;
+  return &entry->billto;
 }
 
 GncEntry * gncEntryLookup (GNCBook *book, const GUID *guid)
@@ -897,6 +933,8 @@ gboolean gncEntryRegister (void)
     { ENTRY_PRICE, QUERYCORE_NUMERIC, (QueryAccess)gncEntryGetPrice },
     { ENTRY_INVOICE, GNC_INVOICE_MODULE_NAME, (QueryAccess)gncEntryGetInvoice },
     { ENTRY_BILL, GNC_INVOICE_MODULE_NAME, (QueryAccess)gncEntryGetBill },
+    { ENTRY_BILLABLE, QUERYCORE_BOOLEAN, (QueryAccess)gncEntryGetBillable },
+    { ENTRY_BILLTO, GNC_OWNER_MODULE_NAME, (QueryAccess)gncEntryGetBillTo },
     { ENTRY_ORDER, GNC_ORDER_MODULE_NAME, (QueryAccess)gncEntryGetOrder },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncEntryGetBook },
     { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncEntryGetGUID },

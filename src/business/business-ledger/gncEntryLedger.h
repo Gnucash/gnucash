@@ -43,11 +43,12 @@ typedef struct entry_ledger_colors
 #define ENTRY_DISHOW_CELL	"discount-how"
 #define ENTRY_PRIC_CELL		"price"
 #define ENTRY_QTY_CELL		"quantity"
-#define ENTRY_TAXABLE_CELL	"taxable"
+#define ENTRY_TAXABLE_CELL	"taxable?"
 #define ENTRY_TAXTABLE_CELL	"taxtable"
 #define ENTRY_TAXINCLUDED_CELL	"taxincluded"
+#define ENTRY_BILLABLE_CELL	"billable?"
 
-#define ENTRY_INV_CELL		"invoiced-p"
+#define ENTRY_INV_CELL		"invoiced?"
 #define ENTRY_VALUE_CELL	"line-value"
 #define ENTRY_TAXVAL_CELL	"line-tax-val"
 
