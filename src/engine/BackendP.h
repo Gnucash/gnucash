@@ -215,10 +215,6 @@ GNCBackendError xaccBackendGetError (Backend *be);
 Backend * xaccAccountGetBackend (Account *account);
 Backend * xaccTransactionGetBackend (Transaction *trans);
 
-/*
- * The xaccGroupSetBackend() associates a backend to a group
- */
-void xaccGroupSetBackend (AccountGroup *group, Backend *be);
 Backend * xaccGroupGetBackend (AccountGroup *group);
 Backend * xaccGNCBookGetBackend (GNCBook *book);
 

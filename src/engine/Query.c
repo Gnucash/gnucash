@@ -32,6 +32,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 
+#include "gnc-book-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
 #include "AccountP.h"
@@ -1073,7 +1074,7 @@ guid_list_to_account_list (Query * q, GList *guids)
   GList *accounts = NULL;
   GList *node;
 
-  if (!q || !q->acct_group)
+  if (!q || !q->acct_group || !q->acct_group->book)
     return NULL;
 
   for (node = guids; node; node = node->next)
@@ -1084,7 +1085,7 @@ guid_list_to_account_list (Query * q, GList *guids)
     if (!guid)
       continue;
 
-    account = xaccAccountLookupEntityTable (guid, q->acct_group->entity_table);
+    account = xaccAccountLookupEntityTable (guid, q->acct_group->book->entity_table);
     if (!account)
       continue;
 

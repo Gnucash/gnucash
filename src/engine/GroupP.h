@@ -51,14 +51,9 @@ struct account_group_s
   /* The flags: */
   unsigned int saved : 1;
 
-  GNCEntityTable *entity_table; /* table which child accounts must
-                                 * be stored in. */
-
   Account *parent;         /* back-pointer to parent */
 
   AccountList *accounts;   /* list of account pointers */
-
-  Backend *backend;        /* persistant storage backend */
 
   GNCBook *book;           /* The book which this group belongs to */
 };

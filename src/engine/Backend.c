@@ -30,6 +30,7 @@
 #include "BackendP.h"
 #include "Group.h"
 #include "GroupP.h"
+#include "gnc-book-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
@@ -71,27 +72,22 @@ xaccBackendGetError (Backend *be)
 Backend *
 xaccAccountGetBackend (Account * acc)
 {
-  Account *parent_acc;
   AccountGroup * grp;
 
   if (!acc) return NULL;
+  grp = xaccAccountGetRoot (acc);
+  if (!grp || !grp->book) return NULL;
 
-  /* find the first account group that has a backend */
-  grp = acc->parent;
-  while (grp) {
-    if (grp->backend) return (grp->backend);
-    parent_acc = grp -> parent;
-    grp = NULL;
-    if (parent_acc) {
-       grp = parent_acc->parent;
-    }
-  }
-  return NULL;
+  return grp->book->backend;
 }
 
 /********************************************************************\
  * Fetch the backend                                                *
 \********************************************************************/
+
+/* XXX hack alert -- practically, it would be easier if we found the
+ * book, and then asked the book about the backend.
+ */
 
 Backend *
 xaccTransactionGetBackend (Transaction *trans)
@@ -124,11 +120,6 @@ xaccTransactionGetBackend (Transaction *trans)
   }
   if (!s) return NULL;
   
-  /* I suppose it would be more 'technically correct' to make sure that
-   * all splits share the same backend, and flag an error if they
-   * don't.  However, at this point, it seems quite unlikely, so we'll
-   * just use the first backend we find.
-   */
   return xaccAccountGetBackend (xaccSplitGetAccount(s));
 }
 
@@ -136,25 +127,12 @@ xaccTransactionGetBackend (Transaction *trans)
  * Set the backend                                                  *
 \********************************************************************/
 
-void 
-xaccGroupSetBackend (AccountGroup *grp, Backend *be)
-{
-   if (!grp) return;
-   grp->backend = be;
-}
-
 Backend *
 xaccGroupGetBackend (AccountGroup *grp)
 {
-   while (grp)
-   {
-     Account *parent;
-     if (grp->backend) return (grp->backend);
-     parent = grp->parent;
-     if (!parent) return NULL;
-     grp = parent->parent;
-   }
-   return NULL;
+  grp = xaccGroupGetRoot (grp);
+  if (!grp || !grp->book) return NULL;
+  return grp->book->backend;
 }
 
 /********************************************************************\

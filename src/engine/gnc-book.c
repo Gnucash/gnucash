@@ -192,8 +192,6 @@ gnc_book_set_group (GNCBook *book, AccountGroup *grp)
   xaccGroupSetBook (grp, book);
 
   book->topgroup = grp;
-
-  xaccGroupSetBackend (grp, book->backend);
 }
 
 void
@@ -202,7 +200,6 @@ gnc_book_set_backend (GNCBook *book, Backend *be)
   if (!book) return;
 
   book->backend = be;
-  xaccGroupSetBackend (book->topgroup, be);
   xaccPriceDBSetBackend (book->pricedb, be);
 }
 
@@ -279,8 +276,6 @@ gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup)
   xaccGroupSetBook (templateGroup, book);
 
   book->template_group = templateGroup;
-
-  xaccGroupSetBackend (templateGroup, book->backend);
 }
 
 Backend * 

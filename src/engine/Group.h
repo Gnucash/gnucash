@@ -43,8 +43,16 @@ void          xaccAccountGroupBeginEdit (AccountGroup *grp);
 void 	      xaccAccountGroupCommitEdit (AccountGroup *grp);
 
 /*
- * The xaccGroupConcatGroup() subroutine will move all accounts
- *    from the "from" group to the "to" group
+ * The xaccGroupConcatGroup() subroutine will move (reparent) 
+ *    all accounts from the "from" group to the "to" group,
+ *    preserving the account heirarchy.  It will also take care 
+ *    that the moved accounts will have the "to" group's book
+ *    parent as well.
+ *
+ * The xaccGroupCopyGroup() subroutine will copy all accounts
+ *    from the "from" group to the "to" group, preserving the 
+ *    account heirarchy.  It will also take care that the moved 
+ *    accounts will have the "to" groups book parent as well.
  *
  * The xaccGroupMergeAccounts() subroutine will go through a group,
  *    merging all accounts that have the same name and description.
@@ -52,6 +60,7 @@ void 	      xaccAccountGroupCommitEdit (AccountGroup *grp);
  */
 
 void    xaccGroupConcatGroup (AccountGroup *to, AccountGroup *from);
+void    xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from);
 void    xaccGroupMergeAccounts (AccountGroup *grp);
 
 /*
@@ -90,6 +99,18 @@ void     xaccGroupMarkDoFree (AccountGroup *grp);
  *    account group can now be reparented to a new location.
  *    Note, however, that it will mark the old parents as having 
  *    been modified.
+ *
+ * The xaccGroupInsertAccount() subroutine will insert the indicated
+ *    account into the indicated group.  If it already is the child 
+ *    of another group, it will be removed there first.  If the
+ *    account belongs to a different book than the the group, it
+ *    will be removed from the other book (and thus, the other book's
+ *    entity tables, generating destroy & create events).  If the 
+ *    account is removed from and inserted into the same group, the 
+ *    overall account sort order will be recomputed.  
+ *
+ * The xaccAccountInsertSubAccount() does the same, except that
+ *    the parent is specified as an account.
  */
 
 void    xaccGroupRemoveAccount (AccountGroup *grp, Account *account);
@@ -157,9 +178,13 @@ Account *xaccGetPeerAccountFromFullName (Account *acc,
                                          const char separator);
 
 /*
- * The xaccGetAccountRoot () subroutine will find the topmost 
+ * The xaccGroupGetRoot() subroutine will find the topmost 
+ *    (root) group to which this group belongs.
+ *
+ * The xaccGetAccountRoot() subroutine will find the topmost 
  *    (root) group to which this account belongs.
  */
+AccountGroup * xaccGroupGetRoot (AccountGroup *grp);
 AccountGroup * xaccAccountGetRoot (Account *account);
 
 /* The xaccGroupGetParentAccount() subroutine returns the parent

@@ -36,18 +36,27 @@ GNCBook * gnc_book_partition (GNCBook *, Query *);
 
 #endif XACC_PERIOD_H__
 
+#include "gnc-book-p.h"
+#include "GroupP.h"
+
+/* ================================================================ */
 
 GNCBook * 
 gnc_book_partition (GNCBook *existing_book, Query *query)
 {
    GNCBook *partition_book;
+   AccountGroup *part_topgrp;
+
    if (!existing_book || !query) return NULL;
 
-   
    partition_book = gnc_book_new();
 
+   /* first, copy all of the accounts */
+   xaccGroupCopyGroup (partition_book->topgroup, existing_book->topgroup);
+   
    return partition_book;
 }
 
+/* ================================================================ */
 
 /* ============================= END OF FILE ====================== */

@@ -52,42 +52,29 @@ static short module = MOD_ENGINE;
 \********************************************************************/
 
 static void
-xaccInitializeAccountGroup (AccountGroup *grp, GNCEntityTable *entity_table)
+xaccInitializeAccountGroup (AccountGroup *grp, GNCBook *book)
 {
   grp->saved       = 1;
 
   grp->parent      = NULL;
   grp->accounts    = NULL;
 
-  grp->backend     = NULL;
-  grp->book        = NULL;
-
-  grp->entity_table = entity_table;
+  grp->book        = book;
 }
 
 /********************************************************************\
 \********************************************************************/
 
-static AccountGroup *
-xaccMallocAccountGroupEntityTable (GNCEntityTable *entity_table)
-{
-  AccountGroup *grp;
-
-  g_return_val_if_fail (entity_table, NULL);
-
-  grp = g_new (AccountGroup, 1);
-
-  xaccInitializeAccountGroup (grp, entity_table);
-
-  return grp;
-}
-
 AccountGroup *
 xaccMallocAccountGroup (GNCBook *book)
 {
+  AccountGroup *grp;
   g_return_val_if_fail (book, NULL);
-  return xaccMallocAccountGroupEntityTable
-    (gnc_book_get_entity_table (book));
+
+  grp = g_new (AccountGroup, 1);
+  xaccInitializeAccountGroup (grp, book);
+
+  return grp;
 }
 
 /********************************************************************\
@@ -242,8 +229,9 @@ xaccAccountGetBook (Account *account)
   if (!account) return NULL;
 
   group = xaccAccountGetParent (account);
+  if (!group) return NULL;
 
-  return xaccGroupGetBook (group);
+  return group->book;
 }
 
 /********************************************************************\
@@ -400,7 +388,7 @@ xaccGroupGetSubAccounts (AccountGroup *grp)
   return g_list_reverse (accounts);
 }
 
-GList *
+AccountList *
 xaccGroupGetAccountList (AccountGroup *grp)
 {
   if (!grp) return NULL;
@@ -413,16 +401,11 @@ xaccGroupGetAccountList (AccountGroup *grp)
 \********************************************************************/
 
 AccountGroup *
-xaccAccountGetRoot (Account * acc) 
+xaccGroupGetRoot (AccountGroup * grp) 
 {
-  AccountGroup * grp;
   AccountGroup * root = NULL;
 
-  if (!acc) return NULL;
-
   /* find the root of the account group structure */
-  grp = acc->parent;
-
   while (grp)
   {
     Account *parent_acc;
@@ -437,6 +420,13 @@ xaccAccountGetRoot (Account * acc)
   }
 
   return root;
+}
+
+AccountGroup *
+xaccAccountGetRoot (Account * acc) 
+{
+  if (!acc) return NULL;
+  return xaccGroupGetRoot (acc->parent);
 }
 
 /********************************************************************\
@@ -632,7 +622,8 @@ void
 xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
 {
   if (!acc) return;
-  /* this routine might be called on accounts which 
+
+  /* Note this routine might be called on accounts which 
    * are not yet parented. */
   if (!grp) return;
 
@@ -667,16 +658,18 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
 void
 xaccAccountInsertSubAccount (Account *adult, Account *child)
 {
-  if (!adult || !child) return;
+  if (!adult) return;
 
+  /* We want the parent to have an entity table.  It doesn't have to
+   * be the same entity table as the child, the xaccGroupInsertAccount
+   * routine will take care of that. */
   g_return_if_fail (adult->entity_table);
-  g_return_if_fail (adult->entity_table == child->entity_table);
 
   /* if a container for the children doesn't yet exist, add it */
   if (adult->children == NULL)
   {
-    adult->children = xaccMallocAccountGroupEntityTable (adult->entity_table);
-    xaccGroupSetBook (adult->children, xaccGroupGetBook (adult->parent));
+    GNCBook *book = xaccGroupGetBook (adult->parent);
+    adult->children = xaccMallocAccountGroup (book);
   }
 
   /* set back-pointer to parent */
@@ -706,10 +699,8 @@ group_sort_helper (gconstpointer a, gconstpointer b)
 void
 xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
 {
-  if (!grp) return;
+  if (!grp || !grp->book) return;
   if (!acc) return;
-
-  g_return_if_fail (grp->entity_table == acc->entity_table);
 
   /* If the account is currently in another group, remove it there
    * first. Basically, we can't have accounts being in two places at
@@ -723,8 +714,28 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
   {
     xaccAccountBeginEdit (acc);
 
-    if (acc->parent)
+    if (acc->parent) 
+    {
       xaccGroupRemoveAccount (acc->parent, acc);
+
+      /* switch over entity tables if needed */
+      if (grp->book->entity_table != acc->entity_table)
+      {
+         /* hack alert -- this implementation is not exactly correct.
+          * If the entity tables are not identical, then the 'from' book 
+          * will have a different backend than the 'to' book.  This means
+          * that we should get the 'from' backend to destroy this account,
+          * and the 'to' backend to save it.  Right now, this is broken.
+          */
+         PWARN ("reparenting accounts accross books is not correctly supported\n");
+
+         gnc_engine_generate_event (&acc->guid, GNC_EVENT_DESTROY);
+         xaccRemoveEntity (acc->entity_table, &acc->guid);
+
+         xaccStoreEntity (grp->book->entity_table, acc, &acc->guid, GNC_ID_ACCOUNT);
+         gnc_engine_generate_event (&acc->guid, GNC_EVENT_CREATE);
+      }
+    }
 
     /* set back-pointer to the account's parent */
     acc->parent = grp;
@@ -738,7 +749,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
 
   grp->saved = 0;
 
-  xaccGroupSetBook (acc->children, xaccGroupGetBook (grp));
+  xaccGroupSetBook (acc->children, grp->book);
 
   gnc_engine_generate_event (&acc->guid, GNC_EVENT_MODIFY);
 }
@@ -752,10 +763,10 @@ xaccGroupConcatGroup (AccountGroup *togrp, AccountGroup *fromgrp)
   if (!togrp) return;
   if (!fromgrp) return;
 
-  g_return_if_fail (togrp->entity_table == fromgrp->entity_table);
-
   /* The act of inserting the account into togrp also causes it to
-   * automatically be deleted from fromgrp. Be careful! */
+   * automatically be deleted from fromgrp.  This causes linked 
+   * lists to be re-written, and so a cursor traversal is not safe.
+   * Be careful! */
 
   while (TRUE)
   {
@@ -764,8 +775,7 @@ xaccGroupConcatGroup (AccountGroup *togrp, AccountGroup *fromgrp)
     GList *next;
 
     accounts = fromgrp->accounts;
-    if (!accounts)
-      return;
+    if (!accounts) return;
 
     next = accounts->next;
 
@@ -773,9 +783,34 @@ xaccGroupConcatGroup (AccountGroup *togrp, AccountGroup *fromgrp)
 
     xaccGroupInsertAccount (togrp, account);
 
-    if (!next)
-      return;
+    if (!next) return;
   }
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
+{
+   GList *node;
+   if (!to || !from) return;
+   if (!from->accounts || !to->book) return;
+
+   for (node = from->accounts; node; node=node->next)
+   {
+      Account *to_acc, *from_acc = node->data;
+      to_acc = xaccCloneAccountSimple (from_acc, to->book);
+
+      xaccAccountBeginEdit (to_acc);
+      to->accounts = g_list_append (to->accounts, to_acc);
+      if (from_acc->children)
+      {
+         to_acc->children = xaccMallocAccountGroup (to->book);
+         xaccGroupCopyGroup (to_acc->children, from_acc->children);
+      }
+      xaccAccountCommitEdit (to_acc);
+   }
 }
 
 /********************************************************************\
