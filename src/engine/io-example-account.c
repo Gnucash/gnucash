@@ -316,6 +316,10 @@ gnc_write_example_account(GncExampleAccount *gea, const gchar *filename)
     FILE *out;
 
     out = fopen(filename, "w");
+    if (out == NULL)
+    {
+        return FALSE;
+    }
 
     fprintf(out, "<?xml version=\"1.0\"?>\n");
     fprintf(out, "<" GNC_ACCOUNT_STRING ">\n");

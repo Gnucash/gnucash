@@ -505,6 +505,10 @@ gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename)
     FILE *out;
 
     out = fopen(filename, "w");
+    if (out == NULL)
+    {
+        return FALSE;
+    }
 
     fprintf(out, "<?xml version=\"1.0\"?>\n");
     fprintf(out, "<" GNC_V2_STRING ">\n");
