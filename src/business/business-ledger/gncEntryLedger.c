@@ -304,6 +304,26 @@ void gnc_entry_ledger_set_default_order (GncEntryLedger *ledger,
   gnc_entry_ledger_display_refresh (ledger);
 }
 
+static GSList *
+build_param_list (char const *param, ...)
+{
+  GSList *param_list = NULL;
+  char const *this_param;
+  va_list ap;
+
+  if (!param)
+    return NULL;
+
+  va_start (ap, param);
+
+  for (this_param = param; this_param; this_param = va_arg (ap, const char *))
+    param_list = g_slist_prepend (param_list, (gpointer)this_param);
+
+  va_end (ap);
+
+  return g_slist_reverse (param_list);
+}
+
 static void create_invoice_query (GncEntryLedger *ledger)
 {
   QueryNew *q, *q1;
@@ -315,17 +335,23 @@ static void create_invoice_query (GncEntryLedger *ledger)
   if (ledger->query)
     gncQueryDestroy (ledger->query);
 
-  /* Match:
+  /* Match:   (where I-TYPE == Invoice or Bill)
    *
    * 1. book AND
-   * 2.   ( Entry->Invoice == ledger->invoice OR
-   * 3.      ( Entry->Invoice == NULL AND
-   *           Entry->Order->real-parent == Invoice->parent ) )
+   * 2.   ( Entry->I-TYPE == ledger->invoice
+   * #if I-TYPE == Invoice (entry only)
+   *        OR
+   * 3.     ( Entry->Invoice == NULL AND
+   *          ( Entry->Billable == TRUE AND
+   *            Entry->Bill->Is-Posted? == TRUE AND
+   *            ( Entry->BillTo == Invoice->parent OR
+   *              Entry->Bill->BillTo == Invoice->parent ) )
+   *           OR
+   *           ( Entry->Order->real-parent == Invoice->parent ) )
+   * #endif
+   *      )
    *
-   * Param 2 uses Entry->Bill if the ledger->invoice->owner is a Vendor
-   *
-   * Note that term 3 is only for Editable invoices where the 'owner'
-   * is valid.
+   * Note that term 3 is only for Editable invoices.
    */
   
   /* Term 1 */
@@ -349,34 +375,50 @@ static void create_invoice_query (GncEntryLedger *ledger)
   }
 
   q = gncQueryCreateFor (GNC_ENTRY_MODULE_NAME);
-  gncQueryAddGUIDMatch (q,
-			g_slist_prepend (g_slist_prepend (NULL,
-							  QUERY_PARAM_GUID),
-					 type),
+  gncQueryAddGUIDMatch (q, build_param_list (type, QUERY_PARAM_GUID, NULL),
 			gncInvoiceGetGUID (ledger->invoice), QUERY_OR);
 
   /* Term 3 */
   if (ledger->type == GNCENTRY_INVOICE_ENTRY &&
       gncOwnerGetEndGUID (gncInvoiceGetOwner (ledger->invoice)) != NULL) {
+
+    const GUID *invoice_parent =
+      gncOwnerGetGUID (gncInvoiceGetOwner (ledger->invoice));
     QueryNew *q2 = gncQueryCreateFor (GNC_ENTRY_MODULE_NAME);
 
-    /* entry_invoice->invoice_guid == NULL */
-    gncQueryAddGUIDMatch (q2,
-			  g_slist_prepend (g_slist_prepend (NULL,
-							    QUERY_PARAM_GUID),
-					   type),
-			  NULL, QUERY_OR);
+    /*
+     * Entry->BillTo == Invoice->parent OR
+     * ( Entry->BillTo == NULL AND Entry->Bill->BillTo == Invoice->parent )
+     */
 
-    /* entry_order->owner->end_guid == invoice->owner->guid */
-    gncQueryAddGUIDMatch (q2,
-			  g_slist_prepend
-			  (g_slist_prepend
-			   (g_slist_prepend (NULL, OWNER_PARENTG),
-			    ORDER_OWNER), ENTRY_ORDER),
-			  gncOwnerGetGUID (gncInvoiceGetOwner
-					   (ledger->invoice)),
-			  QUERY_AND);
+    gncQueryAddGUIDMatch (q2, build_param_list (ENTRY_BILLTO,
+						QUERY_PARAM_GUID, NULL),
+			  NULL, QUERY_AND);
+    gncQueryAddGUIDMatch (q2, build_param_list (ENTRY_BILL, INVOICE_BILLTO,
+						QUERY_PARAM_GUID, NULL),
+			  invoice_parent, QUERY_AND);
+    gncQueryAddGUIDMatch (q2, build_param_list (ENTRY_BILLTO,
+						QUERY_PARAM_GUID, NULL),
+			  invoice_parent, QUERY_OR);
+
+    /* Entry->Billable == TRUE AND Entry->Bill->Is-Posted? == TRUE */
+    gncQueryAddBooleanMatch (q2, build_param_list (ENTRY_BILLABLE, NULL),
+			     TRUE, QUERY_AND);
+    gncQueryAddBooleanMatch (q2, build_param_list (ENTRY_BILL,
+						   INVOICE_IS_POSTED, NULL),
+			     TRUE, QUERY_AND);
+
+    /* Entry->Order->real-parent == Invoice->parent */
+    gncQueryAddGUIDMatch (q2, build_param_list (ENTRY_ORDER, ORDER_OWNER,
+						OWNER_PARENTG, NULL),
+			  invoice_parent, QUERY_OR);
     
+    /* Entry->Invoice == NULL */
+    gncQueryAddGUIDMatch (q2, build_param_list (ENTRY_INVOICE,
+						QUERY_PARAM_GUID, NULL),
+			  NULL, QUERY_AND);
+
+
     /* Combine terms 2 and 3 */
     q1 = gncQueryMerge (q, q2, QUERY_OR);
     gncQueryDestroy (q);

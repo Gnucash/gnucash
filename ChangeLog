@@ -8,6 +8,9 @@
 
 	* add a BillTo owner in the GncInvoice object.  Save it in XML if
 	  it's non-empty.
+
+	* modify the Entry Ledger query to pull in Billable Entries from
+	  Posted Bills that belong to an Invoice's Owner.
 	
 2002-07-09  Derek Atkins  <derek@ihftp.com>
 
