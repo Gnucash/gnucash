@@ -50,6 +50,10 @@ Libchipcard 0.9 or later, http://sourceforge.net/projects/libchipcard
 Then you can build GnuCash 1.7.x/1.8.x with:
    ./configure --enable-hbci --with-openhbci-prefix=/your/openhbci/prefix 
 
+Optionally, for automated checking of destination account numbers you
+need the package ktoblzcheck,
+http://sourceforge.net/projects/ktoblzcheck
+
 And you need to apply at your Bank to get HBCI access. The bank will 
 provide you with some paper work which is needed during HBCI setup in 
 GnuCash. (For problems during compile see 6. Known Problems below.)

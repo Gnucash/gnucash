@@ -20,7 +20,9 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+#ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
 
 #include <gnome.h>
 #include <openhbci/bank.h>
@@ -34,6 +36,9 @@
 #include "gnc-hbci-utils.h"
 #include "gnc-hbci-trans-templ.h"
 #include "dialog-hbcitrans.h"
+#if HAVE_KTOBLZCHECK_H
+#  include <ktoblzcheck.h>
+#endif
 
 /* -------------------------------------- */
 /* Data structure */
@@ -61,9 +66,21 @@ struct _trans_data
 
   /* GList of GNCTransTempl */
   GList *templ;
+
+#if HAVE_KTOBLZCHECK_H
+  /* object for Account number checking */
+  AccountNumberCheck *blzcheck;
+#endif
 };
 typedef struct _trans_data TransData;
 
+static void TransData_delete_helper(TransData *td)
+{
+  if (!td) return;
+#if HAVE_KTOBLZCHECK_H
+  AccountNumberCheck_delete(td->blzcheck);
+#endif    
+}
 
 
 
@@ -73,6 +90,7 @@ typedef struct _trans_data TransData;
 
 void template_selection_cb(GtkButton *b, gpointer user_data);
 void add_template_cb(GtkButton *b, gpointer user_data);
+void blz_changed_cb(GtkEditable *e, gpointer user_data);
 
 static void fill_template_menu_func(gpointer data, gpointer user_data)
 {
@@ -113,7 +131,10 @@ gnc_hbci_trans (GtkWidget *parent,
   g_assert (customer);
   bank = HBCI_Account_bank (h_acc);
   g_assert (bank);
-      
+#if HAVE_KTOBLZCHECK_H
+  td.blzcheck = AccountNumberCheck_new();
+#endif
+  
   xml = gnc_glade_xml_new ("hbci.glade", "HBCI_trans_dialog");
 
   dialog = glade_xml_get_widget (xml, "HBCI_trans_dialog");
@@ -252,6 +273,8 @@ gnc_hbci_trans (GtkWidget *parent,
 				   &td);
     gtk_signal_connect(GTK_OBJECT (add_templ_button), "clicked",
 		       GTK_SIGNAL_FUNC(add_template_cb), &td);
+    gtk_signal_connect(GTK_OBJECT (td.recp_bankcode_entry), "changed",
+		       GTK_SIGNAL_FUNC(blz_changed_cb), &td);
 
     /* Default button */
     gnome_dialog_set_default (GNOME_DIALOG (dialog), 0);
@@ -264,65 +287,130 @@ gnc_hbci_trans (GtkWidget *parent,
 
     /* Repeat until HBCI action was successful or user pressed cancel */
     do {
+      gboolean values_ok;
 
-      gtk_widget_show_all (dialog); 
+      /* Repeat until entered values make sense */
+      do {
 
-      result = gnome_dialog_run (GNOME_DIALOG (dialog));
+	/* Make sure to show the dialog here */
+	gtk_widget_show_all (dialog); 
+
+	result = gnome_dialog_run (GNOME_DIALOG (dialog));
+	/* printf("hbci_trans: result button was %d.\n", result); */
+
+	/* The dialog gets hidden anyway as soon as any button is pressed. */
+	gtk_widget_hide_all (dialog);
+
+	*templ = td.templ;
+
+	/* Was cancel pressed or dialog closed? 0 == execute now, 1 ==
+	   scheduled for later execution (currently unimplemented) */
+	if ((result != 0) && (result != 1)) {
+	  gtk_widget_destroy (GTK_WIDGET (dialog));
+	  TransData_delete_helper(&td);
+	  return NULL;
+	}
+	
+	/* Fill in the user-entered values */
+	trans = HBCI_Transaction_new();
+	values_ok = TRUE;
+	
+	/* OpenHBCI newer than 0.9.8: use account's bankCode values
+	 * instead of the bank's ones since this is what some banks
+	 * require. */
+	HBCI_Transaction_setOurCountryCode (trans, 
+					    HBCI_Account_countryCode (h_acc));
+	HBCI_Transaction_setOurBankCode (trans, 
+					 HBCI_Account_instituteCode (h_acc));
+	HBCI_Transaction_setOurAccountId (trans, HBCI_Account_accountId (h_acc));
+	HBCI_Transaction_setOurSuffix (trans, HBCI_Account_accountSuffix (h_acc));
+	
+	HBCI_Transaction_setOtherCountryCode (trans, 280);
+	HBCI_Transaction_setOtherBankCode 
+	  (trans, gtk_entry_get_text (GTK_ENTRY (td.recp_bankcode_entry)));
+	/* printf("Got otherBankCode %s.\n",
+	   HBCI_Transaction_otherBankCode (trans)); */
+	HBCI_Transaction_setOtherAccountId
+	  (trans, gtk_entry_get_text (GTK_ENTRY (td.recp_account_entry)));
+	/* printf("Got otherAccountId %s.\n",
+	   HBCI_Transaction_otherAccountId (trans)); */
+	HBCI_Transaction_addOtherName
+	  (trans, gtk_entry_get_text (GTK_ENTRY (td.recp_name_entry)));
+	
+	HBCI_Transaction_addDescription
+	  (trans, gtk_entry_get_text (GTK_ENTRY (td.purpose_entry)));
+	HBCI_Transaction_addDescription
+	  (trans, gtk_entry_get_text (GTK_ENTRY (td.purpose_cont_entry)));
+	
+	/* FIXME: Replace "EUR" by account-dependent string here. */
+	HBCI_Transaction_setValue 
+	  (trans, HBCI_Value_new_double 
+	   (gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT (td.amount_edit)), "EUR"));
+	/*printf("dialog-hbcitrans: Got value as %s .\n", 
+	  HBCI_Value_toReadableString (HBCI_Transaction_value (trans)));*/
+	if (HBCI_Value_getValue (HBCI_Transaction_value (trans)) == 0.0) {
+	  gtk_widget_show_all (dialog); 
+	  values_ok = !gnc_verify_dialog_parented
+	    (GTK_WIDGET (dialog),
+	     TRUE,
+	     _("The amount is zero or the amount field could not be \n"
+	       "interpreted correctly. You might have mixed up decimal \n"
+	       "point and comma, compared to your locale settings. \n"
+	       "\n"
+	       "This does not result in a valid online transfer job.\n"
+	       "Do you want to enter the job again?"));
+	  if (values_ok) {
+	    gtk_widget_destroy (GTK_WIDGET (dialog));
+	    HBCI_Transaction_delete (trans);
+	    TransData_delete_helper(&td);
+	    return NULL;
+	  }
+	  continue;
+	} /* check Transaction_value */
+
+#if HAVE_KTOBLZCHECK_H
+	{
+	  int blzresult;
+	  const char *blztext;
+	
+	  blzresult = AccountNumberCheck_check
+	    (td.blzcheck, 
+	     HBCI_Transaction_otherBankCode (trans),
+	     HBCI_Transaction_otherAccountId (trans));
+	  switch (blzresult) {
+	  case 2:
+	    gtk_widget_show_all (dialog); 
+	    values_ok = gnc_verify_dialog_parented
+	      (GTK_WIDGET (dialog),
+	       TRUE,
+	       _("The internal check of the destination account number '%s' \n"
+		 "at the specified bank with bank code '%s' failed. This means \n"
+		 "the account number might contain an error. Should the online \n"
+		 "transfer job be sent with this account number anyway?"),
+	       HBCI_Transaction_otherAccountId (trans),
+	       HBCI_Transaction_otherBankCode (trans));
+	    blztext = "Kontonummer wahrscheinlich falsch";
+	    break;
+	  case 0:
+	    blztext = "Kontonummer ok";
+	    break;
+	  case 3:
+	    blztext = "bank unbekannt";
+	    break;
+	  default:
+	  case 1:
+	    blztext = "unbekannt aus unbekanntem grund";
+	    break;
+	  }
+	
+	  printf("gnc_hbci_trans: KtoBlzCheck said check is %d = %s\n",
+		 blzresult, blztext);
+	}
+#endif    
+      } while (!values_ok);
+
+      /* Make really sure the dialog is hidden now. */
       gtk_widget_hide_all (dialog);
-      /*result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));*/
-      /* printf("hbci_trans: result button was %d.\n", result); */
-	
-      *templ = td.templ;
-
-      /* Was cancel pressed or dialog closed? 0 == execute now, 1 ==
-	 scheduled for later execution (currently unimplemented) */
-      if ((result != 0) && (result != 1)) {
-	gtk_widget_destroy (GTK_WIDGET (dialog));
-	return NULL;
-      }
-	
-      /* Fill in the user-entered values */
-      trans = HBCI_Transaction_new();
-	
-      /* OpenHBCI newer than 0.9.8: use account's bankCode values
-       * instead of the bank's ones since this is what some banks
-       * require. */
-      HBCI_Transaction_setOurCountryCode (trans, 
-					  HBCI_Account_countryCode (h_acc));
-      HBCI_Transaction_setOurBankCode (trans, 
-				       HBCI_Account_instituteCode (h_acc));
-      HBCI_Transaction_setOurAccountId (trans, HBCI_Account_accountId (h_acc));
-      HBCI_Transaction_setOurSuffix (trans, HBCI_Account_accountSuffix (h_acc));
-	
-      HBCI_Transaction_setOtherCountryCode (trans, 280);
-      HBCI_Transaction_setOtherBankCode 
-	(trans, gtk_entry_get_text (GTK_ENTRY (td.recp_bankcode_entry)));
-      /* printf("Got otherBankCode %s.\n",
-	 HBCI_Transaction_otherBankCode (trans)); */
-      HBCI_Transaction_setOtherAccountId
-	(trans, gtk_entry_get_text (GTK_ENTRY (td.recp_account_entry)));
-      /* printf("Got otherAccountId %s.\n",
-	 HBCI_Transaction_otherAccountId (trans)); */
-      HBCI_Transaction_addOtherName
-	(trans, gtk_entry_get_text (GTK_ENTRY (td.recp_name_entry)));
-	
-      HBCI_Transaction_addDescription
-	(trans, gtk_entry_get_text (GTK_ENTRY (td.purpose_entry)));
-      HBCI_Transaction_addDescription
-	(trans, gtk_entry_get_text (GTK_ENTRY (td.purpose_cont_entry)));
-	
-      HBCI_Transaction_setValue 
-	(trans, HBCI_Value_new_double 
-	 (gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT (td.amount_edit)), "EUR"));
-      /* FIXME: Replace "EUR" by account-dependent string here. */
-      /*printf("dialog-hbcitrans: Got value as %s .\n", 
-	HBCI_Value_toReadableString (HBCI_Transaction_value (trans)));*/
-      if (HBCI_Value_getValue (HBCI_Transaction_value (trans)) == 0.0) {
-	printf("dialog-hbcitrans: Oops, value is zero. Cancelling HBCI job.\n");
-	gtk_widget_destroy (GTK_WIDGET (dialog));
-	HBCI_Transaction_delete (trans);
-	return NULL;
-      }
 
       {
 	/* Create a Do-Transaction (Transfer) job. */
@@ -396,8 +484,10 @@ gnc_hbci_trans (GtkWidget *parent,
   
   HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
   gtk_widget_destroy (GTK_WIDGET (dialog));
+  TransData_delete_helper(&td);
   return trans;
 }
+
 
 
 
@@ -430,6 +520,35 @@ void template_selection_cb(GtkButton *b,
       gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (td->amount_edit), 
 				  gnc_trans_templ_get_amount (templ));
     }
+}
+
+void blz_changed_cb(GtkEditable *e, gpointer user_data)
+{
+#if HAVE_KTOBLZCHECK_H
+  TransData *td = user_data;
+  const AccountNumberCheck_Record *record;
+  g_assert(td);
+
+  record = AccountNumberCheck_findBank
+    (td->blzcheck, 
+     gtk_entry_get_text (GTK_ENTRY (td->recp_bankcode_entry)));
+  
+  if (record) {
+    const char *bankname = AccountNumberCheck_Record_bankName (record);
+    gtk_label_set_text (GTK_LABEL (td->recp_bankname_label),
+			(strlen(bankname)>0 ? bankname : _("(unknown)")));
+    gtk_widget_show_all (td->recp_bankname_label);
+
+    /*printf("blz_changed_cb: KtoBlzCheck said check is bank is '%s' at '%s'.\n",
+      bankname,
+      AccountNumberCheck_Record_location (record));*/
+
+  } else {
+    gtk_label_set_text (GTK_LABEL (td->recp_bankname_label),
+			_("(unknown)"));
+    gtk_widget_show_all (td->recp_bankname_label);
+  }
+#endif    
 }
 
 /* -------------------------------------- */
