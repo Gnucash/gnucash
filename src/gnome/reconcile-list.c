@@ -617,15 +617,20 @@ gnc_reconcile_list_commit (GNCReconcileList *list, time_t date)
 
   for (i = 0; i < list->num_splits; i++)
   {
+    Transaction *trans;
     char recn;
 
     split = gtk_clist_get_row_data (clist, i);
+    trans = xaccSplitGetParent(split);
 
     recn = g_hash_table_lookup (list->reconciled, split) ? YREC : NREC;
 
+    xaccTransBeginEdit(trans);
     xaccSplitSetReconcile (split, recn);
-    if (recn == YREC)
+    if (recn == YREC) {
       xaccSplitSetDateReconciledSecs (split, date);
+    }
+    xaccTransCommitEdit(trans);
   }
 }
 
