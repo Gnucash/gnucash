@@ -22,6 +22,10 @@
 	* src/gnome/dialog-scheduledxaction.c: resize the cal after the
 	  dialog is shown, so it get's sized properly.
 
+	* src/register/register-gnome/gnucash-style.c: temporary fix to
+	  prevent 105346, until a real fix can be created.  There is still
+	  a visual artifact leftover, but at least it doesn't crash.
+	
 2003-02-07  Derek Atkins  <derek@ihtfp.com>
 
 	* src/scm/tip-list.scm: remove the tip that says that this is a development
