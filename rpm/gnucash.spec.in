@@ -42,7 +42,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(555,-,-) /usr/bin/gnc-prices
 /usr/info/*
 /usr/lib/libgncengine.*
-/usr/lib/gnucash
 /usr/share/gnucash
 /usr/share/gnome/help/gnucash
 /usr/share/gnome/apps/Applications/gnucash.desktop
