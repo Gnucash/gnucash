@@ -59,10 +59,14 @@
   #f))
 
 (gnc:register-configuration-option
- (gnc:make-simple-boolean-option
+ (gnc:make-complex-boolean-option
   gnc:*business-label* (N_ "Notify Bills Due?")
   "g" (N_ "Whether to display the list of Bills Due at startup.")
-  #t))
+  #t #f
+  (lambda (x) (gnc:set-option-selectable-by-name gnc:*business-label*
+						 "Bills Due Days"
+						 x))
+  ))
 
 (gnc:register-configuration-option
  (gnc:make-number-range-option
