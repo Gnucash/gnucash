@@ -257,6 +257,8 @@ static void ld_cancel_check( GnomeDruid *gd, LoanDruidData *ldd );
 
 static void ld_prm_type_changed( GtkWidget *w, gint index, gpointer ud );
 
+static void gnc_loan_druid_length_changed( GtkEditable *e, gpointer ud );
+
 static void ld_escrow_toggle( GtkToggleButton *tb, gpointer ud );
 static void ld_opt_toggled( GtkToggleButton *tb, gpointer ud );
 static void ld_opt_consistency( GtkToggleButton *tb, gpointer ud );
@@ -302,11 +304,13 @@ gnc_ui_sx_loan_druid_create()
                 {
                         int i;
                         GtkAlignment *a;
+                        /* "gas" == GncAccountSel */
                         struct gas_in_tables_data {
                                 GNCAccountSel **loc;
                                 GtkTable *table;
                                 int left, right, top, bottom;
                         } gas_data[] = {
+                                /* These ints are the GtkTable boundries */
                                 { &ldd->prmAccountGAS,    ldd->prmTable, 1, 4, 0, 1 },
                                 { &ldd->repAssetsFromGAS, ldd->repTable, 1, 4, 2, 3 },
                                 { &ldd->repPrincToGAS,    ldd->repTable, 1, 2, 3, 4 },
@@ -345,6 +349,7 @@ gnc_ui_sx_loan_druid_create()
                 }
 
                 gtk_widget_set_sensitive( GTK_WIDGET(ldd->prmVarFrame), FALSE );
+
                 {
                         GtkAlignment *a;
                         GNCOptionInfo typeOptInfo[] = {
@@ -366,9 +371,9 @@ gnc_ui_sx_loan_druid_create()
                 {
                         GtkAdjustment *a;
 
-                        /* 8.0 [%], range of 0.05..100.0 with ticks at 0.05[%]. */
-                        a = GTK_ADJUSTMENT(gtk_adjustment_new( 8.0, 0.05,
-                                                               100.0, 0.05,
+                        /* 8.0 [%], range of 0.005..100.0 with ticks at 0.001[%]. */
+                        a = GTK_ADJUSTMENT(gtk_adjustment_new( 8.0, 0.001,
+                                                               100.0, 0.001,
                                                                1.0, 1.0 ));
                         gtk_spin_button_set_adjustment( ldd->prmIrateSpin, a );
                         gtk_spin_button_set_value( ldd->prmIrateSpin, 8.00 );
@@ -379,6 +384,9 @@ gnc_ui_sx_loan_druid_create()
                                                                9999, 1,
                                                                12, 12 ));
                         gtk_spin_button_set_adjustment( ldd->prmLengthSpin, a );
+                        gtk_signal_connect( GTK_OBJECT(ldd->prmLengthSpin), "changed",
+                                            GTK_SIGNAL_FUNC(gnc_loan_druid_length_changed),
+                                            ldd );
 
                         a = GTK_ADJUSTMENT(gtk_adjustment_new( 360, 1,
                                                                9999, 1,
@@ -700,7 +708,7 @@ static
 void
 ld_cancel_check( GnomeDruid *gd, LoanDruidData *ldd )
 {
-        const char *cancelMsg = _( "Are you sure you want to close "
+        const char *cancelMsg = _( "Are you sure you want to cancel "
                                    "the Mortgage/Loan Setup Druid?" );
         if ( gnc_verify_dialog_parented( ldd->dialog, FALSE, cancelMsg ) ) {
                 gnc_close_gui_component_by_data( DIALOG_LOAN_DRUID_CM_CLASS,
@@ -1027,7 +1035,7 @@ ld_rep_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                 GString *str;
                 str = g_string_sized_new( 64 );
 
-                g_string_sprintfa( str, "pmt( %.4f / 12 : %d : %0.2f : 0 : 0 )",
+                g_string_sprintfa( str, "pmt( %.5f / 12 : %d : %0.2f : 0 : 0 )",
                                    (ldd->ld.interestRate / 100),
                                    ldd->ld.numPer,
                                    gnc_numeric_to_double(ldd->ld.principal) );
@@ -1330,7 +1338,7 @@ ld_fin_fin  ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                 g_free( tmpStr );
                 gnc_ttsplitinfo_set_account( ttsi, ldd->ld.repPriAcct );
                 tmpGS = g_string_sized_new( 64 );
-                g_string_sprintf( tmpGS, "ppmt( %.4f / 12 : i : %d : %0.2f : 0 : 0 )",
+                g_string_sprintf( tmpGS, "ppmt( %.5f / 12 : i : %d : %0.2f : 0 : 0 )",
                                   (ldd->ld.interestRate / 100),
                                   ldd->ld.numPer,
                                   gnc_numeric_to_double(ldd->ld.principal));
@@ -1346,7 +1354,7 @@ ld_fin_fin  ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                 g_free( tmpStr );
                 gnc_ttsplitinfo_set_account( ttsi, ldd->ld.repIntAcct );
                 tmpGS = g_string_sized_new( 64 );
-                g_string_sprintf( tmpGS, "ipmt( %.4f / 12 : i : %d : %0.2f : 0 : 0 )",
+                g_string_sprintf( tmpGS, "ipmt( %.5f / 12 : i : %d : %0.2f : 0 : 0 )",
                                   (ldd->ld.interestRate / 100),
                                   ldd->ld.numPer,
                                   gnc_numeric_to_double( ldd->ld.principal ) );
@@ -1499,4 +1507,25 @@ ld_fin_fin  ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         g_string_free( repAssetsDebitFormula, TRUE );
 
         ld_close_handler( ldd );
+}
+
+static
+void
+gnc_loan_druid_length_changed( GtkEditable *e, gpointer ud )
+{
+        LoanDruidData *ldd;
+        gchar *txt;
+        gint pos;
+
+        ldd = (LoanDruidData*)ud;
+        txt = gtk_editable_get_chars( e, 0, -1 );
+        if ( !txt )
+                return;
+
+        gtk_editable_select_region( GTK_EDITABLE(ldd->prmRemainSpin), 0, -1 );
+        gtk_editable_delete_selection( GTK_EDITABLE(ldd->prmRemainSpin) );
+        pos = 0;
+        gtk_editable_insert_text( GTK_EDITABLE(ldd->prmRemainSpin),
+                                  txt, strlen(txt), &pos );
+        g_free( txt );
 }

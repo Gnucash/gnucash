@@ -77,10 +77,14 @@ gboolean gnc_exp_parser_parse (const char * expression,
                                gnc_numeric *value_p,
                                char **error_loc_p );
 
-/* Parses as per gnc_exp_parser_parse, but with an optional last argument
+/**
+ * Parses as per gnc_exp_parser_parse, but with an optional last argument
  * dealing with a non-shared variable list and state, local to the expression
  * being parsed.  This is a hashTable of variable names mapping to
- * gnc_numeric pointers. */
+ * gnc_numeric pointers.
+ * @note It is the CALLER'S RESPONSIBILITY to g_free() both the keys and
+ * values of varHash when done.
+ **/
 gboolean gnc_exp_parser_parse_separate_vars (const char * expression,
                                              gnc_numeric *value_p,
                                              char **error_loc_p,

@@ -52,7 +52,7 @@ typedef struct _GNCFrequency {
 
 typedef struct _GNCFrequencyClass {
   GtkVBoxClass parent_class;
-  void (*value_changed) (GNCFrequency *gf);
+  void (*changed) (GNCFrequency *gf);
 } GNCFrequencyClass;
 
 struct pageDataTuple {

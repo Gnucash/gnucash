@@ -282,7 +282,7 @@ gnc_account_sel_set_account( GNCAccountSel *gas, Account *acct )
         }
         acctStr = xaccAccountGetFullName( acct,
                                           gnc_get_account_separator() );
-        gtk_entry_set_text( GTK_EDITABLE(gas->combo->entry), acctStr );
+        gtk_entry_set_text( GTK_ENTRY(gas->combo->entry), acctStr );
         g_free( acctStr );
 }
 

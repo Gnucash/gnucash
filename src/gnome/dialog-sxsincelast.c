@@ -102,6 +102,8 @@
 #define REMINDER_LIST  "reminders_list"
 #define SX_GLADE_FILE "sched-xact.glade"
 
+#define TO_CREATE_STATUS "to_create_status"
+
 #define SELECT_ALL_BUTTON "select_all_button"
 #define UNSELECT_ALL_BUTTON "unselect_all_button"
 #define OK_BUTTON "ok_button"
@@ -157,6 +159,8 @@ typedef struct _sxSinceLastData {
         GladeXML *gxml;
 
         GtkProgressBar *prog;
+        GtkStatusbar *toCreateStatus;
+        guint statusCtxId;
 
         /* Multi-stage processing-related stuff... */
         GList /* <toCreateTuple*> */ *autoCreateList;
@@ -1238,6 +1242,17 @@ sxsincelast_init( sxSinceLastData *sxsld )
         sxsld->prog = GTK_PROGRESS_BAR(glade_xml_get_widget( sxsld->gxml,
                                                              WHAT_TO_DO_PROGRESS ));
 
+        sxsld->toCreateStatus =
+                GTK_STATUSBAR(
+                        glade_xml_get_widget( sxsld->gxml, TO_CREATE_STATUS ) );
+        sxsld->statusCtxId =
+                gtk_statusbar_get_context_id( sxsld->toCreateStatus,
+                                              /* Sure, we're overusing this
+                                               * string, but I don't see why
+                                               * the Statusbar even
+                                               * cares... */
+                                              TO_CREATE_STATUS );
+
         create_autoCreate_ledger( sxsld );
         create_created_ledger( sxsld );
 
@@ -1356,8 +1371,8 @@ generate_instances( SchedXaction *sx,
 static void
 _free_varBindings_hash_elts( gpointer key, gpointer value, gpointer data )
 {
-        if ( key ) 
-                g_free( key );
+        g_assert( key );
+        g_free( key );
         if ( value ) 
                 g_free( value );
 }
@@ -1791,9 +1806,10 @@ static void
 andequal_numerics_set( gpointer key, gpointer value, gpointer data )
 {
         gboolean *allVarsBound = data;
-        if ( strcmp( (gchar*)key, "i" ) != 0 ) {
-                *allVarsBound &= (value != NULL);
+        if ( strcmp( (gchar*)key, "i" ) == 0 ) {
+                return;
         }
+        *allVarsBound &= (value != NULL);
 }
 
 static void
@@ -1805,6 +1821,8 @@ sxsincelast_entry_changed( GtkEditable *e, gpointer ud )
         gchar *entryText;
         gnc_numeric *num, *ourNum;
         GHashTable *dummyVarHash;
+        static const int MSG_BUF_LEN = 127;
+        char msgBuf[MSG_BUF_LEN+1];
 
         sxsld = (sxSinceLastData*)ud;
         tci = (toCreateInstance*)gtk_object_get_data( GTK_OBJECT(e), "tci" );
@@ -1812,27 +1830,48 @@ sxsincelast_entry_changed( GtkEditable *e, gpointer ud )
         num = (gnc_numeric*)gtk_object_get_data( GTK_OBJECT(e), "numeric" );
         entryText = gtk_editable_get_chars( e, 0, -1 );
         dummyVarHash = g_hash_table_new( NULL, NULL );
-        /* FIXME: these debugs probably want to go into a staus bar... */
-        /* FIXME: Should be using xaccParseAmount instead of parser_parse_separate_vars? */
+        /* FIXME?: Should be using xaccParseAmount instead of
+         * parser_parse_separate_vars? */
+        gtk_statusbar_pop( sxsld->toCreateStatus, sxsld->statusCtxId );
+
         if ( !gnc_exp_parser_parse_separate_vars( entryText, num,
                                                   NULL, dummyVarHash ) ) {
-                DEBUG( "error parsing entry \"%s\"", entryText  );
                 num = NULL;
+                if ( entryText != NULL
+                     && strlen(entryText) > 0 ) {
+                        snprintf( msgBuf, MSG_BUF_LEN,
+                                  "error parsing entry near \"%s\"", entryText );
+                        gtk_statusbar_push( sxsld->toCreateStatus,
+                                            sxsld->statusCtxId,
+                                            msgBuf );
+                }
         } else if ( g_hash_table_size( dummyVarHash ) != 0 ) {
-                DEBUG( "no new variables allowed in variable "
-                       "bindings for expression \"%s\"", entryText );
                 num = NULL;
+                snprintf( msgBuf, MSG_BUF_LEN,
+                          "No new variables allowed in "
+                          "expression \"%s\"", entryText );
+                gtk_statusbar_push( sxsld->toCreateStatus,
+                                    sxsld->statusCtxId,
+                                    msgBuf );
         } else if ( gnc_numeric_check( *num ) != GNC_ERROR_OK ) {
-                DEBUG( "entry \"%s\" is not "
-                       "gnc_numeric-parseable", entryText );
+                snprintf( msgBuf, MSG_BUF_LEN,
+                          "Entry \"%s\" is not "
+                          "parseable", entryText );
+                gtk_statusbar_push( sxsld->toCreateStatus,
+                                    sxsld->statusCtxId,
+                                    msgBuf );
                 num = NULL;
         } else {
-#if 0 /* 0 -- this is fine. */
-                DEBUG( "\"%s\" parses as \"%f\"", entryText,
-                       gnc_numeric_to_double( *num ) );
-#endif /* 0 -- this is fine. */
+                snprintf( msgBuf, MSG_BUF_LEN,
+                          "%f", gnc_numeric_to_double( *num ) );
+                gtk_statusbar_push( sxsld->toCreateStatus,
+                                    sxsld->statusCtxId,
+                                    msgBuf );
         }
 
+        g_hash_table_foreach( dummyVarHash,
+                              _free_varBindings_hash_elts,
+                              NULL );
         g_hash_table_destroy( dummyVarHash );
 
         {
@@ -1875,9 +1914,8 @@ sxsincelast_destroy( GtkObject *o, gpointer ud )
         /* appropriate place to destroy data structures */
         clean_sincelast_data( sxsld );
 
-        /* FIXME: need more freeing for ledgers?  why do these result in
-         * "gnc_close_gui_component: component not found" messages? */
-
+        /* We don't need to close the ledgers, as the gnc-reg-widget will do
+         * this for us. */
         gnc_ledger_display_close( sxsld->ac_ledger );
         sxsld->ac_ledger = NULL;
 
@@ -1925,7 +1963,6 @@ gnc_sxsl_del_vars_table_ea( gpointer key,
         g_assert( key );
         if ( key )
                 g_free( (gchar*)key );
-
         if ( value )
                 g_free( (gnc_numeric*)value );
 }
@@ -2376,10 +2413,10 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
          * variables if they're present in the expression. */
         varHashSize = g_hash_table_size( tci->varBindings );
         {
-                gpointer *foo, *bar;
+                gpointer *unusedKey, *unusedVal;
                 if ( g_hash_table_lookup_extended( tci->varBindings, "i",
-                                                   (gpointer)&foo,
-                                                   (gpointer)&bar ) ) {
+                                                   (gpointer)&unusedKey,
+                                                   (gpointer)&unusedVal ) ) {
                         varHashSize -= 1;
                 }
         }

@@ -1,3 +1,35 @@
+2002-08-18  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome-utils/gnc-frequency.c: Added support for a "changed"
+	signal so callers can use their own calendar to show the effects
+	of editing the FreqSpec.
+
+	* src/gnome/dialog-sx-from-trans.c: Added support for using the
+	dense-calendar for showing the effects of option changes.
+
+	* src/gnome/dialog-scheduledxaction.c: Added editor support for
+	using the dense-calendar for showing the effects of FreqSpec
+	changes; re-arranged the editor layout to accomodate.  Added
+	editor support for showing the last-occurred date of an SX.
+
+	* src/gnome/glade/sched-xact.glade: Changes to sx-from-trans
+	dialog, SX editor, GNCFrequency-widgets.
+
+	* src/gnome/dialog-sxsincelast.c (sxsincelast_entry_changed):
+	Added support for variable-entry parsing errors to go to an
+	on-screen status bar instead of being printed to stderr
+	[Bug#90354].
+
+	* src/gnome/druid-loan.c (gnc_loan_druid_length_changed): Added
+	change-handler to the total-loan-length spin; when it changes, the
+	remaining-length spin changes the same [Bug#90785].
+	(gnc_ui_sx_loan_druid_create): Adjusted the size/granularity of
+	the interest-rate spin-button to 3 sig.digits. [Bug#90780].
+
+	* src/gnome/glade/sched-xact.glade: Changed [back?] the
+	shrink/auto-shrink flags on the since-last-run-druid, fixing
+	Bug#90364 and strangely fixing Bug#90365.
+
 2002-08-15  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/*: much more HBCI work. Ini-Letter of

@@ -120,6 +120,8 @@ static short module = MOD_SX;
  
 /** PROTOTYPES ******************************************************/
 
+static int int_cmp( int a, int b );
+
 /**
  * Destroys all sub-FreqSpecs in a composite FreqSpec.
  * Assertion error if it's not a COMPOSITE FreqSpec.
@@ -268,20 +270,22 @@ static inline guint32 min( guint32 a, guint32 b )
 }
 
 void
-xaccFreqSpecGetNextInstance(
-        FreqSpec *fs,
-        const GDate* in_date,
-        GDate* out_date )
+xaccFreqSpecGetNextInstance( FreqSpec *fs,
+                             const GDate* in_date,
+                             GDate* out_date )
 {
-        GList                *list;
+        GList *list;
 
         g_return_if_fail( fs );
         switch( fs->type ) {
         case INVALID:
-                g_return_if_fail(FALSE);
+                /* this is okay, just lame. */
+                g_date_clear( out_date, 1 );
+                break;
 
         case ONCE:
-                if ( g_date_compare( &(fs->s.once.date), CONST_HACK in_date ) > 0 ) {
+                if ( g_date_compare( &(fs->s.once.date),
+                                     CONST_HACK in_date ) > 0 ) {
                         *out_date = fs->s.once.date;
                 } else {
                         /* Date is past due. Return an invalid date. */
@@ -290,147 +294,125 @@ xaccFreqSpecGetNextInstance(
                 break;
 
         case DAILY: {
-                        guint32 julian_in_date, julian_next_repeat, complete_intervals;
+                guint32 julian_in_date, julian_next_repeat, complete_intervals;
 
-                        julian_in_date = g_date_julian( CONST_HACK in_date );
-                        complete_intervals =
-                                (julian_in_date - fs->s.daily.offset_from_epoch) /
-                                        fs->s.daily.interval_days;
-                        julian_next_repeat =
-                                fs->s.daily.offset_from_epoch +
-                                        (complete_intervals + 1) * fs->s.daily.interval_days;
-                        g_date_set_julian( out_date, julian_next_repeat );
-                } break;
+                julian_in_date = g_date_julian( CONST_HACK in_date );
+                complete_intervals =
+                        (julian_in_date - fs->s.daily.offset_from_epoch) /
+                        fs->s.daily.interval_days;
+                julian_next_repeat =
+                        fs->s.daily.offset_from_epoch +
+                        (complete_intervals + 1) * fs->s.daily.interval_days;
+                g_date_set_julian( out_date, julian_next_repeat );
+        } break;
 
         case WEEKLY: {
-                        /* This implementation stores the offset from epoch as the number
-                         * of days, not week epoch offset and day in week offset.
-                         * It is very similar to the daily repeat representation. */
-                        guint32 julian_in_date, julian_next_repeat, complete_intervals;
+                /* This implementation stores the offset from epoch as the number
+                 * of days, not week epoch offset and day in week offset.
+                 * It is very similar to the daily repeat representation. */
+                guint32 julian_in_date, julian_next_repeat, complete_intervals;
 
-                        julian_in_date = g_date_julian( CONST_HACK in_date );
-                        complete_intervals =
-                                (julian_in_date - fs->s.weekly.offset_from_epoch) /
-                                        (fs->s.weekly.interval_weeks * 7);
-                        julian_next_repeat =
-                                fs->s.weekly.offset_from_epoch +
-                                        (complete_intervals + 1) * fs->s.weekly.interval_weeks * 7;
-                        g_date_set_julian( out_date, julian_next_repeat );
-
-                        /* This code passes the test, but it seems large and complicated...
-                         * it uses a separate week offset from epoch and day in week offset. */
-/*                        guint32 julian_in_date, julian_next_repeat, complete_intervals,
-                                in_weeks_from_epoch, after_repeat_in_week_interval;
-                        julian_in_date = g_date_julian( CONST_HACK in_date );
-                        in_weeks_from_epoch = (julian_in_date-1) / 7;
-                        complete_intervals =
-                                (in_weeks_from_epoch -
-                                        fs->s.weekly.offset_from_epoch) /
-                                        fs->s.weekly.interval_weeks;
-                        after_repeat_in_week_interval =
-                                ((julian_in_date-1) % 7 >= fs->s.weekly.day_of_week ||
-                                        (in_weeks_from_epoch - fs->s.weekly.offset_from_epoch) %
-                                                fs->s.weekly.interval_weeks > 0 ) ? 1 : 0;
-                        julian_next_repeat =
-                                (fs->s.weekly.offset_from_epoch +
-                                        (complete_intervals + after_repeat_in_week_interval) *
-                                                fs->s.weekly.interval_weeks) * 7 +
-                                fs->s.weekly.day_of_week + 1;
-                        g_date_set_julian( out_date, julian_next_repeat );
-*/
-                } break;
+                julian_in_date = g_date_julian( CONST_HACK in_date );
+                complete_intervals =
+                        (julian_in_date - fs->s.weekly.offset_from_epoch) /
+                        (fs->s.weekly.interval_weeks * 7);
+                julian_next_repeat =
+                        fs->s.weekly.offset_from_epoch +
+                        (complete_intervals + 1) * fs->s.weekly.interval_weeks * 7;
+                g_date_set_julian( out_date, julian_next_repeat );
+        } break;
 
         case MONTHLY: {
-                        guint32 in_months_from_epoch, after_repeat_in_month_interval,
-                                complete_intervals, next_repeat_months_from_epoch, month, year;
+                guint32 in_months_from_epoch, after_repeat_in_month_interval,
+                        complete_intervals, next_repeat_months_from_epoch, month, year;
 
-                        in_months_from_epoch = (g_date_year( CONST_HACK in_date )-1) * 12 +
-                                g_date_month( CONST_HACK in_date ) - 1;
-                        complete_intervals =
-                                (in_months_from_epoch - fs->s.monthly.offset_from_epoch) /
-                                        fs->s.monthly.interval_months;
-                        after_repeat_in_month_interval =
-                                (g_date_day( CONST_HACK in_date ) >= fs->s.monthly.day_of_month ||
-                                        (in_months_from_epoch - fs->s.monthly.offset_from_epoch) %
-                                                fs->s.monthly.interval_months > 0 ||
-                                        g_date_day( CONST_HACK in_date ) >=
-                                                g_date_days_in_month( g_date_month( CONST_HACK in_date ),
-                                                        g_date_year( CONST_HACK in_date ) ) )  ? 1 : 0;
-                        next_repeat_months_from_epoch =
-                                fs->s.monthly.offset_from_epoch +
-                                        (complete_intervals + after_repeat_in_month_interval) *
-                                                fs->s.monthly.interval_months;
-                        /* Hmmm... what happens if the day of the month is greater than the
-                         * number of days in this month?
-                         * Here I have constrained the day of the month by the number
-                         * of days in the month. This is compensated for above by checking if
-                         * the input day is the last day of that month, in which case it will
-                         * move to the next month interval.
-                         */
-                        month = next_repeat_months_from_epoch % 12 + 1;
-                        year = next_repeat_months_from_epoch / 12 + 1;
-                        g_date_set_dmy( out_date,
+                in_months_from_epoch = (g_date_year( CONST_HACK in_date )-1) * 12 +
+                        g_date_month( CONST_HACK in_date ) - 1;
+                complete_intervals =
+                        (in_months_from_epoch - fs->s.monthly.offset_from_epoch) /
+                        fs->s.monthly.interval_months;
+                after_repeat_in_month_interval =
+                        (g_date_day( CONST_HACK in_date ) >= fs->s.monthly.day_of_month ||
+                         (in_months_from_epoch - fs->s.monthly.offset_from_epoch) %
+                         fs->s.monthly.interval_months > 0 ||
+                         g_date_day( CONST_HACK in_date ) >=
+                         g_date_days_in_month( g_date_month( CONST_HACK in_date ),
+                                               g_date_year( CONST_HACK in_date ) ) )  ? 1 : 0;
+                next_repeat_months_from_epoch =
+                        fs->s.monthly.offset_from_epoch +
+                        (complete_intervals + after_repeat_in_month_interval) *
+                        fs->s.monthly.interval_months;
+                /* Hmmm... what happens if the day of the month is greater than the
+                 * number of days in this month?
+                 * Here I have constrained the day of the month by the number
+                 * of days in the month. This is compensated for above by checking if
+                 * the input day is the last day of that month, in which case it will
+                 * move to the next month interval.
+                 */
+                month = next_repeat_months_from_epoch % 12 + 1;
+                year = next_repeat_months_from_epoch / 12 + 1;
+                g_date_set_dmy( out_date,
                                 min( fs->s.monthly.day_of_month,
-                                        g_date_days_in_month( month, year ) ),
+                                     g_date_days_in_month( month, year ) ),
                                 month,
                                 year );
-                } break;
+        } break;
         
         case MONTH_RELATIVE: {
-                        guint32 in_months_from_epoch, after_repeat_in_month_interval,
-                                complete_intervals, next_repeat_months_from_epoch, month, year,
-                                wday_of_1st, day_of_repeat;
+                guint32 in_months_from_epoch, after_repeat_in_month_interval,
+                        complete_intervals, next_repeat_months_from_epoch, month, year,
+                        wday_of_1st, day_of_repeat;
 
-                        GDate date1;
-                        in_months_from_epoch = (g_date_year( CONST_HACK in_date )-1) * 12 +
-                                g_date_month( CONST_HACK in_date ) - 1;
-                        complete_intervals =
-                                (in_months_from_epoch - fs->s.month_relative.offset_from_epoch) /
-                                        fs->s.month_relative.interval_months;
-                        month = g_date_month( CONST_HACK in_date );
-                        year = g_date_year( CONST_HACK in_date );
-                        g_date_set_dmy( &date1, 1, month, year );
-                        wday_of_1st = g_date_weekday( &date1 );
-                        day_of_repeat = (fs->s.month_relative.occurrence-1)*7 +
-                                ((fs->s.month_relative.weekday + 7 - wday_of_1st)%7 + 1);
-                        after_repeat_in_month_interval =
-                                (g_date_day( CONST_HACK in_date ) >= day_of_repeat ||
-                                day_of_repeat > g_date_days_in_month( month, year ) ||
-                                (in_months_from_epoch - fs->s.month_relative.offset_from_epoch) %
-                                                fs->s.month_relative.interval_months > 0 )  ? 1 : 0;
+                GDate date1;
+                in_months_from_epoch = (g_date_year( CONST_HACK in_date )-1) * 12 +
+                        g_date_month( CONST_HACK in_date ) - 1;
+                complete_intervals =
+                        (in_months_from_epoch - fs->s.month_relative.offset_from_epoch) /
+                        fs->s.month_relative.interval_months;
+                month = g_date_month( CONST_HACK in_date );
+                year = g_date_year( CONST_HACK in_date );
+                g_date_set_dmy( &date1, 1, month, year );
+                wday_of_1st = g_date_weekday( &date1 );
+                day_of_repeat = (fs->s.month_relative.occurrence-1)*7 +
+                        ((fs->s.month_relative.weekday + 7 - wday_of_1st)%7 + 1);
+                after_repeat_in_month_interval =
+                        (g_date_day( CONST_HACK in_date ) >= day_of_repeat ||
+                         day_of_repeat > g_date_days_in_month( month, year ) ||
+                         (in_months_from_epoch - fs->s.month_relative.offset_from_epoch) %
+                         fs->s.month_relative.interval_months > 0 )  ? 1 : 0;
+                next_repeat_months_from_epoch =
+                        fs->s.month_relative.offset_from_epoch +
+                        (complete_intervals + after_repeat_in_month_interval) *
+                        fs->s.month_relative.interval_months;
+                month = next_repeat_months_from_epoch % 12 + 1;
+                year = next_repeat_months_from_epoch / 12 + 1;
+                g_date_set_dmy( &date1, 1, month, year );
+                wday_of_1st = g_date_weekday( &date1 );
+                /* This calculates the day of the month in the month which forms
+                 * the next month in the cycle after the given input date.
+                 * However, this day may be larger than the number of days in that month... */
+                day_of_repeat = (fs->s.month_relative.occurrence-1)*7 +
+                        ((fs->s.month_relative.weekday + 7 - wday_of_1st)%7 + 1);
+                while( day_of_repeat > g_date_days_in_month( month, year ) ) {
+                        /* If the repeat occurs after the end of the month, then
+                         * find the next month containing a day which satisfies the request.
+                         * Each candiate month separated by interval_months is considered
+                         * by this loop.*/
+                        ++complete_intervals;
                         next_repeat_months_from_epoch =
                                 fs->s.month_relative.offset_from_epoch +
-                                        (complete_intervals + after_repeat_in_month_interval) *
-                                                fs->s.month_relative.interval_months;
+                                complete_intervals * fs->s.month_relative.interval_months;
                         month = next_repeat_months_from_epoch % 12 + 1;
                         year = next_repeat_months_from_epoch / 12 + 1;
                         g_date_set_dmy( &date1, 1, month, year );
                         wday_of_1st = g_date_weekday( &date1 );
-                        /* This calculates the day of the month in the month which forms
-                         * the next month in the cycle after the given input date.
-                         * However, this day may be larger than the number of days in that month... */
                         day_of_repeat = (fs->s.month_relative.occurrence-1)*7 +
                                 ((fs->s.month_relative.weekday + 7 - wday_of_1st)%7 + 1);
-                        while( day_of_repeat > g_date_days_in_month( month, year ) ) {
-                                /* If the repeat occurs after the end of the month, then
-                                 * find the next month containing a day which satisfies the request.
-                                 * Each candiate month separated by interval_months is considered
-                                 * by this loop.*/
-                                ++complete_intervals;
-                                next_repeat_months_from_epoch =
-                                        fs->s.month_relative.offset_from_epoch +
-                                                complete_intervals * fs->s.month_relative.interval_months;
-                                month = next_repeat_months_from_epoch % 12 + 1;
-                                year = next_repeat_months_from_epoch / 12 + 1;
-                                g_date_set_dmy( &date1, 1, month, year );
-                                wday_of_1st = g_date_weekday( &date1 );
-                                day_of_repeat = (fs->s.month_relative.occurrence-1)*7 +
-                                        ((fs->s.month_relative.weekday + 7 - wday_of_1st)%7 + 1);
-                                /* Hmmm... It would be nice to know that this loop is
-                                 * guaranteed to terminate... CHECK ME! */
-                        }
-                        g_date_set_dmy( out_date, day_of_repeat, month, year );
-                } break;
+                        /* Hmmm... It would be nice to know that this loop is
+                         * guaranteed to terminate... CHECK ME! */
+                }
+                g_date_set_dmy( out_date, day_of_repeat, month, year );
+        } break;
         
         case COMPOSITE:
                 list = fs->s.composites.subSpecs;
@@ -934,6 +916,7 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
         }
 }
 
+static
 int
 int_cmp( int a, int b )
 {

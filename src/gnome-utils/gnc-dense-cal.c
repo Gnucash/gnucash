@@ -29,12 +29,15 @@
 #include <gtk/gtk.h>
 #include "gnc-dense-cal.h"
 
+/* For PERR, only... */
+#include "gnc-engine-util.h"
+
 /**
  * Todo:
  * . marking
  *   . color-per-marker (configurable)
  *   X all-or-nothing
- * . handle errors properly
+ * \ handle errors properly
  * X mouse-over -> "hottip"
  * X rotated month labels
  * X weeksPerCol -> monthsPerCol
@@ -98,6 +101,8 @@ enum gnc_dense_cal_signal_enum {
 };
 
 static gint gnc_dense_cal_signals[LAST_SIGNAL] = { 0 };
+
+static short module = MOD_SX;
 
 static void gnc_dense_cal_class_init (GncDenseCalClass *class);
 static void gnc_dense_cal_init (GncDenseCal *dcal);
@@ -264,8 +269,8 @@ gnc_dense_cal_init (GncDenseCal *dcal)
                                         dcal->weekColors,
                                         MAX_COLORS, TRUE, TRUE,
                                         &colorAllocSuccess ) > 0 ) {
-                /* FIXME : handle properly */
-                printf( "Error allocating colors\n" );
+                /* FIXME : handle [more] properly */
+                PERR( "Error allocating colors\n" );
         }
 
         /* Deal with the various label sizes. */
@@ -275,16 +280,10 @@ gnc_dense_cal_init (GncDenseCal *dcal)
                 gint lbearing, rbearing, width, ascent, descent;
 
                 dcal->monthLabelFont = gdk_font_load( LABEL_FONT_NAME );
-                if ( dcal->monthLabelFont == NULL ) {
-                        printf( "Couldn't load font \"%s\"\n", LABEL_FONT_NAME );
-                        gtk_main_quit();
-                }
+                g_assert( dcal->monthLabelFont );
 
                 dcal->dayLabelFont = GTK_WIDGET(dcal)->style->font;
-                if ( dcal->dayLabelFont == NULL ) {
-                        printf( "Couldn't get day-label font from widget->style\n" );
-                        gtk_main_quit();
-                }
+                g_assert( dcal->dayLabelFont );
 
                 maxWidth = maxHeight = maxAscent = maxLBearing = 0;
                 for ( i=0; i<12; i++ ) {
@@ -370,8 +369,8 @@ gnc_dense_cal_set_month( GncDenseCal *dcal, GDateMonth mon )
         recompute_extents( dcal );
         if ( GTK_WIDGET_REALIZED( dcal ) ) {
                 recompute_x_y_scales( dcal );
+                gtk_widget_queue_draw( GTK_WIDGET(dcal) );
         }
-        gtk_widget_queue_draw( GTK_WIDGET(dcal) );
 }
 
 void
@@ -475,7 +474,7 @@ gnc_dense_cal_size_request( GtkWidget      *widget,
 {
         GncDenseCal *dcal = GNC_DENSE_CAL(widget);
         if ( !dcal->initialized ) {
-                printf( "Uninitialized size request\n" );
+                PERR( "Uninitialized size request\n" );
                 requisition->width  = DENSE_CAL_DEFAULT_WIDTH;
                 requisition->height = DENSE_CAL_DEFAULT_HEIGHT;
                 return;
@@ -546,10 +545,9 @@ recompute_mark_storage( GncDenseCal *dcal )
                 goto createNew;
         }
 
-        dcal->markData = NULL;
         for ( i=0; i<oldNumMarks; i++ ) {
                 /* Each of these just contains an elt of dcal->markData,
-                 * which we're about to free... */
+                 * which we're about to free, below... */
                 g_list_free( dcal->marks[i] );
         }
         g_free( dcal->marks );
@@ -559,6 +557,7 @@ recompute_mark_storage( GncDenseCal *dcal )
                 g_list_free( ((gdc_mark_data*)l->data)->ourMarks );
                 g_free( (gdc_mark_data*)l->data );
         }
+        g_list_free( dcal->markData );
         dcal->markData = NULL;
 
  createNew:
@@ -748,9 +747,9 @@ gnc_dense_cal_expose( GtkWidget *widget,
 
                 /* FIXME: use a different GC for this */
                 gdk_gc_set_foreground( widget->style->fg_gc[widget->state], &markColor );
-                for ( i=0; i<num_weeks(dcal)*7; i++ ) {
-                        l = dcal->marks[i];
-                        for ( ; l ; l = l->next ) {
+                //for ( i=0; i<num_weeks(dcal)*7; i++ ) {
+                for ( i=0; i<dcal->numMarks; i++ ) {
+                        for ( l = dcal->marks[i]; l ; l = l->next ) {
                                 gdcmd = (gdc_mark_data*)l->data;
                                 doc_coords( dcal, i, &x1, &y1, &x2, &y2 );
                                 gdk_draw_rectangle( widget->window,
@@ -1264,27 +1263,27 @@ wheres_this( GncDenseCal *dcal, int x, int y )
         y -= dcal->topPadding;
 
         if ( (x < 0) || (y < 0) ) {
-                printf( "x(%d) or y(%d) < 0\n", x, y );
+                PERR( "x(%d) or y(%d) < 0\n", x, y );
                 return -1;
         }
         if ( (x >= GTK_WIDGET(dcal)->allocation.width)
              || (y >= GTK_WIDGET(dcal)->allocation.height) ) {
-                printf( "x(%d) > allocation.width(%d) or y(%d) > allocation->height(%d)\n",
-                        x, y,
-                        GTK_WIDGET(dcal)->allocation.width,
-                        GTK_WIDGET(dcal)->allocation.height );
+                PERR( "x(%d) > allocation.width(%d) or y(%d) > allocation->height(%d)\n",
+                      x, y,
+                      GTK_WIDGET(dcal)->allocation.width,
+                      GTK_WIDGET(dcal)->allocation.height );
                 return -1;
         }
 
         /* "outside of displayed table" check */
         if ( x >= (num_cols(dcal) * (col_width(dcal) + COL_BORDER_SIZE)) ) {
-                printf( "x(%d) > ( col_width(%d) * num_cols(%d) )\n",
-                        x, col_width(dcal), num_cols(dcal) );
+                PERR( "x(%d) > ( col_width(%d) * num_cols(%d) )\n",
+                      x, col_width(dcal), num_cols(dcal) );
                 return -1;
         }
         if ( y >= col_height(dcal) ) {
-                printf( "y(%d) > col_height(%d)\n",
-                        y, col_height(dcal) );
+                PERR( "y(%d) > col_height(%d)\n",
+                      y, col_height(dcal) );
                 return -1;
         }
         
@@ -1294,17 +1293,17 @@ wheres_this( GncDenseCal *dcal, int x, int y )
         x %= (col_width(dcal)+COL_BORDER_SIZE);
         x -= dcal->label_width;
         if ( x < 0 ) {
-                printf( "X is over the label.\n" );
+                PERR( "X is over the label.\n" );
                 return -1;
         }
         if ( x >= day_width(dcal) * 7 ) {
-                printf( "X is in the col_border space.\n" );
+                PERR( "X is in the col_border space.\n" );
                 return -1;
         }
 
         y -= dcal->dayLabelHeight;
         if ( y < 0 ) {
-                printf( "Y is over the label.\n" );
+                PERR( "Y is over the label.\n" );
                 return -1;
         }
 
@@ -1317,7 +1316,7 @@ wheres_this( GncDenseCal *dcal, int x, int y )
         dayCol -= (g_date_weekday(&d) % 7);
         if ( weekRow == 0 ) {
                 if ( dayCol < 0 ) {
-                        printf( "Before the beginning of the first month.\n" );
+                        PERR( "Before the beginning of the first month.\n" );
                         return -1;
                 }
         }
@@ -1329,8 +1328,8 @@ wheres_this( GncDenseCal *dcal, int x, int y )
                 g_date_set_dmy( &ccd, 1, dcal->month, dcal->year );
                 g_date_add_months( &ccd, (colNum+1) * dcal->monthsPerCol );
                 if ( g_date_julian(&d) >= g_date_julian(&ccd) ) {
-                        printf( "%d outside of column range [%d]\n",
-                                g_date_julian(&d), g_date_julian(&ccd) );
+                        PERR( "%d outside of column range [%d]\n",
+                              g_date_julian(&d), g_date_julian(&ccd) );
                         return -1;
                 }
         }
@@ -1341,8 +1340,8 @@ wheres_this( GncDenseCal *dcal, int x, int y )
         g_date_subtract_months( &d, dcal->numMonths );
         if ( g_date_julian(&d) >= g_date_julian(&startD) ) {
                 /* we're past the end of the displayed calendar, thus -1 */
-                printf( "%d >= %d\n",
-                        g_date_julian( &d ), g_date_julian( &startD ) );
+                PERR( "%d >= %d\n",
+                      g_date_julian( &d ), g_date_julian( &startD ) );
                 return -1;
         }
 
@@ -1384,16 +1383,15 @@ gnc_dense_cal_mark( GncDenseCal *dcal,
         gint i, doc;
         gdc_mark_data *newMark;
         GDate *d;
-        GList *l;
 
         if ( size == 0 ) {
-                printf( "0 size not allowed\n" );
+                PERR( "0 size not allowed\n" );
                 return -1;
         }
 
         if ( name == NULL
              || strlen(name) == 0 ) {
-                printf( "name must be reasonable\n" );
+                PERR( "name must be reasonable\n" );
                 return -1;
         }
 
@@ -1410,16 +1408,10 @@ gnc_dense_cal_mark( GncDenseCal *dcal,
                 d = dateArray[i];
                 doc = gdc_get_doc_offset( dcal, d );
                 if ( doc < 0 ) {
-#if 0 /* Silently ignore. */
-                        printf( "This is TheErrorThatShouldBeAppropriately"
-                                "Handeled @ %d for \"%s\" with %d\n",
-                                i, name, doc );
-#endif /* 0 */
                         continue;
                 }
-                l = g_list_alloc();
-                l->data = newMark;
-                dcal->marks[doc] = g_list_concat( dcal->marks[doc], l );
+                g_assert( doc < dcal->numMarks );
+                dcal->marks[doc] = g_list_append( dcal->marks[doc], newMark );
                 newMark->ourMarks = g_list_append( newMark->ourMarks,
                                                    GINT_TO_POINTER(doc) );
         }

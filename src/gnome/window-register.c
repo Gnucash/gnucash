@@ -2523,6 +2523,24 @@ gnc_register_recur_cb(GtkWidget *w, gpointer data)
   SplitRegister *reg = gnc_ledger_display_get_split_register (regData->ledger);
   Transaction *pending_trans = gnc_split_register_get_current_trans (reg);
 
+  /* FIXME: If the transaction has a sched-xact KVP frame, then go to the
+   * editor for the existing SX; otherwise, do the sx-from-trans dialog. */
+  {
+    kvp_frame *txn_frame;
+    kvp_value *kvp_val;
+    /* set a kvp-frame element in the transaction indicating and
+     * pointing-to the SX this was created from. */
+    txn_frame = xaccTransGetSlots( pending_trans );
+    if ( txn_frame != NULL ) {
+      DEBUG( "Got frame, looking up key" );
+      kvp_val = kvp_frame_get_slot( txn_frame, "from-sched-xaction" );
+      if ( kvp_val ) {
+        DEBUG( "Find SX with GUID \"%s\"",
+               guid_to_string( kvp_value_get_guid( kvp_val ) ) );
+      }
+    }
+  }
+
   gnc_sx_create_from_trans(pending_trans);
 }
 
