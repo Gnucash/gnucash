@@ -264,7 +264,7 @@ static gboolean
 vendor_active_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
     struct vendor_pdata *pdata = vendor_pdata;
-    set_boolean (node, pdata->vendor, gncVendorSetActive);
+    return set_boolean (node, pdata->vendor, gncVendorSetActive);
 }
 
 static gboolean

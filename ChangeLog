@@ -1,5 +1,16 @@
+2002-10-20  Derek Atkins  <derek@ihtfp.com>
+	* configure.in -- remove -Wno-uninitialized -Wno-unused, in preparation
+	  for the "new g-wrap" which should output code that wont cause these
+	  warnings.
+	
+	* gnc-vendor-xml-v2.c, test-customer.c, test-vendor.c -- fix compiler
+	  warnings.
+	* dialog-options.c -- remove unused variable
+	* gnc-regwidget.c -- remove unused (module) variable
+
 2002-10-20  Benoit Grégoire  <bock@step.polymtl.ca>
-	* Investment transactions now create two accounts, one is for the stock, the other is the account defined by the FI, where the cash is swaped.
+	* Investment transactions now create two accounts, one is for the stock,
+	  the other is the account defined by the FI, where the cash is swaped.
 
 2002-10-19  Derek Atkins  <derek@ihtfp.com>
 	* gnome/gw-gnc-spec.scm -- add "#include <gnc-splash.h>"

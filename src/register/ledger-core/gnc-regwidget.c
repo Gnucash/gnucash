@@ -53,8 +53,6 @@
 #include "gnc-engine-util.h"
 #include "dialog-utils.h"
 
-static short module = MOD_SX;
-
 /** PROTOTYPES ******************************************************/
 static void gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data);
 static void gnc_register_redraw_help_cb (GnucashRegister *g_reg,

@@ -2641,7 +2641,6 @@ gnc_option_get_ui_value_account_sel (GNCOption *option, GtkWidget *widget)
 {
   GNCAccountSel *gas;
   Account* acc;
-  SCM result;
 
   gas = GNC_ACCOUNT_SEL(widget);
   acc = gnc_account_sel_get_account (gas);

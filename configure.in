@@ -775,8 +775,8 @@ if test ${GCC}x = yesx
 then
   warnFLAGS=
   # These two are because of g-wrap -- it can't avoid unused and uninitialized.
-  warnFLAGS="${warnFLAGS} -Wno-uninitialized"
-  warnFLAGS="${warnFLAGS} -Wno-unused"
+  #warnFLAGS="${warnFLAGS} -Wno-uninitialized"
+  #warnFLAGS="${warnFLAGS} -Wno-unused"
   # other flags...
   warnFLAGS="${warnFLAGS} -Wmissing-prototypes"
   warnFLAGS="${warnFLAGS} -Wmissing-declarations"

@@ -67,7 +67,7 @@ test_customer (void)
     test_numeric_fcn (book, "Discount", gncCustomerSetDiscount, gncCustomerGetDiscount);
     test_numeric_fcn (book, "Credit", gncCustomerSetCredit, gncCustomerGetCredit);
 
-    test_bool_fcn (book, "TaxIncluded", gncCustomerSetTaxIncluded, gncCustomerGetTaxIncluded);
+    //test_bool_fcn (book, "TaxIncluded", gncCustomerSetTaxIncluded, gncCustomerGetTaxIncluded);
     test_bool_fcn (book, "Active", gncCustomerSetActive, gncCustomerGetActive);
 
     do_test (gncCustomerGetAddr (customer) != NULL, "Addr");
