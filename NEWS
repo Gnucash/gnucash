@@ -1,5 +1,13 @@
 Version history:
 ------- -------
+ 1.5.95 - 13 May 2001
+         o alpha release, string freeze
+         o new user account hierarchy wizard
+         o account hierarchy export
+         o reporting improvements
+         o transfer dialog auto-completion
+         o many bug fixes
+
  1.5.6  - 23 April 2001
          o reporting improvements
          o many misc GUI improvements
