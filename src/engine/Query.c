@@ -130,11 +130,21 @@ xaccQueryPrint(Query * q)
       qt = (QueryTerm *)j->data;
       switch (qt->data.base.term_type) 
       {
-        case PR_ACCOUNT:
+        case PR_ACCOUNT: {
+          GList *p;
+          char buff[40];
           printf ("account sense=%d how=%d\n",
                   qt->data.base.sense,
                   qt->data.acct.how);
+          for (p=qt->data.acct.account_guids; p; p=p->next) {
+             guid_to_string_buff (p->data, buff);
+             printf ("\tguid=%s\n", buff);
+          }
+          for (p=qt->data.acct.accounts; p; p=p->next) {
+             printf ("\tacct ptr=%p\n", p->data);
+          }
           break;
+        }
         case PR_ACTION:
           printf ("action\n");
           break;
