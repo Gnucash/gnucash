@@ -54,7 +54,7 @@ static gint amount_edit_signals [LAST_SIGNAL] = { 0 };
 
 static void gnc_amount_edit_init         (GNCAmountEdit      *gae);
 static void gnc_amount_edit_class_init   (GNCAmountEditClass *class);
-static void gnc_amount_edit_changed      (GtkEditable        *gae);
+static void gnc_amount_edit_changed      (GtkEditable        *gae, gpointer data);
 static gint gnc_amount_edit_key_press    (GtkWidget          *widget,
 					  GdkEventKey        *event);
 
@@ -98,11 +98,11 @@ gnc_amount_edit_class_init (GNCAmountEditClass *klass)
 {
 	GObjectClass *object_class;
 	GtkWidgetClass *widget_class;
-	GtkEditableClass *editable_class;
+	/* GtkEditableClass *editable_class; */
 
 	object_class = G_OBJECT_CLASS (klass);
 	widget_class = GTK_WIDGET_CLASS (klass);
-	editable_class = GTK_EDITABLE_CLASS (klass);
+	/* editable_class = GTK_EDITABLE_CLASS (g_type_interface_peek (klass, GTK_TYPE_EDITABLE)); */
 
 	parent_class = g_type_class_peek_parent (klass);
 
@@ -119,7 +119,7 @@ gnc_amount_edit_class_init (GNCAmountEditClass *klass)
 
 	widget_class->key_press_event = gnc_amount_edit_key_press;
 
-	editable_class->changed = gnc_amount_edit_changed;
+	/* editable_class->changed = gnc_amount_edit_changed; */
 }
 
 static void
@@ -130,12 +130,15 @@ gnc_amount_edit_init (GNCAmountEdit *gae)
   gae->print_info = gnc_default_print_info (FALSE);
   gae->fraction = 0;
   gae->evaluate_on_enter = FALSE;
+
+  g_signal_connect (G_OBJECT (gae), "changed",
+		    G_CALLBACK (gnc_amount_edit_changed), NULL);
 }
 
 static void
-gnc_amount_edit_changed (GtkEditable *editable)
+gnc_amount_edit_changed (GtkEditable *editable, gpointer data)
 {
-  (* GTK_EDITABLE_CLASS (parent_class)->changed)(editable);
+  /*GTK_EDITABLE_CLASS (parent_class)->changed(editable);*/
 
   GNC_AMOUNT_EDIT(editable)->need_to_parse = TRUE;
 }
@@ -189,7 +192,7 @@ gnc_amount_edit_new (void)
 {
   GNCAmountEdit *gae;
 
-  gae = gtk_type_new (gnc_amount_edit_get_type ());
+  gae = g_object_new (GNC_TYPE_AMOUNT_EDIT, NULL);
 
   return GTK_WIDGET (gae);
 }

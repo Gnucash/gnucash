@@ -88,16 +88,18 @@ gnc_ui_new_user_dialog (void)
 		} else if ((qifImportDruidFcn != NULL) &&
 				gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (import_qif_button))) {
 			qifImportDruidFcn();
+			gncp_new_user_finish ();
 			break;
 		} else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tutorial_button))) {
 			helpWindow (NULL, NULL, HH_QUICKSTART);
+			gncp_new_user_finish ();
 			break;
 		}
 	  default:
+		g_print ("DEBUG: Response: %d", result);
 		g_assert_not_reached ();
   }
 
-  gncp_new_user_finish ();
   gtk_widget_destroy (dialog);
 }
 

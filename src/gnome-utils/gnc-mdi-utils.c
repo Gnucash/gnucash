@@ -672,14 +672,14 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
 
   if (prev_child)
   {
-    prevwin = gtk_object_get_user_data (GTK_OBJECT(prev_child));
+    prevwin = g_object_get_data (G_OBJECT(prev_child), "gnc-mdi-child-info");
     if (mdi->mode != GNOME_MDI_TOPLEVEL)
       gnc_mdi_update_widgets(prevwin, FALSE);
   }
 
   if (mdi && mdi->active_child)
   {
-    childwin = gtk_object_get_user_data (GTK_OBJECT(mdi->active_child));
+    childwin = g_object_get_data (G_OBJECT(mdi->active_child), "gnc-mdi-child-info");
     new_app = gnome_mdi_get_app_from_view (childwin->contents);
   }
 
@@ -906,11 +906,11 @@ gnc_mdi_new (const char *app_name,
                     G_CALLBACK (gnc_mdi_destroy_cb),
                     gnc_mdi);
 
-  g_signal_connect (G_OBJECT (gnc_mdi->mdi), "app_created",
+  g_signal_connect (G_OBJECT (gnc_mdi->mdi), "app-created",
                     G_CALLBACK (gnc_mdi_app_created_cb),
                     gnc_mdi);
 
-  g_signal_connect (G_OBJECT (gnc_mdi->mdi), "child_changed",
+  g_signal_connect (G_OBJECT (gnc_mdi->mdi), "child-changed",
                     G_CALLBACK (gnc_mdi_child_changed_cb),
                     gnc_mdi);
 
@@ -1034,7 +1034,7 @@ gnc_app_set_title (GnomeApp *app)
   child = gnome_mdi_get_child_from_view (view);
   if (!child) return;
 
-  childwin = gtk_object_get_user_data (GTK_OBJECT (child));
+  childwin = g_object_get_data (G_OBJECT (child), "gnc-mdi-child-info");
   if (!childwin) return;
 
   gnc_mdi_child_set_title (childwin);

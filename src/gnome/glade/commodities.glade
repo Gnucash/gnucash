@@ -31,6 +31,7 @@
                 <property name="label">gtk-close</property>
                 <property name="use_stock">yes</property>
                 <property name="use_underline">yes</property>
+                <property name="response">GTK_RESPONSE_OK</property>
               </widget>
             </child>
           </widget>

@@ -203,11 +203,17 @@ window_destroy_cb (GtkObject *object, gpointer data)
 }
 
 static void
-close_clicked (GtkWidget *widget, gpointer data)
+response_cb (GtkDialog *dialog, gint response, gpointer data)
 {
   CommoditiesDialog *cd = data;
 
-  gnc_close_gui_component_by_data (DIALOG_COMMODITIES_CM_CLASS, cd);
+  switch (response) {
+    case GTK_RESPONSE_OK:
+      gnc_close_gui_component_by_data (DIALOG_COMMODITIES_CM_CLASS, cd);
+      break;
+    default:
+      g_assert_not_reached ();
+  }
 }
 
 static void
@@ -372,18 +378,18 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
   dialog = glade_xml_get_widget (xml, "Commodities Dialog");
   cd->dialog = dialog;
 
-  gnome_dialog_button_connect (GNOME_DIALOG (dialog), 0,
-                               GTK_SIGNAL_FUNC (close_clicked), cd);
+  g_signal_connect (G_OBJECT (dialog), "response",
+                    G_CALLBACK (response_cb), cd);
 
-  gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
-                      GTK_SIGNAL_FUNC (window_destroy_cb), cd);
+  g_signal_connect (G_OBJECT (dialog), "destroy",
+                    G_CALLBACK (window_destroy_cb), cd);
 
   /* parent */
   if (parent != NULL)
-    gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (parent));
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
   /* default to ok */
-  gnome_dialog_set_default (GNOME_DIALOG(dialog), 0);
+  gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_OK);
 
   /* commodity tree */
   {
@@ -392,11 +398,11 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     list = glade_xml_get_widget (xml, "commodity_list");
     cd->commodity_list = list;
 
-    gtk_signal_connect (GTK_OBJECT(list), "select_row",
-                        GTK_SIGNAL_FUNC(select_commodity_cb), cd);
+    g_signal_connect (G_OBJECT(list), "select_row",
+                      G_CALLBACK(select_commodity_cb), cd);
 
-    gtk_signal_connect (GTK_OBJECT(list), "unselect_row",
-                        GTK_SIGNAL_FUNC(unselect_commodity_cb), cd);
+    g_signal_connect (G_OBJECT(list), "unselect_row",
+                      G_CALLBACK(unselect_commodity_cb), cd);
   }
 
   /* buttons */
@@ -406,24 +412,24 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     button = glade_xml_get_widget (xml, "edit_button");
     cd->edit_button = button;
 
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                        GTK_SIGNAL_FUNC (edit_clicked), cd);
+    g_signal_connect (G_OBJECT (button), "clicked",
+                      G_CALLBACK (edit_clicked), cd);
 
     button = glade_xml_get_widget (xml, "remove_button");
     cd->remove_button = button;
 
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                        GTK_SIGNAL_FUNC (remove_clicked), cd);
+    g_signal_connect (G_OBJECT (button), "clicked",
+                      G_CALLBACK (remove_clicked), cd);
 
     button = glade_xml_get_widget (xml, "add_button");
 
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                        GTK_SIGNAL_FUNC (add_clicked), cd);
+    g_signal_connect (G_OBJECT (button), "clicked",
+                      G_CALLBACK (add_clicked), cd);
 
     button = glade_xml_get_widget (xml, "show_currencies_button");
 
-    gtk_signal_connect (GTK_OBJECT (button), "toggled",
-                        GTK_SIGNAL_FUNC (show_currencies_toggled), cd);
+    g_signal_connect (G_OBJECT (button), "toggled",
+                      G_CALLBACK (show_currencies_toggled), cd);
   }
 
   gnc_commodities_load_commodities (cd);
@@ -449,7 +455,7 @@ close_handler (gpointer user_data)
 
   gnc_save_window_size ("commodities_win", last_width, last_height);
 
-  gnome_dialog_close (GNOME_DIALOG (cd->dialog));
+  gtk_widget_destroy (GTK_WIDGET (cd->dialog));
 }
 
 static void

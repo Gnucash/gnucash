@@ -159,7 +159,7 @@ static GtkWidget *
 gnc_acct_tree_view_labeler(GnomeMDIChild * child, GtkWidget * current,
                            gpointer user_data)
 {
-  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
+  GNCMDIChildInfo * mc = g_object_get_data (G_OBJECT (child), "gnc-mdi-child-info");
   GNCAcctTreeWin   * win = NULL;
   char             * name = NULL;
 
@@ -244,7 +244,7 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data)
 
   mc->menu_tweaking = gnc_acct_tree_tweak_menu;
 
-  gtk_object_set_user_data(GTK_OBJECT(child), mc);
+  g_object_set_data (G_OBJECT (child), "gnc-mdi-child-info", mc);
 
   /* set the child name that will get used to save app state */
   name_id = g_strdup_printf("id=%d", win->options_id);
@@ -326,11 +326,9 @@ gnc_main_window_open_accounts(gboolean toplevel)
   GNCMDIInfo * maininfo = gnc_mdi_get_current ();
   GnomeMDIChild * accountchild = gnc_acct_tree_window_create_child(NULL);
 
-  g_assert (maininfo->mdi != NULL);
-  g_assert (accountchild != NULL);
-  g_assert (gnome_mdi_add_child(GNOME_MDI(maininfo->mdi), 
-                                GNOME_MDI_CHILD(accountchild)));
-  
+  gnome_mdi_add_child(GNOME_MDI(maininfo->mdi), 
+                      GNOME_MDI_CHILD(accountchild));
+
   if(toplevel) {
     gnome_mdi_add_toplevel_view(GNOME_MDI(maininfo->mdi), 
                                 GNOME_MDI_CHILD(accountchild));
@@ -524,7 +522,7 @@ gnc_acct_tree_find_account_from_gncmdi(GNCMDIInfo * info)
   Account         * account;
 
   child = gnome_mdi_get_active_child(info->mdi);
-  mc = gtk_object_get_user_data(GTK_OBJECT(child));
+  mc = g_object_get_data (G_OBJECT (child), "gnc-mdi-child-info");
   win = mc->user_data;
   account = gnc_acct_tree_window_get_current_account(win);
 
@@ -1178,16 +1176,16 @@ gnc_acct_tree_window_new(const gchar * url)  {
 
   treewin->odb     = gnc_option_db_new(treewin->options);
   
-  gtk_signal_connect(GTK_OBJECT(treewin->account_tree), "activate_account",
-		     GTK_SIGNAL_FUNC (gnc_acct_tree_window_activate_cb), 
+  g_signal_connect (G_OBJECT(treewin->account_tree), "activate_account",
+		    G_CALLBACK (gnc_acct_tree_window_activate_cb), 
                      treewin);
 
-  gtk_signal_connect(GTK_OBJECT(treewin->account_tree), "select_account",
-                     GTK_SIGNAL_FUNC(gnc_acct_tree_window_select_cb), 
+  g_signal_connect (G_OBJECT(treewin->account_tree), "select_account",
+                    G_CALLBACK(gnc_acct_tree_window_select_cb), 
                      treewin);
 
-  gtk_signal_connect(GTK_OBJECT(treewin->account_tree), "unselect_account",
-                     GTK_SIGNAL_FUNC(gnc_acct_tree_window_select_cb), 
+  g_signal_connect (G_OBJECT(treewin->account_tree), "unselect_account",
+                    G_CALLBACK(gnc_acct_tree_window_select_cb), 
                      treewin);
   
   /* Show everything now that it is created */

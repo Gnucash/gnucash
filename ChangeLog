@@ -1,3 +1,34 @@
+2003-05-19  Jan Arne Petersen  <jpetersen@uni-bonn.de>
+
+	Fix some nome-mdi problems:
+	* src/gnome-utils/gnc-mdi-utils.c: (gnc_mdi_child_changed_cb),
+	(gnc_mdi_new), (gnc_app_set_title):
+	* src/gnome/window-acct-tree.c: (gnc_acct_tree_view_labeler),
+	(gnc_acct_tree_view_new), (gnc_main_window_open_accounts),
+	(gnc_acct_tree_find_account_from_gncmdi),
+	(gnc_acct_tree_window_new):
+	* src/gnome/window-main.c: (gnc_main_window_get_mdi_child),
+	(gnc_main_window_add_child_cb), (gnc_main_window_add_view_cb),
+	(gnc_main_window_new), (gnc_main_window_dispatch_cb),
+	(gnc_main_window_file_close_cb):
+
+	Replace some gtk_signal and gtk_type methods by g_signal and g_type
+	methods:
+	* src/gnome-utils/gnc-amount-edit.c: (gnc_amount_edit_class_init),
+	(gnc_amount_edit_init), (gnc_amount_edit_changed),
+	(gnc_amount_edit_new):
+	* src/gnome/dialog-commodities.c: (response_cb),
+	(gnc_commodities_dialog_create), (close_handler):
+	* src/gnome/dialog-new-user.c: (gnc_ui_new_user_dialog):
+	* src/gnome/glade/commodities.glade:
+
+	Add GtkTreeModel for Accounts and ExampleAccounts:
+	* src/gnome-utils/Makefile.am:
+	* src/gnome-utils/gnc-tree-model-account.c
+	* src/gnome-utils/gnc-tree-model-account.h
+	* src/gnome-utils/gnc-tree-model-example-account.c
+	* src/gnome-utils/gnc-tree-model-example-account.h
+
 2003-05-18  Derek Atkins  <derek@ihtfp.com>
 
 	* macros/autogen.sh: comment out intltoolize and libtoolize again

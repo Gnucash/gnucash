@@ -102,7 +102,7 @@ gnc_main_window_get_mdi_child (void)
   if (!mdi || !mdi->active_child)
     return(NULL);
 
-  return(gtk_object_get_user_data(GTK_OBJECT(mdi->active_child)));
+  return g_object_get_data (G_OBJECT (mdi->active_child), "gnc-mdi-child-info");
 }
 
 /********************************************************************
@@ -415,6 +415,19 @@ gnc_main_window_flip_summary_bar_cb(GtkWidget * widget, gpointer data)
   }
 }
 
+/* GNOME 2 Port */
+static gboolean
+gnc_main_window_add_child_cb (GnomeMDI *mdi, GnomeMDIChild *child, gpointer data)
+{
+	return TRUE;
+}
+
+static gboolean
+gnc_main_window_add_view_cb (GnomeMDI *mdi, GtkWidget *widget, gpointer data)
+{
+	return TRUE;
+}
+
 /********************************************************************
  * gnc_main_window_new()
  * initialize the Gnome MDI system
@@ -445,9 +458,17 @@ gnc_main_window_new (void)
   gnome_mdi_set_child_list_path(GNOME_MDI(retval->mdi),
                                 "_Windows/");
 
+  /* GNOME 2 Port (tmp fix) */
+  g_signal_connect (G_OBJECT(retval->mdi), "add-child",
+                    G_CALLBACK(gnc_main_window_add_child_cb),
+                     retval);
+  g_signal_connect (G_OBJECT(retval->mdi), "add-view",
+                    G_CALLBACK(gnc_main_window_add_view_cb),
+                     retval);
+
   /* handle top-level signals */
-  gtk_signal_connect(GTK_OBJECT(retval->mdi), "app_created",
-                     GTK_SIGNAL_FUNC(gnc_main_window_app_created_cb),
+  g_signal_connect (G_OBJECT(retval->mdi), "app-created",
+                    G_CALLBACK(gnc_main_window_app_created_cb),
                      retval);
 
   /* handle show/hide items in view menu */
@@ -563,7 +584,7 @@ gnc_main_window_dispatch_cb(GtkWidget * widget, gpointer data)
   gpointer *uidata;
 
   /* How annoying. MDI overrides the user data. Get it the hard way. */
-  uidata = gtk_object_get_data(GTK_OBJECT(widget), GNOMEUIINFO_KEY_UIDATA);
+  uidata = g_object_get_data (G_OBJECT(widget), GNOMEUIINFO_KEY_UIDATA);
   type = (GNCMDIDispatchType)GPOINTER_TO_UINT(uidata);
   g_return_if_fail(type < GNC_DISP_LAST);
 
@@ -606,7 +627,7 @@ gnc_main_window_file_close_cb(GtkWidget * widget, gpointer data)
   {
     GNCMDIChildInfo * inf;
 
-    inf = gtk_object_get_user_data(GTK_OBJECT(mdi->active_child));
+    inf = g_object_get_data (G_OBJECT (mdi->active_child), "gnc-mdi-child-info");
     if (inf->toolbar)
     {
       gtk_widget_destroy (GTK_WIDGET(inf->toolbar)->parent);
