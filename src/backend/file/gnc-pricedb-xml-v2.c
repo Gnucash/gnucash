@@ -230,7 +230,9 @@ pricedb_start_handler(GSList* sibling_data,
                       const gchar *tag,
                       gchar **attrs)
 {
-  GNCPriceDB *db = gnc_pricedb_create();
+  gxpf_data *gdata = global_data;
+  GNCBook *book = gdata->bookdata;
+  GNCPriceDB *db = gnc_pricedb_create(book);
   g_return_val_if_fail(db, FALSE);
   *result = db;
   return(TRUE);

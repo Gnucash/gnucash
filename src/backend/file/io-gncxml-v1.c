@@ -404,7 +404,7 @@ gnc_session_load_from_xml_file(GNCSession *session)
     {
       GNCPriceDB *db = gnc_book_get_pricedb(book);
 
-      gnc_book_set_pricedb(book, gnc_pricedb_create());
+      gnc_book_set_pricedb(book, gnc_pricedb_create(book));
 
       if(db) gnc_pricedb_destroy(db);
     }
@@ -3711,7 +3711,8 @@ pricedb_start_handler(GSList* sibling_data,
                       const gchar *tag,
                       gchar **attrs)
 {
-  GNCPriceDB *db = gnc_pricedb_create();
+  GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
+  GNCPriceDB *db = gnc_pricedb_create(pstatus->book);
   g_return_val_if_fail(db, FALSE);
   *result = db;
   return(TRUE);

@@ -62,15 +62,18 @@ run_test (void)
     exit(get_rv());
   }
 
-  if (!group_has_book (group1, NULL))
+  if (!group_has_book (group1, book))
   {
-    failure("new group has non-null book");
+    failure("new group has wrong book");
     exit(get_rv());
   }
 
-  /* ????????  this test seems to be testing routines that
-   * are private to the engine, not sure why.  book_set_group
-   * should not be called publically. */
+  /* this test is testing routines that are private
+   * to the engine. these tests are intended to test
+   * the engine as a whole, not just the public
+   * interface. the maintenance of the correct
+   * book pointers is important for correct
+   * engine operation. */
   gnc_book_set_group (book, group1);
   if (!group_has_book (group1, book))
   {

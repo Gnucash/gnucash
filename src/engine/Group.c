@@ -662,10 +662,7 @@ xaccAccountInsertSubAccount (Account *adult, Account *child)
 
   /* if a container for the children doesn't yet exist, add it */
   if (adult->children == NULL)
-  {
-    GNCBook *book = xaccGroupGetBook (adult->parent);
-    adult->children = xaccMallocAccountGroup (book);
-  }
+    adult->children = xaccMallocAccountGroup (adult->book);
 
   /* set back-pointer to parent */
   adult->children->parent = adult;

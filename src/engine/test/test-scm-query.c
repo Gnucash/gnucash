@@ -48,7 +48,7 @@ run_tests (void)
   test_query (q);
   xaccFreeQuery (q);
 
-  for (i = 0; i < 10; i++)
+  for (i = 0; i < 50; i++)
   {
     q = get_random_query ();
     test_query (q);

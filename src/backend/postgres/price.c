@@ -300,7 +300,7 @@ pgendGetAllPrices (PGBackend *be, GNCPriceDB *prdb)
    ENTER ("be=%p, conn=%p", be, be->connection);
 
    if (!prdb) {
-      prdb = gnc_pricedb_create();
+      prdb = gnc_pricedb_create(be->book);
    }
 
    /* first, make sure commodities table is up to date */

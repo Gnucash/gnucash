@@ -612,10 +612,14 @@ commodity_equal (gconstpointer a, gconstpointer b)
 }
 
 GNCPriceDB *
-gnc_pricedb_create(void)
+gnc_pricedb_create(GNCBook * book)
 {
-  GNCPriceDB * result = g_new0(GNCPriceDB, 1);
-  result->book = NULL;
+  GNCPriceDB * result;
+
+  g_return_val_if_fail (book, NULL);
+
+  result = g_new0(GNCPriceDB, 1);
+  result->book = book;
   result->commodity_hash = g_hash_table_new(commodity_hash, commodity_equal);
   g_return_val_if_fail (result->commodity_hash, NULL);
   return result;

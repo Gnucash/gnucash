@@ -78,7 +78,7 @@ gnc_book_init (GNCBook *book)
 
   book->kvp_data = kvp_frame_new ();
   book->topgroup = xaccMallocAccountGroup(book);
-  book->pricedb = gnc_pricedb_create();
+  book->pricedb = gnc_pricedb_create(book);
 
   book->sched_xactions = NULL;
   book->sx_notsaved = FALSE;
@@ -238,6 +238,7 @@ gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db)
 {
   if(!book) return;
   book->pricedb = db;
+  if (db) db->book = book;
 }
 
 /* ---------------------------------------------------------------------- */

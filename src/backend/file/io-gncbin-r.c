@@ -202,7 +202,7 @@ cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices,
 {
   GSList *item = potential_quotes;
 
-  *prices = gnc_pricedb_create();
+  *prices = gnc_pricedb_create(book);
   if (!*prices) return FALSE;
 
   while(item)

@@ -12,7 +12,6 @@
 
 #include "date.h"
 #include "Group.h"
-#include "gnc-book-p.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "test-engine-stuff.h"
@@ -226,7 +225,7 @@ get_random_pricedb(GNCBook *book)
 {
   GNCPriceDB *db;
 
-  db = gnc_pricedb_create ();
+  db = gnc_pricedb_create (book);
   make_random_pricedb (book, db);
 
   return db;
@@ -546,16 +545,16 @@ account_add_subaccounts (GNCBook *book, Account *account, int depth)
   }
 }
 
-static AccountGroup *
-get_random_group_depth(GNCBook *book, int depth)
+static void
+make_random_group_depth (GNCBook *book, AccountGroup *group, int depth)
 {
-  AccountGroup *group;
   int num_accounts;
 
-  if (depth <= 0)
-    return NULL;
+  g_return_if_fail (book);
+  g_return_if_fail (group);
 
-  group = xaccMallocAccountGroup (book);
+  if (depth <= 0)
+    return;
 
   num_accounts = get_random_int_in_range (1, max_group_accounts);
 
@@ -567,18 +566,33 @@ get_random_group_depth(GNCBook *book, int depth)
 
     account_add_subaccounts (book, account, depth - 1);
   }
+}
 
-  return group;
+static void
+make_random_group (GNCBook *book, AccountGroup * group)
+{
+  int depth;
+
+  g_return_if_fail (book);
+  g_return_if_fail (group);
+
+  depth = get_random_int_in_range (1, max_group_depth);
+
+  make_random_group_depth (book, group, depth);
 }
 
 AccountGroup *
 get_random_group (GNCBook *book)
 {
-  int depth;
+  AccountGroup * group;
 
-  depth = get_random_int_in_range (1, max_group_depth);
+  g_return_val_if_fail (book, NULL);
 
-  return get_random_group_depth (book, depth);
+  group = xaccMallocAccountGroup (book);
+
+  make_random_group (book, group);
+
+  return group;
 }
 
 typedef struct
@@ -1443,11 +1457,7 @@ get_random_book (void)
 
   book = gnc_book_new ();
 
-  /* XXX fixme -- gnc_book_set_group is a private engine function, 
-   * it should not be invoked in ordinary test cases.  Its should 
-   * be more like make_random_pricedb below... */
-  gnc_book_set_group (book, get_random_group (book));
-
+  make_random_group (book, gnc_book_get_group (book));
   make_random_pricedb (book, gnc_book_get_pricedb (book));
 
   return book;
@@ -1463,11 +1473,7 @@ get_random_session (void)
 
   book = gnc_session_get_book (session);
 
-  /* XXX fixme -- gnc_book_set_group is a private engine function, 
-   * it should not be invoked in ordinary test cases.  Its should 
-   * be more like make_random_pricedb below... */
-  gnc_book_set_group (book, get_random_group (book));
-
+  make_random_group (book, gnc_book_get_group (book));
   make_random_pricedb (book, gnc_book_get_pricedb (book));
 
   return session;
