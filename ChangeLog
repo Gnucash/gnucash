@@ -1,5 +1,8 @@
 2003-10-14  Christian Stimming  <stimming@tuhh.de>
 
+	* accounts/el_GR/*: Updated Greek account templates by Nikos
+	Charonitakis <frolix68@yahoo.gr>
+
 	* po/de.po: Fix wrong translation of string, #124357.
 
 2003-09-30  Derek Atkins  <derek@ihtfp.com>
