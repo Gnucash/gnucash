@@ -63,6 +63,11 @@
 	       (gnc:progress-dialog-update progress-dialog))) 
 
 	 (gnc:query-set-book query (gnc:group-get-book old-group))
+
+	 ;; first, we want to find only transactions from the old group.
+	 (gnc:query-add-account-match query
+				      (gnc:group-get-subaccounts old-group)
+				      'guid-match-any 'query-and)
          
          ;; the date should be close to the same.. +/- a week. 
          (let ((date (gnc:transaction-get-date-posted xtn)))               

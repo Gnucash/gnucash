@@ -13,6 +13,10 @@
 
 	  NOTE:  Might need similar fixed in qif-io-core?
 
+	* qif-merge-groups.scm: Limit matches against only the accounts in
+	  the old group, so we don't match against ourselves.  This should
+	  limit the matches to only "reasonable" matches, and should fix #102463
+	
 2003-01-15  David Hampton  <hampton@employees.org>
 
 	* configure.in: Remove restriction on guile versions > 1.4.
