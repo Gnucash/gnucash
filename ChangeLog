@@ -1,5 +1,7 @@
 2002-10-18  Christian Stimming  <stimming@tuhh.de>
 
+	* accounts/fr_FR/*: Some bug fixes by frederic.lespez@wanadoo.fr.
+
 	* configure.in, macros/openhbci.m4: Add version control macro for
 	OpenHBCI.
 
