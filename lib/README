@@ -30,3 +30,9 @@ ComboBox:
 
 XmHTML:
   -- modified by deleting examples, other non-essential stuff.
+
+urlget:
+  -- you'll do a let better by gettig the latest from
+     http://www.fts.frontec.se/~dast/curl/
+     Its now called "curl", not "urlget".
+
