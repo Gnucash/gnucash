@@ -91,7 +91,7 @@ AC_SUBST(GNC_DOC_INSTALL_DIR)
 
 
 # We should always see these errors...
-CFLAGS="${CFLAGS} -Wall"
+CFLAGS="${CFLAGS} -Wall -Werror-implicit-function-declaration"
 
 AC_ARG_ENABLE( debug,
        [  --enable-debug          compile with debugging flags set],
@@ -138,10 +138,15 @@ AM_GNU_GETTEXT
 
 # Check for perl, force version 5
 # AC_CHECK_PROGS(PERL,perl5 perl)		# Sets @PERL@
-AC_PATH_PROG(PERL, perl)
 AC_ARG_WITH(perl,
   [  --with-perl=FILE              which perl executable to use ],
   PERL="${with_perl}")
+
+# If the user didn't specify a perl, then go fetch.
+if test x"$PERL" = x;
+then
+  AC_PATH_PROG(PERL, perl)
+fi
 
 # Make sure Perl was found
 if test x"$PERL" = x; then
@@ -314,8 +319,9 @@ GNOME_STATIC_TARGET="gnome.static.real"
 #AC_CHECK_HEADER might work, but I'm not sure it uses CPPFLAGS
 # this guarantees it - it works.  Promise!!
 AC_MSG_CHECKING([gtk-xmhtml/gtk-xmhtml.h])
-AC_TRY_CPP([#include <gtk-xmhtml/gtk-xmhtml.h>], AC_MSG_RESULT(yes) ,
-    AC_MSG_ERROR([Cannot find gtk-xmhtml.h]))
+AC_TRY_CPP([#include <gtk-xmhtml/gtk-xmhtml.h>],
+  AC_MSG_RESULT(yes),
+  AC_MSG_ERROR([Cannot find gtk-xmhtml.h.  See the README for more info.]))
 
 #undo damage to CPPFLAGS
 CPPFLAGS="$OLDCPPFLAGS"
@@ -326,9 +332,9 @@ EXTRALIBS=`$GNOME_CONFIG_BIN --libs gtkxmhtml`
     
 #check for gtkxmhtml, export library link to variable GTK_XMHTML
 AC_CHECK_LIB(gtkxmhtml, gtk_xmhtml_new,
-        GTK_XMHTML="gtkxmhtml",
-        AC_MSG_ERROR([Cannot find libgtkxmhtml.]),
-        $EXTRALIBS)
+  GTK_XMHTML="gtkxmhtml",
+  AC_MSG_ERROR([Cannot find libgtkxmhtml.  See the README for more info.]),
+  $EXTRALIBS)
 AC_SUBST(GTK_XMHTML)
 
 
@@ -337,10 +343,9 @@ EXTRALIBS=`$GNOME_CONFIG_BIN --libs xml`
     
 #check for libxml
 AC_CHECK_LIB(xml, xmlDefaultSAXHandlerInit,
-             NOT_USED="",
-             AC_MSG_ERROR([Cannot find libxml.]),
-             $EXTRALIBS)
-
+  NOT_USED="",
+  AC_MSG_ERROR([Cannot find libxml.  See the README for more info.]),
+  $EXTRALIBS)
 
 ### --------------------------------------------------------------------------
 EXTRALIBS=`$GNOME_CONFIG_BIN --libs print`

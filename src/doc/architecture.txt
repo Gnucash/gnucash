@@ -67,7 +67,7 @@ Under development.
 
 GnuCash
 -------
-"GnuCash" (src/motif, src/gnome, src/qt) is the main GUI application.
+"GnuCash" (src/gnome) is the main GUI application.
 It consists of a collection of miscellaneous GUI code to glue together
 all of the pieces above into a coherent, point-and-click whole.  It is
 meant to be easy to use and intuitive to the novice user without
