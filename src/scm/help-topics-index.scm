@@ -94,7 +94,7 @@
      )
      ((N_ "GnuCash Accounts")
       "gnc-help:gnucash-guide/types1.html"
-       (((N_ "Balance sheet accounts")
+       (((N_ "Balance Sheet Accounts")
          "gnc-help:gnucash-guide/types1.html#balance2" #f)
         ((N_ "Income and Expense Accounts")
          "gnc-help:gnucash-guide/types1.html#income2" #f)
@@ -152,7 +152,7 @@
   )
  ((N_ "Managing Credit Cards")
   "gnc-help:gnucash-guide/chapter6.html"
-   (((N_ "Setting Up Accounts")
+   (((N_ "Setting up Accounts")
      "gnc-help:gnucash-guide/settingupacct1.html" #f)
     ((N_ "Entering Charges")
      "gnc-help:gnucash-guide/entercharge1.html" #f)
@@ -164,9 +164,9 @@
   )
  ((N_ "Investments")
   "gnc-help:gnucash-guide/chapter7.html"
-   (((N_ "Setting Up Accounts")
+   (((N_ "Setting up Accounts")
      "gnc-help:gnucash-guide/setupinvest1.html"
-     (((N_ "Setting Up Accounts")
+     (((N_ "Setting up Accounts")
        "gnc-help:gnucash-guide/setupinvest1.html#predefined2" #f)
       ((N_ "Custom Accounts Example")
        "gnc-help:gnucash-guide/setupinvest1.html#custom2" #f)
