@@ -569,6 +569,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 
 void regRefresh (RegWindow * regData)
 {
+   xaccLoadRegister (regData->ledger, regData->blackacc[0]->splits);
 }
 
 /********************************************************************\
