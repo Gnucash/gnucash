@@ -58,26 +58,18 @@ typedef struct _RecnWindow
 } RecnWindow;
 
 /** PROTOTYPES ******************************************************/
-void recnRecalculateBalance( RecnWindow *recnData );
+static void recnRecalculateBalance( RecnWindow *recnData );
 
-void recnClose( Widget mw, XtPointer cd, XtPointer cb );
-void recnOkCB( Widget mw, XtPointer cd, XtPointer cb );
-void recnCB( Widget mw, XtPointer cd, XtPointer cb );
+static void recnClose( Widget mw, XtPointer cd, XtPointer cb );
+static void recnOkCB( Widget mw, XtPointer cd, XtPointer cb );
+static void recnCB( Widget mw, XtPointer cd, XtPointer cb );
 
 /** GLOBALS *********************************************************/
 extern XtAppContext app;
 
+static RecnWindow **recnList = NULL;
+
 /********************************************************************/
-
-/********************************************************************\
-\********************************************************************/
-
-void 
-xaccDestroyRecnWindow (RecnWindow *recnData)
-{
-   if (!recnData) return;
-   XtDestroyWidget (recnData->dialog);
-}
 
 /********************************************************************\
  * recnRefresh                                                      *
@@ -87,14 +79,14 @@ xaccDestroyRecnWindow (RecnWindow *recnData)
  * Return: none                                                     *
 \********************************************************************/
 void
-recnRefresh( RecnWindow *recnData )
-  {
-  if( recnData != NULL )
-    {
+recnRefresh (Account *acc)
+{
     int   i,nrows;
     char  buf[BUFSIZE];
     Split *split;
-    Account *acc = recnData->acc;
+    RecnWindow *recnData; 
+
+    FIND_IN_LIST (RecnWindow, recnList, acc, acc, recnData);
     
     /* NOTE: an improvement of the current design would be to use the
      *       user-data in the rows to detect where transactions need
@@ -157,7 +149,6 @@ recnRefresh( RecnWindow *recnData )
       }
     
     recnRecalculateBalance(recnData);
-    }
   }
 
   
@@ -168,7 +159,7 @@ recnRefresh( RecnWindow *recnData )
  * Args:   recnData -- the reconcile window to refresh              *
  * Return: none                                                     *
 \********************************************************************/
-void
+static void
 recnRecalculateBalance( RecnWindow *recnData )
   {
   Split * split;
@@ -236,10 +227,10 @@ recnRecalculateBalance( RecnWindow *recnData )
 /********************************************************************\
  * startRecnWindow:  gets the ending balance for reconcile window   *
 \********************************************************************/
-void
+static void
 startRecnOkCB( Widget wm, XtPointer cd, XtPointer cb )
   { *(int *)cd = 1; }
-void
+static void
 startRecnCancelCB( Widget wm, XtPointer cd, XtPointer cb )
   { *(int *)cd = 0; }
 
@@ -757,7 +748,8 @@ recnWindow( Widget parent, Account *acc )
   XtManageChild(recnData->dialog);
   
   /* now that the matices are set up, fill 'em in with transactions: */
-  recnRefresh(recnData);
+  recnRefresh (acc);
+
   /* and then refresh the total/difference balance fields: */
   recnRecalculateBalance(recnData);
   
@@ -765,6 +757,19 @@ recnWindow( Widget parent, Account *acc )
 
   return recnData;
   }
+
+/********************************************************************\
+\********************************************************************/
+
+void 
+xaccDestroyRecnWindow (Account *acc)
+{
+   RecnWindow *recnData;
+
+   REMOVE_FROM_LIST (RecnWindow, recnList, acc, acc, recnData);
+   XtDestroyWidget (recnData->dialog);
+   free (recnData);
+}
 
 /********************************************************************\
  * recnClose                                                        *
@@ -776,14 +781,14 @@ recnWindow( Widget parent, Account *acc )
  *         cb -                                                     *
  * Return: none                                                     *
 \********************************************************************/
-void 
+static void 
 recnClose( Widget mw, XtPointer cd, XtPointer cb )
   {
   RecnWindow *recnData = (RecnWindow *)cd;
   Account *acc = recnData->acc;
   
-  _free(recnData);
-  acc->recnData = NULL;
+  REMOVE_FROM_LIST (RecnWindow, recnList, acc, acc, recnData);
+  free(recnData);
   
   DEBUG("closed RecnWindow");
   }
@@ -798,7 +803,7 @@ recnClose( Widget mw, XtPointer cd, XtPointer cb )
  * Return: none                                                     *
  * Global: data                                                     *
 \********************************************************************/
-void 
+static void 
 recnOkCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   int nrows,i;
@@ -848,7 +853,7 @@ recnOkCB( Widget mw, XtPointer cd, XtPointer cb )
  *         cb -                                                     *
  * Return: none                                                     *
 \********************************************************************/
-void
+static void
 recnCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   RecnWindow *recnData = (RecnWindow *)cd;

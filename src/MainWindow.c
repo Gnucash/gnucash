@@ -1021,22 +1021,6 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
     case FMB_QUIT:
       DEBUG("FMB_QUIT\n");
       {
-      Account *acc;
-      int i=0;
-      while( (acc=getAccount (grp,i++)) != NULL )
-        {
-        if( acc->regData != NULL )
-          {
-          /* ??? -- hack alert -- should free */
-          acc->regData = NULL;
-          }
-        if( acc->recnData != NULL )
-          {
-          /* ??? -- hack alert -- should free */
-          acc->recnData = NULL;
-          }
-        }
-      
       if( !(grp->saved) )
         {
         if( verifyBox(toplevel, FMB_SAVE_MSG) )

@@ -75,8 +75,6 @@ mallocAccount( void )
   acc->regData       = NULL;
   acc->regLedger     = NULL;
   acc->ledgerList    = NULL;
-  acc->recnData      = NULL;
-  acc->adjBData      = NULL;
   
   return acc;
   }
@@ -156,8 +154,6 @@ freeAccount( Account *acc )
   acc->expand   = 0;
   acc->regData  = NULL;
   acc->regLedger = NULL;
-  acc->recnData = NULL;
-  acc->adjBData = NULL;
 
   if (acc->ledgerList) _free (acc->ledgerList);
   acc->ledgerList = NULL;

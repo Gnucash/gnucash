@@ -42,7 +42,6 @@
 #include "util.h"
 #include "xtutil.h"
 
-/** GLOBALS *********************************************************/
 
 /** STRUCTS *********************************************************/
 typedef struct _AdjBWindow
@@ -53,21 +52,12 @@ typedef struct _AdjBWindow
   Widget  date;             /* Text field, the date for the balance */
 } AdjBWindow;
 
+/** GLOBALS *********************************************************/
+static AdjBWindow **adjBList = NULL;
 
 /** PROTOTYPES ******************************************************/
 static void adjBOkCB( Widget mw, XtPointer cd, XtPointer cb );
 static void adjBClose( Widget mw, XtPointer cd, XtPointer cb );
-
-
-/********************************************************************\
-\********************************************************************/
-
-void
-xaccDestroyAdjBWindow (AdjBWindow *adjBData)
-{
-   if (!adjBData) return;
-   XtDestroyWidget (adjBData->dialog);
-}
 
 /********************************************************************\
  * adjBWindow                                                       *
@@ -75,7 +65,7 @@ xaccDestroyAdjBWindow (AdjBWindow *adjBData)
  *                                                                  *
  * Args:   parent  - the parent of this window                      *
  *         account - the account to adjust                          *
- * Return: recnData - the instance of this AdjBWindow               *
+ * Return: adjBData - the instance of this AdjBWindow               *
 \********************************************************************/
 AdjBWindow *
 adjBWindow( Widget parent, Account *acc )
@@ -85,11 +75,10 @@ adjBWindow( Widget parent, Account *acc )
   AdjBWindow *adjBData;
   char buf[BUFSIZE];
   
+  FETCH_FROM_LIST (AdjBWindow, adjBList, acc, acc, adjBData);
+
   setBusyCursor( parent );
 
-  adjBData = (AdjBWindow *)_malloc(sizeof(AdjBWindow));
-  adjBData->acc = acc;
-  
   /* Create the dialog box... */
   sprintf( buf, "%s: %s", acc->accountName, ADJ_BALN_STR);
   
@@ -247,6 +236,19 @@ adjBWindow( Widget parent, Account *acc )
   }
 
 /********************************************************************\
+\********************************************************************/
+
+void
+xaccDestroyAdjBWindow (Account *acc)
+{
+   AdjBWindow *adjBData;
+
+   REMOVE_FROM_LIST (AdjBWindow, adjBList, acc, acc, adjBData);
+   XtDestroyWidget (adjBData->dialog);
+   free (adjBData);
+}
+
+/********************************************************************\
  * adjBClose                                                        *
  *   frees memory allocated for an adjBWindow, and other cleanup    *
  *   stuff                                                          *
@@ -262,8 +264,8 @@ adjBClose( Widget mw, XtPointer cd, XtPointer cb )
   AdjBWindow *adjBData = (AdjBWindow *)cd;
   Account *acc = adjBData->acc;
   
-  _free(adjBData);
-  acc->adjBData = NULL;
+  REMOVE_FROM_LIST (AdjBWindow, adjBList, acc, acc, adjBData);
+  free(adjBData);
   
   DEBUG("closed AdjBWindow");
   }
@@ -320,8 +322,9 @@ adjBOkCB( Widget mw, XtPointer cd, XtPointer cb )
   
   /* Refresh the account register window */
   regRefresh(acc->regData);
+
   /* Refresh the account reconcile window */
-  recnRefresh(acc->recnData);
+  recnRefresh (acc);
   
   refreshMainWindow();
   }

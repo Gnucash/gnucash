@@ -609,8 +609,7 @@ startAdjBCB( Widget mw, XtPointer cd, XtPointer cb )
   if (1 != regData->numAcc) return;
 
   acc = regData->blackacc[0];
-  if( acc->adjBData == NULL )
-    acc->adjBData = adjBWindow( toplevel, acc );
+  adjBWindow( toplevel, acc );
   }
 
 /********************************************************************\
@@ -635,8 +634,7 @@ startRecnCB( Widget mw, XtPointer cd, XtPointer cb )
   if (1 != regData->numAcc) return;
 
   acc = regData->blackacc[0];
-  if( acc->recnData == NULL )
-    acc->recnData = recnWindow( toplevel, acc );
+  recnWindow( toplevel, acc );
   }
 
 /********************************************************************\

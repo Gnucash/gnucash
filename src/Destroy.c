@@ -47,11 +47,10 @@ xaccAccountWindowDestroy (Account *acc)
 
    xaccDestroyRegWindow (acc->regData);
    xaccDestroyRegWindow (acc->regLedger);
-   xaccDestroyRecnWindow (acc->recnData);
-   xaccDestroyAdjBWindow (acc->adjBData);
+   xaccDestroyRecnWindow (acc);
+   xaccDestroyAdjBWindow (acc);
    xaccDestroyEditAccWindow (acc);
    xaccDestroyEditNotesWindow (acc);
-
 }
 
 /* ------------------------------------------------------ */
