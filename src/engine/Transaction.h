@@ -552,9 +552,7 @@ void         xaccSplitSetBaseValue (Split *split, gnc_numeric value,
  * return the amount. If it is neither and the force_double_entry flag
  * is false, return the value. If is is neither and force_double_entry
  * is true, print a warning message and return gnc_numeric_zero(). 
- *
- * @note FIXME: is this function deprecated, or is this function supposed to
- * be used? */
+ */
 gnc_numeric xaccSplitGetBaseValue (const Split *split, 
                                    const gnc_commodity * base_currency);
 
@@ -563,9 +561,7 @@ gnc_numeric xaccSplitGetBaseValue (const Split *split,
  * with non-unit share prices, it is correctly adjusted for
  * share prices.
  *
- * The following three subroutines return the running balance up to &
- * including the indicated split. (The function
- * xaccSplitGetShareBalance seems to have silently disappeared.)
+ * Returns the running balance up to & including the indicated split. 
  */
 gnc_numeric xaccSplitGetBalance (const Split *split);
 
@@ -573,6 +569,8 @@ gnc_numeric xaccSplitGetBalance (const Split *split);
  * The cleared-balance is the currency-denominated balance 
  * of all transactions that have been marked as cleared or reconciled.
  * It is correctly adjusted for price fluctuations.
+ *
+ * Returns the running balance up to & including the indicated split. 
  */
 gnc_numeric xaccSplitGetClearedBalance (const Split *split);
 
@@ -580,6 +578,8 @@ gnc_numeric xaccSplitGetClearedBalance (const Split *split);
  * Returns the reconciled-balance of this split. The
  * reconciled-balance is the currency-denominated balance of all
  * transactions that have been marked as reconciled.
+ *
+ * Returns the running balance up to & including the indicated split. 
  */
 gnc_numeric xaccSplitGetReconciledBalance (const Split *split);
 
