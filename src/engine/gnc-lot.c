@@ -44,6 +44,7 @@
 #include "qofqueryobject.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofid-p.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_LOT;
@@ -60,8 +61,8 @@ gnc_lot_init (GNCLot *lot, QofBook *book)
    lot->is_closed = -1;
   
    lot->book = book;
-   xaccGUIDNew (&lot->guid, book);
-   xaccStoreEntity (book->entity_table, lot, &lot->guid, GNC_ID_LOT);
+   qof_entity_guid_new (book->entity_table, &lot->guid);
+   qof_entity_store (book->entity_table, lot, &lot->guid, GNC_ID_LOT);
    LEAVE ("(lot=%p, book=%p)", lot, book);
 }
 
@@ -85,7 +86,7 @@ gnc_lot_destroy (GNCLot *lot)
    ENTER ("(lot=%p)", lot);
    gnc_engine_generate_event (&lot->guid, GNC_EVENT_DESTROY);
 
-   xaccRemoveEntity (lot->book->entity_table, &lot->guid);
+   qof_entity_remove (lot->book->entity_table, &lot->guid);
    
    for (node=lot->splits; node; node=node->next)
    {
@@ -119,16 +120,16 @@ gnc_lot_set_guid (GNCLot *lot, GUID uid)
 
    if (guid_equal (&lot->guid, &uid)) return;
 
-   xaccRemoveEntity(lot->book->entity_table, &lot->guid);
+   qof_entity_remove(lot->book->entity_table, &lot->guid);
    lot->guid = uid;
-   xaccStoreEntity(lot->book->entity_table, lot, &lot->guid, GNC_ID_LOT);
+   qof_entity_store(lot->book->entity_table, lot, &lot->guid, GNC_ID_LOT);
 }
 
 GNCLot *
 gnc_lot_lookup (const GUID *guid, QofBook *book)
 {
   if (!guid || !book) return NULL;
-  return xaccLookupEntity (qof_book_get_entity_table (book),
+  return qof_entity_lookup (qof_book_get_entity_table (book),
                                           guid, GNC_ID_LOT);
 }
 

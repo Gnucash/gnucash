@@ -29,7 +29,7 @@
 #ifndef QOF_QUERYNEW_H
 #define QOF_QUERYNEW_H
 
-#include "GNCId.h"
+#include "guid.h"
 #include "qofquerycore.h"
 #include "qofbook.h"
 
@@ -64,11 +64,11 @@ GSList * qof_query_build_param_list (char const *param, ...);
 /** Create a new query.  A Query MUST be set with a 'search-for' type.
  *  you can create and set this value in one step or two */
 QofQuery * qof_query_create (void);
-QofQuery * qof_query_create_for (GNCIdTypeConst obj_type);
+QofQuery * qof_query_create_for (QofIdTypeConst obj_type);
 void qof_query_destroy (QofQuery *q);
 
 /** Set the object type to be searched for */
-void qof_query_search_for (QofQuery *query, GNCIdTypeConst obj_type);
+void qof_query_search_for (QofQuery *query, QofIdTypeConst obj_type);
 
 /** Set the book to be searched (you can search multiple books) */
 void qof_query_set_book (QofQuery *q, QofBook *book);
@@ -162,7 +162,7 @@ gboolean qof_query_equal (QofQuery *q1, QofQuery *q2);
 void qof_query_print (QofQuery *query);
 
 /* Return the type of data we're querying for */
-GNCIdType qof_query_get_search_for (QofQuery *q);
+QofIdType qof_query_get_search_for (QofQuery *q);
 
 /* Return the list of books we're using */
 GList * qof_query_get_books (QofQuery *q);

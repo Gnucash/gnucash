@@ -159,12 +159,24 @@ foreach (@files)
 		# s/gncQueryObjectShutdown/qof_query_object_shutdown/g;
 		# s/gncQueryObjectDefaultSort/qof_query_object_default_sort/g;
 
-		s/QofQueryAccessFunc/QofAccessFunc/g;
-		s/QofQueryAccess/QofAccessFunc/g;
-		s/QofQueryCompareFunc/QofCompareFunc/g;
-		s/QofQueryCompare/QofCompareFunc/g;
-		s/QofQuerySortFunc/QofSortFunc/g;
-		s/QofQuerySort/QofSortFunc/g;
+		# s/xaccGUIDNULL/guid_null/g;
+		# s/xaccGUIDMalloc/guid_malloc/g;
+		# s/xaccGUIDFree/guid_free/g;
+
+		# s/GNCIdTypeConst/QofIdTypeConst/g;
+		# s/GNCIdType/QofIdType/g;
+		# s/GNCEntityTable/QofEntityTable/g;
+		# s/xaccGUIDTypeEntityTable/qof_guid_type/g;
+
+		# s/xaccEntityTableNew/qof_entity_new/g;
+		# s/xaccEntityTableDestroy/qof_entity_destroy/g;
+		# s/xaccGUIDNewEntityTable/qof_entity_guid_new/g;
+		# s/xaccLookupEntity/qof_entity_lookup/g;
+		# s/xaccStoreEntity/qof_entity_store/g;
+		# s/xaccRemoveEntity/qof_entity_remove/g;
+		# s/xaccForeachEntity/qof_entity_foreach/g;
+
+		s/foreachObjectCB/QofEntityForeachCB/g;
 
 		print OF $_;
 	}

@@ -2,8 +2,6 @@
 #include <libguile.h>
 #include <string.h>
 
-#include "GNCIdP.h"
-
 #include "Account.h"
 #include "TransLog.h"
 #include "Transaction.h"

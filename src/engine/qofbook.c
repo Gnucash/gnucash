@@ -47,6 +47,7 @@
 #include "gnc-trace.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofid-p.h"
 #include "qofobject-p.h"
 #include "qofqueryobject.h"
 
@@ -60,10 +61,10 @@ qof_book_init (QofBook *book)
 {
   if (!book) return;
 
-  book->entity_table = xaccEntityTableNew ();
+  book->entity_table = qof_entity_new ();
 
-  xaccGUIDNew(&book->guid, book);
-  xaccStoreEntity(book->entity_table, book, &book->guid, GNC_ID_BOOK);
+  qof_entity_guid_new (book->entity_table, &book->guid);
+  qof_entity_store(book->entity_table, book, &book->guid, QOF_ID_BOOK);
 
   book->kvp_data = kvp_frame_new ();
   
@@ -101,8 +102,8 @@ qof_book_destroy (QofBook *book)
 
   qof_object_book_end (book);
 
-  xaccRemoveEntity (book->entity_table, &book->guid);
-  xaccEntityTableDestroy (book->entity_table);
+  qof_entity_remove (book->entity_table, &book->guid);
+  qof_entity_destroy (book->entity_table);
   book->entity_table = NULL;
 
   /* FIXME: Make sure the data_table is empty */
@@ -159,7 +160,7 @@ qof_book_get_slots (QofBook *book)
   return book->kvp_data;
 }
 
-GNCEntityTable *
+QofEntityTable *
 qof_book_get_entity_table (QofBook *book)
 {
   if (!book) return NULL;
@@ -183,9 +184,9 @@ qof_book_set_guid (QofBook *book, GUID uid)
 
   if (guid_equal (&book->guid, &uid)) return;
 
-  xaccRemoveEntity(book->entity_table, &book->guid);
+  qof_entity_remove(book->entity_table, &book->guid);
   book->guid = uid;
-  xaccStoreEntity(book->entity_table, book, &book->guid, GNC_ID_BOOK);
+  qof_entity_store(book->entity_table, book, &book->guid, QOF_ID_BOOK);
 }
 
 void
@@ -298,7 +299,7 @@ gboolean qof_book_register (void)
     { NULL },
   };
 
-  qof_query_object_register (GNC_ID_BOOK, NULL, params);
+  qof_query_object_register (QOF_ID_BOOK, NULL, params);
 
   return TRUE;
 }

@@ -1,5 +1,5 @@
 /********************************************************************\
- * GNCId.c -- Gnucash entity identifier implementation              *
+ * qofid.c -- QOF entity identifier implementation                  *
  * Copyright (C) 2000 Dave Peticolas <dave@krondo.com>              *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -26,68 +26,35 @@
 #include <string.h>
 #include <glib.h>
 
-#include "GNCId.h"
-#include "GNCIdP.h"
+#include "qofid.h"
+#include "qofid-p.h"
 #include "gnc-engine-util.h"
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (gpointer)(str));
 
 /** #defines ********************************************************/
-#define GNCID_DEBUG 0
+#define QOFID_DEBUG 0
 
 
 /** Type definitions ************************************************/
 typedef struct entity_node
 {
-  GNCIdType entity_type;
+  QofIdType entity_type;
   gpointer entity;
 } EntityNode;
 
-struct gnc_entity_table
+struct _QofEntityTable
 {
   GHashTable * hash;
 };
 
 
 /** Static global variables *****************************************/
-static GMemChunk *guid_memchunk = NULL;
 static short module = MOD_ENGINE;
 
 
 /** Function implementations ****************************************/
-
-void
-xaccGUIDInit (void)
-{
-  if (!guid_memchunk)
-    guid_memchunk = g_mem_chunk_create (GUID, 512, G_ALLOC_AND_FREE);
-}
-
-void
-xaccGUIDShutdown (void)
-{
-  if (guid_memchunk)
-  {
-    g_mem_chunk_destroy (guid_memchunk);
-    guid_memchunk = NULL;
-  }
-}
-
-GUID *
-xaccGUIDMalloc (void)
-{
-  return g_chunk_new (GUID, guid_memchunk);
-}
-
-void
-xaccGUIDFree (GUID *guid)
-{
-  if (!guid)
-    return;
-
-  g_chunk_free (guid, guid_memchunk);
-}
 
 static gboolean
 entity_node_destroy(gpointer key, gpointer value, gpointer not_used)
@@ -96,17 +63,17 @@ entity_node_destroy(gpointer key, gpointer value, gpointer not_used)
   EntityNode *e_node = value;
 
   CACHE_REMOVE (e_node->entity_type);
-  e_node->entity_type = GNC_ID_NONE;
+  e_node->entity_type = QOF_ID_NONE;
   e_node->entity = NULL;
 
-  xaccGUIDFree(guid);
+  guid_free(guid);
   g_free(e_node);
 
   return TRUE;
 }
 
 void
-xaccEntityTableDestroy (GNCEntityTable *entity_table)
+qof_entity_destroy (QofEntityTable *entity_table)
 {
   if (entity_table == NULL)
     return;
@@ -152,7 +119,7 @@ id_compare(gconstpointer key_1, gconstpointer key_2)
   return guid_equal (key_1, key_2);
 }
 
-#if GNCID_DEBUG
+#if QOFID_DEBUG
 static void
 print_node(gpointer key, gpointer value, gpointer not_used)
 {
@@ -164,48 +131,48 @@ print_node(gpointer key, gpointer value, gpointer not_used)
 }
 
 static void
-summarize_table (GNCEntityTable *entity_table)
+summarize_table (QofEntityTable *entity_table)
 {
   if (entity_table == NULL)
     return;
 
   g_hash_table_foreach (entity_table->hash, print_node, NULL);
 }
-#endif
+#endif /* QOFID_DEBUG */
 
-GNCEntityTable *
-xaccEntityTableNew (void)
+QofEntityTable *
+qof_entity_new (void)
 {
-  GNCEntityTable *entity_table;
+  QofEntityTable *entity_table;
 
-  entity_table = g_new0 (GNCEntityTable, 1);
+  entity_table = g_new0 (QofEntityTable, 1);
 
   entity_table->hash = g_hash_table_new (id_hash, id_compare);
 
-  xaccStoreEntity (entity_table, NULL, xaccGUIDNULL(), GNC_ID_NULL);
+  qof_entity_store (entity_table, NULL, guid_null(), QOF_ID_NULL);
 
   return entity_table;
 }
 
-GNCIdType
-xaccGUIDTypeEntityTable (const GUID * guid, GNCEntityTable *entity_table)
+QofIdType 
+qof_entity_type (QofEntityTable *entity_table, const GUID * guid)
 {
   EntityNode *e_node;
 
   if (guid == NULL)
-    return GNC_ID_NONE;
+    return QOF_ID_NONE;
 
-  g_return_val_if_fail (entity_table, GNC_ID_NONE);
+  g_return_val_if_fail (entity_table, QOF_ID_NONE);
 
   e_node = g_hash_table_lookup (entity_table->hash, guid->data);
   if (e_node == NULL)
-    return GNC_ID_NONE;
+    return QOF_ID_NONE;
 
   return e_node->entity_type;
 }
 
 void
-xaccGUIDNewEntityTable (GUID *guid, GNCEntityTable *entity_table)
+qof_entity_guid_new (QofEntityTable *entity_table, GUID *guid)
 {
   if (guid == NULL)
     return;
@@ -216,35 +183,16 @@ xaccGUIDNewEntityTable (GUID *guid, GNCEntityTable *entity_table)
   {
     guid_new(guid);
 
-    if (xaccGUIDTypeEntityTable (guid, entity_table) == GNC_ID_NONE)
+    if (qof_entity_type (entity_table, guid) == QOF_ID_NONE)
       break;
 
     PWARN("duplicate id created, trying again");
   } while(1);
 }
 
-const GUID *
-xaccGUIDNULL(void)
-{
-  static int null_inited = (0 == 1);
-  static GUID null_guid;
-
-  if (!null_inited)
-  {
-    int i;
-
-    for (i = 0; i < 16; i++)
-      null_guid.data[i] = 0;
-
-    null_inited = (0 == 0);
-  }
-
-  return &null_guid;
-}
-
 gpointer
-xaccLookupEntity (GNCEntityTable *entity_table,
-                  const GUID * guid, GNCIdType entity_type)
+qof_entity_lookup (QofEntityTable *entity_table,
+                  const GUID * guid, QofIdType entity_type)
 {
   EntityNode *e_node;
 
@@ -264,8 +212,8 @@ xaccLookupEntity (GNCEntityTable *entity_table,
 }
 
 void
-xaccStoreEntity (GNCEntityTable *entity_table, gpointer entity,
-                 const GUID * guid, GNCIdType entity_type)
+qof_entity_store (QofEntityTable *entity_table, gpointer entity,
+                 const GUID * guid, QofIdType entity_type)
 {
   EntityNode *e_node;
   GUID *new_guid;
@@ -277,15 +225,15 @@ xaccStoreEntity (GNCEntityTable *entity_table, gpointer entity,
 
   if (!entity_type) return;
 
-  if (guid_equal(guid, xaccGUIDNULL())) return;
+  if (guid_equal(guid, guid_null())) return;
 
-  xaccRemoveEntity (entity_table, guid);
+  qof_entity_remove (entity_table, guid);
 
   e_node = g_new(EntityNode, 1);
   e_node->entity_type = CACHE_INSERT (entity_type);
   e_node->entity = entity;
 
-  new_guid = xaccGUIDMalloc ();
+  new_guid = guid_malloc ();
 
   if (!new_guid) return;
   
@@ -295,7 +243,7 @@ xaccStoreEntity (GNCEntityTable *entity_table, gpointer entity,
 }
 
 void
-xaccRemoveEntity (GNCEntityTable *entity_table, const GUID * guid)
+qof_entity_remove (QofEntityTable *entity_table, const GUID * guid)
 {
   EntityNode *e_node;
   gpointer old_guid;
@@ -310,7 +258,7 @@ xaccRemoveEntity (GNCEntityTable *entity_table, const GUID * guid)
   {
     e_node = node;
 
-    if (!safe_strcmp (e_node->entity_type, GNC_ID_NULL))
+    if (!safe_strcmp (e_node->entity_type, QOF_ID_NULL))
       return;
 
     g_hash_table_remove (entity_table->hash, old_guid);
@@ -319,9 +267,9 @@ xaccRemoveEntity (GNCEntityTable *entity_table, const GUID * guid)
 }
 
 struct _iterate {
-  foreachObjectCB	fcn;
+  QofEntityForeachCB	fcn;
   gpointer		data;
-  GNCIdType		type;
+  QofIdType		type;
 };
 
 static void foreach_cb (gpointer key, gpointer item, gpointer arg)
@@ -335,8 +283,8 @@ static void foreach_cb (gpointer key, gpointer item, gpointer arg)
 }
 
 void
-xaccForeachEntity (GNCEntityTable *entity_table, GNCIdType type,
-		   foreachObjectCB cb_func, gpointer user_data)
+qof_entity_foreach (QofEntityTable *entity_table, QofIdType type,
+		   QofEntityForeachCB cb_func, gpointer user_data)
 {
   struct _iterate iter;
 

@@ -31,9 +31,9 @@
 #define QOF_BOOK_P_H
 
 #include "Backend.h"
-#include "GNCIdP.h"
 #include "kvp_frame.h"
 #include "qofbook.h"
+#include "qofid.h"
 
 struct _QofBook
 {
@@ -48,7 +48,7 @@ struct _QofBook
    * belonging to this book, with their pointers to the respective
    * objects.  This allows a lookup of objects based on thier guid.
    */
-  GNCEntityTable *entity_table;
+  QofEntityTable *entity_table;
 
   /* In order to store arbitrary data, for extensibility, add a table
    * that will be used to hold arbitrary pointers.

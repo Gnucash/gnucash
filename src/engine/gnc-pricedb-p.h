@@ -28,10 +28,10 @@
 #include <glib.h>
 
 #include "Backend.h"
-#include "GNCIdP.h"
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
 #include "qofbook.h"
+#include "qofid.h"
 
 struct gnc_price_s
 {
@@ -50,7 +50,7 @@ struct gnc_price_s
   guint32  version_check;        /* data aging timestamp */
 
   /* 'private' object management fields */
-  GNCEntityTable *entity_table;  /* table in which price is stored */
+  QofEntityTable *entity_table;  /* table in which price is stored */
   guint32  refcount;             /* garbage collection reference count */
   gint32   editlevel;            /* nesting level of begin/end edit calls */
   gboolean not_saved;            /* price edit saved flag */

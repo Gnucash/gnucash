@@ -2,8 +2,6 @@
 #include <glib.h>
 #include <libguile.h>
 
-#include "GNCIdP.h"
-
 #include "AccountP.h"
 #include "TransLog.h"
 #include "gnc-engine.h"

@@ -29,11 +29,11 @@
 #include "config.h"
 
 #include "AccountP.h"
-#include "GNCIdP.h"
 #include "gnc-associate-account.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "qofbook.h"
+#include "qofid.h"
 
 static short module = MOD_ENGINE;
 
@@ -94,7 +94,7 @@ back_associate_expense_accounts(Account *stock_account,
     g_return_if_fail(kvp_value_get_type(val) == KVP_TYPE_GUID);
     existing_acc_guid = kvp_value_get_guid(val);
 
-    g_return_if_fail(GNC_ID_NONE == xaccGUIDType (existing_acc_guid, stock_account->book));
+    g_return_if_fail(GNC_ID_NONE == qof_entity_type (qof_book_get_entity_table (stock_account->book), existing_acc_guid));
     
     kvp_frame_set_slot_nc(acc_frame, "associated-stock-account",
                           stock_acc_guid_kvpval);
@@ -129,8 +129,7 @@ back_associate_income_accounts(Account *stock_account,
     g_return_if_fail(kvp_value_get_type(val) == KVP_TYPE_GUID);
     existing_acc_guid = kvp_value_get_guid(val);
 
-    g_return_if_fail(xaccGUIDType(existing_acc_guid,
-                                             stock_account->book) ==
+    g_return_if_fail(qof_entity_type(qof_book_get_entity_table(stock_account->book), existing_acc_guid) == 
                      GNC_ID_NONE);
     
     kvp_frame_set_slot_nc(acc_frame, "associated-stock-account",
@@ -449,7 +448,7 @@ gnc_tracking_dissociate_account(Account *inc_or_expense_account)
   
   stock_account_guid = kvp_value_get_guid(stock_account_kvpval);
   if(!safe_strcmp
-     (xaccGUIDType(stock_account_guid, inc_or_expense_account->book),
+     (qof_entity_type(qof_book_get_entity_table(inc_or_expense_account->book), stock_account_guid),
       GNC_ID_NULL))
     return;
 

@@ -26,7 +26,7 @@
 
 #include "config.h"
 
-#include "GNCId.h"
+#include "guid.h"
 #include "kvp_frame.h"
 
 /* PRIVATE FILE 

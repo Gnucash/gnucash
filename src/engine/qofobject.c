@@ -106,8 +106,8 @@ void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data)
   }
 }
 
-void qof_object_foreach (GNCIdTypeConst type_name, QofBook *book, 
-		       foreachObjectCB cb, gpointer user_data)
+void qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
+		       QofEntityForeachCB cb, gpointer user_data)
 {
   const QofObject *obj;
 
@@ -123,7 +123,7 @@ void qof_object_foreach (GNCIdTypeConst type_name, QofBook *book,
 }
 
 const char *
-qof_object_printable (GNCIdTypeConst type_name, gpointer obj)
+qof_object_printable (QofIdTypeConst type_name, gpointer obj)
 {
   const QofObject *b_obj;
 
@@ -138,7 +138,7 @@ qof_object_printable (GNCIdTypeConst type_name, gpointer obj)
   return NULL;	    
 }
 
-const char * qof_object_get_type_label (GNCIdTypeConst type_name)
+const char * qof_object_get_type_label (QofIdTypeConst type_name)
 {
   const QofObject *obj;
 
@@ -207,7 +207,7 @@ gboolean qof_object_register (const QofObject *object)
   return TRUE;
 }
 
-const QofObject * qof_object_lookup (GNCIdTypeConst name)
+const QofObject * qof_object_lookup (QofIdTypeConst name)
 {
   GList *iter;
   const QofObject *obj;
@@ -224,7 +224,7 @@ const QofObject * qof_object_lookup (GNCIdTypeConst name)
   return NULL;
 }
 
-gboolean qof_object_register_backend (GNCIdTypeConst type_name,
+gboolean qof_object_register_backend (QofIdTypeConst type_name,
 				   const char *backend_name,
 				   gpointer be_data)
 {
@@ -250,7 +250,7 @@ gboolean qof_object_register_backend (GNCIdTypeConst type_name,
   return TRUE;
 }
 
-gpointer qof_object_lookup_backend (GNCIdTypeConst type_name,
+gpointer qof_object_lookup_backend (QofIdTypeConst type_name,
 				 const char *backend_name)
 {
   GHashTable *ht;

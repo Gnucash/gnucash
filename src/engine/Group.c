@@ -31,7 +31,6 @@
 #include "AccountP.h"
 #include "Backend.h"
 #include "BackendP.h"
-#include "GNCIdP.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
@@ -40,6 +39,7 @@
 #include "gnc-numeric.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofid-p.h"
 #include "qofobject.h"
 
 static short module = MOD_ENGINE;
@@ -746,9 +746,9 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
          PWARN ("reparenting accounts accross books is not correctly supported\n");
 
          gnc_engine_generate_event (&acc->guid, GNC_EVENT_DESTROY);
-         xaccRemoveEntity (acc->book->entity_table, &acc->guid);
+         qof_entity_remove (acc->book->entity_table, &acc->guid);
 
-         xaccStoreEntity (grp->book->entity_table, acc, &acc->guid, GNC_ID_ACCOUNT);
+         qof_entity_store (grp->book->entity_table, acc, &acc->guid, GNC_ID_ACCOUNT);
          gnc_engine_generate_event (&acc->guid, GNC_EVENT_CREATE);
       }
     }

@@ -28,7 +28,6 @@
 #include <string.h>
 
 #include "BackendP.h"
-#include "GNCIdP.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
@@ -37,6 +36,7 @@
 #include "kvp-util.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofid-p.h"
 #include "qofobject.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -70,8 +70,8 @@ gnc_price_create (QofBook *book)
   p->book = book;
   p->entity_table = qof_book_get_entity_table (book);
 
-  xaccGUIDNew (&p->guid, book);
-  xaccStoreEntity (p->entity_table, p, &p->guid, GNC_ID_PRICE); 
+  qof_entity_guid_new (p->entity_table, &p->guid);
+  qof_entity_store (p->entity_table, p, &p->guid, GNC_ID_PRICE); 
   gnc_engine_generate_event (&p->guid, GNC_EVENT_CREATE);
 
   return p;
@@ -82,7 +82,7 @@ gnc_price_destroy (GNCPrice *p)
 {
   ENTER(" ");
   gnc_engine_generate_event (&p->guid, GNC_EVENT_DESTROY);
-  xaccRemoveEntity(p->entity_table, &p->guid);
+  qof_entity_remove(p->entity_table, &p->guid);
 
   if(p->type) g_cache_remove(gnc_engine_get_string_cache(), p->type);
   if(p->source) g_cache_remove(gnc_engine_get_string_cache(), p->source);
@@ -243,10 +243,10 @@ void
 gnc_price_set_guid (GNCPrice *p, const GUID *guid)
 {
    if (!p || !guid) return;
-   xaccRemoveEntity (p->entity_table, &p->guid);
+   qof_entity_remove (p->entity_table, &p->guid);
    p->guid = *guid;
    if(p->db) p->db->dirty = TRUE;
-   xaccStoreEntity(p->entity_table, p, &p->guid, GNC_ID_PRICE);
+   qof_entity_store(p->entity_table, p, &p->guid, GNC_ID_PRICE);
 }
 
 void
@@ -380,21 +380,21 @@ gnc_price_lookup (const GUID *guid, QofBook *book)
 {
   if (!guid) return NULL;
   g_return_val_if_fail (book, NULL);
-  return xaccLookupEntity (qof_book_get_entity_table (book),
+  return qof_entity_lookup (qof_book_get_entity_table (book),
                            guid, GNC_ID_PRICE);
 }
 
 const GUID *
 gnc_price_get_guid (GNCPrice *p)
 {
-  if (!p) return xaccGUIDNULL();
+  if (!p) return guid_null();
   return &p->guid;
 }
 
 const GUID
 gnc_price_return_guid (GNCPrice *p)
 {
-  if (!p) return *xaccGUIDNULL();
+  if (!p) return *guid_null();
   return p->guid;
 }
 

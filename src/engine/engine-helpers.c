@@ -434,10 +434,10 @@ gnc_scm2balance_match_how (SCM how_scm, gboolean *resp)
   return TRUE;
 }
 
-static GNCIdType
+static QofIdType
 gnc_scm2kvp_match_where (SCM where_scm)
 {
-  GNCIdType res;
+  QofIdType res;
   char *where;
 
   if (!SCM_LISTP (where_scm))
@@ -490,7 +490,7 @@ gnc_scm2guid_glist (SCM guids_scm)
     SCM guid_scm = SCM_CAR (guids_scm);
     GUID *guid;
 
-    guid = xaccGUIDMalloc ();
+    guid = guid_malloc ();
     *guid = gnc_scm2guid (guid_scm);
 
     guids = g_list_prepend (guids, guid);
@@ -507,7 +507,7 @@ gnc_guid_glist_free (GList *guids)
   GList *node;
 
   for (node = guids; node; node = node->next)
-    xaccGUIDFree (node->data);
+    guid_free (node->data);
 
   g_list_free (guids);
 }
@@ -1410,7 +1410,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
     } else if (!safe_strcmp (pd_type, "pd-guid")) {
       GUID guid;
-      GNCIdType id_type;
+      QofIdType id_type;
       char *tmp;
 
       /* guid */
@@ -1435,7 +1435,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       GSList *path;
       kvp_value *value;
       QofQueryCompare how;
-      GNCIdType where;
+      QofIdType where;
 
       /* how */
       if (SCM_NULLP (query_term_scm))

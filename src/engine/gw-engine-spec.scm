@@ -93,7 +93,7 @@
 
 (gw:wrap-as-wct ws '<gnc:GList*> "GList*" "const GList*")
 
-(gw:wrap-as-wct ws '<gnc:id-type> "GNCIdType" "GNCIdTypeConst")
+(gw:wrap-as-wct ws '<gnc:id-type> "QofIdType" "QofIdTypeConst")
 (gw:wrap-as-wct ws '<gnc:Account*> "Account*" "const Account*")
 (gw:wrap-as-wct ws '<gnc:Account**> "Account**" "const Account**")
 (gw:wrap-as-wct ws '<gnc:InvAcct*> "InvAcct*" "const InvAcct*")
@@ -252,7 +252,7 @@
   #t)
 
 ;
-; Definitions from GNCId.h
+; Definitions from gnc-engine.h
 ;
 (gw:wrap-value ws 'gnc:id-account '<gnc:id-type> "GNC_ID_ACCOUNT")
 (gw:wrap-value ws 'gnc:id-book '<gnc:id-type> "GNC_ID_BOOK")

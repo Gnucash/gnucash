@@ -44,7 +44,7 @@ static gboolean clear_table (gpointer key, gpointer value, gpointer user_data)
 /********************************************************************/
 /* PUBLISHED API FUNCTIONS */
 
-void qof_query_object_register (GNCIdTypeConst obj_name,
+void qof_query_object_register (QofIdTypeConst obj_name,
 			     QofSortFunc default_sort_function,
 			     const QofQueryObject *params)
 {
@@ -92,7 +92,7 @@ void qof_query_object_shutdown (void)
 }
 
 
-const QofQueryObject * qof_query_object_get_parameter (GNCIdTypeConst obj_name,
+const QofQueryObject * qof_query_object_get_parameter (QofIdTypeConst obj_name,
 						   const char *parameter)
 {
   GHashTable *ht;
@@ -108,7 +108,7 @@ const QofQueryObject * qof_query_object_get_parameter (GNCIdTypeConst obj_name,
   return (g_hash_table_lookup (ht, parameter));
 }
 
-QofAccessFunc qof_query_object_get_parameter_getter (GNCIdTypeConst obj_name,
+QofAccessFunc qof_query_object_get_parameter_getter (QofIdTypeConst obj_name,
 					      const char *parameter)
 {
   const QofQueryObject *obj;
@@ -123,7 +123,7 @@ QofAccessFunc qof_query_object_get_parameter_getter (GNCIdTypeConst obj_name,
   return NULL;
 }
 
-QofQueryCoreType qof_query_object_parameter_type (GNCIdTypeConst obj_name,
+QofQueryCoreType qof_query_object_parameter_type (QofIdTypeConst obj_name,
 					   const char *param_name)
 {
   const QofQueryObject *obj;
@@ -137,7 +137,7 @@ QofQueryCoreType qof_query_object_parameter_type (GNCIdTypeConst obj_name,
 }
 
 QofSortFunc 
-qof_query_object_default_sort (GNCIdTypeConst obj_name)
+qof_query_object_default_sort (QofIdTypeConst obj_name)
 {
   if (!obj_name) return NULL;
   return g_hash_table_lookup (sortTable, obj_name);

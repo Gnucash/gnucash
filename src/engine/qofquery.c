@@ -80,7 +80,7 @@ typedef struct _QofSortFunc
 struct _QofQuery 
 {
   /* The object type that we're searching for */
-  GNCIdType         search_for;
+  QofIdType         search_for;
 
   /* terms is a list of the OR-terms in a sum-of-products 
    * logical expression. */
@@ -402,7 +402,7 @@ check_object (QofQuery *q, gpointer object)
  *
  * returns NULL if the first parameter is bad (and final is unchanged).
  */
-static GSList * compile_params (GSList *param_list, GNCIdType start_obj,
+static GSList * compile_params (GSList *param_list, QofIdType start_obj,
                                 QofQueryObject const **final)
 {
   const QofQueryObject *objDef = NULL;
@@ -413,7 +413,7 @@ static GSList * compile_params (GSList *param_list, GNCIdType start_obj,
   g_return_val_if_fail (final, NULL);
 
   for (; param_list; param_list = param_list->next) {
-    GNCIdType param_name = param_list->data;
+    QofIdType param_name = param_list->data;
     objDef = qof_query_object_get_parameter (start_obj, param_name);
 
     /* If it doesn't exist, then we've reached the end */
@@ -427,14 +427,14 @@ static GSList * compile_params (GSList *param_list, GNCIdType start_obj,
     *final = objDef;
 
     /* And reset for the next parameter */
-    start_obj = (GNCIdType) objDef->param_type;
+    start_obj = (QofIdType) objDef->param_type;
   }
 
   return (g_slist_reverse (fcns));
 }
 
 static void 
-compile_sort (QofQuerySort *sort, GNCIdType obj)
+compile_sort (QofQuerySort *sort, QofIdType obj)
 {
   const QofQueryObject *resObj = NULL;
 
@@ -789,18 +789,18 @@ QofQuery * qof_query_create (void)
   return qp;
 }
 
-void qof_query_search_for (QofQuery *q, GNCIdTypeConst obj_type)
+void qof_query_search_for (QofQuery *q, QofIdTypeConst obj_type)
 {
   if (!q || !obj_type)
     return;
 
   if (safe_strcmp (q->search_for, obj_type)) {
-    q->search_for = (GNCIdType) obj_type;
+    q->search_for = (QofIdType) obj_type;
     q->changed = 1;
   }
 }
 
-QofQuery * qof_query_create_for (GNCIdTypeConst obj_type)
+QofQuery * qof_query_create_for (QofIdTypeConst obj_type)
 {
   QofQuery *q;
   if (!obj_type)
@@ -975,7 +975,7 @@ QofQuery * qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op)
   QofQuery * i1, * i2;
   QofQuery * t1, * t2;
   GList * i, * j;
-  GNCIdType search_for;
+  QofIdType search_for;
 
   if(!q1 || !q2 ) return NULL;
   if (q1->search_for && q2->search_for)
@@ -1193,7 +1193,7 @@ int qof_query_get_max_results (QofQuery *q)
   return q->max_results;
 }
 
-GNCIdType qof_query_get_search_for (QofQuery *q)
+QofIdType qof_query_get_search_for (QofQuery *q)
 {
   if (!q) return NULL;
   return q->search_for;
@@ -1405,7 +1405,7 @@ qof_query_printOutput (GList * output)
 static GList *
 qof_query_printSearchFor (QofQuery * query, GList * output)
 {
-  GNCIdType searchFor;
+  QofIdType searchFor;
   GString *gs;
 
   searchFor = qof_query_get_search_for (query);

@@ -4,7 +4,6 @@
 
 #include "Group.h"
 #include "GroupP.h"
-#include "GNCIdP.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"

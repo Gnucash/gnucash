@@ -33,8 +33,8 @@
 #include "gnc-commodity.h"
 #include "gnc-date.h"
 #include "gnc-engine.h"
+#include "guid.h"
 #include "kvp_frame.h"
-#include "GNCId.h"
 #include "qofbook.h"
 
 /** @name Split Reconciled field values

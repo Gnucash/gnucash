@@ -32,8 +32,8 @@
 
 #include <glib.h>
 
-#include "GNCId.h"
 #include "gnc-engine.h"
+#include "guid.h"
 #include "qofbook.h"
 
 /**
