@@ -97,8 +97,6 @@ enum gnc_dense_cal_signal_enum {
   LAST_SIGNAL
 };
 
-GtkWidget *gnc_dense_cal_new();
-
 static gint gnc_dense_cal_signals[LAST_SIGNAL] = { 0 };
 
 static void gnc_dense_cal_class_init (GncDenseCalClass *class);
@@ -346,7 +344,7 @@ gnc_dense_cal_init (GncDenseCal *dcal)
 }
 
 GtkWidget*
-gnc_dense_cal_new()
+gnc_dense_cal_new(void)
 {
         GncDenseCal *dcal;
         dcal = gtk_type_new (gnc_dense_cal_get_type ());

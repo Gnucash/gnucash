@@ -42,6 +42,12 @@ typedef struct _gdc_month_coords {
         gint x, y;
 } gdc_month_coords;
 
+enum GDC_COLORS {
+  MONTH_THIS = 0,
+  MONTH_THAT,
+  MAX_COLORS
+};
+
 struct _GncDenseCal
 {
         GtkWidget widget;
@@ -74,10 +80,6 @@ struct _GncDenseCal
         GdkFont *dayLabelFont;
         GdkPixmap *monthLabels[12];
 
-        enum GDC_COLORS {
-                MONTH_THIS = 0,
-                MONTH_THAT,
-                MAX_COLORS };
         GdkColor weekColors[MAX_COLORS];
 
         guint label_lbearing;
@@ -114,7 +116,7 @@ typedef struct _gdc_mark_data {
         GList *ourMarks;
 } gdc_mark_data;
 
-GtkWidget*     gnc_dense_cal_new                    ();
+GtkWidget*     gnc_dense_cal_new                    (void);
 GtkType        gnc_dense_cal_get_type               (void);
 
 void gnc_dense_cal_set_month( GncDenseCal *dcal, GDateMonth mon );
