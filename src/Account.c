@@ -412,7 +412,7 @@ void xaccSetShareAmount (Account *acc, Transaction *trans, double themount)
    if ( trans->debit == ((struct _account *) acc) ) {
       trans->damount = - themount;
    } else {
-      printf ("Internal Error: xaccSetAmount: missing double entry \n");
+      printf ("Internal Error: xaccSetShareAmount: missing double entry \n");
       printf ("this error should not occur. Please report the problem. \n");
       trans->damount = 0.0; /* punt */
    }

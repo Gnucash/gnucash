@@ -1100,15 +1100,18 @@ regSaveTransaction( RegWindow *regData, int position )
       /* Be sure to prompt the user to save to disk after changes are made! */
       Account *acc = regData->blackacc[0];
       acc->parent->saved = False;
-      }
-    } else {
-      /* Be sure to prompt the user to save to disk after changes are made! */
-      Account *acc;
-      acc = (Account *) trans->credit;
-      if (acc) acc->parent->saved = False;
-      acc = (Account *) trans->debit;
-      if (acc) acc->parent->saved = False;
+
+      /* by default, new transactions are considered credits */
+      trans->credit = (struct _account *) acc;
     }
+  } else {
+    /* Be sure to prompt the user to save to disk after changes are made! */
+    Account *acc;
+    acc = (Account *) trans->credit;
+    if (acc) acc->parent->saved = False;
+    acc = (Account *) trans->debit;
+    if (acc) acc->parent->saved = False;
+  }
 
   if( regData->changed & MOD_NUM )
     {
@@ -1185,7 +1188,7 @@ regSaveTransaction( RegWindow *regData, int position )
        * subroutine will find the null slot, and will insert 
        * into it automatically. */
 
-      /* insert the transaction into the new account */
+      /* insert the transaction into the transfer account */
       insertTransaction (xfer_acct, trans);
       }
     }
@@ -1226,7 +1229,7 @@ regSaveTransaction( RegWindow *regData, int position )
        * account. */
       trans->credit = (struct _account *)xfer_acct;
 
-      /* insert the transaction into the new account */
+      /* insert the transaction into the transfer account */
       insertTransaction (xfer_acct, trans);
       }
     }
@@ -1456,21 +1459,6 @@ regSaveTransaction( RegWindow *regData, int position )
       return;
     }
 
-    /* for ledgers, the user *MUST* specify either a 
-     * credited or a debited account, or both.  If they 
-     * have specified these, then the account is already 
-     * inserted, and we have nothing to do.  If they have
-     * not specified either one, then it is an error 
-     * condition -- we cannot insert, because we don't know
-     * where to insert.
-     *
-     * Warn the user about this.  */
-    if ((NULL == trans->credit) && (NULL == trans->debit)) {
-      errorBox (toplevel, XFER_NO_ACC_MSG);
-      freeTransaction (trans);
-      return;
-    }
-
     /* if we got to here, we've got a live one. Insert it into 
      * an account, if we haven't done so already.  Do this 
      * before we get to the date code below, since date the
@@ -1485,6 +1473,21 @@ regSaveTransaction( RegWindow *regData, int position )
       trans->credit = (struct _account *) acc;
       insertTransaction (acc, trans);
     } 
+
+    /* for ledgers, the user *MUST* specify either a 
+     * credited or a debited account, or both.  If they 
+     * have specified these, then the account is already 
+     * inserted, and we have nothing to do.  If they have
+     * not specified either one, then it is an error 
+     * condition -- we cannot insert, because we don't know
+     * where to insert.
+     *
+     * Warn the user about this.  */
+    if ((NULL == trans->credit) && (NULL == trans->debit)) {
+      errorBox (toplevel, XFER_NO_ACC_MSG);
+      freeTransaction (trans);
+      return;
+    }
   }
 
       
@@ -2642,7 +2645,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       break;
     }
 
-    case XbaeModifyVerifyReason:
+    case XbaeModifyVerifyReason: {
       DEBUG("XbaeModifyVerifyReason\n");
       {	
       XbaeMatrixModifyVerifyCallbackStruct *mvcbs = 
@@ -2822,10 +2825,10 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       if( IN_XTO_CELL(row,col) ) {
         regData->changed |= MOD_XTO;
       }
-
       break;
+    } 
 
-    case XbaeTraverseCellReason:
+    case XbaeTraverseCellReason: {
       DEBUG("XbaeTraverseCellReason\n");
       /* This ensure that whenever the user hits TAB, they go to the
        * next valid cell.  Also, if regData->qf and regData->qf->trans
@@ -2841,6 +2844,20 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           /* Don't need to check IN_DATE_CELL or IN_NUM_CELL because
            * the default transversal from these cells is correct */
           
+          if( IN_XFRM_CELL(row,col) ) {
+            tcbs->next_column = DESC_CELL_C;
+          }
+
+          if( IN_ACTN_CELL(row,col) ) {
+            tcbs->next_column = MEMO_CELL_C;
+            if( regData->qf != NULL ) {
+              if( regData->qf->trans != NULL ) {
+                XbaeMatrixSetCell( reg, tcbs->next_row, tcbs->next_column,
+                                   regData->qf->trans->memo );
+              }
+            }
+          }
+
           if( IN_DESC_CELL(row,col) )
             {
             tcbs->next_column = PAY_CELL_C;
@@ -2863,16 +2880,12 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
             {
             /* In this field, we either go to the deposit field,
              * if the user hasn't entered any data in this field,
-             * or to the memo field, if the user has entered data */
+             * or to the action field, if the user has entered data */
             XbaeMatrixCommitEdit(reg,True);
             if( strcmp(XbaeMatrixGetCell(reg,tcbs->row,tcbs->column),"") != 0 )
               {
               tcbs->next_row    = row+1;
-              tcbs->next_column = MEMO_CELL_C;
-              if( regData->qf != NULL )
-                if( regData->qf->trans != NULL )
-                  XbaeMatrixSetCell( reg, tcbs->next_row, tcbs->next_column,
-                                     regData->qf->trans->memo );
+              tcbs->next_column = ACTN_CELL_C;
               }
             else
               {
@@ -2896,11 +2909,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           if( IN_DEP_CELL(row,col) )
             {
             tcbs->next_row    = row+1;
-            tcbs->next_column = MEMO_CELL_C;
-            if( regData->qf != NULL )
-              if( regData->qf->trans != NULL )
-                XbaeMatrixSetCell( reg, tcbs->next_row, tcbs->next_column,
-                                   regData->qf->trans->memo );
+            tcbs->next_column = ACTN_CELL_C;
             }
           
           /* If we are in the memo cell, stay there! */
@@ -2912,8 +2921,10 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
             }
           }
         }
-        break;
-    default:
+      }
+      break;
+
+    default: 
       PERR("regDB(): We shouldn't get here!");
     }
   }
