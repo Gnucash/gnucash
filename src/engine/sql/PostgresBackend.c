@@ -60,6 +60,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
 #include "gnc-pricedb.h"
+#include "gnc-pricedb-p.h"
 #include "guid.h"
 #include "GNCId.h"
 #include "GNCIdP.h"
@@ -1341,16 +1342,68 @@ pgendStorePriceDB (PGBackend *be, GNCPriceDB *prdb)
  *    but single-user mode.
  */
 
+static gpointer
+get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   GNCPriceDB *prdb = (GNCPriceDB *) data;
+   GNCPrice *pr;
+   Timespec ts;
+   gint64 num, denom;
+   gnc_numeric value;
+   GUID guid = nullguid;
+
+   gnc_commodity * modity;
+
+   /* first, lets see if we've already got this one */
+   string_to_guid (DB_GET_VAL ("priceGuid", j), &guid);
+   pr = gnc_price_lookup (&guid);
+
+   if (pr) return prdb;
+
+   /* no we don't ... restore it */
+   pr = gnc_price_create();
+   gnc_price_set_guid (pr, &guid);
+
+   modity = gnc_string_to_commodity (DB_GET_VAL("commodity",j));
+   gnc_price_set_commodity (pr, modity);
+
+   modity = gnc_string_to_commodity (DB_GET_VAL("currency",j));
+   gnc_price_set_currency (pr, modity);
+
+   ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("time",j));
+   gnc_price_set_time (pr, ts);
+
+   gnc_price_set_source (pr, DB_GET_VAL("source",j));
+   gnc_price_set_type (pr, DB_GET_VAL("type",j));
+
+   num = atoll (DB_GET_VAL("valueNum", j));
+   denom = atoll (DB_GET_VAL("valueDenom", j));
+   value = gnc_numeric_create (num, denom);
+   gnc_price_set_value (pr, value);
+
+   gnc_pricedb_add_price(prdb, pr);
+   gnc_price_unref (pr);
+
+   return prdb;
+}
+
+
 static GNCPriceDB *
 pgendGetAllPrices (PGBackend *be)
 {
    GNCPriceDB *prdb;
+   char * p;
 
+   if (!be) return NULL;
+   ENTER ("be=%p, conn=%p", be, be->connection);
    prdb = gnc_pricedb_create();
 
-   /* XXX Not finished */
-   PERR ("postgress backend price db loading not implemented");
+   /* Get them ALL */
+   p = "SELECT * FROM gncPrice;";
+   SEND_QUERY (be, p, prdb);
+   pgendGetResults (be, get_price_cb, prdb);
 
+   LEAVE (" ");
    return prdb;
 }
 
