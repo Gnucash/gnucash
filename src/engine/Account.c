@@ -330,7 +330,7 @@ xaccAccountRecomputeBalance( Account * acc )
   double  share_cleared_balance = 0.0;
   double  share_reconciled_balance = 0.0;
   double  amt = 0.0;
-  Split *split, *last_split;
+  Split *split, *last_split = NULL;
   
   if( NULL == acc ) return;
   if (FALSE == acc->changed) return;
@@ -429,7 +429,7 @@ xaccCheckDateOrder (Account * acc, Split *split )
 
   if (!s) {
      printf ("Internal Error: xaccCheckDateOrder(): ");
-     printf (" split %s not present in account \n", split);
+     printf (" split %p not present in account \n", split);
      return 0;
   }
 
