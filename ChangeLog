@@ -1,5 +1,7 @@
 2001-07-03  Dave Peticolas  <dave@krondo.com>
 
+	* src/engine/sql/putil.h: Alex Zepeda's patch converting atol->strtoll.
+
 	* src/scm/report/taxtxf.scm: fix bug, eliminate use of append
 
 2001-07-02  Dave Peticolas  <dave@krondo.com>
