@@ -87,7 +87,7 @@ kvp_value   * kvp_frame_get_slot(kvp_frame * frame,
                                  const char * key);
 
 /* The kvp_frame_set_slot_path() routines walk the hierarchy,
- * using the key falues to pick each branch.  When the terminal node
+ * using the key values to pick each branch.  When the terminal node
  * is reached, the value is copied into it.
  */
 void          kvp_frame_set_slot_path (kvp_frame *frame,
