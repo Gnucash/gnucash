@@ -267,7 +267,7 @@ xaccBRLoadRegEntry (BasicRegister *reg, Split *split)
  */
 
 void
-xacBRcLoadRegister (BasicRegister *reg, Split **slist, 
+xaccBRLoadRegister (BasicRegister *reg, Split **slist, 
                   Account *default_source_acc)
 {
    int i;
