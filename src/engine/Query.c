@@ -164,7 +164,6 @@ xaccFreeQuery(Query * q) {
   if (q == NULL)
     return;
 
-  gl = q->terms;
   for(gl=q->terms; gl; gl=gl->next) {
     g_list_free(gl->data);
   }
