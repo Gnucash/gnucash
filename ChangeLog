@@ -1,3 +1,10 @@
+2001-06-06  James LewisMoss  <jimdres@mindspring.com>
+
+	* README.patches: remove warning at top.  Up version number to
+	1.6. 
+
+	* README: fix dependancies.  Spell check.
+
 2001-06-06  Dave Peticolas  <dave@krondo.com>
 
 	* src/test/test-real-data.sh: Josh Sled's bug fix
