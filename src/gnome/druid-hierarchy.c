@@ -572,6 +572,7 @@ clone_account (const Account* from, gnc_commodity *com)
 struct add_group_data_struct
 {
   AccountGroup *to;
+  Account *parent;
   gnc_commodity *com;
 };
 
@@ -586,7 +587,15 @@ add_groups_for_each (Account *toadd, gpointer data)
   if (!foundact)
   {
     foundact = clone_account (toadd, dadata->com);
-    xaccGroupInsertAccount (dadata->to, foundact);
+
+    if (dadata->to)
+      xaccGroupInsertAccount (dadata->to, foundact);
+    else if (dadata->parent)
+      xaccAccountInsertSubAccount (dadata->parent, foundact);
+    else
+    {
+      g_warning ("add_groups_for_each: no valid parent");
+    }
   }
 
   {
@@ -597,6 +606,7 @@ add_groups_for_each (Account *toadd, gpointer data)
       struct add_group_data_struct downdata;
 
       downdata.to = xaccAccountGetChildren(foundact);
+      downdata.parent = foundact;
       downdata.com = dadata->com;
 
       xaccGroupForEachAccount (addgrp, add_groups_for_each,
@@ -613,6 +623,7 @@ add_groups_to_with_random_guids (AccountGroup *into, AccountGroup *from,
 {
   struct add_group_data_struct data;
   data.to = into;
+  data.parent = NULL;
   data.com = com;
     
   xaccGroupForEachAccount (from, add_groups_for_each, &data, FALSE);

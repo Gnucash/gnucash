@@ -1187,8 +1187,6 @@ AccountGroup *
 xaccAccountGetChildren (Account *acc)
 {
    if (!acc) return NULL;
-   if (acc->children == NULL)
-     xaccAccountInsertSubAccount (acc, NULL);
    return (acc->children);
 }
 
