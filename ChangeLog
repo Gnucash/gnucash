@@ -1,4 +1,5 @@
 2002-09-14  David Hampton  <hampton@employees.org>
+
 	Refactor the startup to display the splash screen faster (bug #92192)
 
 	* src/app-utils/kvp-option-registry.scm -- use slib
@@ -12,6 +13,20 @@
 	* src/scm/main.scm -- refactor startup into multiple stages to bring the
 	  splash screen up sooner.  Update the splash screen during different
 	  stages of the startup.
+
+	Font Problems
+	
+	* src/gnome/top-level.c (gnc_gui_init): Exit gracefully if the
+	register fonts can't be looaded.
+
+	* src/gnome/window-main.[ch] (gnc_shutdown): Export this function.
+
+	* src/register/register-gnome/gnucash-style.c
+	(gnucash_style_set_register_font_name):
+	(gnucash_style_set_register_hint_font_name): Complain to the user
+	if a font can't be loaded.  Don't release any existing font until
+	the new font has been successfully loaded.
+	(gnucash_style_init): Indicate if all fonts were loaded.
 
 2002-09-14  Derek Atkins  <derek@ihtfp.com>
 	Add TaxTable entries to Vendor Invoices (Bills); make sure it does
