@@ -644,6 +644,12 @@ gnc_acct_tree_window_configure (GNCAcctTreeWin * info) {
 
     else if (safe_strcmp(node->data, "equity") == 0)
       new_avi.include_type[EQUITY] = TRUE;
+
+    else if (safe_strcmp(node->data, "payable") == 0)
+      new_avi.include_type[PAYABLE] = TRUE;
+
+    else if (safe_strcmp(node->data, "receivable") == 0)
+      new_avi.include_type[RECEIVABLE] = TRUE;
   }
 
   gnc_free_list_option_value (list);

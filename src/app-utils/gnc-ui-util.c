@@ -134,6 +134,7 @@ gnc_configure_reverse_balance (void)
   else if (safe_strcmp (choice, "credit") == 0)
   {
     reverse_type[LIABILITY] = TRUE;
+    reverse_type[PAYABLE]   = TRUE;
     reverse_type[EQUITY]    = TRUE;
     reverse_type[INCOME]    = TRUE;
     reverse_type[CREDIT]    = TRUE;

@@ -290,6 +290,8 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
       case MUTUAL:
       case CREDIT:
       case LIABILITY:
+      case PAYABLE:
+      case RECEIVABLE:
 	amount = gnc_ui_account_get_balance (account, FALSE);
         /* unreverse sign */
         if (gnc_reverse_balance (account))

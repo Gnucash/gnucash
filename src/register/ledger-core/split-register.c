@@ -1822,6 +1822,10 @@ gnc_split_register_type_to_account_type (SplitRegisterType sr_type)
       return CREDIT;
     case LIABILITY_REGISTER:
       return LIABILITY;
+    case PAYABLE_REGISTER:
+      return PAYABLE;
+    case RECEIVABLE_REGISTER:
+      return RECEIVABLE;
     case INCOME_LEDGER:  
     case INCOME_REGISTER:
       return INCOME;
@@ -1986,6 +1990,14 @@ gnc_split_register_config_action (SplitRegister *reg)
       gnc_combo_cell_add_menu_item (cell, _("Sell"));
       gnc_combo_cell_add_menu_item (cell, _("Loan"));
       gnc_combo_cell_add_menu_item (cell, _("Int"));
+      gnc_combo_cell_add_menu_item (cell, _("Payment"));
+      break;
+    case RECEIVABLE_REGISTER:
+      gnc_combo_cell_add_menu_item (cell, _("Invoice"));
+      gnc_combo_cell_add_menu_item (cell, _("Receipt"));
+      break;
+    case PAYABLE_REGISTER:
+      gnc_combo_cell_add_menu_item (cell, _("Invoice"));
       gnc_combo_cell_add_menu_item (cell, _("Payment"));
       break;
     case INCOME_LEDGER:

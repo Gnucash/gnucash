@@ -259,6 +259,12 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
       case LIABILITY:
         return LIABILITY_REGISTER;
 
+      case PAYABLE:
+	return PAYABLE_REGISTER;
+
+      case RECEIVABLE:
+	return RECEIVABLE_REGISTER;
+
       case STOCK:
       case MUTUAL:
         return STOCK_REGISTER;
@@ -296,6 +302,8 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
     case ASSET:
     case CREDIT:
     case LIABILITY:
+    case RECEIVABLE:
+    case PAYABLE:
       /* if any of the sub-accounts have STOCK or MUTUAL types,
        * then we must use the PORTFOLIO_LEDGER ledger. Otherwise,
        * a plain old GENERAL_LEDGER will do. */

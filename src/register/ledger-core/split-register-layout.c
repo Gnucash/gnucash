@@ -88,6 +88,8 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
     case ASSET_REGISTER:
     case CREDIT_REGISTER:
     case LIABILITY_REGISTER:
+    case PAYABLE_REGISTER:
+    case RECEIVABLE_REGISTER:
     case INCOME_REGISTER:
     case EXPENSE_REGISTER:
     case EQUITY_REGISTER:
@@ -371,6 +373,8 @@ gnc_split_register_layout_add_cursors (SplitRegister *reg,
     case ASSET_REGISTER:
     case CREDIT_REGISTER:
     case LIABILITY_REGISTER:
+    case PAYABLE_REGISTER:
+    case RECEIVABLE_REGISTER:
     case INCOME_REGISTER:
     case EXPENSE_REGISTER:
     case EQUITY_REGISTER:

@@ -91,14 +91,18 @@ typedef enum
   EQUITY = 10,
   /* Equity account is used to balance the balance sheet. */
 
-  NUM_ACCOUNT_TYPES = 11,
+  RECEIVABLE = 11,
+  PAYABLE = 12,
+  /* A/R and A/P account types */
+
+  NUM_ACCOUNT_TYPES = 13,
   /* stop here; the following types just aren't ready for prime time */
 
   /* bank account types */
-  CHECKING = 11,
-  SAVINGS = 12,
-  MONEYMRKT = 13,
-  CREDITLINE = 14,     /* line of credit */
+  CHECKING = 13,
+  SAVINGS = 14,
+  MONEYMRKT = 15,
+  CREDITLINE = 16,     /* line of credit */
 } GNCAccountType;
 
 /* ------------------ */

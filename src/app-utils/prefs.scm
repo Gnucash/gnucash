@@ -111,6 +111,8 @@
         (cons 'CURRENCY  (N_ "Buy"))
         (cons 'INCOME    (N_ "Charge"))
         (cons 'EXPENSE   (N_ "Expense"))
+	(cons 'PAYABLE   (N_ "Payment"))
+	(cons 'RECEIVABLE (N_ "Invoice"))
         (cons 'EQUITY    (N_ "Decrease"))))
 
 (define gnc:*credit-strings*
@@ -125,6 +127,8 @@
         (cons 'CURRENCY  (N_ "Sell"))
         (cons 'INCOME    (N_ "Income"))
         (cons 'EXPENSE   (N_ "Rebate"))
+	(cons 'PAYABLE   (N_ "Invoice"))
+	(cons 'RECEIVABLE (N_ "Receipt"))
         (cons 'EQUITY    (N_ "Increase"))))
 
 (define (gnc:get-debit-string type)
@@ -331,7 +335,7 @@ not each row")
   (N_ "Reconcile") (N_ "Automatic interest transfer")
   "a" (N_ "Prior to reconciling an account which charges or pays interest, \
 prompt the user to enter a transaction for the interest charge or payment.
-Currently only enabled for Bank, Credit, Mutual, Asset, and Liability accounts.")
+Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts.")
   #f))
 
 (gnc:register-configuration-option
@@ -450,7 +454,7 @@ Control Center"))))))
         (list->vector
          (list 'credit
                (N_ "Credit Accounts")
-               (N_ "Reverse Credit Card, Liability, Equity, and Income \
+               (N_ "Reverse Credit Card, Payable, Liability, Equity, and Income \
 Accounts")))
         (list->vector
          (list 'none

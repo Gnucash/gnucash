@@ -137,11 +137,13 @@ typedef struct _startRecnWindowData
  * xfer dialog could pop up, if the user's preferences allow it.
  */
 #define account_type_has_auto_interest_charge(type)  (((type) == CREDIT) || \
-                                                      ((type) == LIABILITY))
+                                                      ((type) == LIABILITY) ||\
+						      ((type) == PAYABLE))
 
 #define account_type_has_auto_interest_payment(type) (((type) == BANK)  || \
                                                       ((type) == ASSET) || \
-                                                      ((type) == MUTUAL))
+                                                      ((type) == MUTUAL) || \
+						      ((type) == RECEIVABLE))
 
 #define account_type_has_auto_interest_xfer(type) \
   (  account_type_has_auto_interest_charge(type) || \

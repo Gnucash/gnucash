@@ -56,7 +56,7 @@ the account instead of opening a register.") #f))
       (N_ "Account Tree") (N_ "Account types to display")
       "b" ""
       (list 'bank 'cash 'credit 'asset 'liability 'stock
-            'mutual 'currency 'income 'expense 'equity)
+            'mutual 'currency 'income 'expense 'equity 'payable 'receivable)
       (list (list->vector (list 'bank      (N_ "Bank") ""))
             (list->vector (list 'cash      (N_ "Cash") ""))
             (list->vector (list 'credit    (N_ "Credit") ""))
@@ -67,7 +67,9 @@ the account instead of opening a register.") #f))
             (list->vector (list 'currency  (N_ "Currency") ""))
             (list->vector (list 'income    (N_ "Income") ""))
             (list->vector (list 'expense   (N_ "Expense") ""))
-            (list->vector (list 'equity    (N_ "Equity") "")))))
+            (list->vector (list 'equity    (N_ "Equity") ""))
+	    (list->vector (list 'payable   (N_ "Accounts Payable") ""))
+	    (list->vector (list 'receivable (N_ "Accounts Receivable") "")))))
 
     (add-option
      (gnc:make-list-option

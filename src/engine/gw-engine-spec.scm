@@ -503,6 +503,8 @@
     (gw:enum-add-value! we "INCOME" 'income)
     (gw:enum-add-value! we "EXPENSE" 'expense)
     (gw:enum-add-value! we "EQUITY" 'equity)
+    (gw:enum-add-value! we "RECEIVABLE" 'receivable)
+    (gw:enum-add-value! we "PAYABLE" 'payable)
     (gw:enum-add-value! we "NUM_ACCOUNT_TYPES" 'num-account-types)
     (gw:enum-add-value! we "CHECKING" 'checking)
     (gw:enum-add-value! we "SAVINGS" 'savings)

@@ -1192,11 +1192,11 @@ xaccTransFixSplitDateOrder (Transaction *trans)
  * order for report generation */
 
 static int typeorder[NUM_ACCOUNT_TYPES] = {
-     BANK, STOCK, MUTUAL, CURRENCY, CASH, ASSET, 
-     CREDIT, LIABILITY, INCOME, EXPENSE, EQUITY };
+     BANK, STOCK, MUTUAL, CURRENCY, CASH, ASSET, RECEIVABLE,
+     CREDIT, LIABILITY, PAYABLE, INCOME, EXPENSE, EQUITY };
 
 static int revorder[NUM_ACCOUNT_TYPES] = {
-     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
 
 
 int
@@ -1919,6 +1919,8 @@ xaccAccountTypeEnumAsString(GNCAccountType type) {
     GNC_RETURN_ENUM_AS_STRING(INCOME);
     GNC_RETURN_ENUM_AS_STRING(EXPENSE);
     GNC_RETURN_ENUM_AS_STRING(EQUITY);
+    GNC_RETURN_ENUM_AS_STRING(RECEIVABLE);
+    GNC_RETURN_ENUM_AS_STRING(PAYABLE);
     GNC_RETURN_ENUM_AS_STRING(CHECKING);
     GNC_RETURN_ENUM_AS_STRING(SAVINGS);
     GNC_RETURN_ENUM_AS_STRING(MONEYMRKT);
@@ -1950,6 +1952,8 @@ xaccAccountStringToType(const char* str, GNCAccountType *type) {
   GNC_RETURN_ON_MATCH(INCOME);
   GNC_RETURN_ON_MATCH(EXPENSE);
   GNC_RETURN_ON_MATCH(EQUITY);
+  GNC_RETURN_ON_MATCH(RECEIVABLE);
+  GNC_RETURN_ON_MATCH(PAYABLE);
   GNC_RETURN_ON_MATCH(CHECKING);
   GNC_RETURN_ON_MATCH(SAVINGS);
   GNC_RETURN_ON_MATCH(MONEYMRKT);
@@ -1989,7 +1993,9 @@ account_type_name[NUM_ACCOUNT_TYPES] = {
   N_("Currency"),
   N_("Income"),
   N_("Expense"),
-  N_("Equity")
+  N_("Equity"),
+  N_("A/Receivable"),
+  N_("A/Payable")
   /*
     N_("Checking"),
     N_("Savings"),
@@ -2024,6 +2030,8 @@ xaccAccountTypesCompatible (GNCAccountType parent_type,
     case CURRENCY:
     case CREDIT:
     case LIABILITY:
+    case RECEIVABLE:
+    case PAYABLE:
       compatible = ((child_type == BANK)     ||
 		    (child_type == CASH)     ||
 		    (child_type == ASSET)    ||
@@ -2031,7 +2039,9 @@ xaccAccountTypesCompatible (GNCAccountType parent_type,
 		    (child_type == MUTUAL)   ||
 		    (child_type == CURRENCY) ||
                     (child_type == CREDIT)   ||
-                    (child_type == LIABILITY));
+                    (child_type == LIABILITY)||
+                    (child_type == RECEIVABLE)||
+		    (child_type == PAYABLE));
       break;
     case INCOME:
     case EXPENSE:
