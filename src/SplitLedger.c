@@ -2922,6 +2922,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
 
    DEBUG ("updating trans addr=%p\n", trans);
 
+   gnc_table_leave_update (reg->table, reg->table->current_cursor_loc);
+
    xaccSRSaveChangedCells (reg, trans, split);
 
    memo = xaccSplitGetMemo (split);
