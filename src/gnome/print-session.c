@@ -234,6 +234,7 @@ gnc_ui_print_dialog_ok_cb(GtkWidget * widget, gpointer user_data) {
     }
     else {
       gnc_print_session_print(pcd->session);
+      gnc_print_session_done(pcd->session);
       gnc_ui_print_dialog_destroy(pcd);
     }
   }  
@@ -276,6 +277,9 @@ gnc_print_session_create() {
 void 
 gnc_print_session_destroy(PrintSession * ps) {
   gtk_object_unref(GTK_OBJECT(ps->meta));
+  if(ps->printer) 
+    gtk_object_unref(GTK_OBJECT(ps->printer));
+
   gtk_object_unref(GTK_OBJECT(ps->default_font));
 
   g_free(ps->paper);
@@ -315,6 +319,8 @@ gnc_print_session_print(PrintSession * ps) {
   pc = gnome_print_context_new(ps->printer);
   gnome_print_meta_render_from_object(GNOME_PRINT_CONTEXT(pc),
                                       GNOME_PRINT_META(ps->meta)); 
+  gnome_print_context_close(pc);
+  gtk_object_unref(GTK_OBJECT(pc));
 }
 
 #else

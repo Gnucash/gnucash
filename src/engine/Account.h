@@ -28,6 +28,7 @@
 #include "config.h"
 #include "AccInfo.h"
 #include "Transaction.h"
+#include "kvp_frame.h"
 #include "GNCId.h"
 
 
@@ -49,6 +50,10 @@ void         xaccFreeAccount( Account * );
  */
 void         xaccAccountBeginEdit (Account *, int defer);
 void         xaccAccountCommitEdit (Account *);
+
+kvp_value * xaccAccountGetSlot(Account * account, const char * key);
+void      xaccAccountSetSlot(Account * account, const char * key, 
+                             const kvp_value * value);
 
 /*
  * The xaccAccountGetGUID() subroutine will return the

@@ -4,6 +4,8 @@
  * Copyright (C) 1998 Linas Vepstas                                 *
  * Copyright (C) 1999 Jeremy Collins ( gtk-xmhtml port )            *
  * Copyright (C) 2000 Linas Vepstas <linas@linas.org>               *
+ * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
+ *   (gtkhtml port)                                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -27,39 +29,45 @@
 #define __WINDOW_HTML_H__
 
 #include <gnome.h>
-#include <gtk-xmhtml/gtk-xmhtml.h>
-
+#include <gtkhtml/gtkhtml.h>
 
 typedef struct _HTMLWindow HTMLWindow;
-typedef struct _HTMLData HTMLData;
-typedef void * HTMLUserData;
+typedef struct _HTMLData   HTMLData;
+typedef void *             HTMLUserData;
+typedef enum { URL_TYPE_FILE, URL_TYPE_JUMP, 
+               URL_TYPE_HTTP, URL_TYPE_FTP, 
+               URL_TYPE_SECURE, URL_TYPE_OTHER } URLType;
 
 typedef void (*HTMLDestroyUserDataFunc)(HTMLUserData);
 
-typedef HTMLData* (*HTMLAnchorCB)(XmHTMLAnchorCallbackStruct *acbs,
-                                  HTMLUserData user_data);
+typedef HTMLData * (*HTMLAnchorCB)(URLType url_type, char * location, 
+                                   char * label, HTMLUserData user_data);
 
-typedef void (*HTMLJumpCB)(HTMLUserData user_data,
-                           char **text, char **label);
+typedef void (*HTMLJumpCB)(HTMLUserData user_data, char ** location, 
+                           char ** label);
 
+HTMLData     * gnc_html_data_new(const char * title, 
+                                 HTMLUserData user_data,
+                                 HTMLDestroyUserDataFunc destroy,
+                                 GnomeUIInfo * user_buttons,
+                                 int num_user_buttons);
+
+HTMLWindow   * gnc_html_window_new(HTMLAnchorCB anchor_cb, HTMLJumpCB jump_cb);
+void         gnc_html_window_destroy(HTMLWindow *hw);
+void         gnc_html_load(HTMLWindow *hw);
+void         gnc_html_print(HTMLWindow * hw);
+
+URLType      gnc_html_parse_url(HTMLWindow * html, const gchar * url, 
+                                char ** location, char ** label);
 
 HTMLUserData gnc_html_window_user_data(HTMLWindow *hw);
-GtkWidget *  gnc_html_window_get_window(HTMLWindow *hw);
+GtkWidget    * gnc_html_window_get_window(HTMLWindow *hw);
 
-HTMLWindow * gnc_html_window_new(HTMLAnchorCB anchor_cb, HTMLJumpCB jump_cb);
 
-void         gnc_html_window_destroy(HTMLWindow *hw);
+void htmlWindow(GtkWidget * parent, HTMLWindow ** hwp, HTMLData * data);
 
-HTMLData * gnc_html_data_new(const char *title, HTMLUserData user_data,
-                             HTMLDestroyUserDataFunc destroy,
-                             GnomeUIInfo *user_buttons,
-                             int num_user_buttons);
-
-void htmlWindow(GtkWidget   *parent,
-                HTMLWindow **hwp,
-                HTMLData    *data);
-
-void gnc_html_load(HTMLWindow *hw);
+/* for showing URLS with an external browser */
+void gnc_url_show(URLType type, char * location, char * label);
 
 
 #endif

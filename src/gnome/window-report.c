@@ -177,21 +177,16 @@ report_data_set_guile_options(ReportData *report_data, const SCM guile_options)
 
 
 static HTMLData *
-reportAnchorCB(XmHTMLAnchorCallbackStruct *acbs,
+reportAnchorCB(URLType url_type, char * location, char * label,
                HTMLUserData user_data)
 {
-  switch(acbs->url_type)
-  {
-    case ANCHOR_FILE_LOCAL:
-    case ANCHOR_FTP:
-    case ANCHOR_HTTP:
-    case ANCHOR_MAILTO:
-    case ANCHOR_UNKNOWN:
-    default:
-      gnome_url_show(acbs->href);
-      break;
+  /* this isn't called for "jump to anchor" clicks.  That's */
+  /* handled internally in the HTML widget. */
+  switch(url_type) {
+  default:
+    gnc_url_show(url_type, location, label);
+    break;
   }
-
   return NULL;
 }
 

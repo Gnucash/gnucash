@@ -221,6 +221,41 @@ xaccAccountCommitEdit (Account *acc)
    acc->open = 0;
 }
 
+
+/********************************************************************
+ * xaccAccountGetSlot
+ ********************************************************************/
+
+kvp_value * 
+xaccAccountGetSlot(Account * account, const char * key) {
+  if(!account || !key || !(account->kvp_data)) {
+    return NULL;
+  }
+  else {
+    return kvp_frame_get_slot(account->kvp_data, key);
+  }
+}
+
+
+/********************************************************************
+ * xaccAccountSetSlot 
+ ********************************************************************/
+
+void
+xaccAccountSetSlot(Account * account, const char * key, 
+                   const kvp_value * value) {
+  if(!account || !key || !value) {
+    return;
+  }
+  else {
+    if(!account->kvp_data) {
+      account->kvp_data = kvp_frame_new();
+    }
+    kvp_frame_set_slot(account->kvp_data, key, value);
+  }
+}
+
+
 /********************************************************************\
 \********************************************************************/
 

@@ -22,7 +22,7 @@
 \********************************************************************/
 
 #ifndef __GUID__
-#define __GUID__ 1
+#define __GUID__ 
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>

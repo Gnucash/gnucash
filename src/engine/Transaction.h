@@ -30,6 +30,7 @@
 #include <time.h>
 
 #include "gnc-common.h"
+#include "kvp_frame.h"
 #include "GNCId.h"
 
 
@@ -158,6 +159,16 @@ gncBoolean    xaccTransIsOpen (Transaction *trans);
  */
 const GUID  * xaccTransGetGUID (Transaction *trans);
 Transaction * xaccTransLookup (const GUID *guid);
+
+
+/* xaccTransGetSlot and xaccTransSetSlot reference the kvp_data 
+ * field of the transaction.  kvp_data is used to store arbitrary 
+ * strings, numbers, and structures which aren't "official" members
+ * of the transaction structure. */
+
+kvp_value * xaccTransGetSlot(Transaction * trans, const char * key);
+void      xaccTransSetSlot(Transaction * trans, const char * key, 
+                           const kvp_value * value);
 
 /* Convert a day, month, and year to a Timespec */
 Timespec      gnc_dmy2timespec(int day, int month, int year);
@@ -311,6 +322,16 @@ double xaccTransGetImbalance (Transaction * trans);
 /* ------------- splits --------------- */
 Split       * xaccMallocSplit (void);
 void          xaccInitSplit   (Split *);    /* clears a split struct */
+
+
+/* xaccSplitGetSlot and xaccSplitSetSlot reference the kvp_data field
+ * of the split.  kvp_data is used to store arbitrary strings,
+ * numbers, and structures which aren't "official" members of the
+ * split structure. */
+
+kvp_value * xaccSplitGetSlot(Split * split, const char * key);
+void      xaccSplitSetSlot(Split * split, const char * key, 
+                           const kvp_value * value);
 
 /*
  * The xaccSplitGetGUID() subroutine will return the

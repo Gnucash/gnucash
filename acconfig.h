@@ -63,8 +63,8 @@
 /* If configure found libXpm, then use it */
 #define  HAVE_XPM            
 
-/* Use the new XmHTML widdget instead of the old htmlw widget */
-#define  HAVE_LIBXMHTML 1
+/* Use the new gtkhtml widget instead of the old xmhtml widget */
+#define  HAVE_LIBGTKHTML 1
 
 /* use gnomeprint if it's available */
 #undef HAVE_LIBGNOMEPRINT

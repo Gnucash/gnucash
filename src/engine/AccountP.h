@@ -43,6 +43,7 @@
 #define __XACC_ACCOUNT_P_H__
 
 #include "config.h"
+#include "kvp_frame.h"
 #include "AccInfo.h"
 #include "GNCId.h"
 #include "Transaction.h"
@@ -82,6 +83,11 @@ struct _account {
    * pairs would be URL-encoded.
    */
   char     *notes;
+
+  /* kvp_data is a key-value pair database for storing simple 
+   * "extra" information in splits, transactions, and accounts. 
+   * it's NULL until accessed. */
+  kvp_frame * kvp_data;
 
   /* The type field is the account type, picked from the enumerated 
    * list that includes BANK, STOCK, CREDIT, INCOME, etc.  Its

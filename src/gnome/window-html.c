@@ -4,6 +4,7 @@
  * Copyright (C) 1998 Linas Vepstas   <linas@linas.org>             *
  * Copyright (C) 1999 Jeremy Collins ( gtk-xmhtml port )            *
  * Copyright (C) 2000 Linas Vepstas                                 *
+ * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,18 +24,25 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+#include "config.h"
+
 #include <string.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <gtk/gtk.h>
+#include <gtkhtml/gtkhtml.h>
+#include <gnome.h>
+#include <regex.h>
 
-#include "top-level.h"
-
+#include "gnucash.h"
+#include "messages.h"
 #include "window-html.h"
 #include "dialog-utils.h"
 #include "global-options.h"
-#include "messages.h"
+#include "print-session.h"
 #include "File.h"
 #include "util.h"
-
-static short module = MOD_HTML; 
 
 
 /********************************************************************\
@@ -312,38 +320,94 @@ historyDestroy(HTMLHistory *history)
 
 struct _HTMLWindow
 {
-  GtkWidget *window;
-  GtkWidget *htmlwidget;
+  GtkWidget * window;
+  GtkWidget * scroller;
+  GtkWidget * htmlwidget;
 
-  GtkWidget *forward;
-  GtkWidget *back;
+  GtkWidget * forward;
+  GtkWidget * back;
 
-  GtkWidget *toolbar;
-  SCM toolbar_change_callback_id;
+  GtkWidget * dock;
 
-  HTMLHistory *history;
+  SCM       toolbar_change_callback_id;
 
-  HTMLAnchorCB    anchor_cb;
-  HTMLJumpCB      jump_cb;
+  char      * null_text;
+  char      * null_label;
+
+  HTMLHistory   * history;
+
+  HTMLAnchorCB  anchor_cb;
+  HTMLJumpCB    jump_cb;
 };
 
 
 /** PROTOTYPES ******************************************************/
+
 static void htmlBackCB(GtkWidget *widget,  gpointer data);
 static void htmlFwdCB(GtkWidget *widget, gpointer data);
-static void htmlAnchorCB(GtkWidget *widget,
-                         XmHTMLAnchorCallbackStruct *acbs,
-                         gpointer data);
+static void htmlPrintCB(GtkWidget * widget, gpointer data);
 
+static void htmlAnchorCB(GtkHTML * html, const gchar * url, gpointer data);
+static void htmlUrlCB(GtkHTML * html, char * url, 
+                      GtkHTMLStream * handle, gpointer data);
 static gboolean htmlKeyCB(GtkWidget *widget, GdkEventKey *event,
                           gpointer user_data);
+
 static void closeHtmlWinCB(GtkWidget *widget, gpointer data);
 static void destroyHtmlWinCB(GtkWidget *widget, gpointer data);
 
-static XmImageInfo * htmlReadImageProc(GtkWidget *widget, String file,
-                                       gpointer data);
-
 static void htmlSetButtonStates(HTMLWindow *hw);
+
+
+/********************************************************************\
+ * gnc_html_window_new                                              *
+ *   g_malloc and initialize HTMLWindow structure                   *
+ *                                                                  *
+ * Args: anchor_cb - callback for new html pages                    *
+ *       jump_cb   - callback for html text                         *
+ * Return: g_malloc'd initialized HTMLWindow structure              * 
+\********************************************************************/
+
+HTMLWindow *
+gnc_html_window_new(HTMLAnchorCB anchor_cb, HTMLJumpCB jump_cb)
+{
+  HTMLWindow *hw;
+
+  hw = g_new0(HTMLWindow, 1);
+
+  hw->history = historyNew();
+
+  hw->anchor_cb = anchor_cb;
+  hw->jump_cb = jump_cb;
+
+  hw->null_text = NULL;
+
+  return hw;
+}
+
+
+/********************************************************************\
+ * gnc_html_window_destroy                                          *
+ *   destroy an HTMLWindow structure                                *
+ *                                                                  *
+ * Args: hw - the htmlwindow structure to destroy                   *
+ * Return: none                                                     * 
+\********************************************************************/
+
+void
+gnc_html_window_destroy(HTMLWindow * hw)
+{
+  if (hw == NULL)
+    return;
+
+  if (hw->window != NULL)
+    gtk_widget_destroy(hw->window);
+  else
+  {
+    historyDestroy(hw->history);
+    g_free(hw);
+  }
+}
 
 
 /********************************************************************\
@@ -353,8 +417,9 @@ static void htmlSetButtonStates(HTMLWindow *hw);
  * Args: none                                                       *
  * Return: user data for the window                                 *
 \********************************************************************/
+
 HTMLUserData
-gnc_html_window_user_data(HTMLWindow *hw)
+gnc_html_window_user_data(HTMLWindow * hw)
 {
   if (hw == NULL)
     return NULL;
@@ -370,6 +435,7 @@ gnc_html_window_user_data(HTMLWindow *hw)
  * Args: none                                                       *
  * Return: gtk window for html window                               *
 \********************************************************************/
+
 GtkWidget *
 gnc_html_window_get_window(HTMLWindow *hw)
 {
@@ -379,60 +445,13 @@ gnc_html_window_get_window(HTMLWindow *hw)
   return hw->window;
 }
 
-
-/********************************************************************\
- * gnc_html_window_new                                              *
- *   g_malloc and initialize HTMLWindow structure                   *
- *                                                                  *
- * Args: anchor_cb - callback for new html pages                    *
- *       jump_cb   - callback for html text                         *
- * Return: g_malloc'd initialized HTMLWindow structure              * 
-\********************************************************************/
-HTMLWindow *
-gnc_html_window_new(HTMLAnchorCB anchor_cb, HTMLJumpCB jump_cb)
-{
-  HTMLWindow *hw;
-
-  hw = g_new0(HTMLWindow, 1);
-
-  hw->history = historyNew();
-
-  hw->anchor_cb = anchor_cb;
-  hw->jump_cb = jump_cb;
-
-  return hw;
-}
-
-
-/********************************************************************\
- * gnc_html_window_destroy                                          *
- *   destroy an HTMLWindow structure                                *
- *                                                                  *
- * Args: hw - the htmlwindow structure to destroy                   *
- * Return: none                                                     * 
-\********************************************************************/
-void
-gnc_html_window_destroy(HTMLWindow *hw)
-{
-  if (hw == NULL)
-    return;
-
-  if (hw->window != NULL)
-    gtk_widget_destroy(hw->window);
-  else
-  {
-    historyDestroy(hw->history);
-    g_free(hw);
-  }
-}
-
-
 static void
-gnc_html_window_fill_toolbar(HTMLWindow *hw)
+html_window_fill_toolbar(HTMLWindow *hw)
 {
   GnomeUIInfo *toolbar_info;
   gint num_start, num_end;
-  GList *children, *node;
+  GtkWidget *dock_item;
+  GtkWidget *toolbar;
   HTMLData *data;
   gint i;
 
@@ -460,6 +479,17 @@ gnc_html_window_fill_toolbar(HTMLWindow *hw)
 
   GnomeUIInfo toolbar_end[] = 
   {
+    GNOMEUIINFO_SEPARATOR,
+    { GNOME_APP_UI_ITEM,
+      PRINT_STR,
+      "Print HTML Window",
+      htmlPrintCB, hw,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK, 
+      GNOME_STOCK_PIXMAP_PRINT,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
     { GNOME_APP_UI_ITEM,
       CLOSE_STR,
       TOOLTIP_CLOSE_HTML,
@@ -476,16 +506,23 @@ gnc_html_window_fill_toolbar(HTMLWindow *hw)
   if (data == NULL)
     return;
 
-  if (hw->toolbar == NULL)
+  if (hw->dock == NULL)
     return;
 
-  node = children = gtk_container_children(GTK_CONTAINER(hw->toolbar));
-  while (node != NULL)
-  {
-    gtk_container_remove(GTK_CONTAINER(hw->toolbar), GTK_WIDGET(node->data));
-    node = node->next;
-  }
-  g_list_free(children);
+  dock_item = GTK_WIDGET(gnome_dock_get_item_by_name(GNOME_DOCK(hw->dock),
+                                                     "toolbar", NULL, NULL,
+                                                     NULL, NULL));
+  if (dock_item == NULL)
+    return;
+
+  toolbar = gnome_dock_item_get_child(GNOME_DOCK_ITEM(dock_item));
+  if (toolbar != NULL)
+    gtk_container_remove(GTK_CONTAINER(dock_item), toolbar);
+
+  toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+  gtk_container_set_border_width(GTK_CONTAINER(toolbar), 2);
+  gtk_container_add(GTK_CONTAINER(dock_item), toolbar);
+  gtk_widget_show(toolbar);
 
   num_start = sizeof(toolbar_start) / sizeof(GnomeUIInfo);
   num_end = sizeof(toolbar_end) / sizeof(GnomeUIInfo);
@@ -502,7 +539,7 @@ gnc_html_window_fill_toolbar(HTMLWindow *hw)
   for (i = 0; i < num_end; i++)
     toolbar_info[i + num_start + data->num_user_buttons] = toolbar_end[i];
 
-  gnome_app_fill_toolbar(GTK_TOOLBAR(hw->toolbar), toolbar_info, NULL);
+  gnome_app_fill_toolbar(GTK_TOOLBAR(toolbar), toolbar_info, NULL);
 
   hw->back = toolbar_info[0].widget;
   hw->forward = toolbar_info[1].widget;
@@ -512,14 +549,25 @@ gnc_html_window_fill_toolbar(HTMLWindow *hw)
 
 
 static void
-gnc_html_toolbar_change_cb(void *data)
+html_toolbar_change_cb(void *data)
 {
   HTMLWindow *hw = data;
   GtkToolbarStyle tbstyle;
+  GnomeDockItem *dock_item;
+  GtkWidget *toolbar;
 
   tbstyle = gnc_get_toolbar_style();
 
-  gtk_toolbar_set_style(GTK_TOOLBAR(hw->toolbar), tbstyle);
+  dock_item = gnome_dock_get_item_by_name(GNOME_DOCK(hw->dock), "toolbar",
+                                          NULL, NULL, NULL, NULL);
+  if (dock_item == NULL)
+    return;
+
+  toolbar = gnome_dock_item_get_child(dock_item);
+  if (toolbar == NULL)
+    return;
+
+  gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), tbstyle);
 }
 
 
@@ -559,11 +607,13 @@ htmlWindow(GtkWidget   *parent,
 
   /************ CREATE HTML WINDOW HERE *****************/
   {
-    GtkWidget *window;
-    GtkWidget *html;
-    GtkWidget *dock;
-    GtkWidget *dock_item;
-    GtkWidget *toolbar;
+    GtkWidget * window;
+    GtkWidget * html;
+    GtkWidget * dock;
+    GtkWidget * dock_item;
+    GtkWidget * toolbar;
+    GtkWidget * scroll;
+    GtkWidget * frame;
     SCM id;
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -573,42 +623,56 @@ htmlWindow(GtkWidget   *parent,
 
     dock = gnome_dock_new();
     gtk_container_add(GTK_CONTAINER(window), dock);
+    hw->dock = dock;
 
     dock_item = gnome_dock_item_new("toolbar", GNOME_DOCK_ITEM_BEH_EXCLUSIVE);
 
     toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
     gtk_container_set_border_width(GTK_CONTAINER(toolbar), 2);
     gtk_container_add(GTK_CONTAINER(dock_item), toolbar);
-    hw->toolbar = toolbar;
-
-    id = gnc_register_option_change_callback(gnc_html_toolbar_change_cb, hw,
-                                             "General", "Toolbar Buttons");
-    hw->toolbar_change_callback_id = id;
 
     gnome_dock_add_item (GNOME_DOCK(dock), GNOME_DOCK_ITEM(dock_item),
                          GNOME_DOCK_TOP, 0, 0, 0, TRUE);
 
-    html = gtk_xmhtml_new();
+    id = gnc_register_option_change_callback(html_toolbar_change_cb, hw,
+                                             "General", "Toolbar Buttons");
+    hw->toolbar_change_callback_id = id;
+
+    frame  = gtk_frame_new(NULL);
+    scroll = gtk_scrolled_window_new(NULL, NULL);
+    html   = gtk_html_new();
     hw->htmlwidget = html;
-    gnome_dock_set_client_area(GNOME_DOCK(dock), html);
-    gtk_xmhtml_set_image_procs(GTK_XMHTML(html), htmlReadImageProc,
-                               NULL, NULL, NULL);
+    hw->scroller   = scroll;
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scroll),
+                                    GTK_POLICY_AUTOMATIC,
+                                    GTK_POLICY_AUTOMATIC);  
 
-    gnc_html_load(hw);
+    gtk_signal_connect (GTK_OBJECT(html), "url_requested",
+                        GTK_SIGNAL_FUNC (htmlUrlCB), 
+                        (gpointer)hw);
 
-    gtk_signal_connect(GTK_OBJECT(hw->htmlwidget), "activate",
-                       GTK_SIGNAL_FUNC(htmlAnchorCB), hw);
+    gtk_signal_connect (GTK_OBJECT(html), "link_clicked",
+                        GTK_SIGNAL_FUNC (htmlAnchorCB), 
+                        (gpointer)hw);
+
+    gtk_signal_connect (GTK_OBJECT(html), "key_press_event", 
+                        GTK_SIGNAL_FUNC(htmlKeyCB), hw);
 
     gtk_signal_connect(GTK_OBJECT(window), "destroy",
                        GTK_SIGNAL_FUNC(destroyHtmlWinCB), hwp);
 
-    gtk_signal_connect(GTK_OBJECT(window), "key_press_event",
-                       GTK_SIGNAL_FUNC(htmlKeyCB), hw);
+    gtk_container_add(GTK_CONTAINER(frame), scroll);
+    gtk_container_add(GTK_CONTAINER(scroll), html);  
 
+    gtk_html_load_empty(GTK_HTML(html));
+
+    gnome_dock_set_client_area(GNOME_DOCK(dock), frame); 
+    gtk_widget_realize(GTK_WIDGET(html));    
     gtk_widget_show_all(window);
+    gnc_html_load(hw);
   }
 
-  gnc_html_toolbar_change_cb(hw);
+  html_toolbar_change_cb(hw);
   htmlSetButtonStates(hw);
 }
 
@@ -652,16 +716,15 @@ htmlSetButtonStates(HTMLWindow *hw)
 static gboolean
 htmlKeyCB(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-  HTMLWindow *hw = (HTMLWindow *) data;
-  GtkXmHTML *html = GTK_XMHTML(hw->htmlwidget);
-  GtkAdjustment *vadj, *hadj;
-  gfloat v_value, h_value;
+  HTMLWindow    * hw = (HTMLWindow *) data;
 
-  vadj = GTK_ADJUSTMENT(html->vsba);
-  hadj = GTK_ADJUSTMENT(html->hsba);
+  GtkAdjustment * vadj = 
+    gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(hw->scroller));
+  GtkAdjustment * hadj = 
+    gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(hw->scroller));
 
-  v_value = vadj->value;
-  h_value = hadj->value;
+  gfloat        v_value = vadj->value;
+  gfloat        h_value = hadj->value;
 
   switch (event->keyval)
   {
@@ -756,6 +819,15 @@ htmlFwdCB(GtkWidget *widget, gpointer data)
   htmlSetButtonStates(hw);
 }
 
+/********************************************************************\
+ * htmlPrintCB
+ * callback for printing from toolbar button
+\********************************************************************/
+static void 
+htmlPrintCB(GtkWidget * widget, gpointer data) {
+  HTMLWindow * hw = (HTMLWindow *)data;
+  gnc_html_print(hw);
+}
 
 /********************************************************************\
  * closeHtmlWinCB - callback for closing html window                * 
@@ -783,7 +855,7 @@ closeHtmlWinCB(GtkWidget *widget, gpointer data)
 static void
 destroyHtmlWinCB(GtkWidget *widget, gpointer data)
 {
-  HTMLWindow **hwp = (HTMLWindow **) data;
+  HTMLWindow **hwp = data;
   HTMLWindow *hw = *hwp;
 
   /* Delete the history: */
@@ -796,49 +868,190 @@ destroyHtmlWinCB(GtkWidget *widget, gpointer data)
 
   g_free(hw);
   *hwp = NULL;
-
-  DEBUG("HTML window destroyed.\n");
 }
 
 
 /********************************************************************\
  * htmlAnchorCB - called when user clicks on html anchor tag        * 
- *                                                                  * 
- * Args:   widget - the html widget that called us                  * 
- *         acbs   - callback structure                              * 
- *         data   - html window structure                           * 
- * Return: none                                                     * 
+ * the URL needs to be processed and the user callback called.      *
 \********************************************************************/
+
 static void
-htmlAnchorCB(GtkWidget *widget, XmHTMLAnchorCallbackStruct *acbs,
-             gpointer data)
-{
-  HTMLWindow *hw = (HTMLWindow *) data;
-  HTMLData *html_data;
+htmlAnchorCB(GtkHTML * html, const gchar * url, gpointer data) {
+  HTMLWindow * hw = (HTMLWindow *)data;
+  HTMLData   * html_data;
+  char       * url_location;
+  char       * url_label;
+  int        url_type;
+  
+  /*  printf("in htmlAnchorCB: url='%s'\n", url); */
 
-  if (acbs->reason != XmCR_ACTIVATE) return;
+  url_type = gnc_html_parse_url(hw, url, &url_location, &url_label);
 
-  switch(acbs->url_type)
-  {
-    /* a named anchor on a page that is already displayed */
-    case ANCHOR_JUMP:
-      XmHTMLAnchorScrollToName(widget, acbs->href);
-      break;
+  switch(url_type) {
+  case  URL_TYPE_JUMP:
+    gtk_html_jump_to_anchor(html, url_label);
+    g_free(url_location);
+    g_free(url_label);
+    break;
 
-    default:
-      if (hw->anchor_cb == NULL)
-        return;
+  default:
+    if (hw->anchor_cb == NULL) {
+      g_free(url_location);
+      g_free(url_label);
+      return;
+    }
+    
+    html_data = (hw->anchor_cb)(url_type, url_location, url_label,
+                                historyUserData(hw->history));
+    g_free(url_location);
+    g_free(url_label);
 
-      html_data = (hw->anchor_cb)(acbs, historyUserData(hw->history));
-      if (html_data == NULL)
-        return;
+    if (html_data == NULL)
+      return;
+    
+    historyInsert(hw->history, html_data);
+    gnc_html_load(hw);    
+    break;
+  }
+}
 
-      historyInsert(hw->history, html_data);
-      gnc_html_load(hw);
-      break;
+
+/********************************************************************\
+ * htmlUrlCB - called by the GtkHTML widget when a URL needs to be  *
+ * loaded.  At this point, the StreamHandle is already open.        *
+\********************************************************************/
+
+static void 
+htmlUrlCB(GtkHTML * html, char * url, GtkHTMLStream * handle, 
+          gpointer user_data) {
+  HTMLWindow * hw = (HTMLWindow *)user_data;
+
+  char    * text=NULL;
+  char    * location=NULL;
+  char    * label=NULL;
+  int     fsize;
+
+  URLType type;
+
+  if(!url) return;
+
+  if(!strcmp(url, "")) {
+    gtk_html_write(GTK_HTML(hw->htmlwidget), handle, 
+                   hw->null_text, (hw->null_text ? 
+                                   strlen(hw->null_text) : 0));
+    gtk_html_end(GTK_HTML(hw->htmlwidget), handle, GTK_HTML_STREAM_OK);
+    
+    if(hw->null_label) {
+      gtk_html_jump_to_anchor(GTK_HTML(hw->htmlwidget), 
+                              hw->null_label);
+    }
+  }
+  else {
+    type = gnc_html_parse_url(hw, url, &location, &label);
+    fsize = gncReadFile(location, &text);
+    if(text == NULL) {
+      gtk_html_end(html, handle, GTK_HTML_STREAM_OK);    
+    }
+    else {
+      gtk_html_write(GTK_HTML(hw->htmlwidget), handle, 
+                     text, fsize);
+      gtk_html_end(GTK_HTML(hw->htmlwidget), handle, GTK_HTML_STREAM_OK); 
+      if(label) {
+        gtk_html_jump_to_anchor(GTK_HTML(hw->htmlwidget), label);
+      }
+      g_free(text);
+    }
+  }
+}
+
+
+/********************************************************************\
+ * gnc_html_parse_url
+ * this takes a URL and the HTMLWindow context and determines the 
+ * protocol type, location, and possible anchor name from the URL.
+\********************************************************************/
+
+URLType
+gnc_html_parse_url(HTMLWindow * html, const gchar * url, 
+                   char ** url_location, char ** url_label) {
+  char        uri_rexp[] = "^(([^:]*):)?([^#]+)?(#(.*))?$";
+  regex_t     compiled;
+  regmatch_t  match[6];
+  char        * protocol=NULL, * path=NULL, * label=NULL;
+  int         found_protocol=0, found_path=0, found_label=0;  
+  URLType     retval;   
+
+  regcomp(&compiled, uri_rexp, REG_EXTENDED);
+
+  if(!regexec(&compiled, url, 6, match, 0)) {
+    if(match[2].rm_so != -1) {
+      protocol = g_new0(char, match[2].rm_eo - match[2].rm_so + 1);
+      strncpy(protocol, url + match[2].rm_so, 
+              match[2].rm_eo - match[2].rm_so);
+      protocol[match[2].rm_eo - match[2].rm_so] = 0;
+      found_protocol = 1;      
+    }
+    if(match[3].rm_so != -1) {
+      path = g_new0(char, match[3].rm_eo - match[3].rm_so + 1);
+      strncpy(path, url+match[3].rm_so, 
+              match[3].rm_eo - match[3].rm_so);
+      path[match[3].rm_eo - match[3].rm_so] = 0;
+      found_path = 1;
+    }
+    if(match[5].rm_so != -1) {
+      label = g_new0(char, match[5].rm_eo - match[5].rm_so + 1);
+      strncpy(label, url+match[5].rm_so, 
+              match[5].rm_eo - match[5].rm_so);
+      label[match[5].rm_eo - match[5].rm_so] = 0;
+      found_label = 1;
+    }
   }
 
-  htmlSetButtonStates(hw);
+  if(found_protocol) {
+    if(!strcmp(protocol, "file")) {
+      retval = URL_TYPE_FILE;
+    }
+    else if(!strcmp(protocol, "http")) {
+      retval = URL_TYPE_HTTP;
+    }
+    else if(!strcmp(protocol, "ftp")) {
+      retval = URL_TYPE_FTP;
+    }
+    else if(!strcmp(protocol, "https")) {
+      retval = URL_TYPE_SECURE;
+    }
+    else {
+      retval = URL_TYPE_OTHER;
+    }
+  }
+  else if(found_label && !found_path) {
+    retval = URL_TYPE_JUMP;
+  }
+  else {
+    retval = URL_TYPE_FILE; /* FIXME BG */
+  }
+
+  g_free(protocol);
+
+  switch(retval) {
+  case URL_TYPE_FILE:
+    *url_location = path;
+    break;
+
+  case URL_TYPE_JUMP:
+    *url_location = NULL;
+    g_free(path);
+    break;
+
+  case URL_TYPE_OTHER:
+  default:
+    * url_location = path;
+    break;
+  }
+
+  * url_label = label;
+  return retval;
 }
 
 
@@ -851,9 +1064,9 @@ htmlAnchorCB(GtkWidget *widget, XmHTMLAnchorCallbackStruct *acbs,
 void
 gnc_html_load(HTMLWindow *hw)
 {
-  HTMLData *data;
-  char *label = NULL;
-  char *text = NULL;
+  HTMLData      * data;
+  GtkHTMLStream * handle;
+  char * text=NULL, * label=NULL;
 
   if (hw == NULL)
     return;
@@ -863,52 +1076,66 @@ gnc_html_load(HTMLWindow *hw)
   data = historyData(hw->history);
 
   gtk_window_set_title(GTK_WINDOW(hw->window), data->title);
-  gnc_html_window_fill_toolbar(hw);
+
+  html_window_fill_toolbar(hw);
 
   htmlSetButtonStates(hw);
 
-  (hw->jump_cb)(data->user_data, &text, &label);
+  (hw->jump_cb)(data->user_data, &hw->null_text, &hw->null_label);
 
   if (text == NULL)
   {
     text = "";
     label = NULL;
   }
-
-  gtk_xmhtml_source(GTK_XMHTML(hw->htmlwidget), text);
-
-  if (label != NULL)
-    XmHTMLAnchorScrollToName(hw->htmlwidget, label);
-  else
-    XmHTMLTextScrollToLine(hw->htmlwidget, 0);
+  handle = gtk_html_begin(GTK_HTML(hw->htmlwidget));
+  htmlUrlCB(GTK_HTML(hw->htmlwidget), "", handle, (gpointer)hw);
 }
 
+void 
+gnc_url_show(URLType type, char * location, char * label) {
+  char * full_url;
+  char proto_tag[8];
 
-/********************************************************************\
- * htmlReadImageProc - callback function for the html widget        *
- *                     used to find an image file                   *
- *                                                                  * 
- * Args:   widget - the html widget                                 *
- *         file   - the name of the image file to read              *
- *         data   - some data, not used                             *
- * Return: none                                                     * 
-\********************************************************************/
-static XmImageInfo *
-htmlReadImageProc (GtkWidget *widget, String file, gpointer data)
-{
-  char *filename;
-  XmImageInfo *retval = NULL;
+  switch(type) {
+  case URL_TYPE_FILE:
+  case URL_TYPE_JUMP:
+    strcpy(proto_tag, "file:");
+    break;
+  case URL_TYPE_HTTP:
+    strcpy(proto_tag, "http:");
+    break;
+  case URL_TYPE_FTP:
+    strcpy(proto_tag, "ftp:");
+    break;
+  case URL_TYPE_SECURE:
+    strcpy(proto_tag, "https:");
+    break;
+  default:
+    strcpy(proto_tag, "");
+  }
 
-  /* construct absolute path -- twiddle the relative path we received */  
-  filename = gncFindFile(file);
+  full_url = g_new0(char, 
+                    (proto_tag ? strlen(proto_tag) : 0) + 
+                    (location ? strlen(location) : 0) +
+                    (label ? strlen(label) : 0) + 1);
+  strcpy(full_url, proto_tag);
+  if(location) strcat(full_url, location);
+  if(label) strcat(full_url, label);
 
-  /* use the default proc for the hard work */
-  retval = XmHTMLImageDefaultProc(widget, filename, NULL, 0);
-
-  if (filename != NULL)
-    free(filename);
-
-  return retval;
+  gnome_url_show(full_url);
 }
 
-/* ----------------------- END OF FILE ---------------------  */
+/********************************************************************
+ * gnc_html_print : print an html window 
+ ********************************************************************/
+
+void
+gnc_html_print(HTMLWindow * hw) {
+  PrintSession * ps = gnc_print_session_create();
+  
+  gtk_html_print(GTK_HTML(hw->htmlwidget),
+                 GNOME_PRINT_CONTEXT(ps->meta));
+  gnc_print_session_done(ps);
+  gnc_ui_print_dialog_create(ps);
+}

@@ -5296,7 +5296,7 @@ if test "${with_imlib+set}" = set; then
 fi
 
 
-# the XmHTML widget needs libz, libjpeg, and libpng.
+# the gtkhtml widget needs libz, libjpeg, and libpng.
 # it also uses #ifdef's not #if's so DONT #def to zero.
 echo $ac_n "checking for deflateEnd in -lz""... $ac_c" 1>&6
 echo "configure:5303: checking for deflateEnd in -lz" >&5
@@ -5482,108 +5482,12 @@ EOF
 fi
 
 
-### -------------------------------------------------------------------------
-## gtk-xmhtml
-#  if gtk-xmhtml header or library not found, gnome builds are disabled
-#  make gnome will run make gnome.disabled which echoes a warning message
-
-## XXX - need to do this because gtk-xmhtml requires glibconfig.h
-## and I don't want CPPFLAGS permanently altered.
-## If there's a better way to tackle this please let me know!
-
-OLDCPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS `$GNOME_CONFIG_BIN --cflags gnome`"
-
-
-# gnome targets if all goes well
-# XXX - should we shift these to the rest of the gnome configuration
-# section?
-
-GNOME_TARGET="gnome.real"
-GNOME_STATIC_TARGET="gnome.static.real"
-
-#AC_CHECK_HEADER might work, but I'm not sure it uses CPPFLAGS
-# this guarantees it - it works.  Promise!!
-echo $ac_n "checking gtk-xmhtml/gtk-xmhtml.h""... $ac_c" 1>&6
-echo "configure:5509: checking gtk-xmhtml/gtk-xmhtml.h" >&5
-cat > conftest.$ac_ext <<EOF
-#line 5511 "configure"
-#include "confdefs.h"
-#include <gtk-xmhtml/gtk-xmhtml.h>
-EOF
-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:5516: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
-ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
-if test -z "$ac_err"; then
-  rm -rf conftest*
-  echo "$ac_t""yes" 1>&6
-else
-  echo "$ac_err" >&5
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-  rm -rf conftest*
-  { echo "configure: error: Cannot find gtk-xmhtml.h.  See the README for more info." 1>&2; exit 1; }
-fi
-rm -f conftest*
-
-#undo damage to CPPFLAGS
-CPPFLAGS="$OLDCPPFLAGS"
-
-
-### --------------------------------------------------------------------------
-EXTRALIBS=`$GNOME_CONFIG_BIN --libs gtkxmhtml`
-    
-#check for gtkxmhtml, export library link to variable GTK_XMHTML
-echo $ac_n "checking for gtk_xmhtml_new in -lgtkxmhtml""... $ac_c" 1>&6
-echo "configure:5539: checking for gtk_xmhtml_new in -lgtkxmhtml" >&5
-ac_lib_var=`echo gtkxmhtml'_'gtk_xmhtml_new | sed 'y%./+-%__p_%'`
-if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  ac_save_LIBS="$LIBS"
-LIBS="-lgtkxmhtml $EXTRALIBS $LIBS"
-cat > conftest.$ac_ext <<EOF
-#line 5547 "configure"
-#include "confdefs.h"
-/* Override any gcc2 internal prototype to avoid an error.  */
-/* We use char because int might match the return type of a gcc2
-    builtin and then its argument prototype would still apply.  */
-char gtk_xmhtml_new();
-
-int main() {
-gtk_xmhtml_new()
-; return 0; }
-EOF
-if { (eval echo configure:5558: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
-  rm -rf conftest*
-  eval "ac_cv_lib_$ac_lib_var=yes"
-else
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-  rm -rf conftest*
-  eval "ac_cv_lib_$ac_lib_var=no"
-fi
-rm -f conftest*
-LIBS="$ac_save_LIBS"
-
-fi
-if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
-  echo "$ac_t""yes" 1>&6
-  GTK_XMHTML="gtkxmhtml"
-else
-  echo "$ac_t""no" 1>&6
-{ echo "configure: error: Cannot find libgtkxmhtml.  See the README for more info." 1>&2; exit 1; }
-fi
-
-
-
-
 ### --------------------------------------------------------------------------
 EXTRALIBS=`$GNOME_CONFIG_BIN --libs xml`
     
 #check for libxml
 echo $ac_n "checking for xmlDefaultSAXHandlerInit in -lxml""... $ac_c" 1>&6
-echo "configure:5587: checking for xmlDefaultSAXHandlerInit in -lxml" >&5
+echo "configure:5491: checking for xmlDefaultSAXHandlerInit in -lxml" >&5
 ac_lib_var=`echo xml'_'xmlDefaultSAXHandlerInit | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -5591,7 +5495,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lxml $EXTRALIBS $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 5595 "configure"
+#line 5499 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -5602,7 +5506,7 @@ int main() {
 xmlDefaultSAXHandlerInit()
 ; return 0; }
 EOF
-if { (eval echo configure:5606: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:5510: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -5630,7 +5534,7 @@ EXTRALIBS=`$GNOME_CONFIG_BIN --libs print`
 # check for gnome-print and enable it via HAVE_LIBGNOMEPRINT
 # if found
 echo $ac_n "checking for gnome_print_context_new in -lgnomeprint""... $ac_c" 1>&6
-echo "configure:5634: checking for gnome_print_context_new in -lgnomeprint" >&5
+echo "configure:5538: checking for gnome_print_context_new in -lgnomeprint" >&5
 ac_lib_var=`echo gnomeprint'_'gnome_print_context_new | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -5638,7 +5542,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lgnomeprint $EXTRALIBS $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 5642 "configure"
+#line 5546 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -5649,7 +5553,7 @@ int main() {
 gnome_print_context_new()
 ; return 0; }
 EOF
-if { (eval echo configure:5653: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:5557: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -5673,6 +5577,55 @@ else
   echo "$ac_t""no" 1>&6
 fi
 
+### --------------------------------------------------------------------------
+EXTRALIBS=`$GNOME_CONFIG_BIN --libs gtkhtml`
+
+# check for gtkhtml and enable it via HAVE_LIBGTKHTML
+# if found
+echo $ac_n "checking for gtk_html_new in -lgtkhtml""... $ac_c" 1>&6
+echo "configure:5587: checking for gtk_html_new in -lgtkhtml" >&5
+ac_lib_var=`echo gtkhtml'_'gtk_html_new | sed 'y%./+-%__p_%'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-lgtkhtml $EXTRALIBS $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 5595 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char gtk_html_new();
+
+int main() {
+gtk_html_new()
+; return 0; }
+EOF
+if { (eval echo configure:5606: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  GNOMEBUILDLIBS="${GNOMEBUILDLIBS} gtkhtml"
+             cat >> confdefs.h <<\EOF
+#define HAVE_LIBGTKHTML 1
+EOF
+
+else
+  echo "$ac_t""no" 1>&6
+fi
+
 
 
 
@@ -5688,7 +5641,7 @@ cat >> confdefs.h <<\EOF
 EOF
 
 
-GNOMEBUILDLIBS="gnomeui gnome gtkxmhtml xml ${GNOMEBUILDLIBS}"
+GNOMEBUILDLIBS="gnomeui gnome xml ${GNOMEBUILDLIBS}"
 
 if test "${GNOME_CONFIG_BIN}"x != GNOME_CONFIG_NOT_FOUNDx
 then
@@ -5709,7 +5662,7 @@ G_WRAP_LINK_ARGS=""
 # Extract the first word of "g-wrap-config", so it can be a program name with args.
 set dummy g-wrap-config; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:5713: checking for $ac_word" >&5
+echo "configure:5666: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_G_WRAP_CONFIG'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -5753,7 +5706,7 @@ fi
 # Extract the first word of "g-wrap", so it can be a program name with args.
 set dummy g-wrap; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:5757: checking for $ac_word" >&5
+echo "configure:5710: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_G_WRAP'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -5811,7 +5764,7 @@ GUILE_LINK_ARGS=""
 # Extract the first word of "guile-config", so it can be a program name with args.
 set dummy guile-config; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:5815: checking for $ac_word" >&5
+echo "configure:5768: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_GUILE_CONFIG'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -5855,7 +5808,7 @@ fi
 # Extract the first word of "guile", so it can be a program name with args.
 set dummy guile; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:5859: checking for $ac_word" >&5
+echo "configure:5812: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_GUILE'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -6141,7 +6094,6 @@ s%@X_CFLAGS@%$X_CFLAGS%g
 s%@X_PRE_LIBS@%$X_PRE_LIBS%g
 s%@X_LIBS@%$X_LIBS%g
 s%@X_EXTRA_LIBS@%$X_EXTRA_LIBS%g
-s%@GTK_XMHTML@%$GTK_XMHTML%g
 s%@GNOME_TARGET@%$GNOME_TARGET%g
 s%@GNOME_STATIC_TARGET@%$GNOME_STATIC_TARGET%g
 s%@GNOME_CFLAGS@%$GNOME_CFLAGS%g

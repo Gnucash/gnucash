@@ -27,6 +27,8 @@
 #include <stdlib.h>
 #include <guile/gh.h>
 #include <gnome.h>
+#include <gtk/gtk.h>
+#include <gtkhtml/gtkhtml.h>
 
 #include "gnome-top-level.h"
 #include "window-main.h"
@@ -71,15 +73,14 @@ static void gnc_configure_register_borders(void);
 static void gnc_configure_reverse_balance_cb(void *);
 static void gnc_configure_reverse_balance(void);
 static void gnc_configure_sr_label_callbacks();
-static void gnc_configure_auto_raise_cb(void *);
-static void gnc_configure_auto_raise(void);
+static void gnc_configure_auto_raise_cb(void * foo) { }
+static void gnc_configure_auto_raise(void) { }
 static void gnc_configure_auto_decimal_cb(void *);
 static void gnc_configure_auto_decimal(void);
 static void gnc_configure_register_font_cb(void *);
 static void gnc_configure_register_font(void);
 static void gnc_configure_register_hint_font_cb(void *);
 static void gnc_configure_register_hint_font(void);
-
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -147,7 +148,12 @@ gnucash_ui_init()
   {
     gnome_init("GnuCash", NULL, fake_argc, fake_argv);
     gnome_is_initialized = TRUE;
-
+    
+    /* initialization required for gtkhtml */
+    gdk_rgb_init ();    
+    gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
+    gtk_widget_set_default_visual (gdk_rgb_get_visual ());
+    
     app = gnome_app_new("GnuCash", "GnuCash");
 
     gnc_options_init();
@@ -644,37 +650,6 @@ gnc_configure_register_borders(void)
     reg_borders |= STYLE_BORDER_TOP | STYLE_BORDER_BOTTOM;
   
   gnucash_style_set_register_borders (reg_borders);
-}
-
-/* gnc_configure_auto_raise_cb
- *    Callback called when options change - sets
- *    auto-raise status of combocell class
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_auto_raise_cb(void *data)
-{
-  gnc_configure_auto_raise();
-}
-
-/* gnc_configure_auto_raise
- *    sets combocell auto raise status
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_auto_raise(void)
-{
-  gncBoolean auto_pop;
-
-  auto_pop = gnc_lookup_boolean_option("Register",
-                                       "Auto-Raise Lists",
-                                       GNC_T);
-
-  xaccComboCellSetAutoPop(auto_pop);
 }
 
 /* gnc_configure_reverse_balance_cb

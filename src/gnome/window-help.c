@@ -109,35 +109,34 @@ help_data_set_text(HelpData *help_data, const gchar *text)
 
 
 static HTMLData *
-helpAnchorCB(XmHTMLAnchorCallbackStruct *acbs, HTMLUserData user_data)
+helpAnchorCB(URLType url_type, char * location, char * label, 
+             HTMLUserData user_data)
 {
   HelpData *user = user_data;
   HTMLData *html_data;
   HelpData *help_data;
 
-  switch(acbs->url_type)
-  {
+  switch(url_type) {
     /* a local file with a possible jump to label */
-    case ANCHOR_FILE_LOCAL:
-      help_data = help_data_new();
-      help_data_set_file(help_data, acbs->href);
-      help_data_set_title(help_data, user->title);
+  case URL_TYPE_FILE:
+    help_data = help_data_new();
+    help_data_set_file(help_data, location);
+    help_data_set_title(help_data, user->title);
 
-      html_data = gnc_html_data_new(user->title, help_data,
-                                    help_data_destroy,
-                                    NULL, 0);
+    html_data = gnc_html_data_new(user->title, help_data,
+                                  help_data_destroy,
+                                  NULL, 0);    
+    return html_data;
+    break;
 
-      return html_data;
-
-    /* other types use gnome_url_show */
-    case ANCHOR_FTP:
-    case ANCHOR_HTTP:
-    case ANCHOR_MAILTO:
-    case ANCHOR_UNKNOWN:
-    default:
-      gnome_url_show(acbs->href);
-      break;
+    /* other types use gnc_url_show */
+  default:
+    gnc_url_show(url_type, location, label);
+    return NULL;
+    break;
   }
+
+  g_warning("What's going on?\n");
 
   return NULL;
 }
@@ -173,8 +172,9 @@ helpJumpCB(HTMLUserData user_data, char **set_text, char **set_label)
   }
 
   /* if text to display wasn't specified, use the truncated name to read */
-  if (text == NULL)
-    text = gncReadFile(help_data->htmlfile);
+  if (text == NULL) {
+    gncReadFile(help_data->htmlfile, &text);
+  }
 
   if (text != NULL)
   {

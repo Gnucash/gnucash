@@ -264,7 +264,7 @@ AC_ARG_WITH( imlib,
        [  --with-imlib=PATH       specify where to look for imlib includes and libs],
        X_LIBS="${X_LIBS} -L$with_imlib/lib" X_CFLAGS="$X_CFLAGS -I$with_imlib/include" )
 
-# the XmHTML widget needs libz, libjpeg, and libpng.
+# the gtkhtml widget needs libz, libjpeg, and libpng.
 # it also uses #ifdef's not #if's so DONT #def to zero.
 AC_CHECK_LIB(z, deflateEnd,
              AC_DEFINE(HAVE_ZLIB,1))
@@ -283,48 +283,6 @@ AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage,
         AC_DEFINE(HAVE_XPM,0)
         AC_MSG_ERROR([Cannot find required Xpm library]),
         $X_PRE_LIBS -lX11 $X_LIBS $X_EXTRA_LIBS)
-
-### -------------------------------------------------------------------------
-## gtk-xmhtml
-#  if gtk-xmhtml header or library not found, gnome builds are disabled
-#  make gnome will run make gnome.disabled which echoes a warning message
-
-## XXX - need to do this because gtk-xmhtml requires glibconfig.h
-## and I don't want CPPFLAGS permanently altered.
-## If there's a better way to tackle this please let me know!
-
-OLDCPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS `$GNOME_CONFIG_BIN --cflags gnome`"
-
-
-# gnome targets if all goes well
-# XXX - should we shift these to the rest of the gnome configuration
-# section?
-
-GNOME_TARGET="gnome.real"
-GNOME_STATIC_TARGET="gnome.static.real"
-
-#AC_CHECK_HEADER might work, but I'm not sure it uses CPPFLAGS
-# this guarantees it - it works.  Promise!!
-AC_MSG_CHECKING([gtk-xmhtml/gtk-xmhtml.h])
-AC_TRY_CPP([#include <gtk-xmhtml/gtk-xmhtml.h>],
-  AC_MSG_RESULT(yes),
-  AC_MSG_ERROR([Cannot find gtk-xmhtml.h.  See the README for more info.]))
-
-#undo damage to CPPFLAGS
-CPPFLAGS="$OLDCPPFLAGS"
-
-
-### --------------------------------------------------------------------------
-EXTRALIBS=`$GNOME_CONFIG_BIN --libs gtkxmhtml`
-    
-#check for gtkxmhtml, export library link to variable GTK_XMHTML
-AC_CHECK_LIB(gtkxmhtml, gtk_xmhtml_new,
-  GTK_XMHTML="gtkxmhtml",
-  AC_MSG_ERROR([Cannot find libgtkxmhtml.  See the README for more info.]),
-  $EXTRALIBS)
-AC_SUBST(GTK_XMHTML)
-
 
 ### --------------------------------------------------------------------------
 EXTRALIBS=`$GNOME_CONFIG_BIN --libs xml`
@@ -345,6 +303,16 @@ AC_CHECK_LIB(gnomeprint, gnome_print_context_new,
              AC_DEFINE(HAVE_LIBGNOMEPRINT),
              ,
              $EXTRALIBS)
+### --------------------------------------------------------------------------
+EXTRALIBS=`$GNOME_CONFIG_BIN --libs gtkhtml`
+
+# check for gtkhtml and enable it via HAVE_LIBGTKHTML
+# if found
+AC_CHECK_LIB(gtkhtml, gtk_html_new,
+             GNOMEBUILDLIBS="${GNOMEBUILDLIBS} gtkhtml"
+             AC_DEFINE(HAVE_LIBGTKHTML),
+             ,
+             $EXTRALIBS)
 
 AC_SUBST(GNOME_TARGET)
 AC_SUBST(GNOME_STATIC_TARGET)
@@ -357,7 +325,7 @@ AC_SUBST(GNOME_STATIC_TARGET)
 GNOME=1
 AC_DEFINE(GNOME)
 
-GNOMEBUILDLIBS="gnomeui gnome gtkxmhtml xml ${GNOMEBUILDLIBS}"
+GNOMEBUILDLIBS="gnomeui gnome xml ${GNOMEBUILDLIBS}"
 
 if test "${GNOME_CONFIG_BIN}"x != GNOME_CONFIG_NOT_FOUNDx
 then

@@ -108,6 +108,8 @@ xaccInitSplit(Split * split)
   split->cost_basis                = 0.0;
   split->ticket = 0;
 
+  split->kvp_data = NULL;
+
   xaccGUIDNew(&split->guid);
   xaccStoreEntity(split, &split->guid, GNC_ID_SPLIT);
 }
@@ -191,6 +193,37 @@ xaccFreeSplit( Split *split )
   split->date_reconciled.tv_nsec = 0;
 
   _free(split);
+}
+
+/********************************************************************
+ * xaccSplitGetSlot
+ ********************************************************************/
+
+kvp_value * 
+xaccSplitGetSlot(Split * split, const char * key) {
+  if(!split || !key || !(split->kvp_data)) {
+    return NULL;
+  }
+  else {
+    return kvp_frame_get_slot(split->kvp_data, key);
+  }
+}
+
+/********************************************************************
+ * xaccSplitSetSlot 
+ ********************************************************************/
+
+void
+xaccSplitSetSlot(Split * split, const char * key, const kvp_value * value) {
+  if(!split || !key || !value) {
+    return;
+  }
+  else {
+    if(!split->kvp_data) {
+      split->kvp_data = kvp_frame_new();
+    }
+    kvp_frame_set_slot(split->kvp_data, key, value);
+  }
 }
 
 /********************************************************************\
@@ -410,6 +443,8 @@ xaccInitTransaction( Transaction * trans )
   trans->open = 0;
   trans->orig = NULL;
 
+  trans->kvp_data = NULL;
+
   xaccGUIDNew(&trans->guid);
   xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
 }
@@ -524,6 +559,38 @@ xaccFreeTransaction( Transaction *trans )
   _free(trans);
 
   LEAVE ("addr=%p\n", trans);
+}
+
+/********************************************************************
+ * xaccTransGetSlot
+ ********************************************************************/
+
+kvp_value * 
+xaccTransGetSlot(Transaction * trans, const char * key) {
+  if(!trans || !key || !(trans->kvp_data)) {
+    return NULL;
+  }
+  else {
+    return kvp_frame_get_slot(trans->kvp_data, key);
+  }
+}
+
+/********************************************************************
+ * xaccTransSetSlot 
+ ********************************************************************/
+
+void
+xaccTransSetSlot(Transaction * trans, const char * key, 
+                 const kvp_value * value) {
+  if(!trans || !key || !value) {
+    return;
+  }
+  else {
+    if(!trans->kvp_data) {
+      trans->kvp_data = kvp_frame_new();
+    }
+    kvp_frame_set_slot(trans->kvp_data, key, value);
+  }
 }
 
 /********************************************************************\
