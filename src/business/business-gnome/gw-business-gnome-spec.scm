@@ -72,7 +72,7 @@
   (gw:wrap-function
    ws
    'gnc:customer-find
-   '<gnc:GncCustomer*>
+   '<gw:void>
    "gnc_customer_find"
    '((<gnc:UIWidget> parent) (<gnc:GncCustomer*> start_selection)
      (<gnc:Book*> book) )
@@ -102,7 +102,7 @@
   (gw:wrap-function
    ws
    'gnc:employee-find
-   '<gnc:GncEmployee*>
+   '<gw:void>
    "gnc_employee_find"
    '((<gnc:UIWidget> parent) (<gnc:GncEmployee*> start_selection)
      (<gnc:Book*> book))
@@ -132,7 +132,7 @@
   (gw:wrap-function
    ws
    'gnc:invoice-find
-   '<gnc:GncInvoice*>
+   '<gw:void>
    "gnc_invoice_find"
    '((<gnc:UIWidget> parent) (<gnc:GncInvoice*> start_selection)
      (<gnc:GncOwner*> owner) (<gnc:Book*> book))
@@ -148,8 +148,8 @@
    'gnc:job-new
    '<gnc:GncJob*>
    "gnc_job_new"
-   '((<gnc:UIWidget> parent) (<gnc:Book*> book)
-     (<gnc:GncOwner*> default_owner))
+   '((<gnc:UIWidget> parent) (<gnc:GncOwner*> default_owner)
+     (<gnc:Book*> book))
    "Dialog: create a new GncJob.  Parent and Owner may be NULL.")
 
   (gw:wrap-function
@@ -166,12 +166,12 @@
 
   (gw:wrap-function
    ws
-   'gnc:job-select
-   '<gnc:GncJob*>
-   "gnc_ui_select_job_new"
-   '((<gnc:UIWidget> parent) (<gnc:Book*> book)
-     (<gnc:GncOwner*> owner) (<gnc:GncJob*> job))
-   "Dialog: Select a new job.  Parent and Owner may be NULL.")
+   'gnc:job-find
+   '<gw:void>
+   "gnc_job_find"
+   '((<gnc:UIWidget> parent) (<gnc:GncJob*> job)
+     (<gnc:GncOwner*> owner) (<gnc:Book*> book))
+   "Dialog: Find a new job.  Parent and Owner may be NULL.")
 
   ;;
   ;; dialog-order.h
@@ -197,7 +197,7 @@
   (gw:wrap-function
    ws
    'gnc:order-find
-   '<gnc:GncOrder*>
+   '<gw:void>
    "gnc_order_find"
    '((<gnc:UIWidget> parent) (<gnc:GncOrder*> start_selection)
      (<gnc:GncOwner*> order_owner) (<gnc:Book*> book) )
@@ -228,7 +228,7 @@
   (gw:wrap-function
    ws
    'gnc:vendor-find
-   '<gnc:GncVendor*>
+   '<gw:void>
    "gnc_vendor_find"
    '((<gnc:UIWidget> parent) (<gnc:GncVendor*> start_selection)
      (<gnc:Book*> book))

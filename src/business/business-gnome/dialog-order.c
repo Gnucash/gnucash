@@ -765,11 +765,11 @@ new_order_cb (gpointer user_data)
   return gnc_order_new (sw->parent, sw->owner, sw->book);
 }
 
-GncOrder *
-gnc_order_find (GtkWidget *parent, GncOrder *start, GncOwner *owner,
-		GNCBook *book)
+static GncOrder *
+gnc_order_select (GtkWidget *parent, GncOrder *start, GncOwner *owner,
+		  GNCBook *book, gboolean provide_select)
 {
-  GList *params = NULL;
+  static GList *params = NULL;
   gpointer res;
   QueryNew *q, *q2 = NULL;
   GNCSearchCallbackButton buttons[] = { 
@@ -783,18 +783,20 @@ gnc_order_find (GtkWidget *parent, GncOrder *start, GncOwner *owner,
   g_return_val_if_fail (book, NULL);
 
   /* Build parameter list in reverse order*/
-  params = gnc_search_param_prepend (params, _("Order Notes"), NULL, type,
-				     ORDER_NOTES, NULL);
-  params = gnc_search_param_prepend (params, _("Date Closed"), NULL, type,
-				     ORDER_CLOSED, NULL);
-  params = gnc_search_param_prepend (params, _("Is Closed?"), NULL, type,
-				     ORDER_IS_CLOSED, NULL);
-  params = gnc_search_param_prepend (params, _("Date Opened"), NULL, type,
-				     ORDER_OPENED, NULL);
-  params = gnc_search_param_prepend (params, _("Owner Name "), NULL, type,
-				     ORDER_OWNER, OWNER_NAME, NULL);
-  params = gnc_search_param_prepend (params, _("Order ID"), NULL, type,
-				     ORDER_ID, NULL);
+  if (params == NULL) {
+    params = gnc_search_param_prepend (params, _("Order Notes"), NULL, type,
+				       ORDER_NOTES, NULL);
+    params = gnc_search_param_prepend (params, _("Date Closed"), NULL, type,
+				       ORDER_CLOSED, NULL);
+    params = gnc_search_param_prepend (params, _("Is Closed?"), NULL, type,
+				       ORDER_IS_CLOSED, NULL);
+    params = gnc_search_param_prepend (params, _("Date Opened"), NULL, type,
+				       ORDER_OPENED, NULL);
+    params = gnc_search_param_prepend (params, _("Owner Name "), NULL, type,
+				       ORDER_OWNER, OWNER_NAME, NULL);
+    params = gnc_search_param_prepend (params, _("Order ID"), NULL, type,
+				       ORDER_ID, NULL);
+  }
 
   /* Build the queries */
   q = gncQueryCreate ();
@@ -835,17 +837,33 @@ gnc_order_find (GtkWidget *parent, GncOrder *start, GncOwner *owner,
   sw.book = book;
   sw.parent = parent;
   sw.owner = owner;
-  res = gnc_search_dialog_choose_object (type, params, q, q2, buttons,
-					 NULL, new_order_cb, &sw);
+  res = gnc_search_dialog_choose_object (type, params, q, q2,
+					 (provide_select ? buttons :
+					  &(buttons[1])), NULL,
+					 new_order_cb, &sw);
 
   gncQueryDestroy (q);
   return res;
 }
 
+void
+gnc_order_find (GtkWidget *parent, GncOrder *start, GncOwner *owner,
+		GNCBook *book)
+{
+  gnc_order_select (parent, start, owner, book, FALSE);
+}
+
+GncOrder *
+gnc_order_choose (GtkWidget *parent, GncOrder *start, GncOwner *owner,
+		  GNCBook *book)
+{
+  return gnc_order_select (parent, start, owner, book, TRUE);
+}
+
 gpointer gnc_order_edit_new_select (gpointer bookp, gpointer order,
 				       GtkWidget *toplevel)
 {
-  return gnc_order_find (toplevel, order, NULL, bookp);
+  return gnc_order_choose (toplevel, order, NULL, bookp);
 }
 
 gpointer gnc_order_edit_new_edit (gpointer bookp, gpointer v,

@@ -14,8 +14,11 @@
 /* Functions to create and edit orders */
 GncOrder * gnc_order_new (GtkWidget *parent, GncOwner *owner, GNCBook *book);
 void gnc_order_edit (GtkWidget *parent, GncOrder *order);
-GncOrder * gnc_order_find (GtkWidget *parent, GncOrder *start,
-			   GncOwner *owner, GNCBook *book);
+
+void gnc_order_find (GtkWidget *parent, GncOrder *start, GncOwner *owner,
+		     GNCBook *book);
+GncOrder * gnc_order_choose (GtkWidget *parent, GncOrder *start,
+			     GncOwner *owner, GNCBook *book);
 
 /* Callbacks to select a order that match the necessary functions
  * for use with the gnc_general_select widget.

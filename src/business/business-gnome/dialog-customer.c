@@ -634,7 +634,6 @@ gnc_customer_edit (GtkWidget *parent, GncCustomer *cust)
 
 /* Functions for customer selection widgets */
 
-
 static gboolean
 invoice_customer_cb (gpointer *cust_p, gpointer user_data)
 {
@@ -688,7 +687,7 @@ jobs_customer_cb (gpointer *cust_p, gpointer user_data)
     return TRUE;
 
   gncOwnerInitCustomer (&owner, cust);
-  gnc_ui_select_job_new (sw->parent, sw->book, &owner, NULL);
+  gnc_job_find (sw->parent, NULL, &owner, sw->book);
   return TRUE;
 }
 
@@ -728,10 +727,11 @@ new_customer_cb (gpointer user_data)
   return gnc_customer_new (sw->parent, sw->book);
 }
 
-GncCustomer *
-gnc_customer_find (GtkWidget *parent, GncCustomer *start, GNCBook *book)
+static GncCustomer *
+gnc_customer_select (GtkWidget *parent, GncCustomer *start, GNCBook *book,
+		     gboolean provide_select)
 {
-  GList *params = NULL;
+  static GList *params = NULL;
   gpointer res;
   QueryNew *q, *q2 = NULL;
   GNCSearchCallbackButton buttons[] = { 
@@ -748,15 +748,16 @@ gnc_customer_find (GtkWidget *parent, GncCustomer *start, GNCBook *book)
   g_return_val_if_fail (book, NULL);
 
   /* Build parameter list in reverse order*/
-  params = gnc_search_param_prepend (params, _("Shipping Contact"), NULL, type,
-				     CUSTOMER_SHIPADDR, ADDRESS_NAME, NULL);
-  params = gnc_search_param_prepend (params, _("Billing Contact"), NULL, type,
-				     CUSTOMER_ADDR, ADDRESS_NAME, NULL);
-  params = gnc_search_param_prepend (params, _("Customer Name"), NULL, type,
-				     CUSTOMER_NAME, NULL);
-  params = gnc_search_param_prepend (params, _("Customer ID"), NULL, type,
-				     CUSTOMER_ID, NULL);
-
+  if (params == NULL) {
+    params = gnc_search_param_prepend (params, _("Shipping Contact"), NULL, type,
+				       CUSTOMER_SHIPADDR, ADDRESS_NAME, NULL);
+    params = gnc_search_param_prepend (params, _("Billing Contact"), NULL, type,
+				       CUSTOMER_ADDR, ADDRESS_NAME, NULL);
+    params = gnc_search_param_prepend (params, _("Customer Name"), NULL, type,
+				       CUSTOMER_NAME, NULL);
+    params = gnc_search_param_prepend (params, _("Customer ID"), NULL, type,
+				       CUSTOMER_ID, NULL);
+  }
 
   /* Build the queries */
   q = gncQueryCreate ();
@@ -771,17 +772,31 @@ gnc_customer_find (GtkWidget *parent, GncCustomer *start, GNCBook *book)
   /* launch select dialog and return the result */
   sw.book = book;
   sw.parent = parent;
-  res = gnc_search_dialog_choose_object (type, params, q, q2, buttons,
-					 NULL, new_customer_cb, &sw);
+  res = gnc_search_dialog_choose_object (type, params, q, q2,
+					 (provide_select ? buttons :
+					  &(buttons[1])), NULL,
+					 new_customer_cb, &sw);
 
   gncQueryDestroy (q);
   return res;
 }
 
+void
+gnc_customer_find (GtkWidget *parent, GncCustomer *start, GNCBook *book)
+{
+  gnc_customer_select (parent, start, book, FALSE);
+}
+
+GncCustomer *
+gnc_customer_choose (GtkWidget *parent, GncCustomer *start, GNCBook *book)
+{
+  return gnc_customer_select (parent, start, book, TRUE);
+}
+
 gpointer gnc_customer_edit_new_select (gpointer bookp, gpointer cust,
 				       GtkWidget *toplevel)
 {
-  return gnc_customer_find (toplevel, cust, bookp);
+  return gnc_customer_choose (toplevel, cust, bookp);
 }
 
 gpointer gnc_customer_edit_new_edit (gpointer bookp, gpointer cust,

@@ -12,7 +12,7 @@
 #include "gncOwner.h"
 
 /* Functions to create and edit jobs */
-GncJob * gnc_job_new (GtkWidget *parent, GNCBook *book, GncOwner *owner);
+GncJob * gnc_job_new (GtkWidget *parent, GncOwner *owner, GNCBook *book);
 void gnc_job_edit (GtkWidget *parent, GncJob *job);
 
 /* Callback to choose a job from a customer, for use with the

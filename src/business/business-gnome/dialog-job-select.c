@@ -147,7 +147,7 @@ static void
 gnc_ui_select_job_new_cb(GtkButton * button, gpointer user_data)
 {
   struct select_job_window * w = user_data;
-  GncJob * new_selection = gnc_job_new (w->dialog, w->book, &(w->owner));
+  GncJob * new_selection = gnc_job_new (w->dialog, &(w->owner), w->book);
 
   if (new_selection) {
     gncOwnerCopy (gncJobGetOwner (new_selection), &(w->owner));
@@ -197,8 +197,8 @@ select_job_close (GnomeDialog *dialog, gpointer data)
 }
 
 GncJob *
-gnc_ui_select_job_new (GtkWidget * parent, GNCBook *book,
-		       GncOwner *ownerp, GncJob *job)
+gnc_job_choose (GtkWidget * parent, GncJob *start_job,
+		GncOwner *ownerp, GNCBook *book)
 {
   struct select_job_window * win;
   GladeXML *xml;
@@ -264,7 +264,7 @@ gnc_ui_select_job_new (GtkWidget * parent, GNCBook *book,
                       GTK_SIGNAL_FUNC(select_job_close), win);
 
   /* Setup the owner and job lists */
-  win->job = job;
+  win->job = start_job;
   update_owner_select_picker (win);
 
   /* Run the widget */
@@ -279,3 +279,9 @@ gnc_ui_select_job_new (GtkWidget * parent, GNCBook *book,
   return retval;
 }
 
+void
+gnc_job_find (GtkWidget * parent, GncJob *start_job, 
+	      GncOwner *ownerp, GNCBook *book)
+{
+  gnc_job_choose (parent, start_job, ownerp, book);
+}

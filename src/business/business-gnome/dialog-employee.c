@@ -571,10 +571,11 @@ new_employee_cb (gpointer user_data)
   return gnc_employee_new (sw->parent, sw->book);
 }
 
-GncEmployee *
-gnc_employee_find (GtkWidget *parent, GncEmployee *start, GNCBook *book)
+static GncEmployee *
+gnc_employee_select (GtkWidget *parent, GncEmployee *start, GNCBook *book,
+		     gboolean provide_select)
 {
-  GList *params = NULL;
+  static GList *params = NULL;
   gpointer res;
   QueryNew *q, *q2 = NULL;
   GNCSearchCallbackButton buttons[] = { 
@@ -588,13 +589,14 @@ gnc_employee_find (GtkWidget *parent, GncEmployee *start, GNCBook *book)
   g_return_val_if_fail (book, NULL);
 
   /* Build parameter list in reverse order*/
-  params = gnc_search_param_prepend (params, _("Employee Name"), NULL,
-				     type, EMPLOYEE_ADDR, ADDRESS_NAME, NULL);
-  params = gnc_search_param_prepend (params, _("Employee Username"), NULL,
-				     type, EMPLOYEE_USERNAME, NULL);
-  params = gnc_search_param_prepend (params, _("Employee ID"), NULL, type,
-				     EMPLOYEE_ID, NULL);
-
+  if (params == NULL) {
+    params = gnc_search_param_prepend (params, _("Employee Name"), NULL,
+				       type, EMPLOYEE_ADDR, ADDRESS_NAME, NULL);
+    params = gnc_search_param_prepend (params, _("Employee Username"), NULL,
+				       type, EMPLOYEE_USERNAME, NULL);
+    params = gnc_search_param_prepend (params, _("Employee ID"), NULL, type,
+				       EMPLOYEE_ID, NULL);
+  }
 
   /* Build the queries */
   q = gncQueryCreate ();
@@ -609,17 +611,31 @@ gnc_employee_find (GtkWidget *parent, GncEmployee *start, GNCBook *book)
   /* launch select dialog and return the result */
   sw.book = book;
   sw.parent = parent;
-  res = gnc_search_dialog_choose_object (type, params, q, q2, buttons,
-					 NULL, new_employee_cb, &sw);
+  res = gnc_search_dialog_choose_object (type, params, q, q2,
+					 (provide_select ? buttons :
+					  &(buttons[1])), NULL,
+					 new_employee_cb, &sw);
 
   gncQueryDestroy (q);
   return res;
 }
 
+void
+gnc_employee_find (GtkWidget *parent, GncEmployee *start, GNCBook *book)
+{
+  gnc_employee_select (parent, start, book, FALSE);
+}
+
+GncEmployee *
+gnc_employee_choose (GtkWidget *parent, GncEmployee *start, GNCBook *book)
+{
+  return gnc_employee_select (parent, start, book, TRUE);
+}
+
 gpointer gnc_employee_edit_new_select (gpointer bookp, gpointer employee,
 				       GtkWidget *toplevel)
 {
-  return gnc_employee_find (toplevel, employee, bookp);
+  return gnc_employee_choose (toplevel, employee, bookp);
 }
 
 gpointer gnc_employee_edit_new_edit (gpointer bookp, gpointer v,

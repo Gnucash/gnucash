@@ -866,11 +866,11 @@ new_invoice_cb (gpointer user_data)
   return gnc_invoice_new (sw->parent, sw->owner, sw->book);
 }
 
-GncInvoice *
-gnc_invoice_find (GtkWidget *parent, GncInvoice *start, GncOwner *owner,
-		GNCBook *book)
+static GncInvoice *
+gnc_invoice_select (GtkWidget *parent, GncInvoice *start, GncOwner *owner,
+		    GNCBook *book, gboolean provide_select)
 {
-  GList *params = NULL;
+  static GList *params = NULL;
   gpointer res;
   QueryNew *q, *q2 = NULL;
   GNCSearchCallbackButton buttons[] = { 
@@ -884,24 +884,26 @@ gnc_invoice_find (GtkWidget *parent, GncInvoice *start, GncOwner *owner,
   g_return_val_if_fail (book, NULL);
 
   /* Build parameter list in reverse invoice*/
-  params = gnc_search_param_prepend (params, _("Invoice Notes"), NULL, type,
-				     INVOICE_NOTES, NULL);
-  params = gnc_search_param_prepend (params, _("Date Paid"), NULL, type,
-				     INVOICE_PAID, NULL);
-  params = gnc_search_param_prepend (params, _("Is Paid?"), NULL, type,
-				     INVOICE_IS_PAID, NULL);
-  params = gnc_search_param_prepend (params, _("Date Due"), NULL, type,
-				     INVOICE_DUE, NULL);
-  params = gnc_search_param_prepend (params, _("Date Posted"), NULL, type,
-				     INVOICE_POSTED, NULL);
-  params = gnc_search_param_prepend (params, _("Is Posted?"), NULL, type,
-				     INVOICE_IS_POSTED, NULL);
-  params = gnc_search_param_prepend (params, _("Date Opened"), NULL, type,
-				     INVOICE_OPENED, NULL);
-  params = gnc_search_param_prepend (params, _("Owner Name "), NULL, type,
-				     INVOICE_OWNER, OWNER_NAME, NULL);
-  params = gnc_search_param_prepend (params, _("Invoice ID"), NULL, type,
-				     INVOICE_ID, NULL);
+  if (params == NULL) {
+    params = gnc_search_param_prepend (params, _("Invoice Notes"), NULL, type,
+				       INVOICE_NOTES, NULL);
+    params = gnc_search_param_prepend (params, _("Date Paid"), NULL, type,
+				       INVOICE_PAID, NULL);
+    params = gnc_search_param_prepend (params, _("Is Paid?"), NULL, type,
+				       INVOICE_IS_PAID, NULL);
+    params = gnc_search_param_prepend (params, _("Date Due"), NULL, type,
+				       INVOICE_DUE, NULL);
+    params = gnc_search_param_prepend (params, _("Date Posted"), NULL, type,
+				       INVOICE_POSTED, NULL);
+    params = gnc_search_param_prepend (params, _("Is Posted?"), NULL, type,
+				       INVOICE_IS_POSTED, NULL);
+    params = gnc_search_param_prepend (params, _("Date Opened"), NULL, type,
+				       INVOICE_OPENED, NULL);
+    params = gnc_search_param_prepend (params, _("Owner Name "), NULL, type,
+				       INVOICE_OWNER, OWNER_NAME, NULL);
+    params = gnc_search_param_prepend (params, _("Invoice ID"), NULL, type,
+				       INVOICE_ID, NULL);
+  }
 
   /* Build the queries */
   q = gncQueryCreate ();
@@ -931,17 +933,33 @@ gnc_invoice_find (GtkWidget *parent, GncInvoice *start, GncOwner *owner,
   sw.book = book;
   sw.parent = parent;
   sw.owner = owner;
-  res = gnc_search_dialog_choose_object (type, params, q, q2, buttons,
-					 NULL, new_invoice_cb, &sw);
+  res = gnc_search_dialog_choose_object (type, params, q, q2,
+					 (provide_select ? buttons :
+					  &(buttons[1])), NULL,
+					 new_invoice_cb, &sw);
 
   gncQueryDestroy (q);
   return res;
 }
 
+void
+gnc_invoice_find (GtkWidget *parent, GncInvoice *start, GncOwner *owner,
+		GNCBook *book)
+{
+  gnc_invoice_select (parent, start, owner, book, FALSE);
+}
+
+GncInvoice *
+gnc_invoice_choose (GtkWidget *parent, GncInvoice *start, GncOwner *owner,
+		    GNCBook *book)
+{
+  return gnc_invoice_select (parent, start, owner, book, TRUE);
+}
+
 gpointer gnc_invoice_edit_new_select (gpointer bookp, gpointer invoice,
 				       GtkWidget *toplevel)
 {
-  return gnc_invoice_find (toplevel, invoice, NULL, bookp);
+  return gnc_invoice_choose (toplevel, invoice, NULL, bookp);
 }
 
 gpointer gnc_invoice_edit_new_edit (gpointer bookp, gpointer v,

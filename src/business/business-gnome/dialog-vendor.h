@@ -11,8 +11,10 @@
 /* Functions to create and edit vendors */
 GncVendor * gnc_vendor_new (GtkWidget *parent, GNCBook *book);
 void gnc_vendor_edit (GtkWidget *parent, GncVendor *vendor);
-GncVendor * gnc_vendor_find (GtkWidget *parent, GncVendor *start,
-			     GNCBook *book);
+
+void gnc_vendor_find (GtkWidget *parent, GncVendor *start, GNCBook *book);
+GncVendor * gnc_vendor_choose (GtkWidget *parent, GncVendor *start,
+			       GNCBook *book);
 
 /* Callbacks to select a vendor that match the necessary functions
  * for use with the gnc_general_select widget.

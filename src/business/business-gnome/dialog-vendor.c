@@ -25,6 +25,9 @@
 #include "gncVendorP.h"
 
 #include "dialog-vendor.h"
+#include "dialog-job-select.h"
+#include "dialog-order.h"
+#include "dialog-invoice.h"
 
 #define DIALOG_NEW_VENDOR_CM_CLASS "dialog-new-vendor"
 #define DIALOG_EDIT_VENDOR_CM_CLASS "dialog-edit-vendor"
@@ -527,6 +530,63 @@ gnc_vendor_edit (GtkWidget *parent, GncVendor *vendor)
 /* Functions for vendor selection widgets */
 
 static gboolean
+invoice_vendor_cb (gpointer *vendor_p, gpointer user_data)
+{
+  struct _vendor_select_window *sw = user_data;
+  GncOwner owner;
+  GncVendor *vendor;
+
+  g_return_val_if_fail (vendor_p && user_data, TRUE);
+
+  vendor = *vendor_p;
+
+  if (!vendor)
+    return TRUE;
+
+  gncOwnerInitVendor (&owner, vendor);
+  gnc_invoice_find (sw->parent, NULL, &owner, sw->book);
+  return TRUE;
+}
+
+static gboolean
+order_vendor_cb (gpointer *vendor_p, gpointer user_data)
+{
+  struct _vendor_select_window *sw = user_data;
+  GncOwner owner;
+  GncVendor *vendor;
+
+  g_return_val_if_fail (vendor_p && user_data, TRUE);
+
+  vendor = *vendor_p;
+
+  if (!vendor)
+    return TRUE;
+
+  gncOwnerInitVendor (&owner, vendor);
+  gnc_order_find (sw->parent, NULL, &owner, sw->book);
+  return TRUE;
+}
+
+static gboolean
+jobs_vendor_cb (gpointer *vendor_p, gpointer user_data)
+{
+  struct _vendor_select_window *sw = user_data;
+  GncOwner owner;
+  GncVendor *vendor;
+
+  g_return_val_if_fail (vendor_p && user_data, TRUE);
+
+  vendor = *vendor_p;
+
+  if (!vendor)
+    return TRUE;
+
+  gncOwnerInitVendor (&owner, vendor);
+  gnc_job_find (sw->parent, NULL, &owner, sw->book);
+  return TRUE;
+}
+
+static gboolean
 edit_vendor_cb (gpointer *vendor_p, gpointer user_data)
 {
   struct _vendor_select_window *sw = user_data;
@@ -562,15 +622,19 @@ new_vendor_cb (gpointer user_data)
   return gnc_vendor_new (sw->parent, sw->book);
 }
 
-GncVendor *
-gnc_vendor_find (GtkWidget *parent, GncVendor *start, GNCBook *book)
+static GncVendor *
+gnc_vendor_select (GtkWidget *parent, GncVendor *start, GNCBook *book,
+		   gboolean provide_select)
 {
-  GList *params = NULL;
+  static GList *params = NULL;
   gpointer res;
   QueryNew *q, *q2 = NULL;
   GNCSearchCallbackButton buttons[] = { 
     { N_("Select Vendor"), select_vendor_cb},
     { N_("View/Edit Vendor"), edit_vendor_cb},
+    { N_("Vendor Jobs"), jobs_vendor_cb},
+    { N_("Vendor Orders"), order_vendor_cb},
+    { N_("Vendor Invoices"), invoice_vendor_cb},
     { NULL },
   };
   GNCIdType type = GNC_VENDOR_MODULE_NAME;
@@ -579,13 +643,14 @@ gnc_vendor_find (GtkWidget *parent, GncVendor *start, GNCBook *book)
   g_return_val_if_fail (book, NULL);
 
   /* Build parameter list in reverse order*/
-  params = gnc_search_param_prepend (params, _("Billing Contact"), NULL, type,
-				     VENDOR_ADDR, ADDRESS_NAME, NULL);
-  params = gnc_search_param_prepend (params, _("Vendor Name"), NULL, type,
-				     VENDOR_NAME, NULL);
-  params = gnc_search_param_prepend (params, _("Vendor ID"), NULL, type,
-				     VENDOR_ID, NULL);
-
+  if (params == NULL) {
+    params = gnc_search_param_prepend (params, _("Billing Contact"), NULL, type,
+				       VENDOR_ADDR, ADDRESS_NAME, NULL);
+    params = gnc_search_param_prepend (params, _("Vendor Name"), NULL, type,
+				       VENDOR_NAME, NULL);
+    params = gnc_search_param_prepend (params, _("Vendor ID"), NULL, type,
+				       VENDOR_ID, NULL);
+  }
 
   /* Build the queries */
   q = gncQueryCreate ();
@@ -600,17 +665,31 @@ gnc_vendor_find (GtkWidget *parent, GncVendor *start, GNCBook *book)
   /* launch select dialog and return the result */
   sw.book = book;
   sw.parent = parent;
-  res = gnc_search_dialog_choose_object (type, params, q, q2, buttons,
-					 NULL, new_vendor_cb, &sw);
+  res = gnc_search_dialog_choose_object (type, params, q, q2,
+					 (provide_select ? buttons :
+					  &(buttons[1])), NULL,
+					 new_vendor_cb, &sw);
 
   gncQueryDestroy (q);
   return res;
 }
 
+void
+gnc_vendor_find (GtkWidget *parent, GncVendor *start, GNCBook *book)
+{
+  gnc_vendor_select (parent, start, book, FALSE);
+}
+
+GncVendor *
+gnc_vendor_choose (GtkWidget *parent, GncVendor *start, GNCBook *book)
+{
+  return gnc_vendor_select (parent, start, book, TRUE);
+}
+
 gpointer gnc_vendor_edit_new_select (gpointer bookp, gpointer vendor,
 				       GtkWidget *toplevel)
 {
-  return gnc_vendor_find (toplevel, vendor, bookp);
+  return gnc_vendor_choose (toplevel, vendor, bookp);
 }
 
 gpointer gnc_vendor_edit_new_edit (gpointer bookp, gpointer v,

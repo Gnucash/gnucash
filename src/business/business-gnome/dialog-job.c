@@ -350,7 +350,7 @@ gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncOwner *owner,
 }
 
 GncJob *
-gnc_job_new (GtkWidget *parent, GNCBook *bookp, GncOwner *ownerp)
+gnc_job_new (GtkWidget *parent, GncOwner *ownerp, GNCBook *bookp)
 {
   JobWindow *jw;
   GncJob *created_job = NULL;
@@ -428,5 +428,5 @@ gnc_job_select_new_select (gpointer bookp, gpointer jobp, GtkWidget *parent)
   } else
     gncOwnerInitCustomer (&owner, NULL); /* XXX */
 
-  return gnc_ui_select_job_new (parent, book, &owner, j);
+  return gnc_job_choose (parent, j, &owner, book);
 }
