@@ -805,7 +805,7 @@ xaccAddEndPath(char *pathbuf, const char *ending, int len)
 }
 
 static gboolean
-xaccCmdPathGenerator(char *pathbuf, int which)
+xaccCwdPathGenerator(char *pathbuf, int which)
 {
     if(which != 0)
     {
@@ -868,54 +868,42 @@ xaccUserPathPathGenerator(char *pathbuf, int which)
 }
 
 char * 
-xaccResolveFilePath (const char * filefrag_tmp)
+xaccResolveFilePath (const char * filefrag)
 {
   struct stat statbuf;
   char pathbuf[PATH_MAX];
-  char *filefrag;
   pathGenerator gens[4];
   int namelen;
   int i;
 
   /* seriously invalid */
-  if (!filefrag_tmp)
+  if (!filefrag)
   {
       PERR("filefrag is NULL");
       return NULL;
   }
 
-  ENTER ("filefrag=%s", filefrag_tmp);
+  ENTER ("filefrag=%s", filefrag);
 
   /* ---------------------------------------------------- */
   /* OK, now we try to find or build an absolute file path */
 
   /* check for an absolute file path */
-  if (*filefrag_tmp == '/')
-    return g_strdup (filefrag_tmp);
+  if (*filefrag == '/')
+    return g_strdup (filefrag);
 
-  if (!g_strncasecmp(filefrag_tmp, "file:", 5))
+  if (!g_strncasecmp(filefrag, "file:", 5))
   {
-      char *ret = g_new(char, strlen(filefrag_tmp) - 5 + 1);
-      strcpy(ret, filefrag_tmp + 5);
+      char *ret = g_new(char, strlen(filefrag) - 5 + 1);
+      strcpy(ret, filefrag + 5);
       return ret;
   }
 
-  {
-    char *p;
-      
-    filefrag = g_strdup (filefrag_tmp);
-    p = strchr (filefrag, '/');
-    while (p) {
-        *p = ',';
-        p = strchr (filefrag, '/');
-    }
-  }
-  
   /* get conservative on the length so that sprintf(getpid()) works ... */
   /* strlen ("/.LCK") + sprintf (%x%d) */
   namelen = strlen (filefrag) + 25; 
 
-  gens[0] = xaccCmdPathGenerator;
+  gens[0] = xaccCwdPathGenerator;
   gens[1] = xaccDataPathGenerator;
   gens[2] = xaccUserPathPathGenerator;
   gens[3] = NULL;
@@ -930,7 +918,6 @@ xaccResolveFilePath (const char * filefrag_tmp)
               int rc = stat (pathbuf, &statbuf);
               if ((!rc) && (S_ISREG(statbuf.st_mode)))
               {
-                  g_free(filefrag);
                   return (g_strdup (pathbuf));
               }
           }
@@ -957,7 +944,7 @@ xaccResolveFilePath (const char * filefrag_tmp)
 
   /* OK, we still didn't find the file */
   /* Lets try creating a new file in the cwd */
-  if (xaccCmdPathGenerator(pathbuf, 0))
+  if (xaccCwdPathGenerator(pathbuf, 0))
   {
       if(xaccAddEndPath(pathbuf, filefrag, namelen))
           return (g_strdup (pathbuf));
