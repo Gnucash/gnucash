@@ -1,3 +1,10 @@
+2003-05-19  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/QueryNew.[ch]: add gncQueryGetBooks() API to return
+	  list of books in a query.
+	* src/business/business-core/gncInvoice.[ch]: add INVOICE_POST_LOT
+	  query parameter methods
+
 2003-05-18  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/gnc-lot.[ch]: add LOT_IS_CLOSED and LOT_BALANCE
