@@ -44,6 +44,45 @@ receivables can be computed by traversing all lots, etc.  Additional
 information about bills, such as a due date or payment terms, should
 be stored as kvp values associated with the lot.
 
+Billing Example:
+----------------
+Normally, there is a one-to-one correspondence between bills and 
+lots: there  is one lot per bill, and one bill per lot.  (Note: this 
+may not be how gnucash invoices are currently implemented; this is a
+propsed implementation.)
+
+For example:
+
+   invoice #258    customer XXX
+   Order placed 20 December 2001
+       quant (10)  gallons paint      $10/each   $100
+       quant (2)   paintbrushes       $15/each    $30
+                   sales tax                       $8.27
+                                              ------------
+                Total due                        $138.27
+
+   Payment received 24 january  2002  $50      Balance Due: $88.27
+   Payment received 13 february 2002  $60      Balance Due: $28.27
+   Payment received 18 march    2002  $28.27   PAID IN FULL
+
+In this example, the lot encompasses four transactions, dated
+December, January, February and March.  The December transaction
+opens the lot, and gives it a non-zero balance.   To be precise,
+the lot actually consists of four splits, belonging to four
+different transactions.  All four splits are a part of an imagined
+"Accounts Receivable-Billing" account. The first split is for
+$138.27, the second split is for $50, the third split is for $60,
+and the fourth split is for $28.27.   Note that the sales-tax 
+split, and th paint/paint-brush splits are *NOT* a part of this 
+lot. They are only a part of the transaction that opened this lot.
+
+Note also that this example might also encompass two other lots:
+the transfer of paint may belong to a lot in the "Paint Inventory"
+account, and the split describing the paintbrushes might be a part
+of a lot in the "Paintbrush Inventory" account.   These lots should
+not be confused with the invoice lot. 
+
+
 Inventory:
 ----------
 The correct way of handling inventory under GnuCash is to have a 
