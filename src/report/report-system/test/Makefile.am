@@ -12,6 +12,6 @@ LDADD = \
   -L${top_srcdir}/src/gnc-module -L${top_srcdir}/src/gnc-module/.libs \
   ../libgncmod-report-system.la 
 
-bin_PROGRAMS = test-link-module 
+noinst_PROGRAMS = test-link-module 
 
 EXTRA_DIST = test-load-module

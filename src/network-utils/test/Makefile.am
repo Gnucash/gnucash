@@ -14,7 +14,7 @@ LDADD = \
    ../libgncmod-network-utils.la \
   -lltdl
 
-bin_PROGRAMS = \
+noinst_PROGRAMS = \
   test-link-module
 
 #EXTRA_DIST = test-load-module

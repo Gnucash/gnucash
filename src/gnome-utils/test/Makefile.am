@@ -24,7 +24,7 @@ LDADD = \
    ${top_srcdir}/src/engine/test-core/libgncmod-test-engine.la \
   -lltdl
 
-bin_PROGRAMS = \
+noinst_PROGRAMS = \
   test-link-module
 
 #EXTRA_DIST = test-load-module
