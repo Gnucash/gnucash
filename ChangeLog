@@ -1,5 +1,8 @@
 2002-06-14  Derek Atkins   <derek@ihtfp.com>
 
+	* business-core/file/gnc-tax-table-xml-v2.*: Create a preliminary
+	xml implementation for storing tax tables.
+
 	* business-core/gncTaxTable*: Create a preliminary implementation
 	of Tax Tables.  They are currently not saved, and nothing uses
 	them.  Link the initialization into the module.

@@ -235,6 +235,13 @@ void gncTaxTableCommitEdit (GncTaxTable *table)
 
 
 /* Get Functions */
+GncTaxTable * gncTaxTableLookup (GNCBook *book, const GUID *guid)
+{
+  if (!book || !guid) return NULL;
+  return xaccLookupEntity (gnc_book_get_entity_table (book),
+			   guid, _GNC_MOD_NAME);
+}
+
 GncTaxTable *gncTaxTableLookupByName (GNCBook *book, const char *name)
 {
   GList *list = gncTaxTableGetTables (book);
@@ -305,7 +312,7 @@ static GncTaxTable *gncTaxTableCopy (GncTaxTable *table)
   return t;
 }
 
-GncTaxTable *gncTaxTableGetChild (GncTaxTable *table, gboolean make_new)
+GncTaxTable *gncTaxTableReturnChild (GncTaxTable *table, gboolean make_new)
 {
   GncTaxTable *child = NULL;
 

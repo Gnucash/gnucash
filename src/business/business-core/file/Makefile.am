@@ -20,6 +20,7 @@ libgncmod_business_backend_file_la_SOURCES = \
   gnc-job-xml-v2.c \
   gnc-order-xml-v2.c \
   gnc-owner-xml-v2.c \
+  gnc-tax-table-xml-v2.c \
   gnc-vendor-xml-v2.c
 
 noinst_HEADERS = \
@@ -31,6 +32,7 @@ noinst_HEADERS = \
   gnc-job-xml-v2.h \
   gnc-order-xml-v2.h \
   gnc-owner-xml-v2.h \
+  gnc-tax-table-xml-v2.h \
   gnc-vendor-xml-v2.h
 
 libgncmod_business_backend_file_la_LDFLAGS = -module

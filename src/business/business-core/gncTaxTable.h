@@ -48,6 +48,7 @@ void gncTaxTableChanged (GncTaxTable *table);
 void gncTaxTableCommitEdit (GncTaxTable *table);
 
 /* Get Functions */
+GncTaxTable *gncTaxTableLookup (GNCBook *book, const GUID *guid);
 GncTaxTable *gncTaxTableLookupByName (GNCBook *book, const char *name);
 GList * gncTaxTableGetTables (GNCBook *book);
 
@@ -55,8 +56,8 @@ const GUID *gncTaxTableGetGUID (GncTaxTable *table);
 GNCBook *gncTaxTableGetBook (GncTaxTable *table);
 const char *gncTaxTableGetName (GncTaxTable *table);
 GncTaxTable *gncTaxTableGetParent (GncTaxTable *table);
-GncTaxTable *gncTaxTableGetChild (GncTaxTable *table, gboolean make_new);
-#define gncTaxTableReturnChild(t) gncTaxTableGetChild((t),FALSE)
+GncTaxTable *gncTaxTableReturnChild (GncTaxTable *table, gboolean make_new);
+#define gncTaxTableGetChild(t) gncTaxTableReturnChild((t),FALSE)
 GList *gncTaxTableGetEntries (GncTaxTable *table);
 gint64 gncTaxTableGetRefcount (GncTaxTable *table);
 

@@ -17,6 +17,7 @@
 #include "gnc-invoice-xml-v2.h"
 #include "gnc-job-xml-v2.h"
 #include "gnc-order-xml-v2.h"
+#include "gnc-tax-table-xml-v2.h"
 #include "gnc-vendor-xml-v2.h"
 
 /* version of the gnc module system interface we require */
@@ -62,6 +63,7 @@ libgncmod_business_backend_file_LTX_gnc_module_init(int refcount)
     gnc_invoice_xml_initialize ();
     gnc_job_xml_initialize ();
     gnc_order_xml_initialize ();
+    gnc_taxtable_xml_initialize ();
     gnc_vendor_xml_initialize ();
   }
 
