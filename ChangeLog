@@ -1,3 +1,11 @@
+2001-06-11  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/Makefile.am: same as below
+
+	* src/scm/price-quotes.scm: same as below
+
+	* src/scm/process.scm: re-modulize process.scm
+
 2001-06-10  Christian Stimming  <stimming@tuhh.de>
 
 	* de.po: updated German translation.

@@ -20,10 +20,10 @@
 ;;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;(define-module (gnucash process))
+(define-module (gnucash process))
 
-;(export gnc:run-sub-process)
-;(export gnc:cleanup-sub-process)
+(export gnc:run-sub-process)
+(export gnc:cleanup-sub-process)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
