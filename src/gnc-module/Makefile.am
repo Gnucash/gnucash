@@ -1,6 +1,6 @@
 SUBDIRS = . test
 
-AM_CFLAGS = ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS} ${GUILE_INCS}
+AM_CFLAGS = -I../core-utils ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS} ${GUILE_INCS}
 
 lib_LTLIBRARIES = libgncmodule.la 
 pkglib_LTLIBRARIES = libgw-gnc-module.la
@@ -8,6 +8,7 @@ pkglib_LTLIBRARIES = libgw-gnc-module.la
 libgncmodule_la_SOURCES = gnc-module.c
 libgncmodule_la_LDFLAGS = -module
 libgncmodule_la_LIBADD = \
+  -L../core-utils -L../core-utils/.libs -lcore-utils \
   ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
