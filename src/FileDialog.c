@@ -114,6 +114,12 @@ show_book_error (GNCBackendError io_error, const char *newfile)
       gnc_error_dialog (buf);
       break;
 
+    case ERR_BACKEND_PERM:
+      fmt = _("You do not have permission to access\n    %s\n");
+      buf = g_strdup_printf (fmt, newfile);
+      gnc_error_dialog (buf);
+      break;
+
     case ERR_BACKEND_MISC:
       fmt = _("An error occurred while processing\n    %s\n");
       buf = g_strdup_printf (fmt, newfile);
