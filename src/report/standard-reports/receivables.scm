@@ -25,7 +25,7 @@
 (define-module (gnucash report receivables))
 
 (use-modules (ice-9 slib))
-(use-modules (gnucash bootstrap))
+(use-modules (gnucash main))
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/report/report-system" 0)
