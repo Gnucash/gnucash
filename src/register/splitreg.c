@@ -100,6 +100,8 @@ static char *cell_sample_strings[] =
   N_("sample:Expenses:Automobile:Gasoline"+7),  /* mxfrm cell */
   N_("sample:999,999.000"+7),                   /* tcredit cell */
   N_("sample:999,999.000"+7),                   /* tdebit cell */
+  N_("sample:999,999.000"+7),                   /* tshrbaln cell */
+  N_("sample:999,999.000"+7),                   /* tbalance cell */
 };
 
 static CellAlignment cell_alignments[] =
@@ -121,6 +123,8 @@ static CellAlignment cell_alignments[] =
   CELL_ALIGN_RIGHT,  /* mxfrm cell */
   CELL_ALIGN_RIGHT,  /* tcredit cell */
   CELL_ALIGN_RIGHT,  /* tdebit cell */
+  CELL_ALIGN_RIGHT,  /* tshrbaln cell */
+  CELL_ALIGN_RIGHT,  /* tbalance cell */
 };
 
 
@@ -172,23 +176,25 @@ configLabels (SplitRegister *reg)
 
   type = reg->type;
 
-  LABEL (DATE,    _("Date"));
-  LABEL (NUM,     _("Num"));
-  LABEL (DESC,    _("Description"));
-  LABEL (RECN,    _("Reconciled:R"+11));
-  LABEL (SHRBALN, _("Total Shares"));
-  LABEL (BALN,    _("Balance"));
-  LABEL (ACTN,    _("Action"));
-  LABEL (XFRM,    _("Account"));
-  LABEL (XTO,     _("Account"));
-  LABEL (MEMO,    _("Memo"));
-  LABEL (CRED,    _("Credit"));
-  LABEL (DEBT,    _("Debit"));
-  LABEL (PRIC,    _("Price"));
-  LABEL (SHRS,    _("Shares"));
-  LABEL (MXFRM,   _("Transfer"));
-  LABEL (TCRED,   _("Total"));
-  LABEL (TDEBT,   _("Total"));
+  LABEL (DATE,     _("Date"));
+  LABEL (NUM,      _("Num"));
+  LABEL (DESC,     _("Description"));
+  LABEL (RECN,     _("Reconciled:R"+11));
+  LABEL (SHRBALN,  _("Total Shares"));
+  LABEL (BALN,     _("Balance"));
+  LABEL (ACTN,     _("Action"));
+  LABEL (XFRM,     _("Account"));
+  LABEL (XTO,      _("Account"));
+  LABEL (MEMO,     _("Memo"));
+  LABEL (CRED,     _("Credit"));
+  LABEL (DEBT,     _("Debit"));
+  LABEL (PRIC,     _("Price"));
+  LABEL (SHRS,     _("Shares"));
+  LABEL (MXFRM,    _("Transfer"));
+  LABEL (TCRED,    _("Total"));
+  LABEL (TDEBT,    _("Total"));
+  LABEL (TSHRBALN, _("Total Shares"));
+  LABEL (TBALN,    _("Balance"));
 
   if (debit_getter != NULL)
   {
@@ -436,7 +442,7 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, RECN_CELL,  0, 4);
         set_cell (reg, curs, TDEBT_CELL, 0, 5);
         set_cell (reg, curs, TCRED_CELL, 0, 6);
-        set_cell (reg, curs, BALN_CELL,  0, 7);
+        set_cell (reg, curs, TBALN_CELL, 0, 7);
 
         curs = reg->cursor_journal_double;
         copy_cursor_row (reg, curs, reg->cursor_journal_single, 0);
@@ -522,16 +528,16 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, MEMO_CELL, 1, 2);
 
         curs = reg->cursor_journal_single;
-        set_cell (reg, curs, DATE_CELL,    0,  0);
-        set_cell (reg, curs, NUM_CELL,     0,  1);
-        set_cell (reg, curs, DESC_CELL,    0,  2);
-        set_cell (reg, curs, RECN_CELL,    0,  4);
-        set_cell (reg, curs, SHRS_CELL,    0,  5);
-        set_cell (reg, curs, PRIC_CELL,    0,  6);
-        set_cell (reg, curs, TDEBT_CELL,   0,  7);
-        set_cell (reg, curs, TCRED_CELL,   0,  8);
-        set_cell (reg, curs, SHRBALN_CELL, 0,  9);
-        set_cell (reg, curs, BALN_CELL,    0, 10);
+        set_cell (reg, curs, DATE_CELL,     0,  0);
+        set_cell (reg, curs, NUM_CELL,      0,  1);
+        set_cell (reg, curs, DESC_CELL,     0,  2);
+        set_cell (reg, curs, RECN_CELL,     0,  4);
+        set_cell (reg, curs, SHRS_CELL,     0,  5);
+        set_cell (reg, curs, PRIC_CELL,     0,  6);
+        set_cell (reg, curs, TDEBT_CELL,    0,  7);
+        set_cell (reg, curs, TCRED_CELL,    0,  8);
+        set_cell (reg, curs, TSHRBALN_CELL, 0,  9);
+        set_cell (reg, curs, TBALN_CELL,    0, 10);
 
         curs = reg->cursor_journal_double;
         copy_cursor_row (reg, curs, reg->cursor_journal_single, 0);
@@ -562,7 +568,6 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, PRIC_CELL,    0,  7);
         set_cell (reg, curs, DEBT_CELL,    0,  8);
         set_cell (reg, curs, CRED_CELL,    0,  9);
-        set_cell (reg, curs, SHRBALN_CELL, 0, 10);
 
         curs = reg->cursor_ledger_double;
         copy_cursor_row (reg, curs, reg->cursor_ledger_single, 0);
@@ -580,7 +585,6 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, PRIC_CELL,    0,  7);
         set_cell (reg, curs, TDEBT_CELL,   0,  8);
         set_cell (reg, curs, TCRED_CELL,   0,  9);
-        set_cell (reg, curs, SHRBALN_CELL, 0, 10);
 
         curs = reg->cursor_journal_double;
         copy_cursor_row (reg, curs, reg->cursor_journal_single, 0);
@@ -660,7 +664,7 @@ mallocCursors (SplitRegister *reg)
       break;
 
     case PORTFOLIO_LEDGER:
-      num_cols = 11;
+      num_cols = 10;
       break;
 
     default:
@@ -757,23 +761,25 @@ xaccInitSplitRegister (SplitRegister *reg,
 
   reg->nullCell = xaccMallocBasicCell ();
 
-  NEW (DATE,    date,    Date);
-  NEW (NUM,     num,     Num);
-  NEW (DESC,    desc,    QuickFill);
-  NEW (RECN,    recn,    Recn);
-  NEW (SHRBALN, shrbaln, Price);
-  NEW (BALN,    balance, Price);
-  NEW (XFRM,    xfrm,    Combo);
-  NEW (XTO,     xto,     Combo);
-  NEW (ACTN,    action,  Combo);
-  NEW (MEMO,    memo,    QuickFill);
-  NEW (CRED,    credit,  Price);
-  NEW (DEBT,    debit,   Price);
-  NEW (PRIC,    price,   Price);
-  NEW (SHRS,    shares,  Price);
-  NEW (MXFRM,   mxfrm,   Combo);
-  NEW (TCRED,   tcredit, Price);
-  NEW (TDEBT,   tdebit,  Price);
+  NEW (DATE,     date,     Date);
+  NEW (NUM,      num,      Num);
+  NEW (DESC,     desc,     QuickFill);
+  NEW (RECN,     recn,     Recn);
+  NEW (SHRBALN,  shrbaln,  Price);
+  NEW (BALN,     balance,  Price);
+  NEW (XFRM,     xfrm,     Combo);
+  NEW (XTO,      xto,      Combo);
+  NEW (ACTN,     action,   Combo);
+  NEW (MEMO,     memo,     QuickFill);
+  NEW (CRED,     credit,   Price);
+  NEW (DEBT,     debit,    Price);
+  NEW (PRIC,     price,    Price);
+  NEW (SHRS,     shares,   Price);
+  NEW (MXFRM,    mxfrm,    Combo);
+  NEW (TCRED,    tcredit,  Price);
+  NEW (TDEBT,    tdebit,   Price);
+  NEW (TSHRBALN, tshrbaln, Price);
+  NEW (TBALN,    tbalance, Price);
 
   /* --------------------------- */
 
@@ -830,10 +836,12 @@ xaccInitSplitRegister (SplitRegister *reg,
                              _("Enter a description of the transaction"));
 
   /* The balance and total cells are just placeholders */
-  reg->balanceCell->cell.input_output = XACC_CELL_ALLOW_NONE;
-  reg->shrbalnCell->cell.input_output = XACC_CELL_ALLOW_NONE;
-  reg->tcreditCell->cell.input_output = XACC_CELL_ALLOW_NONE;
-  reg->tdebitCell->cell.input_output  = XACC_CELL_ALLOW_NONE;
+  reg->balanceCell->cell.input_output  = XACC_CELL_ALLOW_NONE;
+  reg->shrbalnCell->cell.input_output  = XACC_CELL_ALLOW_NONE;
+  reg->tcreditCell->cell.input_output  = XACC_CELL_ALLOW_NONE;
+  reg->tdebitCell->cell.input_output   = XACC_CELL_ALLOW_NONE;
+  reg->tbalanceCell->cell.input_output = XACC_CELL_ALLOW_NONE;
+  reg->tshrbalnCell->cell.input_output = XACC_CELL_ALLOW_NONE;
 
   /* by default, don't blank zeros on the price cells. */
   xaccSetPriceCellBlankZero(reg->priceCell, FALSE);
@@ -851,8 +859,12 @@ xaccInitSplitRegister (SplitRegister *reg,
   xaccSetPriceCellValue (reg->sharesCell, gnc_numeric_zero ());
 
   /* Initialize shares and share balance cells */
-  xaccSetPriceCellPrintInfo (reg->sharesCell, gnc_default_share_print_info ());
-  xaccSetPriceCellPrintInfo (reg->shrbalnCell,gnc_default_share_print_info ());
+  xaccSetPriceCellPrintInfo
+    (reg->sharesCell, gnc_default_share_print_info ());
+  xaccSetPriceCellPrintInfo
+    (reg->shrbalnCell, gnc_default_share_print_info ());
+  xaccSetPriceCellPrintInfo
+    (reg->tshrbalnCell, gnc_default_share_print_info ());
 
   /* The action cell should accept strings not in the list */
   xaccComboCellSetStrict (reg->actionCell, FALSE);
@@ -987,24 +999,28 @@ xaccDestroySplitRegister (SplitRegister *reg)
   xaccDestroyComboCell     (reg->mxfrmCell);
   xaccDestroyPriceCell     (reg->tcreditCell);
   xaccDestroyPriceCell     (reg->tdebitCell);
+  xaccDestroyPriceCell     (reg->tshrbalnCell);
+  xaccDestroyPriceCell     (reg->tbalanceCell);
 
-  reg->dateCell    = NULL;
-  reg->numCell     = NULL;
-  reg->descCell    = NULL;
-  reg->recnCell    = NULL;
-  reg->shrbalnCell = NULL;
-  reg->balanceCell = NULL;
-  reg->actionCell  = NULL;
-  reg->xfrmCell    = NULL;
-  reg->xtoCell     = NULL;
-  reg->memoCell    = NULL;
-  reg->creditCell  = NULL;
-  reg->debitCell   = NULL;
-  reg->priceCell   = NULL;
-  reg->sharesCell  = NULL;
-  reg->mxfrmCell   = NULL;
-  reg->tcreditCell = NULL;
-  reg->tdebitCell  = NULL;
+  reg->dateCell     = NULL;
+  reg->numCell      = NULL;
+  reg->descCell     = NULL;
+  reg->recnCell     = NULL;
+  reg->shrbalnCell  = NULL;
+  reg->balanceCell  = NULL;
+  reg->actionCell   = NULL;
+  reg->xfrmCell     = NULL;
+  reg->xtoCell      = NULL;
+  reg->memoCell     = NULL;
+  reg->creditCell   = NULL;
+  reg->debitCell    = NULL;
+  reg->priceCell    = NULL;
+  reg->sharesCell   = NULL;
+  reg->mxfrmCell    = NULL;
+  reg->tcreditCell  = NULL;
+  reg->tdebitCell   = NULL;
+  reg->tshrbalnCell = NULL;
+  reg->tbalanceCell = NULL;
 
   for (i = 0; i < CELL_TYPE_COUNT; i++)
   {

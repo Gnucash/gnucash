@@ -690,7 +690,7 @@ sr_set_cell_fractions (SplitRegister *reg, Split *split)
 }
 
 static CellBlock *
-sr_get_lead_cursor (SplitRegister *reg)
+sr_get_passive_cursor (SplitRegister *reg)
 {
   switch (reg->style)
   {
@@ -699,6 +699,26 @@ sr_get_lead_cursor (SplitRegister *reg)
       return reg->use_double_line ?
         reg->cursor_ledger_double : reg->cursor_ledger_single;
 
+    case REG_STYLE_JOURNAL:
+      return reg->use_double_line ?
+        reg->cursor_journal_double : reg->cursor_journal_single;
+  }
+
+  PWARN ("bad register style");
+
+  return NULL;
+}
+
+static CellBlock *
+sr_get_active_cursor (SplitRegister *reg)
+{
+  switch (reg->style)
+  {
+    case REG_STYLE_LEDGER:
+      return reg->use_double_line ?
+        reg->cursor_ledger_double : reg->cursor_ledger_single;
+
+    case REG_STYLE_AUTO_LEDGER:
     case REG_STYLE_JOURNAL:
       return reg->use_double_line ?
         reg->cursor_journal_double : reg->cursor_journal_single;
@@ -844,15 +864,13 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
 
     vc_loc = old_trans_split_loc;
     gnc_table_set_virt_cell_cursor (table, vc_loc,
-                                    sr_get_lead_cursor (reg));
+                                    sr_get_passive_cursor (reg));
     xaccSRSetTransVisible (reg, vc_loc, FALSE,
                            reg->style == REG_STYLE_JOURNAL);
 
     xaccSRGetTransSplit (reg, new_virt_loc.vcell_loc, &vc_loc);
     gnc_table_set_virt_cell_cursor (table, vc_loc,
-                                    reg->use_double_line ?
-                                    reg->cursor_journal_double :
-                                    reg->cursor_journal_single);
+                                    sr_get_active_cursor (reg));
     xaccSRSetTransVisible (reg, vc_loc, TRUE,
                            reg->style == REG_STYLE_JOURNAL);
 
@@ -2925,7 +2943,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 /* ======================================================== */
 
 static gnc_numeric
-get_trans_total (SplitRegister *reg, Transaction *trans)
+get_trans_total_value (SplitRegister *reg, Transaction *trans)
 {
   GList *node;
   Account *account;
@@ -2951,6 +2969,59 @@ get_trans_total (SplitRegister *reg, Transaction *trans)
   }
 
   return total;
+}
+
+static Split *
+get_trans_last_split (SplitRegister *reg, Transaction *trans)
+{
+  GList *node;
+  Account *account;
+  Split *last_split = NULL;
+
+  SRInfo *info = xaccSRGetInfo(reg);
+  account = info->default_source_account;
+
+  if (!account)
+    return last_split;
+
+  for (node = xaccTransGetSplitList (trans); node; node = node->next)
+  {
+    Split *split = node->data;
+
+    if (xaccSplitGetAccount (split) != account)
+      continue;
+
+    if (!last_split)
+    {
+      last_split = split;
+      continue;
+    }
+
+    if (xaccSplitDateOrder (last_split, split) < 0)
+      last_split = split;
+  }
+
+  return last_split;
+}
+
+static gnc_numeric
+get_trans_total_share_balance (SplitRegister *reg, Transaction *trans)
+{
+  Split *last_split;
+
+  last_split = get_trans_last_split (reg, trans);
+
+  return xaccSplitGetShareBalance (last_split);
+}
+
+static gnc_numeric
+get_trans_total_balance (SplitRegister *reg, Transaction *trans)
+{
+  Split *last_split;
+
+  last_split = get_trans_last_split (reg, trans);
+
+  return xaccSplitGetBalance (last_split);
 }
 
 /* ======================================================== */
@@ -3004,6 +3075,7 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
       break;
 
     case SHRBALN_CELL:
+    case TSHRBALN_CELL:
       {
         SRInfo *info = xaccSRGetInfo(reg);
         Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
@@ -3012,7 +3084,10 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
         if (split == blank_split)
           return "";
 
-        balance = xaccSplitGetShareBalance (split);
+        if (cell_type == SHRBALN_CELL)
+          balance = xaccSplitGetShareBalance (split);
+        else
+          balance = get_trans_total_share_balance (reg, trans);
 
         return xaccPrintAmount (balance,
                                 gnc_split_quantity_print_info (split, FALSE));
@@ -3020,6 +3095,7 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
       break;
 
     case BALN_CELL:
+    case TBALN_CELL:
       {
         SRInfo *info = xaccSRGetInfo(reg);
         Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
@@ -3030,7 +3106,11 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
 
         /* If the reverse_balance callback is present use that.
          * Otherwise, reverse income and expense by default. */
-        balance = xaccSplitGetBalance (split);
+        if (cell_type == BALN_CELL)
+          balance = xaccSplitGetBalance (split);
+        else
+          balance = get_trans_total_balance (reg, trans);
+
         if (reverse_balance != NULL)
         {
           Account *account;
@@ -3042,9 +3122,6 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
           if (reverse_balance(account))
             balance = gnc_numeric_neg (balance);
         }
-        else if ((INCOME_REGISTER == reg->type) ||
-                 (EXPENSE_REGISTER == reg->type))
-          balance = gnc_numeric_neg (balance);
 
         return xaccPrintAmount (balance,
                                 gnc_split_value_print_info (split, FALSE));
@@ -3145,7 +3222,7 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
       {
         gnc_numeric total;
 
-        total = get_trans_total (reg, trans);
+        total = get_trans_total_value (reg, trans);
         if (gnc_numeric_zero_p (total))
           return "";
 
@@ -3242,9 +3319,6 @@ xaccSRGetFGColorHandler (VirtualLocation virt_loc, gpointer user_data)
           if (reverse_balance (account))
             balance = gnc_numeric_neg (balance);
         }
-        else if ((INCOME_REGISTER == reg->type) ||
-                 (EXPENSE_REGISTER == reg->type))
-          balance = gnc_numeric_neg (balance);
 
         if (gnc_numeric_negative_p (balance))
           return red;
@@ -3475,7 +3549,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
   multi_line = (reg->style == REG_STYLE_JOURNAL);
   dynamic    = (reg->style == REG_STYLE_AUTO_LEDGER);
 
-  lead_cursor = sr_get_lead_cursor (reg);
+  lead_cursor = sr_get_passive_cursor (reg);
 
   /* figure out where we are going to. */
   find_trans = info->cursor_hint_trans;
@@ -3630,7 +3704,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
     if (dynamic || multi_line)
     {
       gnc_table_set_virt_cell_cursor (table, trans_split_loc.vcell_loc,
-                                      reg->cursor_journal_single);
+                                      sr_get_active_cursor (reg));
       xaccSRSetTransVisible (reg, trans_split_loc.vcell_loc, TRUE, multi_line);
     }
     else

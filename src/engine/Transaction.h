@@ -449,7 +449,8 @@ Account *     xaccSplitGetAccount (Split *split);
  *    Finally, it returns zero if all of the above match.
  *    Note that it does *NOT* compare its member splits.
  *
- * The xaccSplitOrder(sa,sb) method is useful for sorting.
+ * The xaccSplitDateOrder(sa,sb) method is useful for sorting.
+ *    if sa and sb have different transactions, return their xaccTransOrder
  *    return a negative value if split sa has a smaller currency-value than sb,
  *    return a positive value if split sa has a larger currency-value than sb,
  *    return a negative value if split sa has a smaller share-price than sb,  
@@ -458,12 +459,6 @@ Account *     xaccSplitGetAccount (Split *split);
  *    c-library routine, returning  what strcmp would return.
  *    Then it compares the reconciled flags, then the reconciled dates,
  *    Finally, it returns zero if all of the above match.
- *    Note that it does *NOT* compare its parent transaction.
- *
- * The xaccSplitDateOrder(sa,sb) method is useful for sorting.
- *    It is just like the xaccSplitOrder() routine, except that it first
- *    calls xaccTransOrder(), and then does split comparisons only if
- *    xaccTransOrder returned zero (i.e. that everything matched).
  *
  */
 

@@ -93,9 +93,11 @@ typedef enum
   DEBT_CELL,
   PRIC_CELL,
   SHRS_CELL,
-  MXFRM_CELL, /* MXFRM is the "mirrored" transfer-from account */
-  TCRED_CELL,
+  MXFRM_CELL,     /* MXFRM is the "mirrored" transfer-from account */
+  TCRED_CELL,     /* T* cells are transaction summary cells */
   TDEBT_CELL,
+  TSHRBALN_CELL,
+  TBALN_CELL,
   CELL_TYPE_COUNT
 } CellType;
 
@@ -190,6 +192,8 @@ struct _SplitRegister
   ComboCell     * mxfrmCell;
   PriceCell     * tcreditCell;
   PriceCell     * tdebitCell;
+  PriceCell     * tshrbalnCell;
+  PriceCell     * tbalanceCell;
 
   SplitRegisterType type;
   SplitRegisterStyle style;
