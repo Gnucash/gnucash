@@ -23,9 +23,10 @@
 \********************************************************************/
 
 /*
- * io-gncxml.h -- api for new XML-based file format
+ * @file io-gncxml.h
+ * @breif api for GnuCash version 2 XML-based file format
  *
- * Initial code by James LewisMoss
+ * @author Initial code by James LewisMoss, 2001
  */
 
 #ifndef IO_GNCXML_V2_H
@@ -33,16 +34,9 @@
 
 #include <glib.h>
 
-#include "Account.h"
-#include "Transaction.h"
-#include "gnc-commodity.h"
-#include "gnc-engine.h"
-#include "gnc-pricedb.h"
-#include "SchedXaction.h"
-
 #include "qofbook.h"
-#include "qofsession.h"
-#include "qofbackend.h"
+#include "gnc-backend-file.h"
+#include "gnc-engine.h"
 
 #include "sixtp.h"
 
@@ -129,7 +123,7 @@ typedef struct
 void run_callback(sixtp_gdv2 *data, const char *type);
 
 /* read in an account group from a file */
-gboolean qof_session_load_from_xml_file_v2(QofSession *session);
+gboolean qof_session_load_from_xml_file_v2(FileBackend *, QofBook *);
 
 /* write all book info to a file */
 gboolean gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *fh);

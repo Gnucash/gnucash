@@ -1,8 +1,32 @@
-/*********************************************************************
- * gnc-backend-file.c: load and save data to files
+/********************************************************************
+ * gnc-backend-file.c: load and save data to files                  *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+\********************************************************************/
+/** @file gnc-backend-file.c
+ *  @breif load and save data to files 
+ *  @author Copyright (c) 2000 Gnumatic Inc.
+ *  @author Copyright (c) 2002 Derek Atkins <warlord@MIT.EDU>
+ *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
  *
- *
- *********************************************************************/
+ * This file implements the top-level QofBackend API for saving/
+ * restoring data to/from an ordinary Unix filesystem file.
+ */
 
 #define _GNU_SOURCE
 
@@ -17,46 +41,24 @@
 #include <dirent.h>
 #include <time.h>
 
-#include "Group.h"
 #include "TransLog.h"
+#include "gnc-engine.h"
 #include "gnc-date.h"
+#include "gnc-trace.h"
 #include "gnc-engine-util.h"
-#include "gnc-pricedb-p.h"
+
 #include "io-gncxml.h"
 #include "io-gncbin.h"
 #include "io-gncxml-v2.h"
 
 #include "gnc-backend-api.h"
-#include "gnc-engine.h"
-#include "gnc-engine-util.h"
+#include "gnc-backend-file.h"
 
 #include "qofbackend-p.h"
+#include "qofbook-p.h"
 #include "qofsession.h"
 
 static short module = MOD_BACKEND;
-
-struct FileBackend_struct
-{
-    QofBackend be;
-
-    char *dirname;
-    char *fullpath;
-    char *lockfile;
-    char *linkfile;
-    int lockfd;
-
-    QofSession *session;
-};
-
-typedef struct FileBackend_struct FileBackend;
-
-typedef enum 
-{
-    GNC_BOOK_NOT_OURS,
-    GNC_BOOK_BIN_FILE,
-    GNC_BOOK_XML1_FILE,
-    GNC_BOOK_XML2_FILE,
-} QofBookFileType;
 
 static int file_retention_days = 0;
 static gboolean file_compression = FALSE;
@@ -96,8 +98,6 @@ file_session_begin(QofBackend *be_start, QofSession *session,
     char *p;
 
     ENTER (" ");
-
-    be->session = session;
 
     /* Make sure the directory is there */
     be->dirname = g_strdup (qof_session_get_file_path (session));
@@ -184,6 +184,8 @@ static void
 file_sync_all(QofBackend* be, QofBook *book)
 {
     FileBackend *fbe = (FileBackend *) be;
+
+    /* XXX fullpath is correct only for the current open book ! */
     gnc_file_be_write_to_file (fbe, book, fbe->fullpath, TRUE);
     gnc_file_be_remove_old_files (fbe);
 }
@@ -294,7 +296,7 @@ libgncmod_backend_file_LTX_gnc_backend_new(void)
     fbe->linkfile = NULL;
     fbe->lockfd = -1;
 
-    fbe->session = NULL;
+    fbe->primary_book = NULL;
 
     return be;
 }
@@ -453,21 +455,23 @@ gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
     gboolean rc;
     FileBackend *be = (FileBackend *) bend;
 
+    be->primary_book = book;
+
     switch (gnc_file_be_determine_file_type(be->fullpath))
     {
     case GNC_BOOK_XML2_FILE:
-        rc = qof_session_load_from_xml_file_v2 (be->session);
+        rc = qof_session_load_from_xml_file_v2 (be, book);
         if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
         break;
 
     case GNC_BOOK_XML1_FILE:
-        rc = qof_session_load_from_xml_file (be->session);
+        rc = qof_session_load_from_xml_file (book, be->fullpath);
         if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
         break;
 
     case GNC_BOOK_BIN_FILE:
         /* presume it's an old-style binary file */
-        qof_session_load_from_binfile(be->session);
+        qof_session_load_from_binfile(book, be->fullpath);
         error = gnc_get_binfile_io_error();
         break;
 
@@ -478,7 +482,12 @@ gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
     }
 
     if(error != ERR_BACKEND_NO_ERR) 
+    {
         qof_backend_set_error(bend, error);
+    }
+
+    /* We just got done loading, it can't possibly be dirty !! */
+    qof_book_mark_saved (book);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -729,6 +738,10 @@ gnc_file_be_write_to_file(FileBackend *fbe,
     QofBackendError be_err;
 
     ENTER (" book=%p file=%s", book, datafile);
+
+    /* If the book is 'clean', recently saved, then don't save again. */
+    if (FALSE == qof_book_not_saved (book)) return FALSE;
+
     tmp_name = g_new(char, strlen(datafile) + 12);
     strcpy(tmp_name, datafile);
     strcat(tmp_name, ".tmp-XXXXXX");
@@ -756,20 +769,22 @@ gnc_file_be_write_to_file(FileBackend *fbe,
             /* Use the permissions from the original data file */
             if(chmod(tmp_name, statbuf.st_mode) != 0)
             {
+                qof_backend_set_error(be, ERR_BACKEND_PERM);
                 PWARN("unable to chmod filename %s: %s",
                         datafile ? datafile : "(null)", 
                         strerror(errno) ? strerror(errno) : ""); 
-#if VFAT_DOESNT_SUCK
+#if VFAT_DOESNT_SUCK  /* chmod always fails on vfat fs */
                 g_free(tmp_name);
                 return FALSE;
 #endif
             }
             if(chown(tmp_name, statbuf.st_uid, statbuf.st_gid) != 0)
             {
+                qof_backend_set_error(be, ERR_BACKEND_PERM);
                 PWARN("unable to chown filename %s: %s",
                         datafile ? datafile : "(null)", 
                         strerror(errno) ? strerror(errno) : ""); 
-#if VFAT_DOESNT_SUCK
+#if VFAT_DOESNT_SUCK /* chown always fails on vfat fs */
                 g_free(tmp_name);
                 return FALSE;
 #endif
@@ -777,7 +792,7 @@ gnc_file_be_write_to_file(FileBackend *fbe,
         }
         if(unlink(datafile) != 0 && errno != ENOENT)
         {
-            qof_backend_set_error(be, ERR_BACKEND_MISC);
+            qof_backend_set_error(be, ERR_FILEIO_BACKUP_ERROR);
             PWARN("unable to unlink filename %s: %s",
                   datafile ? datafile : "(null)", 
                   strerror(errno) ? strerror(errno) : ""); 
@@ -786,12 +801,13 @@ gnc_file_be_write_to_file(FileBackend *fbe,
         }
         if(!gnc_int_link_or_make_backup(fbe, tmp_name, datafile))
         {
+            qof_backend_set_error(be, ERR_FILEIO_BACKUP_ERROR);
             g_free(tmp_name);
             return FALSE;
         }
         if(unlink(tmp_name) != 0)
         {
-            qof_backend_set_error(be, ERR_BACKEND_MISC);
+            qof_backend_set_error(be, ERR_BACKEND_PERM);
             PWARN("unable to unlink temp filename %s: %s", 
                    tmp_name ? tmp_name : "(null)", 
                    strerror(errno) ? strerror(errno) : ""); 
@@ -799,7 +815,11 @@ gnc_file_be_write_to_file(FileBackend *fbe,
             return FALSE;
         }
         g_free(tmp_name);
-        LEAVE (" book=%p file=%s", book, datafile);
+
+        /* Since we successfully saved the book, 
+         * we should mark it clean. */
+        qof_book_mark_saved (book);
+        LEAVE (" sucessful save of book=%p to file=%s", book, datafile);
         return TRUE;
     }
     else

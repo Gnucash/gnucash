@@ -1,7 +1,5 @@
-/********************************************************************\
- * io-gncxml.h -- api for gnucash xml i/o                           *
- *                                                                  *
- * Copyright (c) 2000,2001 Gnumatic Incorporated                    *
+/********************************************************************
+ * gnc-backend-file.h: load and save data to files                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -19,32 +17,44 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
- *                                                                  *
 \********************************************************************/
-
-/*
- * @file io-gncxml.h
- * @breif api for Version 1 XML-based file format
+/** @file gnc-backend-file.h
+ *  @breif load and save data to files 
+ *  @author Copyright (c) 2000 Gnumatic Inc.
+ *  @author Copyright (c) 2002 Derek Atkins <warlord@MIT.EDU>
+ *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
  *
- * Initial code by Rob L. Browning 4Q 2000
- * Tuneups by James LewisMoss Dec 2000
+ * This file implements the top-level QofBackend API for saving/
+ * restoring data to/from an ordinary Unix filesystem file.
  */
 
-#ifndef IO_GNCXML_H
-#define IO_GNCXML_H
+#ifndef GNC_BACKEND_FILE_H_
+#define GNC_BACKEND_FILE_H_
 
-#include <glib.h>
-#include "qofbook.h"
+#include "qofbackend.h"
+#include "qofbackend-p.h"
 
-/* FIXME: eventually, we probably need to add an error stack
-   accessable via gnc_book_get_xml_io_error() a la binfile. */
+struct FileBackend_struct
+{
+    QofBackend be;
 
-/** Read in an account group from a file */
-gboolean qof_session_load_from_xml_file(QofBook *, const char * filename);
+    char *dirname;
+    char *fullpath;  /* Fully qualified path to book */
+    char *lockfile;
+    char *linkfile;
+    int lockfd;
 
-/** The is_gncxml_file() routine checks to see if the first few 
- * chars of the file look like gnc-xml data.
- */
-gboolean gnc_is_xml_data_file(const gchar *name);
- 
-#endif /* IO_GNCXML_H */
+    QofBook *primary_book;  /* The primary, main open book */
+};
+
+typedef struct FileBackend_struct FileBackend;
+
+typedef enum 
+{
+    GNC_BOOK_NOT_OURS,
+    GNC_BOOK_BIN_FILE,
+    GNC_BOOK_XML1_FILE,
+    GNC_BOOK_XML2_FILE,
+} QofBookFileType;
+
+#endif /* GNC_BACKEND_FILE_H_ */

@@ -1,3 +1,8 @@
+
+/* @file test-load-xml2.c
+ * @breif test the loading of a vrsion-2 gnucash XML file
+ */
+
 #include <glib.h>
 #include <libguile.h>
 #include <stdlib.h>
@@ -12,6 +17,8 @@
 #include "Group.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
+#include "gnc-backend-file.h"
+#include "qofsession-p.h"
 #include "gnc-module.h"
 #include "io-gncxml-v2.h"
 
@@ -47,6 +54,7 @@ test_load_file(const char *filename)
 {
     QofSession *session;
     QofBook *book;
+    QofBackend *be;
     gboolean ignore_lock;
 
     session = qof_session_new();
@@ -56,9 +64,9 @@ test_load_file(const char *filename)
     ignore_lock = (strcmp(getenv("SRCDIR"), ".") != 0);
     qof_session_begin(session, filename, ignore_lock, FALSE);
 
-    qof_session_load_from_xml_file_v2(session);
-
     book = qof_session_get_book (session);
+    be = qof_session_get_backend (session);
+    qof_session_load_from_xml_file_v2((FileBackend *)be, book);
 
     do_test (xaccGroupGetBook (xaccGetAccountGroup (book)) == book,
              "book and group don't match");
