@@ -188,14 +188,16 @@ sub fidelity_nav {
               ($dayte = $q[1]) =~ s/^ +//;
            }
         }
-        ($sym = $q[2]) =~ s/^ +//;
+        $sym = $q[2];
         if ($sym) {
+            $sym =~ s/^ +//;
             $aa {$sym, "exchange"} = "Fidelity";  # Fidelity
-            ($aa {$sym, "name"} = $q[0]) =~ s/^ +//;
-            $aa {$sym, "number"} = $q[1];
-            $aa {$sym, "nav"} = $q[3];
-            $aa {$sym, "change"} = $q[4];
-            $aa {$sym, "ask"} = $q[7];
+            ($aa {$sym, "name"}   = $q[0]) =~ s/^ +//;
+             $aa {$sym, "name"}   =~ s/$ +//;
+            ($aa {$sym, "number"} = $q[1]) =~ s/^ +//;
+            ($aa {$sym, "nav"}    = $q[3]) =~ s/^ +//;
+            ($aa {$sym, "change"} = $q[4]) =~ s/^ +//;
+            ($aa {$sym, "ask"}    = $q[7]) =~ s/^ +//;
             $aa {$sym, "date"} = $dayte;
         }
     }
@@ -221,12 +223,14 @@ sub fidelity_mm {
               ($dayte = $q[1]) =~ s/^ +//;
            }
         }
-        ($sym = $q[2]) =~ s/^ +//;
+        $sym = $q[2];
         if ($sym) {
+            $sym =~ s/^ +//;
             $aa {$sym, "exchange"} = "Fidelity";  # Fidelity
             ($aa {$sym, "name"} = $q[0]) =~ s/^ +//;
-            $aa {$sym, "number"} = $q[1];
-            $aa {$sym, "yield"} = $q[3];
+             $aa {$sym, "name"} =~ s/$ +//;
+            ($aa {$sym, "number"} = $q[1]) =~ s/^ +//;
+            ($aa {$sym, "yield"}  = $q[3]) =~ s/^ +//;
             $aa {$sym, "date"} = $dayte;
         }
     }
