@@ -132,26 +132,22 @@ static char * searchpaths[] = {
 AccountGroup *
 xaccSessionBegin (Session *sess, char * sid)
 {
-   struct stat statbuf;
-   char pathbuf[PATH_MAX];
-   char * filefrag,  *path = NULL;
-   int namelen, len;
-   int i, rc;
+   AccountGroup *retval;
 
    if (!sess) return NULL;
 
    /* clear the error condition of previous errors */
    sess->errtype = 0;
 
-   /* seriously invalid */
-   if (!sid) {
-      sess->errtype = EINVAL;
-      return NULL;
-   }
-
    /* check to see if this session is already open */
    if (sess->sessionid) {
       sess->errtype = ETXTBSY;
+      return NULL;
+   }
+
+   /* seriously invalid */
+   if (!sid) {
+      sess->errtype = EINVAL;
       return NULL;
    }
 
@@ -161,11 +157,42 @@ xaccSessionBegin (Session *sess, char * sid)
       return NULL;
    }
 
+   /* add 5 to space past 'file:' */
+   retval = xaccSessionBeginFile (sess, sid+5);
+
+   return retval;
+}
+
+AccountGroup *
+xaccSessionBeginFile (Session *sess, char * filefrag)
+{
+   struct stat statbuf;
+   char pathbuf[PATH_MAX];
+   char *path = NULL;
+   int namelen, len;
+   int i, rc;
+
+   if (!sess) return NULL;
+
+   /* clear the error condition of previous errors */
+   sess->errtype = 0;
+
+   /* check to see if this session is already open */
+   if (sess->sessionid) {
+      sess->errtype = ETXTBSY;
+      return NULL;
+   }
+
+   /* seriously invalid */
+   if (!filefrag) {
+      sess->errtype = EINVAL;
+      return NULL;
+   }
+
    /* ---------------------------------------------------- */
    /* OK, now we try to find or build an absolute file path */
 
    /* check for an absolute file path */
-   filefrag = sess->sessionid + 5;  /* space past 'file:' */
    if ('/' == *filefrag) {
       sess->fullpath = strdup (filefrag);
    } else {
@@ -256,8 +283,10 @@ xaccSessionBegin (Session *sess, char * sid)
    }
    assert (sess->fullpath);  /* no one fucked with the code, yeah? */
       
-   /* OK, we've got a good string ... */
-   sess->sessionid = strdup (sid);
+   /* Store the sessionid URL also ... */
+   strcpy (pathbuf, "file:");
+   strcat (pathbuf, filefrag);
+   sess->sessionid = strdup (pathbuf);
 
    /* ---------------------------------------------------- */
    /* Yow! OK, after all of that, we've finnaly got a fully 

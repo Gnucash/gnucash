@@ -66,6 +66,10 @@ void       xaccSessionDestroy (Session *);
  *    If the file is succesfully opened and read, then a lock will have been
  *    obtained, and all other access to the file will be denied.  This feature
  *    is intended to be a brute-force global lock to avoid multiple writers.
+ *
+ * The xaccSessionBeginFile() routine is identical to the xaccSessionBegin()
+ *    routine, except that the argument is a filename (i.e. the five
+ *    letters "file:" should not be prepended).
  * 
  * The xaccSessionGetError() routine can be used to obtain the reason for
  *    any failure. Standard errno values are used.  Calling this routine resets
@@ -131,13 +135,14 @@ void       xaccSessionDestroy (Session *);
  *
  */
 
-AccountGroup * xaccSessionBegin (Session *, char * sessionid);
-int            xaccSessionGetError (Session *);
-AccountGroup * xaccSessionGetGroup (Session *);
-void           xaccSessionSetGroup (Session *, AccountGroup *topgroup);
+AccountGroup * xaccSessionBegin     (Session *, char * sessionid);
+AccountGroup * xaccSessionBeginFile (Session *, char * filename);
+int            xaccSessionGetError  (Session *);
+AccountGroup * xaccSessionGetGroup  (Session *);
+void           xaccSessionSetGroup  (Session *, AccountGroup *topgroup);
 
 void           xaccSessionSave (Session *);
-void           xaccSessionEnd (Session *);
+void           xaccSessionEnd  (Session *);
 
 
 #endif /* __XACC_SESSION_H__ */
