@@ -378,7 +378,7 @@ string and 'directories' must be a list of strings."
     (_ "Welcome-to-GnuCash screen")
     (list gnc:menuname-reports gnc:menuname-utility "")
     (lambda ()
-      (gnc:make-welcome-report)))))
+      (gnc:main-window-open-report (gnc:make-welcome-report) #f)))))
 
 (define (gnc:startup)
   (gnc:debug "starting up.")
