@@ -30,7 +30,6 @@
 #include <time.h>
 #include <assert.h>
 
-#include "top-level.h"
 #include "messages.h"
 #include "gnc-ui.h"
 #include "RegWindow.h"

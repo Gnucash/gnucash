@@ -119,7 +119,7 @@
 #ifndef __GNC_FILE_DIALOG_H__
 #define __GNC_FILE_DIALOG_H__
 
-#include "top-level.h"
+#include "config.h"
 
 #include "Group.h"
 #include "Session.h"

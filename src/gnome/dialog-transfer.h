@@ -24,6 +24,8 @@
 #ifndef __DIALOG_TRANSFER_H__
 #define __DIALOG_TRANSFER_H__
 
+#include "Account.h"
+
 typedef struct _xferDialog XferDialog;
 
 XferDialog * gnc_xfer_dialog(GtkWidget * parent, Account *initial);

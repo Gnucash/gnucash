@@ -21,7 +21,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include "top-level.h"
+#include "config.h"
 
 #include <string.h>
 #include <gnome.h>

@@ -20,7 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include <top-level.h>
+#include "config.h"
+
 #include <gnome.h>
 
 #include "dialog-options.h"

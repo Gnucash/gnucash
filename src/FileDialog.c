@@ -19,11 +19,11 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include "config.h"
+
 #include <string.h>
 #include <glib.h>
 #include <guile/gh.h>
-
-#include "top-level.h"
 
 #include "FileBox.h"
 #include "FileDialog.h"

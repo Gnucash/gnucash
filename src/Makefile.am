@@ -63,8 +63,7 @@ noinst_HEADERS = \
   gnc-ui.h \
   gnc-ui-common.h \
   gnc-ui-util.h \
-  messages.h \
-  top-level.h
+  messages.h
 
 EXTRA_DIST = \
   .cvsignore

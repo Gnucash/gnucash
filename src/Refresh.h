@@ -26,7 +26,8 @@
 
 #include <glib.h>
 
-#include "top-level.h"
+#include "Group.h"
+#include "Transaction.h"
 
 
 void gnc_account_ui_refresh(Account *account);
