@@ -1,80 +1,64 @@
-
 <ARTICLE ID="XACC-ABOUT">
 <ARTHEADER>
 <TITLE>About GnuCash</TITLE>
 </ARTHEADER>
 <SECT1>
 <TITLE> About GnuCash</TITLE>
-<PARA>    </PARA>
-<PARA>GnuCash is a program to keep track of your finances. Its
-    features include:
 
-    <ITEMIZEDLIST>
-<LISTITEM>
-<PARA><EMPHASIS>Multiple accounts,</EMPHASIS> which can be open at the same
-      time. Create an GnuCash account for each of your bank
-      accounts.
+<PARA>GnuCash is a program to keep track of your finances. Its features
+include:
 
-      </PARA>
+<ITEMIZEDLIST>
+<LISTITEM> <PARA><EMPHASIS>Multiple accounts,</EMPHASIS> which can be
+open at the same time. Create a GnuCash account for each of your bank
+accounts.
+
+</PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>Each account maintains both a running balance and a
-      reconciled balance, so you can keep track of the checks that
-      have cleared your account.
+reconciled balance, so you can keep track of the checks that
+have cleared your account.
 
-      </PARA>
+</PARA>
 </LISTITEM>
-<LISTITEM>
-<PARA>        <EMPHASIS>A simple user interface.</EMPHASIS> 
-
-        </PARA>
-<PARA>If you can use the register in the back of your
-        checkbook, you can use <APPLICATION>GnuCash.</APPLICATION>
-      
-
-      </PARA>
+<LISTITEM> <PARA> <EMPHASIS>A simple user interface.</EMPHASIS> </PARA>
+<PARA>If you can use the register in the back of your checkbook, you
+can use <APPLICATION>GnuCash.</APPLICATION> </PARA>
 </LISTITEM>
-<LISTITEM>
-<PARA>        <EMPHASIS><LINK LINKEND="XACC-RECNWIN">Automated Tools for
-        Reconciling Accounts.</LINK></EMPHASIS> 
+<LISTITEM> <PARA> <EMPHASIS><LINK LINKEND="XACC-RECNWIN">Automated Tools
+for Reconciling Accounts.</LINK></EMPHASIS> </PARA>
 
-        </PARA>
 <PARA>At the end of the month, open up the <EMPHASIS>reconcile</EMPHASIS>
-        window, enter the ending balance from your bank statement,
-        and check off the transactions that appear in the bank
-        statement. This agrees what you have recorded in GnuCash
-        with what your bank has reported, and makes it easier to
-        track down any discrepancies.
-      
-
-      </PARA>
+window, enter the ending balance from your bank statement, and check
+off the transactions that appear in the bank statement. This agrees
+what you have recorded in GnuCash with what your bank has reported,
+and makes it easier to track down any discrepancies. </PARA>
 </LISTITEM>
-<LISTITEM>
-<PARA>        <EMPHASIS>QuickFill.</EMPHASIS> 
+<LISTITEM> <PARA>        <EMPHASIS>QuickFill.</EMPHASIS>
 
-        </PARA>
-<PARA>If you begin typing in the description field, and the
-        text matches a previous transaction, hitting <KEYCAP>TAB</KEYCAP>
-        will copy in that previous transaction. This is a handy
-        time saver if you regularly create similar
-        transactions.
+ </PARA>
+<PARA>If you begin typing in the description field, and the text matches
+a previous transaction, hitting <KEYCAP>TAB</KEYCAP> will copy in that
+previous transaction. This is a handy time saver if you regularly create
+similar transactions.
       
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>        <EMPHASIS>Stock/Mutual Fund Portfolios.</EMPHASIS> 
 
-        </PARA>
+ </PARA>
 <PARA>Track stocks individually (one per account) or in
         portfolio of accounts (a group of accounts that can be
         displayed together).
 
-        </PARA>
+ </PARA>
 <PARA>There are tools to <LINK LINKEND="XACC-TICKER">        automatically collect stock quotes.</LINK>
       
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>Support for <EMPHASIS><LINK LINKEND="XACC-CURRENCYHANDLING">multiple
@@ -82,38 +66,38 @@
       </EMPHASIS>
         (partial, still broken). 
 
-        </PARA>
+ </PARA>
 <PARA>Bank accounts may be established in different
         currencies, and trades at varying exchange rates may be
         made, in much the same way stocks trade at varying
         prices.
       
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>        <EMPHASIS><LINK LINKEND="QIF">Quicken File
         Import</LINK>.</EMPHASIS> 
 
-        </PARA>
+ </PARA>
 <PARA>Imports Quicken-style QIF files.
       
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA><EMPHASIS><LINK LINKEND="XACC-REPORTS">Reports</LINK>.</EMPHASIS> Display
       or output as HTML Balance, Transaction, and Profit/Loss
       reports, as well as graphical account balance tracking
       (requires gnuplot).
-    </PARA>
+ </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
 
-    </PARA>
+ </PARA>
 <SECT2>
 <TITLE>Advanced Features</TITLE>
-<PARA>    </PARA>
+<PARA> </PARA>
 <PARA>GnuCash offers some features not found in simpler accounting
     programs.
 
@@ -121,130 +105,132 @@
 <LISTITEM>
 <PARA>        <EMPHASIS><LINK LINKEND="XACC-CHARTOFACCTS">Account Hierarchy</LINK></EMPHASIS> 
 
-        </PARA>
+ </PARA>
 <PARA>A master account can have a hierarchy of more detailed
         accounts arranged underneath it. This allows related
         account types (<EMPHASIS>e.g.</EMPHASIS> - Cash, Bank, Stock) to be
         grouped under one master account ( <EMPHASIS>e.g.</EMPHASIS> -
         Assets).
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA><EMPHASIS><LINK LINKEND="XACC-DOUBLEENTRY">Double
       Entry</LINK></EMPHASIS> 
 
-        </PARA>
+ </PARA>
 <PARA>Every transaction involves two accounts, and <EMPHASIS>each
         transaction</EMPHASIS> is required to balance. This provides
         assurance that the overall set of books will add up
         correctly, and prevents out-of-balance errors
         altogether.
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA><EMPHASIS><LINK LINKEND="XACC-INCOMEEXPENSE">Income/Expense Account
       Types</LINK></EMPHASIS> 
 
-        </PARA>
+ </PARA>
 <PARA>Intuit's <LINK LINKEND="XACC-QUICKEN">Quicken</LINK> product
         has what they call "categories" that are used to track
         incomes and expenses. These may be used to create
         Profit/Loss reports.
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>        <EMPHASIS>General Ledger</EMPHASIS> 
 
-        </PARA>
+ </PARA>
 <PARA>Multiple accounts may be displayed in one register
         window at the same time. This can make it easier to track
         down data errors. It also provides a convenient way of
         viewing a portfolio of many stocks, by showing all
         transactions in that portfolio.
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA><EMPHASIS>Handling of <LINK LINKEND="XACC-CURRENCYHANDLING">multiple
       currencies</LINK></EMPHASIS>
-    </PARA>
+ </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
 
-    </PARA>
+ </PARA>
 </SECT2>
 <SECT2>
 <TITLE>Versioning</TITLE>
-<PARA>    </PARA>
+<PARA> </PARA>
 <PARA>The versioning scheme for GnuCash parallels that of the
     Linux kernel, where "even" sub-versions indicate versions that
     are intended to be stable, only seeing maintenance to fix bugs,
     and "odd" sub-versions indicate an "experimental" stream that
     seeks to add enhancement.
 
-    </PARA>
+ </PARA>
 <PARA>The present "experimental" stream is gnucash-1.5.x, which is
     somewhat unstable.
 
-    </PARA>
+ </PARA>
 <PARA>The latest stable release is 1.4.x; if you don't intend to
     do development work, you should be using either this version,
     or an older stable version. These versions are fairly stable,
     with all currently known bugs fixed.
 
-    </PARA>
+ </PARA>
 <PARA>Once the 1.5.x series stabilizes, the next stable series
     will be 1.6.x.
 
-    </PARA>
+ </PARA>
 <PARA>If you wish to "hack" on the experimental version, you should
     first start by reading through the <ULINK
     URL="http://linas.org/linux/xacc/projects.html">Project Goals</ULINK>
     page in order to get some perspective on the overall design.
 
-    </PARA>
+ </PARA>
 </SECT2>
 <SECT2>
 <TITLE>Lead Developers</TITLE>
 <PARA>    <GLOSSLIST>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:rclark@hmc.edu">Robin Clark</ULINK></GLOSSTERM>
+<GLOSSTERM><email> rclark@hmc.edu</email> Robin Clark</GLOSSTERM>
 <GLOSSDEF>
-<PARA>wrote the original X-Accountant in Motif as a school
-      project, taking it to version 0.9 by October 1997.</PARA>
+<PARA>wrote the original <application>X-Accountant</application> in
+Motif as a school project, taking it to version 0.9 by October
+1997.</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:linas@linas.org">Linas Vepstas</ULINK></GLOSSTERM>
+<GLOSSTERM><email> linas@linas.org</email> Linas Vepstas</GLOSSTERM>
 <GLOSSDEF>
 <PARA>liked what he saw: the GUI was slick, the code was
-      documented and well structured, and it was all GPL'ed. And so
-      he re-wrote it: adding cell-widgets to XbaeMatrix, so that
-      the combobox and arrows would make an even slicker GUI,
-      rewrote the X-Accountant internals to add double-entry, an
-      account hierarchy, split out a transaction mini-engine, add
-      support for stocks, and spiff up the help menus. This was
-      version 1.0 as of January 1998. Since then, for version 1.1,
-      the engine was expanded and refined, and the register window
-      code completely redesigned and made mostly Motif-(and
-      GUI-)independent. Did some prototype OFX work.</PARA>
+      documented and well structured, and it was all GPL'ed. And so he
+      re-wrote it: adding cell-widgets to XbaeMatrix, so that the
+      combobox and arrows would make an even slicker GUI, rewrote the
+      <application>X-Accountant</application> internals to add
+      double-entry, an account hierarchy, split out a transaction
+      mini-engine, add support for stocks, and spiff up the help
+      menus. This was version 1.0 as of January 1998. Since then, for
+      version 1.1, the engine was expanded and refined, and the
+      register window code completely redesigned and made mostly
+      Motif-(and GUI-)independent. Did some prototype OFX work.</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:jcollins@gnucash.org">Jeremy
-      Collins</ULINK></GLOSSTERM>
+<GLOSSTERM><email> jcollins@gnucash.org</email> Jeremy
+      Collins</GLOSSTERM>
 <GLOSSDEF>
-<PARA>publicized the GnoMoney project widely and broadly, and
-      then changed its name to GnuCash. Jeremy created the
+<PARA>publicized the <application>GnoMoney</application> project widely
+      and broadly, and then changed its name to
+      <application>GnuCash</application>. Jeremy created the
       gnucash.org web site, registered the domain, got the initial
       GTK/gnome code working.</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:rlb@cs.utexas.edu">Rob Browning</ULINK></GLOSSTERM>
+<GLOSSTERM><email> rlb@cs.utexas.edu</email> Rob Browning</GLOSSTERM>
 <GLOSSDEF>
 <PARA>abused everyone for not using perl, and then after we
       added perl support, dumped perl in favor of guile/scheme
@@ -254,15 +240,15 @@
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:dave@krondo.com">Dave Peticolas</ULINK></GLOSSTERM>
+<GLOSSTERM><email> dave@krondo.com</email> Dave Peticolas</GLOSSTERM>
 <GLOSSDEF>
 <PARA>hacks obsessively on GnuCash. But he can stop anytime he
       wants to. Really.</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:grib@billgribble.com">Bill
-      Gribble</ULINK></GLOSSTERM>
+<GLOSSTERM><email> grib@billgribble.com</email> Bill
+      Gribble</GLOSSTERM>
 <GLOSSDEF>
 <PARA>works magic. If your checks print wrong, blame him. If
       you don't like the amount printed on your checks, blame him.
@@ -272,53 +258,53 @@
 </GLOSSENTRY>
 </GLOSSLIST>
 
-    </PARA>
+ </PARA>
 </SECT2>
 <SECT2>
 <TITLE>Fixers and Patchers</TITLE>
-<PARA>    </PARA>
+
 <PARA>The <EMPHASIS>cast of thousands</EMPHASIS> includes:
 
     <GLOSSLIST>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:arensb@cfar.umd.edu">Andrew
-      Arensburger</ULINK></GLOSSTERM>
+<GLOSSTERM><email> arensb@cfar.umd.edu</email> Andrew
+      Arensburger</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for FreeBSD and other patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:matt_armstrong@bigfoot.com">Matt
-      Armstrong</ULINK></GLOSSTERM>
+<GLOSSTERM><email> matt_armstrong@bigfoot.com</email> Matt
+      Armstrong</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for misc fixes</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:fred@moremagic.com">Fred Baube</ULINK></GLOSSTERM>
+<GLOSSTERM><email> fred@moremagic.com</email> Fred Baube</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for attempted Java port/MoneyDance</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:dennisb@cs.chalmers.se">Dennis
-      Bj&ouml;rklund</ULINK></GLOSSTERM>
+<GLOSSTERM><email> dennisb@cs.chalmers.se</email> Dennis
+      Bj&ouml;rklund</GLOSSTERM>
 <GLOSSDEF>
 <PARA>Swedish translation</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:bojsen@worldnet.att.net">Per
-      Bojsen</ULINK></GLOSSTERM>
+<GLOSSTERM><email> bojsen@worldnet.att.net</email> Per
+      Bojsen</GLOSSTERM>
 <GLOSSDEF>
 <PARA>several core dump fixes</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:tboldt@attglobal.net">Terry Boldt
-      </ULINK></GLOSSTERM>
+<GLOSSTERM><email> tboldt@attglobal.net</email> Terry Boldt
+      </GLOSSTERM>
 <GLOSSDEF>
 <PARA>financial calculator and expression parser</PARA>
 </GLOSSDEF>
@@ -342,22 +328,22 @@
 </GLOSSENTRY>
 <GLOSSENTRY>
 
-<GLOSSTERM><ULINK URL="mailto:wwc@wwcnet.nu">Bill
-      Carlson</ULINK></GLOSSTERM>
+<GLOSSTERM><email> wwc@wwcnet.nu</email> Bill
+      Carlson</GLOSSTERM>
 <GLOSSDEF>
 <PARA>performance improvements</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:grahamc@zeta.org.au">Graham
-      Chapman</ULINK></GLOSSTERM>
+<GLOSSTERM><email> grahamc@zeta.org.au</email> Graham
+      Chapman</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for the xacc-rpts addon package</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:georgec@sco.com">George Chen</ULINK></GLOSSTERM>
+<GLOSSTERM><email> georgec@sco.com</email> George Chen</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for MS-Money QIF support</PARA>
 </GLOSSDEF>
@@ -370,457 +356,457 @@
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:jcollins@gnucash.org">Jeremey
-      Collins</ULINK></GLOSSTERM>
+<GLOSSTERM><email> jcollins@gnucash.org</email> Jeremey
+      Collins</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for GnoMoney and GTK port</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:mcondell@bbn.com">Matthew
-      Condell</ULINK></GLOSSTERM>
+<GLOSSTERM><email> mcondell@bbn.com</email> Matthew
+      Condell</GLOSSTERM>
 <GLOSSDEF>
 <PARA>FreeBSD patch</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:pcondon@rackspace.com">Patrick
-      Condron</ULINK></GLOSSTERM>
+<GLOSSTERM><email> pcondon@rackspace.com</email> Patrick
+      Condron</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for webserver and T1 connection.</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:Ciaran.Deignan@bull.net">Ciaran
-      Deignan</ULINK></GLOSSTERM>
+<GLOSSTERM><email> Ciaran.Deignan@bull.net</email> Ciaran
+      Deignan</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for AIX binary version</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:gjditchfield@acm.org">Glen
-      Ditchfield</ULINK></GLOSSTERM>
+<GLOSSTERM><email> gjditchfield@acm.org</email> Glen
+      Ditchfield</GLOSSTERM>
 <GLOSSDEF>
 <PARA>updated documentation</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:tyson@tyse.net">Tyson Dowd</ULINK></GLOSSTERM>
+<GLOSSTERM><email> tyson@tyse.net</email> Tyson Dowd</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for config/make patches and debian maintenance</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:ripley@xs4all.nl">Koen D'Hondt</ULINK></GLOSSTERM>
+<GLOSSTERM><email> ripley@xs4all.nl</email> Koen D'Hondt</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for Solaris patches to XmHTML</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:bob@mostly.com">Bob Drzyzgula</ULINK></GLOSSTERM>
+<GLOSSTERM><email> bob@mostly.com</email> Bob Drzyzgula</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for budgeting design notes</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:pjf@schools.net.au">Paul
-      Fenwick</ULINK></GLOSSTERM>
+<GLOSSTERM><email> pjf@schools.net.au</email> Paul
+      Fenwick</GLOSSTERM>
 <GLOSSDEF>
 <PARA>ASX support, Finance::Quote</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:hfiguiere@teaser.fr">Hubert
-      Figuiere</ULINK></GLOSSTERM>
+<GLOSSTERM><email> hfiguiere@teaser.fr</email> Hubert
+      Figuiere</GLOSSTERM>
 <GLOSSDEF>
 <PARA>patch to <APPLICATION>gnc-prices</APPLICATION></PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:frob@df.ru">Valek Filippov
-      </ULINK></GLOSSTERM>
+<GLOSSTERM><email> frob@df.ru</email> Valek Filippov
+      </GLOSSTERM>
 <GLOSSDEF>
 <PARA>Russian translation</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:ju_finck@mail.netwave.de">Jan-Uwe
-      Finck</ULINK></GLOSSTERM>
+<GLOSSTERM><email> ju_finck@mail.netwave.de</email> Jan-Uwe
+      Finck</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for German message translation</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:kevinfinn@mediaone.net">Kevin
-      Finn</ULINK></GLOSSTERM>
+<GLOSSTERM><email> kevinfinn@mediaone.net</email> Kevin
+      Finn</GLOSSTERM>
 <GLOSSDEF>
 <PARA>auto-decimal point patch, options patch</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:rjf@aracnet.com">Ron
-      Forrester</ULINK></GLOSSTERM>
+<GLOSSTERM><email> rjf@aracnet.com</email> Ron
+      Forrester</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for gnome patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:DFreese@osc.uscg.mil">Dave
-      Freese</ULINK></GLOSSTERM>
+<GLOSSTERM><email> DFreese@osc.uscg.mil</email> Dave
+      Freese</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for leap-year fix</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:jgoerzen@complete.org">John
-      Goerzen</ULINK></GLOSSTERM>
+<GLOSSTERM><email> jgoerzen@complete.org</email> John
+      Goerzen</GLOSSTERM>
 <GLOSSDEF>
 <PARA>file i/o fix for 64-bit architectures</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:grib@billgribble.com">Bill
-      Gribble</ULINK></GLOSSTERM>
+<GLOSSTERM><email> grib@billgribble.com</email> Bill
+      Gribble</GLOSSTERM>
 <GLOSSDEF>
 <PARA>QIF import code, check printing, transaction find
       dialog</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:otto@bug.redhat.com">Otto
-      Hammersmith</ULINK></GLOSSTERM>
+<GLOSSTERM><email> otto@bug.redhat.com</email> Otto
+      Hammersmith</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for RedHat RPM packaging</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:offby1@blarg.net">Eric Hanchrow</ULINK></GLOSSTERM>
+<GLOSSTERM><email> offby1@blarg.net</email> Eric Hanchrow</GLOSSTERM>
 <GLOSSDEF>
 <PARA>updated currency documentation</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:haral@codec.ro">Alexandru
-      Harsanyi</ULINK></GLOSSTERM>
+<GLOSSTERM><email> haral@codec.ro</email> Alexandru
+      Harsanyi</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for fixing miscellaneous core dumps and lockups.</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:john@dhh.gt.org">John Hasler</ULINK></GLOSSTERM>
+<GLOSSTERM><email> john@dhh.gt.org</email> John Hasler</GLOSSTERM>
 <GLOSSDEF>
 <PARA>engine patch</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:hellan@acm.org">Jon K&aring;re
-      Hellan</ULINK></GLOSSTERM>
+<GLOSSTERM><email> hellan@acm.org</email> Jon K&aring;re
+      Hellan</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for fixing miscellaneous core dumps and lockups.</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:PrakashK@bigfoot.com">Prakash
-      Kailasa</ULINK></GLOSSTERM>
+<GLOSSTERM><email> PrakashK@bigfoot.com</email> Prakash
+      Kailasa</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for gnome build fixes</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:tkludy@csd.sgi.com">Tom Kludy</ULINK></GLOSSTERM>
+<GLOSSTERM><email> tkludy@csd.sgi.com</email> Tom Kludy</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for SGI Irix port</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:sk@xgm.de">Sven Kuenzler</ULINK></GLOSSTERM>
+<GLOSSTERM><email> sk@xgm.de</email> Sven Kuenzler</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for SuSE README file</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:blarsen@ada-works.com">Bryan
-      Larsen</ULINK></GLOSSTERM>
+<GLOSSTERM><email> blarsen@ada-works.com</email> Bryan
+      Larsen</GLOSSTERM>
 <GLOSSDEF>
 <PARA>guile budget report</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:mellon@andare.fugue.com">Ted
-      Lemon</ULINK></GLOSSTERM>
+<GLOSSTERM><email> mellon@andare.fugue.com</email> Ted
+      Lemon</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for NetBSD port</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:y-le-ny@ifrance.com">Yannick Le
-      Ny</ULINK></GLOSSTERM>
+<GLOSSTERM><email> y-le-ny@ifrance.com</email> Yannick Le
+      Ny</GLOSSTERM>
 <GLOSSDEF>
 <PARA>pour la traduction en Fran&ccedil;ais</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:glikely@nortelnetworks.com">Grant
-      Likely</ULINK></GLOSSTERM>
+<GLOSSTERM><email> glikely@nortelnetworks.com</email> Grant
+      Likely</GLOSSTERM>
 <GLOSSDEF>
 <PARA>gnome and engine patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:martinh@pegasus.cc.ucf.edu">Heath
-      Martin</ULINK></GLOSSTERM>
+<GLOSSTERM><email> martinh@pegasus.cc.ucf.edu</email> Heath
+      Martin</GLOSSTERM>
 <GLOSSDEF>
 <PARA>major work on the gnome register</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:mgmartin@abacusnet.net">Matt
-      Martin</ULINK></GLOSSTERM>
+<GLOSSTERM><email> mgmartin@abacusnet.net</email> Matt
+      Martin</GLOSSTERM>
 <GLOSSDEF>
 <PARA>guile error handling code</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:rgmerk@mira.net">Robert Graham
-      Merkel</ULINK></GLOSSTERM>
+<GLOSSTERM><email> rgmerk@mira.net</email> Robert Graham
+      Merkel</GLOSSTERM>
 <GLOSSDEF>
 <PARA>reporting, gnome, and configuration patches.</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:molnarc@mandrakesoft.com">Christopher
-      Molnar</ULINK></GLOSSTERM>
+<GLOSSTERM><email> molnarc@mandrakesoft.com</email> Christopher
+      Molnar</GLOSSTERM>
 <GLOSSDEF>
 <PARA>build system patch</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:mooney@dogbert.cc.ndsu.NoDak.edu">Tim
-      Mooney</ULINK></GLOSSTERM>
+<GLOSSTERM><email> mooney@dogbert.cc.ndsu.NoDak.edu</email> Tim
+      Mooney</GLOSSTERM>
 <GLOSSDEF>
 <PARA>port to alpha-dec-osf4.0f</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:gam3@ann.softgams.com">G. Allen Morris
-      III</ULINK></GLOSSTERM>
+<GLOSSTERM><email> gam3@ann.softgams.com</email> G. Allen Morris
+      III</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for QIF core dump fix</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:sjmurdoch@linuxfan.com">Steven
-      Murdoch</ULINK></GLOSSTERM>
+<GLOSSTERM><email> sjmurdoch@linuxfan.com</email> Steven
+      Murdoch</GLOSSTERM>
 <GLOSSDEF>
 <PARA>gnc-prices fix for London exchange</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:brent@baton.phys.lsu.edu">Brent
-      Neal</ULINK></GLOSSTERM>
+<GLOSSTERM><email> brent@baton.phys.lsu.edu</email> Brent
+      Neal</GLOSSTERM>
 <GLOSSDEF>
 <PARA>TIAA-CREF support</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:spacey@inch.com">Peter
-      Norton</ULINK></GLOSSTERM>
+<GLOSSTERM><email> spacey@inch.com</email> Peter
+      Norton</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for a valiant attempt at a GTK port</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:webmaster@obsidian.uia.net">OmNiBuS
-      </ULINK></GLOSSTERM>
+<GLOSSTERM><email> webmaster@obsidian.uia.net</email> OmNiBuS
+      </GLOSSTERM>
 <GLOSSDEF>
 <PARA>web site graphics and content</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:gordo@pincoya.com">Gordon Oliver
-      </ULINK></GLOSSTERM>
+<GLOSSTERM><email> gordo@pincoya.com</email> Gordon Oliver
+      </GLOSSTERM>
 <GLOSSDEF>
 <PARA>multiple currency status line patch</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:mopyr@IPM.Lviv.UA">Myroslav
-      Opyr</ULINK></GLOSSTERM>
+<GLOSSTERM><email> mopyr@IPM.Lviv.UA</email> Myroslav
+      Opyr</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for misc patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:laurent.pelecq@wanadoo.fr">Laurent
-      P&eacute;lecq</ULINK></GLOSSTERM>
+<GLOSSTERM><email> laurent.pelecq@wanadoo.fr</email> Laurent
+      P&eacute;lecq</GLOSSTERM>
 <GLOSSDEF>
 <PARA>i18n patches with gettext</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:Alain.Peyrat@nmu.alcatel.fr">Alain
-      Peyrat</ULINK></GLOSSTERM>
+<GLOSSTERM><email> Alain.Peyrat@nmu.alcatel.fr</email> Alain
+      Peyrat</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for <FILENAME>configure.in</FILENAME> patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:peter@wuzel.m.isar.de">Peter
-      Pointner</ULINK></GLOSSTERM>
+<GLOSSTERM><email> peter@wuzel.m.isar.de</email> Peter
+      Pointner</GLOSSTERM>
 <GLOSSDEF>
 <PARA>motif and configuration patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:maufk@csv.warwick.ac.uk">Gavin
-      Porter</ULINK></GLOSSTERM>
+<GLOSSTERM><email> maufk@csv.warwick.ac.uk</email> Gavin
+      Porter</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for euro style dates</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:tpo@spin.ch">Tomas Pospisek</ULINK></GLOSSTERM>
+<GLOSSTERM><email> tpo@spin.ch</email> Tomas Pospisek</GLOSSTERM>
 <GLOSSDEF>
 <PARA>debian patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:rr@sco.com">Ron Record</ULINK></GLOSSTERM>
+<GLOSSTERM><email> rr@sco.com</email> Ron Record</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for SCO Unixware and OpenServer binaries</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:Keith.Refson@earth.ox.ac.uk">Keith
-      Refson</ULINK></GLOSSTERM>
+<GLOSSTERM><email> Keith.Refson@earth.ox.ac.uk</email> Keith
+      Refson</GLOSSTERM>
 <GLOSSDEF>
 <PARA>Solaris fixes</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:schoenberger@signsoft.com">Dirk
-      Schoenberger</ULINK></GLOSSTERM>
+<GLOSSTERM><email> schoenberger@signsoft.com</email> Dirk
+      Schoenberger</GLOSSTERM>
 <GLOSSDEF>
 <PARA>began the Qt/KDE port</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:jan.schrage@urz.uni-heidelberg.de">Jan
-      Schrage</ULINK></GLOSSTERM>
+<GLOSSTERM><email> jan.schrage@urz.uni-heidelberg.de</email> Jan
+      Schrage</GLOSSTERM>
 <GLOSSDEF>
 <PARA>documentation patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:cls@seawood.org">Christopher
-      Seawood</ULINK></GLOSSTERM>
+<GLOSSTERM><email> cls@seawood.org</email> Christopher
+      Seawood</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for XbaeMatrix core dump</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:aleseveso@tiscalinet.it">Alessandro
-      Seveso</ULINK></GLOSSTERM>
+<GLOSSTERM><email> aleseveso@tiscalinet.it</email> Alessandro
+      Seveso</GLOSSTERM>
 <GLOSSDEF>
 <PARA>Italian translations</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:msimons@fsimons01.erols.com">Mike
-      Simons</ULINK></GLOSSTERM>
+<GLOSSTERM><email> msimons@fsimons01.erols.com</email> Mike
+      Simons</GLOSSTERM>
 <GLOSSDEF>
 <PARA>misc <FILENAME>configure.in</FILENAME> patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:rich@brake.demon.co.uk">Richard
-      Skelton</ULINK></GLOSSTERM>
+<GLOSSTERM><email> rich@brake.demon.co.uk</email> Richard
+      Skelton</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for Solaris cleanup</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:spruth@bigfoot.com">Henning
-      Spruth</ULINK></GLOSSTERM>
+<GLOSSTERM><email> spruth@bigfoot.com</email> Henning
+      Spruth</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for German text and euro date rework</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:robby.stephenson@usa.net">Robby
-      Stephenson</ULINK></GLOSSTERM>
+<GLOSSTERM><email> robby.stephenson@usa.net</email> Robby
+      Stephenson</GLOSSTERM>
 <GLOSSDEF>
 <PARA>register &amp; file history patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:tma@iis.fhg.de">Herbert Thoma</ULINK></GLOSSTERM>
+<GLOSSTERM><email> tma@iis.fhg.de</email> Herbert Thoma</GLOSSTERM>
 <GLOSSDEF>
 <PARA>gnome register &amp; euro support patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:detrout@earthlink.net">Diane
-      Trout</ULINK></GLOSSTERM>
+<GLOSSTERM><email> detrout@earthlink.net</email> Diane
+      Trout</GLOSSTERM>
 <GLOSSDEF>
 <PARA>scheme qif import patch</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:rkw@dataplex.net">Richard
-      Wackerbarth</ULINK></GLOSSTERM>
+<GLOSSTERM><email> rkw@dataplex.net</email> Richard
+      Wackerbarth</GLOSSTERM>
 <GLOSSDEF>
 <PARA>patch to <APPLICATION>gnc-prices</APPLICATION>, qif import fixes</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:rob@valinux.com">Rob Walker</ULINK></GLOSSTERM>
+<GLOSSTERM><email> rob@valinux.com</email> Rob Walker</GLOSSTERM>
 <GLOSSDEF>
 <PARA>guile and register patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:dwmw2@infradead.org">David
-      Woodhouse</ULINK></GLOSSTERM>
+<GLOSSTERM><email> dwmw2@infradead.org</email> David
+      Woodhouse</GLOSSTERM>
 <GLOSSDEF>
 <PARA>Great Britain translations</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:gooch@ic.EECS.Berkeley.EDU">Ken
-      Yamaguchi</ULINK></GLOSSTERM>
+<GLOSSTERM><email> gooch@ic.EECS.Berkeley.EDU</email> Ken
+      Yamaguchi</GLOSSTERM>
 <GLOSSDEF>
 <PARA>QIF import fixes; MYM import</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:shimpei@gol.com">Shimpei
-      Yamashita</ULINK></GLOSSTERM>
+<GLOSSTERM><email> shimpei@gol.com</email> Shimpei
+      Yamashita</GLOSSTERM>
 <GLOSSDEF>
 <PARA>Japanese translation</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 </GLOSSLIST>
 
-    </PARA>
+ </PARA>
 </SECT2>
 <SECT2>
 <TITLE>Supported Operating Systems</TITLE>
@@ -831,45 +817,45 @@
 <LISTITEM>
 <PARA>Linux 2.0.x -- Intel w/ RedHat Motif
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>Linux 2.0.x -- Intel w/ Lesstif v0.81
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>Linux Debian -- Intel w/ Lesstif v0.81
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>SGI IRIX -- MIPS
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>IBM AIX 4.1.5 -- RS/6000
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>SCO Unixware 7 -- Intel
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>SCO OpenServer 5.0.4 -- Intel
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>NetBSD -- Intel
-    </PARA>
+ </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
 
-    </PARA>
+ </PARA>
 <PARA><ULINK URL="http://www.gnucash.org/"><INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
 <IMAGEDATA FILEREF="logo-linux.gif">
@@ -900,18 +886,18 @@
 </IMAGEOBJECT>
 </INLINEMEDIAOBJECT></ULINK></ULINK>
 
-    </PARA>
+ </PARA>
 </SECT2>
 <SECT2>
 <TITLE>History</TITLE>
-<PARA>    The table below shows some historical lines-of-code and
-    number-of-files counts for the X-Accountant/GnuCash development
-    project 
-     
 
-    <TABLE>
-<TITLE>        Historical Development Stats
-      </TITLE>
+<PARA> The table below shows some historical lines-of-code and
+number-of-files metrics for the <application>X-Accountant</application>
+<application>GnuCash</application> development project
+
+<TABLE>
+<TITLE> Historical Development Stats </TITLE>
+
 <TGROUP COLS="10">
 <THEAD>
 <ROW>
@@ -1047,7 +1033,7 @@
 </TGROUP>
 </TABLE>
 
-    </PARA>
+ </PARA>
 <PARA>Each cell displays the following:
     
      number of *c and *.h files
@@ -1055,54 +1041,55 @@
     (unless its the scheme directories, in which case its *scm
     files, etc) 
 
-    </PARA>
-<PARA>where KLOC == kilo-lines-of-code, as reported by <APPLICATION>    wc</APPLICATION>.
+ </PARA>
+<PARA>where KLOC == kilo-lines-of-code, as reported by
+   <APPLICATION>wc</APPLICATION>.
 
     <ITEMIZEDLIST>
 <LISTITEM>
 <PARA>engine -- contents of the src/engine and the include
       directories
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>register -- contents of the register directory
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>ledger -- *.c, *.h files in the src directory only
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>motif -- contents of src/motif directory
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>gnome -- src/gnome plus src/register/gnome
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>scheme -- scheme and guile code -- src/scm plus
       src/guile
 
-      </PARA>
+ </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>docs -- english-only html docs (user documentation)
 
-      </PARA>
+ </PARA>
 </LISTITEM>
-<LISTITEM>
-<PARA>txt -- internal README and *.txt documentation files in
-      all subdirs
-    </PARA>
-</LISTITEM>
-</ITEMIZEDLIST>
 
+<LISTITEM> <PARA>txt -- internal <filename>README</filename> and
+<filename>*.txt</filename> documentation files in all subdirectories
+</PARA>
+</LISTITEM>
+
+</ITEMIZEDLIST>
 
 </PARA>
 </SECT2>

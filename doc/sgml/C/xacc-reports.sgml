@@ -1,4 +1,3 @@
-
 <ARTICLE ID="XACC-REPORTS">
 <ARTHEADER>
 <TITLE>Reports</TITLE>
@@ -102,38 +101,37 @@
 
     </PARA>
 </SECT1>
+
 <SECT1 ID="XACC-CUSTOMREPORTS">
 <TITLE> Constructing custom reports</TITLE>
-<PARA>    It is possible to write your own reports to meet your own
-    needs, if you can program a little. You will need to know
-    Scheme (a LISP-like programming language), and it is an
-    excellent idea to have a copy of the Gnucash source code
-    available. 
 
-    </PARA>
-<PARA>The reporting interface is presently undocumented, but you
-    can get a good idea of how it works by examining the file
-    src/scm/report/hello-world.scm in the GnuCash source
-    distribution.
+<PARA> It is possible to write your own reports to meet your own
+needs, if you can program a little. You will need to know Scheme (a
+LISP-like programming language), and it is an excellent idea to have a
+copy of the <application>GnuCash</application> source code available.
+</PARA>
 
-    </PARA>
+<PARA>The reporting interface is presently undocumented, but you can
+get a good idea of how it works by examining the file <filename>
+src/scm/report/hello-world.scm </filename> in the
+<application>GnuCash</application> source distribution.
+</PARA>
+
 <PARA>You will also need to access data from the "engine" to get
-    information for your report. This is performed by a set of
-    Scheme wrapper functions that are documented in the file
-    src/g-wrap/gnc.html. You may wish to examine some of the other
-    reports in src/scm/report for an indication of how they are
-    used.
+information for your report. This is performed by a set of Scheme
+wrapper functions that are documented in the file<filename>
+src/g-wrap/gnc.html</filename>. You may wish to examine some of the
+other reports in <filename> src/scm/report </filename> for an
+indication of how they are used.
+</PARA>
 
-    </PARA>
-<PARA>At present, reports are produced by internally creating HTML
-    and rendering this with a HTML widget. (Future versions of
-    GnuCash will hopefully support a more flexible system).
+<PARA>At present, reports are produced by internally creating HTML and
+rendering this with a HTML widget. (Future versions of GnuCash will
+hopefully support a more flexible system).  </PARA>
 
-    </PARA>
 <PARA>If you need more information, or have developed a new report
-    that may be of use to others, please contact the GnuCash
-    development mailing list at <ULINK URL="mailto:gnucash-devel@gnucash.org">    gnucash-devel@gnucash.org</ULINK>.
-
+that may be of use to others, please contact the GnuCash development
+mailing list at <email> gnucash-devel@gnucash.org </email>.
 
 </PARA>
 </SECT1>

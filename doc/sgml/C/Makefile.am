@@ -2,6 +2,7 @@ gnucash_helpdir = $(datadir)/gnome/help/gnucash/C
 
 GNUCASH_SGML_FILES = \
 	bofa-mym.sgml \
+        gnucash.sgml \
 	xacc-about.sgml \
 	xacc-accountedit.sgml \
 	xacc-acctypes.sgml \
@@ -13,6 +14,7 @@ GNUCASH_SGML_FILES = \
 	xacc-currencyhandling.sgml \
 	xacc-dateinput.sgml \
 	xacc-depreciation.sgml \
+        xacc-dochack.sgml \
 	xacc-doubleentry.sgml \
 	xacc-euro.sgml \
 	xacc-gpl.sgml \
