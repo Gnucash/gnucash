@@ -43,7 +43,7 @@ gnomeappdir = ${datadir}/gnome/apps/Applications
 
 gnomeapp_in_files = gnucash.desktop.in
 gnomeapp_DATA = $(gnomeapp_in_files:.desktop.in=.desktop)
-@XML_I18N_MERGE_DESKTOP_RULE@
+@INTLTOOL_DESKTOP_RULE@
 
 appicondir = $(datadir)/pixmaps
 
@@ -88,14 +88,6 @@ EXTRA_DIST = \
   gnucash.mime
 
 CFLAGS = @CFLAGS@ \
-         ${G_WRAP_COMPILE_ARGS} \
-         ${GNOME_PRINT_CFLAGS} \
-         ${GTKHTML_CFLAGS} \
-	 ${GHTTP_CFLAGS} \
-         ${GLADE_CFLAGS} \
-	 ${GUPPI_CFLAGS} 
-
-INCLUDES = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/calculation \
   -I${top_srcdir}/src/engine \
@@ -113,9 +105,14 @@ INCLUDES = \
   -I${top_srcdir}/src/report/report-system \
   -I${top_srcdir}/src/import-export/binary-import \
   -I${top_srcdir}/src/import-export/qif-import \
+  ${GUILE_INCS} \
+  ${G_WRAP_COMPILE_ARGS} \
   ${GNOME_INCLUDEDIR} \
-  ${GUILE_INCS}
-
+  ${GNOME_PRINT_CFLAGS} \
+  ${GTKHTML_CFLAGS} \
+  ${GHTTP_CFLAGS} \
+  ${GLADE_CFLAGS} \
+  ${GUPPI_CFLAGS} 
 
 # We build this in an earlier directory.
 
