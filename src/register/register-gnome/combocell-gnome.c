@@ -111,7 +111,7 @@ xaccInitComboCell (ComboCell *cell)
 {
 	PopBox *box;
 
-	xaccInitBasicCell (&(cell->cell));
+	gnc_basic_cell_init (&(cell->cell));
 
         cell->cell.is_popup = TRUE;
 

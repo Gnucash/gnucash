@@ -182,6 +182,13 @@ typedef void (*CellDestroyFunc) (BasicCell *cell);
 
 typedef char * (*CellGetHelpFunc) (BasicCell *cell);
 
+typedef enum
+{
+  CELL_ALIGN_RIGHT,
+  CELL_ALIGN_CENTER,
+  CELL_ALIGN_LEFT
+} CellAlignment;
+
 struct _BasicCell
 {
   int cell_type;
@@ -213,8 +220,12 @@ struct _BasicCell
   CellMoveFunc    gui_move;
   CellDestroyFunc gui_destroy;
 
-  /* GUI flag indicated is a popup-widget */
-  gboolean is_popup;
+  /* GUI information */
+  char *sample_text;       /* sample text for sizing purposes */
+  CellAlignment alignment; /* horizontal alignment in column */
+  gboolean expandable;     /* can fill with extra space */
+  gboolean span;           /* can span multiple columns */
+  gboolean is_popup;       /* is a popup widget */
 
   /* general hook for gui-private data */
   gpointer gui_private;
@@ -222,10 +233,13 @@ struct _BasicCell
 
 
 BasicCell *  gnc_basic_cell_new (void);
-void         xaccInitBasicCell (BasicCell *bcell);
+void         gnc_basic_cell_init (BasicCell *bcell);
 void         gnc_basic_cell_destroy (BasicCell *bcell);
 
 void         gnc_basic_cell_set_name (BasicCell *cell, int cell_type);
+
+void         gnc_basic_cell_set_sample_text (BasicCell *cell,
+                                             const char *sample_text);
 
 const char * gnc_basic_cell_get_value (BasicCell *cell);
 void         xaccSetBasicCellValue (BasicCell *bcell, const char *value);

@@ -269,20 +269,20 @@ quickfill_cell_destroy (BasicCell *bcell)
 static void
 xaccInitQuickFillCell (QuickFillCell *cell)
 {
-   xaccInitBasicCell (&(cell->cell));
+  gnc_basic_cell_init (&(cell->cell));
 
-   cell->qf = gnc_quickfill_new ();
-   cell->sort = QUICKFILL_LIFO;
-   cell->original = NULL;
+  cell->qf = gnc_quickfill_new ();
+  cell->sort = QUICKFILL_LIFO;
+  cell->original = NULL;
 
-   cell->cell.destroy = quickfill_cell_destroy;
+  cell->cell.destroy = quickfill_cell_destroy;
 
-   cell->cell.enter_cell    = quick_enter;
-   cell->cell.modify_verify = quick_modify;
-   cell->cell.leave_cell    = quick_leave;
-   cell->cell.set_value     = quick_set;
+  cell->cell.enter_cell    = quick_enter;
+  cell->cell.modify_verify = quick_modify;
+  cell->cell.leave_cell    = quick_leave;
+  cell->cell.set_value     = quick_set;
 
-   xaccQuickFillGUIInit (cell);
+  xaccQuickFillGUIInit (cell);
 }
 
 /* ================================================ */
@@ -290,13 +290,13 @@ xaccInitQuickFillCell (QuickFillCell *cell)
 BasicCell *
 xaccMallocQuickFillCell (void)
 {
-   QuickFillCell *cell;
+  QuickFillCell *cell;
 
-   cell = g_new0 (QuickFillCell, 1);
+  cell = g_new0 (QuickFillCell, 1);
 
-   xaccInitQuickFillCell (cell);
+  xaccInitQuickFillCell (cell);
 
-   return &cell->cell;
+  return &cell->cell;
 }
 
 /* ================================================ */

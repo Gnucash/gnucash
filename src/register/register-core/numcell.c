@@ -221,7 +221,7 @@ xaccSetNumCellLastNum (NumCell *cell, const char *str)
 static void
 xaccInitNumCell (NumCell *cell)
 {
-  xaccInitBasicCell (&(cell->cell));
+  gnc_basic_cell_init (&(cell->cell));
 
   cell->next_num = 0;
   cell->next_num_set = FALSE;

@@ -359,7 +359,7 @@ gnc_table_get_align (Table *table, VirtualLocation virt_loc)
   if (cb_cell == NULL)
     return CELL_ALIGN_RIGHT;
 
-  return cb_cell->alignment;
+  return cb_cell->cell->alignment;
 }
 
 /* ==================================================== */

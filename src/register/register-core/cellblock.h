@@ -66,22 +66,9 @@
 #include "gtable.h"
 
 
-typedef enum
-{
-  CELL_ALIGN_RIGHT,
-  CELL_ALIGN_CENTER,
-  CELL_ALIGN_LEFT
-} CellAlignment;
-
 typedef struct
 {
   BasicCell *cell; /* cell handler */
-
-  /* GUI layout information */
-  char *sample_text;       /* sample text for sizing purposes */
-  CellAlignment alignment;
-  gboolean expandable;     /* can fill with extra space */
-  gboolean span;           /* can span multiple columns */
 } CellBlockCell;
 
 

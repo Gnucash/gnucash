@@ -103,7 +103,7 @@ RecnEnter (BasicCell *_cell,
 static void
 xaccInitRecnCell (RecnCell *cell)
 {
-  xaccInitBasicCell (&cell->cell);
+  gnc_basic_cell_init (&cell->cell);
 
   xaccRecnCellSetFlag (cell, NREC);
   cell->confirm_cb = NULL;

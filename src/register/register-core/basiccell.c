@@ -50,7 +50,7 @@ gnc_basic_cell_new (void)
 
   cell = g_new0 (BasicCell, 1);
 
-  xaccInitBasicCell (cell);
+  gnc_basic_cell_init (cell);
 
   return cell;
 }
@@ -93,10 +93,13 @@ gnc_basic_cell_clear (BasicCell *cell)
   cell->is_popup = FALSE;
 
   cell->gui_private = NULL;
+
+  g_free (cell->sample_text);
+  cell->sample_text = NULL;
 }
 
 void
-xaccInitBasicCell (BasicCell *cell)
+gnc_basic_cell_init (BasicCell *cell)
 {
   gnc_basic_cell_clear (cell);
 
@@ -139,6 +142,17 @@ gnc_basic_cell_set_name (BasicCell *cell, int cell_type)
 {
   if (!cell) return;
   cell->cell_type = cell_type;
+}
+
+void
+gnc_basic_cell_set_sample_text (BasicCell *cell,
+                                const char *sample_text)
+{
+  if (!cell) return;
+  if (cell->sample_text == sample_text) return;
+
+  g_free (cell->sample_text);
+  cell->sample_text = g_strdup (sample_text);
 }
 
 const char *

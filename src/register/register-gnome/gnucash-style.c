@@ -180,8 +180,10 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                                 continue;
 
                         cb_cell = gnc_cellblock_get_cell (cursor, row, col);
+                        if (!cb_cell || !cb_cell->cell)
+                                continue;
 
-                        text = cb_cell->sample_text;
+                        text = cb_cell->cell->sample_text;
                         if (text)
                                 cd->can_span_over = FALSE;
 
@@ -249,7 +251,7 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
 
                         cb_cell = gnc_cellblock_get_cell (cursor, 0, col);
 
-                        if (!cb_cell->expandable)
+                        if (!cb_cell->cell->expandable)
                                 continue;
 
                         cd = g_table_index (cd_table, 0, col);
@@ -273,7 +275,7 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
 
                         cb_cell = gnc_cellblock_get_cell (cursor, 0, col);
 
-                        if (!cb_cell->expandable)
+                        if (!cb_cell->cell->expandable)
                                 continue;
 
                         cd = g_table_index (cd_table, 0, col);
@@ -282,7 +284,7 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
 
                         cd->pixel_width += (default_width - width);
 
-                        text = cb_cell->sample_text;
+                        text = cb_cell->cell->sample_text;
                         if (text)
                         {
                                 sample_width = gdk_string_width (font, text);
@@ -341,10 +343,12 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
 
                                 cb_cell = gnc_cellblock_get_cell (cursor,
                                                                   row, col);
+                                if (!cb_cell || !cb_cell->cell)
+                                        continue;
 
                                 cd = g_table_index (cd_table, row, col);
 
-                                if (cb_cell->span)
+                                if (cb_cell->cell->span)
                                 {
                                         cd_span = cd;
                                         continue;
@@ -356,7 +360,7 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
                                 if (cd_span == NULL)
                                         continue;
 
-                                if (cb_cell->sample_text != NULL)
+                                if (cb_cell->cell->sample_text != NULL)
                                 {
                                         cd_span = NULL;
                                         continue;

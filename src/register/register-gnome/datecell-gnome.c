@@ -189,7 +189,7 @@ xaccInitDateCell (DateCell *cell)
   time_t secs;
   char buff[DATE_BUF];
 
-  xaccInitBasicCell (&(cell->cell));
+  gnc_basic_cell_init (&(cell->cell));
 
   cell->cell.is_popup = TRUE;
 

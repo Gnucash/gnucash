@@ -269,10 +269,10 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
   cb_cell = gnc_cellblock_get_cell (cursor, row, col);
 
   cb_cell->cell = gnc_table_layout_get_cell (reg->table->layout, cell_type);
-  cb_cell->sample_text = g_strdup (_(ss->string) + ss->offset);
-  cb_cell->alignment = cell_alignments[cell_type];
-  cb_cell->expandable = cell_type == DESC_CELL;
-  cb_cell->span = cell_type == MEMO_CELL || cell_type == NOTES_CELL;
+  cb_cell->cell->sample_text = g_strdup (_(ss->string) + ss->offset);
+  cb_cell->cell->alignment = cell_alignments[cell_type];
+  cb_cell->cell->expandable = cell_type == DESC_CELL;
+  cb_cell->cell->span = cell_type == MEMO_CELL || cell_type == NOTES_CELL;
 
   cb_cell = gnc_cellblock_get_cell (header, row, col);
 
@@ -282,10 +282,10 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
   if (cb_cell && (cursor == cursor_sl))
   {
     cb_cell->cell = gnc_table_layout_get_cell (reg->table->layout, cell_type);
-    cb_cell->sample_text = g_strdup (_(ss->string) + ss->offset);
-    cb_cell->alignment = cell_alignments[cell_type];
-    cb_cell->expandable = cell_type == DESC_CELL;
-    cb_cell->span = cell_type == MEMO_CELL || cell_type == NOTES_CELL;
+    cb_cell->cell->sample_text = g_strdup (_(ss->string) + ss->offset);
+    cb_cell->cell->alignment = cell_alignments[cell_type];
+    cb_cell->cell->expandable = cell_type == DESC_CELL;
+    cb_cell->cell->span = cell_type == MEMO_CELL || cell_type == NOTES_CELL;
   }
 }
 

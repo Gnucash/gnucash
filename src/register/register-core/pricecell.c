@@ -196,13 +196,13 @@ PriceHelp (BasicCell *bcell)
 BasicCell *
 xaccMallocPriceCell (void)
 {
-   PriceCell *cell;
+  PriceCell *cell;
 
-   cell = g_new0 (PriceCell, 1);
+  cell = g_new0 (PriceCell, 1);
 
-   xaccInitPriceCell (cell);
+  xaccInitPriceCell (cell);
 
-   return &cell->cell;
+  return &cell->cell;
 }
 
 /* ================================================ */
@@ -210,23 +210,23 @@ xaccMallocPriceCell (void)
 static void
 xaccInitPriceCell (PriceCell *cell)
 {
-   xaccInitBasicCell (&(cell->cell));
+  gnc_basic_cell_init (&(cell->cell));
 
-   cell->amount = gnc_numeric_zero ();
-   cell->fraction = 0;
-   cell->blank_zero = TRUE;
+  cell->amount = gnc_numeric_zero ();
+  cell->fraction = 0;
+  cell->blank_zero = TRUE;
 
-   cell->print_info = gnc_default_print_info (FALSE);
+  cell->print_info = gnc_default_print_info (FALSE);
 
-   cell->need_to_parse = FALSE;
+  cell->need_to_parse = FALSE;
 
-   cell->cell.enter_cell = PriceEnter;
-   cell->cell.modify_verify = PriceMV;
-   cell->cell.leave_cell = PriceLeave;
-   cell->cell.set_value = PriceSetValue;
-   cell->cell.get_help_value = PriceHelp;
+  cell->cell.enter_cell = PriceEnter;
+  cell->cell.modify_verify = PriceMV;
+  cell->cell.leave_cell = PriceLeave;
+  cell->cell.set_value = PriceSetValue;
+  cell->cell.get_help_value = PriceHelp;
 
-   xaccPriceGUIInit (cell);
+  xaccPriceGUIInit (cell);
 }
 
 /* ================================================ */

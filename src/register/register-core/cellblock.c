@@ -62,11 +62,6 @@ gnc_cellblock_cell_construct (gpointer _cb_cell, gpointer user_data)
   CellBlockCell *cb_cell = _cb_cell;
 
   cb_cell->cell = NULL;
-
-  cb_cell->sample_text = NULL;
-  cb_cell->alignment = CELL_ALIGN_LEFT;
-  cb_cell->expandable = FALSE;
-  cb_cell->span = FALSE;
 }
 
 static void
@@ -78,9 +73,6 @@ gnc_cellblock_cell_destroy (gpointer _cb_cell, gpointer user_data)
     return;
 
   cb_cell->cell = NULL;
-
-  g_free(cb_cell->sample_text);
-  cb_cell->sample_text = NULL;
 }
 
 static void
