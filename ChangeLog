@@ -1,3 +1,13 @@
+2004-01-31  Christian Stimming  <stimming@tuhh.de>
+
+	* src/engine/kvp_frame.h, src/engine/Account.c: Add clear notice
+	of the semantic change of kvp_frame_get_frame
+	function. Fortunately it seems the only place that still had to be
+	fixed, apart from the hbci module, has been in Account.c.
+
+	* src/import-export/import-account-matcher.h: Make string argument
+	a const char*. Make boolean argument a gboolean.
+
 2004-01-30  Derek Atkins  <derek@ihtfp.com>
 
 	* src/register/ledger-core/split-register-layout.c:  Remove the
