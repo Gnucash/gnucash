@@ -1,3 +1,7 @@
+2001-10-11  Rob Browning  <rlb@defaultvalue.org>
+
+	* configure.in: require at least g-wrap 1.3.1.
+
 2001-10-11  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/register-core/table-allgui.c
