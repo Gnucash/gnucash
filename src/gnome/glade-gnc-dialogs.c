@@ -5879,9 +5879,11 @@ create_Stock_Split_Druid (void)
   GtkWidget *vbox100;
   GtkWidget *label847683;
   GtkWidget *label847684;
+  GtkWidget *label847693;
   GtkWidget *vbox101;
   GtkWidget *date_box;
   GtkWidget *distribution_box;
+  GtkWidget *description_entry;
   GtkWidget *hseparator2;
   GtkWidget *label847691;
   GtkWidget *hbox93;
@@ -5900,7 +5902,7 @@ create_Stock_Split_Druid (void)
   GtkWidget *label847689;
   GtkWidget *vbox104;
   GtkWidget *cash_box;
-  GtkWidget *description_entry;
+  GtkWidget *memo_entry;
   GtkWidget *hbox88;
   GtkWidget *frame43;
   GtkWidget *income_scroll;
@@ -6027,7 +6029,7 @@ create_Stock_Split_Druid (void)
   gtk_widget_show (druid_vbox32);
   gtk_container_set_border_width (GTK_CONTAINER (druid_vbox32), 5);
 
-  label847681 = gtk_label_new (_("Enter the date and the number of shares you gained or lost from the stock split or merger.\nFor stock mergers (negative splits) use a negative value for the share distribution."));
+  label847681 = gtk_label_new (_("Enter the date and the number of shares you gained or lost from the stock split or merger.\nFor stock mergers (negative splits) use a negative value for the share distribution.\nYou can also enter a description of the transaction, or accept the default one."));
   gtk_widget_ref (label847681);
   gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "label847681", label847681,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -6048,6 +6050,7 @@ create_Stock_Split_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (vbox100);
   gtk_box_pack_start (GTK_BOX (hbox86), vbox100, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox100), 2);
 
   label847683 = gtk_label_new (_("Date:"));
   gtk_widget_ref (label847683);
@@ -6064,6 +6067,14 @@ create_Stock_Split_Druid (void)
   gtk_widget_show (label847684);
   gtk_box_pack_start (GTK_BOX (vbox100), label847684, FALSE, FALSE, 0);
   gtk_misc_set_alignment (GTK_MISC (label847684), 1, 0.5);
+
+  label847693 = gtk_label_new (_("Description:"));
+  gtk_widget_ref (label847693);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "label847693", label847693,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847693);
+  gtk_box_pack_start (GTK_BOX (vbox100), label847693, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label847693), 1, 0.5);
 
   vbox101 = gtk_vbox_new (TRUE, 4);
   gtk_widget_ref (vbox101);
@@ -6085,6 +6096,14 @@ create_Stock_Split_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (distribution_box);
   gtk_box_pack_start (GTK_BOX (vbox101), distribution_box, FALSE, FALSE, 0);
+
+  description_entry = gtk_entry_new ();
+  gtk_widget_ref (description_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "description_entry", description_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (description_entry);
+  gtk_box_pack_start (GTK_BOX (vbox101), description_entry, FALSE, FALSE, 0);
+  gtk_entry_set_text (GTK_ENTRY (description_entry), _("Stock Split"));
 
   hseparator2 = gtk_hseparator_new ();
   gtk_widget_ref (hseparator2);
@@ -6149,7 +6168,7 @@ create_Stock_Split_Druid (void)
   gtk_box_pack_start (GTK_BOX (druid_vbox33), label847687, FALSE, FALSE, 0);
   gtk_label_set_justify (GTK_LABEL (label847687), GTK_JUSTIFY_LEFT);
 
-  vbox102 = gtk_vbox_new (FALSE, 8);
+  vbox102 = gtk_vbox_new (FALSE, 10);
   gtk_widget_ref (vbox102);
   gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "vbox102", vbox102,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -6179,7 +6198,7 @@ create_Stock_Split_Druid (void)
   gtk_box_pack_start (GTK_BOX (vbox103), label847688, FALSE, FALSE, 0);
   gtk_misc_set_alignment (GTK_MISC (label847688), 1, 0.5);
 
-  label847689 = gtk_label_new (_("Description:"));
+  label847689 = gtk_label_new (_("Memo:"));
   gtk_widget_ref (label847689);
   gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "label847689", label847689,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -6201,12 +6220,13 @@ create_Stock_Split_Druid (void)
   gtk_widget_show (cash_box);
   gtk_box_pack_start (GTK_BOX (vbox104), cash_box, FALSE, FALSE, 0);
 
-  description_entry = gtk_entry_new ();
-  gtk_widget_ref (description_entry);
-  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "description_entry", description_entry,
+  memo_entry = gtk_entry_new ();
+  gtk_widget_ref (memo_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "memo_entry", memo_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (description_entry);
-  gtk_box_pack_start (GTK_BOX (vbox104), description_entry, FALSE, FALSE, 0);
+  gtk_widget_show (memo_entry);
+  gtk_box_pack_start (GTK_BOX (vbox104), memo_entry, FALSE, FALSE, 0);
+  gtk_entry_set_text (GTK_ENTRY (memo_entry), _("Cash In Lieu"));
 
   hbox88 = gtk_hbox_new (TRUE, 2);
   gtk_widget_ref (hbox88);
@@ -6228,6 +6248,7 @@ create_Stock_Split_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (income_scroll);
   gtk_container_add (GTK_CONTAINER (frame43), income_scroll);
+  gtk_container_set_border_width (GTK_CONTAINER (income_scroll), 3);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (income_scroll), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
   frame44 = gtk_frame_new (_("Asset Account"));
@@ -6243,6 +6264,7 @@ create_Stock_Split_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (asset_scroll);
   gtk_container_add (GTK_CONTAINER (frame44), asset_scroll);
+  gtk_container_set_border_width (GTK_CONTAINER (asset_scroll), 3);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (asset_scroll), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
   finish_page = gnome_druid_page_finish_new ();

@@ -21,6 +21,7 @@ src/gnome/dialog-transfer.c
 src/gnome/dialog-utils.c
 src/gnome/druid-commodity.c
 src/gnome/druid-qif-import.c
+src/gnome/druid-stock-split.c
 src/gnome/file-history.c
 src/gnome/glade-gnc-dialogs.c
 src/gnome/gnc-commodity-edit.c

@@ -8742,7 +8742,8 @@ words.
 	  <class>GtkLabel</class>
 	  <name>label847681</name>
 	  <label>Enter the date and the number of shares you gained or lost from the stock split or merger.
-For stock mergers (negative splits) use a negative value for the share distribution.</label>
+For stock mergers (negative splits) use a negative value for the share distribution.
+You can also enter a description of the transaction, or accept the default one.</label>
 	  <justify>GTK_JUSTIFY_CENTER</justify>
 	  <wrap>False</wrap>
 	  <xalign>0.5</xalign>
@@ -8771,6 +8772,7 @@ For stock mergers (negative splits) use a negative value for the share distribut
 	  <widget>
 	    <class>GtkVBox</class>
 	    <name>vbox100</name>
+	    <border_width>2</border_width>
 	    <homogeneous>True</homogeneous>
 	    <spacing>4</spacing>
 	    <child>
@@ -8800,6 +8802,23 @@ For stock mergers (negative splits) use a negative value for the share distribut
 	      <class>GtkLabel</class>
 	      <name>label847684</name>
 	      <label>Share Distribution:</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>1</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label847693</name>
+	      <label>Description:</label>
 	      <justify>GTK_JUSTIFY_CENTER</justify>
 	      <wrap>False</wrap>
 	      <xalign>1</xalign>
@@ -8855,6 +8874,21 @@ For stock mergers (negative splits) use a negative value for the share distribut
 	      <widget>
 		<class>Placeholder</class>
 	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkEntry</class>
+	      <name>description_entry</name>
+	      <can_focus>True</can_focus>
+	      <editable>True</editable>
+	      <text_visible>True</text_visible>
+	      <text_max_length>0</text_max_length>
+	      <text>Stock Split</text>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
 	    </widget>
 	  </widget>
 	</widget>
@@ -8979,7 +9013,7 @@ enter the details of that payment here. Otherwise, just click `Next'.</label>
 	  <name>vbox102</name>
 	  <border_width>5</border_width>
 	  <homogeneous>False</homogeneous>
-	  <spacing>8</spacing>
+	  <spacing>10</spacing>
 	  <child>
 	    <padding>0</padding>
 	    <expand>True</expand>
@@ -9028,7 +9062,7 @@ enter the details of that payment here. Otherwise, just click `Next'.</label>
 	      <widget>
 		<class>GtkLabel</class>
 		<name>label847689</name>
-		<label>Description:</label>
+		<label>Memo:</label>
 		<justify>GTK_JUSTIFY_CENTER</justify>
 		<wrap>False</wrap>
 		<xalign>1</xalign>
@@ -9072,12 +9106,12 @@ enter the details of that payment here. Otherwise, just click `Next'.</label>
 
 	      <widget>
 		<class>GtkEntry</class>
-		<name>description_entry</name>
+		<name>memo_entry</name>
 		<can_focus>True</can_focus>
 		<editable>True</editable>
 		<text_visible>True</text_visible>
 		<text_max_length>0</text_max_length>
-		<text></text>
+		<text>Cash In Lieu</text>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -9113,6 +9147,7 @@ enter the details of that payment here. Otherwise, just click `Next'.</label>
 	      <widget>
 		<class>GtkScrolledWindow</class>
 		<name>income_scroll</name>
+		<border_width>3</border_width>
 		<hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
 		<vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
 		<hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
@@ -9139,6 +9174,7 @@ enter the details of that payment here. Otherwise, just click `Next'.</label>
 	      <widget>
 		<class>GtkScrolledWindow</class>
 		<name>asset_scroll</name>
+		<border_width>3</border_width>
 		<hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
 		<vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
 		<hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
