@@ -30,6 +30,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "messages.h"
@@ -254,6 +255,7 @@ configLayout (SplitRegister *reg)
             FANCY (XFRM,   xfrm,     2,  0);
             BASIC (MEMO,   memo,     3,  0);
          }
+         break;
 
       /* --------------------------------------------------------- */
       case STOCK_REGISTER:
@@ -303,9 +305,12 @@ configLayout (SplitRegister *reg)
             FANCY (VALU,   value,    8,  0);
             FANCY (SHRS,   shrs,     9,  0);
          }
+         break;
       /* --------------------------------------------------------- */
       default:
-         printf ("Internal Error!!!!! \n");
+         printf ("Internal Error: configLayout(): "
+           "unknown register type %d \n", type);
+         break;
    }
 }
 

@@ -58,19 +58,19 @@
 /* defined register types */
 /* "registers" are single-account display windows.
  * "ledgers" are multiple-account display windows */
-#define BANK_REGISTER       0
-#define CASH_REGISTER       1
-#define ASSET_REGISTER      2
-#define CREDIT_REGISTER     3
-#define LIABILITY_REGISTER  4
-#define INCOME_REGISTER     5
-#define EXPENSE_REGISTER    6
-#define EQUITY_REGISTER     7
-#define STOCK_REGISTER      8
+#define BANK_REGISTER       1
+#define CASH_REGISTER       2
+#define ASSET_REGISTER      3
+#define CREDIT_REGISTER     4
+#define LIABILITY_REGISTER  5
+#define INCOME_REGISTER     6
+#define EXPENSE_REGISTER    7
+#define EQUITY_REGISTER     8
+#define STOCK_REGISTER      9
 
-#define GENERAL_LEDGER      9
-#define INCOME_LEDGER       10
-#define PORTFOLIO           11
+#define GENERAL_LEDGER      10
+#define INCOME_LEDGER       11
+#define PORTFOLIO           12
 #define REG_TYPE_MASK       0xff
 
 /* 
