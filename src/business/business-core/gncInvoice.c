@@ -317,6 +317,7 @@ void gncInvoiceAttachInvoiceToTxn (GncInvoice *invoice, Transaction *txn)
   value = kvp_value_new_guid (gncInvoiceGetGUID (invoice));
   kvp_frame_set_slot_path (kvp, value, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
   kvp_value_delete (value);
+  xaccTransSetTxnType (txn, TXN_TYPE_INVOICE);
   xaccTransCommitEdit (txn);
 
   gncInvoiceSetPostedTxn (invoice, txn);
@@ -346,7 +347,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   GList *iter;
   GList *splitinfo = NULL;
   gnc_numeric total;
-  gnc_commodity *commonCommodity = NULL;
+  gnc_commodity *commonCommodity = NULL; /* XXX: FIXME */
   struct acct_val {
     Account *	acc;
     gnc_numeric val;
@@ -354,12 +355,10 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
   if (!invoice || !acc) return NULL;
 
-  /* XXX: Need to obtain the book */
   txn = xaccMallocTransaction (invoice->book);
   xaccTransBeginEdit (txn);
 
-  /* Figure out the common currency */
-  /* XXX */
+  /* XXX: Figure out the common currency */
 
   /* Set Transaction Description (customer), Num (invoice ID), Currency */
   xaccTransSetDescription
@@ -374,51 +373,41 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccTransSetDatePostedTS (txn, date);
   }
 
+  /* Set the txn due date to be equal to the invoice */
+  {
+    Timespec ddue = gncInvoiceGetDateDue (invoice);
+    xaccTransSetDateDueTS (txn, &ddue);
+  }
+
   /* Iterate through the entries; sum up everything for each account.
    * then create the appropriate splits in this txn.
    */
   total = gnc_numeric_zero();
   for (iter = gncInvoiceGetEntries(invoice); iter; iter = iter->next) {
+    gnc_numeric value, tax;
     GncEntry * entry = iter->data;
-    Account *this_acc = gncEntryGetAccount (entry);
-    gnc_numeric disc = gncEntryGetDiscount (entry);
-    gnc_numeric subtotal = gnc_numeric_mul (gncEntryGetQuantity (entry),
-					    gncEntryGetPrice (entry),
-					    100, /* XXX */
-					    GNC_RND_ROUND);
+    Account *this_acc;
 
-    /* Find the account value for this_acc.  If we haven't seen this
-     * account before, create a new total and add to list
-     */
-    GET_OR_ADD_ACCVAL (splitinfo, this_acc, acc_val);
+    /* Obtain the Entry Value and TaxValue */
+    gncEntryGetValue (entry, &value, &tax);
 
-    /* Now compute the split value and add it to the totals */
-    {
-      gint disc_type = gncEntryGetDiscountType (entry);
-      gnc_numeric value;
-
-      if (GNC_ENTRY_INTERP_IS_PERCENT (disc_type))
-	disc = gnc_numeric_mul (subtotal, disc, 100 /* XXX */, GNC_RND_ROUND);
-
-      value = gnc_numeric_sub_fixed (subtotal, disc);
-      if (disc_type & GNC_ENTRY_PRETAX_FLAG)
-	subtotal = value;
+    /* add the value for the account split */
+    this_acc = gncEntryGetAccount (entry);
+    if (this_acc) {
+      /* Find the account value for this_acc.  If we haven't seen this
+       * account before, create a new total and add to list
+       */
+      GET_OR_ADD_ACCVAL (splitinfo, this_acc, acc_val);
 
       acc_val->val = gnc_numeric_add_fixed (acc_val->val, value);
       total = gnc_numeric_add_fixed (total, value);
     }
 
-    /* Repeat for the Entry Tax */
+    /* Repeat for the TaxValue */
     this_acc = gncEntryGetTaxAccount (entry);
     if (this_acc) {
-      gnc_numeric tax = gncEntryGetTax (entry);
-      gint tax_type = gncEntryGetTaxType (entry);
 
       GET_OR_ADD_ACCVAL (splitinfo, this_acc, acc_val);
-
-      if (GNC_ENTRY_INTERP_IS_PERCENT (tax_type))
-	tax = gnc_numeric_mul (subtotal, tax, 100 /* XXX */, GNC_RND_ROUND);
-
       acc_val->val = gnc_numeric_add_fixed (acc_val->val, tax);
       total = gnc_numeric_add_fixed (total, tax);
     }
@@ -450,8 +439,9 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccTransAppendSplit (txn, split);
   }
 
+  /* Now attach this invoice to the txn and account */
+  gncInvoiceAttachInvoiceToTxn (invoice, txn);
   gncInvoiceSetPostedAcc (invoice, acc);
-  gncInvoiceSetPostedTxn (invoice, txn);
 
   xaccTransCommitEdit (txn);
 
@@ -463,17 +453,16 @@ GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn)
   kvp_frame *kvp;
   kvp_value *value;
   GUID *guid;
-  GNCBook *book = NULL;		/* XXX: FIXME */
+  GNCBook *book;
 
   if (!txn) return NULL;
 
+  book = xaccTransGetBook (txn);
   kvp = xaccTransGetSlots (txn);
   value = kvp_frame_get_slot_path (kvp, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
   if (!value) return NULL;
 
   guid = kvp_value_get_guid (value);
-  /* XXX: Need to get GNCBook from Transaction */
-  /* XXX: lookup invoice from session/guid */
 
   return xaccLookupEntity (gnc_book_get_entity_table (book),
 			   guid, _GNC_MOD_NAME);

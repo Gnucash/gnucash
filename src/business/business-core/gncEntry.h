@@ -63,6 +63,12 @@ gnc_numeric gncEntryGetDiscount (GncEntry *entry);
 gint gncEntryGetDiscountType (GncEntry *entry);
 const char * gncEntryGetDiscountTypeStr (gint type);
 
+/* Compute the Entry value and tax-value numbers, based on the
+ * quantity, price, discount, tax, and discount/tax types
+ */
+void gncEntryGetValue (GncEntry *entry, gnc_numeric *value,
+		       gnc_numeric *tax_value);
+
 gint gncEntryGetTypeFromStr (const char *type);
 
 Account * gncEntryGetAccount (GncEntry *entry);

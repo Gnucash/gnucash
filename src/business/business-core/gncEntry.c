@@ -341,6 +341,51 @@ GncEntry * gncEntryLookup (GNCBook *book, const GUID *guid)
 			   guid, _GNC_MOD_NAME);
 }
 
+void gncEntryGetValue (GncEntry *entry, gnc_numeric *value,
+		       gnc_numeric *tax_value)
+{
+  gnc_numeric	subtotal;
+  gnc_numeric	disc;
+  gnc_numeric	this_value;
+  gint		type;
+
+  if (!entry) return;
+
+  /* Compute the value */
+
+  type = gncEntryGetDiscountType (entry);
+  disc = gncEntryGetDiscount (entry);
+  subtotal = gnc_numeric_mul (gncEntryGetQuantity (entry),
+			      gncEntryGetPrice (entry),
+			      100, /* XXX */
+			      GNC_RND_ROUND);
+
+  if (GNC_ENTRY_INTERP_IS_PERCENT (type))
+    disc = gnc_numeric_mul (subtotal, disc, 100 /* XXX */, GNC_RND_ROUND);
+
+  this_value = gnc_numeric_sub_fixed (subtotal, disc);
+  if (type & GNC_ENTRY_PRETAX_FLAG)
+    subtotal = this_value;
+
+  if (value != NULL)
+    *value = this_value;
+
+
+  /* Compute the tax value */
+
+  if (tax_value != NULL) {
+    gnc_numeric tax = gncEntryGetTax (entry);
+    type = gncEntryGetTaxType (entry);
+
+    if (GNC_ENTRY_INTERP_IS_PERCENT (type))
+      tax = gnc_numeric_mul (subtotal, tax, 100 /* XXX */, GNC_RND_ROUND);
+
+    *tax_value = tax;
+  }
+
+  return;
+}
+
 void gncEntryCommitEdit (GncEntry *entry)
 {
   if (!entry) return;
