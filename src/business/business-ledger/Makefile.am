@@ -27,6 +27,7 @@ libgnc_business_ledger_la_LIBADD = \
 
 AM_CFLAGS = \
   -I${top_srcdir}/src/business/business-core \
+  -I${top_srcdir}/src/business/business-utils \
   -I${top_srcdir}/src/business/dialog-tax-table \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \

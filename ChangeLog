@@ -32,6 +32,18 @@
 
 	* gncEntryLedgerLoad.c: commented-out code to load tax-tables from
 	  the options; waiting until code is actually written.
+
+	* src/app-utils/option-util.[ch]: add new functions to handle
+	  kvp-options from C (similar to the gnome-utils functions to
+	  create an option dialog from a kvp-frame for a particular
+	  object).
+	* src/business/business-utils/business-options.[ch]: add code to
+	  lookup business options in an option database, from C.
+	* src/business/business-ledger/Makefile.am: include business-utils headers
+	* src/business/business-ledger/gncEntryLedgerLoad.c: load the tax-table
+	  from the book-kvp options and use that as the default tax table
+
+	FIXES 93462.
 	
 2003-01-16  Derek Atkins  <derek@ihtfp.com>
 

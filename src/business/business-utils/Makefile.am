@@ -4,10 +4,12 @@ AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/business/business-core \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
-  ${GLIB_CFLAGS} 
+  ${GLIB_CFLAGS} \
+  ${GNOME_INCLUDEDIR}
 
 libgncmod_business_utils_la_SOURCES = \
   gncmod-business-utils.c \

@@ -28,6 +28,8 @@
 #include <glib.h>
 
 #include "gnc-commodity.h"
+#include "kvp_frame.h"
+#include "GNCId.h"
 #include "gnc-ui-common.h"
 #include "date.h"
 
@@ -59,6 +61,17 @@ void gnc_option_set_selectable (GNCOption *option, gboolean selectable);
 
 GNCOptionDB * gnc_option_db_new(SCM guile_options);
 void          gnc_option_db_destroy(GNCOptionDB *odb);
+
+/* Create an option DB for a particular type, and save/load from a kvp.
+ * This assumes the gnc:*kvp-option-path* location for the options
+ * in the kvp.
+ *
+ * Note: the id_type MUST be a reference to the actual SCM
+ * gnc:id-type.  Just wrapping the type in scheme is *NOT* sufficient.
+ */
+GNCOptionDB * gnc_option_db_new_for_type(SCM id_type);
+void gnc_option_db_load_from_kvp(GNCOptionDB* odb, kvp_frame *slots);
+void gnc_option_db_save_to_kvp(GNCOptionDB* odb, kvp_frame *slots);
 
 void gnc_option_db_set_ui_callbacks (GNCOptionDB *odb,
                                      GNCOptionGetUIValue get_ui_value,

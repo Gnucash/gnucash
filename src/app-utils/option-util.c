@@ -257,6 +257,90 @@ gnc_option_db_find (SCM guile_options)
   return find_info.odb;
 }
 
+/* Create an option DB for a particular data type */
+GNCOptionDB *
+gnc_option_db_new_for_type(SCM id_type)
+{
+  static SCM make_option_proc = SCM_UNDEFINED;
+  SCM options;
+
+  if (!id_type) return NULL;
+
+  if (make_option_proc == SCM_UNDEFINED) {
+    make_option_proc = gh_eval_str("gnc:make-kvp-options");
+    if (!gh_procedure_p (make_option_proc)) {
+      PERR ("not a procedure\n");
+      make_option_proc = SCM_UNDEFINED;
+      return NULL;
+    }
+  }
+
+  options = gh_call1 (make_option_proc, id_type);
+  return gnc_option_db_new (options);
+}
+
+void
+gnc_option_db_load_from_kvp(GNCOptionDB* odb, kvp_frame *slots)
+{
+  static SCM kvp_to_scm = SCM_UNDEFINED;
+  static SCM kvp_option_path = SCM_UNDEFINED;
+  SCM scm_slots;
+
+  if (!odb || !slots) return;
+
+  if (kvp_to_scm == SCM_UNDEFINED) {
+    kvp_to_scm = gh_eval_str("gnc:options-kvp->scm");
+    if (!gh_procedure_p (kvp_to_scm)) {
+      PERR ("not a procedure\n");
+      kvp_to_scm = SCM_UNDEFINED;
+      return;
+    }
+  }
+
+  if (kvp_option_path == SCM_UNDEFINED) {
+    kvp_option_path = gh_eval_str("gnc:*kvp-option-path*");
+    if (kvp_option_path == SCM_UNDEFINED) {
+      PERR ("can't find the option path"); 
+      return;
+    }
+  }
+
+  scm_slots = gw_wcp_assimilate_ptr (slots, gh_eval_str("<gnc:kvp-frame*>"));
+
+  gh_call3 (kvp_to_scm, odb->guile_options, scm_slots, kvp_option_path);
+}
+
+void
+gnc_option_db_save_to_kvp(GNCOptionDB* odb, kvp_frame *slots)
+{
+  static SCM scm_to_kvp = SCM_UNDEFINED;
+  static SCM kvp_option_path = SCM_UNDEFINED;
+  SCM scm_slots;
+
+  if (!odb || !slots) return;
+
+  if (scm_to_kvp == SCM_UNDEFINED) {
+    scm_to_kvp = gh_eval_str("gnc:options-scm->kvp");
+    if (!gh_procedure_p (scm_to_kvp)) {
+      PERR ("not a procedure\n");
+      scm_to_kvp = SCM_UNDEFINED;
+      return;
+    }
+  }
+
+  if (kvp_option_path == SCM_UNDEFINED) {
+    kvp_option_path = gh_eval_str("gnc:*kvp-option-path*");
+    if (kvp_option_path == SCM_UNDEFINED) {
+      PERR ("can't find the option path"); 
+      return;
+    }
+  }
+
+  scm_slots = gw_wcp_assimilate_ptr (slots, gh_eval_str("<gnc:kvp-frame*>"));
+
+  gh_call3 (scm_to_kvp, odb->guile_options, scm_slots, kvp_option_path);
+}
+
 /********************************************************************\
  * gnc_option_db_destroy                                            *
  *   unregister the scheme options and free all the memory          *
