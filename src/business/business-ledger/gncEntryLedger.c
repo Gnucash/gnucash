@@ -11,6 +11,7 @@
 #include <glib.h>
 
 #include "Account.h"
+#include "AccWindow.h"
 #include "gnc-ui-util.h"
 #include "combocell.h"
 #include "pricecell.h"
@@ -57,16 +58,63 @@ gnc_entry_ledger_get_blank_entry (GncEntryLedger *ledger)
   return gncEntryLookup (ledger->book, &(ledger->blank_entry_guid));
 }
 		 
+Account *
+gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
+				      const char *name, gboolean *new)
+{
+  const char *placeholder = _("The account %s does not allow transactions.\n");
+  const char *missing = _("The account %s does not exist.\n"
+			  "Would you like to create it?");
+  char *fullname;
+  ComboCell *cell = (ComboCell *) bcell;
+  Account *account;
+
+  /* No changes, as yet. */
+  *new = FALSE;
+
+  /* Find the account */
+  account = xaccGetAccountFromFullName (gnc_get_current_group (),
+					name, gnc_get_account_separator ());
+
+  if (!account) {
+    /* Ask if they want to create a new one. */
+    if (!gnc_verify_dialog_parented (ledger->parent, TRUE, missing, name))
+      return NULL;
+    
+    /* User said yes, they want to create a new account. */
+    account = gnc_ui_new_accounts_from_name_window (name);
+    if (!account)
+      return NULL;
+    *new = TRUE;
+
+    /* Now have a new account. Update the cell with the name as created. */
+    fullname = xaccAccountGetFullName (account, gnc_get_account_separator ());
+    gnc_combo_cell_set_value (cell, fullname);
+    gnc_basic_cell_set_changed (&cell->cell, TRUE);
+    g_free (fullname);
+  }
+
+  /* See if the account (either old or new) is a placeholder. */
+  if (xaccAccountGetPlaceholder (account)) {
+    gnc_error_dialog_parented (GTK_WINDOW(ledger->parent), placeholder, name);
+  }
+
+  /* Be seeing you. */
+  return account;
+}
 
 Account * gnc_entry_ledger_get_account (GncEntryLedger *ledger,
 					const char * cell_name)
 {
-  const char * name =
-    gnc_table_layout_get_cell_value (ledger->table->layout, cell_name);
+  BasicCell *cell;
+  const char * name;
+  gboolean dummy;
 
-  return xaccGetAccountFromFullName (gnc_book_get_group (ledger->book),
-				     name,
-				     gnc_get_account_separator ());
+  cell = gnc_table_layout_get_cell (ledger->table->layout, cell_name);
+  if (!cell)
+    return NULL;
+  name = gnc_basic_cell_get_value (cell);
+  return gnc_entry_ledger_get_account_by_name (ledger, cell, name, &dummy);
 }
 
 GncTaxTable * gnc_entry_ledger_get_taxtable (GncEntryLedger *ledger,

@@ -279,7 +279,6 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
   do
   {
     ComboCell *cell;
-    Account *account;
     char *name;
     char *cell_name = NULL;
 
@@ -316,31 +315,9 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
     if (!name || *name == '\0')
       break;
 
-    account = xaccGetAccountFromFullName (gnc_book_get_group (ledger->book),
-                                          cell->cell.value,
-                                          gnc_get_account_separator ());
-    if (account)
-      break;
-
-    {
-      const char *format = _("The account %s does not exist.\n"
-                             "Would you like to create it?");
-      if (!gnc_verify_dialog_parented (ledger->parent, TRUE, format, name))
-        break;
-    }
-
-    ledger->full_refresh = FALSE;
-
-    account = gnc_ui_new_accounts_from_name_window (name);
-    if (!account)
-      break;
-
-    ledger->full_refresh = TRUE;
-
-    name = xaccAccountGetFullName (account, gnc_get_account_separator ());
-    gnc_combo_cell_set_value (cell, name);
-    gnc_basic_cell_set_changed (&cell->cell, TRUE);
-    g_free (name);
+    /* Create the account if necessary. Also checks for a placeholder */
+    (void) gnc_entry_ledger_get_account_by_name (ledger, (BasicCell *)cell, cell->cell.value,
+						 &ledger->full_refresh);
 
   } while (FALSE);
 

@@ -13,6 +13,10 @@
 	accounts.  (gnc_split_register_get_account): Call the new function
 	to get the addditional checks.  This solves #92157.
 
+	* src/business/business-ledger/gncEntryLedger.c: 
+	* src/business/business-ledger/gncEntryLedgerControl.c: Implement
+	the equivalent fixes for the business ledger.
+
 2002-11-12  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/Transaction-matcher.c: Fix previous patch.  
 	gcc 3.2 is too forgiving...
