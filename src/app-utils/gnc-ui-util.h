@@ -69,9 +69,6 @@ const char * gnc_ui_account_get_field_name (AccountFieldCode field);
 char * gnc_ui_account_get_field_value_string (Account *account,
                                               AccountFieldCode field);
 
-/* Must g_free string when done */
-char * gnc_ui_account_get_tax_info_string (Account *account);
-
 gnc_numeric gnc_ui_account_get_balance (Account *account,
                                         gboolean include_children);
 

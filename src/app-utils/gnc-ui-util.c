@@ -42,6 +42,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "gnc-module.h"
 #include "messages.h"
 
 
@@ -243,6 +244,87 @@ gnc_ui_account_get_balance (Account *account, gboolean include_children)
     balance = gnc_numeric_neg (balance);
 
   return balance;
+}
+
+
+static char *
+gnc_ui_account_get_tax_info_string (Account *account)
+{
+  static SCM get_form = SCM_UNDEFINED;
+  static SCM get_desc = SCM_UNDEFINED;
+
+  GNCAccountType atype;
+  const char *code;
+  SCM category;
+  SCM code_scm;
+  char *result;
+  char *form;
+  char *desc;
+  SCM scm;
+
+  if (get_form == SCM_UNDEFINED)
+  {
+    GNCModule module;
+
+    module = gnc_module_load ("gnucash/report/locale-specific/us", 0);
+
+    g_return_val_if_fail (module, NULL);
+
+    get_form = gh_eval_str ("gnc:txf-get-form");
+    get_desc = gh_eval_str ("gnc:txf-get-description");
+  }
+
+  g_return_val_if_fail (gh_procedure_p (get_form), NULL);
+  g_return_val_if_fail (gh_procedure_p (get_desc), NULL);
+
+  if (!account)
+    return NULL;
+
+  if (!xaccAccountGetTaxRelated (account))
+    return NULL;
+
+  atype = xaccAccountGetType (account);
+  if (atype != INCOME && atype != EXPENSE)
+    return NULL;
+
+  code = xaccAccountGetTaxUSCode (account);
+  if (!code)
+    return NULL;
+
+  category = gh_eval_str (atype == INCOME ?
+                          "txf-income-categories" :
+                          "txf-expense-categories");
+
+  code_scm = gh_symbol2scm (code);
+
+  scm = gh_call2 (get_form, category, code_scm);
+  if (!gh_string_p (scm))
+    return NULL;
+
+  form = gh_scm2newstr (scm, NULL);
+  if (!form)
+    return NULL;
+
+  scm = gh_call2 (get_desc, category, code_scm);
+  if (!gh_string_p (scm))
+  {
+    free (form);
+    return NULL;
+  }
+
+  desc = gh_scm2newstr (scm, NULL);
+  if (!desc)
+  {
+    free (form);
+    return NULL;
+  }
+
+  result = g_strdup_printf ("%s %s", form, desc);
+
+  free (form);
+  free (desc);
+
+  return result;
 }
 
 

@@ -1,7 +1,7 @@
 TESTS = \
   test-link-module \
   test-load-module
-#  test-exp-parser \
+#  test-exp-parser
 
 TESTS_ENVIRONMENT= \
    GNC_MODULE_PATH=../../engine:../../gnc-module:../../calculation:.. \
@@ -17,11 +17,12 @@ LDADD = \
    ../../gnc-module/libgncmodule.la
 #   ../libgncmod-app-utils.la \
 #   ../../engine/libgw-engine.la \
-#   ${top_srcdir}/src/test-core/libgncmod-test.la \
+#   ${top_srcdir}/src/engine/libgw-glib.la \
+#   ${top_srcdir}/src/test-core/libgncmod-test.la
 
 bin_PROGRAMS = \
   test-link-module
-#  test-exp-parser \
+#  test-exp-parser
 
 INCLUDES = \
   -I${top_srcdir}/src/test-core \

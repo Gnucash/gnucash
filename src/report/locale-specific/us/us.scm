@@ -1,3 +1,16 @@
-
 (define-module (gnucash report locale-specific us))
 (use-modules (gnucash report taxtxf))  
+
+(export gnc:txf-get-payer-name-source)
+(export gnc:txf-get-form)
+(export gnc:txf-get-description)
+(export gnc:txf-get-format)
+(export gnc:txf-get-multiple)
+(export gnc:txf-get-category-key)
+(export gnc:txf-get-help)
+(export gnc:txf-get-codes)
+(export gnc:txf-get-code-info)
+(export txf-help-categories)
+(export txf-income-categories)
+(export txf-expense-categories)
+
