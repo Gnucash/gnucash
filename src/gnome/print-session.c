@@ -298,6 +298,7 @@ gnc_print_session_print(PrintSession * ps) {
 }
 
 #else
+
 /* print preview dialog stuff */
 PrintPreviewDialog * gnc_ui_print_preview_create(PrintSession * ps) {
   return NULL;
