@@ -35,11 +35,11 @@
       "#include <gnc-engine.h>\n"
       "#include <gnc-commodity.h>\n"
       "#include <gnc-numeric.h>\n"
+      "#include <gnc-totd-dialog.h>\n"
       "#include <window-main.h>\n"
       "#include <gnc-gui-query.h>\n"
       "#include <dialog-new-user.h>\n"
       "#include <dialog-progress.h>\n"
-      "#include <dialog-totd.h>\n"
       "#include <dialog-commodity.h>\n"
       "#include <druid-hierarchy.h>\n"
       "#include <top-level.h>\n"
@@ -142,7 +142,7 @@
    ws
    'gnc:ui-totd-dialog-create-and-run
    '<gw:void>
-   "gnc_ui_totd_dialog_create_and_run"
+   "gnc_totd_dialog_create_and_run"
    '()
    "Create and run the \"Tip Of The Day\" dialog")
 

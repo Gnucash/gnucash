@@ -1,3 +1,33 @@
+2003-05-30  Jan Arne Petersen  <jpetersen@uni-bonn.de>
+
+        Move egg to lib.
+	* configure.in:
+	* lib/Makefile.am:
+        * lib/egg
+	* src/gnome-utils/Makefile.am:
+	* src/import-export/qif-import/Makefile.am:
+
+	* src/gnome-utils/gnc-dense-cal.c: Fix some Gtk 2 incompatibilty problems.
+        (gnc_dense_cal_class_init), (gnc_dense_cal_init):
+
+	Create a new tip of the day dialog.
+	* src/gnome/Makefile.am:
+	* src/gnome/gnc-totd-dialog.[ch]:
+	* src/gnome/glade/Makefile.am:
+	* src/gnome/glade/totd.glade:
+	* src/gnome/gw-gnc-spec.scm:
+	* src/gnome/window-main.c: (gnc_main_window_totd_cb):
+	* src/scm/tip-of-the-day.scm:
+
+	Replace GnomeDialog by GtkDialog.
+	* src/gnome/dialog-price-edit-db.c: (prices_response),
+	(remove_old_clicked), (gnc_prices_dialog_create), (close_handler):
+
+	Fix a bug (multiple tabs) in the main window.
+	* src/gnome/gnc-main-window.c: (gnc_main_window_close_page),
+	(gnc_main_window_setup_window), (gnc_main_window_switch_page),
+	(gnc_main_window_cmd_help_totd):
+
 2003-05-27  Jan Arne Petersen  <jpetersen@uni-bonn.de>
 
 	* configure.in: Requires gtk+-2.0 >= 2.2 and libgnomeui-2.0 >= 2.2

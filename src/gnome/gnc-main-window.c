@@ -23,7 +23,6 @@
 #include "dialog-options.h"
 #include "dialog-scheduledxaction.h"
 #include "dialog-sxsincelast.h"
-#include "dialog-totd.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "druid-loan.h"
@@ -34,6 +33,7 @@
 #include "gnc-plugin.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-split-reg.h"
+#include "gnc-totd-dialog.h"
 #include "gnc-ui.h"
 #include "gnc-version.h"
 #include "mainwindow-account-tree.h"
@@ -55,6 +55,7 @@ static void gnc_main_window_setup_window (GncMainWindow *window);
 /* Callbacks */
 static void gnc_main_window_add_widget (EggMenuMerge *merge, GtkWidget *widget, GncMainWindow *window);
 static void gnc_main_window_change_current_page (GtkNotebook *notebook, gint pos, GncMainWindow *window);
+static void gnc_main_window_switch_page (GtkNotebook *notebook, GtkNotebookPage *notebook_page, gint pos, GncMainWindow *window);
 static void gnc_main_window_plugin_added (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
 static void gnc_main_window_plugin_removed (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
 
@@ -86,7 +87,7 @@ static void gnc_main_window_cmd_tools_commodity_editor (EggAction *action, GncMa
 static void gnc_main_window_cmd_tools_financial_calculator (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_tools_find_transactions (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_help_tutorial (EggAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_help_tips_of_the_day (EggAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_help_totd (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_help_contents (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_help_about (EggAction *action, GncMainWindow *window);
 
@@ -217,7 +218,7 @@ static EggActionGroupEntry gnc_menu_entries [] = {
 	  G_CALLBACK (gnc_main_window_cmd_help_tutorial), NULL },
 	{ "HelpTipsOfTheDayAction", N_("_Tips Of The Day"), NULL, NULL,
 	  N_("View the Tips of the Day"),
-	  G_CALLBACK (gnc_main_window_cmd_help_tips_of_the_day), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_help_totd), NULL },
 	{ "HelpContentsAction", N_("_Contents"), GTK_STOCK_HELP, NULL,
 	  N_("Open the GnuCash Help"),
 	  G_CALLBACK (gnc_main_window_cmd_help_contents), NULL },
@@ -336,6 +337,24 @@ gnc_main_window_close_page (GncMainWindow *window,
 	gtk_notebook_remove_page (GTK_NOTEBOOK (window->priv->notebook), i);
 
 	gnc_plugin_page_removed (page);
+
+	egg_menu_merge_ensure_update (window->ui_merge);
+
+	/* */
+	i = gtk_notebook_get_current_page (GTK_NOTEBOOK (window->priv->notebook));
+	child = gtk_notebook_get_nth_page (GTK_NOTEBOOK (window->priv->notebook), i);
+	if (child == NULL) {
+		return;
+	}
+
+	page = g_object_get_data (G_OBJECT (child), "page-plugin");
+
+	window->priv->current_page = page;
+
+	if (page != NULL) {
+		gnc_plugin_page_merge_actions (page, window->ui_merge);
+		gnc_plugin_page_selected (page);
+	}
 }
 
 GncPluginPage *
@@ -504,6 +523,8 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	gtk_widget_show (window->priv->notebook);
 	g_signal_connect (G_OBJECT (window->priv->notebook), "change-current-page",
 			  G_CALLBACK (gnc_main_window_change_current_page), window);
+	g_signal_connect (G_OBJECT (window->priv->notebook), "switch-page",
+			  G_CALLBACK (gnc_main_window_switch_page), window);
 	gtk_box_pack_start (GTK_BOX (main_vbox), window->priv->notebook,
 			    TRUE, TRUE, 0);
 
@@ -552,6 +573,15 @@ gnc_main_window_add_widget (EggMenuMerge *merge,
 
 	gtk_box_pack_start (GTK_BOX (window->priv->menu_dock), widget, FALSE, FALSE, 0);
 	gtk_widget_show (widget);
+}
+
+static void
+gnc_main_window_switch_page (GtkNotebook *notebook,
+			     GtkNotebookPage *notebook_page,
+			     gint pos,
+			     GncMainWindow *window)
+{
+	/* FIXME Use switch_page instead of change_current_page */
 }
 
 static void
@@ -830,9 +860,13 @@ gnc_main_window_cmd_help_tutorial (EggAction *action, GncMainWindow *window)
 }
 
 static void
-gnc_main_window_cmd_help_tips_of_the_day (EggAction *action, GncMainWindow *window)
+gnc_main_window_cmd_help_totd (EggAction *action, GncMainWindow *window)
 {
-	gnc_ui_totd_dialog_create_and_run();
+	GtkWidget *dialog;
+
+	dialog = gnc_totd_dialog_new (GTK_WINDOW (window));
+	gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_widget_destroy (dialog);
 }
 
 static void

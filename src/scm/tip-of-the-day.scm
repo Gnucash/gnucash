@@ -87,7 +87,7 @@
   (let ((tip-opt (gnc:lookup-global-option "General"
                                            "Display \"Tip of the Day\"")))
     (if (gnc:option-value tip-opt)
-        (gnc:ui-totd-dialog-create-and-run))))
+        (gnc:totd-dialog-create-and-run))))
 
 (define (gnc:initialize-tip-of-the-day)
   (set! gnc:*tip-file*

@@ -224,22 +224,26 @@ gnc_dense_cal_get_type ()
 static void
 gnc_dense_cal_class_init (GncDenseCalClass *class)
 {
-        GtkObjectClass *object_class;
+        GObjectClass *object_class;
+	GtkObjectClass *gtkobject_class;
         GtkWidgetClass *widget_class;
 
-        object_class = (GtkObjectClass*) class;
-        widget_class = (GtkWidgetClass*) class;
-        parent_class = gtk_type_class (gtk_widget_get_type ());
+        object_class =  G_OBJECT_CLASS (class);
+	gtkobject_class = GTK_OBJECT_CLASS (class);
+        widget_class = GTK_WIDGET_CLASS (class);
+        parent_class = g_type_class_peek_parent (class);
 
         gnc_dense_cal_signals[MARKS_LOST_SIGNAL] =
-                gtk_signal_new( MARKS_LOST_SIGNAL_NAME,
-                                GTK_RUN_LAST,
-                                object_class->type,
-                                GTK_SIGNAL_OFFSET( GncDenseCalClass, marks_lost_cb ),
-                                gtk_signal_default_marshaller, GTK_TYPE_NONE, 0 );
-        gtk_object_class_add_signals (object_class, gnc_dense_cal_signals, LAST_SIGNAL);
+                g_signal_new (MARKS_LOST_SIGNAL_NAME,
+			      G_OBJECT_CLASS_TYPE (object_class),
+                              G_SIGNAL_RUN_LAST,
+                              G_STRUCT_OFFSET (GncDenseCalClass, marks_lost_cb),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
 
-        object_class->destroy = gnc_dense_cal_destroy;
+        gtkobject_class->destroy = gnc_dense_cal_destroy;
         widget_class->realize = gnc_dense_cal_realize;
         widget_class->expose_event = gnc_dense_cal_expose;
         widget_class->size_request = gnc_dense_cal_size_request;
@@ -314,7 +318,8 @@ gnc_dense_cal_init (GncDenseCal *dcal)
                 dcal->monthLabelFont = gdk_font_load( LABEL_FONT_NAME );
                 g_assert( dcal->monthLabelFont );
 
-                dcal->dayLabelFont = GTK_WIDGET(dcal)->style->font;
+		/* FIXME GNOME 2 port (rework the complete font code) */
+                /* dcal->dayLabelFont = GTK_WIDGET(dcal)->style->font; */
                 gdk_font_ref( dcal->dayLabelFont );
                 g_assert( dcal->dayLabelFont );
 

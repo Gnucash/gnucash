@@ -15,7 +15,7 @@ libgncgnome_la_LIBADD = \
   ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
   ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
-  ${top_builddir}/src/gnome-utils/egg/libegg.la \
+  ${top_builddir}/lib/egg/libegg.la \
   ${GUILE_LIBS} ${GNOME_LIBDIR} ${GNOMEUI_LIBS} ${GLIB_LIBS}
 
 libgw_gnc_la_SOURCES = gw-gnc.c
@@ -35,7 +35,7 @@ libgncgnome_la_SOURCES = \
   dialog-sx-from-trans.c \
   dialog-sxsincelast.c \
   dialog-tax-info.c \
-  dialog-totd.c \
+  gnc-totd-dialog.c \
   dialog-userpass.c \
   dialog-scheduledxaction.c \
   druid-hierarchy.c \
@@ -78,7 +78,7 @@ noinst_HEADERS = \
   dialog-progress.h \
   dialog-sx-from-trans.h \
   dialog-sxsincelast.h \
-  dialog-totd.h \
+  gnc-totd-dialog.h \
   dialog-scheduledxaction.h \
   druid-hierarchy.h \
   druid-loan.h \
@@ -125,7 +125,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/g-wrap \
   -I${top_srcdir}/src/gnome-utils \
-  -I${top_srcdir}/src/gnome-utils/egg \
+  -I${top_srcdir}/lib/egg \
   -I${top_srcdir}/src/gnome-search \
   -I${top_srcdir}/src/register/ledger-core \
   -I${top_srcdir}/src/register/register-core \

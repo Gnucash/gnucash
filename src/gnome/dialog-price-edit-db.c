@@ -286,11 +286,13 @@ window_destroy_cb (GtkObject *object, gpointer data)
 }
 
 static void
-prices_close_clicked (GtkWidget *widget, gpointer data)
+prices_response (GtkDialog *dialog, gint response_id, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
 
-  gnc_close_gui_component_by_data (DIALOG_PRICE_DB_CM_CLASS, pdb_dialog);
+  if (response_id == GTK_RESPONSE_CLOSE) {
+    gnc_close_gui_component_by_data (DIALOG_PRICE_DB_CM_CLASS, pdb_dialog);
+  }
 }
 
 static void
@@ -335,16 +337,16 @@ remove_old_clicked (GtkWidget *widget, gpointer data)
   GtkWidget *vbox;
   gint result;
 
-  dialog = gnome_dialog_new (_("Remove old prices"),
-                             GNOME_STOCK_BUTTON_OK,
-                             GNOME_STOCK_BUTTON_CANCEL,
-                             NULL);
+  dialog = gtk_dialog_new_with_buttons (_("Remove old prices"),
+		  			GTK_WINDOW (pdb_dialog->dialog),
+					GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_STOCK_OK,
+					GTK_RESPONSE_ACCEPT,
+					GTK_STOCK_CANCEL,
+					GTK_RESPONSE_REJECT,
+					NULL);	    
 
-  gnome_dialog_set_parent (GNOME_DIALOG (dialog),
-                           GTK_WINDOW (pdb_dialog->dialog));
-  gnome_dialog_close_hides (GNOME_DIALOG (dialog), FALSE);
-
-  vbox = GNOME_DIALOG (dialog)->vbox;
+  vbox = GTK_DIALOG (dialog)->vbox;
 
   gtk_box_set_spacing (GTK_BOX (vbox), 3);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 3);
@@ -356,14 +358,14 @@ remove_old_clicked (GtkWidget *widget, gpointer data)
   gtk_widget_show (label);
 
   date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
-  g_object_ref (GTK_OBJECT (date));
+  g_object_ref (G_OBJECT (date));
   gtk_object_sink (GTK_OBJECT (date));
 
   gtk_box_pack_start (GTK_BOX (vbox), date, FALSE, FALSE, 0);
   gtk_widget_show (date);
 
-  result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
-  if (result == 0)
+  result = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (result == GTK_RESPONSE_ACCEPT)
   {
     GNCBook *book = gnc_get_current_book ();
     GNCPriceDB *pdb = gnc_book_get_pricedb (book);
@@ -385,7 +387,7 @@ remove_old_clicked (GtkWidget *widget, gpointer data)
     gnc_gui_refresh_all ();
   }
 
-  g_object_unref (GTK_OBJECT (date));
+  g_object_unref (G_OBJECT (date));
 }
 
 static void
@@ -527,19 +529,18 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
   dialog = glade_xml_get_widget (xml, "Prices Dialog");
   pdb_dialog->dialog = dialog;
 
-  gnome_dialog_button_connect (GNOME_DIALOG (dialog), 0,
-                               GTK_SIGNAL_FUNC (prices_close_clicked),
-                               pdb_dialog);
+  g_signal_connect (G_OBJECT (dialog), "response",
+                    G_CALLBACK (prices_response), pdb_dialog);
 
-  gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
-                      GTK_SIGNAL_FUNC (window_destroy_cb), pdb_dialog);
+  g_signal_connect (G_OBJECT (dialog), "destroy",
+                      G_CALLBACK (window_destroy_cb), pdb_dialog);
 
   /* parent */
   if (parent != NULL)
-    gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (parent));
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
   /* default to 'close' button */
-  gnome_dialog_set_default (GNOME_DIALOG(dialog), 0);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
 
   /* price tree */
   {
@@ -554,16 +555,16 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
     gtk_clist_column_title_active(GTK_CLIST(list), COMMODITY_COLUMN);
     gtk_clist_column_title_active(GTK_CLIST(list), DATE_COLUMN);
 
-    gtk_signal_connect (GTK_OBJECT(list), "select_row",
-                        GTK_SIGNAL_FUNC(gnc_prices_select_price_cb),
+    g_signal_connect (G_OBJECT(list), "select_row",
+                        G_CALLBACK(gnc_prices_select_price_cb),
                         pdb_dialog);
 
-    gtk_signal_connect (GTK_OBJECT(list), "unselect_row",
-                        GTK_SIGNAL_FUNC(gnc_prices_unselect_price_cb),
+    g_signal_connect (G_OBJECT(list), "unselect_row",
+                        G_CALLBACK(gnc_prices_unselect_price_cb),
                         pdb_dialog);
 
-    gtk_signal_connect (GTK_OBJECT(list), "click_column",
-			GTK_SIGNAL_FUNC(gnc_prices_click_column_cb),
+    g_signal_connect (G_OBJECT(list), "click_column",
+			G_CALLBACK(gnc_prices_click_column_cb),
 			pdb_dialog);
   }
 
@@ -574,30 +575,30 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
     button = glade_xml_get_widget (xml, "edit_button");
     pdb_dialog->edit_button = button;
 
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                        GTK_SIGNAL_FUNC (edit_clicked), pdb_dialog);
+    g_signal_connect (G_OBJECT (button), "clicked",
+                        G_CALLBACK (edit_clicked), pdb_dialog);
 
     button = glade_xml_get_widget (xml, "remove_button");
     pdb_dialog->remove_button = button;
 
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                        GTK_SIGNAL_FUNC (remove_clicked), pdb_dialog);
+    g_signal_connect (G_OBJECT (button), "clicked",
+                        G_CALLBACK (remove_clicked), pdb_dialog);
 
     button = glade_xml_get_widget (xml, "remove_old_button");
     pdb_dialog->remove_old_button = button;
 
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                        GTK_SIGNAL_FUNC (remove_old_clicked), pdb_dialog);
+    g_signal_connect (G_OBJECT (button), "clicked",
+                        G_CALLBACK (remove_old_clicked), pdb_dialog);
 
     button = glade_xml_get_widget (xml, "add_button");
 
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                        GTK_SIGNAL_FUNC (add_clicked), pdb_dialog);
+    g_signal_connect (G_OBJECT (button), "clicked",
+                        G_CALLBACK (add_clicked), pdb_dialog);
 
     button = glade_xml_get_widget (xml, "get_quotes_button");
 
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                        GTK_SIGNAL_FUNC (get_quotes_clicked), pdb_dialog);
+    g_signal_connect (G_OBJECT (button), "clicked",
+                        G_CALLBACK (get_quotes_clicked), pdb_dialog);
   }
 
   /* arrows */
@@ -634,7 +635,7 @@ close_handler (gpointer user_data)
 
   gnc_save_window_size ("prices_win", last_width, last_height);
 
-  gnome_dialog_close (GNOME_DIALOG (pdb_dialog->dialog));
+  gtk_widget_destroy (GTK_WIDGET (pdb_dialog->dialog));
 }
 
 static void

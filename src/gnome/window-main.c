@@ -40,7 +40,6 @@
 #include "dialog-options.h"
 #include "dialog-scheduledxaction.h"
 #include "dialog-sxsincelast.h"
-#include "dialog-totd.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "druid-loan.h"
@@ -778,7 +777,6 @@ void
 gnc_main_window_totd_cb (GtkWidget *widget, gpointer data)
 
 {
-  gnc_ui_totd_dialog_create_and_run();
   return;
 }
 

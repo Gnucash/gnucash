@@ -1069,6 +1069,7 @@ AC_OUTPUT( m4/Makefile
           doc/examples/Makefile
           intl-scm/Makefile
           lib/Makefile
+          lib/egg/Makefile
           lib/guile-www/Makefile
           lib/srfi/Makefile
 	  lib/libc/Makefile
@@ -1117,7 +1118,6 @@ AC_OUTPUT( m4/Makefile
 	  src/gnome/glade/Makefile
 	  src/gnome/ui/Makefile
           src/gnome-utils/Makefile
-          src/gnome-utils/egg/Makefile
 	  src/gnome-utils/test/Makefile
           src/gnome-search/Makefile
           src/import-export/Makefile
