@@ -228,6 +228,9 @@ xaccAccountInsertSplit ( Account *acc, Split *split )
    * the old and new accounts. Basically, both old and new accounts
    * must be denominated in the same currency.
    */
+/*
+hack alert -- in fact this logic is wildly incorrect;
+disable for now till we figure out what the right thing is.
   if (split->acc) {
     if (acc->currency) {
        if (!(split->acc->currency)) return;
@@ -236,6 +239,7 @@ xaccAccountInsertSplit ( Account *acc, Split *split )
        if (split->acc->currency) return;
     }
   }
+*/
 
   /* mark the account as having changed, and
    * the account group as requiring a save */
