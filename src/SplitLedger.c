@@ -194,7 +194,7 @@ LedgerDestroy (SplitRegister *reg)
       /* split destroy will automatically remove it
        * from its parent account */
       trans = xaccSplitGetParent (split);
-      xaccTransBeginEdit (trans);
+      xaccTransBeginEdit (trans, 1);
       xaccTransDestroy (trans);
       reg->user_hook = NULL;
    }
@@ -304,7 +304,7 @@ printf ("save split is %p \n", split);
       acc = xaccSplitGetAccount (s);
 
       split = xaccMallocSplit ();
-      xaccTransBeginEdit (trans);
+      xaccTransBeginEdit (trans, 1);
       xaccTransAppendSplit (trans, split);
       xaccAccountInsertSplit (acc, split);
 
@@ -313,7 +313,7 @@ printf ("save split is %p \n", split);
 
    } else {
       trans = xaccSplitGetParent (split);
-      xaccTransBeginEdit (trans);
+      xaccTransBeginEdit (trans, 1);
    }
 
    /* copy the contents from the cursor to the split */
@@ -895,7 +895,7 @@ printf ("load split %d at phys row %d addr=%p \n", j, phys_row, secondary);
       double last_price = 0.0;
 
       trans = xaccMallocTransaction ();
-      xaccTransBeginEdit (trans);
+      xaccTransBeginEdit (trans, 1);
       xaccTransSetDateToday (trans);
       xaccTransCommitEdit (trans);
       split = xaccTransGetSplit (trans, 0);
