@@ -185,6 +185,9 @@ static void *trans_list_cb (const HBCI_Transaction *h_trans,
   current_time = time(NULL);
   xaccTransSetDateEnteredSecs(gnc_trans, mktime(localtime(&current_time)));
   
+  /* Currency; we take simply the default currency of the gnucash account */
+  xaccTransSetCurrency(gnc_trans, xaccAccountGetCommodity(gnc_acc));
+
   {
     /* Number. We use the "customer reference", if there is one. */
     const char *custref = HBCI_Transaction_customerReference (h_trans);
@@ -195,17 +198,25 @@ static void *trans_list_cb (const HBCI_Transaction *h_trans,
   
   {
     /* Description */
-    char *descr = list_string_concat (HBCI_Transaction_description (h_trans));
-    xaccTransSetDescription (gnc_trans, descr);
-    free (descr);
+    char *h_descr = 
+	list_string_concat (HBCI_Transaction_description (h_trans));
+    char *othername = 
+	list_string_concat_delim (HBCI_Transaction_otherName (h_trans), ", ");
+    char *g_descr = 
+	g_strdup_printf ("%s %s", 
+			 othername, 
+			 h_descr);
+    
+    xaccTransSetDescription (gnc_trans, g_descr);
+
+    free (h_descr);
+    free (othername);
+    g_free (g_descr);
   }
   
-  /* Notes. TransactionText contains strings like "STANDING ORDER",
-     "UEBERWEISUNGSGUTSCHRIFT", etc.  */
-  xaccTransSetNotes (gnc_trans, HBCI_Transaction_transactionText (h_trans));
-
-  /* Currency; we take simply the default currency of the gnucash account */
-  xaccTransSetCurrency(gnc_trans, xaccAccountGetCommodity(gnc_acc));
+  /* Notes. */
+  /*xaccTransSetNotes (gnc_trans, g_notes);*/
+  /* But Nobody ever uses the Notes field? */
 
   /* Add one split */
   split=xaccMallocSplit(book);
@@ -222,20 +233,15 @@ static void *trans_list_cb (const HBCI_Transaction *h_trans,
   }
   
   {
-    /* Memo in the split. We write the recipient (i.e. "other party") in
-       here since the other party might be another gnucash account, and
-       in that account split's memo the respective "this party" will be
-       noted. */
-    char *othername = 
-      list_string_concat_delim (HBCI_Transaction_otherName (h_trans), ", ");
-    char *memo = 
-      g_strdup_printf ("HBCI Transaction to: %s, Account %s, Bank %s", 
-		       othername, 
+    /* Memo in the Split. HBCI's transactionText contains strings like
+     * "STANDING ORDER", "UEBERWEISUNGSGUTSCHRIFT", etc.  */
+    char *g_memo = 
+      g_strdup_printf ("%s Account %s Bank %s",
+		       HBCI_Transaction_transactionText (h_trans),
 		       HBCI_Transaction_otherAccountId (h_trans),
 		       HBCI_Transaction_otherBankCode (h_trans));
-    xaccSplitSetMemo(split, memo);
-    free (othername);
-    g_free (memo);
+    xaccSplitSetMemo(split, g_memo);
+    g_free (g_memo);
   }
   
   /* Instead of xaccTransCommitEdit(gnc_trans)  */

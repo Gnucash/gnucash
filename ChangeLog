@@ -1,3 +1,9 @@
+2002-10-06  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-gettrans.c, gnc-hbci-actions.c:
+	More work on transaction invocation and importing. Is actually
+	usable now.
+
 2002-10-06  Derek Atkins  <derek@ihtfp.com>
 	* Rename a bunch of reports as per Chris Lyttle's suggestions
 	* Change the Report MENU names, not the REPORT names (except for

@@ -91,32 +91,59 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc)
 
   {
     /* Now open the HBCI_trans_dialog. */
-    HBCI_Transaction *trans = gnc_hbci_trans (parent, api, interactor,
-					      h_acc, customer);
-    if (!trans)
+    HBCI_Transaction *h_trans = gnc_hbci_trans (parent, api, interactor,
+						h_acc, customer);
+    if (!h_trans)
       return;
 
     {
       gnc_numeric amount;
-      char *description;
       XferDialog *transdialog;
+
+      transdialog = gnc_xfer_dialog (parent, gnc_acc);
       
+      gnc_xfer_dialog_set_title (transdialog, "Online HBCI Transaction");
+
       amount = double_to_gnc_numeric 
-	(HBCI_Value_getValue (HBCI_Transaction_value (trans)),
+	(HBCI_Value_getValue (HBCI_Transaction_value (h_trans)),
 	 xaccAccountGetCommoditySCU(gnc_acc),
 	 GNC_RND_ROUND); 
-      description = g_strdup_printf("HBCI to %s", 
-				    HBCI_Transaction_otherAccountId (trans));
-      
-      transdialog = gnc_xfer_dialog (parent, gnc_acc);
-      gnc_xfer_dialog_set_title (transdialog, "HBCI initiated transaction");
-      /* gnc_xfer_dialog_toggle_currency_frame (transdialog, FALSE); */
       gnc_xfer_dialog_set_amount (transdialog, amount);
-      gnc_xfer_dialog_set_description (transdialog, description);
-      g_free (description);
+      /* gnc_xfer_dialog_toggle_currency_frame (transdialog, FALSE); */
+
+      {
+	/* Description */
+	char *h_descr = 
+	  list_string_concat (HBCI_Transaction_description (h_trans));
+	char *othername = 
+	  list_string_concat (HBCI_Transaction_otherName (h_trans));
+	char *g_descr = 
+	  g_strdup_printf ("%s %s", 
+			   othername, 
+			   h_descr);
+    
+	gnc_xfer_dialog_set_description (transdialog, g_descr);
+	
+	free (h_descr);
+	free (othername);
+	g_free (g_descr);
+      }
+
+      {
+	/* Memo. HBCI's transactionText contains strings like "STANDING
+	 * ORDER", "UEBERWEISUNGSGUTSCHRIFT", etc.  */
+	char *g_memo = 
+	  g_strdup_printf ("%s Account %s Bank %s",
+			   HBCI_Transaction_transactionText (h_trans),
+			   HBCI_Transaction_otherAccountId (h_trans),
+			   HBCI_Transaction_otherBankCode (h_trans));
+	gnc_xfer_dialog_set_memo (transdialog, g_memo);
+	g_free (g_memo);
+      }
+      /*gnc_xfer_dialog_set_date(XferDialog *xferData, time_t set_time)*/
     }
     
-    HBCI_Transaction_delete (trans);
+    HBCI_Transaction_delete (h_trans);
   }
 }
 

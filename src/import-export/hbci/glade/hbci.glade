@@ -1667,7 +1667,7 @@ Press 'Finish' now.</text>
 	<name>button81</name>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
-	<label>Execute Later</label>
+	<label>Execute Later (unimpl.)</label>
 	<stock_pixmap>GNOME_STOCK_PIXMAP_TIMER</stock_pixmap>
       </widget>
 
