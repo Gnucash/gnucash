@@ -41,24 +41,25 @@
 /* utility defines for cell configuration data */
 #define DATE_CELL      0
 #define NUM_CELL       1
-#define DESC_CELL      2
-#define RECN_CELL      3    /* transaction recn */
-#define TCRED_CELL     4
-#define TDEBT_CELL     5 
-#define TPRIC_CELL     6
-#define TVALU_CELL     7
-#define SHRS_CELL      8
-#define BALN_CELL      9
+#define TXFRM_CELL     2
+#define DESC_CELL      3
+#define RECN_CELL      4    /* transaction recn */
+#define TCRED_CELL     5
+#define TDEBT_CELL     6 
+#define TPRIC_CELL     7
+#define TVALU_CELL     8
+#define SHRS_CELL      9
+#define BALN_CELL      10
 
-#define ACTN_CELL      10
-#define XFRM_CELL      11
-#define XTO_CELL       12
-#define MEMO_CELL      13
-#define RECS_CELL      14    /* split recn */
-#define CRED_CELL      15
-#define DEBT_CELL      16
-#define PRIC_CELL      17
-#define VALU_CELL      18
+#define ACTN_CELL      11
+#define XFRM_CELL      12
+#define XTO_CELL       13
+#define MEMO_CELL      14
+#define RECS_CELL      15    /* split recn */
+#define CRED_CELL      16
+#define DEBT_CELL      17
+#define PRIC_CELL      18
+#define VALU_CELL      19
 
 
 /* utility defines for setting of cell values */
@@ -69,6 +70,10 @@
 #define NUM_CELL_C   (reg->cols[NUM_CELL])
 #define NUM_CELL_R   (reg->rows[NUM_CELL])
 #define NUM_CELL_W   (reg->wids[NUM_CELL])
+
+#define TXFRM_CELL_C   (reg->cols[TXFRM_CELL])
+#define TXFRM_CELL_R   (reg->rows[TXFRM_CELL])
+#define TXFRM_CELL_W   (reg->wids[TXFRM_CELL])
 
 #define DESC_CELL_C   (reg->cols[DESC_CELL])
 #define DESC_CELL_R   (reg->rows[DESC_CELL])
@@ -157,18 +162,20 @@ configLayout (SplitRegister *reg)
 {
    int type = (reg->type) & REG_TYPE_MASK;
    int show_recs = (reg->type) & REG_SHOW_RECS;
-   int show_tdetail = (reg->type) & REG_SHOW_TDETAIL;
-   int show_sdetail = (reg->type) & REG_SHOW_SDETAIL;
+   int show_tamount = (reg->type) & REG_SHOW_TAMOUNT;
+   int show_samount = (reg->type) & REG_SHOW_SAMOUNT;
+   int show_txfrm = (reg->type) & REG_SHOW_TXFRM;
 
    /* perform a bsic layout that's valid for most
     * of the ledgers; then customize with case 
     * statements. */
    reg->num_cols = 8;
    reg->num_header_rows = 1;
-   SET (DATE_CELL,  0,  0, 11,  DATE_STR);
-   SET (NUM_CELL,   1,  0,  7,  NUM_STR);
-   SET (DESC_CELL,  3,  0, 29,  DESC_STR);
-   SET (RECN_CELL,  4,  0,  1,  "R");
+   SET (DATE_CELL,   0,  0, 11,  DATE_STR);
+   SET (NUM_CELL,    1,  0,  7,  NUM_STR);
+   SET (TXFRM_CELL, -1, -1, 14,  XFRM_STR);
+   SET (DESC_CELL,   3,  0, 29,  DESC_STR);
+   SET (RECN_CELL,   4,  0,  1,  "R");
    SET (TDEBT_CELL, -1, -1, 12,  DEBIT_STR);
    SET (TCRED_CELL, -1, -1, 12,  CREDIT_STR);
    SET (TPRIC_CELL, -1, -1,  9,  PRICE_STR);
@@ -191,6 +198,11 @@ configLayout (SplitRegister *reg)
       SET (RECS_CELL,  4,  0,  1,  "R");    
    }
 
+   /* show or hide the transaction transfer-from field */
+   if (show_txfrm) {
+      SET (TXFRM_CELL,  2,  0, 14,  XFRM_STR);
+   }
+
    switch (type) {
       case BANK_REGISTER:
       case CASH_REGISTER:
@@ -207,11 +219,11 @@ configLayout (SplitRegister *reg)
          SET (VALU_CELL, -1, -1, 10,  VALUE_STR);
          SET (SHRS_CELL, -1, -1, 10,  TOT_SHRS_STR);
 
-         if (show_sdetail) {
+         if (show_samount) {
             SET (DEBT_CELL,  5,  0, 12,  DEBIT_STR);
             SET (CRED_CELL,  6,  0, 12,  CREDIT_STR);
          }
-         if (show_tdetail) {
+         if (show_tamount) {
             SET (TDEBT_CELL,  5,  0, 12,  DEBIT_STR);
             SET (TCRED_CELL,  6,  0, 12,  CREDIT_STR);
          }
@@ -220,13 +232,13 @@ configLayout (SplitRegister *reg)
       case STOCK_REGISTER:
          reg->num_cols = 11;
          SET (XTO_CELL,  -1, -1, 14,  XFTO_STR);
-         if (show_sdetail) {
+         if (show_samount) {
             SET (PRIC_CELL,  7,  0,  9,  PRICE_STR);
             SET (VALU_CELL,  8,  0, 10,  VALUE_STR);
             SET (SHRS_CELL,  9,  0, 10,  TOT_SHRS_STR);
             SET (BALN_CELL, 10,  0, 12,  BALN_STR);
          }
-         if (show_tdetail) {
+         if (show_tamount) {
             SET (TDEBT_CELL,  5,  0, 12,  DEBIT_STR);
             SET (TCRED_CELL,  6,  0, 12,  CREDIT_STR);
             SET (TPRIC_CELL,  7,  0,  9,  PRICE_STR);
@@ -286,7 +298,8 @@ configLayout (SplitRegister *reg)
 /* define the traversal order */
 /* negative cells mean "traverse out of table" */
 /* hack alert -- redesign so that we hop from one row to the next, if desired. */
-/* hack alert -- if tdetail or sdetail is set then don't traverse there */
+/* hack alert -- if show_tamount or show_samount is set then don't traverse there */
+/* hack alert -- fix show_txfrm also ... */
 
 static void
 configTraverse (SplitRegister *reg)
@@ -414,6 +427,7 @@ configCursors (SplitRegister *reg)
 
    FANCY (date,    Date,      DATE);
    BASIC (num,     Text,      NUM);
+   FANCY (xfrmTrans,   Combo,     TXFRM);
    FANCY (desc,    QuickFill, DESC);
    BASIC (recn,    Recn,      RECN);
    FANCY (creditTrans,  Price,     TCRED);
@@ -434,6 +448,7 @@ configCursors (SplitRegister *reg)
     */
    reg->dateCell ->  cell.bg_color = 0xccccff;
    reg->numCell ->        bg_color = 0xccccff;
+   reg->xfrmTransCell ->  cell.bg_color = 0xccccff;
    reg->descCell ->  cell.bg_color = 0xccccff;
    reg->recnCell ->       bg_color = 0xccccff;
    reg->creditTransCell->  cell.bg_color = 0xccccff;
@@ -522,6 +537,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    reg->nullTransCell = xaccMallocBasicCell();
    reg->dateCell    = xaccMallocDateCell();
    reg->numCell     = xaccMallocTextCell();
+   reg->xfrmTransCell    = xaccMallocComboCell();
    reg->descCell    = xaccMallocQuickFillCell();
    reg->recnCell    = xaccMallocRecnCell();
    reg->creditTransCell = xaccMallocPriceCell();  
@@ -670,6 +686,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
 
    xaccDestroyDateCell      (reg->dateCell);
    xaccDestroyBasicCell     (reg->numCell);
+   xaccDestroyComboCell     (reg->xfrmTransCell);
    xaccDestroyQuickFillCell (reg->descCell);
    xaccDestroyBasicCell     (reg->recnCell);
    xaccDestroyPriceCell     (reg->creditTransCell);
@@ -690,6 +707,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
 
    reg->dateCell    = NULL;
    reg->numCell     = NULL;
+   reg->xfrmTransCell    = NULL;
    reg->descCell    = NULL;
    reg->recnCell    = NULL;
    reg->creditTransCell  = NULL;
@@ -723,6 +741,7 @@ xaccSplitRegisterGetChangeFlag (SplitRegister *reg)
    /* be careful to use bitwise ands and ors to assemble bit flag */
    changed |= MOD_DATE & reg->dateCell->cell.changed;
    changed |= MOD_NUM  & reg->numCell->changed;
+   changed |= MOD_TXFRM & reg->xfrmTransCell->cell.changed;
    changed |= MOD_DESC & reg->descCell->cell.changed;
    changed |= MOD_RECN & reg->recnCell->changed;
    changed |= MOD_TAMNT & reg->creditTransCell->cell.changed;

@@ -73,31 +73,33 @@
 #define PORTFOLIO           11
 
 #define REG_TYPE_MASK       0xff
-#define REG_SHOW_TDETAIL    0x0100
-#define REG_SHOW_SDETAIL    0x0200
-#define REG_SHOW_RECS       0x0400
-#define REG_DOUBLE_LINE     0x0800
-#define REG_MULTI_LINE      0x1000
+#define REG_SHOW_TAMOUNT    0x0100
+#define REG_SHOW_SAMOUNT    0x0200
+#define REG_SHOW_TXFRM      0x0400
+#define REG_SHOW_RECS       0x0800
+#define REG_DOUBLE_LINE     0x1000
+#define REG_MULTI_LINE      0x2000
 
 /* modified flags -- indicate how values have been modified */
 #define MOD_NONE   0x0000
 #define MOD_DATE   0x0001
 #define MOD_NUM    0x0002
-#define MOD_DESC   0x0004
-#define MOD_RECN   0x0008
-#define MOD_TAMNT  0x0010
-#define MOD_TPRIC  0x0020
-#define MOD_TVALU  0x0040
+#define MOD_TXFRM  0x0004
+#define MOD_DESC   0x0008
+#define MOD_RECN   0x0010
+#define MOD_TAMNT  0x0020
+#define MOD_TPRIC  0x0040
+#define MOD_TVALU  0x0080
 
-#define MOD_ACTN   0x0080
-#define MOD_XFRM   0x0100
-#define MOD_XTO    0x0200
-#define MOD_MEMO   0x0400
-#define MOD_AMNT   0x0800
-#define MOD_PRIC   0x1000
-#define MOD_VALU   0x2000
-#define MOD_NEW    0x4000
-#define MOD_ALL    0x7fff
+#define MOD_ACTN   0x0100
+#define MOD_XFRM   0x0200
+#define MOD_XTO    0x0400
+#define MOD_MEMO   0x0800
+#define MOD_AMNT   0x1000
+#define MOD_PRIC   0x2000
+#define MOD_VALU   0x4000
+#define MOD_NEW    0x8000
+#define MOD_ALL    0xffff
 
 /* The value of NUM_CELLS should be larger than the number of 
  * cells defined in the structure below!
@@ -119,6 +121,7 @@ struct _SplitRegister {
    /* these are handled only by the transaction cursor */
    DateCell      * dateCell;
    BasicCell     * numCell;
+   ComboCell     * xfrmTransCell;
    QuickFillCell * descCell;
    BasicCell     * recnCell;   /* main transaction line reconcile */
    PriceCell     * creditTransCell;
@@ -130,7 +133,7 @@ struct _SplitRegister {
    BasicCell     * nullTransCell;
 
    /* split cells */
-   /* these are hndled only by the split cursor */
+   /* these are handled only by the split cursor */
    ComboCell     * actionCell;
    ComboCell     * xfrmCell;
    ComboCell     * xtoCell;

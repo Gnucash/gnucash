@@ -207,8 +207,8 @@ printf ("save split is %p \n", split);
     * and that's that.  For a two-line display, we want to reparent
     * the "other" split, but only if there is one ...
     */
-   if (MOD_XFRM & changed) {
-      Account *old_acc, *new_acc;
+   if ((MOD_XFRM | MOD_TXFRM) & changed) {
+      Account *old_acc=NULL, *new_acc=NULL;
       Split *split_to_modify = NULL;
 
       if (reg->type & REG_MULTI_LINE) {
@@ -224,7 +224,11 @@ printf ("save split is %p \n", split);
          /* do some reparenting. Insertion into new account will automatically
           * delete from the old account */
          old_acc = xaccSplitGetAccount (split_to_modify);
-         new_acc = xaccGetAccountByName (trans, reg->xfrmCell->cell.value);
+         if (MOD_XFRM & changed) {
+           new_acc = xaccGetAccountByName (trans, reg->xfrmCell->cell.value);
+         } else  {
+            new_acc = xaccGetAccountByName (trans, reg->xfrmTransCell->cell.value);
+         }
          xaccAccountInsertSplit (new_acc, split_to_modify);
    
          /* make sure any open windows of the old account get redrawn */
@@ -297,6 +301,30 @@ xaccTransGetDescription(trans));
 
 /* ======================================================== */
 
+#define LOAD_XFRM(cellname) {							\
+   char * accname=NULL;								\
+										\
+   /* Show the transfer-from account name.                               */	\
+   /* What gets displayed depends on the display format.                 */	\
+   /* For a multi-line display, show the account for each member split.  */	\
+   /* For a one or two-line display, show the other account, but only    */	\
+   /* if there are exactly two splits.                                   */	\
+   if (reg->type & REG_MULTI_LINE) {						\
+      accname = xaccAccountGetName (xaccSplitGetAccount (split));		\
+      xaccSetComboCellValue (reg->cellname, accname);				\
+   } else {									\
+      Split *s = xaccGetOtherSplit (split);					\
+      if (s) {									\
+         accname = xaccAccountGetName (xaccSplitGetAccount (s));		\
+      } else {									\
+         accname = SPLIT_STR;							\
+      }										\
+      xaccSetComboCellValue (reg->cellname, accname);				\
+   } 										\
+}
+   
+/* ======================================================== */
+
 static void
 xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
 {
@@ -308,6 +336,7 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       /* we interpret a NULL split as a blank split */
       xaccSetDateCellValueSecs (reg->dateCell, 0);
       xaccSetBasicCellValue (reg->numCell, "");
+      xaccSetComboCellValue (reg->xfrmTransCell, "");
       xaccSetQuickFillCellValue (reg->descCell, "");
       xaccSetBasicCellValue (reg->recnCell, "");
       xaccSetDebCredCellValue (reg->debitTransCell, 
@@ -325,6 +354,7 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       xaccSetDateCellValueSecs (reg->dateCell, secs);
    
       xaccSetBasicCellValue (reg->numCell, xaccTransGetNum (trans));
+      LOAD_XFRM (xfrmTransCell);
       xaccSetQuickFillCellValue (reg->descCell, xaccTransGetDescription (trans));
    
       buff[0] = xaccSplitGetReconcile (split);
@@ -371,7 +401,6 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
 static void
 xaccSRLoadSplitEntry (SplitRegister *reg, Split *split, int do_commit)
 {
-   char *accname;
    char buff[2];
 
    if (!split) {
@@ -388,31 +417,12 @@ xaccSRLoadSplitEntry (SplitRegister *reg, Split *split, int do_commit)
       double amt;
    
       xaccSetComboCellValue (reg->actionCell, xaccSplitGetAction (split));
+      LOAD_XFRM (xfrmCell);
       xaccSetBasicCellValue (reg->memoCell, xaccSplitGetMemo (split));
    
       buff[0] = xaccSplitGetReconcile (split);
       buff[1] = 0x0;
       xaccSetBasicCellValue (reg->recsCell, buff);
-   
-      /* Show the transfer-from account name.
-       * What gets displayed depends on the display format.  
-       * For a multi-line display, show the account for each member split.
-       * For a two-line display, show the other account, but only if there
-       * are exactly two splits.
-       */
-      if (reg->type & REG_DOUBLE_LINE) {
-         Split *s = xaccGetOtherSplit (split);
-         if (s) {
-            accname = xaccAccountGetName (xaccSplitGetAccount (s));
-         } else {
-            accname = SPLIT_STR;
-         }
-         xaccSetComboCellValue (reg->xfrmCell, accname);
-      }
-      if (reg->type & REG_MULTI_LINE) {
-         accname = xaccAccountGetName (xaccSplitGetAccount (split));
-         xaccSetComboCellValue (reg->xfrmCell, accname);
-      }
    
       if ((EQUITY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
           (STOCK_REGISTER  == (reg->type & REG_TYPE_MASK)) ||

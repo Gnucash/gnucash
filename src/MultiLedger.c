@@ -179,7 +179,8 @@ xaccLedgerDisplaySimple (Account *acc)
     }
 
   /* default to single-line display */
-  reg_type |= REG_SHOW_TDETAIL;
+  reg_type |= REG_SHOW_TAMOUNT;
+  reg_type |= REG_SHOW_TXFRM;
 
   retval = xaccLedgerDisplayGeneral (acc, NULL, reg_type);
   return retval;
@@ -252,7 +253,8 @@ xaccLedgerDisplayAccGroup (Account *acc)
   }
 
   /* default to single-line display */
-  ledger_type |= REG_SHOW_TDETAIL;
+  ledger_type |= REG_SHOW_TAMOUNT;
+  ledger_type |= REG_SHOW_TXFRM;
 
   retval = xaccLedgerDisplayGeneral (acc, list, ledger_type);
 
