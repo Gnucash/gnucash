@@ -13,13 +13,14 @@ collectibles (like paintings), and investments (like shares in
 companies), you may see them appreciate in value over time.  In this
 case, you must recognize -- for tax purposes -- what are called 
 <EMPHASIS>Captial Gains</EMPHASIS>
+</PARA>
 
 <PARA>This section discusses the handling of
     depreciation and appreciation of assets in GnuCash.
     It also provides a brief introduction to the related tax
     issues.
-
     </PARA>
+
 <PARA><EMPHASIS>Warning:</EMPHASIS> <EMPHASIS>Be aware that different countries can
     have <EMPHASIS>substantially</EMPHASIS> different tax policies for handling
     these things; all that this document can really provide is some
