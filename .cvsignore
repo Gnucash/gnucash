@@ -25,6 +25,7 @@ libtool
 ltconfig
 make-gnucash-patch
 make-gnucash-potfiles
+missing
 stamp-h
 stamp-h1
 stamp-h.in
