@@ -41,6 +41,7 @@
 #define DRUID_STOCK_SPLIT_CM_CLASS "druid-stock-split"
 
 
+/** structures *********************************************************/
 typedef struct
 {
   GtkWidget * window;
@@ -58,6 +59,11 @@ typedef struct
 } StockSplitInfo;
 
 
+/** declarations *******************************************************/
+static void set_ending_from_spinners (StockSplitInfo *info);
+
+
+/** implementations ****************************************************/
 static void
 window_destroy_cb (GtkObject *object, gpointer data)
 {
@@ -152,7 +158,10 @@ clist_select_row (GtkCList *clist,
 static void
 refresh_details_page (StockSplitInfo *info)
 {
+  GNCPrintAmountInfo print_info;
+  gnc_numeric amount;
   Account *account;
+  const char *amount_str;
   char *name;
 
   account = xaccAccountLookup (&info->account);
@@ -161,8 +170,18 @@ refresh_details_page (StockSplitInfo *info)
 
   name = xaccAccountGetFullName (account, gnc_get_account_separator ());
   gtk_entry_set_text (GTK_ENTRY (info->account_entry), name);
-
   g_free (name);
+
+  amount = xaccAccountGetShareBalance (account);
+  print_info = gnc_account_quantity_print_info (account, TRUE);
+
+  amount_str = xaccPrintAmount(amount, print_info);
+  gtk_entry_set_text (GTK_ENTRY (info->starting_entry), amount_str);
+
+  gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (info->ending_edit),
+                                  print_info);
+  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (info->ending_edit),
+                                xaccAccountGetSecuritySCU (account));
 }
 
 static gboolean
@@ -179,6 +198,8 @@ account_next (GnomeDruidPage *druidpage,
 
   refresh_details_page (info);
 
+  set_ending_from_spinners (info);
+
   return FALSE;
 }
 
@@ -188,6 +209,51 @@ druid_cancel (GnomeDruid *druid, gpointer user_data)
   StockSplitInfo *info = user_data;
 
   gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
+}
+
+static void
+set_ending_from_spinners (StockSplitInfo *info)
+{
+  GtkSpinButton *spin;
+  gnc_numeric starting;
+  gnc_numeric ending;
+  gint numerator;
+  gint denominator;
+  Account *account;
+
+  account = xaccAccountLookup (&info->account);
+
+  starting = xaccAccountGetShareBalance (account);
+
+  spin = GTK_SPIN_BUTTON (info->numerator_spin);
+  numerator = gtk_spin_button_get_value_as_int (spin);
+
+  spin = GTK_SPIN_BUTTON (info->denominator_spin);
+  denominator = gtk_spin_button_get_value_as_int (spin);
+
+  if (numerator > 0 && denominator > 0)
+  {
+    gnc_numeric ratio;
+    int scu;
+
+    ratio = gnc_numeric_create (numerator, denominator);
+
+    scu = xaccAccountGetSecuritySCU (account);
+
+    ending = gnc_numeric_mul (starting, ratio, scu, GNC_RND_ROUND);
+  }
+  else
+    ending = starting;
+
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (info->ending_edit), ending);
+}
+
+static void
+spin_changed (GtkEditable *editable, gpointer user_data)
+{
+  StockSplitInfo *info = user_data;
+
+  set_ending_from_spinners (info);
 }
 
 static void
@@ -243,6 +309,11 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     info->ending_edit = amount;
 
     page = lookup_widget (info->window, "details_page");
+
+    gtk_signal_connect (GTK_OBJECT (info->numerator_spin), "changed",
+                        GTK_SIGNAL_FUNC (spin_changed), info);
+    gtk_signal_connect (GTK_OBJECT (info->denominator_spin), "changed",
+                        GTK_SIGNAL_FUNC (spin_changed), info);
   }
 }
 
