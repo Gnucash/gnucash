@@ -147,9 +147,9 @@ fill_account_list (EuroConvInfo *info)
     GNCAccountType account_type;
 
     account_type = xaccAccountGetType (account);
-    if (account_type == INCOME ||
-	account_type == EXPENSE)
-      continue;
+    /* if (account_type == INCOME ||
+       account_type == EXPENSE)
+       continue; -- nope, those need to be created as well. */
 
     currency = xaccAccountGetCurrency (account);
     
@@ -169,8 +169,11 @@ fill_account_list (EuroConvInfo *info)
     /*     printf("Account needs conversion: %s\n", */
     /* 	   xaccAccountGetName (account)); */
 
-    /* record the currency */
-    if (!g_hash_table_lookup(currencyhash, currency))
+    /* record the currency, but only if this account's amount needs to
+       be exchanged */
+    if (!g_hash_table_lookup(currencyhash, currency) &&
+	account_type != INCOME &&
+	account_type != EXPENSE)
       {
 	currencyinfo = g_new0 (CurrencyAccount, 1);
 	currencyinfo->currency = currency;
@@ -201,15 +204,19 @@ foreach_currency_cb (gpointer key, gpointer value, gpointer user_data)
   /* 	 gnc_commodity_get_printname(caccount->currency)); */
 
   accountname = 
-    g_strdup_printf ("%s %s - EUR",
-		     _("Exchange"),
-		     gnc_commodity_get_mnemonic(caccount->currency));
+    g_strdup_printf 
+    ("%s %s - EUR",
+     /* Base name for the Euro exchange account. The currency
+	mnemonics get appended, e.g. 'Exchange DEM - EUR'.*/
+     _("Exchange"),
+     gnc_commodity_get_mnemonic(caccount->currency));
 
   /* Create the new currency exchange account. */
   a = xaccMallocAccount();
   xaccAccountBeginEdit(a);
   xaccAccountSetType(a, CURRENCY);
   xaccAccountSetName(a, accountname);
+  /* Account description for the Euro-related currency exchange accounts. */
   xaccAccountSetDescription(a, _("Euro conversion"));
   xaccAccountSetCurrency(a, caccount->currency);
   xaccAccountSetSecurity(a, gnc_get_euro() );
@@ -283,6 +290,7 @@ exchange_amounts(Account *old_a, Account *exchange, Account *new_a)
       xaccSplitSetAmount (split, gnc_numeric_neg(eur_amount));
       xaccAccountInsertSplit (exchange, split);
 
+      /* Transaction description for the Euro conversion-related transaction. */
       xaccTransSetDescription (trans, _("Euro conversion"));     
       xaccTransSetDateToday (trans);
       xaccTransCommitEdit (trans);
@@ -305,6 +313,7 @@ foreach_account_cb (gpointer data, gpointer user_data)
   char *new_name, *old_name;
   AccountGroup *parentGroup;
   CurrencyAccount *caccount;
+  GNCAccountType account_type;
 
   if (old_a == NULL)
     return;
@@ -359,6 +368,12 @@ foreach_account_cb (gpointer data, gpointer user_data)
   g_hash_table_insert(info->account_hash, old_a, new_a);
 
   /* Now the exchange transactions have to be made. */
+
+  /* Make amount exchange only for non-income/expense accounts */
+  account_type = xaccAccountGetType (old_a);
+  if (account_type == INCOME ||
+      account_type == EXPENSE)
+    return;
 
   /* Find the exchange account. */
   caccount = (CurrencyAccount *) 
