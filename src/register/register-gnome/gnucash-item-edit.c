@@ -647,8 +647,10 @@ gnc_item_edit_finalize (GObject *object)
         	item_edit->clipboard = NULL;
 	}
 
-
-        gdk_gc_destroy (item_edit->gc);
+	if (item_edit->gc) {
+		gdk_gc_destroy (item_edit->gc);
+		item_edit->gc = NULL;
+	}
 
         G_OBJECT_CLASS (gnc_item_edit_parent_class)->finalize (object);
 }
