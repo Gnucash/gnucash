@@ -826,6 +826,13 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>peter@pogma.com</email> Peter O'Gorman</glossterm>
+<glossdef>
+<para>file i/o patches</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>webmaster@obsidian.uia.net</email> OmNiBuS
       </glossterm>
 <glossdef>
