@@ -1,3 +1,7 @@
+2005-02-17  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: properly notice that we've got a gtkhtml version.
+
 2005-02-16  Derek Atkins  <derek@ihtfp.com>
 
 	* src/app-utils/option-util.c: in lookup_string_option() use

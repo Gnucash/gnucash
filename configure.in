@@ -897,16 +897,17 @@ then
 
 
     # check for gtkhtml 3.x
-    PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.6 ,,gtkhtml=0)
+    PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.6 , gtkhtml=1 , gtkhtml=0)
     if test $gtkhtml
       then
-         PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.2 ,,gtkhtml=0)
+         PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.2 , gtkhtml=1 , gtkhtml=0)
          if test $gtkhtml
            then 
-              PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.1 ,,gtkhtml=0)
+              PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.1 , gtkhtml=1 , gtkhtml=0)
               if test $gtkhtml
                 then 
-                  PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.0)
+                  PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.0 ,,
+			AC_MSG_ERROR([Could not find a working gtkhtml version]))
               fi
         fi
     fi
