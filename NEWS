@@ -1,6 +1,86 @@
 Version history:
 ------- -------
 
+ 1.8.4  - 25 May 2003
+ 	 o Fix transfer dialog to nothang if OK button is clicked w/o filling
+	   in dialog properly.
+	 o Add HTML::Parser to the list of items checked/installed.
+	 o Updated translations:  Brazilian Portugese, Czech, Italian, German
+	 o Fix the "View xxxbar" menu items to track properly when a new data
+	   file is opened. Consolidate the code for manipulating the
+	   View/Statusbar and View/Summarybar menu items.  Work around a Gnome
+	   MDI bug as best as possible.
+	 o The numeric test regex was broken and would fail on ALL numerics,
+	   causing all imports to be of value zero.
+	 o Fix for creating new template transactions [from Scheduling
+	   existing transactions], such that they have valid Posted dates.
+	 o Fix for existing/old data without posted dates.  If we encounter
+	   the condition, fixup the transaction's Posted date to that of the
+	   Entered date.
+	 o Add LOT_IS_CLOSED and LOT_BALANCE query parameter methods
+	 o Fixes for 64-bit architectures.
+	 o Add gncQueryGetBooks() API to return list of books in a query.
+	 o Add INVOICE_POST_LOT query parameter methods
+	 o Add an api to force an event even when events are suspended.
+	   Without such an API, events can be lost if the event system is
+	   suspended when the event comes in.
+	 o Added gnucash wrappers around gnome-print's rotate, translate,
+	   gsave, and grestore APIs.  All to allow sideways printing (by
+	   rotating the image).
+	 o Wrap the new print-session apis.
+	 o Modify the AC_GWRAP_CHECK_GUILE() macro to take an argument, the
+	   g-wrap module directory.  Then actually test that the g-wrap module
+	   loads.  This should detect systems without slib installed.
+	 o New gwrap check macro
+	 o Deal properly when there are no prices for a commodity.
+	 o Supply a start date (as well as an end date) and don't print
+	   invoices that occur prior to the start date or after the end date.
+	   The aging information ignores the start date, but not the end date.
+	   This means the aging information will always be acurate through the
+	   end date (even if all the invoices and payments are not displayed).
+	 o Limit the itemized invoices/payments to the start/end date range,
+	   but print out a "Balance" line if there is a non-zero balance as of
+	   the start date.
+	 o Nikos Charonitakis's account chart updates: added new carloan
+	   account chart, updated account chart.
+	 o Use the correct columns when printing the Gain column, don't reuse
+	   the same column as profit; we want to report different values.
+	 o Don't let the user do anything with the options dialog until
+	   Apply() finishes.
+	 o Had the wrong number of arguments in gnc:account-get-balance-at-date
+	 o Add some (commented out) code to support a start date for computing
+	   the Net Income (aka Net Profit) in the Balance Sheet.
+	 o Move the instantiation of File -> Properties into main-window.scm
+	   (out of business-gnome.scm) for future cases where we might decide to
+	   ship the business modules separately.
+	 o Fix the ofx test program to make sure it links on many weird
+	   platforms.
+	 o When we are asked to reload the report, queue the request, queue a
+	   draw event, and then return immediately.  When the draw event
+	   happens, load the report then.  This lets you hit Apply and then OK
+	   before the report finishes loading.
+	 o Make sure we can find libofx/libofx.h
+	 o Include split transactions in the filtering of the transaction
+	   report.
+	 o Use a 'from' date to better compute the Net Income on the report.
+	 o Change the default Search Operation for numerics from "less than"
+	   to "equals" -- so by default you would search for an exact value.
+	 o "eval" changed API on guile-1.6.  Use the existing API to convert a
+	   delta symbol to a delta time.
+	 o Call eval with the right number of arguments based on early or late
+	   versions.
+	 o Change the date format string to be consistent with other places
+	   (e.g. the check print dialog) and use '%' instead of '~'.
+	 o Make the Bill Due Days option selectable based on the setting of
+	   Notify Bills Due?
+	 o Don't crash if you remove the last entry and then add another one.
+	 o Deal with the case where the first transaction found for a
+	   particular company is a payment
+	 o Also print out any overpayment in the total column.
+	 o Catch errors when running the child reports so we display the
+	   failed report backtrace but also display an error and continue with
+	   the multicolumn report.
+	 
  1.8.3  - 03 May 2003
  	 o Updated translations: Italian, Swedish, Danish, British,
 	   Traditional Chinese, French, German, Tamil, Brazilian Portugese.

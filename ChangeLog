@@ -1,3 +1,8 @@
+2003-05-25  Chris Lyttle  <chris@wilddev.net>
+
+	* configure.in: release 1.8.4
+	* NEWS: release 1.8.4
+	
 2003-05-25  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/report-gnome/dialog-view-column.c: don't crash
