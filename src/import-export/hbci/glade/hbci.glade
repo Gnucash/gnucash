@@ -882,6 +882,50 @@ If you do not have one yet, choose a filename, and a key file will be created th
 
     <widget>
       <class>GnomeDruidPageStandard</class>
+      <name>account_info_page</name>
+      <title>Account list will be updated</title>
+      <title_color>255,255,255</title_color>
+      <background_color>153,191,153</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>druid-vbox10</name>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>label8437423</name>
+	  <label>In order to update your list of HBCI-enabled accounts, your bank
+server will be contacted and will be queried for the 
+HBCI-accessible accounts.
+
+Press 'Next' now to contact the bank server. You can then see the 
+progress of the HBCI connection in the HBCI connection window.</label>
+	  <justify>GTK_JUSTIFY_LEFT</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
       <name>account_match_page</name>
       <title>Match HBCI accounts with GnuCash accounts</title>
       <title_color>255,255,255</title_color>
@@ -1064,7 +1108,7 @@ account list</label>
 to a Gnucash account is finished. You can now invoke HBCI actions
 on those accounts.
 
-If you want to add another HBCI bank, user, or account, you can just 
+If you want to add another HBCI bank, user, or account, you can 
 start this druid again anytime.
 
 Press 'Finish' now.</text>
@@ -1104,8 +1148,10 @@ to enter your PIN for this to happen. After the successful key
 retrieval, you need to verify those against the Ini-Letter that 
 your bank gave to you on paper.
 
-Press 'Next' now to retrieve the keys from the bank. You can then 
-see the progress of the HBCI connection in the HBCI connection window.</label>
+Press 'Next' now to retrieve the keys from the bank. If you have just
+created a new key file, you have to enter its PIN again. You can 
+then see the progress of the HBCI connection in the HBCI 
+connection window.</label>
 	  <justify>GTK_JUSTIFY_LEFT</justify>
 	  <wrap>False</wrap>
 	  <xalign>0.5</xalign>
@@ -1143,7 +1189,7 @@ see the progress of the HBCI connection in the HBCI connection window.</label>
 
 	<widget>
 	  <class>GtkVBox</class>
-	  <name>vbox145</name>
+	  <name>iniletter_server_vbox</name>
 	  <homogeneous>False</homogeneous>
 	  <spacing>0</spacing>
 	  <child>
@@ -1166,282 +1212,7 @@ see the progress of the HBCI connection in the HBCI connection window.</label>
 	    </child>
 
 	    <widget>
-	      <class>GtkVBox</class>
-	      <name>vbox146</name>
-	      <border_width>10</border_width>
-	      <homogeneous>False</homogeneous>
-	      <spacing>2</spacing>
-
-	      <widget>
-		<class>GtkFrame</class>
-		<name>frame61</name>
-		<label>Bank</label>
-		<label_xalign>0</label_xalign>
-		<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
-		<child>
-		  <padding>0</padding>
-		  <expand>True</expand>
-		  <fill>True</fill>
-		</child>
-
-		<widget>
-		  <class>GtkHBox</class>
-		  <name>hbox114</name>
-		  <border_width>10</border_width>
-		  <homogeneous>False</homogeneous>
-		  <spacing>5</spacing>
-
-		  <widget>
-		    <class>GtkLabel</class>
-		    <name>label8477419</name>
-		    <label>Bank Code:</label>
-		    <justify>GTK_JUSTIFY_CENTER</justify>
-		    <wrap>False</wrap>
-		    <xalign>0.5</xalign>
-		    <yalign>0.5</yalign>
-		    <xpad>0</xpad>
-		    <ypad>0</ypad>
-		    <child>
-		      <padding>0</padding>
-		      <expand>False</expand>
-		      <fill>False</fill>
-		    </child>
-		  </widget>
-
-		  <widget>
-		    <class>GtkFrame</class>
-		    <name>frame62</name>
-		    <label_xalign>0</label_xalign>
-		    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
-		    <child>
-		      <padding>0</padding>
-		      <expand>False</expand>
-		      <fill>False</fill>
-		    </child>
-
-		    <widget>
-		      <class>GtkLabel</class>
-		      <name>server_bankcode_label</name>
-		      <label>10010010</label>
-		      <justify>GTK_JUSTIFY_CENTER</justify>
-		      <wrap>False</wrap>
-		      <xalign>0.5</xalign>
-		      <yalign>0.5</yalign>
-		      <xpad>0</xpad>
-		      <ypad>0</ypad>
-		    </widget>
-		  </widget>
-
-		  <widget>
-		    <class>GtkLabel</class>
-		    <name>label8477421</name>
-		    <label>Name:</label>
-		    <justify>GTK_JUSTIFY_CENTER</justify>
-		    <wrap>False</wrap>
-		    <xalign>0.5</xalign>
-		    <yalign>0.5</yalign>
-		    <xpad>0</xpad>
-		    <ypad>0</ypad>
-		    <child>
-		      <padding>0</padding>
-		      <expand>False</expand>
-		      <fill>False</fill>
-		    </child>
-		  </widget>
-
-		  <widget>
-		    <class>GtkFrame</class>
-		    <name>frame63</name>
-		    <label_xalign>0</label_xalign>
-		    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
-		    <child>
-		      <padding>0</padding>
-		      <expand>False</expand>
-		      <fill>False</fill>
-		    </child>
-
-		    <widget>
-		      <class>GtkLabel</class>
-		      <name>server_bankname_label</name>
-		      <label>my-bank</label>
-		      <justify>GTK_JUSTIFY_CENTER</justify>
-		      <wrap>False</wrap>
-		      <xalign>0.5</xalign>
-		      <yalign>0.5</yalign>
-		      <xpad>0</xpad>
-		      <ypad>0</ypad>
-		    </widget>
-		  </widget>
-
-		  <widget>
-		    <class>GtkLabel</class>
-		    <name>label8877419</name>
-		    <label>Server:</label>
-		    <justify>GTK_JUSTIFY_CENTER</justify>
-		    <wrap>False</wrap>
-		    <xalign>0.5</xalign>
-		    <yalign>0.5</yalign>
-		    <xpad>0</xpad>
-		    <ypad>0</ypad>
-		    <child>
-		      <padding>0</padding>
-		      <expand>False</expand>
-		      <fill>False</fill>
-		    </child>
-		  </widget>
-
-		  <widget>
-		    <class>GtkFrame</class>
-		    <name>frame65</name>
-		    <label_xalign>0</label_xalign>
-		    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
-		    <child>
-		      <padding>0</padding>
-		      <expand>False</expand>
-		      <fill>False</fill>
-		    </child>
-
-		    <widget>
-		      <class>GtkLabel</class>
-		      <name>server_bankaddr_label</name>
-		      <label>127.0.0.1</label>
-		      <justify>GTK_JUSTIFY_CENTER</justify>
-		      <wrap>False</wrap>
-		      <xalign>0.5</xalign>
-		      <yalign>0.5</yalign>
-		      <xpad>0</xpad>
-		      <ypad>0</ypad>
-		    </widget>
-		  </widget>
-		</widget>
-	      </widget>
-
-	      <widget>
-		<class>GtkLabel</class>
-		<name>label8477412</name>
-		<label>Exponent</label>
-		<justify>GTK_JUSTIFY_LEFT</justify>
-		<wrap>False</wrap>
-		<xalign>0</xalign>
-		<yalign>0</yalign>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-		<child>
-		  <padding>0</padding>
-		  <expand>False</expand>
-		  <fill>False</fill>
-		</child>
-	      </widget>
-
-	      <widget>
-		<class>GtkScrolledWindow</class>
-		<name>scrolledwindow26</name>
-		<hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
-		<vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
-		<hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-		<vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
-		<child>
-		  <padding>0</padding>
-		  <expand>True</expand>
-		  <fill>True</fill>
-		</child>
-
-		<widget>
-		  <class>GtkText</class>
-		  <name>serverexponent_text</name>
-		  <can_focus>True</can_focus>
-		  <editable>False</editable>
-		  <text></text>
-		</widget>
-	      </widget>
-
-	      <widget>
-		<class>GtkLabel</class>
-		<name>label8477413</name>
-		<label>Modulus</label>
-		<justify>GTK_JUSTIFY_LEFT</justify>
-		<wrap>False</wrap>
-		<xalign>0</xalign>
-		<yalign>0</yalign>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-		<child>
-		  <padding>0</padding>
-		  <expand>False</expand>
-		  <fill>False</fill>
-		</child>
-	      </widget>
-
-	      <widget>
-		<class>GtkScrolledWindow</class>
-		<name>scrolledwindow27</name>
-		<hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
-		<vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
-		<hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-		<vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
-		<child>
-		  <padding>0</padding>
-		  <expand>True</expand>
-		  <fill>True</fill>
-		</child>
-
-		<widget>
-		  <class>GtkText</class>
-		  <name>servermodulus_text</name>
-		  <can_focus>True</can_focus>
-		  <editable>False</editable>
-		  <text></text>
-		</widget>
-	      </widget>
-
-	      <widget>
-		<class>GtkHSeparator</class>
-		<name>hseparator2</name>
-		<child>
-		  <padding>0</padding>
-		  <expand>True</expand>
-		  <fill>True</fill>
-		</child>
-	      </widget>
-
-	      <widget>
-		<class>GtkLabel</class>
-		<name>label8477414</name>
-		<label>Hash</label>
-		<justify>GTK_JUSTIFY_CENTER</justify>
-		<wrap>False</wrap>
-		<xalign>0</xalign>
-		<yalign>0</yalign>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-		<child>
-		  <padding>0</padding>
-		  <expand>False</expand>
-		  <fill>False</fill>
-		</child>
-	      </widget>
-
-	      <widget>
-		<class>GtkScrolledWindow</class>
-		<name>scrolledwindow28</name>
-		<hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
-		<vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
-		<hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-		<vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
-		<child>
-		  <padding>0</padding>
-		  <expand>True</expand>
-		  <fill>True</fill>
-		</child>
-
-		<widget>
-		  <class>GtkText</class>
-		  <name>serverhash_text</name>
-		  <can_focus>True</can_focus>
-		  <editable>False</editable>
-		  <text></text>
-		</widget>
-	      </widget>
+	      <class>Placeholder</class>
 	    </widget>
 	  </widget>
 
@@ -1482,8 +1253,8 @@ see the progress of the HBCI connection in the HBCI connection window.</label>
 	      <relief>GTK_RELIEF_NORMAL</relief>
 	      <child>
 		<padding>0</padding>
-		<expand>False</expand>
-		<fill>False</fill>
+		<expand>True</expand>
+		<fill>True</fill>
 	      </child>
 	    </widget>
 
@@ -1495,8 +1266,31 @@ see the progress of the HBCI connection in the HBCI connection window.</label>
 	      <relief>GTK_RELIEF_NORMAL</relief>
 	      <child>
 		<padding>0</padding>
-		<expand>False</expand>
-		<fill>False</fill>
+		<expand>True</expand>
+		<fill>True</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkVSeparator</class>
+	      <name>vseparator1</name>
+	      <child>
+		<padding>0</padding>
+		<expand>True</expand>
+		<fill>True</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkButton</class>
+	      <name>serverprint_button</name>
+	      <can_focus>True</can_focus>
+	      <label>Print</label>
+	      <relief>GTK_RELIEF_NORMAL</relief>
+	      <child>
+		<padding>0</padding>
+		<expand>True</expand>
+		<fill>True</fill>
 	      </child>
 	    </widget>
 	  </widget>
@@ -1560,7 +1354,7 @@ the progress of the HBCI connection in the HBCI connection window.</label>
       <widget>
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>vbox132</name>
+	<name>iniletter_user_vbox</name>
 	<border_width>10</border_width>
 	<homogeneous>False</homogeneous>
 	<spacing>5</spacing>
@@ -1573,7 +1367,7 @@ the progress of the HBCI connection in the HBCI connection window.</label>
 	<widget>
 	  <class>GtkFrame</class>
 	  <name>iniletter_user_frame</name>
-	  <label>User Ini-Letter</label>
+	  <label>Ini-Letter User</label>
 	  <label_xalign>0</label_xalign>
 	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	  <child>
@@ -1592,7 +1386,7 @@ the progress of the HBCI connection in the HBCI connection window.</label>
 	  <name>hbox114</name>
 	  <border_width>10</border_width>
 	  <homogeneous>False</homogeneous>
-	  <spacing>10</spacing>
+	  <spacing>20</spacing>
 	  <child>
 	    <padding>0</padding>
 	    <expand>False</expand>
@@ -1602,14 +1396,12 @@ the progress of the HBCI connection in the HBCI connection window.</label>
 	  <widget>
 	    <class>GtkLabel</class>
 	    <name>label8477345</name>
-	    <label>This is the Ini-Letter of you, the user. 
-Please print out a paper copy by pressing 'Print'. 
-Sign it and send it to your bank.
-Then press 'Next'.</label>
+	    <label>This is the Ini-Letter of you, the user. Please print out a paper copy 
+by pressing 'Print'. Then press 'Next'.</label>
 	    <justify>GTK_JUSTIFY_LEFT</justify>
 	    <wrap>False</wrap>
-	    <xalign>0.5</xalign>
-	    <yalign>0.5</yalign>
+	    <xalign>0</xalign>
+	    <yalign>0</yalign>
 	    <xpad>0</xpad>
 	    <ypad>0</ypad>
 	    <child>
@@ -1627,8 +1419,8 @@ Then press 'Next'.</label>
 	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
+	      <expand>True</expand>
+	      <fill>True</fill>
 	    </child>
 	  </widget>
 	</widget>
@@ -1649,8 +1441,8 @@ Then press 'Next'.</label>
 The initial HBCI setup is now finished.
 
 Once your bank has received and processed your Ini-Letter, you
-have to execute the &quot;Finish HBCI Setup&quot; druid in order to use
-the HBCI functionality.
+have to execute this &quot;HBCI Setup&quot; druid again in order 
+to use the HBCI functionality in your accounts.
 
 Press 'Finish' now.</text>
       <background_color>153,191,153</background_color>
@@ -2093,6 +1885,303 @@ Press 'Finish' now.</text>
 	<widget>
 	  <class>GtkScrolledWindow</class>
 	  <name>scrolledwindow29</name>
+	  <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
+	  <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+
+	  <widget>
+	    <class>GtkText</class>
+	    <name>log_text</name>
+	    <can_focus>True</can_focus>
+	    <editable>False</editable>
+	    <text></text>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+  </widget>
+</widget>
+
+<widget>
+  <class>GtkWindow</class>
+  <name>HBCI_connection_window</name>
+  <title>HBCI Connection Window</title>
+  <type>GTK_WINDOW_TOPLEVEL</type>
+  <position>GTK_WIN_POS_NONE</position>
+  <modal>False</modal>
+  <default_width>400</default_width>
+  <default_height>400</default_height>
+  <allow_shrink>True</allow_shrink>
+  <allow_grow>True</allow_grow>
+  <auto_shrink>False</auto_shrink>
+
+  <widget>
+    <class>GtkVBox</class>
+    <name>vbox148</name>
+    <homogeneous>False</homogeneous>
+    <spacing>0</spacing>
+
+    <widget>
+      <class>GtkHBox</class>
+      <child_name>Dialog:action_area</child_name>
+      <name>hbox116</name>
+      <border_width>10</border_width>
+      <homogeneous>True</homogeneous>
+      <spacing>5</spacing>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>True</fill>
+	<pack>GTK_PACK_END</pack>
+      </child>
+
+      <widget>
+	<class>GtkHBox</class>
+	<name>hbox117</name>
+	<homogeneous>True</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>False</expand>
+	  <fill>True</fill>
+	  <pack>GTK_PACK_END</pack>
+	</child>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <name>abort_button</name>
+	  <can_focus>True</can_focus>
+	  <stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
+	  <relief>GTK_RELIEF_NORMAL</relief>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <name>close_button</name>
+	  <can_focus>True</can_focus>
+	  <stock_button>GNOME_STOCK_BUTTON_CLOSE</stock_button>
+	  <relief>GTK_RELIEF_NORMAL</relief>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GtkVBox</class>
+      <name>vbox149</name>
+      <homogeneous>False</homogeneous>
+      <spacing>0</spacing>
+      <child>
+	<padding>0</padding>
+	<expand>True</expand>
+	<fill>True</fill>
+      </child>
+
+      <widget>
+	<class>GtkFrame</class>
+	<name>frame68</name>
+	<border_width>10</border_width>
+	<label>Progress</label>
+	<label_xalign>0</label_xalign>
+	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	<child>
+	  <padding>0</padding>
+	  <expand>False</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkTable</class>
+	  <name>table5</name>
+	  <rows>3</rows>
+	  <columns>2</columns>
+	  <homogeneous>False</homogeneous>
+	  <row_spacing>0</row_spacing>
+	  <column_spacing>0</column_spacing>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <name>label8877424</name>
+	    <label>Current Job</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <child>
+	      <left_attach>0</left_attach>
+	      <right_attach>1</right_attach>
+	      <top_attach>0</top_attach>
+	      <bottom_attach>1</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>False</xexpand>
+	      <yexpand>False</yexpand>
+	      <xshrink>False</xshrink>
+	      <yshrink>False</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>False</yfill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <name>label8877425</name>
+	    <label>Current Action</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <child>
+	      <left_attach>0</left_attach>
+	      <right_attach>1</right_attach>
+	      <top_attach>1</top_attach>
+	      <bottom_attach>2</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>False</xexpand>
+	      <yexpand>False</yexpand>
+	      <xshrink>False</xshrink>
+	      <yshrink>False</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>False</yfill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <name>label8877426</name>
+	    <label>Progress</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <child>
+	      <left_attach>0</left_attach>
+	      <right_attach>1</right_attach>
+	      <top_attach>2</top_attach>
+	      <bottom_attach>3</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>False</xexpand>
+	      <yexpand>False</yexpand>
+	      <xshrink>False</xshrink>
+	      <yshrink>False</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>False</yfill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkProgressBar</class>
+	    <name>action_progress</name>
+	    <value>0</value>
+	    <lower>0</lower>
+	    <upper>100</upper>
+	    <bar_style>GTK_PROGRESS_CONTINUOUS</bar_style>
+	    <orientation>GTK_PROGRESS_LEFT_TO_RIGHT</orientation>
+	    <activity_mode>False</activity_mode>
+	    <show_text>True</show_text>
+	    <format>%P %%</format>
+	    <text_xalign>0.5</text_xalign>
+	    <text_yalign>0.5</text_yalign>
+	    <child>
+	      <left_attach>1</left_attach>
+	      <right_attach>2</right_attach>
+	      <top_attach>2</top_attach>
+	      <bottom_attach>3</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>False</xexpand>
+	      <yexpand>False</yexpand>
+	      <xshrink>False</xshrink>
+	      <yshrink>False</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>False</yfill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkEntry</class>
+	    <name>job_entry</name>
+	    <can_focus>True</can_focus>
+	    <editable>True</editable>
+	    <text_visible>True</text_visible>
+	    <text_max_length>0</text_max_length>
+	    <text></text>
+	    <child>
+	      <left_attach>1</left_attach>
+	      <right_attach>2</right_attach>
+	      <top_attach>0</top_attach>
+	      <bottom_attach>1</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>True</xexpand>
+	      <yexpand>False</yexpand>
+	      <xshrink>False</xshrink>
+	      <yshrink>False</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>False</yfill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkEntry</class>
+	    <name>action_entry</name>
+	    <can_focus>True</can_focus>
+	    <editable>True</editable>
+	    <text_visible>True</text_visible>
+	    <text_max_length>0</text_max_length>
+	    <text></text>
+	    <child>
+	      <left_attach>1</left_attach>
+	      <right_attach>2</right_attach>
+	      <top_attach>1</top_attach>
+	      <bottom_attach>2</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>True</xexpand>
+	      <yexpand>False</yexpand>
+	      <xshrink>False</xshrink>
+	      <yshrink>False</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>False</yfill>
+	    </child>
+	  </widget>
+	</widget>
+      </widget>
+
+      <widget>
+	<class>GtkFrame</class>
+	<name>frame69</name>
+	<border_width>10</border_width>
+	<label>Log Messages</label>
+	<label_xalign>0</label_xalign>
+	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkScrolledWindow</class>
+	  <name>scrolledwindow30</name>
 	  <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
 	  <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
 	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>

@@ -62,6 +62,12 @@ HBCI_API * gnc_hbci_api_new_currentbook (GtkWidget *parent,
 					 GNCInteractor **inter);
 
 
+/** Save this API to the config file given in the current book. Return
+ * an error if one occurred, or if no filename was found in the
+ * current book. */
+HBCI_Error * gnc_hbci_api_save (const HBCI_API *api);
+
+
 /* Get the corresponding HBCI account to a gnucash account. Of course
  * this only works after the gnucash account has been set up for HBCI
  * use, i.e. the kvp_frame "hbci/..." have been filled with

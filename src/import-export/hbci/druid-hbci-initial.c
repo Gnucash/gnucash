@@ -47,9 +47,11 @@
 typedef enum _infostate {
   INI_ADD_BANK,
   INI_ADD_USER,
+  INI_UPDATE_ACCOUNTS,
   INI_MATCH_ACCOUNTS,
   ADD_BANK,
   ADD_USER,
+  UPDATE_ACCOUNTS,
   MATCH_ACCOUNTS
 } Infostate;
 
@@ -82,6 +84,9 @@ struct _hbciinitialinfo
   GtkWidget *mediumpath;
   GtkWidget *mediumddv;
 
+  /* account update info page */
+  GtkWidget *accountinfopage;
+  
   /* account match page */
   GtkWidget *accountpage;
   GtkWidget *accountlist;
@@ -91,12 +96,7 @@ struct _hbciinitialinfo
 
   /* iniletter server */
   GtkWidget *serverpage;
-  GtkWidget *server_bankcode;
-  GtkWidget *server_name;
-  GtkWidget *server_ip;
-  GtkWidget *server_exp;
-  GtkWidget *server_mod;
-  GtkWidget *server_hash;
+  GtkWidget *server_vbox;
   GtkWidget *server_frame;
   gnc_html *server_html;
 
@@ -104,6 +104,7 @@ struct _hbciinitialinfo
   GtkWidget *userinfopage;
   
   /* iniletter user */
+  GtkWidget *user_vbox;
   GtkWidget *user_frame;
   gnc_html *user_html;
 
@@ -120,12 +121,12 @@ struct _hbciinitialinfo
   Infostate state;
 
   /* Newly created customer */
-  HBCI_Customer *newcustomer;
+  const HBCI_Customer *newcustomer;
   /* Bank for which a new user is about to be created */
-  HBCI_Bank *newbank;
+  const HBCI_Bank *newbank;
 
   /* Customer for which we already got the keys */
-  HBCI_Customer *gotkeysforCustomer;
+  const HBCI_Customer *gotkeysforCustomer;
   
 };
 
@@ -280,6 +281,232 @@ update_accountlist (HBCIInitialInfo *info)
  * end update_accountlist 
  *******************************************************************/
 
+/*******************************************************************
+ *
+ * Button enabling */
+static void 
+druid_enable_next_button(HBCIInitialInfo *info)
+{
+  g_assert(info);
+  gnome_druid_set_buttons_sensitive (GNOME_DRUID (info->druid),
+				     TRUE, TRUE, TRUE);
+}
+static void 
+druid_disable_next_button(HBCIInitialInfo *info)
+{
+  g_assert(info);
+  gnome_druid_set_buttons_sensitive (GNOME_DRUID (info->druid),
+				     TRUE, FALSE, TRUE);
+}
+/*
+ * end button enabling
+ *******************************************************************/
+
+/******************************************************************
+ * string conversion 
+ */
+static char *
+to_hexstring (const char *str)
+{
+  int i, bytes = strlen(str)/2;
+  char *res = g_strnfill (3*bytes, ' ');
+  for (i=0; i < bytes; i++) {
+    res[3*i+0] = str[2*i+0];
+    res[3*i+1] = str[2*i+1];
+    if (i % 16 == 15)
+      res[3*i+2] = '\n';
+  }
+  res [3*i+2] = '\0';
+  //printf ("Converted -%s- to -%s-.\n", str, res);
+  return res;
+}
+static char *
+to_hexstring_hash (const char *str)
+{
+  int i, bytes = strlen(str)/2;
+  char *res = g_strnfill (3*bytes, ' ');
+  for (i=0; i < bytes; i++) {
+    res[3*i+0] = str[2*i+0];
+    res[3*i+1] = str[2*i+1];
+    if (i % 10 == 9)
+      res[3*i+2] = '\n';
+  }
+  res [3*i+2] = '\0';
+  //printf ("Converted -%s- to -%s-.\n", str, res);
+  return res;
+}
+/*
+ * end string conversion 
+ ***************************************************************/
+
+
+static void *
+print_list_int_cb (int value, void *user_data)
+{
+  printf("%d, ", value);
+  return NULL;
+}
+static void 
+print_list_int (const list_int *list)
+{
+  g_assert(list);
+  list_int_foreach (list, &print_list_int_cb, NULL);
+  printf ("\n");
+}
+static void *
+get_resultcode_error_cb (int value, void *user_data)
+{
+  if (value >= 9000)
+    return (void*) value;
+  else
+    return NULL;
+}
+static int
+get_resultcode_error (const list_int *list)
+{
+  g_assert (list);
+  return (int) list_int_foreach (list, &get_resultcode_error_cb, NULL);
+}
+
+static void 
+debug_outboxjob (HBCI_OutboxJob *job, HBCIInitialInfo *info)
+{
+  list_int *list;
+  const char *msg;
+  int cause;
+  
+  g_assert (info);
+  g_assert (job);
+/*   if (HBCI_OutboxJob_status (job) != HBCI_JOB_STATUS_DONE) */
+/*     return; */
+/*   if (HBCI_OutboxJob_result (job) != HBCI_JOB_RESULT_FAILED) */
+/*     return; */
+  printf("OutboxJob failed. resultcodes were: \n");
+  list = HBCI_OutboxJob_resultCodes (job);
+  print_list_int (list);
+  cause = get_resultcode_error (list);
+  switch (cause) {
+  case 9310:
+    msg = "Schluessel noch nicht hinterlegt";
+    break;
+  case 9320:
+    msg = "Schluessel noch nicht freigeschaltet";
+    break;
+  case 9330:
+    msg = "Schluessel gesperrt";
+    break;
+  case 9340:
+    msg = "Schluessel falsch";
+    break;
+  default:
+    msg = "Unknown";
+  }
+  printf("Probable cause of error was: code %d, msg: %s\n", cause, msg);
+  list_int_delete (list);
+}
+
+
+static const HBCI_Bank *
+choose_one_bank (HBCIInitialInfo *info, int *list_size)
+{
+  const list_HBCI_Bank *banklist;
+  g_assert (info);
+  g_assert (list_size);
+
+  /* Get HBCI bank and account list */
+  banklist = HBCI_API_bankList (info->api);
+  //printf("%d banks found.\n", list_HBCI_Bank_size (banklist));
+  *list_size = list_HBCI_Bank_size (banklist);
+  if (*list_size == 0) 
+    return NULL;
+  if (*list_size > 1) 
+    return NULL;
+
+  /* Get bank. */
+  {
+    const HBCI_Bank *bank;
+    list_HBCI_Bank_iter *iter;
+
+    iter = list_HBCI_Bank_begin (banklist);
+    bank = list_HBCI_Bank_iter_get (iter);
+    list_HBCI_Bank_iter_delete (iter);
+    return bank;
+  }
+}
+
+
+static const HBCI_Customer *
+choose_customer (HBCIInitialInfo *info)
+{
+  const HBCI_Bank *bank;
+  int banklist_size = 0;
+  g_assert (info);
+
+  bank = choose_one_bank (info, &banklist_size);
+
+  if (banklist_size == 0) 
+    return NULL;
+  
+  if (banklist_size > 1) {
+    printf("choose_customer: oops, more than one bank found. Not yet implemented.\n");
+    return NULL;
+  }
+  g_assert (bank);
+  
+  /* Get User list. */
+  {
+    const list_HBCI_User *userlist;
+
+    userlist = HBCI_Bank_users (bank);
+    
+    if (list_HBCI_User_size (userlist) == 0) {
+      printf("choose_customer: oops, no user found.\n");
+      return NULL;
+    }
+    if (list_HBCI_User_size (userlist) > 1) {
+      printf("choose_customer: oops, more than one user found; not yet implemented.\n");
+      return NULL;
+    }
+
+    /* Get User */
+    {
+      const HBCI_User *user;
+      list_HBCI_User_iter *iter;
+      const list_HBCI_Customer *custlist;
+      
+      iter = list_HBCI_User_begin (userlist);
+      user = list_HBCI_User_iter_get (iter);
+      list_HBCI_User_iter_delete (iter);
+      custlist = HBCI_User_customers (user);
+      
+      if (list_HBCI_Customer_size (custlist) == 0) {
+	printf ("choose_customer: oops, no customer found.\n");
+	return NULL;
+      }
+      if (list_HBCI_Customer_size (custlist) > 1) {
+	printf ("choose_customer: oops, more than one customer found; not yet implemented.\n");
+	return NULL;
+      }
+
+      /* Get customer */
+      {
+	const HBCI_Customer *cust;
+	list_HBCI_Customer_iter *iter;
+
+	iter = list_HBCI_Customer_begin (custlist);
+	cust = list_HBCI_Customer_iter_get (iter);
+	list_HBCI_Customer_iter_delete (iter);
+	
+	return cust;
+      }
+    }
+  }
+}
+
+
+
+
+
 
 
 
@@ -298,12 +525,24 @@ on_finish (GnomeDruidPage *gnomedruidpage,
 	   gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
+  g_assert (info);
 
   if (info->configfile &&
       (strcmp(info->configfile, 
 	      gnc_hbci_get_book_configfile (gnc_get_current_book ())) != 0)) {
     /* Name of configfile has changed */
     gnc_hbci_set_book_configfile (gnc_get_current_book (), info->configfile);
+  }
+  
+  {
+    HBCI_Error *err;
+    err = gnc_hbci_api_save (info->api);
+    if (err != NULL) {
+      if (!HBCI_Error_isOk (err)) 
+	printf("on_finish: Error at saving OpenHBCI data: %s.\n",
+	       HBCI_Error_message (err));
+      HBCI_Error_delete (err);
+    }
   }
   
   if (info->gnc_hash)
@@ -321,7 +560,7 @@ on_configfile_next (GnomeDruidPage *gnomedruidpage,
   HBCIInitialInfo *info = user_data;
   char *filename;
   HBCI_API *api;
-  
+
   filename = g_strstrip(gnome_file_entry_get_full_path 
 			(GNOME_FILE_ENTRY (info->configfileentry), FALSE));
 
@@ -375,16 +614,22 @@ on_configfile_next (GnomeDruidPage *gnomedruidpage,
     }
 
     if (HBCI_API_totalUsers(api) == 0) {
+      int dummy;
       // zero users? go to user-creation page
       info->state = INI_ADD_USER;
+      info->newbank = choose_one_bank (info, &dummy);
       gnome_druid_set_page (GNOME_DRUID (info->druid), 
 			    GNOME_DRUID_PAGE (info->userpage));
       return TRUE;
     }
     
     if (HBCI_API_totalAccounts(api) == 0) {
-      // still no accounts? call account_update 
-      update_accounts (api);
+      // still no accounts? go to account update page
+      info->state = INI_UPDATE_ACCOUNTS;
+      info->newcustomer = choose_customer (info);
+      gnome_druid_set_page (GNOME_DRUID (info->druid), 
+			    GNOME_DRUID_PAGE (info->accountinfopage));
+      return TRUE;
     }
   }
 
@@ -557,16 +802,19 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
   g_assert (info);
   api = info->api;
   g_assert (api);
-  bank = info->newbank;
+  bank = (HBCI_Bank *)info->newbank;
   g_assert (bank);
-    
+  on_userid_focus_out (NULL, NULL, info);
+      
   userid = gtk_entry_get_text (GTK_ENTRY (info->userid));
   username = gtk_entry_get_text (GTK_ENTRY (info->username));
   customerid = gtk_entry_get_text (GTK_ENTRY (info->customerid));
   customername = gtk_entry_get_text (GTK_ENTRY (info->customername));
 
-  user = HBCI_Bank_findUser(bank, userid);
-  if (user == NULL) {
+  /*user = HBCI_Bank_findUser(bank, userid);
+    if (user == NULL)*/ 
+  user = NULL;
+  {
     gboolean is_rdh;
     HBCI_Medium *medium;
     HBCI_User *newuser;
@@ -660,14 +908,152 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
     else
       return FALSE;
 
-  }
+  }/*
   else {
     printf("on_userid_next: Found user, name %s.\n", HBCI_User_userName(user));
-  }
+    }*/
 
-  info->state = MATCH_ACCOUNTS;
   return FALSE;
 }
+
+static gboolean 
+on_accountinfo_back (GnomeDruidPage  *gnomedruidpage,
+		     gpointer         arg1,
+		     gpointer         user_data)
+{
+  HBCIInitialInfo *info = user_data;
+  g_assert(info);
+  
+  switch (info->state) {
+  case UPDATE_ACCOUNTS:
+    gnome_druid_set_page (GNOME_DRUID (info->druid), 
+			  GNOME_DRUID_PAGE (info->accountpage));
+    return TRUE;
+  case INI_UPDATE_ACCOUNTS:
+    gnome_druid_set_page (GNOME_DRUID (info->druid), 
+			  GNOME_DRUID_PAGE (info->filepage));
+    return TRUE;
+  default:
+  }
+  return FALSE;
+}
+static gboolean 
+on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
+		     gpointer         arg1,
+		     gpointer         user_data)
+{
+  HBCIInitialInfo *info = user_data;
+  g_assert(info);
+
+  /* of course we need to know for which customer we do this */
+  if (info->newcustomer == NULL) 
+    info->newcustomer = choose_customer (info);
+  
+  if (info->newcustomer == NULL) 
+    return FALSE;
+
+  {
+    /* Execute a GetAccounts job. */
+    HBCI_OutboxJob *job;
+    HBCI_Error *err;
+    
+    job = HBCI_OutboxJobGetAccounts_OutboxJob 
+      (HBCI_OutboxJobGetAccounts_new ((HBCI_Customer *)info->newcustomer));
+    HBCI_API_addJob (info->api, job);
+
+    if (info->interactor)
+      GNCInteractor_show (info->interactor);
+
+    HBCI_Hbci_setDebugLevel(3);
+    err = HBCI_API_executeQueue (info->api, TRUE);
+    g_assert (err);
+    if (!HBCI_Error_isOk(err)) {
+      char *errstr = g_strdup_printf("on_accountinfo_next: Error at executeQueue: %s",
+				     HBCI_Error_message (err));
+      printf("%s; status %d, result %d\n", errstr, HBCI_OutboxJob_status(job),
+	     HBCI_OutboxJob_result(job));
+      HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor 
+					(HBCI_API_Hbci (info->api)), errstr);
+      g_free (errstr);
+      HBCI_Error_delete (err);
+      debug_outboxjob (job, info);
+      return FALSE;
+    }
+    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);
+    HBCI_Error_delete (err);
+  }
+  //update_accountlist(info->api);
+  
+  return FALSE;
+}
+
+
+
+
+static gboolean 
+on_accountlist_back (GnomeDruidPage  *gnomedruidpage,
+		     gpointer         arg1,
+		     gpointer         user_data)
+{
+  HBCIInitialInfo *info = user_data;
+  g_assert(info);
+  
+  switch (info->state) {
+  case INI_MATCH_ACCOUNTS:
+  case MATCH_ACCOUNTS:
+    gnome_druid_set_page (GNOME_DRUID (info->druid), 
+			  GNOME_DRUID_PAGE (info->filepage));
+    return TRUE;
+  default:
+  }
+  return FALSE;
+}
+
+static void
+on_accountlist_prepare (GnomeDruidPage *gnomedruidpage,
+			gpointer arg1,
+			gpointer user_data)
+{
+  HBCIInitialInfo *info = user_data;
+
+  if (info->gnc_hash == NULL)
+    info->gnc_hash = gnc_hbci_new_hash_from_kvp (info->api);
+  
+  gnome_druid_set_buttons_sensitive (GNOME_DRUID (info->druid),
+				     FALSE, TRUE, TRUE);
+
+  update_accountlist(info);
+}
+
+static void
+on_accountlist_select_row (GtkCList *clist, gint row,
+			   gint column, GdkEvent *event,
+			   gpointer user_data)
+{
+  HBCIInitialInfo *info = user_data;
+  HBCI_Account *hbci_acc;
+  Account *gnc_acc, *old_value;
+  
+  hbci_acc = g_hash_table_lookup (info->hbci_hash, &row);
+  if (hbci_acc) {
+    old_value = g_hash_table_lookup (info->gnc_hash, hbci_acc);
+
+    gnc_acc = hbci_account_picker_dialog(info, old_value);
+
+    if (gnc_acc) {
+      if (old_value) 
+	g_hash_table_remove (info->gnc_hash, hbci_acc);
+      
+      g_hash_table_insert (info->gnc_hash, hbci_acc, gnc_acc);
+    }
+    
+    /* update display */
+    update_accountlist(info);
+  } /* hbci_acc */
+}
+
+
+
 
 
 static gboolean
@@ -705,6 +1091,27 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
     HBCI_OutboxJob *job;
     HBCI_Error *err;
     
+    {
+      HBCI_Error *err;
+      err = HBCI_API_saveEnvironment (info->api, info->configfile);
+      if (err != NULL) {
+	if (!HBCI_Error_isOk (err)) 
+	  printf("on_iniletter_info_next: Error at saving OpenHBCI data: %s.\n",
+		 HBCI_Error_message (err));
+	HBCI_Error_delete (err);
+      }
+    }
+    {
+      HBCI_Error *err;
+      err = HBCI_API_loadEnvironment (info->api, info->configfile);
+      if (err != NULL) {
+	if (!HBCI_Error_isOk (err)) 
+	  printf("on_iniletter_info_next: Error at loading OpenHBCI data: %s.\n",
+		 HBCI_Error_message (err));
+	HBCI_Error_delete (err);
+      }
+    }
+
     job = HBCI_OutboxJobGetKeys_OutboxJob 
       (HBCI_OutboxJobGetKeys_new (info->api, info->newcustomer));
     HBCI_API_addJob (info->api, job);
@@ -713,6 +1120,7 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
       GNCInteractor_show (info->interactor);
   
     err = HBCI_API_executeQueue (info->api, TRUE);
+    g_assert (err);
     if (!HBCI_Error_isOk(err)) {
       char *errstr = g_strdup_printf("on_iniletter_info_next: Error at executeQueue: %s",
 				     HBCI_Error_message (err));
@@ -721,50 +1129,91 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
       HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor (HBCI_API_Hbci (info->api)), errstr);
       g_free (errstr);
       HBCI_Error_delete (err);
+      debug_outboxjob (job, info);
       return FALSE;
     }
     HBCI_Error_delete (err);
+    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);
     info->gotkeysforCustomer = info->newcustomer;
+
   }
   else if (info->gotkeysforCustomer != info->newcustomer) {
     printf("on_iniletter_info_next: Oops, already got keys for another customer. Not yet implemented.\n");
     return TRUE;
   }
 
+  /* Create Ini-Letter */
+  {
+    char *res;
+    const HBCI_Medium *med;
+    const HBCI_MediumRDH *medr;
+    const HBCI_Bank *bank;
+    gboolean use_cryptkey;
+    char *tmp, *hash, *exponent, *modulus;
+    const char *bankcode, *bankname, *bankip;
+    int keynumber, keyversion;
+    time_t now = time(NULL);
+    char *time_now = ctime(&now);
+
+    bank = HBCI_User_bank (HBCI_Customer_user 
+			   ((HBCI_Customer *)info->newcustomer));
+    bankcode = HBCI_Bank_bankCode (bank);
+    bankname = HBCI_Bank_name (bank);
+    bankname = (strlen (bankname) > 0 ? bankname : _("Unknown"));
+    bankip = HBCI_Bank_addr (bank);    
+
+    med = HBCI_User_medium (HBCI_Customer_user
+			    ((HBCI_Customer *)info->newcustomer));
+    medr = HBCI_Medium_MediumRDH ((HBCI_Medium *)med);
+    g_assert (medr);
+
+    use_cryptkey = !HBCI_MediumRDH_hasInstSignKey (medr);
+    tmp = HBCI_MediumRDH_getInstIniLetterHash(medr, use_cryptkey);
+    hash = to_hexstring_hash (tmp);
+    free (tmp);
+    tmp = HBCI_MediumRDH_getInstIniLetterExponent(medr, use_cryptkey);
+    exponent = to_hexstring (tmp);
+    free (tmp);
+    tmp = HBCI_MediumRDH_getInstIniLetterModulus(medr, use_cryptkey);
+    modulus = to_hexstring (tmp);
+    free (tmp);
+    keynumber = HBCI_MediumRDH_getInstKeyNumber(medr, use_cryptkey);
+    keyversion = HBCI_MediumRDH_getInstKeyVersion(medr, use_cryptkey);
+
+    res = g_strdup_printf("<html><body><h1>Ini-Brief der Bank %s</h1>
+<h2>Bankdaten</h2><table>
+<tr><td>Bankleitzahl</td><td>%s</td></tr>
+<tr><td>IP-Adresse</td><td>%s</td></tr>
+<tr><td>Datum, Uhrzeit</td><td>%s</td></tr>
+<tr><td>Schl&uuml;sselnummer</td><td>%d</td></tr>
+<tr><td>Schl&uuml;sselversion</td><td>%d</td></tr>
+</table>
+<h2>Oeffentlicher Schl&uuml;ssel f&uuml;r die elektronische
+Signatur</h2>
+<h3>Exponent (768 Bit)</h3>
+<pre>%s</pre>
+<h3>Modulus (768 Bit)</h3>
+<pre>%s</pre>
+<h3>Hashwert</h3>
+<pre>%s</pre>
+</body></html>",
+			  bankname, 
+			  bankcode,
+			  bankip,
+			  time_now,
+			  keynumber, keyversion,
+			  exponent, modulus, hash);
+
+    g_free (exponent);
+    g_free (modulus);
+    g_free (hash);
+    
+    gnc_html_show_data (info->server_html, res, strlen(res));
+    
+    g_free (res);
+  }
+  
   return FALSE;
-}
-
-
-
-static char *
-to_hexstring (const char *str)
-{
-  int i, bytes = strlen(str)/2;
-  char *res = g_strnfill (3*bytes, ' ');
-  for (i=0; i < bytes; i++) {
-    res[3*i+0] = str[2*i+0];
-    res[3*i+1] = str[2*i+1];
-    if (i % 16 == 15)
-      res[3*i+2] = '\n';
-  }
-  res [3*i+2] = '\0';
-  //printf ("Converted -%s- to -%s-.\n", str, res);
-  return res;
-}
-static char *
-to_hexstring_hash (const char *str)
-{
-  int i, bytes = strlen(str)/2;
-  char *res = g_strnfill (3*bytes, ' ');
-  for (i=0; i < bytes; i++) {
-    res[3*i+0] = str[2*i+0];
-    res[3*i+1] = str[2*i+1];
-    if (i % 10 == 9)
-      res[3*i+2] = '\n';
-  }
-  res [3*i+2] = '\0';
-  //printf ("Converted -%s- to -%s-.\n", str, res);
-  return res;
 }
 
 
@@ -776,98 +1225,78 @@ on_iniletter_server_prepare (GnomeDruidPage *gnomedruidpage,
   HBCIInitialInfo *info = user_data;
   g_assert(info);
 
-  gnome_druid_set_buttons_sensitive (GNOME_DRUID (info->druid),
-				     TRUE, FALSE, TRUE);
-  gtk_label_set_text (GTK_LABEL (info->server_bankcode),
-		      HBCI_Bank_bankCode 
-		      (HBCI_User_bank 
-		       (HBCI_Customer_user(info->newcustomer))));
-  {
-    const char *name = 
-      HBCI_Bank_name (HBCI_User_bank (HBCI_Customer_user(info->newcustomer)));
-    if (name && (strlen(name) > 0))
-      gtk_label_set_text (GTK_LABEL (info->server_name), name);
-    else {
-      gtk_label_set_text (GTK_LABEL (info->server_name), _("Unknown"));
-      gtk_widget_set_sensitive (GTK_WIDGET (info->server_name), FALSE);
-    }
-  }
+  /* Workaround to get let the GtkHTML scrollbars appear. */
+  gtk_box_set_spacing (GTK_BOX (info->server_vbox), 1);
+  gtk_widget_queue_resize (GTK_WIDGET (info->server_vbox));
+  while (g_main_iteration (FALSE));
+  gtk_box_set_spacing (GTK_BOX (info->server_vbox), 0);
+  gtk_widget_queue_resize (GTK_WIDGET (info->server_vbox));
   
-  gtk_label_set_text (GTK_LABEL (info->server_ip),
-		      HBCI_Bank_addr 
-		      (HBCI_User_bank 
-		       (HBCI_Customer_user(info->newcustomer))));
+  druid_disable_next_button (info);
+
   /* Let the widgets be redrawn */
   while (g_main_iteration (FALSE));
-    
-  {
-    gint pos;
-    const HBCI_Medium *med;
-    const HBCI_MediumRDH *medr;
-    gboolean has_signkey;
-    char *tmp, *hash, *exponent, *modulus;
-    
-    med = HBCI_User_medium (HBCI_Customer_user(info->newcustomer));
-    medr = HBCI_Medium_MediumRDH ((HBCI_Medium *)med);
-    g_assert (medr);
-
-    has_signkey = HBCI_MediumRDH_hasInstSignKey (medr);
-    tmp = HBCI_MediumRDH_getInstIniLetterHash(medr, has_signkey);
-    hash = to_hexstring_hash (tmp);
-    free (tmp);
-    tmp = HBCI_MediumRDH_getInstIniLetterExponent(medr, has_signkey);
-    exponent = to_hexstring (tmp);
-    free (tmp);
-    tmp = HBCI_MediumRDH_getInstIniLetterModulus(medr, has_signkey);
-    modulus = to_hexstring (tmp);
-    free (tmp);
-
-    pos = 0;
-    gtk_editable_insert_text (GTK_EDITABLE (info->server_exp), 
-			      exponent, strlen(exponent), &pos);
-    pos = 0;
-    gtk_editable_insert_text (GTK_EDITABLE (info->server_mod), 
-			      modulus, strlen(modulus), &pos);
-    pos = 0;
-    gtk_editable_insert_text (GTK_EDITABLE (info->server_hash), 
-			      hash, strlen(hash), &pos);
-    g_free (exponent);
-    g_free (modulus);
-    g_free (hash);
-  }
-  
 }
+
 static gboolean
 on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
 			  gpointer arg1,
 			  gpointer user_data)
 {
-  //HBCIInitialInfo *info = user_data;
-  return FALSE;
-}
-
-static void
-on_iniletter_user_prepare (GnomeDruidPage  *gnomedruidpage,
-			gpointer arg1,
-			gpointer user_data)
-{
   HBCIInitialInfo *info = user_data;
   char *res;
   g_assert (info);
-  
+
   if (info->newcustomer == NULL)
-    return;
+    return FALSE;
+
+  if (info->gotkeysforCustomer == info->newcustomer) {
+    /* Execute a SendKey job. */
+    HBCI_OutboxJob *job;
+    HBCI_Error *err;
+    
+    job = HBCI_OutboxJobSendKeys_OutboxJob 
+      (HBCI_OutboxJobSendKeys_new (info->api, info->newcustomer));
+    HBCI_API_addJob (info->api, job);
+
+    if (info->interactor)
+      GNCInteractor_show (info->interactor);
   
+    HBCI_Hbci_setDebugLevel(3);
+    err = HBCI_API_executeQueue (info->api, TRUE);
+    g_assert (err);
+    if (!HBCI_Error_isOk(err)) {
+      char *errstr = g_strdup_printf("on_iniletter_userinfo_next: Error at executeQueue: %s",
+				     HBCI_Error_message (err));
+      printf("%s; status %d, result %d\n", errstr, HBCI_OutboxJob_status(job),
+	     HBCI_OutboxJob_result(job));
+      HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor (HBCI_API_Hbci (info->api)), errstr);
+      g_free (errstr);
+      HBCI_Error_delete (err);
+      debug_outboxjob (job, info);
+      return FALSE;
+    }
+    HBCI_Error_delete (err);
+    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);
+  }
+  else {
+    printf("on_iniletter_userinfo_next: Oops, already got keys for another customer. Not yet implemented.\n");
+    return TRUE;
+  }
+
   {
     const HBCI_Medium *med;
     const HBCI_MediumRDH *medr;
     int keynumber, keyversion;
     char *tmp, *hash, *exponent, *modulus;
-    const HBCI_User *user = HBCI_Customer_user (info->newcustomer);
+    const HBCI_User *user;
+    HBCI_Customer *cust;
     time_t now = time(NULL);
     char *time_now = ctime(&now);
-    
-    med = HBCI_User_medium (HBCI_Customer_user(info->newcustomer));
+
+    cust = (HBCI_Customer *)info->newcustomer;
+    user = HBCI_Customer_user (cust);
+    med = HBCI_User_medium (user);
     medr = HBCI_Medium_MediumRDH ((HBCI_Medium *)med);
     g_assert (medr);
 
@@ -915,7 +1344,30 @@ Ort, Datum, Unterschrift</body></html>",
     g_free (hash);
   }
   gnc_html_show_data (info->user_html, res, strlen(res));
+
   g_free (res);
+
+  return FALSE;
+}
+
+static void
+on_iniletter_user_prepare (GnomeDruidPage  *gnomedruidpage,
+			gpointer arg1,
+			gpointer user_data)
+{
+  HBCIInitialInfo *info = user_data;
+  g_assert (info);
+  
+  /* Workaround to get let the GtkHTML scrollbars appear. */
+  gtk_box_set_spacing (GTK_BOX (info->user_vbox), 1);
+  gtk_widget_queue_resize (GTK_WIDGET (info->user_vbox));
+  while (g_main_iteration (FALSE));
+  gtk_box_set_spacing (GTK_BOX (info->user_vbox), 0);
+  gtk_widget_queue_resize (GTK_WIDGET (info->user_vbox));
+
+  druid_disable_next_button (info);
+
+  while (g_main_iteration (FALSE));
 }
 static gboolean
 on_iniletter_user_next (GnomeDruidPage  *gnomedruidpage,
@@ -928,69 +1380,6 @@ on_iniletter_user_next (GnomeDruidPage  *gnomedruidpage,
 
 
 
-static gboolean 
-on_accountlist_back (GnomeDruidPage  *gnomedruidpage,
-		     gpointer         arg1,
-		     gpointer         user_data)
-{
-  HBCIInitialInfo *info = user_data;
-  g_assert(info);
-  
-  switch (info->state) {
-  case INI_ADD_BANK:
-  case INI_ADD_USER:
-  case ADD_BANK:
-  case ADD_USER:
-    return FALSE;
-  case INI_MATCH_ACCOUNTS:
-  case MATCH_ACCOUNTS:
-    gnome_druid_set_page (GNOME_DRUID (info->druid), 
-			  GNOME_DRUID_PAGE (info->filepage));
-    return TRUE;
-  default:
-  }
-  return FALSE;
-}
-
-static void
-on_accountlist_prepare (GnomeDruidPage *gnomedruidpage,
-			gpointer arg1,
-			gpointer user_data)
-{
-  HBCIInitialInfo *info = user_data;
-
-  if (info->gnc_hash == NULL)
-    info->gnc_hash = gnc_hbci_new_hash_from_kvp (info->api);
-  
-  update_accountlist(info);
-}
-
-static void
-on_accountlist_select_row (GtkCList *clist, gint row,
-			   gint column, GdkEvent *event,
-			   gpointer user_data)
-{
-  HBCIInitialInfo *info = user_data;
-  HBCI_Account *hbci_acc;
-  Account *gnc_acc, *old_value;
-  
-  hbci_acc = g_hash_table_lookup (info->hbci_hash, &row);
-  if (hbci_acc) {
-    old_value = g_hash_table_lookup (info->gnc_hash, hbci_acc);
-
-    gnc_acc = hbci_account_picker_dialog(info, old_value);
-
-    if (gnc_acc) {
-      if (old_value) 
-	g_hash_table_remove (info->gnc_hash, hbci_acc);
-      
-      g_hash_table_insert (info->gnc_hash, hbci_acc, gnc_acc);
-    }
-    
-    /* update display */
-    update_accountlist(info);
-  } /* hbci_acc */
-}
 
 static void
 on_button_clicked (GtkButton *button,
@@ -1007,19 +1396,32 @@ on_button_clicked (GtkButton *button,
     gnome_druid_set_page (GNOME_DRUID (info->druid), 
 			  GNOME_DRUID_PAGE (info->bankpage));
   } else if (strcmp (name, "adduser_button") == 0) {
+    int dummy;
     info->state = ADD_USER;
+    info->newbank = choose_one_bank (info, &dummy);
     gnome_druid_set_page (GNOME_DRUID (info->druid), 
 			  GNOME_DRUID_PAGE (info->userpage));
   } else if (strcmp (name, "updatelist_button") == 0) {
-    info->state = MATCH_ACCOUNTS;
-    update_accounts (info->api);
+    info->state = UPDATE_ACCOUNTS;
+    info->newcustomer = choose_customer (info);
     // Nothing else to do.
-    //gnome_druid_set_page (GNOME_DRUID (info->druid), 
-    //		  GNOME_DRUID_PAGE (info->accountpage));
+    gnome_druid_set_page (GNOME_DRUID (info->druid), 
+			  GNOME_DRUID_PAGE (info->accountinfopage));
   } else if (strcmp (name, "serveryes_button") == 0) {
-    gnome_druid_set_buttons_sensitive (GNOME_DRUID (info->druid),
-				       TRUE, TRUE, TRUE);
+    druid_enable_next_button (info);
+  } else if (strcmp (name, "serverno_button") == 0) {
+    druid_disable_next_button (info);
+    gnc_error_dialog_parented(GTK_WINDOW (info->window),
+			      _("Since the cryptographic keys of the bank cannot be verified, 
+you should stop contacting this Server Internet Address
+and contact your bank. To help your bank figure out the 
+problem, you should print out this erroneous Ini-Letter 
+and show it to your bank. Please abort the HBCI setup
+druid now."));
+  } else if (strcmp (name, "serverprint_button") == 0) {
+    gnc_html_print (info->server_html);
   } else if (strcmp (name, "userprint_button") == 0) {
+    druid_enable_next_button (info);
     gnc_html_print (info->user_html);
   } else {
     printf("on_button_clicked: Oops, unknown button: %s\n",
@@ -1133,6 +1535,14 @@ void gnc_hbci_initial_druid (void)
 			GTK_SIGNAL_FUNC (on_userid_next), info);
   }
   {
+    page = glade_xml_get_widget(xml, "account_info_page");
+    info->accountinfopage = page;
+    gtk_signal_connect (GTK_OBJECT (page), "back", 
+			GTK_SIGNAL_FUNC (on_accountinfo_back), info);
+    gtk_signal_connect (GTK_OBJECT (page), "next", 
+			GTK_SIGNAL_FUNC (on_accountinfo_next), info);
+  }
+  {
     page = glade_xml_get_widget(xml, "account_match_page");
     info->accountpage = page;
     info->accountlist = glade_xml_get_widget(xml, "account_page_list");
@@ -1166,17 +1576,24 @@ void gnc_hbci_initial_druid (void)
   {
     page = glade_xml_get_widget(xml, "iniletter_server_page");
     info->serverpage = page;
+    info->server_vbox = glade_xml_get_widget(xml, "iniletter_server_vbox");
+    info->server_frame = glade_xml_get_widget(xml, "iniletter_server_frame");
+    info->server_html = gnc_html_new();
+    gtk_container_add (GTK_CONTAINER (info->server_frame), 
+		       gnc_html_get_widget (info->server_html));
+
     gtk_signal_connect (GTK_OBJECT 
 			(glade_xml_get_widget (xml, "serveryes_button")), 
 			"clicked",
 			GTK_SIGNAL_FUNC (on_button_clicked), info);
-    info->server_bankcode = glade_xml_get_widget(xml, "server_bankcode_label");
-    info->server_name = glade_xml_get_widget(xml, "server_bankname_label");
-    info->server_ip = glade_xml_get_widget(xml, "server_bankaddr_label");
-    info->server_exp = glade_xml_get_widget(xml, "serverexponent_text");
-    info->server_mod = glade_xml_get_widget(xml, "servermodulus_text");
-    info->server_hash = glade_xml_get_widget(xml, "serverhash_text");
-    info->server_frame = glade_xml_get_widget(xml, "iniletter_server_frame");
+    gtk_signal_connect (GTK_OBJECT 
+			(glade_xml_get_widget (xml, "serverno_button")), 
+			"clicked",
+			GTK_SIGNAL_FUNC (on_button_clicked), info);
+    gtk_signal_connect (GTK_OBJECT 
+			(glade_xml_get_widget (xml, "serverprint_button")), 
+			"clicked",
+			GTK_SIGNAL_FUNC (on_button_clicked), info);
     gtk_signal_connect (GTK_OBJECT (page), "prepare", 
 			GTK_SIGNAL_FUNC (on_iniletter_server_prepare), info);
     /*gtk_signal_connect (GTK_OBJECT (page), "next", 
@@ -1190,6 +1607,7 @@ void gnc_hbci_initial_druid (void)
   }
   {
     page = glade_xml_get_widget(xml, "iniletter_user_page");
+    info->user_vbox = glade_xml_get_widget(xml, "iniletter_user_vbox");
     info->user_frame = glade_xml_get_widget(xml, "iniletter_user_frame");
     info->user_html = gnc_html_new();
     gtk_container_add (GTK_CONTAINER (info->user_frame), 

@@ -77,6 +77,17 @@ HBCI_API * gnc_hbci_api_new_currentbook (GtkWidget *parent,
      FALSE, parent, inter);
 };
 
+HBCI_Error * gnc_hbci_api_save (const HBCI_API *api)
+{
+  const char *file = gnc_hbci_get_book_configfile (gnc_get_current_book ());
+  if ((file == NULL) || (strlen (file) == 0)) 
+    return HBCI_Error_new ("gnc_hbci_api_save", ERROR_LEVEL_NORMAL, 0, 
+			   ERROR_ADVISE_ABORT, 
+			   "No filename for config file.", "");
+  
+  return HBCI_API_saveEnvironment (api, file);
+}
+
 
 
 const HBCI_Account *
