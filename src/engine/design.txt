@@ -81,6 +81,11 @@ credit StockBroker category $45 in fees
 
 
 
+Remaining Work Items
+--------------------
+The date handling functions need to be replaced with something that
+handles time, down to milliseconds.  I know millisecssounds stupid, but
+big banks use this for various consistency reasons.
 
 
 
