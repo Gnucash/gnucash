@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.3.5\n"
-"POT-Creation-Date: 2000-05-19 01:27-0700\n"
-"PO-Revision-Date: 2000-04-25 18:03+02:00\n"
+"Project-Id-Version: 1.3.8\n"
+"POT-Creation-Date: 2000-06-01 06:58+0200\n"
+"PO-Revision-Date: 2000-06-01 09:03+02:00\n"
 "Last-Translator: Dennis Björklund <dennisb@cs.chalmers.se>\n"
 "Language-Team: Sv <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -106,8 +106,8 @@ msgid ""
 "To reconcile an account, you must first\n"
 "choose an account to reconcile.\n"
 msgstr ""
-"För att stämma av ett konto så måste du först\n"
-"välja vilket konto du vill stämma av.\n"
+"För att avstämma ett konto så måste du först\n"
+"välja vilket konto du vill avstämma.\n"
 
 # messages-i18n.c:23
 #: messages-i18n.c:23
@@ -124,6 +124,8 @@ msgid ""
 "Do you really want to mark this transaction not reconciled?\n"
 "Doing so might make future reconciliation difficult!"
 msgstr ""
+"Vill du verkligen markera denna transaktion som icke avstämmd?\n"
+"Om du gör detta så kan framtida avstämmningar bli svåra!"
 
 # messages-i18n.c:25
 #: messages-i18n.c:26
@@ -196,13 +198,12 @@ msgstr ""
 
 # messages-i18n.c:32
 #: messages-i18n.c:33
-#, fuzzy
 msgid ""
 "This file appears to be from a newer version of GnuCash. You must upgrade "
 "GnuCash to read this file."
 msgstr ""
-"Denna fil verkar vara från en nyare version av GnuCash.  \n"
-"Vill du fortsätta?"
+"Denna fil verkar vara från en nyare version av GnuCash. Du måste uppgradera "
+"GnuCash för att kunna läsa denna filen."
 
 # messages-i18n.c:33
 #: messages-i18n.c:34
@@ -447,7 +448,7 @@ msgstr ""
 
 #: messages-i18n.c:62
 msgid "The following changes must be made. Continue?"
-msgstr ""
+msgstr "Följande ändringar måste utföras. Fortsätta?"
 
 # messages-i18n.c:61
 #: messages-i18n.c:63
@@ -499,13 +500,12 @@ msgstr "Justera saldot på huvudkontot i detta register"
 
 # messages-i18n.c:126
 #: messages-i18n.c:69
-#, fuzzy
 msgid "Enter the new balance"
-msgstr "Mata in andelspriset"
+msgstr "Mata in det nya saldot"
 
 #: messages-i18n.c:70
 msgid "Enter the date you want the balance adjusted"
-msgstr ""
+msgstr "Mata in datum som du vill att saldot skall justeras"
 
 # messages-i18n.c:67
 #: messages-i18n.c:71
@@ -520,7 +520,7 @@ msgstr "Justera saldot på huvudkontot i detta register"
 # messages-i18n.c:69 po/guile_strings.txt:103
 #: messages-i18n.c:73 po/guile_strings.txt:119
 msgid "Double line mode with a multi-line cursor"
-msgstr "Läge för dubbla rader med flerrads markör"
+msgstr "Läge för dubbla rader med fler-raders markör"
 
 # messages-i18n.c:70 po/guile_strings.txt:104
 #: messages-i18n.c:74 po/guile_strings.txt:120
@@ -549,108 +549,109 @@ msgstr "Stäng detta registerfönster"
 
 # messages-i18n.c:95
 #: messages-i18n.c:79
-#, fuzzy
 msgid "Copy the selected transaction"
-msgstr "Öppna det valda kontot"
+msgstr "Kopiera den valda transaktionen"
+
+#: messages-i18n.c:80
+msgid "Enter a 3-letter ISO currency code such as USD (US Dollars)"
+msgstr "Mata in en 3-bokstävers ISO valuta kod så som SEK (Svenska Kronor)"
 
 # messages-i18n.c:80
-#: messages-i18n.c:80
-#, fuzzy
+#: messages-i18n.c:81
 msgid "Cut the selected transaction"
-msgstr "Redigera det valda kontot"
+msgstr "Klipp ut den valda transaktionen"
 
 # messages-i18n.c:75
-#: messages-i18n.c:81
+#: messages-i18n.c:82
 msgid "Set the date range of this register"
 msgstr "Mata in datumintervall för detta register"
 
 # messages-i18n.c:76
-#: messages-i18n.c:82
+#: messages-i18n.c:83
 msgid "Delete selected account"
 msgstr "Radera det valda kontot"
 
 # messages-i18n.c:77
-#: messages-i18n.c:83
+#: messages-i18n.c:84
 msgid "Delete the current transaction"
 msgstr "Radera den aktuella transaktionen"
 
 # messages-i18n.c:78 po/guile_strings.txt:126
-#: messages-i18n.c:84 po/guile_strings.txt:147
+#: messages-i18n.c:85 po/guile_strings.txt:147
 msgid "Show transactions on two lines with more information"
 msgstr "Visa transaktioner på två rader med mer information"
 
 # messages-i18n.c:79
-#: messages-i18n.c:85
+#: messages-i18n.c:86
 msgid "Make a copy of the current transaction"
-msgstr "Gör en kopia på den aktuella transaktionen"
+msgstr "Skapa en kopia av den aktuella transaktionen"
 
 # messages-i18n.c:80
-#: messages-i18n.c:86
+#: messages-i18n.c:87
 msgid "Edit the selected account"
 msgstr "Redigera det valda kontot"
 
 # messages-i18n.c:81
-#: messages-i18n.c:87
+#: messages-i18n.c:88
 msgid "Edit the main account for this register"
 msgstr "Ändra huvudkontot för detta register"
 
 # messages-i18n.c:82
-#: messages-i18n.c:88
+#: messages-i18n.c:89
 msgid "Edit the current transaction"
 msgstr "Redigera den aktuella transaktionen"
 
 # messages-i18n.c:83
-#: messages-i18n.c:89
+#: messages-i18n.c:90
 msgid "Exit GnuCash"
 msgstr "Avsluta GnuCash"
 
 # messages-i18n.c:84
-#: messages-i18n.c:90
+#: messages-i18n.c:91
 msgid "Export HTML-formatted report to file"
 msgstr "Exportera HTML-formaterad rapport till fil"
 
-#: messages-i18n.c:91
+#: messages-i18n.c:92
 msgid "Find transactions with a search."
-msgstr ""
+msgstr "Hitta transaktioner med en sökning."
 
 # messages-i18n.c:85
-#: messages-i18n.c:92
+#: messages-i18n.c:93
 msgid "Open the GnuCash help window"
 msgstr "Öppna GnuCash hjälpfönster"
 
 # messages-i18n.c:86
-#: messages-i18n.c:93
+#: messages-i18n.c:94
 msgid "Move back one step in the history"
 msgstr "Flytta ett steg bakåt i listan"
 
 # messages-i18n.c:87
-#: messages-i18n.c:94
+#: messages-i18n.c:95
 msgid "Move forward one step in the history"
 msgstr "Flytta ett steg framåt i listan"
 
 # messages-i18n.c:88
-#: messages-i18n.c:95
+#: messages-i18n.c:96
 msgid "Import a Quicken QIF file"
 msgstr "Importera en Quicken QIF fil."
 
 # messages-i18n.c:89
-#: messages-i18n.c:96
+#: messages-i18n.c:97
 msgid "Jump to the corresponding transaction in the other account"
 msgstr "Hoppa till motsvarande transaktion i det andra kontot"
 
 # messages-i18n.c:85
-#: messages-i18n.c:97
-#, fuzzy
+#: messages-i18n.c:98
 msgid "Open the GnuCash Manual"
-msgstr "Öppna GnuCash hjälpfönster"
+msgstr "Öppna GnuCash manual"
 
 # messages-i18n.c:90
-#: messages-i18n.c:98
+#: messages-i18n.c:99
 msgid "Show transactions on multiple lines with one line for each split"
 msgstr "Visa transaktioner över flera rader med en rad för varje delning"
 
 # messages-i18n.c:91
-#: messages-i18n.c:99
+#: messages-i18n.c:100
 msgid ""
 "This transaction has multiple splits; switch to multi-line mode to see them "
 "all"
@@ -659,1555 +660,1505 @@ msgstr ""
 "se alla"
 
 # messages-i18n.c:92
-#: messages-i18n.c:100
+#: messages-i18n.c:101
 msgid "Create a new account"
 msgstr "Skapa ett nytt konto"
 
 # messages-i18n.c:93
-#: messages-i18n.c:101
+#: messages-i18n.c:102
 msgid "Create a new file"
 msgstr "Skapa en ny fil"
 
 # messages-i18n.c:94
-#: messages-i18n.c:102
+#: messages-i18n.c:103
 msgid "Add a new transaction to the account"
 msgstr "Lägg till ny transaktion till kontot"
 
 # messages-i18n.c:95
-#: messages-i18n.c:103
+#: messages-i18n.c:104
 msgid "Open the selected account"
 msgstr "Öppna det valda kontot"
 
 # messages-i18n.c:96
-#: messages-i18n.c:104
+#: messages-i18n.c:105
 msgid "Open the account"
 msgstr "Öppna ett konto"
 
 # messages-i18n.c:97
-#: messages-i18n.c:105
+#: messages-i18n.c:106
 msgid "Open the selected account and all its subaccounts"
 msgstr "Öppna det valda kontot och alla dess underkonton"
 
 # messages-i18n.c:98
-#: messages-i18n.c:106
+#: messages-i18n.c:107
 msgid "Open a file"
 msgstr "Öppna en fil"
 
 # po/guile_strings.txt:188
-#: messages-i18n.c:107
-#, fuzzy
+#: messages-i18n.c:108
 msgid "Paste the transaction clipboard"
-msgstr "Bakgrund för aktiv transaktion i flerradsläge"
+msgstr "Klistra in transaktionen från klippbordet"
 
 # messages-i18n.c:99
-#: messages-i18n.c:108
+#: messages-i18n.c:109
 msgid "Open the global preferences dialog"
 msgstr "Öppna de globala inställningarnas dialogruta"
 
 # messages-i18n.c:100
-#: messages-i18n.c:109
+#: messages-i18n.c:110
 msgid "Print a check using a standard format"
 msgstr "Skriv ut en testsida i standardformat"
 
 # messages-i18n.c:101
-#: messages-i18n.c:110
+#: messages-i18n.c:111
 msgid "Reconcile the selected account"
-msgstr "Stämma av det valda kontot"
+msgstr "Avstämma det valda kontot"
 
 # messages-i18n.c:102
-#: messages-i18n.c:111
+#: messages-i18n.c:112
 msgid "Cancel the reconciliation of this account"
 msgstr "Avbryt avstämning av detta kontot"
 
 # messages-i18n.c:103
-#: messages-i18n.c:112
+#: messages-i18n.c:113
 msgid "Finish the reconciliation of this account"
 msgstr "Slutför avstämning av detta konto"
 
-#: messages-i18n.c:113
+#: messages-i18n.c:114
 msgid ""
 "Change the reconcile information including statement date and ending balance."
-msgstr ""
+msgstr "Ändra avstämmningsinformation inklusive ävstämmningsdatum och slutsaldo."
 
 # messages-i18n.c:104
-#: messages-i18n.c:114
+#: messages-i18n.c:115
 msgid "Reconcile the main account for this register"
-msgstr "Stämma av huvudkontot i detta register"
+msgstr "Avstämma huvudkontot i detta register"
 
 # messages-i18n.c:105
-#: messages-i18n.c:115
+#: messages-i18n.c:116
 msgid "Record the current transaction"
 msgstr "Spara den aktuella transaktionen"
 
 # messages-i18n.c:106
-#: messages-i18n.c:116
+#: messages-i18n.c:117
 msgid "Set the parameters for this report"
 msgstr "Ställ in parametrar för denna rapport"
 
 # messages-i18n.c:107
-#: messages-i18n.c:117
+#: messages-i18n.c:118
 msgid "Save the file to disk"
 msgstr "Spara fil till disk"
 
 # messages-i18n.c:108
-#: messages-i18n.c:118
+#: messages-i18n.c:119
 msgid "Identify and fix problems in the account"
 msgstr "Identifiera och fixa problem i kontot"
 
 # messages-i18n.c:109
-#: messages-i18n.c:119
+#: messages-i18n.c:120
 msgid "Identify and fix problems in all the accounts"
 msgstr "Identifiera och fixa problem i alla konton"
 
 # messages-i18n.c:110
-#: messages-i18n.c:120
+#: messages-i18n.c:121
 msgid "Identify and fix problems in the account and its subaccounts"
 msgstr "Identifiera och fixa problem i kontot och dess underkonton"
 
 # messages-i18n.c:111
-#: messages-i18n.c:121
+#: messages-i18n.c:122
 msgid "Identify and fix problems in the accounts of this register"
 msgstr "Identifiera och fixa problem i kontona i detta register"
 
 # messages-i18n.c:112
-#: messages-i18n.c:122
+#: messages-i18n.c:123
 msgid "Set the option to its default value"
 msgstr "Ställ tillbaka detta alternativ till sitt standardvärde"
 
 # messages-i18n.c:113
-#: messages-i18n.c:123
+#: messages-i18n.c:124
 msgid "Show all of the transactions in the account"
 msgstr "Visa alla transaktioner i kontot"
 
 # messages-i18n.c:114 po/guile_strings.txt:130
-#: messages-i18n.c:124 po/guile_strings.txt:151
+#: messages-i18n.c:125 po/guile_strings.txt:151
 msgid "Show transactions on single lines"
 msgstr "Visa transaktioner på enkla rader"
 
-# messages-i18n.c:115
-#: messages-i18n.c:125
-msgid "Sort by Amount, then Date, then Num"
-msgstr "Sortera på Belopp, sedan Datum, sedan Nummer"
-
-# messages-i18n.c:116
-#: messages-i18n.c:126
-msgid "Sort by Date, then Num, then Amount"
-msgstr "Sortera på Datum, sedan Nummer, sedan Belopp"
-
-# messages-i18n.c:117
-#: messages-i18n.c:127
-msgid "Sort by Description, then Date, then Num"
-msgstr "Sortera på Beskrivning, sedan Datum, sedan Nummer"
-
-# po/guile_strings.txt:37
-#: messages-i18n.c:128
-#, fuzzy
-msgid "Sort by the date of entry"
-msgstr "Sortera efter datum"
-
-# messages-i18n.c:118
-#: messages-i18n.c:129
-msgid "Sort by Memo, then Date, then Num"
-msgstr "Sortera på Memo, sedan Datum, sedan Nummer"
-
-# messages-i18n.c:119
-#: messages-i18n.c:130
-msgid "Sort by Num, then Date, then Amount"
-msgstr "Sortera på Nummer, sedan Datum, sedan Belopp"
-
-#: messages-i18n.c:131
-msgid "Sort by the statement date (unreconciled items last"
-msgstr ""
-
-# messages-i18n.c:120
-#: messages-i18n.c:132
-msgid "Keep normal account order"
-msgstr "Bevara normal kontoordning"
-
-# messages-i18n.c:121
-#: messages-i18n.c:133
-msgid "Transfer funds from one account to another"
-msgstr "Överför pengar från ett konto till ett annat"
-
-# messages-i18n.c:122
-#: messages-i18n.c:134
-msgid "Enter the type of transaction, or choose one from the list"
-msgstr "Mata in transaktionstyp eller välj en från listan"
-
-# messages-i18n.c:123
-#: messages-i18n.c:135
-msgid "Enter a description of the transaction"
-msgstr "Mata in en beskrivning på transaktionen"
-
-# messages-i18n.c:124
-#: messages-i18n.c:136
-msgid "Enter a description of the split"
-msgstr "Mata in en beskrivning för delningen"
-
-# messages-i18n.c:125
-#: messages-i18n.c:137
-msgid "Enter the transaction number, such as the check number"
-msgstr "Mata in transaktionsnumret (t.ex. checknumret)"
-
-# messages-i18n.c:126
-#: messages-i18n.c:138
-msgid "Enter the share price"
-msgstr "Mata in andelspriset"
-
-# messages-i18n.c:127
-#: messages-i18n.c:139
-msgid "Enter the number of shares sold"
-msgstr "Mata in antal sålda andelar"
-
-# messages-i18n.c:128
-#: messages-i18n.c:140
-msgid "Enter the total value of the shares"
-msgstr "Mata in totala värdet på andelarna"
-
-# messages-i18n.c:129
-#: messages-i18n.c:141
-msgid "Enter the account to transfer from, or choose one from the list"
-msgstr "Mata in kontot att överföra från eller välj ett från listan"
-
-# messages-i18n.c:130
-#: messages-i18n.c:142
-msgid "Enter the account to transfer to, or choose one from the list"
-msgstr "Mata in kontot att överföra till eller välj ett från listan"
-
-# messages-i18n.c:131
-#: messages-i18n.c:143
-msgid "_Account"
-msgstr "_Konto"
-
-# messages-i18n.c:132
-#: messages-i18n.c:144
-msgid "_Accounts"
-msgstr "_Konton"
-
-# messages-i18n.c:133
-#: messages-i18n.c:145
-msgid "_Adjust Balance"
-msgstr "_Justera saldo"
-
-# messages-i18n.c:134
-#: messages-i18n.c:146
-msgid "_Adjust Balance..."
-msgstr "_Justera saldo..."
-
-# messages-i18n.c:135
-#: messages-i18n.c:147
-msgid "_Blank"
-msgstr "_Tom"
-
-# messages-i18n.c:136
-#: messages-i18n.c:148
-msgid "_Cancel"
-msgstr "_Avbryt"
-
-# messages-i18n.c:356
-#: messages-i18n.c:149
-#, fuzzy
-msgid "Copy Transaction"
-msgstr "Transaktion"
-
-# messages-i18n.c:356
-#: messages-i18n.c:150
-#, fuzzy
-msgid "Cut Transaction"
-msgstr "Transaktion"
-
-# messages-i18n.c:137
-#: messages-i18n.c:151
-msgid "_Date Range"
-msgstr "_Datum intervall"
-
-# messages-i18n.c:138
-#: messages-i18n.c:152
-msgid "_Delete Account"
-msgstr "_Radera konto"
-
-# messages-i18n.c:139
-#: messages-i18n.c:153
-msgid "_Delete"
-msgstr "_Radera"
-
-# messages-i18n.c:140
-#: messages-i18n.c:154
-msgid "D_uplicate"
-msgstr "_Duplicera"
-
-# messages-i18n.c:141
-#: messages-i18n.c:155
-msgid "_Edit"
-msgstr "_Redigera"
-
-# messages-i18n.c:142
-#: messages-i18n.c:156
-msgid "_Edit Account"
-msgstr "_Redigera konto"
-
-# messages-i18n.c:143
-#: messages-i18n.c:157
-msgid "_Ending Balance"
-msgstr "_Redigera saldo"
-
-# messages-i18n.c:144
-#: messages-i18n.c:158
-msgid "_Ending Balance..."
-msgstr "_Slutsaldo"
-
-# messages-i18n.c:145
-#: messages-i18n.c:159
-msgid "_Finish"
-msgstr "_Slutför"
-
-# messages-i18n.c:146
-#: messages-i18n.c:160
-msgid "_Help"
-msgstr "_Hjälp"
-
-# messages-i18n.c:147
-#: messages-i18n.c:161
-msgid "_Jump"
-msgstr "_Hoppa"
-
-#: messages-i18n.c:162
-msgid "_Manual"
-msgstr ""
-
-# messages-i18n.c:148
-#: messages-i18n.c:163
-msgid "_New"
-msgstr "_Nytt"
-
-# messages-i18n.c:149
-#: messages-i18n.c:164
-msgid "_New Account"
-msgstr "_Nytt konto"
-
-# messages-i18n.c:150
-#: messages-i18n.c:165
-msgid "_New Account..."
-msgstr "_Nytt konto..."
-
-# messages-i18n.c:151
-#: messages-i18n.c:166
-msgid "_Open Account"
-msgstr "_Öppna konto"
-
-# messages-i18n.c:152
-#: messages-i18n.c:167
-msgid "Open S_ubaccounts"
-msgstr "Öppna _Underkonton"
-
-# messages-i18n.c:184
-#: messages-i18n.c:168
-#, fuzzy
-msgid "Paste Transaction"
-msgstr "Radera transaktion"
-
-# messages-i18n.c:153
-#: messages-i18n.c:169
-msgid "_Preferences"
-msgstr "_Inställningar"
-
-# messages-i18n.c:154
-#: messages-i18n.c:170
-msgid "_Preferences..."
-msgstr "_Inställningar..."
-
-# messages-i18n.c:155
-#: messages-i18n.c:171
-msgid "_Print Check... (unfinished!)"
-msgstr "_Skriv ut testsida... (inte klar)"
-
-# messages-i18n.c:247
-#: messages-i18n.c:172
-#, fuzzy
-msgid "_Reconcile Information..."
-msgstr "Kontoinformation"
-
-# messages-i18n.c:156
-#: messages-i18n.c:173
-msgid "_Reconcile..."
-msgstr "_Stämma av..."
-
-# messages-i18n.c:157
-#: messages-i18n.c:174
-msgid "_Reconcile"
-msgstr "_Stämma av"
-
-# messages-i18n.c:158
-#: messages-i18n.c:175
-msgid "_Record"
-msgstr "_Spara"
-
-# messages-i18n.c:159
-#: messages-i18n.c:176
-msgid "_Register"
-msgstr "_Kontoutdrag"
-
-# messages-i18n.c:160
-#: messages-i18n.c:177
-msgid "_Scrub"
-msgstr "_Städa upp"
-
-# messages-i18n.c:161
-#: messages-i18n.c:178
-msgid "Scrub A_ccount"
-msgstr "Städa upp _konto"
-
-# messages-i18n.c:162
-#: messages-i18n.c:179
-msgid "Scrub A_ll"
-msgstr "Städa upp _allt"
-
-# messages-i18n.c:163
-#: messages-i18n.c:180
-msgid "Scrub Su_baccounts"
-msgstr "Städa upp u_nderkonton"
-
-# messages-i18n.c:164
-#: messages-i18n.c:181
-msgid "Set _Range..."
-msgstr "Ställ in _Intervall..."
-
-# messages-i18n.c:165
-#: messages-i18n.c:182
-msgid "Set _Range"
-msgstr "Ställ in _Intervall"
-
-# messages-i18n.c:166
-#: messages-i18n.c:183
-msgid "Show _All"
-msgstr "Visa _allt"
-
-# messages-i18n.c:167
-#: messages-i18n.c:184
-msgid "Sort _Order"
-msgstr "Sorterings_ordning"
-
-# messages-i18n.c:168
-#: messages-i18n.c:185
-msgid "_Style"
-msgstr "_Stil"
-
-# messages-i18n.c:169
-#: messages-i18n.c:186
-msgid "_Transaction"
-msgstr "_Transaktion"
-
-# messages-i18n.c:170
-#: messages-i18n.c:187
-msgid "_Transfer"
-msgstr "_Överför"
-
-# messages-i18n.c:171
-#: messages-i18n.c:188
-msgid "_Transfer..."
-msgstr "_Överför..."
-
-# messages-i18n.c:172
-#: messages-i18n.c:189
-msgid "Account Code"
-msgstr "Konto kod"
-
-# messages-i18n.c:173 po/guile_strings.txt:7
-#: messages-i18n.c:190 po/guile_strings.txt:7
-msgid "Account Name"
-msgstr "Kontonamn"
-
-# messages-i18n.c:174
-#: messages-i18n.c:191
-msgid "Account Type"
-msgstr "Kontotyp"
-
-# messages-i18n.c:175
-#: messages-i18n.c:192
-msgid "Adjust Balance"
-msgstr "Kontosaldo"
-
-# messages-i18n.c:176 po/guile_strings.txt:260
-#: messages-i18n.c:193 po/guile_strings.txt:310
-msgid "Auto Double"
-msgstr "Automatisk dubbel"
-
-# messages-i18n.c:177 po/guile_strings.txt:62
-#: messages-i18n.c:194 po/guile_strings.txt:70
-msgid "Auto Single"
-msgstr "Automatisk enkel"
-
-# messages-i18n.c:178
-#: messages-i18n.c:195
-msgid "Clear All"
-msgstr "Töm allt"
-
-# messages-i18n.c:179
-#: messages-i18n.c:196
-msgid "Close Window"
-msgstr "Stäng fönster"
-
-# messages-i18n.c:180
-#: messages-i18n.c:197
-msgid "Credit Card"
-msgstr "Kreditkort"
-
-# messages-i18n.c:181
-#: messages-i18n.c:198
-msgid "Credit Line"
-msgstr ""
-
-# messages-i18n.c:182
-#: messages-i18n.c:199
-msgid "Date Range"
-msgstr "Datumintervall"
-
-# messages-i18n.c:183
-#: messages-i18n.c:200
-msgid "Delete Account"
-msgstr "Radera konto"
-
-# messages-i18n.c:184
-#: messages-i18n.c:201
-msgid "Delete Transaction"
-msgstr "Radera transaktion"
-
-# messages-i18n.c:185 po/guile_strings.txt:19
-#: messages-i18n.c:202 po/guile_strings.txt:22
-msgid "Double Line"
-msgstr "Dubbelrad"
-
-# messages-i18n.c:186
-#: messages-i18n.c:203
-msgid "Edit Account"
-msgstr "Redigera konto"
-
-# messages-i18n.c:187
-#: messages-i18n.c:204
-msgid "Ending Balance"
-msgstr "Slutsaldo"
-
-# messages-i18n.c:188
-#: messages-i18n.c:205
-msgid "End date"
-msgstr "Slutdatum"
-
-# messages-i18n.c:189
-#: messages-i18n.c:206
-msgid "Export To"
-msgstr "Exportera till"
-
-# messages-i18n.c:190
-#: messages-i18n.c:207
-msgid "Finish"
-msgstr "Slutför"
-
-# messages-i18n.c:299 po/guile_strings.txt:108
-#: messages-i18n.c:208
-#, fuzzy
-msgid "From Now"
-msgstr "Från"
-
-# messages-i18n.c:191
-#: messages-i18n.c:209
-msgid "General Ledger"
-msgstr "Allmän liggare"
-
-# messages-i18n.c:192
-#: messages-i18n.c:210
-msgid "Hide Inc/Exp"
-msgstr "Göm Ink/Utg"
-
-# messages-i18n.c:193
-#: messages-i18n.c:211
-msgid "Import QIF..."
-msgstr "Importera QIF..."
-
-# messages-i18n.c:194
-#: messages-i18n.c:212
-msgid "Import QIF"
-msgstr "Importera QIF"
-
-# messages-i18n.c:195
-#: messages-i18n.c:213
-msgid "Lost Accounts"
-msgstr "Tappade konton"
-
-# messages-i18n.c:196
-#: messages-i18n.c:214
-msgid "Money Market"
-msgstr "Pengamarknad"
-
-# messages-i18n.c:197 po/guile_strings.txt:51
-#: messages-i18n.c:215 po/guile_strings.txt:58
-msgid "Multi Line"
-msgstr "Flerrad"
-
-# messages-i18n.c:198 po/guile_strings.txt:4
-#: messages-i18n.c:216 po/guile_strings.txt:4
-msgid "Mutual Fund"
-msgstr "Aktiefond"
-
-# messages-i18n.c:199
-#: messages-i18n.c:217
-msgid "New Account"
-msgstr "Nytt konto"
-
-# messages-i18n.c:200
-#: messages-i18n.c:218
-msgid "New Balance"
-msgstr "Nytt saldo"
-
-# messages-i18n.c:201
-#: messages-i18n.c:219
-msgid "New File"
-msgstr "Ny fil"
-
-# messages-i18n.c:202
-#: messages-i18n.c:220
-msgid "New top level account"
-msgstr "Nytt toppnivåkonto"
-
-# messages-i18n.c:358 po/guile_strings.txt:57
-#: messages-i18n.c:221
-#, fuzzy
-msgid "New Value"
-msgstr "Värde"
-
-# messages-i18n.c:284 po/guile_strings.txt:131
-#: messages-i18n.c:222
-#, fuzzy
-msgid "No description"
-msgstr "Beskrivning"
-
-# messages-i18n.c:358 po/guile_strings.txt:57
-#: messages-i18n.c:223
-#, fuzzy
-msgid "Old Value"
-msgstr "Värde"
-
-# messages-i18n.c:203
-#: messages-i18n.c:224
-msgid "Open Account"
-msgstr "Öppna konto"
-
-# messages-i18n.c:204
-#: messages-i18n.c:225
-msgid "Opening Balance"
-msgstr "Startsaldo"
-
-# messages-i18n.c:205
-#: messages-i18n.c:226
-msgid "Open File"
-msgstr "Öppna fil"
-
-# messages-i18n.c:206
-#: messages-i18n.c:227
-msgid "Open Subaccounts"
-msgstr "Öppna underkonto"
-
-# messages-i18n.c:207
-#: messages-i18n.c:228
-msgid "Pick One"
-msgstr "Välj ett"
-
-# messages-i18n.c:208
-#: messages-i18n.c:229
-msgid "Parent Account"
-msgstr "Föräldrakonto"
-
-# messages-i18n.c:209
-#: messages-i18n.c:230
-msgid "Previous Balance"
-msgstr "Föregående saldo"
-
-# messages-i18n.c:210
-#: messages-i18n.c:231
-msgid "Purch Price"
-msgstr "Köppris"
-
-# messages-i18n.c:211
-#: messages-i18n.c:232
-msgid "Price Quote Source"
-msgstr "Källa för Prisuppgift"
-
-# messages-i18n.c:204
-#: messages-i18n.c:233
-#, fuzzy
-msgid "Reconciled Balance"
-msgstr "Startsaldo"
-
-# messages-i18n.c:247
-#: messages-i18n.c:234
-#, fuzzy
-msgid "Reconcile Information"
-msgstr "Kontoinformation"
-
-# messages-i18n.c:212
-#: messages-i18n.c:235
-msgid "Register date ranges"
-msgstr "Kontoutdragets datumintervall"
-
-# messages-i18n.c:213
-#: messages-i18n.c:236
-msgid "Sale Price"
-msgstr "Försäljningspris"
-
-# messages-i18n.c:214
-#: messages-i18n.c:237
-msgid "Save As"
-msgstr "Spara som"
-
-# messages-i18n.c:215
-#: messages-i18n.c:238
-msgid "Scrub Account"
-msgstr "Städa upp konto"
-
-# messages-i18n.c:216
-#: messages-i18n.c:239
-msgid "Scrub All"
-msgstr "Städa upp allt"
-
-# messages-i18n.c:217
-#: messages-i18n.c:240
-msgid "Scrub Subaccounts"
-msgstr "Städa upp underkonto"
-
-# messages-i18n.c:218
-#: messages-i18n.c:241
-msgid "Select All"
-msgstr "Välj allt"
-
-# messages-i18n.c:219
-#: messages-i18n.c:242
-msgid "Select Default"
-msgstr "Välj standard"
-
-# messages-i18n.c:220
-#: messages-i18n.c:243
-msgid "Set Date Range"
-msgstr "Ställ in datumintervall"
-
-# messages-i18n.c:221
-#: messages-i18n.c:244
-msgid "Set Range"
-msgstr "Ställ in intervall"
-
-# messages-i18n.c:222
-#: messages-i18n.c:245
-msgid "Set to default"
-msgstr "Sätt till standard"
-
-# messages-i18n.c:223
-#: messages-i18n.c:246
-msgid "Set Up Account"
-msgstr "Sätt upp konto"
-
-# messages-i18n.c:224
-#: messages-i18n.c:247
-msgid "Show All"
-msgstr "Visa allt"
-
-# messages-i18n.c:225
-#: messages-i18n.c:248
-msgid "Show Inc/Exp"
-msgstr "Visa Ink/Utg"
-
-# messages-i18n.c:226
-#: messages-i18n.c:249
-msgid "Show Categories"
-msgstr "Visa kategorier"
-
-# messages-i18n.c:227
-#: messages-i18n.c:250
-msgid "Show Earliest"
-msgstr "Visa tidigaste"
-
-# messages-i18n.c:228
-#: messages-i18n.c:251
-msgid "Show Latest"
-msgstr "Visa senaste"
-
-# messages-i18n.c:229 po/guile_strings.txt:165
-#: messages-i18n.c:252 po/guile_strings.txt:190
-msgid "Single Line"
-msgstr "En rad"
-
 # messages-i18n.c:230
-#: messages-i18n.c:253
+#: messages-i18n.c:126 messages-i18n.c:254
 msgid "Sort by Amount"
 msgstr "Sortera efter belopp"
 
 # messages-i18n.c:231
-#: messages-i18n.c:254
+#: messages-i18n.c:127 messages-i18n.c:255
 msgid "Sort by Date"
 msgstr "Sortera efter datum"
 
 # messages-i18n.c:232
-#: messages-i18n.c:255
+#: messages-i18n.c:128 messages-i18n.c:256
 msgid "Sort by Description"
 msgstr "Sortera efter beskrivning"
 
 # po/guile_strings.txt:37
-#: messages-i18n.c:256
-#, fuzzy
-msgid "Sort by date of entry"
-msgstr "Sortera efter datum"
+#: messages-i18n.c:129
+msgid "Sort by the date of entry"
+msgstr "Sortera efter inmatningsdatum"
 
 # messages-i18n.c:233
-#: messages-i18n.c:257
+#: messages-i18n.c:130 messages-i18n.c:258
 msgid "Sort by Memo"
-msgstr "Sortera efter memo"
+msgstr "Sortera efter anteckning"
 
 # messages-i18n.c:234
-#: messages-i18n.c:258
+#: messages-i18n.c:131 messages-i18n.c:259
 msgid "Sort by Num"
 msgstr "Sortera efter nummer"
 
+#: messages-i18n.c:132
+msgid "Sort by the statement date (unreconciled items last"
+msgstr "Sortera efter avstämmningsdatum (icke avstämda rader sist)"
+
+# messages-i18n.c:120
+#: messages-i18n.c:133
+msgid "Keep normal account order"
+msgstr "Bevara normal kontoordning"
+
+# messages-i18n.c:121
+#: messages-i18n.c:134
+msgid "Transfer funds from one account to another"
+msgstr "Överför pengar från ett konto till ett annat"
+
+# messages-i18n.c:122
+#: messages-i18n.c:135
+msgid "Enter the type of transaction, or choose one from the list"
+msgstr "Mata in transaktionstyp eller välj en från listan"
+
+# messages-i18n.c:123
+#: messages-i18n.c:136
+msgid "Enter a description of the transaction"
+msgstr "Mata in en beskrivning på transaktionen"
+
+# messages-i18n.c:124
+#: messages-i18n.c:137
+msgid "Enter a description of the split"
+msgstr "Mata in en beskrivning för delningen"
+
+# messages-i18n.c:125
+#: messages-i18n.c:138
+msgid "Enter the transaction number, such as the check number"
+msgstr "Mata in transaktionsnumret (t.ex. checknumret)"
+
+# messages-i18n.c:126
+#: messages-i18n.c:139
+msgid "Enter the share price"
+msgstr "Mata in andelspriset"
+
+# messages-i18n.c:127
+#: messages-i18n.c:140
+msgid "Enter the number of shares sold"
+msgstr "Mata in antal sålda andelar"
+
+# messages-i18n.c:128
+#: messages-i18n.c:141
+msgid "Enter the total value of the shares"
+msgstr "Mata in totala värdet på andelarna"
+
+# messages-i18n.c:129
+#: messages-i18n.c:142
+msgid "Enter the account to transfer from, or choose one from the list"
+msgstr "Mata in kontot att överföra från eller välj ett från listan"
+
+# messages-i18n.c:130
+#: messages-i18n.c:143
+msgid "Enter the account to transfer to, or choose one from the list"
+msgstr "Mata in kontot att överföra till eller välj ett från listan"
+
+# messages-i18n.c:131
+#: messages-i18n.c:144
+msgid "_Account"
+msgstr "_Konto"
+
+# messages-i18n.c:132
+#: messages-i18n.c:145
+msgid "_Accounts"
+msgstr "_Konton"
+
+# messages-i18n.c:133
+#: messages-i18n.c:146
+msgid "_Adjust Balance"
+msgstr "_Justera saldo"
+
+# messages-i18n.c:134
+#: messages-i18n.c:147
+msgid "_Adjust Balance..."
+msgstr "_Justera saldo..."
+
+# messages-i18n.c:135
+#: messages-i18n.c:148
+msgid "_Blank"
+msgstr "_Tom"
+
+# messages-i18n.c:136
+#: messages-i18n.c:149
+msgid "_Cancel"
+msgstr "_Avbryt"
+
+# messages-i18n.c:356
+#: messages-i18n.c:150
+msgid "Copy Transaction"
+msgstr "Kopiera transaktion"
+
+# messages-i18n.c:356
+#: messages-i18n.c:151
+msgid "Cut Transaction"
+msgstr "Klipp ut transaktion"
+
+# messages-i18n.c:137
+#: messages-i18n.c:152
+msgid "_Date Range"
+msgstr "_Datum intervall"
+
+# messages-i18n.c:138
+#: messages-i18n.c:153
+msgid "_Delete Account"
+msgstr "_Radera konto"
+
+# messages-i18n.c:139
+#: messages-i18n.c:154
+msgid "_Delete"
+msgstr "_Radera"
+
+# messages-i18n.c:140
+#: messages-i18n.c:155
+msgid "D_uplicate"
+msgstr "_Duplicera"
+
+# messages-i18n.c:141
+#: messages-i18n.c:156
+msgid "_Edit"
+msgstr "_Redigera"
+
+# messages-i18n.c:142
+#: messages-i18n.c:157
+msgid "_Edit Account"
+msgstr "_Redigera konto"
+
+# messages-i18n.c:143
+#: messages-i18n.c:158
+msgid "_Ending Balance"
+msgstr "_Redigera saldo"
+
+# messages-i18n.c:144
+#: messages-i18n.c:159
+msgid "_Ending Balance..."
+msgstr "_Slutsaldo"
+
+# messages-i18n.c:145
+#: messages-i18n.c:160
+msgid "_Finish"
+msgstr "_Slutför"
+
+# messages-i18n.c:146
+#: messages-i18n.c:161
+msgid "_Help"
+msgstr "_Hjälp"
+
+# messages-i18n.c:147
+#: messages-i18n.c:162
+msgid "_Jump"
+msgstr "_Hoppa"
+
+#: messages-i18n.c:163
+msgid "_Manual"
+msgstr "_Manuell"
+
+# messages-i18n.c:148
+#: messages-i18n.c:164
+msgid "_New"
+msgstr "_Nytt"
+
+# messages-i18n.c:149
+#: messages-i18n.c:165
+msgid "_New Account"
+msgstr "_Nytt konto"
+
+# messages-i18n.c:150
+#: messages-i18n.c:166
+msgid "_New Account..."
+msgstr "_Nytt konto..."
+
+# messages-i18n.c:151
+#: messages-i18n.c:167
+msgid "_Open Account"
+msgstr "_Öppna konto"
+
+# messages-i18n.c:152
+#: messages-i18n.c:168
+msgid "Open S_ubaccounts"
+msgstr "Öppna _Underkonton"
+
+# messages-i18n.c:184
+#: messages-i18n.c:169
+msgid "Paste Transaction"
+msgstr "Klistra in transaktion"
+
+# messages-i18n.c:153
+#: messages-i18n.c:170
+msgid "_Preferences"
+msgstr "_Inställningar"
+
+# messages-i18n.c:154
+#: messages-i18n.c:171
+msgid "_Preferences..."
+msgstr "_Inställningar..."
+
+# messages-i18n.c:155
+#: messages-i18n.c:172
+msgid "_Print Check... (unfinished!)"
+msgstr "_Skriv ut testsida... (inte klar)"
+
+# messages-i18n.c:247
+#: messages-i18n.c:173
+msgid "_Reconcile Information..."
+msgstr "_Avstämmningsinformation..."
+
+# messages-i18n.c:156
+#: messages-i18n.c:174
+msgid "_Reconcile..."
+msgstr "_Avstämma..."
+
+# messages-i18n.c:157
+#: messages-i18n.c:175
+msgid "_Reconcile"
+msgstr "_Avstämma"
+
+# messages-i18n.c:158
+#: messages-i18n.c:176
+msgid "_Record"
+msgstr "_Spara"
+
+# messages-i18n.c:159
+#: messages-i18n.c:177
+msgid "_Register"
+msgstr "_Kontoutdrag"
+
+# messages-i18n.c:160
+#: messages-i18n.c:178
+msgid "_Scrub"
+msgstr "_Städa upp"
+
+# messages-i18n.c:161
+#: messages-i18n.c:179
+msgid "Scrub A_ccount"
+msgstr "Städa upp _konto"
+
+# messages-i18n.c:162
+#: messages-i18n.c:180
+msgid "Scrub A_ll"
+msgstr "Städa upp _allt"
+
+# messages-i18n.c:163
+#: messages-i18n.c:181
+msgid "Scrub Su_baccounts"
+msgstr "Städa upp u_nderkonton"
+
+# messages-i18n.c:164
+#: messages-i18n.c:182
+msgid "Set _Range..."
+msgstr "Ställ in _Intervall..."
+
+# messages-i18n.c:165
+#: messages-i18n.c:183
+msgid "Set _Range"
+msgstr "Ställ in _Intervall"
+
+# messages-i18n.c:166
+#: messages-i18n.c:184
+msgid "Show _All"
+msgstr "Visa _allt"
+
+# messages-i18n.c:167
+#: messages-i18n.c:185
+msgid "Sort _Order"
+msgstr "Sorterings_ordning"
+
+# messages-i18n.c:168
+#: messages-i18n.c:186
+msgid "_Style"
+msgstr "_Stil"
+
+# messages-i18n.c:169
+#: messages-i18n.c:187
+msgid "_Transaction"
+msgstr "_Transaktion"
+
+# messages-i18n.c:170
+#: messages-i18n.c:188
+msgid "_Transfer"
+msgstr "_Överför"
+
+# messages-i18n.c:171
+#: messages-i18n.c:189
+msgid "_Transfer..."
+msgstr "_Överför..."
+
+# messages-i18n.c:172
+#: messages-i18n.c:190
+msgid "Account Code"
+msgstr "Konto kod"
+
+# messages-i18n.c:173 po/guile_strings.txt:7
+#: messages-i18n.c:191 po/guile_strings.txt:7
+msgid "Account Name"
+msgstr "Kontonamn"
+
+# messages-i18n.c:174
+#: messages-i18n.c:192
+msgid "Account Type"
+msgstr "Kontotyp"
+
+# messages-i18n.c:175
+#: messages-i18n.c:193
+msgid "Adjust Balance"
+msgstr "Kontosaldo"
+
+# messages-i18n.c:176 po/guile_strings.txt:260
+#: messages-i18n.c:194 po/guile_strings.txt:310
+msgid "Auto Double"
+msgstr "Automatisk dubbel"
+
+# messages-i18n.c:177 po/guile_strings.txt:62
+#: messages-i18n.c:195 po/guile_strings.txt:70
+msgid "Auto Single"
+msgstr "Automatisk enkel"
+
+# messages-i18n.c:178
+#: messages-i18n.c:196
+msgid "Clear All"
+msgstr "Töm allt"
+
+# messages-i18n.c:179
+#: messages-i18n.c:197
+msgid "Close Window"
+msgstr "Stäng fönster"
+
+# messages-i18n.c:180
+#: messages-i18n.c:198
+msgid "Credit Card"
+msgstr "Kreditkort"
+
+# messages-i18n.c:181
+#: messages-i18n.c:199
+msgid "Credit Line"
+msgstr ""
+
+# messages-i18n.c:182
+#: messages-i18n.c:200
+msgid "Date Range"
+msgstr "Datumintervall"
+
+# messages-i18n.c:183
+#: messages-i18n.c:201
+msgid "Delete Account"
+msgstr "Radera konto"
+
+# messages-i18n.c:184
+#: messages-i18n.c:202
+msgid "Delete Transaction"
+msgstr "Radera transaktion"
+
+# messages-i18n.c:185 po/guile_strings.txt:19
+#: messages-i18n.c:203 po/guile_strings.txt:22
+msgid "Double Line"
+msgstr "Dubbla rader"
+
+# messages-i18n.c:186
+#: messages-i18n.c:204
+msgid "Edit Account"
+msgstr "Redigera konto"
+
+# messages-i18n.c:187
+#: messages-i18n.c:205
+msgid "Ending Balance"
+msgstr "Slutsaldo"
+
+# messages-i18n.c:188
+#: messages-i18n.c:206
+msgid "End date"
+msgstr "Slutdatum"
+
+# messages-i18n.c:189
+#: messages-i18n.c:207
+msgid "Export To"
+msgstr "Exportera till"
+
+# messages-i18n.c:190
+#: messages-i18n.c:208
+msgid "Finish"
+msgstr "Slutför"
+
+# messages-i18n.c:299 po/guile_strings.txt:108
+#: messages-i18n.c:209
+msgid "From Now"
+msgstr "Från nu"
+
+# messages-i18n.c:191
+#: messages-i18n.c:210
+msgid "General Ledger"
+msgstr "Allmän liggare"
+
+# messages-i18n.c:192
+#: messages-i18n.c:211
+msgid "Hide Inc/Exp"
+msgstr "Göm Ink/Utg"
+
+# messages-i18n.c:193
+#: messages-i18n.c:212
+msgid "Import QIF..."
+msgstr "Importera QIF..."
+
+# messages-i18n.c:194
+#: messages-i18n.c:213
+msgid "Import QIF"
+msgstr "Importera QIF"
+
+# messages-i18n.c:195
+#: messages-i18n.c:214
+msgid "Lost Accounts"
+msgstr "Tappade konton"
+
+# messages-i18n.c:196
+#: messages-i18n.c:215
+msgid "Money Market"
+msgstr "Pengamarknad"
+
+# messages-i18n.c:197 po/guile_strings.txt:51
+#: messages-i18n.c:216 po/guile_strings.txt:58
+msgid "Multi Line"
+msgstr "Flerrad"
+
+# messages-i18n.c:198 po/guile_strings.txt:4
+#: messages-i18n.c:217 po/guile_strings.txt:4
+msgid "Mutual Fund"
+msgstr "Aktiefond"
+
+# messages-i18n.c:199
+#: messages-i18n.c:218
+msgid "New Account"
+msgstr "Nytt konto"
+
+# messages-i18n.c:200
+#: messages-i18n.c:219
+msgid "New Balance"
+msgstr "Nytt saldo"
+
+# messages-i18n.c:201
+#: messages-i18n.c:220
+msgid "New File"
+msgstr "Ny fil"
+
+# messages-i18n.c:202
+#: messages-i18n.c:221
+msgid "New top level account"
+msgstr "Nytt toppnivåkonto"
+
+# messages-i18n.c:358 po/guile_strings.txt:57
+#: messages-i18n.c:222
+msgid "New Value"
+msgstr "Nytt värde"
+
+# messages-i18n.c:284 po/guile_strings.txt:131
+#: messages-i18n.c:223
+msgid "No description"
+msgstr "Ingen beskrivning"
+
+# messages-i18n.c:358 po/guile_strings.txt:57
+#: messages-i18n.c:224
+msgid "Old Value"
+msgstr "Gammalt värde"
+
+# messages-i18n.c:203
+#: messages-i18n.c:225
+msgid "Open Account"
+msgstr "Öppna konto"
+
+# messages-i18n.c:204
+#: messages-i18n.c:226
+msgid "Opening Balance"
+msgstr "Startsaldo"
+
+# messages-i18n.c:205
+#: messages-i18n.c:227
+msgid "Open File"
+msgstr "Öppna fil"
+
+# messages-i18n.c:206
+#: messages-i18n.c:228
+msgid "Open Subaccounts"
+msgstr "Öppna underkonto"
+
+# messages-i18n.c:207
+#: messages-i18n.c:229
+msgid "Pick One"
+msgstr "Välj ett"
+
+# messages-i18n.c:208
+#: messages-i18n.c:230
+msgid "Parent Account"
+msgstr "Föräldrakonto"
+
+# messages-i18n.c:209
+#: messages-i18n.c:231
+msgid "Previous Balance"
+msgstr "Föregående saldo"
+
+# messages-i18n.c:210
+#: messages-i18n.c:232
+msgid "Purch Price"
+msgstr "Köppris"
+
+# messages-i18n.c:211
+#: messages-i18n.c:233
+msgid "Price Quote Source"
+msgstr "Källa för Prisuppgift"
+
+# messages-i18n.c:204
+#: messages-i18n.c:234
+msgid "Reconciled Balance"
+msgstr "Avstämmt saldo"
+
+# messages-i18n.c:247
+#: messages-i18n.c:235
+msgid "Reconcile Information"
+msgstr "Avstämmningsinformation"
+
+# messages-i18n.c:212
+#: messages-i18n.c:236
+msgid "Register date ranges"
+msgstr "Kontoutdragets datumintervall"
+
+# messages-i18n.c:213
+#: messages-i18n.c:237
+msgid "Sale Price"
+msgstr "Försäljningspris"
+
+# messages-i18n.c:214
+#: messages-i18n.c:238
+msgid "Save As"
+msgstr "Spara som"
+
+# messages-i18n.c:215
+#: messages-i18n.c:239
+msgid "Scrub Account"
+msgstr "Städa upp konto"
+
+# messages-i18n.c:216
+#: messages-i18n.c:240
+msgid "Scrub All"
+msgstr "Städa upp allt"
+
+# messages-i18n.c:217
+#: messages-i18n.c:241
+msgid "Scrub Subaccounts"
+msgstr "Städa upp underkonto"
+
+# messages-i18n.c:218
+#: messages-i18n.c:242
+msgid "Select All"
+msgstr "Välj allt"
+
+# messages-i18n.c:219
+#: messages-i18n.c:243
+msgid "Select Default"
+msgstr "Välj standard"
+
+# messages-i18n.c:220
+#: messages-i18n.c:244
+msgid "Set Date Range"
+msgstr "Ställ in datumintervall"
+
+# messages-i18n.c:221
+#: messages-i18n.c:245
+msgid "Set Range"
+msgstr "Ställ in intervall"
+
+# messages-i18n.c:222
+#: messages-i18n.c:246
+msgid "Set to default"
+msgstr "Sätt till standard"
+
+# messages-i18n.c:223
+#: messages-i18n.c:247
+msgid "Set Up Account"
+msgstr "Sätt upp konto"
+
+# messages-i18n.c:224
+#: messages-i18n.c:248
+msgid "Show All"
+msgstr "Visa allt"
+
+# messages-i18n.c:225
+#: messages-i18n.c:249
+msgid "Show Inc/Exp"
+msgstr "Visa Ink/Utg"
+
+# messages-i18n.c:226
+#: messages-i18n.c:250
+msgid "Show Categories"
+msgstr "Visa kategorier"
+
+# messages-i18n.c:227
+#: messages-i18n.c:251
+msgid "Show Earliest"
+msgstr "Visa tidigaste"
+
+# messages-i18n.c:228
+#: messages-i18n.c:252
+msgid "Show Latest"
+msgstr "Visa senaste"
+
+# messages-i18n.c:229 po/guile_strings.txt:165
+#: messages-i18n.c:253 po/guile_strings.txt:190
+msgid "Single Line"
+msgstr "Enkel rad"
+
 # po/guile_strings.txt:37
-#: messages-i18n.c:259
-#, fuzzy
+#: messages-i18n.c:257
+msgid "Sort by date of entry"
+msgstr "Sortera efter inmatmningsdatum"
+
+# po/guile_strings.txt:37
+#: messages-i18n.c:260
 msgid "Sort by statement date"
-msgstr "Sortera efter datum"
+msgstr "Sortera efter avstämmningsdatum"
 
 # messages-i18n.c:235
-#: messages-i18n.c:260
+#: messages-i18n.c:261
 msgid "Sort Order"
 msgstr "Sorteringsordning"
 
 # messages-i18n.c:236
-#: messages-i18n.c:261
+#: messages-i18n.c:262
 msgid "Start date"
 msgstr "Startdatum"
 
 # messages-i18n.c:187
-#: messages-i18n.c:262
-#, fuzzy
+#: messages-i18n.c:263
 msgid "Starting Balance"
-msgstr "Slutsaldo"
+msgstr "Startsaldo"
 
 # messages-i18n.c:237
-#: messages-i18n.c:263
+#: messages-i18n.c:264
 msgid "Standard order"
 msgstr "Standardordning"
 
 # messages-i18n.c:219
-#: messages-i18n.c:264
-#, fuzzy
+#: messages-i18n.c:265
 msgid "Statement Date:"
-msgstr "Välj standard"
+msgstr "Avstämmningsdatum:"
 
 # messages-i18n.c:238
-#: messages-i18n.c:265
+#: messages-i18n.c:266
 msgid "Top level account"
 msgstr "Toppnivåkonto"
 
 # messages-i18n.c:239
-#: messages-i18n.c:266
-#, fuzzy
-msgid "Total Shares"
-msgstr "Tot And"
-
 #: messages-i18n.c:267
+msgid "Total Shares"
+msgstr "Andelar totalt"
+
+#: messages-i18n.c:268
 msgid "Verify Changes"
-msgstr ""
+msgstr "Verifiera ändringar"
 
 # messages-i18n.c:240
-#: messages-i18n.c:268
+#: messages-i18n.c:269
 msgid "Transfer Information"
 msgstr "Överför information"
 
 # messages-i18n.c:241
-#: messages-i18n.c:269
+#: messages-i18n.c:270
 msgid "Transfer Money"
 msgstr "Överför pengar"
 
 # messages-i18n.c:242
-#: messages-i18n.c:270
+#: messages-i18n.c:271
 msgid "Transfer From"
 msgstr "Överföring från"
 
 # messages-i18n.c:243
-#: messages-i18n.c:271
+#: messages-i18n.c:272
 msgid "Transfer To"
 msgstr "Överföring till"
 
 # messages-i18n.c:244
-#: messages-i18n.c:272
+#: messages-i18n.c:273
 msgid "About"
 msgstr "Om"
 
 # messages-i18n.c:245 po/guile_strings.txt:56
-#: messages-i18n.c:273 po/guile_strings.txt:64
+#: messages-i18n.c:274 po/guile_strings.txt:64
 #: src/gnome/glade-gnc-dialogs.c:1844
 msgid "Account"
 msgstr "Konto"
 
 # messages-i18n.c:246 src/gnome/glade-gnc-dialogs.c:361
 # src/gnome/glade-gnc-dialogs.c:521
-#: messages-i18n.c:274 src/gnome/glade-gnc-dialogs.c:369
+#: messages-i18n.c:275 src/gnome/glade-gnc-dialogs.c:369
 #: src/gnome/glade-gnc-dialogs.c:529
 msgid "Accounts"
 msgstr "Konton"
 
 # messages-i18n.c:247
-#: messages-i18n.c:275
+#: messages-i18n.c:276
 msgid "Account Information"
 msgstr "Kontoinformation"
 
 # messages-i18n.c:248
-#: messages-i18n.c:276
+#: messages-i18n.c:277
 msgid "AutoDep"
 msgstr ""
 
 # messages-i18n.c:249
-#: messages-i18n.c:277 src/gnome/glade-gnc-dialogs.c:2458
+#: messages-i18n.c:278 src/gnome/glade-gnc-dialogs.c:2458
 msgid "Action"
-msgstr "Aktion"
+msgstr "Handling"
 
 # messages-i18n.c:250
-#: messages-i18n.c:278
+#: messages-i18n.c:279
 msgid "Activities"
 msgstr "Aktiviteter"
 
-#: messages-i18n.c:279
+#: messages-i18n.c:280
 msgid "Ago"
-msgstr ""
+msgstr "Sedan"
 
 # messages-i18n.c:251 po/guile_strings.txt:50
-#: messages-i18n.c:280 po/guile_strings.txt:57
+#: messages-i18n.c:281 po/guile_strings.txt:57
 #: src/gnome/glade-gnc-dialogs.c:2198
 msgid "Amount"
 msgstr "Belopp"
 
 # messages-i18n.c:252
-#: messages-i18n.c:281 po/guile_strings.txt:239
+#: messages-i18n.c:282 po/guile_strings.txt:239
 msgid "Appreciation"
 msgstr "Värdestegring"
 
 # messages-i18n.c:253
-#: messages-i18n.c:282
+#: messages-i18n.c:283
 msgid "Phone"
 msgstr "Telefon"
 
 # messages-i18n.c:254 po/guile_strings.txt:149
 # src/gnome/glade-gnc-dialogs.c:626
-#: messages-i18n.c:283 po/guile_strings.txt:173
+#: messages-i18n.c:284 po/guile_strings.txt:173
 #: src/gnome/glade-gnc-dialogs.c:634
 msgid "Asset"
 msgstr "Tillgång"
 
 # messages-i18n.c:255
-#: messages-i18n.c:284
+#: messages-i18n.c:285
 msgid "Assets"
 msgstr "Tillgångar"
 
 # messages-i18n.c:256
-#: messages-i18n.c:285
+#: messages-i18n.c:286
 msgid "ATM"
 msgstr "Bankomat"
 
 # messages-i18n.c:257
-#: messages-i18n.c:286
+#: messages-i18n.c:287
 msgid "Back"
 msgstr "Bakåt"
 
 # messages-i18n.c:258 po/guile_strings.txt:12
-#: messages-i18n.c:287 messages-i18n.c:288 po/guile_strings.txt:13
+#: messages-i18n.c:288 messages-i18n.c:289 po/guile_strings.txt:13
 msgid "Balance"
 msgstr "Saldo"
 
 # messages-i18n.c:259 po/guile_strings.txt:94
 # src/gnome/glade-gnc-dialogs.c:620
-#: messages-i18n.c:289 po/guile_strings.txt:107
+#: messages-i18n.c:290 po/guile_strings.txt:107
 #: src/gnome/glade-gnc-dialogs.c:628
 msgid "Bank"
 msgstr "Bank"
 
 # messages-i18n.c:260
-#: messages-i18n.c:290
+#: messages-i18n.c:291
 msgid "Blank"
 msgstr "Tom"
 
 # messages-i18n.c:261
-#: messages-i18n.c:291 po/guile_strings.txt:123
+#: messages-i18n.c:292 po/guile_strings.txt:123
 msgid "Bought"
 msgstr "Köpte"
 
 # messages-i18n.c:262
-#: messages-i18n.c:292
+#: messages-i18n.c:293
 msgid "Buy"
 msgstr "Köpa"
 
 # messages-i18n.c:263
-#: messages-i18n.c:293
+#: messages-i18n.c:294
 msgid "Cancel"
 msgstr "Avbryt"
 
 # messages-i18n.c:264 po/guile_strings.txt:118
 # src/gnome/glade-gnc-dialogs.c:623
-#: messages-i18n.c:294 po/guile_strings.txt:136
+#: messages-i18n.c:295 po/guile_strings.txt:136
 #: src/gnome/glade-gnc-dialogs.c:631
 msgid "Cash"
 msgstr "Kontant"
 
 # messages-i18n.c:265
-#: messages-i18n.c:295
+#: messages-i18n.c:296
 msgid "Changed"
 msgstr "Ändrad"
 
 # messages-i18n.c:266
-#: messages-i18n.c:296 po/guile_strings.txt:205
+#: messages-i18n.c:297 po/guile_strings.txt:205
 msgid "Charge"
 msgstr "Avgift"
 
 # messages-i18n.c:267
-#: messages-i18n.c:297
+#: messages-i18n.c:298
 msgid "Check"
 msgstr "Check"
 
 # messages-i18n.c:268
-#: messages-i18n.c:298
+#: messages-i18n.c:299
 msgid "Checking"
 msgstr "Kontrollerar"
 
 # messages-i18n.c:269
-#: messages-i18n.c:299
+#: messages-i18n.c:300
 msgid "Cleared"
 msgstr ""
 
 # messages-i18n.c:270
-#: messages-i18n.c:300
+#: messages-i18n.c:301
 msgid "Close"
 msgstr "Stäng"
 
 # messages-i18n.c:271
-#: messages-i18n.c:301
+#: messages-i18n.c:302
 msgid "Commit"
 msgstr ""
 
 # messages-i18n.c:272
-#: messages-i18n.c:302
+#: messages-i18n.c:303
 msgid "Create"
 msgstr "Skapa"
 
 # messages-i18n.c:273 po/guile_strings.txt:214
 # src/gnome/glade-gnc-dialogs.c:629
-#: messages-i18n.c:303 po/guile_strings.txt:254
+#: messages-i18n.c:304 po/guile_strings.txt:254
 #: src/gnome/glade-gnc-dialogs.c:637 src/gnome/glade-gnc-dialogs.c:2142
 msgid "Credit"
 msgstr "Kredit"
 
 # messages-i18n.c:274
-#: messages-i18n.c:304
+#: messages-i18n.c:305
 msgid "Credits"
 msgstr "Krediter"
 
 # messages-i18n.c:275 po/guile_strings.txt:114
 # src/gnome/glade-gnc-dialogs.c:641
-#: messages-i18n.c:305 po/guile_strings.txt:133
+#: messages-i18n.c:306 po/guile_strings.txt:133
 #: src/gnome/glade-gnc-dialogs.c:649
 msgid "Currency"
 msgstr "Valuta"
 
 # messages-i18n.c:276 po/guile_strings.txt:6
-#: messages-i18n.c:306 po/guile_strings.txt:6
+#: messages-i18n.c:307 po/guile_strings.txt:6
 #: src/gnome/glade-gnc-dialogs.c:1980
 msgid "Date"
 msgstr "Datum"
 
 # po/guile_strings.txt:101
-#: messages-i18n.c:307
-#, fuzzy
+#: messages-i18n.c:308
 msgid "Days"
-msgstr "Dag"
+msgstr "Dagar"
 
 # messages-i18n.c:277 po/guile_strings.txt:32
-#: messages-i18n.c:308 po/guile_strings.txt:38
+#: messages-i18n.c:309 po/guile_strings.txt:38
 #: src/gnome/glade-gnc-dialogs.c:2145
 msgid "Debit"
 msgstr "Debet"
 
 # messages-i18n.c:278
-#: messages-i18n.c:309
+#: messages-i18n.c:310
 msgid "Debits"
 msgstr "Debeter"
 
 # messages-i18n.c:279
-#: messages-i18n.c:310
+#: messages-i18n.c:311
 msgid "Decrease"
 msgstr "Minska"
 
 # messages-i18n.c:280
-#: messages-i18n.c:311
+#: messages-i18n.c:312
 msgid "Deficit"
 msgstr "Underskott"
 
 # messages-i18n.c:281
-#: messages-i18n.c:312 src/gnome/glade-gnc-dialogs.c:2877
+#: messages-i18n.c:313 src/gnome/glade-gnc-dialogs.c:2877
 msgid "Delete"
 msgstr "Radera"
 
 # messages-i18n.c:282
-#: messages-i18n.c:313 po/guile_strings.txt:200
+#: messages-i18n.c:314 po/guile_strings.txt:200
 msgid "Deposit"
 msgstr "Insättning"
 
 # messages-i18n.c:283
-#: messages-i18n.c:314 po/guile_strings.txt:159
+#: messages-i18n.c:315 po/guile_strings.txt:159
 msgid "Depreciation"
 msgstr "Värdeminskning"
 
 # messages-i18n.c:284 po/guile_strings.txt:131
-#: messages-i18n.c:315 po/guile_strings.txt:152
+#: messages-i18n.c:316 po/guile_strings.txt:152
 #: src/gnome/glade-gnc-dialogs.c:2038
 msgid "Description"
 msgstr "Beskrivning"
 
 # messages-i18n.c:285
-#: messages-i18n.c:316
+#: messages-i18n.c:317
 msgid "Difference"
 msgstr "Skillnad"
 
 # messages-i18n.c:286
-#: messages-i18n.c:317
+#: messages-i18n.c:318
 msgid "Direct Debit"
 msgstr "Direkt debet"
 
 # messages-i18n.c:287
-#: messages-i18n.c:318
+#: messages-i18n.c:319
 msgid "Dist"
 msgstr "Dist"
 
 # messages-i18n.c:288
-#: messages-i18n.c:319
+#: messages-i18n.c:320
 msgid "Div"
 msgstr "Div"
 
 # messages-i18n.c:289
-#: messages-i18n.c:320
+#: messages-i18n.c:321
 msgid "Duplicate"
 msgstr "Duplicera"
 
 # messages-i18n.c:290
-#: messages-i18n.c:321
+#: messages-i18n.c:322
 msgid "Edit"
 msgstr "Redigera"
 
 # messages-i18n.c:291 po/guile_strings.txt:8
 # src/gnome/glade-gnc-dialogs.c:650
-#: messages-i18n.c:322 po/guile_strings.txt:8
+#: messages-i18n.c:323 po/guile_strings.txt:8
 #: src/gnome/glade-gnc-dialogs.c:658
 msgid "Equity"
 msgstr "Utjämning"
 
 # messages-i18n.c:292
-#: messages-i18n.c:323
+#: messages-i18n.c:324
 msgid "Exit"
 msgstr "Avsluta"
 
 # messages-i18n.c:293 po/guile_strings.txt:275
 # src/gnome/glade-gnc-dialogs.c:647
-#: messages-i18n.c:324 po/guile_strings.txt:327
+#: messages-i18n.c:325 po/guile_strings.txt:327
 #: src/gnome/glade-gnc-dialogs.c:655
 msgid "Expense"
 msgstr "Utgift"
 
 # messages-i18n.c:294
-#: messages-i18n.c:325
+#: messages-i18n.c:326
 msgid "Export"
 msgstr "Export"
 
 # messages-i18n.c:295 po/guile_strings.txt:301
-#: messages-i18n.c:326 po/guile_strings.txt:356
+#: messages-i18n.c:327 po/guile_strings.txt:356
 msgid "Extensions"
 msgstr "Utvidgningar"
 
 # messages-i18n.c:296
-#: messages-i18n.c:327
+#: messages-i18n.c:328
 msgid "Fee"
 msgstr "Avgift"
 
 # messages-i18n.c:297
-#: messages-i18n.c:328
-#, fuzzy
+#: messages-i18n.c:329
 msgid "Field"
-msgstr "Arkiv"
+msgstr "Fält"
 
 # messages-i18n.c:297
-#: messages-i18n.c:329
+#: messages-i18n.c:330
 msgid "File"
 msgstr "Arkiv"
 
 # messages-i18n.c:190
-#: messages-i18n.c:330 src/gnome/glade-gnc-dialogs.c:2532
-#, fuzzy
+#: messages-i18n.c:331 src/gnome/glade-gnc-dialogs.c:2532
 msgid "Find"
-msgstr "Slutför"
+msgstr "Sök"
 
 # messages-i18n.c:298
-#: messages-i18n.c:331
+#: messages-i18n.c:332
 msgid "Forward"
 msgstr "Framåt"
 
 # messages-i18n.c:299 po/guile_strings.txt:108
-#: messages-i18n.c:332 po/guile_strings.txt:125
+#: messages-i18n.c:333 po/guile_strings.txt:125
 msgid "From"
 msgstr "Från"
 
 # messages-i18n.c:300
-#: messages-i18n.c:333
+#: messages-i18n.c:334
 msgid "GnuCash Preferences"
 msgstr "GnuCash inställningar"
 
 # messages-i18n.c:301
-#: messages-i18n.c:334
+#: messages-i18n.c:335
 msgid "Help"
 msgstr "Hjälp"
 
 # messages-i18n.c:258 po/guile_strings.txt:12
-#: messages-i18n.c:335
-#, fuzzy
+#: messages-i18n.c:336
 msgid "Imbalance"
-msgstr "Saldo"
+msgstr "Obalans"
 
 # messages-i18n.c:302
-#: messages-i18n.c:336
+#: messages-i18n.c:337
 msgid "Import"
 msgstr "Importera"
 
 # messages-i18n.c:303 po/guile_strings.txt:208
 # src/gnome/glade-gnc-dialogs.c:644
-#: messages-i18n.c:337 po/guile_strings.txt:244
+#: messages-i18n.c:338 po/guile_strings.txt:244
 #: src/gnome/glade-gnc-dialogs.c:652
 msgid "Income"
 msgstr "Inkomst"
 
 # messages-i18n.c:304
-#: messages-i18n.c:338
+#: messages-i18n.c:339
 msgid "Increase"
 msgstr "Öka"
 
 # messages-i18n.c:305
-#: messages-i18n.c:339
+#: messages-i18n.c:340
 msgid "Int"
 msgstr "Ränta"
 
 # messages-i18n.c:306
-#: messages-i18n.c:340
+#: messages-i18n.c:341
 msgid "Jump"
 msgstr "Hoppa"
 
 # messages-i18n.c:307 po/guile_strings.txt:168
 # src/gnome/glade-gnc-dialogs.c:632
-#: messages-i18n.c:341 po/guile_strings.txt:194
+#: messages-i18n.c:342 po/guile_strings.txt:194
 #: src/gnome/glade-gnc-dialogs.c:640
 msgid "Liability"
 msgstr "Skuld"
 
 # messages-i18n.c:308
-#: messages-i18n.c:342
+#: messages-i18n.c:343
 msgid "License"
 msgstr "Licens"
 
 # messages-i18n.c:309
-#: messages-i18n.c:343
+#: messages-i18n.c:344
 msgid "Loan"
 msgstr "Lån"
 
 # messages-i18n.c:310
-#: messages-i18n.c:344
+#: messages-i18n.c:345
 msgid "LTCG"
 msgstr ""
 
 # messages-i18n.c:311 po/guile_strings.txt:26
-#: messages-i18n.c:345 po/guile_strings.txt:32
+#: messages-i18n.c:346 po/guile_strings.txt:32
 #: src/gnome/glade-gnc-dialogs.c:2256
 msgid "Memo"
-msgstr "Memo"
+msgstr "Anteckning"
 
 # po/guile_strings.txt:187
-#: messages-i18n.c:346
-#, fuzzy
+#: messages-i18n.c:347
 msgid "Months"
-msgstr "Månad"
+msgstr "Månader"
 
 # messages-i18n.c:312
-#: messages-i18n.c:347
+#: messages-i18n.c:348
 msgid "New"
 msgstr "Nytt"
 
 # messages-i18n.c:313
-#: messages-i18n.c:348
+#: messages-i18n.c:349
 msgid "No"
 msgstr "Nej"
 
 # messages-i18n.c:314 src/gnome/print-session.c:108
 # src/gnome/print-session.c:197
-#: messages-i18n.c:349 src/gnome/print-session.c:111
+#: messages-i18n.c:350 src/gnome/print-session.c:111
 #: src/gnome/print-session.c:200
 msgid "(none)"
 msgstr "(ingen)"
 
 # messages-i18n.c:315 po/guile_strings.txt:179
-#: messages-i18n.c:350 po/guile_strings.txt:209
+#: messages-i18n.c:351 po/guile_strings.txt:209
 msgid "Notes"
 msgstr "Anteckningar"
 
 # messages-i18n.c:316 po/guile_strings.txt:151
-#: messages-i18n.c:351 po/guile_strings.txt:175
+#: messages-i18n.c:352 po/guile_strings.txt:175
 msgid "Num"
 msgstr "Num"
 
 # messages-i18n.c:317
-#: messages-i18n.c:352
+#: messages-i18n.c:353
 msgid "Ok"
 msgstr "Ok"
 
 # messages-i18n.c:318
-#: messages-i18n.c:353
+#: messages-i18n.c:354
 msgid "Online"
 msgstr "Uppkopplad"
 
 # messages-i18n.c:319
-#: messages-i18n.c:354
+#: messages-i18n.c:355
 msgid "Open"
 msgstr "Öppna"
 
 # messages-i18n.c:319
-#: messages-i18n.c:355
-#, fuzzy
+#: messages-i18n.c:356
 msgid "Orphan"
-msgstr "Öppna"
+msgstr "Föräldralös"
 
 # messages-i18n.c:320
-#: messages-i18n.c:356
+#: messages-i18n.c:357
 msgid "Parameters"
 msgstr "Parametrar"
 
 # messages-i18n.c:321
-#: messages-i18n.c:357 po/guile_strings.txt:113
+#: messages-i18n.c:358 po/guile_strings.txt:113
 msgid "Payment"
 msgstr "Utgift"
 
 # messages-i18n.c:322
-#: messages-i18n.c:358
+#: messages-i18n.c:359
 msgid "Portfolio"
 msgstr "Portfölj"
 
 # messages-i18n.c:323
-#: messages-i18n.c:359
+#: messages-i18n.c:360
 msgid "POS"
 msgstr ""
 
 # messages-i18n.c:324
-#: messages-i18n.c:360
+#: messages-i18n.c:361
 msgid "Preferences"
 msgstr "Inställningar"
 
 # messages-i18n.c:325
-#: messages-i18n.c:361 src/gnome/glade-gnc-dialogs.c:2400
+#: messages-i18n.c:362 src/gnome/glade-gnc-dialogs.c:2400
 msgid "Price"
-msgstr "Pris"
+msgstr "Kurs"
 
 # messages-i18n.c:326 src/gnome/glade-gnc-dialogs.c:971
-#: messages-i18n.c:362 src/gnome/glade-gnc-dialogs.c:1004
+#: messages-i18n.c:363 src/gnome/glade-gnc-dialogs.c:1004
 msgid "Print"
 msgstr "Utskrift"
 
 # messages-i18n.c:327
-#: messages-i18n.c:363
+#: messages-i18n.c:364
 msgid "Profits"
 msgstr "Vinster"
 
 # messages-i18n.c:328
-#: messages-i18n.c:364
+#: messages-i18n.c:365
 msgid "Quit"
 msgstr "Avsluta"
 
 # messages-i18n.c:329
-#: messages-i18n.c:365 po/guile_strings.txt:18
+#: messages-i18n.c:366 po/guile_strings.txt:18
 msgid "Rebate"
 msgstr "Återbäring"
 
 # messages-i18n.c:330
-#: messages-i18n.c:366 po/guile_strings.txt:191
+#: messages-i18n.c:367 po/guile_strings.txt:191
 msgid "Receive"
 msgstr "Ta emot"
 
 # messages-i18n.c:331
-#: messages-i18n.c:367
+#: messages-i18n.c:368
 msgid "Reconcile"
-msgstr "Stämma av"
+msgstr "Avstämma"
 
 # messages-i18n.c:332
-#: messages-i18n.c:368
+#: messages-i18n.c:369
 msgid "Record"
 msgstr "Spara"
 
 # messages-i18n.c:333 po/guile_strings.txt:184
-#: messages-i18n.c:369 po/guile_strings.txt:215
+#: messages-i18n.c:370 po/guile_strings.txt:215
 msgid "Register"
 msgstr "Kontoutdrag"
 
 # messages-i18n.c:334 po/guile_strings.txt:178
-#: messages-i18n.c:370 po/guile_strings.txt:208
+#: messages-i18n.c:371 po/guile_strings.txt:208
 msgid "Report"
 msgstr "Rapport"
 
 # messages-i18n.c:335
-#: messages-i18n.c:371
+#: messages-i18n.c:372
 msgid "Reports"
 msgstr "Rapporter"
 
 # messages-i18n.c:336
-#: messages-i18n.c:372
+#: messages-i18n.c:373
 msgid "Save"
 msgstr "Spara"
 
 # messages-i18n.c:337
-#: messages-i18n.c:373
+#: messages-i18n.c:374
 msgid "Savings"
 msgstr "Besparingar"
 
 # messages-i18n.c:338
-#: messages-i18n.c:374
+#: messages-i18n.c:375
 msgid "Scrub"
 msgstr "Städa upp"
 
 # messages-i18n.c:339
-#: messages-i18n.c:375
+#: messages-i18n.c:376
 msgid "Search Results"
 msgstr "Sökresultat"
 
 # messages-i18n.c:340 po/guile_strings.txt:164
-#: messages-i18n.c:376 po/guile_strings.txt:189
+#: messages-i18n.c:377 po/guile_strings.txt:189
 msgid "Security"
 msgstr "Säkerhet"
 
 # messages-i18n.c:341
-#: messages-i18n.c:377
+#: messages-i18n.c:378
 msgid "Sell"
 msgstr "Sälja"
 
 # messages-i18n.c:342
-#: messages-i18n.c:378
+#: messages-i18n.c:379
 msgid "Settings"
 msgstr "Inställningar"
 
 # messages-i18n.c:343
-#: messages-i18n.c:379
+#: messages-i18n.c:380
 msgid "Simple"
 msgstr "Enkel"
 
 # messages-i18n.c:344
-#: messages-i18n.c:380 po/guile_strings.txt:313
+#: messages-i18n.c:381 po/guile_strings.txt:313
 msgid "Sold"
 msgstr "Sålde"
 
 # messages-i18n.c:345
-#: messages-i18n.c:381 po/guile_strings.txt:51
+#: messages-i18n.c:382 po/guile_strings.txt:51
 msgid "Spend"
 msgstr "Spendera"
 
 # messages-i18n.c:346
-#: messages-i18n.c:382
+#: messages-i18n.c:383
 msgid "Split"
 msgstr "Delning"
 
 # messages-i18n.c:347
-#: messages-i18n.c:383
+#: messages-i18n.c:384
 msgid "STCG"
 msgstr ""
 
 # messages-i18n.c:348 po/guile_strings.txt:299
 # src/gnome/glade-gnc-dialogs.c:635
-#: messages-i18n.c:384 po/guile_strings.txt:354
+#: messages-i18n.c:385 po/guile_strings.txt:354
 #: src/gnome/glade-gnc-dialogs.c:643
 msgid "Stock"
 msgstr "Aktie"
 
 # messages-i18n.c:349
-#: messages-i18n.c:385 po/guile_strings.txt:246
+#: messages-i18n.c:386 po/guile_strings.txt:246
 msgid "Style"
 msgstr "Stil"
 
 # messages-i18n.c:350
-#: messages-i18n.c:386
+#: messages-i18n.c:387
 msgid "Surplus"
 msgstr "Överskott"
 
 # messages-i18n.c:351
-#: messages-i18n.c:387
+#: messages-i18n.c:388
 msgid "Teller"
 msgstr "Kassör"
 
 # messages-i18n.c:352 po/guile_strings.txt:253
-#: messages-i18n.c:388 po/guile_strings.txt:302
+#: messages-i18n.c:389 po/guile_strings.txt:302
 msgid "To"
 msgstr "Till"
 
 # messages-i18n.c:353
-#: messages-i18n.c:389 src/gnome/glade-gnc-dialogs.c:2624
+#: messages-i18n.c:390 src/gnome/glade-gnc-dialogs.c:2624
 msgid "Today"
 msgstr "Idag"
 
 # messages-i18n.c:354
-#: messages-i18n.c:390 messages-i18n.c:391 po/guile_strings.txt:207
+#: messages-i18n.c:391 messages-i18n.c:392 po/guile_strings.txt:207
 msgid "Total"
 msgstr "Totalt"
 
 # messages-i18n.c:355 po/guile_strings.txt:255
 # src/gnome/glade-gnc-dialogs.c:354 src/gnome/glade-gnc-dialogs.c:408
-#: messages-i18n.c:392 po/guile_strings.txt:304
+#: messages-i18n.c:393 po/guile_strings.txt:304
 #: src/gnome/glade-gnc-dialogs.c:362 src/gnome/glade-gnc-dialogs.c:416
 msgid "Type"
 msgstr "Typ"
 
 # messages-i18n.c:356
-#: messages-i18n.c:393
+#: messages-i18n.c:394
 msgid "Transaction"
 msgstr "Transaktion"
 
 # messages-i18n.c:357
-#: messages-i18n.c:394
+#: messages-i18n.c:395
 msgid "Transfer"
 msgstr "Överföring"
 
 # messages-i18n.c:358 po/guile_strings.txt:57
-#: messages-i18n.c:395 po/guile_strings.txt:65
+#: messages-i18n.c:396 po/guile_strings.txt:65
 msgid "Value"
 msgstr "Värde"
 
 # messages-i18n.c:359
-#: messages-i18n.c:396
+#: messages-i18n.c:397
 msgid "WARNING"
 msgstr "VARNING"
 
 # po/guile_strings.txt:115
-#: messages-i18n.c:397
-#, fuzzy
+#: messages-i18n.c:398
 msgid "Weeks"
-msgstr "Vecka"
+msgstr "Veckor"
 
 # messages-i18n.c:360
-#: messages-i18n.c:398
+#: messages-i18n.c:399
 msgid "Wire"
 msgstr "Överför elektroniskt"
 
 # messages-i18n.c:361
-#: messages-i18n.c:399
+#: messages-i18n.c:400
 msgid "Withdraw"
 msgstr "Uttag"
 
 # po/guile_strings.txt:185
-#: messages-i18n.c:400
-#, fuzzy
+#: messages-i18n.c:401
 msgid "Years"
 msgstr "År"
 
 # messages-i18n.c:362
-#: messages-i18n.c:401
+#: messages-i18n.c:402
 msgid "Yes"
 msgstr "Ja"
 
@@ -2233,9 +2184,8 @@ msgstr "Status"
 
 # messages-i18n.c:203
 #: po/guile_strings.txt:9
-#, fuzzy
 msgid "Other Account"
-msgstr "Öppna konto"
+msgstr "Andra kontot"
 
 # po/guile_strings.txt:9
 #: po/guile_strings.txt:10
@@ -2286,11 +2236,11 @@ msgstr "Den aktuella tiden är %s."
 
 #: po/guile_strings.txt:21
 msgid "Headers"
-msgstr ""
+msgstr "Rubriker"
 
 #: po/guile_strings.txt:23
 msgid "Display N-1 lines"
-msgstr ""
+msgstr "Visa N-1 rader"
 
 # po/guile_strings.txt:20
 #: po/guile_strings.txt:24
@@ -2314,13 +2264,12 @@ msgstr "Balanserar"
 
 #: po/guile_strings.txt:28
 msgid "Date (subtotal monthly)"
-msgstr ""
+msgstr "Datum (delsummor måndasvis)"
 
 # po/guile_strings.txt:123
 #: po/guile_strings.txt:29
-#, fuzzy
 msgid "Single Column Display"
-msgstr "Visa datum format"
+msgstr "Enkelradsvisning"
 
 # po/guile_strings.txt:25
 #: po/guile_strings.txt:30
@@ -2329,7 +2278,7 @@ msgstr "Tid"
 
 #: po/guile_strings.txt:31
 msgid "Account (w/subtotal)"
-msgstr ""
+msgstr "Konto (m/delsumma)"
 
 # po/guile_strings.txt:27
 #: po/guile_strings.txt:33
@@ -2346,7 +2295,7 @@ msgstr "Bakgrundsfärgen för en aktiv delning i flerradsläge och autolägen"
 # po/guile_strings.txt:29
 #: po/guile_strings.txt:35
 msgid "Double mode active background"
-msgstr "Aktiv bakgrund i dubbelläge"
+msgstr "Aktiv bakgrund i dubbelradsläge"
 
 # po/guile_strings.txt:30
 #: po/guile_strings.txt:36
@@ -2386,7 +2335,7 @@ msgstr "Sortera efter datum"
 
 #: po/guile_strings.txt:44
 msgid "Budget Dialog (Testing)"
-msgstr ""
+msgstr "Budgetdialog (test)"
 
 # po/guile_strings.txt:38
 #: po/guile_strings.txt:45
@@ -2446,7 +2395,7 @@ msgstr "Som standard, visa alla transaktioner i ett konto"
 
 #: po/guile_strings.txt:59
 msgid "No amount display"
-msgstr ""
+msgstr "Visa inget belopp"
 
 # po/guile_strings.txt:52
 #: po/guile_strings.txt:60
@@ -2525,7 +2474,7 @@ msgstr "_Vinst och förlust"
 
 #: po/guile_strings.txt:78
 msgid "Display 1 line"
-msgstr ""
+msgstr "Visa en rad"
 
 # po/guile_strings.txt:70
 #: po/guile_strings.txt:79
@@ -2550,7 +2499,7 @@ msgstr "Det finns inga valda konton i kontolistalternativet."
 
 #: po/guile_strings.txt:83
 msgid "Funds Out"
-msgstr ""
+msgstr "Tillgångar ut"
 
 # po/guile_strings.txt:74
 #: po/guile_strings.txt:84
@@ -2579,9 +2528,8 @@ msgstr "Kategori"
 
 # messages-i18n.c:177 po/guile_strings.txt:62
 #: po/guile_strings.txt:89
-#, fuzzy
 msgid "Single"
-msgstr "Automatisk enkel"
+msgstr "Enkel"
 
 # po/guile_strings.txt:80
 #: po/guile_strings.txt:90
@@ -2596,7 +2544,7 @@ msgstr "Sortera efter check/transaktions-nummer"
 # po/guile_strings.txt:82
 #: po/guile_strings.txt:92
 msgid "The background color for the active transaction in double mode"
-msgstr "Bakgrundsfärgen för den aktiva transaktionen deubbelradsläge"
+msgstr "Bakgrundsfärgen för den aktiva transaktionen dubbelradsläge"
 
 # po/guile_strings.txt:83
 #: po/guile_strings.txt:93
@@ -2611,15 +2559,13 @@ msgstr "Detta boolska alternativ är %s."
 
 # po/guile_strings.txt:222
 #: po/guile_strings.txt:95
-#, fuzzy
 msgid "Display the memo?"
-msgstr "Visa budgetrapport."
+msgstr "Visa anteckning?"
 
 # po/guile_strings.txt:166
 #: po/guile_strings.txt:96
-#, fuzzy
 msgid "(subaccounts)"
-msgstr "Underkonton"
+msgstr "(underkonton)"
 
 # po/guile_strings.txt:85
 #: po/guile_strings.txt:97
@@ -2662,9 +2608,8 @@ msgstr "största till minsta, senaste till tidigaste"
 
 # po/guile_strings.txt:222
 #: po/guile_strings.txt:104
-#, fuzzy
 msgid "Display the description?"
-msgstr "Visa budgetrapport."
+msgstr "Visa beskrivning?"
 
 # po/guile_strings.txt:92
 #: po/guile_strings.txt:105
@@ -2718,21 +2663,18 @@ msgstr ""
 
 # po/guile_strings.txt:222
 #: po/guile_strings.txt:116
-#, fuzzy
 msgid "Display the headers?"
-msgstr "Visa budgetrapport."
+msgstr "Visa rubriker?"
 
 # po/guile_strings.txt:156
 #: po/guile_strings.txt:117
-#, fuzzy
 msgid "Do transaction report on these accounts"
-msgstr "Gör transaktionsrapport på detta kontot"
+msgstr "Skapa transaktionsrapport på dessa konton"
 
 # po/guile_strings.txt:234
 #: po/guile_strings.txt:118
-#, fuzzy
 msgid "Sort and subtotal by account transferred from/to's name"
-msgstr "Sortera efter kontots överförings från/till namn"
+msgstr "Sortera och delsumma per kontoöverföringens från/till-namn"
 
 # po/guile_strings.txt:105
 #: po/guile_strings.txt:121
@@ -2756,9 +2698,8 @@ msgstr "Start på rapporteringsperiod"
 
 # po/guile_strings.txt:110
 #: po/guile_strings.txt:127
-#, fuzzy
 msgid "Sort by exact entry time"
-msgstr "Sortera efter den EXAKTA inmatningstiden"
+msgstr "Sortera efter den exakta inmatningstiden"
 
 #: po/guile_strings.txt:128
 msgid "Use accounting labels"
@@ -2771,11 +2712,11 @@ msgstr "Full"
 
 #: po/guile_strings.txt:130
 msgid "The amount of time between data points"
-msgstr ""
+msgstr "Tiden mellan två värden"
 
 #: po/guile_strings.txt:131
 msgid "Upper Limit"
-msgstr ""
+msgstr "Övre gräns"
 
 # po/guile_strings.txt:113
 #: po/guile_strings.txt:132
@@ -2814,19 +2755,17 @@ msgstr "En rapport som är användbar för balansering av budgeten"
 
 # messages-i18n.c:96
 #: po/guile_strings.txt:141
-#, fuzzy
 msgid "Display the amount?"
-msgstr "Öppna ett konto"
+msgstr "Visa beloppet?"
 
 # messages-i18n.c:197 po/guile_strings.txt:51
 #: po/guile_strings.txt:142
-#, fuzzy
 msgid "Multi-Line"
-msgstr "Flerrad"
+msgstr "Flerraders"
 
 #: po/guile_strings.txt:143
 msgid "Two Column Display"
-msgstr ""
+msgstr "Tvåkolumnsvisning"
 
 # po/guile_strings.txt:123
 #: po/guile_strings.txt:144
@@ -2866,7 +2805,7 @@ msgstr "Beräkna saldobladet fram till denna datum"
 # po/guile_strings.txt:133
 #: po/guile_strings.txt:154
 msgid "Transaction Report"
-msgstr "Transaktions rapport"
+msgstr "Transaktionsrapport"
 
 # po/guile_strings.txt:134
 #: po/guile_strings.txt:155
@@ -2900,9 +2839,8 @@ msgstr "Rapportera saker från detta datum"
 
 # po/guile_strings.txt:189
 #: po/guile_strings.txt:162
-#, fuzzy
 msgid "Period"
-msgstr ". (Punkt)"
+msgstr "Period"
 
 # po/guile_strings.txt:140
 #: po/guile_strings.txt:163
@@ -2923,9 +2861,8 @@ msgstr "Sortera efter detta kriterium först"
 
 # messages-i18n.c:176 po/guile_strings.txt:260
 #: po/guile_strings.txt:166
-#, fuzzy
 msgid "Double"
-msgstr "Automatisk dubbel"
+msgstr "Dubbel"
 
 # po/guile_strings.txt:143
 #: po/guile_strings.txt:167
@@ -2991,7 +2928,7 @@ msgstr "största till minsta, senaste till tidigaste"
 # po/guile_strings.txt:156
 #: po/guile_strings.txt:181
 msgid "Do transaction report on this account"
-msgstr "Gör transaktionsrapport på detta kontot"
+msgstr "Skapa transaktionsrapport för detta kontot"
 
 # po/guile_strings.txt:157
 #: po/guile_strings.txt:182
@@ -3062,9 +2999,8 @@ msgstr "US"
 
 # po/guile_strings.txt:133
 #: po/guile_strings.txt:199
-#, fuzzy
 msgid "_Transaction Report"
-msgstr "Transaktions rapport"
+msgstr "_Transaktionsrapport"
 
 # po/guile_strings.txt:174
 #: po/guile_strings.txt:201
@@ -3088,9 +3024,8 @@ msgstr "Visa både ikoner och text"
 
 # po/guile_strings.txt:136
 #: po/guile_strings.txt:206
-#, fuzzy
 msgid "Transfer from/to (w/subtotal)"
-msgstr "Överföring från/till"
+msgstr "Överföring från/till (m/delsumma)"
 
 # po/guile_strings.txt:180
 #: po/guile_strings.txt:210
@@ -3106,9 +3041,8 @@ msgstr "Strängalternativet är %s."
 
 # messages-i18n.c:335
 #: po/guile_strings.txt:212
-#, fuzzy
 msgid "Report style"
-msgstr "Rapporter"
+msgstr "Rapportstil"
 
 # po/guile_strings.txt:182
 #: po/guile_strings.txt:213
@@ -3157,9 +3091,8 @@ msgstr "Namn"
 
 # po/guile_strings.txt:222
 #: po/guile_strings.txt:223
-#, fuzzy
 msgid "Display the date?"
-msgstr "Visa budgetrapport."
+msgstr "Visa datum?"
 
 # po/guile_strings.txt:192
 #: po/guile_strings.txt:224
@@ -3213,7 +3146,7 @@ msgstr "- (Bindestreck)"
 
 #: po/guile_strings.txt:234
 msgid "Funds In"
-msgstr ""
+msgstr "Tillångar in"
 
 # po/guile_strings.txt:202
 #: po/guile_strings.txt:235
@@ -3237,7 +3170,7 @@ msgstr "sant"
 
 #: po/guile_strings.txt:240
 msgid "Do not sort"
-msgstr ""
+msgstr "Sortera inte"
 
 # po/guile_strings.txt:206
 #: po/guile_strings.txt:241
@@ -3251,13 +3184,12 @@ msgstr "Inkomst.Lön.Taxerbar"
 
 #: po/guile_strings.txt:243
 msgid "Only use 'debit' and 'credit' instead of informal synonyms"
-msgstr ""
+msgstr "Använd bara 'debit' och 'kredit' istället för informella synonymer"
 
 # po/guile_strings.txt:100
 #: po/guile_strings.txt:245
-#, fuzzy
 msgid "Include sub-accounts of all selected accounts"
-msgstr "Addera underkonton till varje vald"
+msgstr "Ta med underkonton till varje valt konto"
 
 # po/guile_strings.txt:209
 #: po/guile_strings.txt:247
@@ -3271,7 +3203,7 @@ msgstr "Max"
 
 #: po/guile_strings.txt:249
 msgid "Test the budget dialog."
-msgstr ""
+msgstr "Testa budgetdialogrutan."
 
 # po/guile_strings.txt:211
 #: po/guile_strings.txt:250
@@ -3280,9 +3212,8 @@ msgstr "Visa horisontella kanter i celler som standard."
 
 # po/guile_strings.txt:222
 #: po/guile_strings.txt:251
-#, fuzzy
 msgid "Display the totals?"
-msgstr "Visa budgetrapport."
+msgstr "Visa totalvärdet?"
 
 # po/guile_strings.txt:212
 #: po/guile_strings.txt:252
@@ -3300,7 +3231,7 @@ msgstr ""
 
 #: po/guile_strings.txt:256
 msgid "Enable EURO support"
-msgstr ""
+msgstr "Aktivera EURO stöd"
 
 # po/guile_strings.txt:215
 #: po/guile_strings.txt:257
@@ -3335,13 +3266,12 @@ msgstr ""
 
 #: po/guile_strings.txt:262
 msgid "Enables support for the European Union EURO currency"
-msgstr ""
+msgstr "Aktiverar stöd för Europiska Unionens valuta EURO"
 
 # po/guile_strings.txt:106
 #: po/guile_strings.txt:263
-#, fuzzy
 msgid "Merged"
-msgstr "Genomsnitt"
+msgstr "Sammanslagen"
 
 # po/guile_strings.txt:220
 #: po/guile_strings.txt:264
@@ -3360,19 +3290,17 @@ msgstr "Visa budgetrapport."
 
 # messages-i18n.c:96
 #: po/guile_strings.txt:267
-#, fuzzy
 msgid "Display the account?"
-msgstr "Öppna ett konto"
+msgstr "Visa kontot?"
 
 # po/guile_strings.txt:222
 #: po/guile_strings.txt:268
-#, fuzzy
 msgid "Display the cheque number?"
-msgstr "Visa budgetrapport."
+msgstr "Visa checknummer?"
 
 #: po/guile_strings.txt:269
 msgid "Display N lines"
-msgstr ""
+msgstr "Visa N rader"
 
 # po/guile_strings.txt:223
 #: po/guile_strings.txt:270
@@ -3417,7 +3345,7 @@ msgstr ""
 
 #: po/guile_strings.txt:277
 msgid "Sort by date & subtotal each year"
-msgstr ""
+msgstr "Sortera efter datum & delsumma varje år"
 
 # po/guile_strings.txt:231
 #: po/guile_strings.txt:278
@@ -3431,7 +3359,7 @@ msgstr "Ikoner och text"
 
 #: po/guile_strings.txt:280
 msgid "The type of graph to generate"
-msgstr ""
+msgstr "Vilken sorts graf att generera"
 
 # po/guile_strings.txt:233
 #: po/guile_strings.txt:281
@@ -3466,7 +3394,7 @@ msgstr "Rubrikernas bakgrundsfärg"
 # po/guile_strings.txt:239
 #: po/guile_strings.txt:287
 msgid "Sort by memo"
-msgstr "Sortera efter memo"
+msgstr "Sortera efter anteckning"
 
 # po/guile_strings.txt:240
 #: po/guile_strings.txt:288
@@ -3491,7 +3419,7 @@ msgstr "Raportera slutdatum"
 # po/guile_strings.txt:244
 #: po/guile_strings.txt:292 src/gnome/glade-gnc-dialogs.c:1823
 msgid "None"
-msgstr "Ingen"
+msgstr "Inget"
 
 # po/guile_strings.txt:245
 #: po/guile_strings.txt:293
@@ -3513,6 +3441,8 @@ msgid ""
 "Display the other account?  (if this is a split transaction, this parameter "
 "is guessed)."
 msgstr ""
+"Visa det andra kontot? (om detta är en delad transaktion så gissas värdet på "
+"denna parameter)."
 
 # po/guile_strings.txt:248
 #: po/guile_strings.txt:297
@@ -3546,9 +3476,8 @@ msgstr "minsta till största, tidigaste till senaste"
 
 # po/guile_strings.txt:283
 #: po/guile_strings.txt:305
-#, fuzzy
 msgid "Display the Transaction Report report."
-msgstr "Visa kontots transaktionsrapport."
+msgstr "Visa transaktionsrapport rapporten."
 
 # po/guile_strings.txt:256
 #: po/guile_strings.txt:306
@@ -3572,7 +3501,7 @@ msgstr "Standardläge för kontoutdrag"
 
 #: po/guile_strings.txt:311
 msgid "Lower Limit"
-msgstr ""
+msgstr "Undre gräns"
 
 # po/guile_strings.txt:262
 #: po/guile_strings.txt:312
@@ -3616,7 +3545,7 @@ msgstr "Visa vinst och förlust-rapporten."
 
 #: po/guile_strings.txt:321
 msgid "Date (subtotal yearly)"
-msgstr ""
+msgstr "Datum (delsummor årligen)"
 
 # po/guile_strings.txt:270
 #: po/guile_strings.txt:322
@@ -3680,9 +3609,8 @@ msgstr "Visa saldoblad rapport."
 
 # messages-i18n.c:116
 #: po/guile_strings.txt:335
-#, fuzzy
 msgid "Sort by date & subtotal each month"
-msgstr "Sortera på Datum, sedan Nummer, sedan Belopp"
+msgstr "Sortera på datum & delsumma varje månad"
 
 # po/guile_strings.txt:283
 #: po/guile_strings.txt:336
@@ -3726,13 +3654,12 @@ msgstr "Rapportera saker till och med denna datum"
 
 # po/guile_strings.txt:101
 #: po/guile_strings.txt:344
-#, fuzzy
 msgid "Display"
-msgstr "Dag"
+msgstr "Visa"
 
 #: po/guile_strings.txt:345 src/gnome/glade-gnc-dialogs.c:3123
 msgid "Nominal"
-msgstr ""
+msgstr "Nominell"
 
 # po/guile_strings.txt:292
 #: po/guile_strings.txt:346
@@ -3775,9 +3702,8 @@ msgstr "Hej, Världen"
 
 # po/guile_strings.txt:262
 #: po/guile_strings.txt:352
-#, fuzzy
 msgid "Sort & subtotal by account"
-msgstr "Sortera efter belopp"
+msgstr "Sortera & delsumma per konto"
 
 # po/guile_strings.txt:298
 #: po/guile_strings.txt:353
@@ -3853,7 +3779,7 @@ msgstr "QIF-filnamn:"
 
 #: src/gnome/glade-gnc-dialogs.c:165
 msgid "Default QIF acct:"
-msgstr ""
+msgstr "Standard QIF-konto:"
 
 # src/gnome/glade-gnc-dialogs.c:173
 #: src/gnome/glade-gnc-dialogs.c:174
@@ -3875,9 +3801,8 @@ msgstr "Datumformat:"
 # src/gnome/glade-gnc-dialogs.c:936 src/gnome/glade-gnc-dialogs.c:943
 #: src/gnome/glade-gnc-dialogs.c:223 src/gnome/glade-gnc-dialogs.c:1921
 #: src/gnome/glade-gnc-dialogs.c:1973
-#, fuzzy
 msgid "Select ..."
-msgstr "Välj..."
+msgstr "Välj ..."
 
 # src/gnome/glade-gnc-dialogs.c:222
 #: src/gnome/glade-gnc-dialogs.c:244
@@ -3983,7 +3908,7 @@ msgstr "Kontotyp:"
 # src/gnome/glade-gnc-dialogs.c:638
 #: src/gnome/glade-gnc-dialogs.c:646
 msgid "Mutual"
-msgstr ""
+msgstr "Aktiefond"
 
 # src/gnome/glade-gnc-dialogs.c:700
 #: src/gnome/glade-gnc-dialogs.c:711 src/gnome/glade-gnc-dialogs.c:719
@@ -3992,11 +3917,11 @@ msgstr "Förhandsgranskning"
 
 #: src/gnome/glade-gnc-dialogs.c:761
 msgid "Zoom in"
-msgstr ""
+msgstr "Zooma in"
 
 #: src/gnome/glade-gnc-dialogs.c:769
 msgid "Zoom out"
-msgstr ""
+msgstr "Zooma ut"
 
 # src/gnome/glade-gnc-dialogs.c:786
 #: src/gnome/glade-gnc-dialogs.c:819
@@ -4070,9 +3995,8 @@ msgstr "Kontrollera position"
 
 # src/gnome/glade-gnc-dialogs.c:1216
 #: src/gnome/glade-gnc-dialogs.c:1261
-#, fuzzy
 msgid "Quicken/QuickBooks (tm) US-Letter"
-msgstr "Quicken/QuickBooks (tm)"
+msgstr "Quicken/QuickBooks (tm) US-Brev"
 
 # src/gnome/glade-gnc-dialogs.c:1219 src/gnome/glade-gnc-dialogs.c:1240
 # src/gnome/glade-gnc-dialogs.c:1276
@@ -4164,7 +4088,7 @@ msgstr "Summa (siffror):"
 # src/gnome/glade-gnc-dialogs.c:1348
 #: src/gnome/glade-gnc-dialogs.c:1393
 msgid "Memo:"
-msgstr "Memo:"
+msgstr "Anteckning:"
 
 # src/gnome/glade-gnc-dialogs.c:1372
 #: src/gnome/glade-gnc-dialogs.c:1417
@@ -4211,39 +4135,35 @@ msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
 #: src/gnome/glade-gnc-dialogs.c:1767
-#, fuzzy
 msgid "Find Transactions"
-msgstr "Transaktioner"
+msgstr "Sök transaktioner"
 
 # messages-i18n.c:195
 #: src/gnome/glade-gnc-dialogs.c:1782
-#, fuzzy
 msgid "Match Accounts"
-msgstr "Tappade konton"
+msgstr "Matcha konton"
 
 #: src/gnome/glade-gnc-dialogs.c:1803
 msgid "Find transactions affecting"
-msgstr ""
+msgstr "Sök transaktioner som påverkar"
 
 #: src/gnome/glade-gnc-dialogs.c:1820
 msgid "Any"
-msgstr ""
+msgstr "Någon"
 
 # src/gnome/glade-gnc-dialogs.c:564
 #: src/gnome/glade-gnc-dialogs.c:1829
-#, fuzzy
 msgid "selected accounts:"
-msgstr "Valt konto:"
+msgstr "av valda konton:"
 
 # messages-i18n.c:236
 #: src/gnome/glade-gnc-dialogs.c:1851
-#, fuzzy
 msgid "Match Date"
-msgstr "Startdatum"
+msgstr "Matcha datum"
 
 #: src/gnome/glade-gnc-dialogs.c:1866
 msgid "Find transactions occurring between the dates:"
-msgstr ""
+msgstr "Hitta transaktioner som skett mellan två datum:"
 
 #: src/gnome/glade-gnc-dialogs.c:1890 src/gnome/glade-gnc-dialogs.c:1906
 #: src/gnome/glade-gnc-dialogs.c:1943 src/gnome/glade-gnc-dialogs.c:1958
@@ -4252,43 +4172,40 @@ msgstr ""
 
 # messages-i18n.c:284 po/guile_strings.txt:131
 #: src/gnome/glade-gnc-dialogs.c:1987 src/gnome/glade-gnc-dialogs.c:2045
-#, fuzzy
 msgid "Match Description"
-msgstr "Beskrivning"
+msgstr "Matcha beskrivning"
 
 #: src/gnome/glade-gnc-dialogs.c:2002
 msgid "Find transactions whose Description matches:"
-msgstr ""
+msgstr "Sök transaktioner vars beskrivning matchar:"
 
 #: src/gnome/glade-gnc-dialogs.c:2024 src/gnome/glade-gnc-dialogs.c:2082
 #: src/gnome/glade-gnc-dialogs.c:2242 src/gnome/glade-gnc-dialogs.c:2444
 msgid "Case sensitive"
-msgstr ""
+msgstr "Skilj på stora/små bokstäver"
 
 #: src/gnome/glade-gnc-dialogs.c:2031 src/gnome/glade-gnc-dialogs.c:2089
 #: src/gnome/glade-gnc-dialogs.c:2249 src/gnome/glade-gnc-dialogs.c:2451
 msgid "Regular expression"
-msgstr ""
+msgstr "Reguljärt uttryck"
 
 #: src/gnome/glade-gnc-dialogs.c:2060
 msgid "Find transactions whose Number matches:"
-msgstr ""
+msgstr "Sök transaktioner vars nummer matchar:"
 
 # messages-i18n.c:251 po/guile_strings.txt:50
 #: src/gnome/glade-gnc-dialogs.c:2103
-#, fuzzy
 msgid "Match Amount"
-msgstr "Belopp"
+msgstr "Matcha belopp"
 
 #: src/gnome/glade-gnc-dialogs.c:2125
 msgid "Find "
-msgstr ""
+msgstr "Sök"
 
 # messages-i18n.c:286
 #: src/gnome/glade-gnc-dialogs.c:2139
-#, fuzzy
 msgid "Credit or Debit"
-msgstr "Direkt debet"
+msgstr "Kredit eller debet"
 
 #: src/gnome/glade-gnc-dialogs.c:2150
 msgid "splits having amounts of:"
@@ -4297,54 +4214,49 @@ msgstr ""
 #: src/gnome/glade-gnc-dialogs.c:2171 src/gnome/glade-gnc-dialogs.c:2300
 #: src/gnome/glade-gnc-dialogs.c:2372
 msgid "At least"
-msgstr ""
+msgstr "Minst"
 
 #: src/gnome/glade-gnc-dialogs.c:2174
 msgid "At most "
-msgstr ""
+msgstr "Som mest"
 
 #: src/gnome/glade-gnc-dialogs.c:2177 src/gnome/glade-gnc-dialogs.c:2306
 #: src/gnome/glade-gnc-dialogs.c:2378
 msgid "Exactly"
-msgstr ""
+msgstr "Exakt"
 
 #: src/gnome/glade-gnc-dialogs.c:2205
 msgid "Match Memo"
-msgstr ""
+msgstr "Matcha anteckning"
 
 #: src/gnome/glade-gnc-dialogs.c:2220
 msgid "Find splits whose Memo matches:"
-msgstr ""
+msgstr "Hitta delning där anteckningen passar:"
 
 # messages-i18n.c:127
 #: src/gnome/glade-gnc-dialogs.c:2263
-#, fuzzy
 msgid "Match number of shares"
-msgstr "Mata in antal sålda andelar"
+msgstr "Matcha antal andelar"
 
 # messages-i18n.c:82
 #: src/gnome/glade-gnc-dialogs.c:2278
-#, fuzzy
 msgid "Find securities transactions of:"
-msgstr "Redigera den aktuella transaktionen"
+msgstr ""
 
 # messages-i18n.c:251 po/guile_strings.txt:50
 #: src/gnome/glade-gnc-dialogs.c:2303 src/gnome/glade-gnc-dialogs.c:2375
-#, fuzzy
 msgid "At most"
-msgstr "Belopp"
+msgstr "Som mest"
 
 # po/guile_strings.txt:267
 #: src/gnome/glade-gnc-dialogs.c:2320
-#, fuzzy
 msgid "shares"
-msgstr "Andelar"
+msgstr "andelar"
 
 # messages-i18n.c:126
 #: src/gnome/glade-gnc-dialogs.c:2335
-#, fuzzy
 msgid "Match share price"
-msgstr "Mata in andelspriset"
+msgstr "Matcha andelspriset"
 
 #: src/gnome/glade-gnc-dialogs.c:2350
 msgid "Find securities transactions with share price of:"
@@ -4352,59 +4264,53 @@ msgstr ""
 
 # messages-i18n.c:249
 #: src/gnome/glade-gnc-dialogs.c:2407
-#, fuzzy
 msgid "Match Action"
-msgstr "Aktion"
+msgstr "Matcha handling"
 
 # messages-i18n.c:114 po/guile_strings.txt:130
 #: src/gnome/glade-gnc-dialogs.c:2422
-#, fuzzy
 msgid "Find transactions whose Action matches:"
-msgstr "Visa transaktioner på enkla rader"
+msgstr "Sök transaktioner vars handling matchar"
 
 #: src/gnome/glade-gnc-dialogs.c:2479
 msgid "Type of search"
-msgstr ""
+msgstr "Typ av sökning"
 
 #: src/gnome/glade-gnc-dialogs.c:2493
 msgid "New search"
-msgstr ""
+msgstr "Ny sökning"
 
 #: src/gnome/glade-gnc-dialogs.c:2501
 msgid "Refine current search"
-msgstr ""
+msgstr "Förfina nuvarande sökningen"
 
 #: src/gnome/glade-gnc-dialogs.c:2509
 msgid "Add results to current search"
-msgstr ""
+msgstr "Lägg till resultatet till den nuvarande sökningen"
 
 # messages-i18n.c:77
 #: src/gnome/glade-gnc-dialogs.c:2517
-#, fuzzy
 msgid "Delete results from current search"
-msgstr "Radera den aktuella transaktionen"
+msgstr "Radera resultatet från den nuvarande sökningen"
 
 # messages-i18n.c:219
 #: src/gnome/glade-gnc-dialogs.c:2599
-#, fuzzy
 msgid "Select Date"
-msgstr "Välj standard"
+msgstr "Välj datum"
 
 # po/guile_strings.txt:191
 #: src/gnome/glade-gnc-dialogs.c:2765
-#, fuzzy
 msgid "Name:"
-msgstr "Namn"
+msgstr "Namn:"
 
 #: src/gnome/glade-gnc-dialogs.c:2787
 msgid "The name of this budget"
-msgstr ""
+msgstr "Namnet på denna budgeten"
 
 # po/guile_strings.txt:229
 #: src/gnome/glade-gnc-dialogs.c:2796
-#, fuzzy
 msgid "Budget Entries"
-msgstr "Budget"
+msgstr "Budget inmatningar"
 
 #: src/gnome/glade-gnc-dialogs.c:2844
 msgid "label773"
@@ -4412,29 +4318,26 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2868
 msgid "Add"
-msgstr ""
+msgstr "Lägg till"
 
 #: src/gnome/glade-gnc-dialogs.c:2875
 msgid "Add a new entry or subentry"
-msgstr ""
+msgstr "Lägg till ny rad eller delrad"
 
 # messages-i18n.c:76
 #: src/gnome/glade-gnc-dialogs.c:2884
-#, fuzzy
 msgid "Delete the selected entry or subentry"
-msgstr "Radera det valda kontot"
+msgstr "Radera den valda imatningen eller delinmatningen"
 
 # messages-i18n.c:95
 #: src/gnome/glade-gnc-dialogs.c:2899
-#, fuzzy
 msgid "Move the selected item up"
-msgstr "Öppna det valda kontot"
+msgstr "Flytta den valda raden uppåt"
 
 # messages-i18n.c:95
 #: src/gnome/glade-gnc-dialogs.c:2907
-#, fuzzy
 msgid "Move the selected item down"
-msgstr "Öppna det valda kontot"
+msgstr "Flytta den valda raden nedåt"
 
 #: src/gnome/glade-gnc-dialogs.c:2916
 msgid "Entry"
@@ -4443,25 +4346,22 @@ msgstr ""
 # messages-i18n.c:355 po/guile_strings.txt:255
 # src/gnome/glade-gnc-dialogs.c:354 src/gnome/glade-gnc-dialogs.c:408
 #: src/gnome/glade-gnc-dialogs.c:2949
-#, fuzzy
 msgid "Type:"
-msgstr "Typ"
+msgstr "Typ:"
 
 #: src/gnome/glade-gnc-dialogs.c:2988
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 # messages-i18n.c:354
 #: src/gnome/glade-gnc-dialogs.c:2991
-#, fuzzy
 msgid "No Total"
-msgstr "Totalt"
+msgstr "Ingen summa"
 
 # po/guile_strings.txt:35
 #: src/gnome/glade-gnc-dialogs.c:2996
-#, fuzzy
 msgid "Matching Transactions..."
-msgstr "Kontotransaktioner"
+msgstr "Matchande transaktioner..."
 
 #: src/gnome/glade-gnc-dialogs.c:3003
 msgid "Subentry"
@@ -4469,15 +4369,13 @@ msgstr ""
 
 # messages-i18n.c:251 po/guile_strings.txt:50
 #: src/gnome/glade-gnc-dialogs.c:3036
-#, fuzzy
 msgid "Amount:"
-msgstr "Belopp"
+msgstr "Belopp:"
 
 # po/guile_strings.txt:189
 #: src/gnome/glade-gnc-dialogs.c:3045
-#, fuzzy
 msgid "Period:"
-msgstr ". (Punkt)"
+msgstr "Period:"
 
 #: src/gnome/glade-gnc-dialogs.c:3054
 msgid "Mechanism:"
@@ -4489,9 +4387,8 @@ msgstr ""
 
 # po/guile_strings.txt:189
 #: src/gnome/glade-gnc-dialogs.c:3072
-#, fuzzy
 msgid "Grace Period:"
-msgstr ". (Punkt)"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:3126
 msgid "Bill"
@@ -4509,6 +4406,26 @@ msgstr ""
 #: src/gnome/print-session.c:233
 msgid "You must select a printer first."
 msgstr "Du måste välja en skrivare först."
+
+# messages-i18n.c:115
+#~ msgid "Sort by Amount, then Date, then Num"
+#~ msgstr "Sortera på Belopp, sedan Datum, sedan Nummer"
+
+# messages-i18n.c:116
+#~ msgid "Sort by Date, then Num, then Amount"
+#~ msgstr "Sortera på Datum, sedan Nummer, sedan Belopp"
+
+# messages-i18n.c:117
+#~ msgid "Sort by Description, then Date, then Num"
+#~ msgstr "Sortera på Beskrivning, sedan Datum, sedan Nummer"
+
+# messages-i18n.c:118
+#~ msgid "Sort by Memo, then Date, then Num"
+#~ msgstr "Sortera på Memo, sedan Datum, sedan Nummer"
+
+# messages-i18n.c:119
+#~ msgid "Sort by Num, then Date, then Amount"
+#~ msgstr "Sortera på Nummer, sedan Datum, sedan Belopp"
 
 # po/guile_strings.txt:23
 #~ msgid "reg_win_width"
