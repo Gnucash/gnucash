@@ -452,6 +452,7 @@ printf ("duude got price =%p\n", pr);
 void 
 gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
 {
+   gnc_commodity_table *src_tbl, *dst_tbl;
    AccountGroup *src_grp, *dst_grp;
    time_t now;
    TransList *trans_list, *tnode;
@@ -466,6 +467,11 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
     * and it is not needed for the current usage. */
    kvp_frame_delete (dest_book->kvp_data);
    dest_book->kvp_data = kvp_frame_copy (src_book->kvp_data);
+
+   /* Next, copy the commodity tables */
+   src_tbl = gnc_commodity_table_get_table (src_book);
+   dst_tbl = gnc_commodity_table_get_table (dest_book);
+   gnc_commodity_table_copy (dst_tbl, src_tbl);
 
    /* Next, copy all of the accounts */
    /* hack alert -- FIXME -- this should really be a merge, not a
@@ -769,9 +775,7 @@ gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
                                          QOF_DATE_MATCH_NORMAL,
                                          calve_date);
    param_list = qof_query_build_param_list (PRICE_DATE, NULL);
-printf ("duude start by adding term to query\n");
    qof_query_add_term (prc_query, param_list, pred_data, QOF_QUERY_FIRST_TERM);
-printf ("duude finished by adding term to query\n");
 
    gnc_book_partition_pricedb (closing_book, existing_book, prc_query);
    qof_query_destroy (prc_query);
