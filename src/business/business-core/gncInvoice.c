@@ -496,7 +496,7 @@ GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn)
   kvp_frame *kvp;
   kvp_value *value;
   GUID *guid;
-  GNCBook *book;		/* XXX: FIXME */
+  GNCBook *book = NULL;		/* XXX: FIXME */
 
   if (!txn) return NULL;
 
