@@ -59,9 +59,6 @@ gncLogLevel loglevel[MOD_NUM] =
   GNC_LOG_WARNING,      /* QUERY */
 };
 
-/* xaccParseAmount configuration */
-gncBoolean auto_decimal_enabled;
-
 /* Set the logging level of the given module. */
 void
 gnc_set_log_level(gncModuleType module, gncLogLevel level)
@@ -80,6 +77,17 @@ gnc_set_log_level_global(gncLogLevel level)
 
   for (module = GNC_LOG_NOTHING; module < MOD_NUM; module++)
     loglevel[module] = level;
+}
+
+
+/* xaccParseAmount configuration */
+static gncBoolean auto_decimal_enabled = GNC_F;
+
+/* enable/disable the auto_decimal_enabled option */
+void
+gnc_set_auto_decimal_enabled(gncBoolean enabled)
+{
+   auto_decimal_enabled = enabled;
 }
 
 

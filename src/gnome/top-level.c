@@ -102,7 +102,6 @@ static SCM auto_decimal_callback_id = SCM_UNDEFINED;
 static SCM register_font_callback_id = SCM_UNDEFINED;
 static SCM register_hint_font_callback_id = SCM_UNDEFINED;
 
-
 /* ============================================================== */
 
 int 
@@ -782,7 +781,7 @@ gnc_configure_auto_decimal_cb(void *not_used)
 }
 
 /* gnc_configure_auto_decimal
- *     Setup the global value of the auto decimal field.
+ *     Pass the global value for the auto decimal field to the engine.
  * 
  * Args: Nothing
  * Returns: Nothing
@@ -790,10 +789,12 @@ gnc_configure_auto_decimal_cb(void *not_used)
 static void
 gnc_configure_auto_decimal(void)
 {
-  auto_decimal_enabled =
-     (gncBoolean) gnc_lookup_boolean_option("General",
-                                            "Automatic Decimal Point",
-                                            GNC_F);
+   gnc_set_auto_decimal_enabled
+      ( 
+         (gncBoolean) gnc_lookup_boolean_option("General",
+                                                "Automatic Decimal Point",
+                                                GNC_F)
+      );
 }
 
 /* gnc_configure_register_font_cb

@@ -152,6 +152,9 @@ void gnc_set_log_level(gncModuleType module, gncLogLevel level);
 /* Set the logging level for all modules. */
 void gnc_set_log_level_global(gncLogLevel level);
 
+/* enable/disable the auto decimal option */
+void gnc_set_auto_decimal_enabled(gncBoolean enabled);
+
 
 /********************************************************/
 /* libc 'enhancements' */
@@ -262,9 +265,6 @@ char * xaccPrintAmountArgs (double val,
 
 /* Parse i18n amount strings */
 double xaccParseAmount (const char * instr, gncBoolean monetary);
-
-/* Affects parsing of numerical amounts in xaccParseAmount */
-extern gncBoolean auto_decimal_enabled;
 
 
 /** TEMPLATES ******************************************************/
