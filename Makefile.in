@@ -135,7 +135,7 @@ install-bin: gnucash.${FLAVOR}
 
 install:
 	$(INSTALL) -d ${GNC_BINDIR} ${GNC_LIBDIR} ${GNC_DOCDIR} ${GNC_SHAREDIR}
-	$(INSTALL) -d ${GNC_MANDIR}/man1
+	$(INSTALL) -d ${GNC_DOCDIR}/examples ${GNC_MANDIR}/man1
 
   # Put these in the opposite order of precedence.  Final bin/gnucash link will
   # point to the last one that exists...
@@ -170,6 +170,10 @@ install:
 	$(INSTALL_DATA) TODO ${GNC_DOCDIR}
 	$(INSTALL_DATA) CHANGES ${GNC_DOCDIR}
 
+	$(INSTALL_DATA) doc/examples/*.xac ${GNC_DOCDIR}/examples
+	$(INSTALL_DATA) doc/examples/*.qif ${GNC_DOCDIR}/examples
+	$(INSTALL_DATA) doc/examples/README ${GNC_DOCDIR}/examples
+
 	$(INSTALL_DATA) man/gnucash.1 ${GNC_MANDIR}/man1
 	$(INSTALL_DATA) man/gnc-prices.1 ${GNC_MANDIR}/man1
 
@@ -186,9 +190,6 @@ install:
     dest=`echo $$file | cut -c 11-` ;\
 		${INSTALL_DATA} $$file ${GNC_SHAREDIR}/scm/$$dest; \
   done
-
-	@mkdir -p ${GNC_SHAREDIR}/data
-	$(INSTALL_DATA) data/*.xac ${GNC_SHAREDIR}/data
 
 	@mkdir -p ${GNC_SHAREDIR}/Docs
 	@mkdir -p ${GNC_SHAREDIR}/Docs/C
