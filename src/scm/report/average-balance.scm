@@ -274,15 +274,15 @@
 
   ;; Pull a scheme list of splits from a C array
   (define (gnc:convert-split-list split-array)
-    (let ((slist '()))
-      (let loop ((index 0)
-                 (split (gnc:ith-split split-array 0)))
-        (if (pointer-token-null? split)
-            (reverse slist)
-            (begin
-              (set! slist (cons split slist))
-              (loop (+ index 1) 
-                    (gnc:ith-split split-array (+ index 1))))))))
+    (let loop ((index 0)
+               (split (gnc:ith-split split-array 0))
+               (slist '()))
+      (if (pointer-token-null? split)
+          (reverse slist)
+          (begin
+            (loop (+ index 1) 
+                  (gnc:ith-split split-array (+ index 1))
+                  (cons split slist))))))
 
   ;; Pull a scheme list of accounts (including subaccounts) from group grp
   (define (gnc:group-get-account-list grp)
