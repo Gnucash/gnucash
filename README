@@ -20,8 +20,20 @@ of the features of xacc are:
     similar transactions on a regular basis.
     (such as depositing your paycheck every week :)
 
+
+Running:
+--------
+If you have a binary version of xacc, just start xacc at the 
+command line with "xacc".   Sample accounts can be found in 
+"data" subdirectory.  *.dat files are xacc accounts that can 
+opened with the "Open File" menu entry.  *.qif files are
+Quicken Import Format files that can be opened with the 
+"Import QIF" menu entry.
+
 To install:
 -----------
+This step does not apply to binary distributions; only to
+source distributions.
 
 Normally, to build and install xacc, all you have to do is:
 

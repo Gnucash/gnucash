@@ -44,7 +44,8 @@ Maintained-by:	linas@linas.org (Linas Vepstas)
 Primary-site:	http://www3.hmc.edu/~rclark/xacc/
 Alternate-site:	http://linas.org/linux/xacc 
 Alternate-site:	sunsite.unc.edu /pub/Linux/apps/financial/accounting/
-		990B  xacc-1.0b4.tar.gz
+		966KB  xacc-1.0b4.tar.gz
+		267KB  xacc-1.0b4-bin-linux-i386-motif.tar.gz
 Platforms:      Linux/Unix/X Windows/Lesstif/Motif/Sparc/Intel/PowerPC 
 Copying-policy:	GPL
 End
