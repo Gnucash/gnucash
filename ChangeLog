@@ -3,6 +3,8 @@
 	* revert patch in src/engine/Transaction.c -- imbalance is computed
 	  by _value_ -- ALWAYS.
 
+	* po/nl.po -- don't use msgid_plural -- it fails to work.
+	
 2002-12-06  Benoit Grégoire  <bock@step.polymtl.ca>
 
 	Huge patch, this is the new generic import 
