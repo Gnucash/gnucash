@@ -242,7 +242,6 @@ src/gnc-module/gnc-module.c
 src/gnome/glade/account.glade
 src/gnome/glade/commodities.glade
 src/gnome/glade/fincalc.glade
-src/gnome/glade/find.glade
 src/gnome/glade/help.glade
 src/gnome/glade/newuser.glade
 src/gnome/glade/price.glade

@@ -1,3 +1,8 @@
+2002-11-27  Derek Atkins  <derek@ihtfp.com>
+	* remove find.glade -- it is no longer used
+	* src/gnome/dialog-findtransactions.c -- remove old code
+	* po/POTFILES.in -- remove find.glade
+
 2002-11-26  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/Makefile.am -- make sure to distribute the scm files
