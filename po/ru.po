@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5.0\n"
-"POT-Creation-Date: 2001-03-19 02:36-0800\n"
+"POT-Creation-Date: 2001-04-01 16:02-0700\n"
 "PO-Revision-Date: 2000-08-06 20:43+00:00\n"
 "Last-Translator: Valek Filippov <frob@df.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -91,13 +91,17 @@ msgstr ""
 "Хотите продолжить?"
 
 #: src/FileDialog.c:120
+msgid "Unknown file type"
+msgstr ""
+
+#: src/FileDialog.c:126
 #, c-format
 msgid ""
 "Can't parse the database URL\n"
 "   %s\n"
 msgstr ""
 
-#: src/FileDialog.c:126
+#: src/FileDialog.c:132
 #, c-format
 msgid ""
 "Can't connect to the database\n"
@@ -105,11 +109,11 @@ msgid ""
 "The host, username or password were incorrect."
 msgstr ""
 
-#: src/FileDialog.c:134
+#: src/FileDialog.c:140
 msgid "An unknown I/O error occurred."
 msgstr ""
 
-#: src/FileDialog.c:148
+#: src/FileDialog.c:154
 #, c-format
 msgid ""
 "Gnucash could not obtain the lock for\n"
@@ -120,7 +124,7 @@ msgid ""
 "Do you want to proceed with opening the database?"
 msgstr ""
 
-#: src/FileDialog.c:171
+#: src/FileDialog.c:177
 #, fuzzy, c-format
 msgid ""
 "The database\n"
@@ -130,24 +134,24 @@ msgstr ""
 "Текущая транзакция была изменена.\n"
 "Вы хотите записать ее?"
 
-#: src/FileDialog.c:252
+#: src/FileDialog.c:258
 msgid "Changes have been made since the last Save. Save the data to file?"
 msgstr ""
 "С момента последнего сохранения были сделаны изменения. Сохранить данные в "
 "файл?"
 
-#: src/FileDialog.c:417 src/gnome/dialog-filebox.c:77
-#: src/gnome/window-help.c:550 src/gnome/window-main.c:1097
+#: src/FileDialog.c:423 src/gnome/dialog-filebox.c:77
+#: src/gnome/window-help.c:603 src/gnome/window-main.c:1100
 #: src/gnome/window-reconcile.c:1259
 msgid "Open"
 msgstr "Открыть"
 
-#: src/FileDialog.c:501 src/gnome/window-main.c:781
-#: src/gnome/window-main.c:1076
+#: src/FileDialog.c:507 src/gnome/window-main.c:784
+#: src/gnome/window-main.c:1079
 msgid "Save"
 msgstr "Сохранить"
 
-#: src/FileDialog.c:577
+#: src/FileDialog.c:583
 #, c-format
 msgid ""
 "The file \n"
@@ -186,7 +190,7 @@ msgstr ""
 msgid "Adjust other account split total"
 msgstr ""
 
-#: src/SplitLedger.c:1442
+#: src/SplitLedger.c:1449
 #, fuzzy, c-format
 msgid ""
 "The account %s does not exist.\n"
@@ -195,8 +199,8 @@ msgstr ""
 "Текущая транзакция была изменена.\n"
 "Вы хотите записать ее?"
 
-#: src/SplitLedger.c:1563 src/SplitLedger.c:2008
-#: src/gnome/window-register.c:2934
+#: src/SplitLedger.c:1570 src/SplitLedger.c:2015
+#: src/gnome/window-register.c:2995
 msgid ""
 "The current transaction has been changed.\n"
 "Would you like to record it?"
@@ -204,7 +208,7 @@ msgstr ""
 "Текущая транзакция была изменена.\n"
 "Вы хотите записать ее?"
 
-#: src/SplitLedger.c:2304
+#: src/SplitLedger.c:2311
 #, fuzzy
 msgid ""
 "You are about to overwrite an existing split.\n"
@@ -215,47 +219,48 @@ msgstr ""
 "уже существует.\n"
 "Вы уверены, в том что хотите перезаписать его?"
 
-#: src/SplitLedger.c:2334
+#: src/SplitLedger.c:2341
 msgid ""
 "You are about to overwrite an existing transaction.\n"
 "Are you sure you want to do that?"
 msgstr ""
 
-#: src/SplitLedger.c:3059
+#: src/SplitLedger.c:3066
 msgid "Recalculate Transaction"
 msgstr "Пересчитать транзакцию"
 
-#: src/SplitLedger.c:3060
+#: src/SplitLedger.c:3067
 msgid ""
 "The values entered for this transaction are inconsistent.\n"
 "Which value would you like to have recalculated?"
 msgstr ""
 
-#: src/SplitLedger.c:3065 src/SplitLedger.c:3067 src/SplitLedger.c:3999
-#: src/gnome/glade-gnc-dialogs.c:1304 src/gnome/glade-gnc-dialogs.c:6295
-#: src/scm/report/guile-strings.c:190 src/scm/report/guile-strings.c:202
-#: src/scm/report/guile-strings.c:228 src/scm/report/guile-strings.c:454
-#: src/scm/report/guile-strings.c:466 src/scm/report/guile-strings.c:558
+#: src/SplitLedger.c:3072 src/SplitLedger.c:3074 src/SplitLedger.c:4007
+#: src/gnome/glade-gnc-dialogs.c:1304 src/gnome/glade-gnc-dialogs.c:6356
+#: src/scm/report/guile-strings.c:249 src/scm/report/guile-strings.c:282
+#: src/scm/report/guile-strings.c:468 src/scm/report/guile-strings.c:480
+#: src/scm/report/guile-strings.c:569
 msgid "Shares"
 msgstr ""
 
-#: src/SplitLedger.c:3065 src/SplitLedger.c:3070 src/SplitLedger.c:3075
+#: src/SplitLedger.c:3072 src/SplitLedger.c:3077 src/SplitLedger.c:3082
 msgid "Changed"
 msgstr "Изменено"
 
-#: src/SplitLedger.c:3070 src/SplitLedger.c:3072 src/SplitLedger.c:3993
+#: src/SplitLedger.c:3077 src/SplitLedger.c:3079 src/SplitLedger.c:4001
 #: src/gnome/glade-gnc-dialogs.c:1374 src/register/splitreg.c:225
-#: src/scm/report/guile-strings.c:192 src/scm/report/guile-strings.c:203
-#: src/scm/report/guile-strings.c:231 src/scm/report/guile-strings.c:456
-#: src/scm/report/guile-strings.c:467 src/scm/report/guile-strings.c:561
+#: src/scm/report/guile-strings.c:240 src/scm/report/guile-strings.c:250
+#: src/scm/report/guile-strings.c:285 src/scm/report/guile-strings.c:470
+#: src/scm/report/guile-strings.c:481 src/scm/report/guile-strings.c:572
 msgid "Price"
 msgstr "Цена"
 
-#: src/SplitLedger.c:3075 src/SplitLedger.c:3077
+#: src/SplitLedger.c:3082 src/SplitLedger.c:3084
+#: src/scm/report/guile-strings.c:241
 msgid "Value"
 msgstr "Значение"
 
-#: src/SplitLedger.c:3270 src/SplitLedger.c:3346
+#: src/SplitLedger.c:3277 src/SplitLedger.c:3353
 #, c-format
 msgid ""
 "You cannot transfer funds from the %s account.\n"
@@ -265,120 +270,117 @@ msgid ""
 "Please see the GnuCash online manual."
 msgstr ""
 
-#: src/SplitLedger.c:3937 src/gnome/glade-gnc-dialogs.c:960
+#: src/SplitLedger.c:3932 src/gnome/glade-gnc-dialogs.c:1125
+#: src/scm/report/guile-strings.c:254 src/scm/report/guile-strings.c:483
+msgid "Debit"
+msgstr "Дебет"
+
+#: src/SplitLedger.c:3949 src/gnome/glade-gnc-dialogs.c:1122
+#: src/register/splitreg.c:173 src/register/splitreg.c:189
+#: src/scm/guile-strings.c:185 src/scm/report/guile-strings.c:255
+#: src/scm/report/guile-strings.c:484
+msgid "Credit"
+msgstr "Кредит"
+
+#: src/SplitLedger.c:3965 src/gnome/glade-gnc-dialogs.c:960
 #: src/gnome/glade-gnc-dialogs.c:4595 src/gnome/glade-gnc-dialogs.c:4643
 #: src/gnome/reconcile-list.c:147 src/scm/report/guile-strings.c:2
-#: src/scm/report/guile-strings.c:180 src/scm/report/guile-strings.c:197
-#: src/scm/report/guile-strings.c:209 src/scm/report/guile-strings.c:444
-#: src/scm/report/guile-strings.c:461 src/scm/report/guile-strings.c:492
-#: src/scm/report/guile-strings.c:539
+#: src/scm/report/guile-strings.c:229 src/scm/report/guile-strings.c:244
+#: src/scm/report/guile-strings.c:270 src/scm/report/guile-strings.c:458
+#: src/scm/report/guile-strings.c:475 src/scm/report/guile-strings.c:503
+#: src/scm/report/guile-strings.c:550
 msgid "Date"
 msgstr "Дата"
 
-#: src/SplitLedger.c:3940 src/gnome/reconcile-list.c:148
-#: src/scm/report/guile-strings.c:182 src/scm/report/guile-strings.c:198
-#: src/scm/report/guile-strings.c:212 src/scm/report/guile-strings.c:446
-#: src/scm/report/guile-strings.c:462 src/scm/report/guile-strings.c:542
+#: src/SplitLedger.c:3968 src/gnome/reconcile-list.c:148
+#: src/scm/report/guile-strings.c:245 src/scm/report/guile-strings.c:273
+#: src/scm/report/guile-strings.c:460 src/scm/report/guile-strings.c:476
+#: src/scm/report/guile-strings.c:553
 msgid "Num"
 msgstr "Число"
 
-#: src/SplitLedger.c:3943 src/gnc-ui-util.c:120
+#: src/SplitLedger.c:3971 src/gnc-ui-util.c:120
 #: src/gnome/glade-gnc-dialogs.c:1018 src/gnome/glade-gnc-dialogs.c:4602
-#: src/gnome/glade-gnc-dialogs.c:4650 src/gnome/new-user-interface.c:190
-#: src/gnome/new-user-interface.c:354 src/gnome/reconcile-list.c:149
-#: src/scm/guile-strings.c:183 src/scm/report/guile-strings.c:184
-#: src/scm/report/guile-strings.c:199 src/scm/report/guile-strings.c:215
-#: src/scm/report/guile-strings.c:433 src/scm/report/guile-strings.c:448
-#: src/scm/report/guile-strings.c:463 src/scm/report/guile-strings.c:510
-#: src/scm/report/guile-strings.c:545
+#: src/gnome/glade-gnc-dialogs.c:4650 src/gnome/glade-gnc-dialogs.c:5900
+#: src/gnome/new-user-interface.c:190 src/gnome/new-user-interface.c:354
+#: src/gnome/reconcile-list.c:149 src/scm/guile-strings.c:196
+#: src/scm/report/guile-strings.c:246 src/scm/report/guile-strings.c:276
+#: src/scm/report/guile-strings.c:462 src/scm/report/guile-strings.c:477
+#: src/scm/report/guile-strings.c:521 src/scm/report/guile-strings.c:556
 msgid "Description"
 msgstr "Описание"
 
 #. desc cell
-#: src/SplitLedger.c:3946 src/gnome/reconcile-list.c:151
+#: src/SplitLedger.c:3974 src/gnome/reconcile-list.c:151
 #: src/register/splitreg.c:95
 msgid "Reconciled:R"
 msgstr ""
 
-#: src/SplitLedger.c:3949 src/SplitLedger.c:4048
+#: src/SplitLedger.c:3977 src/SplitLedger.c:4050
 #, fuzzy
 msgid "Share Balance"
 msgstr "Новый баланс"
 
-#: src/SplitLedger.c:3952 src/SplitLedger.c:4051 src/gnc-ui-util.c:132
+#: src/SplitLedger.c:3980 src/SplitLedger.c:4053 src/gnc-ui-util.c:132
 #: src/gnc-ui-util.c:135 src/gnome/glade-gnc-dialogs.c:1527
 #: src/gnome/new-user-interface.c:362 src/scm/guile-strings.c:120
-#: src/scm/guile-strings.c:187 src/scm/report/guile-strings.c:207
-#: src/scm/report/guile-strings.c:471
+#: src/scm/guile-strings.c:200 src/scm/report/guile-strings.c:252
+#: src/scm/report/guile-strings.c:485
 msgid "Balance"
 msgstr "Баланс"
 
-#: src/SplitLedger.c:3955 src/gnome/glade-gnc-dialogs.c:1432
+#: src/SplitLedger.c:3983 src/gnome/glade-gnc-dialogs.c:1432
 msgid "Action"
 msgstr "Действие"
 
-#: src/SplitLedger.c:3958 src/gnome/dialog-account.c:692
+#: src/SplitLedger.c:3986 src/gnome/dialog-account.c:692
 #: src/gnome/glade-gnc-dialogs.c:77 src/gnome/glade-gnc-dialogs.c:878
-#: src/gnome/glade-gnc-dialogs.c:6281 src/scm/report/guile-strings.c:8
-#: src/scm/report/guile-strings.c:90 src/scm/report/guile-strings.c:186
-#: src/scm/report/guile-strings.c:200 src/scm/report/guile-strings.c:221
-#: src/scm/report/guile-strings.c:450 src/scm/report/guile-strings.c:464
-#: src/scm/report/guile-strings.c:479 src/scm/report/guile-strings.c:551
+#: src/gnome/glade-gnc-dialogs.c:6342 src/scm/report/guile-strings.c:8
+#: src/scm/report/guile-strings.c:218 src/scm/report/guile-strings.c:236
+#: src/scm/report/guile-strings.c:247 src/scm/report/guile-strings.c:279
+#: src/scm/report/guile-strings.c:464 src/scm/report/guile-strings.c:478
+#: src/scm/report/guile-strings.c:490 src/scm/report/guile-strings.c:562
 msgid "Account"
 msgstr "Счет"
 
-#: src/SplitLedger.c:3961 src/gnome/glade-gnc-dialogs.c:1234
-#: src/scm/report/guile-strings.c:218 src/scm/report/guile-strings.c:514
-#: src/scm/report/guile-strings.c:548
+#: src/SplitLedger.c:3989 src/gnome/glade-gnc-dialogs.c:1234
+#: src/scm/report/guile-strings.c:525 src/scm/report/guile-strings.c:559
 msgid "Memo"
 msgstr "Заметка"
 
-#: src/SplitLedger.c:3972 src/gnome/glade-gnc-dialogs.c:1122
-#: src/register/splitreg.c:173 src/register/splitreg.c:189
-#: src/scm/guile-strings.c:158 src/scm/guile-strings.c:164
-#: src/scm/guile-strings.c:172 src/scm/report/guile-strings.c:206
-#: src/scm/report/guile-strings.c:470
-msgid "Credit"
-msgstr "Кредит"
-
-#: src/SplitLedger.c:3985 src/gnome/glade-gnc-dialogs.c:1125
-#: src/scm/guile-strings.c:146 src/scm/guile-strings.c:152
-#: src/scm/report/guile-strings.c:205 src/scm/report/guile-strings.c:469
-msgid "Debit"
-msgstr "Дебет"
-
 #. balance cell
-#: src/SplitLedger.c:4002 src/gnome/window-register.c:890
+#: src/SplitLedger.c:4010 src/gnome/window-register.c:891
 #: src/register/splitreg.c:98 src/register/splitreg.c:175
+#: src/scm/report/guile-strings.c:248
 msgid "Transfer"
 msgstr "Передача"
 
-#: src/SplitLedger.c:4012 src/SplitLedger.c:4032
+#: src/SplitLedger.c:4019 src/SplitLedger.c:4036
 #, fuzzy, c-format
 msgid "Tot %s"
 msgstr "Итоги"
 
-#: src/SplitLedger.c:4020
+#: src/SplitLedger.c:4025
 #, fuzzy
 msgid "Tot Credit"
 msgstr "Кредит"
 
-#: src/SplitLedger.c:4040
+#: src/SplitLedger.c:4042
 #, fuzzy
 msgid "Tot Debit"
 msgstr "Дебет"
 
-#: src/SplitLedger.c:4045
+#: src/SplitLedger.c:4047
 #, fuzzy
 msgid "Tot Shares"
 msgstr "Итоги"
 
-#: src/SplitLedger.c:4054 src/gnc-ui-util.c:123
-#: src/gnome/glade-gnc-dialogs.c:3649 src/scm/guile-strings.c:184
+#: src/SplitLedger.c:4056 src/gnc-ui-util.c:123
+#: src/gnome/glade-gnc-dialogs.c:3649 src/scm/guile-strings.c:197
 msgid "Notes"
 msgstr "Заметки"
 
-#: src/SplitLedger.c:4416
+#: src/SplitLedger.c:4418
 #, fuzzy
 msgid ""
 "You are about to change a reconciled split.\n"
@@ -389,53 +391,54 @@ msgstr ""
 "уже существует.\n"
 "Вы уверены, в том что хотите перезаписать его?"
 
-#: src/engine/Account.c:1671 src/scm/guile-strings.c:170
+#: src/engine/Account.c:1747 src/scm/guile-strings.c:183
 msgid "Bank"
 msgstr "Банк"
 
-#: src/engine/Account.c:1672 src/scm/guile-strings.c:171
+#: src/engine/Account.c:1748 src/scm/guile-strings.c:184
 msgid "Cash"
 msgstr "Наличные"
 
-#: src/engine/Account.c:1673 src/scm/guile-strings.c:173
+#: src/engine/Account.c:1749 src/scm/guile-strings.c:186
 msgid "Asset"
 msgstr ""
 
-#: src/engine/Account.c:1674
+#: src/engine/Account.c:1750
 msgid "Credit Card"
 msgstr "Кредитная карта"
 
-#: src/engine/Account.c:1675 src/scm/guile-strings.c:174
+#: src/engine/Account.c:1751 src/scm/guile-strings.c:187
 msgid "Liability"
 msgstr ""
 
-#: src/engine/Account.c:1676 src/scm/guile-strings.c:175
+#: src/engine/Account.c:1752 src/scm/guile-strings.c:188
 msgid "Stock"
 msgstr ""
 
-#: src/engine/Account.c:1677 src/scm/guile-strings.c:176
+#: src/engine/Account.c:1753 src/scm/guile-strings.c:189
 msgid "Mutual Fund"
 msgstr "Сберегательный фонд"
 
-#: src/engine/Account.c:1678 src/gnc-ui-util.c:126 src/scm/guile-strings.c:88
-#: src/scm/guile-strings.c:177 src/scm/guile-strings.c:185
+#: src/engine/Account.c:1754 src/gnc-ui-util.c:126 src/scm/guile-strings.c:89
+#: src/scm/guile-strings.c:190 src/scm/guile-strings.c:198
 msgid "Currency"
 msgstr "Валюта"
 
-#: src/engine/Account.c:1679 src/register/splitreg.c:233
-#: src/scm/guile-strings.c:162 src/scm/guile-strings.c:178
-#: src/scm/guile-strings.c:352 src/scm/report/guile-strings.c:435
+#: src/engine/Account.c:1755 src/gnome/glade-gnc-dialogs.c:5772
+#: src/register/splitreg.c:233 src/scm/guile-strings.c:175
+#: src/scm/guile-strings.c:191 src/scm/guile-strings.c:372
+#: src/scm/report/guile-strings.c:182
 msgid "Income"
 msgstr ""
 
-#: src/engine/Account.c:1680 src/scm/guile-strings.c:151
-#: src/scm/guile-strings.c:179 src/scm/guile-strings.c:353
-#: src/scm/report/guile-strings.c:436
+#: src/engine/Account.c:1756 src/gnome/glade-gnc-dialogs.c:5780
+#: src/scm/guile-strings.c:164 src/scm/guile-strings.c:192
+#: src/scm/guile-strings.c:373 src/scm/report/guile-strings.c:183
 msgid "Expense"
 msgstr ""
 
-#: src/engine/Account.c:1681 src/register/splitreg.c:218
-#: src/scm/guile-strings.c:180
+#: src/engine/Account.c:1757 src/register/splitreg.c:218
+#: src/scm/guile-strings.c:193
 msgid "Equity"
 msgstr ""
 
@@ -479,11 +482,11 @@ msgstr ""
 msgid "Numeric error"
 msgstr ""
 
-#: src/gnc-ui-util.c:111 src/scm/guile-strings.c:181
+#: src/gnc-ui-util.c:111 src/scm/guile-strings.c:194
 msgid "Type"
 msgstr "Тип"
 
-#: src/gnc-ui-util.c:114 src/scm/report/guile-strings.c:437
+#: src/gnc-ui-util.c:114 src/scm/report/guile-strings.c:448
 msgid "Account Name"
 msgstr "Название счета"
 
@@ -491,13 +494,14 @@ msgstr "Название счета"
 msgid "Account Code"
 msgstr "Код счета"
 
-#: src/gnc-ui-util.c:129 src/scm/guile-strings.c:186
+#: src/gnc-ui-util.c:129 src/scm/guile-strings.c:199
 msgid "Security"
 msgstr ""
 
 #: src/gnc-ui-util.c:138 src/gnc-ui-util.c:141 src/scm/guile-strings.c:118
-#: src/scm/guile-strings.c:188 src/scm/report/guile-strings.c:12
-#: src/scm/report/guile-strings.c:438
+#: src/scm/guile-strings.c:201 src/scm/report/guile-strings.c:12
+#: src/scm/report/guile-strings.c:242 src/scm/report/guile-strings.c:317
+#: src/scm/report/guile-strings.c:449
 msgid "Total"
 msgstr "Всего"
 
@@ -599,6 +603,11 @@ msgstr "Новый счет"
 msgid "No description"
 msgstr "Нет описания"
 
+#: src/gnome/dialog-column-view.c:169
+#, fuzzy
+msgid "Contents"
+msgstr "Сантиметры"
+
 #: src/gnome/dialog-commodity.c:242
 msgid ""
 "You must select a commodity.\n"
@@ -622,7 +631,7 @@ msgstr ""
 
 #. GtkWidget             * dialog = GTK_WIDGET(user_data);
 #: src/gnome/dialog-commodity.c:555 src/gnome/glade-gnc-dialogs.c:5458
-#: src/scm/guile-strings.c:59
+#: src/scm/guile-strings.c:60
 msgid "Help"
 msgstr "Справка"
 
@@ -646,36 +655,36 @@ msgstr ""
 msgid "The number of payments cannot be negative."
 msgstr ""
 
-#: src/gnome/dialog-options.c:699
+#: src/gnome/dialog-options.c:748
 msgid "Set to default"
 msgstr "Установить в исходное"
 
-#: src/gnome/dialog-options.c:707
+#: src/gnome/dialog-options.c:756
 msgid "Set the option to its default value"
 msgstr "Установить параметр в его исходное значение"
 
-#: src/gnome/dialog-options.c:1047 src/gnome/dialog-options.c:1201
+#: src/gnome/dialog-options.c:1096 src/gnome/dialog-options.c:1250
 msgid "Select All"
 msgstr "Выбрать все"
 
-#: src/gnome/dialog-options.c:1054 src/gnome/dialog-options.c:1208
+#: src/gnome/dialog-options.c:1103 src/gnome/dialog-options.c:1257
 msgid "Clear All"
 msgstr "Очистить все"
 
-#: src/gnome/dialog-options.c:1062 src/gnome/dialog-options.c:1215
+#: src/gnome/dialog-options.c:1111 src/gnome/dialog-options.c:1264
 msgid "Select Default"
 msgstr "Выбрать исходное"
 
-#: src/gnome/dialog-options.c:1638
+#: src/gnome/dialog-options.c:1722
 #, fuzzy
 msgid "Select pixmap"
 msgstr "Выбрать дату"
 
-#: src/gnome/dialog-options.c:2010
+#: src/gnome/dialog-options.c:2116
 msgid "GnuCash Preferences"
 msgstr "Настройки GnuCash"
 
-#: src/gnome/dialog-progress.c:343 src/gnome/dialog-progress.c:346
+#: src/gnome/dialog-progress.c:356 src/gnome/dialog-progress.c:359
 msgid "Complete"
 msgstr ""
 
@@ -711,7 +720,7 @@ msgstr "Совет дня:"
 msgid "Show the income and expense accounts"
 msgstr "Показать пиктограммы и текст"
 
-#: src/gnome/dialog-transfer.c:406 src/gnome/druid-stock-split.c:214
+#: src/gnome/dialog-transfer.c:406 src/gnome/druid-stock-split.c:220
 msgid "Error"
 msgstr ""
 
@@ -800,12 +809,12 @@ msgid "You must enter an existing ISO4217 currency or enter a different type."
 msgstr ""
 
 #: src/gnome/druid-qif-import.c:203 src/gnome/glade-gnc-dialogs.c:3932
-#: src/scm/guile-strings.c:63 src/scm/guile-strings.c:320
+#: src/scm/guile-strings.c:64 src/scm/guile-strings.c:333
 #, fuzzy
 msgid "QIF Import"
 msgstr "Импортировать"
 
-#: src/gnome/druid-qif-import.c:204 src/scm/guile-strings.c:321
+#: src/gnome/druid-qif-import.c:204 src/scm/guile-strings.c:334
 msgid "Verbose documentation"
 msgstr ""
 
@@ -918,46 +927,46 @@ msgstr ""
 msgid "Click \"Next\" to accept the information and move on."
 msgstr ""
 
-#: src/gnome/druid-stock-split.c:233
+#: src/gnome/druid-stock-split.c:239
 #, fuzzy
 msgid "You must enter a valid distribution amount."
 msgstr "Вы должны выбрать тип счета."
 
-#: src/gnome/druid-stock-split.c:242
+#: src/gnome/druid-stock-split.c:248
 #, fuzzy
 msgid "You must enter a distribution amount."
 msgstr "Вы должны выбрать тип счета."
 
-#: src/gnome/druid-stock-split.c:250
+#: src/gnome/druid-stock-split.c:256
 #, fuzzy
 msgid ""
 "You must either enter a valid price\n"
 "or leave it blank."
 msgstr "Вы должны выбрать тип счета."
 
-#: src/gnome/druid-stock-split.c:259
+#: src/gnome/druid-stock-split.c:265
 #, fuzzy
 msgid "The price must be positive."
 msgstr "Баланс должен быть числом."
 
-#: src/gnome/druid-stock-split.c:294
+#: src/gnome/druid-stock-split.c:300
 msgid ""
 "You must either enter a valid cash amount\n"
 "or leave it blank."
 msgstr ""
 
-#: src/gnome/druid-stock-split.c:303
+#: src/gnome/druid-stock-split.c:309
 msgid "The cash distribution must be positive."
 msgstr ""
 
-#: src/gnome/druid-stock-split.c:316
+#: src/gnome/druid-stock-split.c:322
 #, fuzzy
 msgid ""
 "You must select an income account\n"
 "for the cash distribution."
 msgstr "Вы должны выбрать тип счета."
 
-#: src/gnome/druid-stock-split.c:326
+#: src/gnome/druid-stock-split.c:332
 #, fuzzy
 msgid ""
 "You must select an asset account\n"
@@ -965,18 +974,21 @@ msgid ""
 msgstr "Вы должны выбрать тип счета."
 
 #. Distribution
-#: src/gnome/druid-stock-split.c:388 src/gnome/window-register.c:863
+#: src/gnome/druid-stock-split.c:391 src/gnome/window-register.c:864
 #: src/register/splitreg.c:235
 msgid "Split"
 msgstr ""
 
-#: src/gnome/druid-stock-split.c:664
+#: src/gnome/druid-stock-split.c:421
+msgid "Error adding price."
+msgstr ""
+
+#: src/gnome/druid-stock-split.c:720
 #, fuzzy
-msgid "You don't have any stock accounts!"
+msgid "You don't have any stock accounts with balances!"
 msgstr "Открыть выбранный счет"
 
-#: src/gnome/glade-gnc-dialogs.c:36 src/scm/report/guile-strings.c:405
-#: src/scm/report/guile-strings.c:406
+#: src/gnome/glade-gnc-dialogs.c:36
 msgid "Select Account"
 msgstr "Выбрать счет"
 
@@ -1078,7 +1090,7 @@ msgid "Payee:"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:389 src/gnome/glade-gnc-dialogs.c:4979
-#: src/gnome/glade-gnc-dialogs.c:5979 src/gnome/glade-gnc-dialogs.c:6343
+#: src/gnome/glade-gnc-dialogs.c:6036 src/gnome/glade-gnc-dialogs.c:6404
 msgid "Date:"
 msgstr "Дата:"
 
@@ -1091,7 +1103,7 @@ msgid "Amount (numbers):"
 msgstr "Количество (числа):"
 
 #: src/gnome/glade-gnc-dialogs.c:413 src/gnome/glade-gnc-dialogs.c:4942
-#: src/gnome/glade-gnc-dialogs.c:6489
+#: src/gnome/glade-gnc-dialogs.c:6579
 msgid "Memo:"
 msgstr "Заметки:"
 
@@ -1115,7 +1127,7 @@ msgstr "Сантиметры"
 msgid "Millimeters"
 msgstr "Миллиметры"
 
-#: src/gnome/glade-gnc-dialogs.c:538 src/scm/guile-strings.c:112
+#: src/gnome/glade-gnc-dialogs.c:538
 msgid "Points"
 msgstr "Пункты"
 
@@ -1148,7 +1160,7 @@ msgstr ""
 msgid "Find transactions affecting"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:851 src/scm/guile-strings.c:126
+#: src/gnome/glade-gnc-dialogs.c:851 src/scm/guile-strings.c:136
 msgid "All"
 msgstr "Все"
 
@@ -1156,9 +1168,8 @@ msgstr "Все"
 msgid "Any"
 msgstr "Любые"
 
-#: src/gnome/glade-gnc-dialogs.c:857 src/scm/guile-strings.c:303
-#: src/scm/report/guile-strings.c:235 src/scm/report/guile-strings.c:516
-#: src/scm/report/guile-strings.c:565
+#: src/gnome/glade-gnc-dialogs.c:857 src/scm/guile-strings.c:316
+#: src/scm/report/guile-strings.c:527 src/scm/report/guile-strings.c:576
 msgid "None"
 msgstr "Нет"
 
@@ -1190,7 +1201,8 @@ msgid "Match Description"
 msgstr "Совпадение описания"
 
 #: src/gnome/glade-gnc-dialogs.c:982
-msgid "Find transactions whose Description matches:"
+#, fuzzy
+msgid "Find transactions whose Description contains:"
 msgstr "Найти транзакции чье описание совпадают с:"
 
 #: src/gnome/glade-gnc-dialogs.c:1004 src/gnome/glade-gnc-dialogs.c:1062
@@ -1206,10 +1218,11 @@ msgid "Regular expression"
 msgstr "Регулярное выражение"
 
 #: src/gnome/glade-gnc-dialogs.c:1040
-msgid "Find transactions whose Number matches:"
+#, fuzzy
+msgid "Find transactions whose Number contains:"
 msgstr "Найти транзакции, номера которых совпадают с:"
 
-#: src/gnome/glade-gnc-dialogs.c:1076 src/scm/report/guile-strings.c:512
+#: src/gnome/glade-gnc-dialogs.c:1076 src/scm/report/guile-strings.c:523
 msgid "Number"
 msgstr "Число"
 
@@ -1245,10 +1258,9 @@ msgstr "Точно"
 
 #: src/gnome/glade-gnc-dialogs.c:1176 src/gnome/glade-gnc-dialogs.c:4609
 #: src/gnome/glade-gnc-dialogs.c:4657 src/gnome/reconcile-list.c:150
-#: src/scm/report/guile-strings.c:194 src/scm/report/guile-strings.c:204
-#: src/scm/report/guile-strings.c:233 src/scm/report/guile-strings.c:458
-#: src/scm/report/guile-strings.c:468 src/scm/report/guile-strings.c:508
-#: src/scm/report/guile-strings.c:563
+#: src/scm/report/guile-strings.c:251 src/scm/report/guile-strings.c:287
+#: src/scm/report/guile-strings.c:472 src/scm/report/guile-strings.c:482
+#: src/scm/report/guile-strings.c:519 src/scm/report/guile-strings.c:574
 msgid "Amount"
 msgstr "Количество"
 
@@ -1257,7 +1269,7 @@ msgid "Match Memo"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1198
-msgid "Find splits whose Memo matches:"
+msgid "Find splits whose Memo contains:"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1241
@@ -1289,8 +1301,9 @@ msgid "Match Action"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1396
-msgid "Find transactions whose Action matches:"
-msgstr ""
+#, fuzzy
+msgid "Find transactions whose Action contains:"
+msgstr "Найти транзакции чье описание совпадают с:"
 
 #: src/gnome/glade-gnc-dialogs.c:1439
 msgid "Match Cleared state"
@@ -1371,8 +1384,8 @@ msgid "Delete results from current search"
 msgstr "Удалить результаты из текущего поиска"
 
 # Quicken
-#: src/gnome/glade-gnc-dialogs.c:1663 src/gnome/window-main.c:1139
-#: src/gnome/window-register.c:899
+#: src/gnome/glade-gnc-dialogs.c:1663 src/gnome/window-main.c:1142
+#: src/gnome/window-register.c:900
 msgid "Find"
 msgstr "Найти"
 
@@ -1404,9 +1417,9 @@ msgstr "Добавить"
 msgid "Add a new entry or subentry"
 msgstr "Добавить новую запись или подзапись"
 
-#: src/gnome/glade-gnc-dialogs.c:1929 src/gnome/glade-gnc-dialogs.c:6121
-#: src/gnome/window-main.c:1128 src/gnome/window-reconcile.c:1251
-#: src/gnome/window-register.c:845
+#: src/gnome/glade-gnc-dialogs.c:1929 src/gnome/glade-gnc-dialogs.c:6178
+#: src/gnome/window-main.c:1131 src/gnome/window-reconcile.c:1251
+#: src/gnome/window-register.c:846
 msgid "Delete"
 msgstr "Удалить"
 
@@ -1428,7 +1441,7 @@ msgstr "Запись"
 
 #: src/gnome/glade-gnc-dialogs.c:1992 src/gnome/glade-gnc-dialogs.c:2079
 #: src/gnome/glade-gnc-dialogs.c:3465 src/gnome/glade-gnc-dialogs.c:4934
-#: src/gnome/glade-gnc-dialogs.c:6359
+#: src/gnome/glade-gnc-dialogs.c:6420
 msgid "Description:"
 msgstr "Описание:"
 
@@ -1652,7 +1665,7 @@ msgstr ""
 msgid "Currency/security:"
 msgstr "Валюта:"
 
-#: src/gnome/glade-gnc-dialogs.c:3141 src/gnome/glade-gnc-dialogs.c:6114
+#: src/gnome/glade-gnc-dialogs.c:3141 src/gnome/glade-gnc-dialogs.c:6171
 #, fuzzy
 msgid "New..."
 msgstr "Новый"
@@ -1705,7 +1718,7 @@ msgid "Account Name:"
 msgstr "Название счета"
 
 #: src/gnome/glade-gnc-dialogs.c:3474 src/gnome/glade-gnc-dialogs.c:5047
-#: src/gnome/glade-gnc-dialogs.c:5102
+#: src/gnome/glade-gnc-dialogs.c:5102 src/gnome/glade-gnc-dialogs.c:6494
 msgid "Currency:"
 msgstr "Валюта:"
 
@@ -1727,7 +1740,7 @@ msgstr "Тип счета"
 msgid "label812"
 msgstr "метка773"
 
-#: src/gnome/glade-gnc-dialogs.c:3584 src/gnome/glade-gnc-dialogs.c:5888
+#: src/gnome/glade-gnc-dialogs.c:3584 src/gnome/glade-gnc-dialogs.c:5945
 msgid "Parent Account"
 msgstr "Родительский счет"
 
@@ -1743,7 +1756,7 @@ msgstr ""
 msgid "Timezone for these quotes:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3674 src/gnome/glade-gnc-dialogs.c:5797
+#: src/gnome/glade-gnc-dialogs.c:3674 src/gnome/glade-gnc-dialogs.c:5845
 #, fuzzy
 msgid "Tax Related"
 msgstr "Установить диапазон дат"
@@ -2123,7 +2136,7 @@ msgstr "Передать с"
 msgid "Transfer Information"
 msgstr "Информация о передаче"
 
-#: src/gnome/glade-gnc-dialogs.c:4926 src/gnome/glade-gnc-dialogs.c:5987
+#: src/gnome/glade-gnc-dialogs.c:4926 src/gnome/glade-gnc-dialogs.c:6044
 #, fuzzy
 msgid "Num:"
 msgstr "Число"
@@ -2137,6 +2150,7 @@ msgid " "
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:5063 src/gnome/glade-gnc-dialogs.c:5118
+#: src/scm/report/guile-strings.c:171
 msgid "Show Income/Expense"
 msgstr ""
 
@@ -2199,7 +2213,7 @@ msgid ""
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:5451 src/gnome/glade-gnc-dialogs.c:5494
-#: src/scm/guile-strings.c:82
+#: src/scm/guile-strings.c:83
 #, fuzzy
 msgid "Search"
 msgstr "Новый поиск"
@@ -2221,102 +2235,109 @@ msgstr ""
 msgid "Style sheet template:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:5728 src/gnome/glade-gnc-dialogs.c:5782
-#: src/gnome/window-main.c:1322
+#: src/gnome/glade-gnc-dialogs.c:5735 src/gnome/glade-gnc-dialogs.c:5829
+#: src/gnome/window-main.c:1325
 #, fuzzy
 msgid "Tax Information"
 msgstr "Информация о передаче"
 
-#: src/gnome/glade-gnc-dialogs.c:5743 src/scm/guile-strings.c:67
-#: src/scm/report/guile-strings.c:6 src/scm/report/guile-strings.c:23
-#: src/scm/report/guile-strings.c:67 src/scm/report/guile-strings.c:87
+#: src/gnome/glade-gnc-dialogs.c:5750 src/gnome/window-main.c:1625
+#: src/scm/guile-strings.c:68 src/scm/report/guile-strings.c:6
+#: src/scm/report/guile-strings.c:22 src/scm/report/guile-strings.c:51
+#: src/scm/report/guile-strings.c:68 src/scm/report/guile-strings.c:69
+#: src/scm/report/guile-strings.c:167 src/scm/report/guile-strings.c:189
+#: src/scm/report/guile-strings.c:215 src/scm/report/guile-strings.c:232
 msgid "Accounts"
 msgstr "Счета"
 
-#: src/gnome/glade-gnc-dialogs.c:5766
+#: src/gnome/glade-gnc-dialogs.c:5806
+#, fuzzy
+msgid "Accounts Selected:"
+msgstr "Тип счета:"
+
+#: src/gnome/glade-gnc-dialogs.c:5814
+msgid "0"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5821
 #, fuzzy
 msgid "Select Subaccounts"
 msgstr "Выбрать счет"
 
-#: src/gnome/glade-gnc-dialogs.c:5774
-#, fuzzy
-msgid "Unselect Subaccounts"
-msgstr "Выбрать счет"
-
-#: src/gnome/glade-gnc-dialogs.c:5811
+#: src/gnome/glade-gnc-dialogs.c:5859
 #, fuzzy
 msgid "TXF Categories"
 msgstr "Категории"
 
-#: src/gnome/glade-gnc-dialogs.c:5843
+#: src/gnome/glade-gnc-dialogs.c:5893
 #, fuzzy
-msgid "label847671"
-msgstr "метка773"
+msgid "Form"
+msgstr "С"
 
-#: src/gnome/glade-gnc-dialogs.c:5865
+#: src/gnome/glade-gnc-dialogs.c:5922
 msgid "Payer Name Source"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:5880
+#: src/gnome/glade-gnc-dialogs.c:5937
 #, fuzzy
 msgid "Current Account"
 msgstr "Родительский счет"
 
-#: src/gnome/glade-gnc-dialogs.c:5947
+#: src/gnome/glade-gnc-dialogs.c:6004
 #, fuzzy
 msgid "Duplicate Transaction"
 msgstr "Удалить транзакцию"
 
-#: src/gnome/glade-gnc-dialogs.c:5957
+#: src/gnome/glade-gnc-dialogs.c:6014
 #, fuzzy
 msgid "Transaction Information"
 msgstr "Информация о передаче"
 
-#: src/gnome/glade-gnc-dialogs.c:6059
+#: src/gnome/glade-gnc-dialogs.c:6116
 msgid "HTML Style Sheets"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:6069
+#: src/gnome/glade-gnc-dialogs.c:6126
 msgid "Style sheets"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:6100
+#: src/gnome/glade-gnc-dialogs.c:6157
 #, fuzzy
 msgid "label847668"
 msgstr "метка773"
 
-#: src/gnome/glade-gnc-dialogs.c:6128
+#: src/gnome/glade-gnc-dialogs.c:6185
 #, fuzzy
 msgid "Style sheet options"
 msgstr "Параметры отчета"
 
-#: src/gnome/glade-gnc-dialogs.c:6207 src/gnome/glade-gnc-dialogs.c:6394
+#: src/gnome/glade-gnc-dialogs.c:6268 src/gnome/glade-gnc-dialogs.c:6455
 msgid "Stock Split"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:6227
+#: src/gnome/glade-gnc-dialogs.c:6288
 msgid "This wizard will help you record a stock split or stock merger."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:6238
+#: src/gnome/glade-gnc-dialogs.c:6299
 #, fuzzy
 msgid "Stock Account"
 msgstr "Выбрать счет"
 
-#: src/gnome/glade-gnc-dialogs.c:6247
+#: src/gnome/glade-gnc-dialogs.c:6308
 msgid ""
 "Select the account for which you want to record a stock split or merger."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:6288
+#: src/gnome/glade-gnc-dialogs.c:6349 src/scm/report/guile-strings.c:237
 msgid "Symbol"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:6311
+#: src/gnome/glade-gnc-dialogs.c:6372
 msgid "Stock Split Details"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:6320
+#: src/gnome/glade-gnc-dialogs.c:6381
 msgid ""
 "Enter the date and the number of shares you gained or lost from the stock "
 "split or merger.\n"
@@ -2326,68 +2347,130 @@ msgid ""
 "one."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:6351
+#: src/gnome/glade-gnc-dialogs.c:6412
 msgid "Share Distribution:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:6403
+#: src/gnome/glade-gnc-dialogs.c:6464
 msgid ""
 "If you want to record a stock price for the split, enter it below.\n"
 "You may safely leave it blank."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:6418
+#: src/gnome/glade-gnc-dialogs.c:6486
 #, fuzzy
 msgid "New Price:"
 msgstr "Цена"
 
-#: src/gnome/glade-gnc-dialogs.c:6442 src/gnome/glade-gnc-dialogs.c:6517
+#: src/gnome/glade-gnc-dialogs.c:6532 src/gnome/glade-gnc-dialogs.c:6607
 msgid "Cash In Lieu"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:6451
+#: src/gnome/glade-gnc-dialogs.c:6541
 msgid ""
 "If you received a cash disbursement as a result of the stock split,\n"
 "enter the details of that payment here. Otherwise, just click `Next'."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:6481
+#: src/gnome/glade-gnc-dialogs.c:6571
 #, fuzzy
 msgid "Cash Amount:"
 msgstr "Количество:"
 
-#: src/gnome/glade-gnc-dialogs.c:6526
+#: src/gnome/glade-gnc-dialogs.c:6616
 #, fuzzy
 msgid "Income Account"
 msgstr "Новый счет"
 
-#: src/gnome/glade-gnc-dialogs.c:6542
+#: src/gnome/glade-gnc-dialogs.c:6632
 #, fuzzy
 msgid "Asset Account"
 msgstr "Потерянные счета"
 
-#: src/gnome/glade-gnc-dialogs.c:6568
+#: src/gnome/glade-gnc-dialogs.c:6658
 msgid ""
 "If you are finished creating the stock split or merger, press `Finish'.\n"
 "You may also press `Back' to review your choices, or `Cancel' to\n"
 "quit without making any changes."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:6591
+#: src/gnome/glade-gnc-dialogs.c:6681
 msgid "Username and Password"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:6600
+#: src/gnome/glade-gnc-dialogs.c:6690
 msgid "Enter your username and password"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:6629
+#: src/gnome/glade-gnc-dialogs.c:6719
 msgid "Username:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:6636
+#: src/gnome/glade-gnc-dialogs.c:6726
 msgid "Password:"
 msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6806
+msgid "window1"
+msgstr "окно1"
+
+#: src/gnome/glade-gnc-dialogs.c:6835
+msgid "Available reports"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6849
+#, fuzzy
+msgid "                       "
+msgstr "                    "
+
+#: src/gnome/glade-gnc-dialogs.c:6856
+#, fuzzy
+msgid "Add  >>"
+msgstr "Добавить"
+
+#: src/gnome/glade-gnc-dialogs.c:6863
+msgid "<< Remove"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6877
+msgid "Move up"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6884
+msgid "Move down"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6898
+#, fuzzy
+msgid "Size ..."
+msgstr "Выбор..."
+
+#: src/gnome/glade-gnc-dialogs.c:6932 src/gnome/window-register.c:909
+#: src/gnome/window-register.c:1344 src/scm/guile-strings.c:352
+msgid "Report"
+msgstr "Отчет"
+
+#: src/gnome/glade-gnc-dialogs.c:6939
+#, fuzzy
+msgid "Cols"
+msgstr "Закрыть"
+
+#: src/gnome/glade-gnc-dialogs.c:6946
+msgid "Rows"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7003
+msgid "Enter report row/column span"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7024
+msgid "Row span:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7032
+#, fuzzy
+msgid "Column span:"
+msgstr "Двухколоночное отображение"
 
 #: src/gnome/gnc-datedelta.c:208
 msgid "Days"
@@ -2418,6 +2501,94 @@ msgstr ""
 #, fuzzy
 msgid "Calendar"
 msgstr "Очистить все"
+
+#: src/gnome/gnc-html.c:947
+msgid ""
+"GnuCash Network is disabled and the link you have clicked requires it.\n"
+"You can enable it in the Network section\n"
+"of the Preferences dialog."
+msgstr ""
+
+#: src/gnome/gnc-html.c:1047
+msgid "Badly formed gnc-register: URL."
+msgstr ""
+
+#: src/gnome/gnc-html.c:1076
+msgid "Badly formed gnc-options: URL."
+msgstr ""
+
+#: src/gnome/gnc-html.c:1219
+#, fuzzy
+msgid ""
+"Secure HTTP access is disabled.\n"
+"You can enable it in the Network section of\n"
+"the Preferences dialog."
+msgstr ""
+"Вы отключили \"Совет дня\"\n"
+"Вы можете включить его в разделе\n"
+"\"Общие\" меню \"Настройки\""
+
+#: src/gnome/gnc-html.c:1226
+#, fuzzy
+msgid ""
+"Network HTTP access is disabled.\n"
+"You can enable it in the Network section of\n"
+"the Preferences dialog."
+msgstr ""
+"Вы отключили \"Совет дня\"\n"
+"Вы можете включить его в разделе\n"
+"\"Общие\" меню \"Настройки\""
+
+#: src/gnome/gnc-html.c:1438
+msgid "Save HTML To File"
+msgstr ""
+
+#: src/gnome/gnc-html.c:1445
+#, fuzzy, c-format
+msgid ""
+"Could not open the file\n"
+"     %s\n"
+"%s"
+msgstr ""
+"При открытии файла возникла ошибка\n"
+"     %s\n"
+"\n"
+"%s"
+
+#: src/gnome/gnc-http.c:112
+msgid "NULL request. \n"
+msgstr ""
+
+#: src/gnome/gnc-http.c:177
+msgid "checking SSL certificate..."
+msgstr ""
+
+#: src/gnome/gnc-http.c:179
+msgid " ... done\n"
+msgstr ""
+
+#: src/gnome/gnc-network.c:169
+msgid "Enter GnuCash Network passphrase:"
+msgstr ""
+
+#: src/gnome/gnc-network.c:224
+msgid "GnuCash Network authorization failed."
+msgstr ""
+
+#. start: get first passphrase
+#: src/gnome/gnc-network.c:357
+msgid "Enter passphrase:"
+msgstr ""
+
+#. get another and check for equality
+#: src/gnome/gnc-network.c:371
+#, fuzzy
+msgid "Verify passphrase:"
+msgstr "Проверить изменения"
+
+#: src/gnome/gnc-network.c:382
+msgid "Passphrases did not match."
+msgstr ""
 
 #: src/gnome/new-user-interface.c:64
 #, fuzzy
@@ -2499,82 +2670,83 @@ msgstr ""
 msgid "Run New User Account Setup again?"
 msgstr "Новый счет"
 
-#: src/gnome/window-help.c:245
+#: src/gnome/window-help.c:297
 msgid "Enter URI to load:"
 msgstr ""
 
-#: src/gnome/window-help.c:522 src/gnome/window-report.c:420
+#: src/gnome/window-help.c:575 src/gnome/window-report.c:413
 msgid "Back"
 msgstr "Назад"
 
-#: src/gnome/window-help.c:523 src/gnome/window-report.c:421
+#: src/gnome/window-help.c:576 src/gnome/window-report.c:414
 msgid "Move back one step in the history"
 msgstr "Перейти на один шаг назад в истории"
 
-#: src/gnome/window-help.c:531 src/gnome/window-report.c:429
+#: src/gnome/window-help.c:584 src/gnome/window-report.c:422
 msgid "Forward"
 msgstr "Вперед"
 
-#: src/gnome/window-help.c:532 src/gnome/window-report.c:430
+#: src/gnome/window-help.c:585 src/gnome/window-report.c:423
 msgid "Move forward one step in the history"
 msgstr "Перейти на один шаг вперед в истории"
 
-#: src/gnome/window-help.c:541 src/gnome/window-report.c:438
+#: src/gnome/window-help.c:594 src/gnome/window-report.c:431
 #, fuzzy
 msgid "Reload"
 msgstr "Записать"
 
-#: src/gnome/window-help.c:542
+#: src/gnome/window-help.c:595
 #, fuzzy
 msgid "Reload the current document"
 msgstr "Записать текущую транзакцию"
 
-#: src/gnome/window-help.c:551
+#: src/gnome/window-help.c:604
 #, fuzzy
 msgid "Open a new document"
 msgstr "Открыть счет"
 
-#: src/gnome/window-help.c:559 src/gnome/window-report.c:447
+#: src/gnome/window-help.c:612 src/gnome/window-report.c:440
 msgid "Stop"
 msgstr ""
 
-#: src/gnome/window-help.c:560 src/gnome/window-report.c:448
+#: src/gnome/window-help.c:613 src/gnome/window-report.c:441
 msgid "Cancel outstanding HTML requests"
 msgstr ""
 
-#: src/gnome/window-help.c:569 src/gnome/window-report.c:475
+#: src/gnome/window-help.c:622 src/gnome/window-register.c:918
+#: src/gnome/window-register.c:1352 src/gnome/window-report.c:468
 msgid "Print"
 msgstr "Печать"
 
-#: src/gnome/window-help.c:570
+#: src/gnome/window-help.c:623
 #, fuzzy
 msgid "Print Help window"
 msgstr "Главное окно"
 
-#: src/gnome/window-help.c:579 src/gnome/window-register.c:918
-#: src/gnome/window-register.c:1343 src/gnome/window-report.c:485
+#: src/gnome/window-help.c:632 src/gnome/window-register.c:928
+#: src/gnome/window-register.c:1361 src/gnome/window-report.c:487
 msgid "Close"
 msgstr "Закрыть"
 
-#: src/gnome/window-help.c:580
+#: src/gnome/window-help.c:633
 #, fuzzy
 msgid "Close this Help window"
 msgstr "Закрыть это HTML-окно"
 
-#: src/gnome/window-main.c:168
+#: src/gnome/window-main.c:169
 msgid "Net Assets"
 msgstr ""
 
-#: src/gnome/window-main.c:185
+#: src/gnome/window-main.c:186
 #, fuzzy
 msgid "Profits"
 msgstr "Пункты"
 
-#: src/gnome/window-main.c:514
+#: src/gnome/window-main.c:515
 msgid "Untitled"
 msgstr "Неозаглавленное"
 
-#: src/gnome/window-main.c:548
+#: src/gnome/window-main.c:549
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!"
@@ -2582,12 +2754,12 @@ msgstr ""
 "Личный финансовый диспетчер GnuCash.\n"
 "Способ GNU управлять вашими деньгами!"
 
-#: src/gnome/window-main.c:599
+#: src/gnome/window-main.c:602
 #, c-format
 msgid "Are you sure you want to delete the %s account?"
 msgstr "Вы уверены, что хотите удалить счет %s?"
 
-#: src/gnome/window-main.c:614
+#: src/gnome/window-main.c:617
 msgid ""
 "To delete an account, you must first\n"
 "choose an account to delete.\n"
@@ -2595,7 +2767,7 @@ msgstr ""
 "Для удаления счета, вы должны сначала\n"
 "выбрать счет.\n"
 
-#: src/gnome/window-main.c:634 src/gnome/window-main.c:654
+#: src/gnome/window-main.c:637 src/gnome/window-main.c:657
 #, fuzzy
 msgid ""
 "To open an account, you must first\n"
@@ -2604,7 +2776,7 @@ msgstr ""
 "Чтобы открыть счет, вы должны сначала\n"
 "выбрать счет.\n"
 
-#: src/gnome/window-main.c:679
+#: src/gnome/window-main.c:682
 msgid ""
 "To edit an account, you must first\n"
 "choose an account to edit.\n"
@@ -2612,7 +2784,7 @@ msgstr ""
 "Для правки счета, вы должны сначала\n"
 "выбрать счет.\n"
 
-#: src/gnome/window-main.c:698
+#: src/gnome/window-main.c:701
 #, fuzzy
 msgid ""
 "To reconcile an account, you must first\n"
@@ -2621,232 +2793,232 @@ msgstr ""
 "Для удаления счета, вы должны сначала\n"
 "выбрать счет.\n"
 
-#: src/gnome/window-main.c:723 src/gnome/window-main.c:743
+#: src/gnome/window-main.c:726 src/gnome/window-main.c:746
 msgid "You must select an account to scrub."
 msgstr ""
 
-#: src/gnome/window-main.c:1077
+#: src/gnome/window-main.c:1080
 msgid "Save the file to disk"
 msgstr "Сохранить файл на диске"
 
-#: src/gnome/window-main.c:1086
+#: src/gnome/window-main.c:1089
 msgid "Import"
 msgstr "Импортировать"
 
-#: src/gnome/window-main.c:1087 src/gnome/window-main.c:1195
+#: src/gnome/window-main.c:1090 src/gnome/window-main.c:1198
 msgid "Import a Quicken QIF file"
 msgstr "Импортировать файл Quicken QIF"
 
-#: src/gnome/window-main.c:1098 src/gnome/window-main.c:1254
+#: src/gnome/window-main.c:1101 src/gnome/window-main.c:1257
 msgid "Open the selected account"
 msgstr "Открыть выбранный счет"
 
-#: src/gnome/window-main.c:1107 src/gnome/window-reconcile.c:1244
+#: src/gnome/window-main.c:1110 src/gnome/window-reconcile.c:1244
 msgid "Edit"
 msgstr "Правка"
 
-#: src/gnome/window-main.c:1108 src/gnome/window-main.c:1270
+#: src/gnome/window-main.c:1111 src/gnome/window-main.c:1273
 msgid "Edit the selected account"
 msgstr "Правка выбранного счета"
 
-#: src/gnome/window-main.c:1118 src/gnome/window-reconcile.c:1237
+#: src/gnome/window-main.c:1121 src/gnome/window-reconcile.c:1237
 msgid "New"
 msgstr "Новый"
 
-#: src/gnome/window-main.c:1119 src/gnome/window-main.c:1304
-#: src/gnome/window-register.c:1424
+#: src/gnome/window-main.c:1122 src/gnome/window-main.c:1307
+#: src/gnome/window-register.c:1442
 msgid "Create a new account"
 msgstr "Создать новый счет"
 
-#: src/gnome/window-main.c:1129 src/gnome/window-main.c:1312
+#: src/gnome/window-main.c:1132 src/gnome/window-main.c:1315
 msgid "Delete selected account"
 msgstr "Удалить выбранный счет"
 
-#: src/gnome/window-main.c:1140 src/gnome/window-main.c:1351
-#: src/gnome/window-register.c:900
+#: src/gnome/window-main.c:1143 src/gnome/window-main.c:1354
+#: src/gnome/window-register.c:901
 #, fuzzy
 msgid "Find transactions with a search"
 msgstr "Поиск транзакций."
 
-#: src/gnome/window-main.c:1150
+#: src/gnome/window-main.c:1153
 msgid "Exit"
 msgstr "Выход"
 
-#: src/gnome/window-main.c:1151
+#: src/gnome/window-main.c:1154
 msgid "Exit GnuCash"
 msgstr "Выйти из GnuCash"
 
-#: src/gnome/window-main.c:1181
+#: src/gnome/window-main.c:1184
 msgid "New File"
 msgstr "Новый файл"
 
-#: src/gnome/window-main.c:1182
+#: src/gnome/window-main.c:1185
 msgid "Create a new file"
 msgstr "Создать новый файл"
 
-#: src/gnome/window-main.c:1194
+#: src/gnome/window-main.c:1197
 msgid "Import QIF..."
 msgstr "Импортировать QIF..."
 
-#: src/gnome/window-main.c:1210
+#: src/gnome/window-main.c:1213
 msgid "_Preferences..."
 msgstr "Настройки..."
 
-#: src/gnome/window-main.c:1211
+#: src/gnome/window-main.c:1214
 msgid "Open the global preferences dialog"
 msgstr "Открыть глобальный диалог настроек"
 
-#: src/gnome/window-main.c:1223
+#: src/gnome/window-main.c:1226
 msgid "Scrub A_ccount"
 msgstr ""
 
-#: src/gnome/window-main.c:1224 src/gnome/window-reconcile.c:1081
+#: src/gnome/window-main.c:1227 src/gnome/window-reconcile.c:1081
 msgid "Identify and fix problems in the account"
 msgstr "Идентифицировать и исправить проблемы со счетом"
 
-#: src/gnome/window-main.c:1231
+#: src/gnome/window-main.c:1234
 msgid "Scrub Su_baccounts"
 msgstr ""
 
-#: src/gnome/window-main.c:1232
+#: src/gnome/window-main.c:1235
 msgid "Identify and fix problems in the account and its subaccounts"
 msgstr "Идентифицировать и исправить проблемы со счетом и его подсчетами."
 
-#: src/gnome/window-main.c:1240
+#: src/gnome/window-main.c:1243
 msgid "Scrub A_ll"
 msgstr ""
 
-#: src/gnome/window-main.c:1241
+#: src/gnome/window-main.c:1244
 msgid "Identify and fix problems in all the accounts"
 msgstr "Идентифицировать и исправить проблемы со всеми считами"
 
-#: src/gnome/window-main.c:1253 src/gnome/window-reconcile.c:1058
+#: src/gnome/window-main.c:1256 src/gnome/window-reconcile.c:1058
 msgid "_Open Account"
 msgstr "Открыть счет"
 
-#: src/gnome/window-main.c:1261
+#: src/gnome/window-main.c:1264
 msgid "Open S_ubaccounts"
 msgstr "Открыть подсчета"
 
-#: src/gnome/window-main.c:1262
+#: src/gnome/window-main.c:1265
 msgid "Open the selected account and all its subaccounts"
 msgstr "Открыть выбранный счет и все его подсчета"
 
-#: src/gnome/window-main.c:1269 src/gnome/window-reconcile.c:1065
-#: src/gnome/window-register.c:1389
+#: src/gnome/window-main.c:1272 src/gnome/window-reconcile.c:1065
+#: src/gnome/window-register.c:1407
 msgid "_Edit Account"
 msgstr "Правка счета"
 
-#: src/gnome/window-main.c:1278 src/gnome/window-register.c:1398
+#: src/gnome/window-main.c:1281 src/gnome/window-register.c:1416
 msgid "_Reconcile..."
 msgstr ""
 
-#: src/gnome/window-main.c:1279
+#: src/gnome/window-main.c:1282
 msgid "Reconcile the selected account"
 msgstr ""
 
-#: src/gnome/window-main.c:1286 src/gnome/window-reconcile.c:1073
-#: src/gnome/window-register.c:1406
+#: src/gnome/window-main.c:1289 src/gnome/window-reconcile.c:1073
+#: src/gnome/window-register.c:1424
 msgid "_Transfer..."
 msgstr "Передача..."
 
-#: src/gnome/window-main.c:1287 src/gnome/window-reconcile.c:1073
-#: src/gnome/window-register.c:891 src/gnome/window-register.c:1407
+#: src/gnome/window-main.c:1290 src/gnome/window-reconcile.c:1073
+#: src/gnome/window-register.c:892 src/gnome/window-register.c:1425
 msgid "Transfer funds from one account to another"
 msgstr "Передать фонды с одного счета на другой"
 
-#: src/gnome/window-main.c:1294 src/gnome/window-register.c:1414
+#: src/gnome/window-main.c:1297 src/gnome/window-register.c:1432
 msgid "Stock S_plit..."
 msgstr ""
 
-#: src/gnome/window-main.c:1295 src/gnome/window-register.c:1415
+#: src/gnome/window-main.c:1298 src/gnome/window-register.c:1433
 msgid "Record a stock split or a stock merger"
 msgstr ""
 
-#: src/gnome/window-main.c:1303 src/gnome/window-register.c:1423
+#: src/gnome/window-main.c:1306 src/gnome/window-register.c:1441
 msgid "_New Account..."
 msgstr "Новый счет..."
 
-#: src/gnome/window-main.c:1311
+#: src/gnome/window-main.c:1314
 msgid "_Delete Account"
 msgstr "Удалить счет"
 
-#: src/gnome/window-main.c:1318 src/gnome/window-reconcile.c:1081
+#: src/gnome/window-main.c:1321 src/gnome/window-reconcile.c:1081
 msgid "_Scrub"
 msgstr ""
 
-#: src/gnome/window-main.c:1323
+#: src/gnome/window-main.c:1326
 #, fuzzy
 msgid "Setup tax information for all income and expense accounts"
 msgstr "Показать пиктограммы и текст"
 
-#: src/gnome/window-main.c:1335
+#: src/gnome/window-main.c:1338
 #, fuzzy
 msgid "_General Ledger"
 msgstr "Общие"
 
-#: src/gnome/window-main.c:1336
+#: src/gnome/window-main.c:1339
 #, fuzzy
 msgid "Open a general ledger window"
 msgstr "Открыть окно справки GnuCash"
 
-#: src/gnome/window-main.c:1343
+#: src/gnome/window-main.c:1346
 msgid "Financial _Calculator"
 msgstr ""
 
-#: src/gnome/window-main.c:1344
+#: src/gnome/window-main.c:1347
 msgid "Use the financial calculator"
 msgstr ""
 
-#: src/gnome/window-main.c:1350
+#: src/gnome/window-main.c:1353
 #, fuzzy
 msgid "_Find Transactions"
 msgstr "Найти транзакции"
 
-#: src/gnome/window-main.c:1363
+#: src/gnome/window-main.c:1366
 msgid "_Manual"
 msgstr "Руководство"
 
-#: src/gnome/window-main.c:1364
+#: src/gnome/window-main.c:1367
 msgid "Open the GnuCash Manual"
 msgstr "Открыть руководство GnuCash"
 
-#: src/gnome/window-main.c:1371
+#: src/gnome/window-main.c:1374
 msgid "_Tips Of The Day"
 msgstr "Советы дня"
 
-#: src/gnome/window-main.c:1372
+#: src/gnome/window-main.c:1375
 #, fuzzy
 msgid "View the Tips of the Day"
 msgstr "Советы дня"
 
-#: src/gnome/window-main.c:1387
+#: src/gnome/window-main.c:1390
 msgid "_Write V2 XML File"
 msgstr ""
 
-#: src/gnome/window-main.c:1388
+#: src/gnome/window-main.c:1391
 msgid "Write a version 2 XML file"
 msgstr ""
 
-#: src/gnome/window-main.c:1395
+#: src/gnome/window-main.c:1398
 #, fuzzy
 msgid "Write _Account Hierarchy"
 msgstr "Счет"
 
-#: src/gnome/window-main.c:1396
+#: src/gnome/window-main.c:1399
 msgid "Write just the account hierarchy"
 msgstr ""
 
-#: src/gnome/window-main.c:1407
+#: src/gnome/window-main.c:1410
 msgid "_Accounts"
 msgstr "Счета"
 
-#: src/gnome/window-main.c:1408
+#: src/gnome/window-main.c:1411
 #, fuzzy
 msgid "_Tools"
 msgstr "Итоги"
 
-#: src/gnome/window-main.c:1410
+#: src/gnome/window-main.c:1413
 #, fuzzy
 msgid "_Devel Options"
 msgstr "Параметры отчета"
@@ -2884,11 +3056,11 @@ msgstr "Кредиты"
 msgid "Total:"
 msgstr "Всего"
 
-#: src/gnome/window-reconcile.c:723 src/gnome/window-register.c:2847
+#: src/gnome/window-reconcile.c:723 src/gnome/window-register.c:2908
 msgid "Are you sure you want to delete the current transaction?"
 msgstr "Вы уверены, в том что хотите удалить текущую транзакцию?"
 
-#: src/gnome/window-reconcile.c:772 src/scm/guile-strings.c:271
+#: src/gnome/window-reconcile.c:772 src/scm/guile-strings.c:284
 msgid "Reconcile"
 msgstr ""
 
@@ -2918,8 +3090,8 @@ msgstr ""
 msgid "Postpone the reconciliation of this account"
 msgstr "Добавить новую транзакцию к счету"
 
-#: src/gnome/window-reconcile.c:990 src/gnome/window-register.c:1444
-#: src/gnome/window-register.c:1625
+#: src/gnome/window-reconcile.c:990 src/gnome/window-register.c:1462
+#: src/gnome/window-register.c:1643
 msgid "_Cancel"
 msgstr "Отменить"
 
@@ -2928,30 +3100,30 @@ msgid "Cancel the reconciliation of this account"
 msgstr ""
 
 #: src/gnome/window-reconcile.c:1001 src/gnome/window-reconcile.c:1024
-#: src/gnome/window-register.c:1269
+#: src/gnome/window-register.c:1279
 msgid "Standard order"
 msgstr "Стандартный порядок"
 
 #: src/gnome/window-reconcile.c:1002 src/gnome/window-reconcile.c:1025
-#: src/gnome/window-register.c:1270
+#: src/gnome/window-register.c:1280
 msgid "Keep normal account order"
 msgstr "Сохранять нормальный порядок счета"
 
 #: src/gnome/window-reconcile.c:1004 src/gnome/window-reconcile.c:1005
 #: src/gnome/window-reconcile.c:1027 src/gnome/window-reconcile.c:1028
-#: src/gnome/window-register.c:1284 src/gnome/window-register.c:1285
+#: src/gnome/window-register.c:1294 src/gnome/window-register.c:1295
 msgid "Sort by Num"
 msgstr "Сортировать по номеру"
 
 #: src/gnome/window-reconcile.c:1007 src/gnome/window-reconcile.c:1008
 #: src/gnome/window-reconcile.c:1030 src/gnome/window-reconcile.c:1031
-#: src/gnome/window-register.c:1293 src/gnome/window-register.c:1294
+#: src/gnome/window-register.c:1303 src/gnome/window-register.c:1304
 msgid "Sort by Description"
 msgstr "Сортировать по описанию"
 
 #: src/gnome/window-reconcile.c:1010 src/gnome/window-reconcile.c:1011
 #: src/gnome/window-reconcile.c:1033 src/gnome/window-reconcile.c:1034
-#: src/gnome/window-register.c:1287 src/gnome/window-register.c:1288
+#: src/gnome/window-register.c:1297 src/gnome/window-register.c:1298
 msgid "Sort by Amount"
 msgstr "Сортировать по количеству"
 
@@ -2959,7 +3131,7 @@ msgstr "Сортировать по количеству"
 msgid "Open the account"
 msgstr "Открыть счет"
 
-#: src/gnome/window-reconcile.c:1065 src/gnome/window-register.c:1390
+#: src/gnome/window-reconcile.c:1065 src/gnome/window-register.c:1408
 msgid "Edit the main account for this register"
 msgstr ""
 
@@ -2982,21 +3154,21 @@ msgid "Edit the current transaction"
 msgstr "Правка текущей транзакции"
 
 #: src/gnome/window-reconcile.c:1107 src/gnome/window-reconcile.c:1191
-#: src/gnome/window-register.c:1452 src/gnome/window-register.c:1633
+#: src/gnome/window-register.c:1470 src/gnome/window-register.c:1651
 msgid "_Delete"
 msgstr "Удалить"
 
 #: src/gnome/window-reconcile.c:1107 src/gnome/window-reconcile.c:1191
-#: src/gnome/window-reconcile.c:1251 src/gnome/window-register.c:846
-#: src/gnome/window-register.c:1453 src/gnome/window-register.c:1634
+#: src/gnome/window-reconcile.c:1251 src/gnome/window-register.c:847
+#: src/gnome/window-register.c:1471 src/gnome/window-register.c:1652
 msgid "Delete the current transaction"
 msgstr "Удалить текущую транзакцию"
 
-#: src/gnome/window-reconcile.c:1119 src/gnome/window-register.c:1529
+#: src/gnome/window-reconcile.c:1119 src/gnome/window-register.c:1547
 msgid "_Help"
 msgstr "Справка"
 
-#: src/gnome/window-reconcile.c:1119 src/gnome/window-register.c:1530
+#: src/gnome/window-reconcile.c:1119 src/gnome/window-register.c:1548
 msgid "Open the GnuCash help window"
 msgstr "Открыть окно справки GnuCash"
 
@@ -3004,15 +3176,15 @@ msgstr "Открыть окно справки GnuCash"
 msgid "_Reconcile"
 msgstr ""
 
-#: src/gnome/window-reconcile.c:1130 src/gnome/window-register.c:1329
+#: src/gnome/window-reconcile.c:1130 src/gnome/window-register.c:1339
 msgid "Sort _Order"
 msgstr "Порядок сортировки"
 
-#: src/gnome/window-reconcile.c:1131 src/gnome/window-register.c:1542
+#: src/gnome/window-reconcile.c:1131 src/gnome/window-register.c:1560
 msgid "_Account"
 msgstr "Счет"
 
-#: src/gnome/window-reconcile.c:1132 src/gnome/window-register.c:1543
+#: src/gnome/window-reconcile.c:1132 src/gnome/window-register.c:1561
 msgid "_Transaction"
 msgstr "Транзакция"
 
@@ -3048,349 +3220,369 @@ msgid ""
 "Are you sure you want to cancel?"
 msgstr ""
 
-#: src/gnome/window-register.c:678
+#: src/gnome/window-register.c:679
 msgid "Register date ranges"
 msgstr ""
 
-#: src/gnome/window-register.c:715
+#: src/gnome/window-register.c:716
 msgid "Show Earliest"
 msgstr "Показать наиболее ранние"
 
-#: src/gnome/window-register.c:726
+#: src/gnome/window-register.c:727
 #, fuzzy
 msgid "Start date:"
 msgstr "Начальная дата"
 
-#: src/gnome/window-register.c:765
+#: src/gnome/window-register.c:766
 msgid "Show Latest"
 msgstr "Показать последние"
 
-#: src/gnome/window-register.c:776
+#: src/gnome/window-register.c:777
 msgid "End date:"
 msgstr ""
 
-#: src/gnome/window-register.c:802 src/scm/guile-strings.c:40
+#: src/gnome/window-register.c:803 src/scm/guile-strings.c:41
 msgid "Today"
 msgstr "Сегодня"
 
-#: src/gnome/window-register.c:808
+#: src/gnome/window-register.c:809
 msgid "Set Date Range"
 msgstr "Установить диапазон дат"
 
-#: src/gnome/window-register.c:829
-msgid "Record"
-msgstr "Записать"
+#: src/gnome/window-register.c:830
+#, fuzzy
+msgid "Enter"
+msgstr "Запись"
 
-#: src/gnome/window-register.c:830 src/gnome/window-register.c:1437
-#: src/gnome/window-register.c:1618
+#: src/gnome/window-register.c:831 src/gnome/window-register.c:1455
+#: src/gnome/window-register.c:1636
 msgid "Record the current transaction"
 msgstr "Записать текущую транзакцию"
 
-#: src/gnome/window-register.c:837
+#: src/gnome/window-register.c:838
 msgid "Cancel"
 msgstr "Отменить"
 
-#: src/gnome/window-register.c:838 src/gnome/window-register.c:1445
-#: src/gnome/window-register.c:1626
+#: src/gnome/window-register.c:839 src/gnome/window-register.c:1463
+#: src/gnome/window-register.c:1644
 msgid "Cancel the current transaction"
 msgstr "Отменить текущую транзакцию"
 
-#: src/gnome/window-register.c:854
+#: src/gnome/window-register.c:855
 msgid "Duplicate"
 msgstr "Сдублировать"
 
-#: src/gnome/window-register.c:855 src/gnome/window-register.c:1462
-#: src/gnome/window-register.c:1643
+#: src/gnome/window-register.c:856 src/gnome/window-register.c:1480
+#: src/gnome/window-register.c:1661
 msgid "Make a copy of the current transaction"
 msgstr "Сделать копию текущей транзакции"
 
-#: src/gnome/window-register.c:864 src/gnome/window-register.c:1471
-#: src/gnome/window-register.c:1652
+#: src/gnome/window-register.c:865 src/gnome/window-register.c:1489
+#: src/gnome/window-register.c:1670
 #, fuzzy
 msgid "Show all splits in the current transaction"
 msgstr "Правка текущей транзакции"
 
-#: src/gnome/window-register.c:871
+#: src/gnome/window-register.c:872
 msgid "Blank"
 msgstr "Пустое"
 
-#: src/gnome/window-register.c:872 src/gnome/window-register.c:1479
-#: src/gnome/window-register.c:1660
+#: src/gnome/window-register.c:873 src/gnome/window-register.c:1497
+#: src/gnome/window-register.c:1678
 msgid "Move to the blank transaction at the bottom of the register"
 msgstr ""
 
-#: src/gnome/window-register.c:880
+#: src/gnome/window-register.c:881
 msgid "Jump"
 msgstr "Перейти"
 
-#: src/gnome/window-register.c:881 src/gnome/window-register.c:1488
-#: src/gnome/window-register.c:1669
+#: src/gnome/window-register.c:882 src/gnome/window-register.c:1506
+#: src/gnome/window-register.c:1687
 msgid "Jump to the corresponding transaction in the other account"
 msgstr "Перейти к соответствующей транзакции в другом счете"
 
-#: src/gnome/window-register.c:908 src/gnome/window-register.c:1334
-#: src/scm/guile-strings.c:339
-msgid "Report"
-msgstr "Отчет"
-
-#: src/gnome/window-register.c:909 src/gnome/window-register.c:1335
+#: src/gnome/window-register.c:910 src/gnome/window-register.c:1345
 msgid "Open a report window for this register"
 msgstr ""
 
-#: src/gnome/window-register.c:919 src/gnome/window-register.c:1344
+#: src/gnome/window-register.c:919 src/gnome/window-register.c:1353
+msgid "Print a report for this register"
+msgstr ""
+
+#: src/gnome/window-register.c:929 src/gnome/window-register.c:1362
 msgid "Close this register window"
 msgstr ""
 
-#: src/gnome/window-register.c:1016
+#: src/gnome/window-register.c:1026
 #, fuzzy
 msgid "Present:"
 msgstr "Новое значение"
 
-#: src/gnome/window-register.c:1017
+#: src/gnome/window-register.c:1027
 #, fuzzy
 msgid "Future:"
 msgstr "Новое значение"
 
-#: src/gnome/window-register.c:1018
+#: src/gnome/window-register.c:1028
 #, fuzzy
 msgid "Cleared:"
 msgstr "Очистить все"
 
-#: src/gnome/window-register.c:1020
+#: src/gnome/window-register.c:1030
 #, fuzzy
 msgid "Reconciled:"
 msgstr "Открыть баланс"
 
-#: src/gnome/window-register.c:1024
+#: src/gnome/window-register.c:1034
 #, fuzzy
 msgid "Shares:"
 msgstr "Итоги"
 
-#: src/gnome/window-register.c:1026
+#: src/gnome/window-register.c:1036
 #, fuzzy
 msgid "Current Value:"
 msgstr "Новое значение"
 
-#: src/gnome/window-register.c:1242
+#: src/gnome/window-register.c:1252
 msgid "Basic Ledger"
 msgstr ""
 
-#: src/gnome/window-register.c:1243 src/scm/guile-strings.c:212
+#: src/gnome/window-register.c:1253 src/scm/guile-strings.c:225
 #, fuzzy
 msgid "Show transactions on one or two lines"
 msgstr "Показать транзакции на одной строке"
 
-#: src/gnome/window-register.c:1245
+#: src/gnome/window-register.c:1255
 msgid "Auto-Split Ledger"
 msgstr ""
 
-#: src/gnome/window-register.c:1246 src/scm/guile-strings.c:214
+#: src/gnome/window-register.c:1256 src/scm/guile-strings.c:227
 #, fuzzy
 msgid ""
 "Show transactions on one or two lines and expand the current transaction"
 msgstr "Показать транзакции на двух строках с дополнительной информацией"
 
-#: src/gnome/window-register.c:1249
+#: src/gnome/window-register.c:1259
 #, fuzzy
 msgid "Transaction Journal"
 msgstr "Отчет о транзакциях"
 
-#: src/gnome/window-register.c:1250 src/scm/guile-strings.c:216
+#: src/gnome/window-register.c:1260 src/scm/guile-strings.c:229
 #, fuzzy
 msgid "Show expanded transactions with all splits"
 msgstr "Поиск транзакций."
 
-#: src/gnome/window-register.c:1260
+#: src/gnome/window-register.c:1270
 #, fuzzy
 msgid "_Double Line"
 msgstr "Двойная строка"
 
-#: src/gnome/window-register.c:1261 src/scm/guile-strings.c:219
+#: src/gnome/window-register.c:1271 src/scm/guile-strings.c:232
 msgid "Show two lines of information for each transaction"
 msgstr ""
 
-#: src/gnome/window-register.c:1272 src/gnome/window-register.c:1273
+#: src/gnome/window-register.c:1282 src/gnome/window-register.c:1283
 msgid "Sort by Date"
 msgstr "Сортировать по дате"
 
-#: src/gnome/window-register.c:1275
+#: src/gnome/window-register.c:1285
 msgid "Sort by date of entry"
 msgstr "Сортировать по дате ввода"
 
-#: src/gnome/window-register.c:1276
+#: src/gnome/window-register.c:1286
 msgid "Sort by the date of entry"
 msgstr "Сортировать по дате ввода"
 
-#: src/gnome/window-register.c:1279
+#: src/gnome/window-register.c:1289
 msgid "Sort by statement date"
 msgstr ""
 
-#: src/gnome/window-register.c:1280
+#: src/gnome/window-register.c:1290
 msgid "Sort by the statement date (unreconciled items last)"
 msgstr ""
 
-#: src/gnome/window-register.c:1290 src/gnome/window-register.c:1291
+#: src/gnome/window-register.c:1300 src/gnome/window-register.c:1301
 msgid "Sort by Memo"
 msgstr "Сортировать по памятке"
 
-#: src/gnome/window-register.c:1309
+#: src/gnome/window-register.c:1319
 msgid "Show _All"
 msgstr "Показать все"
 
-#: src/gnome/window-register.c:1310
+#: src/gnome/window-register.c:1320
 msgid "Show all of the transactions in the account"
 msgstr "Показать все транзакции счета"
 
-#: src/gnome/window-register.c:1317
+#: src/gnome/window-register.c:1327
 msgid "Set _Range..."
 msgstr "Установить диапазон..."
 
-#: src/gnome/window-register.c:1318
+#: src/gnome/window-register.c:1328
 msgid "Set the date range of this register"
 msgstr ""
 
-#: src/gnome/window-register.c:1328
+#: src/gnome/window-register.c:1338
 msgid "_Style"
 msgstr "Стиль"
 
-#: src/gnome/window-register.c:1330
+#: src/gnome/window-register.c:1340
 msgid "_Date Range"
 msgstr "Диапазон дат"
 
-#: src/gnome/window-register.c:1360
+#: src/gnome/window-register.c:1378
 msgid "Cut Transaction"
 msgstr "Вырезать транзакцию"
 
-#: src/gnome/window-register.c:1361
+#: src/gnome/window-register.c:1379
 msgid "Cut the selected transaction"
 msgstr "Вырезать выбранную транзакцию"
 
-#: src/gnome/window-register.c:1368
+#: src/gnome/window-register.c:1386
 msgid "Copy Transaction"
 msgstr "Скопировать транзакцию"
 
-#: src/gnome/window-register.c:1369
+#: src/gnome/window-register.c:1387
 msgid "Copy the selected transaction"
 msgstr "Скорировать выбранную транзакцию"
 
-#: src/gnome/window-register.c:1376
+#: src/gnome/window-register.c:1394
 msgid "Paste Transaction"
 msgstr "Вставить транзакцию"
 
-#: src/gnome/window-register.c:1377
+#: src/gnome/window-register.c:1395
 msgid "Paste the transaction clipboard"
 msgstr "Вставить транзакцию из буфера обмена"
 
-#: src/gnome/window-register.c:1399
+#: src/gnome/window-register.c:1417
 msgid "Reconcile the main account for this register"
 msgstr ""
 
-#: src/gnome/window-register.c:1436 src/gnome/window-register.c:1617
-msgid "_Record"
-msgstr "Записать"
+#: src/gnome/window-register.c:1454 src/gnome/window-register.c:1635
+#, fuzzy
+msgid "_Enter"
+msgstr "Запись"
 
-#: src/gnome/window-register.c:1461 src/gnome/window-register.c:1642
+#: src/gnome/window-register.c:1479 src/gnome/window-register.c:1660
 msgid "D_uplicate"
 msgstr "Сдублировать"
 
-#: src/gnome/window-register.c:1470 src/gnome/window-register.c:1651
+#: src/gnome/window-register.c:1488 src/gnome/window-register.c:1669
 #, fuzzy
 msgid "_Split"
 msgstr "Сдублировать"
 
-#: src/gnome/window-register.c:1478 src/gnome/window-register.c:1659
+#: src/gnome/window-register.c:1496 src/gnome/window-register.c:1677
 msgid "_Blank"
 msgstr "Пустое"
 
-#: src/gnome/window-register.c:1487 src/gnome/window-register.c:1668
+#: src/gnome/window-register.c:1505 src/gnome/window-register.c:1686
 msgid "_Jump"
 msgstr "Перейти"
 
-#: src/gnome/window-register.c:1497
+#: src/gnome/window-register.c:1515
 #, fuzzy
 msgid "_Scrub All"
 msgstr "Выбрать все"
 
-#: src/gnome/window-register.c:1498
+#: src/gnome/window-register.c:1516
 #, fuzzy
 msgid ""
 "Identify and fix problems in the transactions displayed in this register"
 msgstr "Идентифицировать и исправить проблемы со счетом и его подсчетами."
 
-#: src/gnome/window-register.c:1506
+#: src/gnome/window-register.c:1524
 msgid "_Scrub Current"
 msgstr ""
 
-#: src/gnome/window-register.c:1507
+#: src/gnome/window-register.c:1525
 #, fuzzy
 msgid "Identify and fix problems in the current transaction"
 msgstr "Идентифицировать и исправить проблемы со счетом"
 
-#: src/gnome/window-register.c:1516
+#: src/gnome/window-register.c:1534
 msgid "_Print Check... (unfinished!)"
 msgstr ""
 
-#: src/gnome/window-register.c:1517
+#: src/gnome/window-register.c:1535
 msgid "Print a check using a standard format"
 msgstr ""
 
-#: src/gnome/window-register.c:1540
+#: src/gnome/window-register.c:1558
 msgid "_Register"
 msgstr ""
 
-#: src/gnome/window-register.c:1799
+#: src/gnome/window-register.c:1846
 msgid "General Ledger"
 msgstr ""
 
-#: src/gnome/window-register.c:1803
+#: src/gnome/window-register.c:1848
+#, fuzzy
+msgid "General Ledger Report"
+msgstr "Общие"
+
+#: src/gnome/window-register.c:1853
 msgid "Portfolio"
 msgstr ""
 
-#: src/gnome/window-register.c:1807
+#: src/gnome/window-register.c:1855
+#, fuzzy
+msgid "Portfolio Report"
+msgstr "Параметры отчета"
+
+#: src/gnome/window-register.c:1860
 msgid "Search Results"
 msgstr "Результаты поиска"
 
-#: src/gnome/window-register.c:1811 src/scm/guile-strings.c:208
-#: src/scm/guile-strings.c:217 src/scm/guile-strings.c:220
-#: src/scm/guile-strings.c:223 src/scm/guile-strings.c:226
-#: src/scm/guile-strings.c:229 src/scm/guile-strings.c:232
-#: src/scm/guile-strings.c:235 src/scm/guile-strings.c:238
-#: src/scm/guile-strings.c:241 src/scm/guile-strings.c:244
-#: src/scm/report/guile-strings.c:269
+#: src/gnome/window-register.c:1862
+#, fuzzy
+msgid "Search Results Report"
+msgstr "Результаты поиска"
+
+#: src/gnome/window-register.c:1867 src/scm/guile-strings.c:221
+#: src/scm/guile-strings.c:230 src/scm/guile-strings.c:233
+#: src/scm/guile-strings.c:236 src/scm/guile-strings.c:239
+#: src/scm/guile-strings.c:242 src/scm/guile-strings.c:245
+#: src/scm/guile-strings.c:248 src/scm/guile-strings.c:251
+#: src/scm/guile-strings.c:254 src/scm/guile-strings.c:257
+#: src/scm/report/guile-strings.c:319
 msgid "Register"
 msgstr ""
 
-#: src/gnome/window-register.c:2283
+#: src/gnome/window-register.c:1869 src/scm/report/guile-strings.c:268
+msgid "Register Report"
+msgstr ""
+
+#: src/gnome/window-register.c:2356
 #, fuzzy
 msgid "<No information>"
 msgstr "Информация о передаче"
 
-#: src/gnome/window-register.c:2697
+#: src/gnome/window-register.c:2758
 msgid ""
 "This selection will delete the whole transaction. This is what you usually "
 "want."
 msgstr "Этот выбор удалит всю транзакцию. Это то чего вы обычно хотите."
 
-#: src/gnome/window-register.c:2699
+#: src/gnome/window-register.c:2760
 msgid ""
 "Warning: Just deleting all the splits will make your account unbalanced. You "
 "probably shouldn't do this unless you're going to immediately add another "
 "split to bring the transaction back into balance."
 msgstr ""
 
-#: src/gnome/window-register.c:2707
+#: src/gnome/window-register.c:2768
 msgid "Delete Transaction"
 msgstr "Удалить транзакцию"
 
-#: src/gnome/window-register.c:2729
+#: src/gnome/window-register.c:2790
 msgid "Delete the whole transaction"
 msgstr "Удалить всю транзакцию"
 
-#: src/gnome/window-register.c:2739
+#: src/gnome/window-register.c:2800
 msgid "Delete all the splits"
 msgstr ""
 
-#: src/gnome/window-register.c:2824
+#: src/gnome/window-register.c:2885
 #, c-format
 msgid ""
 "Are you sure you want to delete\n"
@@ -3403,34 +3595,44 @@ msgstr ""
 "из транзакции\n"
 "   %s ?"
 
-#: src/gnome/window-report.c:439
+#: src/gnome/window-report.c:432
 #, fuzzy
 msgid "Reload the current report"
 msgstr "Записать текущую транзакцию"
 
-#: src/gnome/window-report.c:457
+#: src/gnome/window-report.c:450
 msgid "Export"
 msgstr "Экспортировать"
 
-#: src/gnome/window-report.c:458
+#: src/gnome/window-report.c:451
 msgid "Export HTML-formatted report to file"
 msgstr "Вывод отчета в файл в формате HTML"
 
-#: src/gnome/window-report.c:466
+#: src/gnome/window-report.c:459
 msgid "Parameters"
 msgstr "Параметры"
 
-#: src/gnome/window-report.c:467
+#: src/gnome/window-report.c:460
 #, fuzzy
 msgid "Edit report options"
 msgstr "Параметры отчета"
 
-#: src/gnome/window-report.c:476
+#: src/gnome/window-report.c:469
 #, fuzzy
 msgid "Print report window"
 msgstr "Главное окно"
 
-#: src/gnome/window-report.c:486
+#: src/gnome/window-report.c:478
+#, fuzzy
+msgid "New window"
+msgstr "окно1"
+
+#: src/gnome/window-report.c:479
+#, fuzzy
+msgid "Open this report in a new window"
+msgstr "Закрыть это HTML-окно"
+
+#: src/gnome/window-report.c:488
 #, fuzzy
 msgid "Close this report window"
 msgstr "Закрыть это HTML-окно"
@@ -3506,7 +3708,7 @@ msgid "sample:Notes field sample text string"
 msgstr ""
 
 #. broken ! FIXME bg
-#: src/register/splitreg.c:162 src/scm/guile-strings.c:142
+#: src/register/splitreg.c:162 src/scm/guile-strings.c:155
 msgid "Deposit"
 msgstr "Депозит"
 
@@ -3561,8 +3763,8 @@ msgstr ""
 #: src/register/splitreg.c:188 src/register/splitreg.c:196
 #: src/register/splitreg.c:204 src/register/splitreg.c:211
 #: src/register/splitreg.c:216 src/register/splitreg.c:223
-#: src/register/splitreg.c:238 src/scm/guile-strings.c:147
-#: src/scm/guile-strings.c:148 src/scm/guile-strings.c:149
+#: src/register/splitreg.c:238 src/scm/guile-strings.c:160
+#: src/scm/guile-strings.c:161 src/scm/guile-strings.c:162
 msgid "Buy"
 msgstr ""
 
@@ -3570,8 +3772,8 @@ msgstr ""
 #: src/register/splitreg.c:193 src/register/splitreg.c:197
 #: src/register/splitreg.c:205 src/register/splitreg.c:212
 #: src/register/splitreg.c:217 src/register/splitreg.c:224
-#: src/register/splitreg.c:239 src/scm/guile-strings.c:159
-#: src/scm/guile-strings.c:160 src/scm/guile-strings.c:161
+#: src/register/splitreg.c:239 src/scm/guile-strings.c:172
+#: src/scm/guile-strings.c:173 src/scm/guile-strings.c:174
 msgid "Sell"
 msgstr ""
 
@@ -3585,11 +3787,11 @@ msgid "Loan"
 msgstr ""
 
 #: src/register/splitreg.c:200 src/register/splitreg.c:207
-#: src/scm/guile-strings.c:144
+#: src/scm/guile-strings.c:157
 msgid "Payment"
 msgstr ""
 
-#: src/register/splitreg.c:208 src/scm/guile-strings.c:163
+#: src/register/splitreg.c:208 src/scm/guile-strings.c:176
 msgid "Rebate"
 msgstr "Рибейт"
 
@@ -3611,55 +3813,55 @@ msgstr ""
 msgid "Dist"
 msgstr ""
 
-#: src/register/splitreg.c:719
+#: src/register/splitreg.c:717
 msgid "Enter the transaction number, such as the check number"
 msgstr ""
 
-#: src/register/splitreg.c:724
+#: src/register/splitreg.c:722
 msgid "Enter the account to transfer from, or choose one from the list"
 msgstr ""
 
-#: src/register/splitreg.c:731
+#: src/register/splitreg.c:729
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
 
-#: src/register/splitreg.c:735
+#: src/register/splitreg.c:733 src/scm/report/guile-strings.c:253
 #, fuzzy
 msgid "-- Split Transaction --"
 msgstr "Вырезать транзакцию"
 
-#: src/register/splitreg.c:739
+#: src/register/splitreg.c:737
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
 msgstr ""
 
-#: src/register/splitreg.c:743
+#: src/register/splitreg.c:741
 msgid "-- Stock Split --"
 msgstr ""
 
-#: src/register/splitreg.c:748
+#: src/register/splitreg.c:746
 msgid "Enter a description of the split"
 msgstr ""
 
-#: src/register/splitreg.c:752
+#: src/register/splitreg.c:750
 msgid "Enter a description of the transaction"
 msgstr "Введите описание транзакции"
 
-#: src/register/splitreg.c:756
+#: src/register/splitreg.c:754
 #, fuzzy
 msgid "Enter notes for the transaction"
 msgstr "Введите описание транзакции"
 
-#: src/register/splitreg.c:779
+#: src/register/splitreg.c:777
 msgid "Enter the type of transaction, or choose one from the list"
 msgstr "Введите тип транзакции или выберите один из списка"
 
-#: src/register/splitreg.c:792
+#: src/register/splitreg.c:790
 msgid "Enter the share price"
 msgstr ""
 
-#: src/register/splitreg.c:794
+#: src/register/splitreg.c:792
 msgid "Enter the number of shares bought or sold"
 msgstr ""
 
@@ -3727,360 +3929,366 @@ msgid "Load the system configuation"
 msgstr ""
 
 #: src/scm/guile-strings.c:16
-msgid "Current Year Start"
+msgid "Run the RPC Server"
 msgstr ""
 
 #: src/scm/guile-strings.c:17
-msgid "Start of the current calendar year"
+msgid "Current Year Start"
 msgstr ""
 
 #: src/scm/guile-strings.c:18
+msgid "Start of the current calendar year"
+msgstr ""
+
+#: src/scm/guile-strings.c:19
 #, fuzzy
 msgid "Previous Year Start"
 msgstr "Предыдущий баланс"
 
-#: src/scm/guile-strings.c:19
+#: src/scm/guile-strings.c:20
 msgid "Beginning of the previous calendar year"
 msgstr ""
 
-#: src/scm/guile-strings.c:20
+#: src/scm/guile-strings.c:21
 #, fuzzy
 msgid "Previous Year End"
 msgstr "Предыдущий баланс"
 
-#: src/scm/guile-strings.c:21
+#: src/scm/guile-strings.c:22
 msgid "End of the Previous Year"
 msgstr ""
 
-#: src/scm/guile-strings.c:22
+#: src/scm/guile-strings.c:23
 msgid "Current Financial Year Start"
 msgstr ""
 
-#: src/scm/guile-strings.c:23
+#: src/scm/guile-strings.c:24
 msgid "Start of the current financial year/accounting period"
 msgstr ""
 
-#: src/scm/guile-strings.c:24
+#: src/scm/guile-strings.c:25
 msgid "Previous Financial Year Start"
 msgstr ""
 
-#: src/scm/guile-strings.c:25
+#: src/scm/guile-strings.c:26
 msgid "The start of the previous financial year/accounting period"
 msgstr ""
 
-#: src/scm/guile-strings.c:26
+#: src/scm/guile-strings.c:27
 #, fuzzy
 msgid "End Previous Financial Year"
 msgstr "Предыдущий баланс"
 
-#: src/scm/guile-strings.c:27
+#: src/scm/guile-strings.c:28
 msgid "End of the previous Financial year/Accounting Period"
 msgstr ""
 
-#: src/scm/guile-strings.c:28
+#: src/scm/guile-strings.c:29
 msgid "Start of this month"
 msgstr ""
 
-#: src/scm/guile-strings.c:29
+#: src/scm/guile-strings.c:30
 msgid "Start of the current month"
 msgstr ""
 
-#: src/scm/guile-strings.c:30
+#: src/scm/guile-strings.c:31
 msgid "Start of previous month"
 msgstr ""
 
-#: src/scm/guile-strings.c:31
+#: src/scm/guile-strings.c:32
 msgid "The beginning of the previous month"
 msgstr ""
 
-#: src/scm/guile-strings.c:32
+#: src/scm/guile-strings.c:33
 msgid "End of previous month"
 msgstr ""
 
-#: src/scm/guile-strings.c:33
+#: src/scm/guile-strings.c:34
 msgid "Last day of previous month"
 msgstr ""
 
-#: src/scm/guile-strings.c:34
+#: src/scm/guile-strings.c:35
 #, fuzzy
 msgid "Start of current quarter"
 msgstr "Начало отчетного периода"
 
-#: src/scm/guile-strings.c:35
+#: src/scm/guile-strings.c:36
 msgid "The start of the latest quarterly accounting period"
 msgstr ""
 
-#: src/scm/guile-strings.c:36
+#: src/scm/guile-strings.c:37
 #, fuzzy
 msgid "Start of previous quarter"
 msgstr "Начало отчетного периода"
 
-#: src/scm/guile-strings.c:37
+#: src/scm/guile-strings.c:38
 msgid "The start of the previous quarterly accounting period"
 msgstr ""
 
-#: src/scm/guile-strings.c:38
+#: src/scm/guile-strings.c:39
 #, fuzzy
 msgid "End of previous quarter"
 msgstr "Конец отчетного периода"
 
-#: src/scm/guile-strings.c:39
+#: src/scm/guile-strings.c:40
 #, fuzzy
 msgid "End of previous quarterly accounting period"
 msgstr "Конец отчетного периода"
 
-#: src/scm/guile-strings.c:41
+#: src/scm/guile-strings.c:42
 #, fuzzy
 msgid "The current date"
 msgstr "Текущее время %s"
 
-#: src/scm/guile-strings.c:42 src/scm/guile-strings.c:43
+#: src/scm/guile-strings.c:43 src/scm/guile-strings.c:44
 msgid "One Month Ago"
 msgstr ""
 
-#: src/scm/guile-strings.c:44 src/scm/guile-strings.c:45
+#: src/scm/guile-strings.c:45 src/scm/guile-strings.c:46
 msgid "One Week Ago"
 msgstr ""
 
-#: src/scm/guile-strings.c:46 src/scm/guile-strings.c:47
+#: src/scm/guile-strings.c:47 src/scm/guile-strings.c:48
 msgid "Three Months Ago"
 msgstr ""
 
-#: src/scm/guile-strings.c:48 src/scm/guile-strings.c:49
+#: src/scm/guile-strings.c:49 src/scm/guile-strings.c:50
 #, fuzzy
 msgid "Six Months Ago"
 msgstr "Месяцы"
 
-#: src/scm/guile-strings.c:50 src/scm/guile-strings.c:51
+#: src/scm/guile-strings.c:51 src/scm/guile-strings.c:52
 msgid "One Year Ago"
 msgstr ""
 
-#: src/scm/guile-strings.c:52
+#: src/scm/guile-strings.c:53
 msgid "Export data as text (Danger: Unfinished)"
 msgstr "Экспортировать данные как текст (Внимание: незавершено!)"
 
-#: src/scm/guile-strings.c:53
+#: src/scm/guile-strings.c:54
 msgid "Export data as text."
 msgstr "Экспортировать данные как текст."
 
-#: src/scm/guile-strings.c:54 src/scm/guile-strings.c:55
+#: src/scm/guile-strings.c:55 src/scm/guile-strings.c:56
 msgid "Test progress dialog"
 msgstr ""
 
-#: src/scm/guile-strings.c:56
+#: src/scm/guile-strings.c:57
 #, fuzzy
 msgid "GnuCash Manual"
 msgstr "Открыть руководство GnuCash"
 
-#: src/scm/guile-strings.c:57 src/scm/guile-strings.c:94
+#: src/scm/guile-strings.c:58 src/scm/guile-strings.c:95
 #, fuzzy
 msgid "Overview"
 msgstr "Просмотр"
 
-#: src/scm/guile-strings.c:58
+#: src/scm/guile-strings.c:59
 #, fuzzy
 msgid "Introduction"
 msgstr "Международный"
 
-#: src/scm/guile-strings.c:60
+#: src/scm/guile-strings.c:61
 #, fuzzy
 msgid "Basic Setup"
 msgstr "Настройка печати"
 
-#: src/scm/guile-strings.c:61 src/scm/guile-strings.c:165
-#: src/scm/guile-strings.c:168
+#: src/scm/guile-strings.c:62 src/scm/guile-strings.c:178
+#: src/scm/guile-strings.c:181
 msgid "Main Window"
 msgstr "Главное окно"
 
-#: src/scm/guile-strings.c:62
+#: src/scm/guile-strings.c:63
 #, fuzzy
 msgid "Double Entry"
 msgstr "Подзапись"
 
-#: src/scm/guile-strings.c:64
+#: src/scm/guile-strings.c:65
 msgid "Quicken"
 msgstr ""
 
-#: src/scm/guile-strings.c:65
+#: src/scm/guile-strings.c:66
 msgid "MYM"
 msgstr ""
 
-#: src/scm/guile-strings.c:66
+#: src/scm/guile-strings.c:67
 msgid "Preferences"
 msgstr "Настройки"
 
-#: src/scm/guile-strings.c:68 src/scm/guile-strings.c:95
+#: src/scm/guile-strings.c:69 src/scm/guile-strings.c:96
 #, fuzzy
 msgid "Types"
 msgstr "Тип"
 
-#: src/scm/guile-strings.c:69
+#: src/scm/guile-strings.c:70
 #, fuzzy
 msgid "Vs. Categories"
 msgstr "Категории"
 
-#: src/scm/guile-strings.c:70
+#: src/scm/guile-strings.c:71
 msgid "Income/Expense"
 msgstr ""
 
-#: src/scm/guile-strings.c:71
+#: src/scm/guile-strings.c:72
 #, fuzzy
 msgid "New Setup"
 msgstr "Настройка печати"
 
-#: src/scm/guile-strings.c:72
+#: src/scm/guile-strings.c:73
 #, fuzzy
 msgid "Commodity"
 msgstr "Зафиксировать"
 
-#: src/scm/guile-strings.c:73
+#: src/scm/guile-strings.c:74
 msgid "Chart of"
 msgstr ""
 
-#: src/scm/guile-strings.c:74
+#: src/scm/guile-strings.c:75
 #, fuzzy
 msgid "Editing"
 msgstr "Правка"
 
-#: src/scm/guile-strings.c:75
+#: src/scm/guile-strings.c:76
 msgid "Transactions"
 msgstr "Транзакции"
 
-#: src/scm/guile-strings.c:76
+#: src/scm/guile-strings.c:77
 #, fuzzy
 msgid "Registers"
 msgstr "Сантиметры"
 
-#: src/scm/guile-strings.c:77
+#: src/scm/guile-strings.c:78
 msgid "Shortcuts"
 msgstr ""
 
-#: src/scm/guile-strings.c:78
+#: src/scm/guile-strings.c:79
 #, fuzzy
 msgid "Date Input"
 msgstr "Диапазон дат"
 
-#: src/scm/guile-strings.c:79
+#: src/scm/guile-strings.c:80
 msgid "Keyboard"
 msgstr ""
 
-#: src/scm/guile-strings.c:80
+#: src/scm/guile-strings.c:81
 #, fuzzy
 msgid "Reconciliation"
 msgstr "Открыть баланс"
 
-#: src/scm/guile-strings.c:81
+#: src/scm/guile-strings.c:82
 msgid "Adjust Balance"
 msgstr "Сведение баланса"
 
-#: src/scm/guile-strings.c:83
+#: src/scm/guile-strings.c:84
 #, fuzzy
 msgid "Record Keeping"
 msgstr "Записать"
 
-#: src/scm/guile-strings.c:84
+#: src/scm/guile-strings.c:85
 msgid "Check Printing"
 msgstr ""
 
-#: src/scm/guile-strings.c:85
+#: src/scm/guile-strings.c:86
 msgid "Capital Gains"
 msgstr ""
 
-#: src/scm/guile-strings.c:86
+#: src/scm/guile-strings.c:87
 msgid "Stock Ticker"
 msgstr ""
 
-#: src/scm/guile-strings.c:87 src/scm/guile-strings.c:92
+#: src/scm/guile-strings.c:88 src/scm/guile-strings.c:93
 #, fuzzy
 msgid "Depreciation"
 msgstr "Описание"
 
-#: src/scm/guile-strings.c:89
+#: src/scm/guile-strings.c:90
 #, fuzzy
 msgid "Euro"
 msgstr "Европа"
 
-#: src/scm/guile-strings.c:90
+#: src/scm/guile-strings.c:91
 msgid "Business"
 msgstr ""
 
-#: src/scm/guile-strings.c:91
+#: src/scm/guile-strings.c:92
 msgid "Payables/Receivables"
 msgstr ""
 
-#: src/scm/guile-strings.c:93
+#: src/scm/guile-strings.c:94
 msgid "Reports"
 msgstr "Отчеты"
 
-#: src/scm/guile-strings.c:96
+#: src/scm/guile-strings.c:97
 #, fuzzy
 msgid "Balance Sheet"
 msgstr "Баланс"
 
-#: src/scm/guile-strings.c:97
+#: src/scm/guile-strings.c:98
 #, fuzzy
 msgid "Profit & Loss"
 msgstr "Пункты"
 
-#: src/scm/guile-strings.c:98
+#: src/scm/guile-strings.c:99
 msgid "Transaction"
 msgstr "Транзакция"
 
-#: src/scm/guile-strings.c:99
+#: src/scm/guile-strings.c:100
 msgid "Stock Portfolio"
 msgstr ""
 
-#: src/scm/guile-strings.c:100
+#: src/scm/guile-strings.c:101
 #, fuzzy
 msgid "Balance Tracking"
 msgstr "Пересчитать транзакцию"
 
-#: src/scm/guile-strings.c:101
+#: src/scm/guile-strings.c:102
 #, fuzzy
 msgid "Tax Report"
 msgstr "Отчет"
 
-#: src/scm/guile-strings.c:102
+#: src/scm/guile-strings.c:103
 #, fuzzy
 msgid "TXF Export"
 msgstr "Экспортировать"
 
-#: src/scm/guile-strings.c:103
+#: src/scm/guile-strings.c:104
 msgid "TXF Anomalies"
 msgstr ""
 
-#: src/scm/guile-strings.c:104
+#: src/scm/guile-strings.c:105
 #, fuzzy
 msgid "Account Chart"
 msgstr "Разделитель счета"
 
-#: src/scm/guile-strings.c:105
+#: src/scm/guile-strings.c:106
 #, fuzzy
 msgid "Printing"
 msgstr "Печать"
 
-#: src/scm/guile-strings.c:106
+#: src/scm/guile-strings.c:107
 msgid "More on GnuCash"
 msgstr ""
 
-#: src/scm/guile-strings.c:107
+#: src/scm/guile-strings.c:108
 msgid "Hacking Documentation"
 msgstr ""
 
-#: src/scm/guile-strings.c:108
+#: src/scm/guile-strings.c:109
 msgid "GNU GPL"
 msgstr ""
 
-#: src/scm/guile-strings.c:109
-msgid "Guppi Demos"
-msgstr ""
-
 #: src/scm/guile-strings.c:110
-msgid "Pie chart"
-msgstr ""
+#, fuzzy
+msgid "Support"
+msgstr "Импортировать"
 
 #: src/scm/guile-strings.c:111
-msgid "Bar graph"
+#, fuzzy
+msgid "Register GnuCash"
+msgstr "Сантиметры"
+
+#: src/scm/guile-strings.c:112
+msgid "GnuCash Network Home"
 msgstr ""
 
 #: src/scm/guile-strings.c:113
@@ -4099,8 +4307,7 @@ msgstr ""
 msgid "slashdot.org"
 msgstr ""
 
-#: src/scm/guile-strings.c:117 src/scm/guile-strings.c:346
-#: src/scm/report/guile-strings.c:419
+#: src/scm/guile-strings.c:117 src/scm/guile-strings.c:362
 #, fuzzy
 msgid "Default"
 msgstr "Выбрать исходное"
@@ -4118,648 +4325,700 @@ msgstr ""
 msgid "Select a date to report on"
 msgstr ""
 
-#: src/scm/guile-strings.c:123 src/scm/report/guile-strings.c:361
+#: src/scm/guile-strings.c:123 src/scm/report/guile-strings.c:411
 msgid "Start of reporting period"
 msgstr "Начало отчетного периода"
 
-#: src/scm/guile-strings.c:124 src/scm/report/guile-strings.c:363
+#: src/scm/guile-strings.c:124 src/scm/report/guile-strings.c:413
 msgid "End of reporting period"
 msgstr "Конец отчетного периода"
 
 #: src/scm/guile-strings.c:125
-msgid "Show accounts to this depth, overriding any other option."
+msgid "The amount of time between data points"
 msgstr ""
 
-#: src/scm/guile-strings.c:127
-#, fuzzy
-msgid "Show all accounts"
-msgstr "Показать все столбцы"
+#: src/scm/guile-strings.c:126 src/scm/guile-strings.c:127
+msgid "Day"
+msgstr "День"
 
-#: src/scm/guile-strings.c:128
+#: src/scm/guile-strings.c:128 src/scm/guile-strings.c:129
+msgid "Week"
+msgstr "Неделя"
+
+#: src/scm/guile-strings.c:130
+msgid "2Week"
+msgstr "2 недели"
+
+#: src/scm/guile-strings.c:131
+msgid "Two Week"
+msgstr "Две недели"
+
+#: src/scm/guile-strings.c:132 src/scm/guile-strings.c:133
+msgid "Month"
+msgstr "Месяц"
+
+#: src/scm/guile-strings.c:134 src/scm/guile-strings.c:135
+msgid "Year"
+msgstr "Год"
+
+#: src/scm/guile-strings.c:137
+#, fuzzy
+msgid "All accounts"
+msgstr "Все счета"
+
+#: src/scm/guile-strings.c:138
 #, fuzzy
 msgid "Top-level"
 msgstr "Счет верхнего уровня"
 
-#: src/scm/guile-strings.c:129
+#: src/scm/guile-strings.c:139
 msgid "Second-level"
 msgstr ""
 
-#: src/scm/guile-strings.c:130
+#: src/scm/guile-strings.c:140
 msgid "Third-level"
 msgstr ""
 
-#: src/scm/guile-strings.c:131 src/scm/guile-strings.c:132
+#: src/scm/guile-strings.c:141 src/scm/guile-strings.c:142
 msgid "Fourth-level"
 msgstr ""
 
-#: src/scm/guile-strings.c:133
+#: src/scm/guile-strings.c:143
 msgid "Sixth-level"
 msgstr ""
 
-#: src/scm/guile-strings.c:134
+#: src/scm/guile-strings.c:144
+msgid "Show accounts to this depth, overriding any other option."
+msgstr ""
+
+#: src/scm/guile-strings.c:145
 #, fuzzy
 msgid ""
 "Override account-selection and show sub-accounts of all selected accounts?"
 msgstr "Удалить выбранный счет"
 
-#: src/scm/guile-strings.c:135
+#: src/scm/guile-strings.c:146
 #, fuzzy
 msgid "Report on these accounts, if display depth allows."
 msgstr "Сделать отчет о транзакциях для этих счетов"
 
-#: src/scm/guile-strings.c:136
+#: src/scm/guile-strings.c:147
 msgid "Include sub-account balances in printed balance?"
 msgstr ""
 
-#: src/scm/guile-strings.c:137
+#: src/scm/guile-strings.c:148
 msgid "Group the accounts in main categories?"
 msgstr ""
 
-#: src/scm/guile-strings.c:138
+#: src/scm/guile-strings.c:149
+msgid "Select the currency to display the values of this report in."
+msgstr ""
+
+#: src/scm/guile-strings.c:150
 #, fuzzy
 msgid "Display the account's foreign currency amount?"
 msgstr "Показать счет?"
 
-#: src/scm/guile-strings.c:139
-msgid "All other currencies will get converted to this currency."
+#: src/scm/guile-strings.c:151
+msgid "Width of plot in pixels."
 msgstr ""
 
-#: src/scm/guile-strings.c:140
-msgid "GnuCash Configuration Options"
-msgstr ""
-
-#: src/scm/guile-strings.c:141
-msgid "Funds In"
-msgstr ""
-
-#: src/scm/guile-strings.c:143
-msgid "Receive"
-msgstr ""
-
-#: src/scm/guile-strings.c:145
-msgid "Increase"
-msgstr "Увеличить"
-
-#: src/scm/guile-strings.c:150 src/scm/guile-strings.c:156
-msgid "Charge"
+#: src/scm/guile-strings.c:152
+msgid "Height of plot in pixels."
 msgstr ""
 
 #: src/scm/guile-strings.c:153
-msgid "Funds Out"
+msgid "GnuCash Configuration Options"
 msgstr ""
 
 #: src/scm/guile-strings.c:154
-msgid "Withdrawal"
+msgid "Funds In"
 msgstr ""
 
-#: src/scm/guile-strings.c:155
-msgid "Spend"
+#: src/scm/guile-strings.c:156
+msgid "Receive"
 msgstr ""
 
-#: src/scm/guile-strings.c:157
+#: src/scm/guile-strings.c:158 src/scm/guile-strings.c:171
+#: src/scm/guile-strings.c:177
+msgid "Increase"
+msgstr "Увеличить"
+
+#: src/scm/guile-strings.c:159 src/scm/guile-strings.c:165
+#: src/scm/guile-strings.c:170
 msgid "Decrease"
 msgstr "Уменьшить"
 
+#: src/scm/guile-strings.c:163 src/scm/guile-strings.c:169
+msgid "Charge"
+msgstr ""
+
 #: src/scm/guile-strings.c:166
-msgid "Double click expands parent accounts"
+msgid "Funds Out"
 msgstr ""
 
 #: src/scm/guile-strings.c:167
+msgid "Withdrawal"
+msgstr ""
+
+#: src/scm/guile-strings.c:168
+msgid "Spend"
+msgstr ""
+
+#: src/scm/guile-strings.c:179
+msgid "Double click expands parent accounts"
+msgstr ""
+
+#: src/scm/guile-strings.c:180
 msgid ""
 "Double clicking on an account with children expands the account instead of "
 "opening a register."
 msgstr ""
 
-#: src/scm/guile-strings.c:169
+#: src/scm/guile-strings.c:182
 msgid "Account types to display"
 msgstr "Типы счетов для отображения"
 
-#: src/scm/guile-strings.c:182
+#: src/scm/guile-strings.c:195
 msgid "Code"
 msgstr "Код"
 
-#: src/scm/guile-strings.c:189
+#: src/scm/guile-strings.c:202
 msgid "US"
 msgstr ""
 
-#: src/scm/guile-strings.c:190
+#: src/scm/guile-strings.c:203
 msgid "US-style: mm/dd/yyyy"
 msgstr "Американский стиль: мм/дд/гггг"
 
-#: src/scm/guile-strings.c:191
+#: src/scm/guile-strings.c:204
 msgid "UK"
 msgstr ""
 
-#: src/scm/guile-strings.c:192
+#: src/scm/guile-strings.c:205
 msgid "UK-style dd/mm/yyyy"
 msgstr "Европейский стиль дд/мм/гггг"
 
-#: src/scm/guile-strings.c:193
+#: src/scm/guile-strings.c:206
 msgid "Europe"
 msgstr "Европа"
 
-#: src/scm/guile-strings.c:194
+#: src/scm/guile-strings.c:207
 msgid "Continental Europe: dd.mm.yyyy"
 msgstr "Континентальная Европа: дд.мм.гггг"
 
-#: src/scm/guile-strings.c:195
+#: src/scm/guile-strings.c:208
 msgid "ISO"
 msgstr "ISO"
 
-#: src/scm/guile-strings.c:196
+#: src/scm/guile-strings.c:209
 msgid "ISO Standard: yyyy-mm-dd"
 msgstr "Стандарт ISO: гггг-мм-дд"
 
-#: src/scm/guile-strings.c:197
+#: src/scm/guile-strings.c:210
 #, fuzzy
 msgid "Locale"
 msgstr "Загрузить файл"
 
-#: src/scm/guile-strings.c:198
+#: src/scm/guile-strings.c:211
 msgid "Default system locale format"
 msgstr ""
 
-#: src/scm/guile-strings.c:199 src/scm/guile-strings.c:202
-#: src/scm/guile-strings.c:205
+#: src/scm/guile-strings.c:212 src/scm/guile-strings.c:215
+#: src/scm/guile-strings.c:218
 msgid "International"
 msgstr "Международный"
 
-#: src/scm/guile-strings.c:200
+#: src/scm/guile-strings.c:213
 msgid "Default Currency"
 msgstr "Валюта по умолчанию"
 
-#: src/scm/guile-strings.c:201
+#: src/scm/guile-strings.c:214
 #, fuzzy
 msgid "Default currency for new accounts"
 msgstr "Исходная валюта для новых счетов"
 
-#: src/scm/guile-strings.c:203
+#: src/scm/guile-strings.c:216
 msgid "Use 24-hour time format"
 msgstr "Использовать 24-часовой формат времени"
 
-#: src/scm/guile-strings.c:204
+#: src/scm/guile-strings.c:217
 msgid "Use a 24 hour (instead of a 12 hour) time format."
 msgstr "Использовать 24-х часовой формат времени."
 
-#: src/scm/guile-strings.c:206
+#: src/scm/guile-strings.c:219
 msgid "Enable EURO support"
 msgstr "Включить поддержку Евро"
 
-#: src/scm/guile-strings.c:207
+#: src/scm/guile-strings.c:220
 msgid "Enables support for the European Union EURO currency"
 msgstr ""
 
-#: src/scm/guile-strings.c:209
+#: src/scm/guile-strings.c:222
 msgid "Default Register Style"
 msgstr ""
 
-#: src/scm/guile-strings.c:210
+#: src/scm/guile-strings.c:223
 #, fuzzy
 msgid "Default style for register windows"
 msgstr "Цвет фона заголовка"
 
-#: src/scm/guile-strings.c:211
+#: src/scm/guile-strings.c:224
 #, fuzzy
 msgid "Ledger"
 msgstr "Заголовки"
 
-#: src/scm/guile-strings.c:213
+#: src/scm/guile-strings.c:226
 msgid "Auto Ledger"
 msgstr ""
 
-#: src/scm/guile-strings.c:215
+#: src/scm/guile-strings.c:228
 #, fuzzy
 msgid "Journal"
 msgstr "Нормальный"
 
-#: src/scm/guile-strings.c:218
+#: src/scm/guile-strings.c:231
 #, fuzzy
 msgid "Double Line Mode"
 msgstr "Двойная строка"
 
-#: src/scm/guile-strings.c:221
+#: src/scm/guile-strings.c:234
 msgid "Auto-Raise Lists"
 msgstr ""
 
-#: src/scm/guile-strings.c:222
+#: src/scm/guile-strings.c:235
 msgid "Automatically raise the list of accounts or actions during input."
 msgstr ""
 
-#: src/scm/guile-strings.c:224
+#: src/scm/guile-strings.c:237
 msgid "Show All Transactions"
 msgstr "Показать все транзакции"
 
-#: src/scm/guile-strings.c:225
+#: src/scm/guile-strings.c:238
 msgid "By default, show every transaction in an account."
 msgstr "По умолчанию показывать каждую транзакцию счета."
 
-#: src/scm/guile-strings.c:227
+#: src/scm/guile-strings.c:240
 msgid "Number of Rows"
 msgstr "Число строк"
 
-#: src/scm/guile-strings.c:228
+#: src/scm/guile-strings.c:241
 msgid "Default number of register rows to display."
 msgstr ""
 
-#: src/scm/guile-strings.c:230
+#: src/scm/guile-strings.c:243
 msgid "Show Vertical Borders"
 msgstr "Показать вертикальные рамки"
 
-#: src/scm/guile-strings.c:231
+#: src/scm/guile-strings.c:244
 msgid "By default, show vertical borders on the cells."
 msgstr "По умолчанию, показывать вертикальные рамки ячеек."
 
-#: src/scm/guile-strings.c:233
+#: src/scm/guile-strings.c:246
 msgid "Show Horizontal Borders"
 msgstr "Показать горизонтальные рамки"
 
-#: src/scm/guile-strings.c:234
+#: src/scm/guile-strings.c:247
 msgid "By default, show horizontal borders on the cells."
 msgstr "По умолчанию, показывать горизонтальные рамки ячеек."
 
-#: src/scm/guile-strings.c:236
+#: src/scm/guile-strings.c:249
 #, fuzzy
 msgid "'Enter' moves to blank transaction"
 msgstr "Введите описание транзакции"
 
-#: src/scm/guile-strings.c:237
+#: src/scm/guile-strings.c:250
 msgid ""
 "If selected, move to the blank transaction after the user presses 'Enter'. "
 "Otherwise, move down one row."
 msgstr ""
 
-#: src/scm/guile-strings.c:239
+#: src/scm/guile-strings.c:252
 msgid "Confirm before changing reconciled"
 msgstr ""
 
-#: src/scm/guile-strings.c:240
+#: src/scm/guile-strings.c:253
 msgid ""
 "If selected, use a dialog to confirm a change to a reconciled transaction."
 msgstr ""
 
-#: src/scm/guile-strings.c:242
+#: src/scm/guile-strings.c:255
 msgid "Register font"
 msgstr ""
 
-#: src/scm/guile-strings.c:243
+#: src/scm/guile-strings.c:256
 #, fuzzy
 msgid "The font to use in the register"
 msgstr "Перейти на один шаг вперед в истории"
 
-#: src/scm/guile-strings.c:245
+#: src/scm/guile-strings.c:258
 msgid "Register hint font"
 msgstr ""
 
-#: src/scm/guile-strings.c:246
+#: src/scm/guile-strings.c:259
 msgid "The font used to show hints in the register"
 msgstr ""
 
-#: src/scm/guile-strings.c:247 src/scm/guile-strings.c:250
-#: src/scm/guile-strings.c:253 src/scm/guile-strings.c:256
-#: src/scm/guile-strings.c:259 src/scm/guile-strings.c:262
-#: src/scm/guile-strings.c:265 src/scm/guile-strings.c:268
+#: src/scm/guile-strings.c:260 src/scm/guile-strings.c:263
+#: src/scm/guile-strings.c:266 src/scm/guile-strings.c:269
+#: src/scm/guile-strings.c:272 src/scm/guile-strings.c:275
+#: src/scm/guile-strings.c:278 src/scm/guile-strings.c:281
 msgid "Register Colors"
 msgstr ""
 
-#: src/scm/guile-strings.c:248
+#: src/scm/guile-strings.c:261
 #, fuzzy
 msgid "Header color"
 msgstr "Заголовки"
 
-#: src/scm/guile-strings.c:249
+#: src/scm/guile-strings.c:262
 msgid "The header background color"
 msgstr "Цвет фона заголовка"
 
-#: src/scm/guile-strings.c:251
+#: src/scm/guile-strings.c:264
 #, fuzzy
 msgid "Primary color"
 msgstr "Первичный ключ"
 
-#: src/scm/guile-strings.c:252
+#: src/scm/guile-strings.c:265
 #, fuzzy
 msgid "The default background color for register rows"
 msgstr "Цвет фона заголовка"
 
-#: src/scm/guile-strings.c:254
+#: src/scm/guile-strings.c:267
 #, fuzzy
 msgid "Secondary color"
 msgstr "Вторичный ключ"
 
-#: src/scm/guile-strings.c:255
+#: src/scm/guile-strings.c:268
 #, fuzzy
 msgid "The default secondary background color for register rows"
 msgstr "Цвет фона заголовка"
 
-#: src/scm/guile-strings.c:257
+#: src/scm/guile-strings.c:270
 msgid "Primary active color"
 msgstr ""
 
-#: src/scm/guile-strings.c:258
+#: src/scm/guile-strings.c:271
 msgid "The background color for the current register row"
 msgstr ""
 
-#: src/scm/guile-strings.c:260
+#: src/scm/guile-strings.c:273
 #, fuzzy
 msgid "Secondary active color"
 msgstr "Вторичный ключ"
 
-#: src/scm/guile-strings.c:261
+#: src/scm/guile-strings.c:274
 msgid "The secondary background color for the current register row"
 msgstr ""
 
-#: src/scm/guile-strings.c:263
+#: src/scm/guile-strings.c:276
 msgid "Split color"
 msgstr ""
 
-#: src/scm/guile-strings.c:264
+#: src/scm/guile-strings.c:277
 #, fuzzy
 msgid "The default background color for split rows in the register"
 msgstr "Перейти на один шаг вперед в истории"
 
-#: src/scm/guile-strings.c:266
+#: src/scm/guile-strings.c:279
 msgid "Split active color"
 msgstr ""
 
-#: src/scm/guile-strings.c:267
+#: src/scm/guile-strings.c:280
 msgid "The background color for the current split row in the register"
 msgstr ""
 
-#: src/scm/guile-strings.c:269
+#: src/scm/guile-strings.c:282
 msgid "Double mode colors alternate with transactions"
 msgstr ""
 
-#: src/scm/guile-strings.c:270
+#: src/scm/guile-strings.c:283
 msgid ""
 "Alternate the primary and secondary colors with each transaction, not each "
 "row"
 msgstr ""
 
-#: src/scm/guile-strings.c:272
+#: src/scm/guile-strings.c:285
 msgid "Automatic credit card payments"
 msgstr ""
 
-#: src/scm/guile-strings.c:273
+#: src/scm/guile-strings.c:286
 msgid ""
 "After reconciling a credit card statement, prompt the user to enter a credit "
 "card payment"
 msgstr ""
 
-#: src/scm/guile-strings.c:274 src/scm/guile-strings.c:283
-#: src/scm/guile-strings.c:296 src/scm/guile-strings.c:305
-#: src/scm/guile-strings.c:308 src/scm/guile-strings.c:311
-#: src/scm/guile-strings.c:314 src/scm/guile-strings.c:317
-#: src/scm/guile-strings.c:343 src/scm/guile-strings.c:348
-#: src/scm/report/guile-strings.c:1 src/scm/report/guile-strings.c:16
-#: src/scm/report/guile-strings.c:19 src/scm/report/guile-strings.c:22
-#: src/scm/report/guile-strings.c:25 src/scm/report/guile-strings.c:28
-#: src/scm/report/guile-strings.c:60 src/scm/report/guile-strings.c:62
-#: src/scm/report/guile-strings.c:64 src/scm/report/guile-strings.c:66
-#: src/scm/report/guile-strings.c:68 src/scm/report/guile-strings.c:84
-#: src/scm/report/guile-strings.c:270 src/scm/report/guile-strings.c:273
-#: src/scm/report/guile-strings.c:276 src/scm/report/guile-strings.c:288
-#: src/scm/report/guile-strings.c:291 src/scm/report/guile-strings.c:294
-#: src/scm/report/guile-strings.c:297 src/scm/report/guile-strings.c:330
-#: src/scm/report/guile-strings.c:332 src/scm/report/guile-strings.c:334
-#: src/scm/report/guile-strings.c:336
+#: src/scm/guile-strings.c:287 src/scm/guile-strings.c:296
+#: src/scm/guile-strings.c:309 src/scm/guile-strings.c:318
+#: src/scm/guile-strings.c:321 src/scm/guile-strings.c:324
+#: src/scm/guile-strings.c:327 src/scm/guile-strings.c:330
+#: src/scm/guile-strings.c:356 src/scm/guile-strings.c:359
+#: src/scm/guile-strings.c:364 src/scm/guile-strings.c:366
+#: src/scm/guile-strings.c:368 src/scm/report/guile-strings.c:1
+#: src/scm/report/guile-strings.c:16 src/scm/report/guile-strings.c:63
+#: src/scm/report/guile-strings.c:164 src/scm/report/guile-strings.c:186
+#: src/scm/report/guile-strings.c:212 src/scm/report/guile-strings.c:228
+#: src/scm/report/guile-strings.c:231 src/scm/report/guile-strings.c:265
+#: src/scm/report/guile-strings.c:321 src/scm/report/guile-strings.c:324
+#: src/scm/report/guile-strings.c:327 src/scm/report/guile-strings.c:330
+#: src/scm/report/guile-strings.c:363 src/scm/report/guile-strings.c:365
+#: src/scm/report/guile-strings.c:367 src/scm/report/guile-strings.c:369
+#: src/scm/report/guile-strings.c:391 src/scm/report/guile-strings.c:394
+#: src/scm/report/guile-strings.c:397 src/scm/report/guile-strings.c:486
+#: src/scm/report/guile-strings.c:489 src/scm/report/guile-strings.c:492
+#: src/scm/report/guile-strings.c:625 src/scm/report/guile-strings.c:629
+#: src/scm/report/guile-strings.c:632
 msgid "General"
 msgstr "Общие"
 
-#: src/scm/guile-strings.c:275
+#: src/scm/guile-strings.c:288
 msgid "Save Window Geometry"
 msgstr "Сохранить геометрию окна"
 
-#: src/scm/guile-strings.c:276
+#: src/scm/guile-strings.c:289
 msgid "Save window sizes and positions."
 msgstr "Сохранить размер и положение окна."
 
-#: src/scm/guile-strings.c:277
+#: src/scm/guile-strings.c:290
 msgid "Icons and Text"
 msgstr "Пиктограммы и текст"
 
-#: src/scm/guile-strings.c:278
+#: src/scm/guile-strings.c:291
 msgid "Show both icons and text"
 msgstr "Показать пиктограммы и текст"
 
-#: src/scm/guile-strings.c:279
+#: src/scm/guile-strings.c:292
 msgid "Icons only"
 msgstr "Только пиктограммы"
 
-#: src/scm/guile-strings.c:280
+#: src/scm/guile-strings.c:293
 msgid "Show icons only"
 msgstr "Показать только пиктограммы"
 
-#: src/scm/guile-strings.c:281
+#: src/scm/guile-strings.c:294
 msgid "Text only"
 msgstr "Только текст"
 
-#: src/scm/guile-strings.c:282
+#: src/scm/guile-strings.c:295
 msgid "Show text only"
 msgstr "Показать только текст"
 
-#: src/scm/guile-strings.c:284
+#: src/scm/guile-strings.c:297
 msgid "Account Separator"
 msgstr "Разделитель счета"
 
-#: src/scm/guile-strings.c:285
+#: src/scm/guile-strings.c:298
 msgid "The character used to separate fully-qualified account names"
 msgstr ""
 
-#: src/scm/guile-strings.c:286
+#: src/scm/guile-strings.c:299
 msgid ": (Colon)"
 msgstr ": (Двоеточие)"
 
-#: src/scm/guile-strings.c:287
+#: src/scm/guile-strings.c:300
 msgid "Income:Salary:Taxable"
 msgstr ""
 
-#: src/scm/guile-strings.c:288
+#: src/scm/guile-strings.c:301
 msgid "/ (Slash)"
 msgstr "/ (косая)"
 
-#: src/scm/guile-strings.c:289
+#: src/scm/guile-strings.c:302
 msgid "Income/Salary/Taxable"
 msgstr ""
 
-#: src/scm/guile-strings.c:290
+#: src/scm/guile-strings.c:303
 msgid "\\ (Backslash)"
 msgstr "\\ (обратная косая)"
 
-#: src/scm/guile-strings.c:291
+#: src/scm/guile-strings.c:304
 msgid "Income\\Salary\\Taxable"
 msgstr ""
 
-#: src/scm/guile-strings.c:292
+#: src/scm/guile-strings.c:305
 msgid "- (Dash)"
 msgstr "- (Дефис)"
 
-#: src/scm/guile-strings.c:293
+#: src/scm/guile-strings.c:306
 msgid "Income-Salary-Taxable"
 msgstr ""
 
-#: src/scm/guile-strings.c:294
+#: src/scm/guile-strings.c:307
 msgid ". (Period)"
 msgstr ". (Точка)"
 
-#: src/scm/guile-strings.c:295
+#: src/scm/guile-strings.c:308
 msgid "Income.Salary.Taxable"
 msgstr ""
 
-#: src/scm/guile-strings.c:297
+#: src/scm/guile-strings.c:310
 msgid "Reversed-balance account types"
 msgstr ""
 
-#: src/scm/guile-strings.c:298
+#: src/scm/guile-strings.c:311
 msgid "The types of accounts for which balances are sign-reversed"
 msgstr ""
 
-#: src/scm/guile-strings.c:299
+#: src/scm/guile-strings.c:312
 msgid "Income & Expense"
 msgstr ""
 
-#: src/scm/guile-strings.c:300
+#: src/scm/guile-strings.c:313
 msgid "Reverse Income and Expense Accounts"
 msgstr ""
 
-#: src/scm/guile-strings.c:301
+#: src/scm/guile-strings.c:314
 msgid "Credit Accounts"
 msgstr ""
 
-#: src/scm/guile-strings.c:302
+#: src/scm/guile-strings.c:315
 msgid "Reverse Credit Card, Liability, Equity, and Income Accounts"
 msgstr ""
 
-#: src/scm/guile-strings.c:304
+#: src/scm/guile-strings.c:317
 msgid "Don't reverse any accounts"
 msgstr ""
 
-#: src/scm/guile-strings.c:306
+#: src/scm/guile-strings.c:319
 msgid "Use accounting labels"
 msgstr ""
 
-#: src/scm/guile-strings.c:307
+#: src/scm/guile-strings.c:320
 msgid "Only use 'debit' and 'credit' instead of informal synonyms"
 msgstr ""
 
-#: src/scm/guile-strings.c:309
+#: src/scm/guile-strings.c:322
 #, fuzzy
 msgid "Display \"Tip of the Day\""
 msgstr "Советы дня"
 
-#: src/scm/guile-strings.c:310
+#: src/scm/guile-strings.c:323
 msgid "Display hints for using GnuCash at startup"
 msgstr ""
 
-#: src/scm/guile-strings.c:312 src/scm/guile-strings.c:313
+#: src/scm/guile-strings.c:325 src/scm/guile-strings.c:326
 #, fuzzy
 msgid "Display negative amounts in red"
 msgstr "Показать количество?"
 
-#: src/scm/guile-strings.c:315
+#: src/scm/guile-strings.c:328
 msgid "Automatic Decimal Point"
 msgstr ""
 
-#: src/scm/guile-strings.c:316
+#: src/scm/guile-strings.c:329
 msgid ""
 "Automatically insert a decimal point into values that are entered without "
 "one."
 msgstr ""
 
-#: src/scm/guile-strings.c:318
+#: src/scm/guile-strings.c:331
 msgid "Auto Decimal Places"
 msgstr ""
 
-#: src/scm/guile-strings.c:319
+#: src/scm/guile-strings.c:332
 msgid "How many automatic decimal places will be filled in."
 msgstr ""
 
-#: src/scm/guile-strings.c:322
+#: src/scm/guile-strings.c:335
 msgid "Show some documentation-only pages in QIF Import druid"
 msgstr ""
 
-#: src/scm/guile-strings.c:323 src/scm/guile-strings.c:326
-#: src/scm/guile-strings.c:329 src/scm/guile-strings.c:332
+#: src/scm/guile-strings.c:336 src/scm/guile-strings.c:339
+#: src/scm/guile-strings.c:342 src/scm/guile-strings.c:345
 #, fuzzy
 msgid "Network"
 msgstr "Новый"
 
-#: src/scm/guile-strings.c:324
+#: src/scm/guile-strings.c:337
 msgid "Allow http network access"
 msgstr ""
 
-#: src/scm/guile-strings.c:325
+#: src/scm/guile-strings.c:338
 msgid "Enable GnuCash's HTTP client support."
 msgstr ""
 
-#: src/scm/guile-strings.c:327
+#: src/scm/guile-strings.c:340
 msgid "Allow https connections using OpenSSL"
 msgstr ""
 
-#: src/scm/guile-strings.c:328
+#: src/scm/guile-strings.c:341
 msgid "Enable secure HTTP connections using OpenSSL"
 msgstr ""
 
-#: src/scm/guile-strings.c:330
+#: src/scm/guile-strings.c:343
 msgid "Enable GnuCash Network"
 msgstr ""
 
-#: src/scm/guile-strings.c:331
+#: src/scm/guile-strings.c:344
 msgid "The GnuCash Network server provides support and other services"
 msgstr ""
 
-#: src/scm/guile-strings.c:333
+#: src/scm/guile-strings.c:346
 msgid "GnuCash Network server"
 msgstr ""
 
-#: src/scm/guile-strings.c:334
+#: src/scm/guile-strings.c:347
 msgid "Host to connect to for user registration and support services"
 msgstr ""
 
-#: src/scm/guile-strings.c:335 src/scm/guile-strings.c:337
+#: src/scm/guile-strings.c:348 src/scm/guile-strings.c:350
 msgid "Unable to get quotes or diagnose the problem.\n"
 msgstr ""
 
-#: src/scm/guile-strings.c:336 src/scm/guile-strings.c:338
+#: src/scm/guile-strings.c:349 src/scm/guile-strings.c:351
 msgid "Sorry."
 msgstr ""
 
-#: src/scm/guile-strings.c:340
+#: src/scm/guile-strings.c:353
 #, fuzzy, c-format
 msgid "Display the %s report"
 msgstr "Показать счет?"
 
-#: src/scm/guile-strings.c:341
+#: src/scm/guile-strings.c:354
 msgid "Style Sheets..."
 msgstr ""
 
-#: src/scm/guile-strings.c:342
+#: src/scm/guile-strings.c:355
 #, fuzzy
 msgid "Edit report style sheets."
 msgstr "Параметры отчета"
 
-#: src/scm/guile-strings.c:344 src/scm/guile-strings.c:349
+#: src/scm/guile-strings.c:357 src/scm/guile-strings.c:365
+#, fuzzy
+msgid "Report name"
+msgstr "Отчет"
+
+#: src/scm/guile-strings.c:358
+#, fuzzy
+msgid "Enter a descriptive name for this report"
+msgstr "Введите описание транзакции"
+
+#: src/scm/guile-strings.c:360 src/scm/guile-strings.c:367
+#: src/scm/guile-strings.c:369
 #, fuzzy
 msgid "Stylesheet"
 msgstr "Стиль"
 
-#: src/scm/guile-strings.c:345
+#: src/scm/guile-strings.c:361
 #, fuzzy
 msgid "Select a stylesheet for the report."
 msgstr "Установить параметры для этого отчета"
 
-#: src/scm/guile-strings.c:347
+#: src/scm/guile-strings.c:363
 #, fuzzy
 msgid " Stylesheet"
 msgstr "Стиль"
 
-#: src/scm/guile-strings.c:350
+#: src/scm/guile-strings.c:370
 msgid "Assets"
 msgstr ""
 
-#: src/scm/guile-strings.c:351
+#: src/scm/guile-strings.c:371
 msgid "Liabilities"
 msgstr ""
 
-#: src/scm/guile-strings.c:354
+#: src/scm/guile-strings.c:374
 msgid ""
 "Warning!! This is a DEVELOPMENT version of GnuCash.\n"
 "It probably has lots of bugs and unstable features!\n"
@@ -4767,13 +5026,13 @@ msgid ""
 "you should use the latest release of GnuCash 1.4."
 msgstr ""
 
-#: src/scm/guile-strings.c:358
+#: src/scm/guile-strings.c:378
 msgid ""
 "The GnuCash online manual has lots of helpful information.\n"
 "You can access the manual under the Help menu."
 msgstr ""
 
-#: src/scm/guile-strings.c:360
+#: src/scm/guile-strings.c:380
 msgid ""
 "You can easily import your existing financial data from Quicken,\n"
 "MS Money or other programs that export QIF (Quicken Interchange\n"
@@ -4781,7 +5040,7 @@ msgid ""
 "bar and follow the instructions provided."
 msgstr ""
 
-#: src/scm/guile-strings.c:364
+#: src/scm/guile-strings.c:384
 msgid ""
 "Create new accounts by clicking the New button in the main window\n"
 "tool bar.  This will bring up a dialog box where you can enter\n"
@@ -4790,14 +5049,14 @@ msgid ""
 "manual."
 msgstr ""
 
-#: src/scm/guile-strings.c:369
+#: src/scm/guile-strings.c:389
 msgid ""
 "Click the right mouse button in the main window to bring up the\n"
 "account menu options. Within each register, clicking the right\n"
 "mouse button brings up the transaction menu options."
 msgstr ""
 
-#: src/scm/guile-strings.c:372
+#: src/scm/guile-strings.c:392
 msgid ""
 "As you enter amounts in the register, you can use the GnuCash\n"
 "calculator to add, subtract, multiply and divide .  Simply type\n"
@@ -4805,7 +5064,7 @@ msgid ""
 "second value and press Enter to record the calculated amount."
 msgstr ""
 
-#: src/scm/guile-strings.c:376
+#: src/scm/guile-strings.c:396
 msgid ""
 "If you are familiar with other financial programs such as Quicken,\n"
 "note that GnuCash uses accounts instead of categories to track\n"
@@ -4813,7 +5072,7 @@ msgid ""
 "accounts, please see the GnuCash online manual."
 msgstr ""
 
-#: src/scm/guile-strings.c:380
+#: src/scm/guile-strings.c:400
 msgid ""
 "Quick-fill makes it easy to enter common transactions.  When you\n"
 "type the first letter(s) of a common transaction description,\n"
@@ -4821,7 +5080,7 @@ msgid ""
 "transaction as it was last entered."
 msgstr ""
 
-#: src/scm/guile-strings.c:384
+#: src/scm/guile-strings.c:404
 msgid ""
 "Type the first letter(s) of an existing account name in the\n"
 "Transfer register column, and GnuCash will complete the name from\n"
@@ -4830,7 +5089,7 @@ msgid ""
 "the subaccount (e.g. A:C for Assets:Cash.)"
 msgstr ""
 
-#: src/scm/guile-strings.c:389
+#: src/scm/guile-strings.c:409
 msgid ""
 "To enter multiple-split transactions such as a paycheck with\n"
 "multiple deductions, click the Split button in the tool bar.\n"
@@ -4838,14 +5097,14 @@ msgid ""
 "from the Register|Style menu option."
 msgstr ""
 
-#: src/scm/guile-strings.c:393
+#: src/scm/guile-strings.c:413
 msgid ""
 "Want to see all your subaccount transactions in one register?\n"
 "From the main menu, highlight the parent account and select\n"
 "Accounts|Open Subaccounts from the menu."
 msgstr ""
 
-#: src/scm/guile-strings.c:396
+#: src/scm/guile-strings.c:416
 msgid ""
 "In the reconcile window, you can press the spacebar\n"
 "to mark transactions as reconciled.\n"
@@ -4853,7 +5112,7 @@ msgid ""
 "deposits and withdrawals."
 msgstr ""
 
-#: src/scm/guile-strings.c:400
+#: src/scm/guile-strings.c:420
 msgid ""
 "When entering check numbers in the register, you can\n"
 "type '+' to enter the next number or '-' to enter the previous\n"
@@ -4861,13 +5120,13 @@ msgid ""
 "dates as well."
 msgstr ""
 
-#: src/scm/guile-strings.c:404
+#: src/scm/guile-strings.c:424
 msgid ""
 "You should back up your files regularly.  Just copy\n"
 "the GnuCash .xac file to a floppy or other backup device."
 msgstr ""
 
-#: src/scm/guile-strings.c:406
+#: src/scm/guile-strings.c:426
 msgid ""
 "To transfer funds between accounts with different currencies,\n"
 "you may need an intermediate currency trading account.\n"
@@ -4919,7 +5178,7 @@ msgstr ""
 msgid "QIF import: Name conflict with another account."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:3 src/scm/report/guile-strings.c:88
+#: src/scm/report/guile-strings.c:3 src/scm/report/guile-strings.c:216
 #, fuzzy
 msgid "Account Display Depth"
 msgstr "Типы счетов для отображения"
@@ -4929,21 +5188,23 @@ msgstr "Типы счетов для отображения"
 msgid "Show Foreign Currencies/Shares of Stock"
 msgstr "Валюта"
 
-#: src/scm/report/guile-strings.c:5 src/scm/report/guile-strings.c:94
+#: src/scm/report/guile-strings.c:5 src/scm/report/guile-strings.c:67
+#: src/scm/report/guile-strings.c:169 src/scm/report/guile-strings.c:191
+#: src/scm/report/guile-strings.c:222
 #, fuzzy
 msgid "Report's currency"
 msgstr "Валюта по умолчанию"
 
-#: src/scm/report/guile-strings.c:7 src/scm/report/guile-strings.c:89
+#: src/scm/report/guile-strings.c:7 src/scm/report/guile-strings.c:217
 msgid "Always show sub-accounts"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:9 src/scm/report/guile-strings.c:91
+#: src/scm/report/guile-strings.c:9 src/scm/report/guile-strings.c:219
 #, fuzzy
 msgid "Group the accounts"
 msgstr "Открыть счет"
 
-#: src/scm/report/guile-strings.c:10 src/scm/report/guile-strings.c:92
+#: src/scm/report/guile-strings.c:10 src/scm/report/guile-strings.c:220
 #, fuzzy
 msgid "Include Sub-Account balances"
 msgstr "Подсчета"
@@ -4953,1327 +5214,1492 @@ msgstr "Подсчета"
 msgid "Account Summary"
 msgstr "Разделитель счета"
 
-#: src/scm/report/guile-strings.c:13 src/scm/report/guile-strings.c:81
-#: src/scm/report/guile-strings.c:98
+#: src/scm/report/guile-strings.c:13 src/scm/report/guile-strings.c:58
+#: src/scm/report/guile-strings.c:225
 msgid "No accounts selected"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:14 src/scm/report/guile-strings.c:82
-#: src/scm/report/guile-strings.c:99
+#: src/scm/report/guile-strings.c:14 src/scm/report/guile-strings.c:59
+#: src/scm/report/guile-strings.c:226
 msgid "This report requires accounts to be selected."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:17 src/scm/report/guile-strings.c:61
-#: src/scm/report/guile-strings.c:85 src/scm/report/guile-strings.c:360
-#: src/scm/report/guile-strings.c:473 src/scm/report/guile-strings.c:597
+#: src/scm/report/guile-strings.c:17 src/scm/report/guile-strings.c:71
+#: src/scm/report/guile-strings.c:170 src/scm/report/guile-strings.c:269
+#: src/scm/report/guile-strings.c:272 src/scm/report/guile-strings.c:275
+#: src/scm/report/guile-strings.c:278 src/scm/report/guile-strings.c:281
+#: src/scm/report/guile-strings.c:284 src/scm/report/guile-strings.c:286
+#: src/scm/report/guile-strings.c:293 src/scm/report/guile-strings.c:296
+#: src/scm/report/guile-strings.c:457 src/scm/report/guile-strings.c:459
+#: src/scm/report/guile-strings.c:461 src/scm/report/guile-strings.c:463
+#: src/scm/report/guile-strings.c:465 src/scm/report/guile-strings.c:467
+#: src/scm/report/guile-strings.c:469 src/scm/report/guile-strings.c:471
+#: src/scm/report/guile-strings.c:473 src/scm/report/guile-strings.c:549
+#: src/scm/report/guile-strings.c:552 src/scm/report/guile-strings.c:555
+#: src/scm/report/guile-strings.c:558 src/scm/report/guile-strings.c:561
+#: src/scm/report/guile-strings.c:564 src/scm/report/guile-strings.c:568
+#: src/scm/report/guile-strings.c:571 src/scm/report/guile-strings.c:573
+#: src/scm/report/guile-strings.c:582 src/scm/report/guile-strings.c:585
+msgid "Display"
+msgstr "Отобразить"
+
+#: src/scm/report/guile-strings.c:18
+#, fuzzy
+msgid "Include Sub-Accounts"
+msgstr "Подсчета"
+
+#: src/scm/report/guile-strings.c:19
+#, fuzzy
+msgid "Report Currency"
+msgstr "Валюта по умолчанию"
+
+#: src/scm/report/guile-strings.c:20 src/scm/report/guile-strings.c:48
+#: src/scm/report/guile-strings.c:64 src/scm/report/guile-strings.c:165
+#: src/scm/report/guile-strings.c:187 src/scm/report/guile-strings.c:213
+#: src/scm/report/guile-strings.c:410 src/scm/report/guile-strings.c:487
+#: src/scm/report/guile-strings.c:605
 msgid "From"
 msgstr "С"
 
-#: src/scm/report/guile-strings.c:18 src/scm/report/guile-strings.c:474
-msgid "Report Items from this date"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:20 src/scm/report/guile-strings.c:63
-#: src/scm/report/guile-strings.c:86 src/scm/report/guile-strings.c:362
-#: src/scm/report/guile-strings.c:476 src/scm/report/guile-strings.c:598
+#: src/scm/report/guile-strings.c:21 src/scm/report/guile-strings.c:49
+#: src/scm/report/guile-strings.c:65 src/scm/report/guile-strings.c:166
+#: src/scm/report/guile-strings.c:188 src/scm/report/guile-strings.c:214
+#: src/scm/report/guile-strings.c:412 src/scm/report/guile-strings.c:488
+#: src/scm/report/guile-strings.c:606
 msgid "To"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:21 src/scm/report/guile-strings.c:477
-msgid "Report items up to and including this date"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:24
+#: src/scm/report/guile-strings.c:23
 msgid "Do transaction report on this account"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:26 src/scm/report/guile-strings.c:65
+#: src/scm/report/guile-strings.c:24 src/scm/report/guile-strings.c:50
+#: src/scm/report/guile-strings.c:66 src/scm/report/guile-strings.c:168
 msgid "Step Size"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:27
-msgid "The amount of time between data points"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:29 src/scm/report/guile-strings.c:69
-msgid "Sub-Accounts"
-msgstr "Подсчета"
-
-#: src/scm/report/guile-strings.c:30
+#: src/scm/report/guile-strings.c:25
 msgid "Include sub-accounts of all selected accounts"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:31 src/scm/report/guile-strings.c:40
-#: src/scm/report/guile-strings.c:43 src/scm/report/guile-strings.c:46
-#: src/scm/report/guile-strings.c:49 src/scm/report/guile-strings.c:70
-#: src/scm/report/guile-strings.c:72 src/scm/report/guile-strings.c:74
-#: src/scm/report/guile-strings.c:77 src/scm/report/guile-strings.c:79
-msgid "Output"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:32 src/scm/report/guile-strings.c:71
-msgid "Plot Type"
-msgstr "Тип графика"
-
-#: src/scm/report/guile-strings.c:33
-msgid "The type of graph to generate"
-msgstr "Тип создаваемого графика"
-
-#: src/scm/report/guile-strings.c:34
-msgid "Average"
-msgstr "Среднее"
-
-#: src/scm/report/guile-strings.c:35 src/scm/report/guile-strings.c:76
-#: src/scm/report/guile-strings.c:83
-msgid "Average Balance"
-msgstr "Средний баланс"
-
-#: src/scm/report/guile-strings.c:36 src/scm/report/guile-strings.c:37
-msgid "Net Gain"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:38
-msgid "Gain/Loss"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:39
-msgid "Gain And Loss"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:41 src/scm/report/guile-strings.c:78
-msgid "Plot Width"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:42
-msgid "Width of plot in pixels."
-msgstr ""
-
-#: src/scm/report/guile-strings.c:44 src/scm/report/guile-strings.c:80
-#, fuzzy
-msgid "Plot Height"
-msgstr "Дебет"
-
-#: src/scm/report/guile-strings.c:45
-msgid "Height of plot in pixels."
-msgstr ""
-
-#: src/scm/report/guile-strings.c:47 src/scm/report/guile-strings.c:73
-#, fuzzy
-msgid "Show plot"
-msgstr "Показать все"
-
-#: src/scm/report/guile-strings.c:48
-msgid "Display a graph of the selected data."
-msgstr ""
-
-#: src/scm/report/guile-strings.c:50 src/scm/report/guile-strings.c:75
+#: src/scm/report/guile-strings.c:26 src/scm/report/guile-strings.c:54
 #, fuzzy
 msgid "Show table"
 msgstr "Показать наиболее ранние"
 
-#: src/scm/report/guile-strings.c:51
+#: src/scm/report/guile-strings.c:27
 msgid "Display a table of the selected data."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:52
+#: src/scm/report/guile-strings.c:28 src/scm/report/guile-strings.c:53
+#, fuzzy
+msgid "Show plot"
+msgstr "Показать все"
+
+#: src/scm/report/guile-strings.c:29
+msgid "Display a graph of the selected data."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:30 src/scm/report/guile-strings.c:52
+msgid "Plot Type"
+msgstr "Тип графика"
+
+#: src/scm/report/guile-strings.c:31
+msgid "The type of graph to generate"
+msgstr "Тип создаваемого графика"
+
+#: src/scm/report/guile-strings.c:32
+msgid "Average"
+msgstr "Среднее"
+
+#: src/scm/report/guile-strings.c:33 src/scm/report/guile-strings.c:55
+#: src/scm/report/guile-strings.c:60
+msgid "Average Balance"
+msgstr "Средний баланс"
+
+#: src/scm/report/guile-strings.c:34 src/scm/report/guile-strings.c:35
+msgid "Net Gain"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:36
+msgid "Gain/Loss"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:37
+msgid "Gain And Loss"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:38 src/scm/report/guile-strings.c:56
+#: src/scm/report/guile-strings.c:75 src/scm/report/guile-strings.c:174
+#: src/scm/report/guile-strings.c:196
+msgid "Plot Width"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:39 src/scm/report/guile-strings.c:57
+#: src/scm/report/guile-strings.c:76 src/scm/report/guile-strings.c:175
+#: src/scm/report/guile-strings.c:197
+#, fuzzy
+msgid "Plot Height"
+msgstr "Дебет"
+
+#: src/scm/report/guile-strings.c:40
 #, fuzzy
 msgid "Period start"
 msgstr "Период:"
 
-#: src/scm/report/guile-strings.c:53
+#: src/scm/report/guile-strings.c:41
 #, fuzzy
 msgid "Period end"
 msgstr "Завершение периода"
 
-#: src/scm/report/guile-strings.c:54
+#: src/scm/report/guile-strings.c:42
 #, fuzzy
 msgid "Avg Bal"
 msgstr "Средний баланс"
 
-#: src/scm/report/guile-strings.c:55
+#: src/scm/report/guile-strings.c:43
 #, fuzzy
 msgid "Max Bal"
 msgstr "Макс."
 
-#: src/scm/report/guile-strings.c:56
+#: src/scm/report/guile-strings.c:44
 #, fuzzy
 msgid "Min Bal"
 msgstr "Мин."
 
-#: src/scm/report/guile-strings.c:57
+#: src/scm/report/guile-strings.c:45
 #, fuzzy
 msgid "Total In"
 msgstr "Всего"
 
-#: src/scm/report/guile-strings.c:58
+#: src/scm/report/guile-strings.c:46
 #, fuzzy
 msgid "Total Out"
 msgstr "Всего"
 
-#: src/scm/report/guile-strings.c:59
+#: src/scm/report/guile-strings.c:47
 #, fuzzy
 msgid "Net Change"
 msgstr "Изменено"
 
-#: src/scm/report/guile-strings.c:93
-#, fuzzy
-msgid "Show Foreign Currencies"
-msgstr "Валюта"
-
-#: src/scm/report/guile-strings.c:95
-#, fuzzy
-msgid "Profit and Loss"
-msgstr "Пункты"
-
-#: src/scm/report/guile-strings.c:96
-msgid "to"
+#: src/scm/report/guile-strings.c:61
+msgid "Income Category Barchart"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:97
-#, fuzzy
-msgid "Profit"
-msgstr "Пункты"
+#: src/scm/report/guile-strings.c:62
+msgid "Expense Category Barchart"
+msgstr ""
 
-#: src/scm/report/guile-strings.c:100
+#: src/scm/report/guile-strings.c:70 src/scm/report/guile-strings.c:190
 #, fuzzy
-msgid "Profit And Loss"
-msgstr "Пункты"
+msgid "Show Accounts until level"
+msgstr "Показать только пиктограммы"
 
-#: src/scm/report/guile-strings.c:101 src/scm/report/guile-strings.c:104
-#: src/scm/report/guile-strings.c:115 src/scm/report/guile-strings.c:119
-#: src/scm/report/guile-strings.c:122 src/scm/report/guile-strings.c:125
-#: src/scm/report/guile-strings.c:128 src/scm/report/guile-strings.c:131
-#: src/scm/report/guile-strings.c:134 src/scm/report/guile-strings.c:137
+#: src/scm/report/guile-strings.c:72 src/scm/report/guile-strings.c:193
+#, fuzzy
+msgid "Show long account names"
+msgstr "Показать все столбцы"
+
+#: src/scm/report/guile-strings.c:73
+msgid "Use Stacked Bars"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:74
+#, fuzzy
+msgid "Maximum Bars"
+msgstr "Макс."
+
+#: src/scm/report/guile-strings.c:77 src/scm/report/guile-strings.c:176
+#: src/scm/report/guile-strings.c:198
+#, fuzzy
+msgid "Select accounts to calculate income on"
+msgstr "Выбрать счет"
+
+#: src/scm/report/guile-strings.c:78 src/scm/report/guile-strings.c:199
+msgid "Show accounts to this depth and not further"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:79 src/scm/report/guile-strings.c:201
+msgid "Show the full account name in legend?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:80
+msgid "Show barchart as stacked barchart?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:81
+msgid "Maximum number of bars in the chart"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:82
+#, fuzzy
+msgid "Income Categories"
+msgstr "Категории"
+
+#: src/scm/report/guile-strings.c:83
+#, fuzzy
+msgid "Expense Categories"
+msgstr "Категории"
+
+#: src/scm/report/guile-strings.c:84 src/scm/report/guile-strings.c:181
+#: src/scm/report/guile-strings.c:209
+#, c-format
+msgid "%s to %s"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:85 src/scm/report/guile-strings.c:204
+msgid "Other"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:86 src/scm/report/guile-strings.c:89
+#: src/scm/report/guile-strings.c:100 src/scm/report/guile-strings.c:104
+#: src/scm/report/guile-strings.c:107 src/scm/report/guile-strings.c:110
+#: src/scm/report/guile-strings.c:113 src/scm/report/guile-strings.c:116
+#: src/scm/report/guile-strings.c:119 src/scm/report/guile-strings.c:122
 msgid "Hello, World!"
 msgstr "Здравствуй, Мир!"
 
-#: src/scm/report/guile-strings.c:102
+#: src/scm/report/guile-strings.c:87
 msgid "Boolean Option"
 msgstr "Логический параметр"
 
-#: src/scm/report/guile-strings.c:103
+#: src/scm/report/guile-strings.c:88
 msgid "This is a boolean option."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:105
+#: src/scm/report/guile-strings.c:90
 msgid "Multi Choice Option"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:106
+#: src/scm/report/guile-strings.c:91
 msgid "This is a multi choice option."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:107
+#: src/scm/report/guile-strings.c:92
 msgid "First Option"
 msgstr "Первый параметр"
 
-#: src/scm/report/guile-strings.c:108
+#: src/scm/report/guile-strings.c:93
 msgid "Help for first option"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:109
+#: src/scm/report/guile-strings.c:94
 msgid "Second Option"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:110
+#: src/scm/report/guile-strings.c:95
 msgid "Help for second option"
 msgstr "Справка о втором параметре"
 
-#: src/scm/report/guile-strings.c:111
+#: src/scm/report/guile-strings.c:96
 msgid "Third Option"
 msgstr "Третий параметр"
 
-#: src/scm/report/guile-strings.c:112
+#: src/scm/report/guile-strings.c:97
 msgid "Help for third option"
 msgstr "Справка о третьем параметре"
 
-#: src/scm/report/guile-strings.c:113
+#: src/scm/report/guile-strings.c:98
 msgid "Fourth Options"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:114
+#: src/scm/report/guile-strings.c:99
 msgid "The fourth option rules!"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:116
+#: src/scm/report/guile-strings.c:101
 msgid "String Option"
 msgstr "Параметр строки"
 
-#: src/scm/report/guile-strings.c:117
+#: src/scm/report/guile-strings.c:102
 msgid "This is a string option"
 msgstr "Это параметр строки"
 
-#: src/scm/report/guile-strings.c:118 src/scm/report/guile-strings.c:155
-#: src/scm/report/guile-strings.c:178
+#: src/scm/report/guile-strings.c:103 src/scm/report/guile-strings.c:140
+#: src/scm/report/guile-strings.c:163
 msgid "Hello, World"
 msgstr "Здравствуй, Мир"
 
-#: src/scm/report/guile-strings.c:120
+#: src/scm/report/guile-strings.c:105
 msgid "Just a Date Option"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:121
+#: src/scm/report/guile-strings.c:106
 msgid "This is a date option"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:123
+#: src/scm/report/guile-strings.c:108
 msgid "Time and Date Option"
 msgstr "Параметр даты и времени"
 
-#: src/scm/report/guile-strings.c:124
+#: src/scm/report/guile-strings.c:109
 msgid "This is a date option with time"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:126
+#: src/scm/report/guile-strings.c:111
 #, fuzzy
 msgid "Combo Date Option"
 msgstr "Параметр даты и времени"
 
-#: src/scm/report/guile-strings.c:127
+#: src/scm/report/guile-strings.c:112
 #, fuzzy
 msgid "This is a combination date option"
 msgstr "Это параметр строки"
 
-#: src/scm/report/guile-strings.c:129
+#: src/scm/report/guile-strings.c:114
 #, fuzzy
 msgid "Relative Date Option"
 msgstr "Параметр даты и времени"
 
-#: src/scm/report/guile-strings.c:130
+#: src/scm/report/guile-strings.c:115
 #, fuzzy
 msgid "This is a relative date option"
 msgstr "Это параметр строки"
 
-#: src/scm/report/guile-strings.c:132
+#: src/scm/report/guile-strings.c:117
 msgid "Number Option"
 msgstr "Числовой параметр"
 
-#: src/scm/report/guile-strings.c:133
+#: src/scm/report/guile-strings.c:118
 msgid "This is a number option."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:135 src/scm/report/guile-strings.c:271
-#: src/scm/report/guile-strings.c:310 src/scm/report/guile-strings.c:339
+#: src/scm/report/guile-strings.c:120 src/scm/report/guile-strings.c:343
+#: src/scm/report/guile-strings.c:372 src/scm/report/guile-strings.c:392
 msgid "Background Color"
 msgstr "Цвет фона"
 
-#: src/scm/report/guile-strings.c:136 src/scm/report/guile-strings.c:139
+#: src/scm/report/guile-strings.c:121 src/scm/report/guile-strings.c:124
 msgid "This is a color option"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:138 src/scm/report/guile-strings.c:313
-#: src/scm/report/guile-strings.c:341
+#: src/scm/report/guile-strings.c:123 src/scm/report/guile-strings.c:346
+#: src/scm/report/guile-strings.c:374
 #, fuzzy
 msgid "Text Color"
 msgstr "Только текст"
 
-#: src/scm/report/guile-strings.c:140 src/scm/report/guile-strings.c:143
+#: src/scm/report/guile-strings.c:125 src/scm/report/guile-strings.c:128
 msgid "Hello Again"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:141
+#: src/scm/report/guile-strings.c:126
 msgid "An account list option"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:142
+#: src/scm/report/guile-strings.c:127
 msgid "This is an account list option"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:144
+#: src/scm/report/guile-strings.c:129
 msgid "A list option"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:145
+#: src/scm/report/guile-strings.c:130
 msgid "This is a list option"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:146
+#: src/scm/report/guile-strings.c:131
 msgid "The Good"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:147
+#: src/scm/report/guile-strings.c:132
 msgid "Good option"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:148
+#: src/scm/report/guile-strings.c:133
 msgid "The Bad"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:149
+#: src/scm/report/guile-strings.c:134
 msgid "Bad option"
 msgstr "Плохой параметр"
 
-#: src/scm/report/guile-strings.c:150
+#: src/scm/report/guile-strings.c:135
 msgid "The Ugly"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:151
+#: src/scm/report/guile-strings.c:136
 msgid "Ugly option"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:152
+#: src/scm/report/guile-strings.c:137
 msgid "Testing"
 msgstr "Тестирование"
 
-#: src/scm/report/guile-strings.c:153
+#: src/scm/report/guile-strings.c:138
 msgid "Crash the report"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:154
+#: src/scm/report/guile-strings.c:139
 msgid ""
 "This is for testing. Your reports probably shouldn't have an option like "
 "this."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:156
+#: src/scm/report/guile-strings.c:141
 #, c-format
 msgid ""
 "This is a sample GnuCash report. See the guile (scheme) source code in %s "
 "for details on writing your own reports, or extending existing reports."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:157
+#: src/scm/report/guile-strings.c:142
 #, c-format
 msgid ""
 "For help on writing reports, or to contribute your brand new, totally cool "
 "report, consult the mailing list %s."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:158
+#: src/scm/report/guile-strings.c:143
 #, c-format
 msgid "For details on subscribing to that list, see %s."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:159
+#: src/scm/report/guile-strings.c:144
 #, c-format
 msgid "You can learn more about writing scheme using this %s."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:160
+#: src/scm/report/guile-strings.c:145
 msgid "online book"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:161
+#: src/scm/report/guile-strings.c:146
 #, fuzzy, c-format
 msgid "The current time is %s."
 msgstr "Текущее время %s"
 
-#: src/scm/report/guile-strings.c:162
+#: src/scm/report/guile-strings.c:147
 #, fuzzy, c-format
 msgid "The boolean option is %s."
 msgstr "Текущее время %s"
 
-#: src/scm/report/guile-strings.c:163
+#: src/scm/report/guile-strings.c:148
 msgid "true"
 msgstr "истина"
 
-#: src/scm/report/guile-strings.c:164
+#: src/scm/report/guile-strings.c:149
 msgid "false"
 msgstr "ложь"
 
-#: src/scm/report/guile-strings.c:165
+#: src/scm/report/guile-strings.c:150
 #, fuzzy, c-format
 msgid "The multi-choice option is %s."
 msgstr "Текущее время %s"
 
-#: src/scm/report/guile-strings.c:166
+#: src/scm/report/guile-strings.c:151
 #, fuzzy, c-format
 msgid "The string option is %s."
 msgstr "Это параметр строки"
 
-#: src/scm/report/guile-strings.c:167
+#: src/scm/report/guile-strings.c:152
 #, fuzzy, c-format
 msgid "The date option is %s."
 msgstr "Текущее время %s"
 
-#: src/scm/report/guile-strings.c:168
+#: src/scm/report/guile-strings.c:153
 #, fuzzy, c-format
 msgid "The date and time option is %s."
 msgstr "Текущее время %s"
 
-#: src/scm/report/guile-strings.c:169
+#: src/scm/report/guile-strings.c:154
 #, fuzzy, c-format
 msgid "The relative date option is %s."
 msgstr "Текущее время %s"
 
-#: src/scm/report/guile-strings.c:170
+#: src/scm/report/guile-strings.c:155
 #, fuzzy, c-format
 msgid "The combination date option is %s."
 msgstr "Это параметр строки"
 
-#: src/scm/report/guile-strings.c:171
+#: src/scm/report/guile-strings.c:156
 #, fuzzy, c-format
 msgid "The number option is %s."
 msgstr "Числовой параметр"
 
-#: src/scm/report/guile-strings.c:172
+#: src/scm/report/guile-strings.c:157
 #, fuzzy, c-format
 msgid "The number option formatted as currency is %s."
 msgstr "Числовой параметр"
 
-#: src/scm/report/guile-strings.c:173
+#: src/scm/report/guile-strings.c:158
 #, fuzzy
 msgid "Items you selected:"
 msgstr "Правка выбранного счета"
 
-#: src/scm/report/guile-strings.c:174
+#: src/scm/report/guile-strings.c:159
 #, fuzzy
 msgid "List items selected"
 msgstr "Правка выбранного счета"
 
-#: src/scm/report/guile-strings.c:175
+#: src/scm/report/guile-strings.c:160
 msgid "(You selected no list items.)"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:176
+#: src/scm/report/guile-strings.c:161
 #, fuzzy
 msgid "You have selected no accounts."
 msgstr "Открыть выбранный счет"
 
-#: src/scm/report/guile-strings.c:177
+#: src/scm/report/guile-strings.c:162
 msgid "Have a nice day!"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:179 src/scm/report/guile-strings.c:181
-#: src/scm/report/guile-strings.c:183 src/scm/report/guile-strings.c:185
-#: src/scm/report/guile-strings.c:187 src/scm/report/guile-strings.c:189
-#: src/scm/report/guile-strings.c:191 src/scm/report/guile-strings.c:193
-#: src/scm/report/guile-strings.c:195 src/scm/report/guile-strings.c:208
-#: src/scm/report/guile-strings.c:211 src/scm/report/guile-strings.c:214
-#: src/scm/report/guile-strings.c:217 src/scm/report/guile-strings.c:220
-#: src/scm/report/guile-strings.c:223 src/scm/report/guile-strings.c:227
-#: src/scm/report/guile-strings.c:230 src/scm/report/guile-strings.c:232
-#: src/scm/report/guile-strings.c:241 src/scm/report/guile-strings.c:244
-#: src/scm/report/guile-strings.c:247 src/scm/report/guile-strings.c:443
-#: src/scm/report/guile-strings.c:445 src/scm/report/guile-strings.c:447
-#: src/scm/report/guile-strings.c:449 src/scm/report/guile-strings.c:451
-#: src/scm/report/guile-strings.c:453 src/scm/report/guile-strings.c:455
-#: src/scm/report/guile-strings.c:457 src/scm/report/guile-strings.c:459
-#: src/scm/report/guile-strings.c:538 src/scm/report/guile-strings.c:541
-#: src/scm/report/guile-strings.c:544 src/scm/report/guile-strings.c:547
-#: src/scm/report/guile-strings.c:550 src/scm/report/guile-strings.c:553
-#: src/scm/report/guile-strings.c:557 src/scm/report/guile-strings.c:560
-#: src/scm/report/guile-strings.c:562 src/scm/report/guile-strings.c:571
-#: src/scm/report/guile-strings.c:574 src/scm/report/guile-strings.c:577
-msgid "Display"
-msgstr "Отобразить"
-
-#: src/scm/report/guile-strings.c:188 src/scm/report/guile-strings.c:224
-#: src/scm/report/guile-strings.c:452 src/scm/report/guile-strings.c:554
-msgid "Other Account"
-msgstr "Другой счет"
-
-#: src/scm/report/guile-strings.c:196 src/scm/report/guile-strings.c:245
-#: src/scm/report/guile-strings.c:460 src/scm/report/guile-strings.c:575
+#: src/scm/report/guile-strings.c:172
 #, fuzzy
-msgid "Running Balance"
-msgstr "Открыть баланс"
+msgid "Show Net Profit"
+msgstr "Показать только текст"
 
-#: src/scm/report/guile-strings.c:201 src/scm/report/guile-strings.c:465
-#: src/scm/report/guile-strings.c:498
+#: src/scm/report/guile-strings.c:173
+msgid "Stacked"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:177
 #, fuzzy
-msgid "Transfer from/to"
-msgstr "Передать с"
+msgid "Show Income and Expenses?"
+msgstr "Показать пиктограммы и текст"
 
-#: src/scm/report/guile-strings.c:210 src/scm/report/guile-strings.c:540
+#: src/scm/report/guile-strings.c:178
+msgid "Show the net profit?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:179
+msgid "Show barchart as stacked?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:180
+msgid "Income/Expense Chart"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:184
+#, fuzzy
+msgid "Net Profit"
+msgstr "Пункты"
+
+#: src/scm/report/guile-strings.c:185
+msgid "Income/Expense Graph"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:192
+#, fuzzy
+msgid "Display Format"
+msgstr "Формат даты"
+
+#: src/scm/report/guile-strings.c:194
+#, fuzzy
+msgid "Show Totals"
+msgstr "Показать наиболее ранние"
+
+#: src/scm/report/guile-strings.c:195
+msgid "Maximum Slices"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:200
+#, fuzzy
+msgid "Select the display value for the currency"
+msgstr "Установить параметры для этого отчета"
+
+#: src/scm/report/guile-strings.c:202
+msgid "Show the total balance in legend?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:203
+msgid "Maximum number of slices in pie"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:205 src/scm/report/guile-strings.c:210
+#, fuzzy
+msgid "Income Piechart"
+msgstr "Новый счет"
+
+#: src/scm/report/guile-strings.c:206 src/scm/report/guile-strings.c:211
+msgid "Expense Piechart"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:207
+#, fuzzy
+msgid "Income by Account"
+msgstr "Новый счет"
+
+#: src/scm/report/guile-strings.c:208
+#, fuzzy
+msgid "Expenses by Account"
+msgstr "Открыть счет"
+
+#: src/scm/report/guile-strings.c:221
+#, fuzzy
+msgid "Show Foreign Currencies"
+msgstr "Валюта"
+
+#: src/scm/report/guile-strings.c:223
+#, fuzzy, c-format
+msgid "Profit and Loss - %s to %s"
+msgstr "Пункты"
+
+#: src/scm/report/guile-strings.c:224
+#, fuzzy
+msgid "Profit"
+msgstr "Пункты"
+
+#: src/scm/report/guile-strings.c:227
+#, fuzzy
+msgid "Profit And Loss"
+msgstr "Пункты"
+
+#: src/scm/report/guile-strings.c:230
+#, fuzzy
+msgid "Date to report on"
+msgstr "Показать счет?"
+
+#: src/scm/report/guile-strings.c:233
+#, fuzzy
+msgid "Stock Accounts to report on"
+msgstr "Выбрать счет"
+
+#: src/scm/report/guile-strings.c:234
+msgid "Select the displayed currency"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:235
+#, c-format
+msgid "Investment Portfolio Report: %s"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:238
+#, fuzzy
+msgid "Listing"
+msgstr "Правка"
+
+#: src/scm/report/guile-strings.c:239
+#, fuzzy
+msgid "Units"
+msgstr "Единицы:"
+
+#: src/scm/report/guile-strings.c:243
+msgid "Investment Portfolio"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:256 src/scm/report/guile-strings.c:259
+#: src/scm/report/guile-strings.c:262 src/scm/report/guile-strings.c:318
+#: src/scm/report/guile-strings.c:320
+#, fuzzy
+msgid "Invoice"
+msgstr "Дюймы"
+
+#: src/scm/report/guile-strings.c:257
+msgid "Make an invoice"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:258
+#, fuzzy
+msgid "Display this report as an invoice."
+msgstr "Показать счет?"
+
+#: src/scm/report/guile-strings.c:260
+#, fuzzy
+msgid "Client Name"
+msgstr "Название счета"
+
+#: src/scm/report/guile-strings.c:261
+msgid "The name of the client to put on the invoice."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:263
+msgid "Client Address"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:264
+msgid "The address of the client to put on the invoice"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:266
+#, fuzzy
+msgid "Title"
+msgstr "Время"
+
+#: src/scm/report/guile-strings.c:267
+#, fuzzy
+msgid "The title of the report"
+msgstr "Установить параметры для этого отчета"
+
+#: src/scm/report/guile-strings.c:271 src/scm/report/guile-strings.c:551
 msgid "Display the date?"
 msgstr "Показать дату?"
 
-#: src/scm/report/guile-strings.c:213 src/scm/report/guile-strings.c:543
+#: src/scm/report/guile-strings.c:274 src/scm/report/guile-strings.c:554
 #, fuzzy
 msgid "Display the check number?"
 msgstr "Показать заголовки?"
 
-#: src/scm/report/guile-strings.c:216 src/scm/report/guile-strings.c:546
+#: src/scm/report/guile-strings.c:277 src/scm/report/guile-strings.c:557
 msgid "Display the description?"
 msgstr "Показать описание?"
 
-#: src/scm/report/guile-strings.c:219 src/scm/report/guile-strings.c:549
-#, fuzzy
-msgid "Display the memo?"
-msgstr "Показать количество?"
-
-#: src/scm/report/guile-strings.c:222 src/scm/report/guile-strings.c:552
+#: src/scm/report/guile-strings.c:280 src/scm/report/guile-strings.c:563
 msgid "Display the account?"
 msgstr "Показать счет?"
 
-#: src/scm/report/guile-strings.c:225 src/scm/report/guile-strings.c:555
-msgid ""
-"Display the other account?\n"
-" (if this is a split transaction, this parameter is guessed)."
-msgstr ""
-
-#: src/scm/report/guile-strings.c:229 src/scm/report/guile-strings.c:559
+#: src/scm/report/guile-strings.c:283 src/scm/report/guile-strings.c:570
 #, fuzzy
 msgid "Display the number of shares?"
 msgstr "Показать заголовки?"
 
-#: src/scm/report/guile-strings.c:234 src/scm/report/guile-strings.c:564
+#: src/scm/report/guile-strings.c:288 src/scm/report/guile-strings.c:575
 msgid "Display the amount?"
 msgstr "Показать количество?"
 
-#: src/scm/report/guile-strings.c:236 src/scm/report/guile-strings.c:566
-#, fuzzy
-msgid "No amount display"
-msgstr "Двухколоночное отображение"
-
-#: src/scm/report/guile-strings.c:237 src/scm/report/guile-strings.c:486
-#: src/scm/report/guile-strings.c:567
+#: src/scm/report/guile-strings.c:289 src/scm/report/guile-strings.c:497
+#: src/scm/report/guile-strings.c:578
 msgid "Single"
 msgstr "Одиночный"
 
-#: src/scm/report/guile-strings.c:238 src/scm/report/guile-strings.c:568
+#: src/scm/report/guile-strings.c:290 src/scm/report/guile-strings.c:579
 #, fuzzy
 msgid "Single Column Display"
 msgstr "Двухколоночное отображение"
 
-#: src/scm/report/guile-strings.c:239 src/scm/report/guile-strings.c:569
+#: src/scm/report/guile-strings.c:291 src/scm/report/guile-strings.c:580
 #, fuzzy
 msgid "Double"
 msgstr "Двойная строка"
 
-#: src/scm/report/guile-strings.c:240 src/scm/report/guile-strings.c:570
+#: src/scm/report/guile-strings.c:292 src/scm/report/guile-strings.c:581
 msgid "Two Column Display"
 msgstr "Двухколоночное отображение"
 
-#: src/scm/report/guile-strings.c:242 src/scm/report/guile-strings.c:572
-msgid "Headers"
-msgstr "Заголовки"
+#: src/scm/report/guile-strings.c:294 src/scm/report/guile-strings.c:474
+#: src/scm/report/guile-strings.c:583
+#, fuzzy
+msgid "Running Balance"
+msgstr "Открыть баланс"
 
-#: src/scm/report/guile-strings.c:243 src/scm/report/guile-strings.c:573
-msgid "Display the headers?"
-msgstr "Показать заголовки?"
-
-#: src/scm/report/guile-strings.c:246 src/scm/report/guile-strings.c:576
+#: src/scm/report/guile-strings.c:295 src/scm/report/guile-strings.c:584
 #, fuzzy
 msgid "Display a running balance"
 msgstr "Показать одну строку"
 
-#: src/scm/report/guile-strings.c:248 src/scm/report/guile-strings.c:578
+#: src/scm/report/guile-strings.c:297 src/scm/report/guile-strings.c:586
 #, fuzzy
 msgid "Totals"
 msgstr "Всего"
 
-#: src/scm/report/guile-strings.c:249 src/scm/report/guile-strings.c:579
+#: src/scm/report/guile-strings.c:298 src/scm/report/guile-strings.c:587
 #, fuzzy
 msgid "Display the totals?"
 msgstr "Показать количество?"
 
-#: src/scm/report/guile-strings.c:250 src/scm/report/guile-strings.c:254
-#: src/scm/report/guile-strings.c:258 src/scm/report/guile-strings.c:262
-#: src/scm/report/guile-strings.c:264 src/scm/report/guile-strings.c:266
-#: src/scm/report/guile-strings.c:309 src/scm/report/guile-strings.c:312
-#: src/scm/report/guile-strings.c:315 src/scm/report/guile-strings.c:318
-#: src/scm/report/guile-strings.c:338 src/scm/report/guile-strings.c:340
-#: src/scm/report/guile-strings.c:342 src/scm/report/guile-strings.c:344
-#: src/scm/report/guile-strings.c:580 src/scm/report/guile-strings.c:583
-#: src/scm/report/guile-strings.c:586 src/scm/report/guile-strings.c:590
-#: src/scm/report/guile-strings.c:594 src/scm/report/guile-strings.c:600
-#: src/scm/report/guile-strings.c:602 src/scm/report/guile-strings.c:604
-#: src/scm/report/guile-strings.c:606 src/scm/report/guile-strings.c:608
+#: src/scm/report/guile-strings.c:299 src/scm/report/guile-strings.c:303
+#: src/scm/report/guile-strings.c:307 src/scm/report/guile-strings.c:311
+#: src/scm/report/guile-strings.c:313 src/scm/report/guile-strings.c:315
+#: src/scm/report/guile-strings.c:342 src/scm/report/guile-strings.c:345
+#: src/scm/report/guile-strings.c:348 src/scm/report/guile-strings.c:351
+#: src/scm/report/guile-strings.c:371 src/scm/report/guile-strings.c:373
+#: src/scm/report/guile-strings.c:375 src/scm/report/guile-strings.c:377
+#: src/scm/report/guile-strings.c:588 src/scm/report/guile-strings.c:591
+#: src/scm/report/guile-strings.c:594 src/scm/report/guile-strings.c:598
+#: src/scm/report/guile-strings.c:602 src/scm/report/guile-strings.c:607
+#: src/scm/report/guile-strings.c:609 src/scm/report/guile-strings.c:611
+#: src/scm/report/guile-strings.c:613 src/scm/report/guile-strings.c:615
 #, fuzzy
 msgid "Colors"
 msgstr "Закрыть"
 
-#: src/scm/report/guile-strings.c:251 src/scm/report/guile-strings.c:265
-#: src/scm/report/guile-strings.c:587 src/scm/report/guile-strings.c:607
+#: src/scm/report/guile-strings.c:300 src/scm/report/guile-strings.c:314
+#: src/scm/report/guile-strings.c:595 src/scm/report/guile-strings.c:614
 #, fuzzy
 msgid "Split Odd"
 msgstr "Сдублировать"
 
-#: src/scm/report/guile-strings.c:252 src/scm/report/guile-strings.c:588
+#: src/scm/report/guile-strings.c:301 src/scm/report/guile-strings.c:596
 msgid ""
 "Background color for odd-numbered splits (or main splits in a\n"
 " multi-line report)"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:255 src/scm/report/guile-strings.c:267
-#: src/scm/report/guile-strings.c:591 src/scm/report/guile-strings.c:609
+#: src/scm/report/guile-strings.c:304 src/scm/report/guile-strings.c:316
+#: src/scm/report/guile-strings.c:599 src/scm/report/guile-strings.c:616
 #, fuzzy
 msgid "Split Even"
 msgstr "Сдублировать"
 
-#: src/scm/report/guile-strings.c:256 src/scm/report/guile-strings.c:592
+#: src/scm/report/guile-strings.c:305 src/scm/report/guile-strings.c:600
 msgid ""
 "Background color for even-numbered splits\n"
 " (or \"other\" splits in a multi-line report)"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:259 src/scm/report/guile-strings.c:263
-#: src/scm/report/guile-strings.c:595 src/scm/report/guile-strings.c:605
+#: src/scm/report/guile-strings.c:308 src/scm/report/guile-strings.c:312
+#: src/scm/report/guile-strings.c:603 src/scm/report/guile-strings.c:612
 #, fuzzy
 msgid "Grand Total"
 msgstr "Параметры"
 
-#: src/scm/report/guile-strings.c:260 src/scm/report/guile-strings.c:596
+#: src/scm/report/guile-strings.c:309 src/scm/report/guile-strings.c:604
 #, fuzzy
 msgid "Background color for total"
 msgstr "Цвет фона"
 
-#: src/scm/report/guile-strings.c:261
+#: src/scm/report/guile-strings.c:310
 #, c-format
 msgid "From %s To %s"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:268
-msgid "Register Report"
+#: src/scm/report/guile-strings.c:322 src/scm/report/guile-strings.c:364
+msgid "Preparer"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:272
-#, fuzzy
-msgid "Background color for reports."
-msgstr "Цвет фона"
+#: src/scm/report/guile-strings.c:323
+msgid "Name of person preparing the report"
+msgstr ""
 
-#: src/scm/report/guile-strings.c:274
-#, fuzzy
-msgid "Background Pixmap"
-msgstr "Цвет фона"
+#: src/scm/report/guile-strings.c:325 src/scm/report/guile-strings.c:366
+msgid "Prepared for"
+msgstr ""
 
-#: src/scm/report/guile-strings.c:275 src/scm/report/guile-strings.c:302
-#, fuzzy
-msgid "Background tile for reports."
-msgstr "Цвет фона"
+#: src/scm/report/guile-strings.c:326
+msgid "Name of organization or company prepared for"
+msgstr ""
 
-#: src/scm/report/guile-strings.c:277 src/scm/report/guile-strings.c:298
-#: src/scm/report/guile-strings.c:337
+#: src/scm/report/guile-strings.c:328 src/scm/report/guile-strings.c:368
+msgid "Show preparer info"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:329
+msgid "Name of organization or company"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:331 src/scm/report/guile-strings.c:370
+#: src/scm/report/guile-strings.c:398
 #, fuzzy
 msgid "Enable Links"
 msgstr "Одиночная строка"
 
-#: src/scm/report/guile-strings.c:278
-msgid "Enable hyperlinks in reports."
-msgstr ""
-
-#: src/scm/report/guile-strings.c:279 src/scm/report/guile-strings.c:282
-#: src/scm/report/guile-strings.c:285 src/scm/report/guile-strings.c:321
-#: src/scm/report/guile-strings.c:324 src/scm/report/guile-strings.c:327
-#: src/scm/report/guile-strings.c:352 src/scm/report/guile-strings.c:354
-#: src/scm/report/guile-strings.c:356
-#, fuzzy
-msgid "Tables"
-msgstr "Итоги"
-
-#: src/scm/report/guile-strings.c:280 src/scm/report/guile-strings.c:322
-#: src/scm/report/guile-strings.c:353
-msgid "Table cell spacing"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:281 src/scm/report/guile-strings.c:284
-#: src/scm/report/guile-strings.c:323 src/scm/report/guile-strings.c:326
-msgid "Space between table cells"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:283 src/scm/report/guile-strings.c:325
-#: src/scm/report/guile-strings.c:355
-msgid "Table cell padding"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:286 src/scm/report/guile-strings.c:328
-#: src/scm/report/guile-strings.c:357
-msgid "Table border width"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:287 src/scm/report/guile-strings.c:329
-msgid "Bevel depth on tables"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:289 src/scm/report/guile-strings.c:331
-msgid "Preparer"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:290
-msgid "Name of person preparing the report"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:292 src/scm/report/guile-strings.c:333
-msgid "Prepared for"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:293
-msgid "Name of organization or company prepared for"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:295 src/scm/report/guile-strings.c:335
-msgid "Show preparer info"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:296
-msgid "Name of organization or company"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:299
+#: src/scm/report/guile-strings.c:332
 msgid "Enable hyperlinks in reports"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:300 src/scm/report/guile-strings.c:303
-#: src/scm/report/guile-strings.c:306 src/scm/report/guile-strings.c:346
-#: src/scm/report/guile-strings.c:348 src/scm/report/guile-strings.c:350
+#: src/scm/report/guile-strings.c:333 src/scm/report/guile-strings.c:336
+#: src/scm/report/guile-strings.c:339 src/scm/report/guile-strings.c:379
+#: src/scm/report/guile-strings.c:381 src/scm/report/guile-strings.c:383
 #, fuzzy
 msgid "Images"
 msgstr "Итоги"
 
-#: src/scm/report/guile-strings.c:301 src/scm/report/guile-strings.c:347
+#: src/scm/report/guile-strings.c:334 src/scm/report/guile-strings.c:380
 #, fuzzy
 msgid "Background Tile"
 msgstr "Цвет фона"
 
-#: src/scm/report/guile-strings.c:304 src/scm/report/guile-strings.c:349
+#: src/scm/report/guile-strings.c:335 src/scm/report/guile-strings.c:396
+#, fuzzy
+msgid "Background tile for reports."
+msgstr "Цвет фона"
+
+#: src/scm/report/guile-strings.c:337 src/scm/report/guile-strings.c:382
 #, fuzzy
 msgid "Heading Banner"
 msgstr "Возрастающий"
 
-#: src/scm/report/guile-strings.c:305
+#: src/scm/report/guile-strings.c:338
 msgid "Banner for top of report."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:307 src/scm/report/guile-strings.c:351
+#: src/scm/report/guile-strings.c:340 src/scm/report/guile-strings.c:384
 msgid "Logo"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:308
+#: src/scm/report/guile-strings.c:341
 msgid "Company logo image."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:311
+#: src/scm/report/guile-strings.c:344
 #, fuzzy
 msgid "General background color for report."
 msgstr "Цвет фона заголовка"
 
-#: src/scm/report/guile-strings.c:314
+#: src/scm/report/guile-strings.c:347
 msgid "Normal body text color."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:316 src/scm/report/guile-strings.c:343
+#: src/scm/report/guile-strings.c:349 src/scm/report/guile-strings.c:376
 msgid "Link Color"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:317
+#: src/scm/report/guile-strings.c:350
 msgid "Link text color."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:319 src/scm/report/guile-strings.c:345
+#: src/scm/report/guile-strings.c:352 src/scm/report/guile-strings.c:378
 msgid "Table Cell Color"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:320
+#: src/scm/report/guile-strings.c:353
 #, fuzzy
 msgid "Default background for table cells."
 msgstr "Цвет фона заголовка"
 
-#: src/scm/report/guile-strings.c:358
+#: src/scm/report/guile-strings.c:354 src/scm/report/guile-strings.c:357
+#: src/scm/report/guile-strings.c:360 src/scm/report/guile-strings.c:385
+#: src/scm/report/guile-strings.c:387 src/scm/report/guile-strings.c:389
+#: src/scm/report/guile-strings.c:400 src/scm/report/guile-strings.c:403
+#: src/scm/report/guile-strings.c:406
 #, fuzzy
-msgid "Table test"
+msgid "Tables"
 msgstr "Итоги"
 
-#: src/scm/report/guile-strings.c:359
+#: src/scm/report/guile-strings.c:355 src/scm/report/guile-strings.c:386
+#: src/scm/report/guile-strings.c:401
+msgid "Table cell spacing"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:356 src/scm/report/guile-strings.c:359
+#: src/scm/report/guile-strings.c:402 src/scm/report/guile-strings.c:405
+msgid "Space between table cells"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:358 src/scm/report/guile-strings.c:388
+#: src/scm/report/guile-strings.c:404
+msgid "Table cell padding"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:361 src/scm/report/guile-strings.c:390
+#: src/scm/report/guile-strings.c:407
+msgid "Table border width"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:362 src/scm/report/guile-strings.c:408
+msgid "Bevel depth on tables"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:393
+#, fuzzy
+msgid "Background color for reports."
+msgstr "Цвет фона"
+
+#: src/scm/report/guile-strings.c:395
+#, fuzzy
+msgid "Background Pixmap"
+msgstr "Цвет фона"
+
+#: src/scm/report/guile-strings.c:399
+msgid "Enable hyperlinks in reports."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:409
 #, fuzzy
 msgid "TAX Report Options"
 msgstr "Параметры отчета"
 
-#: src/scm/report/guile-strings.c:364
+#: src/scm/report/guile-strings.c:414
 #, fuzzy
 msgid "Alternate Period"
 msgstr "Параметры"
 
-#: src/scm/report/guile-strings.c:365
+#: src/scm/report/guile-strings.c:415
 msgid "Overide or modify From: & To:"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:366
+#: src/scm/report/guile-strings.c:416
 msgid "Use From - To"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:367
+#: src/scm/report/guile-strings.c:417
 msgid "Use From - To period"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:368
+#: src/scm/report/guile-strings.c:418
 msgid "1st Est Tax Quarter"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:369
+#: src/scm/report/guile-strings.c:419
 msgid "Jan 1 - Mar 31"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:370
+#: src/scm/report/guile-strings.c:420
 msgid "2nd Est Tax Quarter"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:371
+#: src/scm/report/guile-strings.c:421
 msgid "Apr 1 - May 31"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:372
+#: src/scm/report/guile-strings.c:422
 msgid "3rd Est Tax Quarter"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:373
+#: src/scm/report/guile-strings.c:423
 msgid "Jun 1 - Aug 31"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:374
+#: src/scm/report/guile-strings.c:424
 msgid "4th Est Tax Quarter"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:375
+#: src/scm/report/guile-strings.c:425
 msgid "Sep 1 - Dec 31"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:376 src/scm/report/guile-strings.c:377
+#: src/scm/report/guile-strings.c:426 src/scm/report/guile-strings.c:427
 #, fuzzy
 msgid "Last Year"
 msgstr "Год"
 
-#: src/scm/report/guile-strings.c:378
+#: src/scm/report/guile-strings.c:428
 msgid "Last Yr 1st Est Tax Qtr"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:379
+#: src/scm/report/guile-strings.c:429
 msgid "Jan 1 - Mar 31, Last year"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:380
+#: src/scm/report/guile-strings.c:430
 msgid "Last Yr 2nd Est Tax Qtr"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:381
+#: src/scm/report/guile-strings.c:431
 msgid "Apr 1 - May 31, Last year"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:382
+#: src/scm/report/guile-strings.c:432
 msgid "Last Yr 3rd Est Tax Qtr"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:383
+#: src/scm/report/guile-strings.c:433
 msgid "Jun 1 - Aug 31, Last year"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:384
+#: src/scm/report/guile-strings.c:434
 msgid "Last Yr 4th Est Tax Qtr"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:385
+#: src/scm/report/guile-strings.c:435
 msgid "Sep 1 - Dec 31, Last year"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:386
+#: src/scm/report/guile-strings.c:436
 #, fuzzy
 msgid "Select Accounts (none = all)"
 msgstr "Выбрать счет"
 
-#: src/scm/report/guile-strings.c:387
+#: src/scm/report/guile-strings.c:437
 #, fuzzy
 msgid "Select accounts"
 msgstr "Выбрать счет"
 
-#: src/scm/report/guile-strings.c:388
+#: src/scm/report/guile-strings.c:438
 msgid "Suppress $0.00 values"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:389
+#: src/scm/report/guile-strings.c:439
 msgid "$0.00 valued Accounts won't be printed."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:390
+#: src/scm/report/guile-strings.c:440
 #, fuzzy
 msgid "Print Full account names"
 msgstr "Название счета"
 
-#: src/scm/report/guile-strings.c:391
+#: src/scm/report/guile-strings.c:441
 #, fuzzy
 msgid "Print all Parent account names"
 msgstr "Название счета"
 
-#: src/scm/report/guile-strings.c:392
-#, fuzzy
-msgid "Set/Reset Tax Status"
-msgstr "Удалить выбранный счет"
-
-#: src/scm/report/guile-strings.c:393
-#, fuzzy
-msgid "Set/Reset Selected Account Tax Status"
-msgstr "Удалить выбранный счет"
-
-#: src/scm/report/guile-strings.c:394 src/scm/report/guile-strings.c:395
-#, fuzzy
-msgid "No Change"
-msgstr "Изменено"
-
-#: src/scm/report/guile-strings.c:396
-#, fuzzy
-msgid "Set Tax Related"
-msgstr "Установить диапазон дат"
-
-#: src/scm/report/guile-strings.c:397
-#, fuzzy
-msgid "Set Selected accounts as Tax Related"
-msgstr "Удалить выбранный счет"
-
-#: src/scm/report/guile-strings.c:398
-#, fuzzy
-msgid "Reset Tax Related"
-msgstr "Установить диапазон дат"
-
-#: src/scm/report/guile-strings.c:399
-#, fuzzy
-msgid "Reset Selected accounts as not Tax Related"
-msgstr "Удалить выбранный счет"
-
-#: src/scm/report/guile-strings.c:400
-#, fuzzy
-msgid "Set Tax Related & sub-accounts"
-msgstr "Удалить выбранный счет"
-
-#: src/scm/report/guile-strings.c:401
-#, fuzzy
-msgid "Set Selected & sub-accounts as Tax Related"
-msgstr "Удалить выбранный счет"
-
-#: src/scm/report/guile-strings.c:402
-#, fuzzy
-msgid "Reset Tax Related & sub-accounts"
-msgstr "Удалить выбранный счет"
-
-#: src/scm/report/guile-strings.c:403
-#, fuzzy
-msgid "Reset Selected & sub-accounts as not Tax Related"
-msgstr "Удалить выбранный счет"
-
-#: src/scm/report/guile-strings.c:404 src/scm/report/guile-strings.c:407
-#: src/scm/report/guile-strings.c:410 src/scm/report/guile-strings.c:413
-#: src/scm/report/guile-strings.c:416
-msgid "TXF Export Init"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:408
-msgid "Print extended TXF HELP messages"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:409
-msgid "Print TXF HELP"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:411
-msgid "For INCOME accounts, select here.   < ^ # see help"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:412
-msgid "Select a TXF Income catagory"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:414
-msgid "For EXPENSE accounts, select here.   < ^ # see help"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:415
-msgid "Select a TXF Expense catagory"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:417
-msgid "< ^   Payer Name source"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:418
-msgid "Select the source of the Payer Name"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:420
-#, fuzzy
-msgid "Use Indicated Default"
-msgstr "Выбрать исходное"
-
-#: src/scm/report/guile-strings.c:421
-#, fuzzy
-msgid "< Current Account"
-msgstr "Родительский счет"
-
-#: src/scm/report/guile-strings.c:422
-#, fuzzy
-msgid "Use Current Account Name"
-msgstr "Родительский счет"
-
-#: src/scm/report/guile-strings.c:423
-#, fuzzy
-msgid "^ Parent Account"
-msgstr "Родительский счет"
-
-#: src/scm/report/guile-strings.c:424
-#, fuzzy
-msgid "Use Parent Account Name"
-msgstr "Родительский счет"
-
-#: src/scm/report/guile-strings.c:425
+#: src/scm/report/guile-strings.c:442
 msgid ""
-"ERROR: There are duplicate TXF codes assigned to some accounts.  Only TXF "
-"codes prefixed with \"&lt;\" or \"^\" may be repeated."
+"ERROR: There are duplicate TXF codes assigned to some accounts. Only TXF "
+"codes prefixed with payer sources may be repeated."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:426
-msgid "Detailed TXF Category Descriptions"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:427
+#: src/scm/report/guile-strings.c:443
 msgid "Sub"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:428
+#: src/scm/report/guile-strings.c:444
 #, c-format
 msgid "Period from %s to %s"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:429
+#: src/scm/report/guile-strings.c:445
 msgid "Blue items are exportable to a TXF file."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:430
+#: src/scm/report/guile-strings.c:446
 #, c-format
 msgid "Blue items were exported to file %s."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:431
+#: src/scm/report/guile-strings.c:447
 msgid "Blue items were <em>not</em> exported to txf file!"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:432
-msgid "Tax Form \\ TXF Code"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:434
-msgid "Extended TXF Help messages"
-msgstr ""
-
-#: src/scm/report/guile-strings.c:439
+#: src/scm/report/guile-strings.c:450
 msgid ""
 "No Tax Related accounts were found. Go the the Tax Information dialog to set "
 "up tax-related accounts."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:440
+#: src/scm/report/guile-strings.c:451
 #, fuzzy
 msgid "Tax"
 msgstr "Макс."
 
-#: src/scm/report/guile-strings.c:441
+#: src/scm/report/guile-strings.c:452 src/scm/report/guile-strings.c:455
 msgid "Taxable Income / Deductible Expenses"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:442
+#: src/scm/report/guile-strings.c:453
+msgid "This report shows your Taxable Income and Deductable Expenses."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:454
+#, fuzzy
+msgid "Export .TXF"
+msgstr "Экспортировать в"
+
+#: src/scm/report/guile-strings.c:456
 msgid "This page shows your Taxable Income and Deductable Expenses."
 msgstr ""
 
-#: src/scm/report/guile-strings.c:472 src/scm/report/guile-strings.c:475
-#: src/scm/report/guile-strings.c:478 src/scm/report/guile-strings.c:481
-#: src/scm/report/guile-strings.c:618
-#, fuzzy
-msgid "Report Options"
-msgstr "Параметры отчета"
+#: src/scm/report/guile-strings.c:466 src/scm/report/guile-strings.c:565
+msgid "Other Account"
+msgstr "Другой счет"
 
-#: src/scm/report/guile-strings.c:480
+#: src/scm/report/guile-strings.c:479 src/scm/report/guile-strings.c:509
+#, fuzzy
+msgid "Transfer from/to"
+msgstr "Передать с"
+
+#: src/scm/report/guile-strings.c:491
 msgid "Do transaction report on these accounts"
 msgstr "Сделать отчет о транзакциях для этих счетов"
 
-#: src/scm/report/guile-strings.c:482 src/scm/report/guile-strings.c:619
+#: src/scm/report/guile-strings.c:493 src/scm/report/guile-strings.c:626
 #, fuzzy
 msgid "Style"
 msgstr "Стиль"
 
-#: src/scm/report/guile-strings.c:483
+#: src/scm/report/guile-strings.c:494
 msgid "Report style"
 msgstr "Стиль отчета"
 
-#: src/scm/report/guile-strings.c:484
+#: src/scm/report/guile-strings.c:495
 msgid "Multi-Line"
 msgstr "Многострочный"
 
-#: src/scm/report/guile-strings.c:485
+#: src/scm/report/guile-strings.c:496
 msgid "Display N lines"
 msgstr "Показать N строк"
 
-#: src/scm/report/guile-strings.c:487
+#: src/scm/report/guile-strings.c:498
 msgid "Display 1 line"
 msgstr "Показать одну строку"
 
-#: src/scm/report/guile-strings.c:488
+#: src/scm/report/guile-strings.c:499
 #, fuzzy
 msgid "Account Name(w/subtotal)"
 msgstr "Название счета"
 
-#: src/scm/report/guile-strings.c:489
+#: src/scm/report/guile-strings.c:500
 #, fuzzy
 msgid "Sort & subtotal by account name"
 msgstr "Название счета"
 
-#: src/scm/report/guile-strings.c:490
+#: src/scm/report/guile-strings.c:501
 #, fuzzy
 msgid "Account Code (w/subtotal)"
 msgstr "Код счета"
 
-#: src/scm/report/guile-strings.c:491
+#: src/scm/report/guile-strings.c:502
 msgid "Sort & subtotal by account code"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:493
+#: src/scm/report/guile-strings.c:504
 msgid "Sort by date"
 msgstr "Сортировать по дате"
 
-#: src/scm/report/guile-strings.c:494
+#: src/scm/report/guile-strings.c:505
 msgid "Date (subtotal monthly)"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:495
+#: src/scm/report/guile-strings.c:506
 #, fuzzy
 msgid "Sort by date & subtotal each month"
 msgstr "Сортировать по дате ввода"
 
-#: src/scm/report/guile-strings.c:496
+#: src/scm/report/guile-strings.c:507
 msgid "Date (subtotal yearly)"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:497
+#: src/scm/report/guile-strings.c:508
 #, fuzzy
 msgid "Sort by date & subtotal each year"
 msgstr "Сортировать по дате ввода"
 
-#: src/scm/report/guile-strings.c:499
+#: src/scm/report/guile-strings.c:510
 msgid "Sort by account transferred from/to's name"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:500
+#: src/scm/report/guile-strings.c:511
 msgid "Transfer from/to (w/subtotal) by code "
 msgstr ""
 
-#: src/scm/report/guile-strings.c:501
+#: src/scm/report/guile-strings.c:512
 #, fuzzy
 msgid ""
 "Sort and subtotal by account transferred\n"
 " from/to's code"
 msgstr "Название счета"
 
-#: src/scm/report/guile-strings.c:503
+#: src/scm/report/guile-strings.c:514
 #, fuzzy
 msgid "Transfer from/to code"
 msgstr "Передать с"
 
-#: src/scm/report/guile-strings.c:504
+#: src/scm/report/guile-strings.c:515
 msgid "Sort by account transferred from/to's code"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:505
+#: src/scm/report/guile-strings.c:516
 msgid "Transfer from/to (w/subtotal)"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:506
+#: src/scm/report/guile-strings.c:517
 #, fuzzy
 msgid ""
 "Sort and subtotal by account\n"
 " transferred from/to's code"
 msgstr "Название счета"
 
-#: src/scm/report/guile-strings.c:509
+#: src/scm/report/guile-strings.c:520
 msgid "Sort by amount"
 msgstr "Сортировать по количеству"
 
-#: src/scm/report/guile-strings.c:511
+#: src/scm/report/guile-strings.c:522
 msgid "Sort by description"
 msgstr "Сортировать по описанию"
 
-#: src/scm/report/guile-strings.c:513
+#: src/scm/report/guile-strings.c:524
 msgid "Sort by check/transaction number"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:515
+#: src/scm/report/guile-strings.c:526
 msgid "Sort by memo"
 msgstr "Сортировать по заметкам"
 
-#: src/scm/report/guile-strings.c:517
+#: src/scm/report/guile-strings.c:528
 msgid "Do not sort"
 msgstr "Не сортировать"
 
-#: src/scm/report/guile-strings.c:518 src/scm/report/guile-strings.c:521
-#: src/scm/report/guile-strings.c:528 src/scm/report/guile-strings.c:531
-#: src/scm/report/guile-strings.c:610 src/scm/report/guile-strings.c:612
-#: src/scm/report/guile-strings.c:614 src/scm/report/guile-strings.c:616
+#: src/scm/report/guile-strings.c:529 src/scm/report/guile-strings.c:532
+#: src/scm/report/guile-strings.c:539 src/scm/report/guile-strings.c:542
+#: src/scm/report/guile-strings.c:617 src/scm/report/guile-strings.c:619
+#: src/scm/report/guile-strings.c:621 src/scm/report/guile-strings.c:623
 msgid "Sorting"
 msgstr "Сортировка"
 
-#: src/scm/report/guile-strings.c:519 src/scm/report/guile-strings.c:611
-#: src/scm/report/guile-strings.c:615
+#: src/scm/report/guile-strings.c:530 src/scm/report/guile-strings.c:618
+#: src/scm/report/guile-strings.c:622
 msgid "Primary Key"
 msgstr "Первичный ключ"
 
-#: src/scm/report/guile-strings.c:520
+#: src/scm/report/guile-strings.c:531
 #, fuzzy
 msgid "Sort by this criterion first"
 msgstr "Сортировать по описанию"
 
-#: src/scm/report/guile-strings.c:522
+#: src/scm/report/guile-strings.c:533
 msgid "Primary Sort Order"
 msgstr "Первичный порядок сортировки"
 
-#: src/scm/report/guile-strings.c:523
+#: src/scm/report/guile-strings.c:534
 msgid "Order of primary sorting"
 msgstr "Порядок первичной сортировки"
 
-#: src/scm/report/guile-strings.c:524 src/scm/report/guile-strings.c:534
+#: src/scm/report/guile-strings.c:535 src/scm/report/guile-strings.c:545
 msgid "Ascending"
 msgstr "Возрастающий"
 
-#: src/scm/report/guile-strings.c:525 src/scm/report/guile-strings.c:535
+#: src/scm/report/guile-strings.c:536 src/scm/report/guile-strings.c:546
 #, fuzzy
 msgid "smallest to largest, earliest to latest"
 msgstr "от большего к меньшему, от позднего к раннему"
 
-#: src/scm/report/guile-strings.c:526 src/scm/report/guile-strings.c:536
+#: src/scm/report/guile-strings.c:537 src/scm/report/guile-strings.c:547
 msgid "Descending"
 msgstr "Убывающий"
 
-#: src/scm/report/guile-strings.c:527 src/scm/report/guile-strings.c:537
+#: src/scm/report/guile-strings.c:538 src/scm/report/guile-strings.c:548
 msgid "largest to smallest, latest to earliest"
 msgstr "от большего к меньшему, от позднего к раннему"
 
-#: src/scm/report/guile-strings.c:529 src/scm/report/guile-strings.c:613
-#: src/scm/report/guile-strings.c:617
+#: src/scm/report/guile-strings.c:540 src/scm/report/guile-strings.c:620
+#: src/scm/report/guile-strings.c:624
 msgid "Secondary Key"
 msgstr "Вторичный ключ"
 
-#: src/scm/report/guile-strings.c:530
+#: src/scm/report/guile-strings.c:541
 #, fuzzy
 msgid "Sort by this criterion second"
 msgstr "Сортировать по описанию"
 
-#: src/scm/report/guile-strings.c:532
+#: src/scm/report/guile-strings.c:543
 msgid "Secondary Sort Order"
 msgstr "Порядок вторичной сортировки"
 
-#: src/scm/report/guile-strings.c:533
+#: src/scm/report/guile-strings.c:544
 msgid "Order of Secondary sorting"
 msgstr "Порядок вторичной сортировки"
 
-#: src/scm/report/guile-strings.c:581 src/scm/report/guile-strings.c:601
+#: src/scm/report/guile-strings.c:560
+#, fuzzy
+msgid "Display the memo?"
+msgstr "Показать количество?"
+
+#: src/scm/report/guile-strings.c:566
+msgid ""
+"Display the other account?\n"
+" (if this is a split transaction, this parameter is guessed)."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:577
+#, fuzzy
+msgid "No amount display"
+msgstr "Двухколоночное отображение"
+
+#: src/scm/report/guile-strings.c:589 src/scm/report/guile-strings.c:608
 msgid "Primary Subtotals/headings"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:582
+#: src/scm/report/guile-strings.c:590
 #, fuzzy
 msgid "Background color for primary subtotals and headings"
 msgstr "Цвет фона"
 
-#: src/scm/report/guile-strings.c:584 src/scm/report/guile-strings.c:603
+#: src/scm/report/guile-strings.c:592 src/scm/report/guile-strings.c:610
 msgid "Secondary Subtotals/headings"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:585
+#: src/scm/report/guile-strings.c:593
 #, fuzzy
 msgid "Background color for secondary subtotals and headings"
 msgstr "Цвет фона"
 
-#: src/scm/report/guile-strings.c:599
-msgid "Opening Balance"
-msgstr "Открыть баланс"
-
-#: src/scm/report/guile-strings.c:620 src/scm/report/guile-strings.c:621
+#: src/scm/report/guile-strings.c:627 src/scm/report/guile-strings.c:628
 msgid "Transaction Report"
 msgstr "Отчет о транзакциях"
+
+#: src/scm/report/guile-strings.c:630 src/scm/report/guile-strings.c:633
+#, fuzzy
+msgid "Number of columns"
+msgstr "Число строк"
+
+#: src/scm/report/guile-strings.c:631
+msgid "Number of columns before wrapping to a new row"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:634
+#, fuzzy
+msgid "Multicolumn View"
+msgstr "Многострочный"
+
+#, fuzzy
+#~ msgid "Unselect Subaccounts"
+#~ msgstr "Выбрать счет"
+
+#, fuzzy
+#~ msgid "label847671"
+#~ msgstr "метка773"
+
+#~ msgid "Record"
+#~ msgstr "Записать"
+
+#~ msgid "_Record"
+#~ msgstr "Записать"
+
+#~ msgid "Sub-Accounts"
+#~ msgstr "Подсчета"
+
+#~ msgid "Headers"
+#~ msgstr "Заголовки"
+
+#~ msgid "Display the headers?"
+#~ msgstr "Показать заголовки?"
+
+#, fuzzy
+#~ msgid "Table test"
+#~ msgstr "Итоги"
+
+#, fuzzy
+#~ msgid "Set/Reset Tax Status"
+#~ msgstr "Удалить выбранный счет"
+
+#, fuzzy
+#~ msgid "Set/Reset Selected Account Tax Status"
+#~ msgstr "Удалить выбранный счет"
+
+#, fuzzy
+#~ msgid "No Change"
+#~ msgstr "Изменено"
+
+#, fuzzy
+#~ msgid "Set Tax Related"
+#~ msgstr "Установить диапазон дат"
+
+#, fuzzy
+#~ msgid "Set Selected accounts as Tax Related"
+#~ msgstr "Удалить выбранный счет"
+
+#, fuzzy
+#~ msgid "Reset Tax Related"
+#~ msgstr "Установить диапазон дат"
+
+#, fuzzy
+#~ msgid "Reset Selected accounts as not Tax Related"
+#~ msgstr "Удалить выбранный счет"
+
+#, fuzzy
+#~ msgid "Set Tax Related & sub-accounts"
+#~ msgstr "Удалить выбранный счет"
+
+#, fuzzy
+#~ msgid "Set Selected & sub-accounts as Tax Related"
+#~ msgstr "Удалить выбранный счет"
+
+#, fuzzy
+#~ msgid "Reset Tax Related & sub-accounts"
+#~ msgstr "Удалить выбранный счет"
+
+#, fuzzy
+#~ msgid "Reset Selected & sub-accounts as not Tax Related"
+#~ msgstr "Удалить выбранный счет"
+
+#, fuzzy
+#~ msgid "Use Indicated Default"
+#~ msgstr "Выбрать исходное"
+
+#, fuzzy
+#~ msgid "< Current Account"
+#~ msgstr "Родительский счет"
+
+#, fuzzy
+#~ msgid "Use Current Account Name"
+#~ msgstr "Родительский счет"
+
+#, fuzzy
+#~ msgid "^ Parent Account"
+#~ msgstr "Родительский счет"
+
+#, fuzzy
+#~ msgid "Use Parent Account Name"
+#~ msgstr "Родительский счет"
+
+#, fuzzy
+#~ msgid "Report Options"
+#~ msgstr "Параметры отчета"
+
+#~ msgid "Opening Balance"
+#~ msgstr "Открыть баланс"
 
 #, fuzzy
 #~ msgid "There was an error during file IO."
@@ -6293,12 +6719,6 @@ msgstr "Отчет о транзакциях"
 #~ "     %s\n"
 #~ "\n"
 #~ "%s"
-
-#~ msgid "All Accounts"
-#~ msgstr "Все счета"
-
-#~ msgid "Account type:"
-#~ msgstr "Тип счета:"
 
 #, fuzzy
 #~ msgid "Account:"
@@ -6375,32 +6795,18 @@ msgstr "Отчет о транзакциях"
 #~ msgstr "Состояние"
 
 #, fuzzy
-#~ msgid "Portfolio Options"
-#~ msgstr "Параметры отчета"
-
-#, fuzzy
 #~ msgid "At"
 #~ msgstr "Авто"
 
 #~ msgid "Cost"
 #~ msgstr "Стоимость"
 
-#~ msgid "Time"
-#~ msgstr "Время"
-
 #~ msgid "To:"
 #~ msgstr "По:"
 
 #, fuzzy
-#~ msgid "Export .TXF"
-#~ msgstr "Экспортировать в"
-
-#, fuzzy
 #~ msgid "Display the shares price?"
 #~ msgstr "Показать заголовки?"
-
-#~ msgid "Multi Line"
-#~ msgstr "Многострочный"
 
 #~ msgid "_Budget"
 #~ msgstr "Бюджет"
@@ -6409,17 +6815,11 @@ msgstr "Отчет о транзакциях"
 #~ msgid "Display the Account Summary report."
 #~ msgstr "Показать счет?"
 
-#~ msgid "Day"
-#~ msgstr "День"
-
 #~ msgid "Double line mode with a multi-line cursor"
 #~ msgstr "Режим двойной строки с многострочным курсором"
 
 #~ msgid "Single line mode with a multi-line cursor"
 #~ msgstr "Режим одиночной строки с многострочным курсором"
-
-#~ msgid "Week"
-#~ msgstr "Неделя"
 
 #~ msgid "Show transactions on two lines with more information"
 #~ msgstr "Показать транзакции на двух строках с дополнительной информацией"
@@ -6446,9 +6846,6 @@ msgstr "Отчет о транзакциях"
 #~ msgid "A_ccount Summary"
 #~ msgstr "Разделитель счета"
 
-#~ msgid "Date Format"
-#~ msgstr "Формат даты"
-
 #~ msgid "_Transaction Report"
 #~ msgstr "Отчет о транзакции"
 
@@ -6458,15 +6855,6 @@ msgstr "Отчет о транзакциях"
 
 #~ msgid "_Reports"
 #~ msgstr "Отчеты"
-
-#~ msgid "Year"
-#~ msgstr "Год"
-
-#~ msgid "Month"
-#~ msgstr "Месяц"
-
-#~ msgid "Two Week"
-#~ msgstr "Две недели"
 
 #~ msgid "Actual"
 #~ msgstr "Действительное"
@@ -6481,9 +6869,6 @@ msgstr "Отчет о транзакциях"
 
 #~ msgid "Lower Limit"
 #~ msgstr "Нижний предел"
-
-#~ msgid "2Week"
-#~ msgstr "2 недели"
 
 #~ msgid "Extensions"
 #~ msgstr "Расширения"
@@ -6522,17 +6907,6 @@ msgstr "Отчет о транзакциях"
 #~ msgstr "Этот отчет не имеет параметров."
 
 #~ msgid ""
-#~ "There was an error opening the file\n"
-#~ "     %s\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "При открытии файла возникла ошибка\n"
-#~ "     %s\n"
-#~ "\n"
-#~ "%s"
-
-#~ msgid ""
 #~ "There was an error closing the file\n"
 #~ "     %s\n"
 #~ "\n"
@@ -6545,9 +6919,6 @@ msgstr "Отчет о транзакциях"
 
 #~ msgid "Header background"
 #~ msgstr "Фон заголовка"
-
-#~ msgid "Select ..."
-#~ msgstr "Выбор..."
 
 #~ msgid "$"
 #~ msgstr "$"
@@ -6640,9 +7011,6 @@ msgstr "Отчет о транзакциях"
 
 #~ msgid "Import QIF"
 #~ msgstr "Импортировать QIF"
-
-#~ msgid "Open Account"
-#~ msgstr "Открыть счет"
 
 #~ msgid "Open File"
 #~ msgstr "Открыть файл"
@@ -6743,6 +7111,3 @@ msgstr "Отчет о транзакциях"
 #~ msgstr ""
 #~ "Передача между этими счетами не возможна.\n"
 #~ "Они не имеют общей валюты."
-
-#~ msgid "window1"
-#~ msgstr "окно1"
