@@ -64,9 +64,6 @@ typedef struct _SheetBlockStyle SheetBlockStyle;
 
 typedef struct  
 {
-        /* The virtual location in the table of this block */
-        VirtualCellLocation vcell_loc;
-
         /* The style for this block */
         SheetBlockStyle *style;
 

@@ -1953,19 +1953,6 @@ gnucash_sheet_resize (GnucashSheet *sheet)
 
         g_table_resize (sheet->blocks, sheet->table->num_virt_rows, 1);
 
-        /* This assumes that earlier blocks are unchanged. */
-        if (diff_rows > 0) {
-                for (i = 0; i < diff_rows; i++) {
-                        SheetBlock *block;
-
-                        vcell_loc.virt_row = num_virt_rows + i;
-
-                        block = gnucash_sheet_get_block (sheet, vcell_loc);
-
-                        block->vcell_loc = vcell_loc;
-                }
-        }
-
         sheet->num_virt_rows = sheet->table->num_virt_rows;
         gnucash_sheet_set_scroll_region (sheet);
 }
