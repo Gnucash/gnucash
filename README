@@ -275,6 +275,7 @@ Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
 Bob Drzyzgula <bob@mostly.com> for budgeting design notes
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
+Jon K}re Hellan <jk@isdn-a33.itea.ntnu.no> misc core dump fixes
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
 Ted Lemon <mellon@andare.fugue.com> for NetBSD port
 G. Allen Morris III  <gam3@ann.softgams.com> for QIF core dump 
