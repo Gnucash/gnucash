@@ -659,8 +659,9 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
   SRInfo *info = xaccSRGetInfo(reg);
   Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
   Transaction *new_trans;
-  Transaction *trans;
-  Split *trans_split;
+  Transaction *old_trans;
+  Split *old_trans_split;
+  Split *new_trans_split;
   Split *new_split;
   gboolean saved;
 
@@ -669,7 +670,8 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
          new_virt_loc.vcell_loc.virt_col);
 
   /* The transaction we are coming from */
-  trans = xaccSRGetCurrentTrans(reg);
+  old_trans = xaccSRGetCurrentTrans (reg);
+  old_trans_split = xaccSRGetCurrentTransSplit (reg);
 
   if (!info->hint_set_by_traverse)
   {
@@ -680,23 +682,23 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
     new_split = sr_get_split_virtual(reg, new_virt_loc.vcell_loc);
 
     /* The split at the transaction line we are moving to */
-    trans_split = xaccSRGetTransSplit(reg, new_virt_loc.vcell_loc);
+    new_trans_split = xaccSRGetTransSplit(reg, new_virt_loc.vcell_loc);
   }
   else
   {
     new_trans = info->cursor_hint_trans;
     new_split = info->cursor_hint_split;
-    trans_split = info->cursor_hint_trans_split;
+    new_trans_split = info->cursor_hint_trans_split;
   }
 
   /* commit the contents of the cursor into the database */
-  saved = xaccSRSaveRegEntry (reg, trans != new_trans);
+  saved = xaccSRSaveRegEntry (reg, old_trans != new_trans);
   if ((pending_trans != NULL) &&
-      (pending_trans == trans) &&
-      (trans != new_trans))
+      (pending_trans == old_trans) &&
+      (old_trans != new_trans))
   {
-    if (xaccTransIsOpen(trans))
-      xaccTransCommitEdit (trans);
+    if (xaccTransIsOpen (old_trans))
+      xaccTransCommitEdit (old_trans);
     info->pending_trans_guid = *xaccGUIDNULL();
     pending_trans = NULL;
     saved = TRUE;
@@ -710,7 +712,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
 
     /* if the split we were going to is still in the register,
      * then it may have moved. Find out where it is now. */
-    if (xaccSRGetTransSplitVirtLoc (reg, new_trans, trans_split,
+    if (xaccSRGetTransSplitVirtLoc (reg, new_trans, new_trans_split,
                                     new_split, &vcell_loc))
     {
       VirtualCell *vcell;
@@ -735,14 +737,15 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
    * to expand out the splits at the new location. We use the
    * cursor_hint data members to tell the refresh routine where
    * to go. */
-  if ((REG_SINGLE_DYNAMIC == reg->style) ||
-      (REG_DOUBLE_DYNAMIC == reg->style)) 
+  if (((REG_SINGLE_DYNAMIC == reg->style) ||
+       (REG_DOUBLE_DYNAMIC == reg->style)) &&
+      (old_trans_split != new_trans_split))
   {
     new_trans = xaccSRGetTrans(reg, new_virt_loc.vcell_loc);
     info->cursor_hint_trans = new_trans;
 
-    trans_split = xaccSRGetTransSplit(reg, new_virt_loc.vcell_loc);
-    info->cursor_hint_trans_split = trans_split;
+    new_trans_split = xaccSRGetTransSplit(reg, new_virt_loc.vcell_loc);
+    info->cursor_hint_trans_split = new_trans_split;
 
     new_split = sr_get_split_virtual (reg, new_virt_loc.vcell_loc);
     info->cursor_hint_split = new_split;
@@ -768,7 +771,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
   {
     info->cursor_hint_trans = new_trans;
     info->cursor_hint_split = new_split;
-    info->cursor_hint_trans_split = trans_split;
+    info->cursor_hint_trans_split = new_trans_split;
     info->cursor_hint_phys_col = -1;
   }
 
