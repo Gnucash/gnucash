@@ -277,6 +277,10 @@ src/import-export/hbci/druid-hbci-utils.c
 src/import-export/test/test-link.c
 src/import-export/Transaction-matcher.c
 src/import-export/Account-matcher.c
+src/import-export/grc-import/grc.glade
+src/import-export/grc-import/druid-grc-import.c
+src/import-export/grc-import/dialog-account-picker.c
+src/import-export/grc-import/gncmod-grc-import.c
 src/import-export/qif-io-core/gncmod-qifiocore.c
 src/import-export/qif-import/test/test-link.c
 src/import-export/qif-import/dialog-account-picker.c
@@ -291,10 +295,12 @@ src/import-export/binary-import/gncmod-binary-import.c
 src/import-export/binary-import/binary-import.glade
 src/import-export/gncmod-generic-import.c
 src/import-export/generic-import.glade
+src/gnome-utils/gnc-account-sel.c
 src/gnome-utils/test/test-link-module.c
 src/gnome-utils/argv-list-converters.c
 src/gnome-utils/gnc-account-tree.c
 src/gnome-utils/gnc-html-history.c
+src/gnome-utils/dialog-account.c
 src/gnome-utils/print-session.c
 src/gnome-utils/gnc-commodity-edit.c
 src/gnome-utils/gncmod-gnome-utils.c
@@ -319,8 +325,6 @@ src/gnome-utils/gnc-dense-cal.c
 src/gnome-utils/dialog-utils.c
 src/gnome-utils/gnc-html.c
 src/gnome-utils/commodity.glade
-src/gnome-utils/dialog-account.c
-src/gnome-utils/gnc-account-sel.c
 src/business/dialog-tax-table/gncmod-dialog-tax-table.c
 src/business/dialog-tax-table/dialog-tax-table.c
 src/business/dialog-tax-table/tax-tables.glade

@@ -1331,17 +1331,17 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
    * menus and toolbars.  What a pain.
    */
   /* Do not i18n these strings!!! */
-  if (gnc_mdi_child_find_menu_item(mc, "File/New Account..."))
+  if (gnc_mdi_child_find_menu_item(mc, "File/_New Account..."))
     return;
     
   /* Do not i18n these strings!!! */
   dup_scrub[0].user_data = mc->child;
   dup_scrub[1].user_data = mc->child;
   dup_scrub[2].user_data = mc->child;
-  gnome_app_insert_menus (mc->app, "File/New File", fileitems1);
+  gnome_app_insert_menus (mc->app, "File/_New File", fileitems1);
   gnome_app_insert_menus (mc->app, "File/Open...", fileitems2);
   gnome_app_insert_menus (mc->app, "Edit/Paste", edititems);
-  gnome_app_insert_menus (mc->app, "_Actions/Scheduled Transactions",
+  gnome_app_insert_menus (mc->app, "_Actions/_Scheduled Transactions",
 			  actionitems);
 
   win = (GNCAcctTreeWin *)mc->user_data;

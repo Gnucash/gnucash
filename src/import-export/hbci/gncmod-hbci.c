@@ -113,5 +113,5 @@ gnc_hbci_addmenus(void)
     };
     
     
-  gnc_add_c_extension (reg_online_menu, WINDOW_NAME_REGISTER "/Actions/");
+  gnc_add_c_extension (reg_online_menu, WINDOW_NAME_REGISTER "/_Actions/");
 }
