@@ -30,7 +30,8 @@ noinst_HEADERS = \
   RecnWindow.h \
   gnc-ui.h
 
+bin_SCRIPTS = gnc-test-env
+
 EXTRA_DIST = \
   .cvsignore \
-  README.modules \
-  gnc-test-env
+  README.modules
