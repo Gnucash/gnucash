@@ -1,3 +1,15 @@
+2000-11-09  Bill Gribble  <grib@billgribble.com>
+
+	* src/engine/gnc_numeric.c: fix remainder-handling error
+
+	* src/scm/qif-import/qif-dialog-utils.scm: only ask about 
+	stocks that are in the QIF files being loaded.
+
+	* src/scm/qif-import/qif-file.scm: add progress bar to file read
+
+	* src/scm/qif-import/qif-to-gnc.scm: add progress bar to 
+	transaction mark and import.
+
 2000-11-08  Bill Gribble  <grib@billgribble.com>
 
 	* src/engine/SplitLedger.c: use new SetShareAmount/SetValue

@@ -19,27 +19,40 @@
 
 (define (qif-file:read-file self path)
   (qif-file:set-path! self path)
-  (let ((qstate-type #f)
-        (current-xtn #f)
-        (current-split #f)
-        (current-account-name #f)
-        (last-seen-account-name #f)
-        (default-split #f)
-        (first-xtn #f)
-        (ignore-accounts #f)
-        (return-val #t)
-        (line #f)
-        (tag #f)
-        (value #f)
-        (heinous-error #f)
-        (start-time #f)
-        (end-time #f)
-        (delimiters (string #\cr #\nl))
-	(valid-acct-types 
-         '(type:bank type:cash
-                     type:ccard type:invst
-                     #{type:oth\ a}#  #{type:oth\ l}#)))
+  (let* ((qstate-type #f)
+         (current-xtn #f)
+         (current-split #f)
+         (current-account-name #f)
+         (last-seen-account-name #f)
+         (default-split #f)
+         (first-xtn #f)
+         (ignore-accounts #f)
+         (return-val #t)
+         (line #f)
+         (tag #f)
+         (value #f)
+         (heinous-error #f)
+         (start-time #f)
+         (end-time #f)
+         (delimiters (string #\cr #\nl))
+         (valid-acct-types 
+          '(type:bank type:cash
+                      type:ccard type:invst
+                      #{type:oth\ a}#  #{type:oth\ l}#))
+         (progress-dialog #f)
+         (file-stats (stat path))
+         (file-size (stat:size file-stats))
+         (bytes-read 0))
     (set! start-time (gettimeofday))
+    
+    (if (> file-size 10000)
+        (begin
+          (set! progress-dialog (gnc:progress-dialog-new #f))
+          (gnc:progress-dialog-set-title progress-dialog "Progress")
+          (gnc:progress-dialog-set-heading progress-dialog
+                                           "Loading QIF file...")
+          (gnc:progress-dialog-set-limits progress-dialog 0.0 100.0)))
+                                          
     (with-input-from-file path
       (lambda ()
         ;; loop over lines
@@ -49,6 +62,10 @@
                (not (eof-object? line))
                (not (string=? line "")))
               (begin 
+                ;; add to the bytes-read tally 
+                (set! bytes-read 
+                      (+ bytes-read 1 (string-length line)))
+
                 ;; pick the 1-char tag off from the remainder of the line 
                 (set! tag (string-ref line 0))
                 (set! value (make-shared-substring line 1))
@@ -201,7 +218,14 @@
                        ;;(write current-xtn) (newline)
                        (set! current-xtn (make-qif-xtn))
                        (set! current-split #f)
-                       (set! default-split (make-qif-split)))))
+                       (set! default-split (make-qif-split))
+                       
+                       (if progress-dialog 
+                           (begin 
+                             (gnc:progress-dialog-set-value 
+                              progress-dialog
+                              (* 100 (/ bytes-read file-size)))
+                             (gnc:progress-dialog-update progress-dialog)))))) 
                    
                    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                    ;; Class transactions 
@@ -324,6 +348,10 @@
     ;; now reverse the transaction list so xtns are in the same order that 
     ;; they were in the file.  This is important in a few cases. 
     (qif-file:set-xtns! self (reverse (qif-file:xtns self)))
+
+    (if progress-dialog
+        (gnc:progress-dialog-destroy progress-dialog))
+
     return-val))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -133,7 +133,10 @@
           (sort qif-files-list 
                 (lambda (a b)
                   (> (length (qif-file:xtns a)) 
-                     (length (qif-file:xtns b)))))))
+                     (length (qif-file:xtns b))))))
+         (progress-dialog #f)
+         (work-to-do 0)
+         (work-done 0))
     
     ;; first, build a local account tree that mirrors the gnucash
     ;; accounts in the mapping data.  we need to iterate over the
@@ -209,19 +212,37 @@
      (lambda (qif-file)
        (for-each 
         (lambda (xtn)
+          (set! work-to-do (+ 1 work-to-do))
           (let splitloop ((splits (qif-xtn:splits xtn)))             
             (if (qif-split:category-is-account? (car splits))
-                (set! markable-xtns (cons xtn markable-xtns))
+                (begin 
+                  (set! markable-xtns (cons xtn markable-xtns))
+                  (set! work-to-do (+ 1 work-to-do)))
                 (if (not (null? (cdr splits)))
                     (splitloop (cdr splits))))))
         (qif-file:xtns qif-file)))
      qif-files-list)
     
+    (if (> work-to-do 100)
+        (begin 
+          (set! progress-dialog (gnc:progress-dialog-new #f))
+          (gnc:progress-dialog-set-title progress-dialog "Progress")
+          (gnc:progress-dialog-set-heading progress-dialog
+                                           "Importing transactions...")
+          (gnc:progress-dialog-set-limits progress-dialog 0.0 100.0)))
+    
+
     ;; now run through the markable transactions marking any
     ;; duplicates.  marked transactions/splits won't get imported.
     (if (> (length markable-xtns) 1)
         (let xloop ((xtn (car markable-xtns))
                     (rest (cdr markable-xtns)))
+          (set! work-done (+ 1 work-done))
+          (if progress-dialog 
+              (begin 
+                (gnc:progress-dialog-set-value 
+                 progress-dialog (* 100 (/ work-done work-to-do)))
+                (gnc:progress-dialog-update progress-dialog))) 
           (if (not (qif-xtn:mark xtn))
               (qif-import:mark-matching-xtns xtn rest))
           (if (not (null? (cdr rest)))
@@ -233,6 +254,12 @@
      (lambda (qif-file)
        (for-each 
         (lambda (xtn)
+          (set! work-done (+ 1 work-done))
+          (if progress-dialog 
+              (begin 
+                (gnc:progress-dialog-set-value 
+                 progress-dialog (* 100 (/ work-done work-to-do)))
+                (gnc:progress-dialog-update progress-dialog))) 
           (if (not (qif-xtn:mark xtn))
               (begin 
                 ;; create and fill in the GNC transaction
@@ -248,6 +275,10 @@
                   (gnc:transaction-commit-edit gnc-xtn)))))
         (qif-file:xtns qif-file)))
      sorted-qif-files-list)
+    
+    ;; get rid of the progress dialog 
+    (if progress-dialog
+        (gnc:progress-dialog-destroy progress-dialog))
     
     ;; now take the new account tree and merge it in with the 
     ;; existing gnucash account tree. 

@@ -536,15 +536,11 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how) {
     temp.denom = in.denom;
     temp       = gnc_numeric_reduce(temp);
   
-    /* out.num   = in.num * denom; */
     out.num   = in.num * temp.num;
     out.num   = (out.num < 0) ? -out.num : out.num;
     remainder = out.num % temp.denom;
     out.num   = out.num / temp.denom;
     out.denom = denom;
-    if(remainder) {
-      remainder = remainder * in.denom / temp.denom;
-    }
   }
 
   if(remainder > 0) {
@@ -901,9 +897,11 @@ gnc_numeric_add_with_error(gnc_numeric a, gnc_numeric b,
                            gnc_numeric * error) {
 
   gnc_numeric sum   = gnc_numeric_add(a, b, denom, how);
-  gnc_numeric exact = gnc_numeric_add(a, b, GNC_DENOM_EXACT, 0);
-  gnc_numeric err   = gnc_numeric_sub(sum, exact, GNC_DENOM_EXACT, 
-                                      0);
+  gnc_numeric exact = gnc_numeric_add(a, b, GNC_DENOM_AUTO, 
+                                      GNC_DENOM_REDUCE);
+  gnc_numeric err   = gnc_numeric_sub(sum, exact, GNC_DENOM_AUTO,
+                                      GNC_DENOM_REDUCE);
+
   if(error) {
     *error = err;
   }
@@ -920,8 +918,10 @@ gnc_numeric_sub_with_error(gnc_numeric a, gnc_numeric b,
                            gnc_numeric * error) {
 
   gnc_numeric diff  = gnc_numeric_sub(a, b, denom, how);
-  gnc_numeric exact = gnc_numeric_sub(a, b, GNC_DENOM_EXACT, 0);
-  gnc_numeric err   = gnc_numeric_sub(diff, exact, GNC_DENOM_EXACT, 0);
+  gnc_numeric exact = gnc_numeric_sub(a, b, GNC_DENOM_AUTO,
+                                      GNC_DENOM_REDUCE);
+  gnc_numeric err   = gnc_numeric_sub(diff, exact, GNC_DENOM_AUTO, 
+                                      GNC_DENOM_REDUCE);
   if(error) {
     *error = err;
   }
@@ -939,8 +939,10 @@ gnc_numeric_mul_with_error(gnc_numeric a, gnc_numeric b,
                            gnc_numeric * error) {
 
   gnc_numeric prod  = gnc_numeric_mul(a, b, denom, how);
-  gnc_numeric exact = gnc_numeric_mul(a, b, GNC_DENOM_EXACT, 0);
-  gnc_numeric err   = gnc_numeric_sub(prod, exact, GNC_DENOM_EXACT, 0);
+  gnc_numeric exact = gnc_numeric_mul(a, b, GNC_DENOM_AUTO,
+                                      GNC_DENOM_REDUCE);
+  gnc_numeric err   = gnc_numeric_sub(prod, exact, GNC_DENOM_AUTO,
+                                      GNC_DENOM_REDUCE);
   if(error) {
     *error = err;
   }
@@ -958,8 +960,10 @@ gnc_numeric_div_with_error(gnc_numeric a, gnc_numeric b,
                            gnc_numeric * error) {
 
   gnc_numeric quot  = gnc_numeric_div(a, b, denom, how);
-  gnc_numeric exact = gnc_numeric_div(a, b, GNC_DENOM_EXACT, 0);
-  gnc_numeric err   = gnc_numeric_sub(quot, exact, GNC_DENOM_EXACT, 0);
+  gnc_numeric exact = gnc_numeric_div(a, b, GNC_DENOM_AUTO, 
+                                      GNC_DENOM_REDUCE);
+  gnc_numeric err   = gnc_numeric_sub(quot, exact, 
+                                      GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
   if(error) {
     *error = err;
   }
@@ -1012,7 +1016,8 @@ string_to_gnc_numeric(const gchar* str, gnc_numeric *n) {
   return(str + num_read);
 }
 
-#if 0
+#ifdef _GNC_NUMERIC_TEST
+
 static char *
 gnc_numeric_print(gnc_numeric in) {
   char * retval;
@@ -1037,21 +1042,23 @@ main(int argc, char ** argv) {
 
   printf("add exact : %s + %s = %s\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_add(a, b, GNC_DENOM_EXACT, 
-                                           GNC_RND_FLOOR)));
-
-
+         gnc_numeric_print(gnc_numeric_add(a, b, 
+                                           GNC_DENOM_AUTO, 
+                                           GNC_DENOM_EXACT)));
+  
+  
   printf("add least : %s + %s = %s\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_add(a, b, GNC_DENOM_REDUCE, 
-                                           GNC_RND_FLOOR)));
-
-  printf("add 100ths : %s + %s = %s\n",
+         gnc_numeric_print(gnc_numeric_add(a, b, 
+                                           GNC_DENOM_AUTO, 
+                                           GNC_DENOM_REDUCE)));
+  
+  printf("add 100ths (banker's): %s + %s = %s\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
          gnc_numeric_print(gnc_numeric_add(a, b, 100,
-                                           GNC_RND_FLOOR)));
+                                           GNC_RND_ROUND)));
   
-  c = gnc_numeric_add_with_error(a, b, 100, GNC_RND_FLOOR, &err);
+  c = gnc_numeric_add_with_error(a, b, 100, GNC_RND_ROUND, &err);
   printf("add 100ths/error : %s + %s = %s + (error) %s\n\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
          gnc_numeric_print(c),
@@ -1059,19 +1066,20 @@ main(int argc, char ** argv) {
   
   printf("sub exact : %s - %s = %s\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_sub(a, b, GNC_DENOM_EXACT, 
-                                           GNC_RND_FLOOR)));
-
+         gnc_numeric_print(gnc_numeric_sub(a, b, GNC_DENOM_AUTO, 
+                                           GNC_DENOM_EXACT)));
+  
   printf("sub least : %s - %s = %s\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_sub(a, b, GNC_DENOM_REDUCE, 
-                                           GNC_RND_FLOOR)));
-
+         gnc_numeric_print(gnc_numeric_sub(a, b, 
+                                           GNC_DENOM_AUTO, 
+                                           GNC_DENOM_REDUCE)));
+  
   printf("sub 100ths : %s - %s = %s\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
          gnc_numeric_print(gnc_numeric_sub(a, b, 100,
-                                           GNC_RND_FLOOR)));
-
+                                           GNC_RND_ROUND)));
+  
   c = gnc_numeric_sub_with_error(a, b, 100, GNC_RND_FLOOR, &err);
   printf("sub 100ths/error : %s - %s = %s + (error) %s\n\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
@@ -1080,20 +1088,20 @@ main(int argc, char ** argv) {
   
   printf("mul exact : %s * %s = %s\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_mul(a, b, GNC_DENOM_EXACT, 
-                                           GNC_RND_FLOOR)));
+         gnc_numeric_print(gnc_numeric_mul(a, b, GNC_DENOM_AUTO, 
+                                           GNC_DENOM_EXACT)));
 
   printf("mul least : %s * %s = %s\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_mul(a, b, GNC_DENOM_REDUCE, 
-                                           GNC_RND_FLOOR)));
-
+         gnc_numeric_print(gnc_numeric_mul(a, b, GNC_DENOM_AUTO, 
+                                           GNC_DENOM_REDUCE)));
+  
   printf("mul 100ths : %s * %s = %s\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
          gnc_numeric_print(gnc_numeric_mul(a, b, 100,
-                                           GNC_RND_FLOOR)));
+                                           GNC_RND_ROUND)));
 
-  c = gnc_numeric_mul_with_error(a, b, 100, GNC_RND_FLOOR, &err);
+  c = gnc_numeric_mul_with_error(a, b, 100, GNC_RND_ROUND, &err);
   printf("mul 100ths/error : %s * %s = %s + (error) %s\n\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
          gnc_numeric_print(c),
@@ -1101,20 +1109,20 @@ main(int argc, char ** argv) {
   
   printf("div exact : %s / %s = %s\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_div(a, b, GNC_DENOM_EXACT, 
-                                           GNC_RND_FLOOR)));
+         gnc_numeric_print(gnc_numeric_div(a, b, GNC_DENOM_AUTO, 
+                                           GNC_DENOM_EXACT)));
   
   printf("div least : %s / %s = %s\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_div(a, b, GNC_DENOM_REDUCE, 
-                                           GNC_RND_FLOOR)));
+         gnc_numeric_print(gnc_numeric_div(a, b, GNC_DENOM_AUTO, 
+                                           GNC_DENOM_REDUCE)));
   
   printf("div 100ths : %s / %s = %s\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
          gnc_numeric_print(gnc_numeric_div(a, b, 100,
-                                           GNC_RND_FLOOR)));  
+                                           GNC_RND_ROUND)));  
   
-  c = gnc_numeric_div_with_error(a, b, 100, GNC_RND_FLOOR, &err);
+  c = gnc_numeric_div_with_error(a, b, 100, GNC_RND_ROUND, &err);
   printf("div 100ths/error : %s / %s = %s + (error) %s\n\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
          gnc_numeric_print(c),
@@ -1135,6 +1143,20 @@ main(int argc, char ** argv) {
   printf("7/16 as 100ths (round): %s\n",
          gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(7, 16),
                                                100, GNC_RND_ROUND)));
+
+  printf("1511/1000 as 1/100 (round): %s\n",
+         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(1511, 1000),
+                                               100, GNC_RND_ROUND)));
+  printf("1516/1000 as 1/100 (round): %s\n",
+         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(1516, 1000),
+                                               100, GNC_RND_ROUND)));
+  printf("1515/1000 as 1/100 (round): %s\n",
+         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(1515, 1000),
+                                               100, GNC_RND_ROUND)));
+  printf("1525/1000 as 1/100 (round): %s\n",
+         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(1525, 1000),
+                                               100, GNC_RND_ROUND)));
+
   printf("100023234 / 334216654 reduced: %s\n",
          gnc_numeric_print(gnc_numeric_reduce(gnc_numeric_create(10023234LL,
                                                                  334216654LL))));
@@ -1151,12 +1173,12 @@ main(int argc, char ** argv) {
     gnc_numeric_reduce(gnc_numeric_create(17474724864LL,
                                           136048896LL));
   }
-
+  
   printf("add LCM: %s + %s = %s\n",
          gnc_numeric_print(b), gnc_numeric_print(d),
-         gnc_numeric_print(gnc_numeric_add(b, d, GNC_DENOM_LCD,
-                                           GNC_RND_NEVER)));
-
+         gnc_numeric_print(gnc_numeric_add(b, d, GNC_DENOM_AUTO,
+                                           GNC_DENOM_LCD)));
+  
   return 0;
 }
 #endif

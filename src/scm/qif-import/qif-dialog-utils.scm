@@ -479,6 +479,7 @@
         (lambda (elt)
           (if (and 
                (qif-map-entry:new-acct? (cdr elt))
+               (qif-map-entry:display? (cdr elt)) 
                (or 
                 (memv GNC-STOCK-TYPE 
                       (qif-map-entry:allowed-types (cdr elt)))
