@@ -1,4 +1,8 @@
 2002-11-12  Benoit Grégoire  <bock@step.polymtl.ca>
+	* src/import-export/ofx/gnc-ofx-import.c: Fix call to 
+	g_strdup_printf in Christian's 2002-11-03 translation patch.
+
+2002-11-12  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/Transaction-matcher.c
 	* src/import-export/generic-import.glade: First round of 
 	transaction matcher UI changes.  Create a pseudo-widget in first 
