@@ -62,8 +62,7 @@
   (if gnc:extensions-temp-book
       gnc:extensions-temp-book
       (begin
-	(set! gnc:extensions-temp-book (gnc:book-create
-					    (gnc:get-current-book)))
+	(set! gnc:extensions-temp-book (gnc:get-current-book))
 	(gnc:business-create-book gnc:extensions-temp-book)
 	gnc:extensions-temp-book)))
 
@@ -119,7 +118,15 @@
 			  (gnc:employee-select (gnc:extensions-get-book)
 				       #f #f))))
 
+  (define new-order-item
+    (gnc:make-menu-item (N_ "Test New Order Dialog")
+			(N_ "Test New Order Dialog")
+			(list "Extensions" "")
+			(lambda ()
+			  (gnc:order-new #f (gnc:extensions-get-book)))))
+
   (gnc:add-extension menu)
+  (gnc:add-extension new-order-item)
   (gnc:add-extension select-employee-item)
   (gnc:add-extension new-employee-item)
   (gnc:add-extension select-vendor-item)

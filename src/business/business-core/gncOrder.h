@@ -16,6 +16,7 @@ typedef enum {
 } GncOrderType;
 
 #include "gnc-book.h"
+#include "gncEntry.h"
 #include "gncJob.h"
 #include "gncVendor.h"
 

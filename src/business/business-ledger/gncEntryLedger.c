@@ -121,3 +121,10 @@ void gnc_entry_ledger_destroy (GncEntryLedger *ledger)
   gnc_table_destroy (ledger->table);
   g_free (ledger);
 }
+
+Table * gnc_entry_ledger_get_table (GncEntryLedger *ledger)
+{
+  if (!ledger) return;
+  return ledger->table;
+}
+

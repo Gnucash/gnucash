@@ -8,6 +8,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/business/business-core \
+  -I${top_srcdir}/src/business/business-ledger \
   ${GNOME_PRINT_CFLAGS} \
   ${GNOME_INCLUDEDIR} \
   ${GLADE_CFLAGS} \
@@ -16,8 +17,9 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
-  -I${top_srcdir}/src/register/ledger-core \
-  -I${top_srcdir}/src/register/register-core
+  -I${top_srcdir}/src/register/register-core \
+  -I${top_srcdir}/src/register/register-gnome \
+  -I${top_srcdir}/src/register/ledger-core
 
 libgncmod_business_gnome_la_SOURCES = \
   businessmod-gnome.c \
@@ -26,6 +28,7 @@ libgncmod_business_gnome_la_SOURCES = \
   dialog-employee.c \
   dialog-job.c \
   dialog-job-select.c \
+  dialog-order.c \
   dialog-vendor.c
 
 noinst_HEADERS = \
@@ -34,12 +37,14 @@ noinst_HEADERS = \
   dialog-employee.h \
   dialog-job.h \
   dialog-job-select.h \
+  dialog-order.h \
   dialog-vendor.h
 
 libgncmod_business_gnome_la_LDFLAGS = -module
 
 libgncmod_business_gnome_la_LIBADD = \
   ../business-core/libgncmod-business-core.la \
+  ../business-ledger/libgnc-business-ledger.la \
   ${top_srcdir}/src/gnc-module/libgncmodule.la \
   ${top_srcdir}/src/engine/libgncmod-engine.la \
   ${top_srcdir}/src/app-utils/libgncmod-app-utils.la \
@@ -63,6 +68,7 @@ glade_DATA = \
   customer.glade \
   employee.glade \
   job.glade \
+  order.glade \
   vendor.glade
 
 EXTRA_DIST = $(glade_DATA)

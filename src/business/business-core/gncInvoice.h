@@ -16,6 +16,10 @@ typedef enum {
   GNC_INVOICE_VENDOR = 2
 } GncInvoiceType;
 
+#include "gncCustomer.h"
+#include "gncVendor.h"
+#include "gncEntry.h"
+
 #define GNC_INVOICE_MODULE_NAME "gncInvoice"
 
 /* Create/Destroy Functions */

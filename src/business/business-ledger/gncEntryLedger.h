@@ -45,4 +45,7 @@ GncEntry * gnc_entry_ledger_get_current_entry (GncEntryLedger *ledger);
 /* Copy GncEntry information from the list to the rows of the Ledger. */
 void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list);
 
+/* Get the Table */
+Table * gnc_entry_ledger_get_table (GncEntryLedger *ledger);
+
 #endif /* GNC_ENTRY_LEDGER_H */

@@ -47,6 +47,7 @@
       "#include <dialog-employee.h>\n"
       "#include <dialog-job.h>\n"
       "#include <dialog-job-select.h>\n"
+      "#include <dialog-order.h>\n"
       "#include <dialog-vendor.h>\n"
       )))
 
@@ -151,6 +152,36 @@
      (<gnc:GncCustomer*> cust) (<gnc:GncJob*> job))
    "Dialog: Select a new job.  Parent and Customer may be NULL.")
 
+  ;;
+  ;; dialog-order.h
+  ;;
+
+  (gw:wrap-function
+   mod
+   'gnc:order-new
+   '<gnc:GncOrder*>
+   "gnc_order_new"
+   '((<gnc:UIWidget> parent) (<gnc:Book*> book))
+   "Dialog: create a new GncOrder.  Parent may be NULL.")
+
+  (gw:wrap-function
+   mod
+   'gnc:order-edit
+   '<gw:void>
+   "gnc_order_edit"
+   '((<gnc:UIWidget> parent) (<gnc:GncOrder*> order))
+   "Dialog: Edit a GncOrder.  Parent may be NULL.")
+
+
+  (gw:wrap-function
+   mod
+   'gnc:order-select
+   '<gnc:GncOrder*>
+   "gnc_order_edit_new_select"
+   '((<gnc:Book*> book) (<gnc:GncOrder*> start_selection)
+     (<gnc:UIWidget> parent))
+   "Dialog: Select a GncOrder.  Parent and start_selection may be NULL.")
+  
   ;;
   ;; dialog-vendor.h
   ;;
