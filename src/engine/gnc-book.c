@@ -86,7 +86,8 @@ gnc_book_get_schedxactions( GNCBook *book )
   SchedXactionList *list;
   if ( book == NULL ) return NULL;
   list = gnc_book_get_data (book, GNC_SCHEDXACTIONS);
-  return list->sx_list;
+  if (list) return list->sx_list;
+  return NULL;
 }
 
 void
@@ -96,7 +97,7 @@ gnc_book_set_schedxactions( GNCBook *book, GList *newList )
   if ( book == NULL ) return;
 
   old_list = gnc_book_get_data (book, GNC_SCHEDXACTIONS);
-  if (old_list->sx_list == newList) return;
+  if (old_list && old_list->sx_list == newList) return;
   
   new_list = g_new (SchedXactionList, 1);
   new_list->sx_notsaved = TRUE;
