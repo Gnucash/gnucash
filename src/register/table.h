@@ -31,10 +31,13 @@ typedef struct _Table {
 
 Table     * xaccMallocTable (int numentries);
 void        xaccInitTable (Table *, int entries);
-void        xaccCreateTable (Table *, Widget parent, char * name);
+
+/* create the widget */
+Widget      xaccCreateTable (Table *, Widget parent, char * name);
 
 void        xaccDestroyTable (Table *);
 
+/* redraw the table */
 void        xaccRefreshTable (Table *);
 
 /* add a cell to the array */

@@ -3,6 +3,7 @@
 
 #include <Xbae/Matrix.h>
 
+#include "cell.h"
 #include "table.h"
 
 Table * 
@@ -26,12 +27,21 @@ xaccInitTable (Table * table, int numentries)
    int num_phys_rows;
    int num_phys_cols;
    int i,j;
-
+   
    /* delete old entries */
+   num_phys_rows = table->num_phys_rows;
+   num_phys_cols = table->num_phys_cols;
    if (table->entries) {
+      for (i=0; i<num_phys_rows; i++) {
+         if (table->entries[i]) {
+            for (j=0; j<num_phys_cols; j++) {
+               free (table->entries[i][j]);
+            }
+            free (table->entries[i]);
+         }
+      }
+      free (table->entries);
    }
-
-   table->numEntries = numentries;
 
    /* compute number of physical rows */
    num_header_rows = 0;
@@ -48,6 +58,8 @@ xaccInitTable (Table * table, int numentries)
    table->num_phys_rows = num_phys_rows;
    table->num_phys_cols = num_phys_cols;
 
+   table->numEntries = numentries;
+
    /* create an empty table */
    table->entries = (char ***) malloc (num_phys_rows * sizeof (char **));
    for (i=0; i<num_phys_rows; i++) {
@@ -60,14 +72,44 @@ xaccInitTable (Table * table, int numentries)
 
 
 /* ==================================================== */
+/* hack alert -- will core dump if numrows has changed, etc. */
 
+static
 void
+xaccRefreshHeader (Table *table)
+{
+   int i,j;
+   CellBlock *arr;
+
+   /* copy header data into entries cache */
+   arr = table->header;
+   if (arr) {
+      for (i=0; i<arr->numRows; i++) {
+         for (j=0; j<arr->numCols; j++) {
+            if (table->entries[i][j]) free (table->entries[i][j]);
+            if (arr->cells[i][j]) {
+               if ((arr->cells[i][j])->value) {
+                  table->entries[i][j] = strdup ((arr->cells[i][j])->value);
+               } else {
+                  table->entries[i][j] = strdup ("");
+               }
+            } else {
+               table->entries[i][j] = strdup ("");
+            }
+         }
+      }
+   }
+}
+
+/* ==================================================== */
+
+Widget
 xaccCreateTable (Table *table, Widget parent, char * name) 
 {
    unsigned char * alignments;
    short * widths;
 
-   if (!table) return;
+   if (!table) return 0;
 
    /* if a header exists, get alignments, widths from there */
    alignments = NULL;
@@ -80,6 +122,9 @@ xaccCreateTable (Table *table, Widget parent, char * name)
       alignments = table->header->alignments;
       widths = table->header->widths;
    }
+
+   /* copy header data into entries cache */
+   xaccRefreshHeader (table);
 
    table->reg = XtVaCreateWidget( name,
                   xbaeMatrixWidgetClass,  parent,
@@ -100,6 +145,9 @@ xaccCreateTable (Table *table, Widget parent, char * name)
                   XmNnavigationType,      XmEXCLUSIVE_TAB_GROUP,  
                   NULL);
     
+   XtManageChild (table->reg);
+
+   return (table->reg);
 }
 
 /* ==================================================== */
