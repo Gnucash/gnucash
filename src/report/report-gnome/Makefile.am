@@ -79,7 +79,7 @@ gw-report-gnome.scm gw-report-gnome.c gw-report-gnome.h: .scm-links gw-report-gn
 	  (set! %load-path (cons \"${top_srcdir}/src/app-utils\" %load-path)) \
 	  (set! %load-path (cons \"${top_srcdir}/src/gnome-utils\" %load-path)) \
 	  (primitive-load \"./gw-report-gnome-spec.scm\") \
-	  (gw:generate-module \"gw-report-gnome\")"
+	  (gw:generate-wrapset \"gw-report-gnome\")"
 
 BUILT_SOURCES = gw-report-gnome.scm gw-report-gnome.c gw-report-gnome.h
 CLEANFILES = gw-report-gnome.scm gw-report-gnome.c gw-report-gnome.h \
