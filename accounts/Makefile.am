@@ -1,5 +1,5 @@
 
-SUBDIRS = C pt_PT de_DE es_ES
+SUBDIRS = C da de_DE es_ES pt_PT
 
 EXTRA_DIST = \
   .cvsignore

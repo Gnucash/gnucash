@@ -654,6 +654,7 @@ AC_OUTPUT(
           Makefile
           accounts/Makefile
           accounts/C/Makefile
+          accounts/da/Makefile
           accounts/de_DE/Makefile
           accounts/es_ES/Makefile
           accounts/pt_PT/Makefile
