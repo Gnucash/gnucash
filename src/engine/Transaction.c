@@ -345,11 +345,13 @@ xaccSplitSetBaseValue (Split *s, double value, char * base_currency)
     * may be the occasional split without a parent account. 
     * Well, that's ok,  we'll just go with the flow. 
     */
-   if (force_double_entry) {
-      assert (s->acc);
-   } else {
-      s -> damount = (value / (s->share_price));   
-      return;
+   if (!(s->acc)) {
+      if (force_double_entry) {
+         assert (s->acc);
+      } else { 
+         s -> damount = (value / (s->share_price));   
+         return;
+      }
    }
 
    /* be more precise -- the value depends on the curency 
@@ -360,7 +362,11 @@ xaccSplitSetBaseValue (Split *s, double value, char * base_currency)
    } else 
    if (!safe_strcmp(s->acc->security, base_currency)) {
       s -> damount = value;   
-   } else {
+   } else 
+   if ((0x0==base_currency) && (0 == force_double_entry)) {
+      s -> damount = (value / (s->share_price));   
+   } else 
+   {
       printf ("Error: xaccSplitSetBaseValue(): "
               " inappropriate base currency %s "
               " given split currency=%s and security=%s\n",
@@ -381,11 +387,13 @@ xaccSplitGetBaseValue (Split *s, char * base_currency)
     * may be the occasional split without a parent account. 
     * Well, that's ok,  we'll just go with the flow. 
     */
-   if (force_double_entry) {
-      assert (s->acc);
-   } else {
-      value = s->damount * s->share_price;   
-      return;
+   if (!(s->acc)) {
+      if (force_double_entry) {
+         assert (s->acc);
+      } else { 
+         value = s->damount * s->share_price;   
+         return value;
+      }
    }
 
    /* be more precise -- the value depends on the curency 
@@ -396,7 +404,11 @@ xaccSplitGetBaseValue (Split *s, char * base_currency)
    } else 
    if (!safe_strcmp(s->acc->security, base_currency)) {
       value = s->damount;   
-   } else {
+   } else 
+   if ((0x0==base_currency) && (0 == force_double_entry)) {
+      value = s->damount * s->share_price;   
+   } else 
+   {
       printf ("Error: xaccSplitGetBaseValue(): "
               " inappropriate base currency %s "
               " given split currency=%s and security=%s\n",
@@ -420,15 +432,36 @@ ComputeValue (Split **sarray, Split * skip_me, char * base_currency)
    s = sarray[0];
    while (s) {
       if (s != skip_me) {
-         if (!safe_strcmp(s->acc->currency, base_currency)) {
-            value += s->share_price * s->damount;
+         /* ahh -- stupid users may not want or use the double entry 
+          * features of this engine.  So, in particular, there
+          * may be the occasional split without a parent account. 
+          * Well, that's ok,  we'll just go with the flow. 
+          */
+         if (!(s->acc)) {
+            if (force_double_entry) {
+               assert (s->acc);
+            } else { 
+               value += s->damount * s->share_price;   
+            }
          } else 
-         if (!safe_strcmp(s->acc->security, base_currency)) {
-            value += s->damount;
+         if ((0x0 == base_currency) && (0 == force_double_entry)) {
+            value += s->damount * s->share_price;   
          } else {
-            printf ("Internal Error: ComputeValue(): "
-                    " inconsistent currencies \n");
-            assert (0);
+
+            /* OK, we've got a parent account, we've got currency, 
+             * lets behave like profesionals now, instead of the
+             * shenanigans above.
+             */
+            if (!safe_strcmp(s->acc->currency, base_currency)) {
+               value += s->share_price * s->damount;
+            } else 
+            if (!safe_strcmp(s->acc->security, base_currency)) {
+               value += s->damount;
+            } else {
+               printf ("Internal Error: ComputeValue(): "
+                       " inconsistent currencies \n");
+               assert (0);
+            }
          }
       }
       i++; s = sarray [i];
@@ -467,73 +500,77 @@ xaccSplitRebalance (Split *split)
    * quietly return. 
    */
   if (!trans) return;
-  if (!(split->acc)) return;
 
   if (DEFER_REBALANCE & (trans->open)) return;
-  if (ACC_DEFER_REBALANCE & (split->acc->open)) return;
-  assert (trans->splits);
-  assert (trans->splits[0]);
-
-  /* lets find out if we are dealing with multiple currencies,
-   * and which one(s) all of the splits have in common.  */
-  ra = split->acc->currency;
-  rb = split->acc->security;
-  if (rb && (0x0==rb[0])) rb = 0x0;
-
-  i=0; s = trans->splits[0];
-  while (s) {
-    char *sa, *sb;
-
-    /* ahh -- stupid users may not want or use the double entry 
-     * features of this engine.  So, in particular, there
-     * may be the occasional split without a parent account. 
-     * Well, that's ok,  we'll just go with the flow. 
-     */
-    if (force_double_entry) {
-       assert (s->acc);
-    } else {
-       i++; s=trans->splits[i]; continue;
-    }
-
-    sa = s->acc->currency;
-    sb = s->acc->security;
-    if (sb && (0x0==sb[0])) sb = 0x0;
-
-    if (ra && rb) {
-       int aa = safe_strcmp (ra,sa);
-       int ab = safe_strcmp (ra,sb);
-       int ba = safe_strcmp (rb,sa);
-       int bb = safe_strcmp (rb,sb);
-       if ( (!aa) && bb) rb = 0x0;
-       else
-       if ( (!ab) && ba) rb = 0x0;
-       else
-       if ( (!ba) && ab) ra = 0x0;
-       else
-       if ( (!bb) && aa) ra = 0x0;
-       else
-       if ( aa && bb && ab && ba ) { ra=0x0; rb=0x0; }
-
-       if (!ra) { ra=rb; rb=0x0; }
-    } 
-    else
-    if (ra && !rb) {
-       int aa = safe_strcmp (ra,sa);
-       int ab = safe_strcmp (ra,sb);
-       if ( aa && ab )  ra= 0x0;
-    }
-
+  if (split->acc) {
+    if (ACC_DEFER_REBALANCE & (split->acc->open)) return;
+    assert (trans->splits);
+    assert (trans->splits[0]);
+  
+    /* lets find out if we are dealing with multiple currencies,
+     * and which one(s) all of the splits have in common.  */
+    ra = split->acc->currency;
+    rb = split->acc->security;
+    if (rb && (0x0==rb[0])) rb = 0x0;
+  
+    i=0; s = trans->splits[0];
+    while (s) {
+      char *sa, *sb;
+  
+      /* ahh -- stupid users may not want or use the double entry 
+       * features of this engine.  So, in particular, there
+       * may be the occasional split without a parent account. 
+       * Well, that's ok,  we'll just go with the flow. 
+       */
+      if (force_double_entry) {
+         assert (s->acc);
+      } else {
+         i++; s=trans->splits[i]; continue;
+      }
+  
+      sa = s->acc->currency;
+      sb = s->acc->security;
+      if (sb && (0x0==sb[0])) sb = 0x0;
+  
+      if (ra && rb) {
+         int aa = safe_strcmp (ra,sa);
+         int ab = safe_strcmp (ra,sb);
+         int ba = safe_strcmp (rb,sa);
+         int bb = safe_strcmp (rb,sb);
+         if ( (!aa) && bb) rb = 0x0;
+         else
+         if ( (!ab) && ba) rb = 0x0;
+         else
+         if ( (!ba) && ab) ra = 0x0;
+         else
+         if ( (!bb) && aa) ra = 0x0;
+         else
+         if ( aa && bb && ab && ba ) { ra=0x0; rb=0x0; }
+  
+         if (!ra) { ra=rb; rb=0x0; }
+      } 
+      else
+      if (ra && !rb) {
+         int aa = safe_strcmp (ra,sa);
+         int ab = safe_strcmp (ra,sb);
+         if ( aa && ab )  ra= 0x0;
+      }
+  
     if ((!ra) && (!rb)) {
-      printf ("Internal Error: SplitRebalance(): "
-              " no common split currencies \n");
-      printf ("\tbase acc=%s cur=%s base_sec=%s\n"
-              "\tacc=%s scur=%s ssec=%s \n", 
-          split->acc->accountName, split->acc->currency, split->acc->security,
-          s->acc->accountName, s->acc->currency, s->acc->security );
-      assert (0);
-      return;
+        printf ("Internal Error: SplitRebalance(): "
+                " no common split currencies \n");
+        printf ("\tbase acc=%s cur=%s base_sec=%s\n"
+                "\tacc=%s scur=%s ssec=%s \n", 
+            split->acc->accountName, split->acc->currency, split->acc->security,
+            s->acc->accountName, s->acc->currency, s->acc->security );
+        assert (0);
+        return;
+      }
+      i++; s = trans->splits[i];
     }
-    i++; s = trans->splits[i];
+  } else {
+    assert (trans->splits);
+    assert (trans->splits[0]);
   }
 
   base_currency = ra;
