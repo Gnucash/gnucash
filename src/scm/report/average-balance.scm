@@ -366,7 +366,9 @@
                      ;; FIXME - the '1' below is hard-coded and should
                      ;;         be abstracted. Just a temp fix while
                      ;;         the query api gets fully wrapped.
-                     (gnc:query-add-account gncq acct 1)) accounts)
+                     (gnc:query-add-single-account-match gncq acct
+                                                         (cons 'query-op 1)))
+                   accounts)
 
               (set! acctcurrency (gnc:account-get-currency (car accounts)))
 

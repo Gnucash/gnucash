@@ -86,9 +86,9 @@
     gnc:*pnl-report-options*)
 
   (define (render-level-2-account level-2-account l2-value)
-    (let ((account-name (list NBSP NBSP NBSP NBSP 
-					(gnc:account-get-full-name
-					 level-2-account)))
+    (let ((account-name (string-append NBSP NBSP NBSP NBSP 
+                                       (gnc:account-get-full-name
+                                        level-2-account)))
           (type-name (gnc:account-get-type-string
                       (gnc:account-get-type level-2-account))))
       (html-table-row-align
@@ -110,11 +110,10 @@
 
   (define (render-total l0-value)
     (html-table-row-align
-     (list (html-strong (string-db 'lookup 'net))
+     (list (string-html-strong (string-db 'lookup 'net))
            NBSP NBSP 
            (gnc:amount->formatted-string l0-value #f)
-	   NBSP NBSP 
-	   )
+	   NBSP NBSP)
      (list "left" "center" "right" "right" "right" "right")))
 
   (define blank-line
