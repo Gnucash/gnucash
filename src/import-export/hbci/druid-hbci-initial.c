@@ -38,6 +38,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-html.h"
+#include "gnc-component-manager.h"
 
 #include <openhbci2/api.h>
 #include <openhbci2/outboxjob.h>
@@ -152,10 +153,11 @@ static void
 reset_initial_info (HBCIInitialInfo *info)
 {
   if (info == NULL) return;
-  
+
   if (info->api != NULL) 
     gnc_hbci_api_delete (info->api);
   info->api = NULL;
+
   if (info->outbox != NULL)
     HBCI_Outbox_delete(info->outbox);
   info->outbox = NULL;
@@ -184,10 +186,18 @@ delete_initial_druid (HBCIInitialInfo *info)
 
   reset_initial_info (info);
   
+  if (info->interactor)
+    GNCInteractor_delete(info->interactor);
+
+  printf("delete_initial_druid: FIXME: gnucash will crash here in a call to gnome_entry_destroy(), probably related to the configfileentry object.\n");
+
   if (info->window != NULL) 
     gtk_widget_destroy (info->window);
-    
+
+  printf("delete_initial_druid: FIXME: this is not reached \n");
+  
   g_free (info);
+  printf("delete_initial_druid: 4\n");
 }
 
 
@@ -612,17 +622,18 @@ on_finish (GnomeDruidPage *gnomedruidpage,
 	   gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
+  gboolean successful = TRUE;
   g_assert (info);
 
-
   if (info->configfile) {
-    printf("on_finish: Got configfile %s, but the book has %s.\n", info->configfile, gnc_hbci_get_book_configfile (gnc_get_current_book ()));
+    //printf("on_finish: Got configfile %s, but the book has %s.\n", info->configfile, gnc_hbci_get_book_configfile (gnc_get_current_book ()));
     if (!gnc_hbci_get_book_configfile (gnc_get_current_book ()) ||
 	(strcmp(info->configfile, 
 		gnc_hbci_get_book_configfile (gnc_get_current_book ())) != 0)) {
       /* Name of configfile has changed */
       gnc_hbci_set_book_configfile (gnc_get_current_book (), info->configfile);
-      if (strcmp(info->configfile, 
+      if ((gnc_hbci_get_book_configfile (gnc_get_current_book ()) == 0) ||
+	  strcmp(info->configfile, 
 		 gnc_hbci_get_book_configfile (gnc_get_current_book ())) != 0) 
 	printf("on_finish: OOOPS: I just setted the book_configfile to %s, but the book now still has %s.\n", info->configfile, gnc_hbci_get_book_configfile (gnc_get_current_book ()));
     }
@@ -630,28 +641,29 @@ on_finish (GnomeDruidPage *gnomedruidpage,
   
   {
     HBCI_Error *err;
-    printf("on_finish: trying to save openhbci data to file %s.\n", info->configfile);
+    //printf("on_finish: trying to save openhbci data to file %s.\n", gnc_hbci_get_book_configfile (gnc_get_current_book ()));
     
     err = gnc_hbci_api_save (info->api);
+    //printf("on_finish: finished saving openhbci data to file.\n");
+
     if (err != NULL) {
-      if (!HBCI_Error_isOk (err)) 
+      if (!HBCI_Error_isOk (err)) {
+	successful = FALSE;
 	printf("on_finish: Error at saving OpenHBCI data: %s.\n",
 	       HBCI_Error_message (err));
+      }
       HBCI_Error_delete (err);
-      delete_initial_druid(info);
-      return;
     }
   }
   
-  if (info->gnc_hash)
+  if (successful && info->gnc_hash)
     accounts_save_kvp (info->gnc_hash);
-  if (info->hbci_accountlist)
+  if (successful && info->hbci_accountlist)
     {
       GList *kvplist = 
 	gnc_HBCI_Account_kvp_glist_from_glist(info->hbci_accountlist);
       gnc_hbci_set_book_account_list (gnc_get_current_book (), kvplist);
     }
-  
   
   delete_initial_druid(info);
 }

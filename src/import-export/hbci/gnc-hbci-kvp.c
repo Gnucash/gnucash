@@ -21,6 +21,7 @@
 \********************************************************************/
 
 #include "gnc-hbci-kvp.h"
+#include <stdio.h>
 
 #define HBCI_KEY "hbci"
 #define HBCI_ACCOUNT_ID "account-id"
@@ -139,8 +140,13 @@ void gnc_hbci_set_book_account_list (GNCBook *b, GList *account_list)
 /* getters  for kvp frame in book */
 kvp_frame *gnc_hbci_get_book_kvp (GNCBook *b)
 {
-  kvp_frame *toplevel = gnc_book_get_slots (b);
-  return kvp_frame_get_frame (toplevel, HBCI_KEY);
+  kvp_frame *toplevel = qof_book_get_slots (b);
+  kvp_frame *result = kvp_frame_get_frame (toplevel, HBCI_KEY);
+  if (!result) {
+      result = kvp_frame_new();
+      kvp_frame_add_frame_nc (toplevel, HBCI_KEY, result);
+  }
+  return result;
 }
 
 
@@ -149,5 +155,10 @@ kvp_frame *gnc_hbci_get_book_kvp (GNCBook *b)
 kvp_frame *gnc_hbci_get_account_kvp (Account *a)
 {
   kvp_frame *toplevel = xaccAccountGetSlots (a);
-  return kvp_frame_get_frame (toplevel, HBCI_KEY);
+  kvp_frame *result = kvp_frame_get_frame (toplevel, HBCI_KEY);
+  if (!result) {
+      result = kvp_frame_new();
+      kvp_frame_add_frame_nc (toplevel, HBCI_KEY, result);
+  }
+  return result;
 }
