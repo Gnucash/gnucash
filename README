@@ -196,8 +196,11 @@ That's all folks!
 
 Main Developers:
 ----------------
+Rob Browning <rlb@cs.utexas.edu> for GTK graphing
 Robin Clark <rclark@hmc.edu> for original xacc
+Jeremy Collins <linux@cyberramp.net> for GTK port
 Linas Vepstas <linas@lins.org> for extensive enhancements
+
 
 Fixes & Patches:
 ----------------
@@ -211,5 +214,6 @@ Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
 Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
 Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
 Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
+Henning Spruth <spruth@bigfoot.com> for German translations
 ... and I am sure that I have missed many others ...
 
