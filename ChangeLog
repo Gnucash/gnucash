@@ -1,3 +1,8 @@
+2003-03-31  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/test/test-employee.c:  fix the test
+	  to reflect the change in Employee->Printable()
+
 2003-03-29  Christian Stimming  <stimming@tuhh.de>
 
 	* src/report/standard-reports/daily-reports.scm: New report
