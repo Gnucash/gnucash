@@ -4,11 +4,10 @@ It probably has lots of bugs and unstable features!
 If you are looking for a stable personal finance application,
 you should use the latest release of GnuCash 1.4.")
 
- (N_ "Users upgrading from GnuCash 1.4 should read the 
-\"What's new in GnuCash 1.6\" page in the online manual.")
-
- (N_ "The GnuCash online manual has lots of helpful information.
-You can access the manual under the Help menu.")
+ (N_ "The GnuCash online manual has lots of helpful information.  
+If you are upgrading from GnuCash 1.4, the section \"What's new in
+GnuCash 1.6\" is particularly interesting. You can access the manual
+under the Help menu.")
 
  (N_ "You can easily import your existing financial data from Quicken,
 MS Money or other programs that export QIF (Quicken Interchange
@@ -49,8 +48,8 @@ the subaccount (e.g. A:C for Assets:Cash.)")
 
  (N_ "To enter multiple-split transactions such as a paycheck with
 multiple deductions, click the Split button in the tool bar.
-Or choose either Auto-Split Ledger or Transaction Journal
-from the Register|Style menu option.")
+Alternatively, you can choose the register style Auto-Split Ledger or
+Transaction Journal from the Register|Style menu option.")
 
  (N_ "Want to see all your subaccount transactions in one register?
 From the main menu, highlight the parent account and select
@@ -70,12 +69,9 @@ dates as well.")
 your GnuCash data file to a floppy or other backup device.")
 
  (N_ "To transfer funds between accounts with different currencies,
-you may need an intermediate currency trading account.
-Please see the GnuCash online manual for details")
-
- (N_ "GnuCash can display a variety of useful reports and
-graphs, which can be printed and exported as HTML.  Reports
-are created using \"New Report\" on the file menu.")
+you need an intermediate currency trading account. Click the Transfer
+button in the register toolbar to let GnuCash create the intermediate
+transaction. See the GnuCash online manual for details.")
 
  (N_ "You can pack multiple reports into a single window, 
 providing all the financial information you want at a glance.

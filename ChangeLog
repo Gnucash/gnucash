@@ -1,5 +1,8 @@
 2001-05-27  Christian Stimming  <stimming@tuhh.de>
 
+	* src/scm/tip-list.scm: edited some tips after consultation with
+	Robert Graham Merkel.
+	
 	* po/sv.po: by Pablo Saratxaga <pablo@mandrakesoft.com>: changed
 	DOS end of lines to Unix end of lines.
 
