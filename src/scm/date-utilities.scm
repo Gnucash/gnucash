@@ -24,18 +24,18 @@
 
 ;; get stuff from localtime date vector
 (define (gnc:date-get-year datevec)
-  (+ 1900 (vector-ref datevec 5)))
+  (+ 1900 (tm:year datevec)))
 (define (gnc:date-get-month-day datevec)
-  (vector-ref datevec 3))
+  (tm:mday datevec))
 ;; get month with january==1
 (define (gnc:date-get-month datevec)
-  (+ (vector-ref datevec 4) 1))
+  (+ (tm:mon datevec) 1))
 (define (gnc:date-get-week-day datevec)
-  (+ (vector-ref datevec 6) 1))
+  (+ (tm:wday datevec) 1))
 ;; jan 1 == 1
 
 (define (gnc:date-get-year-day datevec)
-  (+ (vector-ref datevec 7) 1))
+  (+ (tm:yday datevec) 1))
 
 (define (gnc:timepair-get-year tp)
   (gnc:date-get-year (localtime (gnc:timepair->secs tp))))
