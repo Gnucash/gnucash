@@ -32,7 +32,11 @@
 #include "basiccell.h"
 #include "recncell.h"
 
-/* hack alert -- temp defs should include Transaction.h */
+/* hack alert -- temp defs: we should  should probably include 
+ * Transaction.h and also implement a more sophisticated togglig
+ * between the various reconcile states. 
+ */
+
 #define NREC 'n'
 #define CREC 'c'
 
