@@ -43,7 +43,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(555,-,-) /usr/bin/update-finance-quote
 %attr(555,-,-) /usr/share/gnucash/finance-quote-helper
 /usr/info/*
-/usr/lib/libgncengine.*
+/usr/lib/libgnc.*
 /usr/share/gnucash/accounts
 /usr/share/gnucash/doc
 /usr/share/gnucash/glade

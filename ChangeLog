@@ -1,3 +1,9 @@
+2001-06-14  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-transfer.c: use libglade
+
+	* rpm/gnucash.spec.in: fix bug
+
 2001-06-13  Dave Peticolas  <dave@krondo.com>
 
 	* src/experimental/cgi-bin/Makefile.am: add .cvsignore to dist

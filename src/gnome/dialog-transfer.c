@@ -32,7 +32,6 @@
 #include "account-tree.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
-#include "glade-gnc-dialogs.h"
 #include "global-options.h"
 #include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
@@ -442,9 +441,6 @@ gnc_xfer_dialog_fill_tree_frame(XferDialog *xferData,
   GtkWidget *scroll_win;
   GtkWidget *button;
   GtkWidget *tree;
-  GtkObject *tdo;
-
-  tdo = GTK_OBJECT (xferData->dialog);
 
   tree = gnc_account_tree_new();
   atree = GNC_ACCOUNT_TREE (tree);
@@ -458,9 +454,9 @@ gnc_xfer_dialog_fill_tree_frame(XferDialog *xferData,
   gnc_account_tree_hide_income_expense(GNC_ACCOUNT_TREE(tree));
   gnc_account_tree_refresh(GNC_ACCOUNT_TREE(tree));
 
-  scroll_win = gtk_object_get_data (tdo,
-                                    (direction == XFER_DIALOG_TO) ?
-                                    "to_window" : "from_window");
+  scroll_win = gnc_glade_lookup_widget (xferData->dialog,
+                                        (direction == XFER_DIALOG_TO) ?
+                                        "to_window" : "from_window");
 
   gtk_container_add(GTK_CONTAINER(scroll_win), tree);
 
@@ -479,9 +475,9 @@ gnc_xfer_dialog_fill_tree_frame(XferDialog *xferData,
     }
   }
 
-  button = gtk_object_get_data (tdo,
-                                (direction == XFER_DIALOG_TO) ?
-                                "to_show_button" : "from_show_button");
+  button = gnc_glade_lookup_widget (xferData->dialog,
+                                    (direction == XFER_DIALOG_TO) ?
+                                    "to_show_button" : "from_show_button");
 
   if (direction == XFER_DIALOG_TO)
     xferData->to_show_button = button;
@@ -1333,11 +1329,12 @@ static void
 gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 {
   GtkWidget *dialog;
-  GtkObject *tdo;
+  GladeXML  *xml;
 
-  dialog = create_Transfer_Dialog();
+  xml = gnc_glade_xml_new ("transfer.glade", "Transfer Dialog");
+
+  dialog = glade_xml_get_widget (xml, "Transfer Dialog");
   xferData->dialog = dialog;
-  tdo = GTK_OBJECT (dialog);
 
   /* parent */
   if (parent != NULL)
@@ -1370,7 +1367,7 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
     GtkWidget *hbox;
 
     amount = gnc_amount_edit_new();
-    hbox = gtk_object_get_data(tdo, "amount_hbox");
+    hbox = glade_xml_get_widget (xml, "amount_hbox");
     gtk_box_pack_end(GTK_BOX(hbox), amount, TRUE, TRUE, 0);
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
     xferData->amount_edit = amount;
@@ -1380,7 +1377,7 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
                        GTK_SIGNAL_FUNC(gnc_xfer_amount_update_cb), xferData);
 
     date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
-    hbox = gtk_object_get_data(tdo, "date_hbox");
+    hbox = glade_xml_get_widget (xml, "date_hbox");
 
     gtk_box_pack_end(GTK_BOX(hbox), date, TRUE, TRUE, 0);
     xferData->date_entry = date;
@@ -1389,22 +1386,25 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
   {
     GtkWidget *entry;
 
-    entry = gtk_object_get_data(tdo, "num_entry");
+    entry = glade_xml_get_widget (xml, "num_entry");
     xferData->num_entry = entry;
     gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
 
-    entry = gtk_object_get_data(tdo, "description_entry");
+    entry = glade_xml_get_widget (xml, "description_entry");
     xferData->description_entry = entry;
 
     /* Get signals from the Description for quickfill. */
     gtk_signal_connect(GTK_OBJECT(entry), "insert_text",
-                       GTK_SIGNAL_FUNC(gnc_xfer_description_insert_cb), xferData);
+                       GTK_SIGNAL_FUNC(gnc_xfer_description_insert_cb),
+                       xferData);
     gtk_signal_connect(GTK_OBJECT(entry), "button_release_event",
-                       GTK_SIGNAL_FUNC(gnc_xfer_description_button_release_cb), xferData );
-    gtk_signal_connect_after(GTK_OBJECT(entry), "key_press_event",
-                             GTK_SIGNAL_FUNC(gnc_xfer_description_key_press_cb), xferData );
+                       GTK_SIGNAL_FUNC(gnc_xfer_description_button_release_cb),
+                       xferData);
+    gtk_signal_connect_after
+      (GTK_OBJECT(entry), "key_press_event",
+       GTK_SIGNAL_FUNC(gnc_xfer_description_key_press_cb), xferData);
 
-    entry = gtk_object_get_data(tdo, "memo_entry");
+    entry = glade_xml_get_widget (xml, "memo_entry");
     xferData->memo_entry = entry;
     gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
   }
@@ -1423,10 +1423,10 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 		       GTK_SIGNAL_FUNC(gnc_xfer_dialog_to_tree_select_cb),
 		       xferData);
 
-    label = gtk_object_get_data(tdo, "from_currency_label");
+    label = glade_xml_get_widget (xml, "from_currency_label");
     xferData->from_currency_label = label;
 
-    label = gtk_object_get_data(tdo, "to_currency_label");
+    label = glade_xml_get_widget (xml, "to_currency_label");
     xferData->to_currency_label = label;
   }
 
@@ -1440,24 +1440,24 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
     GtkWidget *hbox;
     GtkWidget *button;
 
-    frame = gtk_object_get_data(tdo, "curr_transfer_frame");
+    frame = glade_xml_get_widget (xml, "curr_transfer_frame");
     xferData->curr_transfer_frame = frame;
 
-    label = gtk_object_get_data(tdo, "curr_acct_label");
+    label = glade_xml_get_widget (xml, "curr_acct_label");
     xferData->curr_acct_label = label;
 
-    combo = gtk_object_get_data(tdo, "curr_acct_combo");
+    combo = glade_xml_get_widget (xml, "curr_acct_combo");
     xferData->curr_acct_combo = combo;
 
     xferData->curr_accts_list = NULL;
 
-    entry = gtk_object_get_data(tdo, "curr_acct_combo_entry");
+    entry = glade_xml_get_widget (xml, "curr_acct_combo_entry");
     xferData->curr_acct_combo_entry = entry;
 
     edit = gnc_amount_edit_new();
     gnc_amount_edit_set_print_info(GNC_AMOUNT_EDIT(edit),
                                    gnc_default_price_print_info ());
-    hbox = gtk_object_get_data(tdo, "price_hbox");
+    hbox = glade_xml_get_widget (xml, "price_hbox");
     gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 0);
     xferData->price_edit = edit;
     entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (edit));
@@ -1466,7 +1466,7 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
     gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
 
     edit = gnc_amount_edit_new();
-    hbox = gtk_object_get_data(tdo, "to_amount_hbox");
+    hbox = glade_xml_get_widget (xml, "to_amount_hbox");
     gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 0);
     xferData->to_amount_edit = edit;
     entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (edit));
@@ -1475,13 +1475,13 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 		       xferData);
     gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
 
-    button = gtk_object_get_data(tdo, "price_radio");
+    button = glade_xml_get_widget (xml, "price_radio");
     xferData->price_radio = button;
     gtk_signal_connect(GTK_OBJECT(xferData->price_radio), "toggled",
 		       GTK_SIGNAL_FUNC(price_amount_radio_toggled_cb),
 		       xferData);
 
-    button = gtk_object_get_data(tdo, "amount_radio");
+    button = glade_xml_get_widget (xml, "amount_radio");
     xferData->amount_radio = button;
     gtk_signal_connect(GTK_OBJECT(xferData->amount_radio), "toggled",
 		       GTK_SIGNAL_FUNC(price_amount_radio_toggled_cb),
