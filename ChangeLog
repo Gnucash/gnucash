@@ -1,3 +1,10 @@
+2002-04-01  Christian Stimming  <stimming@tuhh.de>
+
+	* po/ja.po: Fixed po-revision-date.
+	
+	* po/it.po, po/glossary/it.po: Added/Updated Italian translation
+	from Lorenzo Cappelletti <L.Cappelletti@mail.com>.
+
 2002-03-16  Chris Lyttle  <chris@wilddev.net>
 
 	* debian/control_fr: removed at request of deb maintainer

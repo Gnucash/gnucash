@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.6.x\n"
 "POT-Creation-Date: 2002-01-06 11:28+0100\n"
-"PO-Revision-Date: 2002-01-28 22:20+01:00\n"
+"PO-Revision-Date: 2002-03-03 13:24+01:00\n"
 "Last-Translator: Lorenzo Cappelletti <L.Cappelletti@mail.com>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -48,7 +48,7 @@ msgstr "tipo conto: valuta, conto finanziario"
 
 #. "see: Equity"
 msgid "account type: Equity"
-msgstr "tipo conto: valore netto"
+msgstr "tipo conto: valore netto, capitale"
 
 #. "-"
 #, fuzzy
@@ -90,7 +90,7 @@ msgstr "conto: sottoconto"
 
 #. "-"
 msgid "account: top level account"
-msgstr "conto: conto principale"
+msgstr "conto: conto livello principale"
 
 #. "The process of doing something that caused a transaction to happen"
 #, fuzzy
@@ -131,7 +131,7 @@ msgstr "operazione: dividendo"
 
 #. "-"
 msgid "action: fee"
-msgstr "operazione: onorario, emolumento, parcella, tassa"
+msgstr "operazione: onorario, emolumento, parcella, commission, tassa"
 
 #. "transaction comes from interest"
 msgid "action: int"
@@ -184,7 +184,7 @@ msgstr "media"
 
 #. "The amount of money that is in one's account"
 msgid "balance (noun)"
-msgstr "pareggio, saldo"
+msgstr "saldo, pareggio"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -282,7 +282,7 @@ msgstr "intervallo temporale, di tempo"
 
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
 msgid "Debit (column in register)"
-msgstr "Avere, uscita (colonna nel mastrino)"
+msgstr "Avere, uscita (colonna nel registro)"
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
@@ -298,7 +298,7 @@ msgstr "deprezzamento"
 
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
-msgstr "Descrizione (colonna nel mastrino)"
+msgstr "Descrizione (colonna nel registro)"
 
 #. "Important Buzzword :)"
 msgid "double entry"
@@ -376,11 +376,11 @@ msgstr "marcatore"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
-msgstr "modo MDI"
+msgstr "modalità MDI"
 
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
-msgstr "Nota"
+msgstr "Memo"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -405,11 +405,11 @@ msgstr "guadagno netto"
 
 #. "One textfield per transaction that can hold explanatory text about the transaction."
 msgid "notes (register)"
-msgstr "note (mastrino)"
+msgstr "note (registro)"
 
 #. "Abbreviation for: number; Field in a transaction. If this transaction was done by check, then the check number should be noted in this field."
 msgid "Num (column in register)"
-msgstr "Nr. (colonna nel mastrino)"
+msgstr "Nr. (colonna nel registro)"
 
 #. "to make accessible"
 msgid "open, to"
@@ -502,28 +502,27 @@ msgstr ""
 # `mastrino' forse non esiste
 #. "A list of items; a book containing such a list"
 msgid "register"
-msgstr "mastrino, conto"
+msgstr "registro, conto, mastrino"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
-msgstr "elemento di mastrino: movimento suddiviso"
+msgstr "elemento di registro: movimento suddiviso"
 
 #. "-"
-#, fuzzy
 msgid "register entry: stock split"
-msgstr "elemento di mastrino: divisione azionaria"
+msgstr "elemento di registro: scissione azionaria"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr "mastrino: registro ad auto-suddivisione"
+msgstr "registro: registro ad auto-suddivisione"
 
 #. "another form of register"
 msgid "register: basic ledger"
-msgstr "mastrino: registro di base"
+msgstr "registro: registro di base"
 
 #. "another form of register"
 msgid "register: general ledger"
-msgstr "mastrino: registro generale"
+msgstr "registro: registro generale"
 
 #. "another form of register"
 msgid "register: transaction journal"
@@ -554,11 +553,11 @@ msgstr "garanzia, titoli, obbligazioni"
 #. "-"
 #, fuzzy
 msgid "Share Balance (register)"
-msgstr "bilancio condiviso (mastrino)"
+msgstr "bilancio condiviso (registro)"
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
-msgstr "titoli"
+msgstr "quota"
 
 #. "(of a price) A place wfrom which sth comes or is obtained"
 msgid "source"
@@ -624,7 +623,7 @@ msgstr "conto di destinazione"
 
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"
-msgstr "trasferire (barra degli attrezzi del mastrino)"
+msgstr "trasferire (barra degli attrezzi del registro)"
 
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"

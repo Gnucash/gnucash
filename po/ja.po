@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5.X\n"
 "POT-Creation-Date: 2002-03-10 15:53-0800\n"
-"PO-Revision-Date: 2001-1-18 14:00+0900\n"
+"PO-Revision-Date: 2001-07-02\n"
 "Last-Translator: Mitsuo Hamada <mhamada@redhat.com>\n"
 "Language-Team: Japanese <translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -56,8 +56,6 @@ msgid ""
 "   %s\n"
 "Connection was lost, unable to send data."
 msgstr ""
-"次のホストに接続できません\n"
-"接続が消失しました。データを送ることができません"
 
 #: src/FileDialog.c:98
 #, fuzzy
