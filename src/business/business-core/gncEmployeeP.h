@@ -10,7 +10,7 @@
 #include "gncEmployee.h"
 
 gboolean gncEmployeeRegister (void);
-gint gncEmployeeNextID (GNCBook *book);
+gint64 gncEmployeeNextID (GNCBook *book);
 void gncEmployeeSetGUID (GncEmployee *employee, const GUID *guid);
 
 #endif /* GNC_EMPLOYEEP_H_ */

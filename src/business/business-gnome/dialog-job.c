@@ -351,7 +351,7 @@ gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncOwner *owner,
 					     bookp, owner);
 
     gtk_entry_set_text (GTK_ENTRY (jw->id_entry),
-			g_strdup_printf ("%.6d", gncJobNextID(bookp)));
+			g_strdup_printf ("%.6lld", gncJobNextID(bookp)));
 
     jw->component_id = gnc_register_gui_component (DIALOG_NEW_JOB_CM_CLASS,
 						   gnc_job_window_refresh_handler,

@@ -183,6 +183,8 @@ gnc_backend_new(void)
     be->run_query = NULL;
     be->price_lookup = NULL;
 
+    be->counter = NULL;
+
     /* the file backend will never be multi-user... */
     be->events_pending = NULL;
     be->process_events = NULL;

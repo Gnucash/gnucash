@@ -717,7 +717,7 @@ gnc_order_window_new_order (GtkWidget *parent, GNCBook *bookp, GncOwner *owner)
   /* Setup initial values */
   ow->order_guid = *gncOrderGetGUID (order);
   gtk_entry_set_text (GTK_ENTRY (ow->id_entry),
-		      g_strdup_printf ("%.6d", gncOrderNextID(bookp)));
+		      g_strdup_printf ("%.6lld", gncOrderNextID(bookp)));
       
   ow->component_id =
     gnc_register_gui_component (DIALOG_NEW_ORDER_CM_CLASS,

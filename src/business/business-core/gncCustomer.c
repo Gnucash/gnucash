@@ -415,9 +415,7 @@ gboolean gncCustomerRegister (void)
   return gncObjectRegister (&gncCustomerDesc);
 }
 
-static gint lastCustomer = 27;
-
-gint gncCustomerNextID (GNCBook *book)
+gint64 gncCustomerNextID (GNCBook *book)
 {
-  return ++lastCustomer;	/* XXX: Look into Database! */
+  return gnc_book_get_counter (book, _GNC_MOD_NAME);
 }

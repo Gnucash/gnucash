@@ -143,6 +143,9 @@
  *    needed to update an existing transaction.  It might pull new 
  *    currencies (??))
  *
+ * The counter() routine increments the named counter and returns the
+ *    post-incremented value.  Returns -1 if there is a problem.
+ *
  * The events_pending() routines should return true if there are
  *    external events which need to be processed to bring the
  *    engine up to date with the backend.
@@ -241,6 +244,8 @@ struct backend_s
   void (*sync_all) (Backend *, GNCBook *);
   void (*sync_group) (Backend *, GNCBook *);
   void (*sync_price) (Backend *, GNCBook *);
+
+  gint64 (*counter) (Backend *, const char *counter_name);
 
   gboolean (*events_pending) (Backend *be);
   gboolean (*process_events) (Backend *be);

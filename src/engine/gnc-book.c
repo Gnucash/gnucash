@@ -439,4 +439,58 @@ gnc_book_count_transactions(GNCBook *book)
     return count;
 }
 
+/* ====================================================================== */
+
+gint64
+gnc_book_get_counter (GNCBook *book, const char *counter_name)
+{
+  Backend *be;
+  kvp_frame *kvp;
+  kvp_value *value;
+  gint64 counter;
+
+  if (!book) {
+    PWARN ("No book!!!");
+    return -1;
+  }
+
+  if (!counter_name || *counter_name == '\0') {
+    PWARN ("Invalid counter name.");
+    return -1;
+  }
+
+  /* If we've got a backend with a counter method, call it */
+  be = book->backend;
+  if (be && be->counter)
+    return ((be->counter)(be, counter_name));
+
+  /* If not, then use the KVP in the book */
+  kvp = gnc_book_get_slots (book);
+
+  if (!kvp) {
+    PWARN ("Book has no KVP_Frame");
+    return -1;
+  }
+
+  value = kvp_frame_get_slot_path (kvp, "counters", counter_name, NULL);
+  if (value) {
+    /* found it */
+    counter = kvp_value_get_gint64 (value);
+  } else {
+    /* New counter */
+    counter = 0;
+  }
+
+  /* Counter is now valid; increment it */
+  counter++;
+
+  /* Save off the new counter */
+  value = kvp_value_new_gint64 (counter);
+  kvp_frame_set_slot_path (kvp, value, "counters", counter_name, NULL);
+  kvp_value_delete (value);
+
+  /* and return the value */
+  return counter;
+}
+
 /* ========================== END OF FILE =============================== */

@@ -329,9 +329,7 @@ gboolean gncJobRegister (void)
   return gncObjectRegister (&gncJobDesc);
 }
 
-static gint lastJob = 57;
-
-gint gncJobNextID (GNCBook *book)
+gint64 gncJobNextID (GNCBook *book)
 {
-  return ++lastJob;	/* XXX: Look into Database! */
+  return gnc_book_get_counter (book, _GNC_MOD_NAME);
 }

@@ -10,7 +10,7 @@
 #include "gncCustomer.h"
 
 gboolean gncCustomerRegister (void);
-gint gncCustomerNextID (GNCBook *book);
+gint64 gncCustomerNextID (GNCBook *book);
 void gncCustomerSetGUID (GncCustomer *customer, const GUID *guid);
 
 #endif /* GNC_CUSTOMERP_H_ */

@@ -763,9 +763,7 @@ gboolean gncInvoiceRegister (void)
   return gncObjectRegister (&gncInvoiceDesc);
 }
 
-static gint lastId = 187;	/* XXX */
-
-gint gncInvoiceNextID (GNCBook *book)
+gint64 gncInvoiceNextID (GNCBook *book)
 {
-  return lastId++;
+  return gnc_book_get_counter (book, _GNC_MOD_NAME);
 }

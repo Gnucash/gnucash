@@ -552,7 +552,7 @@ gnc_customer_new_window (GtkWidget *parent, GNCBook *bookp,
 
     cw->dialog_type = NEW_CUSTOMER;
     gtk_entry_set_text (GTK_ENTRY (cw->id_entry),
-			g_strdup_printf ("%.6d", gncCustomerNextID(bookp)));
+			g_strdup_printf ("%.6lld", gncCustomerNextID(bookp)));
     cw->component_id =
       gnc_register_gui_component (DIALOG_NEW_CUSTOMER_CM_CLASS,
 				  gnc_customer_window_refresh_handler,

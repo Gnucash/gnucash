@@ -12,7 +12,7 @@
 #include "Transaction.h"
 
 gboolean gncInvoiceRegister (void);
-gint gncInvoiceNextID (GNCBook *book);
+gint64 gncInvoiceNextID (GNCBook *book);
 void gncInvoiceSetGUID (GncInvoice *invoice, const GUID *guid);
 void gncInvoiceSetDirty (GncInvoice *invoice, gboolean dirty);
 void gncInvoiceSetPostedAcc (GncInvoice *invoice, Account *acc);

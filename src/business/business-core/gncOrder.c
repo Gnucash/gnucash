@@ -400,9 +400,7 @@ gboolean gncOrderRegister (void)
   return gncObjectRegister (&gncOrderDesc);
 }
 
-static gint lastId = 471;	/* XXX */
-
-gint gncOrderNextID (GNCBook *book)
+gint64 gncOrderNextID (GNCBook *book)
 {
-  return lastId++;
+  return gnc_book_get_counter (book, _GNC_MOD_NAME);
 }

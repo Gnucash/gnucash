@@ -107,6 +107,16 @@ Use:  The GUID of the book that preceeds this one, chronologically.
 
 -----------------------
 
+Name: /counters/...
+Type: int64
+Entities: Book
+Use:  Holders for a bunch of counters for various types.  Used specifically
+      in the business objects for ID counters.  The counter name is the path
+      that follows /counters/, e.g. "/counters/GncCustomer"
+      
+
+-----------------------
+
 Name: from-sched-xaction
 Type: GUID
 Entities: Transaction

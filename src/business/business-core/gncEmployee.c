@@ -339,9 +339,7 @@ gboolean gncEmployeeRegister (void)
   return gncObjectRegister (&gncEmployeeDesc);
 }
 
-static gint lastEmployee = 2;
-
-gint gncEmployeeNextID (GNCBook *book)
+gint64 gncEmployeeNextID (GNCBook *book)
 {
-  return ++lastEmployee;		/* XXX: Look into Database! */
+  return gnc_book_get_counter (book, _GNC_MOD_NAME);
 }

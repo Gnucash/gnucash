@@ -91,4 +91,9 @@ gboolean gnc_book_equal (GNCBook *book_1, GNCBook *book_2);
  * to be moved to some utility/support file.  */
 guint gnc_book_count_transactions(GNCBook *book);
 
+/* This will 'get and increment' the named counter for this book.
+ * The return value is -1 on error or the incremented counter.
+ */
+gint64 gnc_book_get_counter (GNCBook *book, const char *counter_name);
+
 #endif /* GNC_BOOK_H */

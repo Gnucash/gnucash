@@ -10,7 +10,7 @@
 #include "gncVendor.h"
 
 gboolean gncVendorRegister (void);
-gint gncVendorNextID (GNCBook *book);
+gint64 gncVendorNextID (GNCBook *book);
 void gncVendorSetGUID (GncVendor *vendor, const GUID *guid);
 
 #endif /* GNC_VENDORP_H_ */

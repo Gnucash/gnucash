@@ -846,7 +846,7 @@ gnc_invoice_window_new_invoice (GtkWidget *parent, GNCBook *bookp,
   iw->invoice_guid = *gncInvoiceGetGUID (invoice);
 
   gtk_entry_set_text (GTK_ENTRY (iw->id_entry),
-		      g_strdup_printf ("%.6d", gncInvoiceNextID(bookp)));
+		      g_strdup_printf ("%.6lld", gncInvoiceNextID(bookp)));
       
   iw->component_id =
     gnc_register_gui_component (DIALOG_NEW_INVOICE_CM_CLASS,

@@ -371,9 +371,7 @@ gboolean gncVendorRegister (void)
   return gncObjectRegister (&gncVendorDesc);
 }
 
-static gint lastVendor = 17;
-
-gint gncVendorNextID (GNCBook *book)
+gint64 gncVendorNextID (GNCBook *book)
 {
-  return ++lastVendor;		/* XXX: Look into Database! */
+  return gnc_book_get_counter (book, _GNC_MOD_NAME);
 }

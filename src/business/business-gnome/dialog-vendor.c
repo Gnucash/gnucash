@@ -421,7 +421,7 @@ gnc_vendor_new_window (GtkWidget *parent, GNCBook *bookp,
 
     vw->dialog_type = NEW_VENDOR;
     gtk_entry_set_text (GTK_ENTRY (vw->id_entry),
-			g_strdup_printf ("%.6d", gncVendorNextID(bookp)));
+			g_strdup_printf ("%.6lld", gncVendorNextID(bookp)));
     vw->component_id =
       gnc_register_gui_component (DIALOG_NEW_VENDOR_CM_CLASS,
 				  gnc_vendor_window_refresh_handler,

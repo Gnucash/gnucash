@@ -467,7 +467,7 @@ gnc_employee_new_window (GtkWidget *parent, GNCBook *bookp,
 
     ew->dialog_type = NEW_EMPLOYEE;
     gtk_entry_set_text (GTK_ENTRY (ew->id_entry),
-			g_strdup_printf ("%.6d", gncEmployeeNextID(bookp)));
+			g_strdup_printf ("%.6lld", gncEmployeeNextID(bookp)));
     ew->component_id =
       gnc_register_gui_component (DIALOG_NEW_EMPLOYEE_CM_CLASS,
 				  gnc_employee_window_refresh_handler,
