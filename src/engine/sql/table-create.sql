@@ -52,7 +52,6 @@ CREATE TABLE gncAccount (
 );
 
 -- CREATE INDEX gncAccount_pg_idx ON gncAccount (parentGuid);
--- CREATE INDEX gncAccount_ch_idx ON gncAccount (childrenGuid);
 
 CREATE TABLE gncTransaction (
 	transGuid	CHAR(32) PRIMARY KEY,
@@ -157,6 +156,8 @@ CREATE TABLE gncGUIDCache (
 	guid		CHAR(32) UNIQUE NOT NULL
 );
 
+CREATE INDEX gncGUIDCache_guid_idx ON gncGUIDCache (guid);
+
 CREATE TABLE gncKVPvalue (
 	iguid		INT4,
 	ipath		INT4,
@@ -164,6 +165,8 @@ CREATE TABLE gncKVPvalue (
 
         PRIMARY KEY (iguid, ipath)
 );
+
+CREATE INDEX gncKVPvalue_iguid_idx ON gncKVPvalue (iguid);
 
 CREATE TABLE gncKVPvalue_int64 (
 	data		INT8
