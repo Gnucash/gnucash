@@ -190,6 +190,10 @@ PrtAmtComma (char * buf, double val, int prec)
       return 3;
    }
 
+   /* Round to 100'ths or 1000'nths now.  Must do this before we start printing. */
+   if (2 == prec) val += 0.005;
+   if (3 == prec) val += 0.0005;
+
    /* count number of commas */
    tmp = val;
    while (tmp > 1000.0) {
@@ -197,7 +201,7 @@ PrtAmtComma (char * buf, double val, int prec)
       ncommas ++;
    }
 
-   /* print digits in groups of three, seperated by commas */
+   /* print digits in groups of three, separated by commas */
    for (i=ncommas; i>=0; i--) {
       int j;
 
@@ -220,10 +224,10 @@ PrtAmtComma (char * buf, double val, int prec)
 
    /* print two or three decimal places */
    if (3 == prec) {
-      ival = 0.5 + 1000.0 * (val-amt);
+      ival = 1000.0 * (val-amt);
       buf += sprintf (buf, "%03d", ival); 
    } else {
-      ival = 0.5 + 100.0 * (val-amt);
+      ival = 100.0 * (val-amt);
       buf += sprintf (buf, "%02d", ival); 
    }
 
@@ -236,6 +240,9 @@ xaccSPrintAmount (char * bufp, double val, short shrs)
    char * orig_bufp = bufp;
 
    if (!bufp) return 0;
+
+   if (DEQ(val, 0.0))
+     val = 0.0;
 
    if (0.0 > val) {
       bufp[0] = '-';
