@@ -6,52 +6,141 @@ Note that the WebConnect or QFX file format is very similar, and is the
 
 Type of account identifiers
 ----------------------------
-!Type:Bank
-!Type:Invst
-!Type:Cash
-!Type:Oth A
-!Type:CCard
-!Type:Oth L
-!Type:Invoice
-!Type:Tax
+!Type:Bank     Bank account
 !Type:Bill
+!Type:Cash     Cash account
+!Type:CCard    Credit Card account
+!Type:Invoice  
+!Type:Invst    Investment account
+!Type:Oth A    Asset account
+!Type:Oth L    Liability account
+!Type:Tax
 
+!Account         Account list or which account applies to following 
+                 transactions 
+!Type:Cat        Category list
+!Type:Class      Class list
+!Type:Memorized  Memorized transaction list 
 
-Investment account format
--------------------------
+Note that !Account is used both to be a header for account information,
+and to be a header for a list of transactions.
+
+Account Information Format
+--------------------------
+The below typically follow an !Account identifier, and provide account
+data. 
+
 Letter Definition
-D Date (optional)
-N Action
-Y Security
-I Price
-Q Quantity (# of shares or split ratio)
-C Cleared status
-P first line text for transfers/reminders
-M Memo
-O Commission
-L Account for transfer
-T Amount of transaction
-U Amount of transaction (higher possible value than T)
-$ Amount transferred
-^ End of entry
+N      Name
+T      Type of account
+D      Description
+L      Credit limit (only for credit card accounts) 
+/      Statement balance date
+$      Statement balance amount 
+^      End of entry
 
-Non-investment format
----------------------
-Letter
-                                                          Definition
-D Date
-T Amount
-U Transaction amount (higher possible value than T)
-C Cleared status
-N Number (check or reference)
-P Payee/description
-M Memo
-A Address (up to 5 lines; 6th line is an optional message) 
-L Category (category/transfer/class)
-S Category in split (category/transfer/class) 
-E Memo in split
-$ Dollar amount of split
-% Percentage of split if percentages are used
-F Reimbursable business expense flag
-^ End of entry
-X Small Business extensions
+Category Information Format
+---------------------------
+N      Category name:subcategory name 
+D      Description
+T      Tax related if included, not tax related if omitted 
+I      Income category
+E      Expense category (if category type is unspecified, 
+       assumes expense type) 
+B      Budget amount (optional, only appears in a Budget QIF file) 
+R      Tax schedule information 
+^      End of entry
+
+Class Information Format
+------------------------
+N      Class name
+D      Description
+^      End of entry 
+
+Memorized Transaction Format
+----------------------------
+KC     Check transaction
+KD     Deposit transaction
+KP     Payment transaction
+KI     Investment transaction
+KE     Electronic payee transaction 
+T      Amount
+C      Cleared status
+P      Payee
+M      Memo
+A      Address
+L      Category or Transfer/Class 
+S      Category/class in split
+E      Memo in split
+$      Dollar amount of split
+1      Amortization: First payment date 
+2      Amortization: Total years for loan 
+3      Amortization: Number of payments already made 
+4      Amortization: Number of periods per year 
+5      Amortization: Interest rate 
+6      Amortization: Current loan balance 
+7      Amortization: Original loan amount 
+^      End of entry
+
+Note that the K* entries must be the *last* entries in the transaction.
+All fileds are optional.  If this is an amortization record, then all
+zeven amortization fields muct be present.
+
+
+Investment transaction format
+-----------------------------
+Letter Definition
+D      Date (optional)
+N      Action
+Y      Security
+I      Price
+Q      Quantity (# of shares or split ratio)
+C      Cleared status
+P      first line text for transfers/reminders
+M      Memo
+O      Commission
+L      Account for transfer
+T      Amount of transaction
+U      Amount of transaction (higher possible value than T)
+$      Amount transferred
+^      End of entry
+
+Non-investment transaction format
+---------------------------------
+Letter Definition
+D      Date
+T      Amount
+U      Transaction amount (higher possible value than T)
+C      Cleared status
+N      Number (check or reference number)
+P      Payee/description
+M      Memo
+A      Address (up to 5 lines; 6th line is an optional message) 
+L      Category (or subcategory/transfer/class)
+S      Category in split (category/transfer/class) 
+E      Memo in split
+$      Dollar amount of split
+%      Percentage of split if percentages are used
+F      Reimbursable business expense flag
+X      Small Business extensions
+^      End of entry
+
+Note that S,E and $ lines are repeated as needed for splits.
+
+=====================================================================
+General Notes:
+
+Dates: 
+-----
+Dates in US QIF files are usually in the format MM/DD/YY, although
+four-digit years are not uncommon.  Dates sometimes occur without the 
+slash separaator, or using other separators in place of  the slash.
+
+European QIF files may have dates in the DD/MM/YY format.  
+
+Monetary Ammounts:
+------------------
+These may occur in either US or Euro format:
+10,000.00  Ten thousand dollars
+10.000,00  Ten Thousand Francs
+
