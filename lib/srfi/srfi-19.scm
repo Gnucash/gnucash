@@ -27,7 +27,6 @@
 ;; functions that do more work in a "chunk".
 
 (define-module (srfi srfi-19)
-  :use-module (ice-9 syncase)
   :use-module (srfi srfi-8)
   :use-module (srfi srfi-9))
 
@@ -121,16 +120,10 @@
  string->date)
 
 ;; Guile's prior to 1.5.X didn't have this.
-(define (priv:open-input-string str)
-  (call-with-input-string str (lambda (port)
-                                port)))
 
-;; :OPTIONAL is nice
-
-(define-syntax :optional
-  (syntax-rules ()
-    ((_ val default-value)
-     (if (null? val) default-value (car val)))))
+(if (not (defined? open-input-string))
+    (define (open-input-string str)
+      (call-with-input-string str (lambda (port) port))))
 
 (define time-tai 'time-tai)
 (define time-utc 'time-utc)
@@ -227,7 +220,7 @@
     (let loop ((line (read-line port)))
       (if (not (eq? line eof))
           (begin
-            (let* ((data (read (priv:open-input-string
+            (let* ((data (read (open-input-string
                                 (string-append "(" line ")")))) 
                    (year (car data))
                    (jd   (cadddr (cdr data)))
@@ -390,7 +383,7 @@
 ;;  (priv:current-time-ms-time time-gc current-gc-milliseconds))
 
 (define (current-time . clock-type)
-  (let ((clock-type (:optional clock-type time-utc)))
+  (let ((clock-type (if (null? clock-type) time-utc (car clock-type))))
     (cond
      ((eq? clock-type time-tai) (priv:current-time-tai))
      ((eq? clock-type time-utc) (priv:current-time-utc))
@@ -405,7 +398,7 @@
 ;; This will be implementation specific.
 
 (define (time-resolution . clock-type)
-  (let ((clock-type (:optional clock-type time-utc)))
+  (let ((clock-type (if (null? clock-type) time-utc (car clock-type))))
     (case clock-type
       ((time-tai) 1000)
       ((time-utc) 1000)
@@ -577,11 +570,14 @@
 
 ;; -- Date Structures
 
+;; FIXME: to be really safe, perhaps we should normalize the
+;; seconds/nanoseconds/minutes coming in to make-date...
+
 (define-record-type date
-  (make-date-unnormalized nanosecond second minute
-                          hour day month
-                          year
-                          zone-offset)
+  (make-date nanosecond second minute
+             hour day month
+             year
+             zone-offset)
   date?
   (nanosecond date-nanosecond)
   (second date-second)
@@ -612,7 +608,7 @@
 
 ;; gives the seconds/date/month/year 
 (define (priv:decode-julian-day-number jdn)
-  (let* ((days (truncate jdn))
+  (let* ((days (inexact->exact (truncate jdn)))
          (a (+ days 32044))
          (b (quotient (+ (* 4 a) 3) 146097))
          (c (- a (quotient (* 146097 b) 4)))
@@ -646,7 +642,7 @@
 (define (time-utc->date time . tz-offset)
   (if (not (eq? (time-type time) time-utc))
       (priv:time-error 'time->date 'incompatible-time-types  time))
-  (let* ((offset (:optional tz-offset (priv:local-tz-offset)))
+  (let* ((offset (if (null? tz-offset) (priv:local-tz-offset) (car tz-offset)))
          (leap-second? (priv:leap-second? (+ offset (time-second time))))
          (jdn (priv:time->julian-day-number (if leap-second?
                                                 (- (time-second time) 1)
@@ -655,8 +651,9 @@
 
     (call-with-values (lambda () (priv:decode-julian-day-number jdn))
       (lambda (secs date month year)
-        (let* ((hours    (quotient secs (* 60 60)))
-               (rem      (remainder secs (* 60 60)))
+        (let* ((int-secs (inexact->exact (floor secs)))
+               (hours    (quotient int-secs (* 60 60)))
+               (rem      (remainder int-secs (* 60 60)))
                (minutes  (quotient rem 60))
                (seconds  (remainder rem 60)))
           (make-date (time-nanosecond time)
@@ -671,7 +668,7 @@
 (define (time-tai->date time  . tz-offset)
   (if (not (eq? (time-type time) time-tai))
       (priv:time-error 'time->date 'incompatible-time-types  time))
-  (let* ((offset (:optional tz-offset (priv:local-tz-offset)))
+  (let* ((offset (if (null? tz-offset) (priv:local-tz-offset) (car tz-offset)))
          (seconds (- (time-second time)
                      (priv:leap-second-delta (time-second time))))
          (leap-second? (priv:leap-second? (+ offset seconds)))
@@ -699,7 +696,7 @@
 (define (time-monotonic->date time . tz-offset)
   (if (not (eq? (time-type time) time-monotonic))
       (priv:time-error 'time->date 'incompatible-time-types  time))
-  (let* ((offset (:optional tz-offset (priv:local-tz-offset)))
+  (let* ((offset (if (null? tz-offset) (priv:local-tz-offset) (car tz-offset)))
          (seconds (- (time-second time)
                      (priv:leap-second-delta (time-second time))))
          (leap-second? (priv:leap-second? (+ offset seconds)))
@@ -796,8 +793,9 @@
             7))
 
 (define (current-date . tz-offset) 
-  (time-utc->date (current-time time-utc)
-                  (:optional tz-offset (priv:local-tz-offset))))
+  (time-utc->date
+   (current-time time-utc)
+   (if (null? tz-offset) (priv:local-tz-offset) (car tz-offset))))
 
 ;; given a 'two digit' number, find the year within 50 years +/-
 (define (priv:natural-year n)
@@ -882,11 +880,11 @@
   (time-utc->time-monotonic! (julian-day->time-utc jdn)))
 
 (define (julian-day->date jdn . tz-offset)
-  (let ((offset (:optional tz-offset (priv:local-tz-offset))))
+  (let ((offset (if (null? tz-offset) (priv:local-tz-offset) (car tz-offset))))
     (time-utc->date (julian-day->time-utc jdn) offset)))
 
 (define (modified-julian-day->date jdn . tz-offset)
-  (let ((offset (:optional tz-offset (priv:local-tz-offset))))
+  (let ((offset (if (null? tz-offset) (priv:local-tz-offset) (car tz-offset))))
     (julian-day->date (+ jdn 4800001/2) offset)))
 
 (define (modified-julian-day->time-utc jdn)
@@ -1326,7 +1324,7 @@
     (let ((ch (peek-char port)))
       (if (char-alphabetic? ch)
           (read-char-string (cons (read-char port) result))
-          (list->string (reverse result)))))
+          (list->string (reverse! result)))))
   
   (let* ((str (read-char-string '())) 
          (index (indexer str)))
@@ -1482,7 +1480,7 @@
                        0
                        template-string
                        (string-length template-string)
-                       (priv:open-input-string input-string)
+                       (open-input-string input-string)
                        template-string)
     (if (priv:date-ok? newdate)
         newdate
