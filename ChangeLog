@@ -1,3 +1,9 @@
+2004-01-29  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/gnc-druid-provider-*.[ch]:
+	  - move the remove_file() method from the MultiFile to the File Provider
+	  - add a returned gpointer this_file to the file provider callback.
+
 2004-01-23  Derek Atkins  <derek@ihtfp.com>
 
 	* src/app-utils/Makefile.am:

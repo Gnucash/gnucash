@@ -28,6 +28,7 @@ struct _GNCDruidProviderDescFile
 
   gchar* text;
   gchar* last_directory;
+  void (*remove_file)(gpointer be_ctx, gpointer file_ctx);
 };
 
 struct _GNCDruidProviderDescFileClass
@@ -41,7 +42,8 @@ GNCDruidProviderDescFile*
 gnc_druid_provider_desc_file_new_with_data(const gchar* title,
 					   const gchar* text,
 					   const gchar* last_dir,
-					   GNCDruidProviderCB next_cb);
+					   GNCDruidProviderCB next_cb,
+					   void (*remove_file)(gpointer, gpointer));
 
 void	gnc_druid_provider_desc_file_set_text(GNCDruidProviderDescFile*,
 					       const gchar* text);

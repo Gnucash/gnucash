@@ -51,8 +51,7 @@ gnc_druid_provider_desc_multifile_new_with_data(const gchar* title,
 						GNCDruidProviderDescFile *file_prov,
 						GNCDruidProviderCB next_cb,
 						GList* (*get_files)(gpointer),
-						const gchar* (*get_filename)(gpointer, gpointer),
-						void (*remove_file)(gpointer, gpointer))
+						const gchar* (*get_filename)(gpointer, gpointer))
 {
   GNCDruidProviderDescMultifile* desc;
   GNCDruidProviderDesc* gdp_desc;
@@ -64,7 +63,6 @@ gnc_druid_provider_desc_multifile_new_with_data(const gchar* title,
   desc->file_provider = file_prov;
   desc->get_files = get_files;
   desc->get_filename = get_filename;
-  desc->remove_file = remove_file;
 
   gdp_desc->next_cb = next_cb;
 

@@ -30,7 +30,6 @@ struct _GNCDruidProviderDescMultifile
   GNCDruidProviderDescFile* file_provider;
   GList* (*get_files)(gpointer be_ctx);
   const gchar* (*get_filename)(gpointer be_ctx, gpointer file_ctx);
-  void (*remove_file)(gpointer be_ctx, gpointer file_ctx);
 };
 
 struct _GNCDruidProviderDescMultifileClass
@@ -46,8 +45,7 @@ gnc_druid_provider_desc_multifile_new_with_data(const gchar* title,
 						GNCDruidProviderDescFile *file_prov,
 						GNCDruidProviderCB next_cb,
 						GList* (*get_files)(gpointer),
-						const gchar* (*get_filename)(gpointer, gpointer),
-						void (*remove_file)(gpointer, gpointer));
+						const gchar* (*get_filename)(gpointer, gpointer));
 
 void	gnc_druid_provider_desc_multifile_set_text(GNCDruidProviderDescMultifile*,
 						   const gchar* text);

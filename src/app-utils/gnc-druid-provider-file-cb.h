@@ -26,6 +26,8 @@ struct _GNCDruidProviderFileCB
   GNCDruidCB parent;
 
   const gchar* filename;	/* owned by the provider */
+
+  gpointer this_file;		/* set by the backend (return to the provider) */
 };
 
 struct _GNCDruidProviderFileCBClass
