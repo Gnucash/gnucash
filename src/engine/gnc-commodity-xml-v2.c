@@ -74,13 +74,9 @@ gnc_commodity_dom_tree_create(const gnc_commodity *com)
                         "cmdty:xcode",
                         gnc_commodity_get_exchange_code(com)));
     }
-    
-    {
-        gchar *text;
-        text = g_strdup_printf("%d", gnc_commodity_get_fraction(com));
-        xmlAddChild(ret, text_to_dom_tree("cmdty:fraction", text));
-        g_free(text);
-    }
+
+    xmlAddChild(ret, int_to_dom_tree("cmdty:fraction",
+                                     gnc_commodity_get_fraction(com)));
 
     return ret;
 }
