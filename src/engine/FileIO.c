@@ -1702,12 +1702,12 @@ writeTSDate( int fd, Timespec *ts)
   {
   int err=0;
   int tmp;
-  long long ltmp;
+  long long longtmp;
 
   /* write 64 bits to file format */
-  ltmp = ts->tv_sec;
-  XACC_FLIP_LONG_LONG (ltmp);
-  err = write( fd, &tmp, sizeof(long long int) );
+  longtmp = ts->tv_sec;
+  XACC_FLIP_LONG_LONG (longtmp);
+  err = write( fd, &longtmp, sizeof(long long int) );
   if( err != sizeof(long long int) )
     return -1;
   
