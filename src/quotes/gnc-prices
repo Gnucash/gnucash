@@ -117,6 +117,7 @@ die "failed to read file $ARGV[0], maybe its locked? " if (! $grp);
 @acctlist = &account_flatlist ($grp);
 
 # loop over the accounts, look for stock and mutual funds.
+ACCTLOOP:
 foreach $acct (@acctlist) {
    $name = gnucash::xaccAccountGetName ($acct);
    print "Info: Found account $name\n";
@@ -131,6 +132,7 @@ foreach $acct (@acctlist) {
       if ($invacct) {
          $quotesrc = gnucash::xaccInvAcctGetPriceSrc ($invacct);
          print "Info: will use $quotesrc for $name price quotes\n";
+         undef $price;  # undef to make sure later if($price) not broken
          QUOTE: {
             if ("YAHOO" eq $quotesrc) { 
                 %quotes = &Quote::yahoo ($security); 
@@ -147,6 +149,7 @@ foreach $acct (@acctlist) {
                 $price = $quotes {$security, "nav"};
                 last QUOTE;
             }
+            next ACCTLOOP;  # no quote available, go to next account
          }
          $dayte = $quotes {$security, "date"};
          $prodname = $quotes {$security, "name"};
