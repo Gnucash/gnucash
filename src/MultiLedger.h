@@ -45,6 +45,7 @@ struct _xaccLedgerDisplay {
                                   * account type, but not always.           */
   double balance;                /* balance */
   double clearedBalance;
+  double reconciledBalance;
 
   /* GUI related stuff */
   short dirty;                   /* dirty flag, non zero if redraw needed   */

@@ -310,6 +310,7 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
   regData->dirty = 0;
   regData->balance = 0.0;
   regData->clearedBalance = 0.0;
+  regData->reconciledBalance = 0.0;
 
   /* count the number of accounts we are supposed to display,
    * and then, store them. */
@@ -361,9 +362,10 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
   /* provide some convenience data for the ture GUI window.
    * If the GUI wants to display yet other stuff, its on its own.
    */
-
+  // xaccAccountRecomputeBalance(regData->leader);
   regData->balance = xaccAccountGetBalance (regData->leader);
   regData->clearedBalance = xaccAccountGetClearedBalance (regData->leader);
+  regData->reconciledBalance = xaccAccountGetReconciledBalance (regData->leader);
 
   /* for income and expense acounts, we have to reverse
    * the meaning of balance, since, in a dual entry
