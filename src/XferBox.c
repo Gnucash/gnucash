@@ -53,12 +53,12 @@ XferBoxTraverse (PopBox *popGUI, AccountGroup *grp)
 }
 
 PopBox *
-xferBox (Widget parent, AccountGroup *grp)
+xferBox (Widget parent, AccountGroup *grp, int width, int drop_down_width)
 {
    PopBox *popGUI;
    Account * acc;
 
-   popGUI = popBox (parent);
+   popGUI = popBox (parent, width, drop_down_width);
 
    XferBoxTraverse (popGUI, grp);
 

@@ -103,6 +103,10 @@ String fbRes[] = {
   "*recn*cellMarginHeight:    0",
   /* combobox -- don't want the cell to be outlined */
   "*reg*popbox*shadowThickness:     0",
+  "*reg*popbox*list*shadowThickness:     1",  /* we *do* want the combobox scroll bar to show, thoguh */
+  "*reg*popbox*list*thickness:     24",  /* slider width ignored ... why ??? */
+  "*reg*popbox*list*VertScrollBar*width:     24",  /* slider width ignored ... why ??? */
+  "*reg*popbox*list*troughColor:    #9999aa",  /* ignored -- why ???*/
   NULL,
   };
 

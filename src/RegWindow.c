@@ -1715,7 +1715,8 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
    * Set up the menubar menu-items.                                 *
    * Menu structures must be initialized before any code is         *
    * executed.  Some compilers insist on this, although gcc is      *
-   * freindly about this.                                           *
+   * freindly about this.  Note that some of the activityMenu       *
+   * values are changed below. Be careful with which row is which.  *
   \******************************************************************/
   MenuItem reportMenu[] = {
     { "Simple...",          &xmPushButtonWidgetClass, 'S', NULL, NULL, True,
@@ -1758,15 +1759,6 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
     NULL,
   };
   
-  /* some compilers don't like dynamic data in initializers; 
-   * so rather than inlining these, we initialize here ... :-( 
-   * Just be careful not to scramble the order of the rows.
-   * See also some additional activityMenu futzing about below 
-   */
-  activityMenu[2].callback_data=(XtPointer)regData;
-  activityMenu[3].callback_data=(XtPointer)regData;
-  activityMenu[6].callback_data=(XtPointer)regData;
-  activityMenu[8].callback_data=(XtPointer)(regData->dialog);  /* destroy callback */
 
   /******************************************************************\
    * Set quarks, create regData, compute register display type      *
@@ -1880,6 +1872,12 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   /******************************************************************\
    * Setup the menubar at the top of the window                     *
   \******************************************************************/
+
+  /* Be careful not to scramble the order of the rows.  */
+  activityMenu[2].callback_data=(XtPointer)regData;
+  activityMenu[3].callback_data=(XtPointer)regData;
+  activityMenu[6].callback_data=(XtPointer)regData;
+  activityMenu[8].callback_data=(XtPointer)(regData->dialog);  /* destroy callback */
 
   /* can't adjust the balance on a ledger window */
   if (1 != regData->numAcc) {
@@ -2276,15 +2274,23 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 
 
   /* create action box for the first time */
-  regData->actbox = actionBox (reg);
+  { 
+  int width;
+  width = XbaeMatrixGetColumnPixelWidth (reg, regData->cellColLocation[ACTN_CELL_ID]);
+  /* hack alert -- we do want popbox drop-down width to be font dependant */
+  regData->actbox = actionBox (reg, width, 55);
+  }
 
   /* create the xfer account box for the first time */
   /* but first, find the topmost group */
   {
   AccountGroup *grp;
+  int width;
   grp = xaccGetRootGroupOfAcct (regData->blackacc[0]);
-  regData->xfrmbox = xferBox (reg, grp);
-  regData->xtobox  = xferBox (reg, grp);
+  width = XbaeMatrixGetColumnPixelWidth (reg, regData->cellColLocation[XFRM_CELL_ID]);
+  /* hack alert -- we do want popbox drop-down width to be font dependant */
+  regData->xfrmbox = xferBox (reg, grp, width, 103);
+  regData->xtobox  = xferBox (reg, grp, width, 103);
   }
 
   /******************************************************************\

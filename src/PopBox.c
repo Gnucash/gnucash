@@ -44,7 +44,7 @@ static void selectCB (Widget w, XtPointer cd, XtPointer cb );
 \********************************************************************/
 
 PopBox *
-popBox (Widget parent)
+popBox (Widget parent, int width, int drop_width)
 {
    Widget combobox;
    XmString str;
@@ -66,13 +66,12 @@ popBox (Widget parent)
                        XmNmarginWidth, 0,
                        XmNselectionPolicy, XmSINGLE_SELECT,
                        XmNvalue, "",
-
-/* hack alert -- the width of the combobox should be relative to the font, should
- * be relative to the size of the cell in which it will fit. Basically, these
- * values should not be hard-coded, but should be conmputed somehow */
-                       XmNwidth, 53,
-                       XmNdropDownWidth, 103,
+                       XmNwidth, width,
                        NULL);
+
+   if (10 < drop_width) {
+      XtVaSetValues (combobox, XmNdropDownWidth, drop_width, NULL);
+   }
 
    popData -> combobox = combobox;
 
