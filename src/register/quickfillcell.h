@@ -67,10 +67,10 @@ void             xaccDestroyQuickFillCell (QuickFillCell *cell);
 
 void             xaccSetQuickFillCellValue (QuickFillCell *cell,
                                             const char *value);
-void             xaccSetQuickFillSort (QuickFillCell *cell,
-                                       QuickFillSort sort);
-void             xaccSetQuickFillOriginal (QuickFillCell *cell,
-                                           const char *original);
+void             xaccSetQuickFillCellSort (QuickFillCell *cell,
+                                           QuickFillSort sort);
+void             xaccSetQuickFillCellOriginal (QuickFillCell *cell,
+                                               const char *original);
 
 /* GUI-dependent */
 void             xaccQuickFillGUIInit (QuickFillCell *cell);

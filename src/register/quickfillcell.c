@@ -71,7 +71,7 @@ quick_enter (BasicCell *_cell, const char *val,
    *start_selection = 0;
    *end_selection = -1;
 
-   xaccSetQuickFillOriginal(cell, NULL);
+   xaccSetQuickFillCellOriginal(cell, NULL);
 
    return val;
 }
@@ -106,7 +106,7 @@ quick_modify (BasicCell *_cell,
          (strncasecmp(cell->original, newval, strlen(newval)) == 0))
        cell->original[strlen(newval)] = '\0';
      else
-       xaccSetQuickFillOriginal(cell, NULL);
+       xaccSetQuickFillCellOriginal(cell, NULL);
 
      SET (&(cell->cell), newval);
      return newval;
@@ -116,7 +116,7 @@ quick_modify (BasicCell *_cell,
    if (*cursor_position < strlen(oldval))
    {
      SET (&(cell->cell), newval);
-     xaccSetQuickFillOriginal(cell, NULL);
+     xaccSetQuickFillCellOriginal(cell, NULL);
      return newval;
    }
 
@@ -241,7 +241,7 @@ xaccSetQuickFillCellValue (QuickFillCell *cell, const char * value)
 /* ================================================ */
 
 void
-xaccSetQuickFillSort (QuickFillCell *cell, QuickFillSort sort)
+xaccSetQuickFillCellSort (QuickFillCell *cell, QuickFillSort sort)
 {
   if (cell == NULL)
     return;
@@ -252,7 +252,7 @@ xaccSetQuickFillSort (QuickFillCell *cell, QuickFillSort sort)
 /* ================================================ */
 
 void
-xaccSetQuickFillOriginal (QuickFillCell *cell, const char *original)
+xaccSetQuickFillCellOriginal (QuickFillCell *cell, const char *original)
 {
   if (cell == NULL)
     return;
