@@ -676,7 +676,7 @@ create_Find_Transactions (void)
 {
   GtkWidget *Find_Transactions;
   GtkWidget *dialog_vbox7;
-  GtkWidget *notebook2;
+  GtkWidget *find_notebook;
   GtkWidget *frame6;
   GtkWidget *match_accounts_vbox;
   GtkWidget *hbox26;
@@ -804,20 +804,20 @@ create_Find_Transactions (void)
   gtk_object_set_data (GTK_OBJECT (Find_Transactions), "dialog_vbox7", dialog_vbox7);
   gtk_widget_show (dialog_vbox7);
 
-  notebook2 = gtk_notebook_new ();
-  gtk_widget_ref (notebook2);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "notebook2", notebook2,
+  find_notebook = gtk_notebook_new ();
+  gtk_widget_ref (find_notebook);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "find_notebook", find_notebook,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (notebook2);
-  gtk_box_pack_start (GTK_BOX (dialog_vbox7), notebook2, TRUE, TRUE, 0);
-  gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook2), GTK_POS_LEFT);
+  gtk_widget_show (find_notebook);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox7), find_notebook, TRUE, TRUE, 0);
+  gtk_notebook_set_tab_pos (GTK_NOTEBOOK (find_notebook), GTK_POS_LEFT);
 
   frame6 = gtk_frame_new (_("Match Accounts"));
   gtk_widget_ref (frame6);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame6", frame6,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame6);
-  gtk_container_add (GTK_CONTAINER (notebook2), frame6);
+  gtk_container_add (GTK_CONTAINER (find_notebook), frame6);
 
   match_accounts_vbox = gtk_vbox_new (FALSE, 0);
   gtk_widget_ref (match_accounts_vbox);
@@ -880,14 +880,14 @@ create_Find_Transactions (void)
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label716", label716,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label716);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 0), label716);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (find_notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (find_notebook), 0), label716);
 
   frame11 = gtk_frame_new (_("Match Date"));
   gtk_widget_ref (frame11);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame11", frame11,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame11);
-  gtk_container_add (GTK_CONTAINER (notebook2), frame11);
+  gtk_container_add (GTK_CONTAINER (find_notebook), frame11);
 
   vbox79 = gtk_vbox_new (FALSE, 0);
   gtk_widget_ref (vbox79);
@@ -962,14 +962,14 @@ create_Find_Transactions (void)
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label768", label768,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label768);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 1), label768);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (find_notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (find_notebook), 1), label768);
 
   frame8 = gtk_frame_new (_("Match Description"));
   gtk_widget_ref (frame8);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame8", frame8,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame8);
-  gtk_container_add (GTK_CONTAINER (notebook2), frame8);
+  gtk_container_add (GTK_CONTAINER (find_notebook), frame8);
 
   vbox16 = gtk_vbox_new (FALSE, 0);
   gtk_widget_ref (vbox16);
@@ -1020,14 +1020,14 @@ create_Find_Transactions (void)
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label718", label718,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label718);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 2), label718);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (find_notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (find_notebook), 2), label718);
 
   frame15 = gtk_frame_new (_("Match Description"));
   gtk_widget_ref (frame15);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame15", frame15,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame15);
-  gtk_container_add (GTK_CONTAINER (notebook2), frame15);
+  gtk_container_add (GTK_CONTAINER (find_notebook), frame15);
 
   vbox42 = gtk_vbox_new (FALSE, 0);
   gtk_widget_ref (vbox42);
@@ -1078,14 +1078,14 @@ create_Find_Transactions (void)
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label760", label760,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label760);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 3), label760);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (find_notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (find_notebook), 3), label760);
 
   frame9 = gtk_frame_new (_("Match Amount"));
   gtk_widget_ref (frame9);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame9", frame9,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame9);
-  gtk_container_add (GTK_CONTAINER (notebook2), frame9);
+  gtk_container_add (GTK_CONTAINER (find_notebook), frame9);
 
   vbox18 = gtk_vbox_new (FALSE, 0);
   gtk_widget_ref (vbox18);
@@ -1178,14 +1178,14 @@ create_Find_Transactions (void)
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label719", label719,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label719);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 4), label719);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (find_notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (find_notebook), 4), label719);
 
   frame10 = gtk_frame_new (_("Match Memo"));
   gtk_widget_ref (frame10);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame10", frame10,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame10);
-  gtk_container_add (GTK_CONTAINER (notebook2), frame10);
+  gtk_container_add (GTK_CONTAINER (find_notebook), frame10);
 
   vbox22 = gtk_vbox_new (FALSE, 0);
   gtk_widget_ref (vbox22);
@@ -1236,14 +1236,14 @@ create_Find_Transactions (void)
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label771", label771,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label771);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 5), label771);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (find_notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (find_notebook), 5), label771);
 
   frame18 = gtk_frame_new (_("Match number of shares"));
   gtk_widget_ref (frame18);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame18", frame18,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame18);
-  gtk_container_add (GTK_CONTAINER (notebook2), frame18);
+  gtk_container_add (GTK_CONTAINER (find_notebook), frame18);
 
   vbox45 = gtk_vbox_new (FALSE, 0);
   gtk_widget_ref (vbox45);
@@ -1306,14 +1306,14 @@ create_Find_Transactions (void)
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label764", label764,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label764);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 6), label764);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (find_notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (find_notebook), 6), label764);
 
   frame19 = gtk_frame_new (_("Match share price"));
   gtk_widget_ref (frame19);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame19", frame19,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame19);
-  gtk_container_add (GTK_CONTAINER (notebook2), frame19);
+  gtk_container_add (GTK_CONTAINER (find_notebook), frame19);
 
   vbox46 = gtk_vbox_new (FALSE, 0);
   gtk_widget_ref (vbox46);
@@ -1376,14 +1376,14 @@ create_Find_Transactions (void)
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label767", label767,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label767);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 7), label767);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (find_notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (find_notebook), 7), label767);
 
   frame20 = gtk_frame_new (_("Match Action"));
   gtk_widget_ref (frame20);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame20", frame20,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame20);
-  gtk_container_add (GTK_CONTAINER (notebook2), frame20);
+  gtk_container_add (GTK_CONTAINER (find_notebook), frame20);
 
   vbox50 = gtk_vbox_new (FALSE, 0);
   gtk_widget_ref (vbox50);
@@ -1434,14 +1434,14 @@ create_Find_Transactions (void)
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label720", label720,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label720);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 8), label720);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (find_notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (find_notebook), 8), label720);
 
   frame25 = gtk_frame_new (_("Match Cleared state"));
   gtk_widget_ref (frame25);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame25", frame25,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame25);
-  gtk_container_add (GTK_CONTAINER (notebook2), frame25);
+  gtk_container_add (GTK_CONTAINER (find_notebook), frame25);
 
   vbox61 = gtk_vbox_new (FALSE, 5);
   gtk_widget_ref (vbox61);
@@ -1485,14 +1485,14 @@ create_Find_Transactions (void)
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label786", label786,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label786);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 9), label786);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (find_notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (find_notebook), 9), label786);
 
   frame36 = gtk_frame_new (_("Match Balance state"));
   gtk_widget_ref (frame36);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame36", frame36,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame36);
-  gtk_container_add (GTK_CONTAINER (notebook2), frame36);
+  gtk_container_add (GTK_CONTAINER (find_notebook), frame36);
 
   vbox87 = gtk_vbox_new (FALSE, 5);
   gtk_widget_ref (vbox87);
@@ -1529,14 +1529,14 @@ create_Find_Transactions (void)
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label843", label843,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label843);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 10), label843);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (find_notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (find_notebook), 10), label843);
 
   tags_frame = gtk_frame_new (_("Match transaction tags (CURRENTLY INOPERABLE)"));
   gtk_widget_ref (tags_frame);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "tags_frame", tags_frame,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (tags_frame);
-  gtk_container_add (GTK_CONTAINER (notebook2), tags_frame);
+  gtk_container_add (GTK_CONTAINER (find_notebook), tags_frame);
 
   vbox82 = gtk_vbox_new (FALSE, 0);
   gtk_widget_ref (vbox82);
@@ -1590,7 +1590,7 @@ create_Find_Transactions (void)
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label845", label845,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label845);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 11), label845);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (find_notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (find_notebook), 11), label845);
 
   hbox20 = gtk_hbox_new (FALSE, 0);
   gtk_widget_ref (hbox20);

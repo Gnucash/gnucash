@@ -1,3 +1,7 @@
+2001-04-22  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-find-transactions.c: remove tags notebook page.
+
 2001-04-22  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/income-expense-graph.scm: Add links to new

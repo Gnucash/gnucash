@@ -160,6 +160,8 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
   FindTransactionsDialog * ftd = g_new0(FindTransactionsDialog, 1);
   GtkWidget *box;
   GtkWidget *edit;
+  GtkWidget *notebook;
+  gint page_num;
 
   /* call the glade-defined creator */
   ftd->dialog = create_Find_Transactions();
@@ -175,6 +177,14 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
 
   /* initialize the radiobutton state vars */
   ftd->search_type = 0;
+
+  /* remove the tags page (unfinished) */
+  notebook = gtk_object_get_data (GTK_OBJECT (ftd->dialog), "find_notebook");
+  box = gtk_object_get_data (GTK_OBJECT (ftd->dialog), "tags_frame");
+
+  page_num = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), box);
+  if (page_num >= 0)
+    gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page_num);
 
   /* find the important widgets */
   ftd->new_search_radiobutton = 
@@ -312,7 +322,6 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
   /* set data so we can find the struct in callbacks */
   gtk_object_set_data(GTK_OBJECT(ftd->dialog), "find_transactions_structure",
                       ftd);
-  
 
   /* if there's no original query, make the narrow, add, delete 
    * buttons inaccessible */
