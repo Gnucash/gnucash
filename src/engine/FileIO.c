@@ -41,11 +41,14 @@
  *                                                                  *
  * Version 6 of the file format removes the source split            *
  *                                                                  *
+ * Version 7 of the file format adds currency & security types      *
+ *                                                                  *
  * the format of the data in the file:                              *
  *   file        ::== token Group                                   *
  *   Group       ::== numAccounts (Account)^numAccounts             *
  *   Account     ::== accID flags type accountName description      * 
- *                    notes numTran (Transaction)^numTrans          * 
+ *                    notes currency security                       *
+ *                    numTran (Transaction)^numTrans                * 
  *                    numGroups (Group)^numGroups                   *
  *   Transaction ::== num date description                          *
  *                    numSplits (Split)^numSplits                   *
@@ -60,6 +63,8 @@
  *   accountName ::== String                                        *  
  *   description ::== String                                        *  
  *   notes       ::== String                                        *  
+ *   currency    ::== String                                        *  
+ *   security    ::== String                                        *  
  *                                                                  *
  *   num         ::== String                                        * 
  *   date        ::== Date                                          * 
@@ -100,7 +105,7 @@
 #define PERMS   0666
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
 #define RFLAGS  O_RDONLY
-#define VERSION 6
+#define VERSION 7
 
 /** GLOBALS *********************************************************/
 
@@ -430,6 +435,20 @@ readAccount( int fd, AccountGroup *grp, int token )
   xaccAccountSetNotes (acc, tmp);
   free (tmp);
   
+  /* currency and security strings first introduced 
+   * in version 7 of the file format */
+  if (7 <= token) {
+     tmp = readString( fd, token );
+     if( NULL == tmp ) { free (tmp); return NULL; }
+     xaccAccountSetCurrency (acc, tmp);
+     free (tmp);
+
+     tmp = readString( fd, token );
+     if( NULL == tmp ) { free (tmp); return NULL; }
+     xaccAccountSetSecurity (acc, tmp);
+     free (tmp);
+  }
+
   err = read( fd, &numTrans, sizeof(int) );
   if( err != sizeof(int) ) { return NULL; }
   XACC_FLIP_INT (numTrans);
@@ -1233,18 +1252,23 @@ writeAccount( int fd, Account *acc )
   
   tmp = xaccAccountGetName (acc);
   err = writeString( fd, tmp );
-  if( -1 == err )
-    return err;
+  if( -1 == err ) return err;
   
   tmp = xaccAccountGetDescription (acc);
   err = writeString( fd, tmp );
-  if( -1 == err )
-    return err;
+  if( -1 == err ) return err;
   
   tmp = xaccAccountGetNotes (acc);
   err = writeString( fd, tmp );
-  if( -1 == err )
-    return err;
+  if( -1 == err ) return err;
+  
+  tmp = xaccAccountGetCurrency (acc);
+  err = writeString( fd, tmp );
+  if( -1 == err ) return err;
+  
+  tmp = xaccAccountGetSecurity (acc);
+  err = writeString( fd, tmp );
+  if( -1 == err ) return err;
   
   /* figure out numTrans -- it will be less than the total
    * number of transactions in this account, because some 
@@ -1430,11 +1454,7 @@ writeString( int fd, char *str )
   int tmp;
 
   if (NULL == str) str = "";   /* protect against null arguments */
-  
-  for( size=0; str[size] != '\0'; size++ )
-    {}
-  size++;                /* we want to make sure we include the '\0'! 
-			  * Otherwise, bad things happen */
+  size = strlen (str) + 1;
   
   tmp = size;
   XACC_FLIP_INT (tmp);
