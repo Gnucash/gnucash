@@ -409,7 +409,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
     ts.tv_sec = date;
     ts.tv_nsec = 0;
 
-    price = gnc_price_create ();
+    price = gnc_price_create (gnc_get_current_session ());
 
     gnc_price_begin_edit (price);
     gnc_price_set_commodity (price, xaccAccountGetCommodity (account));

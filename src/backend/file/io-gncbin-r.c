@@ -217,7 +217,7 @@ cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices,
        (acct_type == CURRENCY)) {
       /* this is a quote -- file it in the db and kill the split */
       Transaction *txn = xaccSplitGetParent(q->split);
-      GNCPrice *price = gnc_price_create();
+      GNCPrice *price = gnc_price_create(session);
       Timespec time = xaccTransRetDatePostedTS(txn);
 
       gnc_price_begin_edit(price);

@@ -240,7 +240,7 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    if (!pr) 
    { 
-      pr = gnc_price_create();
+      pr = gnc_price_create(be->session);
       gnc_price_begin_edit (pr);
       gnc_price_set_guid (pr, &guid);
       not_found = 1;

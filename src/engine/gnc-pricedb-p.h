@@ -30,7 +30,8 @@
 #include "BackendP.h"
 #include "gnc-pricedb.h"
 
-struct _GNCPrice {
+struct gnc_price_s
+{
   /* 'public' data fields */
   GUID    guid;                  /* globally unique price id */
   GNCPriceDB *db;
@@ -52,7 +53,8 @@ struct _GNCPrice {
 
 
 
-struct _GNCPriceDB {
+struct gnc_price_db_s
+{
   GHashTable *commodity_hash;
   Backend *backend;
   gboolean dirty;
@@ -72,7 +74,8 @@ typedef enum {
 } PriceLookupType;
 
 
-struct _GNCPriceLookup {
+struct gnc_price_lookup_s
+{
   PriceLookupType type;
   GNCPriceDB     *prdb;
   gnc_commodity  *commodity;

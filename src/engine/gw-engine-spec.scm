@@ -1313,9 +1313,9 @@ when no longer needed.")
    'gnc:price-create
    '<gnc:Price*>
    "gnc_price_create"
-   '()
+   '((<gnc:Session*> session))
    "Create and return a new price.")
-  
+
   (gw:wrap-function
    mod
    'gnc:price-unref

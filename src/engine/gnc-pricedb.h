@@ -25,8 +25,9 @@
 #define GNC_PRICEDB_H
 
 #include "date.h"
-#include "gnc-numeric.h"
 #include "gnc-commodity.h"
+#include "gnc-numeric.h"
+#include "gnc-engine.h"
 #include "guid.h"
 
 #include <stdio.h>
@@ -107,20 +108,20 @@
 
  */
 
-typedef struct _GNCPrice GNCPrice;
-typedef struct _GNCPriceLookup GNCPriceLookup;
+typedef struct gnc_price_s GNCPrice;
+typedef struct gnc_price_lookup_s GNCPriceLookup;
 
 /****************/
 /* constructors */
 
 /* gnc_price_create - returns a newly allocated and initialized price
    with a reference count of 1. */
-GNCPrice *gnc_price_create(void);
+GNCPrice *gnc_price_create(GNCSession *session);
 
 /* gnc_price_clone - returns a newly allocated price that's a
    content-wise duplicate of the given price, p.  The returned clone
    will have a reference count of 1. */
-GNCPrice *gnc_price_clone(GNCPrice* p);
+GNCPrice *gnc_price_clone(GNCPrice* p, GNCSession *session);
 
 /*********************/
 /* memory management */
@@ -213,7 +214,7 @@ gboolean gnc_price_list_equal(GList *prices1, GList *prices2);
 
 */
 
-typedef struct _GNCPriceDB GNCPriceDB;
+typedef struct gnc_price_db_s GNCPriceDB;
 
 
 /* gnc_pricedb_create - create a new pricedb.  Normally you won't need

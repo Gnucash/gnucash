@@ -156,7 +156,7 @@ price_parse_xml_end_handler(gpointer data_for_children,
   if(price_xml->prev) { ok = FALSE; goto cleanup_and_exit; }
   if(!price_xml->xmlChildrenNode) { ok = FALSE; goto cleanup_and_exit; }
 
-  p = gnc_price_create();
+  p = gnc_price_create(session);
   if(!p) { ok = FALSE; goto cleanup_and_exit; }
   
   for(child = price_xml->xmlChildrenNode; child; child = child->next) {

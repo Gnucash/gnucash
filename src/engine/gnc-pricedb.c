@@ -49,19 +49,25 @@ static gboolean remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup);
 
 /* allocation */
 GNCPrice *
-gnc_price_create(void)
+gnc_price_create (GNCSession *session)
 {
-  GNCPrice *p = g_new0(GNCPrice, 1);
-  ENTER(" ");
+  GNCPrice *p;
+
+  g_return_val_if_fail (session, NULL);
+
+  p = g_new0(GNCPrice, 1);
+
   p->refcount = 1;
   p->editlevel = 0;
   p->not_saved = FALSE;
   p->do_free = FALSE;
   p->version = 0;
   p->version_check = 0;
+
   xaccGUIDNew (&p->guid);
   xaccStoreEntity(p, &p->guid, GNC_ID_PRICE); 
   gnc_engine_generate_event (&p->guid, GNC_EVENT_CREATE);
+
   return p;
 }
 
@@ -109,14 +115,18 @@ gnc_price_unref(GNCPrice *p)
 /* ==================================================================== */
 
 GNCPrice *
-gnc_price_clone(GNCPrice* p)
+gnc_price_clone (GNCPrice* p, GNCSession *session)
 {
   /* the clone doesn't belong to a PriceDB */
   GNCPrice *new_p;
-  
+
   ENTER ("pr=%p", p);
+
+  g_return_val_if_fail (session, NULL);
+
   if(!p) return NULL;
-  new_p = gnc_price_create();
+
+  new_p = gnc_price_create(session);
   if(!new_p) return NULL;
 
   new_p->version = p->version;

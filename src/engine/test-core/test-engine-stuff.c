@@ -131,7 +131,7 @@ get_random_price(GNCSession *session)
   char *string;
   gnc_commodity *c;
 
-  p = gnc_price_create ();
+  p = gnc_price_create (session);
 
   c = get_random_commodity (session);
   gnc_price_set_commodity (p, c);
