@@ -7,6 +7,8 @@
  *
  * CAUTION: this is currently a non-functioning, experimental implementation
  * of the design described in src/doc/book.txt
+
+Open questions: hwo do we deal with the backends ???
  *
  * HISTORY:
  * created by Linas Vepstas November 2001
@@ -14,8 +16,8 @@
  */
 
 
-#ifndef XACC_PERIOD_H__
-#define XACC_PERIOD_H__
+#ifndef XACC_PERIOD_H
+#define XACC_PERIOD_H
 
 #include "gnc-book.h"
 #include "gnc-engine.h"
@@ -27,6 +29,11 @@
  *    and it moves all of the transactions returned by the query to 
  *    the copied accounts.  I
 
+Note that this routine is 'special' in that it works hard to make sure
+that the partitioned accounts, transactions and splits are really
+moved to a new book -- things like entity tables must be cleared
+and repopulated correctly.
+
 An equity transfer is made ...
 key-value pairs are set ...
 The sched xactions are not copied ...
@@ -34,7 +41,7 @@ The sched xactions are not copied ...
  */
 GNCBook * gnc_book_partition (GNCBook *, Query *);
 
-#endif XACC_PERIOD_H__
+#endif XACC_PERIOD_H
 
 #include "gnc-book-p.h"
 #include "GroupP.h"
@@ -44,6 +51,7 @@ GNCBook * gnc_book_partition (GNCBook *, Query *);
 GNCBook * 
 gnc_book_partition (GNCBook *existing_book, Query *query)
 {
+   GList * split_list;
    GNCBook *partition_book;
    AccountGroup *part_topgrp;
 
@@ -53,7 +61,10 @@ gnc_book_partition (GNCBook *existing_book, Query *query)
 
    /* first, copy all of the accounts */
    xaccGroupCopyGroup (partition_book->topgroup, existing_book->topgroup);
-   
+
+   /* next, run the query */
+   split_list = xaccQueryGetSplitsUniqueTrans (query);
+
    return partition_book;
 }
 

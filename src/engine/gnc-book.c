@@ -203,9 +203,7 @@ void
 gnc_book_set_backend (GNCBook *book, Backend *be)
 {
   if (!book) return;
-
   book->backend = be;
-  xaccPriceDBSetBackend (book->pricedb, be);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -239,9 +237,7 @@ void
 gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db)
 {
   if(!book) return;
-
   book->pricedb = db;
-  xaccPriceDBSetBackend (db, book->backend);
 }
 
 /* ---------------------------------------------------------------------- */

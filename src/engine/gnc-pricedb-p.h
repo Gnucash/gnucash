@@ -26,9 +26,9 @@
 
 #include <glib.h>
 
-#include "BackendP.h"
-#include "GNCIdP.h"
+#include "GNCId.h"
 #include "gnc-book.h"
+#include "gnc-engine.h"
 #include "gnc-pricedb.h"
 
 struct gnc_price_s
@@ -36,6 +36,7 @@ struct gnc_price_s
   /* 'public' data fields */
   GUID    guid;                  /* globally unique price id */
   GNCEntityTable *entity_table;  /* table in which price is stored */
+  GNCBook *book;                 /* book to which this price belongs to */
 
   GNCPriceDB *db;
   gnc_commodity *commodity;
@@ -59,7 +60,7 @@ struct gnc_price_s
 struct gnc_price_db_s
 {
   GHashTable *commodity_hash;
-  Backend *backend;
+  GNCBook *book;   /* book to which this database and all the prices belong to */
   gboolean dirty;
 };
 

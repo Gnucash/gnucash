@@ -64,7 +64,6 @@ xaccBackendGetError (Backend *be)
    return err;
 }
 
-
 /********************************************************************\
  * Fetch the backend                                                *
 \********************************************************************/
@@ -72,13 +71,23 @@ xaccBackendGetError (Backend *be)
 Backend *
 xaccAccountGetBackend (Account * acc)
 {
-  AccountGroup * grp;
+  if (!acc || !acc->book) return NULL;
+  return acc->book->backend;
+}
 
-  if (!acc) return NULL;
-  grp = xaccAccountGetRoot (acc);
+Backend *
+xaccGroupGetBackend (AccountGroup *grp)
+{
+  grp = xaccGroupGetRoot (grp);
   if (!grp || !grp->book) return NULL;
-
   return grp->book->backend;
+}
+
+Backend *
+xaccPriceDBGetBackend (GNCPriceDB *prdb)
+{
+  if (!prdb || !prdb->book) return NULL;
+  return prdb->book->backend;
 }
 
 /********************************************************************\
@@ -121,36 +130,6 @@ xaccTransactionGetBackend (Transaction *trans)
   if (!s) return NULL;
   
   return xaccAccountGetBackend (xaccSplitGetAccount(s));
-}
-
-/********************************************************************\
- * Set the backend                                                  *
-\********************************************************************/
-
-Backend *
-xaccGroupGetBackend (AccountGroup *grp)
-{
-  grp = xaccGroupGetRoot (grp);
-  if (!grp || !grp->book) return NULL;
-  return grp->book->backend;
-}
-
-/********************************************************************\
- * Set the backend                                                  *
-\********************************************************************/
-
-void
-xaccPriceDBSetBackend (GNCPriceDB *prdb, Backend *be)
-{
-  if (!prdb) return;
-  prdb->backend = be;
-}
-
-Backend *
-xaccPriceDBGetBackend (GNCPriceDB *prdb)
-{
-  if (!prdb) return NULL;
-  return prdb->backend;
 }
 
 /***********************************************************************/

@@ -26,8 +26,9 @@
 #include <glib.h>
 #include <string.h>
 
-#include "Backend.h"
+#include "BackendP.h"
 #include "GNCIdP.h"
+#include "gnc-book-p.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-book-p.h"
@@ -62,6 +63,7 @@ gnc_price_create (GNCBook *book)
   p->version = 0;
   p->version_check = 0;
 
+  p->book = book;
   p->entity_table = gnc_book_get_entity_table (book);
 
   xaccGUIDNew (&p->guid, book);
@@ -613,7 +615,7 @@ GNCPriceDB *
 gnc_pricedb_create(void)
 {
   GNCPriceDB * result = g_new0(GNCPriceDB, 1);
-  result->backend = NULL;
+  result->book = NULL;
   result->commodity_hash = g_hash_table_new(commodity_hash, commodity_equal);
   g_return_val_if_fail (result->commodity_hash, NULL);
   return result;
@@ -659,7 +661,7 @@ gnc_pricedb_destroy(GNCPriceDB *db)
                         NULL);
   g_hash_table_destroy (db->commodity_hash);
   db->commodity_hash = NULL;
-  db->backend = NULL;
+  db->book = NULL;
   g_free(db);
 }
 
@@ -776,7 +778,7 @@ gnc_pricedb_equal (GNCPriceDB *db1, GNCPriceDB *db2)
 static gboolean
 add_price(GNCPriceDB *db, GNCPrice *p)
 {
-  /* this function will use p, adding a ref, so treat p as read-only
+  /* This function will use p, adding a ref, so treat p as read-only
      if this function succeeds. */
   GList *price_list;
   gnc_commodity *commodity;
@@ -786,6 +788,14 @@ add_price(GNCPriceDB *db, GNCPrice *p)
   if(!db || !p) return FALSE;
   ENTER ("db=%p, pr=%p not-saved=%d do-free=%d",
          db, p, p->not_saved, p->do_free);
+
+  /* initialize the book pointer for teh first time, if needed */
+  if (NULL == db->book) db->book = p->book;
+  if (db->book != p->book)
+  {
+     PERR ("attempted to mix up prices across different books");
+     return FALSE;
+  }
 
   commodity = gnc_price_get_commodity(p);
   if(!commodity) {
@@ -935,14 +945,14 @@ gnc_pricedb_lookup_latest(GNCPriceDB *db,
   ENTER ("db=%p commodity=%p currency=%p", db, commodity, currency);
   if(!db || !commodity || !currency) return NULL;
 
-  if (db->backend && db->backend->price_lookup)
+  if (db->book && db->book->backend && db->book->backend->price_lookup)
   {
      GNCPriceLookup pl;
      pl.type = LOOKUP_LATEST;
      pl.prdb = db;
      pl.commodity = commodity;
      pl.currency = currency;
-     (db->backend->price_lookup) (db->backend, &pl);
+     (db->book->backend->price_lookup) (db->book->backend, &pl);
   }
 
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
@@ -973,14 +983,14 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
   ENTER ("db=%p commodity=%p currency=%p", db, commodity, currency);
   if(!db || !commodity || !currency) return NULL;
 
-  if (db->backend && db->backend->price_lookup)
+  if (db->book && db->book->backend && db->book->backend->price_lookup)
   {
      GNCPriceLookup pl;
      pl.type = LOOKUP_ALL;
      pl.prdb = db;
      pl.commodity = commodity;
      pl.currency = currency;
-     (db->backend->price_lookup) (db->backend, &pl);
+     (db->book->backend->price_lookup) (db->book->backend, &pl);
   }
 
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
@@ -1011,7 +1021,7 @@ gnc_pricedb_lookup_at_time(GNCPriceDB *db,
   ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
   if(!db || !c || !currency) return NULL;
 
-  if (db->backend && db->backend->price_lookup)
+  if (db->book && db->book->backend && db->book->backend->price_lookup)
   {
      GNCPriceLookup pl;
      pl.type = LOOKUP_AT_TIME;
@@ -1019,7 +1029,7 @@ gnc_pricedb_lookup_at_time(GNCPriceDB *db,
      pl.commodity = c;
      pl.currency = currency;
      pl.date = t;
-     (db->backend->price_lookup) (db->backend, &pl);
+     (db->book->backend->price_lookup) (db->book->backend, &pl);
   }
 
   currency_hash = g_hash_table_lookup(db->commodity_hash, c);
@@ -1059,7 +1069,7 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
   ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
   if(!db || !c || !currency) return NULL;
 
-  if (db->backend && db->backend->price_lookup)
+  if (db->book && db->book->backend && db->book->backend->price_lookup)
   {
      GNCPriceLookup pl;
      pl.type = LOOKUP_NEAREST_IN_TIME;
@@ -1067,7 +1077,7 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
      pl.commodity = c;
      pl.currency = currency;
      pl.date = t;
-     (db->backend->price_lookup) (db->backend, &pl);
+     (db->book->backend->price_lookup) (db->book->backend, &pl);
   }
 
   currency_hash = g_hash_table_lookup(db->commodity_hash, c);

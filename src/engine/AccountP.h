@@ -46,8 +46,8 @@
 
 #include "Account.h"
 #include "GNCIdP.h"
-#include "Transaction.h"
 #include "gnc-commodity.h"
+#include "gnc-engine.h"
 #include "gnc-numeric.h"
 #include "kvp_frame.h"
 
@@ -66,6 +66,7 @@ struct account_s
    * by being here ???  Do we ahve another reason ??? */
   GNCEntityTable *entity_table; /* Entity table this account is
                                  * stored in. */
+  GNCBook *book;
 
   /* The accountName is an arbitrary string assigned by the user. 
    * It is intended to a short, 5 to 30 character long string that

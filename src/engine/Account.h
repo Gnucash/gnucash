@@ -1,7 +1,7 @@
 /********************************************************************\
  * Account.h -- Account handling public routines                    *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -131,9 +131,14 @@ gboolean xaccAccountTypesCompatible (GNCAccountType parent_type,
  *    it does not copy splits/transactions.  Note also that it 
  *    does NOT use the 'gemini' kvp value to indicate where it 
  *    was copied from.
+ *
+ * The xaccCloneAccount() does teh same as above, except that it
+ *    also uses the 'gemini' kvp value to mark the account from
+ *    which it was copied.
  */
 Account    * xaccMallocAccount (GNCBook *book);
-Account    * xaccCloneAccountSimple(const Account *from, GNCBook *book);
+Account    * xaccCloneAccount (const Account *from, GNCBook *book);
+Account    * xaccCloneAccountSimple (const Account *from, GNCBook *book);
 
 void         xaccAccountBeginEdit (Account *account);
 void         xaccAccountCommitEdit (Account *account);
