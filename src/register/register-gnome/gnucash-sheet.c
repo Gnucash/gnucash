@@ -199,7 +199,8 @@ gnucash_sheet_deactivate_cursor_cell (GnucashSheet *sheet)
 
         gnucash_sheet_stop_editing (sheet);
 
-        gnc_table_leave_update(sheet->table, virt_loc);
+        if (!gnc_table_model_read_only (sheet->table->model))
+                gnc_table_leave_update (sheet->table, virt_loc);
 
         gnucash_sheet_redraw_block (sheet, virt_loc.vcell_loc);
 }
@@ -240,8 +241,12 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
         start_sel = 0;
         end_sel = 0;
 
-        allow_edits = gnc_table_enter_update (table, virt_loc, &cursor_pos,
-                                              &start_sel, &end_sel);
+        if (gnc_table_model_read_only (table->model))
+                allow_edits = FALSE;
+        else
+                allow_edits = gnc_table_enter_update (table, virt_loc,
+                                                      &cursor_pos,
+                                                      &start_sel, &end_sel);
 
 	if (!allow_edits)
                 gnucash_sheet_redraw_block (sheet, virt_loc.vcell_loc);
@@ -690,7 +695,7 @@ gnucash_sheet_size_request (GtkWidget *widget, GtkRequisition *requisition)
 }
 
 const char *
-gnucash_sheet_modify_current_cell(GnucashSheet *sheet, const gchar *new_text)
+gnucash_sheet_modify_current_cell (GnucashSheet *sheet, const gchar *new_text)
 {
         GtkEditable *editable;
         Table *table = sheet->table;
@@ -705,6 +710,9 @@ gnucash_sheet_modify_current_cell(GnucashSheet *sheet, const gchar *new_text)
         gnucash_cursor_get_virt(GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
         if (!gnc_table_virtual_loc_valid (table, virt_loc, TRUE))
+                return NULL;
+
+        if (gnc_table_model_read_only (table->model))
                 return NULL;
 
         editable = GTK_EDITABLE(sheet->entry);
@@ -796,6 +804,9 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
         if (!gnc_table_virtual_loc_valid (table, virt_loc, FALSE))
+                return;
+
+        if (gnc_table_model_read_only (table->model))
                 return;
 
         /* insert_text is not NULL-terminated, how annoying */
@@ -936,6 +947,9 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
         gnucash_cursor_get_virt (GNUCASH_CURSOR (sheet->cursor), &virt_loc);
 
         if (!gnc_table_virtual_loc_valid (table, virt_loc, FALSE))
+                return;
+
+        if (gnc_table_model_read_only (table->model))
                 return;
 
         old_text = gtk_entry_get_text (GTK_ENTRY(sheet->entry));
@@ -1479,6 +1493,9 @@ gnucash_sheet_direct_event(GnucashSheet *sheet, GdkEvent *event)
         if (!gnc_table_virtual_loc_valid (table, virt_loc, TRUE))
                 return FALSE;
 
+        if (gnc_table_model_read_only (table->model))
+                return FALSE;
+
         editable = GTK_EDITABLE(sheet->entry);
 
         cursor_position = editable->current_pos;
@@ -1491,11 +1508,11 @@ gnucash_sheet_direct_event(GnucashSheet *sheet, GdkEvent *event)
         new_start = start_sel;
         new_end = end_sel;
 
-        result = gnc_table_direct_update(table, virt_loc,
-                                         &new_text,
-                                         &new_position,
-                                         &new_start, &new_end,
-                                         event);
+        result = gnc_table_direct_update (table, virt_loc,
+                                          &new_text,
+                                          &new_position,
+                                          &new_start, &new_end,
+                                          event);
 
         changed = FALSE;
 

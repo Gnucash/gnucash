@@ -536,7 +536,10 @@ gnc_table_save_cells (Table *table, gpointer save_data)
   GList * cells;
   GList * node;
 
-  if (!table)
+  g_return_if_fail (table);
+
+  /* ignore any changes to read-only tables */
+  if (gnc_table_model_read_only (table->model))
     return;
 
   gnc_table_leave_update (table, table->current_cursor_loc);
@@ -1077,7 +1080,14 @@ gnc_table_enter_update (Table *table,
     can_edit = enter (cell, cursor_position, start_selection, end_selection);
 
     if (safe_strcmp (old_value, cell->value) != 0)
+    {
+      if (gnc_table_model_read_only (table->model))
+      {
+        PWARN ("enter update changed read-only table");
+      }
+
       cell->changed = TRUE;
+    }
 
     g_free (old_value);
   }
@@ -1128,7 +1138,14 @@ gnc_table_leave_update (Table *table, VirtualLocation virt_loc)
     leave (cell);
 
     if (safe_strcmp (old_value, cell->value) != 0)
+    {
+      if (gnc_table_model_read_only (table->model))
+      {
+        PWARN ("leave update changed read-only table");
+      }
+
       cell->changed = TRUE;
+    }
 
     g_free (old_value);
   }
@@ -1175,8 +1192,14 @@ gnc_table_modify_update (Table *table,
   int cell_col;
   char * old_value;
 
-  if (table == NULL)
+  g_return_val_if_fail (table, NULL);
+  g_return_val_if_fail (table->model, NULL);
+
+  if (gnc_table_model_read_only (table->model))
+  {
+    PWARN ("change to read-only table");
     return NULL;
+  }
 
   cb = table->current_cursor;
 
@@ -1254,8 +1277,14 @@ gnc_table_direct_update (Table *table,
   int cell_col;
   char * old_value;
 
-  if (table == NULL)
+  g_return_val_if_fail (table, FALSE);
+  g_return_val_if_fail (table->model, FALSE);
+
+  if (gnc_table_model_read_only (table->model))
+  {
+    PWARN ("input to read-only table");
     return FALSE;
+  }
 
   cb = table->current_cursor;
 
