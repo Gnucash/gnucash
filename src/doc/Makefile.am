@@ -24,7 +24,7 @@ doc: doxygen.cfg
 #	$(MAKE) -C latex/ 
 #	mv latex/refman.pdf ./refman.pdf
 
-dist-hook:
+dist-hook: doxygen.cfg
 	echo "dist-hook: " && pwd
 	cd $(srcdir) && pwd && rm -rf html refman.pdf && $(DOXYGEN) doxygen.cfg
 	cp -rp html ${distdir}

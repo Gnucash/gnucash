@@ -1,6 +1,6 @@
 Version history:
 ------- -------
- 1.7.4a - 02 December 2002
+ 1.7.5  - 02 December 2002
  	 o Fix for a problem with multi-currency that could result in data
 	   corruption. Recommend to use this version over 1.7.4
 
