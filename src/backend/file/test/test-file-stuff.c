@@ -335,7 +335,7 @@ test_load_file(const char *filename, gxpf_callback cb,
         return;
     }
 
-    if(!gnc_xml_parse_file(top_parser, filename, cb, node->childs, book))
+    if(!gnc_xml_parse_file(top_parser, filename, cb, node->children, book))
     {
         failure_args("failure to parse file", __FILE__, __LINE__,
                      "%s", filename);

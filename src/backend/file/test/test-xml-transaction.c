@@ -85,7 +85,7 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
 {
     xmlNodePtr mark;
     
-    for(mark = node->childs; mark != NULL; mark = mark->next)
+    for(mark = node->children; mark != NULL; mark = mark->next)
     {
         if(safe_strcmp(mark->name, "split:id") == 0)
         {
