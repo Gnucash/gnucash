@@ -298,6 +298,8 @@ operation is probably OK.
 
 -- NOTIFY is not updating main window balances ...
 
+-- implement price change events
+
 -- during sync, detect and report conflicting edits to accounts 
    and transactions.  See the notes for pgendSync() for details
    as to what this is about.  For the first pass, this is not a 
@@ -314,6 +316,7 @@ operation is probably OK.
    Otherwise, any edit of this account will incorrectly
    add the deleted account back in. (Note that from the user
    perspective, deleting accounts is a bad idea ...)
+   (this is handled with an event, but is not handled via poll)
 
 -- fix caching in the face of lost contact to the backend.  If the
    backend can't contact its server, then we should just save up caches,

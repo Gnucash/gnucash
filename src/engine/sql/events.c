@@ -258,15 +258,22 @@ pgendProcessEvents (Backend *bend)
    for (node = pending; node; node = node->next)
    {
       Event *ev = (Event *) node->data;
-      GNCIdType obj_type;
+      GNCIdType local_obj_type;
 
       /* lets see if the local cache has this item in it */
-      obj_type = xaccGUIDType (&(ev->guid));
-      switch (obj_type)
+      local_obj_type = xaccGUIDType (&(ev->guid));
+      if ((local_obj_type != GNC_ID_NONE) && (local_obj_type != ev->obj_type))
+      {
+         PERR ("ouch! object type mismatch, local=%d, event=%d", local_obj_type, ev->obj_type);
+         g_free (ev);
+         continue;
+      }
+
+      switch (ev->obj_type)
       {
          case GNC_ID_NONE:
          case GNC_ID_NULL:
-            PINFO ("object not present in local cache");
+            PERR ("bad event type");
             break;
          case GNC_ID_ACCOUNT:
             if (0 < timespec_cmp(&(ev->stamp), &(be->last_account))) 
@@ -280,6 +287,7 @@ pgendProcessEvents (Backend *bend)
                   break;
                case GNC_EVENT_CREATE:
                case GNC_EVENT_MODIFY: 
+                  /* if the remote user created an account, mirror it here */
                   pgendCopyAccountToEngine (be, &(ev->guid));
                   break;
                case GNC_EVENT_DESTROY: {
@@ -300,8 +308,12 @@ pgendProcessEvents (Backend *bend)
             switch (ev->type)
             {
                default:
-               case GNC_EVENT_CREATE:
                   PERR ("transaction: cant' happen !!!!!!!");
+                  break;
+               case GNC_EVENT_CREATE:
+                  /* don't mirror transaction creations. If a register needs
+                   * it, it will do a query. */
+                  PINFO ("create transaction");
                   break;
                case GNC_EVENT_MODIFY: 
                   pgendCopyTransactionToEngine (be, &(ev->guid));
@@ -326,10 +338,15 @@ pgendProcessEvents (Backend *bend)
             break;
 
          default:
-            PERR ("unknown guid type %d", obj_type);
+            PERR ("unknown guid type %d", ev->obj_type);
       }
    
-      gnc_engine_generate_event (&(ev->guid), ev->type);
+      /* get the local type again, since we created guid above */
+      local_obj_type = xaccGUIDType (&(ev->guid));
+      if (GNC_ID_NONE != local_obj_type)
+      {
+         gnc_engine_generate_event (&(ev->guid), local_obj_type);
+      }
    
       g_free (ev);
    }
@@ -385,6 +402,7 @@ get_latest_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    /* get event timestamp */
    latest = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_changed",j));
+   latest.tv_sec ++;  /* ignore old, pre-logon events */
 
    be->last_account = latest;
    be->last_price = latest;
