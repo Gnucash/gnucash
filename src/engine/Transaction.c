@@ -1142,5 +1142,19 @@ xaccGetOtherSplit (Split *split)
    return NULL;  /* never reached, in theory */
 }
 
+/********************************************************************\
+\********************************************************************/
+
+int
+xaccIsPeerSplit (Split *sa, Split *sb)
+{
+   Transaction *ta, *tb;
+   if (!sa || !sb) return 0;
+   ta = sa->parent;
+   tb = sb->parent;
+   if (ta == tb) return 1;
+   return 0;
+}
+
 /************************ END OF ************************************\
 \************************* FILE *************************************/
