@@ -396,11 +396,7 @@ gnc_file_be_load_from_file (Backend *bend, GNCBook *book)
     }
 
     if(error != ERR_BACKEND_NO_ERR) 
-    {
         xaccBackendSetError(bend, error);
-        g_free(be->lockfile);
-        be->lockfile = NULL;
-    }
 }
 
 /* ---------------------------------------------------------------------- */
