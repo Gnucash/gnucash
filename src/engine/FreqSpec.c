@@ -343,7 +343,7 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
                          || ( g_date_day( CONST_HACK in_date )
                               >= g_date_days_in_month( g_date_month( CONST_HACK in_date ),
                                                        g_date_year( CONST_HACK in_date ) ) )
-                         ? 1 : 0;
+                         ? 1 : 0);
                 next_repeat_months_from_epoch =
                          fs->s.monthly.offset_from_epoch
                          + (complete_intervals + after_repeat_in_month_interval)
