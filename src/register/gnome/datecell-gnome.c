@@ -77,6 +77,11 @@ static void DateMV (BasicCell *_cell,
                     int *cursor_position,
                     int *start_selection,
                     int *end_selection);
+static gboolean DateDirect (BasicCell *bcell,
+                            int *cursor_position,
+                            int *start_selection,
+                            int *end_selection,
+                            void *gui_data);
 static gboolean enterDate (BasicCell *bcell,
                            int *cursor_position,
                            int *start_selection,
@@ -190,6 +195,7 @@ xaccInitDateCell (DateCell *cell)
   cell->cell.realize = realizeDate;
   cell->cell.destroy = destroyDate;
   cell->cell.modify_verify = DateMV;
+  cell->cell.direct_update = DateDirect;
   cell->cell.set_value = setDateCellValue;
   cell->cell.get_help_value = DateCellHelpValue;
 
@@ -550,6 +556,134 @@ xaccCommitDateCell (DateCell *cell)
 }
 
 /* =============================================== */
+static gboolean
+DateDirect (BasicCell *bcell,
+            int *cursor_position,
+            int *start_selection,
+            int *end_selection,
+            void *gui_data)
+{
+  DateCell *cell = (DateCell *) bcell;
+  PopBox *box = cell->cell.gui_private;
+  GdkEventKey *event = gui_data;
+  char buff[DATE_BUF];
+  struct tm *date;
+
+  if (event->type != GDK_KEY_PRESS)
+    return FALSE;
+
+  date = &(box->date);
+
+  switch (event->keyval)
+  {
+    case GDK_KP_Add:
+    case GDK_plus:
+    case GDK_equal:
+      if (event->state & GDK_SHIFT_MASK)
+        date->tm_mday += 7;
+      else if (event->state & GDK_MOD1_MASK)
+        date->tm_mon++;
+      else if (event->state & GDK_CONTROL_MASK)
+        date->tm_year++;
+      else
+        date->tm_mday++;
+      break;
+
+    case GDK_KP_Subtract:
+    case GDK_underscore:
+    case GDK_minus:
+      if (dateSeparator () == '-')
+        return FALSE;
+
+      if (event->state & GDK_SHIFT_MASK)
+        date->tm_mday -= 7;
+      else if (event->state & GDK_MOD1_MASK)
+        date->tm_mon--;
+      else if (event->state & GDK_CONTROL_MASK)
+        date->tm_year--;
+      else
+        date->tm_mday--;
+      break;
+
+    case GDK_braceright:
+    case GDK_bracketright:
+      /* increment month */
+      date->tm_mon++;
+      break;
+
+    case GDK_braceleft:
+    case GDK_bracketleft:
+      /* decrement month */
+      date->tm_mon--;
+      break;
+
+    case GDK_M:
+    case GDK_m:
+      /* beginning of month */
+      date->tm_mday = 1;
+      break;
+
+    case GDK_H:
+    case GDK_h:
+      /* end of month */
+      date->tm_mon++;
+      date->tm_mday = 0;
+      break;
+
+    case GDK_Y:
+    case GDK_y:
+      /* beginning of year */
+      date->tm_mday = 1;
+      date->tm_mon = 0;
+      break;
+
+    case GDK_R:
+    case GDK_r:
+      /* end of year */
+      date->tm_mday = 31;
+      date->tm_mon = 11;
+      break;
+
+    case GDK_T:
+    case GDK_t:
+      {
+        /* today */
+        time_t secs;
+        struct tm *now;
+
+        time (&secs);
+        now = localtime (&secs);
+        *date = *now;
+        break;
+      }
+
+    default:
+      return FALSE;
+  }
+
+  date->tm_isdst = -1;
+
+  mktime (date);
+
+  printDate (buff, date->tm_mday, date->tm_mon + 1, date->tm_year + 1900);
+
+  xaccSetBasicCellValueInternal (&cell->cell, buff);
+
+  *start_selection = 0;
+  *end_selection = -1;
+
+  if (!box->date_picker)
+    return TRUE;
+
+  block_picker_signals (cell);
+  gnc_date_picker_set_date (box->date_picker,
+                            box->date.tm_mday,
+                            box->date.tm_mon,
+                            box->date.tm_year + 1900);
+  unblock_picker_signals (cell);
+
+  return TRUE;
+}
 
 static void
 DateMV (BasicCell *_cell,
@@ -564,8 +698,6 @@ DateMV (BasicCell *_cell,
   DateCell *cell = (DateCell *) _cell;
   PopBox *box = cell->cell.gui_private;
   gboolean accept = FALSE;
-  char buff[DATE_BUF];
-  struct tm *date;
 
   if (box->in_date_select)
   {
@@ -627,104 +759,7 @@ DateMV (BasicCell *_cell,
                               box->date.tm_mon,
                               box->date.tm_year + 1900);
     unblock_picker_signals (cell);
-
-    return;
   }
-
-  /* otherwise, maybe its an accelerator key. */
-  if (change_len != 1)
-    return;
-
-  date = &(box->date);
-
-  /* handle accelerator keys */
-  switch (change[0])
-  {
-    case '+':
-    case '=':
-      /* increment day */
-      date->tm_mday++;
-      break;
-
-    case '_':
-    case '-':
-      /* decrement day */
-      date->tm_mday--;
-      break;
-
-    case '}':
-    case ']':
-      /* increment month */
-      date->tm_mon++;
-      break;
-
-    case '{':
-    case '[':
-      /* decrement month */
-      date->tm_mon--;
-      break;
-
-    case 'M':
-    case 'm':
-      /* beginning of month */
-      date->tm_mday = 1;
-      break;
-
-    case 'H':
-    case 'h':
-      /* end of month */
-      date->tm_mon++;
-      date->tm_mday = 0;
-      break;
-
-    case 'Y':
-    case 'y':
-      /* beginning of year */
-      date->tm_mday = 1;
-      date->tm_mon = 0;
-      break;
-
-    case 'R':
-    case 'r':
-      /* end of year */
-      date->tm_mday = 31;
-      date->tm_mon = 11;
-      break;
-
-    case 'T':
-    case 't': {
-      /* today */
-      time_t secs;
-      struct tm *now;
-
-      time (&secs);
-      now = localtime (&secs);
-      *date = *now;
-      break;
-    }
-
-    default:
-      /* reject other changes */
-      return;
-  }
-
-  date->tm_isdst = -1;
-
-  mktime (date);
-
-  printDate (buff, date->tm_mday, date->tm_mon + 1, date->tm_year + 1900);
-
-  xaccSetBasicCellValueInternal (&cell->cell, buff);
-
-  if (!box->date_picker)
-    return;
-
-  block_picker_signals (cell);
-  gnc_date_picker_set_date (box->date_picker,
-                            box->date.tm_mday,
-                            box->date.tm_mon,
-                            box->date.tm_year + 1900);
-  unblock_picker_signals (cell);
 }
 
 /* =============================================== */
@@ -814,6 +849,9 @@ enterDate (BasicCell *bcell,
   unblock_picker_signals (cell);
 
   date_picker_connect_signals ((DateCell *) bcell);
+
+  *start_selection = 0;
+  *end_selection = -1;
 
   return TRUE;
 }
