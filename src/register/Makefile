@@ -25,8 +25,8 @@ LIBXMHTML= ../lib/XmHTML-1.1.0/src/libXmHTML.a
 LIBXBAE  = ../../lib/Xbae-4.6.2-linas/libXbae.a
 LIBCOMBO = ../lib/ComboBox-1.33/libComboBox.a
 ######################################################################
-SRCS = 	basiccell.c cellblock.c datecell.c main.c pricecell.c recncell.c \
-	table.c textcell.c
+SRCS = 	basiccell.c cellblock.c datecell.c main.c pricecell.c \
+	recncell.c register.c table.c textcell.c
 OBJS = ${SRCS:.c=.o} $(LIBXBAE)
 ######################################################################
 
