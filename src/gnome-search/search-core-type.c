@@ -27,9 +27,11 @@
 
 #include "QueryNew.h"
 #include "Account.h"		/* for ACCOUNT_MATCH_ALL_TYPE */
+#include "Transaction.h"	/* for RECONCILED_MATCH_TYPE */
 
 #include "search-core-type.h"
 #include "search-string.h"
+#include "search-reconciled.h"
 #include "search-date.h"
 #include "search-double.h"
 #include "search-int64.h"
@@ -268,6 +270,9 @@ init_table (void)
   gnc_search_core_register_type (ACCOUNT_MATCH_ALL_TYPE,
 				 (GNCSearchCoreNew) 
 				 gnc_search_account_matchall_new);
+  gnc_search_core_register_type (RECONCILED_MATCH_TYPE,
+				 (GNCSearchCoreNew) gnc_search_reconciled_new);
+
 }
 
 void

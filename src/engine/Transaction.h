@@ -575,4 +575,6 @@ Timespec xaccTransGetVoidTime(Transaction *tr);
  * override so the gnome-search dialog displays the right type.
  */
 
+#define RECONCILED_MATCH_TYPE	"reconciled-match"
+
 #endif /* XACC_TRANSACTION_H */

@@ -27,6 +27,7 @@ libgncmod_gnome_search_la_SOURCES = \
   search-int64.c \
   search-numeric.c \
   search-param.c \
+  search-reconciled.c \
   search-string.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
@@ -43,6 +44,7 @@ noinst_HEADERS = \
   search-int64.h \
   search-numeric.h \
   search-param.h \
+  search-reconciled.h \
   search-string.h
 
 libgncmod_gnome_search_la_LDFLAGS = -module

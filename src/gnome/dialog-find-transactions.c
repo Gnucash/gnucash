@@ -102,7 +102,8 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
     params = gnc_search_param_prepend (params, "Balanced", NULL,
 				       type, SPLIT_TRANS, TRANS_IS_BALANCED,
 				       NULL);
-    /* XXX:FIXME add the 'cleared' parameter here */
+    params = gnc_search_param_prepend (params, "Reconcile", RECONCILED_MATCH_TYPE,
+				       type, SPLIT_RECONCILE, NULL);
     params = gnc_search_param_prepend (params, "Share Price", NULL,
 				       type, SPLIT_SHARE_PRICE, NULL);
     params = gnc_search_param_prepend (params, "Share Price", NULL,

@@ -20,6 +20,12 @@
 	  so that the new-account-window can be called using the modal dialog
 	  interfaces.
 	* use the GNCAccoutSel in the date-close dialog (fixes bug #94973)
+
+	* create search-reconciled.[ch] to implement searches by reconcile flag
+	* gnome-search/search-core-type.c: hook in "reconciled" type,
+	  via the RECONCILED_MATCH_TYPE string
+	* src/engine/Transaction.h -- add RECONCILED_MATCH_TYPE string
+	* hook into the Find Transactions window (fixes bug #95634)
 	
 2002-10-16  Joshua Sled  <jsled@asynchronous.org>
 
