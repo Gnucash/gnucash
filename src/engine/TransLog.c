@@ -83,6 +83,7 @@
 
 static int gen_logs = 1;
 static FILE * trans_log = 0x0;
+static char * log_base_name = 0x0;
 
 /********************************************************************\
 \********************************************************************/
@@ -93,23 +94,54 @@ void xaccLogEnable  (void) { gen_logs = 1; }
 /********************************************************************\
 \********************************************************************/
 
+void 
+xaccLogSetBaseName (const char *basepath)
+{
+   if (!basepath) return;
+
+   if (log_base_name) free (log_base_name);
+   log_base_name = strdup (basepath);
+
+   if (trans_log) {
+      xaccCloseLog();
+      xaccOpenLog();
+   }
+}
+
+/********************************************************************\
+\********************************************************************/
+
 void
 xaccOpenLog (void)
 {
-   char filename[1000];
+   char * filename;
    char * timestamp;
 
    if (!gen_logs) return;
    if (trans_log) return;
 
+   if (!log_base_name) log_base_name = strdup ("translog");
+
    /* tag each filename with a timestamp */
    timestamp = xaccDateUtilGetStampNow ();
 
-   strcpy (filename, "translog.");
+   filename = (char *) malloc (strlen (log_base_name) + 50);
+   strcpy (filename, log_base_name);
+   strcat (filename, ".");
    strcat (filename, timestamp);
    strcat (filename, ".log");
 
    trans_log = fopen (filename, "a");
+   if (!trans_log) {
+      int norr = errno;
+      printf ("Error: xaccOpenLog(): cannot open journal \n"
+              "\t %d %s\n", norr, strerror (norr));
+      free (filename);
+      free (timestamp);
+      return;
+   }
+   free (filename);
+   free (timestamp);
 
    /* use tab-separated fields */
    fprintf (trans_log, "mod	id	time_now	" \
@@ -119,7 +151,18 @@ xaccOpenLog (void)
                        "amount	price date_reconciled\n");
    fprintf (trans_log, "-----------------\n");
 
-   free (timestamp);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccCloseLog (void)
+{
+   if (!trans_log) return;
+   fflush (trans_log);
+   fclose (trans_log);
+   trans_log = 0x0;
 }
 
 /********************************************************************\

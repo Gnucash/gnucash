@@ -27,9 +27,17 @@
 #include "Transaction.h"
 
 void    xaccOpenLog (void);
+void    xaccCloseLog (void);
 void    xaccTransWriteLog (Transaction *, char);
 void    xaccLogEnable (void);
 void    xaccLogDisable (void);
+
+/* The xaccLogSetBaseName() method sets the base filepath and the
+ *    root part of the journal file name.  If the journal file is
+ *    already open, it will close it and reopen it with the new
+ *    base name.
+ */
+void    xaccLogSetBaseName (const char *);
 
 /* returned strings will have been allocated with malloc, free with free() */
 char *xaccSplitAsString(Split *s, const char prefix[]);
