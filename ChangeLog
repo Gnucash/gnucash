@@ -1,4 +1,16 @@
 2002-11-21  Benoit Grégoire  <bock@step.polymtl.ca>
+	* src/import-export/Transaction-matcher.c: Tweak the matching
+	heuristics.
+	-Memo and description heuristics now both have a very primitive
+	fuzzy match worth +1:  Only the first half of the string is compared.
+	The rationale is that this will allow the matcher to skip the
+	transaction number sometimes appended after the description by 
+	some banks. 
+	* src/import-export/ofx/gnc-ofx-import.c:  Transaction memo is
+	always written in the split's memo. 
+	* src/doc/user-prefs-howto.txt:  Add new file, by Christian Stimmings.
+	
+2002-11-21  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/generic-import.scm: New file, contains user
 	prefs for the Transaction matcher:
 	Display, Auto-ADD and Auto-CLEAR thresholds can be ajusted.

@@ -350,11 +350,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 		/*gnc_amount = double_to_gnc_numeric(data.amount,xaccAccountGetCommoditySCU(account),GNC_RND_ROUND);*/
 		DxaccSplitSetBaseValue(split, data.amount,xaccAccountGetCommodity(account));
 		
-		/* Also put the ofx transaction name in the splits memo field, or ofx memo if name is unavailable */ 
-		if(data.name_valid==true){
-		  xaccSplitSetMemo(split, data.name);
-		}
-		else if(data.memo_valid==true){
+		/* Also put the ofx transaction's memo in the split's memo field */ 
+		if(data.memo_valid==true){
 		  xaccSplitSetMemo(split, data.memo);
 		}
 	      }

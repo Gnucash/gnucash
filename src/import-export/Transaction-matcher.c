@@ -828,7 +828,14 @@ static void split_find_match( struct _transmatcherdialog * matcher,
 	  match_info->probability=match_info->probability+1;
 	  DEBUG("heuristics:  probability + 1 (amount)");
 	}
-    
+      else
+	{
+	  /* If a transaction's amount doesn't match within the threshold, it's very unlikely to be the same 
+	     transaction so we give it an extra -1 penality */
+	  match_info->probability=match_info->probability-1;
+	  DEBUG("heuristics:  probability - 1 (amount)");
+	}
+      
       /* Date heuristics */
       if(downloaded_split_date.tm_year==match_split_date.tm_year)
 	{
@@ -854,21 +861,46 @@ static void split_find_match( struct _transmatcherdialog * matcher,
 	    }
 	}
     
-      /* Memo and Description heuristics */  
+      /* Memo heuristics */  
       if((strcmp(xaccSplitGetMemo(transaction_info->first_split),
 		 xaccSplitGetMemo(match_info->split))
-	  ==0)
-	 ||
-	 (strcmp(xaccTransGetDescription(transaction_info->trans),
+	  ==0))
+	{	
+	  /*An exact match of description gives a +2 */
+	  match_info->probability=match_info->probability+2;
+	  DEBUG("heuristics:  probability + 2 (memo)");
+	}
+      else if((strncmp(xaccSplitGetMemo(transaction_info->first_split),
+		       xaccSplitGetMemo(match_info->split),
+		       strlen(xaccSplitGetMemo(match_info->split))/2)
+	       ==0))
+	{
+	  /* Very primitive fuzzy match worth +1.  This matches the first 50% of the strings to skip annoying transaction number
+	     some banks seem to include in the memo but someone should write something more sophisticated */ 
+      	  match_info->probability=match_info->probability+1;
+	  DEBUG("heuristics:  probability + 1 (memo)");	
+	}
+
+      /* Description heuristics */  
+      if((strcmp(xaccTransGetDescription(transaction_info->trans),
 		 xaccTransGetDescription(xaccSplitGetParent(match_info->split)))
 	  ==0))
 	{	
-	  /*An exact match gives a +2, but someone should write something more fuzzy, 
-	    worth a +1*/
+	  /*An exact match of Description gives a +2 */
 	  match_info->probability=match_info->probability+2;
-	  DEBUG("heuristics:  probability + 2 (description or memo)");
+	  DEBUG("heuristics:  probability + 2 (description)");
 	}
-    
+      else if((strncmp(xaccTransGetDescription(transaction_info->trans),
+		       xaccTransGetDescription(xaccSplitGetParent(match_info->split)),
+		       strlen(xaccTransGetDescription(transaction_info->trans))/2)
+	  ==0))
+	{
+	  /* Very primitive fuzzy match worth +1.  This matches the first 50% of the strings to skip annoying transaction number
+	     some banks seem to include in the memo but someone should write something more sophisticated */ 
+      	  match_info->probability=match_info->probability+1;
+	  DEBUG("heuristics:  probability + 1 (description)");	
+	}
+
       if(gnc_import_get_trans_online_id(xaccSplitGetParent(split))!=NULL)
 	{
 	  /*If the pref is to show match even with online ID's, reverse the confidence value to distinguish them */
@@ -994,20 +1026,12 @@ void gnc_import_add_trans(Transaction *trans)
       transaction_info->first_split=xaccTransGetSplit(trans,0);/*Only use first split, the source split*/
       transaction_info->trans=trans;
    
-
-   
       list_element = g_list_first(xaccAccountGetSplitList(xaccSplitGetAccount(transaction_info->first_split)));
       while(list_element!=NULL)
 	{
 	  split_find_match(matcher, transaction_info, list_element->data);
 	  list_element=g_list_next(list_element);
 	}
-
-
-
-
-
-
 
       /*WRITEME:  sort match list and determine default action*/
       transaction_info->match_list=g_list_sort(transaction_info->match_list,
