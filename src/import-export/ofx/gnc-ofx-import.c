@@ -23,19 +23,6 @@
 
 #define _GNU_SOURCE
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "config.h"
 
 #include <stdio.h>
@@ -81,7 +68,7 @@ void gnc_file_ofx_import (void)
   extern int ofx_INFO_msg;
   extern int ofx_STATUS_msg;
   char *filenames[3];
-  char *selected_filename;
+  const char *selected_filename;
 
   ofx_PARSER_msg = false;
   ofx_DEBUG_msg = false;
@@ -102,7 +89,7 @@ selected_filename = gnc_file_dialog(_("Select an OFX/QFX file to process"),
   /*strncpy(file,selected_filename, 255);*/
   DEBUG("Filename found: %s",selected_filename);
       filenames[0]=NULL;
-      filenames[1]= selected_filename;
+      filenames[1]= (char *)selected_filename;
 /*      filenames[1]=file;*/
       filenames[2]=NULL;
       DEBUG("Opening selected file");
@@ -307,12 +294,22 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 								 NULL);
 	      if(investment_commodity!=NULL)
 		{
+		  /* WARNING:  The must NOT be the caracter ':' anywhere in investment_account_text, or the translated strings used to build it */
 		  strncat(investment_account_text,
-			  _("A Stock or Mutual Fund account for the following security: \""),
+			  _("Stock account for security \""),
 			  sizeof(investment_account_text)-strlen(investment_account_text));
-		  strncat(investment_account_text,data.security_data_ptr->secname,sizeof(investment_account_text)-strlen(investment_account_text));
-		  strncat(investment_account_text,_("\"\nWarning:  Ofx investment transactions require two accounts."),sizeof(investment_account_text)-strlen(investment_account_text));
-		  investment_account = gnc_import_select_account(data.unique_id, 1, investment_account_text, investment_commodity, STOCK);
+		  strncat(investment_account_text,
+			  data.security_data_ptr->secname,
+			  sizeof(investment_account_text)-strlen(investment_account_text));
+		  strncat(investment_account_text,
+			  _("\""),
+			  sizeof(investment_account_text)-strlen(investment_account_text));
+		  
+		  investment_account = gnc_import_select_account(data.unique_id,
+								 1,
+								 investment_account_text, 
+								 investment_commodity,
+								 STOCK);
 		  
 		  if(investment_account!=NULL&&data.unitprice_valid==true&&data.units_valid==true)
 		    {
@@ -328,12 +325,12 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 		    }
 		  else
 		    {
-		      PERR("The investment account, unist or unitprice  was not found for the insestment transaction");
+		      PERR("The investment account, units or unitprice was not found for the insestment transaction");
 		    }
 		}
 	      else
 		{
-		  PERR("Commodity not found for the insestment transaction");
+		  PERR("Commodity not found for the investment transaction");
 		}
 	    }
 	  
