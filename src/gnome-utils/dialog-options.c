@@ -1214,7 +1214,7 @@ gnc_build_options_dialog_contents(GNCOptionWin *propertybox,
   }
 
   if (default_page >= 0) {
-    gtk_notebook_set_page(GTK_NOTEBOOK(propertybox->notebook), default_page);
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(propertybox->notebook), default_page);
     gtk_list_select_item(GTK_LIST(propertybox->page_list), default_page);
   } else {
     /* GTKList doesn't default to selecting the first item. */
@@ -1329,7 +1329,7 @@ gnc_options_dialog_list_select_cb(GtkWidget * list, GtkWidget * item,
   g_return_if_fail (win);
 
   index = gtk_list_child_position(GTK_LIST(list), item);
-  gtk_notebook_set_page(GTK_NOTEBOOK(win->notebook), index);
+  gtk_notebook_set_current_page(GTK_NOTEBOOK(win->notebook), index);
 }
 
 void
@@ -1376,7 +1376,7 @@ gnc_options_dialog_new(gboolean make_toplevel, gchar *title)
   hbox     =  gtk_hbox_new(FALSE, 5);
 
   if(make_toplevel) {
-    retval->container = gtk_window_new(GDK_WINDOW_TOPLEVEL);
+    retval->container = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     if(title)
     {
       gtk_window_set_title(GTK_WINDOW(retval->container), title);
