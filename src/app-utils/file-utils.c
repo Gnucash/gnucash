@@ -1,9 +1,8 @@
 /********************************************************************\
- * file-utils.c -- simple file utilities                                  *
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998 Linas Vepstas                                 *
+ * file-utils.c -- simple file utilities                            *
+ * Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>            *
  * Copyright (C) 1998 Rob Browning                                  *
- * Copyright (C) 1999-2000 Linas Vepstas                            *
+ * Copyright (C) 1998-2000 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,15 +17,11 @@
  * You should have received a copy of the GNU General Public License*
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
- *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
 #include "config.h"
 
+#include <errno.h>
 #include <fcntl.h>
 #include <string.h>
 #include <sys/stat.h>
