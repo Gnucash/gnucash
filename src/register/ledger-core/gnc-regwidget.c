@@ -498,7 +498,7 @@ gnc_register_create_tool_bar ( GNCRegWidget *rw )
     {
       GNOME_APP_UI_ITEM,
       N_("Schedule..."),
-      N_("Create a Schedule Transaction with the current "
+      N_("Create a Scheduled Transaction with the current "
          "transaction as a template"),
       emit_schedule_ent_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_COPY,
