@@ -46,11 +46,13 @@ Entities: Transaction
 Use: Identifies that the Transaction was created from a ScheduledTransaction,
      and stores the GUID of that SX.
 
+-----------------------
+
 Name: /gemini/
 Type: kvp_frame
 Entities: Account, Book
-Use:  subdirectory holding identification of accounts that are copies
-      of this account.
+Use:  kvp subdirectory holding identification of accounts or books 
+      that are copies of this account.
 
 Name: /gemini/ncopies
 Type: int64
@@ -72,12 +74,16 @@ Use:  guid of another account that is a copy of this one.
 Name: /gemini/0/book_guid
 Type: guid
 Entities: Account, Book
-Use:  guid of the book that the other account belongs to.
+Use:  When this appears in an account, then it contains the guid of 
+      the book that the other account belongs to.  When this appears
+      in a book, then this is the guid of the other book.
 
 Name: /gemini/0/date
 Type: timespec
 Entities: Account, Book
 Use:  date that the copy was created.
+
+-----------------------
 
 Name: last-num
 Type: string

@@ -28,14 +28,20 @@
  *
 -- It will use the /book/blah-blah kvp value to denote xxx.
 -- Make an equity transfer so that we can carry forward the balances.
-/book/close-date
+-- hack alert -- should not allow closed books to have unreconciled
+   transactions ???
+
+Implemented:
+/book/start-date        earliest date in this book.
+/book/end-date          latest date in this book. must not change ...
+/book/close-date        date on which book was closed.
+/book/next-book         guid of next book
+/book/prev-book         guid of previous book
+
+Mot imlemented (yet):
 /book/closing-balance-of-account-guid
-/book/previous-guid
 /book/name=some-user-supplied-name
 /book/notes=user-supplied-descriptive-comments
-/book/start-date=xxx
-/book/end-date=xxx
-/book/previous-book-guids=(list 0xa 0xb 0xc)
 /book/accounting-period=enum {none, week, month, quarter, trimester, year}
 
 

@@ -15,59 +15,13 @@ Open questions: how do we deal with the backends ???
  * Copyright (c) 2001 Linas Vepstas <linas@linas.org>
  */
 
-
-#ifndef XACC_PERIOD_H
-#define XACC_PERIOD_H
-
-#include "gnc-book.h"
-#include "gnc-engine.h"
-#include "Query.h"
-
-/* The gnc_book_partition() uses the result of the indicated query
- *    to partition an existing book into two parts.  It returns 
- *    a newly created book, containing a copy of all of the accounts,
- *    and it moves all of the transactions returned by the query to 
- *    the copied accounts.  
-
-The intent is that the 'typical' query will be a date that splits 
-the book into a 'before and after'; but in fact, any general query 
-will do.
-
-Note that this routine is 'special' in that it works hard to make sure
-that the partitioned accounts, transactions and splits are really
-moved to a new book -- things like entity tables must be cleared
-and repopulated correctly.
-
-This routine intentionally does not copy scheduled/recurring 
-transactions.
-
-TBD:
--- Make an equity transfer so that we can carry forward the balances.
--- set kvp values indicating that the books were split.
-
- */
-GNCBook * gnc_book_partition (GNCBook *, Query *);
-
-/* The gnc_book_insert_trans() routine takes an existing transaction
- *    that is located in one book, and moves it to another book.
- *    It moves all of the splits as well.  In the course of the 
- *    move, the transaction is literally deleted from the first 
- *    book as its placed into the second.  The transaction and
- *    split GUID's are not changed in the move.  This routine 
- *    assumes that twin accounts already exist in both books 
- *    (and can be located with the standard twining proceedure).
- */
-
-void gnc_book_insert_trans (GNCBook *book, Transaction *trans);
-
-#endif /* XACC_PERIOD_H */
-
 #include "AccountP.h"
 #include "gnc-book-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "GroupP.h"
 #include "kvp-util-p.h"
+#include "Period.h"
 #include "TransactionP.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -143,13 +97,18 @@ gnc_book_partition (GNCBook *existing_book, Query *query)
 
    partition_book = gnc_book_new();
 
-   /* first, copy all of the accounts */
+   /* First, copy the book's KVP tree */
+   kvp_frame_delete (partition_book->kvp_data);
+   partition_book->kvp_data = kvp_frame_copy (existing_book->kvp_data);
+
+   /* Next, copy all of the accounts */
    xaccGroupCopyGroup (partition_book->topgroup, existing_book->topgroup);
 
-   /* next, run the query */
+   /* Next, run the query */
+   xaccQuerySetGroup (query, existing_book->topgroup);
    split_list = xaccQueryGetSplitsUniqueTrans (query);
 
-   /* and start moving transactions over */
+   /* And start moving transactions over */
    xaccAccountGroupBeginEdit (partition_book->topgroup);
    xaccAccountGroupBeginEdit (existing_book->topgroup);
    for (snode = split_list; snode; snode=snode->next)
@@ -173,5 +132,48 @@ gnc_book_partition (GNCBook *existing_book, Query *query)
 }
 
 /* ================================================================ */
+
+GNCBook * 
+gnc_book_calve_period (GNCBook *existing_book, Timespec calve_date)
+{
+   Query *query;
+   GNCBook *partition_book;
+   kvp_frame *exist_cwd, partn_cwd;
+   kvp_value *vvv;
+   Timespec ts;
+
+   /* Get all transactions that are *earlier* than the calve date,
+    * and put them in the new book.  */
+   query = xaccMallocQuery();
+   xaccQueryAddDateMatchTS (query, FALSE, calve_date, 
+                                   TRUE, calve_date,
+                                   QUERY_OR);
+   partition_book = gnc_book_partition (existing_book, query);
+
+   xaccFreeQuery (query);
+
+   /* Now add the various identifying kvp's */
+   /* cwd == 'current working directory' */
+   exist_cwd = kvp_frame_get_frame_slash (existing_book->kvp_data, "/book/");
+   partn_cwd = kvp_frame_get_frame_slash (partition_book->kvp_data, "/book/");
+   
+   vvv = kvp_value_new_timespec (calve_date);
+   kvp_frame_set_slot_nc (exist_cwd, "start-date", vvv);
+   kvp_frame_set_slot_nc (partn_cwd, "end-date", vvv);
+
+   /* mark partition as being closed */
+   ts.tv_sec = time(0);
+   ts.tv_nsec = 0;
+   vvv = kvp_value_new_timespec (ts);
+   kvp_frame_set_slot_nc (partn_cwd, "close-date", vvv);
+
+   vvv = kvp_value_new_guid (existing_book->guid);
+   kvp_frame_set_slot_nc (partn_cwd, "next-book", vvv);
+
+   vvv = kvp_value_new_guid (partition_book->guid);
+   kvp_frame_set_slot_nc (exist_cwd, "prev-book", vvv);
+
+   return partition_book;
+}
 
 /* ============================= END OF FILE ====================== */

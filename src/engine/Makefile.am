@@ -44,6 +44,7 @@ gncinclude_HEADERS = \
   FreqSpec.h \
   GNCId.h \
   Group.h \
+  Period.h \
   SchedXaction.h \
   SX-ttinfo.h \
   Query.h \
