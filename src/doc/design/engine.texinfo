@@ -248,14 +248,25 @@ the use of keys and values. Please consult this document before planning
 any use of new keys.
 
 @item
-Key strings should be in all lower case with the @code{'_'} character
-separating words. Example: @code{"bank_info"}
+Key strings should be in all lower case with the '_' character
+separating words. If possible, use only alphanumeric characters
+and '_'. Example: @code{"bank_info"}
 
 @item
 Favor longer, descriptive key strings over short ones. Example:
 @code{"online_banking_info"} is better than @code{"onln_bnk"}.
 
+@item
+Make use of the fact that frames can be stored in frames. If a group
+of keys are used for a related purpose, consider storing them together
+in a sub-frame.
+
+@item
+Values should generally not be accessed directly through keys, but
+should rather be accessed through specific API calls.
+
 @end itemize
+
 
 @node Sessions, Account Groups, Key-Value Pair Frames, Engine
 @section Sessions
