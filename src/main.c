@@ -23,24 +23,25 @@
 \********************************************************************/
 
 #include <Xm/Xm.h>
+
 #include "BuildMenu.h"
-#include "RegWindow.h"
-#include "FileIO.h"
+#include "Data.h"
 #include "FileBox.h"
-#include "util.h"
+#include "FileIO.h"
 #include "main.h"
+#include "RegWindow.h"
+#include "util.h"
 
 /** PROTOTYPES ******************************************************/
 
 /** GLOBALS *********************************************************/
-Data    *data = NULL;
-char    *datafile;
-Widget   toplevel;
-Boolean  realized=False;   /* Has the toplevel been realized? */
+char    *datafile = NULL;
+Widget   toplevel = 0;
+Boolean  realized = False;   /* Has the toplevel been realized? */
 XtAppContext app;
 
 /* The names of the different types of accounts.  For resource
- * specification */
+ * specification. Must match the enums in Account.h */
 String accRes[] ={
   "bank",
   "cash",
@@ -48,7 +49,10 @@ String accRes[] ={
   "credit",
   "liability",
   "portfolio",
-  "mutual"
+  "mutual",
+  "income",
+  "expense",
+  "equity"
 };
 
 /** FALLBACK RESOURCES **********************************************/
@@ -64,14 +68,18 @@ String fbRes[] = {
   /* MenuBar stuff: */
   "*menubar*marginHeight:     1",
   "*menubar*marginWidth:      1",
+
   /* Register window account type specific stuff: */ 
-  "*regbank.oddRowBackground:      #ffffaa",
+  "*regbank.oddRowBackground:      #aaccff",
   "*regcash.oddRowBackground:      #ccffcc",
-  "*regasset.oddRowBackground:     #ccffcc",
-  "*regcredit.oddRowBackground:    #ccccff",
+  "*regasset.oddRowBackground:     #aaffcc",
+  "*regcredit.oddRowBackground:    #ffffaa",
   "*regliability.oddRowBackground: #ffcccc",
-  "*regportfolio.oddRowBackground: grey",
-  "*regmutual.oddRowBackground:    grey",
+  "*regportfolio.oddRowBackground: #ccffff",
+  "*regmutual.oddRowBackground:    #ccffff",
+  "*regincome.oddRowBackground:    #aaccff",
+  "*regexpense.oddRowBackground:   #ffcccc",
+  "*regequity.oddRowBackground:    #ffffaa",
   "*regportfolio.evenRowBackground:grey",
   "*regmutual.evenRowBackground:   grey",
   /* Other register window account stuff: */
@@ -107,7 +115,7 @@ String fbRes[] = {
  * Args:   argc, the number of command line arguments, and argv,    * 
  *         the array of command line args                           * 
  * Return:                                                          * 
- * Global: data     - the data from the datafile                    *
+ * Global: topgroup - the data from the datafile                    *
  *         datafile - the name of the user's datafile               *
  *         toplevel - the toplevel widget, for creating new windows *
  *         app      - the XtAppContext                              *
@@ -123,7 +131,6 @@ main( int argc, char *argv[] )
   printf(" coresize = %d\n",_coresize());
   DEBUG("Done initializing memory");
 #endif
-  data = NULL;
   
   toplevel = XtVaAppInitialize( &app, "Xacc", NULL, 0,
 				&argc, argv, fbRes,
@@ -137,13 +144,13 @@ main( int argc, char *argv[] )
     datafile = fileBox( toplevel, OPEN );
   
   if( datafile != NULL )
-    data = readData(datafile);     /* load the accounts data from datafile*/
-    /* data = xaccReadQIFData(datafile);     /* load the accounts data from datafile*/
+    topgroup = readData(datafile);     /* load the accounts data from datafile*/
+    /* topgroup = xaccReadQIFData(datafile);     /* load the accounts data from datafile*/
   
-  if( data == NULL )
+  if( NULL == topgroup )
     {
-    data = mallocData();           /* the file could not be found */
-    data->new = True;
+    topgroup = mallocAccountGroup();           /* the file could not be found */
+    topgroup->new = True;
     }
   
   /* Make main window */

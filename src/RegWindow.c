@@ -84,7 +84,6 @@ void dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int
 
 /** GLOBALS *********************************************************/
 extern Widget  toplevel;
-extern Data   *data;
 
 /* The XrmQuarks are used by regCB to figure out the kind of traversal 
  * that is going on */
@@ -264,6 +263,9 @@ regRefresh( RegWindow *regData )
         case ASSET:
         case CREDIT:
         case LIABILITY:
+        case INCOME:
+        case EXPENSE:
+        case EQUITY:
           themount = xaccGetAmount (acc, trans);
           if( 0.0 > themount )
             {
@@ -295,7 +297,7 @@ regRefresh( RegWindow *regData )
             }
           break;
         default:
-          fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", acc->type);
+          fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", acc->type);
         }
       
       newData[row+1][PAY_CELL_C] = XtNewString("");
@@ -313,6 +315,9 @@ regRefresh( RegWindow *regData )
         case ASSET:
         case CREDIT:
         case LIABILITY:
+        case INCOME:
+        case EXPENSE:
+        case EQUITY:
           break;
         case PORTFOLIO:
         case MUTUAL:
@@ -331,7 +336,7 @@ regRefresh( RegWindow *regData )
       
           break;
         default:
-          fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", acc->type);
+          fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", acc->type);
         }
       }
 
@@ -409,6 +414,16 @@ regRecalculateBalance( RegWindow *regData )
     dclearedBalance = xaccGetClearedBalance (acc, trans);
     share_balance = xaccGetShareBalance (acc, trans);
     
+    /* for income and expense acounts, we have to reverse
+     * the meaning of balance, since, in a cual entry
+     * system, income will show up as a credit to a 
+     * bank account, and a debit to the income account.
+     * Thus, positive and negative are interchanged */
+    if( (EXPENSE   == acc->type) ||
+        (INCOME    == acc->type) ) {
+      dbalance = - dbalance;
+    }
+
     if( reg != NULL )
       {
 #ifdef USE_NO_COLOR
@@ -563,14 +578,14 @@ regSaveTransaction( RegWindow *regData, int position )
   if (MOD_NONE == regData->changed) return;
 
   /* Be sure to prompt the user to save to disk after changes are made! */
-  acc->data->saved = False;
+  acc->parent->saved = False;
 
   trans = getTransaction( acc, position );
   
   if( trans == NULL )
     {
     /* This must be a new transaction */
-    DEBUG("New Transaction");
+    DEBUG("New Transaction\n");
     
     trans = mallocTransaction();
     trans->credit = (struct _account *) acc;
@@ -585,7 +600,7 @@ regSaveTransaction( RegWindow *regData, int position )
     }
   if( regData->changed & MOD_NUM )
     {
-    DEBUG("MOD_NUM");	  
+    DEBUG("MOD_NUM\n");	  
     /* ...the transaction number (String)... */
     XtFree( trans->num );
     trans->num = XtNewString( XbaeMatrixGetCell(regData->reg,row,NUM_CELL_C) );    
@@ -596,7 +611,7 @@ regSaveTransaction( RegWindow *regData, int position )
     /* ... the transfer ... */
     char * name;
     Account *xfer_acct = xaccGetOtherAccount (acc, trans);
-    DEBUG("MOD_XFER");
+    DEBUG("MOD_XFER\n");
 
     if (xfer_acct) {
       /* remove the transaction from wherever it used to be */
@@ -621,7 +636,7 @@ regSaveTransaction( RegWindow *regData, int position )
   
   if( regData->changed & MOD_DESC )
     {
-    DEBUG("MOD_DESC");
+    DEBUG("MOD_DESC\n");
     /* ... the description... */
     XtFree( trans->description );
     trans->description = 
@@ -632,7 +647,7 @@ regSaveTransaction( RegWindow *regData, int position )
     {
     String tmp;
     String  memo = NULL;
-    DEBUG("MOD_MEMO");
+    DEBUG("MOD_MEMO\n");
     /* ... the memo ... */
     XtFree( trans->memo );
     tmp = XbaeMatrixGetCell(regData->reg,row+MEMO_CELL_R,MEMO_CELL_C);
@@ -644,7 +659,7 @@ regSaveTransaction( RegWindow *regData, int position )
       ((MUTUAL == acc->type) || (PORTFOLIO==acc->type)) )
     {
     String  actn = NULL;
-    DEBUG("MOD_ACTN");
+    DEBUG("MOD_ACTN\n");
     /* ... the action ... */
     XtFree( trans->action );
     actn = XbaeMatrixGetCell(regData->reg,row,ACTN_CELL_C);
@@ -653,7 +668,7 @@ regSaveTransaction( RegWindow *regData, int position )
   
   if( regData->changed & MOD_RECN )
     {
-    DEBUG("MOD_RECN");
+    DEBUG("MOD_RECN\n");
     /* ...the reconciled flag (char)... */
     trans->reconciled = (XbaeMatrixGetCell(regData->reg,row,RECN_CELL_C))[0];
     }
@@ -664,7 +679,7 @@ regSaveTransaction( RegWindow *regData, int position )
     float val=0.0;  /* must be float for sscanf to work */
     double themount = 0.0;
 
-    DEBUG("MOD_AMNT");
+    DEBUG("MOD_AMNT\n");
     /* ...and the amounts */
     amount = XbaeMatrixGetCell(regData->reg,row,DEP_CELL_C);
     sscanf( amount, "%f", &val );
@@ -700,7 +715,7 @@ regSaveTransaction( RegWindow *regData, int position )
     String price;
     float val=0.0;  /* must be float for sscanf to work */
 
-    DEBUG("MOD_PRIC");
+    DEBUG("MOD_PRIC\n");
     /* ...the price flag ... */
 
     price = XbaeMatrixGetCell(regData->reg,row,PRIC_CELL_C);
@@ -715,7 +730,7 @@ regSaveTransaction( RegWindow *regData, int position )
     {
     Boolean outOfOrder = False;
 
-    DEBUG("MOD_DATE");
+    DEBUG("MOD_DATE\n");
     /* read in the date stuff... */
     sscanf( XbaeMatrixGetCell(regData->reg,row+DATE_CELL_R,DATE_CELL_C),"%d/%d",
             &(trans->date.month),
@@ -804,6 +819,7 @@ regSaveTransaction( RegWindow *regData, int position )
 RegWindow *
 regWindow( Widget parent, Account *acc )
   {
+  AccountGroup *grp;
   Transaction *trans;
   RegWindow   *regData;
   Widget menubar, pane, buttonform, frame, reg, widget;
@@ -954,6 +970,9 @@ regWindow( Widget parent, Account *acc )
       case ASSET:
       case CREDIT:
       case LIABILITY:
+      case INCOME:
+      case EXPENSE:
+      case EQUITY:
         acc->columnLocation [DATE_COL_ID] = 0;
         acc->columnLocation [NUM_COL_ID]  = 1;
         acc->columnLocation [DESC_COL_ID] = 2;
@@ -979,7 +998,7 @@ regWindow( Widget parent, Account *acc )
         acc -> numCols = 10;
         break;
       default:
-        fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", acc->type);
+        fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", acc->type);
       }
 
     /* ----------------------------------- */
@@ -1000,6 +1019,9 @@ regWindow( Widget parent, Account *acc )
       case ASSET:
       case CREDIT:
       case LIABILITY:
+      case INCOME:
+      case EXPENSE:
+      case EQUITY:
         break;
       case PORTFOLIO:
       case MUTUAL:
@@ -1027,6 +1049,9 @@ regWindow( Widget parent, Account *acc )
       case ASSET:
       case CREDIT:
       case LIABILITY:
+      case INCOME:
+      case EXPENSE:
+      case EQUITY:
         break;
 
       case PORTFOLIO:
@@ -1056,6 +1081,9 @@ regWindow( Widget parent, Account *acc )
       case ASSET:
       case CREDIT:
       case LIABILITY:
+      case INCOME:
+      case EXPENSE:
+      case EQUITY:
         break;
       case PORTFOLIO:
       case MUTUAL:
@@ -1086,6 +1114,18 @@ regWindow( Widget parent, Account *acc )
       case LIABILITY:
         acc -> rows[0][PAY_CELL_C] = "Increase";
         acc -> rows[0][DEP_CELL_C] = "Decrease";
+        break;
+      case INCOME:
+        acc -> rows[0][PAY_CELL_C] = "Income";
+        acc -> rows[0][DEP_CELL_C] = "Charge";
+        break;
+      case EXPENSE:
+        acc -> rows[0][PAY_CELL_C] = "Rebate";
+        acc -> rows[0][DEP_CELL_C] = "Expense";
+        break;
+      case EQUITY:
+        acc -> rows[0][PAY_CELL_C] = "Surplus";
+        acc -> rows[0][DEP_CELL_C] = "Deficit";
         break;
       case PORTFOLIO:
       case MUTUAL:
@@ -1126,16 +1166,18 @@ regWindow( Widget parent, Account *acc )
   XtAddCallback( reg, XmNmodifyVerifyCallback, regCB, (XtPointer)regData );
   XtAddCallback( reg, XmNtraverseCellCallback, regCB, (XtPointer)regData );
   
-  XtManageChild(reg);
-  XtManageChild(frame);
-  
+  XtManageChild (reg);
+  XtManageChild (frame);
+  XtManageChild (pane);
+
 
   /* create action box for the first time */
   regData->actbox = actionBox (reg);
 
   /* create the xfer account box for the first time */
-  regData->xferbox = xferBox (reg, data);
-
+  /* but first, find the topmost group */
+  grp = xaccGetRootGroupOfAcct (acc);
+  regData->xferbox = xferBox (reg, grp);
 
   /******************************************************************\
    * The button area... also contains balance fields                *
@@ -1198,7 +1240,7 @@ regWindow( Widget parent, Account *acc )
   
   position+=2;
   
-  /* Fix button area of the pane to its current size, and not let 
+  /* Fix button area of the buttonform to its current size, and not let 
    * it resize. */
     {
     Dimension h;
@@ -1289,7 +1331,7 @@ closeRegWindow( Widget mw, XtPointer cd, XtPointer cb )
   _free(regData);
   acc->regData = NULL;
   
-  DEBUG("closed RegWindow");
+  DEBUG("closed RegWindow\n");
   }
 
 /********************************************************************\
@@ -1362,7 +1404,7 @@ deleteCB( Widget mw, XtPointer cd, XtPointer cb )
   trans = getTransaction (acc, regData->lastTrans );
   if( NULL != trans)
     {
-    char *msg = "Are you sure you want\nto delete this transaction?";
+    char *msg = TRANS_DEL_MSG;
     
     if( verifyBox( toplevel, msg ) )
       {
@@ -1430,13 +1472,13 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
   switch( cbs->reason )
     {
     case XbaeEnterCellReason: {
-      DEBUG("XbaeEnterCellReason");
+      DEBUG("XbaeEnterCellReason\n");
       DEBUGCMD(printf(" row = %d\n col = %d\n",row,col));
       /* figure out if we are editing a different transaction... if we 
        * are, then we need to save the transaction we left */
       if( regData->lastTrans != (row-1)/2 )
         {
-        DEBUG("Save Transaction");
+        DEBUG("Save Transaction\n");
         DEBUGCMD(printf(" lastTrans = %d\n currTrans = %d\n", 
                         regData->lastTrans, (row+1)/2 ));
         
@@ -1502,7 +1544,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
     }
 
     case XbaeModifyVerifyReason:
-      DEBUG("XbaeModifyVerifyReason");
+      DEBUG("XbaeModifyVerifyReason\n");
       {	
       XbaeMatrixModifyVerifyCallbackStruct *mvcbs = 
          (XbaeMatrixModifyVerifyCallbackStruct *)cb;
@@ -1543,7 +1585,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           {
           int i;
           regData->insert = mvcbs->verify->currInsert;
-          DEBUG("resyncing quickfill!");
+          DEBUG("resyncing quickfill!\n");
           DEBUGCMD(printf(" insert = %d\n currInsert = %d\n",
                           regData->insert,
                           mvcbs->verify->currInsert ));
@@ -1679,7 +1721,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       break;
 
     case XbaeTraverseCellReason:
-      DEBUG("XbaeTraverseCellReason");
+      DEBUG("XbaeTraverseCellReason\n");
       /* This ensure that whenever the user hits TAB, they go to the
        * next valid cell.  Also, if regData->qf and regData->qf->trans
        * aren't NULL, then fill the field we are entering with the
@@ -1763,7 +1805,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
         }
         break;
     default:
-      DEBUG("We shouldn't get here!");
+      PERR("regDB(): We shouldn't get here!");
     }
   }
 
@@ -1833,42 +1875,42 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_y
     case '+':
     case '=':              /* '+' without the shift! */
       /* next day */
-      DEBUG("next day");
+      DEBUG("next day\n");
       adjustDay( &date, 1 );
       mvcbs->verify->doit = False;
       changed = True;
       break;
     case '-':
       /* prev day */
-      DEBUG("prev day");
+      DEBUG("prev day\n");
       adjustDay( &date, -1 );
       mvcbs->verify->doit = False;
       changed = True;
       break;
     case 't':
       /* today */
-      DEBUG("today");
+      DEBUG("today\n");
       todaysDate( &date );
       mvcbs->verify->doit = False;
       changed = True;
       break;
     case 'm':
       /* beginning of month */
-      DEBUG("beginning of month");
+      DEBUG("beginning of month\n");
       date.day = 1;
       mvcbs->verify->doit = False;
       changed = True;
       break;
     case 'h':
       /* end of month */
-      DEBUG("end of month");
+      DEBUG("end of month\n");
       date.day = daysInMonth( date.month );
       mvcbs->verify->doit = False;
       changed = True;
       break;
     case 'y':
       /* beginning of year */
-      DEBUG("beginning of year");
+      DEBUG("beginning of year\n");
       date.day   = 1;
       date.month = 1;
       mvcbs->verify->doit = False;
@@ -1876,7 +1918,7 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_y
       break;
     case 'r':
       /* end of year */
-      DEBUG("end of year");
+      DEBUG("end of year\n");
       date.day   = 31;
       date.month = 12;
       mvcbs->verify->doit = False;
@@ -1884,14 +1926,14 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_y
       break;
     case ']':
       /* next month */
-      DEBUG("next month");
+      DEBUG("next month\n");
       adjustMonth( &date, +1 );
       mvcbs->verify->doit = False;
       changed = True;
       break;
     case '[':
       /* prev month */
-      DEBUG("prev month");
+      DEBUG("prev month\n");
       adjustMonth( &date, -1 );
       mvcbs->verify->doit = False;
       changed = True;

@@ -39,15 +39,26 @@ sorry, no "make install" yet.
 
 Status:
 -------
-As of version 0.9k:
+As of version 0.9n:
 Bugs:
--- Cash distributions & cash dividends on stock not handled properly
+-- Cash distributions & cash dividends on stock are confusing
+   without sub-accounts.  They should appear as transfers from
+   an income account to the brokerage account, and should be 
+   visible in a gneral ledger that shows both the brokerage 
+   account, and the stock.  However, sub-accounts are not
+   yet implemented fully, and the general-ledger regsiter 
+   window is not implemented.  Getting close, though.
+
 -- tabbing between fields for mutual funds does not work correctly. 
 -- should add "number of shares" to transfer popup when transferring
    from bank account to portfolio.
 -- Nasty core dump in motif when two register windows are opened,
    and then closed.  Beats the heck out of me. 
    
+
+---------------
+Started implementation of sub-accounts.
+This is needed for general ledger capabilites.
 
 ---------------
 Bare-bones Mutual Fund and Stock Portfolio handling

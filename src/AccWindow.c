@@ -2,6 +2,7 @@
  * AccWindow.c -- window for creating new accounts for xacc         *
  *                (X-Accountant)                                    *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1997 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,6 +24,8 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
+#include <string.h>
+
 #include <Xm/Xm.h>
 #include <Xm/DialogS.h>
 #include <Xm/Form.h>
@@ -32,33 +35,31 @@
 #include <Xm/ToggleB.h>
 #include <Xm/PushB.h>
 #include <Xm/Text.h>
-#include <string.h>
 
 #include "Account.h"
+#include "AccountMenu.h"
 #include "Data.h"
 #include "main.h"
 #include "util.h"
 
 /* NOTE: notes has to be at the beginning of the struct!  Order is 
- *       important */
+ *       important -- hack alert -- why is order important ?? */
 typedef struct _accwindow {
   String notes;          /* The text from the "Notes" window        */
                          /* The account type buttons:               */
   Widget dialog;
-  Widget bank;
-  Widget cash;
-  Widget asset;
-  Widget credit;
-  Widget liability;
-  Widget portfolio;
-  Widget mutual;
+
+  Widget type_widgets[NUM_ACCOUNT_TYPES];
+
                          /* The text fields:                        */
   Widget name;           /* The account name text field             */
   Widget desc;           /* Account description text field          */
+
+  AccountMenu *accMenu;
 } AccWindow;
 
 /* NOTE: notes has to be at the beginning of the struct!  Order is 
- *       important */
+ *       important -- hack alert -- why is order important ?? */
 typedef struct _editaccwindow {
   String notes;          /* The text from the "Notes" window        */
                          /* The text fields:                        */
@@ -69,15 +70,15 @@ typedef struct _editaccwindow {
 } EditAccWindow;
 
 /** GLOBALS *********************************************************/
-extern Data   *data;
 extern Widget toplevel;
 
 /** PROTOTYPES ******************************************************/
-void closeAccWindow( Widget mw, XtPointer cd, XtPointer cb );
-void closeEditAccWindow( Widget mw, XtPointer cd, XtPointer cb );
-void notesCB( Widget mw, XtPointer cd, XtPointer cb );
-void createCB( Widget mw, XtPointer cd, XtPointer cb );
-void editCB( Widget mw, XtPointer cd, XtPointer cb );
+void closeAccWindow         ( Widget mw, XtPointer cd, XtPointer cb );
+void closeEditAccWindow     ( Widget mw, XtPointer cd, XtPointer cb );
+static void notesCB         ( Widget mw, XtPointer cd, XtPointer cb );
+static void createCB        ( Widget mw, XtPointer cd, XtPointer cb );
+static void editCB          ( Widget mw, XtPointer cd, XtPointer cb );
+static void selectAccountCB ( Widget mw, XtPointer cd, XtPointer cb );
 
 /********************************************************************\
  * accWindow                                                        *
@@ -90,9 +91,11 @@ void editCB( Widget mw, XtPointer cd, XtPointer cb );
 void 
 accWindow( Widget parent )
   {
+  int i;
   Widget    dialog, form, frame, rc, widget, 
-            label, buttonform;
+            label, buttonform, group_menu, topwid;
   AccWindow *accData;
+  AccountGroup *grp = topgroup;  /* hack alert -- should be passed as argument */
   
   setBusyCursor( parent );
   
@@ -107,9 +110,9 @@ accWindow( Widget parent )
 				 XmNwidth,     350,
 				 XmNminWidth,  350,
 				 XmNmaxWidth,  350,
-				 XmNheight,    300,
-				 XmNminHeight, 300,
-				 XmNmaxHeight, 300,
+				 XmNheight,    340,
+				 XmNminHeight, 340,
+				 XmNmaxHeight, 340,
                                  XmNresizable, FALSE,
                                  XmNallowShellResize, FALSE,
                                  /* XmNtransient, FALSE,  /* allow window to be repositioned */
@@ -162,61 +165,24 @@ accWindow( Widget parent )
 				NULL );
   
   /* Create the buttons */
-  accData->bank = 
-    XtVaCreateManagedWidget( "Bank",
+  for (i=0; i<NUM_ACCOUNT_TYPES; i++) {
+    accData->type_widgets[i] = 
+    XtVaCreateManagedWidget( account_type_name[i],
 			     xmToggleButtonWidgetClass, rc,
 			     XmNindicatorType,   XmONE_OF_MANY,
-			     XmNset,             True,
+			     XmNset,             False,
 			     NULL);
-  
-  accData->cash = 
-    XtVaCreateManagedWidget( "Cash",
-			     xmToggleButtonWidgetClass, rc,
-			     XmNindicatorType,   XmONE_OF_MANY,
-			     NULL);
-  
-  accData->asset =
-    XtVaCreateManagedWidget( "Asset",
-			     xmToggleButtonWidgetClass, rc,
-			     XmNindicatorType,   XmONE_OF_MANY,
-			     NULL);
-  
-  accData->credit = 
-    XtVaCreateManagedWidget( "Credit Card",
-			     xmToggleButtonWidgetClass, rc,
-			     XmNindicatorType,   XmONE_OF_MANY,
-			     NULL);
-  
-  accData->liability = 
-    XtVaCreateManagedWidget( "Liability",
-			     xmToggleButtonWidgetClass, rc,
-			     XmNindicatorType,   XmONE_OF_MANY,
-			     NULL);
-  
-  accData->portfolio = 
-    XtVaCreateManagedWidget( "Portfolio",
-			     xmToggleButtonWidgetClass, rc,
-			     XmNindicatorType,   XmONE_OF_MANY,
-			     NULL);
-  /* Portfolio account not supported yet, so grey it out: */
-/* hack alert 
-  XtSetSensitive( accData->portfolio, False );
-*/
-  
-  accData->mutual =
-    XtVaCreateManagedWidget( "Mutual Fund",
-			     xmToggleButtonWidgetClass, rc,
-			     XmNindicatorType,   XmONE_OF_MANY,
-			     NULL);
-  /* Mutual Fund account not supported yet, so grey it out: */
-/* hack alert
-  XtSetSensitive( accData->mutual, False );
-*/
+  }
+  XtVaSetValues (accData->type_widgets[BANK],
+                             XmNset,             True,
+                             NULL);
+
   
   /******************************************************************\
    * Text fields....                                                *
   \******************************************************************/
   
+    
   label = 
     XtVaCreateManagedWidget( "Account Name:",
 			     xmLabelGadgetClass, form,
@@ -261,15 +227,43 @@ accWindow( Widget parent )
 			     XmNleftPosition,    35,        /* 35% */
 			     NULL );
   
+  topwid = accData->desc;
+  label = 
+    XtVaCreateManagedWidget( "Parent Account:",
+			     xmLabelGadgetClass, form,
+			     XmNtopAttachment,   XmATTACH_WIDGET,
+			     XmNtopWidget,       topwid,
+			     XmNtopOffset,       10,
+			     XmNrightAttachment, XmATTACH_POSITION,
+			     XmNrightPosition,   35,        /* 35% */
+			     NULL );
+  
+  /* put up a pulldown menu to let user choose an account */
+  accData->accMenu = xaccBuildAccountMenu (grp, form, "Pick One");
+  group_menu = xaccGetAccountMenuWidget (accData->accMenu);
+  xaccAccountMenuAddCallback (accData->accMenu, selectAccountCB, (XtPointer) accData);
+
+  XtVaSetValues( group_menu,
+                             XmNtopAttachment,  XmATTACH_WIDGET,
+			     XmNtopWidget,       accData->desc,
+			     XmNtopOffset,       10, 
+			     XmNleftAttachment,  XmATTACH_POSITION,
+			     XmNleftPosition,    35,        /* 35% */
+                             NULL );
+  
+  XtManageChild (group_menu); 
+
   /******************************************************************\
    * The buttons at the bottom...                                   *
   \******************************************************************/
+
+  topwid = group_menu;
   
   buttonform = XtVaCreateWidget( "form", 
 				 xmFormWidgetClass,   form,
 				 XmNfractionBase,     5,
 				 XmNtopAttachment,    XmATTACH_WIDGET,
-				 XmNtopWidget,        accData->desc, 
+				 XmNtopWidget,        topwid, 
 				 XmNtopOffset,        10, 
 				 XmNbottomAttachment, XmATTACH_FORM,
 				 XmNbottomOffset,     10,
@@ -322,10 +316,10 @@ accWindow( Widget parent )
   XtAddCallback( widget, XmNactivateCallback, 
 		 createCB, (XtPointer)accData );
   /* We need to do something to clean up memory too! */
-/* this is done at endo fo dialog.
-  XtAddCallback( widget, XmNactivateCallback, 
-		 destroyShellCB, (XtPointer)dialog );  
-*/
+  /* this is done at end of dialog.
+   * XtAddCallback( widget, XmNactivateCallback, 
+   * 		 destroyShellCB, (XtPointer)dialog );  
+   */
     
   XtManageChild(buttonform);
   
@@ -353,6 +347,7 @@ closeAccWindow( Widget mw, XtPointer cd, XtPointer cb )
   {
   AccWindow *accData = (AccWindow *)cd;
   
+  xaccFreeAccountMenu (accData->accMenu);
   _free(accData);
   DEBUG("close AccWindow");
   }
@@ -548,6 +543,9 @@ void
 closeEditAccWindow( Widget mw, XtPointer cd, XtPointer cb )
   {
   EditAccWindow *editAccData = (EditAccWindow *)cd;
+
+printf ("close edit acc window %x %s \n", editAccData,
+editAccData->notes);
   
   _free(editAccData);
   DEBUG("close EditAccWindow");
@@ -562,12 +560,15 @@ closeEditAccWindow( Widget mw, XtPointer cd, XtPointer cb )
  * Return: none                                                     * 
  * Global: toplevel    - the toplevel widget                        *
 \********************************************************************/
-void
+static void
 notesCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   AccWindow *accData = (AccWindow *)cd;
   
+  /* hack alert -- isn't this a memory leak ????? */
+printf ("orig notes are %x %s \n", accData, accData->notes);
   accData->notes = textBox( toplevel, "Notes", accData->notes, True );
+printf ("new notes are %s \n", accData->notes);
   }
 
 /********************************************************************\
@@ -582,42 +583,18 @@ notesCB( Widget mw, XtPointer cd, XtPointer cb )
  * Global: data        - the data from the datafile                 *
  *         toplevel    - the toplevel widget                        *
 \********************************************************************/
-void
+static void
 createCB( Widget mw, XtPointer cd, XtPointer cb )
   {
-  int i,num;
+  int i, num, acc_id;
   Transaction *trans;
-  Account     *acc;
+  Account     *acc, *parent_acc;
   AccWindow   *accData = (AccWindow *)cd;
   Boolean set = False;
 
   String name = XmTextGetString(accData->name);
   String desc = XmTextGetString(accData->desc);
   
-#ifdef SHOULDNT_BE_BROKEN_ANYMORE
-  {
-    /* since portfolio & mutual not fully implemented, provide warning */
-    int warn = 0;
-    XtVaGetValues( accData->portfolio, XmNset, &set, NULL );
-    if(set) warn = 1;
-    
-    XtVaGetValues( accData->mutual, XmNset, &set, NULL );
-    if(set) warn = 1;
-
-    if (warn) {
-     int do_it_anyway;
-     do_it_anyway = verifyBox (toplevel, 
-"Warning: Portfolio and Mutual Fund \n\
-Account types are not fully implemented. \n\
-You can play with the interface here, \n\
-but doing so may damage your data. \n\
-You have been warned! \n\
-Do you want to continue anyway?\n");
-    if (!do_it_anyway) return;
-    }
-  }
-#endif /* SHOULDNT_BE_BROKEN_ANYMORE */
-
   /* The account has to have a name! */
   if( strcmp( name, "" ) == 0 ) {
     errorBox (toplevel, "The account must be given a name! \n");
@@ -631,34 +608,10 @@ Do you want to continue anyway?\n");
   acc->notes       = accData->notes;
   
   /* figure out account type */
-    
-  XtVaGetValues( accData->bank, XmNset, &set, NULL );
-  if(set)
-    acc->type = BANK;
-  
-  XtVaGetValues( accData->cash, XmNset, &set, NULL );
-  if(set)
-    acc->type = CASH;
-  
-  XtVaGetValues( accData->asset, XmNset, &set, NULL );
-  if(set)
-    acc->type = ASSET;
-  
-  XtVaGetValues( accData->credit, XmNset, &set, NULL );
-  if(set)
-    acc->type = CREDIT;
-  
-  XtVaGetValues( accData->liability, XmNset, &set, NULL );
-  if(set)
-    acc->type = LIABILITY;
-  
-  XtVaGetValues( accData->portfolio, XmNset, &set, NULL );
-  if(set)
-    acc->type = PORTFOLIO;
-  
-  XtVaGetValues( accData->mutual, XmNset, &set, NULL );
-  if(set)
-    acc->type = MUTUAL;
+  for (i=0; i<NUM_ACCOUNT_TYPES; i++) {
+    XtVaGetValues( accData->type_widgets[i], XmNset, &set, NULL );
+    if(set) acc->type = i;
+  }
   
   /* Add an opening balance transaction (as the first transaction) */
   trans = mallocTransaction();
@@ -671,11 +624,19 @@ Do you want to continue anyway?\n");
   /* add the new transaction to the account */
   insertTransaction( acc, trans );
   
-  /* once the account is set up, add it to data */
-  insertAccount( data, acc );
+  /* once the account is set up, add it to account group 
+   * If the user indicated a parent acccount, make it a 
+   * sub account of that */
+  parent_acc = xaccGetAccountMenuSelection (accData->accMenu);
+  if (parent_acc) {
+    xaccInsertSubAccount (parent_acc, acc);
+  } else {
+    insertAccount( topgroup, acc );
+  }
   
   /* make sure the accountlist is updated to reflect the new account */
   refreshMainWindow();
+
   /* open up the account window for the user */
   regWindow( toplevel, acc );
 
@@ -684,7 +645,7 @@ Do you want to continue anyway?\n");
   }
 
 /********************************************************************\
- * editCB -- records the edits made by in the editAccWindow         * 
+ * editCB -- records the edits made in the editAccWindow            * 
  *                                                                  * 
  * Args:   mw - the widget that called us                           * 
  *         cd - editAccData - the struct of data associated with    *
@@ -693,7 +654,7 @@ Do you want to continue anyway?\n");
  * Return: none                                                     * 
  * Global: data        - the data from the datafile                 *
 \********************************************************************/
-void
+static void
 editCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   EditAccWindow *editAccData = (EditAccWindow *)cd;
@@ -708,7 +669,180 @@ editCB( Widget mw, XtPointer cd, XtPointer cb )
     }
   
   XtFree(editAccData->account->description);
-  editAccData->account->description = name;
+  editAccData->account->description = desc;
   
   refreshMainWindow();
   }
+
+/********************************************************************\
+ * selectAccountCB -- checks the use account selection              * 
+ * 
+ * Basically, sub-account *must* be of the same category as thier 
+ * parent accounts, otherwise chaos will errupt.  The five basic 
+ * categories are asset, liability, income,. expense, and equity.
+ *
+ * Currently, there are four subcategories for asset accounts:
+ * banks, cash, stocks, bonds, mutual funds.
+ *
+ *                                                                  * 
+\********************************************************************/
+static void
+selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
+{
+  int i, but;
+  Boolean set;
+  AccWindow *menu = (AccWindow *) cd;
+  Account *acc = (Account *) cb;
+
+  /* unset any pressed radio buttons in preparation for 
+   * setting insensitive of some of them. 
+   */
+
+  /* figure out which radio button might be set */
+  for (i=0; i<NUM_ACCOUNT_TYPES; i++) {
+    XtVaGetValues( menu->type_widgets[i], XmNset, &set, NULL );
+    if(set) but = i;
+  }
+
+  if (acc) {
+    switch (acc->type) {
+       case BANK:
+       case CASH:
+       case ASSET:
+       case PORTFOLIO:
+       case MUTUAL:
+          XtSetSensitive (menu->type_widgets[BANK],      True);
+          XtSetSensitive (menu->type_widgets[CASH],      True);
+          XtSetSensitive (menu->type_widgets[ASSET],     True);
+          XtSetSensitive (menu->type_widgets[PORTFOLIO], True);
+          XtSetSensitive (menu->type_widgets[MUTUAL],    True);
+          XtSetSensitive (menu->type_widgets[LIABILITY], False);
+          XtSetSensitive (menu->type_widgets[CREDIT],    False);
+          XtSetSensitive (menu->type_widgets[INCOME],    False);
+          XtSetSensitive (menu->type_widgets[EXPENSE],   False);
+          XtSetSensitive (menu->type_widgets[EQUITY],    False);
+
+          /* unset unavailable buttons */
+          XtVaSetValues (menu->type_widgets[LIABILITY], XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[CREDIT],    XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[INCOME],    XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[EXPENSE],   XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[EQUITY],    XmNset, False, NULL);
+
+          /* set a default, if an inapporpriate button is pushed */
+          if ((BANK   != but) && (CASH      != but) &&
+              (ASSET  != but) && (PORTFOLIO != but) &&
+              (MUTUAL != but) ) {
+             XtVaSetValues (menu->type_widgets[acc->type], XmNset, True, NULL);
+          }
+          break;
+
+       case LIABILITY:
+       case CREDIT:
+          XtSetSensitive (menu->type_widgets[BANK],      False);
+          XtSetSensitive (menu->type_widgets[CASH],      False);
+          XtSetSensitive (menu->type_widgets[ASSET],     False);
+          XtSetSensitive (menu->type_widgets[PORTFOLIO], False);
+          XtSetSensitive (menu->type_widgets[MUTUAL],    False);
+          XtSetSensitive (menu->type_widgets[LIABILITY], True);
+          XtSetSensitive (menu->type_widgets[CREDIT],    True);
+          XtSetSensitive (menu->type_widgets[INCOME],    False);
+          XtSetSensitive (menu->type_widgets[EXPENSE],   False);
+          XtSetSensitive (menu->type_widgets[EQUITY],    False);
+
+          /* unset unavailable buttons */
+          XtVaSetValues (menu->type_widgets[BANK],      XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[CASH],      XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[ASSET],     XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[PORTFOLIO], XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[MUTUAL],    XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[INCOME],    XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[EXPENSE],   XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[EQUITY],    XmNset, False, NULL);
+
+          /* set a default, if an inapporpriate button is pushed */
+          if ((LIABILITY != but) && (CREDIT != but)) {
+             XtVaSetValues (menu->type_widgets[acc->type], XmNset, True, NULL);
+          }
+          break;
+
+       case INCOME:
+          XtSetSensitive (menu->type_widgets[BANK],      False);
+          XtSetSensitive (menu->type_widgets[CASH],      False);
+          XtSetSensitive (menu->type_widgets[ASSET],     False);
+          XtSetSensitive (menu->type_widgets[PORTFOLIO], False);
+          XtSetSensitive (menu->type_widgets[MUTUAL],    False);
+          XtSetSensitive (menu->type_widgets[LIABILITY], False);
+          XtSetSensitive (menu->type_widgets[CREDIT],    False);
+          XtSetSensitive (menu->type_widgets[INCOME],    True);
+          XtSetSensitive (menu->type_widgets[EXPENSE],   False);
+          XtSetSensitive (menu->type_widgets[EQUITY],    False);
+
+          /* unset unavailable buttons */
+          for (i=0; i<NUM_ACCOUNT_TYPES; i++) {
+             XtVaSetValues (menu->type_widgets[i],      XmNset, False, NULL);
+          }
+
+          /* set a default, if an inapporpriate button is pushed */
+          XtVaSetValues (menu->type_widgets[acc->type], XmNset, True, NULL);
+          break;
+
+       case EXPENSE:
+          XtSetSensitive (menu->type_widgets[BANK],      False);
+          XtSetSensitive (menu->type_widgets[CASH],      False);
+          XtSetSensitive (menu->type_widgets[ASSET],     False);
+          XtSetSensitive (menu->type_widgets[PORTFOLIO], False);
+          XtSetSensitive (menu->type_widgets[MUTUAL],    False);
+          XtSetSensitive (menu->type_widgets[LIABILITY], False);
+          XtSetSensitive (menu->type_widgets[CREDIT],    False);
+          XtSetSensitive (menu->type_widgets[INCOME],    False);
+          XtSetSensitive (menu->type_widgets[EXPENSE],   True);
+          XtSetSensitive (menu->type_widgets[EQUITY],    False);
+
+          /* unset unavailable buttons */
+          for (i=0; i<NUM_ACCOUNT_TYPES; i++) {
+             XtVaSetValues (menu->type_widgets[i],      XmNset, False, NULL);
+          }
+
+          /* set a default, if an inapporpriate button is pushed */
+          XtVaSetValues (menu->type_widgets[acc->type], XmNset, True, NULL);
+          break;
+
+       case EQUITY:
+          XtSetSensitive (menu->type_widgets[BANK],      False);
+          XtSetSensitive (menu->type_widgets[CASH],      False);
+          XtSetSensitive (menu->type_widgets[ASSET],     False);
+          XtSetSensitive (menu->type_widgets[PORTFOLIO], False);
+          XtSetSensitive (menu->type_widgets[MUTUAL],    False);
+          XtSetSensitive (menu->type_widgets[LIABILITY], False);
+          XtSetSensitive (menu->type_widgets[CREDIT],    False);
+          XtSetSensitive (menu->type_widgets[INCOME],    False);
+          XtSetSensitive (menu->type_widgets[EXPENSE],   False);
+          XtSetSensitive (menu->type_widgets[EQUITY],    True);
+
+          /* unset unavailable buttons */
+          for (i=0; i<NUM_ACCOUNT_TYPES; i++) {
+             XtVaSetValues (menu->type_widgets[i],      XmNset, False, NULL);
+          }
+
+          /* set a default, if an inapporpriate button is pushed */
+          XtVaSetValues (menu->type_widgets[acc->type], XmNset, True, NULL);
+          break;
+
+    }
+  } else {
+     XtSetSensitive (menu->type_widgets[BANK],      True);
+     XtSetSensitive (menu->type_widgets[CASH],      True);
+     XtSetSensitive (menu->type_widgets[ASSET],     True);
+     XtSetSensitive (menu->type_widgets[CREDIT],    True);
+     XtSetSensitive (menu->type_widgets[LIABILITY], True);
+     XtSetSensitive (menu->type_widgets[PORTFOLIO], True);
+     XtSetSensitive (menu->type_widgets[MUTUAL],    True);
+     XtSetSensitive (menu->type_widgets[INCOME],    True);
+     XtSetSensitive (menu->type_widgets[EXPENSE],   True);
+     XtSetSensitive (menu->type_widgets[EQUITY],    True);
+  }
+}
+
+/********************** END OF FILE *********************************\
+\********************************************************************/

@@ -24,41 +24,52 @@
 \********************************************************************/
 
 #include <Xm/Xm.h>
-#include <Xm/PanedW.h>
+#include <Xm/ArrowB.h>
 #include <Xm/Form.h>
-#include <Xm/MainW.h>
 #include <Xm/Label.h>
 #include <Xm/LabelGP.h>
 #include <Xm/List.h>
+#include <Xm/MainW.h>
+#include <Xm/PanedW.h>
 #include <Xm/RowColumn.h>
+#include <Xm/Text.h>
 #include <Xbae/Matrix.h>
-#include "main.h"
-#include "util.h"
-#include "Data.h"
+
 #include "Account.h"
-#include "FileIO.h"
-#include "FileBox.h"
 #include "BuildMenu.h"
+#include "Data.h"
+#include "FileBox.h"
+#include "FileIO.h"
+#include "HelpWindow.h"
+#include "main.h"
 #include "MainWindow.h"
 #include "RegWindow.h"
+#include "util.h"
 #include "XferWindow.h"
-#include "HelpWindow.h"
 
 /** PROTOTYPES ******************************************************/
-void closeMainWindow( Widget mw, XtPointer cd, XtPointer cb );
-void listCB( Widget mw, XtPointer cd, XtPointer cb );
-void fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb );
-void accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb );
-void helpMenubarCB( Widget mw, XtPointer cd, XtPointer cb );
+static void xaccMainWindowRedisplayBalance (void);
+static void closeMainWindow ( Widget mw, XtPointer cd, XtPointer cb );
+static void listCB          ( Widget mw, XtPointer cd, XtPointer cb );
+static void expandListCB    ( Widget mw, XtPointer cd, XtPointer cb );
+
+static void ArrowEventCallback (Widget w, XtPointer pClientData,
+                                XEvent *event, Boolean *ContDispatch);
 
 /** GLOBALS *********************************************************/
-extern Data   *data;
 extern char   *datafile;
 extern Widget toplevel;
-int    row;              /* The selected row of accountlist */
-Widget accountlist;
-char   *type[] = { "Bank","Cash","Asset","Credit Card",
-		   "Liability","Portfolio","Mutual Fund" };
+static Account *selected_acc = NULL;          /* The selected account */
+static Widget accountlist;
+static Widget baln_widget;
+
+/* the english-language names here should match 
+ * the enumerated types in Account.h */
+char *account_type_name[] = 
+       { "Bank","Cash","Asset","Credit Card",
+         "Liability","Stock","Mutual Fund",
+         "Income", "Expense", "Equity" };
+
 /* Pixel values are used to color the balance field text 
  * when computing the balance */
 #ifndef USE_NO_COLOR
@@ -67,6 +78,133 @@ char   *type[] = { "Bank","Cash","Asset","Credit Card",
 Pixel   posPixel, negPixel;
 Boolean havePixels = False;
 #endif
+
+#define XACC_MAIN_NUM_COLS 4
+#define XACC_MAIN_ACC_ARRW 0
+#define XACC_MAIN_ACC_NAME 1
+#define XACC_MAIN_ACC_TYPE 2
+#define XACC_MAIN_ACC_BALN 3
+
+/********************************************************************\
+ * xaccMainWindowAddAcct                                            *
+ *                                                                  *
+ * Args:   none                                                     *
+ * Return: none                                                     *
+\********************************************************************/
+void
+xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
+{
+
+  int   i, j, currow;
+  char  buf[BUFSIZE];
+  
+  /* Add all the top-level accounts to the list */
+  for( i=0; i<grp->numAcc; i++ )
+    {
+    String cols[XACC_MAIN_NUM_COLS];
+    Transaction *trans=NULL;
+    Account *acc = getAccount( grp, i );
+    double dbalance;
+    
+    /* fill in the arrow and the account type fileds */
+    cols[XACC_MAIN_ACC_ARRW] = XtNewString("");
+    cols[XACC_MAIN_ACC_TYPE] = account_type_name[acc->type];
+
+    /* fill in the account name field, indenting for sub-accounts */
+    buf[0] = 0x0;
+    for (j=0; j<depth; j++) {
+       strcat (buf, "    ");
+    }
+    strcat (buf, acc->accountName);
+    cols[XACC_MAIN_ACC_NAME] = XtNewString(buf);
+
+    /* fill in the balance column */
+    dbalance = acc->balance;
+    /* if the account has children, add in thier balance */
+    if (acc->children) {
+       dbalance += acc->children->balance;
+    }
+    
+    /* the meaning of "balance" for income and expense 
+     * accounts is reversed, since a deposit of a paycheck in a
+     * bank account will appear as a debit of the corresponding
+     * amount in the income account */
+    if ((EXPENSE == acc->type) ||
+        (INCOME  == acc->type) ) {
+      dbalance = -dbalance;
+    }
+    if( 0.0 > dbalance )
+      sprintf( buf,"-$%.2f\0", DABS(dbalance) );
+    else
+      sprintf( buf,"$%.2f\0", DABS(dbalance) );
+    cols[XACC_MAIN_ACC_BALN] = XtNewString(buf);
+    
+    XtVaGetValues (acctrix, XmNrows, &currow, NULL);
+    XbaeMatrixAddRows( acctrix, currow, cols, NULL, NULL, 1 );
+    
+#ifndef USE_NO_COLOR
+    /* Set the color of the text, depending on whether the
+     * balance is negative or positive */
+    if( 0.0 > dbalance )
+      XbaeMatrixSetCellColor( acctrix, currow, XACC_MAIN_ACC_BALN, negPixel );
+    else
+      XbaeMatrixSetCellColor( acctrix, currow, XACC_MAIN_ACC_BALN, posPixel );    
+#endif
+
+    /* associate a pointer to the actual account with the row */
+    XbaeMatrixSetRowUserData ( acctrix, currow, (XtPointer *) acc); 
+
+    /* If the account has sub-accounts, then add an arrow button 
+     * next to the account name.  Clicking on the arrow button will 
+     * expand the display to list the sub-accounts.  The arrow button
+     * will be a cell-wdiget, and will be stored with the account 
+     * structure */
+    if (acc->children) {
+       /* if the arrow button doesn't exist, add it */
+       if (NULL == acc->arrowb) {
+          acc->arrowb = XtVaCreateManagedWidget ("accarrow", 
+                                      xmArrowButtonWidgetClass, acctrix,
+                                      XmNshadowThickness, 0,
+                                      XmNarrowDirection, XmARROW_DOWN, 
+                                      NULL);
+       }
+       XbaeMatrixSetCellWidget (acctrix, currow, XACC_MAIN_ACC_ARRW, acc->arrowb);
+       XtManageChild (acc->arrowb);
+
+       XtAddCallback (acc->arrowb, XmNactivateCallback, 
+                      expandListCB, (XtPointer *) acc);
+
+#define __XACC_DO_ARROW_CALLBACK
+#ifdef  __XACC_DO_ARROW_CALLBACK
+        /* add a button press event handler just in case the 
+         * XmNactivate callback is broken. See notes for the
+         * ArrowEventCallback for details.  -- Linas */
+        acc->PreviousArrowReason = 0;
+	XtAddEventHandler(acc->arrowb, 
+			  ButtonPressMask | ButtonReleaseMask,
+			  False, (XtEventHandler) ArrowEventCallback,
+			  (XtPointer) acc);
+#endif /* __XACC_DO_ARROW_CALLBACK */
+
+
+       /* recursively display children accounts */
+       if (acc->expand) {
+          xaccMainWindowAddAcct (acctrix, acc->children, depth+1);
+       }
+    } else {
+       /* if there are no children, make sure that there is no
+        * arrow too.  This situation can occur if a sub-account
+        * has been deleted. 
+        */
+       if (acc->arrowb) {
+          XbaeMatrixSetCellWidget (acctrix, currow, XACC_MAIN_ACC_ARRW, NULL);
+          XtUnmanageChild (acc->arrowb);
+          XtDestroyWidget (acc->arrowb);
+          acc->arrowb = NULL;
+       }
+    }
+  }
+}
 
 /********************************************************************\
  * refreshMainWindow                                                *
@@ -79,44 +217,117 @@ Boolean havePixels = False;
 void
 refreshMainWindow( void )
   {
-  int   i,nrows;
-  char  buf[BUFSIZE];
+
+  int   nrows;
+  AccountGroup *grp = topgroup;    /* hack -- should pass as argument ... */
   
   XtVaGetValues( accountlist, XmNrows, &nrows, NULL );
   XbaeMatrixDeleteRows( accountlist, 0, nrows );
   
-  /* Add all the accounts to the list */
-  for( i=0; i<data->numAcc; i++ )
-    {
-    String rows[3];
-    Transaction *trans=NULL;
-    Account *acc = getAccount( data, i );
-    double dbalance;
-    
-    xaccRecomputeBalance (acc);
-    dbalance = acc->balance;
-    
-    if( 0.0 > dbalance )
-      sprintf( buf,"-$%.2f\0", DABS(dbalance) );
-    else
-      sprintf( buf,"$%.2f\0", DABS(dbalance) );
-    
-    rows[0] = acc->accountName;
-    rows[1] = type[acc->type];
-    rows[2] = XtNewString(buf);
-    XtVaGetValues( accountlist, XmNrows, &nrows, NULL );
-    XbaeMatrixAddRows( accountlist, nrows, rows, NULL, NULL, 1 );
-    
-#ifndef USE_NO_COLOR
-    /* Set the color of the text, depending on whether the
-     * balance is negative or positive */
-    if( 0.0 > dbalance )
-      XbaeMatrixSetCellColor( accountlist, nrows, 2, negPixel );
-    else
-      XbaeMatrixSetCellColor( accountlist, nrows, 2, posPixel );    
-#endif
+  xaccRecomputeGroupBalance (grp);  
+  xaccMainWindowAddAcct (accountlist, grp, 0);
+  xaccMainWindowRedisplayBalance ();
+}
+
+/********************************************************************\
+\********************************************************************/
+
+/* --------------------------------------------------------------------
+ * This callback is provided in order to have a separate means of detecting
+ * the arrow button activation.  It seems that some (all?) versions of Motif
+ * have trouble correctly computing the XmCR_ACTIVATE reason for the arrow
+ * button.  In particular, this occurs when the ArrowButton widget has been
+ * reparented.  (XbaeMatrix will reparent a widget so that it will
+ * be properly clipped, e.g. when it is inside of a scrolling window.
+ * The clipping is vitally important to get the widget properly drawn).
+ * 
+ * In a way, one might argue that it is not surpirsing that a reparented
+ * window (XReparentWindow) will confuse the widget: after all, the widget
+ * coordinets with respect to the parent widget differ from the window
+ * coordinates compared to the parent window.  However, this argument
+ * seems flawed: Motif seems to be able to correctly compute and deliver
+ * the XmCR_ARM reason when a button is pressed.  Why can't it get the
+ * the XmCR_ACTIVATE reason when the very same button is relased?
+ * Also, the very same versions of Motif have no problem recognizing
+ * that a button press and release has occured in the window, and have
+ * no problem calling this callback.  So, somehow, the activate computation 
+ * seems broken.
+ * 
+ * Thus, this callback provides an alternate way of getting the arrow
+ * button to work properly.  -- Linas Vepstas October 1997
+ */
+
+static void 
+ArrowEventCallback(Widget w, XtPointer pClientData,
+                   XEvent *event, Boolean *ContDispatch)
+
+{
+    Account *acc = (Account *) pClientData;
+    XButtonEvent *bev = (XButtonEvent *) event;
+    XmArrowButtonCallbackStruct many;
+
+    /* if its not the left mouse button, return */
+    if (1 != bev->button) return;
+
+    /* emulate the arm and activate callbacks */
+    switch ( event->type ) {
+        case ButtonPress:
+            many.reason = XmCR_ARM;
+            many.event = event;
+            many.click_count = 1;
+            expandListCB (w, pClientData, (XtPointer) &many);
+            break;
+        case ButtonRelease:
+            many.reason = XmCR_ACTIVATE;
+            many.event = event;
+            many.click_count = 1;
+            expandListCB (w, pClientData, (XtPointer) &many);
+            break;
     }
+} /* ArrowEventCallback */
+
+
+/********************************************************************\
+\********************************************************************/
+
+static void 
+expandListCB( Widget mw, XtPointer pClientData, XtPointer cb)
+{
+  XmAnyCallbackStruct *info = (XmAnyCallbackStruct *) cb;
+  Account *acc = (Account *)pClientData;
+
+  /* a "fix" to avoid double invocation */
+  switch ( info->reason ) {
+      case XmCR_ACTIVATE:
+          /* avoid double invocation */
+          if (XmCR_ACTIVATE == acc->PreviousArrowReason) return;
+          acc -> PreviousArrowReason = XmCR_ACTIVATE;
+          break;
+
+      default:
+      case XmCR_ARM:
+          /* avoid double invocation */
+          if (XmCR_ARM == acc->PreviousArrowReason) return;
+          acc -> PreviousArrowReason = XmCR_ARM;
+          return;
   }
+
+  /* change arrow direction, mark account as needing expansion */
+  if (acc->expand) {
+     acc->expand = 0;
+     XtVaSetValues (mw, 
+                    XmNarrowDirection, XmARROW_DOWN, 
+                    NULL);
+  } else {
+     acc->expand = 1;
+     XtVaSetValues (mw, 
+                    XmNarrowDirection, XmARROW_UP, 
+                    NULL);
+  }
+
+  /* finally, redraw the main window */
+  refreshMainWindow ();
+}
 
 /********************************************************************\
  * mainWindow -- the main window... (normally) the first window     *
@@ -129,10 +340,11 @@ refreshMainWindow( void )
  * Global: data        - the data from the datafile                 *
  *         accountlist - the widget that has the list of accounts   *
 \********************************************************************/
+
 void
 mainWindow( Widget parent )
   {
-  Widget   mainwindow,menubar,actionform,controlform,pane,widget;
+  Widget   mainwindow,menubar,actionform,buttonform,pane,button,widget;
   int      position;
   
   /******************************************************************\
@@ -183,6 +395,8 @@ mainWindow( Widget parent )
       helpMenubarCB, (XtPointer)HMB_ABOUT, (MenuItem *)NULL },
     { "Help...",            &xmPushButtonWidgetClass, 'H', NULL, NULL, 
       helpMenubarCB, (XtPointer)HMB_MAIN,  (MenuItem *)NULL },
+    { "Accounts...",        &xmPushButtonWidgetClass, 'H', NULL, NULL, 
+      helpMenubarCB, (XtPointer)HMB_ACC,  (MenuItem *)NULL },
     { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL,
       NULL,         NULL,                    (MenuItem *)NULL },
     { "License...",         &xmPushButtonWidgetClass, 'L', NULL, NULL, 
@@ -193,10 +407,8 @@ mainWindow( Widget parent )
   mainwindow = XtVaCreateManagedWidget( "mainwindow", 
 					xmMainWindowWidgetClass, parent, 
 					XmNdeleteResponse,       XmDESTROY,
-/*linas hack */
-                                 XmNwidth,     650,
-                                 XmNheight,    300,
-
+                                        XmNwidth,     450,
+                                        XmNheight,    240,
 					NULL );
   
   /* Umm... this doesn't seem to be getting called */
@@ -271,19 +483,22 @@ mainWindow( Widget parent )
    * use the matrix instead of a list to get the accounts
    * up in columns */
     {
-    String   labels[3]          = {"Account Name","Type","Balance"};
-    short    colWidths[]        = {16,10,8};
-    unsigned char alignments[3] = {XmALIGNMENT_BEGINNING,
+    String   labels[XACC_MAIN_NUM_COLS]     = {"", "Account Name","Type","Balance"};
+    short    colWidths[]        = {2,20,10,12};
+    unsigned char alignments[XACC_MAIN_NUM_COLS] = {
+                                   XmALIGNMENT_CENTER,
+                                   XmALIGNMENT_BEGINNING,
 				   XmALIGNMENT_CENTER,
 				   XmALIGNMENT_END};
     
     accountlist
       = XtVaCreateWidget( "list",
 			  xbaeMatrixWidgetClass,  actionform,
-			  XmNvisibleRows,         7,
-			  XmNcolumns,             3,
+			  XmNvisibleRows,         8,
+			  XmNcolumns,             XACC_MAIN_NUM_COLS,
 			  XmNcolumnWidths,        colWidths,
 			  XmNcolumnAlignments,    alignments,
+			  XmNcolumnLabelAlignments,    alignments,
 			  XmNcolumnLabels,        labels,
 			  XmNtraversalOn,         False,
 			  XmNfill,                True,
@@ -307,9 +522,6 @@ mainWindow( Widget parent )
                    accountMenubarCB, (XtPointer)AMB_OPEN );
     }
  
-  refreshMainWindow();
-  XtManageChild(accountlist);
-  
   /******************************************************************\
    * The button area -- has buttons to create a new account, or     *
    * delete an account, or whatever other button I think up         *
@@ -320,22 +532,22 @@ mainWindow( Widget parent )
   /* create form that will contain most everything in this window...
    * The fractionbase divides the form into segments, so we have
    * better control over where to put the buttons */
-  controlform = XtVaCreateWidget( "form", 
+  buttonform = XtVaCreateWidget( "form", 
 				  xmFormWidgetClass, pane,
-				  XmNfractionBase,   5,
+				  XmNfractionBase,   22,
 				  NULL );
   
   position = 0;                    /* puts the buttons in the right place */
   
   /* The "Open" button */
   widget = XtVaCreateManagedWidget( "Open", 
-				    xmPushButtonWidgetClass, controlform,
+				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNbottomAttachment,   XmATTACH_FORM,
 				    XmNleftAttachment,     XmATTACH_POSITION,
 				    XmNleftPosition,       position,
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      position+1,
+				    XmNrightPosition,      position+3,
 				    XmNshowAsDefault,      True,
 				    NULL );
 
@@ -343,15 +555,15 @@ mainWindow( Widget parent )
 		 accountMenubarCB, (XtPointer)AMB_OPEN );
 
   /* The "New" button, to create a new account */
-  position ++;
+  position += 3;
   widget = XtVaCreateManagedWidget( "New", 
-				    xmPushButtonWidgetClass, controlform,
+				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNbottomAttachment,   XmATTACH_FORM,
 				    XmNleftAttachment,     XmATTACH_POSITION,
 				    XmNleftPosition,       position,
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      position+1,
+				    XmNrightPosition,      position+3,
 				    XmNshowAsDefault,      True,
 				    NULL );
   
@@ -359,15 +571,15 @@ mainWindow( Widget parent )
 		 accountMenubarCB, (XtPointer)AMB_NEW );
   
   /* The "Edit" button */
-  position ++;
+  position += 3;
   widget = XtVaCreateManagedWidget( "Edit", 
-				    xmPushButtonWidgetClass, controlform,
+				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNbottomAttachment,   XmATTACH_FORM,
 				    XmNleftAttachment,     XmATTACH_POSITION,
 				    XmNleftPosition,       position,
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      position+1,
+				    XmNrightPosition,      position+3,
 				    XmNshowAsDefault,      True,
 				    NULL );
   
@@ -375,42 +587,81 @@ mainWindow( Widget parent )
 		 accountMenubarCB, (XtPointer)AMB_EDIT );
   
   /* The "Delete" button */
-  position ++;
+  position += 3;
   widget = XtVaCreateManagedWidget( "Delete", 
-				    xmPushButtonWidgetClass, controlform,
+				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNbottomAttachment,   XmATTACH_FORM,
 				    XmNleftAttachment,     XmATTACH_POSITION,
 				    XmNleftPosition,       position,
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      position+1,
+				    XmNrightPosition,      position+3,
 				    XmNshowAsDefault,      True,
 				    NULL );
   
   XtAddCallback( widget, XmNactivateCallback, 
 		 accountMenubarCB, (XtPointer)AMB_DEL );
+
+  button = widget;
   
+  
+  /* ---------------------------------------------------------------- */
+
+  /* The Asset and Profit field labels: */ 
+  position +=5;
+  widget = XtVaCreateManagedWidget( "Assets:",
+				    xmLabelGadgetClass,    buttonform,
+				    XmNtopAttachment,      XmATTACH_FORM,
+				    XmNleftAttachment,     XmATTACH_POSITION,
+				    XmNleftPosition,       position,
+				    XmNrightAttachment,    XmATTACH_POSITION,
+				    XmNrightPosition,      position+3,
+				    NULL );
+  widget = XtVaCreateManagedWidget( "Profits:",
+				    xmLabelGadgetClass,    buttonform,
+				    XmNtopAttachment,      XmATTACH_WIDGET,
+				    XmNtopWidget,          widget,
+				    XmNbottomAttachment,   XmATTACH_FORM,
+				    XmNleftAttachment,     XmATTACH_POSITION,
+				    XmNleftPosition,       position,
+				    XmNrightAttachment,    XmATTACH_POSITION,
+				    XmNrightPosition,      position+3,
+				    NULL );
+  
+  /* and the balance fields: */
+  position += 3;
+  widget = XtVaCreateManagedWidget( "text",
+				    xmTextWidgetClass,     buttonform,
+				    XmNeditable,           False,
+				    XmNeditMode,           XmMULTI_LINE_EDIT,
+				    XmNcursorPositionVisible, False,
+				    XmNmarginHeight,       0,
+				    XmNmarginWidth,        1,
+				    XmNtopAttachment,      XmATTACH_FORM,
+				    XmNbottomAttachment,   XmATTACH_FORM,
+				    XmNleftAttachment,     XmATTACH_POSITION,
+				    XmNleftPosition,       position,
+				    XmNrightAttachment,    XmATTACH_POSITION,
+				    XmNrightPosition,      position+5,
+				    NULL );
+  baln_widget = widget;
+  
+  /* ---------------------------------------------------------------- */
+    
+  refreshMainWindow();
+  XtManageChild(accountlist);
   
   /* Fix button area of the pane to its current size, and not let 
    * it resize. */
-  XtManageChild( controlform );
+  XtManageChild( buttonform );
     {
     Dimension h;
-    XtVaGetValues( widget, XmNheight, &h, NULL );
-    XtVaSetValues( controlform, XmNpaneMaximum, h, XmNpaneMinimum, h, NULL );
+    XtVaGetValues( button, XmNheight, &h, NULL );
+    XtVaSetValues( buttonform, XmNpaneMaximum, h, XmNpaneMinimum, h, NULL );
     }
   
-  /* Fix action area of the pane to its current size, and not let 
-   * it resize. */
   XtManageChild( actionform );
-    {
-    Dimension h;
-    XtVaGetValues( accountlist, XmNheight, &h, NULL );
-    XtVaSetValues( actionform, XmNpaneMaximum, h, XmNpaneMinimum, h, NULL );
-    }
-    
-  /******************************************************************/
-  XtManageChild(pane);
+  XtManageChild( pane );
   }
 
 /********************************************************************\
@@ -427,10 +678,66 @@ void
 closeMainWindow( Widget mw, XtPointer cd, XtPointer cb )
   {
   
+#ifdef __XACC_DO_ARROW_CALLBACK
+  /* this remove core-dumps motif, Don't know why --linas */
+  /* XtRemoveEventHandler(mw->arrowb, 
+   *                    ButtonPressMask | ButtonReleaseMask,
+   *                    True, (XtEventHandler) ArrowEventCallback,
+   *                    (XtPointer) mw);
+   */
+#endif /* __XACC_DO_ARROW_CALLBACK */
+
   DEBUG("closed MainWindow");
   DEBUGCMD(printf(" coresize = %d\n",_coresize()));
   exit(0);
   }
+
+/********************************************************************\
+ * compute profits and asssets
+\********************************************************************/
+static void
+xaccMainWindowRedisplayBalance (void)
+{
+   int i;
+   double  assets  = 0.0;
+   double  profits = 0.0;
+   char buf[BUFSIZE];
+   AccountGroup *grp = topgroup;
+   Account *acc;
+   
+   for (i=0; i<grp->numAcc; i++) {
+      acc = grp->account[i];
+  
+      switch (acc->type) {
+         case BANK:
+         case CASH:
+         case ASSET:
+         case PORTFOLIO:
+         case MUTUAL:
+         case CREDIT:
+         case LIABILITY:
+            assets += acc->balance;
+            if (acc->children) {
+               assets += acc->children->balance; 
+            }
+            break;
+         case INCOME:
+         case EXPENSE:
+            profits -= acc->balance; /* flip the sign !! */
+            if (acc->children) {
+               profits -= acc->children->balance; /* flip the sign !! */
+            }
+            break;
+         case EQUITY:
+         default:
+            break;
+      }
+   }
+  
+   sprintf( buf, "$ %.2f\n$ %.2f", assets, profits);
+     
+   XmTextSetString( baln_widget, buf );
+}
 
 /********************************************************************\
  * listCB -- makes the matrix widget behave like a list widget      * 
@@ -441,7 +748,7 @@ closeMainWindow( Widget mw, XtPointer cd, XtPointer cb )
  * Return: none                                                     * 
  * Global: accountlist - the widget that has the list of accounts   *
 \********************************************************************/
-void
+static void
 listCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   XbaeMatrixEnterCellCallbackStruct *cbs =
@@ -451,9 +758,10 @@ listCB( Widget mw, XtPointer cd, XtPointer cb )
   cbs->doit = False;
   cbs->map  = False;
   
-  row = cbs->row;
+  selected_acc = (Account *) XbaeMatrixGetRowUserData (accountlist, cbs->row);
+
   XbaeMatrixDeselectAll(accountlist);
-  XbaeMatrixSelectRow( accountlist, row );
+  XbaeMatrixSelectRow( accountlist, cbs->row );
   }
 
 
@@ -471,6 +779,7 @@ listCB( Widget mw, XtPointer cd, XtPointer cb )
 void
 fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
   {
+  AccountGroup *grp = topgroup;
   int button = (int)cd;
   
   /*
@@ -485,54 +794,59 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
   switch( button )
     {
     case FMB_NEW:
-      DEBUG("FMB_NEW");
-      if( (!(data->saved)) && (datafile != NULL) )
+      DEBUG("FMB_NEW\n");
+      if( xaccAccountGroupNotSaved (grp) )
         {
-        char *msg = SAVE_MSG;
-        if( verifyBox(toplevel,msg) )
+        if( verifyBox (toplevel, FMB_SAVE_MSG) )
           fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
         }
       datafile = NULL;
-      freeData(data);
-      data = mallocData();
-      data->new = True;            /* so we have to do a "SaveAs" when
+      freeAccountGroup (grp);
+      grp = mallocAccountGroup();
+      grp->new = True;             /* so we have to do a "SaveAs" when
                                     * the file is first saved */
+      topgroup = grp;
       break;
 
     case FMB_OPEN: {
       char * newfile;
-      DEBUG("FMB_OPEN");
-      if( (!(data->saved)) && (datafile != NULL) )
-        {
-        char *msg = SAVE_MSG;
-        if( verifyBox(toplevel,msg) )
+      DEBUG("FMB_OPEN\n");
+      if( xaccAccountGroupNotSaved (grp) ) {
+        if( verifyBox(toplevel, FMB_SAVE_MSG) ) {
           fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
+          }
         }
       newfile = fileBox(toplevel,OPEN);
       if (newfile) {
         datafile = newfile;
-        freeData(data);
+        freeAccountGroup (grp);
       
         /* load the accounts from the users datafile */
-        data = readData(datafile);
+        grp = readData (datafile);
       
-        if( data == NULL ) {
+        if( NULL == grp ) {
           /* the file could not be found */
-          data = mallocData();
+          grp = mallocAccountGroup();
         }
+        topgroup = grp;
       }
       break;
     }
     case FMB_SAVE:
-      DEBUG("FMB_SAVE");
-      /* ??? Somehow make sure all in-progress edits get committed! */
-      writeData( datafile, data );
-      data->saved = True;
+      DEBUG("FMB_SAVE\n");
+      /* hack alert -- Somehow make sure all in-progress edits get committed! */
+      if (NULL == datafile) {
+        fileMenubarCB( mw, (XtPointer)FMB_SAVEAS, cb );
+        break;
+      }
+
+      writeData( datafile, grp );
+      xaccAccountGroupMarkSaved (grp);
       break;
 
     case FMB_SAVEAS: {
       char * newfile;
-      DEBUG("FMB_SAVEAS");
+      DEBUG("FMB_SAVEAS\n");
 
       newfile = fileBox(toplevel,OPEN);
       if ( newfile ) {
@@ -542,39 +856,39 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       break;
     }
     case FMB_QUIT:
-      DEBUG("FMB_QUIT");
+      DEBUG("FMB_QUIT\n");
       {
       Account *acc;
       int i=0;
-      while( (acc=getAccount(data,i++)) != NULL )
+      while( (acc=getAccount (grp,i++)) != NULL )
         {
         if( acc->regData != NULL )
           {
-          /* ??? */
+          /* ??? -- hack alert -- should free */
           acc->regData = NULL;
           }
         if( acc->recnData != NULL )
           {
-          /* ??? */
+          /* ??? -- hack alert -- should free */
           acc->recnData = NULL;
           }
         }
       
-      if( (!(data->saved)) && (datafile != NULL) )
+      if( !(grp->saved) )
         {
-        char *msg = SAVE_MSG;
-        if( verifyBox(toplevel,msg) )
+        if( verifyBox(toplevel, FMB_SAVE_MSG) )
           fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
         }
       
-      freeData(data);
+      freeAccountGroup (grp);
+      topgroup = NULL;
       XtUnmapWidget(toplevel);     /* make it disappear quickly */
       XtDestroyWidget(toplevel);
       return;                      /* to avoid the refreshMainWindow */
       }
       break;
     default:
-      DEBUG("We shouldn't be here!");
+      PERR("fileMenubarCB(): We shouldn't be here!");
     }
   refreshMainWindow();
   }
@@ -586,9 +900,9 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
  *         cd - const that lets us know which choice was selected   * 
  *         cb -                                                     * 
  * Return: none                                                     * 
- * Global: data        - the data from the datafile                 *
- *         row         - the selected row number                    *
- *         toplevel    - the toplevel widget                        *
+ * Global: data         - the data from the datafile                *
+ *         selected_acc - the selected account                      *
+ *         toplevel     - the toplevel widget                       *
 \********************************************************************/
 void
 accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
@@ -596,6 +910,7 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
   int button = (int)cd;
   int *posList;
   int numPos;
+  AccountGroup *grp = topgroup;
   
   /*
    * which of the file menubar options was chosen
@@ -609,18 +924,15 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
   switch( button )
     {
     case AMB_NEW:
-      DEBUG("AMB_NEW");
+      DEBUG("AMB_NEW\n");
       accWindow(toplevel);
       break;
     case AMB_OPEN:
-      DEBUG("AMB_OPEN");
+      DEBUG("AMB_OPEN\n");
         {
-        Account *acc = getAccount(data,row);
+        Account *acc = selected_acc;
         if( NULL == acc ) {
-          int make_new = verifyBox (toplevel,
-"Do you want to create a new account?\n\
-If not, then please select an account\n\
-account to open in the main window.\n");
+          int make_new = verifyBox (toplevel, ACC_NEW_MSG);
           if (make_new) {
             accWindow(toplevel);
           }
@@ -633,48 +945,49 @@ account to open in the main window.\n");
       }
       break;
     case AMB_EDIT:
-      DEBUG("AMB_EDIT");
+      DEBUG("AMB_EDIT\n");
       {
-        Account *acc = getAccount(data,row);
+        Account *acc = selected_acc;
         if( NULL == acc ) {
-          errorBox (toplevel,
-"To edit an account, you must first \n\
-choose an account to delete.\n");
+          errorBox (toplevel, ACC_EDIT_MSG);
         } else {
-          editAccWindow( toplevel, getAccount(data,row) );
+          editAccWindow( toplevel, acc );
         }
       }
       break;
     case AMB_DEL:
-      DEBUG("AMB_DEL");
+      DEBUG("AMB_DEL\n");
         {
-        Account *acc = getAccount(data,row);
+        Account *acc = selected_acc;
         if( NULL == acc ) {
-          errorBox (toplevel,
-"To delete an account, you must first \n\
-choose an account to delete.\n");
+          errorBox (toplevel, ACC_DEL_MSG);
         } else {
-          char *msg = "Are you sure you want to delete this account?";
+          char msg[1000];
+          sprintf (msg, 
+                   "Are you sure you want to delete the %s account?", 
+                   acc->accountName);
           if( verifyBox(toplevel,msg) ) {
-            freeAccount( removeAccount(data,row) );
+            xaccRemoveAccount (selected_acc);
+            freeAccount (selected_acc);
+            selected_acc = NULL;
             refreshMainWindow();
             }
           }
         }
       break;
     case AMB_TRNS:
-      DEBUG("AMB_TRNS");
+      DEBUG("AMB_TRNS\n");
       xferWindow(toplevel);
       break;
     case AMB_RPRT:
-      DEBUG("AMB_RPRT");
+      DEBUG("AMB_RPRT\n");
       simpleReportWindow(toplevel);
       break;
     case AMB_CAT:
-      DEBUG("AMB_CAT");
+      DEBUG("AMB_CAT\n");
       break;
     default:
-      DEBUG("We shouldn't be here!");
+      PERR ("AccountMenuBarCB(): We shouldn't be here!\n");
     }
   }
 
@@ -709,6 +1022,10 @@ helpMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       DEBUG("HMB_ABOUT");
       helpWindow( toplevel, "About", HH_ABOUT );
       break;
+    case HMB_ACC:
+      DEBUG("HMB_ACC");
+      helpWindow( toplevel, "Help", HH_ACC );
+      break;
     case HMB_REGWIN:
       /* When the user selects "Help" in the RegWindow */
       DEBUG("HMB_REGWIN");
@@ -738,3 +1055,5 @@ helpMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       DEBUG("We shouldn't be here!");
     }
   }
+
+/********************* END OF FILE **********************************/

@@ -33,12 +33,13 @@
  *                                                                  *
 \********************************************************************/
 
-#include <Xm/Xm.h>
 #include <fcntl.h>
-#include "main.h"
-#include "util.h"
+#include <Xm/Xm.h>
+
 #include "Account.h"
 #include "Data.h"
+#include "main.h"
+#include "util.h"
 
 #define PERMS   0666
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
@@ -356,19 +357,19 @@ char * xaccReadQIFTransaction (int fd, Transaction *trans)
  * Args:   datafile - the file to load the data from                * 
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
-Data *
+AccountGroup *
 xaccReadQIFData( char *datafile )
   {
   int  fd;
   int  skip = 0;
   char * qifline;
-  Data *data = mallocData();
+  AccountGroup *grp = mallocAccountGroup();
   
   fd = open( datafile, RFLAGS, 0 );
   if( fd == -1 )
     {
     ERROR();
-    freeData(data);
+    freeAccountGroup(grp);
     return NULL;
     }
   
@@ -378,7 +379,7 @@ xaccReadQIFData( char *datafile )
     {
     ERROR();
     close(fd);
-    freeData(data);
+    freeAccountGroup(grp);
     return NULL;
     }
   
@@ -428,7 +429,7 @@ xaccReadQIFData( char *datafile )
               freeAccount(acc); 
               continue;
            }
-           insertAccount( data, acc );
+           insertAccount( grp, acc );
    
            /* spin until start of transaction records */
            /* in theory, in a perfect file, the transaction data follows immediately */
@@ -467,7 +468,7 @@ xaccReadQIFData( char *datafile )
    }
 
    close(fd);
-   return data;
+   return grp;
 }
 
 /* ========================== END OF FILE ======================= */

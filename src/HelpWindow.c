@@ -22,8 +22,6 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#define USEDEBUG
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
