@@ -34,6 +34,12 @@ exec @-GUILE-@ -s "$0" "$@"
                 ":"
                 "@-GNC_SCM_INSTALL_DIR-@")))
 
+(setenv "PATH"
+        (apply string-append
+               "@-GNC_SCRIPT_OVERRIDE_DIR-@"
+               ":"
+               (list (or (getenv "PATH") ""))))
+
 (if (null? (program-arguments))
     (exit 0)
     (apply execlp (cadr (program-arguments)) (cdr (program-arguments))))
