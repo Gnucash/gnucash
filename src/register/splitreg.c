@@ -158,6 +158,7 @@ configLayout (SplitRegister *reg)
    int type = (reg->type) & REG_TYPE_MASK;
    int show_recs = (reg->type) & REG_SHOW_RECS;
    int show_tdetail = (reg->type) & REG_SHOW_TDETAIL;
+   int show_sdetail = (reg->type) & REG_SHOW_SDETAIL;
 
    /* perform a bsic layout that's valid for most
     * of the ledgers; then customize with case 
@@ -179,9 +180,9 @@ configLayout (SplitRegister *reg)
    SET (XFRM_CELL,  2,  0, 14,  XFRM_STR);
    SET (XTO_CELL,   2,  0, 14,  XFTO_STR);
    SET (MEMO_CELL,  3,  0, 29,  DESC_STR);
-   SET (RECS_CELL, -1,  -1,  1,  "R");       /* hide this one for now ... */
-   SET (DEBT_CELL,  5,  0, 12,  DEBIT_STR);
-   SET (CRED_CELL,  6,  0, 12,  CREDIT_STR);
+   SET (RECS_CELL, -1, -1,  1,  "R");     
+   SET (DEBT_CELL, -1, -1, 12,  DEBIT_STR);
+   SET (CRED_CELL, -1, -1, 12,  CREDIT_STR);
    SET (PRIC_CELL, -1, -1,  9,  PRICE_STR);
    SET (VALU_CELL, -1, -1, 10,  VALUE_STR);
 
@@ -206,6 +207,10 @@ configLayout (SplitRegister *reg)
          SET (VALU_CELL, -1, -1, 10,  VALUE_STR);
          SET (SHRS_CELL, -1, -1, 10,  TOT_SHRS_STR);
 
+         if (show_sdetail) {
+            SET (DEBT_CELL,  5,  0, 12,  DEBIT_STR);
+            SET (CRED_CELL,  6,  0, 12,  CREDIT_STR);
+         }
          if (show_tdetail) {
             SET (TDEBT_CELL,  5,  0, 12,  DEBIT_STR);
             SET (TCRED_CELL,  6,  0, 12,  CREDIT_STR);
@@ -215,10 +220,12 @@ configLayout (SplitRegister *reg)
       case STOCK_REGISTER:
          reg->num_cols = 11;
          SET (XTO_CELL,  -1, -1, 14,  XFTO_STR);
-         SET (PRIC_CELL,  7,  0,  9,  PRICE_STR);
-         SET (VALU_CELL,  8,  0, 10,  VALUE_STR);
-         SET (SHRS_CELL,  9,  0, 10,  TOT_SHRS_STR);
-         SET (BALN_CELL, 10,  0, 12,  BALN_STR);
+         if (show_sdetail) {
+            SET (PRIC_CELL,  7,  0,  9,  PRICE_STR);
+            SET (VALU_CELL,  8,  0, 10,  VALUE_STR);
+            SET (SHRS_CELL,  9,  0, 10,  TOT_SHRS_STR);
+            SET (BALN_CELL, 10,  0, 12,  BALN_STR);
+         }
          if (show_tdetail) {
             SET (TDEBT_CELL,  5,  0, 12,  DEBIT_STR);
             SET (TCRED_CELL,  6,  0, 12,  CREDIT_STR);
@@ -279,6 +286,7 @@ configLayout (SplitRegister *reg)
 /* define the traversal order */
 /* negative cells mean "traverse out of table" */
 /* hack alert -- redesign so that we hop from one row to the next, if desired. */
+/* hack alert -- if tdetail or sdetail is set then don't traverse there */
 
 static void
 configTraverse (SplitRegister *reg)
@@ -498,11 +506,16 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    HDR (RECN);
    HDR (CRED);
    HDR (DEBT);
-   HDR (BALN);
    HDR (PRIC);
-   HDR (SHRS);
    HDR (VALU);
+   HDR (SHRS);
+   HDR (BALN);
    
+   HDR (TCRED);
+   HDR (TDEBT);
+   HDR (TPRIC);
+   HDR (TVALU);
+
    /* --------------------------- */
 
    /* cells that handle transaction stuff */

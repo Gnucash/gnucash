@@ -74,7 +74,8 @@
 
 #define REG_TYPE_MASK       0xff
 #define REG_SHOW_TDETAIL    0x100
-#define REG_SHOW_RECS       0x200
+#define REG_SHOW_SDETAIL    0x200
+#define REG_SHOW_RECS       0x400
 
 
 /* modified flags -- indicate how values have been modified */
