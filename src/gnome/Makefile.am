@@ -182,3 +182,5 @@ BUILT_SOURCES = gnc-dir.h
 # by all means, let us know...
 dist-hook:
 	rm ${distdir}/gnc-dir.h
+
+CLEANFILES = ${BUILT_SOURCES}
