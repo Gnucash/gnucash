@@ -1105,8 +1105,8 @@ regWindow( Widget parent, Account *acc )
         acc -> rows[0][DEP_CELL_C] = "Decrease";
         break;
       case INCOME:
-        acc -> rows[0][PAY_CELL_C] = "Income";
-        acc -> rows[0][DEP_CELL_C] = "Refund";
+        acc -> rows[0][PAY_CELL_C] = "Charge";
+        acc -> rows[0][DEP_CELL_C] = "Income";
         break;
       case EXPENSE:
         acc -> rows[0][PAY_CELL_C] = "Expense";
@@ -1155,16 +1155,16 @@ regWindow( Widget parent, Account *acc )
   XtAddCallback( reg, XmNmodifyVerifyCallback, regCB, (XtPointer)regData );
   XtAddCallback( reg, XmNtraverseCellCallback, regCB, (XtPointer)regData );
   
-  XtManageChild(reg);
-  XtManageChild(frame);
-  
+  XtManageChild (reg);
+  XtManageChild (frame);
+  XtManageChild (pane);
+
 
   /* create action box for the first time */
   regData->actbox = actionBox (reg);
 
   /* create the xfer account box for the first time */
   regData->xferbox = xferBox (reg, acc->parent);
-
 
   /******************************************************************\
    * The button area... also contains balance fields                *
@@ -1227,7 +1227,7 @@ regWindow( Widget parent, Account *acc )
   
   position+=2;
   
-  /* Fix button area of the pane to its current size, and not let 
+  /* Fix button area of the buttonform to its current size, and not let 
    * it resize. */
     {
     Dimension h;

@@ -32,6 +32,7 @@
 #include <Xm/MainW.h>
 #include <Xm/PanedW.h>
 #include <Xm/RowColumn.h>
+#include <Xm/Text.h>
 #include <Xbae/Matrix.h>
 
 #include "Account.h"
@@ -47,6 +48,7 @@
 #include "XferWindow.h"
 
 /** PROTOTYPES ******************************************************/
+static void xaccMainWindowRedisplayBalance (void);
 static void closeMainWindow ( Widget mw, XtPointer cd, XtPointer cb );
 static void listCB          ( Widget mw, XtPointer cd, XtPointer cb );
 static void expandListCB    ( Widget mw, XtPointer cd, XtPointer cb );
@@ -58,7 +60,8 @@ static void ArrowEventCallback (Widget w, XtPointer pClientData,
 extern char   *datafile;
 extern Widget toplevel;
 static Account *selected_acc = NULL;          /* The selected account */
-Widget accountlist;
+static Widget accountlist;
+static Widget baln_widget;
 
 /* the english-language names here should match 
  * the enumerated types in Account.h */
@@ -204,6 +207,7 @@ refreshMainWindow( void )
   
   xaccRecomputeGroupBalance (grp);  
   xaccMainWindowAddAcct (accountlist, grp, 0);
+  xaccMainWindowRedisplayBalance ();
 }
 
 /********************************************************************\
@@ -321,7 +325,7 @@ expandListCB( Widget mw, XtPointer pClientData, XtPointer cb)
 void
 mainWindow( Widget parent )
   {
-  Widget   mainwindow,menubar,actionform,controlform,pane,widget;
+  Widget   mainwindow,menubar,actionform,buttonform,pane,button,widget;
   int      position;
   
   /******************************************************************\
@@ -499,9 +503,6 @@ mainWindow( Widget parent )
                    accountMenubarCB, (XtPointer)AMB_OPEN );
     }
  
-  refreshMainWindow();
-  XtManageChild(accountlist);
-  
   /******************************************************************\
    * The button area -- has buttons to create a new account, or     *
    * delete an account, or whatever other button I think up         *
@@ -512,22 +513,22 @@ mainWindow( Widget parent )
   /* create form that will contain most everything in this window...
    * The fractionbase divides the form into segments, so we have
    * better control over where to put the buttons */
-  controlform = XtVaCreateWidget( "form", 
+  buttonform = XtVaCreateWidget( "form", 
 				  xmFormWidgetClass, pane,
-				  XmNfractionBase,   5,
+				  XmNfractionBase,   22,
 				  NULL );
   
   position = 0;                    /* puts the buttons in the right place */
   
   /* The "Open" button */
   widget = XtVaCreateManagedWidget( "Open", 
-				    xmPushButtonWidgetClass, controlform,
+				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNbottomAttachment,   XmATTACH_FORM,
 				    XmNleftAttachment,     XmATTACH_POSITION,
 				    XmNleftPosition,       position,
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      position+1,
+				    XmNrightPosition,      position+3,
 				    XmNshowAsDefault,      True,
 				    NULL );
 
@@ -535,15 +536,15 @@ mainWindow( Widget parent )
 		 accountMenubarCB, (XtPointer)AMB_OPEN );
 
   /* The "New" button, to create a new account */
-  position ++;
+  position += 3;
   widget = XtVaCreateManagedWidget( "New", 
-				    xmPushButtonWidgetClass, controlform,
+				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNbottomAttachment,   XmATTACH_FORM,
 				    XmNleftAttachment,     XmATTACH_POSITION,
 				    XmNleftPosition,       position,
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      position+1,
+				    XmNrightPosition,      position+3,
 				    XmNshowAsDefault,      True,
 				    NULL );
   
@@ -551,15 +552,15 @@ mainWindow( Widget parent )
 		 accountMenubarCB, (XtPointer)AMB_NEW );
   
   /* The "Edit" button */
-  position ++;
+  position += 3;
   widget = XtVaCreateManagedWidget( "Edit", 
-				    xmPushButtonWidgetClass, controlform,
+				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNbottomAttachment,   XmATTACH_FORM,
 				    XmNleftAttachment,     XmATTACH_POSITION,
 				    XmNleftPosition,       position,
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      position+1,
+				    XmNrightPosition,      position+3,
 				    XmNshowAsDefault,      True,
 				    NULL );
   
@@ -567,30 +568,77 @@ mainWindow( Widget parent )
 		 accountMenubarCB, (XtPointer)AMB_EDIT );
   
   /* The "Delete" button */
-  position ++;
+  position += 3;
   widget = XtVaCreateManagedWidget( "Delete", 
-				    xmPushButtonWidgetClass, controlform,
+				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNbottomAttachment,   XmATTACH_FORM,
 				    XmNleftAttachment,     XmATTACH_POSITION,
 				    XmNleftPosition,       position,
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      position+1,
+				    XmNrightPosition,      position+3,
 				    XmNshowAsDefault,      True,
 				    NULL );
   
   XtAddCallback( widget, XmNactivateCallback, 
 		 accountMenubarCB, (XtPointer)AMB_DEL );
+
+  button = widget;
   
   
+  /* ---------------------------------------------------------------- */
+
+  /* The Asset and Profit field labels: */ 
+  position +=5;
+  widget = XtVaCreateManagedWidget( "Assets:",
+				    xmLabelGadgetClass,    buttonform,
+				    XmNtopAttachment,      XmATTACH_FORM,
+				    XmNleftAttachment,     XmATTACH_POSITION,
+				    XmNleftPosition,       position,
+				    XmNrightAttachment,    XmATTACH_POSITION,
+				    XmNrightPosition,      position+3,
+				    NULL );
+  widget = XtVaCreateManagedWidget( "Profits:",
+				    xmLabelGadgetClass,    buttonform,
+				    XmNtopAttachment,      XmATTACH_WIDGET,
+				    XmNtopWidget,          widget,
+				    XmNbottomAttachment,   XmATTACH_FORM,
+				    XmNleftAttachment,     XmATTACH_POSITION,
+				    XmNleftPosition,       position,
+				    XmNrightAttachment,    XmATTACH_POSITION,
+				    XmNrightPosition,      position+3,
+				    NULL );
+  
+  /* and the balance fields: */
+  position += 3;
+  widget = XtVaCreateManagedWidget( "text",
+				    xmTextWidgetClass,     buttonform,
+				    XmNeditable,           False,
+				    XmNeditMode,           XmMULTI_LINE_EDIT,
+				    XmNcursorPositionVisible, False,
+				    XmNmarginHeight,       0,
+				    XmNmarginWidth,        1,
+				    XmNtopAttachment,      XmATTACH_FORM,
+				    XmNbottomAttachment,   XmATTACH_FORM,
+				    XmNleftAttachment,     XmATTACH_POSITION,
+				    XmNleftPosition,       position,
+				    XmNrightAttachment,    XmATTACH_POSITION,
+				    XmNrightPosition,      position+5,
+				    NULL );
+  baln_widget = widget;
+  
+  /* ---------------------------------------------------------------- */
     
+  refreshMainWindow();
+  XtManageChild(accountlist);
+  
   /* Fix button area of the pane to its current size, and not let 
    * it resize. */
-  XtManageChild( controlform );
+  XtManageChild( buttonform );
     {
     Dimension h;
-    XtVaGetValues( widget, XmNheight, &h, NULL );
-    XtVaSetValues( controlform, XmNpaneMaximum, h, XmNpaneMinimum, h, NULL );
+    XtVaGetValues( button, XmNheight, &h, NULL );
+    XtVaSetValues( buttonform, XmNpaneMaximum, h, XmNpaneMinimum, h, NULL );
     }
   
   XtManageChild( actionform );
@@ -625,6 +673,48 @@ closeMainWindow( Widget mw, XtPointer cd, XtPointer cb )
   exit(0);
   }
 
+/********************************************************************\
+ * compute profits and asssets
+\********************************************************************/
+static void
+xaccMainWindowRedisplayBalance (void)
+{
+   int i;
+   double  assets  = 0.0;
+   double  profits = 0.0;
+   char buf[BUFSIZE];
+   AccountGroup *grp = topgroup;
+   Account *acc;
+   
+   for (i=0; i<grp->numAcc; i++) {
+      acc = grp->account[i];
+  
+      switch (acc->type) {
+         case BANK:
+         case CASH:
+         case ASSET:
+         case PORTFOLIO:
+         case MUTUAL:
+         case CREDIT:
+         case LIABILITY:
+            assets += acc->balance;
+            break;
+         case INCOME:
+         case EXPENSE:
+            profits += acc->balance;
+            break;
+         case EQUITY:
+         default:
+            break;
+      }
+   }
+  
+   sprintf( buf, "$ %.2f\n$ %.2f", assets, profits);
+     
+   XmTextSetString( baln_widget, buf );
+}
+
+/************************** END OF FILE *************************/
 /********************************************************************\
  * listCB -- makes the matrix widget behave like a list widget      * 
  *                                                                  * 
