@@ -62,7 +62,6 @@ gnc_cellblock_cell_construct (gpointer _cb_cell, gpointer user_data)
   CellBlockCell *cb_cell = _cb_cell;
 
   cb_cell->cell = NULL;
-  cb_cell->cell_type = -1;
 
   cb_cell->sample_text = NULL;
   cb_cell->alignment = CELL_ALIGN_LEFT;
@@ -79,13 +78,12 @@ gnc_cellblock_cell_destroy (gpointer _cb_cell, gpointer user_data)
     return;
 
   cb_cell->cell = NULL;
-  cb_cell->cell_type = -1;
 
   g_free(cb_cell->sample_text);
   cb_cell->sample_text = NULL;
 }
 
-static void        
+static void
 gnc_cellblock_init (CellBlock *cellblock, int rows, int cols)
 {
   /* record new size */

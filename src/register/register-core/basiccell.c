@@ -43,10 +43,8 @@
 /* This static indicates the debugging module that this .o belongs to. */
 static short module = MOD_REGISTER;
 
-/* ===================================================== */
-
 BasicCell *
-xaccMallocBasicCell (void)
+gnc_basic_cell_new (void)
 {
   BasicCell * cell;
 
@@ -56,8 +54,6 @@ xaccMallocBasicCell (void)
 
   return cell;
 }
-
-/* ===================================================== */
 
 static char *
 BasicCellHelpValue(BasicCell *cell)
@@ -71,11 +67,11 @@ BasicCellHelpValue(BasicCell *cell)
   return NULL;
 }
 
-/* ===================================================== */
-
 static void
-xaccClearBasicCell (BasicCell *cell)
+gnc_basic_cell_clear (BasicCell *cell)
 {
+  cell->cell_type = -1;
+
   cell->changed = FALSE;
   cell->conditionally_changed = FALSE;
 
@@ -102,7 +98,7 @@ xaccClearBasicCell (BasicCell *cell)
 void
 xaccInitBasicCell (BasicCell *cell)
 {
-  xaccClearBasicCell (cell);
+  gnc_basic_cell_clear (cell);
 
   cell->value = g_strdup ("");
 
@@ -110,8 +106,6 @@ xaccInitBasicCell (BasicCell *cell)
 
   cell->get_help_value = BasicCellHelpValue;
 }
-
-/* ===================================================== */
 
 void
 gnc_basic_cell_destroy (BasicCell *cell)
@@ -134,13 +128,18 @@ gnc_basic_cell_destroy (BasicCell *cell)
   cell->blank_help = NULL;
 
   /* help prevent access to freed memory */
-  xaccClearBasicCell (cell);
+  gnc_basic_cell_clear (cell);
 
   /* free the object itself */
   g_free (cell);
 }
 
-/* ===================================================== */
+void
+gnc_basic_cell_set_name (BasicCell *cell, int cell_type)
+{
+  if (!cell) return;
+  cell->cell_type = cell_type;
+}
 
 const char *
 gnc_basic_cell_get_value (BasicCell *cell)
@@ -149,8 +148,6 @@ gnc_basic_cell_get_value (BasicCell *cell)
 
   return cell->value;
 }
-
-/* ===================================================== */
 
 void
 xaccSetBasicCellValue (BasicCell *cell, const char *val)

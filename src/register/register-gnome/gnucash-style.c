@@ -883,13 +883,13 @@ gnucash_sheet_get_header_widths (GnucashSheet *sheet, int *header_widths)
                                 continue;
 
                         cb_cell = gnc_cellblock_get_cell (header, row, col);
-                        if (cb_cell == NULL)
+                        if (cb_cell == NULL || cb_cell->cell == NULL)
                                 continue;
 
-                        if (cb_cell->cell_type < 0)
+                        if (cb_cell->cell->cell_type < 0)
                                 continue;
 
-                        header_widths[cb_cell->cell_type] = cd->pixel_width;
+                        header_widths[cb_cell->cell->cell_type] = cd->pixel_width;
                 }
 }
 
@@ -919,14 +919,16 @@ gnucash_sheet_set_header_widths (GnucashSheet *sheet, int *header_widths)
                                                                 row, col);
 
                         cb_cell = gnc_cellblock_get_cell (header, row, col);
-
-                        if (cb_cell->cell_type < 0)
+                        if (!cb_cell || !cb_cell->cell)
                                 continue;
 
-                        if (header_widths[cb_cell->cell_type] < 0)
+                        if (cb_cell->cell->cell_type < 0)
                                 continue;
 
-                        cd->pixel_width = header_widths[cb_cell->cell_type];
+                        if (header_widths[cb_cell->cell->cell_type] < 0)
+                                continue;
+
+                        cd->pixel_width = header_widths[cb_cell->cell->cell_type];
                 }
 }
 

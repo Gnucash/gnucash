@@ -135,7 +135,9 @@ gnc_register_add_cell (SplitRegister *sr,
 
   cell = gnc_register_make_cell (cell_type_name);
 
-  gnc_table_layout_add_cell (sr->table->layout, cell_type, cell);
+  gnc_basic_cell_set_name (cell, cell_type);
+
+  gnc_table_layout_add_cell (sr->table->layout, cell);
 }
 
 /* ============================================== */
@@ -267,7 +269,6 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
   cb_cell = gnc_cellblock_get_cell (cursor, row, col);
 
   cb_cell->cell = gnc_table_layout_get_cell (reg->table->layout, cell_type);
-  cb_cell->cell_type = cell_type;
   cb_cell->sample_text = g_strdup (_(ss->string) + ss->offset);
   cb_cell->alignment = cell_alignments[cell_type];
   cb_cell->expandable = cell_type == DESC_CELL;
@@ -281,7 +282,6 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
   if (cb_cell && (cursor == cursor_sl))
   {
     cb_cell->cell = gnc_table_layout_get_cell (reg->table->layout, cell_type);
-    cb_cell->cell_type = cell_type;
     cb_cell->sample_text = g_strdup (_(ss->string) + ss->offset);
     cb_cell->alignment = cell_alignments[cell_type];
     cb_cell->expandable = cell_type == DESC_CELL;
@@ -299,10 +299,10 @@ copy_cursor_row (SplitRegister *reg, CellBlock *to, CellBlock *from, int row)
     CellBlockCell *cb_cell;
 
     cb_cell = gnc_cellblock_get_cell (from, row, col);
-    if (cb_cell->cell_type < 0)
+    if (!cb_cell || !cb_cell->cell || cb_cell->cell->cell_type < 0)
       continue;
 
-    set_cell (reg, to, cb_cell->cell_type, row, col);
+    set_cell (reg, to, cb_cell->cell->cell_type, row, col);
   }
 }
 

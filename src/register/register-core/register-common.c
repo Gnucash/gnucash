@@ -48,7 +48,7 @@ gnc_register_init (void)
 
   global_factory = gnc_cell_factory_new ();
 
-  gnc_register_add_cell_type (BASIC_CELL_TYPE_NAME, xaccMallocBasicCell);
+  gnc_register_add_cell_type (BASIC_CELL_TYPE_NAME, gnc_basic_cell_new);
 
   gnc_register_add_cell_type (COMBO_CELL_TYPE_NAME, xaccMallocComboCell);
 

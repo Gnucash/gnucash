@@ -70,7 +70,7 @@ xaccMallocTextCell (void)
 {
   BasicCell *cell;
 
-  cell = xaccMallocBasicCell ();
+  cell = gnc_basic_cell_new ();
   xaccInitTextCell (cell);
 
   return cell;

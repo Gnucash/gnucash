@@ -184,6 +184,8 @@ typedef char * (*CellGetHelpFunc) (BasicCell *cell);
 
 struct _BasicCell
 {
+  int cell_type;
+
   char * value;                  /* current value */
   char * blank_help;             /* help when value is blank */
 
@@ -219,9 +221,11 @@ struct _BasicCell
 };
 
 
-BasicCell *  xaccMallocBasicCell (void);
+BasicCell *  gnc_basic_cell_new (void);
 void         xaccInitBasicCell (BasicCell *bcell);
 void         gnc_basic_cell_destroy (BasicCell *bcell);
+
+void         gnc_basic_cell_set_name (BasicCell *cell, int cell_type);
 
 const char * gnc_basic_cell_get_value (BasicCell *cell);
 void         xaccSetBasicCellValue (BasicCell *bcell, const char *value);

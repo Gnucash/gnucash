@@ -76,7 +76,6 @@ typedef enum
 typedef struct
 {
   BasicCell *cell; /* cell handler */
-  short cell_type; /* cell type from splitreg.h */
 
   /* GUI layout information */
   char *sample_text;       /* sample text for sizing purposes */

@@ -86,8 +86,6 @@ gnc_table_new (TableControl *control, TableModel *model)
   return table;
 }
 
-/* ==================================================== */
-
 static void
 gnc_table_init (Table * table)
 {
@@ -105,8 +103,6 @@ gnc_table_init (Table * table)
   table->ui_destroy = NULL;
   table->ui_data = NULL;
 }
-
-/* ==================================================== */
 
 void 
 gnc_table_destroy (Table * table)
@@ -259,7 +255,9 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
                                     virt_loc.phys_col_offset);
   if (cb_cell == NULL)
     return "";
-  if (cb_cell->cell_type < 0)
+  if (cb_cell->cell == NULL)
+    return "";
+  if (cb_cell->cell->cell_type < 0)
     return "";
 
   if (virt_cell_loc_equal (table->current_cursor_loc.vcell_loc,
@@ -446,7 +444,7 @@ gnc_table_get_cell_type (Table *table, VirtualLocation virt_loc)
   if (cell == NULL)
     return -1;
 
-  return gnc_table_layout_get_cell_type (table->layout, cell);
+  return cell->cell_type;
 }
 
 gboolean
@@ -475,7 +473,10 @@ gnc_table_get_cell_location (Table *table,
       int ctype;
 
       cb_cell = gnc_cellblock_get_cell (cellblock, cell_row, cell_col);
-      ctype = gnc_table_layout_get_cell_type (table->layout, cb_cell->cell);
+      if (!cb_cell || !cb_cell->cell)
+        return FALSE;
+
+      ctype = cb_cell->cell->cell_type;
 
       if (ctype == cell_type)
       {
@@ -879,9 +880,7 @@ gnc_table_get_vcell_data (Table *table, VirtualCellLocation vcell_loc)
   return vcell->vcell_data;
 }
 
-/* ==================================================== */
-
-/* if any of the cells have GUI specific components that need 
+/* If any of the cells have GUI specific components that need 
  * initialization, initialize them now. The realize() callback
  * on the cursor cell is how we inform the cell handler that 
  * now is the time to initialize its GUI.  */
@@ -904,8 +903,6 @@ gnc_table_realize_gui (Table * table)
       cell->gui_realize (cell, table->ui_data);
   }
 }
-
-/* ==================================================== */
 
 void
 gnc_table_wrap_verify_cursor_position (Table *table, VirtualLocation virt_loc)
