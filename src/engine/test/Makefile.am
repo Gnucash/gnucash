@@ -60,8 +60,7 @@ noinst_PROGRAMS = \
   test-resolve-file-path \
   test-scm-query \
   test-split-vs-account \
-  test-transaction-voiding \
-  test-print-queries
+  test-transaction-voiding
 
 EXTRA_DIST = \
   test-create-account \
