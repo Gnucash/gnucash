@@ -567,16 +567,30 @@ date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
                 case GDK_plus:
                 case GDK_KP_Add:
                 case GDK_equal:
-                case GDK_KP_Equal:
-                        /* increment day */
-                        tm.tm_mday++;
+                        if (event->state & GDK_SHIFT_MASK)
+                                tm.tm_mday += 7;
+                        else if (event->state & GDK_MOD1_MASK)
+                                tm.tm_mon++;
+                        else if (event->state & GDK_CONTROL_MASK)
+                                tm.tm_year++;
+                        else
+                                tm.tm_mday++;
                         break;
 
-                case GDK_underscore:
                 case GDK_minus:
+                        if (dateSeparator () == '-')
+                                return FALSE;
+                        /* fall through */
+                case GDK_underscore:
                 case GDK_KP_Subtract:
-                        /* decrement day */
-                        tm.tm_mday--;
+                        if (event->state & GDK_SHIFT_MASK)
+                                tm.tm_mday -= 7;
+                        else if (event->state & GDK_MOD1_MASK)
+                                tm.tm_mon--;
+                        else if (event->state & GDK_CONTROL_MASK)
+                                tm.tm_year--;
+                        else
+                                tm.tm_mday--;
                         break;
 
                 case GDK_bracketright:

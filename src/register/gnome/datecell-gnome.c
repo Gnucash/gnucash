@@ -589,12 +589,12 @@ DateDirect (BasicCell *bcell,
         date->tm_mday++;
       break;
 
-    case GDK_KP_Subtract:
-    case GDK_underscore:
     case GDK_minus:
       if (dateSeparator () == '-')
         return FALSE;
-
+      /* fall through */
+    case GDK_KP_Subtract:
+    case GDK_underscore:
       if (event->state & GDK_SHIFT_MASK)
         date->tm_mday -= 7;
       else if (event->state & GDK_MOD1_MASK)
