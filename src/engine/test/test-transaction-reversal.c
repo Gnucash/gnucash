@@ -20,7 +20,6 @@
 static void
 transaction_set_splits_to_accounts(Transaction *tr, Account *a1, Account *a2)
 {
-
   Split *split;
 
   split  = xaccTransGetSplit(tr, 0);
@@ -72,21 +71,24 @@ run_test (void)
     failure("xaccTransClone failed.");
 
   xaccTransReverse(new_trans);
-  for (i = 0; i < 2; i++) {
+  for (i = 0; i < 2; i++) 
+  {
     old = xaccSplitGetAmount(xaccTransGetSplit(transaction, i));
     new = xaccSplitGetAmount(xaccTransGetSplit(new_trans, i));
     result = gnc_numeric_add(old, new, GNC_DENOM_AUTO, GNC_DENOM_FIXED);
-    if (gnc_numeric_eq(old, gnc_numeric_neg(new))) {
-	msg = g_strdup_printf("Amount of split %d wrong after reversal", i);
-	failure(msg);
+    if (gnc_numeric_eq(old, gnc_numeric_neg(new))) 
+    {
+      msg = g_strdup_printf("Amount of split %d wrong after reversal", i);
+      failure(msg);
     }
 
     old = xaccSplitGetValue(xaccTransGetSplit(transaction, i));
     new = xaccSplitGetValue(xaccTransGetSplit(new_trans, i));
     result = gnc_numeric_add(old, new, GNC_DENOM_AUTO, GNC_DENOM_FIXED);
-    if (gnc_numeric_eq(old, gnc_numeric_neg(new))) {
-	msg = g_strdup_printf("Value of split %d wrong after reversal", i);
-	failure(msg);
+    if (gnc_numeric_eq(old, gnc_numeric_neg(new))) 
+    {
+      msg = g_strdup_printf("Value of split %d wrong after reversal", i);
+      failure(msg);
     }
 
   }
