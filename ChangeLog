@@ -1,3 +1,23 @@
+2001-10-24  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-scheduledxaction.c (sxed_delete_event): Added.
+	(gnc_ui_scheduled_xaction_editor_dialog_create): Added support for
+	delete-event [WM window close].
+	(sxed_check_close): Added close-check, including register check.
+	(editor_cancel_button_clicked): Renamed from
+	editor_close_button_clicked; correctly handles a cancel WRT ledger
+	changes.
+
+	* src/gnome/glade/sched-xact.glade: Added as-yet-unused Start
+	Date widgets to make-from-transaction dialog.
+	
+	* src/gnome/dialog-sx-from-trans.c (sxftd_add_template_trans): Use
+	the user-friendly amount formating instead of a stringified
+	gnc_numeric.  Copies the account data over into the template
+	transaction.
+	(sxftd_init): Added; supports using the Description of the
+	transaction as the initial name of the SX.
+
 2001-10-22  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/engine/SchedXaction.c (xaccSchedXactionInit): Fixed

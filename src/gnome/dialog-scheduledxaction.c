@@ -51,6 +51,8 @@ static short module = MOD_SX;
 #define DIALOG_SCHEDXACTION_CM_CLASS "dialog-scheduledtransactions"
 #define DIALOG_SCHEDXACTION_EDITOR_CM_CLASS "dialog-scheduledtransaction-editor"
 
+#define SX_LIST_GLADE_NAME "Scheduled Transaction List"
+#define SX_EDITOR_GLADE_NAME "Scheduled Transaction Editor"
 #define SX_OPT_STR "Scheduled Transactions"
 #define AUTOCREATE_OPT "autocreate_opt"
 #define NOTIFY_OPT "notify_opt"
@@ -183,14 +185,20 @@ close_button_clicked( GtkButton *b, gpointer d )
         sxd_close_handler( d );
 }
 
-static
-void
-editor_close_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
+static void
+editor_cancel_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
 {
-        gnc_close_gui_component_by_data( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
-                                         sxed );
-}
+        SplitRegister *reg;
 
+        reg = gnc_ledger_display_get_split_register( sxed->ledger );
+        /* cancel ledger changes */
+        gnc_split_register_cancel_cursor_trans_changes( reg );
+        /* FIXME: cancel other changes */
+       
+        /* close */
+        gnc_close_gui_component_by_data (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
+                                         sxed);
+}
 
 static
 void
@@ -354,14 +362,18 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
 {
         SchedXactionEditorDialog *sxed = data;
 
+        DEBUG( "editor_dialog_destroy" );
+
         if (sxed == NULL)
                 return;
 
+#if 0
         if ( sxed->ledger ) {
                 sxed_close_handler( sxed );
                 return;
         }
-
+#endif /* 0 */
+        DEBUG( "foo" );
         gnc_unregister_gui_component_by_data
           (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
 
@@ -394,10 +406,8 @@ gnc_ui_scheduled_xaction_dialog_create(void)
         sxd = g_new0( SchedXactionDialog, 1 );
 
         /* sxd->dialog = create_Scheduled_Transaction_List(); */
-        sxd->gxml = gnc_glade_xml_new( "sched-xact.glade",
-                                       "Scheduled Transaction List" );
-        sxd->dialog = glade_xml_get_widget( sxd->gxml,
-                                            "Scheduled Transaction List" );
+        sxd->gxml = gnc_glade_xml_new( "sched-xact.glade", SX_LIST_GLADE_NAME );
+        sxd->dialog = glade_xml_get_widget( sxd->gxml, SX_LIST_GLADE_NAME );
 
         sxdo = GTK_OBJECT(sxd->dialog);
 
@@ -499,6 +509,27 @@ schedXact_populate( SchedXactionDialog *sxd )
                            GTK_SIGNAL_FUNC(row_select_handler), sxd );
 }
 
+static void
+sxed_check_close( SchedXactionEditorDialog *sxed )
+{
+        SplitRegister *reg;
+
+        reg = gnc_ledger_display_get_split_register( sxed->ledger );
+
+        /* Check for SX changes... how? */
+
+        /* Check the ledger for changes. */
+        gnc_sxed_reg_check_close( sxed );
+}
+
+static gboolean
+sxed_delete_event( GtkWidget *widget, GdkEvent *evt, gpointer ud )
+{
+        DEBUG( "delete-event" );
+        sxed_close_handler( (SchedXactionEditorDialog*)ud );
+        return TRUE;
+}
+
 SchedXactionEditorDialog *
 gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                                                SchedXaction *sx,
@@ -516,7 +547,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                 gpointer objectData;
         } widgets[] = {
                 { "ok_button",      "clicked", editor_ok_button_clicked,    NULL },
-                { "cancel_button",  "clicked", editor_close_button_clicked, NULL },
+                { "cancel_button",  "clicked", editor_cancel_button_clicked, NULL },
 		{ "help_button",    "clicked", editor_help_button_clicked,  NULL}, 
 
                 { "rb_enddate",     "toggled", endgroup_rb_toggled,         GINT_TO_POINTER(END_OPTION) },
@@ -543,11 +574,10 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         sxed = g_new0( SchedXactionEditorDialog, 1 );
 
         /* sxed->dialog = create_Scheduled_Transaction_Editor(); */
-        sxed->gxml = gnc_glade_xml_new( "sched-xact.glade", "Scheduled Transaction Editor" );
-        sxed->dialog = glade_xml_get_widget( sxed->gxml, "Scheduled Transaction Editor" );
-        if ( sxed->dialog == NULL ) {
-                PERR( "Damnit... sxed->dialog is null\n" );
-        }
+        sxed->gxml = gnc_glade_xml_new( "sched-xact.glade",
+                                        SX_EDITOR_GLADE_NAME );
+        sxed->dialog = glade_xml_get_widget( sxed->gxml, SX_EDITOR_GLADE_NAME );
+
         sxed->sxd = sxd;
         sxed->sx = sx;
         sxed->new = newP;
@@ -558,6 +588,8 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                                                            close handler */
                                     sxed );
 
+        gtk_signal_connect(GTK_OBJECT(sxed->dialog), "delete-event",
+                           GTK_SIGNAL_FUNC(sxed_delete_event), sxed );
         gtk_signal_connect(GTK_OBJECT(sxed->dialog), "destroy",
                            GTK_SIGNAL_FUNC(scheduledxaction_editor_dialog_destroy),
                            sxed);
@@ -1279,7 +1311,21 @@ static
 void
 sxe_register_record_cb( GnucashRegister *reg, gpointer d )
 {
+        SchedXactionEditorDialog *sxed = (SchedXactionEditorDialog*)d;
+        SplitRegister *splitreg;
+        Transaction *t;
+
         DEBUG( "FIXME: sxe_register_record_cb called\n" );
+
+        splitreg = gnc_ledger_display_get_split_register( sxed->ledger );
+        t = gnc_split_register_get_current_trans( splitreg );
+        if ( ! gnc_split_register_save( splitreg, TRUE ) )
+                return;
+
+        /* clipped "if (t)
+         *              gnc_reg_incl_date( splitreg, trans_get_date(trans) )" */
+
+        gnc_split_register_redraw( splitreg );
 }
 
 static
@@ -1611,8 +1657,9 @@ gnc_sxed_reg_check_close(SchedXactionEditorDialog *sxed)
 
         pending_changes = gnc_split_register_changed (reg);
         if (pending_changes) {
-                const char *message = _("The current transaction has been changed.\n"
-                                        "Would you like to record it?");
+                const char *message =
+                        _("The current template transaction has been changed.\n"
+                          "Would you like to record the changes?");
                 if (gnc_verify_dialog_parented(sxed->dialog, message, TRUE)) {
                         sxed_reg_recordCB(sxed->dialog, sxed);
                 } else {

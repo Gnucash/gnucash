@@ -4383,6 +4383,50 @@ Anually
       </widget>
 
       <widget>
+	<class>GtkHBox</class>
+	<name>hbox165</name>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>label847875</name>
+	  <label>Start Date: </label>
+	  <justify>GTK_JUSTIFY_CENTER</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>True</fill>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GnomeDateEdit</class>
+	  <name>start_date_edit</name>
+	  <show_time>False</show_time>
+	  <use_24_format>True</use_24_format>
+	  <week_start_monday>False</week_start_monday>
+	  <lower_hour>7</lower_hour>
+	  <upper_hour>19</upper_hour>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>True</fill>
+	  </child>
+	</widget>
+      </widget>
+
+      <widget>
 	<class>GtkFrame</class>
 	<name>frame78</name>
 	<label>End </label>

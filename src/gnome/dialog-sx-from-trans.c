@@ -2,7 +2,8 @@
  * dialog-sx-from-trans.c -- a simple dialog for creating a         *
  *                           scheduled transaction for a "real      *
  *                           one                                    *
- * Copyright (C) 2000 Robert Merkel <rgmerk@mira.net>               *
+ * Copyright (C) 2001 Robert Merkel <rgmerk@mira.net>               *
+ * Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -47,6 +48,7 @@
 #define SXFTD_N_OCCURRENCES_ENTRY "n_occurrences_entry"
 #define SXFTD_FREQ_OPTION_MENU "freq_option_menu"
 #define SXFTD_END_DATE_EDIT "end_date_edit"
+#define SXFTD_START_DATE_EDIT "start_date_edit"
 
 static short module = MOD_SX;
 
@@ -183,6 +185,7 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
   TTSplitInfo *ttsi;
   Split *sp;
   gnc_numeric split_value;
+  const char *tmpStr;
 
   gnc_ttinfo_set_description(tti, xaccTransGetDescription(tr));
   gnc_ttinfo_set_num(tti, xaccTransGetNum(tr));
@@ -198,15 +201,23 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
 
     if(gnc_numeric_positive_p(split_value))
     {
-      gnc_ttsplitinfo_set_debit_formula_numeric(ttsi, split_value);
+            tmpStr = xaccPrintAmount( split_value,
+                                      gnc_default_print_info(FALSE) );
+            gnc_ttsplitinfo_set_debit_formula( ttsi, tmpStr );
     }
     else
     {
-      gnc_ttsplitinfo_set_credit_formula_numeric(ttsi, split_value);
+            /* Negate the numeric so it prints w/o the sign at the front. */
+            tmpStr = xaccPrintAmount( gnc_numeric_neg( split_value ),
+                                      gnc_default_print_info(FALSE) );
+            gnc_ttsplitinfo_set_credit_formula( ttsi, tmpStr );
     }
 
+    /* Copy over per-split account info */
+    gnc_ttsplitinfo_set_account( ttsi, xaccSplitGetAccount( sp ) );
+
     template_splits = g_list_append(template_splits, ttsi);
-  }			       
+  }
 
   gnc_ttinfo_set_template_splits(tti, template_splits);
 
@@ -215,6 +226,38 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
   xaccSchedXactionSetTemplateTrans(sxfti->sx, tt_list,
                                    gnc_get_current_session ());
 
+  return 0;
+}
+
+static gint
+sxftd_init( SXFromTransInfo *sxfti )
+{
+  GtkWidget *w;
+  const char *transName;
+  gint pos;
+
+  if ( ! sxfti->sx ) {
+    return -1;
+  }
+  if ( ! sxfti->trans ) {
+    return -2;
+  }
+
+  sxfti_attach_callbacks(sxfti);
+
+  /* Get the name from the transaction, try that as the initial SX name. */
+  transName = xaccTransGetDescription( sxfti->trans );
+  xaccSchedXactionSetName( sxfti->sx, transName );
+
+  w = glade_xml_get_widget( sxfti->gxml, SXFTD_NAME_ENTRY );
+  pos = 0;
+  gtk_editable_insert_text( GTK_EDITABLE(w), transName,
+                            (strlen(transName) * sizeof(char)), &pos );
+
+  w = glade_xml_get_widget(sxfti->gxml,
+			   SXFTD_FREQ_OPTION_MENU);
+  gnc_option_menu_init(w);
+  
   return 0;
 }
 
@@ -243,11 +286,9 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
   xaccSchedXactionSetName(sx, name);
   g_free(name);
 
-  /* get the date (basis for start date */
-
+  /* get the date (basis for start date) */
   trans_t = xaccTransGetDate(sxfti->trans);
 
-  
   g_date_set_time(&date, trans_t);
  
   fs = xaccFreqSpecMalloc(gnc_get_current_session ());
@@ -255,13 +296,13 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
   /* get the frequency */
 
   w = glade_xml_get_widget(sxfti->gxml, SXFTD_FREQ_OPTION_MENU);
-  
   index = gnc_option_menu_get_active(w);
 
   /* Note that we make the start date the *NEXT* instance, not the
    * present one
    */
 
+  /* Methinks this should use the FreqSpec to do the calculation... --jsled */
   switch(index)
   {
   case FREQ_DAILY:
@@ -413,8 +454,8 @@ sxftd_advanced_clicked(GtkWidget *w, gpointer user_data)
 void
 gnc_sx_create_from_trans(Transaction *trans)
 {
-  GtkWidget *w;
-  SXFromTransInfo *sxfti = g_malloc(sizeof(SXFromTransInfo));
+  int errno;
+  SXFromTransInfo *sxfti = g_new0( SXFromTransInfo, 1);
 
   sxfti->gxml = gnc_glade_xml_new(SX_GLADE_FILE,
 				  SXFTD_DIALOG_GLADE_NAME);
@@ -426,16 +467,11 @@ gnc_sx_create_from_trans(Transaction *trans)
   
   sxfti->sx = xaccSchedXactionMalloc(gnc_get_current_session ());
 
-  sxfti_attach_callbacks(sxfti);
+  if ( (errno = sxftd_init( sxfti )) < 0 ) {
+          PERR( "Error in sxftd_init: %d", errno );
+  }
 
-  w = glade_xml_get_widget(sxfti->gxml,
-			   SXFTD_FREQ_OPTION_MENU);
-
-  gnc_option_menu_init(w);
-  
   gtk_widget_show_all(sxfti->dialog);
 
   return;
 }
-
-

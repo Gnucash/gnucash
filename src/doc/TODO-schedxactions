@@ -35,11 +35,26 @@ X create a template register
 
 ? Hook into 'book data changed' save-on-exit decision 
 
-. add a big calendar [gnome-pim?  evo?] to SXaction List/overview
+. SX list
+  . add a big calendar [gnome-pim?  evo?] to SXaction List/overview
 
-. match existing transactions for long-time users
-  . based off template-transaction data, some big existing-transaction
-    scanning code.
+. SX editor
+  . 'Cancel' button should auto-cancel ledger changes
+
+. make-from-transaction
+  X credit/debit pull-over issues
+    X need to remove '-' from printed credit value.
+  X pull accounts over.
+  X pull initial SX name from the Transaction name?
+  . need start-date on Make dialog
+    . [initially starts as the next occurance after the created-from SX,
+       which may not be the Right Thing]
+  . better frequency guess?
+    . non-trivial problem
+  [related...]
+  . match existing transactions for long-time users
+    . based off template-transaction data, some big existing-transaction
+      scanning code.
 
 . need "since-last-run" UI for instanatiation.
   X Change from dialogs to druid
@@ -81,6 +96,7 @@ X create a template register
   . Context menus/sensitive toolbar button/menu item for creation of
     not-yet-created transactions.
   . The ability to turn a non-recurring transaction into a recurring one...
+    X [see from-trans section]
   . inactive cells
     X date
     . recn?
@@ -97,6 +113,8 @@ X create a template register
 . backend support
   . PostgreSQL
   . others? 
+
+---------------
 
 . SX Creation...
   . Creation occurs due to a variety of circumstances:
