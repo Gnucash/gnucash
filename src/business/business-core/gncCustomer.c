@@ -35,7 +35,6 @@
 #include "gnc-engine-util.h"
 #include "gnc-commodity.h"
 #include "gnc-numeric.h"
-#include "qofobject.h"
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"
 
@@ -44,13 +43,15 @@
 #include "qofid-p.h"
 #include "qofid.h"
 #include "qofinstance.h"
+#include "qofobject.h"
 #include "qofquerycore.h"
 #include "qofquery.h"
 
+#include "gncAddress.h"
+#include "gncBillTermP.h"
 #include "gncBusiness.h"
 #include "gncCustomer.h"
 #include "gncCustomerP.h"
-#include "gncAddress.h"
 
 struct _gncCustomer 
 {
@@ -151,12 +152,24 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
   cust->active = from->active;
 
   /* cust->jobs = ??? XXX fixme not sure what to do here */
-  /* cust->terms = ??? XXX fixme not sure what to do here */
   /* cust->taxtable = ??? XXX fixme not sure what to do here */
   cust->addr = gncCloneAddress (from->addr, book);
   cust->shipaddr = gncCloneAddress (from->shipaddr, book);
-  addObj (cust);
 
+  /* Assume that bill terms have been previously inserted 
+   * into the new book. Just find the matching bill term. */
+  if (from->terms)
+  {
+    GncBillTerm *bitty;
+    bitty = (GncBillTerm *) qof_instance_lookup_twin (QOF_INSTANCE(from->terms), book);
+    if (!bitty)
+    {
+      bitty = gncCloneBillTerm (from->terms, book);
+    }
+    cust->terms = bitty;
+  }
+
+  addObj (cust);
   gnc_engine_generate_event (&cust->inst.guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
 
   return cust;
