@@ -140,9 +140,9 @@ g_date_equals( gconstpointer gda, gconstpointer gdb )
 {
   if ( !g_date_valid( (GDate*)gda )
        || !g_date_valid( (GDate*)gdb ) ) {
-    DEBUG( "invalid: %.8x(%s), %.8x(%s)",
-           gda, ( g_date_valid(gda) ? "" : "*" ),
-           gdb, ( g_date_valid(gdb) ? "" : "*" ) );
+    DEBUG( "invalid: %p(%s), %p(%s)",
+           gda, ( g_date_valid((GDate*)gda) ? "" : "*" ),
+           gdb, ( g_date_valid((GDate*)gdb) ? "" : "*" ) );
   }
   return ( g_date_compare( (GDate*)gda, (GDate*)gdb )
            == 0 ? TRUE : FALSE );

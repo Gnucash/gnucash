@@ -27,6 +27,7 @@
     "strings" to Gnucash accounts in a generic manner.
     @author Copyright (C) 2002 Derek Atkins <derek@ihtfp.com>
  */
+#include <string.h>
 #include "import-match-map.h"
 #include "kvp_frame.h"
 

@@ -39,7 +39,9 @@ static gboolean gnc_formula_cell_enter( BasicCell *_cell,
                                         int *start_selection,
                                         int *end_selection );
 
+#if 0
 static void gnc_formula_cell_leave( BasicCell *_cell );
+#endif
 
 static void gnc_formula_cell_modify_verify( BasicCell *_cell, 
                                             const GdkWChar *change,
@@ -98,6 +100,7 @@ gnc_formula_cell_enter( BasicCell *_cell,
   return TRUE;
 }
 
+#if 0
 static
 void
 gnc_formula_cell_leave( BasicCell *_cell )
@@ -108,6 +111,7 @@ gnc_formula_cell_leave( BasicCell *_cell )
   str = fc->cell.value;
   gnc_basic_cell_set_value_internal( &fc->cell, str );
 }
+#endif
 
 static
 void
@@ -128,7 +132,7 @@ gnc_formula_cell_modify_verify( BasicCell *_cell,
   int i;
 
   DEBUG( "%s, %d, %s, %d, %d, %d, %d",
-         change, change_len, newval, newval_len,
+         (gchar *)change, change_len, (gchar *)newval, newval_len,
          *cursor_position, *start_selection, *end_selection );
 
   /* accept the newval string if user action was delete */

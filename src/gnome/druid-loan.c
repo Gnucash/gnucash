@@ -1869,6 +1869,7 @@ ld_calc_current_instance_num( int monthsPassed, FreqSpec *fs )
  * - Escrow-diverted repayments cause new Txns w/in their
  *   SX. [Assets->Escrow, Escrow->(Expense|Liability)]
  **/
+#if 0
 static
 void
 new_ld_create_sxes( LoanDruidData *ldd )
@@ -1884,6 +1885,7 @@ new_ld_create_sxes( LoanDruidData *ldd )
          *   . thisSX += txns
          */
 }
+#endif
 
 
 static

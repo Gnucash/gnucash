@@ -364,7 +364,7 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
 {
   GncImportMatchMap *tmp_matchmap = NULL;
   Account *dest;
-  char *descr, *memo;
+  const char *descr, *memo;
   g_assert (trans_info);
 
   /* This will store the destination account of the selected match if 
