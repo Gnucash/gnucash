@@ -168,8 +168,10 @@
     interface to more complex accounting systems. The engine should
     also be expandable to handle other sources of data, such as
     OFX, Integrion GOLD, the Open Trading Protocol, the OMG CORBA
-    General Ledger submission, the IBM San Francisco business
-    objects, or closer to home, Linux Kontor. In particular, it
+    General Ledger submission, the 
+    <a href="http://www.ibm.com/software/ad/sanfrancisco/">
+    IBM San Francisco business objects</a>, 
+    or closer to home, Linux Kontor. In particular, it
     should be possible to use GnuCash not only to view data from
     these sources, but also to manipulate it and send it back.</p>
 
@@ -683,7 +685,7 @@
         <ul>
           <li>All GUI messages currently use GNU <tt>gettext()</tt>
           for the message catalogs. Translations exist for English,
-          British, French, Sweedish and German.</li>
+          British, French, Sweedish, German, Japanese.</li>
 
           <li>Help pages available only in English and French.</li>
 
@@ -729,8 +731,12 @@
 
         <p>Generated reports should be exportable to other gnome
         systems using bonobo. Reports should also be exportable to
-        the gnumeric spreadsheet (possibly by writing out gnumeric
-        file format??)</p>
+        the Gnumeric spreadsheet (possibly by writing out gnumeric
+        file format??).  Tables & etc should be exportable to AbiWord,
+        StarOffice, other wi=ord processors.</p>
+
+        <p>Must be possible to e-mail reports (inluding html) to
+        users. This might be a built-in function of gtk-html?</p>
 
         <p>Reports should make use of the 'action' field ...</p>
         Relationship to budgeting not clear ... 
@@ -885,14 +891,16 @@
             50-100 hints-of-the-day: short (2-4 sentance)
             hints/tips on how to use gnucash. Every time the user
             starts gnucash, an new hint shows up ...
-            <b>Status:</b> Dave volunteers...
+            <b>Status:</b> Hint infrastructure complete.  Need to add
+            hints  (only 6 are currently available).
             </p>
           </li>
 
           <li>
             <p><b>Themes</b>. Some theme testing required. The
             effect of themes on the register window needs to be
-            reviewed.</p>
+            reviewed.  Some themese look flakey in the main account
+            window, might be a gtk bug ???</p>
           </li>
 
           <li>
@@ -2185,9 +2193,11 @@ Password:
       <li><a href="http://www.pathcom.com/~sstratos/">gstalker</a>
       gtk/gnome stock grapher.</li>
 
-      <li><a href=
-      "http://prope.insa-lyon.fr/~rhertzog/geniustrader/">Genius
-      Trader</a> stock graphing tool. Based on Perl and Tk.</li>
+      <li><a href="http://prope.insa-lyon.fr/~rhertzog/geniustrader/">
+      Genius Trader</a> stock graphing tool. Based on Perl and Tk.</li>
+
+      <li><a href="http://www.ifxforum.org">IFX Forum</a> an XML-based
+      finacial-info exchange protocol developed by various banks.</la>
 
       <li><a href="http://www.daveware.com/linuxrapid.html">
       Xrapid</a> stock technical analysis.</li>
@@ -2235,8 +2245,7 @@ Password:
 
       <li>HBCI 2.0: Homebanking Computer Interface</li>
 
-      <li><a href=
-      "http://ganges.cs.tcd.ie/mepeirce/Project/oninternet.html">
+      <li><a href="http://ganges.cs.tcd.ie/mepeirce/Project/oninternet.html">
       Payment mechanisms designed for the Internet</a> provides a
       treasure-trove of links for zillions of standards and
       proposals.</li>
