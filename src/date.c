@@ -164,10 +164,10 @@ todaysDate( Date *date )
 
 int    daysInMonth( int month , int year )
   {
-/* adjust for leap year */
+  /* adjust for leap year */
   if( month == 2 ) {  
-    if ( ( ( date->year % 4 == 0 ) && ( date->year % 100 != 0 ) )
-         || ( date->year % 400 == 0 ) ) 
+    if ( ( ( 0 == year % 4 ) && ( 0 != year % 100 ) )
+         || ( 0 == year % 400 ) ) 
       days[1] = 29;
     else 
       days[1] = 28;
