@@ -44,13 +44,18 @@ typedef enum {
   ERR_BACKEND_NO_ERR = 0,
   ERR_BACKEND_NO_BACKEND,   /* Backend * pointer was null the err routine */
                             /* or no backend handler (ENOSYS) */
-  ERR_BACKEND_LOCKED,       /* in use by another user (ETXTBSY) */
+  ERR_BACKEND_BAD_URL,      /* Can't parse url */
   ERR_BACKEND_NO_SUCH_DB,   /* the named database doesn't exist */
+  ERR_BACKEND_CANT_CONNECT, /* bad dbname/login/passwd or network failure */
+  ERR_BACKEND_CONN_LOST,    /* Lost connection to server */
+  ERR_BACKEND_LOCKED,       /* in use by another user (ETXTBSY) */
+  ERR_BACKEND_DATA_CORRUPT, /* data in db is corrupt */
+  ERR_BACKEND_SERVER_ERR,   /* error in response from server */
   ERR_BACKEND_ALLOC,        /* internal memory allocation failure */
   ERR_BACKEND_MISC,         /* undetermined error */
 
   /* fileio errors */
-  ERR_FILEIO_FILE_BAD_READ,  /* read failed or file prematurely truncated */
+  ERR_FILEIO_FILE_BAD_READ = 1000,  /* read failed or file prematurely truncated */
   ERR_FILEIO_FILE_EMPTY,     /* file exists, is readable, but is empty */
   ERR_FILEIO_FILE_LOCKERR,   /* mangled locks (unspecified error) */
   ERR_FILEIO_FILE_NOT_FOUND, /* not found / no such file */
@@ -59,30 +64,19 @@ typedef enum {
   ERR_FILEIO_UNKNOWN_FILE_TYPE,
   
   /* network errors */
-  ERR_NETIO_NO_CONNECTION,      /* network failure, can't connect to server */
-  ERR_NETIO_SHORT_READ,         /* not enough bytes received */
+  ERR_NETIO_SHORT_READ = 2000,  /* not enough bytes received */
   ERR_NETIO_WRONG_CONTENT_TYPE, /* wrong kind of server, wrong data served */
   ERR_NETIO_NOT_GNCXML,         /* whatever it is, we can't parse it. */
 
   /* database errors */
-  ERR_SQL_BAD_LOCATION,        /* can't parse url */
-  ERR_SQL_CANT_CONNECT,        /* bad dbname/login/passwd or network failure */
-  ERR_SQL_SEND_QUERY_FAILED,   /* can't send to database */
-  ERR_SQL_FINISH_QUERY_FAILED, /* can't finish out sent request */
-  ERR_SQL_GET_RESULT_FAILED,   /* can't read response from the db. */
-  ERR_SQL_CORRUPT_DB,          /* data in db is corrupt */
-  ERR_SQL_MISSING_DATA,        /* database doesn't contain expected data */
+  ERR_SQL_MISSING_DATA = 3000,  /* database doesn't contain expected data */
 
   /* RPC errors */
-  ERR_RPC_BAD_URL,		/* Can't parse url */
-  ERR_RPC_HOST_UNK,		/* Host unknown */
-  ERR_RPC_CANT_CONNECT,		/* bad hostname/port/dbname/etc. */
+  ERR_RPC_HOST_UNK = 4000,	/* Host unknown */
   ERR_RPC_CANT_BIND,		/* can't bind to address */
   ERR_RPC_CANT_ACCEPT,		/* can't accept connection */
   ERR_RPC_NO_CONNECTION,	/* no connection to server */
-  ERR_RPC_CONNECTION_LOST,	/* Lost connection to server */
   ERR_RPC_BAD_VERSION,		/* RPC Version Mismatch */
-  ERR_RPC_SERVER_STATE,		/* Invalid/bad server state */
   ERR_RPC_FAILED,		/* Operation failed */
   ERR_RPC_NOT_ADDED,		/* object not added */
 

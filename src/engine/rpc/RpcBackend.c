@@ -809,7 +809,7 @@ static void rpcend_book_begin (GNCBook *book, const char *book_id,
    * rpc://host[:port]/db_name
    */
   if (strncmp (book_id, "rpc://", 6)) {
-    xaccBackendSetError (&be->be, ERR_RPC_BAD_URL);
+    xaccBackendSetError (&be->be, ERR_BACKEND_BAD_URL);
     LEAVE ("Not an RPC URL?");
     return;
   }
@@ -817,7 +817,7 @@ static void rpcend_book_begin (GNCBook *book, const char *book_id,
   start = url + 6;
   rest = strchr (start, '/');
   if (!rest || *rest == '\0') {
-    xaccBackendSetError (&be->be, ERR_RPC_BAD_URL);
+    xaccBackendSetError (&be->be, ERR_BACKEND_BAD_URL);
     g_free (url);
     LEAVE ("cannot find a path after host[:port]");
     return;
@@ -832,7 +832,7 @@ static void rpcend_book_begin (GNCBook *book, const char *book_id,
   be->hostname = g_strdup (start);
   start = rest+1;
   if (*start == '\0') {
-    xaccBackendSetError (&be->be, ERR_RPC_BAD_URL);
+    xaccBackendSetError (&be->be, ERR_BACKEND_BAD_URL);
     g_free (url);
     LEAVE ("tailing slash but no path after host[:port]");
     return;

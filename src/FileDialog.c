@@ -67,14 +67,48 @@ show_book_error (GNCBackendError io_error, const char *newfile)
 
     case ERR_BACKEND_NO_BACKEND:
       fmt = _("The URL \n    %s\n"
-               "is not supported by this version of GnuCash.");
+              "is not supported by this version of GnuCash.");
+      buf = g_strdup_printf (fmt, newfile);
+      gnc_error_dialog (buf);
+      break;
+
+    case ERR_BACKEND_BAD_URL:
+      fmt = _("Can't parse the URL\n   %s\n");
+      buf = g_strdup_printf (fmt, newfile);
+      gnc_error_dialog (buf);
+      break;
+
+    case ERR_BACKEND_CANT_CONNECT:
+      fmt = _("Can't connect to\n   %s\n"
+              "The host, username or password were incorrect.");
+      buf = g_strdup_printf (fmt, newfile);
+      gnc_error_dialog (buf);
+      break;
+
+    case ERR_BACKEND_CONN_LOST:
+      fmt = _("Can't connect to\n   %s\n"
+              "Connection was lost, unable to send data.");
       buf = g_strdup_printf (fmt, newfile);
       gnc_error_dialog (buf);
       break;
 
     case ERR_BACKEND_LOCKED:
       fmt = _("The URL \n    %s\n"
-               "is in use by another user.");
+              "is in use by another user.");
+      buf = g_strdup_printf (fmt, newfile);
+      gnc_error_dialog (buf);
+      break;
+
+    case ERR_BACKEND_DATA_CORRUPT:
+      fmt = _("The URL \n    %s\n"
+              "does not contain GnuCash data or the data is corrupt.");
+      buf = g_strdup_printf (fmt, newfile);
+      gnc_error_dialog (buf);
+      break;
+
+    case ERR_BACKEND_SERVER_ERR:
+      fmt = _("The server at URL \n    %s\n"
+              "experienced an error or encountered bad or corrupt data.");
       buf = g_strdup_printf (fmt, newfile);
       gnc_error_dialog (buf);
       break;
@@ -122,19 +156,6 @@ show_book_error (GNCBackendError io_error, const char *newfile)
       gnc_error_dialog(buf);
       break;
       
-    case ERR_SQL_BAD_LOCATION:
-      fmt = _("Can't parse the database URL\n   %s\n");
-      buf = g_strdup_printf (fmt, newfile);
-      gnc_error_dialog (buf);
-      break;
-
-    case ERR_SQL_CANT_CONNECT:
-      fmt = _("Can't connect to the database\n   %s\n"
-              "The host, username or password were incorrect.");
-      buf = g_strdup_printf (fmt, newfile);
-      gnc_error_dialog (buf);
-      break;
-
     default:
       PERR("FIXME: Unhandled error %d", io_error);
       fmt = _("An unknown I/O error occurred.");

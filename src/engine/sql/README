@@ -12,11 +12,16 @@ Postgres Install Instructions
 1) Install postgresql server, client and devel packages.
 2) if installed from redhat, then running /etc/rc.d/init.d/postgresql 
    will setup and initialize basic Postgres first-time setup & config.
-3) as root, su - postgres then run 'createuser' to add your user id
-4) (don't set a password on your postgres db name, yet, gnucash doesn't 
-    have a GUI to ask for your password yet)
+3) as root, 'su - postgres' then run 'createuser' to add your user id
+   (don't set a password on your postgres db name, yet, gnucash doesn't 
+   have a GUI to ask for your password yet)
+   If you've forgotten what users are on the system, you can check
+   by starting the 'psql' command shell and typing the command.
+   'SELECT * FROM pg_shadow;'
+   Note this wnly works for the posgres user, and other users that 
+   have creatuser permissions.
 
-5) (optional) enable TCPIP connections to remote hosts. To do this:
+4) (optional) enable TCPIP connections to remote hosts. To do this:
    edit the file pg_hba.conf on the remote host to configure and allow 
    access from other hosts.  See 'man pg_hba.conf' for details.  
         RedHat:   /var/lib/pgsql/pg_hba.conf  
@@ -26,9 +31,17 @@ Postgres Install Instructions
    Note also the user must have 'createuser' permissions in order to 
    lock tables (this is a bug in postgres 6.5 and maybe later ???)
 
+5) Hints and Tips:  
+   If you've forgotten what databases you've created in the past,
+   you can look the filesystem: 'ls -la /var/lib/postgres/data/base'
+   to view the existing databases.  Alternately, if you connect as 
+   user postgres, you can 'SELECT * FROM pg_database;'
+
+
 Alternatively, you can install into a brand new database without
 using root privileges. After step 1 above, perform the following:
 
+1) Install postgresql server, client and devel packages.
 2) initdb -D ~/gnucash
    This creates a directory structure and supporting files
    under ~/gnucash. The gnucash directory is automatically 
@@ -54,6 +67,7 @@ using root privileges. After step 1 above, perform the following:
    connections from processes on the local host.
 
 
+
 GnuCash Build Instructions
 --------------------------
 Same as usual, but you must specify the flag '--enable-sql' in order
@@ -76,6 +90,9 @@ in the file open dialogs.  Or try it on the command line:
 
 /usr/local/bin/gnucash postgres://localhost/dbname_whatever
 
+Note: GnuCash will automatically create the database if it does
+not already exist. Do *not* try to create the database by hand,
+or to specify a database that wasn't created by GnuCash.  
 
 Remote Access
 -------------
@@ -125,8 +142,6 @@ Core bugs/features that still need work:
 
 -- distinguish between 'save' and 'save-as' in gnc-book & backend.
 
--- document the need for the 'gnucash' database & what its role is.
-
 -- single-update mode is asking to 'save' data  at end of session
    fix this (again,  ...)
 
@@ -141,6 +156,7 @@ Core bugs/features that still need work:
    GUI dialogs. This is because the backend needs to return things
    like usernames, etc. in the dialogs, and the backend doesn't 
    have the interfaces for passing this kind of info.
+   (actually, the PERR/PINFO strings might do ??)
 
 -- fix the annoying postgres:,,localhost,asdf file syntax: needs
    mods to gnc-book to keep it happy about lock files & such.
@@ -152,9 +168,9 @@ Core bugs/features that still need work:
    there will be other debilitating conditions if the backend disappears,
    leaving the engine in a possibly confused state.
 
-   for example, if postgres user is misconfigured, the LOCK TABLE
+   For example, if postgres user is misconfigured, the LOCK TABLE
    will fail on session validate, and FINISH_QUERY will close the
-   connection.  subsequent sql will core dump gnucash, even though this 
+   connection.  Subsequent sql will core dump gnucash, even though this 
    is a sysadmin error.
 
 -- during sync, detect and report conflicting edits to accounts 
@@ -214,7 +230,7 @@ This list only affects the multi-user and advanced/optional features.
    I don't currently have an opinion on the 'best' way of dealing with 
    this situation.
 
--- implement account rollback (i.e. of other user has modified the
+-- implement account rollback (i.e. if other user has modified the
    account, we need to do something to merge their work into ours...)
 
 -- transaction rollback is 'incorrect'; sort of ?? since we should
@@ -234,9 +250,10 @@ This list only affects the multi-user and advanced/optional features.
    note, however, that the file format needs to save the version number
    ...
 
--- Implement logging history in the SQL server.  i.e. save the old
-   copies of stuff in log tables.  Make the username part of the 
-   logging scheme.
+-- Implement logging history/audit-trail in the SQL server.  
+   i.e. save the old copies of stuff in log tables.  Make the username 
+   part of the logging scheme.   Having 'audit trails' is considered 
+   to be an important accounting feature.
 
 -- let all attached client receive update events via SQL LISTEN/NOTIFY 
    events.

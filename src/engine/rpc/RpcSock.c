@@ -13,6 +13,8 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <rpc/xprt_thrd.h>
+#include <sys/socket.h>
+
 #include "RpcBackend.h"
 #include "RpcSock.h"
 
@@ -103,7 +105,7 @@ int RpcConnect (char *hostname, unsigned short port, RPCSock **sock)
   struct sockaddr_in sin;
 
   if (hostname == NULL || *hostname == '\0' || port == 0)
-    return ERR_RPC_BAD_URL;
+    return ERR_BACKEND_BAD_URL;
 
   if (sock == NULL)
     return ERR_BACKEND_MISC;
@@ -118,8 +120,8 @@ int RpcConnect (char *hostname, unsigned short port, RPCSock **sock)
   if ((s = socket (sin.sin_family, SOCK_STREAM, 0)) < 0)
     return ERR_BACKEND_ALLOC;
 
-  if (connect (s, &sin, sizeof(sin)) != 0)
-    return ERR_RPC_CANT_CONNECT;
+  if (connect (s, (struct sockaddr *) &sin, sizeof(sin)) != 0)
+    return ERR_BACKEND_CANT_CONNECT;
 
   new = g_malloc (sizeof (*new));
   if (new == NULL) {
@@ -186,7 +188,7 @@ int RpcCreateListener (unsigned short port, RPCSock **sock)
   sin.sin_family = AF_INET;
   sin.sin_port = port;
   sin.sin_addr.s_addr = INADDR_ANY;
-  if (bind (s, &sin, sizeof (sin)) < 0) {
+  if (bind (s, (struct sockaddr *) &sin, sizeof (sin)) < 0) {
     close (s);
     return ERR_RPC_CANT_BIND;
   }

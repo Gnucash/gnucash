@@ -75,9 +75,11 @@ If you want incremental deletion, then use the 'Single Update' mode.
 
 
 Connecting to Postgres
----------
-The postgres API requires a database to connect to. The initial
-connect is made using the "template1" database.
+----------------------
+The postgres API requires a database to connect to.  The initial
+connect is made using the "template1" database, which is the default
+database that is always created when Postgres is installed.  Thus,
+we assume its always present.
 
 
 m4 macros
@@ -132,3 +134,10 @@ are not closely synchronized.  (e.g. which may happen if the machines
 are not using NTP for time synchronization; or, e.g. if one machine failed 
 to have daylight-savings time set correctly: its transactions would be 
 an hour newer/older than the others, leading to bad updates).
+
+Balances
+--------
+UPDATE tx
+         SET (balance )= (SELECT expr from .... WHERE )
+WHERE txdate between today - 7 and today
+

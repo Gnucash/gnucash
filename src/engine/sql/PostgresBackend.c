@@ -404,7 +404,7 @@ pgendGetAllCommodities (PGBackend *be)
    char * p;
    if (!be) return;
 
-   ENTER ("be=%p", be);
+   ENTER ("be=%p, conn=%p", be, be->connection);
 
    comtab = gnc_engine_commodities();
    if (!comtab) {
@@ -857,7 +857,7 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
                    "too many transactions with GUID=%s\n",
                     guid_to_string (trans_guid));
              if (jrows != nrows) xaccTransCommitEdit (trans);
-             xaccBackendSetError (&be->be, ERR_SQL_CORRUPT_DB);
+             xaccBackendSetError (&be->be, ERR_BACKEND_DATA_CORRUPT);
              pgendEnable(be);
              gnc_engine_resume_events();
              return 0;
@@ -1693,10 +1693,21 @@ pgendSessionCanStart (PGBackend *be, int break_lock)
 
 
 /* ============================================================= */
-/* Determine whether a valid session could be obtained.
- * Return TRUE if we have a session
+/* The pgendSessionValidate() routine determines whether a valid 
+ * session could be obtained.
+ * Return TRUE if we have a session.
  * This routine is implemented attomically as a test-n-set.
  */
+
+static gpointer 
+is_gnucash_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   if (TRUE == (gboolean) data) return (gpointer) TRUE;
+
+   if (0 == strcmp ("gncsession", (DB_GET_VAL ("tablename", j)))) 
+      return (gpointer) TRUE;
+   return FALSE;
+}
 
 static gboolean
 pgendSessionValidate (PGBackend *be, int break_lock)
@@ -1707,6 +1718,16 @@ pgendSessionValidate (PGBackend *be, int break_lock)
 
    if (MODE_NONE == be->session_mode) return FALSE;
 
+   /* check to see if this database actually contains 
+    * GnuCash data... */
+   p = "SELECT * FROM pg_tables; ";
+   SEND_QUERY (be,p, FALSE);
+   retval = (gboolean) pgendGetResults (be, is_gnucash_cb, (gpointer) FALSE);
+   if (FALSE == retval) {
+      xaccBackendSetError (&be->be, ERR_BACKEND_DATA_CORRUPT);
+      return FALSE;
+   }
+   
    /* Lock it up so that we test-n-set atomically 
     * i.e. we want to avoid a race condition when testing
     * for the single-user session.
@@ -1897,7 +1918,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
 
    if (strncmp (sessionid, "postgres://", 11)) 
    {
-      xaccBackendSetError (&be->be, ERR_SQL_BAD_LOCATION);
+      xaccBackendSetError (&be->be, ERR_BACKEND_BAD_URL);
       return;
    }
    url = g_strdup(sessionid);
@@ -1924,7 +1945,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
    start = end+1;
    if (0x0 == *start) 
    { 
-      xaccBackendSetError (&be->be, ERR_SQL_BAD_LOCATION);
+      xaccBackendSetError (&be->be, ERR_BACKEND_BAD_URL);
       g_free(url); 
       return; 
    }
@@ -2062,7 +2083,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
       }
       else
       {
-         xaccBackendSetError (&be->be, ERR_SQL_CANT_CONNECT);
+         xaccBackendSetError (&be->be, ERR_BACKEND_CANT_CONNECT);
          return;
       }
    }
@@ -2086,7 +2107,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
               PQerrorMessage(be->connection));
          PQfinish (be->connection);
          be->connection = NULL;
-         xaccBackendSetError (&be->be, ERR_SQL_CANT_CONNECT);
+         xaccBackendSetError (&be->be, ERR_BACKEND_CANT_CONNECT);
          return;
       }
 
@@ -2117,7 +2138,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
               PQerrorMessage(be->connection));
          PQfinish (be->connection);
          be->connection = NULL;
-         xaccBackendSetError (&be->be, ERR_SQL_CANT_CONNECT);
+         xaccBackendSetError (&be->be, ERR_BACKEND_CANT_CONNECT);
          return;
       }
 

@@ -58,6 +58,7 @@ gpointer pgendGetResults (PGBackend *be,
 #define SEND_QUERY(be,buff,retval) 				\
 {								\
    int rc;							\
+   if (NULL == be->connection) return retval;			\
    rc = PQsendQuery (be->connection, buff);			\
    if (!rc)							\
    {								\
@@ -65,7 +66,8 @@ gpointer pgendGetResults (PGBackend *be,
       PERR("send query failed:\n"				\
            "\t%s", PQerrorMessage(be->connection));		\
       PQfinish (be->connection);				\
-      xaccBackendSetError (&be->be, ERR_SQL_SEND_QUERY_FAILED);	\
+      be->connection = NULL;					\
+      xaccBackendSetError (&be->be, ERR_BACKEND_CONN_LOST);	\
       return retval;						\
    }								\
 }
@@ -93,7 +95,9 @@ gpointer pgendGetResults (PGBackend *be,
               "\t%s", PQerrorMessage((conn)));			\
          PQclear(result);					\
          PQfinish ((conn));					\
-         xaccBackendSetError (&be->be, ERR_SQL_FINISH_QUERY_FAILED);	\
+         be->connection = NULL;					\
+         xaccBackendSetError (&be->be, ERR_BACKEND_CONN_LOST);	\
+	 break;							\
       }								\
       PQclear(result);						\
       i++;							\
@@ -118,7 +122,8 @@ gpointer pgendGetResults (PGBackend *be,
            "\t%s", PQerrorMessage((conn)));			\
       PQclear (result);						\
       PQfinish (conn);						\
-      xaccBackendSetError (&be->be, ERR_SQL_GET_RESULT_FAILED);	\
+      be->connection = NULL;					\
+      xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);	\
       break;							\
    }								\
 }
@@ -138,7 +143,7 @@ gpointer pgendGetResults (PGBackend *be,
    }								\
    if (1 < nrows) {						\
       PERR ("unexpected duplicate records");			\
-      xaccBackendSetError (&be->be, ERR_SQL_CORRUPT_DB);	\
+      xaccBackendSetError (&be->be, ERR_BACKEND_DATA_CORRUPT);	\
       break;							\
    } else if (1 == nrows) 
 

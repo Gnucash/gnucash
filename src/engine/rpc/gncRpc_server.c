@@ -57,7 +57,7 @@ gncrpc_book_begin_1_svc(gncrpc_book_begin_args *argp, int *result, struct svc_re
 {
 	bool_t retval = TRUE;
 	GncRpcSvc *cl;
-	int res = ERR_RPC_SERVER_STATE;
+	int res = ERR_BACKEND_SERVER_ERR;
 
 	ENTER ("id=\"%s\"", argp->book_id ? argp->book_id : "");
 
@@ -91,7 +91,7 @@ gncrpc_book_load_1_svc(char *argp, gncrpc_book_load_ret *result, struct svc_req 
 
 	retval = gncrpc_get_state (rqstp, NULL, &cl);
 	if (!retval) {
-	  result->error = ERR_RPC_SERVER_STATE;
+	  result->error = ERR_BACKEND_SERVER_ERR;
 	  LEAVE ("bad state");
 	  return retval;
 	}
@@ -121,7 +121,7 @@ gncrpc_book_end_1_svc(char *argp, int *result, struct svc_req *rqstp)
 	ENTER ("ok");
 	retval = gncrpc_get_state (rqstp, NULL, &cl);
 	if (!retval) {
-	  *result = ERR_RPC_SERVER_STATE;
+	  *result = ERR_BACKEND_SERVER_ERR;
 	  LEAVE ("bad state");
 	  return retval;
 	}
@@ -168,7 +168,7 @@ gncrpc_account_commit_edit_1_svc(gncrpc_commit_acct_args *argp, int *result, str
 	ENTER ("vers=%d", argp->acct.vers);
 	retval = gncrpc_get_state (rqstp, NULL, &cl);
 	if (!retval) {
-	  *result = ERR_RPC_SERVER_STATE;
+	  *result = ERR_BACKEND_SERVER_ERR;
 	  LEAVE ("bad state");
 	  return retval;
 	}
@@ -217,7 +217,7 @@ gncrpc_account_rollback_edit_1_svc(gncrpc_backend_guid *argp, int *result, struc
 	ENTER ("ok");
 	retval = gncrpc_get_state (rqstp, NULL, &cl);
 	if (!retval) {
-	  *result = ERR_RPC_SERVER_STATE;
+	  *result = ERR_BACKEND_SERVER_ERR;
 	  LEAVE ("bad state");
 	  return retval;
 	}
@@ -273,7 +273,7 @@ gncrpc_txn_commit_edit_1_svc(gncrpc_commit_txn_args *argp, int *result, struct s
 	ENTER ("vers=%d", argp->new.vers);
 	retval = gncrpc_get_state (rqstp, NULL, &cl);
 	if (!retval) {
-	  *result = ERR_RPC_SERVER_STATE;
+	  *result = ERR_BACKEND_SERVER_ERR;
 	  LEAVE ("bad state");
 	  return retval;
 	}
@@ -334,7 +334,7 @@ gncrpc_run_query_1_svc(gncrpc_query_args *argp, gncrpc_query_ret *result, struct
 	/* Find state */
 	retval = gncrpc_get_state (rqstp, NULL, &cl);
 	if (!retval) {
-	  result->error = ERR_RPC_SERVER_STATE;
+	  result->error = ERR_BACKEND_SERVER_ERR;
 	  LEAVE ("Bad state");
 	  return retval;
 	}
@@ -386,7 +386,7 @@ gncrpc_sync1_1_svc(gncrpc_sync1_args *argp, gncrpc_sync1_ret *result, struct svc
 	memset (result, 0, sizeof (*result));
 	retval = gncrpc_get_state (rqstp, NULL, &cl);
 	if (!retval) {
-	  result->error = ERR_RPC_SERVER_STATE;
+	  result->error = ERR_BACKEND_SERVER_ERR;
 	  LEAVE ("bad state");
 	  return retval;
 	}
@@ -507,7 +507,7 @@ gncrpc_sync2_1_svc(gncrpc_sync2_args *argp, int *result, struct svc_req *rqstp)
 	*result = 0;
 	retval = gncrpc_get_state (rqstp, NULL, &cl);
 	if (!retval) {
-	  *result = ERR_RPC_SERVER_STATE;
+	  *result = ERR_BACKEND_SERVER_ERR;
 	  LEAVE ("bad state");
 	  return retval;
 	}
@@ -543,7 +543,7 @@ gncrpc_get_txns_1_svc(gncrpc_get_txns_args *argp, gncrpc_get_txns_ret *result, s
 	memset (result, 0, sizeof (*result));
 	retval = gncrpc_get_state (rqstp, NULL, &cl);
 	if (!retval) {
-	  result->error = ERR_RPC_SERVER_STATE;
+	  result->error = ERR_BACKEND_SERVER_ERR;
 	  LEAVE ("Bad state");
 	  return retval;
 	}
