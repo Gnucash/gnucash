@@ -458,6 +458,14 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
    reg->creditCell->blank_zero = 1;
    reg->valueCell->blank_zero = 1;
 
+   /* ok, now make sure the initail value of 0.0 is blanked.
+    * if this is not done, then various oddball situations 
+    * will show the non-blanked values. 
+    */
+   xaccSetPriceCellValue (reg->debitCell, 0.0);
+   xaccSetPriceCellValue (reg->creditCell, 0.0);
+   xaccSetPriceCellValue (reg->valueCell, 0.0);
+
    /* -------------------------------- */   
    /* define how traversal works */
    configTraverse (reg);
