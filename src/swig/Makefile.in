@@ -46,7 +46,7 @@ plot.preproc.h: /usr/include/plot.h
 	cp /usr/include/plot.h plot.preproc.h
 	echo "#include <plot.h>" | gcc -E - > plot.preproc.h
 
-perl5:
+perl5: ${OBJS}
 	@cd perl5 && $(MAKE) default
 
 .PHONY: default guile perl5
