@@ -130,16 +130,6 @@ void xaccSchedXactionSetAdvanceCreation( SchedXaction *sx, gint createDays );
 gint xaccSchedXactionGetAdvanceReminder( SchedXaction *sx );
 void xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays );
 
-#if 0
-#error vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-GList *xaccSchedXactionGetXactions( SchedXaction *sx );
-void xaccSchedXactionClearXactions( SchedXaction *sx );
-void xaccSchedXactionAddXaction( SchedXaction *sx,
-                                 Transaction *t );
-#error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#endif /* 0 */
-
-
 /*
  * The following function is slightly risky.  If you change
  * the retrieved kvp_frame you must mark the SchedXaction
@@ -152,7 +142,6 @@ kvp_frame *xaccSchedXactionGetSlots( SchedXaction *sx );
  **/
 void xaccSchedXactionSetSlots( SchedXaction *sx,
                                kvp_frame *frm );
-
 
 /**
  * Use the following two functions in preference to 
@@ -207,7 +196,6 @@ GDate xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
  * of TTInfo's as defined in SX-ttinfo.h
  * the edit dialog doesn't use this mechanism.  Maybe it should
  */
-
 void xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
                                       GNCSession *session);
 

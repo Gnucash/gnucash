@@ -46,6 +46,9 @@
 #include "window-help.h"
 #include "window-register.h"
 
+/* FIXME: temp until variable-related-stuff settled. */
+#include "dialog-sxsincelast.h"
+
 static short module = MOD_SX;
 
 #define DIALOG_SCHEDXACTION_CM_CLASS "dialog-scheduledtransactions"
@@ -60,11 +63,13 @@ static short module = MOD_SX;
 #define ADVANCE_DAYS_SPIN "advance_days"
 #define REMIND_OPT "remind_opt"
 #define REMIND_DAYS_SPIN "remind_days"
+#define END_DATE_DATEENTRY "sxe_end_date"
 #define END_GNOME_NUMENTRY "end_gnome_nentry"
 #define REMAIN_GNOME_NUMENTRY "remain_gnome_nentry"
 
-#define END_OPTION 0
-#define NUM_OCCUR_OPTION 1
+#define END_NEVER_OPTION 0
+#define END_DATE_OPTION  1
+#define NUM_OCCUR_OPTION 2
 
 /** Datatypes ***********************************************************/
 
@@ -77,7 +82,7 @@ typedef enum
 } DeleteType;
 
 typedef enum _EndTypeEnum {
-        END_NONE,
+        END_NEVER,
         END_DATE,
         END_OCCUR,
 } EndType;
@@ -210,6 +215,12 @@ editor_help_button_clicked(GtkButton *b, SchedXactionEditorDialog *sxed)
 	return;
 }
 
+static void
+local_print_helper( gpointer key, gpointer value, gpointer ud )
+{
+        printf( "var: \"%s\"\n", (char*)key );
+}
+
 static
 void
 editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
@@ -222,8 +233,64 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
         time_t tmpDate;
         GDate *gdate;
 
-        gdate = g_date_new();
+        /* FIXME: Do checks on validity and such, interrupting the user if
+         * things aren't right.
+         *
+         * . "weekly" FS has some days set.
+         * . "once" with reasonable start/end dates.
+         * 
+         * . creating a "not scheduled" SX is probably not right...
+         *
+         * . balancing the SX if contain numeric-only formula data.
+         */
+        gnc_split_register_save ( gnc_ledger_display_get_split_register(sxed->ledger),
+                                  FALSE );
 
+#if 0
+        /* FIXME: leave for now; will use for numeric-formulas-get-balanced
+         * determination later. */
+        {
+                GHashTable *ht;
+                GList *splitList = NULL;
+                char *str;
+                kvp_frame *f;
+                kvp_value *v;
+                Split *s;
+
+                ht = g_hash_table_new( NULL, NULL );
+
+                splitList = xaccSchedXactionGetSplits( sxed->sx );
+                for ( ; splitList; splitList = splitList->next ) {
+                        s = (Split*)splitList->data;
+                        f = xaccSplitGetSlots( s );
+                        v = kvp_frame_get_slot_path( f,
+                                                     GNC_SX_ID,
+                                                     GNC_SX_CREDIT_FORMULA,
+                                                     NULL );
+                        if ( v
+                             && (str = kvp_value_get_string(v))
+                             && strlen( str ) != 0 ) {
+                                parse_vars_from_formula( str, ht );
+                        }
+                        v = kvp_frame_get_slot_path( f,
+                                                     GNC_SX_ID,
+                                                     GNC_SX_DEBIT_FORMULA,
+                                                     NULL );
+                        if ( v
+                             && (str = kvp_value_get_string(v))
+                             && strlen(str) != 0 ) {
+                                parse_vars_from_formula( str, ht );
+                        }
+                        g_hash_table_foreach( ht, local_print_helper, NULL );
+                }
+                if ( g_hash_table_size( ht ) == 0 ) {
+                        
+                }
+                g_hash_table_destroy( ht );
+        }
+#endif /* 0 */
+
+        gdate = g_date_new();
         /* read out data back into SchedXaction object. */
         w = glade_xml_get_widget( sxed->gxml, "sxe_name" );
         xaccSchedXactionSetName( sxed->sx, gtk_entry_get_text( GTK_ENTRY(w) ) );
@@ -233,7 +300,7 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
         optNumOccur = glade_xml_get_widget( sxed->gxml, "rb_num_occur" );
         if ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(optEndDate)) ) {
                 /* get the end date data */
-                w = glade_xml_get_widget( sxed->gxml, "sxe_end_date" );
+                w = glade_xml_get_widget( sxed->gxml, END_DATE_DATEENTRY );
                 g_date_set_time( gdate, gnome_date_edit_get_date( GNOME_DATE_EDIT(w) ) );
                 xaccSchedXactionSetEndDate( sxed->sx, gdate );
                 /* set the num occurances data */
@@ -368,8 +435,6 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
 {
         SchedXactionEditorDialog *sxed = data;
 
-        DEBUG( "editor_dialog_destroy" );
-
         if (sxed == NULL)
                 return;
 
@@ -379,7 +444,6 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
                 return;
         }
 #endif /* 0 */
-        DEBUG( "foo" );
         gnc_unregister_gui_component_by_data
           (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
 
@@ -478,6 +542,8 @@ row_select_handler( GtkCList *clist,
         
         sxd   = (SchedXactionDialog*)d;
 
+        g_return_if_fail( event );
+
         switch ( event->type ) {
         case GDK_2BUTTON_PRESS:
                 sx = (SchedXaction*)gtk_clist_get_row_data( clist, row );
@@ -556,7 +622,8 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                 { "cancel_button",  "clicked", editor_cancel_button_clicked, NULL },
 		{ "help_button",    "clicked", editor_help_button_clicked,  NULL}, 
 
-                { "rb_enddate",     "toggled", endgroup_rb_toggled,         GINT_TO_POINTER(END_OPTION) },
+                { "rb_noend",       "toggled", endgroup_rb_toggled,         GINT_TO_POINTER(END_NEVER_OPTION) },
+                { "rb_enddate",     "toggled", endgroup_rb_toggled,         GINT_TO_POINTER(END_DATE_OPTION) },
                 { "rb_num_occur",   "toggled", endgroup_rb_toggled,         GINT_TO_POINTER(NUM_OCCUR_OPTION) },
 
                 { "autocreate_opt", "toggled", autocreate_toggled,          NULL },
@@ -902,6 +969,16 @@ schedXact_editor_create_freq_sel( SchedXactionEditorDialog *sxed )
         gtk_container_add( GTK_CONTAINER(f), GTK_WIDGET(sxed->gncfreq) );
 }
 
+static void
+sxe_ledger_destroy( GNCLedgerDisplay *ld )
+{
+        SchedXactionEditorDialog *sxed;
+        sxed =(SchedXactionEditorDialog*)
+                gnc_ledger_display_get_user_data( ld );
+        DEBUG( "ledger's being destroyed... we probably want "
+               "to clean up in some appropriate way." );
+}
+
 static
 void
 schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
@@ -919,7 +996,8 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
         sxed->ledger = gnc_ledger_display_template_gl( sxed->sxGUIDstr );
 
         gnc_ledger_display_set_handlers( sxed->ledger,
-                                         NULL, sxe_ledger_get_parent );
+                                         sxe_ledger_destroy,
+                                         sxe_ledger_get_parent );
         gnc_ledger_display_set_user_data( sxed->ledger, (gpointer)sxed );
 
         splitreg = gnc_ledger_display_get_split_register( sxed->ledger );
@@ -942,7 +1020,7 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
         gnucash_register_attach_popup( sxed->reg, popup, sxed );
 
         toolbar = schedXaction_editor_create_reg_tool_bar( sxed );
-        //gtk_container_set_border_width( GTK_CONTAINER(toolbar), 2 );
+        /*gtk_container_set_border_width( GTK_CONTAINER(toolbar), 2 );*/
 
         gtk_box_pack_start( GTK_BOX(vbox), toolbar, FALSE, FALSE, 2 );
         gtk_box_pack_end( GTK_BOX(vbox), regWidget, TRUE, TRUE, 2 );
@@ -997,12 +1075,13 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
                 w = glade_xml_get_widget( sxed->gxml, "rb_enddate" );
                 gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(w), TRUE );
                 /* fill in date data. */
-                w = glade_xml_get_widget( sxed->gxml, "sxe_end_date" );
+                w = glade_xml_get_widget( sxed->gxml, END_DATE_DATEENTRY );
                 tmpTm = g_new0( struct tm, 1 );
                 g_date_to_struct_tm( gd, tmpTm );
                 tmpDate = mktime( tmpTm );
                 g_free( tmpTm );
                 gnome_date_edit_set_time( GNOME_DATE_EDIT(w), tmpDate );
+
                 set_endgroup_toggle_states( sxed, END_DATE );
         } else if ( xaccSchedXactionHasOccurDef( sxed->sx ) ) {
                 gint numOccur = xaccSchedXactionGetNumOccur( sxed->sx );
@@ -1029,7 +1108,7 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
         } else {
                 w = glade_xml_get_widget( sxed->gxml, "rb_noend" );
                 gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(w), TRUE );
-                set_endgroup_toggle_states( sxed, END_NONE );
+                set_endgroup_toggle_states( sxed, END_NEVER );
         }
 
         /* Do auto-create/notify setup */
@@ -1112,7 +1191,7 @@ set_endgroup_toggle_states( SchedXactionEditorDialog *sxed, EndType type )
 {
         GtkWidget *dateCtl, *occurCtl;
 
-        dateCtl = glade_xml_get_widget( sxed->gxml, "sxe_end_date" );
+        dateCtl = glade_xml_get_widget( sxed->gxml, END_DATE_DATEENTRY );
         gtk_widget_set_sensitive( GTK_WIDGET(dateCtl), (type == END_DATE) );
 
         occurCtl = glade_xml_get_widget( sxed->gxml, END_GNOME_NUMENTRY );
@@ -1127,10 +1206,19 @@ void
 new_button_clicked( GtkButton *b, gpointer d )
 {
         SchedXactionDialog        *sxd;
+        FreqSpec *fs;
+        GDate *gd;
         SchedXaction        *tmpSX =
                 xaccSchedXactionMalloc( gnc_get_current_session ());
         SchedXactionEditorDialog *sxed;
 
+        /* Give decent initial FreqSpec for SX */
+        fs = xaccSchedXactionGetFreqSpec( tmpSX );
+        gd = g_date_new();
+        g_date_set_time( gd, time(NULL) );
+        xaccFreqSpecSetOnceDate( fs, gd );
+        g_date_free( gd );
+        
         sxd = (SchedXactionDialog*)d;
         sxed = gnc_ui_scheduled_xaction_editor_dialog_create( sxd, tmpSX, 1 );
 }
@@ -1243,10 +1331,11 @@ endgroup_rb_toggled( GtkButton *b, gpointer d )
         id = GPOINTER_TO_INT(gtk_object_get_data( GTK_OBJECT(b),
                                                   "whichOneAmI" ));
 
-        /* FIXME: this can now be cleaned up with the help of
-           set_endgroup_toggle_states(...) */
         switch (id) {
-        case END_OPTION:
+        case END_NEVER_OPTION:
+                set_endgroup_toggle_states( sxed, END_NEVER );
+                break;
+        case END_DATE_OPTION:
                 set_endgroup_toggle_states( sxed, END_DATE );
                 break;
         case NUM_OCCUR_OPTION:
@@ -1323,9 +1412,6 @@ sxe_ledger_get_parent( GNCLedgerDisplay *ld )
         SchedXactionEditorDialog *sxed;
 
         sxed = gnc_ledger_display_get_user_data( ld );
-        /* FIXME: is this the direct parent?
-           doesn't look like it from window-register.c:gnc_register_get_parent
-        */
         return sxed->dialog;
 }
 

@@ -476,7 +476,11 @@ gnc_main_window_sched_xaction_cb (GtkWidget *widget, gpointer data) {
 
 static void
 gnc_main_window_sched_xaction_slr_cb (GtkWidget *widget, gpointer data) {
-  gnc_ui_sxsincelast_dialog_create();
+  const char *nothing_to_do_msg =
+    _( "There are no Scheduled Transactions to deal with." );
+  if ( ! gnc_ui_sxsincelast_dialog_create() ) {
+    gnc_info_dialog( nothing_to_do_msg );
+  }
 }
 
 static void

@@ -29,6 +29,7 @@
 
 #include "FreqSpec.h"
 #include "dialog-utils.h"
+#include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-frequency.h"
 #include "gnc-ui-util.h"
@@ -377,15 +378,17 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
           int dayOfWeek;
           int count = 0;
 
-          list = xaccFreqSpecCompositeGet( fs );
-          do {
+          for ( list = xaccFreqSpecCompositeGet( fs );
+                list; list = g_list_next(list) ) {
                   subFS = (FreqSpec*)(list->data);
                   if ( weeklyMult == -1 ) {
                           if ( subFS == NULL ) {
                                   PERR( "subFS is null\n" );
                                   return;
                           }
-                          if ( xaccFreqSpecGetWeekly( subFS, &weeklyMult, &dayOfWeek ) < 0 ) {
+                          if ( xaccFreqSpecGetWeekly( subFS,
+                                                      &weeklyMult,
+                                                      &dayOfWeek ) < 0 ) {
                                   PERR( "Inappropriate FreqSpec type "
                                         "[gnc-frequency: %d, FreqSpec: %d]\n",
                                         uift, xaccFreqSpecGetUIType( fs ) );
@@ -398,14 +401,18 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
                                   PERR( "subFS is null\n" );
                                   return;
                           }
-                          if ( xaccFreqSpecGetWeekly( subFS, &otherWeeklyMult, &dayOfWeek ) < 0 ) {
+                          if ( xaccFreqSpecGetWeekly( subFS,
+                                                      &otherWeeklyMult,
+                                                      &dayOfWeek ) < 0 ) {
                                   PERR( "Inappropriate FreqSpec type "
                                         "[gnc-frequency: %d, FreqSpec: %d]\n",
                                         uift, xaccFreqSpecGetUIType( fs ) );
                                   return;
                           }
                           if ( weeklyMult != otherWeeklyMult ) {
-                                  PERR( "Inconsistent weekly FreqSpec multipliers seen [first: %d vs. other: %d]\n",
+                                  PERR( "Inconsistent weekly FreqSpec "
+                                        "multipliers seen "
+                                        "[first: %d vs. other: %d]\n",
                                         weeklyMult, otherWeeklyMult );
                                   return;
                           }
@@ -417,7 +424,7 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
                   str = CHECKBOX_NAMES[dayOfWeek];
                   o = glade_xml_get_widget( gf->gxml, str );
                   gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(o), TRUE );
-          } while ( (list = g_list_next(list)) );
+          }
           o = glade_xml_get_widget( gf->gxml, "weekly_spin" );
           gtk_spin_button_set_value( GTK_SPIN_BUTTON(o), weeklyMult );
   }
@@ -588,13 +595,17 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
   page = gtk_notebook_get_current_page( gf->nb );
   /* save into UIFreqSpec */
 
+  /* We're going to be creating/destroying FreqSpecs, which will cause GUI
+     refreshes. :( */
+  gnc_suspend_gui_refresh();
+
   tmpTimeT = gnome_date_edit_get_date( gf->startDate );
   gd = g_date_new();
   g_date_set_time( gd, tmpTimeT );
   if ( outStartDate != NULL ) {
           g_date_set_time( outStartDate, tmpTimeT );
   }
-  //uift = xaccFreqSpecGetUIType( fs );
+  /*uift = xaccFreqSpecGetUIType( fs );*/
   uift = PAGES[page].uiFTVal;
 
   /* based on value, parse widget values into FreqSpec */
@@ -774,6 +785,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
           uift, __LINE__, __FILE__ );
     break;
   }
+  gnc_resume_gui_refresh();
 }
 
 static void
@@ -825,10 +837,12 @@ update_cal( GNCFrequency *gf, GtkCalendar *cal )
 {
   FreqSpec  *fs;
 
+  gnc_suspend_gui_refresh();
   fs = xaccFreqSpecMalloc(gnc_get_current_session ());
   gnc_frequency_save_state( gf, fs, NULL );
   mark_calendar( cal, fs );
   xaccFreqSpecFree( fs );
+  gnc_resume_gui_refresh();
 }
 
 static void

@@ -948,7 +948,7 @@ Yearly
 	    <can_focus>True</can_focus>
 	    <show_heading>True</show_heading>
 	    <show_day_names>True</show_day_names>
-	    <no_month_change>False</no_month_change>
+	    <no_month_change>True</no_month_change>
 	    <show_week_numbers>False</show_week_numbers>
 	    <week_start_monday>False</week_start_monday>
 	  </widget>
@@ -1061,7 +1061,7 @@ Yearly
 	    <sensitive>False</sensitive>
 	    <can_focus>True</can_focus>
 	    <show_heading>True</show_heading>
-	    <show_day_names>True</show_day_names>
+	    <show_day_names>False</show_day_names>
 	    <no_month_change>False</no_month_change>
 	    <show_week_numbers>False</show_week_numbers>
 	    <week_start_monday>False</week_start_monday>
@@ -1331,7 +1331,7 @@ Yearly
 	    <can_focus>True</can_focus>
 	    <show_heading>True</show_heading>
 	    <show_day_names>True</show_day_names>
-	    <no_month_change>False</no_month_change>
+	    <no_month_change>True</no_month_change>
 	    <show_week_numbers>False</show_week_numbers>
 	    <week_start_monday>False</week_start_monday>
 	  </widget>
@@ -1644,7 +1644,7 @@ Yearly
 	    <can_focus>True</can_focus>
 	    <show_heading>True</show_heading>
 	    <show_day_names>True</show_day_names>
-	    <no_month_change>False</no_month_change>
+	    <no_month_change>True</no_month_change>
 	    <show_week_numbers>False</show_week_numbers>
 	    <week_start_monday>False</week_start_monday>
 	  </widget>

@@ -19,7 +19,9 @@ X would like "don't even tell me you instantiated it, just fscking do
 
 ##################################################
 ### To-Do
+###
 ### '.' = to-do, 'X' = done, '?' = jsled verify
+###
 ##################################################
 
 
@@ -116,12 +118,14 @@ X create a template register
     X Is it sufficient to look at the next instance of ea. transaction only?
       I think not... we probably want to look out until the transaction is
       outside the reminder range.
+  . support sorting in clists
   . tab-order
   . need some configuration for constantly-running GnuCash users of when to
     pop up the 'new scheduled transactions' dialog [option, time-of-day]
-  . Should deal with "nothing-to-do" better [not even show up in the worst
+  X Should deal with "nothing-to-do" better [not even show up in the worst
     [read: no auto-notify/to-create/reminders] case].
-    . this is different between the auto-invoked since-last-run dialog [show
+    X don't load/init/create the GUI if we're not about to use it.
+    X this is different between the auto-invoked since-last-run dialog [show
       nothing] and the menu-invoked since-last-run [show a dialog to the user
       stating there's nothing to do].
   . Double-clicking on auto-create list should jump to transaction
@@ -131,7 +135,7 @@ X create a template register
   X Easy UI way of moving through the SXes which need variable bindings.
     [This presently is: click "Ok" and the next clist row which needs
      bindings is selected.]
-  . Need some way to defer to-create SXes.
+  . Need some way to defer to-create SXes?
 
 . register mods
   . to see upcoming xactions, modifying future balance
@@ -216,21 +220,28 @@ X General
   X Date l10n.
 
 . GNCFreqency
+  X why does the accounts window go crazy when we change the FreqSpec parameters?
+    X probably component-manager related... yup; FreqSpec Malloc/Free
+      generates events, which cause GUI refreshes.
   . transitioning to a new tab doesn't correctly setup the agreement between
     the startdate and the page elements.
-  . Example calendar month change isn't handled correctly/doesn't refresh the
+  X Example calendar month change isn't handled correctly/doesn't refresh the
     marks.
-  . "Inappropriate FreqSpec type" on new-SX editing.
-  . "new; weekly: click on day, click off day: GLib-CRITICAL **: file gdate.c: line 1236 (g_date_to_struct_tm): assertion `g_date_valid (d)' failed."
+    X fixed by removing any ability to change the example calendar.
+  X "Inappropriate FreqSpec type" on new-SX editing.
+  X "new; weekly: click on day, click off day: GLib-CRITICAL **: file gdate.c: line 1236 (g_date_to_struct_tm): assertion `g_date_valid (d)' failed."
+    . no longer reproducable
 
 . Scheduled Transaction Editor
   . Can't click-out of the register
+  . 'ESC' while editing template register causes window to go away [badly].
+  . attempting to create a Weekly SX with no days selected causes a segfault.
+    . the user should be prevented from doing this.
+    X composite SX shouldn't segfault when asked to getFreqSpecStr for this
+  X Size/space issues [?]
   X auto-shrink on window create [the register is too wide, leading to too
     much whitespace on the two top panels -- sometimes].
-  . Size/space issues.
-  . Un-selecting "End Date" leaves calendar widget sensitive
-  . 'ESC' while editing template register causes window to go away [badly].
-  . why does the accounts window go crazy when we change the FreqSpec parameters?
+  X Un-selecting "End Date" leaves calendar widget sensitive
 
 . Scheduled Transaction List
 
@@ -249,6 +260,9 @@ X General
 . SX-from-trans
   . you can delete a freshly-from-trans'd SX from the list with the
     from-trans dlg still open, then 'ok' the dlg to get a segfault.
+  . creating a SX from trans with the SX list open does not update it.
+  . general: there's going to be all sorts of interaction issues like these
+    between these things [SX-from-trans, SX list, SX editor] that should be handled.
 
 ##################################################
 ### Enhancements

@@ -23,7 +23,21 @@
 #ifndef DIALOG_SXSINCELAST_H
 #define DIALOG_SXSINCELAST_H
 
-void gnc_ui_sxsincelast_dialog_create( void );
-void gnc_ui_sxsincelast_guile_wrapper( char* );
+gboolean gnc_ui_sxsincelast_dialog_create( void );
+gboolean gnc_ui_sxsincelast_guile_wrapper( char* );
+
+/**
+ * Returns the varaibles from the Splits of the given SchedXaction as the
+ * keys of the given GHashTable.
+ **/
+void sxsl_get_sx_vars( SchedXaction *sx, GHashTable *varHash );
+
+/**
+ * Returns the variables from the given formula [free-form non-numeric
+ * character strings] as the keys of the given GHashTable.
+ **/
+int parse_vars_from_formula( const char *formula, GHashTable *varHash );
+
+void print_vars_helper( gpointer key, gpointer value, gpointer user_data );
 
 #endif // !defined(DIALOG_SXSINCELAST_H)

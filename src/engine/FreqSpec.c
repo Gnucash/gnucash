@@ -786,8 +786,9 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                         tmpStr[i] = '-';
                 }
 
-                list = xaccFreqSpecCompositeGet( fs );
-                do {
+                
+                for ( list = xaccFreqSpecCompositeGet( fs );
+                      list; list = list->next ) {
                         int dowIdx;
 
                         tmpFS = (FreqSpec*)list->data;
@@ -803,7 +804,7 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                            the appropriate position. */
                         dowIdx = tmpFS->s.weekly.offset_from_epoch;
                         tmpStr[dowIdx] = *(get_wday_name(dowIdx));
-                } while ( (list = g_list_next(list)) );
+                }
 
                 if ( tmpInt > 1 ) {
 		  g_string_sprintf( str, _( "Weekly (x%d): %s"), tmpInt, tmpStr );

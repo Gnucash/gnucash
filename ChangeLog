@@ -1,3 +1,30 @@
+2001-11-04  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome-utils/gnc-frequency.c: saving state and updating the
+	calendar markings no longer force so much of a
+	component-manager/UI refresh.
+
+	* src/guile/gw-gnc-spec.scm: Changed sx-since-last return type to
+	gboolean [bool]; added better sx-since-last-run-wrapper param name
+	[s/foo/bookfile/].
+
+	* src/gnome/dialog-scheduledxaction.c (new_button_clicked): Better
+	initial-FreqSpec setup to prevent error from GNCFrequency.
+
+	* src/engine/SchedXaction.c (xaccSchedXactionSetTemplateTrans):
+	Added support for setting template-transaction currency from the
+	TTinfo structure.
+
+	* src/gnome/dialog-sxsincelast.c: Correct support for "nothing
+	to do": if this is the case, don't load/create the UI.  Required
+	much re-working due to my bad design. :(
+	Added component-manager freeze/thaw [equivalents] around engine
+	interaction to minimize program-wide GUI refresh during
+	Transaction creation.
+	(finish_finish): Added support for 'finish' button.
+	(cancel_check): Initial support for cancel button, checking with
+	user regarding.
+
 2001-10-29  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-sxsincelast.c: Unused pages are skipped,

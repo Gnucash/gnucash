@@ -617,6 +617,8 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
 
     xaccTransSetNum(new_trans,
 		    gnc_ttinfo_get_num(tti));
+    xaccTransSetCurrency( new_trans,
+                          gnc_ttinfo_get_currency(tti) );
 
     for(split_list = gnc_ttinfo_get_template_splits(tti);
 	split_list;
