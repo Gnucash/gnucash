@@ -570,6 +570,27 @@ fi
 AC_SUBST(OFX_DIR)
 
 ### --------------------------------------------------------------------------
+### MT940
+AC_ARG_ENABLE( mt940,
+  [  --enable-mt940               compile with MT940 support (needs --enable-hbci)],
+  if test "x$enableval" != "xno" ; then
+    MT940_DIR=mt940
+  fi)
+if test x${MT940_DIR} = xmt940 ;
+then
+    AM_PATH_OPENHBCI(0.9.13.2)
+    # Note: HBCI_LIBS is changed again below in the --enable-hbci
+    # section. So check for mt940 first and *not* the other way round!
+    HBCI_LIBS="${OPENHBCI_LIBS}"
+    HBCI_CFLAGS="${OPENHBCI_CFLAGS}"
+
+    AS_SCRUB_INCLUDE(HBCI_CFLAGS)
+    AC_SUBST(HBCI_LIBS)
+    AC_SUBST(HBCI_CFLAGS)
+fi
+AC_SUBST(MT940_DIR)
+
+### --------------------------------------------------------------------------
 ### HBCI
 AC_ARG_ENABLE( hbci,
   [  --enable-hbci                compile with HBCI support (needs OpenHBCI)],
@@ -593,15 +614,6 @@ then
     AC_SUBST(HBCI_CFLAGS)
 fi
 AC_SUBST(HBCI_DIR)
-
-### --------------------------------------------------------------------------
-### MT940
-AC_ARG_ENABLE( mt940,
-  [  --enable-mt940               compile with MT940 support (needs --enable-hbci)],
-  if test "x$enableval" != "xno" ; then
-    MT940_DIR=mt940
-  fi)
-AC_SUBST(MT940_DIR)
 
 ### --------------------------------------------------------------------------
 ### i18n
@@ -1040,8 +1052,7 @@ chmod u+x ${srcdir}/src/bin/overrides/gnucash-make-guids
 LIBOBJS_SEDSCRIPT="s,\.[[^.]]* ,$U&,g;s,\.[[^.]]*\$\$,$U&,"
 AC_SUBST(LIBOBJS_SEDSCRIPT)
 
-#AC_OUTPUT( m4/Makefile  po/Makefile.in intl/Makefile
-AC_OUTPUT( m4/Makefile 
+AC_OUTPUT( m4/Makefile po/Makefile.in
           dnl # Makefiles
           Makefile
           accounts/Makefile
@@ -1052,11 +1063,10 @@ AC_OUTPUT( m4/Makefile
           accounts/el_GR/Makefile
           accounts/es_ES/Makefile
           accounts/fr_FR/Makefile
-	  accounts/it/Makefile
+          accounts/it/Makefile
           accounts/pt_BR/Makefile
           accounts/pt_PT/Makefile
           accounts/sk/Makefile
-          debian/Makefile
           doc/Makefile
           doc/examples/Makefile
           intl-scm/Makefile
@@ -1064,8 +1074,7 @@ AC_OUTPUT( m4/Makefile
           lib/egg/Makefile
           lib/guile-www/Makefile
           lib/srfi/Makefile
-	  lib/libc/Makefile
-          po/Makefile.in
+          lib/libc/Makefile
           rpm/Makefile
           src/Makefile
           src/app-file/Makefile

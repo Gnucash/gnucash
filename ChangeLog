@@ -2100,6 +2100,68 @@
 -=-=-=- cvs HEAD ChangeLog is below this line -=-=-=-
 
 
+2003-10-24  David Hampton  <hampton@employees.org>
+
+	* src/import-export/hbci/druid-hbci-initial.c: Use the generic
+	import account picker.
+
+	* src/gnome-utils/Makefile.am:
+	* src/gnome-utils/dialog-account-pick.[ch]: Remove unused files.
+
+2003-10-23  David Hampton  <hampton@employees.org>
+
+	* src/AccWindow.h:
+	* src/gnome-utils/dialog-account.h: Move function declarations to
+	the right header file.  Document them as well.
+
+	* (various): Include the right header file.
+
+2003-10-23  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/prefs.scm:
+	* src/business/business-utils/business-prefs.scm:
+	  Add new preferences for the default "fancy date format",
+	  even if it's not used, yet.  Another step to fixing #99574
+
+	* Added GPL boilerplates to many of my files.
+
+2003-10-21  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-utils.c: Refactor some GUI
+	code. Improve user messages.
+
+2003-10-20  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/hbci-interaction.c,
+	gnc-hbci-getbalance.c, dialog-hbcitrans.c: Improved user messages.
+
+	* src/import-export/hbci/gnc-hbci-utils.c: Fixed extremly stupid,
+	old bug that causes weird HBCI errors.
+
+2003-10-18  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c: Fix and initially
+	implement handling of multiple banks/users/customers.
+
+	* src/import-export/hbci/dialog-hbcitrans.c: Fix handling of HBCI
+	direct debits (fix wrong textkey).
+
+2003-10-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/backend/postgres/gncquery.c:  Linas broke SQL when we renamed
+	  the QueryObjects to QofClass.
+
+2003-09-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/gnc-date.h: add a comment about minimum string length
+	* src/engine/Transaction.c: fix the ISO_DATELEN to be "long enough"
+	  Fixes #123558
+
+2003-09-18  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in: Add correct configure test for openhbci version
+	required by mt940 module.
+
 2003-09-16  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-kvp.c: Fix broken compile due to

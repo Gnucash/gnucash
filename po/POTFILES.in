@@ -208,7 +208,7 @@ src/engine/qofid.c
 src/engine/qofobject.c
 src/engine/qofquery.c
 src/engine/qofquerycore.c
-src/engine/qofqueryobject.c
+src/engine/qofclass.c
 src/engine/qofsession.c
 src/engine/test/test-commodities.c
 src/engine/test/test-date.c

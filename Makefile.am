@@ -1,5 +1,5 @@
 
-SUBDIRS = m4 debian doc lib src intl-scm po rpm accounts
+SUBDIRS = m4 doc lib src intl-scm po rpm accounts
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
