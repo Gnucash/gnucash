@@ -11,6 +11,7 @@ gnc_regular_scm_files = \
   command-line.scm \
   commodity-import.scm \
   commodity-table.scm \
+  commodity-utilities.scm \
   config-var.scm \
   date-utilities.scm \
   depend.scm \
@@ -34,6 +35,7 @@ gnc_regular_scm_files = \
   iso-4217-currencies.scm \
   main.scm \
   options.scm \
+  options-utilities.scm \
   path.scm \
   prefs.scm \
   report.scm \

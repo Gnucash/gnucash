@@ -24,6 +24,7 @@
 
 (gnc:depend "report-utilities.scm")
 (gnc:depend "html-text.scm")
+(gnc:depend "commodity-utilities.scm")
 
 ;; returns a list with n #f (empty cell) values 
 (define (gnc:html-make-empty-cells n)

@@ -1,3 +1,14 @@
+2001-02-09  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/commodity-utilities.scm: Functions to calculate exchange
+	rates (weighted average) for different commodities (moved from
+	report-utilities.scm). Major cleanup.
+
+	* src/scm/options-utilities.scm: Option creation functions common
+	to several reports. (moved from report-utilities.scm)
+
+	* src/scm/report-utilities.scm: Major cleanup.
+
 2001-02-08  Bill Gribble  <grib@billgribble.com>
 
 	* src/gnome/druid-qif-import.c: restructure druid a bit to 
