@@ -96,6 +96,10 @@ architectural goals.
     separation would make the design and implementation of new ledger
     windows much simpler and easier.
     <p>
+    Current Status: the latest alpha-development releases (version 
+    1.1.x) contain such an object.  Its currently motif-based, but 
+    should be easily portable.
+    <p>
 
 <dt><b>C++</b>
 <dd>The current code is written in C, in an object-oriented fashion.
@@ -141,7 +145,8 @@ architectural goals.
 <dd>The current system makes a distinction between the data (account,
     transaction) and they GUI that displays it.  This distinction should
     be further strengthened, and a set of financial objects, residing in
-    their own library, should be created.
+    their own library, should be created.  Current Status: 
+    ready to split this stuff off into its own library.
 </dl>
 <p>
 
@@ -171,8 +176,13 @@ immediately, independent of the major goals.
 <dd>All menus, markup and help-text should be internationalized,
     so that X-Accountant could be usable in any country.  This
     would include the printing of currency values in the local 
-    country conventions.  Current status: most messages have been 
-    moved to a single header file.
+    country conventions.  Current status: most English-language
+    messages have been #defined and moved to a single header file.
+    Still looking for an infrastructure for choosing a message
+    catalogue.  Looking for routines that can parse and print
+    monetary values in different formats, as well as date/time
+    parsing/printing routines.  (xacc contains such parsing
+    routines, but they're not very powerful or i18n'ed.)
     <p>
 
 <dt><b>Navigation</b>
@@ -382,7 +392,7 @@ Your name here as project contributor!
 </ul>
 
 <hr>
-Draft version 0.13 December 1997<br>
+Draft version 0.14 January 1998<br>
 Linas Vepstas <a href="mailto:linas@linas.org">linas@linas.org</a><br>
 Robin Clark <a href="mailto:rclark@hmc.edu">rclark@hmc.edu</a><br>
 </body>
