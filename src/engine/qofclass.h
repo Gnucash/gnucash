@@ -69,16 +69,16 @@
  *  Note that QofIdTypes may also be used.  */
 
 #define QOF_TYPE_STRING    "string"
-#define QOF_TYPE_DATE    	"date"
+#define QOF_TYPE_DATE      "date"
 #define QOF_TYPE_NUMERIC   "numeric"
 #define QOF_TYPE_DEBCRED   "debcred"
-#define QOF_TYPE_GUID    	"guid"
-#define QOF_TYPE_INT32    	"gint32"
-#define QOF_TYPE_INT64    	"gint64"
+#define QOF_TYPE_GUID      "guid"
+#define QOF_TYPE_INT32     "gint32"
+#define QOF_TYPE_INT64     "gint64"
 #define QOF_TYPE_DOUBLE    "double"
 #define QOF_TYPE_BOOLEAN   "boolean"
-#define QOF_TYPE_KVP    	"kvp"
-#define QOF_TYPE_CHAR    	"character"
+#define QOF_TYPE_KVP       "kvp"
+#define QOF_TYPE_CHAR      "character"
 
 /** Type of Paramters (String, Date, Numeric, GUID, etc.) */
 typedef const char * QofType;
@@ -142,24 +142,26 @@ typedef int (*QofSortFunc)(gpointer, gpointer);
  *  In particular, it registers the set of setters and getters for
  *  controlling the object.   The getters are typically used by the
  *  query subsystem to query type specific data.   Note that there
- *  is no particular reqquirement for there to be a setter for every
- *  getter or even v.v. nor is there any requeirement for these to 
- *  map 'cleanly' or orthogonaly to the actual object design.
+ *  is no particular requirement for there to be a setter for every
+ *  getter or even vice-versa, nor is there any requeirement for these
+ *  to map 'cleanly' or orthogonaly to the underlying object.  The
+ *  parameters are really just a set of value setting and getting 
+ *  routines.
  *
  *  The "params" argument must be a NULL-terminated array of QofParam. 
  *  It may be NULL if there are no parameters to be registered.
  */
 void qof_class_register (QofIdTypeConst obj_name,
-			     QofSortFunc default_sort_fcn,
-			     const QofParam *params);
+                         QofSortFunc default_sort_fcn,
+                         const QofParam *params);
 
 /** An example:
  *
- * #define MY_OBJ_MEMO	"memo"
- * #define MY_OBJ_VALUE	"value"
- * #define MY_OBJ_DATE	"date"
- * #define MY_OBJ_ACCOUNT "account"
- * #define MY_OBJ_TRANS	"trans"
+ * #define MY_OBJ_MEMO     "memo"
+ * #define MY_OBJ_VALUE    "value"
+ * #define MY_OBJ_DATE     "date"
+ * #define MY_OBJ_ACCOUNT  "account"
+ * #define MY_OBJ_TRANS    "trans"
  *
  * static QofParam myParams[] = {
  * { MY_OBJ_MEMO, QOF_TYPE_STRING, myMemoGetter, NULL },
@@ -179,19 +181,19 @@ gboolean qof_class_is_registered (QofIdTypeConst obj_name);
 
 /** Return the core datatype of the specified object's parameter */
 QofType qof_class_get_parameter_type (QofIdTypeConst obj_name,
-					   const char *param_name);
+                                      const char *param_name);
 
 /** Return the registered Parameter Definition for the requested parameter */
 const QofParam * qof_class_get_parameter (QofIdTypeConst obj_name,
-						   const char *parameter);
+                                          const char *parameter);
 
 /** Return the object's parameter getter function */
 QofAccessFunc qof_class_get_parameter_getter (QofIdTypeConst obj_name,
-					      const char *parameter);
+                                              const char *parameter);
 
 /** Return the object's parameter setter function */
 QofSetterFunc qof_class_get_parameter_setter (QofIdTypeConst obj_name,
-					      const char *parameter);
+                                              const char *parameter);
 
 
 #endif /* QOF_CLASS_H */
