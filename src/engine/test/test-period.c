@@ -24,9 +24,11 @@
 static void
 run_test (void)
 {
-  AccountGroup *grp;
-  Account * acc;
+  GNCSession *sess;
   GNCBook *openbook, *closedbook;
+  AccountGroup *grp;
+  AccountList *acclist, *anode;
+  Account * acc = NULL;
   Timespec ts;
   SplitList *splist;
   Split *sfirst, *slast;
@@ -41,25 +43,31 @@ run_test (void)
     exit(get_rv());
   }
 
-  openbook = gnc_book_new ();
+  sess = get_random_session ();
+  openbook = gnc_session_get_book (sess);
   if (!openbook)
   {
     failure("book not created");
     exit(get_rv());
   }
 
-  grp = get_random_group (openbook);
-  if(!grp)
+  add_random_transactions_to_book (openbook, 120);
+
+  grp = gnc_book_get_group (openbook);
+
+  acclist = xaccGroupGetSubAccounts (grp);
+  for (anode=acclist; anode; anode=anode->next)
   {
-    failure("group not created");
-    exit(get_rv());
+    int ns;
+    acc = anode->data;
+    ns = g_list_length (xaccAccountGetSplitList (acc));
+    if (2 <= ns) break;
+    acc = NULL;
   }
 
-  gnc_book_set_group (openbook, grp);
-  acc = xaccGroupGetAccount (grp, 0);
   if(!acc)
   {
-    failure("group was empty");
+    failure("group didn't have accounts with enogh splits");
     exit(get_rv());
   }
 
