@@ -75,8 +75,8 @@ void guid_new(GUID *guid);
 /* Return a null-terminated string encoding of the id. String
  * encodings of identifiers are hex numbers printed only with the
  * characters '0' through '9' and 'a' through 'f'. The encoding will
- * always be 32 characters long. The returned string should be freed
- * when no longer needed. */
+ * always be GUID_ENCODING_LENGTH characters long. The returned string
+ * should be freed when no longer needed. */
 char * guid_to_string(const GUID * guid);
 
 
