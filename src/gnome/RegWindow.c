@@ -69,6 +69,9 @@ struct _RegWindow {
 /** GLOBALS *********************************************************/
 extern GtkWidget *  toplevel;
 
+/* This static indicates the debugging module that this .o belongs to.   */
+static short module  MOD_GUI;
+
 /** PROTOTYPES ******************************************************/
 RegWindow *regWindowLedger( xaccLedgerDisplay *ledger);
 static void regRefresh (xaccLedgerDisplay *ledger);

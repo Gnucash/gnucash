@@ -34,7 +34,7 @@ MOTIF_LIBS="-lXm"
 # Let the user specify gnome paths:
 AC_ARG_WITH( gnome-config, 
   [  --with-gnome-config=executable  which gnome-config to use to find gnome ],
-  GNOME_CONFIG_BIN="$with_gnome/bin/")
+  GNOME_CONFIG_BIN="$with_gnome_config")
 AC_SUBST(GNOME_CONFIG_BIN)
 
 # Let the user specify imlib paths:

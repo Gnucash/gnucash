@@ -33,14 +33,16 @@ INCLPATH = -I.. \
            -I@srcdir@/../../include \
            -I$(includedir)
 
-CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH} $(shell @GTK_CONFIG_BIN@ --cflags)
+CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH} \
+           $(shell @GNOME_CONFIG_BIN@ --cflags gnome)
+
 LDFLAGS  = @LDFLAGS@
 
 GUILELIBS = @GUILELIBS@
 LIBS     = -L$(prefix)/lib @LIBS@ @X_PRE_LIBS@ @X_LIBS@ \
-           $(shell @GTK_CONFIG_BIN@ --libs) @X_EXTRA_LIBS@ -lgnomeui \
+           $(shell @GNOME_CONFIG_BIN@ --libs gtk) @X_EXTRA_LIBS@ -lgnomeui \   
 	   $(shell @GNOME_CONFIG_BIN@ --libs gnome gnomeui ) \
-	   $(GUILELIBS) -lintl
+	   $(GUILELIBS) # -lintl
 
 GNOMELIBS = @GNOMELIBS@
 GTKLIBS   = @GTKLIBS@

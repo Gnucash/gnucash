@@ -24,7 +24,7 @@
 
 include @top_srcdir@/Makefile.init
 
-INCLPATH = -I@srcdir@/../../include -I@srcdir@/../..
+INCLPATH = -I@srcdir@/../../include -I@srcdir@/../..  -I@prefix@/include
 CFLAGS   = @CFLAGS@ ${INCLPATH}
 
 ######################################################################

@@ -65,6 +65,9 @@ static void recnCB(GtkWidget *w, gpointer data);
 
 static RecnWindow **recnList = NULL;
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module  MOD_GUI;
+
 /********************************************************************/
 
 /********************************************************************\
