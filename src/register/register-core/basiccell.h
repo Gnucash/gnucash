@@ -264,8 +264,8 @@ char *       xaccBasicCellGetHelp (BasicCell *bcell);
 void         gnc_basic_cell_set_value_internal (BasicCell *bcell,
                                                 const char *value);
 
-void         xaccSetBasicCellWCValueInternal (BasicCell *bcell,
-                                              const GdkWChar *value);
+void         gnc_basic_cell_set_wcvalue_internal (BasicCell *bcell,
+                                                  const GdkWChar *value);
 
 /* helper function, allocates new wide char string for conversion */
 gint         gnc_mbstowcs (GdkWChar **dest_p, const char *src);

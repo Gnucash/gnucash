@@ -275,7 +275,7 @@ gnc_basic_cell_set_value_internal (BasicCell *cell, const char *value)
 }
 
 void
-xaccSetBasicCellWCValueInternal (BasicCell *cell, const GdkWChar *value)
+gnc_basic_cell_set_wcvalue_internal (BasicCell *cell, const GdkWChar *value)
 {
   if (!value)
   {

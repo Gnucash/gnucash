@@ -200,6 +200,13 @@ gnc_table_virtual_cell_out_of_bounds (Table *table,
           (vcell_loc.virt_col >= table->num_virt_cols));
 }
 
+gboolean
+gnc_table_virtual_location_in_header (Table *table,
+                                      VirtualLocation virt_loc)
+{
+  return (virt_loc.vcell_loc.virt_row == 0);
+}
+
 VirtualCell *
 gnc_table_get_virtual_cell (Table *table, VirtualCellLocation vcell_loc)
 {

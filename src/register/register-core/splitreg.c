@@ -868,16 +868,16 @@ xaccInitSplitRegister (SplitRegister *reg,
      _("Enter debit formula for real transaction"));
 
   /* Use 6 decimal places for prices */
-  xaccSetPriceCellFraction
+  gnc_price_cell_set_fraction
     ((PriceCell *)
      gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL), 1000000);
 
   /* Initialize shares and share balance cells */
-  xaccSetPriceCellPrintInfo
+  gnc_price_cell_set_print_info
     ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout, SHRS_CELL),
      gnc_default_share_print_info ());
 
-  xaccSetPriceCellPrintInfo
+  gnc_price_cell_set_print_info
     ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout, TSHRS_CELL),
      gnc_default_share_print_info ());
 
@@ -897,7 +897,7 @@ xaccInitSplitRegister (SplitRegister *reg,
     case CURRENCY_REGISTER:
     case STOCK_REGISTER:
     case PORTFOLIO_LEDGER:
-      xaccSetPriceCellPrintInfo
+      gnc_price_cell_set_print_info
         ((PriceCell *)
          gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL),
          gnc_default_price_print_info ());

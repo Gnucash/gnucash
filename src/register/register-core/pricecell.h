@@ -37,7 +37,7 @@
  *
  * HISTORY:
  * Copyright (c) 1998, 1999, 2000 Linas Vepstas
- * Copyright (c) 2000 Dave Peticolas
+ * Copyright (c) 2000 Dave Peticolas <dave@krondo.com>
  * Copyright (c) 2001 Free Software Foundation
  */
 
@@ -65,35 +65,34 @@ typedef struct _PriceCell
 } PriceCell;
 
 /* installs a callback to handle price recording */
-BasicCell *  xaccMallocPriceCell (void);
+BasicCell *  gnc_price_cell_new (void);
 
 /* return the value of a price cell */
-gnc_numeric  xaccGetPriceCellValue (PriceCell *cell);
+gnc_numeric  gnc_price_cell_get_value (PriceCell *cell);
 
 /* updates amount, returns TRUE if string representation
  * actually changed */
-gboolean     xaccSetPriceCellValue (PriceCell *cell, gnc_numeric amount);
+gboolean     gnc_price_cell_set_value (PriceCell *cell, gnc_numeric amount);
 
 /* Sets the fraction used for rounding. If 0, no rounding is performed. */
-void         xaccSetPriceCellFraction (PriceCell *cell, int fraction);
+void         gnc_price_cell_set_fraction (PriceCell *cell, int fraction);
 
 /* Sets the cell as blank, regardless of the blank_zero value */
-void         xaccSetPriceCellBlank (PriceCell *cell);
+void         gnc_price_cell_blank (PriceCell *cell);
 
 /* determines whether 0 values are left blank or printed.
  * defaults to true. */
-void         xaccSetPriceCellBlankZero (PriceCell *cell, gboolean blank_zero);
+void         gnc_price_cell_set_blank_zero (PriceCell *cell,
+                                            gboolean blank_zero);
 
 /* set the printing context of the price cell */
-void         xaccSetPriceCellPrintInfo (PriceCell *cell,
-                                        GNCPrintAmountInfo print_info);
+void         gnc_price_cell_set_print_info (PriceCell *cell,
+                                            GNCPrintAmountInfo print_info);
 
 /* updates two cells; the deb cell if amt is negative, the credit cell
  * if amount is positive, and makes the other cell blank. */
-void         xaccSetDebCredCellValue (PriceCell *debit,
-                                      PriceCell *credit,
-                                      gnc_numeric amount);
+void         gnc_price_cell_set_debt_credit_value (PriceCell *debit,
+                                                   PriceCell *credit,
+                                                   gnc_numeric amount);
 
-#endif /* __PRICE_CELL_C__ */
-
-/* --------------- end of file ---------------------- */
+#endif

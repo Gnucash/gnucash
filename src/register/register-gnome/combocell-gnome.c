@@ -460,7 +460,7 @@ ComboMV (BasicCell *_cell,
 
         if (box->in_list_select)
         {
-                xaccSetBasicCellWCValueInternal (_cell, newval);
+                gnc_basic_cell_set_wcvalue_internal (_cell, newval);
 
                 *cursor_position = -1;
                 *start_selection = 0;
@@ -472,14 +472,14 @@ ComboMV (BasicCell *_cell,
         /* If deleting, just accept */
         if (change == NULL)
         {
-                xaccSetBasicCellWCValueInternal (_cell, newval);
+                gnc_basic_cell_set_wcvalue_internal (_cell, newval);
                 return;
         }
 
         /* If we are inserting in the middle, just accept */
         if (*cursor_position < _cell->value_len)
         {
-                xaccSetBasicCellWCValueInternal (_cell, newval);
+                gnc_basic_cell_set_wcvalue_internal (_cell, newval);
                 return;
         }
 
@@ -489,7 +489,7 @@ ComboMV (BasicCell *_cell,
 
         if ((match == NULL) || (match_str == NULL))
         {
-                xaccSetBasicCellWCValueInternal (_cell, newval);
+                gnc_basic_cell_set_wcvalue_internal (_cell, newval);
 
                 block_list_signals (cell);
                 gnc_item_list_select (box->item_list, NULL);

@@ -598,7 +598,7 @@ gnucash_sheet_style_new (GnucashSheet *sheet, CellBlock *cursor)
         g_return_val_if_fail (GNUCASH_IS_SHEET (sheet), NULL);
         g_return_val_if_fail (cursor != NULL, NULL);
 
-        style = g_new0(SheetBlockStyle, 1);
+        style = g_new0 (SheetBlockStyle, 1);
 
         style->cursor = cursor;
 

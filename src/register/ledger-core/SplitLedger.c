@@ -1370,10 +1370,10 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
     gnc_numeric debit;
 
     cell = gnc_table_layout_get_cell (reg->table->layout, CRED_CELL);
-    credit = xaccGetPriceCellValue ((PriceCell *) cell);
+    credit = gnc_price_cell_get_value ((PriceCell *) cell);
 
     cell = gnc_table_layout_get_cell (reg->table->layout, DEBT_CELL);
-    debit = xaccGetPriceCellValue ((PriceCell *) cell);
+    debit = gnc_price_cell_get_value ((PriceCell *) cell);
 
     new_value = gnc_numeric_sub_fixed (debit, credit);
 
@@ -1392,7 +1392,7 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
 
     cell = gnc_table_layout_get_cell (reg->table->layout, SHRS_CELL);
 
-    shares = xaccGetPriceCellValue ((PriceCell *) cell);
+    shares = gnc_price_cell_get_value ((PriceCell *) cell);
 
     gnc_split_scm_set_amount (split_scm, shares);
   }
@@ -1635,7 +1635,7 @@ sr_split_auto_calc (SplitRegister *reg, Split *split)
   {
     cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
                                                     SHRS_CELL);
-    amount = xaccGetPriceCellValue (cell);
+    amount = gnc_price_cell_get_value (cell);
   }
   else
     amount = xaccSplitGetAmount (split);
@@ -1644,7 +1644,7 @@ sr_split_auto_calc (SplitRegister *reg, Split *split)
   {
     cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
                                                     PRIC_CELL);
-    price = xaccGetPriceCellValue (cell);
+    price = gnc_price_cell_get_value (cell);
   }
   else
     price = xaccSplitGetSharePrice (split);
@@ -1656,11 +1656,11 @@ sr_split_auto_calc (SplitRegister *reg, Split *split)
 
     cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
                                                     CRED_CELL);
-    credit = xaccGetPriceCellValue (cell);
+    credit = gnc_price_cell_get_value (cell);
 
     cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
                                                     DEBT_CELL);
-    debit = xaccGetPriceCellValue (cell);
+    debit = gnc_price_cell_get_value (cell);
 
     value = gnc_numeric_sub_fixed (debit, credit);
   }
@@ -1790,7 +1790,7 @@ sr_split_auto_calc (SplitRegister *reg, Split *split)
       amount = gnc_numeric_div (value, price, denom, GNC_RND_ROUND);
 
       cell = gnc_table_layout_get_cell (reg->table->layout, SHRS_CELL);
-      xaccSetPriceCellValue ((PriceCell *) cell, amount);
+      gnc_price_cell_set_value ((PriceCell *) cell, amount);
       gnc_basic_cell_set_changed (cell, TRUE);
 
       if (amount_changed)
@@ -1822,16 +1822,16 @@ sr_split_auto_calc (SplitRegister *reg, Split *split)
 
         price = gnc_numeric_neg (price);
 
-        xaccSetDebCredCellValue ((PriceCell *) debit_cell,
-                                 (PriceCell *) credit_cell,
-                                 gnc_numeric_neg (value));
+        gnc_price_cell_set_debt_credit_value ((PriceCell *) debit_cell,
+                                              (PriceCell *) credit_cell,
+                                              gnc_numeric_neg (value));
 
         gnc_basic_cell_set_changed (debit_cell, TRUE);
         gnc_basic_cell_set_changed (credit_cell, TRUE);
       }
 
       price_cell = gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL);
-      xaccSetPriceCellValue ((PriceCell *) price_cell, price);
+      gnc_price_cell_set_value ((PriceCell *) price_cell, price);
       gnc_basic_cell_set_changed (price_cell, TRUE);
     }
 
@@ -1847,8 +1847,8 @@ sr_split_auto_calc (SplitRegister *reg, Split *split)
 
     value = gnc_numeric_mul (price, amount, denom, GNC_RND_ROUND);
 
-    xaccSetDebCredCellValue ((PriceCell *) debit_cell,
-                             (PriceCell *) credit_cell, value);
+    gnc_price_cell_set_debt_credit_value ((PriceCell *) debit_cell,
+                                          (PriceCell *) credit_cell, value);
 
     gnc_basic_cell_set_changed (debit_cell, TRUE);
     gnc_basic_cell_set_changed (credit_cell, TRUE);
@@ -2228,7 +2228,7 @@ xaccSRActuallySaveChangedCells (SplitRegister *reg,
 
     cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
                                                     SHRS_CELL);
-    amount = xaccGetPriceCellValue (cell);
+    amount = gnc_price_cell_get_value (cell);
 
     DEBUG ("SHRS");
 
@@ -2242,7 +2242,7 @@ xaccSRActuallySaveChangedCells (SplitRegister *reg,
 
     cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
                                                     PRIC_CELL);
-    price = xaccGetPriceCellValue (cell);
+    price = gnc_price_cell_get_value (cell);
 
     DEBUG ("PRIC");
 
@@ -2261,11 +2261,11 @@ xaccSRActuallySaveChangedCells (SplitRegister *reg,
 
     cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
                                                     CRED_CELL);
-    credit = xaccGetPriceCellValue (cell);
+    credit = gnc_price_cell_get_value (cell);
 
     cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
                                                     DEBT_CELL);
-    debit  = xaccGetPriceCellValue (cell);
+    debit  = gnc_price_cell_get_value (cell);
 
     new_amount = gnc_numeric_sub_fixed (debit, credit);
 
@@ -3100,7 +3100,7 @@ xaccSRGetFGColorHandler (VirtualLocation virt_loc, gpointer user_data)
         if (cell_type == TSHRS_CELL)
           shares = get_trans_total_amount (reg, trans);
         else if (is_current)
-          shares = xaccGetPriceCellValue
+          shares = gnc_price_cell_get_value
             ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
                                                       SHRS_CELL));
         else
@@ -3260,6 +3260,9 @@ xaccSRGetBGColorHandler (VirtualLocation virt_loc,
   if (!reg)
     return bg_color;
 
+  if (gnc_table_virtual_location_in_header (reg->table, virt_loc))
+    return reg_colors.header_bg_color;
+
   vcell = gnc_table_get_virtual_cell (reg->table, virt_loc.vcell_loc);
   if (!vcell || !vcell->cellblock)
     return bg_color;
@@ -3272,9 +3275,6 @@ xaccSRGetBGColorHandler (VirtualLocation virt_loc,
                                     virt_loc.vcell_loc);
 
   cursor_name = vcell->cellblock->cursor_name;
-
-  if (safe_strcmp (cursor_name, CURSOR_HEADER) == 0)
-    return reg_colors.header_bg_color;
 
   if (safe_strcmp (cursor_name, CURSOR_SINGLE_JOURNAL) == 0 ||
       safe_strcmp (cursor_name, CURSOR_SINGLE_LEDGER) == 0)

@@ -45,7 +45,6 @@
 static void xaccInitNumCell (NumCell *cell);
 
 
-/* ================================================ */
 /* Parses the string value and returns true if it is a
  * number. In that case, *num is set to the value parsed. */
 static gboolean
@@ -70,7 +69,6 @@ parse_num(const char *string, long int *num)
   return TRUE;
 }
 
-/* ================================================ */
 static void
 NumMV (BasicCell *_cell, 
        const GdkWChar *change,
@@ -87,10 +85,10 @@ NumMV (BasicCell *_cell,
   long int number = 0;
 
   if ((change == NULL) || (change_len == 0) || /* if we are deleting       */
-      (change_len > 1))                       /* or entering > 1 char     */
+      (change_len > 1))                        /* or entering > 1 char     */
     /* then just accept the proposed change */
   {
-    xaccSetBasicCellWCValueInternal (&cell->cell, newval);
+    gnc_basic_cell_set_wcvalue_internal (&cell->cell, newval);
     return;
   }
 
@@ -155,10 +153,9 @@ NumMV (BasicCell *_cell,
     return;
   }
 
-  xaccSetBasicCellWCValueInternal (&cell->cell, newval);
+  gnc_basic_cell_set_wcvalue_internal (&cell->cell, newval);
 }
 
-/* ================================================ */
 BasicCell *
 xaccMallocNumCell (void)
 {
@@ -171,7 +168,6 @@ xaccMallocNumCell (void)
   return &cell->cell;
 }
 
-/* ================================================ */
 static void 
 setNumCellValue (BasicCell *_cell, const char *str)
 {
@@ -188,7 +184,6 @@ setNumCellValue (BasicCell *_cell, const char *str)
   gnc_basic_cell_set_value_internal (_cell, str);
 }
 
-/* ================================================ */
 void 
 xaccSetNumCellValue (NumCell *cell, const char *str)
 {
@@ -198,7 +193,6 @@ xaccSetNumCellValue (NumCell *cell, const char *str)
   setNumCellValue (&cell->cell, str);
 }
 
-/* ================================================ */
 gboolean
 xaccSetNumCellLastNum (NumCell *cell, const char *str)
 {
@@ -217,7 +211,6 @@ xaccSetNumCellLastNum (NumCell *cell, const char *str)
   return FALSE;
 }
 
-/* ================================================ */
 static void
 xaccInitNumCell (NumCell *cell)
 {

@@ -779,8 +779,9 @@ gnc_split_register_auto_completion (SplitRegister *reg,
           credit_cell = gnc_table_layout_get_cell (reg->table->layout,
                                                    CRED_CELL);
 
-          xaccSetDebCredCellValue ((PriceCell *) debit_cell,
-                                   (PriceCell *) credit_cell, amount);
+          gnc_price_cell_set_debt_credit_value ((PriceCell *) debit_cell,
+                                                (PriceCell *) credit_cell,
+                                                amount);
 
           gnc_basic_cell_set_changed (debit_cell, TRUE);
           gnc_basic_cell_set_changed (credit_cell, TRUE);

@@ -79,7 +79,7 @@ PriceDirect (BasicCell *bcell,
                                                  &amount, &error_loc);
 
                 if (parse_ok)
-                    changed = xaccSetPriceCellValue (cell, amount);
+                    changed = gnc_price_cell_set_value (cell, amount);
                 else
                     *cursor_position = error_loc - cell->cell.value;
 
@@ -131,7 +131,7 @@ PriceDirect (BasicCell *bcell,
     /* update the cursor position */
     (*cursor_position)++;
 
-    xaccSetBasicCellWCValueInternal (bcell, newval);
+    gnc_basic_cell_set_wcvalue_internal (bcell, newval);
 
     g_free (newval);
 
@@ -151,8 +151,6 @@ xaccPriceGUIInit (PriceCell *cell)
 
     cell->cell.direct_update = PriceDirect;
 }
-
-/* =============== end of file =================== */
 
 /*
   Local Variables:

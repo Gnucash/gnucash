@@ -171,6 +171,10 @@ gboolean    gnc_table_get_current_cell_location (Table *table,
 gboolean gnc_table_virtual_cell_out_of_bounds (Table *table,
                                                VirtualCellLocation vcell_loc);
 
+gboolean gnc_table_virtual_location_in_header (Table *table,
+                                               VirtualLocation virt_loc);
+
+
 /* This function returns the virtual cell associated with a particular
  *   virtual location. If the location is out of bounds, NULL is *
  *   returned. */

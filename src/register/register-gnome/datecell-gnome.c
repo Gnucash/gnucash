@@ -754,7 +754,7 @@ DateMV (BasicCell *_cell,
   {
     char *newval_mb = gnc_wcstombs (newval);
 
-    xaccSetBasicCellWCValueInternal (&cell->cell, newval);
+    gnc_basic_cell_set_wcvalue_internal (&cell->cell, newval);
     xaccParseDate (&(box->date), newval_mb);
     g_free (newval_mb);
 
