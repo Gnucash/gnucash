@@ -45,6 +45,7 @@
 #define SET(cell,str) { 			\
    if ((cell)->value) free ((cell)->value);	\
    (cell)->value = strdup (str);		\
+   (cell)->changed = 0xffffffff;                \
 }
 
 typedef struct _PopBox {
