@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5.X\n"
-"POT-Creation-Date: 2001-06-09 16:49-0700\n"
+"POT-Creation-Date: 2001-06-10 23:32-0700\n"
 "PO-Revision-Date: 2001-1-18 14:00+0900\n"
 "Last-Translator: Mitsuo Hamada <mhamada@redhat.com>\n"
 "Language-Team: Japanese <translation@gnome.gr.jp>\n"
@@ -172,7 +172,7 @@ msgstr "保存されていない変更があります。ファイルに保存しますか?"
 msgid "Open"
 msgstr "開く"
 
-#: src/FileDialog.c:565 src/gnome/window-main.c:1084
+#: src/FileDialog.c:565 src/gnome/window-main.c:1090
 msgid "Save"
 msgstr "保存"
 
@@ -189,8 +189,8 @@ msgstr ""
 " はすで存在します。\n"
 " 本当に上書きしてよろしいですか?"
 
-#: src/SplitLedger.c:125 src/engine/Transaction.c:2017
-#: src/engine/Transaction.c:2038 src/register/splitreg.c:739
+#: src/SplitLedger.c:125 src/engine/Transaction.c:2016
+#: src/engine/Transaction.c:2037 src/register/splitreg.c:739
 #: src/scm/report/guile-strings.c:344
 msgid "-- Split Transaction --"
 msgstr "-- 諸口の取引 --"
@@ -505,7 +505,7 @@ msgstr ""
 msgid "Imbalance"
 msgstr "貸借不一致"
 
-#: src/engine/Transaction.c:2059 src/gnome/druid-stock-split.c:395
+#: src/engine/Transaction.c:2058 src/gnome/druid-stock-split.c:395
 #: src/gnome/window-register.c:869 src/register/splitreg.c:241
 msgid "Split"
 msgstr "諸口"
@@ -679,20 +679,20 @@ msgstr ""
 msgid "New top level account"
 msgstr "新規基本勘定科目"
 
-#: src/gnome/dialog-account.c:1709
+#: src/gnome/dialog-account.c:1717
 msgid "<No name>"
 msgstr "<名前なし>"
 
-#: src/gnome/dialog-account.c:1749
+#: src/gnome/dialog-account.c:1757
 msgid "Edit Account"
 msgstr "勘定科目を編集"
 
-#: src/gnome/dialog-account.c:1752
+#: src/gnome/dialog-account.c:1760
 #, c-format
 msgid "(%d) New Accounts"
 msgstr "(%d) 新規勘定科目"
 
-#: src/gnome/dialog-account.c:1763 src/gnome/glade-gnc-dialogs.c:3446
+#: src/gnome/dialog-account.c:1771 src/gnome/glade-gnc-dialogs.c:3446
 msgid "New Account"
 msgstr "新規勘定科目"
 
@@ -700,7 +700,7 @@ msgstr "新規勘定科目"
 msgid "No description"
 msgstr "説明なし"
 
-#: src/gnome/dialog-column-view.c:243
+#: src/gnome/dialog-column-view.c:242
 #, fuzzy
 msgid "Contents"
 msgstr "偶発損失"
@@ -3364,7 +3364,7 @@ msgstr "印刷"
 msgid "Print Help window"
 msgstr "ヘルプウィンドウを印刷"
 
-#: src/gnome/window-help.c:656 src/gnome/window-main.c:1094
+#: src/gnome/window-help.c:656 src/gnome/window-main.c:1100
 #: src/gnome/window-register.c:933 src/gnome/window-register.c:1374
 msgid "Close"
 msgstr "閉じる"
@@ -3406,148 +3406,148 @@ msgstr ""
 "GnuCash 個人用財務管理\n"
 "GNU でお金を管理しよう!"
 
-#: src/gnome/window-main.c:922
+#: src/gnome/window-main.c:928
 #, fuzzy
 msgid "New _File"
 msgstr "新規ファイル"
 
-#: src/gnome/window-main.c:923
+#: src/gnome/window-main.c:929
 msgid "Create a new file"
 msgstr "新しいファイルを作成する"
 
-#: src/gnome/window-main.c:930
+#: src/gnome/window-main.c:936
 #, fuzzy
 msgid "Export Accounts..."
 msgstr "貸方勘定科目"
 
-#: src/gnome/window-main.c:931
+#: src/gnome/window-main.c:937
 msgid "Export the account hierarchy to a new file"
 msgstr ""
 
-#: src/gnome/window-main.c:939
+#: src/gnome/window-main.c:945
 msgid "Import QIF..."
 msgstr "QIF のインポート..."
 
-#: src/gnome/window-main.c:940
+#: src/gnome/window-main.c:946
 msgid "Import a Quicken QIF file"
 msgstr "Quicken QIF ファイルを読み込む"
 
-#: src/gnome/window-main.c:948
+#: src/gnome/window-main.c:954
 #, fuzzy
 msgid "New _Account Tree"
 msgstr "新規勘定科目"
 
-#: src/gnome/window-main.c:949
+#: src/gnome/window-main.c:955
 #, fuzzy
 msgid "Open a new account tree view"
 msgstr "勘定科目を開く"
 
-#: src/gnome/window-main.c:956
+#: src/gnome/window-main.c:962
 #, fuzzy
 msgid "Move to New Window"
 msgstr "ヘルプウィンドウを閉じる"
 
-#: src/gnome/window-main.c:957
+#: src/gnome/window-main.c:963
 msgid "Open a new top-level GnuCash window for the current view"
 msgstr ""
 
-#: src/gnome/window-main.c:963
+#: src/gnome/window-main.c:969
 #, fuzzy
 msgid "Close _Window"
 msgstr "ヘルプウィンドウを閉じる"
 
-#: src/gnome/window-main.c:964 src/gnome/window-main.c:1095
+#: src/gnome/window-main.c:970 src/gnome/window-main.c:1101
 #, fuzzy
 msgid "Close the current notebook page"
 msgstr "このレポートを再読込"
 
-#: src/gnome/window-main.c:976
+#: src/gnome/window-main.c:982
 msgid "_Preferences..."
 msgstr "初期設定(_P)..."
 
-#: src/gnome/window-main.c:977
+#: src/gnome/window-main.c:983
 msgid "Open the global preferences dialog"
 msgstr "全体の初期設定ダイアログを開く"
 
-#: src/gnome/window-main.c:989
+#: src/gnome/window-main.c:995
 msgid "_General Ledger"
 msgstr "総勘定元帳(_G)"
 
-#: src/gnome/window-main.c:990
+#: src/gnome/window-main.c:996
 msgid "Open a general ledger window"
 msgstr "総勘定元帳を開く"
 
-#: src/gnome/window-main.c:997
+#: src/gnome/window-main.c:1003
 msgid "Commodity _Editor"
 msgstr ""
 
-#: src/gnome/window-main.c:998
+#: src/gnome/window-main.c:1004
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr ""
 
-#: src/gnome/window-main.c:1005
+#: src/gnome/window-main.c:1011
 msgid "_Price Editor"
 msgstr ""
 
-#: src/gnome/window-main.c:1006
+#: src/gnome/window-main.c:1012
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr ""
 
-#: src/gnome/window-main.c:1013
+#: src/gnome/window-main.c:1019
 msgid "Financial _Calculator"
 msgstr "財務計算機(_C)"
 
-#: src/gnome/window-main.c:1014
+#: src/gnome/window-main.c:1020
 msgid "Use the financial calculator"
 msgstr "財務計算機を使用する"
 
-#: src/gnome/window-main.c:1020
+#: src/gnome/window-main.c:1026
 msgid "_Find Transactions"
 msgstr "取引検索(_F)"
 
-#: src/gnome/window-main.c:1021 src/gnome/window-register.c:906
+#: src/gnome/window-main.c:1027 src/gnome/window-register.c:906
 msgid "Find transactions with a search"
 msgstr "検索により取引を見つける"
 
-#: src/gnome/window-main.c:1033
+#: src/gnome/window-main.c:1039
 msgid "_Manual"
 msgstr "マニュアル(_M)"
 
-#: src/gnome/window-main.c:1034
+#: src/gnome/window-main.c:1040
 msgid "Open the GnuCash Manual"
 msgstr "GnuCashマニュアルを開く"
 
-#: src/gnome/window-main.c:1041
+#: src/gnome/window-main.c:1047
 msgid "_Tips Of The Day"
 msgstr "今日のヒント(_T)"
 
-#: src/gnome/window-main.c:1042
+#: src/gnome/window-main.c:1048
 msgid "View the Tips of the Day"
 msgstr "「今日のヒント」を見る"
 
-#: src/gnome/window-main.c:1061
+#: src/gnome/window-main.c:1067
 msgid "_Tools"
 msgstr "ツール(_T)"
 
-#: src/gnome/window-main.c:1062
+#: src/gnome/window-main.c:1068
 #, fuzzy
 msgid "_Settings"
 msgstr "検索開始日"
 
-#: src/gnome/window-main.c:1063
+#: src/gnome/window-main.c:1069
 #, fuzzy
 msgid "_Windows"
 msgstr "メインウィンドウ"
 
-#: src/gnome/window-main.c:1085
+#: src/gnome/window-main.c:1091
 msgid "Save the file to disk"
 msgstr "ファイルをディスクに保存する"
 
-#: src/gnome/window-main.c:1110
+#: src/gnome/window-main.c:1116
 msgid "Exit"
 msgstr "終了"
 
-#: src/gnome/window-main.c:1111
+#: src/gnome/window-main.c:1117
 msgid "Exit GnuCash"
 msgstr "GnuCash を終了する"
 
@@ -4187,16 +4187,16 @@ msgstr "帳票オプションを編集する"
 msgid "Print report window"
 msgstr "帳票ウィンドウを印刷する"
 
-#: src/guile/gnucash.c:143
+#: src/guile/gnucash.c:144
 msgid "This is a development version. It may or may not work."
 msgstr "開発バージョンのため、動作しないかもしれません。"
 
-#: src/guile/gnucash.c:147
+#: src/guile/gnucash.c:148
 #, c-format
 msgid "The last stable version was %s."
 msgstr "最新の安定バージョンは %s です。"
 
-#: src/guile/gnucash.c:149
+#: src/guile/gnucash.c:150
 #, c-format
 msgid "The next stable version will be %s."
 msgstr "次の安定バージョンは %s です。"
@@ -5911,18 +5911,6 @@ msgid "Credit Lines"
 msgstr "貸方"
 
 #: src/scm/guile-strings.c:470
-msgid ""
-"Warning!! This is a DEVELOPMENT version of GnuCash.\n"
-"It probably has lots of bugs and unstable features!\n"
-"If you are looking for a stable personal finance application,\n"
-"you should use the latest release of GnuCash 1.4."
-msgstr ""
-"警告!!これは GnuCash の開発バージョンです。\n"
-"たくさんのバグと不安定な機能があるかもしれません。\n"
-"もし安定版の個人向け財務アプリケーションをお探しならば、\n"
-"最新のリリースである GnuCash 1.4 を使用すべきです。"
-
-#: src/scm/guile-strings.c:474
 #, fuzzy
 msgid ""
 "The GnuCash online manual has lots of helpful information.  \n"
@@ -5933,7 +5921,7 @@ msgstr ""
 "GnuCash オンラインマニュアルには有益な情報がたくさんあります。\n"
 "ヘルプメニューからアクセスすることができます。"
 
-#: src/scm/guile-strings.c:478
+#: src/scm/guile-strings.c:474
 msgid ""
 "You can easily import your existing financial data from Quicken,\n"
 "MS Money or other programs that export QIF (Quicken Interchange\n"
@@ -5945,7 +5933,7 @@ msgstr ""
 "簡単にインポートすることができます。メインウィンドウのツールバーの\n"
 "インポートボタンをクリックし、指示に従ってください。"
 
-#: src/scm/guile-strings.c:482
+#: src/scm/guile-strings.c:478
 msgid ""
 "If you are familiar with other financial programs such as Quicken,\n"
 "note that GnuCash uses accounts instead of categories to track\n"
@@ -5957,7 +5945,7 @@ msgstr ""
 "注意してください。所得、費用の科目に関する詳細情報については、\n"
 "Gnucash のオンラインマニュアルをご覧ください。"
 
-#: src/scm/guile-strings.c:486
+#: src/scm/guile-strings.c:482
 msgid ""
 "Create new accounts by clicking the New button in the main window\n"
 "tool bar.  This will bring up a dialog box where you can enter\n"
@@ -5970,7 +5958,7 @@ msgstr ""
 "科目のタイプの選択や科目表の設定に関する詳細情報に関しては、Gnucash の\n"
 "オンラインマニュアルをご覧ください。"
 
-#: src/scm/guile-strings.c:491
+#: src/scm/guile-strings.c:487
 msgid ""
 "Click the right mouse button in the main window to bring up the\n"
 "account menu options. Within each register, clicking the right\n"
@@ -5980,7 +5968,7 @@ msgstr ""
 "オプションが表示されます。帳簿ウィンドウ内で右ボタンをクリックすると、\n"
 "取引メニューオプションが表示されます。"
 
-#: src/scm/guile-strings.c:494
+#: src/scm/guile-strings.c:490
 msgid ""
 "As you enter amounts in the register, you can use the GnuCash\n"
 "calculator to add, subtract, multiply and divide .  Simply type\n"
@@ -5991,7 +5979,7 @@ msgstr ""
 "を行うことができます。通常の電卓と同様に、最初の数字を入力、'+', '-',\n"
 " '*', '/' を選択、二つ目の数字を入力し、Enter を押します。"
 
-#: src/scm/guile-strings.c:498
+#: src/scm/guile-strings.c:494
 msgid ""
 "Quick-fill makes it easy to enter common transactions.  When you\n"
 "type the first letter(s) of a common transaction description,\n"
@@ -6002,7 +5990,7 @@ msgstr ""
 "最初の文字を入力すると、GnuCash は以前に入力した取引と同じものの\n"
 "続きを自動的に補完します。"
 
-#: src/scm/guile-strings.c:502
+#: src/scm/guile-strings.c:498
 msgid ""
 "Type the first letter(s) of an existing account name in the\n"
 "Transfer register column, and GnuCash will complete the name from\n"
@@ -6015,7 +6003,7 @@ msgstr ""
 "入力し、':'に続けて、子科目の最初の文字を入力してください。\n"
 "例: A:C は Assets:Cash"
 
-#: src/scm/guile-strings.c:507
+#: src/scm/guile-strings.c:503
 msgid ""
 "To enter multiple-split transactions such as a paycheck with\n"
 "multiple deductions, click the Split button in the tool bar.\n"
@@ -6023,7 +6011,7 @@ msgid ""
 "Transaction Journal from the Register|Style menu option."
 msgstr ""
 
-#: src/scm/guile-strings.c:511
+#: src/scm/guile-strings.c:507
 msgid ""
 "Want to see all your subaccount transactions in one register?\n"
 "From the main menu, highlight the parent account and select\n"
@@ -6033,7 +6021,7 @@ msgstr ""
 "親勘定科目を選択し、メインメニューから勘定(A)|子勘定科目を開く\n"
 "を選択してください。"
 
-#: src/scm/guile-strings.c:514
+#: src/scm/guile-strings.c:510
 msgid ""
 "In the reconcile window, you can press the spacebar\n"
 "to mark transactions as reconciled.\n"
@@ -6041,7 +6029,7 @@ msgid ""
 "deposits and withdrawals."
 msgstr ""
 
-#: src/scm/guile-strings.c:518
+#: src/scm/guile-strings.c:514
 msgid ""
 "When entering check numbers in the register, you can\n"
 "type '+' to enter the next number or '-' to enter the previous\n"
@@ -6053,7 +6041,7 @@ msgstr ""
 "の場合には、一つ前の番号を使用します。同様にして、日付も '+',\n"
 "'-'を使用して入力することができます。"
 
-#: src/scm/guile-strings.c:522
+#: src/scm/guile-strings.c:518
 #, fuzzy
 msgid ""
 "You should back up your files regularly.  Just copy\n"
@@ -6063,7 +6051,7 @@ msgstr ""
 "単純に Gnucash の .xac ファイルをフロッピーやその他のメディアに\n"
 "コピーするだけです。"
 
-#: src/scm/guile-strings.c:524
+#: src/scm/guile-strings.c:520
 #, fuzzy
 msgid ""
 "To transfer funds between accounts with different currencies,\n"
@@ -6075,34 +6063,34 @@ msgstr ""
 "必要になります。詳細については Gnucash オンラインマニュアルを\n"
 "ご覧ください。"
 
-#: src/scm/guile-strings.c:528
+#: src/scm/guile-strings.c:524
 msgid ""
 "You can pack multiple reports into a single window, \n"
 "providing all the financial information you want at a glance.\n"
 "To do so, use the \"Multicolumn View\" report."
 msgstr ""
 
-#: src/scm/guile-strings.c:531
+#: src/scm/guile-strings.c:527
 msgid ""
 "GnuCash can act as a simple web browser!  To display\n"
 "a web page as a report, use the \"Frame URL\" report."
 msgstr ""
 
-#: src/scm/guile-strings.c:533
+#: src/scm/guile-strings.c:529
 msgid ""
 "Style Sheets affect how reports are displayed.  Choose\n"
 "a style sheet for your report as a report option, and use\n"
 "the Style Sheets menu to customize style sheets."
 msgstr ""
 
-#: src/scm/guile-strings.c:536
+#: src/scm/guile-strings.c:532
 msgid ""
 "The GnuCash developers are easy to contact.  As well\n"
 "as several mailing lists, you can chat to them live on IRC!\n"
 "Join them on #gnucash at irc.gnome.org"
 msgstr ""
 
-#: src/scm/guile-strings.c:539
+#: src/scm/guile-strings.c:535
 msgid ""
 "There is a theory that if ever anyone discovers what\n"
 "the Universe is for and why it is here, it will instantly\n"
@@ -7874,6 +7862,17 @@ msgstr ""
 #: src/scm/report/guile-strings.c:721
 msgid "Welcome to GnuCash 1.6"
 msgstr ""
+
+#~ msgid ""
+#~ "Warning!! This is a DEVELOPMENT version of GnuCash.\n"
+#~ "It probably has lots of bugs and unstable features!\n"
+#~ "If you are looking for a stable personal finance application,\n"
+#~ "you should use the latest release of GnuCash 1.4."
+#~ msgstr ""
+#~ "警告!!これは GnuCash の開発バージョンです。\n"
+#~ "たくさんのバグと不安定な機能があるかもしれません。\n"
+#~ "もし安定版の個人向け財務アプリケーションをお探しならば、\n"
+#~ "最新のリリースである GnuCash 1.4 を使用すべきです。"
 
 #, fuzzy
 #~ msgid "Introduction"
