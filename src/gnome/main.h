@@ -57,7 +57,6 @@ void file_cmd_quit (GtkWidget *widget, gpointer data);
 void file_cmd_save (GtkWidget *widget, gpointer data);
 void prepare_app ( void );
 
-
 /** GLOBALS *********************************************************/
 extern char  *helpPath;
 extern GtkWidget   *app;
