@@ -64,9 +64,10 @@
 
     </PARA>
 <PARA>The perhaps less obvious extension is the notion that double
-    entry can be used to represent income and expenses as well as
-    bank transfers. See the <LINK LINKEND="XACC-EXPENSE">    Income/Expense</LINK> page for a more detailed discussion of
-    that.
+    entry can be used to represent income and expenses as well as bank
+    transfers. See the <LINK
+    LINKEND="XACC-INCOMEEXPENSE">Income/Expense</LINK> page for a more
+    detailed discussion of that.
 
     </PARA>
 <PARA><ANCHOR ID="IDENTITY">In a traditional system that records

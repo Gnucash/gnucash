@@ -131,7 +131,7 @@
 <TITLE>EURO support in GnuCash</TITLE>
 <PARA>    </PARA>
 <PARA>You can enable euro support in GnuCash in the international
-    category of the <LINK LINKEND="USERPREF">preferences</LINK>
+    category of the <LINK LINKEND="XACC-PREFERENCES">preferences</LINK>
     dialog box. If your system locale specifies one of the <LINK LINKEND="EUROISOCURR">EMU member currencies</LINK>, euro support is
     enabled by default.
 

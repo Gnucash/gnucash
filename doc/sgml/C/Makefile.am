@@ -26,7 +26,6 @@ GNUCASH_SGML_FILES = \
 	xacc-preferences2.sgml \
 	xacc-print-check.sgml \
 	xacc-print.sgml \
-	xacc-project.sgml \
 	xacc-qif-import.sgml \
 	xacc-quicken.sgml \
 	xacc-recnwin.sgml \

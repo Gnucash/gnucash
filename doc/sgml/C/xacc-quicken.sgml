@@ -15,7 +15,7 @@
 <SECT1 ID="XACC-QUICKENCATS">
 <TITLE> Quicken Categories</TITLE>
 <PARA>What Quicken calls <EMPHASIS>Categories</EMPHASIS> are
-really just <LINK LINKEND="XACC-EXPENSE">Income/Expense
+really just <LINK LINKEND="XACC-INCOMEEXPENSE">Income/Expense
 accounts. </LINK> Thus, if
     you are used to specifying a category in Quicken, just create
     an income/expense account of the same name in GnuCash, and use

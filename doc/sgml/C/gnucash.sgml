@@ -1,6 +1,5 @@
 <!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
 <!entity xaccabout system "xacc-about.sgml">
-<!entity xaccproject system "xacc-project.sgml">
 <!entity xaccaccountedit system "xacc-accountedit.sgml">
 <!entity xaccacctypes system "xacc-acctypes.sgml">
 <!entity xaccnewacctwin system "xacc-newacctwin.sgml">
@@ -41,7 +40,6 @@
 <TITLE>GnuCash Documentation Set</TITLE>
 
 &xaccabout;
-&xaccproject;
 &xaccaccountedit;
 &xaccacctypes;
 &xaccnewacctwin;

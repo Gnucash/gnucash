@@ -150,7 +150,7 @@ deciding where to put accounts is not an exact science.
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><EMPHASIS><LINK LINKEND="XACC-EXPENSE"> Income,
+<GLOSSTERM><EMPHASIS><LINK LINKEND="XACC-INCOMEEXPENSE"> Income,
       Expense</LINK></EMPHASIS></GLOSSTERM>
 <GLOSSDEF>
 <PARA><EMPHASIS> Income</EMPHASIS> and <EMPHASIS>Expense</EMPHASIS> account types are used to
@@ -214,7 +214,8 @@ the next accounting period.
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><LINK LINKEND="CURRENCY"> <EMPHASIS>Currency</EMPHASIS></LINK></GLOSSTERM>
+<GLOSSTERM><LINK LINKEND="XACC-CURRENCYHANDLING">
+      <EMPHASIS>Currency</EMPHASIS></LINK></GLOSSTERM>
 <GLOSSDEF>
 <PARA><EMPHASIS> Currency Accounts</EMPHASIS> are used for trading
       currencies.</PARA>

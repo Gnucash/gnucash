@@ -117,7 +117,7 @@ l = @l@
 
 gnucash_helpdir = $(datadir)/gnome/help/gnucash/C
 
-GNUCASH_SGML_FILES =  	bofa-mym.sgml 	xacc-about.sgml 	xacc-accountedit.sgml 	xacc-acctypes.sgml 	xacc-adjbalwin.sgml 	xacc-apar.sgml 	xacc-balancereport.sgml 	xacc-balancesheet.sgml 	xacc-chartofaccts.sgml 	xacc-currencyhandling.sgml 	xacc-dateinput.sgml 	xacc-depreciation.sgml 	xacc-doubleentry.sgml 	xacc-euro.sgml 	xacc-gpl.sgml 	xacc-incomeexpense.sgml 	xacc-locatingtxns.sgml 	xacc-mainwin.sgml 	xacc-newacctwin.sgml 	xacc-pnl.sgml 	xacc-portfolio-report.sgml 	xacc-preferences.sgml 	xacc-preferences2.sgml 	xacc-print-check.sgml 	xacc-print.sgml 	xacc-project.sgml 	xacc-qif-import.sgml 	xacc-quicken.sgml 	xacc-recnwin.sgml 	xacc-regwin-kbd.sgml 	xacc-regwin.sgml 	xacc-reports.sgml 	xacc-ticker.sgml 	xacc-trans-report.sgml 	xacc-userdocs.sgml 	xacc-y2k.sgml
+GNUCASH_SGML_FILES =  	bofa-mym.sgml 	xacc-about.sgml 	xacc-accountedit.sgml 	xacc-acctypes.sgml 	xacc-adjbalwin.sgml 	xacc-apar.sgml 	xacc-balancereport.sgml 	xacc-balancesheet.sgml 	xacc-chartofaccts.sgml 	xacc-currencyhandling.sgml 	xacc-dateinput.sgml 	xacc-depreciation.sgml 	xacc-doubleentry.sgml 	xacc-euro.sgml 	xacc-gpl.sgml 	xacc-incomeexpense.sgml 	xacc-locatingtxns.sgml 	xacc-mainwin.sgml 	xacc-newacctwin.sgml 	xacc-pnl.sgml 	xacc-portfolio-report.sgml 	xacc-preferences.sgml 	xacc-preferences2.sgml 	xacc-print-check.sgml 	xacc-print.sgml 	xacc-qif-import.sgml 	xacc-quicken.sgml 	xacc-recnwin.sgml 	xacc-regwin-kbd.sgml 	xacc-regwin.sgml 	xacc-reports.sgml 	xacc-ticker.sgml 	xacc-trans-report.sgml 	xacc-userdocs.sgml 	xacc-y2k.sgml
 
 
 EXTRA_DIST =  	$(GNUCASH_SGML_FILES)

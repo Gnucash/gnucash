@@ -5,11 +5,11 @@
 <TITLE>Currency Handling and Double Entry Bookkeeping</TITLE>
 </ARTHEADER>
 <SECT1>
-<TITLE> Currency Handling and Double Entry Bookkeeping</TITLE>
-<PARA>    </PARA>
-<PARA>A <LINK LINKEND="DOUBLE">Double Entry bookkeeping
-    system</LINK> stores both values, and requires that all
-    transactions balance, as described in the <LINK LINKEND="IDENTITY">Double Entry Identity.</LINK>
+<TITLE> Currency Handling and Double Entry Bookkeeping</TITLE> <PARA>
+</PARA> <PARA>A <LINK LINKEND="XACC-DOUBLEENTRY">Double Entry
+    bookkeeping system</LINK> stores both values, and requires
+    that all transactions balance, as described in the <LINK
+    LINKEND="IDENTITY">Double Entry Identity.</LINK>
 
     </PARA>
 <PARA>When we introduce the notion of having multiple currencies,

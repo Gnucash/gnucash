@@ -77,8 +77,9 @@
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>        Support for <EMPHASIS><LINK LINKEND="CURRENCY">multiple
-        currencies</LINK></EMPHASIS> and <EMPHASIS>currency trading accounts.</EMPHASIS>
+<PARA>Support for <EMPHASIS><LINK LINKEND="XACC-CURRENCYHANDLING">multiple
+      currencies</LINK></EMPHASIS> and <EMPHASIS>currency trading accounts.
+      </EMPHASIS>
         (partial, still broken). 
 
         </PARA>
@@ -126,12 +127,12 @@
         account types (<EMPHASIS>e.g.</EMPHASIS> - Cash, Bank, Stock) to be
         grouped under one master account ( <EMPHASIS>e.g.</EMPHASIS> -
         Assets).
-      
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>        <EMPHASIS><LINK LINKEND="DOUBLE">Double Entry</LINK></EMPHASIS> 
+<PARA><EMPHASIS><LINK LINKEND="XACC-DOUBLEENTRY">Double
+      Entry</LINK></EMPHASIS> 
 
         </PARA>
 <PARA>Every transaction involves two accounts, and <EMPHASIS>each
@@ -139,20 +140,18 @@
         assurance that the overall set of books will add up
         correctly, and prevents out-of-balance errors
         altogether.
-      
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>        <EMPHASIS><LINK LINKEND="XACC-EXPENSE">Income/Expense Account
-        Types</LINK></EMPHASIS> 
+<PARA><EMPHASIS><LINK LINKEND="XACC-INCOMEEXPENSE">Income/Expense Account
+      Types</LINK></EMPHASIS> 
 
         </PARA>
 <PARA>Intuit's <LINK LINKEND="XACC-QUICKEN">Quicken</LINK> product
         has what they call "categories" that are used to track
         incomes and expenses. These may be used to create
         Profit/Loss reports.
-      
 
       </PARA>
 </LISTITEM>
@@ -165,12 +164,11 @@
         down data errors. It also provides a convenient way of
         viewing a portfolio of many stocks, by showing all
         transactions in that portfolio.
-      
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><EMPHASIS>Handling of <LINK LINKEND="CURRENCY">multiple
+<PARA><EMPHASIS>Handling of <LINK LINKEND="XACC-CURRENCYHANDLING">multiple
       currencies</LINK></EMPHASIS>
     </PARA>
 </LISTITEM>
@@ -202,9 +200,10 @@
     will be 1.6.x.
 
     </PARA>
-<PARA>If you wish to "hack" on the experimental version, you
-    should first start by reading through the <LINK LINKEND="XACC-PROJECT"> Project Goals</LINK> document in order to
-    get some perspective on the overall design.
+<PARA>If you wish to "hack" on the experimental version, you should
+    first start by reading through the <ULINK
+    URL="http://linas.org/linux/xacc/projects.html">Project Goals</ULINK>
+    page in order to get some perspective on the overall design.
 
     </PARA>
 </SECT2>
@@ -308,6 +307,7 @@
 <PARA>Swedish translation</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><ULINK URL="mailto:bojsen@worldnet.att.net">Per
       Bojsen</ULINK></GLOSSTERM>
@@ -315,6 +315,15 @@
 <PARA>several core dump fixes</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
+<GLOSSENTRY>
+<GLOSSTERM><ULINK URL="mailto:tboldt@attglobal.net">Terry Boldt
+      </ULINK></GLOSSTERM>
+<GLOSSDEF>
+<PARA>financial calculator and expression parser</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><ULINK URL="simon.britnell@peace.com">Simon
       Britnell</ULINK></GLOSSTERM>
@@ -331,6 +340,15 @@
       code</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+<GLOSSENTRY>
+
+<GLOSSTERM><ULINK URL="mailto:wwc@wwcnet.nu">Bill
+      Carlson</ULINK></GLOSSTERM>
+<GLOSSDEF>
+<PARA>performance improvements</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><ULINK URL="mailto:grahamc@zeta.org.au">Graham
       Chapman</ULINK></GLOSSTERM>
@@ -372,6 +390,7 @@
 <PARA>for webserver and T1 connection.</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><ULINK URL="mailto:Ciaran.Deignan@bull.net">Ciaran
       Deignan</ULINK></GLOSSTERM>
@@ -379,6 +398,15 @@
 <PARA>for AIX binary version</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
+<GLOSSENTRY>
+<GLOSSTERM><ULINK URL="mailto:gjditchfield@acm.org">Glen
+      Ditchfield</ULINK></GLOSSTERM>
+<GLOSSDEF>
+<PARA>updated documentation</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><ULINK URL="mailto:tyson@tyse.net">Tyson Dowd</ULINK></GLOSSTERM>
 <GLOSSDEF>
@@ -398,11 +426,13 @@
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:pjf@schools.net.au">Paul Fenwick</ULINK></GLOSSTERM>
+<GLOSSTERM><ULINK URL="mailto:pjf@schools.net.au">Paul
+      Fenwick</ULINK></GLOSSTERM>
 <GLOSSDEF>
-<PARA>ASX support</PARA>
+<PARA>ASX support, Finance::Quote</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><ULINK URL="mailto:hfiguiere@teaser.fr">Hubert
       Figuiere</ULINK></GLOSSTERM>
@@ -410,6 +440,15 @@
 <PARA>patch to <APPLICATION>gnc-prices</APPLICATION></PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
+<GLOSSENTRY>
+<GLOSSTERM><ULINK URL="mailto:frob@df.ru">Valek Filippov
+      </ULINK></GLOSSTERM>
+<GLOSSDEF>
+<PARA>Russian translation</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><ULINK URL="mailto:ju_finck@mail.netwave.de">Jan-Uwe
       Finck</ULINK></GLOSSTERM>
@@ -418,13 +457,15 @@
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:kevinfinn@mediaone.net">Kevin Finn</ULINK></GLOSSTERM>
+<GLOSSTERM><ULINK URL="mailto:kevinfinn@mediaone.net">Kevin
+      Finn</ULINK></GLOSSTERM>
 <GLOSSDEF>
-<PARA>auto-decimal point patch</PARA>
+<PARA>auto-decimal point patch, options patch</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:rjf@aracnet.com">Ron Forrester</ULINK></GLOSSTERM>
+<GLOSSTERM><ULINK URL="mailto:rjf@aracnet.com">Ron
+      Forrester</ULINK></GLOSSTERM>
 <GLOSSDEF>
 <PARA>for gnome patches</PARA>
 </GLOSSDEF>
@@ -545,6 +586,7 @@
 <PARA>guile error handling code</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><ULINK URL="mailto:rgmerk@mira.net">Robert Graham
       Merkel</ULINK></GLOSSTERM>
@@ -552,6 +594,15 @@
 <PARA>reporting, gnome, and configuration patches.</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
+<GLOSSENTRY>
+<GLOSSTERM><ULINK URL="mailto:molnarc@mandrakesoft.com">Christopher
+      Molnar</ULINK></GLOSSTERM>
+<GLOSSDEF>
+<PARA>build system patch</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><ULINK URL="mailto:mooney@dogbert.cc.ndsu.NoDak.edu">Tim
       Mooney</ULINK></GLOSSTERM>
@@ -559,6 +610,7 @@
 <PARA>port to alpha-dec-osf4.0f</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><ULINK URL="mailto:gam3@ann.softgams.com">G. Allen Morris
       III</ULINK></GLOSSTERM>
@@ -566,27 +618,49 @@
 <PARA>for QIF core dump fix</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
+<GLOSSENTRY>
+<GLOSSTERM><ULINK URL="mailto:sjmurdoch@linuxfan.com">Steven
+      Murdoch</ULINK></GLOSSTERM>
+<GLOSSDEF>
+<PARA>gnc-prices fix for London exchange</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><ULINK URL="mailto:brent@baton.phys.lsu.edu">Brent
       Neal</ULINK></GLOSSTERM>
 <GLOSSDEF>
-<PARA>TIAA-CREF support.</PARA>
+<PARA>TIAA-CREF support</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:spacey@inch.com">Peter Norton</ULINK></GLOSSTERM>
+<GLOSSTERM><ULINK URL="mailto:spacey@inch.com">Peter
+      Norton</ULINK></GLOSSTERM>
 <GLOSSDEF>
 <PARA>for a valiant attempt at a GTK port</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:webmaster@obsidian.uia.net">      OmNiBuS</ULINK></GLOSSTERM>
+<GLOSSTERM><ULINK URL="mailto:webmaster@obsidian.uia.net">OmNiBuS
+      </ULINK></GLOSSTERM>
 <GLOSSDEF>
 <PARA>web site graphics and content</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
-<GLOSSTERM><ULINK URL="mailto:mopyr@IPM.Lviv.UA">Myroslav Opyr</ULINK></GLOSSTERM>
+<GLOSSTERM><ULINK URL="mailto:gordo@pincoya.com">Gordon Oliver
+      </ULINK></GLOSSTERM>
+<GLOSSDEF>
+<PARA>multiple currency status line patch</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
+<GLOSSENTRY>
+<GLOSSTERM><ULINK URL="mailto:mopyr@IPM.Lviv.UA">Myroslav
+      Opyr</ULINK></GLOSSTERM>
 <GLOSSDEF>
 <PARA>for misc patches</PARA>
 </GLOSSDEF>
@@ -652,6 +726,7 @@
 <PARA>documentation patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><ULINK URL="mailto:cls@seawood.org">Christopher
       Seawood</ULINK></GLOSSTERM>
@@ -659,6 +734,15 @@
 <PARA>for XbaeMatrix core dump</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
+<GLOSSENTRY>
+<GLOSSTERM><ULINK URL="mailto:aleseveso@tiscalinet.it">Alessandro
+      Seveso</ULINK></GLOSSTERM>
+<GLOSSDEF>
+<PARA>Italian translations</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><ULINK URL="mailto:msimons@fsimons01.erols.com">Mike
       Simons</ULINK></GLOSSTERM>
@@ -704,7 +788,7 @@
 <GLOSSTERM><ULINK URL="mailto:rkw@dataplex.net">Richard
       Wackerbarth</ULINK></GLOSSTERM>
 <GLOSSDEF>
-<PARA>patch to <APPLICATION>gnc-prices</APPLICATION></PARA>
+<PARA>patch to <APPLICATION>gnc-prices</APPLICATION>, qif import fixes</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>

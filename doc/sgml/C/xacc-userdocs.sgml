@@ -47,7 +47,7 @@
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="CURRENCY">Foreign Currency
+<PARA><LINK LINKEND="XACC-CURRENCYHANDLING">Foreign Currency
       Accounts</LINK>
 
       </PARA>
@@ -103,18 +103,18 @@
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="DOUBLE">Using Double Entry</LINK>
+<PARA><LINK LINKEND="XACC-DOUBLEENTRY">Using Double Entry</LINK>
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-EXPENSE">Using Income/Expense
+<PARA><LINK LINKEND="XACC-INCOMEEXPENSE">Using Income/Expense
       Accounts</LINK>
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="USERPREF">Personalising
+<PARA><LINK LINKEND="XACC-PREFERENCES">Personalising
       Gnucash</LINK>
 
       </PARA>

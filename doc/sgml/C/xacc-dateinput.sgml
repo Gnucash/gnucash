@@ -57,7 +57,7 @@
 
     </PARA>
 <PARA>GnuCash can be configured to use a variety of date input
-    formats by <LINK LINKEND="USERPREF">setting a
+    formats by <LINK LINKEND="XACC-PREFERENCES">setting a
     preference</LINK>.
 
 
