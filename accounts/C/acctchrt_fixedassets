@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
-<gnc-v2>
-<gnc:count-data cd:type="account">5</gnc:count-data>
+<gnc-account-example>
+    <gnc-act:short-description>
+      Brokerage Accounts
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+      These accounts provide a set of accounts to deal with a
+      brokerage.
+    </gnc-act:long-description>
 <gnc:account version="2.0.0">
   <act:name>Assets</act:name>
   <act:id type="guid">64b6276c060185131cecbd1ac6218440</act:id>
@@ -55,7 +61,7 @@
   <act:description>Vehicle</act:description>
   <act:parent type="guid">9b171f77000bf68dd1ebbaf58336656d</act:parent>
 </gnc:account>
-</gnc-v2>
+</gnc-account-example>
 
 <!-- Local variables: -->
 <!-- mode: xml        -->

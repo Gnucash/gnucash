@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
-<gnc-v2>
-<gnc:count-data cd:type="account">116</gnc:count-data>
+<gnc-account-example>
+    <gnc-act:short-description>
+      Brokerage Accounts
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+      These accounts provide a set of accounts to deal with a
+      brokerage.
+    </gnc-act:long-description>
 <gnc:account version="2.0.0">
   <act:name>Assets</act:name>
   <act:id type="guid">c942789c77cfdd65bc6e4c12900f0805</act:id>
@@ -1284,7 +1290,7 @@
   <act:description>Opening Balances</act:description>
   <act:parent type="guid">68d4074f91295062c0b773b4ae8de6bd</act:parent>
 </gnc:account>
-</gnc-v2>
+</gnc-account-example>
 
 <!-- Local variables: -->
 <!-- mode: xml        -->

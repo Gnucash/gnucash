@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
-<gnc-v2>
-<gnc:count-data cd:type="account">4</gnc:count-data>
+<gnc-account-example>
+    <gnc-act:short-description>
+      Brokerage Accounts
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+      These accounts provide a set of accounts to deal with a
+      brokerage.
+    </gnc-act:long-description>
 <gnc:account version="2.0.0">
   <act:name>Expenses</act:name>
   <act:id type="guid">9a2b4520f113372f4e576f5b6dc129c6</act:id>
@@ -44,7 +50,7 @@
   <act:description>Rent</act:description>
   <act:parent type="guid">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
 </gnc:account>
-</gnc-v2>
+</gnc-account-example>
 
 <!-- Local variables: -->
 <!-- mode: xml        -->

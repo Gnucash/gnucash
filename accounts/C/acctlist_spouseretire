@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
-<gnc-v2>
-<gnc:count-data cd:type="account">5</gnc:count-data>
+<gnc-account-example>
+    <gnc-act:short-description>
+      Brokerage Accounts
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+      These accounts provide a set of accounts to deal with a
+      brokerage.
+    </gnc-act:long-description>
 <gnc:account version="2.0.0">
   <act:name>Spouse Retirement</act:name>
   <act:id type="guid">dc3935401534fddc3faaaa5e45e5327e</act:id>
@@ -61,7 +67,7 @@
   <act:description>Mutual Fund</act:description>
   <act:parent type="guid">dc3935401534fddc3faaaa5e45e5327e</act:parent>
 </gnc:account>
-</gnc-v2>
+</gnc-account-example>
 
 <!-- Local variables: -->
 <!-- mode: xml        -->

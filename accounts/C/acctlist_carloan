@@ -1,5 +1,12 @@
 <?xml version="1.0"?>
-<gnc-v2>
+<gnc-account-example>
+    <gnc-act:short-description>
+      Carloan Accounts
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+      These accounts provide a set of accounts to deal with a
+      car loan.
+    </gnc-act:long-description>
 <gnc:count-data cd:type="account">3</gnc:count-data>
 <gnc:account version="2.0.0">
   <act:name>Vehicle Loan</act:name>
@@ -32,7 +39,7 @@
   <act:description>Vehicle Loan Interest</act:description>
   <act:parent type="guid">7643a09ee539628314452ce99da702a4</act:parent>
 </gnc:account>
-</gnc-v2>
+</gnc-account-example>
 
 <!-- Local variables: -->
 <!-- mode: xml        -->

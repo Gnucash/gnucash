@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
-<gnc-v2>
-<gnc:count-data cd:type="account">3</gnc:count-data>
+<gnc-account-example>
+    <gnc-act:short-description>
+      Brokerage Accounts
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+      These accounts provide a set of accounts to deal with a
+      brokerage.
+    </gnc-act:long-description>
 <gnc:account version="2.0.0">
   <act:name>Mortgage Loan</act:name>
   <act:id type="guid">b3f97c81a91eabbd7ff647a980c788e8</act:id>
@@ -32,7 +38,7 @@
   <act:description>Mortgage Interest</act:description>
   <act:parent type="guid">92d78493399e05c800764dd576fb46e2</act:parent>
 </gnc:account>
-</gnc-v2>
+</gnc-account-example>
 
 <!-- Local variables: -->
 <!-- mode: xml        -->
