@@ -33,6 +33,7 @@
 
 #include <glib.h> 
 #include <libpq-fe.h>  
+#include <stdlib.h>  
 #include "Backend.h"
 #include "BackendP.h"
 #include "gnc-engine-util.h" 

@@ -26,6 +26,7 @@
 #include "config.h"
 
 #include <libpq-fe.h>  
+#include <stdlib.h>  
 
 #include "Backend.h"
 #include "BackendP.h"
