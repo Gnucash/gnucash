@@ -4,6 +4,8 @@
  *
  * DESCRIPTION:
  * Provide a simple query engine interface.
+ * Note that the query engine is officially a part of the transaction engine, 
+ * and thus has direct access to internal structures.
  *
  * HISTORY:
  * created by Linas Vepstas Sept 1998
@@ -142,12 +144,21 @@ xaccQuerySetMaxSplits (Query *q, int max)
 
 /* ================================================== */
 
+static void
+SortSplits (Query *q)
+{
+
+}
+
+/* ================================================== */
+
 Split **
 xaccQueryGetSplits (Query *q)
 {
    int i=0, j=0;
-   int nlist, nstart, nret;
+   int nlist, nstart, nret, nsplits;
    Split *s, **slist;
+   Account *acc;
 
    if (!q) return NULL;
 
@@ -157,6 +168,16 @@ xaccQueryGetSplits (Query *q)
 
    if (q->split_list) _free (q->split_list);
    q->split_list = NULL;
+
+   /* count the number of splits in each account */
+   nsplits = 0;
+   if (q->acc_list) {
+      i=0; acc = q->acc_list[0];
+      while (acc) {
+         nsplits += xaccAccountGetNumSplits (acc);
+         i++; acc = q->acc_list[i];
+      }
+   }
 
    /* hack alert */
    slist = xaccAccountGetSplitList (q->acc_list[0]);

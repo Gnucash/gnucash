@@ -799,4 +799,11 @@ xaccAccountGetSplitList (Account *acc)
    return (acc->splits);
 }
 
+int
+xaccAccountGetNumSplits (Account *acc)
+{
+   if (!acc) return 0;
+   return (acc->numSplits);
+}
+
 /*************************** END OF FILE **************************** */
