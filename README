@@ -152,6 +152,9 @@ Motif or Lesstif  --
 XmHTML  -- version 1.1.4 or later
            http://www.llp.fu-berlin.de/lsoft/F/5/XMHTML.html
            http://www.xs4all.nl/~ripley/XmHTML/XmHTML.html
+           ftp://ftp.ultra.net/pub/eugene/RPMS/i386/XmHTML-1.1.5-1.i386.rpm
+           ftp://ftp.ultra.net/pub/eugene/SRPMS/XmHTML-1.1.5-1.src.rpm
+
 libpng  -- portable network graphics library
 libjpeg -- JPEG image handling library
 libz    -- comopression library
