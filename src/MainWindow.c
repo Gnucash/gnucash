@@ -888,6 +888,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
          * into one file, we must merge them in one by one */
         xaccConcatGroups (topgroup, grp);
         xaccMergeAccounts (topgroup);
+        xaccConsolidateGrpTransactions (topgroup);
       }
       break;
     }

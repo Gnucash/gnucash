@@ -737,4 +737,60 @@ xaccZeroRunningBalances( Account **list )
    }
 }
 
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccConsolidateTransactions (Account * acc)
+{
+   Transaction *ta, *tb;
+   int i,j,k;
+
+   if (!acc) return;
+
+   for (i=0; i<acc->numTrans; i++) {
+      ta = acc->transaction[i];
+      for (j=i+1; j<acc->numTrans; j++) {
+         tb = acc->transaction[j];
+
+         /* if no match, then continue on in the loop.
+          * we really must match everything to get a duplicate */
+         if (ta->credit != tb->credit) continue;
+         if (ta->debit != tb->debit) continue;
+         if (ta->reconciled != tb->reconciled) continue;
+         if (ta->date.year != tb->date.year) continue;
+         if (ta->date.month != tb->date.month) continue;
+         if (ta->date.day != tb->date.day) continue;
+         if (strcmp (ta->num, tb->num)) continue;
+         if (strcmp (ta->description, tb->description)) continue;
+         if (strcmp (ta->memo, tb->memo)) continue;
+         if (strcmp (ta->action, tb->action)) continue;
+         if (0 == DEQ(ta->damount, tb->damount)) continue;
+         if (0 == DEQ(ta->share_price, tb->share_price)) continue;
+
+         /* if we got to here, then there must be a duplicate. */
+         /* before deleting it, remove it from the other 
+          * double-entry account */
+         if (acc == (Account *) tb->credit) {
+            xaccRemoveTransaction ((Account *) tb->debit, tb);
+         }
+         if (acc == (Account *) tb->debit) {
+            xaccRemoveTransaction ((Account *) tb->credit, tb);
+         }
+         tb->credit = NULL;
+         tb->debit = NULL;
+
+         /* Free the transaction, and shuffle down by one.
+          * Need to shuffle in order to preserve date ordering. */
+         freeTransaction (tb);
+         
+         for (k=j+1; k<acc->numTrans; k++) {
+            acc->transaction[k-1] = acc->transaction[k];
+         }
+         acc->transaction[acc->numTrans -1] = NULL;
+         acc->numTrans --;
+      }
+   }
+}
+
 /*************************** END OF FILE **************************** */
