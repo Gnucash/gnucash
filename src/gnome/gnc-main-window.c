@@ -67,6 +67,10 @@
 #include "window-report.h"
 #include "messages.h"
 
+/** Static Globals *******************************************************/
+static GList *active_windows = NULL;
+
+/** Declarations *********************************************************/
 static void gnc_main_window_class_init (GncMainWindowClass *klass);
 static void gnc_main_window_init (GncMainWindow *window);
 static void gnc_main_window_finalize (GObject *object);
@@ -280,7 +284,11 @@ gnc_main_window_get_type (void)
 GncMainWindow *
 gnc_main_window_new (void)
 {
-	return g_object_new (GNC_TYPE_MAIN_WINDOW, NULL);
+	GncMainWindow *window;
+
+	window = g_object_new (GNC_TYPE_MAIN_WINDOW, NULL);
+	active_windows = g_list_append (active_windows, window);
+	return window;
 }
 
 void
@@ -295,6 +303,8 @@ gnc_main_window_open_page (GncMainWindow *window,
 	GtkWidget *image;
 	GtkNotebook *notebook;
 
+	if ((window == NULL) && active_windows)
+	  window = active_windows->data;
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
 
@@ -475,6 +485,7 @@ gnc_main_window_finalize (GObject *object)
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (object));
 
 	window = GNC_MAIN_WINDOW (object);
+	active_windows = g_list_remove (active_windows, window);
 
 	g_return_if_fail (window->priv != NULL);
 
