@@ -23,6 +23,10 @@
 	  Don't ask the user in the general case when making changes
 	  to entries.  Generally the user should be allowed to make
 	  whatever changes they want without being pestered.
+
+	* src/business/business-ledger/gncEntryLedgerControl.c:
+	  Save the entry cells before adding an it to the invoice,
+	  otherwise it wont get sorted properly.  Fixes #108910.
 	
 2003-04-01  Christian Stimming  <stimming@tuhh.de>
 
