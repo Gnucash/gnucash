@@ -235,10 +235,29 @@ cvs -d :pserver:cvs@linas.org:/home/cvs/cvsroot checkout xacc
 
 Main Developers:
 ----------------
-Robin Clark <rclark@hmc.edu> wrote the original X-Accountant
-Linas Vepstas <linas@linas.org> rewrote the original X-Accountant
-Jeremy Collins <linux@cyberramp.net> for GnuCash web site & GTK/gnome code
-Rob Browning <rlb@cs.utexas.edu> for perl, scheme, init/prefs, GTK/gnome port 
+Robin Clark <rclark@hmc.edu> wrote the original X-Accountant in Motif 
+   as a school project, taking it to version 0.9 by October 1997.
+
+Linas Vepstas <linas@linas.org> liked what he saw: the GUI was slick,
+   the code was documented and well structured, and it was all GPL'ed.  
+   And so he re-wrote it: adding cell-widgets to XbaeMatrix, so that 
+   the combobox and arrows would make an even slicker GUI, rewrote the 
+   X-Accountant internals to add double-entry, an account heirarchy,
+   split out a transaction mini-engine, add support for stocks, and spiff
+   up the help menus.  This was version 1.0 as of January 1998.  Since
+   then, for version 1.1, the engine was expanded & refined, and the 
+   register window code completely redesigned and made mostly 
+   Motif-(and GUI-)independent.  Did some prototype OFX work.
+
+Jeremy Collins <linux@cyberramp.net> publicized the GnoMoney project 
+   widely and broadly, and then changed its name to GnuCash.  Jeremy
+   created the gnucash.org web site, registered the domain, got the 
+   initial GTK/gnome code working.
+
+Rob Browning <rlb@cs.utexas.edu> abused everyone for not using perl,
+   and then added guile/scheme support. Rob maintains the build 
+   infrastructure, is handling the whole guile/perl extension language 
+   thing, and is dealing with configuration & configurability.
 
 Fixes & Patches:
 ----------------
