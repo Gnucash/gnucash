@@ -120,11 +120,16 @@ quick_modify (BasicCell *_cell,
 
    if (cell->original == NULL)
      cell->original = g_strdup(newval);
-   else
+   else if (strcasecmp(cell->original, oldval) == 0)
    {
      char *original = g_strconcat(cell->original, change, NULL);
      g_free(cell->original);
      cell->original = original;
+   }
+   else
+   {
+     g_free(cell->original);
+     cell->original = NULL;
    }
 
    match = xaccGetQuickFillStr(cell->qfRoot, newval);
@@ -136,7 +141,7 @@ quick_modify (BasicCell *_cell,
      else
        retval = newval;
 
-     *cursor_position += strlen(change);
+     *cursor_position = -1;
 
      SET (&(cell->cell), retval);
      return retval;
