@@ -456,9 +456,16 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
   if (0>tz_hour) { cyn = '+'; tz_hour = -tz_hour; }
 
   len = sprintf (buff, "%4d-%02d-%02d %02d:%02d:%02d.%06ld %c%02d%02d",
-       parsed.tm_year+1900, parsed.tm_mon+1, parsed.tm_mday,
-       parsed.tm_hour, parsed.tm_min, parsed.tm_sec,
-       ts.tv_nsec/1000, cyn, tz_hour, tz_min);
+                 parsed.tm_year + 1900,
+                 parsed.tm_mon + 1,
+                 parsed.tm_mday,
+                 parsed.tm_hour,
+                 parsed.tm_min,
+                 parsed.tm_sec,
+                 ts.tv_nsec / 1000,
+                 cyn,
+                 tz_hour,
+                 tz_min);
 
   /* return pointer to end of string */
   buff += len;
