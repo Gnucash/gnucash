@@ -927,7 +927,7 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
 			   en_GB, en_AU and everywhere else with the
 			   sensible ordering of ddmmyy.  Translators
 			   note: to switch the last two arguments,
-			   write "Yearly (x%u): %3$u of month %2$s"
+			   write "Yearly (x%1$u): %3$u of month %2$s"
 			 
 			   %u is the number of intervals; %s is the
 			   abbreviated name of the month; %u is the

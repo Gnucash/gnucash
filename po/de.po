@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2002-11-04 00:26+0100\n"
-"PO-Revision-Date: 2002-11-04 00:30+0100\n"
+"POT-Creation-Date: 2002-11-05 00:06+0100\n"
+"PO-Revision-Date: 2002-11-05 00:49+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -55,7 +55,7 @@ msgid "Currency:"
 msgstr "Währung:"
 
 #: src/gnome/glade/account.glade.h:14 src/gnome/glade/price.glade.h:10
-#: src/gnome/glade/print.glade.h:15 src/gnome/glade/register.glade.h:18
+#: src/gnome/glade/print.glade.h:15 src/gnome/glade/register.glade.h:15
 #: src/gnome/glade/stocks.glade.h:6 src/gnome/glade/transfer.glade.h:5
 msgid "Date:"
 msgstr "Datum:"
@@ -74,7 +74,7 @@ msgstr "Wechselkurs:"
 msgid "Memo:"
 msgstr "Buchungstext:"
 
-#: src/gnome/glade/register.glade.h:43 src/gnome/glade/transfer.glade.h:9
+#: src/gnome/glade/register.glade.h:36 src/gnome/glade/transfer.glade.h:9
 msgid "Num:"
 msgstr "Nummer:"
 
@@ -280,7 +280,7 @@ msgstr "%v/%u (%p%%)"
 
 #: src/gnome/glade/sched-xact.glade.h:6
 msgid "... utilize an escrow account for payments?"
-msgstr ""
+msgstr "... Treuhandkonto für Zahlungen verwenden?"
 
 #: src/gnome/glade/sched-xact.glade.h:7
 msgid "10th"
@@ -396,11 +396,11 @@ msgstr "9."
 
 #: src/gnome/glade/sched-xact.glade.h:35
 msgid "<repayment type>"
-msgstr ""
+msgstr "<Rückzahlungsart>"
 
 #: src/gnome/glade/sched-xact.glade.h:36
 msgid "Advanced..."
-msgstr ""
+msgstr "Erweitert..."
 
 #: src/gnome/glade/sched-xact.glade.h:38
 msgid "Apr, Jul, Dec"
@@ -428,7 +428,7 @@ msgstr "Zweiwöchentlich"
 
 #: src/gnome/glade/sched-xact.glade.h:44
 msgid "Conditional on splits not having variables"
-msgstr ""
+msgstr "Abhängig davon, daß Buchungen keine Variablen haben"
 
 #: src/gnome/glade/sched-xact.glade.h:45
 msgid "Create"
@@ -448,7 +448,7 @@ msgstr "Erstellen wie terminiert"
 
 #: src/gnome/glade/sched-xact.glade.h:49
 msgid "Created Transaction Review"
-msgstr ""
+msgstr "Buchungsübersicht erstellt"
 
 #: src/gnome/glade/sched-xact.glade.h:50
 msgid "Creating transactions..."
@@ -486,7 +486,7 @@ msgstr "Tage"
 
 #: src/gnome/glade/sched-xact.glade.h:57
 msgid "Days Away"
-msgstr ""
+msgstr "Tage in der Zukunft"
 
 #: src/gnome/glade/sched-xact.glade.h:58
 msgid "December"
@@ -495,9 +495,8 @@ msgstr "Dezember"
 #: src/business/business-gnome/glade/billterms.glade.h:10
 #: src/business/business-gnome/glade/invoice.glade.h:19
 #: src/business/dialog-tax-table/tax-tables.glade.h:1
-#: src/gnome/glade/register.glade.h:19 src/gnome/glade/sched-xact.glade.h:59
+#: src/gnome/glade/register.glade.h:16 src/gnome/glade/sched-xact.glade.h:59
 #: src/gnome/window-acct-tree.c:851 src/gnome/window-reconcile.c:1417
-#: src/register/ledger-core/gnc-regwidget.c:502
 #: src/report/report-gnome/report.glade.h:7
 msgid "Delete"
 msgstr "Löschen"
@@ -508,7 +507,7 @@ msgstr ""
 
 #: src/gnome/glade/sched-xact.glade.h:61
 msgid "Do you..."
-msgstr ""
+msgstr "Möchten Sie..."
 
 #: src/business/business-gnome/dialog-invoice.c:1524
 #: src/business/business-gnome/glade/invoice.glade.h:26
@@ -525,11 +524,11 @@ msgstr "Terminierte Buchungen bearbeiten"
 
 #: src/gnome/glade/sched-xact.glade.h:64
 msgid "End"
-msgstr ""
+msgstr "Ende"
 
 #: src/gnome/glade/sched-xact.glade.h:65
 msgid "End "
-msgstr ""
+msgstr "Ende "
 
 #: src/gnome/glade/sched-xact.glade.h:66
 msgid "End Date:"
@@ -541,15 +540,15 @@ msgstr "Enddatum: "
 
 #: src/gnome/glade/sched-xact.glade.h:68
 msgid "Ended On"
-msgstr ""
+msgstr "Beendet am"
 
 #: src/gnome/glade/sched-xact.glade.h:69
 msgid "Escrow"
-msgstr "Treuhänder"
+msgstr "Treuhand"
 
 #: src/gnome/glade/sched-xact.glade.h:70
 msgid "Escrow Account:"
-msgstr "Treuhänderkonto:"
+msgstr "Treuhandkonto:"
 
 #: src/gnome/glade/sched-xact.glade.h:71
 msgid "Every"
@@ -577,15 +576,15 @@ msgstr "Februar"
 
 #: src/gnome/glade/sched-xact.glade.h:77
 msgid "First on the:"
-msgstr ""
+msgstr "Erster am:"
 
 #: src/gnome/glade/sched-xact.glade.h:78
 msgid "Frequency"
-msgstr ""
+msgstr "Frequenz"
 
 #: src/gnome/glade/sched-xact.glade.h:79
 msgid "Frequency:"
-msgstr ""
+msgstr "Frequenz:"
 
 #: src/gnome/glade/sched-xact.glade.h:80
 msgid "Friday"
@@ -604,7 +603,7 @@ msgstr "Zinsen"
 
 #: src/gnome/glade/sched-xact.glade.h:83
 msgid "Interest Rate Change Frequency"
-msgstr ""
+msgstr "Zinssatz Änderungsfrequenz"
 
 #: src/gnome/glade/sched-xact.glade.h:84
 msgid "Interest Rate:"
@@ -644,11 +643,11 @@ msgstr "Juni"
 
 #: src/gnome/glade/sched-xact.glade.h:93
 msgid "Last Occurred: "
-msgstr ""
+msgstr "Zuletzt aufgetreten: "
 
 #: src/gnome/glade/sched-xact.glade.h:94
 msgid "Length:"
-msgstr ""
+msgstr "Länge:"
 
 #: src/gnome/glade/sched-xact.glade.h:95
 msgid "Loan Account:"
@@ -708,11 +707,11 @@ msgstr "monatlich"
 
 #: src/gnome/glade/sched-xact.glade.h:108
 msgid "Mortgage/Loan Druid"
-msgstr ""
+msgstr "Hypothek/Darlehen Assistent"
 
 #: src/gnome/glade/sched-xact.glade.h:109
 msgid "Mortgage/Loan Repayment Setup"
-msgstr ""
+msgstr "Hypothek/Darlehen Einrichtung Rückzahlung"
 
 #. src/business/business-reports/aging.scm
 #: intl-scm/guile-strings.c:2826
@@ -730,7 +729,7 @@ msgstr "Name:"
 
 #: src/gnome/glade/sched-xact.glade.h:112
 msgid "Never End"
-msgstr ""
+msgstr "Endet nie"
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2590
@@ -746,7 +745,7 @@ msgstr "Nächstes Auftreten"
 
 #: src/gnome/glade/sched-xact.glade.h:115
 msgid "No End"
-msgstr ""
+msgstr "Endlos"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:628 intl-scm/guile-strings.c:1906
@@ -764,7 +763,7 @@ msgstr "Nicht vorgemerkt"
 
 #: src/gnome/glade/sched-xact.glade.h:118
 msgid "Notify me when created"
-msgstr ""
+msgstr "Bei Erstellung benachrichtigen"
 
 #: src/gnome/glade/sched-xact.glade.h:119
 msgid "November"
@@ -788,7 +787,7 @@ msgstr "Terminierte Buchung löschen"
 
 #: src/gnome/glade/sched-xact.glade.h:124
 msgid "Occuring in"
-msgstr ""
+msgstr "Tritt auf im"
 
 #: src/gnome/glade/sched-xact.glade.h:125
 msgid "October"
@@ -796,11 +795,11 @@ msgstr "Oktober"
 
 #: src/gnome/glade/sched-xact.glade.h:126
 msgid "On the"
-msgstr ""
+msgstr "Am"
 
 #: src/gnome/glade/sched-xact.glade.h:127
 msgid "Once"
-msgstr ""
+msgstr "Einmal"
 
 #: src/gnome/glade/print.glade.h:27 src/gnome/glade/sched-xact.glade.h:128
 #: src/gnome/window-acct-tree.c:830
@@ -860,7 +859,7 @@ msgstr ""
 
 #: src/gnome/glade/sched-xact.glade.h:141
 msgid "Record"
-msgstr ""
+msgstr "Speichern"
 
 #: src/gnome/glade/sched-xact.glade.h:142
 msgid "Recurrance Frequency"
@@ -937,7 +936,7 @@ msgstr "September"
 
 #: src/gnome/glade/sched-xact.glade.h:159
 msgid "Since Last Run"
-msgstr ""
+msgstr "Seit letztem Aufruf"
 
 #: src/gnome/glade/sched-xact.glade.h:160
 msgid "Start Date:"
@@ -995,7 +994,7 @@ msgstr ""
 
 #: src/gnome/glade/sched-xact.glade.h:179
 msgid "This window should never be realized."
-msgstr ""
+msgstr "Dieses Fenster sollte nie erscheinen."
 
 #: src/gnome/glade/sched-xact.glade.h:180
 msgid "Thursday"
@@ -1110,7 +1109,7 @@ msgstr "Monate."
 
 #: src/gnome/glade/sched-xact.glade.h:206
 msgid "then on the:"
-msgstr ""
+msgstr "dann am:"
 
 #: src/gnome/glade/sched-xact.glade.h:207
 msgid "weeks."
@@ -1157,20 +1156,15 @@ msgstr "Willkommen zu GnuCash!"
 
 #: src/business/business-gnome/glade/invoice.glade.h:6
 #: src/gnome/glade/register.glade.h:1
-#: src/register/ledger-core/gnc-regwidget.c:537
 msgid "Blank"
 msgstr "Neu"
 
 #: src/business/business-gnome/glade/invoice.glade.h:7
 #: src/gnome/glade/register.glade.h:2
-#: src/register/ledger-core/gnc-regwidget.c:494
 msgid "Cancel"
 msgstr "Abbrechen"
 
 #: src/gnome/glade/register.glade.h:3
-#: src/register/ledger-core/gnc-regwidget.c:495
-#: src/register/ledger-core/gnc-regwidget.c:871
-#: src/register/ledger-core/gnc-regwidget.c:1034
 msgid "Cancel the current transaction"
 msgstr "Aktuellen Geschäftsvorgang abbrechen"
 
@@ -1182,553 +1176,461 @@ msgstr "Überprüfen"
 msgid "Check Register"
 msgstr "Kassenbericht überprüfen"
 
-#: src/gnome/glade/register.glade.h:6
-msgid ""
-"Check for and repair unbalanced transactions and orphan splits in all "
-"transactions of this account"
-msgstr ""
-"Überprüfen und Reparieren von unvollständigen Geschäftsvorfällen in allen "
-"Buchungen dieses Kontos"
-
-#: src/gnome/glade/register.glade.h:7
-msgid ""
-"Check for and repair unbalanced transactions and orphan splits in this "
-"transaction"
-msgstr ""
-"Überprüfen und Reparieren von unvollständigen Buchungen in diesem "
-"Geschäftsvorfall"
-
 #: src/business/business-gnome/glade/invoice.glade.h:9
-#: src/gnome-utils/window-help.c:651 src/gnome/glade/register.glade.h:8
+#: src/gnome-utils/window-help.c:651 src/gnome/glade/register.glade.h:6
 #: src/gnome/window-main.c:1025
 msgid "Close"
 msgstr "Schließen"
 
-#: src/gnome/glade/register.glade.h:9
-msgid "Close this register window"
-msgstr "Dieses Kassenbericht-Fenster schließen"
-
-#: src/gnome/glade/register.glade.h:10
-#: src/register/ledger-core/gnc-regwidget.c:841
+#: src/gnome/glade/register.glade.h:7
 msgid "Copy Transaction"
 msgstr "Geschäftsvorgang kopieren"
 
-#: src/gnome/glade/register.glade.h:11
-#: src/register/ledger-core/gnc-regwidget.c:842
+#: src/gnome/glade/register.glade.h:8
 msgid "Copy the selected transaction"
 msgstr "Ausgewählten Geschäftsvorgang kopieren"
 
-#: src/gnome/glade/register.glade.h:12
-#: src/register/ledger-core/gnc-regwidget.c:520
-#: src/register/ledger-core/gnc-regwidget.c:896
-#: src/register/ledger-core/gnc-regwidget.c:1059
+#: src/gnome/glade/register.glade.h:9
 msgid ""
 "Create a Scheduled Transaction with the current transaction as a template"
 msgstr ""
 "Terminierte Buchung erstellen mit aktuellem Geschäftsvorgang als Vorlage"
 
-#: src/gnome/glade/register.glade.h:13 src/gnome/window-acct-tree.c:842
+#: src/gnome/glade/register.glade.h:10 src/gnome/window-acct-tree.c:842
 #: src/gnome/window-acct-tree.c:978 src/gnome/window-acct-tree.c:1238
 msgid "Create a new account"
 msgstr "Ein neues Konto eröffnen"
 
-#: src/gnome/glade/register.glade.h:14
-#: src/register/ledger-core/gnc-regwidget.c:833
+#: src/gnome/glade/register.glade.h:11
 msgid "Cut Transaction"
 msgstr "Geschäftsvorgang ausschneiden"
 
-#: src/gnome/glade/register.glade.h:15
-#: src/register/ledger-core/gnc-regwidget.c:834
+#: src/gnome/glade/register.glade.h:12
 msgid "Cut the selected transaction"
 msgstr "Ausgewählten Geschäftsvorgang ausschneiden"
 
-#: src/gnome/glade/register.glade.h:16
+#: src/gnome/glade/register.glade.h:13
 msgid "Date _Range"
 msgstr "_Datumsbereich"
 
 #: src/business/business-gnome/glade/invoice.glade.h:17
-#: src/gnome/glade/register.glade.h:17
+#: src/gnome/glade/register.glade.h:14
 msgid "Date of _Entry"
 msgstr "Eingabe-Datum"
 
-#: src/gnome/glade/register.glade.h:20
-#: src/register/ledger-core/gnc-regwidget.c:1697
+#: src/gnome/glade/register.glade.h:17
 msgid "Delete Transaction"
 msgstr "Geschäftsvorgang löschen"
 
-#: src/gnome/glade/register.glade.h:21
-#: src/register/ledger-core/gnc-regwidget.c:1729
+#: src/gnome/glade/register.glade.h:18
 msgid "Delete all the other splits"
 msgstr "Alle Gegen-Buchungen löschen"
 
-#: src/gnome/glade/register.glade.h:22
-#: src/register/ledger-core/gnc-regwidget.c:503
-#: src/register/ledger-core/gnc-regwidget.c:1042
+#: src/gnome/glade/register.glade.h:19
 msgid "Delete the current transaction"
 msgstr "Aktuellen Geschäftsvorgang löschen"
 
-#: src/gnome/glade/register.glade.h:23
-#: src/register/ledger-core/gnc-regwidget.c:1719
+#: src/gnome/glade/register.glade.h:20
 msgid "Delete the whole transaction"
 msgstr "Den gesamten Geschäftsvorgang löschen"
 
-#: src/gnome/glade/register.glade.h:24
+#: src/gnome/glade/register.glade.h:21
 msgid "Descri_ption"
 msgstr "Beschreibung"
 
-#: src/business/business-gnome/glade/invoice.glade.h:21
-#: src/gnome/glade/register.glade.h:25
-msgid "Display the Status Bar"
-msgstr "Anzeigen der Statusleiste"
-
-#: src/business/business-gnome/glade/invoice.glade.h:22
-#: src/gnome/glade/register.glade.h:26
-msgid "Display the Summary Bar"
-msgstr "Anzeigen der Zusammenfassungsleiste"
-
-#: src/business/business-gnome/glade/invoice.glade.h:23
-#: src/gnome/glade/register.glade.h:27
-msgid "Display the toolbar"
-msgstr "Anzeigen der Werkzeugleiste"
-
-#: src/gnome/glade/register.glade.h:28
+#: src/gnome/glade/register.glade.h:22
 msgid "Dup_licate Transaction..."
 msgstr "Buchung duplizieren..."
 
 #: src/business/business-gnome/glade/invoice.glade.h:25
-#: src/gnome/glade/register.glade.h:29
-#: src/register/ledger-core/gnc-regwidget.c:511
+#: src/gnome/glade/register.glade.h:23
 msgid "Duplicate"
 msgstr "Duplizieren"
 
-#: src/gnome/glade/register.glade.h:30
+#: src/gnome/glade/register.glade.h:24
 msgid "Duplicate Transaction"
 msgstr "Doppelte Buchung"
 
-#: src/gnome/glade/register.glade.h:31 src/gnome/window-reconcile.c:1241
-msgid "Edit the main account for this register"
-msgstr "Bearbeiten des Hauptkonto für diesen Kassenbericht"
-
-#: src/gnome/glade/register.glade.h:32
+#: src/gnome/glade/register.glade.h:25
 msgid "End date:"
 msgstr "Enddatum:"
 
 #: src/business/business-gnome/glade/invoice.glade.h:28
-#: src/gnome/glade/register.glade.h:33
-#: src/register/ledger-core/gnc-regwidget.c:486
+#: src/gnome/glade/register.glade.h:26
 msgid "Enter"
 msgstr "Eingeben"
 
-#: src/gnome/glade/register.glade.h:34
+#: src/gnome/glade/register.glade.h:27
 msgid "Erase all splits except the one for this account."
 msgstr "Alle Buchungen löschen, außer jene in diesem Konto."
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2592 src/gnome-search/search.glade.h:5
-#: src/gnome/glade/find.glade.h:23 src/gnome/glade/register.glade.h:35
+#: src/gnome/glade/find.glade.h:23 src/gnome/glade/register.glade.h:28
 msgid "Find"
 msgstr "Suche"
 
-#: src/gnome/glade/register.glade.h:36 src/gnome/window-main.c:946
-msgid "Find transactions with a search"
-msgstr "Finde Geschäftsvorgänge"
-
-#: src/gnome/glade/register.glade.h:37
-#: src/register/ledger-core/gnc-regwidget.c:546
+#: src/gnome/glade/register.glade.h:29
 msgid "Jump"
 msgstr "Gegen"
 
-#: src/gnome/glade/register.glade.h:38
-#: src/register/ledger-core/gnc-regwidget.c:547
-#: src/register/ledger-core/gnc-regwidget.c:923
+#: src/gnome/glade/register.glade.h:30
 msgid "Jump to the corresponding transaction in the other account"
 msgstr "Zur passenden Gegenbuchung im Gegenkonto gehen"
 
-#: src/gnome/glade/register.glade.h:39
-#: src/register/ledger-core/gnc-regwidget.c:790
+#: src/gnome/glade/register.glade.h:31
 msgid "Keep normal account order"
 msgstr "Beibehalten der normalen Kontoreihenfolge"
 
-#: src/gnome/glade/register.glade.h:40
-#: src/register/ledger-core/gnc-regwidget.c:888
-#: src/register/ledger-core/gnc-regwidget.c:1051
+#: src/gnome/glade/register.glade.h:32
 msgid "Make a copy of the current transaction"
 msgstr "Aktuellen Geschäftsvorgang kopieren"
 
-#: src/gnome/glade/register.glade.h:41
-#: src/register/ledger-core/gnc-regwidget.c:538
-#: src/register/ledger-core/gnc-regwidget.c:914
-#: src/register/ledger-core/gnc-regwidget.c:1077
+#: src/gnome/glade/register.glade.h:33
 msgid "Move to the blank transaction at the bottom of the register"
 msgstr "Zur freien Zeile am Ende dieses Kassenberichts gehen"
 
+#: src/gnome/glade/register.glade.h:34
+msgid "NOTUSED: Defined in src/gnome/window-register.c"
+msgstr "NOTUSED: Defined in src/gnome/window-register.c"
+
 #: src/business/business-gnome/glade/invoice.glade.h:40
 #: src/gnome-utils/dialog-account.c:1648 src/gnome/glade/account.glade.h:25
-#: src/gnome/glade/register.glade.h:42
+#: src/gnome/glade/register.glade.h:35
 msgid "New Account"
 msgstr "Neues Konto"
 
 #: src/business/business-gnome/glade/invoice.glade.h:44
-#: src/gnome/glade/register.glade.h:44 src/gnome/window-main.c:915
+#: src/gnome/glade/register.glade.h:37 src/gnome/window-main.c:915
 msgid "Open a general ledger window"
 msgstr "Hauptbuch-Fenster öffnen"
 
-#: src/gnome/glade/register.glade.h:45
+#: src/gnome/glade/register.glade.h:38
 msgid "Open a register report window for this transaction"
 msgstr "Kassenbericht als Bericht für diesen Geschäftsvorgang öffnen"
 
-#: src/gnome/glade/register.glade.h:46
-msgid "Open a report window for this register"
-msgstr "Bericht für diesen Kassenbericht öffnen"
-
-#: src/gnome/glade/register.glade.h:47
-#: src/register/ledger-core/gnc-regwidget.c:849
+#: src/gnome/glade/register.glade.h:39
 msgid "Paste Transaction"
 msgstr "Geschäftsvorgang einfügen"
 
-#: src/gnome/glade/register.glade.h:48
+#: src/gnome/glade/register.glade.h:40
 msgid "Paste the transaction from the clipboard"
 msgstr "Den Geschäftsvorgangs von der Zwischenablage einfügen"
 
 #: src/business/business-gnome/glade/invoice.glade.h:48
-#: src/gnome-utils/window-help.c:641 src/gnome/glade/register.glade.h:49
+#: src/gnome-utils/window-help.c:641 src/gnome/glade/register.glade.h:41
 #: src/import-export/hbci/glade/hbci.glade.h:113
 #: src/report/report-gnome/window-report.c:851
 msgid "Print"
 msgstr "Drucken"
 
-#: src/gnome/glade/register.glade.h:50
+#: src/gnome/glade/register.glade.h:42
 msgid "Print _Check"
 msgstr "Scheck drucken"
 
-#: src/gnome/glade/register.glade.h:51
+#: src/gnome/glade/register.glade.h:43
 msgid "Print a check using a standard format"
 msgstr "Einen Scheck mit Standard-Format drucken"
 
-#: src/gnome/glade/register.glade.h:52
-msgid "Print a report for this register"
-msgstr "Bericht für diesen Kassenbericht drucken"
-
-#: src/gnome/glade/register.glade.h:53
+#: src/gnome/glade/register.glade.h:44
 msgid "ReInitialize Transaction"
 msgstr ""
 
-#: src/gnome/glade/register.glade.h:54
+#: src/gnome/glade/register.glade.h:45
 msgid "Re_initialize Transaction"
 msgstr ""
 
-#: src/gnome/glade/register.glade.h:55
+#: src/gnome/glade/register.glade.h:46
 msgid "Reconcile the main account for this register"
 msgstr "Abgleichen des Hauptkontos für diesen Kassenbericht"
 
-#: src/gnome/glade/register.glade.h:56 src/gnome/window-acct-tree.c:969
+#: src/gnome/glade/register.glade.h:47 src/gnome/window-acct-tree.c:969
 #: src/gnome/window-acct-tree.c:1313
 msgid "Record a stock split or a stock merger"
 msgstr "Buchen einer Aktienteilung oder eines Aktienzusammenschlusses"
 
-#: src/gnome/glade/register.glade.h:57
-#: src/register/ledger-core/gnc-regwidget.c:487
-#: src/register/ledger-core/gnc-regwidget.c:863
-#: src/register/ledger-core/gnc-regwidget.c:1026
+#: src/gnome/glade/register.glade.h:48
 msgid "Record the current transaction"
 msgstr "Änderungen des aktuellen Geschäftsvorgangs übernehmen"
 
-#: src/gnome/glade/register.glade.h:58
+#: src/gnome/glade/register.glade.h:49
 msgid "Register date ranges"
 msgstr "Datumbereich des Kassenberichts"
 
 #. src/report/report-gnome/report-gnome.scm
-#: intl-scm/guile-strings.c:1214 src/gnome/glade/register.glade.h:59
+#: intl-scm/guile-strings.c:1214 src/gnome/glade/register.glade.h:50
 #: src/report/report-gnome/report.glade.h:16
 #: src/report/report-gnome/window-report.c:112
 msgid "Report"
 msgstr "Bericht"
 
-#: src/gnome/glade/register.glade.h:60
+#: src/gnome/glade/register.glade.h:51
 msgid "S_plit Transaction"
 msgstr "Mehrteiliger Vorgang"
 
 #: src/business/business-gnome/glade/invoice.glade.h:51
-#: src/gnome/glade/register.glade.h:61 src/gnome/window-main.c:861
+#: src/gnome/glade/register.glade.h:52 src/gnome/window-main.c:861
 msgid "S_ummary Bar"
 msgstr "_Zusammenfassung"
 
-#: src/gnome/glade/fincalc.glade.h:27 src/gnome/glade/register.glade.h:62
+#: src/gnome/glade/fincalc.glade.h:27 src/gnome/glade/register.glade.h:53
 msgid "Schedule"
 msgstr "Terminiert"
 
-#: src/gnome/glade/register.glade.h:63
-#: src/register/ledger-core/gnc-regwidget.c:519
-#: src/register/ledger-core/gnc-regwidget.c:895
+#: src/gnome/glade/register.glade.h:54
 msgid "Schedule..."
 msgstr "Terminiert..."
 
-#: src/gnome/glade/register.glade.h:64
+#: src/gnome/glade/register.glade.h:55
 msgid "Set Date Range"
 msgstr "Einstellen Datumsbereich"
 
-#: src/gnome/glade/register.glade.h:65
+#: src/gnome/glade/register.glade.h:56
 msgid "Set _Range..."
 msgstr "_Bereich festlegen"
 
-#: src/gnome/glade/register.glade.h:66
-msgid "Set the date range of this register"
-msgstr "Den Datumsbereich dieses Kassenberichts setzen"
-
-#: src/gnome/glade/register.glade.h:67
+#: src/gnome/glade/register.glade.h:57
 msgid "Show Earliest"
 msgstr "Zeige den ersten"
 
-#: src/gnome/glade/register.glade.h:68
+#: src/gnome/glade/register.glade.h:58
 msgid "Show Latest"
 msgstr "Zeige den letzten"
 
-#: src/gnome/glade/register.glade.h:69
+#: src/gnome/glade/register.glade.h:59
 msgid "Show _All"
 msgstr "_Alle anzeigen"
 
-#: src/gnome/glade/register.glade.h:70
-msgid "Show all of the transactions in the account"
-msgstr "Alle Geschäftsvorgänge anzeigen"
-
-#: src/gnome/glade/register.glade.h:71
-#: src/register/ledger-core/gnc-regwidget.c:530
-#: src/register/ledger-core/gnc-regwidget.c:906
-#: src/register/ledger-core/gnc-regwidget.c:1069
+#: src/gnome/glade/register.glade.h:60
 msgid "Show all splits in the current transaction"
 msgstr "Alle Buchungen im aktuellen Geschäftsvorgang anzeigen"
 
 #. src/app-utils/prefs.scm
-#: intl-scm/guile-strings.c:391 src/gnome/glade/register.glade.h:72
-#: src/register/ledger-core/gnc-regwidget.c:770
+#: intl-scm/guile-strings.c:391 src/gnome/glade/register.glade.h:61
 msgid "Show expanded transactions with all splits"
 msgstr "Zeige Geschäftsvorgänge ausführlich mit allen Buchungen"
 
 #. src/app-utils/prefs.scm
-#: intl-scm/guile-strings.c:383 src/gnome/glade/register.glade.h:73
-#: src/register/ledger-core/gnc-regwidget.c:763
+#: intl-scm/guile-strings.c:383 src/gnome/glade/register.glade.h:62
 msgid "Show transactions on one or two lines"
 msgstr "Anzeigen der Geschäftsvorgänge auf einer oder zwei Zeilen"
 
 #. src/app-utils/prefs.scm
-#: intl-scm/guile-strings.c:387 src/gnome/glade/register.glade.h:74
-#: src/register/ledger-core/gnc-regwidget.c:766
+#: intl-scm/guile-strings.c:387 src/gnome/glade/register.glade.h:63
 msgid ""
 "Show transactions on one or two lines and expand the current transaction"
 msgstr ""
 "Geschäftsvorgänge auf einer oder zwei Zeilen mit mehr Informationen anzeigen"
 
 #. src/app-utils/prefs.scm
-#: intl-scm/guile-strings.c:397 src/gnome/glade/register.glade.h:75
-#: src/register/ledger-core/gnc-regwidget.c:781
+#: intl-scm/guile-strings.c:397 src/gnome/glade/register.glade.h:64
 msgid "Show two lines of information for each transaction"
 msgstr "Zwei Zeilen pro Geschäftsvorgang anzeigen"
 
 #: src/business/business-gnome/glade/invoice.glade.h:52
-#: src/gnome/glade/register.glade.h:76
+#: src/gnome/glade/register.glade.h:65
 msgid "Sort _Order"
 msgstr "S_ortierreihenfolge"
 
-#: src/gnome/glade/register.glade.h:77
-#: src/register/ledger-core/gnc-regwidget.c:807
-#: src/register/ledger-core/gnc-regwidget.c:808
+#: src/gnome/glade/register.glade.h:66
 msgid "Sort by Amount"
 msgstr "Sortiere nach Betrag"
 
-#: src/gnome/glade/register.glade.h:78
-#: src/register/ledger-core/gnc-regwidget.c:792
-#: src/register/ledger-core/gnc-regwidget.c:793
+#: src/gnome/glade/register.glade.h:67
 msgid "Sort by Date"
 msgstr "Sortiere nach Datum"
 
-#: src/gnome/glade/register.glade.h:79
-#: src/register/ledger-core/gnc-regwidget.c:813
-#: src/register/ledger-core/gnc-regwidget.c:814
+#: src/gnome/glade/register.glade.h:68
 msgid "Sort by Description"
 msgstr "Sortiere nach Beschreibung"
 
-#: src/gnome/glade/register.glade.h:80
-#: src/register/ledger-core/gnc-regwidget.c:810
-#: src/register/ledger-core/gnc-regwidget.c:811
+#: src/gnome/glade/register.glade.h:69
 msgid "Sort by Memo"
 msgstr "Sortiere nach Buchungstext"
 
-#: src/gnome/glade/register.glade.h:81
+#: src/gnome/glade/register.glade.h:70
 msgid "Sort by Number"
 msgstr "Sortiere nach Nummer"
 
 #: src/business/business-gnome/glade/invoice.glade.h:57
-#: src/gnome/glade/register.glade.h:82
-#: src/register/ledger-core/gnc-regwidget.c:796
+#: src/gnome/glade/register.glade.h:71
 msgid "Sort by the date of entry"
 msgstr "Sortiere nach Datum der Einträge"
 
-#: src/gnome/glade/register.glade.h:83
-#: src/register/ledger-core/gnc-regwidget.c:800
+#: src/gnome/glade/register.glade.h:72
 msgid "Sort by the statement date (unreconciled items last)"
 msgstr "Nach Statement-Datum sortieren (nicht abgeglichene Einträge zuletzt)"
 
 #: src/engine/Transaction.c:2322 src/gnome/druid-stock-split.c:409
-#: src/gnome/glade/register.glade.h:84
-#: src/register/ledger-core/gnc-regwidget.c:529
+#: src/gnome/glade/register.glade.h:73
 #: src/register/ledger-core/split-register.c:2046
 msgid "Split"
 msgstr "Mehrteilig"
 
-#: src/gnome/glade/register.glade.h:85
+#: src/gnome/glade/register.glade.h:74
 msgid "St_yle"
 msgstr "Stil"
 
-#: src/gnome/glade/register.glade.h:86
+#: src/gnome/glade/register.glade.h:75
 msgid "Start date:"
 msgstr "Anfangsdatum:"
 
 #. src/app-utils/date-utilities.scm
-#: intl-scm/guile-strings.c:780 src/gnome/glade/register.glade.h:87
+#: intl-scm/guile-strings.c:780 src/gnome/glade/register.glade.h:76
 msgid "Today"
 msgstr "Heute"
 
-#: src/gnome/glade/register.glade.h:88
+#: src/gnome/glade/register.glade.h:77
 msgid "Transaction Information"
 msgstr "Geschäftsvorgangsinformation"
 
 #. src/report/standard-reports/register.scm
-#: intl-scm/guile-strings.c:2146 src/gnome/glade/register.glade.h:89
+#: intl-scm/guile-strings.c:2146 src/gnome/glade/register.glade.h:78
 #: src/register/ledger-core/split-register-layout.c:550
 #: src/register/ledger-core/split-register-model.c:198
 #: src/register/ledger-core/split-register.c:1977
 msgid "Transfer"
 msgstr "Buchen"
 
-#: src/gnome/glade/register.glade.h:90 src/gnome/window-acct-tree.c:961
+#: src/gnome/glade/register.glade.h:79 src/gnome/window-acct-tree.c:961
 #: src/gnome/window-acct-tree.c:1297 src/gnome/window-reconcile.c:1249
 msgid "Transfer funds from one account to another"
 msgstr "Beträge von einem Konto zu einem anderen umbuchen"
 
 #: src/business/business-gnome/glade/invoice.glade.h:59
-#: src/gnome/glade/register.glade.h:91 src/gnome/window-main.c:939
+#: src/gnome/glade/register.glade.h:80 src/gnome/window-main.c:939
 msgid "Use the financial calculator"
 msgstr "Den Finanzrechner benutzen"
 
 #: src/business/business-gnome/glade/invoice.glade.h:60
-#: src/gnome/glade/register.glade.h:92 src/gnome/window-main.c:931
+#: src/gnome/glade/register.glade.h:81 src/gnome/window-main.c:931
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr "Wertpapiere für Depots und Investmentfonds anzeigen und bearbeiten"
 
 #: src/business/business-gnome/glade/invoice.glade.h:63
-#: src/gnome/glade/register.glade.h:93 src/gnome/window-main.c:923
+#: src/gnome/glade/register.glade.h:82 src/gnome/window-main.c:923
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr "Preise für Währungen/Wertpapiere anzeigen und bearbeiten"
 
-#: src/gnome/glade/register.glade.h:94
+#: src/gnome/glade/register.glade.h:83
+msgid "[rmw] THIS WINDOW SHOULD NOT BE CREATED"
+msgstr "[rmw] THIS WINDOW SHOULD NOT BE CREATED"
+
+#: src/gnome/glade/register.glade.h:84
+msgid "[rtw] THIS WINDOW SHOULD NOT BE CREATED"
+msgstr "[rtw] THIS WINDOW SHOULD NOT BE CREATED"
+
+#: src/gnome/glade/register.glade.h:85
+msgid "[wrtw] THIS WINDOW SHOULD NOT BE CREATED"
+msgstr "[wrtw] THIS WINDOW SHOULD NOT BE CREATED"
+
+#: src/gnome/glade/register.glade.h:86
 msgid "_Account Report"
 msgstr "Kontenbericht"
 
 #: src/business/business-gnome/glade/invoice.glade.h:64
-#: src/gnome/glade/register.glade.h:95 src/gnome/window-main.c:996
+#: src/gnome/glade/register.glade.h:87 src/gnome/window-main.c:996
 msgid "_Actions"
 msgstr "A_ktionen"
 
-#: src/gnome/glade/register.glade.h:96
+#: src/gnome/glade/register.glade.h:88
 msgid "_All transactions"
 msgstr "Alle Geschäftsvorgänge"
 
-#: src/gnome/glade/register.glade.h:97
+#: src/gnome/glade/register.glade.h:89
 msgid "_Amount"
 msgstr "Betrag"
 
-#: src/gnome/glade/register.glade.h:98
+#: src/gnome/glade/register.glade.h:90
 msgid "_Auto-Split Ledger"
 msgstr "Auto-Mehrteiliges Hauptbuch"
 
-#: src/gnome/glade/register.glade.h:99
+#: src/gnome/glade/register.glade.h:91
 msgid "_Basic Ledger"
 msgstr "Vereinfachtes Hauptbuch"
 
 #: src/business/business-gnome/glade/invoice.glade.h:66
-#: src/gnome/glade/register.glade.h:100
-#: src/register/ledger-core/gnc-regwidget.c:913
-#: src/register/ledger-core/gnc-regwidget.c:1076
+#: src/gnome/glade/register.glade.h:92
 msgid "_Blank"
 msgstr "_Neue Buchung"
 
 #: src/business/business-gnome/glade/invoice.glade.h:67
-#: src/gnome/glade/register.glade.h:101 src/gnome/window-reconcile.c:1221
-#: src/register/ledger-core/gnc-regwidget.c:870
-#: src/register/ledger-core/gnc-regwidget.c:1033
+#: src/gnome/glade/register.glade.h:93 src/gnome/window-reconcile.c:1221
 msgid "_Cancel"
 msgstr "_Abbrechen"
 
 #: src/business/business-gnome/glade/invoice.glade.h:68
-#: src/gnome/glade/register.glade.h:102
+#: src/gnome/glade/register.glade.h:94
 msgid "_Commodity Editor"
 msgstr "Aktien _Editor"
 
 #: src/business/business-gnome/glade/invoice.glade.h:70
-#: src/gnome/glade/register.glade.h:103
+#: src/gnome/glade/register.glade.h:95
 msgid "_Date"
 msgstr "Datum"
 
 #: src/business/business-gnome/glade/invoice.glade.h:71
-#: src/gnome/glade/register.glade.h:104 src/gnome/window-reconcile.c:1285
+#: src/gnome/glade/register.glade.h:96 src/gnome/window-reconcile.c:1285
 #: src/gnome/window-reconcile.c:1357
-#: src/register/ledger-core/gnc-regwidget.c:878
-#: src/register/ledger-core/gnc-regwidget.c:1041
 msgid "_Delete"
 msgstr "_Löschen"
 
-#: src/gnome/glade/register.glade.h:105
-#: src/register/ledger-core/gnc-regwidget.c:780
+#: src/gnome/glade/register.glade.h:97
 msgid "_Double Line"
 msgstr "_Zwei Zeilen"
 
-#: src/gnome/glade/register.glade.h:106 src/gnome/window-acct-tree.c:943
+#: src/gnome/glade/register.glade.h:98 src/gnome/window-reconcile.c:1278
+#: src/gnome/window-reconcile.c:1350
+msgid "_Edit"
+msgstr "_Bearbeiten"
+
+#: src/gnome/glade/register.glade.h:99 src/gnome/window-acct-tree.c:943
 #: src/gnome/window-acct-tree.c:1271 src/gnome/window-reconcile.c:1241
 msgid "_Edit Account"
 msgstr "Konto _bearbeiten"
 
 #: src/business/business-gnome/glade/invoice.glade.h:74
-#: src/gnome/glade/register.glade.h:107
-#: src/register/ledger-core/gnc-regwidget.c:862
-#: src/register/ledger-core/gnc-regwidget.c:1025
+#: src/gnome/glade/register.glade.h:100
 msgid "_Enter"
 msgstr "Übernehmen"
 
 #: src/business/business-gnome/glade/invoice.glade.h:75
-#: src/gnome/glade/register.glade.h:108
+#: src/gnome/glade/register.glade.h:101
 msgid "_Financial Calculator"
 msgstr "Finanzrechner"
 
+#: src/gnome/glade/register.glade.h:102
+msgid "_Find"
+msgstr "Suche"
+
 #: src/business/business-gnome/glade/invoice.glade.h:76
-#: src/gnome/glade/register.glade.h:109 src/gnome/window-main.c:914
+#: src/gnome/glade/register.glade.h:103 src/gnome/window-main.c:914
 msgid "_General Ledger"
 msgstr "_Hauptbuch"
 
 #: src/business/business-gnome/glade/invoice.glade.h:77
-#: src/gnome/glade/register.glade.h:110
+#: src/gnome/glade/register.glade.h:104
 msgid "_Gnucash Users Manual"
 msgstr "GnuCash Benutzeranleitung"
 
-#: src/gnome/glade/register.glade.h:111
-#: src/register/ledger-core/gnc-regwidget.c:922
-#: src/register/ledger-core/gnc-regwidget.c:1085
+#: src/gnome/glade/register.glade.h:105
 msgid "_Jump"
 msgstr "Gegenbuchung"
 
-#: src/gnome/glade/register.glade.h:112
+#: src/gnome/glade/register.glade.h:106
 msgid "_Memo"
 msgstr "Buchungstext"
 
-#: src/gnome/glade/register.glade.h:113
+#: src/gnome/glade/register.glade.h:107
 msgid "_Number"
 msgstr "Nummer"
 
 #: src/business/business-gnome/glade/invoice.glade.h:80
-#: src/gnome/glade/register.glade.h:114 src/gnome/window-main.c:922
+#: src/gnome/glade/register.glade.h:108 src/gnome/window-main.c:922
 msgid "_Price Editor"
 msgstr "_Preis-Editor"
 
-#: src/gnome/glade/register.glade.h:115 src/gnome/window-acct-tree.c:952
+#: src/gnome/glade/register.glade.h:109 src/gnome/window-acct-tree.c:952
 #: src/gnome/window-acct-tree.c:1304
 msgid "_Reconcile..."
 msgstr "_Abgleichen..."
@@ -1736,59 +1638,63 @@ msgstr "_Abgleichen..."
 #. src/report/report-system/report.scm
 #: intl-scm/guile-strings.c:1120
 #: src/business/business-gnome/glade/invoice.glade.h:82
-#: src/gnome/glade/register.glade.h:116
+#: src/gnome/glade/register.glade.h:110
 msgid "_Reports"
 msgstr "_Berichte"
 
 #: src/business/business-gnome/glade/invoice.glade.h:83
-#: src/gnome/glade/register.glade.h:117
+#: src/gnome/glade/register.glade.h:111
 msgid "_Standard"
 msgstr "Standardreihenfolge"
 
-#: src/gnome/glade/register.glade.h:118
+#: src/gnome/glade/register.glade.h:112
 msgid "_Statement Date"
 msgstr "Datum des Kontoauszugs"
 
 #: src/business/business-gnome/glade/invoice.glade.h:84
-#: src/gnome/glade/register.glade.h:119 src/gnome/window-main.c:868
+#: src/gnome/glade/register.glade.h:113 src/gnome/window-main.c:868
 msgid "_Status Bar"
 msgstr "_Statuszeile"
 
-#: src/gnome/glade/register.glade.h:120
+#: src/gnome/glade/register.glade.h:114
 msgid "_Stock Split..."
 msgstr "Aktienteilung..."
 
-#: src/gnome/glade/register.glade.h:121
+#: src/gnome/glade/register.glade.h:115
 msgid "_This transaction"
 msgstr "_Dieser Geschäftsvorgang"
 
 #: src/business/business-gnome/glade/invoice.glade.h:86
-#: src/gnome/glade/register.glade.h:122
+#: src/gnome/glade/register.glade.h:116
 msgid "_Tip Of The Day"
 msgstr "_Tipp des Tages"
 
 #: src/business/business-gnome/glade/invoice.glade.h:87
-#: src/gnome/glade/register.glade.h:123 src/gnome/window-main.c:854
+#: src/gnome/glade/register.glade.h:117 src/gnome/window-main.c:854
 msgid "_Toolbar"
 msgstr "_Werkzeugleiste"
 
 #: src/business/business-gnome/glade/invoice.glade.h:88
-#: src/gnome/glade/register.glade.h:124 src/gnome/window-main.c:997
+#: src/gnome/glade/register.glade.h:118 src/gnome/window-main.c:997
 msgid "_Tools"
 msgstr "_Werkzeuge"
 
-#: src/gnome/glade/register.glade.h:125
+#: src/gnome/glade/register.glade.h:119
 msgid "_Transaction Journal"
 msgstr "Amerikanisches Journal"
 
-#: src/gnome/glade/register.glade.h:126
+#: src/gnome/glade/register.glade.h:120
 msgid "_Transaction Report"
 msgstr "Buchungsbericht"
 
-#: src/gnome/glade/register.glade.h:127 src/gnome/window-acct-tree.c:960
+#: src/gnome/glade/register.glade.h:121 src/gnome/window-acct-tree.c:960
 #: src/gnome/window-acct-tree.c:1296 src/gnome/window-reconcile.c:1249
 msgid "_Transfer..."
 msgstr "_Buchen..."
+
+#: src/gnome/glade/register.glade.h:122
+msgid "_View"
+msgstr "Ansicht"
 
 #. src/report/standard-reports/portfolio.scm
 #: intl-scm/guile-strings.c:1646 intl-scm/guile-strings.c:1668
@@ -3001,7 +2907,7 @@ msgstr "Reconciled:J"
 
 #: src/gnome/druid-loan.c:444
 msgid "via Escrow account?"
-msgstr "über Treuhänderkonto?"
+msgstr "über Treuhandkonto?"
 
 #: src/gnome/druid-loan.c:712
 msgid "Are you sure you want to cancel the Mortgage/Loan Setup Druid?"
@@ -3071,118 +2977,35 @@ msgstr ""
 "Änderungen rückgängig gemacht. Sind Sie sicher, daß Sie alle\n"
 "Änderungen in den Terminierten Buchungen verwerfen wollen?"
 
-#: src/gnome/window-register.c:945
-msgid "Present:"
-msgstr "Aktueller Wert:"
-
-#: src/gnome/window-register.c:946
-msgid "Future:"
-msgstr "Zukünftiger Wert:"
-
-#: src/gnome/window-register.c:947
-msgid "Cleared:"
-msgstr "Bestätigt:"
-
-#: src/gnome/window-register.c:949
-msgid "Reconciled:"
-msgstr "Abgeglichen:"
-
-#: src/gnome/window-register.c:953
-msgid "Shares:"
-msgstr "Anteile:"
-
-#: src/gnome/window-register.c:955
-msgid "Current Value:"
-msgstr "Aktueller Wert:"
-
-#: src/gnome/window-register.c:1393
-msgid "General Ledger"
-msgstr "Hauptbuch"
-
-#: src/gnome/window-register.c:1395
-msgid "General Ledger Report"
-msgstr "Hauptbuch Bericht"
-
-#: src/gnome/window-register.c:1400
-msgid "Portfolio"
-msgstr "Portfolio"
-
-#: src/gnome/window-register.c:1402
-msgid "Portfolio Report"
-msgstr "Portfolio Bericht"
-
-#: src/gnome/window-register.c:1407
-msgid "Search Results"
-msgstr "Suchergebnisse"
-
-#: src/gnome/window-register.c:1409
-msgid "Search Results Report"
-msgstr "Suchergebnisse Bericht"
-
-#. src/app-utils/prefs.scm
-#: intl-scm/guile-strings.c:375 intl-scm/guile-strings.c:393
-#: intl-scm/guile-strings.c:429 intl-scm/guile-strings.c:435
-#: intl-scm/guile-strings.c:441 intl-scm/guile-strings.c:449
-#: intl-scm/guile-strings.c:2240 src/gnome/window-register.c:1414
-msgid "Register"
-msgstr "Kassenbericht"
-
-#. src/report/standard-reports/register.scm
-#: intl-scm/guile-strings.c:2166 src/gnome/window-register.c:1416
-msgid "Register Report"
-msgstr "Bericht zum Kassenbericht"
-
-#: src/gnome/window-register.c:1542
-msgid ""
-"This account may not be edited.  If you want\n"
-"to edit transactions in this register, please\n"
-"open the account options and turn off the\n"
-"placeholder checkbox."
-msgstr ""
-"Dieses Konto kann nicht bearbeitet werden. Wenn Sie Buchungen in\n"
-"diesem Konto bearbeiten möchten, öffnen Sie bitte das Dialogfenster\n"
-"\"Konto Eigenschaften\" und deaktivieren Sie die Option\n"
-"\"Platzhalter-Konto\"."
-
-#: src/gnome/window-register.c:1549
-msgid ""
-"One of the sub-accounts selected may not be\n"
-"edited.  If you want to edit transactions in\n"
-"this register, please open the sub-account\n"
-"options and turn off the placeholder checkbox.\n"
-"You may also open an individual account instead\n"
-"of a set of accounts."
-msgstr ""
-"Eines der Unterkonten dieses Kontos kann nicht bearbeitet werden. Wenn\n"
-"Sie Buchungen in diesem Konto bearbeiten möchten, öffnen Sie bitte das\n"
-"Dialogfenster \"Konto Eigenschaften\" des Unterkontos und deaktivieren\n"
-"Sie die Option \"Platzhalter-Konto\"."
-
-#: src/gnome/window-register.c:1571
-#, c-format
-msgid "%s [Read-Only]"
-msgstr "%s [Nur-Lesen]"
-
-#: src/gnome/window-register.c:2032
+#: src/gnome/gnc-split-reg.c:699
 msgid "<No information>"
 msgstr "<keine Informationen>"
 
-#: src/gnome/window-register.c:2433
+#: src/gnome/gnc-split-reg.c:826
+#: src/register/ledger-core/split-register-control.c:1054
+#: src/register/ledger-core/split-register.c:496
+msgid ""
+"The current transaction has been changed.\n"
+"Would you like to record it?"
+msgstr ""
+"Die aktuelle Buchung wurde verändert.\n"
+"Soll sie gespeichert werden?"
+
+#: src/gnome/gnc-split-reg.c:951
 msgid "Reinitialize"
 msgstr ""
 
-#: src/gnome/window-register.c:2435
+#: src/gnome/gnc-split-reg.c:953
 msgid "Are you sure you want to reinitialize this transaction?"
 msgstr ""
 
-#: src/gnome/window-register.c:2438
+#: src/gnome/gnc-split-reg.c:956
 msgid ""
 "You would be modifying a transaction with reconciled splits!\n"
 "This is not a good idea as it will cause your reconciled balance to be off."
 msgstr ""
 
-#: src/gnome/window-register.c:2525
-#: src/register/ledger-core/gnc-regwidget.c:1822
+#: src/gnome/gnc-split-reg.c:1044
 #, c-format
 msgid ""
 "Are you sure you want to delete\n"
@@ -3196,29 +3019,28 @@ msgstr ""
 "   %s \n"
 "löschen wollen?"
 
-#: src/gnome/window-register.c:2527
+#: src/gnome/gnc-split-reg.c:1046
 msgid ""
 "You would be deleting a reconciled split!\n"
 "This is not a good idea as it will cause your reconciled balance to be off."
 msgstr ""
+"Sie würden eine abgeglichene Buchung löschen! Das würde bewirken, daß\n"
+"Ihr Saldo nicht mehr abgeglichen ist."
 
-#: src/gnome/window-register.c:2535
-#: src/register/ledger-core/gnc-regwidget.c:1830
+#: src/gnome/gnc-split-reg.c:1054
 msgid "(no memo)"
 msgstr "(kein Buchungstext)"
 
-#: src/gnome/window-register.c:2538
-#: src/register/ledger-core/gnc-regwidget.c:1833
+#: src/gnome/gnc-split-reg.c:1057
 msgid "(no description)"
 msgstr "(Keine Beschreibung)"
 
-#: src/gnome/window-register.c:2571
-#: src/register/ledger-core/gnc-regwidget.c:1865
+#: src/gnome/gnc-split-reg.c:1090
 msgid "Are you sure you want to delete the current transaction?"
 msgstr ""
 "Sind Sie sicher, dass Sie den aktuellen Geschäftsvorgang löschen wollen?"
 
-#: src/gnome/window-register.c:2573
+#: src/gnome/gnc-split-reg.c:1092
 msgid ""
 "You would be deleting a transaction with reconciled splits!\n"
 "This is not a good idea as it will cause your reconciled balance to be off."
@@ -3227,16 +3049,97 @@ msgstr ""
 "Buchungen löschen würden. Dies bedeutet, daß ihr abgeglichener Saldo\n"
 "verändert wird."
 
-#: src/gnome/window-register.c:2688
-#: src/register/ledger-core/gnc-regwidget.c:1960
-#: src/register/ledger-core/split-register-control.c:1054
-#: src/register/ledger-core/split-register.c:496
+#: src/gnome/gnc-split-reg.c:1774
+msgid "Present:"
+msgstr "Aktueller Wert:"
+
+#: src/gnome/gnc-split-reg.c:1775
+msgid "Future:"
+msgstr "Zukünftiger Wert:"
+
+#: src/gnome/gnc-split-reg.c:1776
+msgid "Cleared:"
+msgstr "Bestätigt:"
+
+#: src/gnome/gnc-split-reg.c:1777
+msgid "Reconciled:"
+msgstr "Abgeglichen:"
+
+#: src/gnome/gnc-split-reg.c:1781
+msgid "Shares:"
+msgstr "Anteile:"
+
+#: src/gnome/gnc-split-reg.c:1782
+msgid "Current Value:"
+msgstr "Aktueller Wert:"
+
+#: src/gnome/gnc-split-reg.c:2009
 msgid ""
-"The current transaction has been changed.\n"
-"Would you like to record it?"
+"This account may not be edited.  If you want\n"
+"to edit transactions in this register, please\n"
+"open the account options and turn off the\n"
+"placeholder checkbox."
 msgstr ""
-"Die aktuelle Buchung wurde verändert.\n"
-"Soll sie gespeichert werden?"
+"Dieses Konto kann nicht bearbeitet werden. Wenn Sie Buchungen in\n"
+"diesem Konto bearbeiten möchten, öffnen Sie bitte das Dialogfenster\n"
+"\"Konto Eigenschaften\" und deaktivieren Sie die Option\n"
+"\"Platzhalter-Konto\"."
+
+#: src/gnome/gnc-split-reg.c:2016
+msgid ""
+"One of the sub-accounts selected may not be\n"
+"edited.  If you want to edit transactions in\n"
+"this register, please open the sub-account\n"
+"options and turn off the placeholder checkbox.\n"
+"You may also open an individual account instead\n"
+"of a set of accounts."
+msgstr ""
+"Eines der Unterkonten dieses Kontos kann nicht bearbeitet werden. Wenn\n"
+"Sie Buchungen in diesem Konto bearbeiten möchten, öffnen Sie bitte das\n"
+"Dialogfenster \"Konto Eigenschaften\" des Unterkontos und deaktivieren\n"
+"Sie die Option \"Platzhalter-Konto\"."
+
+#: src/gnome/gnc-split-reg.c:2040
+#, c-format
+msgid "%s [Read-Only]"
+msgstr "%s [Nur-Lesen]"
+
+#: src/gnome/window-register.c:698
+msgid "General Ledger"
+msgstr "Hauptbuch"
+
+#: src/gnome/window-register.c:700
+msgid "General Ledger Report"
+msgstr "Hauptbuch Bericht"
+
+#: src/gnome/window-register.c:705
+msgid "Portfolio"
+msgstr "Portfolio"
+
+#: src/gnome/window-register.c:707
+msgid "Portfolio Report"
+msgstr "Portfolio Bericht"
+
+#: src/gnome/window-register.c:712
+msgid "Search Results"
+msgstr "Suchergebnisse"
+
+#: src/gnome/window-register.c:714
+msgid "Search Results Report"
+msgstr "Suchergebnisse Bericht"
+
+#. src/app-utils/prefs.scm
+#: intl-scm/guile-strings.c:375 intl-scm/guile-strings.c:393
+#: intl-scm/guile-strings.c:429 intl-scm/guile-strings.c:435
+#: intl-scm/guile-strings.c:441 intl-scm/guile-strings.c:449
+#: intl-scm/guile-strings.c:2240 src/gnome/window-register.c:719
+msgid "Register"
+msgstr "Kassenbericht"
+
+#. src/report/standard-reports/register.scm
+#: intl-scm/guile-strings.c:2166 src/gnome/window-register.c:721
+msgid "Register Report"
+msgstr "Bericht zum Kassenbericht"
 
 #: src/gnome/dialog-scheduledxaction.c:269
 msgid "This SX has changed; are you sure you want to cancel?"
@@ -3268,10 +3171,12 @@ msgid ""
 "Scheduled Transactions with variables\n"
 "cannot be automatically created."
 msgstr ""
+"Terminierte Buchungen mit Variablen können nicht automatisch erstellt\n"
+"werden."
 
 #: src/gnome/dialog-scheduledxaction.c:742
 msgid "Please provide a valid end selection."
-msgstr ""
+msgstr "Bitte geben Sie ein gültiges Enddatum ein."
 
 #: src/gnome/dialog-scheduledxaction.c:758
 msgid "There must be some number of  occurances."
@@ -3453,6 +3358,10 @@ msgstr "Finanzrechner"
 #: src/gnome/window-main.c:945
 msgid "_Find Transactions"
 msgstr "Geschäftsvorgänge _finden"
+
+#: src/gnome/window-main.c:946
+msgid "Find transactions with a search"
+msgstr "Finde Geschäftsvorgänge"
 
 #: src/gnome/window-main.c:958
 msgid "Tutorial and Concepts _Guide"
@@ -3886,6 +3795,10 @@ msgstr "Die Abstimmung dieses Kontos abbrechen"
 msgid "Open the account"
 msgstr "Konto öffnen"
 
+#: src/gnome/window-reconcile.c:1241
+msgid "Edit the main account for this register"
+msgstr "Bearbeiten des Hauptkonto für diesen Kassenbericht"
+
 #: src/gnome/window-reconcile.c:1271 src/gnome/window-reconcile.c:1343
 msgid "_New"
 msgstr "_Neu"
@@ -3896,17 +3809,12 @@ msgid "Add a new transaction to the account"
 msgstr "Dem Konto einen neuen Geschäftsvorgang hinzufügen"
 
 #: src/gnome/window-reconcile.c:1278 src/gnome/window-reconcile.c:1350
-msgid "_Edit"
-msgstr "_Bearbeiten"
-
-#: src/gnome/window-reconcile.c:1278 src/gnome/window-reconcile.c:1350
 #: src/gnome/window-reconcile.c:1410
 msgid "Edit the current transaction"
 msgstr "Aktuellen Geschäftsvorgang bearbeiten"
 
 #: src/gnome/window-reconcile.c:1285 src/gnome/window-reconcile.c:1357
 #: src/gnome/window-reconcile.c:1417
-#: src/register/ledger-core/gnc-regwidget.c:879
 msgid "Delete the selected transaction"
 msgstr "Ausgewählten Geschäftsvorgang löschen"
 
@@ -4774,7 +4682,7 @@ msgstr "Halbjährlich: %u"
 #. en_GB, en_AU and everywhere else with the
 #. sensible ordering of ddmmyy.  Translators
 #. note: to switch the last two arguments,
-#. write "Yearly (x%u): %3$u of month %2$s"
+#. write "Yearly (x%1$u): %3$u of month %2$s"
 #.
 #. %u is the number of intervals; %s is the
 #. abbreviated name of the month; %u is the
@@ -7313,7 +7221,7 @@ msgstr "Diesem Auftrag muß eine Nummer erteilt werden."
 #: src/business/business-gnome/dialog-invoice.c:261
 #: src/business/business-gnome/dialog-order.c:142
 msgid "You need to supply Billing Information."
-msgstr ""
+msgstr "Sie müssen Rechnungsdaten eingeben."
 
 #: src/business/business-gnome/dialog-order.c:238
 msgid "The Order must have at least one Entry."
@@ -7445,7 +7353,7 @@ msgstr "Ansicht"
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:299 intl-scm/guile-strings.c:2234
 #: intl-scm/guile-strings.c:2788 intl-scm/guile-strings.c:3002
-#: src/business/business-core/gncInvoice.c:434
+#: src/business/business-core/gncInvoice.c:460
 #: src/business/business-gnome/dialog-invoice.c:1533
 #: src/business/business-gnome/glade/invoice.glade.h:30
 #: src/register/ledger-core/split-register.c:2006
@@ -7454,7 +7362,7 @@ msgstr "Rechnung"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:325 intl-scm/guile-strings.c:2790
-#: intl-scm/guile-strings.c:3004 src/business/business-core/gncInvoice.c:436
+#: intl-scm/guile-strings.c:3004 src/business/business-core/gncInvoice.c:462
 #: src/business/business-gnome/dialog-invoice.c:1536
 msgid "Bill"
 msgstr ""
@@ -7667,6 +7575,18 @@ msgstr "Standard-Auftrag"
 msgid "Delete the current entry"
 msgstr "Aktuellen Eintrag löschen"
 
+#: src/business/business-gnome/glade/invoice.glade.h:21
+msgid "Display the Status Bar"
+msgstr "Anzeigen der Statusleiste"
+
+#: src/business/business-gnome/glade/invoice.glade.h:22
+msgid "Display the Summary Bar"
+msgstr "Anzeigen der Zusammenfassungsleiste"
+
+#: src/business/business-gnome/glade/invoice.glade.h:23
+msgid "Display the toolbar"
+msgstr "Anzeigen der Werkzeugleiste"
+
 #: src/business/business-gnome/glade/invoice.glade.h:24
 msgid "Dup_licate"
 msgstr "Duplizieren"
@@ -7771,7 +7691,7 @@ msgstr "Bedingungen"
 
 #: src/business/business-gnome/glade/invoice.glade.h:61
 msgid "View and edit the list of Billing Terms"
-msgstr ""
+msgstr "Liste der Zahlungsbedingungen anzeigen und bearbeiten"
 
 #: src/business/business-gnome/glade/invoice.glade.h:62
 msgid "View and edit the list of Tax Tables"
@@ -7779,7 +7699,7 @@ msgstr ""
 
 #: src/business/business-gnome/glade/invoice.glade.h:65
 msgid "_Billing Terms Editor"
-msgstr ""
+msgstr "Zahlungsbedingungen Editor"
 
 #: src/business/business-gnome/glade/invoice.glade.h:69
 msgid "_Company Report"
@@ -7971,7 +7891,7 @@ msgstr ""
 
 #: src/business/business-gnome/glade/billterms.glade.h:4
 msgid "Choose the type of Billing Term"
-msgstr ""
+msgstr "Wählen Sie die Art der Zahlungsbedingungen"
 
 #: src/business/business-gnome/glade/billterms.glade.h:5
 msgid "Close this window"
@@ -7979,11 +7899,11 @@ msgstr "Dieses Fenster schließen"
 
 #: src/business/business-gnome/glade/billterms.glade.h:6
 msgid "Commit this Billing Term"
-msgstr ""
+msgstr "Zahlungsbedingungen abspeichern"
 
 #: src/business/business-gnome/glade/billterms.glade.h:7
 msgid "Create a new Billing Term"
-msgstr ""
+msgstr "Neue Zahlungsbedingungen erstellen"
 
 #: src/business/business-gnome/glade/billterms.glade.h:8
 msgid "Cutoff Day: "
@@ -7991,7 +7911,7 @@ msgstr ""
 
 #: src/business/business-gnome/glade/billterms.glade.h:11
 msgid "Delete the current Billing Term"
-msgstr ""
+msgstr "Ausgewählte Zahlungsbedingungen löschen"
 
 #: src/business/business-gnome/glade/billterms.glade.h:12
 msgid "Description: "
@@ -8020,11 +7940,11 @@ msgstr ""
 
 #: src/business/business-gnome/glade/billterms.glade.h:19
 msgid "Edit the current Billing Term"
-msgstr ""
+msgstr "Ausgewählte Zahlungsbedingungen bearbeiten"
 
 #: src/business/business-gnome/glade/billterms.glade.h:22
 msgid "New Billing Terms"
-msgstr ""
+msgstr "Neue Zahlungsbedingungen"
 
 #: src/business/business-gnome/glade/billterms.glade.h:24
 msgid "Number of days from now"
@@ -8056,7 +7976,7 @@ msgstr ""
 
 #: src/business/business-gnome/glade/billterms.glade.h:31
 msgid "The description of the Billing Term, printed on invoices"
-msgstr ""
+msgstr "Beschreibung der Zahlungsbedingungen, wie sie auf eine Rechnung gedruckt werden"
 
 #: src/business/business-gnome/glade/billterms.glade.h:32
 msgid "The discount percentage applied if paid early."
@@ -8333,7 +8253,7 @@ msgstr "Zahlung"
 
 #: src/business/business-gnome/dialog-billterms.c:259
 msgid "You must provide a name for this Billing Term."
-msgstr "Sie müssen einen Namen für diese Rechnungsbedingungen angeben."
+msgstr "Sie müssen einen Namen für diese Zahlungsbedingungen angeben."
 
 #: src/business/business-gnome/dialog-billterms.c:265
 #, c-format
@@ -8341,6 +8261,8 @@ msgid ""
 "You must provide a unique name for this Billing Term.\n"
 "Your choice \"%s\" is already in use."
 msgstr ""
+"Sie müssen einen ein-eindeutigen Namen für diese Zahlungsbedingungen\n"
+"angeben. Ihre Auswahl \"%s\" wird bereits benutzt."
 
 #: src/business/business-gnome/dialog-billterms.c:608
 #, c-format
@@ -8685,15 +8607,15 @@ msgstr "sample:999,00"
 msgid "sample:BI"
 msgstr "sample:BI"
 
-#: src/business/business-core/gncOrder.c:402
+#: src/business/business-core/gncOrder.c:416
 msgid " (closed)"
 msgstr " (geschlossen)"
 
-#: src/business/business-core/gncInvoice.c:770
+#: src/business/business-core/gncInvoice.c:798
 msgid "Automatic Payment Forward"
 msgstr ""
 
-#: src/business/business-core/gncInvoice.c:939
+#: src/business/business-core/gncInvoice.c:969
 msgid " (posted)"
 msgstr " (gebucht)"
 
@@ -9011,104 +8933,6 @@ msgstr ""
 #: src/register/ledger-core/split-register-model.c:1594
 msgid "Enter credit formula for real transaction"
 msgstr ""
-
-#: src/register/ledger-core/gnc-regwidget.c:512
-msgid "Make a copy of the current transaction for editing"
-msgstr "Kopie des aktuellen Geschäftsvorgangs zum Bearbeiten erstellen"
-
-#: src/register/ledger-core/gnc-regwidget.c:762
-msgid "Basic Ledger"
-msgstr "Vereinfachtes Hauptbuch"
-
-#: src/register/ledger-core/gnc-regwidget.c:765
-msgid "Auto-Split Ledger"
-msgstr "Auto-Mehrteiliges Hauptbuch"
-
-#: src/register/ledger-core/gnc-regwidget.c:769
-msgid "Transaction Journal"
-msgstr "Amerikanisches Journal"
-
-#: src/register/ledger-core/gnc-regwidget.c:789
-msgid "Standard order"
-msgstr "Standardreihenfolge"
-
-#: src/register/ledger-core/gnc-regwidget.c:795
-msgid "Sort by date of entry"
-msgstr "Sortiere nach Eingabe-Datum"
-
-#: src/register/ledger-core/gnc-regwidget.c:799
-msgid "Sort by statement date"
-msgstr "Sortiere nach Statement-Datum"
-
-#: src/register/ledger-core/gnc-regwidget.c:804
-#: src/register/ledger-core/gnc-regwidget.c:805
-msgid "Sort by Num"
-msgstr "Sortiere nach Nummer"
-
-#: src/register/ledger-core/gnc-regwidget.c:850
-msgid "Paste the transaction clipboard"
-msgstr "Den Geschäftsvorgangs von der Zwischenablage einfügen"
-
-#: src/register/ledger-core/gnc-regwidget.c:887
-#: src/register/ledger-core/gnc-regwidget.c:1050
-msgid "D_uplicate"
-msgstr "D_uplizieren"
-
-#: src/register/ledger-core/gnc-regwidget.c:905
-#: src/register/ledger-core/gnc-regwidget.c:1068
-msgid "_Split"
-msgstr "Mehr_teilige Buchung"
-
-#: src/register/ledger-core/gnc-regwidget.c:1058
-msgid "_Schedule..."
-msgstr "Terminiert..."
-
-#: src/register/ledger-core/gnc-regwidget.c:1086
-msgid "Jump to the corresponding transaction in the other account."
-msgstr "Zur passenden Gegenbuchung im Gegenkonto gehen."
-
-#: src/register/ledger-core/gnc-regwidget.c:1678
-msgid ""
-"This selection will delete the whole transaction. This is what you usually "
-"want."
-msgstr ""
-"Diese Auswahl wird den ganzen Geschäftsvorgang löschen. Wahrscheinlich ist "
-"das genau das, was Sie möchten."
-
-#: src/register/ledger-core/gnc-regwidget.c:1680
-msgid ""
-"This selection will delete the whole transaction.\n"
-"\n"
-"You would be deleting a transaction with reconciled splits!"
-msgstr ""
-"Diese Auswahl wird den ganzen Geschäftsvorgang löschen.\n"
-"\n"
-"Beachten Sie, daß Sie einen Geschäftsvorgang mit abgeglichenen Buchungen "
-"löschen würden."
-
-#: src/register/ledger-core/gnc-regwidget.c:1684
-msgid ""
-"Warning: Just deleting all the other splits will make your account "
-"unbalanced. You probably shouldn't do this unless you're going to "
-"immediately add another split to bring the transaction back into balance."
-msgstr ""
-"Warnung: Nur die Buchungen zu löschen, führt zu einem unausgeglichenen "
-"Geschäftsvorgang. Sie sollten das nicht tun, es sei denn, Sie fügen sofort "
-"eine neue Buchung hinzu, um den Geschäftsvorgang wieder auszugleichen."
-
-#: src/register/ledger-core/gnc-regwidget.c:1689
-msgid "You would be deleting reconciled splits!"
-msgstr "Beachten Sie, daß Sie abgeglichene Buchungen löschen würden."
-
-#: src/register/ledger-core/gnc-regwidget.c:1824
-msgid "You would be deleting a reconciled split!"
-msgstr "Beachten Sie, daß Sie eine abgeglichene Buchung löschen würden."
-
-#: src/register/ledger-core/gnc-regwidget.c:1867
-msgid "You would be deleting a transaction with reconciled splits!"
-msgstr ""
-"Beachten Sie, daß Sie einen Geschäftsvorgang mit abgeglichenen Buchungen "
-"löschen würden."
 
 #. Translators: The 'sample:' items are
 #. strings which are not displayed, but only
@@ -13388,14 +13212,14 @@ msgid "Find Bill"
 msgstr "Rechnung finden"
 
 #. src/business/business-gnome/business-gnome.scm
-#: intl-scm/guile-strings.c:2660
+#: intl-scm/guile-strings.c:2660 intl-scm/guile-strings.c:2954
 msgid "Billing Terms"
-msgstr "Rechnungsbedingungen"
+msgstr "Zahlungsbedingungen"
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2662
 msgid "View and Edit the available Billing Terms"
-msgstr "Die verfügbaren Rechnungsbedingungen anzeigen und bearbeiten."
+msgstr "Die verfügbaren Zahlungsbedingungen anzeigen und bearbeiten."
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2666
@@ -13740,14 +13564,9 @@ msgid "Display the invoice references?"
 msgstr "Rechnungsreferenz anzeigen?"
 
 #. src/business/business-reports/invoice.scm
-#: intl-scm/guile-strings.c:2954
-msgid "Invoice Terms"
-msgstr "Rechnungsbedingungen"
-
-#. src/business/business-reports/invoice.scm
 #: intl-scm/guile-strings.c:2956
-msgid "Display the invoice terms?"
-msgstr "Rechnungsbedingungen anzeigen?"
+msgid "Display the invoice billing terms?"
+msgstr "Zahlungsbedingungen der Rechnung anzeigen?"
 
 #. src/business/business-reports/invoice.scm
 #: intl-scm/guile-strings.c:2962
@@ -13824,6 +13643,115 @@ msgstr "Folgendes Forderungen-Konto wollen Sie untersuchen"
 #: intl-scm/guile-strings.c:3028 intl-scm/guile-strings.c:3030
 msgid "Receivable Aging"
 msgstr "Entwicklung Forderungen"
+
+#~ msgid ""
+#~ "Check for and repair unbalanced transactions and orphan splits in all "
+#~ "transactions of this account"
+#~ msgstr ""
+#~ "Überprüfen und Reparieren von unvollständigen Geschäftsvorfällen in allen "
+#~ "Buchungen dieses Kontos"
+
+#~ msgid ""
+#~ "Check for and repair unbalanced transactions and orphan splits in this "
+#~ "transaction"
+#~ msgstr ""
+#~ "Überprüfen und Reparieren von unvollständigen Buchungen in diesem "
+#~ "Geschäftsvorfall"
+
+#~ msgid "Close this register window"
+#~ msgstr "Dieses Kassenbericht-Fenster schließen"
+
+#~ msgid "Open a report window for this register"
+#~ msgstr "Bericht für diesen Kassenbericht öffnen"
+
+#~ msgid "Print a report for this register"
+#~ msgstr "Bericht für diesen Kassenbericht drucken"
+
+#~ msgid "Set the date range of this register"
+#~ msgstr "Den Datumsbereich dieses Kassenberichts setzen"
+
+#~ msgid "Show all of the transactions in the account"
+#~ msgstr "Alle Geschäftsvorgänge anzeigen"
+
+#~ msgid "Make a copy of the current transaction for editing"
+#~ msgstr "Kopie des aktuellen Geschäftsvorgangs zum Bearbeiten erstellen"
+
+#~ msgid "Basic Ledger"
+#~ msgstr "Vereinfachtes Hauptbuch"
+
+#~ msgid "Auto-Split Ledger"
+#~ msgstr "Auto-Mehrteiliges Hauptbuch"
+
+#~ msgid "Transaction Journal"
+#~ msgstr "Amerikanisches Journal"
+
+#~ msgid "Standard order"
+#~ msgstr "Standardreihenfolge"
+
+#~ msgid "Sort by date of entry"
+#~ msgstr "Sortiere nach Eingabe-Datum"
+
+#~ msgid "Sort by statement date"
+#~ msgstr "Sortiere nach Statement-Datum"
+
+#~ msgid "Sort by Num"
+#~ msgstr "Sortiere nach Nummer"
+
+#~ msgid "Paste the transaction clipboard"
+#~ msgstr "Den Geschäftsvorgangs von der Zwischenablage einfügen"
+
+#~ msgid "D_uplicate"
+#~ msgstr "D_uplizieren"
+
+#~ msgid "_Split"
+#~ msgstr "Mehr_teilige Buchung"
+
+#~ msgid "_Schedule..."
+#~ msgstr "Terminiert..."
+
+#~ msgid "Jump to the corresponding transaction in the other account."
+#~ msgstr "Zur passenden Gegenbuchung im Gegenkonto gehen."
+
+#~ msgid ""
+#~ "This selection will delete the whole transaction. This is what you "
+#~ "usually want."
+#~ msgstr ""
+#~ "Diese Auswahl wird den ganzen Geschäftsvorgang löschen. Wahrscheinlich "
+#~ "ist das genau das, was Sie möchten."
+
+#~ msgid ""
+#~ "This selection will delete the whole transaction.\n"
+#~ "\n"
+#~ "You would be deleting a transaction with reconciled splits!"
+#~ msgstr ""
+#~ "Diese Auswahl wird den ganzen Geschäftsvorgang löschen.\n"
+#~ "\n"
+#~ "Beachten Sie, daß Sie einen Geschäftsvorgang mit abgeglichenen Buchungen "
+#~ "löschen würden."
+
+#~ msgid ""
+#~ "Warning: Just deleting all the other splits will make your account "
+#~ "unbalanced. You probably shouldn't do this unless you're going to "
+#~ "immediately add another split to bring the transaction back into balance."
+#~ msgstr ""
+#~ "Warnung: Nur die Buchungen zu löschen, führt zu einem unausgeglichenen "
+#~ "Geschäftsvorgang. Sie sollten das nicht tun, es sei denn, Sie fügen "
+#~ "sofort eine neue Buchung hinzu, um den Geschäftsvorgang wieder "
+#~ "auszugleichen."
+
+#~ msgid "You would be deleting reconciled splits!"
+#~ msgstr "Beachten Sie, daß Sie abgeglichene Buchungen löschen würden."
+
+#~ msgid "You would be deleting a reconciled split!"
+#~ msgstr "Beachten Sie, daß Sie eine abgeglichene Buchung löschen würden."
+
+#~ msgid "You would be deleting a transaction with reconciled splits!"
+#~ msgstr ""
+#~ "Beachten Sie, daß Sie einen Geschäftsvorgang mit abgeglichenen Buchungen "
+#~ "löschen würden."
+
+#~ msgid "Invoice Terms"
+#~ msgstr "Rechnungsbedingungen"
 
 #~ msgid "Getting Started"
 #~ msgstr "Erste Schritte"

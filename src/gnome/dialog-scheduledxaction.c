@@ -755,7 +755,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
 
                         if ( occur == 0 ) {
                                 const char *sx_occur_count_zero_msg =
-                                        _( "There must be some number of  occurances." );
+                                        _( "There must be some number of occurrences." );
                                 gnc_error_dialog_parented( GTK_WINDOW(sxed->dialog),
                                                            sx_occur_count_zero_msg );
                                 return FALSE;
@@ -763,9 +763,9 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
 
                         if ( rem > occur ) {
                                 const char *sx_occur_counts_wrong_msg =
-                                        _( "The number of remaining occurances "
+                                        _( "The number of remaining occurrences "
                                            "(%d) is greater than the number of "
-                                           "total occurances (%d)." );
+                                           "total occurrences (%d)." );
                                 gnc_error_dialog_parented( GTK_WINDOW(sxed->dialog),
                                                            sx_occur_counts_wrong_msg,
                                                            rem, occur );
