@@ -418,6 +418,7 @@ xaccAccountCommitEdit (Account *acc)
   acc->editlevel--;
   if (0 < acc->editlevel) return;
 
+  ENTER (" ");
   if (0 > acc->editlevel) 
   {
     PERR ("unbalanced call - resetting (was %d)", acc->editlevel);
@@ -513,6 +514,7 @@ xaccAccountCommitEdit (Account *acc)
     xaccGroupRemoveAccount(acc->parent, acc);
     xaccFreeAccount(acc);
   }
+  LEAVE (" ");
 }
 
 void 
