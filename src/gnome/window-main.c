@@ -565,7 +565,7 @@ gnc_main_window_close_children(GNCMainInfo * wind) {
 GNCMainInfo * 
 gnc_main_window_new(void) {
   GNCMainInfo * retval = g_new0(GNCMainInfo, 1);
-  
+
   retval->mdi = GNOME_MDI(gnome_mdi_new("GnuCash", "GnuCash"));
   retval->component_id = 
     gnc_register_gui_component (WINDOW_MAIN_CM_CLASS, NULL, NULL, 
@@ -591,7 +591,9 @@ gnc_main_window_new(void) {
     gnc_register_option_change_callback(gnc_main_window_configure_mdi_cb, 
                                         retval,
                                         "General", "Application MDI mode");
-  
+
+  gnome_mdi_set_mode(retval->mdi, gnc_get_mdi_mode ());
+
   /* handle top-level signals */
   gtk_signal_connect(GTK_OBJECT(retval->mdi), "destroy",
                      GTK_SIGNAL_FUNC(gnc_main_window_destroy_cb),

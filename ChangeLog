@@ -1,5 +1,7 @@
 2001-05-02  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/window-main.c: set the app's mdi mode from user prefs
+
 	* README.cvs: add README about cvs write access
 
 	* src/scm/report/net-barchart.scm: same as below
