@@ -850,4 +850,22 @@ gnc_commodity_table_equal(gnc_commodity_table *t_1,
   return gnc_commodity_table_foreach_commodity (t_2, table_equal_helper, t_1);
 }
 
+/********************************************************************
+ * gnc_commodity_table_add_default_data
+ ********************************************************************/
+
+gboolean
+gnc_commodity_table_add_default_data(gnc_commodity_table *table)
+{
+
+  #include "./iso-4217-currencies.c"
+
+  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_AMEX);
+  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_NYSE);
+  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_NASDAQ);
+  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_EUREX);
+  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_MUTUAL);
+  return TRUE;
+}
+
 /* ========================= END OF FILE ============================== */
