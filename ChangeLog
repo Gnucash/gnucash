@@ -1,5 +1,9 @@
 2002-12-23  David Hampton  <hampton@employees.org>
 
+	* configure.in: When checking for gtkhtml-1.1, make the lack of
+	pkg-config a fatal error. Also check for pkgconfig due to some
+	clueless software mismanagement.
+
 	* macros/autogen.sh: Enable -Werror for all builds.
 	
 

@@ -766,15 +766,19 @@ then
 		     $GTKHTML_LIBS)
 	AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
     else
-	AC_MSG_CHECKING([for gtkhtml >= 1.1])
-	AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
+	AC_PATH_PROG(PKG_CONFIG,pkg-config)
 	if test "x$PKG_CONFIG" = x; then
-	    AC_MSG_ERROR([Could not find pkg-config file that is needed by gtkhtml-1.1],)
+	    # @*%&$ Ximian programmers renamed this application
+	    AC_PATH_PROG(PKG_CONFIG,pkgconfig)
+	    if test "x$PKG_CONFIG" = x; then
+	    	AC_MSG_ERROR([Could not find the pkg-config (or pkgconfig) program.],)
+	    fi
 	fi
 	GTKHTML_LIBS=`$PKG_CONFIG --libs gtkhtml-1.1`
 	GTKHTML_CFLAGS=`$PKG_CONFIG --cflags gtkhtml-1.1`
 	# check for gtkhtml and enable it via HAVE_LIBGTKHTML
 	# if found
+	AC_MSG_CHECKING([for gtkhtml >= 1.1])
 	AC_CHECK_LIB(gtkhtml-1.1, gtk_html_new,
 		     GNOMEBUILDLIBS="${GNOMEBUILDLIBS} $GTKHTML_TEST_LIB"
 		     AC_DEFINE(HAVE_LIBGTKHTML),
