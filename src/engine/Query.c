@@ -12,8 +12,15 @@
  * Copyright (c) 1998 Linas Vepstas
  */
 
+#include <limits.h>
+
 #include "config.h"
+
+#include "Account.h"
+#include "AccountP.h"
 #include "Query.h"
+#include "Transaction.h"
+#include "TransactionP.h"
 #include "util.h"
 
 struct _Query {
@@ -21,6 +28,10 @@ struct _Query {
 
    /* maximum number of splits to return */
    int max_num_splits;
+
+   /* the earliest, and the latest transaction dates to include */
+   Timespec earliest;
+   Timespec latest;
 
    char changed;     /* flag, has the query changed? */
    Split **split_list;
@@ -47,7 +58,14 @@ xaccInitQuery (Query *q)
    q->acc_list = NULL;
    q->split_list = NULL;
    q->changed = 0; 
-   q->max_num_splits = 2<<30;
+   q->max_num_splits = INT_MAX ;
+
+   q->earliest.tv_sec = 0; 
+   q->earliest.tv_nsec = 0; 
+
+   /* q->latest.tv_sec = ULONG_MAX; */
+   q->latest.tv_sec = LONG_MAX;
+   q->latest.tv_nsec = 0; 
 }
 
 /* ================================================== */
@@ -145,7 +163,7 @@ xaccQuerySetMaxSplits (Query *q, int max)
 /* ================================================== */
 
 static void
-SortSplits (Query *q)
+SortSplits (Query *q, Split **slist)
 {
 
 }
@@ -155,13 +173,15 @@ SortSplits (Query *q)
 Split **
 xaccQueryGetSplits (Query *q)
 {
-   int i=0, j=0;
-   int nlist, nstart, nret, nsplits;
+   int i=0, j=0, k=0;
+   int nstart, nret, nsplits;
    Split *s, **slist;
    Account *acc;
 
    if (!q) return NULL;
 
+   /* tmp hack alert */
+   q->changed = 1;
    /* if not changed then don't recompute cache */
    if (!(q->changed)) return q->split_list;
    q->changed = 0;
@@ -169,41 +189,83 @@ xaccQueryGetSplits (Query *q)
    if (q->split_list) _free (q->split_list);
    q->split_list = NULL;
 
-   /* count the number of splits in each account */
+   /* count up the number of splits we'll have to deal with.
+    * Try to limit the CPU pain by trimming out stuff that's 
+    * too early and too late now. 
+    */
    nsplits = 0;
    if (q->acc_list) {
       i=0; acc = q->acc_list[0];
       while (acc) {
-         nsplits += xaccAccountGetNumSplits (acc);
+
+         /* now go through the splits */
+         j=0; s = acc->splits[0];
+         while (s) {
+            if (s->parent->date_posted.tv_sec >= q->earliest.tv_sec) {
+               nsplits ++;
+            }
+            if (s->parent->date_posted.tv_sec > q->latest.tv_sec) {
+               break;
+            }
+            j++; s = acc->splits[j];
+         }
          i++; acc = q->acc_list[i];
       }
    }
 
-   /* hack alert */
-   slist = xaccAccountGetSplitList (q->acc_list[0]);
-   if (!slist) return NULL;
+   /* OK, now get some storage ... concatenate all of the accounts in */
+   slist = (Split **) malloc ((nsplits+1) * sizeof (Split *));
 
-   i=0; s = slist[0];
-   while (s) { i++; s = slist [i]; }
-   nlist = i;
-   
-   /* make sure we don't return too many splits */
-   nret = nlist;
-   if (nret > q->max_num_splits) nret = q->max_num_splits;
-   q->split_list =  (Split **) malloc ((nret+1) * sizeof (Split *));
-   
-   /* return only the last few splits */
-   nstart = nlist - nret;
-   if (0 > nstart) nstart = 0;
+   k=0;
+   if (q->acc_list) {
+      i=0; acc = q->acc_list[0];
+      while (acc) {
 
-   /* copy over */
-   i=nstart; s = slist[i];
-   j = 0;
-   while (s) { 
-      q->split_list [j] = s;
-      j++; i++; s = slist [i];
+         /* now go through the splits */
+         j=0; s = acc->splits[0];
+         while (s) {
+            if (s->parent->date_posted.tv_sec >= q->earliest.tv_sec) {
+               slist[k] = s; k++;
+            }
+            if (s->parent->date_posted.tv_sec > q->latest.tv_sec) {
+               break;
+            }
+            j++; s = acc->splits[j];
+         }
+         i++; acc = q->acc_list[i];
+      }
    }
-   q->split_list [j] = NULL;
+   slist[k] = NULL;
+
+   /* sort them ... */
+   SortSplits (q, slist);
+
+   /* make sure we don't return too many splits */
+   nret = nsplits;
+   if (nret > q->max_num_splits) {
+      nret = q->max_num_splits;
+      q->split_list =  (Split **) malloc ((nret+1) * sizeof (Split *));
+   
+      /* return only the last few splits */
+      nstart = nsplits - nret;
+      if (0 > nstart) nstart = 0;
+
+      /* copy over */
+      i=nstart; s = slist[i];
+      j = 0;
+      while (s) { 
+         q->split_list [j] = s;
+         j++; i++; s = slist [i];
+      }
+      q->split_list [j] = NULL;
+
+      /* cleanup memory */
+      free (slist);
+   } else {
+
+      /* avoid excess mallocs, copies, etc. */
+      q->split_list = slist;
+   }
    
    return q->split_list;
 }
