@@ -88,6 +88,7 @@ int      gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
 gboolean gnc_dup_trans_dialog (GtkWidget * parent, time_t *date_p,
                                const char *num, char **out_num);
 void     gnc_tax_info_dialog (GtkWidget * parent);
+void     gnc_stock_split_dialog (Account * initial);
 
 
 /* Managing the GUI Windows *****************************************/

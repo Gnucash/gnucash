@@ -665,9 +665,15 @@ gnc_ui_mainWindow_reconcile(GtkWidget *widget, gpointer data)
 }
 
 static void
-gnc_ui_mainWindow_transfer(GtkWidget *widget, gpointer data)
+gnc_ui_mainWindow_transfer (GtkWidget *widget, gpointer data)
 {
-  gnc_xfer_dialog(gnc_get_ui_data(), gnc_get_current_account());
+  gnc_xfer_dialog (gnc_get_ui_data (), gnc_get_current_account ());
+}
+
+static void
+gnc_ui_mainWindow_stock_split (GtkWidget *widget, gpointer data)
+{
+  gnc_stock_split_dialog (gnc_get_current_account ());
 }
 
 static void
@@ -1227,6 +1233,14 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
       GNOME_APP_PIXMAP_NONE, NULL,
       't', GDK_CONTROL_MASK, NULL
     },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Stock S_plit..."),
+      N_("Record a stock split or a stock merger"),
+      gnc_ui_mainWindow_stock_split, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
@@ -1246,6 +1260,7 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     },
     GNOMEUIINFO_SEPARATOR,
     GNOMEUIINFO_SUBTREE(N_("_Scrub"), scrubmenu),
+    GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
       N_("Tax Information"),
@@ -1269,9 +1284,16 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     },
     {
       GNOME_APP_UI_ITEM,
-      N_("_Financial Calculator"),
+      N_("Financial _Calculator"),
       N_("Use the financial calculator"),
       gnc_ui_mainWindow_fincalc_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      N_("_Find Transactions"),
+      N_("Find transactions with a search"),
+      gnc_ui_find_transactions_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
@@ -1324,7 +1346,6 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
   list = g_list_prepend(list, accountsmenu[1].widget);
   list = g_list_prepend(list, accountsmenu[2].widget);
   list = g_list_prepend(list, accountsmenu[4].widget);
-  list = g_list_prepend(list, accountsmenu[6].widget);
   list = g_list_prepend(list, accountsmenu[9].widget);
 
   gnc_mainwin_account_tree_attach_popup
@@ -1337,7 +1358,6 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
   list = g_list_prepend(list, accountsmenu[1].widget);
   list = g_list_prepend(list, accountsmenu[2].widget);
   list = g_list_prepend(list, accountsmenu[4].widget);
-  list = g_list_prepend(list, accountsmenu[6].widget);
   list = g_list_prepend(list, accountsmenu[9].widget);
 
   main_info->account_sensitives = list;

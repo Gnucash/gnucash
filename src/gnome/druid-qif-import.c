@@ -194,10 +194,11 @@ gnc_ui_qif_import_druid_make(void)  {
 
 void
 gnc_ui_qif_import_druid_destroy (QIFImportWindow * window) {
-  if(window) {
-    gtk_widget_destroy(window->window);
-  }
-  
+  if (!window)
+    return;
+
+  gtk_widget_destroy(window->window);
+
   scm_unprotect_object(window->imported_files);
   scm_unprotect_object(window->selected_file);
   scm_unprotect_object(window->gnc_acct_info);

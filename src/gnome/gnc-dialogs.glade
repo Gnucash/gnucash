@@ -8542,4 +8542,171 @@ words.
   </widget>
 </widget>
 
+<widget>
+  <class>GtkWindow</class>
+  <name>Stock Split Druid</name>
+  <title>Stock Split</title>
+  <type>GTK_WINDOW_TOPLEVEL</type>
+  <position>GTK_WIN_POS_NONE</position>
+  <modal>False</modal>
+  <allow_shrink>False</allow_shrink>
+  <allow_grow>True</allow_grow>
+  <auto_shrink>False</auto_shrink>
+
+  <widget>
+    <class>GnomeDruid</class>
+    <name>druid1</name>
+
+    <widget>
+      <class>GnomeDruidPageStart</class>
+      <name>druidpagestart2</name>
+      <title></title>
+      <text>This wizard will help you record a stock split or stock merger.</text>
+      <title_color>255,255,255</title_color>
+      <text_color>0,0,0</text_color>
+      <background_color>25,25,112</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+      <textbox_color>255,255,255</textbox_color>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
+      <name>druidpagestandard11</name>
+      <title></title>
+      <title_color>255,255,255</title_color>
+      <background_color>25,25,112</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>druid-vbox31</name>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkVBox</class>
+	  <name>vbox98</name>
+	  <border_width>5</border_width>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <name>label847672</name>
+	    <label>Please select the Stock account for which you want to record a stock split or merger.</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkHBox</class>
+	    <name>hbox86</name>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
+	      <class>Placeholder</class>
+	    </widget>
+
+	    <widget>
+	      <class>GtkScrolledWindow</class>
+	      <name>scrolledwindow21</name>
+	      <border_width>20</border_width>
+	      <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
+	      <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
+	      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	      <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+
+	      <widget>
+		<class>GtkCList</class>
+		<name>account_clist</name>
+		<can_focus>True</can_focus>
+		<columns>2</columns>
+		<column_widths>80,80</column_widths>
+		<selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+		<show_titles>True</show_titles>
+		<shadow_type>GTK_SHADOW_IN</shadow_type>
+
+		<widget>
+		  <class>GtkLabel</class>
+		  <child_name>CList:title</child_name>
+		  <name>label847673</name>
+		  <label>Name</label>
+		  <justify>GTK_JUSTIFY_CENTER</justify>
+		  <wrap>False</wrap>
+		  <xalign>0.5</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		</widget>
+
+		<widget>
+		  <class>GtkLabel</class>
+		  <child_name>CList:title</child_name>
+		  <name>label847674</name>
+		  <label>Share Balance</label>
+		  <justify>GTK_JUSTIFY_CENTER</justify>
+		  <wrap>False</wrap>
+		  <xalign>0.5</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		</widget>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>Placeholder</class>
+	    </widget>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageFinish</class>
+      <name>druidpagefinish1</name>
+      <title></title>
+      <text>If you are finished creating the stock split or merger, press `Finish'.
+You may also press `Back' to review your choices, or `Cancel' to
+quit without making any changes.</text>
+      <background_color>25,25,112</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+      <textbox_color>255,255,255</textbox_color>
+      <text_color>0,0,0</text_color>
+      <title_color>255,255,255</title_color>
+    </widget>
+  </widget>
+</widget>
+
 </GTK-Interface>

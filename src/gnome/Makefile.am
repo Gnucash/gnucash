@@ -22,6 +22,7 @@ libgncgnome_a_SOURCES = \
   dialog-utils.c \
   druid-commodity.c \
   druid-qif-import.c \
+  druid-stock-split.c \
   extensions.c \
   file-history.c \
   glade-gnc-dialogs.c \
