@@ -23,11 +23,13 @@
 
 #include "config.h"
 
-#include "gnc-ui-util.h"
-#include "engine-helpers.h"
 #include <guile/gh.h>
-
 #include <string.h>
+
+#include "engine-helpers.h"
+#include "gnc-helpers.h"
+#include "gnc-ui-util.h"
+
 
 /* Type converters for GNCPrintAmountInfo */
 SCM
