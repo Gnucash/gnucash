@@ -122,8 +122,8 @@ Account * xaccGroupGetAccount (AccountGroup *group, int index);
  *    be freed by the caller.
  */
 
-GList * xaccGroupGetSubAccounts (AccountGroup *grp);
-GList * xaccGroupGetAccountList (AccountGroup *grp);
+AccountList * xaccGroupGetSubAccounts (AccountGroup *grp);
+AccountList * xaccGroupGetAccountList (AccountGroup *grp);
 
 /* 
  * The xaccGetAccountFromName() subroutine fetches the
@@ -208,8 +208,9 @@ void   xaccGroupDepthAutoCode (AccountGroup *grp);
 
 /* if the function returns null for a given item, it won't show up in
    the result list */
+typedef  gpointer (*AccountCallback)(Account *a, gpointer data);
 GSList *xaccGroupMapAccounts(AccountGroup *grp,
-                             gpointer (*thunk)(Account *a, gpointer data),
+                             AccountCallback,
                              gpointer data);
 
 /* The xaccGroupForEachAccount() method will traverse the AccountGroup
@@ -221,8 +222,7 @@ GSList *xaccGroupMapAccounts(AccountGroup *grp,
  */
 
 gpointer xaccGroupForEachAccount (AccountGroup *grp,
-                                  gpointer (*func) (Account *a,
-                                                     gpointer data),
+                                  AccountCallback,
                                   gpointer data,
                                   gboolean deeply);
 
@@ -307,10 +307,11 @@ gboolean xaccSplitTransactionTraverse(Split *split, int stage);
  *    a traversal is undefined, so don't do that.
  */
 
+typedef  int (*TransactionCallbackInt)(Transaction *t, void *data);
 int 
 xaccGroupStagedTransactionTraversal(AccountGroup *grp,
                                     unsigned int stage,
-                                    int (*thunk)(Transaction *t, void *data),
+                                    TransactionCallbackInt,
                                     void *data);
 
 /* xaccAccountStagedTransactionTraversal() calls thunk on each
@@ -327,8 +328,7 @@ xaccGroupStagedTransactionTraversal(AccountGroup *grp,
 
 int xaccAccountStagedTransactionTraversal(Account *a,
                                           unsigned int stage,
-                                          int (*thunk)(Transaction *t,
-                                                       void *data),
+                                          TransactionCallbackInt,
                                           void *data);
 
 /* Traverse all of the transactions in the given account group.
@@ -348,7 +348,7 @@ int xaccAccountStagedTransactionTraversal(Account *a,
    transaction was traversed exactly once.  */
 gboolean
 xaccGroupForEachTransaction(AccountGroup *g,
-                            gboolean (*proc)(Transaction *t, void *data),
+                            TransactionCallback,
                             void *data);
 
 /* Visit every transaction in the account that hasn't already been
@@ -362,8 +362,7 @@ xaccGroupForEachTransaction(AccountGroup *g,
    transaction was traversed exactly once.  */
 gboolean
 xaccGroupVisitUnvisitedTransactions(AccountGroup *g,
-                                    gboolean (*proc)(Transaction *t,
-                                                     void *data),
+                                    TransactionCallback,
                                     void *data,
                                     GHashTable *visited_txns);
 

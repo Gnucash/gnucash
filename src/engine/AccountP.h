@@ -143,7 +143,7 @@ struct _account {
   gint32 version;
   guint32  version_check;  /* data aging timestamp */
 
-  GList *splits;           /* list of split pointers */
+  SplitList *splits;       /* list of split pointers */
 
   /* keep track of nesting level of begin/end edit calls */
   gint32 editlevel;

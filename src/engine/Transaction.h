@@ -49,6 +49,8 @@ typedef struct _account       Account;
 typedef struct _account_group AccountGroup;
 typedef struct _split         Split;
 typedef struct _transaction   Transaction;
+typedef GList                 AccountList;
+typedef GList                 SplitList;
 
 
 /** PROTOTYPES ******************************************************/
@@ -159,7 +161,9 @@ void          xaccTransSetDate (Transaction *trans,
 void          xaccTransSetDateSecs (Transaction *trans, time_t time);
 void          xaccTransSetDateToday (Transaction *trans);
 void          xaccTransSetDateTS (Transaction *trans, const Timespec *ts);
+#ifndef SWIG   /* swig  doesn't like this define */
 #define   xaccTransSetDatePostedTS xaccTransSetDateTS
+#endif /* SWIG */
 
 void          xaccTransSetDateEnteredSecs (Transaction *trans, time_t time);
 void          xaccTransSetDateEnteredTS (Transaction *trans,
@@ -204,7 +208,7 @@ Split *       xaccTransGetSplit (Transaction *trans, int i);
 /* The xaccTransGetSplitList() method returns a GList of the splits
  * in a transaction.  This list must not be modified.  Do *NOT* free
  * this list when you are done with it. */
-GList *       xaccTransGetSplitList (Transaction *trans);
+SplitList *   xaccTransGetSplitList (Transaction *trans);
 
 /* These routines return the Num (or ID field), the description, 
  * the notes, and the date field.
@@ -213,10 +217,14 @@ const char *  xaccTransGetNum (Transaction *trans);
 const char *  xaccTransGetDescription (Transaction *trans);
 const char *  xaccTransGetNotes (Transaction *trans);
 time_t        xaccTransGetDate (Transaction *trans);
+#ifndef SWIG   /* swig 1.1p5 can't hack the long long type */
 long long     xaccTransGetDateL (Transaction *trans);
+#endif /* SWIG */
 
 void          xaccTransGetDateTS (Transaction *trans, Timespec *ts);
+#ifndef SWIG   /* swig  doesn't like this define */
 #define xaccTransGetDatePostedTS xaccTransGetDateTS
+#endif /* SWIG */
 
 void          xaccTransGetDateEnteredTS (Transaction *trans, Timespec *ts);
 
