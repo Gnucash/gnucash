@@ -4,3 +4,4 @@ Makefile.in
 *.la
 .deps
 .libs
+.scm-links
