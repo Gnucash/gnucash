@@ -50,6 +50,18 @@ text_to_dom_tree(const char *tag, const char *str)
 }
 
 xmlNodePtr
+int_to_dom_tree(const char *tag, gint64 val)
+{
+    gchar *text;
+    xmlNodePtr result;
+    
+    text = g_strdup_printf("%lld", val);
+    result = text_to_dom_tree(tag, text);
+    g_free(text);
+    return result;
+}
+    
+xmlNodePtr
 guid_to_dom_tree(const char *tag, const GUID* gid)
 {
     char guid_str[GUID_ENCODING_LENGTH + 1];
