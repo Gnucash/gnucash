@@ -320,7 +320,6 @@ add_closing_balances (AccountGroup *closed_grp,
       /* add KVP to open account, indicating the progenitor
        * of this account. */
       xaccAccountBeginEdit (twin);
-      twin->core_dirty = TRUE;
       cwd = xaccAccountGetSlots (twin);
       cwd = kvp_frame_get_frame_slash (cwd, "/book/");
 
@@ -329,12 +328,13 @@ add_closing_balances (AccountGroup *closed_grp,
       
       vvv = kvp_value_new_guid (&closed_book->guid);
       kvp_frame_set_slot_nc (cwd, "prev-book", vvv);
+
+      xaccAccountSetSlots_nc (twin, twin->kvp_data);
       
       /* -------------------------------- */
       /* add KVP to closed account, indicating where 
        * the next book is. */
       xaccAccountBeginEdit (candidate);
-      candidate->core_dirty = TRUE;
       cwd = xaccAccountGetSlots (candidate);
       cwd = kvp_frame_get_frame_slash (cwd, "/book/");
 
@@ -343,6 +343,8 @@ add_closing_balances (AccountGroup *closed_grp,
       
       vvv = kvp_value_new_guid (xaccAccountGetGUID (twin));
       kvp_frame_set_slot_nc (cwd, "next-acct", vvv);
+
+      xaccAccountSetSlots_nc (candidate, candidate->kvp_data);
 
       /* -------------------------------- */
       /* We need to carry a balance on any account that is not
