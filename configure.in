@@ -42,6 +42,12 @@ AC_PROG_MAKE_SET
 AC_CHECK_FUNCS(stpcpy)   
 
 ### --------------------------------------------------------------------------
+### Fix up prefix for recursive expansion
+
+test "x$prefix" = xNONE && prefix=$ac_default_prefix
+
+
+### --------------------------------------------------------------------------
 ### Useful POSIX shell functions
 ###
 
