@@ -1,11 +1,14 @@
 
-                    kvp_doc.txt
-                    -----------
+                    KVP Values used By GnuCash
+                    --------------------------
+                    Date Last Revised: August 2003
+
 
 This file documents the use of keys in the key-value pair system
-used by the Engine. Before assigning keys for use, please read
-the Key-Value Policy in the GnuCash Design Document located
-under src/doc/design.
+used by the GnuCash Application (both the engine, and non-engine, GUI
+pieces).  Before assigning keys for use, please read the Key-Value 
+Policy in the GnuCash Design Document located under src/doc/design.
+
 
 The format of the data below is:
 
