@@ -872,7 +872,10 @@ update_file_page(QIFImportWindow * wind) {
 
   if(sel_item >= 0) {
     gtk_clist_select_row(GTK_CLIST(wind->selected_file_list), sel_item, 0);
-  }  
+  }
+
+  /* Wheee! Look at me! I'm a little one-line hack to make stuff work! */
+  gtk_widget_queue_resize (wind->window);
 }
 
 
