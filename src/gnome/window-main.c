@@ -776,25 +776,6 @@ gnc_ui_options_cb(GtkWidget *widget, gpointer data)
 }
 
 static void
-gnc_ui_xml_v2_cb(GtkWidget *widget, gpointer menuItem)
-{
-    const char *filename;
-    GNCBook *book;
-    
-    filename = fileBox(_("Save"), "*.gnc", gnc_history_get_last());
-    if (!filename) return;
-    
-    book = gncGetCurrentBook ();
-
-    gnc_book_write_to_xml_file_v2(book, filename);
-}
-
-static void
-gnc_ui_account_hierarchy_cb(GtkWidget *widget, gpointer menuItem)
-{
-}
-
-static void
 gnc_ui_filemenu_cb(GtkWidget *widget, gpointer menuItem)
 {
   switch (GPOINTER_TO_INT(menuItem))
@@ -1385,25 +1366,9 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
 
   static GnomeUIInfo developer_menu[] =
   {
-      {
-          GNOME_APP_UI_ITEM,
-          N_("_Write V2 XML File"),
-          N_("Write a version 2 XML file"),
-          gnc_ui_xml_v2_cb, NULL, NULL,
-          GNOME_APP_PIXMAP_NONE, NULL,
-          0, 0, NULL
-      },
-      {
-          GNOME_APP_UI_ITEM,
-          N_("Write _Account Hierarchy"),
-          N_("Write just the account hierarchy"),
-          gnc_ui_account_hierarchy_cb, NULL, NULL,
-          GNOME_APP_PIXMAP_NONE, NULL,
-          0, 0, NULL
-      },
       GNOMEUIINFO_END
   };
-  
+
   static GnomeUIInfo mainmenu[] =
   {
     GNOMEUIINFO_MENU_FILE_TREE(filemenu),
@@ -1442,6 +1407,8 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
   list = g_list_prepend(list, accountsmenu[9].widget);
 
   main_info->account_sensitives = list;
+
+  gtk_widget_hide (mainmenu[4].widget);
 }
 
 static GtkWidget *

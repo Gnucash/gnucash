@@ -70,10 +70,10 @@
       (set-col (opt-val "Display" "Account") 3)
       (set-col (opt-val "Display" "Shares") 4)
       (set-col (opt-val "Display" "Price") 5)
-      (let ((amount-setting (opt-val "Display" "Amount")))
-        (if (eq? amount-setting 'single)
-            (set-col #t 6))
-        (if (eq? amount-setting 'double)
+      (let ((invoice? (opt-val "Invoice" "Make an invoice"))
+            (amount-setting (opt-val "Display" "Amount")))
+        (if (or invoice? (eq? amount-setting 'single))
+            (set-col #t 6)
             (begin
 	      (set-col #t 7)
 	      (set-col #t 8))))
@@ -81,7 +81,8 @@
 
       col-vector))
 
-  (define (make-heading-list column-vector debit-string credit-string
+  (define (make-heading-list column-vector
+                             debit-string credit-string amount-string
                              multi-rows?)
     (let ((heading-list '()))
       (gnc:debug "Column-vector" column-vector)
@@ -100,7 +101,7 @@
       (if (price-col column-vector)
 	  (addto! heading-list (_ "Price")))
       (if (amount-single-col column-vector)
-	  (addto! heading-list (_ "Amount")))
+	  (addto! heading-list amount-string))
       (if (debit-col column-vector)
 	  (addto! heading-list debit-string))
       (if (credit-col column-vector)
@@ -164,7 +165,7 @@
       (if (amount-single-col column-vector)
 	  (addto! row-contents
                   (if split-info?
-                      (gnc:make-html-table-header-cell/markup
+                      (gnc:make-html-table-cell/markup
                        "number-cell"
                        (gnc:html-split-anchor split split-value))
                       " ")))
@@ -172,7 +173,7 @@
 	  (if (gnc:numeric-positive-p (gnc:gnc-monetary-amount split-value))
 	      (addto! row-contents
                       (if split-info?
-                          (gnc:make-html-table-header-cell/markup
+                          (gnc:make-html-table-cell/markup
                            "number-cell"
                            (gnc:html-split-anchor split split-value))
                           " "))
@@ -181,7 +182,7 @@
 	  (if (gnc:numeric-negative-p (gnc:gnc-monetary-amount split-value))
 	      (addto! row-contents
                       (if split-info?
-                          (gnc:make-html-table-header-cell/markup
+                          (gnc:make-html-table-cell/markup
                            "number-cell"
                            (gnc:html-split-anchor
                             split (gnc:monetary-neg split-value)))
@@ -190,7 +191,7 @@
       (if (balance-col column-vector)
 	  (addto! row-contents
                   (if transaction-info?
-                      (gnc:make-html-table-header-cell/markup
+                      (gnc:make-html-table-cell/markup
                        "number-cell"
                        (gnc:html-split-anchor
                         split
@@ -366,7 +367,8 @@
                                       (N_ "Split Even"))))
       (list 'attribute (list "bgcolor" (gnc:color-option->html bgcolor)))))
 
-  (define (make-split-table splits options debit-string credit-string)
+  (define (make-split-table splits options
+                            debit-string credit-string amount-string)
     (define (opt-val section name)
       (gnc:option-value (gnc:lookup-option options section name)))
     (define (reg-report-journal?)
@@ -380,16 +382,13 @@
                               subtotal-collector subtotal-style)
       (let ((currency-totals (subtotal-collector
                               'format gnc:make-gnc-monetary #f)))
-        (define (make-blanks monetary)
-          (make-list
-           (- (if (amount-single-col used-columns)
-                  (amount-single-col used-columns)
-                  (if (gnc:numeric-negative-p
-                       (gnc:gnc-monetary-amount monetary))
-                      (credit-col used-columns)
-                      (debit-col used-columns)))
-              1)
-           #f))
+        (define (colspan monetary)
+          (if (amount-single-col used-columns)
+              (amount-single-col used-columns)
+              (if (gnc:numeric-negative-p
+                   (gnc:gnc-monetary-amount monetary))
+                  (credit-col used-columns)
+                  (debit-col used-columns))))
 
         (if (not (reg-report-invoice?))
             (gnc:html-table-append-row!
@@ -402,10 +401,11 @@
         (for-each (lambda (currency)
                     (gnc:html-table-append-row! 
                      table 
-                     (append (cons (gnc:make-html-table-header-cell/markup
+                     (append (cons (gnc:make-html-table-cell/markup
                                     "total-label-cell" (_ "Total"))
-                                   (make-blanks currency))
-                             (list (gnc:make-html-table-header-cell/markup
+                                   '())
+                             (list (gnc:make-html-table-cell/size/markup
+                                    1 (colspan currency)
                                     "total-number-cell" currency))))
                     (apply set-last-row-style! 
                            (cons table (cons "tr" subtotal-style))))
@@ -487,7 +487,9 @@
 
       (gnc:html-table-set-col-headers!
        table
-       (make-heading-list used-columns debit-string credit-string multi-rows?))
+       (make-heading-list used-columns
+                          debit-string credit-string amount-string
+                          multi-rows?))
 
       (do-rows-with-subtotals splits
                               table
@@ -500,6 +502,61 @@
                               even-row-style
                               grand-total-style
                               (gnc:make-commodity-collector))
+      table))
+
+  (define (string-expand string character replace-string)
+    (define (car-line chars)
+      (take-while (lambda (c) (not (eqv? c character))) chars))
+    (define (cdr-line chars)
+      (let ((rest (drop-while (lambda (c) (not (eqv? c character))) chars)))
+        (if (null? rest)
+            '()
+            (cdr rest))))
+    (define (line-helper chars)
+      (if (null? chars)
+          ""
+          (let ((first (car-line chars))
+                (rest (cdr-line chars)))
+          (string-append (list->string first)
+                         (if (null? rest) "" replace-string)
+                         (line-helper rest)))))
+    (line-helper (string->list string)))
+
+  (define (make-client-table address)
+    (let ((table (gnc:make-html-table)))
+      (gnc:html-table-set-style!
+       table "table"
+       'attribute (list "border" 0)
+       'attribute (list "cellspacing" 0)
+       'attribute (list "cellpadding" 0))
+      (gnc:html-table-append-row!
+       table
+       (list
+        (string-append (_ "Client") ":&nbsp;")
+        (string-expand address #\newline "<br>")))
+      (set-last-row-style!
+       table "td"
+       'attribute (list "valign" "top"))
+      table))
+
+  (define (make-info-table address)
+    (let ((table (gnc:make-html-table)))
+      (gnc:html-table-set-style!
+       table "table"
+       'attribute (list "border" 0)
+       'attribute (list "cellspacing" 20)
+       'attribute (list "cellpadding" 0))
+      (gnc:html-table-append-row!
+       table
+       (list
+        (string-append
+         (_ "Date") ":&nbsp;"
+         (string-expand (gnc:print-date (cons (current-time) 0))
+                        #\space "&nbsp;"))
+        (make-client-table address)))
+      (set-last-row-style!
+       table "td"
+       'attribute (list "valign" "top"))
       table))
 
   (define (reg-renderer report-obj)
@@ -530,14 +587,36 @@
 
       (set! table (make-split-table splits
                                     (gnc:report-options report-obj)
-                                    debit-string credit-string))
+                                    debit-string credit-string
+                                    (if invoice? (_ "Charge") (_ "Amount"))))
 
       (if invoice?
-          (gnc:html-document-set-style!
-           document "table" 
-           'attribute (list "border" 1)
-           'attribute (list "cellspacing" 0)
-           'attribute (list "cellpadding" 0)))
+          (begin
+            (gnc:html-document-add-object!
+             document
+             (gnc:make-html-text
+              (gnc:html-markup-br)
+              (gnc:option-value
+               (gnc:lookup-global-option "User Info" "User Name"))
+              (gnc:html-markup-br)
+              (string-expand
+               (gnc:option-value
+                (gnc:lookup-global-option "User Info" "User Address"))
+               #\newline
+               "<br>")
+              (gnc:html-markup-br)))
+            (gnc:html-table-set-style!
+             table "table"
+             'attribute (list "border" 1)
+             'attribute (list "cellspacing" 0)
+             'attribute (list "cellpadding" 4))
+            (gnc:html-document-add-object!
+             document
+             (make-info-table
+              (string-append
+               (opt-val "Invoice" "Client Name")
+               "\n"
+               (opt-val "Invoice" "Client Address"))))))
 
       (gnc:html-document-set-title! document title)
       (gnc:html-document-add-object! document table)
@@ -567,7 +646,8 @@
          (double-op (gnc:lookup-option options "__reg" "double"))
          (title-op (gnc:lookup-option options "General" "Title"))
          (debit-op (gnc:lookup-option options "__reg" "debit-string"))
-         (credit-op (gnc:lookup-option options "__reg" "credit-string")))
+         (credit-op (gnc:lookup-option options "__reg" "credit-string"))
+         (amount-op (gnc:lookup-option options "Display" "Amount")))
 
     (gnc:option-set-value invoice-op invoice?)
     (gnc:option-set-value query-op query)

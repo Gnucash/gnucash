@@ -57,9 +57,13 @@
                     (lambda ()
                       (let ((rept (gnc:make-report
                                    (gnc:report-template-name report))))
-                        (gnc:report-in-main-window rept)))))))
+                        (if (gnc:option-value
+                             (gnc:lookup-global-option
+                              "Main Window" "Reports appear in Main Window"))
+                            (gnc:report-in-main-window rept)
+                            (gnc:report-window rept))))))))
           (gnc:add-extension item))))
-  
+
   ;; add the menu option to edit style sheets 
   (gnc:add-extension menu)
   (gnc:add-extension

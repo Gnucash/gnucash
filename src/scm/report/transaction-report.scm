@@ -259,23 +259,23 @@
 	   (gnc:make-gnc-monetary currency (gnc:split-get-share-price split))))
       (if (used-amount-single column-vector)
 	  (addto! row-contents
-                  (gnc:make-html-table-header-cell/markup "number-cell"
-                                                          split-value)))
+                  (gnc:make-html-table-cell/markup "number-cell"
+                                                   split-value)))
       (if (used-amount-double-positive column-vector)
 	  (if (gnc:numeric-positive-p (gnc:gnc-monetary-amount split-value))
 	      (addto! row-contents
-                      (gnc:make-html-table-header-cell/markup "number-cell"
-                                                              split-value))
+                      (gnc:make-html-table-cell/markup "number-cell"
+                                                       split-value))
 	      (addto! row-contents " ")))
       (if (used-amount-double-negative column-vector)
 	  (if (gnc:numeric-negative-p (gnc:gnc-monetary-amount split-value))
 	      (addto! row-contents
-                      (gnc:make-html-table-header-cell/markup
+                      (gnc:make-html-table-cell/markup
                        "number-cell" (gnc:monetary-neg split-value)))
 	      (addto! row-contents " ")))
       (if (used-running-balance column-vector)
 	  (addto! row-contents
-                  (gnc:make-html-table-header-cell/markup
+                  (gnc:make-html-table-cell/markup
                    "number-cell"
                    (gnc:make-gnc-monetary currency
                                           (gnc:split-get-balance split)))))
@@ -571,7 +571,7 @@
                     (gnc:html-table-append-row! 
                      table 
                      (append blanks
-                             (list (gnc:make-html-table-header-cell/markup
+                             (list (gnc:make-html-table-cell/markup
                                     "total-number-cell" currency))))
                     (apply set-last-row-style! 
                            (cons table (cons "tr" subtotal-style))))

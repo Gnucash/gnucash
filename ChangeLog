@@ -1,3 +1,19 @@
+2001-04-02  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-main.c: hide developer menu
+
+	* src/gnome/window-register.c: add invoice menu item
+
+	* src/scm/prefs.scm: add user name & address option for invoice
+	report. add option for whether reports appear in main window or
+	open in new window
+
+	* src/scm/report.scm: open reports based on new option
+
+	* src/scm/report/transaction-report.scm: more work
+
+	* src/scm/report/register.scm: more work
+
 2001-04-01  Dave Peticolas  <dave@krondo.com>
 
 	* src/FileDialog.c: update for api change

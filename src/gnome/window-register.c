@@ -140,6 +140,7 @@ static void recordCB(GtkWidget *w, gpointer data);
 static void cancelCB(GtkWidget *w, gpointer data);
 static void closeCB(GtkWidget *w, gpointer data);
 static void reportCB(GtkWidget *w, gpointer data);
+static void invoiceCB(GtkWidget *w, gpointer data);
 static void printReportCB(GtkWidget *w, gpointer data);
 static void dateCB(GtkWidget *w, gpointer data);
 static void expand_trans_cb(GtkWidget *widget, gpointer data);
@@ -1344,6 +1345,14 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
       N_("Report"),
       N_("Open a report window for this register"),
       reportCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Invoice"),
+      N_("Open an invoice report window for this register"),
+      invoiceCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
@@ -3019,10 +3028,9 @@ closeCB (GtkWidget *widget, gpointer data)
 }
 
 static void
-report_helper (RegWindow *regData, SCM func)
+report_helper (RegWindow *regData, SCM func, Query *query)
 {
   SplitRegister *reg = xaccLedgerDisplayGetSR (regData->ledger);
-  Query *query;
   char *str;
   SCM qtype;
   SCM args;
@@ -3052,10 +3060,13 @@ report_helper (RegWindow *regData, SCM func)
   qtype = gh_eval_str("<gnc:Query*>");
   g_return_if_fail (qtype != SCM_UNDEFINED);
 
-  query = xaccLedgerDisplayGetQuery (regData->ledger);
-  g_return_if_fail (query != NULL);
+  if (!query)
+  {
+    query = xaccLedgerDisplayGetQuery (regData->ledger);
+    g_return_if_fail (query != NULL);
 
-  query = xaccQueryCopy (query);
+    query = xaccQueryCopy (query);
+  }
 
   arg = gw_wcp_assimilate_ptr (query, qtype);
   args = gh_cons (arg, args);
@@ -3084,7 +3095,26 @@ reportCB (GtkWidget *widget, gpointer data)
   func = gh_eval_str ("gnc:show-register-report");
   g_return_if_fail (gh_procedure_p (func));
 
-  report_helper (regData, func);
+  report_helper (regData, func, NULL);
+}
+
+/********************************************************************\
+ * invoiceCB                                                        *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data - regData - the data struct for this register       *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+invoiceCB (GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData = data;
+  SCM func;
+
+  func = gh_eval_str ("gnc:show-invoice-report");
+  g_return_if_fail (gh_procedure_p (func));
+
+  report_helper (regData, func, NULL);
 }
 
 /********************************************************************\
@@ -3103,7 +3133,7 @@ printReportCB (GtkWidget *widget, gpointer data)
   func = gh_eval_str ("gnc:print-register-report");
   g_return_if_fail (gh_procedure_p (func));
 
-  report_helper (regData, func);
+  report_helper (regData, func, NULL);
 }
 
 /********************************************************************\
