@@ -1,0 +1,6 @@
+This directory contains
+
+-- engine  -- a directory containing gui-independent accounting engine
+-- motif   -- the motif implementation of the xacc app
+-- register -- a directory containg the register object
+-- files that are gui-independent, but do not belong to the engine

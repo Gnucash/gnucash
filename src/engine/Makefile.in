@@ -29,7 +29,8 @@ VPATH    = @srcdir@
 CC       = @CC@
 INCLPATH = -I/usr/include \
            -I/usr/local/include \
-           -I@srcdir@/../../include 
+           -I@srcdir@/../../include \
+           -I@srcdir@/../..
 
 CFLAGS   = @cflags@ 
 LFLAGS   = @lflags@

@@ -48,8 +48,6 @@ CPU     = @target_cpu@
 
 default:
 	@cd lib;    $(MAKE)
-	@cd src/engine;      $(MAKE)
-	@cd src/register;    $(MAKE)
 	@cd src;    $(MAKE)
 
 # link in motif libs statically

@@ -4,6 +4,7 @@ CC       = gcc
 RANLIB   = ranlib
 INCLPATH = -I/usr/include \
            -I/usr/X11R6/include/. \
+           -I./../.. \
            -I./../../include \
            -I./../engine \
            -I./../../lib/ComboBox-1.33 \

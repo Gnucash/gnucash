@@ -32,50 +32,22 @@ INCLPATH = -I/usr/include \
            -I./engine \
            -I./register \
            -I/usr/local/include \
-           -I/usr/X11R6/include/. \
-           -I./../include \
-           -I./../lib/ComboBox-1.33 \
-           -I./../lib/XmHTML-1.1.0/src \
-           -I./../lib/Xbae-4.6.2-linas 
+           -I./../include 
 
-# libhtmlw eliminated due to license restrictions 
-# and general brokenness
-#           -I./../lib/libhtmlw 
-
-CFLAGS   = -g -DCELL_WIDGETS=1
+CFLAGS   = -g
 LFLAGS   = -g
-LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
-LIBPATH  = -L/lib -L/usr/lib -L/usr/local/lib -L/usr/X11R6/lib/.
-TARGET   = ../xacc.bin
-STATIC   = ../xacc-static.bin
 
-# LIBHTMLW = ../lib/libhtmlw/libhtmlw.a
-LIBXMHTML= ../lib/XmHTML-1.1.0/src/libXmHTML.a
-LIBXBAE  = ../lib/Xbae-4.6.2-linas/libXbae.a
-LIBCOMBO = ../lib/ComboBox-1.33/libComboBox.a
-LIBREG   = libregister.a
-LIBENG   = libengine.a
+
 ######################################################################
-SRCS = AccWindow.c AccountMenu.c AdjBWindow.c    \
-       BuildMenu.c Destroy.c FileBox.c HelpWindow.c \
-       Ledger.c MainWindow.c  \
-       RecnWindow.c RegWindow.c Reports.c TextBox.c  \
-       XferWindow.c main.c  xtutil.c
-# OBJS = ${SRCS:.c=.o} $(LIBHTMLW) $(LIBXBAE) $(LIBCOMBO)
-OBJS = ${SRCS:.c=.o} $(LIBENG) $(LIBREG) $(LIBXMHTML) $(LIBXBAE) $(LIBCOMBO)
+SRCS = Ledger.c
+OBJS = ${SRCS:.c=.o} 
 ######################################################################
 
-default: $(TARGET)
+default: $(OBJS)
+	@cd engine;            $(MAKE) default
+	@cd register;          $(MAKE) default
+	@cd motif;             $(MAKE) default
 
-$(TARGET): $(OBJS)
-	@echo "++++++"
-	$(CC) $(LFLAGS) $(OBJS) $(LIBPATH) $(LIBS) -o $@
-
-static: $(STATIC)
-
-$(STATIC): $(OBJS)
-	@echo "++++++"
-	$(CC) $(LFLAGS) $(OBJS) $(LIBPATH) $(LIBS) -o $@ -static
 
 .c.o:
 	@echo "+++"
@@ -83,11 +55,21 @@ $(STATIC): $(OBJS)
 
 depend:
 	makedepend -- $(INCLPATH) $(DEFN) -- $(SRCS)
+	@cd engine;            $(MAKE) depend
+	@cd register;          $(MAKE) depend
+	@cd motif;             $(MAKE) depend
+
 
 clean:
 	rm -f *.o *~ *.bak
+	@cd engine;            $(MAKE) clean
+	@cd register;          $(MAKE) clean
+	@cd motif;             $(MAKE) clean
 
 distclean: clean
 	rm -f $(TARGET) $(STATIC) Makefile Makefile.bak config.h
+	@cd engine;            $(MAKE) distclean
+	@cd register;          $(MAKE) distclean
+	@cd motif;             $(MAKE) distclean
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.

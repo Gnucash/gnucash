@@ -30,7 +30,8 @@ CC       = gcc
 RANLIB   = ranlib
 INCLPATH = -I/usr/include \
            -I/usr/local/include \
-           -I./../../include 
+           -I./../../include \
+           -I./../..
 
 CFLAGS   = -g 
 LFLAGS   = -g
