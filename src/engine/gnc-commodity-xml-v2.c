@@ -103,7 +103,7 @@ set_commodity_value(xmlNodePtr node, gnc_commodity* com)
     if(safe_strcmp(node->name, "cmdty:fraction") == 0)
     {
         gint64 val;
-        if(string_to_integer(node->xmlChildrenNode->content, &val))
+        if(string_to_gint64(node->xmlChildrenNode->content, &val))
         {
             gnc_commodity_set_fraction(com, val);
         }
