@@ -1,6 +1,5 @@
 /********************************************************************\
  * option-util.c -- GNOME<->guile option interface                  *
- * Copyright (C) 1998,1999 Linas Vepstas                            *
  * Copyright (C) 2000 Dave Peticolas                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -34,6 +33,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-err-popup.h"
 #include "guile-mappings.h"
+#include "messages.h"
 
 #include <g-wrap-wct.h>
 
@@ -1732,7 +1732,7 @@ gnc_commit_option(GNCOption *option)
     name = gnc_option_name(option);
     section = gnc_option_section(option);
 
-    gnc_send_gui_error("There is a problem with option %s:%s.\n%s",
+    gnc_send_gui_error(_("There is a problem with option %s:%s.\n%s"),
 			   section ? section : "(null)",
                            name ? name : "(null)",
                            message ? message : "(null)");
