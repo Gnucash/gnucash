@@ -429,8 +429,13 @@ gnc_reconcile_list_select_row (GtkCList *clist, gint row, gint column,
   list->current_row = row;
 
   gnc_reconcile_list_toggle (list);
+  if (event == NULL) {
+    /* User pressed the space key */
+    parent_class->scroll_vertical(clist, GTK_SCROLL_STEP_FORWARD, 0.0);
+  }
 
-  GTK_CLIST_CLASS(parent_class)->select_row (clist, row, column, event);
+  /* This will trigger an unselect event for the currently selected row */
+  parent_class->select_row (clist, row, column, event);
 
   if (event && (event->type == GDK_2BUTTON_PRESS))
   {
@@ -452,11 +457,15 @@ gnc_reconcile_list_unselect_row (GtkCList *clist, gint row, gint column,
   if (row == list->current_row)
   {
     gnc_reconcile_list_toggle (list);
+    if (event == NULL) {
+      /* User pressed the space key */
+      parent_class->scroll_vertical(clist, GTK_SCROLL_STEP_FORWARD, 0.0);
+    }
     if (!list->always_unselect)
       return;
   }
 
-  GTK_CLIST_CLASS(parent_class)->unselect_row (clist, row, column, event);
+  parent_class->unselect_row (clist, row, column, event);
 
   if (event && (event->type == GDK_2BUTTON_PRESS))
   {
