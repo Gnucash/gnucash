@@ -53,6 +53,8 @@ typedef struct {
 
 GNCMainInfo   * gnc_main_window_new(void);
 void            gnc_main_window_destroy(GNCMainInfo * wind); 
+gboolean        gnc_main_window_can_save(GNCMainInfo * wind);
+gboolean        gnc_main_window_can_cancel_save (GNCMainInfo *wind);
 void            gnc_main_window_save(GNCMainInfo * wind, char * session);
 void            gnc_main_window_restore(GNCMainInfo * wind,
                                         const char * session);

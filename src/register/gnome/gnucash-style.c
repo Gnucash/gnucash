@@ -743,6 +743,17 @@ gnucash_style_unref (SheetBlockStyle *style)
                 g_warning ("Unbalanced Style ref/unref");
 }
 
+static GdkFont *
+gnucash_font_load (const char *name)
+{
+        GdkFont *font;
+
+        font = gdk_fontset_load (name);
+        if (font) return font;
+
+        return gdk_font_load (name);
+}
+
 void
 gnucash_style_set_register_font_name (const char *name)
 {
@@ -756,7 +767,7 @@ gnucash_style_set_register_font_name (const char *name)
         }
 
         if (register_font_name != NULL)
-                gnucash_register_font = gdk_fontset_load (register_font_name);
+                gnucash_register_font = gnucash_font_load (register_font_name);
 
         if (gnucash_register_font == NULL)
         {
@@ -766,7 +777,7 @@ gnucash_style_set_register_font_name (const char *name)
                 g_free (register_font_name);
                 register_font_name = NULL;
 
-                gnucash_register_font = gdk_fontset_load (name);
+                gnucash_register_font = gnucash_font_load (name);
         }
 
         g_assert (gnucash_register_font != NULL);
@@ -788,7 +799,7 @@ gnucash_style_set_register_hint_font_name (const char *name)
 
         if (register_hint_font_name != NULL)
                 gnucash_register_hint_font =
-                        gdk_fontset_load (register_hint_font_name);
+                        gnucash_font_load (register_hint_font_name);
 
         if (gnucash_register_hint_font == NULL)
         {
@@ -798,7 +809,7 @@ gnucash_style_set_register_hint_font_name (const char *name)
                 g_free (register_hint_font_name);
                 register_hint_font_name = NULL;
 
-                gnucash_register_hint_font = gdk_fontset_load (name);
+                gnucash_register_hint_font = gnucash_font_load (name);
         }
 
         g_assert (gnucash_register_hint_font != NULL);

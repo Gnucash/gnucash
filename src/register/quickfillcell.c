@@ -41,7 +41,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef HAVE_WCTYPE_H
+#include <wctype.h>
+#endif
+
 #include "basiccell.h"
+#include "gnc-ui-util.h"
 #include "quickfillcell.h"
 
 
@@ -101,8 +106,8 @@ wcstrcaseequal (const GdkWChar *s1, const GdkWChar *s2)
     if (s1[i] == 0 || s2[i] == 0)
       return s1[i] == s2[i];
 
-    a = islower (s1[i]) ? toupper (s1[i]) : s1[i];
-    b = islower (s2[i]) ? toupper (s2[i]) : s2[i];
+    a = iswlower (s1[i]) ? towupper (s1[i]) : s1[i];
+    b = iswlower (s2[i]) ? towupper (s2[i]) : s2[i];
 
     if (a != b)
       return FALSE;
@@ -130,8 +135,8 @@ wcstrncaseequal (const GdkWChar *s1, const GdkWChar *s2, int len)
     if (s1[i] == 0 || s2[i] == 0)
       return FALSE;
 
-    a = islower (s1[i]) ? toupper (s1[i]) : s1[i];
-    b = islower (s2[i]) ? toupper (s2[i]) : s2[i];
+    a = iswlower (s1[i]) ? towupper (s1[i]) : s1[i];
+    b = iswlower (s2[i]) ? towupper (s2[i]) : s2[i];
 
     if (a != b)
       return FALSE;

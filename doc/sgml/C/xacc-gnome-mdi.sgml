@@ -3,8 +3,7 @@
 <title>The Gnome MDI</title>
 </artheader>
 
-<para><emphasis>PICTURES NEEDED!!!!</emphasis> 
-</para>
+
 <para>GnuCash can display multiple views of your finances at once, in 
 multiple windows, a tabbed "notebook" style, or in one plain window.
 This facility is provided through the GNOME MDI (multiple document
@@ -16,7 +15,13 @@ new view can be displayed in several ways.
 
 <sect1 id="xacc-notebook-view">
 <title>Notebook View</title>
-<para><emphasis>Picture Needed Here!</emphasis></para>
+      <screenshot>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="image/mdi-notebook.png">
+	  </imageobject>
+	</mediaobject>
+      </screenshot>
 <para>Notebook view puts all new views in the main window, but places
 them on named tabs - just like a real notebook, in fact.  You can bring
 a notebook tab to the front by clicking on it.</para>
@@ -24,7 +29,14 @@ a notebook tab to the front by clicking on it.</para>
 
 <sect1 id="xacc-multiple-windows-view">
 <title>Multiple Windows</title>
-<para><emphasis>Picture Needed Here!</emphasis></para>
+      <screenshot>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="image/mdi-toplevel.png">
+	   
+	  </imageobject>
+	</mediaobject>
+      </screenshot>
 <para>If this mode is selected, a new top-level window will be created
 for the new view.  You can move and resize this window any way you
 want, independently of the original gnucash main window.  If you have
@@ -35,7 +47,14 @@ move it onto a to a different one.
 
 <sect1 id="xacc-single-window-view">
 <title>Single Window</title>
-<para><emphasis>Picture Needed Here!</emphasis></para>
+<screenshot>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="image/mdi-onewindow.png">
+	  </imageobject>
+	</mediaobject>
+      </screenshot>
+
 <para>The single-window view works like the notebook view, except
 that instead of using tabs to select which report/account 
 tree you wish to view, you can select them from the Window menu.

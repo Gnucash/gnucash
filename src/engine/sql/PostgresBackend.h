@@ -53,6 +53,8 @@ typedef enum {
    MODE_EVENT
 } AccessMode;
 
+#define MAX_VERSION_AGE 10
+
 struct _pgend {
    Backend be;
 
@@ -70,6 +72,8 @@ struct _pgend {
    char * username;
    char * dbName;
    PGconn * connection;
+   gboolean freshly_created_db;
+   gboolean freshly_created_prdb;
 
    /* counter used to nest callback disables */
    int nest_count;
@@ -90,6 +94,8 @@ struct _pgend {
    Timespec last_account;
    Timespec last_price;
    Timespec last_transaction;
+
+   guint32 version_check; /* data aging timestamp */
 
    /* scratch space for constructing queries */ 
    int bufflen;

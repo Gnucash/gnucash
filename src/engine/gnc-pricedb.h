@@ -275,7 +275,11 @@ gboolean     gnc_pricedb_foreach_price(GNCPriceDB *db,
 
 /* gnc_pricedb_dirty - return FALSE if the database has not been
    modified. */
-gboolean gnc_pricedb_dirty(GNCPriceDB *p);
+gboolean gnc_pricedb_dirty(GNCPriceDB *db);
+
+/* gnc_pricedb_get_num_prices - return the number of prices
+   in the database. */
+guint gnc_pricedb_get_num_prices(GNCPriceDB *db);
 
 /* semi-lame debugging code */
 void gnc_price_print(GNCPrice *db, FILE *f, int indent);

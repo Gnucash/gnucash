@@ -3,8 +3,7 @@
 <title>O MDI Gnome</title>
 </artheader>
 
-<para><emphasis>NECESSÁRIAS IMAGENS!!!!</emphasis> 
-</para>
+
 <para>O GnuCash pode apresentar várias imagens das suas finanças simultaneamente, em 
 várias janelas, tal como pastas ou separadores num dossier, ou numa simples janela. 
 Esta funcionalidade é disponibilizada através do MDI GNOME (interface de múltiplos 
@@ -16,7 +15,13 @@ nova imagem pode ser apresentada de várias maneiras.
 
 <sect1 id="xacc-notebook-view">
 <title>Vista em Pasta</title>
-<para><emphasis>Necessária Imagem Aqui!</emphasis></para>
+      <screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="image/mdi-notebook.png">
+    </imageobject>
+  </mediaobject>
+      </screenshot>
 <para>Visualização em pastas coloca todas as novas imagens na janela principal, mas 
 coloca-as em separadores com nomes - tal como separadores de um dossier.  Pode 
 colocar uma pasta em primeiro plano clicando sobre ela.</para>
@@ -24,7 +29,14 @@ colocar uma pasta em primeiro plano clicando sobre ela.</para>
 
 <sect1 id="xacc-multiple-windows-view">
 <title>Múltiplas Janelas</title>
-<para><emphasis>Necessária Imagem Aqui!</emphasis></para>
+      <screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="image/mdi-toplevel.png">
+     
+    </imageobject>
+  </mediaobject>
+      </screenshot>
 <para>Se este modo for seleccionado, uma nova janela de topo será 
 criada para a nova imagem.  Você pode mover e redimensionar esta janela 
 da forma que o desejar, independentemente ja janela original do GnuCash.  
@@ -35,7 +47,14 @@ poderá simplesmente mover a janela para outro ambiente de trabalho.
 
 <sect1 id="xacc-single-window-view">
 <title>Janela Única</title>
-<para><emphasis>Necessária Imagem Aqui!</emphasis></para>
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="image/mdi-onewindow.png">
+    </imageobject>
+  </mediaobject>
+      </screenshot>
+
 <para>A janela única funciona como a vista em pastas, excepto em que 
 em vez de utilizar pastas para seleccionar que relatório/árvore de contas 
 você deseja ver, você pode selecciona-las no menu Janela.

@@ -112,6 +112,7 @@ xaccInitSplit(Split * split)
   split->share_reconciled_balance  = gnc_numeric_zero();
 
   split->kvp_data = kvp_frame_new();
+  split->idata = 0;
 
   xaccGUIDNew(&split->guid);
   xaccStoreEntity(split, &split->guid, GNC_ID_SPLIT);
@@ -666,12 +667,14 @@ xaccInitTransaction (Transaction * trans)
   trans->date_posted.tv_nsec = 0;
 
   trans->version = 0;
+  trans->version_check = 0;
   trans->marker = 0;
   trans->editlevel = 0;
   trans->do_free = FALSE;
   trans->orig = NULL;
 
   trans->kvp_data = kvp_frame_new();
+  trans->idata = 0;
 
   xaccGUIDNew(&trans->guid);
   xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
@@ -1316,6 +1319,7 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
      * This is a cheesy and potentially error-prone algorithm;
      * but lets give it a spin and try our luck ...
      */
+    if (NULL == trans->splits) return;
     for (node = trans->splits; node; node = node->next)
     {
       const gnc_commodity *currency;
@@ -1448,24 +1452,34 @@ xaccTransCommitEdit (Transaction *trans)
    be = xaccTransactionGetBackend (trans);
    if (be && be->trans_commit_edit) 
    {
-      int rc = 0;
-      rc = (be->trans_commit_edit) (be, trans, trans->orig);
+      GNCBackendError errcode;
 
-      if (rc) {
+      /* clear errors */
+      do {
+        errcode = xaccBackendGetError (be);
+      } while (ERR_BACKEND_NO_ERR != errcode);
+
+      (be->trans_commit_edit) (be, trans, trans->orig);
+
+      errcode = xaccBackendGetError (be);
+      if (ERR_BACKEND_NO_ERR != errcode)
+      {
          /* if the backend puked, then we must roll-back 
           * at this point, and let the user know that we failed.
           */
         /* XXX hack alert -- turn this into a gui dialog */
-        PWARN("Another user has modified this transaction\n"
-              "\tjust a moment ago.  Please look at thier changes,\n"
-              "\t and try again, if needed.\n"
-              "\t(This dialog should be a gui dialog and \n"
-              "\tshould check for errors)\n"
-              "\t rc=%d\n", rc);
-        /* hack alert -- we should check for i/o errors from 
-         * the backend too ... since an i/o error is not a true 
-         * rollback.  what to do ...
-         */
+        if (ERR_BACKEND_MODIFIED == errcode)
+        {
+           PWARN("Another user has modified this transaction\n"
+                 "\tjust a moment ago.  Please look at thier changes,\n"
+                 "\t and try again, if needed.\n"
+                 "\t(This dialog should be a gui dialog and \n"
+                 "\tshould check for errors)\n");
+        }
+
+        /* push error back onto the stack */
+        xaccBackendSetError (be, errcode);
+
         trans->editlevel++;
         xaccTransRollbackEdit (trans);
         return;
@@ -1669,10 +1683,17 @@ xaccTransRollbackEdit (Transaction *trans)
    be = xaccTransactionGetBackend (trans);
    if (be && be->trans_rollback_edit) 
    {
-      int rc = 0;
-      rc = (be->trans_rollback_edit) (be, trans);
+      GNCBackendError errcode;
 
-      if (BACKEND_ROLLBACK_DESTROY == rc)
+      /* clear errors */
+      do {
+        errcode = xaccBackendGetError (be);
+      } while (ERR_BACKEND_NO_ERR != errcode);
+
+      (be->trans_rollback_edit) (be, trans);
+
+      errcode = xaccBackendGetError (be);
+      if (ERR_BACKEND_MOD_DESTROY == errcode)
       {
          /* The backend is asking us to delete this transaction.
           * This typically happens because another (remote) user
@@ -1682,11 +1703,17 @@ xaccTransRollbackEdit (Transaction *trans)
          trans->editlevel++;
          xaccTransDestroy (trans);
          xaccFreeTransaction (trans);
+
+         /* push error back onto the stack */
+         xaccBackendSetError (be, errcode);
          LEAVE ("deleted trans addr=%p\n", trans);
          return;
       }
-      if (rc) {
-	PERR ("Rollback Failed.  Ouch!");
+      if (ERR_BACKEND_NO_ERR != errcode) 
+      {
+        PERR ("Rollback Failed.  Ouch!");
+        /* push error back onto the stack */
+        xaccBackendSetError (be, errcode);
       }
    }
 
@@ -1967,25 +1994,25 @@ get_corr_account_split(Split *sa, Split **retval)
   Split *current_split;
   GList *split_list;
   Transaction * ta;
-  gnc_numeric sa_balance, current_balance;
-  gboolean sa_balance_positive, current_balance_positive, seen_different = FALSE;
+  gnc_numeric sa_value, current_value;
+  gboolean sa_value_positive, current_value_positive, seen_different = FALSE;
 
   *retval = NULL;
   g_return_val_if_fail(sa, TRUE);
   ta = xaccSplitGetParent(sa);
   
-  sa_balance = xaccSplitGetBalance(sa);
-  sa_balance_positive = gnc_numeric_positive_p(sa_balance);
+  sa_value = xaccSplitGetValue(sa);
+  sa_value_positive = gnc_numeric_positive_p(sa_value);
 
   for(split_list = xaccTransGetSplitList(ta);split_list; split_list = split_list->next)
   {
     current_split = split_list->data;
     if(current_split != sa)
     {
-      current_balance = xaccSplitGetBalance(current_split);
-      current_balance_positive = gnc_numeric_positive_p(current_balance);
-      if((sa_balance_positive && !current_balance_positive) || 
-	 (!sa_balance_positive && current_balance_positive))
+      current_value = xaccSplitGetValue(current_split);
+      current_value_positive = gnc_numeric_positive_p(current_value);
+      if((sa_value_positive && !current_value_positive) || 
+	 (!sa_value_positive && current_value_positive))
       {
 	if(seen_different)
 	{

@@ -28,8 +28,12 @@
 #include <openssl/crypto.h>
 #include <openssl/x509.h>
 #include <openssl/pem.h>
+
+#ifdef HAVE_GHTTP_SSL_H 
 #include <ghttp_ssl.h>
-#endif
+#endif /* HAVE_GHTTP_SSL_H */
+
+#endif /* HAVE_OPENSSL */
 
 #include <ghttp.h>
 #include <glib.h>

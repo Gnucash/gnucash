@@ -4,8 +4,13 @@
 </artheader>
 <sect1>
 <title></title>
-<para><emphasis>NECESSÁRIAS IMAGENS!!!!</emphasis> 
-</para>
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="image/multicolumn-view.png">
+    </imageobject>
+  </mediaobject>
+  </screenshot>
 <para>Se desejar visualizar vários relatórios numa mesma 
 janela, poderá utilizar a visualização multi-coluna.</para>
 </sect1>

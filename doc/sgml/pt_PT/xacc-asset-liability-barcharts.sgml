@@ -4,14 +4,20 @@
 </artheader>
 <sect1>
 <title></title>
-<para><emphasis>NECESSÁRIAS IMAGENS!!!!</emphasis> 
-</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="image/asset-barchart.png">
+</imageobject>
+</mediaobject>
+</screenshot>
 <para>Estes relatórios permitem-lhe visualizar as alterações de 
 um, alguns, ou todos os seus activos ou passivos ao longo do tempo.  
 Se deseja um gráfico de barras que mostre a imagem global do seu 
 valor líquido, utilize então o <link linkend="xacc-net-worth-barchart">
     Gráfico de Barras de Valor Líquido</link>.</para>
       
+<para>As opções disponíveis para este relatório incluem:</para>
       <itemizedlist>
   <listitem><para><emphasis><link linkend="xacc-options-accounts">
     Contas</link></emphasis></para>

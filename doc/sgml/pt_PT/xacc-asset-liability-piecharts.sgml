@@ -4,8 +4,13 @@
 </artheader>
 <sect1>
 <title></title>
-<para><emphasis>NECESSÁRIAS IMAGENS!!!!</emphasis> 
-</para>
+      <screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="image/asset-piechart.png">
+      </imageobject>
+  </mediaobject>
+      </screenshot>
 <para>Estes gráficos circulares são úteis para obter uma 
 visão de como os seus activos e passivos estão categorizados.
 Através da selecção apropriada de opções, poderá examinar, digamos, 

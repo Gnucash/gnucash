@@ -141,6 +141,7 @@ struct _account {
 
   /* version number, used for tracking multiuser updates */
   gint32 version;
+  guint32  version_check;  /* data aging timestamp */
 
   GList *splits;           /* list of split pointers */
 
@@ -156,6 +157,10 @@ struct _account {
    * in any way desired.  Handy for specialty traversals of the 
    * account tree. */
   short mark;
+
+  /* -------------------------------------------------------------- */
+  /* Backend private expansion data */
+  guint32  idata;     /* used by the sql backend for kvp management */
 };
 
 

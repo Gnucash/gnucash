@@ -419,7 +419,8 @@
                          (set! entry 
                                (qif-import:guess-acct
                                 xtn-cat
-                                (if (> (qif-split:amount split) 0)
+                                (if (gnc:numeric-positive-p 
+                                     (qif-split:amount split))
                                     (list GNC-INCOME-TYPE GNC-EXPENSE-TYPE)
                                     (list GNC-EXPENSE-TYPE GNC-INCOME-TYPE))
                                 gnc-acct-info)))
@@ -495,7 +496,8 @@
                               entry (default-unspec-acct))
                              (qif-map-entry:set-allowed-types!
                               entry 
-                              (if (> (qif-split:amount split) 0)
+                              (if (gnc:numeric-positive-p
+                                   (qif-split:amount split))
                                   (list GNC-INCOME-TYPE GNC-EXPENSE-TYPE
                                         GNC-BANK-TYPE GNC-CCARD-TYPE 
                                         GNC-LIABILITY-TYPE GNC-ASSET-TYPE

@@ -1591,17 +1591,28 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 		case GDK_Page_Up:
                         direction = GNC_TABLE_TRAVERSE_UP;
                         new_virt_loc.phys_col_offset = 0;
-                        distance = sheet->num_visible_phys_rows - 1;
-                        gnc_table_move_vertical_position (table, &new_virt_loc,
-                                                          -distance);
+                        if (event->state & GDK_SHIFT_MASK)
+                                new_virt_loc.vcell_loc.virt_row = 1;
+                        else
+                        {
+                                distance = sheet->num_visible_phys_rows - 1;
+                                gnc_table_move_vertical_position
+                                        (table, &new_virt_loc, -distance);
+                        }
 			break;
                 case GDK_KP_Page_Down:
 		case GDK_Page_Down:
                         direction = GNC_TABLE_TRAVERSE_DOWN;
                         new_virt_loc.phys_col_offset = 0;
-                        distance = sheet->num_visible_phys_rows - 1;
-                        gnc_table_move_vertical_position (table, &new_virt_loc,
-                                                          distance);
+                        if (event->state & GDK_SHIFT_MASK)
+                                new_virt_loc.vcell_loc.virt_row =
+                                        sheet->num_virt_rows - 1;
+                        else
+                        {
+                                distance = sheet->num_visible_phys_rows - 1;
+                                gnc_table_move_vertical_position
+                                        (table, &new_virt_loc, distance);
+                        }
 			break;
                 case GDK_KP_Up:
 		case GDK_Up:

@@ -217,7 +217,7 @@ cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices)
       /* this is a quote -- file it in the db and kill the split */
       Transaction *txn = xaccSplitGetParent(q->split);
       GNCPrice *price = gnc_price_create();
-      Timespec time = xaccTransRetDateEnteredTS(txn);
+      Timespec time = xaccTransRetDatePostedTS(txn);
 
       gnc_price_begin_edit(price);
       gnc_price_set_commodity(price, xaccAccountGetSecurity(split_acct));
@@ -437,7 +437,7 @@ gnc_load_financials_from_fd(GNCBook *book, int fd)
   /* If this is a newer file than we know how to deal
    * with, warn the user */
   if( VERSION < token ) {
-    error_code = ERR_FILEIO_FILE_TOO_NEW;
+    error_code = ERR_BACKEND_TOO_NEW;
     return FALSE;
   }
   

@@ -100,6 +100,7 @@ xaccInitAccount (Account * acc)
   acc->description = g_strdup("");
 
   acc->kvp_data    = kvp_frame_new();
+  acc->idata = 0;
 
   acc->currency    = NULL;
   acc->security    = NULL;
@@ -109,6 +110,7 @@ xaccInitAccount (Account * acc)
   acc->splits      = NULL;
 
   acc->version = 0;
+  acc->version_check = 0;
   acc->editlevel = 0;
   acc->balance_dirty = FALSE;
   acc->sort_dirty = FALSE;
@@ -285,7 +287,6 @@ void
 xaccAccountCommitEdit (Account *acc) 
 {
   Backend * be;
-  int rc;
 
   if (!acc) return;
 
@@ -341,16 +342,25 @@ xaccAccountCommitEdit (Account *acc)
   be = xaccAccountGetBackend (acc);
   if (be && be->account_commit_edit) 
   {
-    rc = (be->account_commit_edit) (be, acc);
-    /* hack alert -- we really really should be checking 
-     * for errors returned by the back end ... */
-    if (rc)
+    GNCBackendError errcode;
+
+    /* clear errors */
+    do {
+      errcode = xaccBackendGetError (be);
+    } while (ERR_BACKEND_NO_ERR != errcode);
+
+    (be->account_commit_edit) (be, acc);
+    errcode = xaccBackendGetError (be);
+
+    if (ERR_BACKEND_NO_ERR != errcode)
     {
       /* destroys must be rolled back as well ... ??? */
       acc->do_free = FALSE;
       /* XXX hack alert FIXME implement account rollback */
       PERR (" backend asked engine to rollback, but this isn't"
-            " handled yet. Return code=%d", rc);
+            " handled yet. Return code=%d", errcode);
+      /* push error back onto the stack */
+      xaccBackendSetError (be, errcode);
     }
   }
   acc->core_dirty = FALSE;
@@ -809,7 +819,7 @@ xaccAccountRecomputeBalance (Account * acc)
     if( YREC == split -> reconciled ||
         FREC == split -> reconciled ) {
       share_reconciled_balance = 
-        gnc_numeric_add_fixed(share_cleared_balance, split->damount);
+        gnc_numeric_add_fixed(share_reconciled_balance, split->damount);
       reconciled_balance =  
         gnc_numeric_add_fixed(reconciled_balance, split->value);
     }

@@ -11,7 +11,8 @@
 	are self-contained and can be moved, copied, and backed-up to tape, 
 	floppies, or any other medium you choose.
         They can be saved using any name, and any file extension you choose, but, traditionally
-      the developers and users have used the extension ".xac".
+      the developers and users have used the extension ".xac", or "gml2"
+	to distinguish the new XML format files from the old 1.4 binary file format.
       </para>
 
       <para>
@@ -87,13 +88,17 @@
     </sect1>
     <sect1 id="xacc-export-accounts">
       <title>
-	Exporting Accounts
+	Exporting Your account Hierachy
       </title>
+     
       <para>
-	FIXME: Need content!
+	If you wish for some reason, to create an empty file with the 
+	same account structure as a current one, you can do so by
+	selecting "Export accounts" from the File menu.
 	</para>
       <para>
-	This needs to describe how to use the export accounts feature.
+	This can be used as a basic way to close your accounts, 
+	if you wish.
       </para>
     </sect1>
 

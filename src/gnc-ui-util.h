@@ -217,4 +217,12 @@ void gnc_set_auto_decimal_enabled(gboolean enabled);
 /* set how many auto decimal places to use */
 void gnc_set_auto_decimal_places(int places);
 
+
+/* Missing functions ************************************************/
+
+#ifndef HAVE_TOWUPPER
+gint32 towupper (gint32 wc);
+int iswlower (gint32 wc);
+#endif
+
 #endif

@@ -25,17 +25,16 @@ offers, have a look at the <link linkend="xacc-features">Features
     are intended to be stable, only seeing maintenance to fix bugs,
     and "odd" sub-versions indicate an "experimental" stream that
     seeks to add enhancement.
-    The latest stable release is 1.4.x; if you don't intend to
+    The latest stable release is 1.6.x; if you don't intend to
     do development work, you should be using either this version,
     or an older stable version. These versions are fairly stable,
     with all currently known bugs fixed.
-    The present "experimental" stream is gnucash-1.5.x, which is
-    now almost at beta-test stage.  This is the version you are
-    using right now, obviously!   If you are using this version
+    The present "experimental" stream is gnucash-1.7.x, which is
+    now almost at beta-test stage. If you are using this version
     with real data, PLEASE MAKE BACKUPS REGULARLY!
 
-    Once the 1.5.x series stabilizes, the next stable series
-    will be 1.6.x.
+    Once the 1.7.x series stabilizes, the next stable series
+    will be 1.8.x.
 
  </para>
 <para>If you wish to "hack" on the experimental version, you should
@@ -152,7 +151,7 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 </glossentry>
 
 <glossentry>
-<glossterm><email>dres@debian.org</email>James LewisMoss</glossterm>
+<glossterm><email>dres@debian.org</email> James LewisMoss</glossterm>
 <glossdef>
 <para>
    design doc patches, XML refactoring, 
@@ -162,13 +161,22 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 </glossentry>
 
 <glossentry>
-<glossterm><email>stimming@tuhh.de</email>Christian
+<glossterm><email>stimming@tuhh.de</email> Christian
    Stimming</glossterm>
 <glossdef>
 <para>
    is a report-generating monster. He's been on of the largest
    contributors to the current report infrastructure, creating
    many of the important reports.
+   </para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>jsled@asynchronous.org</email> Joshua Sled</glossterm>
+<glossdef>
+<para>
+  works on scheduled transactions and budgeting.
    </para>
 </glossdef>
 </glossentry>
@@ -241,16 +249,24 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 </glossentry>
 
 <glossentry>
-<glossterm><ulink url="simon.britnell@peace.com">Simon
-      Britnell</ulink></glossterm>
+<glossterm><email>dark@xs4all.nl</email> Richard Braakman
+      </glossterm>
+<glossdef>
+<para>xml version configure patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>simon.britnell@peace.com</email> Simon
+      Britnell</glossterm>
 <glossdef>
 <para>patch to RPM spec</para>
 </glossdef>
 </glossentry>
 
 <glossentry>
-<glossterm><ulink url="http://www.hex.net/~cbbrowne">Christopher B.
-      Browne</ulink></glossterm>
+<glossterm><email>cbbrowne@acm.org</email> Christopher B.
+      Browne</glossterm>
 <glossdef>
 <para>for perl stock scripts, Guile-based QIF import code, lots
       of changes to English documentation, and lots of guile
@@ -298,7 +314,7 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 </glossentry>
 
 <glossentry>
-<glossterm><email>china@thewrittenword.com</email>Albert
+<glossterm><email>china@thewrittenword.com</email> Albert
       Chin-A-Young</glossterm>
 <glossdef>
 <para>configure.in patch</para>
@@ -306,7 +322,7 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 </glossentry>
 
 <glossentry>
-<glossterm><email>kenneth@gnome.org</email>Kenneth
+<glossterm><email>kenneth@gnome.org</email> Kenneth
 Christiansen</glossterm>
 <glossdef>
 <para>Danish translation</para>
@@ -314,7 +330,7 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>jcollins@gnucash.org</email> Jeremey
+<glossterm><email>jcollins@gnucash.org</email> Jeremy
       Collins</glossterm>
 <glossdef>
 <para>for GnoMoney and GTK port</para>
@@ -464,6 +480,13 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>hag@linnaean.org</email> Daniel Hagerty</glossterm>
+<glossdef>
+<para>patch to balance sheet report</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>mhamada@redhat.com</email> Mitsuo
       Hamada</glossterm>
 <glossdef>
@@ -517,14 +540,14 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>claus_h@image.dk</email>Claus Hindsgaul</glossterm>
+<glossterm><email>claus_h@image.dk</email> Claus Hindsgaul</glossterm>
 <glossdef>
 <para>Danish translation</para>
 </glossdef>
 </glossentry>
 
 <glossentry>
-<glossterm><email>jjvmjv@mundomail.net</email>Miquel Jordana
+<glossterm><email>jjvmjv@mundomail.net</email> Miquel Jordana
       Vilamitjana</glossterm>
 <glossdef>
 <para>Spanish translation of manual</para>
@@ -548,7 +571,7 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>ben.kelly@ieee.org</email>Ben Kelly</glossterm>
+<glossterm><email>ben.kelly@ieee.org</email> Ben Kelly</glossterm>
 <glossdef>
 <para>for Motif menu bug fix, core dump fixes</para>
 </glossdef>
@@ -558,6 +581,14 @@ Christiansen</glossterm>
 <glossterm><email>tkludy@csd.sgi.com</email> Tom Kludy</glossterm>
 <glossdef>
 <para>for SGI Irix port</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>kraai@alumni.carnegiemellon.edu</email> Matt
+      Kraai</glossterm>
+<glossdef>
+<para>date accelerator bug fix</para>
 </glossdef>
 </glossentry>
 
@@ -585,7 +616,14 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>minfrin@sharp.fm</email>Graham Leggett</glossterm>
+<glossterm><email>nj.lee@plumtree.co.nz</email> Nicholas Lee</glossterm>
+<glossdef>
+<para>scheme bug fix</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>minfrin@sharp.fm</email> Graham Leggett</glossterm>
 <glossdef>
 <para>for fixing a hang</para>
 </glossdef>
@@ -631,7 +669,7 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>kmaraas@gnome.org</email>Kjartan Maraas</glossterm>
+<glossterm><email>kmaraas@gnome.org</email> Kjartan Maraas</glossterm>
 <glossdef>
 <para>Norwegian translations</para>
 </glossdef>
@@ -719,7 +757,7 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>j.e.nielsen@iname.com</email>Johnny Ernst
+<glossterm><email>j.e.nielsen@iname.com</email> Johnny Ernst
 Nielsen</glossterm>
 <glossdef>
 <para>Danish translation</para>
@@ -747,6 +785,13 @@ Nielsen</glossterm>
       Norton</glossterm>
 <glossdef>
 <para>for a valiant attempt at a GTK port</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>notting@redhat.com</email> Bill Nottingham</glossterm>
+<glossdef>
+<para>guile configure patch</para>
 </glossdef>
 </glossentry>
 
@@ -822,6 +867,13 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>famille.p.poulain@free.fr</email> Paul Poulain</glossterm>
+<glossdef>
+<para>French translations</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>rr@sco.com</email> Ron Record</glossterm>
 <glossdef>
 <para>for SCO Unixware and OpenServer binaries</para>
@@ -877,7 +929,7 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>keld@dkuug.dk</email>Keld Simonsen</glossterm>
+<glossterm><email>keld@dkuug.dk</email> Keld Simonsen</glossterm>
 <glossdef>
 <para>Danish translation</para>
 </glossdef>
@@ -923,6 +975,14 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>garrisonstuber@bellsouth.net</email> Michael
+      T. Garrison Stuber</glossterm>
+<glossdef>
+<para>report patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>bszx@bszxdomain.edu.eu.org</email> Bartek
       Szady</glossterm>
 <glossdef>
@@ -938,7 +998,7 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>troeger@samart.co.th</email>Arnold Troeger</glossterm>
+<glossterm><email>troeger@samart.co.th</email> Arnold Troeger</glossterm>
 <glossdef>
 <para>Mandrake packager</para>
 </glossdef>
@@ -998,6 +1058,13 @@ Nielsen</glossterm>
 <para>Japanese translation</para>
 </glossdef>
 </glossentry>
+
+<glossentry>
+<glossterm><email>jazepeda@pacbell.net</email> Alex Zepeda</glossterm>
+<glossdef>
+<para>postgres configure patch</para>
+</glossdef>
+</glossentry>
 </glosslist>
 
 </para>
@@ -1006,7 +1073,7 @@ Nielsen</glossterm>
 <sect1 id="xacc-oses">
 <title>Supported Operating Systems</title>
 
-<para>GnuCash 1.5.0 is known to work on the following systems: 
+<para>GnuCash 1.6.0 is known to work on the following systems: 
 
 <itemizedlist>
 
@@ -1263,6 +1330,28 @@ For now, this is what we have.
 <entry>341 files
          (114.2)</entry>
 <entry>8 (7.8)</entry>
+</row>
+<row>
+<entry>gnucash-1.6.0
+         June 2001</entry>
+<entry>139 files
+         (42.8+8.3)</entry>
+<entry>28 files
+         (5.7+2.0)</entry>
+<entry>23 files
+         (10.1+1.5)</entry>
+<entry>-</entry>
+<entry>132 files
+         (60.0+4.2)</entry>
+<entry>102 files
+         (6.2+0.8+27.3)</entry>
+<entry>64 files
+         (12.1)</entry>
+<entry>69 files
+         (12.9)</entry>
+<entry>455 files
+         (193.9)</entry>
+<entry>11 (18.7)</entry>
 </row>
 </tbody>
 </tgroup>

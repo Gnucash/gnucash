@@ -144,6 +144,21 @@ gnc_table_destroy (Table * table)
 
 /* ==================================================== */
 
+gboolean
+gnc_table_virtual_cell_out_of_bounds (Table *table,
+                                      VirtualCellLocation vcell_loc)
+{
+  if (!table)
+    return TRUE;
+
+  return ((vcell_loc.virt_row < 0) ||
+          (vcell_loc.virt_row >= table->num_virt_rows) ||
+          (vcell_loc.virt_col < 0) ||
+          (vcell_loc.virt_col >= table->num_virt_cols));
+}
+
+/* ==================================================== */
+
 VirtualCell *
 gnc_table_get_virtual_cell (Table *table, VirtualCellLocation vcell_loc)
 {

@@ -118,20 +118,21 @@ the account instead of opening a register.") #f))
 ;; book close.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (gnc:main-window-book-close-handler book-url)
+(define (gnc:main-window-save-state book-url)
   (let* ((conf-file-name (gnc:html-encode-string book-url))
 	 (dotgnucash-dir (build-path (getenv "HOME") ".gnucash"))
          (file-dir (build-path dotgnucash-dir "books"))
+         (save-file? #f)
          (book-path #f))
-    
-    ;; make sure ~/.gnucash is there
-    (if (not (access? dotgnucash-dir X_OK)) (mkdir dotgnucash-dir #o700))
 
-    ;; make sure the books directory is there
-    
-    (if (not (access? file-dir X_OK)) (mkdir file-dir #o700))
-    
-    (if conf-file-name 
+    ;; make sure ~/.gnucash/books is there
+    (set! save-file? (and (gnc:make-dir dotgnucash-dir)
+                         (gnc:make-dir file-dir)))
+
+    (if (not save-file?) (gnc:warn (_ "Can't save window state")))
+
+    (if (and save-file? conf-file-name
+             (gnc:main-window-can-save? (gnc:get-ui-data)))
         (let ((book-path (build-path (getenv "HOME") ".gnucash" "books" 
                                      conf-file-name)))
           (with-output-to-port (open-output-file book-path)
@@ -149,7 +150,10 @@ the account instead of opening a register.") #f))
                #t gnc:*acct-tree-options*)
 
               (force-output)))
-          (gnc:main-window-save (gnc:get-ui-data) book-url)))
+          (gnc:main-window-save (gnc:get-ui-data) book-url)))))
+
+(define (gnc:main-window-book-close-handler book-url)
+    (gnc:main-window-save-state book-url)
 
     (let ((dead-reports '()))
       ;; get a list of the reports we'll be needing to nuke     
@@ -163,8 +167,8 @@ the account instead of opening a register.") #f))
       (for-each 
        (lambda (dr) 
          (hash-remove! *gnc:_reports_* dr))
-       dead-reports))))
-  
+       dead-reports)))
+
 (define (gnc:main-window-book-open-handler book-url)
   (define (try-load file-suffix)
     (let ((file (build-path (getenv "HOME") ".gnucash" "books" file-suffix)))

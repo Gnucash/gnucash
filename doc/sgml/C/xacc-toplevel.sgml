@@ -4,8 +4,13 @@
 </artheader>
 <sect1>
 <title>The Main Menu</title>
-<para><emphasis>PICTURES NEEDED!!!!</emphasis> 
-</para>
+<screenshot>
+   <mediaobject>
+      <imageobject>
+         <imagedata fileref="image/menu-and-toolbar.png">
+	  </imageobject>
+	</mediaobject>
+      </screenshot>
 <para>The main menu is displayed above all top-level windows, and is
 a gateway to everything that GnuCash can do, including file operations, 
 reports, account operations, window operations, and getting help.

@@ -104,6 +104,12 @@ xaccQueryPrint(Query * q)
   GList * i, * j;
   QueryTerm * qt;
 
+  if (!q)
+  {
+    printf("Query: null\n");
+    return;
+  }
+
   printf("Query: max splits = %d\n", q->max_splits);
 
   /* print and & or terms */
@@ -1303,6 +1309,124 @@ xaccQueryGetTransactions (Query * q, query_run_t runtype) {
   return retval;
 }
 
+/********************************************************************
+ * xaccQueryEqual
+ * Compare two queries for equality
+ ********************************************************************/
+
+static gboolean
+xaccQueryTermEqual (QueryTerm *qt1, QueryTerm *qt2)
+{
+  GList *l1, *l2;
+
+  if (qt1 == qt2) return TRUE;
+  if (!qt1 || !qt2) return FALSE;
+
+  if (qt1->p != qt2->p) return FALSE;
+  if (qt1->data.type != qt2->data.type) return FALSE;
+  if (qt1->data.base.term_type != qt2->data.base.term_type) return FALSE;
+  if (qt1->data.base.sense != qt2->data.base.sense) return FALSE;
+
+  switch (qt1->data.type)
+  {
+    case PD_DATE:
+      if (qt1->data.date.use_start != qt2->data.date.use_start) return FALSE;
+      if (qt1->data.date.use_end != qt2->data.date.use_end) return FALSE;
+      if (!timespec_equal (&qt1->data.date.start, &qt2->data.date.start))
+        return FALSE;
+      if (!timespec_equal (&qt1->data.date.end, &qt2->data.date.end))
+        return FALSE;
+      break;
+
+    case PD_AMOUNT:
+      if (qt1->data.amount.how != qt2->data.amount.how) return FALSE;
+      if (qt1->data.amount.amt_sgn != qt2->data.amount.amt_sgn) return FALSE;
+      if (qt1->data.amount.amount != qt2->data.amount.amount)
+        return FALSE;
+      break;
+
+    case PD_ACCOUNT:
+      if (qt1->data.acct.how != qt2->data.acct.how) return FALSE;
+      l1 = qt1->data.acct.account_guids;
+      l2 = qt2->data.acct.account_guids;
+      if (g_list_length (l1) != g_list_length (l2)) return FALSE;
+      for ( ; l1; l1 = l1->next, l2 = l2->next)
+        if (!guid_equal (l1->data, l2->data))
+          return FALSE;
+      break;
+
+    case PD_STRING:
+      if (qt1->data.str.case_sens != qt2->data.str.case_sens)
+        return FALSE;
+      if (qt1->data.str.use_regexp != qt2->data.str.use_regexp)
+        return FALSE;
+      if (strcmp (qt1->data.str.matchstring, qt2->data.str.matchstring) != 0)
+        return FALSE;
+      break;
+
+    case PD_CLEARED:
+      if (qt1->data.cleared.how != qt2->data.cleared.how) return FALSE;
+      break;
+
+    case PD_BALANCE:
+      if (qt1->data.balance.how != qt2->data.balance.how) return FALSE;
+      break;
+
+    case PD_GUID:
+      if (!guid_equal (&qt1->data.guid.guid, &qt2->data.guid.guid))
+        return FALSE;
+      break;
+
+    case PD_MISC:
+      if (qt1->data.misc.how != qt2->data.misc.how) return FALSE;
+      if (qt1->data.misc.data != qt2->data.misc.data) return FALSE;
+      break;
+
+    default:
+      PERR ("bad query term type");
+      return FALSE;
+  }
+
+  return TRUE;
+}
+
+gboolean
+xaccQueryEqual (Query *q1, Query *q2)
+{
+  GList *or1, *or2;
+
+  if (q1 == q2) return TRUE;
+  if (!q1 || !q2) return FALSE;
+
+  if (g_list_length (q1->terms) != g_list_length (q2->terms)) return FALSE;
+
+  for (or1 = q1->terms, or2 = q2->terms; or1;
+       or1 = or1->next, or2 = or2->next)
+  {
+    GList *and1, *and2;
+
+    and1 = or1->data;
+    and2 = or2->data;
+
+    if (g_list_length (and1) != g_list_length (and2)) return FALSE;
+
+    for ( ; and1; and1 = and1->next, and2 = and2->next)
+      if (!xaccQueryTermEqual (and1->data, and2->data))
+        return FALSE;
+  }
+
+  if (q1->primary_sort != q2->primary_sort) return FALSE;
+  if (q1->secondary_sort != q2->secondary_sort) return FALSE;
+  if (q1->tertiary_sort != q2->tertiary_sort) return FALSE;
+
+  if (q1->primary_increasing != q2->primary_increasing) return FALSE;
+  if (q1->secondary_increasing != q2->secondary_increasing) return FALSE;
+  if (q1->tertiary_increasing != q2->tertiary_increasing) return FALSE;
+
+  if (q1->max_splits != q2->max_splits) return FALSE;
+
+  return TRUE;
+}
 
 Predicate
 xaccQueryGetPredicate (pr_type_t term_type)
@@ -1850,7 +1974,7 @@ DxaccQueryAddSharePriceMatch(Query * q, double amt,
   qt->data.base.term_type   = PR_PRICE;
   qt->data.base.sense       = 1;
   qt->data.amount.how       = how;
-  qt->data.amount.amt_sgn   = 0;
+  qt->data.amount.amt_sgn   = AMT_SGN_MATCH_EITHER;
   qt->data.amount.amount    = amt;
   
   xaccInitQuery(qs, qt);
@@ -1870,7 +1994,7 @@ DxaccQueryAddSharePriceMatch(Query * q, double amt,
 
 /********************************************************************
  * DxaccQueryAddSharesMatch
- * Add a share-price filter to an existing query. 
+ * Add a quantity filter to an existing query. 
  * FIXME ?? fix what ??
  ********************************************************************/
  
@@ -1887,7 +2011,7 @@ DxaccQueryAddSharesMatch(Query * q, double amt,
   qt->data.base.term_type   = PR_SHRS;
   qt->data.base.sense       = 1;
   qt->data.amount.how       = how;
-  qt->data.amount.amt_sgn   = 0;
+  qt->data.amount.amt_sgn   = AMT_SGN_MATCH_EITHER;
   qt->data.amount.amount    = amt;
   
   xaccInitQuery(qs, qt);

@@ -1,3 +1,4 @@
+
 ;; Index file to load all of the releavant reports.
 (gnc:support "report/report-list.scm")
 
@@ -6,20 +7,20 @@
 (gnc:depend "options-utilities.scm")
 
 ;; reports 
-(gnc:depend "report/net-barchart.scm")
-(gnc:depend "report/account-summary.scm")
-(gnc:depend "report/average-balance.scm")
-(gnc:depend "report/balance-sheet.scm")
-(gnc:depend "report/account-piecharts.scm")
-(gnc:depend "report/category-barchart.scm")
-(gnc:depend "report/pnl.scm")
-(gnc:depend "report/hello-world.scm")
-(gnc:depend "report/portfolio.scm")
-(gnc:depend "report/price-scatter.scm")
-(gnc:depend "report/register.scm")
-(gnc:depend "report/iframe-url.scm") 
-(gnc:depend "report/taxtxf.scm")
-(gnc:depend "report/transaction-report.scm")
+(use-modules (gnucash report account-piecharts))
+(use-modules (gnucash report account-summary))
+(use-modules (gnucash report average-balance))
+(use-modules (gnucash report balance-sheet))
+(use-modules (gnucash report category-barchart))
+(use-modules (gnucash report hello-world))
+(use-modules (gnucash report iframe-url))
+(use-modules (gnucash report net-barchart))
+(use-modules (gnucash report pnl))
+(use-modules (gnucash report portfolio))
+(use-modules (gnucash report price-scatter))
+(use-modules (gnucash report register))
+(use-modules (gnucash report taxtxf))
+(use-modules (gnucash report transaction))
 
 ;; style sheets 
 (gnc:depend "report/stylesheet-plain.scm")

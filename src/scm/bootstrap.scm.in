@@ -29,10 +29,7 @@
         (display "a symbolic link named 'slib' from the guile directory\n")
         (display "(usually /usr/share/guile) to the directory where slib\n")
         (display "is installed.\n\n")
-        (display "You may also need to run the following command as root:")
-        (newline)
-        (newline)
-        (display "  guile -c \"(use-modules (ice-9 slib)) (require 'new-catalog)\"")
+        (display "You may also need to run GnuCash once as root.")
         (newline)
         (newline))
 
@@ -185,32 +182,45 @@ string and 'directories' must be a list of strings."
             (set! finished? #t)
             (set! result file-name))))))
 
+; (define (gnc:load name)
+;   "Name must be a string.  The system attempts to locate the file of
+; the given name and load it.  The system will attempt to locate the
+; file in all of the directories specified by gnc:*load-path*."
+
+;   (define (make-thunk file-name)
+;     (lambda () (primitive-load file-name) #t))
+
+;   (define (handler key . args)
+;     (apply display-error #f (current-error-port) args)
+;     #f)
+
+;   (let* ((path (if (list? gnc:*load-path*)
+;                    gnc:*load-path*
+;                    (gnc:config-var-value-get gnc:*load-path*)))
+;          (file-name (gnc:find-in-directories name path)))
+;     (if (not file-name)
+;         #f
+;         (if 
+;          (catch #t (make-thunk file-name) handler)
+;          (begin
+;            (gnc:debug "loaded file " file-name)
+;            #t)
+;          (begin
+;            (gnc:warn "failure loading " file-name)
+;            #f)))))
+
 (define (gnc:load name)
   "Name must be a string.  The system attempts to locate the file of
 the given name and load it.  The system will attempt to locate the
 file in all of the directories specified by gnc:*load-path*."
-
-  (define (make-thunk file-name)
-    (lambda () (primitive-load file-name) #t))
-
-  (define (handler key . args)
-    (apply display-error #f (current-error-port) args)
-    #f)
-
+  
   (let* ((path (if (list? gnc:*load-path*)
                    gnc:*load-path*
                    (gnc:config-var-value-get gnc:*load-path*)))
          (file-name (gnc:find-in-directories name path)))
     (if (not file-name)
         #f
-        (if 
-         (catch #t (make-thunk file-name) handler)
-         (begin
-           (gnc:debug "loaded file " file-name)
-           #t)
-         (begin
-           (gnc:warn "failure loading " file-name)
-           #f)))))
+        (primitive-load file-name))))
 
 (define (gnc:_expand-load-path_ new-path)
   (let ((load-path-interpret

@@ -84,6 +84,9 @@ gnc_table_save_state (Table *table)
                         if (header_widths[i] <= 0)
                                 continue;
 
+                        if (i == DESC_CELL)
+                                continue;
+
                         name = xaccSplitRegisterGetCellTypeName (i);
                         assoc = gh_cons (gh_str02scm(name),
                                          gh_int2scm(header_widths[i]));
