@@ -284,7 +284,7 @@
   (gnc:amount->string datum (gnc:default-print-info #f)))
 
 (define (gnc:default-html-gnc-monetary-renderer datum params)
-  (let* ((result (gnc:amount->string-helper 
+  (let* ((result (gnc:amount->string 
 		  (gnc:gnc-monetary-amount datum) 
 		  (gnc:commodity-print-info 
 		   (gnc:gnc-monetary-commodity datum) #t)))
