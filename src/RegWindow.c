@@ -1733,8 +1733,8 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
       startRecnCB, NULL, (MenuItem *)NULL },
     { "Adjust Balance...",  &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
       startAdjBCB, NULL, (MenuItem *)NULL },
-    { "Report",             &xmPushButtonWidgetClass, 'D', NULL, NULL, True,
-      NULL, (XtPointer)0,  (MenuItem *)&reportMenu },
+    { "Report",             &xmPushButtonWidgetClass, 'D', NULL, NULL, False,
+      NULL, (XtPointer)0,  reportMenu },
     { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                    (MenuItem *)NULL },
     { "Delete Transaction", &xmPushButtonWidgetClass, 'D', NULL, NULL, True,
@@ -1878,6 +1878,8 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   activityMenu[3].callback_data=(XtPointer)regData;
   activityMenu[6].callback_data=(XtPointer)regData;
   activityMenu[8].callback_data=(XtPointer)(regData->dialog);  /* destroy callback */
+
+  activityMenu[4].subitems = reportMenu;
 
   /* can't adjust the balance on a ledger window */
   if (1 != regData->numAcc) {
