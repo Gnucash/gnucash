@@ -64,7 +64,7 @@ void xaccAccountTreeScrubOrphans (Account *acc);
 void xaccGroupScrubOrphans (AccountGroup *grp);
 
 /** The ScrubSplit methods ensure that splits with the same commodity
- *   and command currency have the same amount and value.
+ *   and currency have the same amount and value.
  */
 void xaccSplitScrub (Split *split);
 void xaccTransScrubSplits (Transaction *trans);
