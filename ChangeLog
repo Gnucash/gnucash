@@ -31,6 +31,13 @@
 	  APIs.  All to allow sideways printing (by rotating the image).
 	* src/gnome-utils/gw-gnome-utils-spec.scm: wrap the new print-session
 	  apis.
+
+	* src/gnome/glade/print.glade: add "Deluxe Personal Check" type
+	* src/gnome/dialog-print-check.c: add support for choosing
+	  a "deluxe" check type.
+	* src/scm/printing/print-check.scm: add support for printing
+	  to "deluxe" personal checks.  This prints the check "sideways"
+	  on a US-Letter configuration.
 	
 2003-05-18  Derek Atkins  <derek@ihtfp.com>
 

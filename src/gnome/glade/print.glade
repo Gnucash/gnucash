@@ -338,6 +338,7 @@
 	  <name>check_format_picker</name>
 	  <can_focus>True</can_focus>
 	  <items>Quicken/QuickBooks (tm) US-Letter
+Deluxe(tm) Personal Checks US-Letter
 Custom
 </items>
 	  <initial_choice>0</initial_choice>

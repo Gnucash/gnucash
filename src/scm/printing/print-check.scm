@@ -61,11 +61,20 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define gnc:*stock-check-formats*
-  '((quicken  . ((payee . (90.0 150.0))
-                 (amount-words . (90.0 120.0))
-                 (amount-number . (500.0 150.0))
-                 (date . (500.0 185.0))
-                 (memo . (50.0 40.0))))))
+  '((deluxe  . ((payee . (126.0 150.0))
+		(amount-words . (90.0 125.0))
+		(amount-number . (400.0 150.0))
+		(date . (343.0 183.0))
+		(memo . (105.0 73.0))
+		(rotate . 90.0)
+		(translate . (232.0 300.0))
+		(offset . 0.0)))
+    (quicken  . ((payee . (90.0 150.0))
+		 (amount-words . (90.0 120.0))
+		 (amount-number . (500.0 150.0))
+		 (date . (500.0 185.0))
+		 (memo . (50.0 40.0))))
+    ))
 
 (define gnc:*stock-check-positions*
   '((top . 540.0)
@@ -86,10 +95,13 @@
             (set! format (assq (print-check-format:format format-info) 
                                gnc:*stock-check-formats*))
             (if (pair? format)
-                (set! format (cdr format))))
+		(begin
+		  (set! format (cdr format))
+		  (let ((off (assq 'offset format)))
+		    (if off (set! offset (cdr off)))))))
           (set! format (print-check-format:custom-info format-info)))
       
-      (if (not (eq? (print-check-format:position format-info) 'custom))
+      (if (not (or offset (eq? (print-check-format:position format-info) 'custom)))
           (begin 
             (set! offset 
                   (cdr (assq (print-check-format:position format-info)
@@ -110,7 +122,15 @@
                     (strftime date-fmt (localtime date))))
             (begin 
               (set! date-string (strftime fmt (localtime date))))))            
-      
+
+      (let ((translate-pos (assq 'translate format)))
+	(if translate-pos
+	    (gnc:print-session-translate ps (cadr translate-pos)
+					 (caddr translate-pos))))
+
+      (let ((rotate-angle (assq 'rotate format)))
+	(if rotate-angle (gnc:print-session-rotate ps (cdr rotate-angle))))
+
       (let ((date-pos (assq 'date format)))
         (gnc:print-session-moveto ps (cadr date-pos) 
                                   (+ offset (caddr date-pos)))
