@@ -76,7 +76,7 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
                            LedgerDisplayType ld_type,
                            SplitRegisterType reg_type,
                            SplitRegisterStyle style,
-                           gboolean templateMode );
+                           gboolean is_template);
 static void xaccLedgerDisplayRefreshInternal (xaccLedgerDisplay *ld,
                                               GList *splits);
 
@@ -436,7 +436,7 @@ xaccLedgerDisplayGL (void)
  *   this template ledger.
  **/
 xaccLedgerDisplay *
-xaccLedgerDisplayTemplateGL( char *id )
+xaccLedgerDisplayTemplateGL (char *id)
 {
   GNCBook *book;
   Query *q;
@@ -447,25 +447,29 @@ xaccLedgerDisplayTemplateGL( char *id )
   AccountGroup *ag;
   Account *acct;
 
-  q = xaccMallocQuery();
+  q = xaccMallocQuery ();
 
-  ag = gnc_book_get_template_group( gncGetCurrentBook() );
-  acct = xaccGetAccountFromName( ag, id );
-  if ( acct == NULL ) {
+  ag = gnc_book_get_template_group (gncGetCurrentBook());
+  acct = xaccGetAccountFromName (ag, id);
+  if (!acct)
+  {
     /* FIXME */
     printf( "can't get template account for id \"%s\"\n", id );
   }
-  xaccQueryAddSingleAccountMatch( q, acct, QUERY_AND );
-  book = gncGetCurrentBook();
-  xaccQuerySetGroup( q, gnc_book_get_template_group(book) );
 
-  ld = xaccLedgerDisplayInternal( NULL, q, LD_GL,
+  xaccQueryAddSingleAccountMatch (q, acct, QUERY_AND);
+  book = gncGetCurrentBook ();
+  xaccQuerySetGroup (q, gnc_book_get_template_group(book));
+
+  ld = xaccLedgerDisplayInternal (NULL, q, LD_GL,
                                   GENERAL_LEDGER,
                                   REG_STYLE_JOURNAL,
-                                  TRUE ); /* template mode?  TRUE. */
+                                  TRUE); /* template mode?  TRUE. */
 
-  sr = xaccLedgerDisplayGetSR( ld );
-  sr->templateAcct = acct;
+  sr = xaccLedgerDisplayGetSR (ld);
+
+  gnc_split_register_set_template_account (sr, acct);
+
   return ld;
 }
 
@@ -641,7 +645,7 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
                            LedgerDisplayType ld_type,
                            SplitRegisterType reg_type,
                            SplitRegisterStyle style,
-                           gboolean templateMode )
+                           gboolean is_template )
 {
   xaccLedgerDisplay *ld;
   gboolean show_all;
@@ -748,11 +752,9 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
    * The main register window itself                                *
   \******************************************************************/
 
-  ld->reg = gnc_split_register_new (reg_type, style, FALSE, templateMode);
+  ld->reg = gnc_split_register_new (reg_type, style, FALSE, is_template);
 
   xaccSRSetData (ld->reg, ld, xaccLedgerDisplayParent);
-
-  ld->reg->template = templateMode;
 
   splits = xaccQueryGetSplits (ld->query);
 

@@ -70,13 +70,14 @@ xaccSRInitRegisterData (SplitRegister *reg)
   info->blank_split_guid = *xaccGUIDNULL ();
   info->pending_trans_guid = *xaccGUIDNULL ();
   info->default_account = *xaccGUIDNULL ();
+  info->template_account = *xaccGUIDNULL ();
 
   info->last_date_entered = get_today_midnight ();
 
   info->first_pass = TRUE;
   info->full_refresh = TRUE;
 
-  reg->user_data = info;
+  reg->sr_info = info;
 }
 
 SRInfo *
@@ -85,10 +86,10 @@ xaccSRGetInfo (SplitRegister *reg)
   if (!reg)
     return NULL;
 
-  if (reg->user_data == NULL)
+  if (reg->sr_info == NULL)
     xaccSRInitRegisterData (reg);
 
-  return reg->user_data;
+  return reg->sr_info;
 }
 
 gncUIWidget
@@ -126,6 +127,17 @@ sr_get_default_account (SplitRegister *reg)
   SRInfo *info = xaccSRGetInfo (reg);
 
   return xaccAccountLookup (&info->default_account);
+}
+
+void
+gnc_split_register_set_template_account (SplitRegister *reg,
+                                         Account *template_account)
+{
+  SRInfo *info = xaccSRGetInfo (reg);
+
+  g_return_if_fail (reg != NULL);
+
+  info->template_account = *xaccAccountGetGUID (template_account);
 }
 
 Transaction *

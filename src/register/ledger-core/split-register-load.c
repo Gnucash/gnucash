@@ -504,8 +504,6 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   /* enable callback for cursor user-driven moves */
   gnc_table_control_allow_move (table->control, TRUE);
 
-  reg->destroy = LedgerDestroy;
-
   xaccSRLoadXferCells (reg, default_account);
 }
 

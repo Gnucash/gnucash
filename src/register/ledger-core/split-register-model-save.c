@@ -320,14 +320,14 @@ gnc_split_register_save_template_cells (gpointer save_data,
   trans = sd->trans;
   split = sd->split;
 
-  template_acc = reg->templateAcct;
+  template_acc = xaccAccountLookup (&info->template_account);
 
-  if ( gnc_table_layout_get_cell_changed (reg->table->layout,
-                                          DATE_CELL, TRUE) ||
-       gnc_table_layout_get_cell_changed (reg->table->layout,
-                                          NUM_CELL, TRUE)  ||
-       gnc_table_layout_get_cell_changed (reg->table->layout,
-                                          RECN_CELL, TRUE) )
+  if (gnc_table_layout_get_cell_changed (reg->table->layout,
+                                         DATE_CELL, TRUE) ||
+      gnc_table_layout_get_cell_changed (reg->table->layout,
+                                         NUM_CELL, TRUE)  ||
+      gnc_table_layout_get_cell_changed (reg->table->layout,
+                                         RECN_CELL, TRUE))
   {
     PERR( "unexpected changed fields in a template register\n" );
   }
@@ -335,8 +335,7 @@ gnc_split_register_save_template_cells (gpointer save_data,
   /* We'll be using the Split's KVP frame a lot */
   kvpf = xaccSplitGetSlots (split);
 
-  if ( gnc_table_layout_get_cell_changed (reg->table->layout,
-                                          XFRM_CELL, TRUE) )
+  if (gnc_table_layout_get_cell_changed (reg->table->layout, XFRM_CELL, TRUE))
   {
     Account           *acct;
     const GUID        *acctGUID;
@@ -351,7 +350,7 @@ gnc_split_register_save_template_cells (gpointer save_data,
 
     acctGUID = xaccAccountGetGUID (acct);
     kvp_frame_set_slot (kvpf, "sched-xaction/xfrm",
-                        kvp_value_new_guid(acctGUID));
+                        kvp_value_new_guid (acctGUID));
     kvpf = xaccSplitGetSlots (split);
 
     cell = gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL);
@@ -370,10 +369,10 @@ gnc_split_register_save_template_cells (gpointer save_data,
     gnc_basic_cell_set_changed (cell, FALSE);
   }
 
-  if ( gnc_table_layout_get_cell_changed (reg->table->layout,
-                                          FCRED_CELL, TRUE) ||
-       gnc_table_layout_get_cell_changed (reg->table->layout,
-                                          FDEBT_CELL, TRUE) )
+  if (gnc_table_layout_get_cell_changed (reg->table->layout,
+                                         FCRED_CELL, TRUE) ||
+      gnc_table_layout_get_cell_changed (reg->table->layout,
+                                         FDEBT_CELL, TRUE))
   {
     const char *value;
     char *amountStr = "x + y/42";
@@ -381,17 +380,17 @@ gnc_split_register_save_template_cells (gpointer save_data,
     gnc_numeric credit;
     gnc_numeric debit;
 
-    DEBUG( "kvp_frame before: %s\n", kvp_frame_to_string( kvpf ) );
+    DEBUG ("kvp_frame before: %s\n", kvp_frame_to_string (kvpf));
 
     /* amountStr = gnc_numeric_to_string( new_amount ); */
 
     value = gnc_table_layout_get_cell_value (reg->table->layout, FCRED_CELL);
-    kvp_frame_set_slot( kvpf, "sched-xaction/credit_formula",
-                        kvp_value_new_string( value ) );
+    kvp_frame_set_slot (kvpf, "sched-xaction/credit_formula",
+                        kvp_value_new_string (value));
 
     value = gnc_table_layout_get_cell_value (reg->table->layout, FDEBT_CELL);
-    kvp_frame_set_slot( kvpf, "sched-xaction/debit_formula",
-                        kvp_value_new_string( value ) );
+    kvp_frame_set_slot (kvpf, "sched-xaction/debit_formula",
+                        kvp_value_new_string (value));
 
     DEBUG( "kvp_frame  after: %s\n", kvp_frame_to_string( kvpf ) );
 
@@ -399,22 +398,22 @@ gnc_split_register_save_template_cells (gpointer save_data,
     xaccSplitSetValue (split, gnc_numeric_create(0, 1) );
   }
 
-  if ( gnc_table_layout_get_cell_changed (reg->table->layout,
-                                          SHRS_CELL, TRUE) )
+  if (gnc_table_layout_get_cell_changed (reg->table->layout,
+                                         SHRS_CELL, TRUE))
   {
     char *sharesStr = "(x + y)/42";
 
     /* FIXME: shares cells are numeric by definition. */
-    DEBUG( "kvp_frame before: %s\n", kvp_frame_to_string( kvpf ) );
+    DEBUG ("kvp_frame before: %s\n", kvp_frame_to_string (kvpf));
 
     /* sharesStr = gnc_numeric_to_string( sharesStr ); */
-    kvp_frame_set_slot( kvpf, "sched-xaction/shares",
-                        kvp_value_new_string( sharesStr ) );
-    DEBUG( "kvp_frame  after: %s\n", kvp_frame_to_string( kvpf ) );
+    kvp_frame_set_slot (kvpf, "sched-xaction/shares",
+                        kvp_value_new_string (sharesStr));
+    DEBUG ("kvp_frame  after: %s\n", kvp_frame_to_string (kvpf));
     /* set the shares to an innocuous value */
     xaccSplitSetSharePriceAndAmount (split,
                                      gnc_numeric_create(0, 1),
-                                     gnc_numeric_create(0, 1) );
+                                     gnc_numeric_create(0, 1));
 
     cell = gnc_table_layout_get_cell (reg->table->layout, SHRS_CELL);
     gnc_basic_cell_set_changed (cell, FALSE);

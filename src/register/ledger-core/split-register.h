@@ -122,8 +122,7 @@ typedef struct split_register_colors
 
 
 typedef struct split_register SplitRegister;
-
-typedef void (*SplitRegisterDestroyCB) (SplitRegister *reg);
+typedef struct sr_info SRInfo;
 
 struct split_register
 {
@@ -134,33 +133,10 @@ struct split_register
   SplitRegisterStyle style;
 
   gboolean use_double_line;
+  gboolean is_template;
 
-  /* some private data; outsiders should not access this */
-
-  /**
-   * A flag indicating a "template" register.
-   **/
-  gboolean	template; /* FIXME: this should not be here! */
-
-  /**
-   * The template account which the transactions in a template
-   * splitregister will belong to.
-   **/
-  Account	*templateAcct; /* FIXME: this should not be here! */
-
-  /* user_data allows users of this object to hang
-   * private data onto it */
-  gpointer user_data;
-
-  /* The destroy callback gives user's a chance 
-   * to free up any associated user_hook data */
-  SplitRegisterDestroyCB destroy;
-
-  /* configured strings for debit/credit headers */
-  char *debit_str;
-  char *credit_str;
-  char *tdebit_str;
-  char *tcredit_str;
+  /* private data; outsiders should not access this */
+  SRInfo * sr_info;
 };
 
 /* Callback function type */
@@ -174,7 +150,7 @@ typedef void (*SRSetHelpCallback) (gpointer user_data, const char *help_str);
 SplitRegister * gnc_split_register_new (SplitRegisterType type,
                                         SplitRegisterStyle style,
                                         gboolean use_double_line,
-                                        gboolean templateMode);
+                                        gboolean is_template);
 
 /* Configure the split register. */
 void gnc_split_register_config (SplitRegister *reg,
@@ -184,6 +160,10 @@ void gnc_split_register_config (SplitRegister *reg,
 
 /* Destroy the split register. */
 void gnc_split_register_destroy (SplitRegister *reg);
+
+/* Set the template account used by template registers */
+void gnc_split_register_set_template_account (SplitRegister *reg,
+                                              Account *template_account);
 
 /* Returns the class of the current cursor */
 CursorClass gnc_split_register_get_current_cursor_class (SplitRegister *reg);
@@ -337,14 +317,8 @@ CellIOFlags  xaccSRTemplateGetIOFlagsHandler (VirtualLocation virt_loc,
 gboolean     xaccSRTemplateConfirmHandler (VirtualLocation virt_loc,
 					   gpointer user_data);
 
-/*
- * jsled-added 2001.05.19 for export to dialog-nextrun.c [which will
- * change its name at some point]
- */
 void gnc_copy_trans_onto_trans(Transaction *from, Transaction *to,
 			       gboolean use_cut_semantics,
 			       gboolean do_commit);
 
-
 #endif
-

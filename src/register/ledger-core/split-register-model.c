@@ -217,23 +217,24 @@ gnc_split_register_get_tcredit_label (VirtualLocation virt_loc,
                                       gpointer user_data)
 {
   SplitRegister *reg = user_data;
+  SRInfo *info = xaccSRGetInfo (reg);
 
-  if (reg->tcredit_str)
-    return reg->tcredit_str;
+  if (info->tcredit_str)
+    return info->tcredit_str;
 
   {
     const char *string = xaccSRGetCreditString (reg);
 
     if (string)
-      reg->tcredit_str = g_strdup_printf (_("Tot %s"), string);
+      info->tcredit_str = g_strdup_printf (_("Tot %s"), string);
   }
 
-  if (reg->tcredit_str)
-    return reg->tcredit_str;
+  if (info->tcredit_str)
+    return info->tcredit_str;
 
-  reg->tcredit_str = g_strdup (_("Tot Credit"));
+  info->tcredit_str = g_strdup (_("Tot Credit"));
 
-  return reg->tcredit_str;
+  return info->tcredit_str;
 }
 
 static const char *
@@ -241,22 +242,23 @@ gnc_split_register_get_tdebit_label (VirtualLocation virt_loc,
                                      gpointer user_data)
 {
   SplitRegister *reg = user_data;
+  SRInfo *info = xaccSRGetInfo (reg);
 
-  if (reg->tdebit_str)
-    return reg->tdebit_str;
+  if (info->tdebit_str)
+    return info->tdebit_str;
 
   {
     const char *string = xaccSRGetDebitString (reg);
     if (string)
-      reg->tdebit_str = g_strdup_printf (_("Tot %s"), string);
+      info->tdebit_str = g_strdup_printf (_("Tot %s"), string);
   }
 
-  if (reg->tdebit_str)
-    return reg->tdebit_str;
+  if (info->tdebit_str)
+    return info->tdebit_str;
 
-  reg->tdebit_str = g_strdup (_("Tot Debit"));
+  info->tdebit_str = g_strdup (_("Tot Debit"));
 
-  return reg->tdebit_str;
+  return info->tdebit_str;
 }
 
 static const char *

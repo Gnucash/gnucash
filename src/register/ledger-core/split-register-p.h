@@ -32,8 +32,7 @@
 #define STOCK_SPLIT_STR _("-- Stock Split --")
 
 
-typedef struct _SRInfo SRInfo;
-struct _SRInfo
+struct sr_info
 {
   /* The blank split at the bottom of the register */
   GUID blank_split_guid;
@@ -98,6 +97,18 @@ struct _SRInfo
 
   /* hook to get parent widget */
   SRGetParentCallback get_parent;
+
+  /* flag indicating a template register */
+  gboolean template;
+
+  /* The template account which template transaction should below to */
+  GUID template_account;
+
+  /* configured strings for debit/credit headers */
+  char *debit_str;
+  char *credit_str;
+  char *tdebit_str;
+  char *tcredit_str;
 };
 
 
@@ -141,8 +152,6 @@ Account * gnc_split_register_get_account (SplitRegister *reg,
                                           const char *cell_name);
 
 gboolean gnc_split_register_recn_cell_confirm (char old_flag, gpointer data);
-
-void LedgerDestroy (SplitRegister *reg);
 
 CursorClass gnc_split_register_cursor_name_to_class (const char *cursor_name);
 

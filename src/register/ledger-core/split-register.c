@@ -153,29 +153,6 @@ static gboolean sr_split_auto_calc (SplitRegister *reg, Split *split);
 
 /** implementations *******************************************************/
 
-static void
-xaccSRDestroyRegisterData (SplitRegister *reg)
-{
-  if (reg == NULL)
-    return;
-
-  g_free (reg->user_data);
-
-  reg->user_data = NULL;
-}
-
-void
-xaccSRSetData (SplitRegister *reg, void *user_data,
-               SRGetParentCallback get_parent)
-{
-  SRInfo *info = xaccSRGetInfo (reg);
-
-  g_return_if_fail (reg != NULL);
-
-  info->user_data = user_data;
-  info->get_parent = get_parent;
-}
-
 static int
 gnc_trans_split_index (Transaction *trans, Split *split)
 {
@@ -341,53 +318,6 @@ xaccSRCurrentTransExpanded (SplitRegister *reg)
     return FALSE;
 
   return info->trans_expanded;
-}
-
-void
-LedgerDestroy (SplitRegister *reg)
-{
-   SRInfo *info = xaccSRGetInfo(reg);
-   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
-   Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
-   Transaction *trans;
-
-   gnc_suspend_gui_refresh ();
-
-   /* be sure to destroy the "blank split" */
-   if (blank_split != NULL)
-   {
-      /* split destroy will automatically remove it
-       * from its parent account */
-      trans = xaccSplitGetParent (blank_split);
-
-      /* Make sure we don't commit this below */
-      if (trans == pending_trans)
-      {
-        info->pending_trans_guid = *xaccGUIDNULL ();
-        pending_trans = NULL;
-      }
-
-      xaccTransBeginEdit (trans);
-      xaccTransDestroy (trans);
-      xaccTransCommitEdit (trans);
-
-      info->blank_split_guid = *xaccGUIDNULL ();
-      blank_split = NULL;
-   }
-
-   /* be sure to take care of any open transactions */
-   if (pending_trans != NULL)
-   {
-      if (xaccTransIsOpen (pending_trans))
-        xaccTransCommitEdit (pending_trans);
-
-      info->pending_trans_guid = *xaccGUIDNULL ();
-      pending_trans = NULL;
-   }
-
-   xaccSRDestroyRegisterData (reg);
-
-   gnc_resume_gui_refresh ();
 }
 
 Transaction *
@@ -1858,40 +1788,44 @@ sr_type_to_account_type(SplitRegisterType sr_type)
 const char *
 xaccSRGetDebitString (SplitRegister *reg)
 {
+  SRInfo *info = xaccSRGetInfo (reg);
+
   if (!reg)
     return NULL;
 
-  if (reg->debit_str)
-    return reg->debit_str;
+  if (info->debit_str)
+    return info->debit_str;
 
-  reg->debit_str = gnc_get_debit_string (sr_type_to_account_type (reg->type));
+  info->debit_str = gnc_get_debit_string (sr_type_to_account_type (reg->type));
 
-  if (reg->debit_str)
-    return reg->debit_str;
+  if (info->debit_str)
+    return info->debit_str;
 
-  reg->debit_str = g_strdup (_("Debit"));
+  info->debit_str = g_strdup (_("Debit"));
 
-  return reg->debit_str;
+  return info->debit_str;
 }
 
 const char *
 xaccSRGetCreditString (SplitRegister *reg)
 {
+  SRInfo *info = xaccSRGetInfo (reg);
+
   if (!reg)
     return NULL;
 
-  if (reg->credit_str)
-    return reg->credit_str;
+  if (info->credit_str)
+    return info->credit_str;
 
-  reg->credit_str =
+  info->credit_str =
     gnc_get_credit_string (sr_type_to_account_type (reg->type));
 
-  if (reg->credit_str)
-    return reg->credit_str;
+  if (info->credit_str)
+    return info->credit_str;
 
-  reg->credit_str = g_strdup (_("Credit"));
+  info->credit_str = g_strdup (_("Credit"));
 
-  return reg->credit_str;
+  return info->credit_str;
 }
 
 gboolean
@@ -2159,19 +2093,18 @@ gnc_split_register_init (SplitRegister *reg,
                          SplitRegisterType type,
                          SplitRegisterStyle style,
                          gboolean use_double_line,
-                         gboolean templateMode)
+                         gboolean is_template)
 {
   TableLayout *layout;
   TableModel *model;
   TableControl *control;
 
-  reg->user_data = NULL;
-  reg->destroy = NULL;
+  reg->sr_info = NULL;
 
   reg->type = type;
   reg->style = style;
   reg->use_double_line = use_double_line;
-  reg->template = templateMode;
+  reg->is_template = is_template;
 
   layout = gnc_split_register_layout_new (reg);
 
@@ -2217,7 +2150,7 @@ SplitRegister *
 gnc_split_register_new (SplitRegisterType type,
                         SplitRegisterStyle style,
                         gboolean use_double_line,
-                        gboolean templateMode)
+                        gboolean is_template)
 {
   SplitRegister * reg;
 
@@ -2230,7 +2163,7 @@ gnc_split_register_new (SplitRegisterType type,
                            type,
                            style,
                            use_double_line,
-                           templateMode);
+                           is_template);
 
   return reg;
 }
@@ -2254,6 +2187,92 @@ gnc_split_register_config (SplitRegister *reg,
   gnc_table_realize_gui (reg->table);
 }
 
+static void
+gnc_split_register_destroy_info (SplitRegister *reg)
+{
+  SRInfo *info;
+
+  if (reg == NULL)
+    return;
+
+  info = reg->sr_info;
+  if (!info)
+    return;
+
+  g_free (info->debit_str);
+  g_free (info->tdebit_str);
+  g_free (info->credit_str);
+  g_free (info->tcredit_str);
+
+  info->debit_str = NULL;
+  info->tdebit_str = NULL;
+  info->credit_str = NULL;
+  info->tcredit_str = NULL;
+
+  g_free (reg->sr_info);
+
+  reg->sr_info = NULL;
+}
+
+void
+xaccSRSetData (SplitRegister *reg, void *user_data,
+               SRGetParentCallback get_parent)
+{
+  SRInfo *info = xaccSRGetInfo (reg);
+
+  g_return_if_fail (reg != NULL);
+
+  info->user_data = user_data;
+  info->get_parent = get_parent;
+}
+
+static void
+gnc_split_register_cleanup (SplitRegister *reg)
+{
+   SRInfo *info = xaccSRGetInfo(reg);
+   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
+   Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
+   Transaction *trans;
+
+   gnc_suspend_gui_refresh ();
+
+   /* be sure to destroy the "blank split" */
+   if (blank_split != NULL)
+   {
+      /* split destroy will automatically remove it
+       * from its parent account */
+      trans = xaccSplitGetParent (blank_split);
+
+      /* Make sure we don't commit this below */
+      if (trans == pending_trans)
+      {
+        info->pending_trans_guid = *xaccGUIDNULL ();
+        pending_trans = NULL;
+      }
+
+      xaccTransBeginEdit (trans);
+      xaccTransDestroy (trans);
+      xaccTransCommitEdit (trans);
+
+      info->blank_split_guid = *xaccGUIDNULL ();
+      blank_split = NULL;
+   }
+
+   /* be sure to take care of any open transactions */
+   if (pending_trans != NULL)
+   {
+      if (xaccTransIsOpen (pending_trans))
+        xaccTransCommitEdit (pending_trans);
+
+      info->pending_trans_guid = *xaccGUIDNULL ();
+      pending_trans = NULL;
+   }
+
+   gnc_split_register_destroy_info (reg);
+
+   gnc_resume_gui_refresh ();
+}
+
 void 
 gnc_split_register_destroy (SplitRegister *reg)
 {
@@ -2262,25 +2281,10 @@ gnc_split_register_destroy (SplitRegister *reg)
   if (!reg)
     return;
 
-  /* give the user a chance to clean up */
-  if (reg->destroy)
-    (reg->destroy) (reg);
-
-  reg->destroy = NULL;
-  reg->user_data = NULL;
+  gnc_split_register_cleanup (reg);
 
   gnc_table_destroy (reg->table);
   reg->table = NULL;
-
-  g_free (reg->debit_str);
-  g_free (reg->tdebit_str);
-  g_free (reg->credit_str);
-  g_free (reg->tcredit_str);
-
-  reg->debit_str = NULL;
-  reg->tdebit_str = NULL;
-  reg->credit_str = NULL;
-  reg->tcredit_str = NULL;
 
   /* free the memory itself */
   g_free (reg);

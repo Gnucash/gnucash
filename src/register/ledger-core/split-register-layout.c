@@ -100,7 +100,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
         gnc_table_layout_set_cell (layout, curs, DESC_CELL,  0, 2);
         gnc_table_layout_set_cell (layout, curs, MXFRM_CELL, 0, 3);
         gnc_table_layout_set_cell (layout, curs, RECN_CELL,  0, 4);
-        if (reg->template)
+        if (reg->is_template)
         {
           gnc_table_layout_set_cell (layout, curs, FDEBT_CELL, 0, 5);
           gnc_table_layout_set_cell (layout, curs, FCRED_CELL, 0, 6);
@@ -146,7 +146,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
         gnc_table_layout_set_cell (layout, curs, MEMO_CELL, 0, 2);
         gnc_table_layout_set_cell (layout, curs, XFRM_CELL, 0, 3);
         gnc_table_layout_set_cell (layout, curs, RECN_CELL, 0, 4);
-        if (reg->template)
+        if (reg->is_template)
         {
           gnc_table_layout_set_cell (layout, curs, FDEBT_CELL, 0, 5);
           gnc_table_layout_set_cell (layout, curs, FCRED_CELL, 0, 6);
@@ -173,7 +173,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
         gnc_table_layout_set_cell (layout, curs, DESC_CELL,  0, 2);
         gnc_table_layout_set_cell (layout, curs, MXFRM_CELL, 0, 3);
         gnc_table_layout_set_cell (layout, curs, RECN_CELL,  0, 4);
-        if (reg->template)
+        if (reg->is_template)
         {
           gnc_table_layout_set_cell (layout, curs, FDEBT_CELL,  0, 5);
           gnc_table_layout_set_cell (layout, curs, FCRED_CELL,  0, 6);
@@ -217,7 +217,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
         gnc_table_layout_set_cell (layout, curs, MEMO_CELL, 0, 2);
         gnc_table_layout_set_cell (layout, curs, XFRM_CELL, 0, 3);
         gnc_table_layout_set_cell (layout, curs, RECN_CELL, 0, 4);
-        if (reg->template)
+        if (reg->is_template)
         {
           gnc_table_layout_set_cell (layout, curs, FDEBT_CELL,  0, 5);
           gnc_table_layout_set_cell (layout, curs, FCRED_CELL,  0, 6);
