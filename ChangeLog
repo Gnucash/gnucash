@@ -1,3 +1,6 @@
+2002-11-02  Derek Atkins  <derek@ihtfp.com>
+	* gnc-engine-util.[ch]: add MOD_BUSINESS for logging (eww)
+
 2002-11-01  Chris Lyttle  <chris@wilddev.net>
 
 	* rpm/gnucash.spec.in: updated to work on rh8
