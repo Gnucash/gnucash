@@ -954,26 +954,26 @@ gnc_table_realize_gui (Table * table)
 void
 gnc_table_wrap_verify_cursor_position (Table *table, VirtualLocation virt_loc)
 {
-   VirtualLocation save_loc;
-   gboolean moved_cursor;
+  VirtualLocation save_loc;
+  gboolean moved_cursor;
 
-   if (!table) return;
+  if (!table) return;
 
-   ENTER("(%d %d)", virt_loc.vcell_loc.virt_row, virt_loc.vcell_loc.virt_col);
+  ENTER("(%d %d)", virt_loc.vcell_loc.virt_row, virt_loc.vcell_loc.virt_col);
 
-   save_loc = table->current_cursor_loc;
+  save_loc = table->current_cursor_loc;
 
-   /* VerifyCursor will do all sorts of gui-independent machinations */
-   moved_cursor = gnc_table_verify_cursor_position (table, virt_loc);
+  /* VerifyCursor will do all sorts of gui-independent machinations */
+  moved_cursor = gnc_table_verify_cursor_position (table, virt_loc);
 
-   if (moved_cursor)
-   {
-      /* make sure *both* the old and the new cursor rows get redrawn */
-      gnc_table_refresh_current_cursor_gui (table, TRUE);
-      gnc_table_refresh_cursor_gui (table, save_loc.vcell_loc, FALSE);
-   }
+  if (moved_cursor)
+  {
+    /* make sure *both* the old and the new cursor rows get redrawn */
+    gnc_table_refresh_current_cursor_gui (table, TRUE);
+    gnc_table_refresh_cursor_gui (table, save_loc.vcell_loc, FALSE);
+  }
 
-   LEAVE ("\n");
+  LEAVE ("\n");
 }
 
 void        
@@ -1301,6 +1301,10 @@ gnc_table_direct_update (Table *table,
   return result;
 }
 
+static gboolean gnc_table_find_valid_cell_horiz (Table *table,
+                                                 VirtualLocation *virt_loc,
+                                                 gboolean exact_cell);
+
 static gboolean
 gnc_table_find_valid_row_vert (Table *table, VirtualLocation *virt_loc)
 {
@@ -1330,12 +1334,24 @@ gnc_table_find_valid_row_vert (Table *table, VirtualLocation *virt_loc)
     vloc.vcell_loc.virt_row = top;
     vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
     if (vcell && vcell->cellblock && vcell->visible)
-      break;
+    {
+      vloc.phys_row_offset = 0;
+      vloc.phys_col_offset = 0;
+
+      if (gnc_table_find_valid_cell_horiz (table, &vloc, FALSE))
+        break;
+    }
 
     vloc.vcell_loc.virt_row = bottom;
     vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
     if (vcell && vcell->cellblock && vcell->visible)
-      break;
+    {
+      vloc.phys_row_offset = 0;
+      vloc.phys_col_offset = 0;
+
+      if (gnc_table_find_valid_cell_horiz (table, &vloc, FALSE))
+        break;
+    }
 
     top--;
     bottom++;
@@ -1349,15 +1365,15 @@ gnc_table_find_valid_row_vert (Table *table, VirtualLocation *virt_loc)
   if (vloc.phys_row_offset >= vcell->cellblock->num_rows)
     vloc.phys_row_offset = vcell->cellblock->num_rows - 1;
 
-  *virt_loc = vloc;
+  virt_loc->vcell_loc = vloc.vcell_loc;
 
   return TRUE;
 }
 
 static gboolean
-gnc_table_find_valid_cell_horiz(Table *table,
-                                VirtualLocation *virt_loc,
-                                gboolean exact_cell)
+gnc_table_find_valid_cell_horiz (Table *table,
+                                 VirtualLocation *virt_loc,
+                                 gboolean exact_cell)
 {
   VirtualLocation vloc;
   VirtualCell *vcell;
@@ -1373,7 +1389,7 @@ gnc_table_find_valid_cell_horiz(Table *table,
   if (gnc_table_virtual_cell_out_of_bounds (table, virt_loc->vcell_loc))
     return FALSE;
 
-  if (gnc_table_virtual_loc_valid(table, *virt_loc, exact_cell))
+  if (gnc_table_virtual_loc_valid (table, *virt_loc, exact_cell))
     return TRUE;
 
   vloc = *virt_loc;

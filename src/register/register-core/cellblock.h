@@ -66,7 +66,8 @@ void        gnc_cellblock_set_cell (CellBlock *cellblock,
 BasicCell * gnc_cellblock_get_cell (CellBlock *cellblock,
                                     int row, int col);
 
-gboolean    gnc_cellblock_changed (CellBlock *cursor,
+/* Return number of changed cells. */
+int         gnc_cellblock_changed (CellBlock *cursor,
                                    gboolean include_conditional);
 
 void        gnc_cellblock_clear_changes (CellBlock *cursor);
