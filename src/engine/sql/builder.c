@@ -19,6 +19,7 @@
 #include <glib.h>
 #include <string.h>
 
+#include "date.h"
 #include "builder.h"
 #include "gnc-engine-util.h"
 
@@ -182,10 +183,9 @@ void
 sqlBuild_Set_GUID (sqlBuilder *b, const char *tag, const GUID *val)
 {
   if (val) {
-     char *guid;
-     guid = guid_to_string(val);
-     sqlBuild_Set_Str (b, tag, guid);
-     g_free (guid);
+     char guid_str[GUID_ENCODING_LENGTH+1];
+     guid_to_string_buff(val, guid_str);
+     sqlBuild_Set_Str (b, tag, guid_str);
   } else {
      /* if a SELECT statement is being built, then val may be null */
      sqlBuild_Set_Str (b, tag, "");
@@ -197,28 +197,8 @@ sqlBuild_Set_GUID (sqlBuilder *b, const char *tag, const GUID *val)
 void
 sqlBuild_Set_Date (sqlBuilder *b, const char *tag, Timespec ts)
 {
-  int tz_hour, tz_min;
-  char cyn;
   char buf[512];
-  time_t tmp;
-  struct tm parsed;
-  tmp = ts.tv_sec;
-  localtime_r(&tmp, &parsed);
-
-  tz_hour = timezone/3600;
-  tz_min = (timezone - 3600*tz_hour)/60;
-  if (0>tz_min) { tz_min +=60; tz_hour --; }
-
-  /* we also have to print the sign by hand, to work around a bug 
-   * in the glibc 2.1.3 printf (where %+02d fails to zero-pad)
-   */
-  cyn = '+';
-  if (0>tz_hour) { cyn = '-'; tz_hour = -tz_hour; }
-  
-  snprintf (buf, 512, "%4d-%02d-%02d %02d:%02d:%02d.%06ld %c%02d%02d",
-       parsed.tm_year+1900, parsed.tm_mon+1, parsed.tm_mday, 
-       parsed.tm_hour, parsed.tm_min, parsed.tm_sec,
-       ts.tv_nsec/1000, cyn, tz_hour, tz_min);
+  gnc_timespec_to_iso8601_buff (ts, buf);
   sqlBuild_Set_Str (b, tag, buf);
 }
 
@@ -306,10 +286,9 @@ sqlBuild_Where_Str (sqlBuilder *b, const char *tag, const char *val)
 void
 sqlBuild_Where_GUID (sqlBuilder *b, const char *tag, const GUID *val)
 {
-  char *guid;
-  guid = guid_to_string(val);
-  sqlBuild_Where_Str (b, tag, guid);
-  g_free (guid);
+  char guid_str[GUID_ENCODING_LENGTH+1];
+  guid_to_string_buff(val, guid_str);
+  sqlBuild_Where_Str (b, tag, guid_str);
 }
 
 /* ================================================ */

@@ -1,17 +1,35 @@
 
--- these tables roughly mirror the c structs in 
--- TransactionP.h,  AccountP.h
--- these tables are hand-built, but maybe they should be 
--- autobuilt with the m4 macros ...
+-- FILE:
+-- gnc-init.sql
+--
+-- FUNCTION:
+-- Define the tables needed to initialize a new GnuCash database
+--
+-- These tables roughly mirror the c structs in 
+-- TransactionP.h,  AccountP.h, gnc-commodity.c
+-- Please refer to the C files to get the right level of documentation.
+--
+-- These tables are specifically designed for the 
+-- postgres database server, but are hopefull relatively portable.
+--
+-- These tables are hand-built, but maybe they should be 
+-- auto-built with the m4 macros ...
+--
+-- HISTORY:
+-- Copyright (C) 2000, 2001 Linas Vepstas
+--
 
 -- Commodity structure
+-- Store currency, security types.  Namespace includes
+-- ISO4217 for currencies, NASDAQ, AMEX, NYSE, EUREX for 
+-- stocks.   See the C documentation for details.
 
 DROP TABLE gncCommodity;
 CREATE TABLE gncCommodity (
         commodity	TEXT PRIMARY KEY,
 	fullname	TEXT,
-	namespace	TEXT,
-	mnemonic	TEXT,
+	namespace	TEXT NOT NULL,
+	mnemonic	TEXT NOT NULL,
 	code		TEXT,
 	fraction	INT DEFAULT '100'
 );
@@ -20,20 +38,18 @@ CREATE TABLE gncCommodity (
 -- guid. There is no supports for Groups in this schema.
 -- (there seems to be no strong need to have groups in the DB.)
 --
--- hack alert -- add the kvp frames, the currency tables,
-              -- the current balances, etc
+-- hack alert -- add kvp frames, 
 
 DROP TABLE gncAccount;
 CREATE TABLE gncAccount (
 	accountGuid	CHAR(32) PRIMARY KEY,
-	parentGuid	CHAR(32),
---	childrenGuid	CHAR(32),
-	accountName 	TEXT DEFAULT 'xoxo',
+	parentGuid	CHAR(32) NOT NULL,
+	accountName 	TEXT NOT NULL CHECK (accountName <> ''),
 	accountCode 	TEXT,
 	description 	TEXT,
 	notes	 	TEXT,
-	type		TEXT,
-	commodity	TEXT
+	type		TEXT NOT NULL,
+	commodity	TEXT NOT NULL CHECK (commodity <>'')
 );
 
 -- CREATE INDEX gncAccount_pg_idx ON gncAccount (parentGuid);
@@ -48,54 +64,71 @@ CREATE TABLE gncTransaction (
 	date_posted	 	DATETIME,
 	num			TEXT,
 	description		TEXT,
-        currency                TEXT
+        currency                TEXT NOT NULL CHECK (currency <> '')
 );
 
+CREATE INDEX gncTransaction_posted_idx ON gncTransaction (date_posted);
+
 -- a gncEntry is what we call 'Split' elsewhere in the engine
+-- Here, we call it a 'journal entry'
 
 DROP TABLE gncEntry;
 CREATE TABLE gncEntry (
 	entryGuid		CHAR(32) PRIMARY KEY,
-	accountGuid		CHAR(32),
-	transGuid		CHAR(32),
+	accountGuid		CHAR(32) NOT NULL,
+	transGuid		CHAR(32) NOT NULL,
 	memo			TEXT,
 	action			TEXT,
 	reconciled		CHAR DEFAULT 'n',
 	date_reconciled 	DATETIME,
 	amountNum		INT8 DEFAULT '0',
-	amountDenom		INT8 DEFAULT '100',
+	amountDenom		INT4 DEFAULT '100',
 	valueNum		INT8 DEFAULT '0',
-	valueDenom		INT8 DEFAULT '100'
+	valueDenom		INT4 DEFAULT '100'
 );
 
 CREATE INDEX gncEntry_acc_idx ON gncEntry (accountGuid);
 CREATE INDEX gncEntry_trn_idx ON gncEntry (transGuid);
 
--- populate with some bogus data
--- INSERT INTO gncAccount (accountGuid, parentGuid, accountName, type, description) VALUES
---     ('9101752f77d6615dcdc0fffe24f0de24',
---      '00000000000000000000000000000000',
---      'Swipe Trading Account', 
---      'STOCK',
---      'Swipe Brokers Margin Account');
--- INSERT INTO gncAccount (accountGuid, parentGuid, accountName, type, description) VALUES
---     ('0d7c1819693c85c16d5556b37f6caf9d',
---      '00000000000000000000000000000000',
---      'Stock Dividends &amp; Distributions',
---      'BANK',
---      'Stock Dividends &amp; Distributions');
--- 
--- INSERT INTO gncTransaction (transGuid, date_entered, 
---                 date_posted, num, description) VALUES
---     ('2ebc806e72c17bdc3c2c4e964b82eff8',
---      '1998-07-01 11:00:00.345678 -0500',
---      '1998-07-02 11:00:00.678945 -0531',
---      '101aaa',
---      'Interest at 3.5%');
--- 
--- INSERT INTO gncEntry (entryGuid, memo, reconciled, amountNum,valueNum) VALUES
---     ('d56a1146e414a30d6f2e251af2075f71',
---      'this is a split memo',
---      'Y',
---      700000,
---      700000);
+-- The checkpoint table provides balance information
+-- The balance is provided in the indicated currency; 
+-- this allows the potential of maintaining balance information
+-- in multiple currencies.  
+-- (e.g. report stock account balances in shares of stock, 
+-- and in dollars)
+
+DROP TABLE gncCheckpoint;
+CREATE TABLE gncCheckpoint (
+	accountGuid		CHAR(32) NOT NULL,
+	date_xpoint	 	DATETIME NOT NULL,
+	commodity		TEXT NOT NULL CHECK (commodity <>''),
+	balance			INT8 DEFAULT '0',
+	cleared_balance		INT8 DEFAULT '0',
+	reconciled_balance	INT8 DEFAULT '0',
+
+        PRIMARY KEY (accountGuid, date_xpoint, commodity)
+);
+
+
+-- The session directory serves several purposes.  First and formost,
+-- it notes the database access type.  There are three modes:
+--  o "Single User" -- Only one user can have access to the database
+--                     at a time. 
+--  o "Multi-User Polled" -- multiple users
+--  o "Muilti-User Event Driven" 
+--  See Design.txt for more info.
+-- Note that a client can lie about its identity, sign-on time, etc.
+-- so these records aren't really sufficient for a true audit.
+
+DROP TABLE gncSession;
+CREATE TABLE gncSession (
+	sessionGuid		CHAR(32) PRIMARY KEY,
+	session_mode		CHAR(16) NOT NULL,
+	hostname		TEXT,
+	login_name		TEXT,
+	gecos			TEXT,
+	time_on			DATETIME NOT NULL,
+	time_off		DATETIME NOT NULL DEFAULT 'INFINITY'
+);
+
+

@@ -108,7 +108,6 @@ sqlQuery_build (sqlQuery*sq, Query *q)
             {
                int got_more = 0;
                GList *acct;
-               char guid_str[GUID_ENCODING_LENGTH+1];
 
                PINFO("term is PR_ACCOUNT");
 
@@ -119,9 +118,8 @@ sqlQuery_build (sqlQuery*sq, Query *q)
                   if (got_more) sq->pq = stpcpy(sq->pq, " AND ");
                   got_more = 1;
 
-                  guid_to_string_buff ((GUID*) acct->data, guid_str);
                   sq->pq = stpcpy(sq->pq, "accountguid='");
-                  sq->pq = stpcpy(sq->pq, guid_str);
+                  sq->pq = guid_to_string_buff ((GUID*) acct->data, sq->pq);
                   sq->pq = stpcpy(sq->pq, "'");
                }
                break;

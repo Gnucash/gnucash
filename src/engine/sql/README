@@ -18,7 +18,7 @@ A) run the script gnc-init.sh
 B) edit gnc-book.c and #define SQLHACK
 C) edit src/Makefile.am and add  engine/sql/libgnc_postgres.la 
    and -lpq to LDADD
-D) cd src/engine/sql; m4 table.m4 > tmp.c; make
+D) cd src/engine/sql; m4 table.m4 > autogen.c; make
 E) cd ../../..; make; make install
 
 
@@ -36,6 +36,7 @@ To Bo Done
 ----------
 -- Implement acount and transaction deletion. Deleting an account or
    transaction doesn't remove it from the database.
+   (done with split delete)
 
 -- Implement logging history in the sql server.  i.e. save the old
    copies of stuff in log tables.  Make the username part of the 
@@ -43,6 +44,9 @@ To Bo Done
 
 -- Implement gui to ask user for username/password to log onto the
    server. 
+
+-- let all attached client receive update events via sql LISTEN/NOTIFY 
+   events.
 
 -- Implement various advanced database features, such as checking the
    user's permission to view/edit account by account ... (hmmm this
@@ -72,10 +76,9 @@ To Bo Done
 -- finish implementing pgendAccountGroupSync
 
 -- store account balances in database.  This will be tricky ...
-   -- need to write stored proceedures to recalc split balances
-   -- need to modify engine and maybe gui 
+   -- split query gets hard ... 
 -- urlencode all strings (escape single-quote mark)
--- check multiuser operation
+-- review multiuser operation for correctness 
 -- allow user to enter url in gui dialog
 -- handle kvp frames
 -- implement account commit edit (actually, the check&rollback part)
@@ -89,5 +92,7 @@ To Bo Done
    them out.  But right now, this is brroken.  In particular, 
    the use of xaccGrouparkSaved screws up some status bits ...
 
+-- review & match up against docs at 
+   http://www.lupercalia.net/gnc-db/
 
 

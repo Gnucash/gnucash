@@ -5,7 +5,7 @@ changecom(`/*', `*/')
 /* data dictionary for the gnucash tables */
 /* sql table description and manipulation macros */
 
-define(`account', `gncAccount, Account,
+define(`account', `gncAccount, Account, Account,
        accountName,    , char *, xaccAccountGetName(ptr),
        accountCode,    , char *, xaccAccountGetCode(ptr),
        description,    , char *, xaccAccountGetDescription(ptr),
@@ -17,7 +17,7 @@ define(`account', `gncAccount, Account,
        ')
 
 
-define(`split', `gncEntry, Split,
+define(`split', `gncEntry, Split, Split,
        accountGUID,     , GUID *,   xaccAccountGetGUID(xaccSplitGetAccount(ptr)),
        transGUID,       , GUID *,   xaccTransGetGUID(xaccSplitGetParent(ptr)),
        memo,            , char *,   xaccSplitGetMemo(ptr),
@@ -38,7 +38,7 @@ define(`split', `gncEntry, Split,
 /* date_entered,    , Timespec, xaccTransRetDateEnteredTS(ptr), */
 /* as one might have guessed                                    */
 
-define(`transaction', `gncTransaction, Transaction,
+define(`transaction', `gncTransaction, Transaction, Transaction,
        num,            , char *,   xaccTransGetNum(ptr),
        description,    , char *,   xaccTransGetDescription(ptr),
        currency,       , char *,   gnc_commodity_get_unique_name(xaccTransGetCurrency(ptr)),
@@ -48,7 +48,7 @@ define(`transaction', `gncTransaction, Transaction,
        ')
 
 
-define(`modity', `gncCommodity, gnc_commodity,
+define(`modity', `gncCommodity, Commodity, gnc_commodity, 
        namespace,    , char *, gnc_commodity_get_namespace(ptr),
        fullname,     , char *, gnc_commodity_get_fullname(ptr),
        mnemonic,     , char *, gnc_commodity_get_mnemonic(ptr),
@@ -58,12 +58,33 @@ define(`modity', `gncCommodity, gnc_commodity,
        ')
        
 
+define(`checkpoint', `gncCheckpoint, Checkpoint, Checkpoint,
+       balance,             , int64,    ptr->balance,
+       cleared_balance,     , int64,    ptr->cleared_balance,
+       reconciled_balance,  , int64,    ptr->reconciled_balance,
+       date_xpoint,         , Timespec, ptr->datetime,
+       commodity,           , char *,   ptr->commodity,
+       accountGuid,         , GUID *,   ptr->account_guid,
+       ')
+       
+
+define(`session', `gncSession, Session, void,
+       session_mode,        , char *, pgendSessionGetMode(be),
+       hostname,            , char *, pgendGetHostname(be),
+       login_name,          , char *, pgendGetUsername(be),
+       gecos,               , char *, pgendGetUserGecos(be),
+       time_on,             , now,    "NOW",
+       time_off,            , now,    "INFINITY",
+       sessionGUID,      KEY, GUID *, be->sessionGuid,
+       ')
+       
 /* ------------------------------------------------------- */
 /* symbolic names for the table accessors */
 define(`tablename', $1)
-define(`xacc_type', $2)
+define(`func_name', $2)
+define(`xacc_type', $3)
 
-define(`firstrec', `shift(shift($@))')
+define(`firstrec', `shift(shift(shift($@)))')
 define(`nextrec', `shift(shift(shift(shift($@))))')
 
 /* -------- */
@@ -123,7 +144,7 @@ define(`store_one_only',
  */
 
 static void 
-pgendStoreOne`'xacc_type($@)`'Only (PGBackend *be,
+pgendStoreOne`'func_name($@)`'Only (PGBackend *be,
                      xacc_type($@) *ptr,
                      sqlBuild_QType update)
 {
@@ -155,7 +176,7 @@ define(`compare_one_only',
  */
 
 static int
-pgendCompareOne`'xacc_type($@)`'Only (PGBackend *be,
+pgendCompareOne`'func_name($@)`'Only (PGBackend *be,
                      xacc_type($@) *ptr)
 {
    const char *buf;
@@ -192,14 +213,44 @@ pgendCompareOne`'xacc_type($@)`'Only (PGBackend *be,
 
 ')
 
+define(`put_one_only', 
+`
+/* ------------------------------------------------------ */
+/* This routine inserts or updates, as appropriate
+ * It does not do any traversals, it does not lock.  
+ * It just updates.
+ */
+
+static void 
+pgendPutOne`'func_name($@)`'Only (PGBackend *be,
+                     xacc_type($@) *ptr)
+{
+   int ndiffs;
+   ndiffs = pgendCompareOne`'func_name($@)`'Only (be, ptr);
+
+   /* update the record if there are differences ... */
+   if (0<ndiffs) pgendStoreOne`'func_name($@)`'Only (be, ptr, SQL_UPDATE);
+   /* insert the record if it doesnt exist */
+   if (0>ndiffs) pgendStoreOne`'func_name($@)`'Only (be, ptr, SQL_INSERT);
+}
+
+')
+
 /* ------------------------------------------------------- */
 divert
 store_one_only(account)
-store_one_only(transaction)
-store_one_only(split)
+store_one_only(checkpoint)
 store_one_only(modity)
+store_one_only(session)
+store_one_only(split)
+store_one_only(transaction)
 
 compare_one_only(account)
-compare_one_only(transaction)
-compare_one_only(split)
 compare_one_only(modity)
+compare_one_only(split)
+compare_one_only(transaction)
+
+put_one_only(account)
+put_one_only(modity)
+put_one_only(split)
+put_one_only(transaction)
