@@ -276,8 +276,16 @@
 (define gnc:report-dirty? 
   (record-accessor <report> 'dirty?))
 
-(define gnc:report-set-dirty?!
+(define gnc:report-set-dirty?-internal!
   (record-modifier <report> 'dirty?))
+
+(define (gnc:report-set-dirty?! report val)
+  (gnc:report-set-dirty?-internal! report val)
+  (let* ((template (hash-ref *gnc:_report-templates_* 
+                             (gnc:report-type report)))
+         (cb  (gnc:report-template-options-changed-cb template)))
+    (if (and cb (procedure? cb))
+        (cb report))))
 
 (define gnc:report-editor-widget 
   (record-accessor <report> 'editor-widget))

@@ -1,3 +1,8 @@
+2001-05-15  Bill Gribble  <grib@billgribble.com>
+
+	* fix report updating problem.  should reload multicolumn reports
+	correctly when "reload" is hit.
+
 2001-05-15  Rob Browning  <rlb@cs.utexas.edu>
 
 	* doc/sgml/C/Makefile.am (GNUCASH_SGML_FILES): remove entries
