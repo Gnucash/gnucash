@@ -185,7 +185,7 @@ src/engine/SchedXaction.c
 src/engine/Scrub.c
 src/engine/TransLog.c
 src/engine/Transaction.c
-src/engine/date.c
+src/engine/gnc-date.c
 src/engine/engine-helpers.c
 src/engine/glib-helpers.c
 src/engine/gnc-associate-account.c
