@@ -417,8 +417,11 @@ xaccParseQIFDate (char * str)
    time_t secs;
    struct tm dat;
    int favechar = 0;   /* Which delimiter do we have? */
+   gncBoolean add_2k = GNC_F;
 
    if (!str) return 0;  /* If the string is null, we're done. */
+
+   fprintf(stderr, "1: %s\n", str);
 
    /* First, figure out the delimiter. */
    /* Choices: "." or "-" or "/" */
@@ -432,7 +435,11 @@ xaccParseQIFDate (char * str)
 
    str = tok+sizeof(char);
    tok = strchr (str, favechar);
-   if (!tok) return 0;
+   if (!tok) {
+     tok = strchr (str, '\'');
+     if (!tok) return 0;
+     add_2k = GNC_T;
+   }
    *tok = 0x0;
    dat.tm_mday = atoi (str);
 
@@ -444,12 +451,19 @@ xaccParseQIFDate (char * str)
    }
    *tok = 0x0;
    dat.tm_year = atoi (str);
+   if (add_2k)
+     dat.tm_year += 2000;
+
+   fprintf(stderr, "2: %s\n", str);
 
    TryToFixDate(&dat);
 
    /* a quickie Y2K fix: assume two digit dates with
     * a value less than 50 are in the 21st century. */
    if (50 > dat.tm_year) dat.tm_year += 100;
+
+   /* For 4 digit dates */
+   if (dat.tm_year >= 1900) dat.tm_year -= 1900;
 
    dat.tm_sec = 0;
    dat.tm_min = 0;
@@ -498,21 +512,21 @@ static void TryToFixDate (struct tm *date)
   int st_first, st_second, st_third;
   int mon, mday, year;
   int which[5] = {0,0,0,0,0};
-  
+
   first = date->tm_mon;
   second = date->tm_mday;
   third = date->tm_year;
-  
+
   /* See what sort of date is favored by each component */
   st_first = FavorDateType(first);
   st_second = FavorDateType(second);
   st_third = FavorDateType(third);
-  
+
   /* Plunk the values down into which[] */
   which[st_first] = 1;
   which[st_second] = 2;
   which[st_third] = 3;
-  
+
   switch (which[4]) {   /* Year */
   case 1:
     year = first;
@@ -526,6 +540,7 @@ static void TryToFixDate (struct tm *date)
   default:
     return;   /* No date component looks like a year --> ABORT */
   }
+
   switch (which[2]) {   /* month */
   case 1:
     mon = first;
@@ -539,6 +554,7 @@ static void TryToFixDate (struct tm *date)
   default:
     return;   /* No date component looks like a month --> ABORT */
   }
+
   switch (which[1]) {   /* mday */
   case 1:
     mday = first;
@@ -552,11 +568,11 @@ static void TryToFixDate (struct tm *date)
   default:
     return;   /* No date component looks like a day of the month - ABORT */
   }
-  
+
   date->tm_mon = mon;
   date->tm_mday = mday;
   date->tm_year = year;
-  
+
   return;    
 }
 
