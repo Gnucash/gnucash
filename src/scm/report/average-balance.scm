@@ -423,6 +423,8 @@
                 (if (memq 'GLPlot plot-type)
                     (let ((debit-data 
                            (map (lambda (row) list-ref row 5) data))
+			  (number-data
+			   (map (lambda (row) (list-ref row 7)) data))
                           (credit-data
                            (map (lambda (row) list-ref row 6) data)))
                       ;; debit column 
@@ -448,7 +450,7 @@
                                           (list (list-ref columns 6))))
                             (set! col-colors
                                   (append col-colors (list "red")))
-                            (set all-zeros? #f)))))
+                            (set! all-zeros? #f)))))
                 
                 (if (not all-zeros?)
                     (begin
@@ -501,3 +503,4 @@
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator options-generator
  'renderer renderer)
+
