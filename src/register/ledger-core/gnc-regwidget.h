@@ -23,7 +23,7 @@
 #ifndef GNC_REGWIDGET_H
 #define GNC_REGWIDGET_H
 
-#include <g-wrap-runtime-guile.h>
+#include <libguile.h>
 #include <gtk/gtk.h>
 #include "config.h"
 

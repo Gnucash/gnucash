@@ -20,6 +20,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+#include <libguile.h>
 #include "gnc-regwidget.h"
 #include "gnc-engine-util.h"
 #include "dialog-utils.h"
@@ -179,7 +180,6 @@ gnc_regWidget_new( GNCLedgerDisplay *ld, GtkWindow *win )
 #include "config.h"
 
 #include <gnome.h>
-#include <g-wrap-runtime-guile.h>
 #include <time.h>
 
 #include "AccWindow.h"
