@@ -460,11 +460,11 @@ The password is "guest"
 
 To get a copy of the source in the experimental development tree do a
 
-  cvs -z3 -Pd :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -r HEAD gnucash
+  cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -r HEAD gnucash
 
 To get a copy of the source in the gnucash-1.4 stable production tree do a
 
-  cvs -z3 -Pd :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -r gnucash-1-4-branch gnucash
+  cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -r gnucash-1-4-branch gnucash
 
 
 ##################
