@@ -31,8 +31,14 @@
 #include "RegWindow.h"
 #include "top-level.h"
 #include "version.h"
+#include "util.h"
+#include "AccWindow.h"
 #include "MainWindow.h"
 #include "MainWindowP.h"
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_GUI;
+
 #include "util.h"
 
 /** STRUCTURES ******************************************************/

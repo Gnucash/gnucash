@@ -1,4 +1,4 @@
-/*-*-gnucash-c-*-****************************************************\
+/*******************************************************************\
  * RegWindow.c -- the register window for xacc (X-Accountant)       *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997, 1998 Linas Vepstas                           *
@@ -49,6 +49,7 @@
 #include "table-html.h"
 #include "Transaction.h"
 #include "util.h"
+#include "top-level.h"
 
 /** STRUCTS *********************************************************/
 /* The RegWindow struct contains info needed by an instance of an open 
@@ -56,6 +57,9 @@
 
 struct _RegWindow {
   xaccLedgerDisplay * ledger;   
+  DateCell *early_date_handler;
+  DateCell *late_date_handler;
+  int query_date;
 
   /* display widgets */
   GtkWidget *   dialog;
@@ -97,13 +101,13 @@ static void startAdjBCB( GtkWidget * mw, XtPointer cd, XtPointer cb );
 \********************************************************************/
 RegWindow *
 regWindowSimple(Account *acc) {
-  RegWindow *retval = (RegWindow *) 1; /* for error case later */
-  
-  xaccLedgerDisplay * ledger;
+  RegWindow *result = NULL;
+  xaccLedgerDisplay * ledger = xaccLedgerDisplaySimple(acc);
 
-  ledger = xaccLedgerDisplaySimple (acc);
-  if(retval) retval = regWindowLedger (ledger);
-  return retval;
+  if(ledger) {
+    result = regWindowLedger(ledger);
+  }
+  return result;
 }
 
 /********************************************************************\
@@ -116,12 +120,13 @@ regWindowSimple(Account *acc) {
 \********************************************************************/
 RegWindow *
 regWindowAccGroup(Account *acc) {
-  xaccLedgerDisplay * ledger; 
-  RegWindow *retval;
+  RegWindow *result = NULL;
+  xaccLedgerDisplay * ledger = xaccLedgerDisplayAccGroup(acc);  
 
-  ledger = xaccLedgerDisplayAccGroup (acc);  
-  retval = regWindowLedger (ledger);
-  return retval;
+  if(ledger) {
+    result = regWindowLedger(ledger);
+  }
+  return result;
 }
 
 
@@ -146,6 +151,77 @@ destroy (GtkWidget *widget, gpointer data) {
   closeRegWindow(widget, data);
 }
 
+static void
+ledger_change_style(RegWindow *regData, const int new_style) {
+  xaccLedgerDisplay *ld = regData->ledger;
+  SplitRegister *reg = ld->ledger;
+  int typo = reg->type;
+
+  typo &= ~REG_STYLE_MASK;
+  typo |=  new_style;
+  
+  xaccConfigSplitRegister (reg, typo );
+  ld->dirty = 1;
+  xaccLedgerDisplayRefresh (ld);
+}
+
+static void
+ledger_style_single_cb(GtkWidget *w, gpointer data) {
+  ledger_change_style((RegWindow *) data, REG_SINGLE_LINE);
+}
+static void
+ledger_style_double_cb(GtkWidget *w, gpointer data) {
+  ledger_change_style((RegWindow *) data, REG_DOUBLE_LINE);
+}
+static void
+ledger_style_multi_cb(GtkWidget *w, gpointer data) {
+  ledger_change_style((RegWindow *) data, REG_MULTI_LINE);
+}
+static void
+ledger_style_auto_single_cb(GtkWidget *w, gpointer data) {
+  ledger_change_style((RegWindow *) data, REG_SINGLE_DYNAMIC);
+}
+static void
+ledger_style_auto_double_cb(GtkWidget *w, gpointer data) {
+  ledger_change_style((RegWindow *) data, REG_DOUBLE_DYNAMIC);
+}
+
+
+
+typedef struct {
+  gchar *name;
+  GtkSignalFunc cb;
+  gpointer data;
+} gncOptionMenuItem;
+
+static GtkWidget *
+build_option_menu (gncOptionMenuItem items[], gint num_items) {
+  GtkWidget *omenu;
+  GtkWidget *menu;
+  GtkWidget *menu_item;
+  GSList *group;
+  gint i;
+
+  omenu = gtk_option_menu_new();
+      
+  menu = gtk_menu_new();
+  group = NULL;
+  
+  for (i = 0; i < num_items; ++i) {
+    menu_item = gtk_radio_menu_item_new_with_label (group, items[i].name);
+    gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+                        (GtkSignalFunc) items[i].cb, items[i].data);
+    group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
+    gtk_menu_append (GTK_MENU (menu), menu_item);
+    gtk_widget_show (menu_item);
+  }
+  
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), menu);
+
+  return(omenu);
+}
+
+
 
 /********************************************************************\
  * regWindowLedger                                                  *
@@ -159,8 +235,7 @@ destroy (GtkWidget *widget, gpointer data) {
  * Return: regData  - the register window instance                  *
 \********************************************************************/
 RegWindow *
-regWindowLedger( xaccLedgerDisplay *ledger)                    
-{
+regWindowLedger(xaccLedgerDisplay *ledger) {
   RegWindow   *regData = NULL;
   GtkWidget *reg = NULL;
   char *windowname;
@@ -168,65 +243,10 @@ regWindowLedger( xaccLedgerDisplay *ledger)
   GtkWidget *register_vbox = gtk_vbox_new(FALSE, 0);
   GtkWidget *table_frame = gtk_frame_new(NULL);
 
-    fprintf(stderr, "regWindowLedger\n");
+  /* Menu creation */
 
-#if 0
-  
-  /******************************************************************\
-   * Set up the menubar menu-items.                                 *
-   * Menu structures must be initialized before any code is         *
-   * executed.  Some compilers insist on this, although gcc is      *
-   * freindly about this.  Note that some of the activityMenu       *
-   * values are changed below. Be careful with which row is which.  *
-   \******************************************************************/
-  MenuItem reportMenu[] = {
-    { SIMPLE_E_STR,         &xmPushButtonWidgetClass, 'S', NULL, NULL, True,
-      NULL, (XtPointer)0,  (MenuItem *)NULL, 0 },
-    { NULL,                 NULL,                      0,  NULL, NULL, False,
-      NULL, (XtPointer)0,  (MenuItem *)NULL, 0 },
-  };
-  
-  MenuItem activityMenu[] = {
-    { TRANSFER_E_STR,       &xmPushButtonWidgetClass, 'T', NULL, NULL, True,
-      accountMenubarCB, (XtPointer)AMB_TRNS,   (MenuItem *)NULL, 0 },
-    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
-      NULL,              NULL,                 (MenuItem *)NULL, 0 },
-    { RECONCILE_E_STR,      &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
-      startRecnCB,       NULL,                 (MenuItem *)NULL, 0 },
-    { ADJ_BALN_E_STR,       &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
-      startAdjBCB,       NULL,                 (MenuItem *)NULL, 0 },
-    { REPORT_E_STR,         &xmPushButtonWidgetClass, 'R', NULL, NULL, False,
-      NULL,              (XtPointer)0,         (MenuItem *)NULL, 0 },
-    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
-      NULL,              NULL,                 (MenuItem *)NULL, 0 },
-    { DEL_TRANS_STR,        &xmPushButtonWidgetClass, 'D', NULL, NULL, True,
-      deleteCB,          NULL,                 (MenuItem *)NULL, 0 },
-    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
-      NULL,              NULL,                 (MenuItem *)NULL, 0 },
-    { CLOSE_WIN_STR,        &xmPushButtonWidgetClass, 'Q', NULL, NULL, True,
-      destroyShellCB,    NULL,                 (MenuItem *)NULL, 0 },
-    { NULL,                 NULL,                      0,  NULL, NULL, False,
-      NULL,              (XtPointer)0,         (MenuItem *)NULL, 0 },
-  };
-
-  
-  MenuItem helpMenu[] = {
-    { ABOUT_E_STR,          &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
-      helpMenubarCB, (XtPointer)HMB_ABOUT, (MenuItem *)NULL, 0 },
-    { HELP_E_STR,           &xmPushButtonWidgetClass, 'H', NULL, NULL, True,
-      helpMenubarCB, (XtPointer)HMB_REGWIN,(MenuItem *)NULL, 0 },
-    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
-      NULL,          NULL,                 (MenuItem *)NULL, 0 },
-    { LICENSE_E_STR,        &xmPushButtonWidgetClass, 'L', NULL, NULL, True,
-      helpMenubarCB, (XtPointer)HMB_LIC,   (MenuItem *)NULL, 0 },
-    { NULL,                 NULL,                      0,  NULL, NULL, False,
-      NULL,          (XtPointer)0,         (MenuItem *)NULL, 0 },
-  };
-#endif
-
-  
   regData = (RegWindow *) (ledger->gui_hook);
-  if (regData) return (regData);
+  if(regData) return(regData);
 
   regData = (RegWindow *) malloc (sizeof (RegWindow));
 
@@ -234,6 +254,10 @@ regWindowLedger( xaccLedgerDisplay *ledger)
   ledger->redraw = regRefresh;
   ledger->destroy = regDestroy;
   regData->ledger = ledger;
+
+  regData->query_date = 1;
+  regData->early_date_handler = xaccMallocDateCell();
+  regData->late_date_handler = xaccMallocDateCell();
 
   /******************************************************************\
    * Start creating the Motif Widgets ...                           *
@@ -243,33 +267,27 @@ regWindowLedger( xaccLedgerDisplay *ledger)
   if (ledger->leader) {
     char * acc_name = xaccAccountGetName (ledger->leader);
     switch (ledger->type) {
-    case GENERAL_LEDGER:
-    case INCOME_LEDGER:
-      asprintf(&windowname, "%s (general ledger)", acc_name);
-      break;
-    case PORTFOLIO:
-      asprintf(&windowname, "%s (portfolio)", acc_name);
-      break;
-    default:
-      asprintf(&windowname, "%s (register)", acc_name);
-      break;
+       case GENERAL_LEDGER:
+       case INCOME_LEDGER:
+         asprintf (&windowname, "%s General Ledger", acc_name);
+         break;
+       case PORTFOLIO:
+         asprintf (&windowname, "%s Portfolio", acc_name);
+         break;
+       default:
+         asprintf (&windowname, "%s Register", acc_name);
+         break;
     }
   } else {
-    windowname = strdup("General Ledger");
+    windowname = "General Ledger";
   }
   assert(windowname);
-
-  //setBusyCursor(parent);
+  
+  setBusyCursor(gnc_get_ui_data());
   
   gtk_box_pack_start(GTK_BOX(register_vbox), table_frame, TRUE, TRUE, 0); 
   regData->dialog = table_frame;
   
-  ///* Initialize callbacks */
-    //gtk_signal_connect(GTK_OBJECT(toolBar[exit]), "clicked",
-    //                 GTK_SIGNAL_FUNC (file_cmd_quit), NULL);
-
-
-
   gtk_window_set_title(GTK_WINDOW(register_window), windowname);
   
   /* when the window is given the "delete_event" signal (this is given
@@ -287,63 +305,6 @@ regWindowLedger( xaccLedgerDisplay *ledger)
                       GTK_SIGNAL_FUNC (destroy), (gpointer) regData);
 
 
-
-#if 0
-  /* Create a PanedWindow Manager for the dialog box... the paned 
-   * window is the parent of the two forms which comprise the two
-   * areas of the dialog box */
-  /* Important Note: the paned window MUST have traversal enabled,
-   * otherwise the matrix cells will only get focus when the pointer
-   * is in the cell, which basically defeats the whole idea of a tab 
-   * group.  Put is another way: it is REALLY annoying to have to
-   * put the mouse in the cell being edited. */
-
-  pane = XtVaCreateWidget( "pane", 
-                           xmPanedWindowWidgetClass, regData->dialog,
-                           XmNsashWidth,     1,
-                           XmNsashHeight,    1,
-                           XmNseparatorOn,   False,
-                           XmNtraversalOn,   True,
-                           XmNmarginHeight,  1,
-                           XmNmarginWidth,   1,
-                           XmNallowResize,   True,
-                           XmNpaneMaximum,   200,
-                           XmNpaneMinimum,   800,
-                           NULL );
-  
-  /******************************************************************\
-   * Setup the menubar at the top of the window                     *
-  \******************************************************************/
-
-  /* Be careful not to scramble the order of the rows.  */
-  activityMenu[2].callback_data=(XtPointer)regData;
-  activityMenu[3].callback_data=(XtPointer)regData;
-  activityMenu[6].callback_data=(XtPointer)regData;
-  activityMenu[8].callback_data=(XtPointer)(regData->dialog);  /* destroy callback */
-
-  activityMenu[4].subitems = reportMenu;
-
-  /* can't adjust the balance on a ledger window */
-  if (1 < regData->numAcc) {
-    activityMenu[2].sensitive = False;
-    activityMenu[3].sensitive = False;
-  }
-
-  menubar = XmCreateMenuBar( pane, "menubar", NULL, 0 );  
-  
-  BuildMenu( menubar, XmMENU_PULLDOWN, ACTIVITIES_STR, 'A',
-             False, 0, activityMenu );
-  BuildMenu( menubar, XmMENU_PULLDOWN, HELP_STR,       'H', 
-             False, 0, helpMenu );
-  
-  XtManageChild( menubar );
-  
-  frame = XtVaCreateWidget( "reg", 
-                            xmFrameWidgetClass, pane,
-                            NULL );
-
-#endif
-  
   /******************************************************************\
    * The main register window itself                                *
   \******************************************************************/
@@ -353,6 +314,12 @@ regWindowLedger( xaccLedgerDisplay *ledger)
   reg = xaccCreateTable (ledger->ledger->table, regData->dialog);
   regData->reg = reg;
     
+  /* be sure to initialize the gui elements associated with the cursor */
+  xaccCreateCursor (ledger->ledger->table,  ledger->ledger->single_cursor);
+  xaccCreateCursor (ledger->ledger->table,  ledger->ledger->double_cursor);
+  xaccCreateCursor (ledger->ledger->table,  ledger->ledger->trans_cursor);
+  xaccCreateCursor (ledger->ledger->table,  ledger->ledger->split_cursor);
+
   /* complete GUI initialization */
   {
     AccountGroup *grp;
@@ -360,7 +327,10 @@ regWindowLedger( xaccLedgerDisplay *ledger)
     grp = xaccGetAccountRoot (ledger->leader);
     base_acc = ledger->leader;
 
-    if (!grp) {
+    /* hmm .. if grp is null, we should probably assert, but we'll 
+     * make one more stab at it ... 
+     */ 
+    if (!grp && ledger->displayed_accounts) {
       grp = xaccGetAccountRoot (ledger->displayed_accounts[0]);
       base_acc = ledger->displayed_accounts[0];
     }
@@ -370,128 +340,8 @@ regWindowLedger( xaccLedgerDisplay *ledger)
   }
 
 #if 0
-
-  /******************************************************************\
-   * The button area... also contains balance fields                *
-  \******************************************************************/
-  
-  buttonform = XtVaCreateWidget( "form", 
-				 xmFormWidgetClass, pane,
-				 XmNfractionBase,   6,
-				 XmNresizable,      False,
-                                 XmNtraversalOn,    True,
-                                 XmNnavigationType, XmSTICKY_TAB_GROUP,
-				 NULL );
-
-  position = 0;                    /* puts the buttons in the right place */
-
   /* traverse to the buttons, when leaving the table */
-  xaccNextTabGroup (regData->ledger->table, buttonform); 
-  
-  /* The "Record" button */
-  widget = XtVaCreateManagedWidget( RECORD_STR,
-				    xmPushButtonWidgetClass, buttonform,
-				    XmNtopAttachment,      XmATTACH_FORM,
-				    XmNbottomAttachment,   XmATTACH_FORM,
-				    XmNleftAttachment,     XmATTACH_POSITION,
-				    XmNleftPosition,       position,
-				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      position+1,
-				    XmNshowAsDefault,      True,
-                                    XmNnavigationType,     XmTAB_GROUP, 
-				    NULL );
-  
-  XtAddCallback( widget, XmNactivateCallback, 
-		 recordCB, (XtPointer)regData );
-  regData->record = widget;
-
-  
-  /* The "Cancel" button */
-  position++;
-  widget = XtVaCreateManagedWidget( CANCEL_STR, 
-				    xmPushButtonWidgetClass, buttonform,
-				    XmNtopAttachment,      XmATTACH_FORM,
-				    XmNbottomAttachment,   XmATTACH_FORM,
-				    XmNleftAttachment,     XmATTACH_POSITION,
-				    XmNleftPosition,       position,
-				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      position+1,
-				    XmNshowAsDefault,      True,
-                                    XmNnavigationType,     XmEXCLUSIVE_TAB_GROUP, 
-				    NULL );
-  
-  XtAddCallback( widget, XmNactivateCallback, 
-                 cancelCB, (XtPointer)regData );
-  
-  /* the "close" button */
-  position++;
-  widget = XtVaCreateManagedWidget( CLOSE_STR, 
-				    xmPushButtonWidgetClass, buttonform,
-				    XmNtopAttachment,      XmATTACH_FORM,
-				    XmNbottomAttachment,   XmATTACH_FORM,
-				    XmNleftAttachment,     XmATTACH_POSITION,
-				    XmNleftPosition,       position,
-				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      position+1,
-				    XmNshowAsDefault,      True,
-                                    XmNnavigationType,     XmEXCLUSIVE_TAB_GROUP, 
-				    NULL );
-  
-  XtAddCallback( widget, XmNactivateCallback, 
-                 destroyShellCB, (XtPointer)(regData->dialog) );
-  
-  position += 2;
-  
-  /* Fix button area of the buttonform to its current size, and not let 
-   * it resize. */
-    {
-    Dimension h;
-    XtVaGetValues( widget, XmNheight, &h, NULL );
-    XtVaSetValues( buttonform, XmNpaneMaximum, h, XmNpaneMinimum, h, NULL );
-    }
-    
-  /* The balance field labels: */ 
-  widget = XtVaCreateManagedWidget( BALN_C_STR,
-				    xmLabelGadgetClass,    buttonform,
-				    XmNtopAttachment,      XmATTACH_FORM,
-				    XmNleftAttachment,     XmATTACH_POSITION,
-				    XmNleftPosition,       position,
-				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      position+1,
-				    NULL );
-  widget = XtVaCreateManagedWidget( CLEARED_C_STR,
-				    xmLabelGadgetClass,    buttonform,
-				    XmNtopAttachment,      XmATTACH_WIDGET,
-				    XmNtopWidget,          widget,
-				    XmNbottomAttachment,   XmATTACH_FORM,
-				    XmNleftAttachment,     XmATTACH_POSITION,
-				    XmNleftPosition,       position,
-				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      position+1,
-				    NULL );
-  position++;
-  
-  /* and the balance fields: */
-  widget = XtVaCreateManagedWidget( "text",
-				    xmTextWidgetClass,     buttonform,
-				    XmNeditable,           False,
-				    XmNeditMode,           XmMULTI_LINE_EDIT,
-				    XmNcursorPositionVisible, False,
-				    XmNmarginHeight,       0,
-				    XmNmarginWidth,        1,
-				    XmNtopAttachment,      XmATTACH_FORM,
-				    XmNbottomAttachment,   XmATTACH_FORM,
-				    XmNleftAttachment,     XmATTACH_POSITION,
-				    XmNleftPosition,       position,
-				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      position+1,
-                                    XmNnavigationType,     XmNONE,  /* don't tab here! */
-				    NULL );
-  regData->balance = widget;
-#endif
-  
-#if 0
-  unsetBusyCursor( parent );
+  xaccNextTabGroup (regData->ledger->table, buttonform);
 #endif
   
   {
@@ -519,11 +369,28 @@ regWindowLedger( xaccLedgerDisplay *ledger)
     gtk_widget_set_usize(regData->dialog, list_width + 80, 500);
   }
 
-  /* Add controls at the bottom. */
+  /* Add controls at the bottom.  The controls are all in a handle
+     box.  There's a toolbar with the command butons (which I think
+     should go away or be optional once we have working menus, and
+     there's the menu to select the viewing style.  */
   {
-    GtkWidget *hb = gtk_handle_box_new();
+    GtkWidget *handle_box = gtk_handle_box_new();
+    GtkWidget *controls_hbox = gtk_hbox_new(FALSE, 0);
     GtkWidget *toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL,
                                          GTK_TOOLBAR_TEXT); 
+    gncOptionMenuItem ledger_style_menu_items[] = {
+      {"Single Line", ledger_style_single_cb, regData},
+      {"Double Line", ledger_style_double_cb, regData},
+      {"Multi Line",  ledger_style_multi_cb, regData},
+      {"Auto Single", ledger_style_auto_single_cb, regData},
+      {"Auto Double", ledger_style_auto_double_cb, regData},
+    };
+    const int nstyle_menu_items =
+      sizeof(ledger_style_menu_items) / sizeof(ledger_style_menu_items[0]);    
+    GtkWidget *style_menu = build_option_menu(ledger_style_menu_items,
+                                              nstyle_menu_items);
+    
+
     gtk_toolbar_append_item(GTK_TOOLBAR(toolbar),
                             "Record",
                             "Commit modifications to "
@@ -556,11 +423,16 @@ regWindowLedger( xaccLedgerDisplay *ledger)
                             NULL,
                             GTK_SIGNAL_FUNC(startRecnCB),
                             (gpointer) regData);
+    
+    gtk_box_pack_start(GTK_BOX(controls_hbox), toolbar, FALSE, FALSE, 0); 
+    gtk_box_pack_end(GTK_BOX(controls_hbox), style_menu, FALSE, FALSE, 0); 
+    gtk_container_add(GTK_CONTAINER(handle_box), controls_hbox);
+    gtk_box_pack_end(GTK_BOX(register_vbox), handle_box, FALSE, FALSE, 0); 
 
-    gtk_box_pack_end(GTK_BOX(register_vbox), hb, FALSE, FALSE, 0); 
-    gtk_container_add(GTK_CONTAINER(hb), toolbar); 
+    gtk_widget_show(style_menu);
     gtk_widget_show(toolbar);
-    gtk_widget_show(hb);
+    gtk_widget_show(controls_hbox);
+    gtk_widget_show(handle_box);
   }
 
   gtk_container_add(GTK_CONTAINER(register_window), register_vbox);
@@ -573,6 +445,7 @@ regWindowLedger( xaccLedgerDisplay *ledger)
 
   ledger->dirty = 1;
   xaccLedgerDisplayRefresh (ledger);
+  unsetBusyCursor(gnc_get_ui_data());
 
   return regData;
 }
@@ -792,29 +665,5 @@ cancelCB( GtkWidget *w, gpointer data)
 
 /********************************************************************\
 \********************************************************************/
-
-#if 0
-/* fileBox not implemented in GNOME version yet */
-
-static void
-reportCB( GtkWidget *w, gpointer data)
-{
-  RegWindow *regData = (RegWindow *) data;
-  char *outfile = fileBox( toplevel, OPEN_STR, "*.html" );
-
-  if (!outfile) return;
-  xaccTablePrintHTML (regData->ledger->ledger->table, outfile);
-}
-
-static void
-webCB( GtkWidget *w, gpointer data)
-{
-  RegWindow *regData = (RegWindow *) data;
-  /* hack alert -- make the port number configureable */
-  xaccTableWebServeHTML (regData->ledger->ledger->table, 1080);
-}
-
-#endif
-
 
 /************************** END OF FILE **************************/
