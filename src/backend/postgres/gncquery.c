@@ -877,23 +877,23 @@ sqlQuery_build (sqlQuery *sq, Query *q)
 
 	   if (!safe_strcmp (path->data, QUERY_PARAM_GUID)) {
 	     field = "gncEntry.entryGUID";
-	     g_assert (pdata->options != GUID_MATCH_ANY);
+	     g_assert (pdata->options != GUID_MATCH_ALL);
 
 	   } else if (!safe_strcmp (path->data, SPLIT_TRANS) &&
 		      !safe_strcmp (path->next->data, QUERY_PARAM_GUID)) {
 	     field = "gncEntry.transGUID";
-	     g_assert (pdata->options != GUID_MATCH_ANY);
+	     g_assert (pdata->options != GUID_MATCH_ALL);
 
 	   } else if (!safe_strcmp (path->data, SPLIT_ACCOUNT) &&
 		      !safe_strcmp (path->next->data, QUERY_PARAM_GUID)) {
 	     field = "gncEntry.accountGUID";
-	     g_assert (pdata->options != GUID_MATCH_ANY);
+	     g_assert (pdata->options != GUID_MATCH_ALL);
 
 	   } else if (!safe_strcmp (path->data, SPLIT_TRANS) &&
 		      !safe_strcmp (path->next->data, TRANS_SPLITLIST) &&
 		      !safe_strcmp (path->next->next->data, SPLIT_ACCOUNT_GUID)) {
 	     field = "gncEntry.accountGUID";
-	     g_assert (pdata->options == GUID_MATCH_ANY);
+	     g_assert (pdata->options == GUID_MATCH_ALL);
 
 	   } else {
 	     PINFO ("Unknown GUID parameter, %s", (char*)path->data);
