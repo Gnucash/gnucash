@@ -75,12 +75,12 @@ except that this permission notice may be stated in a
 translation approved by the Free Software Foundation.
 @end titlepage
 
-@ifinfo
+@ifnottex
 @node Top, Introduction, (dir), (dir)
 @top GnuCash Design Document
 This is Edition @value{EDITION}, last updated @value{UPDATED},
 of the @cite{GnuCash Design Document}, version @value{VERSION}.
-@end ifinfo
+@end ifnottex
 
 @menu
 * Introduction::                

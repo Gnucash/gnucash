@@ -2,3 +2,4 @@ Makefile
 version.texi
 stamp-vti
 *.info
+*.html
