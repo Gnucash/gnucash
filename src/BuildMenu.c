@@ -125,6 +125,9 @@ Widget BuildMenu( Widget parent, int menu_type, char *menu_title,
 					NULL );
       }
 
+    /* possible grey out menu entries */
+    XtSetSensitive (widget, items[i].sensitive);
+
     /* If the current widget (menu item) being created corresponds to the 
      * int that the user specified as initial choice, then set initial_choice
      * = widget.  The (int)initial specified by caller of function is the 

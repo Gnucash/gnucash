@@ -40,9 +40,11 @@
 #include "AccWindow.h"
 #include "BuildMenu.h"
 #include "Data.h"
+#include "Destroy.h"
 #include "FileBox.h"
 #include "FileIO.h"
 #include "HelpWindow.h"
+#include "LedgerUtils.h"
 #include "main.h"
 #include "MainWindow.h"
 #include "RecnWindow.h"
@@ -155,7 +157,7 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
 #endif
 
     /* associate a pointer to the actual account with the row */
-    XbaeMatrixSetRowUserData ( acctrix, currow, (XtPointer *) acc); 
+    XbaeMatrixSetRowUserData ( acctrix, currow, (XtPointer) acc); 
 
     /* If the account has sub-accounts, then add an arrow button 
      * next to the account name.  Clicking on the arrow button will 
@@ -354,55 +356,57 @@ mainWindow( Widget parent )
    * Set up the menubar                                             *
   \******************************************************************/
   MenuItem fileMenu[] = {
-    { "New File...",   &xmPushButtonWidgetClass, 'N', NULL, NULL, 
+    { "New File...",   &xmPushButtonWidgetClass, 'N', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_NEW,   (MenuItem *)NULL },
-    { "Open File...      ",&xmPushButtonWidgetClass, 'O', NULL, NULL, 
+    { "Open File...  ",&xmPushButtonWidgetClass, 'O', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_OPEN,  (MenuItem *)NULL },
-    { "",              &xmSeparatorWidgetClass,    0, NULL, NULL, 
+    { "",              &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                  (MenuItem *)NULL },
-    { "Save",          &xmPushButtonWidgetClass, 'S', NULL, NULL, 
+    { "Save",          &xmPushButtonWidgetClass, 'S', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_SAVE,  (MenuItem *)NULL },
-    { "Save As...",    &xmPushButtonWidgetClass, 'A', NULL, NULL, 
+    { "Save As...",    &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_SAVEAS,(MenuItem *)NULL },
-    { "",              &xmSeparatorWidgetClass,    0, NULL, NULL, 
+    { "",              &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                  (MenuItem *)NULL },
-    { "Quit",          &xmPushButtonWidgetClass, 'Q', NULL, NULL, 
+    { "Quit",          &xmPushButtonWidgetClass, 'Q', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_QUIT,  (MenuItem *)NULL },
     NULL,
   };
 
   MenuItem accountMenu[] = {
-    { "New Account...",     &xmPushButtonWidgetClass, 'N', NULL, NULL, 
+    { "New Account...",     &xmPushButtonWidgetClass, 'N', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_NEW,  (MenuItem *)NULL },
-    { "Open Account",       &xmPushButtonWidgetClass, 'O', NULL, NULL, 
+    { "Open Account",       &xmPushButtonWidgetClass, 'O', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_OPEN, (MenuItem *)NULL },
-    { "Edit Account...",    &xmPushButtonWidgetClass, 'E', NULL, NULL, 
+    { "Open Subaccounts",   &xmPushButtonWidgetClass, 'O', NULL, NULL, True,
+      accountMenubarCB, (XtPointer)AMB_LEDGER, (MenuItem *)NULL },
+    { "Edit Account...",    &xmPushButtonWidgetClass, 'E', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_EDIT, (MenuItem *)NULL },
-    { "Delete Account...",  &xmPushButtonWidgetClass, 'D', NULL, NULL,
+    { "Delete Account...",  &xmPushButtonWidgetClass, 'D', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_DEL,  (MenuItem *)NULL },
-    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL,
+    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                    (MenuItem *)NULL },
-    { "Transfer",           &xmPushButtonWidgetClass, 'C', NULL, NULL, 
+    { "Transfer",           &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_TRNS,  (MenuItem *)NULL },
-    { "Report",             &xmPushButtonWidgetClass, 'R', NULL, NULL, 
+    { "Report",             &xmPushButtonWidgetClass, 'R', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_RPRT,  (MenuItem *)NULL },
 #if 0
-    { "Edit Categories...", &xmPushButtonWidgetClass, 'C', NULL, NULL, 
+    { "Edit Categories...", &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_CAT,  (MenuItem *)NULL },
 #endif
     NULL,
   };
   
   MenuItem helpMenu[] = {
-    { "About...",           &xmPushButtonWidgetClass, 'A', NULL, NULL, 
+    { "About...",           &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_ABOUT, (MenuItem *)NULL },
-    { "Help...",            &xmPushButtonWidgetClass, 'H', NULL, NULL, 
+    { "Help...",            &xmPushButtonWidgetClass, 'H', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_MAIN,  (MenuItem *)NULL },
-    { "Accounts...",        &xmPushButtonWidgetClass, 'H', NULL, NULL, 
+    { "Accounts...",        &xmPushButtonWidgetClass, 'H', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_ACC,  (MenuItem *)NULL },
-    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL,
+    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                    (MenuItem *)NULL },
-    { "License...",         &xmPushButtonWidgetClass, 'L', NULL, NULL, 
+    { "License...",         &xmPushButtonWidgetClass, 'L', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_LIC,   (MenuItem *)NULL },
     NULL,
   };
@@ -519,7 +523,7 @@ mainWindow( Widget parent )
                    listCB, (XtPointer)NULL );
     
     /* If the user double-clicks on an account in the list, open
-     * up the detail view (ie the regWindow, or whatever) for
+     * up the detail view (ie the register window, or whatever) for
      * that type of account */
     XtAddCallback( accountlist, XmNdefaultActionCallback, 
                    accountMenubarCB, (XtPointer)AMB_OPEN );
@@ -715,7 +719,7 @@ xaccMainWindowRedisplayBalance (void)
          case BANK:
          case CASH:
          case ASSET:
-         case PORTFOLIO:
+         case STOCK:
          case MUTUAL:
          case CREDIT:
          case LIABILITY:
@@ -919,6 +923,7 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
    * which of the file menubar options was chosen
    *   AMB_NEW    -  New account
    *   AMB_OPEN   -  Open account
+   *   AMB_LEDGER -  Open account and subaccounts in one register
    *   AMB_EDIT   -  Edit account
    *   AMB_DEL    -  Delete account
    *   AMB_CAT    -  Edit catagories
@@ -930,9 +935,10 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       DEBUG("AMB_NEW\n");
       accWindow(toplevel);
       break;
+
     case AMB_OPEN:
       DEBUG("AMB_OPEN\n");
-        {
+      {
         Account *acc = selected_acc;
         if( NULL == acc ) {
           int make_new = verifyBox (toplevel, ACC_NEW_MSG);
@@ -940,13 +946,26 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
             accWindow(toplevel);
           }
         } else {
-          if( NULL == acc->regData ) {  
-            /* avoid having two registers updating one account */
-            acc->regData = regWindow( toplevel, acc );
-          }
+          regWindowSimple ( toplevel, acc );
         }
       }
       break;
+
+    case AMB_LEDGER:
+      DEBUG("AMB_LEDGER\n");
+      {
+        Account *acc = selected_acc;
+        if( NULL == acc ) {
+          int make_new = verifyBox (toplevel, ACC_NEW_MSG);
+          if (make_new) {
+            accWindow(toplevel);
+          }
+        } else {
+          regWindowAccGroup ( toplevel, acc );
+        }
+      }
+      break;
+
     case AMB_EDIT:
       DEBUG("AMB_EDIT\n");
       {
@@ -958,9 +977,10 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
         }
       }
       break;
+
     case AMB_DEL:
       DEBUG("AMB_DEL\n");
-        {
+      {
         Account *acc = selected_acc;
         if( NULL == acc ) {
           errorBox (toplevel, ACC_DEL_MSG);
@@ -972,14 +992,7 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
             /* before deleting the account, make 
              * sure that we close any misc register 
              * windows, if they are open */
-            /* hack alert -- this should be done for 
-             * any child accounts this account might have .. */
-            xaccDestroyRegWindow (selected_acc->regData);
-            xaccDestroyRecnWindow (selected_acc->recnData);
-            xaccDestroyAdjBWindow (selected_acc->adjBData);
-            xaccDestroyEditAccWindow (selected_acc->editAccData);
-            xaccDestroyEditNotesWindow (selected_acc->editNotesData);
-
+            xaccAccountWindowDestroy (selected_acc);
             xaccRemoveAccount (selected_acc);
             freeAccount (selected_acc);
             selected_acc = NULL;
@@ -988,17 +1001,21 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
           }
         }
       break;
+
     case AMB_TRNS:
       DEBUG("AMB_TRNS\n");
       xferWindow(toplevel);
       break;
+
     case AMB_RPRT:
       DEBUG("AMB_RPRT\n");
       simpleReportWindow(toplevel);
       break;
+
     case AMB_CAT:
       DEBUG("AMB_CAT\n");
       break;
+
     default:
       PERR ("AccountMenuBarCB(): We shouldn't be here!\n");
     }

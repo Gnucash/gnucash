@@ -641,7 +641,7 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   
   /* The account has to have a name! */
   if( strcmp( name, "" ) == 0 ) {
-    errorBox (toplevel, "The account must be given a name! \n");
+    errorBox (toplevel, ACC_NO_NAME_MSG);
     return;
   }
   
@@ -683,7 +683,7 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   refreshMainWindow();
 
   /* open up the account window for the user */
-  regWindow( toplevel, acc );
+  regWindowSimple ( toplevel, acc );
 
   /* if we got to here, tear down the dialog window */
   XtDestroyWidget (accData->dialog);
@@ -754,12 +754,12 @@ selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
        case BANK:
        case CASH:
        case ASSET:
-       case PORTFOLIO:
+       case STOCK:
        case MUTUAL:
           XtSetSensitive (menu->type_widgets[BANK],      True);
           XtSetSensitive (menu->type_widgets[CASH],      True);
           XtSetSensitive (menu->type_widgets[ASSET],     True);
-          XtSetSensitive (menu->type_widgets[PORTFOLIO], True);
+          XtSetSensitive (menu->type_widgets[STOCK],     True);
           XtSetSensitive (menu->type_widgets[MUTUAL],    True);
           XtSetSensitive (menu->type_widgets[LIABILITY], False);
           XtSetSensitive (menu->type_widgets[CREDIT],    False);
@@ -776,7 +776,7 @@ selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
 
           /* set a default, if an inapporpriate button is pushed */
           if ((BANK   != but) && (CASH      != but) &&
-              (ASSET  != but) && (PORTFOLIO != but) &&
+              (ASSET  != but) && (STOCK != but) &&
               (MUTUAL != but) ) {
              XtVaSetValues (menu->type_widgets[acc->type], XmNset, True, NULL);
           }
@@ -787,7 +787,7 @@ selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
           XtSetSensitive (menu->type_widgets[BANK],      False);
           XtSetSensitive (menu->type_widgets[CASH],      False);
           XtSetSensitive (menu->type_widgets[ASSET],     False);
-          XtSetSensitive (menu->type_widgets[PORTFOLIO], False);
+          XtSetSensitive (menu->type_widgets[STOCK],     False);
           XtSetSensitive (menu->type_widgets[MUTUAL],    False);
           XtSetSensitive (menu->type_widgets[LIABILITY], True);
           XtSetSensitive (menu->type_widgets[CREDIT],    True);
@@ -799,7 +799,7 @@ selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
           XtVaSetValues (menu->type_widgets[BANK],      XmNset, False, NULL);
           XtVaSetValues (menu->type_widgets[CASH],      XmNset, False, NULL);
           XtVaSetValues (menu->type_widgets[ASSET],     XmNset, False, NULL);
-          XtVaSetValues (menu->type_widgets[PORTFOLIO], XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[STOCK],     XmNset, False, NULL);
           XtVaSetValues (menu->type_widgets[MUTUAL],    XmNset, False, NULL);
           XtVaSetValues (menu->type_widgets[INCOME],    XmNset, False, NULL);
           XtVaSetValues (menu->type_widgets[EXPENSE],   XmNset, False, NULL);
@@ -815,7 +815,7 @@ selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
           XtSetSensitive (menu->type_widgets[BANK],      False);
           XtSetSensitive (menu->type_widgets[CASH],      False);
           XtSetSensitive (menu->type_widgets[ASSET],     False);
-          XtSetSensitive (menu->type_widgets[PORTFOLIO], False);
+          XtSetSensitive (menu->type_widgets[STOCK],     False);
           XtSetSensitive (menu->type_widgets[MUTUAL],    False);
           XtSetSensitive (menu->type_widgets[LIABILITY], False);
           XtSetSensitive (menu->type_widgets[CREDIT],    False);
@@ -836,7 +836,7 @@ selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
           XtSetSensitive (menu->type_widgets[BANK],      False);
           XtSetSensitive (menu->type_widgets[CASH],      False);
           XtSetSensitive (menu->type_widgets[ASSET],     False);
-          XtSetSensitive (menu->type_widgets[PORTFOLIO], False);
+          XtSetSensitive (menu->type_widgets[STOCK],     False);
           XtSetSensitive (menu->type_widgets[MUTUAL],    False);
           XtSetSensitive (menu->type_widgets[LIABILITY], False);
           XtSetSensitive (menu->type_widgets[CREDIT],    False);
@@ -857,7 +857,7 @@ selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
           XtSetSensitive (menu->type_widgets[BANK],      False);
           XtSetSensitive (menu->type_widgets[CASH],      False);
           XtSetSensitive (menu->type_widgets[ASSET],     False);
-          XtSetSensitive (menu->type_widgets[PORTFOLIO], False);
+          XtSetSensitive (menu->type_widgets[STOCK],     False);
           XtSetSensitive (menu->type_widgets[MUTUAL],    False);
           XtSetSensitive (menu->type_widgets[LIABILITY], False);
           XtSetSensitive (menu->type_widgets[CREDIT],    False);
@@ -881,7 +881,7 @@ selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
      XtSetSensitive (menu->type_widgets[ASSET],     True);
      XtSetSensitive (menu->type_widgets[CREDIT],    True);
      XtSetSensitive (menu->type_widgets[LIABILITY], True);
-     XtSetSensitive (menu->type_widgets[PORTFOLIO], True);
+     XtSetSensitive (menu->type_widgets[STOCK],     True);
      XtSetSensitive (menu->type_widgets[MUTUAL],    True);
      XtSetSensitive (menu->type_widgets[INCOME],    True);
      XtSetSensitive (menu->type_widgets[EXPENSE],   True);

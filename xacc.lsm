@@ -1,7 +1,7 @@
 Begin3
 Title:		xacc -- simple single-user accounting program
-Version:	0.9p
-Entered-date:	21NOV97
+Version:	0.9t
+Entered-date:	24NOV97
 Description:    xacc is a program to keep track of your finances.  It 
                 offers a simple check-book register style interface.
                 Currently, the features are quite simple:
@@ -19,15 +19,24 @@ Description:    xacc is a program to keep track of your finances.  It
                   the previous transaction.  Handy if you have
                   similar transactions on a regular basis.
                   (such as depositing your paycheck every week :)
-                - General Ledger. Well, not yet, but double-entry
-                  is supported (transfers between accounts),
-                  sub-accounts are supported (so that master accounts
-                  can contain detail accounts), as well as 
-                  income/expense accounts that handle double-entry
-                  properly.
+                - Stock/Mutual Fund Portfolios.  Tracks stock
+                  investments.
+                - General Ledger.  This is an advanced feature 
+                  for more serious work. Supported are:
+                   o Double Entry: Transactions can appear in two
+                     accounts, one debited, one credited. 
+                   o Sub-accounts: A master account can have 
+                     a heriarchy of detail accounts.
+                   o Income/Expense account types.
+                   o General Ledger for displaying multiple
+                     accounts at once.
 
                 This is a beta development version with known
                 minor user interface bugs and no known major bugs.
+                Under rare circumstances, it will core dump (due to
+                Motif problems) so save often! It has been tested 
+                only lightly but seems to work. It is not beleived to
+                corrupt data.
 
 Keywords:	X11 Accounting double entry
 Author:		rclark@cs.hmc.edu (Robin Clark)
@@ -35,7 +44,7 @@ Maintained-by:	linas@linas.org (Linas Vepstas)
 Primary-site:	http://www3.hmc.edu/~rclark/xacc/
 Alternate-site:	http://linas.org/linux/xacc 
 Alternate-site:	sunsite.unc.edu /pub/Linux/apps/financial/accounting/
-		521kB  xacc-0.9m.tar.gz
+		527kB  xacc-0.9s.tar.gz
 Platforms:      Linux/Unix/X Windows/Lesstif/Motif/Sparc/Intel 
 Copying-policy:	GPL
 End

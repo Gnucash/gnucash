@@ -53,6 +53,8 @@ mallocAccount( void )
 
   acc->balance  = 0.0;
   acc->cleared_balance = 0.0;
+  acc->running_balance  = 0.0;
+  acc->running_cleared_balance = 0.0;
 
   acc->flags = 0;
   acc->type  = -1;
@@ -61,15 +63,17 @@ mallocAccount( void )
   acc->description = NULL;
   acc->notes       = NULL;
   
+  /* transction array should be null-terminated */
   acc->numTrans    = 0;
-  acc->transaction = NULL;         /* Initially there are no transactions
-                                    * in this account's transaction
-                                    * array */
+  acc->transaction = (Transaction **) _malloc (sizeof (Transaction *));
+  acc->transaction[0] = NULL;
   
   /* private data */
   acc->arrowb        = NULL;
   acc->expand        = 0;
   acc->regData       = NULL;
+  acc->regLedger     = NULL;
+  acc->ledgerList    = NULL;
   acc->recnData      = NULL;
   acc->adjBData      = NULL;
   acc->editAccData   = NULL;
@@ -136,8 +140,12 @@ freeAccount( Account *acc )
   acc->arrowb   = NULL;  
   acc->expand   = 0;
   acc->regData  = NULL;
+  acc->regLedger = NULL;
   acc->recnData = NULL;
   acc->adjBData = NULL;
+
+  if (acc->ledgerList) _free (acc->ledgerList);
+  acc->ledgerList = NULL;
 
   _free(acc);
 }
@@ -154,6 +162,7 @@ xaccGetAccountID (Account *acc)
 
 /********************************************************************\
 \********************************************************************/
+
 Transaction *
 getTransaction( Account *acc, int num )
   {
@@ -167,6 +176,7 @@ getTransaction( Account *acc, int num )
 
 /********************************************************************\
 \********************************************************************/
+
 int
 getNumOfTransaction( Account *acc, Transaction *trans )
   {
@@ -179,6 +189,7 @@ getNumOfTransaction( Account *acc, Transaction *trans )
 
 /********************************************************************\
 \********************************************************************/
+
 Transaction *
 removeTransaction( Account *acc, int num )
 {
@@ -198,27 +209,22 @@ removeTransaction( Account *acc, int num )
     
   acc->numTrans--;
 
-  if (0 < acc->numTrans) {
-    acc->transaction = (Transaction **)_malloc((acc->numTrans)*
+  acc->transaction = (Transaction **)_malloc(((acc->numTrans)+1)*
                                                sizeof(Transaction *));
-    
-    trans = oldTrans[acc->numTrans];/* In case we are deleting last in
+     
+  trans = oldTrans[acc->numTrans];/* In case we are deleting last in
                                      * old array */
-    for( i=0,j=0; i<acc->numTrans; i++,j++ ) {
-      if( j != num ) {
-        acc->transaction[i] = oldTrans[j];
-      } else {
-        trans = oldTrans[j];
-        i--;
-      }
+  for( i=0,j=0; i<acc->numTrans; i++,j++ ) {
+    if( j != num ) {
+      acc->transaction[i] = oldTrans[j];
+    } else {
+      trans = oldTrans[j];
+      i--;
     }
-  } else {
-    if (0 != num) {
-       PERR ("removeTransaction(): num should be zero !");
-    }
-    trans = oldTrans[0];
-    acc->transaction = NULL;
-  }    
+  }
+
+  /* make sure the array is NULL terminated */
+  acc->transaction[acc->numTrans] = NULL;
 
   _free (oldTrans);
 
@@ -244,6 +250,7 @@ xaccRemoveTransaction( Account *acc, Transaction *trans)
 
 /********************************************************************\
 \********************************************************************/
+
 int
 insertTransaction( Account *acc, Transaction *trans )
   {
@@ -290,47 +297,45 @@ insertTransaction( Account *acc, Transaction *trans )
   
   acc->numTrans++;
   oldTrans = acc->transaction;
-  acc->transaction = (Transaction **)_malloc((acc->numTrans)*
+  acc->transaction = (Transaction **)_malloc(((acc->numTrans) + 1) *
                                              sizeof(Transaction *));
   
-  if (oldTrans) {
-    /* dt is the date of the transaction we are inserting, and dj
-     * is the date of the "cursor" transaction... we want to insert
-     * the new transaction before the first transaction of the same
-     * or later date.  The !inserted bit is a bit of a kludge to 
-     * make sure we only insert the new transaction once! */
-    dt = &(trans->date);
-    for( i=0,j=0; i<acc->numTrans; i++,j++ )
+  /* dt is the date of the transaction we are inserting, and dj
+   * is the date of the "cursor" transaction... we want to insert
+   * the new transaction before the first transaction of the same
+   * or later date.  The !inserted bit is a bit of a kludge to 
+   * make sure we only insert the new transaction once! */
+  dt = &(trans->date);
+  for( i=0,j=0; i<acc->numTrans; i++,j++ )
+    {
+    /* if we didn't do this, and we needed to insert into the
+     * last spot in the array, we would walk off the end of the
+     * old array, which is no good! */
+    if( j>=(acc->numTrans-1) )
       {
-      /* if we didn't do this, and we needed to insert into the
-       * last spot in the array, we would walk off the end of the
-       * old array, which is no good! */
-      if( j>=(acc->numTrans-1) )
+      position = i;
+      acc->transaction[i] = trans;
+      break;
+      }
+    else
+      {
+      dj = &(oldTrans[j]->date);
+      if( (datecmp(dj,dt) > 0) & !inserted )
         {
         position = i;
         acc->transaction[i] = trans;
-        break;
+        j--;
+        inserted = True;
         }
       else
-        {
-        dj = &(oldTrans[j]->date);
-        if( (datecmp(dj,dt) > 0) & !inserted )
-          {
-          position = i;
-          acc->transaction[i] = trans;
-          j--;
-          inserted = True;
-          }
-        else
-          acc->transaction[i] = oldTrans[j];
-        }
+        acc->transaction[i] = oldTrans[j];
       }
-    
-    _free(oldTrans);
-  } else {
-    acc->transaction[0] = trans;
-    position = 0;
-  }
+    }
+  
+  /* make sure the array is NULL terminated */
+  acc->transaction[acc->numTrans] = NULL;
+
+  _free(oldTrans);
 
   if( position != -1 )
     qfInsertTransaction( acc->qfRoot, trans );
@@ -340,6 +345,7 @@ insertTransaction( Account *acc, Transaction *trans )
 
 /********************************************************************\
 \********************************************************************/
+
 Account *
 xaccGetOtherAccount( Account *acc, Transaction *trans )
 {
@@ -513,6 +519,7 @@ double xaccGetShareBalance (Account *acc, Transaction *trans)
  * Args:   account -- the account for which to recompute balances   *
  * Return: void                                                     *
 \********************************************************************/
+
 void
 xaccRecomputeBalance( Account * acc )
 {
@@ -534,7 +541,7 @@ xaccRecomputeBalance( Account * acc )
     share_balance += amt;
     dbalance += amt * (trans->share_price);
     
-    if( trans->reconciled != NREC ) {
+    if( NREC != trans->reconciled ) {
       share_cleared_balance += amt;
       dcleared_balance += amt * (trans->share_price);
     }
@@ -543,7 +550,7 @@ xaccRecomputeBalance( Account * acc )
     if (tracc == acc) {
       /* For bank accounts, the invarient subtotal is the dollar
        * amount.  For stock accoounts, the invarient is the share amount */
-      if ( (PORTFOLIO == tracc->type) || ( MUTUAL == tracc->type) ) {
+      if ( (STOCK == tracc->type) || ( MUTUAL == tracc->type) ) {
         trans -> credit_share_balance = share_balance;
         trans -> credit_share_cleared_balance = share_cleared_balance;
         trans -> credit_balance = trans->share_price * share_balance;
@@ -557,7 +564,7 @@ xaccRecomputeBalance( Account * acc )
     }
     tracc = (Account *) trans->debit;
     if (tracc == acc) {
-      if ( (PORTFOLIO == tracc->type) || ( MUTUAL == tracc->type) ) {
+      if ( (STOCK == tracc->type) || ( MUTUAL == tracc->type) ) {
         trans -> debit_share_balance = share_balance;
         trans -> debit_share_cleared_balance = share_cleared_balance;
         trans -> debit_balance = trans->share_price * share_balance;
@@ -573,7 +580,7 @@ xaccRecomputeBalance( Account * acc )
     last_trans = trans;
   }
 
-  if ( (PORTFOLIO == acc->type) || ( MUTUAL == acc->type) ) {
+  if ( (STOCK == acc->type) || ( MUTUAL == acc->type) ) {
     acc -> balance = share_balance * (last_trans->share_price);
     acc -> cleared_balance = share_cleared_balance * (last_trans->share_price);
   } else {
@@ -594,6 +601,7 @@ xaccRecomputeBalance( Account * acc )
  *
  * Return: int -- non-zero if out of order                          *
 \********************************************************************/
+
 int
 xaccCheckDateOrder (Account * acc, Transaction *trans )
 {
@@ -641,6 +649,7 @@ xaccCheckDateOrder (Account * acc, Transaction *trans )
  * Args:   trans -- the transaction to check                        *
  * Return: int -- non-zero if out of order                          *
 \********************************************************************/
+
 int
 xaccCheckDateOrderDE (Transaction *trans )
 {
@@ -658,4 +667,62 @@ xaccCheckDateOrderDE (Transaction *trans )
   return 0;
 }
 
-/*************************** end of file **************************** */
+/********************************************************************\
+\********************************************************************/
+
+int
+xaccIsAccountInList (Account * acc, Account **list)
+{
+   Account * chk;
+   int nacc = 0;
+   int nappearances = 0;
+   if (!acc) return 0;
+   if (!list) return 0;
+
+   chk = list[0];
+   while (chk) {
+      if (acc == chk) nappearances ++;
+      nacc++;
+      chk = list[nacc];
+   }
+   return nappearances;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccRecomputeBalances( Account **list )
+{
+   Account * acc;
+   int nacc = 0;
+   if (!list) return;
+
+   acc = list[0];
+   while (acc) {
+      xaccRecomputeBalance (acc);
+      nacc++;
+      acc = list[nacc];
+   }
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccZeroRunningBalances( Account **list )
+{
+   Account * acc;
+   int nacc = 0;
+   if (!list) return;
+
+   acc = list[0];
+   while (acc) {
+      acc -> running_balance = 0.0;
+      acc -> running_cleared_balance = 0.0;
+      nacc++;
+      acc = list[nacc];
+   }
+}
+
+/*************************** END OF FILE **************************** */
