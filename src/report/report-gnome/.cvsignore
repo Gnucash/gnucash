@@ -1,6 +1,8 @@
 Makefile
 Makefile.in
 .scm-links
+.deps
+.libs
 gw-report-gnome.scm
 gw-report-gnome.html
 gw-report-gnome.h
