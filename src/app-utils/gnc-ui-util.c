@@ -79,6 +79,7 @@ static quote_source quote_sources[NUM_SOURCES] = {
   { FALSE, FALSE, "Motley Fool", "FOOL", "fool" },
   { FALSE, FALSE, "Fund Library", "FUNDLIBRARY", "fundlibrary" },
   { FALSE, FALSE, "TD Waterhouse Canada", "TDWATERHOUSE", "tdwaterhouse" },
+  { FALSE, FALSE, "TD Efunds", "TDEFUNDS", "tdefunds" },
   { FALSE, FALSE, "TIAA-CREF", "TIAACREF", "tiaacref" },
   { FALSE, FALSE, "T. Rowe Price", "TRPRICE_DIRECT", "troweprice_direct" }, /* Not Implemented */
   { FALSE, FALSE, "Trustnet", "TRUSTNET", "trustnet" },
