@@ -89,7 +89,7 @@
 
           (if (not menu-tip)
               (set! menu-tip
-                    (sprintf #f (_ "Display the %s report") name)))
+                    (sprintf #f (_ "Display the %s report") (_ name))))
 
           (set! item
                 (gnc:make-menu-item
