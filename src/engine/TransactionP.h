@@ -65,6 +65,8 @@
  * one account, and pieces of it show up as debits (or credits) in other
  * accounts.  Thus, a single credit-card transaction might be split
  * between "dining", "tips" and "taxes" categories.
+ *
+ * A "split" is more commonly refered to as a "entry" in a "transaction".
  */
 
 typedef struct timespec Timespec;
@@ -73,13 +75,36 @@ struct _split
 {
   Account *acc;              /* back-pointer to debited/credited account  */
   Transaction *parent;       /* parent of split                           */
+
+  /* The memo field is an arbitrary user-assiged value. 
+   * It is intended to hold a short (zero to forty cahracter) string 
+   * that is displayed by the GUI along with this split. 
+   */
   char  * memo;
+
+  /* The action field is an arbitrary user-assigned value.
+   * It is meant to be a very short (oen to ten cahracter) string that
+   * signifies the "type" of this split, such as e.g. Buy, Sell, Div,
+   * Withdraw, Deposit, ATM, Check, etc. The idea is that this field
+   * can be used to create custom reports or graphs of data.
+   */ 
   char  * action;            /* Buy, Sell, Div, etc.                      */
+
+  /* The docref field is a hook for arbitrary additional user-assigned
+   * data, such as invoice numbers, clearing/posting reference numbers, 
+   * supporting document references, etc. This additional data should
+   * be encoded in a machine-readable format, e.g. a mime-type encapsulated
+   * form, which any key-value pairs being URL-encoded.
+   */
+  char * docref;
+
+  /* The reconciled field ...
+   */
   char    reconciled;
+  Timespec date_reconciled;  /* date split was reconciled                 */
+
   double  damount;           /* num-shares; if > 0.0, deposit, else paymt */
   double  share_price;       /* the share price, ==1.0 for bank account   */
-
-  Timespec date_reconciled;  /* date split was reconciled                 */
 
   /* The various "balances" are the sum of all of the values of 
    * all the splits in the account, up to and including this split.
@@ -100,8 +125,25 @@ struct _transaction
 {
   Timespec date_entered;     /* date register entry was made              */
   Timespec date_posted;      /* date transaction was posted at bank       */
-  char  * num;               /* transaction id                            */
+
+  /* The num field is a arbitrary user-assigned field.  
+   * It is intended to store a short id number, typically the check number,
+   * deposit number, invoice number or other tracking number
+   */
+  char  * num;  
+
+  /* The description field is an arbitrary user-assigned value. 
+   * It is meant to be a short descriptive phrase.
+   */
   char  * description;        
+
+  /* The docref field is a hook for arbitrary additional user-assigned
+   * data, such as invoice numbers, clearing/posting reference numbers, 
+   * supporting document references, etc. This additional data should
+   * be encoded in a machine-readable format, e.g. a mime-type encapsulated
+   * form, which any key-value pairs being URL-encoded.
+   */
+  char * docref;
 
   Split   **splits;          /* list of splits, null terminated           */
 

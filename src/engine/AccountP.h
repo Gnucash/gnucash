@@ -72,8 +72,11 @@ struct _account {
   char     *description;
 
   /* The notes field is an arbitrary string assigned by the user.
-   * It is intended to hold long, free-form and/or MIME-format 
-   * arbitrary additional data about the account.
+   * It is intended to hold long, free-form arbitrary additional 
+   * data about the account. Machine-readable data *must* be 
+   * structured using standard mime-type techniques.  For example,
+   * image data would be Base64 encoded, and lists of key-value
+   * pairs would be URL-encoded.
    */
   char     *notes;
 

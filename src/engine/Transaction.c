@@ -77,6 +77,7 @@ xaccInitSplit( Split * split )
   
   split->action      = strdup("");
   split->memo        = strdup("");
+  split->docref      = strdup("");
   split->reconciled  = NREC;
   split->damount     = 0.0;
   split->share_price = 1.0;
@@ -111,11 +112,14 @@ xaccFreeSplit( Split *split )
   {
   if (!split) return;
 
-  free(split->memo);
-  free(split->action);
+  if (split->memo) free (split->memo);
+  if (split->action) free (split->action);
+  if (split->docref) free (split->docref);
 
   /* just in case someone looks up freed memory ... */
   split->memo        = 0x0;
+  split->action      = 0x0;
+  split->docref      = 0x0;
   split->reconciled  = NREC;
   split->damount     = 0.0;
   split->share_price = 1.0;
@@ -248,6 +252,7 @@ xaccInitTransaction( Transaction * trans )
   /* fill in some sane defaults */
   trans->num         = strdup("");
   trans->description = strdup("");
+  trans->docref      = strdup("");
 
   trans->splits    = (Split **) _malloc (3* sizeof (Split *));
 
@@ -302,12 +307,14 @@ xaccFreeTransaction( Transaction *trans )
   _free (trans->splits);
 
   /* free up transaction strings */
-  free(trans->num);
-  free(trans->description);
+  if (trans->num) free (trans->num);
+  if (trans->description) free (trans->description);
+  if (trans->docref) free (trans->docref);
 
   /* just in case someone looks up freed memory ... */
   trans->num         = 0x0;
   trans->description = 0x0;
+  trans->docref      = 0x0;
 
   trans->date_entered.tv_sec = 0;
   trans->date_entered.tv_nsec = 0;

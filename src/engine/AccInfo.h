@@ -106,10 +106,10 @@ extern char *account_type_name [NUM_ACCOUNT_TYPES];
 struct _BankAcct 
 {
   char * bankid;       /* routing and transit number */
-  char * branchid;     /* bank identifier for international banks */  
+  char * branchid;     /* branch office bank identifier */  
   char * acctid;       /* account number */
   char * accttype;     /* account type */
-  char * acctkey;      /* checksum for international banks */
+  char * acctkey;      /* checksum key */
   int acctype;         /* account type.  Must be one of 
                         * CHECKING = 10;
                         * SAVINGS = 11;
