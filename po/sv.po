@@ -1,13 +1,13 @@
 # Översättning av gnucash till svenska.
 # Copyright (C) YEAR Free Software Foundation, Inc.
-# Dennis Björklund <dennisb@cs.chalmers.se>, 2000.
+# Dennis Björklund <db@zigo.dhs.org>, 2000.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.4.5\n"
+"Project-Id-Version: 1.4.9\n"
 "POT-Creation-Date: 2000-12-05 02:10-0800\n"
-"PO-Revision-Date: 2000-09-17 09:18+02:00\n"
-"Last-Translator: Dennis Björklund <dennisb@cs.chalmers.se>\n"
+"PO-Revision-Date: 2001-01-23 22:17+01:00\n"
+"Last-Translator: Dennis Björklund <db@zigo.dhs.org>\n"
 "Language-Team: Sv <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
@@ -2253,7 +2253,7 @@ msgstr "Kontrollerar"
 # messages-i18n.c:301 src/gnome/glade-gnc-dialogs.c:2449
 #: messages-i18n.c:301 src/gnome/glade-gnc-dialogs.c:2382
 msgid "Cleared"
-msgstr ""
+msgstr "Godkänd"
 
 # messages-i18n.c:270
 # messages-i18n.c:301
@@ -2439,7 +2439,7 @@ msgstr "Utjämning"
 
 #: messages-i18n.c:325
 msgid "EUR (total)"
-msgstr ""
+msgstr "EUR (totalt)"
 
 # messages-i18n.c:292
 # messages-i18n.c:324
@@ -2967,7 +2967,7 @@ msgstr "Överföring"
 
 #: messages-i18n.c:398
 msgid "Untitled"
-msgstr ""
+msgstr "Utan namn"
 
 # messages-i18n.c:358 po/guile_strings.txt:57
 # messages-i18n.c:396 po/guile_strings.txt:65
@@ -3054,9 +3054,8 @@ msgstr "Kostnad"
 # po/guile_strings.txt:216
 # po/guile_strings.txt:216
 #: po/guile_strings.txt:9
-#, fuzzy
 msgid "Last Year"
-msgstr "År"
+msgstr "Förra året"
 
 #: po/guile_strings.txt:10
 msgid "  F4835 \\ Taxes"
@@ -3181,9 +3180,8 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:514
 # src/gnome/glade-gnc-dialogs.c:447
 #: po/guile_strings.txt:31
-#, fuzzy
 msgid "Select Accounts (none = all)"
-msgstr "Välj konto"
+msgstr "Välj konton (inget = alla)"
 
 # po/guile_strings.txt:16
 # po/guile_strings.txt:17
@@ -3449,7 +3447,7 @@ msgstr ""
 
 #: po/guile_strings.txt:80
 msgid "H_ierarchical"
-msgstr ""
+msgstr "H_ierarkisk"
 
 #: po/guile_strings.txt:82
 msgid ""
@@ -3496,9 +3494,8 @@ msgstr ""
 # po/guile_strings.txt:74
 # po/guile_strings.txt:75
 #: po/guile_strings.txt:89
-#, fuzzy
 msgid "This page shows your Taxable Income and Deductable Expenses."
-msgstr "Denna sida visar dina vinster och förluster."
+msgstr "Denna sida visar dina beskattningsbara inkomster och avdragsgilla utgifter."
 
 # po/guile_strings.txt:34
 # po/guile_strings.txt:40
@@ -3528,9 +3525,8 @@ msgstr ""
 # messages-i18n.c:244
 # messages-i18n.c:246
 #: po/guile_strings.txt:94
-#, fuzzy
 msgid "Set Tax Related"
-msgstr "Ställ in datumintervall"
+msgstr ""
 
 # po/guile_strings.txt:36
 # po/guile_strings.txt:42
@@ -3660,9 +3656,8 @@ msgstr ""
 # messages-i18n.c:207
 # messages-i18n.c:209
 #: po/guile_strings.txt:116
-#, fuzzy
 msgid "Export .TXF"
-msgstr "Exportera till"
+msgstr "Exportera .TXF"
 
 #: po/guile_strings.txt:117
 msgid "  W-2 \\ Medicare tax withheld, self"
@@ -3682,9 +3677,8 @@ msgstr ""
 # po/guile_strings.txt:266
 # po/guile_strings.txt:266
 #: po/guile_strings.txt:120
-#, fuzzy
 msgid "Display the Tax report."
-msgstr "Visa budgetrapport."
+msgstr "Visa skatterapport."
 
 #: po/guile_strings.txt:121
 msgid "  Sched F \\ Freight and trucking"
@@ -3783,9 +3777,8 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:3045
 # src/gnome/glade-gnc-dialogs.c:3036
 #: po/guile_strings.txt:139
-#, fuzzy
 msgid "Period From: "
-msgstr "Period:"
+msgstr "Period från:"
 
 # po/guile_strings.txt:48
 # po/guile_strings.txt:55
@@ -3891,9 +3884,8 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:355 src/gnome/glade-gnc-dialogs.c:409
 # src/gnome/glade-gnc-dialogs.c:288 src/gnome/glade-gnc-dialogs.c:342
 #: po/guile_strings.txt:163
-#, fuzzy
 msgid "Use Current Account Name"
-msgstr "GNUCash Kontonamn"
+msgstr "Använd aktuellt kontonamn"
 
 #: po/guile_strings.txt:164
 msgid ""
@@ -4338,9 +4330,8 @@ msgstr ""
 # po/guile_strings.txt:71
 # po/guile_strings.txt:72
 #: po/guile_strings.txt:244
-#, fuzzy
 msgid "Display the Hierarchical report."
-msgstr "Visa Hej, Världen rapporten."
+msgstr "Visa den hierarkiska rapporten."
 
 #: po/guile_strings.txt:245
 msgid "  F4835 \\ CCC loans reported/election"
@@ -4354,9 +4345,8 @@ msgstr ""
 # messages-i18n.c:83
 # messages-i18n.c:85
 #: po/guile_strings.txt:247
-#, fuzzy
 msgid "Set/Reset Selected Account Tax Status"
-msgstr "Radera det valda kontot"
+msgstr ""
 
 # po/guile_strings.txt:76
 # po/guile_strings.txt:86
@@ -4590,9 +4580,8 @@ msgstr "Visa beskrivning?"
 # po/guile_strings.txt:290
 # po/guile_strings.txt:290
 #: po/guile_strings.txt:285
-#, fuzzy
 msgid "Minimum number of decimal places to display"
-msgstr "Antalet registerrader som visas som standard."
+msgstr "Minsta antal decimalsiffror att visa"
 
 #: po/guile_strings.txt:286
 msgid "  F4835 \\ Fertilizers and lime"
@@ -4602,9 +4591,8 @@ msgstr ""
 # messages-i18n.c:375
 # messages-i18n.c:376
 #: po/guile_strings.txt:287
-#, fuzzy
 msgid "(Sub "
-msgstr "Städa upp"
+msgstr ""
 
 # po/guile_strings.txt:93
 # po/guile_strings.txt:106
@@ -4712,9 +4700,8 @@ msgstr ""
 # messages-i18n.c:83
 # messages-i18n.c:85
 #: po/guile_strings.txt:309
-#, fuzzy
 msgid "Set Selected accounts as Tax Related"
-msgstr "Radera det valda kontot"
+msgstr ""
 
 # po/guile_strings.txt:222
 # po/guile_strings.txt:116
@@ -5131,9 +5118,8 @@ msgstr "Kontofält att visa"
 # messages-i18n.c:230
 # messages-i18n.c:232
 #: po/guile_strings.txt:390
-#, fuzzy
 msgid "< Current Account"
-msgstr "Föräldrakonto"
+msgstr "< aktuellt konto"
 
 #: po/guile_strings.txt:391
 msgid "  Sched A \\ Misc., subject to 2% AGI limit"
@@ -5335,9 +5321,8 @@ msgstr ""
 # messages-i18n.c:243
 # messages-i18n.c:245
 #: po/guile_strings.txt:427
-#, fuzzy
 msgid "Use Indicated Default"
-msgstr "Välj standard"
+msgstr ""
 
 # po/guile_strings.txt:138
 # po/guile_strings.txt:160
@@ -5350,9 +5335,8 @@ msgstr "Verktygsfältknappar"
 # messages-i18n.c:207
 # messages-i18n.c:209
 #: po/guile_strings.txt:429
-#, fuzzy
 msgid "_Export .TXF"
-msgstr "Exportera till"
+msgstr "_Exportera .TXF"
 
 #: po/guile_strings.txt:430
 msgid "  F8863 \\ Lifetime learning credit"
@@ -5466,9 +5450,8 @@ msgstr "Fula alternativ"
 # messages-i18n.c:83
 # messages-i18n.c:85
 #: po/guile_strings.txt:446
-#, fuzzy
 msgid "Reset Tax Related & sub-accounts"
-msgstr "Radera det valda kontot"
+msgstr ""
 
 #: po/guile_strings.txt:447
 msgid "  F8829 \\ Real estate taxes"
@@ -5827,9 +5810,8 @@ msgstr ""
 # po/guile_strings.txt:266
 # po/guile_strings.txt:266
 #: po/guile_strings.txt:509
-#, fuzzy
 msgid "Display the Export .TXF report."
-msgstr "Visa budgetrapport."
+msgstr "Visa .TXF rapporten som exporteras"
 
 #: po/guile_strings.txt:510
 msgid "  F2106 \\ Meal/entertainment expenses"
@@ -5934,9 +5916,8 @@ msgstr "Kasta inte om några konton"
 # messages-i18n.c:230
 # messages-i18n.c:232
 #: po/guile_strings.txt:530
-#, fuzzy
 msgid "^ Parent Account"
-msgstr "Föräldrakonto"
+msgstr "^ Föräldrakonto"
 
 # po/guile_strings.txt:171
 # po/guile_strings.txt:197
@@ -5994,7 +5975,6 @@ msgstr ""
 # messages-i18n.c:243
 # messages-i18n.c:245
 #: po/guile_strings.txt:542
-#, fuzzy
 msgid "Default"
 msgstr "Välj standard"
 
@@ -6002,9 +5982,8 @@ msgstr "Välj standard"
 # po/guile_strings.txt:230
 # po/guile_strings.txt:230
 #: po/guile_strings.txt:543
-#, fuzzy
 msgid "_Balance sheet"
-msgstr "Saldoblad"
+msgstr "_Saldoblad"
 
 #: po/guile_strings.txt:544
 msgid ""
@@ -6040,9 +6019,8 @@ msgstr "Hjälp för första alternativet"
 # src/gnome/glade-gnc-dialogs.c:947
 # src/gnome/glade-gnc-dialogs.c:880
 #: po/guile_strings.txt:549
-#, fuzzy
 msgid "  To: "
-msgstr "Till:"
+msgstr "Till: "
 
 #: po/guile_strings.txt:550
 msgid "  Sched F \\ Taxes"
@@ -6205,9 +6183,8 @@ msgstr ""
 # messages-i18n.c:230
 # messages-i18n.c:232
 #: po/guile_strings.txt:579
-#, fuzzy
 msgid "Use Parent Account Name"
-msgstr "Föräldrakonto"
+msgstr "Använd Föräldrakontots namn"
 
 #: po/guile_strings.txt:580
 msgid ""
@@ -6512,9 +6489,8 @@ msgstr ""
 # po/guile_strings.txt:248
 # po/guile_strings.txt:248
 #: po/guile_strings.txt:631
-#, fuzzy
 msgid "Tax"
-msgstr "Max"
+msgstr "Skatt"
 
 # po/guile_strings.txt:205
 # po/guile_strings.txt:238
@@ -6670,9 +6646,8 @@ msgstr "Den fula"
 # po/guile_strings.txt:71
 # po/guile_strings.txt:72
 #: po/guile_strings.txt:660
-#, fuzzy
 msgid "Hierarchical Accounts Report"
-msgstr "Visa Hej, Världen rapporten."
+msgstr "Hierarkisk kontorapport"
 
 # po/guile_strings.txt:210
 # po/guile_strings.txt:248
@@ -6712,9 +6687,8 @@ msgstr ""
 # messages-i18n.c:296
 # messages-i18n.c:297
 #: po/guile_strings.txt:667
-#, fuzzy
 msgid "No Change"
-msgstr "Ändrad"
+msgstr "Ingen ändring"
 
 #: po/guile_strings.txt:668
 msgid "  W-2 \\ State tax withheld, spouse"
@@ -6776,9 +6750,8 @@ msgstr ""
 # po/guile_strings.txt:150
 # po/guile_strings.txt:151
 #: po/guile_strings.txt:679
-#, fuzzy
 msgid "Tax Report Options"
-msgstr "Rapport alternativ"
+msgstr "Skatterapportalternativ"
 
 # po/guile_strings.txt:256
 # po/guile_strings.txt:256
@@ -7234,9 +7207,8 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:514
 # src/gnome/glade-gnc-dialogs.c:447
 #: po/guile_strings.txt:751
-#, fuzzy
 msgid "Select accounts"
-msgstr "Välj konto"
+msgstr "Välj konton"
 
 # po/guile_strings.txt:234
 # po/guile_strings.txt:282
@@ -7967,25 +7939,24 @@ msgstr ""
 # po/guile_strings.txt:130
 # po/guile_strings.txt:131
 #: po/guile_strings.txt:879
-#, fuzzy
 msgid "The amount of rent payments received from a trade or business."
-msgstr "Tiden mellan två värden"
+msgstr ""
 
 #: po/guile_strings.txt:880
 msgid "Sep 1 - Dec 31"
-msgstr ""
+msgstr "1 Sep - 31 Dec"
 
 #: po/guile_strings.txt:881
 msgid "Jun 1 - Aug 31"
-msgstr ""
+msgstr "1 Jun - 31 Aug"
 
 #: po/guile_strings.txt:882
 msgid "Apr 1 - May 31"
-msgstr ""
+msgstr "1 Apr - 31 Maj"
 
 #: po/guile_strings.txt:883
 msgid "Jan 1 - Mar 31"
-msgstr ""
+msgstr "1 Jan - 31 Mar"
 
 #: po/guile_strings.txt:884
 msgid ""
@@ -8194,9 +8165,8 @@ msgstr ""
 # messages-i18n.c:83
 # messages-i18n.c:85
 #: po/guile_strings.txt:921
-#, fuzzy
 msgid "Set Tax Related & sub-accounts"
-msgstr "Radera det valda kontot"
+msgstr ""
 
 #: po/guile_strings.txt:922
 msgid "  Sched E \\ Other expenses"
@@ -9014,25 +8984,22 @@ msgstr "Matcha datum"
 # src/gnome/glade-gnc-dialogs.c:1866
 # src/gnome/glade-gnc-dialogs.c:1806
 #: src/gnome/glade-gnc-dialogs.c:1793
-#, fuzzy
 msgid "Find transactions occurring in the date range:"
-msgstr "Hitta transaktioner som skett mellan två datum:"
+msgstr "Hitta transaktioner som sker mellan två datum:"
 
 # po/guile_strings.txt:59
 # po/guile_strings.txt:67
 # po/guile_strings.txt:68
 #: src/gnome/glade-gnc-dialogs.c:1816
-#, fuzzy
 msgid "Starting "
-msgstr "Sorterar"
+msgstr "Startar "
 
 # po/guile_strings.txt:124
 # po/guile_strings.txt:145
 # po/guile_strings.txt:146
 #: src/gnome/glade-gnc-dialogs.c:1823
-#, fuzzy
 msgid "Ending "
-msgstr "Slut"
+msgstr "Slutar "
 
 # messages-i18n.c:284 po/guile_strings.txt:131
 # src/gnome/glade-gnc-dialogs.c:1987 src/gnome/glade-gnc-dialogs.c:2045
@@ -9192,36 +9159,33 @@ msgstr "Sök transaktioner vars handling matchar"
 # src/gnome/glade-gnc-dialogs.c:1851
 # src/gnome/glade-gnc-dialogs.c:2405
 #: src/gnome/glade-gnc-dialogs.c:2338
-#, fuzzy
 msgid "Match Cleared state"
-msgstr "Matcha datum"
+msgstr "Matcha godkändstatus"
 
 # src/gnome/glade-gnc-dialogs.c:2060
 # src/gnome/glade-gnc-dialogs.c:2420
 #: src/gnome/glade-gnc-dialogs.c:2353
-#, fuzzy
 msgid "Find transactions whose Cleared status is:"
-msgstr "Sök transaktioner vars nummer matchar:"
+msgstr "Sök transaktioner vars godkändstatus är:"
 
 # src/gnome/glade-gnc-dialogs.c:2428
 #: src/gnome/glade-gnc-dialogs.c:2361
 msgid "Not cleared (n)"
-msgstr ""
+msgstr "Ej godkänd (e)"
 
 # messages-i18n.c:178
 # messages-i18n.c:196
 # src/gnome/glade-gnc-dialogs.c:2435
 #: src/gnome/glade-gnc-dialogs.c:2368
-#, fuzzy
 msgid "Cleared (c)"
-msgstr "Töm allt"
+msgstr "Godkänd (g)"
 
 # messages-i18n.c:331
 # messages-i18n.c:368
 # src/gnome/glade-gnc-dialogs.c:2442
 #: src/gnome/glade-gnc-dialogs.c:2375
 msgid "Reconciled (y)"
-msgstr "Avstämmd (y)"
+msgstr "Avstämmd (j)"
 
 # src/gnome/glade-gnc-dialogs.c:2479
 # src/gnome/glade-gnc-dialogs.c:2470
@@ -9430,368 +9394,20 @@ msgstr "Du måste välja en skrivare först."
 # messages-i18n.c:48
 # messages-i18n.c:50
 #: src/SplitLedger.c:1833
-#, fuzzy
 msgid ""
 "You are about to overwrite an existing split.\n"
 "Are you sure you want to do that?"
 msgstr ""
-"Kontot är inte balanserat.\n"
-"Är du säker på att du vill slutföra?"
+"Du kommer skriva över en existerande delning.\n"
+"Är du säker på att du vill göra det?"
 
 # messages-i18n.c:48
 # messages-i18n.c:49
 # messages-i18n.c:51
 #: src/SplitLedger.c:1863
-#, fuzzy
 msgid ""
 "You are about to overwrite an existing transaction.\n"
 "Are you sure you want to do that?"
 msgstr ""
-"Du har gjort ändringar i detta avstämnings-fönster.\n"
-"Är du säker på att du vill avbryta?"
-
-# po/guile_strings.txt:5
-# po/guile_strings.txt:5
-# po/guile_strings.txt:5
-#~ msgid "Status"
-#~ msgstr "Status"
-
-# po/guile_strings.txt:23
-# po/guile_strings.txt:23
-#~ msgid "Display N-1 lines"
-#~ msgstr "Visa N-1 rader"
-
-# po/guile_strings.txt:22
-# po/guile_strings.txt:26
-# po/guile_strings.txt:26
-#~ msgid "Type of budget report"
-#~ msgstr "Typ av budgetrapport"
-
-# po/guile_strings.txt:24
-# po/guile_strings.txt:27
-# po/guile_strings.txt:27
-#~ msgid "Balancing"
-#~ msgstr "Balanserar"
-
-# po/guile_strings.txt:33
-# po/guile_strings.txt:39
-# po/guile_strings.txt:39
-#~ msgid "_Account Transactions"
-#~ msgstr "_Konto transaktioner"
-
-# po/guile_strings.txt:35
-# po/guile_strings.txt:41
-# po/guile_strings.txt:41
-#~ msgid "Account Transactions"
-#~ msgstr "Kontotransaktioner"
-
-# po/guile_strings.txt:44
-# po/guile_strings.txt:44
-#~ msgid "Budget Dialog (Testing)"
-#~ msgstr "Budgetdialog (test)"
-
-# po/guile_strings.txt:46
-# po/guile_strings.txt:53
-# po/guile_strings.txt:53
-#~ msgid "Testing"
-#~ msgstr "Testar"
-
-# po/guile_strings.txt:52
-# po/guile_strings.txt:60
-# po/guile_strings.txt:61
-#~ msgid "View"
-#~ msgstr "Visa"
-
-# po/guile_strings.txt:55
-# po/guile_strings.txt:63
-# po/guile_strings.txt:64
-#~ msgid "Show all columns"
-#~ msgstr "Visa alla kolumner"
-
-# po/guile_strings.txt:75
-# po/guile_strings.txt:85
-# po/guile_strings.txt:86
-#~ msgid "_Budget"
-#~ msgstr "_Budget"
-
-# po/guile_strings.txt:79
-# po/guile_strings.txt:88
-# po/guile_strings.txt:88
-#~ msgid "Category"
-#~ msgstr "Kategori"
-
-# po/guile_strings.txt:96
-# po/guile_strings.txt:109
-# po/guile_strings.txt:109
-#~ msgid "There are no accounts to report on."
-#~ msgstr "Det finns inga konton att skapa rapporter från."
-
-# po/guile_strings.txt:102
-# po/guile_strings.txt:115
-# po/guile_strings.txt:116
-#~ msgid ""
-#~ "This is for testing. Your reports probably shouldn't have an option like "
-#~ "this."
-#~ msgstr ""
-#~ "Detta är bara för testning. Dina rapporter skall troligen inte\n"
-#~ "ha ett alternativ som det här."
-
-# po/guile_strings.txt:112
-# po/guile_strings.txt:129
-# po/guile_strings.txt:130
-#~ msgid "Full"
-#~ msgstr "Full"
-
-# po/guile_strings.txt:131
-# po/guile_strings.txt:132
-#~ msgid "Upper Limit"
-#~ msgstr "Övre gräns"
-
-# po/guile_strings.txt:117
-# po/guile_strings.txt:135
-# po/guile_strings.txt:136
-#~ msgid "Crash the report"
-#~ msgstr "Krascha rapporten"
-
-# po/guile_strings.txt:122
-# po/guile_strings.txt:140
-# po/guile_strings.txt:141
-#~ msgid "A report useful for balancing the budget"
-#~ msgstr "En rapport som är användbar för balansering av budgeten"
-
-# po/guile_strings.txt:189
-# po/guile_strings.txt:162
-# po/guile_strings.txt:163
-#~ msgid "Period"
-#~ msgstr "Period"
-
-# po/guile_strings.txt:144
-# po/guile_strings.txt:168
-# po/guile_strings.txt:169
-#~ msgid "How are you doing on your budget?"
-#~ msgstr "Hur går det med din budget?"
-
-# po/guile_strings.txt:158
-# po/guile_strings.txt:183
-# po/guile_strings.txt:183
-#~ msgid "Net Inflow"
-#~ msgstr "Nettoinflöde"
-
-# po/guile_strings.txt:174
-# po/guile_strings.txt:201
-# po/guile_strings.txt:201
-#~ msgid "Ba_lance sheet"
-#~ msgstr "Sa_ldoblad"
-
-# po/guile_strings.txt:199
-# po/guile_strings.txt:231
-# po/guile_strings.txt:231
-#~ msgid "Export data as text."
-#~ msgstr "Exportera data som text"
-
-# po/guile_strings.txt:249
-# po/guile_strings.txt:249
-#~ msgid "Test the budget dialog."
-#~ msgstr "Testa budgetdialogrutan."
-
-# po/guile_strings.txt:255
-# po/guile_strings.txt:255
-#~ msgid "Actual"
-#~ msgstr "Verklig"
-
-# po/guile_strings.txt:106
-# po/guile_strings.txt:263
-# po/guile_strings.txt:263
-#~ msgid "Merged"
-#~ msgstr "Sammanslagen"
-
-# po/guile_strings.txt:243
-# po/guile_strings.txt:291
-# po/guile_strings.txt:291
-#~ msgid "Report end date"
-#~ msgstr "Raportera slutdatum"
-
-# po/guile_strings.txt:245
-# po/guile_strings.txt:293
-# po/guile_strings.txt:293
-#~ msgid "Export data as text (Danger: Unfinished)"
-#~ msgstr "Exportera data som text (Fara: Inte färdigt)"
-
-# po/guile_strings.txt:252
-# po/guile_strings.txt:301
-# po/guile_strings.txt:301
-#~ msgid "Report start date"
-#~ msgstr "Rapportera startdatum"
-
-# po/guile_strings.txt:311
-# po/guile_strings.txt:311
-#~ msgid "Lower Limit"
-#~ msgstr "Undre gräns"
-
-# po/guile_strings.txt:283
-# po/guile_strings.txt:336
-# po/guile_strings.txt:335
-#~ msgid "Display the Account Transactions report."
-#~ msgstr "Visa kontots transaktionsrapport."
-
-# src/gnome/glade-gnc-dialogs.c:1890 src/gnome/glade-gnc-dialogs.c:1906
-# src/gnome/glade-gnc-dialogs.c:1943 src/gnome/glade-gnc-dialogs.c:1958
-# src/gnome/glade-gnc-dialogs.c:1830 src/gnome/glade-gnc-dialogs.c:1846
-# src/gnome/glade-gnc-dialogs.c:1883 src/gnome/glade-gnc-dialogs.c:1898
-#~ msgid "/"
-#~ msgstr "-"
-
-# messages-i18n.c:219
-# src/gnome/glade-gnc-dialogs.c:2599
-# src/gnome/glade-gnc-dialogs.c:2590
-#~ msgid "Select Date"
-#~ msgstr "Välj datum"
-
-# messages-i18n.c:226
-# messages-i18n.c:250
-#~ msgid "Show Categories"
-#~ msgstr "Visa kategorier"
-
-# po/guile_strings.txt:78
-# po/guile_strings.txt:87
-#~ msgid "Import QIF File - Scripted in Guile."
-#~ msgstr "Importera QIF fil - Skriptad i Guile."
-
-# po/guile_strings.txt:91
-# po/guile_strings.txt:180
-#, fuzzy
-#~ msgid "largest to t, latest to earliest"
-#~ msgstr "största till minsta, senaste till tidigaste"
-
-# po/guile_strings.txt:279
-# po/guile_strings.txt:331
-#~ msgid "QIF File Import (Danger: Unfinished)"
-#~ msgstr "QIF Fil importering (Fara: Inte färdig)"
-
-# messages-i18n.c:45
-# messages-i18n.c:46
-#~ msgid "QIF file load failed. Check settings and reload."
-#~ msgstr ""
-#~ "QIF-fil kunde inte läsas in. Kontrollera inställningar och läs in igen."
-
-# src/gnome/glade-gnc-dialogs.c:182
-# src/gnome/glade-gnc-dialogs.c:183
-#~ msgid "Radix format:"
-#~ msgstr "Nummerformat"
-
-# src/gnome/glade-gnc-dialogs.c:251
-# src/gnome/glade-gnc-dialogs.c:266
-#~ msgid "Autodetect"
-#~ msgstr "Automatisk detektering"
-
-# src/gnome/glade-gnc-dialogs.c:254
-# src/gnome/glade-gnc-dialogs.c:269
-#~ msgid "Decimal (1,000.00)"
-#~ msgstr "Decimal (1,000.00)"
-
-# src/gnome/glade-gnc-dialogs.c:257
-# src/gnome/glade-gnc-dialogs.c:272
-#~ msgid "Comma (1.000,00)"
-#~ msgstr "Komma (1.000,00)"
-
-# src/gnome/glade-gnc-dialogs.c:269
-# src/gnome/glade-gnc-dialogs.c:284
-#~ msgid "Autodetect           "
-#~ msgstr "Automatisk detektering"
-
-# src/gnome/glade-gnc-dialogs.c:272
-# src/gnome/glade-gnc-dialogs.c:287
-#~ msgid "MM/DD/YYYY"
-#~ msgstr "MM/DD/ÅÅÅÅ"
-
-# src/gnome/glade-gnc-dialogs.c:275
-# src/gnome/glade-gnc-dialogs.c:290
-#~ msgid "DD/MM/YYYY"
-#~ msgstr "DD/MM/ÅÅÅÅ"
-
-# src/gnome/glade-gnc-dialogs.c:278
-# src/gnome/glade-gnc-dialogs.c:293
-#~ msgid "YYYY/MM/DD"
-#~ msgstr "ÅÅÅÅ/MM/DD"
-
-# src/gnome/glade-gnc-dialogs.c:281
-# src/gnome/glade-gnc-dialogs.c:296
-#~ msgid "YYYY/DD/MM"
-#~ msgstr "ÅÅÅÅ/DD/MM"
-
-# messages-i18n.c:115
-#~ msgid "Sort by Amount, then Date, then Num"
-#~ msgstr "Sortera på Belopp, sedan Datum, sedan Nummer"
-
-# messages-i18n.c:116
-#~ msgid "Sort by Date, then Num, then Amount"
-#~ msgstr "Sortera på Datum, sedan Nummer, sedan Belopp"
-
-# messages-i18n.c:117
-#~ msgid "Sort by Description, then Date, then Num"
-#~ msgstr "Sortera på Beskrivning, sedan Datum, sedan Nummer"
-
-# messages-i18n.c:118
-#~ msgid "Sort by Memo, then Date, then Num"
-#~ msgstr "Sortera på Memo, sedan Datum, sedan Nummer"
-
-# messages-i18n.c:119
-#~ msgid "Sort by Num, then Date, then Amount"
-#~ msgstr "Sortera på Nummer, sedan Datum, sedan Belopp"
-
-# po/guile_strings.txt:23
-#~ msgid "reg_win_width"
-#~ msgstr "reg_win_width"
-
-# po/guile_strings.txt:42
-#~ msgid "main_win_height"
-#~ msgstr "main_win_height"
-
-# po/guile_strings.txt:77
-#~ msgid "account_edit_win_height"
-#~ msgstr "account_edit_win_height"
-
-# po/guile_strings.txt:111
-#~ msgid "account_add_win_width"
-#~ msgstr "account_add_win_width"
-
-# po/guile_strings.txt:116
-#~ msgid "Get number at each one of these"
-#~ msgstr "Hämta ett nummer vid varje av dessa"
-
-# po/guile_strings.txt:173
-#~ msgid "account_edit_win_width"
-#~ msgstr "account_edit_win_width"
-
-# po/guile_strings.txt:227
-#~ msgid "account_add_win_height"
-#~ msgstr "account_add_win_height"
-
-# po/guile_strings.txt:261
-#~ msgid "main_win_width"
-#~ msgstr "main_win_width"
-
-# po/guile_strings.txt:290
-#~ msgid "reg_stock_win_width"
-#~ msgstr "reg_stock_win_width"
-
-# src/gnome/glade-gnc-dialogs.c:164
-#~ msgid "QIF Account:"
-#~ msgstr "QIF-konto:"
-
-# src/gnome/glade-gnc-dialogs.c:293
-#~ msgid "Select file"
-#~ msgstr "Välj fil"
-
-#~ msgid "Double line mode with multi-line cursor"
-#~ msgstr "Läge för dubbla rader med flerrads markör"
-
-#~ msgid "Single line mode with multi-line cursor"
-#~ msgstr "Läge för enkelrader med flerrads markör"
-
-#~ msgid "__gui"
-#~ msgstr "__gui"
-
-#~ msgid "Failed to load QIF file. Are you sure it's a QIF file?"
-#~ msgstr ""
-#~ "Misslyckades att läsa in en QIF-fil. Är du säker på att det är en QIF-fil?"
+"Du kommer skriva öven en existerande transaktion.\n"
+"Är du säker på att du vill göra det?"
