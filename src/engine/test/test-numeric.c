@@ -90,23 +90,6 @@ main(int argc, char ** argv) {
   printf("7/16 as float: %e\n",
          gnc_numeric_to_double(gnc_numeric_create(7, 16)));
   
-  printf("100023234 / 334216654 reduced: %s\n",
-         gnc_numeric_print(gnc_numeric_reduce(gnc_numeric_create(10023234LL,
-                                                                 334216654LL))));
-  printf("2^10*3^10*17^2 / 2^8*3^12 reduced: %s\n",
-         gnc_numeric_print
-         (gnc_numeric_reduce(gnc_numeric_create(17474724864LL,
-                                                136048896LL))));
-  printf("1024 / 1024^4 reduced: %s\n",
-         gnc_numeric_print
-         (gnc_numeric_reduce(gnc_numeric_create(1024LL,
-                                                1099511627776LL))));
-  printf("reducing 100,000 times:\n\n");
-  for(i = 0; i < 100000; i++) {
-    gnc_numeric_reduce(gnc_numeric_create(17474724864LL,
-                                          136048896LL));
-  }
-  
   printf("add LCM: %s + %s = %s\n",
          gnc_numeric_print(b), gnc_numeric_print(d),
          gnc_numeric_print(gnc_numeric_add(b, d, GNC_DENOM_AUTO,
@@ -161,7 +144,7 @@ gnc_numeric_unequal (gnc_numeric a, gnc_numeric b)
 /* Make sure that the equivalence operator we use for 
  * later tests actually works */
 static void
-check_equality_operator (void)
+check_eq_operator (void)
 {
 	gnc_numeric a = gnc_numeric_create (42, 58);
 	gnc_numeric b = gnc_numeric_create (42, 58);
@@ -171,8 +154,12 @@ check_equality_operator (void)
 	do_test (gnc_numeric_eq(a, a), "expected self-equivalence");
 	do_test (gnc_numeric_eq(a, b), "expected equivalence");
 	do_test (0 == gnc_numeric_eq(a, c), "expected inequivalence");
+}
 
 
+static void
+check_reduce (void)
+{
 	/* Check common factor elimination (needed for equality checks) */
 	gnc_numeric one = gnc_numeric_create (1,1);
 	gnc_numeric rone = gnc_numeric_create (1000000,1000000);
@@ -184,6 +171,31 @@ check_equality_operator (void)
 	rfour = gnc_numeric_reduce (rfour);
 	do_test (gnc_numeric_eq(four, rfour), "reduce to four");
 
+	gnc_numeric val = gnc_numeric_create(10023234LL, 334216654LL);
+	gnc_numeric rval = gnc_numeric_reduce (val);
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (5011617,167108327),
+	                rval,
+                   val, "expected %s = %s = reduce(%s)");
+
+	val = gnc_numeric_create(17474724864LL,136048896LL);
+	rval = gnc_numeric_reduce (val);
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (4*17*17,9),
+	                rval,
+                   val, "expected %s = %s = reduce(%s)");
+
+	val = gnc_numeric_create(1024LL,1099511627776LL);
+	rval = gnc_numeric_reduce (val);
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (1,1024*1024*1024),
+	                rval,
+                   val, "expected %s = %s = reduce(%s)");
+}
+
+static void
+check_equality_operator (void)
+{
 	/* Check equality operator for some large numer/denom values */
 	gint64 numer = 1<<30;
 	numer <<= 30;   /* we don't trust cpp to compute 1<<60 correctly */
@@ -451,6 +463,8 @@ check_mult_div (void)
 static void
 run_test (void)
 {
+	check_eq_operator ();
+	check_reduce ();
 	check_equality_operator ();
 	check_rounding();
 	check_add_subtract();
