@@ -22,8 +22,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __IO_UTILS_H__
-#define __IO_UTILS_H__
+#ifndef IO_UTILS_H
+#define IO_UTILS_H
 
 #include <stdio.h>
 
@@ -37,4 +37,4 @@ void write_commodities(FILE *out, GNCBook *book);
 void write_emacs_trailer(FILE *out);
 
 
-#endif /* __IO_UTILS_H__ */    
+#endif /* IO_UTILS_H */    

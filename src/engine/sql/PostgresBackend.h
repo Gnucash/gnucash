@@ -31,8 +31,8 @@
  */
 
 
-#ifndef __POSTGRES_BACKEND_H__
-#define __POSTGRES_BACKEND_H__
+#ifndef POSTGRES_BACKEND_H
+#define POSTGRES_BACKEND_H
 
 #include <libpq-fe.h>
 
@@ -138,4 +138,4 @@ void pgendStoreAuditTransaction (PGBackend *be, Transaction *ptr, sqlBuild_QType
 
 int pgendTransactionGetDeletedVersion (PGBackend *be, Transaction *ptr);
 
-#endif /* __POSTGRES_BACKEND_H__ */
+#endif /* POSTGRES_BACKEND_H */

@@ -21,8 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __MULTI_LEDGER_H__
-#define __MULTI_LEDGER_H__
+#ifndef MULTI_LEDGER_H
+#define MULTI_LEDGER_H
 
 #include "config.h"
 
@@ -121,6 +121,6 @@ void        xaccLedgerDisplayClose (xaccLedgerDisplay * ledger_display);
 /* close all ledger windows containing this account. */
 void        xaccDestroyLedgerDisplay (Account *account);
 
-#endif /* __MULTI_LEDGER_H__ */
+#endif /* MULTI_LEDGER_H */
 
 /************************** END OF FILE *************************/

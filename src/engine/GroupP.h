@@ -33,8 +33,8 @@
  *
  */
 
-#ifndef __XACC_ACCOUNT_GROUP_P_H__
-#define __XACC_ACCOUNT_GROUP_P_H__
+#ifndef XACC_ACCOUNT_GROUP_P_H
+#define XACC_ACCOUNT_GROUP_P_H
 
 #include "config.h"
 
@@ -60,4 +60,4 @@ struct _account_group
   gnc_numeric balance;
 };
 
-#endif /* __XACC_ACCOUNT_GROUP_P_H__ */
+#endif /* XACC_ACCOUNT_GROUP_P_H */

@@ -19,8 +19,8 @@
  *
  ***************************************************************************/
 
-#ifndef __FINPROTO_H__
-#define __FINPROTO_H__
+#ifndef FINPROTO_H
+#define FINPROTO_H
 
 #include <stdio.h>
 

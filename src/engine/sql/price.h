@@ -21,8 +21,8 @@
 \********************************************************************/
 
 
-#ifndef __POSTGRES_PRICE_H__
-#define __POSTGRES_PRICE_H__
+#ifndef POSTGRES_PRICE_H
+#define POSTGRES_PRICE_H
 
 #include "PostgresBackend.h"
 
@@ -36,4 +36,4 @@ void pgendPriceLookup (Backend *bend, GNCPriceLookup *look);
 void pgend_price_begin_edit (Backend * bend, GNCPrice *pr);
 void pgend_price_commit_edit (Backend * bend, GNCPrice *pr);
 
-#endif /* __POSTGRES_PRICE_H__ */
+#endif /* POSTGRES_PRICE_H */

@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#ifndef __WINDOW_MAIN_H__
-#define __WINDOW_MAIN_H__
+#ifndef WINDOW_MAIN_H
+#define WINDOW_MAIN_H
 
 #include <gnome.h>
 #include <guile/gh.h>

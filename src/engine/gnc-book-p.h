@@ -26,8 +26,8 @@
  * Copyright (c) 2001 Rob Browning
  */
 
-#ifndef __GNC_BOOK_P_H__
-#define __GNC_BOOK_P_H__
+#ifndef GNC_BOOK_P_H
+#define GNC_BOOK_P_H
 
 #include "gnc-book.h"
 #include "gnc-pricedb.h"
@@ -38,4 +38,4 @@ void gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db);
 
 void gnc_book_mark_saved(GNCBook *book);
 
-#endif /* __GNC_BOOK_P_H__ */
+#endif /* GNC_BOOK_P_H */

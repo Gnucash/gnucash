@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __GNC_SCROLLED_WINDOW_H__
-#define __GNC_SCROLLED_WINDOW_H__
+#ifndef GNC_SCROLLED_WINDOW_H
+#define GNC_SCROLLED_WINDOW_H
 
 #include <gtk/gtkscrolledwindow.h>
 
@@ -61,4 +61,4 @@ GtkWidget * gnc_scrolled_window_new (void);
 #endif /* __cplusplus */
 
 
-#endif /* __GNC_SCROLLED_WINDOW_H__ */
+#endif /* GNC_SCROLLED_WINDOW_H */

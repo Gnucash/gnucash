@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __GNC_ACCOUNT_TREE_H__
-#define __GNC_ACCOUNT_TREE_H__
+#ifndef GNC_ACCOUNT_TREE_H
+#define GNC_ACCOUNT_TREE_H
 
 #include <gtk/gtkctree.h>
 
@@ -167,4 +167,4 @@ void gnc_account_tree_set_selectable_filter (GNCAccountTree *tree,
 }
 #endif				/* __cplusplus */
 
-#endif				/* __GNC_ACCOUNT_TREE_H__ */
+#endif				/* GNC_ACCOUNT_TREE_H */

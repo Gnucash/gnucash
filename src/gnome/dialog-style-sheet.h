@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#ifndef __GNC_DIALOG_STYLE_SHEET_H__
-#define __GNC_DIALOG_STYLE_SHEET_H__
+#ifndef GNC_DIALOG_STYLE_SHEET_H
+#define GNC_DIALOG_STYLE_SHEET_H
 
 typedef struct _stylesheetdialog StyleSheetDialog;
 

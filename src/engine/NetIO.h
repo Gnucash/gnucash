@@ -22,11 +22,11 @@
 \********************************************************************/
 
 
-#ifndef __XACC_NET_IO_H__
-#define __XACC_NET_IO_H__
+#ifndef XACC_NET_IO_H
+#define XACC_NET_IO_H
 
 #include "BackendP.h"
 
 Backend * xmlendNew (void);
 
-#endif /* __XACC_NET_IO_H__ */
+#endif /* XACC_NET_IO_H */

@@ -21,8 +21,8 @@
  *                                                                  *
  *******************************************************************/
 
-#ifndef __GNC_NUMERIC_H__
-#define __GNC_NUMERIC_H__
+#ifndef GNC_NUMERIC_H
+#define GNC_NUMERIC_H
 
 #include <glib.h>
 

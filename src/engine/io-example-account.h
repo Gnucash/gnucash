@@ -22,8 +22,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __IO_EXAMPLE_ACCOUNT_H__
-#define __IO_EXAMPLE_ACCOUNT_H__
+#ifndef IO_EXAMPLE_ACCOUNT_H
+#define IO_EXAMPLE_ACCOUNT_H
 
 #include <glib.h>
 
@@ -58,4 +58,4 @@ GSList* gnc_load_example_account_list(const char *dirname);
 
 gboolean gnc_is_example_account_xml(const gchar *name);
 
-#endif /* __IO_EXAMPLE_ACCOUNT_H__ */
+#endif /* IO_EXAMPLE_ACCOUNT_H */

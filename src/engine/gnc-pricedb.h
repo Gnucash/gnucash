@@ -21,8 +21,8 @@
  *                                                                  *
  *******************************************************************/
 
-#ifndef __GNC_PRICEDB_H__
-#define __GNC_PRICEDB_H__
+#ifndef GNC_PRICEDB_H
+#define GNC_PRICEDB_H
 
 #include "date.h"
 #include "gnc-numeric.h"

@@ -21,8 +21,8 @@
  *                                                                  *
  *******************************************************************/
 
-#ifndef __GNC_PRICEDB_P_H__
-#define __GNC_PRICEDB_P_H__
+#ifndef GNC_PRICEDB_P_H
+#define GNC_PRICEDB_P_H
 
 #include <glib.h>
 

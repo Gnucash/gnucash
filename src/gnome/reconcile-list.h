@@ -20,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __GNC_RECONCILE_LIST_H__
-#define __GNC_RECONCILE_LIST_H__
+#ifndef GNC_RECONCILE_LIST_H
+#define GNC_RECONCILE_LIST_H
 
 #include <gtk/gtkclist.h>
 
@@ -114,4 +114,4 @@ void gnc_reconcile_list_set_sort_order(GNCReconcileList *list,
 }
 #endif /* __cplusplus */
 
-#endif /* __RECONCILE_LIST_H__ */
+#endif /* RECONCILE_LIST_H */

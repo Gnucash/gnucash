@@ -21,8 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __DIALOG_PROGRESS_H__
-#define __DIALOG_PROGRESS_H__
+#ifndef DIALOG_PROGRESS_H
+#define DIALOG_PROGRESS_H
 
 #include <glib.h>
 

@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __WINDOW_RECONCILE_H__
-#define __WINDOW_RECONCILE_H__
+#ifndef WINDOW_RECONCILE_H
+#define WINDOW_RECONCILE_H
 
 #include "RecnWindow.h"
 

@@ -22,8 +22,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __DIALOG_UTILS_H__
-#define __DIALOG_UTILS_H__
+#ifndef DIALOG_UTILS_H
+#define DIALOG_UTILS_H
 
 #include <glade/glade.h>
 #include <gnome.h>

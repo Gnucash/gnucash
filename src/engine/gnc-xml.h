@@ -22,8 +22,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __GNC_XML_H__
-#define __GNC_XML_H__
+#ifndef GNC_XML_H
+#define GNC_XML_H
 
 #include "config.h"
 
@@ -61,4 +61,4 @@ sixtp* gnc_freqSpec_sixtp_parser_create(void);
 
 sixtp* gnc_template_transaction_sixtp_parser_create(void);
 
-#endif /* __GNC_XML_H__ */
+#endif /* GNC_XML_H */

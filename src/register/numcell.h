@@ -32,8 +32,8 @@
  * Copyright (c) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>
  */
  
-#ifndef __NUM_CELL_H__
-#define __NUM_CELL_H__
+#ifndef NUM_CELL_H
+#define NUM_CELL_H
 
 #include "basiccell.h"
 
@@ -50,4 +50,4 @@ void      xaccDestroyNumCell (NumCell *cell);
 void      xaccSetNumCellValue (NumCell *cell, const char *str);
 gboolean  xaccSetNumCellLastNum (NumCell *cell, const char *str);
 
-#endif /* __NUM_CELL_H__ */
+#endif /* NUM_CELL_H */

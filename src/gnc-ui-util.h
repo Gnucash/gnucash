@@ -20,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __GNC_UI_UTIL_H__
-#define __GNC_UI_UTIL_H__
+#ifndef GNC_UI_UTIL_H
+#define GNC_UI_UTIL_H
 
 #include "config.h"
 

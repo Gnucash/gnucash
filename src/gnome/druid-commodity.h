@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#ifndef __DRUID_COMMODITY_H__
-#define __DRUID_COMMODITY_H__
+#ifndef DRUID_COMMODITY_H
+#define DRUID_COMMODITY_H
 
 #include <gnome.h>
 

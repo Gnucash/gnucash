@@ -21,8 +21,8 @@
 \********************************************************************/
 
 
-#ifndef __POSTGRES_ACCOUNT_H__
-#define __POSTGRES_ACCOUNT_H__
+#ifndef POSTGRES_ACCOUNT_H
+#define POSTGRES_ACCOUNT_H
 
 #include "Group.h"
 #include "guid.h"
@@ -37,4 +37,4 @@ int pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid);
 
 void pgend_account_commit_edit (Backend * bend, Account * acct);
 
-#endif /* __POSTGRES_ACCOUNT_H__ */
+#endif /* POSTGRES_ACCOUNT_H */

@@ -39,8 +39,8 @@
  *
  */
 
-#ifndef __XACC_ACCOUNT_P_H__
-#define __XACC_ACCOUNT_P_H__
+#ifndef XACC_ACCOUNT_P_H
+#define XACC_ACCOUNT_P_H
 
 #include "config.h"
 
@@ -215,4 +215,4 @@ void xaccFreeAccount (Account *account);
 void xaccAccountSetVersion (Account*, gint32);
 gint32 xaccAccountGetVersion (Account*);
 
-#endif /* __XACC_ACCOUNT_P_H__ */
+#endif /* XACC_ACCOUNT_P_H */

@@ -86,8 +86,8 @@
  * Copyright (c) 2000 Dave Peticolas
  */
 
-#ifndef __TABLE_ALLGUI_H__
-#define __TABLE_ALLGUI_H__
+#ifndef TABLE_ALLGUI_H
+#define TABLE_ALLGUI_H
 
 #include <glib.h>
 
@@ -436,6 +436,6 @@ gboolean     gnc_table_traverse_update(Table *table,
                                        gncTableTraversalDir dir,
                                        VirtualLocation *dest_loc);
 
-#endif /* __TABLE_ALLGUI_H__ */
+#endif /* TABLE_ALLGUI_H */
 
 /* ================== end of file ======================= */

@@ -20,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __OPTIONS_DIALOG_H__
-#define __OPTIONS_DIALOG_H__
+#ifndef OPTIONS_DIALOG_H
+#define OPTIONS_DIALOG_H
 
 #include <gnome.h>
 #include <guile/gh.h>
@@ -55,4 +55,4 @@ void gnc_show_options_dialog(void);
 void gnc_build_options_dialog_contents(GNCOptionWin *win,
                                        GNCOptionDB  *odb);
 
-#endif /* __OPTIONS_DIALOG_H__ */
+#endif /* OPTIONS_DIALOG_H */

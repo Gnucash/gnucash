@@ -20,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __GNC_SPLASH_H__
-#define __GNC_SPLASH_H__
+#ifndef GNC_SPLASH_H
+#define GNC_SPLASH_H
 
 void gnc_show_splash_screen (void);
 

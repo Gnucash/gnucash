@@ -20,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __HISTORY_H__
-#define __HISTORY_H__
+#ifndef HISTORY_H
+#define HISTORY_H
 
 #include <gnome.h>
 #define MAX_HISTORY 4

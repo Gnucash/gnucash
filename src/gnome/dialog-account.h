@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __DIALOG_ACCOUNT_H__
-#define __DIALOG_ACCOUNT_H__
+#ifndef DIALOG_ACCOUNT_H
+#define DIALOG_ACCOUNT_H
 
 #include "AccWindow.h"
 

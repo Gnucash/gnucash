@@ -1,5 +1,9 @@
 2001-07-02  Dave Peticolas  <dave@krondo.com>
 
+	* many header files: apply Ben Stanley's script to
+	convert __HEADER_H__ to HEADER_H. All names starting
+	with '_' are reserved.
+
 	* src/gnome/gnc-dateedit.c: sync with datecell-gnome.c
 
 	* src/register/gnome/datecell-gnome.c: use GDate to do

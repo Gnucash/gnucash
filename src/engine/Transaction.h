@@ -22,8 +22,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __XACC_TRANSACTION_H__
-#define __XACC_TRANSACTION_H__
+#ifndef XACC_TRANSACTION_H
+#define XACC_TRANSACTION_H
 
 #include "config.h"
 
@@ -569,4 +569,4 @@ Split * xaccSplitGetOtherSplit (Split *split);
  */
 int xaccIsPeerSplit (Split *split_1, Split *split_2);
 
-#endif /* __XACC_TRANSACTION_H__ */
+#endif /* XACC_TRANSACTION_H */

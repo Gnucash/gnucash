@@ -31,8 +31,8 @@
  * Copyright (c) 2001 Linas Vepstas
  */
 
-#ifndef __KVP_SQL_H__
-#define __KVP_SQL_H__
+#ifndef KVP_SQL_H
+#define KVP_SQL_H
 
 #include "kvp_frame.h"
 #include "guid.h"
@@ -67,4 +67,4 @@ void pgendKVPDeleteStr (PGBackend *, const char *guid_string);
 
 kvp_frame * pgendKVPFetch (PGBackend *, const GUID *, kvp_frame *);
 
-#endif /* __KVP_SQL_H__ */
+#endif /* KVP_SQL_H */

@@ -24,8 +24,8 @@
  *   Author: Linas Vepstas (linas@linas.org)                        *
 \********************************************************************/
 
-#ifndef __GNC_ENGINE_UTIL_H__
-#define __GNC_ENGINE_UTIL_H__
+#ifndef GNC_ENGINE_UTIL_H
+#define GNC_ENGINE_UTIL_H
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

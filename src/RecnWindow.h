@@ -23,8 +23,8 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __RECONCILE_H__
-#define __RECONCILE_H__
+#ifndef RECONCILE_H
+#define RECONCILE_H
 
 #include "config.h"
 

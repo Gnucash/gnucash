@@ -22,8 +22,8 @@
  *                                                                  *
  ********************************************************************/
 
-#ifndef __IO_GNCXML_P_H__
-#define __IO_GNCXML_P_H__
+#ifndef IO_GNCXML_P_H
+#define IO_GNCXML_P_H
 
 #include "sixtp.h"
 #include "io-gncxml.h"

@@ -22,8 +22,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __GNC_COMMON_H__
-#define __GNC_COMMON_H__
+#ifndef GNC_COMMON_H
+#define GNC_COMMON_H
 
 #include "config.h"
 #include <glib.h>

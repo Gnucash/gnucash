@@ -20,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __GNC_HELP_WINDOW_H__
-#define __GNC_HELP_WINDOW_H__
+#ifndef GNC_HELP_WINDOW_H
+#define GNC_HELP_WINDOW_H
 
 #include <gnome.h>
 

@@ -22,8 +22,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __XACC_ACCOUNT_H__
-#define __XACC_ACCOUNT_H__
+#ifndef XACC_ACCOUNT_H
+#define XACC_ACCOUNT_H
 
 #include "config.h"
 
@@ -402,4 +402,4 @@ xaccAccountFindTransByDesc(Account *account, const char *description);
 Split *
 xaccAccountFindSplitByDesc(Account *account, const char *description);
 
-#endif /* __XACC_ACCOUNT_H__ */
+#endif /* XACC_ACCOUNT_H */

@@ -28,8 +28,8 @@
  * If a file-io thing needs date handling, it should do it itself,
  * instead of depending on the routines here. */
 
-#ifndef __XACC_DATE_H__
-#define __XACC_DATE_H__
+#ifndef XACC_DATE_H
+#define XACC_DATE_H
 
 #include <time.h>
 
@@ -201,4 +201,4 @@ char * gnc_timespec_to_iso8601_buff (Timespec ts, char * buff);
  */
 long int gnc_timezone (struct tm *tm);
 
-#endif /* __XACC_DATE_H__ */
+#endif /* XACC_DATE_H */

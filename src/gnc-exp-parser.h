@@ -17,8 +17,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-#ifndef __GNC_EXP_PARSER_H__
-#define __GNC_EXP_PARSER_H__
+#ifndef GNC_EXP_PARSER_H
+#define GNC_EXP_PARSER_H
 
 #include "config.h"
 

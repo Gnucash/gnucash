@@ -116,8 +116,8 @@
  * Derived from Rob Clark's original MainWindow.c code, Dec 1998
  */
 
-#ifndef __GNC_FILE_DIALOG_H__
-#define __GNC_FILE_DIALOG_H__
+#ifndef GNC_FILE_DIALOG_H
+#define GNC_FILE_DIALOG_H
 
 #include "config.h"
 
@@ -142,4 +142,4 @@ Account *gncGetTemplateAccount(void);
 
 GNCBook *gncGetCurrentBook (void);
 
-#endif /* __GNC_FILE_DIALOG_H__ */
+#endif /* GNC_FILE_DIALOG_H */

@@ -34,8 +34,8 @@
  * the GUI & other front-end users.  This file defines these errors.
  */
 
-#ifndef __XACC_BACKEND_H__
-#define __XACC_BACKEND_H__
+#ifndef XACC_BACKEND_H
+#define XACC_BACKEND_H
 
 #include "config.h"
 
@@ -89,4 +89,4 @@ typedef enum {
 } GNCBackendError;
 /* NOTE: if you modify GNCBackendError, please update src/scm/gnc.gwp */
 
-#endif /* __XACC_BACKEND_H__ */
+#endif /* XACC_BACKEND_H */

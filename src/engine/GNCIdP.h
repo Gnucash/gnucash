@@ -21,8 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __GNC_ID_P_H__
-#define __GNC_ID_P_H__ 1
+#ifndef GNC_ID_P_H
+#define GNC_ID_P_H 1
 
 #include "GNCId.h"
 

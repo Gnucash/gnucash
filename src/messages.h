@@ -19,8 +19,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-#ifndef __XACC_MESSAGES_H__
-#define __XACC_MESSAGES_H__
+#ifndef XACC_MESSAGES_H
+#define XACC_MESSAGES_H
 
 #include "config.h"
 
@@ -49,4 +49,4 @@
 #undef  N_
 #define N_(String) (String)
 
-#endif /* __XACC_MESSAGES_H__ */
+#endif /* XACC_MESSAGES_H */

@@ -21,8 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __DRUID_UTILS_H__
-#define __DRUID_UTILS_H__
+#ifndef DRUID_UTILS_H
+#define DRUID_UTILS_H
 
 #include <gnome.h>
 

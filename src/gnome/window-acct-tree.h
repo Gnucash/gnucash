@@ -20,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#ifndef __WINDOW_ACCT_TREE_H__
-#define __WINDOW_ACCT_TREE_H__
+#ifndef WINDOW_ACCT_TREE_H
+#define WINDOW_ACCT_TREE_H
 
 #include "mainwindow-account-tree.h"
 #include "window-main.h"

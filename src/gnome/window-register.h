@@ -21,8 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __WINDOW_REGISTER_H__
-#define __WINDOW_REGISTER_H__
+#ifndef WINDOW_REGISTER_H
+#define WINDOW_REGISTER_H
 
 #include "RegWindow.h"
 #include "MultiLedger.h"

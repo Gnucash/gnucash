@@ -27,8 +27,8 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __IO_GNCBIN_H__
-#define __IO_GNCBIN_H__
+#ifndef IO_GNCBIN_H
+#define IO_GNCBIN_H
 
 #include "Backend.h"
 #include "gnc-book.h"
@@ -53,4 +53,4 @@
 void            gnc_book_load_from_binfile(GNCBook *book);
 GNCBackendError gnc_book_get_binfile_io_error(void);
 
-#endif /* __IO_GNCBIN_H__ */
+#endif /* IO_GNCBIN_H */

@@ -22,8 +22,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __IO_GNCXML_GEN_H__
-#define __IO_GNCXML_GEN_H__
+#ifndef IO_GNCXML_GEN_H
+#define IO_GNCXML_GEN_H
 
 #include <glib.h>
 #include "sixtp.h"
@@ -43,4 +43,4 @@ gboolean
 gnc_xml_parse_file(sixtp *top_parser, const char *filename,
                    gxpf_callback callback, gpointer data);
 
-#endif /* __IO_GNCXML_GEN_H__ */
+#endif /* IO_GNCXML_GEN_H */

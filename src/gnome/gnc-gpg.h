@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#ifndef __GNC_GPG_H__
-#define __GNC_GPG_H__
+#ifndef GNC_GPG_H
+#define GNC_GPG_H
 
 #include <glib.h>
 

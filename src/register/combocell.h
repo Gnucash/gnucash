@@ -44,8 +44,8 @@
  * Copyright (c) 2000 Dave Peticolas
  */
 
-#ifndef __COMBO_CELL_H__
-#define __COMBO_CELL_H__
+#ifndef COMBO_CELL_H
+#define COMBO_CELL_H
 
 #include <glib.h>
 
@@ -92,6 +92,6 @@ void         xaccComboCellSetAutoSize (ComboCell *cell, gboolean autosize);
  * Defaults to false. This is a 'class' method. */
 void         xaccComboCellSetAutoPop (gboolean auto_pop_combos);
 
-#endif /* __COMBO_CELL_H__ */
+#endif /* COMBO_CELL_H */
 
 /* --------------- end of file ---------------------- */

@@ -21,8 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __XACC_DATE_UTILS_H__
-#define __XACC_DATE_UTILS_H__
+#ifndef XACC_DATE_UTILS_H
+#define XACC_DATE_UTILS_H
 
 #include <time.h>
 
@@ -31,7 +31,7 @@
 char *     xaccDateUtilGetStamp (time_t thyme);
 char *     xaccDateUtilGetStampNow (void);
 
-#endif /* __XACC_DATE_UTILS_H__ */
+#endif /* XACC_DATE_UTILS_H */
 
 /************************ END OF ************************************\
 \************************* FILE *************************************/

@@ -20,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __QUERY_USER_H__
-#define __QUERY_USER_H__
+#ifndef QUERY_USER_H
+#define QUERY_USER_H
 
 // +jsled: for line below.
 #include "gnc-ui.h"

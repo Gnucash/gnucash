@@ -21,8 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __GUID_H__
-#define __GUID_H__ 
+#ifndef GUID_H
+#define GUID_H 
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"

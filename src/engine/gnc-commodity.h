@@ -21,8 +21,8 @@
  *                                                                  *
  *******************************************************************/
 
-#ifndef __GNC_COMMODITY_H__
-#define __GNC_COMMODITY_H__
+#ifndef GNC_COMMODITY_H
+#define GNC_COMMODITY_H
 
 #include <glib.h>
 

@@ -32,12 +32,12 @@
  * Copyright (c) 1998 Linas Vepstas
  */
 
-#ifndef __XACC_TABLE_HTML_H__
-#define __XACC_TABLE_HTML_H__
+#ifndef XACC_TABLE_HTML_H
+#define XACC_TABLE_HTML_H
 
 int xaccTableDumpHTML (Table * table, int fd);
 int xaccTablePrintHTML (Table * table, char *filename);
 void xaccTableWebServeHTML (Table * table, unsigned short port);
 
 
-#endif __XACC_TABLE_HTML_H__
+#endif XACC_TABLE_HTML_H

@@ -17,8 +17,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-#ifndef __GNC_COMPONENT_MANAGER_H__
-#define __GNC_COMPONENT_MANAGER_H__
+#ifndef GNC_COMPONENT_MANAGER_H
+#define GNC_COMPONENT_MANAGER_H
 
 #include <glib.h>
 

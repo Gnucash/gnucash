@@ -20,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#ifndef __TOP_LEVEL_H__
-#define __TOP_LEVEL_H__
+#ifndef TOP_LEVEL_H
+#define TOP_LEVEL_H
 
 #include <glib.h>
 

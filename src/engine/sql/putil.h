@@ -31,8 +31,8 @@
  * 
  */
 
-#ifndef __P_UTIL_H__ 
-#define __P_UTIL_H__ 
+#ifndef P_UTIL_H 
+#define P_UTIL_H 
 
 #include <glib.h>
 #include <string.h>  
@@ -313,6 +313,6 @@ gnc_commodity * gnc_string_to_commodity (const char *str);
 }
 
 
-#endif /* __P_UTIL_H__ */
+#endif /* P_UTIL_H */
 
 /* ======================== END OF FILE ======================== */

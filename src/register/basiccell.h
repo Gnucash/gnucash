@@ -154,8 +154,8 @@
  * Copyright (c) 2000 Dave Peticolas <dave@krondo.com>
  */
 
-#ifndef __BASIC_CELL_H__
-#define __BASIC_CELL_H__
+#ifndef BASIC_CELL_H
+#define BASIC_CELL_H
 
 #include <gdk/gdk.h>
 #include <glib.h>
@@ -262,4 +262,4 @@ char *       gnc_wcstombs (const GdkWChar *src);
 gint         gnc_wcslen   (const GdkWChar *src);
 GdkWChar *   gnc_wcsdup   (const GdkWChar *src);
 
-#endif /* __BASIC_CELL_H__ */
+#endif /* BASIC_CELL_H */

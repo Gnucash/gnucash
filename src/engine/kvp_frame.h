@@ -21,8 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __KVP_FRAME_H__
-#define __KVP_FRAME_H__
+#ifndef KVP_FRAME_H
+#define KVP_FRAME_H
 
 #include <glib.h>
 

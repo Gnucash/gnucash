@@ -31,8 +31,8 @@
  */
 
 
-#ifndef __CHECKPOINT_H__
-#define __CHECKPOINT_H__
+#ifndef CHECKPOINT_H
+#define CHECKPOINT_H
 
 #include "Account.h"
 #include "Group.h"
@@ -88,4 +88,4 @@ void pgendGroupGetAllBalances (PGBackend *, AccountGroup *, Timespec as_of_date)
  */
 void pgendAccountGetBalance (PGBackend *, Account *, Timespec as_of_date);
 
-#endif /* __CHECKPOINT_H__ */
+#endif /* CHECKPOINT_H */

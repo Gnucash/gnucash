@@ -20,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __GNC_HTML_GUPPI_H__
-#define __GNC_HTML_GUPPI_H__
+#ifndef GNC_HTML_GUPPI_H
+#define GNC_HTML_GUPPI_H
 
 #include <gnome.h>
 #include "gnc-html.h"

@@ -23,8 +23,8 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __ACC_WINDOW_H__
-#define __ACC_WINDOW_H__
+#ifndef ACC_WINDOW_H
+#define ACC_WINDOW_H
 
 #include "config.h"
 
@@ -45,4 +45,4 @@ Account * gnc_ui_new_accounts_from_name_window (const char *name);
 void gnc_ui_set_default_new_account_currency (const char *currency);
 
 
-#endif /* __ACC_WINDOW_H__ */
+#endif /* ACC_WINDOW_H */

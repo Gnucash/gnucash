@@ -21,8 +21,8 @@
  *                                                                  *
  ********************************************************************/
 
-#ifndef __GNC_EVENT_P_H__
-#define __GNC_EVENT_P_H__
+#ifndef GNC_EVENT_P_H
+#define GNC_EVENT_P_H
 
 #include "gnc-event.h"
 

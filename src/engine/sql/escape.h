@@ -31,8 +31,8 @@
  * Linas Vepstas January 2001
  */
 
-#ifndef __SQL_ESCAPE_H__
-#define __SQL_ESCAPE_H__
+#ifndef SQL_ESCAPE_H
+#define SQL_ESCAPE_H
 
 typedef struct _escape sqlEscape;
 
@@ -41,5 +41,5 @@ void sqlEscape_destroy (sqlEscape *);
 
 const char * sqlEscapeString (sqlEscape *, const char *orig_string);
 
-#endif /* __SQL_ESCAPE_H__ */
+#endif /* SQL_ESCAPE_H */
 

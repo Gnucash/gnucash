@@ -21,8 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __XACC_SPLIT_LEDGER_H__
-#define __XACC_SPLIT_LEDGER_H__
+#ifndef XACC_SPLIT_LEDGER_H
+#define XACC_SPLIT_LEDGER_H
 
 #include <glib.h>
 
@@ -241,4 +241,4 @@ void gnc_copy_trans_onto_trans(Transaction *from, Transaction *to,
 			       gboolean do_commit);
 
 
-#endif /* __XACC_SPLIT_LEDGER_H__ */
+#endif /* XACC_SPLIT_LEDGER_H */

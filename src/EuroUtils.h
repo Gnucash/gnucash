@@ -19,8 +19,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __EURO_UTILS_H__
-#define __EURO_UTILS_H__
+#ifndef EURO_UTILS_H
+#define EURO_UTILS_H
 
 #include <glib.h>
 
@@ -36,6 +36,6 @@ gnc_numeric gnc_euro_currency_get_rate (const gnc_commodity *currency);
 
 gnc_commodity * gnc_get_euro (void);
 
-#endif  /* __EURO_UTILS_H__ */
+#endif  /* EURO_UTILS_H */
 
 /************************** END OF FILE *************************/

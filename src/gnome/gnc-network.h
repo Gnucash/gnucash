@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#ifndef __GNC_NETWORK_H__
-#define __GNC_NETWORK_H__
+#ifndef GNC_NETWORK_H
+#define GNC_NETWORK_H
 
 #include "config.h"
 

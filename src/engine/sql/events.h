@@ -31,8 +31,8 @@
  */
 
 
-#ifndef __POSTGRES_EVENTS_H__
-#define __POSTGRES_EVENTS_H__
+#ifndef POSTGRES_EVENTS_H
+#define POSTGRES_EVENTS_H
 
 #include "Backend.h"
 #include "PostgresBackend.h"
@@ -44,4 +44,4 @@ void pgendSessionGetPid (PGBackend *);
 void pgendSessionSetupNotifies (PGBackend *);
 
 
-#endif /* __POSTGRES_EVENTS_H__ */
+#endif /* POSTGRES_EVENTS_H */

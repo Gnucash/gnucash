@@ -62,8 +62,8 @@
  * Copyright (c) 1999, 2000 Linas Vepstas
  */
 
-#ifndef __XACC_QUEUE_H__
-#define __XACC_QUEUE_H__
+#ifndef XACC_QUEUE_H
+#define XACC_QUEUE_H
 
 #include "Transaction.h"
 
@@ -107,4 +107,4 @@ double xaccQueuePopTailValue (Queue *, double);
 double xaccQueueGetValue (Queue *);
 double xaccQueueGetShares (Queue *);
 
-#endif /* __XACC_QUEUE_H__ */
+#endif /* XACC_QUEUE_H */

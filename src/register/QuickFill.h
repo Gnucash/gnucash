@@ -23,8 +23,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __QUICKFILL_H__
-#define __QUICKFILL_H__
+#ifndef QUICKFILL_H
+#define QUICKFILL_H
 
 #include "config.h"
 
@@ -64,4 +64,4 @@ void         gnc_quickfill_insert (QuickFill *qf, const char *text,
 void         gnc_quickfill_insert_wc (QuickFill *qf, const GdkWChar *text,
                                       QuickFillSort sort_code);
 
-#endif /* __QUICKFILL_H__ */
+#endif /* QUICKFILL_H */

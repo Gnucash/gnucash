@@ -34,8 +34,8 @@
  * Copyright (c) 1998, 1999, 2000 Linas Vepstas
  */
 
-#ifndef __XACC_SCRUB_H__
-#define __XACC_SCRUB_H__
+#ifndef XACC_SCRUB_H
+#define XACC_SCRUB_H
 
 #include "Account.h"
 #include "Group.h"
@@ -83,4 +83,4 @@ void xaccAccountScrubImbalance (Account *acc);
 void xaccAccountTreeScrubImbalance (Account *acc);
 void xaccGroupScrubImbalance (AccountGroup *grp);
 
-#endif /* __XACC_SCRUB_H__ */
+#endif /* XACC_SCRUB_H */

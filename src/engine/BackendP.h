@@ -37,8 +37,8 @@
  *
  */
 
-#ifndef __XACC_BACKEND_P_H__
-#define __XACC_BACKEND_P_H__
+#ifndef XACC_BACKEND_P_H
+#define XACC_BACKEND_P_H
 
 #include "config.h"
 
@@ -225,4 +225,4 @@ Backend * xaccGNCBookGetBackend (GNCBook *book);
 void xaccPriceDBSetBackend (GNCPriceDB *prdb, Backend *be);
 Backend * xaccPriceDBGetBackend (GNCPriceDB *prdb);
 
-#endif /* __XACC_BACKEND_P_H__ */
+#endif /* XACC_BACKEND_P_H */

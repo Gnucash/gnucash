@@ -19,8 +19,8 @@
  *
  ***************************************************************************/
 
-#ifndef __FINVAR_H__
-#define __FINVAR_H__
+#ifndef FINVAR_H
+#define FINVAR_H
 
 #if !defined( EOS )
 #define EOS '\x000'

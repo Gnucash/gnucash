@@ -35,8 +35,8 @@
  * Linas Vepstas January 2001
  */
 
-#ifndef __SQL_BUILDER_H__
-#define __SQL_BUILDER_H__
+#ifndef SQL_BUILDER_H
+#define SQL_BUILDER_H
 
 #include "date.h"
 #include "guid.h"
@@ -89,5 +89,5 @@ void sqlBuild_Where_Int32 (sqlBuilder *b, const char *tag, gint32 val);
 const char *sqlBuild_Query (sqlBuilder *b);
 
 
-#endif /* __SQL_BUILDER_H__ */
+#endif /* SQL_BUILDER_H */
 

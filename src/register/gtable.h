@@ -20,8 +20,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __G_TABLE_H__
-#define __G_TABLE_H__
+#ifndef G_TABLE_H
+#define G_TABLE_H
 
 #include "config.h"
 

@@ -21,8 +21,8 @@
  *                                                                  *
  ********************************************************************/
 
-#ifndef __GNC_EVENT_H__
-#define __GNC_EVENT_H__
+#ifndef GNC_EVENT_H
+#define GNC_EVENT_H
 
 #include <glib.h>
 

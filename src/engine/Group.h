@@ -22,8 +22,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __XACC_ACCOUNT_GROUP_H__
-#define __XACC_ACCOUNT_GROUP_H__
+#ifndef XACC_ACCOUNT_GROUP_H
+#define XACC_ACCOUNT_GROUP_H
 
 #include "config.h"
 
@@ -366,4 +366,4 @@ xaccGroupVisitUnvisitedTransactions(AccountGroup *g,
                                     void *data,
                                     GHashTable *visited_txns);
 
-#endif /* __XACC_ACCOUNT_GROUP_H__ */
+#endif /* XACC_ACCOUNT_GROUP_H */

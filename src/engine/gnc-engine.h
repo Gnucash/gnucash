@@ -21,8 +21,8 @@
  *                                                                  *
  ********************************************************************/
 
-#ifndef __GNC_ENGINE_H__
-#define __GNC_ENGINE_H__
+#ifndef GNC_ENGINE_H
+#define GNC_ENGINE_H
 
 #include "gnc-commodity.h"
 

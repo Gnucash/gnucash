@@ -21,8 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __REGISTER_COMMON_H__
-#define __REGISTER_COMMON_H__
+#ifndef REGISTER_COMMON_H
+#define REGISTER_COMMON_H
 
 #include <glib.h>
 

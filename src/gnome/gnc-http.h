@@ -20,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#ifndef __GNC_HTTP_H__
-#define __GNC_HTTP_H__
+#ifndef GNC_HTTP_H
+#define GNC_HTTP_H
 
 #include <glib.h>
 

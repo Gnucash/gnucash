@@ -50,8 +50,8 @@
  * Copyright (c) 2000 Dave Peticolas
  */
 
-#ifndef __GNC_BOOK_H__
-#define __GNC_BOOK_H__
+#ifndef GNC_BOOK_H
+#define GNC_BOOK_H
 
 #include "Group.h"
 #include "Backend.h"
@@ -217,4 +217,4 @@ GNCBookFileType gnc_book_determine_file_type(GNCBook *book);
 /* Run the RPC Server */
 void gnc_run_rpc_server (void);
 
-#endif /* __GNC_BOOK_H__ */
+#endif /* GNC_BOOK_H */

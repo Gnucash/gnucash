@@ -42,8 +42,8 @@
  *
  */
 
-#ifndef __XACC_TRANSACTION_P_H__
-#define __XACC_TRANSACTION_P_H__
+#ifndef XACC_TRANSACTION_P_H
+#define XACC_TRANSACTION_P_H
 
 #include <time.h>
 #include <glib.h>
@@ -226,4 +226,4 @@ gnc_numeric xaccSplitsComputeValue (GList *splits, Split * skip_me,
 void xaccTransSetVersion (Transaction*, gint32);
 gint32 xaccTransGetVersion (Transaction*);
 
-#endif /* __XACC_TRANSACTION_P_H__ */
+#endif /* XACC_TRANSACTION_P_H */

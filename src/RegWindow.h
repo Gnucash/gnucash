@@ -23,8 +23,8 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __REGWINDOW_H__
-#define __REGWINDOW_H__
+#ifndef REGWINDOW_H
+#define REGWINDOW_H
 
 #include "config.h"
 

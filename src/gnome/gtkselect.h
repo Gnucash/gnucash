@@ -25,8 +25,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifndef __GTK_SMART_SELECT_H__
-#define __GTK_SMART_SELECT_H__
+#ifndef GTK_SMART_SELECT_H
+#define GTK_SMART_SELECT_H
 
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkitem.h>
@@ -112,4 +112,4 @@ gint	   gtk_select_child_position	  (GtkSelect	    *list,
 }
 #endif /* __cplusplus */
 
-#endif /* __GTK_SMART_SELECT_H__ */
+#endif /* GTK_SMART_SELECT_H */

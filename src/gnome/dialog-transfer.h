@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __DIALOG_TRANSFER_H__
-#define __DIALOG_TRANSFER_H__
+#ifndef DIALOG_TRANSFER_H
+#define DIALOG_TRANSFER_H
 
 #include "Account.h"
 #include "account-tree.h"

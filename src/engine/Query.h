@@ -20,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __GNUCASH_QUERY_H__
-#define __GNUCASH_QUERY_H__
+#ifndef GNUCASH_QUERY_H
+#define GNUCASH_QUERY_H
 
 #include <sys/types.h>
 #include <time.h>

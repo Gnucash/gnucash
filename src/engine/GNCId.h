@@ -21,8 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __GNC_ID_H__
-#define __GNC_ID_H__ 1
+#ifndef GNC_ID_H
+#define GNC_ID_H 1
 
 /* This file defines an API for using gnucash entity identifiers.
  *

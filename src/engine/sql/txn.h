@@ -31,8 +31,8 @@
  */
 
 
-#ifndef __POSTGRES_TXN_H__
-#define __POSTGRES_TXN_H__
+#ifndef POSTGRES_TXN_H
+#define POSTGRES_TXN_H
 
 #include <glib.h>
 
@@ -52,4 +52,4 @@ void pgend_trans_rollback_edit (Backend * bend, Transaction * trans);
 
 
 
-#endif /* __POSTGRES_TXN_H__ */
+#endif /* POSTGRES_TXN_H */

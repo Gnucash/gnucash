@@ -29,8 +29,8 @@
  * Tuneups by James LewisMoss Dec 2000
  */
 
-#ifndef __IO_GNCXML_H__
-#define __IO_GNCXML_H__
+#ifndef IO_GNCXML_H
+#define IO_GNCXML_H
 
 #include <glib.h>
 
@@ -48,4 +48,4 @@ gboolean gnc_book_load_from_xml_file(GNCBook *book);
  */
 gboolean gnc_is_xml_data_file(const gchar *name);
  
-#endif /* __IO_GNCXML_H__ */
+#endif /* IO_GNCXML_H */

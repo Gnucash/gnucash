@@ -20,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#ifndef __GNC_HTML_HISTORY_H__
-#define __GNC_HTML_HISTORY_H__
+#ifndef GNC_HTML_HISTORY_H
+#define GNC_HTML_HISTORY_H
 
 typedef struct _gnc_html_history_node gnc_html_history_node;
 typedef struct _gnc_html_history gnc_html_history;

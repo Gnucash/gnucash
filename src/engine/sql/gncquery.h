@@ -41,8 +41,8 @@
  */
 
 
-#ifndef __GNC_QUERY_H__
-#define __GNC_QUERY_H__
+#ifndef GNC_QUERY_H
+#define GNC_QUERY_H
 
 #include "Query.h"
 
@@ -55,4 +55,4 @@ void sql_Query_destroy (sqlQuery *);
 const char *sqlQuery_build (sqlQuery *, Query *);
 
 
-#endif  /* __GNC_QUERY_H__ */
+#endif  /* GNC_QUERY_H */

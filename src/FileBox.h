@@ -22,8 +22,8 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __FILEBOX_H__
-#define __FILEBOX_H__
+#ifndef FILEBOX_H
+#define FILEBOX_H
 
 #include "config.h"
 

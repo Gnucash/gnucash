@@ -34,8 +34,8 @@
  * Copyright (c) 2000 Dave Peticolas
  */
 
-#ifndef __TEXT_CELL_H__
-#define __TEXT_CELL_H__
+#ifndef TEXT_CELL_H
+#define TEXT_CELL_H
 
 #include "basiccell.h"
 
@@ -44,6 +44,6 @@ BasicCell * xaccMallocTextCell (void);
 void        xaccInitTextCell (BasicCell *cell);
 void        xaccDestroyTextCell (BasicCell *cell);
 
-#endif /* __TEXT_CELL_H__ */
+#endif /* TEXT_CELL_H */
 
 /* --------------- end of file ---------------------- */

@@ -58,8 +58,8 @@
  * Copyright (c) 2000 Dave Peticolas
  */
 
-#ifndef __XACC_CELL_BLOCK_H__
-#define __XACC_CELL_BLOCK_H__
+#ifndef XACC_CELL_BLOCK_H
+#define XACC_CELL_BLOCK_H
 
 #include "basiccell.h"
 
@@ -109,4 +109,4 @@ void        gnc_cellblock_destroy (CellBlock *cellblock);
 CellBlockCell * gnc_cellblock_get_cell (CellBlock *cellblock,
                                         int row, int col);
 
-#endif /* __XACC_CELL_BLOCK_H__ */
+#endif /* XACC_CELL_BLOCK_H */

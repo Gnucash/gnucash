@@ -41,8 +41,8 @@
  * Copyright (c) 1998, 1999, 2000 Linas Vepstas
  */
 
-#ifndef __XACC_SPLITREG_H__
-#define __XACC_SPLITREG_H__
+#ifndef XACC_SPLITREG_H
+#define XACC_SPLITREG_H
 
 #include "basiccell.h"
 #include "cellblock.h"
@@ -312,6 +312,6 @@ const char * xaccSplitRegisterGetCellTypeName (CellType type);
 CellType     xaccSplitRegisterGetCellTypeFromName (const char *name);
 
 
-#endif /* __XACC_SPLITREG_H__ */
+#endif /* XACC_SPLITREG_H */
 
 /* ============ END OF FILE ===================== */
