@@ -756,3 +756,57 @@ gnc_tree_view_account_set_selected_accounts (GncTreeViewAccount *view,
     gtk_tree_path_free(path);
   }
 }
+
+
+/************************************************************/
+/*           Account Tree View Get/Set Functions            */
+/************************************************************/
+
+static void
+account_cell_kvp_data_func (GtkTreeViewColumn *tree_column,
+			    GtkCellRenderer *cell,
+			    GtkTreeModel *filter_model,
+			    GtkTreeIter *filter_iter,
+			    gpointer key)
+{
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	Account *account;
+	kvp_frame * frame;
+
+	g_return_if_fail (EGG_IS_TREE_MODEL_FILTER (filter_model));
+
+	model =
+	  egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(filter_model));
+	egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(filter_model),
+							  &iter,
+							  filter_iter);
+
+	account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), &iter);
+	frame = xaccAccountGetSlots(account);
+
+	g_object_set (G_OBJECT (cell),
+		      "text", kvp_frame_get_string(frame, (gchar *)key),
+		      "xalign", 0.0,
+		      NULL);
+}
+
+
+void
+gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
+				      const gchar *column_title,
+				      const gchar *kvp_key)
+{
+  GtkCellRenderer *renderer;
+  GtkTreeViewColumn *column;
+
+  renderer = gtk_cell_renderer_text_new ();
+  g_object_set (G_OBJECT (renderer), "xalign", 1.0, NULL);
+  column = gtk_tree_view_column_new_with_attributes (column_title,
+						     renderer,
+						     NULL);
+  gtk_tree_view_column_set_cell_data_func (column, renderer, 
+					   account_cell_kvp_data_func,
+					   g_strdup(kvp_key), g_free);
+  gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
+}

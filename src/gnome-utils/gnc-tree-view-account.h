@@ -114,6 +114,22 @@ const char *gnc_tree_view_account_get_field_name (AccountFieldCode field);
  */
 void          gnc_tree_view_account_configure_columns     (GncTreeViewAccount *account_view,
 							   GSList *column_names);
+
+
+/** Add a new column to the set of columns in an account tree view.
+ *  This column will display the contents of a specified KVP slot.
+ *
+ *  @param view A pointer to an account tree view.
+ *
+ *  @param column_title The title for this new column.
+ *
+ *  @param kvp_key The lookup key to use for looking up data in the
+ *  account KVP structures. The value associated with this key is what
+ *  will be displayed in the column.
+ */
+void          gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
+						    const gchar *column_title,
+						    const gchar *kvp_key);
 /** @} */
 
 
