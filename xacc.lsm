@@ -1,7 +1,7 @@
 Begin3
 Title:		xacc -- simple single-user accounting program
-Version:	0.9m
-Entered-date:	1NOV97
+Version:	0.9p
+Entered-date:	21NOV97
 Description:    xacc is a program to keep track of your finances.  It 
                 offers a simple check-book register style interface.
                 Currently, the features are quite simple:
@@ -10,8 +10,6 @@ Description:    xacc is a program to keep track of your finances.  It
                 - Each account keeps a running balance and
                   a reconciled balance, so you can keep track
                   of the checks that have clear your account.
-                - Double Entry -- transfers between accounts
-                  are coupled.
                 - A simple interface.  If you can use the
                   register in the back of your checkbook,
                   you can use xacc.
@@ -21,9 +19,15 @@ Description:    xacc is a program to keep track of your finances.  It
                   the previous transaction.  Handy if you have
                   similar transactions on a regular basis.
                   (such as depositing your paycheck every week :)
+                - General Ledger. Well, not yet, but double-entry
+                  is supported (transfers between accounts),
+                  sub-accounts are supported (so that master accounts
+                  can contain detail accounts), as well as 
+                  income/expense accounts that handle double-entry
+                  properly.
 
                 This is a beta development version with known
-                minor user interface bugs. 
+                minor user interface bugs and no known major bugs.
 
 Keywords:	X11 Accounting double entry
 Author:		rclark@cs.hmc.edu (Robin Clark)
