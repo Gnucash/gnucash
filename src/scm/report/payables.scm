@@ -38,7 +38,8 @@
 (define sect-acc (N_ "Accounts"))
 (define optname-to-date (N_ "To"))
 (define optname-use-description (N_ "Use Description?"))
-
+(define optname-sort-by (N_ "Sort By"))
+(define optname-sort-order (N_ "Sort Order"))
 
 ;; The idea is:  have a hash with the key being the creditor name
 ;; (In future this might be GUID'ed, but for now it's a string
@@ -195,7 +196,53 @@ more than one currency.  This report is not designed to cope with this possibili
 		(hash-set! hash creditor-name new-creditor)))
 	  (cons #t creditor-name)))))
 
+(define (buckets-get-total buckets)
+  (let ((running-total (gnc:numeric-zero))
+	(buckets-list (vector->list buckets)))
+    (for-each (lambda (bucket)
+		(set! running-total
+		      (gnc:numeric-add-fixed bucket running-total)))
+	      buckets-list)
+    running-total))
 
+(define (compare-total litem-a litem-b)    
+  (let*  ((creditor-a (cdr litem-a))
+	 (bucket-a (creditor-get-buckets creditor-a))
+	 (creditor-b (cdr litem-b))
+	 (bucket-b (creditor-get-buckets creditor-b))
+	 (total-a (buckets-get-total bucket-a))
+	 (total-b (buckets-get-total bucket-b))
+	 (difference-sign (gnc:numeric-compare (gnc:numeric-sub-fixed total-a total-b) (gnc:numeric-zero))))
+	 ;; if same totals, compare by name
+	 (if (= difference-sign 0)
+	     (gnc:safe-strcmp (car litem-a) (car litem-b))
+	     difference-sign)))
+
+(define (compare-buckets litem-a litem-b)
+  (define (driver buckets-a buckets-b)
+    (if (null? buckets-a)
+	0
+	(let ((diff (gnc:numeric-compare 
+		     (gnc:numeric-sub-fixed 
+		      (car buckets-a) 
+		      (car buckets-b)) 
+		     (gnc:numeric-zero))))
+	  (if (= diff 0)
+	      (driver (cdr buckets-a) (cdr buckets-b))
+	      diff))))
+ 
+  (let*  ((creditor-a (cdr litem-a))
+	 (bucket-a (vector->list (creditor-get-buckets creditor-a)))
+	 (creditor-b (cdr litem-b))
+	 (bucket-b (vector->list (creditor-get-buckets creditor-b)))
+	 
+	 (difference (driver bucket-a bucket-b)))
+	 ;; if same totals, compare by name
+	 (if (= difference 0)
+	     (gnc:safe-strcmp (car litem-a) (car litem-b))
+	     difference)))
+  
+    
 ;; set up the query to get the splits in the payables account
 
 (define (setup-query query account date)
@@ -279,6 +326,29 @@ more than one currency.  This report is not designed to cope with this possibili
       #f))
 
     (add-option
+     (gnc:make-multichoice-option
+      gnc:pagename-general
+      optname-sort-by
+      "i"
+      (N_ "Sort creditors by")
+      'name
+      (list 
+       (vector 'name (N_ "Name") (N_ "Name of the creditor"))
+       (vector 'total (N_ "Total Owed") (N_ "Total amount owed to Creditor"))
+       (vector 'oldest-bracket (N_ "Bracket Total Owed") (N_ "Amount owed in oldest bracket - if same go to next oldest")))))
+
+    (add-option 
+     (gnc:make-multichoice-option
+      gnc:pagename-general
+       optname-sort-order
+       "ia"
+       (N_ "Sort order")
+       'increasing
+       (list
+	(vector 'increasing (N_ "Increasing") (N_ "0 -> $999,999.99, A->Z"))
+	(vector 'decreasing (N_ "Decreasing") (N_ "$999,999.99 -> $0, Z->A")))))
+
+       (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-general
       optname-use-description
@@ -298,6 +368,40 @@ more than one currency.  This report is not designed to cope with this possibili
     (gnc:make-date-list begindate to-date ThirtyDayDelta)))
 
 (define (payables-renderer report-obj)
+
+  ;; Format: (cons 'sort-key (cons 'increasing-pred 'decreasing-pred))
+  (define sort-preds
+    (list 
+     (cons 'name (cons (lambda (a b)
+			 (string<? (car a) (car b)))
+		       (lambda (a b)
+			 (string>? (car a) (car b)))))
+     (cons 'total (cons (lambda (a b)
+			  (< (compare-total a b) 0))
+			(lambda (a b)
+			  (> (compare-total a b) 0))))
+     (cons 'oldest-bracket (cons 
+			    (lambda (a b) 
+			     (< (compare-buckets a b) 0))
+			    (lambda (a b)
+			      (> (compare-buckets a b) 0))))))
+				 
+				 
+
+  (define (get-sort-pred sort-criterion sort-order)
+    (let ((choice (assq-ref sort-preds sort-criterion)))
+      (gnc:debug "sort-criterion" sort-criterion)
+      (gnc:debug "sort-order" sort-order)
+      (gnc:debug "choice: " choice)
+      (if choice
+	  (if (eq? sort-order 'increasing)
+	      (car choice)
+	      (cdr choice))
+	  (begin
+	    (gnc:warn "internal sorting option errorin payables.scm")
+	    (lambda (a b)
+	      (string<? (car a) (car b)))))))
+		       
   (define (get-op section name)
     (gnc:lookup-option (gnc:report-options report-obj) section name))
   
@@ -344,6 +448,8 @@ more than one currency.  This report is not designed to cope with this possibili
 		       (op-value gnc:pagename-general (N_ "To")))))
 	(use-description? (op-value gnc:pagename-general optname-use-description))
 	(interval-vec (list->vector (make-interval-list report-date)))
+	(sort-pred (get-sort-pred (op-value gnc:pagename-general optname-sort-by)
+				   (op-value gnc:pagename-general optname-sort-order)))
 	(heading-list (make-heading-list))
 	(table (gnc:make-html-table))
 	(query (gnc:malloc-query))
@@ -370,10 +476,10 @@ more than one currency.  This report is not designed to cope with this possibili
 				   (cons (cons key value) creditor-list)))
 			   creditors)
 	    (gnc:debug "creditor list" creditor-list)
-	    ;; FIXME: Should be able to sort creditors by other criteria
+	   
 	    (set! creditor-list (sort-list! creditor-list
-			(lambda (a b)
-			  (string<? (car a) (car b)))))
+					    sort-pred))
+
 	    (for-each (lambda (creditor-list-entry)
 			(let ((monetary-list (convert-to-monetary-list
 					      (creditor-get-buckets

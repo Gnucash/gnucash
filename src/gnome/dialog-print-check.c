@@ -151,7 +151,7 @@ gnc_ui_print_check_dialog_ok_cb(GtkButton * button,
   int        sel_option;
   double     multip = 72.0;
 
-  char       * formats[]   = { "quicken", "custom" };
+  char       * formats[]   = { "quicken", "wallet", "custom" };
   char       * positions[] = { "top", "middle", "bottom", "custom" };
   char       * dateformats[] = { "%B %e, %Y",
                                  "%e %B, %Y",
