@@ -165,11 +165,6 @@ void         xaccAccountInsertSplit (Account *account, Split *split);
 void         xaccAccountFixSplitDateOrder (Account *account, Split *split);
 void         xaccTransFixSplitDateOrder (Transaction *trans);
 
-/* The xaccIsAccountInList() subroutine returns the number of times
- *    that an account appears in the account list. 
- */
-int          xaccIsAccountInList (Account * account, Account **list);
-
 /* The xaccAccountOrder() subroutine defines a sorting order 
  *    on accounts.  It takes pointers to two accounts, and
  *    returns -1 if the first account is "less than" the second,
@@ -253,12 +248,6 @@ void            xaccAccountSetTaxRelated (Account *account,
  * routine should not be in this library, but some utility library?
  */
 char *         xaccAccountGetFullName (Account *account, const char separator);
-
-/* The IthAccount() routine merely dereferences: the returned
- *    value is just list[i].  This routine is needed for the perl 
- *    swig wrappers, which cannot dereference a list.
- */
-Account *      IthAccount (Account **list, int i);
 
 /* xaccAccountsHaveCommonCurrency returns true if the two given accounts
  * have a currency in common, i.e., if they can have common transactions.

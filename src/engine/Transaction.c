@@ -320,22 +320,6 @@ mark_trans (Transaction *trans)
 /********************************************************************\
 \********************************************************************/
 
-int
-xaccCountSplits (Split **tarray)
-{
-   Split *split;
-   int nsplit = 0;
-
-   if (!tarray) return 0;
-
-   split = tarray[0];
-   while (split) {
-      nsplit ++;
-      split = tarray[nsplit];
-   }
-   return nsplit;
-}
-
 static int
 get_currency_denom(Split * s) {  
   if(!s) return 0;
@@ -2136,16 +2120,6 @@ xaccIsPeerSplit (Split *sa, Split *sb)
    tb = sb->parent;
    if (ta == tb) return 1;
    return 0;
-}
-
-/********************************************************************\
-\********************************************************************/
-
-Split *
-IthSplit (Split **list, int i)
-{
-   if (!list || 0 > i) return NULL;
-   return list[i];
 }
 
 /************************ END OF ************************************\

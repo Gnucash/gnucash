@@ -162,11 +162,10 @@ void         xaccAccountRemoveSplit (Account *, Split *);
 /* the following recompute the partial balances (stored with the
  * transaction) and the total balance, for this account */
 void         xaccAccountRecomputeBalance (Account *);
-void         xaccAccountRecomputeBalances (Account **);
 
 /* Set the account's GUID. This should only be done when reading
  * an account from a datafile, or some other external source. Never
  * call this on an existing account! */
-void xaccAccountSetGUID (Account *account, GUID *guid);
+void         xaccAccountSetGUID (Account *account, GUID *guid);
 
 #endif /* __XACC_ACCOUNT_P_H__ */

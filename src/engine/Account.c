@@ -835,45 +835,6 @@ xaccAccountAutoCode (Account *acc, int digits) {
 /********************************************************************\
 \********************************************************************/
 
-int
-xaccIsAccountInList (Account * acc, Account **list)
-{
-   Account * chk;
-   int nacc = 0;
-   int nappearances = 0;
-   if (!acc) return 0;
-   if (!list) return 0;
-
-   chk = list[0];
-   while (chk) {
-      if (acc == chk) nappearances ++;
-      nacc++;
-      chk = list[nacc];
-   }
-   return nappearances;
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void
-xaccAccountRecomputeBalances( Account **list )
-{
-   Account * acc;
-   int nacc = 0;
-   if (!list) return;
-
-   acc = list[0];
-   while (acc) {
-      xaccAccountRecomputeBalance (acc);
-      nacc++;
-      acc = list[nacc];
-   }
-}
-
-/********************************************************************\
-\********************************************************************/
-
 void 
 xaccAccountSetType (Account *acc, int tip) {
 
@@ -1377,16 +1338,6 @@ xaccAccountSetTaxRelated (Account *account, gboolean tax_related)
     mark_account (account);
   }
   xaccAccountCommitEdit (account);
-}
-
-/********************************************************************\
-\********************************************************************/
-
-Account *
-IthAccount (Account **list, int i)
-{
-   if (!list || 0 > i) return NULL;
-   return list[i];
 }
 
 /********************************************************************\

@@ -457,9 +457,6 @@ int  xaccSplitDateOrder (Split *sa, Split *sb);
  * Miscellaneous utility routines.
 \********************************************************************/
 
-/* count the number of splits in the indicated array */
-int xaccCountSplits (Split **sarray);
-
 /* 
  * The xaccGetAccountByName() is a convenience routine that 
  *    is essentially identical to xaccGetPeerAccountFromName(),
@@ -485,12 +482,5 @@ Split * xaccGetOtherSplit (Split *split);
  *    parent transaction, else it returns zero.
  */
 int xaccIsPeerSplit (Split *split_1, Split *split_2);
-
-/* The IthSplit() routine merely dereferences
- *    the list supplied as argument; i.e. it returns list[i].
- *    This routine is needed by the perl swig wrappers, which
- *    is unable to dereference on their own.
- */
-Split       * IthSplit (Split **sarray, int i);
 
 #endif /* __XACC_TRANSACTION_H__ */
