@@ -7,16 +7,17 @@ of the changes that will come soon to the interfaces.
 
 Accounting Periods
 ------------------
-Acconting periods are implemented by creating a structure that
-describes the accounting period, and then assigning every traansaction to
-at least one period.
+Acconting periods are implemented by creating an object that
+describes the accounting period, and then assigning every 
+transaction to at least one period.
 
 typedef struct _accountingPeriod {
         GUID guid;           // id
 	char *name;          // user-selectable name
 	int kind;            // enum {none, week, month, quarter, year }
-	start_date;          //
-	end_date;
+	Timespec * start_date;   //
+	Timespec * end_date;
+        AccountGroup  *topgrp;  // chart of accounts for this period.
 } AccountingPeriod;
 
 The Transaction struct has to be extended with a period guid.
@@ -27,6 +28,17 @@ an accounting period as well.  This allows 'old' accounts to be deleted
 from 'open books', without having to delete that same account from old
 closed books.  Basically, a new chart of accounts needs to be written
 out/read from the engine for each new accounting period.
+
+
+The xaccPeriodClose() subroutine performs the following:
+-- crawl over all transactions and mark them as being part of this
+   accounting period (actually, new transactions should by default be
+   getting put into the currently open period...)
+-- find the equity account (what if there is more than one equity account
+   ?? what if equity has sub-accounts ?? )
+-- transfer all income/expense to equity  (shouldn't the equity account
+   match the income/expense heirarchy?)
+-- return a new account group with new opening balances ...
 
 
 
