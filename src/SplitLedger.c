@@ -913,6 +913,10 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
 
     gnc_copy_trans_onto_trans(trans, new_trans);
 
+    xaccTransBeginEdit(new_trans, GNC_T);
+    xaccTransSetDateSecs(new_trans, info->last_date_entered);
+    xaccTransCommitEdit(new_trans);
+
     /* This shouldn't happen, but be paranoid. */
     if (split_index >= xaccTransCountSplits(new_trans))
       split_index = 0;
@@ -1125,9 +1129,9 @@ xaccSRPasteCurrent (SplitRegister *reg)
         (xaccGUIDType(&copied_leader_guid) != GNC_ID_NULL))
     {
       new_guid = xaccAccountGetGUID(info->default_source_account);
-      gnc_copy_trans_scm_onto_trans_with_new_account(copied_item, trans,
-                                                     &copied_leader_guid,
-                                                     new_guid);
+      gnc_copy_trans_scm_onto_trans_swap_accounts(copied_item, trans,
+                                                  &copied_leader_guid,
+                                                  new_guid);
     }
     else
       gnc_copy_trans_scm_onto_trans(copied_item, trans);

@@ -610,5 +610,6 @@ Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices
 Rob Walker <rob@valinux.com> guile and register patches
 David Woodhouse <dwmw2@infradead.org> Great Britain translations
 Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU> QIF import fixes; MYM import
+Shimpei Yamashita <shimpei@gol.com> Japanese translation
 
 ... and I am sure that I have missed many others ...

@@ -245,9 +245,9 @@
    (trans-splits 0)))
 
 ;; Copy a scheme representation of a transaction onto a C transaction.
-;; guid-mapping, if present, must be an alist, mapping guids to guids.
-;; This list is used to use alternate account guids when creating splits.
-(define (gnc:transaction-scm-onto-transaction trans-scm trans . guid-mapping)
+;; guid-mapping must be an alist, mapping guids to guids. This list is
+;; used to use alternate account guids when creating splits.
+(define (gnc:transaction-scm-onto-transaction trans-scm trans guid-mapping)
   (if (pointer-token-null? trans)
       #f
       (begin

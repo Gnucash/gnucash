@@ -1,0 +1,3400 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2000-04-22 15:06-0700\n"
+"PO-Revision-Date: 2000-04-25 00:00+0900\n"
+"Last-Translator: Shimpei Yamashita <shimpei@gol.com>\n"
+"Language-Team: Japanese <translation@gnome.gr.jp>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=euc-jp\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: messages-i18n.c:10
+msgid "$"
+msgstr "￥"
+
+#: messages-i18n.c:11
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+""
+
+#: messages-i18n.c:12
+msgid ""
+"To adjust an account's balance, you must first\n"
+"choose an account to adjust.\n"
+msgstr ""
+"残高を変更する勘定科目を\n"
+"まず選択して下さい。\n"
+
+#: messages-i18n.c:13
+msgid "You must choose a valid parent account."
+msgstr "適正な親勘定科目を選択して下さい。"
+
+#: messages-i18n.c:14
+msgid ""
+"Do you want to create a new account?\n"
+"If not, then please select an account\n"
+"to open in the main window.\n"
+msgstr ""
+"新しい勘定科目を作成しますか?\n"
+"作成しないのなら、主ウィンドウで開く\n"
+"勘定科目を選択して下さい。\n"
+
+#: messages-i18n.c:15
+msgid ""
+"To edit an account, you must first\n"
+"choose an account to edit.\n"
+msgstr ""
+"編集する勘定科目を\n"
+"まず選択して下さい。\n"
+
+#: messages-i18n.c:16
+msgid ""
+"To delete an account, you must first\n"
+"choose an account to delete.\n"
+msgstr ""
+"削除する勘定科目を\n"
+"まず選択して下さい。\n"
+
+#: messages-i18n.c:17
+#, c-format
+msgid "Are you sure you want to delete the %s account?"
+msgstr "%sの勘定科目を本当に削除してもよろしいですか？"
+
+#: messages-i18n.c:18
+msgid "The account must be given a name! \n"
+msgstr "勘定科目には名前が必要です。 \n"
+
+#: messages-i18n.c:19
+msgid ""
+"To open an account, you must first\n"
+"choose an account to open.\n"
+msgstr ""
+"開く勘定科目を\n"
+"まず選択して下さい。\n"
+
+#: messages-i18n.c:20
+msgid "You must select an account to scrub."
+msgstr "掃除する勘定科目を選択して下さい。"
+
+#: messages-i18n.c:21
+msgid "You must select an account type."
+msgstr "勘定科目の種類を選択して下さい。"
+
+#: messages-i18n.c:22
+msgid ""
+"To reconcile an account, you must first\n"
+"choose an account to reconcile.\n"
+msgstr ""
+
+#: messages-i18n.c:23
+msgid "The amount must be a number."
+msgstr "数字でなければいけません。"
+
+#: messages-i18n.c:24
+msgid "The balance must be a number."
+msgstr "残高は数字でなければいけません。"
+
+#: messages-i18n.c:25
+msgid "Delete all the splits"
+msgstr ""
+
+#: messages-i18n.c:26
+msgid "Delete the whole transaction"
+msgstr "全取引を削除する"
+
+#: messages-i18n.c:27
+msgid ""
+"This selection will delete the whole transaction. This is what you usually "
+"want."
+msgstr ""
+"この選択肢は取引全体を削除します。普通はこれを選択するべきでしょう。"
+
+#: messages-i18n.c:28
+msgid ""
+"Warning: Just deleting all the splits will make your account unbalanced. You "
+"probably shouldn't do this unless you're going to immediately add another "
+"split to bring the transaction back into balance."
+msgstr ""
+
+#: messages-i18n.c:29
+#, c-format
+msgid ""
+"It is dangerous to change the currency type\n"
+"of an account. You asked to change it\n"
+"from %s to %s.\n"
+"Are You Sure?\n"
+msgstr ""
+"勘定科目の通貨を変更するのは危険です。\n"
+"本当に%sから%sに変更してもよろしいですか?\n"
+
+#: messages-i18n.c:30
+#, c-format
+msgid ""
+"It is dangerous to change the security\n"
+"of an account. You asked to change it\n"
+"from %s to %s.\n"
+"Are You Sure?\n"
+msgstr ""
+
+#: messages-i18n.c:31
+msgid ""
+"This file is from an older version of GnuCash.  \n"
+"Do you want to continue?"
+msgstr ""
+"このファイルは古いバージョンの GnuCash が作成したもののようです。\n"
+"このまま続行しますか?"
+
+#: messages-i18n.c:32
+msgid ""
+"This file appears to be from a newer version of GnuCash. You must upgrade "
+"GnuCash to read this file."
+msgstr ""
+"このファイルはGnuCashの新しいバージョンによって作成されたもののようです。"
+"GnuCashをアップグレードしないと読み込めません。"
+
+#: messages-i18n.c:33
+msgid ""
+"There was an error reading the file. \n"
+"Do you want to continue?"
+msgstr ""
+"ファイル読み込み中にエラーが発生しました。 \n"
+"このまま続行しますか?"
+
+#: messages-i18n.c:34
+#, c-format
+msgid ""
+"There was an error writing the file\n"
+"     %s."
+msgstr ""
+"ファイルに書き込む際にエラーが発生しました\n"
+"     %s。"
+
+#: messages-i18n.c:35
+#, c-format
+msgid ""
+"There was an error opening the file\n"
+"     %s."
+msgstr ""
+"ファイルを開く際にエラーが発生しました\n"
+"     %s。"
+
+#: messages-i18n.c:36
+#, c-format
+msgid ""
+"There was an error closing the file\n"
+"     %s."
+msgstr ""
+"ファイルを閉じる際にエラーが発生しました\n"
+"     %s。"
+
+#: messages-i18n.c:37
+#, c-format
+msgid ""
+"The file \n"
+"    %s\n"
+" could not be found."
+msgstr ""
+"ファイル \n"
+"    %s\n"
+" は見つかりませんでした。"
+
+#: messages-i18n.c:38
+#, c-format
+msgid ""
+"The file \n"
+"    %s\n"
+" is empty."
+msgstr ""
+"ファイル"
+"    %s\n"
+" は空です。"
+
+#: messages-i18n.c:39
+msgid "Changes have been made since the last Save. Save the data to file?"
+msgstr "保存されていない変更があります。ファイルに保存しますか?"
+
+#: messages-i18n.c:40
+#, c-format
+msgid ""
+"The file \n"
+"    %s\n"
+" already exists.\n"
+"Are you sure you want to overwrite it?"
+msgstr ""
+"%s\n"
+" という名前のファイルはすでにあります。\n"
+" 本当に上書きしてよろしいですか?"
+
+#: messages-i18n.c:41
+#, c-format
+msgid ""
+"The filepath \n"
+"    %s\n"
+"is not a valid location in the filesystem."
+msgstr ""
+"パス名 \n"
+"    %s\n"
+" はファイルシステム内に存在しません。"
+
+#: messages-i18n.c:42
+#, c-format
+msgid ""
+"The file \n"
+"    %s\n"
+"appears to be in use by another user.\n"
+"If this is not right, remove the .LCK file and try again."
+msgstr ""
+"ファイル \n"
+"    %s\n"
+" は別のユーザーに使用されているようです。\n"
+" もしそうでなければ、.LCKファイルを削除してもう一度試してみて下さい。"
+
+#: messages-i18n.c:43
+msgid "You need to install the gnome-print library."
+msgstr "gnome-print ライブラリをインストールする必要があります。"
+
+#: messages-i18n.c:44
+#, c-format
+msgid "QIF file load failed. %s"
+msgstr "QIF形式ファイルのロード失敗。 %s"
+
+#: messages-i18n.c:45
+msgid "QIF file load failed. Check settings and reload."
+msgstr "QIF形式ファイルのロード失敗。設定を確かめて再ロードして下さい。"
+
+#: messages-i18n.c:46
+msgid "The source for price quotes"
+msgstr ""
+
+#: messages-i18n.c:47
+msgid ""
+"The account is not balanced.\n"
+"Are you sure you want to finish?"
+msgstr ""
+"科目の勘定が合いません。\n"
+"本当に終了してよろしいですか?"
+
+#: messages-i18n.c:48
+msgid ""
+"You have made changes to this reconcile window.\n"
+"Are you sure you want to cancel?"
+msgstr ""
+
+#: messages-i18n.c:49
+msgid "Warning! This is a reconciled transaction. Do you want do continue?"
+msgstr ""
+
+#: messages-i18n.c:50
+#, c-format
+msgid ""
+"You cannot transfer funds from the %s account.\n"
+"It does not have a matching currency."
+msgstr ""
+"通貨単位が違うので、\n"
+"%s の勘定から資金を移動することは出来ません。"
+
+#: messages-i18n.c:51
+msgid "Error executing scheme report."
+msgstr "scheme 帳票処理中エラー"
+
+#: messages-i18n.c:52
+msgid "This report has no parameters."
+msgstr "この帳票には引数はありません。"
+
+#: messages-i18n.c:53
+msgid "Show the income and expense accounts."
+msgstr "収入と費用の勘定科目を見せる。"
+
+#: messages-i18n.c:54
+msgid ""
+"The current transaction has been changed.\n"
+"Would you like to record it?"
+msgstr ""
+"この取引の情報は変更されました。\n"
+"記録しますか?"
+
+#: messages-i18n.c:55
+#, c-format
+msgid ""
+"Are you sure you want to delete\n"
+"   %s\n"
+"from the transaction\n"
+"   %s ?"
+msgstr ""
+" %s\n"
+"を勘定科目の\n"
+" %s\n"
+"から削除してよろしいですか?"
+
+#: messages-i18n.c:56
+msgid "Are you sure you want to delete the current transaction?"
+msgstr "本当にこの取引を削除してもよろしいですか?"
+
+#: messages-i18n.c:57
+msgid "Recalculate Transaction"
+msgstr "取引再計算"
+
+#: messages-i18n.c:58
+msgid ""
+"The values entered for this transaction are inconsistent.\n"
+"Which value would you like to have recalculated?\n"
+msgstr ""
+"この取引に入力された値は計算が合いません。\n"
+"どの値を再計算すればよろしいですか?\n"
+
+#: messages-i18n.c:59
+#, c-format
+msgid ""
+"The types of all the parent accounts and their subaccounts must be changed "
+"to %s.\n"
+"Is that what you want to do?"
+msgstr ""
+"親勘定科目とその子勘定科目の型を全部%sに変えることになります。\n"
+"それでよろしいですか?"
+
+#: messages-i18n.c:60
+#, c-format
+msgid ""
+"The types of all the subaccounts must be changed to %s.\n"
+"Is that what you want to do?"
+msgstr ""
+"子勘定科目の型を全部%sに変えることになります。\n"
+"それでよろしいですか?"
+
+#: messages-i18n.c:61
+msgid "The following changes must be made. Continue?"
+msgstr "下のような変更が必要です。続行しますか?"
+
+#: messages-i18n.c:62
+msgid ""
+"There must be at least two accounts\n"
+"created before you can transfer funds."
+msgstr ""
+"資金を移動するには、勘定科目が\n"
+"最低二つ必要です。"
+
+#: messages-i18n.c:63
+msgid ""
+"You cannot transfer between those accounts.\n"
+"They do not have a common currency."
+msgstr ""
+"これらの勘定科目間の資金の移動は出来ません。\n"
+"共通の通貨を使っていません。"
+
+#: messages-i18n.c:64
+msgid ""
+"The \"From\" and \"To\" accounts\n"
+" must be different!"
+msgstr ""
+"「元」と「先」の勘定科目が\n"
+"同じではいけません。"
+
+#: messages-i18n.c:65
+msgid "You can't transfer from and to the same account!"
+msgstr "同一の勘定科目への資金の移動は出来ません。"
+
+#: messages-i18n.c:66
+msgid ""
+"You must specify an account to transfer from,\n"
+"or to, or both, for this transaction.\n"
+"Otherwise, it will not be recorded."
+msgstr ""
+"この取引には移動元と移動先の\n"
+"勘定科目を指定しなければいけません。\n"
+"指定しなければ、この取引は記録されません。"
+
+#: messages-i18n.c:67
+msgid "Adjust the balance of the selected account"
+msgstr "選択された勘定科目の残高を調整する"
+
+#: messages-i18n.c:68
+msgid "Adjust the ending balance"
+msgstr "期末残高を調整する"
+
+#: messages-i18n.c:69
+msgid "Adjust the balance of the main account for this register"
+msgstr "この記帳の主勘定科目の残高を調整する"
+
+#: messages-i18n.c:70 po/guile_strings.txt:118
+msgid "Double line mode with a multi-line cursor"
+msgstr "ダブルラインモード(複行カーソル付き)"
+
+#: messages-i18n.c:71 po/guile_strings.txt:119
+msgid "Single line mode with a multi-line cursor"
+msgstr "シングルラインモード(複行カーソル付き)"
+
+#: messages-i18n.c:72
+msgid "Move to the blank transaction at the bottom of the register"
+msgstr "記帳の下の空白取引に移動する"
+
+#: messages-i18n.c:73
+msgid "Cancel the current transaction"
+msgstr "現在の取引をキャンセルする"
+
+#: messages-i18n.c:74
+msgid "Close this HTML window"
+msgstr "このHTMLウィンドウを閉じる"
+
+#: messages-i18n.c:75
+msgid "Close this register window"
+msgstr "この記帳ウィンドウを閉じる"
+
+#: messages-i18n.c:76
+msgid "Set the date range of this register"
+msgstr "この記帳の日付範囲を設定する"
+
+#: messages-i18n.c:77
+msgid "Delete selected account"
+msgstr "選択された勘定科目を削除する"
+
+#: messages-i18n.c:78
+msgid "Delete the current transaction"
+msgstr "この取引を削除する"
+
+#: messages-i18n.c:79 po/guile_strings.txt:144
+msgid "Show transactions on two lines with more information"
+msgstr "取引を二行に分け、もっと詳しい情報を表示する"
+
+#: messages-i18n.c:80
+msgid "Make a copy of the current transaction"
+msgstr "この取引のコピーを作成する"
+
+#: messages-i18n.c:81
+msgid "Edit the selected account"
+msgstr "選択されている勘定科目を編集する"
+
+#: messages-i18n.c:82
+msgid "Edit the main account for this register"
+msgstr "この記帳の主勘定科目を編集する"
+
+#: messages-i18n.c:83
+msgid "Edit the current transaction"
+msgstr "現在の取引を編集する"
+
+#: messages-i18n.c:84
+msgid "Exit GnuCash"
+msgstr "GnuCash終了"
+
+#: messages-i18n.c:85
+msgid "Export HTML-formatted report to file"
+msgstr "HTML形式の帳票をファイルに出力"
+
+#: messages-i18n.c:86
+msgid "Find transactions with a search."
+msgstr "取引を検索で見つける。"
+
+#: messages-i18n.c:87
+msgid "Open the GnuCash help window"
+msgstr "GnuCashヘルプウィンドウを開く"
+
+#: messages-i18n.c:88
+msgid "Move back one step in the history"
+msgstr "履歴内で一歩戻る"
+
+#: messages-i18n.c:89
+msgid "Move forward one step in the history"
+msgstr "履歴内で一歩進む"
+
+#: messages-i18n.c:90
+msgid "Import a Quicken QIF file"
+msgstr "QuickenのQIF形式ファイルを読み込む"
+
+#: messages-i18n.c:91
+msgid "Jump to the corresponding transaction in the other account"
+msgstr "もう片方の勘定科目内でこれに該当する取引に飛ぶ"
+
+#: messages-i18n.c:92
+msgid "Show transactions on multiple lines with one line for each split"
+msgstr "取引を複数行に表示し、一分割ごとに一行を割り当てる"
+
+#: messages-i18n.c:93
+msgid ""
+"This transaction has multiple splits; switch to multi-line mode to see them "
+"all"
+msgstr ""
+"この取引には複数の分割があります。全部見たい時には複数行モードに切替えて下さい。"
+
+#: messages-i18n.c:94
+msgid "Create a new account"
+msgstr "新しい勘定科目を作成"
+
+#: messages-i18n.c:95
+msgid "Create a new file"
+msgstr "新しいファイルを作成"
+
+#: messages-i18n.c:96
+msgid "Add a new transaction to the account"
+msgstr "勘定科目に新しい取引を追加"
+
+#: messages-i18n.c:97
+msgid "Open the selected account"
+msgstr "選択された勘定科目を開く"
+
+#: messages-i18n.c:98
+msgid "Open the account"
+msgstr "勘定科目を開く"
+
+#: messages-i18n.c:99
+msgid "Open the selected account and all its subaccounts"
+msgstr "選択された勘定科目とその子勘定科目を全部開く"
+
+#: messages-i18n.c:100
+msgid "Open a file"
+msgstr "ファイルを開く"
+
+#: messages-i18n.c:101
+msgid "Open the global preferences dialog"
+msgstr "全般設定ダイアログを開く"
+
+#: messages-i18n.c:102
+msgid "Print a check using a standard format"
+msgstr "標準形式の小切手を印刷する"
+
+#: messages-i18n.c:103
+msgid "Reconcile the selected account"
+msgstr ""
+
+#: messages-i18n.c:104
+msgid "Cancel the reconciliation of this account"
+msgstr ""
+
+#: messages-i18n.c:105
+msgid "Finish the reconciliation of this account"
+msgstr ""
+
+#: messages-i18n.c:106
+msgid "Reconcile the main account for this register"
+msgstr ""
+
+#: messages-i18n.c:107
+msgid "Record the current transaction"
+msgstr "現在の取引を記録する"
+
+#: messages-i18n.c:108
+msgid "Set the parameters for this report"
+msgstr "この帳票の引数を設定する"
+
+#: messages-i18n.c:109
+msgid "Save the file to disk"
+msgstr "ファイルをディスクに保存する"
+
+#: messages-i18n.c:110
+msgid "Identify and fix problems in the account"
+msgstr "勘定科目の中の問題点を見つけ、修正する"
+
+#: messages-i18n.c:111
+msgid "Identify and fix problems in all the accounts"
+msgstr "全ての勘定科目の中の問題点を見つけ、修正する"
+
+#: messages-i18n.c:112
+msgid "Identify and fix problems in the account and its subaccounts"
+msgstr "勘定科目とその子勘定科目の中の問題点を見つけ、修正する"
+
+#: messages-i18n.c:113
+msgid "Identify and fix problems in the accounts of this register"
+msgstr "このレジスタの勘定科目の中の問題点を見つけ、修正する"
+
+#: messages-i18n.c:114
+msgid "Set the option to its default value"
+msgstr "オプションを初期値に設定する"
+
+#: messages-i18n.c:115
+msgid "Show all of the transactions in the account"
+msgstr "勘定科目に属する取引を全部表示する"
+
+#: messages-i18n.c:116 po/guile_strings.txt:148
+msgid "Show transactions on single lines"
+msgstr "取引を一行で表示する"
+
+#: messages-i18n.c:117
+msgid "Sort by Amount, then Date, then Num"
+msgstr "数量、日付、番号の順に並べ替える"
+
+#: messages-i18n.c:118
+msgid "Sort by Date, then Num, then Amount"
+msgstr "日付、番号、数量の順に並べ替える"
+
+#: messages-i18n.c:119
+msgid "Sort by Description, then Date, then Num"
+msgstr "説明、日付、番号の順に並べ替える"
+
+#: messages-i18n.c:120
+msgid "Sort by Memo, then Date, then Num"
+msgstr "詳細、日付、番号の順に並べ替える"
+
+#: messages-i18n.c:121
+msgid "Sort by Num, then Date, then Amount"
+msgstr "番号、日付、数量の順に並べ替える"
+
+#: messages-i18n.c:122
+msgid "Keep normal account order"
+msgstr "普通の勘定科目の順番を維持する"
+
+#: messages-i18n.c:123
+msgid "Transfer funds from one account to another"
+msgstr "資金を別の勘定科目へ移動する"
+
+#: messages-i18n.c:124
+msgid "Enter the type of transaction, or choose one from the list"
+msgstr "取引の型を入力するか、リストから選択する"
+
+#: messages-i18n.c:125
+msgid "Enter a description of the transaction"
+msgstr "取引の説明を入力する"
+
+#: messages-i18n.c:126
+msgid "Enter a description of the split"
+msgstr "分割の説明を入力する"
+
+#: messages-i18n.c:127
+msgid "Enter the transaction number, such as the check number"
+msgstr "取引番号を入力する（小切手の番号など）"
+
+#: messages-i18n.c:128
+msgid "Enter the share price"
+msgstr "株価を入力する"
+
+#: messages-i18n.c:129
+msgid "Enter the number of shares sold"
+msgstr "売却した株数を入力する"
+
+#: messages-i18n.c:130
+msgid "Enter the total value of the shares"
+msgstr "株の総価値を入力する"
+
+#: messages-i18n.c:131
+msgid "Enter the account to transfer from, or choose one from the list"
+msgstr "移動元の勘定科目を入力するか、リストから選択する"
+
+#: messages-i18n.c:132
+msgid "Enter the account to transfer to, or choose one from the list"
+msgstr "移動先の勘定科目を入力するか、リストから選択する"
+
+#: messages-i18n.c:133
+msgid "_Account"
+msgstr "_勘定"
+
+#: messages-i18n.c:134
+msgid "_Accounts"
+msgstr "_勘定"
+
+#: messages-i18n.c:135
+msgid "_Adjust Balance"
+msgstr "_残高の調整"
+
+#: messages-i18n.c:136
+msgid "_Adjust Balance..."
+msgstr "_残高の調整..."
+
+#: messages-i18n.c:137
+msgid "_Blank"
+msgstr "_空白"
+
+#: messages-i18n.c:138
+msgid "_Cancel"
+msgstr "_キャンセル"
+
+#: messages-i18n.c:139
+msgid "_Date Range"
+msgstr "_日付範囲"
+
+#: messages-i18n.c:140
+msgid "_Delete Account"
+msgstr "_勘定科目の削除"
+
+#: messages-i18n.c:141
+msgid "_Delete"
+msgstr "_削除"
+
+#: messages-i18n.c:142
+msgid "D_uplicate"
+msgstr "_複製"
+
+#: messages-i18n.c:143
+msgid "_Edit"
+msgstr "_編集"
+
+#: messages-i18n.c:144
+msgid "_Edit Account"
+msgstr "_勘定科目の編集"
+
+#: messages-i18n.c:145
+msgid "_Ending Balance"
+msgstr "_期末残高"
+
+#: messages-i18n.c:146
+msgid "_Ending Balance..."
+msgstr "_期末残高..."
+
+#: messages-i18n.c:147
+msgid "_Finish"
+msgstr "_終了"
+
+#: messages-i18n.c:148
+msgid "_Help"
+msgstr "_ヘルプ"
+
+#: messages-i18n.c:149
+msgid "_Jump"
+msgstr "_飛ぶ"
+
+#: messages-i18n.c:150
+msgid "_New"
+msgstr "_新規"
+
+#: messages-i18n.c:151
+msgid "_New Account"
+msgstr "_勘定科目の新規作成"
+
+#: messages-i18n.c:152
+msgid "_New Account..."
+msgstr "_勘定科目の新規作成..."
+
+#: messages-i18n.c:153
+msgid "_Open Account"
+msgstr "_勘定科目を開く"
+
+#: messages-i18n.c:154
+msgid "Open S_ubaccounts"
+msgstr "_子勘定科目を開く"
+
+#: messages-i18n.c:155
+msgid "_Preferences"
+msgstr "_設定"
+
+#: messages-i18n.c:156
+msgid "_Preferences..."
+msgstr "_設定..."
+
+#: messages-i18n.c:157
+msgid "_Print Check... (unfinished!)"
+msgstr "_小切手を印刷... (未完成です!)"
+
+#: messages-i18n.c:158
+msgid "_Reconcile..."
+msgstr ""
+
+#: messages-i18n.c:159
+msgid "_Reconcile"
+msgstr ""
+
+#: messages-i18n.c:160
+msgid "_Record"
+msgstr "_記録"
+
+#: messages-i18n.c:161
+msgid "_Register"
+msgstr "_レジスタ"
+
+#: messages-i18n.c:162
+msgid "_Scrub"
+msgstr "_掃除"
+
+#: messages-i18n.c:163
+msgid "Scrub A_ccount"
+msgstr "_勘定を掃除する"
+
+#: messages-i18n.c:164
+msgid "Scrub A_ll"
+msgstr "_全勘定を掃除する"
+
+#: messages-i18n.c:165
+msgid "Scrub Su_baccounts"
+msgstr ""
+
+#: messages-i18n.c:166
+msgid "Set _Range..."
+msgstr "_範囲設定..."
+
+#: messages-i18n.c:167
+msgid "Set _Range"
+msgstr "範囲設定"
+
+#: messages-i18n.c:168
+msgid "Show _All"
+msgstr "_全部見せる"
+
+#: messages-i18n.c:169
+msgid "Sort _Order"
+msgstr "_ソート順"
+
+#: messages-i18n.c:170
+msgid "_Style"
+msgstr "_スタイル"
+
+#: messages-i18n.c:171
+msgid "_Transaction"
+msgstr "_取引"
+
+#: messages-i18n.c:172
+msgid "_Transfer"
+msgstr "_資金移動"
+
+#: messages-i18n.c:173
+msgid "_Transfer..."
+msgstr "_資金移動..."
+
+#: messages-i18n.c:174
+msgid "Account Code"
+msgstr "勘定科目コード"
+
+#: messages-i18n.c:175 po/guile_strings.txt:7
+msgid "Account Name"
+msgstr "勘定科目名"
+
+#: messages-i18n.c:176
+msgid "Account Type"
+msgstr "勘定科目型"
+
+#: messages-i18n.c:177
+msgid "Adjust Balance"
+msgstr "残高調整"
+
+#: messages-i18n.c:178 po/guile_strings.txt:300
+msgid "Auto Double"
+msgstr "自動複式"
+
+#: messages-i18n.c:179 po/guile_strings.txt:69
+msgid "Auto Single"
+msgstr "自動単式"
+
+#: messages-i18n.c:180
+msgid "Clear All"
+msgstr "全部クリア"
+
+#: messages-i18n.c:181
+msgid "Close Window"
+msgstr "ウィンドウを閉じる"
+
+#: messages-i18n.c:182
+msgid "Credit Card"
+msgstr "クレジットカード"
+
+#: messages-i18n.c:183
+msgid "Credit Line"
+msgstr "融資枠"
+
+#: messages-i18n.c:184
+msgid "Date Range"
+msgstr "日付範囲"
+
+#: messages-i18n.c:185
+msgid "Delete Account"
+msgstr "勘定科目削除"
+
+#: messages-i18n.c:186
+msgid "Delete Transaction"
+msgstr "取引削除"
+
+#: messages-i18n.c:187 po/guile_strings.txt:23
+msgid "Double Line"
+msgstr "複行"
+
+#: messages-i18n.c:188
+msgid "Edit Account"
+msgstr "勘定科目を編集"
+
+#: messages-i18n.c:189
+msgid "Ending Balance"
+msgstr "期末残高"
+
+#: messages-i18n.c:190
+msgid "End date"
+msgstr "期末日付"
+
+#: messages-i18n.c:191
+msgid "Export To"
+msgstr "エクスポート先"
+
+#: messages-i18n.c:192
+msgid "Finish"
+msgstr "終了"
+
+#: messages-i18n.c:193
+msgid "General Ledger"
+msgstr "総勘定元帳"
+
+#: messages-i18n.c:194
+msgid "Hide Inc/Exp"
+msgstr "収入・費用を隠す"
+
+#: messages-i18n.c:195
+msgid "Import QIF..."
+msgstr "QIF形式インポート..."
+
+#: messages-i18n.c:196
+msgid "Import QIF"
+msgstr "QIF形式インポート"
+
+#: messages-i18n.c:197
+msgid "Lost Accounts"
+msgstr ""
+
+#: messages-i18n.c:198
+msgid "Money Market"
+msgstr "マネーマーケット"
+
+#: messages-i18n.c:199 po/guile_strings.txt:58
+msgid "Multi Line"
+msgstr "複行"
+
+#: messages-i18n.c:200 po/guile_strings.txt:4
+msgid "Mutual Fund"
+msgstr "投資信託"
+
+#: messages-i18n.c:201
+msgid "New Account"
+msgstr "新規勘定科目"
+
+#: messages-i18n.c:202
+msgid "New Balance"
+msgstr "新規残高"
+
+#: messages-i18n.c:203
+msgid "New File"
+msgstr "新規ファイル"
+
+#: messages-i18n.c:204
+msgid "New top level account"
+msgstr ""
+
+#: messages-i18n.c:205
+msgid "New Value"
+msgstr "新しい値"
+
+#: messages-i18n.c:206
+msgid "Old Value"
+msgstr "古い値"
+
+#: messages-i18n.c:207
+msgid "Open Account"
+msgstr "勘定科目を開く"
+
+#: messages-i18n.c:208
+msgid "Opening Balance"
+msgstr "初期残高"
+
+#: messages-i18n.c:209
+msgid "Open File"
+msgstr "ファイルを開く"
+
+#: messages-i18n.c:210
+msgid "Open Subaccounts"
+msgstr "子勘定科目を開く"
+
+#: messages-i18n.c:211
+msgid "Pick One"
+msgstr "一つ選択"
+
+#: messages-i18n.c:212
+msgid "Parent Account"
+msgstr "親勘定科目"
+
+#: messages-i18n.c:213
+msgid "Previous Balance"
+msgstr "前期残高"
+
+#: messages-i18n.c:214
+msgid "Purch Price"
+msgstr "購入値"
+
+#: messages-i18n.c:215
+msgid "Price Quote Source"
+msgstr ""
+
+#: messages-i18n.c:216
+msgid "Register date ranges"
+msgstr "レジスタ日付範囲"
+
+#: messages-i18n.c:217
+msgid "Sale Price"
+msgstr "売却値"
+
+#: messages-i18n.c:218
+msgid "Save As"
+msgstr "名前をつけて保存"
+
+#: messages-i18n.c:219
+msgid "Scrub Account"
+msgstr ""
+
+#: messages-i18n.c:220
+msgid "Scrub All"
+msgstr ""
+
+#: messages-i18n.c:221
+msgid "Scrub Subaccounts"
+msgstr ""
+
+#: messages-i18n.c:222
+msgid "Select All"
+msgstr "全部選択"
+
+#: messages-i18n.c:223
+msgid "Select Default"
+msgstr "デフォルト選択"
+
+#: messages-i18n.c:224
+msgid "Set Date Range"
+msgstr "日付範囲設定"
+
+#: messages-i18n.c:225
+msgid "Set Range"
+msgstr "範囲設定"
+
+#: messages-i18n.c:226
+msgid "Set to default"
+msgstr "デフォルトに設定"
+
+#: messages-i18n.c:227
+msgid "Set Up Account"
+msgstr "勘定科目を作成"
+
+#: messages-i18n.c:228
+msgid "Show All"
+msgstr "全部見せる"
+
+#: messages-i18n.c:229
+msgid "Show Inc/Exp"
+msgstr "収入・費用を表示する"
+
+#: messages-i18n.c:230
+msgid "Show Categories"
+msgstr "区分を表示する"
+
+#: messages-i18n.c:231
+msgid "Show Earliest"
+msgstr "最古を表示する"
+
+#: messages-i18n.c:232
+msgid "Show Latest"
+msgstr "最新を表示する"
+
+#: messages-i18n.c:233 po/guile_strings.txt:185
+msgid "Single Line"
+msgstr "単行"
+
+#: messages-i18n.c:234
+msgid "Sort by Amount"
+msgstr "数量順に並べる"
+
+#: messages-i18n.c:235
+msgid "Sort by Date"
+msgstr "日付順に並べる"
+
+#: messages-i18n.c:236
+msgid "Sort by Description"
+msgstr "説明順に並べる"
+
+#: messages-i18n.c:237
+msgid "Sort by Memo"
+msgstr "詳細順に並べる"
+
+#: messages-i18n.c:238
+msgid "Sort by Num"
+msgstr "番号順に並べる"
+
+#: messages-i18n.c:239
+msgid "Sort Order"
+msgstr "ソート順番"
+
+#: messages-i18n.c:240
+msgid "Start date"
+msgstr "開始日付"
+
+#: messages-i18n.c:241
+msgid "Standard order"
+msgstr "標準の順番"
+
+#: messages-i18n.c:242
+msgid "Top level account"
+msgstr ""
+
+#: messages-i18n.c:243
+msgid "Total Shares"
+msgstr "株式合計"
+
+#: messages-i18n.c:244
+msgid "Verify Changes"
+msgstr "変更を確認する"
+
+#: messages-i18n.c:245
+msgid "Transfer Information"
+msgstr "情報を転送"
+
+#: messages-i18n.c:246
+msgid "Transfer Money"
+msgstr "資金を転送"
+
+#: messages-i18n.c:247
+msgid "Transfer From"
+msgstr "転送元"
+
+#: messages-i18n.c:248
+msgid "Transfer To"
+msgstr "転送先"
+
+#: messages-i18n.c:249
+msgid "About"
+msgstr ""
+
+#: messages-i18n.c:250 po/guile_strings.txt:63
+#: src/gnome/glade-gnc-dialogs.c:1844
+msgid "Account"
+msgstr "勘定科目"
+
+#: messages-i18n.c:251 src/gnome/glade-gnc-dialogs.c:369
+#: src/gnome/glade-gnc-dialogs.c:529
+msgid "Accounts"
+msgstr "勘定科目"
+
+#: messages-i18n.c:252
+msgid "Account Information"
+msgstr "勘定科目情報"
+
+#: messages-i18n.c:253
+msgid "AutoDep"
+msgstr ""
+
+#: messages-i18n.c:254 src/gnome/glade-gnc-dialogs.c:2458
+msgid "Action"
+msgstr ""
+
+#: messages-i18n.c:255
+msgid "Activities"
+msgstr ""
+
+#: messages-i18n.c:256 po/guile_strings.txt:57
+#: src/gnome/glade-gnc-dialogs.c:2198
+msgid "Amount"
+msgstr "金額"
+
+#: messages-i18n.c:257
+msgid "Appreciation"
+msgstr "増加"
+
+#: messages-i18n.c:258
+msgid "Phone"
+msgstr "電話"
+
+#: messages-i18n.c:259 po/guile_strings.txt:168
+#: src/gnome/glade-gnc-dialogs.c:634
+msgid "Asset"
+msgstr "資産"
+
+#: messages-i18n.c:260
+msgid "Assets"
+msgstr "資産"
+
+#: messages-i18n.c:261
+msgid "ATM"
+msgstr "キャッシュマシーン"
+
+#: messages-i18n.c:262
+msgid "Back"
+msgstr "戻る"
+
+#: messages-i18n.c:263 messages-i18n.c:264 po/guile_strings.txt:13
+msgid "Balance"
+msgstr "残高"
+
+#: messages-i18n.c:265 po/guile_strings.txt:106
+#: src/gnome/glade-gnc-dialogs.c:628
+msgid "Bank"
+msgstr "銀行"
+
+#: messages-i18n.c:266
+msgid "Blank"
+msgstr "空白"
+
+#: messages-i18n.c:267
+msgid "Bought"
+msgstr ""
+
+#: messages-i18n.c:268
+msgid "Buy"
+msgstr "買う"
+
+#: messages-i18n.c:269
+msgid "Cancel"
+msgstr "キャンセル"
+
+#: messages-i18n.c:270 po/guile_strings.txt:134
+#: src/gnome/glade-gnc-dialogs.c:631
+msgid "Cash"
+msgstr "現金"
+
+#: messages-i18n.c:271
+msgid "Changed"
+msgstr ""
+
+#: messages-i18n.c:272
+msgid "Charge"
+msgstr ""
+
+#: messages-i18n.c:273
+msgid "Check"
+msgstr ""
+
+#: messages-i18n.c:274
+msgid "Checking"
+msgstr ""
+
+#: messages-i18n.c:275
+msgid "Cleared"
+msgstr ""
+
+#: messages-i18n.c:276
+msgid "Close"
+msgstr ""
+
+#: messages-i18n.c:277
+msgid "Commit"
+msgstr ""
+
+#: messages-i18n.c:278
+msgid "Create"
+msgstr ""
+
+#: messages-i18n.c:279 po/guile_strings.txt:245
+#: src/gnome/glade-gnc-dialogs.c:637 src/gnome/glade-gnc-dialogs.c:2142
+msgid "Credit"
+msgstr "貸方"
+
+#: messages-i18n.c:280
+msgid "Credits"
+msgstr "貸方"
+
+#: messages-i18n.c:281 po/guile_strings.txt:131
+#: src/gnome/glade-gnc-dialogs.c:649
+msgid "Currency"
+msgstr "通貨"
+
+#: messages-i18n.c:282 po/guile_strings.txt:6
+#: src/gnome/glade-gnc-dialogs.c:1980
+msgid "Date"
+msgstr "日付"
+
+#: messages-i18n.c:283 po/guile_strings.txt:39
+#: src/gnome/glade-gnc-dialogs.c:2145
+msgid "Debit"
+msgstr "借方"
+
+#: messages-i18n.c:284
+msgid "Debits"
+msgstr "借方"
+
+#: messages-i18n.c:285
+msgid "Decrease"
+msgstr ""
+
+#: messages-i18n.c:286
+msgid "Deficit"
+msgstr ""
+
+#: messages-i18n.c:287
+msgid "Delete"
+msgstr ""
+
+#: messages-i18n.c:288
+msgid "Deposit"
+msgstr ""
+
+#: messages-i18n.c:289
+msgid "Depreciation"
+msgstr "減価償却"
+
+#: messages-i18n.c:290 po/guile_strings.txt:149
+#: src/gnome/glade-gnc-dialogs.c:2038
+msgid "Description"
+msgstr "説明"
+
+#: messages-i18n.c:291
+msgid "Difference"
+msgstr "差分"
+
+#: messages-i18n.c:292
+msgid "Direct Debit"
+msgstr ""
+
+#: messages-i18n.c:293
+msgid "Dist"
+msgstr ""
+
+#: messages-i18n.c:294
+msgid "Div"
+msgstr ""
+
+#: messages-i18n.c:295
+msgid "Duplicate"
+msgstr ""
+
+#: messages-i18n.c:296
+msgid "Edit"
+msgstr "編集"
+
+#: messages-i18n.c:297 po/guile_strings.txt:8
+#: src/gnome/glade-gnc-dialogs.c:658
+msgid "Equity"
+msgstr "資本"
+
+#: messages-i18n.c:298
+msgid "Exit"
+msgstr "終了"
+
+#: messages-i18n.c:299 po/guile_strings.txt:317
+#: src/gnome/glade-gnc-dialogs.c:655
+msgid "Expense"
+msgstr "費用"
+
+#: messages-i18n.c:300
+msgid "Export"
+msgstr ""
+
+#: messages-i18n.c:301 po/guile_strings.txt:347
+msgid "Extensions"
+msgstr "拡張機能"
+
+#: messages-i18n.c:302
+msgid "Fee"
+msgstr "費用"
+
+#: messages-i18n.c:303
+msgid "Field"
+msgstr ""
+
+#: messages-i18n.c:304
+msgid "File"
+msgstr "ファイル"
+
+#: messages-i18n.c:305 src/gnome/glade-gnc-dialogs.c:2532
+msgid "Find"
+msgstr "検索"
+
+#: messages-i18n.c:306
+msgid "Forward"
+msgstr ""
+
+#: messages-i18n.c:307 po/guile_strings.txt:123
+msgid "From"
+msgstr ""
+
+#: messages-i18n.c:308
+msgid "GnuCash Preferences"
+msgstr "GnuCash 設定"
+
+#: messages-i18n.c:309
+msgid "Help"
+msgstr "ヘルプ"
+
+#: messages-i18n.c:310
+msgid "Import"
+msgstr ""
+
+#: messages-i18n.c:311 po/guile_strings.txt:235
+#: src/gnome/glade-gnc-dialogs.c:652
+msgid "Income"
+msgstr "収入"
+
+#: messages-i18n.c:312
+msgid "Increase"
+msgstr "増加"
+
+#: messages-i18n.c:313
+msgid "Int"
+msgstr ""
+
+#: messages-i18n.c:314
+msgid "Jump"
+msgstr ""
+
+#: messages-i18n.c:315 po/guile_strings.txt:188
+#: src/gnome/glade-gnc-dialogs.c:640
+msgid "Liability"
+msgstr "負債"
+
+#: messages-i18n.c:316
+msgid "License"
+msgstr "ライセンス"
+
+#: messages-i18n.c:317
+msgid "Loan"
+msgstr "借入金"
+
+#: messages-i18n.c:318
+msgid "LTCG"
+msgstr "長期キャピタルゲイン"
+
+#: messages-i18n.c:319 po/guile_strings.txt:33
+#: src/gnome/glade-gnc-dialogs.c:2256
+msgid "Memo"
+msgstr "詳細"
+
+#: messages-i18n.c:320
+msgid "New"
+msgstr ""
+
+#: messages-i18n.c:321
+msgid "No"
+msgstr ""
+
+#: messages-i18n.c:322 src/gnome/print-session.c:108
+#: src/gnome/print-session.c:197
+msgid "(none)"
+msgstr "(なし)"
+
+#: messages-i18n.c:323 po/guile_strings.txt:202
+msgid "Notes"
+msgstr "詳細"
+
+#: messages-i18n.c:324 po/guile_strings.txt:170
+msgid "Num"
+msgstr ""
+
+#: messages-i18n.c:325
+msgid "Ok"
+msgstr ""
+
+#: messages-i18n.c:326
+msgid "Online"
+msgstr "オンライン"
+
+#: messages-i18n.c:327
+msgid "Open"
+msgstr "開く"
+
+#: messages-i18n.c:328
+msgid "Parameters"
+msgstr ""
+
+#: messages-i18n.c:329
+msgid "Payment"
+msgstr "支払"
+
+#: messages-i18n.c:330
+msgid "Portfolio"
+msgstr "ポートフォリオ"
+
+#: messages-i18n.c:331
+msgid "POS"
+msgstr ""
+
+#: messages-i18n.c:332
+msgid "Preferences"
+msgstr "設定"
+
+#: messages-i18n.c:333 src/gnome/glade-gnc-dialogs.c:2400
+msgid "Price"
+msgstr "価値"
+
+#: messages-i18n.c:334 src/gnome/glade-gnc-dialogs.c:1004
+msgid "Print"
+msgstr "印刷"
+
+#: messages-i18n.c:335
+msgid "Profits"
+msgstr "利益"
+
+#: messages-i18n.c:336
+msgid "Quit"
+msgstr "終了"
+
+#: messages-i18n.c:337
+msgid "Rebate"
+msgstr "リベート"
+
+#: messages-i18n.c:338
+msgid "Receive"
+msgstr ""
+
+#: messages-i18n.c:339
+msgid "Reconcile"
+msgstr ""
+
+#: messages-i18n.c:340
+msgid "Record"
+msgstr ""
+
+#: messages-i18n.c:341 po/guile_strings.txt:208
+msgid "Register"
+msgstr ""
+
+#: messages-i18n.c:342 po/guile_strings.txt:201
+msgid "Report"
+msgstr "帳票"
+
+#: messages-i18n.c:343
+msgid "Reports"
+msgstr "帳票"
+
+#: messages-i18n.c:344
+msgid "Save"
+msgstr "保存"
+
+#: messages-i18n.c:345
+msgid "Savings"
+msgstr ""
+
+#: messages-i18n.c:346
+msgid "Scrub"
+msgstr "掃除"
+
+#: messages-i18n.c:347
+msgid "Search Results"
+msgstr ""
+
+#: messages-i18n.c:348 po/guile_strings.txt:184
+msgid "Security"
+msgstr ""
+
+#: messages-i18n.c:349
+msgid "Sell"
+msgstr "売る"
+
+#: messages-i18n.c:350
+msgid "Settings"
+msgstr "設定"
+
+#: messages-i18n.c:351
+msgid "Simple"
+msgstr ""
+
+#: messages-i18n.c:352
+msgid "Sold"
+msgstr ""
+
+#: messages-i18n.c:353
+msgid "Spend"
+msgstr ""
+
+#: messages-i18n.c:354
+msgid "Split"
+msgstr ""
+
+#: messages-i18n.c:355
+msgid "STCG"
+msgstr "短期キャピタルゲイン"
+
+#: messages-i18n.c:356 po/guile_strings.txt:345
+#: src/gnome/glade-gnc-dialogs.c:643
+msgid "Stock"
+msgstr "株"
+
+#: messages-i18n.c:357 po/guile_strings.txt:237
+msgid "Style"
+msgstr ""
+
+#: messages-i18n.c:358
+msgid "Surplus"
+msgstr "剰余"
+
+#: messages-i18n.c:359
+msgid "Teller"
+msgstr "銀行窓口"
+
+#: messages-i18n.c:360 po/guile_strings.txt:293
+msgid "To"
+msgstr ""
+
+#: messages-i18n.c:361 src/gnome/glade-gnc-dialogs.c:2624
+msgid "Today"
+msgstr "本日"
+
+#: messages-i18n.c:362 messages-i18n.c:363 po/guile_strings.txt:200
+msgid "Total"
+msgstr "合計"
+
+#: messages-i18n.c:364 po/guile_strings.txt:295
+#: src/gnome/glade-gnc-dialogs.c:362 src/gnome/glade-gnc-dialogs.c:416
+msgid "Type"
+msgstr "型"
+
+#: messages-i18n.c:365
+msgid "Transaction"
+msgstr "取引"
+
+#: messages-i18n.c:366
+msgid "Transfer"
+msgstr ""
+
+#: messages-i18n.c:367 po/guile_strings.txt:64
+msgid "Value"
+msgstr "価値"
+
+#: messages-i18n.c:368
+msgid "WARNING"
+msgstr "警告"
+
+#: messages-i18n.c:369
+msgid "Wire"
+msgstr ""
+
+#: messages-i18n.c:370
+msgid "Withdraw"
+msgstr "引出し"
+
+#: messages-i18n.c:371
+msgid "Yes"
+msgstr "はい"
+
+#: po/guile_strings.txt:1
+msgid "String Option"
+msgstr ""
+
+#: po/guile_strings.txt:2
+msgid "Second Option"
+msgstr ""
+
+#: po/guile_strings.txt:3
+msgid "Cost"
+msgstr "コスト"
+
+#: po/guile_strings.txt:5
+msgid "Status"
+msgstr "ステータス"
+
+#: po/guile_strings.txt:9
+msgid "Other Account"
+msgstr "他の勘定科目"
+
+#: po/guile_strings.txt:10
+msgid "Account Separator"
+msgstr ""
+
+#: po/guile_strings.txt:11
+msgid ""
+"The default background color for splits in multi-line mode and the auto modes"
+msgstr ""
+
+#: po/guile_strings.txt:12
+msgid "Auto-Raise Lists"
+msgstr "リストを自動的に前面に出す"
+
+#: po/guile_strings.txt:14
+msgid "Secondary Sort Order"
+msgstr "二次的ソート順番"
+
+#: po/guile_strings.txt:15
+msgid "Stock Portfolio Valuation"
+msgstr "株式ポートフォリオの価値計算"
+
+#: po/guile_strings.txt:16
+msgid "Display the Transactions 2 report."
+msgstr ""
+
+#: po/guile_strings.txt:17
+msgid "Stock Portfolio"
+msgstr "株式ポートフォリオ"
+
+#: po/guile_strings.txt:18
+msgid "Debit Accounts"
+msgstr "借方勘定科目"
+
+#: po/guile_strings.txt:19
+msgid "The types of accounts for which balances are sign-reversed"
+msgstr "残高が正負逆になる勘定科目の型"
+
+#: po/guile_strings.txt:20
+msgid "The Good"
+msgstr ""
+
+#: po/guile_strings.txt:21
+#, c-format
+msgid "The current time is %s."
+msgstr "現在時刻は%sです。"
+
+#: po/guile_strings.txt:22
+msgid "Headers"
+msgstr "ヘッダ"
+
+#: po/guile_strings.txt:24
+msgid "Display N-1 lines"
+msgstr "N-1 行表示"
+
+#: po/guile_strings.txt:25
+msgid "Use a 24 hour (instead of a 12 hour) time format."
+msgstr "12時間形式ではなく、24時間形式で時刻を表示する。"
+
+#: po/guile_strings.txt:26
+msgid "Income:Salary:Taxable"
+msgstr "収入：給与：課税"
+
+#: po/guile_strings.txt:27
+msgid "Type of budget report"
+msgstr "予算報告の型"
+
+#: po/guile_strings.txt:28
+msgid "reg_win_width"
+msgstr ""
+
+#: po/guile_strings.txt:29
+msgid "Date (subtotal monthly)"
+msgstr ""
+
+#: po/guile_strings.txt:30
+msgid "Balancing"
+msgstr ""
+
+#: po/guile_strings.txt:31
+msgid "Time"
+msgstr ""
+
+#: po/guile_strings.txt:32
+msgid "Account (w/subtotal)"
+msgstr ""
+
+#: po/guile_strings.txt:34
+msgid "International"
+msgstr "国際"
+
+#: po/guile_strings.txt:35
+msgid ""
+"The background color for an active split in multi-line mode and the auto "
+"modes"
+msgstr ""
+
+#: po/guile_strings.txt:36
+msgid "Double mode active background"
+msgstr ""
+
+#: po/guile_strings.txt:37
+msgid "This is a string option"
+msgstr ""
+
+#: po/guile_strings.txt:38
+msgid "Main Window"
+msgstr "主ウィンドウ"
+
+#: po/guile_strings.txt:40
+msgid "_Account Transactions"
+msgstr "_勘定科目取引"
+
+#: po/guile_strings.txt:41
+#, c-format
+msgid "The date option is %s."
+msgstr ""
+
+#: po/guile_strings.txt:42
+msgid "Account Transactions"
+msgstr ""
+
+#: po/guile_strings.txt:43
+msgid "UK"
+msgstr "イギリス"
+
+#: po/guile_strings.txt:44
+msgid "Sort by date"
+msgstr "日付順で並べる"
+
+#: po/guile_strings.txt:45
+#, c-format
+msgid "Report for %s and all subaccounts."
+msgstr ""
+
+#: po/guile_strings.txt:46
+msgid "Account types to display"
+msgstr ""
+
+#: po/guile_strings.txt:47
+msgid "Gain And Loss"
+msgstr ""
+
+#: po/guile_strings.txt:48
+msgid "Double click expands parent accounts"
+msgstr ""
+
+#: po/guile_strings.txt:49
+msgid "main_win_height"
+msgstr ""
+
+#: po/guile_strings.txt:50
+msgid "Boolean Option"
+msgstr ""
+
+#: po/guile_strings.txt:51
+msgid "Income-Salary-Taxable"
+msgstr ""
+
+#: po/guile_strings.txt:52
+msgid "_Stock Portfolio"
+msgstr ""
+
+#: po/guile_strings.txt:53
+msgid "Testing"
+msgstr ""
+
+#: po/guile_strings.txt:54
+msgid "US-style: mm/dd/yyyy"
+msgstr "アメリカ式: 月月/日日/年年年年"
+
+#: po/guile_strings.txt:55
+msgid "You have not selected an account."
+msgstr "勘定科目を選択して下さい。"
+
+#: po/guile_strings.txt:56
+msgid "By default, show every transaction in an account."
+msgstr ""
+
+#: po/guile_strings.txt:59
+msgid "View"
+msgstr ""
+
+#: po/guile_strings.txt:60
+msgid "The default background color for odd rows in double mode"
+msgstr ""
+
+#: po/guile_strings.txt:61
+msgid "UK-style dd/mm/yyyy"
+msgstr "イギリス式: 日日/月月/年年年年"
+
+#: po/guile_strings.txt:62
+msgid "Show all columns"
+msgstr "全列を表示"
+
+#: po/guile_strings.txt:65
+msgid "Header background"
+msgstr ""
+
+#: po/guile_strings.txt:66
+msgid "Sorting"
+msgstr ""
+
+#: po/guile_strings.txt:67
+msgid "Show icons only"
+msgstr "アイコンのみ表示"
+
+#: po/guile_strings.txt:68
+msgid "The default background color for odd rows in single mode"
+msgstr ""
+
+#: po/guile_strings.txt:70
+msgid "Display the Hello, World report."
+msgstr ""
+
+#: po/guile_strings.txt:71
+msgid "Gain"
+msgstr ""
+
+#: po/guile_strings.txt:72
+msgid "Hello Again"
+msgstr ""
+
+#: po/guile_strings.txt:73
+msgid "This page shows your profits and losses."
+msgstr ""
+
+#: po/guile_strings.txt:74
+msgid "Show Vertical Borders"
+msgstr ""
+
+#: po/guile_strings.txt:75
+msgid "This is a boolean option."
+msgstr ""
+
+#: po/guile_strings.txt:76
+msgid "_Profit and Loss"
+msgstr ""
+
+#: po/guile_strings.txt:77
+msgid "Display 1 line"
+msgstr ""
+
+#: po/guile_strings.txt:78
+msgid "Background Color"
+msgstr ""
+
+#: po/guile_strings.txt:79
+#, c-format
+msgid "The number option formatted as currency is %s."
+msgstr ""
+
+#: po/guile_strings.txt:80
+msgid "Income/Salary/Taxable"
+msgstr ""
+
+#: po/guile_strings.txt:81
+msgid "There are no selected accounts in the account list option."
+msgstr ""
+
+#: po/guile_strings.txt:82
+msgid "This page shows your net worth."
+msgstr ""
+
+#: po/guile_strings.txt:83
+msgid "_Budget"
+msgstr ""
+
+#: po/guile_strings.txt:84
+msgid "Continental Europe: dd.mm.yyyy"
+msgstr "ヨーロッパ大陸式: 日日.月月.年年年年"
+
+#: po/guile_strings.txt:85
+msgid "account_edit_win_height"
+msgstr ""
+
+#: po/guile_strings.txt:86
+msgid "Import QIF File - Scripted in Guile."
+msgstr ""
+
+#: po/guile_strings.txt:87
+msgid "Category"
+msgstr ""
+
+#: po/guile_strings.txt:88
+msgid "Single"
+msgstr ""
+
+#: po/guile_strings.txt:89
+msgid "Show Horizontal Borders"
+msgstr ""
+
+#: po/guile_strings.txt:90
+msgid "Sort by check/transaction number"
+msgstr ""
+
+#: po/guile_strings.txt:91
+msgid "The background color for the active transaction in double mode"
+msgstr ""
+
+#: po/guile_strings.txt:92
+msgid "Register Colors"
+msgstr ""
+
+#: po/guile_strings.txt:93
+#, c-format
+msgid "The boolean option is %s."
+msgstr ""
+
+#: po/guile_strings.txt:94
+msgid "Display the memo?"
+msgstr ""
+
+#: po/guile_strings.txt:95
+msgid "(subaccounts)"
+msgstr ""
+
+#: po/guile_strings.txt:96
+msgid "Multi mode default transaction background"
+msgstr ""
+
+#: po/guile_strings.txt:97
+msgid ""
+"Double clicking on an account with children expands the account instead of "
+"opening a register."
+msgstr ""
+
+#: po/guile_strings.txt:98
+msgid "The background color for the active transaction in single mode"
+msgstr ""
+
+#: po/guile_strings.txt:99
+msgid "Loss"
+msgstr "損失"
+
+#: po/guile_strings.txt:100
+msgid "Credit Accounts"
+msgstr "貸方勘定科目"
+
+#: po/guile_strings.txt:101
+msgid "Sort by description"
+msgstr ""
+
+#: po/guile_strings.txt:102
+msgid "largest to smallest, latest to earliest"
+msgstr "最大から最小、最新から最古"
+
+#: po/guile_strings.txt:103
+msgid "Display the description?"
+msgstr "説明を表示しますか?"
+
+#: po/guile_strings.txt:104
+msgid "Secondary Key"
+msgstr "二次キー"
+
+#: po/guile_strings.txt:105
+msgid "Save window sizes and positions."
+msgstr ""
+
+#: po/guile_strings.txt:107
+msgid "Number Option"
+msgstr ""
+
+#: po/guile_strings.txt:108
+msgid "There are no accounts to report on."
+msgstr ""
+
+#: po/guile_strings.txt:109
+#, c-format
+msgid "Report for %s."
+msgstr ""
+
+#: po/guile_strings.txt:110
+msgid "Reverse Income and Expense Accounts"
+msgstr "収入と費用の勘定科目を逆にする"
+
+#: po/guile_strings.txt:111
+msgid "Europe"
+msgstr "ヨーロッパ"
+
+#: po/guile_strings.txt:112
+msgid "Day"
+msgstr "日"
+
+#: po/guile_strings.txt:113
+msgid ""
+"This is for testing. Your reports probably shouldn't have an option like "
+"this."
+msgstr ""
+
+#: po/guile_strings.txt:114
+msgid "Display the headers?"
+msgstr "ヘッダを表示しますか?"
+
+#: po/guile_strings.txt:115
+msgid "Do transaction report on these accounts"
+msgstr ""
+
+#: po/guile_strings.txt:116
+msgid ""
+"Reverse Bank, Cash, Asset, Stock, Mutual Fund, Currency, and Expense Accounts"
+msgstr ""
+"銀行預金と現金、資産、株式、投資信託、通貨、費用の勘定科目を逆にする"
+
+#: po/guile_strings.txt:117
+msgid "Sort and subtotal by account transferred from/to's name"
+msgstr ""
+
+#: po/guile_strings.txt:120
+msgid "The items selected in the list option are:"
+msgstr ""
+
+#: po/guile_strings.txt:121
+msgid "Average"
+msgstr "平均"
+
+#: po/guile_strings.txt:122
+msgid "A_ccount Balance Tracker"
+msgstr ""
+
+#: po/guile_strings.txt:124
+msgid "Start of reporting period"
+msgstr ""
+
+#: po/guile_strings.txt:125
+msgid "Sort by exact entry time"
+msgstr ""
+
+#: po/guile_strings.txt:126
+msgid "account_add_win_width"
+msgstr ""
+
+#: po/guile_strings.txt:127
+msgid "Full"
+msgstr ""
+
+#: po/guile_strings.txt:128
+msgid "The amount of time between data points"
+msgstr ""
+
+#: po/guile_strings.txt:129
+msgid "Upper Limit"
+msgstr "上限"
+
+#: po/guile_strings.txt:130
+msgid "Multi mode default split background"
+msgstr ""
+
+#: po/guile_strings.txt:132
+msgid "Week"
+msgstr "週"
+
+#: po/guile_strings.txt:133
+msgid "Crash the report"
+msgstr ""
+
+#: po/guile_strings.txt:135
+msgid "Step Size"
+msgstr ""
+
+#: po/guile_strings.txt:136
+msgid "Hello, World!"
+msgstr "こんにちわ、世界!"
+
+#: po/guile_strings.txt:137
+msgid "ISO"
+msgstr ""
+
+#: po/guile_strings.txt:138
+msgid "Display the amount?"
+msgstr ""
+
+#: po/guile_strings.txt:139
+msgid "Multi-Line"
+msgstr ""
+
+#: po/guile_strings.txt:140
+msgid "A report useful for balancing the budget"
+msgstr ""
+
+#: po/guile_strings.txt:141
+msgid "Date Format Display"
+msgstr ""
+
+#: po/guile_strings.txt:142
+msgid "Ending"
+msgstr ""
+
+#: po/guile_strings.txt:143
+msgid "Reversed-balance account types"
+msgstr "残高を逆にする勘定科目の型"
+
+#: po/guile_strings.txt:145
+msgid "Account fields to display"
+msgstr ""
+
+#: po/guile_strings.txt:146
+msgid "Account Balance Tracker"
+msgstr "残高監視モニタ"
+
+#: po/guile_strings.txt:147
+msgid "Report Options"
+msgstr "レポートの設定"
+
+#: po/guile_strings.txt:150
+msgid "Calculate balance sheet up to this date"
+msgstr "この日付までの貸借対照表を計算する"
+
+#: po/guile_strings.txt:151
+msgid "Transaction Report"
+msgstr "取引レポート"
+
+#: po/guile_strings.txt:152
+msgid "Alternate the even and odd colors with each transaction, not each row"
+msgstr ""
+
+#: po/guile_strings.txt:153
+msgid "Gain/Loss"
+msgstr ""
+
+#: po/guile_strings.txt:154
+msgid "Transfer from/to"
+msgstr ""
+
+#: po/guile_strings.txt:155
+msgid "Text only"
+msgstr "テキストのみ"
+
+#: po/guile_strings.txt:156
+msgid "Toolbar Buttons"
+msgstr ""
+
+#: po/guile_strings.txt:157
+msgid "Report Items from this date"
+msgstr ""
+
+#: po/guile_strings.txt:158
+msgid "Period"
+msgstr ""
+
+#: po/guile_strings.txt:159
+msgid ""
+"The default background color for transactions in multi-line mode and the "
+"auto modes"
+msgstr ""
+
+#: po/guile_strings.txt:160
+msgid "Fourth Options"
+msgstr ""
+
+#: po/guile_strings.txt:161
+msgid "Sort by this criterion first"
+msgstr ""
+
+#: po/guile_strings.txt:162
+msgid "Ugly option"
+msgstr ""
+
+#: po/guile_strings.txt:163
+msgid "How are you doing on your budget?"
+msgstr "予算の調子はどうですか?"
+
+#: po/guile_strings.txt:164
+msgid "Save Translatable Strings"
+msgstr "翻訳可能な文字列を保存する"
+
+#: po/guile_strings.txt:165
+msgid "Save strings that need to be translated"
+msgstr "翻訳が必要な文字列を保存する"
+
+#: po/guile_strings.txt:166
+msgid "Number of Rows"
+msgstr "行数"
+
+#: po/guile_strings.txt:167
+msgid "/ (Slash)"
+msgstr ""
+
+#: po/guile_strings.txt:169
+msgid "Use 24-hour time format"
+msgstr "24時間形式を使用する"
+
+#: po/guile_strings.txt:171
+msgid "Date Format"
+msgstr "データ形式"
+
+#: po/guile_strings.txt:172
+msgid "A list option"
+msgstr ""
+
+#: po/guile_strings.txt:173
+msgid "ISO Standard: yyyy-mm-dd"
+msgstr "ISO国際基準: 年年年年-月月-日日"
+
+#: po/guile_strings.txt:174
+msgid "Default Currency"
+msgstr "既定の通貨"
+
+#: po/guile_strings.txt:175
+msgid "largest to t, latest to earliest"
+msgstr "最大からtまで、最新から最古まで"
+
+#: po/guile_strings.txt:176
+msgid "Do transaction report on this account"
+msgstr "この勘定科目について取引レポートを実行する"
+
+#: po/guile_strings.txt:177
+msgid "Recent Price"
+msgstr ""
+
+#: po/guile_strings.txt:178
+msgid "Net Inflow"
+msgstr ""
+
+#: po/guile_strings.txt:179
+msgid "Single mode default even row background"
+msgstr ""
+
+#: po/guile_strings.txt:180
+msgid "Double mode default even row background"
+msgstr ""
+
+#: po/guile_strings.txt:181
+#, c-format
+msgid "The multi-choice option is %s."
+msgstr ""
+
+#: po/guile_strings.txt:182
+msgid "Double mode colors alternate with transactions"
+msgstr ""
+
+#: po/guile_strings.txt:183
+msgid "General"
+msgstr ""
+
+#: po/guile_strings.txt:186
+msgid "Sub-Accounts"
+msgstr ""
+
+#: po/guile_strings.txt:187
+#, c-format
+msgid "The date and time option is %s."
+msgstr ""
+
+#: po/guile_strings.txt:189
+msgid "End of reporting period"
+msgstr ""
+
+#: po/guile_strings.txt:190
+msgid "Don't reverse any accounts"
+msgstr "どの勘定科目も逆勘定にしない"
+
+#: po/guile_strings.txt:191
+msgid "Good option"
+msgstr ""
+
+#: po/guile_strings.txt:192
+msgid "US"
+msgstr "アメリカ"
+
+#: po/guile_strings.txt:193
+msgid "account_edit_win_width"
+msgstr ""
+
+#: po/guile_strings.txt:194
+msgid "Ba_lance sheet"
+msgstr ""
+
+#: po/guile_strings.txt:195
+msgid "Help for first option"
+msgstr ""
+
+#: po/guile_strings.txt:196 src/gnome/glade-gnc-dialogs.c:2096
+msgid "Number"
+msgstr ""
+
+#: po/guile_strings.txt:197
+msgid "Show both icons and text"
+msgstr ""
+
+#: po/guile_strings.txt:198
+msgid "Transfer from/to (w/subtotal)"
+msgstr ""
+
+#: po/guile_strings.txt:199
+msgid "Transactions 2"
+msgstr ""
+
+#: po/guile_strings.txt:203
+#, c-format
+msgid "The number option is %s."
+msgstr ""
+
+#: po/guile_strings.txt:204
+#, c-format
+msgid "The string option is %s."
+msgstr ""
+
+#: po/guile_strings.txt:205
+msgid "Report style"
+msgstr ""
+
+#: po/guile_strings.txt:206
+msgid "_Reports"
+msgstr ""
+
+#: po/guile_strings.txt:207
+msgid "Single mode active background"
+msgstr ""
+
+#: po/guile_strings.txt:209
+msgid "Year"
+msgstr "年"
+
+#: po/guile_strings.txt:210
+msgid "Profit and Loss"
+msgstr "損益"
+
+#: po/guile_strings.txt:211
+msgid "_Transactions 2"
+msgstr ""
+
+#: po/guile_strings.txt:212
+msgid "Month"
+msgstr "月"
+
+#: po/guile_strings.txt:213
+msgid "Multi mode active transaction background"
+msgstr ""
+
+#: po/guile_strings.txt:214
+msgid ". (Period)"
+msgstr ". (ピリオド)"
+
+#: po/guile_strings.txt:215
+msgid "Primary Sort Order"
+msgstr "基本ソート順序"
+
+#: po/guile_strings.txt:216
+msgid "Name"
+msgstr "名前"
+
+#: po/guile_strings.txt:217
+msgid "Display the date?"
+msgstr "日付を表示しますか?"
+
+#: po/guile_strings.txt:218
+msgid "Descending"
+msgstr "降順"
+
+#: po/guile_strings.txt:219
+msgid "This is a date option"
+msgstr ""
+
+#: po/guile_strings.txt:220
+msgid "Two Week"
+msgstr "二週間"
+
+#: po/guile_strings.txt:221
+msgid "Save Window Geometry"
+msgstr "ウィンドウの位置・大きさを保存する"
+
+#: po/guile_strings.txt:222
+msgid "Income\\Salary\\Taxable"
+msgstr ""
+
+#: po/guile_strings.txt:223
+msgid "Code"
+msgstr ""
+
+#: po/guile_strings.txt:224
+msgid "Balance sheet"
+msgstr "貸借対照表"
+
+#: po/guile_strings.txt:225
+msgid "Export data as text."
+msgstr "データをテキストファイルとして出力"
+
+#: po/guile_strings.txt:226
+msgid "Balance Sheet"
+msgstr "貸借対照表"
+
+#: po/guile_strings.txt:227
+msgid "- (Dash)"
+msgstr ""
+
+#: po/guile_strings.txt:228
+msgid "Order of primary sorting"
+msgstr "基本ソート順序"
+
+#: po/guile_strings.txt:229
+msgid "Default Currency For New Accounts"
+msgstr "新規勘定科目に使う既定の通貨"
+
+#: po/guile_strings.txt:230
+msgid "Sort by this criterion second"
+msgstr ""
+
+#: po/guile_strings.txt:231
+msgid "true"
+msgstr "真"
+
+#: po/guile_strings.txt:232
+msgid "Do not sort"
+msgstr "並べかえはしない"
+
+#: po/guile_strings.txt:233
+msgid "Period Ending"
+msgstr ""
+
+#: po/guile_strings.txt:234
+msgid "Income.Salary.Taxable"
+msgstr ""
+
+#: po/guile_strings.txt:236
+msgid "Include sub-accounts of all selected accounts"
+msgstr ""
+
+#: po/guile_strings.txt:238
+msgid "The Ugly"
+msgstr ""
+
+#: po/guile_strings.txt:239
+msgid "Max"
+msgstr ""
+
+#: po/guile_strings.txt:240
+msgid ""
+"Display the other account?  (if this is a split transaction, this parameter "
+"is guessed."
+msgstr ""
+
+#: po/guile_strings.txt:241
+msgid "By default, show horizontal borders on the cells."
+msgstr ""
+
+#: po/guile_strings.txt:242
+msgid "Display the totals?"
+msgstr "合計を表示しますか?"
+
+#: po/guile_strings.txt:243
+msgid ": (Colon)"
+msgstr ""
+
+#: po/guile_strings.txt:244
+msgid "By default, show vertical borders on the cells."
+msgstr ""
+
+#: po/guile_strings.txt:246
+msgid "Actual"
+msgstr ""
+
+#: po/guile_strings.txt:247
+msgid "Enable EURO support"
+msgstr "ユーロを使用可能にする"
+
+#: po/guile_strings.txt:248
+msgid "Ascending"
+msgstr "昇順"
+
+#: po/guile_strings.txt:249
+msgid "The Bad"
+msgstr ""
+
+#: po/guile_strings.txt:250
+msgid "Just a Date Option"
+msgstr ""
+
+#: po/guile_strings.txt:251
+msgid "The accounts selected in the account list option are:"
+msgstr ""
+
+#: po/guile_strings.txt:252
+#, c-format
+msgid ""
+"This is a sample GnuCash report. See the guile (scheme) source code in %s "
+"for details on writing your own reports, or extending existing reports."
+msgstr ""
+
+#: po/guile_strings.txt:253
+msgid "Enables support for the European Union EURO currency"
+msgstr "ヨーロッパ連合のユーロ通貨を使用可能にする"
+
+#: po/guile_strings.txt:254
+msgid "Merged"
+msgstr ""
+
+#: po/guile_strings.txt:255
+msgid "The default background color for even rows in single mode"
+msgstr ""
+
+#: po/guile_strings.txt:256
+msgid "The default background color for even rows in double mode"
+msgstr ""
+
+#: po/guile_strings.txt:257
+msgid "Display the account?"
+msgstr "勘定科目を表示しますか?"
+
+#: po/guile_strings.txt:258
+msgid "Display the cheque number?"
+msgstr "小切手番号を表示しますか?"
+
+#: po/guile_strings.txt:259
+msgid "Display N lines"
+msgstr ""
+
+#: po/guile_strings.txt:260
+msgid "Display the Budget report."
+msgstr ""
+
+#: po/guile_strings.txt:261
+msgid "_Hello, World"
+msgstr ""
+
+#: po/guile_strings.txt:262
+msgid "First Option"
+msgstr ""
+
+#: po/guile_strings.txt:263
+msgid "Display the Stock Portfolio report."
+msgstr ""
+
+#: po/guile_strings.txt:264
+msgid ""
+"Show transactions on multiple lines with one line for each split in the "
+"transaction"
+msgstr ""
+
+#: po/guile_strings.txt:265
+msgid "account_add_win_height"
+msgstr ""
+
+#: po/guile_strings.txt:266
+msgid "Plot Type"
+msgstr ""
+
+#: po/guile_strings.txt:267
+msgid "Budget"
+msgstr "予算"
+
+#: po/guile_strings.txt:268
+msgid "Choose whether to display icons, text, or both for toolbar buttons"
+msgstr ""
+
+#: po/guile_strings.txt:269
+msgid "Sort by date & subtotal each year"
+msgstr ""
+
+#: po/guile_strings.txt:270
+msgid "Show text only"
+msgstr "テキストのみ表示"
+
+#: po/guile_strings.txt:271
+msgid "Icons and Text"
+msgstr "アイコンとテキスト"
+
+#: po/guile_strings.txt:272
+msgid "The type of graph to generate"
+msgstr "生成するグラフの型"
+
+#: po/guile_strings.txt:273
+msgid "Automatically raise the list of accounts or actions during input."
+msgstr "入力中勘定科目や処理のリストを自動的に前面に出す"
+
+#: po/guile_strings.txt:274
+msgid "Sort by account transferred from/to's name"
+msgstr "転送元・転送先の勘定科目名の順で並べかえる"
+
+#: po/guile_strings.txt:275
+msgid "Net Gain"
+msgstr "純増額"
+
+#: po/guile_strings.txt:276
+msgid "The fourth option rules!"
+msgstr ""
+
+#: po/guile_strings.txt:277
+msgid "This is a date option with time"
+msgstr ""
+
+#: po/guile_strings.txt:278
+msgid "The header background color"
+msgstr ""
+
+#: po/guile_strings.txt:279
+msgid "Sort by memo"
+msgstr ""
+
+#: po/guile_strings.txt:280
+msgid "Third Option"
+msgstr ""
+
+#: po/guile_strings.txt:281
+msgid "Choose the default mode for register windows"
+msgstr ""
+
+#: po/guile_strings.txt:282
+msgid "Default number of register rows to display."
+msgstr ""
+
+#: po/guile_strings.txt:283
+msgid "Report end date"
+msgstr ""
+
+#: po/guile_strings.txt:284 src/gnome/glade-gnc-dialogs.c:1823
+msgid "None"
+msgstr "なし"
+
+#: po/guile_strings.txt:285
+msgid "Export data as text (Danger: Unfinished)"
+msgstr "テキストファイルとしてデータを書き出す (警告: 未完成です)"
+
+#: po/guile_strings.txt:286
+msgid "Primary Key"
+msgstr "主キー"
+
+#: po/guile_strings.txt:287
+msgid "Ticker"
+msgstr "速報"
+
+#: po/guile_strings.txt:288
+msgid "Time and Date Option"
+msgstr "時刻と日付の設定"
+
+#: po/guile_strings.txt:289
+msgid "Single mode default odd row background"
+msgstr ""
+
+#: po/guile_strings.txt:290
+msgid "Double mode default odd row background"
+msgstr ""
+
+#: po/guile_strings.txt:291
+msgid "The character used to separate fully-qualified account names"
+msgstr ""
+
+#: po/guile_strings.txt:292
+msgid "Report start date"
+msgstr ""
+
+#: po/guile_strings.txt:294
+msgid "smallest to largest, earliest to latest"
+msgstr ""
+
+#: po/guile_strings.txt:296
+msgid "\\ (Backslash)"
+msgstr ""
+
+#: po/guile_strings.txt:297
+msgid "Icons only"
+msgstr ""
+
+#: po/guile_strings.txt:298
+msgid "Help for third option"
+msgstr ""
+
+#: po/guile_strings.txt:299
+msgid "Default Register Mode"
+msgstr "既定のレジスタのモード"
+
+#: po/guile_strings.txt:301
+msgid "Lower Limit"
+msgstr "下限"
+
+#: po/guile_strings.txt:302
+msgid "main_win_width"
+msgstr ""
+
+#: po/guile_strings.txt:303
+msgid "Sort by amount"
+msgstr ""
+
+#: po/guile_strings.txt:304
+msgid "This is an account list option"
+msgstr ""
+
+#: po/guile_strings.txt:305
+msgid "Average Balance"
+msgstr "平均残高"
+
+#: po/guile_strings.txt:306
+msgid "Totals"
+msgstr "合計"
+
+#: po/guile_strings.txt:307
+msgid "Profit/Loss"
+msgstr "利益・損失"
+
+#: po/guile_strings.txt:308 src/gnome/glade-gnc-dialogs.c:2328
+msgid "Shares"
+msgstr "株式"
+
+#: po/guile_strings.txt:309
+msgid "Show All Transactions"
+msgstr "全取引を表示"
+
+#: po/guile_strings.txt:310
+msgid "Display the Profit and Loss report."
+msgstr "損益計算書を表示。"
+
+#: po/guile_strings.txt:311
+msgid "Date (subtotal yearly)"
+msgstr ""
+
+#: po/guile_strings.txt:312
+msgid "Display the Account Balance Tracker report."
+msgstr "残高監視モニタを表示。"
+
+#: po/guile_strings.txt:313
+msgid "2Week"
+msgstr "2週"
+
+#: po/guile_strings.txt:314
+msgid "Nothing"
+msgstr ""
+
+#: po/guile_strings.txt:315
+msgid "You have selected no values in the list option."
+msgstr ""
+
+#: po/guile_strings.txt:316
+msgid "false"
+msgstr "偽"
+
+#: po/guile_strings.txt:318
+msgid "An account list option"
+msgstr ""
+
+#: po/guile_strings.txt:319
+msgid "Multi Choice Option"
+msgstr ""
+
+#: po/guile_strings.txt:320
+msgid "This is a color option"
+msgstr ""
+
+#: po/guile_strings.txt:321
+msgid "QIF File Import (Danger: Unfinished)"
+msgstr "QIF形式ファイル読み込み (警告: 未完成です)"
+
+#: po/guile_strings.txt:322
+msgid "Make No Plot"
+msgstr ""
+
+#: po/guile_strings.txt:323
+msgid "Bad option"
+msgstr ""
+
+#: po/guile_strings.txt:324
+msgid "Sort by date & subtotal each month"
+msgstr ""
+
+#: po/guile_strings.txt:325
+msgid "Display the Balance sheet report."
+msgstr "貸借対照表を表示する。"
+
+#: po/guile_strings.txt:326
+msgid "Display the Account Transactions report."
+msgstr "勘定科目取引表を表示する。"
+
+#: po/guile_strings.txt:327
+msgid "Net"
+msgstr "純額"
+
+#: po/guile_strings.txt:328
+msgid "Have a nice day!"
+msgstr "じゃあね!"
+
+#: po/guile_strings.txt:329
+msgid "This is a list option"
+msgstr ""
+
+#: po/guile_strings.txt:330
+msgid "Min"
+msgstr ""
+
+#: po/guile_strings.txt:331
+msgid "Order of Secondary sorting"
+msgstr "二次ソート順序"
+
+#: po/guile_strings.txt:332
+msgid "Help for second option"
+msgstr ""
+
+#: po/guile_strings.txt:333
+msgid "reg_stock_win_width"
+msgstr ""
+
+#: po/guile_strings.txt:334
+msgid "Report items up to and including this date"
+msgstr ""
+
+#: po/guile_strings.txt:335
+msgid "Display"
+msgstr "表示"
+
+#: po/guile_strings.txt:336
+msgid "Nominal"
+msgstr ""
+
+#: po/guile_strings.txt:337
+msgid "Beginning"
+msgstr "開始"
+
+#: po/guile_strings.txt:338
+#, c-format
+msgid ""
+"For help on writing reports, or to contribute your brand new, totally cool "
+"report, consult the mailing list %s. For details on subscribing to that "
+"list, see %s."
+msgstr ""
+"新しい帳票を書く手助けが欲しい方、または自分が書いためっちゃんこカッコいい帳票を"
+"みんなと共有したいぜという方は、%s のメーリングリストまでご相談下さい。購読情報は"
+"%s を御覧下さい。"
+
+#: po/guile_strings.txt:339
+msgid ""
+"The background color for an active transaction in multi-line mode and the "
+"auto modes"
+msgstr ""
+
+#: po/guile_strings.txt:340
+msgid "This is a multi choice option."
+msgstr ""
+
+#: po/guile_strings.txt:341
+msgid "Income & Expense"
+msgstr "収入・費用"
+
+#: po/guile_strings.txt:342
+msgid "Hello, World"
+msgstr "こんにちは、世界"
+
+#: po/guile_strings.txt:343
+msgid "Sort & subtotal by account"
+msgstr "勘定科目別に並び替え・小計"
+
+#: po/guile_strings.txt:344
+msgid "Reverse Credit Card, Liability, Equity, and Income Accounts"
+msgstr "クレジットカード、負債、資本、収入の各勘定科目をそれぞれ逆にする"
+
+#: po/guile_strings.txt:346
+msgid "This is a number option."
+msgstr ""
+
+#: po/guile_strings.txt:348
+msgid "Multi mode active split background"
+msgstr ""
+
+#: src/gnome/dialog-account-picker.c:92
+msgid "All Accounts"
+msgstr "全勘定科目"
+
+#: src/gnome/dialog-qif-import.c:221
+msgid "Select QIF File"
+msgstr "QIF ファイル選択"
+
+#: src/gnome/dialog-qif-import.c:310
+msgid "You must specify a file to load."
+msgstr "読み込むファイルを指定して下さい。"
+
+#: src/gnome/dialog-qif-import.c:314
+msgid "You must specify a currency."
+msgstr "通貨を指定して下さい。"
+
+#: src/gnome/dialog-qif-import.c:328 src/gnome/dialog-qif-import.c:664
+#: src/gnome/dialog-qif-import.c:766 src/gnome/dialog-qif-import.c:864
+msgid "QIF File scheme code not loaded properly."
+msgstr "QIFファイル処理用の scheme コードが正常にロードされていません。"
+
+#: src/gnome/dialog-qif-import.c:351
+msgid "QIF File already loaded. Reload with current settings?"
+msgstr "QIFファイルは読み込み済みです。今の設定を使ってもう一度読み込みますか?"
+
+#: src/gnome/dialog-qif-import.c:794 src/gnome/dialog-qif-import.c:892
+msgid "Something is very wrong with QIF Importing."
+msgstr "QIF読み込みが本格的におかしいようです。"
+
+#: src/gnome/glade-gnc-dialogs.c:75
+msgid "Import QIF Files"
+msgstr "QIFファイル読み込み"
+
+#: src/gnome/glade-gnc-dialogs.c:97
+msgid "Loaded Files"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:128
+msgid "File Info"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:156
+msgid "QIF Filename:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:165
+msgid "Default QIF acct:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:174
+msgid "Currency:"
+msgstr "通貨:"
+
+#: src/gnome/glade-gnc-dialogs.c:183
+msgid "Radix format:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:192 src/gnome/glade-gnc-dialogs.c:1239
+#: src/gnome/glade-gnc-dialogs.c:1409
+msgid "Date format:"
+msgstr "日付形式:"
+
+#: src/gnome/glade-gnc-dialogs.c:223 src/gnome/glade-gnc-dialogs.c:1921
+#: src/gnome/glade-gnc-dialogs.c:1973
+msgid "Select ..."
+msgstr "選択...."
+
+#: src/gnome/glade-gnc-dialogs.c:244
+msgid "Auto"
+msgstr "自動"
+
+#: src/gnome/glade-gnc-dialogs.c:266
+msgid "Autodetect"
+msgstr "自動探知"
+
+#: src/gnome/glade-gnc-dialogs.c:269
+msgid "Decimal (1,000.00)"
+msgstr "小数点 (1,000.00)"
+
+#: src/gnome/glade-gnc-dialogs.c:272
+msgid "Comma (1.000,00)"
+msgstr "コンマ (1.000,00)"
+
+#: src/gnome/glade-gnc-dialogs.c:284
+msgid "Autodetect           "
+msgstr "自動探知              "
+
+#: src/gnome/glade-gnc-dialogs.c:287
+msgid "MM/DD/YYYY"
+msgstr "月月/日日/年年年年"
+
+#: src/gnome/glade-gnc-dialogs.c:290
+msgid "DD/MM/YYYY"
+msgstr "日日/月月/年年年年"
+
+#: src/gnome/glade-gnc-dialogs.c:293
+msgid "YYYY/MM/DD"
+msgstr "年年年年/月月/日日"
+
+#: src/gnome/glade-gnc-dialogs.c:296
+msgid "YYYY/DD/MM"
+msgstr "年年年年/日日/月月"
+
+#: src/gnome/glade-gnc-dialogs.c:308
+msgid "Load file"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:315
+msgid "Files"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:341
+msgid "QIF Account"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:348 src/gnome/glade-gnc-dialogs.c:402
+msgid "Transactions"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:355 src/gnome/glade-gnc-dialogs.c:409
+msgid "GNUCash Account Name"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:395
+msgid "QIF Category"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:423
+msgid "Categories"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:514
+msgid "Select Account"
+msgstr "勘定科目を選択"
+
+#: src/gnome/glade-gnc-dialogs.c:572
+msgid "Selected account:"
+msgstr "選択された勘定科目:"
+
+#: src/gnome/glade-gnc-dialogs.c:581
+msgid "Description:"
+msgstr "説明:"
+
+#: src/gnome/glade-gnc-dialogs.c:590
+msgid "Account type:"
+msgstr "勘定科目型:"
+
+#: src/gnome/glade-gnc-dialogs.c:646
+msgid "Mutual"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:711 src/gnome/glade-gnc-dialogs.c:719
+msgid "Print Preview"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:761
+msgid "Zoom in"
+msgstr "ズームイン"
+
+#: src/gnome/glade-gnc-dialogs.c:769
+msgid "Zoom out"
+msgstr "ズームアウト"
+
+#: src/gnome/glade-gnc-dialogs.c:819
+msgid "Print Setup"
+msgstr "印刷設定"
+
+#: src/gnome/glade-gnc-dialogs.c:841
+msgid "Printer:"
+msgstr "プリンタ:"
+
+#: src/gnome/glade-gnc-dialogs.c:849
+msgid "Paper size:"
+msgstr "紙の大きさ:"
+
+#: src/gnome/glade-gnc-dialogs.c:857
+msgid "Pages to print:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:902 src/gnome/glade-gnc-dialogs.c:1817
+msgid "All"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:910
+msgid "Selected"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:932
+msgid "From:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:947
+msgid "To:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:969 src/gnome/glade-gnc-dialogs.c:976
+msgid "Select..."
+msgstr "選択..."
+
+#: src/gnome/glade-gnc-dialogs.c:1012
+msgid "Preview"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1069
+msgid "Select Paper Size"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1194
+msgid "Print Check"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1223
+msgid "Check format:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1231 src/gnome/glade-gnc-dialogs.c:1401
+msgid "Check position:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1261
+msgid "Quicken/QuickBooks (tm) US-Letter"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1264 src/gnome/glade-gnc-dialogs.c:1285
+#: src/gnome/glade-gnc-dialogs.c:1321
+msgid "Custom"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1276
+msgid "Top"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1279
+msgid "Middle"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1282
+msgid "Bottom"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1297
+msgid "December  31, 2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1300
+msgid "31 December, 2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1303
+msgid "Dec 31, 2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1306
+msgid "31 Dec, 2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1309
+msgid "12/31/2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1312
+msgid "12/31/00"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1315
+msgid "31/12/2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1318
+msgid "31/12/00"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1326
+msgid "Custom check parameters"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1361
+msgid "Payee:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1369
+msgid "Date:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1377
+msgid "Amount (words):"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1385
+msgid "Amount (numbers):"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1393
+msgid "Memo:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1417
+msgid "Units:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1432
+msgid "x"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1509
+msgid "Inches"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1512
+msgid "Centimeters"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1515
+msgid "Millimeters"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1518
+msgid "Points"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1531
+msgid "y"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1590
+msgid "                                  "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1597
+msgid "                    "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1767
+msgid "Find Transactions"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1782
+msgid "Match Accounts"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1803
+msgid "Find transactions affecting"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1820
+msgid "Any"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1829
+msgid "selected accounts:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1851
+msgid "Match Date"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1866
+msgid "Find transactions occurring between the dates:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1890 src/gnome/glade-gnc-dialogs.c:1906
+#: src/gnome/glade-gnc-dialogs.c:1943 src/gnome/glade-gnc-dialogs.c:1958
+msgid "/"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1987 src/gnome/glade-gnc-dialogs.c:2045
+msgid "Match Description"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:2002
+msgid "Find transactions whose Description matches:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:2024 src/gnome/glade-gnc-dialogs.c:2082
+#: src/gnome/glade-gnc-dialogs.c:2242 src/gnome/glade-gnc-dialogs.c:2444
+msgid "Case sensitive"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:2031 src/gnome/glade-gnc-dialogs.c:2089
+#: src/gnome/glade-gnc-dialogs.c:2249 src/gnome/glade-gnc-dialogs.c:2451
+msgid "Regular expression"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:2060
+msgid "Find transactions whose Number matches:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:2103
+msgid "Match Amount"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:2125
+msgid "Find "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:2139
+msgid "Credit or Debit"
+msgstr "貸方か借方か"
+
+#: src/gnome/glade-gnc-dialogs.c:2150
+msgid "splits having amounts of:"
+msgstr "この額を持つ分割:"
+
+#: src/gnome/glade-gnc-dialogs.c:2171 src/gnome/glade-gnc-dialogs.c:2300
+#: src/gnome/glade-gnc-dialogs.c:2372
+msgid "At least"
+msgstr "最低でも"
+
+#: src/gnome/glade-gnc-dialogs.c:2174
+msgid "At most "
+msgstr "最大でも"
+
+#: src/gnome/glade-gnc-dialogs.c:2177 src/gnome/glade-gnc-dialogs.c:2306
+#: src/gnome/glade-gnc-dialogs.c:2378
+msgid "Exactly"
+msgstr "ちょうど"
+
+#: src/gnome/glade-gnc-dialogs.c:2205
+msgid "Match Memo"
+msgstr "詳細に該当"
+
+#: src/gnome/glade-gnc-dialogs.c:2220
+msgid "Find splits whose Memo matches:"
+msgstr "詳細が該当する分割を検索: "
+
+#: src/gnome/glade-gnc-dialogs.c:2263
+msgid "Match number of shares"
+msgstr "株式数に該当"
+
+#: src/gnome/glade-gnc-dialogs.c:2278
+msgid "Find securities transactions of:"
+msgstr "この科目の証券取引を検索:"
+
+#: src/gnome/glade-gnc-dialogs.c:2303 src/gnome/glade-gnc-dialogs.c:2375
+msgid "At most"
+msgstr "最大でも"
+
+#: src/gnome/glade-gnc-dialogs.c:2320
+msgid "shares"
+msgstr "株式"
+
+#: src/gnome/glade-gnc-dialogs.c:2335
+msgid "Match share price"
+msgstr "株価に該当"
+
+#: src/gnome/glade-gnc-dialogs.c:2350
+msgid "Find securities transactions with share price of:"
+msgstr "この株価を持つ証券取引を検索:"
+
+#: src/gnome/glade-gnc-dialogs.c:2407
+msgid "Match Action"
+msgstr "処理を検索"
+
+#: src/gnome/glade-gnc-dialogs.c:2422
+msgid "Find transactions whose Action matches:"
+msgstr "処理が該当する取引を検索"
+
+#: src/gnome/glade-gnc-dialogs.c:2479
+msgid "Type of search"
+msgstr "検索の型"
+
+#: src/gnome/glade-gnc-dialogs.c:2493
+msgid "New search"
+msgstr "新規検索"
+
+#: src/gnome/glade-gnc-dialogs.c:2501
+msgid "Refine current search"
+msgstr "現在の検索を堀り下げる"
+
+#: src/gnome/glade-gnc-dialogs.c:2509
+msgid "Add results to current search"
+msgstr "現在の検索に結果を追加する"
+
+#: src/gnome/glade-gnc-dialogs.c:2517
+msgid "Delete results from current search"
+msgstr "結果を現在の検索から削除する"
+
+#: src/gnome/glade-gnc-dialogs.c:2599
+msgid "Select Date"
+msgstr "日付選択"
+
+#: src/gnome/print-session.c:230
+msgid "You must select a printer first."
+msgstr "プリンターをまず選択して下さい。"
