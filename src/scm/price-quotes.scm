@@ -154,8 +154,7 @@
                              (+ year (if (>= year 70)
                                          1900
                                          2000)))))))))
-  
-  
+
   (define (quote-line->quote-alist line)
     (let ((fields (string-split line #\,)))
       (cond 
@@ -222,7 +221,12 @@
   ;;
   ;; (<fq-method> sym sym ...)
   ;;
-  ;; i.e. ("YAHOO" "RHAT" "LNUX" "IBM")
+  ;; i.e. (yahoo "RHAT" "LNUX" "IBM")
+  ;;
+  ;; for currencies, we have
+  ;;
+  ;; (currency "USD" "AUD") for the conversion from USD to AUD,
+  ;;                        i.e., the price of USD in AUD.
   ;;
   ;; This function will return #f on catastrophic failure or a list
   ;; where, for each element in requests, the output list will contain
@@ -294,6 +298,12 @@
   (define (find-quotables group)
     ;; Return a list of accounts for whose commodities we should get
     ;; quotes.
+    (define (quotable-currency-account? a)
+      (let ((currency (gnc:account-get-currency a))
+            (security (gnc:account-get-security a)))
+        (and (equal? (gnc:commodity-get-namespace currency) "ISO4217")
+             (equal? (gnc:commodity-get-namespace security) "ISO4217"))))
+
     (define (quotable-account? a)
       (let ((type (gw:enum-<gnc:AccountType>-val->sym (gnc:account-get-type a)
                                                       #f))
@@ -304,9 +314,11 @@
         (if (and src
 		 (or (memq 'stock type)
 		     (memq 'mutual-fund type)
-		     (memq 'currency type)))
+		     (and (memq 'currency type)
+                          (quotable-currency-account? a))))
 	    a
 	    #f)))
+
     (filter quotable-account? (gnc:group-get-subaccounts group)))
 
   (define (accounts->fq-call-data account-list)
@@ -321,8 +333,10 @@
     ;; finance-quote-helper.  Each item will of the list will be of the
     ;; form:
     ;;
-    ;; (("yahoo" (commodity-1 tz-1) (commodity-2 tz-2) ...)
-    ;;  ("fidelity_direct" (commodity-3 tz-3) (commodity-4 tz-4) ...)
+    ;; (("yahoo" (commodity-1 currency-1 tz-1)
+    ;;           (commodity-2 currency-2 tz-2) ...)
+    ;;  ("fidelity_direct" (commodity-3 currency-3 tz-3)
+    ;;                     (commodity-4 currency-4 tz-4) ...)
     ;;  ...)
 
   (define (src->fq-method-sym src)
@@ -334,8 +348,9 @@
      ((string=? "VANGUARD" src) 'vanguard)
      ((string=? "ASX" src) 'asx)
      ((string=? "TIAACREF" src) 'tiaacref)
+     ((string=? "CURRENCY" src) 'currency)
      (else #f)))
-  
+
   ;; NOTE: If you modify this, please update finance-quote-helper.in as well.
   (define (fq-method-sym->str src-sym)
     (case src-sym
@@ -346,21 +361,25 @@
      ((vanguard) "vanguard")
      ((asx) "asx")
      ((tiaacref) "tiaacref")
+     ((currency) "currency")
      (else #f)))
 
   (define (account->fq-cmd account)
-    ;; Returns (cons fq-method-sym (list commod-sym-str assumed-timezone-str))
+    ;; Returns (cons fq-method-sym
+    ;;               (list commodity currency assumed-timezone-str))
     (let* ((commodity (gnc:account-get-commodity account))
-	   (src (and account (gnc:account-get-price-src account)))
+           (currency (gnc:account-get-currency account))
+           (src (and account (gnc:account-get-price-src account)))
            (tz (gnc:account-get-quote-tz account))
 	   (fq-method-sym (and src (src->fq-method-sym src)))
            (mnemonic (and commodity (gnc:commodity-get-mnemonic commodity))))
       (and
        commodity
+       currency
        fq-method-sym
        mnemonic
-       (cons fq-method-sym (list commodity tz)))))
-  
+       (cons fq-method-sym (list commodity currency tz)))))
+
   (let ((cmd-list (delete #f (map account->fq-cmd account-list)))
 	(cmd-hash (make-hash-table 31)))
 
@@ -374,22 +393,30 @@
      '()
      cmd-hash)))
 
-  (define (fq-call-data->fq-call fq-call-data)
+  (define (fq-call-data->fq-calls fq-call-data)
     ;; take an output element from accounts->fq-call-data and return a
     ;; list where the gnc_commodities have been converted to their
     ;; fq-suitable symbol strings.  i.e. turn the former into the
     ;; latter:
     ;;
-    ;; ("yahoo" (commodity-1 tz-1) (commodity-2 tz-2) ...)
+    ;; ("yahoo" (commodity-1 currency-1 tz-1)
+    ;;          (commodity-2 currency-2 tz-2) ...)
     ;; 
     ;; ("yahoo" "IBM" "AMD" ...)
     ;;
 
-    (cons (car fq-call-data)
-          (map
-           (lambda (quote-item-info)
-             (gnc:commodity-get-mnemonic (car quote-item-info)))
-           (cdr fq-call-data))))
+    (if (equal? (car fq-call-data) "currency")
+        (map (lambda (quote-item-info)
+               (list (car fq-call-data)
+                     (gnc:commodity-get-mnemonic (car quote-item-info))
+                     (gnc:commodity-get-mnemonic (cadr quote-item-info))))
+             (cdr fq-call-data))
+        (list
+         (cons (car fq-call-data)
+               (map
+                (lambda (quote-item-info)
+                  (gnc:commodity-get-mnemonic (car quote-item-info)))
+                (cdr fq-call-data))))))
 
   (define (fq-results->commod-tz-quote-triples fq-call-data fq-results)
     ;; Change output of gnc:fq-get-quotes to a list of (commod
@@ -412,9 +439,9 @@
     ;; We might want more sophisticated error handling later, but this
     ;; will do for now .
     (let ((result-list '()))
-      
+
       (define (process-a-quote call-data call-result)
-        ;; data -> (commod-1 tz-1)
+        ;; data -> (commod-1 currency-1 tz-1)
         ;; result -> (commod-1-sym . result-alist) or some kind of garbage.
         (if (and (list? call-result)
                  (not (null? call-result))
@@ -427,13 +454,13 @@
             ;; OK, data is good (as far as we can tell.
             (set! result-list
                   (cons (list (car call-data)
-                              (cadr call-data)
+                              (caddr call-data)
                               (cdr call-result))
                         result-list))
             (set! result-list
                   (cons (cons #f (car call-data))
                         result-list))))
-      
+
       (define (process-call-result-pair call-data call-result)
         (if (and (list? call-result)
                  (= (length call-data) (+ 1 (length call-result))))
@@ -446,7 +473,7 @@
              (lambda (call-item)
                (set! result-list (cons (cons #f (car call-item)) result-list)))
              (cdr call-data))))
-      
+
       (and (list? fq-call-data)
            (list? fq-results)
            (= (length fq-call-data) (length fq-results))
@@ -508,7 +535,8 @@
                                                    GNC-RND-ROUND))))
 
       (if gnc-time
-          (set! gnc-time (timestr->time-pair gnc-time time-zone)))
+          (set! gnc-time (timestr->time-pair gnc-time time-zone))
+          (set! gnc-time (gnc:get-today)))
 
       (if (not (and commodity currency gnc-time price price-type))
           (string-append
@@ -541,7 +569,8 @@
          (quotables (and group (find-quotables group)))
          (fq-call-data (and quotables (accounts->fq-call-data quotables)))
          (fq-calls (and fq-call-data
-                        (map fq-call-data->fq-call fq-call-data)))
+                        (apply append
+                               (map fq-call-data->fq-calls fq-call-data))))
          (fq-results (and fq-calls (gnc:fq-get-quotes fq-calls)))
          (commod-tz-quote-triples
           (and fq-results (not (member 'missing-lib fq-results))

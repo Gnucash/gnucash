@@ -5340,63 +5340,31 @@ Daily (365)
 	  </child>
 
 	  <widget>
-	    <class>GtkHBox</class>
-	    <name>hbox103</name>
+	    <class>GtkVBox</class>
+	    <name>vbox129</name>
 	    <border_width>3</border_width>
 	    <homogeneous>False</homogeneous>
-	    <spacing>2</spacing>
+	    <spacing>3</spacing>
 
 	    <widget>
-	      <class>GtkVBox</class>
-	      <name>vbox116</name>
-	      <homogeneous>True</homogeneous>
-	      <spacing>0</spacing>
+	      <class>GtkCheckButton</class>
+	      <name>get_quote_check</name>
+	      <can_focus>True</can_focus>
+	      <label>Get Online Quotes</label>
+	      <active>False</active>
+	      <draw_indicator>True</draw_indicator>
 	      <child>
 		<padding>0</padding>
 		<expand>False</expand>
 		<fill>False</fill>
 	      </child>
-
-	      <widget>
-		<class>GtkLabel</class>
-		<name>label813</name>
-		<label>The source for price quotes:</label>
-		<justify>GTK_JUSTIFY_RIGHT</justify>
-		<wrap>False</wrap>
-		<xalign>1</xalign>
-		<yalign>0.5</yalign>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-		<child>
-		  <padding>0</padding>
-		  <expand>False</expand>
-		  <fill>False</fill>
-		</child>
-	      </widget>
-
-	      <widget>
-		<class>GtkLabel</class>
-		<name>label847713</name>
-		<label>Timezone for these quotes:</label>
-		<justify>GTK_JUSTIFY_RIGHT</justify>
-		<wrap>False</wrap>
-		<xalign>1</xalign>
-		<yalign>0.5</yalign>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-		<child>
-		  <padding>0</padding>
-		  <expand>False</expand>
-		  <fill>False</fill>
-		</child>
-	      </widget>
 	    </widget>
 
 	    <widget>
-	      <class>GtkVBox</class>
-	      <name>vbox117</name>
-	      <homogeneous>True</homogeneous>
-	      <spacing>0</spacing>
+	      <class>GtkHBox</class>
+	      <name>hbox103</name>
+	      <homogeneous>False</homogeneous>
+	      <spacing>2</spacing>
 	      <child>
 		<padding>0</padding>
 		<expand>True</expand>
@@ -5404,25 +5372,55 @@ Daily (365)
 	      </child>
 
 	      <widget>
-		<class>GtkHBox</class>
-		<name>source_box</name>
-		<homogeneous>False</homogeneous>
+		<class>GtkVBox</class>
+		<name>vbox116</name>
+		<homogeneous>True</homogeneous>
 		<spacing>0</spacing>
 		<child>
 		  <padding>0</padding>
-		  <expand>True</expand>
-		  <fill>True</fill>
+		  <expand>False</expand>
+		  <fill>False</fill>
 		</child>
 
 		<widget>
-		  <class>Placeholder</class>
+		  <class>GtkLabel</class>
+		  <name>label813</name>
+		  <label>The source for price quotes:</label>
+		  <justify>GTK_JUSTIFY_RIGHT</justify>
+		  <wrap>False</wrap>
+		  <xalign>1</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		  <child>
+		    <padding>0</padding>
+		    <expand>False</expand>
+		    <fill>False</fill>
+		  </child>
+		</widget>
+
+		<widget>
+		  <class>GtkLabel</class>
+		  <name>label847713</name>
+		  <label>Timezone for these quotes:</label>
+		  <justify>GTK_JUSTIFY_RIGHT</justify>
+		  <wrap>False</wrap>
+		  <xalign>1</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		  <child>
+		    <padding>0</padding>
+		    <expand>False</expand>
+		    <fill>False</fill>
+		  </child>
 		</widget>
 	      </widget>
 
 	      <widget>
-		<class>GtkHBox</class>
-		<name>quote_tz_box</name>
-		<homogeneous>False</homogeneous>
+		<class>GtkVBox</class>
+		<name>vbox117</name>
+		<homogeneous>True</homogeneous>
 		<spacing>0</spacing>
 		<child>
 		  <padding>0</padding>
@@ -5431,7 +5429,35 @@ Daily (365)
 		</child>
 
 		<widget>
-		  <class>Placeholder</class>
+		  <class>GtkHBox</class>
+		  <name>source_box</name>
+		  <homogeneous>False</homogeneous>
+		  <spacing>0</spacing>
+		  <child>
+		    <padding>0</padding>
+		    <expand>True</expand>
+		    <fill>True</fill>
+		  </child>
+
+		  <widget>
+		    <class>Placeholder</class>
+		  </widget>
+		</widget>
+
+		<widget>
+		  <class>GtkHBox</class>
+		  <name>quote_tz_box</name>
+		  <homogeneous>False</homogeneous>
+		  <spacing>0</spacing>
+		  <child>
+		    <padding>0</padding>
+		    <expand>True</expand>
+		    <fill>True</fill>
+		  </child>
+
+		  <widget>
+		    <class>Placeholder</class>
+		  </widget>
 		</widget>
 	      </widget>
 	    </widget>

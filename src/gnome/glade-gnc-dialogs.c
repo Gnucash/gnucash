@@ -3404,6 +3404,8 @@ create_Account_Dialog (void)
   GtkWidget *frame30;
   GtkWidget *parent_scroll;
   GtkWidget *price_quote_frame;
+  GtkWidget *vbox129;
+  GtkWidget *get_quote_check;
   GtkWidget *hbox103;
   GtkWidget *vbox116;
   GtkWidget *label813;
@@ -3638,13 +3640,27 @@ create_Account_Dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox75), price_quote_frame, FALSE, TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (price_quote_frame), 3);
 
+  vbox129 = gtk_vbox_new (FALSE, 3);
+  gtk_widget_ref (vbox129);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "vbox129", vbox129,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox129);
+  gtk_container_add (GTK_CONTAINER (price_quote_frame), vbox129);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox129), 3);
+
+  get_quote_check = gtk_check_button_new_with_label (_("Get Online Quotes"));
+  gtk_widget_ref (get_quote_check);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "get_quote_check", get_quote_check,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (get_quote_check);
+  gtk_box_pack_start (GTK_BOX (vbox129), get_quote_check, FALSE, FALSE, 0);
+
   hbox103 = gtk_hbox_new (FALSE, 2);
   gtk_widget_ref (hbox103);
   gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "hbox103", hbox103,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (hbox103);
-  gtk_container_add (GTK_CONTAINER (price_quote_frame), hbox103);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox103), 3);
+  gtk_box_pack_start (GTK_BOX (vbox129), hbox103, TRUE, TRUE, 0);
 
   vbox116 = gtk_vbox_new (TRUE, 0);
   gtk_widget_ref (vbox116);

@@ -36,12 +36,17 @@ use FileHandle;
 
 # where <method-name> indicates the desired Finance::Quote method.
 # The currently recognized subset is yahoo, yahoo_europe,
-# fidelity_direct, troweprice_direct, vanguard, asx, and tiaacref.
+# fidelity_direct, troweprice_direct, vanguard, asx, tiaacref,
+# and currency.
+
+# For currency quotes, the symbols alternate between the 'from'
+# and 'to' currencies.
 
 # For examle:
 #
 # (yahoo "IBM" "LNUX")
 # (fidelity_direct "FBIOX" "FSELX")
+# (currency "USD" "AUD")
 
 # Output (on standard output, one output form per input line):
 
@@ -157,7 +162,7 @@ sub schemify_num {
   # For now we don't need to do anything.
 
   if(!$numstr) { return "failed-conversion"; }
-  
+
   if($numstr =~ /^\s*(\d+(\.\d+)?)$/o) {
     return $1;
   } else {
@@ -189,8 +194,9 @@ sub get_quote_time {
   my $timestr = $$quotehash{$item, 'time'};
 
   if(!$datestr) {
-    return "failed-conversion";
+    return undef;
   }
+
   my $parsestr = $datestr;
   if($timestr) {
     $parsestr .= " $timestr";
@@ -222,7 +228,7 @@ sub schemify_quote {
 
   $field = 'gnc:time-no-zone';
   $data = get_quote_time($itemname, $quotehash);
-  $quotedata .= " ($field . $data)";
+  $quotedata .= " ($field . $data)" if $data;
 
   $field = 'last';
   if (!($$quotehash{$itemname, $field})) {
@@ -280,7 +286,7 @@ sub parse_input_line {
   # Make sure we have an ending ) followed only by whitespace
   # and kill it off if we do...
   if($input !~ s/\s*\)\s*$//o) { return 0; }
-  
+
   while($input) {
     # Items should look like "RHAT"
     # Grab RHAT and delete "RHAT"\s*
@@ -346,6 +352,25 @@ while(<>) {
     }
     if($quote_method_name =~ m/^tiaacref$/) {
       %quote_data = $quoter->tiaacref(@$symbols);
+      last SWITCH;
+    }
+    if($quote_method_name =~ m/^currency$/) {
+      my ($from_currency, $to_currency) = @$symbols;
+
+      last SWITCH unless $from_currency;
+      last SWITCH unless $to_currency;
+
+      my $price = $quoter->currency($from_currency, $to_currency);
+      last SWITCH unless $price;
+
+      $quote_data{$from_currency, "success"} = 1;
+      $quote_data{$from_currency, "symbol"} = $from_currency;
+      $quote_data{$from_currency, "currency"} = $to_currency;
+      $quote_data{$from_currency, "last"} = $price;
+
+      my @new_symbols = ($from_currency);
+      $symbols = \@new_symbols;
+
       last SWITCH;
     }
   }

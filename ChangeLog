@@ -1,3 +1,14 @@
+2001-05-08  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/price-quotes.scm: add currency quote support
+
+	* src/gnome/dialog-account.c: add currency quote support
+
+	* src/engine/Account.c: allow CURRENCY accounts to have price
+	source set.
+
+	* src/quotes/finance-quote-helper.in: add currency quote support
+
 2001-05-07  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/commodity-utilities.scm: Always use the absolute value
