@@ -50,6 +50,7 @@ test_customer (void)
     do_test (gncCustomerGetBook (customer) == book,
 	     "getbook");
 
+    gncCustomerBeginEdit (customer);
     gncCustomerDestroy (customer);
     success ("create/destroy");
   }
@@ -125,8 +126,11 @@ test_string_fcn (GNCBook *book, const char *message,
   char const *str = get_random_string ();
 
   do_test (!gncCustomerIsDirty (customer), "test if start dirty");
+  gncCustomerBeginEdit (customer);
   set (customer, str);
   do_test (gncCustomerIsDirty (customer), "test dirty later");
+  gncCustomerCommitEdit (customer);
+  do_test (!gncCustomerIsDirty (customer), "test dirty after commit");
   do_test (safe_strcmp (get (customer), str) == 0, message);
   gncCustomerSetActive (customer, FALSE);
   count++;
@@ -141,8 +145,11 @@ test_numeric_fcn (GNCBook *book, const char *message,
   gnc_numeric num = gnc_numeric_create (17, 1);
 
   do_test (!gncCustomerIsDirty (customer), "test if start dirty");
+  gncCustomerBeginEdit (customer);
   set (customer, num);
   do_test (gncCustomerIsDirty (customer), "test dirty later");
+  gncCustomerCommitEdit (customer);
+  do_test (!gncCustomerIsDirty (customer), "test dirty after commit");
   do_test (gnc_numeric_equal (get (customer), num), message);
   gncCustomerSetActive (customer, FALSE);
   count++;
@@ -157,10 +164,13 @@ test_bool_fcn (GNCBook *book, const char *message,
   gboolean num = get_random_boolean ();
 
   do_test (!gncCustomerIsDirty (customer), "test if start dirty");
+  gncCustomerBeginEdit (customer);
   set (customer, FALSE);
   set (customer, TRUE);
   set (customer, num);
   do_test (gncCustomerIsDirty (customer), "test dirty later");
+  gncCustomerCommitEdit (customer);
+  do_test (!gncCustomerIsDirty (customer), "test dirty after commit");
   do_test (get (customer) == num, message);
   gncCustomerSetActive (customer, FALSE);
   count++;
@@ -176,8 +186,11 @@ test_gint_fcn (GNCBook *book, const char *message,
   gint num = 17;
 
   do_test (!gncCustomerIsDirty (customer), "test if start dirty");
+  gncCustomerBeginEdit (customer);
   set (customer, num);
   do_test (gncCustomerIsDirty (customer), "test dirty later");
+  gncCustomerCommitEdit (customer);
+  do_test (!gncCustomerIsDirty (customer), "test dirty after commit");
   do_test (get (customer) == num, message);
   gncCustomerSetActive (customer, FALSE);
   count++;

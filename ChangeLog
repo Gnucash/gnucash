@@ -1,3 +1,6 @@
+2002-11-21  Derek Atkins  <derek@ihtfp.com>
+	* business-core/test/*.c -- fix the tests for begin/commit edit
+
 2002-11-21  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/Transaction-matcher.c: Tweak the matching
 	heuristics.

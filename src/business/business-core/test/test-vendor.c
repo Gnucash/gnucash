@@ -52,6 +52,7 @@ test_vendor (void)
     do_test (gncVendorGetBook (vendor) == book,
 	     "getbook");
 
+    gncVendorBeginEdit (vendor);
     gncVendorDestroy (vendor);
     success ("create/destroy");
   }
@@ -111,8 +112,11 @@ test_string_fcn (GNCBook *book, const char *message,
   char const *str = get_random_string ();
 
   do_test (!gncVendorIsDirty (vendor), "test if start dirty");
+  gncVendorBeginEdit (vendor);
   set (vendor, str);
   do_test (gncVendorIsDirty (vendor), "test dirty later");
+  gncVendorCommitEdit (vendor);
+  do_test (!gncVendorIsDirty (vendor), "test dirty after commit");
   do_test (safe_strcmp (get (vendor), str) == 0, message);
   gncVendorSetActive (vendor, FALSE); count++;
 }
@@ -127,8 +131,11 @@ test_numeric_fcn (GNCBook *book, const char *message,
   gnc_numeric num = gnc_numeric_create (17, 1);
 
   do_test (!gncVendorIsDirty (vendor), "test if start dirty");
+  gncVendoryBeginEdit (vendor);
   set (vendor, num);
   do_test (gncVendorIsDirty (vendor), "test dirty later");
+  gncVendorCommitEdit (vendor);
+  do_test (!gncVendorIsDirty (vendor), "test dirty after commit");
   do_test (gnc_numeric_equal (get (vendor), num), message);
   gncVendorSetActive (vendor, FALSE); count++;
 }
@@ -143,10 +150,13 @@ test_bool_fcn (GNCBook *book, const char *message,
   gboolean num = get_random_boolean ();
 
   do_test (!gncVendorIsDirty (vendor), "test if start dirty");
+  gncVendorBeginEdit (vendor);
   set (vendor, FALSE);
   set (vendor, TRUE);
   set (vendor, num);
   do_test (gncVendorIsDirty (vendor), "test dirty later");
+  gncVendorCommitEdit (vendor);
+  do_test (!gncVendorIsDirty (vendor), "test dirty after commit");
   do_test (get (vendor) == num, message);
   gncVendorSetActive (vendor, FALSE); count++;
 }
@@ -161,8 +171,11 @@ test_gint_fcn (GNCBook *book, const char *message,
   gint num = 17;
 
   do_test (!gncVendorIsDirty (vendor), "test if start dirty");
+  gncVendorBeginEdit (vendor);
   set (vendor, num);
   do_test (gncVendorIsDirty (vendor), "test dirty later");
+  gncVendorCommitEdit (vendor);
+  do_test (!gncVendorIsDirty (vendor), "test dirty after commit");
   do_test (get (vendor) == num, message);
   gncVendorSetActive (vendor, FALSE); count++;
 }

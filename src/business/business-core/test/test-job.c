@@ -52,6 +52,7 @@ test_job (void)
     do_test (gncJobGetBook (job) == book,
 	     "getbook");
 
+    gncJobBeginEdit (job);
     gncJobDestroy (job);
     success ("create/destroy");
   }
@@ -113,6 +114,7 @@ test_job (void)
     do_test (list == NULL, "no active jobs");
     list = gncCustomerGetJoblist (cust, TRUE);
     do_test (list != NULL, "all jobs");
+    gncJobBeginEdit (job);
     gncJobDestroy (job);
     list = gncCustomerGetJoblist (cust, TRUE);
     do_test (list == NULL, "no more jobs");
@@ -128,8 +130,11 @@ test_string_fcn (GNCBook *book, const char *message,
   char const *str = get_random_string ();
 
   do_test (!gncJobIsDirty (job), "test if start dirty");
+  gncJobBeginEdit (job);
   set (job, str);
   do_test (gncJobIsDirty (job), "test dirty later");
+  gncJobCommitEdit (job);
+  do_test (!gncJobIsDirty (job), "test dirty after commit");
   do_test (safe_strcmp (get (job), str) == 0, message);
   gncJobSetActive (job, FALSE); count++;
 }
@@ -144,8 +149,11 @@ test_numeric_fcn (GNCBook *book, const char *message,
   gnc_numeric num = gnc_numeric_create (17, 1);
 
   do_test (!gncJobIsDirty (job), "test if start dirty");
+  gncJobBeginEdit (job);
   set (job, num);
   do_test (gncJobIsDirty (job), "test dirty later");
+  gncJobCommitEdit (job);
+  do_test (!gncJobIsDirty (job), "test dirty after commit");
   do_test (gnc_numeric_equal (get (job), num), message);
   gncJobSetActive (job, FALSE); count++;
 }
@@ -160,10 +168,13 @@ test_bool_fcn (GNCBook *book, const char *message,
   gboolean num = get_random_boolean ();
 
   do_test (!gncJobIsDirty (job), "test if start dirty");
+  gncJobBeginEdit (job);
   set (job, FALSE);
   set (job, TRUE);
   set (job, num);
   do_test (gncJobIsDirty (job), "test dirty later");
+  gncJobCommitEdit (job);
+  do_test (!gncJobIsDirty (job), "test dirty after commit");
   do_test (get (job) == num, message);
   gncJobSetActive (job, FALSE); count++;
 }
@@ -178,8 +189,11 @@ test_gint_fcn (GNCBook *book, const char *message,
   gint num = 17;
 
   do_test (!gncJobIsDirty (job), "test if start dirty");
+  gncJobBeginEdit (job);
   set (job, num);
   do_test (gncJobIsDirty (job), "test dirty later");
+  gncJobCommitEdit (job);
+  do_test (!gncJobIsDirty (job), "test dirty after commit");
   do_test (get (job) == num, message);
   gncJobSetActive (job, FALSE); count++;
 }

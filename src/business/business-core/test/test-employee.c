@@ -50,6 +50,7 @@ test_employee (void)
     do_test (gncEmployeeGetBook (employee) == book,
 	     "getbook");
 
+    gncEmployeeBeginEdit (employee);
     gncEmployeeDestroy (employee);
     success ("create/destroy");
   }
@@ -110,8 +111,11 @@ test_string_fcn (GNCBook *book, const char *message,
   char const *str = get_random_string ();
 
   do_test (!gncEmployeeIsDirty (employee), "test if start dirty");
+  gncEmployeeBeginEdit (employee);
   set (employee, str);
   do_test (gncEmployeeIsDirty (employee), "test dirty later");
+  gncEmployeeCommitEdit (employee);
+  do_test (!gncEmployeeIsDirty (employee), "test dirty after commit");
   do_test (safe_strcmp (get (employee), str) == 0, message);
   gncEmployeeSetActive (employee, FALSE);
   count++;
@@ -126,8 +130,11 @@ test_numeric_fcn (GNCBook *book, const char *message,
   gnc_numeric num = gnc_numeric_create (17, 1);
 
   do_test (!gncEmployeeIsDirty (employee), "test if start dirty");
+  gncEmployeeBeginEdit (employee);
   set (employee, num);
   do_test (gncEmployeeIsDirty (employee), "test dirty later");
+  gncEmployeeCommitEdit (employee);
+  do_test (!gncEmployeeIsDirty (employee), "test dirty after commit");
   do_test (gnc_numeric_equal (get (employee), num), message);
   gncEmployeeSetActive (employee, FALSE);
   count++;
@@ -142,10 +149,13 @@ test_bool_fcn (GNCBook *book, const char *message,
   gboolean num = get_random_boolean ();
 
   do_test (!gncEmployeeIsDirty (employee), "test if start dirty");
+  gncEmployeeBeginEdit (employee);
   set (employee, FALSE);
   set (employee, TRUE);
   set (employee, num);
   do_test (gncEmployeeIsDirty (employee), "test dirty later");
+  gncEmployeeCommitEdit (employee);
+  do_test (!gncEmployeeIsDirty (employee), "test dirty after commit");
   do_test (get (employee) == num, message);
   gncEmployeeSetActive (employee, FALSE);
   count++;
@@ -161,8 +171,11 @@ test_gint_fcn (GNCBook *book, const char *message,
   gint num = 17;
 
   do_test (!gncEmployeeIsDirty (employee), "test if start dirty");
+  gncEmployeeBeginEdit (employee);
   set (employee, num);
   do_test (gncEmployeeIsDirty (employee), "test dirty later");
+  gncEmployeeCommitEdit (employee);
+  do_test (!gncEmployeeIsDirty (employee), "test dirty after commit");
   do_test (get (employee) == num, message);
   gncEmployeeSetActive (employee, FALSE);
   count++;
