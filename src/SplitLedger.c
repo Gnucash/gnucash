@@ -2601,7 +2601,8 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
 
     new_name = reg->xfrmCell->cell.value;
 
-    new_account = xaccGetAccountByFullName(trans, new_name, account_separator);
+    new_account = xaccGetAccountFromFullName (gncGetCurrentGroup (),
+                                              new_name, account_separator);
 
     if (new_account != NULL)
       gnc_split_scm_set_account(split_scm, new_account);
@@ -2628,8 +2629,9 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
     if (other_split_scm != SCM_UNDEFINED) {
       Account *new_account;
 
-      new_account = xaccGetAccountByFullName(trans, reg->mxfrmCell->cell.value,
-                                             account_separator);
+      new_account = xaccGetAccountFromFullName (gncGetCurrentGroup (),
+                                                reg->mxfrmCell->cell.value,
+                                                account_separator);
 
       if (new_account != NULL)
         gnc_split_scm_set_account(other_split_scm, new_account);
@@ -2927,7 +2929,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
     new_name = reg->xfrmCell->cell.value;
 
-    new_acc = xaccGetAccountByFullName (trans, new_name, account_separator);
+    new_acc = xaccGetAccountFromFullName (gncGetCurrentGroup (),
+                                          new_name, account_separator);
 
     if ((new_acc != NULL) && (old_acc != new_acc))
     {
@@ -2999,8 +3002,9 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
       /* do some reparenting. Insertion into new account will automatically
        * delete from the old account */
       old_acc = xaccSplitGetAccount (other_split);
-      new_acc = xaccGetAccountByFullName (trans, reg->mxfrmCell->cell.value,
-                                          account_separator);
+      new_acc = xaccGetAccountFromFullName (gncGetCurrentGroup (),
+                                            reg->mxfrmCell->cell.value,
+                                            account_separator);
 
       if ((new_acc != NULL) && (old_acc != new_acc))
       {
