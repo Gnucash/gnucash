@@ -344,7 +344,7 @@ test_real_account(const char *tag, gpointer global_data, gpointer data)
 
     if(!xaccAccountGetParent(act))
     {
-        xaccGroupInsertAccount(gnc_book_get_group(book), act);
+        xaccGroupInsertAccount(xaccGetAccountGroup(book), act);
     }
 
     msg = node_and_account_equal((xmlNodePtr)global_data, act);

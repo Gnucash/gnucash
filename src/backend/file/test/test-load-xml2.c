@@ -61,7 +61,7 @@ test_load_file(const char *filename)
 
     book = gnc_session_get_book (session);
 
-    do_test (xaccGroupGetBook (gnc_book_get_group (book)) == book,
+    do_test (xaccGroupGetBook (xaccGetAccountGroup (book)) == book,
              "book and group don't match");
 
     do_test_args(
