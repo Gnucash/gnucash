@@ -1012,6 +1012,7 @@ gnc_table_modify_update(Table *table, int row, int col,
     /* update data. bounds check done earlier */
     if (table->entries[row][col]) free (table->entries[row][col]);
     table->entries[row][col] = newval;
+    retval = newval;
     (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
   }
   LEAVE ("gnc_table_modify_update(): "
