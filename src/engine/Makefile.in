@@ -46,11 +46,11 @@ include ../../Makefile.common
 
 default: ../libengine.a
 
-
 ../libengine.a: ${OBJS}
 	ar vru libengine.a ${OBJS}
-	cp -p libengine.a ..
+	(cd .. && ln -sf engine/libengine.a .)
 
+TRASH += ../libengine.a libengine.a
 
 .PHONY: all default
 

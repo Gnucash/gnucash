@@ -1,4 +1,4 @@
-# Makefile -- makefile for xacc
+# Makefile -- makefile for gnucash
 # Copyright (C) 1997 Robin Clark                                   
 # Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>
 #                                                                  
@@ -26,13 +26,14 @@ VPATH   = @srcdir@
 
 prefix=@prefix@
 datadir=@datadir@
-VARDIR=@localstatedir@
-CONFIGDIR=@sysconfdir@
+  # i.e. /usr/share
+localstatedir=@localstatedir@
+  # i.e. /var/
+sysconfdir=@sysconfdir@
+  # i.e. /etc/
 
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
-TARGET  = xacc
-DOCDIR	= ${datadir}/Docs
 CPU     = @target_cpu@
 
 LIBS=@LIBS@
@@ -52,29 +53,37 @@ default:
 	@echo "motif           dynamically linked motif version"
 	@echo "motif-static    statically linked motif version"
 	@echo "gnome           gnome/gtk version"
+	@echo "gnome-static    gnome/gtk statically linked version"
 	@echo "qt              kde/qt version"
 	@echo " "
 
-motif:
-	@cd lib;    $(MAKE) motif
-	@cd src;    $(MAKE) motif
+# Aliases
+motif-static: motif.static
+gnome-static: gnome.static
 
-# link in motif libs statically
-motif-static:
-	@cd lib;    $(MAKE) motif
-	@cd src;    $(MAKE) motif-static
+build-flavor:
+	@cd lib;    $(MAKE) ${FLAVOR}
+	@cd src;    $(MAKE) ${FLAVOR}
+	ln -sf gnucash.${FLAVOR} gnucash.bin
+	(cd share && ln -sf ../src/scm scm)
+
+motif:
+	${MAKE} FLAVOR=motif build-flavor
+
+motif.static:
+	${MAKE} FLAVOR=motif.static build-flavor
 
 gnome:
-	@cd lib;    $(MAKE) gnome
-	@cd src;    $(MAKE) gnome
+	${MAKE} FLAVOR=gnome build-flavor
+
+gnome.static:
+	${MAKE} FLAVOR=gnome.static build-flavor
 
 qt:
-	@cd lib;    $(MAKE) qt
-	@cd src;    $(MAKE) qt
+	${MAKE} FLAVOR=qt build-flavor
 
 depend:
-	@cd lib;    $(MAKE) depend
-	@cd src;    $(MAKE) depend
+	@echo make depend is now superfluous.
 
 clean:
 	rm -f *~ *.o *.bak
@@ -82,8 +91,9 @@ clean:
 	@cd src;    $(MAKE) clean
 
 distclean: clean
-	rm -f *~ *.o *.bak Makefile 
-	rm -f xacc xacc.bin xacc.gtk.bin xacc.qt.bin xacc.static.bin
+	rm -f *~ *.o *.bak Makefile share/scm gnucash.bin
+	rm -f gnucash gnucash.motif gnucash.motif.static \
+        gnucash.gnome gnucash.gnome.static gnucash.qt
 	rm -f config.cache config.log config.status config.h
 	@cd lib;    $(MAKE) distclean
 	@cd src;    $(MAKE) distclean
@@ -93,27 +103,73 @@ tagsfiles := $(shell find -name "*.[ch]")
 TAGS: ${tagsfiles}
 	etags ${tagsfiles}    
 
-install: $(TARGET)
-	@mkdir -p $(prefix)/bin
-	$(INSTALL) $(TARGET) $(prefix)/bin/$(TARGET)
-	-$(INSTALL) $(TARGET).bin $(prefix)/bin/$(TARGET).bin
-	-$(INSTALL) $(TARGET).gtk.bin $(prefix)/bin/$(TARGET).gtk.bin
-	-$(INSTALL) $(TARGET).qt.bin $(prefix)/bin/$(TARGET).qt.bin
-	-$(INSTALL) $(TARGET).static.bin $(prefix)/bin/$(TARGET).static.bin
+install:
+	${MAKE} \
+    DOCDIR=${prefix}/doc/gnucash \
+    BINDIR=${prefix}/bin \
+    CONFIGDIR=${sysconfdir}/gnucash \
+    SHAREDIR=${datadir}/gnucash \
+    install-private
+
+install-opt:
+	${MAKE} \
+    DOCDIR=${prefix}/doc \
+    BINDIR=${prefix}/bin \
+    CONFIGDIR=${sysconfdir} \
+    SHAREDIR=${datadir} \
+    install-private
+
+# We have to re-build the binary here to pick up any modifications to
+# the ./configure configuration and to accomodate install vs
+# install-opt.  The other option would be to always use a wrapper
+# script, even in the install tree, but that's IMO uglier.
+
+# We could get rid of some redundant rebuilds with a
+# stamp-install-opt-build, but that's somewhat messy too.
+gnucash.motif gnucash.motif.static gnucash.gnome gnucash.gnome.static:
+	@echo Rebuilding binary to handle install site specific dependencies. 
+	rm -f gnucash.${FLAVOR}
+	${MAKE} DOCDIR=${DOCDIR} BINDIR=${BINDIR} CONFIGDIR=${CONFIGDIR} \
+          SHAREDIR=${SHAREDIR} ${FLAVOR}
+.PHONY: gnucash.motif gnucash.motif.static gnucash.gnome gnucash.gnome.static
+
+
+install-bin: gnucash.${FLAVOR}
+	$(INSTALL) gnucash.${FLAVOR} ${BINDIR}/gnucash.${FLAVOR}
+	(cd ${BINDIR} && ln -sf gnucash.${FLAVOR} gnucash)
+
+install-private:
+	@mkdir -p ${BINDIR}
+
+  # Put these in the opposite order of precedence.  Final bin/gnucash link will
+  # point to the last one that exists...
+	-[ -e gnucash.qt ] && ${MAKE} FLAVOR=qt BINDIR=${BINDIR} install-bin
+	-[ -e gnucash.gnome.static ] && \
+     ${MAKE} FLAVOR=gnome.static BINDIR=${BINDIR} install-bin
+	-[ -e gnucash.gnome ] && ${MAKE} FLAVOR=gnome BINDIR=${BINDIR} install-bin
+	-[ -e gnucash.motif.static ] && \
+     ${MAKE} FLAVOR=motif.static BINDIR=${BINDIR} install-bin
+	-[ -e gnucash.motif ] && ${MAKE} FLAVOR=motif BINDIR=${BINDIR} install-bin
 
   # Make sure at least one succeeded
-	[ -e ${TARGET}.bin -o -${TARGET}.gtk.bin -o -${TARGET}.qt.bin \
-    -o -${TARGET}.static.bin ]
+	[ \
+    -e ${BINDIR}/gnucash.motif -o \
+    -e ${BINDIR}/gnucash.motif.static -o \
+    -e ${BINDIR}/gnucash.gnome -o \
+    -e ${BINDIR}/gnucash.gnome.static -o \
+    -e ${BINDIR}/gnucash.qt \
+  ]
 
 # 	@mkdir -p $(prefix)/toolbar
 # 	$(INSTALL_DATA) toolbar/*.xpm $(prefix)/toolbar
-	@mkdir -p $(DOCDIR)
-	$(INSTALL_DATA) Docs/*.html $(DOCDIR)
-	$(INSTALL_DATA) Docs/*.gif $(DOCDIR)
-#	$(INSTALL_DATA) Docs/*.jpg $(DOCDIR)
-	$(INSTALL_DATA) Docs/*.xpm $(DOCDIR)
-	@mkdir -p $(DOCDIR)/logos
-	$(INSTALL_DATA) Docs/logos/*.* $(DOCDIR)/logos
+
+	@mkdir -p ${DOCDIR}
+	$(INSTALL_DATA) Docs/*.html ${DOCDIR}
+	$(INSTALL_DATA) Docs/*.gif ${DOCDIR}
+#	$(INSTALL_DATA) Docs/*.jpg ${DOCDIR}
+	$(INSTALL_DATA) Docs/*.xpm ${DOCDIR}
+	@mkdir -p ${DOCDIR}/logos
+	$(INSTALL_DATA) Docs/logos/*.* ${DOCDIR}/logos
 
   # Config directory
 	@mkdir -p ${CONFIGDIR}
@@ -132,20 +188,23 @@ install: $(TARGET)
   done
 
   # Share directory
-	@mkdir -p ${datadir}
+	@mkdir -p ${SHAREDIR}
 
   # Try to do this in a platform independent way...
   # Directories
 	for dir in `find share/scm/ -type d`; do \
     dest=`echo $$dir | cut -c 11-` \
-		mkdir -p ${datadir}/scm/$$dest; \
+		mkdir -p ${SHAREDIR}/scm/$$dest; \
   done
 
   # Files
 	for file in `find share/scm/ -name "*.scm"`; do \
     dest=`echo $$file | cut -c 11-` \
-		${INSTALL_DATA} $$file ${datadir}/scm/$$dest; \
+		${INSTALL_DATA} $$file ${SHAREDIR}/scm/$$dest; \
   done
+
+.PHONY: default install-private install motif motif-static gnome gnome-static qt
+.PHONY: depend clean distclean
 
 # Local Variables:
 # tab-width: 2

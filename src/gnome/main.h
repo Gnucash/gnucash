@@ -35,10 +35,11 @@
 #include "util.h"
 #include "MainWindow.h" 
 
+#include "../guile/path-defaults.h"
 
 /** HELP STUFF: *****************************************************/
 #define HELP_VAR     "XACC_HELP"
-#define HELP_ROOT    "./Docs/"
+#define HELP_ROOT    GNC_DOC_DIR_DEFAULT
 #define HH_ABOUT     "xacc-about.html"
 #define HH_ACC       "xacc-accwin.html"
 #define HH_REGWIN    "xacc-regwin.html"

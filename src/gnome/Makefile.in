@@ -1,4 +1,4 @@
-# Makefile -- makefile for xacc/src/gnome                         
+# Makefile -- makefile for gnucash/src/gnome                         
 # Copyright (C) 1997 Robin Clark                                   
 # Copyright (C) 1998 Linas Vepstas                                 
 # Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>
@@ -34,21 +34,21 @@ CC       = @CC@
 INCLPATH = -I.. -I../.. -I../engine -I../register -I../guile \
            -I@srcdir@/../../include \
            -I$(includedir) -I$(prefix)/lib/gnome-libs/include
- 
+
 
 CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH}
 LDFLAGS  = @LDFLAGS@
 LIBS     = -L$(prefix)/lib @LIBS@ @X_PRE_LIBS@ @X_LIBS@ \
            $(shell gtk-config --libs) @X_EXTRA_LIBS@ -lgnomeui -lgnome \
-           -lgnomesupport -lgdk_imlib -ltiff -lgif \
-           -lguile -lreadline -lintl
+           -lgnomesupport -lgdk_imlib -ltiff \
+           -lguile -lqthreads -lreadline -lintl
 
 
-TARGET   = ../../xacc.gtk.bin
-STATIC   = ../../xacc-static.gtk.bin
+TARGET   = ../../gnucash.gnome
+STATIC   = ../../gnucash.gnome.static
 
 OTHER_OBJS := ../obj/gnome/*.o ../engine/obj/*.o ../register/obj/gnome/*.o \
-              ../guile/obj/*.o
+              ../guile/obj/*.o ../swig/guile/gnucash-guile_wrap.o
 
 ######################################################################
 # See Makefile.common for information about these variables.
@@ -64,7 +64,7 @@ include ../../Makefile.common
 
 gnome: default
 
-static: $(STATIC)
+gnome.static: $(STATIC)
 
 $(TARGET): ${GNOME_OBJS} ${OTHER_OBJS}
 	$(CC) $(LDFLAGS) $(LIBS) -o $@ $^
