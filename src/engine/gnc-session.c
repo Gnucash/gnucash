@@ -421,11 +421,14 @@ gnc_session_begin (GNCSession *session, const char * book_id,
   if (session->backend && session->backend->session_begin)
   {
       int err;
+      char * msg;
+      
       (session->backend->session_begin)(session->backend, session,
                                   gnc_session_get_url(session), ignore_lock,
                                   create_if_nonexistent);
       PINFO("Done running session_begin on backend");
       err = xaccBackendGetError(session->backend);
+      msg = xaccBackendGetMessage(session->backend);
       if (err != ERR_BACKEND_NO_ERR)
       {
           g_free(session->fullpath);
@@ -434,9 +437,13 @@ gnc_session_begin (GNCSession *session, const char * book_id,
           session->logpath = NULL;
           g_free(session->book_id);
           session->book_id = NULL;
-          gnc_session_push_error (session, err, NULL);
+          gnc_session_push_error (session, err, msg);
           LEAVE("backend error %d", err);
           return;
+      }
+      if (msg != NULL) {
+          PWARN_GUI(msg);
+          g_free(msg);
       }
   }
 

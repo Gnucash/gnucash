@@ -1842,6 +1842,8 @@ pgend_session_begin (Backend *backend,
              PWARN ("the following message should be shown in a gui");
              PWARN ("unknown mode %s, will use multi-user mode",
                     start ? start : "(null)");
+             xaccBackendSetMessage(_("Unknown mode '%s', defaulting to multi-user mode"),
+			           start ? start : "(null)");
              be->session_mode = MODE_EVENT;
          } 
          
@@ -1947,9 +1949,9 @@ pgend_session_begin (Backend *backend,
          /* check the connection status */
          if (CONNECTION_BAD == PQstatus(be->connection))
          {
+            char * msg = PQerrorMessage(be->connection);
             PWARN("Connection to database 'template1' failed:\n"
-                  "\t%s", 
-                  PQerrorMessage(be->connection));
+                  "\t%s", msg);
       
             PQfinish (be->connection);
             be->connection = NULL;
@@ -1958,6 +1960,7 @@ pgend_session_begin (Backend *backend,
              * Alas, it does not, so we just bomb out.
              */
             xaccBackendSetError (&be->be, ERR_BACKEND_CANT_CONNECT);
+            xaccBackendSetMessage(&be->be, msg);
             return;
          }
 

@@ -1,3 +1,21 @@
+2002-11-17  Matthew Vanecek <mevanecek@yahoo.com>
+	* src/backend/postgres/putil.c: Added needed header files to the c
+	file.
+	
+	* src/backend/postgres/PostgresBackend.c (pgend_session_begin): Added
+	xaccBackendSetMessage for an unknown mode or for a bad connection.
+
+	* src/engine/Backend.c (xaccBackendGetMessage): Allow function to
+	return null if Backend->error_msg is NULL.
+	
+	* src/engine/Account.c (xaccAccountCommitEdit): Handle a NULL return
+	from xaccBackendGetMessage().
+
+	* src/engine/gnc-session.c (gnc_session_begin): Push the Backend
+	error message onto the session error message (instead of NULL), if
+	it exists.  If it's just a warning message (denoted by having a
+	message, but ERR_BACKEND_NO_ERR is set), pop up a dialog.
+	
 2002-11-16  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome-utils/gnc-dense-cal.c (gnc_dense_cal_draw_to_buffer):

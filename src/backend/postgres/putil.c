@@ -31,6 +31,13 @@
  * 
  */
 
+#include <glib.h> 
+#include <libpq-fe.h>  
+#include "Backend.h"
+#include "BackendP.h"
+#include "gnc-engine-util.h" 
+#include "PostgresBackend.h"
+
 static short module = MOD_BACKEND;
 
 #include "putil.h"

@@ -88,7 +88,7 @@ xaccBackendGetMessage (Backend *be) {
    char * msg;
    
    if (!be) return g_strdup(_("ERR_BACKEND_NO_BACKEND"));
-   if (!be->error_msg) return g_strdup(_("No error message"));
+   if (!be->error_msg) return NULL;
 
    /* 
     * Just return the contents of the error_msg and then set it to
