@@ -437,7 +437,7 @@ gnc_load_financials_from_fd(GNCBook *book, int fd)
   /* If this is a newer file than we know how to deal
    * with, warn the user */
   if( VERSION < token ) {
-    error_code = ERR_FILEIO_FILE_TOO_NEW;
+    error_code = ERR_BACKEND_TOO_NEW;
     return FALSE;
   }
   
