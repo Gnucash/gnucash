@@ -1,3 +1,9 @@
+2002-11-12  Benoit Grégoire  <bock@step.polymtl.ca>
+	* src/import-export/Transaction-matcher.c
+	* src/import-export/generic-import.glade: First round of 
+	transaction matcher UI changes.  Create a pseudo-widget in first 
+	column to select the action to be taken with the transaction.
+	
 2002-11-12  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-sxsincelast.c

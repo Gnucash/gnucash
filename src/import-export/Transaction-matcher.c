@@ -48,13 +48,14 @@
  *   Constants   *
 \********************************************************************/
 
-#define NUM_COLUMNS_DOWNLOADED_CLIST 6
+#define NUM_COLUMNS_DOWNLOADED_CLIST 7
 static const int DOWNLOADED_CLIST_ACTION = 0;
 static const int DOWNLOADED_CLIST_ACCOUNT = 1;
 static const int DOWNLOADED_CLIST_DATE = 2;
 static const int DOWNLOADED_CLIST_AMOUNT = 3;
 static const int DOWNLOADED_CLIST_DESCRIPTION = 4;
 static const int DOWNLOADED_CLIST_MEMO = 5;
+static const int DOWNLOADED_CLIST_BALANCED = 6;
 
 #define NUM_COLUMNS_MATCHER_CLIST 5
 static const int MATCHER_CLIST_CONFIDENCE = 0;
@@ -64,28 +65,16 @@ static const int MATCHER_CLIST_DESCRIPTION = 3;
 static const int MATCHER_CLIST_MEMO = 4;
 
 /********************************************************************\
- *   Constants, should idealy be defined a user preference dialog    *
-\********************************************************************/
-
-static short module = MOD_IMPORT;
-static const double MATCH_ATM_FEE_TRESHOLD=3.00;
-static const int MATCH_DATE_TRESHOLD=4; /*within 4 days*/
-/*Transaction who's best match probability is equal or higher than
-  this will reconcile their best match by default */
-static const int TRANSACTION_RECONCILE_PROBABILITY_THRESHOLD = 6;
-/*Transaction who's best match probability is below or equal to 
-  this will be added as new by default */
-static const int TRANSACTION_ADD_PROBABILITY_THRESHOLD = 2;
-static const int SHOW_TRANSACTIONS_WITH_UNIQUE_ID = TRUE;
-
-/********************************************************************\
  *               Structures passed between the functions             *
 \********************************************************************/
+/* If you modify this, modify get_next_action */
 typedef enum _action{
   IGNORE,
   ADD,
   RECONCILE,
-  REPLACE
+  REPLACE,
+  LAST_ACTION,
+  INVALID_ACTION
 } Action;
 
 
@@ -94,10 +83,6 @@ struct _transmatcherdialog {
   GtkWidget * transaction_matcher;
   GtkCList * downloaded_clist;
   GtkCList * match_clist;
-  GtkToggleButton * action_reconcile_button;
-  GtkToggleButton * action_add_button;
-  GtkToggleButton * action_replace_button;
-  GtkToggleButton * action_ignore_button;
   struct _transactioninfo * selected_trans_info;
 };
 
@@ -108,6 +93,7 @@ struct _transactioninfo
   char action_text[10];
   char date_text[20];
   char amount_text[20];
+  char balance_text[20];
   const char * clist_text[NUM_COLUMNS_DOWNLOADED_CLIST];
   GList * match_list;
   struct _matchinfo * selected_match_info;
@@ -128,47 +114,111 @@ struct _matchinfo
   const char * clist_text[NUM_COLUMNS_MATCHER_CLIST];
 };
 
+/********************************************************************\
+ *   Constants, should idealy be defined a user preference dialog    *
+\********************************************************************/
+
+static short module = MOD_IMPORT;
+static const double MATCH_ATM_FEE_TRESHOLD=3.00;
+static const int MATCH_DATE_TRESHOLD=4; /*within 4 days*/
+/*Transaction who's best match probability is equal or higher than
+  this will reconcile their best match by default */
+static const int TRANSACTION_RECONCILE_PROBABILITY_THRESHOLD = 6;
+/*Transaction who's best match probability is below or equal to 
+  this will be added as new by default */
+static const int TRANSACTION_ADD_PROBABILITY_THRESHOLD = 2;
+static const int SHOW_TRANSACTIONS_WITH_UNIQUE_ID = TRUE;
+
+static const int ACTION_IGNORE_ENABLED = TRUE;
+static const int ACTION_ADD_ENABLED = TRUE;
+static const int ACTION_RECONCILE_ENABLED = TRUE;
+static const int ACTION_REPLACE_ENABLED = TRUE;
+
+/* XPM */
+static char * fleche_xpm[] = {
+  "13 21 7 1",
+  " 	c None",
+  ".	c #000000",
+  "+	c #DEDACD",
+  "@	c #FFFFFF",
+  "#	c #B4BAB4",
+  "$	c #C5C2C5",
+  "%	c #BDBEBD",
+  ".............",
+  ".++++++++++@.",
+  ".+#########@.",
+  ".+####.####@.",
+  ".+###...###@.",
+  ".+###...###@.",
+  ".+###...###@.",
+  ".+###...###@.",
+  ".+###...###@.",
+  ".+###...###@.",
+  ".+###...###@.",
+  ".+###...###@.",
+  ".+###...###@.",
+  ".+#.......#@.",
+  ".+##.....##@.",
+  ".+###...###@.",
+  ".+###$.$###@.",
+  ".+####%####@.",
+  ".@#########@.",
+  ".............",
+  "@@@@@@@@@@@@@"};
+
+static Action get_next_action(Action current_action)
+{
+  Action retval = INVALID_ACTION;
+  Action i = current_action;
+  
+  do
+    {
+      if (i == LAST_ACTION)
+	{
+	  i=0;
+	}
+      else
+	{
+	  i++;
+	}
+      if(i==IGNORE&&ACTION_IGNORE_ENABLED==TRUE)
+	retval = i;
+      if(i==ADD&&ACTION_ADD_ENABLED==TRUE)
+	retval = i;
+      if(i==RECONCILE&&ACTION_RECONCILE_ENABLED==TRUE)
+	retval = i;
+      if(i==REPLACE&&ACTION_REPLACE_ENABLED==TRUE)
+	retval = i;
+    }while(retval==INVALID_ACTION&&i!=current_action);
+  return retval;
+}
+
 static void downloaded_transaction_refresh_gui( struct _transmatcherdialog * matcher,struct _transactioninfo * transaction_info)
 {
   gint row_number;
   gint i;
+  GdkPixmap* fleche;
+
   DEBUG("Begin");
   row_number = gtk_clist_find_row_from_data(matcher->downloaded_clist,
 					    transaction_info);
   switch(transaction_info->action)
     {
-    case ADD: strncpy(transaction_info->action_text,"ADD",sizeof(transaction_info->action_text));
+    case ADD: strncpy(transaction_info->action_text,_("ADD"),sizeof(transaction_info->action_text));
       break;
-    case RECONCILE: strncpy(transaction_info->action_text,"RECONCILE",sizeof(transaction_info->action_text));
+    case RECONCILE: strncpy(transaction_info->action_text,_("RECONCILE"),sizeof(transaction_info->action_text));
       break;
-    case REPLACE: strncpy(transaction_info->action_text,"REPLACE",sizeof(transaction_info->action_text));
+    case REPLACE: strncpy(transaction_info->action_text,_("REPLACE"),sizeof(transaction_info->action_text));
       break;
-    case IGNORE: strncpy(transaction_info->action_text,"IGNORE",sizeof(transaction_info->action_text));
+    case IGNORE: strncpy(transaction_info->action_text,_("IGNORE"),sizeof(transaction_info->action_text));
       break;
     default:
       PERR("Unknown action");
     }
-
-if(transaction_info==matcher->selected_trans_info)
-  {
-    switch(transaction_info->action)
-      {
-      case ADD: gtk_toggle_button_set_active ( matcher->action_add_button, TRUE);
-	break;
-      case RECONCILE: gtk_toggle_button_set_active (matcher->action_reconcile_button, TRUE);
-	break;
-      case REPLACE: gtk_toggle_button_set_active (matcher->action_replace_button, TRUE);
-	break;
-      case IGNORE: gtk_toggle_button_set_active (matcher->action_ignore_button, TRUE);
-	break;
-    default:
-      PERR("Unknown action");
-    }
-  }
  
- transaction_info->clist_text[DOWNLOADED_CLIST_ACTION]=transaction_info->action_text;/*Action*/
+  transaction_info->clist_text[DOWNLOADED_CLIST_ACTION]=transaction_info->action_text;/*Action*/
   transaction_info->clist_text[DOWNLOADED_CLIST_ACCOUNT]=xaccAccountGetName(xaccSplitGetAccount(transaction_info->first_split)); /*Account*/
-  
+ 
   printDateSecs(transaction_info->date_text, xaccTransGetDate(transaction_info->trans));
   transaction_info->clist_text[DOWNLOADED_CLIST_DATE]=transaction_info->date_text; /*Date*/
 
@@ -180,7 +230,10 @@ if(transaction_info==matcher->selected_trans_info)
   transaction_info->clist_text[DOWNLOADED_CLIST_DESCRIPTION]=xaccTransGetDescription(transaction_info->trans);
   transaction_info->clist_text[DOWNLOADED_CLIST_MEMO]=xaccSplitGetMemo(transaction_info->first_split);
  
-
+  sprintf(transaction_info->balance_text, 
+	  "%.2f",
+	  gnc_numeric_to_double(xaccTransGetImbalance(transaction_info->trans)));
+  transaction_info->clist_text[DOWNLOADED_CLIST_BALANCED]=transaction_info->balance_text;
 
   for(i=0;i<NUM_COLUMNS_DOWNLOADED_CLIST;i++)
     {
@@ -189,6 +242,22 @@ if(transaction_info==matcher->selected_trans_info)
 				       i,
 				       transaction_info->clist_text[i]);
     } 
+
+  fleche =  gdk_pixmap_create_from_xpm_d    (NULL,
+					     NULL,
+					     NULL,
+					     fleche_xpm);
+  
+  gtk_clist_set_pixtext           (matcher->downloaded_clist,
+				   row_number,
+				   DOWNLOADED_CLIST_ACTION,
+				   transaction_info->action_text,
+				   3,
+				   fleche,
+				   NULL);
+ 
+  gtk_clist_set_row_height        (matcher->downloaded_clist,
+				   0);
 }
 
 
@@ -208,10 +277,27 @@ downloaded_transaction_select_cb (GtkCList *clist,
   struct _matchinfo * match_info;
   GList * list_element;
   gint row_number;
-  DEBUG("Begin");
+  gboolean valid_action_found;
+  DEBUG("row: %d%s%d",row,", column: ",column);
   
+  if(  matcher->selected_trans_info != gtk_clist_get_row_data(clist, row) 
+       && matcher->selected_trans_info != NULL 
+       && column == DOWNLOADED_CLIST_ACTION)
+    {
+      /*We just screwed up the action of a previous selection because of the way GTK automatically
+	calls unselect row.  Let's fix it*/
+      matcher->selected_trans_info->action=matcher->selected_trans_info->previous_action;
+      downloaded_transaction_refresh_gui(matcher,matcher->selected_trans_info);
+      row_number = gtk_clist_find_row_from_data(matcher->downloaded_clist,
+						matcher->selected_trans_info);
+      gtk_clist_unselect_row (clist,
+			      row_number,
+			      DOWNLOADED_CLIST_AMOUNT);/* Anything but DOWNLOADED_CLIST_ACTION */
+    }
+
   matcher->selected_trans_info = gtk_clist_get_row_data(clist, row);
   
+
   gtk_clist_clear(matcher->match_clist);
   list_element = g_list_first(matcher->selected_trans_info->match_list);
   while(list_element!=NULL)
@@ -231,8 +317,23 @@ downloaded_transaction_select_cb (GtkCList *clist,
       
       list_element=g_list_next(list_element);
     }
-  gtk_widget_set_sensitive((GtkWidget *)matcher->action_add_button,TRUE);
-  gtk_widget_set_sensitive((GtkWidget *)matcher->action_ignore_button,TRUE);
+
+  if(column == DOWNLOADED_CLIST_ACTION)
+    {
+      matcher->selected_trans_info->previous_action=matcher->selected_trans_info->action;
+      valid_action_found=FALSE;
+      while(valid_action_found==FALSE)
+	{
+	  matcher->selected_trans_info->action=get_next_action(matcher->selected_trans_info->action);
+	  valid_action_found=TRUE;
+	  if(matcher->selected_trans_info->selected_match_info==NULL&&
+	     (matcher->selected_trans_info->action==REPLACE||matcher->selected_trans_info->action==RECONCILE))
+	    {
+	      valid_action_found=FALSE;
+	    }
+	}
+    }
+
   downloaded_transaction_refresh_gui(matcher,matcher->selected_trans_info);
 }
 
@@ -243,15 +344,20 @@ downloaded_transaction_unselect_cb(GtkCList *clist,
 				   GdkEventButton *event,
 				   gpointer user_data) {
   struct _transmatcherdialog * matcher = user_data;
-  DEBUG("Begin");
-  matcher->selected_trans_info = NULL;
-  gtk_clist_clear(matcher->match_clist);
+  DEBUG("row: %d%s%d",row,", column: ",column);
 
-  gtk_widget_set_sensitive((GtkWidget *)matcher->action_reconcile_button,FALSE);
-  gtk_widget_set_sensitive((GtkWidget *)matcher->action_replace_button,FALSE);
-  gtk_widget_set_sensitive((GtkWidget *)matcher->action_add_button,FALSE);
-  gtk_widget_set_sensitive((GtkWidget *)matcher->action_ignore_button,FALSE);
-
+  if(  matcher->selected_trans_info == gtk_clist_get_row_data(clist, row) && column == DOWNLOADED_CLIST_ACTION)
+    {
+      gtk_clist_select_row (clist,
+			    row,
+			    column);
+    }
+  else
+    {
+      matcher->selected_trans_info = NULL;
+      gtk_clist_clear(matcher->match_clist);
+      
+    }
 }
 
 static void
@@ -261,11 +367,9 @@ match_transaction_select_cb (GtkCList *clist,
 			     GdkEventButton *event,
 			     gpointer user_data) {
   struct _transmatcherdialog * matcher = user_data;
-  DEBUG("Begin...");
+  DEBUG("row: %d%s%d",row,", column: ",column);
   matcher->selected_trans_info->selected_match_info=gtk_clist_get_row_data(clist,
 									   row);
-  gtk_widget_set_sensitive((GtkWidget *)matcher->action_reconcile_button,TRUE);
-  gtk_widget_set_sensitive((GtkWidget *)matcher->action_replace_button,TRUE);
 }
 
 static void
@@ -275,12 +379,10 @@ match_transaction_unselect_cb(GtkCList *clist,
 			      GdkEventButton *event,
 			      gpointer user_data) {
   struct _transmatcherdialog * matcher = user_data;
-  DEBUG("Begin...");
+  DEBUG("row: %d%s%d",row,", column: ",column);
   matcher->selected_trans_info->selected_match_info=NULL;
 
   /*You can't replace or reconcile a nonexistent transaction*/
-  gtk_widget_set_sensitive((GtkWidget *)matcher->action_reconcile_button,FALSE);
-  gtk_widget_set_sensitive((GtkWidget *)matcher->action_replace_button,FALSE);
   if(matcher->selected_trans_info->action==RECONCILE||
      matcher->selected_trans_info->action==REPLACE)
     {
@@ -288,51 +390,6 @@ match_transaction_unselect_cb(GtkCList *clist,
       downloaded_transaction_refresh_gui(matcher,matcher->selected_trans_info);
     }
 }
-
-static void 
-on_action_toggled (GtkToggleButton *togglebutton,
-		   gpointer user_data)
-{
-  struct _transmatcherdialog * matcher = user_data;
-  gboolean refresh = TRUE;
-  DEBUG("Begin");
-  if(matcher->selected_trans_info != NULL)
-    {
-      if(gtk_toggle_button_get_active(matcher->action_reconcile_button)==TRUE
-	 && matcher->selected_trans_info->selected_match_info!=NULL)
-	{
-	  DEBUG("Change to RECONCILE");
-	  matcher->selected_trans_info->action=RECONCILE;
-	}
-      else if(gtk_toggle_button_get_active(matcher->action_add_button)==TRUE)
-	{
-	  DEBUG("Change to ADD");
-	  matcher->selected_trans_info->action=ADD;
-	}
-      else if(gtk_toggle_button_get_active(matcher->action_replace_button)==TRUE
-	      && matcher->selected_trans_info->selected_match_info!=NULL)
-	{
-	  DEBUG("Change to REPLACE");
-	  matcher->selected_trans_info->action=REPLACE;
-	}
-      else if(gtk_toggle_button_get_active(matcher->action_ignore_button)==TRUE)
-	{
-	  DEBUG("Change to IGNORE");
-	  matcher->selected_trans_info->action=IGNORE;
-	}
-      else
-	{
-	  PERR("Unable to find out which button was toggled!");
-	  refresh=FALSE;
-	}
-
-      if(refresh==TRUE)
-	{
-	  downloaded_transaction_refresh_gui(matcher,matcher->selected_trans_info);
-	}
-    }
-}
-
 
 static void 
 on_matcher_apply_clicked (GtkButton *button,
@@ -445,7 +502,7 @@ downloaded_trans_row_destroy_cb(gpointer data)
   /*If the transaction is still open, it must be destroyed*/
   if(xaccTransIsOpen(transaction_info->trans)==TRUE)
     {
-      xaccTransRollbackEdit(transaction_info->trans);
+      xaccTransDestroy(transaction_info->trans);
       xaccTransCommitEdit(transaction_info->trans);
     }
   g_free(transaction_info);
@@ -485,10 +542,6 @@ init_matcher_gui(struct _transmatcherdialog * matcher)
 				GTK_SIGNAL_FUNC(match_transaction_unselect_cb),
 				matcher);
   glade_xml_signal_connect_data(xml,
-				"on_action_toggled", 
-				GTK_SIGNAL_FUNC(on_action_toggled),
-				matcher);
-  glade_xml_signal_connect_data(xml,
 				"on_matcher_ok_clicked", 
 				GTK_SIGNAL_FUNC(on_matcher_ok_clicked),
 				matcher);
@@ -505,10 +558,6 @@ init_matcher_gui(struct _transmatcherdialog * matcher)
   matcher->transaction_matcher = glade_xml_get_widget (xml, "transaction_matcher");
   matcher->downloaded_clist = (GtkCList *)glade_xml_get_widget (xml, "downloaded_clist");
   matcher->match_clist =  (GtkCList *)glade_xml_get_widget (xml, "match_clist");
-  matcher->action_reconcile_button = (GtkToggleButton *)glade_xml_get_widget (xml, "action_reconcile_button");
-  matcher->action_add_button = (GtkToggleButton *)glade_xml_get_widget (xml, "action_add_button");
-  matcher->action_replace_button = (GtkToggleButton *)glade_xml_get_widget (xml, "action_replace_button");
-  matcher->action_ignore_button = (GtkToggleButton *)glade_xml_get_widget (xml, "action_ignore_button");
 
   gtk_widget_show(matcher->transaction_matcher);  
   matcher->initialised=TRUE;  
@@ -536,78 +585,78 @@ static void split_find_match( gpointer data, gpointer user_data)
     Ignore the split if the transaction has an online ID, unless overriden in prefs */
   if(xaccTransIsOpen(xaccSplitGetParent(split))==FALSE&&
      (SHOW_TRANSACTIONS_WITH_UNIQUE_ID==TRUE||gnc_import_get_trans_online_id(xaccSplitGetParent(split))!=NULL))
-  {
-    match_info = g_new0(struct _matchinfo,1);
+    {
+      match_info = g_new0(struct _matchinfo,1);
     
-    match_info->split=split;
-    match_info->trans = xaccSplitGetParent(split);
+      match_info->split=split;
+      match_info->trans = xaccSplitGetParent(split);
     
-    downloaded_split_amount=gnc_numeric_to_double(xaccSplitGetAmount(transaction_info->first_split));
-    DEBUG(" downloaded_split_amount=%f", downloaded_split_amount);
-    match_split_amount=gnc_numeric_to_double(xaccSplitGetAmount(split));
-    DEBUG(" match_split_amount=%f", match_split_amount);
-    temp_time_t = xaccTransGetDate(xaccSplitGetParent(split));
-    match_split_date = *localtime(&temp_time_t);
-    temp_time_t = xaccTransGetDate(transaction_info->trans);
-    downloaded_split_date = *localtime(&temp_time_t);
+      downloaded_split_amount=gnc_numeric_to_double(xaccSplitGetAmount(transaction_info->first_split));
+      DEBUG(" downloaded_split_amount=%f", downloaded_split_amount);
+      match_split_amount=gnc_numeric_to_double(xaccSplitGetAmount(split));
+      DEBUG(" match_split_amount=%f", match_split_amount);
+      temp_time_t = xaccTransGetDate(xaccSplitGetParent(split));
+      match_split_date = *localtime(&temp_time_t);
+      temp_time_t = xaccTransGetDate(transaction_info->trans);
+      downloaded_split_date = *localtime(&temp_time_t);
     
-    /* Matching heuristics */
-    match_info->probability=0;
+      /* Matching heuristics */
+      match_info->probability=0;
     
-    /* Amount heuristics */
-    if(gnc_numeric_equal(xaccSplitGetAmount(transaction_info->first_split),
-			 xaccSplitGetAmount(split)))
-      {
-	match_info->probability=match_info->probability+2;
-	DEBUG("heuristics:  probability + 2 (amount)");
-      }
-    else if(fabs(downloaded_split_amount-match_split_amount)<=MATCH_ATM_FEE_TRESHOLD)
-      {
-	/* ATM fees are sometimes added directly in the transaction.  So you withdraw 100$ and get charged 101,25$
-	   in the same transaction */ 
-	match_info->probability=match_info->probability+1;
-	DEBUG("heuristics:  probability + 1 (amount)");
-      }
+      /* Amount heuristics */
+      if(gnc_numeric_equal(xaccSplitGetAmount(transaction_info->first_split),
+			   xaccSplitGetAmount(split)))
+	{
+	  match_info->probability=match_info->probability+2;
+	  DEBUG("heuristics:  probability + 2 (amount)");
+	}
+      else if(fabs(downloaded_split_amount-match_split_amount)<=MATCH_ATM_FEE_TRESHOLD)
+	{
+	  /* ATM fees are sometimes added directly in the transaction.  So you withdraw 100$ and get charged 101,25$
+	     in the same transaction */ 
+	  match_info->probability=match_info->probability+1;
+	  DEBUG("heuristics:  probability + 1 (amount)");
+	}
     
-    /* Date heuristics */
-    if(downloaded_split_date.tm_year==match_split_date.tm_year)
-      {
-	if(downloaded_split_date.tm_yday==match_split_date.tm_yday)
-	  {
-	    match_info->probability=match_info->probability+2;
-	    DEBUG("heuristics:  probability + 2 (date)");
-	  }
-	else if(downloaded_split_date.tm_yday>match_split_date.tm_yday&&
-		downloaded_split_date.tm_yday<=match_split_date.tm_yday+MATCH_DATE_TRESHOLD)
-	  {
-	    match_info->probability=match_info->probability+1;
-	    DEBUG("heuristics:  probability + 1 (date)");
-	  }
-	/*Note: The above won't won't work as expected for transactions close to the end of the year.
-	  So we have this special case to handle it:*/
-	else if(downloaded_split_date.tm_year==match_split_date.tm_year+1&&
-		match_split_date.tm_yday+MATCH_DATE_TRESHOLD>=365&&
-		downloaded_split_date.tm_yday<=match_split_date.tm_yday+MATCH_DATE_TRESHOLD-365)
-	  {
-	    match_info->probability=match_info->probability+1;
-	    DEBUG("heuristics:  probability + 1 (date special case)");
-	  }
-      }
+      /* Date heuristics */
+      if(downloaded_split_date.tm_year==match_split_date.tm_year)
+	{
+	  if(downloaded_split_date.tm_yday==match_split_date.tm_yday)
+	    {
+	      match_info->probability=match_info->probability+2;
+	      DEBUG("heuristics:  probability + 2 (date)");
+	    }
+	  else if(downloaded_split_date.tm_yday>match_split_date.tm_yday&&
+		  downloaded_split_date.tm_yday<=match_split_date.tm_yday+MATCH_DATE_TRESHOLD)
+	    {
+	      match_info->probability=match_info->probability+1;
+	      DEBUG("heuristics:  probability + 1 (date)");
+	    }
+	  /*Note: The above won't won't work as expected for transactions close to the end of the year.
+	    So we have this special case to handle it:*/
+	  else if(downloaded_split_date.tm_year==match_split_date.tm_year+1&&
+		  match_split_date.tm_yday+MATCH_DATE_TRESHOLD>=365&&
+		  downloaded_split_date.tm_yday<=match_split_date.tm_yday+MATCH_DATE_TRESHOLD-365)
+	    {
+	      match_info->probability=match_info->probability+1;
+	      DEBUG("heuristics:  probability + 1 (date special case)");
+	    }
+	}
     
-    /* Memo and Description heuristics */  
-    if((strcmp(xaccSplitGetMemo(transaction_info->first_split),
-	       xaccSplitGetMemo(match_info->split))
-	==0)
-       ||
-       (strcmp(xaccTransGetDescription(transaction_info->trans),
-	       xaccTransGetDescription(xaccSplitGetParent(match_info->split)))
-	==0))
-      {	
-	/*An exact match gives a +2, but someone should write something more fuzzy, 
-	  worth a +1*/
-	match_info->probability=match_info->probability+2;
-	DEBUG("heuristics:  probability + 2 (description or memo)");
-      }
+      /* Memo and Description heuristics */  
+      if((strcmp(xaccSplitGetMemo(transaction_info->first_split),
+		 xaccSplitGetMemo(match_info->split))
+	  ==0)
+	 ||
+	 (strcmp(xaccTransGetDescription(transaction_info->trans),
+		 xaccTransGetDescription(xaccSplitGetParent(match_info->split)))
+	  ==0))
+	{	
+	  /*An exact match gives a +2, but someone should write something more fuzzy, 
+	    worth a +1*/
+	  match_info->probability=match_info->probability+2;
+	  DEBUG("heuristics:  probability + 2 (description or memo)");
+	}
     
       if(gnc_import_get_trans_online_id(xaccSplitGetParent(split))!=NULL)
 	{
@@ -615,27 +664,27 @@ static void split_find_match( gpointer data, gpointer user_data)
 	  match_info->probability=0-match_info->probability;
 	}
   
-    sprintf(match_info->probability_text, 
-	    "%d",
-	    match_info->probability);
-    match_info->clist_text[MATCHER_CLIST_CONFIDENCE]=match_info->probability_text;/*Probability*/
+      sprintf(match_info->probability_text, 
+	      "%d",
+	      match_info->probability);
+      match_info->clist_text[MATCHER_CLIST_CONFIDENCE]=match_info->probability_text;/*Probability*/
     
-    printDateSecs(match_info->date_text,
-		  xaccTransGetDate(xaccSplitGetParent(split)));
-    match_info->clist_text[MATCHER_CLIST_DATE]=match_info->date_text; /*Date*/
-    sprintf(match_info->amount_text, 
-	    "%.2f",
-	    match_split_amount);
+      printDateSecs(match_info->date_text,
+		    xaccTransGetDate(xaccSplitGetParent(split)));
+      match_info->clist_text[MATCHER_CLIST_DATE]=match_info->date_text; /*Date*/
+      sprintf(match_info->amount_text, 
+	      "%.2f",
+	      match_split_amount);
     
-    match_info->clist_text[MATCHER_CLIST_AMOUNT]=match_info->amount_text;/*Amount*/
+      match_info->clist_text[MATCHER_CLIST_AMOUNT]=match_info->amount_text;/*Amount*/
     
-    match_info->clist_text[MATCHER_CLIST_DESCRIPTION]=xaccTransGetDescription(xaccSplitGetParent(split));/*Description*/
+      match_info->clist_text[MATCHER_CLIST_DESCRIPTION]=xaccTransGetDescription(xaccSplitGetParent(split));/*Description*/
     
-    match_info->clist_text[MATCHER_CLIST_MEMO]=xaccSplitGetMemo(split);/*Split memo*/
+      match_info->clist_text[MATCHER_CLIST_MEMO]=xaccSplitGetMemo(split);/*Split memo*/
     
-    transaction_info->match_list = g_list_append(transaction_info->match_list,
-					       match_info);
-  }
+      transaction_info->match_list = g_list_append(transaction_info->match_list,
+						   match_info);
+    }
 }/* end split_find_match */
 
 /* compare_probability() is used by g_list_sort to sort by probability */
@@ -757,7 +806,7 @@ void gnc_import_add_trans(Transaction *trans)
       }
       
       row_number = gtk_clist_append(matcher->downloaded_clist,
-				   (char **)(transaction_info->clist_text));
+				    (char **)(transaction_info->clist_text));
       gtk_clist_set_row_data_full(matcher->downloaded_clist,
 				  row_number,
 				  transaction_info,
