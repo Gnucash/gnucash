@@ -167,9 +167,10 @@
     indicates that a transaction has been reconciled,
     '<LITERAL>n</LITERAL>' indicates that it has not, and
     '<LITERAL>c</LITERAL>' indicates that it has been cleared, but not
-    reconciled.  When a transaction has cleared, you can change its status
-    to '<LITERAL>c</LITERAL>' by clicking on its <GUILABEL>R</GUILABEL>
-    field.
+    reconciled.  You can toggle
+    the reconciliation status between '<LITERAL>n</LITERAL>' and '<LITERAL>c</LITERAL>' by clicking in the
+    (<GUILABEL>R</GUILABEL>) field; you can set it to '<LITERAL>y</LITERAL>' by using the <LINK
+    LINKEND=XACC-RECNWIN>Reconcile Window</LINK>. 
 
     </PARA>
 <PARA>At the bottom of the account window, there are two running

@@ -66,6 +66,72 @@
 
     </PARA>
 </SECT1>
+  <SECT1>
+  <TITLE>How to set up a foreign-currency account</TITLE>
+  <PARA>All of the above may sound straightforward, but you may get
+    stumped when you first try to represent some foreign money.  Let's
+    demonstrate how you'd go about setting up an account to represent,
+    say, French Francs.</PARA>
+
+  <PARA>Let's say you have an account that holds cash in US dollars,
+    and it has $1,000 in it.  You want to buy about $100 worth of
+    Francs, and naturally you'd like to represent those Francs in
+    their own account.  Here's what you need to do:</PARA>
+  <ITEMIZEDLIST>
+    <LISTITEM>
+      <PARA>
+	Create a new account (name it "Francs") of type Cash, with a
+	currency of FRF (that's the ISO code for French Francs; see
+	<LINK LINKEND="XACC-ISOCURR">ISO Currency Codes</LINK>, below).
+	</PARA>
+    </LISTITEM>
+    <LISTITEM>
+      <PARA>
+      Create <emphasis>another</emphasis> account (name it "Trading"), of type
+      Currency, with a currency of USD, and a <emphasis>security</emphasis> of
+      FRF.  This account will represent <emphasis>trades</emphasis> between the
+      two currencies, or to be more precise, purchases of Francs
+      with dollars.
+	</PARA>
+    </LISTITEM>
+    <LISTITEM>
+      <PARA>
+      Now open the "Trading" account, and enter a transaction that
+      transfers from your cash account.  Put 555 in the "Debit"
+      column, and 0.18 in the Price column.  (GnuCash will offer to
+      calculate the Value for you; let it do so.) You've now bought
+      555 Francs for $0.18 apiece.
+	</PARA>
+    </LISTITEM>
+    <LISTITEM>
+      <PARA>
+      Transfer the 555 Francs that are now in your trading account
+      into the "Francs" account (by putting "555" in the "Debit"
+      column).  Note that you could not have transferred anything
+      directly from cash to Francs (try it); those two accounts do not
+      have a currency in common.
+	</PARA>
+    </LISTITEM>
+<LISTITEM>
+      <PARA>
+	Note that your "Trading" account now is a bit screwed up --
+	the last transaction, transferring 555 francs to your "Francs"
+	account, didn't record the price of those francs.  You can
+	change the price from 1 to 0.18 to make the balance in the
+	"Trading" account come out to zero.
+	</para>
+      </listitem>
+  </ITEMIZEDLIST>
+<PARA>
+    Here's what it all looks like once you're done:
+    <MEDIAOBJECT>
+    <IMAGEOBJECT>
+    <IMAGEDATA FILEREF="image/foreign-currency.png">
+    </IMAGEOBJECT>
+    </MEDIAOBJECT>
+
+    </para>
+</SECT1>
 <SECT1 ID="XACC-ISOCURR">
 <TITLE> ISO Currency Codes</TITLE>
 <PARA>More currencies than you thought possible...

@@ -1,13 +1,14 @@
 <ARTICLE ID="XACC-RECNWIN">
 
 <ARTHEADER>
-<TITLE>Reconciliation Window</TITLE>
+<TITLE>Reconcile Window</TITLE>
 </ARTHEADER>
-
-<PARA>The Reconciliation window is used to reconcile a GnuCash account with
+<PARA>The Reconcile window is used to reconcile a GnuCash account with
     a statement that a bank or other institution has sent you.
 
     </PARA>
+
+
 <PARA>For example, when you write a check for something, you should enter
     the transaction into GnuCash.  The reconciliation
     (<GUILABEL>R</GUILABEL>) field of the transaction will initially
@@ -17,20 +18,12 @@
     (cleared, but not reconciled).
 
     </PARA>
-<PARA>At the end of the month, you receive your bank statement,
-    perhaps including canceled checks. At that point,
-    you should "reconcile" the account, that is, match your personal
-    records with the documentation provided by the bank.
-
-    </PARA>
 
     <ITEMIZEDLIST>
 <LISTITEM>
-<PARA>Open the reconcile window by selecting
-    <GUIMENUITEM>Reconcile...</GUIMENUITEM> from the
-    <GUIMENU>Accounts</GUIMENU> menu of the account's
-    <LINK LINKEND="xacc-regwin">Register window</LINK>.  GnuCash will prompt
-    you for some information from the statement:
+
+<PARA>Choose <GUIMENU>Reconcile</GUIMENU> from the Accounts menu, and GnuCash will prompt you to
+      enter the ending balance from the bank statement.
 
     </PARA>
     
@@ -39,6 +32,7 @@
     <IMAGEDATA FILEREF="image/recninfo.png">
     </IMAGEOBJECT>
     </MEDIAOBJECT>
+
 </LISTITEM>
 <LISTITEM>
 <PARA>Enter the date of the end of the period that the statement covers,
@@ -54,13 +48,14 @@
      </IMAGEOBJECT>
      </MEDIAOBJECT>
 
-     <PARA>The <GUILABEL>Funds In</GUILABEL> and <GUILABEL>Funds Out</GUILABEL>
-     groups lists all the unreconciled transactions.  The
-     '<GUILABEL>?</GUILABEL>' columns show whether the transactions have 
+     <PARA>The <GUILABEL>Debits</GUILABEL> and <GUILABEL>Credits</GUILABEL>
+     groups list all the unreconciled transactions.  The
+     '<GUILABEL>R</GUILABEL>' columns show whether the transactions have 
      been cleared or reconciled.
 
      </PARA>
 </LISTITEM>
+
 <LISTITEM>
 <PARA>Now, examine each item on the bank statement, and look for the
      matching item in the Reconcile window.   
@@ -86,7 +81,7 @@
 
      </PARA>
 <PARA>If the amounts agree, click on the item in the Reconcile window. The
-     '<GUILABEL>?</GUILABEL>' column will change to '<LITERAL>y</LITERAL>'
+     '<GUILABEL>R</GUILABEL>' column will change to '<LITERAL>y</LITERAL>'
      (reconciled) from '<LITERAL>n</LITERAL>' or '<LITERAL>c</LITERAL>'.
 
      </PARA>
@@ -95,30 +90,28 @@
         amounts in GnuCash, and marking off transactions in GnuCash
         as they are reconciled.
       
-
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>At the bottom of the window is a difference field, which
-      should be $0.00 when you are done reconciling. If it isn't,
-      then you have either missed transactions, or some amounts may
-      be incorrect in GnuCash. (Or, probably rather less likely,
+<PARA>At the bottom of the "Reconcile" window is a "Difference" field, which
+      should show $0.00 when you are done reconciling. If it shows some other value,
+      then either you have missed transactions, or some amounts may
+      be incorrect in GnuCash. (Or, less likely,
       the bank may have made an error.)
-      
-      
-
       </PARA>
+
 </LISTITEM>
 <LISTITEM>
-<PARA>When you have completed marking off all the items on the
-      bank statement, and when the difference is $0.00, you should press the
+<PARA>When you have marked off all the items on the
+      bank statement, and when the difference is $0.00, press the
       <GUIBUTTON>Finish</GUIBUTTON> button on the tool bar or select
       <GUIMENUITEM>Finish</GUIMENUITEM> from the
-      <GUIMENU>Reconcile</GUIMENU> menu.  The Reconcile window will close.
+      <GUIMENU>Reconcile</GUIMENU> menu (the latter method will work
+      even if your "Difference" isn't $0.00).
+					The Reconcile window will close.
       In the <LINK LINKEND="xacc-regwin">Register window</LINK>, the
       <GUILABEL>R</GUILABEL> field of the reconciled transactions will
       change to '<LITERAL>y</LITERAL>'.
-      
       
     </PARA>
 </LISTITEM>

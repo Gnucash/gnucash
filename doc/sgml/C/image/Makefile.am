@@ -13,6 +13,7 @@ image_DATA = \
   expand.png \
   foliowin-single.png \
   foliowin.png \
+  foreign-currency.png \
   logo-NetBSD-banner.png \
   logo-debian.png \
   logo-linux.png \
