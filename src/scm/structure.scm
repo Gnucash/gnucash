@@ -53,21 +53,21 @@
   (set-item! 'gensymid (list (gensym)))  ;;; Attach a unique identifier
   actions)
 
-(if testing?
-    (begin
-      (display "Testing structur.scm - define-mystruct, build-mystruct-instance")
-      (newline)
-      (let* ((ms (define-mystruct '(f1 f2 f3)))
-	     (mi (build-mystruct-instance ms)))
-	(mi 'put 'f1 122)
-	(mi 'put 'f3 "hello")
-	(display "Empty list entry:") (display (mi 'get 'f2)) (newline)
-	(display "and two that aren't (f1 f3):")
-	(display (list (mi 'get 'f1) (mi 'get 'f3))) (newline)
-	(display "Whole thang:")
-	(display (mi 'whole 'thang)) (newline)
-	(display "Overlay 'f3 with 42, add to 'f1 value")
-	(mi 'put 'f3 42)
-	(display (number->string (+ (mi 'get 'f1) (mi 'get 'f3)))) (newline))))
+;(if testing?
+;    (begin
+;      (display "Testing structur.scm - define-mystruct, build-mystruct-instance")
+;      (newline)
+;      (let* ((ms (define-mystruct '(f1 f2 f3)))
+;	     (mi (build-mystruct-instance ms)))
+;	(mi 'put 'f1 122)
+;	(mi 'put 'f3 "hello")
+;	(display "Empty list entry:") (display (mi 'get 'f2)) (newline)
+;	(display "and two that aren't (f1 f3):")
+;	(display (list (mi 'get 'f1) (mi 'get 'f3))) (newline)
+;	(display "Whole thang:")
+;	(display (mi 'whole 'thang)) (newline)
+;	(display "Overlay 'f3 with 42, add to 'f1 value")
+;	(mi 'put 'f3 42)
+;	(display (number->string (+ (mi 'get 'f1) (mi 'get 'f3)))) (newline))))
 
 

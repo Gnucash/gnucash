@@ -465,6 +465,12 @@ my $old = 'gnucash.pristine';
 my $new = 'gnucash.mywork';
 my $gnc_home = '/home/me/gnucash';
 
+Right before you make your patch, make sure *both* your working and
+your pristine directories are in sync with cvs. Run 'cvs -z3 update -dP'
+in both directories to ensure that is the case. Updating from cvs in
+your working directory may cause conficts in a file. You must resolve
+those conficts before making a patch.
+
 Now run the script. Note that this script requires the programs
 'makepatch', 'gzip', 'diff', and 'uuencode' (and, of course, 'perl')
 to run. 

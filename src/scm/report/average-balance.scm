@@ -138,22 +138,17 @@
    (apply string-append (map (lambda (val)
 			       (string-append "\t" (tostring val)))
 			     (cdr lst)))
-   "\n"
-   )
-  )
+   "\n"))
 
 (define (text-table-header lst)
   (string-append
    "# " 
-   (text-table-row lst)
-  ))
+   (text-table-row lst)))
 
 (define (text-table hdrlst llst)
   (string-append
    (text-table-header hdrlst)
-   (apply string-append (map text-table-row llst))
-   )
-  )
+   (apply string-append (map text-table-row llst))))
 
 ; Quick and dirty until there is REAL plot support
 (define (data-to-gpfile hdrlst llst fn plotcmd)
@@ -161,14 +156,13 @@
        (display  
 	   (text-table hdrlst llst)
 	 oport)
-	(close-output-port oport)
-	)
-)
+	(close-output-port oport)))
 
 ;; Returns sum of all vector elements after the first
 (define (vector-sum v)
   (let ((sum 0)) 
-    (gnc:for-loop (lambda(i) (set! sum (+ sum (car (vector-ref v i))))) 
+    (gnc:for-loop 
+     (lambda(i) (set! sum (+ sum (car (vector-ref v i))))) 
 		  1 (vector-length v) 1)
        sum))
 
@@ -184,7 +178,6 @@
 	(balmax -10E9)
 	(gains 0)
 	(losses 0))
-
     (define (procvals)
       (let ((curbal (vector-sum (car (cdr (av 'x 0))))))
 	   (set! balmin (min balmin curbal))
@@ -194,8 +187,7 @@
 	 (let ((curbal (vector-sum (car (cdr (av 'x 0))))))
 	 (set! avgaccum (+ avgaccum
 			   (* curbal
-			      (gnc:timepair-delta beg end)))))
-	 )
+			      (gnc:timepair-delta beg end))))))
 
 
     (define (calc-in-interval d tl)
@@ -224,23 +216,17 @@
 
 		      (procvals) ; catch all cases
 		      (set! prevdate cd)
-		      (calc-in-interval d (cdr tl))
-		      )
+		      (calc-in-interval d (cdr tl)))
 
 		     (else  ; Past interval, nothing to do?
 		      (accbal prevdate ed)
 		      (procvals)
-		      tl
-		      )
-		     )))
+		      tl))))
 
 	    (else ; Out of data !
 	     (accbal prevdate (dl:end d))
 	     (procvals)
-	     tl
-	     )
-	    )
-      )
+	     tl)))
        
        ;; Actual routine
        (cond ((null? dl) '()) ;; End of recursion
@@ -263,27 +249,22 @@
 		    (/ avgaccum 
 		       (gnc:timepair-delta bd ed))
 		   balmin balmax (- gains losses) gains losses)
-
-		   (reduce-split-list (cdr dl) rest pt av)))
-		)
-	     )
-       )))
+		   (reduce-split-list (cdr dl) rest pt av))))))))
 
 ;; Pull a scheme list of splits from a C array
 (define (gnc:convert-split-list slist)
-      (let ((numsplit 0)
-	     (schsl '()))
-       (while  
-	(let ((asplit (gnc:ith-split slist numsplit)))
-	  (cond 
-	   ((pointer-token-null? asplit ) #f)
-	   (else 
-	    (set! schsl (append! schsl (list asplit)) )
-	    (set! numsplit (+ numsplit 1))
-	    #t))) ())
-	   schsl
-	   )
-)
+  (let 
+      ((numsplit 0)
+       (schsl '()))
+    (while  
+     (let ((asplit (gnc:ith-split slist numsplit)))
+       (cond 
+	((pointer-token-null? asplit ) #f)
+	(else 
+	 (set! schsl (append! schsl (list asplit)) )
+	 (set! numsplit (+ numsplit 1))
+	 #t))) ())
+    schsl))
 
 ;; Pull a scheme list of accounts (including subaccounts) from group grp
 (define (gnc:group-get-account-list grp)
@@ -292,7 +273,6 @@
 	 (let ((numacct 0)
 	       (acctar (gnc:get-accounts grp))
 	       (schal '()))
-	   
 	   (while  
 	    (let ((anact (gnc:account-nth-account acctar numacct)))
 	      (cond 
@@ -301,50 +281,44 @@
 		(set! schal (append! schal (list anact)) )
 		(set! numacct (+ numacct 1))
 		#t))) ())
-	      schal
-	      )))
-      )
+	   schal))))
 
 (define (accumvects x y)
   (cond 
    ((null? x) '())
    ((number? (car x)) 
     (cons  (+ (car x) (car y)) (accumvects (cdr x) (cdr y))))
-   (else (cons "x" (accumvects (cdr x) (cdr y)))))
-  )
+   (else (cons "x" (accumvects (cdr x) (cdr y))))))
 
 ;; Add x to list lst if it is not already in there
 (define (addunique lst x)
   (cond 
-   ((null? lst)  (list x)) ; all checked add it
+   ((null? lst)  (list x))		; all checked add it
    (else (cond 
-	  ((equal? x (car lst)) lst) ; found, quit search and don't add again
+	  ((equal? x (car lst)) lst)	; found, quit search and don't add again
 	  (else (cons (car lst) (addunique (cdr lst) x))) ; keep searching
 	  ))))
 
 ;; Calculate averages of each column
 (define (get-averages  indata)
   (let* ((avglst '()))
-
     (map (lambda (x) (set! avglst (append avglst (list 0.0)))) (car indata))
-
     (map (lambda (x) 
-
 	   (set! avglst (accumvects x avglst)))
 	 indata)
     (map (lambda (x) 
-		(cond ((number? x) (/ x (length indata)))
-		      (else "")))
-		avglst)
-    ))
+	   (cond ((number? x) (/ x (length indata)))
+		 (else "")))
+	 avglst)))
 
 ;; Turn a C array of accounts into a scheme list of account names
 (define (gnc:acctnames-from-list acctlist)
   (let ((anlist '()))
     (map (lambda(an) 
 	   (set! anlist (append! anlist 
-		   (list (gnc:account-get-name an))))) acctlist)
-       anlist))
+				 (list (gnc:account-get-name an))))) 
+	 acctlist)
+    anlist))
 
 (define acctcurrency "USD")
 (define acctname "")

@@ -16,10 +16,10 @@
 (gnc:depend "date-utilities.scm")
 
 ;; time values
-;(define gnc:budget-day 1)
-;(define gnc:budget-week 2)
-;(define gnc:budget-month 3)
-;(define gnc:budget-year 4)
+(define gnc:budget-day 1)
+(define gnc:budget-week 2)
+(define gnc:budget-month 3)
+(define gnc:budget-year 4)
 
 ;; budget types
 (define gnc:budget-recurring 1) ; regular, recurring budget expenses
