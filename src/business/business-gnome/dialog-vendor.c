@@ -107,6 +107,7 @@ static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
   addr = gncVendorGetAddr (vendor);
 
   gnc_suspend_gui_refresh ();
+  gncVendorBeginEdit (vendor);
 
   gncVendorSetID (vendor, gtk_editable_get_chars
 		    (GTK_EDITABLE (vw->id_entry), 0, -1));
@@ -221,6 +222,7 @@ gnc_vendor_window_destroy_cb (GtkWidget *widget, gpointer data)
   gnc_suspend_gui_refresh ();
 
   if (vw->dialog_type == NEW_VENDOR && vendor != NULL) {
+    gncVendorBeginEdit (vendor);
     gncVendorDestroy (vendor);
     vw->vendor_guid = *xaccGUIDNULL ();
   }

@@ -15,6 +15,7 @@
 #include "GNCIdP.h"
 #include "QueryObject.h"
 #include "gnc-event-p.h"
+#include "gnc-be-utils.h"
 
 #include "gncBusiness.h"
 #include "gncBillTermP.h"
@@ -35,6 +36,10 @@ struct _gncBillTerm {
   GncBillTerm *	parent;		/* if non-null, we are an immutable child */
   GncBillTerm *	child;		/* if non-null, we have not changed */
   gboolean	invisible;
+
+  int		editlevel;
+  gboolean	do_free;
+
   gboolean	dirty;
 };
 
@@ -42,6 +47,8 @@ struct _book_info {
   GncBookInfo	bi;
   GList *	terms;		/* visible terms */
 };
+
+static short	module = MOD_BUSINESS;
 
 #define _GNC_MOD_NAME	GNC_BILLTERM_MODULE_NAME
 
@@ -67,6 +74,7 @@ G_INLINE_FUNC void
 mark_term (GncBillTerm *term)
 {
   term->dirty = TRUE;
+  gncBusinessSetDirtyFlag (term->book, _GNC_MOD_NAME, TRUE);
 
   gnc_engine_generate_event (&term->guid, GNC_EVENT_MODIFY);
 }
@@ -89,6 +97,13 @@ GncBillTerm * gncBillTermCreate (GNCBook *book)
 }
 
 void gncBillTermDestroy (GncBillTerm *term)
+{
+  if (!term) return;
+  term->do_free = TRUE;
+  gncBillTermCommitEdit (term);
+}
+
+static void gncBillTermFree (GncBillTerm *term)
 {
   if (!term) return;
 
@@ -215,16 +230,27 @@ void gncBillTermChanged (GncBillTerm *term)
   term->child = NULL;
 }
 
-void gncBillTermCommitEdit (GncBillTerm *term)
+void gncBillTermBeginEdit (GncBillTerm *term)
 {
-  if (!term) return;
+  GNC_BEGIN_EDIT (term, _GNC_MOD_NAME);
+}
 
-  /* XXX Commit to DB */
-  if (term->dirty)
-    gncBusinessSetDirtyFlag (term->book, _GNC_MOD_NAME, TRUE);
+static void gncBillTermOnError (GncBillTerm *term, GNCBackendError errcode)
+{
+  PERR("BillTerm Backend Failure: %d", errcode);
+}
+
+static void gncBillTermOnDone (GncBillTerm *term)
+{
   term->dirty = FALSE;
 }
 
+void gncBillTermCommitEdit (GncBillTerm *term)
+{
+  GNC_COMMIT_EDIT_PART1 (term);
+  GNC_COMMIT_EDIT_PART2 (term, _GNC_MOD_NAME, gncBillTermOnError,
+			 gncBillTermOnDone, gncBillTermFree);
+}
 
 /* Get Functions */
 GncBillTerm * gncBillTermLookup (GNCBook *book, const GUID *guid)

@@ -138,6 +138,8 @@ GncInvoice * gncEntryGetBill (GncEntry *entry);
 
 GncEntry * gncEntryLookup (GNCBook *book, const GUID *guid);
 
+gboolean gncEntryIsOpen (GncEntry *entry);
+void gncEntryBeginEdit (GncEntry *entry);
 void gncEntryCommitEdit (GncEntry *entry);
 int gncEntryCompare (GncEntry *a, GncEntry *b);
 

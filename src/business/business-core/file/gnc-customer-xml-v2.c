@@ -198,6 +198,7 @@ customer_guid_handler (xmlNodePtr node, gpointer cust_pdata)
     if (cust) {
       gncCustomerDestroy (pdata->customer);
       pdata->customer = cust;
+      gncCustomerBeginEdit (cust);
     } else {
       gncCustomerSetGUID(pdata->customer, guid);
     }
@@ -235,7 +236,9 @@ customer_terms_handler (xmlNodePtr node, gpointer cust_pdata)
     term = gncBillTermLookup (pdata->book, guid);
     if (!term) {
       term = gncBillTermCreate (pdata->book);
+      gncBillTermBeginEdit (term);
       gncBillTermSetGUID (term, guid);
+      gncBillTermCommitEdit (term);
     } else
       gncBillTermDecRef (term);
 
@@ -346,7 +349,9 @@ customer_taxtable_handler (xmlNodePtr node, gpointer cust_pdata)
     taxtable = gncTaxTableLookup (pdata->book, guid);
     if (!taxtable) {
       taxtable = gncTaxTableCreate (pdata->book);
+      gncTaxTableBeginEdit (taxtable);
       gncTaxTableSetGUID (taxtable, guid);
+      gncTaxTableCommitEdit (taxtable);
     } else
       gncTaxTableDecRef (taxtable);
 
@@ -388,12 +393,14 @@ dom_tree_to_customer (xmlNodePtr node, GNCBook *book)
 
     cust_pdata.customer = gncCustomerCreate(book);
     cust_pdata.book = book;
+    gncCustomerBeginEdit (cust_pdata.customer);
 
     successful = dom_tree_generic_parse (node, customer_handlers_v2,
                                          &cust_pdata);
-    gncCustomerCommitEdit (cust_pdata.customer);
 
-    if (!successful)
+    if (successful)
+      gncCustomerCommitEdit (cust_pdata.customer);
+    else
     {
         PERR ("failed to parse customer tree");
         gncCustomerDestroy (cust_pdata.customer);

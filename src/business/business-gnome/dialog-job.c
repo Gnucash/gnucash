@@ -72,6 +72,8 @@ jw_get_job (JobWindow *jw)
 static void gnc_ui_to_job (JobWindow *jw, GncJob *job)
 {
   gnc_suspend_gui_refresh ();
+  gncJobBeginEdit (job);
+
   gncJobSetID (job, gtk_editable_get_chars (GTK_EDITABLE (jw->id_entry),
 					    0, -1));
   gncJobSetName (job, gtk_editable_get_chars (GTK_EDITABLE (jw->name_entry),
@@ -178,6 +180,7 @@ gnc_job_window_destroy_cb (GtkWidget *widget, gpointer data)
   gnc_suspend_gui_refresh ();
 
   if (jw->dialog_type == NEW_JOB && job != NULL) {
+    gncJobBeginEdit (job);
     gncJobDestroy (job);
     jw->job_guid = *xaccGUIDNULL ();
   }

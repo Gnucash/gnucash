@@ -42,6 +42,7 @@ void gncCustomerSetTaxTable (GncCustomer *customer, GncTaxTable *table);
 void gncCustomerAddJob (GncCustomer *customer, GncJob *job);
 void gncCustomerRemoveJob (GncCustomer *customer, GncJob *job);
 
+void gncCustomerBeginEdit (GncCustomer *customer);
 void gncCustomerCommitEdit (GncCustomer *customer);
 
 /* Get Functions */

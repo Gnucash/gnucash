@@ -111,11 +111,13 @@ new_tax_table_ok_cb (GtkWidget *widget, gpointer data)
   /* Ok, it's all valid, now either change to add this thing */
   if (ntt->new_table) {
     GncTaxTable *table = gncTaxTableCreate (ttw->book);
+    gncTaxTableBeginEdit (table);
     gncTaxTableSetName (table, name);
     /* Reset the current table */
     ttw->current_table = table;
     ntt->created_table = table;
-  }
+  } else
+    gncTaxTableBeginEdit (ttw->current_table);
 
   /* Create/edit the entry */
   {
@@ -517,8 +519,8 @@ tax_table_delete_table_cb (GtkButton *button, TaxTableWindow *ttw)
 				  gncTaxTableGetName (ttw->current_table))) {
     /* Ok, let's remove it */
     gnc_suspend_gui_refresh ();
+    gncTaxTableBeginEdit (ttw->current_table);
     gncTaxTableDestroy (ttw->current_table);
-    //    gncTaxTableCommitEdit (ttw->current_table);
     ttw->current_table = NULL;
     gnc_resume_gui_refresh ();
   }
@@ -560,6 +562,7 @@ tax_table_delete_entry_cb (GtkButton *button, TaxTableWindow *ttw)
 			  _("Are you sure you want to delete this entry?"))) {
     /* Ok, let's remove it */
     gnc_suspend_gui_refresh ();
+    gncTaxTableBeginEdit (ttw->current_table);
     gncTaxTableRemoveEntry (ttw->current_table, ttw->current_entry);
     gncTaxTableEntryDestroy (ttw->current_entry);
     gncTaxTableChanged (ttw->current_table);

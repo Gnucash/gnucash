@@ -38,6 +38,7 @@ void gncVendorSetTaxTable (GncVendor *vendor, GncTaxTable *table);
 void gncVendorAddJob (GncVendor *vendor, GncJob *job);
 void gncVendorRemoveJob (GncVendor *vendor, GncJob *job);
 
+void gncVendorBeginEdit (GncVendor *vendor);
 void gncVendorCommitEdit (GncVendor *vendor);
 
 /* Get Functions */

@@ -185,6 +185,7 @@ vendor_guid_handler (xmlNodePtr node, gpointer vendor_pdata)
     if (vendor) {
       gncVendorDestroy (pdata->vendor);
       pdata->vendor = vendor;
+      gncVendorBeginEdit (vendor);
     } else {
       gncVendorSetGUID(pdata->vendor, guid);
     }
@@ -222,7 +223,9 @@ vendor_terms_handler (xmlNodePtr node, gpointer vendor_pdata)
     term = gncBillTermLookup (pdata->book, guid);
     if (!term) {
       term = gncBillTermCreate (pdata->book);
+      gncBillTermBeginEdit (term);
       gncBillTermSetGUID (term, guid);
+      gncBillTermCommitEdit (term);
     } else
       gncBillTermDecRef (term);
 
@@ -293,7 +296,9 @@ vendor_taxtable_handler (xmlNodePtr node, gpointer vendor_pdata)
     taxtable = gncTaxTableLookup (pdata->book, guid);
     if (!taxtable) {
       taxtable = gncTaxTableCreate (pdata->book);
+      gncTaxTableBeginEdit (taxtable);
       gncTaxTableSetGUID (taxtable, guid);
+      gncTaxTableCommitEdit (taxtable);
     } else
       gncTaxTableDecRef (taxtable);
 
@@ -332,12 +337,14 @@ dom_tree_to_vendor (xmlNodePtr node, GNCBook *book)
 
     vendor_pdata.vendor = gncVendorCreate(book);
     vendor_pdata.book = book;
+    gncVendorBeginEdit (vendor_pdata.vendor);
 
     successful = dom_tree_generic_parse (node, vendor_handlers_v2,
                                          &vendor_pdata);
-    gncVendorCommitEdit (vendor_pdata.vendor);
 
-    if (!successful)
+    if (successful)
+      gncVendorCommitEdit (vendor_pdata.vendor);
+    else
     {
         PERR ("failed to parse vendor tree");
         gncVendorDestroy (vendor_pdata.vendor);

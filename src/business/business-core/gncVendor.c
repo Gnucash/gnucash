@@ -16,6 +16,7 @@
 #include "GNCIdP.h"
 #include "QueryObject.h"
 #include "gnc-event-p.h"
+#include "gnc-be-utils.h"
 
 #include "gncBusiness.h"
 #include "gncVendor.h"
@@ -36,8 +37,14 @@ struct _gncVendor {
   GList *	jobs;
   GncTaxTable*	taxtable;
   gboolean	taxtable_override;
+
+  int		editlevel;
+  gboolean	do_free;
+
   gboolean	dirty;
 };
+
+static short	module = MOD_BUSINESS;
 
 #define _GNC_MOD_NAME	GNC_VENDOR_MODULE_NAME
 
@@ -52,6 +59,7 @@ G_INLINE_FUNC void
 mark_vendor (GncVendor *vendor)
 {
   vendor->dirty = TRUE;
+  gncBusinessSetDirtyFlag (vendor->book, _GNC_MOD_NAME, TRUE);
 
   gnc_engine_generate_event (&vendor->guid, GNC_EVENT_MODIFY);
 }
@@ -83,6 +91,13 @@ GncVendor *gncVendorCreate (GNCBook *book)
 }
 
 void gncVendorDestroy (GncVendor *vendor)
+{
+  if (!vendor) return;
+  vendor->do_free = TRUE;
+  gncVendorCommitEdit (vendor);
+}
+
+static void gncVendorFree (GncVendor *vendor)
 {
   if (!vendor) return;
 
@@ -307,15 +322,27 @@ void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
   gnc_engine_generate_event (&vendor->guid, GNC_EVENT_MODIFY);
 }
 
-void gncVendorCommitEdit (GncVendor *vendor)
+void gncVendorBeginEdit (GncVendor *vendor)
 {
-  if (!vendor) return;
+  GNC_BEGIN_EDIT (vendor, _GNC_MOD_NAME);
+}
 
-  /* XXX COMMIT TO DATABASE */
-  if (gncVendorIsDirty (vendor))
-    gncBusinessSetDirtyFlag (vendor->book, _GNC_MOD_NAME, TRUE);
+static void gncVendorOnError (GncVendor *vendor, GNCBackendError errcode)
+{
+  PERR("Vendor Backend Failure: %d", errcode);
+}
+
+static void gncVendorOnDone (GncVendor *vendor)
+{
   vendor->dirty = FALSE;
   gncAddressClearDirty (vendor->addr);
+}
+
+void gncVendorCommitEdit (GncVendor *vendor)
+{
+  GNC_COMMIT_EDIT_PART1 (vendor);
+  GNC_COMMIT_EDIT_PART2 (vendor, _GNC_MOD_NAME, gncVendorOnError,
+			 gncVendorOnDone, gncVendorFree);
 }
 
 /* Other functions */

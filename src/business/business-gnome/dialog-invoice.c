@@ -202,7 +202,9 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
     return;
 
   gnc_suspend_gui_refresh ();
-  
+
+  gncInvoiceBeginEdit (invoice);
+
   if (iw->active_check)
     gncInvoiceSetActive (invoice, gtk_toggle_button_get_active
 			 (GTK_TOGGLE_BUTTON (iw->active_check)));
@@ -333,6 +335,7 @@ gnc_invoice_window_destroy_cb (GtkWidget *widget, gpointer data)
   gnc_suspend_gui_refresh ();
 
   if (iw->dialog_type == NEW_INVOICE && invoice != NULL) {
+    gncInvoiceBeginEdit (invoice);
     gncInvoiceDestroy (invoice);
     iw->invoice_guid = *xaccGUIDNULL ();
   }
@@ -549,10 +552,12 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
    * the verify_ok earlier, so we know it's ok.
    */
   gnc_suspend_gui_refresh ();
+  gncInvoiceBeginEdit (invoice);
   gnc_invoice_window_ok_save (iw);
 
   /* ... post it; post date is set to now ... */
   gncInvoicePostToAccount (invoice, acc, &postdate, &ddue, memo);
+  gncInvoiceCommitEdit (invoice);
   gnc_resume_gui_refresh ();
 
   if (memo)

@@ -17,6 +17,7 @@
 #include "gncObject.h"
 #include "QueryObject.h"
 #include "gnc-event-p.h"
+#include "gnc-be-utils.h"
 
 #include "gncBusiness.h"
 #include "gncEmployee.h"
@@ -36,7 +37,12 @@ struct _gncEmployee {
   gnc_numeric	rate;
   gboolean	active;
   gboolean	dirty;
+
+  int		editlevel;
+  gboolean	do_free;
 };
+
+static short	module = MOD_BUSINESS;
 
 #define _GNC_MOD_NAME	GNC_EMPLOYEE_MODULE_NAME
 
@@ -51,6 +57,7 @@ G_INLINE_FUNC void
 mark_employee (GncEmployee *employee)
 {
   employee->dirty = TRUE;
+  gncBusinessSetDirtyFlag (employee->book, _GNC_MOD_NAME, TRUE);
 
   gnc_engine_generate_event (&employee->guid, GNC_EVENT_MODIFY);
 }
@@ -85,6 +92,13 @@ GncEmployee *gncEmployeeCreate (GNCBook *book)
 }
 
 void gncEmployeeDestroy (GncEmployee *employee)
+{
+  if (!employee) return;
+  employee->do_free = TRUE;
+  gncEmployeeCommitEdit(employee);
+}
+
+static void gncEmployeeFree (GncEmployee *employee)
 {
   if (!employee) return;
 
@@ -267,15 +281,27 @@ gboolean gncEmployeeIsDirty (GncEmployee *employee)
   return (employee->dirty || gncAddressIsDirty (employee->addr));
 }
 
-void gncEmployeeCommitEdit (GncEmployee *employee)
+void gncEmployeeBeginEdit (GncEmployee *employee)
 {
-  if (!employee) return;
+  GNC_BEGIN_EDIT (employee, _GNC_MOD_NAME);
+}
 
-  /* XXX COMMIT TO DATABASE */
-  if (gncEmployeeIsDirty (employee))
-    gncBusinessSetDirtyFlag (employee->book, _GNC_MOD_NAME, TRUE);
+static void gncEmployeeOnError (GncEmployee *employee, GNCBackendError errcode)
+{
+  PERR("Employee Backend Failure: %d", errcode);
+}
+
+static void gncEmployeeOnDone (GncEmployee *employee)
+{
   employee->dirty = FALSE;
   gncAddressClearDirty (employee->addr);
+}
+
+void gncEmployeeCommitEdit (GncEmployee *employee)
+{
+  GNC_COMMIT_EDIT_PART1 (employee);
+  GNC_COMMIT_EDIT_PART2 (employee, _GNC_MOD_NAME, gncEmployeeOnError,
+			 gncEmployeeOnDone, gncEmployeeFree);
 }
 
 /* Other functions */

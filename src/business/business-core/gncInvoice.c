@@ -19,6 +19,7 @@
 #include "QueryObject.h"
 #include "gnc-event-p.h"
 #include "gnc-lot.h"
+#include "gnc-be-utils.h"
 
 #include "gncBusiness.h"
 #include "gncEntry.h"
@@ -51,8 +52,13 @@ struct _gncInvoice {
 
   gboolean 	active;
 
+  int		editlevel;
+  gboolean	do_free;
+
   gboolean	dirty;
 };
+
+static short	module = MOD_BUSINESS;
 
 #define _GNC_MOD_NAME	GNC_INVOICE_MODULE_NAME
 
@@ -79,6 +85,7 @@ static void
 mark_invoice (GncInvoice *invoice)
 {
   invoice->dirty = TRUE;
+  gncBusinessSetDirtyFlag (invoice->book, _GNC_MOD_NAME, TRUE);
 
   gnc_engine_generate_event (&invoice->guid, GNC_EVENT_MODIFY);
 }
@@ -110,6 +117,13 @@ GncInvoice *gncInvoiceCreate (GNCBook *book)
 }
 
 void gncInvoiceDestroy (GncInvoice *invoice)
+{
+  if (!invoice) return;
+  invoice->do_free = TRUE;
+  gncInvoiceCommitEdit (invoice);
+}
+
+static void gncInvoiceFree (GncInvoice *invoice)
 {
   if (!invoice) return;
 
@@ -655,6 +669,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     Account *this_acc;
 
     /* Stabilize the TaxTable in this entry */
+    gncEntryBeginEdit (entry);
     if (reverse)
       gncEntrySetInvTaxTable
 	(entry, gncTaxTableReturnChild (gncEntryGetInvTaxTable (entry), TRUE));
@@ -666,6 +681,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
       if (gncEntryGetBillable (entry))
 	gncEntrySetInvPrice (entry, gncEntryGetBillPrice (entry));
     }
+    gncEntryCommitEdit (entry);
 
     /* Obtain the Entry's Value and TaxValues */
     gncEntryGetValue (entry, reverse, &value, NULL, &tax, &taxes);
@@ -831,14 +847,24 @@ GncInvoice * gncInvoiceLookup (GNCBook *book, const GUID *guid)
 
 void gncInvoiceBeginEdit (GncInvoice *invoice)
 {
-  if (!invoice) return;
+  GNC_BEGIN_EDIT (invoice, _GNC_MOD_NAME);
 }
+
+static void gncInvoiceOnError (GncInvoice *invoice, GNCBackendError errcode)
+{
+  PERR("Invoice Backend Failure: %d", errcode);
+}
+
+static void gncInvoiceOnDone (GncInvoice *invoice)
+{
+  invoice->dirty = FALSE;
+}
+
 void gncInvoiceCommitEdit (GncInvoice *invoice)
 {
-  if (!invoice) return;
-  if (invoice->dirty)
-    gncBusinessSetDirtyFlag (invoice->book, _GNC_MOD_NAME, TRUE);
-  invoice->dirty = FALSE;
+  GNC_COMMIT_EDIT_PART1 (invoice);
+  GNC_COMMIT_EDIT_PART2 (invoice, _GNC_MOD_NAME, gncInvoiceOnError,
+			 gncInvoiceOnDone, gncInvoiceFree);
 }
 
 int gncInvoiceCompare (GncInvoice *a, GncInvoice *b)

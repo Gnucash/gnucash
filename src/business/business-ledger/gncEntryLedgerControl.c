@@ -57,6 +57,9 @@ gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
 
   gnc_suspend_gui_refresh ();
 
+  if (!gncEntryIsOpen (entry))
+    gncEntryBeginEdit (entry);
+
   if (entry == blank_entry) {
     Timespec ts;
     ts.tv_sec = time(NULL);

@@ -153,6 +153,7 @@ order_guid_handler (xmlNodePtr node, gpointer order_pdata)
     if (order) {
       gncOrderDestroy (pdata->order);
       pdata->order = order;
+      gncOrderBeginEdit (order);
     } else {
       gncOrderSetGUID(pdata->order, guid);
     }
@@ -250,12 +251,14 @@ dom_tree_to_order (xmlNodePtr node, GNCBook *book)
 
     order_pdata.order = gncOrderCreate(book);
     order_pdata.book = book;
+    gncOrderBeginEdit (order_pdata.order);
 
     successful = dom_tree_generic_parse (node, order_handlers_v2,
                                          &order_pdata);
-    gncOrderCommitEdit (order_pdata.order);
 
-    if (!successful)
+    if (successful)
+      gncOrderCommitEdit (order_pdata.order);
+    else
     {
         PERR ("failed to parse order tree");
         gncOrderDestroy (order_pdata.order);

@@ -59,6 +59,7 @@ void gncTaxTableAddEntry (GncTaxTable *table, GncTaxTableEntry *entry);
 void gncTaxTableRemoveEntry (GncTaxTable *table, GncTaxTableEntry *entry);
 
 void gncTaxTableChanged (GncTaxTable *table);
+void gncTaxTableBeginEdit (GncTaxTable *table);
 void gncTaxTableCommitEdit (GncTaxTable *table);
 
 /* Get Functions */

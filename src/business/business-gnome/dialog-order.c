@@ -97,6 +97,7 @@ static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
     return;
 
   gnc_suspend_gui_refresh ();
+  gncOrderBeginEdit (order);
   
   gncOrderSetID (order, gtk_editable_get_chars
 		 (GTK_EDITABLE (ow->id_entry), 0, -1));
@@ -291,6 +292,7 @@ gnc_order_window_destroy_cb (GtkWidget *widget, gpointer data)
   gnc_suspend_gui_refresh ();
 
   if (ow->dialog_type == NEW_ORDER && order != NULL) {
+    gncOrderBeginEdit (order);
     gncOrderDestroy (order);
     ow->order_guid = *xaccGUIDNULL ();
   }

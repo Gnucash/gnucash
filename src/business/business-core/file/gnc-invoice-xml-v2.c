@@ -201,6 +201,7 @@ invoice_guid_handler (xmlNodePtr node, gpointer invoice_pdata)
     if (invoice) {
       gncInvoiceDestroy (pdata->invoice);
       pdata->invoice = invoice;
+      gncInvoiceBeginEdit (invoice);
     } else {
       gncInvoiceSetGUID(pdata->invoice, guid);
     }
@@ -290,7 +291,9 @@ invoice_terms_handler (xmlNodePtr node, gpointer invoice_pdata)
     term = gncBillTermLookup (pdata->book, guid);
     if (!term) {
       term = gncBillTermCreate (pdata->book);
+      gncBillTermBeginEdit (term);
       gncBillTermSetGUID (term, guid);
+      gncBillTermCommitEdit (term);
     } else
       gncBillTermDecRef (term);
 
@@ -405,12 +408,14 @@ dom_tree_to_invoice (xmlNodePtr node, GNCBook *book)
 
     invoice_pdata.invoice = gncInvoiceCreate(book);
     invoice_pdata.book = book;
+    gncInvoiceBeginEdit (invoice_pdata.invoice);
 
     successful = dom_tree_generic_parse (node, invoice_handlers_v2,
                                          &invoice_pdata);
-    gncInvoiceCommitEdit (invoice_pdata.invoice);
 
-    if (!successful)
+    if (successful)
+      gncInvoiceCommitEdit (invoice_pdata.invoice);
+    else
     {
         PERR ("failed to parse invoice tree");
         gncInvoiceDestroy (invoice_pdata.invoice);

@@ -279,7 +279,9 @@ set_parent_child (xmlNodePtr node, struct billterm_pdata *pdata,
   term = gncBillTermLookup (pdata->book, guid);
   if (!term) {
     term = gncBillTermCreate (pdata->book);
+    gncBillTermBeginEdit (term);
     gncBillTermSetGUID (term, guid);
+    gncBillTermCommitEdit (term);
   }
   g_free (guid);
   g_return_val_if_fail (term, FALSE);
@@ -312,6 +314,7 @@ billterm_guid_handler (xmlNodePtr node, gpointer billterm_pdata)
     if (term) {
       gncBillTermDestroy (pdata->term);
       pdata->term = term;
+      gncBillTermBeginEdit (term);
     } else {
       gncBillTermSetGUID(pdata->term, guid);
     }
@@ -417,12 +420,14 @@ dom_tree_to_billterm (xmlNodePtr node, GNCBook *book)
   
   billterm_pdata.term = gncBillTermCreate (book);
   billterm_pdata.book = book;
+  gncBillTermBeginEdit (billterm_pdata.term);
 
   successful = dom_tree_generic_parse (node, billterm_handlers_v2,
 				       &billterm_pdata);
-  gncBillTermCommitEdit (billterm_pdata.term);
 
-  if (!successful) {
+  if (successful)
+    gncBillTermCommitEdit (billterm_pdata.term);
+  else {
     PERR ("failed to parse billing term tree");
     gncBillTermDestroy (billterm_pdata.term);
     billterm_pdata.term = NULL;

@@ -279,10 +279,12 @@ new_billterm_ok_cb (GtkWidget *widget, gpointer data)
   /* Ok, it's all valid, now either change or add this thing */
   if (nbt->this_term == NULL) {
     nbt->this_term = gncBillTermCreate (btw->book);
+    gncBillTermBeginEdit (nbt->this_term);
     gncBillTermSetName (nbt->this_term, name);
     /* Reset the current term */
     btw->current_term = nbt->this_term;
-  }
+  } else
+    gncBillTermBeginEdit (btw->current_term);
 
   /* Fill in the rest of the term */
   if (ui_to_billterm (nbt))
@@ -615,8 +617,8 @@ billterms_delete_term_cb (GtkButton *button, BillTermsWindow *btw)
 				  gncBillTermGetName (btw->current_term))) {
     /* Ok, let's remove it */
     gnc_suspend_gui_refresh ();
+    gncBillTermBeginEdit (btw->current_term);
     gncBillTermDestroy (btw->current_term);
-    //    gncBillTermCommitEdit (btw->current_term);
     btw->current_term = NULL;
     gnc_resume_gui_refresh ();
   }

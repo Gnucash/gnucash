@@ -89,6 +89,8 @@ static void gnc_ui_to_employee (EmployeeWindow *ew, GncEmployee *employee)
 
   gnc_suspend_gui_refresh ();
 
+  gncEmployeeBeginEdit (employee);
+
   gncEmployeeSetID (employee, gtk_editable_get_chars
 		    (GTK_EDITABLE (ew->id_entry), 0, -1));
   gncEmployeeSetUsername (employee, gtk_editable_get_chars
@@ -230,6 +232,7 @@ gnc_employee_window_destroy_cb (GtkWidget *widget, gpointer data)
   gnc_suspend_gui_refresh ();
 
   if (ew->dialog_type == NEW_EMPLOYEE && employee != NULL) {
+    gncEmployeeBeginEdit (employee);
     gncEmployeeDestroy (employee);
     ew->employee_guid = *xaccGUIDNULL ();
   }

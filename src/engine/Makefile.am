@@ -66,6 +66,7 @@ gncinclude_HEADERS = \
   engine-helpers.h \
   glib-helpers.h \
   gnc-associate-account.h \
+  gnc-be-utils.h \
   gnc-book.h \
   gnc-commodity.h \
   gnc-engine-util.h \

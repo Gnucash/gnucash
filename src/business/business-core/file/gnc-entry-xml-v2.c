@@ -298,7 +298,9 @@ set_taxtable (xmlNodePtr node, struct entry_pdata *pdata,
     taxtable = gncTaxTableLookup (pdata->book, guid);
     if (!taxtable) {
       taxtable = gncTaxTableCreate (pdata->book);
+      gncTaxTableBeginEdit (taxtable);
       gncTaxTableSetGUID (taxtable, guid);
+      gncTaxTableCommitEdit (taxtable);
     } else
       gncTaxTableDecRef (taxtable);
 
@@ -320,6 +322,7 @@ entry_guid_handler (xmlNodePtr node, gpointer entry_pdata)
     if (entry) {
       gncEntryDestroy (pdata->entry);
       pdata->entry = entry;
+      gncEntryBeginEdit (entry);
     } else {
       gncEntrySetGUID(pdata->entry, guid);
     }
@@ -536,8 +539,11 @@ entry_order_handler (xmlNodePtr node, gpointer entry_pdata)
     order = gncOrderLookup (pdata->book, guid);
     if (!order) {
       order = gncOrderCreate (pdata->book);
+      gncOrderBeginEdit (order);
       gncOrderSetGUID (order, guid);
+      gncOrderCommitEdit (order);
     }
+    gncOrderBeginEdit (order);
     gncOrderAddEntry (order, pdata->entry);
     gncOrderCommitEdit (order);
 
@@ -557,8 +563,11 @@ entry_invoice_handler (xmlNodePtr node, gpointer entry_pdata)
     invoice = gncInvoiceLookup (pdata->book, guid);
     if (!invoice) {
       invoice = gncInvoiceCreate (pdata->book);
+      gncInvoiceBeginEdit (invoice);
       gncInvoiceSetGUID (invoice, guid);
+      gncInvoiceCommitEdit (invoice);
     }
+    gncInvoiceBeginEdit (invoice);
     gncInvoiceAddEntry (invoice, pdata->entry);
     gncInvoiceCommitEdit (invoice);
 
@@ -578,8 +587,11 @@ entry_bill_handler (xmlNodePtr node, gpointer entry_pdata)
     invoice = gncInvoiceLookup (pdata->book, guid);
     if (!invoice) {
       invoice = gncInvoiceCreate (pdata->book);
+      gncInvoiceBeginEdit (invoice);
       gncInvoiceSetGUID (invoice, guid);
+      gncInvoiceCommitEdit (invoice);
     }
+    gncInvoiceBeginEdit (invoice);
     gncBillAddEntry (invoice, pdata->entry);
     gncInvoiceCommitEdit (invoice);
 
@@ -667,6 +679,7 @@ dom_tree_to_entry (xmlNodePtr node, GNCBook *book)
     entry_pdata.entry = gncEntryCreate(book);
     entry_pdata.book = book;
     entry_pdata.acc = NULL;
+    gncEntryBeginEdit (entry_pdata.entry);
 
     successful = dom_tree_generic_parse (node, entry_handlers_v2,
                                          &entry_pdata);
@@ -676,9 +689,10 @@ dom_tree_to_entry (xmlNodePtr node, GNCBook *book)
       else
 	gncEntrySetInvAccount (entry_pdata.entry, entry_pdata.acc);
     }
-    gncEntryCommitEdit (entry_pdata.entry);
 
-    if (!successful)
+    if (successful)
+      gncEntryCommitEdit (entry_pdata.entry);
+    else
     {
         PERR ("failed to parse entry tree");
         gncEntryDestroy (entry_pdata.entry);

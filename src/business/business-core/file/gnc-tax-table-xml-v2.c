@@ -234,7 +234,9 @@ set_parent_child (xmlNodePtr node, struct taxtable_pdata *pdata,
   table = gncTaxTableLookup (pdata->book, guid);
   if (!table) {
     table = gncTaxTableCreate (pdata->book);
+    gncTaxTableBeginEdit (table);
     gncTaxTableSetGUID (table, guid);
+    gncTaxTableCommitEdit (table);
   }
   g_free (guid);
   g_return_val_if_fail (table, FALSE);
@@ -256,6 +258,7 @@ taxtable_guid_handler (xmlNodePtr node, gpointer taxtable_pdata)
     if (table) {
       gncTaxTableDestroy (pdata->table);
       pdata->table = table;
+      gncTaxTableBeginEdit (table);
     } else {
       gncTaxTableSetGUID(pdata->table, guid);
     }
@@ -362,12 +365,15 @@ dom_tree_to_taxtable (xmlNodePtr node, GNCBook *book)
   
   taxtable_pdata.table = gncTaxTableCreate (book);
   taxtable_pdata.book = book;
+  gncTaxTableBeginEdit (taxtable_pdata.table);
 
   successful = dom_tree_generic_parse (node, taxtable_handlers_v2,
 				       &taxtable_pdata);
-  gncTaxTableCommitEdit (taxtable_pdata.table);
 
-  if (!successful) {
+  if (successful)
+    gncTaxTableCommitEdit (taxtable_pdata.table);
+  else
+  {
     PERR ("failed to parse tax table tree");
     gncTaxTableDestroy (taxtable_pdata.table);
     taxtable_pdata.table = NULL;

@@ -15,6 +15,7 @@
 #include "GNCIdP.h"
 #include "QueryObject.h"
 #include "gnc-event-p.h"
+#include "gnc-be-utils.h"
 
 #include "gncBusiness.h"
 #include "gncEntry.h"
@@ -56,6 +57,8 @@ struct _gncEntry {
   GncInvoice *	invoice;
   GncInvoice *	bill;
 
+  int		editlevel;
+  gboolean	do_free;
   gboolean	dirty;
 
   /* CACHED VALUES */
@@ -80,6 +83,8 @@ struct _gncEntry {
   gnc_numeric	b_tax_value_rounded;
   Timespec	b_taxtable_modtime;
 };
+
+static short	module = MOD_BUSINESS;
 
 /* You must edit the functions in this block in tandem.  KEEP THEM IN
    SYNC! */
@@ -136,6 +141,7 @@ G_INLINE_FUNC void
 mark_entry (GncEntry *entry)
 {
   entry->dirty = TRUE;
+  gncBusinessSetDirtyFlag (entry->book, _GNC_MOD_NAME, TRUE);
 
   gnc_engine_generate_event (&entry->guid, GNC_EVENT_MODIFY);
 }
@@ -178,6 +184,13 @@ GncEntry *gncEntryCreate (GNCBook *book)
 }
 
 void gncEntryDestroy (GncEntry *entry)
+{
+  if (!entry) return;
+  entry->do_free = TRUE;
+  gncEntryCommitEdit(entry);
+}
+
+static void gncEntryFree (GncEntry *entry)
 {
   if (!entry) return;
 
@@ -984,13 +997,32 @@ gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry, gboolean is_inv)
   return (is_inv ? entry->i_disc_value_rounded : gnc_numeric_zero());
 }
 
+gboolean gncEntryIsOpen (GncEntry *entry)
+{
+  if (!entry) return FALSE;
+  return (entry->editlevel > 0);
+}
+
+void gncEntryBeginEdit (GncEntry *entry)
+{
+  GNC_BEGIN_EDIT (entry, _GNC_MOD_NAME);
+}
+
+static void gncEntryOnError (GncEntry *entry, GNCBackendError errcode)
+{
+  PERR("Entry Backend Failure: %d", errcode);
+}
+
+static void gncEntryOnDone (GncEntry *entry)
+{
+  entry->dirty = FALSE;
+}
+
 void gncEntryCommitEdit (GncEntry *entry)
 {
-  if (!entry) return;
-  /* XXX */
-  if (entry->dirty)
-    gncBusinessSetDirtyFlag (entry->book, _GNC_MOD_NAME, TRUE);
-  entry->dirty = FALSE;
+  GNC_COMMIT_EDIT_PART1 (entry);
+  GNC_COMMIT_EDIT_PART2 (entry, _GNC_MOD_NAME, gncEntryOnError,
+			 gncEntryOnDone, gncEntryFree);
 }
 
 int gncEntryCompare (GncEntry *a, GncEntry *b)

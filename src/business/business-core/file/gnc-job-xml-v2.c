@@ -141,6 +141,7 @@ job_guid_handler (xmlNodePtr node, gpointer job_pdata)
     if (job) {
       gncJobDestroy (pdata->job);
       pdata->job = job;
+      gncJobBeginEdit (job);
     } else {
       gncJobSetGUID(pdata->job, guid);
     }
@@ -212,12 +213,14 @@ dom_tree_to_job (xmlNodePtr node, GNCBook *book)
 
     job_pdata.job = gncJobCreate(book);
     job_pdata.book = book;
+    gncJobBeginEdit (job_pdata.job);
 
     successful = dom_tree_generic_parse (node, job_handlers_v2,
                                          &job_pdata);
-    gncJobCommitEdit (job_pdata.job);
 
-    if (!successful)
+    if (successful)
+      gncJobCommitEdit (job_pdata.job);
+    else
     {
         PERR ("failed to parse job tree");
         gncJobDestroy (job_pdata.job);

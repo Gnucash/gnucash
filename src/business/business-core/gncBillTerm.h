@@ -41,6 +41,7 @@ void gncBillTermIncRef (GncBillTerm *term);
 void gncBillTermDecRef (GncBillTerm *term);
 
 void gncBillTermChanged (GncBillTerm *term);
+void gncBillTermBeginEdit (GncBillTerm *term);
 void gncBillTermCommitEdit (GncBillTerm *term);
 
 /* Get Functions */

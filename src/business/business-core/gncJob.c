@@ -17,6 +17,7 @@
 #include "GNCIdP.h"
 #include "QueryObject.h"
 #include "gnc-event-p.h"
+#include "gnc-be-utils.h"
 
 #include "gncBusiness.h"
 #include "gncJob.h"
@@ -30,8 +31,13 @@ struct _gncJob {
   char *	desc;
   GncOwner	owner;
   gboolean	active;
+
+  int		editlevel;
+  gboolean	do_free;
   gboolean	dirty;
 };
+
+static short	module = MOD_BUSINESS;
 
 #define _GNC_MOD_NAME	GNC_JOB_MODULE_NAME
 
@@ -46,6 +52,7 @@ G_INLINE_FUNC void
 mark_job (GncJob *job)
 {
   job->dirty = TRUE;
+  gncBusinessSetDirtyFlag (job->book, _GNC_MOD_NAME, TRUE);
 
   gnc_engine_generate_event (&job->guid, GNC_EVENT_MODIFY);
 }
@@ -76,6 +83,13 @@ GncJob *gncJobCreate (GNCBook *book)
 }
 
 void gncJobDestroy (GncJob *job)
+{
+  if (!job) return;
+  job->do_free = TRUE;
+  gncJobCommitEdit (job);
+}
+
+static void gncJobFree (GncJob *job)
 {
   if (!job) return;
 
@@ -184,14 +198,26 @@ void gncJobSetActive (GncJob *job, gboolean active)
   mark_job (job);
 }
 
+void gncJobBeginEdit (GncJob *job)
+{
+  GNC_BEGIN_EDIT (job, _GNC_MOD_NAME);
+}
+
+static void gncJobOnError (GncJob *job, GNCBackendError errcode)
+{
+  PERR("Job Backend Failure: %d", errcode);
+}
+
+static void gncJobOnDone (GncJob *job)
+{
+  job->dirty = FALSE;
+}
+
 void gncJobCommitEdit (GncJob *job)
 {
-  if (!job) return;
-
-  /* XXX: COMMIT TO DATABASE */
-  if (job->dirty)
-    gncBusinessSetDirtyFlag (job->book, _GNC_MOD_NAME, TRUE);
-  job->dirty = FALSE;
+  GNC_COMMIT_EDIT_PART1 (job);
+  GNC_COMMIT_EDIT_PART2 (job, _GNC_MOD_NAME, gncJobOnError,
+			 gncJobOnDone, gncJobFree);
 }
 
 /* Get Functions */

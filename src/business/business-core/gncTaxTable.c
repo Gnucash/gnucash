@@ -15,6 +15,7 @@
 #include "GNCIdP.h"
 #include "QueryObject.h"
 #include "gnc-event-p.h"
+#include "gnc-be-utils.h"
 
 #include "gncBusiness.h"
 #include "gncTaxTableP.h"
@@ -31,6 +32,9 @@ struct _gncTaxTable {
   GncTaxTable *	parent;		/* if non-null, we are an immutable child */
   GncTaxTable *	child;		/* if non-null, we have not changed */
   gboolean	invisible;
+
+  int		editlevel;
+  gboolean	do_free;
   gboolean	dirty;
 };
 
@@ -45,6 +49,8 @@ struct _book_info {
   GncBookInfo	bi;
   GList *	tables;		/* visible tables */
 };
+
+static short	module = MOD_BUSINESS;
 
 /* You must edit the functions in this block in tandem.  KEEP THEM IN
    SYNC! */
@@ -129,6 +135,7 @@ G_INLINE_FUNC void
 mark_table (GncTaxTable *table)
 {
   table->dirty = TRUE;
+  gncBusinessSetDirtyFlag (table->book, _GNC_MOD_NAME, TRUE);
 
   gnc_engine_generate_event (&table->guid, GNC_EVENT_MODIFY);
 }
@@ -156,6 +163,13 @@ GncTaxTable * gncTaxTableCreate (GNCBook *book)
 }
 
 void gncTaxTableDestroy (GncTaxTable *table)
+{
+  if (!table) return;
+  table->do_free = TRUE;
+  gncTaxTableCommitEdit (table);
+}
+
+static void gncTaxTableFree (GncTaxTable *table)
 {
   GList *list;
   if (!table) return;
@@ -309,13 +323,26 @@ void gncTaxTableChanged (GncTaxTable *table)
   table->child = NULL;
 }
 
+void gncTaxTableBeginEdit (GncTaxTable *table)
+{
+  GNC_BEGIN_EDIT (table, _GNC_MOD_NAME);
+}
+
+static void gncTaxTableOnError (GncTaxTable *table, GNCBackendError errcode)
+{
+  PERR("TaxTable Backend Failure: %d", errcode);
+}
+
+static void gncTaxTableOnDone (GncTaxTable *table)
+{
+  table->dirty = FALSE;
+}
+
 void gncTaxTableCommitEdit (GncTaxTable *table)
 {
-  if (!table) return;
-
-  if (table->dirty)
-    gncBusinessSetDirtyFlag (table->book, _GNC_MOD_NAME, TRUE);
-  table->dirty = FALSE;
+  GNC_COMMIT_EDIT_PART1 (table);
+  GNC_COMMIT_EDIT_PART2 (table, _GNC_MOD_NAME, gncTaxTableOnError,
+			 gncTaxTableOnDone, gncTaxTableFree);
 }
 
 

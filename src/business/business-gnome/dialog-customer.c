@@ -122,6 +122,8 @@ static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
 
   gnc_suspend_gui_refresh ();
 
+  gncCustomerBeginEdit (cust);
+
   gncCustomerSetID (cust, gtk_editable_get_chars
 		    (GTK_EDITABLE (cw->id_entry), 0, -1));
   gncCustomerSetName (cust, gtk_editable_get_chars
@@ -296,6 +298,7 @@ gnc_customer_window_destroy_cb (GtkWidget *widget, gpointer data)
   gnc_suspend_gui_refresh ();
 
   if (cw->dialog_type == NEW_CUSTOMER && customer != NULL) {
+    gncCustomerBeginEdit (customer);
     gncCustomerDestroy (customer);
     cw->customer_guid = *xaccGUIDNULL ();
   }

@@ -38,8 +38,11 @@ gnc_entry_ledger_clear_blank_entry (GncEntryLedger *ledger)
   if (!ledger) return;
 
   entry = gnc_entry_ledger_get_blank_entry (ledger);
-  if (entry)
+  if (entry) {
+    if (!gncEntryIsOpen (entry))
+      gncEntryBeginEdit (entry);
     gncEntryDestroy (entry);
+  }
 
   ledger->blank_entry_guid = *xaccGUIDNULL ();
   ledger->blank_entry_edited = FALSE;
@@ -642,6 +645,9 @@ gnc_entry_ledger_delete_current_entry (GncEntryLedger *ledger)
 
   /* Ok, let's delete this entry */
   gnc_suspend_gui_refresh ();
+  if (!gncEntryIsOpen (entry))
+    gncEntryBeginEdit (entry);
+
   {
     GncOrder *order;
     GncInvoice *invoice;
@@ -659,7 +665,6 @@ gnc_entry_ledger_delete_current_entry (GncEntryLedger *ledger)
       gncBillRemoveEntry (invoice, entry);
 
     gncEntryDestroy (entry);
-    /* XXX: Commit the deletion? */
   }
   gnc_resume_gui_refresh ();
 }

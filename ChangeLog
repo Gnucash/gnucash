@@ -1,3 +1,10 @@
+2002-11-03  Derek Atkins  <derek@ihtfp.com>
+	* engine/gnc-be-utils.h: implement macro helpers for begin/commit functions
+	* business/business-core/*.c: Implement BeginEdit()/CommitEdit() functions
+	  for all the business-accounting data objects.
+	* Use the begin/commit calls in the GUI and file-backend.
+	* mostly fixes bug #96855.
+
 2002-11-03  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/dialog-sxsincelast.c, src/gnome/window-main.c,

@@ -160,6 +160,7 @@ employee_guid_handler (xmlNodePtr node, gpointer employee_pdata)
     if (employee) {
       gncEmployeeDestroy (pdata->employee);
       pdata->employee = employee;
+      gncEmployeeBeginEdit (employee);
     } else {
       gncEmployeeSetGUID(pdata->employee, guid);
     }
@@ -279,12 +280,13 @@ dom_tree_to_employee (xmlNodePtr node, GNCBook *book)
 
     employee_pdata.employee = gncEmployeeCreate(book);
     employee_pdata.book = book;
+    gncEmployeeBeginEdit (employee_pdata.employee);
 
     successful = dom_tree_generic_parse (node, employee_handlers_v2,
                                          &employee_pdata);
-    gncEmployeeCommitEdit (employee_pdata.employee);
-
-    if (!successful)
+    if (successful)
+      gncEmployeeCommitEdit (employee_pdata.employee);
+    else
     {
         PERR ("failed to parse employee tree");
         gncEmployeeDestroy (employee_pdata.employee);

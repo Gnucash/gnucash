@@ -17,6 +17,7 @@
 #include "gncObject.h"
 #include "QueryObject.h"
 #include "gnc-event-p.h"
+#include "gnc-be-utils.h"
 
 #include "gncBusiness.h"
 #include "gncCustomer.h"
@@ -39,10 +40,15 @@ struct _gncCustomer {
   gboolean	active;
   GList *	jobs;
 
+  int		editlevel;
+  gboolean	do_free;
+
   GncTaxTable*	taxtable;
   gboolean	taxtable_override;
   gboolean	dirty;
 };
+
+static short	module = MOD_BUSINESS;
 
 #define _GNC_MOD_NAME	GNC_CUSTOMER_MODULE_NAME
 
@@ -57,6 +63,7 @@ G_INLINE_FUNC void
 mark_customer (GncCustomer *customer)
 {
   customer->dirty = TRUE;
+  gncBusinessSetDirtyFlag (customer->book, _GNC_MOD_NAME, TRUE);
 
   gnc_engine_generate_event (&customer->guid, GNC_EVENT_MODIFY);
 }
@@ -92,6 +99,13 @@ GncCustomer *gncCustomerCreate (GNCBook *book)
 }
 
 void gncCustomerDestroy (GncCustomer *cust)
+{
+  if (!cust) return;
+  cust->do_free = TRUE;
+  gncCustomerCommitEdit (cust);
+}
+
+static void gncCustomerFree (GncCustomer *cust)
 {
   if (!cust) return;
 
@@ -256,16 +270,28 @@ void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
   gnc_engine_generate_event (&cust->guid, GNC_EVENT_MODIFY);
 }
 
-void gncCustomerCommitEdit (GncCustomer *cust)
+void gncCustomerBeginEdit (GncCustomer *cust)
 {
-  if (!cust) return;
+  GNC_BEGIN_EDIT (cust, _GNC_MOD_NAME);
+}
 
-  /* XXX COMMIT TO DATABASE */
-  if (gncCustomerIsDirty (cust))
-    gncBusinessSetDirtyFlag (cust->book, _GNC_MOD_NAME, TRUE);
+static void gncCustomerOnError (GncCustomer *cust, GNCBackendError errcode)
+{
+  PERR("Customer Backend Failure: %d", errcode);
+}
+
+static void gncCustomerOnDone (GncCustomer *cust)
+{
   cust->dirty = FALSE;
   gncAddressClearDirty (cust->addr);
   gncAddressClearDirty (cust->shipaddr);
+}
+
+void gncCustomerCommitEdit (GncCustomer *cust)
+{
+  GNC_COMMIT_EDIT_PART1 (cust);
+  GNC_COMMIT_EDIT_PART2 (cust, _GNC_MOD_NAME, gncCustomerOnError,
+			 gncCustomerOnDone, gncCustomerFree);
 }
 
 /* Get Functions */

@@ -16,6 +16,7 @@
 #include "GNCIdP.h"
 #include "QueryObject.h"
 #include "gnc-event-p.h"
+#include "gnc-be-utils.h"
 
 #include "gncBusiness.h"
 #include "gncEntry.h"
@@ -38,8 +39,13 @@ struct _gncOrder {
   Timespec 	closed;
   gboolean 	active;
 
+  int		editlevel;
+  gboolean	do_free;
+
   gboolean	dirty;
 };
+
+static short	module = MOD_BUSINESS;
 
 #define _GNC_MOD_NAME	GNC_ORDER_MODULE_NAME
 
@@ -63,6 +69,7 @@ G_INLINE_FUNC void
 mark_order (GncOrder *order)
 {
   order->dirty = TRUE;
+  gncBusinessSetDirtyFlag (order->book, _GNC_MOD_NAME, TRUE);
 
   gnc_engine_generate_event (&order->guid, GNC_EVENT_MODIFY);
 }
@@ -93,6 +100,13 @@ GncOrder *gncOrderCreate (GNCBook *book)
 }
 
 void gncOrderDestroy (GncOrder *order)
+{
+  if (!order) return;
+  order->do_free = TRUE;
+  gncOrderCommitEdit (order);
+}
+
+static void gncOrderFree (GncOrder *order)
 {
   if (!order) return;
 
@@ -296,16 +310,24 @@ gboolean gncOrderIsClosed (GncOrder *order)
 
 void gncOrderBeginEdit (GncOrder *order)
 {
-  if (!order) return;
+  GNC_BEGIN_EDIT (order, _GNC_MOD_NAME);
+}
+
+static void gncOrderOnError (GncOrder *order, GNCBackendError errcode)
+{
+  PERR("Order Backend Failure: %d", errcode);
+}
+
+static void gncOrderOnDone (GncOrder *order)
+{
+  order->dirty = FALSE;
 }
 
 void gncOrderCommitEdit (GncOrder *order)
 {
-  if (!order) return;
-
-  if (order->dirty)
-    gncBusinessSetDirtyFlag (order->book, _GNC_MOD_NAME, TRUE);
-  order->dirty = FALSE;
+  GNC_COMMIT_EDIT_PART1 (order);
+  GNC_COMMIT_EDIT_PART2 (order, _GNC_MOD_NAME, gncOrderOnError,
+			 gncOrderOnDone, gncOrderFree);
 }
 
 int gncOrderCompare (GncOrder *a, GncOrder *b)

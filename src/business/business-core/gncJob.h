@@ -27,6 +27,7 @@ void gncJobSetReference (GncJob *job, const char *owner_reference);
 void gncJobSetOwner (GncJob *job, GncOwner *owner);
 void gncJobSetActive (GncJob *job, gboolean active);
 
+void gncJobBeginEdit (GncJob *job);
 void gncJobCommitEdit (GncJob *job);
 
 /* Get Functions */
