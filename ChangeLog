@@ -1,3 +1,10 @@
+2003-04-02  Benoit Grégoire  <bock@step.polymtl.ca>
+	
+	* po/POTFILES.in,
+	src/import-export/ofx/Makefile.am,
+	src/import-export/ofx/ofx.glade: Remove obsolete ofx.glade
+	* po/fr.po: Update french translation again, 200 more messages handled
+	
 2003-04-01  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncEntry.h:  Move the definitions

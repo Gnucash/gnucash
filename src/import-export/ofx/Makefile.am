@@ -23,9 +23,6 @@ gncscmdir = ${GNC_SCM_INSTALL_DIR}/ofx
 gncscm_DATA = \
 	ofx-import.scm
 
-#gladedir = ${GNC_GLADE_DIR}
-#glade_DATA = ofx.glade
-
 AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
@@ -44,7 +41,6 @@ AM_CFLAGS = \
 
 EXTRA_DIST = \
   .cvsignore \
-  ofx.glade \
   ${gncscm_DATA}
 
 CLEANFILES = ofx import-export gnucash g-wrapped .scm-links

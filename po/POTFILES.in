@@ -363,7 +363,6 @@ src/import-export/hbci/gnc-hbci-transfer.c
 src/import-export/ofx/test/test-link.c
 src/import-export/ofx/gnc-ofx-import.c
 src/import-export/ofx/gncmod-ofx-import.c
-src/import-export/ofx/ofx.glade
 src/import-export/qif-import/test/test-link.c
 src/import-export/qif-import/dialog-account-picker.c
 src/import-export/qif-import/druid-qif-import.c
