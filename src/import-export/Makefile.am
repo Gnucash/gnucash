@@ -53,8 +53,7 @@ AM_CFLAGS = \
   ${GDK_PIXBUF_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
-  ${GLIB_CFLAGS} \
-  -Werror
+  ${GLIB_CFLAGS} 
 
 EXTRA_DIST = $(glade_DATA) \
   .cvsignore
