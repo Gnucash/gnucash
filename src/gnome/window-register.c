@@ -820,9 +820,6 @@ regWindowLedger( GNCLedgerDisplay *ledger )
 
   /* libglade should do this next line */
   GNOME_APP(register_window)->menubar = glade_xml_get_widget( xml, "gnc_register_menubar" );
-  gnc_extensions_menu_setup_with_data( GNOME_APP(register_window),
-				       WINDOW_NAME_REGISTER,
-				       regData );
 
   gnc_reg_set_window_name( regData );
 
@@ -859,8 +856,11 @@ regWindowLedger( GNCLedgerDisplay *ledger )
                       GTK_SIGNAL_FUNC( gnc_register_help_changed_cb ),
                       regData );
 
-  /* The menu bar */
+  /* The menu bar. Menu extension setup needs to come *after* that. */
   gnc_register_setup_menu_widgets( regData, xml );
+  gnc_extensions_menu_setup_with_data( GNOME_APP(register_window),
+				       WINDOW_NAME_REGISTER,
+				       regData );
 
   /* The tool bar */
   {

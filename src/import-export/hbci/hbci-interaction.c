@@ -38,7 +38,7 @@
 
 #include "dialog-pass.h"
 
-#define PREF_TAB_ONLINE_BANKING "Online Banking & Importing"
+#define PREF_TAB_ONLINE_BANKING N_("Online Banking & Importing")
 
 
 /** Adds the interactor and progressmonitor classes to the api. */

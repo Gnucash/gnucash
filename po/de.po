@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2002-11-06 19:14+0100\n"
-"PO-Revision-Date: 2002-11-06 19:30+0100\n"
+"POT-Creation-Date: 2002-11-08 23:24+0100\n"
+"PO-Revision-Date: 2002-11-08 23:42+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -1353,7 +1353,7 @@ msgstr "Änderungen des aktuellen Geschäftsvorgangs übernehmen"
 msgid "Register date ranges"
 msgstr "Datumbereich des Kassenberichts"
 
-#: src/gnome/glade/register.glade.h:48 src/gnome/gnc-split-reg.c:951
+#: src/gnome/glade/register.glade.h:48 src/gnome/gnc-split-reg.c:947
 msgid "Remove Transaction Splits"
 msgstr "Gegenbuchungen entfernen"
 
@@ -1951,7 +1951,7 @@ msgstr "Suche "
 
 #: src/gnome/glade/find.glade.h:25
 msgid "Find Transactions"
-msgstr "Geschäftsvorgänge finden"
+msgstr "Geschäftsvorgänge suchen"
 
 #: src/gnome/glade/find.glade.h:26
 msgid "Find securities transactions of:"
@@ -2980,11 +2980,11 @@ msgstr ""
 "Änderungen rückgängig gemacht. Sind Sie sicher, daß Sie alle\n"
 "Änderungen in den Terminierten Buchungen verwerfen wollen?"
 
-#: src/gnome/gnc-split-reg.c:699
+#: src/gnome/gnc-split-reg.c:695
 msgid "<No information>"
 msgstr "<keine Informationen>"
 
-#: src/gnome/gnc-split-reg.c:826
+#: src/gnome/gnc-split-reg.c:822
 #: src/register/ledger-core/split-register-control.c:1054
 #: src/register/ledger-core/split-register.c:496
 msgid ""
@@ -2994,13 +2994,13 @@ msgstr ""
 "Die aktuelle Buchung wurde verändert.\n"
 "Soll sie gespeichert werden?"
 
-#: src/gnome/gnc-split-reg.c:953
+#: src/gnome/gnc-split-reg.c:949
 msgid "Are you sure you want to remove the Splits of this transaction?"
 msgstr ""
 "Sind Sie sicher, dass Sie die Gegenbuchungen dieses Geschäftsvorgangs "
 "entfernen wollen?"
 
-#: src/gnome/gnc-split-reg.c:956
+#: src/gnome/gnc-split-reg.c:952
 msgid ""
 "You would be modifying a transaction with reconciled splits!\n"
 "This is not a good idea as it will cause your reconciled balance to be off."
@@ -3008,7 +3008,7 @@ msgstr ""
 "Sie würden einen Geschäftsvorgang mit abgeglichenen Buchungen\n"
 "ändern. Ihr abgeglichener Saldo könnte dadurch fehlerhaft werden."
 
-#: src/gnome/gnc-split-reg.c:1049
+#: src/gnome/gnc-split-reg.c:1045
 #, c-format
 msgid ""
 "Are you sure you want to delete\n"
@@ -3022,7 +3022,7 @@ msgstr ""
 "   %s \n"
 "löschen wollen?"
 
-#: src/gnome/gnc-split-reg.c:1051
+#: src/gnome/gnc-split-reg.c:1047
 msgid ""
 "You would be deleting a reconciled split!\n"
 "This is not a good idea as it will cause your reconciled balance to be off."
@@ -3030,20 +3030,20 @@ msgstr ""
 "Sie würden eine abgeglichene Buchung löschen! Das würde bewirken, daß\n"
 "Ihr Saldo nicht mehr abgeglichen ist."
 
-#: src/gnome/gnc-split-reg.c:1059
+#: src/gnome/gnc-split-reg.c:1055
 msgid "(no memo)"
 msgstr "(kein Buchungstext)"
 
-#: src/gnome/gnc-split-reg.c:1062
+#: src/gnome/gnc-split-reg.c:1058
 msgid "(no description)"
 msgstr "(Keine Beschreibung)"
 
-#: src/gnome/gnc-split-reg.c:1095
+#: src/gnome/gnc-split-reg.c:1091
 msgid "Are you sure you want to delete the current transaction?"
 msgstr ""
 "Sind Sie sicher, dass Sie den aktuellen Geschäftsvorgang löschen wollen?"
 
-#: src/gnome/gnc-split-reg.c:1097
+#: src/gnome/gnc-split-reg.c:1093
 msgid ""
 "You would be deleting a transaction with reconciled splits!\n"
 "This is not a good idea as it will cause your reconciled balance to be off."
@@ -3052,31 +3052,31 @@ msgstr ""
 "Buchungen löschen würden. Dies bedeutet, daß ihr abgeglichener Saldo\n"
 "verändert wird."
 
-#: src/gnome/gnc-split-reg.c:1779
+#: src/gnome/gnc-split-reg.c:1775
 msgid "Present:"
 msgstr "Aktueller Wert:"
 
-#: src/gnome/gnc-split-reg.c:1780
+#: src/gnome/gnc-split-reg.c:1776
 msgid "Future:"
 msgstr "Zukünftiger Wert:"
 
-#: src/gnome/gnc-split-reg.c:1781
+#: src/gnome/gnc-split-reg.c:1777
 msgid "Cleared:"
 msgstr "Bestätigt:"
 
-#: src/gnome/gnc-split-reg.c:1782
+#: src/gnome/gnc-split-reg.c:1778
 msgid "Reconciled:"
 msgstr "Abgeglichen:"
 
-#: src/gnome/gnc-split-reg.c:1786
+#: src/gnome/gnc-split-reg.c:1782
 msgid "Shares:"
 msgstr "Anteile:"
 
-#: src/gnome/gnc-split-reg.c:1787
+#: src/gnome/gnc-split-reg.c:1783
 msgid "Current Value:"
 msgstr "Aktueller Wert:"
 
-#: src/gnome/gnc-split-reg.c:2014
+#: src/gnome/gnc-split-reg.c:2010
 msgid ""
 "This account may not be edited.  If you want\n"
 "to edit transactions in this register, please\n"
@@ -3088,7 +3088,7 @@ msgstr ""
 "\"Konto Eigenschaften\" und deaktivieren Sie die Option\n"
 "\"Platzhalter-Konto\"."
 
-#: src/gnome/gnc-split-reg.c:2021
+#: src/gnome/gnc-split-reg.c:2017
 msgid ""
 "One of the sub-accounts selected may not be\n"
 "edited.  If you want to edit transactions in\n"
@@ -3102,7 +3102,7 @@ msgstr ""
 "Dialogfenster \"Konto Eigenschaften\" des Unterkontos und deaktivieren\n"
 "Sie die Option \"Platzhalter-Konto\"."
 
-#: src/gnome/gnc-split-reg.c:2045
+#: src/gnome/gnc-split-reg.c:2041
 #, c-format
 msgid "%s [Read-Only]"
 msgstr "%s [Nur-Lesen]"
@@ -3368,7 +3368,7 @@ msgstr "Finanzrechner"
 
 #: src/gnome/window-main.c:945
 msgid "_Find Transactions"
-msgstr "Geschäftsvorgänge _finden"
+msgstr "Geschäftsvorgänge _suchen"
 
 #: src/gnome/window-main.c:946
 msgid "Find transactions with a search"
@@ -4043,7 +4043,7 @@ msgstr "Irgendeins der Kriterien wird erfüllt"
 #: src/gnome-search/dialog-search.c:859
 #, c-format
 msgid "New %s"
-msgstr "%s neu"
+msgstr "Neuer %s"
 
 #: src/gnome-search/dialog-search.c:859
 msgid "item"
@@ -4175,7 +4175,7 @@ msgstr "Suchkriterium"
 
 #: src/gnome-search/search.glade.h:10
 msgid "Search for items where"
-msgstr "Nach Einträgen suchen, wo"
+msgstr "Nach Einträgen suchen, für die gilt:"
 
 #: src/gnome-search/search.glade.h:11
 msgid "Search for..."
@@ -6261,7 +6261,7 @@ msgstr "Vereine QIF-Kategorien mit Gnucash Konten"
 
 #: src/import-export/qif-import/qif.glade.h:85
 msgid "Match duplicate transactions"
-msgstr "Doppelte Geschäftsvorgänge finden"
+msgstr "Doppelte Geschäftsvorgänge suchen"
 
 #: src/import-export/qif-import/qif.glade.h:86
 msgid "Match payees/memos to GnuCash accounts"
@@ -6725,7 +6725,7 @@ msgstr "Die Gegenbuchung(en) des gewählten Geschäftsvorgangs:"
 
 #: src/import-export/generic-import.glade.h:19
 msgid "The selected downloaded transaction should:"
-msgstr "Die importieren Buchungen sollen folgendermaßen behandelt werden:"
+msgstr "Mit den importierten Buchungen folgendermaßen verfahren:"
 
 #: src/import-export/generic-import.glade.h:20
 msgid "The selected match will be marked as reconciled"
@@ -6752,19 +6752,19 @@ msgstr ""
 
 #: src/import-export/generic-import.glade.h:25
 msgid "be added as a new transaction"
-msgstr "als neuer Geschäftsvorgang hinzugefügt"
+msgstr "Als neuer Geschäftsvorgang hinzufügen"
 
 #: src/import-export/generic-import.glade.h:26
 msgid "be ignored"
-msgstr "ignoriert"
+msgstr "Ignorieren"
 
 #: src/import-export/generic-import.glade.h:27
 msgid "reconcile the selected match"
-msgstr "passenden Geschäftsvorgang abgleichen"
+msgstr "Passenden Geschäftsvorgang abgleichen"
 
 #: src/import-export/generic-import.glade.h:28
 msgid "replace the selected match"
-msgstr "passenden Geschäftsvorgang ersetzen"
+msgstr "Passenden Geschäftsvorgang ersetzen"
 
 #: src/gnome-utils/dialog-account.c:420
 msgid "Could not create opening balance."
@@ -13245,18 +13245,18 @@ msgstr "Kunden"
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2638 intl-scm/guile-strings.c:2640
 msgid "Find Customer"
-msgstr "Kunde finden"
+msgstr "Kunde suchen"
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2646 intl-scm/guile-strings.c:2648
 msgid "Find Invoice"
-msgstr "Rechnung finden"
+msgstr "Rechnung suchen"
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2654 intl-scm/guile-strings.c:2656
 #: intl-scm/guile-strings.c:2684 intl-scm/guile-strings.c:2686
 msgid "Find Job"
-msgstr "Auftrag finden"
+msgstr "Auftrag suchen"
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2662
@@ -13266,7 +13266,7 @@ msgstr "Zulieferer"
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2668 intl-scm/guile-strings.c:2670
 msgid "Find Vendor"
-msgstr "Zulieferer finden"
+msgstr "Zulieferer suchen"
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2672 intl-scm/guile-strings.c:2674
@@ -13276,7 +13276,7 @@ msgstr "Neue Rechnung"
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2676 intl-scm/guile-strings.c:2678
 msgid "Find Bill"
-msgstr "Rechnung finden"
+msgstr "Rechnung suchen"
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2692 intl-scm/guile-strings.c:2986
@@ -13311,7 +13311,7 @@ msgstr "Mitarbeiter"
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2710 intl-scm/guile-strings.c:2712
 msgid "Find Employee"
-msgstr "Mitarbeiter finden"
+msgstr "Mitarbeiter suchen"
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2714 intl-scm/guile-strings.c:2716

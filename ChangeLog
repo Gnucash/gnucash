@@ -1,3 +1,8 @@
+2002-11-08  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/window-register.c (regWindowLedger): Fix menu
+	extension setup by moving it after gnc_register_setup_menu.
+
 2002-11-07  David Hampton  <hampton@employees.org>
 
 	* src/engine/iso-4217-currencies.scm: Added a bunch of currencies. #95405

@@ -274,6 +274,7 @@ gnc_hbci_trans (GtkWidget *parent,
 	  /* HBCI_API_executeOutbox failed. */
 	  gtk_widget_destroy (GTK_WIDGET (dialog));
 	  HBCI_Transaction_delete (trans);
+	  HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);
 	  return NULL;
 	}
 
@@ -283,6 +284,7 @@ gnc_hbci_trans (GtkWidget *parent,
 
   }
   
+  HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);
   gtk_widget_destroy (GTK_WIDGET (dialog));
   return trans;
 }

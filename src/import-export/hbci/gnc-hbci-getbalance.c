@@ -163,6 +163,7 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 	free (str);
       }
 
+      HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);
       GNCInteractor_hide (interactor);
       if (dialogres) 
 	recnWindowWithBalance (parent, 
