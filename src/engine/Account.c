@@ -768,6 +768,19 @@ xaccAccountSetName (Account *acc, char *str)
 }
 
 void 
+xaccAccountSetCode (Account *acc, char *str)
+{
+   char * tmp;
+   if ((!acc) || (!str)) return;
+   CHECK (acc);
+
+   /* make strdup before freeing */
+   tmp = strdup (str);
+   if (acc->accountCode) free (acc->accountCode);
+   acc->accountCode = tmp;
+}
+
+void 
 xaccAccountSetDescription (Account *acc, char *str)
 {
    char * tmp;
@@ -858,6 +871,13 @@ xaccAccountGetName (Account *acc)
 {
    if (!acc) return NULL;
    return (acc->accountName);
+}
+
+char *
+xaccAccountGetCode (Account *acc)
+{
+   if (!acc) return NULL;
+   return (acc->accountCode);
 }
 
 char * 

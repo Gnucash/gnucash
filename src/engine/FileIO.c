@@ -43,14 +43,16 @@
  *                                                                  *
  * Version 7 of the file format adds currency & security types      *
  *                                                                  *
+ * Version 8 of the file format adds misc fields                    *
+ *                                                                  *
  * the format of the data in the file:                              *
  *   file        ::== token Group                                   *
  *   Group       ::== numAccounts (Account)^numAccounts             *
- *   Account     ::== accID flags type accountName description      * 
- *                    notes currency security                       *
+ *   Account     ::== accID flags type accountName accountCode      *
+ *                    description notes currency security           *
  *                    numTran (Transaction)^numTrans                * 
  *                    numGroups (Group)^numGroups                   *
- *   Transaction ::== num date description                          *
+ *   Transaction ::== num date_entered date_posted description      *
  *                    numSplits (Split)^numSplits                   *
  *   Split       ::== memo action reconciled                        *
  *                     amount share_price account                   *
@@ -61,13 +63,15 @@
  *   flags       ::== char                                          * 
  *   type        ::== char                                          * 
  *   accountName ::== String                                        *  
+ *   accountCode ::== String                                        *  
  *   description ::== String                                        *  
  *   notes       ::== String                                        *  
  *   currency    ::== String                                        *  
  *   security    ::== String                                        *  
  *                                                                  *
  *   num         ::== String                                        * 
- *   date        ::== Date                                          * 
+ *   date_entered::== Date                                          * 
+ *   date_posted ::== Date                                          * 
  *   description ::== String                                        * 
  *   memo        ::== String                                        * 
  *   action      ::== String                                        * 
@@ -105,7 +109,7 @@
 #define PERMS   0666
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
 #define RFLAGS  O_RDONLY
-#define VERSION 7
+#define VERSION 8
 
 
 /* hack alert the current file format does not support most of the
@@ -445,6 +449,13 @@ readAccount( int fd, AccountGroup *grp, int token )
   INFO_2 ("readAccount(): reading acct %s \n", tmp);
   xaccAccountSetName (acc, tmp);
   free (tmp);
+  
+  if (8 <= token) {
+     tmp = readString( fd, token );
+     if( NULL == tmp)  { free (tmp);  return NULL; }
+     xaccAccountSetCode (acc, tmp);
+     free (tmp);
+  }
   
   tmp = readString( fd, token );
   if( NULL == tmp ) { free (tmp); return NULL; }
@@ -1250,7 +1261,7 @@ writeAccount( int fd, Account *acc )
   int numChildren = 0;
   char * tmp;
   
-  INFO_2 ("writeAccount(): writing acct %s \n", acc->accountName);
+  INFO_2 ("writeAccount(): writing acct %s \n", xaccAccountGetName (acc));
 
   acc_id = acc->id;
   XACC_FLIP_INT (acc_id);
@@ -1290,6 +1301,10 @@ writeAccount( int fd, Account *acc )
   }
   
   tmp = xaccAccountGetName (acc);
+  err = writeString( fd, tmp );
+  if( -1 == err ) return err;
+  
+  tmp = xaccAccountGetCode (acc);
   err = writeString( fd, tmp );
   if( -1 == err ) return err;
   

@@ -103,6 +103,7 @@ void xaccMoveFarEndByName (Split *, const char *);
 
 void xaccAccountSetType (Account *, int);
 void xaccAccountSetName (Account *, char *);
+void xaccAccountSetCode (Account *, char *);
 void xaccAccountSetDescription (Account *, char *);
 void xaccAccountSetNotes (Account *, char *);
 void xaccAccountSetCurrency (Account *, char *);
@@ -110,6 +111,7 @@ void xaccAccountSetSecurity (Account *, char *);
 
 int            xaccAccountGetType (Account *);
 char *         xaccAccountGetName (Account *);
+char *         xaccAccountGetCode (Account *);
 char *         xaccAccountGetDescription (Account *);
 char *         xaccAccountGetNotes (Account *);
 char *         xaccAccountGetCurrency (Account *);
