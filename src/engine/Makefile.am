@@ -16,7 +16,6 @@ libgncmod_engine_la_SOURCES = \
   Group.c \
   Period.c \
   Query.c \
-  QueryNew.c \
   QueryObject.c \
   SchedXaction.c \
   SX-book.c \
@@ -44,6 +43,7 @@ libgncmod_engine_la_SOURCES = \
   md5.c \
   messages.c \
   qofbook.c \
+  qofquery.c \
   qofquerycore.c \
   qofobject.c
 
@@ -90,6 +90,7 @@ gncinclude_HEADERS = \
   kvp-util.h \
   messages.h \
   qofbook.h \
+  qofquery.h \
   qofquerycore.h \
   qofobject.h
 
@@ -100,7 +101,6 @@ noinst_HEADERS = \
   GNCIdP.h \
   GroupP.h \
   QueryP.h \
-  QueryNewP.h \
   QueryObjectP.h \
   SchedXactionP.h \
   ScrubP.h \
@@ -117,6 +117,7 @@ noinst_HEADERS = \
   gw-engine.h \
   gw-kvp.h \
   qofbook-p.h \
+  qofquery-p.h \
   qofquerycore-p.h \
   qofobject-p.h
 
