@@ -277,9 +277,7 @@
        (if (eq? amount-setting 'single)
 	   (vector-set! column-list 7 #t))
        (if (eq? amount-setting 'double)
-	   (begin uary 2001
-		  
-		  (vector-set! column-list 8 #t)
+	   (begin (vector-set! column-list 8 #t)
 		  (vector-set! column-list 9 #t))))
      (if (opt-val (N_ "Display") (N_ "Running Balance"))
 	 (vector-set! column-list 10 #t))
